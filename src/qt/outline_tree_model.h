@@ -45,7 +45,8 @@ public:
     void addRow(Note* note);
     void refresh(Note* note) { refresh(note, noselection); }
     void refresh(Note* note, QModelIndexList selection);
-    void createRowText(QString& title, Note* note);
+private:
+    void createTitleText(QString& title, Note* note);
 };
 
 }

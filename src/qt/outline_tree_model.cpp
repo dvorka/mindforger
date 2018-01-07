@@ -50,22 +50,17 @@ void OutlineTreeModel::addRow(Note* note)
 
     QString s;
     QString title;
-    createRowText(title, note);
+    createTitleText(title, note);
 
     // IMPROVE refactor to methods
 
     QStandardItem* noteItem = new QStandardItem(title);
     // TODO set role
     noteItem->setData(QVariant::fromValue(note));
-    // TODO remove array from here - not needed
     items.append(noteItem);
-
     items.append(new QStandardItem(QString::number(note->getReads())));
-
     items.append(new QStandardItem(QString::number(note->getRevision())));
-
-    s.clear();
-    s += note->getModifiedPretty().c_str();
+    s.clear(); s += note->getModifiedPretty().c_str();
     items.append(new QStandardItem(s));
 
     appendRow(items);
@@ -73,36 +68,46 @@ void OutlineTreeModel::addRow(Note* note)
 
 void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
 {
-    int row{};
-    QStandardItem* i{};
+    int row = -1;
+
+    // determine row number by note attached to the row - selection or iteration
     if(selection.size()) {
         // TODO use role
         if(item(selection[0].row())->data().value<Note*>() == note) {
             row = selection[0].row();
-            i=item(row);
         }
     }
-    if(!i) {
+    // iterate
+    if(row<0) {
         // IMPROVE UI note that has both Note and QStandardItem refs
         for(row = 0; row<rowCount(); row++) {
             // TODO use role
             if(item(row)->data().value<Note*>() == note) {
-                i = item(row);
                 break;
             }
         }
     }
-    if(i) {
-        QString title;
-        createRowText(title, note);
-        i->setText(title);
-        QModelIndex top = createIndex(row, 0, i);
-        emit dataChanged(top,top);
+
+    // refresh
+    if(row>=0) {
+        QString s;
+        createTitleText(s, note);
+        // refresh content
+        item(row,0)->setText(s);
+        item(row,1)->setText(QString::number(note->getReads()));
+        item(row,2)->setText(QString::number(note->getRevision()));
+        s.clear(); s += note->getModifiedPretty().c_str();
+        item(row,3)->setText(s);
+
+        QModelIndex from = createIndex(row, 0, item(row,0));
+        QModelIndex to = createIndex(row, 3, item(row,3));
+        // notify
+        emit dataChanged(from,to);
         return;
     }
 }
 
-void OutlineTreeModel::createRowText(QString& html, Note* note)
+void OutlineTreeModel::createTitleText(QString& html, Note* note)
 {
     for(auto depth=0; depth<note->getDepth(); depth++) {
         html += QString::fromUtf8("&nbsp;&nbsp;&nbsp;&nbsp;");
