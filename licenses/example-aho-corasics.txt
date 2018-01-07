@@ -1,0 +1,10 @@
+Aho-Corasick algorithm implementation has been inspired by:
+
+  http://dl.acm.org/citation.cfm?doid=360825.360855
+  http://blog.ivank.net/aho-corasick-algorithm-in-as3.html
+
+... and Andrés Mejía's Gist:
+
+ https://gist.github.com/andmej/1233426
+
+These code snippets has no license.

@@ -1,0 +1,48 @@
+.TH MindForger 1
+.SH NAME
+\fBmindforger\fR \-  easily view, navigate and manage your notes and knowledge.
+.SH SYNOPSIS
+.B mindforger [options] [<command>] [<args>]
+.SH DESCRIPTION
+.B MindForger
+is a personal thinking notebook.
+
+Where do you keep your private remarks like ideas, personal plans, gift tips, howtos, dreams, master thesis, research remarks, business vision, finance strategy or auto coaching notes? Loads of documents, sketches and remarks spread around the file system, web and Post-it notes? Are you able to find then once you create them? Do you know how they are mutually related when you read or write them? No?
+
+MindForger is definitive human mind inspired knowledge management tool which aims to connect the tradition of outline editors with emerging technologies. Its mission is to help you in organization of your knowledge and associated local, web and real world resources in a way that enables quick navigation, concise representation, automatic interconnections, associative completion and inferencing.
+
+.SH OPTIONS
+.TP 
+\fB-h --help\fR
+Show help
+.TP 
+\fB-v --version\fR
+Show version information
+.TP 
+\fB-r --repository <repo-dir>\fR
+Load given MindForger or Markdown repository from directory <repo-dir>.
+.TP 
+\fB-r --theme <theme>\fR
+Use specified GUI <theme> like yin, yang or black. 
+
+.SH ENVIRONMENT VARIABLES
+\fBMindForger\fR defines the following environment variables:
+.TP
+\fBMINDFORGER_REPOSITORY\fR
+	If no repository is found in the default directory, then it's loaded from directory specified by this environment variable. It's might be overriden by \fB--repository\fr option.
+
+.SH FILES AND DIRECTORIES
+.TP
+\fB~/.mindforger\fR 
+ MindForger configuration file.
+.TP
+\fB~/mindforger-repository\fR 
+ Directory where MindForger expects to find a default repository first.
+
+.SH AUTHOR
+Written by Martin Dvorak <martin.dvorak@mindforger.com>
+.SH BUGS
+Report bugs to https://github.com/dvorka/mindforger/issues
+.SH "SEE ALSO"
+.BR bash (1)
+

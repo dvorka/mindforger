@@ -1,0 +1,3 @@
+# MindForger
+
+Personal thinking notebook.

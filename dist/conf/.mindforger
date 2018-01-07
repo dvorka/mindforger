@@ -1,0 +1,56 @@
+# MindForger Configuration
+
+This is MindForger configuration file (Markdown hosted DSL) - see
+documentation for configuration options details.
+
+# Settings
+Application settings:
+
+* Start page: Outlines
+   * Examples: Outlines, Navigator, Organizer
+* Theme: dark
+   * Examples: Dark, Light
+* External editor: emacs
+   * Examples: emacs, remarkable, vim
+
+# Repositories
+If MindForger detects MindForger repository structure, then it's treated as
+knowledge base, else it's used as a Markdown repository (e.g. metadata are
+not stored to Markdown files).
+
+* Active repository: /home/dvorka/.mindforger-repository-mini
+* Repository: /home/dvorka/.my-mindforger-repository
+* Read-only repository: /home/dvorka/study/github/markup
+
+# Mind
+Mind setting:
+
+* Forget threshold: 1 year
+   * Examples: 1 week, 2 months, 3 years  
+
+# Outline Types
+* GROW
+* Outline
+
+# Outline Labels
+* Important: #fff
+* Cool: #f0f
+* Personal: #00f
+
+# Note Types
+* Idea
+* Question
+* Problem
+
+# Note Tags
+* Important: #fff
+* Cool: #f0f
+* Personal: #00f
+
+# Theme: Light
+* Window: #000
+* WindowText: #fff
+
+# Theme: Dark
+* Window: #000
+* WindowText: #fff

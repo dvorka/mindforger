@@ -1,0 +1,90 @@
+/*
+ outline_tree_presenter.cpp     MindForger thinking notebook
+
+ Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+#include "outline_tree_presenter.h"
+
+namespace m8r {
+
+OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, QObject* parent) : QObject(parent)
+{
+    this->view = view;
+    this->model = new OutlineTreeModel(view);
+    this->view->setModel(this->model);
+
+    // ensure HTML cells rendering
+    HtmlDelegate* delegate = new HtmlDelegate();
+    this->view->setItemDelegate(delegate);
+
+    // signals and slots
+    QObject::connect(view, SIGNAL(signalSelectNextRow()), this, SLOT(slotSelectNextRow()));
+    QObject::connect(view, SIGNAL(signalSelectLastRow()), this, SLOT(slotSelectLastRow()));
+}
+
+void OutlineTreePresenter::refresh(Outline* outline)
+{
+    if(outline != nullptr) {
+        model->removeAllRows();
+        for(Note* note:outline->getNotes()) {
+            model->addRow(note);
+        }
+    }
+}
+
+void OutlineTreePresenter::refresh(Note* note)
+{
+    QItemSelectionModel *select = view->selectionModel();
+    if(select->hasSelection()) {
+        model->refresh(note, select->selectedRows());
+    } else {
+        model->refresh(note);
+    }
+}
+
+int OutlineTreePresenter::getCurrentRow(void) const
+{
+    QModelIndexList indexes = view->selectionModel()->selection().indexes();
+    for(int i=0; i<indexes.count(); i++) {
+        return indexes.at(i).row();
+    }
+    return -1;
+}
+
+void OutlineTreePresenter::slotSelectNextRow(void)
+{
+    int row = getCurrentRow();
+    if(row < model->rowCount()-1) {
+        QModelIndex nextIndex = model->index(row+1, 0);
+        view->setCurrentIndex(nextIndex);
+    }
+}
+
+void OutlineTreePresenter::slotSelectLastRow(void)
+{
+    int row = getCurrentRow();
+    if(row) {
+        QModelIndex previousIndex = model->index(row-1, 0);
+        view->setCurrentIndex(previousIndex);
+    }
+}
+
+OutlineTreePresenter::~OutlineTreePresenter()
+{
+    if(model) delete model;
+}
+
+}

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MindForger
+Exec=/path/to/mindforger/executable
+Icon=/path/to/mindforger/icon
+Type=Application
+Categories=Office;
