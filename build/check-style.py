@@ -42,8 +42,8 @@ BLACKLIST = {
     'NOTHING'
 }
 
-COPYRIGHT_CPP = 'Copyright (C) 2016 Martin Dvorak <martin.dvorak@mindforger.com>'
-COPYRIGHT_PROPERTY = '<!-- Copyright (C) 2016 Martin Dvorak <martin.dvorak@mindforger.com> -->'
+COPYRIGHT_CPP = 'Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>'
+COPYRIGHT_PROPERTY = '<!-- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com> -->'
 
 LIGHT_RED="[1;31m"
 LIGHT_GREEN="[1;32m"

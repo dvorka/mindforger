@@ -1,1 +1,1 @@
-The project is under active development, but it wasn't released yet.
+MindForger project is under active development, but it wasn't released yet.
