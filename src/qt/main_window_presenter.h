@@ -92,10 +92,13 @@ public:
 
 public slots:
     // mindforger
+#ifdef MFDEBUG
+    void doActionMindHack(void);
+#endif
     void doActionRepositoryOpen(void);
     void doActionRepositoryRecent(void);
     void doActionPreferences(void);
-    void doActionToolsBackup(void);
+    void doActionMindSnapshot(void);
     void doActionExit(void);
     // find
     void doActionFts(void);

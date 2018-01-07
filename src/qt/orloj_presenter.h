@@ -114,6 +114,7 @@ public:
     void showFacetOutlineList(const std::vector<Outline*>& outlines);
     void showFacetFtsResult(std::vector<Note*>* result);
     void showFacetOutline(Outline* outline);
+    void showFacetNoteView(void);
     void showFacetNoteEdit(Note* note, std::string* md);
     void showFacetOutlineHeaderEdit(Outline* outline, std::string* html);
 

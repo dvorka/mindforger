@@ -111,6 +111,12 @@ void OrlojPresenter::slotShowOutline(const QItemSelection& selected, const QItem
     }
 }
 
+void OrlojPresenter::showFacetNoteView(void)
+{
+    setFacet(OrlojPresenterFacets::FACET_VIEW_NOTE);
+    view->showFacetNoteView();
+}
+
 void OrlojPresenter::showFacetNoteEdit(Note* note, string* md)
 {
     setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
@@ -138,7 +144,7 @@ void OrlojPresenter::fromNoteEditBackToView(Note* note)
     // update note in outline tree
     outlineViewPresenter->refresh(note);
 
-    view->showFacetNoteView();
+    showFacetNoteView();
 }
 
 void OrlojPresenter::slotShowOutlineHeader(void)

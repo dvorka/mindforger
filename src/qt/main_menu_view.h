@@ -21,6 +21,8 @@
 
 #include <QtWidgets>
 
+#include "lib/src/debug.h"
+
 #include "main_menu_presenter.h"
 #include "main_window_view.h"
 
@@ -53,6 +55,9 @@ public:
     QMenu* menuTools;
     QMenu* menuHelp;
 
+#ifdef MFDEBUG
+    QAction* actionMindHack;
+#endif
     // menu: MindForger
     QAction* actionMindLearn;
     QAction* actionMindRemember;

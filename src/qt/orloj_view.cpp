@@ -128,7 +128,6 @@ void OrlojView::showFacetNoteView(void)
 {
     QSet<QWidget*> v; v << outlineView << noteView;
     hideChildren(v);
-    //outlineView->setFocus();
     outlineView->getOutlineTree()->setFocus();
 }
 

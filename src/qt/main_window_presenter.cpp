@@ -65,6 +65,11 @@ void MainWindowPresenter::initView(void)
 {
 }
 
+void MainWindowPresenter::doActionMindHack()
+{
+    qDebug() << "[MindHack] Current facet: " << orloj->getFacet();
+}
+
 void MainWindowPresenter::doActionRepositoryOpen()
 {
 }
@@ -235,7 +240,12 @@ void MainWindowPresenter::doActionOutlineImport()
 
 void MainWindowPresenter::doActionNoteNew()
 {
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)) {
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE))
+    {
         newNoteDialog->show();
     } else {
         QMessageBox::critical(&view, tr("New Note"), tr("Open and view an Outline to create new Note."));
@@ -282,7 +292,7 @@ void MainWindowPresenter::doActionNoteLast()
 {
 }
 
-void MainWindowPresenter::doActionToolsBackup()
+void MainWindowPresenter::doActionMindSnapshot()
 {
 }
 

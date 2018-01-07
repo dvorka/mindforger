@@ -26,10 +26,10 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     this->maindWindowPresenter = mwp;
 
     // menu: mind
-    // TODO QObject::connect(view->actionRepositoryOpen, SIGNAL(triggered()),mwp, SLOT(doActionRepositoryOpen()));
-    // TODO QObject::connect(view->actionRepositoryRecent, SIGNAL(triggered()), mwp, SLOT(doActionRepositoryRecent()));
-    // TODO QObject::connect(view->actionPreferences, SIGNAL(triggered()), mwp, SLOT(doActionPreferences()));
-    QObject::connect(view->actionMindSnapshot, SIGNAL(triggered()), mwp, SLOT(doActionToolsBackup()));
+#ifdef MFDEBUG
+    QObject::connect(view->actionMindHack, SIGNAL(triggered()),mwp, SLOT(doActionMindHack()));
+#endif
+    QObject::connect(view->actionMindSnapshot, SIGNAL(triggered()), mwp, SLOT(doActionMindSnapshot()));
     QObject::connect(view->actionExit, SIGNAL(triggered()), mwp, SLOT(doActionExit()));
 
     // menu: find

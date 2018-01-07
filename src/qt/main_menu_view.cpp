@@ -27,6 +27,12 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: mind
 
+#ifdef MFDEBUG
+    actionMindHack = new QAction(QString::fromUtf8("Mind Hack"), mainWindow);
+    actionMindHack->setStatusTip(QString::fromUtf8("Mind hacking and debugging hook"));
+    actionMindHack->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
+#endif
+
     // learn... from a repository, Markdown or TXT file
     actionMindLearn = new QAction(QString::fromUtf8("&Learn"), mainWindow);
     // IMPROVE show RECENT repositories and files in the dialog
@@ -69,6 +75,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionExit->setStatusTip(QString::fromUtf8("Leave application"));
 
     menuMindForger = qMenuBar->addMenu(QString::fromUtf8("&Mind"));
+#ifdef MFDEBUG
+    menuMindForger->addAction(actionMindHack);
+#endif
     menuMindForger->addAction(actionMindLearn);
     menuMindForger->addAction(actionMindRemember);
     menuMindForger->addAction(actionMindRemind);
