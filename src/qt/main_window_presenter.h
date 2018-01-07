@@ -21,6 +21,7 @@
 
 #include "lib/src/config/configuration.h"
 #include "lib/src/mind/mind.h"
+#include "lib/src/representations/markdown/markdown_outline_representation.h"
 
 #include "main_window_view.h"
 #include "main_menu_presenter.h"
@@ -60,6 +61,8 @@ private:
 
     Configuration& configuration;
     Mind* mind;
+
+    MarkdownOutlineRepresentation* markdownRepresentation;
 
     MainMenuPresenter* mainMenu;
     CliAndBreadcrumbsPresenter* cli;

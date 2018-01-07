@@ -27,8 +27,12 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view, Configuration& co
       configuration(configuration)
 {    
     // think
-    mind = new Mind(configuration);
+    mind = new Mind{configuration};
     mind->think();
+
+    // representations
+    // IMPROVE other presenters to reuse representations from here
+    markdownRepresentation = new MarkdownOutlineRepresentation{mind->ontology()};
 
     // assemble presenters w/ UI
     mainMenu = new MainMenuPresenter(this);
@@ -181,7 +185,7 @@ void MainWindowPresenter::handleOutlineNew(void)
 void MainWindowPresenter::handleNoteNew(void)
 {    
     string title = newNoteDialog->getNoteName().toStdString();
-    bool created = mind->noteNew(
+    Note* note = mind->noteNew(
                 orloj->getOutlineView()->getCurrentOutline()->getKey(),
                 // IMPROVE get parent note number from selection (if selected)
                 NO_PARENT,
@@ -189,14 +193,12 @@ void MainWindowPresenter::handleNoteNew(void)
                 newNoteDialog->getNoteType(),
                 newNoteDialog->getTag(),
                 newNoteDialog->getStencil());
-    if(created) {
-        // TODO remember modified outline
+    if(note) {
         mind->remind().remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
-
-        // TODO refresh outline note tree
+        // IMPROVE smarter refresh of outline tree (do less then overall load)
         orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
-
-        // TODO open new note for edit
+        unique_ptr<string> md{markdownRepresentation->to(note)};
+        orloj->showFacetNoteEdit(note, md.get());
     } else {
         QMessageBox::critical(&view, tr("New Note"), tr("Failed to create new note!"));
     }

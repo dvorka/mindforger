@@ -74,6 +74,7 @@ void NoteViewPresenter::slotEditNote(void)
 {
     string* md = markdownRepresentation->to(this->currentNote);
     orloj->showFacetNoteEdit(this->currentNote, md);
+    // IMPROVE MD is leak
 }
 
 NoteViewPresenter::~NoteViewPresenter()

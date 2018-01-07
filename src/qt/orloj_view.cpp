@@ -133,7 +133,7 @@ void OrlojView::showFacetNoteView(void)
 
 void OrlojView::showFacetNoteEdit(void)
 {
-    QSet<QWidget*> v; v << noteView << noteEdit;
+    QSet<QWidget*> v; v << outlineView << noteEdit;
     hideChildren(v);
     noteEdit->setFocus();
 }
