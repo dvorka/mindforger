@@ -78,6 +78,7 @@ void NoteEditPresenter::slotSaveNote(void)
         currentNote->setModified();
         currentNote->setModifiedPretty();
         currentNote->setRevision(currentNote->getRevision()+1);
+        if(currentNote->getReads()<currentNote->getRevision()) currentNote->setReads(currentNote->getRevision());
         // TODO delete note (vectors to be kept)
 
         // Note's outline metadata must be updated as well

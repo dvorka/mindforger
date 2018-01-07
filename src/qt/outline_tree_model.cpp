@@ -60,7 +60,7 @@ void OutlineTreeModel::addRow(Note* note)
     items.append(noteItem);
     items.append(new QStandardItem(QString::number(note->getReads())));
     items.append(new QStandardItem(QString::number(note->getRevision())));
-    s.clear(); s += note->getModifiedPretty().c_str();
+    s = note->getModifiedPretty().c_str();
     items.append(new QStandardItem(s));
 
     appendRow(items);
@@ -96,7 +96,7 @@ void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
         item(row,0)->setText(s);
         item(row,1)->setText(QString::number(note->getReads()));
         item(row,2)->setText(QString::number(note->getRevision()));
-        s.clear(); s += note->getModifiedPretty().c_str();
+        s = note->getModifiedPretty().c_str();
         item(row,3)->setText(s);
 
         QModelIndex from = createIndex(row, 0, item(row,0));
