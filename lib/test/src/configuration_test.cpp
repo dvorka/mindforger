@@ -47,7 +47,6 @@ TEST(ConfigurationTestCase, FromEnvironment)
     // set MINDFORGER_REPOSITORY environment variable
     const char* envVarName = "MINDFORGER_REPOSITORY";
     const char* relativeRepositoryPath = "/lib/test/resources/basic-repository";
-    // IMPROVE malloc to new/delete
     char* envVar = new char[strlen(envVarName)+1+strlen(getMindforgerGitHomePath())+strlen(relativeRepositoryPath)+1];
     envVar[0] = 0;
     strcat(envVar, envVarName);
@@ -75,4 +74,3 @@ TEST(ConfigurationTestCase, FromEnvironment)
     unsetenv(m8r::ENV_VAR_M8R_REPOSITORY);
     delete[] envVar;
 }
-

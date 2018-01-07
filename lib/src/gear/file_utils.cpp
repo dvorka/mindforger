@@ -137,12 +137,11 @@ int removeDirectoryRecursively(const char *path)
           int r2 = -1;
           char *buf;
           size_t len;
-          /* Skip the names "." and ".." as we don't want to recurse on them. */
+          // skip the names "." and ".." as I don't want to recurse on them
           if (!strcmp(p->d_name, ".") || !strcmp(p->d_name, "..")) {
              continue;
           }
           len = path_len + strlen(p->d_name) + 2;
-          // IMPROVE malloc to new/delete
           buf = new char[len];
           if(buf) {
              struct stat statbuf;

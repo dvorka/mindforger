@@ -32,9 +32,8 @@
 
 namespace m8r {
 
-/* Helper functions for handling C character strings and std::strings.
- *
- * MF lib runs on C character strings and malloc/free to be fast.
+/*
+ *  Helper functions for handling C character strings and std::strings.
  */
 
 bool stringStartsWith(const char *s, const char *prefix);
