@@ -288,10 +288,10 @@ public:
     /**
      * @brief Delete note from outline.
      *
-     * If note has children, then they are deleted as well. There
-     * is no UNDO for this operation.
+     * If note has children, then they are deleted as well.
+     * Outline is not persisted. There is no UNDO for this operation.
      */
-    void noteForget(Note* note);
+    Outline* noteForget(Note* note);
     /**
      * @brief Move note to the beginning on the current level of depth.
      */

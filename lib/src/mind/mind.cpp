@@ -372,11 +372,12 @@ Note* Mind::noteNew(
     }
 }
 
-void Mind::noteForget(Note* note)
+Outline* Mind::noteForget(Note* note)
 {
     Outline* o = note->getOutline();
     if(o) {
         note->getOutline()->forgetNote(note);
+        return o;
     } else {
         throw MindForgerException("Unable find Outline from which should be the Note deleted!");
     }

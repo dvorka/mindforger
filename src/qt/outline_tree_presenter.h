@@ -52,6 +52,7 @@ public:
     void refresh(Note* note);
 
     int getCurrentRow(void) const;
+    Note* getCurrentNote(void) const;
 
     ~OutlineTreePresenter();
 

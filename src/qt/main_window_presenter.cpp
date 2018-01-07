@@ -256,8 +256,21 @@ void MainWindowPresenter::doActionNoteOpen()
 {
 }
 
-void MainWindowPresenter::doActionNoteArchive()
+void MainWindowPresenter::doActionNoteForget()
 {
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE))
+    {
+        Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+        if(note) {
+            Outline* outline = mind->noteForget(note);
+            mind->remind().remember(outline);
+            orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+            return;
+        }
+    }
+    QMessageBox::critical(&view, tr("Forget Note"), tr("Please select a note to forget."));
 }
 
 void MainWindowPresenter::doActionNoteAttach()

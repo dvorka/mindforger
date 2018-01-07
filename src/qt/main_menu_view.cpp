@@ -311,8 +311,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // actionNoteSave->setShortcut(QKeySequence(Qt::ALT+Qt::Key_Left));
     actionNoteSave->setStatusTip(QString::fromUtf8("Save note being edited"));
 
-    actionNoteArchive = new QAction(QString::fromUtf8("&Forget"), mainWindow);
-    actionNoteArchive->setStatusTip(QString::fromUtf8("Forget note"));
+    actionNoteForget = new QAction(QString::fromUtf8("&Forget"), mainWindow);
+    actionNoteForget->setStatusTip(QString::fromUtf8("Forget note"));
 
     actionNoteClose = new QAction(QString::fromUtf8("&Close\tAlt+Left"), mainWindow);
     actionNoteClose->setStatusTip(QString::fromUtf8("Save and close note being edited"));
@@ -356,7 +356,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNote->addAction(actionNoteOpen);
     menuNote->addAction(actionNoteSave);
     menuNote->addAction(actionNoteClose);
-    menuNote->addAction(actionNoteArchive);
+    menuNote->addAction(actionNoteForget);
     menuNote->addSeparator();
     menuNote->addAction(actionNoteFirst);
     menuNote->addAction(actionNoteUp);

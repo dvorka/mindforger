@@ -45,16 +45,20 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
      * It's done by Orloj presenter as it has access to all its child windows
      * and widgets - it can show/hide what's needed and then pass control to children.
      */
+
+    // click Outline in Outlines to view Outline detail
     QObject::connect(
         view->getOutlinesTable()->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowOutline(const QItemSelection&, const QItemSelection&)));
+    // click Outline tree to view Note
     QObject::connect(
         view->getOutlineView()->getOutlineTree()->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowNote(const QItemSelection&, const QItemSelection&)));
+    // click FTS result to view Note
     QObject::connect(
         view->getNotesTable()->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),

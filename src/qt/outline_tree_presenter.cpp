@@ -61,7 +61,19 @@ int OutlineTreePresenter::getCurrentRow(void) const
     for(int i=0; i<indexes.count(); i++) {
         return indexes.at(i).row();
     }
+    // IMPROVE constant w/ a name
     return -1;
+}
+
+Note* OutlineTreePresenter::getCurrentNote(void) const
+{
+    int row = getCurrentRow();
+    // IMPROVE constant w/ a name
+    if(row != -1) {
+        return model->item(row)->data().value<Note*>();
+    } else {
+        return nullptr;
+    }
 }
 
 void OutlineTreePresenter::slotSelectNextRow(void)

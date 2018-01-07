@@ -132,7 +132,7 @@ public slots:
     void doActionNoteLast(void);
     void doActionNoteAttach(void);
     void doActionNoteSave(void);
-    void doActionNoteArchive(void);
+    void doActionNoteForget(void);
     // help
     void doActionHelpDocumentation(void);
     void doActionHelpWeb(void);

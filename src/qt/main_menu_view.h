@@ -121,7 +121,7 @@ public:
     QAction* actionNoteOpen;
     QAction* actionNoteSave;
     QAction* actionNoteClose;
-    QAction* actionNoteArchive;
+    QAction* actionNoteForget;
     QAction* actionNoteFirst;
     QAction* actionNoteUp;
     QAction* actionNotePromote;

@@ -70,7 +70,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionNoteLast, SIGNAL(triggered()), mwp, SLOT(doActionNoteLast()));
     QObject::connect(view->actionNoteAttach, SIGNAL(triggered()), mwp, SLOT(doActionNoteAttach()));
     QObject::connect(view->actionNoteSave, SIGNAL(triggered()), mwp, SLOT(doActionNoteSave()));
-    QObject::connect(view->actionNoteArchive, SIGNAL(triggered()), mwp, SLOT(doActionNoteArchive()));
+    QObject::connect(view->actionNoteForget, SIGNAL(triggered()), mwp, SLOT(doActionNoteForget()));
 
     // menu: help
     QObject::connect(view->actionHelpDocumentation, SIGNAL(triggered()), mwp, SLOT(doActionHelpDocumentation()));
