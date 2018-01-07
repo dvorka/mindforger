@@ -146,7 +146,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewStencils->setStatusTip(QString::fromUtf8("List outline and note stencils..."));
 
     actionViewLimbo = new QAction(QString::fromUtf8("&Limbo"), mainWindow);
-    actionViewLimbo->setStatusTip(QString::fromUtf8("List deleted outlines and notes..."));
+    actionViewLimbo->setStatusTip(QString::fromUtf8("List forgotten outlines and notes..."));
 
     actionViewDistractionFree = new QAction(QString::fromUtf8("&Distraction Free"), mainWindow);
     actionViewDistractionFree->setShortcut(QKeySequence(Qt::Key_F5));

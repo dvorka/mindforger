@@ -199,14 +199,30 @@ void MainWindowPresenter::handleNoteNew(void)
 
 void MainWindowPresenter::doActionOutlineOpen()
 {
+    doActionFindOutlineByName();
 }
 
 void MainWindowPresenter::doActionOutlineClose()
 {
+    if(orloj->isFacetActiveOutlineManagement()) {
+        orloj->slotShowOutlines();
+    } else {
+        QMessageBox::critical(&view, tr("Close Outline"), tr("Cannot close Outline as it's not open."));
+    }
 }
 
 void MainWindowPresenter::doActionOutlineForget()
 {
+    if(orloj->isFacetActiveOutlineManagement()) {
+        QMessageBox::StandardButton choice;
+        choice = QMessageBox::question(&view, tr("Delete Outline"), tr("Do you really want to forget current Outline?"));
+        if (choice == QMessageBox::Yes) {
+            mind->outlineForget(orloj->getOutlineView()->getCurrentOutline()->getKey());
+            orloj->slotShowOutlines();
+        } // else do nothing
+    } else {
+        QMessageBox::critical(&view, tr("Delete Outline"), tr("Outline can be forgotten only when viewed."));
+    }
 }
 
 void MainWindowPresenter::doActionOutlineExport()

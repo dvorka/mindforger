@@ -87,7 +87,24 @@ public:
     NotesTablePresenter* getNotesTable(void) const { return notesTablePresenter; }
     OutlineViewPresenter* getOutlineView(void) const { return outlineViewPresenter; }
 
-    bool isFacetActive(const OrlojPresenterFacets facet) const { return activeFacet==facet;}    
+    bool isFacetActive(const OrlojPresenterFacets facet) const { return activeFacet==facet;}
+    bool isFacetActiveOutlineManagement(void) {
+        if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+             ||
+           isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
+             ||
+           isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+             ||
+           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+             ||
+           isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     OrlojPresenterFacets getFacet(void) const { return activeFacet; }
     void setFacet(OrlojPresenterFacets facet) {
         qDebug() << "Changing facet: " << activeFacet << " > " << facet;
