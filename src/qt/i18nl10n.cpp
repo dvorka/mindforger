@@ -26,7 +26,7 @@ void l8n(QApplication& mindforgerApplication)
     qtTranslator->load("qt_"+QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     mindforgerApplication.installTranslator(qtTranslator);
 
-    qDebug() << "Loading locale: " << ":/translations/mindforger_"+QLocale::system().name()+".qm";
+    qDebug() << "Loading locale:" << endl << "  " << ":/translations/mindforger_"+QLocale::system().name()+".qm";
     // Qt to delete translator
     QTranslator* mfTranslator = new QTranslator();
     mfTranslator->load(":/translations/mindforger_"+QLocale::system().name()+".qm");

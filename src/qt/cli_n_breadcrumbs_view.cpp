@@ -79,23 +79,28 @@ const QStringList CliAndBreadcrumbsView::DEFAULT_CMDS = QStringList()
 
 
 CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent)
-    : QHBoxLayout(parent)
+    : QWidget(parent)
 {    
+    setFixedHeight(this->fontMetrics().height()*1.5);
+
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    // ensure that wont be extra space around member widgets
+    layout->setContentsMargins(QMargins(0,0,0,0));
+    setLayout(layout);
+
     breadcrumbsLabel = new QLabel();
     breadcrumbsLabel->setText("$");
-    // IMPROVE let UI to build automatically w/o fixed geometry
-    breadcrumbsLabel->setFixedHeight(25);
-    addWidget(breadcrumbsLabel);
+    layout->addWidget(breadcrumbsLabel);
 
     cli = new CliView(this, parent);
     cliCompleter = new QCompleter(DEFAULT_CMDS, parent);
     cliCompleter->setCaseSensitivity(Qt::CaseSensitivity::CaseInsensitive);
     cliCompleter->setCompletionMode(QCompleter::PopupCompletion);
     cli->setCompleter(cliCompleter);    
-    addWidget(cli);    
+    layout->addWidget(cli);
 
     goButton = new QPushButton(tr("Run"));
-    addWidget(goButton);
+    layout->addWidget(goButton);
 
     showBreadcrumb();
 }

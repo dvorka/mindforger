@@ -41,7 +41,7 @@ signals:
     void keyReleased(QKeyEvent* event);
 };
 
-class CliAndBreadcrumbsView : public QHBoxLayout
+class CliAndBreadcrumbsView : public QWidget
 {
     Q_OBJECT
 

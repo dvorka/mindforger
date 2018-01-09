@@ -55,7 +55,7 @@ private:
     StatusBarView* statusBarView;
 
 public:
-    explicit MainWindowView(LookAndFeels& lookAndFeel, QWidget *parent = 0);
+    explicit MainWindowView(LookAndFeels& lookAndFeel);
     // TODO delete
     virtual ~MainWindowView();
 
