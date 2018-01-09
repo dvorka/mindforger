@@ -125,7 +125,7 @@ private:
 
     void load(const std::vector<MarkdownAstNodeSection*>* ast);
 
-    void addRepository(const std::string* repositoryPath);
+    const std::string* addRepository(const std::string* repositoryPath);
 };
 
 } // namespace

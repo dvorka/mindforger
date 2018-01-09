@@ -28,9 +28,9 @@ cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && 
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=MindTestCase.Mind
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=DateTimeGearTestCase.Immutability
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=ConfigurationTestCase.*
+#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=ConfigurationTestCase.FromConstructor
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=ConfigurationTestCase.Environment
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=MarkdownParserTestCase.FileSystemPersistence
 #cd ${BUILD_DIR} && make clean
-
 
 # eof

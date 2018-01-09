@@ -6,10 +6,6 @@ Special thanks:
      
 * ...
 
-Acknowledgements to reviewers:
-   
-* ...
-
 Big thanks to 3rd party content authors:
 
 * Bjarne Stroustrup (C++ - for inspiring visions and being the authority behind C++ language)
@@ -24,3 +20,7 @@ Big thanks to 3rd party content authors:
 * Richard Stallman (GNU and GNU GPL - for passionate software freedom activism)
 
 See [licenses](./licenses) folder for 3rd party content licensing details.
+
+Acknowledgements to reviewers and testers:
+
+* ...

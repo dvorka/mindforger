@@ -338,6 +338,9 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
         QString("About MindForger"),
         QString(
             "<b>MindForger " MINDFORGER_VERSION "</b>"
+#ifdef MFDEBUG
+            "&nbsp;&nbsp;&nbsp;&nbsp;" __DATE__ " " __TIME__ ""
+#endif
             "<br>"
             "<br>Personal thinking notebook."
             "<br>"
@@ -350,7 +353,7 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
             "<br>Contact me at <a href='mailto:martin.dvorak@mindforger.com'>&lt;martin.dvorak@mindforger.com&gt;</a>"
             " or see <a href='https://www.mindforger.com'>www.mindforger.com</a> for more information."
             "<br>"
-            "<br>Copyright (C) 2018 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/CREDITS.md'>contributors</a>."
+            "<br>Copyright (C) 2018 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/blob/master/CREDITS.md'>contributors</a>."
         ));
 }
 

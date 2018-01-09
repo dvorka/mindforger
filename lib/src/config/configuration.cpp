@@ -32,8 +32,7 @@ Configuration::Configuration()
     const char* r{};
     if((r=getRepositoryFromEnv()) != nullptr) {
         string* repository = new string{r};
-        addRepository(repository);
-        setActiveRepository(repository);
+        setActiveRepository(addRepository(repository));
     } else {
         activeRepository = nullptr;
     }
@@ -45,17 +44,28 @@ Configuration::Configuration()
     installer = new Installer{};
 }
 
-
-
-Configuration::Configuration(const string& activeRepository)
+Configuration::Configuration(const string& activeRepository) : Configuration()
 {
-    Configuration();
     setActiveRepository(addRepository(activeRepository));
 }
 
-void Configuration::addRepository(const string* repositoryPath)
+Configuration::~Configuration()
+{
+    for(const string* r:repositories) {
+        delete r;
+    }
+    repositories.clear();
+
+    if(installer) {
+        delete installer;
+        installer = nullptr;
+    }
+}
+
+const string* Configuration::addRepository(const string* repositoryPath)
 {
     repositories.insert(repositoryPath);
+    return repositoryPath;
 }
 
 const string* Configuration::addRepository(const string& repositoryPath)
@@ -145,15 +155,6 @@ void Configuration::load(const vector<MarkdownAstNodeSection*>* ast)
 void Configuration::save(void) const
 {
     // TODO to be implemented
-}
-
-Configuration::~Configuration()
-{
-    for(const string* r:repositories) {
-        delete r;
-    }
-
-    delete installer;
 }
 
 const char* Configuration::getRepositoryFromEnv()
