@@ -146,6 +146,8 @@ int main(int argc, char *argv[])
     configuration.load();
     if(!useRepository.empty()) {
         configuration.setActiveRepository(configuration.addRepository(useRepository));
+    } else {
+        configuration.findOrCreateDefaultRepository();
     }
 
     // setup application

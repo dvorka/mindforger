@@ -41,6 +41,8 @@ Configuration::Configuration()
     fontPointSize = DEFAULT_FONT_POINT_SIZE;
 
     // IMPROVE labels/types/tags might become extensible and can be loaded from configuration and memory content
+
+    installer = new Installer{};
 }
 
 
@@ -65,7 +67,11 @@ const string* Configuration::addRepository(const string& repositoryPath)
 
 const string* Configuration::getActiveRepository(void) const
 {
-    return activeRepository;
+    if(activeRepository) {
+        return activeRepository;
+    } else {
+        throw MindForgerException{"Active repository not set!"};
+    }
 }
 
 std::set<const std::string*>& Configuration::getRepositories(void)
@@ -92,6 +98,28 @@ void Configuration::setActiveRepository(const string* repositoryPath)
     }
 }
 
+void Configuration::findOrCreateDefaultRepository(void)
+{
+    if(!activeRepository || (*activeRepository).empty()) {
+        string defaultRepositoryPath{userHomePath};
+        defaultRepositoryPath.append(FILE_PATH_SEPARATOR);
+        defaultRepositoryPath.append(DIRNAME_M8R_REPOSITORY);
+        MFDEBUG("Checking for default repository existence: " << defaultRepositoryPath << endl);
+        if(isDirectoryExist(defaultRepositoryPath.c_str())) {
+            setActiveRepository(addRepository(defaultRepositoryPath));
+        } else {
+            // create default repository w/ default content using Installer class
+            MFDEBUG("  Creating a default MF repository in " << defaultRepositoryPath << endl);
+            installer->createEmptyMindForgerRepository(defaultRepositoryPath);
+            if(!activeRepository) {
+                string* r = new string{defaultRepositoryPath};
+                addRepository(r);
+                setActiveRepository(r);
+            }
+        }
+    }
+}
+
 void Configuration::load(void)
 {
     const string filePath = getConfigFileName();
@@ -111,18 +139,7 @@ void Configuration::load(const vector<MarkdownAstNodeSection*>* ast)
 
     //   3. Environment variable - is set up in configuration's constructor
     //   4. If CLI, config and environment didn't provide repository location, then check default location
-    if(!activeRepository || (*activeRepository).empty()) {
-        string defaultRepositoryPath{userHomePath};
-        defaultRepositoryPath.append(FILE_PATH_SEPARATOR);
-        defaultRepositoryPath.append(DIRNAME_M8R_REPOSITORY);
-        MFDEBUG("Checking default repository existence: " << defaultRepositoryPath);
-        if(isDirectoryExist(defaultRepositoryPath.c_str())) {
-            setActiveRepository(addRepository(defaultRepositoryPath));
-        } else {
-	    // IMPROVE create default repository w/ default content using Installer class
-            MFDEBUG("  ... doesn't exist > no repository found > running MF w/o repository");
-        }
-    }
+    findOrCreateDefaultRepository();
 }
 
 void Configuration::save(void) const
@@ -132,7 +149,11 @@ void Configuration::save(void) const
 
 Configuration::~Configuration()
 {
-    for(const string* r:repositories) delete r;
+    for(const string* r:repositories) {
+        delete r;
+    }
+
+    delete installer;
 }
 
 const char* Configuration::getRepositoryFromEnv()

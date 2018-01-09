@@ -100,7 +100,8 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     lib/src/version.h \
     lib/src/config/color.h \
     src/qt/note_new_dialog.h \
-    lib/src/mind/mind_listener.h
+    lib/src/mind/mind_listener.h \
+    lib/src/install/installer.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
@@ -174,7 +175,8 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/outline_new_dialog.cpp \
     lib/src/config/configuration.cpp \
     lib/src/representations/markdown/markdown.cpp \
-    src/qt/note_new_dialog.cpp
+    src/qt/note_new_dialog.cpp \
+    lib/src/install/installer.cpp
 
 QMAKE_CXX = ccache g++
 QMAKE_CXXFLAGS += -std=c++0x -pedantic

@@ -31,6 +31,7 @@
 #include "../model/tag.h"
 #include "../representations/markdown/markdown.h"
 #include "../representations/markdown/markdown_ast_node.h"
+#include "../install/installer.h"
 
 namespace m8r {
 
@@ -52,6 +53,7 @@ constexpr const auto FILE_EXTENSION_MARKDOWN = ".md";
 constexpr const auto DEFAULT_FONT_POINT_SIZE = 10;
 
 class MarkdownAstNodeSection;
+class Installer;
 
 /**
  * @brief MindForger configuration.
@@ -84,6 +86,8 @@ private:
     // GUI
     int fontPointSize;
 
+    Installer* installer;
+
 public:
     explicit Configuration();
     virtual ~Configuration();
@@ -105,6 +109,8 @@ public:
      * @brief Set active repository - activeRepositoryPath parameter must be one of known repositories.
      */
     void setActiveRepository(const std::string* activeRepositoryPath);
+
+    void findOrCreateDefaultRepository(void);
 
     const char* getRepositoryFromEnv(void);
     const char* getEditorFromEnv(void);
