@@ -21,7 +21,7 @@
 
 #define DO_MF_DEBUG
 
-#if defined(DO_MF_DEBUG)
+#ifdef DO_MF_DEBUG
     #define MF_DEBUG(x) do { std::cerr << x; } while (0)
 #else
     #define MF_DEBUG(x) do {;} while (0)

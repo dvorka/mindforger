@@ -46,7 +46,7 @@ RepositoryIndexer::RepositoryIndexer(const string& repositoryDirPath)
 }
 
 void RepositoryIndexer::updateIndex() {
-#if defined(DO_MF_DEBUG)
+#ifdef DO_MF_DEBUG
     MF_DEBUG("\nIndexing repository:\n  " << repositoryPath);
     auto begin = chrono::high_resolution_clock::now();
 #endif
@@ -55,7 +55,7 @@ void RepositoryIndexer::updateIndex() {
     updateIndexStencils(outlineStencilsDirectory, outlineStencils);
     updateIndexStencils(noteStencilsDirectory, noteStencils);
 
-#if defined(DO_MF_DEBUG)
+#ifdef DO_MF_DEBUG
     auto end = chrono::high_resolution_clock::now();
     MF_DEBUG("\nRepository indexed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
 #endif
