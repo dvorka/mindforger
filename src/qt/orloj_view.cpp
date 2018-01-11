@@ -54,7 +54,7 @@ OrlojView::OrlojView(QWidget* parent)
 
     addWidget(new QTextEdit("Outline single page edit"));
 
-    noteEdit = new NoteEditView(this);
+    noteEdit = new NoteEditorView{this};
     addWidget(noteEdit);
 }
 

@@ -1,5 +1,5 @@
 /*
- outline_header_edit_view.cpp     MindForger thinking notebook
+ edit_name_and_buttons_panel.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,24 +16,15 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "outline_header_edit_view.h"
+#include "edit_name_and_buttons_panel.h"
 
 namespace m8r {
 
-OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent) : NoteEditorView(parent,false)
+EditNameAndButtonsPanel::EditNameAndButtonsPanel()
 {
-    // IMPROVE from text to Qt key constants
-    new QShortcut(
-        QKeySequence(tr("Ctrl+s", "Save")),
-        this, SLOT(slotSaveOutlineHeader()));
 }
 
-void OutlineHeaderEditView::slotSaveOutlineHeader(void)
-{
-    emit signalSaveOutlineHeader();
-}
-
-OutlineHeaderEditView::~OutlineHeaderEditView()
+EditNameAndButtonsPanel::~EditNameAndButtonsPanel()
 {
 }
 

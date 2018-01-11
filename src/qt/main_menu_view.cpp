@@ -27,7 +27,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: mind
 
-#ifdef MFDEBUG
+#ifdef DO_MF_DEBUG
     actionMindHack = new QAction(QString::fromUtf8("Mind Hack"), mainWindow);
     actionMindHack->setStatusTip(QString::fromUtf8("Mind hacking and debugging hook"));
     actionMindHack->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
@@ -75,7 +75,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionExit->setStatusTip(QString::fromUtf8("Leave application"));
 
     menuMindForger = qMenuBar->addMenu(QString::fromUtf8("&Mind"));
-#ifdef MFDEBUG
+#ifdef DO_MF_DEBUG
     menuMindForger->addAction(actionMindHack);
 #endif
     menuMindForger->addAction(actionMindLearn);
@@ -140,9 +140,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewDwell = new QAction(QString::fromUtf8("&Memory Dwell"), mainWindow);
     actionViewDwell->setStatusTip(QString::fromUtf8("Open memory dwell"));
 
+#ifdef DO_MF_DEBUG
     actionViewCli = new QAction(QString::fromUtf8("&CLI"), mainWindow);
     actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
     actionViewCli->setStatusTip(QString::fromUtf8("Toggle command line"));
+#endif
 
     actionViewToggleRecent = new QAction(QString::fromUtf8("&Recent Notes"), mainWindow);
     actionViewToggleRecent->setStatusTip(QString::fromUtf8("View recently modified Notes"));
@@ -172,7 +174,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewStencils);
     menuView->addAction(actionViewNavigator);
     menuView->addAction(actionViewDwell);
+#ifdef DO_MF_DEBUG
     menuView->addAction(actionViewCli);
+#endif
     menuView->addAction(actionViewLimbo);
     menuView->addSeparator();
     menuView->addAction(actionViewToggleRecent);

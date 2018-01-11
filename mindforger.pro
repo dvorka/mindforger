@@ -83,7 +83,6 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     src/qt/html_delegate.h \
     lib/src/gear/lang_utils.h \
     src/qt/note_edit_highlight.h \
-    src/qt/note_edit_view.h \
     lib/src/persistence/filesystem_persistence.h \
     lib/src/persistence/persistence.h \
     lib/src/model/stencil.h \
@@ -101,7 +100,10 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     lib/src/config/color.h \
     src/qt/note_new_dialog.h \
     lib/src/mind/mind_listener.h \
-    lib/src/install/installer.h
+    lib/src/install/installer.h \
+    src/qt/note_editor_view.h \
+    src/qt/note_edit_view.h \
+    src/qt/edit_name_and_buttons_panel.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
@@ -161,7 +163,6 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/look_n_feel.cpp \
     src/qt/html_delegate.cpp \
     src/qt/note_edit_highlight.cpp \
-    src/qt/note_edit_view.cpp \
     lib/src/persistence/filesystem_persistence.cpp \
     lib/src/model/stencil.cpp \
     src/qt/gear/qutils.cpp \
@@ -176,7 +177,10 @@ SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/config/configuration.cpp \
     lib/src/representations/markdown/markdown.cpp \
     src/qt/note_new_dialog.cpp \
-    lib/src/install/installer.cpp
+    lib/src/install/installer.cpp \
+    src/qt/note_editor_view.cpp \
+    src/qt/note_edit_view.cpp \
+    src/qt/edit_name_and_buttons_panel.cpp
 
 QMAKE_CXX = ccache g++
 QMAKE_CXXFLAGS += -std=c++0x -pedantic

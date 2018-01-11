@@ -26,7 +26,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     this->maindWindowPresenter = mwp;
 
     // menu: mind
-#ifdef MFDEBUG
+#ifdef DO_MF_DEBUG
     QObject::connect(view->actionMindHack, SIGNAL(triggered()),mwp, SLOT(doActionMindHack()));
 #endif
     QObject::connect(view->actionMindSnapshot, SIGNAL(triggered()), mwp, SLOT(doActionMindSnapshot()));
@@ -45,8 +45,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 
     // menu: view
     QObject::connect(view->actionViewOutlines, SIGNAL(triggered()), mwp, SLOT(doActionViewOutlines()));
+#ifdef DO_MF_DEBUG
     QObject::connect(view->actionViewCli, SIGNAL(triggered()), mwp, SLOT(doActionCli()));
-    QObject::connect(view->actionViewCli, SIGNAL(triggered()), mwp, SLOT(doActionCli()));
+#endif
     QObject::connect(view->actionViewToggleRecent, SIGNAL(triggered()), mwp, SLOT(doActionViewToggleRecent()));
     QObject::connect(view->actionViewDistractionFree, SIGNAL(triggered()), mwp, SLOT(doActionViewDistractionFree()));
     QObject::connect(view->actionViewFullscreen, SIGNAL(triggered()), mwp, SLOT(doActionViewFullscreen()));

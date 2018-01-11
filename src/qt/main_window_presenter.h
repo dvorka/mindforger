@@ -95,7 +95,7 @@ public:
 
 public slots:
     // mindforger
-#ifdef MFDEBUG
+#ifdef DO_MF_DEBUG
     void doActionMindHack(void);
 #endif
     void doActionRepositoryOpen(void);

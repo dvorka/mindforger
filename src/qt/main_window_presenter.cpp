@@ -69,10 +69,12 @@ void MainWindowPresenter::initView(void)
 {
 }
 
+#ifdef DO_MF_DEBUG
 void MainWindowPresenter::doActionMindHack()
 {
     qDebug() << "[MindHack] Current facet: " << orloj->getFacet();
 }
+#endif
 
 void MainWindowPresenter::doActionRepositoryOpen()
 {

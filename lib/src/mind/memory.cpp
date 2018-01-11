@@ -50,31 +50,31 @@ void Memory::learn()
 {
     repositoryIndexer.updateIndex();
 
-    MFDEBUG("\nMarkdown files:");
+    MF_DEBUG("\nMarkdown files:");
     for(const string* markdownFile:repositoryIndexer.getMarkdownFiles()) {
-        MFDEBUG("\n  '" << *markdownFile << "'");
+        MF_DEBUG("\n  '" << *markdownFile << "'");
         Outline *outline = representation.outline(File(*markdownFile));
         outlines.push_back(outline);
         outlinesMap.insert(map<string,Outline*>::value_type(outline->getKey(), outline));
     }
 
-    MFDEBUG("\nOutline stencils:");
+    MF_DEBUG("\nOutline stencils:");
     for(const string* file:repositoryIndexer.getOutlineStencilsFileNames()) {
         Stencil* stencil = new Stencil{*file, ResourceType::OUTLINE};
         persistence->load(stencil);
         outlineStencils.push_back(stencil);
-        MFDEBUG("\n  " << stencil->getFilePath());
+        MF_DEBUG("\n  " << stencil->getFilePath());
     }
 
-    MFDEBUG("\nNote stencils:");
+    MF_DEBUG("\nNote stencils:");
     for(const string* file:repositoryIndexer.getNoteStencilsFileNames()) {
         Stencil* stencil = new Stencil{*file, ResourceType::NOTE};
         persistence->load(stencil);
         noteStencils.push_back(stencil);
-        MFDEBUG("\n  " << stencil->getFilePath());
+        MF_DEBUG("\n  " << stencil->getFilePath());
     }
 
-    MFDEBUG("\n");
+    MF_DEBUG("\n");
     // IMPROVE consider repositoryIndexer.clean() to save memory
 }
 

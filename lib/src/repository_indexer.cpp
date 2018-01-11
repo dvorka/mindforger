@@ -46,20 +46,24 @@ RepositoryIndexer::RepositoryIndexer(const string& repositoryDirPath)
 }
 
 void RepositoryIndexer::updateIndex() {
-    MFDEBUG("\nIndexing repository:\n  " << repositoryPath);
+#if defined(DO_MF_DEBUG)
+    MF_DEBUG("\nIndexing repository:\n  " << repositoryPath);
     auto begin = chrono::high_resolution_clock::now();
+#endif
 
     updateIndexMemory(memoryDirectory);
     updateIndexStencils(outlineStencilsDirectory, outlineStencils);
     updateIndexStencils(noteStencilsDirectory, noteStencils);
 
+#if defined(DO_MF_DEBUG)
     auto end = chrono::high_resolution_clock::now();
-    MFDEBUG("\nRepository indexed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
+    MF_DEBUG("\nRepository indexed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
+#endif
 }
 
 void RepositoryIndexer::updateIndexMemory(const string directory)
 {
-    MFDEBUG("\nINDEXING memory DIR: " << directory);
+    MF_DEBUG("\nINDEXING memory DIR: " << directory);
     DIR *dir;
     if((dir = opendir(directory.c_str()))) {
         const struct dirent *entry;
@@ -78,7 +82,7 @@ void RepositoryIndexer::updateIndexMemory(const string directory)
 
                     updateIndexMemory(path);
                 } else {
-                    MFDEBUG("\n  FILE: " << directory.c_str() << "//" << entry->d_name);
+                    MF_DEBUG("\n  FILE: " << directory.c_str() << "//" << entry->d_name);
                     ppath = new string{directory};
                     ppath->append(FILE_PATH_SEPARATOR);
                     ppath->append(entry->d_name);
@@ -96,7 +100,7 @@ void RepositoryIndexer::updateIndexMemory(const string directory)
 
 void RepositoryIndexer::updateIndexStencils(const string& directory, vector<const std::string*>& stencils)
 {
-    MFDEBUG("\nINDEXING stencils DIR: " << directory);
+    MF_DEBUG("\nINDEXING stencils DIR: " << directory);
     DIR *dir;
     if((dir = opendir(directory.c_str()))) {
         const struct dirent *entry;
@@ -104,7 +108,7 @@ void RepositoryIndexer::updateIndexStencils(const string& directory, vector<cons
             string *path;
             do {
                 if (entry->d_type != DT_DIR) {
-                    MFDEBUG("\n  FILE: " << directory.c_str() << "//" << entry->d_name);
+                    MF_DEBUG("\n  FILE: " << directory.c_str() << "//" << entry->d_name);
                     path = new string{directory};
                     path->append(FILE_PATH_SEPARATOR);
                     path->append(entry->d_name);

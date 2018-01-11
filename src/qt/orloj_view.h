@@ -27,12 +27,12 @@
 #include "outline_header_view.h"
 #include "outline_header_edit_view.h"
 #include "note_view.h"
-#include "note_edit_view.h"
+#include "note_editor_view.h"
 #include "3rdparty/elasticnodes/graphwidget.h"
 
 namespace m8r {
 
-class NoteEditView;
+class NoteEditorView;
 class OutlineHeaderEditView;
 
 /**
@@ -57,7 +57,7 @@ private:
     OutlineHeaderView* outlineHeaderView;
     OutlineHeaderEditView* outlineHeaderEdit;
     NoteView* noteView;
-    NoteEditView* noteEdit;
+    NoteEditorView* noteEdit;
 
     GraphWidget* navigator;
 
@@ -74,7 +74,7 @@ public:
     OutlineHeaderView* getOutlineHeaderView(void) const { return outlineHeaderView; }
     OutlineHeaderEditView* getOutlineHeaderEdit(void) const { return outlineHeaderEdit; }
     NoteView* getNoteView(void) const { return noteView; }
-    NoteEditView* getNoteEdit(void) const { return noteEdit; }
+    NoteEditorView* getNoteEdit(void) const { return noteEdit; }
 
     /**
      * @brief List of outlines

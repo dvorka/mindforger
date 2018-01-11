@@ -114,12 +114,12 @@ void Configuration::findOrCreateDefaultRepository(void)
         string defaultRepositoryPath{userHomePath};
         defaultRepositoryPath.append(FILE_PATH_SEPARATOR);
         defaultRepositoryPath.append(DIRNAME_M8R_REPOSITORY);
-        MFDEBUG("Checking for default repository existence: " << defaultRepositoryPath << endl);
+        MF_DEBUG("Checking for default repository existence: " << defaultRepositoryPath << endl);
         if(isDirectoryExist(defaultRepositoryPath.c_str())) {
             setActiveRepository(addRepository(defaultRepositoryPath));
         } else {
             // create default repository w/ default content using Installer class
-            MFDEBUG("  Creating a default MF repository in " << defaultRepositoryPath << endl);
+            MF_DEBUG("  Creating a default MF repository in " << defaultRepositoryPath << endl);
             installer->createEmptyMindForgerRepository(defaultRepositoryPath);
             if(!activeRepository) {
                 string* r = new string{defaultRepositoryPath};

@@ -21,13 +21,13 @@
 
 #include <QtWidgets>
 
-#include "note_edit_view.h"
+#include "note_editor_view.h"
 
 namespace m8r {
 
 class OrlojView;
 
-class OutlineHeaderEditView : public NoteEditView
+class OutlineHeaderEditView : public NoteEditorView
 {
     Q_OBJECT
 

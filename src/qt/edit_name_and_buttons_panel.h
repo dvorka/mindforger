@@ -1,5 +1,5 @@
 /*
- note_edit_view.h     MindForger thinking notebook
+ edit_name_and_buttons_panel.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,23 +16,21 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_NOTE_EDIT_VIEW_H
-#define M8R_NOTE_EDIT_VIEW_H
-
-#include <QtWidgets>
+#ifndef M8R_EDIT_NAME_AND_BUTTONS_PANEL_H
+#define M8R_EDIT_NAME_AND_BUTTONS_PANEL_H
 
 namespace m8r {
 
-class NoteEditView : QWidget
+class EditNameAndButtonsPanel
 {
 public:
-    explicit NoteEditView(QWidget* parent);
-    NoteEditView(const NoteEditView&) = delete;
-    NoteEditView(const NoteEditView&&) = delete;
-    NoteEditView &operator=(const NoteEditView&) = delete;
-    NoteEditView &operator=(const NoteEditView&&) = delete;
-    ~NoteEditView();
+    explicit EditNameAndButtonsPanel();
+    EditNameAndButtonsPanel(const EditNameAndButtonsPanel&) = delete;
+    EditNameAndButtonsPanel(const EditNameAndButtonsPanel&&) = delete;
+    EditNameAndButtonsPanel &operator=(const EditNameAndButtonsPanel&) = delete;
+    EditNameAndButtonsPanel &operator=(const EditNameAndButtonsPanel&&) = delete;
+    ~EditNameAndButtonsPanel();
 };
 
 }
-#endif // M8R_NOTE_EDIT_VIEW_H
+#endif // M8R_EDIT_NAME_AND_BUTTONS_PANEL_H

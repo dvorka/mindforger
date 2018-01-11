@@ -25,7 +25,7 @@ using namespace std;
 namespace m8r {
 
 NoteEditPresenter::NoteEditPresenter(
-        NoteEditView* view,
+        NoteEditorView* view,
         MainWindowPresenter* mwp,
         QObject* parent) : QObject(parent)
 {
