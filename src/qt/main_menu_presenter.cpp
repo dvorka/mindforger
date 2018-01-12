@@ -47,6 +47,8 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionViewOutlines, SIGNAL(triggered()), mwp, SLOT(doActionViewOutlines()));
 #ifdef DO_MF_DEBUG
     QObject::connect(view->actionViewCli, SIGNAL(triggered()), mwp, SLOT(doActionCli()));
+#else
+    QObject::connect(view, SIGNAL(showCli()), mwp, SLOT(doActionCli()));
 #endif
     QObject::connect(view->actionViewToggleRecent, SIGNAL(triggered()), mwp, SLOT(doActionViewToggleRecent()));
     QObject::connect(view->actionViewDistractionFree, SIGNAL(triggered()), mwp, SLOT(doActionViewDistractionFree()));

@@ -144,6 +144,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewCli = new QAction(QString::fromUtf8("&CLI"), mainWindow);
     actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
     actionViewCli->setStatusTip(QString::fromUtf8("Toggle command line"));
+#else
+    cliShortcut = new QShortcut(QKeySequence(Qt::ALT+Qt::Key_X), mainWindow);
+    QObject::connect(cliShortcut, SIGNAL(activated()), this, SLOT(slotShowCli()));
 #endif
 
     actionViewToggleRecent = new QAction(QString::fromUtf8("&Recent Notes"), mainWindow);

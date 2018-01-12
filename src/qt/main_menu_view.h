@@ -87,6 +87,8 @@ public:
     QAction* actionViewStencils;
 #ifdef DO_MF_DEBUG
     QAction* actionViewCli;
+#else
+    QShortcut* cliShortcut;
 #endif
     QAction* actionViewToggleRecent;
     QAction* actionViewLimbo;
@@ -148,6 +150,12 @@ public:
     MainMenuView &operator=(const MainMenuView&) = delete;
     MainMenuView &operator=(const MainMenuView&&) = delete;
     virtual ~MainMenuView();
+
+private slots:
+    void slotShowCli() { emit showCli(); }
+
+signals:
+    void showCli(void);
 };
 
 }
