@@ -24,21 +24,21 @@ FtsDialog::FtsDialog(QWidget *parent)
     : QDialog(parent)
 {
     // widgets
-    label = new QLabel(tr("Text to &find:"));
+    label = new QLabel{tr("Text to &find:")};
     lineEdit = new QLineEdit{this};
     label->setBuddy(lineEdit);
 
-    completer = new QCompleter(history, this);
+    completer = new QCompleter{history, this};
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     lineEdit->setCompleter(completer);
 
-    caseCheckBox = new QCheckBox(tr("&Ignore case"));
+    caseCheckBox = new QCheckBox{tr("&Ignore case")};
 
-    findButton = new QPushButton(tr("&Search"));
+    findButton = new QPushButton{tr("&Search")};
     findButton->setDefault(true);
     findButton->setEnabled(false);
 
-    closeButton = new QPushButton(tr("&Cancel"));
+    closeButton = new QPushButton{tr("&Cancel")};
 
     // signals
     connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(enableFindButton(const QString&)));
@@ -46,13 +46,13 @@ FtsDialog::FtsDialog(QWidget *parent)
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     // assembly
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QVBoxLayout *mainLayout = new QVBoxLayout{};
     mainLayout->addWidget(label);
     mainLayout->addWidget(lineEdit);
     mainLayout->addLayout(mainLayout);
     mainLayout->addWidget(caseCheckBox);
 
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    QHBoxLayout *buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
     buttonLayout->addWidget(closeButton);
     buttonLayout->addWidget(findButton);
