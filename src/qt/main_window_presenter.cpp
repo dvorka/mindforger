@@ -35,22 +35,22 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view, Configuration& co
     markdownRepresentation = new MarkdownOutlineRepresentation{mind->ontology()};
 
     // assemble presenters w/ UI
-    mainMenu = new MainMenuPresenter(this);
-    cli = new CliAndBreadcrumbsPresenter(this, view.getCli(), mind);
-    orloj = new OrlojPresenter(this, view.getOrloj(), mind);
-    statusBar = new StatusBarPresenter(view.getStatusBar(), mind);
+    mainMenu = new MainMenuPresenter{this};
+    cli = new CliAndBreadcrumbsPresenter{this, view.getCli(), mind};
+    orloj = new OrlojPresenter{this, view.getOrloj(), mind};
+    statusBar = new StatusBarPresenter{view.getStatusBar(), mind};
 
     // initialize components
-    newOutlineDialog = new OutlineNewDialog(
+    newOutlineDialog = new OutlineNewDialog{
                 QString::fromStdString(configuration.getMemoryPath()),
                 mind->remind().getOntology(),
                 mind->remind().getStencils(ResourceType::OUTLINE),
-                &view);
-    newNoteDialog = new NoteNewDialog(
+                &view};
+    newNoteDialog = new NoteNewDialog{
                 mind->remind().getOntology(),
                 mind->remind().getStencils(ResourceType::NOTE),
-                &view);
-    ftsDialog = new FtsDialog(&view);
+                &view};
+    ftsDialog = new FtsDialog{&view};
 
     // wire signals
     QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
