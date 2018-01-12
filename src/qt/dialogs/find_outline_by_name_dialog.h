@@ -19,11 +19,15 @@
 #ifndef M8RUI_FIND_OUTLINE_BY_NAME_DIALOG_H
 #define M8RUI_FIND_OUTLINE_BY_NAME_DIALOG_H
 
+#include <vector>
+
 #include <QtWidgets>
+
+#include "fts_dialog.h"
 
 namespace m8r {
 
-class FindOutlineByNameDialog : public QObject
+class FindOutlineByNameDialog : public FtsDialog
 {
     Q_OBJECT
 
@@ -34,6 +38,8 @@ public:
     FindOutlineByNameDialog &operator=(const FindOutlineByNameDialog&) = delete;
     FindOutlineByNameDialog &operator=(const FindOutlineByNameDialog&&) = delete;
     ~FindOutlineByNameDialog();
+
+    void show(std::vector<std::string>* outlineNames);
 };
 
 }

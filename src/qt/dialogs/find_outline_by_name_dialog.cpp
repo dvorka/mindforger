@@ -20,8 +20,30 @@
 
 namespace m8r {
 
+using namespace std;
+
 FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
+    : FtsDialog(parent)
 {
+    label->setText("Outline name:");
+    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+
+    // dialog
+    setWindowTitle(tr("Find Outline by Name"));
+}
+
+void FindOutlineByNameDialog::show(vector<string>* outlineNames)
+{
+    qDebug() << "NNN " << outlineNames->size();
+
+    if(outlineNames && outlineNames->size()) {
+        for(string n:*outlineNames) {
+            completerModel << QString::fromStdString(n);
+        }
+        ((QStringListModel*)completer->model())->setStringList(completerModel);
+    }
+
+    FtsDialog::show();
 }
 
 FindOutlineByNameDialog::~FindOutlineByNameDialog()

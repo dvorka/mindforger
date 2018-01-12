@@ -108,7 +108,6 @@ public:
 
     OrlojPresenterFacets getFacet(void) const { return activeFacet; }
     void setFacet(OrlojPresenterFacets facet) {
-        qDebug() << "Changing facet: " << activeFacet << " > " << facet;
         activeFacet = facet;
     }
 

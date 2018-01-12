@@ -51,11 +51,13 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view, Configuration& co
                 mind->remind().getStencils(ResourceType::NOTE),
                 &view};
     ftsDialog = new FtsDialog{&view};
+    findOutlineByNameDialog = new FindOutlineByNameDialog{&view};
 
     // wire signals
     QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
     QObject::connect(ftsDialog->getFindButton(), SIGNAL(clicked()), this, SLOT(handleFts()));
+    QObject::connect(findOutlineByNameDialog->getFindButton(), SIGNAL(clicked()), this, SLOT(handleFindOutlineByName()));
 }
 
 MainWindowPresenter::~MainWindowPresenter()
@@ -139,11 +141,18 @@ void MainWindowPresenter::executeFts(const string& searchedString, const bool ig
 
 void MainWindowPresenter::doActionFindOutlineByName()
 {
-    cli->executeListOutlines();
-    view.getCli()->setBreadcrumbPath("/");
-    // TODO constant
-    view.getCli()->setCommand("find outline by name ");
-    view.getCli()->showCli(false);
+    // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
+    vector<string>* outlineTitles=mind->getOutlineTitles();
+
+    findOutlineByNameDialog->show(outlineTitles);
+}
+
+void MainWindowPresenter::handleFindOutlineByName()
+{
+    QString searchedString = findOutlineByNameDialog->getSearchedString();
+    findOutlineByNameDialog->hide();
+
+    // ...
 }
 
 void MainWindowPresenter::doActionFindNoteByName()

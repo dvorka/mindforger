@@ -30,16 +30,18 @@ class FtsDialog : public QDialog
     Q_OBJECT
 
 private:
-    QStringList history;
-
-    QLabel* label;
-    QCompleter* completer;
     QLineEdit* lineEdit;
     QCheckBox* caseCheckBox;
     QPushButton* findButton;
     QPushButton* closeButton;
 
     Outline* scope;
+
+protected:
+    QStringList completerModel;
+
+    QCompleter* completer;
+    QLabel* label;
 
 public:
     explicit FtsDialog(QWidget* parent);

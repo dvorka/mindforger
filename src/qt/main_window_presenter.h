@@ -32,6 +32,7 @@
 #include "dialogs/outline_new_dialog.h"
 #include "dialogs/note_new_dialog.h"
 #include "dialogs/fts_dialog.h"
+#include "dialogs/find_outline_by_name_dialog.h"
 
 #include <QtWidgets>
 
@@ -73,6 +74,7 @@ private:
     OutlineNewDialog* newOutlineDialog;
     NoteNewDialog* newNoteDialog;
     FtsDialog* ftsDialog;
+    FindOutlineByNameDialog *findOutlineByNameDialog;
 
 public:
     explicit MainWindowPresenter(MainWindowView& view, Configuration& configuration);
@@ -109,6 +111,7 @@ public slots:
     void doActionFts(void);
     void handleFts(void);
     void doActionFindOutlineByName(void);
+    void handleFindOutlineByName(void);
     void doActionFindNoteByName(void);
     void doActionFindNoteByTag(void);
     // view

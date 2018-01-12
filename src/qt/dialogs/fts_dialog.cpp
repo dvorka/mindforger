@@ -28,7 +28,7 @@ FtsDialog::FtsDialog(QWidget *parent)
     lineEdit = new QLineEdit{this};
     label->setBuddy(lineEdit);
 
-    completer = new QCompleter{history, this};
+    completer = new QCompleter{completerModel, this};
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     lineEdit->setCompleter(completer);
 
@@ -75,8 +75,8 @@ void FtsDialog::enableFindButton(const QString& text)
 void FtsDialog::addExpressionToHistory()
 {
     if(lineEdit->text().size()) {
-        history.insert(0, lineEdit->text());
-        ((QStringListModel*)completer->model())->setStringList(history);
+        completerModel.insert(0, lineEdit->text());
+        ((QStringListModel*)completer->model())->setStringList(completerModel);
     }
 }
 
