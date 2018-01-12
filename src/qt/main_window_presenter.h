@@ -29,8 +29,9 @@
 #include "orloj_presenter.h"
 #include "status_bar_presenter.h"
 
-#include "outline_new_dialog.h"
-#include "note_new_dialog.h"
+#include "dialogs/outline_new_dialog.h"
+#include "dialogs/note_new_dialog.h"
+#include "dialogs/fts_dialog.h"
 
 #include <QtWidgets>
 
@@ -71,6 +72,7 @@ private:
 
     OutlineNewDialog* newOutlineDialog;
     NoteNewDialog* newNoteDialog;
+    FtsDialog* ftsDialog;
 
 public:
     explicit MainWindowPresenter(MainWindowView& view, Configuration& configuration);
@@ -105,10 +107,10 @@ public slots:
     void doActionExit(void);
     // find
     void doActionFts(void);
+    void handleFts(void);
     void doActionFindOutlineByName(void);
     void doActionFindNoteByName(void);
     void doActionFindNoteByTag(void);
-    void doActionFindPreviousNote(void);
     // view
     void doActionViewOutlines(void);
     void doActionViewToggleRecent(void);
@@ -142,6 +144,8 @@ public slots:
     void doActionHelpReportBug(void);
     void doActionHelpCheckForUpdates(void);
     void doActionHelpAboutMindForger(void);
+
+    void executeFts(const std::string& command, const bool ignoreCase=false) const;
 };
 
 }

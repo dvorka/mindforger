@@ -42,15 +42,11 @@ private:
     CliAndBreadcrumbsView* view;
     Mind* mind;
 
-    QString* ftsExpr;
-
 public:
     CliAndBreadcrumbsPresenter(
             const MainWindowPresenter* mainPresenter,
             CliAndBreadcrumbsView* view,
             Mind* mind);
-
-    const QString* getFtsExpression(void) const { return ftsExpr; }
 
     void executeListOutlines(void);
     void executeListNotes(void);

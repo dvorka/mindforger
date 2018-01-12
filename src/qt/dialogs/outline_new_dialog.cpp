@@ -172,7 +172,7 @@ OutlineNewDialog::OutlineNewDialog(
 
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-    // wire signals ensuring that close & set dialog status
+    // signals
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     connect(generalTab->getNameEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(refreshPath(const QString &)));
@@ -182,7 +182,9 @@ OutlineNewDialog::OutlineNewDialog(
     mainLayout->addWidget(buttonBox);
     setLayout(mainLayout);
 
+    // dialog
     setWindowTitle(tr("New Outline Dialog"));
+    setModal(true);
 }
 
 void OutlineNewDialog::show()

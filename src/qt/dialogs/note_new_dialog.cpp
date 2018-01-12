@@ -42,6 +42,7 @@ NoteNewDialog::GeneralTab::GeneralTab(QWidget *parent)
     this->stencilLabel = new QLabel(tr("Stencil")+":", this);
     this->stencilCombo = new QComboBox(this);
 
+    // signals
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(nameLabel);
     mainLayout->addWidget(nameEdit);
@@ -130,6 +131,7 @@ NoteNewDialog::NoteNewDialog(
     setLayout(mainLayout);
 
     setWindowTitle(tr("New Note Dialog"));
+    setModal(true);
 }
 
 void NoteNewDialog::show()

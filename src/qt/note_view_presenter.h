@@ -48,6 +48,9 @@ private:
 
     Note* currentNote;
 
+    QString ftsExpression;
+    bool ftsIgnoreCase;
+
 public:
     NoteViewPresenter(NoteView* view, OrlojPresenter* orloj);
     NoteViewPresenter(const NoteViewPresenter&) = delete;
@@ -58,7 +61,13 @@ public:
 
     NoteViewModel* getModel(void) const { return model; }
 
-    void refresh(Note* note, const QString* ftsExpr);
+    void refresh(Note* note);
+
+    void clearFtsExpression(void) { ftsExpression.clear(); }
+    void setFtsExpression(const std::string& expression) { ftsExpression = QString::fromStdString(expression); }
+    void setFtsExpression(const QString& expression) { ftsExpression = expression; }
+    const QString& getFtsExpression(void) const { return ftsExpression; }
+    void setFtsIgnoreCase(bool ignoreCase) { ftsIgnoreCase = ignoreCase; }
 
 public slots:
     void slotEditNote(void);

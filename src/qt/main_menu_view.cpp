@@ -94,9 +94,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: search
 
     // TODO tr()
-    actionFts = new QAction(QString::fromUtf8("&Fulltext search"), mainWindow);
+    actionFts = new QAction(QString::fromUtf8("&Full-text search"), mainWindow);
     actionFts->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
-    actionFts->setStatusTip(QString::fromUtf8("Note fulltext search"));
+    actionFts->setStatusTip(QString::fromUtf8("Note full-text search"));
 
     actionFindOutlineByName = new QAction(QString::fromUtf8("Find &Outline by Name"), mainWindow);
     actionFindOutlineByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
@@ -110,15 +110,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFindTagByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
     actionFindTagByName->setStatusTip(QString::fromUtf8("Find tag by name"));
 
-    actionFindPreviousNote = new QAction(QString::fromUtf8("Find &Previous Note"), mainWindow);
-    actionFindPreviousNote->setStatusTip(QString::fromUtf8("Find previous note in history"));
-
     menuFind = qMenuBar->addMenu(QString::fromUtf8("&Search"));
     menuFind->addAction(actionFts);
     menuFind->addAction(actionFindOutlineByName);
     menuFind->addAction(actionFindNoteByName);
     menuFind->addAction(actionFindTagByName);
-    menuFind->addAction(actionFindPreviousNote);
 
     // menu: view
     actionViewHome = new QAction(QString::fromUtf8("&Home"), mainWindow);

@@ -76,7 +76,6 @@ public:
     QAction* actionFindNoteByName;
     QAction* actionFindTagByName;
     QAction* actionFindNoteByTag;
-    QAction* actionFindPreviousNote;
 
     // menu: View
     QAction* actionViewHome;

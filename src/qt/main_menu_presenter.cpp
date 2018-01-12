@@ -33,15 +33,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionExit, SIGNAL(triggered()), mwp, SLOT(doActionExit()));
 
     // menu: find
-    QObject::connect(
-        view->actionFts, SIGNAL(triggered()),
-        mwp, SLOT(doActionFts()));
-    QObject::connect(
-        view->actionFindOutlineByName, SIGNAL(triggered()),
-        mwp, SLOT(doActionFindOutlineByName()));
-    QObject::connect(view->actionFindNoteByName, SIGNAL(triggered()),
-        mwp, SLOT(doActionFindNoteByName()));
-    QObject::connect(view->actionFindPreviousNote, SIGNAL(triggered()), mwp, SLOT(doActionFindPreviousNote()));
+    QObject::connect(view->actionFts, SIGNAL(triggered()), mwp, SLOT(doActionFts()));
+    QObject::connect(view->actionFindOutlineByName, SIGNAL(triggered()), mwp, SLOT(doActionFindOutlineByName()));
+    QObject::connect(view->actionFindNoteByName, SIGNAL(triggered()), mwp, SLOT(doActionFindNoteByName()));
 
     // menu: view
     QObject::connect(view->actionViewOutlines, SIGNAL(triggered()), mwp, SLOT(doActionViewOutlines()));

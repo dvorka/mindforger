@@ -45,8 +45,8 @@ NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
 
 }
 
-// when HTML will be here: first decorate MD with HTML colors > then MD to HTML conversion
-void NoteViewPresenter::refresh(Note* note, const QString* ftsExpr2Highlight)
+// HINT when HTML will be here: first decorate MD with HTML colors > then MD to HTML conversion
+void NoteViewPresenter::refresh(Note* note)
 {
     this->currentNote = note;
 
@@ -58,11 +58,12 @@ void NoteViewPresenter::refresh(Note* note, const QString* ftsExpr2Highlight)
     html += LookAndFeels::getInstance().getTextColor();
     html += QString::fromUtf8("'><pre>");
 
-    if(ftsExpr2Highlight != nullptr) {
+    if(!ftsExpression.isEmpty()) {
         QString highlighted = QString::fromStdString("<span style='background-color: red; color: white;'>");
-        highlighted += ftsExpr2Highlight;
+        // IMPROVE instead of searched expression that MAY differ in CASE, here should be original string found in the haystack
+        highlighted += ftsExpression;
         highlighted += QString::fromStdString("</span>");
-        noteHtml.replace(*ftsExpr2Highlight, highlighted);
+        noteHtml.replace(ftsExpression, highlighted, ftsIgnoreCase?Qt::CaseInsensitive:Qt::CaseSensitive);
     }
     html += noteHtml;
     html += QString::fromStdString("</pre></body></html>");

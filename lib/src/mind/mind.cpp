@@ -89,7 +89,7 @@ vector<string>* Mind::getOutlineTitles(void) const
     return result;
 }
 
-vector<Note*>* Mind::findNoteFts(const string& regexp)
+vector<Note*>* Mind::findNoteFts(const string& regexp, const bool ignoreCase)
 {
     if(allNotesCache.size()) {
         allNotesCache.clear();
@@ -97,27 +97,70 @@ vector<Note*>* Mind::findNoteFts(const string& regexp)
 
     vector<Note*>* result = new vector<Note*>();
     const vector<m8r::Outline*> outlines = memory.getOutlines();
+    string lowerRegexp{};
+    stringToLower(regexp, lowerRegexp);
+    string s{};
     for(Outline* outline:outlines) {
-        if(outline->getTitle().find(regexp)!=string::npos) {
-            result->push_back(outline->getOutlineDescriptorAsNote());
-        } else {
-            for(string* d:outline->getDescription()) {
-                if(d && d->find(regexp)!=string::npos) {
-                    result->push_back(outline->getOutlineDescriptorAsNote());
-                    // avoid multiple matches in the result
-                    break;
+        // IMPROVE make this faster - do NOT convert to lower case, but compare it in that method > will do less
+        if(ignoreCase) {
+            // case INSENSITIVE
+            s.clear();
+            stringToLower(outline->getTitle(), s);
+            if(s.find(lowerRegexp)!=string::npos) {
+                result->push_back(outline->getOutlineDescriptorAsNote());
+            } else {
+                for(string* d:outline->getDescription()) {
+                    if(d) {
+                         s.clear();
+                         stringToLower(*d, s);
+                         if(s.find(lowerRegexp)!=string::npos) {
+                             result->push_back(outline->getOutlineDescriptorAsNote());
+                             break;
+                         }
+                    }
                 }
             }
-        }
-
-        for(Note* note:outline->getNotes()) {
-            if(note->getTitle().find(regexp)!=string::npos) {
-                result->push_back(note);
+            for(Note* note:outline->getNotes()) {
+                s.clear();
+                stringToLower(note->getTitle(), s);
+                if(s.find(lowerRegexp)!=string::npos) {
+                    result->push_back(note);
+                } else {
+                    for(string* d:note->getDescription()) {
+                        if(d) {
+                             s.clear();
+                             stringToLower(*d, s);
+                             if(s.find(lowerRegexp)!=string::npos) {
+                                 result->push_back(note);
+                                 break;
+                             }
+                        }
+                    }
+                }
+            }
+        } else {
+            // case SENSITIVE
+            if(outline->getTitle().find(regexp)!=string::npos) {
+                result->push_back(outline->getOutlineDescriptorAsNote());
             } else {
-                for(string* d:note->getDescription()) {
+                for(string* d:outline->getDescription()) {
                     if(d && d->find(regexp)!=string::npos) {
-                        result->push_back(note);
+                        result->push_back(outline->getOutlineDescriptorAsNote());
+                        // avoid multiple matches in the result
                         break;
+                    }
+                }
+            }
+            for(Note* note:outline->getNotes()) {
+                if(note->getTitle().find(regexp)!=string::npos) {
+                    result->push_back(note);
+                } else {
+                    for(string* d:note->getDescription()) {
+                        if(d && d->find(regexp)!=string::npos) {
+                            result->push_back(note);
+                            // avoid multiple matches in the result
+                            break;
+                        }
                     }
                 }
             }

@@ -50,10 +50,12 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view, Configuration& co
                 mind->remind().getOntology(),
                 mind->remind().getStencils(ResourceType::NOTE),
                 &view);
+    ftsDialog = new FtsDialog(&view);
 
     // wire signals
     QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
+    QObject::connect(ftsDialog->getFindButton(), SIGNAL(clicked()), this, SLOT(handleFts()));
 }
 
 MainWindowPresenter::~MainWindowPresenter()
@@ -95,10 +97,34 @@ void MainWindowPresenter::doActionExit()
 
 void MainWindowPresenter::doActionFts()
 {
-    view.getCli()->setBreadcrumbPath("/fts");
-    // TODO constant
-    view.getCli()->setCommand("fts ");
-    view.getCli()->showCli(false);
+    ftsDialog->show();
+}
+
+void MainWindowPresenter::handleFts()
+{
+    QString searchedString = ftsDialog->getSearchedString();
+    ftsDialog->hide();
+    executeFts(searchedString.toStdString(), ftsDialog->getCaseCheckbox()->isChecked());
+}
+
+void MainWindowPresenter::executeFts(const string& searchedString, const bool ignoreCase) const
+{
+    vector<Note*>* result = mind->findNoteFts(searchedString, ignoreCase);
+
+    QString info = QString::number(result->size());
+    info += QString::fromUtf8(" result(s) found for '");
+    info += QString::fromStdString(searchedString);
+    info += QString::fromUtf8("'");
+    view.getStatusBar()->showInfo(info);
+
+    if(result && result->size()) {
+        orloj->getNoteView()->setFtsExpression(searchedString);
+        orloj->getNoteView()->setFtsIgnoreCase(ignoreCase);
+
+        orloj->showFacetFtsResult(result);
+    } else {
+        QMessageBox::information(&view, tr("Full-text Search Result"), tr("No matching Outline or Note found."));
+    }
 }
 
 void MainWindowPresenter::doActionFindOutlineByName()
@@ -121,10 +147,6 @@ void MainWindowPresenter::doActionFindNoteByName()
 }
 
 void MainWindowPresenter::doActionFindNoteByTag()
-{
-}
-
-void MainWindowPresenter::doActionFindPreviousNote()
 {
 }
 

@@ -144,7 +144,8 @@ void OrlojPresenter::fromOutlineHeaderEditBackToView(Outline* outline)
 
 void OrlojPresenter::fromNoteEditBackToView(Note* note)
 {
-    noteViewPresenter->refresh(note, nullptr);
+    noteViewPresenter->clearFtsExpression();
+    noteViewPresenter->refresh(note);
     // update note in outline tree
     outlineViewPresenter->refresh(note);
 
@@ -169,7 +170,7 @@ void OrlojPresenter::slotShowNote(const QItemSelection& selected, const QItemSel
         // IMPROVE make my role constant
         Note* note = item->data(Qt::UserRole + 1).value<Note*>();
 
-        noteViewPresenter->refresh(note, mainPresenter->getCli()->getFtsExpression());
+        noteViewPresenter->refresh(note);
         view->showFacetNoteView();
         mainPresenter->getStatusBar()->showInfo(QString(note->getTitle().c_str()));
     } else {
@@ -191,7 +192,7 @@ void OrlojPresenter::slotShowNoteAsResult(
         // TODO make my role constant
         Note* note = item->data(Qt::UserRole + 1).value<Note*>();
 
-        noteViewPresenter->refresh(note, mainPresenter->getCli()->getFtsExpression());
+        noteViewPresenter->refresh(note);
         view->showFacetFtsResultDetail();
         mainPresenter->getStatusBar()->showInfo(QString(note->getTitle().c_str()));
     } else {

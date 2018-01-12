@@ -94,16 +94,17 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     src/qt/outline_header_view_presenter.h \
     src/qt/outline_header_edit_view.h \
     src/qt/outline_header_view.h \
-    src/qt/outline_new_dialog.h \
     lib/src/gear/color.h \
     lib/src/version.h \
     lib/src/config/color.h \
-    src/qt/note_new_dialog.h \
     lib/src/mind/mind_listener.h \
     lib/src/install/installer.h \
     src/qt/note_editor_view.h \
     src/qt/note_edit_view.h \
-    src/qt/edit_name_and_buttons_panel.h
+    src/qt/edit_name_and_buttons_panel.h \
+    src/qt/dialogs/note_new_dialog.h \
+    src/qt/dialogs/outline_new_dialog.h \
+    src/qt/dialogs/fts_dialog.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
@@ -173,14 +174,15 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/outline_header_view_presenter.cpp \
     src/qt/outline_header_edit_view.cpp \
     src/qt/outline_header_view.cpp \
-    src/qt/outline_new_dialog.cpp \
     lib/src/config/configuration.cpp \
     lib/src/representations/markdown/markdown.cpp \
-    src/qt/note_new_dialog.cpp \
     lib/src/install/installer.cpp \
     src/qt/note_editor_view.cpp \
     src/qt/note_edit_view.cpp \
-    src/qt/edit_name_and_buttons_panel.cpp
+    src/qt/edit_name_and_buttons_panel.cpp \
+    src/qt/dialogs/note_new_dialog.cpp \
+    src/qt/dialogs/outline_new_dialog.cpp \
+    src/qt/dialogs/fts_dialog.cpp
 
 QMAKE_CXX = ccache g++
 QMAKE_CXXFLAGS += -std=c++0x -pedantic

@@ -28,8 +28,6 @@ CliAndBreadcrumbsPresenter::CliAndBreadcrumbsPresenter(
         Mind* mind)
     : mainPresenter(mainPresenter), view(view), mind(mind)
 {
-    ftsExpr = nullptr;
-
     // wire signals
     QObject::connect(
         view->cli, SIGNAL(returnPressed()),
@@ -84,11 +82,6 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
 // TODO i18n
 void CliAndBreadcrumbsPresenter::executeCommand(void)
 {
-    if(ftsExpr != nullptr) {
-        delete ftsExpr;
-        ftsExpr = nullptr;
-    }
-
     QString command = view->getCommand();
     if(command.size()) {
         // TODO convert to qstring once
@@ -132,17 +125,11 @@ void CliAndBreadcrumbsPresenter::executeCommand(void)
 
 void CliAndBreadcrumbsPresenter::executeFts(QString& command)
 {
-    // TODO check size
-    ftsExpr = new QString(QString::fromStdString(command.toStdString().substr(4)));
-    vector<Note*>* result = mind->findNoteFts(ftsExpr->toUtf8().constData());
-
-    QString info = QString::number(result->size());
-    info += QString::fromUtf8(" result(s) found for '");
-    info += ftsExpr;
-    info += QString::fromUtf8("'");
-    mainPresenter->getStatusBar()->showInfo(info);
-
-    mainPresenter->getOrloj()->showFacetFtsResult(result);
+    string searchedString = command.toStdString().substr(4);
+    if(!searchedString.empty()) {
+        // IMPROVE get ignore case from the command and pass it as 2nd parameter
+        mainPresenter->executeFts(searchedString);
+    }
 }
 
 void CliAndBreadcrumbsPresenter::executeListOutlines(void)

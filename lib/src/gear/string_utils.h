@@ -53,11 +53,14 @@ char **stringSplit(const char *s, const char delimiter, u_int16_t resultBaseSize
  */
 std::string normalizeToNcName(std::string name, char quoteChar);
 
+/**
+ * @brief Check wheter strings are identical while ignoring case.
+ */
 static inline bool stringistring(const std::string& a, const std::string& b)
 {
     unsigned int asize = a.size();
     if(b.size()==asize) {
-        for (unsigned int i = 0; i < asize; ++i) {
+        for(unsigned int i = 0; i < asize; ++i) {
             if(tolower(a[i]) != tolower(b[i])) {
                 return false;
             }
