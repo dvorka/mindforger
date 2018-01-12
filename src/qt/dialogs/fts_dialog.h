@@ -21,6 +21,8 @@
 
 #include <QtWidgets>
 
+#include "../../../lib/src/model/outline.h"
+
 namespace m8r {
 
 class FtsDialog : public QDialog
@@ -37,6 +39,8 @@ private:
     QPushButton* findButton;
     QPushButton* closeButton;
 
+    Outline* scope;
+
 public:
     explicit FtsDialog(QWidget* parent);
     FtsDialog(const FtsDialog&) = delete;
@@ -44,6 +48,10 @@ public:
     FtsDialog &operator=(const FtsDialog&) = delete;
     FtsDialog &operator=(const FtsDialog&&) = delete;
     ~FtsDialog();
+
+    void clearScope(void) { scope = nullptr; }
+    void setScope(Outline* o) { scope = o; }
+    Outline* getScope(void) { return scope; }
 
     QString getSearchedString() const { return lineEdit->text(); }
     QCheckBox* getCaseCheckbox(void) const { return caseCheckBox; }

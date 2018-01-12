@@ -145,7 +145,7 @@ public slots:
     void doActionHelpCheckForUpdates(void);
     void doActionHelpAboutMindForger(void);
 
-    void executeFts(const std::string& command, const bool ignoreCase=false) const;
+    void executeFts(const std::string& command, const bool ignoreCase=false, Outline* scope=nullptr) const;
 };
 
 }

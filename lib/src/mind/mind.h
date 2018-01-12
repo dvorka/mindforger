@@ -116,7 +116,7 @@ public:
      */
     std::unique_ptr<std::vector<Outline*>> findOutlineByTitleFts(const std::string& regexp) const;
     std::vector<Note*>* findNoteByTitleFts(const std::string& regexp) const;
-    std::vector<Note*>* findNoteFts(const std::string& regexp, const bool ignoreCase);
+    std::vector<Note*>* findNoteFts(const std::string& regexp, const bool ignoreCase, Outline* scope=nullptr);
     // TODO findFts() - search also outline title and description
     //   >> temporary note of Outline type (never saved), cannot be created by user
     std::vector<std::string>* getOutlineTitles(void) const;
@@ -360,6 +360,12 @@ private:
      * @brief Invoked on remembering Outline/Note/... to flush all inferred knowledge, caches, ...
      */
     void onRemembering(void);
+
+    void findNoteFts(
+            std::vector<Note*>* result,
+            const std::string& regexp,
+            const bool ignoreCase,
+            Outline* outline);
 };
 
 } /* namespace */

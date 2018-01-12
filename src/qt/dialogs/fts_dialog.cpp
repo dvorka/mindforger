@@ -24,12 +24,11 @@ FtsDialog::FtsDialog(QWidget *parent)
     : QDialog(parent)
 {
     // widgets
-    label = new QLabel(tr("&Find string:"));
+    label = new QLabel(tr("Text to &find:"));
     lineEdit = new QLineEdit{this};
     label->setBuddy(lineEdit);
 
     completer = new QCompleter(history, this);
-    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     lineEdit->setCompleter(completer);
 
@@ -54,6 +53,7 @@ FtsDialog::FtsDialog(QWidget *parent)
     mainLayout->addWidget(caseCheckBox);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->addStretch(1);
     buttonLayout->addWidget(closeButton);
     buttonLayout->addWidget(findButton);
     buttonLayout->addStretch();
@@ -63,6 +63,7 @@ FtsDialog::FtsDialog(QWidget *parent)
 
     // dialog
     setWindowTitle(tr("Full-text Search"));
+    resize(fontMetrics().averageCharWidth()*35, height());
     setModal(true);
 }
 

@@ -97,6 +97,13 @@ void MainWindowPresenter::doActionExit()
 
 void MainWindowPresenter::doActionFts()
 {
+    if(orloj->isFacetActiveOutlineManagement()) {
+        ftsDialog->setWindowTitle(tr("Full-text Search in Outline"));
+        ftsDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
+    } else {
+        ftsDialog->setWindowTitle(tr("Full-text Search"));
+        ftsDialog->clearScope();
+    }
     ftsDialog->show();
 }
 
@@ -104,12 +111,15 @@ void MainWindowPresenter::handleFts()
 {
     QString searchedString = ftsDialog->getSearchedString();
     ftsDialog->hide();
-    executeFts(searchedString.toStdString(), ftsDialog->getCaseCheckbox()->isChecked());
+    executeFts(
+        searchedString.toStdString(),
+        ftsDialog->getCaseCheckbox()->isChecked(),
+        ftsDialog->getScope());
 }
 
-void MainWindowPresenter::executeFts(const string& searchedString, const bool ignoreCase) const
+void MainWindowPresenter::executeFts(const string& searchedString, const bool ignoreCase, Outline* scope) const
 {
-    vector<Note*>* result = mind->findNoteFts(searchedString, ignoreCase);
+    vector<Note*>* result = mind->findNoteFts(searchedString, ignoreCase, scope);
 
     QString info = QString::number(result->size());
     info += QString::fromUtf8(" result(s) found for '");
