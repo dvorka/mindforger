@@ -144,7 +144,7 @@ void OrlojPresenter::fromOutlineHeaderEditBackToView(Outline* outline)
 
 void OrlojPresenter::fromNoteEditBackToView(Note* note)
 {
-    noteViewPresenter->clearFtsExpression();
+    noteViewPresenter->clearSearchExpression();
     noteViewPresenter->refresh(note);
     // update note in outline tree
     outlineViewPresenter->refresh(note);

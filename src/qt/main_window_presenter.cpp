@@ -118,8 +118,8 @@ void MainWindowPresenter::executeFts(const string& searchedString, const bool ig
     view.getStatusBar()->showInfo(info);
 
     if(result && result->size()) {
-        orloj->getNoteView()->setFtsExpression(searchedString);
-        orloj->getNoteView()->setFtsIgnoreCase(ignoreCase);
+        orloj->getNoteView()->setSearchExpression(searchedString);
+        orloj->getNoteView()->setSearchIgnoreCase(ignoreCase);
 
         orloj->showFacetFtsResult(result);
     } else {

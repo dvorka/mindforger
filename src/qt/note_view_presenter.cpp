@@ -58,12 +58,12 @@ void NoteViewPresenter::refresh(Note* note)
     html += LookAndFeels::getInstance().getTextColor();
     html += QString::fromUtf8("'><pre>");
 
-    if(!ftsExpression.isEmpty()) {
+    if(!searchExpression.isEmpty()) {
         QString highlighted = QString::fromStdString("<span style='background-color: red; color: white;'>");
         // IMPROVE instead of searched expression that MAY differ in CASE, here should be original string found in the haystack
-        highlighted += ftsExpression;
+        highlighted += searchExpression;
         highlighted += QString::fromStdString("</span>");
-        noteHtml.replace(ftsExpression, highlighted, ftsIgnoreCase?Qt::CaseInsensitive:Qt::CaseSensitive);
+        noteHtml.replace(searchExpression, highlighted, searchIgnoreCase?Qt::CaseInsensitive:Qt::CaseSensitive);
     }
     html += noteHtml;
     html += QString::fromStdString("</pre></body></html>");
