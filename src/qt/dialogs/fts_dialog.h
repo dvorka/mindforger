@@ -28,11 +28,14 @@ class FtsDialog : public QDialog
     Q_OBJECT
 
 private:
-     QLabel *label;
-     QLineEdit *lineEdit;
-     QCheckBox *caseCheckBox;
-     QPushButton *findButton;
-     QPushButton *closeButton;
+    QStringList history;
+
+    QLabel* label;
+    QCompleter* completer;
+    QLineEdit* lineEdit;
+    QCheckBox* caseCheckBox;
+    QPushButton* findButton;
+    QPushButton* closeButton;
 
 public:
     explicit FtsDialog(QWidget* parent);
@@ -50,6 +53,7 @@ public:
 
 private slots:
     void enableFindButton(const QString &text);
+    void addExpressionToHistory();
 };
 
 }

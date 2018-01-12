@@ -25,8 +25,13 @@ FtsDialog::FtsDialog(QWidget *parent)
 {
     // widgets
     label = new QLabel(tr("&Find string:"));
-    lineEdit = new QLineEdit;
+    lineEdit = new QLineEdit{this};
     label->setBuddy(lineEdit);
+
+    completer = new QCompleter(history, this);
+    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    lineEdit->setCompleter(completer);
 
     caseCheckBox = new QCheckBox(tr("&Ignore case"));
 
@@ -38,6 +43,7 @@ FtsDialog::FtsDialog(QWidget *parent)
 
     // signals
     connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(enableFindButton(const QString&)));
+    connect(findButton, SIGNAL(clicked()), this, SLOT(addExpressionToHistory()));
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     // assembly
@@ -65,10 +71,19 @@ void FtsDialog::enableFindButton(const QString& text)
     findButton->setEnabled(!text.isEmpty());
 }
 
+void FtsDialog::addExpressionToHistory()
+{
+    if(lineEdit->text().size()) {
+        history.insert(0, lineEdit->text());
+        ((QStringListModel*)completer->model())->setStringList(history);
+    }
+}
+
 FtsDialog::~FtsDialog()
 {
     delete label;
     delete lineEdit;
+    delete completer;
     delete caseCheckBox;
     delete findButton;
     delete closeButton;
