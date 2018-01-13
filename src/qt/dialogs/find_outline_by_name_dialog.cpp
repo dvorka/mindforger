@@ -78,33 +78,38 @@ void FindOutlineByNameDialog::enableFindButton(const QString& text)
     filteredListViewStrings.clear();
     if(!text.isEmpty()) {
         Qt::CaseSensitivity c = caseCheckBox->isChecked()?Qt::CaseInsensitive:Qt::CaseSensitive;
-        for(QString& n:listViewStrings) {
-            if(n.startsWith(text,c)) {
-                filteredListViewStrings << n;
+        for(Outline* o:outlines) {
+            QString s = QString::fromStdString(o->getTitle());
+            if(s.startsWith(text,c)) {
+                filteredListViewStrings << s;
             }
         }
     } else {
-        filteredListViewStrings << listViewStrings;
+        for(Outline* o:outlines) {
+            filteredListViewStrings << QString::fromStdString(o->getTitle());
+        }
     }
     ((QStringListModel*)listView->model())->setStringList(filteredListViewStrings);
 
     findButton->setEnabled(!filteredListViewStrings.isEmpty());
 }
 
-void FindOutlineByNameDialog::show(vector<string>& outlineNames)
+void FindOutlineByNameDialog::show(vector<Outline*>& os)
 {
-    listViewStrings.clear();
+    outlines.clear();
     filteredListViewStrings.clear();
-    if(outlineNames.size()) {
-        for(string n:outlineNames) {
-            listViewStrings << QString::fromStdString(n);
+    if(os.size()) {
+        for(Outline* o:os) {
+            outlines.push_back(o);
+            if(o->getTitle().size()) {
+                filteredListViewStrings << QString::fromStdString(o->getTitle());
+            }
         }
-        listViewStrings.sort();
-        filteredListViewStrings << listViewStrings;
+        // IMPROVE filteredListViewStrings.sort(); ... I cannot keep consistency between strings and Os for now
         ((QStringListModel*)listView->model())->setStringList(filteredListViewStrings);
     }
 
-    findButton->setEnabled(!listViewStrings.isEmpty());
+    findButton->setEnabled(!filteredListViewStrings.isEmpty());
     lineEdit->clear();
     lineEdit->setFocus();
 
@@ -120,6 +125,10 @@ void FindOutlineByNameDialog::handleReturn(void)
         emit searchFinished();
     }
 }
+
+NOT SORTED
+MUST BE CHOOSEN FROM FILTERED LIST OF OUTLINES
+
 
 void FindOutlineByNameDialog::handleChoice(void)
 {

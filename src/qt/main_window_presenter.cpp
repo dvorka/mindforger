@@ -148,9 +148,9 @@ void MainWindowPresenter::executeFts(const string& searchedString, const bool ig
 void MainWindowPresenter::doActionFindOutlineByName()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
-    vector<string> outlineTitles;
-    mind->getOutlineTitles(outlineTitles);
-    findOutlineByNameDialog->show(outlineTitles);
+    vector<Outline*> os(mind->remind().getOutlines());
+    mind->remind().sortByTitle(os);
+    findOutlineByNameDialog->show(os);
 }
 
 void MainWindowPresenter::handleFindOutlineByName()

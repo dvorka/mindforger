@@ -169,6 +169,16 @@ const vector<Outline*>& Memory::getOutlines(void) const
     return outlines;
 }
 
+int compareStrings(const Outline* o1, const Outline* o2)
+{
+    return o1->getTitle().compare(o2->getTitle());
+}
+
+void Memory::sortByTitle(vector<Outline*>& os)
+{
+    std::sort(os.begin(), os.end(), compareStrings);
+}
+
 string Memory::createOutlineKey(const string* title)
 {
     return persistence->createFileName(config.getMemoryPath(), title, string(FILE_EXTENSION_MARKDOWN));

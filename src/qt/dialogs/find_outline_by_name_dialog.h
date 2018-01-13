@@ -23,6 +23,8 @@
 
 #include <QtWidgets>
 
+#include "../../../lib/src/model/outline.h"
+
 namespace m8r {
 
 class FindOutlineByNameDialog : public QDialog
@@ -49,13 +51,13 @@ class FindOutlineByNameDialog : public QDialog
 private:
     MyLineEdit* lineEdit;
     QListView* listView;
-    QStringList listViewStrings;
     QStringList filteredListViewStrings;
     QStringListModel listViewModel;
     QCheckBox* caseCheckBox;
     QPushButton* closeButton;
 
     QString choice;
+    std::vector<Outline*> outlines;
 
 protected:
     QLabel* label;
@@ -74,7 +76,7 @@ public:
     QPushButton* getFindButton(void) const { return findButton; }
     QString& getChoice(void) { return choice; }
 
-    void show(std::vector<std::string>& outlineNames);
+    void show(std::vector<Outline*>& outlines);
 
 signals:
     void searchFinished(void);

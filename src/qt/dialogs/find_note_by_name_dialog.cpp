@@ -53,7 +53,7 @@ void FindNoteByNameDialog::show(vector<Note*> notes)
             }
         }
     }
-    FindOutlineByNameDialog::show(noteTitles);
+    // TODO FindOutlineByNameDialog::show(noteTitles);
 
     QDialog::show();
 }

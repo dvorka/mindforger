@@ -151,6 +151,12 @@ public:
     std::vector<std::string*>* ftsMatch(const std::string* exactMatchString) const;
     std::vector<std::string*>* fts(const std::string* regexp) const;
 
+    /*
+     * UTILS
+     */
+
+    void sortByTitle(std::vector<Outline*>& sorted);
+
 private:
     const OutlineType* toOutlineType(const MarkdownAstSectionMetadata&);
 
