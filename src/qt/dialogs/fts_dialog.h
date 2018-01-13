@@ -38,7 +38,7 @@ private:
     Outline* scope;
 
 protected:
-    QStringList completerModel;
+    QStringList completerStrings;
 
     QCompleter* completer;
     QLabel* label;

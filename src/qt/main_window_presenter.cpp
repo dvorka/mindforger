@@ -57,7 +57,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view, Configuration& co
     QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
     QObject::connect(ftsDialog->getFindButton(), SIGNAL(clicked()), this, SLOT(handleFts()));
-    QObject::connect(findOutlineByNameDialog->getFindButton(), SIGNAL(clicked()), this, SLOT(handleFindOutlineByName()));
+    QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
 }
 
 MainWindowPresenter::~MainWindowPresenter()
@@ -149,10 +149,17 @@ void MainWindowPresenter::doActionFindOutlineByName()
 
 void MainWindowPresenter::handleFindOutlineByName()
 {
-    QString searchedString = findOutlineByNameDialog->getSearchedString();
-    findOutlineByNameDialog->hide();
-
-    // ...
+    if(findOutlineByNameDialog->getChoice().size()) {
+        unique_ptr<vector<Outline*>> outlines
+            = mind->findOutlineByTitleFts(findOutlineByNameDialog->getChoice().toStdString());
+        if(outlines && outlines->size()) {
+            orloj->showFacetOutline(outlines->front());
+            // IMPROVE make this more efficient
+            statusBar->showInfo(QString(tr("Outline "))+QString::fromStdString(outlines->front()->getTitle()));
+        } else {
+            statusBar->showInfo(QString(tr("Outline not found: ")).append(findOutlineByNameDialog->getChoice()));
+        }
+    }
 }
 
 void MainWindowPresenter::doActionFindNoteByName()

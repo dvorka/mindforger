@@ -23,31 +23,122 @@ namespace m8r {
 using namespace std;
 
 FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
-    : FtsDialog(parent)
+    : QDialog(parent)
 {
-    label->setText("Outline name:");
-    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    // widgets
+    label = new QLabel{tr("Outline name:")};
+    lineEdit = new QLineEdit{this};
+    label->setBuddy(lineEdit);
+
+    listView = new QListView(this);
+    listView->setModel(&listViewModel);
+
+    caseCheckBox = new QCheckBox{tr("&Ignore case")};
+    caseCheckBox->setChecked(true);
+
+    findButton = new QPushButton{tr("&Open Outline")};
+    findButton->setDefault(true);
+    findButton->setEnabled(false);
+
+    closeButton = new QPushButton{tr("&Cancel")};
+
+    // signals
+    connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(enableFindButton(const QString&)));
+    connect(lineEdit, SIGNAL(returnPressed()), this, SLOT(handleReturn()));
+    connect(findButton, SIGNAL(clicked()), this, SLOT(handleChoice()));
+    connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+
+    // assembly
+    QVBoxLayout *mainLayout = new QVBoxLayout{};
+    mainLayout->addWidget(label);
+    mainLayout->addWidget(lineEdit);
+    mainLayout->addWidget(listView);
+    mainLayout->addWidget(caseCheckBox);
+
+    QHBoxLayout *buttonLayout = new QHBoxLayout{};
+    buttonLayout->addStretch(1);
+    buttonLayout->addWidget(closeButton);
+    buttonLayout->addWidget(findButton);
+    buttonLayout->addStretch();
+
+    mainLayout->addLayout(buttonLayout);
+    setLayout(mainLayout);
 
     // dialog
     setWindowTitle(tr("Find Outline by Name"));
+    // height is set to make sure listview gets enough lines
+    resize(fontMetrics().averageCharWidth()*50, fontMetrics().height()*30);
+    setModal(true);
+}
+
+void FindOutlineByNameDialog::enableFindButton(const QString& text)
+{
+    // filter listview
+    // IMPROVE use HSTR algorithm to be smarter
+    filteredListViewStrings.clear();
+    if(!text.isEmpty()) {
+        Qt::CaseSensitivity c = caseCheckBox->isChecked()?Qt::CaseInsensitive:Qt::CaseSensitive;
+        for(QString& n:listViewStrings) {
+            if(n.startsWith(text,c)) {
+                filteredListViewStrings << n;
+            }
+        }
+    } else {
+        filteredListViewStrings << listViewStrings;
+    }
+    ((QStringListModel*)listView->model())->setStringList(filteredListViewStrings);
+
+    findButton->setEnabled(!filteredListViewStrings.isEmpty());
 }
 
 void FindOutlineByNameDialog::show(vector<string>* outlineNames)
 {
-    qDebug() << "NNN " << outlineNames->size();
-
+    listViewStrings.clear();
+    filteredListViewStrings.clear();
     if(outlineNames && outlineNames->size()) {
-        for(string n:*outlineNames) {
-            completerModel << QString::fromStdString(n);
+        for(string& n:*outlineNames) {
+            listViewStrings << QString::fromStdString(n);
         }
-        ((QStringListModel*)completer->model())->setStringList(completerModel);
+        listViewStrings.sort();
+        filteredListViewStrings << listViewStrings;
+        ((QStringListModel*)listView->model())->setStringList(filteredListViewStrings);
     }
 
-    FtsDialog::show();
+    findButton->setEnabled(!listViewStrings.isEmpty());
+    lineEdit->clear();
+    lineEdit->setFocus();
+
+    QDialog::show();
+}
+
+void FindOutlineByNameDialog::handleReturn(void)
+{
+    if(findButton->isEnabled()) {
+        choice = filteredListViewStrings.at(0);
+
+        QDialog::close();
+        emit searchFinished();
+    }
+}
+
+void FindOutlineByNameDialog::handleChoice(void)
+{
+    if(listView->currentIndex().isValid()) {
+        choice = filteredListViewStrings.at(listView->currentIndex().row());
+
+        QDialog::close();
+        emit searchFinished();
+    }
 }
 
 FindOutlineByNameDialog::~FindOutlineByNameDialog()
 {
+    delete label;
+    delete lineEdit;
+    delete listView;
+    delete caseCheckBox;
+    delete findButton;
+    delete closeButton;
 }
 
 }
