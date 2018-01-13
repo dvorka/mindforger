@@ -67,7 +67,7 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     // dialog
     setWindowTitle(tr("Find Outline by Name"));
     // height is set to make sure listview gets enough lines
-    resize(fontMetrics().averageCharWidth()*50, fontMetrics().height()*30);
+    resize(fontMetrics().averageCharWidth()*55, fontMetrics().height()*30);
     setModal(true);
 }
 
@@ -91,12 +91,12 @@ void FindOutlineByNameDialog::enableFindButton(const QString& text)
     findButton->setEnabled(!filteredListViewStrings.isEmpty());
 }
 
-void FindOutlineByNameDialog::show(vector<string>* outlineNames)
+void FindOutlineByNameDialog::show(vector<string>& outlineNames)
 {
     listViewStrings.clear();
     filteredListViewStrings.clear();
-    if(outlineNames && outlineNames->size()) {
-        for(string& n:*outlineNames) {
+    if(outlineNames.size()) {
+        for(string n:outlineNames) {
             listViewStrings << QString::fromStdString(n);
         }
         listViewStrings.sort();

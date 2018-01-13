@@ -52,11 +52,12 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                 mainPresenter->getStatusBar()->showInfo(prefix);
                 if(prefix.size()==1) {
                     // switch suggestions model
-                    vector<string>* outlineTitles=mind->getOutlineTitles();
+                    vector<string> outlineTitles;
+                    mind->getOutlineTitles(outlineTitles);
                     QStringList outlineTitlesCompletion = QStringList();
-                    if(outlineTitles!=nullptr && outlineTitles->size()) {
+                    if(outlineTitles.size()) {
                         QString qs;
-                        for(string s:*outlineTitles) {
+                        for(const string s:outlineTitles) {
                             qs.clear();
                             // TODO commands are constants
                             qs.append("find outline by name ");
@@ -65,7 +66,6 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                         }
                     }
                     view->updateCompleterModel(&outlineTitlesCompletion);
-                    delete outlineTitles;
                 } else {
                 }
             } else {

@@ -19,13 +19,23 @@
 #ifndef M8RUI_FIND_NOTE_BY_NAME_DIALOG_H
 #define M8RUI_FIND_NOTE_BY_NAME_DIALOG_H
 
+#include <vector>
+
 #include <QtWidgets>
+
+#include "../../../lib/src/model/outline.h"
+#include "../../../lib/src/model/note.h"
+
+#include "find_outline_by_name_dialog.h"
 
 namespace m8r {
 
-class FindNoteByNameDialog : public QObject
+class FindNoteByNameDialog : public FindOutlineByNameDialog
 {
     Q_OBJECT
+
+private:
+    Outline* scope;
 
 public:
     explicit FindNoteByNameDialog(QWidget* parent);
@@ -34,6 +44,12 @@ public:
     FindNoteByNameDialog &operator=(const FindNoteByNameDialog&) = delete;
     FindNoteByNameDialog &operator=(const FindNoteByNameDialog&&) = delete;
     ~FindNoteByNameDialog();
+
+    void clearScope(void) { scope = nullptr; }
+    void setScope(Outline* o) { scope = o; }
+    Outline* getScope(void) { return scope; }
+
+    void show(std::vector<Note*>);
 };
 
 }

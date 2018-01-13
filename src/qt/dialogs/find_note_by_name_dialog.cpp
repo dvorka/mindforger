@@ -20,8 +20,42 @@
 
 namespace m8r {
 
+using namespace std;
+
 FindNoteByNameDialog::FindNoteByNameDialog(QWidget *parent)
+    : FindOutlineByNameDialog(parent)
 {
+    // widgets
+    label->setText(tr("Note name:"));
+    findButton->setText(tr("Open Note"));
+
+    // dialog
+    setWindowTitle(tr("Find Note by Name"));
+}
+
+void FindNoteByNameDialog::show(vector<Note*> notes)
+{
+    // use parent dialog to handle titles + keep shadow vector of (filtered) notes in here for choice
+    // IMPROVE performance - consider pointer instead of string copy
+    vector<string> noteTitles{};
+    if(notes.size()) {
+        if(!scope) {
+            for(Note* n:notes) {
+                string s{n->getTitle()};
+                s.append(" (");
+                s.append(n->getOutline()->getTitle());
+                s.append(")");
+                noteTitles.push_back(s);
+            }
+        } else {
+            for(Note* n:notes) {
+                noteTitles.push_back(n->getTitle());
+            }
+        }
+    }
+    FindOutlineByNameDialog::show(noteTitles);
+
+    QDialog::show();
 }
 
 FindNoteByNameDialog::~FindNoteByNameDialog()

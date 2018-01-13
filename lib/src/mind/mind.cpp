@@ -78,15 +78,13 @@ vector<Note*>* Mind::findNoteByTitleFts(const string& regexp) const
     return nullptr;
 }
 
-vector<string>* Mind::getOutlineTitles(void) const
+void Mind::getOutlineTitles(vector<string>& titles) const
 {
     // IMPROVE PERF cache vector (stack member) until and evict on memory modification
-    vector<string>* result = new vector<string>();
     vector<Outline*> outlines = memory.getOutlines();
     for(Outline* outline:outlines) {
-        result->push_back(outline->getTitle());
+        titles.push_back(outline->getTitle());
     }
-    return result;
 }
 
 void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool ignoreCase, Outline* outline)
@@ -227,6 +225,16 @@ vector<Outline*>* Mind::getOutlinesOfType(const OutlineType& type) const
     UNUSED_ARG(type);
 
     return nullptr;
+}
+
+void Mind::getAllNotes(std::vector<Note*>& notes) const
+{
+    vector<Outline*> outlines = memory.getOutlines();
+    for(Outline* o:outlines) {
+        for(Note* n:o->getNotes()) {
+            notes.push_back(n);
+        }
+    }
 }
 
 vector<Note*>* Mind::getNotesOfType(const NoteType& type) const

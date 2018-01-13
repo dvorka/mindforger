@@ -52,12 +52,14 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view, Configuration& co
                 &view};
     ftsDialog = new FtsDialog{&view};
     findOutlineByNameDialog = new FindOutlineByNameDialog{&view};
+    findNoteByNameDialog = new FindNoteByNameDialog{&view};
 
     // wire signals
     QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
     QObject::connect(ftsDialog->getFindButton(), SIGNAL(clicked()), this, SLOT(handleFts()));
     QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
+    QObject::connect(findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
 }
 
 MainWindowPresenter::~MainWindowPresenter()
@@ -66,6 +68,10 @@ MainWindowPresenter::~MainWindowPresenter()
     if(mainMenu) delete mainMenu;
     if(statusBar) delete statusBar;
     if(newOutlineDialog) delete newOutlineDialog;
+    if(ftsDialog) delete ftsDialog;
+    if(findOutlineByNameDialog) delete findOutlineByNameDialog;
+    if(findNoteByNameDialog) delete findNoteByNameDialog;
+
     // TODO deletes
 }
 
@@ -142,8 +148,8 @@ void MainWindowPresenter::executeFts(const string& searchedString, const bool ig
 void MainWindowPresenter::doActionFindOutlineByName()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
-    vector<string>* outlineTitles=mind->getOutlineTitles();
-
+    vector<string> outlineTitles;
+    mind->getOutlineTitles(outlineTitles);
     findOutlineByNameDialog->show(outlineTitles);
 }
 
@@ -163,13 +169,20 @@ void MainWindowPresenter::handleFindOutlineByName()
 }
 
 void MainWindowPresenter::doActionFindNoteByName()
-{
-    cli->executeListNotes();
-    // TODO gear function that trims string to some length + adds ... to the end > use it here
-    view.getCli()->setBreadcrumbPath("/outlines/[outline name].../notes");
-    // TODO constant
-    view.getCli()->setCommand("find note by name ");
-    view.getCli()->showCli(false);
+{    
+    // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
+    if(orloj->isFacetActiveOutlineManagement()) {
+        findNoteByNameDialog->setWindowTitle(tr("Find Note by Name in Outline"));
+        findNoteByNameDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
+        vector<Note*> allNotes(findNoteByNameDialog->getScope()->getNotes());
+        findNoteByNameDialog->show(allNotes);
+    } else {
+        findNoteByNameDialog->setWindowTitle(tr("Find Note by Name"));
+        findNoteByNameDialog->clearScope();
+        vector<Note*> allNotes{};
+        mind->getAllNotes(allNotes);
+        findNoteByNameDialog->show(allNotes);
+    }
 }
 
 void MainWindowPresenter::doActionFindNoteByTag()

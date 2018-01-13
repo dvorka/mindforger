@@ -105,7 +105,8 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     src/qt/dialogs/note_new_dialog.h \
     src/qt/dialogs/outline_new_dialog.h \
     src/qt/dialogs/fts_dialog.h \
-    src/qt/dialogs/find_outline_by_name_dialog.h
+    src/qt/dialogs/find_outline_by_name_dialog.h \
+    src/qt/dialogs/find_note_by_name_dialog.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
@@ -184,7 +185,8 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/dialogs/note_new_dialog.cpp \
     src/qt/dialogs/outline_new_dialog.cpp \
     src/qt/dialogs/fts_dialog.cpp \
-    src/qt/dialogs/find_outline_by_name_dialog.cpp
+    src/qt/dialogs/find_outline_by_name_dialog.cpp \
+    src/qt/dialogs/find_note_by_name_dialog.cpp
 
 QMAKE_CXX = ccache g++
 QMAKE_CXXFLAGS += -std=c++0x -pedantic

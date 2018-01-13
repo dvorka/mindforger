@@ -47,17 +47,19 @@ class FindOutlineByNameDialog : public QDialog
     };
 
 private:
-    QLabel* label;
     MyLineEdit* lineEdit;
     QListView* listView;
     QStringList listViewStrings;
     QStringList filteredListViewStrings;
     QStringListModel listViewModel;
     QCheckBox* caseCheckBox;
-    QPushButton* findButton;
     QPushButton* closeButton;
 
     QString choice;
+
+protected:
+    QLabel* label;
+    QPushButton* findButton;
 
 public:
     explicit FindOutlineByNameDialog(QWidget* parent);
@@ -72,7 +74,7 @@ public:
     QPushButton* getFindButton(void) const { return findButton; }
     QString& getChoice(void) { return choice; }
 
-    void show(std::vector<std::string>* outlineNames);
+    void show(std::vector<std::string>& outlineNames);
 
 signals:
     void searchFinished(void);

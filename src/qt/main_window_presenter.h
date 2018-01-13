@@ -33,6 +33,7 @@
 #include "dialogs/note_new_dialog.h"
 #include "dialogs/fts_dialog.h"
 #include "dialogs/find_outline_by_name_dialog.h"
+#include "dialogs/find_note_by_name_dialog.h"
 
 #include <QtWidgets>
 
@@ -74,7 +75,8 @@ private:
     OutlineNewDialog* newOutlineDialog;
     NoteNewDialog* newNoteDialog;
     FtsDialog* ftsDialog;
-    FindOutlineByNameDialog *findOutlineByNameDialog;
+    FindOutlineByNameDialog* findOutlineByNameDialog;
+    FindNoteByNameDialog* findNoteByNameDialog;
 
 public:
     explicit MainWindowPresenter(MainWindowView& view, Configuration& configuration);

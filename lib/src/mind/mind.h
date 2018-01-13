@@ -119,7 +119,7 @@ public:
     std::vector<Note*>* findNoteFts(const std::string& regexp, const bool ignoreCase, Outline* scope=nullptr);
     // TODO findFts() - search also outline title and description
     //   >> temporary note of Outline type (never saved), cannot be created by user
-    std::vector<std::string>* getOutlineTitles(void) const;
+    void getOutlineTitles(std::vector<std::string>& titles) const;
 
     /*
      * (CROSS) REFERENCES - explicit associations created by the user.
@@ -187,6 +187,7 @@ public:
 
     std::vector<Outline*>* getOutlinesOfType(const OutlineType& type) const;
 
+    void getAllNotes(std::vector<Note*>& notes) const;
     std::vector<Note*>* getNotesOfType(const NoteType& type) const;
     std::vector<Note*>* getNotesOfType(const NoteType& type, const Outline& outline) const;
 
