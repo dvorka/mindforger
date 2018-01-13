@@ -26,12 +26,12 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     : QDialog(parent)
 {
     // widgets
-    label = new QLabel{tr("Outline name:")};
-    lineEdit = new QLineEdit{this};
-    label->setBuddy(lineEdit);
-
     listView = new QListView(this);
     listView->setModel(&listViewModel);
+
+    label = new QLabel{tr("Outline name:")};
+    lineEdit = new MyLineEdit{listView, this};
+    label->setBuddy(lineEdit);
 
     caseCheckBox = new QCheckBox{tr("&Ignore case")};
     caseCheckBox->setChecked(true);

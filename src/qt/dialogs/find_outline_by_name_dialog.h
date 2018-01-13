@@ -29,9 +29,26 @@ class FindOutlineByNameDialog : public QDialog
 {
     Q_OBJECT
 
+    class MyLineEdit : public QLineEdit
+    {
+    private:
+        QListView* target;
+    public:
+        explicit MyLineEdit(QListView* t, QWidget* parent)
+            : QLineEdit(parent), target(t)
+        {}
+        void keyPressEvent(QKeyEvent* event) override {
+            if(event->key() == Qt::Key_Down) {
+                target->setCurrentIndex(target->model()->index(0,0));
+                target->setFocus();
+            }
+            QLineEdit::keyPressEvent(event);
+        }
+    };
+
 private:
     QLabel* label;
-    QLineEdit* lineEdit;
+    MyLineEdit* lineEdit;
     QListView* listView;
     QStringList listViewStrings;
     QStringList filteredListViewStrings;
