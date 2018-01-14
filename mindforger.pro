@@ -188,8 +188,12 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/dialogs/find_outline_by_name_dialog.cpp \
     src/qt/dialogs/find_note_by_name_dialog.cpp
 
+# Development environment remarks:
+# - Beast: GCC 5.4.0, Qt 5.5.1
+# - S7   : GCC 4... , Qt 5...
+# - GCC: -std=c++0x ~ -std=c++11
+
 QMAKE_CXX = ccache g++
-# -std=c++0x ~ -std=c++11
 QMAKE_CXXFLAGS += -pedantic -std=c++11
 
 TRANSLATIONS = src/qt/translations/mindforger_en.ts src/qt/translations/mindforger_cs.ts
