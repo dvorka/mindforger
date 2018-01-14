@@ -53,6 +53,7 @@ void LookAndFeels::setTheme(const QString& themeName)
 void LookAndFeels::setBlackTheme(void)
 {
     textColor = QString("#FFF");
+    backgroundColor = QString("#000");
     cliTextColor = QColor(0x99,0xb1,0xff);
 
     /* The valid keys can be retrieved using the keys() function. Typically they include
@@ -97,6 +98,7 @@ void LookAndFeels::setBlackTheme(void)
 void LookAndFeels::setYinTheme(void)
 {
     textColor = QString("#FFF");
+    backgroundColor = QString("#353535");
     cliTextColor = Qt::green;
 
     mindforgerApplication->setStyle(QStyleFactory::create("fusion"));
@@ -131,6 +133,7 @@ void LookAndFeels::setYinTheme(void)
 void LookAndFeels::setYangTheme(void)
 {
     textColor = QString("#000");
+    backgroundColor = QString("#FFF");
     cliTextColor = Qt::black;
 
     mindforgerApplication->setStyle(QStyleFactory::create("fusion"));

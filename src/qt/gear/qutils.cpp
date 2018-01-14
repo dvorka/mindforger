@@ -37,7 +37,7 @@ void tagsToHtml(const vector<const Tag*>& tags, QString& html)
                 html += QString::fromStdString(t->getColor().asHtml());
                 html += QString::fromUtf8("; font-weight: normal;'> ");
                 html += QString::fromStdString(t->getName());
-                html += QString::fromUtf8(" </span>");
+                html += QString::fromUtf8("&nbsp;</span>");
             }
         }
     }
@@ -46,7 +46,7 @@ void tagsToHtml(const vector<const Tag*>& tags, QString& html)
 void outlineTypeToHtml(const OutlineType* outlineType, QString& html)
 {
     if(outlineType) {
-        html += QString::fromUtf8("&nbsp;&nbsp;<span style='color: ");
+        html += QString::fromUtf8("<span style='color: ");
         html += QString::fromStdString(outlineType->getColor().asHtml());
         html += QString::fromUtf8("; font-style: italic;'> ");
         html += QString::fromStdString(outlineType->getName());

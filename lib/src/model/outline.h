@@ -170,7 +170,7 @@ public:
     OutlineMemoryLocation getMemoryLocation() const;
     void setMemoryLocation(OutlineMemoryLocation memoryLocation);
     const std::vector<std::string*>& getDescription() const;
-    std::string* getDescriptionAsString() const;
+    std::string getDescriptionAsString() const;
     void addDescriptionLine(std::string *);
     void setDescription(const std::vector<std::string*>& description);
     virtual const std::string& getTitle() const;

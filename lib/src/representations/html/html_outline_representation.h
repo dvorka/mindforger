@@ -26,10 +26,21 @@
 
 namespace m8r {
 
+constexpr const auto MF_HTML_HEAD =
+   "<!DOCTYPE html>"
+   "<html>"
+   " <head></head>"
+   " <body";
+
+constexpr const auto MF_HTML_TAIL =
+   " </body>"
+   "</html>";
+
 class HtmlOutlineRepresentation
 {
 private:
     MarkdownOutlineRepresentation markdownRepresentation;
+
 public:
     explicit HtmlOutlineRepresentation(Ontology& ontology);
     HtmlOutlineRepresentation(const HtmlOutlineRepresentation&) = delete;

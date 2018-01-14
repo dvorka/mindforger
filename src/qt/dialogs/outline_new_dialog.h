@@ -54,6 +54,8 @@ class OutlineNewDialog : public QDialog
         QLabel* stencilLabel;
         QComboBox* stencilCombo;
 
+        // TODO progress
+
     public:
         explicit GeneralTab(QWidget *parent);
         ~GeneralTab(void);
@@ -68,6 +70,8 @@ class OutlineNewDialog : public QDialog
         void clean(void);
     };
 
+    // TODO tags tab
+
     class AdvancedTab : public QWidget
     {
     private:
@@ -76,6 +80,8 @@ class OutlineNewDialog : public QDialog
 
     private:
         const QString memoryDirPath;
+
+        // TODO read reads written writes
 
     public:
         explicit AdvancedTab(const QString& memoryDirPath, QWidget *parent);

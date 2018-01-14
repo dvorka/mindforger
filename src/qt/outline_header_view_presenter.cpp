@@ -40,42 +40,78 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
     currentOutline = outline;
 
     // TODO build HTML using Outline > QString build documented in QtDoc for QString
-    QString html("<html><body style='color: ");
+    QString html(MF_HTML_HEAD);
+    html += QString::fromUtf8(" style='color: ");
     html += LookAndFeels::getInstance().getTextColor();
-    html += QString::fromUtf8("'><pre>");
-    html += QString::fromUtf8("<h3>");
+    html += QString::fromUtf8("; background-color: ");
+    html += LookAndFeels::getInstance().getBackgroundColor();
+    html += QString::fromUtf8("; font-size: 90%;'>");
+    // table
+    html += QString::fromUtf8("<table width='100%'><tr>");
+    html += QString::fromUtf8("<td>");
+    html += QString::fromUtf8("<h2>");
     html += QString::fromStdString(outline->getTitle());
-    html += QString::fromUtf8("</h3>");
-
-    tagsToHtml(outline->getTags(), html);
-    // IMPROVE make showing of type  configurable
+    html += QString::fromUtf8("</h2>");
     outlineTypeToHtml(outline->getType(), html);
-
-    if(outline->getImportance()>0) {
-        html += QString::fromUtf8("<br>");
-        html += QString::fromUtf8("<font>");
-        html += QString::fromUtf8("**...");
-        html += QString::fromUtf8("</font>");
-        html += QString::fromUtf8("<br/>");
+    html += QString::fromUtf8("</td>");
+    html += QString::fromUtf8("<td style='width: 50px;'>");
+    html += QString::fromUtf8("<h1>");
+    html += QString::number(outline->getProgress());
+    html += QString::fromUtf8("%&nbsp;&nbsp;</h1>");
+    html += QString::fromUtf8("</td>");
+    html += QString::fromUtf8("<td style='width: 50px;'><table style='font-size: 100%;'><tr>");
+    if(outline->getImportance() > 0) {
+        for(int i=0; i<=4; i++) {
+            html += QString::fromUtf8("<td>");
+            if(outline->getImportance()>i) {
+                html += QChar(9733);
+            } else {
+                html += QChar(9734);
+            }
+            html += QString::fromUtf8("</td>");
+        }
+    } else {
+        for(int i=0; i<5; i++) {
+            html += QString::fromUtf8("<td>");
+            html.append(QChar(9734));
+            html += QString::fromUtf8("</td>");
+        }
     }
+    html += QString::fromUtf8("</tr>");
+    html += QString::fromUtf8("<tr>");
     if(outline->getUrgency()>0) {
-        html += QString::fromUtf8("<font>");
-        html += QString::fromUtf8("!!!!!");
-        html += QString::fromUtf8("</font>");
-        html += QString::fromUtf8("<br/>");
+        for(int i=0; i<=4; i++) {
+            if(outline->getUrgency()>i) {
+                html += QString::fromUtf8("<td>");
+                html += QChar(0x29D7);
+                html += QString::fromUtf8("</td>");
+            } else {
+                html += QString::fromUtf8("<td>");
+                html += QChar(0x29D6);
+                html += QString::fromUtf8("</td>");
+            }
+        }
+    } else {
+        for(int i=0; i<5; i++) {
+            html += QString::fromUtf8("<td>");
+            html.append(QChar(0x29D6));
+            html += QString::fromUtf8("</td>");
+        }
     }
-    if(outline->getProgress()>0) {
-        html += QString::fromUtf8("<font>");
-        html += QString::fromUtf8("12%");
-        html += QString::fromUtf8("</font>");
-    }
+    html += QString::fromUtf8("</tr></table>");
+    html += QString::fromUtf8("</td>");
+    html += QString::fromUtf8("</tr></table>");
 
-    html += QString::fromUtf8("<p>");
-    // TODO leak
-    html += QString::fromStdString(*outline->getDescriptionAsString());
-    html += QString::fromUtf8("</p>");
 
-    html += QString::fromStdString("</pre></body></html>");
+
+    html += QString::fromUtf8("<br/>");
+    tagsToHtml(outline->getTags(), html);
+
+    html += QString::fromUtf8("<pre>");
+    html += QString::fromStdString(outline->getDescriptionAsString());
+    html += QString::fromUtf8("</pre>");
+
+    html += QString::fromStdString(MF_HTML_TAIL);
     view->setHtml(html);
 }
 

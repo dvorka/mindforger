@@ -50,6 +50,7 @@ public:
 private:
     QApplication* mindforgerApplication;
     QString textColor;
+    QString backgroundColor;
     QColor cliTextColor;
 
     explicit LookAndFeels(void);
@@ -83,6 +84,7 @@ public:
     void setTheme(const QString&);
 
     const QString& getTextColor(void) const { return textColor; }
+    const QString& getBackgroundColor(void) const { return backgroundColor; }
     const QColor& getCliTextColor(void) const { return cliTextColor; }
 };
 

@@ -349,14 +349,14 @@ const vector<string*>& Outline::getDescription() const
     return description;
 }
 
-string* Outline::getDescriptionAsString() const
+string Outline::getDescriptionAsString() const
 {
     // IMPROVE cache narrowed description for performance
-    string* result = new string{};
+    string result{};
     if(description.size()) {
         for(string *s:description) {
-            result->append(*s);
-            result->append("\n");
+            result.append(*s);
+            result.append("\n");
         }
     }
     return result;
