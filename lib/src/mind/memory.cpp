@@ -169,9 +169,9 @@ const vector<Outline*>& Memory::getOutlines(void) const
     return outlines;
 }
 
-int compareStrings(const Outline* o1, const Outline* o2)
+bool compareStrings(const Outline* o1, const Outline* o2)
 {
-    return o1->getTitle().compare(o2->getTitle());
+    return o1->getTitle().compare(o2->getTitle()) < 0;
 }
 
 void Memory::sortByTitle(vector<Outline*>& os)
