@@ -41,7 +41,7 @@ class Outline;
  * 10% progress
  * 12/24 deadline
  */
-class Note
+class Note : public MindEntity
 {
 private:
     // note identifier within the scope of parent outline
@@ -114,7 +114,7 @@ public:
     const std::vector<const Tag*>& getTags() const;
     void addTag(const Tag* tag);
     void setTags(const std::vector<const Tag*>& tags);
-    const std::string& getTitle() const;
+    virtual const std::string& getTitle() const;
     void addTitle(const std::string& s);
     void setTitle(const std::string& title);
     const NoteType* getType() const;

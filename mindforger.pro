@@ -106,7 +106,8 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     src/qt/dialogs/outline_new_dialog.h \
     src/qt/dialogs/fts_dialog.h \
     src/qt/dialogs/find_outline_by_name_dialog.h \
-    src/qt/dialogs/find_note_by_name_dialog.h
+    src/qt/dialogs/find_note_by_name_dialog.h \
+    lib/src/model/mind_entity.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \

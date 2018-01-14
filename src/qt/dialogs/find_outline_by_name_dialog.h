@@ -23,7 +23,7 @@
 
 #include <QtWidgets>
 
-#include "../../../lib/src/model/outline.h"
+#include "../../../lib/src/model/mind_entity.h"
 
 namespace m8r {
 
@@ -41,7 +41,13 @@ class FindOutlineByNameDialog : public QDialog
         {}
         void keyPressEvent(QKeyEvent* event) override {
             if(event->key() == Qt::Key_Down) {
-                target->setCurrentIndex(target->model()->index(0,0));
+                // find the first visible row
+                for(int row = 0; row<target->model()->rowCount(); row++) {
+                    if(!target->isRowHidden(row)) {
+                        target->setCurrentIndex(target->model()->index(row,0));
+                        break;
+                    }
+                }
                 target->setFocus();
             }
             QLineEdit::keyPressEvent(event);
@@ -56,8 +62,8 @@ private:
     QCheckBox* caseCheckBox;
     QPushButton* closeButton;
 
-    Outline* choice;
-    std::vector<Outline*> outlines;
+    MindEntity* choice;
+    std::vector<MindEntity*> mindEntities;
 
 protected:
     QLabel* label;
@@ -74,9 +80,9 @@ public:
     QString getSearchedString() const { return lineEdit->text(); }
     QCheckBox* getCaseCheckbox(void) const { return caseCheckBox; }
     QPushButton* getFindButton(void) const { return findButton; }
-    Outline* getChoice(void) { return choice; }
+    MindEntity* getChoice(void) const { return choice; }
 
-    void show(std::vector<Outline*>& outlines);
+    void show(std::vector<MindEntity*>& outlines);
 
 signals:
     void searchFinished(void);

@@ -29,7 +29,7 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     listView = new QListView(this);
     listView->setModel(&listViewModel);
 
-    label = new QLabel{tr("Outline name:")};
+    label = new QLabel{tr("Outline &name:")};
     lineEdit = new MyLineEdit{listView, this};
     label->setBuddy(lineEdit);
 
@@ -80,8 +80,8 @@ void FindOutlineByNameDialog::enableFindButton(const QString& text)
         // IMPROVE find a list view method giving # of visible rows
         int visible = 0;
         int row = 0;
-        for(Outline* o:outlines) {
-            QString s = QString::fromStdString(o->getTitle());
+        for(MindEntity* e:mindEntities) {
+            QString s = QString::fromStdString(e->getTitle());
             if(s.startsWith(text,c)) {
                 listView->setRowHidden(row, false);
                 visible++;
@@ -92,29 +92,29 @@ void FindOutlineByNameDialog::enableFindButton(const QString& text)
         }
         findButton->setEnabled(visible);
     } else {
-        for(size_t row = 0; row<outlines.size(); row++) {
+        for(size_t row = 0; row<mindEntities.size(); row++) {
             listView->setRowHidden(row, false);
         }
-        findButton->setEnabled(outlines.size());
+        findButton->setEnabled(mindEntities.size());
     }
 }
 
-void FindOutlineByNameDialog::show(vector<Outline*>& os)
+void FindOutlineByNameDialog::show(vector<MindEntity*>& outlines)
 {
     choice = nullptr;
-    outlines.clear();
+    mindEntities.clear();
     listViewStrings.clear();
-    if(os.size()) {
-        for(Outline* o:os) {
-            outlines.push_back(o);
-            if(o->getTitle().size()) {
-                listViewStrings << QString::fromStdString(o->getTitle());
+    if(outlines.size()) {
+        for(MindEntity* e:outlines) {
+            mindEntities.push_back(e);
+            if(e->getTitle().size()) {
+                listViewStrings << QString::fromStdString(e->getTitle());
             }
         }
         ((QStringListModel*)listView->model())->setStringList(listViewStrings);
     }
 
-    findButton->setEnabled(outlines.size());
+    findButton->setEnabled(mindEntities.size());
     lineEdit->clear();
     lineEdit->setFocus();
     QDialog::show();
@@ -123,9 +123,9 @@ void FindOutlineByNameDialog::show(vector<Outline*>& os)
 void FindOutlineByNameDialog::handleReturn(void)
 {
     if(findButton->isEnabled()) {
-        for(size_t row = 0; row<outlines.size(); row++) {
+        for(size_t row = 0; row<mindEntities.size(); row++) {
             if(!listView->isRowHidden(row)) {
-                choice = outlines[row];
+                choice = mindEntities[row];
                 break;
             }
         }
@@ -138,7 +138,7 @@ void FindOutlineByNameDialog::handleReturn(void)
 void FindOutlineByNameDialog::handleChoice(void)
 {
     if(listView->currentIndex().isValid()) {
-        choice = outlines[listView->currentIndex().row()];
+        choice = mindEntities[listView->currentIndex().row()];
 
         QDialog::close();
         emit searchFinished();

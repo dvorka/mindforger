@@ -26,8 +26,8 @@ FindNoteByNameDialog::FindNoteByNameDialog(QWidget *parent)
     : FindOutlineByNameDialog(parent)
 {
     // widgets
-    label->setText(tr("Note name:"));
-    findButton->setText(tr("Open Note"));
+    label->setText(tr("Note &name:"));
+    findButton->setText(tr("&Open Note"));
 
     // dialog
     setWindowTitle(tr("Find Note by Name"));
@@ -53,9 +53,9 @@ void FindNoteByNameDialog::show(vector<Note*> notes)
             }
         }
     }
-    // TODO FindOutlineByNameDialog::show(noteTitles);
 
-    QDialog::show();
+    vector<MindEntity*> es{notes.begin(), notes.end()};
+    FindOutlineByNameDialog::show(es);
 }
 
 FindNoteByNameDialog::~FindNoteByNameDialog()

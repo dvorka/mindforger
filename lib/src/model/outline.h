@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 
+#include "mind_entity.h"
 #include "note_type.h"
 #include "note.h"
 #include "outline_type.h"
@@ -50,7 +51,7 @@ enum class OutlineMemoryLocation {
  * 3/5 urgency
  * 10% progress
  */
-class Outline
+class Outline : public MindEntity
 {
 private:
     /**
@@ -172,7 +173,7 @@ public:
     std::string* getDescriptionAsString() const;
     void addDescriptionLine(std::string *);
     void setDescription(const std::vector<std::string*>& description);
-    const std::string& getTitle() const;
+    virtual const std::string& getTitle() const;
     void setTitle(const std::string& title);
     unsigned int getBytesize() const;
     void setBytesize(unsigned int bytesize);

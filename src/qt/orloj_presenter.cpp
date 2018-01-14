@@ -175,7 +175,7 @@ void OrlojPresenter::slotShowNote(const QItemSelection& selected, const QItemSel
         mainPresenter->getStatusBar()->showInfo(QString(note->getTitle().c_str()));
     } else {
         // TODO i18n
-        mainPresenter->getStatusBar()->showInfo(QString("No outline selected!"));
+        mainPresenter->getStatusBar()->showInfo(QString(tr("No Outline selected!")));
     }
 }
 

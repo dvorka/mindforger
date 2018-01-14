@@ -59,7 +59,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view, Configuration& co
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
     QObject::connect(ftsDialog->getFindButton(), SIGNAL(clicked()), this, SLOT(handleFts()));
     QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
-    QObject::connect(findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
+    QObject::connect(findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByName()));
 }
 
 MainWindowPresenter::~MainWindowPresenter()
@@ -148,15 +148,17 @@ void MainWindowPresenter::executeFts(const string& searchedString, const bool ig
 void MainWindowPresenter::doActionFindOutlineByName()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
-    vector<Outline*> os(mind->remind().getOutlines());
+    vector<Outline*> os{mind->remind().getOutlines()};
     mind->remind().sortByTitle(os);
-    findOutlineByNameDialog->show(os);
+    vector<MindEntity*> es{os.begin(),os.end()};
+
+    findOutlineByNameDialog->show(es);
 }
 
 void MainWindowPresenter::handleFindOutlineByName()
 {
     if(findOutlineByNameDialog->getChoice()) {
-        orloj->showFacetOutline(findOutlineByNameDialog->getChoice());
+        orloj->showFacetOutline((Outline*)findOutlineByNameDialog->getChoice());
         // IMPROVE make this more efficient
         statusBar->showInfo(QString(tr("Outline "))+QString::fromStdString(findOutlineByNameDialog->getChoice()->getTitle()));
     } else {
@@ -180,6 +182,21 @@ void MainWindowPresenter::doActionFindNoteByName()
         findNoteByNameDialog->show(allNotes);
     }
 }
+
+void MainWindowPresenter::handleFindNoteByName()
+{
+    if(findNoteByNameDialog->getChoice()) {
+        Note* choice = (Note*)findNoteByNameDialog->getChoice();
+        orloj->showFacetOutline(choice->getOutline());
+        orloj->getNoteView()->refresh(choice);
+        orloj->showFacetNoteView();
+        // IMPROVE make this more efficient
+        statusBar->showInfo(QString(tr("Note "))+QString::fromStdString(findNoteByNameDialog->getChoice()->getTitle()));
+    } else {
+        statusBar->showInfo(QString(tr("Note not found: ")).append(findNoteByNameDialog->getSearchedString()));
+    }
+}
+
 
 void MainWindowPresenter::doActionFindNoteByTag()
 {

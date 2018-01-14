@@ -115,6 +115,7 @@ public slots:
     void doActionFindOutlineByName(void);
     void handleFindOutlineByName(void);
     void doActionFindNoteByName(void);
+    void handleFindNoteByName(void);
     void doActionFindNoteByTag(void);
     // view
     void doActionViewOutlines(void);
