@@ -121,10 +121,9 @@ public:
     int getFontPointSize(void) const { return fontPointSize; }
 
 private:
+    void init(void);
     const std::string getConfigFileName();
-
     void load(const std::vector<MarkdownAstNodeSection*>* ast);
-
     const std::string* addRepository(const std::string* repositoryPath);
 };
 

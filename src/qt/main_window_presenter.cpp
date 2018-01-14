@@ -155,16 +155,12 @@ void MainWindowPresenter::doActionFindOutlineByName()
 
 void MainWindowPresenter::handleFindOutlineByName()
 {
-    if(findOutlineByNameDialog->getChoice().size()) {
-        unique_ptr<vector<Outline*>> outlines
-            = mind->findOutlineByTitleFts(findOutlineByNameDialog->getChoice().toStdString());
-        if(outlines && outlines->size()) {
-            orloj->showFacetOutline(outlines->front());
-            // IMPROVE make this more efficient
-            statusBar->showInfo(QString(tr("Outline "))+QString::fromStdString(outlines->front()->getTitle()));
-        } else {
-            statusBar->showInfo(QString(tr("Outline not found: ")).append(findOutlineByNameDialog->getChoice()));
-        }
+    if(findOutlineByNameDialog->getChoice()) {
+        orloj->showFacetOutline(findOutlineByNameDialog->getChoice());
+        // IMPROVE make this more efficient
+        statusBar->showInfo(QString(tr("Outline "))+QString::fromStdString(findOutlineByNameDialog->getChoice()->getTitle()));
+    } else {
+        statusBar->showInfo(QString(tr("Outline not found: ")).append(findOutlineByNameDialog->getSearchedString()));
     }
 }
 
@@ -401,8 +397,9 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
         QString("About MindForger"),
         QString(
             "<b>MindForger " MINDFORGER_VERSION "</b>"
-#ifdef MFDEBUG
-            "&nbsp;&nbsp;&nbsp;&nbsp;" __DATE__ " " __TIME__ ""
+#ifdef DO_MF_DEBUG
+            "&nbsp;&nbsp;&nbsp;&nbsp;" __DATE__ " " __TIME__
+            "&nbsp;&nbsp;&nbsp;&nbsp; Qt " QT_VERSION_STR
 #endif
             "<br>"
             "<br>Personal thinking notebook."

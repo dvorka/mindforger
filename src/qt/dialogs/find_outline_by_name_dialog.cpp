@@ -73,67 +73,72 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
 
 void FindOutlineByNameDialog::enableFindButton(const QString& text)
 {
-    // filter listview
     // IMPROVE use HSTR algorithm to be smarter
-    filteredListViewStrings.clear();
+    listViewStrings.clear();
     if(!text.isEmpty()) {
         Qt::CaseSensitivity c = caseCheckBox->isChecked()?Qt::CaseInsensitive:Qt::CaseSensitive;
+        // IMPROVE find a list view method giving # of visible rows
+        int visible = 0;
+        int row = 0;
         for(Outline* o:outlines) {
             QString s = QString::fromStdString(o->getTitle());
             if(s.startsWith(text,c)) {
-                filteredListViewStrings << s;
+                listView->setRowHidden(row, false);
+                visible++;
+            } else {
+                listView->setRowHidden(row, true);
             }
+            row++;
         }
+        findButton->setEnabled(visible);
     } else {
-        for(Outline* o:outlines) {
-            filteredListViewStrings << QString::fromStdString(o->getTitle());
+        for(size_t row = 0; row<outlines.size(); row++) {
+            listView->setRowHidden(row, false);
         }
+        findButton->setEnabled(outlines.size());
     }
-    ((QStringListModel*)listView->model())->setStringList(filteredListViewStrings);
-
-    findButton->setEnabled(!filteredListViewStrings.isEmpty());
 }
 
 void FindOutlineByNameDialog::show(vector<Outline*>& os)
 {
+    choice = nullptr;
     outlines.clear();
-    filteredListViewStrings.clear();
+    listViewStrings.clear();
     if(os.size()) {
         for(Outline* o:os) {
             outlines.push_back(o);
             if(o->getTitle().size()) {
-                filteredListViewStrings << QString::fromStdString(o->getTitle());
+                listViewStrings << QString::fromStdString(o->getTitle());
             }
         }
-        // IMPROVE filteredListViewStrings.sort(); ... I cannot keep consistency between strings and Os for now
-        ((QStringListModel*)listView->model())->setStringList(filteredListViewStrings);
+        ((QStringListModel*)listView->model())->setStringList(listViewStrings);
     }
 
-    findButton->setEnabled(!filteredListViewStrings.isEmpty());
+    findButton->setEnabled(outlines.size());
     lineEdit->clear();
     lineEdit->setFocus();
-
     QDialog::show();
 }
 
 void FindOutlineByNameDialog::handleReturn(void)
 {
     if(findButton->isEnabled()) {
-        choice = filteredListViewStrings.at(0);
+        for(size_t row = 0; row<outlines.size(); row++) {
+            if(!listView->isRowHidden(row)) {
+                choice = outlines[row];
+                break;
+            }
+        }
 
         QDialog::close();
         emit searchFinished();
     }
 }
 
-NOT SORTED
-MUST BE CHOOSEN FROM FILTERED LIST OF OUTLINES
-
-
 void FindOutlineByNameDialog::handleChoice(void)
 {
     if(listView->currentIndex().isValid()) {
-        choice = filteredListViewStrings.at(listView->currentIndex().row());
+        choice = outlines[listView->currentIndex().row()];
 
         QDialog::close();
         emit searchFinished();

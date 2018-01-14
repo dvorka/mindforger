@@ -51,12 +51,12 @@ class FindOutlineByNameDialog : public QDialog
 private:
     MyLineEdit* lineEdit;
     QListView* listView;
-    QStringList filteredListViewStrings;
+    QStringList listViewStrings;
     QStringListModel listViewModel;
     QCheckBox* caseCheckBox;
     QPushButton* closeButton;
 
-    QString choice;
+    Outline* choice;
     std::vector<Outline*> outlines;
 
 protected:
@@ -74,7 +74,7 @@ public:
     QString getSearchedString() const { return lineEdit->text(); }
     QCheckBox* getCaseCheckbox(void) const { return caseCheckBox; }
     QPushButton* getFindButton(void) const { return findButton; }
-    QString& getChoice(void) { return choice; }
+    Outline* getChoice(void) { return choice; }
 
     void show(std::vector<Outline*>& outlines);
 

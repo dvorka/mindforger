@@ -189,7 +189,8 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/dialogs/find_note_by_name_dialog.cpp
 
 QMAKE_CXX = ccache g++
-QMAKE_CXXFLAGS += -std=c++0x -pedantic
+# -std=c++0x ~ -std=c++11
+QMAKE_CXXFLAGS += -pedantic -std=c++11
 
 TRANSLATIONS = src/qt/translations/mindforger_en.ts src/qt/translations/mindforger_cs.ts
 

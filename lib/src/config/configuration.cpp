@@ -25,7 +25,8 @@ using namespace std;
 
 namespace m8r {
 
-Configuration::Configuration()
+// init() method to workaround missing constructor to constructor call in older versions of GCC :-/
+void Configuration::init(void)
 {
     char *home = getenv(ENV_VAR_HOME);
     userHomePath = string{home};
@@ -44,8 +45,14 @@ Configuration::Configuration()
     installer = new Installer{};
 }
 
-Configuration::Configuration(const string& activeRepository) : Configuration()
+Configuration::Configuration()
 {
+    init();
+}
+
+Configuration::Configuration(const string& activeRepository)
+{
+    init();
     setActiveRepository(addRepository(activeRepository));
 }
 
