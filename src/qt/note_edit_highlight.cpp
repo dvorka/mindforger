@@ -23,20 +23,55 @@ namespace m8r {
 NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     : QSyntaxHighlighter(parent)
 {
+    /*
+     * Markdown (check QRegExp or Perl regexps)
+     */
+
+    // emphasis
+    addRegex(Bold, "\\*(:?\\w[\\w\\s]+)\\*"); // shorter match must go first: * first, ** next
+    addRegex(Bolder, "\\*\\*(:?\\w[\\w\\s]+)\\*\\*");
+    addRegex(Italicer, "__(:?[\\w\\s]+)__");
+    addRegex(Italic, "_(:?[\\w\\s]+)_");
+    addRegex(Strikethrough, "~~(:?[\\w\\s]+)~~");
+    addRegex(Codeblock, "`(:?[\\w\\s]+)`");
+
+    // TODO extra method - HTML comment like
+    //addRegex(CodeblockMultiline, "\\*(:?#\\d+|\\w+)\\*");
+
+    // TODO colors from configuration
+    boldFormat.setForeground(Qt::red);
+    bolderFormat.setForeground(Qt::red);
+    bolderFormat.setFontWeight(QFont::ExtraBold);
+    italicFormat.setForeground(Qt::darkGreen);
+    italicFormat.setFontItalic(true);
+    italicerFormat.setForeground(Qt::darkGreen);
+    italicerFormat.setFontItalic(true);
+    italicerFormat.setFontWeight(QFont::Bold);
+    strikethroughFormat.setForeground(Qt::blue);
+    codeblockFormat.setForeground(Qt::blue);
+
+    /*
+     * HTML inlined in MD
+     */
+
+    addRegex(Tag, "<[!?]?\\w+(?:/>)?", false);
+    addRegex(Tag, "(?:</\\w+)?[?]?>");
+    addRegex(Entity, "&(:?#\\d+|\\w+);");
+    addRegex(Comment, "<!--.*-->");
+    addRegex(Attribute, "(\\w+(?::\\w+)?)=(\"[^\"]+\"|'[^\']+')");
+
+    // TODO colors from configuration
     tagFormat.setForeground(Qt::darkBlue);
     attributeNameFormat.setForeground(Qt::blue);
     attributeValueFormat.setForeground(Qt::darkYellow);
     entityFormat.setForeground(Qt::darkRed);
-    commentFormat.setForeground(Qt::darkGreen);
+    commentFormat.setForeground(Qt::gray);
     commentFormat.setFontItalic(true);
-
-    addRegex(Tag, "<[!?]?\\w+(?:/>)?", false);
-    addRegex(Tag, "(?:</\\w+)?[?]?>");
-    addRegex(Attribute, "(\\w+(?::\\w+)?)=(\"[^\"]+\"|'[^\']+')");
-    addRegex(Entity, "&(:?#\\d+|\\w+);");
-    addRegex(Comment, "<!--.*-->");
 }
 
+/*
+ * Add Qt's Perl compatible regexp - see QRegExp or https://perlmaven.com/regex-cheat-sheet
+ */
 void NoteEditHighlight::addRegex(Type type, const QString &pattern, bool minimal)
 {
     QRegExp regex(pattern);
@@ -45,7 +80,7 @@ void NoteEditHighlight::addRegex(Type type, const QString &pattern, bool minimal
     regexForType.insert(type, regex);
 }
 
-void NoteEditHighlight::highlightBlock(const QString &text)
+void NoteEditHighlight::highlightBlock(const QString& text)
 {
     setCurrentBlockState(Normal);
 
@@ -53,17 +88,32 @@ void NoteEditHighlight::highlightBlock(const QString &text)
     highlightComments(text);
 }
 
-void NoteEditHighlight::highlightPatterns(const QString &text)
+void NoteEditHighlight::highlightPatterns(const QString& text)
 {
     QHashIterator<Type, QRegExp> i(regexForType);
+
     while(i.hasNext()) {
         i.next();
         Type type = i.key();
         const QRegExp &regex = i.value();
+
         int index = regex.indexIn(text);
         while(index > -1) {
             int length = regex.matchedLength();
-            if(type == Tag)
+
+            if(type == Bolder)
+                setFormat(index, length, bolderFormat);
+            else if(type == Bold)
+                setFormat(index, length, boldFormat);
+            else if(type == Italic)
+                setFormat(index, length, italicFormat);
+            else if(type == Italicer)
+                setFormat(index, length, italicerFormat);
+            else if(type == Strikethrough)
+                setFormat(index, length, strikethroughFormat);
+            else if(type == Codeblock)
+                setFormat(index, length, codeblockFormat);
+            else if(type == Tag)
                 setFormat(index, length, tagFormat);
             else if(type == Attribute) {
                 setFormat(index, regex.pos(2) - index - 1,

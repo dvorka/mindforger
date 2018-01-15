@@ -35,13 +35,22 @@ protected:
 
 private:
     enum State {
-	    Normal=0x01, 
+	    Normal=0x01,
 	    InComment=0x02
     };
     enum Type {
-	    Tag, 
-	    Attribute, 
-	    Entity, 
+        // Markdown
+        Bold,
+        Bolder,
+        Italic,
+        Italicer,
+        Strikethrough,
+        Codeblock,
+
+        // HTML
+	    Tag,
+	    Attribute,
+	    Entity,
 	    Comment
     };
 
@@ -50,6 +59,16 @@ private:
     void highlightPatterns(const QString& text);
     void highlightComments(const QString& text);
 
+private:
+    // Markdown formats
+    QTextCharFormat boldFormat;
+    QTextCharFormat bolderFormat;
+    QTextCharFormat italicFormat;
+    QTextCharFormat italicerFormat;
+    QTextCharFormat strikethroughFormat;
+    QTextCharFormat codeblockFormat;
+
+    // HTML formats
     QTextCharFormat tagFormat;
     QTextCharFormat attributeNameFormat;
     QTextCharFormat attributeValueFormat;
