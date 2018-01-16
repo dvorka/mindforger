@@ -197,7 +197,11 @@ SOURCES += ./lib/src/mind/planner.cpp \
 QMAKE_CXX = ccache g++
 QMAKE_CXXFLAGS += -pedantic -std=c++11
 
-TRANSLATIONS = src/qt/translations/mindforger_en.ts src/qt/translations/mindforger_cs.ts
+TRANSLATIONS = src/qt/translations/mindforger_en.ts \
+    src/qt/translations/mindforger_de.ts \
+    src/qt/translations/mindforger_fr.ts \
+    src/qt/translations/mindforger_es.ts \
+    src/qt/translations/mindforger_cs.ts
 
 RESOURCES += \
     mf-resources.qrc

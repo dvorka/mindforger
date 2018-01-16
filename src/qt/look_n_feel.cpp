@@ -20,6 +20,29 @@
 
 namespace m8r {
 
+
+
+
+
+
+
+// TODO theme names are constants
+
+// TODO editor* properties
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 LookAndFeels::LookAndFeels(void)
 {
     themeNames << "yin" << "yang" << "black";

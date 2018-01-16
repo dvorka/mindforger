@@ -24,6 +24,9 @@
 
 namespace m8r {
 
+/**
+ * @brief L&F singleton class uses through frontend components and widgets.
+ */
 class LookAndFeels
 {
 private:

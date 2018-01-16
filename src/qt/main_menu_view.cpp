@@ -94,7 +94,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: search
 
     // TODO tr()
-    actionFts = new QAction(QString::fromUtf8("&Full-text search"), mainWindow);
+    actionFts = new QAction(QString::fromUtf8("&Full-text Search"), mainWindow);
     actionFts->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
     actionFts->setStatusTip(QString::fromUtf8("Note full-text search"));
 

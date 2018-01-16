@@ -30,6 +30,15 @@ Mind::Mind(Configuration &configuration)
 
 void Mind::dream(void)
 {
+    // integrity check: ...
+
+    // memory structure check:
+    // - Os w/o description
+    // - Os w/o any N
+    // - Ns w/o description
+
+    // attachments
+    // - orphan attachments (not referenced from any O)
 }
 
 void Mind::think(void)

@@ -26,12 +26,8 @@ OutlineViewPresenter::OutlineViewPresenter(OutlineView *view, OrlojPresenter* or
     // IMPROVE stack object
     this->outlineTreePresenter = new OutlineTreePresenter(view->getOutlineTree(), this);
 
-    QObject::connect(
-        view->getTitleLabel(), SIGNAL(clicked()),
-        orloj, SLOT(slotShowOutlineHeader()));
-    QObject::connect(
-        view->getOutlineTree(), SIGNAL(signalFromOutlineTreeToOutlines()),
-        orloj, SLOT(slotShowOutlines()));
+    QObject::connect(view->getTitleLabel(), SIGNAL(clicked()), orloj, SLOT(slotShowOutlineHeader()));
+    QObject::connect(view->getOutlineTree(), SIGNAL(signalFromOutlineTreeToOutlines()), orloj, SLOT(slotShowOutlines()));
 }
 
 void OutlineViewPresenter::refresh(Outline* outline)
