@@ -21,60 +21,69 @@
 
 #include <QtWidgets>
 
+#include "look_n_feel.h"
+
 namespace m8r {
 
 class NoteEditHighlight : public QSyntaxHighlighter
 {
     Q_OBJECT
 
-public:
-    explicit NoteEditHighlight(QTextDocument *parent=0);
-
-protected:
-    void highlightBlock(const QString &text);
-
 private:
-    enum State {
-	    Normal=0x01,
-	    InComment=0x02
-    };
     enum Type {
-        // Markdown
         Bold,
         Bolder,
         Italic,
         Italicer,
         Strikethrough,
+        Link,
         Codeblock,
 
-        // HTML
-	    Tag,
-	    Attribute,
-	    Entity,
-	    Comment
+        HtmlTag,
+        HtmlAttribute,
+        HtmlEntity,
+        HtmlComment
     };
 
-    void addRegex(Type type, const QString& pattern, bool minimal=true);
+    enum State {
+        Normal=0x01,
+        InComment=0x02
+    };
 
-    void highlightPatterns(const QString& text);
-    void highlightComments(const QString& text);
+    LookAndFeels& lookAndFeels;
 
-private:
     // Markdown formats
     QTextCharFormat boldFormat;
     QTextCharFormat bolderFormat;
     QTextCharFormat italicFormat;
     QTextCharFormat italicerFormat;
     QTextCharFormat strikethroughFormat;
+    QTextCharFormat linkFormat;
     QTextCharFormat codeblockFormat;
 
     // HTML formats
-    QTextCharFormat tagFormat;
-    QTextCharFormat attributeNameFormat;
-    QTextCharFormat attributeValueFormat;
-    QTextCharFormat entityFormat;
-    QTextCharFormat commentFormat;
+    QTextCharFormat htmlTagFormat;
+    QTextCharFormat htmlAttrNameFormat;
+    QTextCharFormat htmlAttValueFormat;
+    QTextCharFormat htmlEntityFormat;
+    QTextCharFormat htmlCommentFormat;
+
     QMultiHash<Type, QRegExp> regexForType;
+
+public:
+    explicit NoteEditHighlight(QTextDocument* parent);
+    NoteEditHighlight(const NoteEditHighlight&) = delete;
+    NoteEditHighlight(const NoteEditHighlight&&) = delete;
+    NoteEditHighlight &operator=(const NoteEditHighlight&) = delete;
+    NoteEditHighlight &operator=(const NoteEditHighlight&&) = delete;
+
+protected:
+    void highlightBlock(const QString &text);
+
+private:
+    void addRegex(Type type, const QString& pattern, bool minimal=true);
+    void highlightPatterns(const QString& text);
+    void highlightComments(const QString& text);
 };
 
 }

@@ -52,8 +52,27 @@ public:
 
 private:
     QApplication* mindforgerApplication;
+
+    // viewer
     QString textColor;
-    QString backgroundColor;
+
+    // editor
+    QString editorBackgroundColor;
+
+    QColor editorBold;
+    QColor editorBolder;
+    QColor editorItalic;
+    QColor editorItalicer;
+    QColor editorStrikethrough;
+    QColor editorLink;
+    QColor editorCodeblock;
+    QColor editorHtmlTag;
+    QColor editorHtmlEntity;
+    QColor editorHtmlAttrName;
+    QColor editorHtmlAttrValue;
+    QColor editorHtmlComment;
+
+    // CLI
     QColor cliTextColor;
 
     explicit LookAndFeels(void);
@@ -87,7 +106,21 @@ public:
     void setTheme(const QString&);
 
     const QString& getTextColor(void) const { return textColor; }
-    const QString& getBackgroundColor(void) const { return backgroundColor; }
+    const QString& getEditorBackgroundColor(void) const { return editorBackgroundColor; }
+
+    QColor& getEditorBold(void) { return editorBold; }
+    QColor& getEditorBolder(void) { return editorBolder; }
+    QColor& getEditorItalic(void) { return editorItalic; }
+    QColor& getEditorItalicer(void) { return editorItalicer; }
+    QColor& getEditorStrikethrough(void) { return editorStrikethrough; }
+    QColor& getEditorLink(void) { return editorLink; }
+    QColor& getEditorCodeblock(void) { return editorCodeblock; }
+    QColor& getEditorHtmlTag(void) { return editorHtmlTag; }
+    QColor& getEditorHtmlEntity(void) { return editorHtmlEntity; }
+    QColor& getEditorHtmlAttrName(void) { return editorHtmlAttrName; }
+    QColor& getEditorHtmlAttrValue(void) { return editorHtmlAttrValue; }
+    QColor& getEditorHtmlComment(void) { return editorHtmlComment; }
+
     const QColor& getCliTextColor(void) const { return cliTextColor; }
 };
 

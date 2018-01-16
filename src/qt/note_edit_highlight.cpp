@@ -21,7 +21,8 @@
 namespace m8r {
 
 NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
-    : QSyntaxHighlighter(parent)
+    : QSyntaxHighlighter(parent),
+      lookAndFeels(LookAndFeels::getInstance())
 {
     /*
      * Markdown (check QRegExp or Perl regexps)
@@ -33,40 +34,43 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     addRegex(Italicer, "__(:?[\\w\\s]+)__");
     addRegex(Italic, "_(:?[\\w\\s]+)_");
     addRegex(Strikethrough, "~~(:?[\\w\\s]+)~~");
+    //addRegex(Link, "\\[(:?[\\w\\s]+)\\]\\((:?[\\w\\s]+)\\)");
+    //addRegex(Link, "\\[(:?[\\w\\s]+)\\]\\((:?[\\w\\:/]+)");
+    //addRegex(Link, "\\([\\w:/\\.]+\\)");
+    addRegex(Link, "\\[(:?[\\w\\s]+)\\]\\([\\w:/\\.]+\\)");
     addRegex(Codeblock, "`(:?[\\w\\s]+)`");
 
     // TODO extra method - HTML comment like
     //addRegex(CodeblockMultiline, "\\*(:?#\\d+|\\w+)\\*");
 
-    // TODO colors from configuration
-    boldFormat.setForeground(Qt::red);
-    bolderFormat.setForeground(Qt::red);
+    boldFormat.setForeground(lookAndFeels.getEditorBold());
+    bolderFormat.setForeground(lookAndFeels.getEditorBolder());
     bolderFormat.setFontWeight(QFont::ExtraBold);
-    italicFormat.setForeground(Qt::darkGreen);
+    italicFormat.setForeground(lookAndFeels.getEditorItalic());
     italicFormat.setFontItalic(true);
-    italicerFormat.setForeground(Qt::darkGreen);
+    italicerFormat.setForeground(lookAndFeels.getEditorItalicer());
     italicerFormat.setFontItalic(true);
     italicerFormat.setFontWeight(QFont::Bold);
-    strikethroughFormat.setForeground(Qt::blue);
-    codeblockFormat.setForeground(Qt::blue);
+    strikethroughFormat.setForeground(lookAndFeels.getEditorStrikethrough());
+    linkFormat.setForeground(lookAndFeels.getEditorLink());
+    codeblockFormat.setForeground(lookAndFeels.getEditorCodeblock());
 
     /*
      * HTML inlined in MD
      */
 
-    addRegex(Tag, "<[!?]?\\w+(?:/>)?", false);
-    addRegex(Tag, "(?:</\\w+)?[?]?>");
-    addRegex(Entity, "&(:?#\\d+|\\w+);");
-    addRegex(Comment, "<!--.*-->");
-    addRegex(Attribute, "(\\w+(?::\\w+)?)=(\"[^\"]+\"|'[^\']+')");
+    addRegex(HtmlTag, "<[!?]?\\w+(?:/>)?", false);
+    addRegex(HtmlTag, "(?:</\\w+)?[?]?>");
+    addRegex(HtmlEntity, "&(:?#\\d+|\\w+);");
+    addRegex(HtmlComment, "<!--.*-->");
+    addRegex(HtmlAttribute, "(\\w+(?::\\w+)?)=(\"[^\"]+\"|'[^\']+')");
 
-    // TODO colors from configuration
-    tagFormat.setForeground(Qt::darkBlue);
-    attributeNameFormat.setForeground(Qt::blue);
-    attributeValueFormat.setForeground(Qt::darkYellow);
-    entityFormat.setForeground(Qt::darkRed);
-    commentFormat.setForeground(Qt::gray);
-    commentFormat.setFontItalic(true);
+    htmlTagFormat.setForeground(lookAndFeels.getEditorHtmlTag());
+    htmlAttrNameFormat.setForeground(lookAndFeels.getEditorHtmlAttrName());
+    htmlAttValueFormat.setForeground(lookAndFeels.getEditorHtmlAttrValue());
+    htmlEntityFormat.setForeground(lookAndFeels.getEditorHtmlEntity());
+    htmlCommentFormat.setForeground(lookAndFeels.getEditorHtmlComment());
+    htmlCommentFormat.setFontItalic(true);
 }
 
 /*
@@ -113,19 +117,26 @@ void NoteEditHighlight::highlightPatterns(const QString& text)
                 setFormat(index, length, strikethroughFormat);
             else if(type == Codeblock)
                 setFormat(index, length, codeblockFormat);
-            else if(type == Tag)
-                setFormat(index, length, tagFormat);
-            else if(type == Attribute) {
-                setFormat(index, regex.pos(2) - index - 1,
-                          attributeNameFormat);
-                setFormat(regex.pos(2) + 1, regex.cap(2).length() - 2,
-                          attributeValueFormat);
+            else if(type == Link)
+                setFormat(index, length, linkFormat);
+            else if(type == HtmlTag)
+                setFormat(index, length, htmlTagFormat);
+            else if(type == HtmlAttribute) {
+                setFormat(
+                    index,
+                    regex.pos(2) - index - 1,
+                    htmlAttrNameFormat);
+                setFormat(
+                    regex.pos(2) + 1,
+                    regex.cap(2).length() - 2,
+                    htmlAttValueFormat);
             }
-            else if(type == Entity)
-                setFormat(index, length, entityFormat);
-            else if(type == Comment)
-                setFormat(index, length, commentFormat);
-            index = regex.indexIn(text, index + length);
+            else if(type == HtmlEntity)
+                setFormat(index, length, htmlEntityFormat);
+            else if(type == HtmlComment)
+                setFormat(index, length, htmlCommentFormat);
+
+            index = regex.indexIn(text, index+length);
         }
     }
 }
@@ -138,19 +149,20 @@ void NoteEditHighlight::highlightComments(const QString &text)
     if(previousBlockState() > -1 && (previousBlockState() & InComment) == InComment) {
         int end = text.indexOf(EndOfComment);
         if (end == -1) {
-            setFormat(0, text.length(), commentFormat);
+            setFormat(0, text.length(), htmlCommentFormat);
             setCurrentBlockState(currentBlockState() | InComment);
             return;
         }
-        else
-            setFormat(0, end + EndOfComment.length(), commentFormat);
+        else {
+            setFormat(0, end + EndOfComment.length(), htmlCommentFormat);
+        }
     }
 
     int start = text.lastIndexOf(StartOfComment);
     if(start != -1) {
         int end = text.lastIndexOf(EndOfComment);
         if(end < start) {
-            setFormat(start, text.length(), commentFormat);
+            setFormat(start, text.length(), htmlCommentFormat);
             setCurrentBlockState(currentBlockState() | InComment);
         }
     }

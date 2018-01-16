@@ -44,7 +44,7 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
     html += QString::fromUtf8(" style='color: ");
     html += LookAndFeels::getInstance().getTextColor();
     html += QString::fromUtf8("; background-color: ");
-    html += LookAndFeels::getInstance().getBackgroundColor();
+    html += LookAndFeels::getInstance().getEditorBackgroundColor();
     html += QString::fromUtf8("; font-size: 90%;'>");
     // table
     html += QString::fromUtf8("<table width='100%'><tr>");

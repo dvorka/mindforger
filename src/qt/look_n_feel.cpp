@@ -18,34 +18,16 @@
 */
 #include "look_n_feel.h"
 
+
+constexpr const auto THEME_YIN = "yin";
+constexpr const auto THEME_YANG = "yang";
+constexpr const auto THEME_BLACK = "black";
+
 namespace m8r {
-
-
-
-
-
-
-
-// TODO theme names are constants
-
-// TODO editor* properties
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 LookAndFeels::LookAndFeels(void)
 {
-    themeNames << "yin" << "yang" << "black";
+    themeNames << THEME_YIN << THEME_YANG << THEME_BLACK;
 }
 
 void LookAndFeels::init(QApplication* mindforgerApplication)
@@ -64,19 +46,128 @@ bool LookAndFeels::isThemeNameValid(const QString& themeName) const
 
 void LookAndFeels::setTheme(const QString& themeName)
 {
-    if("black" == themeName.toStdString()) {
-        setBlackTheme();
-    } else if("yang" == themeName.toStdString()) {
+    if(THEME_YANG == themeName.toStdString()) {
         setYangTheme();
-    } else if("yin" == themeName.toStdString()) {
+    } else if(THEME_YIN == themeName.toStdString()) {
         setYinTheme();
+    } else if(THEME_BLACK == themeName.toStdString()) {
+        setBlackTheme();
     }
+}
+
+/*
+ * Built-in yin (dark) theme definition.
+ */
+void LookAndFeels::setYinTheme(void)
+{
+    textColor = QString("#FFF");
+
+    editorBackgroundColor = QString("#353535");
+
+    editorBold.setRgb(0xFF,0xFF,0x00);
+    editorBolder.setRgb(0xFF,0xFF,0x00);
+    editorItalic.setRgb(0x00,0xAA,0x00);
+    editorItalicer.setRgb(0x00,0xAA,0x00);
+    editorStrikethrough.setRgb(0x00,0x00,0x00);
+    editorLink.setRgb(0x00,0xFF,0xFF);
+    editorCodeblock.setRgb(0x99,0x99,0x99);
+    editorHtmlTag.setRgb(0xAA,0x00,0xAA);
+    editorHtmlEntity.setRgb(0xAA,0x00,0xAA);
+    editorHtmlAttrName.setRgb(0xFF,0x00,0xFF);
+    editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
+    editorHtmlComment.setRgb(0x66,0x66,0x66);
+
+    cliTextColor = Qt::green;
+
+    mindforgerApplication->setStyle(QStyleFactory::create("fusion"));
+    mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+
+    // Terminal green: QColor(0, 140, 0)
+    // Terminal blue : QColor(42, 130, 218)
+    palette.setColor(QPalette::Window, QColor(53,53,53));
+    palette.setColor(QPalette::WindowText, Qt::white);
+    palette.setColor(QPalette::Base, QColor(25,25,25));
+    palette.setColor(QPalette::AlternateBase, QColor(53,53,53));
+    palette.setColor(QPalette::Text, Qt::white);
+    palette.setColor(QPalette::Button, QColor(53,53,53));
+    palette.setColor(QPalette::ButtonText, Qt::white);
+    palette.setColor(QPalette::BrightText, Qt::red);
+
+    palette.setColor(QPalette::Link, QColor(0, 140, 0));
+    palette.setColor(QPalette::Highlight, QColor(0, 140, 0));
+    palette.setColor(QPalette::HighlightedText, Qt::white);
+
+    mindforgerApplication->setPalette(palette);
+
+    // IMPROVE tooltips via palette does NOT work > CSS is used instead
+    mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #008c00; border: 1px solid white; }");
+    //palette.setColor(QPalette::ToolTipBase, Qt::blue);
+    //palette.setColor(QPalette::ToolTipText, Qt::red);
+}
+
+/*
+ * Built-in yang (light) theme definition.
+ */
+void LookAndFeels::setYangTheme(void)
+{
+    textColor = QString("#000");
+
+    editorBackgroundColor = QString("#FFF");
+
+    // magenta 0xBB,0x00,0xBB
+    // cyan 0x00,0x88,0x88
+    // blue 0x00,0x00,0xFF
+    // green 0x00,0x55,0x00
+
+    editorBold.setRgb(0x00,0x88,0x88);
+    editorBolder.setRgb(0x00,0x88,0x88);
+    editorItalic.setRgb(0xBB,0x00,0xBB);
+    editorItalicer.setRgb(0xBB,0x00,0xBB);
+    editorStrikethrough.setRgb(0xAA,0xAA,0xAA);
+    editorLink.setRgb(0x00,0x00,0xFF);
+    editorCodeblock.setRgb(0x88,0x88,0x88);
+    editorHtmlTag.setRgb(0x00,0x00,0xFF);
+    editorHtmlEntity.setRgb(0x00,0x00,0xFF);
+    editorHtmlAttrName.setRgb(0x00,0x00,0xFF);
+    editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
+    editorHtmlComment.setRgb(0xAA,0xAA,0xAA);
+
+    cliTextColor = Qt::black;
+
+    mindforgerApplication->setStyle(QStyleFactory::create("fusion"));
+
+    // Ubuntu orange:
+    //   100% #E95420 QColor(221, 72, 20)
+    //    90% #EB6536 QColor(235, 101, 54)
+    //    80% #ED764D QColor(237, 118, 77)
+    palette.setColor(QPalette::Link, QColor(237, 118, 77));
+    palette.setColor(QPalette::Highlight, QColor(237, 118, 77));
+    palette.setColor(QPalette::HighlightedText, Qt::white);
+
+    mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #ED764D; border: 1px solid white; }");
+
+    mindforgerApplication->setPalette(palette);
 }
 
 void LookAndFeels::setBlackTheme(void)
 {
     textColor = QString("#FFF");
-    backgroundColor = QString("#000");
+
+    editorBackgroundColor = QString("#000");
+
+    editorBold.setRgb(0xFF,0xFF,0x00);
+    editorBolder.setRgb(0xFF,0xFF,0x00);
+    editorItalic.setRgb(0x00,0xFF,0x00);
+    editorItalicer.setRgb(0x00,0xFF,0x00);
+    editorStrikethrough.setRgb(0x00,0x00,0xFF);
+    editorLink.setRgb(0x00,0xFF,0xFF);
+    editorCodeblock.setRgb(0x00,0x00,0xFF);
+    editorHtmlTag.setRgb(0x00,0x00,0x88);
+    editorHtmlEntity.setRgb(0x88,0x00,0x00);
+    editorHtmlAttrName.setRgb(0x00,0x00,0xFF);
+    editorHtmlAttrValue.setRgb(0x88,0x88,0x00);
+    editorHtmlComment.setRgb(0xAA,0xAA,0xAA);
+
     cliTextColor = QColor(0x99,0xb1,0xff);
 
     /* The valid keys can be retrieved using the keys() function. Typically they include
@@ -113,65 +204,6 @@ void LookAndFeels::setBlackTheme(void)
 
     // IMPROVE tooltips are set in two ways
     mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #000000; border: 1px solid white; }");
-}
-
-/*
- * Built-in yin (dark) theme definition.
- */
-void LookAndFeels::setYinTheme(void)
-{
-    textColor = QString("#FFF");
-    backgroundColor = QString("#353535");
-    cliTextColor = Qt::green;
-
-    mindforgerApplication->setStyle(QStyleFactory::create("fusion"));
-    mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-
-    // Terminal green: QColor(0, 140, 0)
-    // Terminal blue : QColor(42, 130, 218)
-    palette.setColor(QPalette::Window, QColor(53,53,53));
-    palette.setColor(QPalette::WindowText, Qt::white);
-    palette.setColor(QPalette::Base, QColor(25,25,25));
-    palette.setColor(QPalette::AlternateBase, QColor(53,53,53));
-    palette.setColor(QPalette::Text, Qt::white);
-    palette.setColor(QPalette::Button, QColor(53,53,53));
-    palette.setColor(QPalette::ButtonText, Qt::white);
-    palette.setColor(QPalette::BrightText, Qt::red);
-
-    palette.setColor(QPalette::Link, QColor(0, 140, 0));
-    palette.setColor(QPalette::Highlight, QColor(0, 140, 0));
-    palette.setColor(QPalette::HighlightedText, Qt::white);
-
-    mindforgerApplication->setPalette(palette);
-
-    // IMPROVE tooltips via palette does NOT work > CSS is used instead
-    mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #008c00; border: 1px solid white; }");
-    //palette.setColor(QPalette::ToolTipBase, Qt::blue);
-    //palette.setColor(QPalette::ToolTipText, Qt::red);
-}
-
-/*
- * Built-in yang (light) theme definition.
- */
-void LookAndFeels::setYangTheme(void)
-{
-    textColor = QString("#000");
-    backgroundColor = QString("#FFF");
-    cliTextColor = Qt::black;
-
-    mindforgerApplication->setStyle(QStyleFactory::create("fusion"));
-
-    // Ubuntu orange:
-    //   100% #E95420 QColor(221, 72, 20)
-    //    90% #EB6536 QColor(235, 101, 54)
-    //    80% #ED764D QColor(237, 118, 77)
-    palette.setColor(QPalette::Link, QColor(237, 118, 77));
-    palette.setColor(QPalette::Highlight, QColor(237, 118, 77));
-    palette.setColor(QPalette::HighlightedText, Qt::white);
-
-    mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #ED764D; border: 1px solid white; }");
-
-    mindforgerApplication->setPalette(palette);
 }
 
 }
