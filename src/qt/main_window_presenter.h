@@ -127,7 +127,6 @@ public slots:
     void doActionOutlineNew(void);
     void handleOutlineNew(void);
     void doActionOutlineOpen(void);
-    void doActionOutlineClose(void);
     void doActionOutlineForget(void);
     void doActionOutlineExport(void);
     void doActionOutlineImport(void);

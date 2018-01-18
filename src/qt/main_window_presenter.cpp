@@ -285,15 +285,6 @@ void MainWindowPresenter::doActionOutlineOpen()
     doActionFindOutlineByName();
 }
 
-void MainWindowPresenter::doActionOutlineClose()
-{
-    if(orloj->isFacetActiveOutlineManagement()) {
-        orloj->slotShowOutlines();
-    } else {
-        QMessageBox::critical(&view, tr("Close Outline"), tr("Cannot close Outline as it's not open."));
-    }
-}
-
 void MainWindowPresenter::doActionOutlineForget()
 {
     if(orloj->isFacetActiveOutlineManagement()) {

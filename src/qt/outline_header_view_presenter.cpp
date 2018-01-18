@@ -53,6 +53,8 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
     html += QString::fromStdString(outline->getTitle());
     html += QString::fromUtf8("</h2>");
     outlineTypeToHtml(outline->getType(), html);
+    html += QString::fromUtf8("&nbsp;");
+    outlineMetadataToHtml(outline, html);
     html += QString::fromUtf8("</td>");
     html += QString::fromUtf8("<td style='width: 50px;'>");
     html += QString::fromUtf8("<h1>");

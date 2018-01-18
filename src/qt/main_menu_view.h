@@ -59,6 +59,7 @@ public:
     QAction* actionMindHack;
 #endif
     // menu: MindForger
+    QAction* actionMindDevise;
     QAction* actionMindLearn;
     QAction* actionMindRemember;
     QAction* actionMindRemind;
@@ -113,7 +114,6 @@ public:
     // menu: Outline
     QAction* actionOutlineNew;
     QAction* actionOutlineOpen;
-    QAction* actionOutlineClose;
     QAction* actionOutlineClone;
     QAction* actionOutlineForget;
     QAction* actionOutlineExport;
@@ -134,6 +134,8 @@ public:
     QAction* actionNoteAttach;
     QAction* actionNoteRefactor;
     QAction* actionNoteClone;
+    QAction* actionNoteExport;
+    QAction* actionNoteImport;
 
     // menu: Help
     QAction* actionHelpDocumentation;

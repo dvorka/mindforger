@@ -49,7 +49,29 @@ void outlineTypeToHtml(const OutlineType* outlineType, QString& html)
         html += QString::fromUtf8("<span style='color: ");
         html += QString::fromStdString(outlineType->getColor().asHtml());
         html += QString::fromUtf8("; font-style: italic;'> ");
+
         html += QString::fromStdString(outlineType->getName());
+
+        html += QString::fromUtf8(" </span>");
+    }
+}
+
+void outlineMetadataToHtml(const Outline* outline, QString& html)
+{
+    if(outline) {
+        html += QString::fromUtf8("<span style='color: ");
+        html += QString::fromStdString(outline->getType()->getColor().asHtml());
+        html += QString::fromUtf8("; font-style: italic;' title='Last read on ");
+        html += QString::fromStdString(datetimeToString(outline->getRead()));
+        html += QString::fromUtf8(", last write on ");
+        html += QString::fromStdString(datetimeToString(outline->getModified()));
+        html += QString::fromUtf8("'>w/ ");
+
+        html += QString::number(outline->getReads());
+        html += QString::fromUtf8(" reads and ");
+        html += QString::number(outline->getRevision());
+        html += QString::fromUtf8(" writes");
+
         html += QString::fromUtf8(" </span>");
     }
 }

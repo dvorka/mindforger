@@ -20,7 +20,7 @@
 #define M8R_QUTILS_H
 
 #include "lib/src/model/tag.h"
-#include "lib/src/model/outline_type.h"
+#include "lib/src/model/outline.h"
 #include "lib/src/model/note_type.h"
 #include "lib/src/gear/string_utils.h"
 
@@ -33,6 +33,7 @@ void initRandomizer(void);
 // HTML
 void tagsToHtml(const std::vector<const Tag*>& tags, QString& html);
 void outlineTypeToHtml(const OutlineType*, QString& html);
+void outlineMetadataToHtml(const Outline*, QString& html);
 void noteTypeToHtml(const NoteType* noteType, QString& html);
 
 }

@@ -25,6 +25,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 {
     qMenuBar = mainWindow->getMenuBar();
 
+    // TODO tr() for all menu items
+
     // menu: mind
 
 #ifdef DO_MF_DEBUG
@@ -32,6 +34,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindHack->setStatusTip(QString::fromUtf8("Mind hacking and debugging hook"));
     actionMindHack->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
 #endif
+
+    // devise... new MD repository
+    actionMindDevise = new QAction(QString::fromUtf8("&Devise"), mainWindow);
+    actionMindDevise->setStatusTip(QString::fromUtf8("Create new MD repository to form new combinations, applications, ideas or principles"));
 
     // learn... from a repository, Markdown or TXT file
     actionMindLearn = new QAction(QString::fromUtf8("&Learn"), mainWindow);
@@ -60,10 +66,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindForget->setStatusTip(QString::fromUtf8("Don't show notes older than..."));
 
     // dream ... sanity, integrity, detox, inference, assoc discovery, ...
-    actionMindDream = new QAction(QString::fromUtf8("&Dream"), mainWindow);
+    actionMindDream = new QAction(QString::fromUtf8("Dr&eam"), mainWindow);
     actionMindDream->setStatusTip(QString::fromUtf8("Tidy up, clean and optimize memory which is otherwise done on your inactivity"));
 
-    actionMindSnapshot = new QAction(tr("&Snapshot"), mainWindow);
+    actionMindSnapshot = new QAction(tr("D&ump"), mainWindow);
     actionMindSnapshot->setStatusTip(QString::fromUtf8("Create backup archive of the current repository"));
 
     actionMindPreferences = new QAction(QString::fromUtf8("&Preferences"), mainWindow);
@@ -78,6 +84,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #ifdef DO_MF_DEBUG
     menuMindForger->addAction(actionMindHack);
 #endif
+    menuMindForger->addAction(actionMindDevise);
     menuMindForger->addAction(actionMindLearn);
     menuMindForger->addAction(actionMindRemember);
     menuMindForger->addAction(actionMindRemind);
@@ -91,26 +98,26 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMindForger->addSeparator();
     menuMindForger->addAction(actionExit);
 
-    // menu: search
+    // menu: recall
 
     // TODO tr()
     actionFts = new QAction(QString::fromUtf8("&Full-text Search"), mainWindow);
     actionFts->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
     actionFts->setStatusTip(QString::fromUtf8("Note full-text search"));
 
-    actionFindOutlineByName = new QAction(QString::fromUtf8("Find &Outline by Name"), mainWindow);
+    actionFindOutlineByName = new QAction(QString::fromUtf8("Recall &Outline by Name"), mainWindow);
     actionFindOutlineByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
     actionFindOutlineByName->setStatusTip(QString::fromUtf8("Find outline by name"));
 
-    actionFindNoteByName = new QAction(QString::fromUtf8("Find &Note by Name"), mainWindow);
+    actionFindNoteByName = new QAction(QString::fromUtf8("Recall &Note by Name"), mainWindow);
     actionFindNoteByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
     actionFindNoteByName->setStatusTip(QString::fromUtf8("Find note by name"));
 
-    actionFindTagByName = new QAction(QString::fromUtf8("Find &Tag by Name"), mainWindow);
+    actionFindTagByName = new QAction(QString::fromUtf8("Recall &Tag by Name"), mainWindow);
     actionFindTagByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
     actionFindTagByName->setStatusTip(QString::fromUtf8("Find tag by name"));
 
-    menuFind = qMenuBar->addMenu(QString::fromUtf8("&Search"));
+    menuFind = qMenuBar->addMenu(QString::fromUtf8("&Recall"));
     menuFind->addAction(actionFts);
     menuFind->addAction(actionFindOutlineByName);
     menuFind->addAction(actionFindNoteByName);
@@ -268,15 +275,12 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: outline
 
-    actionOutlineNew = new QAction(QString::fromUtf8("&New"), mainWindow);
-    actionOutlineNew->setStatusTip(QString::fromUtf8("New outline"));
+    actionOutlineNew = new QAction(QString::fromUtf8("&Devise"), mainWindow);
+    actionOutlineNew->setStatusTip(QString::fromUtf8("Create new Outline to form new combinations, applications, ideas or principles"));
 
-    actionOutlineOpen = new QAction(QString::fromUtf8("&Open"), mainWindow);
+    actionOutlineOpen = new QAction(QString::fromUtf8("Rec&all"), mainWindow);
     actionOutlineOpen->setShortcut(tr("Ctrl-Shift-O"));
     actionOutlineOpen->setStatusTip(QString::fromUtf8("Open outline by name"));
-
-    actionOutlineClose = new QAction(QString::fromUtf8("&Close"), mainWindow);
-    actionOutlineClose->setStatusTip(QString::fromUtf8("Close outline and show home page"));
 
     actionOutlineClone = new QAction(QString::fromUtf8("C&lone"), mainWindow);
     actionOutlineClone->setStatusTip(QString::fromUtf8("Make copy of the current outline..."));
@@ -293,7 +297,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuOutline = qMenuBar->addMenu(QString::fromUtf8("&Outline"));
     menuOutline->addAction(actionOutlineNew);
     menuOutline->addAction(actionOutlineOpen);
-    menuOutline->addAction(actionOutlineClose);
     menuOutline->addAction(actionOutlineForget);
     menuOutline->addSeparator();
     menuOutline->addAction(actionOutlineClone);
@@ -303,22 +306,21 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: note
 
-    actionNoteNew = new QAction(QString::fromUtf8("&New"), mainWindow);
-    actionNoteNew->setStatusTip(QString::fromUtf8("New note"));
+    actionNoteNew = new QAction(QString::fromUtf8("&Devise"), mainWindow);
+    actionNoteNew->setStatusTip(QString::fromUtf8("Create new note to form new combinations, applications, ideas or principles"));
 
-    actionNoteOpen = new QAction(QString::fromUtf8("&Open"), mainWindow);
+    actionNoteOpen = new QAction(QString::fromUtf8("Rec&all"), mainWindow);
     actionNoteOpen->setStatusTip(QString::fromUtf8("Find note by name in the current outline..."));
 
-    actionNoteSave = new QAction(QString::fromUtf8("&Save\tCtrl+S"), mainWindow);
+    actionNoteSave = new QAction(QString::fromUtf8("Remember\tCtrl+S"), mainWindow);
     // Alt-Left is handled elsewhere and I don't want menu to handle it
-    // actionNoteSave->setShortcut(QKeySequence(Qt::ALT+Qt::Key_Left));
     actionNoteSave->setStatusTip(QString::fromUtf8("Save note being edited"));
 
     actionNoteForget = new QAction(QString::fromUtf8("&Forget"), mainWindow);
     actionNoteForget->setStatusTip(QString::fromUtf8("Forget note"));
 
-    actionNoteClose = new QAction(QString::fromUtf8("&Close\tAlt+Left"), mainWindow);
-    actionNoteClose->setStatusTip(QString::fromUtf8("Save and close note being edited"));
+    actionNoteClose = new QAction(QString::fromUtf8("&Leave\tAlt+Left"), mainWindow);
+    actionNoteClose->setStatusTip(QString::fromUtf8("Save leave editor of Note being changed"));
 
     actionNoteFirst = new QAction(QString::fromUtf8("&Top"), mainWindow);
     actionNoteFirst->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_T));
@@ -336,7 +338,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteDemote->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Left));
     actionNoteDemote->setStatusTip(QString::fromUtf8("Demote note"));
 
-    actionNoteDown = new QAction(QString::fromUtf8("&Down"), mainWindow);
+    actionNoteDown = new QAction(QString::fromUtf8("Do&wn"), mainWindow);
     actionNoteDown->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Down));
     actionNoteDown->setStatusTip(QString::fromUtf8("Move note down"));
 
@@ -353,6 +355,12 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionNoteClone = new QAction(QString::fromUtf8("&Clone"), mainWindow);
     actionNoteClone->setStatusTip(QString::fromUtf8("Make a copy of the note to this or other outline..."));
+
+    actionNoteExport = new QAction(QString::fromUtf8("&Export"), mainWindow);
+    actionNoteExport->setStatusTip(QString::fromUtf8("Export note"));
+
+    actionNoteImport = new QAction(QString::fromUtf8("&Import"), mainWindow);
+    actionNoteImport->setStatusTip(QString::fromUtf8("Import note"));
 
     menuNote = qMenuBar->addMenu(QString::fromUtf8("&Note"));
     menuNote->addAction(actionNoteNew);
@@ -371,6 +379,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNote->addAction(actionNoteAttach);
     menuNote->addAction(actionNoteRefactor);
     menuNote->addAction(actionNoteClone);
+    menuNote->addSeparator();
+    menuNote->addAction(actionNoteExport);
+    menuNote->addAction(actionNoteImport);
 
     // menu: help
 

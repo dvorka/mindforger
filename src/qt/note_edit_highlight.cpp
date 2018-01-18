@@ -34,10 +34,7 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     addRegex(Italicer, "__(:?[\\w\\s]+)__");
     addRegex(Italic, "_(:?[\\w\\s]+)_");
     addRegex(Strikethrough, "~~(:?[\\w\\s]+)~~");
-    //addRegex(Link, "\\[(:?[\\w\\s]+)\\]\\((:?[\\w\\s]+)\\)");
-    //addRegex(Link, "\\[(:?[\\w\\s]+)\\]\\((:?[\\w\\:/]+)");
-    //addRegex(Link, "\\([\\w:/\\.]+\\)");
-    addRegex(Link, "\\[(:?[\\w\\s]+)\\]\\([\\w:/\\.]+\\)");
+    addRegex(Link, "\\[(:?[\\w\\s]+)\\]\\([\\w:/\\.-]+\\)");
     addRegex(Codeblock, "`(:?[\\w\\s]+)`");
 
     // TODO extra method - HTML comment like

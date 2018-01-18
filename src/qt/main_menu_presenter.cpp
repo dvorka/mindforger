@@ -51,7 +51,6 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     // menu: outline
     QObject::connect(view->actionOutlineNew, SIGNAL(triggered()), mwp, SLOT(doActionOutlineNew()));
     QObject::connect(view->actionOutlineOpen, SIGNAL(triggered()), mwp, SLOT(doActionOutlineOpen()));
-    QObject::connect(view->actionOutlineClose, SIGNAL(triggered()), mwp, SLOT(doActionOutlineClose()));
     QObject::connect(view->actionOutlineForget, SIGNAL(triggered()), mwp, SLOT(doActionOutlineForget()));
     QObject::connect(view->actionOutlineExport, SIGNAL(triggered()), mwp, SLOT(doActionOutlineExport()));
     QObject::connect(view->actionOutlineImport, SIGNAL(triggered()), mwp, SLOT(doActionOutlineImport()));
