@@ -42,6 +42,8 @@ class NoteNewDialog : public QDialog
     {
 
     private:
+        QVBoxLayout *mainLayout;
+
         QLabel* nameLabel;
         QLineEdit* nameEdit;
         QLabel* typeLabel;
@@ -54,7 +56,7 @@ class NoteNewDialog : public QDialog
         QComboBox* stencilCombo;
 
     public:
-        explicit GeneralTab(QWidget *parent);
+        explicit GeneralTab(QWidget* parent);
         ~GeneralTab(void);
 
         QLineEdit* getNameEdit(void) const { return nameEdit; }

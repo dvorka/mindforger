@@ -50,6 +50,9 @@ class MainWindowView: public QMainWindow
 private:
     LookAndFeels& lookAndFeel;
 
+    QWidget* centralWidget;
+    QVBoxLayout *centralLayout;
+
     CliAndBreadcrumbsView* cliView;
     OrlojView* orlojView;
     StatusBarView* statusBarView;

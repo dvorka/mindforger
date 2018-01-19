@@ -1,5 +1,5 @@
 /*
- note_new_dialog.cpp     MindForger thinking notebook
+ note_edit_dialog.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,17 +16,16 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "note_new_dialog.h"
+#include "note_edit_dialog.h"
 
 using namespace std;
 
 namespace m8r {
 
-NoteNewDialog::GeneralTab::GeneralTab(QWidget *parent)
+NoteEditDialog::GeneralTab::GeneralTab(QWidget *parent)
     : QWidget(parent)
 {
-    this->nameLabel = new QLabel(tr("Name")+":", this),
-    this->nameEdit = new QLineEdit(tr("Note"), this);
+    QGroupBox* basicGroup = new QGroupBox{tr("Basic"), this};
 
     this->typeLabel = new QLabel(tr("Type")+":", this);
     this->typeCombo = new QComboBox(this);
@@ -34,54 +33,49 @@ NoteNewDialog::GeneralTab::GeneralTab(QWidget *parent)
     this->tagLabel = new QLabel(tr("Tag")+":", this);
     this->tagCombo = new QComboBox(this);
 
-    this->positionLabel = new QLabel(tr("Position")+":", this);
-    this->positionCombo = new QComboBox(this);
+    this->progressLabel = new QLabel(tr("Progress")+":", this);
+    this->progressSpin = new QSpinBox(this);
+    progressSpin->setMinimum(0);
+    progressSpin->setMaximum(100);
 
-    this->stencilLabel = new QLabel(tr("Stencil")+":", this);
-    this->stencilCombo = new QComboBox(this);
+    QGroupBox* advancedGroup = new QGroupBox{tr("Advanced"), this};
 
     // assembly
     mainLayout = new QVBoxLayout{};
-    mainLayout->addWidget(nameLabel);
-    mainLayout->addWidget(nameEdit);
-    mainLayout->addWidget(typeLabel);
-    mainLayout->addWidget(typeCombo);
-    mainLayout->addWidget(tagLabel);
-    mainLayout->addWidget(tagCombo);
-    mainLayout->addWidget(positionLabel);
-    mainLayout->addWidget(positionCombo);
-    mainLayout->addWidget(stencilLabel);
-    mainLayout->addWidget(stencilCombo);
-    mainLayout->addStretch(1);
+    mainLayout->addWidget(basicGroup);
+    mainLayout->addWidget(advancedGroup);
+    QVBoxLayout* basicLayout = new QVBoxLayout{};
+    basicLayout->addWidget(typeLabel);
+    basicLayout->addWidget(typeCombo);
+    basicLayout->addWidget(tagLabel);
+    basicLayout->addWidget(tagCombo);
+    basicGroup->setLayout(basicLayout);
+    QVBoxLayout* advancedLayout = new QVBoxLayout{};
+    advancedLayout->addWidget(progressLabel);
+    advancedLayout->addWidget(progressSpin);
+    advancedLayout->addStretch(1);
+    advancedGroup->setLayout(advancedLayout);
+
     setLayout(mainLayout);
 }
 
-void NoteNewDialog::GeneralTab::clean(void)
+void NoteEditDialog::GeneralTab::clean(void)
 {
-    nameEdit->setText(tr("Note"));
-    nameEdit->selectAll();
-    nameEdit->setFocus();
+    typeCombo->setFocus();
 }
 
-NoteNewDialog::GeneralTab::~GeneralTab(void)
+NoteEditDialog::GeneralTab::~GeneralTab(void)
 {
-    delete nameLabel;
-    delete nameEdit;
     delete typeLabel;
     delete typeCombo;
     delete tagLabel;
     delete tagCombo;
-    delete positionLabel;
-    delete positionCombo;
-    delete stencilLabel;
-    delete stencilCombo;
 
     delete mainLayout;
 }
 
-NoteNewDialog::NoteNewDialog(
+NoteEditDialog::NoteEditDialog(
         Ontology& ontology,
-        vector<Stencil*>& stencils,
         QWidget* parent)
     : QDialog(parent), ontology(ontology)
 {
@@ -105,20 +99,6 @@ NoteNewDialog::NoteNewDialog(
         }
         combo->setCurrentText("");
     }
-    QComboBox* combo=generalTab->getPositionCombo();
-    // IMPROVE i18n - text is localized, QVariant keeps a constant (e.g. enum)
-    combo->addItem("First child");
-    combo->addItem("Last child");
-    if(stencils.size()) {
-        QComboBox* combo=generalTab->getStencilCombo();
-        combo->addItem("", QVariant::fromValue<const Stencil*>(nullptr));
-        for(Stencil* t:stencils) {
-            if(t->getType()==ResourceType::NOTE) {
-                combo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<Stencil*>(t));
-            }
-        }
-        combo->setCurrentText("");
-    }
     tabWidget->addTab(generalTab, tr("General"));
 
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -132,17 +112,17 @@ NoteNewDialog::NoteNewDialog(
     mainLayout->addWidget(buttonBox);
     setLayout(mainLayout);
 
-    setWindowTitle(tr("New Note"));
+    setWindowTitle(tr("Edit Note Properties"));
     setModal(true);
 }
 
-void NoteNewDialog::show()
+void NoteEditDialog::show()
 {
     generalTab->clean();
     QDialog::show();
 }
 
-NoteNewDialog::~NoteNewDialog(void)
+NoteEditDialog::~NoteEditDialog()
 {
     if(generalTab) delete generalTab;
 }

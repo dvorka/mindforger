@@ -183,7 +183,7 @@ OutlineNewDialog::OutlineNewDialog(
     setLayout(mainLayout);
 
     // dialog
-    setWindowTitle(tr("New Outline Dialog"));
+    setWindowTitle(tr("New Outline"));
     setModal(true);
 }
 

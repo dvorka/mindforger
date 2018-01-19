@@ -25,7 +25,7 @@ using namespace std;
 namespace m8r {
 
 NoteEditPresenter::NoteEditPresenter(
-        NoteEditorView* view,
+        NoteEditView* view,
         MainWindowPresenter* mwp,
         QObject* parent) : QObject(parent)
 {
@@ -36,6 +36,11 @@ NoteEditPresenter::NoteEditPresenter(
     this->mdRepresentation
         = new MarkdownOutlineRepresentation{mwp->getMind()->ontology()};
 
+    noteEditDialog
+        = new NoteEditDialog{mwp->getMind()->remind().getOntology(), view};
+    this->view->setNoteEditDialog(noteEditDialog);
+
+    // signals
     QObject::connect(
         view, SIGNAL(signalSaveNote()),
         this, SLOT(slotSaveNote()));
@@ -47,20 +52,21 @@ NoteEditPresenter::NoteEditPresenter(
 void NoteEditPresenter::setCurrentNote(Note* note, string* md)
 {
     this->currentNote = note;
-    view->setPlainText(QString::fromStdString(*md));
+    view->setNoteTitle(note->getTitle());
+    view->setNoteDescription(*md);
 }
 
 void NoteEditPresenter::slotSaveAndCloseEditor(void)
 {
     slotSaveNote();
-    if(!view->toPlainText().isEmpty()) {
+    if(!view->isNoteDescriptionEmpty()) {
         mainPresenter->getOrloj()->fromNoteEditBackToView(currentNote);
     }
 }
 
 void NoteEditPresenter::slotSaveNote(void)
 {
-    QString text = view->toPlainText();
+    QString text = view->getNoteDescription();
 
     if(!text.isEmpty()) {
         // IMPROVE try to find a more efficient conversion

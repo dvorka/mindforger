@@ -27,6 +27,7 @@
 #include "orloj_presenter.h"
 #include "note_editor_view.h"
 #include "note_edit_model.h"
+#include "dialogs/note_edit_dialog.h"
 
 namespace m8r {
 
@@ -37,16 +38,18 @@ class NoteEditPresenter : public QObject
     Q_OBJECT
 
 private:
-    NoteEditorView* view;
+    NoteEditView* view;
     NoteEditModel* model;
-    MainWindowPresenter* mainPresenter;
-
-    MarkdownOutlineRepresentation* mdRepresentation;
 
     Note* currentNote;
 
+    MainWindowPresenter* mainPresenter;
+    MarkdownOutlineRepresentation* mdRepresentation;
+
+    NoteEditDialog* noteEditDialog;
+
 public:
-    NoteEditPresenter(NoteEditorView* view, MainWindowPresenter* mainPresenter, QObject* parent);
+    NoteEditPresenter(NoteEditView* view, MainWindowPresenter* mainPresenter, QObject* parent);
     NoteEditPresenter(const NoteEditPresenter&) = delete;
     NoteEditPresenter(const NoteEditPresenter&&) = delete;
     NoteEditPresenter &operator=(const NoteEditPresenter&) = delete;

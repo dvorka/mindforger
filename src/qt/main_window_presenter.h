@@ -78,6 +78,7 @@ private:
     FindOutlineByNameDialog* findOutlineByNameDialog;
     FindNoteByNameDialog* findNoteByNameDialog;
 
+
 public:
     explicit MainWindowPresenter(MainWindowView& view, Configuration& configuration);
     MainWindowPresenter(const MainWindowPresenter&) = delete;

@@ -27,9 +27,9 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
 {
     setWindowTitle("MindForger - "+tr("Thinking Notebook"));
 
-    QWidget* centralWidget = new QWidget(this);
+    centralWidget = new QWidget(this);
 
-    QVBoxLayout *centralLayout = new QVBoxLayout{centralWidget};
+    centralLayout = new QVBoxLayout{centralWidget};
     cliView = new CliAndBreadcrumbsView(centralWidget);
     centralLayout->addWidget(cliView);
     orlojView = new OrlojView(centralWidget);
@@ -43,8 +43,8 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
 
 MainWindowView::~MainWindowView()
 {
-    //delete centralWidget;
-    //delete centralLayout;
+    delete centralWidget;
+    delete centralLayout;
 }
 
 QMenuBar* MainWindowView::getMenuBar(void) const

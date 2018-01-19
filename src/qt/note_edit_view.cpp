@@ -20,22 +20,24 @@
 
 namespace m8r {
 
+using namespace std;
+
 NoteEditView::NoteEditView(QWidget* parent)
     : QWidget(parent)
 {
+    // TODO remove: CHECK OUTLINE VIEW: QWidget w/ vertical layout, sizing done there
 
+    // widgets
+    editTitleAndButtonsPanel = new EditTitleAndButtonsPanel{this};
+    noteEditor = new NoteEditorView{this};
 
-    // CHECK OUTLINE VIEW: QWidget w/ vertical layout, sizing done there
-
-
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    // assembly
+    QVBoxLayout* layout = new QVBoxLayout{this};
     // ensure that wont be extra space around member widgets
     layout->setContentsMargins(QMargins(0,0,0,0));
+    layout->addWidget(editTitleAndButtonsPanel);
+    layout->addWidget(noteEditor);
     setLayout(layout);
-
-    //EditNameAndButtonsPanel* ;
-
-
 }
 
 NoteEditView::~NoteEditView()
