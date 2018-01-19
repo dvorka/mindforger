@@ -22,109 +22,142 @@ using namespace std;
 
 namespace m8r {
 
-NoteEditDialog::GeneralTab::GeneralTab(QWidget *parent)
-    : QWidget(parent)
+NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
+    : QDialog(parent), ontology(ontology)
 {
     QGroupBox* basicGroup = new QGroupBox{tr("Basic"), this};
 
-    this->typeLabel = new QLabel(tr("Type")+":", this);
-    this->typeCombo = new QComboBox(this);
+    typeLabel = new QLabel{tr("Type")+":", this};
+    typeCombo = new QComboBox(this);
+    if(ontology.getNoteTypes().size()) {
+        for(const NoteType* t:ontology.getNoteTypes().values()) {
+            typeCombo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<const NoteType*>(t));
+        }
+        typeCombo->setCurrentText(QString::fromStdString(ontology.getDefaultNoteType()->getName()));
+    }
 
-    this->tagLabel = new QLabel(tr("Tag")+":", this);
-    this->tagCombo = new QComboBox(this);
+    tagLabel = new QLabel{tr("Tag")+":", this};
+    tagCombo = new QComboBox(this);
+    if(ontology.getTags().size()) {
+        tagCombo->addItem("", QVariant::fromValue<const Tag*>(nullptr));
+        for(const Tag* t:ontology.getTags().values()) {
+            if(!stringistring(string("none"), t->getName())) {
+                tagCombo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<const Tag*>(t));
+            }
+        }
+        tagCombo->setCurrentText("");
+    }
 
-    this->progressLabel = new QLabel(tr("Progress")+":", this);
-    this->progressSpin = new QSpinBox(this);
+    progressLabel = new QLabel{tr("Progress")+":", this};
+    progressSpin = new QSpinBox(this);
     progressSpin->setMinimum(0);
     progressSpin->setMaximum(100);
 
     QGroupBox* advancedGroup = new QGroupBox{tr("Advanced"), this};
 
+    createdLabel = new QLabel{tr("Created")+":", this};
+    createdLine = new QLineEdit{this};
+    createdLine->setDisabled(true);
+    modifiedLabel = new QLabel{tr("Modified")+":", this};
+    modifiedLine = new QLineEdit{this};
+    modifiedLine->setDisabled(true);
+    readLabel = new QLabel{tr("Read")+":", this};
+    readLine = new QLineEdit{this};
+    readLine->setDisabled(true);
+    readsLabel = new QLabel{tr("Reads")+":", this};
+    readsLine = new QLineEdit{this};
+    readsLine->setDisabled(true);
+    writesLabel = new QLabel{tr("Writes")+":", this};
+    writesLine = new QLineEdit{this};
+    writesLine->setDisabled(true);
+    locationLabel = new QLabel{tr("Location")+":", this};
+    locationLine = new QLineEdit{this};
+    locationLine->setDisabled(true);
+
+    buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
     // assembly
-    mainLayout = new QVBoxLayout{};
-    mainLayout->addWidget(basicGroup);
-    mainLayout->addWidget(advancedGroup);
     QVBoxLayout* basicLayout = new QVBoxLayout{};
     basicLayout->addWidget(typeLabel);
     basicLayout->addWidget(typeCombo);
     basicLayout->addWidget(tagLabel);
     basicLayout->addWidget(tagCombo);
+    basicLayout->addWidget(progressLabel);
+    basicLayout->addWidget(progressSpin);
+    // TODO basicLayout->addStretch(1);
     basicGroup->setLayout(basicLayout);
     QVBoxLayout* advancedLayout = new QVBoxLayout{};
-    advancedLayout->addWidget(progressLabel);
-    advancedLayout->addWidget(progressSpin);
-    advancedLayout->addStretch(1);
+    advancedLayout->addWidget(createdLabel);
+    advancedLayout->addWidget(createdLine);
+    advancedLayout->addWidget(modifiedLabel);
+    advancedLayout->addWidget(modifiedLine);
+    advancedLayout->addWidget(readLabel);
+    advancedLayout->addWidget(readLine);
+    advancedLayout->addWidget(readsLabel);
+    advancedLayout->addWidget(readsLine);
+    advancedLayout->addWidget(writesLabel);
+    advancedLayout->addWidget(writesLine);
+    advancedLayout->addWidget(locationLabel);
+    advancedLayout->addWidget(locationLine);
     advancedGroup->setLayout(advancedLayout);
+    QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(basicGroup);
+    boxesLayout->addWidget(advancedGroup);
+    boxesLayout->addWidget(buttonBox);
+    setLayout(boxesLayout);
 
-    setLayout(mainLayout);
+    // wire signals ensuring that close & set dialog status
+    QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    setWindowTitle(tr("Edit Note Properties"));
+    resize(fontMetrics().averageCharWidth()*55, height());
+    setModal(true);
 }
 
-void NoteEditDialog::GeneralTab::clean(void)
-{
-    typeCombo->setFocus();
-}
-
-NoteEditDialog::GeneralTab::~GeneralTab(void)
+NoteEditDialog::~NoteEditDialog()
 {
     delete typeLabel;
     delete typeCombo;
     delete tagLabel;
     delete tagCombo;
-
-    delete mainLayout;
-}
-
-NoteEditDialog::NoteEditDialog(
-        Ontology& ontology,
-        QWidget* parent)
-    : QDialog(parent), ontology(ontology)
-{
-    tabWidget = new QTabWidget;
-
-    generalTab = new GeneralTab(this);
-    if(ontology.getNoteTypes().size()) {
-        QComboBox* combo=generalTab->getTypeCombo();
-        for(const NoteType* t:ontology.getNoteTypes().values()) {
-            combo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<const NoteType*>(t));
-        }
-        combo->setCurrentText(QString::fromStdString(ontology.getDefaultNoteType()->getName()));
-    }
-    if(ontology.getTags().size()) {
-        QComboBox* combo=generalTab->getTagCombo();
-        combo->addItem("", QVariant::fromValue<const Tag*>(nullptr));
-        for(const Tag* t:ontology.getTags().values()) {
-            if(!stringistring(string("none"), t->getName())) {
-                combo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<const Tag*>(t));
-            }
-        }
-        combo->setCurrentText("");
-    }
-    tabWidget->addTab(generalTab, tr("General"));
-
-    buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-
-    // wire signals ensuring that close & set dialog status
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(tabWidget);
-    mainLayout->addWidget(buttonBox);
-    setLayout(mainLayout);
-
-    setWindowTitle(tr("Edit Note Properties"));
-    setModal(true);
 }
 
 void NoteEditDialog::show()
 {
-    generalTab->clean();
-    QDialog::show();
-}
+    if(currentNote) {
+        // RDWR
+        if(currentNote->getType()) {
+            int i = typeCombo->findData(QVariant::fromValue<const NoteType*>(currentNote->getType()));
+            if(i>=0) {
+                typeCombo->setCurrentIndex(i);
+            } else {
+                qDebug() << "Unknown note type: " << QString::fromStdString(currentNote->getType()->getName());
+            }
+        }
+        // IMPROVE handle MULTIPLE tags
+        if(currentNote->getPrimaryTag()) {
+            int i = tagCombo->findData(QVariant::fromValue<const Tag*>(currentNote->getPrimaryTag()));
+            if(i>=0) {
+                tagCombo->setCurrentIndex(i);
+            } else {
+                qDebug() << "Unknown tag: " << QString::fromStdString(currentNote->getPrimaryTag()->getName());
+            }
+        }
 
-NoteEditDialog::~NoteEditDialog()
-{
-    if(generalTab) delete generalTab;
+        progressSpin->setValue(currentNote->getProgress());
+        // TODO deadline h
+        // view->setNoteDeadline(note->getDeadline());
+        // RDONLY
+        createdLine->setText(QString::fromStdString(datetimeToString(currentNote->getCreated())));
+        modifiedLine->setText(QString::fromStdString(datetimeToString(currentNote->getModified())));
+        readLine->setText(QString::fromStdString(datetimeToString(currentNote->getRead())));
+        readsLine->setText(QString::number(currentNote->getReads()));
+        writesLine->setText(QString::number(currentNote->getRevision()));
+        locationLine->setText(QString::fromStdString(currentNote->getOutlineKey()));
+    }
+
+    QDialog::show();
 }
 
 }

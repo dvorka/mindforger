@@ -49,10 +49,11 @@ NoteEditPresenter::NoteEditPresenter(
         this, SLOT(slotSaveAndCloseEditor()));
 }
 
+// IMPROVE md propagation is not nice (create it here (deepest presenter point)?)
 void NoteEditPresenter::setCurrentNote(Note* note, string* md)
 {
     this->currentNote = note;
-    view->setNoteTitle(note->getTitle());
+    view->setCurrentNote(note);
     view->setNoteDescription(*md);
 }
 

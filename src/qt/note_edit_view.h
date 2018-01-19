@@ -21,6 +21,8 @@
 
 #include <QtWidgets>
 
+#include "../../lib/src/model/note.h"
+
 #include "note_editor_view.h"
 #include "panels/edit_name_and_buttons_panel.h"
 
@@ -28,9 +30,13 @@ namespace m8r {
 
 class NoteEditView : public QWidget
 {
+    Q_OBJECT
+
 private:
     EditTitleAndButtonsPanel* editTitleAndButtonsPanel;
     NoteEditorView* noteEditor;
+
+    Note* currentNote;
 
 public:
     explicit NoteEditView(QWidget* parent);
@@ -41,8 +47,8 @@ public:
     ~NoteEditView();
 
     void setNoteEditDialog(NoteEditDialog* noteEditDialog) { editTitleAndButtonsPanel->setNoteEditDialog(noteEditDialog); }
+    void setCurrentNote(Note* note) { editTitleAndButtonsPanel->setCurrentNote(note); }
 
-    void setNoteTitle(const std::string& name) { editTitleAndButtonsPanel->setTitle(name); }
     void setNoteDescription(std::string& description) { noteEditor->setPlainText(QString::fromStdString(description)); }
     QString getNoteDescription(void) const { return noteEditor->toPlainText(); }
     // IMPROVE toPlainText() to determine empty is expensive

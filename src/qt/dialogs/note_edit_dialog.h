@@ -32,36 +32,34 @@ class NoteEditDialog : public QDialog
 {
     Q_OBJECT
 
-    class GeneralTab : public QWidget
-    {
-
-    private:
-        QVBoxLayout *mainLayout;
-
-        QLabel* typeLabel;
-        QComboBox* typeCombo;
-        QLabel* tagLabel;
-        QComboBox* tagCombo;
-        QLabel* progressLabel;
-        QSpinBox* progressSpin;
-
-    public:
-        explicit GeneralTab(QWidget* parent);
-        ~GeneralTab(void);
-
-        QComboBox* getTypeCombo(void) const { return typeCombo; }
-        QComboBox* getTagCombo(void) const { return tagCombo; }
-
-        void clean(void);
-    };
-
 private:
-    QTabWidget *tabWidget;
+    QLabel* typeLabel;
+    QComboBox* typeCombo;
+    QLabel* tagLabel;
+    QComboBox* tagCombo;
+    QLabel* progressLabel;
+    QSpinBox* progressSpin;
+    // TODO deadline - via QCalendar + my own serialization/ts creation
+    QLabel* deadlineLabel;
+
+    QLabel* createdLabel;
+    QLineEdit* createdLine;
+    QLabel* modifiedLabel;
+    QLineEdit* modifiedLine;
+    QLabel* readLabel;
+    QLineEdit* readLine;
+    QLabel* readsLabel;
+    QLineEdit* readsLine;
+    QLabel* writesLabel;
+    QLineEdit* writesLine;
+    QLabel* locationLabel;
+    QLineEdit* locationLine;
+
     QDialogButtonBox *buttonBox;
 
-    GeneralTab* generalTab;
-
     Ontology& ontology;
+
+    Note* currentNote;
 
 public:
     explicit NoteEditDialog(Ontology& ontology, QWidget* parent);
@@ -70,6 +68,8 @@ public:
     NoteEditDialog &operator=(const NoteEditDialog&) = delete;
     NoteEditDialog &operator=(const NoteEditDialog&&) = delete;
     ~NoteEditDialog();
+
+    void setCurrentNote(Note* note) { currentNote = note; }
 
     void show();
 };

@@ -57,8 +57,6 @@ EditTitleAndButtonsPanel::~EditTitleAndButtonsPanel()
 
 void EditTitleAndButtonsPanel::slotNoteEditDialog(void)
 {
-    qDebug() << "SHOW!";
-
     noteEditDialog->show();
 }
 
