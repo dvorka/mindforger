@@ -20,12 +20,13 @@
 
 namespace m8r {
 
-OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent) : NoteEditorView(parent,false)
+OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
+    : NoteEditorView(parent)
 {
     // IMPROVE from text to Qt key constants
-    new QShortcut(
-        QKeySequence(tr("Ctrl+s", "Save")),
-        this, SLOT(slotSaveOutlineHeader()));
+//    new QShortcut(
+//        QKeySequence(tr("Ctrl+s", "Save")),
+//        this, SLOT(slotSaveOutlineHeader()));
 }
 
 void OutlineHeaderEditView::slotSaveOutlineHeader(void)

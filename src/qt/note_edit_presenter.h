@@ -61,6 +61,7 @@ public:
 
 public slots:
     void slotSaveAndCloseEditor(void);
+    void slotCloseEditor(void);
     void slotSaveNote(void);
 };
 

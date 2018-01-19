@@ -38,6 +38,41 @@ NoteEditView::NoteEditView(QWidget* parent)
     layout->addWidget(editTitleAndButtonsPanel);
     layout->addWidget(noteEditor);
     setLayout(layout);
+
+    // signals
+    new QShortcut(
+        QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Left)),
+        this, SLOT(slotSaveAndCloseEditor()));
+    new QShortcut(
+        QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_S)),
+        this, SLOT(slotSaveNote()));
+    QObject::connect(
+        editTitleAndButtonsPanel->getRememberButton(), SIGNAL(clicked()),
+        this, SLOT(slotSaveAndCloseEditor()));
+    QObject::connect(
+        editTitleAndButtonsPanel->getCancelButton(), SIGNAL(clicked()),
+        this, SLOT(slotCloseEditor()));
+}
+
+void NoteEditView::updateCurrentNote(void)
+{
+    currentNote->setTitle(editTitleAndButtonsPanel->getTitle().toStdString());
+}
+
+
+void NoteEditView::slotSaveAndCloseEditor(void)
+{
+    emit signalSaveAndCloseEditor();
+}
+
+void NoteEditView::slotCloseEditor(void)
+{
+    emit signalCloseEditor();
+}
+
+void NoteEditView::slotSaveNote(void)
+{
+    emit signalSaveNote();
 }
 
 NoteEditView::~NoteEditView()

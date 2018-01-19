@@ -30,12 +30,14 @@ class NoteEditorView : public QPlainTextEdit
     Q_OBJECT
 
 private:
+    QWidget* parent;
+
     bool completedAndSelected;
     QCompleter *completer;
     QStringListModel *model;
 
 public:
-    explicit NoteEditorView(QWidget* parent, bool doClashingConnections=true);
+    explicit NoteEditorView(QWidget* parent);
     NoteEditorView(const NoteEditorView&) = delete;
     NoteEditorView(const NoteEditorView&&) = delete;
     NoteEditorView &operator=(const NoteEditorView&) = delete;
@@ -49,17 +51,12 @@ private slots:
     void insertCompletion(const QString& completion, bool singleWord=false);
     void highlightCurrentLine(void);
     void performCompletion(void);
-    void slotSaveNote(void);
-    void slotSaveAndCloseEditor(void);
-
-signals:
-    void signalSaveAndCloseEditor(void);
-    void signalSaveNote(void);
 
 private:
-    void createWidgets();
-    void createConnections(bool doClashingConnections);
-    QString textUnderCursor() const;
+    void createWidgets(void);
+    void createConnections(void);
+
+    QString textUnderCursor(void) const;
     void performCompletion(const QString &completionPrefix);
     bool handledCompletedAndSelected(QKeyEvent *event);
     void populateModel(const QString &completionPrefix);

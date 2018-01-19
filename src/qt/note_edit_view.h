@@ -48,11 +48,22 @@ public:
 
     void setNoteEditDialog(NoteEditDialog* noteEditDialog) { editTitleAndButtonsPanel->setNoteEditDialog(noteEditDialog); }
     void setCurrentNote(Note* note) { editTitleAndButtonsPanel->setCurrentNote(note); }
+    void updateCurrentNote(void);
 
     void setNoteDescription(std::string& description) { noteEditor->setPlainText(QString::fromStdString(description)); }
     QString getNoteDescription(void) const { return noteEditor->toPlainText(); }
     // IMPROVE toPlainText() to determine empty is expensive
     bool isNoteDescriptionEmpty(void) const { return noteEditor->toPlainText().isEmpty(); }
+
+private slots:
+    void slotSaveNote(void);
+    void slotCloseEditor(void);
+    void slotSaveAndCloseEditor(void);
+
+signals:
+    void signalSaveAndCloseEditor(void);
+    void signalCloseEditor(void);
+    void signalSaveNote(void);
 };
 
 }

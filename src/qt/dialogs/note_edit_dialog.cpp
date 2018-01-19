@@ -148,6 +148,7 @@ void NoteEditDialog::show()
         progressSpin->setValue(currentNote->getProgress());
         // TODO deadline h
         // view->setNoteDeadline(note->getDeadline());
+
         // RDONLY
         createdLine->setText(QString::fromStdString(datetimeToString(currentNote->getCreated())));
         modifiedLine->setText(QString::fromStdString(datetimeToString(currentNote->getModified())));

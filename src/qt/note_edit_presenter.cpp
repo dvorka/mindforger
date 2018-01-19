@@ -45,6 +45,9 @@ NoteEditPresenter::NoteEditPresenter(
         view, SIGNAL(signalSaveNote()),
         this, SLOT(slotSaveNote()));
     QObject::connect(
+        view, SIGNAL(signalCloseEditor()),
+        this, SLOT(slotCloseEditor()));
+    QObject::connect(
         view, SIGNAL(signalSaveAndCloseEditor()),
         this, SLOT(slotSaveAndCloseEditor()));
 }
@@ -57,9 +60,16 @@ void NoteEditPresenter::setCurrentNote(Note* note, string* md)
     view->setNoteDescription(*md);
 }
 
+void NoteEditPresenter::slotCloseEditor(void)
+{
+    mainPresenter->getOrloj()->fromNoteEditBackToView(currentNote);
+}
+
 void NoteEditPresenter::slotSaveAndCloseEditor(void)
 {
+    view->updateCurrentNote();
     slotSaveNote();
+
     if(!view->isNoteDescriptionEmpty()) {
         mainPresenter->getOrloj()->fromNoteEditBackToView(currentNote);
     }

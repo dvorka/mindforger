@@ -48,9 +48,14 @@ public:
     ~EditTitleAndButtonsPanel();
 
     void setNoteEditDialog(NoteEditDialog* noteEditDialog) { this->noteEditDialog = noteEditDialog; }
-    void setCurrentNote(Note* note) { noteEditDialog->setCurrentNote(note); }
+    void setCurrentNote(Note* note) {
+        noteEditDialog->setCurrentNote(note);
+        lineEdit->setText(QString::fromStdString(note->getTitle()));
+    }
 
-    void setTitle(const std::string& name) { lineEdit->setText(QString::fromStdString(name)); }
+    QString getTitle(void) const { return lineEdit->text(); }
+    QPushButton* getRememberButton(void) const { return rememberButton; }
+    QPushButton* getCancelButton(void) const { return cancelButton; }
 
 private slots:
     void slotNoteEditDialog(void);

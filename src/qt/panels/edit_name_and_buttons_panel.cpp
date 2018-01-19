@@ -30,6 +30,7 @@ EditTitleAndButtonsPanel::EditTitleAndButtonsPanel(QWidget* parent)
     lineEdit = new QLineEdit{parent};
     moreButton = new QPushButton{tr("More..."), this};
     rememberButton = new QPushButton{tr("Remember"), this};
+    rememberButton->setToolTip("Alt-LEFT");
     cancelButton = new QPushButton{tr("Cancel"), this};
 
     // assembly

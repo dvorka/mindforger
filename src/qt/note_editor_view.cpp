@@ -26,11 +26,11 @@ bool caseInsensitiveLessThan(const QString &a, const QString &b)
     return a.compare(b, Qt::CaseInsensitive) < 0;
 }
 
-NoteEditorView::NoteEditorView(QWidget* parent, bool doClashingConnections)
-    : QPlainTextEdit(parent), completedAndSelected(false)
+NoteEditorView::NoteEditorView(QWidget* parent)
+    : QPlainTextEdit(parent), parent(parent), completedAndSelected(false)
 {
     createWidgets();
-    createConnections(doClashingConnections);
+    createConnections();
     highlightCurrentLine();
 }
 
@@ -48,28 +48,17 @@ void NoteEditorView::createWidgets()
     completer->setWrapAround(true);
 }
 
-void NoteEditorView::createConnections(bool doClashingConnections)
+void NoteEditorView::createConnections(void)
 {
-    QObject::connect(this, SIGNAL(cursorPositionChanged()),
-            this, SLOT(highlightCurrentLine()));
-    QObject::connect(completer, SIGNAL(activated(const QString&)),
-            this, SLOT(insertCompletion(const QString&)));
-
-    // IMPROVE from text to Qt key constants
+    QObject::connect(
+        this, SIGNAL(cursorPositionChanged()),
+        this, SLOT(highlightCurrentLine()));
+    QObject::connect(
+        completer, SIGNAL(activated(const QString&)),
+        this, SLOT(insertCompletion(const QString&)));
     new QShortcut(
-        QKeySequence(tr("Alt+/", "Complete")),
+        QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Slash)),
         this, SLOT(performCompletion()));
-    // IMPROVE from text to Qt key constants
-    new QShortcut(
-        QKeySequence(tr("Alt+LEFT", "Save and Close Editor")),
-        this, SLOT(slotSaveAndCloseEditor()));
-
-    if(doClashingConnections) {
-        // IMPROVE from text to Qt key constants
-        new QShortcut(
-            QKeySequence(tr("Ctrl+s", "Save")),
-            this, SLOT(slotSaveNote()));
-    }
 }
 
 void NoteEditorView::keyPressEvent(QKeyEvent *event)
@@ -119,17 +108,7 @@ bool NoteEditorView::handledCompletedAndSelected(QKeyEvent *event)
     return true;
 }
 
-void NoteEditorView::slotSaveAndCloseEditor(void)
-{
-    emit signalSaveAndCloseEditor();
-}
-
-void NoteEditorView::slotSaveNote(void)
-{
-    emit signalSaveNote();
-}
-
-void NoteEditorView::performCompletion()
+void NoteEditorView::performCompletion(void)
 {
     QTextCursor cursor = textCursor();
     cursor.select(QTextCursor::WordUnderCursor);
@@ -196,7 +175,7 @@ void NoteEditorView::mousePressEvent(QMouseEvent* event)
     QPlainTextEdit::mousePressEvent(event);
 }
 
-void NoteEditorView::highlightCurrentLine()
+void NoteEditorView::highlightCurrentLine(void)
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
     QTextEdit::ExtraSelection selection;

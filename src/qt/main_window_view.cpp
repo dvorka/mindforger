@@ -44,7 +44,6 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
 MainWindowView::~MainWindowView()
 {
     delete centralWidget;
-    delete centralLayout;
 }
 
 QMenuBar* MainWindowView::getMenuBar(void) const
