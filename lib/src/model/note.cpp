@@ -173,7 +173,17 @@ const vector<const Tag*>& Note::getTags() const
 
 void Note::addTag(const Tag* tag)
 {
-    tags.push_back(tag);
+    if(tag) {
+        tags.push_back(tag);
+    }
+}
+
+void Note::setTag(const Tag* tag)
+{
+    if(tag) {
+        tags.clear();
+        addTag(tag);
+    }
 }
 
 void Note::setTags(const vector<const Tag*>& tags)

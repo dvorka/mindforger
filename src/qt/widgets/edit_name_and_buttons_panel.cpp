@@ -43,7 +43,8 @@ EditTitleAndButtonsPanel::EditTitleAndButtonsPanel(QWidget* parent)
     setLayout(layout);
 
     // signals
-    QObject::connect(moreButton, SIGNAL(clicked()), this, SLOT(slotNoteEditDialog()));
+    QObject::connect(moreButton, SIGNAL(clicked()), this, SLOT(slotShowNoteEditDialog()));
+    QObject::connect(noteEditDialog, SIGNAL(accepted()), this, SLOT(slotCloseNoteEditDialog()));
 }
 
 EditTitleAndButtonsPanel::~EditTitleAndButtonsPanel()
@@ -56,9 +57,14 @@ EditTitleAndButtonsPanel::~EditTitleAndButtonsPanel()
     delete layout;
 }
 
-void EditTitleAndButtonsPanel::slotNoteEditDialog(void)
+void EditTitleAndButtonsPanel::slotShowNoteEditDialog(void)
 {
     noteEditDialog->show();
+}
+
+void EditTitleAndButtonsPanel::slotCloseNoteEditDialog(void)
+{
+    noteEditDialog->toNote();
 }
 
 }

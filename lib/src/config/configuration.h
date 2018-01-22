@@ -61,23 +61,23 @@ class Installer;
  * Configuration file (in Markdown format) contains location
  * of repositories, active repository and user preferences.
  * M8r configuration file may be stored in ~/.mindforger.md
- *
- * Active repository location is determined as follows:
- *
- * 1) if application has single arg which is dir OR --repository, then use it, else 2)
- * 2) if configuration file exist w/ repository specified, then use it, else 3)
- * 3) if environment variable MINDFORGER_REPOSITORY is set, then use it, else 4)
- * 4) if repository exist in default location ~/mindforger-repository, then use it, else start W/O repository
  */
 class Configuration {
 private:
     // mind repository
     std::string userHomePath;
     std::set<const std::string*> repositories;
+    /* Active repository location is determined as follows:
+     *
+     * 1) if application has single arg which is dir OR --repository, then use it, else 2)
+     * 2) if configuration file exist w/ repository specified, then use it, else 3)
+     * 3) if environment variable MINDFORGER_REPOSITORY is set, then use it, else 4)
+     * 4) if repository exist in default location ~/mindforger-repository, then use it, else start W/O repository
+     */
     const std::string* activeRepository;
     std::string memoryPath;
     std::string limboPath;
-    std::string editor;
+    std::string externalEditor;
 
     // configuration
     // TODO repositoryType (MF/MD/mdFile)
@@ -85,7 +85,11 @@ private:
 
     // GUI
     int fontPointSize;
+    bool editorShowLineNumbers;
+    bool editorEnableSyntaxHighlighting;
 
+private:
+    // fields
     Installer* installer;
 
 public:
@@ -115,7 +119,7 @@ public:
     const char* getRepositoryFromEnv(void);
     const char* getEditorFromEnv(void);
     std::set<const std::string*>& getRepositories(void);
-    const std::string& getEditor(void) const { return editor; }
+    const std::string& getExternalEditor(void) const { return externalEditor; }
     const std::string& getMemoryPath(void) const { return memoryPath; }
     const std::string& getLimboPath(void) const { return limboPath; }
     int getFontPointSize(void) const { return fontPointSize; }

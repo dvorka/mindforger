@@ -1,5 +1,5 @@
 /*
- qutils.h     MindForger thinking notebook
+ configuration_dialog.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,28 +16,25 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_QUTILS_H
-#define M8R_QUTILS_H
-
-#include "lib/src/model/tag.h"
-#include "lib/src/model/outline.h"
-#include "lib/src/model/note_type.h"
-#include "lib/src/gear/string_utils.h"
+#ifndef M8RUI_CONFIGURATION_DIALOG_H
+#define M8RUI_CONFIGURATION_DIALOG_H
 
 #include <QtWidgets>
 
 namespace m8r {
 
-void initRandomizer(void);
+class ConfigurationDialog : public QObject
+{
+    Q_OBJECT
 
-// data and time
-void timetToQDate(const time_t t, QDate& qdate);
-
-// HTML
-void tagsToHtml(const std::vector<const Tag*>& tags, QString& html);
-void outlineTypeToHtml(const OutlineType*, QString& html);
-void outlineMetadataToHtml(const Outline*, QString& html);
-void noteTypeToHtml(const NoteType* noteType, QString& html);
+public:
+    explicit ConfigurationDialog(QWidget* parent);
+    ConfigurationDialog(const ConfigurationDialog&) = delete;
+    ConfigurationDialog(const ConfigurationDialog&&) = delete;
+    ConfigurationDialog &operator=(const ConfigurationDialog&) = delete;
+    ConfigurationDialog &operator=(const ConfigurationDialog&&) = delete;
+    ~ConfigurationDialog();
+};
 
 }
-#endif // M8R_QUTILS_H
+#endif // M8RUI_CONFIGURATION_DIALOG_H

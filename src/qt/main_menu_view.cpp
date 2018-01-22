@@ -286,13 +286,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineClone->setStatusTip(QString::fromUtf8("Make copy of the current outline..."));
 
     actionOutlineForget = new QAction(QString::fromUtf8("&Forget"), mainWindow);
-    actionOutlineForget->setStatusTip(QString::fromUtf8("Forget outline and move it to Limbo"));
+    actionOutlineForget->setStatusTip(QString::fromUtf8("Forget Outline and move it to Limbo"));
 
-    actionOutlineExport = new QAction(QString::fromUtf8("&Export"), mainWindow);
-    actionOutlineExport->setStatusTip(QString::fromUtf8("Export outline"));
+    actionOutlineExport = new QAction(QString::fromUtf8("Dump"), mainWindow);
+    actionOutlineExport->setStatusTip(QString::fromUtf8("Export Outline to a file in supported format"));
 
-    actionOutlineImport = new QAction(QString::fromUtf8("&Import"), mainWindow);
-    actionOutlineImport->setStatusTip(QString::fromUtf8("Import outline"));
+    actionOutlineImport = new QAction(QString::fromUtf8("Learn"), mainWindow);
+    actionOutlineImport->setStatusTip(QString::fromUtf8("Import Outline from an external file in a supported format"));
 
     menuOutline = qMenuBar->addMenu(QString::fromUtf8("&Outline"));
     menuOutline->addAction(actionOutlineNew);
@@ -354,13 +354,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteRefactor->setStatusTip(QString::fromUtf8("Refactor note to another outline..."));
 
     actionNoteClone = new QAction(QString::fromUtf8("&Clone"), mainWindow);
-    actionNoteClone->setStatusTip(QString::fromUtf8("Make a copy of the note to this or other outline..."));
+    actionNoteClone->setStatusTip(QString::fromUtf8("Make a copy of the Note to this or other outline..."));
 
-    actionNoteExport = new QAction(QString::fromUtf8("&Export"), mainWindow);
-    actionNoteExport->setStatusTip(QString::fromUtf8("Export note"));
+    actionNoteExport = new QAction(QString::fromUtf8("Dump"), mainWindow);
+    actionNoteExport->setStatusTip(QString::fromUtf8("Export Note to an external file in a supported format"));
 
-    actionNoteImport = new QAction(QString::fromUtf8("&Import"), mainWindow);
-    actionNoteImport->setStatusTip(QString::fromUtf8("Import note"));
+    actionNoteImport = new QAction(QString::fromUtf8("Learn"), mainWindow);
+    actionNoteImport->setStatusTip(QString::fromUtf8("Import Note from an external file in a supported format"));
 
     menuNote = qMenuBar->addMenu(QString::fromUtf8("&Note"));
     menuNote->addAction(actionNoteNew);

@@ -107,8 +107,10 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     src/qt/dialogs/find_outline_by_name_dialog.h \
     src/qt/dialogs/find_note_by_name_dialog.h \
     lib/src/model/mind_entity.h \
-    src/qt/panels/edit_name_and_buttons_panel.h \
-    src/qt/dialogs/note_edit_dialog.h
+    src/qt/widgets/edit_name_and_buttons_panel.h \
+    src/qt/dialogs/note_edit_dialog.h \
+    src/qt/dialogs/configuration_dialog.h \
+    src/qt/widgets/edit_tags_panel.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
@@ -188,8 +190,10 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/dialogs/fts_dialog.cpp \
     src/qt/dialogs/find_outline_by_name_dialog.cpp \
     src/qt/dialogs/find_note_by_name_dialog.cpp \
-    src/qt/panels/edit_name_and_buttons_panel.cpp \
-    src/qt/dialogs/note_edit_dialog.cpp
+    src/qt/widgets/edit_name_and_buttons_panel.cpp \
+    src/qt/dialogs/note_edit_dialog.cpp \
+    src/qt/dialogs/configuration_dialog.cpp \
+    src/qt/widgets/edit_tags_panel.cpp
 
 # Development environment remarks:
 # - Beast: GCC 5.4.0, Qt 5.5.1

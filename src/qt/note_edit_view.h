@@ -24,7 +24,7 @@
 #include "../../lib/src/model/note.h"
 
 #include "note_editor_view.h"
-#include "panels/edit_name_and_buttons_panel.h"
+#include "widgets/edit_name_and_buttons_panel.h"
 
 namespace m8r {
 
@@ -46,8 +46,13 @@ public:
     NoteEditView &operator=(const NoteEditView&&) = delete;
     ~NoteEditView();
 
-    void setNoteEditDialog(NoteEditDialog* noteEditDialog) { editTitleAndButtonsPanel->setNoteEditDialog(noteEditDialog); }
-    void setCurrentNote(Note* note) { editTitleAndButtonsPanel->setCurrentNote(note); }
+    void setNoteEditDialog(NoteEditDialog* noteEditDialog) {
+        editTitleAndButtonsPanel->setNoteEditDialog(noteEditDialog);
+    }
+    void setCurrentNote(Note* note) {
+        currentNote = note;
+        editTitleAndButtonsPanel->setCurrentNote(note);
+    }
     void updateCurrentNote(void);
 
     void setNoteDescription(std::string& description) { noteEditor->setPlainText(QString::fromStdString(description)); }

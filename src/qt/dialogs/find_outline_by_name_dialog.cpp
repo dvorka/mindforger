@@ -27,6 +27,7 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
 {
     // widgets
     listView = new QListView(this);
+    // list view model must be set - use of this type of mode enable the use of string lists controlling its content
     listView->setModel(&listViewModel);
 
     label = new QLabel{tr("Outline &name:")};

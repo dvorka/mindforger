@@ -27,6 +27,12 @@ void initRandomizer(void)
     qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 }
 
+void timetToQDate(const time_t t, QDate& qdate)
+{
+    tm dd = *localtime(&t);
+    qdate.setDate(dd.tm_year, dd.tm_mon, dd.tm_mday);
+}
+
 void tagsToHtml(const vector<const Tag*>& tags, QString& html)
 {
     //text += QString::fromUtf8("&nbsp;&nbsp;<table cellspacing='0' border='0' style='color: #ffffff; background-color: #00cc00; font-weight: normal;'><tr><td>urgent</td></tr></table>");

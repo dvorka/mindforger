@@ -56,7 +56,13 @@ NoteEditView::NoteEditView(QWidget* parent)
 
 void NoteEditView::updateCurrentNote(void)
 {
-    currentNote->setTitle(editTitleAndButtonsPanel->getTitle().toStdString());
+    if(currentNote) {
+        string title{"Note"};
+        if(editTitleAndButtonsPanel->getTitle().size()) {
+            title.assign(editTitleAndButtonsPanel->getTitle().toStdString());
+        }
+        currentNote->setTitle(title);
+    }
 }
 
 

@@ -49,7 +49,7 @@ public:
 
     void setNoteEditDialog(NoteEditDialog* noteEditDialog) { this->noteEditDialog = noteEditDialog; }
     void setCurrentNote(Note* note) {
-        noteEditDialog->setCurrentNote(note);
+        noteEditDialog->setNote(note);
         lineEdit->setText(QString::fromStdString(note->getTitle()));
     }
 
@@ -58,7 +58,8 @@ public:
     QPushButton* getCancelButton(void) const { return cancelButton; }
 
 private slots:
-    void slotNoteEditDialog(void);
+    void slotShowNoteEditDialog(void);
+    void slotCloseNoteEditDialog(void);
 };
 
 }

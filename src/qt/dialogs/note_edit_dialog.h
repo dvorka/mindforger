@@ -24,7 +24,9 @@
 #include "lib/src/mind/ontology/ontology_vocabulary.h"
 #include "lib/src/mind/ontology/ontology.h"
 
-#include "src/qt/model_meta_definitions.h"
+#include "../model_meta_definitions.h"
+#include "../widgets/edit_tags_panel.h"
+#include "../gear/qutils.h"
 
 namespace m8r {
 
@@ -35,12 +37,10 @@ class NoteEditDialog : public QDialog
 private:
     QLabel* typeLabel;
     QComboBox* typeCombo;
-    QLabel* tagLabel;
-    QComboBox* tagCombo;
     QLabel* progressLabel;
     QSpinBox* progressSpin;
-    // TODO deadline - via QCalendar + my own serialization/ts creation
-    QLabel* deadlineLabel;
+    QCheckBox* deadlineCheck;
+    QDateEdit* deadlineEdit;
 
     QLabel* createdLabel;
     QLineEdit* createdLine;
@@ -54,6 +54,8 @@ private:
     QLineEdit* writesLine;
     QLabel* locationLabel;
     QLineEdit* locationLine;
+
+    EditTagsPanel* editTagsGroup;
 
     QDialogButtonBox *buttonBox;
 
@@ -69,9 +71,19 @@ public:
     NoteEditDialog &operator=(const NoteEditDialog&&) = delete;
     ~NoteEditDialog();
 
-    void setCurrentNote(Note* note) { currentNote = note; }
+    /**
+     * @brief Set current Note.
+     */
+    void setNote(Note* note) { currentNote = note; }
+    /**
+     * @brief Set dialog's data to Note.
+     */
+    void toNote(void);
 
-    void show();
+    void show(void);
+
+private slots:
+    void slotDeadlineCheck(int state);
 };
 
 }

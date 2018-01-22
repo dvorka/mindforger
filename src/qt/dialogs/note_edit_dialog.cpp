@@ -36,24 +36,17 @@ NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
         typeCombo->setCurrentText(QString::fromStdString(ontology.getDefaultNoteType()->getName()));
     }
 
-    tagLabel = new QLabel{tr("Tag")+":", this};
-    tagCombo = new QComboBox(this);
-    if(ontology.getTags().size()) {
-        tagCombo->addItem("", QVariant::fromValue<const Tag*>(nullptr));
-        for(const Tag* t:ontology.getTags().values()) {
-            if(!stringistring(string("none"), t->getName())) {
-                tagCombo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<const Tag*>(t));
-            }
-        }
-        tagCombo->setCurrentText("");
-    }
-
     progressLabel = new QLabel{tr("Progress")+":", this};
     progressSpin = new QSpinBox(this);
     progressSpin->setMinimum(0);
     progressSpin->setMaximum(100);
 
-    QGroupBox* advancedGroup = new QGroupBox{tr("Advanced"), this};
+    deadlineCheck = new QCheckBox{tr("Deadline")+":", this};
+    deadlineEdit = new QDateEdit{QDate::currentDate(), this};
+
+    editTagsGroup = new EditTagsPanel(ontology, this);
+
+    QGroupBox* advancedGroup = new QGroupBox{tr("Metadata"), this};
 
     createdLabel = new QLabel{tr("Created")+":", this};
     createdLine = new QLineEdit{this};
@@ -77,16 +70,15 @@ NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
     // assembly
-    QVBoxLayout* basicLayout = new QVBoxLayout{};
+    QVBoxLayout* basicLayout = new QVBoxLayout{this};
     basicLayout->addWidget(typeLabel);
     basicLayout->addWidget(typeCombo);
-    basicLayout->addWidget(tagLabel);
-    basicLayout->addWidget(tagCombo);
     basicLayout->addWidget(progressLabel);
     basicLayout->addWidget(progressSpin);
-    // TODO basicLayout->addStretch(1);
+    basicLayout->addWidget(deadlineCheck);
+    basicLayout->addWidget(deadlineEdit);
     basicGroup->setLayout(basicLayout);
-    QVBoxLayout* advancedLayout = new QVBoxLayout{};
+    QVBoxLayout* advancedLayout = new QVBoxLayout{this};
     advancedLayout->addWidget(createdLabel);
     advancedLayout->addWidget(createdLine);
     advancedLayout->addWidget(modifiedLabel);
@@ -102,11 +94,13 @@ NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
     advancedGroup->setLayout(advancedLayout);
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
     boxesLayout->addWidget(basicGroup);
+    boxesLayout->addWidget(editTagsGroup);
     boxesLayout->addWidget(advancedGroup);
     boxesLayout->addWidget(buttonBox);
     setLayout(boxesLayout);
 
     // wire signals ensuring that close & set dialog status
+    QObject::connect(deadlineCheck, SIGNAL(stateChanged(int)), this, SLOT(slotDeadlineCheck(int)));
     QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -119,8 +113,6 @@ NoteEditDialog::~NoteEditDialog()
 {
     delete typeLabel;
     delete typeCombo;
-    delete tagLabel;
-    delete tagCombo;
 }
 
 void NoteEditDialog::show()
@@ -136,18 +128,20 @@ void NoteEditDialog::show()
             }
         }
         // IMPROVE handle MULTIPLE tags
-        if(currentNote->getPrimaryTag()) {
-            int i = tagCombo->findData(QVariant::fromValue<const Tag*>(currentNote->getPrimaryTag()));
-            if(i>=0) {
-                tagCombo->setCurrentIndex(i);
-            } else {
-                qDebug() << "Unknown tag: " << QString::fromStdString(currentNote->getPrimaryTag()->getName());
-            }
-        }
+        editTagsGroup->refresh(currentNote->getTags());
 
         progressSpin->setValue(currentNote->getProgress());
-        // TODO deadline h
-        // view->setNoteDeadline(note->getDeadline());
+        if(currentNote->getDeadline()) {
+            deadlineCheck->setChecked(true);
+            deadlineEdit->setEnabled(false);
+            QDate date{};
+            timetToQDate(currentNote->getDeadline(),date);
+            deadlineEdit->setDate(date);
+        } else {
+            deadlineCheck->setChecked(false);
+            deadlineEdit->setEnabled(false);
+            deadlineEdit->setDate(QDate::currentDate());
+        }
 
         // RDONLY
         createdLine->setText(QString::fromStdString(datetimeToString(currentNote->getCreated())));
@@ -159,6 +153,29 @@ void NoteEditDialog::show()
     }
 
     QDialog::show();
+}
+
+void NoteEditDialog::toNote(void)
+{
+    if(currentNote) {
+        if(typeCombo->currentIndex() != -1) {
+            currentNote->setType((const NoteType*)(typeCombo->itemData(typeCombo->currentIndex(), Qt::UserRole).value<const NoteType*>()));
+            currentNote->setTags((editTagsGroup->getTags()));
+            currentNote->setProgress(progressSpin->value());
+            // TODO deadline
+        }
+    } else {
+        qDebug("Attempt to save data from dialog to Note, but no Note is set.");
+    }
+}
+
+void NoteEditDialog::slotDeadlineCheck(int state)
+{
+    if(!state) {
+        deadlineEdit->setEnabled(false);
+    } else {
+        deadlineEdit->setEnabled(true);
+    }
 }
 
 }
