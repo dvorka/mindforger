@@ -160,13 +160,12 @@ void NoteEditDialog::toNote(void)
     if(currentNote) {
         if(typeCombo->currentIndex() != -1) {
             currentNote->setType((const NoteType*)(typeCombo->itemData(typeCombo->currentIndex(), Qt::UserRole).value<const NoteType*>()));
-            currentNote->setTags((editTagsGroup->getTags()));
-            if(deadlineCheck->isEnabled()) {
-                tm date {0,0,0,0,0,0,0,0,0,0,0}; // missing initializer required by older GCC versions 4.8.5 and older
-                currentNote->setDeadline(datetimeSeconds(&date));
-            }
-            currentNote->setProgress(progressSpin->value());
-            // TODO deadline
+        }
+        currentNote->setTags((editTagsGroup->getTags()));
+        currentNote->setProgress(progressSpin->value());
+        if(deadlineCheck->isEnabled()) {
+            tm date {0,0,0,0,0,0,0,0,0,0,0}; // missing initializer required by older GCC versions 4.8.5 and older
+            currentNote->setDeadline(datetimeSeconds(&date));
         }
     } else {
         qDebug("Attempt to save data from dialog to Note, but no Note is set.");

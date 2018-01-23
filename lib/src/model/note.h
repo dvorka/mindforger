@@ -122,6 +122,7 @@ public:
     void setType(const NoteType* type);
     const std::vector<std::string*>& getDescription() const;
     void setDescription(const std::vector<std::string*>& description);
+    void clearDescription(void);
     void addDescription(const std::vector<std::string*>& d);
     void addDescriptionLine(std::string *line);
     Outline*& getOutline();

@@ -247,6 +247,12 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
     }
 }
 
+void MarkdownOutlineRepresentation::description(const std::string* md, std::vector<std::string*>& description)
+{
+
+}
+
+
 string* MarkdownOutlineRepresentation::to(const Outline* outline)
 {
     string* md = new string{};
@@ -297,6 +303,8 @@ string* MarkdownOutlineRepresentation::to(const Note* note)
 
 string* MarkdownOutlineRepresentation::to(const Note* note, string* md)
 {
+    md->clear();
+
     char buffer[50];
     for(int i=0; i<=note->getDepth(); i++) {
         md->append("#");
@@ -318,6 +326,13 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md)
     md->append(" modified: "); md->append(datetimeToString(note->getModified())); md->append(";");
     sprintf(buffer," progress: %d%%; -->\n",note->getProgress()); md->append(buffer);
 
+    toDescription(note, md);
+
+    return md;
+}
+
+string* MarkdownOutlineRepresentation::toDescription(const Note* note, string* md)
+{
     const vector<string*>& description=note->getDescription();
     if(description.size()) {
         for(string *s:description) {
@@ -325,9 +340,9 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md)
             md->append("\n");
         }
     }
-
     return md;
 }
+
 
 } /* namespace m8r */
 

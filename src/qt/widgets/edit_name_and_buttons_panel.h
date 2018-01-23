@@ -48,7 +48,7 @@ public:
     ~EditTitleAndButtonsPanel();
 
     void setNoteEditDialog(NoteEditDialog* noteEditDialog) { this->noteEditDialog = noteEditDialog; }
-    void setCurrentNote(Note* note) {
+    void setNote(Note* note) {
         noteEditDialog->setNote(note);
         lineEdit->setText(QString::fromStdString(note->getTitle()));
     }

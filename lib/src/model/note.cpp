@@ -236,6 +236,11 @@ void Note::setDescription(const vector<string*>& description)
     this->description = description;
 }
 
+void Note::clearDescription(void)
+{
+    this->description.clear();
+}
+
 void Note::addDescription(const vector<string*>& d)
 {
     // IMPROVE why not description.push_back(d);

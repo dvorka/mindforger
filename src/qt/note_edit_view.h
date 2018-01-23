@@ -22,6 +22,7 @@
 #include <QtWidgets>
 
 #include "../../lib/src/model/note.h"
+#include "../../lib/src/representations/markdown/markdown_outline_representation.h"
 
 #include "note_editor_view.h"
 #include "widgets/edit_name_and_buttons_panel.h"
@@ -33,10 +34,11 @@ class NoteEditView : public QWidget
     Q_OBJECT
 
 private:
+    Note* currentNote;
+    MarkdownOutlineRepresentation* mdRepresentation;
+
     EditTitleAndButtonsPanel* editTitleAndButtonsPanel;
     NoteEditorView* noteEditor;
-
-    Note* currentNote;
 
 public:
     explicit NoteEditView(QWidget* parent);
@@ -49,12 +51,15 @@ public:
     void setNoteEditDialog(NoteEditDialog* noteEditDialog) {
         editTitleAndButtonsPanel->setNoteEditDialog(noteEditDialog);
     }
+    void setMarkdownRepresentation(MarkdownOutlineRepresentation* representation) {
+        this->mdRepresentation = representation;
+    }
     void setNote(Note* note) {
         currentNote = note;
-        editTitleAndButtonsPanel->setCurrentNote(note);
-    }
-    void setDescription(std::string& description) {
-        noteEditor->setPlainText(QString::fromStdString(description));
+        editTitleAndButtonsPanel->setNote(note);
+        std::string mdDescription{};
+        mdRepresentation->toDescription(note, &mdDescription);
+        noteEditor->setPlainText(QString::fromStdString(mdDescription));
     }
 
     /**

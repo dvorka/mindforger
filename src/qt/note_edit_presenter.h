@@ -57,7 +57,7 @@ public:
     ~NoteEditPresenter();
 
     NoteEditModel* getModel(void) const { return model; }
-    void setNote(Note* note, std::string* md);
+    void setNote(Note* note);
 
 public slots:
     void slotSaveAndCloseEditor(void);

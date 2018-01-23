@@ -54,17 +54,43 @@ NoteEditView::NoteEditView(QWidget* parent)
         this, SLOT(slotCloseEditor()));
 }
 
+// IMPROVE perhaps this code belong to presenter
 void NoteEditView::toNote(void)
 {
     if(currentNote) {
         string title{"Note"};
-        if(editTitleAndButtonsPanel->getTitle().size()) {
+        if(!editTitleAndButtonsPanel->getTitle().isEmpty()) {
             title.assign(editTitleAndButtonsPanel->getTitle().toStdString());
         }
         currentNote->setTitle(title);
+
+        if(!noteEditor->toPlainText().isEmpty()) {
+            string s{noteEditor->toPlainText().toStdString()};
+            vector<string*> d{};
+            mdRepresentation->description(&s, d);
+            currentNote->setDescription(d);
+        } else {
+            currentNote->clearDescription();
+        }
+
+        // Note metada (type, tags, progress, deadline) are set by Note edit dialog on it's close
+        // (if user doesn't open dialog, nothing is blindly saved there & here)
+
+        // IMPROVE if fields below are set on remembering (save) of Note, then delete code below
+        currentNote->setModified();
+        currentNote->setModifiedPretty();
+        currentNote->setRevision(currentNote->getRevision()+1);
+        if(currentNote->getReads()<currentNote->getRevision()) {
+            currentNote->setReads(currentNote->getRevision());
+        }
+        // Note's outline metadata must be updated as well
+        currentNote->getOutline()->setModified();
+        currentNote->getOutline()->setModifiedPretty();
+        currentNote->getOutline()->setRevision(currentNote->getOutline()->getRevision()+1);
+    } else {
+        QMessageBox::critical(this, tr("Unable to Save Note"), tr("Attempt to save data from UI to Note, but no Note is set."));
     }
 }
-
 
 void NoteEditView::slotSaveAndCloseEditor(void)
 {

@@ -39,6 +39,7 @@ NoteEditPresenter::NoteEditPresenter(
     noteEditDialog
         = new NoteEditDialog{mwp->getMind()->remind().getOntology(), view};
     this->view->setNoteEditDialog(noteEditDialog);
+    this->view->setMarkdownRepresentation(mdRepresentation);
 
     // signals
     QObject::connect(
@@ -52,12 +53,10 @@ NoteEditPresenter::NoteEditPresenter(
         this, SLOT(slotSaveAndCloseEditor()));
 }
 
-// IMPROVE md propagation is not nice (create it here (deepest presenter point)?)
-void NoteEditPresenter::setNote(Note* note, string* md)
+void NoteEditPresenter::setNote(Note* note)
 {
     this->currentNote = note;
     view->setNote(note);
-    view->setDescription(*md);
 }
 
 void NoteEditPresenter::slotCloseEditor(void)
@@ -67,7 +66,6 @@ void NoteEditPresenter::slotCloseEditor(void)
 
 void NoteEditPresenter::slotSaveAndCloseEditor(void)
 {
-    view->toNote();
     slotSaveNote();
 
     if(!view->isNoteDescriptionEmpty()) {
@@ -77,37 +75,12 @@ void NoteEditPresenter::slotSaveAndCloseEditor(void)
 
 void NoteEditPresenter::slotSaveNote(void)
 {
-    QString text = view->getDescription();
+    // set UI data to current note
+    view->toNote();
 
-    if(!text.isEmpty()) {
-        // IMPROVE try to find a more efficient conversion
-        string s = text.toStdString();
-        Note* note = mdRepresentation->note(&s);
-
-        // IMPROVE move this code to note - it updates existing note OR mind.learn()
-        currentNote->setTitle(note->getTitle());
-        currentNote->setDescription(note->getDescription());
-        //currentNote->setDeadline();
-        //currentNote->setProgress();
-        //currentNote->setTags();
-        //currentNote->setType();
-        // set on remembering (save) of note
-        currentNote->setModified();
-        currentNote->setModifiedPretty();
-        currentNote->setRevision(currentNote->getRevision()+1);
-        if(currentNote->getReads()<currentNote->getRevision()) currentNote->setReads(currentNote->getRevision());
-        // TODO delete note (vectors to be kept)
-
-        // Note's outline metadata must be updated as well
-        currentNote->getOutline()->setModified();
-        currentNote->getOutline()->setModifiedPretty();
-        currentNote->getOutline()->setRevision(currentNote->getOutline()->getRevision()+1);
-
-        mainPresenter->getMind()->remind().remember(currentNote->getOutlineKey());
-        mainPresenter->getStatusBar()->showInfo("Note saved!");
-    } else {
-        mainPresenter->getStatusBar()->showError("Note text is empty - it was NOT saved!");
-    }
+    // remember
+    mainPresenter->getMind()->remind().remember(currentNote->getOutlineKey());
+    mainPresenter->getStatusBar()->showInfo("Note saved!");
 }
 
 NoteEditPresenter::~NoteEditPresenter()

@@ -154,8 +154,7 @@ void CliAndBreadcrumbsPresenter::executeListNotes(void)
             auto notes = o->getNotes();
             // TODO push notes to CLI completer > filter > ENTER outline's note in view
             if(!notes.empty()) {
-                string h{"Hi"};
-                mainPresenter->getOrloj()->showFacetNoteEdit(notes.front(),&h);
+                mainPresenter->getOrloj()->showFacetNoteEdit(notes.front());
             }
         }
 

@@ -30,10 +30,6 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view, Configuration& co
     mind = new Mind{configuration};
     mind->think();
 
-    // representations
-    // IMPROVE other presenters to reuse representations from here
-    markdownRepresentation = new MarkdownOutlineRepresentation{mind->ontology()};
-
     // assemble presenters w/ UI
     mainMenu = new MainMenuPresenter{this};
     cli = new CliAndBreadcrumbsPresenter{this, view.getCli(), mind};
@@ -273,8 +269,7 @@ void MainWindowPresenter::handleNoteNew(void)
         mind->remind().remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
         // IMPROVE smarter refresh of outline tree (do less then overall load)
         orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
-        unique_ptr<string> md{markdownRepresentation->to(note)};
-        orloj->showFacetNoteEdit(note, md.get());
+        orloj->showFacetNoteEdit(note);
     } else {
         QMessageBox::critical(&view, tr("New Note"), tr("Failed to create new note!"));
     }
