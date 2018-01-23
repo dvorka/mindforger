@@ -49,14 +49,19 @@ public:
     void setNoteEditDialog(NoteEditDialog* noteEditDialog) {
         editTitleAndButtonsPanel->setNoteEditDialog(noteEditDialog);
     }
-    void setCurrentNote(Note* note) {
+    void setNote(Note* note) {
         currentNote = note;
         editTitleAndButtonsPanel->setCurrentNote(note);
     }
-    void updateCurrentNote(void);
+    void setDescription(std::string& description) {
+        noteEditor->setPlainText(QString::fromStdString(description));
+    }
 
-    void setNoteDescription(std::string& description) { noteEditor->setPlainText(QString::fromStdString(description)); }
-    QString getNoteDescription(void) const { return noteEditor->toPlainText(); }
+    /**
+     * @brief Save view data to Note.
+     */
+    void toNote(void);
+    QString getDescription(void) const { return noteEditor->toPlainText(); }
     // IMPROVE toPlainText() to determine empty is expensive
     bool isNoteDescriptionEmpty(void) const { return noteEditor->toPlainText().isEmpty(); }
 

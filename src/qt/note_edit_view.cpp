@@ -54,7 +54,7 @@ NoteEditView::NoteEditView(QWidget* parent)
         this, SLOT(slotCloseEditor()));
 }
 
-void NoteEditView::updateCurrentNote(void)
+void NoteEditView::toNote(void)
 {
     if(currentNote) {
         string title{"Note"};

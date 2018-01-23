@@ -51,10 +51,10 @@ NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
     createdLabel = new QLabel{tr("Created")+":", this};
     createdLine = new QLineEdit{this};
     createdLine->setDisabled(true);
-    modifiedLabel = new QLabel{tr("Modified")+":", this};
+    modifiedLabel = new QLabel{tr("Last Modified")+":", this};
     modifiedLine = new QLineEdit{this};
     modifiedLine->setDisabled(true);
-    readLabel = new QLabel{tr("Read")+":", this};
+    readLabel = new QLabel{tr("Last Read")+":", this};
     readLine = new QLineEdit{this};
     readLine->setDisabled(true);
     readsLabel = new QLabel{tr("Reads")+":", this};
@@ -161,6 +161,10 @@ void NoteEditDialog::toNote(void)
         if(typeCombo->currentIndex() != -1) {
             currentNote->setType((const NoteType*)(typeCombo->itemData(typeCombo->currentIndex(), Qt::UserRole).value<const NoteType*>()));
             currentNote->setTags((editTagsGroup->getTags()));
+            if(deadlineCheck->isEnabled()) {
+                tm date {0,0,0,0,0,0,0,0,0,0,0}; // missing initializer required by older GCC versions 4.8.5 and older
+                currentNote->setDeadline(datetimeSeconds(&date));
+            }
             currentNote->setProgress(progressSpin->value());
             // TODO deadline
         }

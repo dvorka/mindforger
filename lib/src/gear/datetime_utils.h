@@ -40,11 +40,11 @@ namespace m8r {
  */
 
 time_t datetimeNow();
+time_t datetimeSeconds(struct tm *datetime);
 struct tm *datetimeFrom(const char *s);
 struct tm *datetimeFrom(const char *s, struct tm *datetime);
 char *datetimeTo(const struct tm *datetime, char* result);
 std::string datetimeToString(const time_t ts);
-time_t datetimeSeconds(struct tm *datetime);
 std::string datetimeToPrettyHtml(const time_t ts);
 std::string datetimeToPrettyHtml(const time_t* seconds);
 

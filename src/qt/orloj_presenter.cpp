@@ -124,7 +124,7 @@ void OrlojPresenter::showFacetNoteView(void)
 // IMPROVE md propagation is not nice (create it here or lower from note?)
 void OrlojPresenter::showFacetNoteEdit(Note* note, string* md)
 {
-    noteEditPresenter->setCurrentNote(note, md);
+    noteEditPresenter->setNote(note, md);
     view->showFacetNoteEdit();
     setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
 }

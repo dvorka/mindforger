@@ -53,11 +53,11 @@ NoteEditPresenter::NoteEditPresenter(
 }
 
 // IMPROVE md propagation is not nice (create it here (deepest presenter point)?)
-void NoteEditPresenter::setCurrentNote(Note* note, string* md)
+void NoteEditPresenter::setNote(Note* note, string* md)
 {
     this->currentNote = note;
-    view->setCurrentNote(note);
-    view->setNoteDescription(*md);
+    view->setNote(note);
+    view->setDescription(*md);
 }
 
 void NoteEditPresenter::slotCloseEditor(void)
@@ -67,7 +67,7 @@ void NoteEditPresenter::slotCloseEditor(void)
 
 void NoteEditPresenter::slotSaveAndCloseEditor(void)
 {
-    view->updateCurrentNote();
+    view->toNote();
     slotSaveNote();
 
     if(!view->isNoteDescriptionEmpty()) {
@@ -77,7 +77,7 @@ void NoteEditPresenter::slotSaveAndCloseEditor(void)
 
 void NoteEditPresenter::slotSaveNote(void)
 {
-    QString text = view->getNoteDescription();
+    QString text = view->getDescription();
 
     if(!text.isEmpty()) {
         // IMPROVE try to find a more efficient conversion

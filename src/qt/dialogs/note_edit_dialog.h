@@ -35,6 +35,8 @@ class NoteEditDialog : public QDialog
     Q_OBJECT
 
 private:
+    Note* currentNote;
+
     QLabel* typeLabel;
     QComboBox* typeCombo;
     QLabel* progressLabel;
@@ -56,12 +58,9 @@ private:
     QLineEdit* locationLine;
 
     EditTagsPanel* editTagsGroup;
-
     QDialogButtonBox *buttonBox;
 
     Ontology& ontology;
-
-    Note* currentNote;
 
 public:
     explicit NoteEditDialog(Ontology& ontology, QWidget* parent);

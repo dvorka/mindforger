@@ -38,10 +38,10 @@ class NoteEditPresenter : public QObject
     Q_OBJECT
 
 private:
+    Note* currentNote;
+
     NoteEditView* view;
     NoteEditModel* model;
-
-    Note* currentNote;
 
     MainWindowPresenter* mainPresenter;
     MarkdownOutlineRepresentation* mdRepresentation;
@@ -57,7 +57,7 @@ public:
     ~NoteEditPresenter();
 
     NoteEditModel* getModel(void) const { return model; }
-    void setCurrentNote(Note* note, std::string* md);
+    void setNote(Note* note, std::string* md);
 
 public slots:
     void slotSaveAndCloseEditor(void);
