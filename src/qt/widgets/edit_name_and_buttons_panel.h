@@ -47,7 +47,12 @@ public:
     EditTitleAndButtonsPanel &operator=(const EditTitleAndButtonsPanel&&) = delete;
     ~EditTitleAndButtonsPanel();
 
-    void setNoteEditDialog(NoteEditDialog* noteEditDialog) { this->noteEditDialog = noteEditDialog; }
+    void setNoteEditDialog(NoteEditDialog* noteEditDialog) {
+        this->noteEditDialog = noteEditDialog;
+        // signals can be set after dialog instance is available
+        // IMPROVE wiring to QDialog::accept doesn't from some reason :-/
+        QObject::connect(noteEditDialog, SIGNAL(acceptedSignal()), this, SLOT(handleCloseNoteEditDialog()));
+    }
     void setNote(Note* note) {
         noteEditDialog->setNote(note);
         lineEdit->setText(QString::fromStdString(note->getTitle()));
@@ -57,9 +62,9 @@ public:
     QPushButton* getRememberButton(void) const { return rememberButton; }
     QPushButton* getCancelButton(void) const { return cancelButton; }
 
-private slots:
-    void slotShowNoteEditDialog(void);
-    void slotCloseNoteEditDialog(void);
+public slots:
+    void handleShowNoteEditDialog();
+    void handleCloseNoteEditDialog();
 };
 
 }

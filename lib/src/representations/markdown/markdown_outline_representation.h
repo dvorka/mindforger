@@ -52,6 +52,7 @@ class MarkdownOutlineRepresentation : public OutlineRepresentation
 private:
     static constexpr int AVG_NOTE_SIZE = 500;
     static constexpr int AVG_OUTLINE_SIZE = 3*AVG_NOTE_SIZE;
+    static const std::string MINIMAL_SECTION_HEADER;
 
     // tags, outline types and note types are dynamic (not fixed)
     Ontology& ontology;

@@ -100,9 +100,13 @@ NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
     setLayout(boxesLayout);
 
     // wire signals ensuring that close & set dialog status
-    QObject::connect(deadlineCheck, SIGNAL(stateChanged(int)), this, SLOT(slotDeadlineCheck(int)));
+    QObject::connect(deadlineCheck, SIGNAL(stateChanged(int)), this, SLOT(handleDeadlineCheck(int)));
     QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    // IMPROVE extra wiring below to be removed - I was unable to connect QDialog::accept from outside :-/
+    QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &NoteEditDialog::handleAccepted);
+    QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &NoteEditDialog::handleRejected);
+    //QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, [=](){ qDebug("NoteEditDialog OK"); });
 
     setWindowTitle(tr("Edit Note Properties"));
     resize(fontMetrics().averageCharWidth()*55, height());
@@ -127,19 +131,19 @@ void NoteEditDialog::show()
                 qDebug() << "Unknown note type: " << QString::fromStdString(currentNote->getType()->getName());
             }
         }
-        // IMPROVE handle MULTIPLE tags
         editTagsGroup->refresh(currentNote->getTags());
-
         progressSpin->setValue(currentNote->getProgress());
         if(currentNote->getDeadline()) {
             deadlineCheck->setChecked(true);
-            deadlineEdit->setEnabled(false);
+            deadlineEdit->setEnabled(true);
+
             QDate date{};
             timetToQDate(currentNote->getDeadline(),date);
             deadlineEdit->setDate(date);
         } else {
             deadlineCheck->setChecked(false);
             deadlineEdit->setEnabled(false);
+
             deadlineEdit->setDate(QDate::currentDate());
         }
 
@@ -155,7 +159,7 @@ void NoteEditDialog::show()
     QDialog::show();
 }
 
-void NoteEditDialog::toNote(void)
+void NoteEditDialog::toNote()
 {
     if(currentNote) {
         if(typeCombo->currentIndex() != -1) {
@@ -163,22 +167,35 @@ void NoteEditDialog::toNote(void)
         }
         currentNote->setTags((editTagsGroup->getTags()));
         currentNote->setProgress(progressSpin->value());
-        if(deadlineCheck->isEnabled()) {
+        if(deadlineCheck->isChecked()) {
             tm date {0,0,0,0,0,0,0,0,0,0,0}; // missing initializer required by older GCC versions 4.8.5 and older
+            qdateToTm(deadlineEdit->dateTime().date(), date);
             currentNote->setDeadline(datetimeSeconds(&date));
+        } else {
+            currentNote->setDeadline(0);
         }
     } else {
         qDebug("Attempt to save data from dialog to Note, but no Note is set.");
     }
 }
 
-void NoteEditDialog::slotDeadlineCheck(int state)
+void NoteEditDialog::handleDeadlineCheck(int state)
 {
     if(!state) {
         deadlineEdit->setEnabled(false);
     } else {
         deadlineEdit->setEnabled(true);
     }
+}
+
+void NoteEditDialog::handleAccepted()
+{
+    emit acceptedSignal();
+}
+
+void NoteEditDialog::handleRejected()
+{
+    emit rejectedSignal();
 }
 
 }

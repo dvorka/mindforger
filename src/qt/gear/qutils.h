@@ -32,6 +32,7 @@ void initRandomizer(void);
 
 // data and time
 void timetToQDate(const time_t t, QDate& qdate);
+void qdateToTm(const QDate& qdate, struct tm& t);
 
 // HTML
 void tagsToHtml(const std::vector<const Tag*>& tags, QString& html);

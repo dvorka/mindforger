@@ -63,6 +63,7 @@ EditTagsPanel::~EditTagsPanel()
 
 void EditTagsPanel::refresh(const vector<const Tag*>& noteTags)
 {
+    lineEdit->clear();
     completerStrings.clear();
     if(ontology.getTags().size()) {
         for(const Tag* t:ontology.getTags().values()) {
@@ -86,18 +87,9 @@ void EditTagsPanel::refresh(const vector<const Tag*>& noteTags)
 
 std::vector<const Tag*>& EditTagsPanel::getTags(void)
 {
-    qDebug() << "-BEFORE-";
-    for(auto& s: listViewStrings) {
-        qDebug() << s;
-    }
-    qDebug() << "-OUT-";
-
-
-
     tags.clear();
     if(listViewStrings.size()) {
         for(QString& s:listViewStrings) {
-            qDebug() << s;
             tags.push_back(ontology.findOrCreateTag(s.toStdString()));
         }
     }

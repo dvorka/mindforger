@@ -236,6 +236,17 @@ void Note::setDescription(const vector<string*>& description)
     this->description = description;
 }
 
+void Note::moveDescription(std::vector<std::string*>& target)
+{
+    if(description.size()) {
+        // IMPROVE find a more efficient method - perhaps an algorithm function
+        for(auto& s:description) {
+            target.push_back(s);
+        }
+        description.clear();
+    }
+}
+
 void Note::clearDescription(void)
 {
     this->description.clear();

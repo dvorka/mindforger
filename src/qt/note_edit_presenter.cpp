@@ -39,7 +39,6 @@ NoteEditPresenter::NoteEditPresenter(
     noteEditDialog
         = new NoteEditDialog{mwp->getMind()->remind().getOntology(), view};
     this->view->setNoteEditDialog(noteEditDialog);
-    this->view->setMarkdownRepresentation(mdRepresentation);
 
     // signals
     QObject::connect(
@@ -56,7 +55,10 @@ NoteEditPresenter::NoteEditPresenter(
 void NoteEditPresenter::setNote(Note* note)
 {
     this->currentNote = note;
-    view->setNote(note);
+    string mdDescription{};
+    mdRepresentation->toDescription(note, &mdDescription);
+
+    view->setNote(note, mdDescription);
 }
 
 void NoteEditPresenter::slotCloseEditor(void)
@@ -68,7 +70,7 @@ void NoteEditPresenter::slotSaveAndCloseEditor(void)
 {
     slotSaveNote();
 
-    if(!view->isNoteDescriptionEmpty()) {
+    if(!view->isDescriptionEmpty()) {
         mainPresenter->getOrloj()->fromNoteEditBackToView(currentNote);
     }
 }
@@ -76,7 +78,39 @@ void NoteEditPresenter::slotSaveAndCloseEditor(void)
 void NoteEditPresenter::slotSaveNote(void)
 {
     // set UI data to current note
-    view->toNote();
+    if(currentNote) {
+        string title{"Note"};
+        if(!view->getTitle().isEmpty()) {
+            title.assign(view->getTitle().toStdString());
+        }
+        currentNote->setTitle(title);
+
+        if(!view->isDescriptionEmpty()) {
+            string s{view->getDescription().toStdString()};
+            vector<string*> d{};
+            mdRepresentation->description(&s, d);
+            currentNote->setDescription(d);
+        } else {
+            currentNote->clearDescription();
+        }
+
+        // Note metada (type, tags, progress, deadline) are set by Note edit dialog on it's close
+        // (if user doesn't open dialog, nothing is blindly saved there & here)
+
+        // IMPROVE if fields below are set on remembering (save) of Note, then delete code below
+        currentNote->setModified();
+        currentNote->setModifiedPretty();
+        currentNote->setRevision(currentNote->getRevision()+1);
+        if(currentNote->getReads()<currentNote->getRevision()) {
+            currentNote->setReads(currentNote->getRevision());
+        }
+        // Note's outline metadata must be updated as well
+        currentNote->getOutline()->setModified();
+        currentNote->getOutline()->setModifiedPretty();
+        currentNote->getOutline()->setRevision(currentNote->getOutline()->getRevision()+1);
+    } else {
+        mainPresenter->getStatusBar()->showError(tr("Attempt to save data from UI to Note, but no Note is set."));
+    }
 
     // remember
     mainPresenter->getMind()->remind().remember(currentNote->getOutlineKey());

@@ -35,7 +35,6 @@ class NoteEditView : public QWidget
 
 private:
     Note* currentNote;
-    MarkdownOutlineRepresentation* mdRepresentation;
 
     EditTitleAndButtonsPanel* editTitleAndButtonsPanel;
     NoteEditorView* noteEditor;
@@ -51,24 +50,15 @@ public:
     void setNoteEditDialog(NoteEditDialog* noteEditDialog) {
         editTitleAndButtonsPanel->setNoteEditDialog(noteEditDialog);
     }
-    void setMarkdownRepresentation(MarkdownOutlineRepresentation* representation) {
-        this->mdRepresentation = representation;
-    }
-    void setNote(Note* note) {
+    void setNote(Note* note, std::string mdDescription) {
         currentNote = note;
         editTitleAndButtonsPanel->setNote(note);
-        std::string mdDescription{};
-        mdRepresentation->toDescription(note, &mdDescription);
         noteEditor->setPlainText(QString::fromStdString(mdDescription));
     }
 
-    /**
-     * @brief Save view data to Note.
-     */
-    void toNote(void);
-    QString getDescription(void) const { return noteEditor->toPlainText(); }
-    // IMPROVE toPlainText() to determine empty is expensive
-    bool isNoteDescriptionEmpty(void) const { return noteEditor->toPlainText().isEmpty(); }
+    QString getTitle() const { return editTitleAndButtonsPanel->getTitle(); }
+    QString getDescription() const { return noteEditor->toPlainText(); }
+    bool isDescriptionEmpty() const { return noteEditor->toPlainText().isEmpty(); }
 
 private slots:
     void slotSaveNote(void);

@@ -20,9 +20,11 @@
 
 #include "../../mind/ontology/ontology.h"
 
+namespace m8r {
+
 using namespace std;
 
-namespace m8r {
+const string MarkdownOutlineRepresentation::MINIMAL_SECTION_HEADER = "# T\n";
 
 MarkdownOutlineRepresentation::MarkdownOutlineRepresentation(Ontology& ontology)
     : ontology(ontology)
@@ -249,7 +251,16 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
 
 void MarkdownOutlineRepresentation::description(const std::string* md, std::vector<std::string*>& description)
 {
-
+    // stupid and ugly: prepend a minimal section to description an parse it using MD parser (no need to create a new function)
+    if(md) {
+        string s{*md};
+        s.insert(0, MINIMAL_SECTION_HEADER);
+        Markdown md{nullptr};
+        md.from(&s);
+        vector<MarkdownAstNodeSection*>* ast = md.moveAst();
+        Note* n = note(ast);
+        n->moveDescription(description);
+    }
 }
 
 

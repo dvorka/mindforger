@@ -77,12 +77,18 @@ public:
     /**
      * @brief Set dialog's data to Note.
      */
-    void toNote(void);
+    void toNote();
 
-    void show(void);
+    void show();
+
+signals:
+    void acceptedSignal();
+    void rejectedSignal();
 
 private slots:
-    void slotDeadlineCheck(int state);
+    void handleDeadlineCheck(int state);
+    void handleAccepted();
+    void handleRejected();
 };
 
 }

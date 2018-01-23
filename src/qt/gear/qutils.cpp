@@ -33,6 +33,13 @@ void timetToQDate(const time_t t, QDate& qdate)
     qdate.setDate(dd.tm_year, dd.tm_mon, dd.tm_mday);
 }
 
+void qdateToTm(const QDate& qdate, struct tm& t)
+{
+    t.tm_year = qdate.year();
+    t.tm_mon = qdate.month();
+    t.tm_mday = qdate.day();
+}
+
 void tagsToHtml(const vector<const Tag*>& tags, QString& html)
 {
     //text += QString::fromUtf8("&nbsp;&nbsp;<table cellspacing='0' border='0' style='color: #ffffff; background-color: #00cc00; font-weight: normal;'><tr><td>urgent</td></tr></table>");
