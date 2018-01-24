@@ -44,6 +44,9 @@ NoteEditView::NoteEditView(QWidget* parent)
         QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Left)),
         this, SLOT(slotSaveAndCloseEditor()));
     new QShortcut(
+        QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Return)),
+        this, SLOT(slotOpenNotePropertiesEditor()));
+    new QShortcut(
         QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_S)),
         this, SLOT(slotSaveNote()));
     QObject::connect(
@@ -54,17 +57,22 @@ NoteEditView::NoteEditView(QWidget* parent)
         this, SLOT(slotCloseEditor()));
 }
 
-void NoteEditView::slotSaveAndCloseEditor(void)
+void NoteEditView::slotOpenNotePropertiesEditor()
+{
+    editTitleAndButtonsPanel->handleShowNoteEditDialog();
+}
+
+void NoteEditView::slotSaveAndCloseEditor()
 {
     emit signalSaveAndCloseEditor();
 }
 
-void NoteEditView::slotCloseEditor(void)
+void NoteEditView::slotCloseEditor()
 {
     emit signalCloseEditor();
 }
 
-void NoteEditView::slotSaveNote(void)
+void NoteEditView::slotSaveNote()
 {
     emit signalSaveNote();
 }

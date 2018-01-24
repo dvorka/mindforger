@@ -29,8 +29,9 @@ EditTitleAndButtonsPanel::EditTitleAndButtonsPanel(QWidget* parent)
     label = new QLabel{tr("Name:"), this};
     lineEdit = new QLineEdit{parent};
     moreButton = new QPushButton{tr("More..."), this};
+    moreButton->setToolTip("Alt+Enter");
     rememberButton = new QPushButton{tr("Remember"), this};
-    rememberButton->setToolTip("Alt-LEFT");
+    rememberButton->setToolTip("Alt+Left");
     cancelButton = new QPushButton{tr("Cancel"), this};
 
     // assembly

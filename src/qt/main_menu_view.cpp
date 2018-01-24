@@ -313,14 +313,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteOpen = new QAction(QString::fromUtf8("Rec&all"), mainWindow);
     actionNoteOpen->setStatusTip(QString::fromUtf8("Find note by name in the current outline..."));
 
-    actionNoteSave = new QAction(QString::fromUtf8("Remember\tCtrl+S"), mainWindow);
-    // Alt-Left is handled elsewhere and I don't want menu to handle it
+    actionNoteSave = new QAction(QString::fromUtf8("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
     actionNoteSave->setStatusTip(QString::fromUtf8("Save note being edited"));
 
     actionNoteForget = new QAction(QString::fromUtf8("&Forget"), mainWindow);
     actionNoteForget->setStatusTip(QString::fromUtf8("Forget note"));
 
-    actionNoteClose = new QAction(QString::fromUtf8("&Leave\tAlt+Left"), mainWindow);
+    actionNoteClose = new QAction(QString::fromUtf8("&Leave\tAlt+Left"), mainWindow); // Alt+Left is handled elsewhere and I don't want menu to handle it
     actionNoteClose->setStatusTip(QString::fromUtf8("Save leave editor of Note being changed"));
 
     actionNoteFirst = new QAction(QString::fromUtf8("&Top"), mainWindow);

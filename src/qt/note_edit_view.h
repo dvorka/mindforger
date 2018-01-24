@@ -61,14 +61,15 @@ public:
     bool isDescriptionEmpty() const { return noteEditor->toPlainText().isEmpty(); }
 
 private slots:
-    void slotSaveNote(void);
-    void slotCloseEditor(void);
-    void slotSaveAndCloseEditor(void);
+    void slotOpenNotePropertiesEditor();
+    void slotSaveNote();
+    void slotCloseEditor();
+    void slotSaveAndCloseEditor();
 
 signals:
-    void signalSaveAndCloseEditor(void);
-    void signalCloseEditor(void);
-    void signalSaveNote(void);
+    void signalSaveAndCloseEditor();
+    void signalCloseEditor();
+    void signalSaveNote();
 };
 
 }

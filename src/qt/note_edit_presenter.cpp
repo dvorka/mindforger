@@ -61,12 +61,12 @@ void NoteEditPresenter::setNote(Note* note)
     view->setNote(note, mdDescription);
 }
 
-void NoteEditPresenter::slotCloseEditor(void)
+void NoteEditPresenter::slotCloseEditor()
 {
     mainPresenter->getOrloj()->fromNoteEditBackToView(currentNote);
 }
 
-void NoteEditPresenter::slotSaveAndCloseEditor(void)
+void NoteEditPresenter::slotSaveAndCloseEditor()
 {
     slotSaveNote();
 
@@ -75,7 +75,7 @@ void NoteEditPresenter::slotSaveAndCloseEditor(void)
     }
 }
 
-void NoteEditPresenter::slotSaveNote(void)
+void NoteEditPresenter::slotSaveNote()
 {
     // set UI data to current note
     if(currentNote) {

@@ -60,9 +60,9 @@ public:
     void setNote(Note* note);
 
 public slots:
-    void slotSaveAndCloseEditor(void);
-    void slotCloseEditor(void);
-    void slotSaveNote(void);
+    void slotSaveAndCloseEditor();
+    void slotCloseEditor();
+    void slotSaveNote();
 };
 
 }
