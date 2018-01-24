@@ -162,7 +162,7 @@ private slots:
     void slotShowCli() { emit showCli(); }
 
 signals:
-    void showCli(void);
+    void showCli();
 };
 
 }

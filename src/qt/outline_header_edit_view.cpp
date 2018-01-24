@@ -21,21 +21,60 @@
 namespace m8r {
 
 OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
-    : NoteEditorView(parent)
+    : QWidget(parent)
 {
-    // IMPROVE from text to Qt key constants
-//    new QShortcut(
-//        QKeySequence(tr("Ctrl+s", "Save")),
-//        this, SLOT(slotSaveOutlineHeader()));
-}
+    // widgets
+    editTitleAndButtonsPanel = new EditTitleAndButtonsPanel{EditTitleAndButtonsPanel::Mode::OUTLINE_MODE, this};
+    noteEditor = new NoteEditorView{this};
 
-void OutlineHeaderEditView::slotSaveOutlineHeader(void)
-{
-    emit signalSaveOutlineHeader();
+    // assembly
+    QVBoxLayout* layout = new QVBoxLayout{this};
+    // ensure that wont be extra space around member widgets
+    layout->setContentsMargins(QMargins(0,0,0,0));
+    layout->addWidget(editTitleAndButtonsPanel);
+    layout->addWidget(noteEditor);
+    setLayout(layout);
+
+    // signals
+    new QShortcut(
+        QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Left)),
+        this, SLOT(slotSaveAndCloseEditor()));
+    new QShortcut(
+        QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Return)),
+        this, SLOT(slotOpenNotePropertiesEditor()));
+    new QShortcut(
+        QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_S)),
+        this, SLOT(slotSaveNote()));
+    QObject::connect(
+        editTitleAndButtonsPanel->getRememberButton(), SIGNAL(clicked()),
+        this, SLOT(slotSaveAndCloseEditor()));
+    QObject::connect(
+        editTitleAndButtonsPanel->getCancelButton(), SIGNAL(clicked()),
+        this, SLOT(slotCloseEditor()));
 }
 
 OutlineHeaderEditView::~OutlineHeaderEditView()
 {
+}
+
+void OutlineHeaderEditView::slotOpenOutlineHeaderPropertiesEditor()
+{
+    editTitleAndButtonsPanel->handleShowOutlineHeaderEditDialog();
+}
+
+void OutlineHeaderEditView::slotSaveAndCloseEditor()
+{
+    emit signalSaveAndCloseEditor();
+}
+
+void OutlineHeaderEditView::slotCloseEditor()
+{
+    emit signalCloseEditor();
+}
+
+void OutlineHeaderEditView::slotSaveOutlineHeader()
+{
+    emit signalSaveOutlineHeader();
 }
 
 }

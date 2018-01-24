@@ -22,7 +22,6 @@
 #include <QtWidgets>
 
 #include "../../lib/src/model/note.h"
-#include "../../lib/src/representations/markdown/markdown_outline_representation.h"
 
 #include "note_editor_view.h"
 #include "widgets/edit_name_and_buttons_panel.h"

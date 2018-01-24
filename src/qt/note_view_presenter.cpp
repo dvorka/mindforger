@@ -31,8 +31,6 @@ NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
     this->model = new NoteViewModel();
     this->view->setModel(this->model);
 
-    this->markdownRepresentation
-        = new MarkdownOutlineRepresentation{orloj->getMind()->ontology()};
     this->htmlRepresentation
         = new HtmlOutlineRepresentation{orloj->getMind()->ontology()};
 

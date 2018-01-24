@@ -22,8 +22,8 @@ namespace m8r {
 
 using namespace std;
 
-EditTitleAndButtonsPanel::EditTitleAndButtonsPanel(QWidget* parent)
-    : QWidget(parent)
+EditTitleAndButtonsPanel::EditTitleAndButtonsPanel(Mode mode, QWidget* parent)
+    : QWidget(parent), mode(mode)
 {
     // widgets
     label = new QLabel{tr("Name:"), this};
@@ -44,7 +44,11 @@ EditTitleAndButtonsPanel::EditTitleAndButtonsPanel(QWidget* parent)
     setLayout(layout);
 
     // signals
-    QObject::connect(moreButton, SIGNAL(clicked()), this, SLOT(handleShowNoteEditDialog()));
+    if(mode==Mode::OUTLINE_MODE) {
+        QObject::connect(moreButton, SIGNAL(clicked()), this, SLOT(handleShowOutlineHeaderEditDialog()));
+    } else {
+        QObject::connect(moreButton, SIGNAL(clicked()), this, SLOT(handleShowNoteEditDialog()));
+    }
 }
 
 EditTitleAndButtonsPanel::~EditTitleAndButtonsPanel()
@@ -55,6 +59,16 @@ EditTitleAndButtonsPanel::~EditTitleAndButtonsPanel()
     delete rememberButton;
     delete cancelButton;
     delete layout;
+}
+
+void EditTitleAndButtonsPanel::handleShowOutlineHeaderEditDialog()
+{
+    outlineHeaderEditDialog->show();
+}
+
+void EditTitleAndButtonsPanel::handleCloseOutlineHeaderEditDialog()
+{
+    outlineHeaderEditDialog->toOutline();
 }
 
 void EditTitleAndButtonsPanel::handleShowNoteEditDialog()

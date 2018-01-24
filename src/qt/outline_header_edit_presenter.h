@@ -24,24 +24,24 @@
 
 #include "main_window_presenter.h"
 #include "outline_header_edit_view.h"
+#include "dialogs/outline_header_edit_dialog.h"
 
 #include <QtWidgets>
 
 namespace m8r {
-
-class OrlojView;
 
 class OutlineHeaderEditPresenter : public QObject
 {
     Q_OBJECT
 
 private:
-    OutlineHeaderEditView *view;
-    MainWindowPresenter* mainPresenter;
-
-    MarkdownOutlineRepresentation* mdRepresentation;
-
+    // IMPROVE to model
     Outline* currentOutline;
+    Note* outlineHeader;
+
+    OutlineHeaderEditView* view;
+    MainWindowPresenter* mainPresenter;
+    OutlineHeaderEditDialog* outlineHeaderEditDialog;
 
 public:
     explicit OutlineHeaderEditPresenter(OutlineHeaderEditView* view, MainWindowPresenter* mwp, QObject* parent);
@@ -51,11 +51,12 @@ public:
     OutlineHeaderEditPresenter &operator=(const OutlineHeaderEditPresenter&&) = delete;
     ~OutlineHeaderEditPresenter();
 
-    void setCurrentOutline(Outline* outline, std::string* html);
+    void setOutline(Outline* outline);
 
 public slots:
-    void slotSave(void);
-    void slotSaveAndCloseEditor(void);
+    void slotSaveAndCloseEditor();
+    void slotCloseEditor();
+    void slotSaveOutlineHeader();
 };
 
 }

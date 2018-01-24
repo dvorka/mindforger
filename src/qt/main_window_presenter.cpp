@@ -30,6 +30,10 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view, Configuration& co
     mind = new Mind{configuration};
     mind->think();
 
+    // representations
+    this->mdRepresentation
+        = new MarkdownOutlineRepresentation{mind->ontology()};
+
     // assemble presenters w/ UI
     mainMenu = new MainMenuPresenter{this};
     cli = new CliAndBreadcrumbsPresenter{this, view.getCli(), mind};

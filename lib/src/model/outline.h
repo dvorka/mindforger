@@ -121,7 +121,7 @@ public:
     /**
      * @brief TRUE if notes were loaded from filesystem.
      */
-    bool isNotesLoaded(void) const;
+    bool isNotesLoaded() const;
 
     time_t getCreated() const;
     void setCreated(time_t created);
@@ -135,10 +135,10 @@ public:
     void setTags(const std::vector<const Tag*>& tags);
     void addTag(const Tag *tag);
     time_t getModified() const;
-    void setModified(void);
+    void setModified();
     void setModified(time_t modified);
     const std::string& getModifiedPretty() const;
-    void setModifiedPretty(void);
+    void setModifiedPretty();
     void setModifiedPretty(const std::string& modifiedPretty);
     const std::vector<Note*>& getNotes() const;
     size_t getNotesCount() const;
@@ -159,6 +159,7 @@ public:
     void setProgress(int8_t progress);
     u_int32_t getRevision() const;
     void setRevision(u_int32_t revision);
+    void incRevision();
     const OutlineType* getType() const;
     void setType(const OutlineType* type);
     int8_t getUrgency() const;
@@ -173,12 +174,13 @@ public:
     std::string getDescriptionAsString() const;
     void addDescriptionLine(std::string *);
     void setDescription(const std::vector<std::string*>& description);
+    void clearDescription();
     virtual const std::string& getTitle() const;
     void setTitle(const std::string& title);
     unsigned int getBytesize() const;
     void setBytesize(unsigned int bytesize);
 
-    Note* getOutlineDescriptorAsNote(void);
+    Note* getOutlineDescriptorAsNote();
 };
 
 } /* namespace m8r */

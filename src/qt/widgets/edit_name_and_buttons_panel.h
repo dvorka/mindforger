@@ -22,6 +22,7 @@
 #include <QtWidgets>
 
 #include "../dialogs/note_edit_dialog.h"
+#include "../dialogs/outline_header_edit_dialog.h"
 
 namespace m8r {
 
@@ -29,7 +30,15 @@ class EditTitleAndButtonsPanel : public QWidget
 {
     Q_OBJECT
 
+public:
+    enum Mode {
+        OUTLINE_MODE,
+        NOTE_MODE
+    };
+
 private:
+    Mode mode;
+
     QHBoxLayout* layout;
     QLabel* label;
     QLineEdit* lineEdit;
@@ -37,34 +46,60 @@ private:
     QPushButton* rememberButton;
     QPushButton* cancelButton;
 
+    OutlineHeaderEditDialog* outlineHeaderEditDialog;
     NoteEditDialog* noteEditDialog;
 
 public:
-    explicit EditTitleAndButtonsPanel(QWidget* parent);
+    explicit EditTitleAndButtonsPanel(Mode mode, QWidget* parent);
     EditTitleAndButtonsPanel(const EditTitleAndButtonsPanel&) = delete;
     EditTitleAndButtonsPanel(const EditTitleAndButtonsPanel&&) = delete;
     EditTitleAndButtonsPanel &operator=(const EditTitleAndButtonsPanel&) = delete;
     EditTitleAndButtonsPanel &operator=(const EditTitleAndButtonsPanel&&) = delete;
     ~EditTitleAndButtonsPanel();
 
-    void setNoteEditDialog(NoteEditDialog* noteEditDialog) {
-        this->noteEditDialog = noteEditDialog;
+/*
+ * NOTE mode
+ */
+
+    void setNoteEditDialog(NoteEditDialog* dialog) {
+        this->noteEditDialog = dialog;
         // signals can be set after dialog instance is available
         // IMPROVE wiring to QDialog::accept doesn't from some reason :-/
-        QObject::connect(noteEditDialog, SIGNAL(acceptedSignal()), this, SLOT(handleCloseNoteEditDialog()));
+        QObject::connect(dialog, SIGNAL(acceptedSignal()), this, SLOT(handleCloseNoteEditDialog()));
     }
     void setNote(Note* note) {
         noteEditDialog->setNote(note);
         lineEdit->setText(QString::fromStdString(note->getTitle()));
     }
 
+public slots:
+    void handleShowNoteEditDialog();
+    void handleCloseNoteEditDialog();
+
+/*
+ * OUTLINE mode
+ */
+
+    void setOutlineHeaderEditDialog(OutlineHeaderEditDialog* dialog) {
+        this->outlineHeaderEditDialog = dialog;
+        // signals can be set after dialog instance is available
+        // IMPROVE wiring to QDialog::accept doesn't from some reason :-/
+        QObject::connect(dialog, SIGNAL(acceptedSignal()), this, SLOT(handleCloseOutlineHeaderEditDialog()));
+    }
+    void setOutline(Outline* outline) {
+        outlineHeaderEditDialog->setOutline(outline);
+        lineEdit->setText(QString::fromStdString(outline->getTitle()));
+    }
+
+public slots:
+    void handleShowOutlineHeaderEditDialog();
+    void handleCloseOutlineHeaderEditDialog();
+
+public:
     QString getTitle(void) const { return lineEdit->text(); }
     QPushButton* getRememberButton(void) const { return rememberButton; }
     QPushButton* getCancelButton(void) const { return cancelButton; }
 
-public slots:
-    void handleShowNoteEditDialog();
-    void handleCloseNoteEditDialog();
 };
 
 }

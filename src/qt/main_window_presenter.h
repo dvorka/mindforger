@@ -64,6 +64,8 @@ private:
     Configuration& configuration;
     Mind* mind;
 
+    MarkdownOutlineRepresentation* mdRepresentation;
+
     MainMenuPresenter* mainMenu;
     CliAndBreadcrumbsPresenter* cli;
     OrlojPresenter* orloj;
@@ -85,69 +87,70 @@ public:
     ~MainWindowPresenter();
 
     // this presenter view
-    MainWindowView& getView(void) const { return view; }
-    void initView(void);
-    const Configuration& getConfiguration(void) const { return configuration; }
+    MainWindowView& getView() const { return view; }
+    void initView();
+    const Configuration& getConfiguration() const { return configuration; }
+    MarkdownOutlineRepresentation* getMarkdownRepresentation() const { return mdRepresentation; }
 
     // presenters
-    CliAndBreadcrumbsPresenter* getCli(void) { return cli; }
-    OrlojPresenter* getOrloj(void) const { return orloj; }
-    MainMenuPresenter* getMainMenu(void) const { return mainMenu; }
-    StatusBarPresenter* getStatusBar(void) const { return statusBar; }
+    CliAndBreadcrumbsPresenter* getCli() { return cli; }
+    OrlojPresenter* getOrloj() const { return orloj; }
+    MainMenuPresenter* getMainMenu() const { return mainMenu; }
+    StatusBarPresenter* getStatusBar() const { return statusBar; }
 
     // function
-    Mind* getMind(void) const { return mind; }
+    Mind* getMind() const { return mind; }
 
 public slots:
     // mindforger
 #ifdef DO_MF_DEBUG
-    void doActionMindHack(void);
+    void doActionMindHack();
 #endif
-    void doActionRepositoryOpen(void);
-    void doActionRepositoryRecent(void);
-    void doActionPreferences(void);
-    void doActionMindSnapshot(void);
-    void doActionExit(void);
+    void doActionRepositoryOpen();
+    void doActionRepositoryRecent();
+    void doActionPreferences();
+    void doActionMindSnapshot();
+    void doActionExit();
     // find
-    void doActionFts(void);
-    void handleFts(void);
-    void doActionFindOutlineByName(void);
-    void handleFindOutlineByName(void);
-    void doActionFindNoteByName(void);
-    void handleFindNoteByName(void);
-    void doActionFindNoteByTag(void);
+    void doActionFts();
+    void handleFts();
+    void doActionFindOutlineByName();
+    void handleFindOutlineByName();
+    void doActionFindNoteByName();
+    void handleFindNoteByName();
+    void doActionFindNoteByTag();
     // view
-    void doActionViewOutlines(void);
-    void doActionViewToggleRecent(void);
-    void doActionCli(void);
-    void doActionViewDistractionFree(void);
-    void doActionViewFullscreen(void);
+    void doActionViewOutlines();
+    void doActionViewToggleRecent();
+    void doActionCli();
+    void doActionViewDistractionFree();
+    void doActionViewFullscreen();
     // outline
-    void doActionOutlineNew(void);
-    void handleOutlineNew(void);
-    void doActionOutlineOpen(void);
-    void doActionOutlineForget(void);
-    void doActionOutlineExport(void);
-    void doActionOutlineImport(void);
+    void doActionOutlineNew();
+    void handleOutlineNew();
+    void doActionOutlineOpen();
+    void doActionOutlineForget();
+    void doActionOutlineExport();
+    void doActionOutlineImport();
     // note
-    void doActionNoteNew(void);
-    void handleNoteNew(void);
-    void doActionNoteOpen(void);
-    void doActionNoteFirst(void);
-    void doActionNoteUp(void);
-    void doActionNotePromote(void);
-    void doActionNoteDemote(void);
-    void doActionNoteDown(void);
-    void doActionNoteLast(void);
-    void doActionNoteAttach(void);
-    void doActionNoteSave(void);
-    void doActionNoteForget(void);
+    void doActionNoteNew();
+    void handleNoteNew();
+    void doActionNoteOpen();
+    void doActionNoteFirst();
+    void doActionNoteUp();
+    void doActionNotePromote();
+    void doActionNoteDemote();
+    void doActionNoteDown();
+    void doActionNoteLast();
+    void doActionNoteAttach();
+    void doActionNoteSave();
+    void doActionNoteForget();
     // help
-    void doActionHelpDocumentation(void);
-    void doActionHelpWeb(void);
-    void doActionHelpReportBug(void);
-    void doActionHelpCheckForUpdates(void);
-    void doActionHelpAboutMindForger(void);
+    void doActionHelpDocumentation();
+    void doActionHelpWeb();
+    void doActionHelpReportBug();
+    void doActionHelpCheckForUpdates();
+    void doActionHelpAboutMindForger();
 
     void executeFts(const std::string& command, const bool ignoreCase=false, Outline* scope=nullptr) const;
 };

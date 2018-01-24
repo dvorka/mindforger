@@ -36,11 +36,12 @@ class OutlineHeaderViewPresenter : public QObject
     Q_OBJECT
 
 private:
+    // IMPROVE to model
+    Outline* currentOutline;
+
     OutlineHeaderView* view;
     OrlojPresenter* orloj;
     HtmlOutlineRepresentation* htmlRepresentation;
-
-    Outline* currentOutline;
 
 public:
     explicit OutlineHeaderViewPresenter(OutlineHeaderView* view, OrlojPresenter* orloj);

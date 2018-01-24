@@ -119,9 +119,7 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
 
 void OutlineHeaderViewPresenter::slotEditOutlineHeader(void)
 {
-    // TODO two presenters: Outline/* > NoteViewPresenter/NoteView and NoteEditPresenter/NoteEditView/...
-    std::string* html = htmlRepresentation->toHeader(this->currentOutline);
-    orloj->showFacetOutlineHeaderEdit(this->currentOutline, html);
+    orloj->showFacetOutlineHeaderEdit(currentOutline);
 }
 
 OutlineHeaderViewPresenter::~OutlineHeaderViewPresenter()

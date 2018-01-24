@@ -133,9 +133,9 @@ void OrlojPresenter::showFacetNoteEdit(Note* note)
     mainPresenter->getMainMenu()->showFacetNoteEdit();
 }
 
-void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline, std::string* html)
+void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
 {
-    outlineHeaderEditPresenter->setCurrentOutline(outline, html);
+    outlineHeaderEditPresenter->setOutline(outline);
     view->showFacetOutlineHeaderEdit();
     setFacet(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER);
     mainPresenter->getMainMenu()->showFacetNoteEdit();

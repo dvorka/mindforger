@@ -182,7 +182,7 @@ time_t Outline::getModified() const
     return modified;
 }
 
-void Outline::setModified(void)
+void Outline::setModified()
 {
     this->modified = datetimeNow();
 }
@@ -197,7 +197,7 @@ const string& Outline::getModifiedPretty() const
     return modifiedPretty;
 }
 
-void Outline::setModifiedPretty(void)
+void Outline::setModifiedPretty()
 {
     this->modifiedPretty = datetimeToPrettyHtml(modified);
 }
@@ -240,6 +240,11 @@ u_int32_t Outline::getRevision() const
 void Outline::setRevision(u_int32_t revision)
 {
     this->revision = revision;
+}
+
+void Outline::incRevision()
+{
+    revision++;
 }
 
 const OutlineType* Outline::getType() const
@@ -374,6 +379,11 @@ void Outline::setDescription(const vector<string*>& description)
     this->description = description;
 }
 
+void Outline::clearDescription()
+{
+    this->description.clear();
+}
+
 const string& Outline::getTitle() const
 {
     return title;
@@ -399,7 +409,7 @@ void Outline::setMemoryLocation(OutlineMemoryLocation memoryLocation)
     this->memoryLocation = memoryLocation;
 }
 
-Note* Outline::getOutlineDescriptorAsNote(void)
+Note* Outline::getOutlineDescriptorAsNote()
 {
     outlineDescriptorAsNote->setTitle(title);
     outlineDescriptorAsNote->setDescription(description);

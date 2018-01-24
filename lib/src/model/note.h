@@ -79,7 +79,7 @@ public:
     Note(const Note&&) = delete;
     Note& operator=(const Note&) = delete;
     Note& operator=(const Note&&) = delete;
-    void clear(void);
+    void clear();
     virtual ~Note();
 
     void completeProperties(const time_t outlineModificationTime);
@@ -93,10 +93,10 @@ public:
     u_int16_t getDepth() const;
     void setDepth(u_int16_t depth);
     time_t getModified() const;
-    void setModified(void);
+    void setModified();
     void setModified(time_t modified);
     const std::string& getModifiedPretty() const;
-    void setModifiedPretty(void);
+    void setModifiedPretty();
     void setModifiedPretty(const std::string& modifiedPretty);
     u_int16_t getOrder() const;
     void setOrder(u_int16_t order);
@@ -109,7 +109,7 @@ public:
     void setReads(u_int32_t reads);
     u_int32_t getRevision() const;
     void setRevision(u_int32_t revision);
-    void incRevision(void);
+    void incRevision();
     const Tag* getPrimaryTag() const;
     const std::vector<const Tag*>& getTags() const;
     void addTag(const Tag* tag);
@@ -123,14 +123,14 @@ public:
     const std::vector<std::string*>& getDescription() const;
     void setDescription(const std::vector<std::string*>& description);
     void moveDescription(std::vector<std::string*>& target);
-    void clearDescription(void);
+    void clearDescription();
     void addDescription(const std::vector<std::string*>& d);
     void addDescriptionLine(std::string *line);
     Outline*& getOutline();
     void setOutline(Outline* outline);
 
-    void promote(void);
-    void demote(void);
+    void promote();
+    void demote();
 };
 
 } /* namespace m8r */

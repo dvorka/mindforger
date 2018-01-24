@@ -14,7 +14,7 @@
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "note_edit_view.h"
 
@@ -25,10 +25,8 @@ using namespace std;
 NoteEditView::NoteEditView(QWidget* parent)
     : QWidget(parent)
 {
-    // TODO remove: CHECK OUTLINE VIEW: QWidget w/ vertical layout, sizing done there
-
     // widgets
-    editTitleAndButtonsPanel = new EditTitleAndButtonsPanel{this};
+    editTitleAndButtonsPanel = new EditTitleAndButtonsPanel{EditTitleAndButtonsPanel::Mode::NOTE_MODE, this};
     noteEditor = new NoteEditorView{this};
 
     // assembly
@@ -57,6 +55,10 @@ NoteEditView::NoteEditView(QWidget* parent)
         this, SLOT(slotCloseEditor()));
 }
 
+NoteEditView::~NoteEditView()
+{
+}
+
 void NoteEditView::slotOpenNotePropertiesEditor()
 {
     editTitleAndButtonsPanel->handleShowNoteEditDialog();
@@ -75,10 +77,6 @@ void NoteEditView::slotCloseEditor()
 void NoteEditView::slotSaveNote()
 {
     emit signalSaveNote();
-}
-
-NoteEditView::~NoteEditView()
-{
 }
 
 }

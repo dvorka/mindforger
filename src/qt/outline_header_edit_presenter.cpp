@@ -24,15 +24,15 @@ namespace m8r {
 
 OutlineHeaderEditPresenter::OutlineHeaderEditPresenter(
         OutlineHeaderEditView *view,
-        MainWindowPresenter* mainPresenter,
+        MainWindowPresenter* mwp,
         QObject *parent) : QObject(parent)
 {
     this->view = view;
-    this->mainPresenter = mainPresenter;
+    this->mainPresenter = mwp;
 
-    Ontology& ontology=mainPresenter->getMind()->ontology();
-    this->mdRepresentation
-        = new MarkdownOutlineRepresentation{ontology};
+    outlineHeaderEditDialog
+        = new OutlineHeaderEditDialog{mwp->getMind()->remind().getOntology(), view};
+    this->view->setOutlineHeaderEditDialog(outlineHeaderEditDialog);
 
     QObject::connect(
         view, SIGNAL(signalSaveOutlineHeader()),
@@ -42,51 +42,70 @@ OutlineHeaderEditPresenter::OutlineHeaderEditPresenter(
         this, SLOT(slotSaveAndCloseEditor()));
 }
 
-void OutlineHeaderEditPresenter::setCurrentOutline(Outline* outline, string* html)
+OutlineHeaderEditPresenter::~OutlineHeaderEditPresenter()
 {
-    this->currentOutline = outline;
-    view->setPlainText(QString::fromStdString(*html));
 }
 
-void OutlineHeaderEditPresenter::slotSaveAndCloseEditor(void)
+void OutlineHeaderEditPresenter::setOutline(Outline* outline)
 {
-    slotSave();
-    if(!view->toPlainText().isEmpty()) {
+    this->currentOutline = outline;
+    string mdDescription{};
+    outlineHeader = outline->getOutlineDescriptorAsNote();
+    mainPresenter->getMarkdownRepresentation()->toDescription(outlineHeader, &mdDescription);
+
+    view->setOutline(outline, mdDescription);
+}
+
+void OutlineHeaderEditPresenter::slotCloseEditor()
+{
+    mainPresenter->getOrloj()->fromOutlineHeaderEditBackToView(currentOutline);
+}
+
+void OutlineHeaderEditPresenter::slotSaveAndCloseEditor()
+{
+    slotSaveOutlineHeader();
+
+    if(!view->isDescriptionEmpty()) {
         mainPresenter->getOrloj()->fromOutlineHeaderEditBackToView(currentOutline);
     }
 }
 
-void OutlineHeaderEditPresenter::slotSave(void)
+void OutlineHeaderEditPresenter::slotSaveOutlineHeader()
 {
-    QString text = view->toPlainText();
-    if(!text.isEmpty()) {
-        // IMPROVE try to find a more efficient conversion
-        string s = text.toStdString();
-        Note* note = mdRepresentation->note(&s);
+    // set UI data to current note
+    if(currentOutline) {
+        string title{"Outline"};
+        if(!view->getTitle().isEmpty()) {
+            title.assign(view->getTitle().toStdString());
+        }
+        currentOutline->setTitle(title);
 
-        // IMPROVE move this code to note - it updates existing note OR mind.learn()
-        currentOutline->setTitle(note->getTitle());
-        currentOutline->setDescription(note->getDescription());
-        //currentNote->setDeadline();
-        //currentNote->setProgress();
-        //currentNote->setTags();
-        //currentNote->setType();
-        // set on remembering
+        if(!view->isDescriptionEmpty()) {
+            string s{view->getDescription().toStdString()};
+            vector<string*> d{};
+            mainPresenter->getMarkdownRepresentation()->description(&s, d);
+            currentOutline->setDescription(d);
+        } else {
+            currentOutline->clearDescription();
+        }
+
+        // Outline metada (type, tags, progress, deadline) are set by Outline header edit dialog on it's close
+        // (if user doesn't open dialog, nothing is blindly saved there & here)
+
+        // IMPROVE if fields below are set on remembering (save) of Outline, then delete code below
         currentOutline->setModified();
         currentOutline->setModifiedPretty();
-        currentOutline->setRevision(currentOutline->getRevision()+1);
-        // TODO delete note (vectors to be kept)
+        currentOutline->incRevision();
+        if(currentOutline->getReads()<currentOutline->getRevision()) {
+            currentOutline->setReads(currentOutline->getRevision());
+        }
 
+        // remember
         mainPresenter->getMind()->remind().remember(currentOutline->getKey());
-        mainPresenter->getStatusBar()->showInfo("Outline saved!");
+        mainPresenter->getStatusBar()->showInfo(tr("Outline saved!"));
     } else {
-        mainPresenter->getStatusBar()->showError("Outline header text is empty - it was NOT saved!");
+        mainPresenter->getStatusBar()->showError(tr("Attempt to save data from UI to Outline, but no Outline is set."));
     }
-}
-
-OutlineHeaderEditPresenter::~OutlineHeaderEditPresenter()
-{
-    if(mdRepresentation) delete mdRepresentation;
 }
 
 }

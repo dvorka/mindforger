@@ -1,5 +1,5 @@
 /*
- note_edit_dialog.h     MindForger thinking notebook
+ outline_header_edit_dialog.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8RUI_NOTE_EDIT_DIALOG_H
-#define M8RUI_NOTE_EDIT_DIALOG_H
+#ifndef M8RUI_OUTLINE_HEADER_EDIT_DIALOG_H
+#define M8RUI_OUTLINE_HEADER_EDIT_DIALOG_H
 
 #include <QtWidgets>
 
@@ -31,21 +31,21 @@
 
 namespace m8r {
 
-class NoteEditDialog : public QDialog
+class OutlineHeaderEditDialog : public QDialog
 {
     Q_OBJECT
 
 private:
-    Note* currentNote;
+    Outline* currentOutline;
 
     QLabel* typeLabel;
     QComboBox* typeCombo;
+    QLabel* importanceLabel;
+    QSpinBox* importanceSpin;
+    QLabel* urgencyLabel;
+    QSpinBox* urgencySpin;
     QLabel* progressLabel;
     QSpinBox* progressSpin;
-    QCheckBox* deadlineCheck;
-    QDateEdit* deadlineEdit;
-    QLabel* parentRelLabel;
-    QComboBox* parentRelCombo;
 
     QLabel* createdLabel;
     QLineEdit* createdLine;
@@ -63,15 +63,15 @@ private:
     Ontology& ontology;
 
 public:
-    explicit NoteEditDialog(Ontology& ontology, QWidget* parent);
-    NoteEditDialog(const NoteEditDialog&) = delete;
-    NoteEditDialog(const NoteEditDialog&&) = delete;
-    NoteEditDialog &operator=(const NoteEditDialog&) = delete;
-    NoteEditDialog &operator=(const NoteEditDialog&&) = delete;
-    ~NoteEditDialog();
+    explicit OutlineHeaderEditDialog(Ontology& ontology, QWidget* parent);
+    OutlineHeaderEditDialog(const OutlineHeaderEditDialog&) = delete;
+    OutlineHeaderEditDialog(const OutlineHeaderEditDialog&&) = delete;
+    OutlineHeaderEditDialog &operator=(const OutlineHeaderEditDialog&) = delete;
+    OutlineHeaderEditDialog &operator=(const OutlineHeaderEditDialog&&) = delete;
+    ~OutlineHeaderEditDialog();
 
-    void setNote(Note* note) { currentNote = note; }
-    void toNote();
+    void setOutline(Outline* outline) { currentOutline = outline; }
+    void toOutline();
 
     void show();
 
@@ -80,10 +80,9 @@ signals:
     void rejectedSignal();
 
 private slots:
-    void handleDeadlineCheck(int state);
     void handleAccepted();
     void handleRejected();
 };
 
 }
-#endif // M8RUI_NOTE_EDIT_DIALOG_H
+#endif // M8RUI_OUTLINE_HEADER_EDIT_DIALOG_H

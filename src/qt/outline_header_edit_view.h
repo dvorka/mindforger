@@ -21,15 +21,22 @@
 
 #include <QtWidgets>
 
+#include "../../lib/src/model/outline.h"
+
 #include "note_editor_view.h"
+#include "widgets/edit_name_and_buttons_panel.h"
 
 namespace m8r {
 
-class OrlojView;
-
-class OutlineHeaderEditView : public NoteEditorView
+class OutlineHeaderEditView : public QWidget
 {
     Q_OBJECT
+
+private:
+    Outline* currentOutline;
+
+    EditTitleAndButtonsPanel* editTitleAndButtonsPanel;
+    NoteEditorView* noteEditor;
 
 public:
     explicit OutlineHeaderEditView(QWidget* parent);
@@ -39,11 +46,29 @@ public:
     OutlineHeaderEditView &operator=(const OutlineHeaderEditView&&) = delete;
     ~OutlineHeaderEditView();
 
+    void setOutlineHeaderEditDialog(OutlineHeaderEditDialog* outlineHeaderEditDialog) {
+        editTitleAndButtonsPanel->setOutlineHeaderEditDialog(outlineHeaderEditDialog);
+    }
+    void setOutline(Outline* outline, std::string mdDescription) {
+        currentOutline = outline;
+        editTitleAndButtonsPanel->setOutline(outline);
+        noteEditor->setPlainText(QString::fromStdString(mdDescription));
+    }
+
+    QString getTitle() const { return editTitleAndButtonsPanel->getTitle(); }
+    QString getDescription() const { return noteEditor->toPlainText(); }
+    bool isDescriptionEmpty() const { return noteEditor->toPlainText().isEmpty(); }
+
 private slots:
-    void slotSaveOutlineHeader(void);
+    void slotOpenOutlineHeaderPropertiesEditor();
+    void slotSaveOutlineHeader();
+    void slotCloseEditor();
+    void slotSaveAndCloseEditor();
 
 signals:
-    void signalSaveOutlineHeader(void);
+    void signalSaveAndCloseEditor();
+    void signalCloseEditor();
+    void signalSaveOutlineHeader();
 };
 
 }

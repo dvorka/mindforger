@@ -31,10 +31,6 @@ NoteEditPresenter::NoteEditPresenter(
 {
     this->view = view;    
     this->mainPresenter = mwp;
-    this->model = new NoteEditModel{};
-    // IMPROVE View/Model to be used this->view->setModel(this->model);
-    this->mdRepresentation
-        = new MarkdownOutlineRepresentation{mwp->getMind()->ontology()};
 
     noteEditDialog
         = new NoteEditDialog{mwp->getMind()->remind().getOntology(), view};
@@ -52,11 +48,15 @@ NoteEditPresenter::NoteEditPresenter(
         this, SLOT(slotSaveAndCloseEditor()));
 }
 
+NoteEditPresenter::~NoteEditPresenter()
+{
+}
+
 void NoteEditPresenter::setNote(Note* note)
 {
     this->currentNote = note;
     string mdDescription{};
-    mdRepresentation->toDescription(note, &mdDescription);
+    mainPresenter->getMarkdownRepresentation()->toDescription(note, &mdDescription);
 
     view->setNote(note, mdDescription);
 }
@@ -88,7 +88,7 @@ void NoteEditPresenter::slotSaveNote()
         if(!view->isDescriptionEmpty()) {
             string s{view->getDescription().toStdString()};
             vector<string*> d{};
-            mdRepresentation->description(&s, d);
+            mainPresenter->getMarkdownRepresentation()->description(&s, d);
             currentNote->setDescription(d);
         } else {
             currentNote->clearDescription();
@@ -100,26 +100,21 @@ void NoteEditPresenter::slotSaveNote()
         // IMPROVE if fields below are set on remembering (save) of Note, then delete code below
         currentNote->setModified();
         currentNote->setModifiedPretty();
-        currentNote->setRevision(currentNote->getRevision()+1);
+        currentNote->incRevision();
         if(currentNote->getReads()<currentNote->getRevision()) {
             currentNote->setReads(currentNote->getRevision());
         }
         // Note's outline metadata must be updated as well
         currentNote->getOutline()->setModified();
         currentNote->getOutline()->setModifiedPretty();
-        currentNote->getOutline()->setRevision(currentNote->getOutline()->getRevision()+1);
+        currentNote->getOutline()->incRevision();
+
+        // remember
+        mainPresenter->getMind()->remind().remember(currentNote->getOutlineKey());
+        mainPresenter->getStatusBar()->showInfo(tr("Note saved!"));
     } else {
         mainPresenter->getStatusBar()->showError(tr("Attempt to save data from UI to Note, but no Note is set."));
     }
-
-    // remember
-    mainPresenter->getMind()->remind().remember(currentNote->getOutlineKey());
-    mainPresenter->getStatusBar()->showInfo("Note saved!");
-}
-
-NoteEditPresenter::~NoteEditPresenter()
-{
-    if(mdRepresentation) delete mdRepresentation;
 }
 
 }

@@ -80,13 +80,13 @@ public:
                    OrlojView* view,
                    Mind* mind);
 
-    Mind* getMind(void) { return mind; }
+    Mind* getMind() { return mind; }
 
-    OrlojView* getView(void) const { return view; }
-    OutlinesTablePresenter* getOutlinesTable(void) const { return outlinesTablePresenter; }
-    NotesTablePresenter* getNotesTable(void) const { return notesTablePresenter; }
-    OutlineViewPresenter* getOutlineView(void) const { return outlineViewPresenter; }
-    NoteViewPresenter* getNoteView(void) const { return noteViewPresenter; }
+    OrlojView* getView() const { return view; }
+    OutlinesTablePresenter* getOutlinesTable() const { return outlinesTablePresenter; }
+    NotesTablePresenter* getNotesTable() const { return notesTablePresenter; }
+    OutlineViewPresenter* getOutlineView() const { return outlineViewPresenter; }
+    NoteViewPresenter* getNoteView() const { return noteViewPresenter; }
 
     bool isFacetActive(const OrlojPresenterFacets facet) const { return activeFacet==facet;}
     bool isFacetActiveOutlineManagement(void) {
@@ -116,15 +116,15 @@ public:
     void showFacetOutline(Outline* outline);
     void showFacetNoteView(void);
     void showFacetNoteEdit(Note* note);
-    void showFacetOutlineHeaderEdit(Outline* outline, std::string* html);
+    void showFacetOutlineHeaderEdit(Outline* outline);
 
     void fromOutlineHeaderEditBackToView(Outline* outline);
     void fromNoteEditBackToView(Note* note);
 
 public slots:
-    void slotShowOutlines(void);
+    void slotShowOutlines();
     void slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected);
-    void slotShowOutlineHeader(void);
+    void slotShowOutlineHeader();
     void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
     void slotShowNoteAsResult(const QItemSelection& selected, const QItemSelection& deselected);
 };

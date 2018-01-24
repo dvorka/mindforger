@@ -77,7 +77,7 @@ time_t Note::getModified() const
     return modified;
 }
 
-void Note::setModified(void)
+void Note::setModified()
 {
     this->modified = datetimeNow();
 }
@@ -93,7 +93,7 @@ const string& Note::getModifiedPretty() const
     return modifiedPretty;
 }
 
-void Note::setModifiedPretty(void)
+void Note::setModifiedPretty()
 {
     this->modifiedPretty = datetimeToPrettyHtml(modified);
 }
@@ -153,7 +153,7 @@ void Note::setRevision(u_int32_t revision)
     this->revision = revision;
 }
 
-void Note::incRevision(void) {
+void Note::incRevision() {
     revision++;
 }
 
@@ -247,7 +247,7 @@ void Note::moveDescription(std::vector<std::string*>& target)
     }
 }
 
-void Note::clearDescription(void)
+void Note::clearDescription()
 {
     this->description.clear();
 }
@@ -268,7 +268,7 @@ void Note::setOutline(Outline* outline)
     this->outline = outline;
 }
 
-const string& Note::getOutlineKey(void) const
+const string& Note::getOutlineKey() const
 {
     if(outline) {
         return outline->getKey();
