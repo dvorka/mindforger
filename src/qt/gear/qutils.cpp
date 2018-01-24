@@ -96,6 +96,13 @@ void noteTypeToHtml(const NoteType* noteType, QString& html)
         html += QString::fromStdString(noteType->getColor().asHtml());
         html += QString::fromUtf8("; font-style: italic;'> ");
         html += QString::fromStdString(noteType->getName());
+
+        // TODO parent-child relationship rendering
+        html += QString::fromUtf8(" ");
+        html += QString::fromUtf8("&#9670;"); // composition
+        //html += QString::fromUtf8("&#9671;"); // aggregation
+        //html += QString::fromUtf8("&#9651;"); // isa
+
         html += QString::fromUtf8(" </span>");
     }
 }

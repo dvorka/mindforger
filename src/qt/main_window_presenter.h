@@ -92,7 +92,8 @@ public:
     // presenters
     CliAndBreadcrumbsPresenter* getCli(void) { return cli; }
     OrlojPresenter* getOrloj(void) const { return orloj; }
-    StatusBarPresenter* getStatusBar(void) const { return statusBar; }       
+    MainMenuPresenter* getMainMenu(void) const { return mainMenu; }
+    StatusBarPresenter* getStatusBar(void) const { return statusBar; }
 
     // function
     Mind* getMind(void) const { return mind; }

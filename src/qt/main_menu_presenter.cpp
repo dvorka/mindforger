@@ -81,4 +81,19 @@ MainMenuPresenter::~MainMenuPresenter()
     // TODO deletes: actions
 }
 
+void MainMenuPresenter::showFacetOutlineList()
+{
+    view->showFacetOutlineList();
+}
+
+void MainMenuPresenter::showFacetOutlineView()
+{
+    view->showFacetOutlineView();
+}
+
+void MainMenuPresenter::showFacetNoteEdit()
+{
+    view->showFacetNoteEdit();
+}
+
 }

@@ -29,13 +29,13 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
      */
 
     // emphasis
-    addRegex(Bold, "\\*(:?\\w[\\w\\s]+)\\*"); // shorter match must go first: * first, ** next
-    addRegex(Bolder, "\\*\\*(:?\\w[\\w\\s]+)\\*\\*");
-    addRegex(Italicer, "__(:?[\\w\\s]+)__");
-    addRegex(Italic, "_(:?[\\w\\s]+)_");
-    addRegex(Strikethrough, "~~(:?[\\w\\s]+)~~");
-    addRegex(Link, "\\[(:?[\\w\\s]+)\\]\\([\\w:/\\.-]+\\)");
-    addRegex(Codeblock, "`(:?[\\w\\s]+)`");
+    addRegex(Bolder, "\\*\\*(:?\\w[\\w\\s'/:\\.]+)\\*\\*"); // ** first, * next
+    addRegex(Bold, "\\*(:?\\w[\\w\\s'/:\\.]+)\\*");
+    addRegex(Italicer, "__(:?[\\w\\s'/:\\.]+)__");
+    addRegex(Italic, "_(:?[\\w\\s'/:\\.]+)_");
+    addRegex(Strikethrough, "~~(:?[\\w\\s'/:\\.]+)~~");
+    addRegex(Link, "\\[(:?[\\w\\s:\\-=]+)\\]\\([\\w/\\.:-#]+\\)");
+    addRegex(Codeblock, "`(:?[\\w\\s'/:\\.]+)`");
 
     // TODO extra method - HTML comment like
     //addRegex(CodeblockMultiline, "\\*(:?#\\d+|\\w+)\\*");

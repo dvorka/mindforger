@@ -26,6 +26,7 @@
 
 #include "../model_meta_definitions.h"
 #include "../widgets/edit_tags_panel.h"
+#include "../widgets/labeled_edit_line_panel.h"
 #include "../gear/qutils.h"
 
 namespace m8r {
@@ -43,16 +44,15 @@ private:
     QSpinBox* progressSpin;
     QCheckBox* deadlineCheck;
     QDateEdit* deadlineEdit;
+    QLabel* parentRelLabel;
+    QComboBox* parentRelCombo;
 
     QLabel* createdLabel;
     QLineEdit* createdLine;
-    QLabel* modifiedLabel;
-    QLineEdit* modifiedLine;
-    QLabel* readLabel;
-    QLineEdit* readLine;
-    QLabel* readsLabel;
-    QLineEdit* readsLine;
-    QLabel* writesLabel;
+    LabeledEditLinePanel* modifiedPanel;
+    LabeledEditLinePanel* readPanel;
+    LabeledEditLinePanel* readsPanel;
+    LabeledEditLinePanel* writesPanel;
     QLineEdit* writesLine;
     QLabel* locationLabel;
     QLineEdit* locationLine;

@@ -53,6 +53,10 @@ public:
     virtual ~MainMenuPresenter();
 
     MainMenuView* getView(void) { return view; }
+
+    void showFacetOutlineList();
+    void showFacetOutlineView();
+    void showFacetNoteEdit();
 };
 
 }

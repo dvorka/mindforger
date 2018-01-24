@@ -72,6 +72,7 @@ void OrlojPresenter::showFacetOutlineList(const vector<Outline*>& outlines)
     // IMPROVE reload ONLY if dirty, otherwise just show
     outlinesTablePresenter->refresh(outlines);
     view->showFacetOutlines();
+    mainPresenter->getMainMenu()->showFacetOutlineList();
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
@@ -84,6 +85,7 @@ void OrlojPresenter::showFacetFtsResult(vector<Note*>* result)
 {
     setFacet(OrlojPresenterFacets::FACET_FTS_RESULT);
     notesTablePresenter->refresh(result);
+    mainPresenter->getMainMenu()->showFacetOutlineList();
     view->showFacetFtsResult();
 }
 
@@ -95,6 +97,7 @@ void OrlojPresenter::showFacetOutline(Outline* outline)
     outlineHeaderViewPresenter->refresh(outline);
     view->showFacetOutlineHeaderView();
 
+    mainPresenter->getMainMenu()->showFacetOutlineView();
     mainPresenter->getStatusBar()->showInfo(QString("Outline '%1' selected...").arg(outline->getTitle().c_str()));
 }
 
@@ -118,6 +121,7 @@ void OrlojPresenter::slotShowOutline(const QItemSelection& selected, const QItem
 void OrlojPresenter::showFacetNoteView(void)
 {
     view->showFacetNoteView();
+    mainPresenter->getMainMenu()->showFacetOutlineView();
     setFacet(OrlojPresenterFacets::FACET_VIEW_NOTE);
 }
 
@@ -126,6 +130,7 @@ void OrlojPresenter::showFacetNoteEdit(Note* note)
     noteEditPresenter->setNote(note);
     view->showFacetNoteEdit();
     setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
+    mainPresenter->getMainMenu()->showFacetNoteEdit();
 }
 
 void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline, std::string* html)
@@ -133,6 +138,7 @@ void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline, std::string* h
     outlineHeaderEditPresenter->setCurrentOutline(outline, html);
     view->showFacetOutlineHeaderEdit();
     setFacet(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER);
+    mainPresenter->getMainMenu()->showFacetNoteEdit();
 }
 
 void OrlojPresenter::fromOutlineHeaderEditBackToView(Outline* outline)
@@ -140,6 +146,7 @@ void OrlojPresenter::fromOutlineHeaderEditBackToView(Outline* outline)
     outlineHeaderViewPresenter->refresh(outline);
     view->showFacetOutlineHeaderView();
     setFacet(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER);
+    mainPresenter->getMainMenu()->showFacetOutlineView();
 }
 
 void OrlojPresenter::fromNoteEditBackToView(Note* note)
@@ -172,6 +179,7 @@ void OrlojPresenter::slotShowNote(const QItemSelection& selected, const QItemSel
 
         noteViewPresenter->refresh(note);
         view->showFacetNoteView();
+        mainPresenter->getMainMenu()->showFacetOutlineView();
         mainPresenter->getStatusBar()->showInfo(QString(note->getTitle().c_str()));
         setFacet(OrlojPresenterFacets::FACET_VIEW_NOTE);
     } else {
@@ -195,6 +203,7 @@ void OrlojPresenter::slotShowNoteAsResult(
 
         noteViewPresenter->refresh(note);
         view->showFacetFtsResultDetail();
+        mainPresenter->getMainMenu()->showFacetOutlineList();
         mainPresenter->getStatusBar()->showInfo(QString(note->getTitle().c_str()));
         setFacet(OrlojPresenterFacets::FACET_VIEW_NOTE);
     } else {

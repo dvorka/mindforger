@@ -44,6 +44,12 @@ NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
     deadlineCheck = new QCheckBox{tr("Deadline")+":", this};
     deadlineEdit = new QDateEdit{QDate::currentDate(), this};
 
+    parentRelLabel = new QLabel{tr("Parent-child Relationship")+":", this};
+    parentRelCombo = new QComboBox(this);
+    parentRelCombo->addItem(QString("Composition"));
+    parentRelCombo->addItem(QString("Aggregation"));
+    parentRelCombo->addItem(QString("Is-a"));
+
     editTagsGroup = new EditTagsPanel(ontology, this);
 
     QGroupBox* advancedGroup = new QGroupBox{tr("Metadata"), this};
@@ -51,18 +57,14 @@ NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
     createdLabel = new QLabel{tr("Created")+":", this};
     createdLine = new QLineEdit{this};
     createdLine->setDisabled(true);
-    modifiedLabel = new QLabel{tr("Last Modified")+":", this};
-    modifiedLine = new QLineEdit{this};
-    modifiedLine->setDisabled(true);
-    readLabel = new QLabel{tr("Last Read")+":", this};
-    readLine = new QLineEdit{this};
-    readLine->setDisabled(true);
-    readsLabel = new QLabel{tr("Reads")+":", this};
-    readsLine = new QLineEdit{this};
-    readsLine->setDisabled(true);
-    writesLabel = new QLabel{tr("Writes")+":", this};
-    writesLine = new QLineEdit{this};
-    writesLine->setDisabled(true);
+    modifiedPanel = new LabeledEditLinePanel{tr("Last Modified")+":", this};
+    modifiedPanel->setEnabled(false);
+    readPanel = new LabeledEditLinePanel{tr("Last Read")+":", this};
+    readPanel->setEnabled(false);
+    readsPanel = new LabeledEditLinePanel{tr("Reads")+":", this};
+    readsPanel->setDisabled(true);
+    writesPanel = new LabeledEditLinePanel{tr("Writes")+":", this};
+    writesPanel->setDisabled(true);
     locationLabel = new QLabel{tr("Location")+":", this};
     locationLine = new QLineEdit{this};
     locationLine->setDisabled(true);
@@ -77,18 +79,20 @@ NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
     basicLayout->addWidget(progressSpin);
     basicLayout->addWidget(deadlineCheck);
     basicLayout->addWidget(deadlineEdit);
+    basicLayout->addWidget(parentRelLabel);
+    basicLayout->addWidget(parentRelCombo);
     basicGroup->setLayout(basicLayout);
     QVBoxLayout* advancedLayout = new QVBoxLayout{this};
     advancedLayout->addWidget(createdLabel);
     advancedLayout->addWidget(createdLine);
-    advancedLayout->addWidget(modifiedLabel);
-    advancedLayout->addWidget(modifiedLine);
-    advancedLayout->addWidget(readLabel);
-    advancedLayout->addWidget(readLine);
-    advancedLayout->addWidget(readsLabel);
-    advancedLayout->addWidget(readsLine);
-    advancedLayout->addWidget(writesLabel);
-    advancedLayout->addWidget(writesLine);
+    QHBoxLayout* l = new QHBoxLayout(this);
+    l->addWidget(modifiedPanel);
+    l->addWidget(readPanel);
+    advancedLayout->addLayout(l);
+    l = new QHBoxLayout(this);
+    l->addWidget(readsPanel);
+    l->addWidget(writesPanel);
+    advancedLayout->addLayout(l);
     advancedLayout->addWidget(locationLabel);
     advancedLayout->addWidget(locationLine);
     advancedGroup->setLayout(advancedLayout);
@@ -149,10 +153,10 @@ void NoteEditDialog::show()
 
         // RDONLY
         createdLine->setText(QString::fromStdString(datetimeToString(currentNote->getCreated())));
-        modifiedLine->setText(QString::fromStdString(datetimeToString(currentNote->getModified())));
-        readLine->setText(QString::fromStdString(datetimeToString(currentNote->getRead())));
-        readsLine->setText(QString::number(currentNote->getReads()));
-        writesLine->setText(QString::number(currentNote->getRevision()));
+        modifiedPanel->setText(QString::fromStdString(datetimeToString(currentNote->getModified())));
+        readPanel->setText(QString::fromStdString(datetimeToString(currentNote->getRead())));
+        readsPanel->setText(QString::number(currentNote->getReads()));
+        writesPanel->setText(QString::number(currentNote->getRevision()));
         locationLine->setText(QString::fromStdString(currentNote->getOutlineKey()));
     }
 

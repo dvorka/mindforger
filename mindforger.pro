@@ -110,7 +110,8 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     src/qt/widgets/edit_name_and_buttons_panel.h \
     src/qt/dialogs/note_edit_dialog.h \
     src/qt/dialogs/configuration_dialog.h \
-    src/qt/widgets/edit_tags_panel.h
+    src/qt/widgets/edit_tags_panel.h \
+    src/qt/widgets/labeled_edit_line_panel.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
@@ -193,7 +194,8 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/widgets/edit_name_and_buttons_panel.cpp \
     src/qt/dialogs/note_edit_dialog.cpp \
     src/qt/dialogs/configuration_dialog.cpp \
-    src/qt/widgets/edit_tags_panel.cpp
+    src/qt/widgets/edit_tags_panel.cpp \
+    src/qt/widgets/labeled_edit_line_panel.cpp
 
 # Development environment remarks:
 # - Beast: GCC 5.4.0, Qt 5.5.1

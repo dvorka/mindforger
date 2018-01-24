@@ -80,23 +80,23 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionExit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Q));
     actionExit->setStatusTip(QString::fromUtf8("Leave application"));
 
-    menuMindForger = qMenuBar->addMenu(QString::fromUtf8("&Mind"));
+    menuMind = qMenuBar->addMenu(QString::fromUtf8("&Mind"));
 #ifdef DO_MF_DEBUG
-    menuMindForger->addAction(actionMindHack);
+    menuMind->addAction(actionMindHack);
 #endif
-    menuMindForger->addAction(actionMindDevise);
-    menuMindForger->addAction(actionMindLearn);
-    menuMindForger->addAction(actionMindRemember);
-    menuMindForger->addAction(actionMindRemind);
-    menuMindForger->addAction(actionMindAssociate);
-    menuMindForger->addAction(actionMindThink);
-    menuMindForger->addAction(actionMindForget);
-    menuMindForger->addAction(actionMindDream);
-    menuMindForger->addSeparator();
-    menuMindForger->addAction(actionMindSnapshot);
-    menuMindForger->addAction(actionMindPreferences);
-    menuMindForger->addSeparator();
-    menuMindForger->addAction(actionExit);
+    menuMind->addAction(actionMindDevise);
+    menuMind->addAction(actionMindLearn);
+    menuMind->addAction(actionMindRemember);
+    menuMind->addAction(actionMindRemind);
+    menuMind->addAction(actionMindAssociate);
+    menuMind->addAction(actionMindThink);
+    menuMind->addAction(actionMindForget);
+    menuMind->addAction(actionMindDream);
+    menuMind->addSeparator();
+    menuMind->addAction(actionMindSnapshot);
+    menuMind->addAction(actionMindPreferences);
+    menuMind->addSeparator();
+    menuMind->addAction(actionExit);
 
     // menu: recall
 
@@ -254,24 +254,25 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     //actionFormatTable->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
     actionFormatTable->setStatusTip(QString::fromUtf8("Insert table"));
 
-    menuEdit = qMenuBar->addMenu(QString::fromUtf8("&Format"));
-    menuEdit->addAction(actionFormatBold);
-    menuEdit->addAction(actionFormatItalic);
-    menuEdit->addAction(actionFormatCode);
-    menuEdit->addAction(actionFormatStrikethrough);
-    menuEdit->addAction(actionFormatHighlight);
-    menuEdit->addAction(actionFormatSubscript);
-    menuEdit->addAction(actionFormatSuperscript);
-    menuEdit->addSeparator();
-    menuEdit->addAction(actionFormatListBullet);
-    menuEdit->addAction(actionFormatListNumber);
-    menuEdit->addSeparator();
-    menuEdit->addAction(actionFormatCodeBlock);
-    menuEdit->addAction(actionFormatBlockQuote);
-    menuEdit->addSeparator();
-    menuEdit->addAction(actionFormatLink);
-    menuEdit->addAction(actionFormatImage);
-    menuEdit->addAction(actionFormatTable);
+    menuFormat = qMenuBar->addMenu(QString::fromUtf8("&Format"));
+    menuFormat->addAction(actionFormatBold);
+    menuFormat->addAction(actionFormatItalic);
+    menuFormat->addAction(actionFormatCode);
+    menuFormat->addAction(actionFormatStrikethrough);
+    menuFormat->addAction(actionFormatHighlight);
+    menuFormat->addAction(actionFormatSubscript);
+    menuFormat->addAction(actionFormatSuperscript);
+    menuFormat->addSeparator();
+    menuFormat->addAction(actionFormatListBullet);
+    menuFormat->addAction(actionFormatListNumber);
+    menuFormat->addSeparator();
+    menuFormat->addAction(actionFormatCodeBlock);
+    menuFormat->addAction(actionFormatBlockQuote);
+    menuFormat->addSeparator();
+    menuFormat->addAction(actionFormatLink);
+    menuFormat->addAction(actionFormatImage);
+    menuFormat->addAction(actionFormatTable);
+    menuFormat->setEnabled(false);
 
     // menu: outline
 
@@ -382,6 +383,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNote->addSeparator();
     menuNote->addAction(actionNoteExport);
     menuNote->addAction(actionNoteImport);
+    menuNote->setEnabled(false);
 
     // menu: help
 
@@ -414,6 +416,35 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 MainMenuView::~MainMenuView()
 {
     // TODO deletes (menus DO not delete > menuBar creates them)
+}
+
+void MainMenuView::showAllMenuItems()
+{
+    menuMind->setEnabled(true);
+    menuFind->setEnabled(true);
+    menuView->setEnabled(true);
+    menuOutline->setEnabled(true);
+    menuNote->setEnabled(true);
+    menuFormat->setEnabled(true);
+    menuHelp->setEnabled(true);
+}
+
+void MainMenuView::showFacetOutlineList()
+{
+    showAllMenuItems();
+    menuFormat->setEnabled(false);
+    menuNote->setEnabled(false);
+}
+
+void MainMenuView::showFacetOutlineView()
+{
+    showAllMenuItems();
+    menuFormat->setEnabled(false);
+}
+
+void MainMenuView::showFacetNoteEdit()
+{
+    showAllMenuItems();
 }
 
 }

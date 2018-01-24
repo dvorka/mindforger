@@ -46,13 +46,12 @@ private:
     QMenuBar* qMenuBar;
 
 public:    
-    QMenu* menuMindForger;
+    QMenu* menuMind;
     QMenu* menuFind;
     QMenu* menuView;
     QMenu* menuOutline;
     QMenu* menuNote;
-    QMenu* menuEdit;
-    QMenu* menuTools;
+    QMenu* menuFormat;
     QMenu* menuHelp;
 
 #ifdef DO_MF_DEBUG
@@ -151,6 +150,13 @@ public:
     MainMenuView &operator=(const MainMenuView&) = delete;
     MainMenuView &operator=(const MainMenuView&&) = delete;
     virtual ~MainMenuView();
+
+    void showFacetOutlineList();
+    void showFacetOutlineView();
+    void showFacetNoteEdit();
+
+private:
+    void showAllMenuItems();
 
 private slots:
     void slotShowCli() { emit showCli(); }
