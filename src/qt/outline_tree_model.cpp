@@ -38,6 +38,7 @@ void OutlineTreeModel::removeAllRows(void)
     QStringList tableHeader;
     tableHeader
             << tr("Notes")
+            << tr("Done")
             << tr("Rs")
             << tr("Ws")
             << tr("Modified");
@@ -49,17 +50,23 @@ void OutlineTreeModel::addRow(Note* note)
     QList<QStandardItem*> items;
 
     QString s;
-    QString title;
+
+    QString title;    
     createTitleText(title, note);
-
-    // IMPROVE refactor to methods
-
     QStandardItem* noteItem = new QStandardItem(title);
     // TODO set role
     noteItem->setData(QVariant::fromValue(note));
     items.append(noteItem);
+
+    s.clear();
+    s += QString::number(note->getProgress());
+    s += "%";
+    items.append(new QStandardItem(s));
+
     items.append(new QStandardItem(QString::number(note->getReads())));
+
     items.append(new QStandardItem(QString::number(note->getRevision())));
+
     s = note->getModifiedPretty().c_str();
     items.append(new QStandardItem(s));
 
@@ -94,10 +101,16 @@ void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
         createTitleText(s, note);
         // refresh content
         item(row,0)->setText(s);
-        item(row,1)->setText(QString::number(note->getReads()));
-        item(row,2)->setText(QString::number(note->getRevision()));
+
+        s.clear();
+        s += QString::number(note->getProgress());
+        s += "%";
+        item(row,1)->setText(s);
+
+        item(row,2)->setText(QString::number(note->getReads()));
+        item(row,3)->setText(QString::number(note->getRevision()));
         s = note->getModifiedPretty().c_str();
-        item(row,3)->setText(s);
+        item(row,4)->setText(s);
 
         QModelIndex from = createIndex(row, 0, item(row,0));
         QModelIndex to = createIndex(row, 3, item(row,3));

@@ -92,9 +92,13 @@ void OutlineTreeView::paintEvent(QPaintEvent* event)
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
-    this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*5);
+    // progress
+    this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*6);
+    // rd/wr
     this->setColumnWidth(2, this->fontMetrics().averageCharWidth()*5);
-    this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*12);
+    this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*5);
+    // pretty
+    this->setColumnWidth(4, this->fontMetrics().averageCharWidth()*12);
 
     QTableView::paintEvent(event);
 }
