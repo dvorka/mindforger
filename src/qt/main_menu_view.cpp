@@ -25,62 +25,60 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 {
     qMenuBar = mainWindow->getMenuBar();
 
-    // TODO tr() for all menu items
-
     // menu: mind
 
 #ifdef DO_MF_DEBUG
-    actionMindHack = new QAction(QString::fromUtf8("Mind Hack"), mainWindow);
-    actionMindHack->setStatusTip(QString::fromUtf8("Mind hacking and debugging hook"));
+    actionMindHack = new QAction(tr("Mind Hack"), mainWindow);
+    actionMindHack->setStatusTip(tr("Mind hacking and debugging hook"));
     actionMindHack->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
 #endif
 
     // devise... new MD repository
-    actionMindDevise = new QAction(QString::fromUtf8("&Devise"), mainWindow);
-    actionMindDevise->setStatusTip(QString::fromUtf8("Create new MD repository to form new combinations, applications, ideas or principles"));
+    actionMindDevise = new QAction(tr("&Devise"), mainWindow);
+    actionMindDevise->setStatusTip(tr("Create new MD repository to form new combinations, applications, ideas or principles"));
 
     // learn... from a repository, Markdown or TXT file
-    actionMindLearn = new QAction(QString::fromUtf8("&Learn"), mainWindow);
+    actionMindLearn = new QAction(tr("&Learn"), mainWindow);
     // IMPROVE show RECENT repositories and files in the dialog
-    actionMindLearn->setStatusTip(QString::fromUtf8("Learn notes by loading a MindForger repository, Markdown repository or file"));
+    actionMindLearn->setStatusTip(tr("Learn notes by loading a MindForger repository, Markdown repository or file"));
 
     // remember... by flushing caches and saving unsaved notes
-    actionMindRemember = new QAction(QString::fromUtf8("Re&member"), mainWindow);
-    actionMindRemember->setStatusTip(QString::fromUtf8("Remember notes by ensuring memory persistence"));
+    actionMindRemember = new QAction(tr("Re&member"), mainWindow);
+    actionMindRemember->setStatusTip(tr("Remember notes by ensuring memory persistence"));
 
     // remind ... smart mind search using FTS/associations/similarity
-    actionMindRemind = new QAction(QString::fromUtf8("&Remind"), mainWindow);
+    actionMindRemind = new QAction(tr("&Remind"), mainWindow);
     // IMPROVE show memory dwell as a base for reminding a note
-    actionMindRemind->setStatusTip(QString::fromUtf8("Remind a Note by searching memory dwell, associations and similar notes"));
+    actionMindRemind->setStatusTip(tr("Remind a Note by searching memory dwell, associations and similar notes"));
 
     // associate ... discover associated notes
-    actionMindAssociate = new QAction(QString::fromUtf8("&Associate"), mainWindow);
-    actionMindAssociate->setStatusTip(QString::fromUtf8("Discover related notes"));
+    actionMindAssociate = new QAction(tr("&Associate"), mainWindow);
+    actionMindAssociate->setStatusTip(tr("Discover Notes associated with current Outline or Note"));
 
     // think ... toggle mental processes ~ enable associations/similarity/search based suggestions on searching/reading/writing notes
-    actionMindThink = new QAction(QString::fromUtf8("&Think"), mainWindow);
-    actionMindThink->setStatusTip(QString::fromUtf8("Toggle ability to suggest matching, similar and associated notes on searching, reading and writing"));
+    actionMindThink = new QAction(tr("&Think"), mainWindow);
+    actionMindThink->setStatusTip(tr("Toggle suggestions of matching, similar and associated notes while searching, reading and writing"));
 
     // forget ... don't show any note older than 1Y/3M/...
-    actionMindForget = new QAction(QString::fromUtf8("&Forget"), mainWindow);
-    actionMindForget->setStatusTip(QString::fromUtf8("Don't show notes older than..."));
+    actionMindForget = new QAction(tr("&Forget"), mainWindow);
+    actionMindForget->setStatusTip(tr("Don't show notes older than..."));
 
     // dream ... sanity, integrity, detox, inference, assoc discovery, ...
-    actionMindDream = new QAction(QString::fromUtf8("Dr&eam"), mainWindow);
-    actionMindDream->setStatusTip(QString::fromUtf8("Tidy up, clean and optimize memory which is otherwise done on your inactivity"));
+    actionMindDream = new QAction(tr("Dr&eam"), mainWindow);
+    actionMindDream->setStatusTip(tr("Tidy up, clean and optimize memory which is otherwise done on your inactivity"));
 
     actionMindSnapshot = new QAction(tr("D&ump"), mainWindow);
-    actionMindSnapshot->setStatusTip(QString::fromUtf8("Create backup archive of the current repository"));
+    actionMindSnapshot->setStatusTip(tr("Create backup archive of the current repository"));
 
-    actionMindPreferences = new QAction(QString::fromUtf8("&Preferences"), mainWindow);
+    actionMindPreferences = new QAction(tr("&Preferences"), mainWindow);
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
-    actionMindPreferences->setStatusTip(QString::fromUtf8("Open preferences..."));
+    actionMindPreferences->setStatusTip(tr("Open preferences..."));
 
-    actionExit = new QAction(QString::fromUtf8("E&xit"), mainWindow);
+    actionExit = new QAction(tr("E&xit"), mainWindow);
     actionExit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Q));
-    actionExit->setStatusTip(QString::fromUtf8("Leave application"));
+    actionExit->setStatusTip(tr("Leave application"));
 
-    menuMind = qMenuBar->addMenu(QString::fromUtf8("&Mind"));
+    menuMind = qMenuBar->addMenu(tr("&Mind"));
 #ifdef DO_MF_DEBUG
     menuMind->addAction(actionMindHack);
 #endif
@@ -101,79 +99,77 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: recall
 
     // TODO tr()
-    actionFts = new QAction(QString::fromUtf8("&Full-text Search"), mainWindow);
+    actionFts = new QAction(tr("&Full-text Search"), mainWindow);
     actionFts->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
-    actionFts->setStatusTip(QString::fromUtf8("Note full-text search"));
+    actionFts->setStatusTip(tr("Note full-text search"));
 
-    actionFindOutlineByName = new QAction(QString::fromUtf8("Recall &Outline by Name"), mainWindow);
+    actionFindOutlineByName = new QAction(tr("Recall &Outline by Name"), mainWindow);
     actionFindOutlineByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
-    actionFindOutlineByName->setStatusTip(QString::fromUtf8("Find outline by name"));
+    actionFindOutlineByName->setStatusTip(tr("Find outline by name"));
 
-    actionFindNoteByName = new QAction(QString::fromUtf8("Recall &Note by Name"), mainWindow);
+    actionFindNoteByName = new QAction(tr("Recall &Note by Name"), mainWindow);
     actionFindNoteByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
-    actionFindNoteByName->setStatusTip(QString::fromUtf8("Find note by name"));
+    actionFindNoteByName->setStatusTip(tr("Find note by name"));
 
-    actionFindTagByName = new QAction(QString::fromUtf8("Recall &Tag by Name"), mainWindow);
+    actionFindTagByName = new QAction(tr("Recall &Tag by Name"), mainWindow);
     actionFindTagByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
-    actionFindTagByName->setStatusTip(QString::fromUtf8("Find tag by name"));
+    actionFindTagByName->setStatusTip(tr("Find tag by name"));
 
-    menuFind = qMenuBar->addMenu(QString::fromUtf8("&Recall"));
+    menuFind = qMenuBar->addMenu(tr("&Recall"));
     menuFind->addAction(actionFts);
     menuFind->addAction(actionFindOutlineByName);
     menuFind->addAction(actionFindNoteByName);
     menuFind->addAction(actionFindTagByName);
 
     // menu: view
-    actionViewHome = new QAction(QString::fromUtf8("&Home"), mainWindow);
-    actionViewHome->setStatusTip(QString::fromUtf8("Open Home"));
+    actionViewHome = new QAction(tr("&Home"), mainWindow);
+    actionViewHome->setStatusTip(tr("Open Home"));
     actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
 
-    actionViewOrganizer = new QAction(QString::fromUtf8("O&rganizer"), mainWindow);
-    actionViewOrganizer->setStatusTip(QString::fromUtf8("Open Organizer"));
-    //actionViewHome->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
+    actionViewOrganizer = new QAction(tr("O&rganizer"), mainWindow);
+    actionViewOrganizer->setStatusTip(tr("Open Organizer"));
 
-    actionViewOutlines = new QAction(QString::fromUtf8("&Outlines"), mainWindow);
+    actionViewOutlines = new QAction(tr("&Outlines"), mainWindow);
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
-    actionViewOutlines->setStatusTip(QString::fromUtf8("Show list of Outlines"));
+    actionViewOutlines->setStatusTip(tr("Show list of Outlines"));
 
-    actionViewNavigator = new QAction(QString::fromUtf8("&Navigator"), mainWindow);
-    actionViewNavigator->setStatusTip(QString::fromUtf8("Open Navigator"));
-    //actionViewHome->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
+    actionViewNavigator = new QAction(tr("&Navigator"), mainWindow);
+    actionViewNavigator->setStatusTip(tr("Open Navigator"));
 
-    actionViewDwell = new QAction(QString::fromUtf8("&Memory Dwell"), mainWindow);
-    actionViewDwell->setStatusTip(QString::fromUtf8("Open memory dwell"));
+    actionViewDwell = new QAction(tr("&Memory Dwell"), mainWindow);
+    actionViewDwell->setStatusTip(tr("Open memory dwell"));
 
 #ifdef DO_MF_DEBUG
-    actionViewCli = new QAction(QString::fromUtf8("&CLI"), mainWindow);
+    actionViewCli = new QAction(tr("&CLI"), mainWindow);
     actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
-    actionViewCli->setStatusTip(QString::fromUtf8("Toggle command line"));
+    actionViewCli->setStatusTip(tr("Toggle command line"));
 #else
     cliShortcut = new QShortcut(QKeySequence(Qt::ALT+Qt::Key_X), mainWindow);
     QObject::connect(cliShortcut, SIGNAL(activated()), this, SLOT(slotShowCli()));
 #endif
 
-    actionViewToggleRecent = new QAction(QString::fromUtf8("&Recent Notes"), mainWindow);
-    actionViewToggleRecent->setStatusTip(QString::fromUtf8("View recently modified Notes"));
+    actionViewToggleRecent = new QAction(tr("&Recent Notes"), mainWindow);
+    actionViewToggleRecent->setStatusTip(tr("View recently modified Notes"));
     actionViewToggleRecent->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_R));
 
-    actionViewStencils = new QAction(QString::fromUtf8("&Stencils"), mainWindow);
+    actionViewStencils = new QAction(tr("&Stencils"), mainWindow);
     // Outline/Note marked w/ tag stencil is MOVED among stencils (NOT indexed/searched/...)
     //  + Stencil view allows making a stencil outline again
     //  + Note stencils are notes in a given Outline
-    actionViewStencils->setStatusTip(QString::fromUtf8("List outline and note stencils..."));
+    actionViewStencils->setStatusTip(tr("List outline and note stencils..."));
 
-    actionViewLimbo = new QAction(QString::fromUtf8("&Limbo"), mainWindow);
-    actionViewLimbo->setStatusTip(QString::fromUtf8("List forgotten outlines and notes..."));
+    actionViewLimbo = new QAction(tr("&Limbo"), mainWindow);
+    actionViewLimbo->setStatusTip(tr("List forgotten outlines and notes..."));
 
-    actionViewDistractionFree = new QAction(QString::fromUtf8("&Distraction Free"), mainWindow);
+    actionViewDistractionFree = new QAction(tr("&Distraction Free"), mainWindow);
     actionViewDistractionFree->setShortcut(QKeySequence(Qt::Key_F5));
-    actionViewDistractionFree->setStatusTip(QString::fromUtf8("Toggle distraction free mode"));
+    actionViewDistractionFree->setStatusTip(tr("Toggle distraction free mode"));
 
-    actionViewFullscreen = new QAction(QString::fromUtf8("&Fullscreen"), mainWindow);
+    actionViewFullscreen = new QAction(tr("&Fullscreen"), mainWindow);
     actionViewFullscreen->setShortcut(tr("F11"));
-    actionViewFullscreen->setStatusTip(QString::fromUtf8("Fullscreen"));
+    actionViewFullscreen->setStatusTip(tr("Fullscreen"));
 
-    menuView = qMenuBar->addMenu(QString::fromUtf8("&View"));
+    menuView = qMenuBar->addMenu(tr("&View"));
     menuView->addAction(actionViewHome);
     menuView->addAction(actionViewOrganizer);
     menuView->addAction(actionViewOutlines);
@@ -192,69 +188,55 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: format
 
-    actionFormatBold = new QAction(QString::fromUtf8("&Bold"), mainWindow);
-    //actionFormatBold->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
-    actionFormatBold->setStatusTip(QString::fromUtf8("Format text as bold"));
+    actionFormatBold = new QAction(tr("&Bold"), mainWindow);
+    actionFormatBold->setStatusTip(tr("Format text as bold"));
 
-    actionFormatItalic = new QAction(QString::fromUtf8("&Italic"), mainWindow);
-    //actionFormatItalic->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
-    actionFormatItalic->setStatusTip(QString::fromUtf8("Format text as italic"));
+    actionFormatItalic = new QAction(tr("&Italic"), mainWindow);
+    actionFormatItalic->setStatusTip(tr("Format text as italic"));
 
-    actionFormatCode = new QAction(QString::fromUtf8("&Code"), mainWindow);
-    //actionFormatCode->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
-    actionFormatCode->setStatusTip(QString::fromUtf8("Format text as inlined source code"));
+    actionFormatCode = new QAction(tr("&Code"), mainWindow);
+    actionFormatCode->setStatusTip(tr("Format text as inlined source code"));
 
-    actionFormatStrikethrough = new QAction(QString::fromUtf8("&Strikethrough"), mainWindow);
-    //actionFormatStrikethrough->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
-    actionFormatStrikethrough->setStatusTip(QString::fromUtf8("Format text as strikethrough"));
+    actionFormatStrikethrough = new QAction(tr("&Strikethrough"), mainWindow);
+    actionFormatStrikethrough->setStatusTip(tr("Format text as strikethrough"));
 
-    actionFormatHighlight = new QAction(QString::fromUtf8("&Highlight"), mainWindow);
-    //actionFormatHighlight->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
-    actionFormatHighlight->setStatusTip(QString::fromUtf8("Format text as highlighted"));
+    actionFormatHighlight = new QAction(tr("&Highlight"), mainWindow);
+    actionFormatHighlight->setStatusTip(tr("Format text as highlighted"));
 
-    actionFormatSubscript = new QAction(QString::fromUtf8("Subscript"), mainWindow);
-    //actionFormatSubscript->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
-    actionFormatSubscript->setStatusTip(QString::fromUtf8("Format text as subscript"));
+    actionFormatSubscript = new QAction(tr("Subscript"), mainWindow);
+    actionFormatSubscript->setStatusTip(tr("Format text as subscript"));
 
-    actionFormatSuperscript = new QAction(QString::fromUtf8("Superscript"), mainWindow);
-    //actionFormatSubscript->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
-    actionFormatSuperscript->setStatusTip(QString::fromUtf8("Format text as superscript"));
+    actionFormatSuperscript = new QAction(tr("Superscript"), mainWindow);
+    actionFormatSuperscript->setStatusTip(tr("Format text as superscript"));
 
     // ---
 
-    actionFormatListBullet = new QAction(QString::fromUtf8("Bulleted List"), mainWindow);
-    //actionFormatListBullet->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
-    actionFormatListBullet->setStatusTip(QString::fromUtf8("Format block as bulleted list"));
+    actionFormatListBullet = new QAction(tr("Bulleted List"), mainWindow);
+    actionFormatListBullet->setStatusTip(tr("Format block as bulleted list"));
 
-    actionFormatListNumber = new QAction(QString::fromUtf8("Numbered List"), mainWindow);
-    //actionFormatListNumber->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
-    actionFormatListNumber->setStatusTip(QString::fromUtf8("Format block as numbered list"));
+    actionFormatListNumber = new QAction(tr("Numbered List"), mainWindow);
+    actionFormatListNumber->setStatusTip(tr("Format block as numbered list"));
 
     // ---
 
-    actionFormatCodeBlock = new QAction(QString::fromUtf8("C&ode Block"), mainWindow);
-    //actionFormatCodeBlock->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
-    actionFormatCodeBlock->setStatusTip(QString::fromUtf8("Format text block as source code"));
+    actionFormatCodeBlock = new QAction(tr("C&ode Block"), mainWindow);
+    actionFormatCodeBlock->setStatusTip(tr("Format text block as source code"));
 
-    actionFormatBlockQuote = new QAction(QString::fromUtf8("Block &Quote"), mainWindow);
-    //actionFormatBlockQuote->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
-    actionFormatBlockQuote->setStatusTip(QString::fromUtf8("Format text block as blockquote"));
+    actionFormatBlockQuote = new QAction(tr("Block &Quote"), mainWindow);
+    actionFormatBlockQuote->setStatusTip(tr("Format text block as blockquote"));
 
     // ---
 
-    actionFormatLink = new QAction(QString::fromUtf8("&Link"), mainWindow);
-    //actionFormatLink->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
-    actionFormatLink->setStatusTip(QString::fromUtf8("Insert link to a document, image or file"));
+    actionFormatLink = new QAction(tr("&Link"), mainWindow);
+    actionFormatLink->setStatusTip(tr("Insert link to a document, image or file"));
 
-    actionFormatImage = new QAction(QString::fromUtf8("I&mage"), mainWindow);
-    //actionFormatImage->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
-    actionFormatImage->setStatusTip(QString::fromUtf8("Insert image"));
+    actionFormatImage = new QAction(tr("I&mage"), mainWindow);
+    actionFormatImage->setStatusTip(tr("Insert image"));
 
-    actionFormatTable = new QAction(QString::fromUtf8("&Table"), mainWindow);
-    //actionFormatTable->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
-    actionFormatTable->setStatusTip(QString::fromUtf8("Insert table"));
+    actionFormatTable = new QAction(tr("&Table"), mainWindow);
+    actionFormatTable->setStatusTip(tr("Insert table"));
 
-    menuFormat = qMenuBar->addMenu(QString::fromUtf8("&Format"));
+    menuFormat = qMenuBar->addMenu(tr("&Format"));
     menuFormat->addAction(actionFormatBold);
     menuFormat->addAction(actionFormatItalic);
     menuFormat->addAction(actionFormatCode);
@@ -276,26 +258,26 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: outline
 
-    actionOutlineNew = new QAction(QString::fromUtf8("&Devise"), mainWindow);
-    actionOutlineNew->setStatusTip(QString::fromUtf8("Create new Outline to form new combinations, applications, ideas or principles"));
+    actionOutlineNew = new QAction(tr("&Devise"), mainWindow);
+    actionOutlineNew->setStatusTip(tr("Create new Outline to form new combinations, applications, ideas or principles"));
 
-    actionOutlineOpen = new QAction(QString::fromUtf8("Rec&all"), mainWindow);
+    actionOutlineOpen = new QAction(tr("Rec&all"), mainWindow);
     actionOutlineOpen->setShortcut(tr("Ctrl-Shift-O"));
-    actionOutlineOpen->setStatusTip(QString::fromUtf8("Open outline by name"));
+    actionOutlineOpen->setStatusTip(tr("Open outline by name"));
 
-    actionOutlineClone = new QAction(QString::fromUtf8("C&lone"), mainWindow);
-    actionOutlineClone->setStatusTip(QString::fromUtf8("Make copy of the current outline..."));
+    actionOutlineClone = new QAction(tr("C&lone"), mainWindow);
+    actionOutlineClone->setStatusTip(tr("Make copy of the current outline..."));
 
-    actionOutlineForget = new QAction(QString::fromUtf8("&Forget"), mainWindow);
-    actionOutlineForget->setStatusTip(QString::fromUtf8("Forget Outline and move it to Limbo"));
+    actionOutlineForget = new QAction(tr("&Forget"), mainWindow);
+    actionOutlineForget->setStatusTip(tr("Forget Outline and move it to Limbo"));
 
-    actionOutlineExport = new QAction(QString::fromUtf8("Dump"), mainWindow);
-    actionOutlineExport->setStatusTip(QString::fromUtf8("Export Outline to a file in supported format"));
+    actionOutlineExport = new QAction(tr("Dump"), mainWindow);
+    actionOutlineExport->setStatusTip(tr("Export Outline to a file in supported format"));
 
-    actionOutlineImport = new QAction(QString::fromUtf8("Learn"), mainWindow);
-    actionOutlineImport->setStatusTip(QString::fromUtf8("Import Outline from an external file in a supported format"));
+    actionOutlineImport = new QAction(tr("Learn"), mainWindow);
+    actionOutlineImport->setStatusTip(tr("Import Outline from an external file in a supported format"));
 
-    menuOutline = qMenuBar->addMenu(QString::fromUtf8("&Outline"));
+    menuOutline = qMenuBar->addMenu(tr("&Outline"));
     menuOutline->addAction(actionOutlineNew);
     menuOutline->addAction(actionOutlineOpen);
     menuOutline->addAction(actionOutlineForget);
@@ -307,62 +289,62 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: note
 
-    actionNoteNew = new QAction(QString::fromUtf8("&Devise"), mainWindow);
-    actionNoteNew->setStatusTip(QString::fromUtf8("Create new note to form new combinations, applications, ideas or principles"));
+    actionNoteNew = new QAction(tr("&Devise"), mainWindow);
+    actionNoteNew->setStatusTip(tr("Create new note to form new combinations, applications, ideas or principles"));
 
-    actionNoteOpen = new QAction(QString::fromUtf8("Rec&all"), mainWindow);
-    actionNoteOpen->setStatusTip(QString::fromUtf8("Find note by name in the current outline..."));
+    actionNoteOpen = new QAction(tr("Rec&all"), mainWindow);
+    actionNoteOpen->setStatusTip(tr("Find note by name in the current outline..."));
 
-    actionNoteSave = new QAction(QString::fromUtf8("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
-    actionNoteSave->setStatusTip(QString::fromUtf8("Save note being edited"));
+    actionNoteSave = new QAction(tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
+    actionNoteSave->setStatusTip(tr("Save note being edited"));
 
-    actionNoteForget = new QAction(QString::fromUtf8("&Forget"), mainWindow);
-    actionNoteForget->setStatusTip(QString::fromUtf8("Forget note"));
+    actionNoteForget = new QAction(tr("&Forget"), mainWindow);
+    actionNoteForget->setStatusTip(tr("Forget note"));
 
-    actionNoteClose = new QAction(QString::fromUtf8("&Leave\tAlt+Left"), mainWindow); // Alt+Left is handled elsewhere and I don't want menu to handle it
-    actionNoteClose->setStatusTip(QString::fromUtf8("Save leave editor of Note being changed"));
+    actionNoteClose = new QAction(tr("&Leave\tAlt+Left"), mainWindow); // Alt+Left is handled elsewhere and I don't want menu to handle it
+    actionNoteClose->setStatusTip(tr("Save leave editor of Note being changed"));
 
-    actionNoteFirst = new QAction(QString::fromUtf8("&Top"), mainWindow);
+    actionNoteFirst = new QAction(tr("&Top"), mainWindow);
     actionNoteFirst->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_T));
-    actionNoteFirst->setStatusTip(QString::fromUtf8("Move note to be the first child of its parent"));
+    actionNoteFirst->setStatusTip(tr("Move note to be the first child of its parent"));
 
-    actionNoteUp = new QAction(QString::fromUtf8("&Up"), mainWindow);
+    actionNoteUp = new QAction(tr("&Up"), mainWindow);
     actionNoteUp->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Up));
-    actionNoteUp->setStatusTip(QString::fromUtf8("Move note up"));
+    actionNoteUp->setStatusTip(tr("Move note up"));
 
-    actionNotePromote = new QAction(QString::fromUtf8("&Promote"), mainWindow);
+    actionNotePromote = new QAction(tr("&Promote"), mainWindow);
     actionNotePromote->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Right));
-    actionNotePromote->setStatusTip(QString::fromUtf8("Promote note"));
+    actionNotePromote->setStatusTip(tr("Promote note"));
 
-    actionNoteDemote = new QAction(QString::fromUtf8("D&emote"), mainWindow);
+    actionNoteDemote = new QAction(tr("D&emote"), mainWindow);
     actionNoteDemote->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Left));
-    actionNoteDemote->setStatusTip(QString::fromUtf8("Demote note"));
+    actionNoteDemote->setStatusTip(tr("Demote note"));
 
-    actionNoteDown = new QAction(QString::fromUtf8("Do&wn"), mainWindow);
+    actionNoteDown = new QAction(tr("Do&wn"), mainWindow);
     actionNoteDown->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Down));
-    actionNoteDown->setStatusTip(QString::fromUtf8("Move note down"));
+    actionNoteDown->setStatusTip(tr("Move note down"));
 
-    actionNoteLast = new QAction(QString::fromUtf8("&Bottom"), mainWindow);
+    actionNoteLast = new QAction(tr("&Bottom"), mainWindow);
     actionNoteLast->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));
-    actionNoteLast->setStatusTip(QString::fromUtf8("Move note to be the last child of its parent"));
+    actionNoteLast->setStatusTip(tr("Move note to be the last child of its parent"));
 
     // TODO Attach vs. COPY to repository
-    actionNoteAttach = new QAction(QString::fromUtf8("&Attach"), mainWindow);
-    actionNoteAttach->setStatusTip(QString::fromUtf8("Attach a document (by value) to note and create link to it..."));
+    actionNoteAttach = new QAction(tr("&Attach"), mainWindow);
+    actionNoteAttach->setStatusTip(tr("Attach a document (by value) to note and create link to it..."));
 
-    actionNoteRefactor = new QAction(QString::fromUtf8("&Refactor"), mainWindow);
-    actionNoteRefactor->setStatusTip(QString::fromUtf8("Refactor note to another outline..."));
+    actionNoteRefactor = new QAction(tr("&Refactor"), mainWindow);
+    actionNoteRefactor->setStatusTip(tr("Refactor note to another outline..."));
 
-    actionNoteClone = new QAction(QString::fromUtf8("&Clone"), mainWindow);
-    actionNoteClone->setStatusTip(QString::fromUtf8("Make a copy of the Note to this or other outline..."));
+    actionNoteClone = new QAction(tr("&Clone"), mainWindow);
+    actionNoteClone->setStatusTip(tr("Make a copy of the Note to this or other outline..."));
 
-    actionNoteExport = new QAction(QString::fromUtf8("Dump"), mainWindow);
-    actionNoteExport->setStatusTip(QString::fromUtf8("Export Note to an external file in a supported format"));
+    actionNoteExport = new QAction(tr("Dump"), mainWindow);
+    actionNoteExport->setStatusTip(tr("Export Note to an external file in a supported format"));
 
-    actionNoteImport = new QAction(QString::fromUtf8("Learn"), mainWindow);
-    actionNoteImport->setStatusTip(QString::fromUtf8("Import Note from an external file in a supported format"));
+    actionNoteImport = new QAction(tr("Learn"), mainWindow);
+    actionNoteImport->setStatusTip(tr("Import Note from an external file in a supported format"));
 
-    menuNote = qMenuBar->addMenu(QString::fromUtf8("&Note"));
+    menuNote = qMenuBar->addMenu(tr("&Note"));
     menuNote->addAction(actionNoteNew);
     menuNote->addAction(actionNoteOpen);
     menuNote->addAction(actionNoteSave);
@@ -386,23 +368,23 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: help
 
-    actionHelpDocumentation = new QAction(QString::fromUtf8("&Documentation"), mainWindow);
+    actionHelpDocumentation = new QAction(tr("&Documentation"), mainWindow);
     actionHelpDocumentation->setShortcut(tr("F1"));
-    actionHelpDocumentation->setStatusTip(QString::fromUtf8("Open MindForger documentation"));
+    actionHelpDocumentation->setStatusTip(tr("Open MindForger documentation"));
 
-    actionHelpWeb = new QAction(QString::fromUtf8("&Web"), mainWindow);
-    actionHelpWeb->setStatusTip(QString::fromUtf8("Open MindForger web"));
+    actionHelpWeb = new QAction(tr("&Web"), mainWindow);
+    actionHelpWeb->setStatusTip(tr("Open MindForger web"));
 
-    actionHelpReportBug = new QAction(QString::fromUtf8("Report &Bug or Request Feature"), mainWindow);
-    actionHelpReportBug->setStatusTip(QString::fromUtf8("Report bug or suggest an enhancement"));
+    actionHelpReportBug = new QAction(tr("Report &Bug or Request Feature"), mainWindow);
+    actionHelpReportBug->setStatusTip(tr("Report bug or suggest an enhancement"));
 
-    actionHelpCheckForUpdates = new QAction(QString::fromUtf8("&Check for Updates"), mainWindow);
-    actionHelpCheckForUpdates->setStatusTip(QString::fromUtf8("Check for MindForger updates"));
+    actionHelpCheckForUpdates = new QAction(tr("&Check for Updates"), mainWindow);
+    actionHelpCheckForUpdates->setStatusTip(tr("Check for MindForger updates"));
 
-    actionHelpAbout = new QAction(QString::fromUtf8("&About MindForger"), mainWindow);
-    actionHelpAbout->setStatusTip(QString::fromUtf8("About MindForger..."));
+    actionHelpAbout = new QAction(tr("&About MindForger"), mainWindow);
+    actionHelpAbout->setStatusTip(tr("About MindForger..."));
 
-    menuHelp = qMenuBar->addMenu(QString::fromUtf8("&Help"));
+    menuHelp = qMenuBar->addMenu(tr("&Help"));
     menuHelp->addAction(actionHelpDocumentation);
     menuHelp->addAction(actionHelpWeb);
     menuHelp->addSeparator();
