@@ -22,8 +22,11 @@
 #include <QtWidgets>
 
 #include "note_edit_highlight.h"
+#include "widgets/line_number_panel.h"
 
 namespace m8r {
+
+class LineNumberPanel;
 
 class NoteEditorView : public QPlainTextEdit
 {
@@ -36,8 +39,10 @@ private:
     QCompleter *completer;
     QStringListModel *model;
 
+    bool enableLineNumbers;
+
 public:
-    explicit NoteEditorView(QWidget* parent);
+    explicit NoteEditorView(QWidget* parent, bool enableLineNubers=true);
     NoteEditorView(const NoteEditorView&) = delete;
     NoteEditorView(const NoteEditorView&&) = delete;
     NoteEditorView &operator=(const NoteEditorView&) = delete;
@@ -49,7 +54,7 @@ protected:
 
 private slots:
     void insertCompletion(const QString& completion, bool singleWord=false);
-    void highlightCurrentLine(void);
+    void highlightCurrentLine();
     void performCompletion(void);
 
 private:
@@ -60,6 +65,21 @@ private:
     void performCompletion(const QString &completionPrefix);
     bool handledCompletedAndSelected(QKeyEvent *event);
     void populateModel(const QString &completionPrefix);
+
+// line number panel
+public:
+    void lineNumberPanelPaintEvent(QPaintEvent *event);
+    int lineNumberPanelWidth();
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
+private slots:
+    void updateLineNumberPanelWidth(int newBlockCount);
+    void updateLineNumberPanel(const QRect &, int);
+
+private:
+    LineNumberPanel* lineNumberPanel;
 };
 
 }

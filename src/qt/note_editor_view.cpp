@@ -26,17 +26,22 @@ bool caseInsensitiveLessThan(const QString &a, const QString &b)
     return a.compare(b, Qt::CaseInsensitive) < 0;
 }
 
-NoteEditorView::NoteEditorView(QWidget* parent)
-    : QPlainTextEdit(parent), parent(parent), completedAndSelected(false)
+NoteEditorView::NoteEditorView(QWidget* parent, bool enableLineNumbers)
+    : QPlainTextEdit(parent), parent(parent), completedAndSelected(false), enableLineNumbers(enableLineNumbers)
 {
     createWidgets();
     createConnections();
     highlightCurrentLine();
+
+    updateLineNumberPanelWidth(0);
 }
 
 void NoteEditorView::createWidgets()
 {
     (void)new NoteEditHighlight(document());
+
+    lineNumberPanel = new LineNumberPanel(this);
+    lineNumberPanel->setVisible(enableLineNumbers);
 
     model = new QStringListModel(this);
     completer = new QCompleter(this);
@@ -48,8 +53,15 @@ void NoteEditorView::createWidgets()
     completer->setWrapAround(true);
 }
 
-void NoteEditorView::createConnections(void)
+void NoteEditorView::createConnections()
 {
+    QObject::connect(
+        this, SIGNAL(blockCountChanged(int)),
+        this, SLOT(updateLineNumberPanelWidth(int)));
+    QObject::connect(
+        this, SIGNAL(updateRequest(QRect,int)),
+        this, SLOT(updateLineNumberPanel(QRect,int)));
+
     QObject::connect(
         this, SIGNAL(cursorPositionChanged()),
         this, SLOT(highlightCurrentLine()));
@@ -175,17 +187,90 @@ void NoteEditorView::mousePressEvent(QMouseEvent* event)
     QPlainTextEdit::mousePressEvent(event);
 }
 
-void NoteEditorView::highlightCurrentLine(void)
+void NoteEditorView::highlightCurrentLine()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
-    QTextEdit::ExtraSelection selection;
-    QBrush highlightColor = palette().alternateBase();
-    selection.format.setBackground(highlightColor);
-    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-    selection.cursor = textCursor();
-    selection.cursor.clearSelection();
-    extraSelections.append(selection);
+    if (!isReadOnly()) {
+        QTextEdit::ExtraSelection selection;
+        //QColor lineColor = QColor(Qt::yellow).lighter(160);
+        QBrush highlightColor = palette().alternateBase();
+        selection.format.setBackground(highlightColor);
+        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+        selection.cursor = textCursor();
+        selection.cursor.clearSelection();
+        extraSelections.append(selection);
+    }
     setExtraSelections(extraSelections);
+}
+
+/*
+ * Line number rendering
+ */
+
+int NoteEditorView::lineNumberPanelWidth()
+{
+    if(enableLineNumbers) {
+        int digits = 1;
+        int max = qMax(1, blockCount());
+        while(max >= 10) {
+            max /= 10;
+            ++digits;
+        }
+        int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+        return space;
+    } else {
+        return 0;
+    }
+}
+
+void NoteEditorView::updateLineNumberPanelWidth(int /* newBlockCount */)
+{
+    // IMPROVE comment to parameter and ignore macro
+    setViewportMargins(lineNumberPanelWidth(), 0, 0, 0);
+}
+
+void NoteEditorView::updateLineNumberPanel(const QRect& r, int deltaY)
+{
+    if(deltaY) {
+        lineNumberPanel->scroll(0, deltaY);
+    } else {
+        lineNumberPanel->update(0, r.y(), lineNumberPanel->width(), r.height());
+    }
+
+    if (r.contains(viewport()->rect())) {
+        updateLineNumberPanelWidth(0);
+    }
+}
+
+void NoteEditorView::resizeEvent(QResizeEvent* e)
+{
+    QPlainTextEdit::resizeEvent(e);
+    QRect contents = contentsRect();
+    lineNumberPanel->setGeometry(QRect(contents.left(), contents.top(), lineNumberPanelWidth(), contents.height()));
+}
+
+void NoteEditorView::lineNumberPanelPaintEvent(QPaintEvent* event)
+{
+    QPainter painter(lineNumberPanel);
+    painter.fillRect(event->rect(), Qt::lightGray);
+
+    QTextBlock block = firstVisibleBlock();
+    int blockNumber = block.blockNumber();
+    int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
+    int bottom = top + (int) blockBoundingRect(block).height();
+
+    while(block.isValid() && top <= event->rect().bottom()) {
+        if (block.isVisible() && bottom >= event->rect().top()) {
+            QString number = QString::number(blockNumber + 1);
+            painter.setPen(Qt::black);
+            painter.drawText(0, top, lineNumberPanel->width(), fontMetrics().height(), Qt::AlignCenter, number);
+        }
+
+        block = block.next();
+        top = bottom;
+        bottom = top + (int)blockBoundingRect(block).height();
+        ++blockNumber;
+    }
 }
 
 }
