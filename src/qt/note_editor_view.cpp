@@ -252,7 +252,7 @@ void NoteEditorView::resizeEvent(QResizeEvent* e)
 void NoteEditorView::lineNumberPanelPaintEvent(QPaintEvent* event)
 {
     QPainter painter(lineNumberPanel);
-    painter.fillRect(event->rect(), Qt::lightGray);
+    painter.fillRect(event->rect(), LookAndFeels::getInstance().getEditorLineNumbersBackgroundColor());
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
@@ -262,7 +262,7 @@ void NoteEditorView::lineNumberPanelPaintEvent(QPaintEvent* event)
     while(block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);
-            painter.setPen(Qt::black);
+            painter.setPen(LookAndFeels::getInstance().getEditorLineNumbersForegroundColor());
             painter.drawText(0, top, lineNumberPanel->width(), fontMetrics().height(), Qt::AlignCenter, number);
         }
 

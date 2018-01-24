@@ -63,6 +63,8 @@ void LookAndFeels::setYinTheme(void)
     textColor = QString("#FFF");
 
     editorBackgroundColor = QString("#353535");
+    editorLineNumbersForegroundColor = QString("#777777");
+    editorLineNumbersBackgroundColor = QString("#353535");
 
     editorBold.setRgb(0xFF,0xFF,0x00);
     editorBolder.setRgb(0xFF,0xFF,0x00);
@@ -113,6 +115,8 @@ void LookAndFeels::setYangTheme(void)
     textColor = QString("#000");
 
     editorBackgroundColor = QString("#FFF");
+    editorLineNumbersForegroundColor = QString("#BBBBBB");
+    editorLineNumbersBackgroundColor = QString("#EEEEEE");
 
     // magenta 0xBB,0x00,0xBB
     // cyan 0x00,0x88,0x88
@@ -154,6 +158,8 @@ void LookAndFeels::setBlackTheme(void)
     textColor = QString("#FFF");
 
     editorBackgroundColor = QString("#000");
+    editorLineNumbersForegroundColor = QString("#555555");
+    editorLineNumbersBackgroundColor = QString("#353535");
 
     editorBold.setRgb(0xFF,0xFF,0x00);
     editorBolder.setRgb(0xFF,0xFF,0x00);

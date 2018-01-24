@@ -58,6 +58,8 @@ private:
 
     // editor
     QString editorBackgroundColor;
+    QString editorLineNumbersForegroundColor;
+    QString editorLineNumbersBackgroundColor;
 
     QColor editorBold;
     QColor editorBolder;
@@ -107,6 +109,9 @@ public:
 
     const QString& getTextColor(void) const { return textColor; }
     const QString& getEditorBackgroundColor(void) const { return editorBackgroundColor; }
+
+    const QString& getEditorLineNumbersForegroundColor(void) const { return editorLineNumbersForegroundColor; }
+    const QString& getEditorLineNumbersBackgroundColor(void) const { return editorLineNumbersBackgroundColor; }
 
     QColor& getEditorBold(void) { return editorBold; }
     QColor& getEditorBolder(void) { return editorBolder; }
