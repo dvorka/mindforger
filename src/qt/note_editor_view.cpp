@@ -29,6 +29,8 @@ bool caseInsensitiveLessThan(const QString &a, const QString &b)
 NoteEditorView::NoteEditorView(QWidget* parent, bool enableLineNumbers)
     : QPlainTextEdit(parent), parent(parent), completedAndSelected(false), enableLineNumbers(enableLineNumbers)
 {
+    setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+
     createWidgets();
     createConnections();
     highlightCurrentLine();
