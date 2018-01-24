@@ -49,11 +49,11 @@ void OutlineTreeModel::addRow(Note* note)
 {
     QList<QStandardItem*> items;
 
-    QString s;
+    QString s{};
 
-    QString title;    
+    QString title{};
     createTitleText(title, note);
-    QStandardItem* noteItem = new QStandardItem(title);
+    QStandardItem* noteItem = new QStandardItem{title};
     // TODO set role
     noteItem->setData(QVariant::fromValue(note));
     items.append(noteItem);
@@ -61,14 +61,14 @@ void OutlineTreeModel::addRow(Note* note)
     s.clear();
     s += QString::number(note->getProgress());
     s += "%";
-    items.append(new QStandardItem(s));
+    items.append(new QStandardItem{s});
 
-    items.append(new QStandardItem(QString::number(note->getReads())));
+    items.append(new QStandardItem{QString::number(note->getReads())});
 
-    items.append(new QStandardItem(QString::number(note->getRevision())));
+    items.append(new QStandardItem{QString::number(note->getRevision())});
 
     s = note->getModifiedPretty().c_str();
-    items.append(new QStandardItem(s));
+    items.append(new QStandardItem{s});
 
     appendRow(items);
 }
@@ -97,7 +97,7 @@ void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
 
     // refresh
     if(row>=0) {
-        QString s;
+        QString s{};
         createTitleText(s, note);
         // refresh content
         item(row,0)->setText(s);

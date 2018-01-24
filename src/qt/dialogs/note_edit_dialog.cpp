@@ -23,12 +23,12 @@ using namespace std;
 namespace m8r {
 
 NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
-    : QDialog(parent), ontology(ontology)
+    : QDialog{parent}, ontology(ontology)
 {
     QGroupBox* basicGroup = new QGroupBox{tr("Basic"), this};
 
     typeLabel = new QLabel{tr("Type")+":", this};
-    typeCombo = new QComboBox(this);
+    typeCombo = new QComboBox{this};
     if(ontology.getNoteTypes().size()) {
         for(const NoteType* t:ontology.getNoteTypes().values()) {
             typeCombo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<const NoteType*>(t));
@@ -37,7 +37,7 @@ NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
     }
 
     progressLabel = new QLabel{tr("Progress")+":", this};
-    progressSpin = new QSpinBox(this);
+    progressSpin = new QSpinBox{this};
     progressSpin->setMinimum(0);
     progressSpin->setMaximum(100);
 
@@ -50,7 +50,7 @@ NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
     parentRelCombo->addItem(QString("Aggregation"));
     parentRelCombo->addItem(QString("Is-a"));
 
-    editTagsGroup = new EditTagsPanel(ontology, this);
+    editTagsGroup = new EditTagsPanel{ontology, this};
 
     QGroupBox* advancedGroup = new QGroupBox{tr("Metadata"), this};
 
@@ -69,7 +69,7 @@ NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
     locationLine = new QLineEdit{this};
     locationLine->setDisabled(true);
 
-    buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    buttonBox = new QDialogButtonBox{QDialogButtonBox::Ok | QDialogButtonBox::Cancel};
 
     // assembly
     QVBoxLayout* basicLayout = new QVBoxLayout{this};
@@ -87,12 +87,14 @@ NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
     advancedLayout->addWidget(createdLine);
     QWidget* w = new QWidget{this};
     QHBoxLayout* l = new QHBoxLayout(w);
+    l->setContentsMargins(0,0,0,0);
     l->addWidget(modifiedPanel);
     l->addWidget(readPanel);
     w->setLayout(l);
     advancedLayout->addWidget(w);
     w = new QWidget{this};
     l = new QHBoxLayout(w);
+    l->setContentsMargins(0,0,0,0);
     l->addWidget(readsPanel);
     l->addWidget(writesPanel);
     w->setLayout(l);
