@@ -46,9 +46,9 @@ NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
 
     parentRelLabel = new QLabel{tr("Parent-child Relationship")+":", this};
     parentRelCombo = new QComboBox(this);
-    parentRelCombo->addItem(QString("Composition"));
-    parentRelCombo->addItem(QString("Aggregation"));
-    parentRelCombo->addItem(QString("Is-a"));
+    parentRelCombo->addItem(tr("Composition")+" "+QChar(9670));
+    parentRelCombo->addItem(tr("Aggregation")+" "+QChar(9671));
+    parentRelCombo->addItem(tr("Is-a")+" "+QChar(9651));
 
     editTagsGroup = new EditTagsPanel{ontology, this};
 
