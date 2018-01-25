@@ -27,6 +27,25 @@ void initRandomizer(void)
     qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 }
 
+bool stringMatchByKeywords(const QString& keywords, const QString& s, bool caseSensitive)
+{
+    if(keywords.size()) {
+        QStringList ks = keywords.split(" ");
+        if(ks.size()) {
+            Qt::CaseSensitivity c = caseSensitive?Qt::CaseInsensitive:Qt::CaseSensitive;
+            for(QString& k:ks) {
+                if(!s.contains(k, c)) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    // no keywords ~ nothing filters || all match
+    return true;
+}
+
+
 void timetToQDate(const time_t t, QDate& qdate)
 {
     tm dd = *localtime(&t);

@@ -60,6 +60,7 @@ private:
     QStringList listViewStrings;
     QStringListModel listViewModel;
     QCheckBox* caseCheckBox;
+    QCheckBox* keywordsCheckBox;
     QPushButton* closeButton;
 
     MindEntity* choice;

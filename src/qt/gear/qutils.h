@@ -30,6 +30,9 @@ namespace m8r {
 
 void initRandomizer(void);
 
+// string
+bool stringMatchByKeywords(const QString& keywords, const QString& s, bool caseSensitive=true);
+
 // data and time
 void timetToQDate(const time_t t, QDate& qdate);
 void qdateToTm(const QDate& qdate, struct tm& t);

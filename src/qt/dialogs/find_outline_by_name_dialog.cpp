@@ -18,6 +18,8 @@
 */
 #include "find_outline_by_name_dialog.h"
 
+#include "../gear/qutils.h"
+
 namespace m8r {
 
 using namespace std;
@@ -36,6 +38,8 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
 
     caseCheckBox = new QCheckBox{tr("&Ignore case")};
     caseCheckBox->setChecked(true);
+    keywordsCheckBox = new QCheckBox{tr("&Keywords match")};
+    keywordsCheckBox->setChecked(true);
 
     findButton = new QPushButton{tr("&Open Outline")};
     findButton->setDefault(true);
@@ -55,6 +59,7 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     mainLayout->addWidget(lineEdit);
     mainLayout->addWidget(listView);
     mainLayout->addWidget(caseCheckBox);
+    mainLayout->addWidget(keywordsCheckBox);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
@@ -74,24 +79,39 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
 
 void FindOutlineByNameDialog::enableFindButton(const QString& text)
 {
-    // IMPROVE use HSTR algorithm to be smarter
     listViewStrings.clear();
     if(!text.isEmpty()) {
-        Qt::CaseSensitivity c = caseCheckBox->isChecked()?Qt::CaseInsensitive:Qt::CaseSensitive;
-        // IMPROVE find a list view method giving # of visible rows
-        int visible = 0;
-        int row = 0;
-        for(MindEntity* e:mindEntities) {
-            QString s = QString::fromStdString(e->getTitle());
-            if(s.startsWith(text,c)) {
-                listView->setRowHidden(row, false);
-                visible++;
-            } else {
-                listView->setRowHidden(row, true);
+        if(keywordsCheckBox->isEnabled() && keywordsCheckBox->isChecked()) {
+            int visible = 0;
+            int row = 0;
+            for(MindEntity* e:mindEntities) {
+                QString s = QString::fromStdString(e->getTitle());
+                if(stringMatchByKeywords(text, s, caseCheckBox->isChecked())) {
+                    listView->setRowHidden(row, false);
+                    visible++;
+                } else {
+                    listView->setRowHidden(row, true);
+                }
+                row++;
             }
-            row++;
+            findButton->setEnabled(visible);
+        } else {
+            Qt::CaseSensitivity c = caseCheckBox->isChecked()?Qt::CaseInsensitive:Qt::CaseSensitive;
+            // IMPROVE find a list view method giving # of visible rows
+            int visible = 0;
+            int row = 0;
+            for(MindEntity* e:mindEntities) {
+                QString s = QString::fromStdString(e->getTitle());
+                if(s.startsWith(text,c)) {
+                    listView->setRowHidden(row, false);
+                    visible++;
+                } else {
+                    listView->setRowHidden(row, true);
+                }
+                row++;
+            }
+            findButton->setEnabled(visible);
         }
-        findButton->setEnabled(visible);
     } else {
         for(size_t row = 0; row<mindEntities.size(); row++) {
             listView->setRowHidden(row, false);
