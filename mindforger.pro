@@ -203,7 +203,7 @@ SOURCES += ./lib/src/mind/planner.cpp \
 
 # Development environment remarks:
 # - Beast: GCC 5.4.0, Qt 5.5.1
-# - S7   : GCC 4... , Qt 5...
+# - S7   : GCC 4.8.5, Qt 5.2.1.
 # - GCC: -std=c++0x ~ -std=c++11
 
 QMAKE_CXX = ccache g++

@@ -34,10 +34,10 @@ void OutlinesTableModel::removeAllRows(void)
     QStringList tableHeader;
     tableHeader
         << tr("Outline")
-        << tr("Ns")
         << tr("Importance")
         << tr("Urgency")
         << tr("Done")
+        << tr("Ns")
         << tr("Rs")
         << tr("Ws")
         << tr("Modified");
@@ -68,10 +68,6 @@ void OutlinesTableModel::addRow(Outline* outline)
     item->setData(QVariant::fromValue(outline));
     items.append(item);
 
-    item = new QStandardItem();
-    item->setData(QVariant::fromValue((unsigned)(outline->getNotesCount())), Qt::DisplayRole);
-    items.append(item);
-
     // IMPROVE refactor to methods
     QString s;
 
@@ -83,10 +79,6 @@ void OutlinesTableModel::addRow(Outline* outline)
             } else {
                 s += QChar(9734);
             }
-        }
-    } else {
-        for(int i=0; i<5; i++) {
-            s.append(QChar(9734));
         }
     }
     items.append(new QStandardItem(s));
@@ -100,21 +92,19 @@ void OutlinesTableModel::addRow(Outline* outline)
                 s += QChar(0x29D6);
             }
         }
-    } else {
-        for(int i=0; i<5; i++) {
-            s.append(QChar(0x29D6));
-        }
     }
     items.append(new QStandardItem(s));
 
     s.clear();
-    if(outline->getProgress() >= 0) {
+    if(outline->getProgress() > 0) {
         s += QString::number(outline->getProgress());
-    } else {
-        s.append("0");
+        s += "%";
     }
-    s += "%";
     items.append(new QStandardItem(s));
+
+    item = new QStandardItem();
+    item->setData(QVariant::fromValue((unsigned)(outline->getNotesCount())), Qt::DisplayRole);
+    items.append(item);
 
     item = new QStandardItem();
     item->setData(QVariant(outline->getReads()), Qt::DisplayRole);

@@ -42,13 +42,13 @@ void OutlinesTableView::paintEvent(QPaintEvent* event)
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
-    // notes
-    this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*5);
     // importance/urgency
+    this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*12);
     this->setColumnWidth(2, this->fontMetrics().averageCharWidth()*12);
-    this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*12);
     // progress
-    this->setColumnWidth(4, this->fontMetrics().averageCharWidth()*6);
+    this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*6);
+    // notes
+    this->setColumnWidth(4, this->fontMetrics().averageCharWidth()*5);
     // rd/wr
     this->setColumnWidth(5, this->fontMetrics().averageCharWidth()*5);
     this->setColumnWidth(6, this->fontMetrics().averageCharWidth()*5);

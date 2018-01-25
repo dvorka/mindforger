@@ -48,7 +48,6 @@ void OutlineTreeModel::removeAllRows(void)
 void OutlineTreeModel::addRow(Note* note)
 {
     QList<QStandardItem*> items;
-
     QString s{};
 
     QString title{};
@@ -58,10 +57,14 @@ void OutlineTreeModel::addRow(Note* note)
     noteItem->setData(QVariant::fromValue(note));
     items.append(noteItem);
 
-    s.clear();
-    s += QString::number(note->getProgress());
-    s += "%";
-    items.append(new QStandardItem{s});
+    if(note->getProgress()) {
+        s.clear();
+        s += QString::number(note->getProgress());
+        s += "%";
+        items.append(new QStandardItem{s});
+    } else {
+        items.append(new QStandardItem{""});
+    }
 
     items.append(new QStandardItem{QString::number(note->getReads())});
 
@@ -102,10 +105,14 @@ void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
         // refresh content
         item(row,0)->setText(s);
 
-        s.clear();
-        s += QString::number(note->getProgress());
-        s += "%";
-        item(row,1)->setText(s);
+        if(note->getProgress()) {
+            s.clear();
+            s += QString::number(note->getProgress());
+            s += "%";
+            item(row,1)->setText(s);
+        } else {
+            item(row,1)->setText("");
+        }
 
         item(row,2)->setText(QString::number(note->getReads()));
         item(row,3)->setText(QString::number(note->getRevision()));

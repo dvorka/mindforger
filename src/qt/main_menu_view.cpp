@@ -98,28 +98,34 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: recall
 
-    // TODO tr()
     actionFts = new QAction(tr("&Full-text Search"), mainWindow);
     actionFts->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
     actionFts->setStatusTip(tr("Note full-text search"));
 
     actionFindOutlineByName = new QAction(tr("Recall &Outline by Name"), mainWindow);
     actionFindOutlineByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
-    actionFindOutlineByName->setStatusTip(tr("Find outline by name"));
+    actionFindOutlineByName->setStatusTip(tr("Find Outline by name"));
 
     actionFindNoteByName = new QAction(tr("Recall &Note by Name"), mainWindow);
     actionFindNoteByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
-    actionFindNoteByName->setStatusTip(tr("Find note by name"));
+    actionFindNoteByName->setStatusTip(tr("Find Note by name"));
 
-    actionFindTagByName = new QAction(tr("Recall &Tag by Name"), mainWindow);
-    actionFindTagByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
-    actionFindTagByName->setStatusTip(tr("Find tag by name"));
+    actionFindOutlineByTag = new QAction(tr("Recall O&utline by Tag"), mainWindow);
+    actionFindOutlineByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_U));
+    actionFindOutlineByTag->setStatusTip(tr("Find Outline by tag"));
+    actionFindOutlineByTag->setEnabled(false);
+
+    actionFindNoteByTag = new QAction(tr("Recall Note by &Tag"), mainWindow);
+    actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
+    actionFindNoteByTag->setStatusTip(tr("Find Note by tag"));
+    actionFindNoteByTag->setEnabled(false);
 
     menuFind = qMenuBar->addMenu(tr("&Recall"));
     menuFind->addAction(actionFts);
     menuFind->addAction(actionFindOutlineByName);
     menuFind->addAction(actionFindNoteByName);
-    menuFind->addAction(actionFindTagByName);
+    menuFind->addAction(actionFindOutlineByTag);
+    menuFind->addAction(actionFindNoteByTag);
 
     // menu: view
     actionViewHome = new QAction(tr("&Home"), mainWindow);

@@ -74,7 +74,7 @@ public:
     QAction* actionFts;
     QAction* actionFindOutlineByName;
     QAction* actionFindNoteByName;
-    QAction* actionFindTagByName;
+    QAction* actionFindOutlineByTag;
     QAction* actionFindNoteByTag;
 
     // menu: View

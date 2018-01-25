@@ -42,7 +42,11 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
 
     boldFormat.setForeground(lookAndFeels.getEditorBold());
     bolderFormat.setForeground(lookAndFeels.getEditorBolder());
+#if QT_VERSION > QT_VERSION_CHECK(5, 5, 0)
     bolderFormat.setFontWeight(QFont::ExtraBold);
+#else
+    bolderFormat.setFontWeight(QFont::Black);
+#endif
     italicFormat.setForeground(lookAndFeels.getEditorItalic());
     italicFormat.setFontItalic(true);
     italicerFormat.setForeground(lookAndFeels.getEditorItalicer());
