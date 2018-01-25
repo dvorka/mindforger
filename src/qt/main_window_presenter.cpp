@@ -279,11 +279,6 @@ void MainWindowPresenter::handleNoteNew(void)
     }
 }
 
-void MainWindowPresenter::doActionOutlineOpen()
-{
-    doActionFindOutlineByName();
-}
-
 void MainWindowPresenter::doActionOutlineForget()
 {
     if(orloj->isFacetActiveOutlineManagement()) {
@@ -318,10 +313,6 @@ void MainWindowPresenter::doActionNoteNew()
     } else {
         QMessageBox::critical(&view, tr("New Note"), tr("Open and view an Outline to create new Note."));
     }
-}
-
-void MainWindowPresenter::doActionNoteOpen()
-{
 }
 
 void MainWindowPresenter::doActionNoteForget()

@@ -102,7 +102,7 @@ public:
     Mind* getMind() const { return mind; }
 
 public slots:
-    // mindforger
+    // mind
 #ifdef DO_MF_DEBUG
     void doActionMindHack();
 #endif
@@ -111,7 +111,7 @@ public slots:
     void doActionPreferences();
     void doActionMindSnapshot();
     void doActionExit();
-    // find
+    // recall
     void doActionFts();
     void handleFts();
     void doActionFindOutlineByName();
@@ -128,14 +128,12 @@ public slots:
     // outline
     void doActionOutlineNew();
     void handleOutlineNew();
-    void doActionOutlineOpen();
     void doActionOutlineForget();
     void doActionOutlineExport();
     void doActionOutlineImport();
     // note
     void doActionNoteNew();
     void handleNoteNew();
-    void doActionNoteOpen();
     void doActionNoteFirst();
     void doActionNoteUp();
     void doActionNotePromote();

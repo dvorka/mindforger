@@ -112,7 +112,6 @@ public:
 
     // menu: Outline
     QAction* actionOutlineNew;
-    QAction* actionOutlineOpen;
     QAction* actionOutlineClone;
     QAction* actionOutlineForget;
     QAction* actionOutlineExport;
@@ -120,7 +119,6 @@ public:
 
     // menu: Note
     QAction* actionNoteNew;
-    QAction* actionNoteOpen;
     QAction* actionNoteSave;
     QAction* actionNoteClose;
     QAction* actionNoteForget;

@@ -72,7 +72,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionMindPreferences = new QAction(tr("&Preferences"), mainWindow);
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
-    actionMindPreferences->setStatusTip(tr("Open preferences..."));
+    actionMindPreferences->setStatusTip(tr("Open preferences"));
 
     actionExit = new QAction(tr("E&xit"), mainWindow);
     actionExit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Q));
@@ -162,10 +162,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // Outline/Note marked w/ tag stencil is MOVED among stencils (NOT indexed/searched/...)
     //  + Stencil view allows making a stencil outline again
     //  + Note stencils are notes in a given Outline
-    actionViewStencils->setStatusTip(tr("List outline and note stencils..."));
+    actionViewStencils->setStatusTip(tr("List Outline and Note stencils"));
 
     actionViewLimbo = new QAction(tr("&Limbo"), mainWindow);
-    actionViewLimbo->setStatusTip(tr("List forgotten outlines and notes..."));
+    actionViewLimbo->setStatusTip(tr("List forgotten Outlines and Notes"));
 
     actionViewDistractionFree = new QAction(tr("&Distraction Free"), mainWindow);
     actionViewDistractionFree->setShortcut(QKeySequence(Qt::Key_F5));
@@ -267,12 +267,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineNew = new QAction(tr("&Devise"), mainWindow);
     actionOutlineNew->setStatusTip(tr("Create new Outline to form new combinations, applications, ideas or principles"));
 
-    actionOutlineOpen = new QAction(tr("Rec&all"), mainWindow);
-    actionOutlineOpen->setShortcut(tr("Ctrl-Shift-O"));
-    actionOutlineOpen->setStatusTip(tr("Open outline by name"));
-
     actionOutlineClone = new QAction(tr("C&lone"), mainWindow);
-    actionOutlineClone->setStatusTip(tr("Make copy of the current outline..."));
+    actionOutlineClone->setStatusTip(tr("Make copy of the current Outline"));
 
     actionOutlineForget = new QAction(tr("&Forget"), mainWindow);
     actionOutlineForget->setStatusTip(tr("Forget Outline and move it to Limbo"));
@@ -285,7 +281,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     menuOutline = qMenuBar->addMenu(tr("&Outline"));
     menuOutline->addAction(actionOutlineNew);
-    menuOutline->addAction(actionOutlineOpen);
     menuOutline->addAction(actionOutlineForget);
     menuOutline->addSeparator();
     menuOutline->addAction(actionOutlineClone);
@@ -296,13 +291,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: note
 
     actionNoteNew = new QAction(tr("&Devise"), mainWindow);
-    actionNoteNew->setStatusTip(tr("Create new note to form new combinations, applications, ideas or principles"));
-
-    actionNoteOpen = new QAction(tr("Rec&all"), mainWindow);
-    actionNoteOpen->setStatusTip(tr("Find note by name in the current outline..."));
+    actionNoteNew->setStatusTip(tr("Create new Note to form new combinations, applications, ideas or principles"));
 
     actionNoteSave = new QAction(tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
-    actionNoteSave->setStatusTip(tr("Save note being edited"));
+    actionNoteSave->setStatusTip(tr("Save Note being edited"));
 
     actionNoteForget = new QAction(tr("&Forget"), mainWindow);
     actionNoteForget->setStatusTip(tr("Forget note"));
@@ -312,34 +304,34 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionNoteFirst = new QAction(tr("&Top"), mainWindow);
     actionNoteFirst->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_T));
-    actionNoteFirst->setStatusTip(tr("Move note to be the first child of its parent"));
+    actionNoteFirst->setStatusTip(tr("Move Note to be the first child of its parent"));
 
     actionNoteUp = new QAction(tr("&Up"), mainWindow);
     actionNoteUp->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Up));
-    actionNoteUp->setStatusTip(tr("Move note up"));
+    actionNoteUp->setStatusTip(tr("Move Note up"));
 
     actionNotePromote = new QAction(tr("&Promote"), mainWindow);
     actionNotePromote->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Right));
-    actionNotePromote->setStatusTip(tr("Promote note"));
+    actionNotePromote->setStatusTip(tr("Promote Note"));
 
     actionNoteDemote = new QAction(tr("D&emote"), mainWindow);
     actionNoteDemote->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Left));
-    actionNoteDemote->setStatusTip(tr("Demote note"));
+    actionNoteDemote->setStatusTip(tr("Demote Note"));
 
     actionNoteDown = new QAction(tr("Do&wn"), mainWindow);
     actionNoteDown->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Down));
-    actionNoteDown->setStatusTip(tr("Move note down"));
+    actionNoteDown->setStatusTip(tr("Move Note down"));
 
     actionNoteLast = new QAction(tr("&Bottom"), mainWindow);
     actionNoteLast->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));
-    actionNoteLast->setStatusTip(tr("Move note to be the last child of its parent"));
+    actionNoteLast->setStatusTip(tr("Move Note to be the last child of its parent"));
 
     // TODO Attach vs. COPY to repository
     actionNoteAttach = new QAction(tr("&Attach"), mainWindow);
-    actionNoteAttach->setStatusTip(tr("Attach a document (by value) to note and create link to it..."));
+    actionNoteAttach->setStatusTip(tr("Attach a document (by value) to Note and create link to it..."));
 
     actionNoteRefactor = new QAction(tr("&Refactor"), mainWindow);
-    actionNoteRefactor->setStatusTip(tr("Refactor note to another outline..."));
+    actionNoteRefactor->setStatusTip(tr("Refactor Note to another outline..."));
 
     actionNoteClone = new QAction(tr("&Clone"), mainWindow);
     actionNoteClone->setStatusTip(tr("Make a copy of the Note to this or other outline..."));
@@ -352,7 +344,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     menuNote = qMenuBar->addMenu(tr("&Note"));
     menuNote->addAction(actionNoteNew);
-    menuNote->addAction(actionNoteOpen);
     menuNote->addAction(actionNoteSave);
     menuNote->addAction(actionNoteClose);
     menuNote->addAction(actionNoteForget);
