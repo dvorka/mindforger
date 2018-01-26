@@ -259,7 +259,7 @@ void MainWindowPresenter::handleOutlineNew(void)
     // else Outlines are refreshed on facet change
 }
 
-void MainWindowPresenter::handleNoteNew(void)
+void MainWindowPresenter::handleNoteNew()
 {    
     string title = newNoteDialog->getNoteName().toStdString();
     Note* note = mind->noteNew(
@@ -268,7 +268,8 @@ void MainWindowPresenter::handleNoteNew(void)
                 NO_PARENT,
                 &title,
                 newNoteDialog->getNoteType(),
-                newNoteDialog->getTag(),
+                newNoteDialog->getTags(),
+                newNoteDialog->getProgress(),
                 newNoteDialog->getStencil());
     if(note) {
         mind->remind().remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
@@ -310,7 +311,7 @@ void MainWindowPresenter::doActionNoteNew()
          ||
        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE))
     {
-        newNoteDialog->show();
+        newNoteDialog->show(QString::fromStdString(orloj->getOutlineView()->getCurrentOutline()->getKey()));
     } else {
         QMessageBox::critical(&view, tr("New Note"), tr("Open and view an Outline to create new Note."));
     }

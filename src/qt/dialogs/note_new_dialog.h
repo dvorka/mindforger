@@ -27,7 +27,8 @@
 #include "lib/src/mind/ontology/ontology.h"
 #include "lib/src/model/stencil.h"
 
-#include "src/qt/model_meta_definitions.h"
+#include "../model_meta_definitions.h"
+#include "../widgets/edit_tags_panel.h"
 
 class QDialogButtonBox;
 class QTabWidget;
@@ -38,43 +39,17 @@ class NoteNewDialog : public QDialog
 {
     Q_OBJECT
 
-    class GeneralTab : public QWidget
-    {
-
-    private:
-        QVBoxLayout *mainLayout;
-
-        QLabel* nameLabel;
-        QLineEdit* nameEdit;
-        QLabel* typeLabel;
-        QComboBox* typeCombo;
-        QLabel* tagLabel;
-        QComboBox* tagCombo;
-        QLabel* positionLabel;
-        QComboBox* positionCombo;
-        QLabel* stencilLabel;
-        QComboBox* stencilCombo;
-
-    public:
-        explicit GeneralTab(QWidget* parent);
-        ~GeneralTab(void);
-
-        QLineEdit* getNameEdit(void) const { return nameEdit; }
-        QComboBox* getTypeCombo(void) const { return typeCombo; }
-        QComboBox* getTagCombo(void) const { return tagCombo; }
-        QComboBox* getPositionCombo(void) const { return positionCombo; }
-        QComboBox* getStencilCombo(void) const { return stencilCombo; }
-
-        void clean(void);
-    };
+    class GeneralTab;
+    class AdvancedTab;
 
 private:
-    QTabWidget *tabWidget;
-    QDialogButtonBox *buttonBox;
+    Ontology& ontology;
 
     GeneralTab* generalTab;
+    AdvancedTab* advancedTab;
 
-    Ontology& ontology;
+    QTabWidget *tabWidget;
+    QDialogButtonBox *buttonBox;
 
 public:
     explicit NoteNewDialog(
@@ -87,16 +62,67 @@ public:
     NoteNewDialog &operator=(const NoteNewDialog&&) = delete;
     ~NoteNewDialog(void);
 
-    QString getNoteName(void) const { return generalTab->getNameEdit()->text(); }
-    Stencil* getStencil(void) const { return generalTab->getStencilCombo()->itemData(generalTab->getStencilCombo()->currentIndex()).value<Stencil*>(); }
-    const NoteType* getNoteType(void) const {
-        return (const NoteType*)(generalTab->getTypeCombo()->itemData(generalTab->getTypeCombo()->currentIndex(), Qt::UserRole).value<const NoteType*>());
-    }
-    const Tag* getTag(void) const {
-        return (const Tag*)(generalTab->getTagCombo()->itemData(generalTab->getTagCombo()->currentIndex(), Qt::UserRole).value<const Tag*>());
-    }
+    QString getNoteName() const;
+    Stencil* getStencil() const;
+    const NoteType* getNoteType() const;
+    const std::vector<const Tag*>* getTags() const;
+    int getProgress() const;
 
-    void show();
+    void show(const QString& path);
+};
+
+/**
+ * @brief General tab of new Note dialog.
+ */
+class NoteNewDialog::GeneralTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    Ontology& ontology;
+
+    QLabel* nameLabel;
+    QLineEdit* nameEdit;
+    QLabel* typeLabel;
+    QComboBox* typeCombo;
+    QLabel* progressLabel;
+    QSpinBox* progressSpin;
+    QLabel* stencilLabel;
+    QComboBox* stencilCombo;
+    QLabel* positionLabel;
+    QComboBox* positionCombo;
+
+    EditTagsPanel* editTagsGroup;
+
+public:
+    explicit GeneralTab(Ontology& ontology, QWidget* parent);
+    ~GeneralTab(void);
+
+    QLineEdit* getNameEdit() const { return nameEdit; }
+    QComboBox* getTypeCombo() const { return typeCombo; }
+    const std::vector<const Tag*>* getTags() { return editTagsGroup->getTags(); }
+    QSpinBox* getProgressSpin() const { return progressSpin; }
+    QComboBox* getStencilCombo() const { return stencilCombo; }
+    QComboBox* getPositionCombo() const { return positionCombo; }
+
+    void clean();
+};
+
+/**
+ * @brief Advanced tab of new Note dialog.
+ */
+class NoteNewDialog::AdvancedTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    QLabel *pathLabel;
+    QLabel *pathEdit;
+
+public:
+    explicit AdvancedTab(QWidget *parent);
+    void refreshPath(const QString &path);
+    ~AdvancedTab();
 };
 
 }

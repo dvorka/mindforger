@@ -22,38 +22,67 @@ using namespace std;
 
 namespace m8r {
 
-NoteNewDialog::GeneralTab::GeneralTab(QWidget *parent)
-    : QWidget(parent)
+/*
+ * General tab
+ */
+
+NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
+    : QWidget(parent), ontology(ontology)
 {
-    this->nameLabel = new QLabel(tr("Name")+":", this),
-    this->nameEdit = new QLineEdit(tr("Note"), this);
+    QGroupBox* basicGroup = new QGroupBox{tr("Basic"), this};
 
-    this->typeLabel = new QLabel(tr("Type")+":", this);
-    this->typeCombo = new QComboBox(this);
+    nameLabel = new QLabel(tr("Name")+":", this),
+    nameEdit = new QLineEdit(tr("Note"), this);
 
-    this->tagLabel = new QLabel(tr("Tag")+":", this);
-    this->tagCombo = new QComboBox(this);
+    typeLabel = new QLabel(tr("Type")+":", this);
+    typeCombo = new QComboBox(this);
 
-    this->positionLabel = new QLabel(tr("Position")+":", this);
-    this->positionCombo = new QComboBox(this);
+    progressLabel = new QLabel{tr("Progress")+": %", this};
+    progressSpin = new QSpinBox{this};
+    progressSpin->setMinimum(0);
+    progressSpin->setMaximum(100);
 
-    this->stencilLabel = new QLabel(tr("Stencil")+":", this);
-    this->stencilCombo = new QComboBox(this);
+    stencilLabel = new QLabel(tr("Stencil")+":", this);
+    stencilCombo = new QComboBox(this);
+
+    positionLabel = new QLabel(tr("Position")+":", this);
+    positionCombo = new QComboBox(this);
+
+    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup->refreshOntologyTags();
 
     // assembly
-    mainLayout = new QVBoxLayout{};
-    mainLayout->addWidget(nameLabel);
-    mainLayout->addWidget(nameEdit);
-    mainLayout->addWidget(typeLabel);
-    mainLayout->addWidget(typeCombo);
-    mainLayout->addWidget(tagLabel);
-    mainLayout->addWidget(tagCombo);
-    mainLayout->addWidget(positionLabel);
-    mainLayout->addWidget(positionCombo);
-    mainLayout->addWidget(stencilLabel);
-    mainLayout->addWidget(stencilCombo);
-    mainLayout->addStretch(1);
-    setLayout(mainLayout);
+    QVBoxLayout* basicLayout = new QVBoxLayout{this};
+    basicLayout->addWidget(nameLabel);
+    basicLayout->addWidget(nameEdit);
+    basicLayout->addWidget(typeLabel);
+    basicLayout->addWidget(typeCombo);
+    basicLayout->addWidget(progressLabel);
+    basicLayout->addWidget(progressSpin);
+    basicLayout->addWidget(stencilLabel);
+    basicLayout->addWidget(stencilCombo);
+    basicLayout->addWidget(positionLabel);
+    basicLayout->addWidget(positionCombo);
+    basicGroup->setLayout(basicLayout);
+
+    QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(basicGroup);
+    boxesLayout->addWidget(editTagsGroup);
+    setLayout(boxesLayout);
+}
+
+NoteNewDialog::GeneralTab::~GeneralTab(void)
+{
+    delete nameLabel;
+    delete nameEdit;
+    delete typeLabel;
+    delete typeCombo;
+    delete positionLabel;
+    delete positionCombo;
+    delete progressLabel;
+    delete progressSpin;
+    delete stencilLabel;
+    delete stencilCombo;
 }
 
 void NoteNewDialog::GeneralTab::clean(void)
@@ -63,23 +92,39 @@ void NoteNewDialog::GeneralTab::clean(void)
     nameEdit->setFocus();
 }
 
-NoteNewDialog::GeneralTab::~GeneralTab(void)
-{
-    delete nameLabel;
-    delete nameEdit;
-    delete typeLabel;
-    delete typeCombo;
-    delete tagLabel;
-    delete tagCombo;
-    delete positionLabel;
-    delete positionCombo;
-    delete stencilLabel;
-    delete stencilCombo;
+/*
+ * Advanced tab.
+ */
 
-    delete mainLayout;
+NoteNewDialog::AdvancedTab::AdvancedTab(QWidget *parent)
+    : QWidget(parent)
+{
+    pathLabel = new QLabel{tr("Location")+":", this};
+    pathEdit = new QLabel{this};
+    pathEdit->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(pathLabel);
+    mainLayout->addWidget(pathEdit);
+    mainLayout->addStretch(1);
+    setLayout(mainLayout);
 }
 
+void NoteNewDialog::AdvancedTab::refreshPath(const QString& path)
+{
+    pathEdit->setText(path);
+}
+
+NoteNewDialog::AdvancedTab::~AdvancedTab()
+{
+}
+
+/*
+ * Dialog.
+ */
+
 NoteNewDialog::NoteNewDialog(
+        // IMPROVE Does model belong to View? Set values from presenter & keep model classes in presenter only?
         Ontology& ontology,
         vector<Stencil*>& stencils,
         QWidget* parent)
@@ -87,23 +132,13 @@ NoteNewDialog::NoteNewDialog(
 {
     tabWidget = new QTabWidget;
 
-    generalTab = new GeneralTab(this);
+    generalTab = new GeneralTab{ontology, this};
     if(ontology.getNoteTypes().size()) {
         QComboBox* combo=generalTab->getTypeCombo();
         for(const NoteType* t:ontology.getNoteTypes().values()) {
             combo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<const NoteType*>(t));
         }
         combo->setCurrentText(QString::fromStdString(ontology.getDefaultNoteType()->getName()));
-    }
-    if(ontology.getTags().size()) {
-        QComboBox* combo=generalTab->getTagCombo();
-        combo->addItem("", QVariant::fromValue<const Tag*>(nullptr));
-        for(const Tag* t:ontology.getTags().values()) {
-            if(!stringistring(string("none"), t->getName())) {
-                combo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<const Tag*>(t));
-            }
-        }
-        combo->setCurrentText("");
     }
     QComboBox* combo=generalTab->getPositionCombo();
     // IMPROVE i18n - text is localized, QVariant keeps a constant (e.g. enum)
@@ -121,13 +156,16 @@ NoteNewDialog::NoteNewDialog(
     }
     tabWidget->addTab(generalTab, tr("General"));
 
+    advancedTab = new AdvancedTab{this};
+    tabWidget->addTab(advancedTab, tr("Advanced"));
+
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-    // wire signals ensuring that close & set dialog status
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    // signals
+    QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QVBoxLayout *mainLayout = new QVBoxLayout{this};
     mainLayout->addWidget(tabWidget);
     mainLayout->addWidget(buttonBox);
     setLayout(mainLayout);
@@ -136,15 +174,42 @@ NoteNewDialog::NoteNewDialog(
     setModal(true);
 }
 
-void NoteNewDialog::show()
-{
-    generalTab->clean();
-    QDialog::show();
-}
-
 NoteNewDialog::~NoteNewDialog(void)
 {
     if(generalTab) delete generalTab;
+    if(advancedTab) delete advancedTab;
+}
+
+QString NoteNewDialog::getNoteName() const
+{
+    return generalTab->getNameEdit()->text();
+}
+
+Stencil* NoteNewDialog::getStencil() const
+{
+    return generalTab->getStencilCombo()->itemData(generalTab->getStencilCombo()->currentIndex()).value<Stencil*>();
+}
+
+const NoteType* NoteNewDialog::getNoteType() const
+{
+    return (const NoteType*)(generalTab->getTypeCombo()->itemData(generalTab->getTypeCombo()->currentIndex(), Qt::UserRole).value<const NoteType*>());
+}
+
+const std::vector<const Tag*>* NoteNewDialog::getTags() const
+{
+    return generalTab->getTags();
+}
+
+int NoteNewDialog::getProgress() const
+{
+    return generalTab->getProgressSpin()->value();
+}
+
+void NoteNewDialog::show(const QString& path)
+{
+    generalTab->clean();
+    advancedTab->refreshPath(path);
+    QDialog::show();
 }
 
 }

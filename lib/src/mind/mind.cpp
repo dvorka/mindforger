@@ -420,7 +420,8 @@ Note* Mind::noteNew(
         // IMPROVE pass title by reference
         const std::string* title,
         const NoteType* noteType,
-        const Tag* tag,
+        const std::vector<const Tag*>* tags,
+        const int8_t progress,
         Stencil* noteStencil)
 {
     Outline* o = memory.getOutline(outlineKey);
@@ -441,9 +442,10 @@ Note* Mind::noteNew(
         if(noteType) {
             n->setType(noteType);
         }
-        if(tag) {
-            n->addTag(tag);
+        if(tags) {
+            n->setTags(tags);
         }
+        n->setProgress(progress);
 
         o->addNote(n, offset);
         return n;

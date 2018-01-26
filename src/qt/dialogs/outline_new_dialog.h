@@ -27,9 +27,9 @@
 #include "lib/src/mind/ontology/ontology.h"
 #include "lib/src/model/stencil.h"
 #include "lib/src/gear/string_utils.h"
-#include "../widgets/edit_tags_panel.h"
 
-#include "src/qt/model_meta_definitions.h"
+#include "../model_meta_definitions.h"
+#include "../widgets/edit_tags_panel.h"
 
 class QDialogButtonBox;
 class QTabWidget;
@@ -78,8 +78,9 @@ private slots:
     void refreshPath(const QString &);
 };
 
-
-
+/**
+ * @brief General tab of new Outline dialog.
+ */
 class OutlineNewDialog::GeneralTab : public QWidget
 {
     Q_OBJECT
@@ -117,8 +118,9 @@ public:
     void clean();
 };
 
-
-
+/**
+ * @brief Advanced tab of new Outline dialog.
+ */
 class OutlineNewDialog::AdvancedTab : public QWidget
 {
     Q_OBJECT

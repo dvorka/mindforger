@@ -241,13 +241,13 @@ public:
      * @brief Create new outline and return its key.
      */
     std::string outlineNew(
-            const std::string* title=nullptr,
-            const OutlineType* outlineType=nullptr,
+            const std::string* title = nullptr,
+            const OutlineType* outlineType = nullptr,
             const int8_t importance = 0,
             const int8_t urgency = 0,
             const int8_t progress = 0,
             const std::vector<const Tag*>* tags = nullptr,
-            Stencil *outlineStencil=nullptr);
+            Stencil *outlineStencil = nullptr);
     /**
      * @brief Move Outline to limbo.
      *
@@ -266,10 +266,11 @@ public:
             const std::string& outlineKey,
             const uint16_t parentNoteId,
             // IMPROVE pass title by reference
-            const std::string* title=nullptr,
-            const NoteType* noteType=nullptr,
-            const Tag* tag=nullptr,
-            Stencil* noteStencil=nullptr);
+            const std::string* title = nullptr,
+            const NoteType* noteType = nullptr,
+            const std::vector<const Tag*>* tags = nullptr,
+            const int8_t progress = 0,
+            Stencil* noteStencil = nullptr);
     /**
      * @brief Clone a note.
      *

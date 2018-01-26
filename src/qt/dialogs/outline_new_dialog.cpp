@@ -115,12 +115,6 @@ OutlineNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     setLayout(boxesLayout);
 }
 
-void OutlineNewDialog::GeneralTab::clean(void)
-{
-    nameEdit->selectAll();
-    nameEdit->setFocus();
-}
-
 OutlineNewDialog::GeneralTab::~GeneralTab(void)
 {
     delete nameLabel;
@@ -137,6 +131,12 @@ OutlineNewDialog::GeneralTab::~GeneralTab(void)
     delete stencilCombo;
 }
 
+void OutlineNewDialog::GeneralTab::clean(void)
+{
+    nameEdit->selectAll();
+    nameEdit->setFocus();
+}
+
 /*
  * Advanced tab
  */
@@ -144,8 +144,8 @@ OutlineNewDialog::GeneralTab::~GeneralTab(void)
 OutlineNewDialog::AdvancedTab::AdvancedTab(const QString& memoryDirPath, QWidget *parent)
     : QWidget(parent), memoryDirPath(memoryDirPath)
 {
-    pathLabel = new QLabel(tr("Expected File Path")+":");
-    pathEdit = new QLabel(this->memoryDirPath);
+    pathLabel = new QLabel{tr("Expected Location")+":", this};
+    pathEdit = new QLabel{this->memoryDirPath, this};
     pathEdit->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
@@ -164,7 +164,7 @@ void OutlineNewDialog::AdvancedTab::refreshPath(const QString& name)
         FILE_EXTENSION_MARKDOWN);
 }
 
-OutlineNewDialog::AdvancedTab::~AdvancedTab(void)
+OutlineNewDialog::AdvancedTab::~AdvancedTab()
 {
 }
 
@@ -182,7 +182,7 @@ OutlineNewDialog::OutlineNewDialog(
 {
     tabWidget = new QTabWidget;
 
-    generalTab = new GeneralTab(ontology, this);
+    generalTab = new GeneralTab{ontology, this};
     if(ontology.getOutlineTypes().size()) {
         QComboBox* combo=generalTab->getTypeCombo();
         for(const OutlineType* t:ontology.getOutlineTypes().values()) {
@@ -208,11 +208,11 @@ OutlineNewDialog::OutlineNewDialog(
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
     // signals
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(generalTab->getNameEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(refreshPath(const QString &)));
+    QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    QObject::connect(generalTab->getNameEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(refreshPath(const QString &)));
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QVBoxLayout *mainLayout = new QVBoxLayout{this};
     mainLayout->addWidget(tabWidget);
     mainLayout->addWidget(buttonBox);
     setLayout(mainLayout);
