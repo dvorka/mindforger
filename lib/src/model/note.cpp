@@ -186,9 +186,14 @@ void Note::setTag(const Tag* tag)
     }
 }
 
-void Note::setTags(const vector<const Tag*>& tags)
+void Note::setTags(const vector<const Tag*>* tags)
 {
-    this->tags = tags;
+    this->tags.clear();
+    if(tags) {
+        for(const Tag* t:*tags) {
+            addTag(t);
+        }
+    }
 }
 
 const string& Note::getTitle() const

@@ -53,12 +53,13 @@ public:
     EditTagsPanel &operator=(const EditTagsPanel&&) = delete;
     ~EditTagsPanel();
 
+    void refreshOntologyTags();
     void refresh(const std::vector<const Tag*>& noteTags);
-    std::vector<const Tag*>& getTags(void);
+    const std::vector<const Tag*>* getTags();
 
 private slots:
-    void slotAddTag(void);
-    void slotRemoveTag(void);
+    void slotAddTag();
+    void slotRemoveTag();
 };
 
 }

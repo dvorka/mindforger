@@ -22,20 +22,25 @@ using namespace std;
 
 namespace m8r {
 
-OutlineNewDialog::GeneralTab::GeneralTab(QWidget *parent)
-    : QWidget(parent)
+/*
+ * General tab
+ */
+
+OutlineNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
+    : QWidget(parent), ontology(ontology)
 {
+    QGroupBox* basicGroup = new QGroupBox{tr("Basic"), this};
+
+    nameLabel = new QLabel(tr("Name")+":", this),
+    nameEdit = new QLineEdit(tr("Outline"), this);
+
+    typeLabel = new QLabel(tr("Type")+":", this);
+    typeCombo = new QComboBox(this);
+
+    importanceLabel = new QLabel(tr("Importance")+":", this);
+    importanceCombo = new QComboBox(this);
+    importanceCombo->addItem("");
     QString s{};
-
-    this->nameLabel = new QLabel(tr("Name")+":", this),
-    this->nameEdit = new QLineEdit(tr("Outline"), this);
-
-    this->typeLabel = new QLabel(tr("Type")+":", this);
-    this->typeCombo = new QComboBox(this);
-
-    this->importanceLabel = new QLabel(tr("Importance")+":", this);
-    this->importanceCombo = new QComboBox(this);
-    this->importanceCombo->addItem("");
     for(int i=1; i<=5; i++) {
         s.clear();
         for(int j=1; j<=5; j++) {
@@ -48,9 +53,9 @@ OutlineNewDialog::GeneralTab::GeneralTab(QWidget *parent)
         importanceCombo->addItem(s, QVariant::fromValue<int>(i));
     }
 
-    this->urgencyLabel = new QLabel(tr("Urgency")+":", this);
-    this->urgencyCombo = new QComboBox(this);
-    this->urgencyCombo->addItem("");
+    urgencyLabel = new QLabel(tr("Urgency")+":", this);
+    urgencyCombo = new QComboBox(this);
+    urgencyCombo->addItem("");
     for(int i=1; i<=5; i++) {
         s.clear();
         for(int j=1; j<=5; j++) {
@@ -63,27 +68,51 @@ OutlineNewDialog::GeneralTab::GeneralTab(QWidget *parent)
         urgencyCombo->addItem(s, QVariant::fromValue<int>(i));
     }
 
-    this->tagLabel = new QLabel(tr("Tag")+":", this);
-    this->tagCombo = new QComboBox(this);
+    progressLabel = new QLabel{tr("Progress")+": %", this};
+    progressSpin = new QSpinBox{this};
+    progressSpin->setMinimum(0);
+    progressSpin->setMaximum(100);
 
-    this->stencilLabel = new QLabel(tr("Stencil")+":", this);
-    this->stencilCombo = new QComboBox(this);
+    stencilLabel = new QLabel(tr("Stencil")+":", this);
+    stencilCombo = new QComboBox(this);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(nameLabel);
-    mainLayout->addWidget(nameEdit);
-    mainLayout->addWidget(typeLabel);
-    mainLayout->addWidget(typeCombo);
-    mainLayout->addWidget(importanceLabel);
-    mainLayout->addWidget(importanceCombo);
-    mainLayout->addWidget(urgencyLabel);
-    mainLayout->addWidget(urgencyCombo);
-    mainLayout->addWidget(tagLabel);
-    mainLayout->addWidget(tagCombo);
-    mainLayout->addWidget(stencilLabel);
-    mainLayout->addWidget(stencilCombo);
-    mainLayout->addStretch(1);
-    setLayout(mainLayout);
+    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup->refreshOntologyTags();
+
+    // assembly
+    QVBoxLayout* basicLayout = new QVBoxLayout{this};
+    basicLayout->addWidget(nameLabel);
+    basicLayout->addWidget(nameEdit);
+    basicLayout->addWidget(typeLabel);
+    basicLayout->addWidget(typeCombo);
+    QWidget* wiu = new QWidget{this};
+    QHBoxLayout* liu = new QHBoxLayout(wiu);
+    liu->setContentsMargins(0,0,0,0);
+    QWidget* w = new QWidget{this};
+    QVBoxLayout* l = new QVBoxLayout(w);
+    l->setContentsMargins(0,0,0,0);
+    l->addWidget(importanceLabel);
+    l->addWidget(importanceCombo);
+    w->setLayout(l);
+    liu->addWidget(w);
+    w = new QWidget{this};
+    l = new QVBoxLayout(w);
+    l->setContentsMargins(0,0,0,0);
+    l->addWidget(urgencyLabel);
+    l->addWidget(urgencyCombo);
+    w->setLayout(l);
+    liu->addWidget(w);
+    basicLayout->addWidget(wiu);
+    basicLayout->addWidget(progressLabel);
+    basicLayout->addWidget(progressSpin);
+    basicLayout->addWidget(stencilLabel);
+    basicLayout->addWidget(stencilCombo);
+    basicGroup->setLayout(basicLayout);
+
+    QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(basicGroup);
+    boxesLayout->addWidget(editTagsGroup);
+    setLayout(boxesLayout);
 }
 
 void OutlineNewDialog::GeneralTab::clean(void)
@@ -98,16 +127,24 @@ OutlineNewDialog::GeneralTab::~GeneralTab(void)
     delete nameEdit;
     delete typeLabel;
     delete typeCombo;
-    delete tagLabel;
-    delete tagCombo;
+    delete importanceLabel;
+    delete importanceCombo;
+    delete urgencyLabel;
+    delete urgencyCombo;
+    delete progressLabel;
+    delete progressSpin;
     delete stencilLabel;
     delete stencilCombo;
 }
 
+/*
+ * Advanced tab
+ */
+
 OutlineNewDialog::AdvancedTab::AdvancedTab(const QString& memoryDirPath, QWidget *parent)
     : QWidget(parent), memoryDirPath(memoryDirPath)
 {
-    pathLabel = new QLabel(tr("File path:"));
+    pathLabel = new QLabel(tr("Expected File Path")+":");
     pathEdit = new QLabel(this->memoryDirPath);
     pathEdit->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 
@@ -120,12 +157,20 @@ OutlineNewDialog::AdvancedTab::AdvancedTab(const QString& memoryDirPath, QWidget
 
 void OutlineNewDialog::AdvancedTab::refreshPath(const QString& name)
 {
-    pathEdit->setText(memoryDirPath+FILE_PATH_SEPARATOR+name+FILE_EXTENSION_MARKDOWN);
+    pathEdit->setText(
+        memoryDirPath+
+        FILE_PATH_SEPARATOR+
+        QString::fromStdString(normalizeToNcName(name.toStdString(),'-'))+
+        FILE_EXTENSION_MARKDOWN);
 }
 
 OutlineNewDialog::AdvancedTab::~AdvancedTab(void)
 {
 }
+
+/*
+ * Dialog
+ */
 
 OutlineNewDialog::OutlineNewDialog(
         const QString& memoryDirPath,
@@ -137,23 +182,13 @@ OutlineNewDialog::OutlineNewDialog(
 {
     tabWidget = new QTabWidget;
 
-    generalTab = new GeneralTab(this);
+    generalTab = new GeneralTab(ontology, this);
     if(ontology.getOutlineTypes().size()) {
         QComboBox* combo=generalTab->getTypeCombo();
         for(const OutlineType* t:ontology.getOutlineTypes().values()) {
             combo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<const OutlineType*>(t));
         }
         combo->setCurrentText(QString::fromStdString(ontology.getDefaultOutlineType()->getName()));
-    }
-    if(ontology.getTags().size()) {
-        QComboBox* combo=generalTab->getTagCombo();
-        combo->addItem("", QVariant::fromValue<const Tag*>(nullptr));
-        for(const Tag* t:ontology.getTags().values()) {
-            if(!stringistring(string("none"), t->getName())) {
-                combo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<const Tag*>(t));
-            }
-        }
-        combo->setCurrentText("");
     }
     if(stencils.size()) {
         QComboBox* combo=generalTab->getStencilCombo();
@@ -187,20 +222,57 @@ OutlineNewDialog::OutlineNewDialog(
     setModal(true);
 }
 
+OutlineNewDialog::~OutlineNewDialog(void)
+{
+    if(generalTab) delete generalTab;
+    if(advancedTab) delete advancedTab;
+}
+
+QString OutlineNewDialog::getOutlineName() const
+{
+    return generalTab->getNameEdit()->text();
+}
+
+Stencil* OutlineNewDialog::getStencil() const
+{
+    return generalTab->getStencilCombo()->itemData(generalTab->getStencilCombo()->currentIndex()).value<Stencil*>();
+}
+
+const OutlineType* OutlineNewDialog::getOutlineType() const
+{
+    return (const OutlineType*)(generalTab->getTypeCombo()->itemData(generalTab->getTypeCombo()->currentIndex(), Qt::UserRole).value<const OutlineType*>());
+}
+
+int8_t OutlineNewDialog::getImportance() const
+{
+    return (int8_t)(generalTab->getImportanceCombo()->itemData(generalTab->getImportanceCombo()->currentIndex(), Qt::UserRole).value<int>());
+}
+
+int8_t OutlineNewDialog::getUrgency() const
+{
+    return (int8_t)(generalTab->getUrgencyCombo()->itemData(generalTab->getUrgencyCombo()->currentIndex(), Qt::UserRole).value<int>());
+}
+
+int OutlineNewDialog::getProgress() const
+{
+    return generalTab->getProgressSpin()->value();
+}
+
+const std::vector<const Tag*>* OutlineNewDialog::getTags() const
+{
+    return generalTab->getTags();
+}
+
 void OutlineNewDialog::show()
 {
     generalTab->clean();
+    refreshPath(generalTab->getNameEdit()->text());
     QDialog::show();
 }
 
 void OutlineNewDialog::refreshPath(const QString& path)
 {
     advancedTab->refreshPath(path);
-}
-
-OutlineNewDialog::~OutlineNewDialog(void)
-{
-    if(generalTab) delete generalTab;
 }
 
 }

@@ -355,7 +355,8 @@ string Mind::outlineNew(
     const OutlineType* outlineType,
     const int8_t importance,
     const int8_t urgency,
-    const Tag* tag,
+    const int8_t progress,
+    const std::vector<const Tag*>* tags,
     Stencil* outlineStencil)
 {
     string key = memory.createOutlineKey(title);
@@ -378,8 +379,11 @@ string Mind::outlineNew(
         }
         outline->setImportance(importance);
         outline->setUrgency(urgency);
-        if(tag) {
-            outline->addTag(tag);
+        outline->setProgress(progress);
+        if(tags) {
+            for(const Tag* t:*tags) {
+                outline->addTag(t);
+            }
         }
         if(outline->getNotes().empty()) {
             Note* note = new Note{memory.getOntology().getNoteTypes().get(NoteType::KeyNote()), outline};

@@ -132,7 +132,7 @@ public:
     const Tag* getPrimaryTag() const;
     const std::vector<const Tag*>& getTags() const;
     void setTag(const Tag* tag);
-    void setTags(const std::vector<const Tag*>& tags);
+    void setTags(const std::vector<const Tag*>* tags);
     void addTag(const Tag *tag);
     time_t getModified() const;
     void setModified();

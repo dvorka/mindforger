@@ -114,7 +114,7 @@ public:
     const std::vector<const Tag*>& getTags() const;
     void addTag(const Tag* tag);
     void setTag(const Tag* tag);
-    void setTags(const std::vector<const Tag*>& tags);
+    void setTags(const std::vector<const Tag*>* tags);
     virtual const std::string& getTitle() const;
     void addTitle(const std::string& s);
     void setTitle(const std::string& title);

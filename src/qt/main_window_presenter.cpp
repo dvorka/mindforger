@@ -248,7 +248,8 @@ void MainWindowPresenter::handleOutlineNew(void)
         newOutlineDialog->getOutlineType(),
         newOutlineDialog->getImportance(),
         newOutlineDialog->getUrgency(),
-        newOutlineDialog->getTag(),
+        newOutlineDialog->getProgress(),
+        newOutlineDialog->getTags(),
         newOutlineDialog->getStencil());
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_LIST_OUTLINES)) {

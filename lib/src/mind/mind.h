@@ -245,7 +245,8 @@ public:
             const OutlineType* outlineType=nullptr,
             const int8_t importance = 0,
             const int8_t urgency = 0,
-            const Tag* tag=nullptr,
+            const int8_t progress = 0,
+            const std::vector<const Tag*>* tags = nullptr,
             Stencil *outlineStencil=nullptr);
     /**
      * @brief Move Outline to limbo.

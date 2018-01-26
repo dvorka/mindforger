@@ -26,6 +26,8 @@
 #include "lib/src/mind/ontology/ontology_vocabulary.h"
 #include "lib/src/mind/ontology/ontology.h"
 #include "lib/src/model/stencil.h"
+#include "lib/src/gear/string_utils.h"
+#include "../widgets/edit_tags_panel.h"
 
 #include "src/qt/model_meta_definitions.h"
 
@@ -38,65 +40,17 @@ class OutlineNewDialog : public QDialog
 {
     Q_OBJECT
 
-    class GeneralTab : public QWidget
-    {
-    private:
-        QLabel* nameLabel;
-        QLineEdit* nameEdit;
-        QLabel* typeLabel;
-        QComboBox* typeCombo;
-        QLabel* importanceLabel;
-        QComboBox* importanceCombo;
-        QLabel* urgencyLabel;
-        QComboBox* urgencyCombo;
-        QLabel* tagLabel;
-        QComboBox* tagCombo;
-        QLabel* stencilLabel;
-        QComboBox* stencilCombo;
-
-        // TODO progress
-
-    public:
-        explicit GeneralTab(QWidget *parent);
-        ~GeneralTab(void);
-
-        QLineEdit* getNameEdit(void) const { return nameEdit; }
-        QComboBox* getTypeCombo(void) const { return typeCombo; }
-        QComboBox* getImportanceCombo(void) const { return importanceCombo; }
-        QComboBox* getUrgencyCombo(void) const { return urgencyCombo; }
-        QComboBox* getTagCombo(void) const { return tagCombo; }
-        QComboBox* getStencilCombo(void) const { return stencilCombo; }
-
-        void clean(void);
-    };
-
-    // TODO tags tab
-
-    class AdvancedTab : public QWidget
-    {
-    private:
-        QLabel *pathLabel;
-        QLabel *pathEdit;
-
-    private:
-        const QString memoryDirPath;
-
-        // TODO read reads written writes
-
-    public:
-        explicit AdvancedTab(const QString& memoryDirPath, QWidget *parent);
-        void refreshPath(const QString &);
-        ~AdvancedTab(void);
-    };
+    class GeneralTab;
+    class AdvancedTab;
 
 private:
-    QTabWidget *tabWidget;
-    QDialogButtonBox *buttonBox;
+    Ontology& ontology;
 
     GeneralTab* generalTab;
     AdvancedTab* advancedTab;
 
-    Ontology& ontology;
+    QTabWidget *tabWidget;
+    QDialogButtonBox *buttonBox;
 
 public:
     explicit OutlineNewDialog(
@@ -108,27 +62,78 @@ public:
     OutlineNewDialog(const OutlineNewDialog&&) = delete;
     OutlineNewDialog &operator=(const OutlineNewDialog&) = delete;
     OutlineNewDialog &operator=(const OutlineNewDialog&&) = delete;
-    ~OutlineNewDialog(void);
+    ~OutlineNewDialog();
 
-    QString getOutlineName(void) const { return generalTab->getNameEdit()->text(); }
-    Stencil* getStencil(void) const { return generalTab->getStencilCombo()->itemData(generalTab->getStencilCombo()->currentIndex()).value<Stencil*>(); }
-    const OutlineType* getOutlineType(void) const {
-        return (const OutlineType*)(generalTab->getTypeCombo()->itemData(generalTab->getTypeCombo()->currentIndex(), Qt::UserRole).value<const OutlineType*>());
-    }
-    int8_t getImportance(void) const {
-        return (int8_t)(generalTab->getImportanceCombo()->itemData(generalTab->getImportanceCombo()->currentIndex(), Qt::UserRole).value<int>());
-    }
-    int8_t getUrgency(void) const {
-        return (int8_t)(generalTab->getUrgencyCombo()->itemData(generalTab->getUrgencyCombo()->currentIndex(), Qt::UserRole).value<int>());
-    }
-    const Tag* getTag(void) const {
-        return (const Tag*)(generalTab->getTagCombo()->itemData(generalTab->getTagCombo()->currentIndex(), Qt::UserRole).value<const Tag*>());
-    }
+    QString getOutlineName() const;
+    Stencil* getStencil() const;
+    const OutlineType* getOutlineType() const;
+    int8_t getImportance() const;
+    int8_t getUrgency() const;
+    int getProgress() const;
+    const std::vector<const Tag*>* getTags() const;
 
     void show();
 
 private slots:
     void refreshPath(const QString &);
+};
+
+
+
+class OutlineNewDialog::GeneralTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    Ontology& ontology;
+
+    QLabel* nameLabel;
+    QLineEdit* nameEdit;
+    QLabel* typeLabel;
+    QComboBox* typeCombo;
+    QLabel* importanceLabel;
+    QComboBox* importanceCombo;
+    QLabel* urgencyLabel;
+    QComboBox* urgencyCombo;
+    QLabel* progressLabel;
+    QSpinBox* progressSpin;
+    QLabel* stencilLabel;
+    QComboBox* stencilCombo;
+
+    EditTagsPanel* editTagsGroup;
+
+public:
+    explicit GeneralTab(Ontology& ontology, QWidget *parent);
+    ~GeneralTab();
+
+    QLineEdit* getNameEdit() const { return nameEdit; }
+    QComboBox* getTypeCombo() const { return typeCombo; }
+    QComboBox* getImportanceCombo() const { return importanceCombo; }
+    QComboBox* getUrgencyCombo() const { return urgencyCombo; }
+    QComboBox* getStencilCombo() const { return stencilCombo; }
+    QSpinBox* getProgressSpin() const { return progressSpin; }
+    const std::vector<const Tag*>* getTags() { return editTagsGroup->getTags(); }
+
+    void clean();
+};
+
+
+
+class OutlineNewDialog::AdvancedTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    QLabel *pathLabel;
+    QLabel *pathEdit;
+
+private:
+    const QString memoryDirPath;
+
+public:
+    explicit AdvancedTab(const QString& memoryDirPath, QWidget *parent);
+    void refreshPath(const QString &name);
+    ~AdvancedTab();
 };
 
 }

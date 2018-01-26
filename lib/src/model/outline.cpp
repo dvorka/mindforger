@@ -166,9 +166,14 @@ const vector<const Tag*>& Outline::getTags() const
     return tags;
 }
 
-void Outline::setTags(const vector<const Tag*>& tags)
+void Outline::setTags(const vector<const Tag*>* tags)
 {
-    this->tags = tags;
+    this->tags.clear();
+    if(tags) {
+        for(const Tag* t:*tags) {
+            addTag(t);
+        }
+    }
 }
 
 void Outline::setTag(const Tag* tag)

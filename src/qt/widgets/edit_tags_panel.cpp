@@ -61,9 +61,8 @@ EditTagsPanel::~EditTagsPanel()
 {
 }
 
-void EditTagsPanel::refresh(const vector<const Tag*>& noteTags)
+void EditTagsPanel::refreshOntologyTags()
 {
-    lineEdit->clear();
     completerStrings.clear();
     if(ontology.getTags().size()) {
         for(const Tag* t:ontology.getTags().values()) {
@@ -73,6 +72,12 @@ void EditTagsPanel::refresh(const vector<const Tag*>& noteTags)
         }
     }
     ((QStringListModel*)completer->model())->setStringList(completerStrings);
+}
+
+void EditTagsPanel::refresh(const vector<const Tag*>& noteTags)
+{
+    lineEdit->clear();
+    refreshOntologyTags();
 
     listViewStrings.clear();
     if(noteTags.size()) {
@@ -85,7 +90,7 @@ void EditTagsPanel::refresh(const vector<const Tag*>& noteTags)
     ((QStringListModel*)listView->model())->setStringList(listViewStrings);
 }
 
-std::vector<const Tag*>& EditTagsPanel::getTags(void)
+const std::vector<const Tag*>* EditTagsPanel::getTags()
 {
     tags.clear();
     if(listViewStrings.size()) {
@@ -93,10 +98,10 @@ std::vector<const Tag*>& EditTagsPanel::getTags(void)
             tags.push_back(ontology.findOrCreateTag(s.toStdString()));
         }
     }
-    return tags;
+    return &tags;
 }
 
-void EditTagsPanel::slotAddTag(void)
+void EditTagsPanel::slotAddTag()
 {
     if(!lineEdit->text().isEmpty()) {
         if(!listViewStrings.contains(lineEdit->text())) {
@@ -106,7 +111,7 @@ void EditTagsPanel::slotAddTag(void)
     }
 }
 
-void EditTagsPanel::slotRemoveTag(void)
+void EditTagsPanel::slotRemoveTag()
 {
     if(listView->currentIndex().isValid()) {
         listViewStrings.removeAt(listView->currentIndex().row());
