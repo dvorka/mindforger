@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef ORLOJ_VIEW_H
-#define ORLOJ_VIEW_H
+#ifndef M8RUI_ORLOJ_VIEW_H
+#define M8RUI_ORLOJ_VIEW_H
 
 #include <QtWidgets>
 
@@ -68,53 +68,53 @@ public:
     OrlojView &operator=(const OrlojView&) = delete;
     OrlojView &operator=(const OrlojView&&) = delete;
 
-    OutlinesTableView* getOutlinesTable(void) const { return outlinesTable; }
-    NotesTableView* getNotesTable(void) const { return notesTable; }
-    OutlineView* getOutlineView(void) const { return outlineView; }
-    OutlineHeaderView* getOutlineHeaderView(void) const { return outlineHeaderView; }
-    OutlineHeaderEditView* getOutlineHeaderEdit(void) const { return outlineHeaderEdit; }
-    NoteView* getNoteView(void) const { return noteView; }
-    NoteEditView* getNoteEdit(void) const { return noteEdit; }
+    OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
+    NotesTableView* getNotesTable() const { return notesTable; }
+    OutlineView* getOutlineView() const { return outlineView; }
+    OutlineHeaderView* getOutlineHeaderView() const { return outlineHeaderView; }
+    OutlineHeaderEditView* getOutlineHeaderEdit() const { return outlineHeaderEdit; }
+    NoteView* getNoteView() const { return noteView; }
+    NoteEditView* getNoteEdit() const { return noteEdit; }
 
     /**
      * @brief List of outlines
      */
-    void showFacetOutlines(void);
+    void showFacetOutlines();
 
     /**
      * @brief Outline detail: name and tree of notes
      */
-    void showFacetOutlinesDetail(void);
+    void showFacetOutlinesDetail();
 
     /**
      * @brief FTS result list - notes w/o detail
      */
-    void showFacetFtsResult(void);
+    void showFacetFtsResult();
 
     /**
      * @brief FTS result list - notes w/ detail
      */
-    void showFacetFtsResultDetail(void);
+    void showFacetFtsResultDetail();
 
     /**
      * @brief Outline header view
      */
-    void showFacetOutlineHeaderView(void);
+    void showFacetOutlineHeaderView();
 
     /**
      * @brief Outline header edit
      */
-    void showFacetOutlineHeaderEdit(void);
+    void showFacetOutlineHeaderEdit();
 
     /**
      * @brief Note view
      */
-    void showFacetNoteView(void);
+    void showFacetNoteView();
 
     /**
      * @brief Note edit
      */
-    void showFacetNoteEdit(void);
+    void showFacetNoteEdit();
 
 private:
     /**
@@ -126,9 +126,9 @@ private:
      * @brief Application window may be resized - this method to be called
      * on resize/regularly.
      */
-    void fiftyFifty(void);
+    void fiftyFifty();
 };
 
 }
 
-#endif // ORLOJ_VIEW_H
+#endif // M8RUI_ORLOJ_VIEW_H

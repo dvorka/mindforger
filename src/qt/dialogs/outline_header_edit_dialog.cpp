@@ -20,8 +20,12 @@
 
 namespace m8r {
 
-OutlineHeaderEditDialog::OutlineHeaderEditDialog(Ontology& ontology, QWidget *parent)
-    : QDialog{parent}, ontology(ontology)
+/*
+ * General tab
+ */
+
+OutlineHeaderEditDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
+    : QWidget(parent), ontology(ontology)
 {
     QGroupBox* basicGroup = new QGroupBox{tr("Basic"), this};
 
@@ -34,15 +38,11 @@ OutlineHeaderEditDialog::OutlineHeaderEditDialog(Ontology& ontology, QWidget *pa
         typeCombo->setCurrentText(QString::fromStdString(ontology.getDefaultOutlineType()->getName()));
     }
 
-    importanceLabel = new QLabel{tr("Importance")+": "+QChar(9733), this};
-    importanceSpin = new QSpinBox{this};
-    importanceSpin->setMinimum(0);
-    importanceSpin->setMaximum(5);
+    importanceLabel = new QLabel(tr("Importance")+":", this);
+    importanceCombo = new ImportanceComboBox{this};
 
-    urgencyLabel = new QLabel{tr("Urgency")+": "+QChar(0x29D7), this};
-    urgencySpin = new QSpinBox{this};
-    urgencySpin->setMinimum(0);
-    urgencySpin->setMaximum(5);
+    urgencyLabel = new QLabel(tr("Urgency")+":", this);
+    urgencyCombo = new UrgencyComboBox{this};
 
     progressLabel = new QLabel{tr("Progress")+": %", this};
     progressSpin = new QSpinBox{this};
@@ -51,7 +51,58 @@ OutlineHeaderEditDialog::OutlineHeaderEditDialog(Ontology& ontology, QWidget *pa
 
     editTagsGroup = new EditTagsPanel{ontology, this};
 
-    QGroupBox* advancedGroup = new QGroupBox{tr("Metadata"), this};
+    // assembly
+    QVBoxLayout* basicLayout = new QVBoxLayout{this};
+    basicLayout->addWidget(typeLabel);
+    basicLayout->addWidget(typeCombo);
+    QWidget* wiu = new QWidget{this};
+    QHBoxLayout* liu = new QHBoxLayout(wiu);
+    liu->setContentsMargins(0,0,0,0);
+    QWidget* w = new QWidget{this};
+    QVBoxLayout* l = new QVBoxLayout(w);
+    l->setContentsMargins(0,0,0,0);
+    l->addWidget(importanceLabel);
+    l->addWidget(importanceCombo);
+    w->setLayout(l);
+    liu->addWidget(w);
+    w = new QWidget{this};
+    l = new QVBoxLayout(w);
+    l->setContentsMargins(0,0,0,0);
+    l->addWidget(urgencyLabel);
+    l->addWidget(urgencyCombo);
+    w->setLayout(l);
+    liu->addWidget(w);
+    basicLayout->addWidget(wiu);
+    basicLayout->addWidget(progressLabel);
+    basicLayout->addWidget(progressSpin);
+    basicGroup->setLayout(basicLayout);
+
+    QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(basicGroup);
+    boxesLayout->addWidget(editTagsGroup);
+    setLayout(boxesLayout);
+}
+
+OutlineHeaderEditDialog::GeneralTab::~GeneralTab()
+{
+    delete typeLabel;
+    delete typeCombo;
+    delete importanceLabel;
+    delete importanceCombo;
+    delete urgencyLabel;
+    delete urgencyCombo;
+    delete progressLabel;
+    delete progressSpin;
+}
+
+/*
+ * Advanced tab
+ */
+
+OutlineHeaderEditDialog::AdvancedTab::AdvancedTab(QWidget* parent)
+    : QWidget(parent)
+{
+    QGroupBox* metadataGroup = new QGroupBox{tr("Metadata"), this};
 
     createdLabel = new QLabel{tr("Created")+":", this};
     createdLine = new QLineEdit{this};
@@ -64,49 +115,67 @@ OutlineHeaderEditDialog::OutlineHeaderEditDialog(Ontology& ontology, QWidget *pa
     readsPanel->setDisabled(true);
     writesPanel = new LabeledEditLinePanel{tr("Writes")+":", this};
     writesPanel->setDisabled(true);
-    locationLabel = new QLabel{tr("Location")+":", this};
-    locationLine = new QLineEdit{this};
-    locationLine->setDisabled(true);
+    fileLabel = new QLabel{tr("File")+":", this};
+    fileLine = new QLineEdit{this};
+    fileLine->setDisabled(true);
 
-    buttonBox = new QDialogButtonBox{QDialogButtonBox::Ok | QDialogButtonBox::Cancel};
-
-    // assembly
-    QVBoxLayout* basicLayout = new QVBoxLayout{this};
-    basicLayout->addWidget(typeLabel);
-    basicLayout->addWidget(typeCombo);
-    basicLayout->addWidget(importanceLabel);
-    basicLayout->addWidget(importanceSpin);
-    basicLayout->addWidget(urgencyLabel);
-    basicLayout->addWidget(urgencySpin);
-    basicLayout->addWidget(progressLabel);
-    basicLayout->addWidget(progressSpin);
-    basicGroup->setLayout(basicLayout);
-    QVBoxLayout* advancedLayout = new QVBoxLayout{this};
-    advancedLayout->addWidget(createdLabel);
-    advancedLayout->addWidget(createdLine);
+    QVBoxLayout* metadataLayout = new QVBoxLayout{this};
+    metadataLayout->addWidget(createdLabel);
+    metadataLayout->addWidget(createdLine);
     QWidget* w = new QWidget{this};
     QHBoxLayout* l = new QHBoxLayout(w);
     l->setContentsMargins(0,0,0,0);
     l->addWidget(modifiedPanel);
     l->addWidget(readPanel);
     w->setLayout(l);
-    advancedLayout->addWidget(w);
+    metadataLayout->addWidget(w);
     w = new QWidget{this};
     l = new QHBoxLayout(w);
     l->setContentsMargins(0,0,0,0);
     l->addWidget(readsPanel);
     l->addWidget(writesPanel);
     w->setLayout(l);
-    advancedLayout->addWidget(w);
-    advancedLayout->addWidget(locationLabel);
-    advancedLayout->addWidget(locationLine);
-    advancedGroup->setLayout(advancedLayout);
+    metadataLayout->addWidget(w);
+    metadataGroup->setLayout(metadataLayout);
+
+    QGroupBox* locationGroup = new QGroupBox{tr("Location"), this};
+    QVBoxLayout* locationLayout = new QVBoxLayout{this};
+    locationLayout->addWidget(fileLabel);
+    locationLayout->addWidget(fileLine);
+    locationGroup->setLayout(locationLayout);
+
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
-    boxesLayout->addWidget(basicGroup);
-    boxesLayout->addWidget(editTagsGroup);
-    boxesLayout->addWidget(advancedGroup);
-    boxesLayout->addWidget(buttonBox);
+    boxesLayout->addWidget(metadataGroup);
+    boxesLayout->addWidget(locationGroup);
+    boxesLayout->addStretch();
     setLayout(boxesLayout);
+}
+
+void OutlineHeaderEditDialog::AdvancedTab::refreshPath(const QString& path)
+{
+    fileLine->setText(path);
+}
+
+OutlineHeaderEditDialog::AdvancedTab::~AdvancedTab()
+{
+}
+
+/*
+ * Dialog
+ */
+
+OutlineHeaderEditDialog::OutlineHeaderEditDialog(Ontology& ontology, QWidget *parent)
+    : QDialog{parent}, ontology(ontology)
+{
+    tabWidget = new QTabWidget;
+
+    generalTab = new GeneralTab(ontology, this);
+    tabWidget->addTab(generalTab, tr("General"));
+
+    advancedTab = new AdvancedTab{this};
+    tabWidget->addTab(advancedTab, tr("Advanced"));
+
+    buttonBox = new QDialogButtonBox{QDialogButtonBox::Ok | QDialogButtonBox::Cancel};
 
     // wire signals ensuring that close & set dialog status
     QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
@@ -116,15 +185,18 @@ OutlineHeaderEditDialog::OutlineHeaderEditDialog(Ontology& ontology, QWidget *pa
     QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &OutlineHeaderEditDialog::handleRejected);
     //QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, [=](){ qDebug("NoteEditDialog OK"); });
 
-    setWindowTitle(tr("Edit Outline Properties"));
+    QVBoxLayout *mainLayout = new QVBoxLayout{this};
+    mainLayout->addWidget(tabWidget);
+    mainLayout->addWidget(buttonBox);
+    setLayout(mainLayout);
+
+    setWindowTitle(tr("Edit Outline"));
     resize(fontMetrics().averageCharWidth()*55, height());
     setModal(true);
 }
 
 OutlineHeaderEditDialog::~OutlineHeaderEditDialog()
 {
-    delete typeLabel;
-    delete typeCombo;
 }
 
 void OutlineHeaderEditDialog::show()
@@ -132,23 +204,25 @@ void OutlineHeaderEditDialog::show()
     if(currentOutline) {
         // RDWR
         if(currentOutline->getType()) {
-            int i = typeCombo->findData(QVariant::fromValue<const OutlineType*>(currentOutline->getType()));
+            int i = generalTab->typeCombo->findData(QVariant::fromValue<const OutlineType*>(currentOutline->getType()));
             if(i>=0) {
-                typeCombo->setCurrentIndex(i);
+                generalTab->typeCombo->setCurrentIndex(i);
             } else {
                 qDebug() << "Unknown Outline type: " << QString::fromStdString(currentOutline->getType()->getName());
             }
-        }
-        editTagsGroup->refresh(currentOutline->getTags());
-        progressSpin->setValue(currentOutline->getProgress());
+        }        
+        generalTab->importanceCombo->setCurrentIndex(currentOutline->getImportance());
+        generalTab->urgencyCombo->setCurrentIndex(currentOutline->getUrgency());
+        generalTab->progressSpin->setValue(currentOutline->getProgress());
+        generalTab->editTagsGroup->refresh(currentOutline->getTags());
 
         // RDONLY
-        createdLine->setText(QString::fromStdString(datetimeToString(currentOutline->getCreated())));
-        modifiedPanel->setText(QString::fromStdString(datetimeToString(currentOutline->getModified())));
-        readPanel->setText(QString::fromStdString(datetimeToString(currentOutline->getRead())));
-        readsPanel->setText(QString::number(currentOutline->getReads()));
-        writesPanel->setText(QString::number(currentOutline->getRevision()));
-        locationLine->setText(QString::fromStdString(currentOutline->getKey()));
+        advancedTab->createdLine->setText(QString::fromStdString(datetimeToString(currentOutline->getCreated())));
+        advancedTab->modifiedPanel->setText(QString::fromStdString(datetimeToString(currentOutline->getModified())));
+        advancedTab->readPanel->setText(QString::fromStdString(datetimeToString(currentOutline->getRead())));
+        advancedTab->readsPanel->setText(QString::number(currentOutline->getReads()));
+        advancedTab->writesPanel->setText(QString::number(currentOutline->getRevision()));
+        advancedTab->fileLine->setText(QString::fromStdString(currentOutline->getKey()));
     }
 
     QDialog::show();
@@ -157,11 +231,13 @@ void OutlineHeaderEditDialog::show()
 void OutlineHeaderEditDialog::toOutline()
 {
     if(currentOutline) {
-        if(typeCombo->currentIndex() != -1) {
-            currentOutline->setType((const OutlineType*)(typeCombo->itemData(typeCombo->currentIndex(), Qt::UserRole).value<const OutlineType*>()));
+        if(generalTab->typeCombo->currentIndex() != -1) {
+            currentOutline->setType((const OutlineType*)(generalTab->typeCombo->itemData(generalTab->typeCombo->currentIndex(), Qt::UserRole).value<const OutlineType*>()));
         }
-        currentOutline->setTags((editTagsGroup->getTags()));
-        currentOutline->setProgress(progressSpin->value());
+        currentOutline->setImportance(generalTab->importanceCombo->currentIndex());
+        currentOutline->setUrgency(generalTab->urgencyCombo->currentIndex());
+        currentOutline->setProgress(generalTab->progressSpin->value());
+        currentOutline->setTags(generalTab->editTagsGroup->getTags());
     } else {
         qDebug("Attempt to save data from dialog to Outline, but no Outline is set.");
     }

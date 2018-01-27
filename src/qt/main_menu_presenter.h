@@ -52,7 +52,7 @@ public:
     MainMenuPresenter &operator=(const MainMenuPresenter&&) = delete;
     virtual ~MainMenuPresenter();
 
-    MainMenuView* getView(void) { return view; }
+    MainMenuView* getView() { return view; }
 
     void showFacetOutlineList();
     void showFacetOutlineView();

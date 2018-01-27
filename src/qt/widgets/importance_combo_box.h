@@ -1,5 +1,5 @@
 /*
- outlines_table_model.h     MindForger thinking notebook
+ importance_combo_box.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,27 +16,29 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8RUI_OUTLINES_TABLE_MODEL_H
-#define M8RUI_OUTLINES_TABLE_MODEL_H
+#ifndef M8RUI_IMPORTANCE_COMBO_BOX_H
+#define M8RUI_IMPORTANCE_COMBO_BOX_H
 
 #include <QtWidgets>
 
-#include "model_meta_definitions.h"
-#include "gear/qutils.h"
-
 namespace m8r {
 
-class OutlinesTableModel : public QStandardItemModel
+class ImportanceComboBox : public QComboBox
 {
     Q_OBJECT
 
 public:
-    OutlinesTableModel(QObject* parent);
+    explicit ImportanceComboBox(QWidget* parent);
+    ImportanceComboBox(const ImportanceComboBox&) = delete;
+    ImportanceComboBox(const ImportanceComboBox&&) = delete;
+    ImportanceComboBox &operator=(const ImportanceComboBox&) = delete;
+    ImportanceComboBox &operator=(const ImportanceComboBox&&) = delete;
+    ~ImportanceComboBox();
 
-    void removeAllRows();
-    void addRow(Outline* outline);
+    int8_t getValue() {
+        return itemData(currentIndex(), Qt::UserRole).value<int>();
+    }
 };
 
 }
-
-#endif // M8RUI_OUTLINES_TABLE_MODEL_H
+#endif // M8RUI_IMPORTANCE_COMBO_BOX_H

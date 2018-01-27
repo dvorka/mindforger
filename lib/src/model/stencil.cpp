@@ -42,22 +42,22 @@ Stencil::~Stencil()
     }
 }
 
-ResourceType m8r::Stencil::getType(void) const
+ResourceType m8r::Stencil::getType() const
 {
     return type;
 }
 
-const string& Stencil::getFilePath(void) const
+const string& Stencil::getFilePath() const
 {
     return filePath;
 }
 
-const string& Stencil::getName(void) const
+const string& Stencil::getName() const
 {
     return name;
 }
 
-const string* Stencil::getStencil(void) const
+const string* Stencil::getStencil() const
 {
     return content;
 }

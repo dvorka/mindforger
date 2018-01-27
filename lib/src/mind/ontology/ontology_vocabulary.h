@@ -36,7 +36,7 @@ protected:
     MAP entries;
 
 public:
-    explicit OntologyVocabulary(void);
+    explicit OntologyVocabulary();
     OntologyVocabulary(const OntologyVocabulary&) = delete;
     OntologyVocabulary(const OntologyVocabulary&&) = delete;
     OntologyVocabulary &operator=(const OntologyVocabulary&) = delete;
@@ -45,11 +45,11 @@ public:
 
     void put(const std::string& name, const VALUE* label);
     const VALUE* get(const std::string& name);
-    bool empty(void) const { return entries.empty(); }
-    MAP_ITERATOR begin(void) { return entries.begin(); }
-    MAP_ITERATOR end(void) { return entries.end(); }
-    void clear(void) { entries.clear(); }
-    std::vector<const VALUE*>& values(void) {
+    bool empty() const { return entries.empty(); }
+    MAP_ITERATOR begin() { return entries.begin(); }
+    MAP_ITERATOR end() { return entries.end(); }
+    void clear() { entries.clear(); }
+    std::vector<const VALUE*>& values() {
         // IMPROVE cache this via dirty flag
         static std::vector<const VALUE*> v;
         v.clear();
@@ -58,11 +58,11 @@ public:
         }
         return v;
     }
-    MAP_SIZE size(void) { return entries.size(); }
+    MAP_SIZE size() { return entries.size(); }
 };
 
 template <class VALUE>
-OntologyVocabulary<VALUE>::OntologyVocabulary(void)
+OntologyVocabulary<VALUE>::OntologyVocabulary()
 {
 }
 

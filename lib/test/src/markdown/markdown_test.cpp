@@ -38,7 +38,7 @@
 using namespace std;
 using namespace m8r;
 
-extern char* getMindforgerGitHomePath(void);
+extern char* getMindforgerGitHomePath();
 
 void dumpLexemType(MarkdownLexemType type)
 {

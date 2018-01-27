@@ -21,7 +21,7 @@
 
 #include "../../../src/repository_indexer.h"
 
-extern char* getMindforgerGitHomePath(void);
+extern char* getMindforgerGitHomePath();
 
 using namespace std;
 

@@ -64,31 +64,31 @@ public:
     explicit CliAndBreadcrumbsView(QWidget *parent);
 
     void updateCompleterModel(const QStringList *list=nullptr);
-    void forceInitialCompletion(void);
-    QString getFirstCompletion(void) const;
+    void forceInitialCompletion();
+    QString getFirstCompletion() const;
     void setBreadcrumbPath(const QString& path);
     void setCommand(const char* command)
     {
         cli->setText(command);
     }
-    const QString getCommand(void) const
+    const QString getCommand() const
     {
         return cli->text();
     }
-    void show(void)
+    void show()
     {
         breadcrumbsLabel->show();
         cli->show();
         cliCompleter->complete();
         goButton->show();
     }
-    void hide(void)
+    void hide()
     {
         breadcrumbsLabel->hide();
         cli->hide();
         goButton->hide();
     }
-    void showBreadcrumb(void)
+    void showBreadcrumb()
     {
         breadcrumbsLabel->show();
         cli->hide();

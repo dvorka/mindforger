@@ -107,11 +107,11 @@ Ontology::~Ontology()
     }
 }
 
-void Ontology::load(void)
+void Ontology::load()
 {
 }
 
-void Ontology::save(void) const
+void Ontology::save() const
 {
 }
 

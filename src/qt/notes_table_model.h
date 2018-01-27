@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef NOTES_TABLE_MODEL_H
-#define NOTES_TABLE_MODEL_H
+#ifndef M8RUI_NOTES_TABLE_MODEL_H
+#define M8RUI_NOTES_TABLE_MODEL_H
 
 #include <QtWidgets>
 
@@ -32,9 +32,9 @@ class NotesTableModel : public QStandardItemModel
 public:
     NotesTableModel(QObject *parent = 0);
 
-    void removeAllRows(void);
-    void addRow(Note* note); // TODO const
+    void removeAllRows();
+    void addRow(Note* note);
 };
 
 }
-#endif // NOTES_TABLE_MODEL_H
+#endif // M8RUI_NOTES_TABLE_MODEL_H

@@ -27,7 +27,7 @@ NotesTableModel::NotesTableModel(QObject *parent)
     setRowCount(0);
 }
 
-void NotesTableModel::removeAllRows(void)
+void NotesTableModel::removeAllRows()
 {
     QStandardItemModel::clear();
 
@@ -45,9 +45,9 @@ void NotesTableModel::addRow(Note* note)
     QStandardItem* noteItem = new QStandardItem(QString(note->getTitle().c_str()));
     noteItem->setData(QVariant::fromValue(note));
     items.append(noteItem);
-    items.append(new QStandardItem(note->getOutline()->getTitle().c_str()));
+    items.append(new QStandardItem{note->getOutline()->getTitle().c_str()});
 
     appendRow(items);
 }
 
-}
+} // m8r namespace

@@ -141,7 +141,7 @@ void FindOutlineByNameDialog::show(vector<MindEntity*>& outlines)
     QDialog::show();
 }
 
-void FindOutlineByNameDialog::handleReturn(void)
+void FindOutlineByNameDialog::handleReturn()
 {
     if(findButton->isEnabled()) {
         for(size_t row = 0; row<mindEntities.size(); row++) {
@@ -156,7 +156,7 @@ void FindOutlineByNameDialog::handleReturn(void)
     }
 }
 
-void FindOutlineByNameDialog::handleChoice(void)
+void FindOutlineByNameDialog::handleChoice()
 {
     if(listView->currentIndex().isValid()) {
         choice = mindEntities[listView->currentIndex().row()];

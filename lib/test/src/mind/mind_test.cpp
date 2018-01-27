@@ -33,7 +33,7 @@
 
 #include "../../../src/representations/markdown/markdown_outline_representation.h"
 
-extern char* getMindforgerGitHomePath(void);
+extern char* getMindforgerGitHomePath();
 
 using namespace std;
 

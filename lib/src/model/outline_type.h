@@ -26,11 +26,11 @@ namespace m8r {
 class OutlineType : public Thing {
 public:
     // static initialization order fiasco prevention
-    static const std::string& KeyOutline(void) {
+    static const std::string& KeyOutline() {
         static const std::string KEY_OUTLINE = std::string{"Outline"};
         return KEY_OUTLINE;
     }
-    static const std::string& KeyGrow(void) {
+    static const std::string& KeyGrow() {
         static const std::string KEY_GROW = std::string{"Goal"};
         return KEY_GROW;
     }

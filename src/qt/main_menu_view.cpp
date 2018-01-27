@@ -35,7 +35,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // devise... new MD repository
     actionMindDevise = new QAction(tr("&Devise"), mainWindow);
-    actionMindDevise->setStatusTip(tr("Create new MD repository to form new combinations, applications, ideas or principles"));
+    actionMindDevise->setStatusTip(tr("Create new MD repository to form new ideas, principles, combinations or applications"));
 
     // learn... from a repository, Markdown or TXT file
     actionMindLearn = new QAction(tr("&Learn"), mainWindow);
@@ -47,9 +47,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindRemember->setStatusTip(tr("Remember notes by ensuring memory persistence"));
 
     // remind ... smart mind search using FTS/associations/similarity
-    actionMindRemind = new QAction(tr("&Remind"), mainWindow);
+    actionMindRecall = new QAction(tr("&Recall"), mainWindow);
     // IMPROVE show memory dwell as a base for reminding a note
-    actionMindRemind->setStatusTip(tr("Remind a Note by searching memory dwell, associations and similar notes"));
+    actionMindRecall->setStatusTip(tr("Recall a Note by searching memory dwell, associations and similar notes"));
 
     // associate ... discover associated notes
     actionMindAssociate = new QAction(tr("&Associate"), mainWindow);
@@ -85,7 +85,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addAction(actionMindDevise);
     menuMind->addAction(actionMindLearn);
     menuMind->addAction(actionMindRemember);
-    menuMind->addAction(actionMindRemind);
+    menuMind->addAction(actionMindRecall);
     menuMind->addAction(actionMindAssociate);
     menuMind->addAction(actionMindThink);
     menuMind->addAction(actionMindForget);
@@ -264,8 +264,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: outline
 
-    actionOutlineNew = new QAction(tr("&Devise"), mainWindow);
-    actionOutlineNew->setStatusTip(tr("Create new Outline to form new combinations, applications, ideas or principles"));
+    actionOutlineNew = new QAction(tr("&New"), mainWindow);
+    actionOutlineNew->setStatusTip(tr("Create new Outline to form new ideas, principles, combinations or applications"));
 
     actionOutlineClone = new QAction(tr("C&lone"), mainWindow);
     actionOutlineClone->setStatusTip(tr("Make copy of the current Outline"));
@@ -273,7 +273,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineForget = new QAction(tr("&Forget"), mainWindow);
     actionOutlineForget->setStatusTip(tr("Forget Outline and move it to Limbo"));
 
-    actionOutlineExport = new QAction(tr("Dump"), mainWindow);
+    actionOutlineExport = new QAction(tr("&Dump"), mainWindow);
     actionOutlineExport->setStatusTip(tr("Export Outline to a file in supported format"));
 
     actionOutlineImport = new QAction(tr("Learn"), mainWindow);
@@ -290,10 +290,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: note
 
-    actionNoteNew = new QAction(tr("&Devise"), mainWindow);
-    actionNoteNew->setStatusTip(tr("Create new Note to form new combinations, applications, ideas or principles"));
+    actionNoteNew = new QAction(tr("&New"), mainWindow);
+    actionNoteNew->setStatusTip(tr("Create new Note to form new ideas, principles, combinations and applications"));
 
-    actionNoteSave = new QAction(tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
+    actionNoteSave = new QAction(tr("R&emember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
     actionNoteSave->setStatusTip(tr("Save Note being edited"));
 
     actionNoteForget = new QAction(tr("&Forget"), mainWindow);
@@ -314,7 +314,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNotePromote->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Right));
     actionNotePromote->setStatusTip(tr("Promote Note"));
 
-    actionNoteDemote = new QAction(tr("D&emote"), mainWindow);
+    actionNoteDemote = new QAction(tr("&Demote"), mainWindow);
     actionNoteDemote->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Left));
     actionNoteDemote->setStatusTip(tr("Demote Note"));
 

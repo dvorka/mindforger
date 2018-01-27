@@ -86,17 +86,17 @@ public:
     virtual void paintEvent(QPaintEvent* event) override;
 
 signals:
-    void signalFromOutlineTreeToOutlines(void);
+    void signalFromOutlineTreeToOutlines();
 
-    void signalSelectNextRow(void);
-    void signalSelectLastRow(void);
+    void signalSelectNextRow();
+    void signalSelectLastRow();
 
-    void signalChangeUp(void);
-    void signalChangeDown(void);
-    void signalChangePromote(void);
-    void signalChangeDemote(void);
-    void signalChangeFirst(void);
-    void signalChangeLast(void);
+    void signalChangeUp();
+    void signalChangeDown();
+    void signalChangePromote();
+    void signalChangeDemote();
+    void signalChangeFirst();
+    void signalChangeLast();
 };
 
 }

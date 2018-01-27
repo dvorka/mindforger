@@ -26,7 +26,7 @@ using namespace std;
 namespace m8r {
 
 // init() method to workaround missing constructor to constructor call in older versions of GCC :-/
-void Configuration::init(void)
+void Configuration::init()
 {
     char *home = getenv(ENV_VAR_HOME);
     userHomePath = string{home};
@@ -82,7 +82,7 @@ const string* Configuration::addRepository(const string& repositoryPath)
     return result;
 }
 
-const string* Configuration::getActiveRepository(void) const
+const string* Configuration::getActiveRepository() const
 {
     if(activeRepository) {
         return activeRepository;
@@ -91,7 +91,7 @@ const string* Configuration::getActiveRepository(void) const
     }
 }
 
-std::set<const std::string*>& Configuration::getRepositories(void)
+std::set<const std::string*>& Configuration::getRepositories()
 {
     return repositories;
 }
@@ -115,7 +115,7 @@ void Configuration::setActiveRepository(const string* repositoryPath)
     }
 }
 
-void Configuration::findOrCreateDefaultRepository(void)
+void Configuration::findOrCreateDefaultRepository()
 {
     if(!activeRepository || (*activeRepository).empty()) {
         string defaultRepositoryPath{userHomePath};
@@ -137,7 +137,7 @@ void Configuration::findOrCreateDefaultRepository(void)
     }
 }
 
-void Configuration::load(void)
+void Configuration::load()
 {
     const string filePath = getConfigFileName();
     Markdown configMarkdown{&filePath};
@@ -159,7 +159,7 @@ void Configuration::load(const vector<MarkdownAstNodeSection*>* ast)
     findOrCreateDefaultRepository();
 }
 
-void Configuration::save(void) const
+void Configuration::save() const
 {
     // TODO to be implemented
 }

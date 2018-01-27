@@ -106,22 +106,22 @@ public:
      * @brief Get Ontology.
      * @return Ontology
      */
-    Ontology& getOntology(void) { return ontology; }
+    Ontology& getOntology() { return ontology; }
 
     /**
      * @brief Get the number of outlines.
      */
-    int getOutlinesCount(void) const;
+    int getOutlinesCount() const;
 
     /**
      * @brief Get the size of outline MDs in bytes.
      */
-    unsigned int getOutlineMarkdownsSize(void) const;
+    unsigned int getOutlineMarkdownsSize() const;
 
     /**
      * @brief Get the number of notes of all outlines.
      */
-    int getNotesCount(void) const;
+    int getNotesCount() const;
 
     std::string createOutlineKey(const std::string* title);
     std::string createLimboKey(const std::string* title);
@@ -132,7 +132,7 @@ public:
      * Get list of outlines - title/description/metadata presence
      * is guaranteed, while AST is not.
      */
-    const std::vector<Outline*>& getOutlines(void) const;
+    const std::vector<Outline*>& getOutlines() const;
 
     /**
      * @brief Get full outline.

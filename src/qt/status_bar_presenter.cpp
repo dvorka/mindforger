@@ -42,7 +42,7 @@ void StatusBarPresenter::showError(const QString& message)
     view->showError(message);
 }
 
-void StatusBarPresenter::showMindStatistics(void)
+void StatusBarPresenter::showMindStatistics()
 {
     const QLocale& cLocale = QLocale::c();
 

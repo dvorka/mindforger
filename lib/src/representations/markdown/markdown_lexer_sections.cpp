@@ -36,7 +36,7 @@ public:
     explicit FileLineProvider(const char* filename);
     virtual ~FileLineProvider();
 
-    string* getLine(void);
+    string* getLine();
 };
 
 FileLineProvider::FileLineProvider(const char* filename)
@@ -44,7 +44,7 @@ FileLineProvider::FileLineProvider(const char* filename)
     infile = new ifstream{filename};
 }
 
-string* FileLineProvider::getLine(void)
+string* FileLineProvider::getLine()
 {
     // IMPROVE this is slow heap operation
     string* line = new string();

@@ -79,19 +79,19 @@ public:
     ~FindOutlineByNameDialog();
 
     QString getSearchedString() const { return lineEdit->text(); }
-    QCheckBox* getCaseCheckbox(void) const { return caseCheckBox; }
-    QPushButton* getFindButton(void) const { return findButton; }
-    MindEntity* getChoice(void) const { return choice; }
+    QCheckBox* getCaseCheckbox() const { return caseCheckBox; }
+    QPushButton* getFindButton() const { return findButton; }
+    MindEntity* getChoice() const { return choice; }
 
     void show(std::vector<MindEntity*>& outlines);
 
 signals:
-    void searchFinished(void);
+    void searchFinished();
 
 private slots:
     void enableFindButton(const QString &text);
-    void handleChoice(void);
-    void handleReturn(void);
+    void handleChoice();
+    void handleReturn();
 };
 
 }

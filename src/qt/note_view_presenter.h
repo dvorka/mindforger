@@ -60,18 +60,18 @@ public:
     NoteViewPresenter &operator=(const NoteViewPresenter&&) = delete;
     ~NoteViewPresenter();
 
-    NoteViewModel* getModel(void) const { return model; }
+    NoteViewModel* getModel() const { return model; }
 
     void refresh(Note* note);
 
-    void clearSearchExpression(void) { searchExpression.clear(); }
+    void clearSearchExpression() { searchExpression.clear(); }
     void setSearchExpression(const std::string& expression) { searchExpression = QString::fromStdString(expression); }
     void setSearchExpression(const QString& expression) { searchExpression = expression; }
-    const QString& getFtsExpression(void) const { return searchExpression; }
+    const QString& getFtsExpression() const { return searchExpression; }
     void setSearchIgnoreCase(bool ignoreCase) { searchIgnoreCase = ignoreCase; }
 
 public slots:
-    void slotEditNote(void);
+    void slotEditNote();
 };
 
 }

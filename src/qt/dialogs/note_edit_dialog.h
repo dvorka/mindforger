@@ -31,36 +31,26 @@
 
 namespace m8r {
 
+/*
+ * Dialog
+ */
+
 class NoteEditDialog : public QDialog
 {
     Q_OBJECT
 
+    class GeneralTab;
+    class AdvancedTab;
+
 private:
     Note* currentNote;
-
-    QLabel* typeLabel;
-    QComboBox* typeCombo;
-    QLabel* progressLabel;
-    QSpinBox* progressSpin;
-    QCheckBox* deadlineCheck;
-    QDateEdit* deadlineEdit;
-    QLabel* parentRelLabel;
-    QComboBox* parentRelCombo;
-
-    QLabel* createdLabel;
-    QLineEdit* createdLine;
-    LabeledEditLinePanel* modifiedPanel;
-    LabeledEditLinePanel* readPanel;
-    LabeledEditLinePanel* readsPanel;
-    LabeledEditLinePanel* writesPanel;
-    QLineEdit* writesLine;
-    QLabel* locationLabel;
-    QLineEdit* locationLine;
-
-    EditTagsPanel* editTagsGroup;
-    QDialogButtonBox *buttonBox;
-
     Ontology& ontology;
+
+    QTabWidget* tabWidget;
+    GeneralTab* generalTab;
+    AdvancedTab* advancedTab;
+
+    QDialogButtonBox *buttonBox;
 
 public:
     explicit NoteEditDialog(Ontology& ontology, QWidget* parent);
@@ -80,9 +70,65 @@ signals:
     void rejectedSignal();
 
 private slots:
-    void handleDeadlineCheck(int state);
     void handleAccepted();
     void handleRejected();
+};
+
+/**
+ * @brief General tab of edit Note dialog.
+ */
+class NoteEditDialog::GeneralTab : public QWidget
+{
+    Q_OBJECT
+
+    friend class NoteEditDialog;
+
+private:
+    Ontology& ontology;
+
+    QLabel* typeLabel;
+    QComboBox* typeCombo;
+    QLabel* progressLabel;
+    QSpinBox* progressSpin;
+    QCheckBox* deadlineCheck;
+    QDateEdit* deadlineEdit;
+    QLabel* parentRelLabel;
+    QComboBox* parentRelCombo;
+
+    EditTagsPanel* editTagsGroup;
+
+public:
+    explicit GeneralTab(Ontology& ontology, QWidget *parent);
+    ~GeneralTab();
+
+private slots:
+    void handleDeadlineCheck(int state);
+};
+
+/**
+ * @brief Advanced tab of edit Note dialog.
+ */
+class NoteEditDialog::AdvancedTab : public QWidget
+{
+    Q_OBJECT
+
+    friend class NoteEditDialog;
+
+private:
+    QLabel* createdLabel;
+    QLineEdit* createdLine;
+    LabeledEditLinePanel* modifiedPanel;
+    LabeledEditLinePanel* readPanel;
+    LabeledEditLinePanel* readsPanel;
+    LabeledEditLinePanel* writesPanel;
+    QLineEdit* writesLine;
+    QLabel* fileLabel;
+    QLineEdit* fileLine;
+
+public:
+    explicit AdvancedTab(QWidget* parent);
+    void refreshPath(const QString &path);
+    ~AdvancedTab();
 };
 
 }

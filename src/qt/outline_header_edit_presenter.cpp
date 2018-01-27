@@ -36,7 +36,10 @@ OutlineHeaderEditPresenter::OutlineHeaderEditPresenter(
 
     QObject::connect(
         view, SIGNAL(signalSaveOutlineHeader()),
-        this, SLOT(slotSave()));
+        this, SLOT(slotSaveOutlineHeader()));
+    QObject::connect(
+        view, SIGNAL(signalCloseEditor()),
+        this, SLOT(slotCloseEditor()));
     QObject::connect(
         view, SIGNAL(signalSaveAndCloseEditor()),
         this, SLOT(slotSaveAndCloseEditor()));

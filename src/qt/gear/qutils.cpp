@@ -22,7 +22,7 @@ using namespace std;
 
 namespace m8r {
 
-void initRandomizer(void)
+void initRandomizer()
 {
     qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 }

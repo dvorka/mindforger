@@ -17,9 +17,8 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-// IMPROVE prefix all ifdefs w/ M8RUI_
-#ifndef __MAIN_WINDOW_VIEW_H__
-#define __MAIN_WINDOW_VIEW_H__
+#ifndef M8RUI_MAIN_WINDOW_VIEW_H
+#define M8RUI_MAIN_WINDOW_VIEW_H
 
 #include <QtWidgets>
 
@@ -59,17 +58,20 @@ private:
 
 public:
     explicit MainWindowView(LookAndFeels& lookAndFeel);
-    // TODO delete
+    MainWindowView(const MainWindowView&) = delete;
+    MainWindowView(const MainWindowView&&) = delete;
+    MainWindowView &operator=(const MainWindowView&) = delete;
+    MainWindowView &operator=(const MainWindowView&&) = delete;
     virtual ~MainWindowView();
 
-    //QSize size(void) const { return this->size(); }
+    //QSize size() const { return this->size(); }
 
-    QMenuBar* getMenuBar(void) const;
-    CliAndBreadcrumbsView* getCli(void) const { return cliView; }
-    OrlojView* getOrloj(void) const { return orlojView; }
-    StatusBarView* getStatusBar(void) const { return statusBarView; }
+    QMenuBar* getMenuBar() const;
+    CliAndBreadcrumbsView* getCli() const { return cliView; }
+    OrlojView* getOrloj() const { return orlojView; }
+    StatusBarView* getStatusBar() const { return statusBarView; }
 };
 
 }
 
-#endif
+#endif // M8RUI_MAIN_WINDOW_VIEW_H

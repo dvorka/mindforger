@@ -57,16 +57,16 @@ public:
     MarkdownParserSections &operator=(const MarkdownParserSections&&) = delete;
     virtual ~MarkdownParserSections();
 
-    void parse(void);
+    void parse();
 
-    std::vector<MarkdownAstNodeSection*>* getAst(void) const { return ast; }
-    std::vector<MarkdownAstNodeSection*>* moveAst(void) {
+    std::vector<MarkdownAstNodeSection*>* getAst() const { return ast; }
+    std::vector<MarkdownAstNodeSection*>* moveAst() {
         std::vector<MarkdownAstNodeSection*>* result = ast;
         ast = nullptr;
         return result;
     };
-    size_t size(void) const { return ast==nullptr?0:ast->size(); }
-    bool empty(void) const { return ast==nullptr?true:ast->empty(); }
+    size_t size() const { return ast==nullptr?0:ast->size(); }
+    bool empty() const { return ast==nullptr?true:ast->empty(); }
 
 private:
     inline const MarkdownLexem* lookahead(size_t offset);
@@ -76,7 +76,7 @@ private:
     inline void skipEOL(size_t& offset);
     inline void skipSectionBody(size_t& offset);
 
-    void markdownRule(void);
+    void markdownRule();
     MarkdownAstNodeSection* sectionRule(size_t& offset);
     MarkdownAstNodeSection* sectionHeaderRule(size_t& offset);
     std::string* sectionTitleRule(size_t& offset);

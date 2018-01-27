@@ -33,7 +33,7 @@ class OutlinesTableView: public QTableView
     Q_OBJECT
 
 public:
-    static const int COLUMN_COUNT = 5;
+    static const int COLUMN_COUNT = 7;
 public:
     explicit OutlinesTableView(QWidget* parent);
     OutlinesTableView(const OutlinesTableView&) = delete;
@@ -41,7 +41,7 @@ public:
     OutlinesTableView &operator=(const OutlinesTableView&) = delete;
     OutlinesTableView &operator=(const OutlinesTableView&&) = delete;
 
-    int getColumnCount(void) { return COLUMN_COUNT; }
+    int getColumnCount() { return COLUMN_COUNT; }
 
     virtual void paintEvent(QPaintEvent* event) override;
 };

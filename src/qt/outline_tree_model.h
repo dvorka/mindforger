@@ -41,7 +41,7 @@ public:
     OutlineTreeModel &operator=(const OutlineTreeModel&) = delete;
     OutlineTreeModel &operator=(const OutlineTreeModel&&) = delete;
 
-    void removeAllRows(void);
+    void removeAllRows();
     void addRow(Note* note);
     void refresh(Note* note) { refresh(note, noselection); }
     void refresh(Note* note, QModelIndexList selection);

@@ -55,13 +55,13 @@ protected:
 private slots:
     void insertCompletion(const QString& completion, bool singleWord=false);
     void highlightCurrentLine();
-    void performCompletion(void);
+    void performCompletion();
 
 private:
-    void createWidgets(void);
-    void createConnections(void);
+    void createWidgets();
+    void createConnections();
 
-    QString textUnderCursor(void) const;
+    QString textUnderCursor() const;
     void performCompletion(const QString &completionPrefix);
     bool handledCompletedAndSelected(QKeyEvent *event);
     void populateModel(const QString &completionPrefix);

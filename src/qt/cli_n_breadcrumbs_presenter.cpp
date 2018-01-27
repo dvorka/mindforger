@@ -80,7 +80,7 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
 }
 
 // TODO i18n
-void CliAndBreadcrumbsPresenter::executeCommand(void)
+void CliAndBreadcrumbsPresenter::executeCommand()
 {
     QString command = view->getCommand();
     if(command.size()) {
@@ -132,12 +132,12 @@ void CliAndBreadcrumbsPresenter::executeFts(QString& command)
     }
 }
 
-void CliAndBreadcrumbsPresenter::executeListOutlines(void)
+void CliAndBreadcrumbsPresenter::executeListOutlines()
 {
     mainPresenter->getOrloj()->showFacetOutlineList(mind->remind().getOutlines());
 }
 
-void CliAndBreadcrumbsPresenter::executeListNotes(void)
+void CliAndBreadcrumbsPresenter::executeListNotes()
 {
     if(mainPresenter->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
          ||

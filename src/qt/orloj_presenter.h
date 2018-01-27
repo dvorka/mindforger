@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef ORLOJ_PRESENTER_H
-#define ORLOJ_PRESENTER_H
+#ifndef M8RUI_ORLOJ_PRESENTER_H
+#define M8RUI_ORLOJ_PRESENTER_H
 
 #include <iostream>
 
@@ -89,7 +89,7 @@ public:
     NoteViewPresenter* getNoteView() const { return noteViewPresenter; }
 
     bool isFacetActive(const OrlojPresenterFacets facet) const { return activeFacet==facet;}
-    bool isFacetActiveOutlineManagement(void) {
+    bool isFacetActiveOutlineManagement() {
         if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
              ||
            isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
@@ -106,7 +106,7 @@ public:
         }
     }
 
-    OrlojPresenterFacets getFacet(void) const { return activeFacet; }
+    OrlojPresenterFacets getFacet() const { return activeFacet; }
     void setFacet(OrlojPresenterFacets facet) {
         activeFacet = facet;
     }
@@ -114,7 +114,7 @@ public:
     void showFacetOutlineList(const std::vector<Outline*>& outlines);
     void showFacetFtsResult(std::vector<Note*>* result);
     void showFacetOutline(Outline* outline);
-    void showFacetNoteView(void);
+    void showFacetNoteView();
     void showFacetNoteEdit(Note* note);
     void showFacetOutlineHeaderEdit(Outline* outline);
 
@@ -131,4 +131,4 @@ public slots:
 
 } // m8r namespace
 
-#endif // ORLOJ_PRESENTER_H
+#endif // M8RUI_ORLOJ_PRESENTER_H

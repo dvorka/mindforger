@@ -61,7 +61,7 @@ public:
     QAction* actionMindDevise;
     QAction* actionMindLearn;
     QAction* actionMindRemember;
-    QAction* actionMindRemind;
+    QAction* actionMindRecall;
     QAction* actionMindAssociate;
     QAction* actionMindThink;
     QAction* actionMindForget;

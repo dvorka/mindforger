@@ -139,12 +139,12 @@ Memory::~Memory()
     delete persistence;
 }
 
-int Memory::getOutlinesCount(void) const
+int Memory::getOutlinesCount() const
 {
     return outlines.size();
 }
 
-unsigned Memory::getOutlineMarkdownsSize(void) const
+unsigned Memory::getOutlineMarkdownsSize() const
 {
     // IMPROVE introduce dirty flag (add/remove outline and recount only then)
     unsigned int result{};
@@ -154,7 +154,7 @@ unsigned Memory::getOutlineMarkdownsSize(void) const
     return result;
 }
 
-int Memory::getNotesCount(void) const
+int Memory::getNotesCount() const
 {
     // IMPROVE introduce dirty flag (add/remove outline and recount only then)
     unsigned int result{};
@@ -164,7 +164,7 @@ int Memory::getNotesCount(void) const
     return result;
 }
 
-const vector<Outline*>& Memory::getOutlines(void) const
+const vector<Outline*>& Memory::getOutlines() const
 {
     return outlines;
 }

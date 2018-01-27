@@ -51,13 +51,13 @@ public:
     FtsDialog &operator=(const FtsDialog&&) = delete;
     ~FtsDialog();
 
-    void clearScope(void) { scope = nullptr; }
+    void clearScope() { scope = nullptr; }
     void setScope(Outline* o) { scope = o; }
-    Outline* getScope(void) { return scope; }
+    Outline* getScope() { return scope; }
 
     QString getSearchedString() const { return lineEdit->text(); }
-    QCheckBox* getCaseCheckbox(void) const { return caseCheckBox; }
-    QPushButton* getFindButton(void) const { return findButton; }
+    QCheckBox* getCaseCheckbox() const { return caseCheckBox; }
+    QPushButton* getFindButton() const { return findButton; }
 
     void show() { lineEdit->selectAll(); lineEdit->setFocus(); QDialog::show(); }
 

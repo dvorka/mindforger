@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef NOTES_TABLE_PRESENTER_H
-#define NOTES_TABLE_PRESENTER_H
+#ifndef M8RUI_NOTES_TABLE_PRESENTER_H
+#define M8RUI_NOTES_TABLE_PRESENTER_H
 
 #include <QtWidgets>
 
@@ -36,13 +36,16 @@ private:
 
 public:
     NotesTablePresenter(NotesTableView* view);
-    // TODO delets
+    NotesTablePresenter(const NotesTablePresenter&) = delete;
+    NotesTablePresenter(const NotesTablePresenter&&) = delete;
+    NotesTablePresenter &operator=(const NotesTablePresenter&) = delete;
+    NotesTablePresenter &operator=(const NotesTablePresenter&&) = delete;
 
-    NotesTableModel* getModel(void) const { return model; }
+    NotesTableModel* getModel() const { return model; }
 
     void refresh(std::vector<Note*>* notes);
 };
 
 }
 
-#endif // NOTES_TABLE_PRESENTER_H
+#endif // M8RUI_NOTES_TABLE_PRESENTER_H

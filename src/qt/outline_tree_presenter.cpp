@@ -23,11 +23,11 @@ namespace m8r {
 OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, QObject* parent) : QObject(parent)
 {
     this->view = view;
-    this->model = new OutlineTreeModel(view);
+    this->model = new OutlineTreeModel{view};
     this->view->setModel(this->model);
 
     // ensure HTML cells rendering
-    HtmlDelegate* delegate = new HtmlDelegate();
+    HtmlDelegate* delegate = new HtmlDelegate{};
     this->view->setItemDelegate(delegate);
 
     // signals and slots
@@ -55,7 +55,7 @@ void OutlineTreePresenter::refresh(Note* note)
     }
 }
 
-int OutlineTreePresenter::getCurrentRow(void) const
+int OutlineTreePresenter::getCurrentRow() const
 {
     QModelIndexList indexes = view->selectionModel()->selection().indexes();
     for(int i=0; i<indexes.count(); i++) {
@@ -65,7 +65,7 @@ int OutlineTreePresenter::getCurrentRow(void) const
     return -1;
 }
 
-Note* OutlineTreePresenter::getCurrentNote(void) const
+Note* OutlineTreePresenter::getCurrentNote() const
 {
     int row = getCurrentRow();
     // IMPROVE constant w/ a name
@@ -76,7 +76,7 @@ Note* OutlineTreePresenter::getCurrentNote(void) const
     }
 }
 
-void OutlineTreePresenter::slotSelectNextRow(void)
+void OutlineTreePresenter::slotSelectNextRow()
 {
     int row = getCurrentRow();
     if(row < model->rowCount()-1) {
@@ -85,7 +85,7 @@ void OutlineTreePresenter::slotSelectNextRow(void)
     }
 }
 
-void OutlineTreePresenter::slotSelectLastRow(void)
+void OutlineTreePresenter::slotSelectLastRow()
 {
     int row = getCurrentRow();
     if(row) {

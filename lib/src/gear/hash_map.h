@@ -50,21 +50,21 @@ public:
     HashMap(const HashMap&&) = delete;
     HashMap &operator=(const HashMap&) = delete;
     HashMap &operator=(const HashMap&&) = delete;
-    virtual ~HashMap(void);
+    virtual ~HashMap();
 
     void put(const char* key, VALUE* value);
     void add(const char* key) { put(key, nullptr); }
     VALUE* get(const char* key);
     bool contains(const char* key) { return (get(key)!=nullptr); }
-    std::vector<char*>* keys(void);
+    std::vector<char*>* keys();
 
     void put(const std::string* key, VALUE* value) { put(key->c_str(), value); }
     void add(const std::string* key) { put(key, nullptr); }
     VALUE* get(const std::string* key) { return get(key->c_str()); }
     bool contains(const std::string* key) { return (get(key)!=nullptr); }
 
-    int size(void) const { return entrySize; }
-    void stat(void);
+    int size() const { return entrySize; }
+    void stat();
 
 private:
     unsigned int hash(const char *key)
@@ -92,7 +92,7 @@ HashMap<VALUE>::HashMap(bool freeValues, int tableSize)
 }
 
 template<class VALUE>
-HashMap<VALUE>::~HashMap(void)
+HashMap<VALUE>::~HashMap()
 {
     Entry *entry, *kill;
     for(int slot{}; slot<tableSize; slot++) {
@@ -148,7 +148,7 @@ VALUE* HashMap<VALUE>::get(const char* key)
 }
 
 template<class VALUE>
-std::vector<char*>* HashMap<VALUE>::keys(void)
+std::vector<char*>* HashMap<VALUE>::keys()
 {
     if(entrySize) {
         std::vector<char*>* result = new std::vector<char*>{};
@@ -168,7 +168,7 @@ std::vector<char*>* HashMap<VALUE>::keys(void)
 }
 
 template<class VALUE>
-void HashMap<VALUE>::stat(void)
+void HashMap<VALUE>::stat()
 {
     Entry *entry{};
     for(int slot=0; slot<tableSize; slot++) {

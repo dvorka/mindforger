@@ -18,7 +18,16 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 '''
-Code style checker
+MindForger code conventions:
+
+- spaces, no tabs
+- no trailing whitespaces
+- {} used w/ constructor having 0/1 parameter, () otherwise
+- CamelCase class names (no underscores)
+- lower_case_with_unserscores class files names
+- .h extension for header files
+- .cpp extension for class files
+
 '''
 
 import os

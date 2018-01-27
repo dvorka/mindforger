@@ -44,7 +44,7 @@ private:
     int fontPointSize;
 
 public:
-    static LookAndFeels& getInstance(void)
+    static LookAndFeels& getInstance()
     {
         static LookAndFeels SINGLETON;
         return SINGLETON;
@@ -77,7 +77,7 @@ private:
     // CLI
     QColor cliTextColor;
 
-    explicit LookAndFeels(void);
+    explicit LookAndFeels();
 
 public:
     LookAndFeels(const LookAndFeels&) = delete;
@@ -89,44 +89,44 @@ public:
      * "hacker" style view suitable in the night and early
      * mornings when your eyes prefer less light.
      */
-    void setYinTheme(void);
+    void setYinTheme();
 
     /* Yang (white) theme aims to be distraction-free Kindle style
      * theme suitable for comfortable knowledge reading and
      * navigation.
      */
-    void setYangTheme(void);
+    void setYangTheme();
 
     /* Extra (custom) theme(s)...
      */
-    void setBlackTheme(void);
+    void setBlackTheme();
 
     void init(QApplication* mindforgerApplication);
     bool isThemeNameValid(const QString&) const;
     void setFontPointSize(int fontPointSize) { this->fontPointSize = fontPointSize; }
-    int getFontPointSize(void) const { return fontPointSize; }
+    int getFontPointSize() const { return fontPointSize; }
     void setTheme(const QString&);
 
-    const QString& getTextColor(void) const { return textColor; }
-    const QString& getEditorBackgroundColor(void) const { return editorBackgroundColor; }
+    const QString& getTextColor() const { return textColor; }
+    const QString& getEditorBackgroundColor() const { return editorBackgroundColor; }
 
-    const QString& getEditorLineNumbersForegroundColor(void) const { return editorLineNumbersForegroundColor; }
-    const QString& getEditorLineNumbersBackgroundColor(void) const { return editorLineNumbersBackgroundColor; }
+    const QString& getEditorLineNumbersForegroundColor() const { return editorLineNumbersForegroundColor; }
+    const QString& getEditorLineNumbersBackgroundColor() const { return editorLineNumbersBackgroundColor; }
 
-    QColor& getEditorBold(void) { return editorBold; }
-    QColor& getEditorBolder(void) { return editorBolder; }
-    QColor& getEditorItalic(void) { return editorItalic; }
-    QColor& getEditorItalicer(void) { return editorItalicer; }
-    QColor& getEditorStrikethrough(void) { return editorStrikethrough; }
-    QColor& getEditorLink(void) { return editorLink; }
-    QColor& getEditorCodeblock(void) { return editorCodeblock; }
-    QColor& getEditorHtmlTag(void) { return editorHtmlTag; }
-    QColor& getEditorHtmlEntity(void) { return editorHtmlEntity; }
-    QColor& getEditorHtmlAttrName(void) { return editorHtmlAttrName; }
-    QColor& getEditorHtmlAttrValue(void) { return editorHtmlAttrValue; }
-    QColor& getEditorHtmlComment(void) { return editorHtmlComment; }
+    QColor& getEditorBold() { return editorBold; }
+    QColor& getEditorBolder() { return editorBolder; }
+    QColor& getEditorItalic() { return editorItalic; }
+    QColor& getEditorItalicer() { return editorItalicer; }
+    QColor& getEditorStrikethrough() { return editorStrikethrough; }
+    QColor& getEditorLink() { return editorLink; }
+    QColor& getEditorCodeblock() { return editorCodeblock; }
+    QColor& getEditorHtmlTag() { return editorHtmlTag; }
+    QColor& getEditorHtmlEntity() { return editorHtmlEntity; }
+    QColor& getEditorHtmlAttrName() { return editorHtmlAttrName; }
+    QColor& getEditorHtmlAttrValue() { return editorHtmlAttrValue; }
+    QColor& getEditorHtmlComment() { return editorHtmlComment; }
 
-    const QColor& getCliTextColor(void) const { return cliTextColor; }
+    const QColor& getCliTextColor() const { return cliTextColor; }
 };
 
 }

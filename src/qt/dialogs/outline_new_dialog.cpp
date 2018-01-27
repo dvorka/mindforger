@@ -35,38 +35,13 @@ OutlineNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     nameEdit = new QLineEdit(tr("Outline"), this);
 
     typeLabel = new QLabel(tr("Type")+":", this);
-    typeCombo = new QComboBox(this);
+    typeCombo = new QComboBox{this};
 
     importanceLabel = new QLabel(tr("Importance")+":", this);
-    importanceCombo = new QComboBox(this);
-    importanceCombo->addItem("");
-    QString s{};
-    for(int i=1; i<=5; i++) {
-        s.clear();
-        for(int j=1; j<=5; j++) {
-            if(j<=i) {
-                s += QChar(9733);
-            } else {
-                s += QChar(9734);
-            }
-        }
-        importanceCombo->addItem(s, QVariant::fromValue<int>(i));
-    }
+    importanceCombo = new ImportanceComboBox{this};
 
     urgencyLabel = new QLabel(tr("Urgency")+":", this);
-    urgencyCombo = new QComboBox(this);
-    urgencyCombo->addItem("");
-    for(int i=1; i<=5; i++) {
-        s.clear();
-        for(int j=1; j<=5; j++) {
-            if(j<=i) {
-                s += QChar(0x29D7);
-            } else {
-                s += QChar(0x29D6);
-            }
-        }
-        urgencyCombo->addItem(s, QVariant::fromValue<int>(i));
-    }
+    urgencyCombo = new UrgencyComboBox{this};
 
     progressLabel = new QLabel{tr("Progress")+": %", this};
     progressSpin = new QSpinBox{this};
@@ -115,7 +90,7 @@ OutlineNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     setLayout(boxesLayout);
 }
 
-OutlineNewDialog::GeneralTab::~GeneralTab(void)
+OutlineNewDialog::GeneralTab::~GeneralTab()
 {
     delete nameLabel;
     delete nameEdit;
@@ -131,7 +106,7 @@ OutlineNewDialog::GeneralTab::~GeneralTab(void)
     delete stencilCombo;
 }
 
-void OutlineNewDialog::GeneralTab::clean(void)
+void OutlineNewDialog::GeneralTab::clean()
 {
     nameEdit->selectAll();
     nameEdit->setFocus();
@@ -144,20 +119,25 @@ void OutlineNewDialog::GeneralTab::clean(void)
 OutlineNewDialog::AdvancedTab::AdvancedTab(const QString& memoryDirPath, QWidget *parent)
     : QWidget(parent), memoryDirPath(memoryDirPath)
 {
-    pathLabel = new QLabel{tr("Expected Location")+":", this};
-    pathEdit = new QLabel{this->memoryDirPath, this};
-    pathEdit->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    fileLabel = new QLabel{tr("Expected File")+":", this};
+    fileLine = new QLineEdit{this->memoryDirPath, this};
+    fileLine->setDisabled(true);
+
+    QGroupBox* locationGroup = new QGroupBox{tr("Location"), this};
+    QVBoxLayout* locationLayout = new QVBoxLayout{this};
+    locationLayout->addWidget(fileLabel);
+    locationLayout->addWidget(fileLine);
+    locationGroup->setLayout(locationLayout);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(pathLabel);
-    mainLayout->addWidget(pathEdit);
-    mainLayout->addStretch(1);
+    mainLayout->addWidget(locationGroup);
+    mainLayout->addStretch();
     setLayout(mainLayout);
 }
 
 void OutlineNewDialog::AdvancedTab::refreshPath(const QString& name)
 {
-    pathEdit->setText(
+    fileLine->setText(
         memoryDirPath+
         FILE_PATH_SEPARATOR+
         QString::fromStdString(normalizeToNcName(name.toStdString(),'-'))+
@@ -222,7 +202,7 @@ OutlineNewDialog::OutlineNewDialog(
     setModal(true);
 }
 
-OutlineNewDialog::~OutlineNewDialog(void)
+OutlineNewDialog::~OutlineNewDialog()
 {
     if(generalTab) delete generalTab;
     if(advancedTab) delete advancedTab;

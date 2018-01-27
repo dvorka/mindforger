@@ -25,42 +25,34 @@
 #include "lib/src/mind/ontology/ontology.h"
 
 #include "../model_meta_definitions.h"
+#include "../gear/qutils.h"
 #include "../widgets/edit_tags_panel.h"
 #include "../widgets/labeled_edit_line_panel.h"
-#include "../gear/qutils.h"
+#include "../widgets/importance_combo_box.h"
+#include "../widgets/urgency_combo_box.h"
 
 namespace m8r {
+
+/*
+ * Dialog
+ */
 
 class OutlineHeaderEditDialog : public QDialog
 {
     Q_OBJECT
 
+    class GeneralTab;
+    class AdvancedTab;
+
 private:
     Outline* currentOutline;
-
-    QLabel* typeLabel;
-    QComboBox* typeCombo;
-    QLabel* importanceLabel;
-    QSpinBox* importanceSpin;
-    QLabel* urgencyLabel;
-    QSpinBox* urgencySpin;
-    QLabel* progressLabel;
-    QSpinBox* progressSpin;
-
-    QLabel* createdLabel;
-    QLineEdit* createdLine;
-    LabeledEditLinePanel* modifiedPanel;
-    LabeledEditLinePanel* readPanel;
-    LabeledEditLinePanel* readsPanel;
-    LabeledEditLinePanel* writesPanel;
-    QLineEdit* writesLine;
-    QLabel* locationLabel;
-    QLineEdit* locationLine;
-
-    EditTagsPanel* editTagsGroup;
-    QDialogButtonBox *buttonBox;
-
     Ontology& ontology;
+
+    QTabWidget* tabWidget;
+    GeneralTab* generalTab;
+    AdvancedTab* advancedTab;
+
+    QDialogButtonBox *buttonBox;
 
 public:
     explicit OutlineHeaderEditDialog(Ontology& ontology, QWidget* parent);
@@ -84,5 +76,60 @@ private slots:
     void handleRejected();
 };
 
+/**
+ * @brief General tab of edit Outline dialog.
+ */
+class OutlineHeaderEditDialog::GeneralTab : public QWidget
+{
+    Q_OBJECT
+
+    friend class OutlineHeaderEditDialog;
+
+private:
+    Ontology& ontology;
+
+    QLabel* typeLabel;
+    QComboBox* typeCombo;
+    QLabel* importanceLabel;
+    ImportanceComboBox* importanceCombo;
+    QLabel* urgencyLabel;
+    UrgencyComboBox* urgencyCombo;
+    QLabel* progressLabel;
+    QSpinBox* progressSpin;
+
+    EditTagsPanel* editTagsGroup;
+
+public:
+    explicit GeneralTab(Ontology& ontology, QWidget *parent);
+    ~GeneralTab();
+};
+
+/**
+ * @brief Advanced tab of edit Outline dialog.
+ */
+class OutlineHeaderEditDialog::AdvancedTab : public QWidget
+{
+    Q_OBJECT
+
+    friend class OutlineHeaderEditDialog;
+
+private:
+    QLabel* createdLabel;
+    QLineEdit* createdLine;
+    LabeledEditLinePanel* modifiedPanel;
+    LabeledEditLinePanel* readPanel;
+    LabeledEditLinePanel* readsPanel;
+    LabeledEditLinePanel* writesPanel;
+    QLineEdit* writesLine;
+    QLabel* fileLabel;
+    QLineEdit* fileLine;
+
+public:
+    explicit AdvancedTab(QWidget* parent);
+    void refreshPath(const QString &path);
+    ~AdvancedTab();
+};
+
 }
+
 #endif // M8RUI_OUTLINE_HEADER_EDIT_DIALOG_H

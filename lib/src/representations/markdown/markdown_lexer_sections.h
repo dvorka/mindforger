@@ -103,7 +103,7 @@ public:
 
     void addSymbol(std::string *symbol);
     bool lookup(std::string* symbol) const;
-    void clearSymbols(void) { symbols.clear(); }
+    void clearSymbols() { symbols.clear(); }
 };
 
 /**
@@ -130,7 +130,7 @@ public:
     MarkdownLexerSections &operator=(const MarkdownLexerSections &&) = delete;
     virtual ~MarkdownLexerSections();
 
-    void tokenize(void);
+    void tokenize();
     void tokenize(const std::string* text);
 
     /**
@@ -145,14 +145,14 @@ public:
     const MarkdownSymbolTable& getSymbolTable() const { return symbolTable; }
     MarkdownLexem* operator[](size_t i) { return lexems[i]; }
     const MarkdownLexem* operator[](size_t i) const { return lexems[i]; }
-    bool empty(void) const { return lexems.empty(); }
-    size_t size(void) const { return lexems.size(); }
+    bool empty() const { return lexems.empty(); }
+    size_t size() const { return lexems.size(); }
 
 private:
     bool nextToken(const unsigned short int offset);
 
     inline bool lookahead(const unsigned short offset, const unsigned short idx) const;
-    void toggleInCodeBlock(void) { inCodeBlock=!inCodeBlock; }
+    void toggleInCodeBlock() { inCodeBlock=!inCodeBlock; }
 
     inline bool isSameCharsLine(const unsigned short offset, const char c) const;
     inline bool startsWithCodeBlockSymbol(const unsigned short offset) const;

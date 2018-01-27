@@ -76,7 +76,7 @@ void OrlojPresenter::showFacetOutlineList(const vector<Outline*>& outlines)
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
-void OrlojPresenter::slotShowOutlines(void)
+void OrlojPresenter::slotShowOutlines()
 {
     showFacetOutlineList(mind->remind().getOutlines());
 }
@@ -118,7 +118,7 @@ void OrlojPresenter::slotShowOutline(const QItemSelection& selected, const QItem
     }
 }
 
-void OrlojPresenter::showFacetNoteView(void)
+void OrlojPresenter::showFacetNoteView()
 {
     view->showFacetNoteView();
     mainPresenter->getMainMenu()->showFacetOutlineView();
@@ -159,7 +159,7 @@ void OrlojPresenter::fromNoteEditBackToView(Note* note)
     showFacetNoteView();
 }
 
-void OrlojPresenter::slotShowOutlineHeader(void)
+void OrlojPresenter::slotShowOutlineHeader()
 {
     // TODO update view w/ new outline
     view->showFacetOutlineHeaderView();

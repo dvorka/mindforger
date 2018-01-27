@@ -25,7 +25,7 @@ constexpr const auto THEME_BLACK = "black";
 
 namespace m8r {
 
-LookAndFeels::LookAndFeels(void)
+LookAndFeels::LookAndFeels()
 {
     themeNames << THEME_YIN << THEME_YANG << THEME_BLACK;
 }
@@ -58,7 +58,7 @@ void LookAndFeels::setTheme(const QString& themeName)
 /*
  * Built-in yin (dark) theme definition.
  */
-void LookAndFeels::setYinTheme(void)
+void LookAndFeels::setYinTheme()
 {
     textColor = QString("#FFF");
 
@@ -110,7 +110,7 @@ void LookAndFeels::setYinTheme(void)
 /*
  * Built-in yang (light) theme definition.
  */
-void LookAndFeels::setYangTheme(void)
+void LookAndFeels::setYangTheme()
 {
     textColor = QString("#000");
 
@@ -153,7 +153,7 @@ void LookAndFeels::setYangTheme(void)
     mindforgerApplication->setPalette(palette);
 }
 
-void LookAndFeels::setBlackTheme(void)
+void LookAndFeels::setBlackTheme()
 {
     textColor = QString("#FFF");
 

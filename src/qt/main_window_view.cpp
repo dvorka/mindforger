@@ -20,9 +20,8 @@
 
 namespace m8r {
 
-MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
-    // main window has no parent - it's destroyed by MF main class
-    : QMainWindow(nullptr),
+MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)    
+    : QMainWindow(nullptr), // main window has no parent - it's destroyed by MF main class
       lookAndFeel(lookAndFeel)
 {
     setWindowTitle("MindForger - "+tr("Thinking Notebook"));
@@ -30,9 +29,9 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
     centralWidget = new QWidget(this);
 
     centralLayout = new QVBoxLayout{centralWidget};
-    cliView = new CliAndBreadcrumbsView(centralWidget);
+    cliView = new CliAndBreadcrumbsView{centralWidget};
     centralLayout->addWidget(cliView);
-    orlojView = new OrlojView(centralWidget);
+    orlojView = new OrlojView{centralWidget};
     centralLayout->addWidget(orlojView);
 
     centralWidget->setLayout(centralLayout);
@@ -46,7 +45,7 @@ MainWindowView::~MainWindowView()
     delete centralWidget;
 }
 
-QMenuBar* MainWindowView::getMenuBar(void) const
+QMenuBar* MainWindowView::getMenuBar() const
 {
     return menuBar();
 }

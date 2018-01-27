@@ -117,7 +117,7 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
     view->setHtml(html);
 }
 
-void OutlineHeaderViewPresenter::slotEditOutlineHeader(void)
+void OutlineHeaderViewPresenter::slotEditOutlineHeader()
 {
     orloj->showFacetOutlineHeaderEdit(currentOutline);
 }

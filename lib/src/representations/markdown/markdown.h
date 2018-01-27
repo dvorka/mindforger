@@ -64,10 +64,10 @@ public:
     Markdown &operator=(const Markdown &&) = delete;
     virtual ~Markdown();
 
-    void from(void);
+    void from();
     void from(const std::string* text);
-    bool isParsed(void) const { return ast==nullptr; }
-    void clear(void);
+    bool isParsed() const { return ast==nullptr; }
+    void clear();
 
     const std::string* getFilePath() const;
     unsigned getFileSize() const;

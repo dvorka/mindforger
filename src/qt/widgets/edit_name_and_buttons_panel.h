@@ -96,9 +96,9 @@ public slots:
     void handleCloseOutlineHeaderEditDialog();
 
 public:
-    QString getTitle(void) const { return lineEdit->text(); }
-    QPushButton* getRememberButton(void) const { return rememberButton; }
-    QPushButton* getCancelButton(void) const { return cancelButton; }
+    QString getTitle() const { return lineEdit->text(); }
+    QPushButton* getRememberButton() const { return rememberButton; }
+    QPushButton* getCancelButton() const { return cancelButton; }
 
 };
 

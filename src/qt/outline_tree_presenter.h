@@ -46,19 +46,19 @@ public:
     OutlineTreePresenter &operator=(const OutlineTreePresenter&) = delete;
     OutlineTreePresenter &operator=(const OutlineTreePresenter&&) = delete;
 
-    OutlineTreeModel* getModel(void) const { return model; }
+    OutlineTreeModel* getModel() const { return model; }
 
     void refresh(Outline* outline);
     void refresh(Note* note);
 
-    int getCurrentRow(void) const;
-    Note* getCurrentNote(void) const;
+    int getCurrentRow() const;
+    Note* getCurrentNote() const;
 
     ~OutlineTreePresenter();
 
 public slots:
-    void slotSelectNextRow(void);
-    void slotSelectLastRow(void);
+    void slotSelectNextRow();
+    void slotSelectLastRow();
 };
 
 }

@@ -82,23 +82,23 @@ public:
     Ontology &operator=(const Ontology&&) = delete;
     virtual ~Ontology();
 
-    void load(void);
-    void save(void) const;
+    void load();
+    void save() const;
 
     /**
      * @brief Find tag w/ key ensuring it exist in one instance through the application.
      * @return tag w/ given key.
      */
     const Tag* findOrCreateTag(const std::string& key);
-    OntologyVocabulary<Tag>& getTags(void) { return tags; }
+    OntologyVocabulary<Tag>& getTags() { return tags; }
 
     const OutlineType* findOrCreateOutlineType(const std::string& key);
-    const OutlineType* getDefaultOutlineType(void) const { return defaultOutlineType; }
-    OntologyVocabulary<OutlineType>& getOutlineTypes(void) { return outlineTypes; }
+    const OutlineType* getDefaultOutlineType() const { return defaultOutlineType; }
+    OntologyVocabulary<OutlineType>& getOutlineTypes() { return outlineTypes; }
 
     const NoteType* findOrCreateNoteType(const std::string& key);
-    const NoteType* getDefaultNoteType(void) const { return defaultNoteType; }
-    OntologyVocabulary<NoteType>& getNoteTypes(void) { return noteTypes; }
+    const NoteType* getDefaultNoteType() const { return defaultNoteType; }
+    OntologyVocabulary<NoteType>& getNoteTypes() { return noteTypes; }
 };
 
 } /* namespace m8r */

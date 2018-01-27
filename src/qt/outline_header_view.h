@@ -21,7 +21,6 @@
 
 #include <QtWidgets>
 #include <QWebView>
-#include <QUrl>
 
 namespace m8r {
 
@@ -41,7 +40,7 @@ public:
     ~OutlineHeaderView();
 
 signals:
-    void signalMouseDoubleClickEvent(void);
+    void signalMouseDoubleClickEvent();
 };
 
 }

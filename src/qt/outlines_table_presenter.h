@@ -41,7 +41,7 @@ public:
     OutlinesTablePresenter(const OutlinesTablePresenter&&) = delete;
     OutlinesTablePresenter &operator=(const OutlinesTablePresenter&) = delete;
     OutlinesTablePresenter &operator=(const OutlinesTablePresenter&&) = delete;
-    OutlinesTableModel* getModel(void) const { return model; }
+    OutlinesTableModel* getModel() const { return model; }
 
     void refresh(const std::vector<Outline*>& outlines);
 };

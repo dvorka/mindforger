@@ -48,7 +48,7 @@ MarkdownParserSections::~MarkdownParserSections()
     }
 }
 
-void MarkdownParserSections::parse(void)
+void MarkdownParserSections::parse()
 {
     if(lexer.size()) {
         if(ast!=nullptr) {
@@ -89,7 +89,7 @@ const MarkdownLexem* MarkdownParserSections::lookaheadNot(MarkdownLexemType lexe
     }
 }
 
-void MarkdownParserSections::markdownRule(void)
+void MarkdownParserSections::markdownRule()
 {
     MarkdownAstNodeSection* section;
     size_t offset = 0;

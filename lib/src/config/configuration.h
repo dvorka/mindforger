@@ -100,32 +100,32 @@ public:
      * @brief Create Configuration and set active repository.
      */
     explicit Configuration(const std::string& activeRepository);
-    void load(void);
-    void save(void) const;
+    void load();
+    void save() const;
 
     /**
      * @brief Add new repository path to configuration.
      */
     const std::string* addRepository(const std::string& repositoryPath);
 
-    const std::string* getActiveRepository(void) const;
+    const std::string* getActiveRepository() const;
     /**
      * @brief Set active repository - activeRepositoryPath parameter must be one of known repositories.
      */
     void setActiveRepository(const std::string* activeRepositoryPath);
 
-    void findOrCreateDefaultRepository(void);
+    void findOrCreateDefaultRepository();
 
-    const char* getRepositoryFromEnv(void);
-    const char* getEditorFromEnv(void);
-    std::set<const std::string*>& getRepositories(void);
-    const std::string& getExternalEditor(void) const { return externalEditor; }
-    const std::string& getMemoryPath(void) const { return memoryPath; }
-    const std::string& getLimboPath(void) const { return limboPath; }
-    int getFontPointSize(void) const { return fontPointSize; }
+    const char* getRepositoryFromEnv();
+    const char* getEditorFromEnv();
+    std::set<const std::string*>& getRepositories();
+    const std::string& getExternalEditor() const { return externalEditor; }
+    const std::string& getMemoryPath() const { return memoryPath; }
+    const std::string& getLimboPath() const { return limboPath; }
+    int getFontPointSize() const { return fontPointSize; }
 
 private:
-    void init(void);
+    void init();
     const std::string getConfigFileName();
     void load(const std::vector<MarkdownAstNodeSection*>* ast);
     const std::string* addRepository(const std::string* repositoryPath);

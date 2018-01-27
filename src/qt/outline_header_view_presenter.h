@@ -55,7 +55,7 @@ public:
     ~OutlineHeaderViewPresenter();
 
 public slots:
-    void slotEditOutlineHeader(void);
+    void slotEditOutlineHeader();
 };
 
 }

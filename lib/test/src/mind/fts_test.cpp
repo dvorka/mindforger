@@ -29,7 +29,7 @@
 #include "../../../src/mind/mind.h"
 #include "../../../src/model/note.h"
 
-extern char* getMindforgerGitHomePath(void);
+extern char* getMindforgerGitHomePath();
 
 using namespace std;
 

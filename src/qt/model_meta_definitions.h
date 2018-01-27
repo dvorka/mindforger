@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef MODEL_META_DEFINITIONS_H
-#define MODEL_META_DEFINITIONS_H
+#ifndef M8RUI_MODEL_META_DEFINITIONS_H
+#define M8RUI_MODEL_META_DEFINITIONS_H
 
 #include <QtWidgets>
 
@@ -52,4 +52,4 @@ Q_DECLARE_METATYPE(const m8r::Tag*)
 Q_DECLARE_METATYPE(m8r::Stencil*)
 Q_DECLARE_METATYPE(const m8r::Stencil*)
 
-#endif // MODEL_META_DEFINITIONS_H
+#endif // M8RUI_MODEL_META_DEFINITIONS_H

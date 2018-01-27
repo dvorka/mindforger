@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef CLI_N_BREADCRUMBS_PRESENTER_H
-#define CLI_N_BREADCRUMBS_PRESENTER_H
+#ifndef M8RUI_CLI_N_BREADCRUMBS_PRESENTER_H
+#define M8RUI_CLI_N_BREADCRUMBS_PRESENTER_H
 
 #include <vector>
 
@@ -48,14 +48,14 @@ public:
             CliAndBreadcrumbsView* view,
             Mind* mind);
 
-    void executeListOutlines(void);
-    void executeListNotes(void);
+    void executeListOutlines();
+    void executeListNotes();
     void executeFts(QString& command);
 
 private slots:
-    void executeCommand(void);
+    void executeCommand();
     void handleCliTextChanged(const QString& text);
 };
 
 }
-#endif // CLI_N_BREADCRUMBS_PRESENTER_H
+#endif // M8RUI_CLI_N_BREADCRUMBS_PRESENTER_H

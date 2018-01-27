@@ -30,7 +30,7 @@ Markdown::Markdown(const std::string* filePath)
     this->ast = nullptr;
 }
 
-void Markdown::clear(void)
+void Markdown::clear()
 {
     this->fileSize = 0;
     this->modified = 0;
@@ -41,7 +41,7 @@ void Markdown::clear(void)
     }
 }
 
-void Markdown::from(void)
+void Markdown::from()
 {
     clear();
     modified = fileModificationTime(filePath);
@@ -90,7 +90,7 @@ const std::string* Markdown::getFilePath() const
     return filePath;
 }
 
-unsigned Markdown::getFileSize(void) const
+unsigned Markdown::getFileSize() const
 {
     return fileSize;
 }

@@ -45,10 +45,10 @@ class NoteNewDialog : public QDialog
 private:
     Ontology& ontology;
 
+    QTabWidget* tabWidget;
     GeneralTab* generalTab;
     AdvancedTab* advancedTab;
 
-    QTabWidget *tabWidget;
     QDialogButtonBox *buttonBox;
 
 public:
@@ -60,7 +60,7 @@ public:
     NoteNewDialog(const NoteNewDialog&&) = delete;
     NoteNewDialog &operator=(const NoteNewDialog&) = delete;
     NoteNewDialog &operator=(const NoteNewDialog&&) = delete;
-    ~NoteNewDialog(void);
+    ~NoteNewDialog();
 
     QString getNoteName() const;
     Stencil* getStencil() const;
@@ -96,7 +96,7 @@ private:
 
 public:
     explicit GeneralTab(Ontology& ontology, QWidget* parent);
-    ~GeneralTab(void);
+    ~GeneralTab();
 
     QLineEdit* getNameEdit() const { return nameEdit; }
     QComboBox* getTypeCombo() const { return typeCombo; }
@@ -116,12 +116,12 @@ class NoteNewDialog::AdvancedTab : public QWidget
     Q_OBJECT
 
 private:
-    QLabel *pathLabel;
-    QLabel *pathEdit;
+    QLabel* fileLabel;
+    QLineEdit* fileLine;
 
 public:
-    explicit AdvancedTab(QWidget *parent);
-    void refreshPath(const QString &path);
+    explicit AdvancedTab(QWidget* parent);
+    void refreshLocation(const QString &path);
     ~AdvancedTab();
 };
 

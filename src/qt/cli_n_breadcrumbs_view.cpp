@@ -105,7 +105,7 @@ CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent)
     showBreadcrumb();
 }
 
-void CliAndBreadcrumbsView::forceInitialCompletion(void)
+void CliAndBreadcrumbsView::forceInitialCompletion()
 {
     QStringListModel* completerModel=(QStringListModel*)cliCompleter->model();
     if(completerModel==nullptr) {
@@ -116,7 +116,7 @@ void CliAndBreadcrumbsView::forceInitialCompletion(void)
     cliCompleter->complete();
 }
 
-QString CliAndBreadcrumbsView::getFirstCompletion(void) const
+QString CliAndBreadcrumbsView::getFirstCompletion() const
 {
     if(cliCompleter->completionCount()) {
         return cliCompleter->currentCompletion();

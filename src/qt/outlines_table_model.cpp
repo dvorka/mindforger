@@ -20,14 +20,14 @@
 
 namespace m8r {
 
-OutlinesTableModel::OutlinesTableModel(QObject *parent)
+OutlinesTableModel::OutlinesTableModel(QObject* parent)
     : QStandardItemModel(parent)
 {
     setColumnCount(5);
     setRowCount(0);
 }
 
-void OutlinesTableModel::removeAllRows(void)
+void OutlinesTableModel::removeAllRows()
 {
     QStandardItemModel::clear();
 

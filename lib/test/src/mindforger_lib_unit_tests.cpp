@@ -43,7 +43,7 @@ using namespace std;
  * This variable is used to access test data, like MF repositories, stored
  * in Git repository.
  */
-char* getMindforgerGitHomePath(void)
+char* getMindforgerGitHomePath()
 {
     return getenv("MINDFORGER_GIT_PATH");
 }

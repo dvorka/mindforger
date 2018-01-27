@@ -40,13 +40,13 @@ NoteEditorView::NoteEditorView(QWidget* parent, bool enableLineNumbers)
 
 void NoteEditorView::createWidgets()
 {
-    (void)new NoteEditHighlight(document());
+    (void)new NoteEditHighlight{document()};
 
-    lineNumberPanel = new LineNumberPanel(this);
+    lineNumberPanel = new LineNumberPanel{this};
     lineNumberPanel->setVisible(enableLineNumbers);
 
-    model = new QStringListModel(this);
-    completer = new QCompleter(this);
+    model = new QStringListModel{this};
+    completer = new QCompleter{this};
     completer->setWidget(this);
     completer->setCompletionMode(QCompleter::PopupCompletion);
     completer->setModel(model);
@@ -122,7 +122,7 @@ bool NoteEditorView::handledCompletedAndSelected(QKeyEvent *event)
     return true;
 }
 
-void NoteEditorView::performCompletion(void)
+void NoteEditorView::performCompletion()
 {
     QTextCursor cursor = textCursor();
     cursor.select(QTextCursor::WordUnderCursor);
@@ -155,7 +155,7 @@ void NoteEditorView::performCompletion(const QString& completionPrefix)
 
 void NoteEditorView::populateModel(const QString& completionPrefix)
 {
-    QStringList strings = toPlainText().split(QRegExp("\\W+"));
+    QStringList strings = toPlainText().split(QRegExp{"\\W+"});
     strings.removeAll(completionPrefix);
     strings.removeDuplicates();
     qSort(strings.begin(), strings.end(), caseInsensitiveLessThan);
@@ -218,7 +218,7 @@ int NoteEditorView::lineNumberPanelWidth()
             max /= 10;
             ++digits;
         }
-        int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+        int space = 3 + fontMetrics().width(QLatin1Char{'9'}) * digits;
         return space;
     } else {
         return 0;

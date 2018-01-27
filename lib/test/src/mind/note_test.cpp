@@ -125,28 +125,28 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     EXPECT_EQ(mind.remind().getOutlinesCount(), 0);
 }
 
-// MUST TODO void testOutlineDelete(void)
+// MUST TODO void testOutlineDelete()
 
-// MUST TODO void testNoteDelete(void)
+// MUST TODO void testNoteDelete()
 
 
-// TODO void testNoteBegin(void)
-// TODO void testNoteEnd(void)
-// MUST TODO void testNoteUp(void)
-// MUST TODO void testNoteDown(void)
+// TODO void testNoteBegin()
+// TODO void testNoteEnd()
+// MUST TODO void testNoteUp()
+// MUST TODO void testNoteDown()
 
-// TODO void testNoteTop(void)
-// TODO void testNoteBottom(void)
-// MUST TODO void testNotePromote(void)
-// MUST TODO void testNoteDemote(void)
+// TODO void testNoteTop()
+// TODO void testNoteBottom()
+// MUST TODO void testNotePromote()
+// MUST TODO void testNoteDemote()
 
-// TODO void testNoteForget(void)
+// TODO void testNoteForget()
 
-// TODO void testNoteClone(void)
-// TODO void testNoteMoveToOtherOutline(void)
-// TODO void testNoteMakeItOutline(void)
-// TODO void testOutlineMakeItNoteInOutline(void)
-// TODO void testOutlineMakeNoteNewOutline(void)
+// TODO void testNoteClone()
+// TODO void testNoteMoveToOtherOutline()
+// TODO void testNoteMakeItOutline()
+// TODO void testOutlineMakeItNoteInOutline()
+// TODO void testOutlineMakeNoteNewOutline()
 
-// TODO void testGetFilepathToNote(void)
-// TODO void testGetFilepathToOutline(void)
+// TODO void testGetFilepathToNote()
+// TODO void testGetFilepathToOutline()

@@ -50,7 +50,7 @@ public:
     OutlineViewPresenter &operator=(const OutlineViewPresenter&) = delete;
     OutlineViewPresenter &operator=(const OutlineViewPresenter&&) = delete;
 
-    Outline* getCurrentOutline(void) const { return currentOutline; }
+    Outline* getCurrentOutline() const { return currentOutline; }
     void refresh(Outline* outline);
     void refresh(Note* note);
     OutlineTreePresenter* getOutlineTree() const { return outlineTreePresenter; }

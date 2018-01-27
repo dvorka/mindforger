@@ -52,61 +52,61 @@ private:
     static std::vector<std::unique_ptr<Color>> customColors;
 
 public:
-    static const Color& RED(void) {
+    static const Color& RED() {
         static const Color color(0xFF,0,0);
         return color;
     }
-    static const Color& GREEN(void) {
+    static const Color& GREEN() {
         static const Color color(0,0xFF,0);
         return color;
     }
-    static const Color& BLUE(void) {
+    static const Color& BLUE() {
         static const Color color(0,0,0xFF);
         return color;
     }
-    static const Color& WHITE(void) {
+    static const Color& WHITE() {
         static const Color color(0xFF,0xFF,0xFF);
         return color;
     }
-    static const Color& BLACK(void) {
+    static const Color& BLACK() {
         static const Color color(0,0,0);
         return color;
     }
-    static const Color& LIGHT_GRAY(void) {
+    static const Color& LIGHT_GRAY() {
         static const Color color(0xCC,0xCC,0xCC);
         return color;
     }
-    static const Color& DARK_GRAY(void) {
+    static const Color& DARK_GRAY() {
         static const Color color(0x33,0x33,0x33);
         return color;
     }
 
     // MindForger colors
-    static const Color& MF_RED(void) {
+    static const Color& MF_RED() {
         static const Color color(0xFF,0x81,0x81);
         return color;
     }
-    static const Color& MF_GREEN(void) {
+    static const Color& MF_GREEN() {
         static const Color color(0x7F,0xC0,0x74);
         return color;
     }
-    static const Color& MF_BLUE(void) {
+    static const Color& MF_BLUE() {
         static const Color color(0x99,0xB1,0xFF);
         return color;
     }
-    static const Color& MF_YELLOW(void) {
+    static const Color& MF_YELLOW() {
         static const Color color(0xFF,0xCD,0x8D);
         return color;
     }
-    static const Color& MF_PURPLE(void) {
+    static const Color& MF_PURPLE() {
         static const Color color(0xC7,0x9E,0xC9);
         return color;
     }
-    static const Color& MF_BLACK(void) {
+    static const Color& MF_BLACK() {
         static const Color color(0,0,0);
         return color;
     }
-    static const Color& MF_GRAY(void) {
+    static const Color& MF_GRAY() {
         static const Color color(0xCC,0xCC,0xCC);
         return color;
     }
@@ -158,8 +158,8 @@ public:
     Color &operator=(const Color&) = delete;
     Color &operator=(const Color&&) = delete;
 
-    const unsigned long& asLong(void) const { return c; }
-    const std::string& asHtml(void) const { return html; }
+    const unsigned long& asLong() const { return c; }
+    const std::string& asHtml() const { return html; }
 
     // IMPROVE introduce Palette - for an entity it will give a color, palette can be loaded from configuration (per theme colors)
 };

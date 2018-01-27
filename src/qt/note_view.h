@@ -49,8 +49,8 @@ public:
     virtual void keyPressEvent(QKeyEvent*) override;
 
 signals:
-    void signalMouseDoubleClickEvent(void);
-    void signalFromViewNoteToOutlines(void);
+    void signalMouseDoubleClickEvent();
+    void signalFromViewNoteToOutlines();
 };
 
 }

@@ -28,7 +28,7 @@ Mind::Mind(Configuration &configuration)
     forget = 0;
 }
 
-void Mind::dream(void)
+void Mind::dream()
 {
     // integrity check: ...
 
@@ -41,7 +41,7 @@ void Mind::dream(void)
     // - orphan attachments (not referenced from any O)
 }
 
-void Mind::think(void)
+void Mind::think()
 {
     memory.learn();
 }
@@ -59,7 +59,7 @@ const vector<Note*>& Mind::getMemoryDwell(int pageSize) const
     return memoryDwell;
 }
 
-size_t Mind::getMemoryDwellDepth(void) const
+size_t Mind::getMemoryDwellDepth() const
 {
     return memoryDwell.size();
 }
@@ -293,7 +293,7 @@ vector<Note*>* Mind::getAssociatedNotes(const vector<string*> words,
     return nullptr;
 }
 
-uint8_t Mind::getForgetThreshold(void) const
+uint8_t Mind::getForgetThreshold() const
 {
     return forget;
 }
@@ -306,12 +306,12 @@ vector<Outline*>* Mind::getTaggedOutlines(
     return nullptr;
 }
 
-vector<Tag*>* Mind::getOutlinesTags(void) const
+vector<Tag*>* Mind::getOutlinesTags() const
 {
     return nullptr;
 }
 
-vector<Tag*>* Mind::getTags(void) const
+vector<Tag*>* Mind::getTags() const
 {
     return nullptr;
 }
@@ -527,7 +527,7 @@ bool Mind::noteRefactor(
     return false;
 }
 
-void Mind::onRemembering(void)
+void Mind::onRemembering()
 {
     allNotesCache.clear();
 }

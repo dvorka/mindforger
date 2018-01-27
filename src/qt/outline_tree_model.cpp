@@ -31,7 +31,7 @@ OutlineTreeModel::OutlineTreeModel(QObject *parent)
     setRowCount(0);
 }
 
-void OutlineTreeModel::removeAllRows(void)
+void OutlineTreeModel::removeAllRows()
 {
     QStandardItemModel::clear();
 

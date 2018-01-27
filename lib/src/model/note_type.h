@@ -27,67 +27,67 @@ class NoteType : public Thing
 {
 public:
     // static initialization order fiasco prevention
-    static const std::string& KeyNote(void) {
+    static const std::string& KeyNote() {
         static const std::string KEY_NOTE = std::string{"Note"};
         return KEY_NOTE;
     }
-    static const std::string& KeyIdea(void) {
+    static const std::string& KeyIdea() {
         static const std::string KEY_IDEA = std::string{"Idea"};
         return KEY_IDEA;
     }
-    static const std::string& KeyQuestion(void) {
+    static const std::string& KeyQuestion() {
         static const std::string KEY_QUESTION = std::string{"Question"};
         return KEY_QUESTION;
     }
-    static const std::string& KeyStrength(void) {
+    static const std::string& KeyStrength() {
         static const std::string KEY_STRENGTH = std::string{"Strength"};
         return KEY_STRENGTH;
     }
-    static const std::string& KeyWeakness(void) {
+    static const std::string& KeyWeakness() {
         static const std::string KEY_WEAKNESS = std::string{"Weakness"};
         return KEY_WEAKNESS;
     }
-    static const std::string& KeyFact(void) {
+    static const std::string& KeyFact() {
         static const std::string KEY_FACT = std::string{"Fact"};
         return KEY_FACT;
     }
-    static const std::string& KeyOption(void) {
+    static const std::string& KeyOption() {
         static const std::string KEY_OPTION = std::string{"Option"};
         return KEY_OPTION;
     }
-    static const std::string& KeyOpportunity(void) {
+    static const std::string& KeyOpportunity() {
         static const std::string KEY_OPPORTUNITY = std::string{"Opportunity"};
         return KEY_OPPORTUNITY;
     }
-    static const std::string& KeyThreat(void) {
+    static const std::string& KeyThreat() {
         static const std::string KEY_THREAT = std::string{"Threat"};
         return KEY_THREAT;
     }
-    static const std::string& KeyAction(void) {
+    static const std::string& KeyAction() {
         static const std::string KEY_ACTION = std::string{"Action"};
         return KEY_ACTION;
     }
-    static const std::string& KeyTask(void) {
+    static const std::string& KeyTask() {
         static const std::string KEY_TASK = std::string{"Task"};
         return KEY_TASK;
     }
-    static const std::string& KeyResult(void) {
+    static const std::string& KeyResult() {
         static const std::string KEY_RESULT = std::string{"Result"};
         return KEY_RESULT;
     }
-    static const std::string& KeySolution(void) {
+    static const std::string& KeySolution() {
         static const std::string KEY_SOLUTION = std::string{"Solution"};
         return KEY_SOLUTION;
     }
-    static const std::string& KeyLesson(void) {
+    static const std::string& KeyLesson() {
         static const std::string KEY_LESSON = std::string{"Lesson"};
         return KEY_LESSON;
     }
-    static const std::string& KeyExperience(void) {
+    static const std::string& KeyExperience() {
         static const std::string KEY_EXPERIENCE = std::string{"Experience"};
         return KEY_EXPERIENCE;
     }
-    static const std::string& KeyConclusion(void) {
+    static const std::string& KeyConclusion() {
         static const std::string KEY_CONCLUSION = std::string{"Conclusion"};
         return KEY_CONCLUSION;
     }

@@ -76,7 +76,7 @@ void OrlojView::hideChildren(const QSet<QWidget*>& visibleChildren)
     }
 }
 
-void OrlojView::fiftyFifty(void)
+void OrlojView::fiftyFifty()
 {
     // 50%/50%
     int half = size().width()/2;
@@ -87,51 +87,51 @@ void OrlojView::fiftyFifty(void)
     setSizes(sizes);
 }
 
-void OrlojView::showFacetOutlines(void)
+void OrlojView::showFacetOutlines()
 {
     QSet<QWidget*> v; v << outlinesTable;
     hideChildren(v);
 }
 
-void OrlojView::showFacetOutlinesDetail(void)
+void OrlojView::showFacetOutlinesDetail()
 {
     QSet<QWidget*> v; v << outlinesTable << outlineView;
     hideChildren(v);
 }
 
-void OrlojView::showFacetFtsResult(void)
+void OrlojView::showFacetFtsResult()
 {
     QSet<QWidget*> v; v << notesTable;
     hideChildren(v);
 }
 
-void OrlojView::showFacetFtsResultDetail(void)
+void OrlojView::showFacetFtsResultDetail()
 {
     QSet<QWidget*> v; v << notesTable << noteView;
     hideChildren(v);
 }
 
-void OrlojView::showFacetOutlineHeaderView(void)
+void OrlojView::showFacetOutlineHeaderView()
 {
     QSet<QWidget*> v; v << outlineView << outlineHeaderView;
     hideChildren(v);
     outlineView->getOutlineTree()->clearSelection();
 }
 
-void OrlojView::showFacetOutlineHeaderEdit(void)
+void OrlojView::showFacetOutlineHeaderEdit()
 {
     QSet<QWidget*> v; v << outlineView << outlineHeaderEdit;
     hideChildren(v);
 }
 
-void OrlojView::showFacetNoteView(void)
+void OrlojView::showFacetNoteView()
 {
     QSet<QWidget*> v; v << outlineView << noteView;
     hideChildren(v);
     outlineView->getOutlineTree()->setFocus();
 }
 
-void OrlojView::showFacetNoteEdit(void)
+void OrlojView::showFacetNoteEdit()
 {
     QSet<QWidget*> v; v << outlineView << noteEdit;
     hideChildren(v);

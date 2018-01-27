@@ -65,7 +65,7 @@ public:
      *
      * Learn, associate, ...
      */
-    void think(void);
+    void think();
 
     /**
      * @brief Dream to detox, optimize, check and clean up mind/memory.
@@ -82,7 +82,7 @@ public:
      *     > calculate Galaxies (Galaxy == interconnected Outlines)
      *     > calculate BlackHole (for each Galaxy find Outline with most in/out relationships)
      */
-    void dream(void);
+    void dream();
 
     /*
      * REMEMBERING
@@ -105,7 +105,7 @@ public:
      * trimmed by forgetting threshold.
      */
     const std::vector<Note*>& getMemoryDwell(int pageSize = ALL_ENTRIES) const;
-    size_t getMemoryDwellDepth(void) const;
+    size_t getMemoryDwellDepth() const;
 
     /*
      * FIND
@@ -154,12 +154,12 @@ public:
     /**
      * @brief Get all tags assingned to Outlines in the memory.
      */
-    std::vector<Tag*>* getOutlinesTags(void) const;
+    std::vector<Tag*>* getOutlinesTags() const;
 
     /**
      * @brief Get all tags used in the memory.
      */
-    std::vector<Tag*>* getTags(void) const;
+    std::vector<Tag*>* getTags() const;
 
     /**
      * @brief Get all tags used in the Outline by its Notes.
@@ -224,7 +224,7 @@ public:
      *
      * Forget threshold is relative time from now.
      */
-    uint8_t getForgetThreshold(void) const;
+    uint8_t getForgetThreshold() const;
 
     /**
      * @brief Set forgetting threshold.
@@ -362,7 +362,7 @@ private:
     /**
      * @brief Invoked on remembering Outline/Note/... to flush all inferred knowledge, caches, ...
      */
-    void onRemembering(void);
+    void onRemembering();
 
     void findNoteFts(
             std::vector<Note*>* result,

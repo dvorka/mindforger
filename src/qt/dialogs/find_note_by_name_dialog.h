@@ -45,9 +45,9 @@ public:
     FindNoteByNameDialog &operator=(const FindNoteByNameDialog&&) = delete;
     ~FindNoteByNameDialog();
 
-    void clearScope(void) { scope = nullptr; }
+    void clearScope() { scope = nullptr; }
     void setScope(Outline* o) { scope = o; }
-    Outline* getScope(void) { return scope; }
+    Outline* getScope() { return scope; }
 
     void show(std::vector<Note*>);
 };

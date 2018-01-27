@@ -69,7 +69,7 @@ void NoteViewPresenter::refresh(Note* note)
     view->setHtml(html);
 }
 
-void NoteViewPresenter::slotEditNote(void)
+void NoteViewPresenter::slotEditNote()
 {
     orloj->showFacetNoteEdit(this->currentNote);
 }

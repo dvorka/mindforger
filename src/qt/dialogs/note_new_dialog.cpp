@@ -71,7 +71,7 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     setLayout(boxesLayout);
 }
 
-NoteNewDialog::GeneralTab::~GeneralTab(void)
+NoteNewDialog::GeneralTab::~GeneralTab()
 {
     delete nameLabel;
     delete nameEdit;
@@ -85,7 +85,7 @@ NoteNewDialog::GeneralTab::~GeneralTab(void)
     delete stencilCombo;
 }
 
-void NoteNewDialog::GeneralTab::clean(void)
+void NoteNewDialog::GeneralTab::clean()
 {
     nameEdit->setText(tr("Note"));
     nameEdit->selectAll();
@@ -96,23 +96,28 @@ void NoteNewDialog::GeneralTab::clean(void)
  * Advanced tab.
  */
 
-NoteNewDialog::AdvancedTab::AdvancedTab(QWidget *parent)
+NoteNewDialog::AdvancedTab::AdvancedTab(QWidget* parent)
     : QWidget(parent)
 {
-    pathLabel = new QLabel{tr("Location")+":", this};
-    pathEdit = new QLabel{this};
-    pathEdit->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    fileLabel = new QLabel{tr("File")+":", this};
+    fileLine = new QLineEdit{this};
+    fileLine->setEnabled(false);
+
+    QGroupBox* locationGroup = new QGroupBox{tr("Location"), this};
+    QVBoxLayout* locationLayout = new QVBoxLayout{this};
+    locationLayout->addWidget(fileLabel);
+    locationLayout->addWidget(fileLine);
+    locationGroup->setLayout(locationLayout);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(pathLabel);
-    mainLayout->addWidget(pathEdit);
-    mainLayout->addStretch(1);
+    mainLayout->addWidget(locationGroup);
+    mainLayout->addStretch();
     setLayout(mainLayout);
 }
 
-void NoteNewDialog::AdvancedTab::refreshPath(const QString& path)
+void NoteNewDialog::AdvancedTab::refreshLocation(const QString& path)
 {
-    pathEdit->setText(path);
+    fileLine->setText(path);
 }
 
 NoteNewDialog::AdvancedTab::~AdvancedTab()
@@ -174,7 +179,7 @@ NoteNewDialog::NoteNewDialog(
     setModal(true);
 }
 
-NoteNewDialog::~NoteNewDialog(void)
+NoteNewDialog::~NoteNewDialog()
 {
     if(generalTab) delete generalTab;
     if(advancedTab) delete advancedTab;
@@ -208,7 +213,7 @@ int NoteNewDialog::getProgress() const
 void NoteNewDialog::show(const QString& path)
 {
     generalTab->clean();
-    advancedTab->refreshPath(path);
+    advancedTab->refreshLocation(path);
     QDialog::show();
 }
 

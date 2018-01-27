@@ -75,7 +75,7 @@ MainWindowPresenter::~MainWindowPresenter()
     // TODO deletes
 }
 
-void MainWindowPresenter::initView(void)
+void MainWindowPresenter::initView()
 {
 }
 
@@ -162,7 +162,7 @@ void MainWindowPresenter::handleFindOutlineByName()
         // IMPROVE make this more efficient
         statusBar->showInfo(QString(tr("Outline "))+QString::fromStdString(findOutlineByNameDialog->getChoice()->getTitle()));
     } else {
-        statusBar->showInfo(QString(tr("Outline not found: ")).append(findOutlineByNameDialog->getSearchedString()));
+        statusBar->showInfo(QString(tr("Outline not found")+": ").append(findOutlineByNameDialog->getSearchedString()));
     }
 }
 
@@ -193,7 +193,7 @@ void MainWindowPresenter::handleFindNoteByName()
         // IMPROVE make this more efficient
         statusBar->showInfo(QString(tr("Note "))+QString::fromStdString(findNoteByNameDialog->getChoice()->getTitle()));
     } else {
-        statusBar->showInfo(QString(tr("Note not found: ")).append(findNoteByNameDialog->getSearchedString()));
+        statusBar->showInfo(QString(tr("Note not found")+": ").append(findNoteByNameDialog->getSearchedString()));
     }
 }
 
@@ -206,19 +206,19 @@ void MainWindowPresenter::doActionViewToggleRecent()
 {
 }
 
-void MainWindowPresenter::doActionViewOutlines(void)
+void MainWindowPresenter::doActionViewOutlines()
 {
     view.getCli()->setBreadcrumbPath("/outlines");
     cli->executeListOutlines();
 }
 
-void MainWindowPresenter::doActionCli(void)
+void MainWindowPresenter::doActionCli()
 {
     view.getCli()->setBreadcrumbPath("/");
     view.getCli()->showCli();
 }
 
-void MainWindowPresenter::doActionViewDistractionFree(void)
+void MainWindowPresenter::doActionViewDistractionFree()
 {
     if(view.statusBar()->isVisible()) {
         view.menuBar()->hide();
@@ -240,7 +240,7 @@ void MainWindowPresenter::doActionOutlineNew()
     newOutlineDialog->show();
 }
 
-void MainWindowPresenter::handleOutlineNew(void)
+void MainWindowPresenter::handleOutlineNew()
 {
     string title = newOutlineDialog->getOutlineName().toStdString();
     mind->outlineNew(
@@ -376,17 +376,17 @@ void MainWindowPresenter::doActionHelpDocumentation()
 
 void MainWindowPresenter::doActionHelpWeb()
 {
-    QDesktopServices::openUrl(QUrl("http://www.mindforger.com"));
+    QDesktopServices::openUrl(QUrl{"http://www.mindforger.com"});
 }
 
 void MainWindowPresenter::doActionHelpReportBug()
 {
-    QDesktopServices::openUrl(QUrl("https://github.com/dvorka/mindforger/issues"));
+    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger/issues"});
 }
 
 void MainWindowPresenter::doActionHelpCheckForUpdates()
 {
-    QDesktopServices::openUrl(QUrl("https://github.com/dvorka/mindforger/releases"));
+    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger/releases"});
 }
 
 void MainWindowPresenter::doActionHelpAboutMindForger()
@@ -394,8 +394,8 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
     // IMPROVE move this to view: remove this method and route signal to MainWindowView
     QMessageBox::about(
         &view,
-        QString("About MindForger"),
-        QString(
+        QString{tr("About MindForger")},
+        QString{
             "<b>MindForger " MINDFORGER_VERSION "</b>"
 #ifdef DO_MF_DEBUG
             "&nbsp;&nbsp;&nbsp;&nbsp;" __DATE__ " " __TIME__
@@ -416,7 +416,7 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
             " or see <a href='https://www.mindforger.com'>www.mindforger.com</a> for more information."
             "<br>"
             "<br>Copyright (C) 2018 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/blob/master/CREDITS.md'>contributors</a>."
-        ));
+        });
 }
 
 }

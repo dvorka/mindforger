@@ -21,7 +21,7 @@
 
 #include <gtest/gtest.h>
 
-extern char* getMindforgerGitHomePath(void);
+extern char* getMindforgerGitHomePath();
 
 using namespace std;
 

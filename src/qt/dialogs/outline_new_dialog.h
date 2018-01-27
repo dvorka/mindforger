@@ -30,6 +30,8 @@
 
 #include "../model_meta_definitions.h"
 #include "../widgets/edit_tags_panel.h"
+#include "../widgets/importance_combo_box.h"
+#include "../widgets/urgency_combo_box.h"
 
 class QDialogButtonBox;
 class QTabWidget;
@@ -46,10 +48,10 @@ class OutlineNewDialog : public QDialog
 private:
     Ontology& ontology;
 
+    QTabWidget* tabWidget;
     GeneralTab* generalTab;
     AdvancedTab* advancedTab;
 
-    QTabWidget *tabWidget;
     QDialogButtonBox *buttonBox;
 
 public:
@@ -93,9 +95,9 @@ private:
     QLabel* typeLabel;
     QComboBox* typeCombo;
     QLabel* importanceLabel;
-    QComboBox* importanceCombo;
+    ImportanceComboBox* importanceCombo;
     QLabel* urgencyLabel;
-    QComboBox* urgencyCombo;
+    UrgencyComboBox* urgencyCombo;
     QLabel* progressLabel;
     QSpinBox* progressSpin;
     QLabel* stencilLabel;
@@ -109,8 +111,8 @@ public:
 
     QLineEdit* getNameEdit() const { return nameEdit; }
     QComboBox* getTypeCombo() const { return typeCombo; }
-    QComboBox* getImportanceCombo() const { return importanceCombo; }
-    QComboBox* getUrgencyCombo() const { return urgencyCombo; }
+    ImportanceComboBox* getImportanceCombo() const { return importanceCombo; }
+    UrgencyComboBox* getUrgencyCombo() const { return urgencyCombo; }
     QComboBox* getStencilCombo() const { return stencilCombo; }
     QSpinBox* getProgressSpin() const { return progressSpin; }
     const std::vector<const Tag*>* getTags() { return editTagsGroup->getTags(); }
@@ -126,8 +128,8 @@ class OutlineNewDialog::AdvancedTab : public QWidget
     Q_OBJECT
 
 private:
-    QLabel *pathLabel;
-    QLabel *pathEdit;
+    QLabel *fileLabel;
+    QLineEdit *fileLine;
 
 private:
     const QString memoryDirPath;

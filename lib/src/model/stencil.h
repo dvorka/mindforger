@@ -45,10 +45,10 @@ public:
     Stencil &operator=(const Stencil&&) = delete;
     ~Stencil();
 
-    ResourceType getType(void) const;
-    const std::string& getFilePath(void) const;
-    const std::string& getName(void) const;
-    const std::string* getStencil(void) const;
+    ResourceType getType() const;
+    const std::string& getFilePath() const;
+    const std::string& getName() const;
+    const std::string* getStencil() const;
     void setContent(std::string* content);
 };
 
