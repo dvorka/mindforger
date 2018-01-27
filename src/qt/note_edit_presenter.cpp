@@ -112,6 +112,9 @@ void NoteEditPresenter::slotSaveNote()
         // remember
         mainPresenter->getMind()->remind().remember(currentNote->getOutlineKey());
         mainPresenter->getStatusBar()->showInfo(tr("Note saved!"));
+#ifdef DO_MF_DEBUG
+        qDebug() << "Note " << QString::fromStdString(currentNote->getTitle()) << " saved!";
+#endif
     } else {
         mainPresenter->getStatusBar()->showError(tr("Attempt to save data from UI to Note, but no Note is set."));
     }

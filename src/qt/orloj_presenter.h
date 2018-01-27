@@ -45,14 +45,14 @@ class OutlineHeaderEditPresenter;
 class OutlineViewPresenter;
 
 enum OrlojPresenterFacets {
-    FACET_NONE,
-    FACET_FTS_RESULT,
-    FACET_LIST_OUTLINES,
-    FACET_VIEW_OUTLINE,
-    FACET_VIEW_OUTLINE_HEADER,
-    FACET_EDIT_OUTLINE_HEADER,
-    FACET_VIEW_NOTE,
-    FACET_EDIT_NOTE
+    FACET_NONE,                 // 0
+    FACET_FTS_RESULT,           // 1
+    FACET_LIST_OUTLINES,        // 2
+    FACET_VIEW_OUTLINE,         // 3
+    FACET_VIEW_OUTLINE_HEADER,  // 4
+    FACET_EDIT_OUTLINE_HEADER,  // 5
+    FACET_VIEW_NOTE,            // 6
+    FACET_EDIT_NOTE             // 7
 };
 
 class OrlojPresenter : public QObject
@@ -108,8 +108,14 @@ public:
 
     OrlojPresenterFacets getFacet() const { return activeFacet; }
     void setFacet(OrlojPresenterFacets facet) {
+        onFacetChange(facet);
         activeFacet = facet;
     }
+
+    /**
+     * @brief This method is invoked whenever a facet is changed i.e. it allows to perform desired actions.
+     */
+    void onFacetChange(const OrlojPresenterFacets targetFacet) const;
 
     void showFacetOutlineList(const std::vector<Outline*>& outlines);
     void showFacetFtsResult(std::vector<Note*>* result);

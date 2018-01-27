@@ -66,6 +66,36 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         SLOT(slotShowNoteAsResult(const QItemSelection&, const QItemSelection&)));
 }
 
+int dialogSaveOrCancel()
+{
+    QMessageBox msgBox{};
+    msgBox.setText("Do you want to save changes to the edited Note?");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    return msgBox.exec();
+}
+
+void OrlojPresenter::onFacetChange(const OrlojPresenterFacets targetFacet) const
+{
+    qDebug() << "Facet CHANGE: " << activeFacet << " > " << targetFacet;
+
+    if(activeFacet == OrlojPresenterFacets::FACET_EDIT_NOTE) {
+        if(targetFacet != OrlojPresenterFacets::FACET_VIEW_NOTE) {
+            int decision = dialogSaveOrCancel();
+            if(decision==QMessageBox::Save) {
+                  noteEditPresenter->slotSaveNote();
+            }
+        }
+    } else if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
+        if(targetFacet != OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER) {
+            int decision = dialogSaveOrCancel();
+            if(decision==QMessageBox::Save) {
+                outlineHeaderEditPresenter->slotSaveOutlineHeader();
+            }
+        }
+    }
+}
+
 void OrlojPresenter::showFacetOutlineList(const vector<Outline*>& outlines)
 {
     setFacet(OrlojPresenterFacets::FACET_LIST_OUTLINES);

@@ -77,22 +77,22 @@ public:
     NoteEditView* getNoteEdit() const { return noteEdit; }
 
     /**
-     * @brief List of outlines
+     * @brief List of Outlines
      */
     void showFacetOutlines();
 
     /**
-     * @brief Outline detail: name and tree of notes
+     * @brief Outline detail: name and tree of Notes
      */
     void showFacetOutlinesDetail();
 
     /**
-     * @brief FTS result list - notes w/o detail
+     * @brief FTS result list - Notes w/o detail
      */
     void showFacetFtsResult();
 
     /**
-     * @brief FTS result list - notes w/ detail
+     * @brief FTS result list - Notes w/ detail
      */
     void showFacetFtsResultDetail();
 
