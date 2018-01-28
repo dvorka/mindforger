@@ -31,27 +31,22 @@ class OutlineTreeViewItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 
-private:
-    QObject* parent;
 public:
     OutlineTreeViewItemDelegate(QObject* outlineTreeView)
         : QStyledItemDelegate(outlineTreeView)
     {
-        this->parent = outlineTreeView;
         installEventFilter(this);
     }
 
     /**
      * If you want to FILTER the event out, i.e. STOP it being
-     * handled further, then return TRUE; otherwise return false.
+     * handled further, then return TRUE; otherwise return FALSE.
      *
      * Event filter must be installed in constructor.
      */
-    bool eventFilter(QObject *obj, QEvent *event) override
+    bool eventFilter(QObject* obj, QEvent* event) override
     {
         if(event->type() == QEvent::KeyPress) {
-            qDebug("tree itemDelegate eventFilter()");
-            qDebug("tree itemDelegate FORWARD");
             return true;
         } else {
             return QStyledItemDelegate::eventFilter(obj, event);
@@ -59,8 +54,8 @@ public:
     }
 
     QWidget *createEditor(QWidget *parent,
-                          const QStyleOptionViewItem &option,
-                          const QModelIndex &index) const override
+                          const QStyleOptionViewItem& option,
+                          const QModelIndex& index) const override
     {
         QWidget *result = QStyledItemDelegate::createEditor(parent, option, index);
         result->installEventFilter(new OutlineTreeViewItemDelegate(parent));

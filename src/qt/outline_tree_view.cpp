@@ -31,14 +31,12 @@ OutlineTreeView::OutlineTreeView(QWidget *parent)
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
-    // disable TAB and Ctrl-O up/down navigation (Ctrl-O no longer bound)
+    // disable TAB and Ctrl+O up/down navigation (Ctrl+O no longer bound)
     setTabKeyNavigation(false);
 }
 
 void OutlineTreeView::keyPressEvent(QKeyEvent* event)
 {
-    // IMPROVE remove qDebug() << "\n[OutlineTreeView] KEY event" << event->key();
-
     // leave note view navigation
     if(event->modifiers() & Qt::AltModifier){
         if(event->key()==Qt::Key_Left) {

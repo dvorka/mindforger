@@ -27,7 +27,7 @@ namespace m8r {
 OutlineTreeModel::OutlineTreeModel(QObject *parent)
     : QStandardItemModel(parent)
 {
-    setColumnCount(1);
+    setColumnCount(5);
     setRowCount(0);
 }
 
@@ -45,18 +45,31 @@ void OutlineTreeModel::removeAllRows()
     setHorizontalHeaderLabels(tableHeader);
 }
 
+void OutlineTreeModel::createTitleText(QString& html, Note* note)
+{
+    for(auto depth=0; depth<note->getDepth(); depth++) {
+        html += QString::fromUtf8("&nbsp;&nbsp;&nbsp;&nbsp;");
+    }
+    html += QString::fromStdString(note->getTitle());
+
+    tagsToHtml(note->getTags(), html);
+    // IMPROVE make showing of type configurable
+    noteTypeToHtml(note->getType(), html);
+}
+
 void OutlineTreeModel::addRow(Note* note)
 {
     QList<QStandardItem*> items;
     QString s{};
 
+    // title
     QString title{};
     createTitleText(title, note);
     QStandardItem* noteItem = new QStandardItem{title};
     // TODO set role
     noteItem->setData(QVariant::fromValue(note));
     items.append(noteItem);
-
+    // %
     if(note->getProgress()) {
         s.clear();
         s += QString::number(note->getProgress());
@@ -65,11 +78,10 @@ void OutlineTreeModel::addRow(Note* note)
     } else {
         items.append(new QStandardItem{""});
     }
-
+    // rd/wr
     items.append(new QStandardItem{QString::number(note->getReads())});
-
     items.append(new QStandardItem{QString::number(note->getRevision())});
-
+    // pretty
     s = note->getModifiedPretty().c_str();
     items.append(new QStandardItem{s});
 
@@ -125,18 +137,6 @@ void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
         emit dataChanged(from,to);
         return;
     }
-}
-
-void OutlineTreeModel::createTitleText(QString& html, Note* note)
-{
-    for(auto depth=0; depth<note->getDepth(); depth++) {
-        html += QString::fromUtf8("&nbsp;&nbsp;&nbsp;&nbsp;");
-    }
-    html += QString::fromStdString(note->getTitle());
-
-    tagsToHtml(note->getTags(), html);
-    // IMPROVE make showing of type configurable
-    noteTypeToHtml(note->getType(), html);
 }
 
 }
