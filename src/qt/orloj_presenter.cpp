@@ -95,9 +95,6 @@ void OrlojPresenter::onFacetChange(const OrlojPresenterFacets targetFacet) const
             }
             return;
         }
-    } else if(activeFacet == OrlojPresenterFacets::FACET_VIEW_OUTLINE) {
-        outlineViewPresenter->getOutlineTree()->clearSelection();
-        return;
     }
 
     if(targetFacet == OrlojPresenterFacets::FACET_VIEW_OUTLINE) {
