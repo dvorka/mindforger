@@ -44,7 +44,9 @@ public:
     void removeAllRows();
     void addRow(Note* note);
     void refresh(Note* note) { refresh(note, noselection); }
+    int getRowByNote(const Note* note);
     void refresh(Note* note, QModelIndexList selection);
+
 private:
     void createTitleText(QString& title, Note* note);
 };

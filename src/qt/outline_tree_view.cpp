@@ -20,8 +20,8 @@
 
 namespace m8r {
 
-OutlineTreeView::OutlineTreeView(QWidget *parent)
-    : QTableView(parent), parent(parent)
+OutlineTreeView::OutlineTreeView(QWidget* parent)
+    : QTableView(parent)
 {
     verticalHeader()->setVisible(false);
     // BEFARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);

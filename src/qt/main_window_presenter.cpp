@@ -190,8 +190,9 @@ void MainWindowPresenter::handleFindNoteByName()
         orloj->showFacetOutline(choice->getOutline());
         orloj->getNoteView()->refresh(choice);
         orloj->showFacetNoteView();
+        orloj->getOutlineView()->selectRowByNote(choice);
         // IMPROVE make this more efficient
-        statusBar->showInfo(QString(tr("Note "))+QString::fromStdString(findNoteByNameDialog->getChoice()->getTitle()));
+        statusBar->showInfo(QString(tr("Note "))+QString::fromStdString(choice->getTitle()));
     } else {
         statusBar->showInfo(QString(tr("Note not found")+": ").append(findNoteByNameDialog->getSearchedString()));
     }

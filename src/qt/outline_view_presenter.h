@@ -40,7 +40,6 @@ private:
     Outline* currentOutline;
 
     OutlineView* view;
-
     OutlineTreePresenter* outlineTreePresenter;
 
 public:
@@ -53,6 +52,7 @@ public:
     Outline* getCurrentOutline() const { return currentOutline; }
     void refresh(Outline* outline);
     void refresh(Note* note);
+    void selectRowByNote(const Note* note);
     OutlineTreePresenter* getOutlineTree() const { return outlineTreePresenter; }
 
     ~OutlineViewPresenter();

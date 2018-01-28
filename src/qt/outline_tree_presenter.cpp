@@ -55,6 +55,18 @@ void OutlineTreePresenter::refresh(Note* note)
     }
 }
 
+void OutlineTreePresenter::selectRowByNote(const Note* note)
+{
+    if(note) {
+        int row = model->getRowByNote(note);
+        if(row >= 0) {
+            view->selectRow(row);
+            return;
+        }
+    }
+    view->clearSelection();
+}
+
 int OutlineTreePresenter::getCurrentRow() const
 {
     QModelIndexList indexes = view->selectionModel()->selection().indexes();

@@ -67,9 +67,6 @@ class OutlineTreeView : public QTableView
 {
     Q_OBJECT
 
-protected:
-    QWidget* parent;
-
 public:
     explicit OutlineTreeView(QWidget* parent);
     OutlineTreeView(const OutlineTreeView&) = delete;

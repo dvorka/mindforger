@@ -30,6 +30,11 @@ OutlineViewPresenter::OutlineViewPresenter(OutlineView *view, OrlojPresenter* or
     QObject::connect(view->getOutlineTree(), SIGNAL(signalFromOutlineTreeToOutlines()), orloj, SLOT(slotShowOutlines()));
 }
 
+OutlineViewPresenter::~OutlineViewPresenter()
+{
+    if(outlineTreePresenter) delete outlineTreePresenter;
+}
+
 void OutlineViewPresenter::refresh(Outline* outline)
 {
     currentOutline = outline;
@@ -42,9 +47,9 @@ void OutlineViewPresenter::refresh(Note* note)
     outlineTreePresenter->refresh(note);
 }
 
-OutlineViewPresenter::~OutlineViewPresenter()
+void OutlineViewPresenter::selectRowByNote(const Note* note)
 {
-    if(outlineTreePresenter) delete outlineTreePresenter;
+    outlineTreePresenter->selectRowByNote(note);
 }
 
 }

@@ -20,6 +20,8 @@
 
 #include <iostream>
 
+#define NO_INDEX -1
+
 using namespace std;
 
 namespace m8r {
@@ -88,9 +90,19 @@ void OutlineTreeModel::addRow(Note* note)
     appendRow(items);
 }
 
+int OutlineTreeModel::getRowByNote(const Note* note)
+{
+    for(int row = 0; row<rowCount(); row++) {
+        if(item(row)->data().value<Note*>() == note) {
+            return row;
+        }
+    }
+    return NO_INDEX;
+}
+
 void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
 {
-    int row = -1;
+    int row = NO_INDEX;
 
     // determine row number by note attached to the row - selection or iteration
     if(selection.size()) {
@@ -100,18 +112,13 @@ void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
         }
     }
     // iterate
-    if(row<0) {
+    if(row < 0) {
         // IMPROVE UI note that has both Note and QStandardItem refs
-        for(row = 0; row<rowCount(); row++) {
-            // TODO use role
-            if(item(row)->data().value<Note*>() == note) {
-                break;
-            }
-        }
+        row = getRowByNote(note);
     }
 
     // refresh
-    if(row>=0) {
+    if(row >= 0) {
         QString s{};
         createTitleText(s, note);
         // refresh content
