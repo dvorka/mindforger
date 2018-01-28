@@ -55,6 +55,11 @@ void OutlineTreePresenter::refresh(Note* note)
     }
 }
 
+void OutlineTreePresenter::clearSelection()
+{
+    view->clearSelection();
+}
+
 void OutlineTreePresenter::selectRowByNote(const Note* note)
 {
     if(note) {

@@ -51,6 +51,7 @@ public:
     void refresh(Outline* outline);
     void refresh(Note* note);
 
+    void clearSelection();
     void selectRowByNote(const Note* note);
 
     int getCurrentRow() const;

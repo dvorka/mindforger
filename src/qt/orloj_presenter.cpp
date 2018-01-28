@@ -93,6 +93,8 @@ void OrlojPresenter::onFacetChange(const OrlojPresenterFacets targetFacet) const
                 outlineHeaderEditPresenter->slotSaveOutlineHeader();
             }
         }
+    } else if(activeFacet == OrlojPresenterFacets::FACET_VIEW_OUTLINE) {
+        outlineViewPresenter->getOutlineTree()->clearSelection();
     }
 }
 
