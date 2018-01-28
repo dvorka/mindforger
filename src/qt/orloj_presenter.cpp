@@ -85,6 +85,7 @@ void OrlojPresenter::onFacetChange(const OrlojPresenterFacets targetFacet) const
             if(decision==QMessageBox::Save) {
                   noteEditPresenter->slotSaveNote();
             }
+            return;
         }
     } else if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
         if(targetFacet != OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER) {
@@ -92,9 +93,15 @@ void OrlojPresenter::onFacetChange(const OrlojPresenterFacets targetFacet) const
             if(decision==QMessageBox::Save) {
                 outlineHeaderEditPresenter->slotSaveOutlineHeader();
             }
+            return;
         }
     } else if(activeFacet == OrlojPresenterFacets::FACET_VIEW_OUTLINE) {
         outlineViewPresenter->getOutlineTree()->clearSelection();
+        return;
+    }
+
+    if(targetFacet == OrlojPresenterFacets::FACET_VIEW_OUTLINE) {
+        outlineViewPresenter->getOutlineTree()->focus();
     }
 }
 

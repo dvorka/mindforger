@@ -52,6 +52,7 @@ public:
     void refresh(Note* note);
 
     void clearSelection();
+    void focus() { view->setFocus(); }
     void selectRowByNote(const Note* note);
 
     int getCurrentRow() const;
