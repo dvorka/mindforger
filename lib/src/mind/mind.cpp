@@ -534,7 +534,13 @@ void Mind::noteChildren(Note* note, std::vector<Note*>& children)
         auto it = std::find(ns.begin(), ns.end(), note);
         if(it != ns.end()) {
             auto index = std::distance(ns.begin(), it);
-            xxx
+            for(unsigned int i=index+1; i<ns.size(); i++) {
+                if(ns[i]->getDepth() > note->getDepth()) {
+                    children.push_back(ns[i]);
+                } else {
+                    return;
+                }
+            }
         } else {
             // note not in vector
             return;
