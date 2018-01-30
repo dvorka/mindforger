@@ -28,6 +28,12 @@ Mind::Mind(Configuration &configuration)
     forget = 0;
 }
 
+Mind::~Mind()
+{
+    // - Memory destruct outlines
+    // - allNotesCache Notes is just container referencing Memory's Outlines
+}
+
 void Mind::dream()
 {
     // integrity check: ...
@@ -46,12 +52,6 @@ void Mind::think()
     memory.learn();
 }
 
-Mind::~Mind()
-{
-    // - Memory destruct outlines
-    // - allNotesCache Notes is just container referencing Memory's Outlines
-}
-
 const vector<Note*>& Mind::getMemoryDwell(int pageSize) const
 {
     UNUSED_ARG(pageSize);
@@ -62,22 +62,6 @@ const vector<Note*>& Mind::getMemoryDwell(int pageSize) const
 size_t Mind::getMemoryDwellDepth() const
 {
     return memoryDwell.size();
-}
-
-unique_ptr<vector<Outline*>> Mind::findOutlineByTitleFts(const string& expr) const
-{
-    // IMPROVE implement regexp and other search options by reusing HSTR code
-    // IMPROVE PERF this method is extremely inefficient > use cached map (stack member) evicted on memory modification
-    unique_ptr<vector<Outline*>> result{new vector<Outline*>()};
-    if(expr.size()) {
-        vector<Outline*> outlines = memory.getOutlines();
-        for(Outline* outline:outlines) {
-            if(!expr.compare(outline->getTitle())) {
-                result->push_back(outline);
-            }
-        }
-    }
-    return result;
 }
 
 vector<Note*>* Mind::findNoteByTitleFts(const string& regexp) const
@@ -102,67 +86,67 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
 
     // IMPROVE make this faster - do NOT convert to lower case, but compare it in that method > will do less
     if(ignoreCase) {
-	// case INSENSITIVE
-	s.clear();
-	stringToLower(outline->getTitle(), s);
-	if(s.find(regexp)!=string::npos) {
-	    result->push_back(outline->getOutlineDescriptorAsNote());
-	} else {
-	    for(string* d:outline->getDescription()) {
-		if(d) {
-		     s.clear();
-		     stringToLower(*d, s);
-		     if(s.find(regexp)!=string::npos) {
-			 result->push_back(outline->getOutlineDescriptorAsNote());
-			 break;
-		     }
-		}
-	    }
-	}
-	for(Note* note:outline->getNotes()) {
-	    s.clear();
-	    stringToLower(note->getTitle(), s);
-	    if(s.find(regexp)!=string::npos) {
-		result->push_back(note);
-	    } else {
-		for(string* d:note->getDescription()) {
-		    if(d) {
-			 s.clear();
-			 stringToLower(*d, s);
-			 if(s.find(regexp)!=string::npos) {
-			     result->push_back(note);
-			     break;
-			 }
-		    }
-		}
-	    }
-	}
+        // case INSENSITIVE
+        s.clear();
+        stringToLower(outline->getTitle(), s);
+        if(s.find(regexp)!=string::npos) {
+            result->push_back(outline->getOutlineDescriptorAsNote());
+        } else {
+            for(string* d:outline->getDescription()) {
+                if(d) {
+                    s.clear();
+                    stringToLower(*d, s);
+                    if(s.find(regexp)!=string::npos) {
+                        result->push_back(outline->getOutlineDescriptorAsNote());
+                        break;
+                    }
+                }
+            }
+        }
+        for(Note* note:outline->getNotes()) {
+            s.clear();
+            stringToLower(note->getTitle(), s);
+            if(s.find(regexp)!=string::npos) {
+                result->push_back(note);
+            } else {
+                for(string* d:note->getDescription()) {
+                    if(d) {
+                        s.clear();
+                        stringToLower(*d, s);
+                        if(s.find(regexp)!=string::npos) {
+                            result->push_back(note);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     } else {
-	// case SENSITIVE
-	if(outline->getTitle().find(regexp)!=string::npos) {
-	    result->push_back(outline->getOutlineDescriptorAsNote());
-	} else {
-	    for(string* d:outline->getDescription()) {
-		if(d && d->find(regexp)!=string::npos) {
-		    result->push_back(outline->getOutlineDescriptorAsNote());
-		    // avoid multiple matches in the result
-		    break;
-		}
-	    }
-	}
-	for(Note* note:outline->getNotes()) {
-	    if(note->getTitle().find(regexp)!=string::npos) {
-		result->push_back(note);
-	    } else {
-		for(string* d:note->getDescription()) {
-		    if(d && d->find(regexp)!=string::npos) {
-			result->push_back(note);
-			// avoid multiple matches in the result
-			break;
-		    }
-		}
-	    }
-	}
+        // case SENSITIVE
+        if(outline->getTitle().find(regexp)!=string::npos) {
+            result->push_back(outline->getOutlineDescriptorAsNote());
+        } else {
+            for(string* d:outline->getDescription()) {
+                if(d && d->find(regexp)!=string::npos) {
+                    result->push_back(outline->getOutlineDescriptorAsNote());
+                    // avoid multiple matches in the result
+                    break;
+                }
+            }
+        }
+        for(Note* note:outline->getNotes()) {
+            if(note->getTitle().find(regexp)!=string::npos) {
+                result->push_back(note);
+            } else {
+                for(string* d:note->getDescription()) {
+                    if(d && d->find(regexp)!=string::npos) {
+                        result->push_back(note);
+                        // avoid multiple matches in the result
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -530,6 +514,23 @@ bool Mind::noteRefactor(
 void Mind::onRemembering()
 {
     allNotesCache.clear();
+}
+
+// unique_ptr template BREAKS Qt Developer indentation > stored at EOF
+unique_ptr<vector<Outline*>> Mind::findOutlineByTitleFts(const string& expr) const
+{
+    // IMPROVE implement regexp and other search options by reusing HSTR code
+    // IMPROVE PERF this method is extremely inefficient > use cached map (stack member) evicted on memory modification
+    unique_ptr<vector<Outline*>> result{new vector<Outline*>()};
+    if(expr.size()) {
+        vector<Outline*> outlines = memory.getOutlines();
+        for(Outline* outline:outlines) {
+            if(!expr.compare(outline->getTitle())) {
+                result->push_back(outline);
+            }
+        }
+    }
+    return result;
 }
 
 } /* namespace */

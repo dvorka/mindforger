@@ -75,7 +75,10 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
     mind.think();
 
     // create Outline using a stencil from MEMORY
+    vector<const m8r::Tag*> tags{};
+    tags.push_back(mind.ontology().findOrCreateTag(m8r::Tag::KeyCool()));
     vector<m8r::Stencil*>& stencils = memory.getStencils();
+    m8r::Stencil* stencil = stencils.at(0);
     cout << endl << "Loaded Outline STENCILS: " << stencils.size();
     // IMPROVE constructor call is WRONG > complete parameters
     string title{"MIND's stencil Outline"};
@@ -84,8 +87,9 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
                 mind.ontology().findOrCreateOutlineType(m8r::OutlineType::KeyOutline()),
                 1,
                 2,
-                mind.ontology().findOrCreateTag(m8r::Tag::KeyCool()),
-                stencils[0]);
+                55,
+                &tags,
+                stencil);
 
     // create stencil MANUALLY (stencil file does NOT have to exist)
     unique_ptr<m8r::Stencil> outlineStencil{
@@ -94,12 +98,15 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
             string{"Manual stencil"}}};
     // IMPROVE constructor call is WRONG > complete parameters
     title.assign("MANUAL stencil Outline");
+    tags.clear();
+    tags.push_back(mind.ontology().findOrCreateTag(m8r::Tag::KeyImportant()));
     mind.outlineNew(
                 &title,
                 mind.ontology().findOrCreateOutlineType(m8r::OutlineType::KeyGrow()),
                 3,
                 5,
-                mind.ontology().findOrCreateTag(m8r::Tag::KeyImportant()),
+                66,
+                &tags,
                 outlineStencil.get());
 
     // asserts

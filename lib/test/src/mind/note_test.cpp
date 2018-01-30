@@ -68,15 +68,18 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     // get the outline and add to it a stencil note
     vector<m8r::Outline*> outlines = memory.getOutlines();
     m8r::Outline* o = outlines.at(0);
-    vector<m8r::Stencil*> stencils = memory.getStencils(m8r::ResourceType::NOTE);
+    vector<const m8r::Tag*> tags{};
+    tags.push_back(mind.ontology().findOrCreateTag(m8r::Tag::KeyImportant()));
+    m8r::Stencil* stencil = memory.getStencils(m8r::ResourceType::NOTE).at(0);
     string title{"!!! STENCIL Note !!!"};
     mind.noteNew(
                 o->getKey(),
                 0,
                 &title,
                 mind.ontology().findOrCreateNoteType(m8r::NoteType::KeyAction()),
-                mind.ontology().findOrCreateTag(m8r::Tag::KeyImportant()),
-                stencils.at(0));
+                &tags,
+                0,
+                stencil);
     // insert note in the middle and to the depth 1
     string deepTitle{"!!! DEEP Note !!!"};
     // insert note in the middle and to the depth 1
@@ -85,8 +88,9 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
                 2,
                 &deepTitle,
                 mind.ontology().findOrCreateNoteType(m8r::NoteType::KeyAction()),
-                mind.ontology().findOrCreateTag(m8r::Tag::KeyImportant()),
-                stencils.at(0));
+                &tags,
+                0,
+                stencil);
     newNote->demote();
     //cout << "Begin:" << endl; for(m8r::Note* nn: o->getNotes()) { cout << "  #x" << nn->getDepth() << " " << nn->getTitle() << endl; }
 
