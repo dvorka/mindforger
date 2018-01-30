@@ -321,8 +321,11 @@ public:
     bool noteBottom(std::string outlineKey, uint16_t noteId);
     /**
      * @brief Move note one level up from the current depth.
+     *
+     * If note can be moved, then return true, else return false.
+     * If it has children, then its children are promoted as well.
      */
-    bool notePromote(std::string outlineKey, uint16_t noteId);
+    bool notePromote(Note* note);
     /**
      * @brief Move note one level down from the current depth.
      */

@@ -481,10 +481,19 @@ bool Mind::noteBottom(string outlineKey, uint16_t noteId)
     return false;
 }
 
-bool Mind::notePromote(string outlineKey, uint16_t noteId)
+bool Mind::notePromote(Note* note)
 {
-    UNUSED_ARG(outlineKey);
-    UNUSED_ARG(noteId);
+    if(note) {
+        if(note->getDepth()) {
+            vector<Note*> children{};
+            noteChildren(note, children);
+            note->promote();
+            for(Note* n:children) {
+                n->promote();
+            }
+            return true;
+        }
+    }
 
     return false;
 }
