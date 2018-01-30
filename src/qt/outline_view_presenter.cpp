@@ -20,11 +20,12 @@
 
 namespace m8r {
 
-OutlineViewPresenter::OutlineViewPresenter(OutlineView *view, OrlojPresenter* orloj) : QObject(orloj), currentOutline{nullptr}
+OutlineViewPresenter::OutlineViewPresenter(OutlineView *view, OrlojPresenter* orloj)
+    : QObject(orloj), currentOutline{nullptr}
 {
     this->view = view;
-    // IMPROVE stack object
-    this->outlineTreePresenter = new OutlineTreePresenter(view->getOutlineTree(), this);
+    this->outlineTreePresenter
+        = new OutlineTreePresenter(view->getOutlineTree(), orloj->getMainWindow(), this);
 
     QObject::connect(view->getTitleLabel(), SIGNAL(clicked()), orloj, SLOT(slotShowOutlineHeader()));
     QObject::connect(view->getOutlineTree(), SIGNAL(signalFromOutlineTreeToOutlines()), orloj, SLOT(slotShowOutlines()));

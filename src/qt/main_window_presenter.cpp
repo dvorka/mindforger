@@ -353,6 +353,13 @@ void MainWindowPresenter::doActionNoteUp()
 
 void MainWindowPresenter::doActionNotePromote()
 {
+    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    mind->notePromote(note);
+
+    // IMPROVE lib to modify timestamp of Note and Outline
+    // IMPROVE refresh ONLY modified lines in the table
+
+    //orloj->getOutlineView()->getOutlineTree()->refresh();
 }
 
 void MainWindowPresenter::doActionNoteDemote()

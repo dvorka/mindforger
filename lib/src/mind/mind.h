@@ -362,6 +362,8 @@ public:
     // IMPROVE MemoryStatistics getStatistics();
 
 private:
+    void noteChildren(Note* note, std::vector<Note*>& children);
+
     /**
      * @brief Invoked on remembering Outline/Note/... to flush all inferred knowledge, caches, ...
      */

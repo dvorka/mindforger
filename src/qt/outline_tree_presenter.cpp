@@ -20,7 +20,8 @@
 
 namespace m8r {
 
-OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, QObject* parent) : QObject(parent)
+OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, MainWindowPresenter* mwp, QObject* parent)
+    : QObject(parent)
 {
     this->view = view;
     this->model = new OutlineTreeModel{view};
@@ -33,6 +34,13 @@ OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, QObject* paren
     // signals and slots
     QObject::connect(view, SIGNAL(signalSelectNextRow()), this, SLOT(slotSelectNextRow()));
     QObject::connect(view, SIGNAL(signalSelectLastRow()), this, SLOT(slotSelectLastRow()));
+
+    QObject::connect(view, SIGNAL(signalChangePromote()), mwp, SLOT(doActionNotePromote()));
+}
+
+OutlineTreePresenter::~OutlineTreePresenter()
+{
+    if(model) delete model;
 }
 
 void OutlineTreePresenter::refresh(Outline* outline)
@@ -109,11 +117,6 @@ void OutlineTreePresenter::slotSelectLastRow()
         QModelIndex previousIndex = model->index(row-1, 0);
         view->setCurrentIndex(previousIndex);
     }
-}
-
-OutlineTreePresenter::~OutlineTreePresenter()
-{
-    if(model) delete model;
 }
 
 }

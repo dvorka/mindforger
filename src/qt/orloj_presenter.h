@@ -83,6 +83,7 @@ public:
     Mind* getMind() { return mind; }
 
     OrlojView* getView() const { return view; }
+    MainWindowPresenter* getMainWindow() const { return mainPresenter; }
     OutlinesTablePresenter* getOutlinesTable() const { return outlinesTablePresenter; }
     NotesTablePresenter* getNotesTable() const { return notesTablePresenter; }
     OutlineViewPresenter* getOutlineView() const { return outlineViewPresenter; }

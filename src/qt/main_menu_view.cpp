@@ -310,12 +310,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteUp->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Up));
     actionNoteUp->setStatusTip(tr("Move Note up"));
 
-    actionNotePromote = new QAction(tr("&Promote"), mainWindow);
-    actionNotePromote->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Right));
+    actionNotePromote = new QAction(tr("&Promote\tCtrl+Left"), mainWindow); // handled from Outline tree
     actionNotePromote->setStatusTip(tr("Promote Note"));
 
     actionNoteDemote = new QAction(tr("&Demote"), mainWindow);
-    actionNoteDemote->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Left));
+    actionNoteDemote->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Right));
     actionNoteDemote->setStatusTip(tr("Demote Note"));
 
     actionNoteDown = new QAction(tr("Do&wn"), mainWindow);

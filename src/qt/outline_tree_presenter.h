@@ -40,12 +40,13 @@ private:
     OutlineTreeModel* model;
 
 public:
-    explicit OutlineTreePresenter(OutlineTreeView* view, QObject* parent);
+    explicit OutlineTreePresenter(OutlineTreeView* view, MainWindowPresenter* mwp, QObject* parent);
     OutlineTreePresenter(const OutlineTreePresenter&) = delete;
     OutlineTreePresenter(const OutlineTreePresenter&&) = delete;
     OutlineTreePresenter &operator=(const OutlineTreePresenter&) = delete;
     OutlineTreePresenter &operator=(const OutlineTreePresenter&&) = delete;
 
+    OutlineTreeView* getView() const { return view; }
     OutlineTreeModel* getModel() const { return model; }
 
     void refresh(Outline* outline);

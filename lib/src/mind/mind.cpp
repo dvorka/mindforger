@@ -525,6 +525,23 @@ void Mind::onRemembering()
     allNotesCache.clear();
 }
 
+void Mind::noteChildren(Note* note, std::vector<Note*>& children)
+{
+    if(note) {
+        Outline* o = note->getOutline();
+        // IMPROVE this is SLOW o(n) - consider keeping order of note within it as a field
+        const vector<Note*>& ns = o->getNotes();
+        auto it = std::find(ns.begin(), ns.end(), note);
+        if(it != ns.end()) {
+            auto index = std::distance(ns.begin(), it);
+            xxx
+        } else {
+            // note not in vector
+            return;
+        }
+    }
+}
+
 // unique_ptr template BREAKS Qt Developer indentation > stored at EOF
 unique_ptr<vector<Outline*>> Mind::findOutlineByTitleFts(const string& expr) const
 {
