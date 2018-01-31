@@ -481,21 +481,25 @@ bool Mind::noteBottom(string outlineKey, uint16_t noteId)
     return false;
 }
 
-bool Mind::notePromote(Note* note)
+void Mind::notePromote(Note* note, Outline::Patch* patch)
 {
     if(note) {
         if(note->getDepth()) {
             vector<Note*> children{};
-            noteChildren(note, children);
+            noteChildren(note, children, patch);
             note->promote();
             for(Note* n:children) {
                 n->promote();
             }
-            return true;
+            if(patch) {
+                patch->action = Outline::Patch::Action::UPDATE;
+            }
+            return;
         }
     }
-
-    return false;
+    if(patch) {
+        patch->action = Outline::Patch::Action::NOP;
+    }
 }
 
 bool Mind::noteDemote(string outlineKey, uint16_t noteId)
@@ -525,7 +529,7 @@ void Mind::onRemembering()
     allNotesCache.clear();
 }
 
-void Mind::noteChildren(Note* note, std::vector<Note*>& children)
+void Mind::noteChildren(Note* note, std::vector<Note*>& children, Outline::Patch* patch)
 {
     if(note) {
         Outline* o = note->getOutline();
@@ -538,11 +542,18 @@ void Mind::noteChildren(Note* note, std::vector<Note*>& children)
                 if(ns[i]->getDepth() > note->getDepth()) {
                     children.push_back(ns[i]);
                 } else {
+                    if(patch) {
+                        patch->begin=index;
+                        patch->end=index+children.size();
+                    }
                     return;
                 }
             }
         } else {
             // note not in vector
+            if(patch) {
+                patch->begin=patch->end=0;
+            }
             return;
         }
     }

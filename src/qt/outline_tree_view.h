@@ -76,6 +76,7 @@ public:
 
     virtual void keyPressEvent(QKeyEvent* event) override;
     virtual void paintEvent(QPaintEvent* event) override;
+    void refreshNotes(const QModelIndex& from, const QModelIndex& to) { dataChanged(from, to); }
 
 signals:
     void signalFromOutlineTreeToOutlines();

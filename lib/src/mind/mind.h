@@ -325,7 +325,7 @@ public:
      * If note can be moved, then return true, else return false.
      * If it has children, then its children are promoted as well.
      */
-    bool notePromote(Note* note);
+    void notePromote(Note* note, Outline::Patch* patch=nullptr);
     /**
      * @brief Move note one level down from the current depth.
      */
@@ -362,7 +362,7 @@ public:
     // IMPROVE MemoryStatistics getStatistics();
 
 private:
-    void noteChildren(Note* note, std::vector<Note*>& children);
+    void noteChildren(Note* note, std::vector<Note*>& children, Outline::Patch* patch);
 
     /**
      * @brief Invoked on remembering Outline/Note/... to flush all inferred knowledge, caches, ...

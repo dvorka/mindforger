@@ -59,6 +59,9 @@ private:
      */
     static const NoteType NOTE_4_OUTLINE_TYPE;
 
+public:
+    class Patch;
+
 private:
     OutlineMemoryLocation memoryLocation;
 
@@ -181,6 +184,33 @@ public:
     void setBytesize(unsigned int bytesize);
 
     Note* getOutlineDescriptorAsNote();
+};
+
+/**
+ * @brief Modification protocol for Outline's Notes.
+ *
+ * Patch describes changes that were made by an operation (like promote or demote)
+ * to its Notes. It's used by higher levels (like frontend) to process/adapt to
+ * these changes (e.g. widget rendering).
+ */
+struct Outline::Patch {
+    enum Action {
+        // no patch i.e. no change was made to Notes
+        NOP,
+        // refresh Notes specified by boundaries i.e. in place changes like change of title or depth
+        UPDATE,
+        // Notes given by boundaries were moved to the target location
+        MOVE,
+        // Notes given by boundaries were removed/deleted
+        DELETE
+    };
+
+    Action action;
+
+    unsigned int begin;
+    unsigned int end;
+
+    unsigned int target;
 };
 
 } /* namespace m8r */

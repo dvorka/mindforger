@@ -43,6 +43,14 @@ OutlineTreePresenter::~OutlineTreePresenter()
     if(model) delete model;
 }
 
+void OutlineTreePresenter::refresh(Outline::Patch& patch)
+{
+    if(patch.action == Outline::Patch::Action::UPDATE) {
+        view->refreshNotes(model->index(patch.begin, 0), model->index(patch.end, 0));
+    }
+}
+
+
 void OutlineTreePresenter::refresh(Outline* outline)
 {
     if(outline != nullptr) {

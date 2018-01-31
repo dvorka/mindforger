@@ -49,6 +49,7 @@ public:
     OutlineTreeView* getView() const { return view; }
     OutlineTreeModel* getModel() const { return model; }
 
+    void refresh(Outline::Patch& patch);
     void refresh(Outline* outline);
     void refresh(Note* note);
 
