@@ -37,7 +37,10 @@ private:
         Italicer,
         Strikethrough,
         Link,
+        Autolink,
         Codeblock,
+        UnorderedList,
+        OrderedList,
 
         HtmlTag,
         HtmlAttribute,
@@ -59,6 +62,7 @@ private:
     QTextCharFormat italicerFormat;
     QTextCharFormat strikethroughFormat;
     QTextCharFormat linkFormat;
+    QTextCharFormat listFormat;
     QTextCharFormat codeblockFormat;
 
     // HTML formats

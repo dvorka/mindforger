@@ -29,24 +29,24 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
      */
 
     // emphasis
-    addRegex(Bolder, "\\*\\*(:?\\w[\\w\\s'/:\\.]+)\\*\\*"); // ** first, * next
-    addRegex(Bold, "\\*(:?\\w[\\w\\s'/:\\.]+)\\*");
-    addRegex(Italicer, "__(:?[\\w\\s'/:\\.]+)__");
-    addRegex(Italic, "_(:?[\\w\\s'/:\\.]+)_");
-    addRegex(Strikethrough, "~~(:?[\\w\\s'/:\\.]+)~~");
-    addRegex(Link, "\\[(:?[\\w\\s:\\-=]+)\\]\\([\\w/\\.:-#]+\\)");
-    addRegex(Codeblock, "`(:?[\\w\\s'/:\\.]+)`");
+    addRegex(Bolder, "\\*\\*(:?\\w[\\w\\s'/:\\.:-#\\(\\)]+)\\*\\*"); // ** first, * next
+    addRegex(Bold, "\\*(:?\\w[\\w\\s'/:\\.:-#()]+)\\*");
+    addRegex(Italicer, "__(:?[\\w\\s'/:\\.:-#()]+)__");
+    addRegex(Italic, "_(:?[\\w\\s'/:\\.:-#()]+)_");
+    addRegex(Strikethrough, "~~(:?[\\w\\s'/:\\.:-#()]+)~~");
+    //addRegex(Link, "\\[(:?[\\w\\s:\\-=]+)\\]\\([\\w/\\.:-#()]+\\)");
+    addRegex(Link, "\\[(:?[\\w\\s:\\-=]+)\\]\\(\\S+\\)");
+    // IMPROVE IMO regexp like https?://\S+ should be OK, but from some reason it's non-greedy... that's why I use this obscure one
+    addRegex(Autolink, "https?://\\S+$");
+    addRegex(Codeblock, "`(:?[\\w\\s'/:\\.:-#()]+)`");
+    addRegex(UnorderedList, "^(:?    )*[\\*\\+\\-] ");
+    addRegex(OrderedList, "^(:?    )*\\d\\. ");
 
     // TODO extra method - HTML comment like
     //addRegex(CodeblockMultiline, "\\*(:?#\\d+|\\w+)\\*");
 
     boldFormat.setForeground(lookAndFeels.getEditorBold());
     bolderFormat.setForeground(lookAndFeels.getEditorBolder());
-#if QT_VERSION > QT_VERSION_CHECK(5, 5, 0)
-    bolderFormat.setFontWeight(QFont::ExtraBold);
-#else
-    bolderFormat.setFontWeight(QFont::Black);
-#endif
     italicFormat.setForeground(lookAndFeels.getEditorItalic());
     italicFormat.setFontItalic(true);
     italicerFormat.setForeground(lookAndFeels.getEditorItalicer());
@@ -54,7 +54,16 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     italicerFormat.setFontWeight(QFont::Bold);
     strikethroughFormat.setForeground(lookAndFeels.getEditorStrikethrough());
     linkFormat.setForeground(lookAndFeels.getEditorLink());
+    listFormat.setForeground(lookAndFeels.getEditorList());
     codeblockFormat.setForeground(lookAndFeels.getEditorCodeblock());
+
+#if QT_VERSION > QT_VERSION_CHECK(5, 5, 0)
+    bolderFormat.setFontWeight(QFont::ExtraBold);
+    listFormat.setFontWeight(QFont::ExtraBold);
+#else
+    bolderFormat.setFontWeight(QFont::Black);
+    listFormat.setFontWeight(QFont::Black);
+#endif
 
     /*
      * HTML inlined in MD
@@ -120,6 +129,12 @@ void NoteEditHighlight::highlightPatterns(const QString& text)
                 setFormat(index, length, codeblockFormat);
             else if(type == Link)
                 setFormat(index, length, linkFormat);
+            else if(type == Autolink)
+                setFormat(index, length, linkFormat);
+            else if(type == UnorderedList)
+                setFormat(index, length, listFormat);
+            else if(type == OrderedList)
+                setFormat(index, length, listFormat);
             else if(type == HtmlTag)
                 setFormat(index, length, htmlTagFormat);
             else if(type == HtmlAttribute) {
