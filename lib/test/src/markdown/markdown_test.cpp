@@ -228,7 +228,58 @@ TEST(MarkdownParserTestCase, MarkdownParserSections)
     parser.parse();
     dumpAst(parser.getAst());
     cout << endl << "- DONE ----------------------------------------------";
-    cout << endl << "";
+    cout << endl;
+}
+
+TEST(MarkdownParserTestCase, Bug37Meta)
+{
+    string fileName{"/lib/test/resources/bugs-repository/memory/bug-37-meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    cout << endl << "- Lexer ----------------------------------------------";
+    MarkdownLexerSections lexer(&fileName);
+    lexer.tokenize();
+    dumpLexems(lexer.getLexems());
+    cout << endl << "- Parser ----------------------------------------------";
+    MarkdownParserSections parser(lexer);
+    parser.parse();
+    dumpAst(parser.getAst());
+    ASSERT_EQ(parser.getAst()->size(), 4);
+    cout << endl << "- DONE ----------------------------------------------";
+    cout << endl;
+}
+
+TEST(MarkdownParserTestCase, Bug37Nometa)
+{
+    string fileName{"/lib/test/resources/bugs-repository/memory/bug-37-nometa.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    cout << endl << "- Lexer ----------------------------------------------";
+    MarkdownLexerSections lexer(&fileName);
+    lexer.tokenize();
+    dumpLexems(lexer.getLexems());
+    cout << endl << "- Parser ----------------------------------------------";
+    MarkdownParserSections parser(lexer);
+    parser.parse();
+    dumpAst(parser.getAst());
+    ASSERT_EQ(parser.getAst()->size(), 4);
+    cout << endl << "- DONE ----------------------------------------------";
+    cout << endl;
+}
+
+TEST(MarkdownParserTestCase, Bug37Notrailing)
+{
+    string fileName{"/lib/test/resources/bugs-repository/memory/bug-37-notrailing.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    cout << endl << "- Lexer ----------------------------------------------";
+    MarkdownLexerSections lexer(&fileName);
+    lexer.tokenize();
+    dumpLexems(lexer.getLexems());
+    cout << endl << "- Parser ----------------------------------------------";
+    MarkdownParserSections parser(lexer);
+    parser.parse();
+    dumpAst(parser.getAst());
+    ASSERT_EQ(parser.getAst()->size(), 4);
+    cout << endl << "- DONE ----------------------------------------------";
+    cout << endl;
 }
 
 TEST(MarkdownParserTestCase, MarkdownRepresentation)
@@ -290,16 +341,16 @@ TEST(MarkdownParserTestCase, FileSystemPersistence)
     cout << persistence.createFileName(string("/tmp"), text.get(), string(FILE_EXTENSION_MARKDOWN));
 }
 
-TEST(MarkdownParserBugsTestCase, MarkdownOnUbuntu)
+TEST(MarkdownParserBugsTestCase, EmptyTitleSkipsEof)
 {
-    string repository{"/lib/test/resources/basic-repository"};
+    string repository{"/lib/test/resources/bugs-repository"};
     repository.insert(0, getMindforgerGitHomePath());
 
     m8r::Configuration configuration{repository};
     m8r::Ontology ontology{configuration};
 
     m8r::MarkdownOutlineRepresentation mdr{ontology};
-    string outlineFilename{"/lib/test/resources/bug-md-ubuntu/ubuntu-in.md"};
+    string outlineFilename{"/lib/test/resources/bugs-repository/memory/bug-37.md"};
     outlineFilename.insert(0, getMindforgerGitHomePath());
     m8r::Outline* o = mdr.outline(outlineFilename);
     string* s = mdr.to(o);
@@ -308,7 +359,9 @@ TEST(MarkdownParserBugsTestCase, MarkdownOnUbuntu)
     cout << *s;
     cout << endl << "-----------------------------------------------";
 
-    std::ofstream out("./tests/resources/bug-md-ubuntu/ubuntu-out.md");
+    // TODO asserts
+
+    std::ofstream out("./tests/resources/bugs-repository/memory/bug-37-PARSER-OUTPUT.md");
     out << *s;
     out.close();
 

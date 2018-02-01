@@ -206,6 +206,17 @@ string* MarkdownParserSections::sectionTitleRule(size_t& offset)
         }
         return title;
     } else {
+        // handle section w/ empty title like: '##   <!-- Metadata... '
+        if(next->getType()==MarkdownLexemType::HTML_COMMENT_BEGIN) {
+            return new string();
+        }
+
+        // handle section w/ empty title, no metadata and traling spaces like: '##   '
+        if(next->getType()==MarkdownLexemType::BR) {
+            return new string();
+        }
+
+        // ... this is most probably timebomb - certain part of the document might be skipped
         return nullptr;
     }
 }
