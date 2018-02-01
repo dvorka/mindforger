@@ -98,16 +98,12 @@ void NoteEditPresenter::slotSaveNote()
         // (if user doesn't open dialog, nothing is blindly saved there & here)
 
         // IMPROVE if fields below are set on remembering (save) of Note, then delete code below
-        currentNote->setModified();
-        currentNote->setModifiedPretty();
-        currentNote->incRevision();
+        currentNote->makeModified();
         if(currentNote->getReads()<currentNote->getRevision()) {
             currentNote->setReads(currentNote->getRevision());
         }
         // Note's outline metadata must be updated as well
-        currentNote->getOutline()->setModified();
-        currentNote->getOutline()->setModifiedPretty();
-        currentNote->getOutline()->incRevision();
+        currentNote->getOutline()->makeModified();
 
         // remember
         mainPresenter->getMind()->remind().remember(currentNote->getOutlineKey());

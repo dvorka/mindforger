@@ -138,6 +138,7 @@ public:
     void setTags(const std::vector<const Tag*>* tags);
     void addTag(const Tag *tag);
     time_t getModified() const;
+    void makeModified();
     void setModified();
     void setModified(time_t modified);
     const std::string& getModifiedPretty() const;
@@ -194,23 +195,23 @@ public:
  * these changes (e.g. widget rendering).
  */
 struct Outline::Patch {
-    enum Action {
-        // no patch i.e. no change was made to Notes
-        NOP,
-        // refresh Notes specified by boundaries i.e. in place changes like change of title or depth
-        UPDATE,
-        // Notes given by boundaries were moved to the target location
+    enum Diff {
+        // no difference i.e. no change made to Notes
+        NO,
+        // Notes given by boundaries were changed e.g. title or depth, but not (re)moved
+        CHANGE,
+        // Notes given by boundaries were moved to the dest location
         MOVE,
-        // Notes given by boundaries were removed/deleted
+        // Notes given by boundaries were deleted
         DELETE
     };
 
-    Action action;
+    Diff diff;
 
-    unsigned int begin;
-    unsigned int end;
+    unsigned int start;
+    unsigned int count;
 
-    unsigned int target;
+    unsigned int dest;
 };
 
 } /* namespace m8r */

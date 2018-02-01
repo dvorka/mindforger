@@ -77,6 +77,13 @@ time_t Note::getModified() const
     return modified;
 }
 
+void Note::makeModified()
+{
+    setModified();
+    setModifiedPretty();
+    incRevision();
+}
+
 void Note::setModified()
 {
     this->modified = datetimeNow();

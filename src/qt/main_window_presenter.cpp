@@ -354,13 +354,15 @@ void MainWindowPresenter::doActionNoteUp()
 void MainWindowPresenter::doActionNotePromote()
 {
     Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
-    Outline::Patch patch{};
-    mind->notePromote(note, &patch);
+    if(note) {
+        // TODO lib to modify timestamp of Note and Outline
 
-    // IMPROVE lib to modify timestamp of Note and Outline
-    // IMPROVE refresh ONLY modified lines in the table
-
-    orloj->getOutlineView()->getOutlineTree()->refresh(patch);
+        // IMPROVE consider patch once in class
+        Outline::Patch patch{};
+        mind->notePromote(note, &patch);
+        mind->remind().remember(note->getOutline());
+        orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+    }
 }
 
 void MainWindowPresenter::doActionNoteDemote()

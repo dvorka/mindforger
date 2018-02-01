@@ -93,6 +93,7 @@ public:
     u_int16_t getDepth() const;
     void setDepth(u_int16_t depth);
     time_t getModified() const;
+    void makeModified();
     void setModified();
     void setModified(time_t modified);
     const std::string& getModifiedPretty() const;

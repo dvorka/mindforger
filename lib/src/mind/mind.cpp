@@ -488,17 +488,20 @@ void Mind::notePromote(Note* note, Outline::Patch* patch)
             vector<Note*> children{};
             noteChildren(note, children, patch);
             note->promote();
+            note->makeModified();
             for(Note* n:children) {
                 n->promote();
+                n->makeModified();
             }
+            note->getOutline()->makeModified();
             if(patch) {
-                patch->action = Outline::Patch::Action::UPDATE;
+                patch->diff = Outline::Patch::Diff::CHANGE;
             }
             return;
         }
     }
     if(patch) {
-        patch->action = Outline::Patch::Action::NOP;
+        patch->diff = Outline::Patch::Diff::NO;
     }
 }
 
@@ -543,8 +546,8 @@ void Mind::noteChildren(Note* note, std::vector<Note*>& children, Outline::Patch
                     children.push_back(ns[i]);
                 } else {
                     if(patch) {
-                        patch->begin=index;
-                        patch->end=index+children.size();
+                        patch->start=index;
+                        patch->count=children.size();
                     }
                     return;
                 }
@@ -552,7 +555,7 @@ void Mind::noteChildren(Note* note, std::vector<Note*>& children, Outline::Patch
         } else {
             // note not in vector
             if(patch) {
-                patch->begin=patch->end=0;
+                patch->start=patch->count=0;
             }
             return;
         }

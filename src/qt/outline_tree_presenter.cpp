@@ -20,6 +20,8 @@
 
 namespace m8r {
 
+using namespace std;
+
 OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, MainWindowPresenter* mwp, QObject* parent)
     : QObject(parent)
 {
@@ -43,20 +45,25 @@ OutlineTreePresenter::~OutlineTreePresenter()
     if(model) delete model;
 }
 
-void OutlineTreePresenter::refresh(Outline::Patch& patch)
+void OutlineTreePresenter::refresh(Outline* outline, Outline::Patch* patch)
 {
-    if(patch.action == Outline::Patch::Action::UPDATE) {
-        view->refreshNotes(model->index(patch.begin, 0), model->index(patch.end, 0));
-    }
-}
-
-
-void OutlineTreePresenter::refresh(Outline* outline)
-{
-    if(outline != nullptr) {
-        model->removeAllRows();
-        for(Note* note:outline->getNotes()) {
-            model->addRow(note);
+    if(outline) {
+        if(patch) {
+            const vector<Note*>& notes = outline->getNotes();
+            switch(patch->diff) {
+            case Outline::Patch::Diff::CHANGE:
+                for(unsigned int i=patch->start; i<=patch->start+patch->count; i++) {
+                    model->refresh(notes[i], i);
+                }
+                break;
+            default:
+                break;
+            }
+        } else {
+            model->removeAllRows();
+            for(Note* note:outline->getNotes()) {
+                model->addRow(note);
+            }
         }
     }
 }

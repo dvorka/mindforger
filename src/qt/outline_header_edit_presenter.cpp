@@ -96,9 +96,7 @@ void OutlineHeaderEditPresenter::slotSaveOutlineHeader()
         // (if user doesn't open dialog, nothing is blindly saved there & here)
 
         // IMPROVE if fields below are set on remembering (save) of Outline, then delete code below
-        currentOutline->setModified();
-        currentOutline->setModifiedPretty();
-        currentOutline->incRevision();
+        currentOutline->makeModified();
         if(currentOutline->getReads()<currentOutline->getRevision()) {
             currentOutline->setReads(currentOutline->getRevision());
         }

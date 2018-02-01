@@ -187,6 +187,13 @@ time_t Outline::getModified() const
     return modified;
 }
 
+void Outline::makeModified()
+{
+    setModified();
+    setModifiedPretty();
+    incRevision();
+}
+
 void Outline::setModified()
 {
     this->modified = datetimeNow();

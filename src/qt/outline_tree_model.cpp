@@ -100,25 +100,9 @@ int OutlineTreeModel::getRowByNote(const Note* note)
     return NO_INDEX;
 }
 
-void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
+void OutlineTreeModel::refresh(Note* note, int row)
 {
-    int row = NO_INDEX;
-
-    // determine row number by note attached to the row - selection or iteration
-    if(selection.size()) {
-        // TODO use role
-        if(item(selection[0].row())->data().value<Note*>() == note) {
-            row = selection[0].row();
-        }
-    }
-    // iterate
-    if(row < 0) {
-        // IMPROVE UI note that has both Note and QStandardItem refs
-        row = getRowByNote(note);
-    }
-
-    // refresh
-    if(row >= 0) {
+    if(row > NO_INDEX) {
         QString s{};
         createTitleText(s, note);
         // refresh content
@@ -140,10 +124,30 @@ void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
 
         QModelIndex from = createIndex(row, 0, item(row,0));
         QModelIndex to = createIndex(row, 3, item(row,3));
-        // notify
+
+        // notify widget about changes
         emit dataChanged(from,to);
-        return;
     }
+}
+
+
+void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
+{
+    int row = NO_INDEX;
+
+    // determine row number by note attached to the row - selection or iteration
+    if(selection.size()) {
+        // TODO use role
+        if(item(selection[0].row())->data().value<Note*>() == note) {
+            row = selection[0].row();
+        }
+    }
+    if(row <= NO_INDEX) {
+        // IMPROVE UI note that has both Note and QStandardItem refs
+        row = getRowByNote(note);
+    }
+
+    refresh(note, row);
 }
 
 }
