@@ -54,50 +54,55 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
     html += QString::fromUtf8("</h2>");
     outlineTypeToHtml(outline->getType(), html);
     html += QString::fromUtf8("&nbsp;");
+    // IMPROVE show rs/ws/... only if it's MF repository (hide it otherwise) + configuration allows to hide it in all cases
     outlineMetadataToHtml(outline, html);
     html += QString::fromUtf8("</td>");
     html += QString::fromUtf8("<td style='width: 50px;'>");
-    html += QString::fromUtf8("<h1>");
-    html += QString::number(outline->getProgress());
-    html += QString::fromUtf8("%&nbsp;&nbsp;</h1>");
+    if(outline->getProgress()) {
+        html += QString::fromUtf8("<h1>");
+        html += QString::number(outline->getProgress());
+        html += QString::fromUtf8("%&nbsp;&nbsp;</h1>");
+    }
     html += QString::fromUtf8("</td>");
     html += QString::fromUtf8("<td style='width: 50px;'><table style='font-size: 100%;'><tr>");
-    if(outline->getImportance() > 0) {
-        for(int i=0; i<=4; i++) {
-            html += QString::fromUtf8("<td>");
-            if(outline->getImportance()>i) {
-                html += QChar(9733);
-            } else {
-                html += QChar(9734);
-            }
-            html += QString::fromUtf8("</td>");
-        }
-    } else {
-        for(int i=0; i<5; i++) {
-            html += QString::fromUtf8("<td>");
-            html.append(QChar(9734));
-            html += QString::fromUtf8("</td>");
-        }
-    }
-    html += QString::fromUtf8("</tr>");
-    html += QString::fromUtf8("<tr>");
-    if(outline->getUrgency()>0) {
-        for(int i=0; i<=4; i++) {
-            if(outline->getUrgency()>i) {
+    if(outline->getImportance() || outline->getUrgency()) {
+        if(outline->getImportance() > 0) {
+            for(int i=0; i<=4; i++) {
                 html += QString::fromUtf8("<td>");
-                html += QChar(0x29D7);
+                if(outline->getImportance()>i) {
+                    html += QChar(9733);
+                } else {
+                    html += QChar(9734);
+                }
                 html += QString::fromUtf8("</td>");
-            } else {
+            }
+        } else {
+            for(int i=0; i<5; i++) {
                 html += QString::fromUtf8("<td>");
-                html += QChar(0x29D6);
+                html.append(QChar(9734));
                 html += QString::fromUtf8("</td>");
             }
         }
-    } else {
-        for(int i=0; i<5; i++) {
-            html += QString::fromUtf8("<td>");
-            html.append(QChar(0x29D6));
-            html += QString::fromUtf8("</td>");
+        html += QString::fromUtf8("</tr>");
+        html += QString::fromUtf8("<tr>");
+        if(outline->getUrgency()>0) {
+            for(int i=0; i<=4; i++) {
+                if(outline->getUrgency()>i) {
+                    html += QString::fromUtf8("<td>");
+                    html += QChar(0x29D7);
+                    html += QString::fromUtf8("</td>");
+                } else {
+                    html += QString::fromUtf8("<td>");
+                    html += QChar(0x29D6);
+                    html += QString::fromUtf8("</td>");
+                }
+            }
+        } else {
+            for(int i=0; i<5; i++) {
+                html += QString::fromUtf8("<td>");
+                html.append(QChar(0x29D6));
+                html += QString::fromUtf8("</td>");
+            }
         }
     }
     html += QString::fromUtf8("</tr></table>");

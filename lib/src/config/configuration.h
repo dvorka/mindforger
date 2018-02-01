@@ -88,6 +88,11 @@ private:
     bool editorShowLineNumbers;
     bool editorEnableSyntaxHighlighting;
 
+    /**
+     * @brief Show reads/writes/... when viewing Outlines and/or Notes.
+     */
+    bool viewerShowMetadata;
+
 private:
     // fields
     Installer* installer;
