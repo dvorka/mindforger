@@ -491,7 +491,7 @@ void Mind::notePromote(Note* note, Outline::Patch* patch)
             note->makeModified();
             for(Note* n:children) {
                 n->promote();
-                n->makeModified();
+                // IMPROVE consider whether children should be marked as modified or no n->makeModified();
             }
             note->getOutline()->makeModified();
             if(patch) {
@@ -505,12 +505,28 @@ void Mind::notePromote(Note* note, Outline::Patch* patch)
     }
 }
 
-bool Mind::noteDemote(string outlineKey, uint16_t noteId)
+void Mind::noteDemote(Note* note, Outline::Patch* patch)
 {
-    UNUSED_ARG(outlineKey);
-    UNUSED_ARG(noteId);
-
-    return false;
+    if(note) {
+        if(note->getDepth() < MAX_NOTE_DEPTH) {
+            vector<Note*> children{};
+            noteChildren(note, children, patch);
+            note->demote();
+            note->makeModified();
+            for(Note* n:children) {
+                n->demote();
+                // IMPROVE consider whether children should be marked as modified or no n->makeModified();
+            }
+            note->getOutline()->makeModified();
+            if(patch) {
+                patch->diff = Outline::Patch::Diff::CHANGE;
+            }
+            return;
+        }
+    }
+    if(patch) {
+        patch->diff = Outline::Patch::Diff::NO;
+    }
 }
 
 bool Mind::noteRefactor(
@@ -536,28 +552,41 @@ void Mind::noteChildren(Note* note, std::vector<Note*>& children, Outline::Patch
 {
     if(note) {
         Outline* o = note->getOutline();
-        // IMPROVE this is SLOW o(n) - consider keeping order of note within it as a field
         const vector<Note*>& ns = o->getNotes();
-        auto it = std::find(ns.begin(), ns.end(), note);
-        if(it != ns.end()) {
-            auto index = std::distance(ns.begin(), it);
-            for(unsigned int i=index+1; i<ns.size(); i++) {
-                if(ns[i]->getDepth() > note->getDepth()) {
-                    children.push_back(ns[i]);
-                } else {
-                    if(patch) {
-                        patch->start=index;
-                        patch->count=children.size();
-                    }
-                    return;
-                }
-            }
-        } else {
-            // note not in vector
+        if(note == ns[ns.size()-1]) {
             if(patch) {
-                patch->start=patch->count=0;
+                patch->start=ns.size()-1;
+                patch->count=0;
             }
             return;
+        } else {
+            // IMPROVE this is SLOW o(n) - consider keeping order of note within it as a field
+            auto it = std::find(ns.begin(), ns.end(), note);
+            if(it != ns.end()) {
+                auto index = std::distance(ns.begin(), it);
+                for(unsigned int i=index+1; i<ns.size(); i++) {
+                    if(ns[i]->getDepth() > note->getDepth()) {
+                        children.push_back(ns[i]);
+                    } else {
+                        if(patch) {
+                            patch->start=index;
+                            patch->count=children.size();
+                        }
+                        return;
+                    }
+                }
+                if(patch) {
+                    patch->start=index;
+                    patch->count=ns.size()-1-index;
+                }
+                return;
+            } else {
+                // note not in vector
+                if(patch) {
+                    patch->start=patch->count=0;
+                }
+                return;
+            }
         }
     }
 }

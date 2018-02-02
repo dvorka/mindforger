@@ -355,7 +355,7 @@ void MainWindowPresenter::doActionNotePromote()
 {
     Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
     if(note) {
-        // IMPROVE consider patch once in class
+        // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0,0}; // explicit initialization required by older GCC versions
         mind->notePromote(note, &patch);
         mind->remind().remember(note->getOutline());
@@ -365,6 +365,14 @@ void MainWindowPresenter::doActionNotePromote()
 
 void MainWindowPresenter::doActionNoteDemote()
 {
+    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    if(note) {
+        // IMPROVE consider patch once in class (cross functions)
+        Outline::Patch patch{Outline::Patch::Diff::NO,0,0,0}; // explicit initialization required by older GCC versions
+        mind->noteDemote(note, &patch);
+        mind->remind().remember(note->getOutline());
+        orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+    }
 }
 
 void MainWindowPresenter::doActionNoteDown()

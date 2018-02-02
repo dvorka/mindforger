@@ -34,6 +34,7 @@ class Mind
 {
 public:
     static const int ALL_ENTRIES = -1;
+    static const u_int16_t MAX_NOTE_DEPTH = 50;
 
 private:
     const Configuration &config;
@@ -329,7 +330,7 @@ public:
     /**
      * @brief Move note one level down from the current depth.
      */
-    bool noteDemote(std::string outlineKey, uint16_t noteId);
+    void noteDemote(Note* note, Outline::Patch* patch=nullptr);
 
     /**
      * @brief Refactor note from the outline to another outline.
