@@ -355,10 +355,8 @@ void MainWindowPresenter::doActionNotePromote()
 {
     Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
     if(note) {
-        // TODO lib to modify timestamp of Note and Outline
-
         // IMPROVE consider patch once in class
-        Outline::Patch patch{};
+        Outline::Patch patch{Outline::Patch::Diff::NO,0,0,0}; // explicit initialization required by older GCC versions
         mind->notePromote(note, &patch);
         mind->remind().remember(note->getOutline());
         orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);

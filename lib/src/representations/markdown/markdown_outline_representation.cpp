@@ -253,7 +253,25 @@ void MarkdownOutlineRepresentation::description(const std::string* md, std::vect
 {
     // stupid and ugly: prepend a minimal section to description an parse it using MD parser (no need to create a new function)
     if(md) {
-        string s{*md};
+        // quote description: TAB all lines starting with # to ensure correct sections separation
+        // TODO add quoting of multiline sections that use === and ---
+        string s{};
+        istringstream imd(*md);
+        static const char SECTION = '#';
+        for(string line; std::getline(imd, line); ) {
+            if(line.size() && line.at(0) == SECTION) {
+                s += "    ";
+            }
+            s += line;
+#ifdef __linux__
+            s += "\n";
+#elif _WIN32
+            s += "\r\n";
+#else
+            s += "\r";
+#endif
+        }
+
         s.insert(0, MINIMAL_SECTION_HEADER);
         Markdown md{nullptr};
         md.from(&s);
