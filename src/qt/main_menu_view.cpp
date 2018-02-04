@@ -293,37 +293,43 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteNew = new QAction(tr("&New"), mainWindow);
     actionNoteNew->setStatusTip(tr("Create new Note to form new ideas, principles, combinations and applications"));
 
-    actionNoteSave = new QAction(tr("R&emember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
+    actionNoteSave = new QAction(tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
     actionNoteSave->setStatusTip(tr("Save Note being edited"));
 
     actionNoteForget = new QAction(tr("&Forget"), mainWindow);
     actionNoteForget->setStatusTip(tr("Forget note"));
 
-    actionNoteClose = new QAction(tr("&Leave\tAlt+Left"), mainWindow); // Alt+Left is handled elsewhere and I don't want menu to handle it
+    actionNoteClose = new QAction(tr("Leave\tAlt+Left"), mainWindow); // Alt+Left is handled elsewhere and I don't want menu to handle it
     actionNoteClose->setStatusTip(tr("Save leave editor of Note being changed"));
 
-    actionNoteFirst = new QAction(tr("&Top"), mainWindow);
-    actionNoteFirst->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_T));
+
+    //actionNoteTop = new QAction(tr("&Top\tCtrl+Shift+Left"), mainWindow);
+    //actionNoteTop->setStatusTip(tr("Move Note to the top depth"));
+
+    actionNotePromote = new QAction(tr("&Promote\tCtrl+Left"), mainWindow); // handled from Outline tree
+    actionNotePromote->setStatusTip(tr("Promote Note"));
+
+    actionNoteDemote = new QAction(tr("&Demote\tCtrl+Right"), mainWindow);
+    actionNoteDemote->setStatusTip(tr("Demote Note"));
+
+    //actionNoteBottom = new QAction(tr("&Bottom\tCtrl+Shift+Down"), mainWindow);
+    //actionNoteBottom->setStatusTip(tr("Move Note to be the child of the previous Note"));
+
+
+    actionNoteFirst = new QAction(tr("F&irst"), mainWindow);
     actionNoteFirst->setStatusTip(tr("Move Note to be the first child of its parent"));
 
     actionNoteUp = new QAction(tr("&Up"), mainWindow);
     actionNoteUp->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Up));
     actionNoteUp->setStatusTip(tr("Move Note up"));
 
-    actionNotePromote = new QAction(tr("&Promote\tCtrl+Left"), mainWindow); // handled from Outline tree
-    actionNotePromote->setStatusTip(tr("Promote Note"));
-
-    actionNoteDemote = new QAction(tr("&Demote"), mainWindow);
-    actionNoteDemote->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Right));
-    actionNoteDemote->setStatusTip(tr("Demote Note"));
-
     actionNoteDown = new QAction(tr("Do&wn"), mainWindow);
     actionNoteDown->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Down));
     actionNoteDown->setStatusTip(tr("Move Note down"));
 
-    actionNoteLast = new QAction(tr("&Bottom"), mainWindow);
-    actionNoteLast->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));
+    actionNoteLast = new QAction(tr("&Last"), mainWindow);
     actionNoteLast->setStatusTip(tr("Move Note to be the last child of its parent"));
+
 
     // TODO Attach vs. COPY to repository
     actionNoteAttach = new QAction(tr("&Attach"), mainWindow);
@@ -347,10 +353,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNote->addAction(actionNoteClose);
     menuNote->addAction(actionNoteForget);
     menuNote->addSeparator();
-    menuNote->addAction(actionNoteFirst);
-    menuNote->addAction(actionNoteUp);
     menuNote->addAction(actionNotePromote);
     menuNote->addAction(actionNoteDemote);
+    menuNote->addSeparator();
+    menuNote->addAction(actionNoteFirst);
+    menuNote->addAction(actionNoteUp);
     menuNote->addAction(actionNoteDown);
     menuNote->addAction(actionNoteLast);
     menuNote->addSeparator();

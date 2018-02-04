@@ -337,6 +337,22 @@ void Outline::addNote(Note* note, int offset)
     notes.insert(notes.begin()+offset, note);
 }
 
+int Outline::getNoteOffset(Note* note)
+{
+    if(!notes.empty()) {
+        if(notes.size()==1) {
+            return 0;
+        } else {
+            // IMPROVE this is SLOW O(n) - consider keeping order of note within it as a field
+            auto it = std::find(notes.begin(), notes.end(), note);
+            if(it != notes.end()) {
+                return std::distance(notes.begin(), it);
+            }
+        }
+    }
+    return -1;
+}
+
 void Outline::forgetNote(Note* note)
 {
     if(note && notes.size()) {

@@ -33,8 +33,9 @@ namespace m8r {
 class Mind
 {
 public:
+    static const int NO_SIBLING = -1;
+    static const u_int16_t MAX_NOTE_DEPTH = 100;
     static const int ALL_ENTRIES = -1;
-    static const u_int16_t MAX_NOTE_DEPTH = 50;
 
 private:
     const Configuration &config;
@@ -296,30 +297,31 @@ public:
      * Outline is not persisted. There is no UNDO for this operation.
      */
     Outline* noteForget(Note* note);
+
     /**
      * @brief Move note to the beginning on the current level of depth.
      */
-    bool noteBegin(std::string outlineKey, uint16_t noteId);
+    void noteBegin(Note* note, Outline::Patch* patch=nullptr);
     /**
      * @brief Move note to the end on the current level of depth.
      */
-    bool noteEnd(std::string outlineKey, uint16_t noteId);
+    void noteEnd(Note* note, Outline::Patch* patch=nullptr);
     /**
      * @brief Move note one position up on the current level of depth.
      */
-    bool noteUp(std::string outlineKey, uint16_t noteId);
+    void noteUp(Note* note, Outline::Patch* patch);
     /**
      * @brief Move note on position down on the current level of depth.
      */
-    bool noteDown(std::string outlineKey, uint16_t noteId);
+    void noteDown(Note* note, Outline::Patch* patch=nullptr);
     /**
      * @brief Move note to the first level of depth (following parents).
      */
-    bool noteTop(std::string outlineKey, uint16_t noteId);
+    void noteTop(Note* note, Outline::Patch* patch=nullptr);
     /**
      * @brief Move note to the bottom of depth (following the first child).
      */
-    bool noteBottom(std::string outlineKey, uint16_t noteId);
+    void noteBottom(Note* note, Outline::Patch* patch=nullptr);
     /**
      * @brief Move note one level up from the current depth.
      *
@@ -355,6 +357,8 @@ public:
     std::string makeNoteOutline(
             std::string fromOutlineKey,
             uint16_t fromNoteId);
+
+    int getOffsetOfAboveNoteSibling(Note* note);
 
     /*
      * DIAGNOSTICS

@@ -45,25 +45,36 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
     } else {
         // TODO up/down/promote/demote note tree changes
         if(event->modifiers() & Qt::ControlModifier){
-            switch(event->key()) {
-            case Qt::Key_Up:
-                emit signalChangeUp();
-                break;
-            case Qt::Key_Down:
-                emit signalChangeDown();
-                break;
-            case Qt::Key_Left:
-                emit signalChangePromote();
-                break;
-            case Qt::Key_Right:
-                emit signalChangeDemote();
-                break;
-            case Qt::Key_F:
-                emit signalChangeFirst();
-                break;
-            case Qt::Key_L:
-                emit signalChangeLast();
-                break;
+            if(event->modifiers() & Qt::ShiftModifier) {
+                switch(event->key()) {
+                case Qt::Key_Up:
+                    emit signalChangeFirst();
+                    break;
+                case Qt::Key_Down:
+                    emit signalChangeLast();
+                    break;
+                }
+            } else {
+                switch(event->key()) {
+                case Qt::Key_Up:
+                    emit signalChangeUp();
+                    break;
+                case Qt::Key_Down:
+                    emit signalChangeDown();
+                    break;
+                case Qt::Key_Left:
+                    emit signalChangePromote();
+                    break;
+                case Qt::Key_Right:
+                    emit signalChangeDemote();
+                    break;
+                //case Qt::Key_F:
+                //    emit signalChangeFirst();
+                //    break;
+                //case Qt::Key_L:
+                //    emit signalChangeLast();
+                //    break;
+                }
             }
         } else {
             // up/down note tree navigation

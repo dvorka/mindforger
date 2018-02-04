@@ -449,36 +449,99 @@ Outline* Mind::noteForget(Note* note)
     }
 }
 
-bool Mind::noteTop(string outlineKey, uint16_t noteId)
+int Mind::getOffsetOfAboveNoteSibling(Note* note)
 {
-    UNUSED_ARG(outlineKey);
-    UNUSED_ARG(noteId);
-
-    return false;
+    int offset = note->getOutline()->getNoteOffset(note);
+    if(offset != Outline::NO_OFFSET) {
+        if(offset) {
+            const vector<Note*>& ns = note->getOutline()->getNotes();
+            for(int o=offset-1; o>=0; o--) {
+                if(ns[o]->getDepth() == note->getDepth()) {
+                    return o;
+                }
+                if(ns[o]->getDepth() < note->getDepth()) {
+                    return NO_SIBLING;
+                }
+            }
+        }
+        return offset;
+    } else {
+        return NO_SIBLING;
+    }
 }
 
-bool Mind::noteUp(string outlineKey, uint16_t noteId)
+void Mind::noteUp(Note* note, Outline::Patch* patch)
 {
-    UNUSED_ARG(outlineKey);
-    UNUSED_ARG(noteId);
+    if(note) {
+        Outline* o = note->getOutline();
+        const vector<Note*>& ns = o->getNotes();
+        auto it = std::find(ns.begin(), ns.end(), note);
+        if(it != ns.end()) {
+            auto index = std::distance(ns.begin(), it);
+            if(index) {
+                // find sibling on the same depth + there CANNOT be N w/ lower depth
+                if(note->getDepth() == ns[index]->getDepth()) {
 
-    return false;
+                }
+            }
+            // else Note is 1st O's Note
+        }
+        // else Note not found among O's Notes
+
+
+
+
+        vector<Note*> children{};
+
+
+
+        noteChildren(note, children, patch);
+        // index of the last child becomes END of patch
+        note->promote();
+        note->makeModified();
+        for(Note* n:children) {
+            n->promote();
+            // IMPROVE consider whether children should be marked as modified or no n->makeModified();
+        }
+        note->getOutline()->makeModified();
+        if(patch) {
+            patch->diff = Outline::Patch::Diff::CHANGE;
+        }
+        return;
+    }
+    if(patch) {
+        patch->diff = Outline::Patch::Diff::NO;
+    }
 }
 
-bool Mind::noteDown(string outlineKey, uint16_t noteId)
+void Mind::noteDown(Note* note, Outline::Patch* patch)
 {
-    UNUSED_ARG(outlineKey);
-    UNUSED_ARG(noteId);
-
-    return false;
+    UNUSED_ARG(note);
+    UNUSED_ARG(patch);
 }
 
-bool Mind::noteBottom(string outlineKey, uint16_t noteId)
+void Mind::noteTop(Note* note, Outline::Patch* patch)
 {
-    UNUSED_ARG(outlineKey);
-    UNUSED_ARG(noteId);
+    UNUSED_ARG(note);
+    UNUSED_ARG(patch);
+}
 
-    return false;
+void Mind::noteBottom(Note* note, Outline::Patch* patch)
+{
+    UNUSED_ARG(note);
+    UNUSED_ARG(patch);
+}
+
+void Mind::noteBegin(Note* note, Outline::Patch* patch)
+{
+    UNUSED_ARG(note);
+    UNUSED_ARG(patch);
+}
+
+void Mind::noteEnd(Note* note, Outline::Patch* patch)
+{
+    UNUSED_ARG(note);
+    UNUSED_ARG(patch);
 }
 
 void Mind::notePromote(Note* note, Outline::Patch* patch)

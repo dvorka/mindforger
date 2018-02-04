@@ -53,6 +53,9 @@ enum class OutlineMemoryLocation {
  */
 class Outline : public MindEntity
 {
+public:
+    static const int NO_OFFSET = -1;
+
 private:
     /**
      * @brief Auxiliary Note type that is used to represent Outline's title and description, e.g. in FTS.
@@ -153,7 +156,7 @@ public:
      * @brief Add note on given offset.
      */
     void addNote(Note*, int offset);
-
+    int getNoteOffset(Note* note);
     /**
      * @brief Forget note and its children.
      */
