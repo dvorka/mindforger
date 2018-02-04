@@ -449,146 +449,59 @@ Outline* Mind::noteForget(Note* note)
     }
 }
 
-int Mind::getOffsetOfAboveNoteSibling(Note* note)
-{
-    int offset = note->getOutline()->getNoteOffset(note);
-    if(offset != Outline::NO_OFFSET) {
-        if(offset) {
-            const vector<Note*>& ns = note->getOutline()->getNotes();
-            for(int o=offset-1; o>=0; o--) {
-                if(ns[o]->getDepth() == note->getDepth()) {
-                    return o;
-                }
-                if(ns[o]->getDepth() < note->getDepth()) {
-                    return NO_SIBLING;
-                }
-            }
-        }
-        return offset;
-    } else {
-        return NO_SIBLING;
-    }
-}
-
 void Mind::noteUp(Note* note, Outline::Patch* patch)
 {
     if(note) {
-        Outline* o = note->getOutline();
-        const vector<Note*>& ns = o->getNotes();
-        auto it = std::find(ns.begin(), ns.end(), note);
-        if(it != ns.end()) {
-            auto index = std::distance(ns.begin(), it);
-            if(index) {
-                // find sibling on the same depth + there CANNOT be N w/ lower depth
-                if(note->getDepth() == ns[index]->getDepth()) {
-
-                }
-            }
-            // else Note is 1st O's Note
-        }
-        // else Note not found among O's Notes
-
-
-
-
-        vector<Note*> children{};
-
-
-
-        noteChildren(note, children, patch);
-        // index of the last child becomes END of patch
-        note->promote();
-        note->makeModified();
-        for(Note* n:children) {
-            n->promote();
-            // IMPROVE consider whether children should be marked as modified or no n->makeModified();
-        }
-        note->getOutline()->makeModified();
-        if(patch) {
-            patch->diff = Outline::Patch::Diff::CHANGE;
-        }
-        return;
-    }
-    if(patch) {
-        patch->diff = Outline::Patch::Diff::NO;
+        note->getOutline()->moveNoteUp(note, patch);
     }
 }
 
 void Mind::noteDown(Note* note, Outline::Patch* patch)
 {
-    UNUSED_ARG(note);
-    UNUSED_ARG(patch);
+    if(note) {
+        note->getOutline()->moveNoteDown(note, patch);
+    }
 }
 
 void Mind::noteTop(Note* note, Outline::Patch* patch)
 {
-    UNUSED_ARG(note);
-    UNUSED_ARG(patch);
+    if(note) {
+        note->getOutline()->promoteNoteToTop(note, patch);
+    }
 }
 
 void Mind::noteBottom(Note* note, Outline::Patch* patch)
 {
-    UNUSED_ARG(note);
-    UNUSED_ARG(patch);
+    if(note) {
+        note->getOutline()->demoteNoteToBottom(note, patch);
+    }
 }
 
-void Mind::noteBegin(Note* note, Outline::Patch* patch)
+void Mind::noteFirst(Note* note, Outline::Patch* patch)
 {
-    UNUSED_ARG(note);
-    UNUSED_ARG(patch);
+    if(note) {
+        note->getOutline()->moveNoteToFirst(note, patch);
+    }
 }
 
-void Mind::noteEnd(Note* note, Outline::Patch* patch)
+void Mind::noteLast(Note* note, Outline::Patch* patch)
 {
-    UNUSED_ARG(note);
-    UNUSED_ARG(patch);
+    if(note) {
+        note->getOutline()->moveNoteToLast(note, patch);
+    }
 }
 
 void Mind::notePromote(Note* note, Outline::Patch* patch)
 {
     if(note) {
-        if(note->getDepth()) {
-            vector<Note*> children{};
-            noteChildren(note, children, patch);
-            note->promote();
-            note->makeModified();
-            for(Note* n:children) {
-                n->promote();
-                // IMPROVE consider whether children should be marked as modified or no n->makeModified();
-            }
-            note->getOutline()->makeModified();
-            if(patch) {
-                patch->diff = Outline::Patch::Diff::CHANGE;
-            }
-            return;
-        }
-    }
-    if(patch) {
-        patch->diff = Outline::Patch::Diff::NO;
+        note->getOutline()->promoteNote(note, patch);
     }
 }
 
 void Mind::noteDemote(Note* note, Outline::Patch* patch)
 {
     if(note) {
-        if(note->getDepth() < MAX_NOTE_DEPTH) {
-            vector<Note*> children{};
-            noteChildren(note, children, patch);
-            note->demote();
-            note->makeModified();
-            for(Note* n:children) {
-                n->demote();
-                // IMPROVE consider whether children should be marked as modified or no n->makeModified();
-            }
-            note->getOutline()->makeModified();
-            if(patch) {
-                patch->diff = Outline::Patch::Diff::CHANGE;
-            }
-            return;
-        }
-    }
-    if(patch) {
-        patch->diff = Outline::Patch::Diff::NO;
+        note->getOutline()->demoteNote(note, patch);
     }
 }
 
@@ -609,49 +522,6 @@ bool Mind::noteRefactor(
 void Mind::onRemembering()
 {
     allNotesCache.clear();
-}
-
-void Mind::noteChildren(Note* note, std::vector<Note*>& children, Outline::Patch* patch)
-{
-    if(note) {
-        Outline* o = note->getOutline();
-        const vector<Note*>& ns = o->getNotes();
-        if(note == ns[ns.size()-1]) {
-            if(patch) {
-                patch->start=ns.size()-1;
-                patch->count=0;
-            }
-            return;
-        } else {
-            // IMPROVE this is SLOW o(n) - consider keeping order of note within it as a field
-            auto it = std::find(ns.begin(), ns.end(), note);
-            if(it != ns.end()) {
-                auto index = std::distance(ns.begin(), it);
-                for(unsigned int i=index+1; i<ns.size(); i++) {
-                    if(ns[i]->getDepth() > note->getDepth()) {
-                        children.push_back(ns[i]);
-                    } else {
-                        if(patch) {
-                            patch->start=index;
-                            patch->count=children.size();
-                        }
-                        return;
-                    }
-                }
-                if(patch) {
-                    patch->start=index;
-                    patch->count=ns.size()-1-index;
-                }
-                return;
-            } else {
-                // note not in vector
-                if(patch) {
-                    patch->start=patch->count=0;
-                }
-                return;
-            }
-        }
-    }
 }
 
 // unique_ptr template BREAKS Qt Developer indentation > stored at EOF

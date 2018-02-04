@@ -55,6 +55,8 @@ class Outline : public MindEntity
 {
 public:
     static const int NO_OFFSET = -1;
+    static const int NO_SIBLING = -1;
+    static const u_int16_t MAX_NOTE_DEPTH = 100;
 
 private:
     /**
@@ -92,6 +94,7 @@ private:
     int8_t urgency;
     int8_t progress;
 
+    // IMPROVE introduce own data structure: tree of ordered notes w/ offset i.e. heap
     std::vector<Note*> notes;
 
     Note* outlineDescriptorAsNote;
@@ -125,7 +128,7 @@ public:
     void completeProperties(const time_t fileModificationTime);
 
     /**
-     * @brief TRUE if notes were loaded from filesystem.
+     * @brief TRUE if Notes were loaded from filesystem.
      */
     bool isNotesLoaded() const;
 
@@ -150,17 +153,27 @@ public:
     const std::vector<Note*>& getNotes() const;
     size_t getNotesCount() const;
     void setNotes(const std::vector<Note*>& notes);
-    void addNote(Note*);
 
+    void addNote(Note*);
     /**
-     * @brief Add note on given offset.
+     * @brief Add Note on given offset.
      */
     void addNote(Note*, int offset);
     int getNoteOffset(Note* note);
+    void getNoteChildren(Note* note, std::vector<Note*>* children=nullptr, Outline::Patch* patch=nullptr);
     /**
-     * @brief Forget note and its children.
+     * @brief Forget Note and its children.
      */
     void forgetNote(Note*);
+
+    void promoteNoteToTop(Note* note, Outline::Patch* patch=nullptr);
+    void promoteNote(Note* note, Outline::Patch* patch=nullptr);
+    void demoteNote(Note* note, Outline::Patch* patch=nullptr);
+    void demoteNoteToBottom(Note* note, Outline::Patch* patch=nullptr);
+    void moveNoteToFirst(Note* note, Outline::Patch* patch=nullptr);
+    void moveNoteUp(Note* note, Outline::Patch* patch=nullptr);
+    void moveNoteDown(Note* note, Outline::Patch* patch=nullptr);
+    void moveNoteToLast(Note* note, Outline::Patch* patch=nullptr);
 
     int8_t getProgress() const;
     void setProgress(int8_t progress);
@@ -188,6 +201,14 @@ public:
     void setBytesize(unsigned int bytesize);
 
     Note* getOutlineDescriptorAsNote();
+
+private:
+    /**
+     * @brief Returns offset of the first sibling above on the same level.
+     *
+     * This method also returns offset of the Note.
+     */
+    int getOffsetOfAboveNoteSibling(Note* note, int& offset);
 };
 
 /**

@@ -33,8 +33,6 @@ namespace m8r {
 class Mind
 {
 public:
-    static const int NO_SIBLING = -1;
-    static const u_int16_t MAX_NOTE_DEPTH = 100;
     static const int ALL_ENTRIES = -1;
 
 private:
@@ -301,11 +299,11 @@ public:
     /**
      * @brief Move note to the beginning on the current level of depth.
      */
-    void noteBegin(Note* note, Outline::Patch* patch=nullptr);
+    void noteFirst(Note* note, Outline::Patch* patch=nullptr);
     /**
      * @brief Move note to the end on the current level of depth.
      */
-    void noteEnd(Note* note, Outline::Patch* patch=nullptr);
+    void noteLast(Note* note, Outline::Patch* patch=nullptr);
     /**
      * @brief Move note one position up on the current level of depth.
      */
@@ -357,8 +355,6 @@ public:
     std::string makeNoteOutline(
             std::string fromOutlineKey,
             uint16_t fromNoteId);
-
-    int getOffsetOfAboveNoteSibling(Note* note);
 
     /*
      * DIAGNOSTICS

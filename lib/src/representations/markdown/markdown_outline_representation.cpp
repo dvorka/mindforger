@@ -216,7 +216,9 @@ string* MarkdownOutlineRepresentation::toHeader(const Outline* outline)
 void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
 {
     if(outline) {
-        if(outline->getNotes().size()) md->reserve(outline->getNotes().size()*AVG_NOTE_SIZE);
+        if(outline->getNotes().size()) {
+            md->reserve(outline->getNotes().size()*AVG_NOTE_SIZE);
+        }
 
         md->append("# ");
         if(outline->getTitle().size()) {

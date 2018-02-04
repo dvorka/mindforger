@@ -353,6 +353,49 @@ int Outline::getNoteOffset(Note* note)
     return -1;
 }
 
+void Outline::getNoteChildren(Note* note, vector<Note*>* children, Outline::Patch* patch)
+{
+    if(note) {
+        if(note == notes[notes.size()-1]) {
+            if(patch) {
+                patch->start=notes.size()-1;
+                patch->count=0;
+            }
+            return;
+        } else {
+            // IMPROVE this is SLOW o(n) - consider keeping order of note within it as a field
+            auto offset = std::find(notes.begin(), notes.end(), note);
+            if(offset != notes.end()) {
+                auto index = std::distance(notes.begin(), offset);
+                for(unsigned int i=index+1; i<notes.size(); i++) {
+                    if(notes[i]->getDepth() > note->getDepth()) {
+                        if(children) {
+                            children->push_back(notes[i]);
+                        }
+                    } else {
+                        if(patch) {
+                            patch->start=index;
+                            patch->count=i-index;
+                        }
+                        return;
+                    }
+                }
+                if(patch) {
+                    patch->start=index;
+                    patch->count=notes.size()-1-index;
+                }
+                return;
+            } else {
+                // note not in vector
+                if(patch) {
+                    patch->start=patch->count=0;
+                }
+                return;
+            }
+        }
+    }
+}
+
 void Outline::forgetNote(Note* note)
 {
     if(note && notes.size()) {
@@ -375,6 +418,136 @@ void Outline::forgetNote(Note* note)
 
         notes.erase(std::remove(notes.begin(), notes.end(), note), notes.end());
     }
+}
+
+int Outline::getOffsetOfAboveNoteSibling(Note* note, int& offset)
+{
+    offset = getNoteOffset(note);
+    if(offset != Outline::NO_OFFSET) {
+        if(offset) {
+            for(int o=offset-1; o>=0; o--) {
+                if(notes[o]->getDepth() == note->getDepth()) {
+                    return o;
+                }
+                if(notes[o]->getDepth() < note->getDepth()) {
+                    return NO_SIBLING;
+                }
+            }
+        }
+        return offset;
+    } else {
+        return NO_SIBLING;
+    }
+}
+
+void Outline::promoteNoteToTop(Note* note, Outline::Patch* patch)
+{
+
+}
+
+void Outline::promoteNote(Note* note, Outline::Patch* patch)
+{
+    if(note) {
+        if(note->getDepth()) {
+            vector<Note*> children{};
+            getNoteChildren(note, &children, patch);
+            note->promote();
+            note->makeModified();
+            for(Note* n:children) {
+                n->promote();
+                // IMPROVE consider whether children should be marked as modified or no n->makeModified();
+            }
+            makeModified();
+            if(patch) {
+                patch->diff = Outline::Patch::Diff::CHANGE;
+            }
+            return;
+        }
+    }
+    if(patch) {
+        patch->diff = Outline::Patch::Diff::NO;
+    }
+}
+
+void Outline::demoteNote(Note* note, Outline::Patch* patch)
+{
+    if(note) {
+        if(note->getDepth() < MAX_NOTE_DEPTH) {
+            vector<Note*> children{};
+            getNoteChildren(note, &children, patch);
+            note->demote();
+            note->makeModified();
+            for(Note* n:children) {
+                n->demote();
+                // IMPROVE consider whether children should be marked as modified or no n->makeModified();
+            }
+            makeModified();
+            if(patch) {
+                patch->diff = Outline::Patch::Diff::CHANGE;
+            }
+            return;
+        }
+    }
+    if(patch) {
+        patch->diff = Outline::Patch::Diff::NO;
+    }
+}
+
+void Outline::demoteNoteToBottom(Note* note, Outline::Patch* patch)
+{
+
+}
+
+void Outline::moveNoteToFirst(Note* note, Outline::Patch* patch)
+{
+
+}
+
+void Outline::moveNoteUp(Note* note, Outline::Patch* patch)
+{
+    if(note) {
+        int noteOffset;
+        int siblingOffset = getOffsetOfAboveNoteSibling(note, noteOffset);
+        if(siblingOffset != NO_SIBLING) {
+            vector<Note*> children{};
+            getNoteChildren(note, &children);
+            if(patch) {
+                // upper tier to patch [sibling's offset, note's last child]
+                patch->start = siblingOffset;
+                patch->count = noteOffset+children.size() - siblingOffset;
+            }
+            // modify outline: cut & insert
+            if(children.size()) {
+                notes.erase(notes.begin()+noteOffset, notes.begin()+noteOffset+children.size());
+                for(int c=children.size()-1; c>=0; c--) {
+                    // bottom up insert
+                    notes.insert(notes.begin()+siblingOffset, children[c]);
+                }
+            } else {
+                notes.erase(notes.begin()+noteOffset);
+            }
+            notes.insert(notes.begin()+siblingOffset, note);
+        } else {
+            if(patch) {
+                patch->diff = Outline::Patch::Diff::NO;
+                return;
+            }
+        }
+    } else {
+        if(patch) {
+            patch->diff = Outline::Patch::Diff::NO;
+        }
+    }
+}
+
+void Outline::moveNoteDown(Note* note, Outline::Patch* patch)
+{
+
+}
+
+void Outline::moveNoteToLast(Note* note, Outline::Patch* patch)
+{
+
 }
 
 const vector<string*>& Outline::getDescription() const
