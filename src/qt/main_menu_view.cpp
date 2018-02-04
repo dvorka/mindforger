@@ -316,18 +316,16 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     //actionNoteBottom->setStatusTip(tr("Move Note to be the child of the previous Note"));
 
 
-    actionNoteFirst = new QAction(tr("F&irst"), mainWindow);
+    actionNoteFirst = new QAction(tr("F&irst\tCtrl+Shift+Up"), mainWindow);
     actionNoteFirst->setStatusTip(tr("Move Note to be the first child of its parent"));
 
-    actionNoteUp = new QAction(tr("&Up"), mainWindow);
-    actionNoteUp->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Up));
+    actionNoteUp = new QAction(tr("&Up\tCtrl+Up"), mainWindow);
     actionNoteUp->setStatusTip(tr("Move Note up"));
 
-    actionNoteDown = new QAction(tr("Do&wn"), mainWindow);
-    actionNoteDown->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Down));
+    actionNoteDown = new QAction(tr("Do&wn\tCtrl+Down"), mainWindow);
     actionNoteDown->setStatusTip(tr("Move Note down"));
 
-    actionNoteLast = new QAction(tr("&Last"), mainWindow);
+    actionNoteLast = new QAction(tr("&Last\tCtrl+Shift+Down"), mainWindow);
     actionNoteLast->setStatusTip(tr("Move Note to be the last child of its parent"));
 
 
