@@ -345,10 +345,62 @@ void MainWindowPresenter::doActionNoteSave()
 
 void MainWindowPresenter::doActionNoteFirst()
 {
+    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    if(note) {
+        // IMPROVE consider patch once in class (cross functions)
+        Outline::Patch patch{Outline::Patch::Diff::NO,0,0,0}; // explicit initialization required by older GCC versions
+        mind->noteFirst(note, &patch);
+        if(patch.diff != Outline::Patch::Diff::NO) {
+            mind->remind().remember(note->getOutline());
+            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            statusBar->showInfo(QString(tr("Note moved to be the first child")));
+        }
+    }
 }
 
 void MainWindowPresenter::doActionNoteUp()
 {
+    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    if(note) {
+        // IMPROVE consider patch once in class (cross functions)
+        Outline::Patch patch{Outline::Patch::Diff::NO,0,0,0}; // explicit initialization required by older GCC versions
+        mind->noteUp(note, &patch);
+        if(patch.diff != Outline::Patch::Diff::NO) {
+            mind->remind().remember(note->getOutline());
+            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            statusBar->showInfo(QString(tr("Note moved up")));
+        }
+    }
+}
+
+void MainWindowPresenter::doActionNoteDown()
+{
+    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    if(note) {
+        // IMPROVE consider patch once in class (cross functions)
+        Outline::Patch patch{Outline::Patch::Diff::NO,0,0,0}; // explicit initialization required by older GCC versions
+        mind->noteDown(note, &patch);
+        if(patch.diff != Outline::Patch::Diff::NO) {
+            mind->remind().remember(note->getOutline());
+            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            statusBar->showInfo(QString(tr("Note moved down")));
+        }
+    }
+}
+
+void MainWindowPresenter::doActionNoteLast()
+{
+    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    if(note) {
+        // IMPROVE consider patch once in class (cross functions)
+        Outline::Patch patch{Outline::Patch::Diff::NO,0,0,0}; // explicit initialization required by older GCC versions
+        mind->noteLast(note, &patch);
+        if(patch.diff != Outline::Patch::Diff::NO) {
+            mind->remind().remember(note->getOutline());
+            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            statusBar->showInfo(QString(tr("Note moved to be the last child")));
+        }
+    }
 }
 
 void MainWindowPresenter::doActionNotePromote()
@@ -358,8 +410,11 @@ void MainWindowPresenter::doActionNotePromote()
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0,0}; // explicit initialization required by older GCC versions
         mind->notePromote(note, &patch);
-        mind->remind().remember(note->getOutline());
-        orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+        if(patch.diff != Outline::Patch::Diff::NO) {
+            mind->remind().remember(note->getOutline());
+            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            statusBar->showInfo(QString(tr("Note promoted")));
+        }
     }
 }
 
@@ -372,15 +427,10 @@ void MainWindowPresenter::doActionNoteDemote()
         mind->noteDemote(note, &patch);
         mind->remind().remember(note->getOutline());
         orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+        if(patch.diff != Outline::Patch::Diff::NO) {
+            statusBar->showInfo(QString(tr("Note demoted")));
+        }
     }
-}
-
-void MainWindowPresenter::doActionNoteDown()
-{
-}
-
-void MainWindowPresenter::doActionNoteLast()
-{
 }
 
 void MainWindowPresenter::doActionMindSnapshot()
