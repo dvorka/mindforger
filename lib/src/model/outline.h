@@ -29,6 +29,8 @@
 #include "../gear/datetime_utils.h"
 #include "tag.h"
 
+#include "../debug.h"
+
 namespace m8r {
 
 class Note;
@@ -236,6 +238,12 @@ struct Outline::Patch {
     unsigned int count;
 
     unsigned int dest;
+
+#ifdef DO_MF_DEBUG
+    void print() const {
+        MF_DEBUG("\nPatch " << diff << " : start " << start << " count " << count);
+    }
+#endif
 };
 
 } /* namespace m8r */

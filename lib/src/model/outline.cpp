@@ -513,6 +513,7 @@ void Outline::moveNoteUp(Note* note, Outline::Patch* patch)
             getNoteChildren(note, &children);
             if(patch) {
                 // upper tier to patch [sibling's offset, note's last child]
+                patch->diff = Outline::Patch::Diff::CHANGE;
                 patch->start = siblingOffset;
                 patch->count = noteOffset+children.size() - siblingOffset;
             }
@@ -527,6 +528,11 @@ void Outline::moveNoteUp(Note* note, Outline::Patch* patch)
                 notes.erase(notes.begin()+noteOffset);
             }
             notes.insert(notes.begin()+siblingOffset, note);
+
+#ifdef DO_MF_DEBUG
+            if(patch) patch->print();
+#endif
+            return;
         } else {
             if(patch) {
                 patch->diff = Outline::Patch::Diff::NO;

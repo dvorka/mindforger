@@ -367,6 +367,9 @@ void MainWindowPresenter::doActionNoteUp()
         mind->noteUp(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
             mind->remind().remember(note->getOutline());
+
+            hard refresh: not just use existing note, but REPLACE note in tree data
+
             orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
             statusBar->showInfo(QString(tr("Note moved up")));
         }
