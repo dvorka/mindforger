@@ -235,7 +235,13 @@ struct Outline::Patch {
 
     Diff diff;
 
+    /**
+     * @brief Top boundary.
+     */
     unsigned int start;
+    /**
+     * @brief Number of children i.e. it's 0 if Note has no children.
+     */
     unsigned int count;
 
 #ifdef DO_MF_DEBUG

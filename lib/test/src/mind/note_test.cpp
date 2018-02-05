@@ -32,6 +32,8 @@
 #include "../../../src/mind/mind.h"
 #include "../../../src/install/installer.h"
 
+#include "../test_gear.cpp"
+
 using namespace std;
 
 TEST(NoteTestCase, AddNewStencilNoteToOutline) {
@@ -129,28 +131,340 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     EXPECT_EQ(mind.remind().getOutlinesCount(), 0);
 }
 
-// MUST TODO void testOutlineDelete()
+TEST(NoteTestCase, PromoteDemoteUpDownNote) {
+    // prepare M8R repository and let the mind think...
+    string repositoryDir{"/tmp/mf-unit-repository-o"};
+    m8r::removeDirectoryRecursively(repositoryDir.c_str());
+    m8r::Installer installer{};
+    installer.createEmptyMindForgerRepository(repositoryDir);
+    string oFile{"/tmp/mf-unit-repository-o/memory/o.md"};
+    string oContent{
+        "# Note Operations Test Outline"
+        "\nOutline text."
+        "\n"
+        "\n# 1"
+        "\nT1."
+        "\n"
+        "\n# 2"
+        "\nT2."
+        "\n"
+        "\n# 3"
+        "\nT3."
+        "\n"};
+    m8r::stringToFile(oFile,oContent);
 
-// MUST TODO void testNoteDelete()
+    m8r::Configuration configuration{repositoryDir};
+    m8r::Mind mind{configuration};
+    m8r::Memory& memory = mind.remind();
+    mind.think();
 
 
-// TODO void testNoteBegin()
-// TODO void testNoteEnd()
-// MUST TODO void testNoteUp()
-// MUST TODO void testNoteDown()
+    // test
+    vector<m8r::Outline*> outlines = memory.getOutlines();
+    m8r::Outline* o = outlines.at(0);
 
-// TODO void testNoteTop()
-// TODO void testNoteBottom()
-// MUST TODO void testNotePromote()
-// MUST TODO void testNoteDemote()
+    m8r::Outline::Patch patch{m8r::Outline::Patch::Diff::NO,0,0};
 
-// TODO void testNoteForget()
+    EXPECT_EQ(o->getNotesCount(), 3);
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[0]->getDepth(), 0);
+    EXPECT_EQ(o->getNotes()[1]->getDepth(), 0);
+    EXPECT_EQ(o->getNotes()[2]->getDepth(), 0);
 
-// TODO void testNoteClone()
-// TODO void testNoteMoveToOtherOutline()
-// TODO void testNoteMakeItOutline()
-// TODO void testOutlineMakeItNoteInOutline()
-// TODO void testOutlineMakeNoteNewOutline()
+    // demote
 
-// TODO void testGetFilepathToNote()
-// TODO void testGetFilepathToOutline()
+    o->demoteNote(o->getNotes()[2], &patch);
+
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[0]->getDepth(), 0);
+    EXPECT_EQ(o->getNotes()[1]->getDepth(), 0);
+    EXPECT_EQ(o->getNotes()[2]->getDepth(), 1);
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::CHANGE);
+    EXPECT_EQ(patch.start, 2);
+    EXPECT_EQ(patch.count, 0);
+
+    o->demoteNote(o->getNotes()[1]);
+
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[0]->getDepth(), 0);
+    EXPECT_EQ(o->getNotes()[1]->getDepth(), 1);
+    EXPECT_EQ(o->getNotes()[2]->getDepth(), 2);
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::CHANGE);
+    EXPECT_EQ(patch.start, 2);
+    EXPECT_EQ(patch.count, 0);
+
+    // promote
+
+    o->promoteNote(o->getNotes()[1], &patch);
+    o->promoteNote(o->getNotes()[2], &patch);
+
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[0]->getDepth(), 0);
+    EXPECT_EQ(o->getNotes()[1]->getDepth(), 0);
+    EXPECT_EQ(o->getNotes()[2]->getDepth(), 0);
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::CHANGE);
+    EXPECT_EQ(patch.start, 2);
+    EXPECT_EQ(patch.count, 0);
+
+    // up
+
+    o->moveNoteUp(o->getNotes()[1], &patch);
+
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
+    EXPECT_EQ(patch.start, 0);
+    EXPECT_EQ(patch.count, 1);
+
+    o->moveNoteUp(o->getNotes()[2], &patch);
+
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "1");
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
+    EXPECT_EQ(patch.start, 1);
+    EXPECT_EQ(patch.count, 1);
+
+    o->moveNoteUp(o->getNotes()[1], &patch);
+
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "1");
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
+    EXPECT_EQ(patch.start, 0);
+    EXPECT_EQ(patch.count, 1);
+
+    // down
+
+    o->moveNoteDown(o->getNotes()[0], &patch);
+
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "1");
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
+    EXPECT_EQ(patch.start, 0);
+    EXPECT_EQ(patch.count, 1);
+
+    o->moveNoteDown(o->getNotes()[1], &patch);
+
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
+    EXPECT_EQ(patch.start, 1);
+    EXPECT_EQ(patch.count, 1);
+
+    o->moveNoteDown(o->getNotes()[0], &patch);
+
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
+    EXPECT_EQ(patch.start, 0);
+    EXPECT_EQ(patch.count, 1);
+}
+
+TEST(NoteTestCase, DeepUpDownNote) {
+    // prepare M8R repository and let the mind think...
+    string repositoryDir{"/tmp/mf-unit-repository-o"};
+    m8r::removeDirectoryRecursively(repositoryDir.c_str());
+    m8r::Installer installer{};
+    installer.createEmptyMindForgerRepository(repositoryDir);
+    string oFile{"/tmp/mf-unit-repository-o/memory/o.md"};
+    string oContent{
+        "# Note Operations Test Outline"
+        "\nOutline text."
+        "\n"
+        "\n# 1"
+        "\nT1."
+        "\n"
+        "\n# 2"
+        "\nT2."
+        "\n"
+        "\n# 3"
+        "\nT3."
+        "\n"
+        "\n## 33"
+        "\nT33."
+        "\n"
+        "\n### 333"
+        "\nT333."
+        "\n"
+        "\n# 4"
+        "\nT4."
+        "\n"
+        "\n## 44"
+        "\nT44."
+        "\n"
+        "\n# 5"
+        "\nT5."
+        "\n"
+        "\n# 6"
+        "\nT6."
+        "\n"
+        "\n"};
+    m8r::stringToFile(oFile,oContent);
+
+    m8r::Configuration configuration{repositoryDir};
+    m8r::Mind mind{configuration};
+    m8r::Memory& memory = mind.remind();
+    mind.think();
+
+
+    // test
+    vector<m8r::Outline*> outlines = memory.getOutlines();
+    m8r::Outline* o = outlines.at(0);
+
+    m8r::Outline::Patch patch{m8r::Outline::Patch::Diff::NO,0,0};
+
+    //printOutlineNotes(o);
+    EXPECT_EQ(o->getNotesCount(), 9);
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[3]->getTitle(), "33");
+    EXPECT_EQ(o->getNotes()[4]->getTitle(), "333");
+    EXPECT_EQ(o->getNotes()[5]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[6]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[7]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[8]->getTitle(), "6");
+
+    // up
+
+    o->moveNoteUp(o->getNotes()[5], &patch);
+
+    //printOutlineNotes(o);
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[3]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[4]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[5]->getTitle(), "33");
+    EXPECT_EQ(o->getNotes()[6]->getTitle(), "333");
+    EXPECT_EQ(o->getNotes()[7]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[8]->getTitle(), "6");
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
+    EXPECT_EQ(patch.start, 2);
+    EXPECT_EQ(patch.count, 4);
+
+    // down
+
+    o->moveNoteDown(o->getNotes()[2], &patch);
+
+    //printOutlineNotes(o);
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[3]->getTitle(), "33");
+    EXPECT_EQ(o->getNotes()[4]->getTitle(), "333");
+    EXPECT_EQ(o->getNotes()[5]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[6]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[7]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[8]->getTitle(), "6");
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
+    EXPECT_EQ(patch.start, 3);
+    EXPECT_EQ(patch.count, 4);
+
+    o->moveNoteDown(o->getNotes()[5], &patch);
+
+    //printOutlineNotes(o);
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[3]->getTitle(), "33");
+    EXPECT_EQ(o->getNotes()[4]->getTitle(), "333");
+    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[7]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[8]->getTitle(), "6");
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
+    EXPECT_EQ(patch.start, 5);
+    EXPECT_EQ(patch.count, 2);
+
+    o->moveNoteDown(o->getNotes()[6], &patch);
+
+    //printOutlineNotes(o);
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[3]->getTitle(), "33");
+    EXPECT_EQ(o->getNotes()[4]->getTitle(), "333");
+    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[7]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[8]->getTitle(), "44");
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
+    EXPECT_EQ(patch.start, 6);
+    EXPECT_EQ(patch.count, 2);
+
+    o->moveNoteDown(o->getNotes()[7], &patch);
+
+    //printOutlineNotes(o);
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[3]->getTitle(), "33");
+    EXPECT_EQ(o->getNotes()[4]->getTitle(), "333");
+    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[7]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[8]->getTitle(), "44");
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::NO);
+
+    // up
+
+    o->moveNoteUp(o->getNotes()[2], &patch);
+
+    //printOutlineNotes(o);
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "33");
+    EXPECT_EQ(o->getNotes()[3]->getTitle(), "333");
+    EXPECT_EQ(o->getNotes()[4]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[7]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[8]->getTitle(), "44");
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
+    EXPECT_EQ(patch.start, 1);
+    EXPECT_EQ(patch.count, 3);
+
+    o->moveNoteUp(o->getNotes()[1], &patch);
+
+    //printOutlineNotes(o);
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "33");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "333");
+    EXPECT_EQ(o->getNotes()[3]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[4]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[7]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[8]->getTitle(), "44");
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
+    EXPECT_EQ(patch.start, 0);
+    EXPECT_EQ(patch.count, 3);
+
+    o->moveNoteUp(o->getNotes()[0], &patch);
+
+    //printOutlineNotes(o);
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "33");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "333");
+    EXPECT_EQ(o->getNotes()[3]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[4]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[7]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[8]->getTitle(), "44");
+    EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::NO);
+}

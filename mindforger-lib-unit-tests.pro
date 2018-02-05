@@ -67,7 +67,8 @@ SOURCES += \
     lib/src/config/configuration.cpp \
     lib/src/representations/markdown/markdown.cpp \
     lib/src/install/installer.cpp \
-    lib/test/src/mind/outline_test.cpp
+    lib/test/src/mind/outline_test.cpp \
+    lib/test/src/test_gear.cpp
 
 HEADERS += \
     ./lib/src/debug.h \

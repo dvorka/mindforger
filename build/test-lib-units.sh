@@ -20,7 +20,7 @@
 export SCRIPT_DIR=`pwd`
 export BUILD_DIR=${SCRIPT_DIR}/..
 
-cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests
+#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && gdb ./mindforger-lib-unit-tests
 
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=StringGearTestCase.Split
@@ -33,6 +33,8 @@ cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && 
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=MarkdownParserTestCase.FileSystemPersistence
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=MarkdownParserTestCase.Bug37Notrailing
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=MarkdownParserBugsTestCase.*
+cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=NoteTestCase.PromoteDemoteUpDownNote
+#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=NoteTestCase.DeepUpDownNote
 #cd ${BUILD_DIR} && make clean
 
 # eof

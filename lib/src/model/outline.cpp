@@ -444,8 +444,8 @@ int Outline::getOffsetOfBelowNoteSibling(Note* note, int& offset)
 {
     offset = getNoteOffset(note);
     if(offset != Outline::NO_OFFSET) {
-        if(offset) {
-            for(int o=offset+1; o<notes.size(); o++) {
+        if((unsigned int)offset < notes.size()-1) {
+            for(unsigned int o=offset+1; o<notes.size(); o++) {
                 if(notes[o]->getDepth() == note->getDepth()) {
                     return o;
                 }
@@ -515,12 +515,10 @@ void Outline::demoteNote(Note* note, Outline::Patch* patch)
 
 void Outline::demoteNoteToBottom(Note* note, Outline::Patch* patch)
 {
-
 }
 
 void Outline::moveNoteToFirst(Note* note, Outline::Patch* patch)
 {
-
 }
 
 void Outline::moveNoteUp(Note* note, Outline::Patch* patch)
@@ -539,7 +537,7 @@ void Outline::moveNoteUp(Note* note, Outline::Patch* patch)
             }
             // modify outline: cut & insert
             if(children.size()) {
-                notes.erase(notes.begin()+noteOffset, notes.begin()+noteOffset+children.size());
+                notes.erase(notes.begin()+noteOffset, notes.begin()+noteOffset+children.size()+1);
                 for(int c=children.size()-1; c>=0; c--) {
                     // bottom up insert
                     notes.insert(notes.begin()+siblingOffset, children[c]);
@@ -580,17 +578,15 @@ void Outline::moveNoteDown(Note* note, Outline::Patch* patch)
             // modify outline: cut & insert (COPY moved Note below sibling, DELETE original Note)
             vector<Note*> children{};
             getNoteChildren(note, &children);
-            notes.insert(notes.begin()+siblingOffset, note);
+            int belowSiblingIndex = siblingOffset+siblingChildren.size()+1;
+            notes.insert(notes.begin()+belowSiblingIndex, note);
             if(children.size()) {
                 for(int c=children.size()-1; c>=0; c--) {
                     // bottom up insert
-                    notes.insert(notes.begin()+siblingOffset+1, children[c]);
+                    notes.insert(notes.begin()+belowSiblingIndex+1, children[c]);
                 }
             }
-            int deleteCount = 1+children.size();
-            for(int c=0; c<deleteCount; c++) {
-                notes.erase(notes.begin()+noteOffset);
-            }
+            notes.erase(notes.begin()+noteOffset, notes.begin()+noteOffset+children.size()+1);
             return;
         } else {
             if(patch) {
