@@ -440,6 +440,26 @@ int Outline::getOffsetOfAboveNoteSibling(Note* note, int& offset)
     }
 }
 
+int Outline::getOffsetOfBelowNoteSibling(Note* note, int& offset)
+{
+    offset = getNoteOffset(note);
+    if(offset != Outline::NO_OFFSET) {
+        if(offset) {
+            for(int o=offset+1; o<notes.size(); o++) {
+                if(notes[o]->getDepth() == note->getDepth()) {
+                    return o;
+                }
+                if(notes[o]->getDepth() < note->getDepth()) {
+                    return NO_SIBLING;
+                }
+            }
+        }
+        return offset;
+    } else {
+        return NO_SIBLING;
+    }
+}
+
 void Outline::promoteNoteToTop(Note* note, Outline::Patch* patch)
 {
 
@@ -528,10 +548,6 @@ void Outline::moveNoteUp(Note* note, Outline::Patch* patch)
                 notes.erase(notes.begin()+noteOffset);
             }
             notes.insert(notes.begin()+siblingOffset, note);
-
-#ifdef DO_MF_DEBUG
-            if(patch) patch->print();
-#endif
             return;
         } else {
             if(patch) {
@@ -548,7 +564,45 @@ void Outline::moveNoteUp(Note* note, Outline::Patch* patch)
 
 void Outline::moveNoteDown(Note* note, Outline::Patch* patch)
 {
-
+    if(note) {
+        int noteOffset;
+        int siblingOffset = getOffsetOfBelowNoteSibling(note, noteOffset);
+        if(siblingOffset != NO_SIBLING) {
+            Note* sibling = notes[siblingOffset];
+            vector<Note*> siblingChildren{};
+            getNoteChildren(sibling, &siblingChildren);
+            if(patch) {
+                // upper tier to patch [note's original offset,sibling's last child]
+                patch->diff = Outline::Patch::Diff::MOVE;
+                patch->start = noteOffset;
+                patch->count = siblingOffset+siblingChildren.size() - noteOffset;
+            }
+            // modify outline: cut & insert (COPY moved Note below sibling, DELETE original Note)
+            vector<Note*> children{};
+            getNoteChildren(note, &children);
+            notes.insert(notes.begin()+siblingOffset, note);
+            if(children.size()) {
+                for(int c=children.size()-1; c>=0; c--) {
+                    // bottom up insert
+                    notes.insert(notes.begin()+siblingOffset+1, children[c]);
+                }
+            }
+            int deleteCount = 1+children.size();
+            for(int c=0; c<deleteCount; c++) {
+                notes.erase(notes.begin()+noteOffset);
+            }
+            return;
+        } else {
+            if(patch) {
+                patch->diff = Outline::Patch::Diff::NO;
+                return;
+            }
+        }
+    } else {
+        if(patch) {
+            patch->diff = Outline::Patch::Diff::NO;
+        }
+    }
 }
 
 void Outline::moveNoteToLast(Note* note, Outline::Patch* patch)

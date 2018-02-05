@@ -211,6 +211,7 @@ private:
      * This method also returns offset of the Note.
      */
     int getOffsetOfAboveNoteSibling(Note* note, int& offset);
+    int getOffsetOfBelowNoteSibling(Note* note, int& offset);
 };
 
 /**
