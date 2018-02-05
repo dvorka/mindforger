@@ -36,43 +36,53 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // devise... new MD repository
     actionMindDevise = new QAction(tr("&Devise"), mainWindow);
     actionMindDevise->setStatusTip(tr("Create new MD repository to form new ideas, principles, combinations or applications"));
+    actionMindDevise->setEnabled(false);
 
     // learn... from a repository, Markdown or TXT file
     actionMindLearn = new QAction(tr("&Learn"), mainWindow);
     // IMPROVE show RECENT repositories and files in the dialog
     actionMindLearn->setStatusTip(tr("Learn notes by loading a MindForger repository, Markdown repository or file"));
+    actionMindLearn->setEnabled(false);
 
     // remember... by flushing caches and saving unsaved notes
     actionMindRemember = new QAction(tr("Re&member"), mainWindow);
     actionMindRemember->setStatusTip(tr("Remember notes by ensuring memory persistence"));
+    actionMindRemember->setEnabled(false);
 
     // remind ... smart mind search using FTS/associations/similarity
     actionMindRecall = new QAction(tr("&Recall"), mainWindow);
     // IMPROVE show memory dwell as a base for reminding a note
     actionMindRecall->setStatusTip(tr("Recall a Note by searching memory dwell, associations and similar notes"));
+    actionMindRecall->setEnabled(false);
 
     // associate ... discover associated notes
     actionMindAssociate = new QAction(tr("&Associate"), mainWindow);
     actionMindAssociate->setStatusTip(tr("Discover Notes associated with current Outline or Note"));
+    actionMindAssociate->setEnabled(false);
 
     // think ... toggle mental processes ~ enable associations/similarity/search based suggestions on searching/reading/writing notes
     actionMindThink = new QAction(tr("&Think"), mainWindow);
     actionMindThink->setStatusTip(tr("Toggle suggestions of matching, similar and associated notes while searching, reading and writing"));
+    actionMindThink->setEnabled(false);
 
     // forget ... don't show any note older than 1Y/3M/...
     actionMindForget = new QAction(tr("&Forget"), mainWindow);
     actionMindForget->setStatusTip(tr("Don't show notes older than..."));
+    actionMindForget->setEnabled(false);
 
     // dream ... sanity, integrity, detox, inference, assoc discovery, ...
     actionMindDream = new QAction(tr("Dr&eam"), mainWindow);
     actionMindDream->setStatusTip(tr("Tidy up, clean and optimize memory which is otherwise done on your inactivity"));
+    actionMindDream->setEnabled(false);
 
     actionMindSnapshot = new QAction(tr("D&ump"), mainWindow);
     actionMindSnapshot->setStatusTip(tr("Create backup archive of the current repository"));
+    actionMindSnapshot->setEnabled(false);
 
     actionMindPreferences = new QAction(tr("&Preferences"), mainWindow);
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
     actionMindPreferences->setStatusTip(tr("Open preferences"));
+    actionMindPreferences->setEnabled(false);
 
     actionExit = new QAction(tr("E&xit"), mainWindow);
     actionExit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Q));
@@ -131,9 +141,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewHome = new QAction(tr("&Home"), mainWindow);
     actionViewHome->setStatusTip(tr("Open Home"));
     actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
+    actionViewHome->setEnabled(false);
 
     actionViewOrganizer = new QAction(tr("O&rganizer"), mainWindow);
     actionViewOrganizer->setStatusTip(tr("Open Organizer"));
+    actionViewOrganizer->setEnabled(false);
 
     actionViewOutlines = new QAction(tr("&Outlines"), mainWindow);
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
@@ -141,9 +153,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionViewNavigator = new QAction(tr("&Navigator"), mainWindow);
     actionViewNavigator->setStatusTip(tr("Open Navigator"));
+    actionViewNavigator->setEnabled(false);
 
     actionViewDwell = new QAction(tr("&Memory Dwell"), mainWindow);
     actionViewDwell->setStatusTip(tr("Open memory dwell"));
+    actionViewDwell->setEnabled(false);
 
 #ifdef DO_MF_DEBUG
     actionViewCli = new QAction(tr("&CLI"), mainWindow);
@@ -157,23 +171,28 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewToggleRecent = new QAction(tr("&Recent Notes"), mainWindow);
     actionViewToggleRecent->setStatusTip(tr("View recently modified Notes"));
     actionViewToggleRecent->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_R));
+    actionViewToggleRecent->setEnabled(false);
 
     actionViewStencils = new QAction(tr("&Stencils"), mainWindow);
     // Outline/Note marked w/ tag stencil is MOVED among stencils (NOT indexed/searched/...)
     //  + Stencil view allows making a stencil outline again
     //  + Note stencils are notes in a given Outline
     actionViewStencils->setStatusTip(tr("List Outline and Note stencils"));
+    actionViewStencils->setEnabled(false);
 
     actionViewLimbo = new QAction(tr("&Limbo"), mainWindow);
     actionViewLimbo->setStatusTip(tr("List forgotten Outlines and Notes"));
+    actionViewLimbo->setEnabled(false);
 
     actionViewDistractionFree = new QAction(tr("&Distraction Free"), mainWindow);
     actionViewDistractionFree->setShortcut(QKeySequence(Qt::Key_F5));
     actionViewDistractionFree->setStatusTip(tr("Toggle distraction free mode"));
+    actionViewDistractionFree->setEnabled(false);
 
     actionViewFullscreen = new QAction(tr("&Fullscreen"), mainWindow);
     actionViewFullscreen->setShortcut(tr("F11"));
     actionViewFullscreen->setStatusTip(tr("Fullscreen"));
+    actionViewFullscreen->setEnabled(false);
 
     menuView = qMenuBar->addMenu(tr("&View"));
     menuView->addAction(actionViewHome);
@@ -269,15 +288,18 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionOutlineClone = new QAction(tr("C&lone"), mainWindow);
     actionOutlineClone->setStatusTip(tr("Make copy of the current Outline"));
+    actionOutlineClone->setEnabled(false);
 
     actionOutlineForget = new QAction(tr("&Forget"), mainWindow);
     actionOutlineForget->setStatusTip(tr("Forget Outline and move it to Limbo"));
 
     actionOutlineExport = new QAction(tr("&Dump"), mainWindow);
     actionOutlineExport->setStatusTip(tr("Export Outline to a file in supported format"));
+    actionOutlineExport->setEnabled(false);
 
     actionOutlineImport = new QAction(tr("Learn"), mainWindow);
     actionOutlineImport->setStatusTip(tr("Import Outline from an external file in a supported format"));
+    actionOutlineImport->setEnabled(false);
 
     menuOutline = qMenuBar->addMenu(tr("&Outline"));
     menuOutline->addAction(actionOutlineNew);
@@ -303,8 +325,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteClose->setStatusTip(tr("Save leave editor of Note being changed"));
 
 
-    //actionNoteTop = new QAction(tr("&Top\tCtrl+Shift+Left"), mainWindow);
-    //actionNoteTop->setStatusTip(tr("Move Note to the top depth"));
+    actionNoteTop = new QAction(tr("&Top\tCtrl+Shift+Left"), mainWindow);
+    actionNoteTop->setStatusTip(tr("Move Note to the top depth"));
+    actionNoteTop->setEnabled(false);
 
     actionNotePromote = new QAction(tr("&Promote\tCtrl+Left"), mainWindow); // handled from Outline tree
     actionNotePromote->setStatusTip(tr("Promote Note"));
@@ -312,12 +335,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteDemote = new QAction(tr("&Demote\tCtrl+Right"), mainWindow);
     actionNoteDemote->setStatusTip(tr("Demote Note"));
 
-    //actionNoteBottom = new QAction(tr("&Bottom\tCtrl+Shift+Down"), mainWindow);
-    //actionNoteBottom->setStatusTip(tr("Move Note to be the child of the previous Note"));
+    actionNoteBottom = new QAction(tr("&Bottom\tCtrl+Shift+Down"), mainWindow);
+    actionNoteBottom->setStatusTip(tr("Move Note to be the child of the previous Note"));
+    actionNoteBottom->setEnabled(false);
 
 
     actionNoteFirst = new QAction(tr("F&irst\tCtrl+Shift+Up"), mainWindow);
     actionNoteFirst->setStatusTip(tr("Move Note to be the first child of its parent"));
+    actionNoteFirst->setEnabled(false);
 
     actionNoteUp = new QAction(tr("&Up\tCtrl+Up"), mainWindow);
     actionNoteUp->setStatusTip(tr("Move Note up"));
@@ -327,23 +352,29 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionNoteLast = new QAction(tr("&Last\tCtrl+Shift+Down"), mainWindow);
     actionNoteLast->setStatusTip(tr("Move Note to be the last child of its parent"));
+    actionNoteLast->setEnabled(false);
 
 
     // TODO Attach vs. COPY to repository
     actionNoteAttach = new QAction(tr("&Attach"), mainWindow);
     actionNoteAttach->setStatusTip(tr("Attach a document (by value) to Note and create link to it..."));
+    actionNoteAttach->setEnabled(false);
 
     actionNoteRefactor = new QAction(tr("&Refactor"), mainWindow);
     actionNoteRefactor->setStatusTip(tr("Refactor Note to another outline..."));
+    actionNoteRefactor->setEnabled(false);
 
     actionNoteClone = new QAction(tr("&Clone"), mainWindow);
     actionNoteClone->setStatusTip(tr("Make a copy of the Note to this or other outline..."));
+    actionNoteClone->setEnabled(false);
 
     actionNoteExport = new QAction(tr("Dump"), mainWindow);
     actionNoteExport->setStatusTip(tr("Export Note to an external file in a supported format"));
+    actionNoteExport->setEnabled(false);
 
     actionNoteImport = new QAction(tr("Learn"), mainWindow);
     actionNoteImport->setStatusTip(tr("Import Note from an external file in a supported format"));
+    actionNoteImport->setEnabled(false);
 
     menuNote = qMenuBar->addMenu(tr("&Note"));
     menuNote->addAction(actionNoteNew);
