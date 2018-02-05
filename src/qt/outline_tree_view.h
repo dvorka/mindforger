@@ -82,7 +82,7 @@ signals:
     void signalFromOutlineTreeToOutlines();
 
     void signalSelectNextRow();
-    void signalSelectLastRow();
+    void signalSelectPreviousRow();
 
     void signalChangeUp();
     void signalChangeDown();

@@ -216,10 +216,9 @@ void OrlojPresenter::slotShowNote(const QItemSelection& selected, const QItemSel
         noteViewPresenter->refresh(note);
         view->showFacetNoteView();
         mainPresenter->getMainMenu()->showFacetOutlineView();
-        mainPresenter->getStatusBar()->showInfo(QString(note->getTitle().c_str()));
+        mainPresenter->getStatusBar()->showInfo(QString(tr("Note '%1' selected")).arg(note->getTitle().c_str()));
         setFacet(OrlojPresenterFacets::FACET_VIEW_NOTE);
     } else {
-        // TODO i18n
         mainPresenter->getStatusBar()->showInfo(QString(tr("No Outline selected!")));
     }
 }

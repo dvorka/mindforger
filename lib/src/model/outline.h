@@ -224,9 +224,9 @@ struct Outline::Patch {
     enum Diff {
         // no difference i.e. no change made to Notes
         NO,
-        // Notes given by boundaries were changed e.g. title or depth, but not (re)moved
+        // Notes given by boundaries were changed e.g. title or depth, but not moved
         CHANGE,
-        // Notes given by boundaries were moved to the dest location
+        // Notes given by boundaries were moved/shuffled i.e. Notes are on different offsets
         MOVE,
         // Notes given by boundaries were deleted
         DELETE
@@ -237,11 +237,9 @@ struct Outline::Patch {
     unsigned int start;
     unsigned int count;
 
-    unsigned int dest;
-
 #ifdef DO_MF_DEBUG
     void print() const {
-        MF_DEBUG("\nPatch " << diff << " : start " << start << " count " << count);
+        MF_DEBUG("Patch " << diff << " : start " << start << " count " << count << "\n");
     }
 #endif
 };

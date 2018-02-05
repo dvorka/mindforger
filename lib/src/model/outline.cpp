@@ -513,7 +513,7 @@ void Outline::moveNoteUp(Note* note, Outline::Patch* patch)
             getNoteChildren(note, &children);
             if(patch) {
                 // upper tier to patch [sibling's offset, note's last child]
-                patch->diff = Outline::Patch::Diff::CHANGE;
+                patch->diff = Outline::Patch::Diff::MOVE;
                 patch->start = siblingOffset;
                 patch->count = noteOffset+children.size() - siblingOffset;
             }

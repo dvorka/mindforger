@@ -63,7 +63,7 @@ public:
 
 public slots:
     void slotSelectNextRow();
-    void slotSelectLastRow();
+    void slotSelectPreviousRow();
 };
 
 }

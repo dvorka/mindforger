@@ -35,7 +35,7 @@ OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, MainWindowPres
 
     // signals and slots
     QObject::connect(view, SIGNAL(signalSelectNextRow()), this, SLOT(slotSelectNextRow()));
-    QObject::connect(view, SIGNAL(signalSelectLastRow()), this, SLOT(slotSelectLastRow()));
+    QObject::connect(view, SIGNAL(signalSelectPreviousRow()), this, SLOT(slotSelectPreviousRow()));
 
     QObject::connect(view, SIGNAL(signalChangePromote()), mwp, SLOT(doActionNotePromote()));
     QObject::connect(view, SIGNAL(signalChangeDemote()), mwp, SLOT(doActionNoteDemote()));
@@ -58,7 +58,12 @@ void OutlineTreePresenter::refresh(Outline* outline, Outline::Patch* patch)
             switch(patch->diff) {
             case Outline::Patch::Diff::CHANGE:
                 for(unsigned int i=patch->start; i<=patch->start+patch->count; i++) {
-                    model->refresh(notes[i], i);
+                    model->refresh(notes[i], i, false);
+                }
+                break;
+            case Outline::Patch::Diff::MOVE:
+                for(unsigned int i=patch->start; i<=patch->start+patch->count; i++) {
+                    model->refresh(notes[i], i, true);
                 }
                 break;
             default:
@@ -130,7 +135,7 @@ void OutlineTreePresenter::slotSelectNextRow()
     }
 }
 
-void OutlineTreePresenter::slotSelectLastRow()
+void OutlineTreePresenter::slotSelectPreviousRow()
 {
     int row = getCurrentRow();
     if(row) {

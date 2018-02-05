@@ -45,7 +45,7 @@ public:
     void addRow(Note* note);
     int getRowByNote(const Note* note);
     void refresh(Note* note) { refresh(note, noselection); }
-    void refresh(Note* note, int row);
+    void refresh(Note* note, int row, bool set=false);
     void refresh(Note* note, QModelIndexList selection);
 
 private:

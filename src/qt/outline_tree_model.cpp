@@ -68,8 +68,8 @@ void OutlineTreeModel::addRow(Note* note)
     QString title{};
     createTitleText(title, note);
     QStandardItem* noteItem = new QStandardItem{title};
-    // TODO set role
-    noteItem->setData(QVariant::fromValue(note));
+    // TODO declare custom role
+    noteItem->setData(QVariant::fromValue(note), Qt::UserRole + 1);
     items.append(noteItem);
     // %
     if(note->getProgress()) {
@@ -100,9 +100,14 @@ int OutlineTreeModel::getRowByNote(const Note* note)
     return NO_INDEX;
 }
 
-void OutlineTreeModel::refresh(Note* note, int row)
+void OutlineTreeModel::refresh(Note* note, int row, bool set)
 {
     if(row > NO_INDEX) {
+        if(set) {
+            // TODO declare custom role
+            item(row,0)->setData(QVariant::fromValue(note), Qt::UserRole + 1);
+        }
+
         QString s{};
         createTitleText(s, note);
         // refresh content
@@ -137,8 +142,8 @@ void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
 
     // determine row number by note attached to the row - selection or iteration
     if(selection.size()) {
-        // TODO use role
-        if(item(selection[0].row())->data().value<Note*>() == note) {
+        // TODO declare custom role
+        if(item(selection[0].row())->data(Qt::UserRole + 1).value<Note*>() == note) {
             row = selection[0].row();
         }
     }

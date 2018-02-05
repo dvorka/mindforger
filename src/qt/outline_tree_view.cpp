@@ -80,7 +80,7 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
             // up/down note tree navigation
             switch(event->key()) {
             case Qt::Key_Up:
-                emit signalSelectLastRow();
+                emit signalSelectPreviousRow();
                 break;
             case Qt::Key_Down:
                 emit signalSelectNextRow();
