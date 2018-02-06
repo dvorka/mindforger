@@ -404,6 +404,7 @@ Note* Mind::noteNew(
         // IMPROVE pass title by reference
         const std::string* title,
         const NoteType* noteType,
+        u_int16_t depth,
         const std::vector<const Tag*>* tags,
         const int8_t progress,
         Stencil* noteStencil)
@@ -426,6 +427,7 @@ Note* Mind::noteNew(
         if(noteType) {
             n->setType(noteType);
         }
+        n->setDepth(depth);
         if(tags) {
             n->setTags(tags);
         }

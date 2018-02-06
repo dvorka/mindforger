@@ -268,6 +268,7 @@ public:
             // IMPROVE pass title by reference
             const std::string* title = nullptr,
             const NoteType* noteType = nullptr,
+            u_int16_t depth = 0,
             const std::vector<const Tag*>* tags = nullptr,
             const int8_t progress = 0,
             Stencil* noteStencil = nullptr);

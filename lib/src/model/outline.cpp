@@ -334,7 +334,11 @@ void Outline::addNote(Note* note)
 void Outline::addNote(Note* note, int offset)
 {
     note->setOutline(this);
-    notes.insert(notes.begin()+offset, note);
+    if(offset>notes.size()-1) {
+        notes.push_back(note);
+    } else {
+        notes.insert(notes.begin()+offset, note);
+    }
 }
 
 int Outline::getNoteOffset(Note* note)

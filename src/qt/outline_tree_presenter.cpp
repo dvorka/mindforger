@@ -111,8 +111,7 @@ int OutlineTreePresenter::getCurrentRow() const
     for(int i=0; i<indexes.count(); i++) {
         return indexes.at(i).row();
     }
-    // IMPROVE constant w/ a name
-    return -1;
+    return NO_ROW;
 }
 
 Note* OutlineTreePresenter::getCurrentNote() const

@@ -35,6 +35,9 @@ class OutlineTreePresenter : public QObject
 {
     Q_OBJECT
 
+public:
+    static const int NO_ROW = -1;
+
 private:
     OutlineTreeView* view;
     OutlineTreeModel* model;

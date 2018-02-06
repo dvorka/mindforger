@@ -261,14 +261,32 @@ void MainWindowPresenter::handleOutlineNew()
 }
 
 void MainWindowPresenter::handleNoteNew()
-{    
+{
+    int offset
+        = orloj->getOutlineView()->getOutlineTree()->getCurrentRow();
+    if(offset == OutlineTreePresenter::NO_ROW) {
+        offset = NO_PARENT;
+    } else {
+        // new note to be sibling below the current line (if offset>o.notes.size(), then it's appended)
+        offset++;
+    }
+
+    u_int16_t depth;
+    Note* n = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    if(n) {
+        depth = n->getDepth();
+    } else {
+        n = 0;
+    }
+
     string title = newNoteDialog->getNoteName().toStdString();
     Note* note = mind->noteNew(
                 orloj->getOutlineView()->getCurrentOutline()->getKey(),
                 // IMPROVE get parent note number from selection (if selected)
-                NO_PARENT,
+                offset,
                 &title,
                 newNoteDialog->getNoteType(),
+                depth,
                 newNoteDialog->getTags(),
                 newNoteDialog->getProgress(),
                 newNoteDialog->getStencil());
