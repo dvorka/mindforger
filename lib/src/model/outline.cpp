@@ -643,7 +643,52 @@ void Outline::moveNoteDown(Note* note, Outline::Patch* patch)
 
 void Outline::moveNoteToLast(Note* note, Outline::Patch* patch)
 {
+    if(note) {
+        int no, noteOffset = NO_OFFSET;
 
+        // loop to find the first sibling
+        int so, siblingOffset = NO_OFFSET;
+        Note* n = note;
+        while((so = getOffsetOfBelowNoteSibling(n, no)) != NO_SIBLING) {
+            if(noteOffset == NO_OFFSET) noteOffset = no;
+            siblingOffset = so;
+            n = note->getOutline()->getNotes()[siblingOffset];
+        }
+
+        if(siblingOffset != NO_SIBLING) {
+            Note* sibling = notes[siblingOffset];
+            vector<Note*> siblingChildren{};
+            getNoteChildren(sibling, &siblingChildren);
+            if(patch) {
+                // upper tier to patch [note's original offset,sibling's last child]
+                patch->diff = Outline::Patch::Diff::MOVE;
+                patch->start = noteOffset;
+                patch->count = siblingOffset+siblingChildren.size() - noteOffset;
+            }
+            // modify outline: cut & insert (COPY moved Note below sibling, DELETE original Note)
+            vector<Note*> children{};
+            getNoteChildren(note, &children);
+            int belowSiblingIndex = siblingOffset+siblingChildren.size()+1;
+            notes.insert(notes.begin()+belowSiblingIndex, note);
+            if(children.size()) {
+                for(int c=children.size()-1; c>=0; c--) {
+                    // bottom up insert
+                    notes.insert(notes.begin()+belowSiblingIndex+1, children[c]);
+                }
+            }
+            notes.erase(notes.begin()+noteOffset, notes.begin()+noteOffset+children.size()+1);
+            return;
+        } else {
+            if(patch) {
+                patch->diff = Outline::Patch::Diff::NO;
+                return;
+            }
+        }
+    } else {
+        if(patch) {
+            patch->diff = Outline::Patch::Diff::NO;
+        }
+    }
 }
 
 const vector<string*>& Outline::getDescription() const
