@@ -463,20 +463,6 @@ void Mind::noteDown(Note* note, Outline::Patch* patch)
     }
 }
 
-void Mind::noteTop(Note* note, Outline::Patch* patch)
-{
-    if(note) {
-        note->getOutline()->promoteNoteToTop(note, patch);
-    }
-}
-
-void Mind::noteBottom(Note* note, Outline::Patch* patch)
-{
-    if(note) {
-        note->getOutline()->demoteNoteToBottom(note, patch);
-    }
-}
-
 void Mind::noteFirst(Note* note, Outline::Patch* patch)
 {
     if(note) {

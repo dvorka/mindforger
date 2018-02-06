@@ -324,21 +324,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteClose = new QAction(tr("Leave\tAlt+Left"), mainWindow); // Alt+Left is handled elsewhere and I don't want menu to handle it
     actionNoteClose->setStatusTip(tr("Save leave editor of Note being changed"));
 
-
-    actionNoteTop = new QAction(tr("&Top\tCtrl+Shift+Left"), mainWindow);
-    actionNoteTop->setStatusTip(tr("Move Note to the top depth"));
-    actionNoteTop->setEnabled(false);
-
     actionNotePromote = new QAction(tr("&Promote\tCtrl+Left"), mainWindow); // handled from Outline tree
     actionNotePromote->setStatusTip(tr("Promote Note"));
 
     actionNoteDemote = new QAction(tr("&Demote\tCtrl+Right"), mainWindow);
     actionNoteDemote->setStatusTip(tr("Demote Note"));
-
-    actionNoteBottom = new QAction(tr("&Bottom\tCtrl+Shift+Down"), mainWindow);
-    actionNoteBottom->setStatusTip(tr("Move Note to be the child of the previous Note"));
-    actionNoteBottom->setEnabled(false);
-
 
     actionNoteFirst = new QAction(tr("F&irst\tCtrl+Shift+Up"), mainWindow);
     actionNoteFirst->setStatusTip(tr("Move Note to be the first child of its parent"));

@@ -168,10 +168,8 @@ public:
      */
     void forgetNote(Note*);
 
-    void promoteNoteToTop(Note* note, Outline::Patch* patch=nullptr);
     void promoteNote(Note* note, Outline::Patch* patch=nullptr);
     void demoteNote(Note* note, Outline::Patch* patch=nullptr);
-    void demoteNoteToBottom(Note* note, Outline::Patch* patch=nullptr);
     void moveNoteToFirst(Note* note, Outline::Patch* patch=nullptr);
     void moveNoteUp(Note* note, Outline::Patch* patch=nullptr);
     void moveNoteDown(Note* note, Outline::Patch* patch=nullptr);

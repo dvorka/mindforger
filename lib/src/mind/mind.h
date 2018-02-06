@@ -313,14 +313,6 @@ public:
      */
     void noteDown(Note* note, Outline::Patch* patch=nullptr);
     /**
-     * @brief Move note to the first level of depth (following parents).
-     */
-    void noteTop(Note* note, Outline::Patch* patch=nullptr);
-    /**
-     * @brief Move note to the bottom of depth (following the first child).
-     */
-    void noteBottom(Note* note, Outline::Patch* patch=nullptr);
-    /**
      * @brief Move note one level up from the current depth.
      *
      * If note can be moved, then return true, else return false.

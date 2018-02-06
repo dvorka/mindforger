@@ -369,7 +369,8 @@ void MainWindowPresenter::doActionNoteUp()
             mind->remind().remember(note->getOutline());
             orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
             // select Note in the tree
-            QModelIndex idx = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(patch.start, 0);
+            QModelIndex idx
+                = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(patch.start, 0);
             orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
             statusBar->showInfo(QString(tr("Moved up Note '%1'")).arg(note->getTitle().c_str()));
         }
@@ -386,6 +387,10 @@ void MainWindowPresenter::doActionNoteDown()
         if(patch.diff != Outline::Patch::Diff::NO) {
             mind->remind().remember(note->getOutline());
             orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            // select Note in the tree
+            QModelIndex idx
+                = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(note->getOutline()->getNoteOffset(note), 0);
+            orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
             statusBar->showInfo(QString(tr("Moved down Note '%1'").arg(note->getTitle().c_str())));
         }
     }

@@ -427,17 +427,19 @@ int Outline::getOffsetOfAboveNoteSibling(Note* note, int& offset)
         if(offset) {
             for(int o=offset-1; o>=0; o--) {
                 if(notes[o]->getDepth() == note->getDepth()) {
-                    return o;
+                    if(offset == o) {
+                        return NO_SIBLING;
+                    } else {
+                        return o;
+                    }
                 }
                 if(notes[o]->getDepth() < note->getDepth()) {
                     return NO_SIBLING;
                 }
             }
         }
-        return offset;
-    } else {
-        return NO_SIBLING;
     }
+    return NO_SIBLING;
 }
 
 int Outline::getOffsetOfBelowNoteSibling(Note* note, int& offset)
@@ -447,22 +449,19 @@ int Outline::getOffsetOfBelowNoteSibling(Note* note, int& offset)
         if((unsigned int)offset < notes.size()-1) {
             for(unsigned int o=offset+1; o<notes.size(); o++) {
                 if(notes[o]->getDepth() == note->getDepth()) {
-                    return o;
+                    if((unsigned int)offset == o) {
+                        return NO_SIBLING;
+                    } else {
+                        return o;
+                    }
                 }
                 if(notes[o]->getDepth() < note->getDepth()) {
                     return NO_SIBLING;
                 }
             }
         }
-        return offset;
-    } else {
-        return NO_SIBLING;
     }
-}
-
-void Outline::promoteNoteToTop(Note* note, Outline::Patch* patch)
-{
-
+    return NO_SIBLING;
 }
 
 void Outline::promoteNote(Note* note, Outline::Patch* patch)
@@ -513,12 +512,53 @@ void Outline::demoteNote(Note* note, Outline::Patch* patch)
     }
 }
 
-void Outline::demoteNoteToBottom(Note* note, Outline::Patch* patch)
-{
-}
-
+// IMPROVE move to up and first are almost the same - introduce method that has sibling offset as parameter
 void Outline::moveNoteToFirst(Note* note, Outline::Patch* patch)
 {
+    if(note) {
+        int no, noteOffset = NO_OFFSET;
+
+        // loop to find the first sibling
+        int so, siblingOffset = NO_OFFSET;
+        Note* n = note;
+        while((so = getOffsetOfAboveNoteSibling(n, no)) != NO_SIBLING) {
+            if(noteOffset == NO_OFFSET) noteOffset = no;
+            siblingOffset = so;
+            n = note->getOutline()->getNotes()[siblingOffset];
+        }
+
+        if(siblingOffset != NO_SIBLING) {
+            vector<Note*> children{};
+            getNoteChildren(note, &children);
+            if(patch) {
+                // upper tier to patch [sibling's offset, note's last child]
+                patch->diff = Outline::Patch::Diff::MOVE;
+                patch->start = siblingOffset;
+                patch->count = noteOffset+children.size() - siblingOffset;
+            }
+            // modify outline: cut & insert
+            if(children.size()) {
+                notes.erase(notes.begin()+noteOffset, notes.begin()+noteOffset+children.size()+1);
+                for(int c=children.size()-1; c>=0; c--) {
+                    // bottom up insert
+                    notes.insert(notes.begin()+siblingOffset, children[c]);
+                }
+            } else {
+                notes.erase(notes.begin()+noteOffset);
+            }
+            notes.insert(notes.begin()+siblingOffset, note);
+            return;
+        } else {
+            if(patch) {
+                patch->diff = Outline::Patch::Diff::NO;
+                return;
+            }
+        }
+    } else {
+        if(patch) {
+            patch->diff = Outline::Patch::Diff::NO;
+        }
+    }
 }
 
 void Outline::moveNoteUp(Note* note, Outline::Patch* patch)
