@@ -353,6 +353,10 @@ void MainWindowPresenter::doActionNoteFirst()
         if(patch.diff != Outline::Patch::Diff::NO) {
             mind->remind().remember(note->getOutline());
             orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            // select Note in the tree
+            QModelIndex idx
+                = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(patch.start, 0);
+            orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
             statusBar->showInfo(QString(tr("Moved Note '%1' to be the first child")).arg(note->getTitle().c_str()));
         }
     }
@@ -406,6 +410,10 @@ void MainWindowPresenter::doActionNoteLast()
         if(patch.diff != Outline::Patch::Diff::NO) {
             mind->remind().remember(note->getOutline());
             orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            // select Note in the tree
+            QModelIndex idx
+                = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(note->getOutline()->getNoteOffset(note), 0);
+            orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
             statusBar->showInfo(QString(tr("Moved Note '%1' to be the last child")).arg(note->getTitle().c_str()));
         }
     }
