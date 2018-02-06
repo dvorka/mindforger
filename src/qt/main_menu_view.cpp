@@ -332,7 +332,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionNoteFirst = new QAction(tr("F&irst\tCtrl+Shift+Up"), mainWindow);
     actionNoteFirst->setStatusTip(tr("Move Note to be the first child of its parent"));
-    actionNoteFirst->setEnabled(false);
 
     actionNoteUp = new QAction(tr("&Up\tCtrl+Up"), mainWindow);
     actionNoteUp->setStatusTip(tr("Move Note up"));
@@ -342,7 +341,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionNoteLast = new QAction(tr("&Last\tCtrl+Shift+Down"), mainWindow);
     actionNoteLast->setStatusTip(tr("Move Note to be the last child of its parent"));
-    actionNoteLast->setEnabled(false);
 
 
     // TODO Attach vs. COPY to repository
