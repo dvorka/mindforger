@@ -44,13 +44,9 @@ class Outline;
 class Note : public MindEntity
 {
 private:
-    // note identifier within the scope of parent outline
-    u_int16_t id;
     // parent outline - might be changed on refactoring
     Outline* outline;
 
-    // TODO deprecated
-    u_int16_t order;
     // [0,inf)
     u_int16_t depth;
 
@@ -75,7 +71,7 @@ private:
 public:
     Note() = delete;
     explicit Note(const NoteType* type, Outline* outline);
-    Note(const Note&) = delete;
+    explicit Note(const Note&);
     Note(const Note&&) = delete;
     Note& operator=(const Note&) = delete;
     Note& operator=(const Note&&) = delete;
@@ -99,8 +95,6 @@ public:
     const std::string& getModifiedPretty() const;
     void setModifiedPretty();
     void setModifiedPretty(const std::string& modifiedPretty);
-    u_int16_t getOrder() const;
-    void setOrder(u_int16_t order);
     const std::string& getOutlineKey() const;
     u_int8_t getProgress() const;
     void setProgress(u_int8_t progress);

@@ -25,11 +25,42 @@ namespace m8r {
 Note::Note(const NoteType* type, Outline* outline)
     : outline(outline), type(type)
 {
-    id = 0;
-    order = depth = 0;
+    depth = 0;
     created = modified = read = deadline = 0;
     reads = revision = 0;
     progress = 0;
+}
+
+Note::Note(const Note& n)
+    : outline(nullptr), type(n.type)
+{
+    MF_DEBUG("Note copy constructor invoked");
+
+    title = n.title;
+    if(n.description.size()) {
+        for(string* s:n.description) {
+            description.push_back(new string(*s));
+        }
+    }
+
+    depth = n.depth;
+    created = n.created;
+    modified = n.modified;
+    read = n.read;
+    deadline = n.deadline;
+    reads = n.reads;
+    revision = n.revision;
+    progress = n.progress;
+
+    if(n.tags.size()) {
+        tags.insert(tags.end(), n.tags.begin(), n.tags.end());
+    }
+
+    if(n.attachments.size()) {
+        for(Attachment* a:n.attachments) {
+            attachments.push_back(new Attachment(*a));
+        }
+    }
 }
 
 const vector<Attachment*>& Note::getAttachments() const
@@ -108,16 +139,6 @@ void Note::setModifiedPretty()
 void Note::setModifiedPretty(const string& modifiedPretty)
 {
     this->modifiedPretty = modifiedPretty;
-}
-
-u_int16_t Note::getOrder() const
-{
-    return order;
-}
-
-void Note::setOrder(u_int16_t order)
-{
-    this->order = order;
 }
 
 u_int8_t Note::getProgress() const

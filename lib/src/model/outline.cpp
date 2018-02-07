@@ -35,6 +35,46 @@ Outline::Outline(const OutlineType* type)
     outlineDescriptorAsNote = new Note(&NOTE_4_OUTLINE_TYPE, this);
 }
 
+Outline::Outline(const Outline& o)
+    : memoryLocation(OutlineMemoryLocation::NORMAL), type(o.type)
+{
+    MF_DEBUG("Outline copy constructor invoked!");
+
+    key = nullptr;
+
+    title = o.title;
+    if(o.description.size()) {
+        for(string* s:o.description) {
+            description.push_back(new string(*s));
+        }
+    }
+
+    if(o.notes.size()) {
+        Note* clone;
+        for(Note* n:o.notes) {
+            clone = new Note(*n);
+            notes.push_back(clone);
+        }
+    }
+
+    created = o.created;
+    modified = o.modified;
+    read = o.read;
+    reads = o.reads;
+    revision = o.revision;
+    importance = o.importance;
+    urgency = o.urgency;
+    progress = o.progress;
+    bytesize = o.bytesize;
+
+    if(o.tags.size()) {
+        tags.insert(tags.end(), o.tags.begin(), o.tags.end());
+    }
+
+    outlineDescriptorAsNote = o.outlineDescriptorAsNote;
+}
+
+
 void Outline::completeProperties(const time_t fileModificationTime)
 {
     // Outline
@@ -334,7 +374,7 @@ void Outline::addNote(Note* note)
 void Outline::addNote(Note* note, int offset)
 {
     note->setOutline(this);
-    if(offset>notes.size()-1) {
+    if((unsigned int)offset > notes.size()-1) {
         notes.push_back(note);
     } else {
         notes.insert(notes.begin()+offset, note);

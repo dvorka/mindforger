@@ -21,12 +21,13 @@
 namespace m8r {
 
 Attachment::Attachment() {
-	// TODO Auto-generated constructor stub
+}
 
+Attachment::Attachment(const Attachment& a) {
+    UNUSED_ARG(a);
 }
 
 Attachment::~Attachment() {
-	// TODO Auto-generated destructor stub
 }
 
 } /* namespace m8r */

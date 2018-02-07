@@ -109,7 +109,7 @@ private:
 public:
     Outline() = delete;
     explicit Outline(const OutlineType* type);
-    Outline(const Outline&) = delete;
+    explicit Outline(const Outline&);
     Outline(const Outline&&) = delete;
     Outline& operator=(const Outline&) = delete;
     Outline& operator=(const Outline&&) = delete;

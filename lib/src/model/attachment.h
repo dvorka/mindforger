@@ -19,11 +19,17 @@
 #ifndef M8R_ATTACHMENT_H_
 #define M8R_ATTACHMENT_H_
 
+#include "../gear/lang_utils.h"
+
 namespace m8r {
 
 class Attachment {
 public:
-    Attachment();
+    explicit Attachment();
+    explicit Attachment(const Attachment&);
+    Attachment(const Attachment&&) = delete;
+    Attachment &operator=(const Attachment&) = delete;
+    Attachment &operator=(const Attachment&&) = delete;
     virtual ~Attachment();
 };
 
