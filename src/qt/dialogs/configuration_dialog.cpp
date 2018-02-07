@@ -22,6 +22,7 @@ namespace m8r {
 
 ConfigurationDialog::ConfigurationDialog(QWidget *parent)
 {
+    UNUSED_ARG(parent);
 }
 
 ConfigurationDialog::~ConfigurationDialog()
