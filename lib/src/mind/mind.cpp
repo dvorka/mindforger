@@ -400,7 +400,7 @@ bool Mind::outlineForget(string outlineKey)
 
 Note* Mind::noteNew(
         const std::string& outlineKey,
-        const uint16_t parentNoteId,
+        const uint16_t offset,
         // IMPROVE pass title by reference
         const std::string* title,
         const NoteType* noteType,
@@ -417,7 +417,6 @@ Note* Mind::noteNew(
             n = new Note(ontology().findOrCreateNoteType(NoteType::KeyNote()),o);
         }
         n->setOutline(o);
-        uint16_t offset = (NO_PARENT==parentNoteId?0:parentNoteId);
         if(title) {
             n->setTitle(*title);
         }
@@ -433,8 +432,18 @@ Note* Mind::noteNew(
         }
         n->setProgress(progress);
 
-        o->addNote(n, offset);
+        o->addNote(n, NO_PARENT==offset?0:offset);
         return n;
+    } else {
+        throw MindForgerException("Outline for given key not found!");
+    }
+}
+
+Note* Mind::noteClone(const string& outlineKey, const Note* newNote)
+{
+    Outline* o = memory.getOutline(outlineKey);
+    if(o) {
+        return o->cloneNote(newNote);
     } else {
         throw MindForgerException("Outline for given key not found!");
     }

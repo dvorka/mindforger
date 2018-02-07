@@ -365,6 +365,43 @@ OutlineMemoryLocation Outline::getMemoryLocation() const
     return memoryLocation;
 }
 
+void Outline::resetClonedNote(Note* n)
+{
+    n->setOutline(this);
+    n->setReads(1);
+    n->setRevision(0);
+    n->setModified();
+    n->setModifiedPretty();
+    n->completeProperties(n->getModified());
+}
+
+Note* Outline::cloneNote(const Note* clonedNote)
+{
+    int offset = getNoteOffset(clonedNote);
+    if(offset != -1) {
+        Note* newNote;
+
+        vector<Note*> children{};
+        getNoteChildren(clonedNote, &children);
+        offset += 1+children.size();
+        if(children.size()) {
+            for(Note* n:children) {
+                newNote = new Note(*n);
+                resetClonedNote(newNote);
+                addNote(newNote, offset);
+            }
+        }
+
+        newNote = new Note(*clonedNote);
+        resetClonedNote(newNote);
+        addNote(newNote, offset);
+
+        return newNote;
+    } else {
+        return nullptr;
+    }
+}
+
 void Outline::addNote(Note* note)
 {
     note->setOutline(this);
@@ -381,7 +418,7 @@ void Outline::addNote(Note* note, int offset)
     }
 }
 
-int Outline::getNoteOffset(Note* note)
+int Outline::getNoteOffset(const Note* note) const
 {
     if(!notes.empty()) {
         if(notes.size()==1) {
@@ -397,7 +434,7 @@ int Outline::getNoteOffset(Note* note)
     return -1;
 }
 
-void Outline::getNoteChildren(Note* note, vector<Note*>* children, Outline::Patch* patch)
+void Outline::getNoteChildren(const Note* note, vector<Note*>* children, Outline::Patch* patch)
 {
     if(note) {
         if(note == notes[notes.size()-1]) {

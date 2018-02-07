@@ -134,12 +134,19 @@ public:
      */
     bool isNotesLoaded() const;
 
+    const std::string& getKey() const;
+    void setKey(const std::string key);
+    virtual const std::string& getTitle() const;
+    void setTitle(const std::string& title);
+    const std::vector<std::string*>& getDescription() const;
+    std::string getDescriptionAsString() const;
+    void addDescriptionLine(std::string *);
+    void setDescription(const std::vector<std::string*>& description);
+    void clearDescription();
     time_t getCreated() const;
     void setCreated(time_t created);
     int8_t getImportance() const;
     void setImportance(int8_t importance);
-    const std::string& getKey() const;
-    void setKey(const std::string key);
     const Tag* getPrimaryTag() const;
     const std::vector<const Tag*>& getTags() const;
     void setTag(const Tag* tag);
@@ -152,29 +159,6 @@ public:
     const std::string& getModifiedPretty() const;
     void setModifiedPretty();
     void setModifiedPretty(const std::string& modifiedPretty);
-    const std::vector<Note*>& getNotes() const;
-    size_t getNotesCount() const;
-    void setNotes(const std::vector<Note*>& notes);
-
-    void addNote(Note*);
-    /**
-     * @brief Add Note on given offset.
-     */
-    void addNote(Note*, int offset);
-    int getNoteOffset(Note* note);
-    void getNoteChildren(Note* note, std::vector<Note*>* children=nullptr, Outline::Patch* patch=nullptr);
-    /**
-     * @brief Forget Note and its children.
-     */
-    void forgetNote(Note*);
-
-    void promoteNote(Note* note, Outline::Patch* patch=nullptr);
-    void demoteNote(Note* note, Outline::Patch* patch=nullptr);
-    void moveNoteToFirst(Note* note, Outline::Patch* patch=nullptr);
-    void moveNoteUp(Note* note, Outline::Patch* patch=nullptr);
-    void moveNoteDown(Note* note, Outline::Patch* patch=nullptr);
-    void moveNoteToLast(Note* note, Outline::Patch* patch=nullptr);
-
     int8_t getProgress() const;
     void setProgress(int8_t progress);
     u_int32_t getRevision() const;
@@ -190,15 +174,33 @@ public:
     void setRead(time_t read);
     OutlineMemoryLocation getMemoryLocation() const;
     void setMemoryLocation(OutlineMemoryLocation memoryLocation);
-    const std::vector<std::string*>& getDescription() const;
-    std::string getDescriptionAsString() const;
-    void addDescriptionLine(std::string *);
-    void setDescription(const std::vector<std::string*>& description);
-    void clearDescription();
-    virtual const std::string& getTitle() const;
-    void setTitle(const std::string& title);
     unsigned int getBytesize() const;
     void setBytesize(unsigned int bytesize);
+
+    const std::vector<Note*>& getNotes() const;
+    size_t getNotesCount() const;
+    void setNotes(const std::vector<Note*>& notes);
+    void addNote(Note*);
+    /**
+     * @brief Clone Note including its children.
+     *
+     * New Note is stored as cloned Note's sibling (below).
+     */
+    Note* cloneNote(const Note* clonedNote);
+    void addNote(Note*, int offset);
+    int getNoteOffset(const Note* note) const;
+    void getNoteChildren(const Note* note, std::vector<Note*>* children=nullptr, Outline::Patch* patch=nullptr);
+    /**
+     * @brief Forget Note including its children.
+     */
+    void forgetNote(Note*);
+
+    void promoteNote(Note* note, Outline::Patch* patch=nullptr);
+    void demoteNote(Note* note, Outline::Patch* patch=nullptr);
+    void moveNoteToFirst(Note* note, Outline::Patch* patch=nullptr);
+    void moveNoteUp(Note* note, Outline::Patch* patch=nullptr);
+    void moveNoteDown(Note* note, Outline::Patch* patch=nullptr);
+    void moveNoteToLast(Note* note, Outline::Patch* patch=nullptr);
 
     Note* getOutlineDescriptorAsNote();
 
@@ -210,6 +212,8 @@ private:
      */
     int getOffsetOfAboveNoteSibling(Note* note, int& offset);
     int getOffsetOfBelowNoteSibling(Note* note, int& offset);
+
+    void resetClonedNote(Note* n);
 };
 
 /**

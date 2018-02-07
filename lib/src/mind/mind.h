@@ -264,7 +264,7 @@ public:
      */
     Note* noteNew(
             const std::string& outlineKey,
-            const uint16_t parentNoteId,
+            const uint16_t offset,
             // IMPROVE pass title by reference
             const std::string* title = nullptr,
             const NoteType* noteType = nullptr,
@@ -272,13 +272,14 @@ public:
             const std::vector<const Tag*>* tags = nullptr,
             const int8_t progress = 0,
             Stencil* noteStencil = nullptr);
+
     /**
      * @brief Clone a note.
      *
      * Cloned note is stored down from original note on the same level of depth.
      * If note has children, then they are cloned as well.
      */
-    bool noteClone(const std::string& outlineKey, const std::string& noteToClone);
+    Note* noteClone(const std::string& outlineKey, const Note* newNote);
     /*
      * @brief Forget note.
      *

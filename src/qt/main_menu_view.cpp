@@ -354,7 +354,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionNoteClone = new QAction(tr("&Clone"), mainWindow);
     actionNoteClone->setStatusTip(tr("Make a copy of the Note to this or other outline..."));
-    actionNoteClone->setEnabled(false);
 
     actionNoteExport = new QAction(tr("Dump"), mainWindow);
     actionNoteExport->setStatusTip(tr("Export Note to an external file in a supported format"));

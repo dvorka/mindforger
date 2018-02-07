@@ -141,6 +141,7 @@ public slots:
     void doActionNoteDown();
     void doActionNoteLast();
     void doActionNoteAttach();
+    void doActionNoteClone();
     void doActionNoteSave();
     void doActionNoteForget();
     // help
