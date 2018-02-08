@@ -38,6 +38,8 @@ OutlineViewPresenter::~OutlineViewPresenter()
 
 void OutlineViewPresenter::refresh(Outline* outline)
 {
+    outline->incReads();
+
     currentOutline = outline;
     view->refreshHeader(outline->getTitle());
     outlineTreePresenter->refresh(outline);

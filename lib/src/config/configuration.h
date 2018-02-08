@@ -80,6 +80,7 @@ private:
     std::string externalEditor;
 
     // configuration
+    bool rememberReads; // persist Outline and Note reads (touches disc on every O/N view)
     // TODO repositoryType (MF/MD/mdFile)
     // TODO doSaveMetadata
 

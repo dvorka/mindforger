@@ -46,6 +46,8 @@ NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
 // HINT when HTML will be here: first decorate MD with HTML colors > then MD to HTML conversion
 void NoteViewPresenter::refresh(Note* note)
 {
+    note->incReads();
+
     this->currentNote = note;
 
     // IMPROVE NPE

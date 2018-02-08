@@ -105,6 +105,7 @@ public:
     u_int32_t getRevision() const;
     void setRevision(u_int32_t revision);
     void incRevision();
+    void incReads() { reads++; }
     const Tag* getPrimaryTag() const;
     const std::vector<const Tag*>& getTags() const;
     void addTag(const Tag* tag);

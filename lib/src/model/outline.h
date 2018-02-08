@@ -164,6 +164,7 @@ public:
     u_int32_t getRevision() const;
     void setRevision(u_int32_t revision);
     void incRevision();
+    void incReads() { reads++; }
     const OutlineType* getType() const;
     void setType(const OutlineType* type);
     int8_t getUrgency() const;
