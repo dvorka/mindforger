@@ -11,7 +11,6 @@ Big thanks to 3rd party content authors:
 * Bjarne Stroustrup (C++ - for inspiring visions and being the authority behind C++ language)
 * John Gruber (Markdown - spec)
 * Qt Company (Qt - lib and code)
-* Jason R. Blevins (Emacs Major mode for Markdown formatted text files - regexps)
 * Christian Loose (CuteMarkEd - inspiration and code)
 * Jamie McGowan (Remarkable - inspiration)
 * Mark Summerfield (Advanced Qt Programming book examples - code snippets)
