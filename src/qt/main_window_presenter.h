@@ -33,6 +33,7 @@
 #include "dialogs/fts_dialog.h"
 #include "dialogs/find_outline_by_name_dialog.h"
 #include "dialogs/find_note_by_name_dialog.h"
+#include "dialogs/refactor_note_to_outline_dialog.h"
 
 #include <QtWidgets>
 
@@ -76,7 +77,7 @@ private:
     FtsDialog* ftsDialog;
     FindOutlineByNameDialog* findOutlineByNameDialog;
     FindNoteByNameDialog* findNoteByNameDialog;
-
+    RefactorNoteToOutlineDialog* refactorNoteToOutlineDialog;
 
 public:
     explicit MainWindowPresenter(MainWindowView& view, Configuration& configuration);
@@ -143,6 +144,8 @@ public slots:
     void doActionNoteLast();
     void doActionNoteAttach();
     void doActionNoteClone();
+    void doActionRefactorNoteToOutline();
+    void handleRefactorNoteToOutline();
     void doActionNoteSave();
     void doActionNoteForget();
     // help

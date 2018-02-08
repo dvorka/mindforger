@@ -348,11 +348,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteAttach->setEnabled(false);
 
     actionNoteRefactor = new QAction(tr("&Refactor"), mainWindow);
-    actionNoteRefactor->setStatusTip(tr("Refactor Note to another outline..."));
-    actionNoteRefactor->setEnabled(false);
+    actionNoteRefactor->setStatusTip(tr("Refactor Note to another Outline..."));
 
     actionNoteClone = new QAction(tr("&Clone"), mainWindow);
-    actionNoteClone->setStatusTip(tr("Make a copy of the Note to this or other outline..."));
+    actionNoteClone->setStatusTip(tr("Make a copy of the Note to this or other Outline..."));
 
     actionNoteExport = new QAction(tr("Dump"), mainWindow);
     actionNoteExport->setStatusTip(tr("Export Note to an external file in a supported format"));

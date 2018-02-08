@@ -277,12 +277,21 @@ public:
             Stencil* noteStencil = nullptr);
 
     /**
-     * @brief Clone a note.
+     * @brief Clone Note.
      *
-     * Cloned note is stored down from original note on the same level of depth.
-     * If note has children, then they are cloned as well.
+     * Cloned Note is stored down from original note on the same level of depth.
+     * If Note has children, then they are cloned as well.
      */
     Note* noteClone(const std::string& outlineKey, const Note* newNote);
+
+    /**
+     * @brief Refactor Note to an Outline.
+     *
+     * Refactored Note is moved from owning Outline to target Outline along with its
+     * child Notes.
+     */
+    Outline* noteRefactor(const std::string& outlineKey, const Note* noteToRefactor);
+
     /*
      * @brief Forget note.
      *

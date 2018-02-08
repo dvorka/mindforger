@@ -463,6 +463,13 @@ Note* Mind::noteClone(const string& outlineKey, const Note* newNote)
     }
 }
 
+Outline* noteRefactor(const std::string& outlineKey, const Note* noteToRefactor)
+{
+    // copy Note w/ children to TARGET > outline.addNotes(note*)
+    // delete Note w/ children from SOURCE
+    // persist S and T
+}
+
 Outline* Mind::noteForget(Note* note)
 {
     Outline* o = note->getOutline();
