@@ -34,7 +34,7 @@ Note::Note(const NoteType* type, Outline* outline)
 Note::Note(const Note& n)
     : outline(nullptr), type(n.type)
 {
-    MF_DEBUG("Note copy constructor invoked");
+    MF_DEBUG("Note copy constructor invoked\n");
 
     title = n.title;
     if(n.description.size()) {

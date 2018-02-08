@@ -79,6 +79,7 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
                 0,
                 &title,
                 mind.ontology().findOrCreateNoteType(m8r::NoteType::KeyAction()),
+                0,
                 &tags,
                 0,
                 stencil);
@@ -90,6 +91,7 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
                 2,
                 &deepTitle,
                 mind.ontology().findOrCreateNoteType(m8r::NoteType::KeyAction()),
+                0,
                 &tags,
                 0,
                 stencil);
@@ -574,12 +576,15 @@ TEST(NoteTestCase, DeepUpDownNote) {
     EXPECT_EQ(o->getNotes()[2]->getTitle(), "2");
     EXPECT_EQ(o->getNotes()[3]->getTitle(), "5");
     EXPECT_EQ(o->getNotes()[4]->getTitle(), "5");
-    // TODO assert depth
     EXPECT_EQ(o->getNotes()[5]->getTitle(), "6");
     EXPECT_EQ(o->getNotes()[6]->getTitle(), "1");
     EXPECT_EQ(o->getNotes()[7]->getTitle(), "3");
     EXPECT_EQ(o->getNotes()[8]->getTitle(), "33");
     EXPECT_EQ(o->getNotes()[9]->getTitle(), "333");
+    // Note data
+    EXPECT_EQ(o->getNotes()[4]->getDepth(), 0);
+    EXPECT_EQ(o->getNotes()[4]->getReads(), 1);
+    EXPECT_EQ(o->getNotes()[4]->getRevision(), 1);
 
     o->cloneNote(o->getNotes()[0]);
 
@@ -588,7 +593,6 @@ TEST(NoteTestCase, DeepUpDownNote) {
     EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
     EXPECT_EQ(o->getNotes()[2]->getTitle(), "4");
     EXPECT_EQ(o->getNotes()[3]->getTitle(), "44");
-    // TODO assert depth
     EXPECT_EQ(o->getNotes()[4]->getTitle(), "2");
     EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
     EXPECT_EQ(o->getNotes()[6]->getTitle(), "5");
@@ -597,10 +601,17 @@ TEST(NoteTestCase, DeepUpDownNote) {
     EXPECT_EQ(o->getNotes()[9]->getTitle(), "3");
     EXPECT_EQ(o->getNotes()[10]->getTitle(), "33");
     EXPECT_EQ(o->getNotes()[11]->getTitle(), "333");
+    // Note data
+    EXPECT_EQ(o->getNotes()[2]->getDepth(), 0);
+    EXPECT_EQ(o->getNotes()[2]->getReads(), 1);
+    EXPECT_EQ(o->getNotes()[2]->getRevision(), 1);
+    EXPECT_EQ(o->getNotes()[3]->getDepth(), 1);
+    EXPECT_EQ(o->getNotes()[3]->getReads(), 1);
+    EXPECT_EQ(o->getNotes()[3]->getRevision(), 1);
 
     o->cloneNote(o->getNotes()[9]);
 
-    //printOutlineNotes(o);
+    printOutlineNotes(o);
     EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
     EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
     EXPECT_EQ(o->getNotes()[2]->getTitle(), "4");
@@ -611,10 +622,47 @@ TEST(NoteTestCase, DeepUpDownNote) {
     EXPECT_EQ(o->getNotes()[7]->getTitle(), "6");
     EXPECT_EQ(o->getNotes()[8]->getTitle(), "1");
     EXPECT_EQ(o->getNotes()[9]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[10]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[11]->getTitle(), "333");
-    EXPECT_EQ(o->getNotes()[12]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[14]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[15]->getTitle(), "333");
-    // TODO assert depth
+    EXPECT_EQ(o->getNotes()[10]->getTitle(),"33");
+    EXPECT_EQ(o->getNotes()[11]->getTitle(),"333");
+    EXPECT_EQ(o->getNotes()[12]->getTitle(),"3");
+    EXPECT_EQ(o->getNotes()[13]->getTitle(),"33");
+    EXPECT_EQ(o->getNotes()[14]->getTitle(),"333");
+    // Note data
+    EXPECT_EQ(o->getNotes()[12]->getDepth(), 0);
+    EXPECT_EQ(o->getNotes()[12]->getReads(), 1);
+    EXPECT_EQ(o->getNotes()[12]->getRevision(), 1);
+    EXPECT_EQ(o->getNotes()[13]->getDepth(), 1);
+    EXPECT_EQ(o->getNotes()[13]->getReads(), 1);
+    EXPECT_EQ(o->getNotes()[13]->getRevision(), 1);
+    EXPECT_EQ(o->getNotes()[14]->getDepth(), 2);
+    EXPECT_EQ(o->getNotes()[14]->getReads(), 1);
+    EXPECT_EQ(o->getNotes()[14]->getRevision(), 1);
+
+    o->cloneNote(o->getNotes()[13]);
+
+    printOutlineNotes(o);
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[3]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[4]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[7]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[8]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[9]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[10]->getTitle(),"33");
+    EXPECT_EQ(o->getNotes()[11]->getTitle(),"333");
+    EXPECT_EQ(o->getNotes()[12]->getTitle(),"3");
+    EXPECT_EQ(o->getNotes()[13]->getTitle(),"33");
+    EXPECT_EQ(o->getNotes()[14]->getTitle(),"333");
+    EXPECT_EQ(o->getNotes()[15]->getTitle(),"33");
+    EXPECT_EQ(o->getNotes()[16]->getTitle(),"333");
+    // Note data
+    EXPECT_EQ(o->getNotes()[15]->getDepth(), 1);
+    EXPECT_EQ(o->getNotes()[15]->getReads(), 1);
+    EXPECT_EQ(o->getNotes()[15]->getRevision(), 1);
+    EXPECT_EQ(o->getNotes()[16]->getDepth(), 2);
+    EXPECT_EQ(o->getNotes()[16]->getReads(), 1);
+    EXPECT_EQ(o->getNotes()[16]->getRevision(), 1);
 }

@@ -38,7 +38,7 @@ Outline::Outline(const OutlineType* type)
 Outline::Outline(const Outline& o)
     : memoryLocation(OutlineMemoryLocation::NORMAL), type(o.type)
 {
-    MF_DEBUG("Outline copy constructor invoked!");
+    MF_DEBUG("Outline copy constructor invoked\n");
 
     key = nullptr;
 
@@ -385,10 +385,19 @@ Note* Outline::cloneNote(const Note* clonedNote)
         getNoteChildren(clonedNote, &children);
         offset += 1+children.size();
         if(children.size()) {
-            for(Note* n:children) {
-                newNote = new Note(*n);
-                resetClonedNote(newNote);
-                addNote(newNote, offset);
+            if(offset < notes.size()) {
+                for(Note* n:children) {
+                    newNote = new Note(*n);
+                    resetClonedNote(newNote);
+                    addNote(newNote, offset);
+                }
+            } else {
+                for(Note* n:children) {
+                    newNote = new Note(*n);
+                    resetClonedNote(newNote);
+                    newNote->setOutline(this);
+                    notes.push_back(newNote);
+                }
             }
         }
 
