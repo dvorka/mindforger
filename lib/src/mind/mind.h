@@ -248,6 +248,9 @@ public:
             const int8_t progress = 0,
             const std::vector<const Tag*>* tags = nullptr,
             Stencil *outlineStencil = nullptr);
+
+    Outline* outlineClone(const std::string& outlineKey);
+
     /**
      * @brief Move Outline to limbo.
      *

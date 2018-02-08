@@ -214,6 +214,7 @@ private:
     int getOffsetOfBelowNoteSibling(Note* note, int& offset);
 
     void resetClonedNote(Note* n);
+    void resetClonedOutline(Outline* o);
 };
 
 /**

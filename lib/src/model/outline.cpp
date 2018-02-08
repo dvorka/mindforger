@@ -35,12 +35,21 @@ Outline::Outline(const OutlineType* type)
     outlineDescriptorAsNote = new Note(&NOTE_4_OUTLINE_TYPE, this);
 }
 
+void Outline::resetClonedOutline(Outline* o)
+{
+    o->setReads(1);
+    o->setRevision(0);
+    o->setModified();
+    o->modified++;
+    o->setRead(o->getModified());
+    o->setModifiedPretty();
+    o->completeProperties(o->getModified());
+}
+
 Outline::Outline(const Outline& o)
     : memoryLocation(OutlineMemoryLocation::NORMAL), type(o.type)
 {
-    MF_DEBUG("Outline copy constructor invoked\n");
-
-    key = nullptr;
+    key.clear();
 
     title = o.title;
     if(o.description.size()) {
@@ -57,11 +66,9 @@ Outline::Outline(const Outline& o)
         }
     }
 
-    created = o.created;
-    modified = o.modified;
-    read = o.read;
-    reads = o.reads;
-    revision = o.revision;
+    // created/modified/... to be reset = o.created;
+    resetClonedOutline(this);
+
     importance = o.importance;
     urgency = o.urgency;
     progress = o.progress;
@@ -71,7 +78,7 @@ Outline::Outline(const Outline& o)
         tags.insert(tags.end(), o.tags.begin(), o.tags.end());
     }
 
-    outlineDescriptorAsNote = o.outlineDescriptorAsNote;
+    outlineDescriptorAsNote = nullptr;
 }
 
 
@@ -371,6 +378,8 @@ void Outline::resetClonedNote(Note* n)
     n->setReads(1);
     n->setRevision(0);
     n->setModified();
+    n->setModified(n->getModified()+1);
+    n->setRead(n->getModified());
     n->setModifiedPretty();
     n->completeProperties(n->getModified());
 }
@@ -385,7 +394,7 @@ Note* Outline::cloneNote(const Note* clonedNote)
         getNoteChildren(clonedNote, &children);
         offset += 1+children.size();
         if(children.size()) {
-            if(offset < notes.size()) {
+            if((unsigned int)offset < notes.size()) {
                 for(Note* n:children) {
                     newNote = new Note(*n);
                     resetClonedNote(newNote);

@@ -116,9 +116,10 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     EXPECT_EQ(deepTitle, o->getNotes()[2]->getTitle());
 
     // delete NOTE w/ DEEP child
+    //cout << "Before DEEP delete:" << endl; for(m8r::Note* nn: o->getNotes()) { cout << "  #x" << nn->getDepth() << " " << nn->getTitle() << endl; }
     mind.noteForget(o->getNotes()[1]);
     //cout << "After DEEP delete:" << endl; for(m8r::Note* nn: o->getNotes()) { cout << "  #x" << nn->getDepth() << " " << nn->getTitle() << endl; }
-    EXPECT_EQ(o->getNotesCount(), 1);
+    EXPECT_EQ(o->getNotesCount(), 2);
     EXPECT_EQ(title, o->getNotes()[0]->getTitle());
 
     // IMPROVE test add note on offset (virified manually that it works)
@@ -611,7 +612,7 @@ TEST(NoteTestCase, DeepUpDownNote) {
 
     o->cloneNote(o->getNotes()[9]);
 
-    printOutlineNotes(o);
+    //printOutlineNotes(o);
     EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
     EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
     EXPECT_EQ(o->getNotes()[2]->getTitle(), "4");
@@ -640,7 +641,7 @@ TEST(NoteTestCase, DeepUpDownNote) {
 
     o->cloneNote(o->getNotes()[13]);
 
-    printOutlineNotes(o);
+    //printOutlineNotes(o);
     EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
     EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
     EXPECT_EQ(o->getNotes()[2]->getTitle(), "4");

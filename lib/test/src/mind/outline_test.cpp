@@ -113,3 +113,67 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
     EXPECT_EQ(mind.remind().getOutlinesCount(), 2);
     EXPECT_EQ(mind.remind().getNotesCount(), 3);
 }
+
+TEST(OutlineTestCase, CloneOutline) {
+    // prepare M8R repository and let the mind think...
+    string repositoryDir{"/tmp/mf-unit-repository-o"};
+    m8r::removeDirectoryRecursively(repositoryDir.c_str());
+    m8r::Installer installer{};
+    installer.createEmptyMindForgerRepository(repositoryDir);
+    string oFile{"/tmp/mf-unit-repository-o/memory/o.md"};
+    string oContent{
+        "# Note Operations Test Outline"
+        "\nOutline text."
+        "\n"
+        "\n# 1"
+        "\nT1."
+        "\n"
+        "\n# 2"
+        "\nT2."
+        "\n"
+        "\n# 3"
+        "\nT3."
+        "\n"
+        "\n## 33"
+        "\nT33."
+        "\n"
+        "\n### 333"
+        "\nT333."
+        "\n"
+        "\n# 4"
+        "\nT4."
+        "\n"
+        "\n## 44"
+        "\nT44."
+        "\n"
+        "\n# 5"
+        "\nT5."
+        "\n"
+        "\n# 6"
+        "\nT6."
+        "\n"
+        "\n"};
+    m8r::stringToFile(oFile,oContent);
+
+    m8r::Configuration configuration{repositoryDir};
+    m8r::Mind mind{configuration};
+    m8r::Memory& memory = mind.remind();
+    mind.think();
+
+
+    // test
+    vector<m8r::Outline*> outlines = memory.getOutlines();
+    m8r::Outline* o = outlines.at(0);
+    m8r::Outline* c = mind.outlineClone(o->getKey());
+
+    // asserts
+    EXPECT_TRUE(c != nullptr);
+    EXPECT_EQ(mind.remind().getOutlinesCount(), 2);
+    EXPECT_EQ(mind.remind().getNotesCount(), 18);
+    cout << "O key: " << o->getKey() << endl;
+    cout << "C key: " << c->getKey() << endl;
+    EXPECT_NE(o->getKey(), c->getKey());
+    EXPECT_EQ(o->getTitle(), c->getTitle());
+    EXPECT_EQ(o->getDescription().size(), c->getDescription().size());
+    EXPECT_NE(o->getModified(), c->getModified());
+}

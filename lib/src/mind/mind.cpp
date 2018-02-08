@@ -385,6 +385,20 @@ string Mind::outlineNew(
     return outline?outline->getKey():nullptr;
 }
 
+Outline* Mind::outlineClone(const std::string& outlineKey)
+{
+    Outline* o = memory.getOutline(outlineKey);
+    if(o) {
+        Outline* clonedOutline = new Outline{*o};
+        clonedOutline->setKey(memory.createOutlineKey(&o->getTitle()));
+        memory.remember(clonedOutline);
+        onRemembering();
+        return clonedOutline;
+    } else {
+        return nullptr;
+    }
+}
+
 bool Mind::outlineForget(string outlineKey)
 {
     Outline* o = memory.getOutline(outlineKey);
