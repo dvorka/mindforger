@@ -90,6 +90,8 @@ signals:
     void signalChangeDemote();
     void signalChangeFirst();
     void signalChangeLast();
+
+    void signalForget();
 };
 
 }

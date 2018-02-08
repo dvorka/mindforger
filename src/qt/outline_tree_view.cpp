@@ -85,6 +85,9 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
             case Qt::Key_Down:
                 emit signalSelectNextRow();
                 break;
+            case Qt::Key_Delete:
+                emit signalForget();
+                break;
             }
         }
     }

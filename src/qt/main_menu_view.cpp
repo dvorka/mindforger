@@ -317,7 +317,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteSave = new QAction(tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
     actionNoteSave->setStatusTip(tr("Save Note being edited"));
 
-    actionNoteForget = new QAction(tr("&Forget"), mainWindow);
+    actionNoteForget = new QAction(tr("&Forget\tDelete"), mainWindow); // Delete is handled elsewhere and I don't want menu to handle it
     actionNoteForget->setStatusTip(tr("Forget note"));
 
     actionNoteClose = new QAction(tr("Leave\tAlt+Left"), mainWindow); // Alt+Left is handled elsewhere and I don't want menu to handle it
