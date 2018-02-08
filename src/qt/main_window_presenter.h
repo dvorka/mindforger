@@ -128,6 +128,7 @@ public slots:
     // outline
     void doActionOutlineNew();
     void handleOutlineNew();
+    void doActionOutlineClone();
     void doActionOutlineForget();
     void doActionOutlineExport();
     void doActionOutlineImport();

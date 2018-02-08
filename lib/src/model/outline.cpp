@@ -51,7 +51,8 @@ Outline::Outline(const Outline& o)
 {
     key.clear();
 
-    title = o.title;
+    // IMPROVE i18n
+    title = "Copy of " + o.title;
     if(o.description.size()) {
         for(string* s:o.description) {
             description.push_back(new string(*s));
@@ -62,6 +63,7 @@ Outline::Outline(const Outline& o)
         Note* clone;
         for(Note* n:o.notes) {
             clone = new Note(*n);
+            resetClonedNote(clone);
             notes.push_back(clone);
         }
     }

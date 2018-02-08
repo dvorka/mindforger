@@ -300,6 +300,22 @@ void MainWindowPresenter::handleNoteNew()
     }
 }
 
+void MainWindowPresenter::doActionOutlineClone()
+{
+    Outline* o = orloj->getOutlineView()->getCurrentOutline();
+    if(o) {
+        Outline* clonedOutline = mind->outlineClone(o->getKey());
+        if(clonedOutline) {
+            orloj->getOutlineView()->refresh(clonedOutline);
+            orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+        } else {
+            QMessageBox::critical(&view, tr("Clone Outline"), tr("Failed to clone Outline!"));
+        }
+    } else {
+        QMessageBox::critical(&view, tr("Clone Outline"), tr("Please open and Outline to be cloned."));
+    }
+}
+
 void MainWindowPresenter::doActionOutlineForget()
 {
     if(orloj->isFacetActiveOutlineManagement()) {
@@ -367,13 +383,11 @@ void MainWindowPresenter::doActionNoteClone()
                 = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(n->getOutline()->getNoteOffset(clonedNote), 0);
             orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
         } else {
-            QMessageBox::critical(&view, tr("New Note"), tr("Failed to clone Note!"));
+            QMessageBox::critical(&view, tr("Clone Note"), tr("Failed to clone Note!"));
         }
     } else {
         QMessageBox::critical(&view, tr("Clone Note"), tr("Please select a Note to be cloned."));
     }
-
-
 }
 
 void MainWindowPresenter::doActionNoteAttach()

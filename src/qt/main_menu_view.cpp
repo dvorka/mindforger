@@ -288,7 +288,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionOutlineClone = new QAction(tr("C&lone"), mainWindow);
     actionOutlineClone->setStatusTip(tr("Make copy of the current Outline"));
-    actionOutlineClone->setEnabled(false);
 
     actionOutlineForget = new QAction(tr("&Forget"), mainWindow);
     actionOutlineForget->setStatusTip(tr("Forget Outline and move it to Limbo"));
