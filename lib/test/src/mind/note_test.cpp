@@ -563,4 +563,58 @@ TEST(NoteTestCase, DeepUpDownNote) {
     EXPECT_EQ(o->getNotes()[7]->getTitle(), "33");
     EXPECT_EQ(o->getNotes()[8]->getTitle(), "333");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::NO);
+
+    // clone
+
+    o->cloneNote(o->getNotes()[3]);
+
+    //printOutlineNotes(o);
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[3]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[4]->getTitle(), "5");
+    // TODO assert depth
+    EXPECT_EQ(o->getNotes()[5]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[6]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[7]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[8]->getTitle(), "33");
+    EXPECT_EQ(o->getNotes()[9]->getTitle(), "333");
+
+    o->cloneNote(o->getNotes()[0]);
+
+    //printOutlineNotes(o);
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[3]->getTitle(), "44");
+    // TODO assert depth
+    EXPECT_EQ(o->getNotes()[4]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[7]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[8]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[9]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[10]->getTitle(), "33");
+    EXPECT_EQ(o->getNotes()[11]->getTitle(), "333");
+
+    o->cloneNote(o->getNotes()[9]);
+
+    //printOutlineNotes(o);
+    EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[2]->getTitle(), "4");
+    EXPECT_EQ(o->getNotes()[3]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[4]->getTitle(), "2");
+    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getTitle(), "5");
+    EXPECT_EQ(o->getNotes()[7]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[8]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[9]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[10]->getTitle(), "33");
+    EXPECT_EQ(o->getNotes()[11]->getTitle(), "333");
+    EXPECT_EQ(o->getNotes()[12]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[14]->getTitle(), "33");
+    EXPECT_EQ(o->getNotes()[15]->getTitle(), "333");
+    // TODO assert depth
 }
