@@ -20,6 +20,13 @@ TARGET = mindforger
 TEMPLATE = app
 
 QT += widgets
+
+# webengine
+#QT += webenginewidgets
+
+# webkit is supposed to be obsoleted by webengine, but webengine is disabled
+# on Linux since Qt 5.9 due to its tragic performance > conditional compilation
+# seems to be the only way (webkit on Linux, webengine on Windows)
 QT += webkit
 QT += webkitwidgets
 
