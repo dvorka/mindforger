@@ -208,8 +208,10 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/dialogs/refactor_note_to_outline_dialog.cpp
 
 # Development environment remarks:
-# - Beast: GCC 5.4.0, Qt 5.5.1
-# - S7   : GCC 4.8.5, Qt 5.2.1.
+# - Beast 64b:   GCC 5.4.0, Qt 5.5.1
+# - S7    64b:   GCC 4.8.5, Qt 5.2.1
+# - Win10 64b: MinGW 4.9.2, Qt 5.10.0
+#
 # - GCC: -std=c++0x ~ -std=c++11
 
 QMAKE_CXX = ccache g++
