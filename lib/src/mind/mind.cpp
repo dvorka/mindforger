@@ -463,11 +463,32 @@ Note* Mind::noteClone(const string& outlineKey, const Note* newNote)
     }
 }
 
-Outline* noteRefactor(const std::string& outlineKey, const Note* noteToRefactor)
+Outline* Mind::noteRefactor(Note* noteToRefactor, const string& targetOutlineKey, Note* targetParent)
 {
-    // copy Note w/ children to TARGET > outline.addNotes(note*)
-    // delete Note w/ children from SOURCE
-    // persist S and T
+    UNUSED_ARG(targetParent);
+
+    if(noteToRefactor) {
+        Outline* o = memory.getOutline(targetOutlineKey);
+        if(o) {
+            vector<Note*> children{};
+            Outline* sourceOutline = noteToRefactor->getOutline();
+            sourceOutline->getNoteChildren(noteToRefactor, &children);
+            children.insert(children.begin(), noteToRefactor);
+            // IMPROVE allow passing parent for the Note in the target Outline
+            o->addNotes(children, 0);
+
+            noteToRefactor->getOutline()->removeNote(noteToRefactor);
+
+            memory.remember(o);
+            memory.remember(o);
+
+            return o;
+        } else {
+            throw MindForgerException("Outline for given key not found!");
+        }
+    } else {
+        throw MindForgerException("Note to be refactored is nullptr!");
+    }
 }
 
 Outline* Mind::noteForget(Note* note)
@@ -521,20 +542,6 @@ void Mind::noteDemote(Note* note, Outline::Patch* patch)
     if(note) {
         note->getOutline()->demoteNote(note, patch);
     }
-}
-
-bool Mind::noteRefactor(
-        string fromOutlineKey,
-        uint16_t fromNoteId,
-        string toOutlineKey,
-        uint16_t toParentNoteId)
-{
-    UNUSED_ARG(fromOutlineKey);
-    UNUSED_ARG(fromNoteId);
-    UNUSED_ARG(toOutlineKey);
-    UNUSED_ARG(toParentNoteId);
-
-    return false;
 }
 
 void Mind::onRemembering()

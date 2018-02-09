@@ -438,6 +438,15 @@ void Outline::addNote(Note* note, int offset)
     }
 }
 
+void Outline::addNotes(std::vector<Note*>& notesToAdd, int offset)
+{
+    if(notesToAdd.size()) {
+        for(int i=notesToAdd.size()-1; i>=0; i--) {
+            addNote(notesToAdd[i], offset);
+        }
+    }
+}
+
 int Outline::getNoteOffset(const Note* note) const
 {
     if(!notes.empty()) {
@@ -497,7 +506,7 @@ void Outline::getNoteChildren(const Note* note, vector<Note*>* children, Outline
     }
 }
 
-void Outline::forgetNote(Note* note)
+void Outline::removeNote(Note* note, bool deallocate)
 {
     if(note && notes.size()) {
         auto d = note->getDepth();
@@ -505,13 +514,17 @@ void Outline::forgetNote(Note* note)
             if(notes[i] == note) {
                 auto begin = i++;
                 while(i<notes.size() && notes[i]->getDepth()>d) {
-                    delete notes[i];
+                    if(deallocate) {
+                        delete notes[i];
+                    }
                     i++;
                 }
                 // because erase deletes [begin,end)
                 notes.erase(notes.begin()+begin, notes.begin()+i);
 
-                delete note;
+                if(deallocate) {
+                    delete note;
+                }
 
                 return;
             }

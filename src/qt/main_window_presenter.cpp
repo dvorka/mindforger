@@ -197,14 +197,22 @@ void MainWindowPresenter::doActionRefactorNoteToOutline()
 
 void MainWindowPresenter::handleRefactorNoteToOutline()
 {
-    if(refactorNoteToOutlineDialog->getChoice()) {
-        // TODO mind->refactor()
-        orloj->showFacetOutline((Outline*)refactorNoteToOutlineDialog->getChoice());
+    // IMPROVE check current view to be VIEW or EDIT NOTE
+    Note* noteToRefactor = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    if(noteToRefactor) {
+        if(refactorNoteToOutlineDialog->getChoice()) {
+            Outline* dstOutline = (Outline*)refactorNoteToOutlineDialog->getChoice();
+            mind->noteRefactor(noteToRefactor, dstOutline->getKey());
 
-        // IMPROVE make this more efficient
-        statusBar->showInfo(QString(tr("Refactored Note to Outline '"))+QString::fromStdString(refactorNoteToOutlineDialog->getChoice()->getTitle())+"'...");
+            orloj->showFacetOutline((Outline*)refactorNoteToOutlineDialog->getChoice());
+
+            // IMPROVE make this more efficient .arg() + add Note's title
+            statusBar->showInfo(QString(tr("Refactored Note to Outline '"))+QString::fromStdString(refactorNoteToOutlineDialog->getChoice()->getTitle())+"'...");
+        } else {
+            statusBar->showInfo(QString(tr("Target Outline not found")+": ").append(refactorNoteToOutlineDialog->getSearchedString()));
+        }
     } else {
-        statusBar->showInfo(QString(tr("Target Outline not found")+": ").append(refactorNoteToOutlineDialog->getSearchedString()));
+        QMessageBox::critical(&view, tr("Refactor Note"), tr("Note to be refactored not specified!"));
     }
 }
 
@@ -321,7 +329,7 @@ void MainWindowPresenter::handleNoteNew()
         orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
         orloj->showFacetNoteEdit(note);
     } else {
-        QMessageBox::critical(&view, tr("New Note"), tr("Failed to create new note!"));
+        QMessageBox::critical(&view, tr("New Note"), tr("Failed to create new Note!"));
     }
 }
 
@@ -370,6 +378,7 @@ void MainWindowPresenter::doActionNoteNew()
        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
          ||
        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE))
+       // IMPROVE if note is edited, show warning that note must be saved
     {
         newNoteDialog->show(QString::fromStdString(orloj->getOutlineView()->getCurrentOutline()->getKey()));
     } else {
@@ -381,8 +390,10 @@ void MainWindowPresenter::doActionNoteForget()
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
          ||
-       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE))
-    {
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+    ) {
         Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
         if(note) {
             Outline* outline = mind->noteForget(note);
@@ -439,6 +450,8 @@ void MainWindowPresenter::doActionNoteFirst()
             orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
             statusBar->showInfo(QString(tr("Moved Note '%1' to be the first child")).arg(note->getTitle().c_str()));
         }
+    } else {
+        QMessageBox::critical(&view, tr("Move Note"), tr("Please select a Note to be moved."));
     }
 }
 
@@ -458,6 +471,8 @@ void MainWindowPresenter::doActionNoteUp()
             orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
             statusBar->showInfo(QString(tr("Moved up Note '%1'")).arg(note->getTitle().c_str()));
         }
+    } else {
+        QMessageBox::critical(&view, tr("Move Note"), tr("Please select a Note to be moved."));
     }
 }
 
@@ -477,6 +492,8 @@ void MainWindowPresenter::doActionNoteDown()
             orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
             statusBar->showInfo(QString(tr("Moved down Note '%1'").arg(note->getTitle().c_str())));
         }
+    } else {
+        QMessageBox::critical(&view, tr("Move Note"), tr("Please select a Note to be moved."));
     }
 }
 
@@ -496,6 +513,8 @@ void MainWindowPresenter::doActionNoteLast()
             orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
             statusBar->showInfo(QString(tr("Moved Note '%1' to be the last child")).arg(note->getTitle().c_str()));
         }
+    } else {
+        QMessageBox::critical(&view, tr("Move Note"), tr("Please select a Note to be moved."));
     }
 }
 
@@ -511,6 +530,8 @@ void MainWindowPresenter::doActionNotePromote()
             orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
             statusBar->showInfo(QString(tr("Promoted Note '%1'")).arg(note->getTitle().c_str()));
         }
+    } else {
+        QMessageBox::critical(&view, tr("Promote Note"), tr("Please select a Note to be promoted."));
     }
 }
 
@@ -526,6 +547,8 @@ void MainWindowPresenter::doActionNoteDemote()
         if(patch.diff != Outline::Patch::Diff::NO) {
             statusBar->showInfo(QString(tr("Demoted Note '%1'")).arg(note->getTitle().c_str()));
         }
+    } else {
+        QMessageBox::critical(&view, tr("Demote Note"), tr("Please select a Note to be demoted."));
     }
 }
 

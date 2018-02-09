@@ -290,7 +290,7 @@ public:
      * Refactored Note is moved from owning Outline to target Outline along with its
      * child Notes.
      */
-    Outline* noteRefactor(const std::string& outlineKey, const Note* noteToRefactor);
+    Outline* noteRefactor(Note* noteToRefactor, const std::string& targetOutlineKey, Note* targetParent=nullptr);
 
     /*
      * @brief Forget note.
@@ -338,14 +338,6 @@ public:
      */
     void noteDemote(Note* note, Outline::Patch* patch=nullptr);
 
-    /**
-     * @brief Refactor note from the outline to another outline.
-     */
-    bool noteRefactor(
-            std::string fromOutlineKey,
-            uint16_t fromNoteId,
-            std::string toOutlineKey,
-            uint16_t toParentNoteId=NO_PARENT);
     /**
      * @brief Convert an outline to note in another outline.
      * @return new note key

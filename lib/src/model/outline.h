@@ -189,13 +189,17 @@ public:
      */
     Note* cloneNote(const Note* clonedNote);
     void addNote(Note*, int offset);
-    void addNotes(std::vector<Note*>, int offset);
+    void addNotes(std::vector<Note*>&, int offset);
     int getNoteOffset(const Note* note) const;
     void getNoteChildren(const Note* note, std::vector<Note*>* children=nullptr, Outline::Patch* patch=nullptr);
     /**
      * @brief Forget Note including its children.
      */
-    void forgetNote(Note*);
+    void forgetNote(Note* n) { removeNote(n, true); }
+    /**
+     * @brief Remove Note including its children from Outline, but do NOT dealocate them.
+     */
+    void removeNote(Note* n) { removeNote(n, false); }
 
     void promoteNote(Note* note, Outline::Patch* patch=nullptr);
     void demoteNote(Note* note, Outline::Patch* patch=nullptr);
@@ -207,6 +211,8 @@ public:
     Note* getOutlineDescriptorAsNote();
 
 private:
+    void removeNote(Note* note, bool dealocate);
+
     /**
      * @brief Returns offset of the first sibling above on the same level.
      *
