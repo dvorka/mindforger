@@ -35,14 +35,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // devise... new MD repository
     actionMindDevise = new QAction(tr("&Devise"), mainWindow);
-    actionMindDevise->setStatusTip(tr("Create new MD repository to form new ideas, principles, combinations or applications"));
+    actionMindDevise->setStatusTip(tr("Create new MD repository to form new ideas/principles/..."));
     actionMindDevise->setEnabled(false);
 
     // learn... from a repository, Markdown or TXT file
     actionMindLearn = new QAction(tr("&Learn"), mainWindow);
     // IMPROVE show RECENT repositories and files in the dialog
-    actionMindLearn->setStatusTip(tr("Learn notes by loading a MindForger repository, Markdown repository or file"));
-    actionMindLearn->setEnabled(false);
+    actionMindLearn->setStatusTip(tr("Learn ideas/principles/... by loading a MindForger repository, Markdown repository or file"));
 
     // remember... by flushing caches and saving unsaved notes
     actionMindRemember = new QAction(tr("Re&member"), mainWindow);
