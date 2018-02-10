@@ -41,7 +41,7 @@ TEST(OutlineTestCase, NewAndDeleteOutline) {
     m8r::removeDirectoryRecursively(repositoryDir.c_str());
     m8r::Installer installer{};
     installer.createEmptyMindForgerRepository(repositoryDir);
-    string oFile{"/tmp/mf-unit-repository/memory/outline.md"};
+    string oFile{repositoryDir+"/memory/outline.md"};
     string oContent{"# Test Outline\n\nOutline text.\n\n## Note 1\nNote 1 text.\n"};
     m8r::stringToFile(oFile,oContent);
 
@@ -65,7 +65,7 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
     m8r::removeDirectoryRecursively(repositoryDir.c_str());
     m8r::Installer installer{};
     installer.createEmptyMindForgerRepository(repositoryDir);
-    string stencilFile{"/tmp/mf-unit-repository-o/stencils/outlines/o-s.md"};
+    string stencilFile{repositoryDir+"/stencils/outlines/o-s.md"};
     string stencilContent{"# Stencil Test Outline\n\nOutline text.\n\n## Stencil Note 1\nNote 1 text.\n\n##Stencil Note 2\nNote 2 text.\n"};
     m8r::stringToFile(stencilFile,stencilContent);
 
@@ -94,7 +94,7 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
     // create stencil MANUALLY (stencil file does NOT have to exist)
     unique_ptr<m8r::Stencil> outlineStencil{
         new m8r::Stencil{
-            string{"/tmp/mf-unit-repository-o/stencils/outlines/grow.md"},
+            string{repositoryDir+"/stencils/outlines/grow.md"},
             string{"Manual stencil"}}};
     // IMPROVE constructor call is WRONG > complete parameters
     title.assign("MANUAL stencil Outline");
@@ -120,7 +120,7 @@ TEST(OutlineTestCase, CloneOutline) {
     m8r::removeDirectoryRecursively(repositoryDir.c_str());
     m8r::Installer installer{};
     installer.createEmptyMindForgerRepository(repositoryDir);
-    string oFile{"/tmp/mf-unit-repository-o/memory/o.md"};
+    string oFile{repositoryDir+"/memory/o.md"};
     string oContent{
         "# Note Operations Test Outline"
         "\nOutline text."
@@ -173,7 +173,8 @@ TEST(OutlineTestCase, CloneOutline) {
     cout << "O key: " << o->getKey() << endl;
     cout << "C key: " << c->getKey() << endl;
     EXPECT_NE(o->getKey(), c->getKey());
-    EXPECT_EQ(o->getTitle(), c->getTitle());
+    EXPECT_EQ(o->getTitle(), "Note Operations Test Outline");
+    EXPECT_EQ(c->getTitle(), "Copy of Note Operations Test Outline");
     EXPECT_EQ(o->getDescription().size(), c->getDescription().size());
     EXPECT_NE(o->getModified(), c->getModified());
 }

@@ -42,7 +42,7 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     m8r::removeDirectoryRecursively(repositoryDir.c_str());
     m8r::Installer installer{};
     installer.createEmptyMindForgerRepository(repositoryDir);
-    string stencilFile{"/tmp/mf-unit-repository-o/stencils/outlines/o-s.md"};
+    string stencilFile{repositoryDir+"/stencils/outlines/o-s.md"};
     string stencilContent{
         "# Stencil Test Outline"
         "\n"
@@ -55,10 +55,10 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
         "\nNote 2 text."
         "\n"};
     m8r::stringToFile(stencilFile,stencilContent);
-    stencilFile.assign("/tmp/mf-unit-repository-o/stencils/notes/n-s.md");
+    stencilFile.assign(repositoryDir+"/stencils/notes/n-s.md");
     stencilContent.assign("## Stencil Single Note\nNote text.\n");
     m8r::stringToFile(stencilFile,stencilContent);
-    string oFile{"/tmp/mf-unit-repository-o/memory/outline.md"};
+    string oFile{repositoryDir+"/memory/outline.md"};
     string oContent{"# Test Outline\n\nOutline text.\n\n## Note 1\nNote 1 text.\n\n##Note 2\nNote 2 text.\n"};
     m8r::stringToFile(oFile,oContent);
 
@@ -134,13 +134,13 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     EXPECT_EQ(mind.remind().getOutlinesCount(), 0);
 }
 
-TEST(NoteTestCase, PromoteDemoteUpDownNote) {
+TEST(NoteTestCase, PromoteDemoteUpDown) {
     // prepare M8R repository and let the mind think...
     string repositoryDir{"/tmp/mf-unit-repository-o"};
     m8r::removeDirectoryRecursively(repositoryDir.c_str());
     m8r::Installer installer{};
     installer.createEmptyMindForgerRepository(repositoryDir);
-    string oFile{"/tmp/mf-unit-repository-o/memory/o.md"};
+    string oFile{repositoryDir+"/memory/o.md"};
     string oContent{
         "# Note Operations Test Outline"
         "\nOutline text."
@@ -276,13 +276,13 @@ TEST(NoteTestCase, PromoteDemoteUpDownNote) {
     EXPECT_EQ(patch.count, 1);
 }
 
-TEST(NoteTestCase, DeepUpDownNote) {
+TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     // prepare M8R repository and let the mind think...
     string repositoryDir{"/tmp/mf-unit-repository-o"};
     m8r::removeDirectoryRecursively(repositoryDir.c_str());
     m8r::Installer installer{};
     installer.createEmptyMindForgerRepository(repositoryDir);
-    string oFile{"/tmp/mf-unit-repository-o/memory/o.md"};
+    string oFile{repositoryDir+"/memory/o.md"};
     string oContent{
         "# Note Operations Test Outline"
         "\nOutline text."
@@ -666,4 +666,113 @@ TEST(NoteTestCase, DeepUpDownNote) {
     EXPECT_EQ(o->getNotes()[16]->getDepth(), 2);
     EXPECT_EQ(o->getNotes()[16]->getReads(), 1);
     EXPECT_EQ(o->getNotes()[16]->getRevision(), 1);
+}
+
+
+TEST(NoteTestCase, RefactorNote) {
+    // prepare M8R repository and let the mind think...
+    string repositoryDir{"/tmp/mf-unit-repository-refactor"};
+    m8r::removeDirectoryRecursively(repositoryDir.c_str());
+    m8r::Installer installer{};
+    installer.createEmptyMindForgerRepository(repositoryDir);
+    // source O
+    string sFile{repositoryDir+"/memory/source.md"};
+    string sContent{
+        "# Source Test Outline"
+        "\nOutline text."
+        "\n"
+        "\n# 1"
+        "\nT1."
+        "\n"
+        "\n# 2"
+        "\nT2."
+        "\n"
+        "\n# 3"
+        "\nT3."
+        "\n"
+        "\n## 33"
+        "\nT33."
+        "\n"
+        "\n### 333"
+        "\nT333."
+        "\n"
+        "\n# 4"
+        "\nT4."
+        "\n"
+        "\n## 44"
+        "\nT44."
+        "\n"
+        "\n# 5"
+        "\nT5."
+        "\n"
+        "\n# 6"
+        "\nT6."
+        "\n"
+        "\n"};
+    m8r::stringToFile(sFile,sContent);
+
+    // target O
+    string tFile{repositoryDir+"/memory/target.md"};
+    string tContent{
+        "# Target Test Outline"
+        "\nOutline text."
+        "\n"
+        "\n# A"
+        "\nTA."
+        "\n"
+        "\n# B"
+        "\nTB."
+        "\n"
+        "\n# C"
+        "\nTC."
+        "\n"
+        "\n## CC"
+        "\nTCC."
+        "\n"
+        "\n### CCC"
+        "\nTCCC."
+        "\n"
+        "\n# D"
+        "\nTD."
+        "\n"
+        "\n## DD"
+        "\nTDD."
+        "\n"
+        "\n# E"
+        "\nTE."
+        "\n"
+        "\n# F"
+        "\nTF."
+        "\n"
+        "\n"};
+    m8r::stringToFile(tFile,tContent);
+
+    m8r::Configuration configuration{repositoryDir};
+    m8r::Mind mind{configuration};
+    mind.think();
+
+    // test
+    m8r::Outline* s = mind.remind().getOutline(sFile);
+    m8r::Outline* t = mind.remind().getOutline(tFile);
+    EXPECT_TRUE(s != nullptr);
+    EXPECT_TRUE(t != nullptr);
+    EXPECT_EQ(mind.remind().getOutlinesCount(), 2);
+    EXPECT_EQ(mind.remind().getNotesCount(), 18);
+
+    EXPECT_EQ(s->getNotes()[2]->getTitle(), "3");
+
+    mind.noteRefactor(s->getNotes()[2], t->getKey());
+
+    // asserts
+    EXPECT_EQ(s->getNotesCount(), 9-3);
+    EXPECT_EQ(s->getNotes()[0]->getTitle(), "1");
+    EXPECT_EQ(s->getNotes()[1]->getTitle(), "2");
+    EXPECT_EQ(s->getNotes()[2]->getTitle(), "4");
+    EXPECT_EQ(t->getNotesCount(), 9+3);
+    EXPECT_EQ(t->getNotes()[0]->getTitle(), "3");
+    EXPECT_EQ(t->getNotes()[1]->getTitle(), "33");
+    EXPECT_EQ(t->getNotes()[2]->getTitle(), "333");
+    EXPECT_EQ(t->getNotes()[3]->getTitle(), "A");
+
+    // IMPROVE assert Os and Ns modified
 }

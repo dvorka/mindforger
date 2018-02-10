@@ -34,7 +34,7 @@ cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && 
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=MarkdownParserTestCase.Bug37Notrailing
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=MarkdownParserBugsTestCase.*
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=NoteTestCase.PromoteDemoteUpDownNote
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=NoteTestCase.DeepUpDownNote
+#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=NoteTestCase.RefactorNote
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=OutlineTestCase.CloneOutline
 
 #cd ${BUILD_DIR} && make clean
