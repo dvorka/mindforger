@@ -441,7 +441,9 @@ void Outline::addNote(Note* note, int offset)
 void Outline::addNotes(std::vector<Note*>& notesToAdd, int offset)
 {
     if(notesToAdd.size()) {
+        makeModified();
         for(int i=notesToAdd.size()-1; i>=0; i--) {
+            notesToAdd[i]->makeModified();
             addNote(notesToAdd[i], offset);
         }
     }

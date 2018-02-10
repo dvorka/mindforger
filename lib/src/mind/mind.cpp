@@ -468,21 +468,21 @@ Outline* Mind::noteRefactor(Note* noteToRefactor, const string& targetOutlineKey
     UNUSED_ARG(targetParent);
 
     if(noteToRefactor) {
-        Outline* o = memory.getOutline(targetOutlineKey);
-        if(o) {
+        Outline* targetOutline = memory.getOutline(targetOutlineKey);
+        if(targetOutline) {
             vector<Note*> children{};
             Outline* sourceOutline = noteToRefactor->getOutline();
             sourceOutline->getNoteChildren(noteToRefactor, &children);
             children.insert(children.begin(), noteToRefactor);
             // IMPROVE allow passing parent for the Note in the target Outline
-            o->addNotes(children, 0);
+            targetOutline->addNotes(children, 0);
 
-            noteToRefactor->getOutline()->removeNote(noteToRefactor);
+            sourceOutline->removeNote(noteToRefactor);
 
-            memory.remember(o);
-            memory.remember(o);
+            memory.remember(sourceOutline);
+            memory.remember(targetOutline);
 
-            return o;
+            return targetOutline;
         } else {
             throw MindForgerException("Outline for given key not found!");
         }
