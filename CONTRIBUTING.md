@@ -1,7 +1,11 @@
 # Contribute to MindForger
 
 MindForger is free and open source software. Feel free to **contribute** - any help 
+<<<<<<< cd6692bbe686e6d739cb70585f3aea1363824992
 with MindForger development will be **highly appreciated**!
+=======
+with its development will be **highly appreciated**!
+>>>>>>> Adding contribution guidelines.
 
 * **Bugs and Suggestions** ... submit bugs, issues, ideas and enhancements.
 * **Translations** ... translate MindForger to your language.
@@ -17,7 +21,11 @@ Don't hesitate to contact [me](mailto:martin.dvorak@mindforger.com).
 # Code of Conduct
 This project and everyone participating in it is governed by the 
 [MindForger Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold this
+<<<<<<< cd6692bbe686e6d739cb70585f3aea1363824992
 code. Please [report](mailto:martin.dvorak@mindforger.com) unacceptable behavior.
+=======
+code. Please report unacceptable behavior to atom@github.com.
+>>>>>>> Adding contribution guidelines.
 
 
 
