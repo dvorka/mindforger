@@ -64,8 +64,6 @@ public:
     MainWindowView &operator=(const MainWindowView&&) = delete;
     virtual ~MainWindowView();
 
-    //QSize size() const { return this->size(); }
-
     QMenuBar* getMenuBar() const;
     CliAndBreadcrumbsView* getCli() const { return cliView; }
     OrlojView* getOrloj() const { return orlojView; }
