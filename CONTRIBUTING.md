@@ -1,7 +1,7 @@
 # Contribute to MindForger
 
 MindForger is free and open source software. Feel free to **contribute** - any help 
-with its development will be **highly appreciated**!
+with MindForger development will be **highly appreciated**!
 
 * **Bugs and Suggestions** ... submit bugs, issues, ideas and enhancements.
 * **Translations** ... translate MindForger to your language.
