@@ -68,7 +68,8 @@ SOURCES += \
     lib/src/representations/markdown/markdown.cpp \
     lib/src/install/installer.cpp \
     lib/test/src/mind/outline_test.cpp \
-    lib/test/src/test_gear.cpp
+    lib/test/src/test_gear.cpp \
+    lib/src/config/repository.cpp
 
 HEADERS += \
     ./lib/src/debug.h \
@@ -119,7 +120,8 @@ HEADERS += \
     lib/src/mind/mind_listener.h \
     lib/src/config/color.h \
     lib/src/config/configuration.h \
-    lib/src/install/installer.h
+    lib/src/install/installer.h \
+    lib/src/config/repository.h
 
 # GTest unit test framework library dependencies
 unix|win32: LIBS += -lgtest

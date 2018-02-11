@@ -78,7 +78,34 @@ void Memory::learn()
     // IMPROVE consider repositoryIndexer.clean() to save memory
 }
 
-Outline* Memory::learnOutline(Stencil* stencil)
+void Memory::amnesia()
+{
+    // IMPROVE reset ontology i.e. clear custom types & keep only default ontology
+    // ontology.reset();
+
+    for(Outline*& outline:outlines) {
+        delete outline;
+    }
+    outlines.clear();
+    outlinesMap.clear();
+
+    for(Outline*& outline:limboOutlines) {
+        delete outline;
+    }
+    limboOutlines.clear();
+
+    for(Stencil*& stencil:outlineStencils) {
+        delete stencil;
+    }
+    outlineStencils.clear();
+
+    for(Stencil*& stencil:noteStencils) {
+        delete stencil;
+    }
+    noteStencils.clear();
+}
+
+Outline* Memory::createOutline(Stencil* stencil)
 {
     if(stencil && ResourceType::OUTLINE==stencil->getType()) {
         return representation.outline(File(stencil->getFilePath()));
@@ -87,7 +114,7 @@ Outline* Memory::learnOutline(Stencil* stencil)
     }
 }
 
-Note* Memory::learnNote(Stencil* stencil)
+Note* Memory::createNote(Stencil* stencil)
 {
     if(stencil && ResourceType::NOTE==stencil->getType()) {
         return representation.note(File(stencil->getFilePath()));

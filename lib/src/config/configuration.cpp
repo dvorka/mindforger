@@ -28,6 +28,7 @@ namespace m8r {
 // init() method to workaround missing constructor to constructor call in older versions of GCC :-/
 void Configuration::init()
 {
+    repositoryMode = RepositoryMode::MINDFORGER_REPO;
     char *home = getenv(ENV_VAR_HOME);
     userHomePath = string{home};
     const char* r{};

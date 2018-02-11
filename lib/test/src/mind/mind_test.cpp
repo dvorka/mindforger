@@ -115,6 +115,8 @@ void dumpOutline(m8r::Outline*& outline)
 
 TEST(MindTestCase, Ontology) {
     cout << "\nOutline label: " << m8r::Tag::KeyCool();
+
+    // TODO TBD
 }
 
 TEST(MindTestCase, Mind) {

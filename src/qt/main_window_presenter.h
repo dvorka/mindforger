@@ -107,9 +107,7 @@ public slots:
 #ifdef DO_MF_DEBUG
     void doActionMindHack();
 #endif
-    void doActionRepositoryOpen();
-    void doActionRepositoryRecent();
-    void doActionPreferences();
+    void doActionMindLearn();
     void doActionMindSnapshot();
     void doActionExit();
     // recall

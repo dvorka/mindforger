@@ -61,6 +61,11 @@ public:
     virtual ~Mind();
 
     /**
+     * @brief Stop all mental processes and forget everything.
+     */
+    void amnesia();
+
+    /**
      * @brief Learn from memory to start thinking.
      *
      * Learn, associate, ...

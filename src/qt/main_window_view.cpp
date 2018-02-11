@@ -24,7 +24,7 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
     : QMainWindow(nullptr), // main window has no parent - it's destroyed by MF main class
       lookAndFeel(lookAndFeel)
 {
-    setWindowTitle("MindForger - "+tr("Thinking Notebook")+" - "+MINDFORGER_VERSION+" "+tr("preview"));
+    setWindowTitle("MindForger - "+tr("Thinking Notebook")+" - "+MINDFORGER_VERSION);
 
     centralWidget = new QWidget(this);
 

@@ -75,17 +75,25 @@ public:
     Memory& operator=(const Memory&&) = delete;
     virtual ~Memory();
 
-    std::vector<Stencil*>& getStencils(ResourceType type=ResourceType::OUTLINE);
-
     /**
      * @brief Learn repository content.
      */
     void learn();
     /**
+     * @brief Forget everything.
+     */
+    void amnesia();
+
+    std::vector<Stencil*>& getStencils(ResourceType type=ResourceType::OUTLINE);
+
+    /**
      * @brief Create Outline from stencil, but don't learn it yet.
      */
-    Outline* learnOutline(Stencil* stencil);
-    Note* learnNote(Stencil* stencil);
+    Outline* createOutline(Stencil* stencil);
+    /**
+     * @brief Create Note from stencil, but don't learn it yet.
+     */
+    Note* createNote(Stencil* stencil);
 
     /**
      * @brief Remember known Outline by saving it.

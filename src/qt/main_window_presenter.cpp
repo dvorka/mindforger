@@ -88,16 +88,33 @@ void MainWindowPresenter::doActionMindHack()
 }
 #endif
 
-void MainWindowPresenter::doActionRepositoryOpen()
+void MainWindowPresenter::doActionMindLearn()
 {
-}
+    QString homeDirectory
+        = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
 
-void MainWindowPresenter::doActionRepositoryRecent()
-{
-}
+    QFileDialog learnDialog{&view};
+    learnDialog.setWindowTitle(tr("Open Repository"));
+    learnDialog.setFileMode(QFileDialog::DirectoryOnly);
+    learnDialog.setDirectory(homeDirectory);
+    learnDialog.setViewMode(QFileDialog::Detail);
 
-void MainWindowPresenter::doActionPreferences()
-{
+    QStringList directoryNames{};
+    if(learnDialog.exec()) {
+        directoryNames = learnDialog.selectedFiles();
+        if(directoryNames.size()==1) {
+            if(configuration.getInstaller()->isMindForgerRepository(directoryNames[0].toStdString())) {
+                // TODO clear everything - hard
+                // TODO load to mind new repository (like when MF is booting)
+                // xxx
+            } else {
+                QMessageBox::critical(
+                    &view,
+                    tr("Learn"),
+                    tr("This is not MindForger repository - directory doesn't contain memory/ and other required sub-directories."));
+            }
+        }
+    } // else directory closed / nothing choosen
 }
 
 void MainWindowPresenter::doActionExit()

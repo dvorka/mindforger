@@ -25,6 +25,7 @@
 #include <cstdio>
 #include <vector>
 
+#include "repository.h"
 #include "../gear/lang_utils.h"
 #include "../gear/file_utils.h"
 #include "../exceptions.h"
@@ -59,75 +60,72 @@ class Installer;
  * @brief MindForger configuration.
  *
  * Configuration file (in Markdown format) contains location
- * of repositories, active repository and user preferences.
- * M8r configuration file may be stored in ~/.mindforger.md
+ * of repositories, active repository and user preferences (for GUI and library).
+ *
+ * MindForger configuration file may be stored in ~/.mindforger.md
  */
 class Configuration {
+public:
+
 private:
-    // mind repository
+    Repository* activeRepository;
+
+    std::string memoryPath;
+    std::string limboPath;
+
+    std::set<const Repository*> repositories;
+
+    // lib configuration
     std::string userHomePath;
-    std::set<const std::string*> repositories;
-    /* Active repository location is determined as follows:
+    bool writeMetadata; // write metadata to MD - enabled in case of MINDFORGER_REPO only by default (can be disabled for all repository types)
+    bool rememberReads; // persist Outline and Note reads (writes to disc on every O/N view)
+    std::string externalEditorPath; // path to external MD editor e.g. Emacs or Remarkable
+
+    // GUI configuration
+    int fontPointSize;
+    bool viewerShowMetadata; // show reads/writes/... when viewing Outlines and/or Notes.
+    bool editorShowLineNumbers;
+    bool editorEnableSyntaxHighlighting;
+
+private:
+    Installer* installer;
+
+public:
+    explicit Configuration();
+    /**
+     * @brief Create Configuration and set active repository.
+     */
+    explicit Configuration(const std::string& activeRepository);
+    virtual ~Configuration();
+
+    Installer* getInstaller() const { return installer; }
+
+    void load();
+    void save() const;
+
+    /* On MF start is active repository location is determined as follows:
      *
      * 1) if application has single arg which is dir OR --repository, then use it, else 2)
      * 2) if configuration file exist w/ repository specified, then use it, else 3)
      * 3) if environment variable MINDFORGER_REPOSITORY is set, then use it, else 4)
      * 4) if repository exist in default location ~/mindforger-repository, then use it, else start W/O repository
      */
-    const std::string* activeRepository;
-    std::string memoryPath;
-    std::string limboPath;
-    std::string externalEditor;
-
-    // configuration
-    bool rememberReads; // persist Outline and Note reads (touches disc on every O/N view)
-    // TODO repositoryType (MF/MD/mdFile)
-    // TODO doSaveMetadata
-
-    // GUI
-    int fontPointSize;
-    bool editorShowLineNumbers;
-    bool editorEnableSyntaxHighlighting;
-
-    /**
-     * @brief Show reads/writes/... when viewing Outlines and/or Notes.
-     */
-    bool viewerShowMetadata;
-
-private:
-    // fields
-    Installer* installer;
-
-public:
-    explicit Configuration();
-    virtual ~Configuration();
-
-    /**
-     * @brief Create Configuration and set active repository.
-     */
-    explicit Configuration(const std::string& activeRepository);
-    void load();
-    void save() const;
-
-    /**
-     * @brief Add new repository path to configuration.
-     */
-    const std::string* addRepository(const std::string& repositoryPath);
-
-    const std::string* getActiveRepository() const;
-    /**
-     * @brief Set active repository - activeRepositoryPath parameter must be one of known repositories.
-     */
-    void setActiveRepository(const std::string* activeRepositoryPath);
-
     void findOrCreateDefaultRepository();
+    const Repository* addRepository(const std::string& repositoryPath);
+    std::set<const Repository*>& getRepositories();
+    const Repository* getActiveRepository() const;
+    /**
+     * @brief Set active repository - activeRepository parameter must be one of known repositories.
+     */
+    void setActiveRepository(const Repository* activeRepository);
 
-    const char* getRepositoryFromEnv();
-    const char* getEditorFromEnv();
-    std::set<const std::string*>& getRepositories();
-    const std::string& getExternalEditor() const { return externalEditor; }
     const std::string& getMemoryPath() const { return memoryPath; }
     const std::string& getLimboPath() const { return limboPath; }
+
+    const char* getRepositoryPathFromEnv();
+    const char* getEditorFromEnv();
+    const std::string& getExternalEditor() const { return externalEditor; }
+
     int getFontPointSize() const { return fontPointSize; }
 
 private:
