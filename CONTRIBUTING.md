@@ -17,7 +17,7 @@ Don't hesitate to contact [me](mailto:martin.dvorak@mindforger.com).
 # Code of Conduct
 This project and everyone participating in it is governed by the 
 [MindForger Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold this
-code. Please report unacceptable behavior to atom@github.com.
+code. Please [report](mailto:martin.dvorak@mindforger.com) unacceptable behavior.
 
 
 
