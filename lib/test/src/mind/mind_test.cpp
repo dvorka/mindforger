@@ -199,16 +199,20 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     }
     cout << endl;
 
+    // assert learned MF repository attributes (mind, outlines count, notes count, ontology count, ...)
     EXPECT_EQ(configuration.getRepositories().size(), 1);
     // ...
 
     // 2/3 amnesia
     mind.amnesia();
 
+    // assert mind and memory cleaned (+Valgrind memory check)
     EXPECT_EQ(configuration.getRepositories().size(), 0);
     // ...
 
     // 3/3 learn
+    // ...
+    // assert ANOTHER learned MF repository attributes (mind, outlines count, notes count, different ontology count, ...)
 }
 
 // TODO start w/ empty repository (do I need it?)
