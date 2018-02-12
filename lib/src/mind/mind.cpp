@@ -36,6 +36,8 @@ Mind::~Mind()
 
 void Mind::amnesia()
 {
+    allNotesCache.clear();
+    memoryDwell.clear();
     memory.amnesia();
 }
 

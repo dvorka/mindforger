@@ -25,6 +25,7 @@
 
 #include <gtest/gtest.h>
 
+#include "../../../src/config/repository.h"
 #include "../../../src/model/outline.h"
 #include "../../../src/model/note.h"
 #include "../../../src/model/tag.h"
@@ -39,87 +40,87 @@ using namespace std;
 
 void dumpOutline(m8r::Outline*& outline)
 {
-    cout << "\n  - Outline -----------------------";
-    cout << "\n  " << outline->getKey() << " (key)";
-    cout << "\n  "
+    cout << endl << "  - Outline -----------------------";
+    cout << endl << "  " << outline->getKey() << " (key)";
+    cout << endl << "  "
             << (outline->getPrimaryTag() ?
                     outline->getPrimaryTag()->getName() : "NULL")
             << " (primary tag)";
     if (outline->getTags().size()) {
         for (size_t t = 0; t < outline->getTags().size(); t++) {
-            cout << "\n    " << outline->getTags()[t]->getName() << " (tag)";
+            cout << endl << "    " << outline->getTags()[t]->getName() << " (tag)";
         }
     }
-    cout << "\n  "
+    cout << endl << "  "
             << (outline->getType() ? outline->getType()->getName() : "NULL")
             << " (type)";
-    cout << "\n  '" << outline->getTitle() << "' (title)";
-    cout << "\n  Description[" << outline->getDescription().size() << "]:";
+    cout << endl << "  '" << outline->getTitle() << "' (title)";
+    cout << endl << "  Description[" << outline->getDescription().size() << "]:";
     for (size_t d = 0; d < outline->getDescription().size(); d++) {
-        cout << "\n    '" << *outline->getDescription()[d] << "' (description)";
+        cout << endl << "    '" << *outline->getDescription()[d] << "' (description)";
     }
-    cout << "\n  " << outline->getCreated() << " (created)";
-    cout << "\n  " << outline->getModified() << " (modified)";
-    cout << "\n  " << outline->getRevision() << " (revision)";
-    cout << "\n  " << outline->getReads() << " (reads)";
-    cout << "\n  " << outline->getRead() << " (read)";
+    cout << endl << "  " << outline->getCreated() << " (created)";
+    cout << endl << "  " << outline->getModified() << " (modified)";
+    cout << endl << "  " << outline->getRevision() << " (revision)";
+    cout << endl << "  " << outline->getReads() << " (reads)";
+    cout << endl << "  " << outline->getRead() << " (read)";
     u_int8_t value = outline->getImportance();
     if (value <= 0) {
-        cout << "\n    X (importance)";
+        cout << endl << "    X (importance)";
     } else {
-        cout << "\n    " << +value << " (importance)";
+        cout << endl << "    " << +value << " (importance)";
     }
     value = outline->getUrgency();
     if (value <= 0) {
-        cout << "\n    X (urgency)";
+        cout << endl << "    X (urgency)";
     } else {
-        cout << "\n    " << +value << " (urgency)";
+        cout << endl << "    " << +value << " (urgency)";
     }
     value = outline->getProgress();
     if (value <= 0) {
-        cout << "\n    X (progress)";
+        cout << endl << "    X (progress)";
     } else {
-        cout << "\n    " << +value << " (progress)";
+        cout << endl << "    " << +value << " (progress)";
     }
-    cout << "\n  Notes[" << outline->getNotes().size() << "]:";
+    cout << endl << "  Notes[" << outline->getNotes().size() << "]:";
     if (outline->getNotes().size()) {
         for (m8r::Note* note : outline->getNotes()) {
-            cout << "\n    '" << note->getTitle() << "' (title)";
-            cout << "\n    '" << note->getDepth() << "' (depth)";
-            cout << "\n    "
+            cout << endl << "    '" << note->getTitle() << "' (title)";
+            cout << endl << "    '" << note->getDepth() << "' (depth)";
+            cout << endl << "    "
                     << (note->getPrimaryTag() ?
                             note->getPrimaryTag()->getName() : "NULL")
                     << " (primary tag)";
             if (note->getTags().size()) {
                 for (size_t t = 0; t < note->getTags().size(); t++) {
-                    cout << "\n      " << note->getTags()[t]->getName()
+                    cout << endl << "      " << note->getTags()[t]->getName()
                             << " (tag)";
                 }
             }
-            cout << "\n    "
+            cout << endl << "    "
                     << (note->getType() ? note->getType()->getName() : "NULL")
                     << " (type)";
-            cout << "\n      Description[" << note->getDescription().size()
+            cout << endl << "      Description[" << note->getDescription().size()
                     << "]:";
             for (string* description : note->getDescription()) {
-                cout << "\n        '" << *description << "' (description)";
+                cout << endl << "        '" << *description << "' (description)";
             }
-            cout << "\n  " << note->getCreated() << " (created)";
-            cout << "\n  " << note->getModified() << " (modified)";
-            cout << "\n  " << note->getRevision() << " (revision)";
-            cout << "\n  " << note->getReads() << " (reads)";
-            cout << "\n  " << note->getRead() << " (read)";
+            cout << endl << "  " << note->getCreated() << " (created)";
+            cout << endl << "  " << note->getModified() << " (modified)";
+            cout << endl << "  " << note->getRevision() << " (revision)";
+            cout << endl << "  " << note->getReads() << " (reads)";
+            cout << endl << "  " << note->getRead() << " (read)";
         }
     }
 }
 
 TEST(MindTestCase, Ontology) {
-    cout << "\nOutline label: " << m8r::Tag::KeyCool();
+    cout << endl << "Outline label: " << m8r::Tag::KeyCool();
 
     // TODO TBD
 }
 
-TEST(MindTestCase, Mind) {
+TEST(MindTestCase, LearnAndRememberMindForgerRepository) {
     // prepare M8R repository
     string repositoryDir{"/tmp/mf-unit-repository-m"};
     m8r::removeDirectoryRecursively(repositoryDir.c_str());
@@ -151,28 +152,69 @@ TEST(MindTestCase, Mind) {
 
     m8r::Memory& memory = mind.remind();
     vector<m8r::Outline*> outlines = memory.getOutlines();
-    cout << "\nOutlines[" << outlines.size() << "]:";
+    cout << endl << "Outlines[" << outlines.size() << "]:";
     if(outlines.size()>0) {
         for(m8r::Outline*& outline:outlines) {
             dumpOutline(outline);
         }
     } else {
-        cout << "\nNO OUTLINES";
+        cout << endl << "NO OUTLINES";
     }
 
-    cout << "\n\n- Outline > MD ----------------------------------------------";
+    cout << endl << endl << "- Outline > MD ----------------------------------------------";
     m8r::MarkdownOutlineRepresentation mdr{memory.getOntology()};
     string outlineMd{} ;
-    cout << "\n " << *mdr.to(outlines[0], &outlineMd);
+    cout << endl << " " << *mdr.to(outlines[0], &outlineMd);
 
-    cout << "\n\n- Outline persistence: modify and save a note ----------------------------------------------";
+    cout << endl << endl << "- Outline persistence: modify and save a note ----------------------------------------------";
     m8r::Note* noteToSave = outlines[0]->getNotes()[0];
     noteToSave->setTitle(string("SAVE"));
     outlines[0]->notifyChange(noteToSave);
-    cout << "\n Saving " << outlines[0]->getKey();
+    cout << endl << " Saving " << outlines[0]->getKey();
     memory.remember(outlines[0]->getKey());
 
-    cout << "\n- DONE ----------------------------------------------";
-    cout << "\n";
+    cout << endl << "- DONE ----------------------------------------------";
+    cout << endl << "";
 }
 
+TEST(MindTestCase, LearnAmnesiaLearn) {
+    string repositoryPath{"/lib/test/resources/amnesia-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::Repository repository(
+        repositoryPath,
+        m8r::Repository::RepositoryType::MINDFORGER,
+        m8r::Repository::RepositoryMode::REPOSITORY,
+        false);
+
+    // 1/3 learn
+    m8r::Configuration configuration{repository};
+    m8r::Mind mind(configuration);
+    mind.think();
+    m8r::Memory& memory = mind.remind();
+
+    cout << endl << "Active repository:" << endl << "  " << *configuration.getActiveRepository();
+    cout << endl << "Repositories[" << configuration.getRepositories().size() << "]:";
+    for(const string* r:configuration.getRepositories()) {
+        cout << endl << "  " << *r;
+    }
+    cout << endl;
+
+    EXPECT_EQ(configuration.getRepositories().size(), 1);
+    // ...
+
+    // 2/3 amnesia
+    mind.amnesia();
+
+    EXPECT_EQ(configuration.getRepositories().size(), 0);
+    // ...
+
+    // 3/3 learn
+}
+
+// TODO start w/ empty repository (do I need it?)
+// TODO learn MD repository
+// TODO learn MF repository (might be test above)
+// TODO learn MD file
+// TODO learn MF file
+// TODO test readonly
+// TODO test metadata not written

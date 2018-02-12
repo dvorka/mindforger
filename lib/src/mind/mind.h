@@ -40,16 +40,15 @@ private:
     Memory memory;
 
     std::vector<Note*> memoryDwell;
+    /**
+     * @brief Cache of all Notes across all Outlines: built on FTS traversal, evicted on any save/modification/delete.
+     */
+    std::vector<Note*> allNotesCache;
 
     /**
      * @brief TODO time to remember e.g. 1y, 1m, 1h > change the type.
      */
     uint8_t forget;
-
-    /**
-     * @brief Cache of all Notes across all Outlines: built on FTS traversal, evicted on any save/modification/delete.
-     */
-    std::vector<Note*> allNotesCache;
 
 public:
     explicit Mind(Configuration &config);
