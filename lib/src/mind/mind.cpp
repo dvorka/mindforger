@@ -34,6 +34,32 @@ Mind::~Mind()
     // - allNotesCache Notes is just container referencing Memory's Outlines
 }
 
+void Mind::learn(const std::string& path)
+{
+    // 1) check if the path is valid
+    Repository* repository{};
+    if(config.getInstaller()->isMindForgerRepository(path)) {
+        repository = new Repository(path);
+    } else if(isDirectoryOrFileExists(path.c_str())) {
+        if(isDirectory(path.c_str())) {
+            repository = new Repository(path, Repository::RepositoryType::MARKDOWN);
+        } else {
+            repository = new Repository(path, Repository::RepositoryType::MARKDOWN, Repository::RepositoryType::FILE);
+        }
+    } else {
+        // directory doesn't exist - nothing to learn
+        // IMPROVE consider throwing an exception
+        return;
+    }
+    config.setActiveRepository(repository);
+
+    // 2) forget everything
+    amnesia();
+
+    // 3) learn knowledge & start to think
+    think();
+}
+
 void Mind::amnesia()
 {
     allNotesCache.clear();

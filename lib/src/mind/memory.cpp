@@ -48,6 +48,7 @@ vector<Stencil*>& Memory::getStencils(ResourceType type)
 
 void Memory::learn()
 {
+    repositoryIndexer.setPath(configuration.getActiveRepository().getPath());
     repositoryIndexer.updateIndex();
 
     MF_DEBUG("\nMarkdown files:");
@@ -80,6 +81,8 @@ void Memory::learn()
 
 void Memory::amnesia()
 {
+    repositoryIndexer.clear();
+
     // IMPROVE reset ontology i.e. clear custom types & keep only default ontology
     // ontology.reset();
 

@@ -26,6 +26,8 @@ namespace m8r {
 
 RepositoryIndexer::RepositoryIndexer(const string& repositoryDirPath)
 {
+    this goes away > to setPath() method, this will be a default constructor
+
     repositoryPath.append(repositoryDirPath);
 
     memoryDirectory.append(repositoryPath);

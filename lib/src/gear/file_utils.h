@@ -74,7 +74,8 @@ void stringToFile(const std::string& filename, const std::string& content);
 time_t fileModificationTime(const std::string* filename);
 bool copyFile(const std::string &from, const std::string &to);
 bool moveFile(const std::string &from, const std::string &to);
-bool isDirectoryExist(const char* path);
+bool isDirectoryOrFileExists(const char* path);
+bool isDirectory(const char* path);
 char* makeTempDirectory(char* dirNamePefix);
 int removeDirectoryRecursively(const char *path);
 

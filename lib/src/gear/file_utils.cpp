@@ -104,13 +104,25 @@ bool moveFile(const string &from, const string &to)
     }
 }
 
-bool isDirectoryExist(const char* path)
+bool isDirectoryOrFileExists(const char* path)
 {
     struct stat info;
     if(stat(path, &info)) {
         return false;
     } else {
         return true;
+    }
+}
+
+bool isDirectory(const char* path)
+{
+    struct stat info;
+    if(stat(path, &info)) {
+        return false;
+    } else if(S_ISDIR(info)) {
+        return true;
+    } else {
+        return false;
     }
 }
 

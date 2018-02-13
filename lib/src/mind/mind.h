@@ -60,6 +60,11 @@ public:
     virtual ~Mind();
 
     /**
+     * @brief Learn MindForger/Markdown repository/directory/file.
+     */
+    void learn(const std::string& path);
+
+    /**
      * @brief Stop all mental processes and forget everything.
      */
     void amnesia();
