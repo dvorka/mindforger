@@ -59,26 +59,40 @@ class Installer;
 /**
  * @brief MindForger configuration.
  *
- * Configuration file (in Markdown format) contains location
- * of repositories, active repository and user preferences (for GUI and library).
+ * Configuration file (Markdown-based DSL) maintained by this class contains
+ * location of repositories, active repository and user preferences (for GUI
+ * and library).
  *
- * MindForger configuration file may be stored in ~/.mindforger.md
+ * MindForger configuration file is stored in ~/.mindforger.md by default.
+ *
+ * This class is singleton. The reason to make it singleton is that it's used
+ * through lib and GUI instances. Therefore passing of the configuration instance
+ * to (almost) each and every application instance would be inefficient i.e. worse
+ * than the use of singleton pattern.
  */
 class Configuration {
 public:
+    static Configuration& getInstance()
+    {
+        static Configuration SINGLETON{};
+        return SINGLETON;
+    }
+private:
+    explicit Configuration();
 
 private:
-    Repository* activeRepository;
+    std::string userHomePath;
 
+    Repository* activeRepository;
+    std::map<const std::string, const Repository*> repositories;
+
+    // active repository memory, limbo, ... paths (efficiency)
     std::string memoryPath;
     std::string limboPath;
 
-    std::set<const Repository*> repositories;
-
     // lib configuration
-    std::string userHomePath;
     bool writeMetadata; // write metadata to MD - enabled in case of MINDFORGER_REPO only by default (can be disabled for all repository types)
-    bool rememberReads; // persist Outline and Note reads (writes to disc on every O/N view)
+    bool rememberReads; // persist count of Outline and Note reads (requires write to disc on every O/N view)
     std::string externalEditorPath; // path to external MD editor e.g. Emacs or Remarkable
 
     // GUI configuration
@@ -91,11 +105,10 @@ private:
     Installer* installer;
 
 public:
-    explicit Configuration();
-    /**
-     * @brief Create Configuration and set active repository.
-     */
-    explicit Configuration(const std::string& activeRepository);
+    Configuration(const Configuration&) = delete;
+    Configuration(const Configuration&&) = delete;
+    Configuration &operator=(const Configuration&) = delete;
+    Configuration &operator=(const Configuration&&) = delete;
     virtual ~Configuration();
 
     Installer* getInstaller() const { return installer; }
@@ -103,7 +116,10 @@ public:
     void load();
     void save() const;
 
-    /* On MF start is active repository location is determined as follows:
+    /**
+     * @brief Find or create default MindForger repository.
+     *
+     * On MF start active repository location is determined as follows:
      *
      * 1) if application has single arg which is dir OR --repository, then use it, else 2)
      * 2) if configuration file exist w/ repository specified, then use it, else 3)
@@ -113,11 +129,13 @@ public:
     void findOrCreateDefaultRepository();
     const Repository* addRepository(const std::string& repositoryPath);
     std::set<const Repository*>& getRepositories();
-    const Repository* getActiveRepository() const;
     /**
-     * @brief Set active repository - activeRepository parameter must be one of known repositories.
+     * @brief Set active repository
+     *
+     * Note that activeRepository parameter must be one of the known repositories.
      */
     void setActiveRepository(const Repository* activeRepository);
+    const Repository* getActiveRepository() const;
 
     const std::string& getMemoryPath() const { return memoryPath; }
     const std::string& getLimboPath() const { return limboPath; }
@@ -129,7 +147,6 @@ public:
     int getFontPointSize() const { return fontPointSize; }
 
 private:
-    void init();
     const std::string getConfigFileName();
     void load(const std::vector<MarkdownAstNodeSection*>* ast);
     const std::string* addRepository(const std::string* repositoryPath);

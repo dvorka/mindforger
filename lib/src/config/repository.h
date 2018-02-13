@@ -24,7 +24,7 @@
 namespace m8r {
 
 /**
- * @brief Knowledge repository.
+ * @brief A knowledge repository to be learned by MindForger.
  */
 class Repository
 {

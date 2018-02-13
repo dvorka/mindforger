@@ -25,37 +25,35 @@ using namespace std;
 
 namespace m8r {
 
-// init() method to workaround missing constructor to constructor call in older versions of GCC :-/
-void Configuration::init()
+Configuration::Configuration()
 {
-    repositoryMode = RepositoryMode::MINDFORGER_REPO;
+    installer = new Installer{};
+
     char *home = getenv(ENV_VAR_HOME);
     userHomePath = string{home};
+
+    // repositories
     const char* r{};
     if((r=getRepositoryFromEnv()) != nullptr) {
-        string* repository = new string{r};
-        setActiveRepository(addRepository(repository));
+        string* repositoryPath = new string{r};
+        // TODO check repository type: MF/MD, RW by default
+        setActiveRepository(addRepository(repositoryPath));
     } else {
         activeRepository = nullptr;
     }
 
+    // lib
+    writeMetadata = true;
+    rememberReads = false;
+    externalEditorPath = nullptr;
+
+    // GUI
+    viewerShowMetadata = true;
+    editorEnableSyntaxHighlighting = true;
+    editorShowLineNumbers = true;
     fontPointSize = DEFAULT_FONT_POINT_SIZE;
-
-    // IMPROVE labels/types/tags might become extensible and can be loaded from configuration and memory content
-
-    installer = new Installer{};
 }
 
-Configuration::Configuration()
-{
-    init();
-}
-
-Configuration::Configuration(const string& activeRepository)
-{
-    init();
-    setActiveRepository(addRepository(activeRepository));
-}
 
 Configuration::~Configuration()
 {
@@ -142,38 +140,32 @@ void Configuration::load()
 {
     const string filePath = getConfigFileName();
     Markdown configMarkdown{&filePath};
-    load(configMarkdown.getAst());
+    load(configMarkdown.getAst());    
 }
 
 void Configuration::load(const vector<MarkdownAstNodeSection*>* ast)
 {
-    // IMPROVE remove ast param if NOT needed
     UNUSED_ARG(ast);
 
-    // Search for repository in the following order:
-    //   1. CLI argument - active repository would be set by main() on configuration
-    //   2. Parse Configuration file ~/.mindforger
-    // TODO parsing and loading of configuration
+    // TODO deserialize AST to this instance
 
-    //   3. Environment variable - is set up in configuration's constructor
-    //   4. If CLI, config and environment didn't provide repository location, then check default location
     findOrCreateDefaultRepository();
 }
 
 void Configuration::save() const
 {
-    // TODO to be implemented
+    // TODO serialize this instance directly to MD file using streams
 }
 
 const char* Configuration::getRepositoryFromEnv()
 {
-    char *repository = getenv(ENV_VAR_M8R_REPOSITORY);  // this is not leak (static reusable array)
+    char* repository = getenv(ENV_VAR_M8R_REPOSITORY);  // this is not leak (static reusable array)
     return repository;
 }
 
 const char* Configuration::getEditorFromEnv()
 {
-    char *editor = getenv(ENV_VAR_M8R_EDITOR);  // this is not leak (static reusable array)
+    char* editor = getenv(ENV_VAR_M8R_EDITOR);  // this is not leak (static reusable array)
     return editor;
 }
 

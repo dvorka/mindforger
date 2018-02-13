@@ -25,10 +25,23 @@
 namespace m8r {
 
 /**
- * @brief L&F singleton class uses through frontend components and widgets.
+ * @brief L&F singleton class.
+ *
+ * The reason to make this class singleton is that it's used through frontend
+ * components and widgets. Therefore passing of L&F instance to each and every
+ * instance of the GUI object tree would be inefficient.
  */
 class LookAndFeels
 {
+public:
+    static LookAndFeels& getInstance()
+    {
+        static LookAndFeels SINGLETON{};
+        return SINGLETON;
+    }
+private:
+    explicit LookAndFeels();
+
 private:
     /**
      * @brief Active palette.
@@ -42,13 +55,6 @@ private:
     QSet<QString> themeNames;
 
     int fontPointSize;
-
-public:
-    static LookAndFeels& getInstance()
-    {
-        static LookAndFeels SINGLETON;
-        return SINGLETON;
-    }
 
 private:
     QApplication* mindforgerApplication;
@@ -77,8 +83,6 @@ private:
 
     // CLI
     QColor cliTextColor;
-
-    explicit LookAndFeels();
 
 public:
     LookAndFeels(const LookAndFeels&) = delete;
