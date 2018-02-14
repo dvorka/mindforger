@@ -84,7 +84,7 @@ private:
     std::string userHomePath;
 
     Repository* activeRepository;
-    std::map<const std::string, const Repository*> repositories;
+    std::map<const std::string, Repository*> repositories;
 
     // active repository memory, limbo, ... paths (efficiency)
     std::string memoryPath;

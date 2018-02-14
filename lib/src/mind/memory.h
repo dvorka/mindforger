@@ -164,6 +164,7 @@ public:
      */
 
     void sortByTitle(std::vector<Outline*>& sorted);
+    RepositoryIndexer& getRepositoryIndexer() { return repositoryIndexer; }
 
 private:
     const OutlineType* toOutlineType(const MarkdownAstSectionMetadata&);

@@ -330,10 +330,12 @@ TEST(MarkdownParserTestCase, MarkdownRepresentation)
 
 TEST(MarkdownParserTestCase, FileSystemPersistence)
 {
-    string repository{"/lib/test/resources/basic-repository"};
-    repository.insert(0, getMindforgerGitHomePath());
+    string repositoryPath{"/lib/test/resources/basic-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
 
-    m8r::Configuration configuration{repository};
+    m8r::Configuration& configuration = m8r::Configuration::getInstance();
+    configuration.setActiveRepository(configuration.addRepository(repositoryPath));
     m8r::Ontology ontology{configuration};
     m8r::MarkdownOutlineRepresentation mdr{ontology};
     m8r::FilesystemPersistence persistence{configuration,mdr};

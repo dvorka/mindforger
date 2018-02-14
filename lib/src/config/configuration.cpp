@@ -36,7 +36,7 @@ Configuration::Configuration()
     const char* r{};
     if((r=getRepositoryFromEnv()) != nullptr) {
         string* repositoryPath = new string{r};
-        // TODO check repository type: MF/MD, RW by default
+        // TODO detect repository type: MF/MD, RW by default
         setActiveRepository(addRepository(repositoryPath));
     } else {
         activeRepository = nullptr;

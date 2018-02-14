@@ -164,5 +164,40 @@ char* RepositoryIndexer::getTagsFromPath() {
     return nullptr;
 }
 
+bool RepositoryIndexer::isMindForgerRepository(const string& directory)
+{
+    if(directory.empty()) {
+        return false;
+    } else if(!isDirectoryOrFileExists(directory.c_str())) {
+        return false;
+    }
+
+    string path{};
+    path.append(directory);
+    path.append(FILE_PATH_SEPARATOR);
+    path.append(FILE_PATH_MEMORY);
+    if(!isDirectoryOrFileExists(path)) {
+        return false;
+    }
+
+    return true;
+}
+
+Repository* RepositoryIndexer::getRepositoryForPath(const std::string& path)
+{
+    if(isMindForgerRepository(path)) {
+        return new Repository(path);
+    } else if(isDirectoryOrFileExists(path.c_str())) {
+        if(isDirectory(path.c_str())) {
+            return new Repository(path, Repository::RepositoryType::MARKDOWN);
+        } else {
+            return new Repository(path, Repository::RepositoryType::MARKDOWN, Repository::RepositoryMode::FILE);
+        }
+    } else {
+        // directory doesn't exist - nothing to learn
+        return nullptr;
+    }
+}
+
 } /* namespace */
 

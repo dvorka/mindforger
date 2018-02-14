@@ -37,20 +37,8 @@ Mind::~Mind()
 void Mind::learn(const std::string& path)
 {
     // 1) check if the path is valid
-    Repository* repository{};
-    if(config.getInstaller()->isMindForgerRepository(path)) {
-        repository = new Repository(path);
-    } else if(isDirectoryOrFileExists(path.c_str())) {
-        if(isDirectory(path.c_str())) {
-            repository = new Repository(path, Repository::RepositoryType::MARKDOWN);
-        } else {
-            repository = new Repository(path, Repository::RepositoryType::MARKDOWN, Repository::RepositoryType::FILE);
-        }
-    } else {
-        // directory doesn't exist - nothing to learn
-        // IMPROVE consider throwing an exception
-        return;
-    }
+    Repository* repository = memory.getRepositoryIndexer().getRepositoryForPath(path);
+    if(!repository) return; // IMPROVE throw exception / report problem
     config.setActiveRepository(repository);
 
     // 2) forget everything

@@ -80,23 +80,4 @@ void Installer::createDirectory(const string& path) {
     }
 }
 
-bool Installer::isMindForgerRepository(const std::string& directory)
-{
-    if(directory.empty()) {
-        return false;
-    } else if(!isDirectoryExist(directory.c_str())) {
-        return false;
-    }
-
-    string path{};
-    path.append(directory);
-    path.append(FILE_PATH_SEPARATOR);
-    path.append(FILE_PATH_MEMORY);
-    if(!isDirectoryExist(path)) {
-        return false;
-    }
-
-    return true;
-}
-
 }

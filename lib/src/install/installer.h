@@ -47,11 +47,6 @@ public:
      */
     void createEmptyMindForgerRepository(const std::string& directory);
 
-    /**
-     * @brief Check whether directory contains a MindForger repository.
-     */
-    bool isMindForgerRepository(const std::string& directory);
-
 private:
     void createDirectory(const std::string& path);
 };

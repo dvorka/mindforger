@@ -31,6 +31,7 @@
 #include <vector>
 
 #include "debug.h"
+#include "gear/file_utils.h"
 #include "gear/string_utils.h"
 #include "config/configuration.h"
 
@@ -40,6 +41,17 @@ namespace m8r {
  * @brief MindForger/Markdown repository/file indexer.
  */
 class RepositoryIndexer {
+public:
+    /**
+     * @brief Check whether given directory contains a MindForger repository.
+     */
+    static bool isMindForgerRepository(const std::string& directory);
+
+    /**
+     * @brief Detect repository path and mode for given path.
+     */
+    static Repository* getRepositoryForPath(const std::string& path);
+
 private:
     Repository* repository;
 

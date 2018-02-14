@@ -21,6 +21,8 @@
 
 #include <string>
 
+#include "../debug.h"
+
 namespace m8r {
 
 /**
@@ -86,6 +88,12 @@ public:
     RepositoryMode getRepositoryMode() const { return mode; }
     bool isReadOnly() const { return readOnly; }
     void setReadOnly(bool readOnly) { this->readOnly = readOnly; }
+
+#ifdef DO_MF_DEBUG
+    void print() const {
+        MF_DEBUG("Path " << path << ", file " << file << ", type " << type << ", mode" << mode << ", RD_ONLY " << readOnly << "\n");
+    }
+#endif
 };
 
 }
