@@ -67,19 +67,23 @@ private:
     bool readOnly;
 
 public:
-    explicit Repository(std::string path, RepositoryType type=RepositoryType::MINDFORGER, mode=RepositoryMode::REPOSITORY, bool readOnly=false);
+    explicit Repository(
+        std::string path,
+        RepositoryType type=RepositoryType::MINDFORGER,
+        RepositoryMode mode=RepositoryMode::REPOSITORY,
+        bool readOnly=false);
     Repository(const Repository&) = delete;
     Repository(const Repository&&) = delete;
     Repository &operator=(const Repository&) = delete;
     Repository &operator=(const Repository&&) = delete;
     ~Repository();
 
-    std::string& getPath() const { return path; }
+    const std::string& getPath() const { return path; }
     void setPath(std::string path) { this->path = path; }
     RepositoryType getType() const { return type; }
     void setType(RepositoryType type) { this->type = type; }
-    void setRepositoryMode(RepositoryMode repositoryMode) { this->repositoryMode=repositoryMode; }
-    RepositoryMode getRepositoryMode() const { return repositoryMode; }
+    void setRepositoryMode(RepositoryMode mode) { this->mode=mode; }
+    RepositoryMode getRepositoryMode() const { return mode; }
     bool isReadOnly() const { return readOnly; }
     void setReadOnly(bool readOnly) { this->readOnly = readOnly; }
 };

@@ -37,39 +37,26 @@
 namespace m8r {
 
 /**
- * @brief MindForger repository index.
- *
- * List of MindForger repository Markdown and attachment file names
- * which doesn't perform content indexation.
+ * @brief MindForger/Markdown repository/file indexer.
  */
 class RepositoryIndexer {
 private:
-    /**
-     * @brief Path to MindForger repository e.g. ~/my-mf-repo
-     */
-    std::string repositoryPath;
+    Repository* repository;
 
     /**
      * @brief Path to MindForger memory e.g. ~/my-mf-repo/memory
      */
     std::string memoryDirectory;
-    /**
-     * @brief Path to MindForger memory e.g. ~/my-mf-repo/stencils/outlines
-     */
     std::string outlineStencilsDirectory;
     std::string noteStencilsDirectory;
 
-    std::vector<const std::string*> markdowns;
     std::vector<const std::string*> allFiles;
+    std::vector<const std::string*> markdowns;
     std::vector<const std::string*> outlineStencils;
     std::vector<const std::string*> noteStencils;
 
 public:
-    /**
-     * @brief Constructor.
-     * @param repositoryDirectory   MindForger repository directory.
-     */
-    explicit RepositoryIndexer(const std::string& repositoryDirPath);
+    explicit RepositoryIndexer();
     RepositoryIndexer(const RepositoryIndexer&) = delete;
     RepositoryIndexer(const RepositoryIndexer&&) = delete;
     RepositoryIndexer& operator=(const RepositoryIndexer&) = delete;
@@ -77,7 +64,12 @@ public:
     virtual ~RepositoryIndexer();
 
     /**
-     * @brief Update index of outlines/ directory content.
+     * @brief Index new repository - any type, any modes.
+     */
+    void index(Repository* repository);
+
+    /**
+     * @brief Smart (dirty) update of the repository index.
      */
     void updateIndex();
 
@@ -88,7 +80,7 @@ public:
     char* getTagsFromPath();
 
 private:
-    void updateIndexMemory(const std::string directory);
+    void updateIndexMemory(const std::string& directory);
     void updateIndexStencils(const std::string& directory, std::vector<const std::string*>& stencils);
 };
 

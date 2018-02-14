@@ -24,32 +24,50 @@ using namespace std;
 
 namespace m8r {
 
-RepositoryIndexer::RepositoryIndexer(const string& repositoryDirPath)
+RepositoryIndexer::RepositoryIndexer()
+    : repository(nullptr)
+{}
+
+void RepositoryIndexer::index(Repository* repository)
 {
-    this goes away > to setPath() method, this will be a default constructor
+    if(repository) {
+        this->repository = repository;
 
-    repositoryPath.append(repositoryDirPath);
+        memoryDirectory.append(repository->getPath());
+        memoryDirectory.append(FILE_PATH_SEPARATOR);
+        memoryDirectory.append(FILE_PATH_MEMORY);
 
-    memoryDirectory.append(repositoryPath);
-    memoryDirectory.append(FILE_PATH_SEPARATOR);
-    memoryDirectory.append(FILE_PATH_MEMORY);
+        outlineStencilsDirectory.append(repository->getPath());
+        outlineStencilsDirectory.append(FILE_PATH_SEPARATOR);
+        outlineStencilsDirectory.append(FILE_PATH_STENCILS);
+        outlineStencilsDirectory.append(FILE_PATH_SEPARATOR);
+        outlineStencilsDirectory.append(FILE_PATH_OUTLINES);
 
-    outlineStencilsDirectory.append(repositoryPath);
-    outlineStencilsDirectory.append(FILE_PATH_SEPARATOR);
-    outlineStencilsDirectory.append(FILE_PATH_STENCILS);
-    outlineStencilsDirectory.append(FILE_PATH_SEPARATOR);
-    outlineStencilsDirectory.append(FILE_PATH_OUTLINES);
+        noteStencilsDirectory.append(repository->getPath());
+        noteStencilsDirectory.append(FILE_PATH_SEPARATOR);
+        noteStencilsDirectory.append(FILE_PATH_STENCILS);
+        noteStencilsDirectory.append(FILE_PATH_SEPARATOR);
+        noteStencilsDirectory.append(FILE_PATH_NOTES);
+    } // IMPROVE else throw
+}
 
-    noteStencilsDirectory.append(repositoryPath);
-    noteStencilsDirectory.append(FILE_PATH_SEPARATOR);
-    noteStencilsDirectory.append(FILE_PATH_STENCILS);
-    noteStencilsDirectory.append(FILE_PATH_SEPARATOR);
-    noteStencilsDirectory.append(FILE_PATH_NOTES);
+RepositoryIndexer::~RepositoryIndexer() {
+    repository = nullptr;
+
+    for(const string* f:allFiles) {
+        delete f;
+    }
+    for(const string* s:outlineStencils) {
+        delete s;
+    }
+    for(const string* s:noteStencils) {
+        delete s;
+    }
 }
 
 void RepositoryIndexer::updateIndex() {
 #ifdef DO_MF_DEBUG
-    MF_DEBUG("\nIndexing repository:\n  " << repositoryPath);
+    MF_DEBUG("\nIndexing repository:\n  " << repository->getPath());
     auto begin = chrono::high_resolution_clock::now();
 #endif
 
@@ -63,7 +81,7 @@ void RepositoryIndexer::updateIndex() {
 #endif
 }
 
-void RepositoryIndexer::updateIndexMemory(const string directory)
+void RepositoryIndexer::updateIndexMemory(const string& directory)
 {
     MF_DEBUG("\nINDEXING memory DIR: " << directory);
     DIR *dir;
@@ -73,7 +91,7 @@ void RepositoryIndexer::updateIndexMemory(const string directory)
             string path;
             string *ppath;
             do {
-                if (entry->d_type == DT_DIR) {
+                if(entry->d_type == DT_DIR) {
                     if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
                         continue;
                     }
@@ -109,7 +127,7 @@ void RepositoryIndexer::updateIndexStencils(const string& directory, vector<cons
         if((entry = readdir(dir))) {
             string *path;
             do {
-                if (entry->d_type != DT_DIR) {
+                if(entry->d_type != DT_DIR) {
                     MF_DEBUG("\n  FILE: " << directory.c_str() << "//" << entry->d_name);
                     path = new string{directory};
                     path->append(FILE_PATH_SEPARATOR);
@@ -144,18 +162,6 @@ const vector<const std::string*> RepositoryIndexer::getNoteStencilsFileNames() c
 
 char* RepositoryIndexer::getTagsFromPath() {
     return nullptr;
-}
-
-RepositoryIndexer::~RepositoryIndexer() {
-    for(const string* f:allFiles) {
-        delete f;
-    }
-    for(const string* s:outlineStencils) {
-        delete s;
-    }
-    for(const string* s:noteStencils) {
-        delete s;
-    }
 }
 
 } /* namespace */

@@ -35,3 +35,18 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
     auto outlineFiles = repositoryIndexer.getAllOutlineFileNames();
     EXPECT_EQ(3, outlineFiles.size());
 }
+
+TEST(RepositoryIndexerTestCase, MarkdownRepository)
+{
+    // TODO TBD
+}
+
+TEST(RepositoryIndexerTestCase, MindForgerFile)
+{
+    // TODO TBD
+}
+
+TEST(RepositoryIndexerTestCase, MarkdownFile)
+{
+    // TODO TBD
+}

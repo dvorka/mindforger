@@ -287,7 +287,8 @@ TEST(MarkdownParserTestCase, MarkdownRepresentation)
     string repository{"/lib/test/resources/basic-repository"};
     repository.insert(0, getMindforgerGitHomePath());
 
-    m8r::Configuration configuration{repository};
+    m8r::Configuration& configuration = m8r::Configuration::getInstance();
+    configuration.setActiveRepository(configuration.addRepository(repository));
 
     m8r::Ontology ontology{configuration};
 

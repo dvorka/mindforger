@@ -68,12 +68,14 @@ Configuration::~Configuration()
     }
 }
 
+xxx fix
 const string* Configuration::addRepository(const string* repositoryPath)
 {
     repositories.insert(repositoryPath);
     return repositoryPath;
 }
 
+xxx fix
 const string* Configuration::addRepository(const string& repositoryPath)
 {
     const string* result = new string{repositoryPath};
@@ -90,11 +92,13 @@ const string* Configuration::getActiveRepository() const
     }
 }
 
+xxx fix
 std::set<const std::string*>& Configuration::getRepositories()
 {
     return repositories;
 }
 
+xxx fix
 void Configuration::setActiveRepository(const string* repositoryPath)
 {
     if(repositories.find(repositoryPath)!=repositories.end()) {

@@ -119,7 +119,7 @@ bool isDirectory(const char* path)
     struct stat info;
     if(stat(path, &info)) {
         return false;
-    } else if(S_ISDIR(info)) {
+    } else if(S_ISDIR(info.st_mode)) {
         return true;
     } else {
         return false;

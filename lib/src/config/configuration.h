@@ -142,7 +142,7 @@ public:
 
     const char* getRepositoryPathFromEnv();
     const char* getEditorFromEnv();
-    const std::string& getExternalEditor() const { return externalEditor; }
+    const std::string& getExternalEditorPath() const { return externalEditorPath; }
 
     int getFontPointSize() const { return fontPointSize; }
 

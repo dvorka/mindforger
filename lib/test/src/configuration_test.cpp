@@ -32,10 +32,10 @@ TEST(ConfigurationTestCase, FromConstructor)
 
     m8r::Configuration configuration{repository};
 
-    cout << endl << "Active repository:" << endl << "  " << *configuration.getActiveRepository();
+    cout << endl << "Active repository:" << endl << "  " << configuration.getActiveRepository()->getPath();
     cout << endl << "Repositories[" << configuration.getRepositories().size() << "]:";
-    for(const string* r:configuration.getRepositories()) {
-        cout << endl << "  " << *r;
+    for(const m8r::Repository& r:configuration.getRepositories()) {
+        cout << endl << "  " << r.getPath();
     }
     cout << endl;
 

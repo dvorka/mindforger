@@ -22,7 +22,11 @@ namespace m8r {
 
 using namespace std;
 
-Repository::Repository(string path, RepositoryType type, RepositoryMode mode, bool readOnly)
+Repository::Repository(
+    string path,
+    RepositoryType type,
+    RepositoryMode mode,
+    bool readOnly)
     : path(path), type(type), mode(mode), readOnly(readOnly)
 {
 }
