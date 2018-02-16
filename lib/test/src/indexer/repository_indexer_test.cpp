@@ -30,8 +30,8 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
     std::string repositoryPath("/lib/test/resources/basic-repository");
     repositoryPath.insert(0, getMindforgerGitHomePath());
 
-    m8r::RepositoryIndexer repositoryIndexer(repositoryPath);
-    repositoryIndexer.updateIndex();
+    m8r::RepositoryIndexer repositoryIndexer{};
+    repositoryIndexer.index(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath));
     auto outlineFiles = repositoryIndexer.getAllOutlineFileNames();
     EXPECT_EQ(3, outlineFiles.size());
 }

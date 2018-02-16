@@ -37,7 +37,7 @@ Mind::~Mind()
 void Mind::learn(const std::string& path)
 {
     // 1) check if the path is valid
-    Repository* repository = memory.getRepositoryIndexer().getRepositoryForPath(path);
+    Repository* repository = RepositoryIndexer::getRepositoryForPath(path);
     if(!repository) return; // IMPROVE throw exception / report problem
     config.setActiveRepository(repository);
 
@@ -367,7 +367,7 @@ string Mind::outlineNew(
     string key = memory.createOutlineKey(title);
     Outline* outline{};
     if(outlineStencil) {
-        outline = memory.learnOutline(outlineStencil);
+        outline = memory.createOutline(outlineStencil);
         outline->setModified();
     } else {
         outline = new Outline{ontology().getDefaultOutlineType()};
@@ -446,7 +446,7 @@ Note* Mind::noteNew(
 {
     Outline* o = memory.getOutline(outlineKey);
     if(o) {
-        Note* n = memory.learnNote(noteStencil);
+        Note* n = memory.createNote(noteStencil);
         if(!n) {
             // IMPROVE make note type method parameter w/ a default
             n = new Note(ontology().findOrCreateNoteType(NoteType::KeyNote()),o);

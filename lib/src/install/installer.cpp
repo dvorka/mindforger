@@ -33,7 +33,7 @@ Installer::~Installer()
 void Installer::createEmptyMindForgerRepository(const string& directory)
 {
     if(!directory.empty()) {
-        if(!isDirectoryExist(directory.c_str())) {
+        if(!isDirectoryOrFileExists(directory.c_str())) {
             createDirectory(directory);
         }
         // create skeleton directories: ./memory ./mind ./limbo ./stencils/outlines|notes

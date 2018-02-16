@@ -62,8 +62,9 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     string oContent{"# Test Outline\n\nOutline text.\n\n## Note 1\nNote 1 text.\n\n##Note 2\nNote 2 text.\n"};
     m8r::stringToFile(oFile,oContent);
 
-    m8r::Configuration configuration{repositoryDir};
-    m8r::Mind mind{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.think();
 
@@ -156,8 +157,9 @@ TEST(NoteTestCase, PromoteDemoteUpDown) {
         "\n"};
     m8r::stringToFile(oFile,oContent);
 
-    m8r::Configuration configuration{repositoryDir};
-    m8r::Mind mind{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.think();
 
@@ -317,8 +319,9 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
         "\n"};
     m8r::stringToFile(oFile,oContent);
 
-    m8r::Configuration configuration{repositoryDir};
-    m8r::Mind mind{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.think();
 
@@ -747,8 +750,9 @@ TEST(NoteTestCase, RefactorNote) {
         "\n"};
     m8r::stringToFile(tFile,tContent);
 
-    m8r::Configuration configuration{repositoryDir};
-    m8r::Mind mind{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    m8r::Mind mind{config};
     mind.think();
 
     // test

@@ -27,19 +27,20 @@ using namespace std;
 
 TEST(ConfigurationTestCase, FromConstructor)
 {
-    string repository{"/lib/test/resources/basic-repository"};
-    repository.insert(0, getMindforgerGitHomePath());
+    string repositoryPath{"/lib/test/resources/basic-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
 
-    m8r::Configuration configuration{repository};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
 
-    cout << endl << "Active repository:" << endl << "  " << configuration.getActiveRepository()->getPath();
-    cout << endl << "Repositories[" << configuration.getRepositories().size() << "]:";
-    for(const m8r::Repository& r:configuration.getRepositories()) {
-        cout << endl << "  " << r.getPath();
+    cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getPath();
+    cout << endl << "Repositories[" << config.getRepositories().size() << "]:";
+    for(auto& r:config.getRepositories()) {
+        cout << endl << "  " << r.first;
     }
     cout << endl;
 
-    EXPECT_EQ(configuration.getRepositories().size(), 1);
+    EXPECT_EQ(config.getRepositories().size(), 1);
 }
 
 TEST(ConfigurationTestCase, FromEnvironment)
@@ -56,15 +57,17 @@ TEST(ConfigurationTestCase, FromEnvironment)
     putenv(envVar);
     cout << "Setting env:" << endl << "  " << envVar;
 
-    m8r::Configuration configuration{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
 
-    if(configuration.getActiveRepository()) {
-        cout << endl << "Active repository:" << endl << "  " << *configuration.getActiveRepository();
-        cout << endl << "Repositories[" << configuration.getRepositories().size() << "]:";
-        for(const string* r:configuration.getRepositories()) {
-            cout << endl << "  " << *r;
+    // TODO use code from Configuration constructor to get repo from environment
+
+    if(config.getActiveRepository()) {
+        cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getPath();
+        cout << endl << "Repositories[" << config.getRepositories().size() << "]:";
+        for(auto& r:config.getRepositories()) {
+            cout << endl << "  " << r.first;
         }
-        EXPECT_EQ(configuration.getRepositories().size(), 1);
+        EXPECT_EQ(config.getRepositories().size(), 1);
     } else {
         FAIL() << "Repository environment variable is NOT set!" << endl;
     }

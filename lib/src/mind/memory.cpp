@@ -26,10 +26,10 @@ namespace m8r {
 
 Memory::Memory(Configuration& configuration)
     : config(configuration),
-      repositoryIndexer(*config.getActiveRepository()),
       ontology(config),
       representation(ontology)
 {
+    repositoryIndexer.index(configuration.getActiveRepository());
     persistence = new FilesystemPersistence{configuration, representation};
     cache = true;
 }
@@ -48,7 +48,7 @@ vector<Stencil*>& Memory::getStencils(ResourceType type)
 
 void Memory::learn()
 {
-    repositoryIndexer.setPath(configuration.getActiveRepository().getPath());
+    repositoryIndexer.index(config.getActiveRepository());
     repositoryIndexer.updateIndex();
 
     MF_DEBUG("\nMarkdown files:");

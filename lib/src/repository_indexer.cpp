@@ -28,6 +28,32 @@ RepositoryIndexer::RepositoryIndexer()
     : repository(nullptr)
 {}
 
+RepositoryIndexer::~RepositoryIndexer() {
+    clear();
+}
+
+void RepositoryIndexer::clear()
+{
+    repository = nullptr;
+
+    for(const string* f:allFiles) {
+        delete f;
+    }
+    allFiles.clear();
+    for(const string* m:markdowns) {
+        delete m;
+    }
+    outlineStencils.clear();
+    for(const string* s:outlineStencils) {
+        delete s;
+    }
+    outlineStencils.clear();
+    for(const string* s:noteStencils) {
+        delete s;
+    }
+    noteStencils.clear();
+}
+
 void RepositoryIndexer::index(Repository* repository)
 {
     if(repository) {
@@ -48,21 +74,9 @@ void RepositoryIndexer::index(Repository* repository)
         noteStencilsDirectory.append(FILE_PATH_STENCILS);
         noteStencilsDirectory.append(FILE_PATH_SEPARATOR);
         noteStencilsDirectory.append(FILE_PATH_NOTES);
+
+        updateIndex();
     } // IMPROVE else throw
-}
-
-RepositoryIndexer::~RepositoryIndexer() {
-    repository = nullptr;
-
-    for(const string* f:allFiles) {
-        delete f;
-    }
-    for(const string* s:outlineStencils) {
-        delete s;
-    }
-    for(const string* s:noteStencils) {
-        delete s;
-    }
 }
 
 void RepositoryIndexer::updateIndex() {
@@ -176,7 +190,7 @@ bool RepositoryIndexer::isMindForgerRepository(const string& directory)
     path.append(directory);
     path.append(FILE_PATH_SEPARATOR);
     path.append(FILE_PATH_MEMORY);
-    if(!isDirectoryOrFileExists(path)) {
+    if(!isDirectoryOrFileExists(path.c_str())) {
         return false;
     }
 

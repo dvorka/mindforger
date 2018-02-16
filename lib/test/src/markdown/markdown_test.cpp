@@ -284,11 +284,11 @@ TEST(MarkdownParserTestCase, Bug37Notrailing)
 
 TEST(MarkdownParserTestCase, MarkdownRepresentation)
 {
-    string repository{"/lib/test/resources/basic-repository"};
-    repository.insert(0, getMindforgerGitHomePath());
+    string repositoryPath{"/lib/test/resources/basic-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
 
     m8r::Configuration& configuration = m8r::Configuration::getInstance();
-    configuration.setActiveRepository(configuration.addRepository(repository));
+    configuration.setActiveRepository(configuration.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
 
     m8r::Ontology ontology{configuration};
 
@@ -332,13 +332,12 @@ TEST(MarkdownParserTestCase, FileSystemPersistence)
 {
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
-    m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
 
-    m8r::Configuration& configuration = m8r::Configuration::getInstance();
-    configuration.setActiveRepository(configuration.addRepository(repositoryPath));
-    m8r::Ontology ontology{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    m8r::Ontology ontology{config};
     m8r::MarkdownOutlineRepresentation mdr{ontology};
-    m8r::FilesystemPersistence persistence{configuration,mdr};
+    m8r::FilesystemPersistence persistence{config,mdr};
 
     unique_ptr<string> text = unique_ptr<string>(new string{"abc"});
     cout << persistence.createFileName(string("/tmp"), text.get(), string(FILE_EXTENSION_MARKDOWN));
@@ -346,11 +345,12 @@ TEST(MarkdownParserTestCase, FileSystemPersistence)
 
 TEST(MarkdownParserBugsTestCase, EmptyTitleSkipsEof)
 {
-    string repository{"/lib/test/resources/bugs-repository"};
-    repository.insert(0, getMindforgerGitHomePath());
+    string repositoryPath{"/lib/test/resources/bugs-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
 
-    m8r::Configuration configuration{repository};
-    m8r::Ontology ontology{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    m8r::Ontology ontology{config};
 
     m8r::MarkdownOutlineRepresentation mdr{ontology};
     string outlineFilename{"/lib/test/resources/bugs-repository/memory/bug-37.md"};

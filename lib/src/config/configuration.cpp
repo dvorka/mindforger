@@ -21,26 +21,17 @@
 
 #include <iostream>
 
-using namespace std;
-
 namespace m8r {
 
-Configuration::Configuration()
-{
-    installer = new Installer{};
+using namespace std;
 
+Configuration::Configuration()
+    : installer(new Installer{})
+{
     char *home = getenv(ENV_VAR_HOME);
     userHomePath = string{home};
 
-    // repositories
-    const char* r{};
-    if((r=getRepositoryFromEnv()) != nullptr) {
-        string* repositoryPath = new string{r};
-        // TODO detect repository type: MF/MD, RW by default
-        setActiveRepository(addRepository(repositoryPath));
-    } else {
-        activeRepository = nullptr;
-    }
+    // repositories - environment variable defined repository path to be used only if desired
 
     // lib
     writeMetadata = true;
@@ -57,33 +48,23 @@ Configuration::Configuration()
 
 Configuration::~Configuration()
 {
-    for(const string* r:repositories) {
-        delete r;
+    for(auto& r:repositories) {
+        delete r.second;
     }
     repositories.clear();
 
     if(installer) {
         delete installer;
-        installer = nullptr;
     }
 }
 
-xxx fix
-const string* Configuration::addRepository(const string* repositoryPath)
+Repository* Configuration::addRepository(Repository* repository)
 {
-    repositories.insert(repositoryPath);
-    return repositoryPath;
+    repositories[repository->getPath()] = repository; // overwrites item map under given key (map::insert keeps existing)
+    return repository;
 }
 
-xxx fix
-const string* Configuration::addRepository(const string& repositoryPath)
-{
-    const string* result = new string{repositoryPath};
-    addRepository(result);
-    return result;
-}
-
-const string* Configuration::getActiveRepository() const
+Repository* Configuration::getActiveRepository() const
 {
     if(activeRepository) {
         return activeRepository;
@@ -92,25 +73,23 @@ const string* Configuration::getActiveRepository() const
     }
 }
 
-xxx fix
-std::set<const std::string*>& Configuration::getRepositories()
+std::map<const std::string,Repository*>& Configuration::getRepositories()
 {
     return repositories;
 }
 
-xxx fix
-void Configuration::setActiveRepository(const string* repositoryPath)
+void Configuration::setActiveRepository(Repository* repository)
 {
-    if(repositories.find(repositoryPath)!=repositories.end()) {
-        activeRepository = repositoryPath;
+    if(repositories.find(repository->getPath()) != repositories.end()) {
+        activeRepository = repository;
 
         memoryPath.clear();
-        memoryPath.append(*activeRepository);
+        memoryPath.append(activeRepository->getPath());
         memoryPath+=FILE_PATH_SEPARATOR;
         memoryPath+=FILE_PATH_MEMORY;
 
         limboPath.clear();
-        limboPath.append(*activeRepository);
+        limboPath.append(activeRepository->getPath());
         limboPath+=FILE_PATH_SEPARATOR;
         limboPath+=FILE_PATH_LIMBO;
     } else {
@@ -120,21 +99,19 @@ void Configuration::setActiveRepository(const string* repositoryPath)
 
 void Configuration::findOrCreateDefaultRepository()
 {
-    if(!activeRepository || (*activeRepository).empty()) {
+    if(!activeRepository || activeRepository->getPath().empty()) {
         string defaultRepositoryPath{userHomePath};
         defaultRepositoryPath.append(FILE_PATH_SEPARATOR);
         defaultRepositoryPath.append(DIRNAME_M8R_REPOSITORY);
         MF_DEBUG("Checking for default repository existence: " << defaultRepositoryPath << endl);
-        if(isDirectoryExist(defaultRepositoryPath.c_str())) {
-            setActiveRepository(addRepository(defaultRepositoryPath));
+        if(isDirectoryOrFileExists(defaultRepositoryPath.c_str())) {
+            setActiveRepository(addRepository(RepositoryIndexer::getRepositoryForPath(defaultRepositoryPath)));
         } else {
             // create default repository w/ default content using Installer class
             MF_DEBUG("  Creating a default MF repository in " << defaultRepositoryPath << endl);
             installer->createEmptyMindForgerRepository(defaultRepositoryPath);
             if(!activeRepository) {
-                string* r = new string{defaultRepositoryPath};
-                addRepository(r);
-                setActiveRepository(r);
+                setActiveRepository(addRepository(new Repository(defaultRepositoryPath)));
             }
         }
     }
@@ -144,7 +121,7 @@ void Configuration::load()
 {
     const string filePath = getConfigFileName();
     Markdown configMarkdown{&filePath};
-    load(configMarkdown.getAst());    
+    load(configMarkdown.getAst());
 }
 
 void Configuration::load(const vector<MarkdownAstNodeSection*>* ast)
@@ -161,7 +138,7 @@ void Configuration::save() const
     // TODO serialize this instance directly to MD file using streams
 }
 
-const char* Configuration::getRepositoryFromEnv()
+const char* Configuration::getRepositoryPathFromEnv()
 {
     char* repository = getenv(ENV_VAR_M8R_REPOSITORY);  // this is not leak (static reusable array)
     return repository;

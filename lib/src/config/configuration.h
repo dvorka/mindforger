@@ -26,6 +26,7 @@
 #include <vector>
 
 #include "repository.h"
+#include "../repository_indexer.h"
 #include "../gear/lang_utils.h"
 #include "../gear/file_utils.h"
 #include "../exceptions.h"
@@ -102,7 +103,7 @@ private:
     bool editorEnableSyntaxHighlighting;
 
 private:
-    Installer* installer;
+    Installer*const installer;
 
 public:
     Configuration(const Configuration&) = delete;
@@ -127,15 +128,15 @@ public:
      * 4) if repository exist in default location ~/mindforger-repository, then use it, else start W/O repository
      */
     void findOrCreateDefaultRepository();
-    const Repository* addRepository(const std::string& repositoryPath);
-    std::set<const Repository*>& getRepositories();
+    Repository* addRepository(Repository* repository);
+    std::map<const std::string, Repository*>& getRepositories();
     /**
      * @brief Set active repository
      *
      * Note that activeRepository parameter must be one of the known repositories.
      */
-    void setActiveRepository(const Repository* activeRepository);
-    const Repository* getActiveRepository() const;
+    void setActiveRepository(Repository* activeRepository);
+    Repository* getActiveRepository() const;
 
     const std::string& getMemoryPath() const { return memoryPath; }
     const std::string& getLimboPath() const { return limboPath; }
@@ -149,7 +150,6 @@ public:
 private:
     const std::string getConfigFileName();
     void load(const std::vector<MarkdownAstNodeSection*>* ast);
-    const std::string* addRepository(const std::string* repositoryPath);
 };
 
 } // namespace

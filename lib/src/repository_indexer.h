@@ -85,6 +85,11 @@ public:
      */
     void updateIndex();
 
+    /**
+     * @brief Clear all fields.
+     */
+    void clear();
+
     const std::vector<const std::string*> getMarkdownFiles() const;
     const std::vector<const std::string*> getAllOutlineFileNames() const;
     const std::vector<const std::string*> getOutlineStencilsFileNames() const;

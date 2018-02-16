@@ -34,12 +34,13 @@ extern char* getMindforgerGitHomePath();
 using namespace std;
 
 TEST(MindTestCase, FTS) {
-    string repository{"/lib/test/resources/basic-repository"};
-    repository.insert(0, getMindforgerGitHomePath());
+    string repositoryPath{"/lib/test/resources/basic-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
 
-    m8r::Configuration configuration{repository};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
 
-    m8r::Mind mind(configuration);
+    m8r::Mind mind(config);
     mind.think();
 
     cout << "\nStatistics:";

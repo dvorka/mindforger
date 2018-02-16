@@ -146,8 +146,9 @@ TEST(MindTestCase, LearnAndRememberMindForgerRepository) {
     to.append("/memory/outline.md");
     m8r::copyFile(from,to);
 
-    m8r::Configuration configuration{repositoryDir};
-    m8r::Mind mind(configuration);
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    m8r::Mind mind(config);
     mind.think();
 
     m8r::Memory& memory = mind.remind();
@@ -180,34 +181,35 @@ TEST(MindTestCase, LearnAndRememberMindForgerRepository) {
 TEST(MindTestCase, LearnAmnesiaLearn) {
     string repositoryPath{"/lib/test/resources/amnesia-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
-    m8r::Repository repository(
+    m8r::Repository* repository = new m8r::Repository(
         repositoryPath,
         m8r::Repository::RepositoryType::MINDFORGER,
         m8r::Repository::RepositoryMode::REPOSITORY,
         false);
 
     // 1/3 learn
-    m8r::Configuration configuration{repository};
-    m8r::Mind mind(configuration);
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(repository));
+    m8r::Mind mind(config);
     mind.think();
-    m8r::Memory& memory = mind.remind();
+    // TODO remove - m8r::Memory& memory = mind.remind();
 
-    cout << endl << "Active repository:" << endl << "  " << *configuration.getActiveRepository();
-    cout << endl << "Repositories[" << configuration.getRepositories().size() << "]:";
-    for(const string* r:configuration.getRepositories()) {
-        cout << endl << "  " << *r;
+    cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getPath();
+    cout << endl << "Repositories[" << config.getRepositories().size() << "]:";
+    for(auto& r:config.getRepositories()) {
+        cout << endl << "  " << r.first;
     }
     cout << endl;
 
     // assert learned MF repository attributes (mind, outlines count, notes count, ontology count, ...)
-    EXPECT_EQ(configuration.getRepositories().size(), 1);
+    EXPECT_EQ(config.getRepositories().size(), 1);
     // ...
 
     // 2/3 amnesia
     mind.amnesia();
 
     // assert mind and memory cleaned (+Valgrind memory check)
-    EXPECT_EQ(configuration.getRepositories().size(), 0);
+    EXPECT_EQ(config.getRepositories().size(), 0);
     // ...
 
     // 3/3 learn

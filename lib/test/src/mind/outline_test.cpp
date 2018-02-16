@@ -45,8 +45,9 @@ TEST(OutlineTestCase, NewAndDeleteOutline) {
     string oContent{"# Test Outline\n\nOutline text.\n\n## Note 1\nNote 1 text.\n"};
     m8r::stringToFile(oFile,oContent);
 
-    m8r::Configuration configuration{repositoryDir};
-    m8r::Mind mind{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    m8r::Mind mind{config};
     mind.think();
 
     EXPECT_EQ(mind.remind().getOutlinesCount(), 1);
@@ -69,8 +70,9 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
     string stencilContent{"# Stencil Test Outline\n\nOutline text.\n\n## Stencil Note 1\nNote 1 text.\n\n##Stencil Note 2\nNote 2 text.\n"};
     m8r::stringToFile(stencilFile,stencilContent);
 
-    m8r::Configuration configuration{repositoryDir};
-    m8r::Mind mind{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.think();
 
@@ -155,8 +157,9 @@ TEST(OutlineTestCase, CloneOutline) {
         "\n"};
     m8r::stringToFile(oFile,oContent);
 
-    m8r::Configuration configuration{repositoryDir};
-    m8r::Mind mind{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.think();
 

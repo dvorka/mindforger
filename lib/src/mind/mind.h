@@ -36,7 +36,7 @@ public:
     static const int ALL_ENTRIES = -1;
 
 private:
-    const Configuration &config;
+    Configuration &config;
     Memory memory;
 
     std::vector<Note*> memoryDwell;
