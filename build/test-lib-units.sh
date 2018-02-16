@@ -20,23 +20,27 @@
 export SCRIPT_DIR=`pwd`
 export BUILD_DIR=${SCRIPT_DIR}/..
 
-cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests
+# run all tests
+#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && gdb ./mindforger-lib-unit-tests
 
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=StringGearTestCase.Split
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=NoteTestCase.*
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=MindTestCase.Mind
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=DateTimeGearTestCase.Immutability
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=ConfigurationTestCase.*
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=ConfigurationTestCase.FromConstructor
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=ConfigurationTestCase.Environment
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=MarkdownParserTestCase.FileSystemPersistence
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=MarkdownParserTestCase.Bug37Notrailing
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=MarkdownParserBugsTestCase.*
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=NoteTestCase.PromoteDemoteUpDownNote
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=NoteTestCase.RefactorNote
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=OutlineTestCase.CloneOutline
+# run particular test(s)
+#export TEST_NAME="NoteTestCase.*"
+#export TEST_NAME="MindTestCase.Mind"
+#export TEST_NAME="DateTimeGearTestCase.Immutability"
+#export TEST_NAME="ConfigurationTestCase.*"
+#export TEST_NAME="ConfigurationTestCase.FromConstructor"
+#export TEST_NAME="ConfigurationTestCase.Environment"
+#export TEST_NAME="MarkdownParserTestCase.FileSystemPersistence"
+#export TEST_NAME="MarkdownParserTestCase.Bug37Notrailing"
+#export TEST_NAME="MarkdownParserBugsTestCase.*"
+#export TEST_NAME="NoteTestCase.PromoteDemoteUpDownNote"
+#export TEST_NAME="NoteTestCase.RefactorNote"
+#export TEST_NAME="OutlineTestCase.CloneOutline"
+export TEST_NAME="StringGearTestCase.Split"
+cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=${TEST_NAME}
 
+# clean 
 #cd ${BUILD_DIR} && make clean
 
 # eof

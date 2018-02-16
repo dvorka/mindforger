@@ -20,6 +20,16 @@
 export SCRIPT_DIR=`pwd`
 export BUILD_DIR=${SCRIPT_DIR}/..
 
+
+
+
+# TODO rewrite this script according to non-valgrind unit test script
+
+
+
+
+
+
 # Hints:
 #  - use -g GCC option to get line information
 #  - use --track-origins=yes Valgrind option to better track root cause of problems like "Conditional jump using uninitialized values"
