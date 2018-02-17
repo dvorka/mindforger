@@ -20,38 +20,22 @@
 export SCRIPT_DIR=`pwd`
 export BUILD_DIR=${SCRIPT_DIR}/..
 
-
-
-
-# TODO rewrite this script according to non-valgrind unit test script
-
-
-
-
-
-
 # Hints:
 #  - use -g GCC option to get line information
-#  - use --track-origins=yes Valgrind option to better track root cause of problems like "Conditional jump using uninitialized values"
+#  - use --track-origins=yes Valgrind option to better track root cause of problems
+#    like "Conditional jump using uninitialized values"
 
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind -v --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests
+# run all tests w/ Valgrind
+cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind -v --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests
 
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --track-origins=yes --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests --gtest_filter=NoteTestCase.AddNewStencilNoteToOutline
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --track-origins=yes --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests --gtest_filter=OutlineTestCase.NewOutlineFromStencil
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --track-origins=yes --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests --gtest_filter=OutlineTestCase.NewAndDeleteOutline
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind -v --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests --gtest_filter=MindTestCase.FTS
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests --gtest_filter=RepositoryIndexerTestCase.MindForgerRepository
-cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --tool=memcheck --leak-check=full --track-origins=yes ./mindforger-lib-unit-tests --gtest_filter=ConfigurationTestCase.FromConstructor
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests --gtest_filter=ConfigurationTestCase.FromEnvironment
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind -v --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests --gtest_filter=MarkdownParserTestCase.MarkdownParserSections
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests --gtest_filter=DateTimeGearTestCase.*
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests --gtest_filter=DateTimeGearTestCase.MdDateTimeParsing
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests --gtest_filter=DateTimeGearTestCase.Immutability
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind -v --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests --gtest_filter=DateTimeGearTestCase.PrettyTimestamp
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind -v --track-origins=yes --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests --gtest_filter=StringGearTestCase.Split
+# run selected test(s) w/ Valgrind
+#export TEST_NAME="NoteTestCase.*"
 
+#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --track-origins=yes -v --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests --gtest_filter=${TEST_NAME}
+#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --track-origins=yes --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests --gtest_filter=${TEST_NAME}
+#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --track-origins=yes --tool=memcheck ./mindforger-lib-unit-tests --gtest_filter=${TEST_NAME}
+
+# clean all to avoid side effects next time
 cd ${BUILD_DIR} && make clean
 
 # eof

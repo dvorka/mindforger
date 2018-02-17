@@ -24,7 +24,7 @@ export BUILD_DIR=${SCRIPT_DIR}/..
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && gdb ./mindforger-lib-unit-tests
 
-# run particular test(s)
+# run selected test(s)
 #export TEST_NAME="NoteTestCase.*"
 #export TEST_NAME="MindTestCase.Mind"
 #export TEST_NAME="DateTimeGearTestCase.Immutability"
@@ -40,7 +40,7 @@ export BUILD_DIR=${SCRIPT_DIR}/..
 export TEST_NAME="StringGearTestCase.Split"
 cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=${TEST_NAME}
 
-# clean 
-#cd ${BUILD_DIR} && make clean
+# clean all to avoid side effects next time
+cd ${BUILD_DIR} && make clean
 
 # eof
