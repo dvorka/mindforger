@@ -36,7 +36,6 @@ Configuration::Configuration()
     // lib
     writeMetadata = true;
     rememberReads = false;
-    externalEditorPath = nullptr;
 
     // GUI
     viewerShowMetadata = true;
