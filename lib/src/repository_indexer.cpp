@@ -47,6 +47,7 @@ void RepositoryIndexer::clear()
         delete s;
     }
     outlineStencils.clear();
+
     for(const string* s:noteStencils) {
         delete s;
     }

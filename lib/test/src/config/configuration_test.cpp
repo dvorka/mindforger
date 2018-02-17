@@ -17,7 +17,7 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../../src/config/configuration.h"
+#include "../../../src/config/configuration.h"
 
 #include <gtest/gtest.h>
 

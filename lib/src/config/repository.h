@@ -91,7 +91,7 @@ public:
 
 #ifdef DO_MF_DEBUG
     void print() const {
-        MF_DEBUG("Path " << path << ", file " << file << ", type " << type << ", mode" << mode << ", RD_ONLY " << readOnly << "\n");
+        MF_DEBUG(std::endl << "Path: " << path << ", file: " << file << ", type: " << type << ", mode: " << mode << ", RD_ONLY: " << readOnly);
     }
 #endif
 };

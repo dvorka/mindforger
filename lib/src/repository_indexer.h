@@ -90,6 +90,8 @@ public:
      */
     void clear();
 
+    const Repository* getRepository() const { return repository; }
+
     const std::vector<const std::string*> getMarkdownFiles() const;
     const std::vector<const std::string*> getAllOutlineFileNames() const;
     const std::vector<const std::string*> getOutlineStencilsFileNames() const;

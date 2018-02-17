@@ -17,10 +17,7 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../../src/model/outline.h"
-#include "../../src/model/outline_type.h"
-#include "../../src/model/note.h"
-#include "../../src/model/tag.h"
+#include "test_gear.h"
 
 namespace m8r {
 
@@ -38,5 +35,20 @@ void printOutlineNotes(Outline* o)
     }
 }
 
+void createEmptyRepository(string& repositoryDir, map<string,string>& pathToContent)
+{
+    // clean
+    removeDirectoryRecursively(repositoryDir.c_str());
+    // create empty repo
+    Installer installer{};
+    installer.createEmptyMindForgerRepository(repositoryDir);
+    // create content (path is expected to be absolute)
+    if(pathToContent.size()) {
+        for(auto& i:pathToContent) {
+            stringToFile(i.first, i.second);
+        }
+    }
 }
+
+} // namespace
 

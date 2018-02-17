@@ -1,5 +1,5 @@
 /*
- note_refactoring_test.cpp     MindForger test
+ note_test.cpp     MindForger test
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -32,7 +32,7 @@
 #include "../../../src/mind/mind.h"
 #include "../../../src/install/installer.h"
 
-#include "../test_gear.cpp"
+#include "../test_gear.h"
 
 using namespace std;
 

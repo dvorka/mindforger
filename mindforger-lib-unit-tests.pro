@@ -48,7 +48,6 @@ SOURCES += \
     ./lib/src/representations/markdown/markdown_parser_sections.cpp \
     ./lib/src/representations/markdown/markdown_section_metadata.cpp \
     ./lib/src/representations/outline_representation.cpp \
-    ./lib/test/src/configuration_test.cpp \
     ./lib/test/src/gear/datetime_test.cpp \
     ./lib/test/src/gear/string_utils_test.cpp \
     ./lib/test/src/indexer/repository_indexer_test.cpp \
@@ -69,7 +68,8 @@ SOURCES += \
     lib/src/install/installer.cpp \
     lib/test/src/mind/outline_test.cpp \
     lib/test/src/test_gear.cpp \
-    lib/src/config/repository.cpp
+    lib/src/config/repository.cpp \
+    lib/test/src/config/configuration_test.cpp
 
 HEADERS += \
     ./lib/src/debug.h \
@@ -121,7 +121,8 @@ HEADERS += \
     lib/src/config/color.h \
     lib/src/config/configuration.h \
     lib/src/install/installer.h \
-    lib/src/config/repository.h
+    lib/src/config/repository.h \
+    lib/test/src/test_gear.h
 
 # GTest unit test framework library dependencies
 unix|win32: LIBS += -lgtest
