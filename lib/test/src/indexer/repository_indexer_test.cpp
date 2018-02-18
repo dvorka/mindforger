@@ -20,33 +20,17 @@
 #include <gtest/gtest.h>
 
 #include "../../../src/repository_indexer.h"
+#include "../../../src/mind/mind.h"
+#include "../../../src/gear/file_utils.h"
 
 #include "../test_gear.cpp"
 
 using namespace std;
 
 extern char* getMindforgerGitHomePath();
+extern void dumpOutline(m8r::Outline*&);
 
 TEST(RepositoryIndexerTestCase, MindForgerRepository)
-{
-    std::string repositoryPath("/lib/test/resources/basic-repository");
-    repositoryPath.insert(0, getMindforgerGitHomePath());
-
-    // test
-    m8r::RepositoryIndexer repositoryIndexer{};
-    repositoryIndexer.index(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath));
-    auto outlineFiles = repositoryIndexer.getAllOutlineFileNames();
-
-    // asserts
-    EXPECT_EQ(3, outlineFiles.size());
-}
-
-
-// TODO make test BELOW MF repo test, for MD do NOT call creation of empty repo!
-
-
-
-TEST(RepositoryIndexerTestCase, MarkdownRepository)
 {
     string repositoryPath{"/tmp/mf-unit-repository-indexer"};
     map<string,string> pathToContent;
@@ -82,21 +66,68 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
 
     m8r::createEmptyRepository(repositoryPath, pathToContent);
 
-    // test
+    // test repository indexation
     m8r::RepositoryIndexer repositoryIndexer{};
-    repositoryIndexer.index(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath));
+    m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    repositoryIndexer.index(repository);
     repositoryIndexer.getRepository()->print();
     auto outlineFiles = repositoryIndexer.getAllOutlineFileNames();
 
     // asserts
+    EXPECT_EQ(repository->getPath(), repositoryPath);
+    EXPECT_EQ(repository->getType(), m8r::Repository::RepositoryType::MINDFORGER);
+    EXPECT_EQ(repository->getRepositoryMode(), m8r::Repository::RepositoryMode::REPOSITORY);
+    EXPECT_EQ(repository->isReadOnly(), false);
     EXPECT_EQ(2, outlineFiles.size());
+    EXPECT_EQ(2, repositoryIndexer.getMarkdownFiles().size());
+    EXPECT_EQ(0, repositoryIndexer.getNoteStencilsFileNames().size());
+    EXPECT_EQ(0, repositoryIndexer.getOutlineStencilsFileNames().size());
 
-    // TODO test and assert that metadata are NOT written
+    // test that metadata ARE written
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(repository));
+    m8r::Mind mind(config);
+    mind.think();
+    m8r::Memory& memory = mind.remind();
+    vector<m8r::Outline*> outlines = memory.getOutlines();
+    m8r::Outline* outline;
+    cout << endl << "Outlines[" << outlines.size() << "]:";
+    if(outlines.size()>0) {
+        for(m8r::Outline*& o:outlines) {
+            dumpOutline(o);
+            if(o->getTitle() == string("First Outline")) {
+                outline = o;
+            }
+        }
+    } else {
+        cout << endl << "NO OUTLINES";
+    }
+
+    // assert
+    ASSERT_NE(outline, nullptr);
+    // write outline > metadata to be written
+    string* outlineAsString = m8r::fileToString(outline->getKey());
+    EXPECT_EQ(outlineAsString->find("Metadata"), std::string::npos);
+    delete outlineAsString;
+
+    mind.remind().remember(outline);
+
+    outlineAsString = m8r::fileToString(outline->getKey());
+    EXPECT_NE(outlineAsString->find("Metadata"), std::string::npos);
+    delete outlineAsString;
+}
+
+TEST(RepositoryIndexerTestCase, MarkdownRepository)
+{
+    // TODO
 }
 
 TEST(RepositoryIndexerTestCase, MindForgerFile)
 {
     // TODO TBD
+
+    // TODO parser must detect metadata occurence, Outline to have a hint to be used on serialization
+    // hint to be called 'format' enum - MF, MD (w/ or w/o)
 }
 
 TEST(RepositoryIndexerTestCase, MarkdownFile)

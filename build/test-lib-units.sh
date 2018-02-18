@@ -25,8 +25,8 @@ export BUILD_DIR=${SCRIPT_DIR}/..
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && gdb ./mindforger-lib-unit-tests
 
 # run selected test(s)
-export TEST_NAME="RepositoryIndexerTestCase.MarkdownRepository"
-#export TEST_NAME="RepositoryIndexerTestCase.MindForgerRepository"
+#export TEST_NAME="RepositoryIndexerTestCase.MarkdownRepository"
+export TEST_NAME="RepositoryIndexerTestCase.MindForgerRepository"
 #export TEST_NAME="NoteTestCase.*"
 #export TEST_NAME="MindTestCase.Mind"
 #export TEST_NAME="DateTimeGearTestCase.Immutability"
