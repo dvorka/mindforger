@@ -211,6 +211,7 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
 
 TEST(RepositoryIndexerTestCase, MindForgerFile)
 {
+    EXPECT_TRUE(false);
     // TODO TBD
 
     // TODO parser must detect metadata occurence, Outline to have a hint to be used on serialization
@@ -219,6 +220,7 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
 
 TEST(RepositoryIndexerTestCase, MarkdownFile)
 {
+    EXPECT_TRUE(false);
     // TODO TBD
 
     // assert size

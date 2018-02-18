@@ -42,6 +42,7 @@ void RepositoryIndexer::clear()
     allFiles.clear();
 
     // markdowns strings were cleared as a part of allFiles strings
+    markdowns.clear();
 
     for(const string* s:outlineStencils) {
         delete s;

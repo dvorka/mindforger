@@ -191,31 +191,92 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     // 1/3 learn
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.setActiveRepository(config.addRepository(repository));
-    m8r::Mind mind(config);
-    mind.think();
-    // TODO remove - m8r::Memory& memory = mind.remind();
-
     cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getPath();
     cout << endl << "Repositories[" << config.getRepositories().size() << "]:";
-    for(auto& r:config.getRepositories()) {
-        cout << endl << "  " << r.first;
-    }
-    cout << endl;
+
+    m8r::Mind mind(config);
+    m8r::Memory& memory = mind.remind();
+
+    EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
+    EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
+    EXPECT_EQ(memory.getOntology().getTags().size(), 7);
+
+    mind.think();
 
     // assert learned MF repository attributes (mind, outlines count, notes count, ontology count, ...)
-    EXPECT_EQ(config.getRepositories().size(), 1);
-    // ...
+    EXPECT_GE(config.getRepositories().size(), 1);
+    EXPECT_EQ(memory.getStencils(m8r::ResourceType::OUTLINE).size(), 1);
+    EXPECT_EQ(memory.getStencils(m8r::ResourceType::NOTE).size(), 1);
+    EXPECT_EQ(memory.getOutlines().size(), 3);
+    EXPECT_EQ(memory.getOutlinesCount(), 3);
+    EXPECT_EQ(memory.getNotesCount(), 8);
+    EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
+    EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
+    EXPECT_EQ(memory.getOntology().getTags().size(), 10);
 
-    // 2/3 amnesia
+    // 2/3 amnesia - assert mind and memory cleaned (+Valgrind memory check)
     mind.amnesia();
+    EXPECT_GE(config.getRepositories().size(), 1);
+    EXPECT_EQ(memory.getStencils(m8r::ResourceType::OUTLINE).size(), 0);
+    EXPECT_EQ(memory.getStencils(m8r::ResourceType::NOTE).size(), 0);
+    EXPECT_EQ(memory.getOutlines().size(), 0);
+    EXPECT_EQ(memory.getOutlinesCount(), 0);
+    EXPECT_EQ(memory.getNotesCount(), 0);
+    EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
+    EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
+    EXPECT_EQ(memory.getOntology().getTags().size(), 10); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
 
-    // assert mind and memory cleaned (+Valgrind memory check)
-    EXPECT_GE(config.getRepositories().size(), 1); // repositories are remembered as Configuration is singleton
-    // ...
+    // 3/3 learn - MARKDOWN repository (not MINDFORGER repository as above)
+    repositoryPath.assign("/tmp/mf-unit-amnesia");
+    string path, content;
+    m8r::removeDirectoryRecursively(repositoryPath.c_str());
+    int e = mkdir(repositoryPath.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+    ASSERT_EQ(e, 0);
+    path.assign(repositoryPath+"/1.md");
+    content.assign(
+        "# First Markdown"
+        "\n"
+        "\nFirst outline text."
+        "\n"
+        "\n## Note 1"
+        "\nNote 1 text."
+        "\n"
+        "\n## Note 2"
+        "\nNote 2 text."
+        "\n");
+    m8r::stringToFile(path, content);
+    path.assign(repositoryPath+"/2.md");
+    content.assign(
+        "# Second Markdown"
+        "\n"
+        "\nSecond outline text."
+        "\n"
+        "\n## Note 11"
+        "\nNote 11 text."
+        "\n"
+        "\n## Note 22"
+        "\nNote 22 text."
+        "\n");
+    m8r::stringToFile(path, content);
 
-    // 3/3 learn
-    // ...
-    // assert ANOTHER learned MF repository attributes (mind, outlines count, notes count, different ontology count, ...)
+    // repository is NOT deleted - it's registered in Configuration and it will take care of it
+    repository = new m8r::Repository(
+        repositoryPath,
+        m8r::Repository::RepositoryType::MARKDOWN,
+        m8r::Repository::RepositoryMode::REPOSITORY,
+        false);
+    config.setActiveRepository(config.addRepository(repository));
+    mind.think();
+
+    EXPECT_GE(config.getRepositories().size(), 1);
+    EXPECT_EQ(memory.getOutlines().size(), 2);
+    EXPECT_EQ(memory.getOutlinesCount(), 2);
+    EXPECT_EQ(memory.getNotesCount(), 4);
+    EXPECT_EQ(memory.getStencils(m8r::ResourceType::OUTLINE).size(), 0);
+    EXPECT_EQ(memory.getStencils(m8r::ResourceType::NOTE).size(), 0);
+    EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
+    EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
+    EXPECT_EQ(memory.getOntology().getTags().size(), 10); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
 }
 
 // TODO start w/ empty repository (do I need it?)
@@ -224,4 +285,3 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
 // TODO learn MD file
 // TODO learn MF file
 // TODO test readonly
-// TODO test metadata not written
