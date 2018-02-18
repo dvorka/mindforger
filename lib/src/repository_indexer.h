@@ -62,6 +62,8 @@ private:
     std::string outlineStencilsDirectory;
     std::string noteStencilsDirectory;
 
+    migrate to std::set
+
     std::vector<const std::string*> allFiles;
     std::vector<const std::string*> markdowns;
     std::vector<const std::string*> outlineStencils;

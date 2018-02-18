@@ -32,7 +32,7 @@ extern void dumpOutline(m8r::Outline*&);
 
 TEST(RepositoryIndexerTestCase, MindForgerRepository)
 {
-    string repositoryPath{"/tmp/mf-unit-repository-indexer"};
+    string repositoryPath{"/tmp/mf-unit-repository-indexer-mf"};
     map<string,string> pathToContent;
     string path, content;
 
@@ -119,7 +119,90 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
 
 TEST(RepositoryIndexerTestCase, MarkdownRepository)
 {
-    // TODO
+    string repositoryPath{"/tmp/mf-unit-repository-indexer-md"};
+    string path, content;
+
+    m8r::removeDirectoryRecursively(repositoryPath.c_str());
+    int e = mkdir(repositoryPath.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+    ASSERT_EQ(e, 0);
+
+    path.assign(repositoryPath+"/first.md");
+    content.assign(
+        "# First Markdown"
+        "\n"
+        "\nFirst outline text."
+        "\n"
+        "\n## Note 1"
+        "\nNote 1 text."
+        "\n"
+        "\n## Note 2"
+        "\nNote 2 text."
+        "\n");
+    m8r::stringToFile(path, content);
+
+    path.assign(repositoryPath+"/second.md");
+    content.assign(
+        "# Second Markdown"
+        "\n"
+        "\nSecond outline text."
+        "\n"
+        "\n## Note 11"
+        "\nNote 11 text."
+        "\n"
+        "\n## Note 22"
+        "\nNote 22 text."
+        "\n");
+    m8r::stringToFile(path, content);
+
+    // test repository indexation
+    m8r::RepositoryIndexer repositoryIndexer{};
+    m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    repositoryIndexer.index(repository);
+    repositoryIndexer.getRepository()->print();
+    auto outlineFiles = repositoryIndexer.getAllOutlineFileNames();
+
+    // asserts
+    EXPECT_EQ(repository->getPath(), repositoryPath);
+    EXPECT_EQ(repository->getType(), m8r::Repository::RepositoryType::MARKDOWN);
+    EXPECT_EQ(repository->getRepositoryMode(), m8r::Repository::RepositoryMode::REPOSITORY);
+    EXPECT_EQ(repository->isReadOnly(), false);
+    EXPECT_EQ(2, outlineFiles.size());
+    EXPECT_EQ(2, repositoryIndexer.getMarkdownFiles().size());
+    EXPECT_EQ(0, repositoryIndexer.getNoteStencilsFileNames().size());
+    EXPECT_EQ(0, repositoryIndexer.getOutlineStencilsFileNames().size());
+
+    // test that metadata ARE written
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(repository));
+    m8r::Mind mind(config);
+    mind.think();
+    m8r::Memory& memory = mind.remind();
+    vector<m8r::Outline*> outlines = memory.getOutlines();
+    m8r::Outline* outline;
+    cout << endl << "Outlines[" << outlines.size() << "]:";
+    if(outlines.size()>0) {
+        for(m8r::Outline*& o:outlines) {
+            dumpOutline(o);
+            if(o->getTitle() == string("First Outline")) {
+                outline = o;
+            }
+        }
+    } else {
+        cout << endl << "NO OUTLINES";
+    }
+
+    // assert
+    ASSERT_NE(outline, nullptr);
+    // write outline > metadata to be written
+    string* outlineAsString = m8r::fileToString(outline->getKey());
+    EXPECT_EQ(outlineAsString->find("Metadata"), std::string::npos);
+    delete outlineAsString;
+
+    mind.remind().remember(outline);
+
+    outlineAsString = m8r::fileToString(outline->getKey());
+    EXPECT_EQ(outlineAsString->find("Metadata"), std::string::npos);
+    delete outlineAsString;
 }
 
 TEST(RepositoryIndexerTestCase, MindForgerFile)

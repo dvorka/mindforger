@@ -59,21 +59,25 @@ void RepositoryIndexer::index(Repository* repository)
     if(repository) {
         this->repository = repository;
 
-        memoryDirectory.append(repository->getPath());
-        memoryDirectory.append(FILE_PATH_SEPARATOR);
-        memoryDirectory.append(FILE_PATH_MEMORY);
+        memoryDirectory.assign(repository->getPath());
+        if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
+            memoryDirectory.append(FILE_PATH_SEPARATOR);
+            memoryDirectory.append(FILE_PATH_MEMORY);
+        }
 
-        outlineStencilsDirectory.append(repository->getPath());
-        outlineStencilsDirectory.append(FILE_PATH_SEPARATOR);
-        outlineStencilsDirectory.append(FILE_PATH_STENCILS);
-        outlineStencilsDirectory.append(FILE_PATH_SEPARATOR);
-        outlineStencilsDirectory.append(FILE_PATH_OUTLINES);
+        if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
+            outlineStencilsDirectory.assign(repository->getPath());
+            outlineStencilsDirectory.append(FILE_PATH_SEPARATOR);
+            outlineStencilsDirectory.append(FILE_PATH_STENCILS);
+            outlineStencilsDirectory.append(FILE_PATH_SEPARATOR);
+            outlineStencilsDirectory.append(FILE_PATH_OUTLINES);
 
-        noteStencilsDirectory.append(repository->getPath());
-        noteStencilsDirectory.append(FILE_PATH_SEPARATOR);
-        noteStencilsDirectory.append(FILE_PATH_STENCILS);
-        noteStencilsDirectory.append(FILE_PATH_SEPARATOR);
-        noteStencilsDirectory.append(FILE_PATH_NOTES);
+            noteStencilsDirectory.assign(repository->getPath());
+            noteStencilsDirectory.append(FILE_PATH_SEPARATOR);
+            noteStencilsDirectory.append(FILE_PATH_STENCILS);
+            noteStencilsDirectory.append(FILE_PATH_SEPARATOR);
+            noteStencilsDirectory.append(FILE_PATH_NOTES);
+        }
 
         updateIndex();
     } // IMPROVE else throw
@@ -86,8 +90,10 @@ void RepositoryIndexer::updateIndex() {
 #endif
 
     updateIndexMemory(memoryDirectory);
-    updateIndexStencils(outlineStencilsDirectory, outlineStencils);
-    updateIndexStencils(noteStencilsDirectory, noteStencils);
+    if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
+        updateIndexStencils(outlineStencilsDirectory, outlineStencils);
+        updateIndexStencils(noteStencilsDirectory, noteStencils);
+    }
 
 #ifdef DO_MF_DEBUG
     auto end = chrono::high_resolution_clock::now();
