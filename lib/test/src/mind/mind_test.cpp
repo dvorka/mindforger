@@ -42,6 +42,7 @@ void dumpOutline(m8r::Outline*& outline)
 {
     cout << endl << "  - Outline -----------------------";
     cout << endl << "  " << outline->getKey() << " (key)";
+    cout << endl << "  " << outline->getFormat() << " (format)";
     cout << endl << "  "
             << (outline->getPrimaryTag() ?
                     outline->getPrimaryTag()->getName() : "NULL")
@@ -209,7 +210,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     mind.amnesia();
 
     // assert mind and memory cleaned (+Valgrind memory check)
-    EXPECT_EQ(config.getRepositories().size(), 0);
+    EXPECT_GE(config.getRepositories().size(), 1); // repositories are remembered as Configuration is singleton
     // ...
 
     // 3/3 learn

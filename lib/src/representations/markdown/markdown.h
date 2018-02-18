@@ -44,8 +44,21 @@ class MarkdownAstNodeSection;
  */
 class Markdown
 {
+public:
+    /**
+     * @brief Markdown format.
+     *
+     * MINDFORGER indicates MindForger DSL (w/ metadata) and MARKDOWN
+     * plain Markdown file w/o any enhancements.
+     */
+    enum Format {
+        MINDFORGER,
+        MARKDOWN
+    };
+
 private:
     const std::string* filePath;
+    Format format;
     unsigned fileSize;
     time_t modified;
 
@@ -70,6 +83,7 @@ public:
     void clear();
 
     const std::string* getFilePath() const;
+    Format getFormat() const { return format; }
     unsigned getFileSize() const;
     time_t getModified() const { return modified; }
     std::string* getTitle();

@@ -53,6 +53,7 @@ void Markdown::from()
         // must be pointer (circular header dep)
         MarkdownParserSections parser{lexer};
         parser.parse();
+        format = parser.hasMetadata()?Format::MINDFORGER:Format::MARKDOWN;
         // parser is deleted on return, but AST is kept
         ast = parser.moveAst();
         from(ast);
@@ -70,6 +71,7 @@ void Markdown::from(const std::string* text)
         fileSize = lexer.getFileSize();
         MarkdownParserSections parser = MarkdownParserSections(lexer);
         parser.parse();
+        format = parser.hasMetadata()?Format::MINDFORGER:Format::MARKDOWN;
         // parser is deleted on return, but AST is kept
         ast = parser.moveAst();
         from(ast);

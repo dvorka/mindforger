@@ -211,11 +211,22 @@ TEST(MarkdownParserTestCase, MarkdownLexerSections)
     dumpLexems(lexer.getLexems());
 }
 
+TEST(MarkdownParserTestCase, MarkdownLexerSectionsNoMetadata)
+{
+    unique_ptr<string> fileName
+            = unique_ptr<string>(new string{"/lib/test/resources/basic-repository/memory/no-metadata.md"});
+    fileName.get()->insert(0, getMindforgerGitHomePath());
+    MarkdownLexerSections lexer(fileName.get());
+
+    // minimal MD
+    lexer.tokenize();
+    dumpLexems(lexer.getLexems());
+}
+
 TEST(MarkdownParserTestCase, MarkdownParserSections)
 {
     unique_ptr<string> fileName
             = unique_ptr<string>(new string{"/lib/test/resources/basic-repository/memory/outline.md"});
-    //unique_ptr<string> fileName=new string{"/lib/test/resources/basic-repository/memory/no-metadata.md"};
     fileName.get()->insert(0, getMindforgerGitHomePath());
 
     // minimal MD
@@ -226,6 +237,27 @@ TEST(MarkdownParserTestCase, MarkdownParserSections)
     cout << endl << "- Parser ----------------------------------------------";
     MarkdownParserSections parser(lexer);
     parser.parse();
+    EXPECT_TRUE(parser.hasMetadata());
+    dumpAst(parser.getAst());
+    cout << endl << "- DONE ----------------------------------------------";
+    cout << endl;
+}
+
+TEST(MarkdownParserTestCase, MarkdownParserSectionsNoMetadata)
+{
+    unique_ptr<string> fileName
+            = unique_ptr<string>(new string{"/lib/test/resources/basic-repository/memory/no-metadata.md"});
+    fileName.get()->insert(0, getMindforgerGitHomePath());
+
+    // minimal MD
+    cout << endl << "- Lexer ----------------------------------------------";
+    MarkdownLexerSections lexer(fileName.get());
+    lexer.tokenize();
+    dumpLexems(lexer.getLexems());
+    cout << endl << "- Parser ----------------------------------------------";
+    MarkdownParserSections parser(lexer);
+    parser.parse();
+    EXPECT_TRUE(!parser.hasMetadata());
     dumpAst(parser.getAst());
     cout << endl << "- DONE ----------------------------------------------";
     cout << endl;
@@ -242,6 +274,7 @@ TEST(MarkdownParserTestCase, Bug37Meta)
     cout << endl << "- Parser ----------------------------------------------";
     MarkdownParserSections parser(lexer);
     parser.parse();
+    EXPECT_TRUE(parser.hasMetadata());
     dumpAst(parser.getAst());
     ASSERT_EQ(parser.getAst()->size(), 4);
     cout << endl << "- DONE ----------------------------------------------";
@@ -259,6 +292,7 @@ TEST(MarkdownParserTestCase, Bug37Nometa)
     cout << endl << "- Parser ----------------------------------------------";
     MarkdownParserSections parser(lexer);
     parser.parse();
+    EXPECT_TRUE(parser.hasMetadata());
     dumpAst(parser.getAst());
     ASSERT_EQ(parser.getAst()->size(), 4);
     cout << endl << "- DONE ----------------------------------------------";
@@ -276,6 +310,7 @@ TEST(MarkdownParserTestCase, Bug37Notrailing)
     cout << endl << "- Parser ----------------------------------------------";
     MarkdownParserSections parser(lexer);
     parser.parse();
+    EXPECT_TRUE(parser.hasMetadata());
     dumpAst(parser.getAst());
     ASSERT_EQ(parser.getAst()->size(), 4);
     cout << endl << "- DONE ----------------------------------------------";

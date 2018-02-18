@@ -95,6 +95,7 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
     if(outlines.size()>0) {
         for(m8r::Outline*& o:outlines) {
             dumpOutline(o);
+            ASSERT_EQ(o->getFormat(), m8r::Markdown::Format::MINDFORGER);
             if(o->getTitle() == string("First Outline")) {
                 outline = o;
             }
@@ -176,6 +177,7 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
     config.setActiveRepository(config.addRepository(repository));
     m8r::Mind mind(config);
     mind.think();
+
     m8r::Memory& memory = mind.remind();
     vector<m8r::Outline*> outlines = memory.getOutlines();
     m8r::Outline* outline;
@@ -183,7 +185,8 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
     if(outlines.size()>0) {
         for(m8r::Outline*& o:outlines) {
             dumpOutline(o);
-            if(o->getTitle() == string("First Outline")) {
+            ASSERT_EQ(o->getFormat(), m8r::Markdown::Format::MARKDOWN);
+            if(o->getTitle() == string("First Markdown")) {
                 outline = o;
             }
         }
@@ -198,6 +201,7 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
     EXPECT_EQ(outlineAsString->find("Metadata"), std::string::npos);
     delete outlineAsString;
 
+    outline->setTitle("Dirty");
     mind.remind().remember(outline);
 
     outlineAsString = m8r::fileToString(outline->getKey());

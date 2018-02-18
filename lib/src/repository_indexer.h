@@ -62,12 +62,10 @@ private:
     std::string outlineStencilsDirectory;
     std::string noteStencilsDirectory;
 
-    migrate to std::set
-
-    std::vector<const std::string*> allFiles;
-    std::vector<const std::string*> markdowns;
-    std::vector<const std::string*> outlineStencils;
-    std::vector<const std::string*> noteStencils;
+    std::set<const std::string*> allFiles;
+    std::set<const std::string*> markdowns;
+    std::set<const std::string*> outlineStencils;
+    std::set<const std::string*> noteStencils;
 
 public:
     explicit RepositoryIndexer();
@@ -94,15 +92,15 @@ public:
 
     const Repository* getRepository() const { return repository; }
 
-    const std::vector<const std::string*> getMarkdownFiles() const;
-    const std::vector<const std::string*> getAllOutlineFileNames() const;
-    const std::vector<const std::string*> getOutlineStencilsFileNames() const;
-    const std::vector<const std::string*> getNoteStencilsFileNames() const;
+    const std::set<const std::string*> getMarkdownFiles() const;
+    const std::set<const std::string*> getAllOutlineFileNames() const;
+    const std::set<const std::string*> getOutlineStencilsFileNames() const;
+    const std::set<const std::string*> getNoteStencilsFileNames() const;
     char* getTagsFromPath();
 
 private:
     void updateIndexMemory(const std::string& directory);
-    void updateIndexStencils(const std::string& directory, std::vector<const std::string*>& stencils);
+    void updateIndexStencils(const std::string& directory, std::set<const std::string*>& stencils);
 };
 
 } /* namespace */

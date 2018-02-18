@@ -93,6 +93,7 @@ Outline* MarkdownOutlineRepresentation::outline(const File& file)
     vector<MarkdownAstNodeSection*>* ast = md.moveAst();
 
     Outline* o = outline(ast);
+    o->setFormat(md.getFormat());
     if(o) {
         o->setKey(*md.getFilePath());
         o->setBytesize(md.getFileSize());
@@ -228,18 +229,20 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
         }
 
         // IMPROVE c++11: std::to_string(int)
-        char buffer[50];
-        md->append(" <!-- Metadata:");
-        if(outline->getTags().size()) { md->append(" tags: "); md->append(to(md, outline->getTags())); md->append(";"); }
-        md->append(" type: "); md->append(outline->getType()->getName()); md->append(";");
-        md->append(" created: "); md->append(datetimeToString(outline->getCreated())); md->append(";");
-        sprintf(buffer," reads: %d;",outline->getReads()); md->append(buffer);
-        md->append(" read: "); md->append(datetimeToString(outline->getRead())); md->append(";");
-        sprintf(buffer," revision: %d;",outline->getRevision()); md->append(buffer);
-        md->append(" modified: "); md->append(datetimeToString(outline->getModified())); md->append(";");
-        sprintf(buffer," importance: %d/5;",outline->getImportance()); md->append(buffer);
-        sprintf(buffer," urgency: %d/5;",outline->getUrgency()); md->append(buffer);
-        sprintf(buffer," progress: %d%%; -->\n",outline->getProgress()); md->append(buffer);
+        if(outline->getFormat() == Markdown::Format::MINDFORGER) {
+            char buffer[50];
+            md->append(" <!-- Metadata:");
+            if(outline->getTags().size()) { md->append(" tags: "); md->append(to(md, outline->getTags())); md->append(";"); }
+            md->append(" type: "); md->append(outline->getType()->getName()); md->append(";");
+            md->append(" created: "); md->append(datetimeToString(outline->getCreated())); md->append(";");
+            sprintf(buffer," reads: %d;",outline->getReads()); md->append(buffer);
+            md->append(" read: "); md->append(datetimeToString(outline->getRead())); md->append(";");
+            sprintf(buffer," revision: %d;",outline->getRevision()); md->append(buffer);
+            md->append(" modified: "); md->append(datetimeToString(outline->getModified())); md->append(";");
+            sprintf(buffer," importance: %d/5;",outline->getImportance()); md->append(buffer);
+            sprintf(buffer," urgency: %d/5;",outline->getUrgency()); md->append(buffer);
+            sprintf(buffer," progress: %d%%; -->\n",outline->getProgress()); md->append(buffer);
+        }
 
         const vector<string*>& description=outline->getDescription();
         if(description.size()) {
@@ -299,7 +302,7 @@ string* MarkdownOutlineRepresentation::to(const Outline* outline, string* md)
         if(notes.size()) {
             string noteMd{};
             for(Note *note:notes) {
-                to(note, &noteMd);
+                to(note, &noteMd, outline->getFormat()==Markdown::Format::MINDFORGER);
                 md->append(noteMd);
                 noteMd.clear();
             }
@@ -332,7 +335,7 @@ string* MarkdownOutlineRepresentation::to(const Note* note)
     return to(note, md);
 }
 
-string* MarkdownOutlineRepresentation::to(const Note* note, string* md)
+string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool includeMetadata)
 {
     md->clear();
 
@@ -347,15 +350,17 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md)
         md->append("?");
     }
 
-    md->append(" <!-- Metadata:");
-    if(note->getTags().size()) { md->append(" tags: "); md->append(to(md, note->getTags())); md->append(";"); }
-    md->append(" type: "); md->append(note->getType()->getName()); md->append(";");
-    md->append(" created: "); md->append(datetimeToString(note->getCreated())); md->append(";");
-    sprintf(buffer," reads: %d;",note->getReads()); md->append(buffer);
-    md->append(" read: "); md->append(datetimeToString(note->getRead())); md->append(";");
-    sprintf(buffer," revision: %d;",note->getRevision()); md->append(buffer);
-    md->append(" modified: "); md->append(datetimeToString(note->getModified())); md->append(";");
-    sprintf(buffer," progress: %d%%; -->\n",note->getProgress()); md->append(buffer);
+    if(includeMetadata) {
+        md->append(" <!-- Metadata:");
+        if(note->getTags().size()) { md->append(" tags: "); md->append(to(md, note->getTags())); md->append(";"); }
+        md->append(" type: "); md->append(note->getType()->getName()); md->append(";");
+        md->append(" created: "); md->append(datetimeToString(note->getCreated())); md->append(";");
+        sprintf(buffer," reads: %d;",note->getReads()); md->append(buffer);
+        md->append(" read: "); md->append(datetimeToString(note->getRead())); md->append(";");
+        sprintf(buffer," revision: %d;",note->getRevision()); md->append(buffer);
+        md->append(" modified: "); md->append(datetimeToString(note->getModified())); md->append(";");
+        sprintf(buffer," progress: %d%%; -->\n",note->getProgress()); md->append(buffer);
+    }
 
     toDescription(note, md);
 

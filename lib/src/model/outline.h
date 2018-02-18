@@ -26,6 +26,7 @@
 #include "note_type.h"
 #include "note.h"
 #include "outline_type.h"
+#include "../representations/markdown/markdown.h"
 #include "../gear/datetime_utils.h"
 #include "tag.h"
 
@@ -78,6 +79,8 @@ private:
      */
     // IMPROVE make Key object w/ equals - std::string and sequence integer for fast equals
     std::string key;
+
+    Markdown::Format format;
 
     // IMPROVE hashset
     std::vector<const Tag*> tags;
@@ -136,6 +139,8 @@ public:
 
     const std::string& getKey() const;
     void setKey(const std::string key);
+    Markdown::Format getFormat() const { return format; }
+    void setFormat(Markdown::Format format) { this->format = format; }
     virtual const std::string& getTitle() const;
     void setTitle(const std::string& title);
     const std::vector<std::string*>& getDescription() const;

@@ -21,8 +21,6 @@
 
 #include <string>
 #include <vector>
-
-// debug
 #include <iostream>
 
 #include "../../gear/datetime_utils.h"
@@ -38,9 +36,9 @@ class MarkdownAstSectionMetadata;
 /**
  * @brief Markdown recursive-descent parser for section-level granularity AST.
  *
- * OPTIMISTIC Markdown RDP expects syntactically valid input - it can simplify
- * parsing process to ensure reasonable performance it implements minimal
- * robustness.
+ * OPTIMISTIC Markdown RDP expects syntactically valid input - it allows simplification
+ * of the parsing process while ensuring reasonable performance as it may implement just
+ * minimal robustness.
  */
 class MarkdownParserSections
 {
@@ -48,6 +46,11 @@ private:
     MarkdownLexerSections& lexer;
 
     std::vector<MarkdownAstNodeSection*>* ast;
+
+    /**
+     * @brief true if parser processed a section with metadata
+     */
+    bool metadataExist;
 
 public:
     explicit MarkdownParserSections(MarkdownLexerSections& lexer);
@@ -64,9 +67,10 @@ public:
         std::vector<MarkdownAstNodeSection*>* result = ast;
         ast = nullptr;
         return result;
-    };
+    }
     size_t size() const { return ast==nullptr?0:ast->size(); }
     bool empty() const { return ast==nullptr?true:ast->empty(); }
+    bool hasMetadata() const { return metadataExist; }
 
 private:
     inline const MarkdownLexem* lookahead(size_t offset);

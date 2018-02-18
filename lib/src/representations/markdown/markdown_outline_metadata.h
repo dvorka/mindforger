@@ -19,7 +19,7 @@
 #ifndef M8R_MARKDOWN_OUTLINE_METADATA_H_
 #define M8R_MARKDOWN_OUTLINE_METADATA_H_
 
-#include "../../model/outline.h"
+#include "../../model/outline_type.h"
 #include "../../mind/ontology/ontology.h"
 #include "../../gear/datetime_utils.h"
 #include "../../gear/string_utils.h"

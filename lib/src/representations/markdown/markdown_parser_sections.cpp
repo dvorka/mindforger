@@ -284,6 +284,8 @@ bool MarkdownParserSections::sectionMetadataRule(
                 }
                 skipWhitespaces(offset);
             }
+
+            metadataExist = true;
         }
     }
 

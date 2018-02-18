@@ -57,6 +57,8 @@ void RepositoryIndexer::clear()
 void RepositoryIndexer::index(Repository* repository)
 {
     if(repository) {
+        clear();
+
         this->repository = repository;
 
         memoryDirectory.assign(repository->getPath());
@@ -115,7 +117,7 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
                     if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
                         continue;
                     }
-                    //MFDEBUG("\nDIVE> " << directory.c_str() << "//" << entry->d_name);
+                    //MF_DEBUG("\nDIVE> " << directory.c_str() << "//" << entry->d_name);
                     path.assign(directory);
                     path.append(FILE_PATH_SEPARATOR);
                     path.append(entry->d_name);
@@ -127,9 +129,9 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
                     ppath->append(FILE_PATH_SEPARATOR);
                     ppath->append(entry->d_name);
 
-                    allFiles.push_back(ppath);
+                    allFiles.insert(ppath);
                     if(stringEndsWith(*ppath, FILE_EXTENSION_MARKDOWN)) {
-                        markdowns.push_back(ppath);
+                        markdowns.insert(ppath);
                     }
                 }
             } while ((entry = readdir(dir)) != 0);
@@ -138,7 +140,7 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
     }
 }
 
-void RepositoryIndexer::updateIndexStencils(const string& directory, vector<const std::string*>& stencils)
+void RepositoryIndexer::updateIndexStencils(const string& directory, set<const std::string*>& stencils)
 {
     MF_DEBUG("\nINDEXING stencils DIR: " << directory);
     DIR *dir;
@@ -153,7 +155,7 @@ void RepositoryIndexer::updateIndexStencils(const string& directory, vector<cons
                     path->append(FILE_PATH_SEPARATOR);
                     path->append(entry->d_name);
                     if(stringEndsWith(*path, FILE_EXTENSION_MARKDOWN)) {
-                        stencils.push_back(path);
+                        stencils.insert(path);
                     }
                 }
             } while ((entry = readdir(dir)) != 0);
@@ -162,20 +164,20 @@ void RepositoryIndexer::updateIndexStencils(const string& directory, vector<cons
     }
 }
 
-const vector<const string*> RepositoryIndexer::getMarkdownFiles() const {
+const set<const string*> RepositoryIndexer::getMarkdownFiles() const {
     return markdowns;
 }
 
-const vector<const string*> RepositoryIndexer::getAllOutlineFileNames() const {
+const set<const string*> RepositoryIndexer::getAllOutlineFileNames() const {
     return allFiles;
 }
 
-const vector<const std::string*> RepositoryIndexer::getOutlineStencilsFileNames() const
+const set<const std::string*> RepositoryIndexer::getOutlineStencilsFileNames() const
 {
     return outlineStencils;
 }
 
-const vector<const std::string*> RepositoryIndexer::getNoteStencilsFileNames() const
+const set<const std::string*> RepositoryIndexer::getNoteStencilsFileNames() const
 {
     return noteStencils;
 }

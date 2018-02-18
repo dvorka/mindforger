@@ -25,7 +25,7 @@ namespace m8r {
 const NoteType Outline::NOTE_4_OUTLINE_TYPE{"Outline", Color::RED()};
 
 Outline::Outline(const OutlineType* type)
-    : memoryLocation(OutlineMemoryLocation::NORMAL), type(type)
+    : memoryLocation(OutlineMemoryLocation::NORMAL), format(Markdown::Format::MINDFORGER), type(type)
 {
     created = modified = read = 0;
     reads = revision = 0;
@@ -47,7 +47,7 @@ void Outline::resetClonedOutline(Outline* o)
 }
 
 Outline::Outline(const Outline& o)
-    : memoryLocation(OutlineMemoryLocation::NORMAL), type(o.type)
+    : memoryLocation(OutlineMemoryLocation::NORMAL), format(o.format), type(o.type)
 {
     key.clear();
 

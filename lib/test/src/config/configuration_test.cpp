@@ -40,7 +40,7 @@ TEST(ConfigurationTestCase, FromConstructor)
     }
     cout << endl;
 
-    EXPECT_EQ(config.getRepositories().size(), 1);
+    EXPECT_GE(config.getRepositories().size(), 1);
 }
 
 TEST(ConfigurationTestCase, FromEnvironment)
@@ -67,7 +67,7 @@ TEST(ConfigurationTestCase, FromEnvironment)
         for(auto& r:config.getRepositories()) {
             cout << endl << "  " << r.first;
         }
-        EXPECT_EQ(config.getRepositories().size(), 1);
+        EXPECT_GE(config.getRepositories().size(), 1);
     } else {
         FAIL() << "Repository environment variable is NOT set!" << endl;
     }

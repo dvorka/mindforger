@@ -29,7 +29,6 @@ Memory::Memory(Configuration& configuration)
       ontology(config),
       representation(ontology)
 {
-    repositoryIndexer.index(configuration.getActiveRepository());
     persistence = new FilesystemPersistence{configuration, representation};
     cache = true;
 }
@@ -49,12 +48,16 @@ vector<Stencil*>& Memory::getStencils(ResourceType type)
 void Memory::learn()
 {
     repositoryIndexer.index(config.getActiveRepository());
-    repositoryIndexer.updateIndex();
 
     MF_DEBUG("\nMarkdown files:");
     for(const string* markdownFile:repositoryIndexer.getMarkdownFiles()) {
         MF_DEBUG("\n  '" << *markdownFile << "'");
-        Outline *outline = representation.outline(File(*markdownFile));
+        Outline* outline = representation.outline(File(*markdownFile));
+        if(config.getActiveRepository()->getType() == Repository::RepositoryType::MINDFORGER) {
+            outline->setFormat(Markdown::Format::MINDFORGER);
+        } else {
+            outline->setFormat(Markdown::Format::MARKDOWN);
+        }
         outlines.push_back(outline);
         outlinesMap.insert(map<string,Outline*>::value_type(outline->getKey(), outline));
     }
@@ -138,6 +141,11 @@ void Memory::remember(const std::string& outlineKey)
 
 void Memory::remember(Outline* outline)
 {
+    if(config.getActiveRepository()->getType() == Repository::RepositoryType::MINDFORGER) {
+        outline->setFormat(Markdown::Format::MINDFORGER);
+    } else {
+        outline->setFormat(Markdown::Format::MARKDOWN);
+    }
     persistence->save(outline);
     if(!getOutline(outline->getKey())) {
         outlines.push_back(outline);

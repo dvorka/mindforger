@@ -76,7 +76,7 @@ public:
     virtual std::string* to(const Outline* outline, std::string* md);
     virtual std::string* toHeader(const Outline* outline);
     virtual std::string* to(const Note* note);
-    virtual std::string* to(const Note* note, std::string* md);
+    virtual std::string* to(const Note* note, std::string* md, bool includeMetadata=true);
     virtual std::string* toDescription(const Note* note, std::string* md);
 
 private:
