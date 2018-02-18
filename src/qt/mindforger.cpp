@@ -142,12 +142,12 @@ int main(int argc, char *argv[])
     m8r::initRandomizer();
 
     // load configuration & update it w/ CLI settings
-    m8r::Configuration configuration;
-    configuration.load();
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.load();
     if(!useRepository.empty()) {
-        configuration.setActiveRepository(configuration.addRepository(useRepository));
+        config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(useRepository)));
     } else {
-        configuration.findOrCreateDefaultRepository();
+        config.findOrCreateDefaultRepository();
     }
 
     // setup application
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
     // choose L&F
     m8r::LookAndFeels& lookAndFeels = m8r::LookAndFeels::getInstance();
     lookAndFeels.init(&mindforgerApplication);
-    lookAndFeels.setFontPointSize(configuration.getFontPointSize());
+    lookAndFeels.setFontPointSize(config.getFontPointSize());
     if(!themeOptionValue.isEmpty()) {
         if(lookAndFeels.isThemeNameValid(themeOptionValue)) {
             lookAndFeels.setTheme(themeOptionValue);
@@ -170,10 +170,10 @@ int main(int argc, char *argv[])
 
     // initialize and start UI
     m8r::MainWindowView mainWindowView(lookAndFeels);
-    m8r::MainWindowPresenter mainWindowPresenter(mainWindowView, configuration);
+    m8r::MainWindowPresenter mainWindowPresenter(mainWindowView);
     mainWindowView.showMaximized();
     mainWindowPresenter.doActionViewOutlines();
-    mindforgerApplication.font().setPointSize(configuration.getFontPointSize());
+    mindforgerApplication.font().setPointSize(config.getFontPointSize());
 
     // run application
     return mindforgerApplication.exec();

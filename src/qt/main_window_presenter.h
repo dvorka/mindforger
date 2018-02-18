@@ -80,7 +80,7 @@ private:
     RefactorNoteToOutlineDialog* refactorNoteToOutlineDialog;
 
 public:
-    explicit MainWindowPresenter(MainWindowView& view, Configuration& configuration);
+    explicit MainWindowPresenter(MainWindowView& view);
     MainWindowPresenter(const MainWindowPresenter&) = delete;
     MainWindowPresenter(const MainWindowPresenter&&) = delete;
     MainWindowPresenter &operator=(const MainWindowPresenter&) = delete;

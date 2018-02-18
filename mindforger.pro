@@ -123,7 +123,8 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     src/qt/dialogs/outline_header_edit_dialog.h \
     src/qt/widgets/urgency_combo_box.h \
     src/qt/widgets/importance_combo_box.h \
-    src/qt/dialogs/refactor_note_to_outline_dialog.h
+    src/qt/dialogs/refactor_note_to_outline_dialog.h \
+    lib/src/config/repository.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
@@ -212,7 +213,8 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/dialogs/outline_header_edit_dialog.cpp \
     src/qt/widgets/urgency_combo_box.cpp \
     src/qt/widgets/importance_combo_box.cpp \
-    src/qt/dialogs/refactor_note_to_outline_dialog.cpp
+    src/qt/dialogs/refactor_note_to_outline_dialog.cpp \
+    lib/src/config/repository.cpp
 
 # Development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1

@@ -22,9 +22,9 @@ using namespace std;
 
 namespace m8r {
 
-MainWindowPresenter::MainWindowPresenter(MainWindowView& view, Configuration& configuration)
+MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     : view(view),
-      configuration(configuration)
+      configuration(Configuration::getInstance())
 {    
     // think
     mind = new Mind{configuration};
@@ -103,10 +103,12 @@ void MainWindowPresenter::doActionMindLearn()
     if(learnDialog.exec()) {
         directoryNames = learnDialog.selectedFiles();
         if(directoryNames.size()==1) {
-            if(configuration.getInstaller()->isMindForgerRepository(directoryNames[0].toStdString())) {
+            if(RepositoryIndexer::isMindForgerRepository(directoryNames[0].toStdString())) {
                 // TODO clear everything - hard
                 // TODO load to mind new repository (like when MF is booting)
-                // xxx
+
+                // ... xxx continue here ...
+
             } else {
                 QMessageBox::critical(
                     &view,
