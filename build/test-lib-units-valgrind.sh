@@ -26,7 +26,9 @@ export BUILD_DIR=${SCRIPT_DIR}/..
 #    like "Conditional jump using uninitialized values"
 
 # run all tests w/ Valgrind
-cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind -v --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests
+#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --track-origins=yes -v --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests
+cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --track-origins=yes --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests
+#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind -v --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests
 
 # run selected test(s) w/ Valgrind
 #export TEST_NAME="NoteTestCase.*"
