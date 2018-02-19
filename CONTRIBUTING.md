@@ -25,7 +25,7 @@ code. Please [report](mailto:martin.dvorak@mindforger.com) unacceptable behavior
 # Styleguide: Git Commit Messages
 
 * Limit commit message to 72 characters or less.
-* Reference issues and pull requests - especially when you close an issue with the commit.
+* Reference issues and pull requests - especially when you are closing an issue with the commit.
 * Consider starting the commit message with an applicable emoji:
     * :art: `:art:` when improving the format/structure of the code
     * :racehorse: `:racehorse:` when improving performance
