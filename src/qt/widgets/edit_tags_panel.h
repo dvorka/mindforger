@@ -29,13 +29,31 @@ class EditTagsPanel : public QGroupBox
 {
     Q_OBJECT
 
+    class MyLineEdit : public QLineEdit
+    {
+    private:
+        EditTagsPanel* tagsPanel;
+    public:
+        explicit MyLineEdit(EditTagsPanel* tagsPanel, QWidget* parent) : QLineEdit(parent), tagsPanel(tagsPanel) {}
+        virtual void keyPressEvent(QKeyEvent* event) override {
+            if(event->modifiers() & Qt::ControlModifier){
+                switch(event->key()) {
+                case Qt::Key_Return: // Qt::Key_Enter is keypad Enter
+                    tagsPanel->slotAddTag();
+                    break;
+                }
+            }
+            QLineEdit::keyPressEvent(event);
+        }
+    };
+
 private:
     Ontology& ontology;
     std::vector<const Tag*> tags;
 
     QVBoxLayout* layout;
 
-    QLineEdit* lineEdit;
+    MyLineEdit* lineEdit;
     QCompleter* completer;
     QListView* listView;
     QPushButton* addButton;

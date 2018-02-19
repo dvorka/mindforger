@@ -28,7 +28,8 @@ EditTagsPanel::EditTagsPanel(
     : QGroupBox(tr("Tags"), parent), ontology(ontology)
 {
     // widgets
-    lineEdit = new QLineEdit{parent};
+    lineEdit = new MyLineEdit{this, parent};
+    lineEdit->setToolTip(tr("Hit Ctrl+Enter to add tag"));
     completer = new QCompleter{completerStrings, this};
     completer->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
