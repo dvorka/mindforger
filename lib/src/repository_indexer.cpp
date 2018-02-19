@@ -63,12 +63,14 @@ void RepositoryIndexer::index(Repository* repository)
         this->repository = repository;
 
         memoryDirectory.assign(repository->getPath());
-        if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
+
+        if(repository->getType() == Repository::RepositoryType::MINDFORGER
+             &&
+           repository->getMode() == Repository::RepositoryMode::REPOSITORY
+        ) {
             memoryDirectory.append(FILE_PATH_SEPARATOR);
             memoryDirectory.append(FILE_PATH_MEMORY);
-        }
 
-        if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
             outlineStencilsDirectory.assign(repository->getPath());
             outlineStencilsDirectory.append(FILE_PATH_SEPARATOR);
             outlineStencilsDirectory.append(FILE_PATH_STENCILS);
@@ -80,6 +82,9 @@ void RepositoryIndexer::index(Repository* repository)
             noteStencilsDirectory.append(FILE_PATH_STENCILS);
             noteStencilsDirectory.append(FILE_PATH_SEPARATOR);
             noteStencilsDirectory.append(FILE_PATH_NOTES);
+        } else {
+            outlineStencilsDirectory.clear();
+            noteStencilsDirectory.clear();
         }
 
         updateIndex();
@@ -93,7 +98,11 @@ void RepositoryIndexer::updateIndex() {
 #endif
 
     updateIndexMemory(memoryDirectory);
-    if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
+
+    if(repository->getType() == Repository::RepositoryType::MINDFORGER
+         &&
+       repository->getMode() == Repository::RepositoryMode::REPOSITORY
+    ) {
         updateIndexStencils(outlineStencilsDirectory, outlineStencils);
         updateIndexStencils(noteStencilsDirectory, noteStencils);
     }
@@ -106,37 +115,48 @@ void RepositoryIndexer::updateIndex() {
 
 void RepositoryIndexer::updateIndexMemory(const string& directory)
 {
-    MF_DEBUG("\nINDEXING memory DIR: " << directory);
-    DIR *dir;
-    if((dir = opendir(directory.c_str()))) {
-        const struct dirent *entry;
-        if((entry = readdir(dir))) {
-            string path;
-            string *ppath;
-            do {
-                if(entry->d_type == DT_DIR) {
-                    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
-                        continue;
-                    }
-                    //MF_DEBUG("\nDIVE> " << directory.c_str() << "//" << entry->d_name);
-                    path.assign(directory);
-                    path.append(FILE_PATH_SEPARATOR);
-                    path.append(entry->d_name);
+    if(repository->getMode() == Repository::RepositoryMode::REPOSITORY) {
+        MF_DEBUG("\nINDEXING memory DIR: " << directory);
+        DIR *dir;
+        if((dir = opendir(directory.c_str()))) {
+            const struct dirent *entry;
+            if((entry = readdir(dir))) {
+                string path;
+                string *ppath;
+                do {
+                    if(entry->d_type == DT_DIR) {
+                        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+                            continue;
+                        }
+                        //MF_DEBUG("\nDIVE> " << directory.c_str() << "//" << entry->d_name);
+                        path.assign(directory);
+                        path.append(FILE_PATH_SEPARATOR);
+                        path.append(entry->d_name);
 
-                    updateIndexMemory(path);
-                } else {
-                    MF_DEBUG("\n  FILE: " << directory.c_str() << "//" << entry->d_name);
-                    ppath = new string{directory};
-                    ppath->append(FILE_PATH_SEPARATOR);
-                    ppath->append(entry->d_name);
+                        updateIndexMemory(path);
+                    } else {
+                        MF_DEBUG("\n  FILE: " << directory.c_str() << "//" << entry->d_name);
+                        ppath = new string{directory};
+                        ppath->append(FILE_PATH_SEPARATOR);
+                        ppath->append(entry->d_name);
 
-                    allFiles.insert(ppath);
-                    if(stringEndsWith(*ppath, FILE_EXTENSION_MARKDOWN)) {
-                        markdowns.insert(ppath);
+                        allFiles.insert(ppath);
+                        if(stringEndsWith(*ppath, FILE_EXTENSION_MARKDOWN)) {
+                            markdowns.insert(ppath);
+                        }
                     }
-                }
-            } while ((entry = readdir(dir)) != 0);
-            closedir(dir);
+                } while ((entry = readdir(dir)) != 0);
+                closedir(dir);
+            }
+        }
+    } else {
+        MF_DEBUG("\nINDEXING memory single FILE: " << repository->getFile());
+        if(repository->getFile().size()) {
+            string* path = new string{repository->getFile()};
+            allFiles.insert(path);
+            if(stringEndsWith(repository->getFile(), FILE_EXTENSION_MARKDOWN)) {
+                markdowns.insert(path);
+            }
         }
     }
 }

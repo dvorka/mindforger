@@ -90,7 +90,7 @@ public:
      */
     void clear();
 
-    const Repository* getRepository() const { return repository; }
+    Repository* getRepository() const { return repository; }
 
     const std::set<const std::string*> getMarkdownFiles() const;
     const std::set<const std::string*> getAllOutlineFileNames() const;

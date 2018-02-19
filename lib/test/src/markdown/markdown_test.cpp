@@ -292,7 +292,7 @@ TEST(MarkdownParserTestCase, Bug37Nometa)
     cout << endl << "- Parser ----------------------------------------------";
     MarkdownParserSections parser(lexer);
     parser.parse();
-    EXPECT_TRUE(parser.hasMetadata());
+    EXPECT_FALSE(parser.hasMetadata());
     dumpAst(parser.getAst());
     ASSERT_EQ(parser.getAst()->size(), 4);
     cout << endl << "- DONE ----------------------------------------------";
@@ -310,7 +310,7 @@ TEST(MarkdownParserTestCase, Bug37Notrailing)
     cout << endl << "- Parser ----------------------------------------------";
     MarkdownParserSections parser(lexer);
     parser.parse();
-    EXPECT_TRUE(parser.hasMetadata());
+    EXPECT_FALSE(parser.hasMetadata());
     dumpAst(parser.getAst());
     ASSERT_EQ(parser.getAst()->size(), 4);
     cout << endl << "- DONE ----------------------------------------------";

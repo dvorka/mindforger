@@ -24,23 +24,23 @@ using namespace std;
 
 namespace m8r {
 
-bool stringStartsWith(const char *s, const char *prefix)
+bool stringStartsWith(const char* s, const char* prefix)
 {
     size_t prefixLng = strlen(prefix), sLng = strlen(s);
     return sLng < prefixLng ? false : strncmp(prefix, s, prefixLng) == 0;
 }
 
-bool stringStartsWith(const string s, const string prefix)
+bool stringStartsWith(const string& s, const string& prefix)
 {
     return stringStartsWith(s.c_str(), prefix.c_str());
 }
 
-bool stringStartsWith(const string s, const char *prefix)
+bool stringStartsWith(const string& s, const char* prefix)
 {
     return stringStartsWith(s.c_str(), prefix);
 }
 
-bool stringEndsWith(const string s, const string suffix)
+bool stringEndsWith(const string& s, const string& suffix)
 {
     if(suffix.size() > s.size()) {
         return false;
@@ -48,7 +48,7 @@ bool stringEndsWith(const string s, const string suffix)
     return equal(suffix.rbegin(), suffix.rend(), s.rbegin());
 }
 
-bool stringEndsWith(const string s, const char *suffix)
+bool stringEndsWith(const string& s, const char* suffix)
 {
     if (!s.c_str() || !suffix) {
         return 0;
@@ -67,7 +67,7 @@ bool stringEndsWith(const string s, const char *suffix)
  * This function is outline metadata parser optimized - base size 15
  * and increment 5.
  */
-char **stringSplit(const char *s, const char delimiter) {
+char** stringSplit(const char* s, const char delimiter) {
     return stringSplit(s, delimiter, 15, 5);
 }
 
@@ -75,8 +75,8 @@ char **stringSplit(const char *s, const char delimiter) {
  * @brief Split spring using delimiter and return array of tokens.
  * @return Array of pointers to split items.
  */
-char **stringSplit(
-        const char *s,
+char** stringSplit(
+        const char* s,
         const char delimiter,
         u_int16_t resultBaseSize,
         u_int16_t resultIncSize)

@@ -82,10 +82,12 @@ public:
 
     const std::string& getPath() const { return path; }
     void setPath(std::string path) { this->path = path; }
+    const std::string& getFile() const { return file; }
+    void setFile(std::string file) { this->file = file; }
     RepositoryType getType() const { return type; }
     void setType(RepositoryType type) { this->type = type; }
-    void setRepositoryMode(RepositoryMode mode) { this->mode=mode; }
-    RepositoryMode getRepositoryMode() const { return mode; }
+    void setMode(RepositoryMode mode) { this->mode=mode; }
+    RepositoryMode getMode() const { return mode; }
     bool isReadOnly() const { return readOnly; }
     void setReadOnly(bool readOnly) { this->readOnly = readOnly; }
 

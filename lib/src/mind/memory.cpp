@@ -49,37 +49,66 @@ void Memory::learn()
 {
     repositoryIndexer.index(config.getActiveRepository());
 
-    MF_DEBUG("\nMarkdown files:");
-    for(const string* markdownFile:repositoryIndexer.getMarkdownFiles()) {
-        MF_DEBUG("\n  '" << *markdownFile << "'");
-        Outline* outline = representation.outline(File(*markdownFile));
-        if(config.getActiveRepository()->getType() == Repository::RepositoryType::MINDFORGER) {
-            outline->setFormat(Markdown::Format::MINDFORGER);
-        } else {
-            outline->setFormat(Markdown::Format::MARKDOWN);
+    MF_DEBUG("\nLEARNING repository in mode " << config.getActiveRepository()->getMode() << ":");
+    if(config.getActiveRepository()->getMode() == Repository::RepositoryMode::REPOSITORY) {
+        MF_DEBUG("\nMarkdown files:");
+        for(const string* markdownFile:repositoryIndexer.getMarkdownFiles()) {
+            Outline* outline = representation.outline(File(*markdownFile));
+            MF_DEBUG("\n  '" << *markdownFile << "' format " << (outline->getFormat()==Markdown::Format::MINDFORGER?"MF":"MD"));
+
+            // fix O type according to repository type
+            switch(config.getActiveRepository()->getType()) {
+            case Repository::RepositoryType::MINDFORGER:
+                outline->setFormat(Markdown::Format::MINDFORGER);
+                break;
+            case Repository::RepositoryType::MARKDOWN:
+                outline->setFormat(Markdown::Format::MARKDOWN);
+                break;
+            }
+
+            outlines.push_back(outline);
+            outlinesMap.insert(map<string,Outline*>::value_type(outline->getKey(), outline));
         }
-        outlines.push_back(outline);
-        outlinesMap.insert(map<string,Outline*>::value_type(outline->getKey(), outline));
-    }
 
-    MF_DEBUG("\nOutline stencils:");
-    for(const string* file:repositoryIndexer.getOutlineStencilsFileNames()) {
-        Stencil* stencil = new Stencil{*file, ResourceType::OUTLINE};
-        persistence->load(stencil);
-        outlineStencils.push_back(stencil);
-        MF_DEBUG("\n  " << stencil->getFilePath());
-    }
+        MF_DEBUG("\nOutline stencils:");
+        for(const string* file:repositoryIndexer.getOutlineStencilsFileNames()) {
+            Stencil* stencil = new Stencil{*file, ResourceType::OUTLINE};
+            persistence->load(stencil);
+            outlineStencils.push_back(stencil);
+            MF_DEBUG("\n  " << stencil->getFilePath());
+        }
 
-    MF_DEBUG("\nNote stencils:");
-    for(const string* file:repositoryIndexer.getNoteStencilsFileNames()) {
-        Stencil* stencil = new Stencil{*file, ResourceType::NOTE};
-        persistence->load(stencil);
-        noteStencils.push_back(stencil);
-        MF_DEBUG("\n  " << stencil->getFilePath());
-    }
+        MF_DEBUG("\nNote stencils:");
+        for(const string* file:repositoryIndexer.getNoteStencilsFileNames()) {
+            Stencil* stencil = new Stencil{*file, ResourceType::NOTE};
+            persistence->load(stencil);
+            noteStencils.push_back(stencil);
+            MF_DEBUG("\n  " << stencil->getFilePath());
+        }
 
-    MF_DEBUG("\n");
-    // IMPROVE consider repositoryIndexer.clean() to save memory
+        MF_DEBUG("\n");
+        // IMPROVE consider repositoryIndexer.clean() to save memory
+    } else {
+        MF_DEBUG("\nSingle markdown file: " << repositoryIndexer.getMarkdownFiles().size());
+        if(repositoryIndexer.getMarkdownFiles().size() == 1) {
+            const string* markdownFile = *repositoryIndexer.getMarkdownFiles().begin();
+            Outline* outline = representation.outline(File(*markdownFile));
+            MF_DEBUG("\n  '" << *markdownFile << "' format " << (outline->getFormat()==Markdown::Format::MINDFORGER?"MF":"MD"));
+
+            // MD file format determines repository type
+            repositoryIndexer.getRepository()->setMode(Repository::RepositoryMode::FILE);
+            if(outline->getFormat() == Markdown::Format::MINDFORGER) {
+                repositoryIndexer.getRepository()->setType(Repository::RepositoryType::MINDFORGER);
+            } else {
+                repositoryIndexer.getRepository()->setType(Repository::RepositoryType::MARKDOWN);
+            }
+
+            outlines.push_back(outline);
+            outlinesMap.insert(map<string,Outline*>::value_type(outline->getKey(), outline));
+
+            MF_DEBUG("\n");
+        } // else wrong number of files (typically none)
+    }
 }
 
 void Memory::amnesia()

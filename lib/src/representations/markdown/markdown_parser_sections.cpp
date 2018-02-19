@@ -50,6 +50,7 @@ MarkdownParserSections::~MarkdownParserSections()
 
 void MarkdownParserSections::parse()
 {
+    metadataExist = false;
     if(lexer.size()) {
         if(ast!=nullptr) {
             if(!ast->empty()) {

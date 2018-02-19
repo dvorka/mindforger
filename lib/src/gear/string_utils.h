@@ -36,13 +36,13 @@ namespace m8r {
  *  Helper functions for handling C character strings and std::strings.
  */
 
-bool stringStartsWith(const char *s, const char *prefix);
-bool stringStartsWith(const std::string s, const char *prefix);
-bool stringStartsWith(const std::string s, const std::string prefix);
-bool stringEndsWith(const std::string s, const char *suffix);
-bool stringEndsWith(const std::string s, const std::string suffix);
-char **stringSplit(const char *s, const char delimiter);
-char **stringSplit(const char *s, const char delimiter, u_int16_t resultBaseSize, u_int16_t resultIncSize);
+bool stringStartsWith(const char* s, const char* prefix);
+bool stringStartsWith(const std::string& s, const char* prefix);
+bool stringStartsWith(const std::string& s, const std::string& prefix);
+bool stringEndsWith(const std::string& s, const char* suffix);
+bool stringEndsWith(const std::string& s, const std::string& suffix);
+char** stringSplit(const char* s, const char delimiter);
+char** stringSplit(const char* s, const char delimiter, u_int16_t resultBaseSize, u_int16_t resultIncSize);
 
 /**
  * @brief Normalizes a string to NCName.
@@ -110,17 +110,17 @@ static inline char *stringTrim(const char *s) {
     return nullptr;
 }
 
-static inline std::string &stringLeftTrim(std::string &s) {
+static inline std::string &stringLeftTrim(std::string& s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(isspace))));
     return s;
 }
 
-static inline std::string &stringRightTrim(std::string &s) {
+static inline std::string &stringRightTrim(std::string& s) {
     s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(isspace))).base(), s.end());
     return s;
 }
 
-static inline std::string &stringTrim(std::string &s) {
+static inline std::string &stringTrim(std::string& s) {
     return stringLeftTrim(stringRightTrim(s));
 }
 

@@ -52,8 +52,8 @@ public:
      * plain Markdown file w/o any enhancements.
      */
     enum Format {
-        MINDFORGER,
-        MARKDOWN
+        MINDFORGER = 1,
+        MARKDOWN = 2
     };
 
 private:
