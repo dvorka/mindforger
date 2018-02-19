@@ -29,7 +29,21 @@ bool caseInsensitiveLessThan(const QString &a, const QString &b)
 NoteEditorView::NoteEditorView(QWidget* parent, bool enableLineNumbers)
     : QPlainTextEdit(parent), parent(parent), completedAndSelected(false), enableLineNumbers(enableLineNumbers)
 {
-    setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+    // font
+    QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    // alternatively
+    //font.setFamily("Courier");
+    //font.setStyleHint(QFont::Monospace);
+    //font.setFixedPitch(true);
+    //font.setPointSize(10);
+
+    setFont(font);
+
+    // tab width 4 vs 8
+    // IMPROVE move this constant to Configuration (number is number of characters)
+    const int tabStop = 4;
+    QFontMetrics metrics(font);
+    setTabStopWidth(tabStop * metrics.width(' '));
 
     createWidgets();
     createConnections();
