@@ -232,8 +232,12 @@ Repository* RepositoryIndexer::getRepositoryForPath(const std::string& path)
         return new Repository(path);
     } else if(isDirectoryOrFileExists(path.c_str())) {
         if(isDirectory(path.c_str())) {
+            detect MF repo or MD repo
+
             return new Repository(path, Repository::RepositoryType::MARKDOWN);
         } else {
+            break to filename and repository
+
             return new Repository(path, Repository::RepositoryType::MARKDOWN, Repository::RepositoryMode::FILE);
         }
     } else {

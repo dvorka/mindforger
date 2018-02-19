@@ -62,7 +62,7 @@ class MainWindowPresenter : public QObject
 private:
     MainWindowView& view;
 
-    Configuration& configuration;
+    Configuration& config;
     Mind* mind;
 
     MarkdownOutlineRepresentation* mdRepresentation;
@@ -90,7 +90,7 @@ public:
     // this presenter view
     MainWindowView& getView() const { return view; }
     void initView();
-    const Configuration& getConfiguration() const { return configuration; }
+    const Configuration& getConfiguration() const { return config; }
     MarkdownOutlineRepresentation* getMarkdownRepresentation() const { return mdRepresentation; }
 
     // presenters

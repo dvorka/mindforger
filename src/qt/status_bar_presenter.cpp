@@ -53,8 +53,24 @@ void StatusBarPresenter::showMindStatistics()
     // use locale to: 1000 > 1,000
     status.clear();
     status = " Sleeping    "; // IMPROVE sleeping / thinking / dreaming
-    status.append("MF"); // MF, MD (file), MDs (directory)
-    status.append(" repository    ");
+
+    switch(Configuration::getInstance().getActiveRepository()->getType()) {
+    case Repository::RepositoryType::MINDFORGER:
+        status.append("MF");
+        break;
+    case Repository::RepositoryType::MARKDOWN:
+        status.append("MD");
+        break;
+    }
+    switch(Configuration::getInstance().getActiveRepository()->getMode()) {
+    case Repository::RepositoryMode::REPOSITORY:
+        status.append(" repository    ");
+        break;
+    case Repository::RepositoryMode::FILE:
+        status.append(" file    ");
+        break;
+    }
+
     status += cLocale.toString(mind->remind().getOutlinesCount());
     //status += QString::number(mind->remind().getOutlinesCount());
     status.append(" outlines    ");

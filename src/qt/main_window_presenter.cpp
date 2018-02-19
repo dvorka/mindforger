@@ -24,10 +24,10 @@ namespace m8r {
 
 MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     : view(view),
-      configuration(Configuration::getInstance())
+      config(Configuration::getInstance())
 {    
     // think
-    mind = new Mind{configuration};
+    mind = new Mind{config};
     mind->think();
 
     // representations
@@ -42,7 +42,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // initialize components
     newOutlineDialog = new OutlineNewDialog{
-                QString::fromStdString(configuration.getMemoryPath()),
+                QString::fromStdString(config.getMemoryPath()),
                 mind->remind().getOntology(),
                 mind->remind().getStencils(ResourceType::OUTLINE),
                 &view};
@@ -93,29 +93,51 @@ void MainWindowPresenter::doActionMindLearn()
     QString homeDirectory
         = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
 
+    QMessageBox msgBox;
+    msgBox.setText("Learn");
+    msgBox.setInformativeText("Do you want to open MindForger/Markdown directory or file?");
+    QPushButton* repositoryButton = msgBox.addButton(tr("Repository"), QMessageBox::ActionRole);
+    QPushButton* fileButton = msgBox.addButton(tr("File"), QMessageBox::ActionRole);
+    QPushButton* cancelButton = msgBox.addButton(QMessageBox::Cancel);
+    msgBox.exec();
+
     QFileDialog learnDialog{&view};
-    learnDialog.setWindowTitle(tr("Open Repository"));
-    learnDialog.setFileMode(QFileDialog::DirectoryOnly);
-    learnDialog.setDirectory(homeDirectory);
-    learnDialog.setViewMode(QFileDialog::Detail);
+    if (msgBox.clickedButton() == repositoryButton) {
+        learnDialog.setWindowTitle(tr("Open Repository"));
+        // learnDialog.setFileMode(QFileDialog::Directory|QFileDialog::ExistingFiles); not supported, therefore
+        // >
+        // ASK user: directory/repository or file (choice) > open dialog configured as required
+        learnDialog.setFileMode(QFileDialog::Directory);
+        learnDialog.setDirectory(homeDirectory);
+        learnDialog.setViewMode(QFileDialog::Detail);
+    } else if (msgBox.clickedButton() == fileButton) {
+        learnDialog.setWindowTitle(tr("Open File"));
+        learnDialog.setFileMode(QFileDialog::ExistingFile);
+        learnDialog.setDirectory(homeDirectory);
+        learnDialog.setViewMode(QFileDialog::Detail);
+    } else if (msgBox.clickedButton() == cancelButton) {
+        return;
+    }
 
     QStringList directoryNames{};
     if(learnDialog.exec()) {
         directoryNames = learnDialog.selectedFiles();
         if(directoryNames.size()==1) {
-            if(RepositoryIndexer::isMindForgerRepository(directoryNames[0].toStdString())) {
-                // TODO clear everything - hard
-                // TODO load to mind new repository (like when MF is booting)
+            mind->amnesia();
+            Repository* r = RepositoryIndexer::getRepositoryForPath(directoryNames[0].toStdString());
+            if(r) {
+                config.setActiveRepository(config.addRepository(r));
+                mind->think();
 
-                // ... xxx continue here ...
-
+                MF_DEBUG(endl << "Learned and going to show repository of size: " << mind->remind().getOutlines().size() << endl);
+                orloj->showFacetOutlineList(mind->remind().getOutlines());
             } else {
                 QMessageBox::critical(
                     &view,
                     tr("Learn"),
-                    tr("This is not MindForger repository - directory doesn't contain memory/ and other required sub-directories."));
+                    tr("This is neither valid MindForger/Markdown repository nor file."));
             }
-        }
+        } // else too many files
     } // else directory closed / nothing choosen
 }
 
