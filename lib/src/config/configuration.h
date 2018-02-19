@@ -103,7 +103,7 @@ private:
     bool editorEnableSyntaxHighlighting;
 
 private:
-    Installer*const installer;
+    Installer* installer;
 
 public:
     Configuration(const Configuration&) = delete;

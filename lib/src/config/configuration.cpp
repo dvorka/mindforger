@@ -44,7 +44,6 @@ Configuration::Configuration()
     fontPointSize = DEFAULT_FONT_POINT_SIZE;
 }
 
-
 Configuration::~Configuration()
 {
     for(auto& r:repositories) {
@@ -54,11 +53,16 @@ Configuration::~Configuration()
 
     if(installer) {
         delete installer;
+        installer = nullptr;
     }
 }
 
 Repository* Configuration::addRepository(Repository* repository)
 {
+    if(repositories[repository->getPath()] != nullptr) {
+        // deleting clashing repository
+        delete repositories[repository->getPath()];
+    }
     repositories[repository->getPath()] = repository; // overwrites item map under given key (map::insert keeps existing)
     return repository;
 }

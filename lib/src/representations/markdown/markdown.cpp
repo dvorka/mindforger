@@ -28,6 +28,7 @@ Markdown::Markdown(const std::string* filePath)
     this->fileSize = 0;
     this->modified = 0;
     this->ast = nullptr;
+    this->format = Format::MINDFORGER;
 }
 
 void Markdown::clear()
@@ -39,6 +40,7 @@ void Markdown::clear()
         delete ast;
         ast = nullptr;
     }
+    this->format = Format::MINDFORGER;
 }
 
 void Markdown::from()

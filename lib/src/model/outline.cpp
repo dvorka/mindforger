@@ -40,8 +40,9 @@ void Outline::resetClonedOutline(Outline* o)
     o->setReads(1);
     o->setRevision(0);
     o->setModified();
+    o->setCreated(o->modified);
     o->modified++;
-    o->setRead(o->getModified());
+    o->setRead(o->modified);
     o->setModifiedPretty();
     o->completeProperties(o->getModified());
 }
