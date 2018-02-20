@@ -93,6 +93,7 @@ void MainWindowPresenter::doActionMindLearn()
     QString homeDirectory
         = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
 
+    // IMPROVE extend Qt's file dialog to support both directory and file section (message box goes away)
     QMessageBox msgBox;
     msgBox.setText("Learn");
     msgBox.setInformativeText("Do you want to open MindForger/Markdown directory or file?");
@@ -129,8 +130,20 @@ void MainWindowPresenter::doActionMindLearn()
                 config.setActiveRepository(config.addRepository(r));
                 mind->think();
 
-                MF_DEBUG(endl << "Learned and going to show repository of size: " << mind->remind().getOutlines().size() << endl);
-                orloj->showFacetOutlineList(mind->remind().getOutlines());
+                if(mind->remind().getOutlines().size()) {
+                    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+                        mainMenu->getView()->showFacetModeRepository();
+                        orloj->showFacetOutlineList(mind->remind().getOutlines());
+                    } else {
+                        mainMenu->getView()->showFacetModeSingleFile();
+                        orloj->showFacetOutline(*mind->remind().getOutlines().begin());
+                    }
+                } else {
+                    // nothing to show
+                    mind->amnesia();
+                    // IMPROVE show homepage once it's implemented
+                    orloj->showFacetOutlineList(mind->remind().getOutlines());
+                }
             } else {
                 QMessageBox::critical(
                     &view,

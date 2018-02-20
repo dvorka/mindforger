@@ -424,6 +424,24 @@ void MainMenuView::showAllMenuItems()
     menuNote->setEnabled(true);
     menuFormat->setEnabled(true);
     menuHelp->setEnabled(true);
+
+    actionFindOutlineByName->setEnabled(true);
+}
+
+void MainMenuView::showFacetModeRepository()
+{
+    showFacetOutlineList();
+}
+
+void MainMenuView::showFacetModeSingleFile()
+{
+    showAllMenuItems();
+    menuView->setEnabled(false);
+    menuOutline->setEnabled(false);
+    menuFormat->setEnabled(false);
+
+    actionFindOutlineByName->setEnabled(false);
+    actionFindOutlineByTag->setEnabled(false);
 }
 
 void MainMenuView::showFacetOutlineList()

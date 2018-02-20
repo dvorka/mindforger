@@ -152,9 +152,11 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
     } else {
         MF_DEBUG("\nINDEXING memory single FILE: " << repository->getFile());
         if(repository->getFile().size()) {
-            string* path = new string{repository->getFile()};
+            string* path = new string{repository->getPath()};
+            path->append(FILE_PATH_SEPARATOR);
+            path->append(repository->getFile());
             allFiles.insert(path);
-            if(stringEndsWith(repository->getFile(), FILE_EXTENSION_MARKDOWN)) {
+            if(stringEndsWith(*path, FILE_EXTENSION_MARKDOWN)) {
                 markdowns.insert(path);
             }
         }

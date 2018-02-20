@@ -149,6 +149,9 @@ public:
     MainMenuView &operator=(const MainMenuView&&) = delete;
     virtual ~MainMenuView();
 
+    void showFacetModeRepository();
+    void showFacetModeSingleFile();
+
     void showFacetOutlineList();
     void showFacetOutlineView();
     void showFacetNoteEdit();
