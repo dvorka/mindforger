@@ -228,17 +228,18 @@ bool RepositoryIndexer::isMindForgerRepository(const string& directory)
 
 Repository* RepositoryIndexer::getRepositoryForPath(const std::string& path)
 {
-    if(isMindForgerRepository(path)) {
-        return new Repository(path);
-    } else if(isDirectoryOrFileExists(path.c_str())) {
+    if(isDirectoryOrFileExists(path.c_str())) {
         if(isDirectory(path.c_str())) {
-            detect MF repo or MD repo
-
-            return new Repository(path, Repository::RepositoryType::MARKDOWN);
+            if(isMindForgerRepository(path)) {
+                return new Repository(path);
+            } else {
+                return new Repository(path, Repository::RepositoryType::MARKDOWN);
+            }
         } else {
-            break to filename and repository
-
-            return new Repository(path, Repository::RepositoryType::MARKDOWN, Repository::RepositoryMode::FILE);
+            string directory, file;
+            pathToDirectoryAndFile(path, directory, file);
+            // MF/MD for single file will be determined after parsing i.e. metadata detection (would be too expensive here)
+            return new Repository(directory, Repository::RepositoryType::MINDFORGER, Repository::RepositoryMode::FILE, file);
         }
     } else {
         // directory doesn't exist - nothing to learn

@@ -30,6 +30,62 @@ using namespace std;
 extern char* getMindforgerGitHomePath();
 extern void dumpOutline(m8r::Outline*&);
 
+TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
+{
+    string repositoryPath, directoryName, fileName;
+
+    // MF repository
+    repositoryPath.assign("/lib/test/resources/basic-repository");
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::Repository* r = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    ASSERT_NE(r, nullptr);
+    EXPECT_EQ(r->getType(),m8r::Repository::RepositoryType::MINDFORGER);
+    EXPECT_EQ(r->getMode(),m8r::Repository::RepositoryMode::REPOSITORY);
+    EXPECT_EQ(r->getPath(),repositoryPath);
+    EXPECT_TRUE(r->getFile().empty());
+    delete r;
+
+    // MD repository
+    repositoryPath.assign("/lib/test/resources/basic-repository/memory");
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    r = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    ASSERT_NE(r, nullptr);
+    EXPECT_EQ(r->getType(),m8r::Repository::RepositoryType::MARKDOWN);
+    EXPECT_EQ(r->getMode(),m8r::Repository::RepositoryMode::REPOSITORY);
+    EXPECT_EQ(r->getPath(),repositoryPath);
+    EXPECT_TRUE(r->getFile().empty());
+    delete r;
+
+    // MF file
+    repositoryPath.assign("/lib/test/resources/basic-repository/memory/flat-metadata.md");
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    directoryName.assign("/lib/test/resources/basic-repository/memory");
+    directoryName.insert(0, getMindforgerGitHomePath());
+    fileName.assign("flat-metadata.md");
+    r = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    ASSERT_NE(r, nullptr);
+    EXPECT_EQ(r->getType(),m8r::Repository::RepositoryType::MINDFORGER);
+    EXPECT_EQ(r->getMode(),m8r::Repository::RepositoryMode::FILE);
+    EXPECT_EQ(r->getPath(),directoryName);
+    EXPECT_EQ(r->getFile(),fileName);
+    delete r;
+
+    // MD file
+    repositoryPath.assign("/lib/test/resources/basic-repository/memory/no-metadata.md");
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    directoryName.assign("/lib/test/resources/basic-repository/memory");
+    directoryName.insert(0, getMindforgerGitHomePath());
+    fileName.assign("no-metadata.md");
+    r = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    ASSERT_NE(r, nullptr);
+    // it's OK - MF is default type BEFORE parsing (MF doesn't delete metadata, MD would erase them)
+    EXPECT_EQ(r->getType(),m8r::Repository::RepositoryType::MINDFORGER);
+    EXPECT_EQ(r->getMode(),m8r::Repository::RepositoryMode::FILE);
+    EXPECT_EQ(r->getPath(),directoryName);
+    EXPECT_EQ(r->getFile(),fileName);
+    delete r;
+}
+
 TEST(RepositoryIndexerTestCase, MindForgerRepository)
 {
     string repositoryPath{"/tmp/mf-unit-repository-indexer-mf"};

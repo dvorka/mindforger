@@ -22,6 +22,23 @@ using namespace std;
 
 namespace m8r {
 
+void pathToDirectoryAndFile(const std::string& path, std::string& directory, std::string& file)
+{
+    if(!path.empty()) {
+        size_t found;
+#ifdef __linux__
+        found=path.find_last_of("/");
+#elif _WIN32
+        found=path.find_last_of("\\");
+#else
+        // IMPROVE complete the code
+        found=path.find_last_of("/");
+#endif
+        directory = path.substr(0,found);
+        file = path.substr(found+1);
+    }
+}
+
 bool stringToLines(const string* text, vector<string*>& lines, unsigned long int &filesize)
 {
     if(text) {
@@ -80,9 +97,9 @@ time_t fileModificationTime(const string* filename)
     stat(filename->c_str(), &t_stat);
     return t_stat.st_ctime;
 #elif _WIN32
-    // windows code goes here
+    // IMPROVE windows code goes here
 #else
-
+    // IMPROVE complete the code
 #endif
 }
 

@@ -186,6 +186,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
         repositoryPath,
         m8r::Repository::RepositoryType::MINDFORGER,
         m8r::Repository::RepositoryMode::REPOSITORY,
+        "",
         false);
 
     // 1/3 learn
@@ -264,6 +265,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
         repositoryPath,
         m8r::Repository::RepositoryType::MARKDOWN,
         m8r::Repository::RepositoryMode::REPOSITORY,
+        "",
         false);
     config.setActiveRepository(config.addRepository(repository));
     mind.think();

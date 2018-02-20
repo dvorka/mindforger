@@ -73,6 +73,7 @@ public:
         std::string path,
         RepositoryType type=RepositoryType::MINDFORGER,
         RepositoryMode mode=RepositoryMode::REPOSITORY,
+        std::string file = "",
         bool readOnly=false);
     Repository(const Repository&) = delete;
     Repository(const Repository&&) = delete;

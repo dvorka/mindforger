@@ -26,8 +26,9 @@ Repository::Repository(
     string path,
     RepositoryType type,
     RepositoryMode mode,
+    std::string file,
     bool readOnly)
-    : path(path), type(type), mode(mode), readOnly(readOnly)
+    : path(path), file(file), type(type), mode(mode), readOnly(readOnly)
 {
 }
 

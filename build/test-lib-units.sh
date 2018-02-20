@@ -21,17 +21,18 @@ export SCRIPT_DIR=`pwd`
 export BUILD_DIR=${SCRIPT_DIR}/..
 
 # run all tests
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests
+cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && gdb ./mindforger-lib-unit-tests
 
 # run selected test(s)
 # --gtest-filter=XYZ.* ... filter tests
 # --gtest_repeat=1000  ... performance/load tests
 #export TEST_NAME="MarkdownParserTestCase.MarkdownLexerSectionsNoMetadata"
-export TEST_NAME="MarkdownParserTestCase.*"
+#export TEST_NAME="MarkdownParserTestCase.*"
 #export TEST_NAME="MarkdownParserTestCase.MarkdownParserSections"
 #export TEST_NAME="MarkdownParserTestCase.MarkdownParserSectionsNoMetadata"
 #export TEST_NAME="RepositoryIndexerTestCase.*"
+#export TEST_NAME="RepositoryIndexerTestCase.RepositoryTypeDetection"
 #export TEST_NAME="RepositoryIndexerTestCase.MarkdownRepository"
 #export TEST_NAME="RepositoryIndexerTestCase.MindForgerRepository"
 #export TEST_NAME="RepositoryIndexerTestCase.MindForgerFile"
@@ -49,7 +50,7 @@ export TEST_NAME="MarkdownParserTestCase.*"
 #export TEST_NAME="OutlineTestCase.CloneOutline"
 #export TEST_NAME="StringGearTestCase.Split"
 
-cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=${TEST_NAME}
+#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests --gtest_filter=${TEST_NAME}
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && gdb --args ./mindforger-lib-unit-tests --gtest_filter=${TEST_NAME}
 
 # clean all to avoid side effects next time
