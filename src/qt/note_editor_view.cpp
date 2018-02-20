@@ -26,8 +26,8 @@ bool caseInsensitiveLessThan(const QString &a, const QString &b)
     return a.compare(b, Qt::CaseInsensitive) < 0;
 }
 
-NoteEditorView::NoteEditorView(QWidget* parent, bool enableLineNumbers)
-    : QPlainTextEdit(parent), parent(parent), completedAndSelected(false), enableLineNumbers(enableLineNumbers)
+NoteEditorView::NoteEditorView(QWidget* parent)
+    : QPlainTextEdit(parent), parent(parent), completedAndSelected(false)
 {
     // font
     QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
@@ -54,10 +54,10 @@ NoteEditorView::NoteEditorView(QWidget* parent, bool enableLineNumbers)
 
 void NoteEditorView::createWidgets()
 {
-    (void)new NoteEditHighlight{document()};
+    highlighter = new NoteEditHighlight{document()};
 
     lineNumberPanel = new LineNumberPanel{this};
-    lineNumberPanel->setVisible(enableLineNumbers);
+    lineNumberPanel->setVisible(showLineNumbers);
 
     model = new QStringListModel{this};
     completer = new QCompleter{this};
@@ -87,6 +87,18 @@ void NoteEditorView::createConnections()
     new QShortcut(
         QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Slash)),
         this, SLOT(performCompletion()));
+}
+
+void NoteEditorView::setShowLineNumbers(bool show)
+{
+    showLineNumbers = show;
+    lineNumberPanel->setVisible(showLineNumbers);
+}
+
+void NoteEditorView::setEnableSyntaxHighlighting(bool enable)
+{
+    enableSyntaxHighlighting = enable;
+    highlighter->setEnabled(enableSyntaxHighlighting);
 }
 
 void NoteEditorView::keyPressEvent(QKeyEvent *event)
@@ -225,7 +237,7 @@ void NoteEditorView::highlightCurrentLine()
 
 int NoteEditorView::lineNumberPanelWidth()
 {
-    if(enableLineNumbers) {
+    if(showLineNumbers) {
         int digits = 1;
         int max = qMax(1, blockCount());
         while(max >= 10) {
@@ -239,22 +251,26 @@ int NoteEditorView::lineNumberPanelWidth()
     }
 }
 
-void NoteEditorView::updateLineNumberPanelWidth(int /* newBlockCount */)
+void NoteEditorView::updateLineNumberPanelWidth(int newBlockCount)
 {
+    UNUSED_ARG(newBlockCount);
+
     // IMPROVE comment to parameter and ignore macro
     setViewportMargins(lineNumberPanelWidth(), 0, 0, 0);
 }
 
 void NoteEditorView::updateLineNumberPanel(const QRect& r, int deltaY)
 {
-    if(deltaY) {
-        lineNumberPanel->scroll(0, deltaY);
-    } else {
-        lineNumberPanel->update(0, r.y(), lineNumberPanel->width(), r.height());
-    }
+    if(showLineNumbers) {
+        if(deltaY) {
+            lineNumberPanel->scroll(0, deltaY);
+        } else {
+            lineNumberPanel->update(0, r.y(), lineNumberPanel->width(), r.height());
+        }
 
-    if (r.contains(viewport()->rect())) {
-        updateLineNumberPanelWidth(0);
+        if (r.contains(viewport()->rect())) {
+            updateLineNumberPanelWidth(0);
+        }
     }
 }
 

@@ -90,7 +90,7 @@ void Outline::completeProperties(const time_t fileModificationTime)
     // Outline
     //  - invariants:
     //    read > modified > created
-    //    reads > writes
+    //    reads >= writes
 
     if(!created) {
         if(modified) {

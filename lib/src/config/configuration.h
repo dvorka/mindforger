@@ -99,8 +99,8 @@ private:
     // GUI configuration
     int fontPointSize;
     bool viewerShowMetadata; // show reads/writes/... when viewing Outlines and/or Notes.
-    bool editorShowLineNumbers;
-    bool editorEnableSyntaxHighlighting;
+    bool editorShowLineNumbers; // show line numbers
+    bool editorEnableSyntaxHighlighting; // toggle syntax highlighting
 
 private:
     Installer* installer;
@@ -146,6 +146,10 @@ public:
     const std::string& getExternalEditorPath() const { return externalEditorPath; }
 
     int getFontPointSize() const { return fontPointSize; }
+    bool isEditorShowLineNumbers() const { return editorShowLineNumbers; }
+    void setEditorShowLineNumbers(bool show) { editorShowLineNumbers = show; }
+    bool isEditorEnableSyntaxHighlighting() const { return editorEnableSyntaxHighlighting; }
+    void setEditorEnableSyntaxHighlighting(bool enable) { editorEnableSyntaxHighlighting = enable; }
 
 private:
     const std::string getConfigFileName();

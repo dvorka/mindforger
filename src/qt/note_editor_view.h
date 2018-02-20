@@ -21,6 +21,8 @@
 
 #include <QtWidgets>
 
+#include "../../lib/src/gear/lang_utils.h"
+
 #include "note_edit_highlight.h"
 #include "widgets/line_number_panel.h"
 
@@ -39,14 +41,20 @@ private:
     QCompleter *completer;
     QStringListModel *model;
 
-    bool enableLineNumbers;
+    NoteEditHighlight* highlighter;
+
+    bool showLineNumbers;
+    bool enableSyntaxHighlighting;
 
 public:
-    explicit NoteEditorView(QWidget* parent, bool enableLineNubers=true);
+    explicit NoteEditorView(QWidget* parent);
     NoteEditorView(const NoteEditorView&) = delete;
     NoteEditorView(const NoteEditorView&&) = delete;
     NoteEditorView &operator=(const NoteEditorView&) = delete;
     NoteEditorView &operator=(const NoteEditorView&&) = delete;
+
+    void setShowLineNumbers(bool show);
+    void setEnableSyntaxHighlighting(bool enable);
 
 protected:
     void mousePressEvent(QMouseEvent* event);

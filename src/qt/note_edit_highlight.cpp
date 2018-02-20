@@ -96,10 +96,12 @@ void NoteEditHighlight::addRegex(Type type, const QString &pattern, bool minimal
 
 void NoteEditHighlight::highlightBlock(const QString& text)
 {
-    setCurrentBlockState(Normal);
+    if(enabled) {
+        setCurrentBlockState(Normal);
 
-    highlightPatterns(text);
-    highlightComments(text);
+        highlightPatterns(text);
+        highlightComments(text);
+    }
 }
 
 void NoteEditHighlight::highlightPatterns(const QString& text)

@@ -86,6 +86,13 @@ using namespace std;
  */
 int main(int argc, char *argv[])
 {
+    // load configuration
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.load();
+    // IMPROVE hardcoded settings below to be loaded from the configuration file
+    config.setEditorShowLineNumbers(true);
+    config.setEditorEnableSyntaxHighlighting(true);
+
     QApplication mindforgerApplication(argc, argv);
 
     std::string useRepository{};
@@ -141,9 +148,6 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion(MINDFORGER_VERSION);
     m8r::initRandomizer();
 
-    // load configuration & update it w/ CLI settings
-    m8r::Configuration& config = m8r::Configuration::getInstance();
-    config.load();
     if(!useRepository.empty()) {
         config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(useRepository)));
     } else {

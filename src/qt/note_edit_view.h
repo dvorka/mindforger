@@ -54,6 +54,8 @@ public:
         editTitleAndButtonsPanel->setNote(note);
         noteEditor->setPlainText(QString::fromStdString(mdDescription));
     }
+    void setEditorShowLineNumbers(bool show) { noteEditor->setShowLineNumbers(show); }
+    void setEditorEnableSyntaxHighlighting(bool enable) { noteEditor->setEnableSyntaxHighlighting(enable); }
 
     QString getTitle() const { return editTitleAndButtonsPanel->getTitle(); }
     QString getDescription() const { return noteEditor->toPlainText(); }

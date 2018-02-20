@@ -53,6 +53,8 @@ private:
         InComment=0x02
     };
 
+    bool enabled;
+
     LookAndFeels& lookAndFeels;
 
     // Markdown formats
@@ -80,6 +82,9 @@ public:
     NoteEditHighlight(const NoteEditHighlight&&) = delete;
     NoteEditHighlight &operator=(const NoteEditHighlight&) = delete;
     NoteEditHighlight &operator=(const NoteEditHighlight&&) = delete;
+
+    void setEnabled(bool enable) { enabled = enable; }
+    bool isEnabled() const { return enabled; }
 
 protected:
     void highlightBlock(const QString &text);
