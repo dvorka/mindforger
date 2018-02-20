@@ -162,6 +162,21 @@ void Outline::completeProperties(const time_t fileModificationTime)
     }
 }
 
+bool Outline::isVirgin() const
+{
+    if(notes.empty() &&
+       !title.compare("Outline") &&
+       importance==0 &&
+       urgency==0 &&
+       progress==0
+    ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 void Outline::notifyChange(Note* note)
 {
     modified = datetimeNow();

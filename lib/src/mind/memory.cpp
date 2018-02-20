@@ -66,8 +66,13 @@ void Memory::learn()
                 break;
             }
 
-            outlines.push_back(outline);
-            outlinesMap.insert(map<string,Outline*>::value_type(outline->getKey(), outline));
+            if(outline->isVirgin()) {
+                MF_DEBUG("\n    VIRGIN ~ most probably wrongly parsed > SKIPPING it");
+                delete outline;
+            } else {
+                outlines.push_back(outline);
+                outlinesMap.insert(map<string,Outline*>::value_type(outline->getKey(), outline));
+            }
         }
 
         MF_DEBUG("\nOutline stencils:");
@@ -103,8 +108,13 @@ void Memory::learn()
                 repositoryIndexer.getRepository()->setType(Repository::RepositoryType::MARKDOWN);
             }
 
-            outlines.push_back(outline);
-            outlinesMap.insert(map<string,Outline*>::value_type(outline->getKey(), outline));
+            if(outline->isVirgin()) {
+                MF_DEBUG("\n    VIRGIN ~ most probably wrongly parsed > SKIPPING it");
+                delete outline;
+            } else {
+                outlines.push_back(outline);
+                outlinesMap.insert(map<string,Outline*>::value_type(outline->getKey(), outline));
+            }
 
             MF_DEBUG("\n");
         } // else wrong number of files (typically none)

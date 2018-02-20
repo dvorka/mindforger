@@ -133,9 +133,9 @@ public:
     void completeProperties(const time_t fileModificationTime);
 
     /**
-     * @brief TRUE if Notes were loaded from filesystem.
+     * @brief Virgin Outline has default title, no Notes, clean metadata, ...
      */
-    bool isNotesLoaded() const;
+    bool isVirgin() const;
 
     const std::string& getKey() const;
     void setKey(const std::string key);
