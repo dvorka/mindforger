@@ -21,6 +21,7 @@
 namespace m8r {
 
 MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
+    : config(Configuration::getInstance())
 {
     this->view = new MainMenuView(mwp->getView());
     this->maindWindowPresenter = mwp;
@@ -85,17 +86,17 @@ MainMenuPresenter::~MainMenuPresenter()
 
 void MainMenuPresenter::showFacetOutlineList()
 {
-    view->showFacetOutlineList();
+    view->showFacetOutlineList(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
 }
 
 void MainMenuPresenter::showFacetOutlineView()
 {
-    view->showFacetOutlineView();
+    view->showFacetOutlineView(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
 }
 
 void MainMenuPresenter::showFacetNoteEdit()
 {
-    view->showFacetNoteEdit();
+    view->showFacetNoteEdit(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
 }
 
 }

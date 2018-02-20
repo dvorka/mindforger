@@ -94,17 +94,17 @@ void MainWindowPresenter::doActionMindLearn()
         = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
 
     // IMPROVE extend Qt's file dialog to support both directory and file section (message box goes away)
-    QMessageBox msgBox;
-    msgBox.setText("Learn");
-    msgBox.setInformativeText("Do you want to open MindForger/Markdown directory or file?");
-    QPushButton* repositoryButton = msgBox.addButton(tr("Repository"), QMessageBox::ActionRole);
-    QPushButton* fileButton = msgBox.addButton(tr("File"), QMessageBox::ActionRole);
+    QMessageBox msgBox{&view};
+    msgBox.setIcon(QMessageBox::Icon::Question);
+    msgBox.setText(tr("Do you want to learn content of directory or file?"));
+    QPushButton* repositoryButton = msgBox.addButton(tr("&Directory"), QMessageBox::ActionRole);
+    QPushButton* fileButton = msgBox.addButton(tr("&File"), QMessageBox::ActionRole);
     QPushButton* cancelButton = msgBox.addButton(QMessageBox::Cancel);
     msgBox.exec();
 
     QFileDialog learnDialog{&view};
     if (msgBox.clickedButton() == repositoryButton) {
-        learnDialog.setWindowTitle(tr("Open Repository"));
+        learnDialog.setWindowTitle(tr("Learn Directory"));
         // learnDialog.setFileMode(QFileDialog::Directory|QFileDialog::ExistingFiles); not supported, therefore
         // >
         // ASK user: directory/repository or file (choice) > open dialog configured as required
@@ -112,7 +112,7 @@ void MainWindowPresenter::doActionMindLearn()
         learnDialog.setDirectory(homeDirectory);
         learnDialog.setViewMode(QFileDialog::Detail);
     } else if (msgBox.clickedButton() == fileButton) {
-        learnDialog.setWindowTitle(tr("Open File"));
+        learnDialog.setWindowTitle(tr("Learn File"));
         learnDialog.setFileMode(QFileDialog::ExistingFile);
         learnDialog.setDirectory(homeDirectory);
         learnDialog.setViewMode(QFileDialog::Detail);
@@ -132,10 +132,8 @@ void MainWindowPresenter::doActionMindLearn()
 
                 if(mind->remind().getOutlines().size()) {
                     if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-                        mainMenu->getView()->showFacetModeRepository();
                         orloj->showFacetOutlineList(mind->remind().getOutlines());
                     } else {
-                        mainMenu->getView()->showFacetModeSingleFile();
                         orloj->showFacetOutline(*mind->remind().getOutlines().begin());
                     }
                 } else {

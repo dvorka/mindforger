@@ -43,6 +43,7 @@ private:
     MainMenuView* view;
 
     MainWindowPresenter* maindWindowPresenter;
+    Configuration& config;
 
 public:
     MainMenuPresenter(MainWindowPresenter* mainWindowPresenter);

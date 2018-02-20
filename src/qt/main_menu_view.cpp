@@ -428,38 +428,51 @@ void MainMenuView::showAllMenuItems()
     actionFindOutlineByName->setEnabled(true);
 }
 
-void MainMenuView::showFacetModeRepository()
-{
-    showFacetOutlineList();
-}
-
-void MainMenuView::showFacetModeSingleFile()
+void MainMenuView::showFacetOutlineList(bool repositoryMode)
 {
     showAllMenuItems();
-    menuView->setEnabled(false);
-    menuOutline->setEnabled(false);
-    menuFormat->setEnabled(false);
 
-    actionFindOutlineByName->setEnabled(false);
-    actionFindOutlineByTag->setEnabled(false);
-}
-
-void MainMenuView::showFacetOutlineList()
-{
-    showAllMenuItems();
     menuFormat->setEnabled(false);
     menuNote->setEnabled(false);
+
+    if(!repositoryMode) {
+        menuView->setEnabled(false);
+        menuOutline->setEnabled(false);
+        menuFormat->setEnabled(false);
+
+        actionFindOutlineByName->setEnabled(false);
+        actionFindOutlineByTag->setEnabled(false);
+    }
 }
 
-void MainMenuView::showFacetOutlineView()
+void MainMenuView::showFacetOutlineView(bool repositoryMode)
 {
     showAllMenuItems();
+
     menuFormat->setEnabled(false);
+
+    if(!repositoryMode) {
+        menuView->setEnabled(false);
+        menuOutline->setEnabled(false);
+        menuFormat->setEnabled(false);
+
+        actionFindOutlineByName->setEnabled(false);
+        actionFindOutlineByTag->setEnabled(false);
+    }
 }
 
-void MainMenuView::showFacetNoteEdit()
+void MainMenuView::showFacetNoteEdit(bool repositoryMode)
 {
     showAllMenuItems();
+
+    if(!repositoryMode) {
+        menuView->setEnabled(false);
+        menuOutline->setEnabled(false);
+        menuFormat->setEnabled(false);
+
+        actionFindOutlineByName->setEnabled(false);
+        actionFindOutlineByTag->setEnabled(false);
+    }
 }
 
 }
