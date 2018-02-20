@@ -90,17 +90,17 @@ public:
     LookAndFeels &operator=(const LookAndFeels&) = delete;
     LookAndFeels &operator=(const LookAndFeels&&) = delete;
 
-    /* Yin (dark) theme is supposed to be terminal (dark&green)
+    /* Dark theme is supposed to be terminal (dark&green)
      * "hacker" style view suitable in the night and early
      * mornings when your eyes prefer less light.
      */
-    void setYinTheme();
+    void setDarkTheme();
 
-    /* Yang (white) theme aims to be distraction-free Kindle style
+    /* Light theme aims to be distraction-free Kindle style
      * theme suitable for comfortable knowledge reading and
      * navigation.
      */
-    void setYangTheme();
+    void setLightTheme();
 
     /* Extra (custom) theme(s)...
      */

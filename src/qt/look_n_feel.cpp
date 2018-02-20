@@ -19,15 +19,15 @@
 #include "look_n_feel.h"
 
 
-constexpr const auto THEME_YIN = "yin";
-constexpr const auto THEME_YANG = "yang";
+constexpr const auto THEME_DARK = "dark";
+constexpr const auto THEME_LIGHT = "light";
 constexpr const auto THEME_BLACK = "black";
 
 namespace m8r {
 
 LookAndFeels::LookAndFeels()
 {
-    themeNames << THEME_YIN << THEME_YANG << THEME_BLACK;
+    themeNames << THEME_DARK << THEME_LIGHT << THEME_BLACK;
 }
 
 void LookAndFeels::init(QApplication* mindforgerApplication)
@@ -46,19 +46,19 @@ bool LookAndFeels::isThemeNameValid(const QString& themeName) const
 
 void LookAndFeels::setTheme(const QString& themeName)
 {
-    if(THEME_YANG == themeName.toStdString()) {
-        setYangTheme();
-    } else if(THEME_YIN == themeName.toStdString()) {
-        setYinTheme();
+    if(THEME_LIGHT == themeName.toStdString()) {
+        setLightTheme();
+    } else if(THEME_DARK == themeName.toStdString()) {
+        setDarkTheme();
     } else if(THEME_BLACK == themeName.toStdString()) {
         setBlackTheme();
     }
 }
 
 /*
- * Built-in yin (dark) theme definition.
+ * Built-in dark theme definition.
  */
-void LookAndFeels::setYinTheme()
+void LookAndFeels::setDarkTheme()
 {
     textColor = QString("#FFF");
 
@@ -109,9 +109,9 @@ void LookAndFeels::setYinTheme()
 }
 
 /*
- * Built-in yang (light) theme definition.
+ * Built-in light theme definition.
  */
-void LookAndFeels::setYangTheme()
+void LookAndFeels::setLightTheme()
 {
     textColor = QString("#000");
 
