@@ -43,46 +43,64 @@ using namespace std;
  * GUI:
  *
  * $ mindforger
- *   ... use repository specified using
- *       --repository parameter,
- *       or configured in ~/.mindforger,
- *       or specified by environment variable MINDFORGER_REPOSITORY,
- *       or check existence of default ~/mindforger-repository
- *       otherwise exit
+ *   ... lookup repository as follows
+ *     1. configured in ~/.mindforger,
+ *     2. specified by environment variable MINDFORGER_REPOSITORY,
+ *     3. check existence of MindForger repository in default location i.e. ~/mindforger-repository
+ *     4. create new MindForger repository in default location i.e. ~/mindforger-repository
+ * $ mindforger ~/my-mf-repository
+ *   ... MindForger repository
+ * $ mindforger ~/books/marathon-training
+ *   ... directory structure w/ Markdowns
+ * $ mindforger ~/my-mf-repository/memory/plans.md
+ *   ... Markdown-based MindForger DSL file
+ * $ mindforger ~/books/marathon-training/07-lsd.md
+ *   ... Markdown file
+ *
+ *
+ *
+ * Options:
+ *
+ * $ mindforger --theme dark
+ *   -t
+ * $ mindforger --config forget=25%
+ * $ mindforger --config editor-show-syntax-highlighting=true
+ *   -c
+ * $ mindforger --generate-toc my.md
+ *   -T
+ * $ mindforger --strip-metadata my.md
+ *   -S
+ * $ mindforger --shell
+ *   -s
+ * $ mindforger --version
+ *   -V
+ * $ mindforger --help
+ *   -h
+ *
  *
  *
  * Terminal CLI commands:
  *
- * $ mindforger LIST outlines
- * $ mindforger FIND outline "abc"
- * $ mindforger VIEW outline "abc"
- * $ mindforger EDIT outline "abc"
- * $ mindforger LIST associations OF outline "abc"
+ * $ mindforger --command LIST outlines
+ * $ mindforger -C LIST outlines
  *
- * $ mindforger LIST notes
- * $ mindforger FIND note "abc"
- * $ mindforger VIEW note "abc"."efg"
- * $ mindforger EDIT note "abc"."efg"
- * $ mindforger LIST notes OF outline "abc"
- * $ mindforger LIST associations OF note "abc"."efg"
+ * $ mindforger -C "LIST outlines"
+ * $ mindforger -C "FIND outline 'abc'"
+ * $ mindforger -C "FIND outline 'a''c'"
+ * $ mindforger -C "VIEW outline 'abc'"
+ * $ mindforger -C "EDIT outline 'abc'"
+ * $ mindforger -C "LIST associations OF outline 'abc'"
  *
- * $ mindforger FTS "expr"
- * $ mindforger FTS "expr" OF outline "abc"
- * $ mindforger FTS "expr" OF note "abc"."efg"
+ * $ mindforger -C "LIST notes"
+ * $ mindforger -C "FIND note 'abc'"
+ * $ mindforger -C "VIEW note 'abc'.'efg'"
+ * $ mindforger -C "EDIT note 'abc'.'efg'"
+ * $ mindforger -C "LIST notes OF outline 'abc'"
+ * $ mindforger -C "LIST associations OF note 'abc'.'efg'"
  *
- *
- * MindForger options:
- *
- * TODO $ mindforger /a/directory    ... a MD directory to index (non-MF)
- * TODO $ mindforger /a/file.md      ... a MD file to show (non-MF)
- *
- * $ mindforger --repository ~/my-repository
- * $ mindforger -r ~/my-repository
- * $ mindforger --theme dark
- * $ mindforger --generate-toc my.md
- * $ mindforger --config forget=25%
- * $ mindforger --shell
- * $ mindforger --help
+ * $ mindforger -C "FTS 'expr'"
+ * $ mindforger -C "FTS 'expr' SCOPE outline 'abc'"
+ * $ mindforger -C "FTS 'expr' SCOPE note 'abc'.'efg'"
  */
 int main(int argc, char *argv[])
 {
@@ -101,20 +119,15 @@ int main(int argc, char *argv[])
         QCommandLineParser parser;
         // process command line as parameters/options are present
         parser.setApplicationDescription("Thinking notebook.");
-        parser.addPositionalArgument("[<command>]", QCoreApplication::translate("main", "A MindForger command like LIST, FIND, VIEW, EDIT or FTS."));
-        parser.addPositionalArgument("[<args>]", QCoreApplication::translate("main", "Command arguments."));
-        QCommandLineOption repositoryOption(QStringList() << "r" << "repository",
-                QCoreApplication::translate("main", "Load given MindForger or Markdown <repository>."),
-                QCoreApplication::translate("main", "repository"));
-        parser.addOption(repositoryOption);
+        parser.addPositionalArgument("[<directory>|<file>]", QCoreApplication::translate("main", "MindForger repository or directory/file with Markdown(s) to open"));
         QCommandLineOption themeOption(QStringList() << "t" << "theme",
-                QCoreApplication::translate("main", "Use yin or yang GUI <theme>."),
+                QCoreApplication::translate("main", "Use 'dark', 'light' or other GUI <theme>."),
                 QCoreApplication::translate("main", "theme"));
         parser.addOption(themeOption);
-        QCommandLineOption generateTocOption(QStringList() << "T" << "generate-toc",
-                QCoreApplication::translate("main", "Generate table of contents for <source> Markdown file."),
-                QCoreApplication::translate("main", "source"));
-        parser.addOption(generateTocOption);
+//        QCommandLineOption generateTocOption(QStringList() << "T" << "generate-toc",
+//                QCoreApplication::translate("main", "Generate table of contents for <source> Markdown file."),
+//                QCoreApplication::translate("main", "source"));
+//        parser.addOption(generateTocOption);
         QCommandLineOption versionOption=parser.addVersionOption();
         QCommandLineOption helpOption=parser.addHelpOption();
         // process the actual command line arguments given by the user
@@ -124,22 +137,17 @@ int main(int argc, char *argv[])
             return 0;
         }
 
-        if(parser.isSet(repositoryOption)) {
-            QString repositoryOptionValue = parser.value(repositoryOption);
-            useRepository.assign(repositoryOptionValue.toStdString());
+        QStringList arguments = parser.positionalArguments();
+
+        if(arguments.size()==1) {
+            useRepository.assign(arguments[0].toStdString());
+        } else if(arguments.size()>1) {
+            cerr << "Too many arguments (" << dec << arguments.size() + ") - at most one directory or file can be specified!" << endl;
+            return 1;
         }
 
         if(parser.isSet(themeOption)) {
             themeOptionValue = parser.value(themeOption);
-        }
-
-        QString tocOfMarkdownFile = parser.value(generateTocOption);
-        if(!tocOfMarkdownFile.isEmpty()) {
-            cout << "Generating table of contents for " << tocOfMarkdownFile.toUtf8().constData();
-
-            // ... TODO to be finished ...
-
-            return 0;
         }
     }
     // else there are no parameters and options > simply load GUI
