@@ -131,6 +131,7 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     lib/src/mind/ontology/thing_class_rel_triple.h \
     lib/src/config/configuration.h
     lib/src/debug.h
+    src/qt/recent_files_menu.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
@@ -223,6 +224,7 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/recent_files_menu.cpp
     lib/src/mind/ontology/taxonomy.cpp \
     lib/src/mind/ontology/thing_class_rel_triple.cpp
+    src/qt/recent_files_menu.cpp
 
 # Development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1
