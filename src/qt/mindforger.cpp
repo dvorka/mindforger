@@ -157,7 +157,15 @@ int main(int argc, char *argv[])
     m8r::initRandomizer();
 
     if(!useRepository.empty()) {
-        config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(useRepository)));
+        m8r::Repository* r = m8r::RepositoryIndexer::getRepositoryForPath(useRepository);
+        if(r) {
+            config.setActiveRepository(config.addRepository(r));
+        } else {
+            cerr << QCoreApplication::translate("main", "Unable to find given repository/file to open: '").toUtf8().constData()
+                 << useRepository
+                 << "'\n";
+            exit(1);
+        }
     } else {
         config.findOrCreateDefaultRepository();
     }
@@ -176,7 +184,7 @@ int main(int argc, char *argv[])
         } else {
             cerr << QCoreApplication::translate("main", "Ignoring unknown GUI theme: '").toUtf8().constData()
                  << themeOptionValue.toUtf8().constData()
-                 << "'";
+                 << "'\n";
         }
     }
 
@@ -184,7 +192,7 @@ int main(int argc, char *argv[])
     m8r::MainWindowView mainWindowView(lookAndFeels);
     m8r::MainWindowPresenter mainWindowPresenter(mainWindowView);
     mainWindowView.showMaximized();
-    mainWindowPresenter.doActionViewOutlines();
+    mainWindowPresenter.showInitialView();
     mindforgerApplication.font().setPointSize(config.getFontPointSize());
 
     // run application

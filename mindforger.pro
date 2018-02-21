@@ -124,7 +124,8 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     src/qt/widgets/urgency_combo_box.h \
     src/qt/widgets/importance_combo_box.h \
     src/qt/dialogs/refactor_note_to_outline_dialog.h \
-    lib/src/config/repository.h
+    lib/src/config/repository.h \
+    lib/src/debug.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \

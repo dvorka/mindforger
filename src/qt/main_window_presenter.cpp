@@ -129,19 +129,7 @@ void MainWindowPresenter::doActionMindLearn()
             if(r) {
                 config.setActiveRepository(config.addRepository(r));
                 mind->think();
-
-                if(mind->remind().getOutlines().size()) {
-                    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-                        orloj->showFacetOutlineList(mind->remind().getOutlines());
-                    } else {
-                        orloj->showFacetOutline(*mind->remind().getOutlines().begin());
-                    }
-                } else {
-                    // nothing to show
-                    mind->amnesia();
-                    // IMPROVE show homepage once it's implemented
-                    orloj->showFacetOutlineList(mind->remind().getOutlines());
-                }
+                showInitialView();
             } else {
                 QMessageBox::critical(
                     &view,
@@ -150,6 +138,27 @@ void MainWindowPresenter::doActionMindLearn()
             }
         } // else too many files
     } // else directory closed / nothing choosen
+}
+
+void MainWindowPresenter::showInitialView()
+{
+    if(mind->remind().getOutlines().size()) {
+        if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+            view.getCli()->setBreadcrumbPath("/outlines");
+            orloj->showFacetOutlineList(mind->remind().getOutlines());
+        } else {
+            // IMPROVE move this method to breadcrumps
+            QString m{"/outlines/"};
+            m.append(QString::fromStdString((*mind->remind().getOutlines().begin())->getTitle()));
+            view.getCli()->setBreadcrumbPath(m);
+            orloj->showFacetOutline(*mind->remind().getOutlines().begin());
+        }
+    } else {
+        // nothing to show
+        mind->amnesia();
+        // IMPROVE show homepage once it's implemented
+        orloj->showFacetOutlineList(mind->remind().getOutlines());
+    }
 }
 
 void MainWindowPresenter::doActionExit()
@@ -294,8 +303,10 @@ void MainWindowPresenter::doActionViewToggleRecent()
 
 void MainWindowPresenter::doActionViewOutlines()
 {
-    view.getCli()->setBreadcrumbPath("/outlines");
-    cli->executeListOutlines();
+    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+        view.getCli()->setBreadcrumbPath("/outlines");
+        cli->executeListOutlines();
+    }
 }
 
 void MainWindowPresenter::doActionCli()

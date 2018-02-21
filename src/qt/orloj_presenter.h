@@ -21,6 +21,7 @@
 
 #include <iostream>
 
+#include "lib/src/debug.h"
 #include "lib/src/mind/mind.h"
 
 #include <QtWidgets>

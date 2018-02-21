@@ -98,6 +98,7 @@ private:
 
     // GUI configuration
     int fontPointSize;
+    bool showBreadcrump; // show breadcrump path
     bool viewerShowMetadata; // show reads/writes/... when viewing Outlines and/or Notes.
     bool editorShowLineNumbers; // show line numbers
     bool editorEnableSyntaxHighlighting; // toggle syntax highlighting

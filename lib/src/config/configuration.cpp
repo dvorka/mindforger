@@ -132,8 +132,6 @@ void Configuration::load(const vector<MarkdownAstNodeSection*>* ast)
     UNUSED_ARG(ast);
 
     // TODO deserialize AST to this instance
-
-    findOrCreateDefaultRepository();
 }
 
 void Configuration::save() const

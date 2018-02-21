@@ -34,7 +34,12 @@ void pathToDirectoryAndFile(const std::string& path, std::string& directory, std
         // IMPROVE complete the code
         found=path.find_last_of("/");
 #endif
-        directory = path.substr(0,found);
+        if(found == string::npos) {
+            directory = ".";
+        } else {
+            directory = path.substr(0,found);
+        }
+
         file = path.substr(found+1);
     }
 }

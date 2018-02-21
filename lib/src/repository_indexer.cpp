@@ -58,6 +58,11 @@ void RepositoryIndexer::clear()
 void RepositoryIndexer::index(Repository* repository)
 {
     if(repository) {
+        if(!repository->getPath().empty() && !isDirectoryOrFileExists(repository->getPath().c_str())
+        ) {
+            throw MindForgerException{"Given repository path does NOT exist!"};
+        }
+
         clear();
 
         this->repository = repository;
@@ -150,7 +155,7 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
             }
         }
     } else {
-        MF_DEBUG("\nINDEXING memory single FILE: " << repository->getFile());
+        MF_DEBUG("\nINDEXING memory single FILE: " << repository->getFile() << " in " << repository->getPath());
         if(repository->getFile().size()) {
             string* path = new string{repository->getPath()};
             path->append(FILE_PATH_SEPARATOR);

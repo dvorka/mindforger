@@ -102,6 +102,8 @@ public:
     // function
     Mind* getMind() const { return mind; }
 
+    void showInitialView();
+
 public slots:
     // mind
 #ifdef DO_MF_DEBUG
