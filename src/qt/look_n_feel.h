@@ -22,6 +22,8 @@
 #include <QtWidgets>
 #include <QSet>
 
+#include "../../lib/src/config/configuration.h"
+
 namespace m8r {
 
 /**

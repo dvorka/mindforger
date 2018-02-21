@@ -25,6 +25,7 @@
 
 #include "main_menu_presenter.h"
 #include "main_window_view.h"
+#include "recent_files_menu.h"
 
 namespace m8r {
 
@@ -60,6 +61,7 @@ public:
     // menu: MindForger
     QAction* actionMindDevise;
     QAction* actionMindLearn;
+    RecentFilesMenu* submenuMindRelearn;
     QAction* actionMindRemember;
     QAction* actionMindRecall;
     QAction* actionMindAssociate;
@@ -152,6 +154,8 @@ public:
     void showFacetOutlineList(bool repositoryMode=true);
     void showFacetOutlineView(bool repositoryMode=true);
     void showFacetNoteEdit(bool repositoryMode=true);
+
+    void addRepositoryOrFileToRelearn(const QString& path);
 
 private:
     void showAllMenuItems();

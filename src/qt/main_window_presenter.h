@@ -110,6 +110,7 @@ public slots:
     void doActionMindHack();
 #endif
     void doActionMindLearn();
+    void doActionMindRelearn(QString path);
     void doActionMindSnapshot();
     void doActionExit();
     // recall

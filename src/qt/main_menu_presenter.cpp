@@ -31,6 +31,10 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionMindHack, SIGNAL(triggered()),mwp, SLOT(doActionMindHack()));
 #endif
     QObject::connect(view->actionMindLearn, SIGNAL(triggered()), mwp, SLOT(doActionMindLearn()));
+    for(auto& r:config.getRepositories()) {
+        view->submenuMindRelearn->addFile(QString::fromStdString(r.first));
+    }
+    QObject::connect(view->submenuMindRelearn, SIGNAL(recentFileTriggered(QString)), mwp, SLOT(doActionMindRelearn(QString)));
     QObject::connect(view->actionMindSnapshot, SIGNAL(triggered()), mwp, SLOT(doActionMindSnapshot()));
     QObject::connect(view->actionExit, SIGNAL(triggered()), mwp, SLOT(doActionExit()));
 
@@ -98,5 +102,11 @@ void MainMenuPresenter::showFacetNoteEdit()
 {
     view->showFacetNoteEdit(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
 }
+
+void MainMenuPresenter::addRecentDirectoryOrFile(const QString& path)
+{
+    view->addRepositoryOrFileToRelearn(path);
+}
+
 
 }

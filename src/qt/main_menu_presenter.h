@@ -58,6 +58,8 @@ public:
     void showFacetOutlineList();
     void showFacetOutlineView();
     void showFacetNoteEdit();
+
+    void addRecentDirectoryOrFile(const QString& path);
 };
 
 }

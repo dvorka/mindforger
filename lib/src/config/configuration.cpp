@@ -31,6 +31,10 @@ Configuration::Configuration()
     char *home = getenv(ENV_VAR_HOME);
     userHomePath = string{home};
 
+    configFilePath.assign(userHomePath);
+    configFilePath.append(FILE_PATH_SEPARATOR);
+    configFilePath.append(FILENAME_M8R_CONFIGURATION);
+
     // repositories - environment variable defined repository path to be used only if desired
 
     // lib
@@ -38,10 +42,11 @@ Configuration::Configuration()
     rememberReads = false;
 
     // GUI
-    viewerShowMetadata = true;
-    editorEnableSyntaxHighlighting = true;
-    editorShowLineNumbers = true;
-    fontPointSize = DEFAULT_FONT_POINT_SIZE;
+    uiViewerShowMetadata = true;
+    uiEditorEnableSyntaxHighlighting = true;
+    uiEditorShowLineNumbers = true;
+    uiThemeName.assign(UI_DEFAULT_THEME);
+    uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
 }
 
 Configuration::~Configuration()
@@ -122,9 +127,13 @@ void Configuration::findOrCreateDefaultRepository()
 
 void Configuration::load()
 {
-    const string filePath = getConfigFileName();
-    Markdown configMarkdown{&filePath};
-    load(configMarkdown.getAst());
+    MF_DEBUG("Loading configuration from " << configFilePath);
+    if(isDirectoryOrFileExists(configFilePath.c_str())) {
+        Markdown configMarkdown{&configFilePath};
+        load(configMarkdown.getAst());
+    } else {
+        save();
+    }
 }
 
 void Configuration::load(const vector<MarkdownAstNodeSection*>* ast)
@@ -136,7 +145,36 @@ void Configuration::load(const vector<MarkdownAstNodeSection*>* ast)
 
 void Configuration::save() const
 {
-    // TODO serialize this instance directly to MD file using streams
+    MF_DEBUG("Saving configuration to " << configFilePath);
+
+    stringstream s{};
+    // IMPROVE build more in compile time and less in runtime
+    s <<
+         "# MindForger Configuration" << endl <<
+         endl <<
+         "This is MindForger configuration file (Markdown hosted DSL)." << endl <<
+         "See documentation for configuration options details." << endl <<
+         endl <<
+         "# Settings" << endl <<
+         "Application settings:" << endl <<
+         endl <<
+         "* Theme: " << uiThemeName << endl <<
+         "    * Examples: dark, light" << endl <<
+         endl <<
+         endl <<
+         "# Repositories" << endl <<
+         endl <<
+         "If MindForger detects MindForger repository structure, then the directory is" << endl <<
+         "threated as knowledge base, else it's used as a Markdown directory (e.g. metadata"  << endl <<
+         "are not stored to Markdown files)." << endl <<
+         endl <<
+         "* Active repository: ~/mindforger-repository" << endl <<
+         "* Repository: ~/mindforger-repository" << endl <<
+         endl;
+
+    std::ofstream out(configFilePath);
+    out << s.str();
+    out.close();
 }
 
 const char* Configuration::getRepositoryPathFromEnv()
@@ -149,14 +187,6 @@ const char* Configuration::getEditorFromEnv()
 {
     char* editor = getenv(ENV_VAR_M8R_EDITOR);  // this is not leak (static reusable array)
     return editor;
-}
-
-const string Configuration::getConfigFileName()
-{
-    string filePath{userHomePath};
-    filePath.append(FILE_PATH_SEPARATOR);
-    filePath.append(FILENAME_M8R_CONFIGURATION);
-    return std::move(filePath);
 }
 
 } // namespace

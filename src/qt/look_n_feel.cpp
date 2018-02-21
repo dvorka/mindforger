@@ -18,16 +18,11 @@
 */
 #include "look_n_feel.h"
 
-
-constexpr const auto THEME_DARK = "dark";
-constexpr const auto THEME_LIGHT = "light";
-constexpr const auto THEME_BLACK = "black";
-
 namespace m8r {
 
 LookAndFeels::LookAndFeels()
 {
-    themeNames << THEME_DARK << THEME_LIGHT << THEME_BLACK;
+    themeNames << UI_THEME_DARK << UI_THEME_LIGHT << UI_THEME_BLACK;
 }
 
 void LookAndFeels::init(QApplication* mindforgerApplication)
@@ -46,11 +41,11 @@ bool LookAndFeels::isThemeNameValid(const QString& themeName) const
 
 void LookAndFeels::setTheme(const QString& themeName)
 {
-    if(THEME_LIGHT == themeName.toStdString()) {
+    if(UI_THEME_LIGHT == themeName.toStdString()) {
         setLightTheme();
-    } else if(THEME_DARK == themeName.toStdString()) {
+    } else if(UI_THEME_DARK == themeName.toStdString()) {
         setDarkTheme();
-    } else if(THEME_BLACK == themeName.toStdString()) {
+    } else if(UI_THEME_BLACK == themeName.toStdString()) {
         setBlackTheme();
     }
 }

@@ -37,6 +37,7 @@
 
 namespace m8r {
 
+// const in constexpr makes value const
 constexpr const auto ENV_VAR_HOME = "HOME";
 constexpr const auto ENV_VAR_M8R_REPOSITORY = "MINDFORGER_REPOSITORY";
 constexpr const auto ENV_VAR_M8R_EDITOR = "MINDFORGER_EDITOR";
@@ -52,7 +53,11 @@ constexpr const auto FILE_PATH_OUTLINES = "outlines";
 constexpr const auto FILE_PATH_NOTES = "notes";
 constexpr const auto FILE_EXTENSION_MARKDOWN = ".md";
 
-constexpr const auto DEFAULT_FONT_POINT_SIZE = 10;
+constexpr const auto UI_THEME_DARK = "dark";
+constexpr const auto UI_THEME_LIGHT = "light";
+constexpr const auto UI_THEME_BLACK = "black";
+constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
+constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
 class MarkdownAstNodeSection;
 class Installer;
@@ -83,6 +88,7 @@ private:
 
 private:
     std::string userHomePath;
+    std::string configFilePath;
 
     Repository* activeRepository;
     std::map<const std::string, Repository*> repositories;
@@ -97,11 +103,12 @@ private:
     std::string externalEditorPath; // path to external MD editor e.g. Emacs or Remarkable
 
     // GUI configuration
-    int fontPointSize;
-    bool showBreadcrump; // show breadcrump path
-    bool viewerShowMetadata; // show reads/writes/... when viewing Outlines and/or Notes.
-    bool editorShowLineNumbers; // show line numbers
-    bool editorEnableSyntaxHighlighting; // toggle syntax highlighting
+    int uiFontPointSize;
+    bool uiShowBreadcrump; // show breadcrump path
+    bool uiViewerShowMetadata; // show reads/writes/... when viewing Outlines and/or Notes.
+    bool uiEditorShowLineNumbers; // show line numbers
+    bool uiEditorEnableSyntaxHighlighting; // toggle syntax highlighting
+    std::string uiThemeName;
 
 private:
     Installer* installer;
@@ -146,14 +153,15 @@ public:
     const char* getEditorFromEnv();
     const std::string& getExternalEditorPath() const { return externalEditorPath; }
 
-    int getFontPointSize() const { return fontPointSize; }
-    bool isEditorShowLineNumbers() const { return editorShowLineNumbers; }
-    void setEditorShowLineNumbers(bool show) { editorShowLineNumbers = show; }
-    bool isEditorEnableSyntaxHighlighting() const { return editorEnableSyntaxHighlighting; }
-    void setEditorEnableSyntaxHighlighting(bool enable) { editorEnableSyntaxHighlighting = enable; }
+    int getUiFontPointSize() const { return uiFontPointSize; }
+    const std::string& getUiThemeName() const { return uiThemeName; }
+    void setUiThemeName(const std::string theme) { uiThemeName = theme; }
+    bool isUiEditorShowLineNumbers() const { return uiEditorShowLineNumbers; }
+    void setUiEditorShowLineNumbers(bool show) { uiEditorShowLineNumbers = show; }
+    bool isUiEditorEnableSyntaxHighlighting() const { return uiEditorEnableSyntaxHighlighting; }
+    void setUiEditorEnableSyntaxHighlighting(bool enable) { uiEditorEnableSyntaxHighlighting = enable; }
 
 private:
-    const std::string getConfigFileName();
     void load(const std::vector<MarkdownAstNodeSection*>* ast);
 };
 

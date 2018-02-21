@@ -124,20 +124,27 @@ void MainWindowPresenter::doActionMindLearn()
     if(learnDialog.exec()) {
         directoryNames = learnDialog.selectedFiles();
         if(directoryNames.size()==1) {
-            mind->amnesia();
-            Repository* r = RepositoryIndexer::getRepositoryForPath(directoryNames[0].toStdString());
-            if(r) {
-                config.setActiveRepository(config.addRepository(r));
-                mind->think();
-                showInitialView();
-            } else {
-                QMessageBox::critical(
-                    &view,
-                    tr("Learn"),
-                    tr("This is neither valid MindForger/Markdown repository nor file."));
-            }
+            mainMenu->addRecentDirectoryOrFile(directoryNames[0]);
+            doActionMindRelearn(directoryNames[0]);
         } // else too many files
     } // else directory closed / nothing choosen
+}
+
+void MainWindowPresenter::doActionMindRelearn(QString path)
+{
+    mind->amnesia();
+
+    Repository* r = RepositoryIndexer::getRepositoryForPath(path.toStdString());
+    if(r) {
+        config.setActiveRepository(config.addRepository(r));
+        mind->think();
+        showInitialView();
+    } else {
+        QMessageBox::critical(
+            &view,
+            tr("Learn"),
+            tr("This is neither valid MindForger/Markdown repository nor file."));
+    }
 }
 
 void MainWindowPresenter::showInitialView()

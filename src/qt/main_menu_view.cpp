@@ -40,8 +40,12 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // learn... from a repository, Markdown or TXT file
     actionMindLearn = new QAction(tr("&Learn"), mainWindow);
-    // IMPROVE show RECENT repositories and files in the dialog
     actionMindLearn->setStatusTip(tr("Learn knowledge by loading a MindForger repository, Markdown repository or file"));
+
+    // relearn ... recent repositories and files
+    submenuMindRelearn = new RecentFilesMenu(tr("Relearn"), mainWindow);
+    submenuMindRelearn->setStatusTip(tr("Relearn recently opened MindForger repositories, Markdown repositories or files"));
+    submenuMindRelearn->setEnabled(false);
 
     // remember... by flushing caches and saving unsaved notes
     actionMindRemember = new QAction(tr("Re&member"), mainWindow);
@@ -93,6 +97,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
     menuMind->addAction(actionMindDevise);
     menuMind->addAction(actionMindLearn);
+    menuMind->addMenu(submenuMindRelearn);
     menuMind->addAction(actionMindRemember);
     menuMind->addAction(actionMindRecall);
     menuMind->addAction(actionMindAssociate);
@@ -473,6 +478,15 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
         actionFindOutlineByName->setEnabled(false);
         actionFindOutlineByTag->setEnabled(false);
     }
+}
+
+void MainMenuView::addRepositoryOrFileToRelearn(const QString& path)
+{
+    if(!submenuMindRelearn->isEnabled()) {
+        submenuMindRelearn->setEnabled(true);
+    }
+
+    submenuMindRelearn->addFile(path);
 }
 
 }

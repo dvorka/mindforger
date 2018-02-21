@@ -107,9 +107,6 @@ int main(int argc, char *argv[])
     // load configuration
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.load();
-    // IMPROVE hardcoded settings below to be loaded from the configuration file
-    config.setEditorShowLineNumbers(true);
-    config.setEditorEnableSyntaxHighlighting(true);
 
     QApplication mindforgerApplication(argc, argv);
 
@@ -177,7 +174,7 @@ int main(int argc, char *argv[])
     // choose L&F
     m8r::LookAndFeels& lookAndFeels = m8r::LookAndFeels::getInstance();
     lookAndFeels.init(&mindforgerApplication);
-    lookAndFeels.setFontPointSize(config.getFontPointSize());
+    lookAndFeels.setFontPointSize(config.getUiFontPointSize());
     if(!themeOptionValue.isEmpty()) {
         if(lookAndFeels.isThemeNameValid(themeOptionValue)) {
             lookAndFeels.setTheme(themeOptionValue);
@@ -186,6 +183,8 @@ int main(int argc, char *argv[])
                  << themeOptionValue.toUtf8().constData()
                  << "'\n";
         }
+    } else {
+        lookAndFeels.setTheme(QString::fromStdString(config.getUiThemeName()));
     }
 
     // initialize and start UI
@@ -193,7 +192,7 @@ int main(int argc, char *argv[])
     m8r::MainWindowPresenter mainWindowPresenter(mainWindowView);
     mainWindowView.showMaximized();
     mainWindowPresenter.showInitialView();
-    mindforgerApplication.font().setPointSize(config.getFontPointSize());
+    mindforgerApplication.font().setPointSize(config.getUiFontPointSize());
 
     // run application
     return mindforgerApplication.exec();
