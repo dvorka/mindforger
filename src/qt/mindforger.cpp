@@ -182,6 +182,7 @@ int main(int argc, char *argv[])
             cerr << QCoreApplication::translate("main", "Ignoring unknown GUI theme: '").toUtf8().constData()
                  << themeOptionValue.toUtf8().constData()
                  << "'\n";
+            lookAndFeels.setTheme(QString::fromStdString(config.getUiThemeName()));
         }
     } else {
         lookAndFeels.setTheme(QString::fromStdString(config.getUiThemeName()));

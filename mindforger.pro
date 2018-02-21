@@ -126,7 +126,8 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     src/qt/dialogs/refactor_note_to_outline_dialog.h \
     lib/src/config/repository.h \
     lib/src/debug.h \
-    src/qt/recent_files_menu.h
+    src/qt/recent_files_menu.h \
+    lib/src/config/configuration.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
