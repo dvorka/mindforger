@@ -130,6 +130,7 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     lib/src/mind/ontology/taxonomy.h \
     lib/src/mind/ontology/thing_class_rel_triple.h \
     lib/src/config/configuration.h
+    lib/src/debug.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \

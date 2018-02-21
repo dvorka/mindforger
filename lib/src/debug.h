@@ -19,7 +19,7 @@
 #ifndef M8R_DEBUG_H_
 #define M8R_DEBUG_H_
 
-#define DO_MF_DEBUG
+//#define DO_MF_DEBUG
 
 #ifdef DO_MF_DEBUG
 #include <iostream>
