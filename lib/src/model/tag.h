@@ -26,13 +26,24 @@
 namespace m8r {
 
 /**
- * Outline label - an extensible set of labels w/ a predefined base.
- * Labels are loaded from the configuration (default set populated on installation).
- * Outline may have associated zero or one label. Labels may have associated also
- * a color.
+ * Outline tag - an extensible set of labels w/ a predefined base.
+ *
+ * Tag represents Ontology class or class property.
+ *
+ * Tags are loaded from the configuration (default set populated on installation).
+ * Both Outline and Note may have associated zero or more tags. Tags may have associated
+ * also a color.
  */
 class Tag : public Thing
 {
+public:
+    /**
+     * @brief Tag type.
+     */
+    enum TagType {
+        CLASS,
+        PROPERTY
+    };
 
 public:
     // static initialization order fiasco prevention
