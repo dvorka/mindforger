@@ -39,7 +39,6 @@ namespace m8r {
  *   Although Thing ontology forms a single tree it is multi-layered - sub-trees
  * that beginning just below Thing. Such layer defines facet i.e. technical,
  * functional, emotional, etc. view of the tag.
- *
  */
 class Tag : public Clazz
 {
@@ -54,6 +53,16 @@ public:
 
 private:
     const Color& color;
+
+public:
+    /**
+     * @brief Tag type.
+     */
+    // IMPROVE this information to be captured rather in Ontology - Tag may have different parent classes
+    enum TagType {
+        CLASS,
+        ATTRIBUTE
+    };
 
 public:
     // static initialization order fiasco prevention
