@@ -20,10 +20,11 @@
 #define M8R_THING_H_
 
 #include <string>
-
-#include "relationship.h"
+#include <set>
 
 namespace m8r {
+
+class Relationship;
 
 /**
  * @brief Ontology Thing.
@@ -41,11 +42,13 @@ protected:
     /**
      * @brief Relationships.
      *
-     * All relationships (both incoming and outgoing) distinquished using subject.
+     * Explicit relationships (both incoming and outgoing) distinquished
+     * using subject.
      */
     std::set<Relationship*> relationships;
 
 public:
+    Thing();
     explicit Thing(std::string name);
     Thing(const Thing&) = delete;
     Thing(const Thing&&) = delete;
@@ -53,7 +56,7 @@ public:
     Thing &operator=(const Thing&&) = delete;
     virtual ~Thing();
 
-    const std::string& getName() const;
+    const std::string& getName() const { return name; }
     void setName(std::string name) { this->name = name; }
 };
 

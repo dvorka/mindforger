@@ -21,6 +21,7 @@
 
 #include <string>
 
+#include "../config/color.h"
 #include "../mind/ontology/clazz.h"
 
 namespace m8r {
@@ -93,7 +94,7 @@ public:
     Tag &operator=(const Tag&&) = delete;
     virtual ~Tag();
 
-    const Color& getColor() const;
+    const Color& getColor() const { return color; }
 };
 
 } // m8r namespace

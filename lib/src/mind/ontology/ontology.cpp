@@ -23,10 +23,10 @@ namespace m8r {
 Ontology::Ontology(const Configuration& configuration)
     : config(configuration),
       thing("Thing"),
-      tagsTaxonomy("Tags", thing),
       outlineTypeTaxonomy("OutlineTypes", thing),
       noteTypeTaxonomy("NoteTypes", thing),
-      relationshipTypeTaxonomy("RelationshipTypes", thing)
+      relationshipTypeTaxonomy("RelationshipTypes", thing),
+      tagsTaxonomy("Tags", thing)
 
 {
     // taxonomy: tags

@@ -158,7 +158,7 @@ public:
     void load();
     void save() const;
 
-    Clazz* getThing() const { return thing; }
+    const Clazz& getThing() const { return thing; }
 
 #ifdef DO_MF_DEBUG
     void print() const {}
@@ -169,15 +169,15 @@ public:
      * @return tag w/ given key.
      */
     const Tag* findOrCreateTag(const std::string& key);
-    OntologyVocabulary<Tag>& getTags() { return tags; }
+    Taxonomy<Tag>& getTags() { return tagsTaxonomy; }
 
     const OutlineType* findOrCreateOutlineType(const std::string& key);
     const OutlineType* getDefaultOutlineType() const { return defaultOutlineType; }
-    OntologyVocabulary<OutlineType>& getOutlineTypes() { return outlineTypes; }
+    Taxonomy<OutlineType>& getOutlineTypes() { return outlineTypeTaxonomy; }
 
     const NoteType* findOrCreateNoteType(const std::string& key);
     const NoteType* getDefaultNoteType() const { return defaultNoteType; }
-    OntologyVocabulary<NoteType>& getNoteTypes() { return noteTypes; }
+    Taxonomy<NoteType>& getNoteTypes() { return noteTypeTaxonomy; }
 };
 
 } // m8r namespace

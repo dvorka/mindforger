@@ -23,7 +23,9 @@ using namespace std;
 namespace m8r {
 
 OutlineType::OutlineType(string name, const Color& color)
-    : Thing{name, color}
+    : Clazz{name},
+      color(color)
+
 {
 }
 

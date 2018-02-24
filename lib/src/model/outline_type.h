@@ -19,11 +19,15 @@
 #ifndef M8R_OUTLINE_TYPE_H_
 #define M8R_OUTLINE_TYPE_H_
 
+#include "../config/color.h"
 #include "../mind/ontology/clazz.h"
 
 namespace m8r {
 
 class OutlineType : public Clazz {
+private:
+    const Color& color;
+
 public:
     // static initialization order fiasco prevention
     static const std::string& KeyOutline() {
@@ -42,6 +46,8 @@ public:
     OutlineType &operator=(const OutlineType&) = delete;
     OutlineType &operator=(const OutlineType&&) = delete;
     virtual ~OutlineType();
+
+    const Color& getColor() const { return color; }
 };
 
 } // m8r namespace

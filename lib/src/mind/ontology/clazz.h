@@ -19,9 +19,11 @@
 #ifndef M8R_CLAZZ_H
 #define M8R_CLAZZ_H
 
-#include "thing.h"
+#include "relationship.h"
 
 namespace m8r {
+
+class Thing;
 
 /**
  * @brief Ontology class.

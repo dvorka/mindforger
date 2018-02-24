@@ -18,9 +18,12 @@
  */
 #include "thing.h"
 
+namespace m8r {
+
 using namespace std;
 
-namespace m8r {
+Thing::Thing()
+{}
 
 Thing::Thing(string name)
 {
@@ -29,16 +32,6 @@ Thing::Thing(string name)
 
 Thing::~Thing()
 {
-}
-
-const Color& Thing::getColor() const
-{
-    return color;
-}
-
-const string& Thing::getName() const
-{
-    return name;
 }
 
 } // m8r namespace

@@ -73,7 +73,7 @@ class Installer;
  *
  * This class is singleton. The reason to make it singleton is that it's used
  * through lib and GUI instances. Therefore passing of the configuration instance
- * to (almost) each and every application instance would be inefficient i.e. worse
+ * to (almost) each and every application's component would be inefficient i.e. worse
  * than the use of singleton pattern.
  */
 class Configuration {

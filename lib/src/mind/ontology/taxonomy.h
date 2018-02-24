@@ -48,22 +48,21 @@ public:
 };
 
 template <class CLAZZ>
-Taxonomy::Taxonomy(std::string& name, CLAZZ* isA)
+Taxonomy<CLAZZ>::Taxonomy(std::string& name, CLAZZ* isA)
     : Clazz(name, isA)
 {
 }
 
 template <class CLAZZ>
-Taxonomy::~Taxonomy()
+Taxonomy<CLAZZ>::~Taxonomy()
 {
 }
 
 template <class CLAZZ>
-void Taxonomy::add(std::string name, CLAZZ* clazz)
+void Taxonomy<CLAZZ>::add(std::string name, CLAZZ* clazz)
 {
     classes.put(name, clazz);
 }
-
 
 }
 #endif // M8R_TAXONOMY_H

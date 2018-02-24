@@ -20,16 +20,27 @@
 #define M8R_TRIPLE_H
 
 #include "thing.h"
+#include "relationship_type.h"
+
 
 namespace m8r {
 
+class Thing;
+
 /**
  * @brief Ontology triple.
+ *
+ * Subject -predicate-> Object
  *
  * See m8r::Ontology.
  */
 class Triple : public Thing
 {
+protected:
+    Thing* subject;
+    RelationshipType* predicate;
+    Thing* object;
+
 public:
     explicit Triple();
     Triple(const Triple&) = delete;
@@ -37,6 +48,13 @@ public:
     Triple &operator=(const Triple&) = delete;
     Triple &operator=(const Triple&&) = delete;
     ~Triple();
+
+    Thing* getSubject() const { return subject; }
+    void setSubject(Thing* subject) { this->subject = subject; }
+    RelationshipType* getPredicate() const { return predicate; }
+    void setPredicate(RelationshipType* predicate) { this->predicate = predicate; }
+    Thing* getObject() const { return object; }
+    void setObject(Thing* object) { this->object = object; }
 };
 
 }

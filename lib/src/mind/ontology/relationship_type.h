@@ -21,12 +21,14 @@
 
 namespace m8r {
 
+class Clazz;
+
 /**
  * @brief Ontology reationship type.
  *
  * See m8r::Ontology.
  */
-class RelationshipType
+class RelationshipType : public Clazz
 {
 public:
     explicit RelationshipType();

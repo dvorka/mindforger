@@ -19,12 +19,16 @@
 #ifndef M8R_NOTE_TYPE_H_
 #define M8R_NOTE_TYPE_H_
 
+#include "../config/color.h"
 #include "../mind/ontology/clazz.h"
 
 namespace m8r {
 
 class NoteType : public Clazz
 {
+private:
+    const Color& color;
+
 public:
     // static initialization order fiasco prevention
     static const std::string& KeyNote() {
@@ -99,6 +103,8 @@ public:
     NoteType &operator=(const NoteType&) = delete;
     NoteType &operator=(const NoteType&&) = delete;
     virtual ~NoteType();
+
+    const Color& getColor() const { return color; }
 };
 
 } // m8r namespace

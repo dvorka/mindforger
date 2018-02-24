@@ -23,7 +23,7 @@ using namespace std;
 namespace m8r {
 
 NoteType::NoteType(string name, const Color& color)
-    : Thing{name, color}
+    : Thing{name}, color(color)
 {
 }
 
