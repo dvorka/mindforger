@@ -26,7 +26,7 @@ namespace m8r {
 
 NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
 {
-    this->view = view;    
+    this->view = view;
     this->orloj = orloj;
     this->model = new NoteViewModel();
     this->view->setModel(this->model);

@@ -29,7 +29,7 @@ NoteEditPresenter::NoteEditPresenter(
         MainWindowPresenter* mwp,
         QObject* parent) : QObject(parent)
 {
-    this->view = view;    
+    this->view = view;
     this->mainPresenter = mwp;
 
     view->setEditorShowLineNumbers(Configuration::getInstance().isUiEditorShowLineNumbers());

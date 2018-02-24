@@ -210,7 +210,7 @@ void OutlineHeaderEditDialog::show()
             } else {
                 qDebug() << "Unknown Outline type: " << QString::fromStdString(currentOutline->getType()->getName());
             }
-        }        
+        }
         generalTab->importanceCombo->setCurrentIndex(currentOutline->getImportance());
         generalTab->urgencyCombo->setCurrentIndex(currentOutline->getUrgency());
         generalTab->progressSpin->setValue(currentOutline->getProgress());

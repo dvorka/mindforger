@@ -20,7 +20,7 @@
 
 namespace m8r {
 
-MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)    
+MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
     : QMainWindow(nullptr), // main window has no parent - it's destroyed by MF main class
       lookAndFeel(lookAndFeel)
 {

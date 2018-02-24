@@ -67,18 +67,18 @@ class CodestyleEnforcer:
     Main class - finds all files and validate them
     '''
 
-    def __init__(self, mavenRepositoryRootDir):
+    def __init__(self, gitRepositoryRootDir):
         print 'MindForger Codestyle Checker'
-        self.mavenRepositoryRootDir = mavenRepositoryRootDir
+        self.gitRepositoryRootDir = gitRepositoryRootDir
         self.cppFiles = {}
         self.propertyFiles = {}
         self.report = []
 
     def loadFiles(self):
-        for dirName, subdirList, fileList in os.walk(self.mavenRepositoryRootDir):
+        for dirName, subdirList, fileList in os.walk(self.gitRepositoryRootDir):
             for f in fileList:
                     fileName = os.path.join(dirName, f).replace('packaging/build/../../','')
-                    relativeFileName = fileName[len(self.mavenRepositoryRootDir)+1:]
+                    relativeFileName = fileName[len(self.gitRepositoryRootDir)+1:]
                     if relativeFileName not in BLACKLIST:
                         if f.endswith('.h') or f.endswith('.cpp'):
                             cpp = CppFile(fileName)
@@ -123,7 +123,7 @@ class CodestyleEnforcer:
                            result = isInfo.search(problem[0])
                            if result is not None:
                                print "{}{}{}".format(LIGHT_GREEN, problem[0], NO_COLOR)
-                       
+
                    if problem[1] != None:
                        print problem[1]
            print '\nMindForger Codestyle Checker finished:'

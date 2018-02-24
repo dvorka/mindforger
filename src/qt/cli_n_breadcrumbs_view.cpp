@@ -80,7 +80,7 @@ const QStringList CliAndBreadcrumbsView::DEFAULT_CMDS = QStringList()
 
 CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent)
     : QWidget(parent)
-{    
+{
     setFixedHeight(this->fontMetrics().height()*1.5);
 
     QHBoxLayout* layout = new QHBoxLayout(this);
@@ -96,7 +96,7 @@ CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent)
     cliCompleter = new QCompleter(DEFAULT_CMDS, parent);
     cliCompleter->setCaseSensitivity(Qt::CaseSensitivity::CaseInsensitive);
     cliCompleter->setCompletionMode(QCompleter::PopupCompletion);
-    cli->setCompleter(cliCompleter);    
+    cli->setCompleter(cliCompleter);
     layout->addWidget(cli);
 
     goButton = new QPushButton(tr("Run"));

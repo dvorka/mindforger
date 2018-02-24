@@ -25,7 +25,7 @@ namespace m8r {
 MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     : view(view),
       config(Configuration::getInstance())
-{    
+{
     // think
     mind = new Mind{config};
     mind->think();
@@ -237,7 +237,7 @@ void MainWindowPresenter::handleFindOutlineByName()
 }
 
 void MainWindowPresenter::doActionFindNoteByName()
-{    
+{
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     if(orloj->isFacetActiveOutlineManagement()) {
         findNoteByNameDialog->setWindowTitle(tr("Find Note by Name in Outline"));

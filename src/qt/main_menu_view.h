@@ -46,7 +46,7 @@ private:
     MainWindowView* mainWindow;
     QMenuBar* qMenuBar;
 
-public:    
+public:
     QMenu* menuMind;
     QMenu* menuFind;
     QMenu* menuView;
