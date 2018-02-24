@@ -1,5 +1,4 @@
-/*                                                                                                                                     a
- planner.h     MindForger thinking notebook
+/*                                                                                          planner.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -27,6 +26,6 @@ public:
 	virtual ~Planner();
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_PLANNER_H_ */

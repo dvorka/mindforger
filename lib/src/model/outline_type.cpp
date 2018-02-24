@@ -31,4 +31,4 @@ OutlineType::~OutlineType()
 {
 }
 
-} /* namespace m8r */
+} // m8r namespace

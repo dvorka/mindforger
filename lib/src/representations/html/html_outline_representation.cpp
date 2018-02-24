@@ -52,4 +52,4 @@ string* HtmlOutlineRepresentation::to(const Note* note)
     return markdown;
 }
 
-} /* namespace m8r */
+} // m8r namespace

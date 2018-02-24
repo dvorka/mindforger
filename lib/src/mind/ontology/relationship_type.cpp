@@ -1,5 +1,5 @@
 /*
- mind_entity.h     MindForger thinking notebook
+ relationship_type.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -10,25 +10,22 @@
 
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_MIND_ENTITY_H
-#define M8R_MIND_ENTITY_H
+#include "relationship_type.h"
 
 namespace m8r {
 
-/**
- * @brief Abstract class for Mind entities.
- */
-class MindEntity
+RelationshipType::RelationshipType()
 {
-public:
-    virtual const std::string& getTitle() const = 0;
-};
-
 }
-#endif // M8R_MIND_ENTITY_H
+
+RelationshipType::~RelationshipType()
+{
+}
+
+} // m8r namespace

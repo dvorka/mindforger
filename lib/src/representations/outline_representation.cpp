@@ -28,4 +28,4 @@ OutlineRepresentation::~OutlineRepresentation()
 {
 }
 
-} /* namespace m8r */
+} // m8r namespace

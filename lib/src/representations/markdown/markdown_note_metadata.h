@@ -52,6 +52,6 @@ public:
     void setTags(const std::vector<char*>& tags);
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_MARKDOWN_NOTE_METADATA_H_ */

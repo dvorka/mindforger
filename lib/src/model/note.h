@@ -41,7 +41,7 @@ class Outline;
  * 10% progress
  * 12/24 deadline
  */
-class Note : public MindEntity
+class Note : public Thing
 {
 private:
     // parent outline - might be changed on refactoring
@@ -129,6 +129,6 @@ public:
     void demote();
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_NOTE_H_ */

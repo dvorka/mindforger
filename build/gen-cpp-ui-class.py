@@ -82,7 +82,7 @@ TEMPLATE_CPP_FILE='''/*
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "{}.h"
 
@@ -96,7 +96,7 @@ namespace m8r {{
 {{
 }}
 
-}}
+}} // m8r namespace
 '''
 
 #####################################################################

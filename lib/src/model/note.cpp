@@ -402,4 +402,4 @@ void Note::promote()
     if(depth) depth--;
 }
 
-} /* namespace m8r */
+} // m8r namespace

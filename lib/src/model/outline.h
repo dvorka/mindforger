@@ -54,7 +54,7 @@ enum class OutlineMemoryLocation {
  * 3/5 urgency
  * 10% progress
  */
-class Outline : public MindEntity
+class Outline : public Thing
 {
 public:
     static const int NO_OFFSET = -1;
@@ -267,6 +267,6 @@ struct Outline::Patch {
 #endif
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_OUTLINE_H_ */

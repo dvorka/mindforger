@@ -1,5 +1,5 @@
 /*
- repository.cpp     MindForger thinking notebook
+ triple.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,23 +16,15 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "repository.h"
+#include "triple.h"
 
 namespace m8r {
 
-using namespace std;
-
-Repository::Repository(
-    string path,
-    RepositoryType type,
-    RepositoryMode mode,
-    std::string file,
-    bool readOnly)
-    : path(path), file(file), type(type), mode(mode), readOnly(readOnly)
+Triple::Triple()
 {
 }
 
-Repository::~Repository()
+Triple::~Triple()
 {
 }
 

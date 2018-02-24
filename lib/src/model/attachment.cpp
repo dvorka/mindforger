@@ -30,4 +30,4 @@ Attachment::Attachment(const Attachment& a) {
 Attachment::~Attachment() {
 }
 
-} /* namespace m8r */
+} // m8r namespace

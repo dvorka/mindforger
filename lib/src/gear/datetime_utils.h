@@ -48,6 +48,6 @@ std::string datetimeToString(const time_t ts);
 std::string datetimeToPrettyHtml(const time_t ts);
 std::string datetimeToPrettyHtml(const time_t* seconds);
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_DATETIME_UTILS_H_ */

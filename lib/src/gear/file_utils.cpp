@@ -201,4 +201,4 @@ int removeDirectoryRecursively(const char *path)
    return r;
 }
 
-} /* namespace m8r */
+} // m8r namespace

@@ -1,5 +1,5 @@
 /*
- repository.cpp     MindForger thinking notebook
+ triple.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -10,30 +10,32 @@
 
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "repository.h"
+#ifndef M8R_TRIPLE_H
+#define M8R_TRIPLE_H
 
 namespace m8r {
 
-using namespace std;
-
-Repository::Repository(
-    string path,
-    RepositoryType type,
-    RepositoryMode mode,
-    std::string file,
-    bool readOnly)
-    : path(path), file(file), type(type), mode(mode), readOnly(readOnly)
+/**
+ * @brief Ontology triple.
+ *
+ * See m8r::Ontology.
+ */
+class Triple
 {
-}
+public:
+    explicit Triple();
+    Triple(const Triple&) = delete;
+    Triple(const Triple&&) = delete;
+    Triple &operator=(const Triple&) = delete;
+    Triple &operator=(const Triple&&) = delete;
+    ~Triple();
+};
 
-Repository::~Repository()
-{
 }
-
-}
+#endif // M8R_TRIPLE_H

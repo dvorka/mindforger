@@ -19,17 +19,23 @@
 #ifndef M8R_MIND_H_
 #define M8R_MIND_H_
 
-// IMPROVE make it enum or constexpr
-#define NO_PARENT 0xFFFF
-
 #include <inttypes.h>
 #include <memory>
 
-#include "../config/configuration.h"
 #include "memory.h"
+#include "ontology/triple.h"
+
+#include "../config/configuration.h"
 
 namespace m8r {
 
+constexpr auto NO_PARENT = 0xFFFF;
+
+/**
+ * @brief Mind.
+ *
+ * See m8r::Ontology.
+ */
 class Mind
 {
 public:
@@ -39,14 +45,42 @@ private:
     Configuration &config;
     Memory memory;
 
-    std::vector<Note*> memoryDwell;
     /**
-     * @brief Cache of all Notes across all Outlines: built on FTS traversal, evicted on any save/modification/delete.
+     * @brief Semantic view of Memory.
+     *
+     * This member contains all relationships - not just explicitly defined
+     * in Things, but also implicit relationships like Notes parent/child hierarchy
+     * relationships, etc.
+     *
+     * This member is empty until Mind::think() is invoked. Once Mind is in thinking
+     * state triples are maintained.
+     *
+     * This member is used for triple filtering (per O/N/T/...), thinking, associations,
+     * inferring, ...
+     *
+     * See also m8r::Ontology.
+     */
+    std::vector<Triple*> triples;
+
+    /**
+     * @brief Notes time machine.
+     *
+     * This member represents memory dwell - a structure of Notes that represents their
+     * relevance to the present. Deeper Note is, less relevant it is.
+     */
+    std::vector<Note*> memoryDwell;
+
+    /**
+     * @brief Cache of all Notes across all Outlines: built on FTS traversal, evicted on
+     * any save/modification/delete.
      */
     std::vector<Note*> allNotesCache;
 
     /**
-     * @brief TODO time to remember e.g. 1y, 1m, 1h > change the type.
+     * @brief Time interval to show e.g. 1y, 1m, 1h > change the type.
+     *
+     * Anything what is older than now-forget is *not* shown to user, but kept in and maintained
+     * in mind.
      */
     uint8_t forget;
 
@@ -71,8 +105,6 @@ public:
 
     /**
      * @brief Learn from memory to start thinking.
-     *
-     * Learn, associate, ...
      */
     void think();
 

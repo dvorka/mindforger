@@ -52,6 +52,6 @@ public:
     void setRevision(u_int32_t revision);
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_MARKDOWN_SECTION_METADATA_H_ */

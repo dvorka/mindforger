@@ -22,8 +22,7 @@ using namespace std;
 
 namespace m8r {
 
-Thing::Thing(string name, const Color& color)
-    : color(color)
+Thing::Thing(string name)
 {
     this->name = name;
 }
@@ -42,5 +41,5 @@ const string& Thing::getName() const
     return name;
 }
 
-} /* namespace m8r */
+} // m8r namespace
 

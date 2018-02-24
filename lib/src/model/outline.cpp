@@ -890,4 +890,4 @@ Note* Outline::getOutlineDescriptorAsNote()
     return outlineDescriptorAsNote;
 }
 
-} /* namespace m8r */
+} // m8r namespace

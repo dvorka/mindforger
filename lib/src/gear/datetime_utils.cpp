@@ -141,5 +141,5 @@ std::string datetimeToPrettyHtml(const time_t* ts)
     return result;
 }
 
-} /* namespace m8r */
+} // m8r namespace
 

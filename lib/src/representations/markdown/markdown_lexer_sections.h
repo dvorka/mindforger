@@ -180,6 +180,6 @@ private:
     void fixBackDeclaredSection(const unsigned short offset, const unsigned short sectionDepth);
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_MARKDOWN_LEXER_SECTIONS_H_ */

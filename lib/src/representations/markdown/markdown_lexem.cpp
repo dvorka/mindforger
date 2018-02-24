@@ -88,4 +88,4 @@ void MarkdownLexem::setDepth(unsigned depth)
     this->depth = depth;
 }
 
-} /* namespace m8r */
+} // m8r namespace

@@ -54,6 +54,6 @@ public:
     std::string* to(const Note* note);
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_HTML_OUTLINE_REPRESENTATION_H_ */

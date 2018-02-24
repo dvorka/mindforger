@@ -67,4 +67,4 @@ void Stencil::setContent(string* stencil)
     this->content = stencil;
 }
 
-} /* namespace m8r */
+} // m8r namespace

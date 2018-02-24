@@ -105,6 +105,6 @@ private:
 };
 
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_MARKDOWN_H_ */

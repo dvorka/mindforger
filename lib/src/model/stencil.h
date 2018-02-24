@@ -52,6 +52,6 @@ public:
     void setContent(std::string* content);
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_CONCEPT_STENCIL_H_ */

@@ -33,6 +33,6 @@ public:
     virtual ~Attachment();
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_ATTACHMENT_H_ */

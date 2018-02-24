@@ -21,52 +21,42 @@
 
 #include <string>
 
-#include "../../config/color.h"
+#include "relationship.h"
 
 namespace m8r {
 
-// TODO make category a thing
-
 /**
- * @brief Ontology concept aka Thing.
+ * @brief Ontology Thing.
  *
- * All outline labels and note tags are organized to MindForger ontology that
- * defines semantical hierarchy of all maintained knowledge - labels/tags
- * annotate outlines/notes, thus by organizing labels/tags are in fact
- * organized all outlines/notes into a single semantical tree.
- *
- * Thing is a root of the hierarchy. Any newly created label/tag becomes child
- * of Thing. User (or MindForger) may move label/tag around the ontology.
- *
- * Although Thing ontology forms a single tree it is multi-layered - sub-trees
- * that beginning just below Thing. Such layer defines facet i.e. technical,
- * functional, emotional, etc. view of the label/tag.
+ * See m8r::Ontology.
  */
 class Thing
 {
 protected:
+    /**
+     * @brief Display name.
+     */
     std::string name;
-    const Color& color;
 
     /**
-     * @brief Parent concept.
+     * @brief Relationships.
      *
-     * All things are organized to ISA hierarchy ("C++ ISA programming language).
+     * All relationships (both incoming and outgoing) distinquished using subject.
      */
-    //Thing isA;
+    std::set<Relationship*> relationships;
 
 public:
-    explicit Thing(std::string name, const Color& color);
+    explicit Thing(std::string name);
     Thing(const Thing&) = delete;
     Thing(const Thing&&) = delete;
     Thing &operator=(const Thing&) = delete;
     Thing &operator=(const Thing&&) = delete;
     virtual ~Thing();
 
-    const Color& getColor() const;
     const std::string& getName() const;
+    void setName(std::string name) { this->name = name; }
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_THING_H_ */

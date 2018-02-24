@@ -25,6 +25,9 @@
 
 namespace m8r {
 
+/**
+ * @brief Ontology vocabulary.
+ */
 template <class VALUE>
 class OntologyVocabulary {
     // IMPROVE migrate to using once compiler supports it
@@ -85,6 +88,6 @@ const VALUE* OntologyVocabulary<VALUE>::get(const std::string& name)
     return result!=entries.end() ? result->second : nullptr;
 }
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_ONTOLOGY_VOCABULARY_H_ */

@@ -1,5 +1,5 @@
 /*
- working_memory.h     MindForger thinking notebook
+ clazz.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,17 +16,37 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_WORKING_MEMORY_H_
-#define M8R_WORKING_MEMORY_H_
+#ifndef M8R_CLAZZ_H
+#define M8R_CLAZZ_H
+
+#include "thing.h"
 
 namespace m8r {
 
-class WorkingMemory {
+/**
+ * @brief Ontology class.
+ *
+ * See m8r::Ontology.
+ */
+class Clazz : public Thing
+{
+private:
+    /**
+     * @brief Parent class in ISA hierarchy.
+     *
+     * All Classes are organized to ISA (C++ is-a programming language) hierarchy.
+     * The root of ISA hierarchy is the Thing (instance of m8r::Class) defined by Ontology.
+     */
+    Relationship isA;
+
 public:
-	WorkingMemory();
-	virtual ~WorkingMemory();
+    explicit Clazz(std::string& name, Clazz* isA);
+    Clazz(const Clazz&) = delete;
+    Clazz(const Clazz&&) = delete;
+    Clazz &operator=(const Clazz&) = delete;
+    Clazz &operator=(const Clazz&&) = delete;
+    ~Clazz();
 };
 
-} // m8r namespace
-
-#endif /* M8R_WORKING_MEMORY_H_ */
+}
+#endif // M8R_CLAZZ_H

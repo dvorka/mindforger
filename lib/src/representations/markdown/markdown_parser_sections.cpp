@@ -462,4 +462,4 @@ vector<string*>* MarkdownParserSections::sectionBodyRule(size_t& offset)
     return result;
 }
 
-} /* namespace m8r */
+} // m8r namespace

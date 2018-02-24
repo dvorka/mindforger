@@ -27,6 +27,6 @@ public:
 	virtual ~MemoryDwell();
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_MEMORY_DWELL_H_ */

@@ -21,20 +21,26 @@
 
 #include <string>
 
-#include "../mind/ontology/thing.h"
+#include "../mind/ontology/clazz.h"
 
 namespace m8r {
 
 /**
- * Outline tag - an extensible set of labels w/ a predefined base.
+ * Tag is a member of an extensible set of labels w/ a predefined base.
+ * Labels are loaded from the configuration (default set populated on installation).
+ * Outline may have associated zero or one label. Labels may have associated also
+ * a color.
  *
- * Tag represents Ontology class or class property.
+ * All Outline/Note tags are organized to MindForger ontology that
+ * defines semantic structure and hierarchy of maintained knowledge.
+ *   Any newly created tag becomes child of the Class. User (or MindForger) may
+ * move tag around the ontology.
+ *   Although Thing ontology forms a single tree it is multi-layered - sub-trees
+ * that beginning just below Thing. Such layer defines facet i.e. technical,
+ * functional, emotional, etc. view of the tag.
  *
- * Tags are loaded from the configuration (default set populated on installation).
- * Both Outline and Note may have associated zero or more tags. Tags may have associated
- * also a color.
  */
-class Tag : public Thing
+class Tag : public Clazz
 {
 public:
     /**
@@ -44,6 +50,9 @@ public:
         CLASS,
         PROPERTY
     };
+
+private:
+    const Color& color;
 
 public:
     // static initialization order fiasco prevention
@@ -77,14 +86,16 @@ public:
     }
 
     Tag() = delete;
-    Tag(const std::string& name, const Color& color);
+    explicit Tag(const std::string& name, const Color& color, Clazz* isA);
     Tag(const Tag&) = delete;
     Tag(const Tag&&) = delete;
     Tag &operator=(const Tag&) = delete;
     Tag &operator=(const Tag&&) = delete;
     virtual ~Tag();
+
+    const Color& getColor() const;
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_TAG_H_ */

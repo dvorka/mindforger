@@ -60,6 +60,6 @@ public:
     void setUrgency(int8_t urgency);
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_MARKDOWN_OUTLINE_METADATA_H_ */

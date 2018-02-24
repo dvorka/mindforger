@@ -29,4 +29,4 @@ WorkingMemory::~WorkingMemory() {
 	// TODO Auto-generated destructor stub
 }
 
-} /* namespace m8r */
+} // m8r namespace

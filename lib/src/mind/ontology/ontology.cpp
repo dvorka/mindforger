@@ -21,23 +21,41 @@
 namespace m8r {
 
 Ontology::Ontology(const Configuration& configuration)
-    : config(configuration)
-{
-    // tags
-    tags.put(Tag::KeyCool(), new Tag{Tag::KeyCool(), Color::MF_BLUE()});
-    tags.put(Tag::KeyImportant(), new Tag{Tag::KeyImportant(), Color::MF_RED()});
-    tags.put(Tag::KeyLater(), new Tag{Tag::KeyLater(), Color::MF_PURPLE()});
-    tags.put(Tag::KeyObsolete(), new Tag{Tag::KeyObsolete(), Color::MF_GRAY()});
-    tags.put(Tag::KeyPersonal(), new Tag{Tag::KeyPersonal(), Color::MF_GREEN()});
-    tags.put(Tag::KeyProblem(), new Tag{Tag::KeyProblem(), Color::MF_BLACK()});
-    tags.put(Tag::KeyTodo(), new Tag{Tag::KeyTodo(), Color::MF_YELLOW()});
+    : config(configuration),
+      thing("Thing"),
+      tagsTaxonomy("Tags", thing),
+      outlineTypeTaxonomy("OutlineTypes", thing),
+      noteTypeTaxonomy("NoteTypes", thing),
+      relationshipTypeTaxonomy("RelationshipTypes", thing)
 
-    // outline types
+{
+    // taxonomy: tags
+    tagsTaxonomy->add(Tag::KeyCool(), new Tag{Tag::KeyCool(), taxonomy, Color::MF_BLUE()});
+    tagsTaxonomy->add(Tag::KeyImportant(), new Tag{Tag::KeyImportant(), taxonomy, Color::MF_RED()});
+    tagsTaxonomy->add(Tag::KeyLater(), new Tag{Tag::KeyLater(), taxonomy, Color::MF_PURPLE()});
+    tagsTaxonomy->add(Tag::KeyObsolete(), new Tag{Tag::KeyObsolete(), taxonomy, Color::MF_GRAY()});
+    tagsTaxonomy->add(Tag::KeyPersonal(), new Tag{Tag::KeyPersonal(), taxonomy, Color::MF_GREEN()});
+    tagsTaxonomy->add(Tag::KeyProblem(), new Tag{Tag::KeyProblem(), taxonomy, Color::MF_BLACK()});
+    tagsTaxonomy->add(Tag::KeyTodo(), new Tag{Tag::KeyTodo(), taxonomy, Color::MF_YELLOW()});
+    tagsTaxonomies.put(taxonomy->geName(),taxonomy);
+
+
+
+
+    // relationship types
+    // relationships
+
+
+
+
+
+
+    // taxonomy: outline types
     this->defaultOutlineType = new OutlineType{OutlineType::KeyOutline(), Color::MF_GRAY()};;
     outlineTypes.put(OutlineType::KeyOutline(), defaultOutlineType);
     outlineTypes.put(OutlineType::KeyGrow(), new OutlineType(OutlineType::KeyGrow(), Color::MF_GRAY()));
 
-    // note types
+    // taxonomy: note types
     this->defaultNoteType = new NoteType{NoteType::KeyNote(), Color::MF_GRAY()};
     noteTypes.put(NoteType::KeyNote(), defaultNoteType);
     noteTypes.put(NoteType::KeyAction(), new NoteType{NoteType::KeyAction(), Color::MF_GRAY()});
@@ -55,6 +73,31 @@ Ontology::Ontology(const Configuration& configuration)
     noteTypes.put(NoteType::KeyTask(), new NoteType{NoteType::KeyTask(), Color::MF_GRAY()});
     noteTypes.put(NoteType::KeyThreat(), new NoteType{NoteType::KeyThreat(), Color::MF_GRAY()});
     noteTypes.put(NoteType::KeyWeakness(), new NoteType{NoteType::KeyWeakness(), Color::MF_GRAY()});
+}
+
+Ontology::~Ontology()
+{
+    delete thing;
+    thing = nullptr;
+
+    if(!tags.empty()) {
+        for(auto& t:tags) {
+            delete t.second;
+        }
+        tags.clear();
+    }
+    if(!outlineTypes.empty()) {
+        for(auto& t:outlineTypes) {
+            delete t.second;
+        }
+        outlineTypes.clear();
+    }
+    if(!noteTypes.empty()) {
+        for(auto& t:noteTypes) {
+            delete t.second;
+        }
+        noteTypes.clear();
+    }
 }
 
 const Tag* Ontology::findOrCreateTag(const std::string& key) {
@@ -87,26 +130,6 @@ const NoteType* Ontology::findOrCreateNoteType(const std::string& key) {
     return result;
 }
 
-Ontology::~Ontology()
-{
-    if(!tags.empty()) {
-        for(auto& t:tags) delete t.second;
-        tags.clear();
-    }
-    if(!outlineTypes.empty()) {
-        for(auto& t:outlineTypes) {
-            delete t.second;
-        }
-        outlineTypes.clear();
-    }
-    if(!noteTypes.empty()) {
-        for(auto& t:noteTypes) {
-            delete t.second;
-        }
-        noteTypes.clear();
-    }
-}
-
 void Ontology::load()
 {
 }
@@ -115,4 +138,4 @@ void Ontology::save() const
 {
 }
 
-} /* namespace m8r */
+} // m8r namespace

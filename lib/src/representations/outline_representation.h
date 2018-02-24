@@ -38,6 +38,6 @@ public:
     virtual Outline* outline(const m8r::File& file) = 0;
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_OUTLINE_REPRESENTATION_H_ */

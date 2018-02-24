@@ -19,11 +19,11 @@
 #ifndef M8R_NOTE_TYPE_H_
 #define M8R_NOTE_TYPE_H_
 
-#include "../mind/ontology/thing.h"
+#include "../mind/ontology/clazz.h"
 
 namespace m8r {
 
-class NoteType : public Thing
+class NoteType : public Clazz
 {
 public:
     // static initialization order fiasco prevention
@@ -101,6 +101,6 @@ public:
     virtual ~NoteType();
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_NOTE_TYPE_H_ */

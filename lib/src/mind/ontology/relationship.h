@@ -1,5 +1,5 @@
 /*
- repository.cpp     MindForger thinking notebook
+ relationship.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -10,30 +10,35 @@
 
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "repository.h"
+#ifndef M8R_RELATIONSHIP_H
+#define M8R_RELATIONSHIP_H
 
 namespace m8r {
 
-using namespace std;
-
-Repository::Repository(
-    string path,
-    RepositoryType type,
-    RepositoryMode mode,
-    std::string file,
-    bool readOnly)
-    : path(path), file(file), type(type), mode(mode), readOnly(readOnly)
+/**
+ * @brief Ontology reationship.
+ *
+ * See m8r::Ontology.
+ */
+class Relationship
 {
-}
+public:
+    explicit Relationship();
 
-Repository::~Repository()
-{
-}
+    constructor modifies object's relationships to self register
+
+    Relationship(const Relationship&) = delete;
+    Relationship(const Relationship&&) = delete;
+    Relationship &operator=(const Relationship&) = delete;
+    Relationship &operator=(const Relationship&&) = delete;
+    ~Relationship();
+};
 
 }
+#endif // M8R_RELATIONSHIP_H

@@ -119,6 +119,6 @@ public:
     void setOff(unsigned short int off);
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_MARKDOWN_LEXEM_H_ */

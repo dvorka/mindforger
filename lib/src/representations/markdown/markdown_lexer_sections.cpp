@@ -794,5 +794,5 @@ void MarkdownLexerSections::fixBackDeclaredSection(const unsigned short offset, 
     // TODO tokenize LINE as SECTION HEADER
 }
 
-} /* namespace m8r */
+} // m8r namespace
 

@@ -175,6 +175,6 @@ public:
     MarkdownAstSectionMetadata& getMetadata();
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_MARKDOWN_AST_MarkdownAstNodeSection_H_ */

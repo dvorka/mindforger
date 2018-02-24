@@ -236,5 +236,5 @@ const string* MarkdownAstSectionMetadata::getPrimaryTag() const
     }
 }
 
-} /* namespace m8r */
+} // m8r namespace
 

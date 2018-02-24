@@ -80,6 +80,6 @@ bool isDirectory(const char* path);
 char* makeTempDirectory(char* dirNamePefix);
 int removeDirectoryRecursively(const char *path);
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_FILE_UTILS_H_ */

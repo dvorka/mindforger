@@ -27,6 +27,6 @@ enum ResourceType {
     ATTACHMENT
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_RESOURCE_TYPES_H_ */

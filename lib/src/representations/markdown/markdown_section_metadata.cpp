@@ -80,4 +80,4 @@ MarkdownSectionMetadata::~MarkdownSectionMetadata()
 {
 }
 
-} /* namespace m8r */
+} // m8r namespace

@@ -1,5 +1,5 @@
 /*
- repository.cpp     MindForger thinking notebook
+ clazz.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,23 +16,19 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "repository.h"
+#include "clazz.h"
 
 namespace m8r {
 
-using namespace std;
+Clazz::Clazz(std::string& name, Clazz* isA)
+    : Thing{name},
+      isA(RelationshipTypes::isA, isA)
 
-Repository::Repository(
-    string path,
-    RepositoryType type,
-    RepositoryMode mode,
-    std::string file,
-    bool readOnly)
-    : path(path), file(file), type(type), mode(mode), readOnly(readOnly)
 {
+    relationships.insert(isA);
 }
 
-Repository::~Repository()
+Clazz::~Clazz()
 {
 }
 

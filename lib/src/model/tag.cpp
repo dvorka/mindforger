@@ -22,15 +22,14 @@ using namespace std;
 
 namespace m8r {
 
-Tag::Tag(const string& name, const Color& color)
-    : Thing{name, color}
+Tag::Tag(const string& name, const Color& color, Clazz* isA)
+    : Clazz{name, isA}
 {
+    this->color = color;
 }
 
 Tag::~Tag()
 {
 }
 
-}
-
-/* namespace m8r */
+} // namespace m8r

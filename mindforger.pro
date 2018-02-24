@@ -113,7 +113,6 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     src/qt/dialogs/fts_dialog.h \
     src/qt/dialogs/find_outline_by_name_dialog.h \
     src/qt/dialogs/find_note_by_name_dialog.h \
-    lib/src/model/mind_entity.h \
     src/qt/widgets/edit_name_and_buttons_panel.h \
     src/qt/dialogs/note_edit_dialog.h \
     src/qt/dialogs/configuration_dialog.h \
@@ -128,6 +127,12 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     lib/src/debug.h \
     src/qt/recent_files_menu.h \
     lib/src/config/configuration.h
+    lib/src/mind/ontology/clazz.h \
+    lib/src/mind/ontology/ontology_vocabulary.h \
+    lib/src/mind/ontology/relationship.h \
+    lib/src/mind/ontology/taxonomy.h \
+    lib/src/mind/ontology/triple.h \
+    lib/src/mind/ontology/relationship_type.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
@@ -219,6 +224,11 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/dialogs/refactor_note_to_outline_dialog.cpp \
     lib/src/config/repository.cpp \
     src/qt/recent_files_menu.cpp
+    lib/src/mind/ontology/clazz.cpp \
+    lib/src/mind/ontology/relationship.cpp \
+    lib/src/mind/ontology/taxonomy.cpp \
+    lib/src/mind/ontology/triple.cpp \
+    lib/src/mind/ontology/relationship_type.cpp
 
 # Development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1

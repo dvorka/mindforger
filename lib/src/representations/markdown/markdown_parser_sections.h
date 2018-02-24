@@ -96,6 +96,6 @@ private:
     void skipBr(size_t& offset);
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_MARKDOWN_PARSER_SECTIONS_H_ */

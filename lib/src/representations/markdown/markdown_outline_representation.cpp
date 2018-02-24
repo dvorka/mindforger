@@ -380,5 +380,5 @@ string* MarkdownOutlineRepresentation::toDescription(const Note* note, string* m
 }
 
 
-} /* namespace m8r */
+} // m8r namespace
 

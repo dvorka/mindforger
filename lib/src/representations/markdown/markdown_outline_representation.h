@@ -86,6 +86,6 @@ private:
     std::string to(std::string* md, const std::vector<const Tag*>& tags);
 };
 
-} /* namespace m8r */
+} // m8r namespace
 
 #endif /* M8R_MARKDOWN_OUTLINE_REPRESENTATION_H_ */
