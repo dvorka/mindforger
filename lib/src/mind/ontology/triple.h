@@ -19,6 +19,8 @@
 #ifndef M8R_TRIPLE_H
 #define M8R_TRIPLE_H
 
+#include "thing.h"
+
 namespace m8r {
 
 /**
@@ -26,7 +28,7 @@ namespace m8r {
  *
  * See m8r::Ontology.
  */
-class Triple
+class Triple : public Thing
 {
 public:
     explicit Triple();

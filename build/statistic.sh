@@ -17,8 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-find .. -type f -iname \*.cpp -type f -o -iname \*.h | while read F; do cat "$F"; done | wc -l -c
-
-#find .. -type f -iname \*.cpp -type f -o -iname \*.h -exec wc -l -c {} +
+if [ -x "$(command -v tokei)" ]
+then
+  cd .. && tokei
+else
+  find .. -type f -iname \*.cpp -type f -o -iname \*.h | while read F; do cat "$F"; done | wc -l -c
+  #find .. -type f -iname \*.cpp -type f -o -iname \*.h -exec wc -l -c {} +
+fi
 
 # eof

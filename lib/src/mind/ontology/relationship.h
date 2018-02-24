@@ -19,6 +19,8 @@
 #ifndef M8R_RELATIONSHIP_H
 #define M8R_RELATIONSHIP_H
 
+#include "triple.h"
+
 namespace m8r {
 
 /**
@@ -26,13 +28,13 @@ namespace m8r {
  *
  * See m8r::Ontology.
  */
-class Relationship
+class Relationship : public Triple
 {
 public:
+    /**
+     * @brief Triple constructor - every Relationship is a Triple.
+     */
     explicit Relationship();
-
-    constructor modifies object's relationships to self register
-
     Relationship(const Relationship&) = delete;
     Relationship(const Relationship&&) = delete;
     Relationship &operator=(const Relationship&) = delete;
