@@ -100,7 +100,6 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     src/qt/outline_header_view_presenter.h \
     src/qt/outline_header_edit_view.h \
     src/qt/outline_header_view.h \
-    lib/src/gear/color.h \
     lib/src/version.h \
     lib/src/config/color.h \
     lib/src/mind/mind_listener.h \
@@ -124,13 +123,11 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     src/qt/dialogs/refactor_note_to_outline_dialog.h \
     lib/src/config/repository.h \
     lib/src/debug.h \
-    src/qt/recent_files_menu.h \
-    lib/src/config/configuration.h
     lib/src/mind/ontology/ontology_vocabulary.h \
     lib/src/mind/ontology/taxonomy.h \
     lib/src/mind/ontology/thing_class_rel_triple.h \
-    lib/src/config/configuration.h
-    lib/src/debug.h
+    lib/src/config/configuration.h \
+    lib/src/debug.h \
     src/qt/recent_files_menu.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
@@ -221,9 +218,7 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/widgets/importance_combo_box.cpp \
     src/qt/dialogs/refactor_note_to_outline_dialog.cpp \
     lib/src/config/repository.cpp \
-    src/qt/recent_files_menu.cpp
-    lib/src/mind/ontology/taxonomy.cpp \
-    lib/src/mind/ontology/thing_class_rel_triple.cpp
+    lib/src/mind/ontology/thing_class_rel_triple.cpp \
     src/qt/recent_files_menu.cpp
 
 # Development environment remarks:

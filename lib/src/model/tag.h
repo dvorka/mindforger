@@ -42,15 +42,6 @@ namespace m8r {
  */
 class Tag : public Clazz
 {
-public:
-    /**
-     * @brief Tag type.
-     */
-    enum TagType {
-        CLASS,
-        PROPERTY
-    };
-
 private:
     const Color& color;
 
@@ -61,7 +52,7 @@ public:
     // IMPROVE this information to be captured rather in Ontology - Tag may have different parent classes
     enum TagType {
         CLASS,
-        ATTRIBUTE
+        PROPERTY
     };
 
 public:
