@@ -31,6 +31,9 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     listView = new QListView(this);
     // list view model must be set - use of this type of mode enable the use of string lists controlling its content
     listView->setModel(&listViewModel);
+    // disable editation of the list item on doble click
+    listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
 
     label = new QLabel{tr("Outline &name:")};
     lineEdit = new MyLineEdit{listView, this};

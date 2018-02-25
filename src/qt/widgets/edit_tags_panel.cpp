@@ -37,6 +37,8 @@ EditTagsPanel::EditTagsPanel(
     listView = new QListView{this};
     // list view model must be set - use of this type of mode enable the use of string lists controlling its content
     listView->setModel(&listViewModel);
+    // disable ability to edit list items
+    listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     addButton = new QPushButton{tr("Add"), this};
     removeButton = new QPushButton{tr("Remove"), this};
 
