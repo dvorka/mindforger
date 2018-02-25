@@ -278,6 +278,7 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
         "\nFirst outline text."
         "\n"
         "\n## Note 1 <!-- Metadata: type: Note; created: 2017-02-02 06:31:09; reads: 35; read: 2018-01-07 08:05:58; revision: 36; modified: 2018-01-07 08:06:05; progress: 20%; -->"
+        "\n" // empty line s/d to reproduce bug
         "\nNote 1 text."
         "\n"
         "\n## Note 2 <!-- Metadata: type: Idea; created: 2017-02-02 06:31:09; reads: 1; read: 2018-01-07 08:05:58; revision: 1; modified: 2018-01-07 08:06:05; progress: 10%; -->"
@@ -355,6 +356,7 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
         "\nFirst MD text."
         "\n"
         "\n## Note 1"
+        "\n" // empty line s/d to reproduce bug
         "\nNote 1 text."
         "\n"
         "\n## Note 2"
@@ -403,16 +405,23 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
         cout << endl << "NO MDs";
     }
 
-    // assert
+    // asserts
     ASSERT_NE(outline, nullptr);
-    // write outline > metadata to be written
+    // assert O contains NO metadata
     string* outlineAsString = m8r::fileToString(outline->getKey());
     EXPECT_EQ(outlineAsString->find("Metadata"), std::string::npos);
+    EXPECT_EQ(*outlineAsString, content);
     delete outlineAsString;
 
+    // assert that load -> save -> load w/o metadata yields identical result
+    mind.remind().remember(outline);
+    outlineAsString = m8r::fileToString(outline->getKey());
+    EXPECT_EQ(*outlineAsString, content);
+    delete outlineAsString;
+
+    // assert write to O writes NO metadata
     outline->setName("Dirty");
     mind.remind().remember(outline);
-
     outlineAsString = m8r::fileToString(outline->getKey());
     EXPECT_EQ(outlineAsString->find("Metadata"), std::string::npos);
     delete outlineAsString;

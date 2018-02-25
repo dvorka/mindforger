@@ -241,8 +241,9 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
             md->append(" modified: "); md->append(datetimeToString(outline->getModified())); md->append(";");
             sprintf(buffer," importance: %d/5;",outline->getImportance()); md->append(buffer);
             sprintf(buffer," urgency: %d/5;",outline->getUrgency()); md->append(buffer);
-            sprintf(buffer," progress: %d%%; -->\n",outline->getProgress()); md->append(buffer);
+            sprintf(buffer," progress: %d%%; -->",outline->getProgress()); md->append(buffer);
         }
+        md->append("\n");
 
         const vector<string*>& description=outline->getDescription();
         if(description.size()) {
@@ -359,8 +360,9 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
         md->append(" read: "); md->append(datetimeToString(note->getRead())); md->append(";");
         sprintf(buffer," revision: %d;",note->getRevision()); md->append(buffer);
         md->append(" modified: "); md->append(datetimeToString(note->getModified())); md->append(";");
-        sprintf(buffer," progress: %d%%; -->\n",note->getProgress()); md->append(buffer);
+        sprintf(buffer," progress: %d%%; -->",note->getProgress()); md->append(buffer);
     }
+    md->append("\n");
 
     toDescription(note, md);
 
