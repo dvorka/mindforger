@@ -74,23 +74,23 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     vector<const m8r::Tag*> tags{};
     tags.push_back(mind.ontology().findOrCreateTag(m8r::Tag::KeyImportant()));
     m8r::Stencil* stencil = memory.getStencils(m8r::ResourceType::NOTE).at(0);
-    string title{"!!! STENCIL Note !!!"};
+    string name{"!!! STENCIL Note !!!"};
     mind.noteNew(
                 o->getKey(),
                 0,
-                &title,
+                &name,
                 mind.ontology().findOrCreateNoteType(m8r::NoteType::KeyAction()),
                 0,
                 &tags,
                 0,
                 stencil);
     // insert note in the middle and to the depth 1
-    string deepTitle{"!!! DEEP Note !!!"};
+    string deepName{"!!! DEEP Note !!!"};
     // insert note in the middle and to the depth 1
     m8r::Note* newNote = mind.noteNew(
                 o->getKey(),
                 2,
-                &deepTitle,
+                &deepName,
                 mind.ontology().findOrCreateNoteType(m8r::NoteType::KeyAction()),
                 0,
                 &tags,
@@ -103,25 +103,25 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     EXPECT_EQ(oFile, o->getKey());
     EXPECT_EQ(string{"Test Outline"}, o->getName());
     EXPECT_EQ(o->getNotesCount(), 4);
-    EXPECT_EQ(title, o->getNotes()[0]->getName());
+    EXPECT_EQ(name, o->getNotes()[0]->getName());
     EXPECT_EQ(string{"Note 1"}, o->getNotes()[1]->getName());
-    EXPECT_EQ(deepTitle, o->getNotes()[2]->getName());
+    EXPECT_EQ(deepName, o->getNotes()[2]->getName());
     EXPECT_EQ(string{"Note 2"}, o->getNotes()[3]->getName());
 
     // delete NOTE
     mind.noteForget(o->getNotes()[3]);
     //cout << "After delete:" << endl; for(m8r::Note* nn: o->getNotes()) { cout << "  #x" << nn->getDepth() << " " << nn->getName() << endl; }
     EXPECT_EQ(o->getNotesCount(), 3);
-    EXPECT_EQ(title, o->getNotes()[0]->getName());
+    EXPECT_EQ(name, o->getNotes()[0]->getName());
     EXPECT_EQ(string{"Note 1"}, o->getNotes()[1]->getName());
-    EXPECT_EQ(deepTitle, o->getNotes()[2]->getName());
+    EXPECT_EQ(deepName, o->getNotes()[2]->getName());
 
     // delete NOTE w/ DEEP child
     //cout << "Before DEEP delete:" << endl; for(m8r::Note* nn: o->getNotes()) { cout << "  #x" << nn->getDepth() << " " << nn->getName() << endl; }
     mind.noteForget(o->getNotes()[1]);
     //cout << "After DEEP delete:" << endl; for(m8r::Note* nn: o->getNotes()) { cout << "  #x" << nn->getDepth() << " " << nn->getName() << endl; }
     EXPECT_EQ(o->getNotesCount(), 2);
-    EXPECT_EQ(title, o->getNotes()[0]->getName());
+    EXPECT_EQ(name, o->getNotes()[0]->getName());
 
     // IMPROVE test add note on offset (virified manually that it works)
     mind.noteForget(o->getNotes()[0]);

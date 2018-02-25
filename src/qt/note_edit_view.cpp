@@ -26,14 +26,14 @@ NoteEditView::NoteEditView(QWidget* parent)
     : QWidget(parent)
 {
     // widgets
-    editTitleAndButtonsPanel = new EditTitleAndButtonsPanel{EditTitleAndButtonsPanel::Mode::NOTE_MODE, this};
+    editNameAndButtonsPanel = new EditNameAndButtonsPanel{EditNameAndButtonsPanel::Mode::NOTE_MODE, this};
     noteEditor = new NoteEditorView{this};
 
     // assembly
     QVBoxLayout* layout = new QVBoxLayout{this};
     // ensure that wont be extra space around member widgets
     layout->setContentsMargins(QMargins(0,0,0,0));
-    layout->addWidget(editTitleAndButtonsPanel);
+    layout->addWidget(editNameAndButtonsPanel);
     layout->addWidget(noteEditor);
     setLayout(layout);
 
@@ -48,10 +48,10 @@ NoteEditView::NoteEditView(QWidget* parent)
         QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_S)),
         this, SLOT(slotSaveNote()));
     QObject::connect(
-        editTitleAndButtonsPanel->getRememberButton(), SIGNAL(clicked()),
+        editNameAndButtonsPanel->getRememberButton(), SIGNAL(clicked()),
         this, SLOT(slotSaveAndCloseEditor()));
     QObject::connect(
-        editTitleAndButtonsPanel->getCancelButton(), SIGNAL(clicked()),
+        editNameAndButtonsPanel->getCancelButton(), SIGNAL(clicked()),
         this, SLOT(slotCloseEditor()));
 }
 
@@ -61,7 +61,7 @@ NoteEditView::~NoteEditView()
 
 void NoteEditView::slotOpenNotePropertiesEditor()
 {
-    editTitleAndButtonsPanel->handleShowNoteEditDialog();
+    editNameAndButtonsPanel->handleShowNoteEditDialog();
 }
 
 void NoteEditView::slotSaveAndCloseEditor()

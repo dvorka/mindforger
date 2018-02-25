@@ -22,7 +22,7 @@ namespace m8r {
 
 using namespace std;
 
-EditTitleAndButtonsPanel::EditTitleAndButtonsPanel(Mode mode, QWidget* parent)
+EditNameAndButtonsPanel::EditNameAndButtonsPanel(Mode mode, QWidget* parent)
     : QWidget(parent), mode(mode)
 {
     // widgets
@@ -51,7 +51,7 @@ EditTitleAndButtonsPanel::EditTitleAndButtonsPanel(Mode mode, QWidget* parent)
     }
 }
 
-EditTitleAndButtonsPanel::~EditTitleAndButtonsPanel()
+EditNameAndButtonsPanel::~EditNameAndButtonsPanel()
 {
     delete label;
     delete lineEdit;
@@ -61,22 +61,22 @@ EditTitleAndButtonsPanel::~EditTitleAndButtonsPanel()
     delete layout;
 }
 
-void EditTitleAndButtonsPanel::handleShowOutlineHeaderEditDialog()
+void EditNameAndButtonsPanel::handleShowOutlineHeaderEditDialog()
 {
     outlineHeaderEditDialog->show();
 }
 
-void EditTitleAndButtonsPanel::handleCloseOutlineHeaderEditDialog()
+void EditNameAndButtonsPanel::handleCloseOutlineHeaderEditDialog()
 {
     outlineHeaderEditDialog->toOutline();
 }
 
-void EditTitleAndButtonsPanel::handleShowNoteEditDialog()
+void EditNameAndButtonsPanel::handleShowNoteEditDialog()
 {
     noteEditDialog->show();
 }
 
-void EditTitleAndButtonsPanel::handleCloseNoteEditDialog()
+void EditNameAndButtonsPanel::handleCloseNoteEditDialog()
 {
     noteEditDialog->toNote();
 }

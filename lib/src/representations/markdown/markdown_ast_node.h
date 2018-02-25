@@ -159,7 +159,7 @@ protected:
 
 public:
     explicit MarkdownAstNodeSection();
-    explicit MarkdownAstNodeSection(std::string *title);
+    explicit MarkdownAstNodeSection(std::string *name);
     MarkdownAstNodeSection(const MarkdownAstNodeSection &) = delete;
     MarkdownAstNodeSection(const MarkdownAstNodeSection &&) = delete;
     MarkdownAstNodeSection &operator=(const MarkdownAstNodeSection &) = delete;

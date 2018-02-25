@@ -85,19 +85,19 @@ size_t Mind::getMemoryDwellDepth() const
     return memoryDwell.size();
 }
 
-vector<Note*>* Mind::findNoteByTitleFts(const string& regexp) const
+vector<Note*>* Mind::findNoteByNameFts(const string& regexp) const
 {
     UNUSED_ARG(regexp);
 
     return nullptr;
 }
 
-void Mind::getOutlineTitles(vector<string>& titles) const
+void Mind::getOutlineNames(vector<string>& names) const
 {
     // IMPROVE PERF cache vector (stack member) until and evict on memory modification
     vector<Outline*> outlines = memory.getOutlines();
     for(Outline* outline:outlines) {
-        titles.push_back(outline->getName());
+        names.push_back(outline->getName());
     }
 }
 
@@ -355,8 +355,8 @@ void Mind::setForgetThreashold(uint8_t forget)
 }
 
 string Mind::outlineNew(
-    // IMPROVE pass title by reference
-    const string* title,
+    // IMPROVE pass name by reference
+    const string* name,
     const OutlineType* outlineType,
     const int8_t importance,
     const int8_t urgency,
@@ -364,7 +364,7 @@ string Mind::outlineNew(
     const std::vector<const Tag*>* tags,
     Stencil* outlineStencil)
 {
-    string key = memory.createOutlineKey(title);
+    string key = memory.createOutlineKey(name);
     Outline* outline{};
     if(outlineStencil) {
         outline = memory.createOutline(outlineStencil);
@@ -376,8 +376,8 @@ string Mind::outlineNew(
     if(outline) {
         outline->completeProperties(datetimeNow());
         outline->setKey(key);
-        if(title && !title->empty()) {
-            outline->setName(*title);
+        if(name && !name->empty()) {
+            outline->setName(*name);
         }
         if(outlineType) {
             outline->setType(outlineType);
@@ -436,8 +436,8 @@ bool Mind::outlineForget(string outlineKey)
 Note* Mind::noteNew(
         const std::string& outlineKey,
         const uint16_t offset,
-        // IMPROVE pass title by reference
-        const std::string* title,
+        // IMPROVE pass name by reference
+        const std::string* name,
         const NoteType* noteType,
         u_int16_t depth,
         const std::vector<const Tag*>* tags,
@@ -452,8 +452,8 @@ Note* Mind::noteNew(
             n = new Note(ontology().findOrCreateNoteType(NoteType::KeyNote()),o);
         }
         n->setOutline(o);
-        if(title) {
-            n->setName(*title);
+        if(name) {
+            n->setName(*name);
         }
         n->setModified();
         n->setModifiedPretty();
@@ -571,7 +571,7 @@ void Mind::onRemembering()
 }
 
 // unique_ptr template BREAKS Qt Developer indentation > stored at EOF
-unique_ptr<vector<Outline*>> Mind::findOutlineByTitleFts(const string& expr) const
+unique_ptr<vector<Outline*>> Mind::findOutlineByNameFts(const string& expr) const
 {
     // IMPROVE implement regexp and other search options by reusing HSTR code
     // IMPROVE PERF this method is extremely inefficient > use cached map (stack member) evicted on memory modification

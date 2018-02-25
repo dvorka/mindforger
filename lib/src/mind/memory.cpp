@@ -251,19 +251,19 @@ bool compareStrings(const Outline* o1, const Outline* o2)
     return o1->getName().compare(o2->getName()) < 0;
 }
 
-void Memory::sortByTitle(vector<Outline*>& os)
+void Memory::sortByName(vector<Outline*>& os)
 {
     std::sort(os.begin(), os.end(), compareStrings);
 }
 
-string Memory::createOutlineKey(const string* title)
+string Memory::createOutlineKey(const string* name)
 {
-    return persistence->createFileName(config.getMemoryPath(), title, string(FILE_EXTENSION_MARKDOWN));
+    return persistence->createFileName(config.getMemoryPath(), name, string(FILE_EXTENSION_MARKDOWN));
 }
 
-string Memory::createLimboKey(const string* title)
+string Memory::createLimboKey(const string* name)
 {
-    return persistence->createFileName(config.getLimboPath(), title, string(FILE_EXTENSION_MARKDOWN));
+    return persistence->createFileName(config.getLimboPath(), name, string(FILE_EXTENSION_MARKDOWN));
 }
 
 Outline* Memory::getOutline(const string& key)

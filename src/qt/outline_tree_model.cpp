@@ -47,12 +47,12 @@ void OutlineTreeModel::removeAllRows()
     setHorizontalHeaderLabels(tableHeader);
 }
 
-void OutlineTreeModel::createTitleText(QString& html, Note* note)
+void OutlineTreeModel::createNameText(QString& html, Note* note)
 {
     for(auto depth=0; depth<note->getDepth(); depth++) {
         html += QString::fromUtf8("&nbsp;&nbsp;&nbsp;&nbsp;");
     }
-    html += QString::fromStdString(note->getTitle());
+    html += QString::fromStdString(note->getName());
 
     tagsToHtml(note->getTags(), html);
     // IMPROVE make showing of type configurable
@@ -64,10 +64,10 @@ void OutlineTreeModel::addRow(Note* note)
     QList<QStandardItem*> items;
     QString s{};
 
-    // title
-    QString title{};
-    createTitleText(title, note);
-    QStandardItem* noteItem = new QStandardItem{title};
+    // name
+    QString name{};
+    createNameText(name, note);
+    QStandardItem* noteItem = new QStandardItem{name};
     // TODO declare custom role
     noteItem->setData(QVariant::fromValue(note), Qt::UserRole + 1);
     items.append(noteItem);
@@ -109,7 +109,7 @@ void OutlineTreeModel::refresh(Note* note, int row, bool set)
         }
 
         QString s{};
-        createTitleText(s, note);
+        createNameText(s, note);
         // refresh content
         item(row,0)->setText(s);
 

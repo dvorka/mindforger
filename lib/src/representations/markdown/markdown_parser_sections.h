@@ -83,7 +83,7 @@ private:
     void markdownRule();
     MarkdownAstNodeSection* sectionRule(size_t& offset);
     MarkdownAstNodeSection* sectionHeaderRule(size_t& offset);
-    std::string* sectionTitleRule(size_t& offset);
+    std::string* sectionNameRule(size_t& offset);
     bool sectionMetadataRule(MarkdownAstSectionMetadata& meta, size_t& offset);
     const MarkdownLexem* parsePropertyValue(size_t& offset);
     time_t parsePropertyValueTimestamp(size_t& offset);

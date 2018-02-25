@@ -125,14 +125,14 @@ void MarkdownParserSections::skipBr(size_t& offset)
 MarkdownAstNodeSection* MarkdownParserSections::sectionHeaderRule(size_t& offset)
 {
     const MarkdownLexem* next;
-    string* title;
+    string* name;
     // seek to section token - may skip a part of the document
     while((next=lookahead(offset+1))!=nullptr
             &&
           next->getType()!=MarkdownLexemType::SECTION)
     {
-        if((title=sectionTitleRule(offset))!=nullptr) {
-            MarkdownAstNodeSection* result = new MarkdownAstNodeSection(title);
+        if((name=sectionNameRule(offset))!=nullptr) {
+            MarkdownAstNodeSection* result = new MarkdownAstNodeSection(name);
             if(sectionMetadataRule(result->getMetadata(), offset)) {
                 // skip section line's BR
                 skipBr(offset);
@@ -171,7 +171,7 @@ void MarkdownParserSections::skipSectionBody(size_t& offset)
     }
 }
 
-string* MarkdownParserSections::sectionTitleRule(size_t& offset)
+string* MarkdownParserSections::sectionNameRule(size_t& offset)
 {
     skipWhitespaces(offset);
     const MarkdownLexem* next;
@@ -179,7 +179,7 @@ string* MarkdownParserSections::sectionTitleRule(size_t& offset)
           &&
         next->getType()==MarkdownLexemType::TEXT)
     {
-        string* title = new string();
+        string* name = new string();
         string* text = nullptr;
         while((next=lookahead(offset+1))!=nullptr
                 &&
@@ -187,12 +187,12 @@ string* MarkdownParserSections::sectionTitleRule(size_t& offset)
         {
             text = lexer.getText(next);
             if(text!=nullptr) {
-                title->append(*text);
+                name->append(*text);
                 delete text;
                 text = nullptr;
             } else {
-                if(title->size()) {
-                    title->append(" ");
+                if(name->size()) {
+                    name->append(" ");
                 }
             }
             ++offset;
@@ -200,19 +200,19 @@ string* MarkdownParserSections::sectionTitleRule(size_t& offset)
         text = lexer.getText(next);
         if(text!=nullptr) {
             if(next->getType()==MarkdownLexemType::WHITESPACES) {
-                title->erase(title->size()-1, text->size());
+                name->erase(name->size()-1, text->size());
             }
             delete text;
             text = nullptr;
         }
-        return title;
+        return name;
     } else {
-        // handle section w/ empty title like: '##   <!-- Metadata... '
+        // handle section w/ empty name like: '##   <!-- Metadata... '
         if(next->getType()==MarkdownLexemType::HTML_COMMENT_BEGIN) {
             return new string();
         }
 
-        // handle section w/ empty title, no metadata and traling spaces like: '##   '
+        // handle section w/ empty name, no metadata and traling spaces like: '##   '
         if(next->getType()==MarkdownLexemType::BR) {
             return new string();
         }

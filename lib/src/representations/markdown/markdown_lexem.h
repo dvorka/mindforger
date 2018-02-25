@@ -32,7 +32,7 @@ enum class MarkdownLexemType
     BEGIN_DOC,                  // begin of document
 
     SECTION,                    // "#" .. "##...#"
-    TEXT,                       // "title"
+    TEXT,                       // "name"
     LINE,                       // ^"This is sentence."$ (w/o ^ and $ markers)
     WHITESPACES,                 // [:whitespace]+ (\n\r TAB)
 

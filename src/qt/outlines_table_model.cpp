@@ -51,8 +51,8 @@ void OutlinesTableModel::addRow(Outline* outline)
     QStandardItem* item;
 
     QString html, tooltip;
-    if(outline->getTitle().size()) {
-        tooltip = QString(outline->getTitle().c_str());
+    if(outline->getName().size()) {
+        tooltip = QString(outline->getName().c_str());
         html += tooltip;
     } else {
         tooltip = QString::fromStdString(outline->getKey());

@@ -26,7 +26,7 @@
 
 namespace m8r {
 
-class EditTitleAndButtonsPanel : public QWidget
+class EditNameAndButtonsPanel : public QWidget
 {
     Q_OBJECT
 
@@ -50,12 +50,12 @@ private:
     NoteEditDialog* noteEditDialog;
 
 public:
-    explicit EditTitleAndButtonsPanel(Mode mode, QWidget* parent);
-    EditTitleAndButtonsPanel(const EditTitleAndButtonsPanel&) = delete;
-    EditTitleAndButtonsPanel(const EditTitleAndButtonsPanel&&) = delete;
-    EditTitleAndButtonsPanel &operator=(const EditTitleAndButtonsPanel&) = delete;
-    EditTitleAndButtonsPanel &operator=(const EditTitleAndButtonsPanel&&) = delete;
-    ~EditTitleAndButtonsPanel();
+    explicit EditNameAndButtonsPanel(Mode mode, QWidget* parent);
+    EditNameAndButtonsPanel(const EditNameAndButtonsPanel&) = delete;
+    EditNameAndButtonsPanel(const EditNameAndButtonsPanel&&) = delete;
+    EditNameAndButtonsPanel &operator=(const EditNameAndButtonsPanel&) = delete;
+    EditNameAndButtonsPanel &operator=(const EditNameAndButtonsPanel&&) = delete;
+    ~EditNameAndButtonsPanel();
 
 /*
  * NOTE mode
@@ -69,7 +69,7 @@ public:
     }
     void setNote(Note* note) {
         noteEditDialog->setNote(note);
-        lineEdit->setText(QString::fromStdString(note->getTitle()));
+        lineEdit->setText(QString::fromStdString(note->getName()));
     }
 
 public slots:
@@ -88,7 +88,7 @@ public slots:
     }
     void setOutline(Outline* outline) {
         outlineHeaderEditDialog->setOutline(outline);
-        lineEdit->setText(QString::fromStdString(outline->getTitle()));
+        lineEdit->setText(QString::fromStdString(outline->getName()));
     }
 
 public slots:
@@ -96,7 +96,7 @@ public slots:
     void handleCloseOutlineHeaderEditDialog();
 
 public:
-    QString getTitle() const { return lineEdit->text(); }
+    QString getName() const { return lineEdit->text(); }
     QPushButton* getRememberButton() const { return rememberButton; }
     QPushButton* getCancelButton() const { return cancelButton; }
 

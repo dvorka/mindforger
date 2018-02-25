@@ -52,20 +52,20 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                 mainPresenter->getStatusBar()->showInfo(prefix);
                 if(prefix.size()==1) {
                     // switch suggestions model
-                    vector<string> outlineTitles;
-                    mind->getOutlineTitles(outlineTitles);
-                    QStringList outlineTitlesCompletion = QStringList();
-                    if(outlineTitles.size()) {
+                    vector<string> outlineNames;
+                    mind->getOutlineNames(outlineNames);
+                    QStringList outlineNamesCompletion = QStringList();
+                    if(outlineNames.size()) {
                         QString qs;
-                        for(const string s:outlineTitles) {
+                        for(const string s:outlineNames) {
                             qs.clear();
                             // TODO commands are constants
                             qs.append("find outline by name ");
                             qs.append(QString::fromStdString(s));
-                            outlineTitlesCompletion << qs;
+                            outlineNamesCompletion << qs;
                         }
                     }
-                    view->updateCompleterModel(&outlineTitlesCompletion);
+                    view->updateCompleterModel(&outlineNamesCompletion);
                 } else {
                 }
             } else {
@@ -97,22 +97,22 @@ void CliAndBreadcrumbsPresenter::executeCommand()
             return;
         }
         if(command.startsWith(view->CMD_FIND_OUTLINE_BY_NAME)) {
-            string title = command.toStdString().substr(21);
-            unique_ptr<vector<Outline*>> outlines = mind->findOutlineByTitleFts(title);
+            string name = command.toStdString().substr(21);
+            unique_ptr<vector<Outline*>> outlines = mind->findOutlineByNameFts(name);
             if(!outlines || !outlines->size()) {
                 // IMPROVE memory leak if outlines && !outlines->size()
                 QString firstCompletion = view->getFirstCompletion();
                 if(firstCompletion != QString::null) {
-                    title = view->getFirstCompletion().toStdString().substr(21);
-                    outlines = mind->findOutlineByTitleFts(title);
+                    name = view->getFirstCompletion().toStdString().substr(21);
+                    outlines = mind->findOutlineByNameFts(name);
                 }
             }
             if(outlines && outlines->size()) {
                 mainPresenter->getOrloj()->showFacetOutline(outlines->front());
                 // TODO efficient
-                mainPresenter->getStatusBar()->showInfo(QString("Outline ")+QString::fromStdString(outlines->front()->getTitle()));
+                mainPresenter->getStatusBar()->showInfo(QString("Outline ")+QString::fromStdString(outlines->front()->getName()));
             } else {
-                mainPresenter->getStatusBar()->showInfo(QString("Outline not found: ").append(QString(title.c_str())));
+                mainPresenter->getStatusBar()->showInfo(QString("Outline not found: ").append(QString(name.c_str())));
             }
             view->showBreadcrumb();
             return;

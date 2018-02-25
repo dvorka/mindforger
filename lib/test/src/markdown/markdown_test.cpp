@@ -153,7 +153,7 @@ void dumpAst(const vector<MarkdownAstNodeSection*>* ast)
     cout << endl << "AST: ";
     if(ast) {
         cout << " (" << ast->size() << ")";
-        string* title{};
+        string* name{};
         size_t c = 0;
         for(MarkdownAstNodeSection* section:*ast) {
             cout << endl << "  " << ++c << " #";
@@ -164,9 +164,9 @@ void dumpAst(const vector<MarkdownAstNodeSection*>* ast)
                 cout << " dNULL";
             }
             cout << " '";
-            title = section->getText();
-            if(title!=nullptr) {
-                cout << *title;
+            name = section->getText();
+            if(name!=nullptr) {
+                cout << *name;
             } else {
                 cout << "NULL";
             }
@@ -338,7 +338,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentation)
 
     unique_ptr<Note> note = unique_ptr<Note>(mdr.note(&text));
     if(note) {
-        cout << endl << "    '" << note->getName() << "' (title)";
+        cout << endl << "    '" << note->getName() << "' (name)";
         cout << endl << "    '" << note->getDepth() << "' (depth)";
         cout << endl << "    " << (note->getPrimaryTag()?note->getPrimaryTag()->getName():"NULL") << " (primary tag)";
         if(note->getTags().size()) {
@@ -378,7 +378,7 @@ TEST(MarkdownParserTestCase, FileSystemPersistence)
     cout << persistence.createFileName(string("/tmp"), text.get(), string(FILE_EXTENSION_MARKDOWN));
 }
 
-TEST(MarkdownParserBugsTestCase, EmptyTitleSkipsEof)
+TEST(MarkdownParserBugsTestCase, EmptyNameSkipsEof)
 {
     string repositoryPath{"/lib/test/resources/bugs-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());

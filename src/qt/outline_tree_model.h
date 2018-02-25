@@ -49,7 +49,7 @@ public:
     void refresh(Note* note, QModelIndexList selection);
 
 private:
-    void createTitleText(QString& title, Note* note);
+    void createNameText(QString& name, Note* note);
 };
 
 }

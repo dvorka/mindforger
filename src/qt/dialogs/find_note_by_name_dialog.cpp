@@ -35,21 +35,21 @@ FindNoteByNameDialog::FindNoteByNameDialog(QWidget *parent)
 
 void FindNoteByNameDialog::show(vector<Note*> notes)
 {
-    // use parent dialog to handle titles + keep shadow vector of (filtered) notes in here for choice
+    // use parent dialog to handle names + keep shadow vector of (filtered) Notes in here for choice
     // IMPROVE performance - consider pointer instead of string copy
-    vector<string> noteTitles{};
+    vector<string> noteNames{};
     if(notes.size()) {
         if(!scope) {
             for(Note* n:notes) {
-                string s{n->getTitle()};
+                string s{n->getName()};
                 s.append(" (");
-                s.append(n->getOutline()->getTitle());
+                s.append(n->getOutline()->getName());
                 s.append(")");
-                noteTitles.push_back(s);
+                noteNames.push_back(s);
             }
         } else {
             for(Note* n:notes) {
-                noteTitles.push_back(n->getTitle());
+                noteNames.push_back(n->getName());
             }
         }
     }

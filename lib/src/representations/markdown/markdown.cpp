@@ -35,7 +35,7 @@ void Markdown::clear()
 {
     this->fileSize = 0;
     this->modified = 0;
-    this->title.clear();
+    this->name.clear();
     if(ast!=nullptr) {
         delete ast;
         ast = nullptr;
@@ -84,7 +84,7 @@ void Markdown::from(const std::vector<MarkdownAstNodeSection*>* ast)
 {
     if(ast!=nullptr && ast->size()) {
         if(ast->at(0)->getText()!=nullptr) {
-            title.assign(*ast->at(0)->getText());
+            name.assign(*ast->at(0)->getText());
         }
     }
 }

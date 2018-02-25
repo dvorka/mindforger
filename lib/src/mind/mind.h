@@ -195,14 +195,14 @@ public:
      */
 
     /**
-     * @brief Find outline by title - exact match.
+     * @brief Find outline by name - exact match.
      */
-    std::unique_ptr<std::vector<Outline*>> findOutlineByTitleFts(const std::string& regexp) const;
-    std::vector<Note*>* findNoteByTitleFts(const std::string& regexp) const;
+    std::unique_ptr<std::vector<Outline*>> findOutlineByNameFts(const std::string& regexp) const;
+    std::vector<Note*>* findNoteByNameFts(const std::string& regexp) const;
     std::vector<Note*>* findNoteFts(const std::string& regexp, const bool ignoreCase=false, Outline* scope=nullptr);
-    // TODO findFts() - search also outline title and description
+    // TODO findFts() - search also outline name and description
     //   >> temporary note of Outline type (never saved), cannot be created by user
-    void getOutlineTitles(std::vector<std::string>& titles) const;
+    void getOutlineNames(std::vector<std::string>& names) const;
 
     /*
      * (CROSS) REFERENCES - explicit associations created by the user.
@@ -324,7 +324,7 @@ public:
      * @brief Create new outline and return its key.
      */
     std::string outlineNew(
-            const std::string* title = nullptr,
+            const std::string* name = nullptr,
             const OutlineType* outlineType = nullptr,
             const int8_t importance = 0,
             const int8_t urgency = 0,
@@ -351,8 +351,8 @@ public:
     Note* noteNew(
             const std::string& outlineKey,
             const uint16_t offset,
-            // IMPROVE pass title by reference
-            const std::string* title = nullptr,
+            // IMPROVE pass name by reference
+            const std::string* name = nullptr,
             const NoteType* noteType = nullptr,
             u_int16_t depth = 0,
             const std::vector<const Tag*>* tags = nullptr,

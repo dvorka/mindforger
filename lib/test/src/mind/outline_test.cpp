@@ -83,9 +83,9 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
     m8r::Stencil* stencil = stencils.at(0);
     cout << endl << "Loaded Outline STENCILS: " << stencils.size();
     // IMPROVE constructor call is WRONG > complete parameters
-    string title{"MIND's stencil Outline"};
+    string name{"MIND's stencil Outline"};
     mind.outlineNew(
-                &title,
+                &name,
                 mind.ontology().findOrCreateOutlineType(m8r::OutlineType::KeyOutline()),
                 1,
                 2,
@@ -99,11 +99,11 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
             string{repositoryDir+"/stencils/outlines/grow.md"},
             string{"Manual stencil"}}};
     // IMPROVE constructor call is WRONG > complete parameters
-    title.assign("MANUAL stencil Outline");
+    name.assign("MANUAL stencil Outline");
     tags.clear();
     tags.push_back(mind.ontology().findOrCreateTag(m8r::Tag::KeyImportant()));
     mind.outlineNew(
-                &title,
+                &name,
                 mind.ontology().findOrCreateOutlineType(m8r::OutlineType::KeyGrow()),
                 3,
                 5,

@@ -35,7 +35,7 @@ class NoteEditView : public QWidget
 private:
     Note* currentNote;
 
-    EditTitleAndButtonsPanel* editTitleAndButtonsPanel;
+    EditNameAndButtonsPanel* editNameAndButtonsPanel;
     NoteEditorView* noteEditor;
 
 public:
@@ -47,17 +47,17 @@ public:
     ~NoteEditView();
 
     void setNoteEditDialog(NoteEditDialog* noteEditDialog) {
-        editTitleAndButtonsPanel->setNoteEditDialog(noteEditDialog);
+        editNameAndButtonsPanel->setNoteEditDialog(noteEditDialog);
     }
     void setNote(Note* note, std::string mdDescription) {
         currentNote = note;
-        editTitleAndButtonsPanel->setNote(note);
+        editNameAndButtonsPanel->setNote(note);
         noteEditor->setPlainText(QString::fromStdString(mdDescription));
     }
     void setEditorShowLineNumbers(bool show) { noteEditor->setShowLineNumbers(show); }
     void setEditorEnableSyntaxHighlighting(bool enable) { noteEditor->setEnableSyntaxHighlighting(enable); }
 
-    QString getTitle() const { return editTitleAndButtonsPanel->getTitle(); }
+    QString getName() const { return editNameAndButtonsPanel->getName(); }
     QString getDescription() const { return noteEditor->toPlainText(); }
     bool isDescriptionEmpty() const { return noteEditor->toPlainText().isEmpty(); }
 

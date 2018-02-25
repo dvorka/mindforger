@@ -39,7 +39,7 @@ class MarkdownAstNodeSection;
 /**
  * @brief Markdown file representation.
  *
- * Represents Markdown file (title, sections, paragraphs, bullet lists, etc.)
+ * Represents Markdown file (name, sections, paragraphs, bullet lists, etc.)
  * that has no notion of MindForger data model (outlines, notes, ...).
  */
 class Markdown
@@ -63,9 +63,9 @@ private:
     time_t modified;
 
     /**
-     * @brief Markdown root section title.
+     * @brief Markdown root section name.
      */
-    std::string title;
+    std::string name;
     std::vector<MarkdownAstNodeSection*>* ast;
 
 public:
@@ -86,7 +86,7 @@ public:
     Format getFormat() const { return format; }
     unsigned getFileSize() const;
     time_t getModified() const { return modified; }
-    std::string* getTitle();
+    std::string* getName();
     /**
      * @brief Get AST for read only processing.
      */

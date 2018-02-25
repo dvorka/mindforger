@@ -33,7 +33,7 @@ class OutlineView : public QWidget
 private:
     // header
     QVBoxLayout headerVerticalLayout;
-    QPushButton* titleLabel;
+    QPushButton* nameLabel;
     //QLabel* labelsLabel;
     // notes tree
     OutlineTreeView *outlineTreeView;
@@ -45,8 +45,8 @@ public:
     OutlineView &operator=(const OutlineView&) = delete;
     OutlineView &operator=(const OutlineView&&) = delete;
 
-    void refreshHeader(const std::string& title);
-    const QPushButton* getTitleLabel() const { return titleLabel; }
+    void refreshHeader(const std::string& name);
+    const QPushButton* getNameLabel() const { return nameLabel; }
     OutlineTreeView* getOutlineTree() const { return outlineTreeView; }
 
     ~OutlineView();

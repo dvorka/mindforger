@@ -55,7 +55,7 @@ void dumpOutline(m8r::Outline*& outline)
     cout << endl << "  "
             << (outline->getType() ? outline->getType()->getName() : "NULL")
             << " (type)";
-    cout << endl << "  '" << outline->getName() << "' (title)";
+    cout << endl << "  '" << outline->getName() << "' (name)";
     cout << endl << "  Description[" << outline->getDescription().size() << "]:";
     for (size_t d = 0; d < outline->getDescription().size(); d++) {
         cout << endl << "    '" << *outline->getDescription()[d] << "' (description)";
@@ -87,7 +87,7 @@ void dumpOutline(m8r::Outline*& outline)
     if (outline->getNotes().size()) {
         for (m8r::Note* note : outline->getNotes()) {
             ASSERT_TRUE(note != nullptr);
-            cout << endl << "    '" << note->getName() << "' (title)";
+            cout << endl << "    '" << note->getName() << "' (name)";
             cout << endl << "    '" << note->getDepth() << "' (depth)";
             cout << endl << "    "
                     << (note->getPrimaryTag() ?

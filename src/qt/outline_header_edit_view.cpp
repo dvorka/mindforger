@@ -24,14 +24,14 @@ OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
     : QWidget(parent)
 {
     // widgets
-    editTitleAndButtonsPanel = new EditTitleAndButtonsPanel{EditTitleAndButtonsPanel::Mode::OUTLINE_MODE, this};
+    editNameAndButtonsPanel = new EditNameAndButtonsPanel{EditNameAndButtonsPanel::Mode::OUTLINE_MODE, this};
     noteEditor = new NoteEditorView{this};
 
     // assembly
     QVBoxLayout* layout = new QVBoxLayout{this};
     // ensure that wont be extra space around member widgets
     layout->setContentsMargins(QMargins(0,0,0,0));
-    layout->addWidget(editTitleAndButtonsPanel);
+    layout->addWidget(editNameAndButtonsPanel);
     layout->addWidget(noteEditor);
     setLayout(layout);
 
@@ -46,10 +46,10 @@ OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
         QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_S)),
         this, SLOT(slotSaveOutlineHeader()));
     QObject::connect(
-        editTitleAndButtonsPanel->getRememberButton(), SIGNAL(clicked()),
+        editNameAndButtonsPanel->getRememberButton(), SIGNAL(clicked()),
         this, SLOT(slotSaveAndCloseEditor()));
     QObject::connect(
-        editTitleAndButtonsPanel->getCancelButton(), SIGNAL(clicked()),
+        editNameAndButtonsPanel->getCancelButton(), SIGNAL(clicked()),
         this, SLOT(slotCloseEditor()));
 }
 
@@ -59,7 +59,7 @@ OutlineHeaderEditView::~OutlineHeaderEditView()
 
 void OutlineHeaderEditView::slotOpenOutlineHeaderPropertiesEditor()
 {
-    editTitleAndButtonsPanel->handleShowOutlineHeaderEditDialog();
+    editNameAndButtonsPanel->handleShowOutlineHeaderEditDialog();
 }
 
 void OutlineHeaderEditView::slotSaveAndCloseEditor()

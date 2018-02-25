@@ -42,7 +42,7 @@ namespace m8r {
  *
  *   MarkdownOutlineRepresentation (transcoder)
  *     from(AST) --> OUTLINE
- *       AST.getString(LEXEM) --> title, description, line, ...
+ *       AST.getString(LEXEM) --> name, description, line, ...
  *
  * Methods are virtual so that an inherited class may provide
  * e.g. a Markdown flavor or HTML implementations.

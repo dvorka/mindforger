@@ -82,11 +82,11 @@ void NoteEditPresenter::slotSaveNote()
 {
     // set UI data to current note
     if(currentNote) {
-        string title{"Note"};
-        if(!view->getTitle().isEmpty()) {
-            title.assign(view->getTitle().toStdString());
+        string name{"Note"};
+        if(!view->getName().isEmpty()) {
+            name.assign(view->getName().toStdString());
         }
-        currentNote->setTitle(title);
+        currentNote->setName(name);
 
         if(!view->isDescriptionEmpty()) {
             string s{view->getDescription().toStdString()};
@@ -112,7 +112,7 @@ void NoteEditPresenter::slotSaveNote()
         mainPresenter->getMind()->remind().remember(currentNote->getOutlineKey());
         mainPresenter->getStatusBar()->showInfo(tr("Note saved!"));
 #ifdef DO_MF_DEBUG
-        qDebug() << "Note " << QString::fromStdString(currentNote->getTitle()) << " saved!";
+        qDebug() << "Note " << QString::fromStdString(currentNote->getName()) << " saved!";
 #endif
     } else {
         mainPresenter->getStatusBar()->showError(tr("Attempt to save data from UI to Note, but no Note is set."));

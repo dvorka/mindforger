@@ -131,13 +131,13 @@ public:
      */
     int getNotesCount() const;
 
-    std::string createOutlineKey(const std::string* title);
-    std::string createLimboKey(const std::string* title);
+    std::string createOutlineKey(const std::string* name);
+    std::string createLimboKey(const std::string* name);
 
     /**
      * @brief Get list of outlines.
      *
-     * Get list of outlines - title/description/metadata presence
+     * Get list of outlines - name/description/metadata presence
      * is guaranteed, while AST is not.
      */
     const std::vector<Outline*>& getOutlines() const;
@@ -145,7 +145,7 @@ public:
     /**
      * @brief Get full outline.
      *
-     * Get outline including AST - if Outline contains only title/description/metadata,
+     * Get outline including AST - if Outline contains only name/description/metadata,
      * then AST is loaded and full outline returned.
      */
     Outline* getOutline(const std::string &key);
@@ -163,7 +163,7 @@ public:
      * UTILS
      */
 
-    void sortByTitle(std::vector<Outline*>& sorted);
+    void sortByName(std::vector<Outline*>& sorted);
     RepositoryIndexer& getRepositoryIndexer() { return repositoryIndexer; }
 
 private:

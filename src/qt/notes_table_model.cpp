@@ -42,10 +42,10 @@ void NotesTableModel::addRow(Note* note)
 {
     QList<QStandardItem*> items;
 
-    QStandardItem* noteItem = new QStandardItem(QString(note->getTitle().c_str()));
+    QStandardItem* noteItem = new QStandardItem(QString(note->getName().c_str()));
     noteItem->setData(QVariant::fromValue(note));
     items.append(noteItem);
-    items.append(new QStandardItem{note->getOutline()->getTitle().c_str()});
+    items.append(new QStandardItem{note->getOutline()->getName().c_str()});
 
     appendRow(items);
 }

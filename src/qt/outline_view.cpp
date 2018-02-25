@@ -23,16 +23,16 @@ namespace m8r {
 OutlineView::OutlineView(QWidget *parent)
     : QWidget(parent)
 {
-    // KISS & ONCE: show the title only - details to be rendered by Outline header view
-    titleLabel = new QPushButton{parent};
-    titleLabel->sizePolicy().setHorizontalPolicy(QSizePolicy::Maximum);
+    // KISS & ONCE: show the name only - details to be rendered by Outline header view
+    nameLabel = new QPushButton{parent};
+    nameLabel->sizePolicy().setHorizontalPolicy(QSizePolicy::Maximum);
     // make button to look like label
-    titleLabel->setStyleSheet("border: 0px");
-    QFont titleFont = titleLabel->font();
-    titleFont.setPointSize(titleFont.pointSize()+titleFont.pointSize()/4);
-    titleFont.setBold(true);
-    titleLabel->setFont(titleFont);
-    headerVerticalLayout.addWidget(titleLabel);
+    nameLabel->setStyleSheet("border: 0px");
+    QFont nameFont = nameLabel->font();
+    nameFont.setPointSize(nameFont.pointSize()+nameFont.pointSize()/4);
+    nameFont.setBold(true);
+    nameLabel->setFont(nameFont);
+    headerVerticalLayout.addWidget(nameLabel);
 
     // tree of note
     outlineTreeView = new OutlineTreeView(parent);
@@ -41,16 +41,16 @@ OutlineView::OutlineView(QWidget *parent)
     setLayout(&headerVerticalLayout);
 }
 
-void OutlineView::refreshHeader(const std::string& title)
+void OutlineView::refreshHeader(const std::string& name)
 {
-    if(!title.empty()) {
-        QFontMetrics metrics(titleLabel->font());
-        // IMPROVE titleLabel has incorrect size before rendered for the first time - find a better solution than fixed width
+    if(!name.empty()) {
+        QFontMetrics metrics(nameLabel->font());
+        // IMPROVE nameLabel has incorrect size before rendered for the first time - find a better solution than fixed width
         QString elidedText
-            = metrics.elidedText(QString::fromStdString(title), Qt::ElideRight, titleLabel->width()<100?1920/2:titleLabel->width());
-        titleLabel->setText(elidedText);
+            = metrics.elidedText(QString::fromStdString(name), Qt::ElideRight, nameLabel->width()<100?1920/2:nameLabel->width());
+        nameLabel->setText(elidedText);
     } else {
-        titleLabel->setText("");
+        nameLabel->setText("");
     }
 }
 

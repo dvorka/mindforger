@@ -77,11 +77,11 @@ void OutlineHeaderEditPresenter::slotSaveOutlineHeader()
 {
     // set UI data to current note
     if(currentOutline) {
-        string title{"Outline"};
-        if(!view->getTitle().isEmpty()) {
-            title.assign(view->getTitle().toStdString());
+        string name{"Outline"};
+        if(!view->getName().isEmpty()) {
+            name.assign(view->getName().toStdString());
         }
-        currentOutline->setTitle(title);
+        currentOutline->setName(name);
 
         if(!view->isDescriptionEmpty()) {
             string s{view->getDescription().toStdString()};

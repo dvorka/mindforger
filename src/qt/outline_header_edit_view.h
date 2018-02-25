@@ -35,7 +35,7 @@ class OutlineHeaderEditView : public QWidget
 private:
     Outline* currentOutline;
 
-    EditTitleAndButtonsPanel* editTitleAndButtonsPanel;
+    EditNameAndButtonsPanel* editNameAndButtonsPanel;
     NoteEditorView* noteEditor;
 
 public:
@@ -47,15 +47,15 @@ public:
     ~OutlineHeaderEditView();
 
     void setOutlineHeaderEditDialog(OutlineHeaderEditDialog* outlineHeaderEditDialog) {
-        editTitleAndButtonsPanel->setOutlineHeaderEditDialog(outlineHeaderEditDialog);
+        editNameAndButtonsPanel->setOutlineHeaderEditDialog(outlineHeaderEditDialog);
     }
     void setOutline(Outline* outline, std::string mdDescription) {
         currentOutline = outline;
-        editTitleAndButtonsPanel->setOutline(outline);
+        editNameAndButtonsPanel->setOutline(outline);
         noteEditor->setPlainText(QString::fromStdString(mdDescription));
     }
 
-    QString getTitle() const { return editTitleAndButtonsPanel->getTitle(); }
+    QString getName() const { return editNameAndButtonsPanel->getName(); }
     QString getDescription() const { return noteEditor->toPlainText(); }
     bool isDescriptionEmpty() const { return noteEditor->toPlainText().isEmpty(); }
 
