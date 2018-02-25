@@ -24,10 +24,11 @@ export BUILD_DIR=${SCRIPT_DIR}/..
 #  - use -g GCC option to get line information
 #  - use --track-origins=yes Valgrind option to better track root cause of problems
 #    like "Conditional jump using uninitialized values"
+#  - use --show-leak-kinds=all
 
 # run all tests w/ Valgrind
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --track-origins=yes -v --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests
-cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --track-origins=yes --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests
+cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all ./mindforger-lib-unit-tests
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind -v --tool=memcheck --leak-check=full ./mindforger-lib-unit-tests
 
 # run selected test(s) w/ Valgrind
@@ -38,6 +39,6 @@ cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && 
 #cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && valgrind --track-origins=yes --tool=memcheck ./mindforger-lib-unit-tests --gtest_filter=${TEST_NAME}
 
 # clean all to avoid side effects next time
-cd ${BUILD_DIR} && make clean
+#cd ${BUILD_DIR} && make clean
 
 # eof
