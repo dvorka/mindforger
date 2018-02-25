@@ -39,6 +39,7 @@ namespace m8r {
 
 // const in constexpr makes value const
 constexpr const auto ENV_VAR_HOME = "HOME";
+constexpr const auto ENV_VAR_TERM = "TERM";
 constexpr const auto ENV_VAR_M8R_REPOSITORY = "MINDFORGER_REPOSITORY";
 constexpr const auto ENV_VAR_M8R_EDITOR = "MINDFORGER_EDITOR";
 

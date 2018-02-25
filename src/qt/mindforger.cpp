@@ -108,6 +108,16 @@ int main(int argc, char *argv[])
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.load();
 
+    // check whether running in GUI (and not in text console tty)
+    char *term = getenv(m8r::ENV_VAR_TERM);
+    if(term) {
+        if(!strcmp("linux", term)) {
+            cerr << QCoreApplication::translate("main", "\nMindForger CANNOT be run from text console - run it from a terminal in GUI.").toUtf8().constData()
+                 << "\n";
+            exit(1);
+        }
+    }
+
     QApplication mindforgerApplication(argc, argv);
 
     std::string useRepository{};
