@@ -55,7 +55,7 @@ void FindNoteByNameDialog::show(vector<Note*> notes)
     }
 
     vector<Thing*> es{notes.begin(), notes.end()};
-    FindOutlineByNameDialog::show(es);
+    FindOutlineByNameDialog::show(es, &noteNames);
 }
 
 FindNoteByNameDialog::~FindNoteByNameDialog()

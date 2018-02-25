@@ -64,7 +64,7 @@ private:
     QPushButton* closeButton;
 
     Thing* choice;
-    std::vector<Thing*> mindEntities;
+    std::vector<Thing*> things;
 
 protected:
     QLabel* label;
@@ -83,7 +83,7 @@ public:
     QPushButton* getFindButton() const { return findButton; }
     Thing* getChoice() const { return choice; }
 
-    void show(std::vector<Thing*>& outlines);
+    void show(std::vector<Thing*>& outlines, std::vector<std::string>* customizedNames=nullptr);
 
 signals:
     void searchFinished();

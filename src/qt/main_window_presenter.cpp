@@ -236,23 +236,6 @@ void MainWindowPresenter::handleFindOutlineByName()
     }
 }
 
-void MainWindowPresenter::doActionFindNoteByName()
-{
-    // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
-    if(orloj->isFacetActiveOutlineManagement()) {
-        findNoteByNameDialog->setWindowTitle(tr("Find Note by Name in Outline"));
-        findNoteByNameDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
-        vector<Note*> allNotes(findNoteByNameDialog->getScope()->getNotes());
-        findNoteByNameDialog->show(allNotes);
-    } else {
-        findNoteByNameDialog->setWindowTitle(tr("Find Note by Name"));
-        findNoteByNameDialog->clearScope();
-        vector<Note*> allNotes{};
-        mind->getAllNotes(allNotes);
-        findNoteByNameDialog->show(allNotes);
-    }
-}
-
 void MainWindowPresenter::doActionRefactorNoteToOutline()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
@@ -281,6 +264,23 @@ void MainWindowPresenter::handleRefactorNoteToOutline()
         }
     } else {
         QMessageBox::critical(&view, tr("Refactor Note"), tr("Note to be refactored not specified!"));
+    }
+}
+
+void MainWindowPresenter::doActionFindNoteByName()
+{
+    // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
+    if(orloj->isFacetActiveOutlineManagement()) {
+        findNoteByNameDialog->setWindowTitle(tr("Find Note by Name in Outline"));
+        findNoteByNameDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
+        vector<Note*> allNotes(findNoteByNameDialog->getScope()->getNotes());
+        findNoteByNameDialog->show(allNotes);
+    } else {
+        findNoteByNameDialog->setWindowTitle(tr("Find Note by Name"));
+        findNoteByNameDialog->clearScope();
+        vector<Note*> allNotes{};
+        mind->getAllNotes(allNotes);
+        findNoteByNameDialog->show(allNotes);
     }
 }
 
