@@ -97,7 +97,7 @@ void Mind::getOutlineTitles(vector<string>& titles) const
     // IMPROVE PERF cache vector (stack member) until and evict on memory modification
     vector<Outline*> outlines = memory.getOutlines();
     for(Outline* outline:outlines) {
-        titles.push_back(outline->getTitle());
+        titles.push_back(outline->getName());
     }
 }
 
@@ -109,7 +109,7 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
     if(ignoreCase) {
         // case INSENSITIVE
         s.clear();
-        stringToLower(outline->getTitle(), s);
+        stringToLower(outline->getName(), s);
         if(s.find(regexp)!=string::npos) {
             result->push_back(outline->getOutlineDescriptorAsNote());
         } else {
@@ -126,7 +126,7 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
         }
         for(Note* note:outline->getNotes()) {
             s.clear();
-            stringToLower(note->getTitle(), s);
+            stringToLower(note->getName(), s);
             if(s.find(regexp)!=string::npos) {
                 result->push_back(note);
             } else {
@@ -144,7 +144,7 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
         }
     } else {
         // case SENSITIVE
-        if(outline->getTitle().find(regexp)!=string::npos) {
+        if(outline->getName().find(regexp)!=string::npos) {
             result->push_back(outline->getOutlineDescriptorAsNote());
         } else {
             for(string* d:outline->getDescription()) {
@@ -156,7 +156,7 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
             }
         }
         for(Note* note:outline->getNotes()) {
-            if(note->getTitle().find(regexp)!=string::npos) {
+            if(note->getName().find(regexp)!=string::npos) {
                 result->push_back(note);
             } else {
                 for(string* d:note->getDescription()) {
@@ -377,7 +377,7 @@ string Mind::outlineNew(
         outline->completeProperties(datetimeNow());
         outline->setKey(key);
         if(title && !title->empty()) {
-            outline->setTitle(*title);
+            outline->setName(*title);
         }
         if(outlineType) {
             outline->setType(outlineType);
@@ -411,7 +411,7 @@ Outline* Mind::outlineClone(const std::string& outlineKey)
     Outline* o = memory.getOutline(outlineKey);
     if(o) {
         Outline* clonedOutline = new Outline{*o};
-        clonedOutline->setKey(memory.createOutlineKey(&o->getTitle()));
+        clonedOutline->setKey(memory.createOutlineKey(&o->getName()));
         memory.remember(clonedOutline);
         onRemembering();
         return clonedOutline;
@@ -425,7 +425,7 @@ bool Mind::outlineForget(string outlineKey)
     Outline* o = memory.getOutline(outlineKey);
     if(o) {
         memory.forget(o);
-        auto k = memory.createLimboKey(&o->getTitle());
+        auto k = memory.createLimboKey(&o->getName());
         o->setKey(k);
         moveFile(outlineKey, k);
         return true;
@@ -453,7 +453,7 @@ Note* Mind::noteNew(
         }
         n->setOutline(o);
         if(title) {
-            n->setTitle(*title);
+            n->setName(*title);
         }
         n->setModified();
         n->setModifiedPretty();
@@ -579,7 +579,7 @@ unique_ptr<vector<Outline*>> Mind::findOutlineByTitleFts(const string& expr) con
     if(expr.size()) {
         vector<Outline*> outlines = memory.getOutlines();
         for(Outline* outline:outlines) {
-            if(!expr.compare(outline->getTitle())) {
+            if(!expr.compare(outline->getName())) {
                 result->push_back(outline);
             }
         }

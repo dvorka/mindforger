@@ -56,7 +56,7 @@ Note* MarkdownOutlineRepresentation::note(vector<MarkdownAstNodeSection*>* ast, 
         note = new Note{noteType, outline};
         // TODO pull pointer > do NOT copy
         if (ast->at(i)->getText() != nullptr) {
-            note->setTitle(*(ast->at(i)->getText()));
+            note->setName(*(ast->at(i)->getText()));
         }
         note->setDepth(ast->at(i)->getDepth());
         body = ast->at(i)->moveBody();
@@ -111,7 +111,7 @@ Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>*
             MarkdownAstNodeSection* astNode = ast->at(0);
             if(astNode->getText()!=nullptr) {
                 // IMPROVE pull pointer > do NOT copy
-                outline->setTitle(*(astNode->getText()));
+                outline->setName(*(astNode->getText()));
             }
             const string* s = astNode->getMetadata().getType();
             if(s) {
@@ -222,8 +222,8 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
         }
 
         md->append("# ");
-        if(outline->getTitle().size()) {
-            md->append(outline->getTitle());
+        if(outline->getName().size()) {
+            md->append(outline->getName());
         } else {
             md->append(outline->getKey());
         }
@@ -344,8 +344,8 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
         md->append("#");
     }
     md->append(" ");
-    if(note->getTitle().size()) {
-        md->append(note->getTitle());
+    if(note->getName().size()) {
+        md->append(note->getName());
     } else {
         md->append("?");
     }

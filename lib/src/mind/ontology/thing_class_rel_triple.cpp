@@ -27,6 +27,7 @@ using namespace std;
  */
 
 Thing::Thing()
+    : name("")
 {}
 
 Thing::Thing(const string name)

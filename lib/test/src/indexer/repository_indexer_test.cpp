@@ -152,7 +152,7 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
         for(m8r::Outline*& o:outlines) {
             dumpOutline(o);
             ASSERT_EQ(o->getFormat(), m8r::Markdown::Format::MINDFORGER);
-            if(o->getTitle() == string("First Outline")) {
+            if(o->getName() == string("First Outline")) {
                 outline = o;
             }
         }
@@ -242,7 +242,7 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
         for(m8r::Outline*& o:outlines) {
             dumpOutline(o);
             ASSERT_EQ(o->getFormat(), m8r::Markdown::Format::MARKDOWN);
-            if(o->getTitle() == string("First Markdown")) {
+            if(o->getName() == string("First Markdown")) {
                 outline = o;
             }
         }
@@ -257,7 +257,7 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
     EXPECT_EQ(outlineAsString->find("Metadata"), std::string::npos);
     delete outlineAsString;
 
-    outline->setTitle("Dirty");
+    outline->setName("Dirty");
     mind.remind().remember(outline);
 
     outlineAsString = m8r::fileToString(outline->getKey());
@@ -319,7 +319,7 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
         for(m8r::Outline*& o:outlines) {
             dumpOutline(o);
             ASSERT_EQ(o->getFormat(), m8r::Markdown::Format::MINDFORGER);
-            if(o->getTitle() == string("First Outline")) {
+            if(o->getName() == string("First Outline")) {
                 outline = o;
             }
         }
@@ -334,7 +334,7 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
     EXPECT_NE(outlineAsString->find("Metadata"), std::string::npos);
     delete outlineAsString;
 
-    outline->setTitle("Dirty");
+    outline->setName("Dirty");
     mind.remind().remember(outline);
 
     outlineAsString = m8r::fileToString(outline->getKey());
@@ -396,7 +396,7 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
         for(m8r::Outline*& o:outlines) {
             dumpOutline(o);
             ASSERT_EQ(o->getFormat(), m8r::Markdown::Format::MARKDOWN);
-            if(o->getTitle() == string("First Markdown")) {
+            if(o->getName() == string("First Markdown")) {
                 outline = o;
             }
         }
@@ -411,7 +411,7 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
     EXPECT_EQ(outlineAsString->find("Metadata"), std::string::npos);
     delete outlineAsString;
 
-    outline->setTitle("Dirty");
+    outline->setName("Dirty");
     mind.remind().remember(outline);
 
     outlineAsString = m8r::fileToString(outline->getKey());

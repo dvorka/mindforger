@@ -26,9 +26,9 @@ using namespace std;
 void printOutlineNotes(Outline* o)
 {
     if(o) {
-        cout << "Outline: " << o->getTitle() << endl;
+        cout << "Outline: " << o->getName() << endl;
         for(unsigned int i=0; i<o->getNotes().size(); i++) {
-            cout << "  " << o->getNotes()[i]->getTitle() << endl;
+            cout << "  " << o->getNotes()[i]->getName() << endl;
         }
     } else {
         cout << "Outline is NULL" << endl;

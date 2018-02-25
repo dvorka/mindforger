@@ -53,7 +53,6 @@ private:
     // IMPROVE hashset
     std::vector<const Tag*> tags;
     const NoteType* type;
-    std::string title;
     std::vector<std::string*> description;
 
     time_t created;
@@ -111,9 +110,7 @@ public:
     void addTag(const Tag* tag);
     void setTag(const Tag* tag);
     void setTags(const std::vector<const Tag*>* tags);
-    virtual const std::string& getTitle() const;
-    void addTitle(const std::string& s);
-    void setTitle(const std::string& title);
+    void addName(const std::string& s);
     const NoteType* getType() const;
     void setType(const NoteType* type);
     const std::vector<std::string*>& getDescription() const;

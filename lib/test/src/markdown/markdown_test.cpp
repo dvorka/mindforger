@@ -338,7 +338,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentation)
 
     unique_ptr<Note> note = unique_ptr<Note>(mdr.note(&text));
     if(note) {
-        cout << endl << "    '" << note->getTitle() << "' (title)";
+        cout << endl << "    '" << note->getName() << "' (title)";
         cout << endl << "    '" << note->getDepth() << "' (depth)";
         cout << endl << "    " << (note->getPrimaryTag()?note->getPrimaryTag()->getName():"NULL") << " (primary tag)";
         if(note->getTags().size()) {

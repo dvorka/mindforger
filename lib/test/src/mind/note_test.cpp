@@ -97,31 +97,31 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
                 0,
                 stencil);
     newNote->demote();
-    //cout << "Begin:" << endl; for(m8r::Note* nn: o->getNotes()) { cout << "  #x" << nn->getDepth() << " " << nn->getTitle() << endl; }
+    //cout << "Begin:" << endl; for(m8r::Note* nn: o->getNotes()) { cout << "  #x" << nn->getDepth() << " " << nn->getName() << endl; }
 
     // asserts
     EXPECT_EQ(oFile, o->getKey());
-    EXPECT_EQ(string{"Test Outline"}, o->getTitle());
+    EXPECT_EQ(string{"Test Outline"}, o->getName());
     EXPECT_EQ(o->getNotesCount(), 4);
-    EXPECT_EQ(title, o->getNotes()[0]->getTitle());
-    EXPECT_EQ(string{"Note 1"}, o->getNotes()[1]->getTitle());
-    EXPECT_EQ(deepTitle, o->getNotes()[2]->getTitle());
-    EXPECT_EQ(string{"Note 2"}, o->getNotes()[3]->getTitle());
+    EXPECT_EQ(title, o->getNotes()[0]->getName());
+    EXPECT_EQ(string{"Note 1"}, o->getNotes()[1]->getName());
+    EXPECT_EQ(deepTitle, o->getNotes()[2]->getName());
+    EXPECT_EQ(string{"Note 2"}, o->getNotes()[3]->getName());
 
     // delete NOTE
     mind.noteForget(o->getNotes()[3]);
-    //cout << "After delete:" << endl; for(m8r::Note* nn: o->getNotes()) { cout << "  #x" << nn->getDepth() << " " << nn->getTitle() << endl; }
+    //cout << "After delete:" << endl; for(m8r::Note* nn: o->getNotes()) { cout << "  #x" << nn->getDepth() << " " << nn->getName() << endl; }
     EXPECT_EQ(o->getNotesCount(), 3);
-    EXPECT_EQ(title, o->getNotes()[0]->getTitle());
-    EXPECT_EQ(string{"Note 1"}, o->getNotes()[1]->getTitle());
-    EXPECT_EQ(deepTitle, o->getNotes()[2]->getTitle());
+    EXPECT_EQ(title, o->getNotes()[0]->getName());
+    EXPECT_EQ(string{"Note 1"}, o->getNotes()[1]->getName());
+    EXPECT_EQ(deepTitle, o->getNotes()[2]->getName());
 
     // delete NOTE w/ DEEP child
-    //cout << "Before DEEP delete:" << endl; for(m8r::Note* nn: o->getNotes()) { cout << "  #x" << nn->getDepth() << " " << nn->getTitle() << endl; }
+    //cout << "Before DEEP delete:" << endl; for(m8r::Note* nn: o->getNotes()) { cout << "  #x" << nn->getDepth() << " " << nn->getName() << endl; }
     mind.noteForget(o->getNotes()[1]);
-    //cout << "After DEEP delete:" << endl; for(m8r::Note* nn: o->getNotes()) { cout << "  #x" << nn->getDepth() << " " << nn->getTitle() << endl; }
+    //cout << "After DEEP delete:" << endl; for(m8r::Note* nn: o->getNotes()) { cout << "  #x" << nn->getDepth() << " " << nn->getName() << endl; }
     EXPECT_EQ(o->getNotesCount(), 2);
-    EXPECT_EQ(title, o->getNotes()[0]->getTitle());
+    EXPECT_EQ(title, o->getNotes()[0]->getName());
 
     // IMPROVE test add note on offset (virified manually that it works)
     mind.noteForget(o->getNotes()[0]);
@@ -171,9 +171,9 @@ TEST(NoteTestCase, PromoteDemoteUpDown) {
     m8r::Outline::Patch patch{m8r::Outline::Patch::Diff::NO,0,0};
 
     EXPECT_EQ(o->getNotesCount(), 3);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "3");
     EXPECT_EQ(o->getNotes()[0]->getDepth(), 0);
     EXPECT_EQ(o->getNotes()[1]->getDepth(), 0);
     EXPECT_EQ(o->getNotes()[2]->getDepth(), 0);
@@ -182,9 +182,9 @@ TEST(NoteTestCase, PromoteDemoteUpDown) {
 
     o->demoteNote(o->getNotes()[2], &patch);
 
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "3");
     EXPECT_EQ(o->getNotes()[0]->getDepth(), 0);
     EXPECT_EQ(o->getNotes()[1]->getDepth(), 0);
     EXPECT_EQ(o->getNotes()[2]->getDepth(), 1);
@@ -194,9 +194,9 @@ TEST(NoteTestCase, PromoteDemoteUpDown) {
 
     o->demoteNote(o->getNotes()[1]);
 
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "3");
     EXPECT_EQ(o->getNotes()[0]->getDepth(), 0);
     EXPECT_EQ(o->getNotes()[1]->getDepth(), 1);
     EXPECT_EQ(o->getNotes()[2]->getDepth(), 2);
@@ -209,9 +209,9 @@ TEST(NoteTestCase, PromoteDemoteUpDown) {
     o->promoteNote(o->getNotes()[1], &patch);
     o->promoteNote(o->getNotes()[2], &patch);
 
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "3");
     EXPECT_EQ(o->getNotes()[0]->getDepth(), 0);
     EXPECT_EQ(o->getNotes()[1]->getDepth(), 0);
     EXPECT_EQ(o->getNotes()[2]->getDepth(), 0);
@@ -223,27 +223,27 @@ TEST(NoteTestCase, PromoteDemoteUpDown) {
 
     o->moveNoteUp(o->getNotes()[1], &patch);
 
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "3");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 0);
     EXPECT_EQ(patch.count, 1);
 
     o->moveNoteUp(o->getNotes()[2], &patch);
 
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "1");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 1);
     EXPECT_EQ(patch.count, 1);
 
     o->moveNoteUp(o->getNotes()[1], &patch);
 
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "1");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 0);
     EXPECT_EQ(patch.count, 1);
@@ -252,27 +252,27 @@ TEST(NoteTestCase, PromoteDemoteUpDown) {
 
     o->moveNoteDown(o->getNotes()[0], &patch);
 
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "1");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 0);
     EXPECT_EQ(patch.count, 1);
 
     o->moveNoteDown(o->getNotes()[1], &patch);
 
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "3");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 1);
     EXPECT_EQ(patch.count, 1);
 
     o->moveNoteDown(o->getNotes()[0], &patch);
 
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "3");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 0);
     EXPECT_EQ(patch.count, 1);
@@ -334,30 +334,30 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
 
     //printOutlineNotes(o);
     EXPECT_EQ(o->getNotesCount(), 9);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "333");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "333");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "6");
 
     // up
 
     o->moveNoteUp(o->getNotes()[5], &patch);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "333");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "333");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "6");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 2);
     EXPECT_EQ(patch.count, 4);
@@ -367,15 +367,15 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->moveNoteDown(o->getNotes()[2], &patch);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "333");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "333");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "6");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 2);
     EXPECT_EQ(patch.count, 4);
@@ -383,15 +383,15 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->moveNoteDown(o->getNotes()[5], &patch);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "333");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "333");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "6");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 5);
     EXPECT_EQ(patch.count, 2);
@@ -399,15 +399,15 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->moveNoteDown(o->getNotes()[6], &patch);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "333");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "6");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "333");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "6");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "44");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 6);
     EXPECT_EQ(patch.count, 2);
@@ -415,15 +415,15 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->moveNoteDown(o->getNotes()[7], &patch);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "333");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "6");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "333");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "6");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "44");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::NO);
 
     // up
@@ -431,15 +431,15 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->moveNoteUp(o->getNotes()[2], &patch);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "333");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "6");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "333");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "6");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "44");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 1);
     EXPECT_EQ(patch.count, 3);
@@ -447,15 +447,15 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->moveNoteUp(o->getNotes()[1], &patch);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "333");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "6");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "333");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "6");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "44");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 0);
     EXPECT_EQ(patch.count, 3);
@@ -463,15 +463,15 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->moveNoteUp(o->getNotes()[0], &patch);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "333");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "6");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "333");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "6");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "44");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::NO);
 
     // first
@@ -479,15 +479,15 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->moveNoteToFirst(o->getNotes()[4], &patch);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "333");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "6");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "44");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "333");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "6");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "44");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 0);
     EXPECT_EQ(patch.count, 4);
@@ -495,15 +495,15 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->moveNoteToFirst(o->getNotes()[7], &patch);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "333");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "333");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "6");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 0);
     EXPECT_EQ(patch.count, 8);
@@ -511,15 +511,15 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->moveNoteToFirst(o->getNotes()[0], &patch);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "333");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "6");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "333");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "6");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::NO);
 
     // last
@@ -527,15 +527,15 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->moveNoteToLast(o->getNotes()[6], &patch);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "333");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "6");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "1");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "333");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "6");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "1");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 6);
     EXPECT_EQ(patch.count, 2);
@@ -543,15 +543,15 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->moveNoteToLast(o->getNotes()[3], &patch);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "6");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "333");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "6");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "333");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::MOVE);
     EXPECT_EQ(patch.start, 3);
     EXPECT_EQ(patch.count, 5);
@@ -559,15 +559,15 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->moveNoteToLast(o->getNotes()[6], &patch);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "6");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "333");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "6");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "333");
     EXPECT_EQ(patch.diff, m8r::Outline::Patch::Diff::NO);
 
     // clone
@@ -575,16 +575,16 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->cloneNote(o->getNotes()[3]);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "6");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[9]->getTitle(), "333");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "6");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[9]->getName(), "333");
     // Note data
     EXPECT_EQ(o->getNotes()[4]->getDepth(), 0);
     EXPECT_EQ(o->getNotes()[4]->getReads(), 1);
@@ -593,18 +593,18 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->cloneNote(o->getNotes()[0]);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "6");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[9]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[10]->getTitle(), "33");
-    EXPECT_EQ(o->getNotes()[11]->getTitle(), "333");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "6");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[9]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[10]->getName(), "33");
+    EXPECT_EQ(o->getNotes()[11]->getName(), "333");
     // Note data
     EXPECT_EQ(o->getNotes()[2]->getDepth(), 0);
     EXPECT_EQ(o->getNotes()[2]->getReads(), 1);
@@ -616,21 +616,21 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->cloneNote(o->getNotes()[9]);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "6");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[9]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[10]->getTitle(),"33");
-    EXPECT_EQ(o->getNotes()[11]->getTitle(),"333");
-    EXPECT_EQ(o->getNotes()[12]->getTitle(),"3");
-    EXPECT_EQ(o->getNotes()[13]->getTitle(),"33");
-    EXPECT_EQ(o->getNotes()[14]->getTitle(),"333");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "6");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[9]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[10]->getName(),"33");
+    EXPECT_EQ(o->getNotes()[11]->getName(),"333");
+    EXPECT_EQ(o->getNotes()[12]->getName(),"3");
+    EXPECT_EQ(o->getNotes()[13]->getName(),"33");
+    EXPECT_EQ(o->getNotes()[14]->getName(),"333");
     // Note data
     EXPECT_EQ(o->getNotes()[12]->getDepth(), 0);
     EXPECT_EQ(o->getNotes()[12]->getReads(), 1);
@@ -645,23 +645,23 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     o->cloneNote(o->getNotes()[13]);
 
     //printOutlineNotes(o);
-    EXPECT_EQ(o->getNotes()[0]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[1]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[2]->getTitle(), "4");
-    EXPECT_EQ(o->getNotes()[3]->getTitle(), "44");
-    EXPECT_EQ(o->getNotes()[4]->getTitle(), "2");
-    EXPECT_EQ(o->getNotes()[5]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[6]->getTitle(), "5");
-    EXPECT_EQ(o->getNotes()[7]->getTitle(), "6");
-    EXPECT_EQ(o->getNotes()[8]->getTitle(), "1");
-    EXPECT_EQ(o->getNotes()[9]->getTitle(), "3");
-    EXPECT_EQ(o->getNotes()[10]->getTitle(),"33");
-    EXPECT_EQ(o->getNotes()[11]->getTitle(),"333");
-    EXPECT_EQ(o->getNotes()[12]->getTitle(),"3");
-    EXPECT_EQ(o->getNotes()[13]->getTitle(),"33");
-    EXPECT_EQ(o->getNotes()[14]->getTitle(),"333");
-    EXPECT_EQ(o->getNotes()[15]->getTitle(),"33");
-    EXPECT_EQ(o->getNotes()[16]->getTitle(),"333");
+    EXPECT_EQ(o->getNotes()[0]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[1]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[2]->getName(), "4");
+    EXPECT_EQ(o->getNotes()[3]->getName(), "44");
+    EXPECT_EQ(o->getNotes()[4]->getName(), "2");
+    EXPECT_EQ(o->getNotes()[5]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[6]->getName(), "5");
+    EXPECT_EQ(o->getNotes()[7]->getName(), "6");
+    EXPECT_EQ(o->getNotes()[8]->getName(), "1");
+    EXPECT_EQ(o->getNotes()[9]->getName(), "3");
+    EXPECT_EQ(o->getNotes()[10]->getName(),"33");
+    EXPECT_EQ(o->getNotes()[11]->getName(),"333");
+    EXPECT_EQ(o->getNotes()[12]->getName(),"3");
+    EXPECT_EQ(o->getNotes()[13]->getName(),"33");
+    EXPECT_EQ(o->getNotes()[14]->getName(),"333");
+    EXPECT_EQ(o->getNotes()[15]->getName(),"33");
+    EXPECT_EQ(o->getNotes()[16]->getName(),"333");
     // Note data
     EXPECT_EQ(o->getNotes()[15]->getDepth(), 1);
     EXPECT_EQ(o->getNotes()[15]->getReads(), 1);
@@ -763,20 +763,20 @@ TEST(NoteTestCase, RefactorNote) {
     EXPECT_EQ(mind.remind().getOutlinesCount(), 2);
     EXPECT_EQ(mind.remind().getNotesCount(), 18);
 
-    EXPECT_EQ(s->getNotes()[2]->getTitle(), "3");
+    EXPECT_EQ(s->getNotes()[2]->getName(), "3");
 
     mind.noteRefactor(s->getNotes()[2], t->getKey());
 
     // asserts
     EXPECT_EQ(s->getNotesCount(), 9-3);
-    EXPECT_EQ(s->getNotes()[0]->getTitle(), "1");
-    EXPECT_EQ(s->getNotes()[1]->getTitle(), "2");
-    EXPECT_EQ(s->getNotes()[2]->getTitle(), "4");
+    EXPECT_EQ(s->getNotes()[0]->getName(), "1");
+    EXPECT_EQ(s->getNotes()[1]->getName(), "2");
+    EXPECT_EQ(s->getNotes()[2]->getName(), "4");
     EXPECT_EQ(t->getNotesCount(), 9+3);
-    EXPECT_EQ(t->getNotes()[0]->getTitle(), "3");
-    EXPECT_EQ(t->getNotes()[1]->getTitle(), "33");
-    EXPECT_EQ(t->getNotes()[2]->getTitle(), "333");
-    EXPECT_EQ(t->getNotes()[3]->getTitle(), "A");
+    EXPECT_EQ(t->getNotes()[0]->getName(), "3");
+    EXPECT_EQ(t->getNotes()[1]->getName(), "33");
+    EXPECT_EQ(t->getNotes()[2]->getName(), "333");
+    EXPECT_EQ(t->getNotes()[3]->getName(), "A");
 
     // IMPROVE assert Os and Ns modified
 }

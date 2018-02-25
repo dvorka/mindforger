@@ -57,7 +57,7 @@ Outline::Outline(const Outline& o)
     key.clear();
 
     // IMPROVE i18n
-    title = "Copy of " + o.title;
+    name = "Copy of " + o.name;
     if(o.description.size()) {
         for(string* s:o.description) {
             description.push_back(new string(*s));
@@ -151,8 +151,8 @@ void Outline::completeProperties(const time_t fileModificationTime)
         reads = revision;
     }
 
-    if(title.empty()) {
-        title.assign("Outline");
+    if(name.empty()) {
+        name.assign("Outline");
     }
 
     setModifiedPretty();
@@ -169,7 +169,7 @@ void Outline::completeProperties(const time_t fileModificationTime)
 bool Outline::isVirgin() const
 {
     if(notes.empty() &&
-       !title.compare("Outline") &&
+       !name.compare("Outline") &&
        importance==0 &&
        urgency==0 &&
        progress==0
@@ -862,11 +862,6 @@ void Outline::clearDescription()
     this->description.clear();
 }
 
-const string& Outline::getTitle() const
-{
-    return title;
-}
-
 void Outline::setBytesize(unsigned int bytesize)
 {
     this->bytesize = bytesize;
@@ -877,11 +872,6 @@ unsigned int Outline::getBytesize() const
     return bytesize;
 }
 
-void Outline::setTitle(const string& title)
-{
-    this->title = title;
-}
-
 void Outline::setMemoryLocation(OutlineMemoryLocation memoryLocation)
 {
     this->memoryLocation = memoryLocation;
@@ -889,7 +879,7 @@ void Outline::setMemoryLocation(OutlineMemoryLocation memoryLocation)
 
 Note* Outline::getOutlineDescriptorAsNote()
 {
-    outlineDescriptorAsNote->setTitle(title);
+    outlineDescriptorAsNote->setName(name);
     outlineDescriptorAsNote->setDescription(description);
     return outlineDescriptorAsNote;
 }

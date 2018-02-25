@@ -52,7 +52,7 @@ TEST(MindTestCase, FTS) {
     if(result->size()) {
         cout << "\nFOUND " << result->size() << " result(s):";
         for(size_t i=0; i<result->size(); i++) {
-            cout << endl << "  #" << i << " " << result->at(i)->getTitle();
+            cout << endl << "  #" << i << " " << result->at(i)->getName();
         }
     } else {
         cout << "\nNOTHING found";

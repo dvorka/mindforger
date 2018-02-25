@@ -55,7 +55,7 @@ void dumpOutline(m8r::Outline*& outline)
     cout << endl << "  "
             << (outline->getType() ? outline->getType()->getName() : "NULL")
             << " (type)";
-    cout << endl << "  '" << outline->getTitle() << "' (title)";
+    cout << endl << "  '" << outline->getName() << "' (title)";
     cout << endl << "  Description[" << outline->getDescription().size() << "]:";
     for (size_t d = 0; d < outline->getDescription().size(); d++) {
         cout << endl << "    '" << *outline->getDescription()[d] << "' (description)";
@@ -86,7 +86,8 @@ void dumpOutline(m8r::Outline*& outline)
     cout << endl << "  Notes[" << outline->getNotes().size() << "]:";
     if (outline->getNotes().size()) {
         for (m8r::Note* note : outline->getNotes()) {
-            cout << endl << "    '" << note->getTitle() << "' (title)";
+            ASSERT_TRUE(note != nullptr);
+            cout << endl << "    '" << note->getName() << "' (title)";
             cout << endl << "    '" << note->getDepth() << "' (depth)";
             cout << endl << "    "
                     << (note->getPrimaryTag() ?
@@ -98,6 +99,8 @@ void dumpOutline(m8r::Outline*& outline)
                             << " (tag)";
                 }
             }
+            ASSERT_TRUE(note->getType() != nullptr);
+            ASSERT_NE(note->getType()->getName(), "");
             cout << endl << "    "
                     << (note->getType() ? note->getType()->getName() : "NULL")
                     << " (type)";
@@ -170,7 +173,7 @@ TEST(MindTestCase, LearnAndRememberMindForgerRepository) {
 
     cout << endl << endl << "- Outline persistence: modify and save a note ----------------------------------------------";
     m8r::Note* noteToSave = outlines[0]->getNotes()[0];
-    noteToSave->setTitle(string("SAVE"));
+    noteToSave->setName(string("SAVE"));
     outlines[0]->notifyChange(noteToSave);
     cout << endl << " Saving " << outlines[0]->getKey();
     memory.remember(outlines[0]->getKey());

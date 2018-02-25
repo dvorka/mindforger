@@ -29,7 +29,6 @@ SOURCES += \
     ./lib/src/gear/file_utils.cpp \
     ./lib/src/gear/string_utils.cpp \
     ./lib/src/mind/ontology/ontology.cpp \
-    ./lib/src/mind/ontology/thing.cpp \
     ./lib/src/model/attachment.cpp \
     ./lib/src/model/note_type.cpp \
     ./lib/src/model/note.cpp \
@@ -69,7 +68,8 @@ SOURCES += \
     lib/test/src/mind/outline_test.cpp \
     lib/test/src/test_gear.cpp \
     lib/src/config/repository.cpp \
-    lib/test/src/config/configuration_test.cpp
+    lib/test/src/config/configuration_test.cpp \
+    lib/src/mind/ontology/thing_class_rel_triple.cpp
 
 HEADERS += \
     ./lib/src/debug.h \
@@ -89,7 +89,6 @@ HEADERS += \
     ./lib/src/gear/string_utils.h \
     ./lib/src/mind/ontology/ontology_vocabulary.h \
     ./lib/src/mind/ontology/ontology.h \
-    ./lib/src/mind/ontology/thing.h \
     ./lib/src/model/attachment.h \
     ./lib/src/model/note_type.h \
     ./lib/src/model/note.h \
@@ -122,7 +121,9 @@ HEADERS += \
     lib/src/config/configuration.h \
     lib/src/install/installer.h \
     lib/src/config/repository.h \
-    lib/test/src/test_gear.h
+    lib/test/src/test_gear.h \
+    lib/src/mind/ontology/thing_class_rel_triple.h \
+    lib/src/mind/ontology/taxonomy.h
 
 # GTest unit test framework library dependencies
 unix|win32: LIBS += -lgtest

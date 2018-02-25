@@ -38,7 +38,7 @@ Note::Note(const Note& n)
       outline(nullptr),
       type(n.type)
 {
-    title = n.title;
+    name = n.name;
     if(n.description.size()) {
         for(string* s:n.description) {
             description.push_back(new string(*s));
@@ -226,18 +226,8 @@ void Note::setTags(const vector<const Tag*>* tags)
     }
 }
 
-const string& Note::getTitle() const
-{
-    return title;
-}
-
-void Note::addTitle(const string& s) {
-    title.append(s);
-}
-
-void Note::setTitle(const string& title)
-{
-    this->title = title;
+void Note::addName(const string& s) {
+    name.append(s);
 }
 
 const NoteType* Note::getType() const
@@ -388,8 +378,8 @@ void Note::completeProperties(const time_t outlineModificationTime)
 
     setModifiedPretty();
 
-    if(title.empty()) {
-        title.assign("Note");
+    if(name.empty()) {
+        name.assign("Note");
     }
     if(description.empty()) {
         description.push_back(new string{"..."});

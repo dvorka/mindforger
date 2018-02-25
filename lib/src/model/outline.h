@@ -63,7 +63,7 @@ public:
 
 private:
     /**
-     * @brief Auxiliary Note type that is used to represent Outline's title and description, e.g. in FTS.
+     * @brief Auxiliary Note type that is used to represent Outline's name and description, e.g. in FTS.
      */
     static const NoteType NOTE_4_OUTLINE_TYPE;
 
@@ -85,7 +85,6 @@ private:
     // IMPROVE hashset
     std::vector<const Tag*> tags;
     const OutlineType* type;
-    std::string title;
     std::vector<std::string*> description;
 
     time_t created;
@@ -133,7 +132,7 @@ public:
     void completeProperties(const time_t fileModificationTime);
 
     /**
-     * @brief Virgin Outline has default title, no Notes, clean metadata, ...
+     * @brief Virgin Outline has default name, no Notes, clean metadata, ...
      */
     bool isVirgin() const;
 
@@ -141,8 +140,6 @@ public:
     void setKey(const std::string key);
     Markdown::Format getFormat() const { return format; }
     void setFormat(Markdown::Format format) { this->format = format; }
-    virtual const std::string& getTitle() const;
-    void setTitle(const std::string& title);
     const std::vector<std::string*>& getDescription() const;
     std::string getDescriptionAsString() const;
     void addDescriptionLine(std::string *);
@@ -241,7 +238,7 @@ struct Outline::Patch {
     enum Diff {
         // no difference i.e. no change made to Notes
         NO,
-        // Notes given by boundaries were changed e.g. title or depth, but not moved
+        // Notes given by boundaries were changed e.g. name or depth, but not moved
         CHANGE,
         // Notes given by boundaries were moved/shuffled i.e. Notes are on different offsets
         MOVE,

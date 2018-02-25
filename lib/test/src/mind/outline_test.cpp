@@ -178,8 +178,8 @@ TEST(OutlineTestCase, CloneOutline) {
     cout << "O key: " << o->getKey() << endl;
     cout << "C key: " << c->getKey() << endl;
     EXPECT_NE(o->getKey(), c->getKey());
-    EXPECT_EQ(o->getTitle(), "Note Operations Test Outline");
-    EXPECT_EQ(c->getTitle(), "Copy of Note Operations Test Outline");
+    EXPECT_EQ(o->getName(), "Note Operations Test Outline");
+    EXPECT_EQ(c->getName(), "Copy of Note Operations Test Outline");
     EXPECT_EQ(o->getDescription().size(), c->getDescription().size());
     EXPECT_NE(o->getModified(), c->getModified());
 }
