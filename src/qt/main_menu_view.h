@@ -68,6 +68,7 @@ public:
     QAction* actionMindThink;
     QAction* actionMindForget;
     QAction* actionMindDream;
+    QAction* actionMindSleep;
     QAction* actionMindSnapshot;
     QAction* actionMindPreferences;
     QAction* actionExit;

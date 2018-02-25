@@ -34,7 +34,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
 
     // devise... new MD repository
-    actionMindDevise = new QAction(tr("&New"), mainWindow);
+    actionMindDevise = new QAction(tr("&Devise"), mainWindow);
     actionMindDevise->setStatusTip(tr("Create brand new MindForger repository..."));
     actionMindDevise->setEnabled(false);
 
@@ -65,8 +65,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // think ... toggle mental processes ~ enable associations/similarity/search based suggestions on searching/reading/writing notes
     actionMindThink = new QAction(tr("&Think"), mainWindow);
-    actionMindThink->setStatusTip(tr("Toggle suggestions of matching, similar and associated notes while searching, reading and writing"));
+    actionMindThink->setStatusTip(tr("Start to suggest matching, similar and associated Notes while searching, reading and writing"));
     actionMindThink->setEnabled(false);
+
+    // sleep ... opposite to think ~ stop mental processes and clear Mind
+    actionMindSleep = new QAction(tr("&Sleep"), mainWindow);
+    actionMindSleep->setStatusTip(tr("Stop sugggestions and clear Mind"));
+    actionMindSleep->setEnabled(false);
 
     // forget ... don't show any note older than 1Y/3M/...
     actionMindForget = new QAction(tr("&Forget"), mainWindow);
@@ -75,7 +80,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // dream ... sanity, integrity, detox, inference, assoc discovery, ...
     actionMindDream = new QAction(tr("Dr&eam"), mainWindow);
-    actionMindDream->setStatusTip(tr("Tidy up, clean and optimize memory which is otherwise done on your inactivity"));
+    actionMindDream->setStatusTip(tr("Tidy up, clean, re-infer, check and optimize Memory which is otherwise done on your inactivity"));
     actionMindDream->setEnabled(false);
 
     actionMindSnapshot = new QAction(tr("D&ump"), mainWindow);
@@ -94,16 +99,19 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind = qMenuBar->addMenu(tr("&Mind"));
 #ifdef DO_MF_DEBUG
     menuMind->addAction(actionMindHack);
+    menuMind->addSeparator();
 #endif
+    menuMind->addAction(actionMindThink);
+    menuMind->addAction(actionMindDream);
+    menuMind->addAction(actionMindSleep);
+    menuMind->addSeparator();
     menuMind->addAction(actionMindDevise);
     menuMind->addAction(actionMindLearn);
     menuMind->addMenu(submenuMindRelearn);
-    menuMind->addAction(actionMindRemember);
     menuMind->addAction(actionMindRecall);
     menuMind->addAction(actionMindAssociate);
-    menuMind->addAction(actionMindThink);
+    menuMind->addAction(actionMindRemember);
     menuMind->addAction(actionMindForget);
-    menuMind->addAction(actionMindDream);
     menuMind->addSeparator();
     menuMind->addAction(actionMindSnapshot);
     menuMind->addAction(actionMindPreferences);

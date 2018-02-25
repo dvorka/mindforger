@@ -33,13 +33,27 @@ constexpr auto NO_PARENT = 0xFFFF;
 /**
  * @brief Mind.
  *
- * MindForger aims to be thinking notebook. By thinking is meant mental
+ * MindForger aims to be *thinking* notebook. By thinking is meant a mental
  * process of human mind. While mind is thinking, it instantly throws ideas,
- * suggestions, associations based on what it's host (human) percieves
- * i.e. based on the current though and what host sees/smells/feels.
+ * suggestions, associations, inferences based on what it's host (human)
+ * percieves i.e. based on the current though and what host sees/smells/feels.
  *
- * Mind's flow of thoughts cannot be stopped, it can just be slow down
- * for instance by meditation.
+ * Mind can be in the following states:
+ *
+ * SLEEPING (do nothing)
+ *   When sleeping Mind is clearead and no mental processes are running.
+ *
+ * THINKING (think)
+ *
+ * DREAMING (heal and get ready)
+ *   When dreaming Mind is cleared, then Memory content is processed to Mind.
+ * Things and Relationships are converted to Triples, implicit/transitive/opposite
+ * relationships are inferred to Triples as well, etc. Once Memory is processed
+ * to Mind, it's checked (for Triples integrity), optimized (redundant Triples
+ * are removed). Finally Mind is ready to wake up.
+ *
+ * Mind's flow of thoughts cannot be stopped when awake, it can just be slowed
+ * down for instance by meditation.
  *
  * See also m8r::Ontology.
  */
