@@ -33,7 +33,15 @@ constexpr auto NO_PARENT = 0xFFFF;
 /**
  * @brief Mind.
  *
- * See m8r::Ontology.
+ * MindForger aims to be thinking notebook. By thinking is meant mental
+ * process of human mind. While mind is thinking, it instantly throws ideas,
+ * suggestions, associations based on what it's host (human) percieves
+ * i.e. based on the current though and what host sees/smells/feels.
+ *
+ * Mind's flow of thoughts cannot be stopped, it can just be slow down
+ * for instance by meditation.
+ *
+ * See also m8r::Ontology.
  */
 class Mind
 {
