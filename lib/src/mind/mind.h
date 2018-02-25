@@ -41,21 +41,42 @@ constexpr auto NO_PARENT = 0xFFFF;
  * Mind can be in the following states:
  *
  * SLEEPING (do nothing)
- *   When sleeping Mind is clearead and no mental processes are running.
+ *   Mind is cleared and no mental processes are running.
  *
  * THINKING (think)
+ *   Mind instantly provides a set of Things (Notes/Outlines/Tags/...) for
+ * a given Thing. When:
+ *   - SEARCHING/recalling/Menu:Associate it provides relevant Thing suggestions
+ *     as user writes query.
+ *     For example, for query string user gets relevant Outlines and Notes.
+ *   - READING/browsing it provides Things relevant to the viewed Thing.
+ *     For example, for viewed Note user gets relevant Notes.
+ *   - WRITING it provides Things relevant to the Thing being changed and to
+ *     the text being written.
+ *     For example, for a word written to description user gets relevant Notes.
  *
  * DREAMING (heal and get ready)
- *   When dreaming Mind is cleared, then Memory content is processed to Mind.
- * Things and Relationships are converted to Triples, implicit/transitive/opposite
+ *   Mind is cleared, then Memory content is processed to Mind.
+ * Things and Relationships are converted to Triples, implicit/transitive/opposite/...
  * relationships are inferred to Triples as well, etc. Once Memory is processed
  * to Mind, it's checked (for Triples integrity), optimized (redundant Triples
- * are removed). Finally Mind is ready to wake up.
+ * are removed). Dreaming is idle when Mind is ready to wake up.
  *
  * Mind's flow of thoughts cannot be stopped when awake, it can just be slowed
  * down for instance by meditation.
  *
  * See also m8r::Ontology.
+ */
+/* Semantic scoping is used by Mind to limit/restrict/choose relevant Things
+ * (consider a concept like 'wheel' in various Outlines like Car, Wheel of Life, ...):
+ *
+ * - Relevant Outlines for an Outline are filtered by Tags union (Outline w/ biggest
+ *   tag union is choosen from candidates).
+ * - Relevant Notes for a Note are searched from the current Outline first and then
+ *   from other Outlines (autolinking, link completion).
+ * - text completion is performed from the current description first, then from Outline's
+ *   Notes.
+ * - ...
  */
 class Mind
 {
