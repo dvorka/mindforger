@@ -21,8 +21,8 @@ export SCRIPT_DIR=`pwd`
 export BUILD_DIR=${SCRIPT_DIR}/..
 
 # run all tests
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests
-cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && gdb ./mindforger-lib-unit-tests
+cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && ./mindforger-lib-unit-tests
+#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make && gdb ./mindforger-lib-unit-tests
 
 # run selected test(s)
 # --gtest-filter=XYZ.* ... filter tests

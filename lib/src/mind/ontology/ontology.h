@@ -19,10 +19,8 @@
 #ifndef M8R_ONTOLOGY_H_
 #define M8R_ONTOLOGY_H_
 
-// IMPROVE something is wrong w/ this header - had to include it in .cpp files in AST
-
 #include <string>
-#include <set>
+#include <map>
 
 #include "thing_class_rel_triple.h"
 #include "taxonomy.h"
@@ -116,8 +114,10 @@ private:
      *
      * Ontology defined taxonomies like: tags (important, todo, personal, ...),
      * outline types, note types, etc.
+     *
+     * Clazz must be instead of Taxonomy because of generics.
      */
-    std::set<std::string,Clazz*> taxonomies;
+    std::map<std::string,Clazz*> taxonomies;
 
     /**
      * Outline type naming convention: first uppercase; e.g. Grow

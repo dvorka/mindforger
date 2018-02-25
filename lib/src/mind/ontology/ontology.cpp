@@ -30,57 +30,57 @@ string Ontology::KEY_TAXONOMY_TAGS = string("Tags");
 
 Ontology::Ontology(const Configuration& configuration)
     : config(configuration),
-      // IMPROVE from default constructor to NORMAL constructor
       thing(KEY_THING, Clazz::ROOT_CLASS)//,
-//      outlineTypeTaxonomy(),
-//      noteTypeTaxonomy(),
-//      relationshipTypeTaxonomy(),
-//      tagTaxonomy()
 {
     // taxonomy: tags
-//    tagsTaxonomy->add(Tag::KeyCool(), new Tag{Tag::KeyCool(), taxonomy, Color::MF_BLUE()});
-//    tagsTaxonomy->add(Tag::KeyImportant(), new Tag{Tag::KeyImportant(), taxonomy, Color::MF_RED()});
-//    tagsTaxonomy->add(Tag::KeyLater(), new Tag{Tag::KeyLater(), taxonomy, Color::MF_PURPLE()});
-//    tagsTaxonomy->add(Tag::KeyObsolete(), new Tag{Tag::KeyObsolete(), taxonomy, Color::MF_GRAY()});
-//    tagsTaxonomy->add(Tag::KeyPersonal(), new Tag{Tag::KeyPersonal(), taxonomy, Color::MF_GREEN()});
-//    tagsTaxonomy->add(Tag::KeyProblem(), new Tag{Tag::KeyProblem(), taxonomy, Color::MF_BLACK()});
-//    tagsTaxonomy->add(Tag::KeyTodo(), new Tag{Tag::KeyTodo(), taxonomy, Color::MF_YELLOW()});
-//    tagsTaxonomies.put(taxonomy->geName(),taxonomy);
+    tagTaxonomy.setName(KEY_TAXONOMY_TAGS);
+    tagTaxonomy.setIsA(&thing);
+    tagTaxonomy.add(Tag::KeyCool(), new Tag{Tag::KeyCool(), &tagTaxonomy, Color::MF_BLUE()});
+    tagTaxonomy.add(Tag::KeyImportant(), new Tag{Tag::KeyImportant(), &tagTaxonomy, Color::MF_RED()});
+    tagTaxonomy.add(Tag::KeyLater(), new Tag{Tag::KeyLater(), &tagTaxonomy, Color::MF_PURPLE()});
+    tagTaxonomy.add(Tag::KeyObsolete(), new Tag{Tag::KeyObsolete(), &tagTaxonomy, Color::MF_GRAY()});
+    tagTaxonomy.add(Tag::KeyPersonal(), new Tag{Tag::KeyPersonal(), &tagTaxonomy, Color::MF_GREEN()});
+    tagTaxonomy.add(Tag::KeyProblem(), new Tag{Tag::KeyProblem(), &tagTaxonomy, Color::MF_BLACK()});
+    tagTaxonomy.add(Tag::KeyTodo(), new Tag{Tag::KeyTodo(), &tagTaxonomy, Color::MF_YELLOW()});
+    taxonomies[tagTaxonomy.getName()] = &tagTaxonomy;
 
+    // taxonomy: outline types
+    outlineTypeTaxonomy.setName(KEY_TAXONOMY_OUTLINE_TYPES);
+    outlineTypeTaxonomy.setIsA(&thing);
+    this->defaultOutlineType = new OutlineType{OutlineType::KeyOutline(), &outlineTypeTaxonomy, Color::MF_GRAY()};;
+    outlineTypeTaxonomy.add(OutlineType::KeyOutline(), defaultOutlineType);
+    outlineTypeTaxonomy.add(OutlineType::KeyGrow(), new OutlineType(OutlineType::KeyGrow(), &outlineTypeTaxonomy, Color::MF_GRAY()));
 
+    // taxonomy: note types
+    noteTypeTaxonomy.setName(KEY_TAXONOMY_NOTE_TYPES);
+    noteTypeTaxonomy.setIsA(&thing);
+    this->defaultNoteType = new NoteType{NoteType::KeyNote(), &noteTypeTaxonomy, Color::MF_GRAY()};
+    noteTypeTaxonomy.add(NoteType::KeyNote(), defaultNoteType);
+    noteTypeTaxonomy.add(NoteType::KeyAction(), new NoteType{NoteType::KeyAction(), &noteTypeTaxonomy, Color::MF_GRAY()});
+    noteTypeTaxonomy.add(NoteType::KeyConclusion(), new NoteType{NoteType::KeyConclusion(), &noteTypeTaxonomy, Color::MF_GRAY()});
+    noteTypeTaxonomy.add(NoteType::KeyExperience(), new NoteType{NoteType::KeyExperience(), &noteTypeTaxonomy, Color::MF_GRAY()});
+    noteTypeTaxonomy.add(NoteType::KeyFact(), new NoteType{NoteType::KeyFact(), &noteTypeTaxonomy, Color::MF_GRAY()});
+    noteTypeTaxonomy.add(NoteType::KeyIdea(), new NoteType{NoteType::KeyIdea(), &noteTypeTaxonomy, Color::MF_GRAY()});
+    noteTypeTaxonomy.add(NoteType::KeyLesson(), new NoteType{NoteType::KeyLesson(), &noteTypeTaxonomy, Color::MF_GRAY()});
+    noteTypeTaxonomy.add(NoteType::KeyOpportunity(), new NoteType{NoteType::KeyOpportunity(), &noteTypeTaxonomy, Color::MF_GRAY()});
+    noteTypeTaxonomy.add(NoteType::KeyOption(), new NoteType{NoteType::KeyOption(), &noteTypeTaxonomy, Color::MF_GRAY()});
+    noteTypeTaxonomy.add(NoteType::KeyQuestion(), new NoteType{NoteType::KeyQuestion(), &noteTypeTaxonomy, Color::MF_GRAY()});
+    noteTypeTaxonomy.add(NoteType::KeyResult(), new NoteType{NoteType::KeyResult(), &noteTypeTaxonomy, Color::MF_GRAY()});
+    noteTypeTaxonomy.add(NoteType::KeySolution(), new NoteType{NoteType::KeySolution(), &noteTypeTaxonomy, Color::MF_GRAY()});
+    noteTypeTaxonomy.add(NoteType::KeyStrength(), new NoteType{NoteType::KeyStrength(), &noteTypeTaxonomy, Color::MF_GRAY()});
+    noteTypeTaxonomy.add(NoteType::KeyTask(), new NoteType{NoteType::KeyTask(), &noteTypeTaxonomy, Color::MF_GRAY()});
+    noteTypeTaxonomy.add(NoteType::KeyThreat(), new NoteType{NoteType::KeyThreat(), &noteTypeTaxonomy, Color::MF_GRAY()});
+    noteTypeTaxonomy.add(NoteType::KeyWeakness(), new NoteType{NoteType::KeyWeakness(), &noteTypeTaxonomy, Color::MF_GRAY()});
 
+    // TODO relationship types
+    noteTypeTaxonomy.setName(KEY_TAXONOMY_RELATIONSHIP_TYPES);
+    noteTypeTaxonomy.setIsA(&thing);
+    //noteTypeTaxonomy.add(RelationshipType::KeySame(), new RelationshipType(RelationshipType::KeyGrow(), &outlineTypeTaxonomy, Color::MF_GRAY()));
+    //noteTypeTaxonomy.add(RelationshipType::KeyOpposite(), new RelationshipType(RelationshipType::KeyGrow(), &outlineTypeTaxonomy, Color::MF_GRAY()));
+    //noteTypeTaxonomy.add(RelationshipType::KeyDepends(), new RelationshipType(RelationshipType::KeyGrow(), &outlineTypeTaxonomy, Color::MF_GRAY()));
 
-    // relationship types
-    // relationships
-
-
-
-
-
-
-//    // taxonomy: outline types
-//    this->defaultOutlineType = new OutlineType{OutlineType::KeyOutline(), Color::MF_GRAY()};;
-//    outlineTypes.put(OutlineType::KeyOutline(), defaultOutlineType);
-//    outlineTypes.put(OutlineType::KeyGrow(), new OutlineType(OutlineType::KeyGrow(), Color::MF_GRAY()));
-
-//    // taxonomy: note types
-//    this->defaultNoteType = new NoteType{NoteType::KeyNote(), Color::MF_GRAY()};
-//    noteTypes.put(NoteType::KeyNote(), defaultNoteType);
-//    noteTypes.put(NoteType::KeyAction(), new NoteType{NoteType::KeyAction(), Color::MF_GRAY()});
-//    noteTypes.put(NoteType::KeyConclusion(), new NoteType{NoteType::KeyConclusion(), Color::MF_GRAY()});
-//    noteTypes.put(NoteType::KeyExperience(), new NoteType{NoteType::KeyExperience(), Color::MF_GRAY()});
-//    noteTypes.put(NoteType::KeyFact(), new NoteType{NoteType::KeyFact(), Color::MF_GRAY()});
-//    noteTypes.put(NoteType::KeyIdea(), new NoteType{NoteType::KeyIdea(), Color::MF_GRAY()});
-//    noteTypes.put(NoteType::KeyLesson(), new NoteType{NoteType::KeyLesson(), Color::MF_GRAY()});
-//    noteTypes.put(NoteType::KeyOpportunity(), new NoteType{NoteType::KeyOpportunity(), Color::MF_GRAY()});
-//    noteTypes.put(NoteType::KeyOption(), new NoteType{NoteType::KeyOption(), Color::MF_GRAY()});
-//    noteTypes.put(NoteType::KeyQuestion(), new NoteType{NoteType::KeyQuestion(), Color::MF_GRAY()});
-//    noteTypes.put(NoteType::KeyResult(), new NoteType{NoteType::KeyResult(), Color::MF_GRAY()});
-//    noteTypes.put(NoteType::KeySolution(), new NoteType{NoteType::KeySolution(), Color::MF_GRAY()});
-//    noteTypes.put(NoteType::KeyStrength(), new NoteType{NoteType::KeyStrength(), Color::MF_GRAY()});
-//    noteTypes.put(NoteType::KeyTask(), new NoteType{NoteType::KeyTask(), Color::MF_GRAY()});
-//    noteTypes.put(NoteType::KeyThreat(), new NoteType{NoteType::KeyThreat(), Color::MF_GRAY()});
-//    noteTypes.put(NoteType::KeyWeakness(), new NoteType{NoteType::KeyWeakness(), Color::MF_GRAY()});
+    // TODO relationships among taxonomies and their categories, ...
+    // ...
 }
 
 Ontology::~Ontology()

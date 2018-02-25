@@ -92,6 +92,9 @@ public:
     Clazz &operator=(const Clazz&) = delete;
     Clazz &operator=(const Clazz&&) = delete;
     ~Clazz();
+
+    Clazz* getIsA() const { return isA; }
+    void setIsA(Clazz* isA) { this->isA = isA; }
 };
 
 /**
@@ -101,6 +104,11 @@ public:
  */
 class RelationshipType : public Clazz
 {
+private:
+    bool reflexive; // Thing op Thing (==,>=,*1) tj. *1(T) = T, ==(T) = T, ...
+    bool symetric;
+    bool transitive;
+
 public:
     explicit RelationshipType(const std::string& name, Clazz* isA);
     RelationshipType(const RelationshipType&) = delete;

@@ -268,10 +268,9 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
 TEST(RepositoryIndexerTestCase, MindForgerFile)
 {
     string repositoryPath{"/tmp"};
-    string path, content;
-
-    path.assign(repositoryPath+"/repository-indexer-single-mf-file.md");
-    remove(path.c_str());
+    string fileName{"repository-indexer-single-mf-file.md"};
+    string content;
+    string filePath{repositoryPath+"/"+fileName};
 
     content.assign(
         "# First Outline <!-- Metadata: type: Outline; created: 2017-02-02 06:31:09; reads: 35; read: 2018-01-07 08:05:58; revision: 36; modified: 2018-01-07 08:06:05; importance: 0/5; urgency: 0/5; progress: 0%; -->"
@@ -284,12 +283,12 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
         "\n## Note 2 <!-- Metadata: type: Idea; created: 2017-02-02 06:31:09; reads: 1; read: 2018-01-07 08:05:58; revision: 1; modified: 2018-01-07 08:06:05; progress: 10%; -->"
         "\nNote 2 text."
         "\n");
-    m8r::stringToFile(path, content);
+    m8r::stringToFile(filePath, content);
 
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     // repository type will be determined by mind.think() > memory.learn()
     repository->setMode(m8r::Repository::RepositoryMode::FILE);
-    repository->setFile(path);
+    repository->setFile(fileName);
 
     m8r::RepositoryIndexer repositoryIndexer{};
     repositoryIndexer.index(repository);
@@ -329,6 +328,7 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
 
     // assert
     ASSERT_NE(outline, nullptr);
+    cout << endl << "Loading saved O from " << outline->getKey() << flush;
     // write outline > metadata to be written
     string* outlineAsString = m8r::fileToString(outline->getKey());
     EXPECT_NE(outlineAsString->find("Metadata"), std::string::npos);
@@ -345,10 +345,9 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
 TEST(RepositoryIndexerTestCase, MarkdownFile)
 {
     string repositoryPath{"/tmp"};
-    string path, content;
-
-    path.assign(repositoryPath+"/repository-indexer-single-md-file.md");
-    remove(path.c_str());
+    string fileName{"repository-indexer-single-md-file.md"};
+    string content;
+    string filePath{repositoryPath+"/"+fileName};
 
     content.assign(
         "# First Markdown"
@@ -361,12 +360,12 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
         "\n## Note 2"
         "\nNote 2 text."
         "\n");
-    m8r::stringToFile(path, content);
+    m8r::stringToFile(filePath, content);
 
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     // repository type will be determined by mind.think() > memory.learn()
     repository->setMode(m8r::Repository::RepositoryMode::FILE);
-    repository->setFile(path);
+    repository->setFile(fileName);
 
     m8r::RepositoryIndexer repositoryIndexer{};
     repositoryIndexer.index(repository);
