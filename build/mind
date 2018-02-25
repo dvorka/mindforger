@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd /home/dvorka/bin && ./mindforger --theme dark ~/mf > /dev/null 2>&1 &
+
+# eof
+
