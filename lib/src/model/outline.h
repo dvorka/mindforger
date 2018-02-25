@@ -22,7 +22,7 @@
 #include <string>
 #include <vector>
 
-#include "../mind/ontology/thing.h"
+#include "../mind/ontology/thing_class_rel_triple.h"
 #include "note_type.h"
 #include "note.h"
 #include "outline_type.h"

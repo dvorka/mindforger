@@ -24,10 +24,8 @@
 #include <string>
 #include <set>
 
-#include "thing.h"
-#include "clazz.h"
+#include "thing_class_rel_triple.h"
 #include "taxonomy.h"
-#include "relationship_type.h"
 
 #include "../../config/configuration.h"
 #include "../../model/tag.h"
@@ -94,6 +92,13 @@ class Configuration;
 class Ontology
 {
 private:
+    static std::string KEY_THING;
+    static std::string KEY_TAXONOMY_OUTLINE_TYPES;
+    static std::string KEY_TAXONOMY_NOTE_TYPES;
+    static std::string KEY_TAXONOMY_RELATIONSHIP_TYPES;
+    static std::string KEY_TAXONOMY_TAGS;
+
+private:
     // ontology is loaded from the configuration (and by harvesting memory content)
     const Configuration &config;
 
@@ -137,7 +142,7 @@ private:
      *
      * Tag naming convention: lowercase (:alpha :number space); e.g. cool, super cool, ...
      */
-    Taxonomy<Tag> tagsTaxonomy;
+    Taxonomy<Tag> tagTaxonomy;
 
     /*
      * Defaults
@@ -169,7 +174,7 @@ public:
      * @return tag w/ given key.
      */
     const Tag* findOrCreateTag(const std::string& key);
-    Taxonomy<Tag>& getTags() { return tagsTaxonomy; }
+    Taxonomy<Tag>& getTags() { return tagTaxonomy; }
 
     const OutlineType* findOrCreateOutlineType(const std::string& key);
     const OutlineType* getDefaultOutlineType() const { return defaultOutlineType; }

@@ -20,7 +20,7 @@
 #define M8R_NOTE_TYPE_H_
 
 #include "../config/color.h"
-#include "../mind/ontology/clazz.h"
+#include "../mind/ontology/thing_class_rel_triple.h"
 
 namespace m8r {
 
@@ -97,7 +97,7 @@ public:
     }
 
     NoteType() = delete;
-    NoteType(std::string name, const Color& color);
+    NoteType(std::string name, Clazz* isA, const Color& color);
     NoteType(const NoteType&) = delete;
     NoteType(const NoteType&&) = delete;
     NoteType &operator=(const NoteType&) = delete;

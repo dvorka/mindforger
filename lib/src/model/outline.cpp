@@ -22,10 +22,11 @@ using namespace std;
 
 namespace m8r {
 
-const NoteType Outline::NOTE_4_OUTLINE_TYPE{"Outline", Color::RED()};
+// IMPROVE this type is not bound to any parent Clazz in Ontology
+const NoteType Outline::NOTE_4_OUTLINE_TYPE{"Outline", nullptr, Color::RED()};
 
 Outline::Outline(const OutlineType* type)
-    : Thing(),
+    : Thing{},
       memoryLocation(OutlineMemoryLocation::NORMAL),
       format(Markdown::Format::MINDFORGER), type(type)
 {
@@ -50,7 +51,8 @@ void Outline::resetClonedOutline(Outline* o)
 }
 
 Outline::Outline(const Outline& o)
-    : memoryLocation(OutlineMemoryLocation::NORMAL), format(o.format), type(o.type)
+    : Thing{},
+      memoryLocation(OutlineMemoryLocation::NORMAL), format(o.format), type(o.type)
 {
     key.clear();
 

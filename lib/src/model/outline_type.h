@@ -20,7 +20,7 @@
 #define M8R_OUTLINE_TYPE_H_
 
 #include "../config/color.h"
-#include "../mind/ontology/clazz.h"
+#include "../mind/ontology/thing_class_rel_triple.h"
 
 namespace m8r {
 
@@ -40,7 +40,7 @@ public:
     }
 
     OutlineType() = delete;
-    explicit OutlineType(std::string name, const Color& color);
+    explicit OutlineType(std::string name, Clazz* isA, const Color& color);
     OutlineType(const OutlineType&) = delete;
     OutlineType(const OutlineType&&) = delete;
     OutlineType &operator=(const OutlineType&) = delete;

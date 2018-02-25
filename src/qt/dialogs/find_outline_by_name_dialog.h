@@ -23,7 +23,7 @@
 
 #include <QtWidgets>
 
-#include "../../../lib/src/model/mind_entity.h"
+#include "../../../lib/src/mind/ontology/thing_class_rel_triple.h"
 
 namespace m8r {
 
@@ -63,8 +63,8 @@ private:
     QCheckBox* keywordsCheckBox;
     QPushButton* closeButton;
 
-    MindEntity* choice;
-    std::vector<MindEntity*> mindEntities;
+    Thing* choice;
+    std::vector<Thing*> mindEntities;
 
 protected:
     QLabel* label;
@@ -81,9 +81,9 @@ public:
     QString getSearchedString() const { return lineEdit->text(); }
     QCheckBox* getCaseCheckbox() const { return caseCheckBox; }
     QPushButton* getFindButton() const { return findButton; }
-    MindEntity* getChoice() const { return choice; }
+    Thing* getChoice() const { return choice; }
 
-    void show(std::vector<MindEntity*>& outlines);
+    void show(std::vector<Thing*>& outlines);
 
 signals:
     void searchFinished();

@@ -23,8 +23,7 @@
 #include <memory>
 
 #include "memory.h"
-#include "ontology/triple.h"
-
+#include "ontology/thing_class_rel_triple.h"
 #include "../config/configuration.h"
 
 namespace m8r {

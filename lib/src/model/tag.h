@@ -22,7 +22,7 @@
 #include <string>
 
 #include "../config/color.h"
-#include "../mind/ontology/clazz.h"
+#include "../mind/ontology/thing_class_rel_triple.h"
 
 namespace m8r {
 
@@ -87,7 +87,7 @@ public:
     }
 
     Tag() = delete;
-    explicit Tag(const std::string& name, const Color& color, Clazz* isA);
+    explicit Tag(const std::string& name, Clazz* isA, const Color& color);
     Tag(const Tag&) = delete;
     Tag(const Tag&&) = delete;
     Tag &operator=(const Tag&) = delete;

@@ -43,11 +43,11 @@ Note* MarkdownOutlineRepresentation::note(vector<MarkdownAstNodeSection*>* ast, 
     const string* s;
     for(size_t i = astindex; i < ast->size(); i++) {
         s = ast->at(i)->getMetadata().getType();
-        if (s) {
+        if(s) {
             // IMPROVE consider string normalization to make parsing more robust
             //std::transform(s.begin(), s.end(), s.begin(), ::tolower);
             //s[0] = toupper(s[0])
-            if ((noteType = ontology.getNoteTypes().get(*s)) == nullptr) {
+            if((noteType = ontology.getNoteTypes().get(*s)) == nullptr) {
                 noteType = ontology.getDefaultNoteType();
             }
         } else {

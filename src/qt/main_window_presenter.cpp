@@ -220,7 +220,7 @@ void MainWindowPresenter::doActionFindOutlineByName()
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> os{mind->remind().getOutlines()};
     mind->remind().sortByTitle(os);
-    vector<MindEntity*> es{os.begin(),os.end()};
+    vector<Thing*> es{os.begin(),os.end()};
 
     findOutlineByNameDialog->show(es);
 }
@@ -230,7 +230,7 @@ void MainWindowPresenter::handleFindOutlineByName()
     if(findOutlineByNameDialog->getChoice()) {
         orloj->showFacetOutline((Outline*)findOutlineByNameDialog->getChoice());
         // IMPROVE make this more efficient
-        statusBar->showInfo(QString(tr("Outline "))+QString::fromStdString(findOutlineByNameDialog->getChoice()->getTitle()));
+        statusBar->showInfo(QString(tr("Outline "))+QString::fromStdString(findOutlineByNameDialog->getChoice()->getName()));
     } else {
         statusBar->showInfo(QString(tr("Outline not found")+": ").append(findOutlineByNameDialog->getSearchedString()));
     }
@@ -258,7 +258,7 @@ void MainWindowPresenter::doActionRefactorNoteToOutline()
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> os{mind->remind().getOutlines()};
     mind->remind().sortByTitle(os);
-    vector<MindEntity*> es{os.begin(),os.end()};
+    vector<Thing*> es{os.begin(),os.end()};
 
     refactorNoteToOutlineDialog->show(es);
 }
@@ -275,7 +275,7 @@ void MainWindowPresenter::handleRefactorNoteToOutline()
             orloj->showFacetOutline((Outline*)refactorNoteToOutlineDialog->getChoice());
 
             // IMPROVE make this more efficient .arg() + add Note's title
-            statusBar->showInfo(QString(tr("Refactored Note to Outline '"))+QString::fromStdString(refactorNoteToOutlineDialog->getChoice()->getTitle())+"'...");
+            statusBar->showInfo(QString(tr("Refactored Note to Outline '"))+QString::fromStdString(refactorNoteToOutlineDialog->getChoice()->getName())+"'...");
         } else {
             statusBar->showInfo(QString(tr("Target Outline not found")+": ").append(refactorNoteToOutlineDialog->getSearchedString()));
         }

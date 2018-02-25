@@ -19,10 +19,11 @@
 #ifndef M8R_TAXONOMY_H
 #define M8R_TAXONOMY_H
 
-#include "clazz.h"
 #include "ontology_vocabulary.h"
 
 namespace m8r {
+
+class Clazz;
 
 /**
  * @brief Ontology taxonomy.
@@ -32,10 +33,16 @@ namespace m8r {
 template <class CLAZZ>
 class Taxonomy : public Clazz
 {
+    // IMPROVE migrate to using once compiler supports it
+    typedef typename std::map<std::string,const CLAZZ*> MAP;
+    typedef typename MAP::iterator MAP_ITERATOR;
+    typedef typename MAP::size_type MAP_SIZE;
+
 private:
     OntologyVocabulary<CLAZZ> classes;
 
 public:
+    explicit Taxonomy();
     explicit Taxonomy(std::string& name, CLAZZ* isA);
     Taxonomy(const Taxonomy&) = delete;
     Taxonomy(const Taxonomy&&) = delete;
@@ -43,9 +50,21 @@ public:
     Taxonomy &operator=(const Taxonomy&&) = delete;
     ~Taxonomy();
 
-    void add(std::string key, CLAZZ* clazz);
-    OntologyVocabulary<CLAZZ> getClasses() { return classes; }
+    bool empty() const { return classes.empty(); }
+    MAP_SIZE size() { return classes.size(); }
+    const CLAZZ* get(const std::string& name);
+    void add(const std::string& key, const CLAZZ* clazz);
+    std::vector<const CLAZZ*>& values() { return classes.values(); }
+    void clear() { classes.clear(); }
+
+    OntologyVocabulary<CLAZZ>& getClasses() { return classes; }
 };
+
+template <class CLAZZ>
+Taxonomy<CLAZZ>::Taxonomy()
+    : Clazz("", nullptr)
+{
+}
 
 template <class CLAZZ>
 Taxonomy<CLAZZ>::Taxonomy(std::string& name, CLAZZ* isA)
@@ -59,7 +78,13 @@ Taxonomy<CLAZZ>::~Taxonomy()
 }
 
 template <class CLAZZ>
-void Taxonomy<CLAZZ>::add(std::string name, CLAZZ* clazz)
+const CLAZZ* Taxonomy<CLAZZ>::get(const std::string& name)
+{
+    return classes.get(name);
+}
+
+template <class CLAZZ>
+void Taxonomy<CLAZZ>::add(const std::string& name, const CLAZZ* clazz)
 {
     classes.put(name, clazz);
 }

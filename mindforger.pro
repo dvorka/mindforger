@@ -32,7 +32,6 @@ QT += webkitwidgets
 
 HEADERS += ./lib/src/mind/memory_dwell.h \
     lib/src/mind/planner.h \
-    lib/src/mind/ontology/thing.h \
     lib/src/mind/ontology/ontology.h \
     lib/src/mind/working_memory.h \
     lib/src/mind/mind.h \
@@ -127,19 +126,16 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     lib/src/debug.h \
     src/qt/recent_files_menu.h \
     lib/src/config/configuration.h
-    lib/src/mind/ontology/clazz.h \
     lib/src/mind/ontology/ontology_vocabulary.h \
-    lib/src/mind/ontology/relationship.h \
     lib/src/mind/ontology/taxonomy.h \
-    lib/src/mind/ontology/triple.h \
-    lib/src/mind/ontology/relationship_type.h
+    lib/src/mind/ontology/thing_class_rel_triple.h \
+    lib/src/config/configuration.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
     lib/src/mind/memory.cpp \
     lib/src/mind/mind.cpp \
     lib/src/mind/ontology/ontology.cpp \
-    lib/src/mind/ontology/thing.cpp \
     lib/src/mind/working_memory.cpp \
     lib/src/repository_indexer.cpp \
     lib/src/model/attachment.cpp \
@@ -224,11 +220,8 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/dialogs/refactor_note_to_outline_dialog.cpp \
     lib/src/config/repository.cpp \
     src/qt/recent_files_menu.cpp
-    lib/src/mind/ontology/clazz.cpp \
-    lib/src/mind/ontology/relationship.cpp \
     lib/src/mind/ontology/taxonomy.cpp \
-    lib/src/mind/ontology/triple.cpp \
-    lib/src/mind/ontology/relationship_type.cpp
+    lib/src/mind/ontology/thing_class_rel_triple.cpp
 
 # Development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1

@@ -22,10 +22,9 @@ using namespace std;
 
 namespace m8r {
 
-Tag::Tag(const string& name, const Color& color, Clazz* isA)
-    : Clazz{name, isA}
+Tag::Tag(const string& name, Clazz* isA, const Color& color)
+    : Clazz(name, isA), color(color)
 {
-    this->color = color;
 }
 
 Tag::~Tag()

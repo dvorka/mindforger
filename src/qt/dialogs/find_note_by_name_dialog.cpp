@@ -54,7 +54,7 @@ void FindNoteByNameDialog::show(vector<Note*> notes)
         }
     }
 
-    vector<MindEntity*> es{notes.begin(), notes.end()};
+    vector<Thing*> es{notes.begin(), notes.end()};
     FindOutlineByNameDialog::show(es);
 }
 

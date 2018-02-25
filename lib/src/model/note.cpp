@@ -23,7 +23,9 @@ using namespace std;
 namespace m8r {
 
 Note::Note(const NoteType* type, Outline* outline)
-    : outline(outline), type(type)
+    : Thing{},
+      outline(outline),
+      type(type)
 {
     depth = 0;
     created = modified = read = deadline = 0;
@@ -32,7 +34,9 @@ Note::Note(const NoteType* type, Outline* outline)
 }
 
 Note::Note(const Note& n)
-    : outline(nullptr), type(n.type)
+    : Thing{},
+      outline(nullptr),
+      type(n.type)
 {
     title = n.title;
     if(n.description.size()) {

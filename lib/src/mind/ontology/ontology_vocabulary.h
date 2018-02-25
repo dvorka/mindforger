@@ -22,6 +22,7 @@
 #include <string>
 // IMPROVE uniq_map - compiler doesn't support it yet :-Z
 #include <map>
+#include <vector>
 
 namespace m8r {
 
