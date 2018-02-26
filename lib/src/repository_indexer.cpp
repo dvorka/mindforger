@@ -18,8 +18,6 @@
  */
 #include "repository_indexer.h"
 
-#include <chrono>
-
 using namespace std;
 
 namespace m8r {

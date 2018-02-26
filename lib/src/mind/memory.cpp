@@ -47,14 +47,18 @@ vector<Stencil*>& Memory::getStencils(ResourceType type)
 
 void Memory::learn()
 {
-    repositoryIndexer.index(config.getActiveRepository());
+    repositoryIndexer.index(config.getActiveRepository());    
 
-    MF_DEBUG("\nLEARNING repository in mode " << config.getActiveRepository()->getMode() << ":");
+#ifdef DO_MF_DEBUG
+    MF_DEBUG(endl << "LEARNING repository in mode " << config.getActiveRepository()->getMode() << ":");
+    auto begin = chrono::high_resolution_clock::now();
+#endif
+
     if(config.getActiveRepository()->getMode() == Repository::RepositoryMode::REPOSITORY) {
-        MF_DEBUG("\nMarkdown files:");
+        MF_DEBUG(endl << "Markdown files:");
         for(const string* markdownFile:repositoryIndexer.getMarkdownFiles()) {
             Outline* outline = representation.outline(File(*markdownFile));
-            MF_DEBUG("\n  '" << *markdownFile << "' format " << (outline->getFormat()==Markdown::Format::MINDFORGER?"MF":"MD"));
+            MF_DEBUG(endl << "  '" << *markdownFile << "' format " << (outline->getFormat()==Markdown::Format::MINDFORGER?"MF":"MD"));
 
             // fix O type according to repository type
             switch(config.getActiveRepository()->getType()) {
@@ -67,7 +71,7 @@ void Memory::learn()
             }
 
             if(outline->isVirgin()) {
-                MF_DEBUG("\n    VIRGIN ~ most probably wrongly parsed > SKIPPING it");
+                MF_DEBUG(endl << "    VIRGIN ~ most probably wrongly parsed > SKIPPING it");
                 delete outline;
             } else {
                 outlines.push_back(outline);
@@ -75,30 +79,30 @@ void Memory::learn()
             }
         }
 
-        MF_DEBUG("\nOutline stencils:");
+        MF_DEBUG(endl << "Outline stencils:");
         for(const string* file:repositoryIndexer.getOutlineStencilsFileNames()) {
             Stencil* stencil = new Stencil{*file, ResourceType::OUTLINE};
             persistence->load(stencil);
             outlineStencils.push_back(stencil);
-            MF_DEBUG("\n  " << stencil->getFilePath());
+            MF_DEBUG(endl << "  " << stencil->getFilePath());
         }
 
-        MF_DEBUG("\nNote stencils:");
+        MF_DEBUG(endl << "Note stencils:");
         for(const string* file:repositoryIndexer.getNoteStencilsFileNames()) {
             Stencil* stencil = new Stencil{*file, ResourceType::NOTE};
             persistence->load(stencil);
             noteStencils.push_back(stencil);
-            MF_DEBUG("\n  " << stencil->getFilePath());
+            MF_DEBUG(endl << "  " << stencil->getFilePath());
         }
 
-        MF_DEBUG("\n");
+        MF_DEBUG(endl);
         // IMPROVE consider repositoryIndexer.clean() to save memory
     } else {
-        MF_DEBUG("\nSingle markdown file: " << repositoryIndexer.getMarkdownFiles().size());
+        MF_DEBUG(endl << "Single markdown file: " << repositoryIndexer.getMarkdownFiles().size());
         if(repositoryIndexer.getMarkdownFiles().size() == 1) {
             const string* markdownFile = *repositoryIndexer.getMarkdownFiles().begin();
             Outline* outline = representation.outline(File(*markdownFile));
-            MF_DEBUG("\n  '" << *markdownFile << "' format " << (outline->getFormat()==Markdown::Format::MINDFORGER?"MF":"MD"));
+            MF_DEBUG(endl << "  '" << *markdownFile << "' format " << (outline->getFormat()==Markdown::Format::MINDFORGER?"MF":"MD"));
 
             // MD file format determines repository type
             repositoryIndexer.getRepository()->setMode(Repository::RepositoryMode::FILE);
@@ -109,16 +113,21 @@ void Memory::learn()
             }
 
             if(outline->isVirgin()) {
-                MF_DEBUG("\n    VIRGIN ~ most probably wrongly parsed > SKIPPING it");
+                MF_DEBUG(endl << "    VIRGIN ~ most probably wrongly parsed > SKIPPING it");
                 delete outline;
             } else {
                 outlines.push_back(outline);
                 outlinesMap.insert(map<string,Outline*>::value_type(outline->getKey(), outline));
             }
 
-            MF_DEBUG("\n");
+            MF_DEBUG(endl);
         } // else wrong number of files (typically none)
     }
+
+#ifdef DO_MF_DEBUG
+    auto end = chrono::high_resolution_clock::now();
+    MF_DEBUG("LEARNED in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms" << endl);
+#endif
 }
 
 void Memory::amnesia()
