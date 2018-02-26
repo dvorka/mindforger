@@ -1,0 +1,5 @@
+mindforger-lib-unit-tests
+Makefile
+*.o
+*.*~
+moc_*.cpp

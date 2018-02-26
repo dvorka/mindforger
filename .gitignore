@@ -1,7 +1,5 @@
 mindforger
-mindforger-lib-unit-tests
 Makefile
-.gitignore
 *.o
 *.*~
 moc_*.cpp
