@@ -18,7 +18,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 export SCRIPT_DIR=`pwd`
-export BUILD_DIR=${SCRIPT_DIR}/..
+export BUILD_DIR=${SCRIPT_DIR}/../lib/test
 
 # Hints:
 #  - use -g GCC option to get line information
