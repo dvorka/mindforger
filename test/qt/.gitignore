@@ -4,3 +4,4 @@ Makefile
 *.o
 *.*~
 moc_*.cpp
+qrc_mf-resources.cpp
