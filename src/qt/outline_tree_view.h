@@ -21,7 +21,7 @@
 
 #include <QtWidgets>
 
-#include "lib/src/gear/lang_utils.h"
+#include "../../lib/src/gear/lang_utils.h"
 
 namespace m8r {
 

@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-cd .. && qmake -qt5 mindforger.pro && make clean && make && ./mindforger --repository ../../git/mindforger/lib/test/resources/basic-repository
+export CORES=7
+
+cd ../test/qt && qmake -qt5 mindforger-gui-tests.pro && make clean && make -j${CORES} && ./mindforger-gui-tests
 
 # eof

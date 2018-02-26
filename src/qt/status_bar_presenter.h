@@ -19,7 +19,7 @@
 #ifndef M8RUI_STATUS_BAR_PRESENTER_H
 #define M8RUI_STATUS_BAR_PRESENTER_H
 
-#include "lib/src/mind/mind.h"
+#include "../../lib/src/mind/mind.h"
 
 #include <QtWidgets>
 

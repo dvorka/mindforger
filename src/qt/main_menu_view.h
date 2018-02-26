@@ -21,7 +21,7 @@
 
 #include <QtWidgets>
 
-#include "lib/src/debug.h"
+#include "../../lib/src/debug.h"
 
 #include "main_menu_presenter.h"
 #include "main_window_view.h"

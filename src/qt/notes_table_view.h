@@ -21,7 +21,7 @@
 
 #include <vector>
 
-#include "lib/src/model/note.h"
+#include "../../lib/src/model/note.h"
 
 #include <QtWidgets>
 

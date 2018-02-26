@@ -21,12 +21,12 @@
 
 #include <QtWidgets>
 
-#include <lib/src/model/outline.h>
-#include <lib/src/model/note.h>
-#include <lib/src/model/tag.h>
-#include <lib/src/model/stencil.h>
-#include <lib/src/model/outline_type.h>
-#include <lib/src/model/note_type.h>
+#include "../../lib/src/model/outline.h"
+#include "../../lib/src/model/note.h"
+#include "../../lib/src/model/tag.h"
+#include "../../lib/src/model/stencil.h"
+#include "../../lib/src/model/outline_type.h"
+#include "../../lib/src/model/note_type.h"
 
 /*
  * Registration of custom Qt types allowing to use them in QVariant and Qt's widget models:

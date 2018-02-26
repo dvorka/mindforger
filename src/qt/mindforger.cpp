@@ -23,8 +23,8 @@
 
 #include <QtWidgets>
 
-#include "lib/src/version.h"
-#include "lib/src/config/configuration.h"
+#include "../../lib/src/version.h"
+#include "../../lib/src/config/configuration.h"
 
 #include "gear/qutils.h"
 #include "i18nl10n.h"

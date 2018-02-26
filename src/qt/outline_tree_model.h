@@ -21,9 +21,9 @@
 
 #include <QtWidgets>
 
-#include "lib/src/model/note.h"
-#include "notes_table_model.h"
+#include "../../lib/src/model/note.h"
 
+#include "notes_table_model.h"
 #include "gear/qutils.h"
 
 namespace m8r {

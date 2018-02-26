@@ -22,7 +22,7 @@
 
 #include <QtWidgets>
 
-#include "lib/src/version.h"
+#include "../../lib/src/version.h"
 
 #include "main_window_presenter.h"
 #include "main_menu_presenter.h"

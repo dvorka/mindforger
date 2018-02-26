@@ -21,7 +21,8 @@
 
 #include <QtWidgets>
 
-#include "lib/src/gear/lang_utils.h"
+#include "../../lib/src/gear/lang_utils.h"
+
 #include "outline_tree_view.h"
 
 namespace m8r {

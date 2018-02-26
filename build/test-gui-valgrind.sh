@@ -19,6 +19,4 @@
 
 # TODO start MF w/ a test repository, load it & have macro that shutdowns MF after load & certain operations (compiled with #define MF_DEBUG_MODE on)
 
-cd .. && qmake -qt5 mindforger.pro && make clean && make && valgrind -v --tool=memcheck --leak-check=full ./mindforger --repository ../../git/mindforger/lib/test/resources/basic-repository
-
 # eof

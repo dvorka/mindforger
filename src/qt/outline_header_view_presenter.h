@@ -19,8 +19,8 @@
 #ifndef M8RUI_OUTLINE_HEADER_VIEW_PRESENTER_H
 #define M8RUI_OUTLINE_HEADER_VIEW_PRESENTER_H
 
-#include "lib/src/model/outline.h"
-#include "lib/src/representations/html/html_outline_representation.h"
+#include "../../lib/src/model/outline.h"
+#include "../../lib/src/representations/html/html_outline_representation.h"
 
 #include <QtWidgets>
 

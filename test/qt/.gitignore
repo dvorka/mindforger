@@ -1,0 +1,6 @@
+mindforger
+mindforger-gui-tests
+Makefile
+*.o
+*.*~
+moc_*.cpp

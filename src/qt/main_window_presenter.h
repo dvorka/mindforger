@@ -19,8 +19,7 @@
 #ifndef M8RUI_MAIN_WINDOW_PRESENTER_H
 #define M8RUI_MAIN_WINDOW_PRESENTER_H
 
-#include "lib/src/config/configuration.h"
-#include "lib/src/mind/mind.h"
+#include "../../lib/src/mind/mind.h"
 
 #include "main_window_view.h"
 #include "main_menu_presenter.h"

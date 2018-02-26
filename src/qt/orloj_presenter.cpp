@@ -18,7 +18,7 @@
 */
 #include "orloj_presenter.h"
 
-#include "lib/src/gear/lang_utils.h"
+#include "../../lib/src/gear/lang_utils.h"
 
 using namespace std;
 

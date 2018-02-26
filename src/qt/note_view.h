@@ -19,7 +19,7 @@
 #ifndef M8RUI_NOTE_VIEW_H
 #define M8RUI_NOTE_VIEW_H
 
-#include "lib/src/model/note.h"
+#include "../../lib/src/model/note.h"
 
 #include "note_view_model.h"
 

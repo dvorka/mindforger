@@ -21,8 +21,7 @@
 
 #include <vector>
 
-#include "lib/src/model/outline.h"
-#include "lib/src/mind/mind.h"
+#include "../../lib/src/mind/mind.h"
 
 #include <QtWidgets>
 
