@@ -84,10 +84,19 @@ public:
         static Configuration SINGLETON{};
         return SINGLETON;
     }
+
+    enum MindState {
+        THINKING,
+        DREAMING,
+        SLEEPING
+    };
+
 private:
     explicit Configuration();
 
 private:
+    MindState mindState;
+
     std::string userHomePath;
     std::string configFilePath;
 
@@ -125,6 +134,9 @@ public:
 
     void load();
     void save() const;
+
+    MindState getMindState() const { return mindState; }
+    void setMindState(MindState mindState);
 
     /**
      * @brief Find or create default MindForger repository.

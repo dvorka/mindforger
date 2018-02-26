@@ -28,6 +28,8 @@ using namespace std;
 Configuration::Configuration()
     : installer(new Installer{})
 {
+    mindState = MindState::SLEEPING;
+
     char *home = getenv(ENV_VAR_HOME);
     userHomePath = string{home};
 
@@ -60,6 +62,11 @@ Configuration::~Configuration()
         delete installer;
         installer = nullptr;
     }
+}
+
+void Configuration::setMindState(MindState mindState)
+{
+    this->mindState = mindState;
 }
 
 Repository* Configuration::addRepository(Repository* repository)

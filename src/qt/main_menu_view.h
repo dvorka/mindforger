@@ -156,6 +156,10 @@ public:
     void showFacetOutlineView(bool repositoryMode=true);
     void showFacetNoteEdit(bool repositoryMode=true);
 
+    void showFacetMindThink();
+    void showFacetMindDream();
+    void showFacetMindSleep();
+
     void addRepositoryOrFileToRelearn(const QString& path);
 
 private:

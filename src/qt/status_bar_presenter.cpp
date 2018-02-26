@@ -44,7 +44,7 @@ void StatusBarPresenter::showError(const QString& message)
 
 void StatusBarPresenter::showMindStatistics()
 {
-    const QLocale& cLocale = QLocale::c();
+    const QLocale& cLocale = QLocale::c(); // "C" seems to be a default locale
 
     // IMPROVE string builder
     // IMPROVE const delimiter "    "
@@ -52,7 +52,20 @@ void StatusBarPresenter::showMindStatistics()
     // use %L1 to localize
     // use locale to: 1000 > 1,000
     status.clear();
-    status = " Sleeping    "; // IMPROVE sleeping / thinking / dreaming
+
+    status.append(" ");
+    switch(Configuration::getInstance().getMindState()) {
+    case Configuration::MindState::THINKING:
+        status.append("Thinking");
+        break;
+    case Configuration::MindState::DREAMING:
+        status.append("Dreaming");
+        break;
+    case Configuration::MindState::SLEEPING:
+        status.append("Sleeping");
+        break;
+    }
+    status.append("    ");
 
     switch(Configuration::getInstance().getActiveRepository()->getType()) {
     case Repository::RepositoryType::MINDFORGER:
@@ -72,19 +85,17 @@ void StatusBarPresenter::showMindStatistics()
     }
 
     status += cLocale.toString(mind->remind().getOutlinesCount());
-    //status += QString::number(mind->remind().getOutlinesCount());
     status.append(" outlines    ");
     status += cLocale.toString(mind->remind().getNotesCount());
-    //status += QString::number(mind->remind().getNotesCount());
     status.append(" notes    ");
+    status += cLocale.toString(mind->getTriplesCount());
+    status.append(" triples    ");
     status += cLocale.toString(mind->remind().getOutlineMarkdownsSize());
-    //status += QString::number(mind->remind().getOutlineMarkdownsSize());
     status.append(" bytes    ");
     status += QString::number(mind->getForgetThreshold());
     status.append("% forgotten");
 
-    //view->showInfo(qPrintable(status));
     view->showInfo(status);
 }
 
-}
+} // namespace

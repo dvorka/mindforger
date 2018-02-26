@@ -216,7 +216,7 @@ Memory::~Memory()
     delete persistence;
 }
 
-int Memory::getOutlinesCount() const
+unsigned Memory::getOutlinesCount() const
 {
     return outlines.size();
 }
@@ -231,7 +231,7 @@ unsigned Memory::getOutlineMarkdownsSize() const
     return result;
 }
 
-int Memory::getNotesCount() const
+unsigned Memory::getNotesCount() const
 {
     // IMPROVE introduce dirty flag (add/remove outline and recount only then)
     unsigned int result{};

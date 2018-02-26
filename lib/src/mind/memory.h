@@ -119,7 +119,7 @@ public:
     /**
      * @brief Get the number of outlines.
      */
-    int getOutlinesCount() const;
+    unsigned getOutlinesCount() const;
 
     /**
      * @brief Get the size of outline MDs in bytes.
@@ -129,7 +129,7 @@ public:
     /**
      * @brief Get the number of notes of all outlines.
      */
-    int getNotesCount() const;
+    unsigned getNotesCount() const;
 
     std::string createOutlineKey(const std::string* name);
     std::string createLimboKey(const std::string* name);

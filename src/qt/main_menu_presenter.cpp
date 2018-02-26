@@ -30,6 +30,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 #ifdef DO_MF_DEBUG
     QObject::connect(view->actionMindHack, SIGNAL(triggered()),mwp, SLOT(doActionMindHack()));
 #endif
+    QObject::connect(view->actionMindThink, SIGNAL(triggered()), mwp, SLOT(doActionMindThink()));
+    QObject::connect(view->actionMindDream, SIGNAL(triggered()), mwp, SLOT(doActionMindDream()));
+    QObject::connect(view->actionMindSleep, SIGNAL(triggered()), mwp, SLOT(doActionMindSleep()));
     QObject::connect(view->actionMindLearn, SIGNAL(triggered()), mwp, SLOT(doActionMindLearn()));
     for(auto& r:config.getRepositories()) {
         view->submenuMindRelearn->addFile(QString::fromStdString(r.first));
@@ -81,6 +84,18 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionHelpReportBug, SIGNAL(triggered()), mwp, SLOT(doActionHelpReportBug()));
     QObject::connect(view->actionHelpCheckForUpdates, SIGNAL(triggered()), mwp, SLOT(doActionHelpCheckForUpdates()));
     QObject::connect(view->actionHelpAbout, SIGNAL(triggered()), mwp, SLOT(doActionHelpAboutMindForger()));
+
+    switch(config.getMindState()) {
+    case Configuration::MindState::THINKING:
+        showFacetMindThink();
+        break;
+    case Configuration::MindState::DREAMING:
+        showFacetMindDream();
+        break;
+    case Configuration::MindState::SLEEPING:
+        showFacetMindSleep();
+        break;
+    }
 }
 
 MainMenuPresenter::~MainMenuPresenter()
@@ -103,10 +118,24 @@ void MainMenuPresenter::showFacetNoteEdit()
     view->showFacetNoteEdit(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
 }
 
+void MainMenuPresenter::showFacetMindThink()
+{
+    view->showFacetMindThink();
+}
+
+void MainMenuPresenter::showFacetMindDream()
+{
+    view->showFacetMindDream();
+}
+
+void MainMenuPresenter::showFacetMindSleep()
+{
+    view->showFacetMindSleep();
+}
+
 void MainMenuPresenter::addRecentDirectoryOrFile(const QString& path)
 {
     view->addRepositoryOrFileToRelearn(path);
 }
 
-
-}
+} // namespace

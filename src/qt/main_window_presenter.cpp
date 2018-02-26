@@ -26,9 +26,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     : view(view),
       config(Configuration::getInstance())
 {
-    // think
     mind = new Mind{config};
-    mind->think();
 
     // representations
     this->mdRepresentation
@@ -62,6 +60,9 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
     QObject::connect(findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByName()));
     QObject::connect(refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
+
+    // let mind think/dream/...
+    mind->learn();
 }
 
 MainWindowPresenter::~MainWindowPresenter()
@@ -87,6 +88,27 @@ void MainWindowPresenter::doActionMindHack()
     qDebug() << "[MindHack] Current facet: " << orloj->getFacet();
 }
 #endif
+
+void MainWindowPresenter::doActionMindThink()
+{
+    mind->think();
+    statusBar->showMindStatistics();
+    mainMenu->showFacetMindThink();
+}
+
+void MainWindowPresenter::doActionMindDream()
+{
+    mind->dream();
+    statusBar->showMindStatistics();
+    mainMenu->showFacetMindDream();
+}
+
+void MainWindowPresenter::doActionMindSleep()
+{
+    mind->sleep();
+    statusBar->showMindStatistics();
+    mainMenu->showFacetMindSleep();
+}
 
 void MainWindowPresenter::doActionMindLearn()
 {
@@ -132,12 +154,10 @@ void MainWindowPresenter::doActionMindLearn()
 
 void MainWindowPresenter::doActionMindRelearn(QString path)
 {
-    mind->amnesia();
-
     Repository* r = RepositoryIndexer::getRepositoryForPath(path.toStdString());
     if(r) {
         config.setActiveRepository(config.addRepository(r));
-        mind->think();
+        mind->learn();
         showInitialView();
     } else {
         QMessageBox::critical(

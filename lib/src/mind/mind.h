@@ -94,8 +94,8 @@ private:
      * in Things, but also implicit relationships like Notes parent/child hierarchy
      * relationships, etc.
      *
-     * This member is empty until Mind::think() is invoked. Once Mind is in thinking
-     * state triples are maintained.
+     * This member is empty until Mind::think() or Mind::dream() is invoked. Once Mind
+     * is in thinking state triples are maintained.
      *
      * This member is used for triple filtering (per O/N/T/...), thinking, associations,
      * inferring, ...
@@ -136,16 +136,6 @@ public:
     virtual ~Mind();
 
     /**
-     * @brief Learn MindForger/Markdown repository/directory/file.
-     */
-    void learn(const std::string& path);
-
-    /**
-     * @brief Stop all mental processes and forget everything.
-     */
-    void amnesia();
-
-    /**
      * @brief Learn from memory to start thinking.
      */
     void think();
@@ -166,6 +156,25 @@ public:
      *     > calculate BlackHole (for each Galaxy find Outline with most in/out relationships)
      */
     void dream();
+
+    /**
+     * @brief Sleep just to learn memory and relax.
+     *
+     * Triples are cleared - no thinking or dreaming.
+     */
+    void sleep();
+
+    /**
+     * @brief Learn new MindForger/Markdown repository/directory/file defined by configuration while maintaining current mind state.
+     *
+     * Mind and Memory is reset i.e. this method does NOT add new knowledge, but it starts over.
+     */
+    void learn();
+
+    /**
+     * @brief Forget everything while maintaining current mind state.
+     */
+    void amnesia();
 
     /*
      * REMEMBERING
@@ -438,14 +447,18 @@ public:
             uint16_t fromNoteId);
 
     /*
+     * TRIPLES
+     */
+
+    unsigned getTriplesCount() const { return triples.size(); }
+
+    /*
      * DIAGNOSTICS
      */
 
     // IMPROVE MemoryStatistics getStatistics();
 
 private:
-    void noteChildren(Note* note, std::vector<Note*>& children, Outline::Patch* patch);
-
     /**
      * @brief Invoked on remembering Outline/Note/... to flush all inferred knowledge, caches, ...
      */

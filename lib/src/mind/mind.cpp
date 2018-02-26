@@ -23,7 +23,8 @@ using namespace std;
 namespace m8r {
 
 Mind::Mind(Configuration &configuration)
-    : config(configuration), memory(configuration)
+    : config(configuration),
+      memory(configuration)
 {
     forget = 0;
 }
@@ -34,18 +35,56 @@ Mind::~Mind()
     // - allNotesCache Notes is just container referencing Memory's Outlines
 }
 
-void Mind::learn(const std::string& path)
+void Mind::think()
 {
-    // 1) check if the path is valid
-    Repository* repository = RepositoryIndexer::getRepositoryForPath(path);
-    if(!repository) return; // IMPROVE throw exception / report problem
-    config.setActiveRepository(repository);
+    config.setMindState(Configuration::MindState::THINKING);
 
-    // 2) forget everything
     amnesia();
 
-    // 3) learn knowledge & start to think
-    think();
+    // think
+    memory.learn();
+    // TODO start to think by inferring triples
+}
+
+void Mind::dream()
+{
+    config.setMindState(Configuration::MindState::DREAMING);
+
+    amnesia();
+
+    // TODO infer all triples, check, fix, optimize and save
+
+    // o integrity check: ...
+    // o memory structure check:
+    //  - Os w/o description
+    //  - Os w/o any N
+    //  - Ns w/o description
+    // o attachments
+    //  - orphan attachments (not referenced from any O)
+}
+
+void Mind::sleep()
+{
+    config.setMindState(Configuration::MindState::SLEEPING);
+
+    amnesia();
+
+    memory.learn();
+}
+
+void Mind::learn()
+{
+    switch(config.getMindState()) {
+    case Configuration::MindState::THINKING:
+        think();
+        break;
+    case Configuration::MindState::DREAMING:
+        dream();
+        break;
+    case Configuration::MindState::SLEEPING:
+        sleep();
+        break;
+    }
 }
 
 void Mind::amnesia()
@@ -53,24 +92,7 @@ void Mind::amnesia()
     allNotesCache.clear();
     memoryDwell.clear();
     memory.amnesia();
-}
-
-void Mind::dream()
-{
-    // integrity check: ...
-
-    // memory structure check:
-    // - Os w/o description
-    // - Os w/o any N
-    // - Ns w/o description
-
-    // attachments
-    // - orphan attachments (not referenced from any O)
-}
-
-void Mind::think()
-{
-    memory.learn();
+    triples.clear();
 }
 
 const vector<Note*>& Mind::getMemoryDwell(int pageSize) const

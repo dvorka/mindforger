@@ -57,4 +57,4 @@ StatusBarView::~StatusBarView()
 {
 }
 
-}
+} // namespace

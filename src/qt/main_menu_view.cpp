@@ -66,7 +66,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // think ... toggle mental processes ~ enable associations/similarity/search based suggestions on searching/reading/writing notes
     actionMindThink = new QAction(tr("&Think"), mainWindow);
     actionMindThink->setStatusTip(tr("Start to suggest matching, similar and associated Notes while searching, reading and writing"));
-    actionMindThink->setEnabled(false);
 
     // sleep ... opposite to think ~ stop mental processes and clear Mind
     actionMindSleep = new QAction(tr("&Sleep"), mainWindow);
@@ -81,7 +80,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // dream ... sanity, integrity, detox, inference, assoc discovery, ...
     actionMindDream = new QAction(tr("Dr&eam"), mainWindow);
     actionMindDream->setStatusTip(tr("Tidy up, clean, re-infer, check and optimize Memory which is otherwise done on your inactivity"));
-    actionMindDream->setEnabled(false);
 
     actionMindSnapshot = new QAction(tr("D&ump"), mainWindow);
     actionMindSnapshot->setStatusTip(tr("Create backup archive of the current repository"));
@@ -486,6 +484,27 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
         actionFindOutlineByName->setEnabled(false);
         actionFindOutlineByTag->setEnabled(false);
     }
+}
+
+void MainMenuView::showFacetMindThink()
+{
+    actionMindThink->setEnabled(false);
+    actionMindDream->setEnabled(true);
+    actionMindSleep->setEnabled(true);
+}
+
+void MainMenuView::showFacetMindDream()
+{
+    actionMindThink->setEnabled(true);
+    actionMindDream->setEnabled(false);
+    actionMindSleep->setEnabled(true);
+}
+
+void MainMenuView::showFacetMindSleep()
+{
+    actionMindThink->setEnabled(true);
+    actionMindDream->setEnabled(true);
+    actionMindSleep->setEnabled(false);
 }
 
 void MainMenuView::addRepositoryOrFileToRelearn(const QString& path)

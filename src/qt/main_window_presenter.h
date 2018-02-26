@@ -109,6 +109,9 @@ public slots:
 #ifdef DO_MF_DEBUG
     void doActionMindHack();
 #endif
+    void doActionMindThink();
+    void doActionMindDream();
+    void doActionMindSleep();
     void doActionMindLearn();
     void doActionMindRelearn(QString path);
     void doActionMindSnapshot();
