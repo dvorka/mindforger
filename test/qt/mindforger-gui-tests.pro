@@ -30,6 +30,9 @@ QT += widgets
 QT += webkit
 QT += webkitwidgets
 
+# GUI tests
+QT += testlib
+
 HEADERS += \
     ../../lib/src/mind/memory_dwell.h \
     ../../lib/src/mind/planner.h \

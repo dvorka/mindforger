@@ -21,7 +21,7 @@
 
 #include <QtWidgets>
 
-#include "../../lib/src/mind/ontology/ontology.h"
+#include "../../../lib/src/mind/ontology/ontology.h"
 
 namespace m8r {
 

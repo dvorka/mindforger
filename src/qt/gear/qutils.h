@@ -19,10 +19,10 @@
 #ifndef M8R_QUTILS_H
 #define M8R_QUTILS_H
 
-#include "../../lib/src/model/tag.h"
-#include "../../lib/src/model/outline.h"
-#include "../../lib/src/model/note_type.h"
-#include "../../lib/src/gear/string_utils.h"
+#include "../../../lib/src/model/tag.h"
+#include "../../../lib/src/model/outline.h"
+#include "../../../lib/src/model/note_type.h"
+#include "../../../lib/src/gear/string_utils.h"
 
 #include <QtWidgets>
 
