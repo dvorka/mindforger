@@ -305,4 +305,4 @@ void NoteEditorView::lineNumberPanelPaintEvent(QPaintEvent* event)
     }
 }
 
-}
+} // namespace

@@ -37,7 +37,7 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     //addRegex(Link, "\\[(:?[\\w\\s:\\-=]+)\\]\\([\\w/\\.:-#()]+\\)");
     addRegex(Link, "\\[(:?[\\w\\s:\\-=]+)\\]\\(\\S+\\)");
     // IMPROVE IMO regexp like https?://\S+ should be OK, but from some reason it's non-greedy... that's why I use this obscure one
-    addRegex(Autolink, "https?://\\S+$");
+    addRegex(Autolink, "https?://\\S+[$\\s]");
     addRegex(Codeblock, "`(:?[\\w\\s'/:\\.:-#()]+)`");
     addRegex(UnorderedList, "^(:?    )*[\\*\\+\\-] ");
     addRegex(OrderedList, "^(:?    )*\\d\\. ");
