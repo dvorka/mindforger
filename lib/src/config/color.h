@@ -110,6 +110,10 @@ public:
         static const Color color(0xCC,0xCC,0xCC);
         return color;
     }
+    static const Color& MF_TURQUOISE() {
+        static const Color color(64,224,208);
+        return color;
+    }
 
     // palette
     static const Color& findOrCreate(unsigned char r, unsigned char g, unsigned char b) {
@@ -130,6 +134,7 @@ public:
             colors.insert(std::pair<unsigned long,const Color&>(MF_PURPLE().asLong(), MF_PURPLE()));
             colors.insert(std::pair<unsigned long,const Color&>(MF_BLACK().asLong(), MF_BLACK()));
             colors.insert(std::pair<unsigned long,const Color&>(MF_GRAY().asLong(), MF_GRAY()));
+            colors.insert(std::pair<unsigned long,const Color&>(MF_TURQUOISE().asLong(), MF_TURQUOISE()));
         }
 
         unsigned long k = (r<<16) + (g<<8) + b;

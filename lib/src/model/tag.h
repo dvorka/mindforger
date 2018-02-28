@@ -86,6 +86,27 @@ public:
         return KEY_PROBLEM;
     }
 
+    static const std::string& KeyWhat() {
+        static const std::string KEY_PROBLEM = std::string{"what"};
+        return KEY_PROBLEM;
+    }
+    static const std::string& KeyHow() {
+        static const std::string KEY_PROBLEM = std::string{"how"};
+        return KEY_PROBLEM;
+    }
+    static const std::string& KeyWhy() {
+        static const std::string KEY_PROBLEM = std::string{"why"};
+        return KEY_PROBLEM;
+    }
+    static const std::string& KeyWhere() {
+        static const std::string KEY_PROBLEM = std::string{"where"};
+        return KEY_PROBLEM;
+    }
+    static const std::string& KeyWho() {
+        static const std::string KEY_PROBLEM = std::string{"who"};
+        return KEY_PROBLEM;
+    }
+
     Tag() = delete;
     explicit Tag(const std::string& name, Clazz* isA, const Color& color);
     Tag(const Tag&) = delete;

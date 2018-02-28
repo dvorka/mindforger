@@ -42,6 +42,12 @@ Ontology::Ontology(const Configuration& configuration)
     tagTaxonomy.add(Tag::KeyPersonal(), new Tag{Tag::KeyPersonal(), &tagTaxonomy, Color::MF_GREEN()});
     tagTaxonomy.add(Tag::KeyProblem(), new Tag{Tag::KeyProblem(), &tagTaxonomy, Color::MF_BLACK()});
     tagTaxonomy.add(Tag::KeyTodo(), new Tag{Tag::KeyTodo(), &tagTaxonomy, Color::MF_YELLOW()});
+    // knowledge type
+    tagTaxonomy.add(Tag::KeyWhat(), new Tag{Tag::KeyWhat(), &tagTaxonomy, Color::MF_TURQUOISE()});
+    tagTaxonomy.add(Tag::KeyHow(), new Tag{Tag::KeyHow(), &tagTaxonomy, Color::MF_TURQUOISE()});
+    tagTaxonomy.add(Tag::KeyWhy(), new Tag{Tag::KeyWhy(), &tagTaxonomy, Color::MF_TURQUOISE()});
+    tagTaxonomy.add(Tag::KeyWhere(), new Tag{Tag::KeyWhere(), &tagTaxonomy, Color::MF_TURQUOISE()});
+    tagTaxonomy.add(Tag::KeyWho(), new Tag{Tag::KeyWho(), &tagTaxonomy, Color::MF_TURQUOISE()});
     taxonomies[tagTaxonomy.getName()] = &tagTaxonomy;
 
     // taxonomy: outline types
