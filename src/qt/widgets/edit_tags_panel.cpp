@@ -64,6 +64,13 @@ EditTagsPanel::~EditTagsPanel()
 {
 }
 
+void EditTagsPanel::clearTagList()
+{
+    lineEdit->clear();
+    listViewStrings.clear();
+    ((QStringListModel*)listView->model())->setStringList(listViewStrings);
+}
+
 void EditTagsPanel::refreshOntologyTags()
 {
     completerStrings.clear();
@@ -80,6 +87,7 @@ void EditTagsPanel::refreshOntologyTags()
 void EditTagsPanel::refresh(const vector<const Tag*>& noteTags)
 {
     lineEdit->clear();
+    clearTagList();
     refreshOntologyTags();
 
     listViewStrings.clear();

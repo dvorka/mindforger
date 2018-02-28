@@ -110,6 +110,7 @@ void OutlineNewDialog::GeneralTab::clean()
 {
     nameEdit->selectAll();
     nameEdit->setFocus();
+    editTagsGroup->clearTagList();
 }
 
 /*

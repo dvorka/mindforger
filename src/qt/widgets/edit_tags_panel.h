@@ -71,6 +71,7 @@ public:
     EditTagsPanel &operator=(const EditTagsPanel&&) = delete;
     ~EditTagsPanel();
 
+    void clearTagList();
     void refreshOntologyTags();
     void refresh(const std::vector<const Tag*>& noteTags);
     const std::vector<const Tag*>* getTags();
