@@ -157,7 +157,6 @@ OutlineNewDialog::OutlineNewDialog(
         const QString& memoryDirPath,
         // IMPROVE Does model belong to View? Set values from presenter & keep model classes in presenter only?
         Ontology& ontology,
-        vector<Stencil*>& stencils,
         QWidget *parent)
     : QDialog(parent), ontology(ontology)
 {
@@ -171,16 +170,8 @@ OutlineNewDialog::OutlineNewDialog(
         }
         combo->setCurrentText(QString::fromStdString(ontology.getDefaultOutlineType()->getName()));
     }
-    if(stencils.size()) {
-        QComboBox* combo=generalTab->getStencilCombo();
-        combo->addItem("", QVariant::fromValue<const Stencil*>(nullptr));
-        for(Stencil* t:stencils) {
-            if(t->getType()==ResourceType::OUTLINE) {
-                combo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<Stencil*>(t));
-            }
-        }
-        combo->setCurrentText("");
-    }
+
+    // stencils may be added/removed/changed therefore they are updated anytime dialog is shown
     tabWidget->addTab(generalTab, tr("General"));
 
     advancedTab = new AdvancedTab(memoryDirPath, this);
@@ -244,9 +235,22 @@ const std::vector<const Tag*>* OutlineNewDialog::getTags() const
     return generalTab->getTags();
 }
 
-void OutlineNewDialog::show()
+void OutlineNewDialog::show(vector<Stencil*>& stencils)
 {
     generalTab->clean();
+
+    // IMPROVE reload stencils only if dirty
+    if(stencils.size()) {
+        QComboBox* combo=generalTab->getStencilCombo();
+        combo->addItem("", QVariant::fromValue<const Stencil*>(nullptr));
+        for(Stencil* t:stencils) {
+            if(t->getType()==ResourceType::OUTLINE) {
+                combo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<Stencil*>(t));
+            }
+        }
+        combo->setCurrentText("");
+    }
+
     refreshPath(generalTab->getNameEdit()->text());
     QDialog::show();
 }

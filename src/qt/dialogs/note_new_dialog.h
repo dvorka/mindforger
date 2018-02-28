@@ -52,10 +52,7 @@ private:
     QDialogButtonBox *buttonBox;
 
 public:
-    explicit NoteNewDialog(
-            Ontology& ontology,
-            std::vector<Stencil*>& stencils,
-            QWidget* parent);
+    explicit NoteNewDialog(Ontology& ontology, QWidget* parent);
     NoteNewDialog(const NoteNewDialog&) = delete;
     NoteNewDialog(const NoteNewDialog&&) = delete;
     NoteNewDialog &operator=(const NoteNewDialog&) = delete;
@@ -68,7 +65,7 @@ public:
     const std::vector<const Tag*>* getTags() const;
     int getProgress() const;
 
-    void show(const QString& path);
+    void show(const QString& path, std::vector<Stencil*>& stencils);
 };
 
 /**

@@ -58,7 +58,6 @@ public:
     explicit OutlineNewDialog(
             const QString& memoryDirPath,
             Ontology& ontology,
-            std::vector<Stencil*>& stencils,
             QWidget* parent);
     OutlineNewDialog(const OutlineNewDialog&) = delete;
     OutlineNewDialog(const OutlineNewDialog&&) = delete;
@@ -74,7 +73,7 @@ public:
     int getProgress() const;
     const std::vector<const Tag*>* getTags() const;
 
-    void show();
+    void show(std::vector<Stencil*>& stencils);
 
 private slots:
     void refreshPath(const QString &);

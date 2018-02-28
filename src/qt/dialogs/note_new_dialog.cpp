@@ -132,7 +132,6 @@ NoteNewDialog::AdvancedTab::~AdvancedTab()
 NoteNewDialog::NoteNewDialog(
         // IMPROVE Does model belong to View? Set values from presenter & keep model classes in presenter only?
         Ontology& ontology,
-        vector<Stencil*>& stencils,
         QWidget* parent)
     : QDialog(parent), ontology(ontology)
 {
@@ -150,16 +149,7 @@ NoteNewDialog::NoteNewDialog(
     // IMPROVE i18n - text is localized, QVariant keeps a constant (e.g. enum)
     combo->addItem("First child");
     combo->addItem("Last child");
-    if(stencils.size()) {
-        QComboBox* combo=generalTab->getStencilCombo();
-        combo->addItem("", QVariant::fromValue<const Stencil*>(nullptr));
-        for(Stencil* t:stencils) {
-            if(t->getType()==ResourceType::NOTE) {
-                combo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<Stencil*>(t));
-            }
-        }
-        combo->setCurrentText("");
-    }
+    // stencils may be added/changed/removed - refreshed each time dialog is shown
     tabWidget->addTab(generalTab, tr("General"));
 
     advancedTab = new AdvancedTab{this};
@@ -211,9 +201,26 @@ int NoteNewDialog::getProgress() const
     return generalTab->getProgressSpin()->value();
 }
 
-void NoteNewDialog::show(const QString& path)
+void NoteNewDialog::show(const QString& path, vector<Stencil*>& stencils)
 {
     generalTab->clean();
+
+    // IMPROVE re-load only if stencils are dirty
+    if(stencils.size()) {
+        QComboBox* combo=generalTab->getStencilCombo();
+        combo->setEnabled(true);
+        combo->addItem("", QVariant::fromValue<const Stencil*>(nullptr));
+        for(Stencil* t:stencils) {
+            if(t->getType() == ResourceType::NOTE) {
+                combo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<Stencil*>(t));
+            }
+        }
+        combo->setCurrentText("");
+    } else {
+        generalTab->getStencilCombo()->clear();
+        generalTab->getStencilCombo()->setEnabled(false);
+    }
+
     advancedTab->refreshLocation(path);
     QDialog::show();
 }

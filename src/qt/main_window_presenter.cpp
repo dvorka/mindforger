@@ -42,12 +42,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     newOutlineDialog = new OutlineNewDialog{
                 QString::fromStdString(config.getMemoryPath()),
                 mind->remind().getOntology(),
-                mind->remind().getStencils(ResourceType::OUTLINE),
                 &view};
-    newNoteDialog = new NoteNewDialog{
-                mind->remind().getOntology(),
-                mind->remind().getStencils(ResourceType::NOTE),
-                &view};
+    newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
     ftsDialog = new FtsDialog{&view};
     findOutlineByNameDialog = new FindOutlineByNameDialog{&view};
     findNoteByNameDialog = new FindNoteByNameDialog{&view};
@@ -361,7 +357,7 @@ void MainWindowPresenter::doActionViewFullscreen()
 
 void MainWindowPresenter::doActionOutlineNew()
 {
-    newOutlineDialog->show();
+    newOutlineDialog->show(mind->remind().getStencils(ResourceType::OUTLINE));
 }
 
 void MainWindowPresenter::handleOutlineNew()
@@ -470,7 +466,9 @@ void MainWindowPresenter::doActionNoteNew()
        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE))
        // IMPROVE if note is edited, show warning that note must be saved
     {
-        newNoteDialog->show(QString::fromStdString(orloj->getOutlineView()->getCurrentOutline()->getKey()));
+        newNoteDialog->show(
+                    QString::fromStdString(orloj->getOutlineView()->getCurrentOutline()->getKey()),
+                    mind->remind().getStencils(ResourceType::NOTE));
     } else {
         QMessageBox::critical(&view, tr("New Note"), tr("Open and view an Outline to create new Note."));
     }
