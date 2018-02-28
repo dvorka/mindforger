@@ -233,8 +233,9 @@ SOURCES += \
 #
 # - GCC: -std=c++0x ~ -std=c++11
 
+# Enable MindForger test/profiling code
 QMAKE_CXX = ccache g++
-QMAKE_CXXFLAGS += -pedantic -std=c++11
+QMAKE_CXXFLAGS += -pedantic -std=c++11 -DDO_M8R_DEBUG
 
 TRANSLATIONS = src/qt/translations/mindforger_en.ts \
     ../../src/qt/translations/mindforger_de.ts \
@@ -245,7 +246,7 @@ TRANSLATIONS = src/qt/translations/mindforger_en.ts \
 RESOURCES += \
     ../../mf-resources.qrc
 
-# GTest unit test framework library dependencies
+# Enable GTest unit test framework library by linking dependencies
 #unix|win32: LIBS += -lgtest
 #unix|win32: LIBS += -lpthread
 

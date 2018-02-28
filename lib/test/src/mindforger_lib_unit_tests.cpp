@@ -45,13 +45,13 @@ using namespace std;
  */
 char* getMindforgerGitHomePath()
 {
-    return getenv("MINDFORGER_GIT_PATH");
+    return getenv("M8R_GIT_PATH");
 }
 
 int main(int argc, char **argv)
 {
     if(!getMindforgerGitHomePath()) {
-        cout << "MINDFORGER_GIT_PATH environment variable must be set to run unit tests!" << endl;
+        cout << "M8R_GIT_PATH environment variable must be set to run unit tests!" << endl;
         return 1;
     } else {
         testing::InitGoogleTest(&argc, argv);

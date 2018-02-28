@@ -111,7 +111,7 @@ void NoteEditPresenter::slotSaveNote()
         // remember
         mainPresenter->getMind()->remind().remember(currentNote->getOutlineKey());
         mainPresenter->getStatusBar()->showInfo(tr("Note saved!"));
-#ifdef DO_MF_DEBUG
+#ifdef DO_M8F_DEBUG
         qDebug() << "Note " << QString::fromStdString(currentNote->getName()) << " saved!";
 #endif
     } else {

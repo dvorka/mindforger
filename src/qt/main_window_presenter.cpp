@@ -82,7 +82,7 @@ void MainWindowPresenter::initView()
 {
 }
 
-#ifdef DO_MF_DEBUG
+#ifdef DO_M8F_DEBUG
 void MainWindowPresenter::doActionMindHack()
 {
     qDebug() << "[MindHack] Current facet: " << orloj->getFacet();
@@ -673,7 +673,7 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
         QString{tr("About MindForger")},
         QString{
             "<b>MindForger " MINDFORGER_VERSION "</b>"
-#ifdef DO_MF_DEBUG
+#ifdef DO_M8F_DEBUG
             "&nbsp;&nbsp;&nbsp;&nbsp;" __DATE__ " " __TIME__
             "&nbsp;&nbsp;&nbsp;&nbsp; Qt " QT_VERSION_STR
 #endif

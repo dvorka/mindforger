@@ -17,44 +17,93 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
+#export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
+export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
+export OPTION_RUN_ALL_TESTS=yes # comment this line to disable
+
+export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsNoMetadata"
+#export OPTION_TEST="MarkdownParserTestCase.*"
+#export OPTION_TEST="MarkdownParserTestCase.MarkdownParserSections"
+#export OPTION_TEST="MarkdownParserTestCase.MarkdownParserSectionsNoMetadata"
+#export OPTION_TEST="RepositoryIndexerTestCase.*"
+#export OPTION_TEST="RepositoryIndexerTestCase.RepositoryTypeDetection"
+#export OPTION_TEST="RepositoryIndexerTestCase.MarkdownRepository"
+#export OPTION_TEST="RepositoryIndexerTestCase.MindForgerRepository"
+#export OPTION_TEST="RepositoryIndexerTestCase.MindForgerFile"
+#export OPTION_TEST="RepositoryIndexerTestCase.MarkdownFile"
+#export OPTION_TEST="NoteTestCase.*"
+#export OPTION_TEST="MindTestCase.LearnAmnesiaLearn"
+#export OPTION_TEST="DateTimeGearTestCase.Immutability"
+#export OPTION_TEST="ConfigurationTestCase.*"
+#export OPTION_TEST="ConfigurationTestCase.FromConstructor"
+#export OPTION_TEST="ConfigurationTestCase.Environment"
+#export OPTION_TEST="MarkdownParserTestCase.Bug37Notrailing"
+#export OPTION_TEST="MarkdownParserBugsTestCase.*"
+#export OPTION_TEST="NoteTestCase.PromoteDemoteUpDownNote"
+#export OPTION_TEST="NoteTestCase.RefactorNote"
+#export OPTION_TEST="OutlineTestCase.CloneOutline"
+#export OPTION_TEST="StringGearTestCase.Split"
+
+# environment - to be specified in .bashrc or elsewhere:
+#   export M8R_CPU_CORES=7
+#   export M8R_GIT_PATH=/home/dvorka/p/mindforger/git/mindforger
+
+if [ -z ${M8R_CPU_CORES} ]
+then
+    echo "Set M8R_CPU_CORES env var to specify number of CPU cores to be used by compiler/make"
+    exit 1
+fi
+if [ -z ${M8R_GIT_PATH} ]
+then
+    echo "Set M8R_GIT_PATH env var to specify location of MindForger Git repository"
+    exit 1
+fi
+if [ ${OPTION_RUN_VALGRIND} ] 
+then
+    export M8R_VALGRIND="valgrind --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
+    #export M8R_VALGRIND="valgrind -v --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
+else
+    export M8R_VALGRIND=
+fi
+if [ ${OPTION_RUN_GDB} ] 
+then
+    export M8R_GDB="gdb"
+else
+    export M8R_GDB=
+fi
+
 export SCRIPT_DIR=`pwd`
 export BUILD_DIR=${SCRIPT_DIR}/../lib/test
-export CORES=7
 
-# run all tests
-cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make -j${CORES} && ./mindforger-lib-unit-tests
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make -j${CORES} && gdb ./mindforger-lib-unit-tests
 
-# run selected test(s)
-# --gtest-filter=XYZ.* ... filter tests
-# --gtest_repeat=1000  ... performance/load tests
-#export TEST_NAME="MarkdownParserTestCase.MarkdownLexerSectionsNoMetadata"
-#export TEST_NAME="MarkdownParserTestCase.*"
-#export TEST_NAME="MarkdownParserTestCase.MarkdownParserSections"
-#export TEST_NAME="MarkdownParserTestCase.MarkdownParserSectionsNoMetadata"
-#export TEST_NAME="RepositoryIndexerTestCase.*"
-#export TEST_NAME="RepositoryIndexerTestCase.RepositoryTypeDetection"
-#export TEST_NAME="RepositoryIndexerTestCase.MarkdownRepository"
-#export TEST_NAME="RepositoryIndexerTestCase.MindForgerRepository"
-#export TEST_NAME="RepositoryIndexerTestCase.MindForgerFile"
-#export TEST_NAME="RepositoryIndexerTestCase.MarkdownFile"
-#export TEST_NAME="NoteTestCase.*"
-#export TEST_NAME="MindTestCase.LearnAmnesiaLearn"
-#export TEST_NAME="DateTimeGearTestCase.Immutability"
-#export TEST_NAME="ConfigurationTestCase.*"
-#export TEST_NAME="ConfigurationTestCase.FromConstructor"
-#export TEST_NAME="ConfigurationTestCase.Environment"
-#export TEST_NAME="MarkdownParserTestCase.Bug37Notrailing"
-#export TEST_NAME="MarkdownParserBugsTestCase.*"
-#export TEST_NAME="NoteTestCase.PromoteDemoteUpDownNote"
-#export TEST_NAME="NoteTestCase.RefactorNote"
-#export TEST_NAME="OutlineTestCase.CloneOutline"
-#export TEST_NAME="StringGearTestCase.Split"
+# Compile source w/ debug code enabled and various test libs linked to get test-ready binary
+#  - use -g GCC option to get line information
+# Valgrind
+#  - use --track-origins=yes Valgrind option to better track root cause of problems
+#    like "Conditional jump using uninitialized values"
+#  - use --leak-check=full
+#  - use --show-leak-kinds=all
+#  - use -v only if you want a lot of info (might be too much)
+if [ ${OPTION_RECOMPILE} ]
+then
+    cd ${BUILD_DIR} && make clean && qmake mindforger-lib-unit-tests.pro && make -j${M8R_CPU_CORES}
+fi
 
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make -j${CORES} && ./mindforger-lib-unit-tests --gtest_filter=${TEST_NAME}
-#cd ${BUILD_DIR} && qmake mindforger-lib-unit-tests.pro && make clean && make -j${CORES} && gdb --args ./mindforger-lib-unit-tests --gtest_filter=${TEST_NAME}
+# logs
+export TEST_LOG_FILE="${M8R_GIT_PATH}/TEST_LOG_LIB.txt"
+rm -vf ${TEST_LOG_FILE}
 
-# clean all to avoid side effects next time
-#cd ${BUILD_DIR} && make clean
+# run test(s)
+if [ ${OPTION_RUN_ALL_TESTS} ]
+then
+    cd ${BUILD_DIR} && ${M8R_GDB} ${M8R_VALGRIND} ./mindforger-lib-unit-tests #> ${TEST_LOG_FILE} 2>&1
+else
+    # run selected test(s)
+    # --gtest-filter=XYZ.* ... filter tests
+    # --gtest_repeat=1000  ... performance/load tests
+
+    cd ${BUILD_DIR} && ${M8R_GDB} ${M8R_VALGRIND} ./mindforger-lib-unit-tests --gtest_filter=${OPTION_TEST} #> ${TEST_LOG_FILE} 2>&1
+fi
 
 # eof

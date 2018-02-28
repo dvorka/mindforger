@@ -19,9 +19,9 @@
 #ifndef M8R_DEBUG_H_
 #define M8R_DEBUG_H_
 
-#define DO_MF_DEBUG
+#define DO_M8F_DEBUG
 
-#ifdef DO_MF_DEBUG
+#ifdef DO_M8F_DEBUG
 #include <chrono>
 #include <iostream>
     #define MF_DEBUG(x) do { std::cerr << x; } while (0)

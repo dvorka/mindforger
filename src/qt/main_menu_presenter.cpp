@@ -27,7 +27,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     this->maindWindowPresenter = mwp;
 
     // menu: mind
-#ifdef DO_MF_DEBUG
+#ifdef DO_M8F_DEBUG
     QObject::connect(view->actionMindHack, SIGNAL(triggered()),mwp, SLOT(doActionMindHack()));
 #endif
     QObject::connect(view->actionMindThink, SIGNAL(triggered()), mwp, SLOT(doActionMindThink()));
@@ -48,7 +48,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 
     // menu: view
     QObject::connect(view->actionViewOutlines, SIGNAL(triggered()), mwp, SLOT(doActionViewOutlines()));
-#ifdef DO_MF_DEBUG
+#ifdef DO_M8F_DEBUG
     QObject::connect(view->actionViewCli, SIGNAL(triggered()), mwp, SLOT(doActionCli()));
 #else
     QObject::connect(view, SIGNAL(showCli()), mwp, SLOT(doActionCli()));

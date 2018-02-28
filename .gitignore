@@ -3,3 +3,4 @@ Makefile
 *.o
 *.*~
 moc_*.cpp
+TEST_LOG*.*

@@ -92,7 +92,7 @@ public:
     bool isReadOnly() const { return readOnly; }
     void setReadOnly(bool readOnly) { this->readOnly = readOnly; }
 
-#ifdef DO_MF_DEBUG
+#ifdef DO_M8F_DEBUG
     void print() const {
         MF_DEBUG(std::endl << "Path: " << path << ", file: " << file << ", type: " << type << ", mode: " << mode << ", RD_ONLY: " << readOnly);
     }

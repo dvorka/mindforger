@@ -105,7 +105,7 @@ public:
 
 public slots:
     // mind
-#ifdef DO_MF_DEBUG
+#ifdef DO_M8F_DEBUG
     void doActionMindHack();
 #endif
     void doActionMindThink();

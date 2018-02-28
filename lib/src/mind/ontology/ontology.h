@@ -165,7 +165,7 @@ public:
 
     const Clazz& getThing() const { return thing; }
 
-#ifdef DO_MF_DEBUG
+#ifdef DO_M8F_DEBUG
     void print() const {}
 #endif
 

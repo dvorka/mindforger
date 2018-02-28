@@ -16,8 +16,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
+
+export SCRIPT_DIR=`pwd`
+
 # Run all unit tests - both lib and Qt
-#
+./test-lib-units.sh
+cd ${SCRIPT_DIR} && ./test-gui.sh
 
 # eof

@@ -27,7 +27,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: mind
 
-#ifdef DO_MF_DEBUG
+#ifdef DO_M8F_DEBUG
     actionMindHack = new QAction(tr("Mind Hack"), mainWindow);
     actionMindHack->setStatusTip(tr("Mind hacking and debugging hook"));
     actionMindHack->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
@@ -95,7 +95,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionExit->setStatusTip(tr("Leave application"));
 
     menuMind = qMenuBar->addMenu(tr("&Mind"));
-#ifdef DO_MF_DEBUG
+#ifdef DO_M8F_DEBUG
     menuMind->addAction(actionMindHack);
     menuMind->addSeparator();
 #endif
@@ -169,7 +169,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewDwell->setStatusTip(tr("Open memory dwell"));
     actionViewDwell->setEnabled(false);
 
-#ifdef DO_MF_DEBUG
+#ifdef DO_M8F_DEBUG
     actionViewCli = new QAction(tr("&CLI"), mainWindow);
     actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
     actionViewCli->setStatusTip(tr("Toggle command line"));
@@ -211,7 +211,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewStencils);
     menuView->addAction(actionViewNavigator);
     menuView->addAction(actionViewDwell);
-#ifdef DO_MF_DEBUG
+#ifdef DO_M8F_DEBUG
     menuView->addAction(actionViewCli);
 #endif
     menuView->addAction(actionViewLimbo);
