@@ -15,6 +15,8 @@ Big thanks to 3rd party content authors:
 * Jamie McGowan (Remarkable - inspiration)
 * Mark Summerfield (Advanced Qt Programming book examples - code snippets)
 * Natacha Porte (Upskirt/Sundown/Hoedown - code)
+* Raimund Hocke (SikuliX - GUI automation testing)
+* Google (Google C++ unit testing framework)
 * Andres Mejia (Aho-Corasick algoritm implementation - code snippets)
 * Richard Stallman (GNU and GNU GPL - for passionate software freedom activism)
 
@@ -22,4 +24,4 @@ See [licenses](./licenses) folder for 3rd party content licensing details.
 
 Acknowledgements to reviewers and testers:
 
-* ...
+* Floex
