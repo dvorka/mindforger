@@ -21,7 +21,7 @@
 
 namespace m8r {
 
-// constexpr static char const* MINDFORGER_VERSION = "18.1.5 alpha";
+// constexpr char const* MINDFORGER_VERSION = "18.1.5 alpha";
 // C++ character const/constexpr concatenation patterns via templates are crazy > using C-style define
 
 // versionning scheme: https://semver.org/
