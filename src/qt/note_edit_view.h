@@ -61,6 +61,8 @@ public:
     QString getDescription() const { return noteEditor->toPlainText(); }
     bool isDescriptionEmpty() const { return noteEditor->toPlainText().isEmpty(); }
 
+    void giveFocusToEditor() { noteEditor->setFocus(); }
+
 private slots:
     void slotOpenNotePropertiesEditor();
     void slotSaveNote();

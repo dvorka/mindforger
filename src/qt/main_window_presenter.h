@@ -149,6 +149,7 @@ public slots:
     void doActionNoteClone();
     void doActionRefactorNoteToOutline();
     void handleRefactorNoteToOutline();
+    void doActionNoteEdit();
     void doActionNoteSave();
     void doActionNoteForget();
     // help

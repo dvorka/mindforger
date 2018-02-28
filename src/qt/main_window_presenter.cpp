@@ -476,6 +476,23 @@ void MainWindowPresenter::doActionNoteNew()
     }
 }
 
+void MainWindowPresenter::doActionNoteEdit()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+    ) {
+        Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+        if(note) {
+            orloj->showFacetNoteEdit(note);
+            return;
+        }
+    }
+    QMessageBox::critical(&view, tr("Edit Note"), tr("Please select a Note to edit."));
+}
+
 void MainWindowPresenter::doActionNoteForget()
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)

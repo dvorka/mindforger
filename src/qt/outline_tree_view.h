@@ -91,6 +91,7 @@ signals:
     void signalChangeFirst();
     void signalChangeLast();
 
+    void signalEdit();
     void signalForget();
 };
 
