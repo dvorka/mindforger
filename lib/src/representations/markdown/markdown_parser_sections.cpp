@@ -94,8 +94,20 @@ void MarkdownParserSections::markdownRule()
 {
     MarkdownAstNodeSection* section;
     size_t offset = 0;
+
+    preambleRule(offset);
     while((section=sectionRule(offset))!=nullptr) {
         ast->push_back(section);
+    }
+}
+
+void MarkdownParserSections::preambleRule(size_t& offset)
+{
+    if(lookahead(MarkdownLexemType::SECTION,offset+1) == nullptr) {
+        MarkdownAstNodeSection* result = new MarkdownAstNodeSection();
+        result->setPreamble();
+        result->setBody(sectionBodyRule(offset));
+        ast->push_back(result);
     }
 }
 

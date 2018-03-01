@@ -81,6 +81,7 @@ private:
     inline void skipSectionBody(size_t& offset);
 
     void markdownRule();
+    void preambleRule(size_t& offset);
     MarkdownAstNodeSection* sectionRule(size_t& offset);
     MarkdownAstNodeSection* sectionHeaderRule(size_t& offset);
     std::string* sectionNameRule(size_t& offset);
@@ -93,6 +94,7 @@ private:
     std::string* parsePropertyValueString(size_t& offset);
     std::vector<std::string*>* parsePropertyValueTags(size_t& offset);
     std::vector<std::string*>* sectionBodyRule(size_t& offset);
+
     void skipBr(size_t& offset);
 };
 

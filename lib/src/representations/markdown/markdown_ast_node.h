@@ -152,7 +152,14 @@ public:
 
 class MarkdownAstNodeSection : public MarkdownAstNode
 {
+public:
+    // IMPROVE constexpr
+    static u_int16_t PREAMBLE;
+
 protected:
+    /**
+     * @brief Regular section depth [0,0xFFFF) or preamble section marker (PREAMBLE ~ no depth).
+     */
     u_int16_t depth;
     MarkdownAstSectionMetadata metadata;
     std::vector<std::string*>* body;
@@ -173,6 +180,9 @@ public:
     u_int16_t getDepth() const;
     void setDepth(u_int16_t depth);
     MarkdownAstSectionMetadata& getMetadata();
+
+    void setPreamble() { depth = PREAMBLE; }
+    bool isPreambleSection() { return depth == PREAMBLE; }
 };
 
 } // m8r namespace

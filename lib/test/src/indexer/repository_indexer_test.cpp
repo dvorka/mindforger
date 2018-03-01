@@ -29,6 +29,7 @@ using namespace std;
 
 extern char* getMindforgerGitHomePath();
 extern void dumpOutline(m8r::Outline*&);
+extern void createEmptyRepository(string& repositoryDir, map<string,string>& pathToContent);
 
 TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
 {

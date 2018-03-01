@@ -203,7 +203,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
 
     EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
     EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
-    EXPECT_EQ(memory.getOntology().getTags().size(), 7);
+    EXPECT_EQ(memory.getOntology().getTags().size(), 12);
 
     mind.think();
 
@@ -216,7 +216,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(memory.getNotesCount(), 8);
     EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
     EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
-    EXPECT_EQ(memory.getOntology().getTags().size(), 10);
+    EXPECT_EQ(memory.getOntology().getTags().size(), 15);
 
     // 2/3 amnesia - assert mind and memory cleaned (+Valgrind memory check)
     mind.amnesia();
@@ -228,7 +228,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(memory.getNotesCount(), 0);
     EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
     EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
-    EXPECT_EQ(memory.getOntology().getTags().size(), 10); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
+    EXPECT_EQ(memory.getOntology().getTags().size(), 15); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
 
     // 3/3 learn - MARKDOWN repository (not MINDFORGER repository as above)
     repositoryPath.assign("/tmp/mf-unit-amnesia");
@@ -281,7 +281,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(memory.getStencils(m8r::ResourceType::NOTE).size(), 0);
     EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
     EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
-    EXPECT_EQ(memory.getOntology().getTags().size(), 10); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
+    EXPECT_EQ(memory.getOntology().getTags().size(), 15); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
 }
 
 // TODO start w/ empty repository (do I need it?)

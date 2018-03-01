@@ -775,7 +775,11 @@ string* MarkdownLexerSections::getText(const MarkdownLexem* lexem)
                 lines[lexem->getOff()] = nullptr;
                 return result;
             } else {
-                return new string(lines[lexem->getOff()]->substr(lexem->getIdx(),lexem->getLng()));
+                if(lexem->getLng()==0) {
+                    return new string{};
+                } else {
+                    return new string{lines[lexem->getOff()]->substr(lexem->getIdx(),lexem->getLng())};
+                }
             }
         }
     }
@@ -795,4 +799,3 @@ void MarkdownLexerSections::fixBackDeclaredSection(const unsigned short offset, 
 }
 
 } // m8r namespace
-

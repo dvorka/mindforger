@@ -20,6 +20,7 @@
 
 namespace m8r {
 
+// IMPROVE constexpr
 unsigned short int MarkdownLexem::NO_TEXT = USHRT_MAX;
 unsigned short int MarkdownLexem::WHOLE_LINE = USHRT_MAX;
 

@@ -139,7 +139,7 @@ void dumpLexems(const vector<MarkdownLexem*>& lexems)
             } else {
                 cout << " " << lexems.at(i)->getOff();
                 cout << " " << lexems.at(i)->getIdx();
-                cout << " " << lexems.at(i)->getLng();
+                cout << " " << (lexems.at(i)->getLng()==MarkdownLexem::WHOLE_LINE?"*":std::to_string(lexems.at(i)->getLng()));
             }
         }
     } else {
@@ -208,7 +208,20 @@ TEST(MarkdownParserTestCase, MarkdownLexerSections)
 
     // minimal MD
     lexer.tokenize();
-    dumpLexems(lexer.getLexems());
+    const std::vector<MarkdownLexem*>& lexems = lexer.getLexems();
+    dumpLexems(lexems);
+
+    // asserts
+    EXPECT_EQ(lexems[0]->getType(), MarkdownLexemType::BEGIN_DOC);
+
+    EXPECT_EQ(lexems[1]->getType(), MarkdownLexemType::SECTION);
+    EXPECT_EQ(lexems[1]->getDepth(), 0);
+
+    EXPECT_EQ(lexems[2]->getType(), MarkdownLexemType::WHITESPACES);
+    EXPECT_EQ(lexems[3]->getType(), MarkdownLexemType::TEXT);
+    EXPECT_EQ(lexems[3]->getOff(), 0);
+    EXPECT_EQ(lexems[3]->getIdx(), 2);
+    EXPECT_EQ(lexems[3]->getLng(), 9);
 }
 
 TEST(MarkdownParserTestCase, MarkdownLexerSectionsNoMetadata)
@@ -221,6 +234,27 @@ TEST(MarkdownParserTestCase, MarkdownLexerSectionsNoMetadata)
     // minimal MD
     lexer.tokenize();
     dumpLexems(lexer.getLexems());
+}
+
+TEST(MarkdownParserTestCase, MarkdownLexerSectionsPreamble)
+{
+    unique_ptr<string> fileName
+            = unique_ptr<string>(new string{"/lib/test/resources/apiary-repository/memory/01. Simplest API.md"});
+    fileName.get()->insert(0, getMindforgerGitHomePath());
+    MarkdownLexerSections lexer(fileName.get());
+
+    // tokenize
+    lexer.tokenize();
+    const std::vector<MarkdownLexem*>& lexems = lexer.getLexems();
+    dumpLexems(lexems);
+
+    // asserts
+    EXPECT_EQ(lexems[0]->getType(), MarkdownLexemType::BEGIN_DOC);
+    EXPECT_EQ(lexems[1]->getType(), MarkdownLexemType::LINE);
+    EXPECT_EQ(lexems[2]->getType(), MarkdownLexemType::BR);
+    EXPECT_EQ(lexems[3]->getType(), MarkdownLexemType::BR);
+    EXPECT_EQ(lexems[4]->getType(), MarkdownLexemType::SECTION);
+    EXPECT_EQ(lexems[4]->getDepth(), 0);
 }
 
 TEST(MarkdownParserTestCase, MarkdownParserSections)
@@ -239,6 +273,35 @@ TEST(MarkdownParserTestCase, MarkdownParserSections)
     parser.parse();
     EXPECT_TRUE(parser.hasMetadata());
     dumpAst(parser.getAst());
+    cout << endl << "- DONE ----------------------------------------------";
+    cout << endl;
+}
+
+TEST(MarkdownParserTestCase, MarkdownParserSectionsPreamble)
+{
+    unique_ptr<string> fileName
+            = unique_ptr<string>(new string{"/lib/test/resources/apiary-repository/memory/01. Simplest API.md"});
+    fileName.get()->insert(0, getMindforgerGitHomePath());
+
+    // minimal MD
+    cout << endl << "- Lexer ----------------------------------------------";
+    MarkdownLexerSections lexer(fileName.get());
+    lexer.tokenize();
+    const std::vector<MarkdownLexem*>& lexems = lexer.getLexems();
+    dumpLexems(lexems);
+    EXPECT_EQ(lexems.size(), 62);
+
+    cout << endl << "- Parser ----------------------------------------------";
+    MarkdownParserSections parser(lexer);
+    parser.parse();
+    EXPECT_TRUE(!parser.hasMetadata());
+    std::vector<MarkdownAstNodeSection*>* ast = parser.getAst();
+    dumpAst(ast);
+    EXPECT_EQ(ast->size(), 4);
+    // preamble section
+    EXPECT_TRUE(ast->at(0)->isPreambleSection());
+    EXPECT_EQ(ast->at(0)->getText(), nullptr);
+
     cout << endl << "- DONE ----------------------------------------------";
     cout << endl;
 }
@@ -361,6 +424,53 @@ TEST(MarkdownParserTestCase, MarkdownRepresentation)
     }
 
     cout << endl << "- DONE ----------------------------------------------";
+}
+
+TEST(MarkdownParserTestCase, MarkdownRepresentationPreamble)
+{
+    string repositoryPath{"/lib/test/resources/apiary-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::Configuration& configuration = m8r::Configuration::getInstance();
+    configuration.setActiveRepository(configuration.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    m8r::Ontology ontology{configuration};
+
+    // parse
+    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    unique_ptr<string> fileName
+            = unique_ptr<string>(new string{"/lib/test/resources/apiary-repository/memory/01. Simplest API.md"});
+    fileName.get()->insert(0, getMindforgerGitHomePath());
+    File file{*fileName.get()};
+    m8r::Outline* o = mdr.outline(file);
+
+    // asserts
+    EXPECT_NE(o, nullptr);
+    EXPECT_EQ(o->getNotesCount(), 2);
+
+    cout << endl << "- Preamble ---";
+    EXPECT_EQ(o->getPreamble().size(), 2);
+    cout << endl << "'" << *(o->getPreamble()[0]) << "'";
+    cout << endl << "'" << *(o->getPreamble()[1]) << "'";
+    EXPECT_EQ(*(o->getPreamble()[0]), "FORMAT: 1A");
+    EXPECT_EQ(*(o->getPreamble()[1]), "");
+    EXPECT_TRUE(o->isApiaryBlueprint());
+
+
+    cout << endl << "- Outline ---";
+    cout << endl << "'" << o->getName() << "'";
+    EXPECT_EQ(o->getName(), "The Simplest API");
+    EXPECT_EQ(o->getDescription().size(), 15);
+
+    cout << endl << "- N[0] ---";
+    cout << endl << "'" << o->getNotes()[0]->getName() << "'";
+    EXPECT_EQ(o->getNotes()[0]->getName(), "API Blueprint");
+    EXPECT_EQ(o->getNotes()[0]->getDescription().size(), 3);
+
+    cout << endl << "- N[1] ---";
+    cout << endl << "'" << o->getNotes()[1]->getName() << "'";
+    EXPECT_EQ(o->getNotes()[1]->getName(), "GET /message");
+
+    cout << endl << "- DONE ----------------------------------------------" << endl;
+    delete o;
 }
 
 TEST(MarkdownParserTestCase, FileSystemPersistence)

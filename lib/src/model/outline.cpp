@@ -38,6 +38,24 @@ Outline::Outline(const OutlineType* type)
     outlineDescriptorAsNote = new Note(&NOTE_4_OUTLINE_TYPE, this);
 }
 
+Outline::~Outline() {
+    for(string* d:description) {
+        delete d;
+    }
+    for(string* d:preamble) {
+        delete d;
+    }
+    for(Note* note:notes) {
+        delete note;
+    }
+
+    // description is shared between this outline and Note
+    if(outlineDescriptorAsNote) {
+        outlineDescriptorAsNote->clear();
+        delete outlineDescriptorAsNote;
+    }
+}
+
 void Outline::resetClonedOutline(Outline* o)
 {
     o->setReads(1);
@@ -61,6 +79,11 @@ Outline::Outline(const Outline& o)
     if(o.description.size()) {
         for(string* s:o.description) {
             description.push_back(new string(*s));
+        }
+    }
+    if(o.preamble.size()) {
+        for(string* s:o.preamble) {
+            preamble.push_back(new string(*s));
         }
     }
 
@@ -352,21 +375,6 @@ void Outline::addTag(const Tag* tag)
 void Outline::setUrgency(int8_t urgency)
 {
     this->urgency = urgency;
-}
-
-Outline::~Outline() {
-    for(string* d:description) {
-        delete d;
-    }
-    for(Note* note:notes) {
-        delete note;
-    }
-
-    // description is shared between this outline and Note
-    if(outlineDescriptorAsNote) {
-        outlineDescriptorAsNote->clear();
-        delete outlineDescriptorAsNote;
-    }
 }
 
 u_int32_t m8r::Outline::getReads() const
@@ -827,6 +835,37 @@ void Outline::moveNoteToLast(Note* note, Outline::Patch* patch)
     }
 }
 
+const vector<string*>& Outline::getPreamble() const
+{
+    return preamble;
+}
+
+string Outline::getPreambleAsString() const
+{
+    // IMPROVE cache narrowed preamble for performance
+    string result{};
+    if(preamble.size()) {
+        for(string *s:preamble) {
+            result.append(*s);
+            // IMPROVE endl
+            result.append("\n");
+        }
+    }
+    return result;
+}
+
+void Outline::addPreambleLine(string *line)
+{
+    if(line) {
+        preamble.push_back(line);
+    }
+}
+
+void Outline::setPreamble(const vector<string*>& preamble)
+{
+    this->preamble = preamble;
+}
+
 const vector<string*>& Outline::getDescription() const
 {
     return description;
@@ -883,5 +922,15 @@ Note* Outline::getOutlineDescriptorAsNote()
     outlineDescriptorAsNote->setDescription(description);
     return outlineDescriptorAsNote;
 }
+
+bool Outline::isApiaryBlueprint()
+{
+    if(preamble.size() && preamble[0]->size()>7 && stringStartsWith(*preamble[0],"FORMAT:") ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 } // m8r namespace

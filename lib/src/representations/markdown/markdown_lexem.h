@@ -70,6 +70,7 @@ enum class MarkdownLexemType
 class MarkdownLexem
 {
 public:
+    // IMPROVE constexpr
     static unsigned short int NO_TEXT;
     static unsigned short int WHOLE_LINE;
 

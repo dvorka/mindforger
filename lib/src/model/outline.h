@@ -82,6 +82,7 @@ private:
 
     Markdown::Format format;
 
+    std::vector<std::string*> preamble;
     // IMPROVE hashset
     std::vector<const Tag*> tags;
     const OutlineType* type;
@@ -140,6 +141,10 @@ public:
     void setKey(const std::string key);
     Markdown::Format getFormat() const { return format; }
     void setFormat(Markdown::Format format) { this->format = format; }
+    const std::vector<std::string*>& getPreamble() const;
+    std::string getPreambleAsString() const;
+    void addPreambleLine(std::string *line);
+    void setPreamble(const std::vector<std::string*>& preamble);
     const std::vector<std::string*>& getDescription() const;
     std::string getDescriptionAsString() const;
     void addDescriptionLine(std::string *);
@@ -211,6 +216,12 @@ public:
     void moveNoteToLast(Note* note, Outline::Patch* patch=nullptr);
 
     Note* getOutlineDescriptorAsNote();
+
+    /*
+     * Dialect detection
+     */
+
+    bool isApiaryBlueprint();
 
 private:
     void removeNote(Note* note, bool dealocate);

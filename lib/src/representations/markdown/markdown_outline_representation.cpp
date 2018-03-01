@@ -107,8 +107,24 @@ Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>*
 {
     Outline *outline = new Outline{ontology.getDefaultOutlineType()};
     if(ast) {
+        size_t off = 0;
         if(ast->size()) {
-            MarkdownAstNodeSection* astNode = ast->at(0);
+            MarkdownAstNodeSection* astNode = ast->at(off);
+
+            // preamble
+            if(astNode->isPreambleSection()) {
+                vector<string*>* body = ast->at(off)->moveBody();
+                if(body!=nullptr) {
+                    // IMPROVE use body as is
+                    for(string*& bodyItem:*body) {
+                        outline->addPreambleLine(bodyItem);
+                    }
+                    delete body;
+                }
+                astNode = ast->at(++off);
+            }
+
+            // O's section
             if(astNode->getText()!=nullptr) {
                 // IMPROVE pull pointer > do NOT copy
                 outline->setName(*(astNode->getText()));
@@ -141,7 +157,7 @@ Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>*
                 }
             }
 
-            vector<string*>* body = ast->at(0)->moveBody();
+            vector<string*>* body = ast->at(off)->moveBody();
             if(body!=nullptr) {
                 // IMPROVE use body as is
                 for(string*& bodyItem:*body) {
@@ -151,9 +167,9 @@ Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>*
             }
         }
 
-        // notes
-        if(ast->size()>1) {
-            note(ast, 1, outline);
+        // Ns sections
+        if(ast->size() > off+1) {
+            note(ast, off+1, outline);
         }
 
         // delete AST

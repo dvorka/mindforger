@@ -54,6 +54,9 @@ MarkdownAstNode::~MarkdownAstNode()
  * MarkdownAstNodeSection
  */
 
+// IMPROVE constexpr
+u_int16_t MarkdownAstNodeSection::PREAMBLE = 0xff00;
+
 MarkdownAstNodeSection::MarkdownAstNodeSection()
     : MarkdownAstNode{MarkdownAstNodeType::SECTION}
 {
