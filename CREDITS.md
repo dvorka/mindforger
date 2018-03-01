@@ -17,6 +17,7 @@ Big thanks to 3rd party content authors:
 * Natacha Porte (Upskirt/Sundown/Hoedown - code)
 * Raimund Hocke (SikuliX - GUI automation testing)
 * Google (Google C++ unit testing framework)
+* Apiary (API blueprints - test data)
 * Andres Mejia (Aho-Corasick algoritm implementation - code snippets)
 * Richard Stallman (GNU and GNU GPL - for passionate software freedom activism)
 
