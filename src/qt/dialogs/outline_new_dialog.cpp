@@ -120,7 +120,7 @@ void OutlineNewDialog::GeneralTab::clean()
 OutlineNewDialog::AdvancedTab::AdvancedTab(const QString& memoryDirPath, QWidget *parent)
     : QWidget(parent), memoryDirPath(memoryDirPath)
 {
-    fileLabel = new QLabel{tr("Expected File")+":", this};
+    fileLabel = new QLabel{tr("Expected file name")+":", this};
     fileLine = new QLineEdit{this->memoryDirPath, this};
     fileLine->setDisabled(true);
 

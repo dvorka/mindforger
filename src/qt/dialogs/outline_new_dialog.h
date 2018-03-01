@@ -43,6 +43,7 @@ class OutlineNewDialog : public QDialog
     Q_OBJECT
 
     class GeneralTab;
+    class PreambleTab;
     class AdvancedTab;
 
 private:
@@ -50,6 +51,7 @@ private:
 
     QTabWidget* tabWidget;
     GeneralTab* generalTab;
+    PreambleTab* preambleTab;
     AdvancedTab* advancedTab;
 
     QDialogButtonBox *buttonBox;
@@ -117,6 +119,26 @@ public:
     const std::vector<const Tag*>* getTags() { return editTagsGroup->getTags(); }
 
     void clean();
+};
+
+/**
+ * @brief Preamble tab of new Outline dialog.
+ */
+class OutlineNewDialog::PreambleTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    QLabel *fileLabel;
+    QLineEdit *fileLine;
+
+private:
+    const QString memoryDirPath;
+
+public:
+    explicit PreambleTab(QWidget *parent);
+    void refreshPath(const QString &name);
+    ~PreambleTab();
 };
 
 /**
