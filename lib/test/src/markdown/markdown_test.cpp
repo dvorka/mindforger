@@ -306,6 +306,51 @@ TEST(MarkdownParserTestCase, MarkdownParserSectionsPreamble)
     cout << endl;
 }
 
+TEST(MarkdownParserTestCase, MarkdownParserSectionsEmptyFirstLine)
+{
+    string repositoryPath{"/tmp"};
+    string fileName{"md-parser-first-empty-line-file.md"};
+    string content;
+    string filePath{repositoryPath+"/"+fileName};
+
+    content.assign(
+        "\n"
+        "\n"
+        "\n"
+        "# First Markdown"
+        "\nFirst MD text."
+        "\n"
+        "\n## Note 1"
+        "\nNote 1 text."
+        "\n"
+        "\n## Note 2"
+        "\nNote 2 text."
+        "\n");
+    m8r::stringToFile(filePath, content);
+
+    // minimal MD
+    cout << endl << "- Lexer ----------------------------------------------";
+    MarkdownLexerSections lexer(&filePath);
+    lexer.tokenize();
+    const std::vector<MarkdownLexem*>& lexems = lexer.getLexems();
+    dumpLexems(lexems);
+    EXPECT_EQ(lexems.size(), 31);
+
+    cout << endl << "- Parser ----------------------------------------------";
+    MarkdownParserSections parser(lexer);
+    parser.parse();
+    EXPECT_TRUE(!parser.hasMetadata());
+    std::vector<MarkdownAstNodeSection*>* ast = parser.getAst();
+    dumpAst(ast);
+    EXPECT_EQ(ast->size(), 4);
+    // preamble section
+    EXPECT_TRUE(ast->at(0)->isPreambleSection());
+    EXPECT_EQ(ast->at(0)->getText(), nullptr);
+
+    cout << endl << "- DONE ----------------------------------------------";
+    cout << endl;
+}
+
 TEST(MarkdownParserTestCase, MarkdownParserSectionsNoMetadata)
 {
     unique_ptr<string> fileName
@@ -454,7 +499,6 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPreamble)
     EXPECT_EQ(*(o->getPreamble()[1]), "");
     EXPECT_TRUE(o->isApiaryBlueprint());
 
-
     cout << endl << "- Outline ---";
     cout << endl << "'" << o->getName() << "'";
     EXPECT_EQ(o->getName(), "The Simplest API");
@@ -476,6 +520,60 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPreamble)
 
     cout << endl << "- DONE ----------------------------------------------" << endl;
     delete o;
+}
+
+TEST(MarkdownParserTestCase, MarkdownRepresentationEmptyFirstLine)
+{
+    string repositoryPath{"/tmp"};
+    string fileName{"md-parser-first-empty-line-file.md"};
+    string content;
+    string filePath{repositoryPath+"/"+fileName};
+
+    content.assign(
+        "\n"
+        "\n"
+        "\n"
+        "# First Markdown"
+        "\nFirst MD text."
+        "\n"
+        "\n## Note 1"
+        "\nNote 1 text."
+        "\n"
+        "\n## Note 2"
+        "\nNote 2 text."
+        "\n");
+    m8r::stringToFile(filePath, content);
+
+    m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    repository->setMode(m8r::Repository::RepositoryMode::FILE);
+    repository->setFile(fileName);
+    m8r::Configuration& configuration = m8r::Configuration::getInstance();
+    configuration.setActiveRepository(configuration.addRepository(repository));
+    m8r::Ontology ontology{configuration};
+
+    // parse
+    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    File file{filePath};
+    m8r::Outline* o = mdr.outline(file);
+
+    // asserts
+    EXPECT_NE(o, nullptr);
+    EXPECT_EQ(o->getNotesCount(), 2);
+
+    cout << endl << "- Preamble ---";
+    EXPECT_EQ(o->getPreamble().size(), 3);
+    cout << endl << "'" << *(o->getPreamble()[0]) << "'";
+    cout << endl << "'" << *(o->getPreamble()[1]) << "'";
+    cout << endl << "'" << *(o->getPreamble()[2]) << "'";
+    EXPECT_EQ(*(o->getPreamble()[0]), "");
+    EXPECT_EQ(*(o->getPreamble()[1]), "");
+    EXPECT_EQ(*(o->getPreamble()[2]), "");
+    EXPECT_TRUE(!o->isApiaryBlueprint());
+
+    cout << endl << "- Outline ---";
+    cout << endl << "'" << o->getName() << "'";
+    EXPECT_EQ(o->getName(), "First Markdown");
+    EXPECT_EQ(o->getDescription().size(), 2);
 }
 
 TEST(MarkdownParserTestCase, FileSystemPersistence)
