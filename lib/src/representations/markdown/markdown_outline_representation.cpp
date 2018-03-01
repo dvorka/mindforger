@@ -230,6 +230,20 @@ string* MarkdownOutlineRepresentation::toHeader(const Outline* outline)
     return md;
 }
 
+string* MarkdownOutlineRepresentation::toPreamble(const Outline* outline, string* md)
+{
+    if(outline) {
+        const vector<string*>& p=outline->getPreamble();
+        if(p.size()) {
+            for(string *s:p) {
+                md->append(*s);
+                md->append("\n");
+            }
+        }
+    }
+    return md;
+}
+
 void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
 {
     if(outline) {
@@ -313,6 +327,7 @@ string* MarkdownOutlineRepresentation::to(const Outline* outline)
 
 string* MarkdownOutlineRepresentation::to(const Outline* outline, string* md)
 {
+    toPreamble(outline, md);
     toHeader(outline, md);
     if(outline) {
         const vector<Note*>& notes=outline->getNotes();

@@ -469,6 +469,11 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPreamble)
     cout << endl << "'" << o->getNotes()[1]->getName() << "'";
     EXPECT_EQ(o->getNotes()[1]->getName(), "GET /message");
 
+    // preamble serialization check
+    string* original = m8r::fileToString(o->getKey());
+    string* serialized = mdr.to(o);
+    EXPECT_EQ(*original, *serialized);
+
     cout << endl << "- DONE ----------------------------------------------" << endl;
     delete o;
 }
