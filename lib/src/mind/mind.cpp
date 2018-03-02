@@ -384,7 +384,7 @@ string Mind::outlineNew(
     const int8_t urgency,
     const int8_t progress,
     const vector<const Tag*>* tags,
-    const string* preamble,
+    const vector<string*>* preamble,
     Stencil* outlineStencil)
 {
     string key = memory.createOutlineKey(name);
@@ -396,8 +396,8 @@ string Mind::outlineNew(
         outline = new Outline{ontology().getDefaultOutlineType()};
     }
 
-    if(preamble) {
-        outline->setPreamble(preamble);
+    if(preamble && preamble->size()) {
+        outline->setPreamble(*preamble);
     }
 
     if(outline) {

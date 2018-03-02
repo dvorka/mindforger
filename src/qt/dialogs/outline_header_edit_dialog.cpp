@@ -96,6 +96,32 @@ OutlineHeaderEditDialog::GeneralTab::~GeneralTab()
 }
 
 /*
+ * Preamble tab
+ */
+
+OutlineHeaderEditDialog::PreambleTab::PreambleTab(QWidget *parent)
+    : QWidget(parent)
+{
+    preambleLabel = new QLabel{tr("Text")+":", this};
+    preambleText = new QTextEdit{this};
+
+    QGroupBox* preambleGroup = new QGroupBox{tr("Preamble"), this};
+    QVBoxLayout* locationLayout = new QVBoxLayout{this};
+    locationLayout->addWidget(preambleLabel);
+    locationLayout->addWidget(preambleText);
+    preambleGroup->setLayout(locationLayout);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(preambleGroup);
+    mainLayout->addStretch();
+    setLayout(mainLayout);
+}
+
+OutlineHeaderEditDialog::PreambleTab::~PreambleTab()
+{
+}
+
+/*
  * Advanced tab
  */
 
@@ -172,6 +198,9 @@ OutlineHeaderEditDialog::OutlineHeaderEditDialog(Ontology& ontology, QWidget *pa
     generalTab = new GeneralTab(ontology, this);
     tabWidget->addTab(generalTab, tr("General"));
 
+    preambleTab = new PreambleTab(this);
+    tabWidget->addTab(preambleTab, tr("Preamble"));
+
     advancedTab = new AdvancedTab{this};
     tabWidget->addTab(advancedTab, tr("Advanced"));
 
@@ -197,6 +226,9 @@ OutlineHeaderEditDialog::OutlineHeaderEditDialog(Ontology& ontology, QWidget *pa
 
 OutlineHeaderEditDialog::~OutlineHeaderEditDialog()
 {
+    if(generalTab) delete generalTab;
+    if(preambleTab) delete preambleTab;
+    if(advancedTab) delete advancedTab;
 }
 
 void OutlineHeaderEditDialog::show()
@@ -215,6 +247,8 @@ void OutlineHeaderEditDialog::show()
         generalTab->urgencyCombo->setCurrentIndex(currentOutline->getUrgency());
         generalTab->progressSpin->setValue(currentOutline->getProgress());
         generalTab->editTagsGroup->refresh(currentOutline->getTags());
+
+        preambleTab->preambleText->setText(QString::fromStdString(currentOutline->getPreambleAsString()));
 
         // RDONLY
         advancedTab->createdLine->setText(QString::fromStdString(datetimeToString(currentOutline->getCreated())));
@@ -238,6 +272,15 @@ void OutlineHeaderEditDialog::toOutline()
         currentOutline->setUrgency(generalTab->urgencyCombo->currentIndex());
         currentOutline->setProgress(generalTab->progressSpin->value());
         currentOutline->setTags(generalTab->editTagsGroup->getTags());
+
+        // preamble
+        std::vector<std::string*> preamble;
+        if(preambleTab->getPreambleText().size()) {
+            std::string* preambleText = new std::string{preambleTab->getPreambleText().toStdString()};
+            stringToLines(preambleText, preamble);
+            delete preambleText;
+        }
+        currentOutline->setPreamble(preamble);
     } else {
         qDebug("Attempt to save data from dialog to Outline, but no Outline is set.");
     }

@@ -68,7 +68,7 @@ public:
     ~OutlineNewDialog();
 
     QString getOutlineName() const;
-    QString getPreamble() const { return preambleTab->getPreambleText(); }
+    QString getPreamble() const;
     Stencil* getStencil() const;
     const OutlineType* getOutlineType() const;
     int8_t getImportance() const;

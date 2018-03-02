@@ -363,6 +363,16 @@ void MainWindowPresenter::doActionOutlineNew()
 void MainWindowPresenter::handleOutlineNew()
 {
     string name = newOutlineDialog->getOutlineName().toStdString();
+
+    // preamble
+    vector<string*>* preamble = nullptr;
+    if(newOutlineDialog->getPreamble().size()) {
+        string* preambleText = new string{newOutlineDialog->getPreamble().toStdString()};
+        preamble = new vector<string*>{};
+        stringToLines(preambleText, *preamble);
+        delete preambleText;
+    }
+
     mind->outlineNew(
         &name,
         newOutlineDialog->getOutlineType(),
@@ -370,6 +380,7 @@ void MainWindowPresenter::handleOutlineNew()
         newOutlineDialog->getUrgency(),
         newOutlineDialog->getProgress(),
         newOutlineDialog->getTags(),
+        preamble,
         newOutlineDialog->getStencil());
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_LIST_OUTLINES)) {

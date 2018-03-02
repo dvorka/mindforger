@@ -92,7 +92,7 @@ void OutlineHeaderEditPresenter::slotSaveOutlineHeader()
             currentOutline->clearDescription();
         }
 
-        // Outline metada (type, tags, progress, deadline) are set by Outline header edit dialog on it's close
+        // Outline metada (preamble, type, tags, progress, deadline) are set by Outline header edit dialog on it's close
         // (if user doesn't open dialog, nothing is blindly saved there & here)
 
         // IMPROVE if fields below are set on remembering (save) of Outline, then delete code below

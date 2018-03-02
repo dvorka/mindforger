@@ -68,7 +68,7 @@ struct File
 };
 
 void pathToDirectoryAndFile(const std::string& path, std::string& directory, std::string& file);
-bool stringToLines(const std::string* text, std::vector<std::string*>& lines, unsigned long int &filesize);
+bool stringToLines(const std::string* text, std::vector<std::string*>& lines);
 bool fileToLines(const std::string* filename, std::vector<std::string*>& lines, unsigned long int &filesize);
 std::string* fileToString(const std::string& filename);
 void stringToFile(const std::string& filename, const std::string& content);

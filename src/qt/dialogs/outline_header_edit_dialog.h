@@ -42,6 +42,7 @@ class OutlineHeaderEditDialog : public QDialog
     Q_OBJECT
 
     class GeneralTab;
+    class PreambleTab;
     class AdvancedTab;
 
 private:
@@ -49,7 +50,9 @@ private:
     Ontology& ontology;
 
     QTabWidget* tabWidget;
+    PreambleTab* preambleTag;
     GeneralTab* generalTab;
+    PreambleTab* preambleTab;
     AdvancedTab* advancedTab;
 
     QDialogButtonBox *buttonBox;
@@ -102,6 +105,27 @@ private:
 public:
     explicit GeneralTab(Ontology& ontology, QWidget *parent);
     ~GeneralTab();
+};
+
+/**
+ * @brief Preamble tab of edit Outline dialog.
+ */
+class OutlineHeaderEditDialog::PreambleTab : public QWidget
+{
+    Q_OBJECT
+
+    friend class OutlineHeaderEditDialog;
+
+private:
+    QLabel* preambleLabel;
+    QTextEdit* preambleText;
+
+public:
+    explicit PreambleTab(QWidget* parent);
+    ~PreambleTab();
+
+    void refreshPreambleText(QString& t) { preambleText->setText(t); }
+    QString getPreambleText() const { return preambleText->toPlainText(); }
 };
 
 /**

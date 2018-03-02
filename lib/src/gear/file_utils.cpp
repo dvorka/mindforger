@@ -44,17 +44,16 @@ void pathToDirectoryAndFile(const std::string& path, std::string& directory, std
     }
 }
 
-bool stringToLines(const string* text, vector<string*>& lines, unsigned long int &filesize)
+bool stringToLines(const string* text, vector<string*>& lines)
 {
-    if(text) {
-        filesize = text->size();
+    if(text && text->size()) {
         istringstream input{*text};
         string line;
         while(getline(input, line)) {
             // IMPROVE heap allocation possibly expensive
             lines.push_back(new string{line});
         }
-        return filesize>0;
+        return true;
     } else {
         return false;
     }

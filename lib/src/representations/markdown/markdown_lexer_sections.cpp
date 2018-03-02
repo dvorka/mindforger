@@ -209,8 +209,7 @@ void MarkdownLexerSections::tokenize()
 
 void MarkdownLexerSections::tokenize(const string* text)
 {
-    fileSize = 0;
-    if(stringToLines(text, lines, fileSize)) {
+    if(stringToLines(text, lines)) {
         // IMPROVE body of this function can be shared by file & text
         lexems.push_back(MarkdownSymbolTable::LEXEM.BEGIN_DOC);
 

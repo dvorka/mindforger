@@ -240,6 +240,11 @@ Stencil* OutlineNewDialog::getStencil() const
     return generalTab->getStencilCombo()->itemData(generalTab->getStencilCombo()->currentIndex()).value<Stencil*>();
 }
 
+QString OutlineNewDialog::getPreamble() const
+{
+    return preambleTab->getPreambleText();
+}
+
 const OutlineType* OutlineNewDialog::getOutlineType() const
 {
     return (const OutlineType*)(generalTab->getTypeCombo()->itemData(generalTab->getTypeCombo()->currentIndex(), Qt::UserRole).value<const OutlineType*>());
