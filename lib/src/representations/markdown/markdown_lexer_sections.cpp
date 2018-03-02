@@ -86,6 +86,10 @@ MarkdownLexemTable::MarkdownLexemTable()
     lexems.insert(SECTION_9);
     SECTION_10 = new MarkdownLexem { MarkdownLexemType::SECTION, 10 };
     lexems.insert(SECTION_10);
+    HEADER_equals = new MarkdownLexem { MarkdownLexemType::HEADER_equals};
+    lexems.insert(HEADER_equals);
+    HEADER_hyphens = new MarkdownLexem { MarkdownLexemType::HEADER_hyphens};
+    lexems.insert(HEADER_hyphens);
     META_BEGIN = new MarkdownLexem { MarkdownLexemType::META_BEGIN };
     lexems.insert(META_BEGIN);
     META_PROPERTY_DELIMITER = new MarkdownLexem{MarkdownLexemType::META_PROPERTY_DELIMITER};
@@ -551,6 +555,7 @@ bool MarkdownLexerSections::lexPostDeclaredSectionHeader(const unsigned short in
         if(lines[offset-1]!=nullptr && lines[offset-1]->size()
              &&
            !isspace(lines[offset-1]->at(0)) && isSameCharsLine(offset, delimiter))
+check FIRST and LAST char as heuristics
         {
             fixBackDeclaredSection(offset-1, 1);
             return true;

@@ -50,6 +50,8 @@ public:
     MarkdownLexem* SECTION_8;
     MarkdownLexem* SECTION_9;
     MarkdownLexem* SECTION_10;
+    MarkdownLexem* HEADER_equals;
+    MarkdownLexem* HEADER_hyphens;
     MarkdownLexem* META_BEGIN;
     MarkdownLexem* META_PROPERTY_DELIMITER;
     MarkdownLexem* META_PROPERTY_type;
