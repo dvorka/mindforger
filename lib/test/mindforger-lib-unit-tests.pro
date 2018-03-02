@@ -69,7 +69,8 @@ SOURCES += \
     ../../lib/test/src/test_gear.cpp \
     ../../lib/src/config/repository.cpp \
     ../../lib/test/src/config/configuration_test.cpp \
-    ../../lib/src/mind/ontology/thing_class_rel_triple.cpp
+    ../../lib/src/mind/ontology/thing_class_rel_triple.cpp \
+    benchmark/markdown_benchmark.cpp
 
 HEADERS += \
     ../../lib/src/debug.h \

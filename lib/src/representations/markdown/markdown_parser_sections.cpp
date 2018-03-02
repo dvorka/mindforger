@@ -90,6 +90,38 @@ const MarkdownLexem* MarkdownParserSections::lookaheadNot(MarkdownLexemType lexe
     }
 }
 
+const MarkdownLexem* MarkdownParserSections::lookaheadSection(size_t offset)
+{
+    if(offset<lexer.size()
+         &&
+      (lexer[offset]->getType()==MarkdownLexemType::SECTION
+         ||
+       lexer[offset]->getType()==MarkdownLexemType::SECTION_equals
+         ||
+       lexer[offset]->getType()==MarkdownLexemType::SECTION_hyphens))
+    {
+        return lexer[offset];
+    } else {
+        return nullptr;
+    }
+}
+
+const MarkdownLexem* MarkdownParserSections::lookaheadNotSection(size_t offset)
+{
+    if(offset<lexer.size()
+         &&
+      lexer[offset]->getType()!=MarkdownLexemType::SECTION
+         &&
+      lexer[offset]->getType()!=MarkdownLexemType::SECTION_equals
+         &&
+      lexer[offset]->getType()!=MarkdownLexemType::SECTION_hyphens)
+    {
+        return lexer[offset];
+    } else {
+        return nullptr;
+    }
+}
+
 void MarkdownParserSections::markdownRule()
 {
     MarkdownAstNodeSection* section;
@@ -103,7 +135,8 @@ void MarkdownParserSections::markdownRule()
 
 void MarkdownParserSections::preambleRule(size_t& offset)
 {
-    if(lookahead(MarkdownLexemType::SECTION,offset+1) == nullptr) {
+    // IMPROVE test w/o calling method doing the same checks
+    if(lookaheadSection(offset+1) == nullptr) {
         MarkdownAstNodeSection* result = new MarkdownAstNodeSection();
         result->setPreamble();
         result->setBody(sectionBodyRule(offset));
@@ -113,14 +146,30 @@ void MarkdownParserSections::preambleRule(size_t& offset)
 
 MarkdownAstNodeSection* MarkdownParserSections::sectionRule(size_t& offset)
 {
-    const MarkdownLexem* next;
-    if((next=lookahead(MarkdownLexemType::SECTION,offset+1))!=nullptr) {
-        unsigned depth = next->getDepth();
-        MarkdownAstNodeSection* result=sectionHeaderRule(++offset);
-        if(result!=nullptr) {
-            result->setDepth(depth);
+    if(offset+1<lexer.size()) {
+        MarkdownAstNodeSection* result;
+        unsigned depth;
+        switch(lexer[offset+1]->getType()) {
+        case MarkdownLexemType::SECTION:
+            depth=lexer[offset+1]->getDepth();
+            result=sectionHeaderRule(++offset);
+            if(result!=nullptr) {
+                result->setDepth(depth);
+                result->setBody(sectionBodyRule(offset));
+                return result;
+            }
+            break;
+        case MarkdownLexemType::SECTION_equals:
+        case MarkdownLexemType::SECTION_hyphens:
+            // lexer ensures existence of LINE and BR right after SECTION_*
+            ++offset; // move to point to SECTION_*
+            result = new MarkdownAstNodeSection(lexer.getText(lexer[++offset])); // move to LINE
+            if(lexer[offset+1]->getType()==MarkdownLexemType::SECTION_equals) result->setDepth(0); else result->setDepth(1);
+            ++offset; // skip BR
             result->setBody(sectionBodyRule(offset));
             return result;
+        default:
+            return nullptr;
         }
     }
     return nullptr;
@@ -141,7 +190,7 @@ MarkdownAstNodeSection* MarkdownParserSections::sectionHeaderRule(size_t& offset
     // seek to section token - may skip a part of the document
     while((next=lookahead(offset+1))!=nullptr
             &&
-          next->getType()!=MarkdownLexemType::SECTION)
+          next->getType()!=MarkdownLexemType::SECTION && next->getType()!=MarkdownLexemType::SECTION_equals && next->getType()!=MarkdownLexemType::SECTION_hyphens)
     {
         if((name=sectionNameRule(offset))!=nullptr) {
             MarkdownAstNodeSection* result = new MarkdownAstNodeSection(name);
@@ -178,7 +227,7 @@ void MarkdownParserSections::skipEOL(size_t& offset)
 
 void MarkdownParserSections::skipSectionBody(size_t& offset)
 {
-    while(lookaheadNot(MarkdownLexemType::SECTION,offset+1)!=nullptr) {
+    while(lookaheadNotSection(offset+1)!=nullptr) {
         ++offset;
     }
 }
@@ -451,7 +500,7 @@ vector<string*>* MarkdownParserSections::sectionBodyRule(size_t& offset)
     vector<string*>* result = new vector<string*>();
     string* s;
     const MarkdownLexem* l;
-    while((l=lookaheadNot(MarkdownLexemType::SECTION,offset+1))!=nullptr) {
+    while((l=lookaheadNotSection(offset+1))!=nullptr) {
         ++offset;
         switch(l->getType()) {
         case MarkdownLexemType::LINE:

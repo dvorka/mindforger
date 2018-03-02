@@ -76,6 +76,8 @@ private:
     inline const MarkdownLexem* lookahead(size_t offset);
     inline const MarkdownLexem* lookahead(MarkdownLexemType, size_t offset);
     inline const MarkdownLexem* lookaheadNot(MarkdownLexemType, size_t offset);
+    inline const MarkdownLexem* lookaheadSection(size_t offset);
+    inline const MarkdownLexem* lookaheadNotSection(size_t offset);
     inline void skipWhitespaces(size_t& offset);
     inline void skipEOL(size_t& offset);
     inline void skipSectionBody(size_t& offset);

@@ -66,30 +66,6 @@ MarkdownLexemTable::MarkdownLexemTable()
 {
     BEGIN_DOC = new MarkdownLexem { MarkdownLexemType::BEGIN_DOC };
     lexems.insert(BEGIN_DOC);
-    SECTION_1 = new MarkdownLexem { MarkdownLexemType::SECTION, 1 };
-    lexems.insert(SECTION_1);
-    SECTION_2 = new MarkdownLexem { MarkdownLexemType::SECTION, 2 };
-    lexems.insert(SECTION_2);
-    SECTION_3 = new MarkdownLexem { MarkdownLexemType::SECTION, 3 };
-    lexems.insert(SECTION_3);
-    SECTION_4 = new MarkdownLexem { MarkdownLexemType::SECTION, 4 };
-    lexems.insert(SECTION_4);
-    SECTION_5 = new MarkdownLexem { MarkdownLexemType::SECTION, 5 };
-    lexems.insert(SECTION_5);
-    SECTION_6 = new MarkdownLexem { MarkdownLexemType::SECTION, 6 };
-    lexems.insert(SECTION_6);
-    SECTION_7 = new MarkdownLexem { MarkdownLexemType::SECTION, 7 };
-    lexems.insert(SECTION_7);
-    SECTION_8 = new MarkdownLexem { MarkdownLexemType::SECTION, 8 };
-    lexems.insert(SECTION_8);
-    SECTION_9 = new MarkdownLexem { MarkdownLexemType::SECTION, 9 };
-    lexems.insert(SECTION_9);
-    SECTION_10 = new MarkdownLexem { MarkdownLexemType::SECTION, 10 };
-    lexems.insert(SECTION_10);
-    HEADER_equals = new MarkdownLexem { MarkdownLexemType::HEADER_equals};
-    lexems.insert(HEADER_equals);
-    HEADER_hyphens = new MarkdownLexem { MarkdownLexemType::HEADER_hyphens};
-    lexems.insert(HEADER_hyphens);
     META_BEGIN = new MarkdownLexem { MarkdownLexemType::META_BEGIN };
     lexems.insert(META_BEGIN);
     META_PROPERTY_DELIMITER = new MarkdownLexem{MarkdownLexemType::META_PROPERTY_DELIMITER};
@@ -129,16 +105,6 @@ MarkdownLexemTable::MarkdownLexemTable()
 MarkdownLexemTable::~MarkdownLexemTable()
 {
     delete BEGIN_DOC;
-    delete SECTION_1;
-    delete SECTION_2;
-    delete SECTION_3;
-    delete SECTION_4;
-    delete SECTION_5;
-    delete SECTION_6;
-    delete SECTION_7;
-    delete SECTION_8;
-    delete SECTION_9;
-    delete SECTION_10;
     delete META_BEGIN;
     delete META_PROPERTY_DELIMITER;
     delete META_PROPERTY_type;
@@ -236,7 +202,7 @@ void MarkdownLexerSections::tokenize()
         if(lexems.size()==1) {
             lexems.clear();
         } else {
-            lexems.push_back(symbolTable.LEXEM.END_DOC);
+            lexems.push_back(MarkdownSymbolTable::LEXEM.END_DOC);
         }
     }
 }
@@ -256,7 +222,7 @@ void MarkdownLexerSections::tokenize(const string* text)
         if(lexems.size()==1) {
             lexems.clear();
         } else {
-            lexems.push_back(symbolTable.LEXEM.END_DOC);
+            lexems.push_back(MarkdownSymbolTable::LEXEM.END_DOC);
         }
     }
 }
@@ -548,16 +514,63 @@ bool MarkdownLexerSections::lexToEndOfHtmlComment(const unsigned short offset, u
 bool MarkdownLexerSections::lexPostDeclaredSectionHeader(const unsigned short int offset, const char delimiter)
 {
     if (offset == 0 || inCodeBlock) {
-        // if the first MD document line starts with '=' > invalid markdown document || in code > ignore
+        // if the first MD document line starts with '=' > markdown document w/ preamble || in code > ignore
         addLineToLexems(offset);
         return false;
     } else {
-        if(lines[offset-1]!=nullptr && lines[offset-1]->size()
+        // previous line is valid section name && current line is header line for that name
+        if(lines[offset-1]!=nullptr && lines[offset-1]->size()>=2 && !isspace(lines[offset-1]->at(0))
              &&
-           !isspace(lines[offset-1]->at(0)) && isSameCharsLine(offset, delimiter))
-check FIRST and LAST char as heuristics
+           isSameCharsLine(offset, delimiter))
         {
-            fixBackDeclaredSection(offset-1, 1);
+            // Patch processed lexems and inject post declared section marker - before:
+            //
+            //  #0 BEGIN_DOC          0 0 0
+            //  #1 LINE               0 0 *
+            //  #2 BR                 0 0 0
+            //  #3 ... current line...
+            // after:
+            //  #0 BEGIN_DOC          0 0 0
+            //  #1 SECTION=           0 0 0         # note === marker: SECTION vs SECTION= vs SECTION-
+            //  #2 LINE               0 0 *
+            //  #3 BR                 0 0 0
+            //
+            // or before:
+            //
+            //  #3 ...
+            //  #4 BR                 0 0 0
+            //  #5 BR                 0 0 0
+            //  #6 BR                 0 0 0
+            //  #7 LINE               8 0 *
+            //  #8 BR                 0 0 0
+            //  #9 ... current line...
+            // after:
+            //  #3 ...
+            //  #4 BR                 0 0 0
+            //  #5 BR                 0 0 0
+            //  #6 BR                 0 0 0
+            //  #7 SECTION=           0 0 0         # note === marker: SECTION vs SECTION= vs SECTION-
+            //  #8 LINE               8 0 *
+            //  #9 BR                 0 0 0
+            //
+            // Conlusion: there MUST be BR and LINE, insert section right after, otherwise normal line
+
+            if(lexems.size()>2 // BEGIN_DOC LINE BR
+                 &&
+               lexems[lexems.size()-1]->getType()==MarkdownLexemType::BR
+                 &&
+               lexems[lexems.size()-2]->getType()==MarkdownLexemType::LINE)
+            {
+                if(delimiter=='=') {
+                    lexems.insert(lexems.begin()+lexems.size()-2, new MarkdownLexem(MarkdownLexemType::SECTION_equals,0));
+                } else {
+                    lexems.insert(lexems.begin()+lexems.size()-2, new MarkdownLexem(MarkdownLexemType::SECTION_hyphens,1));
+                }
+            } else {
+                addLineToLexems(offset);
+                return false;
+            }
+            // insert  marker > parser will create section w/ section type marker (lexem lookahead)
             return true;
         } else {
             addLineToLexems(offset);
@@ -712,8 +725,12 @@ bool MarkdownLexerSections::nextToken(const unsigned short int offset) {
 
 bool MarkdownLexerSections::isSameCharsLine(const unsigned short offset, const char c) const
 {
-    if(lines[offset]!=nullptr && lines[offset]->size()>0) {
-        for(unsigned i=0; i<lines[offset]->size(); i++) {
+    // fail fast
+    if(lines[offset]!=nullptr && lines[offset]->size()
+         &&
+       lines[offset]->at(0)==c && lines[offset]->at(lines[offset]->size()-1)==c)
+    {
+        for(unsigned i=1; i<lines[offset]->size()-1; i++) {
             if(lines[offset]->at(i)!=c) {
                 return false;
             }
@@ -789,18 +806,6 @@ string* MarkdownLexerSections::getText(const MarkdownLexem* lexem)
         }
     }
     return nullptr;
-}
-
-void MarkdownLexerSections::fixBackDeclaredSection(const unsigned short offset, const unsigned short sectionDepth)
-{
-    UNUSED_ARG(offset);
-    UNUSED_ARG(sectionDepth);
-
-    // throw std::exception();
-
-    // TODO find last BR
-    // TODO vector.insert() SECTION
-    // TODO tokenize LINE as SECTION HEADER
 }
 
 } // m8r namespace

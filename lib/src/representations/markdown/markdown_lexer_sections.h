@@ -40,18 +40,6 @@ private:
 
 public:
     MarkdownLexem* BEGIN_DOC;
-    MarkdownLexem* SECTION_1;
-    MarkdownLexem* SECTION_2;
-    MarkdownLexem* SECTION_3;
-    MarkdownLexem* SECTION_4;
-    MarkdownLexem* SECTION_5;
-    MarkdownLexem* SECTION_6;
-    MarkdownLexem* SECTION_7;
-    MarkdownLexem* SECTION_8;
-    MarkdownLexem* SECTION_9;
-    MarkdownLexem* SECTION_10;
-    MarkdownLexem* HEADER_equals;
-    MarkdownLexem* HEADER_hyphens;
     MarkdownLexem* META_BEGIN;
     MarkdownLexem* META_PROPERTY_DELIMITER;
     MarkdownLexem* META_PROPERTY_type;

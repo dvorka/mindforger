@@ -32,8 +32,8 @@ enum class MarkdownLexemType
     BEGIN_DOC,                  // begin of document
 
     SECTION,                    // "#" .. "##...#"
-    HEADER_equals,              // "===" 3 or more equal signs
-    HEADER_hyphens,             // "---" 3 or more hyphens
+    SECTION_equals,              // "==" 2 or more equal signs (post declared section)
+    SECTION_hyphens,             // "--" 2 or more hyphens (post declared section)
     TEXT,                       // "name"
     LINE,                       // ^"This is sentence."$ (w/o ^ and $ markers)
     WHITESPACES,                 // [:whitespace]+ (\n\r TAB)

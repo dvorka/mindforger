@@ -52,6 +52,12 @@ void dumpLexemType(MarkdownLexemType type)
     case MarkdownLexemType::SECTION:
         cout << "SECTION           ";
         break;
+    case MarkdownLexemType::SECTION_equals:
+        cout << "SECTION=           ";
+        break;
+    case MarkdownLexemType::SECTION_hyphens:
+        cout << "SECTION-           ";
+        break;
     case MarkdownLexemType::BR:
         cout << "BR                ";
         break;
@@ -255,6 +261,65 @@ TEST(MarkdownParserTestCase, MarkdownLexerSectionsPreamble)
     EXPECT_EQ(lexems[3]->getType(), MarkdownLexemType::BR);
     EXPECT_EQ(lexems[4]->getType(), MarkdownLexemType::SECTION);
     EXPECT_EQ(lexems[4]->getDepth(), 0);
+}
+
+TEST(MarkdownParserTestCase, MarkdownLexerSectionsPostDeclaredHeaders)
+{
+    unique_ptr<string> fileName
+            = unique_ptr<string>(new string{"/lib/test/resources/bugs-repository/memory/feature-9-post-declared-headers.md"});
+    fileName.get()->insert(0, getMindforgerGitHomePath());
+    MarkdownLexerSections lexer(fileName.get());
+
+    // tokenize
+    lexer.tokenize();
+    const std::vector<MarkdownLexem*>& lexems = lexer.getLexems();
+    dumpLexems(lexems);
+
+    // asserts
+    EXPECT_EQ(lexems[0]->getType(), MarkdownLexemType::BEGIN_DOC);
+    EXPECT_EQ(lexems[1]->getType(), MarkdownLexemType::SECTION_equals);
+    EXPECT_EQ(lexems[2]->getType(), MarkdownLexemType::LINE);
+    EXPECT_EQ(lexems[3]->getType(), MarkdownLexemType::BR);
+    EXPECT_EQ(lexems[4]->getType(), MarkdownLexemType::LINE);
+    EXPECT_EQ(lexems[5]->getType(), MarkdownLexemType::BR);
+}
+
+TEST(MarkdownParserTestCase, MarkdownLexerSectionsPostDeclaredHeaders2)
+{
+    string content;
+    content.assign(
+        "Outline Name\n"
+        "========\n"
+        "O text.\n"
+        "\n"
+        "First Section\n"
+        "-------------\n"
+        "N1 text.\n"
+        "\n"
+        "## Second Section\n"
+        "\n"
+        "N2 text.\n"
+        "\n"
+        "Note 3\n"
+        "-------------\n"
+        "N2 text.\n"
+        "\n");
+
+    MarkdownLexerSections lexer(nullptr);
+
+    // tokenize
+    lexer.tokenize(&content);
+    const std::vector<MarkdownLexem*>& lexems = lexer.getLexems();
+    ASSERT_TRUE(lexems.size());
+    dumpLexems(lexems);
+
+    // asserts
+    EXPECT_EQ(lexems[0]->getType(), MarkdownLexemType::BEGIN_DOC);
+    EXPECT_EQ(lexems[1]->getType(), MarkdownLexemType::SECTION_equals);
+    EXPECT_EQ(lexems[2]->getType(), MarkdownLexemType::LINE);
+    EXPECT_EQ(lexems[3]->getType(), MarkdownLexemType::BR);
+    EXPECT_EQ(lexems[4]->getType(), MarkdownLexemType::LINE);
+    EXPECT_EQ(lexems[5]->getType(), MarkdownLexemType::BR);
 }
 
 TEST(MarkdownParserTestCase, MarkdownParserSections)
@@ -520,6 +585,62 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPreamble)
 
     cout << endl << "- DONE ----------------------------------------------" << endl;
     delete o;
+}
+
+TEST(MarkdownParserTestCase, MarkdownRepresentationPostDeclaredSection)
+{
+    string repositoryPath{"/tmp"};
+    string fileName{"md-post-declared-section.md"};
+    string content;
+    string filePath{repositoryPath+"/"+fileName};
+
+    content.assign(
+        "Outline Name\n"
+        "========\n"
+        "O text.\n"
+        "\n"
+        "First Section\n"
+        "-------------\n"
+        "N1 text.\n"
+        "\n"
+        "## Second Section\n"
+        "\n"
+        "N2 text.\n"
+        "\n"
+        "Note 3\n"
+        "-------------\n"
+        "N2 text.\n"
+        "\n");
+    m8r::stringToFile(filePath, content);
+
+    m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    repository->setMode(m8r::Repository::RepositoryMode::FILE);
+    repository->setFile(fileName);
+    m8r::Configuration& configuration = m8r::Configuration::getInstance();
+    configuration.setActiveRepository(configuration.addRepository(repository));
+    m8r::Ontology ontology{configuration};
+
+    // parse
+    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    File file{filePath};
+    m8r::Outline* o = mdr.outline(file);
+
+    // asserts
+    EXPECT_NE(o, nullptr);
+    ASSERT_EQ(o->getNotesCount(), 3);
+
+    cout << endl << "- O ---";
+    cout << endl << "Name: '" << o->getName() << "'";
+    EXPECT_EQ(o->getName(), "Outline Name");
+    cout << endl << "Desc: '" << o->getDescriptionAsString() << "'";
+    EXPECT_EQ(o->getDescription().size(), 2);
+
+    EXPECT_EQ(o->getNotes()[0]->getName(), "First Section");
+    EXPECT_EQ(o->getNotes()[0]->getDescription().size(), 2);
+    EXPECT_EQ(o->getNotes()[1]->getName(), "Second Section");
+    EXPECT_EQ(o->getNotes()[1]->getDescription().size(), 3);
+    EXPECT_EQ(o->getNotes()[2]->getName(), "Note 3");
+    EXPECT_EQ(o->getNotes()[2]->getDescription().size(), 2);
 }
 
 TEST(MarkdownParserTestCase, MarkdownRepresentationEmptyFirstLine)
