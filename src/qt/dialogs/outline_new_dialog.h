@@ -132,13 +132,9 @@ private:
     QLabel *fileLabel;
     QLineEdit *fileLine;
 
-private:
-    const QString memoryDirPath;
-
 public:
-    explicit PreambleTab(QWidget *parent);
-    void refreshPath(const QString &name);
-    ~PreambleTab();
+    explicit PreambleTab(QWidget *parent) {}
+    ~PreambleTab() {}
 };
 
 /**

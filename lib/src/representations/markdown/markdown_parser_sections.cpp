@@ -162,9 +162,10 @@ MarkdownAstNodeSection* MarkdownParserSections::sectionRule(size_t& offset)
         case MarkdownLexemType::SECTION_equals:
         case MarkdownLexemType::SECTION_hyphens:
             // lexer ensures existence of LINE and BR right after SECTION_*
+            depth = lexer[offset+1]->getType()==MarkdownLexemType::SECTION_equals?0:1;
             ++offset; // move to point to SECTION_*
             result = new MarkdownAstNodeSection(lexer.getText(lexer[++offset])); // move to LINE
-            if(lexer[offset+1]->getType()==MarkdownLexemType::SECTION_equals) result->setDepth(0); else result->setDepth(1);
+            result->setDepth(depth);
             ++offset; // skip BR
             result->setBody(sectionBodyRule(offset));
             return result;
