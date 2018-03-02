@@ -31,6 +31,7 @@ Note::Note(const NoteType* type, Outline* outline)
     created = modified = read = deadline = 0;
     reads = revision = 0;
     progress = 0;
+    flags = 0;
 }
 
 Note::Note(const Note& n)

@@ -607,9 +607,79 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPostDeclaredSection)
         "\n"
         "N2 text.\n"
         "\n"
+        "Note 2\n"
+        "------\n"
+        "\n"
+        "N2 text.\n"
+        "\n"
         "Note 3\n"
         "------\n"
+        "N3 text.\n"
+        "\n");
+    m8r::stringToFile(filePath, content);
+
+    m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    repository->setMode(m8r::Repository::RepositoryMode::FILE);
+    repository->setFile(fileName);
+    m8r::Configuration& configuration = m8r::Configuration::getInstance();
+    configuration.setActiveRepository(configuration.addRepository(repository));
+    m8r::Ontology ontology{configuration};
+
+    // parse
+    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    File file{filePath};
+    m8r::Outline* o = mdr.outline(file);
+
+    // asserts
+    EXPECT_NE(o, nullptr);
+    ASSERT_EQ(o->getNotesCount(), 4);
+
+    cout << endl << "- O ---";
+    cout << endl << "Name: '" << o->getName() << "'";
+    EXPECT_EQ(o->getName(), "Outline Name");
+    cout << endl << "Desc: '" << o->getDescriptionAsString() << "'";
+    EXPECT_EQ(o->getDescription().size(), 2);
+
+    EXPECT_EQ(o->getNotes()[0]->getName(), "First Section");
+    EXPECT_EQ(o->getNotes()[0]->getDescription().size(), 2);
+    EXPECT_EQ(o->getNotes()[1]->getName(), "Second Section");
+    EXPECT_EQ(o->getNotes()[1]->getDescription().size(), 3);
+    EXPECT_EQ(o->getNotes()[2]->getName(), "Note 2");
+    EXPECT_EQ(o->getNotes()[2]->getDescription().size(), 3);
+    EXPECT_EQ(o->getNotes()[3]->getName(), "Note 3");
+    EXPECT_EQ(o->getNotes()[3]->getDescription().size(), 2);
+
+    // serialize
+    string* serialized = mdr.to(o);
+    cout << endl << "- SERIALIZED ---";
+    cout << endl << *serialized;
+    EXPECT_EQ(content, *serialized);
+
+    delete serialized;
+}
+
+// TODO support for trailing hashes to be implemented
+TEST(MarkdownParserTestCase, DISABLED_MarkdownRepresentationSectionTrailingHashes)
+{
+    string repositoryPath{"/tmp"};
+    string fileName{"md-trailing-hashes-section.md"};
+    string content;
+    string filePath{repositoryPath+"/"+fileName};
+
+    content.assign(
+        "Outline Name\n"
+        "============\n"
+        "O text.\n"
+        "\n"
+        "# First Section #\n"
+        "N1 text.\n"
+        "\n"
+        "## Second Section ##\n"
+        "\n"
         "N2 text.\n"
+        "\n"
+        "### Note 3 ###\n"
+        "N3 text.\n"
         "\n");
     m8r::stringToFile(filePath, content);
 

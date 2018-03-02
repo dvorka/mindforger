@@ -58,6 +58,7 @@ MarkdownAstNodeSection::MarkdownAstNodeSection()
     : MarkdownAstNode{MarkdownAstNodeType::SECTION}
 {
     depth = 0;
+    flags = 0;
     text = nullptr;
     body = new vector<string*>{};
 }

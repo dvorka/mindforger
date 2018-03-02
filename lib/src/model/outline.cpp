@@ -34,6 +34,7 @@ Outline::Outline(const OutlineType* type)
     reads = revision = 0;
     importance = urgency = progress = 0;
     bytesize = 0;
+    flags = 0;
 
     outlineDescriptorAsNote = new Note(&NOTE_4_OUTLINE_TYPE, this);
 }
