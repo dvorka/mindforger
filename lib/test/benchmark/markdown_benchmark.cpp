@@ -40,21 +40,50 @@ using namespace m8r;
 
 extern char* getMindforgerGitHomePath();
 
+// 2018/03/02 100x = 2.460ms (120MiB)
 TEST(MarkdownParserBenchmark, DISABLED_ParserMeta)
 {    
     unique_ptr<string> fileName
             = unique_ptr<string>(new string{"/lib/test/resources/benchmark-repository/memory/meta.md"});
     fileName.get()->insert(0, getMindforgerGitHomePath());
 
+    // do >1 iterations
+    const int ITERATIONS = 100;
     auto begin = chrono::high_resolution_clock::now();
+    for(int i=0; i<ITERATIONS; i++) {
+        cout << "." << flush;
+        MarkdownLexerSections lexer(fileName.get());
+        lexer.tokenize();
+        MarkdownParserSections parser(lexer);
+        parser.parse();
 
-    MarkdownLexerSections lexer(fileName.get());
-    lexer.tokenize();
-    MarkdownParserSections parser(lexer);
-    parser.parse();
-
+        EXPECT_TRUE(parser.hasMetadata());
+    }
     auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("\nParsed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
+    MF_DEBUG("\n" << (ITERATIONS*1.2) << "MiB (" << ITERATIONS << "x1.1MiB) MDs parsed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
+    MF_DEBUG(" ~ AVG: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms\n");
+}
 
-    EXPECT_TRUE(parser.hasMetadata());
+// 2018/03/02 100x = 1.000ms (770MiB)
+TEST(MarkdownParserBenchmark, DISABLED_ParserNoMeta)
+{
+    unique_ptr<string> fileName
+            = unique_ptr<string>(new string{"/lib/test/resources/benchmark-repository/memory/nometa.md"});
+    fileName.get()->insert(0, getMindforgerGitHomePath());
+
+    // do >1 iterations
+    const int ITERATIONS = 100;
+    auto begin = chrono::high_resolution_clock::now();
+    for(int i=0; i<ITERATIONS; i++) {
+        cout << "." << flush;
+        MarkdownLexerSections lexer(fileName.get());
+        lexer.tokenize();
+        MarkdownParserSections parser(lexer);
+        parser.parse();
+
+        EXPECT_FALSE(parser.hasMetadata());
+    }
+    auto end = chrono::high_resolution_clock::now();
+    MF_DEBUG("\n" << (ITERATIONS*0.77) << "MiB (" << ITERATIONS << "x0.77MiB) MDs parsed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
+    MF_DEBUG(" ~ AVG: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms\n");
 }
