@@ -339,6 +339,7 @@ public:
             const int8_t urgency = 0,
             const int8_t progress = 0,
             const std::vector<const Tag*>* tags = nullptr,
+            const std::string* preamble = nullptr,
             Stencil *outlineStencil = nullptr);
 
     Outline* outlineClone(const std::string& outlineKey);

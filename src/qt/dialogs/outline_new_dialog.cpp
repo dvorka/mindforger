@@ -114,6 +114,32 @@ void OutlineNewDialog::GeneralTab::clean()
 }
 
 /*
+ * Preamble tab
+ */
+
+OutlineNewDialog::PreambleTab::PreambleTab(QWidget *parent)
+    : QWidget(parent)
+{
+    preambleLabel = new QLabel{tr("Text")+":", this};
+    preambleText = new QTextEdit{this};
+
+    QGroupBox* preambleGroup = new QGroupBox{tr("Preamble"), this};
+    QVBoxLayout* locationLayout = new QVBoxLayout{this};
+    locationLayout->addWidget(preambleLabel);
+    locationLayout->addWidget(preambleText);
+    preambleGroup->setLayout(locationLayout);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(preambleGroup);
+    mainLayout->addStretch();
+    setLayout(mainLayout);
+}
+
+OutlineNewDialog::PreambleTab::~PreambleTab()
+{
+}
+
+/*
  * Advanced tab
  */
 
@@ -174,6 +200,9 @@ OutlineNewDialog::OutlineNewDialog(
     // stencils may be added/removed/changed therefore they are updated anytime dialog is shown
     tabWidget->addTab(generalTab, tr("General"));
 
+    preambleTab = new PreambleTab(this);
+    tabWidget->addTab(preambleTab, tr("Preamble"));
+
     advancedTab = new AdvancedTab(memoryDirPath, this);
     tabWidget->addTab(advancedTab, tr("Advanced"));
 
@@ -197,6 +226,7 @@ OutlineNewDialog::OutlineNewDialog(
 OutlineNewDialog::~OutlineNewDialog()
 {
     if(generalTab) delete generalTab;
+    if(preambleTab) delete preambleTab;
     if(advancedTab) delete advancedTab;
 }
 

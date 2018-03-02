@@ -68,6 +68,7 @@ public:
     ~OutlineNewDialog();
 
     QString getOutlineName() const;
+    QString getPreamble() const { return preambleTab->getPreambleText(); }
     Stencil* getStencil() const;
     const OutlineType* getOutlineType() const;
     int8_t getImportance() const;
@@ -107,7 +108,7 @@ private:
     EditTagsPanel* editTagsGroup;
 
 public:
-    explicit GeneralTab(Ontology& ontology, QWidget *parent);
+    explicit GeneralTab(Ontology& ontology, QWidget* parent);
     ~GeneralTab();
 
     QLineEdit* getNameEdit() const { return nameEdit; }
@@ -129,12 +130,15 @@ class OutlineNewDialog::PreambleTab : public QWidget
     Q_OBJECT
 
 private:
-    QLabel *fileLabel;
-    QLineEdit *fileLine;
+    QLabel* preambleLabel;
+    QTextEdit* preambleText;
 
 public:
-    explicit PreambleTab(QWidget *parent) {}
-    ~PreambleTab() {}
+    explicit PreambleTab(QWidget* parent);
+    ~PreambleTab();
+
+    void refreshPreambleText(QString& t) { preambleText->setText(t); }
+    QString getPreambleText() const { return preambleText->toPlainText(); }
 };
 
 /**
@@ -145,14 +149,14 @@ class OutlineNewDialog::AdvancedTab : public QWidget
     Q_OBJECT
 
 private:
-    QLabel *fileLabel;
-    QLineEdit *fileLine;
+    QLabel* fileLabel;
+    QLineEdit* fileLine;
 
 private:
     const QString memoryDirPath;
 
 public:
-    explicit AdvancedTab(const QString& memoryDirPath, QWidget *parent);
+    explicit AdvancedTab(const QString& memoryDirPath, QWidget* parent);
     void refreshPath(const QString &name);
     ~AdvancedTab();
 };
