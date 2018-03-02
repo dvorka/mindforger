@@ -54,6 +54,7 @@ Note* MarkdownOutlineRepresentation::note(vector<MarkdownAstNodeSection*>* ast, 
             noteType = ontology.getDefaultNoteType();
         }
         note = new Note{noteType, outline};
+        if(ast->at(i)->isPostDeclaredSection()) note->setPostDeclaredSection();
         // TODO pull pointer > do NOT copy
         if (ast->at(i)->getText() != nullptr) {
             note->setName(*(ast->at(i)->getText()));
@@ -125,6 +126,7 @@ Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>*
             }
 
             // O's section
+            if(astNode->isPostDeclaredSection()) outline->setPostDeclaredSection();
             if(astNode->getText()!=nullptr) {
                 // IMPROVE pull pointer > do NOT copy
                 outline->setName(*(astNode->getText()));
@@ -251,7 +253,9 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
             md->reserve(outline->getNotes().size()*AVG_NOTE_SIZE);
         }
 
-        md->append("# ");
+        if(!outline->isPostDeclaredSection()) {
+            md->append("# ");
+        }
         if(outline->getName().size()) {
             md->append(outline->getName());
         } else {
@@ -274,6 +278,11 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
             sprintf(buffer," progress: %d%%; -->",outline->getProgress()); md->append(buffer);
         }
         md->append("\n");
+        if(outline->isPostDeclaredSection()) {
+            int w=outline->getName().size()<2?2:outline->getName().size();
+            for(int i=0; i<w; i++) md->append("=");
+            md->append("\n");
+        }
 
         const vector<string*>& description=outline->getDescription();
         if(description.size()) {
@@ -371,11 +380,13 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
 {
     md->clear();
 
-    char buffer[50];
-    for(int i=0; i<=note->getDepth(); i++) {
-        md->append("#");
+    if(!note->isPostDeclaredSection()) {
+        for(int i=0; i<=note->getDepth(); i++) {
+            md->append("#");
+        }
+        md->append(" ");
     }
-    md->append(" ");
+
     if(note->getName().size()) {
         md->append(note->getName());
     } else {
@@ -383,6 +394,7 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
     }
 
     if(includeMetadata) {
+        char buffer[50];
         md->append(" <!-- Metadata:");
         if(note->getTags().size()) { md->append(" tags: "); md->append(to(md, note->getTags())); md->append(";"); }
         md->append(" type: "); md->append(note->getType()->getName()); md->append(";");
@@ -394,6 +406,15 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
         sprintf(buffer," progress: %d%%; -->",note->getProgress()); md->append(buffer);
     }
     md->append("\n");
+
+    if(note->isPostDeclaredSection()) {
+        int w=note->getName().size()<2?2:note->getName().size();
+        const char* c = note->getDepth()?"-":"=";
+        for(int i=0; i<w; i++) {
+            md->append(c);
+        }
+        md->append("\n");
+    }
 
     toDescription(note, md);
 

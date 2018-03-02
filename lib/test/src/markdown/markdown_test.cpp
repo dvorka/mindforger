@@ -596,7 +596,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPostDeclaredSection)
 
     content.assign(
         "Outline Name\n"
-        "========\n"
+        "============\n"
         "O text.\n"
         "\n"
         "First Section\n"
@@ -608,7 +608,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPostDeclaredSection)
         "N2 text.\n"
         "\n"
         "Note 3\n"
-        "-------------\n"
+        "------\n"
         "N2 text.\n"
         "\n");
     m8r::stringToFile(filePath, content);
@@ -641,6 +641,14 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPostDeclaredSection)
     EXPECT_EQ(o->getNotes()[1]->getDescription().size(), 3);
     EXPECT_EQ(o->getNotes()[2]->getName(), "Note 3");
     EXPECT_EQ(o->getNotes()[2]->getDescription().size(), 2);
+
+    // serialize
+    string* serialized = mdr.to(o);
+    cout << endl << "- SERIALIZED ---";
+    cout << endl << *serialized;
+    EXPECT_EQ(content, *serialized);
+
+    delete serialized;
 }
 
 TEST(MarkdownParserTestCase, MarkdownRepresentationEmptyFirstLine)

@@ -153,8 +153,8 @@ public:
 class MarkdownAstNodeSection : public MarkdownAstNode
 {
 public:
-    // IMPROVE constexpr
-    static u_int16_t PREAMBLE;
+    static constexpr u_int16_t PREAMBLE = 0xff00;
+    static constexpr int FLAG_MASK_POST_DECLARED_SECTION = 1;
 
 protected:
     /**
@@ -163,6 +163,9 @@ protected:
     u_int16_t depth;
     MarkdownAstSectionMetadata metadata;
     std::vector<std::string*>* body;
+
+    // various flags (bit)
+    int flags;
 
 public:
     explicit MarkdownAstNodeSection();
@@ -183,6 +186,9 @@ public:
 
     void setPreamble() { depth = PREAMBLE; }
     bool isPreambleSection() { return depth == PREAMBLE; }
+
+    void setPostDeclaredSection() { flags |= FLAG_MASK_POST_DECLARED_SECTION; }
+    bool isPostDeclaredSection() const { return flags & FLAG_MASK_POST_DECLARED_SECTION; }
 };
 
 } // m8r namespace

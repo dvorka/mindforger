@@ -165,6 +165,7 @@ MarkdownAstNodeSection* MarkdownParserSections::sectionRule(size_t& offset)
             depth = lexer[offset+1]->getType()==MarkdownLexemType::SECTION_equals?0:1;
             ++offset; // move to point to SECTION_*
             result = new MarkdownAstNodeSection(lexer.getText(lexer[++offset])); // move to LINE
+            result->setPostDeclaredSection();
             result->setDepth(depth);
             ++offset; // skip BR
             result->setBody(sectionBodyRule(offset));

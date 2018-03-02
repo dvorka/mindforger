@@ -62,6 +62,8 @@ public:
     static const u_int16_t MAX_NOTE_DEPTH = 100;
 
 private:
+    static constexpr int FLAG_MASK_POST_DECLARED_SECTION = 1;
+
     /**
      * @brief Auxiliary Note type that is used to represent Outline's name and description, e.g. in FTS.
      */
@@ -79,6 +81,9 @@ private:
      */
     // IMPROVE make Key object w/ equals - std::string and sequence integer for fast equals
     std::string key;
+
+    // various format, structure, semantic, ... flags (bit)
+    int flags;
 
     Markdown::Format format;
 
@@ -220,6 +225,9 @@ public:
     /*
      * Dialect detection
      */
+
+    void setPostDeclaredSection() { flags |= FLAG_MASK_POST_DECLARED_SECTION; }
+    bool isPostDeclaredSection() const { return flags & FLAG_MASK_POST_DECLARED_SECTION; }
 
     bool isApiaryBlueprint();
 

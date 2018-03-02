@@ -44,8 +44,14 @@ class Outline;
 class Note : public Thing
 {
 private:
+    static constexpr int FLAG_MASK_POST_DECLARED_SECTION = 1;
+
+private:
     // parent outline - might be changed on refactoring
     Outline* outline;
+
+    // various format, structure, semantic, ... flags (bit)
+    int flags;
 
     // [0,inf)
     u_int16_t depth;
@@ -124,6 +130,9 @@ public:
 
     void promote();
     void demote();
+
+    void setPostDeclaredSection() { flags |= FLAG_MASK_POST_DECLARED_SECTION; }
+    bool isPostDeclaredSection() const { return flags & FLAG_MASK_POST_DECLARED_SECTION; }
 };
 
 } // m8r namespace
