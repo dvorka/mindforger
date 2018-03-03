@@ -2,10 +2,6 @@
 
 Written by [Martin Dvorak](http://me.mindforger.com).
 
-Special thanks:
-     
-* ...
-
 Big thanks to 3rd party content authors:
 
 * Bjarne Stroustrup (C++ - for inspiring visions and being the authority behind C++ language)
@@ -23,6 +19,7 @@ Big thanks to 3rd party content authors:
 
 See [licenses](./licenses) folder for 3rd party content licensing details.
 
-Acknowledgements to reviewers and testers:
+Acknowledgements to reviewers, and testers:
 
-* Floex
+* Floex (reviews)
+* Honza Odstrcil (consultations)

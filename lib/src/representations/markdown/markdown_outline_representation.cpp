@@ -122,50 +122,56 @@ Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>*
                     }
                     delete body;
                 }
-                astNode = ast->at(++off);
-            }
-
-            // O's section
-            if(astNode->isPostDeclaredSection()) outline->setPostDeclaredSection();
-            if(astNode->getText()!=nullptr) {
-                // IMPROVE pull pointer > do NOT copy
-                outline->setName(*(astNode->getText()));
-            }
-            const string* s = astNode->getMetadata().getType();
-            if(s) {
-                const OutlineType* outlineType;
-                // IMPROVE consider string normalization to make parsing more robust
-                //std::transform(s.begin(), s.end(), s.begin(), ::tolower);
-                //s[0] = toupper(s[0])
-                if((outlineType=ontology.getOutlineTypes().get(*s))==nullptr) {
-                    outlineType = ontology.getDefaultOutlineType();
-                }
-                outline->setType(outlineType);
-            }
-            outline->setCreated(astNode->getMetadata().getCreated());
-            outline->setModified(astNode->getMetadata().getModified());
-            outline->setRevision(astNode->getMetadata().getRevision());
-            outline->setRead(astNode->getMetadata().getRead());
-            outline->setReads(astNode->getMetadata().getReads());
-            outline->setImportance(astNode->getMetadata().getImportance());
-            outline->setUrgency(astNode->getMetadata().getUrgency());
-            outline->setProgress(astNode->getMetadata().getProgress());
-
-            if(astNode->getMetadata().getTags().size()) {
-                const Tag* t;
-                for(string* s:astNode->getMetadata().getTags()) {
-                    t = ontology.findOrCreateTag(*s);
-                    outline->addTag(t);
+                if(ast->size()>1) {
+                    astNode = ast->at(++off);
+                } else {
+                    astNode = nullptr;
                 }
             }
 
-            vector<string*>* body = ast->at(off)->moveBody();
-            if(body!=nullptr) {
-                // IMPROVE use body as is
-                for(string*& bodyItem:*body) {
-                    outline->addDescriptionLine(bodyItem);
+            if(astNode) {
+                // O's section
+                if(astNode->isPostDeclaredSection()) outline->setPostDeclaredSection();
+                if(astNode->getText()!=nullptr) {
+                    // IMPROVE pull pointer > do NOT copy
+                    outline->setName(*(astNode->getText()));
                 }
-                delete body;
+                const string* s = astNode->getMetadata().getType();
+                if(s) {
+                    const OutlineType* outlineType;
+                    // IMPROVE consider string normalization to make parsing more robust
+                    //std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+                    //s[0] = toupper(s[0])
+                    if((outlineType=ontology.getOutlineTypes().get(*s))==nullptr) {
+                        outlineType = ontology.getDefaultOutlineType();
+                    }
+                    outline->setType(outlineType);
+                }
+                outline->setCreated(astNode->getMetadata().getCreated());
+                outline->setModified(astNode->getMetadata().getModified());
+                outline->setRevision(astNode->getMetadata().getRevision());
+                outline->setRead(astNode->getMetadata().getRead());
+                outline->setReads(astNode->getMetadata().getReads());
+                outline->setImportance(astNode->getMetadata().getImportance());
+                outline->setUrgency(astNode->getMetadata().getUrgency());
+                outline->setProgress(astNode->getMetadata().getProgress());
+
+                if(astNode->getMetadata().getTags().size()) {
+                    const Tag* t;
+                    for(string* s:astNode->getMetadata().getTags()) {
+                        t = ontology.findOrCreateTag(*s);
+                        outline->addTag(t);
+                    }
+                }
+
+                vector<string*>* body = ast->at(off)->moveBody();
+                if(body!=nullptr) {
+                    // IMPROVE use body as is
+                    for(string*& bodyItem:*body) {
+                        outline->addDescriptionLine(bodyItem);
+                    }
+                    delete body;
+                }
             }
         }
 
