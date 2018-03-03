@@ -20,7 +20,7 @@
 #export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
 #export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
-#export OPTION_RUN_ALL_TESTS=yes # comment this line to disable
+export OPTION_RUN_ALL_TESTS=yes # comment this line to disable
 
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
@@ -38,7 +38,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownRepresentationPostDeclaredSection"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownRepresentationEmptyFirstLine"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownRepresentationPreamble"
-export OPTION_TEST="MarkdownParserTestCase.MarkdownRepresentationSectionTrailingHashes"
+#export OPTION_TEST="MarkdownParserTestCase.MarkdownRepresentationSectionTrailingHashes"
 #export OPTION_TEST="RepositoryIndexerTestCase.*"
 #export OPTION_TEST="RepositoryIndexerTestCase.RepositoryTypeDetection"
 #export OPTION_TEST="RepositoryIndexerTestCase.MarkdownRepository"

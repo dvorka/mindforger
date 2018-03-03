@@ -50,5 +50,170 @@ void createEmptyRepository(string& repositoryDir, map<string,string>& pathToCont
     }
 }
 
+void printLexemType(MarkdownLexemType type)
+{
+    switch(type) {
+    case MarkdownLexemType::BEGIN_DOC:
+        cout << "BEGIN_DOC         ";
+        break;
+    case MarkdownLexemType::END_DOC:
+        cout << "END_DOC           ";
+        break;
+    case MarkdownLexemType::SECTION:
+        cout << "SECTION           ";
+        break;
+    case MarkdownLexemType::SECTION_equals:
+        cout << "SECTION=           ";
+        break;
+    case MarkdownLexemType::SECTION_hyphens:
+        cout << "SECTION-           ";
+        break;
+    case MarkdownLexemType::BR:
+        cout << "BR                ";
+        break;
+    case MarkdownLexemType::LINE:
+        cout << "LINE              ";
+        break;
+    case MarkdownLexemType::TEXT:
+        cout << "TEXT              ";
+        break;
+    case MarkdownLexemType::WHITESPACES:
+        cout << "WHITESPACES       ";
+        break;
+    case MarkdownLexemType::HTML_COMMENT_BEGIN:
+        cout << "HTML_COMMENT_BEGIN";
+        break;
+    case MarkdownLexemType::HTML_COMMENT_END:
+        cout << "HTML_COMMENT_END  ";
+        break;
+
+    case MarkdownLexemType::META_BEGIN:
+        cout << "META_BEGIN        ";
+        break;
+    case MarkdownLexemType::META_PROPERTY_DELIMITER:
+        cout << "META_PROP_DELIM   ";
+        break;
+    case MarkdownLexemType::META_NAMEVALUE_DELIMITER:
+        cout << "META_NV_DELIM     ";
+        break;
+
+    case MarkdownLexemType::META_PROPERTY_created:
+        cout << "META created     #";
+        break;
+    case MarkdownLexemType::META_PROPERTY_importance:
+        cout << "META importance  #";
+        break;
+    case MarkdownLexemType::META_PROPERTY_modified:
+        cout << "META modified    #";
+        break;
+    case MarkdownLexemType::META_PROPERTY_progress:
+        cout << "META progress    #";
+        break;
+    case MarkdownLexemType::META_PROPERTY_read:
+        cout << "META read        #";
+        break;
+    case MarkdownLexemType::META_PROPERTY_reads:
+        cout << "META reads       #";
+        break;
+    case MarkdownLexemType::META_PROPERTY_revision:
+        cout << "META revision    #";
+        break;
+    case MarkdownLexemType::META_PROPERTY_tags:
+        cout << "META tags        #";
+        break;
+    case MarkdownLexemType::META_PROPERTY_type:
+        cout << "META type        #";
+        break;
+    case MarkdownLexemType::META_PROPERTY_urgency:
+        cout << "META urgency     #";
+        break;
+
+    case MarkdownLexemType::META_PROPERTY_VALUE:
+        cout << "META_PROP_VALUE  >";
+        break;
+
+    case MarkdownLexemType::META_TEXT:
+        cout << "META_TEXT         ";
+        break;
+
+    default:
+        cout << (int)type;
+        break;
+    }
+}
+
+void printLexems(const vector<MarkdownLexem*>& lexems)
+{
+    cout << endl << "LEXEMs:";
+    if(!lexems.empty()) {
+        cout << " (" << lexems.size() << ")";
+        for(unsigned long i=0; i<lexems.size(); ++i) {
+            cout << endl << "  #" << i << " ";
+            printLexemType(lexems.at(i)->getType());
+            if(lexems.at(i)->getType() == MarkdownLexemType::SECTION) {
+                cout << " " << lexems.at(i)->getDepth();
+            } else {
+                cout << " " << lexems.at(i)->getOff();
+                cout << " " << lexems.at(i)->getIdx();
+                cout << " " << (lexems.at(i)->getLng()==MarkdownLexem::WHOLE_LINE?"*":std::to_string(lexems.at(i)->getLng()));
+            }
+        }
+    } else {
+        cout << "  EMPTY";
+    }
+    cout << endl << "End of LEXEMs";
+}
+
+void printAst(const vector<MarkdownAstNodeSection*>* ast)
+{
+    cout << endl << "AST: ";
+    if(ast) {
+        cout << " (" << ast->size() << ")";
+        string* name{};
+        size_t c = 0;
+        for(MarkdownAstNodeSection* section:*ast) {
+            cout << endl << "  " << ++c << " #";
+            cout << section->getDepth();
+            if(section->getBody()) {
+                cout << " d" << section->getBody()->size();
+            } else {
+                cout << " dNULL";
+            }
+            cout << " '";
+            name = section->getText();
+            if(name!=nullptr) {
+                cout << *name;
+            } else {
+                cout << "NULL";
+            }
+            cout << "'";
+            MarkdownAstSectionMetadata& meta = section->getMetadata();
+            cout << "    / t: " << (meta.getType()?*meta.getType():"NULL");
+            cout << " / c: " << meta.getCreated();
+            cout << " / m: " << meta.getModified();
+            cout << " / r: " << meta.getRead();
+            cout << " / l: " << (meta.getPrimaryTag()==nullptr?"NULL":*(meta.getPrimaryTag()));
+            cout << " / R: " << meta.getReads();
+            cout << " / W: " << meta.getRevision();
+            cout << " / *: '" << (int)meta.getImportance() << "'";
+            cout << " / !: " << (int)meta.getUrgency();
+            cout << " / %: " << (int)meta.getProgress();
+            cout << " / t: ";
+            if(meta.getTags().size()) {
+                for(string* s:meta.getTags()) {
+                    cout << *s << "|";
+                }
+            } else {
+                cout << "EMPTY";
+            }
+
+        }
+
+    } else {
+        cout << "  EMPTY";
+    }
+    cout << endl << "End of AST";
+}
+
 } // namespace
 

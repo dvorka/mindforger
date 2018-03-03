@@ -91,6 +91,7 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
                 2,
                 55,
                 &tags,
+                nullptr,
                 stencil);
 
     // create stencil MANUALLY (stencil file does NOT have to exist)
@@ -109,6 +110,7 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
                 5,
                 66,
                 &tags,
+                nullptr,
                 outlineStencil.get());
 
     // asserts

@@ -27,6 +27,10 @@
 namespace m8r {
 
 void printOutlineNotes(Outline* o);
+void printLexemType(MarkdownLexemType type);
+void printLexems(const std::vector<MarkdownLexem*>& lexems);
+void printAst(const std::vector<MarkdownAstNodeSection*>* ast);
+
 void createEmptyRepository(std::string& repositoryDir, std::map<std::string,std::string>& pathToContent);
 
 }
