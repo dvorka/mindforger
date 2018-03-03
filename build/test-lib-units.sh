@@ -72,18 +72,22 @@ then
     echo "Set M8R_GIT_PATH env var to specify location of MindForger Git repository"
     exit 1
 fi
+
 if [ ${OPTION_RUN_VALGRIND} ] 
 then
-    export M8R_VALGRIND="valgrind --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
-    #export M8R_VALGRIND="valgrind -v --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
+    if [ ${OPTION_RUN_GDB} ] 
+    then
+	export M8R_VALGRIND="valgrind --vgdb=yes --vgdb-error=0 --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
+    else
+	export M8R_VALGRIND="valgrind --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
+	#export M8R_VALGRIND="valgrind -v --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
+    fi
 else
-    export M8R_VALGRIND=
-fi
-if [ ${OPTION_RUN_GDB} ] 
-then
-    export M8R_GDB="gdb --args"
-else
-    export M8R_GDB=
+    export M8R_VALGRIND=    
+    if [ ${OPTION_RUN_GDB} ] 
+    then
+	export M8R_GDB="gdb --args"
+    fi
 fi
 
 export SCRIPT_DIR=`pwd`
@@ -110,6 +114,7 @@ rm -vf ${TEST_LOG_FILE}
 # run test(s)
 if [ ${OPTION_RUN_ALL_TESTS} ]
 then
+    echo "Running: ${M8R_GDB} ${M8R_VALGRIND} ./mindforger-lib-unit-tests"
     cd ${BUILD_DIR} && ${M8R_GDB} ${M8R_VALGRIND} ./mindforger-lib-unit-tests #> ${TEST_LOG_FILE} 2>&1
 else
     # run selected test(s)
