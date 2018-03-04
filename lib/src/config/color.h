@@ -107,7 +107,7 @@ public:
         return color;
     }
     static const Color& MF_GRAY() {
-        static const Color color(0xCC,0xCC,0xCC);
+        static const Color color(0x88,0x88,0x88);
         return color;
     }
     static const Color& MF_TURQUOISE() {
