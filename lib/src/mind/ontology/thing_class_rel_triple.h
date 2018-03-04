@@ -22,6 +22,8 @@
 #include <string>
 #include <set>
 
+#include "../../config/color.h"
+
 /*
  * Thing, Class, Relationship, RelationshipType and Triple
  * share the same header file to simplify compilation units
@@ -109,13 +111,42 @@ private:
     bool symetric;
     bool transitive;
 
+    const Color& color;
+
 public:
-    explicit RelationshipType(const std::string& name, Clazz* isA);
+    // static initialization order fiasco prevention
+    static const std::string& KeyIsA() {
+        static const std::string KEY_IS_A= std::string{"is a"};
+        return KEY_IS_A;
+    }
+    static const std::string& KeySameAs() {
+        static const std::string KEY_SAME_AS = std::string{"same as"};
+        return KEY_SAME_AS;
+    }
+    static const std::string& KeyOppositeOf() {
+        static const std::string KEY_OPPOSITE_OF= std::string{"opposite of"};
+        return KEY_OPPOSITE_OF;
+    }
+    static const std::string& KeyDependsOn() {
+        static const std::string KEY_DEPENDS_ON= std::string{"depends on"};
+        return KEY_DEPENDS_ON;
+    }
+
+public:
+    RelationshipType() = delete;
+    explicit RelationshipType(const std::string& name, Clazz* isA, const Color& color);
     RelationshipType(const RelationshipType&) = delete;
     RelationshipType(const RelationshipType&&) = delete;
     RelationshipType &operator=(const RelationshipType&) = delete;
     RelationshipType &operator=(const RelationshipType&&) = delete;
     ~RelationshipType();
+
+    bool isReflexive() const { return reflexive; }
+    void setReflexive(bool r) { reflexive = r; }
+    bool isTransitive() const { return transitive; }
+    void setTransitive(bool t) { transitive = t; }
+    bool isSymetric() const { return symetric; }
+    void setSymetric(bool s) { symetric = s; }
 };
 
 /**
@@ -128,24 +159,24 @@ public:
 class Triple : public Thing
 {
 protected:
-    Thing* subject;
-    RelationshipType* predicate;
-    Thing* object;
+    const Thing* subject;
+    const RelationshipType* predicate;
+    const Thing* object;
 
 public:
-    explicit Triple(const std::string name);
+    explicit Triple(const std::string name, const Thing* subject, const RelationshipType* predicate, const Thing* object);
     Triple(const Triple&) = delete;
     Triple(const Triple&&) = delete;
     Triple &operator=(const Triple&) = delete;
     Triple &operator=(const Triple&&) = delete;
     ~Triple();
 
-    Thing* getSubject() const { return subject; }
-    void setSubject(Thing* subject) { this->subject = subject; }
-    RelationshipType* getPredicate() const { return predicate; }
-    void setPredicate(RelationshipType* predicate) { this->predicate = predicate; }
-    Thing* getObject() const { return object; }
-    void setObject(Thing* object) { this->object = object; }
+    const Thing* getSubject() const { return subject; }
+    void setSubject(const Thing* subject) { this->subject = subject; }
+    const RelationshipType* getPredicate() const { return predicate; }
+    void setPredicate(const RelationshipType* predicate) { this->predicate = predicate; }
+    const Thing* getObject() const { return object; }
+    void setObject(const Thing* object) { this->object = object; }
 };
 
 /**
@@ -160,7 +191,7 @@ public:
     /**
      * @brief Triple constructor - every Relationship is a Triple.
      */
-    explicit Relationship(const std::string name);
+    explicit Relationship(const std::string name, Thing* subject, RelationshipType* predicate, Thing* object);
     Relationship(const Relationship&) = delete;
     Relationship(const Relationship&&) = delete;
     Relationship &operator=(const Relationship&) = delete;

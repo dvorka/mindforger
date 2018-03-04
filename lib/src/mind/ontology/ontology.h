@@ -145,6 +145,24 @@ private:
     Taxonomy<Tag> tagTaxonomy;
 
     /*
+     * Relationships
+     */
+
+    RelationshipType* RELATIONSHIP_TYPE_IS_A;
+    RelationshipType* RELATIONSHIP_TYPE_SAME_AS;
+    RelationshipType* RELATIONSHIP_TYPE_OPPOSITE_OF;
+    RelationshipType* RELATIONSHIP_TYPE_DEPENDS_ON;
+
+    /**
+     * Ontology metamodel captures meta-model level relationships among O types, N types,
+     * relationship types and tags e.g. child-rel opposite-of parent-rel.
+     *
+     * Ontology triples can be/are used to infer new triples on top of Mind's triples
+     * e.g. by leveraging transitivity or opposite-of properties of a rel.
+     */
+    std::vector<Triple*> metamodel;
+
+    /*
      * Defaults
      */
 

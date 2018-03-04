@@ -57,9 +57,10 @@ Clazz::~Clazz()
  * RelationshipType
  */
 
-RelationshipType::RelationshipType(const std::string& name, Clazz* isA)
-    : Clazz(name, isA)
+RelationshipType::RelationshipType(const std::string& name, Clazz* isA, const Color& color)
+    : Clazz{name, isA}, color(color)
 {
+    reflexive = transitive = symetric = false;
 }
 
 RelationshipType::~RelationshipType()
@@ -70,8 +71,11 @@ RelationshipType::~RelationshipType()
  * Triple
  */
 
-Triple::Triple(const std::string name)
-    : Thing(name)
+Triple::Triple(const std::string name, const Thing* subject, const RelationshipType* predicate, const Thing* object)
+    : Thing(name),
+      subject(subject),
+      predicate(predicate),
+      object(object)
 {
 }
 
@@ -83,8 +87,8 @@ Triple::~Triple()
  * Relationship
  */
 
-Relationship::Relationship(const std::string name)
-    : Triple(name)
+Relationship::Relationship(const std::string name, Thing* subject, RelationshipType* predicate, Thing* object)
+    : Triple(name, subject, predicate, object)
 {
 }
 

@@ -78,15 +78,36 @@ Ontology::Ontology(const Configuration& configuration)
     noteTypeTaxonomy.add(NoteType::KeyThreat(), new NoteType{NoteType::KeyThreat(), &noteTypeTaxonomy, Color::MF_GRAY()});
     noteTypeTaxonomy.add(NoteType::KeyWeakness(), new NoteType{NoteType::KeyWeakness(), &noteTypeTaxonomy, Color::MF_GRAY()});
 
-    // TODO relationship types
-    noteTypeTaxonomy.setName(KEY_TAXONOMY_RELATIONSHIP_TYPES);
-    noteTypeTaxonomy.setIsA(&thing);
-    //noteTypeTaxonomy.add(RelationshipType::KeySame(), new RelationshipType(RelationshipType::KeyGrow(), &outlineTypeTaxonomy, Color::MF_GRAY()));
-    //noteTypeTaxonomy.add(RelationshipType::KeyOpposite(), new RelationshipType(RelationshipType::KeyGrow(), &outlineTypeTaxonomy, Color::MF_GRAY()));
-    //noteTypeTaxonomy.add(RelationshipType::KeyDepends(), new RelationshipType(RelationshipType::KeyGrow(), &outlineTypeTaxonomy, Color::MF_GRAY()));
+    // relationship types
+    RELATIONSHIP_TYPE_IS_A = new RelationshipType(RelationshipType::KeyIsA(), &outlineTypeTaxonomy, Color::MF_GREEN());
+    RELATIONSHIP_TYPE_IS_A->setReflexive(true);
+    RELATIONSHIP_TYPE_IS_A->setTransitive(true);
+    RELATIONSHIP_TYPE_SAME_AS = new RelationshipType(RelationshipType::KeySameAs(), &outlineTypeTaxonomy, Color::MF_GREEN());
+    RELATIONSHIP_TYPE_SAME_AS->setReflexive(true);
+    RELATIONSHIP_TYPE_SAME_AS->setTransitive(true);
+    RELATIONSHIP_TYPE_SAME_AS->setSymetric(true);
+    RELATIONSHIP_TYPE_OPPOSITE_OF = new RelationshipType(RelationshipType::KeyOppositeOf(), &outlineTypeTaxonomy, Color::MF_GREEN());
+    RELATIONSHIP_TYPE_OPPOSITE_OF->setTransitive(true);
+    RELATIONSHIP_TYPE_DEPENDS_ON = new RelationshipType(RelationshipType::KeyDependsOn(), &outlineTypeTaxonomy, Color::MF_GREEN());
+    RELATIONSHIP_TYPE_DEPENDS_ON->setTransitive(true);
 
-    // TODO relationships among taxonomies and their categories, ...
-    // ...
+    relationshipTypeTaxonomy.setName(KEY_TAXONOMY_RELATIONSHIP_TYPES);
+    relationshipTypeTaxonomy.setIsA(&thing);
+    relationshipTypeTaxonomy.add(RelationshipType::KeyIsA(), RELATIONSHIP_TYPE_IS_A);
+    relationshipTypeTaxonomy.add(RelationshipType::KeySameAs(), RELATIONSHIP_TYPE_SAME_AS);
+    relationshipTypeTaxonomy.add(RelationshipType::KeyOppositeOf(), RELATIONSHIP_TYPE_OPPOSITE_OF);
+    relationshipTypeTaxonomy.add(RelationshipType::KeyDependsOn(), RELATIONSHIP_TYPE_DEPENDS_ON);
+
+    // ontology metamodel ~ relationships among taxonomies and their categories, relationships, ...
+    string tripleName{};
+    metamodel.push_back(
+        new Triple(
+             tripleName,
+             noteTypeTaxonomy.get(NoteType::KeyStrength()), RELATIONSHIP_TYPE_OPPOSITE_OF, noteTypeTaxonomy.get(NoteType::KeyWeakness())));
+    metamodel.push_back(
+        new Triple(
+             tripleName,
+             noteTypeTaxonomy.get(NoteType::KeyOpportunity()), RELATIONSHIP_TYPE_OPPOSITE_OF, noteTypeTaxonomy.get(NoteType::KeyThreat())));
 }
 
 Ontology::~Ontology()
@@ -108,6 +129,18 @@ Ontology::~Ontology()
             delete t.second;
         }
         noteTypeTaxonomy.clear();
+    }
+    if(!relationshipTypeTaxonomy.empty()) {
+        for(auto& t:relationshipTypeTaxonomy.getClasses()) {
+            delete t.second;
+        }
+        relationshipTypeTaxonomy.clear();
+    }
+    if(!metamodel.empty()) {
+        for(auto& t:metamodel) {
+            delete t;
+        }
+        metamodel.clear();
     }
 }
 

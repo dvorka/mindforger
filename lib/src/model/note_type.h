@@ -97,7 +97,7 @@ public:
     }
 
     NoteType() = delete;
-    NoteType(std::string name, Clazz* isA, const Color& color);
+    NoteType(const std::string& name, Clazz* isA, const Color& color);
     NoteType(const NoteType&) = delete;
     NoteType(const NoteType&&) = delete;
     NoteType &operator=(const NoteType&) = delete;

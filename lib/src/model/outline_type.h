@@ -40,7 +40,7 @@ public:
     }
 
     OutlineType() = delete;
-    explicit OutlineType(std::string name, Clazz* isA, const Color& color);
+    explicit OutlineType(const std::string& name, Clazz* isA, const Color& color);
     OutlineType(const OutlineType&) = delete;
     OutlineType(const OutlineType&&) = delete;
     OutlineType &operator=(const OutlineType&) = delete;

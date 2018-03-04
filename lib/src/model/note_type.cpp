@@ -22,8 +22,7 @@ using namespace std;
 
 namespace m8r {
 
-// IMPROVE const string name
-NoteType::NoteType(string name, Clazz* isA, const Color& color)
+NoteType::NoteType(const string& name, Clazz* isA, const Color& color)
     : Clazz{name, isA}, color(color)
 {
 }

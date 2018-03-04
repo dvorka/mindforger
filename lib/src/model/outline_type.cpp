@@ -22,8 +22,7 @@ using namespace std;
 
 namespace m8r {
 
-// IMPROVE const string name
-OutlineType::OutlineType(string name, Clazz* isA, const Color& color)
+OutlineType::OutlineType(const string& name, Clazz* isA, const Color& color)
     : Clazz{name, isA},
       color(color)
 
