@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
+#export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
 #export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
 #export OPTION_RUN_ALL_TESTS=yes # comment this line to disable
@@ -27,7 +27,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSections"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsPreamble"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsNoMetadata"
-export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsPostDeclaredHeaders"
+#export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsPostDeclaredHeaders"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsPostDeclaredHeaders2"
 #export OPTION_TEST="MarkdownParserTestCase.*"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownParserSections"
@@ -36,6 +36,7 @@ export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsPostDeclaredHead
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownParserSectionsNoMetadata"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownParserSections"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownRepresentationPostDeclaredSection"
+export OPTION_TEST="MarkdownParserTestCase.MarkdownRepresentationTrailingHashesSection"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownRepresentationEmptyFirstLine"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownRepresentationPreamble"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownRepresentationSectionTrailingHashes"

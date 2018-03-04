@@ -154,6 +154,25 @@ MarkdownAstNodeSection* MarkdownParserSections::sectionRule(size_t& offset)
             depth=lexer[offset+1]->getDepth();
             result=sectionHeaderRule(++offset);
             if(result!=nullptr) {
+                // detect trailing spaces (no metadata) like ### Section w/ depth 3 ###
+                string* n = result->getText();
+                if(n && n->size()>=5 && n->at(n->size()-1)=='#')
+                {
+                    bool t = true;
+                    if(depth) {
+                        for(uint i=n->size()-2; i>n->size()-2-depth; i--) {
+                            if(n->at(i)!='#') {
+                                t = false;
+                                break;
+                            }
+                        }
+                    }
+                    if(t && n->size()>depth+1 && n->at(n->size()-1-1-depth)==' ') {
+                        result->setTrailingHashesSection();
+                        n->assign(n->substr(0, n->size()-(1+depth+1)));
+                    }
+                }
+
                 result->setDepth(depth);
                 result->setBody(sectionBodyRule(offset));
                 return result;

@@ -45,6 +45,7 @@ class Note : public Thing
 {
 private:
     static constexpr int FLAG_MASK_POST_DECLARED_SECTION = 1;
+    static constexpr int FLAG_MASK_TRAILING_HASHES_SECTION = 1<<1;
 
 private:
     // parent outline - might be changed on refactoring
@@ -133,6 +134,8 @@ public:
 
     void setPostDeclaredSection() { flags |= FLAG_MASK_POST_DECLARED_SECTION; }
     bool isPostDeclaredSection() const { return flags & FLAG_MASK_POST_DECLARED_SECTION; }
+    void setTrailingHashesSection() { flags |= FLAG_MASK_TRAILING_HASHES_SECTION; }
+    bool isTrailingHashesSection() const { return flags & FLAG_MASK_TRAILING_HASHES_SECTION; }
 };
 
 } // m8r namespace

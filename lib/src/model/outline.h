@@ -63,6 +63,7 @@ public:
 
 private:
     static constexpr int FLAG_MASK_POST_DECLARED_SECTION = 1;
+    static constexpr int FLAG_MASK_TRAILING_HASHES_SECTION = 1<<1;
 
     /**
      * @brief Auxiliary Note type that is used to represent Outline's name and description, e.g. in FTS.
@@ -228,6 +229,8 @@ public:
 
     void setPostDeclaredSection() { flags |= FLAG_MASK_POST_DECLARED_SECTION; }
     bool isPostDeclaredSection() const { return flags & FLAG_MASK_POST_DECLARED_SECTION; }
+    void setTrailingHashesSection() { flags |= FLAG_MASK_TRAILING_HASHES_SECTION; }
+    bool isTrailingHashesSection() const { return flags & FLAG_MASK_TRAILING_HASHES_SECTION; }
 
     bool isApiaryBlueprint();
 

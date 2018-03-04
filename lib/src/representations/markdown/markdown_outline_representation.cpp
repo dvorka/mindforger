@@ -55,6 +55,7 @@ Note* MarkdownOutlineRepresentation::note(vector<MarkdownAstNodeSection*>* ast, 
         }
         note = new Note{noteType, outline};
         if(ast->at(i)->isPostDeclaredSection()) note->setPostDeclaredSection();
+        if(ast->at(i)->isTrailingHashesSection()) note->setTrailingHashesSection();
         // TODO pull pointer > do NOT copy
         if (ast->at(i)->getText() != nullptr) {
             note->setName(*(ast->at(i)->getText()));
@@ -132,6 +133,7 @@ Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>*
             if(astNode) {
                 // O's section
                 if(astNode->isPostDeclaredSection()) outline->setPostDeclaredSection();
+                if(astNode->isTrailingHashesSection()) outline->setTrailingHashesSection();
                 if(astNode->getText()!=nullptr) {
                     // IMPROVE pull pointer > do NOT copy
                     outline->setName(*(astNode->getText()));
@@ -283,7 +285,11 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
             sprintf(buffer," urgency: %d/5;",outline->getUrgency()); md->append(buffer);
             sprintf(buffer," progress: %d%%; -->",outline->getProgress()); md->append(buffer);
         }
+        if(outline->isTrailingHashesSection()) {
+            md->append(" #");
+        }
         md->append("\n");
+
         if(outline->isPostDeclaredSection()) {
             int w=outline->getName().size()<2?2:outline->getName().size();
             for(int i=0; i<w; i++) md->append("=");
@@ -410,6 +416,12 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
         sprintf(buffer," revision: %d;",note->getRevision()); md->append(buffer);
         md->append(" modified: "); md->append(datetimeToString(note->getModified())); md->append(";");
         sprintf(buffer," progress: %d%%; -->",note->getProgress()); md->append(buffer);
+    }
+    if(note->isTrailingHashesSection()) {
+        md->append(" ");
+        for(int i=0; i<note->getDepth()+1; i++) {
+            md->append("#");
+        }
     }
     md->append("\n");
 

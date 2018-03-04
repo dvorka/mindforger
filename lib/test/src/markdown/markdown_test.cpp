@@ -495,8 +495,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPostDeclaredSection)
     delete serialized;
 }
 
-// TODO support for trailing hashes to be implemented
-TEST(MarkdownParserTestCase, DISABLED_MarkdownRepresentationSectionTrailingHashes)
+TEST(MarkdownParserTestCase, MarkdownRepresentationTrailingHashesSection)
 {
     string repositoryPath{"/tmp"};
     string fileName{"md-trailing-hashes-section.md"};
@@ -504,16 +503,20 @@ TEST(MarkdownParserTestCase, DISABLED_MarkdownRepresentationSectionTrailingHashe
     string filePath{repositoryPath+"/"+fileName};
 
     content.assign(
-        "Outline Name\n"
-        "============\n"
+        "# Outline Name #\n"
         "O text.\n"
         "\n"
         "# First Section #\n"
         "N1 text.\n"
         "\n"
-        "## Second Section ##\n"
+        "# WRONG 1 ##\n"
+        "W1 text.\n"
         "\n"
+        "## Second Section ##\n"
         "N2 text.\n"
+        "\n"
+        "## WRONG 2 #\n"
+        "W2 text.\n"
         "\n"
         "### Note 3 ###\n"
         "N3 text.\n"
@@ -534,20 +537,39 @@ TEST(MarkdownParserTestCase, DISABLED_MarkdownRepresentationSectionTrailingHashe
 
     // asserts
     EXPECT_NE(o, nullptr);
-    ASSERT_EQ(o->getNotesCount(), 3);
+    ASSERT_EQ(o->getNotesCount(), 5);
 
     cout << endl << "- O ---";
     cout << endl << "Name: '" << o->getName() << "'";
     EXPECT_EQ(o->getName(), "Outline Name");
     cout << endl << "Desc: '" << o->getDescriptionAsString() << "'";
-    EXPECT_EQ(o->getDescription().size(), 2);
+    EXPECT_EQ(o->isPostDeclaredSection(), false);
+    EXPECT_EQ(o->isTrailingHashesSection(), true);
 
     EXPECT_EQ(o->getNotes()[0]->getName(), "First Section");
+    EXPECT_EQ(o->getNotes()[0]->isPostDeclaredSection(), false);
+    EXPECT_EQ(o->getNotes()[0]->isTrailingHashesSection(), true);
     EXPECT_EQ(o->getNotes()[0]->getDescription().size(), 2);
-    EXPECT_EQ(o->getNotes()[1]->getName(), "Second Section");
-    EXPECT_EQ(o->getNotes()[1]->getDescription().size(), 3);
-    EXPECT_EQ(o->getNotes()[2]->getName(), "Note 3");
+
+    EXPECT_EQ(o->getNotes()[1]->getName(), "WRONG 1 ##");
+    EXPECT_EQ(o->getNotes()[1]->isPostDeclaredSection(), false);
+    EXPECT_EQ(o->getNotes()[1]->isTrailingHashesSection(), false);
+    EXPECT_EQ(o->getNotes()[1]->getDescription().size(), 2);
+
+    EXPECT_EQ(o->getNotes()[2]->getName(), "Second Section");
+    EXPECT_EQ(o->getNotes()[2]->isPostDeclaredSection(), false);
+    EXPECT_EQ(o->getNotes()[2]->isTrailingHashesSection(), true);
     EXPECT_EQ(o->getNotes()[2]->getDescription().size(), 2);
+
+    EXPECT_EQ(o->getNotes()[3]->getName(), "WRONG 2 #");
+    EXPECT_EQ(o->getNotes()[3]->isPostDeclaredSection(), false);
+    EXPECT_EQ(o->getNotes()[3]->isTrailingHashesSection(), false);
+    EXPECT_EQ(o->getNotes()[3]->getDescription().size(), 2);
+
+    EXPECT_EQ(o->getNotes()[4]->getName(), "Note 3");
+    EXPECT_EQ(o->getNotes()[4]->isPostDeclaredSection(), false);
+    EXPECT_EQ(o->getNotes()[4]->isTrailingHashesSection(), true);
+    EXPECT_EQ(o->getNotes()[4]->getDescription().size(), 2);
 
     // serialize
     string* serialized = mdr.to(o);

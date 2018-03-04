@@ -127,6 +127,8 @@ public:
     MarkdownAstSectionMetadata &operator=(const MarkdownAstSectionMetadata&&) = delete;
     virtual ~MarkdownAstSectionMetadata();
 
+    bool isVirgin() const { return type==nullptr && created==0 && tags.size(); }
+
     time_t getCreated() const;
     void setCreated(time_t created);
     int8_t getImportance() const;
@@ -155,6 +157,7 @@ class MarkdownAstNodeSection : public MarkdownAstNode
 public:
     static constexpr u_int16_t PREAMBLE = 0xff00;
     static constexpr int FLAG_MASK_POST_DECLARED_SECTION = 1;
+    static constexpr int FLAG_MASK_TRAILING_HASHES_SECTION = 1<<1;
 
 protected:
     /**
@@ -189,6 +192,8 @@ public:
 
     void setPostDeclaredSection() { flags |= FLAG_MASK_POST_DECLARED_SECTION; }
     bool isPostDeclaredSection() const { return flags & FLAG_MASK_POST_DECLARED_SECTION; }
+    void setTrailingHashesSection() { flags |= FLAG_MASK_TRAILING_HASHES_SECTION; }
+    bool isTrailingHashesSection() const { return flags & FLAG_MASK_TRAILING_HASHES_SECTION; }
 };
 
 } // m8r namespace
