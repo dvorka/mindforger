@@ -39,6 +39,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     statusBar = new StatusBarPresenter{view.getStatusBar(), mind};
 
     // initialize components
+    forgetDialog = new ForgetDialog{&view};
     newOutlineDialog = new OutlineNewDialog{
                 QString::fromStdString(config.getMemoryPath()),
                 mind->remind().getOntology(),
@@ -50,6 +51,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     refactorNoteToOutlineDialog = new RefactorNoteToOutlineDialog{&view};
 
     // wire signals
+    QObject::connect(forgetDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleForgetThreshold()));
     QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
     QObject::connect(ftsDialog->getFindButton(), SIGNAL(clicked()), this, SLOT(handleFts()));
@@ -670,6 +672,25 @@ void MainWindowPresenter::doActionNoteDemote()
 
 void MainWindowPresenter::doActionMindSnapshot()
 {
+}
+
+void MainWindowPresenter::doActionSetForgetThreshold()
+{
+    forgetDialog->show(mind->isForgetThreasholdEnabled());
+}
+
+void MainWindowPresenter::handleForgetThreshold()
+{
+    if(forgetDialog->isThreasholdSet()) {
+        mind->getForgetThreshold().setThreshold(
+            forgetDialog->getYears(),
+            forgetDialog->getMonths(),
+            forgetDialog->getDays(),
+            forgetDialog->getHours(),
+            forgetDialog->getMinutes());
+    } else {
+        mind->getForgetThreshold().clearTreshold();
+    }
 }
 
 void MainWindowPresenter::doActionHelpDocumentation()

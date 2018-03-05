@@ -128,7 +128,10 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     lib/src/mind/ontology/thing_class_rel_triple.h \
     lib/src/config/configuration.h \
     lib/src/debug.h \
-    src/qt/recent_files_menu.h
+    src/qt/recent_files_menu.h \
+    lib/src/mind/aspect/aspect.h \
+    lib/src/mind/aspect/forget_aspect.h \
+    src/qt/dialogs/forget_dialog.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
@@ -219,7 +222,9 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/dialogs/refactor_note_to_outline_dialog.cpp \
     lib/src/config/repository.cpp \
     lib/src/mind/ontology/thing_class_rel_triple.cpp \
-    src/qt/recent_files_menu.cpp
+    src/qt/recent_files_menu.cpp \
+    lib/src/mind/aspect/forget_aspect.cpp \
+    src/qt/dialogs/forget_dialog.cpp
 
 # Development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1

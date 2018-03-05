@@ -26,7 +26,6 @@ Mind::Mind(Configuration &configuration)
     : config(configuration),
       memory(configuration)
 {
-    forget = 0;
 }
 
 Mind::~Mind()
@@ -320,11 +319,6 @@ vector<Note*>* Mind::getAssociatedNotes(const vector<string*> words,
     return nullptr;
 }
 
-uint8_t Mind::getForgetThreshold() const
-{
-    return forget;
-}
-
 vector<Outline*>* Mind::getTaggedOutlines(
         const std::vector<Tag*> labels) const
 {
@@ -369,11 +363,6 @@ unsigned Mind::getNoteTagCardinality(const Tag& tag) const
     UNUSED_ARG(tag);
 
     return 0;
-}
-
-void Mind::setForgetThreashold(uint8_t forget)
-{
-    this->forget = forget;
 }
 
 string Mind::outlineNew(

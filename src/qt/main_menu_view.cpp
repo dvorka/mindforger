@@ -75,7 +75,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // forget ... don't show any note older than 1Y/3M/...
     actionMindForget = new QAction(tr("&Forget"), mainWindow);
     actionMindForget->setStatusTip(tr("Don't show notes older than..."));
-    actionMindForget->setEnabled(false);
 
     // dream ... sanity, integrity, detox, inference, assoc discovery, ...
     actionMindDream = new QAction(tr("Dr&eam"), mainWindow);

@@ -25,6 +25,7 @@
 #include "memory.h"
 #include "ontology/thing_class_rel_triple.h"
 #include "../config/configuration.h"
+#include "aspect/forget_aspect.h"
 
 namespace m8r {
 
@@ -119,12 +120,9 @@ private:
     std::vector<Note*> allNotesCache;
 
     /**
-     * @brief Time interval to show e.g. 1y, 1m, 1h > change the type.
-     *
-     * Anything what is older than now-forget is *not* shown to user, but kept in and maintained
-     * in mind.
+     * @brief Forgetting.
      */
-    uint8_t forget;
+    ForgetAspect forgetAspect;
 
 public:
     explicit Mind(Configuration &config);
@@ -316,14 +314,9 @@ public:
      *
      * Forget threshold is relative time from now.
      */
-    uint8_t getForgetThreshold() const;
-
-    /**
-     * @brief Set forgetting threshold.
-     *
-     * Forget threshold is relative time from now.
-     */
-    void setForgetThreashold(uint8_t);
+    std::string getForgetThresholdAsString() const { return forgetAspect.getThresholdAsString(); }
+    bool isForgetThreasholdEnabled() const { return forgetAspect.isEnabled(); }
+    ForgetAspect& getForgetThreshold() { return forgetAspect; }
 
     /*
      * OUTLINE MANAGEMENT

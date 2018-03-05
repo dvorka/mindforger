@@ -33,6 +33,7 @@
 #include "dialogs/find_outline_by_name_dialog.h"
 #include "dialogs/find_note_by_name_dialog.h"
 #include "dialogs/refactor_note_to_outline_dialog.h"
+#include "dialogs/forget_dialog.h"
 
 #include <QtWidgets>
 
@@ -71,6 +72,7 @@ private:
     OrlojPresenter* orloj;
     StatusBarPresenter* statusBar;
 
+    ForgetDialog* forgetDialog;
     OutlineNewDialog* newOutlineDialog;
     NoteNewDialog* newNoteDialog;
     FtsDialog* ftsDialog;
@@ -113,6 +115,8 @@ public slots:
     void doActionMindSleep();
     void doActionMindLearn();
     void doActionMindRelearn(QString path);
+    void doActionSetForgetThreshold();
+    void handleForgetThreshold();
     void doActionMindSnapshot();
     void doActionExit();
     // recall

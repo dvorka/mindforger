@@ -92,8 +92,13 @@ void StatusBarPresenter::showMindStatistics()
     status.append(" triples    ");
     status += cLocale.toString(mind->remind().getOutlineMarkdownsSize());
     status.append(" bytes    ");
-    status += QString::number(mind->getForgetThreshold());
-    status.append("% forgotten");
+    if(mind->isForgetThreasholdEnabled()) {
+        status.append(">");
+        status.append(mind->getForgetThresholdAsString().c_str());
+    } else {
+        status.append(tr("nothing"));
+    }
+    status.append(" forgotten");
 
     view->showInfo(status);
 }

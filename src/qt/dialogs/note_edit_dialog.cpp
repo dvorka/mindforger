@@ -122,22 +122,6 @@ NoteEditDialog::AdvancedTab::AdvancedTab(QWidget* parent)
     fileLine = new QLineEdit{this};
     fileLine->setDisabled(true);
 
-//    QGroupBox* advancedGroup = new QGroupBox{tr("Metadata"), this};
-//    createdLabel = new QLabel{tr("Created")+":", this};
-//    createdLine = new QLineEdit{this};
-//    createdLine->setDisabled(true);
-//    modifiedPanel = new LabeledEditLinePanel{tr("Last Modified")+":", this};
-//    modifiedPanel->setEnabled(false);
-//    readPanel = new LabeledEditLinePanel{tr("Last Read")+":", this};
-//    readPanel->setEnabled(false);
-//    readsPanel = new LabeledEditLinePanel{tr("Reads")+":", this};
-//    readsPanel->setDisabled(true);
-//    writesPanel = new LabeledEditLinePanel{tr("Writes")+":", this};
-//    writesPanel->setDisabled(true);
-//    locationLabel = new QLabel{tr("Location")+":", this};
-//    locationLine = new QLineEdit{this};
-//    locationLine->setDisabled(true);
-
     QVBoxLayout* metadataLayout = new QVBoxLayout{this};
     metadataLayout->addWidget(createdLabel);
     metadataLayout->addWidget(createdLine);

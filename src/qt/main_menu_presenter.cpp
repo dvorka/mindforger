@@ -38,6 +38,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         view->submenuMindRelearn->addFile(QString::fromStdString(r.first));
     }
     QObject::connect(view->submenuMindRelearn, SIGNAL(recentFileTriggered(QString)), mwp, SLOT(doActionMindRelearn(QString)));
+    QObject::connect(view->actionMindForget, SIGNAL(triggered()), mwp, SLOT(doActionSetForgetThreshold()));
     QObject::connect(view->actionMindSnapshot, SIGNAL(triggered()), mwp, SLOT(doActionMindSnapshot()));
     QObject::connect(view->actionExit, SIGNAL(triggered()), mwp, SLOT(doActionExit()));
 
