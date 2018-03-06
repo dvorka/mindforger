@@ -23,6 +23,7 @@
 #include <string>
 
 #include "aspect.h"
+#include "../../debug.h"
 
 namespace m8r {
 
@@ -62,11 +63,11 @@ public:
      */
     void setThreshold(int years, int months, int days, int hours, int minutes)
     {
-        years=years;
-        months=months;
-        days=days;
-        hours=hours;
-        minutes=minutes;
+        this->years = years;
+        this->months = months;
+        this->days = days;
+        this->hours = hours;
+        this->minutes = minutes;
 
         relative =
                 minutes*60 +
@@ -79,6 +80,8 @@ public:
         time(&now);
 
         threshold = now-relative;
+
+        MF_DEBUG("R " << relative << std::endl);
     }
 
     int getYears() const { return years; }

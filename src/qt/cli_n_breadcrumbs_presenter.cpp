@@ -134,7 +134,7 @@ void CliAndBreadcrumbsPresenter::executeFts(QString& command)
 
 void CliAndBreadcrumbsPresenter::executeListOutlines()
 {
-    mainPresenter->getOrloj()->showFacetOutlineList(mind->remind().getOutlines());
+    mainPresenter->getOrloj()->showFacetOutlineList(mind->getOutlines());
 }
 
 void CliAndBreadcrumbsPresenter::executeListNotes()

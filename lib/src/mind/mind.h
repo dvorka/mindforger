@@ -275,6 +275,8 @@ public:
      * TYPES
      */
 
+    // IMPROVE rename to getAllOs()
+    const std::vector<Outline*>& getOutlines() const;
     std::vector<Outline*>* getOutlinesOfType(const OutlineType& type) const;
 
     void getAllNotes(std::vector<Note*>& notes) const;

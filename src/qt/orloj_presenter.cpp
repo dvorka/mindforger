@@ -114,7 +114,7 @@ void OrlojPresenter::showFacetOutlineList(const vector<Outline*>& outlines)
 
 void OrlojPresenter::slotShowOutlines()
 {
-    showFacetOutlineList(mind->remind().getOutlines());
+    showFacetOutlineList(mind->getOutlines());
 }
 
 void OrlojPresenter::showFacetFtsResult(vector<Note*>* result)

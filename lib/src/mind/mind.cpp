@@ -146,6 +146,9 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
             }
         }
         for(Note* note:outline->getNotes()) {
+            if(forgetAspect.isEnabled() && forgetAspect.isForgotten(note->getModified())) {
+                continue;
+            }
             s.clear();
             stringToLower(note->getName(), s);
             if(s.find(regexp)!=string::npos) {
@@ -255,6 +258,24 @@ vector<Note*>* Mind::getTaggedNotes(const vector<Tag*> tags) const
     return nullptr;
 }
 
+// IMPROVE PERF use dirty flag to avoid result-rebuilt
+const vector<Outline*>& Mind::getOutlines() const
+{
+    static vector<Outline*> result{};
+
+    if(forgetAspect.isEnabled()) {
+        result.clear();
+        for(Outline* o:memory.getOutlines()) {
+            if(forgetAspect.isRemembered(o->getModified())) {
+                result.push_back(o);
+            }
+        }
+        return result;
+    } else {
+        return memory.getOutlines();
+    }
+}
+
 vector<Outline*>* Mind::getOutlinesOfType(const OutlineType& type) const
 {
     UNUSED_ARG(type);
@@ -267,7 +288,13 @@ void Mind::getAllNotes(std::vector<Note*>& notes) const
     vector<Outline*> outlines = memory.getOutlines();
     for(Outline* o:outlines) {
         for(Note* n:o->getNotes()) {
-            notes.push_back(n);
+            if(forgetAspect.isEnabled()) {
+                if(forgetAspect.isRemembered(n->getModified())) {
+                    notes.push_back(n);
+                }
+            } else {
+                notes.push_back(n);
+            }
         }
     }
 }

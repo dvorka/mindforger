@@ -55,6 +55,11 @@ OutlineTreePresenter::~OutlineTreePresenter()
 
 void OutlineTreePresenter::refresh(Outline* outline, Outline::Patch* patch)
 {
+    // If FORGET aspect is used, then only VIEW is filtered, but operations are performed
+    // on the non-filtered O's Ns. UI view serves just as a FILTER of what can be changed.
+    // Therefore anything special is needed on the backend.
+    //   Unfortunately PATCH will NOT help if VIEW is filtered and everyhing must be
+    // refreshed.
     if(outline) {
         if(patch) {
             const vector<Note*>& notes = outline->getNotes();
@@ -74,8 +79,12 @@ void OutlineTreePresenter::refresh(Outline* outline, Outline::Patch* patch)
             }
         } else {
             model->removeAllRows();
-            for(Note* note:outline->getNotes()) {
-                model->addRow(note);
+            if(mind->isForgetAspectEnabled()) {
+
+            } else {
+                for(Note* note:outline->getNotes()) {
+                    model->addRow(note);
+                }
             }
         }
     }

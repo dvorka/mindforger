@@ -167,22 +167,22 @@ void MainWindowPresenter::doActionMindRelearn(QString path)
 
 void MainWindowPresenter::showInitialView()
 {
-    if(mind->remind().getOutlines().size()) {
+    if(mind->getOutlines().size()) {
         if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
             view.getCli()->setBreadcrumbPath("/outlines");
-            orloj->showFacetOutlineList(mind->remind().getOutlines());
+            orloj->showFacetOutlineList(mind->getOutlines());
         } else {
             // IMPROVE move this method to breadcrumps
             QString m{"/outlines/"};
-            m.append(QString::fromStdString((*mind->remind().getOutlines().begin())->getName()));
+            m.append(QString::fromStdString((*mind->getOutlines().begin())->getName()));
             view.getCli()->setBreadcrumbPath(m);
-            orloj->showFacetOutline(*mind->remind().getOutlines().begin());
+            orloj->showFacetOutline(*mind->getOutlines().begin());
         }
     } else {
         // nothing to show
         mind->amnesia();
         // IMPROVE show homepage once it's implemented
-        orloj->showFacetOutlineList(mind->remind().getOutlines());
+        orloj->showFacetOutlineList(mind->getOutlines());
     }
 }
 
@@ -236,7 +236,7 @@ void MainWindowPresenter::executeFts(const string& searchedString, const bool ig
 void MainWindowPresenter::doActionFindOutlineByName()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
-    vector<Outline*> os{mind->remind().getOutlines()};
+    vector<Outline*> os{mind->getOutlines()};
     mind->remind().sortByName(os);
     vector<Thing*> es{os.begin(),os.end()};
 
@@ -257,7 +257,7 @@ void MainWindowPresenter::handleFindOutlineByName()
 void MainWindowPresenter::doActionRefactorNoteToOutline()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
-    vector<Outline*> os{mind->remind().getOutlines()};
+    vector<Outline*> os{mind->getOutlines()};
     mind->remind().sortByName(os);
     vector<Thing*> es{os.begin(),os.end()};
 
@@ -387,7 +387,7 @@ void MainWindowPresenter::handleOutlineNew()
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_LIST_OUTLINES)) {
         // IMPROVE PERF add only 1 new outline + sort table (don't load all outlines)
-        orloj->getOutlinesTable()->refresh(mind->remind().getOutlines());
+        orloj->getOutlinesTable()->refresh(mind->getOutlines());
     }
     // else Outlines are refreshed on facet change
 }
@@ -691,6 +691,9 @@ void MainWindowPresenter::handleForgetThreshold()
     } else {
         mind->getForgetThreshold().clearTreshold();
     }
+
+    // IMPROVE don't change view to Os, but refresh current one
+    doActionViewOutlines();
 }
 
 void MainWindowPresenter::doActionHelpDocumentation()
