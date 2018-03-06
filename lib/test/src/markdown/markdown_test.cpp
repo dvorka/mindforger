@@ -679,3 +679,36 @@ TEST(MarkdownParserBugsTestCase, EmptyNameSkipsEof)
 
     cout << endl << "- DONE ----------------------------------------------";
 }
+
+// TODO to be implemented
+TEST(MarkdownParserTestCase, Deadline)
+{
+    string content;
+    content.assign(
+        "# Outline Name\n"
+        "========\n"
+        "O text.\n"
+        "\n"
+        "## First Section  <!-- Metadata: deadline: 2010-11-12 13:14:15; -->\n"
+        "N1 text.\n"
+        "\n"
+        "## Second Section\n"
+        "N2 text.\n"
+        "\n");
+
+    MarkdownLexerSections lexer(nullptr);
+
+    // tokenize
+    lexer.tokenize(&content);
+    const std::vector<MarkdownLexem*>& lexems = lexer.getLexems();
+    ASSERT_TRUE(lexems.size());
+    printLexems(lexems);
+
+    // asserts
+    EXPECT_EQ(lexems[0]->getType(), MarkdownLexemType::BEGIN_DOC);
+    EXPECT_EQ(lexems[1]->getType(), MarkdownLexemType::SECTION_equals);
+    EXPECT_EQ(lexems[2]->getType(), MarkdownLexemType::LINE);
+    EXPECT_EQ(lexems[3]->getType(), MarkdownLexemType::BR);
+    EXPECT_EQ(lexems[4]->getType(), MarkdownLexemType::LINE);
+    EXPECT_EQ(lexems[5]->getType(), MarkdownLexemType::BR);
+}

@@ -127,6 +127,15 @@ void printLexemType(MarkdownLexemType type)
     case MarkdownLexemType::META_PROPERTY_urgency:
         cout << "META urgency     #";
         break;
+    case MarkdownLexemType::META_PROPERTY_deadline:
+        cout << "META deadline    #";
+        break;
+    case MarkdownLexemType::META_PROPERTY_links:
+        cout << "META links       #";
+        break;
+    case MarkdownLexemType::META_PROPERTY_forget:
+        cout << "META forget      #";
+        break;
 
     case MarkdownLexemType::META_PROPERTY_VALUE:
         cout << "META_PROP_VALUE  >";
