@@ -115,6 +115,12 @@ private:
      */
     unsigned int bytesize;
 
+    /*
+     * Transient fields
+     */
+
+    time_t forgetThreshold;
+
 public:
     Outline() = delete;
     explicit Outline(const OutlineType* type);

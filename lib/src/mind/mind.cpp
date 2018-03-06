@@ -146,7 +146,7 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
             }
         }
         for(Note* note:outline->getNotes()) {
-            if(forgetAspect.isEnabled() && forgetAspect.isForgotten(note->getModified())) {
+            if(forgetAspect.isEnabled() && forgetAspect.isForgotten(note)) {
                 continue;
             }
             s.clear();
@@ -266,7 +266,7 @@ const vector<Outline*>& Mind::getOutlines() const
     if(forgetAspect.isEnabled()) {
         result.clear();
         for(Outline* o:memory.getOutlines()) {
-            if(forgetAspect.isRemembered(o->getModified())) {
+            if(forgetAspect.isRemembered(o)) {
                 result.push_back(o);
             }
         }
@@ -289,7 +289,7 @@ void Mind::getAllNotes(std::vector<Note*>& notes) const
     for(Outline* o:outlines) {
         for(Note* n:o->getNotes()) {
             if(forgetAspect.isEnabled()) {
-                if(forgetAspect.isRemembered(n->getModified())) {
+                if(forgetAspect.isRemembered(n)) {
                     notes.push_back(n);
                 }
             } else {

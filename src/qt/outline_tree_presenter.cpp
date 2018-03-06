@@ -28,6 +28,7 @@ OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, MainWindowPres
     this->view = view;
     this->model = new OutlineTreeModel{view};
     this->view->setModel(this->model);
+    this->mind = mwp->getMind();
 
     // ensure HTML cells rendering
     HtmlDelegate* delegate = new HtmlDelegate{};
@@ -79,8 +80,15 @@ void OutlineTreePresenter::refresh(Outline* outline, Outline::Patch* patch)
             }
         } else {
             model->removeAllRows();
-            if(mind->isForgetAspectEnabled()) {
+            if(mind->isForgetThreasholdEnabled()) {
+                for(Note* note:outline->getNotes()) {
+                    if(mind->getForgetThreshold().isRemembered(note)) {
+                        // TODO add all parents
+                        MF_DEBUG("PARENTS to be added");
 
+                        model->addRow(note);
+                    }
+                }
             } else {
                 for(Note* note:outline->getNotes()) {
                     model->addRow(note);

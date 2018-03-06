@@ -30,7 +30,7 @@ Outline::Outline(const OutlineType* type)
       memoryLocation(OutlineMemoryLocation::NORMAL),
       format(Markdown::Format::MINDFORGER), type(type)
 {
-    created = modified = read = 0;
+    forgetThreshold = created = modified = read = 0;
     reads = revision = 0;
     importance = urgency = progress = 0;
     bytesize = 0;
@@ -99,6 +99,9 @@ Outline::Outline(const Outline& o)
 
     // created/modified/... to be reset = o.created;
     resetClonedOutline(this);
+
+     // reset threshold to avoid situations when all Ns are forgotten > user is confused
+    forgetThreshold = 0;
 
     importance = o.importance;
     urgency = o.urgency;

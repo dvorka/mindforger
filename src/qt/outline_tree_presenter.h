@@ -20,6 +20,7 @@
 #define M8RUI_OUTLINE_TREE_PRESENTER_H
 
 #include "../../lib/src/model/outline.h"
+#include "../../lib/src/mind/mind.h"
 
 #include <QtWidgets>
 
@@ -41,6 +42,8 @@ public:
 private:
     OutlineTreeView* view;
     OutlineTreeModel* model;
+
+    Mind* mind;
 
 public:
     explicit OutlineTreePresenter(OutlineTreeView* view, MainWindowPresenter* mwp, QObject* parent);

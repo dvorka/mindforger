@@ -22,6 +22,7 @@
 #include <ctime>
 #include <string>
 
+#include "../../model/outline.h"
 #include "aspect.h"
 #include "../../debug.h"
 
@@ -55,8 +56,10 @@ public:
     ~ForgetAspect();
 
     virtual bool isEnabled() const { return relative>0; }
-    bool isForgotten(time_t t) const { return t < threshold; }
-    bool isRemembered(time_t t) const { return t >= threshold; }
+    bool isForgotten(const Outline* o) const { return o->getRead()<threshold; }
+    bool isForgotten(const Note* n) const { return n->getRead()<threshold; }
+    bool isRemembered(const Outline* o) const { return !isForgotten(o); }
+    bool isRemembered(const Note* n) const { return !isForgotten(n); }
 
     /**
      * @brief Set threshold by the relative specification e.g. remember just recent year.
