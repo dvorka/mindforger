@@ -90,6 +90,12 @@ MarkdownLexemTable::MarkdownLexemTable()
     lexems.insert(META_PROPERTY_progress);
     META_PROPERTY_tags = new MarkdownLexem{MarkdownLexemType::META_PROPERTY_tags};
     lexems.insert(META_PROPERTY_tags);
+    META_PROPERTY_links= new MarkdownLexem{MarkdownLexemType::META_PROPERTY_links};
+    lexems.insert(META_PROPERTY_links);
+    META_PROPERTY_deadline = new MarkdownLexem{MarkdownLexemType::META_PROPERTY_deadline};
+    lexems.insert(META_PROPERTY_deadline);
+    META_PROPERTY_forget = new MarkdownLexem{MarkdownLexemType::META_PROPERTY_forget};
+    lexems.insert(META_PROPERTY_forget);
     META_NAMEVALUE_DELIMITER = new MarkdownLexem{MarkdownLexemType::META_NAMEVALUE_DELIMITER};
     lexems.insert(META_NAMEVALUE_DELIMITER);
     HTML_COMMENT_BEGIN = new MarkdownLexem{MarkdownLexemType::HTML_COMMENT_BEGIN};
@@ -117,6 +123,9 @@ MarkdownLexemTable::~MarkdownLexemTable()
     delete META_PROPERTY_urgency;
     delete META_PROPERTY_progress;
     delete META_PROPERTY_tags;
+    delete META_PROPERTY_links;
+    delete META_PROPERTY_deadline;
+    delete META_PROPERTY_forget;
     delete META_NAMEVALUE_DELIMITER;
     delete HTML_COMMENT_BEGIN;
     delete HTML_COMMENT_END;
@@ -463,6 +472,47 @@ bool MarkdownLexerSections::lexMetaPropertyName(const unsigned short offset, uns
                lines[offset]->at(idx+8)=='d' &&
                (lines[offset]->at(idx+9)==':' || !isspace(idx+9))) {
                 lexems.push_back(symbolTable.LEXEM.META_PROPERTY_modified);
+                idx+=8;
+                return true;
+            } else {
+                return false;
+            }
+        case 'l':
+            // key for relationships is 'links' because a) there are clashes for 'r' b) links is shorter than relationships
+            if(lines[offset]->at(idx+2)=='i' &&
+               lines[offset]->at(idx+3)=='n' &&
+               lines[offset]->at(idx+4)=='k' &&
+               lines[offset]->at(idx+5)=='s' &&
+               (lines[offset]->at(idx+6)==':' || !isspace(idx+6))) {
+                lexems.push_back(symbolTable.LEXEM.META_PROPERTY_links);
+                idx+=5;
+                return true;
+            } else {
+                return false;
+            }
+        case 'f':
+            if(lines[offset]->at(idx+2)=='o' &&
+               lines[offset]->at(idx+3)=='r' &&
+               lines[offset]->at(idx+4)=='g' &&
+               lines[offset]->at(idx+5)=='e' &&
+               lines[offset]->at(idx+6)=='t' &&
+               (lines[offset]->at(idx+7)==':' || !isspace(idx+7))) {
+                lexems.push_back(symbolTable.LEXEM.META_PROPERTY_forget);
+                idx+=6;
+                return true;
+            } else {
+                return false;
+            }
+        case 'd':
+            if(lines[offset]->at(idx+2)=='e' &&
+               lines[offset]->at(idx+3)=='a' &&
+               lines[offset]->at(idx+4)=='d' &&
+               lines[offset]->at(idx+5)=='l' &&
+               lines[offset]->at(idx+6)=='i' &&
+               lines[offset]->at(idx+7)=='n' &&
+               lines[offset]->at(idx+8)=='e' &&
+               (lines[offset]->at(idx+9)==':' || !isspace(idx+9))) {
+                lexems.push_back(symbolTable.LEXEM.META_PROPERTY_deadline);
                 idx+=8;
                 return true;
             } else {

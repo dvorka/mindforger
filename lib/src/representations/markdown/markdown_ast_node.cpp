@@ -217,6 +217,7 @@ const vector<string*>& MarkdownAstSectionMetadata::getTags() const
 void MarkdownAstSectionMetadata::setTags(vector<string*>* tags)
 {
     if(tags && tags->size()) {
+        // IMPROVE std::move()
         for(string* t:*tags) {
             this->tags.push_back(std::move(t));
         }
@@ -235,6 +236,36 @@ const string* MarkdownAstSectionMetadata::getPrimaryTag() const
     } else {
         return nullptr;
     }
+}
+
+time_t MarkdownAstSectionMetadata::getForget() const
+{
+    return forget;
+}
+
+void MarkdownAstSectionMetadata::setForget(time_t forget)
+{
+    this->forget=forget;
+}
+
+time_t MarkdownAstSectionMetadata::getDeadline() const
+{
+    return deadline;
+}
+
+void MarkdownAstSectionMetadata::setDeadline(time_t deadline)
+{
+    this->deadline=deadline;
+}
+
+const std::vector<std::string*>& MarkdownAstSectionMetadata::getRelationships() const
+{
+    return relationships;
+}
+
+void MarkdownAstSectionMetadata::setRelationships(std::vector<std::string*>* relationships)
+{
+    this->relationships=std::move(*relationships);
 }
 
 } // m8r namespace

@@ -89,12 +89,14 @@ private:
     std::string* sectionNameRule(size_t& offset);
     bool sectionMetadataRule(MarkdownAstSectionMetadata& meta, size_t& offset);
     const MarkdownLexem* parsePropertyValue(size_t& offset);
+    time_t parsePropertyValueForget(size_t& offset);
     time_t parsePropertyValueTimestamp(size_t& offset);
     int parsePropertyValueInteger(size_t& offset);
     int parsePropertyValueFraction(size_t& offset);
     int parsePropertyValuePercent(size_t& offset);
     std::string* parsePropertyValueString(size_t& offset);
     std::vector<std::string*>* parsePropertyValueTags(size_t& offset);
+    std::vector<std::string*>* parsePropertyValueRelationships(size_t& offset);
     std::vector<std::string*>* sectionBodyRule(size_t& offset);
 
     void skipBr(size_t& offset);

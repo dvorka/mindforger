@@ -70,7 +70,8 @@ SOURCES += \
     ../../lib/src/config/repository.cpp \
     ../../lib/test/src/config/configuration_test.cpp \
     ../../lib/src/mind/ontology/thing_class_rel_triple.cpp \
-    benchmark/markdown_benchmark.cpp
+    benchmark/markdown_benchmark.cpp \
+    ../src/mind/aspect/forget_aspect.cpp
 
 HEADERS += \
     ../../lib/src/debug.h \
@@ -124,7 +125,9 @@ HEADERS += \
     ../../lib/src/config/repository.h \
     ../../lib/test/src/test_gear.h \
     ../../lib/src/mind/ontology/thing_class_rel_triple.h \
-    ../../lib/src/mind/ontology/taxonomy.h
+    ../../lib/src/mind/ontology/taxonomy.h \
+    ../src/mind/aspect/forget_aspect.h \
+    ../src/mind/aspect/aspect.h
 
 # GTest unit test framework library dependencies
 unix|win32: LIBS += -lgtest

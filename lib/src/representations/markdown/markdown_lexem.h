@@ -53,6 +53,9 @@ enum class MarkdownLexemType
     META_PROPERTY_urgency,
     META_PROPERTY_progress,
     META_PROPERTY_tags,         // outline or note tags
+    META_PROPERTY_links,
+    META_PROPERTY_deadline,
+    META_PROPERTY_forget,
 
     META_NAMEVALUE_DELIMITER,   // :
     META_PROPERTY_VALUE,

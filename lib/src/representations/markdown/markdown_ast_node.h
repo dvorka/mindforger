@@ -119,6 +119,10 @@ private:
 
     std::vector<std::string*> tags;
 
+    time_t forget;
+    time_t deadline;
+    std::vector<std::string*> relationships;
+
 public:
     explicit MarkdownAstSectionMetadata();
     MarkdownAstSectionMetadata(const MarkdownAstSectionMetadata&) = delete;
@@ -150,6 +154,13 @@ public:
     const std::vector<std::string*>& getTags() const;
     void setTags(std::vector<std::string*>* tags);
     const std::string* getPrimaryTag() const;
+
+    time_t getForget() const;
+    void setForget(time_t forget);
+    time_t getDeadline() const;
+    void setDeadline(time_t deadline);
+    const std::vector<std::string*>& getRelationships() const;
+    void setRelationships(std::vector<std::string*>* relationships);
 };
 
 class MarkdownAstNodeSection : public MarkdownAstNode

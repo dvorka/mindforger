@@ -358,6 +358,19 @@ bool MarkdownParserSections::sectionMetadataRule(
                 case MarkdownLexemType::META_PROPERTY_urgency:
                     meta.setUrgency(parsePropertyValueFraction(offset));
                     break;
+                case MarkdownLexemType::META_PROPERTY_forget:
+                    if((t = parsePropertyValueForget(offset))!=0) {
+                        meta.setForget(t); // structure to avoid conversions
+                    }
+                    break;
+                case MarkdownLexemType::META_PROPERTY_deadline:
+                    if((t = parsePropertyValueTimestamp(offset))!=0) {
+                        meta.setDeadline(t);
+                    }
+                    break;
+                case MarkdownLexemType::META_PROPERTY_links:
+                    meta.setRelationships(parsePropertyValueRelationships(offset));
+                    break;
                 default:
                     done=true;
                     break;
@@ -386,6 +399,22 @@ const MarkdownLexem* MarkdownParserSections::parsePropertyValue(size_t& offset)
             return result;
         }
     }
+    return nullptr;
+}
+
+time_t MarkdownParserSections::parsePropertyValueForget(size_t& offset)
+{
+    UNUSED_ARG(offset);
+
+    // TODO to be implemented
+    return 0;
+}
+
+vector<string*>* MarkdownParserSections::parsePropertyValueRelationships(size_t& offset)
+{
+    UNUSED_ARG(offset);
+
+    // TODO to be implemented
     return nullptr;
 }
 
