@@ -16,23 +16,23 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "forget_aspect.h"
+#include "time_scope_aspect.h"
 
 namespace m8r {
 
 using namespace std;
 
-ForgetAspect::ForgetAspect()
+TimeScopeAspect::TimeScopeAspect()
 {
-    threshold = 0;
+    timepoint = 0;
     relative = 0;
 }
 
-ForgetAspect::~ForgetAspect()
+TimeScopeAspect::~TimeScopeAspect()
 {
 }
 
-string ForgetAspect::getThresholdAsString() const
+string TimeScopeAspect::getTimePointAsString() const
 {
     string s{""};
     if(relative) {

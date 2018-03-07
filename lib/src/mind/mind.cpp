@@ -146,7 +146,7 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
             }
         }
         for(Note* note:outline->getNotes()) {
-            if(forgetAspect.isEnabled() && forgetAspect.isForgotten(note)) {
+            if(timeScopeAspect.isEnabled() && timeScopeAspect.isOutOfScope(note)) {
                 continue;
             }
             s.clear();
@@ -263,10 +263,10 @@ const vector<Outline*>& Mind::getOutlines() const
 {
     static vector<Outline*> result{};
 
-    if(forgetAspect.isEnabled()) {
+    if(timeScopeAspect.isEnabled()) {
         result.clear();
         for(Outline* o:memory.getOutlines()) {
-            if(forgetAspect.isRemembered(o)) {
+            if(timeScopeAspect.isInScope(o)) {
                 result.push_back(o);
             }
         }
@@ -288,8 +288,8 @@ void Mind::getAllNotes(std::vector<Note*>& notes) const
     vector<Outline*> outlines = memory.getOutlines();
     for(Outline* o:outlines) {
         for(Note* n:o->getNotes()) {
-            if(forgetAspect.isEnabled()) {
-                if(forgetAspect.isRemembered(n)) {
+            if(timeScopeAspect.isEnabled()) {
+                if(timeScopeAspect.isInScope(n)) {
                     notes.push_back(n);
                 }
             } else {

@@ -16,16 +16,16 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "forget_dialog.h"
+#include "time_scope_dialog.h"
 
 namespace m8r {
 
-ForgetDialog::ForgetDialog(QWidget *parent)
+TimeScopeDialog::TimeScopeDialog(QWidget *parent)
     : QDialog{parent}
 {
-    QVBoxLayout* forgetThresholLayout = new QVBoxLayout{this};
+    QVBoxLayout* timepointThresholdLayout = new QVBoxLayout{this};
 
-    enableCheck = new QCheckBox{tr("Don't show Outlines and Notes older than")+":", this};
+    enableCheck = new QCheckBox{tr("show only Outlines/Notes modified or viewed in recent")+":", this};
     enableCheck->setChecked(false);
 
     QWidget* w = new QWidget(this);
@@ -73,29 +73,29 @@ ForgetDialog::ForgetDialog(QWidget *parent)
     buttonLayout->addWidget(setButton);
     buttonLayout->addStretch();
 
-    forgetThresholLayout->addWidget(enableCheck);
-    forgetThresholLayout->addWidget(w);
-    forgetThresholLayout->addWidget(w);
-    forgetThresholLayout->addLayout(buttonLayout);
+    timepointThresholdLayout->addWidget(enableCheck);
+    timepointThresholdLayout->addWidget(w);
+    timepointThresholdLayout->addWidget(w);
+    timepointThresholdLayout->addLayout(buttonLayout);
 
-    setLayout(forgetThresholLayout);
+    setLayout(timepointThresholdLayout);
 
     // signals
     QObject::connect(enableCheck, SIGNAL(clicked(bool)), this, SLOT(enableDisable(bool)));
     connect(setButton, SIGNAL(clicked()), this, SLOT(close()));
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
-    setWindowTitle(tr("Forgetting"));
+    setWindowTitle(tr("Scope Mind by..."));
     resize(fontMetrics().averageCharWidth()*55, height());
     setModal(true);
 }
 
-ForgetDialog::~ForgetDialog()
+TimeScopeDialog::~TimeScopeDialog()
 {
     // TODO delete all widgets
 }
 
-void ForgetDialog::enableDisable(bool enable)
+void TimeScopeDialog::enableDisable(bool enable)
 {
     yearSpin->setEnabled(enable);
     monthSpin->setEnabled(enable);

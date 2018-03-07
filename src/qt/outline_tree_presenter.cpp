@@ -81,11 +81,11 @@ void OutlineTreePresenter::refresh(Outline* outline, Outline::Patch* patch)
         } else {
             model->removeAllRows();
             // IMPROVE consider moving skeleton creation for aspects to lib on threshold
-            if(mind->isForgetThreasholdEnabled()) {
+            if(mind->isTimeScopeEnabled()) {
                 set<int> visibleNotes;
                 vector<int> parents;
                 for(size_t i=0; i<outline->getNotesCount(); i++) {
-                    if(mind->getForgetThreshold().isRemembered(outline->getNotes()[i])) {
+                    if(mind->getTimeScopeAspect().isInScope(outline->getNotes()[i])) {
                         // N's parents
                         parents.clear();
                         outline->getNotePathToRoot(i, parents);

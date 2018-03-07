@@ -72,9 +72,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindSleep->setStatusTip(tr("Stop sugggestions and clear Mind"));
     actionMindSleep->setEnabled(false);
 
-    // forget ... don't show any note older than 1Y/3M/...
+    // scope ... don't show any N/O older than 1Y/3M/...
+    actionMindScope = new QAction(tr("Sco&pe"), mainWindow);
+    actionMindScope->setStatusTip(tr("Don't show Outlines and Notes older than..."));
+
+    // forget ... move to Limbo or erase
     actionMindForget = new QAction(tr("&Forget"), mainWindow);
-    actionMindForget->setStatusTip(tr("Don't show notes older than..."));
+    actionMindForget->setStatusTip(tr("Limbo vs erase memory..."));
 
     // dream ... sanity, integrity, detox, inference, assoc discovery, ...
     actionMindDream = new QAction(tr("Dr&eam"), mainWindow);
@@ -108,6 +112,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addAction(actionMindRecall);
     menuMind->addAction(actionMindAssociate);
     menuMind->addAction(actionMindRemember);
+    menuMind->addAction(actionMindScope);
     menuMind->addAction(actionMindForget);
     menuMind->addSeparator();
     menuMind->addAction(actionMindSnapshot);

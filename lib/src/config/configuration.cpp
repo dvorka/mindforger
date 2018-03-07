@@ -167,9 +167,8 @@ void Configuration::save() const
          endl <<
          "* Theme: " << uiThemeName << endl <<
          "    * Examples: dark, light" << endl <<
-         "* Forget: " << "0y0m0d0h0m" << endl <<
+         "* Time scope: " << "0y0m0d0h0m" << endl <<
          "    * Examples: 2y0m0d0h0m (recent 2 years), 0y3m15d0h0m (recent 3 months and 15 days)" << endl <<
-         endl <<
          endl <<
          "# Repositories" << endl <<
          endl <<

@@ -25,7 +25,7 @@
 #include "memory.h"
 #include "ontology/thing_class_rel_triple.h"
 #include "../config/configuration.h"
-#include "aspect/forget_aspect.h"
+#include "aspect/time_scope_aspect.h"
 
 namespace m8r {
 
@@ -122,7 +122,7 @@ private:
     /**
      * @brief Forgetting.
      */
-    ForgetAspect forgetAspect;
+    TimeScopeAspect timeScopeAspect;
 
 public:
     explicit Mind(Configuration &config);
@@ -308,17 +308,12 @@ public:
     std::vector<Note*>* getAssociatedNotes(const std::vector<std::string*> words, const Outline& outline) const;
 
     /*
-     * FORGETTING
+     * SCOPING
      */
 
-    /**
-     * @brief Get forgetting threshold.
-     *
-     * Forget threshold is relative time from now.
-     */
-    std::string getForgetThresholdAsString() const { return forgetAspect.getThresholdAsString(); }
-    bool isForgetThreasholdEnabled() const { return forgetAspect.isEnabled(); }
-    ForgetAspect& getForgetThreshold() { return forgetAspect; }
+    std::string getTimeScopeAsString() const { return timeScopeAspect.getTimePointAsString(); }
+    bool isTimeScopeEnabled() const { return timeScopeAspect.isEnabled(); }
+    TimeScopeAspect& getTimeScopeAspect() { return timeScopeAspect; }
 
     /*
      * OUTLINE MANAGEMENT

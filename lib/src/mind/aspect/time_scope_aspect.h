@@ -1,5 +1,5 @@
 /*
- forget_aspect.h     MindForger thinking notebook
+ time_scope_aspect.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_FORGET_ASPECT_H
-#define M8R_FORGET_ASPECT_H
+#ifndef M8R_TIME_SCOPE_ASPECT_H
+#define M8R_TIME_SCOPE_ASPECT_H
 
 #include <ctime>
 #include <string>
@@ -28,17 +28,17 @@
 
 namespace m8r {
 
-class ForgetAspect : public Aspect
+class TimeScopeAspect : public Aspect
 {
 private:
 
     /**
      * @brief Show only Os/Ns that were modified after this point in time.
      *
-     * Anything what is older than now-forget is *not* shown to user, but
-     * kept in and maintained in mind.
+     * Anything what is older than timepoint is *not* shown to user (when
+     * viewing O/N), but it can be recalled and it's maintained in memory.
      */
-    time_t threshold;
+    time_t timepoint;
 
     /**
      * @brief Relative interval to remember in seconds.
@@ -48,23 +48,23 @@ private:
     int years, months, days, hours, minutes;
 
 public:
-    explicit ForgetAspect();
-    ForgetAspect(const ForgetAspect&) = delete;
-    ForgetAspect(const ForgetAspect&&) = delete;
-    ForgetAspect &operator=(const ForgetAspect&) = delete;
-    ForgetAspect &operator=(const ForgetAspect&&) = delete;
-    ~ForgetAspect();
+    explicit TimeScopeAspect();
+    TimeScopeAspect(const TimeScopeAspect&) = delete;
+    TimeScopeAspect(const TimeScopeAspect&&) = delete;
+    TimeScopeAspect &operator=(const TimeScopeAspect&) = delete;
+    TimeScopeAspect &operator=(const TimeScopeAspect&&) = delete;
+    ~TimeScopeAspect();
 
     virtual bool isEnabled() const { return relative>0; }
-    bool isForgotten(const Outline* o) const { return o->getRead()<threshold; }
-    bool isForgotten(const Note* n) const { return n->getRead()<threshold; }
-    bool isRemembered(const Outline* o) const { return !isForgotten(o); }
-    bool isRemembered(const Note* n) const { return !isForgotten(n); }
+    bool isOutOfScope(const Outline* o) const { return o->getRead()<timepoint; }
+    bool isOutOfScope(const Note* n) const { return n->getRead()<timepoint; }
+    bool isInScope(const Outline* o) const { return !isOutOfScope(o); }
+    bool isInScope(const Note* n) const { return !isOutOfScope(n); }
 
     /**
      * @brief Set threshold by the relative specification e.g. remember just recent year.
      */
-    void setThreshold(int years, int months, int days, int hours, int minutes)
+    void setTimePoint(int years, int months, int days, int hours, int minutes)
     {
         this->years = years;
         this->months = months;
@@ -82,7 +82,7 @@ public:
         time_t now;
         time(&now);
 
-        threshold = now-relative;
+        timepoint = now-relative;
 
         MF_DEBUG("R " << relative << std::endl);
     }
@@ -93,10 +93,10 @@ public:
     int getHours() const { return hours; }
     int getMinutes() const { return minutes; }
 
-    void setThreshold(time_t threshold);
-    std::string getThresholdAsString() const;
+    void setTimePoint(time_t timepoint);
+    std::string getTimePointAsString() const;
     void clearTreshold() { relative=0; }
 };
 
 }
-#endif // M8R_FORGET_ASPECT_H
+#endif // M8R_TIME_SCOPE_ASPECT_H

@@ -92,13 +92,10 @@ void StatusBarPresenter::showMindStatistics()
     status.append(" triples    ");
     status += cLocale.toString(mind->remind().getOutlineMarkdownsSize());
     status.append(" bytes    ");
-    if(mind->isForgetThreasholdEnabled()) {
-        status.append(">");
-        status.append(mind->getForgetThresholdAsString().c_str());
-    } else {
-        status.append(tr("nothing"));
+    if(mind->isTimeScopeEnabled()) {
+        status.append("scope:");
+        status.append(mind->getTimeScopeAsString().c_str());
     }
-    status.append(" forgotten");
 
     view->showInfo(status);
 }

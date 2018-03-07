@@ -39,6 +39,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     statusBar = new StatusBarPresenter{view.getStatusBar(), mind};
 
     // initialize components
+    timeScopeDialog = new TimeScopeDialog{&view};
     forgetDialog = new ForgetDialog{&view};
     newOutlineDialog = new OutlineNewDialog{
                 QString::fromStdString(config.getMemoryPath()),
@@ -51,7 +52,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     refactorNoteToOutlineDialog = new RefactorNoteToOutlineDialog{&view};
 
     // wire signals
-    QObject::connect(forgetDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleForgetThreshold()));
+    QObject::connect(timeScopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindTimeScope()));
+    QObject::connect(forgetDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindForgetting()));
     QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
     QObject::connect(ftsDialog->getFindButton(), SIGNAL(clicked()), this, SLOT(handleFts()));
@@ -674,26 +676,41 @@ void MainWindowPresenter::doActionMindSnapshot()
 {
 }
 
-void MainWindowPresenter::doActionSetForgetThreshold()
+void MainWindowPresenter::doActionMindTimeScope()
 {
-    forgetDialog->show(mind->isForgetThreasholdEnabled());
+    TimeScopeAspect& a=mind->getTimeScopeAspect();
+    timeScopeDialog->show(
+        a.isEnabled(),
+        a.getYears(),
+        a.getMonths(),
+        a.getDays(),
+        a.getHours(),
+        a.getMinutes());
 }
 
-void MainWindowPresenter::handleForgetThreshold()
+void MainWindowPresenter::handleMindTimeScope()
 {
-    if(forgetDialog->isThreasholdSet()) {
-        mind->getForgetThreshold().setThreshold(
-            forgetDialog->getYears(),
-            forgetDialog->getMonths(),
-            forgetDialog->getDays(),
-            forgetDialog->getHours(),
-            forgetDialog->getMinutes());
+    if(timeScopeDialog->isThreasholdSet()) {
+        mind->getTimeScopeAspect().setTimePoint(
+            timeScopeDialog->getYears(),
+            timeScopeDialog->getMonths(),
+            timeScopeDialog->getDays(),
+            timeScopeDialog->getHours(),
+            timeScopeDialog->getMinutes());
     } else {
-        mind->getForgetThreshold().clearTreshold();
+        mind->getTimeScopeAspect().clearTreshold();
     }
 
     // IMPROVE don't change view to Os, but refresh current one
     doActionViewOutlines();
+}
+
+void MainWindowPresenter::doActionMindForgetting()
+{
+}
+
+void MainWindowPresenter::handleMindForgetting()
+{
 }
 
 void MainWindowPresenter::doActionHelpDocumentation()
