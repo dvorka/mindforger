@@ -79,6 +79,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // forget ... move to Limbo or erase
     actionMindForget = new QAction(tr("&Forget"), mainWindow);
     actionMindForget->setStatusTip(tr("Limbo vs erase memory..."));
+    actionMindForget->setEnabled(false);
 
     // dream ... sanity, integrity, detox, inference, assoc discovery, ...
     actionMindDream = new QAction(tr("Dr&eam"), mainWindow);
