@@ -212,6 +212,10 @@ public:
     int getNoteOffset(const Note* note) const;
     void getNoteChildren(const Note* note, std::vector<Note*>* children=nullptr, Outline::Patch* patch=nullptr);
     /**
+     * @brief Get skeleton-style (Note per level) path to root.
+     */
+    void getNotePathToRoot(const size_t offset, std::vector<int> parents);
+    /**
      * @brief Forget Note including its children.
      */
     void forgetNote(Note* n) { removeNote(n, true); }

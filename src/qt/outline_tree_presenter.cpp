@@ -80,13 +80,26 @@ void OutlineTreePresenter::refresh(Outline* outline, Outline::Patch* patch)
             }
         } else {
             model->removeAllRows();
+            // IMPROVE consider moving skeleton creation for aspects to lib on threshold
             if(mind->isForgetThreasholdEnabled()) {
-                for(Note* note:outline->getNotes()) {
-                    if(mind->getForgetThreshold().isRemembered(note)) {
-                        // TODO add all parents
-                        MF_DEBUG("PARENTS to be added");
+                set<int> visibleNotes;
+                vector<int> parents;
+                for(size_t i=0; i<outline->getNotesCount(); i++) {
+                    if(mind->getForgetThreshold().isRemembered(outline->getNotes()[i])) {
+                        // N's parents
+                        parents.clear();
+                        outline->getNotePathToRoot(i, parents);
+                        if(parents.size()) {
+                            for(size_t p=0; p<parents.size(); p++) {
+                                if(visibleNotes.find(parents[p]) != visibleNotes.end()) {
+                                    visibleNotes.insert(p);
+                                    model->addRow(outline->getNotes()[parents[p]]);
+                                }
+                            }
+                        }
 
-                        model->addRow(note);
+                        // N
+                        model->addRow(outline->getNotes()[i]);
                     }
                 }
             } else {

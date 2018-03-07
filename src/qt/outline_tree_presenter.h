@@ -19,6 +19,8 @@
 #ifndef M8RUI_OUTLINE_TREE_PRESENTER_H
 #define M8RUI_OUTLINE_TREE_PRESENTER_H
 
+#include <set>
+
 #include "../../lib/src/model/outline.h"
 #include "../../lib/src/mind/mind.h"
 
