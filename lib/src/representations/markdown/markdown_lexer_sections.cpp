@@ -94,8 +94,8 @@ MarkdownLexemTable::MarkdownLexemTable()
     lexems.insert(META_PROPERTY_links);
     META_PROPERTY_deadline = new MarkdownLexem{MarkdownLexemType::META_PROPERTY_deadline};
     lexems.insert(META_PROPERTY_deadline);
-    META_PROPERTY_forget = new MarkdownLexem{MarkdownLexemType::META_PROPERTY_forget};
-    lexems.insert(META_PROPERTY_forget);
+    META_PROPERTY_scope = new MarkdownLexem{MarkdownLexemType::META_PROPERTY_scope};
+    lexems.insert(META_PROPERTY_scope);
     META_NAMEVALUE_DELIMITER = new MarkdownLexem{MarkdownLexemType::META_NAMEVALUE_DELIMITER};
     lexems.insert(META_NAMEVALUE_DELIMITER);
     HTML_COMMENT_BEGIN = new MarkdownLexem{MarkdownLexemType::HTML_COMMENT_BEGIN};
@@ -125,7 +125,7 @@ MarkdownLexemTable::~MarkdownLexemTable()
     delete META_PROPERTY_tags;
     delete META_PROPERTY_links;
     delete META_PROPERTY_deadline;
-    delete META_PROPERTY_forget;
+    delete META_PROPERTY_scope;
     delete META_NAMEVALUE_DELIMITER;
     delete HTML_COMMENT_BEGIN;
     delete HTML_COMMENT_END;
@@ -490,15 +490,14 @@ bool MarkdownLexerSections::lexMetaPropertyName(const unsigned short offset, uns
             } else {
                 return false;
             }
-        case 'f':
-            if(lines[offset]->at(idx+2)=='o' &&
-               lines[offset]->at(idx+3)=='r' &&
-               lines[offset]->at(idx+4)=='g' &&
+        case 's':
+            if(lines[offset]->at(idx+2)=='c' &&
+               lines[offset]->at(idx+3)=='o' &&
+               lines[offset]->at(idx+4)=='p' &&
                lines[offset]->at(idx+5)=='e' &&
-               lines[offset]->at(idx+6)=='t' &&
-               (lines[offset]->at(idx+7)==':' || !isspace(idx+7))) {
-                lexems.push_back(symbolTable.LEXEM.META_PROPERTY_forget);
-                idx+=6;
+               (lines[offset]->at(idx+6)==':' || !isspace(idx+6))) {
+                lexems.push_back(symbolTable.LEXEM.META_PROPERTY_scope);
+                idx+=5;
                 return true;
             } else {
                 return false;

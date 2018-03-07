@@ -358,7 +358,7 @@ bool MarkdownParserSections::sectionMetadataRule(
                 case MarkdownLexemType::META_PROPERTY_urgency:
                     meta.setUrgency(parsePropertyValueFraction(offset));
                     break;
-                case MarkdownLexemType::META_PROPERTY_forget:
+                case MarkdownLexemType::META_PROPERTY_scope:
                     if((t = parsePropertyValueForget(offset))!=0) {
                         meta.setForget(t); // structure to avoid conversions
                     }

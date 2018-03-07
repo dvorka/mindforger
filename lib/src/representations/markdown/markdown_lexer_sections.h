@@ -54,7 +54,7 @@ public:
     MarkdownLexem* META_PROPERTY_tags;
     MarkdownLexem* META_PROPERTY_links;
     MarkdownLexem* META_PROPERTY_deadline;
-    MarkdownLexem* META_PROPERTY_forget;
+    MarkdownLexem* META_PROPERTY_scope;
     MarkdownLexem* META_NAMEVALUE_DELIMITER;
     MarkdownLexem* HTML_COMMENT_BEGIN;
     MarkdownLexem* HTML_COMMENT_END;

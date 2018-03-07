@@ -73,6 +73,7 @@ Note* MarkdownOutlineRepresentation::note(vector<MarkdownAstNodeSection*>* ast, 
         note->setRevision(ast->at(i)->getMetadata().getRevision());
         note->setRead(ast->at(i)->getMetadata().getRead());
         note->setReads(ast->at(i)->getMetadata().getReads());
+        note->setDeadline(ast->at(i)->getMetadata().getDeadline());
         note->setProgress(ast->at(i)->getMetadata().getProgress());
         if (ast->at(i)->getMetadata().getTags().size()) {
             const Tag* t;
@@ -283,7 +284,10 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
             md->append(" modified: "); md->append(datetimeToString(outline->getModified())); md->append(";");
             sprintf(buffer," importance: %d/5;",outline->getImportance()); md->append(buffer);
             sprintf(buffer," urgency: %d/5;",outline->getUrgency()); md->append(buffer);
-            sprintf(buffer," progress: %d%%; -->",outline->getProgress()); md->append(buffer);
+            if(outline->getProgress()) {
+                sprintf(buffer," progress: %d%%;",outline->getProgress()); md->append(buffer);
+            }
+            md->append(" -->");
         }
         if(outline->isTrailingHashesSection()) {
             md->append(" #");
@@ -415,7 +419,13 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
         md->append(" read: "); md->append(datetimeToString(note->getRead())); md->append(";");
         sprintf(buffer," revision: %d;",note->getRevision()); md->append(buffer);
         md->append(" modified: "); md->append(datetimeToString(note->getModified())); md->append(";");
-        sprintf(buffer," progress: %d%%; -->",note->getProgress()); md->append(buffer);
+        if(note->getProgress()) {
+            sprintf(buffer," progress: %d%%;",note->getProgress()); md->append(buffer);
+        }
+        if(note->getDeadline()) {
+            md->append(" deadline: "); md->append(datetimeToString(note->getDeadline())); md->append(";");
+        }
+        md->append(" -->");
     }
     if(note->isTrailingHashesSection()) {
         md->append(" ");
@@ -453,4 +463,3 @@ string* MarkdownOutlineRepresentation::toDescription(const Note* note, string* m
 
 
 } // m8r namespace
-

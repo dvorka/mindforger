@@ -193,7 +193,7 @@ int8_t MarkdownAstSectionMetadata::getUrgency() const
 
 MarkdownAstSectionMetadata::MarkdownAstSectionMetadata()
 {
-    created = read = modified = 0;
+    deadline = created = read = modified = 0;
     importance = urgency = progress = 0;
     revision = reads = 0;
     type = nullptr;

@@ -133,7 +133,7 @@ void printLexemType(MarkdownLexemType type)
     case MarkdownLexemType::META_PROPERTY_links:
         cout << "META links       #";
         break;
-    case MarkdownLexemType::META_PROPERTY_forget:
+    case MarkdownLexemType::META_PROPERTY_scope:
         cout << "META forget      #";
         break;
 

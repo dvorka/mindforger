@@ -683,32 +683,47 @@ TEST(MarkdownParserBugsTestCase, EmptyNameSkipsEof)
 // TODO to be implemented
 TEST(MarkdownParserTestCase, Deadline)
 {
+    string repositoryPath{"/tmp"};
+    string fileName{"md-parser-deadline.md"};
     string content;
+    string filePath{repositoryPath+"/"+fileName};
+
     content.assign(
-        "# Outline Name\n"
-        "========\n"
-        "O text.\n"
-        "\n"
-        "## First Section  <!-- Metadata: deadline: 2010-11-12 13:14:15; -->\n"
-        "N1 text.\n"
-        "\n"
-        "## Second Section\n"
-        "N2 text.\n"
-        "\n");
+                "# Outline Name\n"
+                "O text.\n"
+                "\n"
+                "## First Section  <!-- Metadata: deadline: 2010-11-12 13:14:15; -->\n"
+                "N1 text.\n"
+                "\n"
+                "## Second Section\n"
+                "N2 text.\n"
+                "\n");
+    m8r::stringToFile(filePath, content);
 
-    MarkdownLexerSections lexer(nullptr);
+    m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    repository->setMode(m8r::Repository::RepositoryMode::FILE);
+    repository->setFile(fileName);
+    m8r::Configuration& configuration = m8r::Configuration::getInstance();
+    configuration.setActiveRepository(configuration.addRepository(repository));
+    m8r::Ontology ontology{configuration};
 
-    // tokenize
-    lexer.tokenize(&content);
-    const std::vector<MarkdownLexem*>& lexems = lexer.getLexems();
-    ASSERT_TRUE(lexems.size());
-    printLexems(lexems);
+    // parse
+    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    File file{filePath};
+    m8r::Outline* o = mdr.outline(file);
 
     // asserts
-    EXPECT_EQ(lexems[0]->getType(), MarkdownLexemType::BEGIN_DOC);
-    EXPECT_EQ(lexems[1]->getType(), MarkdownLexemType::SECTION_equals);
-    EXPECT_EQ(lexems[2]->getType(), MarkdownLexemType::LINE);
-    EXPECT_EQ(lexems[3]->getType(), MarkdownLexemType::BR);
-    EXPECT_EQ(lexems[4]->getType(), MarkdownLexemType::LINE);
-    EXPECT_EQ(lexems[5]->getType(), MarkdownLexemType::BR);
+    EXPECT_NE(o, nullptr);
+    EXPECT_EQ(o->getNotesCount(), 2);
+
+    cout << endl << "Deadline: " << o->getNotes()[0]->getDeadline();
+    EXPECT_EQ(o->getNotes()[0]->getDeadline(), 1289564055);
+
+    // serialize
+    string* serialized = mdr.to(o);
+    cout << endl << "- SERIALIZED ---";
+    cout << endl << *serialized;
+    EXPECT_NE(serialized->find("deadline: 2010-11-12 13:14:15"), std::string::npos);
+
+    delete serialized;
 }
