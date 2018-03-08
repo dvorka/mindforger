@@ -31,7 +31,7 @@
 namespace m8r {
 
 /**
- * @brief Markdown outline representation.
+ * @brief Markdown Outline representation.
  */
 /* Method:
  *   Markdown (instance representing MD file)

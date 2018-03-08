@@ -71,7 +71,8 @@ SOURCES += \
     ../../lib/test/src/config/configuration_test.cpp \
     ../../lib/src/mind/ontology/thing_class_rel_triple.cpp \
     benchmark/markdown_benchmark.cpp \
-    ../src/mind/aspect/time_scope_aspect.cpp
+    ../src/mind/aspect/time_scope_aspect.cpp \
+    ../src/representations/markdown/markdown_configuration_representation.cpp
 
 HEADERS += \
     ../../lib/src/debug.h \
@@ -127,7 +128,8 @@ HEADERS += \
     ../../lib/src/mind/ontology/thing_class_rel_triple.h \
     ../../lib/src/mind/ontology/taxonomy.h \
     ../src/mind/aspect/aspect.h \
-    ../src/mind/aspect/time_scope_aspect.h
+    ../src/mind/aspect/time_scope_aspect.h \
+    ../src/representations/markdown/markdown_configuration_representation.h
 
 # GTest unit test framework library dependencies
 unix|win32: LIBS += -lgtest

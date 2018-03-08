@@ -19,8 +19,6 @@
 
 #include "configuration.h"
 
-#include <iostream>
-
 namespace m8r {
 
 using namespace std;
@@ -154,31 +152,7 @@ void Configuration::save() const
 {
     MF_DEBUG("Saving configuration to " << configFilePath);
 
-    stringstream s{};
-    // IMPROVE build more in compile time and less in runtime
-    s <<
-         "# MindForger Configuration" << endl <<
-         endl <<
-         "This is MindForger configuration file (Markdown hosted DSL)." << endl <<
-         "See documentation for configuration options details." << endl <<
-         endl <<
-         "# Settings" << endl <<
-         "Application settings:" << endl <<
-         endl <<
-         "* Theme: " << uiThemeName << endl <<
-         "    * Examples: dark, light" << endl <<
-         "* Time scope: " << "0y0m0d0h0m" << endl <<
-         "    * Examples: 2y0m0d0h0m (recent 2 years), 0y3m15d0h0m (recent 3 months and 15 days)" << endl <<
-         endl <<
-         "# Repositories" << endl <<
-         endl <<
-         "If MindForger detects MindForger repository structure, then the directory is" << endl <<
-         "threated as knowledge base, else it's used as a Markdown directory (e.g. metadata"  << endl <<
-         "are not stored to Markdown files)." << endl <<
-         endl <<
-         "* Active repository: ~/mindforger-repository" << endl <<
-         "* Repository: ~/mindforger-repository" << endl <<
-         endl;
+    migrate to MdConfigRepre
 
     std::ofstream out(configFilePath);
     out << s.str();

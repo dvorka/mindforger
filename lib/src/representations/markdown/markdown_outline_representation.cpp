@@ -24,6 +24,7 @@ namespace m8r {
 
 using namespace std;
 
+// IMPROVE endl
 const string MarkdownOutlineRepresentation::MINIMAL_SECTION_HEADER = "# T\n";
 
 MarkdownOutlineRepresentation::MarkdownOutlineRepresentation(Ontology& ontology)
@@ -248,6 +249,7 @@ string* MarkdownOutlineRepresentation::toPreamble(const Outline* outline, string
         if(p.size()) {
             for(string *s:p) {
                 md->append(*s);
+                // IMPROVE endl
                 md->append("\n");
             }
         }
@@ -297,6 +299,7 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
         if(outline->isPostDeclaredSection()) {
             int w=outline->getName().size()<2?2:outline->getName().size();
             for(int i=0; i<w; i++) md->append("=");
+            // IMPROVE endl
             md->append("\n");
         }
 
@@ -304,6 +307,7 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
         if(description.size()) {
             for(string *s:description) {
                 md->append(*s);
+                // IMPROVE endl
                 md->append("\n");
             }
         }
@@ -441,6 +445,7 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
         for(int i=0; i<w; i++) {
             md->append(c);
         }
+        // IMPROVE endl
         md->append("\n");
     }
 
@@ -455,6 +460,7 @@ string* MarkdownOutlineRepresentation::toDescription(const Note* note, string* m
     if(description.size()) {
         for(string *s:description) {
             md->append(*s);
+            // IMPROVE endl
             md->append("\n");
         }
     }
