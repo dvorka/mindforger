@@ -24,9 +24,6 @@ namespace m8r {
 
 using namespace std;
 
-// IMPROVE endl
-const string MarkdownOutlineRepresentation::MINIMAL_SECTION_HEADER = "# T\n";
-
 MarkdownOutlineRepresentation::MarkdownOutlineRepresentation(Ontology& ontology)
     : ontology(ontology)
 {
@@ -343,33 +340,19 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
 
 void MarkdownOutlineRepresentation::description(const std::string* md, std::vector<std::string*>& description)
 {
-    // stupid and ugly: prepend a minimal section to description an parse it using MD parser (no need to create a new function)
     if(md) {
-        // quote description: TAB all lines starting with # to ensure correct sections separation
-        // TODO add quoting of multiline sections that use === and ---
-        string s{};
-        istringstream imd(*md);
+        istringstream is(*md);
         static const char SECTION = '#';
-        for(string line; std::getline(imd, line); ) {
-            if(line.size() && line.at(0) == SECTION) {
-                s += "    ";
+        for(string line; std::getline(is, line); ) {
+            // TODO add quoting of multiline sections that use === and ---
+            // quote description: TAB all lines starting with # to ensure correct sections separation
+            if(line.size() && line.at(0)==SECTION) {
+                line += "    ";
             }
-            s += line;
-#ifdef __linux__
-            s += "\n";
-#elif _WIN32
-            s += "\r\n";
-#else
-            s += "\r";
-#endif
+            description.push_back(new string{line});
         }
-
-        s.insert(0, MINIMAL_SECTION_HEADER);
-        Markdown md{nullptr};
-        md.from(&s);
-        vector<MarkdownAstNodeSection*>* ast = md.moveAst();
-        Note* n = note(ast);
-        n->moveDescription(description);
+    } else {
+        description.clear();
     }
 }
 
