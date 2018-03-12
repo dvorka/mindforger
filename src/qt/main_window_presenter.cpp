@@ -681,24 +681,25 @@ void MainWindowPresenter::doActionMindTimeScope()
     TimeScopeAspect& a=mind->getTimeScopeAspect();
     timeScopeDialog->show(
         a.isEnabled(),
-        a.getYears(),
-        a.getMonths(),
-        a.getDays(),
-        a.getHours(),
-        a.getMinutes());
+        a.getTimeScope().years,
+        a.getTimeScope().months,
+        a.getTimeScope().days,
+        a.getTimeScope().hours,
+        a.getTimeScope().minutes);
 }
 
 void MainWindowPresenter::handleMindTimeScope()
 {
     if(timeScopeDialog->isThreasholdSet()) {
-        mind->getTimeScopeAspect().setTimePoint(
-            timeScopeDialog->getYears(),
-            timeScopeDialog->getMonths(),
-            timeScopeDialog->getDays(),
-            timeScopeDialog->getHours(),
-            timeScopeDialog->getMinutes());
+        TimeScope& ts=mind->getTimeScopeAspect().getTimeScope();
+        ts.years=timeScopeDialog->getYears();
+        ts.years=timeScopeDialog->getMonths();
+        ts.months=timeScopeDialog->getMonths();
+        ts.days=timeScopeDialog->getDays();
+        ts.hours=timeScopeDialog->getHours();
+        ts.minutes=timeScopeDialog->getMinutes();
     } else {
-        mind->getTimeScopeAspect().clearTreshold();
+        mind->getTimeScopeAspect().getTimeScope().reset();
     }
 
     // IMPROVE don't change view to Os, but refresh current one

@@ -132,7 +132,10 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     lib/src/mind/aspect/aspect.h \
     src/qt/dialogs/forget_dialog.h \
     src/qt/dialogs/time_scope_dialog.h \
-    lib/src/mind/aspect/time_scope_aspect.h
+    lib/src/mind/aspect/time_scope_aspect.h \
+    lib/src/model/link.h \
+    lib/src/config/time_scope.h \
+    lib/src/representations/markdown/markdown_configuration_representation.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
@@ -226,7 +229,10 @@ SOURCES += ./lib/src/mind/planner.cpp \
     src/qt/recent_files_menu.cpp \
     src/qt/dialogs/forget_dialog.cpp \
     src/qt/dialogs/time_scope_dialog.cpp \
-    lib/src/mind/aspect/time_scope_aspect.cpp
+    lib/src/mind/aspect/time_scope_aspect.cpp \
+    lib/src/model/link.cpp \
+    lib/src/config/time_scope.cpp \
+    lib/src/representations/markdown/markdown_configuration_representation.cpp
 
 # Development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1

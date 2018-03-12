@@ -24,7 +24,7 @@
 #include <QtWidgets>
 
 #include "../../lib/src/version.h"
-#include "../../lib/src/config/configuration.h"
+#include "../../lib/src/representations/markdown/markdown_configuration_representation.h"
 
 #include "gear/qutils.h"
 #include "i18nl10n.h"
@@ -105,8 +105,11 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     // load configuration
+    m8r::MarkdownConfigurationRepresentation mdConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
-    config.load();
+    if(!mdConfigRepresentation.load(config)) {
+        mdConfigRepresentation.save(m8r::File{config.getConfigFilePath()});
+    }
 
     // check whether running in GUI (and not in text console tty)
     char *term = getenv(m8r::ENV_VAR_TERM);
