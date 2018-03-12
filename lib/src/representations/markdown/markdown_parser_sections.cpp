@@ -359,9 +359,7 @@ bool MarkdownParserSections::sectionMetadataRule(
                     meta.setUrgency(parsePropertyValueFraction(offset));
                     break;
                 case MarkdownLexemType::META_PROPERTY_scope:
-                    if((t = parsePropertyValueForget(offset))!=0) {
-                        meta.setTimeScope(t); // structure to avoid conversions
-                    }
+                    meta.setTimeScope(parsePropertyValueTimeScope(offset));
                     break;
                 case MarkdownLexemType::META_PROPERTY_deadline:
                     if((t = parsePropertyValueTimestamp(offset))!=0) {
@@ -400,14 +398,6 @@ const MarkdownLexem* MarkdownParserSections::parsePropertyValue(size_t& offset)
         }
     }
     return nullptr;
-}
-
-time_t MarkdownParserSections::parsePropertyValueForget(size_t& offset)
-{
-    UNUSED_ARG(offset);
-
-    // TODO to be implemented
-    return 0;
 }
 
 vector<string*>* MarkdownParserSections::parsePropertyValueRelationships(size_t& offset)
@@ -543,6 +533,22 @@ int MarkdownParserSections::parsePropertyValuePercent(size_t& offset)
         }
     }
     return 0;
+}
+
+TimeScope MarkdownParserSections::parsePropertyValueTimeScope(size_t& offset)
+{
+    const MarkdownLexem* valueLexem = parsePropertyValue(offset);
+    TimeScope result{};
+    if(valueLexem != nullptr) {
+        string* s = lexer.getText(valueLexem);
+        if(s!=nullptr) {
+            if(s->size()) {
+                TimeScope::fromString(*s, result);
+            }
+            delete s;
+        }
+    }
+    return result;
 }
 
 vector<string*>* MarkdownParserSections::sectionBodyRule(size_t& offset)

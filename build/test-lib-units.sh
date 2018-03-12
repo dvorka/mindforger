@@ -24,12 +24,14 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
+export OPTION_TEST="MarkdownParserTestCase.TimeScope"
 #export OPTION_TEST="MarkdownParserTestCase.Deadline"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSections"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsPreamble"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsNoMetadata"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsPostDeclaredHeaders"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsPostDeclaredHeaders2"
+#export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerTimeScope"
 #export OPTION_TEST="MarkdownParserTestCase.*"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownParserSections"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownParserSectionsPreamble"
@@ -52,7 +54,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="DateTimeGearTestCase.Immutability"
 #export OPTION_TEST="ConfigurationTestCase.*"
 #export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
-export OPTION_TEST="ConfigurationTestCase.SaveAndLoad"
+#export OPTION_TEST="ConfigurationTestCase.SaveAndLoad"
 ##export OPTION_TEST="ConfigurationTestCase.FromConstructor"
 #export OPTION_TEST="ConfigurationTestCase.Environment"
 #export OPTION_TEST="MarkdownParserTestCase.Bug37Notrailing"

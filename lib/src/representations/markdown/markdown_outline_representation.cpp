@@ -161,6 +161,9 @@ Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>*
                 outline->setImportance(astNode->getMetadata().getImportance());
                 outline->setUrgency(astNode->getMetadata().getUrgency());
                 outline->setProgress(astNode->getMetadata().getProgress());
+                if(astNode->getMetadata().getTimeScope().relativeSecs) {
+                    outline->setTimeScope(astNode->getMetadata().getTimeScope());
+                }
 
                 if(astNode->getMetadata().getTags().size()) {
                     const Tag* t;
@@ -290,6 +293,11 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
             sprintf(buffer," urgency: %d/5;",outline->getUrgency()); md->append(buffer);
             if(outline->getProgress()) {
                 sprintf(buffer," progress: %d%%;",outline->getProgress()); md->append(buffer);
+            }
+            if(outline->getTimeScope().relativeSecs) {
+                string ts{};
+                outline->getTimeScope().toString(ts);
+                md->append(" scope: "); md->append(ts); md->append(";");
             }
             md->append(" -->");
         }

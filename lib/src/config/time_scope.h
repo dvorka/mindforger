@@ -24,6 +24,8 @@
 
 #include <sys/types.h>
 
+#include "../debug.h"
+
 namespace m8r {
 
 struct TimeScope {
@@ -57,6 +59,43 @@ struct TimeScope {
         recalculateRelativeSecs();
     }
 
+    TimeScope(const TimeScope& t)
+    {
+        this->years = t.years;
+        this->months = t.months;
+        this->days = t.days;
+        this->hours = t.hours;
+        this->minutes = t.minutes;
+
+        recalculateRelativeSecs();
+    }
+
+    TimeScope& operator=(const TimeScope& t)
+    {
+        this->years = t.years;
+        this->months = t.months;
+        this->days = t.days;
+        this->hours = t.hours;
+        this->minutes = t.minutes;
+
+        recalculateRelativeSecs();
+
+        return *this;
+    }
+
+    TimeScope(const TimeScope&& t)
+    {
+        this->years = t.years;
+        this->months = t.months;
+        this->days = t.days;
+        this->hours = t.hours;
+        this->minutes = t.minutes;
+
+        recalculateRelativeSecs();
+    }
+
+    TimeScope& operator=(const TimeScope&&) = delete;
+
     void recalculateRelativeSecs()
     {
         relativeSecs =
@@ -73,7 +112,7 @@ struct TimeScope {
         relativeSecs=0;
     }
 
-    void toString(std::string& s);
+    void toString(std::string& s) const;
 };
 
 }

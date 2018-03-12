@@ -31,44 +31,45 @@ bool TimeScope::fromString(const std::string& s, TimeScope& t)
         while(isdigit(s[i])) {
             h+=s[i++];
         }
-        if(h.size() && s[i]=='y') i++; else return false;
+        if(h.size() && s[i]=='y') i++; else { t.reset(); return false; }
         t.years = stoi(h);
         // months
         h.clear();
         while(isdigit(s[i])) {
             h+=s[i++];
         }
-        if(h.size() && s[i]=='m') i++; else return false;
+        if(h.size() && s[i]=='m') i++; else { t.reset(); return false; }
         t.months= stoi(h);
         // days
         h.clear();
         while(isdigit(s[i])) {
             h+=s[i++];
         }
-        if(h.size() && s[i]=='d') i++; else return false;
+        if(h.size() && s[i]=='d') i++; else { t.reset(); return false; }
         t.days= stoi(h);
         // hours
         h.clear();
         while(isdigit(s[i])) {
             h+=s[i++];
         }
-        if(h.size() && s[i]=='h') i++; else return false;
+        if(h.size() && s[i]=='h') i++; else { t.reset(); return false; }
         t.hours= stoi(h);
         // minutes
         h.clear();
         while(isdigit(s[i])) {
             h+=s[i++];
         }
-        if(h.size() && s[i]=='m') i++; else return false;
+        if(h.size() && s[i]=='m') i++; else { t.reset(); return false; }
         t.minutes= stoi(h);
 
         return true;
     } else {
+        t.reset();
         return false;
     }
 }
 
-void TimeScope::toString(string& s)
+void TimeScope::toString(string& s) const
 {
     std::ostringstream os;
     os << (int)years << "y" << (int)months << "m" << (int)days << "d" << (int)hours << "h" << (int)minutes << "m";

@@ -159,6 +159,33 @@ TEST(MarkdownParserTestCase, MarkdownLexerSectionsPostDeclaredHeaders2)
     EXPECT_EQ(lexems[5]->getType(), MarkdownLexemType::BR);
 }
 
+TEST(MarkdownParserTestCase, MarkdownLexerTimeScope)
+{
+    string content;
+    content.assign(
+        "# Outline Name <!-- Metadata: scope: 1y2m3d4h5m; -->\n"
+        "O text.\n"
+        "\n"
+        "## First Section\n"
+        "N1 text.\n"
+        "\n"
+        "## Second Section\n"
+        "N2 text.\n"
+        "\n");
+
+    MarkdownLexerSections lexer(nullptr);
+
+    // tokenize
+    lexer.tokenize(&content);
+    const std::vector<MarkdownLexem*>& lexems = lexer.getLexems();
+    ASSERT_TRUE(lexems.size());
+    printLexems(lexems);
+
+    // asserts
+    EXPECT_EQ(lexems[0]->getType(), MarkdownLexemType::BEGIN_DOC);
+    EXPECT_EQ(lexems[9]->getType(), MarkdownLexemType::META_PROPERTY_scope);
+}
+
 TEST(MarkdownParserTestCase, MarkdownParserSections)
 {
     unique_ptr<string> fileName
@@ -680,8 +707,57 @@ TEST(MarkdownParserBugsTestCase, EmptyNameSkipsEof)
     cout << endl << "- DONE ----------------------------------------------";
 }
 
-// TODO to be implemented
-TEST(MarkdownParserTestCase, Deadline)
+TEST(MarkdownParserTestCase, TimeScope)
+{
+    string repositoryPath{"/tmp"};
+    string fileName{"md-parser-time-scope.md"};
+    string content;
+    string filePath{repositoryPath+"/"+fileName};
+
+    content.assign(
+                "# Outline Name <!-- Metadata: scope: 1y2m3d4h5m; -->\n"
+                "O text.\n"
+                "\n"
+                "## First Section\n"
+                "N1 text.\n"
+                "\n"
+                "## Second Section\n"
+                "N2 text.\n"
+                "\n");
+    m8r::stringToFile(filePath, content);
+
+    m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    repository->setMode(m8r::Repository::RepositoryMode::FILE);
+    repository->setFile(fileName);
+    m8r::Configuration& configuration = m8r::Configuration::getInstance();
+    configuration.setActiveRepository(configuration.addRepository(repository));
+    m8r::Ontology ontology{configuration};
+
+    // parse
+    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    File file{filePath};
+    m8r::Outline* o = mdr.outline(file);
+
+    // asserts
+    EXPECT_NE(o, nullptr);
+    string timeScopeAsString{};
+    o->getTimeScope().toString(timeScopeAsString);
+    cout << endl << "Time scope: " << timeScopeAsString << " (" << o->getTimeScope().relativeSecs << "s)";
+    EXPECT_EQ(o->getTimeScope().relativeSecs, 36993900);
+    o->getTimeScope().toString(timeScopeAsString);
+    EXPECT_EQ(timeScopeAsString, "1y2m3d4h5m");
+    EXPECT_EQ(o->getNotesCount(), 2);
+
+    // serialize
+    string* serialized = mdr.to(o);
+    cout << endl << "- SERIALIZED ---";
+    cout << endl << *serialized;
+    EXPECT_NE(serialized->find("scope: 1y2m3d4h5m;"), std::string::npos);
+
+    delete serialized;
+}
+
+TEST(MarkdownParserTestCase, DISABLED_Deadline)
 {
     string repositoryPath{"/tmp"};
     string fileName{"md-parser-deadline.md"};

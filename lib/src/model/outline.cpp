@@ -28,9 +28,11 @@ const NoteType Outline::NOTE_4_OUTLINE_TYPE{"Outline", nullptr, Color::RED()};
 Outline::Outline(const OutlineType* type)
     : Thing{},
       memoryLocation(OutlineMemoryLocation::NORMAL),
-      format(Markdown::Format::MINDFORGER), type(type)
+      format(Markdown::Format::MINDFORGER),
+      type(type),
+      timeScope{}
 {
-    forgetThreshold = created = modified = read = 0;
+    created = modified = read = 0;
     reads = revision = 0;
     importance = urgency = progress = 0;
     bytesize = 0;
@@ -101,7 +103,7 @@ Outline::Outline(const Outline& o)
     resetClonedOutline(this);
 
      // reset threshold to avoid situations when all Ns are forgotten > user is confused
-    forgetThreshold = 0;
+    timeScope.reset();
 
     importance = o.importance;
     urgency = o.urgency;

@@ -119,7 +119,10 @@ private:
      * Transient fields
      */
 
-    time_t forgetThreshold;
+    /**
+     * @brief Time scope to use for filtering (selective forgetting) of O's Ns.
+     */
+    TimeScope timeScope;
 
 public:
     Outline() = delete;
@@ -232,6 +235,13 @@ public:
     void moveNoteToLast(Note* note, Outline::Patch* patch=nullptr);
 
     Note* getOutlineDescriptorAsNote();
+
+    /*
+     * Scope
+     */
+
+    void setTimeScope(const TimeScope& timeScope) { this->timeScope = timeScope; }
+    const TimeScope& getTimeScope() const { return timeScope; }
 
     /*
      * Dialect detection

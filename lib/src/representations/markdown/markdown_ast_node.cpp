@@ -238,12 +238,12 @@ const string* MarkdownAstSectionMetadata::getPrimaryTag() const
     }
 }
 
-time_t MarkdownAstSectionMetadata::getTimeScope() const
+TimeScope& MarkdownAstSectionMetadata::getTimeScope()
 {
     return timeScope;
 }
 
-void MarkdownAstSectionMetadata::setTimeScope(time_t timeScope)
+void MarkdownAstSectionMetadata::setTimeScope(const TimeScope& timeScope)
 {
     this->timeScope=timeScope;
 }
