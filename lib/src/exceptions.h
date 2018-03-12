@@ -26,7 +26,10 @@ class MindForgerException : public std::exception
 public:
     explicit MindForgerException(const char* message) throw()
         : message(message) {}
-    ~MindForgerException() throw() { if(message) delete message; }
+    ~MindForgerException() throw() {
+        // IMPROVE deleted by parent > remove the following line (unit test)
+        if(message) delete message;
+    }
 
     const char *what() const throw() { return message; }
 

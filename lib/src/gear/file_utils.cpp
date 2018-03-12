@@ -147,6 +147,18 @@ bool isDirectory(const char* path)
     }
 }
 
+bool isFile(const char* path)
+{
+    struct stat info;
+    if(stat(path, &info)) {
+        return false;
+    } else if(S_ISDIR(info.st_mode)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 char* makeTempDirectory(char* dirNamePrefix)
 {
     char tmpl[100];

@@ -31,8 +31,6 @@
 #include "../gear/file_utils.h"
 #include "../exceptions.h"
 #include "../model/tag.h"
-#include "../representations/markdown/markdown.h"
-#include "../representations/markdown/markdown_ast_node.h"
 #include "../install/installer.h"
 
 namespace m8r {
@@ -44,6 +42,8 @@ constexpr const auto ENV_VAR_M8R_REPOSITORY = "MINDFORGER_REPOSITORY";
 constexpr const auto ENV_VAR_M8R_EDITOR = "MINDFORGER_EDITOR";
 
 constexpr const auto DIRNAME_M8R_REPOSITORY = "mindforger-repository";
+// IMPROVE :-Z C++
+constexpr const auto FILE_PATH_M8R_REPOSITORY = "~/mindforger-repository";
 
 constexpr const auto FILENAME_M8R_CONFIGURATION = ".mindforger.md";
 constexpr const auto FILE_PATH_MEMORY = "memory";
@@ -60,7 +60,6 @@ constexpr const auto UI_THEME_BLACK = "black";
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
-class MarkdownAstNodeSection;
 class Installer;
 
 /**
@@ -91,6 +90,13 @@ public:
         SLEEPING
     };
 
+    static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
+    static const std::string DEFAULT_TIME_SCOPE;
+    static constexpr const bool DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON = true;
+    static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
+
+    static const std::string DEFAULT_UI_THEME_NAME;
+
 private:
     explicit Configuration();
 
@@ -109,16 +115,18 @@ private:
 
     // lib configuration
     bool writeMetadata; // write metadata to MD - enabled in case of MINDFORGER_REPO only by default (can be disabled for all repository types)
-    bool rememberReads; // persist count of Outline and Note reads (requires write to disc on every O/N view)
+    bool saveReadsMetadata; // persist count of Outline and Note reads (requires write to disc on every O/N view)
     std::string externalEditorPath; // path to external MD editor e.g. Emacs or Remarkable
+    std::string timeScopeAsString;
 
     // GUI configuration
+    std::string uiThemeName;
     int uiFontPointSize;
     bool uiShowBreadcrump; // show breadcrump path
     bool uiViewerShowMetadata; // show reads/writes/... when viewing Outlines and/or Notes.
     bool uiEditorShowLineNumbers; // show line numbers
     bool uiEditorEnableSyntaxHighlighting; // toggle syntax highlighting
-    std::string uiThemeName;
+    bool uiShowNotebookEditButton;
 
 private:
     Installer* installer;
@@ -130,14 +138,17 @@ public:
     Configuration &operator=(const Configuration&&) = delete;
     virtual ~Configuration();
 
+    void reset();
+
     Installer* getInstaller() const { return installer; }
-
-    void load();
-    void save() const;
-
     MindState getMindState() const { return mindState; }
     void setMindState(MindState mindState);
 
+    std::string& getConfigFilePath() { return configFilePath; }
+    void setConfigFilePath(const std::string customConfigFilePath) { configFilePath = customConfigFilePath; }
+    const std::string& getMemoryPath() const { return memoryPath; }
+    const std::string& getLimboPath() const { return limboPath; }
+    const char* getRepositoryPathFromEnv();
     /**
      * @brief Find or create default MindForger repository.
      *
@@ -157,14 +168,23 @@ public:
      * Note that activeRepository parameter must be one of the known repositories.
      */
     void setActiveRepository(Repository* activeRepository);
+    bool isActiveRepository() const { return activeRepository!=nullptr; }
     Repository* getActiveRepository() const;
 
-    const std::string& getMemoryPath() const { return memoryPath; }
-    const std::string& getLimboPath() const { return limboPath; }
+    /*
+     * lib
+     */
 
-    const char* getRepositoryPathFromEnv();
     const char* getEditorFromEnv();
     const std::string& getExternalEditorPath() const { return externalEditorPath; }
+    void setTimeScope(const std::string& timeScope) { timeScopeAsString = timeScope; }
+    const std::string& getTimeScopeAsString() const { return timeScopeAsString; }
+    bool isSaveReadsMetadata() const { return saveReadsMetadata; }
+    void setSaveReadsMetadata(bool saveReadsMetadata) { this->saveReadsMetadata=saveReadsMetadata; }
+
+    /*
+     * GUI
+     */
 
     int getUiFontPointSize() const { return uiFontPointSize; }
     const std::string& getUiThemeName() const { return uiThemeName; }
@@ -173,9 +193,8 @@ public:
     void setUiEditorShowLineNumbers(bool show) { uiEditorShowLineNumbers = show; }
     bool isUiEditorEnableSyntaxHighlighting() const { return uiEditorEnableSyntaxHighlighting; }
     void setUiEditorEnableSyntaxHighlighting(bool enable) { uiEditorEnableSyntaxHighlighting = enable; }
-
-private:
-    void load(const std::vector<MarkdownAstNodeSection*>* ast);
+    bool isUiShowNotebookEditButton() const { return uiShowNotebookEditButton; }
+    void setUiShowNotebookEditButton(bool show) { uiShowNotebookEditButton = show; }
 };
 
 } // namespace

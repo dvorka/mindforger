@@ -23,11 +23,14 @@
 #include <vector>
 #include <iostream>
 
+#include "../../config/configuration.h"
 #include "markdown.h"
 #include "markdown_ast_node.h"
-#include "../../config/configuration.h"
 
 namespace m8r {
+
+class Configuration;
+class MarkdownAstNodeSection;
 
 /**
  * @brief Markdown configuration representation.
@@ -46,9 +49,7 @@ namespace m8r {
 class MarkdownConfigurationRepresentation
 {
     static constexpr int AVG_SECTION_SIZE = 300;
-    static constexpr int AVG_CONFIGURATION_SIZE = 2*AVG_NOTE_SIZE;
-private:
-    Configuration config;
+    static constexpr int AVG_CONFIGURATION_SIZE = 2*AVG_SECTION_SIZE;
 
 public:
     explicit MarkdownConfigurationRepresentation();
@@ -58,11 +59,26 @@ public:
     MarkdownConfigurationRepresentation &operator=(const MarkdownConfigurationRepresentation&&) = delete;
     ~MarkdownConfigurationRepresentation();
 
-    virtual void configuration(const File& file);
-    virtual std::string* to();
+    std::string* to(Configuration& c);
+
+    /**
+     * @brief Load configuration from file and return true on success (file exists), otherwise return false.
+     */
+    bool load(Configuration& c);
+    /**
+     * @brief Save configuration to file.
+     */
+    void save(Configuration& c) { save(nullptr, &c); }
+    /**
+     * @brief Save initial configuration file.
+     */
+    void save(const File& file) { save(&file, nullptr); }
 
 private:
-    void configuration(std::vector<MarkdownAstNodeSection*>* ast);
+    void configuration(std::vector<MarkdownAstNodeSection*>* ast, Configuration& c);
+    void configuration(std::string* title, std::vector<std::string*>* body, Configuration& c);
+    std::string& to(Configuration* c, std::string& md);
+    void save(const File* file, Configuration* c);
 };
 
 }

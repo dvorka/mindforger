@@ -23,6 +23,10 @@ namespace m8r {
 
 using namespace std;
 
+const std::string Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH = std::string{FILE_PATH_M8R_REPOSITORY};
+const std::string Configuration::DEFAULT_UI_THEME_NAME = std::string{UI_DEFAULT_THEME};
+const std::string Configuration::DEFAULT_TIME_SCOPE = std::string{"0y0m0d0h0m"};
+
 Configuration::Configuration()
     : installer(new Installer{})
 {
@@ -37,16 +41,7 @@ Configuration::Configuration()
 
     // repositories - environment variable defined repository path to be used only if desired
 
-    // lib
-    writeMetadata = true;
-    rememberReads = false;
-
-    // GUI
-    uiViewerShowMetadata = true;
-    uiEditorEnableSyntaxHighlighting = true;
-    uiEditorShowLineNumbers = true;
-    uiThemeName.assign(UI_DEFAULT_THEME);
-    uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
+    reset();
 }
 
 Configuration::~Configuration()
@@ -62,6 +57,29 @@ Configuration::~Configuration()
     }
 }
 
+void Configuration::reset()
+{
+    // repositories
+    activeRepository = nullptr;
+    for(auto& r:repositories) {
+        delete r.second;
+    }
+    repositories.clear();
+
+    // lib
+    writeMetadata = true;
+    saveReadsMetadata = DEFAULT_SAVE_READS_METADATA;
+    timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
+
+    // GUI
+    uiViewerShowMetadata = true;
+    uiEditorEnableSyntaxHighlighting = true;
+    uiEditorShowLineNumbers = true;
+    uiThemeName.assign(UI_DEFAULT_THEME);
+    uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
+    uiShowNotebookEditButton = DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON;
+}
+
 void Configuration::setMindState(MindState mindState)
 {
     this->mindState = mindState;
@@ -69,11 +87,18 @@ void Configuration::setMindState(MindState mindState)
 
 Repository* Configuration::addRepository(Repository* repository)
 {
-    if(repositories[repository->getPath()] != nullptr) {
-        // deleting clashing repository
-        delete repositories[repository->getPath()];
+    Repository* clash;
+    if((clash=repositories[repository->getPATH()]) != nullptr) {
+        // deleting clashing repository and update active repository (if needed)
+        repositories.erase(repository->getPATH());
+        if(activeRepository == clash) {
+            activeRepository = repository;
+            delete clash;
+        }
     }
-    repositories[repository->getPath()] = repository; // overwrites item map under given key (map::insert keeps existing)
+
+    repositories[repository->getPATH()] = repository;
+
     return repository;
 }
 
@@ -93,26 +118,30 @@ std::map<const std::string,Repository*>& Configuration::getRepositories()
 
 void Configuration::setActiveRepository(Repository* repository)
 {
-    if(repositories.find(repository->getPath()) != repositories.end()) {
-        activeRepository = repository;
+    if(repository) {
+        if(repositories.find(repository->getPATH()) != repositories.end()) {
+            activeRepository = repository;
 
-        memoryPath.clear();
-        memoryPath.append(activeRepository->getPath());
-        memoryPath+=FILE_PATH_SEPARATOR;
-        memoryPath+=FILE_PATH_MEMORY;
+            memoryPath.clear();
+            memoryPath.append(activeRepository->getDir());
+            memoryPath+=FILE_PATH_SEPARATOR;
+            memoryPath+=FILE_PATH_MEMORY;
 
-        limboPath.clear();
-        limboPath.append(activeRepository->getPath());
-        limboPath+=FILE_PATH_SEPARATOR;
-        limboPath+=FILE_PATH_LIMBO;
+            limboPath.clear();
+            limboPath.append(activeRepository->getDir());
+            limboPath+=FILE_PATH_SEPARATOR;
+            limboPath+=FILE_PATH_LIMBO;
+        } else {
+            throw MindForgerException{"Active repository must be one of repositories known to Configuration!"};
+        }
     } else {
-        throw MindForgerException{"Active repository must be one of repositories known to Configuration!"};
+        activeRepository = nullptr;
     }
 }
 
 void Configuration::findOrCreateDefaultRepository()
 {
-    if(!activeRepository || activeRepository->getPath().empty()) {
+    if(!activeRepository || activeRepository->getDir().empty()) {
         string defaultRepositoryPath{userHomePath};
         defaultRepositoryPath.append(FILE_PATH_SEPARATOR);
         defaultRepositoryPath.append(DIRNAME_M8R_REPOSITORY);
@@ -128,35 +157,6 @@ void Configuration::findOrCreateDefaultRepository()
             }
         }
     }
-}
-
-void Configuration::load()
-{
-    MF_DEBUG("Loading configuration from " << configFilePath);
-    if(isDirectoryOrFileExists(configFilePath.c_str())) {
-        Markdown configMarkdown{&configFilePath};
-        load(configMarkdown.getAst());
-    } else {
-        save();
-    }
-}
-
-void Configuration::load(const vector<MarkdownAstNodeSection*>* ast)
-{
-    UNUSED_ARG(ast);
-
-    // TODO deserialize AST to this instance
-}
-
-void Configuration::save() const
-{
-    MF_DEBUG("Saving configuration to " << configFilePath);
-
-    migrate to MdConfigRepre
-
-    std::ofstream out(configFilePath);
-    out << s.str();
-    out.close();
 }
 
 const char* Configuration::getRepositoryPathFromEnv()

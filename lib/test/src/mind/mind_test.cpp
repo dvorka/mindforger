@@ -195,7 +195,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     // 1/3 learn
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.setActiveRepository(config.addRepository(repository));
-    cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getPath();
+    cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getDir();
     cout << endl << "Repositories[" << config.getRepositories().size() << "]:";
 
     m8r::Mind mind(config);

@@ -42,7 +42,7 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     ASSERT_NE(r, nullptr);
     EXPECT_EQ(r->getType(),m8r::Repository::RepositoryType::MINDFORGER);
     EXPECT_EQ(r->getMode(),m8r::Repository::RepositoryMode::REPOSITORY);
-    EXPECT_EQ(r->getPath(),repositoryPath);
+    EXPECT_EQ(r->getDir(),repositoryPath);
     EXPECT_TRUE(r->getFile().empty());
     delete r;
 
@@ -53,7 +53,7 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     ASSERT_NE(r, nullptr);
     EXPECT_EQ(r->getType(),m8r::Repository::RepositoryType::MARKDOWN);
     EXPECT_EQ(r->getMode(),m8r::Repository::RepositoryMode::REPOSITORY);
-    EXPECT_EQ(r->getPath(),repositoryPath);
+    EXPECT_EQ(r->getDir(),repositoryPath);
     EXPECT_TRUE(r->getFile().empty());
     delete r;
 
@@ -67,7 +67,7 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     ASSERT_NE(r, nullptr);
     EXPECT_EQ(r->getType(),m8r::Repository::RepositoryType::MINDFORGER);
     EXPECT_EQ(r->getMode(),m8r::Repository::RepositoryMode::FILE);
-    EXPECT_EQ(r->getPath(),directoryName);
+    EXPECT_EQ(r->getDir(),directoryName);
     EXPECT_EQ(r->getFile(),fileName);
     delete r;
 
@@ -82,7 +82,7 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     // it's OK - MF is default type BEFORE parsing (MF doesn't delete metadata, MD would erase them)
     EXPECT_EQ(r->getType(),m8r::Repository::RepositoryType::MINDFORGER);
     EXPECT_EQ(r->getMode(),m8r::Repository::RepositoryMode::FILE);
-    EXPECT_EQ(r->getPath(),directoryName);
+    EXPECT_EQ(r->getDir(),directoryName);
     EXPECT_EQ(r->getFile(),fileName);
     delete r;
 }
@@ -131,7 +131,7 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
     auto outlineFiles = repositoryIndexer.getAllOutlineFileNames();
 
     // asserts
-    EXPECT_EQ(repository->getPath(), repositoryPath);
+    EXPECT_EQ(repository->getDir(), repositoryPath);
     EXPECT_EQ(repository->getType(), m8r::Repository::RepositoryType::MINDFORGER);
     EXPECT_EQ(repository->getMode(), m8r::Repository::RepositoryMode::REPOSITORY);
     EXPECT_EQ(repository->isReadOnly(), false);
@@ -220,7 +220,7 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
     auto outlineFiles = repositoryIndexer.getAllOutlineFileNames();
 
     // asserts
-    EXPECT_EQ(repository->getPath(), repositoryPath);
+    EXPECT_EQ(repository->getDir(), repositoryPath);
     EXPECT_EQ(repository->getType(), m8r::Repository::RepositoryType::MARKDOWN);
     EXPECT_EQ(repository->getMode(), m8r::Repository::RepositoryMode::REPOSITORY);
     EXPECT_EQ(repository->isReadOnly(), false);
@@ -307,7 +307,7 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
     m8r::Mind mind(config);
     mind.think();
 
-    EXPECT_EQ(repository->getPath(), repositoryPath);
+    EXPECT_EQ(repository->getDir(), repositoryPath);
     EXPECT_EQ(repository->getType(), m8r::Repository::RepositoryType::MINDFORGER);
     EXPECT_EQ(repository->getMode(), m8r::Repository::RepositoryMode::FILE);
     EXPECT_EQ(repository->isReadOnly(), false);
@@ -385,7 +385,7 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
     m8r::Mind mind(config);
     mind.think();
 
-    EXPECT_EQ(repository->getPath(), repositoryPath);
+    EXPECT_EQ(repository->getDir(), repositoryPath);
     EXPECT_EQ(repository->getType(), m8r::Repository::RepositoryType::MARKDOWN);
     EXPECT_EQ(repository->getMode(), m8r::Repository::RepositoryMode::FILE);
     EXPECT_EQ(repository->isReadOnly(), false);

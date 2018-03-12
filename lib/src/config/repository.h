@@ -22,6 +22,7 @@
 #include <string>
 
 #include "../debug.h"
+#include "../gear/file_utils.h"
 
 namespace m8r {
 
@@ -62,15 +63,16 @@ public:
     };
 
 private:
-    std::string path;
+    std::string dir;
     std::string file;
+    std::string path;
     RepositoryType type;
     RepositoryMode mode;
     bool readOnly;
 
 public:
     explicit Repository(
-        std::string path,
+        std::string dir,
         RepositoryType type=RepositoryType::MINDFORGER,
         RepositoryMode mode=RepositoryMode::REPOSITORY,
         std::string file = "",
@@ -81,10 +83,12 @@ public:
     Repository &operator=(const Repository&&) = delete;
     ~Repository();
 
-    const std::string& getPath() const { return path; }
-    void setPath(std::string path) { this->path = path; }
+    // IMPROVE rename to getPath() after refactoring
+    std::string& getPATH() { return path; }
+    const std::string& getDir() const { return dir; }
+    void setDir(std::string dir) { this->dir = dir; updatePath(); }
     const std::string& getFile() const { return file; }
-    void setFile(std::string file) { this->file = file; }
+    void setFile(std::string file) { this->file = file; updatePath(); }
     RepositoryType getType() const { return type; }
     void setType(RepositoryType type) { this->type = type; }
     void setMode(RepositoryMode mode) { this->mode=mode; }
@@ -94,9 +98,12 @@ public:
 
 #ifdef DO_M8F_DEBUG
     void print() const {
-        MF_DEBUG(std::endl << "Path: " << path << ", file: " << file << ", type: " << type << ", mode: " << mode << ", RD_ONLY: " << readOnly);
+        MF_DEBUG(std::endl << "Path: '" << path << "' Dir: '" << dir << "' file: '" << file << "' type: " << type << ", mode: " << mode << ", RD_ONLY: " << readOnly << std::flush);
     }
 #endif
+
+private:
+    void updatePath();
 };
 
 }

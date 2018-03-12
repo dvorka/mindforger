@@ -56,7 +56,7 @@ void RepositoryIndexer::clear()
 void RepositoryIndexer::index(Repository* repository)
 {
     if(repository) {
-        if(!repository->getPath().empty() && !isDirectoryOrFileExists(repository->getPath().c_str())
+        if(!repository->getDir().empty() && !isDirectoryOrFileExists(repository->getDir().c_str())
         ) {
             throw MindForgerException{"Given repository path does NOT exist!"};
         }
@@ -65,7 +65,7 @@ void RepositoryIndexer::index(Repository* repository)
 
         this->repository = repository;
 
-        memoryDirectory.assign(repository->getPath());
+        memoryDirectory.assign(repository->getDir());
 
         if(repository->getType() == Repository::RepositoryType::MINDFORGER
              &&
@@ -74,13 +74,13 @@ void RepositoryIndexer::index(Repository* repository)
             memoryDirectory.append(FILE_PATH_SEPARATOR);
             memoryDirectory.append(FILE_PATH_MEMORY);
 
-            outlineStencilsDirectory.assign(repository->getPath());
+            outlineStencilsDirectory.assign(repository->getDir());
             outlineStencilsDirectory.append(FILE_PATH_SEPARATOR);
             outlineStencilsDirectory.append(FILE_PATH_STENCILS);
             outlineStencilsDirectory.append(FILE_PATH_SEPARATOR);
             outlineStencilsDirectory.append(FILE_PATH_OUTLINES);
 
-            noteStencilsDirectory.assign(repository->getPath());
+            noteStencilsDirectory.assign(repository->getDir());
             noteStencilsDirectory.append(FILE_PATH_SEPARATOR);
             noteStencilsDirectory.append(FILE_PATH_STENCILS);
             noteStencilsDirectory.append(FILE_PATH_SEPARATOR);
@@ -96,7 +96,7 @@ void RepositoryIndexer::index(Repository* repository)
 
 void RepositoryIndexer::updateIndex() {
 #ifdef DO_M8F_DEBUG
-    MF_DEBUG("\nIndexing repository:\n  " << repository->getPath());
+    MF_DEBUG("\nIndexing repository:\n  " << repository->getDir());
     auto begin = chrono::high_resolution_clock::now();
 #endif
 
@@ -153,9 +153,9 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
             }
         }
     } else {
-        MF_DEBUG("\nINDEXING memory single FILE: " << repository->getFile() << " in " << repository->getPath());
+        MF_DEBUG("\nINDEXING memory single FILE: " << repository->getFile() << " in " << repository->getDir());
         if(repository->getFile().size()) {
-            string* path = new string{repository->getPath()};
+            string* path = new string{repository->getDir()};
             path->append(FILE_PATH_SEPARATOR);
             path->append(repository->getFile());
             allFiles.insert(path);

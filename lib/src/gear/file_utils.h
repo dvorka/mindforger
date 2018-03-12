@@ -57,7 +57,7 @@ namespace m8r {
 
 struct File
 {
-    const std::string& name;
+    const std::string name;
 
     File(const std::string& name)
         : name(name)
@@ -77,6 +77,7 @@ bool copyFile(const std::string &from, const std::string &to);
 bool moveFile(const std::string &from, const std::string &to);
 bool isDirectoryOrFileExists(const char* path);
 bool isDirectory(const char* path);
+bool isFile(const char* path);
 char* makeTempDirectory(char* dirNamePefix);
 int removeDirectoryRecursively(const char *path);
 

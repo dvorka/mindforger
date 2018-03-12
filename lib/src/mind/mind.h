@@ -82,7 +82,7 @@ constexpr auto NO_PARENT = 0xFFFF;
 class Mind
 {
 public:
-    static const int ALL_ENTRIES = -1;
+    static constexpr int ALL_ENTRIES = -1;
 
 private:
     Configuration &config;

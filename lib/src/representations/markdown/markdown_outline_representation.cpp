@@ -36,8 +36,10 @@ MarkdownOutlineRepresentation::~MarkdownOutlineRepresentation()
 {
 }
 
+// IMPROVE return the last N doesn't seem to have much sense...
 Note* MarkdownOutlineRepresentation::note(vector<MarkdownAstNodeSection*>* ast, const size_t astindex, Outline* outline)
 {
+    // IMPROVE move declarations to for scope
     Note* note = nullptr;
     const NoteType* noteType;
     vector<string*>* body;
@@ -63,8 +65,8 @@ Note* MarkdownOutlineRepresentation::note(vector<MarkdownAstNodeSection*>* ast, 
         }
         note->setDepth(ast->at(i)->getDepth());
         body = ast->at(i)->moveBody();
-        if (body != nullptr) {
-            for (string*& bodyItem : *body) {
+        if(body != nullptr) {
+            for(string*& bodyItem : *body) {
                 note->addDescriptionLine(bodyItem);
             }
         }

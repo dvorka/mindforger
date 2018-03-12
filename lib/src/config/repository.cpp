@@ -23,17 +23,27 @@ namespace m8r {
 using namespace std;
 
 Repository::Repository(
-    string path,
+    string dir,
     RepositoryType type,
     RepositoryMode mode,
     std::string file,
     bool readOnly)
-    : path(path), file(file), type(type), mode(mode), readOnly(readOnly)
+    : dir(dir), file(file), type(type), mode(mode), readOnly(readOnly)
 {
+    updatePath();
 }
 
 Repository::~Repository()
 {
+}
+
+void Repository::updatePath()
+{
+    path.assign(dir);
+    if(mode == RepositoryMode::FILE) {
+        path += FILE_PATH_SEPARATOR;
+        path += file;
+    }
 }
 
 }
