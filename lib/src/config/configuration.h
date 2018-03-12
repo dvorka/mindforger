@@ -62,6 +62,26 @@ constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
 class Installer;
 
+struct TimeScope {
+    u_int8_t years;
+    u_int8_t months;
+    u_int8_t days;
+    u_int8_t hours;
+    u_int8_t minutes;
+
+    explicit TimeScope() {
+        years=months=days=hours=minutes=0;
+    }
+
+    explicit TimeScope(u_int8_t years, u_int8_t months, u_int8_t days, u_int8_t hours, u_int8_t minutes) {
+        this->years = years;
+        this->months = months;
+        this->days = days;
+        this->hours = hours;
+        this->minutes = minutes;
+    }
+};
+
 /**
  * @brief MindForger configuration.
  *
@@ -117,6 +137,7 @@ private:
     bool writeMetadata; // write metadata to MD - enabled in case of MINDFORGER_REPO only by default (can be disabled for all repository types)
     bool saveReadsMetadata; // persist count of Outline and Note reads (requires write to disc on every O/N view)
     std::string externalEditorPath; // path to external MD editor e.g. Emacs or Remarkable
+    TimeScope timeScope;
     std::string timeScopeAsString;
 
     // GUI configuration
@@ -177,8 +198,8 @@ public:
 
     const char* getEditorFromEnv();
     const std::string& getExternalEditorPath() const { return externalEditorPath; }
-    void setTimeScope(const std::string& timeScope) { timeScopeAsString = timeScope; }
-    const std::string& getTimeScopeAsString() const { return timeScopeAsString; }
+    void setTimeScope(const TimeScope& timeScope) { this->timeScope = timeScope; }
+    const TimeScope& getTimeScope() const { return timeScope; }
     bool isSaveReadsMetadata() const { return saveReadsMetadata; }
     void setSaveReadsMetadata(bool saveReadsMetadata) { this->saveReadsMetadata=saveReadsMetadata; }
 

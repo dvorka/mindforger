@@ -42,6 +42,59 @@ MarkdownConfigurationRepresentation::~MarkdownConfigurationRepresentation()
 {
 }
 
+void MarkdownConfigurationRepresentation::timescopeToString(const TimeScope& t, string& s)
+{
+    std::ostringstream os;
+    os << (int)t.years << "y" << (int)t.months << "m" << (int)t.days << "d" << (int)t.hours << "h" << (int)t.minutes << "m";
+    s.assign(os.str());
+}
+
+bool MarkdownConfigurationRepresentation::timescopeFromString(const std::string& s, TimeScope& t)
+{
+    if(s.size()) {
+        string h{};
+        int i=0;
+        // years
+        while(isdigit(s[i])) {
+            h+=s[i++];
+        }
+        if(h.size() && s[i]=='y') i++; else return false;
+        t.years = stoi(h);
+        // months
+        h.clear();
+        while(isdigit(s[i])) {
+            h+=s[i++];
+        }
+        if(h.size() && s[i]=='m') i++; else return false;
+        t.months= stoi(h);
+        // days
+        h.clear();
+        while(isdigit(s[i])) {
+            h+=s[i++];
+        }
+        if(h.size() && s[i]=='d') i++; else return false;
+        t.days= stoi(h);
+        // hours
+        h.clear();
+        while(isdigit(s[i])) {
+            h+=s[i++];
+        }
+        if(h.size() && s[i]=='h') i++; else return false;
+        t.hours= stoi(h);
+        // minutes
+        h.clear();
+        while(isdigit(s[i])) {
+            h+=s[i++];
+        }
+        if(h.size() && s[i]=='m') i++; else return false;
+        t.minutes= stoi(h);
+
+        return true;
+    } else {
+        return false;
+    }
+}
+
 /*
  * Parse Configuration represented as AST while aiming to be as ROBUST as possible i.e. handle
  * eventual user typos and incorrect formatting.
@@ -99,7 +152,13 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
             for(string* line: *body) {
                 if(line && line->size() && line->at(0)=='*') {
                     if(line->find(CONFIG_SETTING_TIME_SCOPE_LABEL) != std::string::npos) {
-                        // TODO
+                        string t = line->substr(strlen(CONFIG_SETTING_TIME_SCOPE_LABEL));
+                        if(t.size()) {
+                            TimeScope ts;
+                            if(timescopeFromString(t, ts)) {
+                                c.setTimeScope(ts);
+                            }
+                        }
                     } else if(line->find(CONFIG_SETTING_SAVE_READS_METADATA_LABEL) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
                             c.setSaveReadsMetadata(true);
@@ -166,6 +225,12 @@ string* MarkdownConfigurationRepresentation::to(Configuration& c)
 string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
 {
     stringstream s{};
+    string timeScope{};
+    if(c) {
+        timescopeToString(c->getTimeScope(), timeScope);
+    } else {
+        timeScope.assign(Configuration::DEFAULT_TIME_SCOPE);
+    }
     // IMPROVE build more in compile time and less in runtime
     s <<
          "# MindForger Configuration" << endl <<
@@ -179,7 +244,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          endl <<
          CONFIG_SETTING_UI_THEME_LABEL << (c?c->getUiThemeName():Configuration::DEFAULT_UI_THEME_NAME) << endl <<
          "    * Examples: dark, light" << endl <<
-         CONFIG_SETTING_TIME_SCOPE_LABEL << (c?c->getTimeScopeAsString():Configuration::DEFAULT_TIME_SCOPE) << endl <<
+         CONFIG_SETTING_TIME_SCOPE_LABEL << timeScope << endl <<
          "    * Examples: 2y0m0d0h0m (recent 2 years), 0y3m15d0h0m (recent 3 months and 15 days)" << endl <<
          CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL << (c?(c->isUiShowNotebookEditButton()?"yes":"no"):(Configuration::DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<

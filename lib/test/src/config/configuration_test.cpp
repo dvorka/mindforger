@@ -106,12 +106,13 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     std::ofstream out(repositoryPath);
     out << "# Just a Test" << endl;
     out.close();
+    string timeScopeAsString{};
     m8r::MarkdownConfigurationRepresentation configRepresentation{};
     m8r::Configuration& c = m8r::Configuration::getInstance();
 
     string backupFile = c.getConfigFilePath();
     string backupTheme = c.getUiThemeName();
-    string backupTimeScope = c.getTimeScopeAsString();
+    m8r::TimeScope backupTimeScope = c.getTimeScope();
     bool backupReadsMetadata = c.isSaveReadsMetadata();
     bool backupNotebookButton = c.isUiShowNotebookEditButton();
     m8r::Repository* backupActiveRepository;
@@ -127,7 +128,8 @@ TEST(ConfigurationTestCase, SaveAndLoad)
 
     c.setConfigFilePath(file);
     c.setUiThemeName("CRAZYCOLORS");
-    c.setTimeScope("1y2m33d4h55m");
+    m8r::TimeScope ts{1,2,33,4,55};
+    c.setTimeScope(ts);
     c.setSaveReadsMetadata(false);
     c.setUiShowNotebookEditButton(false);
     m8r::Repository* r = new m8r::Repository{
@@ -162,7 +164,8 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     // asserts
     ASSERT_TRUE(loaded);
     EXPECT_EQ(c.getUiThemeName(), "CRAZYCOLORS");
-    EXPECT_NE(c.getTimeScopeAsString(), "1y2m33d4h55m");
+    configRepresentation.timescopeToString(c.getTimeScope(), timeScopeAsString);
+    EXPECT_EQ(timeScopeAsString, "1y2m33d4h55m");
     EXPECT_FALSE(c.isSaveReadsMetadata());
     EXPECT_FALSE(c.isUiShowNotebookEditButton());
 

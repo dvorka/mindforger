@@ -25,19 +25,6 @@
 
 namespace m8r {
 
-struct TimeScope {
-    u_int8_t years;
-    u_int8_t months;
-    u_int8_t weeks;
-    u_int8_t days;
-    u_int8_t hours;
-    u_int8_t minutes;
-
-    TimeScope() {
-        years=months=weeks=days=hours=minutes=0;
-    }
-};
-
 enum class MarkdownAstNodeType {
     // AST type
     AST_STANDARD,       // AST w/ finest granularity
