@@ -757,7 +757,7 @@ TEST(MarkdownParserTestCase, TimeScope)
     delete serialized;
 }
 
-TEST(MarkdownParserTestCase, DISABLED_Deadline)
+TEST(MarkdownParserTestCase, Deadline)
 {
     string repositoryPath{"/tmp"};
     string fileName{"md-parser-deadline.md"};
