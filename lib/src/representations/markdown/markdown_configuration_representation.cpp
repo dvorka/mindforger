@@ -172,11 +172,11 @@ string* MarkdownConfigurationRepresentation::to(Configuration& c)
 string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
 {
     stringstream s{};
-    string timeScope{};
+    string timeScopeAsString{};
     if(c) {
-        TimeScope::toString(c->getTimeScope(), timeScope);
+        c->getTimeScope().toString(timeScopeAsString);
     } else {
-        timeScope.assign(Configuration::DEFAULT_TIME_SCOPE);
+        timeScopeAsString.assign(Configuration::DEFAULT_TIME_SCOPE);
     }
     // IMPROVE build more in compile time and less in runtime
     s <<
@@ -191,7 +191,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          endl <<
          CONFIG_SETTING_UI_THEME_LABEL << (c?c->getUiThemeName():Configuration::DEFAULT_UI_THEME_NAME) << endl <<
          "    * Examples: dark, light" << endl <<
-         CONFIG_SETTING_TIME_SCOPE_LABEL << timeScope << endl <<
+         CONFIG_SETTING_TIME_SCOPE_LABEL << timeScopeAsString << endl <<
          "    * Examples: 2y0m0d0h0m (recent 2 years), 0y3m15d0h0m (recent 3 months and 15 days)" << endl <<
          CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL << (c?(c->isUiShowNotebookEditButton()?"yes":"no"):(Configuration::DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<

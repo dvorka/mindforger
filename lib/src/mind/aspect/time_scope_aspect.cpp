@@ -32,10 +32,10 @@ TimeScopeAspect::~TimeScopeAspect()
 {
 }
 
-string TimeScopeAspect::getTimePointAsString() const
+string TimeScopeAspect::getTimeScopeAsString()
 {
     string result{};
-    TimeScope::toString(timeScope, result);
+    timeScope.toString(result);
     return std::move(result);
 }
 

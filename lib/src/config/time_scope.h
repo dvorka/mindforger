@@ -28,7 +28,6 @@ namespace m8r {
 
 struct TimeScope {
 
-    static void toString(const TimeScope& t, std::string& s);
     static bool fromString(const std::string& s, TimeScope& t);
 
     u_int8_t years;
@@ -73,6 +72,8 @@ struct TimeScope {
         years=months=days=hours=minutes=0;
         relativeSecs=0;
     }
+
+    void toString(std::string& s);
 };
 
 }

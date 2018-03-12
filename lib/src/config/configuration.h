@@ -180,7 +180,7 @@ public:
     const char* getEditorFromEnv();
     const std::string& getExternalEditorPath() const { return externalEditorPath; }
     void setTimeScope(const TimeScope& timeScope) { this->timeScope = timeScope; }
-    const TimeScope& getTimeScope() const { return timeScope; }
+    TimeScope& getTimeScope() { return timeScope; }
     bool isSaveReadsMetadata() const { return saveReadsMetadata; }
     void setSaveReadsMetadata(bool saveReadsMetadata) { this->saveReadsMetadata=saveReadsMetadata; }
 

@@ -164,7 +164,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     // asserts
     ASSERT_TRUE(loaded);
     EXPECT_EQ(c.getUiThemeName(), "CRAZYCOLORS");
-    m8r::TimeScope::toString(c.getTimeScope(), timeScopeAsString);
+    c.getTimeScope().toString(timeScopeAsString);
     EXPECT_EQ(timeScopeAsString, "1y2m33d4h55m");
     EXPECT_FALSE(c.isSaveReadsMetadata());
     EXPECT_FALSE(c.isUiShowNotebookEditButton());

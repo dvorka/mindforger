@@ -311,7 +311,7 @@ public:
      * SCOPING
      */
 
-    std::string getTimeScopeAsString() const { return timeScopeAspect.getTimePointAsString(); }
+    std::string getTimeScopeAsString() { return timeScopeAspect.getTimeScopeAsString(); }
     bool isTimeScopeEnabled() const { return timeScopeAspect.isEnabled(); }
     TimeScopeAspect& getTimeScopeAspect() { return timeScopeAspect; }
 

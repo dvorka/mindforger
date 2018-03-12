@@ -22,13 +22,6 @@ namespace m8r {
 
 using namespace std;
 
-void TimeScope::toString(const TimeScope& t, string& s)
-{
-    std::ostringstream os;
-    os << (int)t.years << "y" << (int)t.months << "m" << (int)t.days << "d" << (int)t.hours << "h" << (int)t.minutes << "m";
-    s.assign(os.str());
-}
-
 bool TimeScope::fromString(const std::string& s, TimeScope& t)
 {
     if(s.size()) {
@@ -73,6 +66,13 @@ bool TimeScope::fromString(const std::string& s, TimeScope& t)
     } else {
         return false;
     }
+}
+
+void TimeScope::toString(string& s)
+{
+    std::ostringstream os;
+    os << (int)years << "y" << (int)months << "m" << (int)days << "d" << (int)hours << "h" << (int)minutes << "m";
+    s.assign(os.str());
 }
 
 } // m8r namespace
