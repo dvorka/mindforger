@@ -91,6 +91,7 @@ private:
     std::vector<std::string*> preamble;
     // IMPROVE hashset
     std::vector<const Tag*> tags;
+    std::vector<Link*> links;
     const OutlineType* type;
     std::vector<std::string*> description;
 
@@ -235,6 +236,12 @@ public:
     void moveNoteToLast(Note* note, Outline::Patch* patch=nullptr);
 
     Note* getOutlineDescriptorAsNote();
+
+    /*
+     * Links
+     */
+
+    void addLink(const Link* link);
 
     /*
      * Scope

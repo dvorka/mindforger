@@ -48,6 +48,9 @@ Outline::~Outline() {
     for(string* d:preamble) {
         delete d;
     }
+    for(Link* l:links) {
+        delete l;
+    }
     for(Note* note:notes) {
         delete note;
     }
@@ -940,6 +943,11 @@ Note* Outline::getOutlineDescriptorAsNote()
     outlineDescriptorAsNote->setName(name);
     outlineDescriptorAsNote->setDescription(description);
     return outlineDescriptorAsNote;
+}
+
+void Outline::addLink(const Link* link)
+{
+    // TODO
 }
 
 bool Outline::isApiaryBlueprint()

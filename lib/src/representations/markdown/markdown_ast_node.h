@@ -21,6 +21,7 @@
 
 #include <string>
 
+#include "../../model/link.h"
 #include "markdown_note_metadata.h"
 
 namespace m8r {
@@ -121,7 +122,7 @@ private:
 
     TimeScope timeScope;
     time_t deadline;
-    std::vector<std::string*> relationships;
+    std::vector<Link*> links;
 
 public:
     explicit MarkdownAstSectionMetadata();
@@ -159,8 +160,9 @@ public:
     void setTimeScope(const TimeScope& timeScope);
     time_t getDeadline() const;
     void setDeadline(time_t deadline);
-    const std::vector<std::string*>& getRelationships() const;
-    void setRelationships(std::vector<std::string*>* relationships);
+    const std::vector<Link*>& getLinks() const;
+    void setLinks(std::vector<Link*>* links);
+    void clearLinks() { links.clear(); }
 };
 
 class MarkdownAstNodeSection : public MarkdownAstNode

@@ -81,6 +81,7 @@ private:
     inline void skipWhitespaces(size_t& offset);
     inline void skipEOL(size_t& offset);
     inline void skipSectionBody(size_t& offset);
+    inline void skipBr(size_t& offset);
 
     void markdownRule();
     void preambleRule(size_t& offset);
@@ -88,6 +89,8 @@ private:
     MarkdownAstNodeSection* sectionHeaderRule(size_t& offset);
     std::string* sectionNameRule(size_t& offset);
     bool sectionMetadataRule(MarkdownAstSectionMetadata& meta, size_t& offset);
+    std::vector<std::string*>* sectionBodyRule(size_t& offset);
+
     const MarkdownLexem* parsePropertyValue(size_t& offset);
     time_t parsePropertyValueTimestamp(size_t& offset);
     int parsePropertyValueInteger(size_t& offset);
@@ -96,10 +99,8 @@ private:
     TimeScope parsePropertyValueTimeScope(size_t& offset);
     std::string* parsePropertyValueString(size_t& offset);
     std::vector<std::string*>* parsePropertyValueTags(size_t& offset);
-    std::vector<std::string*>* parsePropertyValueLinks(size_t& offset);
-    std::vector<std::string*>* sectionBodyRule(size_t& offset);
-
-    void skipBr(size_t& offset);
+    std::vector<Link*>* parsePropertyValueLinks(size_t& offset);
+    Link* parseLink(const std::string& s);
 };
 
 } // m8r namespace

@@ -258,17 +258,17 @@ void MarkdownAstSectionMetadata::setDeadline(time_t deadline)
     this->deadline=deadline;
 }
 
-const std::vector<std::string*>& MarkdownAstSectionMetadata::getRelationships() const
+const std::vector<Link*>& MarkdownAstSectionMetadata::getLinks() const
 {
-    return relationships;
+    return links;
 }
 
-void MarkdownAstSectionMetadata::setRelationships(std::vector<std::string*>* relationships)
+void MarkdownAstSectionMetadata::setLinks(std::vector<Link*>* links)
 {
-    if(relationships) {
-        this->relationships=std::move(*relationships);
+    if(links) {
+        this->links=std::move(*links);
     } else {
-        this->relationships.clear();
+        this->links.clear();
     }
 }
 

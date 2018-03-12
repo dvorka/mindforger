@@ -186,6 +186,33 @@ TEST(MarkdownParserTestCase, MarkdownLexerTimeScope)
     EXPECT_EQ(lexems[9]->getType(), MarkdownLexemType::META_PROPERTY_scope);
 }
 
+TEST(MarkdownParserTestCase, MarkdownLexerLinks)
+{
+    string content;
+    content.assign(
+                "# Outline Name <!-- Metadata: links: [same as](./o1.md); -->\n"
+                "O text.\n"
+                "\n"
+                "## First Section <!-- Metadata: links: [opposite of](./x.md),[is a](./y.md#a-z); -->\n"
+                "N1 text.\n"
+                "\n"
+                "## Second Section\n"
+                "N2 text.\n"
+                "\n");
+
+    MarkdownLexerSections lexer(nullptr);
+
+    // tokenize
+    lexer.tokenize(&content);
+    const std::vector<MarkdownLexem*>& lexems = lexer.getLexems();
+    ASSERT_TRUE(lexems.size());
+    printLexems(lexems);
+
+    // asserts
+    EXPECT_EQ(lexems[0]->getType(), MarkdownLexemType::BEGIN_DOC);
+    EXPECT_EQ(lexems[9]->getType(), MarkdownLexemType::META_PROPERTY_links);
+}
+
 TEST(MarkdownParserTestCase, MarkdownParserSections)
 {
     unique_ptr<string> fileName

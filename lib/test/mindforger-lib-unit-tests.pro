@@ -73,7 +73,8 @@ SOURCES += \
     benchmark/markdown_benchmark.cpp \
     ../src/mind/aspect/time_scope_aspect.cpp \
     ../src/representations/markdown/markdown_configuration_representation.cpp \
-    ../src/config/time_scope.cpp
+    ../src/config/time_scope.cpp \
+    ../src/model/link.cpp
 
 HEADERS += \
     ../../lib/src/debug.h \
@@ -131,7 +132,8 @@ HEADERS += \
     ../src/mind/aspect/aspect.h \
     ../src/mind/aspect/time_scope_aspect.h \
     ../src/representations/markdown/markdown_configuration_representation.h \
-    ../src/config/time_scope.h
+    ../src/config/time_scope.h \
+    ../src/model/link.h
 
 # GTest unit test framework library dependencies
 unix|win32: LIBS += -lgtest

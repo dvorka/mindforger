@@ -367,7 +367,7 @@ bool MarkdownParserSections::sectionMetadataRule(
                     }
                     break;
                 case MarkdownLexemType::META_PROPERTY_links:
-                    meta.setRelationships(parsePropertyValueLinks(offset));
+                    meta.setLinks(parsePropertyValueLinks(offset));
                     break;
                 default:
                     done=true;
@@ -397,14 +397,6 @@ const MarkdownLexem* MarkdownParserSections::parsePropertyValue(size_t& offset)
             return result;
         }
     }
-    return nullptr;
-}
-
-vector<string*>* MarkdownParserSections::parsePropertyValueLinks(size_t& offset)
-{
-    UNUSED_ARG(offset);
-
-    // TODO to be implemented
     return nullptr;
 }
 
@@ -549,6 +541,44 @@ TimeScope MarkdownParserSections::parsePropertyValueTimeScope(size_t& offset)
         }
     }
     return result;
+}
+
+Link* MarkdownParserSections::parseLink(const std::string& s)
+{
+    if(s.size()>4 && s[0]=='[' && s[s.size()-1]==')') {
+        size_t i;
+        if((i=s.find("](")) != std::string::npos) {
+            return new Link{s.substr(1,i-1),s.substr(i+2,s.size()-3-i)};
+        }
+    }
+    return nullptr;
+}
+
+vector<Link*>* MarkdownParserSections::parsePropertyValueLinks(size_t& offset)
+{
+    const MarkdownLexem* valueLexem = parsePropertyValue(offset);
+    if(valueLexem != nullptr) {
+        string* t = lexer.getText(valueLexem);
+        if(t!=nullptr) {
+            if(t->size()) {
+                vector<Link*>* result = new vector<Link*>{};
+                istringstream split(*t);
+                string s;
+                while(getline(split, s, ',')) {
+                    Link* l;
+                    if((l=parseLink(s))!=nullptr) {
+                        result->push_back(l);
+                    }
+                }
+                if(result->empty()) {
+                    delete result;
+                }
+            }
+            delete t;
+        }
+    }
+
+    return nullptr;
 }
 
 vector<string*>* MarkdownParserSections::sectionBodyRule(size_t& offset)

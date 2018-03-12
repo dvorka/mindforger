@@ -166,11 +166,20 @@ Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>*
                 }
 
                 if(astNode->getMetadata().getTags().size()) {
+                    // IMPROVE move to for scope
                     const Tag* t;
                     for(string* s:astNode->getMetadata().getTags()) {
                         t = ontology.findOrCreateTag(*s);
                         outline->addTag(t);
                     }
+                }
+
+                if(astNode->getMetadata().getLinks().size()) {
+                    // TODO const MarkdownAstSectionMetadata::Link* ls;
+                    for(auto l:astNode->getMetadata().getLinks()) {
+                        outline->addLink(l);
+                    }
+                    astNode->getMetadata().clearLinks();
                 }
 
                 vector<string*>* body = ast->at(off)->moveBody();
