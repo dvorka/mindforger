@@ -360,7 +360,7 @@ bool MarkdownParserSections::sectionMetadataRule(
                     break;
                 case MarkdownLexemType::META_PROPERTY_scope:
                     if((t = parsePropertyValueForget(offset))!=0) {
-                        meta.setForget(t); // structure to avoid conversions
+                        meta.setTimeScope(t); // structure to avoid conversions
                     }
                     break;
                 case MarkdownLexemType::META_PROPERTY_deadline:

@@ -238,14 +238,14 @@ const string* MarkdownAstSectionMetadata::getPrimaryTag() const
     }
 }
 
-time_t MarkdownAstSectionMetadata::getForget() const
+time_t MarkdownAstSectionMetadata::getTimeScope() const
 {
-    return forget;
+    return timeScope;
 }
 
-void MarkdownAstSectionMetadata::setForget(time_t forget)
+void MarkdownAstSectionMetadata::setTimeScope(time_t timeScope)
 {
-    this->forget=forget;
+    this->timeScope=timeScope;
 }
 
 time_t MarkdownAstSectionMetadata::getDeadline() const

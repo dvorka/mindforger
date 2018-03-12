@@ -38,14 +38,9 @@ private:
      * Anything what is older than timepoint is *not* shown to user (when
      * viewing O/N), but it can be recalled and it's maintained in memory.
      */
-    time_t timepoint;
+    time_t timePoint;
 
-    /**
-     * @brief Relative interval to remember in seconds.
-     */
-    int relative;
-
-    int years, months, days, hours, minutes;
+    TimeScope timeScope;
 
 public:
     explicit TimeScopeAspect();
@@ -55,47 +50,30 @@ public:
     TimeScopeAspect &operator=(const TimeScopeAspect&&) = delete;
     ~TimeScopeAspect();
 
-    virtual bool isEnabled() const { return relative>0; }
-    bool isOutOfScope(const Outline* o) const { return o->getRead()<timepoint; }
-    bool isOutOfScope(const Note* n) const { return n->getRead()<timepoint; }
+    virtual bool isEnabled() const { return timeScope.relativeSecs>0; }
+    bool isOutOfScope(const Outline* o) const { return o->getRead()<timePoint; }
+    bool isOutOfScope(const Note* n) const { return n->getRead()<timePoint; }
     bool isInScope(const Outline* o) const { return !isOutOfScope(o); }
     bool isInScope(const Note* n) const { return !isOutOfScope(n); }
 
     /**
-     * @brief Set threshold by the relative specification e.g. remember just recent year.
+     * @brief Set time scope by RELATIVE specification e.g. remember just recent year.
      */
-    void setTimePoint(int years, int months, int days, int hours, int minutes)
+    void setTimeScope(const TimeScope& timeScope)
     {
-        this->years = years;
-        this->months = months;
-        this->days = days;
-        this->hours = hours;
-        this->minutes = minutes;
-
-        relative =
-                minutes*60 +
-                hours*60*60 +
-                days*60*60*24 +
-                months*60*60*24*30 +
-                years*60*60*24*365;
+        this->timeScope = timeScope;
 
         time_t now;
         time(&now);
 
-        timepoint = now-relative;
-
-        MF_DEBUG("R " << relative << std::endl);
+        timePoint = now-timeScope.relativeSecs;
     }
+    const TimeScope& getTimeScope() const { return timeScope; }
 
-    int getYears() const { return years; }
-    int getMonths() const { return months; }
-    int getDays() const { return days; }
-    int getHours() const { return hours; }
-    int getMinutes() const { return minutes; }
-
-    void setTimePoint(time_t timepoint);
+    void setTimePoint(time_t timePoint);
     std::string getTimePointAsString() const;
-    void clearTreshold() { relative=0; }
+
+    void resetScope() { timeScope.reset(); }
 };
 
 }

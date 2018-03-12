@@ -164,12 +164,12 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     // asserts
     ASSERT_TRUE(loaded);
     EXPECT_EQ(c.getUiThemeName(), "CRAZYCOLORS");
-    configRepresentation.timescopeToString(c.getTimeScope(), timeScopeAsString);
+    m8r::TimeScope::toString(c.getTimeScope(), timeScopeAsString);
     EXPECT_EQ(timeScopeAsString, "1y2m33d4h55m");
     EXPECT_FALSE(c.isSaveReadsMetadata());
     EXPECT_FALSE(c.isUiShowNotebookEditButton());
 
-    EXPECT_EQ(c.getRepositories().size(), 1);
+    EXPECT_GE(c.getRepositories().size(), 1);
     EXPECT_NE(c.getRepositories().find(repositoryPath), c.getRepositories().end());
     c.getRepositories().find(repositoryPath)->second->print();
     EXPECT_EQ(c.getRepositories().find(repositoryPath)->second->getPATH(), repositoryPath);
@@ -191,7 +191,6 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     c.setTimeScope(backupTimeScope);
     c.setSaveReadsMetadata(backupReadsMetadata);
     c.setUiShowNotebookEditButton(backupNotebookButton);
-    // TODO backup WAS deleted
     if(backupActiveRepository) {
         c.setActiveRepository(c.addRepository(backupActiveRepository));
     } else {

@@ -52,10 +52,6 @@ class MarkdownConfigurationRepresentation
     static constexpr int AVG_CONFIGURATION_SIZE = 2*AVG_SECTION_SIZE;
 
 public:
-    static void timescopeToString(const TimeScope& t, std::string& s);
-    static bool timescopeFromString(const std::string& s, TimeScope& t);
-
-public:
     explicit MarkdownConfigurationRepresentation();
     MarkdownConfigurationRepresentation(const MarkdownConfigurationRepresentation&) = delete;
     MarkdownConfigurationRepresentation(const MarkdownConfigurationRepresentation&&) = delete;

@@ -26,6 +26,7 @@
 #include <vector>
 
 #include "repository.h"
+#include "time_scope.h"
 #include "../repository_indexer.h"
 #include "../gear/lang_utils.h"
 #include "../gear/file_utils.h"
@@ -61,26 +62,6 @@ constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
 class Installer;
-
-struct TimeScope {
-    u_int8_t years;
-    u_int8_t months;
-    u_int8_t days;
-    u_int8_t hours;
-    u_int8_t minutes;
-
-    explicit TimeScope() {
-        years=months=days=hours=minutes=0;
-    }
-
-    explicit TimeScope(u_int8_t years, u_int8_t months, u_int8_t days, u_int8_t hours, u_int8_t minutes) {
-        this->years = years;
-        this->months = months;
-        this->days = days;
-        this->hours = hours;
-        this->minutes = minutes;
-    }
-};
 
 /**
  * @brief MindForger configuration.

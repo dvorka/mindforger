@@ -119,7 +119,7 @@ private:
 
     std::vector<std::string*> tags;
 
-    time_t forget;
+    time_t timeScope;
     time_t deadline;
     std::vector<std::string*> relationships;
 
@@ -155,8 +155,8 @@ public:
     void setTags(std::vector<std::string*>* tags);
     const std::string* getPrimaryTag() const;
 
-    time_t getForget() const;
-    void setForget(time_t forget);
+    time_t getTimeScope() const;
+    void setTimeScope(time_t timeScope);
     time_t getDeadline() const;
     void setDeadline(time_t deadline);
     const std::vector<std::string*>& getRelationships() const;

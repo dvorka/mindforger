@@ -23,9 +23,9 @@ namespace m8r {
 using namespace std;
 
 TimeScopeAspect::TimeScopeAspect()
+    : timeScope{}
 {
-    timepoint = 0;
-    relative = 0;
+    timePoint = 0;
 }
 
 TimeScopeAspect::~TimeScopeAspect()
@@ -34,33 +34,9 @@ TimeScopeAspect::~TimeScopeAspect()
 
 string TimeScopeAspect::getTimePointAsString() const
 {
-    string s{""};
-    if(relative) {
-        if(years) {
-            s.append(std::to_string(years));
-            s.append("y");
-        }
-        if(months) {
-            s.append(std::to_string(months));
-            s.append("m");
-        }
-        if(days) {
-            s.append(std::to_string(days));
-            s.append("d");
-        }
-        if(hours) {
-            s.append(std::to_string(hours));
-            s.append("h");
-        }
-        if(minutes) {
-            s.append(std::to_string(minutes));
-            s.append("y");
-        }
-
-        return std::move(s);
-    } else {
-        return s;
-    }
+    string result{};
+    TimeScope::toString(timeScope, result);
+    return std::move(result);
 }
 
 } // m8r namespace

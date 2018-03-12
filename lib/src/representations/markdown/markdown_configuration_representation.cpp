@@ -42,59 +42,6 @@ MarkdownConfigurationRepresentation::~MarkdownConfigurationRepresentation()
 {
 }
 
-void MarkdownConfigurationRepresentation::timescopeToString(const TimeScope& t, string& s)
-{
-    std::ostringstream os;
-    os << (int)t.years << "y" << (int)t.months << "m" << (int)t.days << "d" << (int)t.hours << "h" << (int)t.minutes << "m";
-    s.assign(os.str());
-}
-
-bool MarkdownConfigurationRepresentation::timescopeFromString(const std::string& s, TimeScope& t)
-{
-    if(s.size()) {
-        string h{};
-        int i=0;
-        // years
-        while(isdigit(s[i])) {
-            h+=s[i++];
-        }
-        if(h.size() && s[i]=='y') i++; else return false;
-        t.years = stoi(h);
-        // months
-        h.clear();
-        while(isdigit(s[i])) {
-            h+=s[i++];
-        }
-        if(h.size() && s[i]=='m') i++; else return false;
-        t.months= stoi(h);
-        // days
-        h.clear();
-        while(isdigit(s[i])) {
-            h+=s[i++];
-        }
-        if(h.size() && s[i]=='d') i++; else return false;
-        t.days= stoi(h);
-        // hours
-        h.clear();
-        while(isdigit(s[i])) {
-            h+=s[i++];
-        }
-        if(h.size() && s[i]=='h') i++; else return false;
-        t.hours= stoi(h);
-        // minutes
-        h.clear();
-        while(isdigit(s[i])) {
-            h+=s[i++];
-        }
-        if(h.size() && s[i]=='m') i++; else return false;
-        t.minutes= stoi(h);
-
-        return true;
-    } else {
-        return false;
-    }
-}
-
 /*
  * Parse Configuration represented as AST while aiming to be as ROBUST as possible i.e. handle
  * eventual user typos and incorrect formatting.
@@ -155,7 +102,7 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         string t = line->substr(strlen(CONFIG_SETTING_TIME_SCOPE_LABEL));
                         if(t.size()) {
                             TimeScope ts;
-                            if(timescopeFromString(t, ts)) {
+                            if(TimeScope::fromString(t, ts)) {
                                 c.setTimeScope(ts);
                             }
                         }
@@ -227,7 +174,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
     stringstream s{};
     string timeScope{};
     if(c) {
-        timescopeToString(c->getTimeScope(), timeScope);
+        TimeScope::toString(c->getTimeScope(), timeScope);
     } else {
         timeScope.assign(Configuration::DEFAULT_TIME_SCOPE);
     }
