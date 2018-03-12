@@ -803,3 +803,53 @@ TEST(MarkdownParserTestCase, Deadline)
 
     delete serialized;
 }
+
+TEST(MarkdownParserTestCase, Links)
+{
+    string repositoryPath{"/tmp"};
+    string fileName{"md-parser-deadline.md"};
+    string content;
+    string filePath{repositoryPath+"/"+fileName};
+
+    content.assign(
+                "# Outline Name <!-- Metadata: links: [same as](./o1.md); -->\n"
+                "O text.\n"
+                "\n"
+                "## First Section <!-- Metadata: links: [opposite of](./x.md),[is a](./y.md#a-z); -->\n"
+                "N1 text.\n"
+                "\n"
+                "## Second Section\n"
+                "N2 text.\n"
+                "\n");
+    m8r::stringToFile(filePath, content);
+
+    m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    repository->setMode(m8r::Repository::RepositoryMode::FILE);
+    repository->setFile(fileName);
+    m8r::Configuration& configuration = m8r::Configuration::getInstance();
+    configuration.setActiveRepository(configuration.addRepository(repository));
+    m8r::Ontology ontology{configuration};
+
+    // parse
+    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    File file{filePath};
+    m8r::Outline* o = mdr.outline(file);
+
+    // asserts
+    EXPECT_NE(o, nullptr);
+    EXPECT_EQ(o->getNotesCount(), 2);
+
+    cout << endl << "O links: " << o->getRelationships().size();
+    EXPECT_EQ(o->getRelationships().size(), 1);
+
+    cout << endl << "N links: " << o->getNotes()[0]->getRelationships().size();
+    EXPECT_EQ(o->getNotes()[0]->getRelationships().size(), 2);
+
+    // serialize
+    string* serialized = mdr.to(o);
+    cout << endl << "- SERIALIZED ---";
+    cout << endl << *serialized;
+    EXPECT_NE(serialized->find("..."), std::string::npos);
+
+    delete serialized;
+}

@@ -66,6 +66,9 @@ public:
 
     const std::string& getName() const { return name; }
     void setName(const std::string& name) { this->name = name; }
+
+    const std::set<Relationship*> getRelationships() const { return relationships; }
+    size_t getRelationshipsCount() const { return relationships.size(); }
 };
 
 /**

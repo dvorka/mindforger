@@ -367,7 +367,7 @@ bool MarkdownParserSections::sectionMetadataRule(
                     }
                     break;
                 case MarkdownLexemType::META_PROPERTY_links:
-                    meta.setRelationships(parsePropertyValueRelationships(offset));
+                    meta.setRelationships(parsePropertyValueLinks(offset));
                     break;
                 default:
                     done=true;
@@ -400,7 +400,7 @@ const MarkdownLexem* MarkdownParserSections::parsePropertyValue(size_t& offset)
     return nullptr;
 }
 
-vector<string*>* MarkdownParserSections::parsePropertyValueRelationships(size_t& offset)
+vector<string*>* MarkdownParserSections::parsePropertyValueLinks(size_t& offset)
 {
     UNUSED_ARG(offset);
 

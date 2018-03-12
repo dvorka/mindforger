@@ -96,7 +96,7 @@ private:
     TimeScope parsePropertyValueTimeScope(size_t& offset);
     std::string* parsePropertyValueString(size_t& offset);
     std::vector<std::string*>* parsePropertyValueTags(size_t& offset);
-    std::vector<std::string*>* parsePropertyValueRelationships(size_t& offset);
+    std::vector<std::string*>* parsePropertyValueLinks(size_t& offset);
     std::vector<std::string*>* sectionBodyRule(size_t& offset);
 
     void skipBr(size_t& offset);

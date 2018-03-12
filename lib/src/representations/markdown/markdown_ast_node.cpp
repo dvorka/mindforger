@@ -265,7 +265,11 @@ const std::vector<std::string*>& MarkdownAstSectionMetadata::getRelationships() 
 
 void MarkdownAstSectionMetadata::setRelationships(std::vector<std::string*>* relationships)
 {
-    this->relationships=std::move(*relationships);
+    if(relationships) {
+        this->relationships=std::move(*relationships);
+    } else {
+        this->relationships.clear();
+    }
 }
 
 } // m8r namespace
