@@ -78,6 +78,14 @@ Note* MarkdownOutlineRepresentation::note(vector<MarkdownAstNodeSection*>* ast, 
         note->setReads(ast->at(i)->getMetadata().getReads());
         note->setDeadline(ast->at(i)->getMetadata().getDeadline());
         note->setProgress(ast->at(i)->getMetadata().getProgress());
+
+        if(ast->at(i)->getMetadata().getLinks().size()) {
+            for(auto l:ast->at(i)->getMetadata().getLinks()) {
+                note->addLink(l);
+            }
+            ast->at(i)->getMetadata().clearLinks();
+        }
+
         if (ast->at(i)->getMetadata().getTags().size()) {
             const Tag* t;
             for(string* s : ast->at(i)->getMetadata().getTags()) {
@@ -175,7 +183,6 @@ Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>*
                 }
 
                 if(astNode->getMetadata().getLinks().size()) {
-                    // TODO const MarkdownAstSectionMetadata::Link* ls;
                     for(auto l:astNode->getMetadata().getLinks()) {
                         outline->addLink(l);
                     }
@@ -291,8 +298,9 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
         if(outline->getFormat() == Markdown::Format::MINDFORGER) {
             char buffer[50];
             md->append(" <!-- Metadata:");
-            if(outline->getTags().size()) { md->append(" tags: "); md->append(to(md, outline->getTags())); md->append(";"); }
             md->append(" type: "); md->append(outline->getType()->getName()); md->append(";");
+            if(outline->getTags().size()) { md->append(" tags: "); md->append(to(outline->getTags())); md->append(";"); }
+            if(outline->getLinksCount()) { md->append(" links: "); md->append(to(outline->getLinks())); md->append(";"); }
             md->append(" created: "); md->append(datetimeToString(outline->getCreated())); md->append(";");
             sprintf(buffer," reads: %d;",outline->getReads()); md->append(buffer);
             md->append(" read: "); md->append(datetimeToString(outline->getRead())); md->append(";");
@@ -392,16 +400,29 @@ string* MarkdownOutlineRepresentation::to(const Outline* outline, string* md)
 
 }
 
-string MarkdownOutlineRepresentation::to(string* md, const vector<const Tag*>& tags)
+string MarkdownOutlineRepresentation::to(const vector<const Tag*>& tags)
 {
-    // IMPROVE suspicious - why is not md used
-    UNUSED_ARG(md);
-
     string s;
     if(tags.size()) {
         for(const Tag* t:tags) {
             s += t->getName();
             s += ",";
+        }
+        s.resize(s.size()-1);
+    }
+    return s;
+}
+
+string MarkdownOutlineRepresentation::to(const vector<Link*>& links)
+{
+    string s;
+    if(links.size()) {
+        for(Link* l:links) {
+            s += "[";
+            s += l->getName();
+            s += "](";
+            s += l->getUrl();
+            s += "),";
         }
         s.resize(s.size()-1);
     }
@@ -435,8 +456,9 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
     if(includeMetadata) {
         char buffer[50];
         md->append(" <!-- Metadata:");
-        if(note->getTags().size()) { md->append(" tags: "); md->append(to(md, note->getTags())); md->append(";"); }
         md->append(" type: "); md->append(note->getType()->getName()); md->append(";");
+        if(note->getTags().size()) { md->append(" tags: "); md->append(to(note->getTags())); md->append(";"); }
+        if(note->getLinksCount()) { md->append(" links: "); md->append(to(note->getLinks())); md->append(";"); }
         md->append(" created: "); md->append(datetimeToString(note->getCreated())); md->append(";");
         sprintf(buffer," reads: %d;",note->getReads()); md->append(buffer);
         md->append(" read: "); md->append(datetimeToString(note->getRead())); md->append(";");

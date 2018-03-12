@@ -866,17 +866,19 @@ TEST(MarkdownParserTestCase, Links)
     EXPECT_NE(o, nullptr);
     EXPECT_EQ(o->getNotesCount(), 2);
 
-    cout << endl << "O links: " << o->getRelationships().size();
-    EXPECT_EQ(o->getRelationships().size(), 1);
+    cout << endl << "O links: " << o->getLinksCount();
+    EXPECT_EQ(o->getLinksCount(), 1);
 
-    cout << endl << "N links: " << o->getNotes()[0]->getRelationships().size();
-    EXPECT_EQ(o->getNotes()[0]->getRelationships().size(), 2);
+    cout << endl << "N links: " << o->getNotes()[0]->getLinksCount();
+    EXPECT_EQ(o->getNotes()[0]->getLinksCount(), 2);
 
     // serialize
     string* serialized = mdr.to(o);
     cout << endl << "- SERIALIZED ---";
     cout << endl << *serialized;
-    EXPECT_NE(serialized->find("..."), std::string::npos);
+    EXPECT_NE(serialized->find("[same as](./o1.md)"), std::string::npos);
+    EXPECT_NE(serialized->find("[opposite of](./x.md)"), std::string::npos);
+    EXPECT_NE(serialized->find("[is a](./y.md#a-z)"), std::string::npos);
 
     delete serialized;
 }

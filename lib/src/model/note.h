@@ -25,6 +25,7 @@
 #include "attachment.h"
 #include "note_type.h"
 #include "tag.h"
+#include "link.h"
 #include "../exceptions.h"
 
 namespace m8r {
@@ -59,6 +60,7 @@ private:
 
     // IMPROVE hashset
     std::vector<const Tag*> tags;
+    std::vector<Link*> links;
     const NoteType* type;
     std::vector<std::string*> description;
 
@@ -128,6 +130,10 @@ public:
     void addDescriptionLine(std::string *line);
     Outline*& getOutline();
     void setOutline(Outline* outline);
+
+    void addLink(Link* link);
+    const std::vector<Link*>& getLinks() const { return links; }
+    size_t getLinksCount() const { return links.size(); }
 
     void promote();
     void demote();

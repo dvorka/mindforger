@@ -387,6 +387,13 @@ void Note::completeProperties(const time_t outlineModificationTime)
     }
 }
 
+void Note::addLink(Link* link)
+{
+    if(link) {
+        links.push_back(link);
+    }
+}
+
 void Note::demote()
 {
     depth++;

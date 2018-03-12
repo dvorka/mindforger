@@ -945,9 +945,11 @@ Note* Outline::getOutlineDescriptorAsNote()
     return outlineDescriptorAsNote;
 }
 
-void Outline::addLink(const Link* link)
+void Outline::addLink(Link* link)
 {
-    // TODO
+    if(link) {
+        links.push_back(link);
+    }
 }
 
 bool Outline::isApiaryBlueprint()

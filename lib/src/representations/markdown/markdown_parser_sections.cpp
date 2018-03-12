@@ -572,6 +572,8 @@ vector<Link*>* MarkdownParserSections::parsePropertyValueLinks(size_t& offset)
                 }
                 if(result->empty()) {
                     delete result;
+                } else {
+                    return result;
                 }
             }
             delete t;

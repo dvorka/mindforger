@@ -23,12 +23,10 @@
 #include <vector>
 
 #include "../mind/ontology/thing_class_rel_triple.h"
-#include "note_type.h"
 #include "note.h"
 #include "outline_type.h"
 #include "../representations/markdown/markdown.h"
 #include "../gear/datetime_utils.h"
-#include "tag.h"
 
 #include "../debug.h"
 
@@ -241,7 +239,9 @@ public:
      * Links
      */
 
-    void addLink(const Link* link);
+    void addLink(Link* link);
+    const std::vector<Link*>& getLinks() const { return links; }
+    size_t getLinksCount() const { return links.size(); }
 
     /*
      * Scope
