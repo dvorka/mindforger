@@ -181,6 +181,7 @@ void Memory::remember(const std::string& outlineKey)
 {
     Outline* o;
     if((o=getOutline(outlineKey)) != nullptr) {
+        o->checkAndFixProperties();
         persistence->save(o);
     } else {
         throw MindForgerException{"Save: unable to find outline w/ given key"};
@@ -194,7 +195,10 @@ void Memory::remember(Outline* outline)
     } else {
         outline->setFormat(Markdown::Format::MARKDOWN);
     }
+
+    outline->checkAndFixProperties();
     persistence->save(outline);
+
     if(!getOutline(outline->getKey())) {
         outlines.push_back(outline);
         outlinesMap.insert(map<string,Outline*>::value_type(outline->getKey(), outline));

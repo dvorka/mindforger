@@ -100,13 +100,7 @@ void NoteEditPresenter::slotSaveNote()
         // Note metada (type, tags, progress, deadline) are set by Note edit dialog on it's close
         // (if user doesn't open dialog, nothing is blindly saved there & here)
 
-        // IMPROVE if fields below are set on remembering (save) of Note, then delete code below
         currentNote->makeModified();
-        if(currentNote->getReads()<currentNote->getRevision()) {
-            currentNote->setReads(currentNote->getRevision());
-        }
-        // Note's outline metadata must be updated as well
-        currentNote->getOutline()->makeModified();
 
         // remember
         mainPresenter->getMind()->remind().remember(currentNote->getOutlineKey());

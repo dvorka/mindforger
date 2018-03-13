@@ -308,6 +308,10 @@ void MainWindowPresenter::handleFindNoteByName()
 {
     if(findNoteByNameDialog->getChoice()) {
         Note* choice = (Note*)findNoteByNameDialog->getChoice();
+
+        choice->incReads();
+        choice->makeDirty();
+
         orloj->showFacetOutline(choice->getOutline());
         orloj->getNoteView()->refresh(choice);
         orloj->showFacetNoteView();

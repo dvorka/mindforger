@@ -116,6 +116,8 @@ void Note::makeModified()
     setModified();
     setModifiedPretty();
     incRevision();
+
+    if(outline) outline->makeModified();
 }
 
 void Note::setModified()
@@ -348,16 +350,9 @@ void Note::completeProperties(const time_t outlineModificationTime)
         } else {
             modified = created;
         }
-    } else {
-        if(created > modified) {
-            created = modified;
-        }
     }
 
     if(!read) {
-        read = modified;
-    }
-    if(read < modified) {
         read = modified;
     }
 
@@ -373,17 +368,28 @@ void Note::completeProperties(const time_t outlineModificationTime)
         reads = revision;
     }
 
+    if(description.empty()) {
+        description.push_back(new string{"..."});
+    }
+
+    checkAndFixProperties();
+    setModifiedPretty();
+}
+
+void Note::checkAndFixProperties()
+{
     if(revision > reads) {
         reads = revision;
     }
-
-    setModifiedPretty();
+    if(modified > read) {
+        read = modified;
+    }
+    if(created > modified) {
+        created = modified;
+    }
 
     if(name.empty()) {
         name.assign("Note");
-    }
-    if(description.empty()) {
-        description.push_back(new string{"..."});
     }
 }
 
@@ -402,6 +408,11 @@ void Note::demote()
 void Note::promote()
 {
     if(depth) depth--;
+}
+
+void Note::makeDirty()
+{
+    if(outline) outline->makeDirty();
 }
 
 } // m8r namespace

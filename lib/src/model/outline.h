@@ -119,6 +119,11 @@ private:
      */
 
     /**
+     * @brief Indicates that O has been changed (e.g. read timestamp), but it was not saved (yet).
+     */
+    bool dirty;
+
+    /**
      * @brief Time scope to use for filtering (selective forgetting) of O's Ns.
      */
     TimeScope timeScope;
@@ -145,6 +150,11 @@ public:
      * counts.
      */
     void completeProperties(const time_t fileModificationTime);
+
+    /**
+     * @brief Ensure O's properties integrity.
+     */
+    void checkAndFixProperties();
 
     /**
      * @brief Virgin Outline has default name, no Notes, clean metadata, ...
@@ -234,6 +244,10 @@ public:
     void moveNoteToLast(Note* note, Outline::Patch* patch=nullptr);
 
     Note* getOutlineDescriptorAsNote();
+
+    bool isDirty() const { return dirty; }
+    void makeDirty() { dirty = true; }
+    void clearDirty() { dirty = false; }
 
     /*
      * Links

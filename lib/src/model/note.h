@@ -87,6 +87,7 @@ public:
     virtual ~Note();
 
     void completeProperties(const time_t outlineModificationTime);
+    void checkAndFixProperties();
 
     const std::vector<Attachment*>& getAttachments() const;
     void setAttachments(const std::vector<Attachment*>& attachments);
@@ -142,6 +143,8 @@ public:
     bool isPostDeclaredSection() const { return flags & FLAG_MASK_POST_DECLARED_SECTION; }
     void setTrailingHashesSection() { flags |= FLAG_MASK_TRAILING_HASHES_SECTION; }
     bool isTrailingHashesSection() const { return flags & FLAG_MASK_TRAILING_HASHES_SECTION; }
+
+    void makeDirty();
 };
 
 } // m8r namespace

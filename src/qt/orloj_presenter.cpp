@@ -133,6 +133,9 @@ void OrlojPresenter::showFacetOutline(Outline* outline)
     outlineHeaderViewPresenter->refresh(outline);
     view->showFacetOutlineHeaderView();
 
+    outline->incReads();
+    outline->makeDirty();
+
     mainPresenter->getMainMenu()->showFacetOutlineView();
     mainPresenter->getStatusBar()->showInfo(QString("Outline '%1' selected...").arg(outline->getName().c_str()));
 }
@@ -212,6 +215,9 @@ void OrlojPresenter::slotShowNote(const QItemSelection& selected, const QItemSel
             = outlineViewPresenter->getOutlineTree()->getModel()->itemFromIndex(index);
         // IMPROVE make my role constant
         Note* note = item->data(Qt::UserRole + 1).value<Note*>();
+
+        note->incReads();
+        note->makeDirty();
 
         noteViewPresenter->refresh(note);
         view->showFacetNoteView();

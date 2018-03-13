@@ -120,14 +120,8 @@ Outline::Outline(const Outline& o)
     outlineDescriptorAsNote = nullptr;
 }
 
-
 void Outline::completeProperties(const time_t fileModificationTime)
 {
-    // Outline
-    //  - invariants:
-    //    read > modified > created
-    //    reads >= writes
-
     if(!created) {
         if(modified) {
             created = modified;
@@ -154,16 +148,9 @@ void Outline::completeProperties(const time_t fileModificationTime)
         } else {
             modified = created;
         }
-    } else {
-        if(created > modified) {
-            created = modified;
-        }
     }
 
     if(!read) {
-        read = modified;
-    }
-    if(read < modified) {
         read = modified;
     }
 
@@ -179,16 +166,6 @@ void Outline::completeProperties(const time_t fileModificationTime)
         reads = revision;
     }
 
-    if(revision > reads) {
-        reads = revision;
-    }
-
-    if(name.empty()) {
-        name.assign("Outline");
-    }
-
-    setModifiedPretty();
-
     // Notes
     if(notes.size()) {
         for(Note* n:notes) {
@@ -196,7 +173,43 @@ void Outline::completeProperties(const time_t fileModificationTime)
             n->setModifiedPretty();
         }
     }
+
+    checkAndFixProperties();
+    setModifiedPretty();
 }
+
+void Outline::checkAndFixProperties()
+{
+    // Notes
+    time_t latestNote{};
+    if(notes.size()) {
+        for(Note* n:notes) {
+            n->checkAndFixProperties();
+            if(latestNote < n->getModified()) {
+                latestNote = n->getModified();
+            }
+        }
+    }
+    if(latestNote > modified) {
+        modified = latestNote;
+        setModifiedPretty();
+    }
+
+    if(revision > reads) {
+        reads = revision;
+    }
+    if(modified > read) {
+        read = modified;
+    }
+    if(created > modified) {
+        created = modified;
+    }
+
+    if(name.empty()) {
+        name.assign("Outline");
+    }
+}
+
 
 bool Outline::isVirgin() const
 {
@@ -452,6 +465,7 @@ Note* Outline::cloneNote(const Note* clonedNote)
         newNote = new Note(*clonedNote);
         resetClonedNote(newNote);
         addNote(newNote, offset);
+        newNote->makeModified();
 
         return newNote;
     } else {
@@ -478,7 +492,6 @@ void Outline::addNote(Note* note, int offset)
 void Outline::addNotes(std::vector<Note*>& notesToAdd, int offset)
 {
     if(notesToAdd.size()) {
-        makeModified();
         for(int i=notesToAdd.size()-1; i>=0; i--) {
             notesToAdd[i]->makeModified();
             addNote(notesToAdd[i], offset);
@@ -713,6 +726,7 @@ void Outline::moveNoteToFirst(Note* note, Outline::Patch* patch)
                 notes.erase(notes.begin()+noteOffset);
             }
             notes.insert(notes.begin()+siblingOffset, note);
+            note->makeModified();
             return;
         } else {
             if(patch) {
@@ -752,6 +766,7 @@ void Outline::moveNoteUp(Note* note, Outline::Patch* patch)
                 notes.erase(notes.begin()+noteOffset);
             }
             notes.insert(notes.begin()+siblingOffset, note);
+            makeModified();
             return;
         } else {
             if(patch) {
@@ -793,6 +808,7 @@ void Outline::moveNoteDown(Note* note, Outline::Patch* patch)
                 }
             }
             notes.erase(notes.begin()+noteOffset, notes.begin()+noteOffset+children.size()+1);
+            makeModified();
             return;
         } else {
             if(patch) {
@@ -843,6 +859,7 @@ void Outline::moveNoteToLast(Note* note, Outline::Patch* patch)
                 }
             }
             notes.erase(notes.begin()+noteOffset, notes.begin()+noteOffset+children.size()+1);
+            makeModified();
             return;
         } else {
             if(patch) {

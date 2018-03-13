@@ -77,6 +77,8 @@ void FilesystemPersistence::save(Outline* outline)
         out << *text;
         out.close();
         delete text;
+
+        outline->clearDirty();
     }
 }
 

@@ -500,7 +500,6 @@ Note* Mind::noteNew(
         }
         n->setModified();
         n->setModifiedPretty();
-        n->completeProperties(n->getModified());
         if(noteType) {
             n->setType(noteType);
         }
@@ -509,6 +508,7 @@ Note* Mind::noteNew(
             n->setTags(tags);
         }
         n->setProgress(progress);
+        n->completeProperties(n->getModified());
 
         o->addNote(n, NO_PARENT==offset?0:offset);
         return n;
