@@ -60,6 +60,7 @@ public:
     QString getName() const { return editNameAndButtonsPanel->getName(); }
     QString getDescription() const { return noteEditor->toPlainText(); }
     bool isDescriptionEmpty() const { return noteEditor->toPlainText().isEmpty(); }
+    QString getSelectedText() const { return noteEditor->getSelectedText(); }
 
     void giveFocusToEditor() { noteEditor->setFocus(); }
 

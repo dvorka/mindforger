@@ -155,6 +155,7 @@ public slots:
     void doActionNoteLast();
     void doActionNoteAttach();
     void doActionNoteClone();
+    void doActionNoteExtract();
     void doActionRefactorNoteToOutline();
     void handleRefactorNoteToOutline();
     void doActionNoteEdit();

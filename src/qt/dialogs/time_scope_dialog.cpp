@@ -25,7 +25,7 @@ TimeScopeDialog::TimeScopeDialog(QWidget *parent)
 {
     QVBoxLayout* timepointThresholdLayout = new QVBoxLayout{this};
 
-    enableCheck = new QCheckBox{tr("show only Outlines/Notes modified or viewed in recent")+":", this};
+    enableCheck = new QCheckBox{tr("Show only Outlines/Notes modified or viewed in recent")+":", this};
     enableCheck->setChecked(false);
 
     QWidget* w = new QWidget(this);
@@ -85,7 +85,7 @@ TimeScopeDialog::TimeScopeDialog(QWidget *parent)
     connect(setButton, SIGNAL(clicked()), this, SLOT(close()));
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
-    setWindowTitle(tr("Scope Mind by..."));
+    setWindowTitle(tr("Scope Mind"));
     resize(fontMetrics().averageCharWidth()*55, height());
     setModal(true);
 }

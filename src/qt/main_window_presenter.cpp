@@ -529,6 +529,59 @@ void MainWindowPresenter::doActionNoteForget()
     QMessageBox::critical(&view, tr("Forget Note"), tr("Please select a Note to forget."));
 }
 
+void MainWindowPresenter::doActionNoteExtract()
+{
+    // TODO distinquish HEADER and NOTE - different places from where to get text
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+    ) {
+        // try to get N (might be null if O's header is being edited)
+        Note* n = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+        QString selectedText;
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            selectedText = orloj->getOutlineHeaderEdit()->getSelectedText();
+        } else {
+            selectedText = orloj->getNoteEdit()->getSelectedText();
+        }
+
+        if(selectedText.isEmpty()) {
+            QMessageBox::critical(&view, tr("Extract Note"), tr("Please select a text to extract."));
+        } else {
+            int offset = orloj->getOutlineView()->getOutlineTree()->getCurrentRow();
+            if(offset == OutlineTreePresenter::NO_ROW) {
+                offset = NO_PARENT;
+            } else {
+                offset++; // extracted N to be sibling below w/ same depth
+            }
+
+            static string defaultExtractedNoteName{"Extracted Note"};
+            Note* extractedNote = mind->noteNew(
+                        orloj->getOutlineView()->getCurrentOutline()->getKey(),
+                        offset,
+                        &defaultExtractedNoteName,
+                        n?n->getType():mind->remind().getOntology().findOrCreateNoteType(NoteType::KeyNote()),
+                        n?n->getDepth():0);
+            if(extractedNote) {
+                // parse selected text to description
+                std::vector<std::string*> description{};
+                string t{selectedText.toStdString()};
+                mdRepresentation->description(&t, description);
+                extractedNote->setDescription(description);
+
+                mind->remind().remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
+                // IMPROVE smarter refresh of outline tree (do less then overall load)
+                orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+                orloj->showFacetNoteEdit(extractedNote);
+            } else {
+                QMessageBox::critical(&view, tr("Extract Note"), tr("Failed to extract new Note!"));
+            }
+        }
+    } else {
+        QMessageBox::critical(&view, tr("Extract Note"), tr("Please select a Note, edit it and select a text to extract."));
+    }
+}
+
 void MainWindowPresenter::doActionNoteClone()
 {
     Note* n = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();

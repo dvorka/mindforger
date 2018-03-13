@@ -52,6 +52,7 @@ public:
     ~NoteEditPresenter();
 
     void setNote(Note* note);
+    QString getSelectedText() const { return view->getSelectedText(); }
 
 public slots:
     void slotSaveAndCloseEditor();

@@ -88,7 +88,9 @@ public:
     OutlinesTablePresenter* getOutlinesTable() const { return outlinesTablePresenter; }
     NotesTablePresenter* getNotesTable() const { return notesTablePresenter; }
     OutlineViewPresenter* getOutlineView() const { return outlineViewPresenter; }
+    OutlineHeaderEditPresenter* getOutlineHeaderEdit() const { return outlineHeaderEditPresenter; }
     NoteViewPresenter* getNoteView() const { return noteViewPresenter; }
+    NoteEditPresenter* getNoteEdit() const { return noteEditPresenter; }
 
     bool isFacetActive(const OrlojPresenterFacets facet) const { return activeFacet==facet;}
     bool isFacetActiveOutlineManagement() {

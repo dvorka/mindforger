@@ -55,6 +55,7 @@ public:
 
     void setShowLineNumbers(bool show);
     void setEnableSyntaxHighlighting(bool enable);
+    QString getSelectedText() const { return textCursor().selectedText(); }
 
 protected:
     void mousePressEvent(QMouseEvent* event);

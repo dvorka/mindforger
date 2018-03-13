@@ -52,6 +52,7 @@ public:
     ~OutlineHeaderEditPresenter();
 
     void setOutline(Outline* outline);
+    QString getSelectedText() const { return view->getSelectedText(); }
 
 public slots:
     void slotSaveAndCloseEditor();

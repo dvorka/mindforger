@@ -356,7 +356,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteLast = new QAction(tr("&Last\tCtrl+Shift+Down"), mainWindow);
     actionNoteLast->setStatusTip(tr("Move Note to be the last child of its parent"));
 
-
     // TODO Attach vs. COPY to repository
     actionNoteAttach = new QAction(tr("&Attach"), mainWindow);
     actionNoteAttach->setStatusTip(tr("Attach a document (by value) to Note and create link to it..."));
@@ -364,6 +363,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionNoteRefactor = new QAction(tr("&Refactor"), mainWindow);
     actionNoteRefactor->setStatusTip(tr("Refactor Note to another Outline..."));
+
+    actionNoteExtract = new QAction(tr("E&xtract"), mainWindow);
+    actionNoteExtract->setStatusTip(tr("Create new Note from the text selected in the current Note..."));
 
     actionNoteClone = new QAction(tr("&Clone"), mainWindow);
     actionNoteClone->setStatusTip(tr("Make a copy of the Note to this or other Outline..."));
@@ -392,6 +394,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNote->addSeparator();
     menuNote->addAction(actionNoteAttach);
     menuNote->addAction(actionNoteRefactor);
+    menuNote->addAction(actionNoteExtract);
     menuNote->addAction(actionNoteClone);
     menuNote->addSeparator();
     menuNote->addAction(actionNoteExport);

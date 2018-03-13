@@ -134,6 +134,7 @@ public:
     QAction* actionNoteLast;
     QAction* actionNoteAttach;
     QAction* actionNoteRefactor;
+    QAction* actionNoteExtract;
     QAction* actionNoteClone;
     QAction* actionNoteExport;
     QAction* actionNoteImport;
