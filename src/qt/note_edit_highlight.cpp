@@ -20,6 +20,19 @@
 
 namespace m8r {
 
+/*
+ * IMPROVE redesign syntax highlighting
+ *
+ * I need to rewrite this class - it is code built on a simple example
+ * which doesn't work well.
+ *   I need to better understand how regexps are combined, how efficient
+ * highlighting is, how loop that performs the highlighting works, why
+ * certain regexps doesn't work as expected (links finished by EOF/space),
+ *   I need to fix regexps (e.g. links) to accept ALL letters (not just
+ * enumerated letters), etc.
+ *
+ */
+
 NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     : QSyntaxHighlighter(parent),
       lookAndFeels(LookAndFeels::getInstance())

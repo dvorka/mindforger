@@ -31,7 +31,8 @@ namespace m8r {
 /**
  * @brief The Color class.
  *
- * Palette:
+ * Palette of MF reserved colors:
+ *
  *   red    #ff8181     (important)
  *   blue   #99b1ff     (cool)
  *   green  #7fc074     (personal)
@@ -45,11 +46,6 @@ class Color
 private:
     unsigned long c;
     std::string html{};
-
-    // map of all colors ensuring singletons
-    static std::map<unsigned long,const Color&> colors;
-    // container ensuring custom colors destruction
-    static std::vector<std::unique_ptr<Color>> customColors;
 
 public:
     static const Color& RED() {
@@ -115,40 +111,6 @@ public:
         return color;
     }
 
-    // palette
-    static const Color& findOrCreate(unsigned char r, unsigned char g, unsigned char b) {
-        // IMPROVE condition is slow and NOT reentrant, but don't know how to implement it w/o it and avoid C++ init fiasco
-        if(colors.empty()) {
-            colors.insert(std::pair<unsigned long,const Color&>(RED().asLong(), RED()));
-            colors.insert(std::pair<unsigned long,const Color&>(GREEN().asLong(), GREEN()));
-            colors.insert(std::pair<unsigned long,const Color&>(BLUE().asLong(), BLUE()));
-            colors.insert(std::pair<unsigned long,const Color&>(WHITE().asLong(), WHITE()));
-            colors.insert(std::pair<unsigned long,const Color&>(BLACK().asLong(), BLACK()));
-            colors.insert(std::pair<unsigned long,const Color&>(LIGHT_GRAY().asLong(), LIGHT_GRAY()));
-            colors.insert(std::pair<unsigned long,const Color&>(DARK_GRAY().asLong(), DARK_GRAY()));
-
-            colors.insert(std::pair<unsigned long,const Color&>(MF_RED().asLong(), MF_RED()));
-            colors.insert(std::pair<unsigned long,const Color&>(MF_GREEN().asLong(), MF_GREEN()));
-            colors.insert(std::pair<unsigned long,const Color&>(MF_BLUE().asLong(), MF_BLUE()));
-            colors.insert(std::pair<unsigned long,const Color&>(MF_YELLOW().asLong(), MF_YELLOW()));
-            colors.insert(std::pair<unsigned long,const Color&>(MF_PURPLE().asLong(), MF_PURPLE()));
-            colors.insert(std::pair<unsigned long,const Color&>(MF_BLACK().asLong(), MF_BLACK()));
-            colors.insert(std::pair<unsigned long,const Color&>(MF_GRAY().asLong(), MF_GRAY()));
-            colors.insert(std::pair<unsigned long,const Color&>(MF_TURQUOISE().asLong(), MF_TURQUOISE()));
-        }
-
-        unsigned long k = (r<<16) + (g<<8) + b;
-        auto result = colors.find(k);
-        if(result!=colors.end()) {
-            return result->second;
-        } else {
-            Color* newColor = new Color{r,g,b};
-            colors.insert(std::pair<unsigned long,const Color&>(newColor->asLong(), *newColor));
-            customColors.push_back(std::unique_ptr<Color>(newColor));
-            return *newColor;
-        }
-    }
-
     explicit Color(unsigned char r, unsigned char g, unsigned char b) {
         c = b;
         c += g<<8;
@@ -165,8 +127,6 @@ public:
 
     const unsigned long& asLong() const { return c; }
     const std::string& asHtml() const { return html; }
-
-    // IMPROVE introduce Palette - for an entity it will give a color, palette can be loaded from configuration (per theme colors)
 };
 
 }

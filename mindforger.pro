@@ -135,7 +135,9 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     lib/src/mind/aspect/time_scope_aspect.h \
     lib/src/model/link.h \
     lib/src/config/time_scope.h \
-    lib/src/representations/markdown/markdown_configuration_representation.h
+    lib/src/representations/markdown/markdown_configuration_representation.h \
+    lib/src/config/palette.h \
+    lib/src/gear/hash_map.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
@@ -232,7 +234,8 @@ SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/aspect/time_scope_aspect.cpp \
     lib/src/model/link.cpp \
     lib/src/config/time_scope.cpp \
-    lib/src/representations/markdown/markdown_configuration_representation.cpp
+    lib/src/representations/markdown/markdown_configuration_representation.cpp \
+    lib/src/config/palette.cpp
 
 # Development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1

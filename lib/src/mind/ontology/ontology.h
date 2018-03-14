@@ -26,6 +26,7 @@
 #include "taxonomy.h"
 
 #include "../../config/configuration.h"
+#include "../../config/palette.h"
 #include "../../model/tag.h"
 #include "../../model/outline_type.h"
 #include "../../model/note_type.h"
@@ -168,6 +169,15 @@ private:
 
     OutlineType* defaultOutlineType;
     NoteType* defaultNoteType;
+
+    /*
+     * Aux
+     */
+
+    /**
+     * @brief Ontology color palette used by Things and Classes
+     */
+    Palette colorPalette;
 
 public:
     Ontology() = delete;

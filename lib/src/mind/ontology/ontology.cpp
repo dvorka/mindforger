@@ -30,8 +30,32 @@ string Ontology::KEY_TAXONOMY_TAGS = string("Tags");
 
 Ontology::Ontology(const Configuration& configuration)
     : config(configuration),
-      thing(KEY_THING, Clazz::ROOT_CLASS)//,
+      thing(KEY_THING, Clazz::ROOT_CLASS)
 {
+    // color palette
+    colorPalette.findOrCreate(0xE2,0x7D,0x60);
+    colorPalette.findOrCreate(0xE8,0xA8,0x7C);
+    colorPalette.findOrCreate(0xC3,0x8D,0x9E);
+    colorPalette.findOrCreate(0x41,0xB3,0xA3);
+    colorPalette.findOrCreate(0x24,0x25,0x82);
+    colorPalette.findOrCreate(0xF6,0x4C,0x72);
+    colorPalette.findOrCreate(0x99,0x73,0x8E);
+    colorPalette.findOrCreate(0x8D,0x87,0x41);
+    colorPalette.findOrCreate(0x65,0x9D,0xBD);
+    colorPalette.findOrCreate(0xDA,0xAD,0x86);
+    colorPalette.findOrCreate(0xBC,0x98,0x6A);
+    colorPalette.findOrCreate(0x5C,0xDB,0x95);
+    colorPalette.findOrCreate(0x8E,0xE4,0xAF);
+    colorPalette.findOrCreate(0xFC,0x44,0x45);
+    colorPalette.findOrCreate(0x3F,0xEE,0xE6);
+    colorPalette.findOrCreate(0x97,0xCA,0xEF);
+    colorPalette.findOrCreate(0x64,0x48,0x5C);
+    colorPalette.findOrCreate(0x50,0x1B,0x1D);
+    colorPalette.findOrCreate(0x2E,0x11,0x14);
+    colorPalette.findOrCreate(0x83,0x67,0x7B);
+    colorPalette.findOrCreate(0xD7,0x99,0x22);
+    //colorPalette.findOrCreate(0x,0x,0x);
+
     // taxonomy: tags
     tagTaxonomy.setName(KEY_TAXONOMY_TAGS);
     tagTaxonomy.setIsA(&thing);
@@ -150,7 +174,7 @@ const Tag* Ontology::findOrCreateTag(const string& key) {
     stringToLower(key, k);
     auto result = tagTaxonomy.get(k);
     if(!result) {
-        result = new Tag(k, &tagTaxonomy, Color::MF_GRAY());
+        result = new Tag(k, &tagTaxonomy, colorPalette.colorForName(key));
         tagTaxonomy.add(k, result);
     }
     return result;
