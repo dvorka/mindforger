@@ -25,6 +25,7 @@
 
 #include "note_editor_view.h"
 #include "widgets/edit_name_and_buttons_panel.h"
+#include "status_bar_view.h"
 
 namespace m8r {
 
@@ -56,6 +57,7 @@ public:
     }
     void setEditorShowLineNumbers(bool show) { noteEditor->setShowLineNumbers(show); }
     void setEditorEnableSyntaxHighlighting(bool enable) { noteEditor->setEnableSyntaxHighlighting(enable); }
+    void setStatusBar(const StatusBarView* statusBar) { noteEditor->setStatusBar(statusBar); }
 
     QString getName() const { return editNameAndButtonsPanel->getName(); }
     QString getDescription() const { return noteEditor->toPlainText(); }

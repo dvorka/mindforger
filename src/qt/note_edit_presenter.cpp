@@ -34,6 +34,7 @@ NoteEditPresenter::NoteEditPresenter(
 
     view->setEditorShowLineNumbers(Configuration::getInstance().isUiEditorShowLineNumbers());
     view->setEditorEnableSyntaxHighlighting(Configuration::getInstance().isUiEditorEnableSyntaxHighlighting());
+    view->setStatusBar(mwp->getStatusBar()->getView());
 
     noteEditDialog
         = new NoteEditDialog{mwp->getMind()->remind().getOntology(), view};

@@ -25,6 +25,7 @@
 
 #include "note_edit_highlight.h"
 #include "widgets/line_number_panel.h"
+#include "status_bar_view.h"
 
 namespace m8r {
 
@@ -38,10 +39,11 @@ private:
     QWidget* parent;
 
     bool completedAndSelected;
-    QCompleter *completer;
-    QStringListModel *model;
+    QCompleter* completer;
+    QStringListModel* model;
 
     NoteEditHighlight* highlighter;
+    const StatusBarView* statusBar;
 
     bool showLineNumbers;
     bool enableSyntaxHighlighting;
@@ -55,6 +57,7 @@ public:
 
     void setShowLineNumbers(bool show);
     void setEnableSyntaxHighlighting(bool enable);
+    void setStatusBar(const StatusBarView* statusBar) { this->statusBar = statusBar; }
     QString getSelectedText() const { return textCursor().selectedText(); }
 
 protected:

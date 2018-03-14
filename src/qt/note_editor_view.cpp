@@ -218,7 +218,7 @@ void NoteEditorView::mousePressEvent(QMouseEvent* event)
 void NoteEditorView::highlightCurrentLine()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
-    if (!isReadOnly()) {
+    if(!isReadOnly()) {
         QTextEdit::ExtraSelection selection;
         //QColor lineColor = QColor(Qt::yellow).lighter(160);
         QBrush highlightColor = palette().alternateBase();
@@ -227,6 +227,15 @@ void NoteEditorView::highlightCurrentLine()
         selection.cursor = textCursor();
         selection.cursor.clearSelection();
         extraSelections.append(selection);
+
+        // IMPROVE if line number changed
+        if(isVisible()) {
+            QString m{"    "};
+            m.append(QString::number(textCursor().blockNumber()));
+            m.append(":");
+            m.append(QString::number(textCursor().positionInBlock()));
+            statusBar->showInfo(m);
+        }
     }
     setExtraSelections(extraSelections);
 }

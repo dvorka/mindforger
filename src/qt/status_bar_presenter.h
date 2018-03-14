@@ -55,6 +55,8 @@ public:
     void showError(const char* message) { showError(QString::fromUtf8(message)); }
     void showError(const std::string& message) { showError(QString::fromStdString(message)); }
     void showError(const QString& message);
+
+    const StatusBarView* getView() const { return view; }
 };
 
 }

@@ -33,10 +33,10 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         = new MarkdownOutlineRepresentation{mind->ontology()};
 
     // assemble presenters w/ UI
+    statusBar = new StatusBarPresenter{view.getStatusBar(), mind};
     mainMenu = new MainMenuPresenter{this};
     cli = new CliAndBreadcrumbsPresenter{this, view.getCli(), mind};
     orloj = new OrlojPresenter{this, view.getOrloj(), mind};
-    statusBar = new StatusBarPresenter{view.getStatusBar(), mind};
 
     // initialize components
     timeScopeDialog = new TimeScopeDialog{&view};
