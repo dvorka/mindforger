@@ -54,6 +54,9 @@ public:
         editNameAndButtonsPanel->setOutline(outline);
         noteEditor->setPlainText(QString::fromStdString(mdDescription));
     }
+    void setEditorShowLineNumbers(bool show) { noteEditor->setShowLineNumbers(show); }
+    void setEditorEnableSyntaxHighlighting(bool enable) { noteEditor->setEnableSyntaxHighlighting(enable); }
+    void setStatusBar(const StatusBarView* statusBar) { noteEditor->setStatusBar(statusBar); }
 
     QString getName() const { return editNameAndButtonsPanel->getName(); }
     QString getDescription() const { return noteEditor->toPlainText(); }

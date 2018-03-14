@@ -57,7 +57,7 @@ public:
 
     void setShowLineNumbers(bool show);
     void setEnableSyntaxHighlighting(bool enable);
-    void setStatusBar(const StatusBarView* statusBar) { this->statusBar = statusBar; }
+    void setStatusBar(const StatusBarView* sb) { this->statusBar = sb; }
     QString getSelectedText() const { return textCursor().selectedText(); }
 
 protected:

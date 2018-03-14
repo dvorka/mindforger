@@ -20,7 +20,7 @@
 
 namespace m8r {
 
-StatusBarView::StatusBarView(QStatusBar *qStatusBar, LookAndFeels& lookAndFeel)
+StatusBarView::StatusBarView(QStatusBar* qStatusBar, LookAndFeels& lookAndFeel)
     : lookAndFeel(lookAndFeel)
 {
     this->statusBar = qStatusBar;
@@ -32,6 +32,7 @@ StatusBarView::StatusBarView(QStatusBar *qStatusBar, LookAndFeels& lookAndFeel)
 
 void StatusBarView::showInfo(const QString& message) const
 {
+    // IMPROVE set style sheet - code below causes SIGSEGV (lookAndFeel nullptr)
     QString style;
     style.append("color: ");
     style.append(lookAndFeel.getTextColor());
@@ -43,13 +44,13 @@ void StatusBarView::showInfo(const QString& message) const
 
 void StatusBarView::showWarning(const QString& message) const
 {
-    //statusBar->setStyleSheet("color: yellow;");
+    // IMPROVE set style sheet > ORANGE
     statusBar->showMessage(message);
 }
 
 void StatusBarView::showError(const QString& message) const
 {
-    //statusBar->setStyleSheet("color: red;");
+    // IMPROVE set style sheet > RED
     statusBar->showMessage(message);
 }
 

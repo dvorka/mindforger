@@ -26,7 +26,8 @@ namespace m8r {
 
 OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
                                OrlojView* view,
-                               Mind* mind) : activeFacet{OrlojPresenterFacets::FACET_NONE}
+                               Mind* mind)
+    : activeFacet{OrlojPresenterFacets::FACET_NONE}
 {
     this->mainPresenter = mainPresenter;
     this->view = view;

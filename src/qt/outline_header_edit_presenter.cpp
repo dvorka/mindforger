@@ -34,6 +34,10 @@ OutlineHeaderEditPresenter::OutlineHeaderEditPresenter(
         = new OutlineHeaderEditDialog{mwp->getMind()->remind().getOntology(), view};
     this->view->setOutlineHeaderEditDialog(outlineHeaderEditDialog);
 
+    view->setEditorShowLineNumbers(Configuration::getInstance().isUiEditorShowLineNumbers());
+    view->setEditorEnableSyntaxHighlighting(Configuration::getInstance().isUiEditorEnableSyntaxHighlighting());
+    view->setStatusBar(mwp->getStatusBar()->getView());
+
     QObject::connect(
         view, SIGNAL(signalSaveOutlineHeader()),
         this, SLOT(slotSaveOutlineHeader()));

@@ -28,13 +28,13 @@ namespace m8r {
 class StatusBarView
 {
 private:
-    QStatusBar *statusBar;
+    QStatusBar* statusBar;
 
     LookAndFeels& lookAndFeel;
     QFont font;
 
 public:
-    StatusBarView(QStatusBar *, LookAndFeels& lookAndFeel);
+    StatusBarView(QStatusBar* qStatusBar, LookAndFeels& lookAndFeel);
     StatusBarView(const StatusBarView&) = delete;
     StatusBarView(const StatusBarView&&) = delete;
     StatusBarView &operator=(const StatusBarView&) = delete;
