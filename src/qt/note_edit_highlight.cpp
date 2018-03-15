@@ -20,18 +20,7 @@
 
 namespace m8r {
 
-/*
- * IMPROVE redesign syntax highlighting
- *
- * I need to rewrite this class - it is code built on a simple example
- * which doesn't work well.
- *   I need to better understand how regexps are combined, how efficient
- * highlighting is, how loop that performs the highlighting works, why
- * certain regexps doesn't work as expected (links finished by EOF/space),
- *   I need to fix regexps (e.g. links) to accept ALL letters (not just
- * enumerated letters), etc.
- *
- */
+using namespace std;
 
 NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     : QSyntaxHighlighter(parent),
@@ -41,23 +30,20 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
      * Markdown (check QRegExp or Perl regexps)
      */
 
-    // emphasis
-    addRegex(Bolder, "\\*\\*(:?\\w[\\w\\s'/:\\.:-#\\(\\)]+)\\*\\*"); // ** first, * next
-    addRegex(Bold, "\\*(:?\\w[\\w\\s'/:\\.:-#()]+)\\*");
-    addRegex(Italicer, "__(:?[\\w\\s'/:\\.:-#()]+)__");
-    addRegex(Italic, "_(:?[\\w\\s'/:\\.:-#()]+)_");
-    addRegex(Strikethrough, "~~(:?[\\w\\s'/:\\.:-#()]+)~~");
-    //addRegex(Link, "\\[(:?[\\w\\s:\\-=]+)\\]\\([\\w/\\.:-#()]+\\)");
-    addRegex(Link, "\\[(:?[\\w\\s:\\-=]+)\\]\\(\\S+\\)");
-    // IMPROVE IMO regexp like https?://\S+ should be OK, but from some reason it's non-greedy... that's why I use this obscure one
-    addRegex(Autolink, "https?://\\S+[$\\s]");
-    addRegex(Codeblock, "`(:?[\\w\\s'/:\\.:-#()]+)`");
+    // regexps
+    addRegex(Bold, "\\*\\S[\\S\\s]+\\*",true);
+    addRegex(Bolder, "\\*\\*[\\S\\s]+\\*\\*");
+    addRegex(Italic, "_[\\S\\s]+_");
+    addRegex(Italicer, "__[\\S\\s]+\\__");
+    addRegex(Strikethrough, "~~[\\S\\s]+\\~~");
+    addRegex(Link, "\\[(:?[\\S\\s]+)\\]\\(\\S+\\)");
+    addRegex(Autolink, "https?://\\S+",false);
+    addRegex(Codeblock, "`[\\S\\s]+`");
     addRegex(UnorderedList, "^(:?    )*[\\*\\+\\-] ");
     addRegex(OrderedList, "^(:?    )*\\d\\. ");
+    // IMPROVE highlight tasks (red/green) that overwrite lists , BUT new regexps make highlighting slower - is it worth to highlight it?
 
-    // TODO extra method - HTML comment like
-    //addRegex(CodeblockMultiline, "\\*(:?#\\d+|\\w+)\\*");
-
+    // formats
     boldFormat.setForeground(lookAndFeels.getEditorBold());
     bolderFormat.setForeground(lookAndFeels.getEditorBolder());
     italicFormat.setForeground(lookAndFeels.getEditorItalic());
@@ -96,86 +82,161 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     htmlCommentFormat.setFontItalic(true);
 }
 
-/*
+NoteEditHighlight::~NoteEditHighlight()
+{
+    for(auto& p:typeAndRegex) {
+        delete p;
+    }
+    typeAndRegex.clear();
+}
+
+
+/**
+ * @brief Add regexp for matching
+ * @param minimal   controls non-greed vs greedy matching
+ *
  * Add Qt's Perl compatible regexp - see QRegExp or https://perlmaven.com/regex-cheat-sheet
  */
 void NoteEditHighlight::addRegex(Type type, const QString &pattern, bool minimal)
 {
-    QRegExp regex(pattern);
-    regex.setPatternSyntax(QRegExp::RegExp2);
-    regex.setMinimal(minimal);
-    regexForType.insert(type, regex);
+    QRegExp* regex = new QRegExp{pattern};
+    regex->setPatternSyntax(QRegExp::RegExp2);
+    regex->setMinimal(minimal);
+
+    std::pair<Type,QRegExp*>* p = new std::pair<Type,QRegExp*>(type,regex);
+    typeAndRegex.push_back(p);
 }
 
+/**
+ * @brief This method is called for EACH line to highlight it.
+ *
+ * Multi-line highlighting is solved by maintaining a state as the
+ * whole document is being highlighted.
+ */
 void NoteEditHighlight::highlightBlock(const QString& text)
 {
     if(enabled) {
+        // clear format of the text
         setCurrentBlockState(Normal);
-
-        highlightPatterns(text);
-        highlightComments(text);
+        // highlight patterns defined using regexps
+        if(text.size()) highlightPatterns(text);
+        // eventually overwrite certain formatting with *multiline(s)* like MD code or HTML comments
+        highlightMultilineMdCode(text);
+        highlightMultilineHtmlComments(text);
     }
 }
 
+/*
+ * This method get editor's text and it uses regexps to tokenize
+ * it. Then it assigns a format to every detected token using
+ * setFormat(offset,length) function.
+ */
 void NoteEditHighlight::highlightPatterns(const QString& text)
 {
-    QHashIterator<Type, QRegExp> i(regexForType);
+    // iterate all regexps - ORDER matters as latter regexps may OVERWRITE format of
+    // earlier regexps, e.g. consider bold rewritten by multiline code or bold rewriting
+    // bolder
+    // IMPROVE improve O(n) which is BIG and depends on the number of regexps:
+    //   O(n) = size(regexps) * lng(text)
+    for(auto p:typeAndRegex) {
+        Type type = p->first;
+        QRegExp* regex = p->second;
 
-    while(i.hasNext()) {
-        i.next();
-        Type type = i.key();
-        const QRegExp &regex = i.value();
-
-        int index = regex.indexIn(text);
+        // find 1st match for regex in text
+        int index = regex->indexIn(text);
+        // loop until there are other matches
         while(index > -1) {
-            int length = regex.matchedLength();
+            int length = regex->matchedLength();
 
-            if(type == Bolder)
+            switch(type) {
+            case Bolder:
                 setFormat(index, length, bolderFormat);
-            else if(type == Bold)
+                break;
+            case Bold:
                 setFormat(index, length, boldFormat);
-            else if(type == Italic)
+                break;
+            case Italic:
                 setFormat(index, length, italicFormat);
-            else if(type == Italicer)
+                break;
+            case Italicer:
                 setFormat(index, length, italicerFormat);
-            else if(type == Strikethrough)
+                break;
+            case Strikethrough:
                 setFormat(index, length, strikethroughFormat);
-            else if(type == Codeblock)
+                break;
+            case Codeblock:
                 setFormat(index, length, codeblockFormat);
-            else if(type == Link)
+                break;
+            case Link:
                 setFormat(index, length, linkFormat);
-            else if(type == Autolink)
+                break;
+            case Autolink:
                 setFormat(index, length, linkFormat);
-            else if(type == UnorderedList)
+                break;
+            case UnorderedList:
                 setFormat(index, length, listFormat);
-            else if(type == OrderedList)
+                break;
+            case OrderedList:
                 setFormat(index, length, listFormat);
-            else if(type == HtmlTag)
+                break;
+            case HtmlTag:
                 setFormat(index, length, htmlTagFormat);
-            else if(type == HtmlAttribute) {
+                break;
+            case HtmlAttribute:
                 setFormat(
                     index,
-                    regex.pos(2) - index - 1,
+                    regex->pos(2) - index - 1,
                     htmlAttrNameFormat);
                 setFormat(
-                    regex.pos(2) + 1,
-                    regex.cap(2).length() - 2,
+                    regex->pos(2) + 1,
+                    regex->cap(2).length() - 2,
                     htmlAttValueFormat);
-            }
-            else if(type == HtmlEntity)
+                break;
+            case HtmlEntity:
                 setFormat(index, length, htmlEntityFormat);
-            else if(type == HtmlComment)
+                break;
+            case HtmlComment:
+                // this is single line comment - multiline comments are matched by separate method
                 setFormat(index, length, htmlCommentFormat);
+                break;
+            }
 
-            index = regex.indexIn(text, index+length);
+            // match again
+            index = regex->indexIn(text, index+length);
         }
     }
 }
 
-void NoteEditHighlight::highlightComments(const QString &text)
+void NoteEditHighlight::highlightMultilineMdCode(const QString &text)
 {
-    const QString StartOfComment("<!--");
-    const QString EndOfComment("-->");
+    static const QString TOKEN("```");
+
+    if(previousBlockState()!=-1 && (previousBlockState()&InCode)==InCode) {
+        // already inside block
+        if(!text.compare(TOKEN)) {
+            // finish block ~ don't send anything
+            setFormat(0, TOKEN.length(), codeblockFormat);
+        } else {
+            // continue block
+            setCurrentBlockState(currentBlockState()|InCode);
+            setFormat(0, text.size(), codeblockFormat);
+        }
+    } else {
+        // outside block
+        if(text.startsWith(TOKEN)) {
+            // enter block ~ don't send anything
+            setCurrentBlockState(currentBlockState()|InCode);
+            setFormat(0, text.size(), codeblockFormat);
+        } else {
+            setCurrentBlockState(Normal);
+        }
+    }
+}
+
+void NoteEditHighlight::highlightMultilineHtmlComments(const QString &text)
+{
+    static const QString StartOfComment("<!--");
+    static const QString EndOfComment("-->");
 
     if(previousBlockState() > -1 && (previousBlockState() & InComment) == InComment) {
         int end = text.indexOf(EndOfComment);
@@ -199,4 +260,4 @@ void NoteEditHighlight::highlightComments(const QString &text)
     }
 }
 
-}
+} // m8r namespace

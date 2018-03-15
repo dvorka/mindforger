@@ -49,8 +49,9 @@ private:
     };
 
     enum State {
-        Normal=0x01,
-        InComment=0x02
+        Normal=1<<0,
+        InComment=1<<1,
+        InCode=1<<2
     };
 
     bool enabled;
@@ -74,7 +75,8 @@ private:
     QTextCharFormat htmlEntityFormat;
     QTextCharFormat htmlCommentFormat;
 
-    QMultiHash<Type, QRegExp> regexForType;
+    // well defined order of regexps MATTERS - hashes/maps CANNOT be used
+    std::vector<std::pair<Type,QRegExp*>*> typeAndRegex;
 
 public:
     explicit NoteEditHighlight(QTextDocument* parent);
@@ -82,17 +84,20 @@ public:
     NoteEditHighlight(const NoteEditHighlight&&) = delete;
     NoteEditHighlight &operator=(const NoteEditHighlight&) = delete;
     NoteEditHighlight &operator=(const NoteEditHighlight&&) = delete;
+    ~NoteEditHighlight();
 
     void setEnabled(bool enable) { enabled = enable; }
     bool isEnabled() const { return enabled; }
 
 protected:
-    void highlightBlock(const QString &text);
+    // implementation of the abstract method that performs highlighting
+    virtual void highlightBlock(const QString &text) override;
 
 private:
     void addRegex(Type type, const QString& pattern, bool minimal=true);
     void highlightPatterns(const QString& text);
-    void highlightComments(const QString& text);
+    void highlightMultilineMdCode(const QString& text);
+    void highlightMultilineHtmlComments(const QString& text);
 };
 
 }
