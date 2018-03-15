@@ -96,7 +96,7 @@ protected:
 private:
     void addRegex(Type type, const QString& pattern, bool minimal=true);
     void highlightPatterns(const QString& text);
-    void highlightMultilineMdCode(const QString& text);
+    bool highlightMultilineMdCode(const QString& text);
     void highlightMultilineHtmlComments(const QString& text);
 };
 

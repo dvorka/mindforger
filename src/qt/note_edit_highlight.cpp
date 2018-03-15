@@ -92,7 +92,7 @@ NoteEditHighlight::~NoteEditHighlight()
 
 
 /**
- * @brief Add regexp for matching
+ * @brief Add regexp for matching.
  * @param minimal   controls non-greed vs greedy matching
  *
  * Add Qt's Perl compatible regexp - see QRegExp or https://perlmaven.com/regex-cheat-sheet
@@ -118,11 +118,14 @@ void NoteEditHighlight::highlightBlock(const QString& text)
     if(enabled) {
         // clear format of the text
         setCurrentBlockState(Normal);
-        // highlight patterns defined using regexps
-        if(text.size()) highlightPatterns(text);
-        // eventually overwrite certain formatting with *multiline(s)* like MD code or HTML comments
-        highlightMultilineMdCode(text);
-        highlightMultilineHtmlComments(text);
+
+        // when in MD code section, then there is no need to highlight anything
+        if(!highlightMultilineMdCode(text)) {
+            // highlight patterns defined using regexps
+            if(text.size()) highlightPatterns(text);
+            // eventually overwrite certain formatting with *multiline(s)* like MD code or HTML comments
+            highlightMultilineHtmlComments(text);
+        }
     }
 }
 
@@ -207,7 +210,10 @@ void NoteEditHighlight::highlightPatterns(const QString& text)
     }
 }
 
-void NoteEditHighlight::highlightMultilineMdCode(const QString &text)
+/**
+ * @brief Highlight MD multiline code and return true if the line has been formatted.
+ */
+bool NoteEditHighlight::highlightMultilineMdCode(const QString &text)
 {
     static const QString TOKEN("```");
 
@@ -216,10 +222,12 @@ void NoteEditHighlight::highlightMultilineMdCode(const QString &text)
         if(!text.compare(TOKEN)) {
             // finish block ~ don't send anything
             setFormat(0, TOKEN.length(), codeblockFormat);
+            return true;
         } else {
             // continue block
             setCurrentBlockState(currentBlockState()|InCode);
             setFormat(0, text.size(), codeblockFormat);
+            return true;
         }
     } else {
         // outside block
@@ -227,32 +235,34 @@ void NoteEditHighlight::highlightMultilineMdCode(const QString &text)
             // enter block ~ don't send anything
             setCurrentBlockState(currentBlockState()|InCode);
             setFormat(0, text.size(), codeblockFormat);
+            return true;
         } else {
             setCurrentBlockState(Normal);
+            return false;
         }
     }
 }
 
 void NoteEditHighlight::highlightMultilineHtmlComments(const QString &text)
 {
-    static const QString StartOfComment("<!--");
-    static const QString EndOfComment("-->");
+    static const QString BEGIN_TOKEN("<!--");
+    static const QString END_TOKEN("-->");
 
     if(previousBlockState() > -1 && (previousBlockState() & InComment) == InComment) {
-        int end = text.indexOf(EndOfComment);
+        int end = text.indexOf(END_TOKEN);
         if (end == -1) {
             setFormat(0, text.length(), htmlCommentFormat);
             setCurrentBlockState(currentBlockState() | InComment);
             return;
         }
         else {
-            setFormat(0, end + EndOfComment.length(), htmlCommentFormat);
+            setFormat(0, end + END_TOKEN.length(), htmlCommentFormat);
         }
     }
 
-    int start = text.lastIndexOf(StartOfComment);
+    int start = text.lastIndexOf(BEGIN_TOKEN);
     if(start != -1) {
-        int end = text.lastIndexOf(EndOfComment);
+        int end = text.lastIndexOf(END_TOKEN);
         if(end < start) {
             setFormat(start, text.length(), htmlCommentFormat);
             setCurrentBlockState(currentBlockState() | InComment);
