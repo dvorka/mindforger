@@ -27,6 +27,23 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
       lookAndFeels(LookAndFeels::getInstance())
 {
     /*
+     * HTML inlined in MD - goes first so that formatting can be rewritten by MD
+     */
+
+    addRegex(HtmlTag, "<[!?]?\\w+(?:/>)?", false);
+    addRegex(HtmlTag, "(?:</\\w+)?[?]?>");
+    addRegex(HtmlEntity, "&(:?#\\d+|\\w+);");
+    addRegex(HtmlComment, "<!--.*-->");
+    addRegex(HtmlAttribute, "(\\w+(?::\\w+)?)=(\"[^\"]+\"|'[^\']+')");
+
+    htmlTagFormat.setForeground(lookAndFeels.getEditorHtmlTag());
+    htmlAttrNameFormat.setForeground(lookAndFeels.getEditorHtmlAttrName());
+    htmlAttValueFormat.setForeground(lookAndFeels.getEditorHtmlAttrValue());
+    htmlEntityFormat.setForeground(lookAndFeels.getEditorHtmlEntity());
+    htmlCommentFormat.setForeground(lookAndFeels.getEditorHtmlComment());
+    htmlCommentFormat.setFontItalic(true);
+
+    /*
      * Markdown (check QRegExp or Perl regexps)
      */
 
@@ -63,23 +80,6 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     bolderFormat.setFontWeight(QFont::Black);
     listFormat.setFontWeight(QFont::Black);
 #endif
-
-    /*
-     * HTML inlined in MD
-     */
-
-    addRegex(HtmlTag, "<[!?]?\\w+(?:/>)?", false);
-    addRegex(HtmlTag, "(?:</\\w+)?[?]?>");
-    addRegex(HtmlEntity, "&(:?#\\d+|\\w+);");
-    addRegex(HtmlComment, "<!--.*-->");
-    addRegex(HtmlAttribute, "(\\w+(?::\\w+)?)=(\"[^\"]+\"|'[^\']+')");
-
-    htmlTagFormat.setForeground(lookAndFeels.getEditorHtmlTag());
-    htmlAttrNameFormat.setForeground(lookAndFeels.getEditorHtmlAttrName());
-    htmlAttValueFormat.setForeground(lookAndFeels.getEditorHtmlAttrValue());
-    htmlEntityFormat.setForeground(lookAndFeels.getEditorHtmlEntity());
-    htmlCommentFormat.setForeground(lookAndFeels.getEditorHtmlComment());
-    htmlCommentFormat.setFontItalic(true);
 }
 
 NoteEditHighlight::~NoteEditHighlight()
