@@ -104,13 +104,6 @@ using namespace std;
  */
 int main(int argc, char *argv[])
 {
-    // load configuration
-    m8r::MarkdownConfigurationRepresentation mdConfigRepresentation{};
-    m8r::Configuration& config = m8r::Configuration::getInstance();
-    if(!mdConfigRepresentation.load(config)) {
-        mdConfigRepresentation.save(m8r::File{config.getConfigFilePath()});
-    }
-
     // check whether running in GUI (and not in text console tty)
     char *term = getenv(m8r::ENV_VAR_TERM);
     if(term) {
@@ -122,6 +115,8 @@ int main(int argc, char *argv[])
     }
 
     QApplication mindforgerApplication(argc, argv);
+    QApplication::setApplicationName("MindForger");
+    QApplication::setApplicationVersion(MINDFORGER_VERSION);
 
     std::string useRepository{};
     QString themeOptionValue{};
@@ -162,8 +157,13 @@ int main(int argc, char *argv[])
     }
     // else there are no parameters and options > simply load GUI
 
-    QApplication::setApplicationName("MindForger");
-    QApplication::setApplicationVersion(MINDFORGER_VERSION);
+    // load configuration
+    m8r::MarkdownConfigurationRepresentation mdConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    if(!mdConfigRepresentation.load(config)) {
+        mdConfigRepresentation.save(m8r::File{config.getConfigFilePath()});
+    }
+
     m8r::initRandomizer();
 
     if(!useRepository.empty()) {
