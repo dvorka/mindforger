@@ -30,6 +30,7 @@ constexpr const auto CONFIG_SETTING_ACTIVE_REPOSITORY_LABEL = "* Active reposito
 constexpr const auto CONFIG_SETTING_REPOSITORY_LABEL = "* Repository: ";
 
 constexpr const auto CONFIG_SETTING_UI_THEME_LABEL = "* Theme: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
 constexpr const auto CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL = "* Show Notebook edit button: ";
 
 using namespace std;
@@ -118,6 +119,14 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         if(t.size()) {
                             c.setUiThemeName(t);
                         }
+                    } else if(line->find(CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL) != std::string::npos) {
+                        if(line->find("emacs") != std::string::npos) {
+                            c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::EMACS);
+                        } else if(line->find("windows") != std::string::npos) {
+                            c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::WINDOWS);
+                        } else {
+                            c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::VIM);
+                        }
                     } else if(line->find(CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
                             c.setUiShowNotebookEditButton(true);
@@ -191,6 +200,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          endl <<
          CONFIG_SETTING_UI_THEME_LABEL << (c?c->getUiThemeName():Configuration::DEFAULT_UI_THEME_NAME) << endl <<
          "    * Examples: dark, light" << endl <<
+         CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL << (c?c->getEditorKeyBindingAsString():Configuration::DEFAULT_EDITOR_KEY_BINDING) << endl <<
+         "    * Examples: emacs, vim, windows" << endl <<
          CONFIG_SETTING_TIME_SCOPE_LABEL << timeScopeAsString << endl <<
          "    * Examples: 2y0m0d0h0m (recent 2 years), 0y3m15d0h0m (recent 3 months and 15 days)" << endl <<
          CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL << (c?(c->isUiShowNotebookEditButton()?"yes":"no"):(Configuration::DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON?"yes":"no")) << endl <<

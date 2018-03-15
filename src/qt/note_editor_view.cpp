@@ -103,6 +103,17 @@ void NoteEditorView::setEnableSyntaxHighlighting(bool enable)
 
 void NoteEditorView::keyPressEvent(QKeyEvent *event)
 {
+    // IMPROVE get configuration reference and editor mode setting - this must be fast
+    if(Configuration::getInstance().getEditorKeyBinding()==Configuration::EditorKeyBindingMode::EMACS) {
+        if(event->modifiers() & Qt::ControlModifier){
+            switch (event->key()) {
+            case Qt::Key_A:
+                moveCursor(QTextCursor::StartOfLine);
+                return; // exit to override default key binding
+            }
+        }
+    }
+
     if (completedAndSelected && handledCompletedAndSelected(event)) {
         return;
     } else {

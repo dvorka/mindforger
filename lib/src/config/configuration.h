@@ -59,6 +59,7 @@ constexpr const auto UI_THEME_DARK = "dark";
 constexpr const auto UI_THEME_LIGHT = "light";
 constexpr const auto UI_THEME_BLACK = "black";
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
+constexpr const auto UI_DEFAULT_EDITOR_KEY_BINDING = "emacs";
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
 class Installer;
@@ -91,12 +92,19 @@ public:
         SLEEPING
     };
 
+    enum EditorKeyBindingMode {
+        EMACS,
+        VIM,
+        WINDOWS
+    };
+
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
     static const std::string DEFAULT_TIME_SCOPE;
     static constexpr const bool DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON = true;
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
 
     static const std::string DEFAULT_UI_THEME_NAME;
+    static const std::string DEFAULT_EDITOR_KEY_BINDING;
 
 private:
     explicit Configuration();
@@ -123,6 +131,7 @@ private:
 
     // GUI configuration
     std::string uiThemeName;
+    EditorKeyBindingMode uiEditorKeyBinding;
     int uiFontPointSize;
     bool uiShowBreadcrump; // show breadcrump path
     bool uiViewerShowMetadata; // show reads/writes/... when viewing Outlines and/or Notes.
@@ -188,6 +197,12 @@ public:
      * GUI
      */
 
+    EditorKeyBindingMode getEditorKeyBinding() const { return uiEditorKeyBinding; }
+    const char* getEditorKeyBindingAsString() const {
+        if(uiEditorKeyBinding==EditorKeyBindingMode::EMACS) return "emacs"; else
+            if(uiEditorKeyBinding==EditorKeyBindingMode::WINDOWS) return "windows"; else return "vim";
+    }
+    void setEditorKeyBinding(EditorKeyBindingMode keyBinding) { this->uiEditorKeyBinding=keyBinding; }
     int getUiFontPointSize() const { return uiFontPointSize; }
     const std::string& getUiThemeName() const { return uiThemeName; }
     void setUiThemeName(const std::string theme) { uiThemeName = theme; }
