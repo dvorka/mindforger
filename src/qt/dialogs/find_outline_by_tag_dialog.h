@@ -25,6 +25,7 @@
 
 #include "../../../lib/src/mind/ontology/thing_class_rel_triple.h"
 #include "../../../lib/src/mind/ontology/ontology.h"
+#include "../../../lib/src/model/outline.h"
 
 #include "../widgets/edit_tags_panel.h"
 
@@ -67,7 +68,7 @@ signals:
     void searchFinished();
 
 private slots:
-    void enableFindButton(const QString &text);
+    void handleTagsChanged();
     void handleChoice();
     void handleReturn();
 };

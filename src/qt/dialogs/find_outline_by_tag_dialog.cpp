@@ -27,17 +27,19 @@ FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *pare
     : QDialog(parent), ontology(ontology)
 {
     // widgets
+    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup->refreshOntologyTags();
+    editTagsGroup->setTitle(tr("Outline tags:"));
+
+    QGroupBox* outlinesGroup = new QGroupBox{tr("Outlines:"),this};
+    QVBoxLayout* outlinesGroupLayout = new QVBoxLayout{this};
+    outlinesGroup->setLayout(outlinesGroupLayout);
     listView = new QListView(this);
     // list view model must be set - use of this type of mode enable the use of string lists controlling its content
     listView->setModel(&listViewModel);
     // disable editation of the list item on doble click
     listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-    label = new QLabel{tr("Outline tags:")};
-
-    editTagsGroup = new EditTagsPanel{ontology, this};
-    editTagsGroup->refreshOntologyTags();
-    label->setBuddy(editTagsGroup);
+    outlinesGroupLayout->addWidget(listView);
 
     findButton = new QPushButton{tr("&Open Outline")};
     findButton->setDefault(true);
@@ -50,10 +52,9 @@ FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *pare
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     // assembly
-    QVBoxLayout *mainLayout = new QVBoxLayout{};
-    mainLayout->addWidget(label);
+    QVBoxLayout* mainLayout = new QVBoxLayout{};
     mainLayout->addWidget(editTagsGroup);
-    mainLayout->addWidget(listView);
+    mainLayout->addWidget(outlinesGroup);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
@@ -64,7 +65,10 @@ FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *pare
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
 
-    // dialog
+    // signals
+    QObject::connect(editTagsGroup, SIGNAL(signalTagSelectionChanged()), this, SLOT(handleTagsChanged()));
+
+    // dialog    
     setWindowTitle(tr("Find Outline by Name"));
     // height is set to make sure listview gets enough lines
     resize(fontMetrics().averageCharWidth()*55, fontMetrics().height()*30);
@@ -77,18 +81,6 @@ FindOutlineByTagDialog::~FindOutlineByTagDialog()
     delete listView;
     delete findButton;
     delete closeButton;
-}
-
-// TODO remove text
-void FindOutlineByTagDialog::enableFindButton(const QString& text)
-{
-    listViewStrings.clear();
-
-    for(size_t row = 0; row<things.size(); row++) {
-        listView->setRowHidden(row, false);
-    }
-
-    findButton->setEnabled(things.size());
 }
 
 void FindOutlineByTagDialog::show(vector<Thing*>& outlines, vector<string>* customizedNames)
@@ -114,8 +106,48 @@ void FindOutlineByTagDialog::show(vector<Thing*>& outlines, vector<string>* cust
     }
 
     findButton->setEnabled(things.size());
-    // TODO set focus to tags
+    editTagsGroup->clearTagList();
+    editTagsGroup->getLineEdit()->setFocus();
     QDialog::show();
+}
+
+void FindOutlineByTagDialog::handleTagsChanged()
+{
+    auto choosenTags = editTagsGroup->getTags();
+
+    int row = 0;
+    if(choosenTags->size()) {
+        int visible = 0;
+        for(Thing* e:things) {
+            Outline* o = (Outline*)e;
+
+            bool hasAllTags=true;
+            for(size_t i=0; i<editTagsGroup->getTags()->size(); i++) {
+                if(std::find(
+                    o->getTags().begin(),
+                    o->getTags().end(),
+                    editTagsGroup->getTags()->at(i)) == o->getTags().end())
+                {
+                    hasAllTags=false;
+                    break;
+                }
+            }
+
+            if(hasAllTags) {
+                listView->setRowHidden(row, false);
+                visible++;
+            } else {
+                listView->setRowHidden(row, true);
+            }
+            row++;
+        }
+        findButton->setEnabled(visible);
+    } else {
+        // show everything
+        for(size_t i=0; i<things.size(); i++) {
+            listView->setRowHidden(row++, true);
+        }
+    }
 }
 
 void FindOutlineByTagDialog::handleReturn()

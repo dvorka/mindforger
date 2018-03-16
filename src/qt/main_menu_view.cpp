@@ -135,13 +135,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFindNoteByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
     actionFindNoteByName->setStatusTip(tr("Find Note by name"));
 
-    actionFindOutlineByTag = new QAction(tr("Recall O&utline by Tag"), mainWindow);
+    actionFindOutlineByTag = new QAction(tr("Recall O&utline by Tags"), mainWindow);
     actionFindOutlineByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_U));
-    actionFindOutlineByTag->setStatusTip(tr("Find Outline by tag"));
+    actionFindOutlineByTag->setStatusTip(tr("Find Outline by tags"));
 
-    actionFindNoteByTag = new QAction(tr("Recall Note by &Tag"), mainWindow);
+    actionFindNoteByTag = new QAction(tr("Recall Note by &Tags"), mainWindow);
     actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
-    actionFindNoteByTag->setStatusTip(tr("Find Note by tag"));
+    actionFindNoteByTag->setStatusTip(tr("Find Note by tags"));
     actionFindNoteByTag->setEnabled(false);
 
     menuFind = qMenuBar->addMenu(tr("&Recall"));

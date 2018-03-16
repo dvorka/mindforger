@@ -71,10 +71,14 @@ public:
     EditTagsPanel &operator=(const EditTagsPanel&&) = delete;
     ~EditTagsPanel();
 
+    QLineEdit* getLineEdit() const { return lineEdit; }
     void clearTagList();
     void refreshOntologyTags();
     void refresh(const std::vector<const Tag*>& noteTags);
     const std::vector<const Tag*>* getTags();
+
+signals:
+    void signalTagSelectionChanged();
 
 private slots:
     void slotAddTag();

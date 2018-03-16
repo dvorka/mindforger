@@ -118,6 +118,7 @@ void EditTagsPanel::slotAddTag()
         if(!listViewStrings.contains(lineEdit->text())) {
             listViewStrings << lineEdit->text();
             ((QStringListModel*)listView->model())->setStringList(listViewStrings);
+            emit signalTagSelectionChanged();
         }
     }
 }
@@ -127,7 +128,8 @@ void EditTagsPanel::slotRemoveTag()
     if(listView->currentIndex().isValid()) {
         listViewStrings.removeAt(listView->currentIndex().row());
         ((QStringListModel*)listView->model())->setStringList(listViewStrings);
+        emit signalTagSelectionChanged();
     }
 }
 
-}
+} // m8r namespace
