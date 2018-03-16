@@ -21,9 +21,6 @@
 
 #include <QtWidgets>
 
-#include "../../../lib/src/model/tag.h"
-#include "../../../lib/src/model/outline_type.h"
-#include "../../../lib/src/mind/ontology/ontology_vocabulary.h"
 #include "../../../lib/src/mind/ontology/ontology.h"
 #include "../../../lib/src/model/stencil.h"
 #include "../../../lib/src/gear/string_utils.h"

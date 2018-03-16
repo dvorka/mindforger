@@ -1,5 +1,5 @@
 /*
- find_outline_by_name_dialog.cpp     MindForger thinking notebook
+ find_outline_by_tag.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,16 +16,15 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "find_outline_by_name_dialog.h"
 
-#include "../gear/qutils.h"
+#include "find_outline_by_tag_dialog.h"
 
 namespace m8r {
 
 using namespace std;
 
-FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
-    : QDialog(parent)
+FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *parent)
+    : QDialog(parent), ontology(ontology)
 {
     // widgets
     listView = new QListView(this);
@@ -34,15 +33,11 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     // disable editation of the list item on doble click
     listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
+    label = new QLabel{tr("Outline tags:")};
 
-    label = new QLabel{tr("Outline &name:")};
-    lineEdit = new MyLineEdit{listView, this};
-    label->setBuddy(lineEdit);
-
-    caseCheckBox = new QCheckBox{tr("&Ignore case")};
-    caseCheckBox->setChecked(true);
-    keywordsCheckBox = new QCheckBox{tr("&Keywords match")};
-    keywordsCheckBox->setChecked(true);
+    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup->refreshOntologyTags();
+    label->setBuddy(editTagsGroup);
 
     findButton = new QPushButton{tr("&Open Outline")};
     findButton->setDefault(true);
@@ -51,18 +46,14 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     closeButton = new QPushButton{tr("&Cancel")};
 
     // signals
-    connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(enableFindButton(const QString&)));
-    connect(lineEdit, SIGNAL(returnPressed()), this, SLOT(handleReturn()));
     connect(findButton, SIGNAL(clicked()), this, SLOT(handleChoice()));
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     // assembly
     QVBoxLayout *mainLayout = new QVBoxLayout{};
     mainLayout->addWidget(label);
-    mainLayout->addWidget(lineEdit);
+    mainLayout->addWidget(editTagsGroup);
     mainLayout->addWidget(listView);
-    mainLayout->addWidget(caseCheckBox);
-    mainLayout->addWidget(keywordsCheckBox);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
@@ -80,60 +71,27 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     setModal(true);
 }
 
-FindOutlineByNameDialog::~FindOutlineByNameDialog()
+FindOutlineByTagDialog::~FindOutlineByTagDialog()
 {
     delete label;
-    delete lineEdit;
     delete listView;
-    delete caseCheckBox;
     delete findButton;
     delete closeButton;
 }
 
-void FindOutlineByNameDialog::enableFindButton(const QString& text)
+// TODO remove text
+void FindOutlineByTagDialog::enableFindButton(const QString& text)
 {
     listViewStrings.clear();
-    if(!text.isEmpty()) {
-        if(keywordsCheckBox->isEnabled() && keywordsCheckBox->isChecked()) {
-            int visible = 0;
-            int row = 0;
-            for(Thing* e:things) {
-                QString s = QString::fromStdString(e->getName());
-                if(stringMatchByKeywords(text, s, caseCheckBox->isChecked())) {
-                    listView->setRowHidden(row, false);
-                    visible++;
-                } else {
-                    listView->setRowHidden(row, true);
-                }
-                row++;
-            }
-            findButton->setEnabled(visible);
-        } else {
-            Qt::CaseSensitivity c = caseCheckBox->isChecked()?Qt::CaseInsensitive:Qt::CaseSensitive;
-            // IMPROVE find a list view method giving # of visible rows
-            int visible = 0;
-            int row = 0;
-            for(Thing* e:things) {
-                QString s = QString::fromStdString(e->getName());
-                if(s.startsWith(text,c)) {
-                    listView->setRowHidden(row, false);
-                    visible++;
-                } else {
-                    listView->setRowHidden(row, true);
-                }
-                row++;
-            }
-            findButton->setEnabled(visible);
-        }
-    } else {
-        for(size_t row = 0; row<things.size(); row++) {
-            listView->setRowHidden(row, false);
-        }
-        findButton->setEnabled(things.size());
+
+    for(size_t row = 0; row<things.size(); row++) {
+        listView->setRowHidden(row, false);
     }
+
+    findButton->setEnabled(things.size());
 }
 
-void FindOutlineByNameDialog::show(vector<Thing*>& outlines, vector<string>* customizedNames)
+void FindOutlineByTagDialog::show(vector<Thing*>& outlines, vector<string>* customizedNames)
 {
     choice = nullptr;
     things.clear();
@@ -156,12 +114,11 @@ void FindOutlineByNameDialog::show(vector<Thing*>& outlines, vector<string>* cus
     }
 
     findButton->setEnabled(things.size());
-    lineEdit->clear();
-    lineEdit->setFocus();
+    // TODO set focus to tags
     QDialog::show();
 }
 
-void FindOutlineByNameDialog::handleReturn()
+void FindOutlineByTagDialog::handleReturn()
 {
     if(findButton->isEnabled()) {
         for(size_t row = 0; row<things.size(); row++) {
@@ -176,7 +133,7 @@ void FindOutlineByNameDialog::handleReturn()
     }
 }
 
-void FindOutlineByNameDialog::handleChoice()
+void FindOutlineByTagDialog::handleChoice()
 {
     if(listView->currentIndex().isValid()) {
         choice = things[listView->currentIndex().row()];

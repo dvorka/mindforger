@@ -49,6 +49,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     ftsDialog = new FtsDialog{&view};
     findOutlineByNameDialog = new FindOutlineByNameDialog{&view};
     findNoteByNameDialog = new FindNoteByNameDialog{&view};
+    findOutlineByTagDialog = new FindOutlineByTagDialog{mind->remind().getOntology(), &view};
+    //findNoteByTagDialog = new FindNoteByTagDialog{&view};
     refactorNoteToOutlineDialog = new RefactorNoteToOutlineDialog{&view};
 
     // wire signals
@@ -74,6 +76,8 @@ MainWindowPresenter::~MainWindowPresenter()
     if(ftsDialog) delete ftsDialog;
     if(findOutlineByNameDialog) delete findOutlineByNameDialog;
     if(findNoteByNameDialog) delete findNoteByNameDialog;
+    if(findOutlineByTagDialog) delete findOutlineByTagDialog;
+    //if(findNoteByNameDialog) delete findNoteByNameDialog;
 
     // TODO deletes
 }
@@ -265,6 +269,27 @@ void MainWindowPresenter::handleFindOutlineByName()
         statusBar->showInfo(QString(tr("Outline "))+QString::fromStdString(findOutlineByNameDialog->getChoice()->getName()));
     } else {
         statusBar->showInfo(QString(tr("Outline not found")+": ").append(findOutlineByNameDialog->getSearchedString()));
+    }
+}
+
+void MainWindowPresenter::doActionFindOutlineByTag()
+{
+    // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
+    vector<Outline*> os{mind->getOutlines()};
+    mind->remind().sortByName(os);
+    vector<Thing*> es{os.begin(),os.end()};
+
+    findOutlineByTagDialog->show(es);
+}
+
+void MainWindowPresenter::handleFindOutlineByTag()
+{
+    if(findOutlineByTagDialog->getChoice()) {
+        orloj->showFacetOutline((Outline*)findOutlineByTagDialog->getChoice());
+        // IMPROVE make this more efficient
+        statusBar->showInfo(QString(tr("Outline "))+QString::fromStdString(findOutlineByTagDialog->getChoice()->getName()));
+    } else {
+        statusBar->showInfo(QString(tr("Outline not found")));
     }
 }
 

@@ -31,6 +31,7 @@
 #include "dialogs/note_new_dialog.h"
 #include "dialogs/fts_dialog.h"
 #include "dialogs/find_outline_by_name_dialog.h"
+#include "dialogs/find_outline_by_tag_dialog.h"
 #include "dialogs/find_note_by_name_dialog.h"
 #include "dialogs/refactor_note_to_outline_dialog.h"
 #include "dialogs/time_scope_dialog.h"
@@ -80,6 +81,8 @@ private:
     FtsDialog* ftsDialog;
     FindOutlineByNameDialog* findOutlineByNameDialog;
     FindNoteByNameDialog* findNoteByNameDialog;
+    FindOutlineByTagDialog* findOutlineByTagDialog;
+    //FindNoteByNameDialog* findNoteByNameDialog;
     RefactorNoteToOutlineDialog* refactorNoteToOutlineDialog;
 
 public:
@@ -130,7 +133,10 @@ public slots:
     void handleFindOutlineByName();
     void doActionFindNoteByName();
     void handleFindNoteByName();
+    void doActionFindOutlineByTag();
+    void handleFindOutlineByTag();
     void doActionFindNoteByTag();
+
     // view
     void doActionViewOutlines();
     void doActionViewToggleRecent();

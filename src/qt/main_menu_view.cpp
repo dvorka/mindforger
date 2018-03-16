@@ -138,7 +138,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFindOutlineByTag = new QAction(tr("Recall O&utline by Tag"), mainWindow);
     actionFindOutlineByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_U));
     actionFindOutlineByTag->setStatusTip(tr("Find Outline by tag"));
-    actionFindOutlineByTag->setEnabled(false);
 
     actionFindNoteByTag = new QAction(tr("Recall Note by &Tag"), mainWindow);
     actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
