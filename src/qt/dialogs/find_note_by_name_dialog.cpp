@@ -33,6 +33,10 @@ FindNoteByNameDialog::FindNoteByNameDialog(QWidget *parent)
     setWindowTitle(tr("Find Note by Name"));
 }
 
+FindNoteByNameDialog::~FindNoteByNameDialog()
+{
+}
+
 void FindNoteByNameDialog::show(vector<Note*> notes)
 {
     // use parent dialog to handle names + keep shadow vector of (filtered) Notes in here for choice
@@ -58,8 +62,4 @@ void FindNoteByNameDialog::show(vector<Note*> notes)
     FindOutlineByNameDialog::show(es, &noteNames);
 }
 
-FindNoteByNameDialog::~FindNoteByNameDialog()
-{
-}
-
-}
+} // m8r namespace

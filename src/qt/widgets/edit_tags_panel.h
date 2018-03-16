@@ -74,7 +74,7 @@ public:
     QLineEdit* getLineEdit() const { return lineEdit; }
     void clearTagList();
     void refreshOntologyTags();
-    void refresh(const std::vector<const Tag*>& noteTags);
+    void refresh(const std::vector<const Tag*>* noteTags);
     const std::vector<const Tag*>* getTags();
 
 signals:

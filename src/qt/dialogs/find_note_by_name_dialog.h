@@ -24,7 +24,6 @@
 #include <QtWidgets>
 
 #include "../../../lib/src/model/outline.h"
-#include "../../../lib/src/model/note.h"
 
 #include "find_outline_by_name_dialog.h"
 

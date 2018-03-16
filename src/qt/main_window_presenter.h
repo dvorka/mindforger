@@ -33,6 +33,7 @@
 #include "dialogs/find_outline_by_name_dialog.h"
 #include "dialogs/find_outline_by_tag_dialog.h"
 #include "dialogs/find_note_by_name_dialog.h"
+#include "dialogs/find_note_by_tag_dialog.h"
 #include "dialogs/refactor_note_to_outline_dialog.h"
 #include "dialogs/time_scope_dialog.h"
 #include "dialogs/forget_dialog.h"
@@ -82,7 +83,7 @@ private:
     FindOutlineByNameDialog* findOutlineByNameDialog;
     FindNoteByNameDialog* findNoteByNameDialog;
     FindOutlineByTagDialog* findOutlineByTagDialog;
-    //FindNoteByNameDialog* findNoteByNameDialog;
+    FindNoteByTagDialog* findNoteByTagDialog;
     RefactorNoteToOutlineDialog* refactorNoteToOutlineDialog;
 
 public:
@@ -136,6 +137,7 @@ public slots:
     void doActionFindOutlineByTag();
     void handleFindOutlineByTag();
     void doActionFindNoteByTag();
+    void handleFindNoteByTag();
 
     // view
     void doActionViewOutlines();

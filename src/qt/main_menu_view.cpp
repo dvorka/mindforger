@@ -142,7 +142,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFindNoteByTag = new QAction(tr("Recall Note by &Tags"), mainWindow);
     actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
     actionFindNoteByTag->setStatusTip(tr("Find Note by tags"));
-    actionFindNoteByTag->setEnabled(false);
 
     menuFind = qMenuBar->addMenu(tr("&Recall"));
     menuFind->addAction(actionFts);

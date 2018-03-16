@@ -84,15 +84,15 @@ void EditTagsPanel::refreshOntologyTags()
     ((QStringListModel*)completer->model())->setStringList(completerStrings);
 }
 
-void EditTagsPanel::refresh(const vector<const Tag*>& noteTags)
+void EditTagsPanel::refresh(const vector<const Tag*>* noteTags)
 {
     lineEdit->clear();
     clearTagList();
     refreshOntologyTags();
 
     listViewStrings.clear();
-    if(noteTags.size()) {
-        for(const Tag* t:noteTags) {
+    if(noteTags->size()) {
+        for(const Tag* t:*noteTags) {
             if(!stringistring(string("none"), t->getName())) {
                 listViewStrings << QString::fromStdString(t->getName());
             }

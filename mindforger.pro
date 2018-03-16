@@ -138,7 +138,8 @@ HEADERS += ./lib/src/mind/memory_dwell.h \
     lib/src/representations/markdown/markdown_configuration_representation.h \
     lib/src/config/palette.h \
     lib/src/gear/hash_map.h \
-    src/qt/dialogs/find_outline_by_tag_dialog.h
+    src/qt/dialogs/find_outline_by_tag_dialog.h \
+    src/qt/dialogs/find_note_by_tag_dialog.h
 
 SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/mind/memory_dwell.cpp \
@@ -237,7 +238,8 @@ SOURCES += ./lib/src/mind/planner.cpp \
     lib/src/config/time_scope.cpp \
     lib/src/representations/markdown/markdown_configuration_representation.cpp \
     lib/src/config/palette.cpp \
-    src/qt/dialogs/find_outline_by_tag_dialog.cpp
+    src/qt/dialogs/find_outline_by_tag_dialog.cpp \
+    src/qt/dialogs/find_note_by_tag_dialog.cpp
 
 # Development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1

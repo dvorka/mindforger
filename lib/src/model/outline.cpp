@@ -275,9 +275,9 @@ const Tag* Outline::getPrimaryTag() const
     }
 }
 
-const vector<const Tag*>& Outline::getTags() const
+const vector<const Tag*>* Outline::getTags() const
 {
-    return tags;
+    return &tags;
 }
 
 void Outline::setTags(const vector<const Tag*>* tags)

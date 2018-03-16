@@ -50,7 +50,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     findOutlineByNameDialog = new FindOutlineByNameDialog{&view};
     findNoteByNameDialog = new FindNoteByNameDialog{&view};
     findOutlineByTagDialog = new FindOutlineByTagDialog{mind->remind().getOntology(), &view};
-    //findNoteByTagDialog = new FindNoteByTagDialog{&view};
+    findNoteByTagDialog = new FindNoteByTagDialog{mind->remind().getOntology(), &view};
     refactorNoteToOutlineDialog = new RefactorNoteToOutlineDialog{&view};
 
     // wire signals
@@ -62,6 +62,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
     QObject::connect(findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByName()));
     QObject::connect(findOutlineByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByTag()));
+    QObject::connect(findNoteByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByTag()));
     QObject::connect(refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
 
     // let mind think/dream/...
@@ -294,6 +295,42 @@ void MainWindowPresenter::handleFindOutlineByTag()
     }
 }
 
+void MainWindowPresenter::doActionFindNoteByTag()
+{
+    // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
+    if(orloj->isFacetActiveOutlineManagement()) {
+        findNoteByTagDialog->setWindowTitle(tr("Find Note by Tag in Outline"));
+        findNoteByTagDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
+        vector<Note*> allNotes(findNoteByTagDialog->getScope()->getNotes());
+        findNoteByTagDialog->show(allNotes);
+    } else {
+        findNoteByTagDialog->setWindowTitle(tr("Find Note by Tag"));
+        findNoteByTagDialog->clearScope();
+        vector<Note*> allNotes{};
+        mind->getAllNotes(allNotes);
+        findNoteByTagDialog->show(allNotes);
+    }
+}
+
+void MainWindowPresenter::handleFindNoteByTag()
+{
+    if(findNoteByTagDialog->getChoice()) {
+        Note* choice = (Note*)findNoteByTagDialog->getChoice();
+
+        choice->incReads();
+        choice->makeDirty();
+
+        orloj->showFacetOutline(choice->getOutline());
+        orloj->getNoteView()->refresh(choice);
+        orloj->showFacetNoteView();
+        orloj->getOutlineView()->selectRowByNote(choice);
+        // IMPROVE make this more efficient
+        statusBar->showInfo(QString(tr("Note "))+QString::fromStdString(choice->getName()));
+    } else {
+        statusBar->showInfo(QString(tr("Note not found")+": ").append(findNoteByNameDialog->getSearchedString()));
+    }
+}
+
 void MainWindowPresenter::doActionRefactorNoteToOutline()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
@@ -359,11 +396,6 @@ void MainWindowPresenter::handleFindNoteByName()
     } else {
         statusBar->showInfo(QString(tr("Note not found")+": ").append(findNoteByNameDialog->getSearchedString()));
     }
-}
-
-
-void MainWindowPresenter::doActionFindNoteByTag()
-{
 }
 
 void MainWindowPresenter::doActionViewToggleRecent()

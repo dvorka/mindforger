@@ -38,7 +38,7 @@ void timetToQDate(const time_t t, QDate& qdate);
 void qdateToTm(const QDate& qdate, struct tm& t);
 
 // HTML
-void tagsToHtml(const std::vector<const Tag*>& tags, QString& html);
+void tagsToHtml(const std::vector<const Tag*>* tags, QString& html);
 void outlineTypeToHtml(const OutlineType*, QString& html);
 void outlineMetadataToHtml(const Outline*, QString& html);
 void noteTypeToHtml(const NoteType* noteType, QString& html);

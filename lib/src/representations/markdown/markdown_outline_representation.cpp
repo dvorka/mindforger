@@ -296,7 +296,7 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
             char buffer[50];
             md->append(" <!-- Metadata:");
             md->append(" type: "); md->append(outline->getType()->getName()); md->append(";");
-            if(outline->getTags().size()) { md->append(" tags: "); md->append(to(outline->getTags())); md->append(";"); }
+            if(outline->getTags()->size()) { md->append(" tags: "); md->append(to(outline->getTags())); md->append(";"); }
             if(outline->getLinksCount()) { md->append(" links: "); md->append(to(outline->getLinks())); md->append(";"); }
             md->append(" created: "); md->append(datetimeToString(outline->getCreated())); md->append(";");
             sprintf(buffer," reads: %d;",outline->getReads()); md->append(buffer);
@@ -383,11 +383,11 @@ string* MarkdownOutlineRepresentation::to(const Outline* outline, string* md)
 
 }
 
-string MarkdownOutlineRepresentation::to(const vector<const Tag*>& tags)
+string MarkdownOutlineRepresentation::to(const vector<const Tag*>* tags)
 {
     string s;
-    if(tags.size()) {
-        for(const Tag* t:tags) {
+    if(tags->size()) {
+        for(const Tag* t:*tags) {
             s += t->getName();
             s += ",";
         }
@@ -440,7 +440,7 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
         char buffer[50];
         md->append(" <!-- Metadata:");
         md->append(" type: "); md->append(note->getType()->getName()); md->append(";");
-        if(note->getTags().size()) { md->append(" tags: "); md->append(to(note->getTags())); md->append(";"); }
+        if(note->getTags()->size()) { md->append(" tags: "); md->append(to(note->getTags())); md->append(";"); }
         if(note->getLinksCount()) { md->append(" links: "); md->append(to(note->getLinks())); md->append(";"); }
         md->append(" created: "); md->append(datetimeToString(note->getCreated())); md->append(";");
         sprintf(buffer," reads: %d;",note->getReads()); md->append(buffer);

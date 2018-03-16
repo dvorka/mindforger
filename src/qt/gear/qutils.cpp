@@ -59,11 +59,11 @@ void qdateToTm(const QDate& qdate, struct tm& t)
     t.tm_mday = qdate.day();
 }
 
-void tagsToHtml(const vector<const Tag*>& tags, QString& html)
+void tagsToHtml(const vector<const Tag*>* tags, QString& html)
 {
     //text += QString::fromUtf8("&nbsp;&nbsp;<table cellspacing='0' border='0' style='color: #ffffff; background-color: #00cc00; font-weight: normal;'><tr><td>urgent</td></tr></table>");
-    if(!tags.empty()) {
-        for(const Tag* t:tags) {
+    if(!tags->empty()) {
+        for(const Tag* t:*tags) {
             if(!stringistring(string("none"), t->getName())) {
                 html += QString::fromUtf8("&nbsp;&nbsp;<span style='color: #ffffff; background-color: ");
                 html += QString::fromStdString(t->getColor().asHtml());

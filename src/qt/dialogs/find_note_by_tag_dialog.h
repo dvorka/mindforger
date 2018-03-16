@@ -21,19 +21,32 @@
 
 #include <QtWidgets>
 
+#include "../../../lib/src/model/outline.h"
+
+#include "find_outline_by_tag_dialog.h"
+
 namespace m8r {
 
-class FindNoteByTagDialog : public QObject
+class FindNoteByTagDialog : public FindOutlineByTagDialog
 {
     Q_OBJECT
 
+private:
+    Outline* scope;
+
 public:
-    explicit FindNoteByTagDialog(QWidget* parent);
+    explicit FindNoteByTagDialog(Ontology& ontology, QWidget* parent);
     FindNoteByTagDialog(const FindNoteByTagDialog&) = delete;
     FindNoteByTagDialog(const FindNoteByTagDialog&&) = delete;
     FindNoteByTagDialog &operator=(const FindNoteByTagDialog&) = delete;
     FindNoteByTagDialog &operator=(const FindNoteByTagDialog&&) = delete;
     ~FindNoteByTagDialog();
+
+    void clearScope() { scope = nullptr; }
+    void setScope(Outline* o) { scope = o; }
+    Outline* getScope() { return scope; }
+
+    void show(std::vector<Note*>);
 };
 
 }

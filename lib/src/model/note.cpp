@@ -199,9 +199,9 @@ const Tag* Note::getPrimaryTag() const
     }
 }
 
-const vector<const Tag*>& Note::getTags() const
+const vector<const Tag*>* Note::getTags() const
 {
-    return tags;
+    return &tags;
 }
 
 void Note::addTag(const Tag* tag)

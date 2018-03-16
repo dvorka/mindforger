@@ -38,7 +38,6 @@ class FindOutlineByTagDialog : public QDialog
 private:
     Ontology& ontology;
 
-    EditTagsPanel* editTagsGroup;
     QListView* listView;
     QStringList listViewStrings;
     QStringListModel listViewModel;
@@ -48,7 +47,13 @@ private:
     std::vector<Thing*> things;
 
 protected:
-    QLabel* label;
+    enum ThingsMode {
+        OUTLINES,
+        NOTES
+    };
+
+    ThingsMode mode;
+    EditTagsPanel* editTagsGroup;
     QPushButton* findButton;
 
 public:

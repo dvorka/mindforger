@@ -116,7 +116,7 @@ public:
     void incRevision();
     void incReads() { reads++; }
     const Tag* getPrimaryTag() const;
-    const std::vector<const Tag*>& getTags() const;
+    const std::vector<const Tag*>* getTags() const;
     void addTag(const Tag* tag);
     void setTag(const Tag* tag);
     void setTags(const std::vector<const Tag*>* tags);

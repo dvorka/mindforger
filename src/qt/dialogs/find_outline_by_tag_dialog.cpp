@@ -26,6 +26,8 @@ using namespace std;
 FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *parent)
     : QDialog(parent), ontology(ontology)
 {
+    mode = ThingsMode::OUTLINES;
+
     // widgets
     editTagsGroup = new EditTagsPanel{ontology, this};
     editTagsGroup->refreshOntologyTags();
@@ -77,7 +79,6 @@ FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *pare
 
 FindOutlineByTagDialog::~FindOutlineByTagDialog()
 {
-    delete label;
     delete listView;
     delete findButton;
     delete closeButton;
@@ -119,14 +120,21 @@ void FindOutlineByTagDialog::handleTagsChanged()
     if(choosenTags->size()) {
         int visible = 0;
         for(Thing* e:things) {
-            Outline* o = (Outline*)e;
+            const std::vector<const Tag*>* thingTags;
+            if(mode==ThingsMode::OUTLINES) {
+                Outline* o = (Outline*)e;
+                thingTags = o->getTags();
+            } else {
+                Note* n = (Note*)e;
+                thingTags = n->getTags();
+            }
 
             bool hasAllTags=true;
             for(size_t i=0; i<editTagsGroup->getTags()->size(); i++) {
                 if(std::find(
-                    o->getTags().begin(),
-                    o->getTags().end(),
-                    editTagsGroup->getTags()->at(i)) == o->getTags().end())
+                    thingTags->begin(),
+                    thingTags->end(),
+                    editTagsGroup->getTags()->at(i)) == thingTags->end())
                 {
                     hasAllTags=false;
                     break;
