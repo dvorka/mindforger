@@ -31,6 +31,7 @@ Repository::Repository(
     : dir(dir), file(file), type(type), mode(mode), readOnly(readOnly)
 {
     updatePath();
+    flags = 0;
 }
 
 Repository::~Repository()

@@ -63,12 +63,18 @@ public:
     };
 
 private:
+    static constexpr int FLAG_MASK_GITHUB_REPO = 1;
+
+private:
     std::string dir;
     std::string file;
     std::string path;
     RepositoryType type;
     RepositoryMode mode;
     bool readOnly;
+
+    // various format, structure, semantic, ... flags (bit)
+    int flags;
 
 public:
     explicit Repository(
@@ -95,6 +101,9 @@ public:
     RepositoryMode getMode() const { return mode; }
     bool isReadOnly() const { return readOnly; }
     void setReadOnly(bool readOnly) { this->readOnly = readOnly; }
+
+    bool isGithubRepository() const { return flags & FLAG_MASK_GITHUB_REPO; }
+    void setGithubRepository() { flags |= FLAG_MASK_GITHUB_REPO; }
 
 #ifdef DO_M8F_DEBUG
     void print() const {

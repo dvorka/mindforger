@@ -238,7 +238,21 @@ Repository* RepositoryIndexer::getRepositoryForPath(const std::string& path)
             if(isMindForgerRepository(path)) {
                 return new Repository(path);
             } else {
-                return new Repository(path, Repository::RepositoryType::MARKDOWN);
+                Repository* r = new Repository(path, Repository::RepositoryType::MARKDOWN);
+
+                string p{path};
+                p.append(FILE_PATH_SEPARATOR);
+                p.append("README.md");
+                if(isDirectoryOrFileExists(p.c_str())) {
+                    p.assign(path);
+                    p.append(FILE_PATH_SEPARATOR);
+                    p.append(".git");
+                    if(isDirectoryOrFileExists(p.c_str())) {
+                        r->setGithubRepository();
+                    }
+                }
+
+                return r;
             }
         } else {
             string directory, file;

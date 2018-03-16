@@ -171,8 +171,20 @@ void MainWindowPresenter::showInitialView()
 {
     if(mind->getOutlines().size()) {
         if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-            view.getCli()->setBreadcrumbPath("/outlines");
-            orloj->showFacetOutlineList(mind->getOutlines());
+            if(config.getActiveRepository()->isGithubRepository()) {
+                string key{config.getActiveRepository()->getDir()};
+                key.append(FILE_PATH_SEPARATOR);
+                key.append("README.md");
+                Outline* o = mind->remind().getOutline(key);
+                if(o) {
+                    orloj->showFacetOutline(o);
+                } else {
+                    orloj->showFacetOutlineList(mind->getOutlines());
+                }
+            } else {
+                view.getCli()->setBreadcrumbPath("/outlines");
+                orloj->showFacetOutlineList(mind->getOutlines());
+            }
         } else {
             // IMPROVE move this method to breadcrumps
             QString m{"/outlines/"};
