@@ -8,6 +8,7 @@ Big thanks to 3rd party content authors:
 * John Gruber (Markdown - spec)
 * Qt Company (Qt - lib and code)
 * Christian Loose (CuteMarkEd - inspiration and code)
+* David Parsons (Discount - MD rendering - library)
 * Jamie McGowan (Remarkable - inspiration)
 * Mark Summerfield (Advanced Qt Programming book examples - code snippets)
 * Natacha Porte (Upskirt/Sundown/Hoedown - code)

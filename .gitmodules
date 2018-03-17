@@ -1,0 +1,7 @@
+[submodule "3rdparty/discount"]
+	path = 3rd-party/discount
+	url = https://github.com/dvorka/discount.git
+[submodule "doc"]
+	path = doc
+	url = https://github.com/dvorka/mindforger-repository.git
+
