@@ -28,6 +28,9 @@ CliAndBreadcrumbsPresenter::CliAndBreadcrumbsPresenter(
         Mind* mind)
     : mainPresenter(mainPresenter), view(view), mind(mind)
 {
+    // widgets
+    view->setVisible(Configuration::getInstance().isUiShowBreadcrump());
+
     // wire signals
     QObject::connect(
         view->cli, SIGNAL(returnPressed()),

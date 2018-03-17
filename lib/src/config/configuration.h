@@ -212,6 +212,7 @@ public:
     void setUiEditorEnableSyntaxHighlighting(bool enable) { uiEditorEnableSyntaxHighlighting = enable; }
     bool isUiShowNotebookEditButton() const { return uiShowNotebookEditButton; }
     void setUiShowNotebookEditButton(bool show) { uiShowNotebookEditButton = show; }
+    bool isUiShowBreadcrump() const { return uiShowBreadcrump; }
 };
 
 } // namespace

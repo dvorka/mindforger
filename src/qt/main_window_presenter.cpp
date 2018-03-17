@@ -843,6 +843,16 @@ void MainWindowPresenter::handleMindForgetting()
 
 void MainWindowPresenter::doActionHelpDocumentation()
 {
+    // Open MD w/ documentation
+
+    /* Keyboard shortcuts:
+     *
+     * Editor shortcuts:
+     *
+     * Ctrl+g ... exit editor without saving
+     * Ctrl+s
+     * Alt+LeftArrow ... save and exit editor
+     */
 }
 
 void MainWindowPresenter::doActionHelpWeb()

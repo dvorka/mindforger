@@ -40,6 +40,9 @@ OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
         QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Left)),
         this, SLOT(slotSaveAndCloseEditor()));
     new QShortcut(
+        QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_G)),
+        this, SLOT(slotCloseEditor()));
+    new QShortcut(
         QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Return)),
         this, SLOT(slotOpenOutlineHeaderPropertiesEditor()));
     new QShortcut(
