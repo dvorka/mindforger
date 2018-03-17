@@ -47,9 +47,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     submenuMindRelearn->setStatusTip(tr("Relearn recently opened MindForger repositories, Markdown repositories or files"));
     submenuMindRelearn->setEnabled(false);
 
-    // remember... by flushing caches and saving unsaved notes
+    // remember... by flushing caches, saving unsaved Ns, saving Os/Ns with changed read metadata, ...
     actionMindRemember = new QAction(tr("Re&member"), mainWindow);
-    actionMindRemember->setStatusTip(tr("Remember notes by ensuring memory persistence"));
+    actionMindRemember->setStatusTip(tr("Remember Things by ensuring Memory persistence"));
     actionMindRemember->setEnabled(false);
 
     // remind ... smart mind search using FTS/associations/similarity

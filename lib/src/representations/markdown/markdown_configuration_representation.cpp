@@ -211,7 +211,6 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          endl <<
 
          "# " << CONFIG_SECTION_REPOSITORIES << endl <<
-         endl <<
          "If MindForger detects MindForger repository structure, then the directory is" << endl <<
          "threated as knowledge base, else it's used as a Markdown directory (e.g. metadata"  << endl <<
          "are not stored to Markdown files)." << endl <<
