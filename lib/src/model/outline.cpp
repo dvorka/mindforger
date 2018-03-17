@@ -465,7 +465,7 @@ Note* Outline::cloneNote(const Note* clonedNote)
         newNote = new Note(*clonedNote);
         resetClonedNote(newNote);
         addNote(newNote, offset);
-        newNote->makeModified();
+        newNote->getOutline()->makeModified();
 
         return newNote;
     } else {
