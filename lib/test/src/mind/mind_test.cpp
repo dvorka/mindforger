@@ -47,9 +47,9 @@ void dumpOutline(m8r::Outline*& outline)
             << (outline->getPrimaryTag() ?
                     outline->getPrimaryTag()->getName() : "NULL")
             << " (primary tag)";
-    if (outline->getTags().size()) {
-        for (size_t t = 0; t < outline->getTags().size(); t++) {
-            cout << endl << "    " << outline->getTags()[t]->getName() << " (tag)";
+    if (outline->getTags()->size()) {
+        for (size_t t = 0; t < outline->getTags()->size(); t++) {
+            cout << endl << "    " << (*outline->getTags())[t]->getName() << " (tag)";
         }
     }
     cout << endl << "  "
@@ -93,9 +93,9 @@ void dumpOutline(m8r::Outline*& outline)
                     << (note->getPrimaryTag() ?
                             note->getPrimaryTag()->getName() : "NULL")
                     << " (primary tag)";
-            if (note->getTags().size()) {
-                for (size_t t = 0; t < note->getTags().size(); t++) {
-                    cout << endl << "      " << note->getTags()[t]->getName()
+            if (note->getTags()->size()) {
+                for (size_t t = 0; t < note->getTags()->size(); t++) {
+                    cout << endl << "      " << (*note->getTags())[t]->getName()
                             << " (tag)";
                 }
             }

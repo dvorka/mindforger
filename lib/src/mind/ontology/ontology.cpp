@@ -30,7 +30,8 @@ string Ontology::KEY_TAXONOMY_TAGS = string("Tags");
 
 Ontology::Ontology(const Configuration& configuration)
     : config(configuration),
-      thing(KEY_THING, Clazz::ROOT_CLASS)
+      thing(KEY_THING, Clazz::ROOT_CLASS),
+      colorPalette{}
 {
     // color palette
     colorPalette.findOrCreate(0xE2,0x7D,0x60);

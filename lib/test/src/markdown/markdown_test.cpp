@@ -405,9 +405,9 @@ TEST(MarkdownParserTestCase, MarkdownRepresentation)
         cout << endl << "    '" << note->getName() << "' (name)";
         cout << endl << "    '" << note->getDepth() << "' (depth)";
         cout << endl << "    " << (note->getPrimaryTag()?note->getPrimaryTag()->getName():"NULL") << " (primary tag)";
-        if(note->getTags().size()) {
-            for(size_t t=0; t<note->getTags().size(); t++) {
-                cout << endl << "      " << note->getTags()[t]->getName() << " (tag)";
+        if(note->getTags()->size()) {
+            for(size_t t=0; t<note->getTags()->size(); t++) {
+                cout << endl << "      " << (*note->getTags())[t]->getName() << " (tag)";
             }
         }
         cout << endl << "    " << (note->getType()?note->getType()->getName():"NULL") << " (type)";
