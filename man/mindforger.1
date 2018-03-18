@@ -1,43 +1,55 @@
 .TH MindForger 1
 .SH NAME
-\fBmindforger\fR \-  easily view, navigate and manage your notes and knowledge.
+\fBmindforger\fR \-  easily view, navigate and manage your knowledge or Markdown notes.
 .SH SYNOPSIS
-.B mindforger [options] [<command>] [<args>]
+.B mindforger [options] [<directory>|<file>]
 .SH DESCRIPTION
 .B MindForger
 is a personal thinking notebook.
 
-Where do you keep your private remarks like ideas, personal plans, gift tips, howtos, dreams, master thesis, research remarks, business vision, finance strategy or auto coaching notes? Loads of documents, sketches and remarks spread around the file system, web and Post-it notes? Are you able to find then once you create them? Do you know how they are mutually related when you read or write them? No?
+MindForger is definitive human mind inspired
+.B knowledge management tool
+which aims to connect the tradition of outline editors with emerging technologies. Its mission is to help you in organization of your knowledge and associated local, web and real world resources in a way that enables quick navigation, concise representation, automatic interconnections, associative completion and inferencing.
 
-MindForger is definitive human mind inspired knowledge management tool which aims to connect the tradition of outline editors with emerging technologies. Its mission is to help you in organization of your knowledge and associated local, web and real world resources in a way that enables quick navigation, concise representation, automatic interconnections, associative completion and inferencing.
+MindForger can be also used as
+.B Markdown IDE/editor
+as it uses Markdown shorthand.
 
 .SH OPTIONS
 .TP 
+\fB-r --theme <theme>\fR
+Use specified GUI <theme> like light, dark or black.
+.TP
 \fB-h --help\fR
 Show help
 .TP 
 \fB-v --version\fR
 Show version information
-.TP 
-\fB-r --repository <repo-dir>\fR
-Load given MindForger or Markdown repository from directory <repo-dir>.
-.TP 
-\fB-r --theme <theme>\fR
-Use specified GUI <theme> like yin, yang or black. 
 
 .SH ENVIRONMENT VARIABLES
 \fBMindForger\fR defines the following environment variables:
 .TP
 \fBMINDFORGER_REPOSITORY\fR
-	If no repository is found in the default directory, then it's loaded from directory specified by this environment variable. It's might be overriden by \fB--repository\fr option.
+	If no repository is found in the default directory, then it's loaded from directory specified by this environment variable. This environment variable is overriden by directory/file specified as program argument.
 
 .SH FILES AND DIRECTORIES
 .TP
-\fB~/.mindforger\fR 
- MindForger configuration file.
+\fB~/.mindforger.md\fR
+MindForger configuration file.
 .TP
 \fB~/mindforger-repository\fR 
- Directory where MindForger expects to find a default repository first.
+Directory where MindForger expects to find a default repository first.
+
+.SH EXAMPLES
+.TP
+\fBmindforger --theme dark\fR
+Open configured/default knowledge repository and use `dark` UI theme.
+.TP
+\fBmindforger ./ideas.md\fR
+Open `ideas.md` Markdown formatted file.
+.TP
+\fBmindforger --theme light ./a-github-project-directory\fR
+Find all Markdown formatted files in `a-github-project-directory` for search/browse/edit and use `light` UI theme.
 
 .SH AUTHOR
 Written by Martin Dvorak <martin.dvorak@mindforger.com>
