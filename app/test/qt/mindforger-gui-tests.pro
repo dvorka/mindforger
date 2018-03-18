@@ -15,6 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+
+
+>>> TO BE REWRITTEN AFTER BUILD MODULARIZATION <<<
+
+
+
 TARGET = mindforger-gui-tests
 
 TEMPLATE = app

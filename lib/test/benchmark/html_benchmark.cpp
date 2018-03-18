@@ -33,7 +33,8 @@ using namespace std;
 
 extern char* getMindforgerGitHomePath();
 
-TEST(HtmlTestCase, Outline)
+// 2018/03/18 110MiB (100x1.1MiB) MDs 2 HTML converted in 2496.91ms ~ AVG: 2.49691ms
+TEST(HtmlBenchmark, DISABLED_Outline)
 {    
     string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
     fileName.insert(0, getMindforgerGitHomePath());
@@ -48,32 +49,18 @@ TEST(HtmlTestCase, Outline)
     ASSERT_GE(mind.remind().getOutlinesCount(), 1);
 
     // MD: 1.1MiB
-    string markdown{};
-    markdownRepresentation.to(mind.remind().getOutlines()[0], &markdown);
-    cout << "Markdown " << markdown.size() << "B" << endl;
+    string outlineAsMarkdown{};
+    markdownRepresentation.to(mind.remind().getOutlines()[0], &outlineAsMarkdown);
+    cout << "Markdown " << outlineAsMarkdown.size() << "B" << endl;
 
-    string html{};
-    htmlRepresentation.to(&markdown, &html);
-
-    cout << "= BEGIN HTML =" << endl << html << endl << "= END HTML =" << endl;
-}
-
-TEST(HtmlTestCase, Note)
-{
-    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
-    fileName.insert(0, getMindforgerGitHomePath());
-
-    m8r::Configuration& config = m8r::Configuration::getInstance();
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
-    m8r::Mind mind(config);
-    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology()};
-    m8r::MarkdownOutlineRepresentation markdownRepresentation(mind.remind().getOntology());
-    mind.think();
-
-    ASSERT_GE(mind.remind().getOutlinesCount(), 1);
-
-    string html{};
-    htmlRepresentation.to(mind.remind().getOutlines()[0]->getNotes()[0], &html);
-
-    cout << "= BEGIN HTML =" << endl << html << endl << "= END HTML =" << endl;
+    // do >1 iterations
+    const int ITERATIONS = 100;
+    auto begin = chrono::high_resolution_clock::now();
+    for(int i=0; i<ITERATIONS; i++) {
+        string html{};
+        htmlRepresentation.to(&outlineAsMarkdown, &html);
+    }
+    auto end = chrono::high_resolution_clock::now();
+    MF_DEBUG("\n" << (ITERATIONS*1.1) << "MiB (" << ITERATIONS << "x1.1MiB) MDs 2 HTML converted in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
+    MF_DEBUG(" ~ AVG: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms\n");
 }
