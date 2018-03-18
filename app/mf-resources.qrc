@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="minforger-icon.png">src/qt/images/mindforger-icon.png</file>
+    </qresource>
+    <qresource prefix="/translations">
+        <file alias="mindforger_cs_CZ.qm">src/qt/translations/mindforger_cs.qm</file>
+        <file alias="mindforger_en_US.qm">src/qt/translations/mindforger_en.qm</file>
+    </qresource>
+</RCC>
