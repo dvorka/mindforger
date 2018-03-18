@@ -23,7 +23,7 @@
 
 #include <QtWidgets>
 
-#include "../../../lib/src/mind/ontology/thing_class_rel_triple.h"
+#include "../../lib/src/mind/ontology/thing_class_rel_triple.h"
 
 namespace m8r {
 

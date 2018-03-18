@@ -21,8 +21,8 @@
 
 #include <QtWidgets>
 
-#include "../../../lib/src/mind/ontology/ontology_vocabulary.h"
-#include "../../../lib/src/mind/ontology/ontology.h"
+#include "../../lib/src/mind/ontology/ontology_vocabulary.h"
+#include "../../lib/src/mind/ontology/ontology.h"
 
 #include "../model_meta_definitions.h"
 #include "../widgets/edit_tags_panel.h"

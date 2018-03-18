@@ -21,7 +21,7 @@
 
 #include <QtWidgets>
 
-#include "../../../lib/src/model/outline.h"
+#include "../../lib/src/model/outline.h"
 
 namespace m8r {
 

@@ -23,9 +23,9 @@
 
 #include <QtWidgets>
 
-#include "../../../lib/src/mind/ontology/thing_class_rel_triple.h"
-#include "../../../lib/src/mind/ontology/ontology.h"
-#include "../../../lib/src/model/outline.h"
+#include "../../lib/src/mind/ontology/thing_class_rel_triple.h"
+#include "../../lib/src/mind/ontology/ontology.h"
+#include "../../lib/src/model/outline.h"
 
 #include "../widgets/edit_tags_panel.h"
 

@@ -21,9 +21,9 @@
 
 #include <QtWidgets>
 
-#include "../../../lib/src/mind/ontology/ontology.h"
-#include "../../../lib/src/model/stencil.h"
-#include "../../../lib/src/gear/string_utils.h"
+#include "../../lib/src/mind/ontology/ontology.h"
+#include "../../lib/src/model/stencil.h"
+#include "../../lib/src/gear/string_utils.h"
 
 #include "../model_meta_definitions.h"
 #include "../widgets/edit_tags_panel.h"
