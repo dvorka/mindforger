@@ -1,3 +1,8 @@
+Makefile
+*.o
+*.a
+*.*~
+moc_*.cpp
 /Debug/
 /Release/
 /CLI/

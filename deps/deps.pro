@@ -1,4 +1,4 @@
-# mindforger.pro     Qt project file for MindForger
+# mindforger-deps.pro     Qt project file for MindForger
 #
 # Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 #
@@ -50,10 +50,6 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS = deps lib app
-
-# build dependencies
-lib.depends = deps
-app.depends = lib
+SUBDIRS = discount
 
 # eof

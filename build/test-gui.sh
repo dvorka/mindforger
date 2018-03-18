@@ -26,7 +26,7 @@
 export OPTION_TESTS="open-exit.sikuli"
 export OPTION_TEST=open-exit.sikuli 
 
-export M8R_TEST_APP_DIR="`pwd`/../test/qt"
+export M8R_TEST_APP_DIR="`pwd`/../app/test/qt"
 export M8R_TEST_REPOSITORY="${HOME}/tmp/small-repository"
 
 # environment - to be specified in .bashrc or elsewhere:
