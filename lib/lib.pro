@@ -54,7 +54,6 @@ SOURCES += \
     ./src/mind/planner.cpp \
     ./src/mind/working_memory.cpp \
     ./src/config/configuration.cpp \
-    ./src/representations/markdown/markdown.cpp \
     ./src/install/installer.cpp \
     ./src/config/repository.cpp \
     ./src/mind/ontology/thing_class_rel_triple.cpp \
@@ -62,7 +61,9 @@ SOURCES += \
     ./src/representations/markdown/markdown_configuration_representation.cpp \
     ./src/config/time_scope.cpp \
     ./src/model/link.cpp \
-    ./src/config/palette.cpp
+    ./src/config/palette.cpp \
+    src/representations/markdown/markdown_document.cpp \
+    src/representations/html/html_document.cpp
 
 HEADERS += \
     ./src/debug.h \
@@ -121,4 +122,6 @@ HEADERS += \
     ./src/representations/markdown/markdown_configuration_representation.h \
     ./src/config/time_scope.h \
     ./src/model/link.h \
-    ./src/config/palette.h
+    ./src/config/palette.h \
+    src/representations/markdown/markdown_document.h \
+    src/representations/html/html_document.h

@@ -58,15 +58,15 @@ void Memory::learn()
         MF_DEBUG(endl << "Markdown files:");
         for(const string* markdownFile:repositoryIndexer.getMarkdownFiles()) {
             Outline* outline = representation.outline(File(*markdownFile));
-            MF_DEBUG(endl << "  '" << *markdownFile << "' format " << (outline->getFormat()==Markdown::Format::MINDFORGER?"MF":"MD"));
+            MF_DEBUG(endl << "  '" << *markdownFile << "' format " << (outline->getFormat()==MarkdownDocument::Format::MINDFORGER?"MF":"MD"));
 
             // fix O type according to repository type
             switch(config.getActiveRepository()->getType()) {
             case Repository::RepositoryType::MINDFORGER:
-                outline->setFormat(Markdown::Format::MINDFORGER);
+                outline->setFormat(MarkdownDocument::Format::MINDFORGER);
                 break;
             case Repository::RepositoryType::MARKDOWN:
-                outline->setFormat(Markdown::Format::MARKDOWN);
+                outline->setFormat(MarkdownDocument::Format::MARKDOWN);
                 break;
             }
 
@@ -102,11 +102,11 @@ void Memory::learn()
         if(repositoryIndexer.getMarkdownFiles().size() == 1) {
             const string* markdownFile = *repositoryIndexer.getMarkdownFiles().begin();
             Outline* outline = representation.outline(File(*markdownFile));
-            MF_DEBUG(endl << "  '" << *markdownFile << "' format " << (outline->getFormat()==Markdown::Format::MINDFORGER?"MF":"MD"));
+            MF_DEBUG(endl << "  '" << *markdownFile << "' format " << (outline->getFormat()==MarkdownDocument::Format::MINDFORGER?"MF":"MD"));
 
             // MD file format determines repository type
             repositoryIndexer.getRepository()->setMode(Repository::RepositoryMode::FILE);
-            if(outline->getFormat() == Markdown::Format::MINDFORGER) {
+            if(outline->getFormat() == MarkdownDocument::Format::MINDFORGER) {
                 repositoryIndexer.getRepository()->setType(Repository::RepositoryType::MINDFORGER);
             } else {
                 repositoryIndexer.getRepository()->setType(Repository::RepositoryType::MARKDOWN);
@@ -191,9 +191,9 @@ void Memory::remember(const std::string& outlineKey)
 void Memory::remember(Outline* outline)
 {
     if(config.getActiveRepository()->getType() == Repository::RepositoryType::MINDFORGER) {
-        outline->setFormat(Markdown::Format::MINDFORGER);
+        outline->setFormat(MarkdownDocument::Format::MINDFORGER);
     } else {
-        outline->setFormat(Markdown::Format::MARKDOWN);
+        outline->setFormat(MarkdownDocument::Format::MARKDOWN);
     }
 
     outline->checkAndFixProperties();

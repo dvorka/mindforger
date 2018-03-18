@@ -36,10 +36,24 @@ constexpr const auto MF_HTML_TAIL =
    " </body>"
    "</html>";
 
+/**
+ * @brief HTML Outline representation.
+ *
+ * Discount-based HTML Outline representation.
+ */
 class HtmlOutlineRepresentation
 {
 private:
+    Configuration& config;
     MarkdownOutlineRepresentation markdownRepresentation;
+
+    /**
+     * @brief Last MindForger MD 2 HTML options.
+     *
+     * If MF options don't change, then Discount options doesn't have to be recalculated.
+     */
+    unsigned int lastMfOptions;
+    unsigned int discountOptions;
 
 public:
     explicit HtmlOutlineRepresentation(Ontology& ontology);
@@ -49,9 +63,11 @@ public:
     HtmlOutlineRepresentation &operator=(const HtmlOutlineRepresentation&&) = delete;
     virtual ~HtmlOutlineRepresentation();
 
-    std::string* to(const Outline* outline);
-    std::string* toHeader(const Outline* outline);
-    std::string* to(const Note* note);
+    std::string* to(const std::string* markdown, std::string* html);
+
+    std::string* to(const Outline* outline, std::string* html);
+    std::string* toHeader(const Outline* outline, std::string* html);
+    std::string* to(const Note* note, std::string* html);
 };
 
 } // m8r namespace

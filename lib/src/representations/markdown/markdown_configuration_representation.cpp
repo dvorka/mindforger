@@ -237,7 +237,7 @@ bool MarkdownConfigurationRepresentation::load(Configuration& c)
     MF_DEBUG("Loading configuration from " << c.getConfigFilePath() << endl);
     string file{c.getConfigFilePath().c_str()};
     if(isFile(file.c_str())) {
-        Markdown md{&file};
+        MarkdownDocument md{&file};
         md.from();
         vector<MarkdownAstNodeSection*>* ast = md.moveAst();
         configuration(ast, c);

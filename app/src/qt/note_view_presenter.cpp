@@ -25,7 +25,10 @@ using namespace std;
 namespace m8r {
 
 NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
+    : qHtml{} // IMPROVE stack overflow?
 {
+    this->html = new string{};
+
     this->view = view;
     this->orloj = orloj;
     this->model = new NoteViewModel();
@@ -43,32 +46,39 @@ NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
 
 }
 
-// HINT when HTML will be here: first decorate MD with HTML colors > then MD to HTML conversion
+// IMPROVE first decorate MD with HTML colors > then MD to HTML conversion
 void NoteViewPresenter::refresh(Note* note)
 {
     note->incReads();
-
     this->currentNote = note;
 
-    // IMPROVE NPE
-    QString noteHtml = QString::fromStdString(*htmlRepresentation->to(note));
-
-    // TODO HtmlBuilderClass
-    QString html("<html><body style='color: ");
-    html += LookAndFeels::getInstance().getTextColor();
-    html += QString::fromUtf8("'><pre>");
-
+    // FTS or HTML
     if(!searchExpression.isEmpty()) {
+        // TODO HtmlBuilderClass
+        // header
+        qHtml = QString::fromUtf8("<html><body style='color: ");
+        qHtml += LookAndFeels::getInstance().getTextColor();
+        qHtml += QString::fromUtf8("'><pre>");
+
+        // note
+        markdownRepresentation->to(note, html);
+        qHtml += QString::fromStdString(*html);
+
+        // highlight
         QString highlighted = QString::fromStdString("<span style='background-color: red; color: white;'>");
         // IMPROVE instead of searched expression that MAY differ in CASE, here should be original string found in the haystack
         highlighted += searchExpression;
         highlighted += QString::fromStdString("</span>");
-        noteHtml.replace(searchExpression, highlighted, searchIgnoreCase?Qt::CaseInsensitive:Qt::CaseSensitive);
-    }
-    html += noteHtml;
-    html += QString::fromStdString("</pre></body></html>");
+        qHtml.replace(searchExpression, highlighted, searchIgnoreCase?Qt::CaseInsensitive:Qt::CaseSensitive);
 
-    view->setHtml(html);
+        // footer
+        qHtml += QString::fromStdString("</pre></body></html>");
+    } else {
+        htmlRepresentation->to(note, html);
+        qHtml= QString::fromStdString(*html);
+    }
+
+    view->setHtml(qHtml);
 }
 
 void NoteViewPresenter::slotEditNote()

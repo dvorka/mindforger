@@ -24,7 +24,7 @@
 #include <iostream>
 
 #include "../../config/configuration.h"
-#include "markdown.h"
+#include "markdown_document.h"
 #include "markdown_ast_node.h"
 
 namespace m8r {

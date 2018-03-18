@@ -22,7 +22,7 @@
 #include <string>
 #include <cstdio>
 
-#include "markdown.h"
+#include "markdown_document.h"
 #include "markdown_ast_node.h"
 #include "../../model/outline.h"
 #include "../../mind/ontology/ontology.h"

@@ -27,7 +27,7 @@
 #include "../mind/ontology/ontology.h"
 #include "../config/configuration.h"
 #include "../repository_indexer.h"
-#include "../representations/markdown/markdown.h"
+#include "../representations/markdown/markdown_document.h"
 #include "../representations/markdown/markdown_outline_representation.h"
 #include "../model/outline.h"
 #include "../model/note.h"

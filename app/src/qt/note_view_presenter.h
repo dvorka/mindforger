@@ -38,6 +38,9 @@ class NoteViewPresenter : public QObject
     Q_OBJECT
 
 private:
+    std::string* html;
+    QString qHtml;
+
     OrlojPresenter* orloj;
 
     NoteView* view;

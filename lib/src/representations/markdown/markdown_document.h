@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef M8R_MARKDOWN_H_
-#define M8R_MARKDOWN_H_
+#ifndef M8R_MARKDOWN_DOCUMENT_H_
+#define M8R_MARKDOWN_DOCUMENT_H_
 
 #include <cstring>
 #include <cstdlib>
@@ -42,7 +42,7 @@ class MarkdownAstNodeSection;
  * Represents Markdown file (name, sections, paragraphs, bullet lists, etc.)
  * that has no notion of MindForger data model (outlines, notes, ...).
  */
-class Markdown
+class MarkdownDocument
 {
 public:
     /**
@@ -69,13 +69,13 @@ private:
     std::vector<MarkdownAstNodeSection*>* ast;
 
 public:
-    explicit Markdown(const std::string* filePath);
-    Markdown() = delete;
-    Markdown(const Markdown &) = delete;
-    Markdown(const Markdown &&) = delete;
-    Markdown &operator=(const Markdown &) = delete;
-    Markdown &operator=(const Markdown &&) = delete;
-    virtual ~Markdown();
+    explicit MarkdownDocument(const std::string* filePath);
+    MarkdownDocument() = delete;
+    MarkdownDocument(const MarkdownDocument &) = delete;
+    MarkdownDocument(const MarkdownDocument &&) = delete;
+    MarkdownDocument &operator=(const MarkdownDocument &) = delete;
+    MarkdownDocument &operator=(const MarkdownDocument &&) = delete;
+    virtual ~MarkdownDocument();
 
     void from();
     void from(const std::string* text);
@@ -107,4 +107,4 @@ private:
 
 } // m8r namespace
 
-#endif /* M8R_MARKDOWN_H_ */
+#endif /* M8R_MARKDOWN_DOCUMENT_H_ */

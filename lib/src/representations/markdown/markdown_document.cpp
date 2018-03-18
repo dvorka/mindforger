@@ -16,13 +16,13 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "markdown.h"
+#include "markdown_document.h"
 
 using namespace std;
 
 namespace m8r {
 
-Markdown::Markdown(const std::string* filePath)
+MarkdownDocument::MarkdownDocument(const std::string* filePath)
 {
     this->filePath = filePath;
     this->fileSize = 0;
@@ -31,7 +31,7 @@ Markdown::Markdown(const std::string* filePath)
     this->format = Format::MINDFORGER;
 }
 
-void Markdown::clear()
+void MarkdownDocument::clear()
 {
     this->fileSize = 0;
     this->modified = 0;
@@ -43,7 +43,7 @@ void Markdown::clear()
     this->format = Format::MINDFORGER;
 }
 
-void Markdown::from()
+void MarkdownDocument::from()
 {
     clear();
     modified = fileModificationTime(filePath);
@@ -62,7 +62,7 @@ void Markdown::from()
     } // else: empty file/no lexems
 }
 
-void Markdown::from(const std::string* text)
+void MarkdownDocument::from(const std::string* text)
 {
     clear();
     modified = datetimeNow();
@@ -80,7 +80,7 @@ void Markdown::from(const std::string* text)
     } // else: empty file/no lexems
 }
 
-void Markdown::from(const std::vector<MarkdownAstNodeSection*>* ast)
+void MarkdownDocument::from(const std::vector<MarkdownAstNodeSection*>* ast)
 {
     if(ast!=nullptr && ast->size()) {
         if(ast->at(0)->getText()!=nullptr) {
@@ -89,17 +89,17 @@ void Markdown::from(const std::vector<MarkdownAstNodeSection*>* ast)
     }
 }
 
-const std::string* Markdown::getFilePath() const
+const std::string* MarkdownDocument::getFilePath() const
 {
     return filePath;
 }
 
-unsigned Markdown::getFileSize() const
+unsigned MarkdownDocument::getFileSize() const
 {
     return fileSize;
 }
 
-Markdown::~Markdown()
+MarkdownDocument::~MarkdownDocument()
 {
     if(ast) {
         for(MarkdownAstNodeSection*& node:*ast) {

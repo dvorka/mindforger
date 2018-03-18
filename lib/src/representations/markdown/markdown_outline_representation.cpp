@@ -99,7 +99,7 @@ Note* MarkdownOutlineRepresentation::note(vector<MarkdownAstNodeSection*>* ast, 
 
 Outline* MarkdownOutlineRepresentation::outline(const File& file)
 {
-    Markdown md{&file.name};
+    MarkdownDocument md{&file.name};
     md.from();
     vector<MarkdownAstNodeSection*>* ast = md.moveAst();
 
@@ -216,7 +216,7 @@ Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>*
 
 Outline* MarkdownOutlineRepresentation::header(const std::string *mdString)
 {
-    Markdown md{nullptr};
+    MarkdownDocument md{nullptr};
     md.from(mdString);
     vector<MarkdownAstNodeSection*>* ast = md.moveAst();
 
@@ -225,7 +225,7 @@ Outline* MarkdownOutlineRepresentation::header(const std::string *mdString)
 
 Note* MarkdownOutlineRepresentation::note(const string *text)
 {
-    Markdown md{nullptr};
+    MarkdownDocument md{nullptr};
     md.from(text);
     vector<MarkdownAstNodeSection*>* ast = md.moveAst();
 
@@ -292,7 +292,7 @@ void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
         }
 
         // IMPROVE c++11: std::to_string(int)
-        if(outline->getFormat() == Markdown::Format::MINDFORGER) {
+        if(outline->getFormat() == MarkdownDocument::Format::MINDFORGER) {
             char buffer[50];
             md->append(" <!-- Metadata:");
             md->append(" type: "); md->append(outline->getType()->getName()); md->append(";");
@@ -373,7 +373,7 @@ string* MarkdownOutlineRepresentation::to(const Outline* outline, string* md)
         if(notes.size()) {
             string noteMd{};
             for(Note *note:notes) {
-                to(note, &noteMd, outline->getFormat()==Markdown::Format::MINDFORGER);
+                to(note, &noteMd, outline->getFormat()==MarkdownDocument::Format::MINDFORGER);
                 md->append(noteMd);
                 noteMd.clear();
             }

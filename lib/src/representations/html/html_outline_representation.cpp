@@ -18,38 +18,81 @@
  */
 #include "html_outline_representation.h"
 
+extern "C" {
+#include <mkdio.h>
+}
+
 using namespace std;
 
 namespace m8r {
 
 HtmlOutlineRepresentation::HtmlOutlineRepresentation(Ontology& ontology)
-    : markdownRepresentation(ontology)
+    : config(Configuration::getInstance()), markdownRepresentation(ontology)
 {
+    lastMfOptions = discountOptions = 0;
 }
 
 HtmlOutlineRepresentation::~HtmlOutlineRepresentation()
 {
 }
 
-string* HtmlOutlineRepresentation::to(const Outline* outline)
+std::string* HtmlOutlineRepresentation::to(const std::string* markdown, std::string* html)
 {
-    string* markdown = markdownRepresentation.to(outline);
-    // TODO use hoedown to render MD to HTML
-    return markdown;
+
+    MMIOT* doc = nullptr;
+    if(markdown->size() > 0) {
+        // ensure MD ends with new line, otherwise there would be missing characters in output HTML
+        if(markdown->at(markdown->size()-1) != '\n') {
+            markdown += '\n';
+        }
+
+        // options
+        unsigned int mfOptions = config.getMd2HtmlOptions();
+        if(mfOptions!=lastMfOptions) {
+            lastMfOptions = mfOptions;
+            discountOptions
+                = MKD_TOC
+                    | MKD_NOSTYLE
+                    | (mfOptions&Configuration::MdToHtmlOption::AutolinkOption?MKD_AUTOLINK:0)
+                    | (mfOptions&Configuration::MdToHtmlOption::NoStrikethroughOption?MKD_NOSTRIKETHROUGH:0)
+                    | (mfOptions&Configuration::MdToHtmlOption::NoAlphaListOption?MKD_NOALPHALIST:0)
+                    | (mfOptions&Configuration::MdToHtmlOption::NoDefinitionListOption?MKD_NODLIST:0)
+                    | (mfOptions&Configuration::MdToHtmlOption::NoSmartypantsOption?MKD_NOPANTS:0)
+                    | (mfOptions&Configuration::MdToHtmlOption::ExtraFootnoteOption?MKD_EXTRA_FOOTNOTE:0)
+                    | (mfOptions&Configuration::MdToHtmlOption::NoSuperscriptOption?MKD_NOSUPERSCRIPT:0);
+        }
+
+        // compile to AST - a tree of paragraph
+        doc = mkd_string(markdown->c_str(), markdown->size(), discountOptions);
+        mkd_compile(doc, discountOptions);
+    }
+
+    // TODO check if out is leak OR reused array
+    char* out{};
+    // compile AST to HTML string
+    mkd_document(doc, &out);
+    html->assign(out);
+
+    return html;
 }
 
-string* HtmlOutlineRepresentation::toHeader(const Outline* outline)
+string* HtmlOutlineRepresentation::to(const Outline* outline, string* html)
+{
+    // IMPROVE markdown can be processed by Mind to be enriched with various links and relationships
+    string* markdown = markdownRepresentation.to(outline);
+    return to(markdown, html);
+}
+
+string* HtmlOutlineRepresentation::toHeader(const Outline* outline, string* html)
 {
     string* markdown = markdownRepresentation.toHeader(outline);
-    // TODO use hoedown to render MD to HTML
-    return markdown;
+    return to(markdown, html);
 }
 
-string* HtmlOutlineRepresentation::to(const Note* note)
+string* HtmlOutlineRepresentation::to(const Note* note, string* html)
 {
     string* markdown = markdownRepresentation.to(note);
-    // TODO use hoedown to render MD to HTML
-    return markdown;
+    return to(markdown, html);
 }
 
 } // m8r namespace

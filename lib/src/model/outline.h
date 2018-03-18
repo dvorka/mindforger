@@ -25,7 +25,7 @@
 #include "../mind/ontology/thing_class_rel_triple.h"
 #include "note.h"
 #include "outline_type.h"
-#include "../representations/markdown/markdown.h"
+#include "../representations/markdown/markdown_document.h"
 #include "../gear/datetime_utils.h"
 
 #include "../debug.h"
@@ -84,7 +84,7 @@ private:
     // various format, structure, semantic, ... flags (bit)
     int flags;
 
-    Markdown::Format format;
+    MarkdownDocument::Format format;
 
     std::vector<std::string*> preamble;
     // IMPROVE hashset
@@ -163,8 +163,8 @@ public:
 
     const std::string& getKey() const;
     void setKey(const std::string key);
-    Markdown::Format getFormat() const { return format; }
-    void setFormat(Markdown::Format format) { this->format = format; }
+    MarkdownDocument::Format getFormat() const { return format; }
+    void setFormat(MarkdownDocument::Format format) { this->format = format; }
     const std::vector<std::string*>& getPreamble() const;
     std::string getPreambleAsString() const;
     void addPreambleLine(std::string *line);

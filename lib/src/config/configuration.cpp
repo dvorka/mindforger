@@ -71,6 +71,16 @@ void Configuration::reset()
     writeMetadata = true;
     saveReadsMetadata = DEFAULT_SAVE_READS_METADATA;
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
+    md2HtmlOptions = 0;
+    // change default options by enabling flags below
+    //        | Configuration::MdToHtmlOption::AutolinkOption
+    //        | Configuration::MdToHtmlOption::NoStrikethroughOption
+    //        | Configuration::MdToHtmlOption::NoAlphaListOption
+    //        | Configuration::MdToHtmlOption::NoDefinitionListOption
+    //        | Configuration::MdToHtmlOption::NoSmartypantsOption
+    //        | Configuration::MdToHtmlOption::ExtraFootnoteOption
+    //        | Configuration::MdToHtmlOption::NoSuperscriptOption;
+    // IMPROVE add math support
 
     // GUI
     uiViewerShowMetadata = true;

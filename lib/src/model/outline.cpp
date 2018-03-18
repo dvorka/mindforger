@@ -28,7 +28,7 @@ const NoteType Outline::NOTE_4_OUTLINE_TYPE{"Outline", nullptr, Color::RED()};
 Outline::Outline(const OutlineType* type)
     : Thing{},
       memoryLocation(OutlineMemoryLocation::NORMAL),
-      format(Markdown::Format::MINDFORGER),
+      format(MarkdownDocument::Format::MINDFORGER),
       type(type),
       timeScope{}
 {
