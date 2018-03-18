@@ -1,6 +1,6 @@
-mindforger
 Makefile
 *.o
+*.a
 *.*~
 moc_*.cpp
 TEST_LOG*.*
