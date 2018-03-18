@@ -29,6 +29,7 @@ QT += widgets
 QT += webkit
 QT += webkitwidgets
 
+# dependencies
 INCLUDEPATH += $$PWD/../deps/discount
 DEPENDPATH += $$PWD/../deps/discount
 INCLUDEPATH += $$PWD/../lib/src
@@ -37,6 +38,17 @@ DEPENDPATH += $$PWD/../lib/src
 # -L where to look for library, -l link the library
 LIBS += -L$$OUT_PWD/../lib -lmindforger
 LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
+
+# development environment remarks:
+# - Beast 64b:   GCC 5.4.0, Qt 5.5.1
+# - S7    64b:   GCC 4.8.5, Qt 5.2.1
+# - Win10 64b: MinGW 4.9.2, Qt 5.10.0
+#
+# - GCC: -std=c++0x ~ -std=c++11
+
+# compiler options
+QMAKE_CXX = ccache g++
+QMAKE_CXXFLAGS += -pedantic -std=c++11
 
 HEADERS += \
     ./src/qt/3rdparty/elasticnodes/edge.h \
@@ -163,16 +175,6 @@ SOURCES += \
     ./src/qt/dialogs/time_scope_dialog.cpp \
     ./src/qt/dialogs/find_outline_by_tag_dialog.cpp \
     ./src/qt/dialogs/find_note_by_tag_dialog.cpp
-
-# Development environment remarks:
-# - Beast 64b:   GCC 5.4.0, Qt 5.5.1
-# - S7    64b:   GCC 4.8.5, Qt 5.2.1
-# - Win10 64b: MinGW 4.9.2, Qt 5.10.0
-#
-# - GCC: -std=c++0x ~ -std=c++11
-
-QMAKE_CXX = ccache g++
-QMAKE_CXXFLAGS += -pedantic -std=c++11
 
 TRANSLATIONS = \
     ./src/qt/translations/mindforger_en.ts \

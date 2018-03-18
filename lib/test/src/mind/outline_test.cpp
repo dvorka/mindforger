@@ -172,9 +172,9 @@ TEST(OutlineTestCase, CloneOutline) {
     m8r::Outline* c = mind.outlineClone(o->getKey());
 
     // asserts
-    EXPECT_TRUE(o->getFormat()==m8r::Markdown::Format::MINDFORGER);
+    EXPECT_TRUE(o->getFormat()==m8r::MarkdownDocument::Format::MINDFORGER);
     EXPECT_TRUE(c != nullptr);
-    EXPECT_TRUE(c->getFormat()==m8r::Markdown::Format::MINDFORGER);
+    EXPECT_TRUE(c->getFormat()==m8r::MarkdownDocument::Format::MINDFORGER);
     EXPECT_EQ(mind.remind().getOutlinesCount(), 2);
     EXPECT_EQ(mind.remind().getNotesCount(), 18);
     cout << "O key: " << o->getKey() << endl;

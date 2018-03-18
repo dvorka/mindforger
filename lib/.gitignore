@@ -3,6 +3,7 @@ Makefile
 *.a
 *.*~
 moc_*.cpp
+mindforger-lib-unit-tests
 /Debug/
 /Release/
 /CLI/

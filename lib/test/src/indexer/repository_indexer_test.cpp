@@ -152,7 +152,7 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
     if(outlines.size()>0) {
         for(m8r::Outline*& o:outlines) {
             dumpOutline(o);
-            ASSERT_EQ(o->getFormat(), m8r::Markdown::Format::MINDFORGER);
+            ASSERT_EQ(o->getFormat(), m8r::MarkdownDocument::Format::MINDFORGER);
             if(o->getName() == string("First Outline")) {
                 outline = o;
             }
@@ -242,7 +242,7 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
     if(outlines.size()>0) {
         for(m8r::Outline*& o:outlines) {
             dumpOutline(o);
-            ASSERT_EQ(o->getFormat(), m8r::Markdown::Format::MARKDOWN);
+            ASSERT_EQ(o->getFormat(), m8r::MarkdownDocument::Format::MARKDOWN);
             if(o->getName() == string("First Markdown")) {
                 outline = o;
             }
@@ -319,7 +319,7 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
     if(outlines.size()>0) {
         for(m8r::Outline*& o:outlines) {
             dumpOutline(o);
-            ASSERT_EQ(o->getFormat(), m8r::Markdown::Format::MINDFORGER);
+            ASSERT_EQ(o->getFormat(), m8r::MarkdownDocument::Format::MINDFORGER);
             if(o->getName() == string("First Outline")) {
                 outline = o;
             }
@@ -397,7 +397,7 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
     if(outlines.size()>0) {
         for(m8r::Outline*& o:outlines) {
             dumpOutline(o);
-            ASSERT_EQ(o->getFormat(), m8r::Markdown::Format::MARKDOWN);
+            ASSERT_EQ(o->getFormat(), m8r::MarkdownDocument::Format::MARKDOWN);
             if(o->getName() == string("First Markdown")) {
                 outline = o;
             }

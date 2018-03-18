@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
+export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
 #export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
 #export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
@@ -124,13 +124,13 @@ rm -vf ${TEST_LOG_FILE}
 if [ ${OPTION_RUN_ALL_TESTS} ]
 then
     echo "Running: ${M8R_GDB} ${M8R_VALGRIND} ./mindforger-lib-unit-tests"
-    cd ${BUILD_DIR} && ${M8R_GDB} ${M8R_VALGRIND} ./mindforger-lib-unit-tests #> ${TEST_LOG_FILE} 2>&1
+    cd ${BUILD_DIR} && ${M8R_GDB} ${M8R_VALGRIND} ./src/mindforger-lib-unit-tests #> ${TEST_LOG_FILE} 2>&1
 else
     # run selected test(s)
     # --gtest-filter=XYZ.* ... filter tests
     # --gtest_repeat=1000  ... performance/load tests
 
-    cd ${BUILD_DIR} && ${M8R_GDB} ${M8R_VALGRIND} ./mindforger-lib-unit-tests --gtest_filter=${OPTION_TEST} #> ${TEST_LOG_FILE} 2>&1
+    cd ${BUILD_DIR} && ${M8R_GDB} ${M8R_VALGRIND} ./src/mindforger-lib-unit-tests --gtest_filter=${OPTION_TEST} #> ${TEST_LOG_FILE} 2>&1
 fi
 
 # eof
