@@ -25,7 +25,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="HtmlBenchmark.Outline"
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
-export OPTION_TEST="HtmlTestCase.Note"
+export OPTION_TEST="HtmlTestCase.NoteLinks"
 #export OPTION_TEST="MarkdownParserTestCase.Links"
 #export OPTION_TEST="MarkdownParserTestCase.TimeScope"
 #export OPTION_TEST="MarkdownParserTestCase.Deadline"

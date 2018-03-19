@@ -1,0 +1,78 @@
+/*---------------------------------------------------
+    LESS Elements 0.9
+  ---------------------------------------------------
+    A set of useful LESS mixins
+    More info at: http://lesselements.com
+  ---------------------------------------------------*/
+/**
+ * https://github.com/rhiokim/markdown-css
+ * solarized-light style
+ * made by rhio.kim
+ * powered by http://ethanschoonover.com/solarized
+ */
+body {
+  padding: 20px;
+  color: #737373;
+  font-size: 1em;
+  font-family: Sans-serif;
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: #1e6ea7;
+}
+a:hover {
+  color: #268bd2;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: #404040;
+}
+h2 {
+  border-bottom: 1px solid #cccccc;
+}
+h6 {
+  color: #666666;
+}
+hr {
+  border: 1px solid #e6e6e6;
+}
+pre > code {
+/*  font-size: .9em;*/
+  font-family: Consolas, Inconsolata, Courier, monospace;
+}
+blockquote {
+  padding: 0 15px;
+  font-style: italic;
+}
+blockquote:before {
+  content: "\201C";
+  font-size: 40px;
+  margin-left: -20px;
+  color: #aaa;
+}
+table {
+  background-color: #ffffff;
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+table tr th,
+table tr td {
+  border: 0px;
+  padding: .2em 1em;
+}
+table tr th {
+  border-bottom: 1px solid #bfbfbf;
+}
+table tr td {
+  border-bottom: 1px solid #d9d9d9;
+}
+table tr:nth-child(2n) {
+  background-color: #ffffff;
+}
+/**
+ * after less
+ */

@@ -177,11 +177,11 @@ SOURCES += \
     ./src/qt/dialogs/find_note_by_tag_dialog.cpp
 
 TRANSLATIONS = \
-    ./src/qt/translations/mindforger_en.ts \
-    ./src/qt/translations/mindforger_de.ts \
-    ./src/qt/translations/mindforger_fr.ts \
-    ./src/qt/translations/mindforger_es.ts \
-    ./src/qt/translations/mindforger_cs.ts
+    ./resources/qt/translations/mindforger_en.ts \
+    ./resources/qt/translations/mindforger_de.ts \
+    ./resources/qt/translations/mindforger_fr.ts \
+    ./resources/qt/translations/mindforger_es.ts \
+    ./resources/qt/translations/mindforger_cs.ts
 
 RESOURCES += \
     ./mf-resources.qrc

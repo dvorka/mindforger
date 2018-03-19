@@ -73,6 +73,13 @@ std::string* HtmlOutlineRepresentation::to(const std::string* markdown, std::str
     mkd_document(doc, &out);
     html->assign(out);
 
+//    // TODO remove quick hack
+//    // TODO base MUST be set O's directory to resolve URLs - set html/head/base/@href as base url
+//    string head{"<html><head><base href='file:///home/dvorka/tmp/small-repository/memory/'></head><body>"};
+//    html->insert(0,head);
+//    html->append("</body></html>");
+//    cout << "===" << *html << "=1==" << endl << flush;
+
     return html;
 }
 

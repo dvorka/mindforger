@@ -77,3 +77,23 @@ TEST(HtmlTestCase, Note)
 
     cout << "= BEGIN HTML =" << endl << html << endl << "= END HTML =" << endl;
 }
+
+TEST(HtmlTestCase, NoteLinks)
+{
+    string fileName{"/lib/test/resources/bugs-repository/memory/feature-html-links.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
+    m8r::Mind mind(config);
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology()};
+    mind.think();
+
+    ASSERT_GE(mind.remind().getOutlinesCount(), 1);
+
+    string html{};
+    htmlRepresentation.to(mind.remind().getOutlines()[0]->getNotes()[0], &html);
+
+    // links are NOT resolved - they are kept as they are
+    cout << "= BEGIN HTML =" << endl << html << endl << "= END HTML =" << endl;
+}
