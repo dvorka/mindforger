@@ -220,6 +220,7 @@ OutlineNewDialog::OutlineNewDialog(
 
     // dialog
     setWindowTitle(tr("New Outline"));
+    resize(fontMetrics().averageCharWidth()*55, fontMetrics().height()*30);
     setModal(true);
 }
 

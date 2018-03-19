@@ -124,4 +124,5 @@ HEADERS += \
     ./src/model/link.h \
     ./src/config/palette.h \
     src/representations/markdown/markdown_document.h \
-    src/representations/html/html_document.h
+    src/representations/html/html_document.h \
+    src/version.h

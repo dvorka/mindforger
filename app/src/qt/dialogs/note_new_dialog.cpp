@@ -167,6 +167,7 @@ NoteNewDialog::NoteNewDialog(
     setLayout(mainLayout);
 
     setWindowTitle(tr("New Note"));
+    resize(fontMetrics().averageCharWidth()*55, fontMetrics().height()*30);
     setModal(true);
 }
 
