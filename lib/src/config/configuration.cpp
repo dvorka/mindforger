@@ -71,7 +71,7 @@ void Configuration::reset()
     writeMetadata = true;
     saveReadsMetadata = DEFAULT_SAVE_READS_METADATA;
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
-    md2HtmlOptions = 0;
+    md2HtmlOptions = 0
     // change default options by enabling flags below
     //        | Configuration::MdToHtmlOption::AutolinkOption
     //        | Configuration::MdToHtmlOption::NoStrikethroughOption
@@ -80,13 +80,17 @@ void Configuration::reset()
     //        | Configuration::MdToHtmlOption::NoSmartypantsOption
     //        | Configuration::MdToHtmlOption::ExtraFootnoteOption
     //        | Configuration::MdToHtmlOption::NoSuperscriptOption;
-    // IMPROVE add math support
+            | Configuration::MdToHtmlOption::MathSupport
+            | Configuration::MdToHtmlOption::MathInlineSupport
+            | Configuration::MdToHtmlOption::CodeHighlighting
+            | Configuration::MdToHtmlOption::DiagramSupport;
 
     // GUI
     uiViewerShowMetadata = true;
     uiEditorEnableSyntaxHighlighting = true;
     uiEditorShowLineNumbers = true;
     uiThemeName.assign(UI_DEFAULT_THEME);
+    uiHtmlThemeName.assign(UI_DEFAULT_HTML_THEME);
     uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
     uiShowNotebookEditButton = DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON;
 }

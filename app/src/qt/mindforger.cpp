@@ -181,13 +181,7 @@ int main(int argc, char *argv[])
     }
 
     // setup application
-    QFile iconFile(":/icons/mindforger-icon.png");
-    if(!iconFile.open(QFile::ReadOnly)) {
-        cerr << "Unable to find MindForger icon!" << endl;
-    } else {
-        mindforgerApplication.setWindowIcon(QIcon(":/icons/mindforger-icon.png"));
-    }
-
+    mindforgerApplication.setWindowIcon(QIcon(":/icons/mindforger-icon.png"));
     m8r::l8n(mindforgerApplication);
 
     // choose L&F

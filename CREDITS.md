@@ -12,10 +12,13 @@ Big thanks to 3rd party content authors:
 * David Parsons (Discount - MD rendering - library)
 * Google (Google C++ unit testing framework)
 * Raimund Hocke (SikuliX - GUI automation testing)
-* Jamie McGowan (Remarkable - inspiration)
+* Knut Sveidqvist (Mermaid.js - diagrams and flowcharts rendering in HTML)
+* AMS and SIAM (MathJax.js - math rendering in HTML)
+* Ivan Sagalaev (Highlight.js - source code syntax highlighting)
+* Jamie McGowan (Remarkable - inspiration and code)
 * Apiary (API blueprints - test data)
 * Mark Summerfield (Advanced Qt Programming book examples - code snippets)
-* Andres Mejia (Aho-Corasick algoritm implementation - code snippets)
+* Andres Mejia (Aho-Corasick algorithm implementation - code snippets)
 
 See [licenses](./licenses) folder for 3rd party content licensing details.
 

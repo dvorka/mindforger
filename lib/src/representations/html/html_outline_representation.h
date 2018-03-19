@@ -68,6 +68,10 @@ public:
     std::string* to(const Outline* outline, std::string* html);
     std::string* toHeader(const Outline* outline, std::string* html);
     std::string* to(const Note* note, std::string* html);
+
+private:
+    void header(std::string& html);
+    void footer(std::string& html);
 };
 
 } // m8r namespace

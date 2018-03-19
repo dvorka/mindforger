@@ -58,7 +58,26 @@ constexpr const auto FILE_EXTENSION_MARKDOWN = ".md";
 constexpr const auto UI_THEME_DARK = "dark";
 constexpr const auto UI_THEME_LIGHT = "light";
 constexpr const auto UI_THEME_BLACK = "black";
-constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
+
+// default light
+constexpr const auto UI_HTML_THEME_MARKDOWN = "markdown";
+// default dark
+constexpr const auto UI_HTML_THEME_BYWORD_DARK = "byword-dark";
+constexpr const auto UI_HTML_THEME_CLEARNESS_DARK = "clearness-dark";
+constexpr const auto UI_HTML_THEME_CLEARNESS = "clearness";
+constexpr const auto UI_HTML_THEME_GITHUB = "github";
+constexpr const auto UI_HTML_THEME_SOLARIZED_DARK = "solarized-dark";
+constexpr const auto UI_HTML_THEME_SOLARIZED_LIGHT = "solarized-light";
+constexpr const auto UI_HTML_THEME_FOGHORN = "foghorn";
+constexpr const auto UI_HTML_THEME_HANDWRITING = "handwriting";
+constexpr const auto UI_HTML_THEME_METRO_VIBES_DARK = "metro-vibes-dark";
+constexpr const auto UI_HTML_THEME_METRO_VIBES = "metro-vibes";
+constexpr const auto UI_HTML_THEME_MODERN = "modern";
+constexpr const auto UI_HTML_THEME_REMARKABLE_DARK = "remarkable-dark";
+constexpr const auto UI_HTML_THEME_SCREEN = "screen";
+
+constexpr const auto UI_DEFAULT_THEME = UI_HTML_THEME_MARKDOWN;
+constexpr const auto UI_DEFAULT_HTML_THEME = "byword-dark";
 constexpr const auto UI_DEFAULT_EDITOR_KEY_BINDING = "emacs";
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
@@ -92,23 +111,29 @@ public:
         SLEEPING
     };
 
-    // TODO constant notation
     enum MdToHtmlOption {
-        NoLinksOption          = 0x00000001, /* don't do link processing, block <a> tags  */
-        NoImagesOption         = 0x00000002, /* don't do image processing, block <img> */
-        NoSmartypantsOption    = 0x00000004, /* don't run smartypants() */
-        NoHtmlOption           = 0x00000008, /* don't allow raw html through AT ALL */
-        NoSuperscriptOption    = 0x00000100, /* don't process a^2 as superscript(<sup>) */
-        NoTablesOption         = 0x00000400, /* disallow tables */
-        NoStrikethroughOption  = 0x00000800, /* forbid ~~strikethrough~~ */
-        TableOfContentsOption  = 0x00001000, /* do table-of-contents processing */
-        AutolinkOption         = 0x00004000, /* make http://foo.com link even without <>s */
-        NoHeaderOption         = 0x00010000, /* don't process header blocks */
-        NoDivQuoteOption       = 0x00040000, /* forbid >%class% blocks */
-        NoAlphaListOption      = 0x00080000, /* forbid alphabetic lists */
-        NoDefinitionListOption = 0x00100000, /* forbid definition lists */
-        ExtraFootnoteOption    = 0x00200000, /* enable markdown extra-style footnotes */
-        NoStyleOption          = 0x00400000  /* don't extract <style> blocks */
+        // Discount options
+        NoLinksOption          = 1<<0, /* don't do link processing, block <a> tags  */
+        NoImagesOption         = 1<<1, /* don't do image processing, block <img> */
+        NoSmartypantsOption    = 1<<2, /* don't run smartypants() */
+        NoHtmlOption           = 1<<3, /* don't allow raw html through AT ALL */
+        NoSuperscriptOption    = 1<<4, /* don't process a^2 as superscript(<sup>) */
+        NoTablesOption         = 1<<5, /* disallow tables */
+        NoStrikethroughOption  = 1<<6, /* forbid ~~strikethrough~~ */
+        TableOfContentsOption  = 1<<7, /* do table-of-contents processing */
+        AutolinkOption         = 1<<8, /* make http://foo.com link even without <>s */
+        NoHeaderOption         = 1<<9, /* don't process header blocks */
+        NoDivQuoteOption       = 1<<10, /* forbid >%class% blocks */
+        NoAlphaListOption      = 1<<11, /* forbid alphabetic lists */
+        NoDefinitionListOption = 1<<12, /* forbid definition lists */
+        ExtraFootnoteOption    = 1<<13, /* enable markdown extra-style footnotes */
+        NoStyleOption          = 1<<14, /* don't extract <style> blocks */
+
+        // postprocessing - makes HTML rendering slow
+        MathSupport              = 1<<15,
+        MathInlineSupport        = 1<<16,
+        CodeHighlighting         = 1<<17,
+        DiagramSupport           = 1<<18
     };
 
     enum EditorKeyBindingMode {
@@ -151,6 +176,7 @@ private:
 
     // GUI configuration
     std::string uiThemeName;
+    std::string uiHtmlThemeName;
     EditorKeyBindingMode uiEditorKeyBinding;
     int uiFontPointSize;
     bool uiShowBreadcrump; // show breadcrump path
@@ -234,6 +260,8 @@ public:
     bool isUiShowNotebookEditButton() const { return uiShowNotebookEditButton; }
     void setUiShowNotebookEditButton(bool show) { uiShowNotebookEditButton = show; }
     bool isUiShowBreadcrump() const { return uiShowBreadcrump; }
+    const std::string& getUiHtmlThemeName() const { return uiHtmlThemeName; }
+    void setUiHtmlThemeName(const std::string theme) { uiHtmlThemeName = theme; }
 };
 
 } // namespace

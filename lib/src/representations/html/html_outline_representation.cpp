@@ -36,7 +36,44 @@ HtmlOutlineRepresentation::~HtmlOutlineRepresentation()
 {
 }
 
-std::string* HtmlOutlineRepresentation::to(const std::string* markdown, std::string* html)
+void HtmlOutlineRepresentation::header(string& html)
+{
+    html.append("<html><head>");
+    html.append("<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); }; </script>\n");
+
+    // math via MathJax.js
+    if(lastMfOptions&Configuration::MdToHtmlOption::MathSupport) {
+        // set inline flag
+        if(lastMfOptions&Configuration::MdToHtmlOption::MathInlineSupport) {
+            html.append("<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>");
+        }
+        // TODO make this qrc:resource
+        html.append("<script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>\n");
+    }
+
+    // diagrams via mermaid.js
+    if(lastMfOptions&Configuration::MdToHtmlOption::DiagramSupport) {
+        html.append("<link rel=\"stylesheet\" href=\"qrc:/scripts/mermaid/mermaid.css\">\n");
+        html.append("<script src=\"qrc:/scripts/mermaid/mermaid.full.min.js\"></script>\n");
+    }
+
+    // source code highlighting via Highlight.js
+    if(lastMfOptions&Configuration::MdToHtmlOption::CodeHighlighting) {
+        html.append("<link rel=\"stylesheet\" href=\"qrc:/html-css/");
+        html.append(config.getUiHtmlThemeName());
+        html.append(".css\">\n");
+        html.append("<script src=\"qrc:/scripts/highlight.js/highlight.pack.js\"></script>\n");
+        html.append("<script>hljs.initHighlightingOnLoad();</script>\n");
+    }
+    html.append("</head><body>");
+}
+
+void HtmlOutlineRepresentation::footer(string& html)
+{
+    html.append("</body></html>");
+}
+
+string* HtmlOutlineRepresentation::to(const string* markdown, string* html)
 {
 
     MMIOT* doc = nullptr;
@@ -68,17 +105,17 @@ std::string* HtmlOutlineRepresentation::to(const std::string* markdown, std::str
     }
 
     // TODO check if out is leak OR reused array
-    char* out{};
+    char* body{};
     // compile AST to HTML string
-    mkd_document(doc, &out);
-    html->assign(out);
+    mkd_document(doc, &body);
 
-//    // TODO remove quick hack
-//    // TODO base MUST be set O's directory to resolve URLs - set html/head/base/@href as base url
-//    string head{"<html><head><base href='file:///home/dvorka/tmp/small-repository/memory/'></head><body>"};
-//    html->insert(0,head);
-//    html->append("</body></html>");
-//    cout << "===" << *html << "=1==" << endl << flush;
+    // assemble HTML
+    html->clear();
+    header(*html);
+    html->append(body);
+    footer(*html);
+
+    MF_DEBUG("===" << *html << "=1==" << endl);
 
     return html;
 }
