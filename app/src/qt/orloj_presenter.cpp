@@ -193,7 +193,7 @@ void OrlojPresenter::fromNoteEditBackToView(Note* note)
 {
     noteViewPresenter->clearSearchExpression();
     noteViewPresenter->refresh(note);
-    // update note in outline tree
+    // update N in outline tree
     outlineViewPresenter->refresh(note);
 
     showFacetNoteView();

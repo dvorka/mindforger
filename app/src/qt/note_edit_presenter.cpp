@@ -1,3 +1,4 @@
+
 /*
  note_edit_presenter.cpp     MindForger thinking notebook
 
@@ -73,10 +74,7 @@ void NoteEditPresenter::slotCloseEditor()
 void NoteEditPresenter::slotSaveAndCloseEditor()
 {
     slotSaveNote();
-
-    if(!view->isDescriptionEmpty()) {
-        mainPresenter->getOrloj()->fromNoteEditBackToView(currentNote);
-    }
+    mainPresenter->getOrloj()->fromNoteEditBackToView(currentNote);
 }
 
 void NoteEditPresenter::slotSaveNote()

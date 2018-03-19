@@ -71,10 +71,7 @@ void OutlineHeaderEditPresenter::slotCloseEditor()
 void OutlineHeaderEditPresenter::slotSaveAndCloseEditor()
 {
     slotSaveOutlineHeader();
-
-    if(!view->isDescriptionEmpty()) {
-        mainPresenter->getOrloj()->fromOutlineHeaderEditBackToView(currentOutline);
-    }
+    mainPresenter->getOrloj()->fromOutlineHeaderEditBackToView(currentOutline);
 }
 
 void OutlineHeaderEditPresenter::slotSaveOutlineHeader()
