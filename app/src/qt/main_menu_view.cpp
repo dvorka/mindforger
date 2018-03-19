@@ -89,9 +89,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindSnapshot->setStatusTip(tr("Create backup archive of the current repository"));
     actionMindSnapshot->setEnabled(false);
 
-    actionMindPreferences = new QAction(tr("&Preferences"), mainWindow);
+    actionMindPreferences = new QAction(tr("&Adapt"), mainWindow);
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
-    actionMindPreferences->setStatusTip(tr("Open preferences"));
+    actionMindPreferences->setStatusTip(tr("Adapt Mind by setting your preferences..."));
     actionMindPreferences->setEnabled(false);
 
     actionExit = new QAction(tr("E&xit"), mainWindow);
