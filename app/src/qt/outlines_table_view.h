@@ -31,6 +31,10 @@ class OutlinesTableView: public QTableView
 {
     Q_OBJECT
 
+private:
+    // if view is width < threshold columns, then shows simplified view w/o Mind-related columns
+    static constexpr int SIMPLIFIED_VIEW_THRESHOLD_WIDTH = 75*2;
+
 public:
     static const int COLUMN_COUNT = 7;
 public:

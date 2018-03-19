@@ -22,6 +22,7 @@
 #include <QtWidgets>
 
 #include "../../lib/src/gear/lang_utils.h"
+#include "../lib/src/debug.h"
 
 namespace m8r {
 
@@ -66,6 +67,10 @@ public:
 class OutlineTreeView : public QTableView
 {
     Q_OBJECT
+
+private:
+    // if view is width < threshold columns, then shows simplified view w/o Mind-related columns
+    static constexpr int SIMPLIFIED_VIEW_THRESHOLD_WIDTH = 75;
 
 public:
     explicit OutlineTreeView(QWidget* parent);

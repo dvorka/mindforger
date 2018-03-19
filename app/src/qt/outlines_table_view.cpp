@@ -47,11 +47,20 @@ void OutlinesTableView::paintEvent(QPaintEvent* event)
     this->setColumnWidth(2, this->fontMetrics().averageCharWidth()*12);
     // progress
     this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*6);
-    // notes
-    this->setColumnWidth(4, this->fontMetrics().averageCharWidth()*5);
-    // rd/wr
-    this->setColumnWidth(5, this->fontMetrics().averageCharWidth()*5);
-    this->setColumnWidth(6, this->fontMetrics().averageCharWidth()*5);
+
+    int normalizedWidth = width()/fontMetrics().averageCharWidth();
+    if(normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH) {
+        this->setColumnWidth(4, 0);
+        this->setColumnWidth(5, 0);
+        this->setColumnWidth(6, 0);
+    } else {
+        // notes
+        this->setColumnWidth(4, this->fontMetrics().averageCharWidth()*5);
+        // rd/wr
+        this->setColumnWidth(5, this->fontMetrics().averageCharWidth()*5);
+        this->setColumnWidth(6, this->fontMetrics().averageCharWidth()*5);
+    }
+
     // pretty
     this->setColumnWidth(7, this->fontMetrics().averageCharWidth()*12);
 
