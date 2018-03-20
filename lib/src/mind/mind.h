@@ -134,12 +134,17 @@ public:
     virtual ~Mind();
 
     /**
-     * @brief Learn from memory to start thinking.
+     * @brief Think to do useful things for user when searching, viewing and editing.
+     *
+     * If NOT initialized, think first switches to dream to prepare memory and AI.
+     * When ready, it starts to think and be useful.
      */
     void think();
 
     /**
-     * @brief Dream to detox, optimize, check and clean up mind/memory.
+     * @brief Dream to detox, optimize, check/clean up mind/memory and prepare to think.
+     *
+     * When all dreaming activities are DONE, Mind wakes up and switches to THINK mode.
      *
      * Mental processes:
      *   > Cleanup/detox: move to limbo, remove orphans, unused memory structures, ...
@@ -156,7 +161,7 @@ public:
     void dream();
 
     /**
-     * @brief Sleep just to learn memory and relax.
+     * @brief Sleep just to learn Memory and relax.
      *
      * Triples are cleared - no thinking or dreaming.
      */

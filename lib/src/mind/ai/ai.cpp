@@ -1,5 +1,5 @@
 /*
- similarity_recurrent_neural_network.cpp     MindForger thinking notebook
+ ai.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,15 +16,15 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "similarity_recurrent_neural_network.h"
+#include "ai.h"
 
 namespace m8r {
 
-SimilarityRecurrentNeuralNetwork::SimilarityRecurrentNeuralNetwork()
+Ai::Ai()
 {
 }
 
-SimilarityRecurrentNeuralNetwork::~SimilarityRecurrentNeuralNetwork()
+Ai::~Ai()
 {
 }
 

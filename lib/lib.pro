@@ -63,7 +63,8 @@ SOURCES += \
     ./src/model/link.cpp \
     ./src/config/palette.cpp \
     src/representations/markdown/markdown_document.cpp \
-    src/representations/html/html_document.cpp
+    src/representations/html/html_document.cpp \
+    src/mind/ai/ai.cpp
 
 HEADERS += \
     ./src/debug.h \
@@ -125,4 +126,5 @@ HEADERS += \
     ./src/config/palette.h \
     src/representations/markdown/markdown_document.h \
     src/representations/html/html_document.h \
-    src/version.h
+    src/version.h \
+    src/mind/ai/ai.h
