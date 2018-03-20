@@ -89,6 +89,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindSnapshot->setStatusTip(tr("Create backup archive of the current repository"));
     actionMindSnapshot->setEnabled(false);
 
+    // TODO submenu: printer, HTML, PDF
+
     actionMindPreferences = new QAction(tr("&Adapt"), mainWindow);
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
     actionMindPreferences->setStatusTip(tr("Adapt Mind by setting your preferences..."));

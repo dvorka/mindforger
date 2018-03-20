@@ -20,6 +20,7 @@
 #define M8RUI_MAIN_WINDOW_PRESENTER_H
 
 #include "../../lib/src/mind/mind.h"
+#include "../../lib/src/representations/html/html_outline_representation.h"
 
 #include "main_window_view.h"
 #include "main_menu_presenter.h"
@@ -69,6 +70,7 @@ private:
     Mind* mind;
 
     MarkdownOutlineRepresentation* mdRepresentation;
+    HtmlOutlineRepresentation* htmlRepresentation;
 
     MainMenuPresenter* mainMenu;
     CliAndBreadcrumbsPresenter* cli;
@@ -99,6 +101,7 @@ public:
     void initView();
     const Configuration& getConfiguration() const { return config; }
     MarkdownOutlineRepresentation* getMarkdownRepresentation() const { return mdRepresentation; }
+    HtmlOutlineRepresentation* getHtmlRepresentation() const { return htmlRepresentation; }
 
     // presenters
     CliAndBreadcrumbsPresenter* getCli() { return cli; }

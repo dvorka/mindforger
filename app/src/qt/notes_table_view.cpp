@@ -33,8 +33,10 @@ NotesTableView::NotesTableView(QWidget *parent)
     // disable TAB and Ctrl-O up/down navigation
     setTabKeyNavigation(false);
 
+    verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
+
     QHeaderView* header = this->horizontalHeader();
     header->setSectionResizeMode(QHeaderView::Stretch);
 }
 
-}
+} // m8r namespace

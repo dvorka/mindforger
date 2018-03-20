@@ -31,6 +31,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     // representations
     this->mdRepresentation
         = new MarkdownOutlineRepresentation{mind->ontology()};
+    this->htmlRepresentation
+        = new HtmlOutlineRepresentation{mind->ontology()};
 
     // assemble presenters w/ UI
     statusBar = new StatusBarPresenter{view.getStatusBar(), mind};

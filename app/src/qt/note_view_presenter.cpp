@@ -25,7 +25,7 @@ using namespace std;
 namespace m8r {
 
 NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
-    : qHtml{} // IMPROVE stack overflow?
+    : qHtml{} // IMPROVE stack overflow if HTML too big?
 {
     this->html = new string{};
 
@@ -34,8 +34,10 @@ NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
     this->model = new NoteViewModel();
     this->view->setModel(this->model);
 
+    this->markdownRepresentation
+        = orloj->getMainWindow()->getMarkdownRepresentation();
     this->htmlRepresentation
-        = new HtmlOutlineRepresentation{orloj->getMind()->ontology()};
+        = orloj->getMainWindow()->getHtmlRepresentation();
 
     QObject::connect(
         view, SIGNAL(signalMouseDoubleClickEvent()),
