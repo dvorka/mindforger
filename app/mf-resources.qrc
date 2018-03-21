@@ -7,19 +7,7 @@
         <file>resources/qt/translations/mindforger_en.qm</file>
     </qresource>
     <qresource prefix="/html-css">
-        <file alias="byword-dark.css">resources/qt/css/byword-dark.css</file>
-        <file alias="clearness-dark.css">resources/qt/css/clearness-dark.css</file>
-        <file alias="clearness">resources/qt/css/clearness.css</file>
-        <file alias="github.css">resources/qt/css/github.css</file>
-        <file alias="markdown.css">resources/qt/css/markdown.css</file>
-        <file alias="solarized-dark.css">resources/qt/css/solarized-dark.css</file>
-        <file alias="solarized-light.css">resources/qt/css/solarized-light.css</file>
-        <file alias="foghorn.css">resources/qt/css/foghorn.css</file>
-        <file alias="handwriting.css">resources/qt/css/handwriting.css</file>
-        <file alias="metro-vibes-dark.css">resources/qt/css/metro-vibes-dark.css</file>
-        <file alias="metro-vibes.css">resources/qt/css/metro-vibes.css</file>
-        <file alias="modern.css">resources/qt/css/modern.css</file>
-        <file alias="remarkable-dark.css">resources/qt/css/remarkable-dark.css</file>
-        <file alias="screen.css">resources/qt/css/screen.css</file>
+        <file alias="dark.css">resources/qt/css/dark.css</file>
+        <file alias="light.css">resources/qt/css/light.css</file>
     </qresource>
 </RCC>

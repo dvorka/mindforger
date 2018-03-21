@@ -486,7 +486,7 @@ void MainWindowPresenter::handleNoteNew()
     if(n) {
         depth = n->getDepth();
     } else {
-        n = 0;
+        depth = 0;
     }
 
     string name = newNoteDialog->getNoteName().toStdString();

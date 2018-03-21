@@ -1,3 +1,4 @@
+# Syntax highlighting
 
 *blah* text
 *bl ah* text

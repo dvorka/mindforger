@@ -38,44 +38,50 @@ HtmlOutlineRepresentation::~HtmlOutlineRepresentation()
 
 void HtmlOutlineRepresentation::header(string& html)
 {
-    html.append("<html><head>");
-    html.append("<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); }; </script>\n");
+    if(!config.isUiHtmlTheme()) {
+        html.append("<html><head><pre>");
+    } else {
+        html.append("<html><head>");
+        html.append("<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); }; </script>\n");
 
-    // math via MathJax.js
-    if(lastMfOptions&Configuration::MdToHtmlOption::MathSupport) {
-        // set inline flag
-        if(lastMfOptions&Configuration::MdToHtmlOption::MathInlineSupport) {
-            html.append("<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>");
+        // math via MathJax.js
+        if(lastMfOptions&Configuration::MdToHtmlOption::MathSupport) {
+            // set inline flag
+            if(lastMfOptions&Configuration::MdToHtmlOption::MathInlineSupport) {
+                html.append("<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>");
+            }
+            // TODO make this qrc:resource
+            html.append("<script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>\n");
         }
-        // TODO make this qrc:resource
-        html.append("<script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>\n");
-    }
 
-    // diagrams via mermaid.js
-    if(lastMfOptions&Configuration::MdToHtmlOption::DiagramSupport) {
-        html.append("<link rel=\"stylesheet\" href=\"qrc:/scripts/mermaid/mermaid.css\">\n");
-        html.append("<script src=\"qrc:/scripts/mermaid/mermaid.full.min.js\"></script>\n");
-    }
+        // diagrams via mermaid.js
+        if(lastMfOptions&Configuration::MdToHtmlOption::DiagramSupport) {
+            html.append("<link rel=\"stylesheet\" href=\"qrc:/scripts/mermaid/mermaid.css\">\n");
+            html.append("<script src=\"qrc:/scripts/mermaid/mermaid.full.min.js\"></script>\n");
+        }
 
-    // source code highlighting via Highlight.js
-    if(lastMfOptions&Configuration::MdToHtmlOption::CodeHighlighting) {
-        html.append("<link rel=\"stylesheet\" href=\"qrc:/html-css/");
-        html.append(config.getUiHtmlThemeName());
-        html.append(".css\">\n");
-        html.append("<script src=\"qrc:/scripts/highlight.js/highlight.pack.js\"></script>\n");
-        html.append("<script>hljs.initHighlightingOnLoad();</script>\n");
+        // source code highlighting via Highlight.js
+        if(lastMfOptions&Configuration::MdToHtmlOption::CodeHighlighting) {
+            html.append("<link rel=\"stylesheet\" href=\"");
+            html.append(config.getUiHtmlCssPath());
+            html.append("\">\n");
+            html.append("<script src=\"qrc:/scripts/highlight.js/highlight.pack.js\"></script>\n");
+            html.append("<script>hljs.initHighlightingOnLoad();</script>\n");
+        }
+        html.append("</head><body>");
     }
-    html.append("</head><body>");
 }
 
 void HtmlOutlineRepresentation::footer(string& html)
 {
+    if(!config.isUiHtmlTheme()) {
+        html.append("<pre>");
+    }
     html.append("</body></html>");
 }
 
 string* HtmlOutlineRepresentation::to(const string* markdown, string* html)
 {
-
     MMIOT* doc = nullptr;
     if(markdown->size() > 0) {
         // ensure MD ends with new line, otherwise there would be missing characters in output HTML
@@ -115,28 +121,52 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html)
     html->append(body);
     footer(*html);
 
-    MF_DEBUG("===" << *html << "=1==" << endl);
+    //MF_DEBUG("===" << *html << "=1==" << endl);
 
     return html;
 }
 
 string* HtmlOutlineRepresentation::to(const Outline* outline, string* html)
 {
-    // IMPROVE markdown can be processed by Mind to be enriched with various links and relationships
-    string* markdown = markdownRepresentation.to(outline);
-    return to(markdown, html);
+    // IMPROVE markdown can be processed by Mind to be enriched with various links and relationships    
+    string* markdown = markdownRepresentation.to(outline);    
+    if(config.isUiHtmlTheme()) {
+        to(markdown, html);
+        delete markdown;
+        return html;
+    } else {
+        html->assign(*markdown);
+        delete markdown;
+        return html;
+    }
 }
 
 string* HtmlOutlineRepresentation::toHeader(const Outline* outline, string* html)
 {
     string* markdown = markdownRepresentation.toHeader(outline);
-    return to(markdown, html);
+    if(config.isUiHtmlTheme()) {
+        to(markdown, html);
+        delete markdown;
+        return html;
+    } else {
+        html->assign(*markdown);
+        delete markdown;
+        return html;
+    }
 }
 
 string* HtmlOutlineRepresentation::to(const Note* note, string* html)
 {
     string* markdown = markdownRepresentation.to(note);
-    return to(markdown, html);
+    if(config.isUiHtmlTheme()) {
+        to(markdown, html);
+        delete markdown;
+        return html;
+    } else {
+        html->assign(*markdown);
+        delete markdown;
+        return html;
+    }
 }
 
 } // m8r namespace

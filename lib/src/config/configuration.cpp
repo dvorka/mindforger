@@ -90,7 +90,7 @@ void Configuration::reset()
     uiEditorEnableSyntaxHighlighting = true;
     uiEditorShowLineNumbers = true;
     uiThemeName.assign(UI_DEFAULT_THEME);
-    uiHtmlThemeName.assign(UI_DEFAULT_HTML_THEME);
+    uiHtmlCssPath.assign(UI_DEFAULT_HTML_THEME_CSS);
     uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
     uiShowNotebookEditButton = DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON;
 }
@@ -109,6 +109,7 @@ Repository* Configuration::addRepository(Repository* repository)
         if(activeRepository == clash) {
             activeRepository = repository;
             delete clash;
+
         }
     }
 

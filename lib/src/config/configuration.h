@@ -59,25 +59,11 @@ constexpr const auto UI_THEME_DARK = "dark";
 constexpr const auto UI_THEME_LIGHT = "light";
 constexpr const auto UI_THEME_BLACK = "black";
 
-// default light
-constexpr const auto UI_HTML_THEME_MARKDOWN = "markdown";
-// default dark
-constexpr const auto UI_HTML_THEME_BYWORD_DARK = "byword-dark";
-constexpr const auto UI_HTML_THEME_CLEARNESS_DARK = "clearness-dark";
-constexpr const auto UI_HTML_THEME_CLEARNESS = "clearness";
-constexpr const auto UI_HTML_THEME_GITHUB = "github";
-constexpr const auto UI_HTML_THEME_SOLARIZED_DARK = "solarized-dark";
-constexpr const auto UI_HTML_THEME_SOLARIZED_LIGHT = "solarized-light";
-constexpr const auto UI_HTML_THEME_FOGHORN = "foghorn";
-constexpr const auto UI_HTML_THEME_HANDWRITING = "handwriting";
-constexpr const auto UI_HTML_THEME_METRO_VIBES_DARK = "metro-vibes-dark";
-constexpr const auto UI_HTML_THEME_METRO_VIBES = "metro-vibes";
-constexpr const auto UI_HTML_THEME_MODERN = "modern";
-constexpr const auto UI_HTML_THEME_REMARKABLE_DARK = "remarkable-dark";
-constexpr const auto UI_HTML_THEME_SCREEN = "screen";
+constexpr const auto UI_HTML_THEME_CSS_DARK = "qrc:/html-css/dark.css";
+constexpr const auto UI_HTML_THEME_CSS_LIGHT = "qrc:/html-css/light.css";
 
-constexpr const auto UI_DEFAULT_THEME = UI_HTML_THEME_MARKDOWN;
-constexpr const auto UI_DEFAULT_HTML_THEME = "byword-dark";
+constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
+constexpr const auto UI_DEFAULT_HTML_THEME_CSS = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_KEY_BINDING = "emacs";
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
@@ -176,7 +162,7 @@ private:
 
     // GUI configuration
     std::string uiThemeName;
-    std::string uiHtmlThemeName;
+    std::string uiHtmlCssPath; // use a CSS (size>0) or render raw MD (size==0)
     EditorKeyBindingMode uiEditorKeyBinding;
     int uiFontPointSize;
     bool uiShowBreadcrump; // show breadcrump path
@@ -260,8 +246,9 @@ public:
     bool isUiShowNotebookEditButton() const { return uiShowNotebookEditButton; }
     void setUiShowNotebookEditButton(bool show) { uiShowNotebookEditButton = show; }
     bool isUiShowBreadcrump() const { return uiShowBreadcrump; }
-    const std::string& getUiHtmlThemeName() const { return uiHtmlThemeName; }
-    void setUiHtmlThemeName(const std::string theme) { uiHtmlThemeName = theme; }
+    bool isUiHtmlTheme() const { return !uiHtmlCssPath.empty(); }
+    const std::string& getUiHtmlCssPath() const { return uiHtmlCssPath; }
+    void setUiHtmlCssPath(const std::string path) { uiHtmlCssPath = path; }
 };
 
 } // namespace
