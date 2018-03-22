@@ -259,8 +259,12 @@ public:
     void setUiShowNotebookEditButton(bool show) { uiShowNotebookEditButton = show; }
     bool isUiShowBreadcrump() const { return uiShowBreadcrump; }
     bool isUiHtmlTheme() const { return !uiHtmlCssPath.empty(); }
-    const char* getUiHtmlCssPath() const { return uiHtmlCssPath.size()?uiHtmlCssPath.c_str():UI_HTML_THEME_CSS_RAW; }
-    void setUiHtmlCssPath(const std::string path) { if (path.compare(UI_HTML_THEME_CSS_RAW)) uiHtmlCssPath.clear(); else uiHtmlCssPath = path; }
+    const char* getUiHtmlCssPath() const {
+        return uiHtmlCssPath.size()?uiHtmlCssPath.c_str():UI_HTML_THEME_CSS_RAW;
+    }
+    void setUiHtmlCssPath(const std::string path) {
+        if(!path.compare(UI_HTML_THEME_CSS_RAW)) uiHtmlCssPath.clear(); else uiHtmlCssPath = path;
+    }
 };
 
 } // namespace

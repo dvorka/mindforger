@@ -64,6 +64,7 @@ void HtmlOutlineRepresentation::header(string& html)
         if(lastMfOptions&Configuration::MdToHtmlOption::CodeHighlighting) {
             html.append("<link rel=\"stylesheet\" href=\"");
             html.append(config.getUiHtmlCssPath());
+            cout << "PATH " << config.getUiHtmlCssPath() << endl;
             html.append("\">\n");
             html.append("<script src=\"qrc:/scripts/highlight.js/highlight.pack.js\"></script>\n");
             html.append("<script>hljs.initHighlightingOnLoad();</script>\n");
@@ -128,7 +129,7 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html)
 
 string* HtmlOutlineRepresentation::to(const Outline* outline, string* html)
 {
-    // IMPROVE markdown can be processed by Mind to be enriched with various links and relationships    
+    // IMPROVE markdown can be processed by Mind to be enriched with various links and relationships
     string* markdown = markdownRepresentation.to(outline);    
     if(config.isUiHtmlTheme()) {
         to(markdown, html);
