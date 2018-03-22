@@ -102,7 +102,7 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
 {
     if(title && body && title->size() && body->size()) {
         if(!title->compare(CONFIG_SECTION_APP)) {
-            MF_DEBUG("PARSING configuration section Settings" << endl);
+            MF_DEBUG("PARSING configuration section App" << endl);
             for(string* line: *body) {
                 if(line && line->size() && line->at(0)=='*') {
                     if(line->find(CONFIG_SETTING_SAVE_READS_METADATA_LABEL) != std::string::npos) {
@@ -141,13 +141,16 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                 }
             }
         } else if(!title->compare(CONFIG_SECTION_MIND)) {
-            if(line && line->size() && line->at(0)=='*') {
-                if(line->find(CONFIG_SETTING_TIME_SCOPE_LABEL) != std::string::npos) {
-                    string t = line->substr(strlen(CONFIG_SETTING_TIME_SCOPE_LABEL));
-                    if(t.size()) {
-                        TimeScope ts;
-                        if(TimeScope::fromString(t, ts)) {
-                            c.setTimeScope(ts);
+            MF_DEBUG("PARSING configuration section Mind" << endl);
+            for(string* line: *body) {
+                if(line && line->size() && line->at(0)=='*') {
+                    if(line->find(CONFIG_SETTING_TIME_SCOPE_LABEL) != std::string::npos) {
+                        string t = line->substr(strlen(CONFIG_SETTING_TIME_SCOPE_LABEL));
+                        if(t.size()) {
+                            TimeScope ts;
+                            if(TimeScope::fromString(t, ts)) {
+                                c.setTimeScope(ts);
+                            }
                         }
                     }
                 }
