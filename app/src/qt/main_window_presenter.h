@@ -21,6 +21,7 @@
 
 #include "../../lib/src/mind/mind.h"
 #include "../../lib/src/representations/html/html_outline_representation.h"
+#include "../../lib/src/representations/markdown/markdown_configuration_representation.h"
 
 #include "main_window_view.h"
 #include "main_menu_presenter.h"
@@ -37,7 +38,9 @@
 #include "dialogs/find_note_by_tag_dialog.h"
 #include "dialogs/refactor_note_to_outline_dialog.h"
 #include "dialogs/time_scope_dialog.h"
+// IMPROVE forger > scope_dialog.h
 #include "dialogs/forget_dialog.h"
+#include "dialogs/configuration_dialog.h"
 
 #include <QtWidgets>
 
@@ -71,6 +74,7 @@ private:
 
     MarkdownOutlineRepresentation* mdRepresentation;
     HtmlOutlineRepresentation* htmlRepresentation;
+    MarkdownConfigurationRepresentation* mdConfigRepresentation;
 
     MainMenuPresenter* mainMenu;
     CliAndBreadcrumbsPresenter* cli;
@@ -87,6 +91,7 @@ private:
     FindOutlineByTagDialog* findOutlineByTagDialog;
     FindNoteByTagDialog* findNoteByTagDialog;
     RefactorNoteToOutlineDialog* refactorNoteToOutlineDialog;
+    ConfigurationDialog* configDialog;
 
 public:
     explicit MainWindowPresenter(MainWindowView& view);
@@ -128,6 +133,8 @@ public slots:
     void handleMindTimeScope();
     void doActionMindForgetting();
     void handleMindForgetting();
+    void doActionMindPreferences();
+    void handleMindPreferences();
     void doActionMindSnapshot();
     void doActionExit();
     // recall

@@ -20,13 +20,154 @@
 
 namespace m8r {
 
-ConfigurationDialog::ConfigurationDialog(QWidget *parent)
+using namespace std;
+
+ConfigurationDialog::ConfigurationDialog(QWidget* parent)
+    : QDialog(parent)
 {
-    UNUSED_ARG(parent);
+    tabWidget = new QTabWidget;
+
+    appTab = new AppTab{this};
+
+    tabWidget->addTab(appTab, tr("Application"));
+
+    buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+    // signals
+    QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    QObject::connect(buttonBox, &QDialogButtonBox::accepted, appTab, &ConfigurationDialog::AppTab::saveSlot);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout{this};
+    mainLayout->addWidget(tabWidget);
+    mainLayout->addWidget(buttonBox);
+    setLayout(mainLayout);
+
+    // dialog
+    setWindowTitle(tr("Adapt"));
+    resize(fontMetrics().averageCharWidth()*55, fontMetrics().height()*30);
+    setModal(true);
 }
 
 ConfigurationDialog::~ConfigurationDialog()
 {
+    if(appTab) delete appTab;
 }
 
+/*
+ * App tab
+ */
+
+ConfigurationDialog::AppTab::AppTab(QWidget *parent)
+    : QWidget(parent), config(Configuration::getInstance())
+{
+    QGroupBox* settingsGroup = new QGroupBox{tr("Settings"), this};
+
+    themeLabel = new QLabel(tr("UI theme")+":", this),
+    themeCombo = new QComboBox{this};
+    themeCombo->addItem(QString{UI_THEME_LIGHT});
+    themeCombo->addItem(QString{UI_THEME_DARK});
+    themeCombo->addItem(QString{UI_THEME_BLACK});
+
+    htmlCssThemeLabel = new QLabel(tr("HTML CSS theme")+":", this);
+    htmlCssThemeCombo = new QComboBox{this};
+    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT});
+    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_DARK});
+    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_RAW});
+
+    editorKeyBindingLabel = new QLabel(tr("Editor key binding")+":", this);
+    editorKeyBindingCombo = new QComboBox{this};
+    editorKeyBindingCombo->addItem("emacs");
+    editorKeyBindingCombo->addItem("vim");
+    editorKeyBindingCombo->addItem("windows");
+
+    // IMPROVE horizontal panel w/ label & check same line
+    showOutlineEditButtonLabel = new QLabel(tr("Show Notebook edit button")+":", this);
+    showOutlineEditButtonCheck = new QCheckBox(this);
+
+    // IMPROVE horizontal panel w/ label & check same line
+    saveReadsMetadataLabel = new QLabel(tr("Save reads metadata")+":", this);
+    saveReadsMetadataCheck = new QCheckBox(this);
+
+    // assembly
+    QVBoxLayout* settingsLayout = new QVBoxLayout{this};
+    settingsLayout->addWidget(themeLabel);
+    settingsLayout->addWidget(themeCombo);
+    settingsLayout->addWidget(htmlCssThemeLabel);
+    settingsLayout->addWidget(htmlCssThemeCombo);
+    settingsLayout->addWidget(editorKeyBindingLabel);
+    settingsLayout->addWidget(editorKeyBindingCombo);
+    settingsLayout->addWidget(showOutlineEditButtonLabel);
+    settingsLayout->addWidget(showOutlineEditButtonCheck);
+    settingsLayout->addWidget(saveReadsMetadataLabel);
+    settingsLayout->addWidget(saveReadsMetadataCheck);
+    settingsGroup->setLayout(settingsLayout);
+
+    QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(settingsGroup);
+    setLayout(boxesLayout);
 }
+
+ConfigurationDialog::AppTab::~AppTab()
+{
+    delete themeLabel;
+    delete themeCombo;
+    delete htmlCssThemeLabel;
+    delete htmlCssThemeCombo;
+    delete editorKeyBindingLabel;
+    delete editorKeyBindingCombo;
+    delete showOutlineEditButtonLabel;
+    delete showOutlineEditButtonCheck;
+    delete saveReadsMetadataLabel;
+    delete saveReadsMetadataCheck;
+}
+
+void ConfigurationDialog::AppTab::refresh()
+{
+    int i = themeCombo->findText(QString::fromStdString(config.getUiThemeName()));
+    if(i>=0) {
+        themeCombo->setCurrentIndex(i);
+    }
+
+    i = htmlCssThemeCombo->findText(QString::fromStdString(config.getUiHtmlCssPath()));
+    if(i>=0) {
+        htmlCssThemeCombo->setCurrentIndex(i);
+    }
+
+    i = editorKeyBindingCombo->findText(QString::fromStdString(config.getEditorKeyBindingAsString()));
+    if(i>=0) {
+        editorKeyBindingCombo->setCurrentIndex(i);
+    }
+
+    showOutlineEditButtonCheck->setChecked(config.isUiShowNotebookEditButton());
+    saveReadsMetadataCheck->setChecked(config.isSaveReadsMetadata());
+}
+
+void ConfigurationDialog::AppTab::clean()
+{
+}
+
+void ConfigurationDialog::AppTab::saveSlot()
+{
+    config.setUiThemeName(themeCombo->itemText(themeCombo->currentIndex()).toStdString());
+    config.setUiHtmlCssPath(htmlCssThemeCombo->itemText(htmlCssThemeCombo->currentIndex()).toStdString());
+    config.setEditorKeyBindingByString(editorKeyBindingCombo->itemText(editorKeyBindingCombo->currentIndex()).toStdString());
+    config.setUiShowNotebookEditButton(showOutlineEditButtonCheck->isChecked());
+    config.setSaveReadsMetadata(saveReadsMetadataCheck->isChecked());
+
+    emit saveConfigSignal();
+}
+
+/*
+ * Dialog
+ */
+
+void ConfigurationDialog::show()
+{
+    appTab->refresh();
+
+    QDialog::show();
+}
+
+
+} // m8r namespace

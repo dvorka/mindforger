@@ -21,13 +21,26 @@
 
 #include <QtWidgets>
 
-#include "../../lib/src/gear/lang_utils.h"
+#include "../../lib/src/config/configuration.h"
+
+class QDialogButtonBox;
+class QTabWidget;
 
 namespace m8r {
 
-class ConfigurationDialog : public QObject
+class ConfigurationDialog : public QDialog
 {
     Q_OBJECT
+
+    class MindTab;
+    class AppTab;
+
+private:
+    QTabWidget* tabWidget;
+    MindTab* mindTab;
+    AppTab* appTab;
+
+    QDialogButtonBox *buttonBox;
 
 public:
     explicit ConfigurationDialog(QWidget* parent);
@@ -36,6 +49,63 @@ public:
     ConfigurationDialog &operator=(const ConfigurationDialog&) = delete;
     ConfigurationDialog &operator=(const ConfigurationDialog&&) = delete;
     ~ConfigurationDialog();
+
+    AppTab* getAppTab() { return appTab; }
+
+    void show();
+};
+
+/**
+ * @brief Mind tab.
+ */
+class ConfigurationDialog::MindTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    QLabel* nameLabel;
+    QLineEdit* nameEdit;
+
+public:
+    explicit MindTab(QWidget* parent) : QWidget(parent) {}
+    ~MindTab() {}
+};
+
+/*
+ * App tab
+ */
+
+class ConfigurationDialog::AppTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    Configuration& config;
+
+    QLabel* themeLabel;
+    QComboBox* themeCombo;
+    QLabel* htmlCssThemeLabel;
+    QComboBox* htmlCssThemeCombo;
+    QLabel* editorKeyBindingLabel;
+    QComboBox* editorKeyBindingCombo;
+    QLabel* showOutlineEditButtonLabel;
+    QCheckBox* showOutlineEditButtonCheck;
+    QLabel* saveReadsMetadataLabel;
+    QCheckBox* saveReadsMetadataCheck;
+
+public:
+    explicit AppTab(QWidget* parent);
+    ~AppTab();
+
+    // there and back is handled by Dialog's access to this class & Config singleton
+    void refresh();
+    void clean();
+
+signals:
+    void saveConfigSignal();
+
+public slots:
+    void saveSlot();
 };
 
 }

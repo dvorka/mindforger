@@ -21,17 +21,23 @@
 
 namespace m8r {
 
-constexpr const auto CONFIG_SECTION_SETTINGS = "Settings";
-constexpr const auto CONFIG_SECTION_REPOSITORIES= "REPOSITORIES";
+constexpr const auto CONFIG_SECTION_APP = "Application";
+constexpr const auto CONFIG_SECTION_MIND = "Mind";
+constexpr const auto CONFIG_SECTION_REPOSITORIES= "Repositories";
 
+// application
+constexpr const auto CONFIG_SETTING_UI_THEME_LABEL = "* Theme: ";
+constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* HTML CSS theme: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
 constexpr const auto CONFIG_SETTING_TIME_SCOPE_LABEL = "* Time scope: ";
+constexpr const auto CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL = "* Show Notebook edit button: ";
 constexpr const auto CONFIG_SETTING_SAVE_READS_METADATA_LABEL = "* Save reads metadata: ";
+
+// mind
+
+// repositories
 constexpr const auto CONFIG_SETTING_ACTIVE_REPOSITORY_LABEL = "* Active repository: ";
 constexpr const auto CONFIG_SETTING_REPOSITORY_LABEL = "* Repository: ";
-
-constexpr const auto CONFIG_SETTING_UI_THEME_LABEL = "* Theme: ";
-constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
-constexpr const auto CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL = "* Show Notebook edit button: ";
 
 using namespace std;
 
@@ -95,19 +101,11 @@ void MarkdownConfigurationRepresentation::configuration(vector<MarkdownAstNodeSe
 void MarkdownConfigurationRepresentation::configuration(string* title, vector<string*>* body, Configuration& c)
 {
     if(title && body && title->size() && body->size()) {
-        if(!title->compare(CONFIG_SECTION_SETTINGS)) {
+        if(!title->compare(CONFIG_SECTION_APP)) {
             MF_DEBUG("PARSING configuration section Settings" << endl);
             for(string* line: *body) {
                 if(line && line->size() && line->at(0)=='*') {
-                    if(line->find(CONFIG_SETTING_TIME_SCOPE_LABEL) != std::string::npos) {
-                        string t = line->substr(strlen(CONFIG_SETTING_TIME_SCOPE_LABEL));
-                        if(t.size()) {
-                            TimeScope ts;
-                            if(TimeScope::fromString(t, ts)) {
-                                c.setTimeScope(ts);
-                            }
-                        }
-                    } else if(line->find(CONFIG_SETTING_SAVE_READS_METADATA_LABEL) != std::string::npos) {
+                    if(line->find(CONFIG_SETTING_SAVE_READS_METADATA_LABEL) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
                             c.setSaveReadsMetadata(true);
                         } else {
@@ -118,6 +116,12 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         // NOTE: theme name is NOT validated
                         if(t.size()) {
                             c.setUiThemeName(t);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL) != std::string::npos) {
+                        string t = line->substr(strlen(CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL));
+                        if(t.size()) {
+                            // TODO: IMPORTANT - this is potential SECURITY threat - theme name is NOT validated
+                            c.setUiHtmlCssPath(t);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL) != std::string::npos) {
                         if(line->find("emacs") != std::string::npos) {
@@ -132,6 +136,18 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                             c.setUiShowNotebookEditButton(true);
                         } else {
                             c.setUiShowNotebookEditButton(false);
+                        }
+                    }
+                }
+            }
+        } else if(!title->compare(CONFIG_SECTION_MIND)) {
+            if(line && line->size() && line->at(0)=='*') {
+                if(line->find(CONFIG_SETTING_TIME_SCOPE_LABEL) != std::string::npos) {
+                    string t = line->substr(strlen(CONFIG_SETTING_TIME_SCOPE_LABEL));
+                    if(t.size()) {
+                        TimeScope ts;
+                        if(TimeScope::fromString(t, ts)) {
+                            c.setTimeScope(ts);
                         }
                     }
                 }
@@ -195,15 +211,26 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "See documentation for configuration options details." << endl <<
          endl <<
 
-         "# " << CONFIG_SECTION_SETTINGS << endl <<
+         "# " << CONFIG_SECTION_MIND << endl <<
+         "Mind-related settings:" << endl <<
+         endl <<
+         CONFIG_SETTING_TIME_SCOPE_LABEL << timeScopeAsString << endl <<
+         "    * Examples: 2y0m0d0h0m (recent 2 years), 0y3m15d0h0m (recent 3 months and 15 days)" << endl <<
+         endl <<
+
+         "# " << CONFIG_SECTION_APP << endl <<
          "Application settings:" << endl <<
          endl <<
          CONFIG_SETTING_UI_THEME_LABEL << (c?c->getUiThemeName():Configuration::DEFAULT_UI_THEME_NAME) << endl <<
          "    * Examples: dark, light" << endl <<
+         CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL << (c?c->getUiHtmlCssPath():Configuration::DEFAULT_UI_HTML_CSS_THEME) << endl <<
+         "    * Normal themes (dark, light) style HTML generated from Markdown," << endl <<
+         "      while raw theme shows syntax-highlighted Markdown only. You can" << endl <<
+         // ... well I know this is potential security hole, but I believe MF users have good intentions
+         "      also specify path to any CSS file to be used." << endl <<
+         "    * Examples: qrc:/html-css/light.css, qrc:/html-css/dark.css, raw, /home/user/my-custom-mf-style.css" << endl <<
          CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL << (c?c->getEditorKeyBindingAsString():Configuration::DEFAULT_EDITOR_KEY_BINDING) << endl <<
          "    * Examples: emacs, vim, windows" << endl <<
-         CONFIG_SETTING_TIME_SCOPE_LABEL << timeScopeAsString << endl <<
-         "    * Examples: 2y0m0d0h0m (recent 2 years), 0y3m15d0h0m (recent 3 months and 15 days)" << endl <<
          CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL << (c?(c->isUiShowNotebookEditButton()?"yes":"no"):(Configuration::DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_SAVE_READS_METADATA_LABEL << (c?(c->isSaveReadsMetadata()?"yes":"no"):(Configuration::DEFAULT_SAVE_READS_METADATA?"yes":"no")) << endl <<

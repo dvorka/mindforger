@@ -33,6 +33,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         = new MarkdownOutlineRepresentation{mind->ontology()};
     this->htmlRepresentation
         = new HtmlOutlineRepresentation{mind->ontology()};
+    this->mdConfigRepresentation
+        = new MarkdownConfigurationRepresentation{};
 
     // assemble presenters w/ UI
     statusBar = new StatusBarPresenter{view.getStatusBar(), mind};
@@ -54,6 +56,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     findOutlineByTagDialog = new FindOutlineByTagDialog{mind->remind().getOntology(), &view};
     findNoteByTagDialog = new FindNoteByTagDialog{mind->remind().getOntology(), &view};
     refactorNoteToOutlineDialog = new RefactorNoteToOutlineDialog{&view};
+    configDialog = new ConfigurationDialog{&view};
 
     // wire signals
     QObject::connect(timeScopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindTimeScope()));
@@ -66,6 +69,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(findOutlineByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByTag()));
     QObject::connect(findNoteByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByTag()));
     QObject::connect(refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
+    QObject::connect(configDialog->getAppTab(), SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
 
     // let mind think/dream/...
     mind->learn();
@@ -81,6 +85,7 @@ MainWindowPresenter::~MainWindowPresenter()
     if(findOutlineByNameDialog) delete findOutlineByNameDialog;
     if(findNoteByNameDialog) delete findNoteByNameDialog;
     if(findOutlineByTagDialog) delete findOutlineByTagDialog;
+    if(configDialog) delete configDialog;
     //if(findNoteByNameDialog) delete findNoteByNameDialog;
 
     // TODO deletes
@@ -841,6 +846,16 @@ void MainWindowPresenter::doActionMindForgetting()
 
 void MainWindowPresenter::handleMindForgetting()
 {
+}
+
+void MainWindowPresenter::doActionMindPreferences()
+{
+    configDialog->show();
+}
+
+void MainWindowPresenter::handleMindPreferences()
+{
+    mdConfigRepresentation->save(config);
 }
 
 void MainWindowPresenter::doActionHelpDocumentation()

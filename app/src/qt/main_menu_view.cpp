@@ -94,7 +94,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindPreferences = new QAction(tr("&Adapt"), mainWindow);
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
     actionMindPreferences->setStatusTip(tr("Adapt Mind by setting your preferences..."));
-    actionMindPreferences->setEnabled(false);
 
     actionExit = new QAction(tr("E&xit"), mainWindow);
     actionExit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Q));

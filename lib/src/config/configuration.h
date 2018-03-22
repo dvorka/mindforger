@@ -59,12 +59,18 @@ constexpr const auto UI_THEME_DARK = "dark";
 constexpr const auto UI_THEME_LIGHT = "light";
 constexpr const auto UI_THEME_BLACK = "black";
 
-constexpr const auto UI_HTML_THEME_CSS_DARK = "qrc:/html-css/dark.css";
 constexpr const auto UI_HTML_THEME_CSS_LIGHT = "qrc:/html-css/light.css";
+constexpr const auto UI_HTML_THEME_CSS_DARK = "qrc:/html-css/dark.css";
+constexpr const auto UI_HTML_THEME_CSS_RAW = "raw";
+
+constexpr const auto UI_EDITOR_KEY_BINDING_EMACS = "emacs";
+constexpr const auto UI_EDITOR_KEY_BINDING_VIM = "vim";
+constexpr const auto UI_EDITOR_KEY_BINDING_WIN = "windows";
+
 
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
-constexpr const auto UI_DEFAULT_HTML_THEME_CSS = UI_HTML_THEME_CSS_LIGHT;
-constexpr const auto UI_DEFAULT_EDITOR_KEY_BINDING = "emacs";
+constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
+constexpr const auto UI_DEFAULT_EDITOR_KEY_BINDING = UI_EDITOR_KEY_BINDING_EMACS;
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
 class Installer;
@@ -134,6 +140,7 @@ public:
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
 
     static const std::string DEFAULT_UI_THEME_NAME;
+    static const std::string DEFAULT_UI_HTML_CSS_THEME;
     static const std::string DEFAULT_EDITOR_KEY_BINDING;
 
 private:
@@ -232,10 +239,15 @@ public:
 
     EditorKeyBindingMode getEditorKeyBinding() const { return uiEditorKeyBinding; }
     const char* getEditorKeyBindingAsString() const {
-        if(uiEditorKeyBinding==EditorKeyBindingMode::EMACS) return "emacs"; else
-            if(uiEditorKeyBinding==EditorKeyBindingMode::WINDOWS) return "windows"; else return "vim";
+        if(uiEditorKeyBinding==EditorKeyBindingMode::EMACS) return UI_EDITOR_KEY_BINDING_EMACS; else
+            if(uiEditorKeyBinding==EditorKeyBindingMode::WINDOWS) return UI_EDITOR_KEY_BINDING_WIN; else return UI_EDITOR_KEY_BINDING_VIM;
     }
     void setEditorKeyBinding(EditorKeyBindingMode keyBinding) { this->uiEditorKeyBinding=keyBinding; }
+    void setEditorKeyBindingByString(const std::string& binding) {
+        if(!binding.compare(UI_EDITOR_KEY_BINDING_WIN)) uiEditorKeyBinding=EditorKeyBindingMode::WINDOWS;
+        else if (!binding.compare(UI_EDITOR_KEY_BINDING_VIM)) uiEditorKeyBinding=EditorKeyBindingMode::VIM;
+        else uiEditorKeyBinding=EditorKeyBindingMode::EMACS;
+    }
     int getUiFontPointSize() const { return uiFontPointSize; }
     const std::string& getUiThemeName() const { return uiThemeName; }
     void setUiThemeName(const std::string theme) { uiThemeName = theme; }
@@ -247,8 +259,8 @@ public:
     void setUiShowNotebookEditButton(bool show) { uiShowNotebookEditButton = show; }
     bool isUiShowBreadcrump() const { return uiShowBreadcrump; }
     bool isUiHtmlTheme() const { return !uiHtmlCssPath.empty(); }
-    const std::string& getUiHtmlCssPath() const { return uiHtmlCssPath; }
-    void setUiHtmlCssPath(const std::string path) { uiHtmlCssPath = path; }
+    const char* getUiHtmlCssPath() const { return uiHtmlCssPath.size()?uiHtmlCssPath.c_str():UI_HTML_THEME_CSS_RAW; }
+    void setUiHtmlCssPath(const std::string path) { if (path.compare(UI_HTML_THEME_CSS_RAW)) uiHtmlCssPath.clear(); else uiHtmlCssPath = path; }
 };
 
 } // namespace

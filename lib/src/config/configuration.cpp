@@ -25,6 +25,7 @@ using namespace std;
 
 const std::string Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH = std::string{FILE_PATH_M8R_REPOSITORY};
 const std::string Configuration::DEFAULT_UI_THEME_NAME = std::string{UI_DEFAULT_THEME};
+const std::string Configuration::DEFAULT_UI_HTML_CSS_THEME = std::string{UI_DEFAULT_HTML_CSS_THEME};
 const std::string Configuration::DEFAULT_EDITOR_KEY_BINDING= std::string{UI_DEFAULT_EDITOR_KEY_BINDING};
 const std::string Configuration::DEFAULT_TIME_SCOPE = std::string{"0y0m0d0h0m"};
 
@@ -90,7 +91,7 @@ void Configuration::reset()
     uiEditorEnableSyntaxHighlighting = true;
     uiEditorShowLineNumbers = true;
     uiThemeName.assign(UI_DEFAULT_THEME);
-    uiHtmlCssPath.assign(UI_DEFAULT_HTML_THEME_CSS);
+    uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
     uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
     uiShowNotebookEditButton = DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON;
 }
