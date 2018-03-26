@@ -39,7 +39,13 @@ HtmlOutlineRepresentation::~HtmlOutlineRepresentation()
 void HtmlOutlineRepresentation::header(string& html)
 {
     if(!config.isUiHtmlTheme()) {
+        // IMPROVE possibly dark/light variant might be needed (check theme name)
         html.append("<html><head><pre>");
+        if(config.getUiThemeName().find(UI_THEME_LIGHT) != string::npos) {
+            html.append("<font color='#000'>");
+        } else {
+            html.append("<font color='#FFF'>");
+        }
     } else {
         html.append("<html><head>");
         html.append("<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); }; </script>\n");
@@ -75,53 +81,60 @@ void HtmlOutlineRepresentation::header(string& html)
 void HtmlOutlineRepresentation::footer(string& html)
 {
     if(!config.isUiHtmlTheme()) {
-        html.append("<pre>");
+        html.append("</font></pre>");
     }
     html.append("</body></html>");
 }
 
 string* HtmlOutlineRepresentation::to(const string* markdown, string* html)
 {
-    MMIOT* doc = nullptr;
-    if(markdown->size() > 0) {
-        // ensure MD ends with new line, otherwise there would be missing characters in output HTML
-        if(markdown->at(markdown->size()-1) != '\n') {
-            markdown += '\n';
+    if(!config.isUiHtmlTheme()) {
+        html->clear();
+        header(*html);
+        html->append(*markdown);
+        footer(*html);
+    } else {
+        MMIOT* doc = nullptr;
+        if(markdown->size() > 0) {
+            // ensure MD ends with new line, otherwise there would be missing characters in output HTML
+            if(markdown->at(markdown->size()-1) != '\n') {
+                markdown += '\n';
+            }
+
+            // options
+            unsigned int mfOptions = config.getMd2HtmlOptions();
+            if(mfOptions!=lastMfOptions) {
+                lastMfOptions = mfOptions;
+                discountOptions
+                    = MKD_TOC
+                        | MKD_NOSTYLE
+                        | (mfOptions&Configuration::MdToHtmlOption::AutolinkOption?MKD_AUTOLINK:0)
+                        | (mfOptions&Configuration::MdToHtmlOption::NoStrikethroughOption?MKD_NOSTRIKETHROUGH:0)
+                        | (mfOptions&Configuration::MdToHtmlOption::NoAlphaListOption?MKD_NOALPHALIST:0)
+                        | (mfOptions&Configuration::MdToHtmlOption::NoDefinitionListOption?MKD_NODLIST:0)
+                        | (mfOptions&Configuration::MdToHtmlOption::NoSmartypantsOption?MKD_NOPANTS:0)
+                        | (mfOptions&Configuration::MdToHtmlOption::ExtraFootnoteOption?MKD_EXTRA_FOOTNOTE:0)
+                        | (mfOptions&Configuration::MdToHtmlOption::NoSuperscriptOption?MKD_NOSUPERSCRIPT:0);
+            }
+
+            // compile to AST - a tree of paragraph
+            doc = mkd_string(markdown->c_str(), markdown->size(), discountOptions);
+            mkd_compile(doc, discountOptions);
         }
 
-        // options
-        unsigned int mfOptions = config.getMd2HtmlOptions();
-        if(mfOptions!=lastMfOptions) {
-            lastMfOptions = mfOptions;
-            discountOptions
-                = MKD_TOC
-                    | MKD_NOSTYLE
-                    | (mfOptions&Configuration::MdToHtmlOption::AutolinkOption?MKD_AUTOLINK:0)
-                    | (mfOptions&Configuration::MdToHtmlOption::NoStrikethroughOption?MKD_NOSTRIKETHROUGH:0)
-                    | (mfOptions&Configuration::MdToHtmlOption::NoAlphaListOption?MKD_NOALPHALIST:0)
-                    | (mfOptions&Configuration::MdToHtmlOption::NoDefinitionListOption?MKD_NODLIST:0)
-                    | (mfOptions&Configuration::MdToHtmlOption::NoSmartypantsOption?MKD_NOPANTS:0)
-                    | (mfOptions&Configuration::MdToHtmlOption::ExtraFootnoteOption?MKD_EXTRA_FOOTNOTE:0)
-                    | (mfOptions&Configuration::MdToHtmlOption::NoSuperscriptOption?MKD_NOSUPERSCRIPT:0);
-        }
+        // TODO check if out is leak OR reused array
+        char* body{};
+        // compile AST to HTML string
+        mkd_document(doc, &body);
 
-        // compile to AST - a tree of paragraph
-        doc = mkd_string(markdown->c_str(), markdown->size(), discountOptions);
-        mkd_compile(doc, discountOptions);
+        // assemble HTML
+        html->clear();
+        header(*html);
+        html->append(body);
+        footer(*html);
     }
 
-    // TODO check if out is leak OR reused array
-    char* body{};
-    // compile AST to HTML string
-    mkd_document(doc, &body);
-
-    // assemble HTML
-    html->clear();
-    header(*html);
-    html->append(body);
-    footer(*html);
-
-    //MF_DEBUG("===" << *html << "=1==" << endl);
+    MF_DEBUG("===" << *html << "=1==" << endl);
 
     return html;
 }
@@ -130,43 +143,25 @@ string* HtmlOutlineRepresentation::to(const Outline* outline, string* html)
 {
     // IMPROVE markdown can be processed by Mind to be enriched with various links and relationships
     string* markdown = markdownRepresentation.to(outline);    
-    if(config.isUiHtmlTheme()) {
-        to(markdown, html);
-        delete markdown;
-        return html;
-    } else {
-        html->assign(*markdown);
-        delete markdown;
-        return html;
-    }
+    to(markdown, html);
+    delete markdown;
+    return html;
 }
 
 string* HtmlOutlineRepresentation::toHeader(const Outline* outline, string* html)
 {
     string* markdown = markdownRepresentation.toHeader(outline);
-    if(config.isUiHtmlTheme()) {
-        to(markdown, html);
-        delete markdown;
-        return html;
-    } else {
-        html->assign(*markdown);
-        delete markdown;
-        return html;
-    }
+    to(markdown, html);
+    delete markdown;
+    return html;
 }
 
 string* HtmlOutlineRepresentation::to(const Note* note, string* html)
 {
     string* markdown = markdownRepresentation.to(note);
-    if(config.isUiHtmlTheme()) {
-        to(markdown, html);
-        delete markdown;
-        return html;
-    } else {
-        html->assign(*markdown);
-        delete markdown;
-        return html;
-    }
+    to(markdown, html);
+    delete markdown;
+    return html;
 }
 
 } // m8r namespace
