@@ -10,6 +10,7 @@ Big thanks to 3rd party content authors:
 * Qt Company (Qt - lib and code)
 * Christian Loose (CuteMarkEd - inspiration and code)
 * David Parsons (Discount - MD rendering - library)
+* Lewis Van Winkle (GENANN - minimal neural network - library)
 * Google (Google C++ unit testing framework)
 * Raimund Hocke (SikuliX - GUI automation testing)
 * Knut Sveidqvist (Mermaid.js - diagrams and flowcharts rendering in HTML)
