@@ -64,7 +64,6 @@ void HtmlOutlineRepresentation::header(string& html)
         if(lastMfOptions&Configuration::MdToHtmlOption::CodeHighlighting) {
             html.append("<link rel=\"stylesheet\" href=\"");
             html.append(config.getUiHtmlCssPath());
-            cout << "PATH " << config.getUiHtmlCssPath() << endl;
             html.append("\">\n");
             html.append("<script src=\"qrc:/scripts/highlight.js/highlight.pack.js\"></script>\n");
             html.append("<script>hljs.initHighlightingOnLoad();</script>\n");

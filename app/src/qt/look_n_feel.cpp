@@ -101,8 +101,6 @@ void LookAndFeels::setDarkTheme()
     mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #008c00; border: 1px solid white; }");
     //palette.setColor(QPalette::ToolTipBase, Qt::blue);
     //palette.setColor(QPalette::ToolTipText, Qt::red);
-
-    Configuration::getInstance().setUiHtmlCssPath(UI_HTML_THEME_CSS_DARK);
 }
 
 /*
@@ -150,8 +148,6 @@ void LookAndFeels::setLightTheme()
     mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #ED764D; border: 1px solid white; }");
 
     mindforgerApplication->setPalette(palette);
-
-    Configuration::getInstance().setUiHtmlCssPath(UI_HTML_THEME_CSS_LIGHT);
 }
 
 void LookAndFeels::setBlackTheme()
@@ -212,8 +208,6 @@ void LookAndFeels::setBlackTheme()
 
     // IMPROVE tooltips are set in two ways
     mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #000000; border: 1px solid white; }");
-
-    Configuration::getInstance().setUiHtmlCssPath(UI_HTML_THEME_CSS_DARK);
 }
 
 } // m8r namespace

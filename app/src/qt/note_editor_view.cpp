@@ -143,6 +143,7 @@ bool NoteEditorView::handledCompletedAndSelected(QKeyEvent *event)
 
     QTextCursor cursor = textCursor();
     switch(event->key()) {
+    case Qt::Key_Space:
         case Qt::Key_Enter:
         case Qt::Key_Return:
             cursor.clearSelection();
