@@ -2,15 +2,14 @@
 
 Written by [Martin Dvorak](http://me.mindforger.com).
 
-Big thanks to 3rd party content authors:
+Big thanks to 3rd party FOSS content authors:
 
-* Bjarne Stroustrup (C++ - for inspiring visions and being the authority behind C++ language)
-* Richard Stallman (GNU and GNU GPL - for passionate software freedom activism)
 * John Gruber (Markdown - spec)
 * Qt Company (Qt - lib and code)
 * Christian Loose (CuteMarkEd - inspiration and code)
-* David Parsons (Discount - MD rendering - library)
+* David Parsons (Discount - Markdown rendering - library)
 * Lewis Van Winkle (GENANN - minimal neural network - library)
+* Oleander Software (Oleander stemming library - stemmer - library)
 * Google (Google C++ unit testing framework)
 * Raimund Hocke (SikuliX - GUI automation testing)
 * Knut Sveidqvist (Mermaid.js - diagrams and flowcharts rendering in HTML)
@@ -27,3 +26,9 @@ Acknowledgements to reviewers, and testers:
 
 * Floex (reviews)
 * Honza Odstrcil (consultations)
+
+Special thanks to:
+
+* Bjarne Stroustrup (C++ - for inspiring visions and being the authority behind C++ language)
+* Linus Torvalds (Linux and Git - for being inspiring and straightforward)
+* Richard Stallman (GNU and GNU GPL - for passionate software freedom activism)
