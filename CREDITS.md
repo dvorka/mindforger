@@ -22,7 +22,7 @@ Big thanks to 3rd party FOSS content authors:
 
 See [licenses](./licenses) folder for 3rd party content licensing details.
 
-Acknowledgements to reviewers, and testers:
+Acknowledgements to reviewers and testers:
 
 * Floex (reviews)
 * Honza Odstrcil (consultations)
