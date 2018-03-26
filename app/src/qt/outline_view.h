@@ -32,12 +32,10 @@ class OutlineView : public QWidget
     Q_OBJECT
 
 private:
-    // header
-    QVBoxLayout headerVerticalLayout;
     QPushButton* nameLabel;
-    //QLabel* labelsLabel;
-    // notes tree
     OutlineTreeView *outlineTreeView;
+
+    QVBoxLayout headerVerticalLayout;
 
 public:
     explicit OutlineView(QWidget* parent);

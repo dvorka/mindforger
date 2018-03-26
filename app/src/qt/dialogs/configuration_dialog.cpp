@@ -45,7 +45,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
 
     // dialog
     setWindowTitle(tr("Adapt"));
-    resize(fontMetrics().averageCharWidth()*55, fontMetrics().height()*30);
+    resize(fontMetrics().averageCharWidth()*55, 0);
     setModal(true);
 }
 
@@ -63,7 +63,7 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
 {
     QGroupBox* settingsGroup = new QGroupBox{tr("Settings"), this};
 
-    themeLabel = new QLabel(tr("UI theme")+":", this),
+    themeLabel = new QLabel(tr("UI theme (requires restart)")+":", this),
     themeCombo = new QComboBox{this};
     themeCombo->addItem(QString{UI_THEME_LIGHT});
     themeCombo->addItem(QString{UI_THEME_DARK});

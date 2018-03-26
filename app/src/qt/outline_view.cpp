@@ -34,7 +34,7 @@ OutlineView::OutlineView(QWidget *parent)
     nameLabel->setFont(nameFont);
     headerVerticalLayout.addWidget(nameLabel);
 
-    // tree of note
+    // tree of Ns
     outlineTreeView = new OutlineTreeView(parent);
     headerVerticalLayout.addWidget(outlineTreeView);
 
