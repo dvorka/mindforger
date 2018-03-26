@@ -30,5 +30,5 @@ Acknowledgements to reviewers, and testers:
 Special thanks to:
 
 * Bjarne Stroustrup (C++ - for inspiring visions and being the authority behind C++ language)
-* Linus Torvalds (Linux and Git - for being inspiring and straightforward)
+* Linus Torvalds (Linux and Git - for being inspiration and strong opinions)
 * Richard Stallman (GNU and GNU GPL - for passionate software freedom activism)
