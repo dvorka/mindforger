@@ -90,7 +90,6 @@ void LookAndFeels::setDarkTheme()
     palette.setColor(QPalette::Button, QColor(53,53,53));
     palette.setColor(QPalette::ButtonText, Qt::white);
     palette.setColor(QPalette::BrightText, Qt::red);
-
     palette.setColor(QPalette::Link, QColor(0, 140, 0));
     palette.setColor(QPalette::Highlight, QColor(0, 140, 0));
     palette.setColor(QPalette::HighlightedText, Qt::white);

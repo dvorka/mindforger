@@ -24,6 +24,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     : mainWindow(&mainWindowView)
 {
     qMenuBar = mainWindow->getMenuBar();
+    qMenuBar->setStyleSheet(QString("QMenu::separator { background: #444444; height: 1; }"));
 
     // menu: mind
 
@@ -34,8 +35,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
 
     // devise... new MD repository
-    actionMindDevise = new QAction(tr("&Devise"), mainWindow);
-    actionMindDevise->setStatusTip(tr("Create brand new MindForger repository..."));
+    actionMindDevise = new QAction(tr("&New"), mainWindow);
+    actionMindDevise->setStatusTip(tr("Create a brand new MindForger repository..."));
     actionMindDevise->setEnabled(false);
 
     // learn... from a repository, Markdown or TXT file
@@ -52,13 +53,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindRemember->setStatusTip(tr("Remember Things by ensuring Memory persistence"));
     actionMindRemember->setEnabled(false);
 
-    // remind ... smart mind search using FTS/associations/similarity
+    // remind ... smart *combined* (semantic) mind search using FTS/associations/associations to find O or N
     actionMindRecall = new QAction(tr("&Recall"), mainWindow);
     // IMPROVE show memory dwell as a base for reminding a note
-    actionMindRecall->setStatusTip(tr("Recall a Note by searching memory dwell, associations and similar notes"));
+    actionMindRecall->setStatusTip(tr("Recall a Note by searching memory dwell, associations and similar Notes"));
     actionMindRecall->setEnabled(false);
 
-    // associate ... discover associated notes
+    // TODO move this to O and N menu where it makes much more sense
+    // associate ... discover Os/Ns associated with the current O/N
     actionMindAssociate = new QAction(tr("&Associate"), mainWindow);
     actionMindAssociate->setStatusTip(tr("Discover Notes associated with current Outline or Note"));
     actionMindAssociate->setEnabled(false);
@@ -76,6 +78,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindScope = new QAction(tr("Sco&pe"), mainWindow);
     actionMindScope->setStatusTip(tr("Don't show Outlines and Notes older than..."));
 
+    // TODO remove this menu item > make it Configuration option in Mind menu (Limbo or erase)
     // forget ... move to Limbo or erase
     actionMindForget = new QAction(tr("&Forget"), mainWindow);
     actionMindForget->setStatusTip(tr("Limbo vs erase memory..."));
@@ -86,7 +89,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindDream->setStatusTip(tr("Tidy up, clean, re-infer, check and optimize Memory which is otherwise done on your inactivity"));
 
     actionMindSnapshot = new QAction(tr("D&ump"), mainWindow);
-    actionMindSnapshot->setStatusTip(tr("Create backup archive of the current repository"));
+    actionMindSnapshot->setStatusTip(tr("Create backup archive of the current repository and store it in home directory"));
     actionMindSnapshot->setEnabled(false);
 
     // TODO submenu: printer, HTML, PDF
@@ -100,14 +103,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionExit->setStatusTip(tr("Leave application"));
 
     menuMind = qMenuBar->addMenu(tr("&Mind"));
-#ifdef DO_M8F_DEBUG
-    menuMind->addAction(actionMindHack);
-    menuMind->addSeparator();
-#endif
-    menuMind->addAction(actionMindThink);
-    menuMind->addAction(actionMindDream);
-    menuMind->addAction(actionMindSleep);
-    menuMind->addSeparator();
     menuMind->addAction(actionMindDevise);
     menuMind->addAction(actionMindLearn);
     menuMind->addMenu(submenuMindRelearn);
@@ -117,10 +112,18 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addAction(actionMindScope);
     menuMind->addAction(actionMindForget);
     menuMind->addSeparator();
+    menuMind->addAction(actionMindThink);
+    menuMind->addAction(actionMindDream);
+    menuMind->addAction(actionMindSleep);
+    menuMind->addSeparator();
     menuMind->addAction(actionMindSnapshot);
     menuMind->addAction(actionMindPreferences);
     menuMind->addSeparator();
     menuMind->addAction(actionExit);
+#ifdef DO_M8F_DEBUG
+    menuMind->addSeparator();
+    menuMind->addAction(actionMindHack);
+#endif
 
     // menu: recall
 
@@ -306,7 +309,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineForget = new QAction(tr("&Forget"), mainWindow);
     actionOutlineForget->setStatusTip(tr("Forget Outline and move it to Limbo"));
 
-    actionOutlineExport = new QAction(tr("&Dump"), mainWindow);
+    actionOutlineExport = new QAction(tr("E&xport"), mainWindow);
     actionOutlineExport->setStatusTip(tr("Export Outline to a file in supported format"));
     actionOutlineExport->setEnabled(false);
 
@@ -369,7 +372,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteClone = new QAction(tr("&Clone"), mainWindow);
     actionNoteClone->setStatusTip(tr("Make a copy of the Note to this or other Outline..."));
 
-    actionNoteExport = new QAction(tr("Dump"), mainWindow);
+    actionNoteExport = new QAction(tr("E&xport"), mainWindow);
     actionNoteExport->setStatusTip(tr("Export Note to an external file in a supported format"));
     actionNoteExport->setEnabled(false);
 
