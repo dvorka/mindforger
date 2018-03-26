@@ -62,7 +62,7 @@ void NoteViewPresenter::refresh(Note* note)
         qHtml += LookAndFeels::getInstance().getTextColor();
         qHtml += QString::fromUtf8("'><pre>");
 
-        // note
+        // N
         markdownRepresentation->to(note, html);
         qHtml += QString::fromStdString(*html);
 

@@ -40,14 +40,15 @@ void HtmlOutlineRepresentation::header(string& html)
 {
     if(!config.isUiHtmlTheme()) {
         // IMPROVE possibly dark/light variant might be needed (check theme name)
-        html.append("<html><head><pre>");
+        html.assign("<html><body style='color: ");
         if(config.getUiThemeName().find(UI_THEME_LIGHT) != string::npos) {
-            html.append("<font color='#000'>");
+            html.append("#000>");
         } else {
-            html.append("<font color='#FFF'>");
+            html.append("#FFF");
         }
+        html.append("'><pre>");
     } else {
-        html.append("<html><head>");
+        html.assign("<html><head>");
         html.append("<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); }; </script>\n");
 
         // math via MathJax.js
@@ -81,7 +82,7 @@ void HtmlOutlineRepresentation::header(string& html)
 void HtmlOutlineRepresentation::footer(string& html)
 {
     if(!config.isUiHtmlTheme()) {
-        html.append("</font></pre>");
+        html.append("</pre>");
     }
     html.append("</body></html>");
 }
@@ -89,7 +90,6 @@ void HtmlOutlineRepresentation::footer(string& html)
 string* HtmlOutlineRepresentation::to(const string* markdown, string* html)
 {
     if(!config.isUiHtmlTheme()) {
-        html->clear();
         header(*html);
         html->append(*markdown);
         footer(*html);
