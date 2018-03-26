@@ -24,7 +24,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     : mainWindow(&mainWindowView)
 {
     qMenuBar = mainWindow->getMenuBar();
-    qMenuBar->setStyleSheet(QString("QMenu::separator { background: #444444; height: 1; }"));
+    qMenuBar->setStyleSheet(LookAndFeels::getInstance().getMenuStylesheet());
 
     // menu: mind
 
@@ -53,17 +53,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindRemember->setStatusTip(tr("Remember Things by ensuring Memory persistence"));
     actionMindRemember->setEnabled(false);
 
-    // remind ... smart *combined* (semantic) mind search using FTS/associations/associations to find O or N
+    // remind ... smart *combined* (semantic) mind search using FTS/associations/... to find O or N
     actionMindRecall = new QAction(tr("&Recall"), mainWindow);
     // IMPROVE show memory dwell as a base for reminding a note
     actionMindRecall->setStatusTip(tr("Recall a Note by searching memory dwell, associations and similar Notes"));
     actionMindRecall->setEnabled(false);
-
-    // TODO move this to O and N menu where it makes much more sense
-    // associate ... discover Os/Ns associated with the current O/N
-    actionMindAssociate = new QAction(tr("&Associate"), mainWindow);
-    actionMindAssociate->setStatusTip(tr("Discover Notes associated with current Outline or Note"));
-    actionMindAssociate->setEnabled(false);
 
     // think ... toggle mental processes ~ enable associations/similarity/search based suggestions on searching/reading/writing notes
     actionMindThink = new QAction(tr("&Think"), mainWindow);
@@ -107,7 +101,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addAction(actionMindLearn);
     menuMind->addMenu(submenuMindRelearn);
     menuMind->addAction(actionMindRecall);
-    menuMind->addAction(actionMindAssociate);
     menuMind->addAction(actionMindRemember);
     menuMind->addAction(actionMindScope);
     menuMind->addAction(actionMindForget);
@@ -298,10 +291,15 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatTable);
     menuFormat->setEnabled(false);
 
-    // menu: outline
+    // menu: Outline
 
     actionOutlineNew = new QAction(tr("&New"), mainWindow);
     actionOutlineNew->setStatusTip(tr("Create new Outline to form new ideas, principles, combinations or applications"));
+
+    // associate ... discover Os/Ns associated with the current O/N
+    actionOutlineAssociations = new QAction(tr("&Associations"), mainWindow);
+    actionOutlineAssociations->setStatusTip(tr("Discover Outlines/Notes associated with the current Outline"));
+    actionOutlineAssociations->setEnabled(false);
 
     actionOutlineClone = new QAction(tr("C&lone"), mainWindow);
     actionOutlineClone->setStatusTip(tr("Make copy of the current Outline"));
@@ -319,6 +317,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     menuOutline = qMenuBar->addMenu(tr("&Outline"));
     menuOutline->addAction(actionOutlineNew);
+    menuOutline->addAction(actionOutlineAssociations);
     menuOutline->addAction(actionOutlineForget);
     menuOutline->addSeparator();
     menuOutline->addAction(actionOutlineClone);
@@ -333,6 +332,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionNoteSave = new QAction(tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
     actionNoteSave->setStatusTip(tr("Save Note being edited"));
+
+    // associate ... discover Os/Ns associated with the current O/N
+    actionNoteAssociations = new QAction(tr("&Associations"), mainWindow);
+    actionNoteAssociations->setStatusTip(tr("Discover Outlines/Notes associated with the current Outline"));
+    actionNoteAssociations->setEnabled(false);
 
     actionNoteForget = new QAction(tr("&Forget\tDelete"), mainWindow); // Delete is handled elsewhere and I don't want menu to handle it
     actionNoteForget->setStatusTip(tr("Forget note"));
@@ -382,6 +386,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     menuNote = qMenuBar->addMenu(tr("&Note"));
     menuNote->addAction(actionNoteNew);
+    menuNote->addAction(actionNoteAssociations);
     menuNote->addAction(actionNoteSave);
     menuNote->addAction(actionNoteClose);
     menuNote->addAction(actionNoteForget);

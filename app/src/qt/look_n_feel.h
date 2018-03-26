@@ -61,6 +61,9 @@ private:
 private:
     QApplication* mindforgerApplication;
 
+    // menu
+    QString menuStylesheet;
+
     // viewer
     QString textColor;
 
@@ -113,6 +116,8 @@ public:
     void setFontPointSize(int fontPointSize) { this->fontPointSize = fontPointSize; }
     int getFontPointSize() const { return fontPointSize; }
     void setTheme(const QString&);
+
+    const QString& getMenuStylesheet() const { return menuStylesheet; }
 
     const QString& getTextColor() const { return textColor; }
     const QString& getEditorBackgroundColor() const { return editorBackgroundColor; }

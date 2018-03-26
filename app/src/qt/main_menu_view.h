@@ -64,7 +64,6 @@ public:
     RecentFilesMenu* submenuMindRelearn;
     QAction* actionMindRemember;
     QAction* actionMindRecall;
-    QAction* actionMindAssociate;
     QAction* actionMindThink;
     QAction* actionMindScope;
     QAction* actionMindForget;
@@ -116,6 +115,7 @@ public:
 
     // menu: Outline
     QAction* actionOutlineNew;
+    QAction* actionOutlineAssociations;
     QAction* actionOutlineClone;
     QAction* actionOutlineForget;
     QAction* actionOutlineExport;
@@ -123,6 +123,7 @@ public:
 
     // menu: Note
     QAction* actionNoteNew;
+    QAction* actionNoteAssociations;
     QAction* actionNoteSave;
     QAction* actionNoteClose;
     QAction* actionNoteForget;

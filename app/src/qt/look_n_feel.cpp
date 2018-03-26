@@ -98,6 +98,7 @@ void LookAndFeels::setDarkTheme()
 
     // IMPROVE tooltips via palette does NOT work > CSS is used instead
     mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #008c00; border: 1px solid white; }");
+    menuStylesheet = QString("QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px;}");
     //palette.setColor(QPalette::ToolTipBase, Qt::blue);
     //palette.setColor(QPalette::ToolTipText, Qt::red);
 }
@@ -145,6 +146,7 @@ void LookAndFeels::setLightTheme()
     palette.setColor(QPalette::HighlightedText, Qt::white);
 
     mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #ED764D; border: 1px solid white; }");
+    menuStylesheet = QString("QMenu::separator { background: #ccc; height: 1px; margin-left: 10px; margin-right: 10px;}");
 
     mindforgerApplication->setPalette(palette);
 }
@@ -207,6 +209,7 @@ void LookAndFeels::setBlackTheme()
 
     // IMPROVE tooltips are set in two ways
     mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #000000; border: 1px solid white; }");
+    menuStylesheet = QString("QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px;}");
 }
 
 } // m8r namespace
