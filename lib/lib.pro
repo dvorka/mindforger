@@ -64,7 +64,9 @@ SOURCES += \
     ./src/config/palette.cpp \
     src/representations/markdown/markdown_document.cpp \
     src/representations/html/html_document.cpp \
-    src/mind/ai/ai.cpp
+    src/mind/ai/ai.cpp \
+    src/ai/nlp/markdown_tokenizer.cpp \
+    src/ai/nlp/bag_of_words.cpp
 
 HEADERS += \
     ./src/debug.h \
@@ -127,4 +129,6 @@ HEADERS += \
     src/representations/markdown/markdown_document.h \
     src/representations/html/html_document.h \
     src/version.h \
-    src/mind/ai/ai.h
+    src/mind/ai/ai.h \
+    src/ai/nlp/markdown_tokenizer.h \
+    src/ai/nlp/bag_of_words.h

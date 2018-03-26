@@ -1,5 +1,5 @@
 /*
- string_utils_test.cpp     MindForger application test
+ datetime_test.cpp     MindForger application test
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 

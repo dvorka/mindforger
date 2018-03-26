@@ -80,7 +80,7 @@ TEST(HtmlTestCase, Note)
 
 TEST(HtmlTestCase, NoteLinks)
 {
-    string fileName{"/lib/test/resources/bugs-repository/memory/feature-html-links.md"};
+    string fileName{"/lib/test/resources/markdown-repository/memory/feature-html-links.md"};
     fileName.insert(0, getMindforgerGitHomePath());
 
     m8r::Configuration& config = m8r::Configuration::getInstance();

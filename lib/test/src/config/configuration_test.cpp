@@ -1,5 +1,5 @@
 /*
- configuration_test.h     MindForger configuration test
+ configuration_test.cpp     MindForger configuration test
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 

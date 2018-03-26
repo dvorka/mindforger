@@ -19,6 +19,7 @@
 #include "html_outline_representation.h"
 
 extern "C" {
+// IMPROVE this expects mkdio.h to be installed in the system - should I rather link Git submodule mkdio.h?
 #include <mkdio.h>
 }
 
@@ -106,6 +107,7 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html)
             if(mfOptions!=lastMfOptions) {
                 lastMfOptions = mfOptions;
                 discountOptions
+                      // IMPROVE I don't want TOC, should this be switched ON?
                     = MKD_TOC
                         | MKD_NOSTYLE
                         | (mfOptions&Configuration::MdToHtmlOption::AutolinkOption?MKD_AUTOLINK:0)
