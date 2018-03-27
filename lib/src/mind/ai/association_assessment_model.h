@@ -1,5 +1,5 @@
 /*
- lexicon.h     MindForger thinking notebook
+ association_assessment_model.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,21 +16,21 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_LEXICON_H
-#define M8R_LEXICON_H
+#ifndef M8R_ASSOCIATION_ASSESSMENT_MODEL_H
+#define M8R_ASSOCIATION_ASSESSMENT_MODEL_H
 
 namespace m8r {
 
-class Lexicon
+class AssociationAssessmentModel
 {
 public:
-    explicit Lexicon();
-    Lexicon(const Lexicon&) = delete;
-    Lexicon(const Lexicon&&) = delete;
-    Lexicon &operator=(const Lexicon&) = delete;
-    Lexicon &operator=(const Lexicon&&) = delete;
-    ~Lexicon();
+    explicit AssociationAssessmentModel();
+    AssociationAssessmentModel(const AssociationAssessmentModel&) = delete;
+    AssociationAssessmentModel(const AssociationAssessmentModel&&) = delete;
+    AssociationAssessmentModel &operator=(const AssociationAssessmentModel&) = delete;
+    AssociationAssessmentModel &operator=(const AssociationAssessmentModel&&) = delete;
+    ~AssociationAssessmentModel();
 };
 
 }
-#endif // M8R_LEXICON_H
+#endif // M8R_ASSOCIATION_ASSESSMENT_MODEL_H

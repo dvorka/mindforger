@@ -23,6 +23,8 @@
 #include <string>
 #include <map>
 
+#include "../../../src/model/note.h"
+
 extern "C" {
 #include <mkdio.h>
 }
@@ -158,29 +160,29 @@ TEST(AiBowTestCase, DescriptionToWordsList)
 
 
     /**
-     * @brief Are-notes-associated NN input feature (simmetric relation).
+     * @brief AssociationsDetector NN input feature (symmetric relation).
      */
     class NotesSimilarityFeature {
     public:
         // 30%
-        static constexpr int IDX_HAVE_MUTUAL_REL = 0;
+        const int IDX_HAVE_MUTUAL_REL = 0;
         // 10% (x0% remains)
-        static constexpr int IDX_TYPE_MATCHES = 4;
+        const int IDX_TYPE_MATCHES = 4;
         // 20% (x0% remains)
-        static constexpr int IDX_SIMILARITY_BY_TAGS = 2;
+        const int IDX_SIMILARITY_BY_TAGS = 2;
 
         // x0% (x0% remains)
-        static constexpr int IDX_SIMILARITY_BY_TITLES= 2;
+        const int IDX_SIMILARITY_BY_TITLES= 2;
         // x0% (x0% remains)
-        static constexpr int IDX_SIMILARITY_BY_RELEVANT_WORDS_IN_DESCS = 2;
+        const int IDX_SIMILARITY_BY_RELEVANT_WORDS_IN_DESCS = 2;
         // x0% (x0% remains)
-        static constexpr int IDX_SIMILARITY_BY_TITLES_IN_DESCS = 2;
+        const int IDX_SIMILARITY_BY_TITLES_IN_DESCS = 2;
         // x0% (x0% remains)
-        static constexpr int IDX_SIMILARITY_BY_RELS_W_SAME_TARGETS = 3;
+        const int IDX_SIMILARITY_BY_RELS_W_SAME_TARGETS = 3;
 
     private:
-        pair<Note*,Note*> notes;
-        float features[];
+        pair<m8r::Note*,m8r::Note*> notes;
+        float features[7];
 
     public:
         void setHaveMutualRel(bool haveRel) {
@@ -209,7 +211,7 @@ TEST(AiBowTestCase, DescriptionToWordsList)
          *  - TF-IDF of tags
          */
         void setSimilarityByTags(float similarityByTags) {
-            features[IDX_HAVE_WEIGHTED_MATCHING_TAGS] = similarityByTags;
+            features[IDX_SIMILARITY_BY_TAGS] = similarityByTags;
         }
 
         void setTypeMatches(bool typeMatches) {
@@ -226,7 +228,7 @@ TEST(AiBowTestCase, DescriptionToWordsList)
          * @brief Set similarity computed by words in description.
          */
         void setSimilarityByWords(float similarityByTags) {
-            features[IDX_HAVE_WEIGHTED_MATCHING_TAGS] = similarityByTags;
+            features[IDX_SIMILARITY_BY_RELEVANT_WORDS_IN_DESCS] = similarityByTags;
         }
 
         /**
@@ -243,4 +245,7 @@ TEST(AiBowTestCase, DescriptionToWordsList)
         }
     };
 
+
+    // create model - consult it w/ A.Ng notes
+    // TODO: class AssociatedNotesDetector*Model* : public class NN { ... }
 }

@@ -44,13 +44,20 @@ private:
      * Data sets
      */
 
-    // Os - vector index is used as ID through other data structures
+    // Os - vector index is used as ID through other data structures like similarity matrices
     std::vector<Outline*> outlines;
     // Ns - vector index is used as ID through other data structures
     std::vector<Note*> notes;
 
-    // Ws - vector index of all words across Os/Ns names and descriptions (a, the, ... filtered out)
-    std::vector<std::string> words;
+    // TODO class nlp/Lexicon
+    // L - vector index of all words across Os/Ns names and descriptions (a, the, ... filtered out)
+    std::vector<std::string> lexicon;
+
+    /*
+     * NN models
+     */
+
+    // AssociationAssessmentModel
 
     /*
      * Classification
@@ -58,15 +65,15 @@ private:
 
     // long[Os] - O attributes: no description, no Ns, ...
     long* oClassification;
-    // long[Os][Os] - mutual Os relationships: similarity, ...
+    // long[Os][Os] - mutual Os relationships: similarity (%), ...
     long* oHive;
 
     // long[Ns] - N attributes: no description, ...
     long* nClassification;
-    // long[Ns][Ns] - mutual Ns relationships: similarity, ...
+    // long[Ns][Ns] - mutual Ns relationships: similarity (%), ...
     long* nHive;
 
-    // long[Ws] - W attributes: ...
+    // long[Ws] - W attributes: ..., Standford GloVe word vectors (https://nlp.stanford.edu/projects/glove/)
     long* wClassification;
     // long[Ws][Ws] - mutual Ws relationships: synonym, antonym, positive/negative, ...
     long* wHive;
@@ -78,6 +85,12 @@ public:
     Ai &operator=(const Ai&) = delete;
     Ai &operator=(const Ai&&) = delete;
     ~Ai();
+
+
+    // TODO assessAssocByTags(N1,N2)
+    // TODO assessAssocByDescriptions()
+    // TODO assessAssocByTitles()
+
 
     /**
      * @brief Get Outlines tuples [O1,O2] by similarity
