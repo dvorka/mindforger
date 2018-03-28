@@ -259,6 +259,19 @@ const vector<string*>& Note::getDescription() const
     return description;
 }
 
+string Note::getDescriptionAsString() const
+{
+    // IMPROVE cache narrowed description for performance
+    string result{};
+    if(description.size()) {
+        for(string *s:description) {
+            result.append(*s);
+            result.append("\n");
+        }
+    }
+    return result;
+}
+
 void Note::setDescription(const vector<string*>& description)
 {
     this->description = description;

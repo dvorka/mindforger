@@ -19,17 +19,40 @@
 #ifndef M8R_NOTE_CHAR_PROVIDER_H
 #define M8R_NOTE_CHAR_PROVIDER_H
 
+#include <string>
+
+#include "../../../debug.h"
+#include "string_char_provider.h"
+#include "../../../model/note.h"
+
 namespace m8r {
 
-class NoteCharProvider
+/**
+ * @brief Make N stream of chars.
+ *
+ * N name and then description is turned to continous char stream.
+ */
+// IMPROVE consider template
+class NoteCharProvider : public CharProvider
 {
+private:
+    Note* n;
+    std::string s;
+    StringCharProvider* p;
+
+
 public:
-    explicit NoteCharProvider();
+    explicit NoteCharProvider(Note* note, char delimiter = '\n');
     NoteCharProvider(const NoteCharProvider&) = delete;
     NoteCharProvider(const NoteCharProvider&&) = delete;
     NoteCharProvider &operator=(const NoteCharProvider&) = delete;
     NoteCharProvider &operator=(const NoteCharProvider&&) = delete;
     ~NoteCharProvider();
+
+    virtual bool hasNext() { return p->hasNext(); }
+    virtual const char& get() { return p->get(); }
+    virtual const char& getLookahead() { return p->getLookahead(); }
+    virtual const char& next() { return p->next(); }
 };
 
 }

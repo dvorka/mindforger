@@ -20,12 +20,20 @@
 
 namespace m8r {
 
-NoteCharProvider::NoteCharProvider()
+NoteCharProvider::NoteCharProvider(Note* note, char delimiter)
+    : CharProvider{}, n(note)
 {
+    // N description (split in lines) streaming was complicated (check) and therefe slow - narrowing is faster
+    s.assign(note->getName());
+    s += delimiter;
+    s.append(note->getDescriptionAsString());
+
+    p = new StringCharProvider{s};
 }
 
 NoteCharProvider::~NoteCharProvider()
 {
+    delete p;
 }
 
 } // m8r namespace

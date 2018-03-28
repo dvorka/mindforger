@@ -56,7 +56,7 @@ SOURCES += \
     ../benchmark/markdown_benchmark.cpp \
     ../benchmark/html_benchmark.cpp \
     html/html_test.cpp \
-    ai/bag_of_words_test.cpp
+    ai/bow_test.cpp
 
 HEADERS += \
     ./test_gear.h

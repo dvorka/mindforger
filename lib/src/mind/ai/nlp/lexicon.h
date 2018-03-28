@@ -19,11 +19,24 @@
 #ifndef M8R_LEXICON_H
 #define M8R_LEXICON_H
 
+#include <map>
+#include <vector>
+#include <string>
+
+#include "../../../gear/lang_utils.h"
+
 namespace m8r {
 
-// IMPROVE Stanford lexicon w/ word attributes & semantic domains (configure > check existince > use OR skip) 
+/**
+ * @brief Lexicon of all words w/ global frequencies.
+ */
+// IMPROVE Stanford GloVe lexicon w/ word attributes & semantic domains (configure > check existince > use OR skip)
 class Lexicon
 {
+private:
+    std::map<std::string,int> m; // duplicity detection on merging
+    std::vector<std::pair<std::string*,int>> words;
+
 public:
     explicit Lexicon();
     Lexicon(const Lexicon&) = delete;
@@ -31,6 +44,10 @@ public:
     Lexicon &operator=(const Lexicon&) = delete;
     Lexicon &operator=(const Lexicon&&) = delete;
     ~Lexicon();
+
+    void merge(std::map<std::string,int>) {} // TODO
+    void finalize() {} // TODO delete map when nothing more will be added, blocks new additions
+    std::string& operator [](int i) { static std::string s; UNUSED_ARG(i); return s; } // TODO get word for index
 };
 
 }

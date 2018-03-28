@@ -19,18 +19,39 @@
 #ifndef M8R_BAG_OF_WORDS_H
 #define M8R_BAG_OF_WORDS_H
 
+#include <map>
+
+#include "word_frequency_list.h"
+#include "../../../model/note.h"
+
 namespace m8r {
 
 /**
  * @brief BoW.
  *
+ * Classic BoW definition:
+ *
+ * ----------------------------------
+ * | Document | Word1 | ... | WordN |
+ * ----------------------------------
+ * | D1       |     1 | ... |     1 |
+ * | D2       |     3 | ... |     0 |
+ * | D3       |     0 | ... |     1 |
+ * ----------------------------------
+ *
  * See for similarity using BoW:
- * https://www.youtube.com/watch?v=KIT-LbvNt_I&list=PLBv09BD7ez_77rla9ZYx-OAdgo2r9USm4
+ *   https://www.youtube.com/watch?v=KIT-LbvNt_I&list=PLBv09BD7ez_77rla9ZYx-OAdgo2r9USm4
  */
 class BagOfWords
 {
+private:
+    /**
+     * @brief Document (O/N) to words (w/ frequencies).
+     */
+    std::map<Thing*,WordFrequencyList*> bow;
+
 public:
-    explicit BagOfWords();
+    explicit BagOfWords(Thing* t);
     BagOfWords(const BagOfWords&) = delete;
     BagOfWords(const BagOfWords&&) = delete;
     BagOfWords &operator=(const BagOfWords&) = delete;

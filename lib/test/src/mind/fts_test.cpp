@@ -27,7 +27,6 @@
 
 #include "../../../src/config/configuration.h"
 #include "../../../src/mind/mind.h"
-#include "../../../src/model/note.h"
 
 extern char* getMindforgerGitHomePath();
 

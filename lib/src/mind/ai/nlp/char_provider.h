@@ -1,5 +1,5 @@
 /*
- note_embedding.h     MindForger thinking notebook
+ char_provider.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,32 +16,36 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_NOTE_EMBEDDING_H
-#define M8R_NOTE_EMBEDDING_H
-
-#include <string>
-#include <map>
-
-#include "thing_embedding.h"
+#ifndef M8R_CHAR_PROVIDER_H
+#define M8R_CHAR_PROVIDER_H
 
 namespace m8r {
 
-class NoteEmbedding : public ThingEmbedding
+class CharProvider
 {
-private:
-    std::string type;
-    std::map<std::string,int> bow;
-    // TODO map<> stemmed tags;
-    // TODO relationship types/targets
-
 public:
-    explicit NoteEmbedding();
-    NoteEmbedding(const NoteEmbedding&) = delete;
-    NoteEmbedding(const NoteEmbedding&&) = delete;
-    NoteEmbedding &operator=(const NoteEmbedding&) = delete;
-    NoteEmbedding &operator=(const NoteEmbedding&&) = delete;
-    ~NoteEmbedding();
+    virtual ~CharProvider() {}
+
+    /**
+     * @brief Indicate whether there are more characters to consume.
+     */
+    virtual bool hasNext() = 0;
+
+    /**
+     * @brief Get current character, but do NOT move in the stream.
+     */
+    virtual const char& get() = 0;
+
+    /**
+     * @brief Get next character, but do NOT move in the stream.
+     */
+    virtual const char& getLookahead() = 0;
+
+    /**
+     * @brief Move to the NEXT character in the stream and return it.
+     */
+    virtual const char& next() = 0;
 };
 
 }
-#endif // M8R_NOTE_EMBEDDING_H
+#endif // M8R_CHAR_PROVIDER_H

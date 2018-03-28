@@ -20,6 +20,8 @@
 
 namespace m8r {
 
+using namespace std;
+
 MarkdownTokenizer::MarkdownTokenizer()
 {
 }
@@ -28,14 +30,74 @@ MarkdownTokenizer::~MarkdownTokenizer()
 {
 }
 
-// https://www.ibm.com/developerworks/community/blogs/nlp/entry/tokenization?lang=en
-// :-)
-// write own TOKENIZER(character provider, separators "xyz", blacklist, vector<string::words>)
-// character provider: it's a class that can process string, description, note, ... and getChar() will give a stream of chars
-// tokenizer will work like PIPELINE - it will filter out certain characters (*[]\/), it will detect begin/end of tokens
-//   perhaps filter out all non-alpha with certain exceptions like - inside
-// first pass will be character based
-// second pass will be words based (all words w/ lenght 1 will be killed, blacklist words will be killed
-// finally tokenizer provides a list of reasonable words
+void MarkdownTokenizer::tokenize(CharProvider& md, BagOfWords& bow, bool blacklist, bool stem)
+{
+    // IMPROVE incorporate options
+    UNUSED_ARG(blacklist);
+    UNUSED_ARG(stem);
+
+    string w{};
+    while(md.hasNext()) {
+        switch(md.next()) {
+        case '-':
+            // check lookahead to accept words like: self-awareness
+            if(md.hasNext() && md.getLookahead()!='-') {
+                w += md.get();
+                break;
+            }
+        case ' ':
+        case '\n':
+        case '\r':
+        case '!':
+        case '?':
+        case '.':
+        case ':':
+        case ';':
+        case '#':
+        case '=':
+        case '`':
+        case '(':
+        case ')':
+        case '[':
+        case ']':
+        case '*':
+        case '_':
+        case '"':
+        case '\'':
+        case '~':
+        case '@':
+        case '$':
+        case '%':
+        case '^':
+        case '&':
+        case '+':
+        case '{':
+        case '}':
+        case '|':
+        case '\\':
+        case '<':
+        case '>':
+        case '/':
+            if(w.size()>1) {
+                // stem
+                if(stem) {
+                    // TODO stem word
+                }
+
+                // blacklist
+                // TODO remove blacklisted words like: but, else, and, ...
+
+                // increment token frequency
+                ++bow[w];
+            }
+            w.clear();
+            break;
+        default:
+            w += md.get();
+            break;
+        }
+    }
+
+}
 
 } // m8r namespace

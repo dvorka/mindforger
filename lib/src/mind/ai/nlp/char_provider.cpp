@@ -1,5 +1,5 @@
 /*
- notes_similarity_feature.cpp     MindForger thinking notebook
+ char_provider.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,15 +16,15 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "notes_similarity_feature.h"
+#include "char_provider.h"
 
 namespace m8r {
 
-NotesSimilarityFeature::NotesSimilarityFeature()
+CharProvider::CharProvider()
 {
 }
 
-NotesSimilarityFeature::~NotesSimilarityFeature()
+CharProvider::~CharProvider()
 {
 }
 

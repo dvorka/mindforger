@@ -19,16 +19,38 @@
 #ifndef M8R_MARKDOWN_TOKENIZER_H
 #define M8R_MARKDOWN_TOKENIZER_H
 
+#include <set>
+
+#include "../../../debug.h"
+#include "../../../gear/lang_utils.h"
+#include "char_provider.h"
+#include "bag_of_words.h"
+
 namespace m8r {
 
 /**
  * @brief Tokenize Markdown text to words.
  *
- * See:
+ * On tokenization:
+ *
+ *   - hardcoded delimiters
+ *   - filters out words w/ length <1
+ *   - stems words
+ *   - computes token frequency (TF)
+ *   - RESULT is additive i.e. adding to map can be used to build:
+ *     a) lexicon which is union of all BoWs (has total frequencies)
+ *     b) per document BoW
+ *
+ * See also:
  * https://www.ibm.com/developerworks/community/blogs/nlp/entry/tokenization?lang=en
  */
 class MarkdownTokenizer
 {
+    /**
+     * @brief Word blacklist (e.g. and, but, have, do, ...)
+     */
+    std::set<std::string> blacklist;
+
 public:
     explicit MarkdownTokenizer();
     MarkdownTokenizer(const MarkdownTokenizer&) = delete;
@@ -36,6 +58,11 @@ public:
     MarkdownTokenizer &operator=(const MarkdownTokenizer&) = delete;
     MarkdownTokenizer &operator=(const MarkdownTokenizer&&) = delete;
     ~MarkdownTokenizer();
+
+    /**
+     * @brief Tokenize a stream of characters to BoW.
+     */
+    void tokenize(CharProvider& md, BagOfWords& bow, bool blacklist=true, bool stem=true);
 };
 
 }

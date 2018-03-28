@@ -66,7 +66,17 @@ SOURCES += \
     src/representations/html/html_document.cpp \
     src/mind/ai/ai.cpp \
     src/mind/ai/nlp/markdown_tokenizer.cpp \
-    src/mind/ai/nlp/bag_of_words.cpp
+    src/mind/ai/nlp/bag_of_words.cpp \
+    src/mind/ai/association_assessment_model.cpp \
+    src/mind/ai/note_embedding.cpp \
+    src/mind/ai/thing_embedding.cpp \
+    src/mind/ai/nlp/lexicon.cpp \
+    src/mind/ai/nlp/note_char_provider.cpp \
+    src/mind/ai/nlp/outline_char_provider.cpp \
+    src/mind/ai/nlp/string_char_provider.cpp \
+    src/mind/ai/nn/genann.c \
+    src/mind/ai/association_assessment_notes_feature.cpp \
+    src/mind/ai/nlp/word_frequency_list.cpp
 
 HEADERS += \
     ./src/debug.h \
@@ -131,4 +141,14 @@ HEADERS += \
     src/version.h \
     src/mind/ai/ai.h \
     src/mind/ai/nlp/markdown_tokenizer.h \
-    src/mind/ai/nlp/bag_of_words.h
+    src/mind/ai/nlp/bag_of_words.h \
+    src/mind/ai/association_assessment_model.h \
+    src/mind/ai/note_embedding.h \
+    src/mind/ai/thing_embedding.h \
+    src/mind/ai/nlp/lexicon.h \
+    src/mind/ai/nlp/note_char_provider.h \
+    src/mind/ai/nlp/outline_char_provider.h \
+    src/mind/ai/nlp/string_char_provider.h \
+    src/mind/ai/nn/genann.h \
+    src/mind/ai/association_assessment_notes_feature.h \
+    src/mind/ai/nlp/word_frequency_list.h

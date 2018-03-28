@@ -1,5 +1,5 @@
 /*
- string_char_provider.cpp     MindForger thinking notebook
+ word_frequency_list.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,19 +16,15 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "string_char_provider.h"
+#include "word_frequency_list.h"
 
 namespace m8r {
 
-using namespace std;
-
-StringCharProvider::StringCharProvider(string& s)
-    : CharProvider(), s(s), fst(true)
+WordFrequencyList::WordFrequencyList()
 {
-    i = 0;
 }
 
-StringCharProvider::~StringCharProvider()
+WordFrequencyList::~WordFrequencyList()
 {
 }
 

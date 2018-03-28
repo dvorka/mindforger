@@ -19,17 +19,49 @@
 #ifndef M8R_STRING_CHAR_PROVIDER_H
 #define M8R_STRING_CHAR_PROVIDER_H
 
+#include <string>
+
+#include "../../../debug.h"
+#include "char_provider.h"
+
 namespace m8r {
 
-class StringCharProvider
+// IMPROVE consider template
+class StringCharProvider : public CharProvider
 {
+private:
+    std::string& s;
+    bool fst;
+    size_t i;
+
 public:
-    explicit StringCharProvider();
+    explicit StringCharProvider(std::string& s);
     StringCharProvider(const StringCharProvider&) = delete;
     StringCharProvider(const StringCharProvider&&) = delete;
     StringCharProvider &operator=(const StringCharProvider&) = delete;
     StringCharProvider &operator=(const StringCharProvider&&) = delete;
     ~StringCharProvider();
+
+    virtual bool hasNext() {
+        if(s.empty()) {
+            return false;
+        } else {
+            if(fst) {
+                return true;
+            }  else {
+                return i<s.size()-1;
+            }
+        }
+    }
+    virtual const char& next() {
+        if(fst) {
+            fst=false;
+            return s[0];
+        } else
+            return s[++i];
+    }
+    virtual const char& get() { return s[i]; }
+    virtual const char& getLookahead() { return s[i+1]; }
 };
 
 }
