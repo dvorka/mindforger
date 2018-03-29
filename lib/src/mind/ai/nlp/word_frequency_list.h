@@ -28,6 +28,7 @@
 #endif
 
 #include "../../../debug.h"
+#include "lexicon.h"
 
 namespace m8r {
 
@@ -39,11 +40,27 @@ namespace m8r {
  */
 class WordFrequencyList
 {
+    struct WordWeightComparator
+    {
+        Lexicon *l;
+        WordWeightComparator(Lexicon* l) : l(l) {}
+
+        // functor to compare words by weight
+        bool operator()(
+                const std::pair<const std::string* const,int>*const& p1,
+                const std::pair<const std::string* const,int>*const& p2
+        ) {
+            return l->get(p1->first)->weight > l->get(p2->first)->weight;
+        }
+    };
+
 private:
+    WordWeightComparator wordWeightComparator;
+
     /**
      * @brief List of words occuring in a Thing ordered by weight.
      */
-    std::vector<std::string*> wordsByWeight;
+    std::vector<std::pair<const std::string *const,int>*> wordsByWeight;
 
     /**
      * @brief TRANSIENT map used for quick inserts (can be cleared once list is built).
@@ -51,7 +68,7 @@ private:
     std::map<const std::string*,int> word2Frequency;
 
 public:
-    explicit WordFrequencyList();
+    explicit WordFrequencyList(Lexicon* lexicon);
     WordFrequencyList(const WordFrequencyList&) = delete;
     WordFrequencyList(const WordFrequencyList&&) = delete;
     WordFrequencyList &operator=(const WordFrequencyList&) = delete;
@@ -77,21 +94,21 @@ public:
     /**
      * @brief Sort words by weight.
      */
-    void sort() {
-        // TODO to be implemented
-
-    }
-
+    void sort();
 
 #ifdef DO_M8F_DEBUG
     void print() const {
         std::cout << "WordFrequencyList[" << word2Frequency.size() << "]:" << std::endl;
-        for(auto s:word2Frequency) {
-            std::cout << "  " << (*s.first) << " [" << s.second << "] " << std::endl;
+        for(auto& w:wordsByWeight) {
+            std::cout << "  " << (*w->first) << " [" << w->second << "] " << std::endl;
+        }
+    }
+    void printFlat() const {
+        for(auto& w:wordsByWeight) {
+            std::cout << (*w->first) << " [" << w->second << "] ";
         }
     }
 #endif
-
 };
 
 }

@@ -18,14 +18,29 @@
 */
 #include "word_frequency_list.h"
 
+#include <algorithm>
+
 namespace m8r {
 
-WordFrequencyList::WordFrequencyList()
+using namespace std;
+
+WordFrequencyList::WordFrequencyList(Lexicon* lexicon)
+    : wordWeightComparator{lexicon}
 {
 }
 
 WordFrequencyList::~WordFrequencyList()
 {
+}
+
+void WordFrequencyList::sort() {
+    // reset array
+    wordsByWeight.clear();
+
+    for(auto& w:word2Frequency) {
+        wordsByWeight.push_back(&w);
+    }
+    std::sort(wordsByWeight.begin(),wordsByWeight.end(),wordWeightComparator);
 }
 
 } // m8r namespace

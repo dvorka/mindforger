@@ -24,4 +24,11 @@ BagOfWords::BagOfWords()
 {
 }
 
+void BagOfWords::reorderDocVectorsByWeight()
+{
+    for(auto& e:bow) {
+        e.second->sort();
+    }
+}
+
 } // m8r namespace

@@ -49,12 +49,21 @@ void Mind::think()
 
 void Mind::dream()
 {
+    MF_DEBUG("START: dreaming..." << endl);
     config.setMindState(Configuration::MindState::DREAMING);
 
-    amnesia();
+    // clear trainsient indices, but keep memory
+    allNotesCache.clear();
+    memoryDwell.clear();
+    triples.clear();
 
-    // TODO infer all triples, check, fix, optimize and save
+    // AI associations NN
+    ai.learnMemory();
 
+
+    // TODO Triples: infer all triples, check, fix, optimize and save
+
+    // sanity
     // o integrity check: ...
     // o memory structure check:
     //  - Os w/o description
@@ -62,6 +71,7 @@ void Mind::dream()
     //  - Ns w/o description
     // o attachments
     //  - orphan attachments (not referenced from any O)
+    MF_DEBUG("FINISH: dream" << endl);
 }
 
 void Mind::sleep()

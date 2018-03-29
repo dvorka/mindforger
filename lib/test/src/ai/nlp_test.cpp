@@ -85,6 +85,7 @@ TEST(AiNlpTestCase, Outline)
     // FOO outline
     m8r::OutlineType oType{m8r::OutlineType::KeyOutline(),nullptr,m8r::Color::RED()};
     m8r::Outline o{&oType};
+    o.setName("Outline Name");
     // FOO outline as MD
     string markdown;
     markdown.assign(
@@ -114,7 +115,7 @@ TEST(AiNlpTestCase, Outline)
     m8r::Lexicon lexicon{};
     m8r::MarkdownTokenizer tokenizer{lexicon};
     m8r::StringCharProvider chars{markdown};
-    m8r::WordFrequencyList* wfl = new m8r::WordFrequencyList{};
+    m8r::WordFrequencyList* wfl = new m8r::WordFrequencyList{&lexicon};
     cout << "Tokenizing MD string to word frequency list..." << endl;
     tokenizer.tokenize(chars, *wfl);
     wfl->print();
@@ -132,11 +133,11 @@ TEST(AiNlpTestCase, Outline)
     m8r::BagOfWords bow{};
     bow.add(&o, wfl);
 
+    bow.print();
     ASSERT_EQ(1, bow.size());
 }
 
-/*
-TEST(AiBowTestCase, Repository)
+TEST(AiNlpTestCase, Tokenizer)
 {
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
@@ -148,7 +149,7 @@ TEST(AiBowTestCase, Repository)
     cout << "\n  Outlines: " << mind.remind().getOutlinesCount();
     cout << "\n  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
 
-    ASSERT_EQ(mind.remind().getOutlinesCount(),3);
+    ASSERT_EQ(3, mind.remind().getOutlinesCount());
 
     // test N narrowing to string using char provider
     cout << endl << endl << "Testing M NARROWING using tokenizer:" << endl;
@@ -162,8 +163,42 @@ TEST(AiBowTestCase, Repository)
     }
     cout << narrowed << endl << "- END char stream --" << endl;
     ASSERT_EQ(182, narrowed.size());
+}
 
-    // test N to BoW
+TEST(AiNlpTestCase, Repository)
+{
+    string repositoryPath{"/lib/test/resources/universe-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    m8r::Mind mind(config);
+    mind.think();
+    cout << "Statistics:" << endl
+    << "  Outlines: " << mind.remind().getOutlinesCount() << endl
+    << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize() << endl;
+
+    //ASSERT_EQ(3, mind.remind().getOutlinesCount());
+
+    /*
+     * Tokenize repository > make AI to think > find the most similar Notes pair
+     */
+
+    mind.dream();
+
+    // get the most similar Note pairs in the repository
+    mind.associationsLeaderBoard();
+
+    // get the best associations of N
+    // TODO find Note by name and use it...
+    // TODO consider AI repository for assoc experiments
+    m8r::Note* n=mind.remind().getOutlines()[0]->getNotes()[0];
+    mind.associationsLeaderBoard(n);
+
+
+
+
+
+    /*
     m8r::MarkdownTokenizer tokenizer{};
     m8r::NoteCharProvider chars{n};
     m8r::BagOfWords bow{};
@@ -176,64 +211,16 @@ TEST(AiBowTestCase, Repository)
 
     ASSERT_EQ(19, bow.size());
 
-
-
-
-
-
-
-    *
-     * STEP: parse O/N to Lexicon and BoW(matrix Things x frequencies)
-     *
-
-    m8r::Ai ai{};
-
-    *
-     * STEP: create feature(N1,N2) for notes N1 and N2
-     *
-
-    m8r::Note* n1;
-    m8r::Note* n2;
-
-    // IMPLEMENT THIS :)
-    // IMPLEMENT THIS :)
-    // IMPLEMENT THIS :)
-    // IMPLEMENT THIS :)
-    // IMPLEMENT THIS :)
-    // IMPLEMENT THIS :)
-    // IMPLEMENT THIS :)
-    // IMPLEMENT THIS :)
-    // IMPLEMENT THIS :)
     m8r::AssociationAssessmentNotesFeature& nnFeature
         = createAaFeature(n1, n2);
 
-    // TODO ...
-
-    *
-     * STEP: pass feature(N1,N2) to NN to determine whether they ARE/AREN'T associated
-     *
-
     m8r::AssociationAssessmentModel nn{};
     nn.predict(nnFeature);
-
-    // TODO ...
-
-
-
-
 
     // Having BoW next steps are:
     //   - create similarityEmbedding ~ for every Ni vector w/ [[bow],stemmed tags,relationship,type]
     //   - for every Ni and Nj create notesSimilarityFeature ~ smart unit using similarityEmbedding[Ni] and se[Nj]
     //     [# matching words in total, avg of at most words TF-IDF, # matching tags, have relationship, # relationship to same target, type matches]
     //   - now ask NN(notesSimilarityFeature[Ni,Nj]) = {1/0} ... similar/not similar (associated each other/don't ...)
-
-    // Create model - consult it w/ A.Ng notes
-
-    // TODO: class AssociatedNotesDetector*Model* : public class NN { ... }
+    */
 }
-
-*/
-
-// TODO TEST ... O to OutlineBoW
-

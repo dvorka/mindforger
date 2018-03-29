@@ -20,6 +20,8 @@
 
 namespace m8r {
 
+using namespace std;
+
 Ai::Ai(Memory& memory)
     :memory(memory),
      lexicon{},
@@ -34,9 +36,9 @@ Ai::~Ai()
 
 void Ai::trainAaNn()
 {
-    MF_DEBUG("Training AA NN...");
+    MF_DEBUG("START: training AA NN..." << endl);
     // TODO train NN using a reasonable number of features: createAaFeature()
-    MF_DEBUG("AA NN done!");
+    MF_DEBUG("FINISH: AA NN trained" << endl);
 }
 
 void Ai::learnMemory()
@@ -48,7 +50,7 @@ void Ai::learnMemory()
     bow.clear();
     for(Note* n:notes) {
         NoteCharProvider chars{n};
-        WordFrequencyList* wfl = new WordFrequencyList{};
+        WordFrequencyList* wfl = new WordFrequencyList{&lexicon};
         tokenizer.tokenize(chars, *wfl);
 
         bow.add(n, wfl);
@@ -56,7 +58,13 @@ void Ai::learnMemory()
 
     // prepare DATA to quickly create association assessment features
     lexicon.recalculateWeights();
+#ifdef DO_M8F_DEBUG
+    lexicon.print();
+#endif
     bow.reorderDocVectorsByWeight();
+#ifdef DO_M8F_DEBUG
+    bow.print();
+#endif
 
     // train NN
     trainAaNn();

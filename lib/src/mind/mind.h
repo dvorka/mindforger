@@ -446,6 +446,13 @@ public:
             uint16_t fromNoteId);
 
     /*
+     *  AI
+     */
+
+    void associationsLeaderBoard() {}
+    void associationsLeaderBoard(Note* n) { UNUSED_ARG(n); }
+
+    /*
      * TRIPLES
      */
 

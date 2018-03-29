@@ -21,6 +21,10 @@
 
 #include <map>
 
+#ifdef DO_M8F_DEBUG
+#include <iostream>
+#endif
+
 #include "word_frequency_list.h"
 #include "../../../model/note.h"
 
@@ -70,9 +74,18 @@ public:
         bow[t] = wfl;
     }
 
-    void reorderDocVectorsByWeight() {
-        // TODO to be implemented
+    void reorderDocVectorsByWeight();
+
+#ifdef DO_M8F_DEBUG
+    void print() const {
+        std::cout << "BoW[" << bow.size() << "]:" << std::endl;
+        for(auto& e:bow) {
+            std::cout << "  '" << e.first->getName() << "' > ";
+            e.second->printFlat();
+            std::cout << std::endl;
+        }
     }
+#endif
 };
 
 }
