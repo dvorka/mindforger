@@ -23,6 +23,7 @@
 #include <memory>
 
 #include "memory.h"
+#include "ai/ai.h"
 #include "ontology/thing_class_rel_triple.h"
 #include "../config/configuration.h"
 #include "aspect/time_scope_aspect.h"
@@ -87,6 +88,7 @@ public:
 private:
     Configuration &config;
     Memory memory;
+    Ai ai;
 
     /**
      * @brief Semantic view of Memory.
@@ -316,6 +318,7 @@ public:
      * SCOPING
      */
 
+    // TODO set scope & propagate it to memory
     std::string getTimeScopeAsString() { return timeScopeAspect.getTimeScopeAsString(); }
     bool isTimeScopeEnabled() const { return timeScopeAspect.isEnabled(); }
     TimeScopeAspect& getTimeScopeAspect() { return timeScopeAspect; }

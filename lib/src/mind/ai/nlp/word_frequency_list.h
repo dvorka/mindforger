@@ -23,10 +23,16 @@
 #include <vector>
 #include <string>
 
+#ifdef DO_M8F_DEBUG
+#include <iostream>
+#endif
+
+#include "../../../debug.h"
+
 namespace m8r {
 
 /**
- * @brief Word frequency list.
+ * @brief Word frequency list for a doc.
  *
  * See:
  *   https://en.wikipedia.org/wiki/Word_lists_by_frequency
@@ -35,14 +41,14 @@ class WordFrequencyList
 {
 private:
     /**
-     * @brief List of words ordered by frequences.
+     * @brief List of words occuring in a Thing ordered by weight.
      */
-    std::vector<std::pair<std::string,int> list;
+    std::vector<std::string*> wordsByWeight;
 
     /**
      * @brief TRANSIENT map used for quick inserts (can be cleared once list is built).
      */
-    std::map<std::string,int> word2Frequency;
+    std::map<const std::string*,int> word2Frequency;
 
 public:
     explicit WordFrequencyList();
@@ -52,19 +58,40 @@ public:
     WordFrequencyList &operator=(const WordFrequencyList&&) = delete;
     ~WordFrequencyList();
 
-    /**
-     * @brief Sort word list and clear auxiliary map - nothing can be added after finalize().
-     */
-    void finalize() {}
+    int& operator[](std::string* key) { return word2Frequency[key]; }
+    size_t size() const { return word2Frequency.size(); }
+    const std::map<const std::string*,int> iterable() const { return word2Frequency; }
+
+    int add(const std::string* word) {
+        int result;
+        std::map<const std::string*,int>::iterator i = word2Frequency.find(word);
+        if(i != word2Frequency.end()) {
+            ++i->second;
+            return result;
+        } else {
+            word2Frequency[word] = 1;
+            return 1;
+        }
+    }
 
     /**
-     * @brief Sort word list.
+     * @brief Sort words by weight.
      */
-    void sort() {}
+    void sort() {
+        // TODO to be implemented
 
-    int& operator[](const std::string& key) { return word2Frequency[key]; }
-    size_t size() { return word2Frequency.size(); }
-    const std::map<std::string,int> iterable() { return word2Frequency; }
+    }
+
+
+#ifdef DO_M8F_DEBUG
+    void print() const {
+        std::cout << "WordFrequencyList[" << word2Frequency.size() << "]:" << std::endl;
+        for(auto s:word2Frequency) {
+            std::cout << "  " << (*s.first) << " [" << s.second << "] " << std::endl;
+        }
+    }
+#endif
+
 };
 
 }

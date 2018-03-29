@@ -22,6 +22,11 @@
 #include <vector>
 
 #include "../../model/outline.h"
+#include "../memory.h"
+#include "./nlp/markdown_tokenizer.h"
+#include "./nlp/note_char_provider.h"
+#include "./nlp/bag_of_words.h"
+#include "./association_assessment_notes_feature.h"
 
 namespace m8r {
 
@@ -40,29 +45,34 @@ private:
     };
 
 private:
+    Memory& memory;
+
+    Lexicon lexicon;
+    BagOfWords bow;
+    MarkdownTokenizer tokenizer;
+
     /*
      * Data sets
      */
+
+    // TODO ... take from Memory
 
     // Os - vector index is used as ID through other data structures like similarity matrices
     std::vector<Outline*> outlines;
     // Ns - vector index is used as ID through other data structures
     std::vector<Note*> notes;
 
-    // TODO class nlp/Lexicon
-    // L - vector index of all words across Os/Ns names and descriptions (a, the, ... filtered out)
-    std::vector<std::string> lexicon;
-
     /*
      * NN models
      */
 
-    // AssociationAssessmentModel
+    // TODO NN: AssociationAssessmentModel
 
     /*
      * Classification
      */
 
+    /* IMPROVE:
     // long[Os] - O attributes: no description, no Ns, ...
     long* oClassification;
     // long[Os][Os] - mutual Os relationships: similarity (%), ...
@@ -77,28 +87,35 @@ private:
     long* wClassification;
     // long[Ws][Ws] - mutual Ws relationships: synonym, antonym, positive/negative, ...
     long* wHive;
+    */
 
 public:
-    explicit Ai();
+    explicit Ai(Memory& memory);
     Ai(const Ai&) = delete;
     Ai(const Ai&&) = delete;
     Ai &operator=(const Ai&) = delete;
     Ai &operator=(const Ai&&) = delete;
     ~Ai();
 
+    /**
+     * @brief Learn what's in memory to get ready for thinking.
+     */
+    void learnMemory();
 
+private:
+    float calculateSimilarityByWords(Note* n1, Note* n2);
+
+    AssociationAssessmentNotesFeature* createAaFeature(Note* n1, Note* n2);
+
+    /**
+     * @brief Train associations assessment neural network once memory is learnt.
+     */
+    void trainAaNn();
+
+    // NN methods
     // TODO assessAssocByTags(N1,N2)
     // TODO assessAssocByDescriptions()
     // TODO assessAssocByTitles()
-
-
-    /**
-     * @brief Get Outlines tuples [O1,O2] by similarity
-     *
-     * From two most similar to less similar ([O,O] identity filtered out).
-     */
-    void getOutlinesBySimilarity() {}
-
 };
 
 }

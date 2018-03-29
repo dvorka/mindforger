@@ -19,6 +19,8 @@
 #ifndef M8R_ASSOCIATION_ASSESSMENT_MODEL_H
 #define M8R_ASSOCIATION_ASSESSMENT_MODEL_H
 
+#include "association_assessment_notes_feature.h"
+
 namespace m8r {
 
 class AssociationAssessmentModel

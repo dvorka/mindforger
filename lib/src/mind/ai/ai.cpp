@@ -20,12 +20,68 @@
 
 namespace m8r {
 
-Ai::Ai()
+Ai::Ai(Memory& memory)
+    :memory(memory),
+     lexicon{},
+     tokenizer{lexicon}
 {
+    // TODO AA NN
 }
 
 Ai::~Ai()
 {
+}
+
+void Ai::trainAaNn()
+{
+    MF_DEBUG("Training AA NN...");
+    // TODO train NN using a reasonable number of features: createAaFeature()
+    MF_DEBUG("AA NN done!");
+}
+
+void Ai::learnMemory()
+{
+    memory.getAllNotes(notes);
+
+    // build lexicon and BoW
+    lexicon.clear();
+    bow.clear();
+    for(Note* n:notes) {
+        NoteCharProvider chars{n};
+        WordFrequencyList* wfl = new WordFrequencyList{};
+        tokenizer.tokenize(chars, *wfl);
+
+        bow.add(n, wfl);
+    }
+
+    // prepare DATA to quickly create association assessment features
+    lexicon.recalculateWeights();
+    bow.reorderDocVectorsByWeight();
+
+    // train NN
+    trainAaNn();
+}
+
+float Ai::calculateSimilarityByWords(Note* n1, Note* n2)
+{
+    // TODO
+    // formula: ... 10() ...
+}
+
+AssociationAssessmentNotesFeature* Ai::createAaFeature(Note* n1, Note* n2)
+{
+    AssociationAssessmentNotesFeature* result
+        = new AssociationAssessmentNotesFeature{};
+
+    // TODO replace foo value
+    result->setHaveMutualRel(false);
+    result->setTypeMatches(n1->getType()==n2->getType());
+    // TODO replace foo value
+    result->setSimilarityByTags(0.0);
+    // TODO replace foo value
+    result->setSimilarityByWords(0.0);
+
+    return result;
 }
 
 } // m8r namespace

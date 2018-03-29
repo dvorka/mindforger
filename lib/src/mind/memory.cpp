@@ -31,6 +31,7 @@ Memory::Memory(Configuration& configuration)
 {
     persistence = new FilesystemPersistence{configuration, representation};
     cache = true;
+    timeScope = nullptr;
 }
 
 vector<Stencil*>& Memory::getStencils(ResourceType type)
@@ -289,18 +290,19 @@ Outline* Memory::getOutline(const string& key)
     }
 }
 
-vector<string*>* Memory::ftsMatch(const string* exactMatchString) const
+void Memory::getAllNotes(vector<Note*>& notes) const
 {
-    UNUSED_ARG(exactMatchString);
-
-    return nullptr;
-}
-
-vector<string*>* Memory::fts(const string* regexp) const
-{
-    UNUSED_ARG(regexp);
-
-    return nullptr;
+    for(Outline* o:outlines) {
+        for(Note* n:o->getNotes()) {
+            if(timeScope && timeScope->isEnabled()) {
+                if(timeScope->isInScope(n)) {
+                    notes.push_back(n);
+                }
+            } else {
+                notes.push_back(n);
+            }
+        }
+    }
 }
 
 const OutlineType* Memory::toOutlineType(const MarkdownAstSectionMetadata& meta)

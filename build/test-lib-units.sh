@@ -25,8 +25,9 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="HtmlBenchmark.Outline"
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
-export OPTION_TEST="AiBowTestCase.TokenizeRepository"
-#export OPTION_TEST="AiBowTestCase.TokenizeO"
+#export OPTION_TEST="AiNlpTestCase.Lexicon"
+#export OPTION_TEST="AiNlpTestCase.Repository"
+export OPTION_TEST="AiNlpTestCase.Outline"
 #export OPTION_TEST="HtmlTestCase.NoteLinks"
 #export OPTION_TEST="MarkdownParserTestCase.Links"
 #export OPTION_TEST="MarkdownParserTestCase.TimeScope"

@@ -34,13 +34,11 @@ namespace m8r {
  * ----------------------------------
  * | Document | Word1 | ... | WordN |
  * ----------------------------------
- * | D1       |     1 | ... |     1 |
- * | D2       |     3 | ... |     0 |
- * | D3       |     0 | ... |     1 |
+ * | N1       |     1 | ... |     1 |
+ * | O2       |     3 | ... |     0 |
+ * | N3       |     0 | ... |     1 |
  * ----------------------------------
  *
- * See for similarity using BoW:
- *   https://www.youtube.com/watch?v=KIT-LbvNt_I&list=PLBv09BD7ez_77rla9ZYx-OAdgo2r9USm4
  */
 class BagOfWords
 {
@@ -51,12 +49,30 @@ private:
     std::map<Thing*,WordFrequencyList*> bow;
 
 public:
-    explicit BagOfWords(Thing* t);
+    explicit BagOfWords();
     BagOfWords(const BagOfWords&) = delete;
     BagOfWords(const BagOfWords&&) = delete;
     BagOfWords &operator=(const BagOfWords&) = delete;
     BagOfWords &operator=(const BagOfWords&&) = delete;
-    ~BagOfWords();
+    ~BagOfWords() {
+        clear();
+    }
+
+    size_t size() const { return bow.size(); }
+    void clear() {
+        for(auto p:bow) {
+            delete p.second;
+        }
+        bow.clear();
+    }
+
+    void add(Thing* t, WordFrequencyList* wfl) {
+        bow[t] = wfl;
+    }
+
+    void reorderDocVectorsByWeight() {
+        // TODO to be implemented
+    }
 };
 
 }

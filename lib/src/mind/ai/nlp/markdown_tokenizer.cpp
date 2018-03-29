@@ -22,7 +22,8 @@ namespace m8r {
 
 using namespace std;
 
-MarkdownTokenizer::MarkdownTokenizer()
+MarkdownTokenizer::MarkdownTokenizer(Lexicon& lexicon)
+    : lexicon(lexicon)
 {
 }
 
@@ -30,7 +31,7 @@ MarkdownTokenizer::~MarkdownTokenizer()
 {
 }
 
-void MarkdownTokenizer::tokenize(CharProvider& md, BagOfWords& bow, bool blacklist, bool stem)
+void MarkdownTokenizer::tokenize(CharProvider& md, WordFrequencyList& wfl, bool blacklist, bool stem)
 {
     // IMPROVE incorporate options
     UNUSED_ARG(blacklist);
@@ -88,7 +89,8 @@ void MarkdownTokenizer::tokenize(CharProvider& md, BagOfWords& bow, bool blackli
                 // TODO remove blacklisted words like: but, else, and, ...
 
                 // increment token frequency
-                ++bow[w];
+                Lexicon::WordEmbedding* we = lexicon.add(w);
+                ++wfl[&(we->word)];
             }
             w.clear();
             break;
@@ -98,6 +100,7 @@ void MarkdownTokenizer::tokenize(CharProvider& md, BagOfWords& bow, bool blackli
         }
     }
 
+    lexicon.recalculateWeights();
 }
 
 } // m8r namespace

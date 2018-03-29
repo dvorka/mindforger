@@ -24,8 +24,4 @@ BagOfWords::BagOfWords()
 {
 }
 
-BagOfWords::~BagOfWords()
-{
-}
-
 } // m8r namespace

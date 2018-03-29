@@ -24,8 +24,10 @@ namespace m8r {
 
 Mind::Mind(Configuration &configuration)
     : config(configuration),
-      memory(configuration)
+      memory(configuration),
+      ai{memory}
 {
+    memory.setTimeScope(&timeScopeAspect);
 }
 
 Mind::~Mind()
@@ -285,18 +287,7 @@ vector<Outline*>* Mind::getOutlinesOfType(const OutlineType& type) const
 
 void Mind::getAllNotes(std::vector<Note*>& notes) const
 {
-    vector<Outline*> outlines = memory.getOutlines();
-    for(Outline* o:outlines) {
-        for(Note* n:o->getNotes()) {
-            if(timeScopeAspect.isEnabled()) {
-                if(timeScopeAspect.isInScope(n)) {
-                    notes.push_back(n);
-                }
-            } else {
-                notes.push_back(n);
-            }
-        }
-    }
+    return memory.getAllNotes(notes);
 }
 
 vector<Note*>* Mind::getNotesOfType(const NoteType& type) const

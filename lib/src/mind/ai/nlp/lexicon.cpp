@@ -22,6 +22,8 @@ namespace m8r {
 
 Lexicon::Lexicon()
 {
+    // inaccurate, but until the 1st word is added ;)
+    maxFrequency = 1;
 }
 
 Lexicon::~Lexicon()

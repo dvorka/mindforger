@@ -36,6 +36,7 @@
 #include "../model/resource_types.h"
 #include "../persistence/persistence.h"
 #include "../persistence/filesystem_persistence.h"
+#include "aspect/time_scope_aspect.h"
 
 namespace m8r {
 
@@ -51,11 +52,12 @@ private:
      */
     bool cache;
 
-    Configuration& config;
+    Configuration& config;    
     RepositoryIndexer repositoryIndexer;
     Ontology ontology;
     MarkdownOutlineRepresentation representation;
     Persistence* persistence;
+    TimeScopeAspect* timeScope;
 
     std::vector<Outline*> outlines;
     std::vector<Note*> notes;
@@ -74,6 +76,8 @@ public:
     Memory& operator=(const Memory&) = delete;
     Memory& operator=(const Memory&&) = delete;
     virtual ~Memory();
+
+    void setTimeScope(TimeScopeAspect* tsa) { timeScope = tsa; }
 
     /**
      * @brief Learn repository content.
@@ -151,13 +155,9 @@ public:
     Outline* getOutline(const std::string &key);
 
     /**
-     * @brief Full text search.
-     *
-     * Iterates outlines and calls fts() on each of them to get
-     * matching outline's/note's description(s).
+     * @brief Get notes of all outlines.
      */
-    std::vector<std::string*>* ftsMatch(const std::string* exactMatchString) const;
-    std::vector<std::string*>* fts(const std::string* regexp) const;
+    void getAllNotes(std::vector<Note*>& notes) const;
 
     /*
      * UTILS
