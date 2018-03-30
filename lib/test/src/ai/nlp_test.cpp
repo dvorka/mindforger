@@ -171,8 +171,8 @@ TEST(AiNlpTestCase, Tokenizer)
 TEST(AiNlpTestCase, Repository)
 {
     string repositoryPath{"/lib/test/resources/universe-repository"};
-    //repositoryPath.insert(0, getMindforgerGitHomePath());
-    repositoryPath.assign("/home/dvorka/tmp/ai-repository"); // experiment w/ bigger repository
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    //repositoryPath.assign("/home/dvorka/tmp/ai-repository"); // experiment w/ bigger repository
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
     m8r::Mind mind(config);
