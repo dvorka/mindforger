@@ -153,4 +153,5 @@ HEADERS += \
     src/mind/ai/nn/genann.h \
     src/mind/ai/association_assessment_notes_feature.h \
     src/mind/ai/nlp/word_frequency_list.h \
-    src/gear/trie.h
+    src/gear/trie.h \
+    src/mind/ai/nlp/char_provider.h
