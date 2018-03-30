@@ -22,8 +22,8 @@ namespace m8r {
 
 using namespace std;
 
-MarkdownTokenizer::MarkdownTokenizer(Lexicon& lexicon)
-    : lexicon(lexicon)
+MarkdownTokenizer::MarkdownTokenizer(Lexicon& lexicon, Trie& blacklist)
+    : lexicon(lexicon), blacklist(blacklist)
 {
 }
 
@@ -31,7 +31,7 @@ MarkdownTokenizer::~MarkdownTokenizer()
 {
 }
 
-void MarkdownTokenizer::tokenize(CharProvider& md, WordFrequencyList& wfl, bool blacklist, bool stem)
+void MarkdownTokenizer::tokenize(CharProvider& md, WordFrequencyList& wfl, bool useBlacklist, bool lowercase, bool stem)
 {
     // IMPROVE incorporate options
     UNUSED_ARG(blacklist);
@@ -85,17 +85,21 @@ void MarkdownTokenizer::tokenize(CharProvider& md, WordFrequencyList& wfl, bool 
                     // TODO stem word
                 }
 
-                // blacklist
-                // TODO remove blacklisted words like: but, else, and, ...
-
-                // increment token frequency
-                Lexicon::WordEmbedding* we = lexicon.add(w);
-                ++wfl[&(we->word)];
+                // remove common words
+                if(!useBlacklist || !blacklist.searchWord(w)) {
+                    // increment token frequency
+                    Lexicon::WordEmbedding* we = lexicon.add(w);
+                    ++wfl[&(we->word)];
+                }
             }
             w.clear();
             break;
         default:
-            w += md.get();
+            if(lowercase) {
+                w += tolower(md.get());
+            } else {
+                w += md.get();
+            }
             break;
         }
     }

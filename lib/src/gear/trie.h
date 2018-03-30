@@ -1,141 +1,85 @@
 /*
- * C++ implementation was inspired by http://www.sourcetricks.com
- */
+ trie.h     MindForger thinking notebook
 
-#include <iostream>
+ Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+#ifndef M8R_TRIE_H
+#define M8R_TRIE_H
+
 #include <vector>
-using namespace std;
+#include <string>
 
-class Node {
-public:
-    Node() { mContent = ' '; mMarker = false; }
-    ~Node() {}
-    char content() { return mContent; }
-    void setContent(char c) { mContent = c; }
-    bool wordMarker() { return mMarker; }
-    void setWordMarker() { mMarker = true; }
-    Node* findChild(char c);
-    void appendChild(Node* child) { mChildren.push_back(child); }
-    vector<Node*> children() { return mChildren; }
+namespace m8r {
 
+/**
+ * @brief Trie.
+ *
+ * This implementation has been inspired by an http://www.sourcetricks.com example.
+ */
+class Trie
+{
 private:
-    char mContent;
-    bool mMarker;
-    vector<Node*> mChildren;
-};
+    class Node {
+        friend class Trie;
 
-class Trie {
-public:
-    Trie();
-    ~Trie();
-    void addWord(string s);
-    bool searchWord(string s);
-    void deleteWord(string s);
-private:
+    private:
+        char mContent;
+        bool mMarker;
+        std::vector<Node*> mChildren;
+
+    public:
+        Node() { mContent = ' '; mMarker = false; }
+        ~Node() {}
+        char content() const { return mContent; }
+        void setContent(char c) { mContent = c; }
+        bool wordMarker() const { return mMarker; }
+        void setWordMarker() { mMarker = true; }
+        void appendChild(Node* child) { mChildren.push_back(child); }
+        std::vector<Node*> children() const { return mChildren; }
+
+        // IMPROVE sort children once trie filled AND use binary search here O(n) -> O(log(n))
+        Node* findChild(char c) {
+            for(Node* n:mChildren) {
+                if(n->content()==c) {
+                    return n;
+                }
+            }
+            return nullptr;
+        }
+    };
+
     Node* root;
+
+public:
+    explicit Trie();
+    Trie(const Trie&) = delete;
+    Trie(const Trie&&) = delete;
+    Trie &operator=(const Trie&) = delete;
+    Trie &operator=(const Trie&&) = delete;
+    ~Trie();
+
+    bool empty() const { return root->children().empty(); }
+
+    void addWord(std::string s);
+    bool searchWord(std::string s) const;
+    void deleteWord(std::string s);
+
+private:
+    void destroy(Node* n);
 };
 
-// TODO make this binary search
-Node* Node::findChild(char c)
-{
-    for ( int i = 0; i < mChildren.size(); i++ )
-    {
-        Node* tmp = mChildren.at(i);
-        if ( tmp->content() == c )
-        {
-            return tmp;
-        }
-    }
-
-    return NULL;
 }
-
-Trie::Trie()
-{
-    root = new Node();
-}
-
-Trie::~Trie()
-{
-    // Free memory
-}
-
-void Trie::addWord(string s)
-{
-    Node* current = root;
-
-    if ( s.length() == 0 )
-    {
-        current->setWordMarker(); // an empty word
-        return;
-    }
-
-    for ( int i = 0; i < s.length(); i++ )
-    {        
-        Node* child = current->findChild(s[i]);
-        if ( child != NULL )
-        {
-            current = child;
-        }
-        else
-        {
-            Node* tmp = new Node();
-            tmp->setContent(s[i]);
-            current->appendChild(tmp);
-            current = tmp;
-        }
-        if ( i == s.length() - 1 )
-            current->setWordMarker();
-    }
-}
-
-
-bool Trie::searchWord(string s)
-{
-    Node* current = root;
-
-    while ( current != NULL )
-    {
-        for ( int i = 0; i < s.length(); i++ )
-        {
-            Node* tmp = current->findChild(s[i]);
-            if ( tmp == NULL )
-                return false;
-            current = tmp;
-        }
-
-        if ( current->wordMarker() )
-            return true;
-        else
-            return false;
-    }
-
-    return false;
-}
-
-
-// Test program
-int test-program()
-{
-    Trie* trie = new Trie();
-    trie->addWord("Hello");
-    trie->addWord("Balloon");
-    trie->addWord("Ball");
-
-    if ( trie->searchWord("Hell") )
-        cout << "Found Hell" << endl;
-
-    if ( trie->searchWord("Hello") )
-        cout << "Found Hello" << endl;
-
-    if ( trie->searchWord("Helloo") )
-        cout << "Found Helloo" << endl;
-
-    if ( trie->searchWord("Ball") )
-        cout << "Found Ball" << endl;
-
-    if ( trie->searchWord("Balloon") )
-        cout << "Found Balloon" << endl;
-
-    delete trie;
-}
+#endif // M8R_TRIE_H

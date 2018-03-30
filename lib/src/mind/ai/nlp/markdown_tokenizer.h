@@ -23,6 +23,7 @@
 
 #include "../../../debug.h"
 #include "../../../gear/lang_utils.h"
+#include "../../../gear/trie.h"
 #include "char_provider.h"
 #include "lexicon.h"
 #include "word_frequency_list.h"
@@ -49,10 +50,10 @@ class MarkdownTokenizer
     /**
      * @brief Word blacklist (e.g. and, but, have, do, ...)
      */
-    std::set<std::string> blacklist;
+    Trie& blacklist;
 
 public:
-    explicit MarkdownTokenizer(Lexicon& lexicon);
+    explicit MarkdownTokenizer(Lexicon& lexicon, Trie& blacklist);
     MarkdownTokenizer(const MarkdownTokenizer&) = delete;
     MarkdownTokenizer(const MarkdownTokenizer&&) = delete;
     MarkdownTokenizer &operator=(const MarkdownTokenizer&) = delete;
@@ -62,7 +63,7 @@ public:
     /**
      * @brief Tokenize a stream of characters.
      */
-    void tokenize(CharProvider& md, WordFrequencyList& wfl, bool blacklist=true, bool stem=true);
+    void tokenize(CharProvider& md, WordFrequencyList& wfl, bool useBlacklist=true, bool lowercase=true, bool stem=true);
 };
 
 }

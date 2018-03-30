@@ -76,7 +76,8 @@ SOURCES += \
     src/mind/ai/nlp/string_char_provider.cpp \
     src/mind/ai/nn/genann.c \
     src/mind/ai/association_assessment_notes_feature.cpp \
-    src/mind/ai/nlp/word_frequency_list.cpp
+    src/mind/ai/nlp/word_frequency_list.cpp \
+    src/gear/trie.cpp
 
 HEADERS += \
     ./src/debug.h \
@@ -151,4 +152,5 @@ HEADERS += \
     src/mind/ai/nlp/string_char_provider.h \
     src/mind/ai/nn/genann.h \
     src/mind/ai/association_assessment_notes_feature.h \
-    src/mind/ai/nlp/word_frequency_list.h
+    src/mind/ai/nlp/word_frequency_list.h \
+    src/gear/trie.h

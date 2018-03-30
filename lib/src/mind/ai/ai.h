@@ -48,14 +48,13 @@ private:
     Memory& memory;
 
     Lexicon lexicon;
+    Trie wordBlacklist;
     BagOfWords bow;
     MarkdownTokenizer tokenizer;
 
     /*
      * Data sets
      */
-
-    // TODO ... take from Memory
 
     // Os - vector index is used as ID through other data structures like similarity matrices
     std::vector<Outline*> outlines;
@@ -103,6 +102,13 @@ public:
     void learnMemory();
 
 private:
+    /**
+     * @brief Initialize blacklist using common words.
+     *
+     * Lexicon of common words is manually filtered first 200 words to 80 from:
+     *   https://github.com/first20hours/google-10000-english
+     */
+    void initializeWordBlacklist();
     float calculateSimilarityByWords(Note* n1, Note* n2);
 
     AssociationAssessmentNotesFeature* createAaFeature(Note* n1, Note* n2);

@@ -449,8 +449,10 @@ public:
      *  AI
      */
 
-    void associationsLeaderBoard() {}
-    void associationsLeaderBoard(Note* n) { UNUSED_ARG(n); }
+    /**
+     * @brief Find associations of the Note.
+     */
+    void getAssociationsLeaderboard(Note* n) { UNUSED_ARG(n); }
 
     /*
      * TRIPLES

@@ -113,18 +113,21 @@ TEST(AiNlpTestCase, Outline)
      */
 
     m8r::Lexicon lexicon{};
-    m8r::MarkdownTokenizer tokenizer{lexicon};
+    m8r::Trie wordBlaclist{};
+    wordBlaclist.addWord("text");
+    m8r::MarkdownTokenizer tokenizer{lexicon, wordBlaclist};
     m8r::StringCharProvider chars{markdown};
     m8r::WordFrequencyList* wfl = new m8r::WordFrequencyList{&lexicon};
     cout << "Tokenizing MD string to word frequency list..." << endl;
     tokenizer.tokenize(chars, *wfl);
-    wfl->print();
+    wfl->sort();
 
     // assert wfl
-    ASSERT_EQ(20, wfl->size());
+    wfl->print();
+    ASSERT_EQ(19, wfl->size());
     // assert lexicon
     lexicon.print();
-    ASSERT_EQ(20, lexicon.size());
+    ASSERT_EQ(19, lexicon.size());
 
     /*
      * STEP: build BoW i.e. matrix of Things x frequencies
@@ -185,14 +188,11 @@ TEST(AiNlpTestCase, Repository)
 
     mind.dream();
 
-    // get the most similar Note pairs in the repository
-    mind.associationsLeaderBoard();
-
     // get the best associations of N
     // TODO find Note by name and use it...
     // TODO consider AI repository for assoc experiments
     m8r::Note* n=mind.remind().getOutlines()[0]->getNotes()[0];
-    mind.associationsLeaderBoard(n);
+    mind.getAssociationsLeaderboard(n);
 
 
 

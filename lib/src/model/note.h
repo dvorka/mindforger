@@ -76,6 +76,12 @@ private:
 
     std::vector<Attachment*> attachments;
 
+    /*
+     * Transient fields
+     */
+
+    int aiAaMatrixIndex;
+
 public:
     Note() = delete;
     explicit Note(const NoteType* type, Outline* outline);
@@ -146,6 +152,9 @@ public:
     bool isTrailingHashesSection() const { return flags & FLAG_MASK_TRAILING_HASHES_SECTION; }
 
     void makeDirty();
+
+    int getAiAaMatrixIndex() const { return aiAaMatrixIndex; }
+    void setAiAaMatrixIndex(int i) { aiAaMatrixIndex = i; }
 };
 
 } // m8r namespace
