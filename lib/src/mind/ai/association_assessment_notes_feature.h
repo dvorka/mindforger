@@ -36,18 +36,18 @@ public:
     // 30%
     static constexpr int IDX_HAVE_MUTUAL_REL = 0;
     // 10% (x0% remains)
-    const int IDX_TYPE_MATCHES = 4;
+    const int IDX_TYPE_MATCHES = 1;
     // 20% (x0% remains)
     const int IDX_SIMILARITY_BY_TAGS = 2;
 
     // x0% (x0% remains)
-    const int IDX_SIMILARITY_BY_TITLES= 2;
+    const int IDX_SIMILARITY_BY_TITLES= 3;
     // x0% (x0% remains)
-    const int IDX_SIMILARITY_BY_RELEVANT_WORDS_IN_DESCS = 2;
+    const int IDX_SIMILARITY_BY_DESCRIPTIONS = 4;
     // x0% (x0% remains)
-    const int IDX_SIMILARITY_BY_TITLES_IN_DESCS = 2;
+    const int IDX_SIMILARITY_BY_TITLES_IN_DESCS = 5;
     // x0% (x0% remains)
-    const int IDX_SIMILARITY_BY_RELS_W_SAME_TARGETS = 3;
+    const int IDX_SIMILARITY_BY_SAME_TARGETS_RELS = 6;
 
 private:
     std::pair<m8r::Note*,m8r::Note*> notes;
@@ -61,8 +61,14 @@ public:
     AssociationAssessmentNotesFeature &operator=(const AssociationAssessmentNotesFeature&&) = delete;
     ~AssociationAssessmentNotesFeature();
 
+    void clearFeatures();
+
     void setHaveMutualRel(bool haveRel) {
         features[IDX_HAVE_MUTUAL_REL] = haveRel?1.:0.;
+    }
+
+    void setTypeMatches(bool typeMatches) {
+        features[IDX_HAVE_MUTUAL_REL] = typeMatches?1.:0.;
     }
 
     /**
@@ -90,21 +96,20 @@ public:
         features[IDX_SIMILARITY_BY_TAGS] = similarityByTags;
     }
 
-    void setTypeMatches(bool typeMatches) {
-        features[IDX_HAVE_MUTUAL_REL] = typeMatches?1.:0.;
+    void setSimilarityByTitles(float similarityByTitles) {
+        features[IDX_SIMILARITY_BY_TAGS] = similarityByTitles;
     }
 
-    /**
-     * @brief Set similarity computed by words in title.
-     */
+    void setSimilarityByDescription(float similarityByDescription) {
+        features[IDX_SIMILARITY_BY_DESCRIPTIONS] = similarityByDescription;
+    }
 
-    // TODO N1 title occurs in body of N2, N2 in N1, mutual title containment ... means related
+    void setSimilarityByTitlesInDescription(float similarity) {
+        features[IDX_SIMILARITY_BY_TITLES_IN_DESCS] = similarity;
+    }
 
-    /**
-     * @brief Set similarity computed by words in description.
-     */
-    void setSimilarityByWords(float similarityByTags) {
-        features[IDX_SIMILARITY_BY_RELEVANT_WORDS_IN_DESCS] = similarityByTags;
+    void setSimilarityBySameTargetRels(float similarity) {
+        features[IDX_SIMILARITY_BY_SAME_TARGETS_RELS] = similarity;
     }
 
     /**
@@ -114,10 +119,15 @@ public:
      * each similarity aspect A: 10%*A1+40%*A2+...+5%*AN=100% (<=> if As==1).
      */
     float areNotesAssociatedMetric() {
-        return (
-            features[IDX_HAVE_MUTUAL_REL]*30. +
-            features[IDX_HAVE_MUTUAL_REL]*30.
-          )/100.;
+        return
+            features[IDX_HAVE_MUTUAL_REL] * 0.3 +
+            features[IDX_TYPE_MATCHES] * 0.1 +
+            features[IDX_SIMILARITY_BY_TAGS] * 0.2 +
+            features[IDX_SIMILARITY_BY_TITLES] * 0.2 +
+            features[IDX_SIMILARITY_BY_DESCRIPTIONS] * 0.2 +
+            features[IDX_SIMILARITY_BY_TITLES_IN_DESCS] * 0.1 +
+            features[IDX_SIMILARITY_BY_SAME_TARGETS_RELS] * 0.1
+            ;
     }
 };
 

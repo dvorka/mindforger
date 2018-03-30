@@ -450,9 +450,11 @@ public:
      */
 
     /**
-     * @brief Find associations of the Note.
+     * @brief Find Note associations.
      */
-    void getAssociationsLeaderboard(Note* n) { UNUSED_ARG(n); }
+    void getAssociationsLeaderboard(const Note* n, std::vector<Note*>& leaderboard) {
+        return ai.getAssociationsLeaderboard(n, leaderboard);
+    }
 
     /*
      * TRIPLES

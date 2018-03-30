@@ -22,10 +22,16 @@ namespace m8r {
 
 AssociationAssessmentNotesFeature::AssociationAssessmentNotesFeature()
 {
+    clearFeatures();
 }
 
 AssociationAssessmentNotesFeature::~AssociationAssessmentNotesFeature()
 {
+}
+
+void AssociationAssessmentNotesFeature::clearFeatures()
+{
+    for(int i=0; i<7; i++) features[i]=0.;
 }
 
 } // m8r namespace

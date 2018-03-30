@@ -171,7 +171,8 @@ TEST(AiNlpTestCase, Tokenizer)
 TEST(AiNlpTestCase, Repository)
 {
     string repositoryPath{"/lib/test/resources/universe-repository"};
-    repositoryPath.insert(0, getMindforgerGitHomePath());
+    //repositoryPath.insert(0, getMindforgerGitHomePath());
+    repositoryPath.assign("/home/dvorka/tmp/ai-repository"); // experiment w/ bigger repository
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
     m8r::Mind mind(config);
@@ -192,35 +193,7 @@ TEST(AiNlpTestCase, Repository)
     // TODO find Note by name and use it...
     // TODO consider AI repository for assoc experiments
     m8r::Note* n=mind.remind().getOutlines()[0]->getNotes()[0];
-    mind.getAssociationsLeaderboard(n);
-
-
-
-
-
-    /*
-    m8r::MarkdownTokenizer tokenizer{};
-    m8r::NoteCharProvider chars{n};
-    m8r::BagOfWords bow{};
-    cout << "Tokenizing MD string to Bag of Words (BoW)..." << endl;
-    tokenizer.tokenize(chars, bow);
-    cout << "BoW[" << bow.size() << "]:" << endl;
-    for(auto s:bow.iterable()) {
-        cout << "  " << (s.first) << " [" << s.second << "] " << endl;
-    }
-
-    ASSERT_EQ(19, bow.size());
-
-    m8r::AssociationAssessmentNotesFeature& nnFeature
-        = createAaFeature(n1, n2);
-
-    m8r::AssociationAssessmentModel nn{};
-    nn.predict(nnFeature);
-
-    // Having BoW next steps are:
-    //   - create similarityEmbedding ~ for every Ni vector w/ [[bow],stemmed tags,relationship,type]
-    //   - for every Ni and Nj create notesSimilarityFeature ~ smart unit using similarityEmbedding[Ni] and se[Nj]
-    //     [# matching words in total, avg of at most words TF-IDF, # matching tags, have relationship, # relationship to same target, type matches]
-    //   - now ask NN(notesSimilarityFeature[Ni,Nj]) = {1/0} ... similar/not similar (associated each other/don't ...)
-    */
+    std::vector<m8r::Note*> lb{};
+    mind.getAssociationsLeaderboard(n, lb);
+    m8r::Ai::print(n,lb);
 }

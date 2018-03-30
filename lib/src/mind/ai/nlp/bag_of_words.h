@@ -74,6 +74,10 @@ public:
         bow[t] = wfl;
     }
 
+    WordFrequencyList* get(Thing* t) {
+        return bow[t];
+    }
+
     void reorderDocVectorsByWeight();
 
 #ifdef DO_M8F_DEBUG

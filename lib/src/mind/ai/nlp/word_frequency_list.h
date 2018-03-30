@@ -54,8 +54,32 @@ class WordFrequencyList
         }
     };
 
+public:
+    static void evalUnion(WordFrequencyList& l1, WordFrequencyList& l2, WordFrequencyList& u)
+    {
+        // IMPROVE u.iterable().insert(l1.iterable().begin(),l1.iterable().end());
+        for(auto& e:l1.iterable()) {
+            u.add(e.first);
+        }
+
+        for(auto& e:l2.iterable()) {
+            u.add(e.first);
+        }
+    }
+
+    static void evalIntersection(WordFrequencyList& l1, WordFrequencyList& l2, WordFrequencyList& u)
+    {
+        // IMPROVE u.iterable().insert(l1.iterable().begin(),l1.iterable().end());
+        for(auto& e:l1.iterable()) {
+            if(l2.contains(e.first)) {
+                u.add(e.first);
+            }
+        }
+    }
+
 private:
     WordWeightComparator wordWeightComparator;
+    Lexicon* lexicon;
 
     /**
      * @brief List of words occuring in a Thing ordered by weight.
@@ -77,24 +101,38 @@ public:
 
     int& operator[](std::string* key) { return word2Frequency[key]; }
     size_t size() const { return word2Frequency.size(); }
-    const std::map<const std::string*,int> iterable() const { return word2Frequency; }
+    const std::map<const std::string*,int>& iterable() const { return word2Frequency; }
+
+    int contains(const std::string* word) {
+        std::map<const std::string*,int>::iterator i = word2Frequency.find(word);
+        if(i != word2Frequency.end()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     int add(const std::string* word) {
-        int result;
         std::map<const std::string*,int>::iterator i = word2Frequency.find(word);
         if(i != word2Frequency.end()) {
             ++i->second;
-            return result;
+            return word2Frequency[word];
         } else {
             word2Frequency[word] = 1;
             return 1;
         }
     }
 
+    int set(const std::string* word, int frequency) {
+        word2Frequency[word] = frequency;
+    }
+
     /**
      * @brief Sort words by weight.
      */
     void sort();
+
+    float weight();
 
 #ifdef DO_M8F_DEBUG
     void print() const {

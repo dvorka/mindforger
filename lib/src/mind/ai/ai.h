@@ -21,6 +21,7 @@
 
 #include <vector>
 
+#include "../../debug.h"
 #include "../../model/outline.h"
 #include "../memory.h"
 #include "./nlp/markdown_tokenizer.h"
@@ -68,6 +69,15 @@ private:
     // TODO NN: AssociationAssessmentModel
 
     /*
+     * AA leaderboard(s)
+     */
+
+    // association assessment matrix w/ rankings for any N1/N2 tuple
+    float** aaMatrix;
+
+    // TODO leaderboards cache to avoid re-calculation
+
+    /*
      * Classification
      */
 
@@ -101,6 +111,11 @@ public:
      */
     void learnMemory();
 
+    /**
+     * @brief Find Note associations.
+     */
+    void getAssociationsLeaderboard(const Note* n, std::vector<Note*>& associations);
+
 private:
     /**
      * @brief Initialize blacklist using common words.
@@ -109,7 +124,11 @@ private:
      *   https://github.com/first20hours/google-10000-english
      */
     void initializeWordBlacklist();
-    float calculateSimilarityByWords(Note* n1, Note* n2);
+
+    /**
+     * @brief Calculate similarity of two word vectors.
+     */
+    float calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyList& v2, int threshold=1000);
 
     AssociationAssessmentNotesFeature* createAaFeature(Note* n1, Note* n2);
 
@@ -122,6 +141,17 @@ private:
     // TODO assessAssocByTags(N1,N2)
     // TODO assessAssocByDescriptions()
     // TODO assessAssocByTitles()
+
+public:
+#ifdef DO_M8F_DEBUG
+    static void print(const Note* n, std::vector<Note*>& leaderboard) {
+        std::cout << "Note '" << n->getName() << "' AA leaderboard("<< leaderboard.size() <<"):" << std::endl;
+        int i=1;
+        for(auto& nn:leaderboard) {
+            std::cout << "  #" << i++ << " '" << nn->getName() << "'" << std::endl;
+        }
+    }
+#endif
 };
 
 }
