@@ -181,7 +181,7 @@ TEST(AiNlpTestCase, Repository)
     << "  Outlines: " << mind.remind().getOutlinesCount() << endl
     << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize() << endl;
 
-    //ASSERT_EQ(3, mind.remind().getOutlinesCount());
+    ASSERT_GE(1, mind.remind().getOutlinesCount());
 
     /*
      * Tokenize repository > make AI to think > find the most similar Notes pair
