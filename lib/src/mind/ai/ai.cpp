@@ -113,7 +113,7 @@ void Ai::learnMemory()
                 aaFeature.setHaveMutualRel(false); // TODO
                 aaFeature.setTypeMatches(n1->getType()==n2->getType());
                 aaFeature.setSimilarityByTags(calculateSimilarityByTags(n1->getTags(),n2->getTags()));
-                aaFeature.setSimilarityByTitles(0.0); // TODO
+                aaFeature.setSimilarityByTitles(calculateSimilarityByTitles(n1->getName(),n2->getName()));
                 aaFeature.setSimilarityByDescription(calculateSimilarityByWords(*bow.get(n1),*bow.get(n2),WORD_RELEVANCY_THRESHOLD));
                 aaFeature.setSimilarityByTitlesInDescription(0.0); // TODO nice
                 aaFeature.setSimilarityBySameTargetRels(0.0); // TODO nice
@@ -135,6 +135,47 @@ void Ai::learnMemory()
     //trainAaNn();
 
     MF_DEBUG("  AI::FINISH: memory learned" << endl);
+}
+
+float Ai::calculateSimilarityByTitles(const string& t1, const string& t2)
+{
+    StringCharProvider cp1{t1};
+    WordFrequencyList v1{&lexicon};
+    tokenizer.tokenize(cp1, v1, false, true, false);
+    StringCharProvider cp2{t2};
+    WordFrequencyList v2{&lexicon};
+    tokenizer.tokenize(cp2, v2, false, true, false);
+
+    // calculate overlap
+    if(!v1.size() || !v2.size()) {
+        return 0.;
+    } else {
+        // direct access for efficiency
+        WordFrequencyList intersection{&lexicon};
+        float iWeight=0, uWeight=0;
+
+        for(auto& e:v1.iterable()) {
+            uWeight += 1;
+            if(v2.contains(e.first)) {
+                iWeight += 1;
+                intersection.add(e.first);
+            }
+        }
+
+        for(auto& e:v2.iterable()) {
+            if(!intersection.contains(e.first)) {
+                uWeight += 1;
+                if(v1.contains(e.first)) {
+                    iWeight += 1;
+                    // no need to update iVector as it won't be needed
+                }
+            }
+        }
+
+        MF_DEBUG("  titleSimilarity = "<<iWeight<<" / "<<uWeight << endl);
+
+        return (iWeight/uWeight/100.)/100.;
+    }
 }
 
 // algorithm is based on similarity by words (for now there are no weights - might be added later if needed by other lib functions)
@@ -168,7 +209,7 @@ float Ai::calculateSimilarityByTags(const vector<const Tag*>* t1, const vector<c
             }
         }
 
-        MF_DEBUG("  tagSimilarity = "<<iWeight<<" / "<<uWeight << endl);
+        //MF_DEBUG("  tagSimilarity = "<<iWeight<<" / "<<uWeight << endl);
 
         // intersection % of union
         return (iWeight/uWeight/100.)/100.;

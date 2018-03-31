@@ -22,7 +22,7 @@ namespace m8r {
 
 using namespace std;
 
-StringCharProvider::StringCharProvider(string& s)
+StringCharProvider::StringCharProvider(const string& s)
     : CharProvider(), s(s), fst(true)
 {
     i = 0;

@@ -30,12 +30,12 @@ namespace m8r {
 class StringCharProvider : public CharProvider
 {
 private:
-    std::string& s;
+    const std::string& s;
     bool fst;
     size_t i;
 
 public:
-    explicit StringCharProvider(std::string& s);
+    explicit StringCharProvider(const std::string& s);
     StringCharProvider(const StringCharProvider&) = delete;
     StringCharProvider(const StringCharProvider&&) = delete;
     StringCharProvider &operator=(const StringCharProvider&) = delete;

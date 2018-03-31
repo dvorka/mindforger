@@ -135,17 +135,17 @@ private:
      */
     float calculateSimilarityByTags(const std::vector<const Tag*>* t1, const std::vector<const Tag*>* t2);
 
+    /**
+     * @brief Calculate similarity of two N/O names.
+     */
+    float calculateSimilarityByTitles(const std::string& t1, const std::string& t2);
+
     AssociationAssessmentNotesFeature* createAaFeature(Note* n1, Note* n2);
 
     /**
      * @brief Train associations assessment neural network once memory is learned.
      */
     void trainAaNn();
-
-    // NN methods
-    // TODO assessAssocByTags(N1,N2)
-    // TODO assessAssocByDescriptions()
-    // TODO assessAssocByTitles()
 
 public:
 #ifdef DO_M8F_DEBUG
