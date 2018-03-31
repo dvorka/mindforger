@@ -79,7 +79,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindForget->setEnabled(false);
 
     // dream ... sanity, integrity, detox, inference, assoc discovery, ...
-    actionMindDream = new QAction(tr("Dr&eam"), mainWindow);
+    actionMindDream = new QAction(tr("&Dream"), mainWindow);
     actionMindDream->setStatusTip(tr("Tidy up, clean, re-infer, check and optimize Memory which is otherwise done on your inactivity"));
 
     actionMindSnapshot = new QAction(tr("D&ump"), mainWindow);

@@ -98,7 +98,9 @@ void MainWindowPresenter::initView()
 #ifdef DO_M8F_DEBUG
 void MainWindowPresenter::doActionMindHack()
 {
-    qDebug() << "[MindHack] Current facet: " << orloj->getFacet();
+    //qDebug() << "[MindHack] Current facet: " << orloj->getFacet();
+    vector<Note*> l;
+    mind->getAssociationsLeaderboard(orloj->getNoteView()->getCurrentNote(), l);
 }
 #endif
 

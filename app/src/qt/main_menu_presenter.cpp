@@ -28,7 +28,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 
     // menu: mind
 #ifdef DO_M8F_DEBUG
-    QObject::connect(view->actionMindHack, SIGNAL(triggered()),mwp, SLOT(doActionMindHack()));
+    QObject::connect(view->actionMindHack, SIGNAL(triggered()), mwp, SLOT(doActionMindHack()));
 #endif
     QObject::connect(view->actionMindThink, SIGNAL(triggered()), mwp, SLOT(doActionMindThink()));
     QObject::connect(view->actionMindDream, SIGNAL(triggered()), mwp, SLOT(doActionMindDream()));

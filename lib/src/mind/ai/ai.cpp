@@ -390,7 +390,6 @@ void Ai::getAssociationsLeaderboard(const Note* n, vector<Note*>& leaderboard)
                     break;
                 }
             }
-            cout << "SLOT FOUND: "<<target<<endl;
             // shift leaderboard
             int sx=aaLeaderboard[target][0];
             int sy=aaLeaderboard[target][1];
@@ -415,8 +414,10 @@ void Ai::getAssociationsLeaderboard(const Note* n, vector<Note*>& leaderboard)
     }
 
     MF_DEBUG("Leaderboard of " << n->getName() << ":" << endl);
-    for(int i=0; aaLeaderboard[i][0]!=AA_LEADERBOARD_LINE_EMPTY && i<AA_LEADERBOARD_SIZE; i++) {
-        MF_DEBUG("  " << notes[aaLeaderboard[i][0]]->getName() << " ~ " << aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]] << endl);
+    for(int i=0; i<AA_LEADERBOARD_SIZE && aaLeaderboard[i][0]!=AA_LEADERBOARD_LINE_EMPTY; i++) {
+        MF_DEBUG("  #" << i << " " <<
+                 notes[aaLeaderboard[i][0]]->getName() << " (" << notes[aaLeaderboard[i][0]]->getOutline()->getName() << ")" <<
+                 " ~ " << aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]] << endl);
         leaderboard.push_back(notes[aaLeaderboard[i][0]]);
     }
 }
