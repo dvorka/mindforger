@@ -45,7 +45,8 @@ extern char* getMindforgerGitHomePath();
 /*
  * Measurements
  *
- * 2018/03/31 ... 338s, 5.000 Ns, 12.560.072 rankings in aaMatrix (5k^2 / 2)
+ * 2018/03/31 ... 129s (2')  , 5.000 Ns, 12.560.072 rankings in aaMatrix (5k^2 / 2) ... 1/2 of matrix, simplified vectors weight computation
+ * 2018/03/31 ... 338s (5'30), 5.000 Ns, 12.560.072 rankings in aaMatrix (5k^2 / 2)
  *
  *
  */

@@ -79,44 +79,51 @@ void Ai::learnMemory()
     for(size_t i=0; i<notes.size(); ++i) {
         aaMatrix[i] = new float[notes.size()];
     }
-    MF_DEBUG("  Building AA matrix w/ " << (notes.size()*notes.size()/2) << " rankings..." << endl);
-    float aa;
-    AssociationAssessmentNotesFeature aaFeature{};
-    int x=-1, y;
+
 #ifdef DO_M8F_DEBUG
+    MF_DEBUG("  Building AA matrix w/ " << (notes.size()*notes.size()/2) << " UNIQUE rankings..." << endl);
     float c=0;
     float p;
 #endif
-    // TODO calculate only values ABOVE diagonal i.e. initialize x=y
+
     // TODO vectorize this ~ multiple threads calculating values in parallel
-    for(Note* n1:notes) {
+    int WORD_RELEVANCY_THRESHOLD = 10; // use 10 words w/ highest weight from vectors (and ignore others - irrelevant can bring noice with volume)
+    float aa;
+    AssociationAssessmentNotesFeature aaFeature{};
+    for(size_t y=0; y<notes.size(); y++) {
+        notes[y]->setAiAaMatrixIndex(y); // sets index for ALL notes in notes vector
+
         #ifdef DO_M8F_DEBUG
         p = c/((float(notes.size()*notes.size()))/100.);
-        MF_DEBUG("    " << (int)p << "% AA matrix row for '" << n1->getName() << endl);
+        MF_DEBUG("    " << (int)p << "% AA matrix rankings for '" << notes[y]->getName() << "'" << endl);
         #endif
-        n1->setAiAaMatrixIndex(++x);
-        y = -1;
-        for(Note* n2:notes) {
+
+        // calculate only values ABOVE diagonal i.e. initialize x=y
+        for(size_t x=y; x<notes.size(); x++) {
             #ifdef DO_M8F_DEBUG
             c++;
             #endif
-            n2->setAiAaMatrixIndex(++y);
-            if(n1==n2) {
+
+            if(x==y) {
                 aaMatrix[x][y] = 1.;
             } else {
+                Note* n1 = notes[x];
+                Note* n2 = notes[y];
+
                 aaFeature.setHaveMutualRel(false); // TODO
                 aaFeature.setTypeMatches(n1->getType()==n2->getType());
                 aaFeature.setSimilarityByTags(0.0); // TODO
                 aaFeature.setSimilarityByTitles(0.0); // TODO
-                aaFeature.setSimilarityByDescription(calculateSimilarityByWords(*bow.get(n1),*bow.get(n2)));
+                aaFeature.setSimilarityByDescription(calculateSimilarityByWords(*bow.get(n1),*bow.get(n2),WORD_RELEVANCY_THRESHOLD));
                 aaFeature.setSimilarityByTitlesInDescription(0.0); // TODO
                 aaFeature.setSimilarityBySameTargetRels(0.0); // TODO
 
                 // set both values above and below diagonal - detection will be faster later (no check x>y needed)
                 aa = aaFeature.areNotesAssociatedMetric();
                 //MF_DEBUG("  aa[" << x << "][" << y << "]=" << aa << endl);
-                // TODO store features to be used as input to NN later
+                // TODO store features to be used as input to NN later > can be FIXED array size
 
+                // set AA ranking both below and above diagonal
                 aaMatrix[x][y] = aa;
                 aaMatrix[y][x] = aa;
             }
@@ -124,29 +131,53 @@ void Ai::learnMemory()
     }
     MF_DEBUG("  AA matrix built!" << endl);
 
-    // TODO train NN usin aaMatrix - why (incorporate USER data), how much data to use, test set, ...
+    // TODO train NN usint aaMatrix - why (incorporate USER data), how much data to use, test set, ...
     //trainAaNn();
 
     MF_DEBUG("  AI::FINISH: memory learned" << endl);
 }
 
+// consider ONLY most valuable words via threshold - many irrelevat words would kill the score (irrelevant words make noise)
 float Ai::calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyList& v2, int threshold)
 {
-    // IMPROVE consider using only most valuable words via threshold
-    UNUSED_ARG(threshold);
+    // direct access for efficiency
+    WordFrequencyList intersection{&lexicon};
+    float iWeight=0, uWeight=0;
+    int t=0;
 
-    // union weight
-    WordFrequencyList u{&lexicon};
-    WordFrequencyList::evalUnion(v1, v2, u);
+    // iterate at most *threashold* words from v1: all + to UNION, matching + to INTERSECTION
+    for(auto& e:v1.iterable()) {
+        if(t++>=threshold) break;
 
-    // intersection
-    WordFrequencyList i{&lexicon};
-    WordFrequencyList::evalIntersection(v1, v2, i);
+        float w = lexicon.get(e.first)->weight;
+        uWeight += w;
+        if(v2.contains(e.first)) {
+            iWeight += w;
+            intersection.add(e.first);
+        }
+    }
+    // uWeight contains weight of 1st 10 v1's words, iWeight weight of v1 intersection v2
 
-    //MF_DEBUG("  calc("<<i.size()<<"/"<<u.size()<<"): " << i.weight() << " % " << u.weight() << endl);
+    // iterate at most *threashold* words from v2: w in intersection HANDLED both u&i, w in v2&v1 > intersection else union
+    t=0;
+    for(auto& e:v2.iterable()) {
+        // consider at most threashold words from v2
+        if(++t>=threshold) break;
+
+        if(!intersection.contains(e.first)) {
+            float w = lexicon.get(e.first)->weight;
+            uWeight += w;
+            if(v1.contains(e.first)) {
+                iWeight += w;
+                // no need to update iVector as it won't be needed
+            }
+        }
+    }
+
+    //MF_DEBUG("  similarity = "<<iWeight<<" / "<<uWeight <<" (t="<<t<<")" << endl);
 
     // intersection % of union
-    return (i.weight()/u.weight()/100.)/100.;
+    return (iWeight/uWeight/100.)/100.;
 }
 
 AssociationAssessmentNotesFeature* Ai::createAaFeature(Note* n1, Note* n2)

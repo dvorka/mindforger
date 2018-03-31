@@ -27,6 +27,7 @@
 #include "char_provider.h"
 #include "lexicon.h"
 #include "word_frequency_list.h"
+#include "stemmer/stemmer.h"
 
 namespace m8r {
 
@@ -52,6 +53,8 @@ class MarkdownTokenizer
      */
     Trie& blacklist;
 
+    Stemmer stemmer;
+
 public:
     explicit MarkdownTokenizer(Lexicon& lexicon, Trie& blacklist);
     MarkdownTokenizer(const MarkdownTokenizer&) = delete;
@@ -64,6 +67,9 @@ public:
      * @brief Tokenize a stream of characters.
      */
     void tokenize(CharProvider& md, WordFrequencyList& wfl, bool useBlacklist=true, bool lowercase=true, bool stem=true);
+
+private:
+    inline void handleWord(WordFrequencyList& wfl, std::string &w, bool stem, bool useBlacklist);
 };
 
 }

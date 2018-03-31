@@ -27,6 +27,7 @@ export OPTION_TEST="AiBenchmark.AaMatrix"
 #export OPTION_TEST="HtmlBenchmark.Outline"
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
+#export OPTION_TEST="AiNlpTestCase.Stemmer"
 #export OPTION_TEST="AiNlpTestCase.Repository"
 #export OPTION_TEST="AiNlpTestCase.Outline"
 #export OPTION_TEST="AiNlpTestCase.Lexicon"

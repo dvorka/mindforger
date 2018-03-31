@@ -26,6 +26,7 @@
 #include "../../../src/config/configuration.h"
 #include "../../../src/mind/mind.h"
 #include "../../../src/mind/ai/ai.h"
+#include "../../../src/mind/ai/nlp/stemmer/stemmer.h"
 #include "../../../src/mind/ai/nlp/string_char_provider.h"
 #include "../../../src/mind/ai/nlp/note_char_provider.h"
 #include "../../../src/mind/ai/nlp/markdown_tokenizer.h"
@@ -39,6 +40,29 @@
 extern char* getMindforgerGitHomePath();
 
 using namespace std;
+
+TEST(AiNlpTestCase, Stemmer)
+{
+    m8r::Stemmer stemmer{};
+
+    const char *a[] = {
+        "informational",
+        "Eclipse",
+        "Martin",
+        "AI",
+        "machine",
+        "learning"
+    };
+    vector<string> words(a, end(a));
+
+    stemmer.setLanguage(m8r::Stemmer::ENGLISH);
+
+    for(string& w:words) {
+        string sW = stemmer.stem(w);
+        cout << "Before: " << w << endl;
+        cout << "After : " << sW << endl;
+    }
+}
 
 TEST(AiNlpTestCase, Lexicon)
 {

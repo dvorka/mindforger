@@ -28,6 +28,7 @@ WordFrequencyList::WordFrequencyList(Lexicon* lexicon)
     : lexicon(lexicon),
       wordWeightComparator{lexicon}
 {
+    weight = UNDEF_WEIGHT;
 }
 
 WordFrequencyList::~WordFrequencyList()
@@ -44,14 +45,14 @@ void WordFrequencyList::sort() {
     std::sort(wordsByWeight.begin(),wordsByWeight.end(),wordWeightComparator);
 }
 
-float WordFrequencyList::weight() {
-    float result = 0;
+float WordFrequencyList::recalculateWeight() {
+    weight = 0;
     for(auto& w:word2Frequency) {
         Lexicon::WordEmbedding* e = lexicon->get(w.first);
         // IMPROVE if(e) result += e->weight * ((float)w.second); ... means min of weights in UNION and INTERSECTION
-        if(e) result += e->weight;
+        if(e) weight += e->weight;
     }
-    return result;
+    return weight;
 }
 
 } // m8r namespace

@@ -77,7 +77,8 @@ SOURCES += \
     src/mind/ai/nn/genann.c \
     src/mind/ai/association_assessment_notes_feature.cpp \
     src/mind/ai/nlp/word_frequency_list.cpp \
-    src/gear/trie.cpp
+    src/gear/trie.cpp \
+    src/mind/ai/nlp/stemmer/stemmer.cpp
 
 HEADERS += \
     ./src/debug.h \
@@ -154,4 +155,23 @@ HEADERS += \
     src/mind/ai/association_assessment_notes_feature.h \
     src/mind/ai/nlp/word_frequency_list.h \
     src/gear/trie.h \
-    src/mind/ai/nlp/char_provider.h
+    src/mind/ai/nlp/char_provider.h \
+    src/mind/ai/nlp/stemmer/stemmer.h \
+    src/mind/ai/nlp/stemmer/stemming/danish_stem.h \
+    src/mind/ai/nlp/stemmer/stemming/dutch_stem.h \
+    src/mind/ai/nlp/stemmer/stemming/english_stem.h \
+    src/mind/ai/nlp/stemmer/stemming/finnish_stem.h \
+    src/mind/ai/nlp/stemmer/stemming/french_stem.h \
+    src/mind/ai/nlp/stemmer/stemming/german_stem.h \
+    src/mind/ai/nlp/stemmer/stemming/italian_stem.h \
+    src/mind/ai/nlp/stemmer/stemming/norwegian_stem.h \
+    src/mind/ai/nlp/stemmer/stemming/portuguese_stem.h \
+    src/mind/ai/nlp/stemmer/stemming/russian_stem.h \
+    src/mind/ai/nlp/stemmer/stemming/spanish_stem.h \
+    src/mind/ai/nlp/stemmer/stemming/stemming.h \
+    src/mind/ai/nlp/stemmer/stemming/swedish_stem.h \
+    src/mind/ai/nlp/stemmer/indexing/common_lang_constants.h \
+    src/mind/ai/nlp/stemmer/indexing/string_util.h \
+    src/mind/ai/nlp/stemmer/utilities/debug_logic.h \
+    src/mind/ai/nlp/stemmer/utilities/safe_math.h \
+    src/mind/ai/nlp/stemmer/utilities/utilities.h

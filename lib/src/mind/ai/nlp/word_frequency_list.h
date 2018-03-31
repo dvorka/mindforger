@@ -55,6 +55,8 @@ class WordFrequencyList
     };
 
 public:
+    static constexpr float UNDEF_WEIGHT = -1;
+
     static void evalUnion(WordFrequencyList& l1, WordFrequencyList& l2, WordFrequencyList& u)
     {
         // IMPROVE u.iterable().insert(l1.iterable().begin(),l1.iterable().end());
@@ -78,8 +80,10 @@ public:
     }
 
 private:
-    WordWeightComparator wordWeightComparator;
     Lexicon* lexicon;
+    WordWeightComparator wordWeightComparator;
+
+    float weight;
 
     /**
      * @brief List of words occuring in a Thing ordered by weight.
@@ -103,6 +107,14 @@ public:
     size_t size() const { return word2Frequency.size(); }
     const std::map<const std::string*,int>& iterable() const { return word2Frequency; }
 
+    float getWeight() {
+        if(weight==UNDEF_WEIGHT) {
+            return recalculateWeight();
+        } else {
+            return weight;
+        }
+    }
+
     int contains(const std::string* word) {
         std::map<const std::string*,int>::iterator i = word2Frequency.find(word);
         if(i != word2Frequency.end()) {
@@ -113,6 +125,8 @@ public:
     }
 
     int add(const std::string* word) {
+        weight = UNDEF_WEIGHT;
+
         std::map<const std::string*,int>::iterator i = word2Frequency.find(word);
         if(i != word2Frequency.end()) {
             ++i->second;
@@ -123,7 +137,7 @@ public:
         }
     }
 
-    int set(const std::string* word, int frequency) {
+    void set(const std::string* word, int frequency) {
         word2Frequency[word] = frequency;
     }
 
@@ -132,7 +146,10 @@ public:
      */
     void sort();
 
-    float weight();
+    /**
+     * @brief Get weight of vector words.
+     */
+    float recalculateWeight();
 
 #ifdef DO_M8F_DEBUG
     void print() const {

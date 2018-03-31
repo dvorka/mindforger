@@ -23,7 +23,7 @@ namespace m8r {
 using namespace std;
 
 MarkdownTokenizer::MarkdownTokenizer(Lexicon& lexicon, Trie& blacklist)
-    : lexicon(lexicon), blacklist(blacklist)
+    : lexicon(lexicon), blacklist(blacklist), stemmer{}
 {
 }
 
@@ -49,9 +49,11 @@ void MarkdownTokenizer::tokenize(CharProvider& md, WordFrequencyList& wfl, bool 
         case ' ':
         case '\n':
         case '\r':
+        case '\t':
         case '!':
         case '?':
         case '.':
+        case ',':
         case ':':
         case ';':
         case '#':
@@ -79,32 +81,43 @@ void MarkdownTokenizer::tokenize(CharProvider& md, WordFrequencyList& wfl, bool 
         case '<':
         case '>':
         case '/':
-            if(w.size()>1) {
-                // stem
-                if(stem) {
-                    // TODO stem word
-                }
-
-                // remove common words
-                if(!useBlacklist || !blacklist.findWord(w)) {
-                    // increment token frequency
-                    Lexicon::WordEmbedding* we = lexicon.add(w);
-                    ++wfl[&(we->word)];
-                }
-            }
-            w.clear();
+            handleWord(wfl, w, stem, useBlacklist);
             break;
         default:
-            if(lowercase) {
-                w += tolower(md.get());
+            if(md.get() < 0) {
+                // skip HIGH Unicode chars
+                handleWord(wfl, w, stem, useBlacklist);
             } else {
-                w += md.get();
+                if(lowercase) {
+                    w += tolower(md.get());
+                } else {
+                    w += md.get();
+                }
             }
+
             break;
         }
     }
 
     lexicon.recalculateWeights();
+}
+
+void MarkdownTokenizer::handleWord(WordFrequencyList& wfl, string &w, bool stem, bool useBlacklist)
+{
+    if(w.size()>1) {
+        // stem
+        if(stem) {
+            w = stemmer.stem(w);
+        }
+
+        // remove common words
+        if(!useBlacklist || !blacklist.findWord(w)) {
+            // increment token frequency
+            Lexicon::WordEmbedding* we = lexicon.add(w);
+            ++wfl[&(we->word)];
+        }
+    }
+    w.clear();
 }
 
 } // m8r namespace
