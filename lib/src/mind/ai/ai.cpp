@@ -46,6 +46,8 @@ void Ai::trainAaNn()
 
 void Ai::learnMemory()
 {
+    MF_DEBUG("  AI::START: learning memory..." << endl);
+
     memory.getAllNotes(notes);
 
     // build lexicon and BoW
@@ -77,13 +79,27 @@ void Ai::learnMemory()
     for(size_t i=0; i<notes.size(); ++i) {
         aaMatrix[i] = new float[notes.size()];
     }
+    MF_DEBUG("  Building AA matrix w/ " << (notes.size()*notes.size()/2) << " rankings..." << endl);
     float aa;
     AssociationAssessmentNotesFeature aaFeature{};
     int x=-1, y;
+#ifdef DO_M8F_DEBUG
+    float c=0;
+    float p;
+#endif
+    // TODO calculate only values ABOVE diagonal i.e. initialize x=y
+    // TODO vectorize this ~ multiple threads calculating values in parallel
     for(Note* n1:notes) {
+        #ifdef DO_M8F_DEBUG
+        p = c/((float(notes.size()*notes.size()))/100.);
+        MF_DEBUG("    " << (int)p << "% AA matrix row for '" << n1->getName() << endl);
+        #endif
         n1->setAiAaMatrixIndex(++x);
         y = -1;
         for(Note* n2:notes) {
+            #ifdef DO_M8F_DEBUG
+            c++;
+            #endif
             n2->setAiAaMatrixIndex(++y);
             if(n1==n2) {
                 aaMatrix[x][y] = 1.;
@@ -99,14 +115,19 @@ void Ai::learnMemory()
                 // set both values above and below diagonal - detection will be faster later (no check x>y needed)
                 aa = aaFeature.areNotesAssociatedMetric();
                 //MF_DEBUG("  aa[" << x << "][" << y << "]=" << aa << endl);
+                // TODO store features to be used as input to NN later
+
                 aaMatrix[x][y] = aa;
                 aaMatrix[y][x] = aa;
             }
         }
     }
+    MF_DEBUG("  AA matrix built!" << endl);
 
     // TODO train NN usin aaMatrix - why (incorporate USER data), how much data to use, test set, ...
     //trainAaNn();
+
+    MF_DEBUG("  AI::FINISH: memory learned" << endl);
 }
 
 float Ai::calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyList& v2, int threshold)

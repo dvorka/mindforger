@@ -86,7 +86,7 @@ void MarkdownTokenizer::tokenize(CharProvider& md, WordFrequencyList& wfl, bool 
                 }
 
                 // remove common words
-                if(!useBlacklist || !blacklist.searchWord(w)) {
+                if(!useBlacklist || !blacklist.findWord(w)) {
                     // increment token frequency
                     Lexicon::WordEmbedding* we = lexicon.add(w);
                     ++wfl[&(we->word)];

@@ -133,7 +133,7 @@ private:
     AssociationAssessmentNotesFeature* createAaFeature(Note* n1, Note* n2);
 
     /**
-     * @brief Train associations assessment neural network once memory is learnt.
+     * @brief Train associations assessment neural network once memory is learned.
      */
     void trainAaNn();
 

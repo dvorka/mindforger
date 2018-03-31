@@ -1,5 +1,5 @@
 /*
- markdown_benchmark.cpp     MindForger markdown test
+ trie_benchmark.cpp     MindForger markdown test
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -49,7 +49,7 @@ Searching TRIE[191480]
 191480 words SEARCHED in 26.602ms
 TRIE done
  */
-TEST(TrieBenchmark, TrieVsMap)
+TEST(TrieBenchmark, DISABLED_TrieVsMap)
 {
     // 1.1M file
     unique_ptr<string> fileName

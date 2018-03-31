@@ -56,7 +56,9 @@ SOURCES += \
     ../benchmark/markdown_benchmark.cpp \
     ../benchmark/html_benchmark.cpp \
     ./html/html_test.cpp \
-    ./ai/nlp_test.cpp
+    ./ai/nlp_test.cpp \
+    ../benchmark/trie_benchmark.cpp \
+    ../benchmark/ai_benchmark.cpp
 
 HEADERS += \
     ./test_gear.h

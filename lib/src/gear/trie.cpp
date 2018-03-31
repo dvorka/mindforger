@@ -65,7 +65,7 @@ void Trie::addWord(string s)
     }
 }
 
-bool Trie::searchWord(string s) const
+bool Trie::findWord(string s) const
 {
     if(root->children().empty()) {
         return false;
