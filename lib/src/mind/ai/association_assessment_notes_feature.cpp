@@ -31,7 +31,7 @@ AssociationAssessmentNotesFeature::~AssociationAssessmentNotesFeature()
 
 void AssociationAssessmentNotesFeature::clearFeatures()
 {
-    for(int i=0; i<7; i++) features[i]=0.;
+    for(int i=0; i<FEATURES_SIZE; i++) features[i]=0.;
 }
 
 } // m8r namespace

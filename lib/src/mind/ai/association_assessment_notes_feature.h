@@ -21,6 +21,7 @@
 
 #include <map>
 
+#include "../../debug.h"
 #include "../../model/note.h"
 
 namespace m8r {
@@ -33,18 +34,20 @@ namespace m8r {
 class AssociationAssessmentNotesFeature
 {
 public:
-    static constexpr int IDX_HAVE_MUTUAL_REL = 0;
-    const int IDX_TYPE_MATCHES = 1;
-    const int IDX_SIMILARITY_BY_TAGS = 2;
+    static constexpr int FEATURES_SIZE = 7;
 
-    const int IDX_SIMILARITY_BY_TITLES= 3;
-    const int IDX_SIMILARITY_BY_DESCRIPTIONS = 4;
-    const int IDX_SIMILARITY_BY_TITLES_IN_DESCS = 5;
-    const int IDX_SIMILARITY_BY_SAME_TARGETS_RELS = 6;
+    static constexpr int IDX_HAVE_MUTUAL_REL = 0;
+    static constexpr int IDX_TYPE_MATCHES = 1;
+    static constexpr int IDX_SIMILARITY_BY_TAGS = 2;
+
+    static constexpr int IDX_SIMILARITY_BY_TITLES= 3;
+    static constexpr int IDX_SIMILARITY_BY_DESCRIPTIONS = 4;
+    static constexpr int IDX_SIMILARITY_BY_TITLES_IN_DESCS = 5;
+    static constexpr int IDX_SIMILARITY_BY_SAME_TARGETS_RELS = 6;
 
 private:
     std::pair<m8r::Note*,m8r::Note*> notes;
-    float features[7];
+    float features[FEATURES_SIZE];
 
 public:
     explicit AssociationAssessmentNotesFeature();
@@ -61,7 +64,7 @@ public:
     }
 
     void setTypeMatches(bool typeMatches) {
-        features[IDX_HAVE_MUTUAL_REL] = typeMatches?1.:0.;
+        features[IDX_TYPE_MATCHES] = typeMatches?1.:0.;
     }
 
     /**
@@ -90,7 +93,7 @@ public:
     }
 
     void setSimilarityByTitles(float similarityByTitles) {
-        features[IDX_SIMILARITY_BY_TAGS] = similarityByTitles;
+        features[IDX_SIMILARITY_BY_TITLES] = similarityByTitles;
     }
 
     void setSimilarityByDescription(float similarityByDescription) {
@@ -112,6 +115,17 @@ public:
      * each similarity aspect A: 10%*A1+40%*A2+...+5%*AN=100% (<=> if As==1).
      */
     float areNotesAssociatedMetric() {
+#ifdef DO_M8F_DEBUG
+//        std::cout <<
+//                "------------" << std::endl <<
+//                //"'" << notes.first->getName() << "' X '" << notes.second->getName() << "'" << std::endl <<
+//                "mutual-rel: " << features[IDX_HAVE_MUTUAL_REL] << std::endl <<
+//                "type-match: " << features[IDX_TYPE_MATCHES] << std::endl <<
+//                "by-tags   : " << features[IDX_SIMILARITY_BY_TAGS] << std::endl <<
+//                "by-titles : " << features[IDX_SIMILARITY_BY_TITLES] << std::endl <<
+//                "by-descs  : " << features[IDX_SIMILARITY_BY_DESCRIPTIONS] << std::endl
+//                ;
+#endif
         return
             features[IDX_HAVE_MUTUAL_REL] * 0.3 +
             features[IDX_TYPE_MATCHES] * 0.1 +

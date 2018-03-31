@@ -157,6 +157,17 @@ public:
         }
     }
 #endif
+    void printAa() {
+        std::cout << "AA Matrix:" << std::endl;
+        if(aaMatrix!=nullptr) {
+            for(size_t i=0; i<notes.size(); i++) {
+                for(size_t j=0; j<notes.size(); j++) {
+                    std::cout << aaMatrix[i][j] << " ";
+                }
+                std::cout << std::endl;
+            }
+        }
+    }
 };
 
 }

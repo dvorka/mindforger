@@ -81,7 +81,8 @@ void Ai::learnMemory()
     }
 
 #ifdef DO_M8F_DEBUG
-    MF_DEBUG("  Building AA matrix w/ " << (notes.size()*notes.size()/2) << " UNIQUE rankings..." << endl);
+    static const float UNIQUE_AA_CELLS = (float)(notes.size()*notes.size()/2.+notes.size()/2.);
+    MF_DEBUG("  Building AA matrix w/ " << UNIQUE_AA_CELLS << " UNIQUE rankings..." << endl);
     float c=0;
     float p;
 #endif
@@ -94,7 +95,7 @@ void Ai::learnMemory()
         notes[y]->setAiAaMatrixIndex(y); // sets index for ALL notes in notes vector
 
         #ifdef DO_M8F_DEBUG
-        p = c/((float(notes.size()*notes.size()))/100.);
+        p = c/(UNIQUE_AA_CELLS/100.);
         MF_DEBUG("    " << (int)p << "% AA matrix rankings for '" << notes[y]->getName() << "'" << endl);
         #endif
 
@@ -129,7 +130,10 @@ void Ai::learnMemory()
             }
         }
     }
+#ifdef DO_M8F_DEBUG
     MF_DEBUG("  AA matrix built!" << endl);
+    //printAa();
+#endif
 
     // TODO train NN usint aaMatrix - why (incorporate USER data), how much data to use, test set, ...
     //trainAaNn();
@@ -172,9 +176,9 @@ float Ai::calculateSimilarityByTitles(const string& t1, const string& t2)
             }
         }
 
-        MF_DEBUG("  titleSimilarity = "<<iWeight<<" / "<<uWeight << endl);
+        //MF_DEBUG("  titleSimilarity = "<<iWeight<<" / "<<uWeight << endl);
 
-        return (iWeight/uWeight/100.)/100.;
+        return (iWeight/(uWeight/100.))/100;
     }
 }
 
@@ -212,7 +216,7 @@ float Ai::calculateSimilarityByTags(const vector<const Tag*>* t1, const vector<c
         //MF_DEBUG("  tagSimilarity = "<<iWeight<<" / "<<uWeight << endl);
 
         // intersection % of union
-        return (iWeight/uWeight/100.)/100.;
+        return (iWeight/(uWeight/100.))/100;
     }
 }
 
@@ -256,10 +260,9 @@ float Ai::calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyList& v
             }
         }
 
-        //MF_DEBUG("  wordSimilarity = "<<iWeight<<" / "<<uWeight <<" (t="<<t<<")" << endl);
-
-        // intersection % of union
-        return (iWeight/uWeight/100.)/100.;
+        float result = (iWeight/(uWeight/100.))/100;
+        //MF_DEBUG("  wordSimilarity = "<<iWeight<<" / "<<uWeight <<" (t="<<t<<") -> " << result << endl);
+        return result;
     }
 }
 
@@ -361,69 +364,59 @@ void Ai::getAssociationsLeaderboard(const Note* n, vector<Note*>& leaderboard)
     static const int AA_LEADERBOARD_SIZE = 10;
     static const int AA_LEADERBOARD_LINE_EMPTY = -1;
 
-    int aaLeaderboard[10][2]; for(int i=0; i<AA_LEADERBOARD_SIZE; i++) aaLeaderboard[i][0]=aaLeaderboard[i][1]=AA_LEADERBOARD_LINE_EMPTY;
-    float aaLeaderboardMin=0.;
-    int aaLeaderboardSize=0;
+    int aaLeaderboard[AA_LEADERBOARD_SIZE][2];
+    for(int i=0; i<AA_LEADERBOARD_SIZE; i++) {
+        aaLeaderboard[i][0]=aaLeaderboard[i][1]=AA_LEADERBOARD_LINE_EMPTY;
+    }
 
     float aa;
-    for(int x=0, y=n->getAiAaMatrixIndex(); x<notes.size(); x++) {
+    for(size_t x=0, y=n->getAiAaMatrixIndex(); x<notes.size(); x++) {
         if(x==y) continue; // self on diagonal
 
         aa = aaMatrix[x][y];
 
-        // update leaderboard
-        if(aa >= aaLeaderboardMin) {
-            if(!aaLeaderboardSize) {
-                aaLeaderboard[0][0]=x;
-                aaLeaderboard[0][1]=y;
-                aaLeaderboardSize++;
-                aaLeaderboardMin=aa;
-            } else {
-                if(aaLeaderboardSize==AA_LEADERBOARD_SIZE
-                     &&
-                   aaLeaderboardMin==aaMatrix[aaLeaderboard[AA_LEADERBOARD_SIZE-1][0]][aaLeaderboard[AA_LEADERBOARD_SIZE-1][1]])
-                {
-                    // don't replace minimim w/ same minimu - skip
-                } else {
-                    for(int i=0; i<AA_LEADERBOARD_SIZE; i++) {
-                        if(aaLeaderboard[i][0]==AA_LEADERBOARD_LINE_EMPTY) {
-                            // using empty leaderboard line
-                            aaLeaderboard[i][0]=x;
-                            aaLeaderboard[i][1]=y;
-                            aaLeaderboardSize++;
-                            break;
-                        }
-                        if(aa > aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]]) {
-                            // insert new value in here and shift >> the rest of leaderboard
-                            int sx=aaLeaderboard[i][0];
-                            int sy=aaLeaderboard[i][1];
-                            aaLeaderboard[i][0]=x;
-                            aaLeaderboard[i][1]=y;
-                            if(aaLeaderboardSize<AA_LEADERBOARD_SIZE) aaLeaderboardSize++;
-                            for(int j=i+1; j<AA_LEADERBOARD_SIZE; j++) {
-                                if(aaLeaderboard[j][0] == -1) {
-                                    aaLeaderboard[j][0]=sx;
-                                    aaLeaderboard[j][1]=sy;
-                                    break;
-                                } else {
-                                    int bx=aaLeaderboard[j][0];
-                                    int by=aaLeaderboard[j][1];
-                                    aaLeaderboard[j][0]=sx;
-                                    aaLeaderboard[j][1]=sy;
-                                    sx=bx;
-                                    sy=by;
-                                }
-                            }
-                        }
+        if(aaLeaderboard[AA_LEADERBOARD_SIZE-1][0]==AA_LEADERBOARD_LINE_EMPTY
+             ||
+           aaLeaderboard[AA_LEADERBOARD_SIZE-1][0]<aa)
+        {
+            // find target leaderboard row
+            size_t target;
+            for(target=0; target<AA_LEADERBOARD_SIZE; target++) {
+                if(aaLeaderboard[target][0]!=AA_LEADERBOARD_LINE_EMPTY) {
+                    if(aa >= aaMatrix[aaLeaderboard[target][0]][aaLeaderboard[target][1]]) {
+                        break;
                     }
-                    aaLeaderboardMin = aaMatrix[aaLeaderboard[aaLeaderboardSize-1][0]][aaLeaderboard[aaLeaderboardSize-1][1]];
+                } else {
+                    break;
                 }
             }
+            cout << "SLOT FOUND: "<<target<<endl;
+            // shift leaderboard
+            int sx=aaLeaderboard[target][0];
+            int sy=aaLeaderboard[target][1];
+            for(size_t ll=target; ll<AA_LEADERBOARD_SIZE; ll++) {
+                if(aaLeaderboard[ll][0]!=AA_LEADERBOARD_LINE_EMPTY) {
+                    int tx=aaLeaderboard[ll][0];
+                    int ty=aaLeaderboard[ll][1];
+                    aaLeaderboard[ll][0]=sx;
+                    aaLeaderboard[ll][1]=sy;
+                    sx=tx;
+                    sy=ty;
+                } else {
+                    aaLeaderboard[ll][0]=sx;
+                    aaLeaderboard[ll][1]=sy;
+                    break;
+                }
+            }
+            // assign value
+            aaLeaderboard[target][0]=x;
+            aaLeaderboard[target][1]=y;
         }
     }
 
-    // print leaderboard
-    for(int i=0; i<aaLeaderboardSize; i++) {
+    MF_DEBUG("Leaderboard of " << n->getName() << ":" << endl);
+    for(int i=0; aaLeaderboard[i][0]!=AA_LEADERBOARD_LINE_EMPTY && i<AA_LEADERBOARD_SIZE; i++) {
+        MF_DEBUG("  " << notes[aaLeaderboard[i][0]]->getName() << " ~ " << aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]] << endl);
         leaderboard.push_back(notes[aaLeaderboard[i][0]]);
     }
 }
