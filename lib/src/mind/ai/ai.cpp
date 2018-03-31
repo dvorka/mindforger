@@ -86,7 +86,7 @@ void Ai::learnMemory()
     float p;
 #endif
 
-    // TODO vectorize this ~ multiple threads calculating values in parallel
+    // TODO vectorize this ~ LAUNCH multiple threads calculating values in parallel (portion of rows from the matrix)
     int WORD_RELEVANCY_THRESHOLD = 10; // use 10 words w/ highest weight from vectors (and ignore others - irrelevant can bring noice with volume)
     float aa;
     AssociationAssessmentNotesFeature aaFeature{};
@@ -112,11 +112,11 @@ void Ai::learnMemory()
 
                 aaFeature.setHaveMutualRel(false); // TODO
                 aaFeature.setTypeMatches(n1->getType()==n2->getType());
-                aaFeature.setSimilarityByTags(0.0); // TODO
+                aaFeature.setSimilarityByTags(calculateSimilarityByTags(n1->getTags(),n2->getTags()));
                 aaFeature.setSimilarityByTitles(0.0); // TODO
                 aaFeature.setSimilarityByDescription(calculateSimilarityByWords(*bow.get(n1),*bow.get(n2),WORD_RELEVANCY_THRESHOLD));
-                aaFeature.setSimilarityByTitlesInDescription(0.0); // TODO
-                aaFeature.setSimilarityBySameTargetRels(0.0); // TODO
+                aaFeature.setSimilarityByTitlesInDescription(0.0); // TODO nice
+                aaFeature.setSimilarityBySameTargetRels(0.0); // TODO nice
 
                 // set both values above and below diagonal - detection will be faster later (no check x>y needed)
                 aa = aaFeature.areNotesAssociatedMetric();
@@ -137,47 +137,89 @@ void Ai::learnMemory()
     MF_DEBUG("  AI::FINISH: memory learned" << endl);
 }
 
+// algorithm is based on similarity by words (for now there are no weights - might be added later if needed by other lib functions)
+float Ai::calculateSimilarityByTags(const vector<const Tag*>* t1, const vector<const Tag*>* t2)
+{
+    if(!t1->size() || !t2->size()) {
+        return 0.;
+    } else {
+        // direct access for efficiency
+        vector<const Tag*> intersection{};
+        float iWeight=0, uWeight=0;
+
+        // iterate at most *threashold* words from v1: all + to UNION, matching + to INTERSECTION
+        for(auto& t:*t1) {
+            uWeight += 1;
+            if(std::find(t2->begin(),t2->end(),t) != t2->end()) {
+                iWeight += 1;
+                intersection.push_back(t);
+            }
+        }
+        // uWeight contains weight of v1's tags, iWeight weight of v1 intersection v2
+
+        // iterate tags from v2: w in intersection HANDLED both u&i, w in v2&v1 > intersection else union
+        for(auto& t:*t2) {
+            if(std::find(intersection.begin(),intersection.end(),t) == intersection.end()) {
+                uWeight += 1;
+                if(std::find(t1->begin(),t1->end(),t) != t1->end()) {
+                    iWeight += 1;
+                    // no need to update iVector as it won't be needed
+                }
+            }
+        }
+
+        MF_DEBUG("  tagSimilarity = "<<iWeight<<" / "<<uWeight << endl);
+
+        // intersection % of union
+        return (iWeight/uWeight/100.)/100.;
+    }
+}
+
 // consider ONLY most valuable words via threshold - many irrelevat words would kill the score (irrelevant words make noise)
 float Ai::calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyList& v2, int threshold)
 {
-    // direct access for efficiency
-    WordFrequencyList intersection{&lexicon};
-    float iWeight=0, uWeight=0;
-    int t=0;
+    if(!v1.size() || !v2.size()) {
+        return 0.;
+    } else {
+        // direct access for efficiency
+        WordFrequencyList intersection{&lexicon};
+        float iWeight=0, uWeight=0;
+        int t=0;
 
-    // iterate at most *threashold* words from v1: all + to UNION, matching + to INTERSECTION
-    for(auto& e:v1.iterable()) {
-        if(t++>=threshold) break;
+        // iterate at most *threashold* words from v1: all + to UNION, matching + to INTERSECTION
+        for(auto& e:v1.iterable()) {
+            if(t++>=threshold) break;
 
-        float w = lexicon.get(e.first)->weight;
-        uWeight += w;
-        if(v2.contains(e.first)) {
-            iWeight += w;
-            intersection.add(e.first);
-        }
-    }
-    // uWeight contains weight of 1st 10 v1's words, iWeight weight of v1 intersection v2
-
-    // iterate at most *threashold* words from v2: w in intersection HANDLED both u&i, w in v2&v1 > intersection else union
-    t=0;
-    for(auto& e:v2.iterable()) {
-        // consider at most threashold words from v2
-        if(++t>=threshold) break;
-
-        if(!intersection.contains(e.first)) {
             float w = lexicon.get(e.first)->weight;
             uWeight += w;
-            if(v1.contains(e.first)) {
+            if(v2.contains(e.first)) {
                 iWeight += w;
-                // no need to update iVector as it won't be needed
+                intersection.add(e.first);
             }
         }
+        // uWeight contains weight of 1st 10 v1's words, iWeight weight of v1 intersection v2
+
+        // iterate at most *threashold* words from v2: w in intersection HANDLED both u&i, w in v2&v1 > intersection else union
+        t=0;
+        for(auto& e:v2.iterable()) {
+            // consider at most threashold words from v2
+            if(++t>=threshold) break;
+
+            if(!intersection.contains(e.first)) {
+                float w = lexicon.get(e.first)->weight;
+                uWeight += w;
+                if(v1.contains(e.first)) {
+                    iWeight += w;
+                    // no need to update iVector as it won't be needed
+                }
+            }
+        }
+
+        //MF_DEBUG("  wordSimilarity = "<<iWeight<<" / "<<uWeight <<" (t="<<t<<")" << endl);
+
+        // intersection % of union
+        return (iWeight/uWeight/100.)/100.;
     }
-
-    //MF_DEBUG("  similarity = "<<iWeight<<" / "<<uWeight <<" (t="<<t<<")" << endl);
-
-    // intersection % of union
-    return (iWeight/uWeight/100.)/100.;
 }
 
 AssociationAssessmentNotesFeature* Ai::createAaFeature(Note* n1, Note* n2)

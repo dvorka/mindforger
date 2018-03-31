@@ -130,6 +130,11 @@ private:
      */
     float calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyList& v2, int threshold=1000);
 
+    /**
+     * @brief Calculate similarity of two tag lists.
+     */
+    float calculateSimilarityByTags(const std::vector<const Tag*>* t1, const std::vector<const Tag*>* t2);
+
     AssociationAssessmentNotesFeature* createAaFeature(Note* n1, Note* n2);
 
     /**

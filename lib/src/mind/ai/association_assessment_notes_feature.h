@@ -33,20 +33,13 @@ namespace m8r {
 class AssociationAssessmentNotesFeature
 {
 public:
-    // 30%
     static constexpr int IDX_HAVE_MUTUAL_REL = 0;
-    // 10% (x0% remains)
     const int IDX_TYPE_MATCHES = 1;
-    // 20% (x0% remains)
     const int IDX_SIMILARITY_BY_TAGS = 2;
 
-    // x0% (x0% remains)
     const int IDX_SIMILARITY_BY_TITLES= 3;
-    // x0% (x0% remains)
     const int IDX_SIMILARITY_BY_DESCRIPTIONS = 4;
-    // x0% (x0% remains)
     const int IDX_SIMILARITY_BY_TITLES_IN_DESCS = 5;
-    // x0% (x0% remains)
     const int IDX_SIMILARITY_BY_SAME_TARGETS_RELS = 6;
 
 private:
