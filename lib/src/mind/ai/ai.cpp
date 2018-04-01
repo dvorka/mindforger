@@ -190,8 +190,12 @@ float Ai::calculateSimilarityByTitles(const string& t1, const string& t2)
 // algorithm is based on similarity by words (for now there are no weights - might be added later if needed by other lib functions)
 float Ai::calculateSimilarityByTags(const vector<const Tag*>* t1, const vector<const Tag*>* t2)
 {
-    if(!t1->size() || !t2->size()) {
-        return 0.;
+    if(!t1->size()) {
+        if(!t2->size()) {
+            return 1.;
+        } else {
+            return 0.;
+        }
     } else {
         // direct access for efficiency
         vector<const Tag*> intersection{};
@@ -422,7 +426,8 @@ void Ai::getAssociationsLeaderboard(const Note* n, vector<pair<Note*,float>>& le
     }
 
     leaderboard.clear();
-    MF_DEBUG("Leaderboard of " << n->getName() << ":" << endl);
+
+    MF_DEBUG("Leaderboard of " << n->getName() << " (" << n->getOutline()->getName() << "):" << endl);
     for(int i=0; i<AA_LEADERBOARD_SIZE && aaLeaderboard[i][0]!=AA_LEADERBOARD_LINE_EMPTY; i++) {
         MF_DEBUG("  #" << i << " " <<
                  notes[aaLeaderboard[i][0]]->getName() << " (" << notes[aaLeaderboard[i][0]]->getOutline()->getName() << ")" <<

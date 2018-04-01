@@ -136,7 +136,7 @@ public:
     void clearDescription();
     void addDescription(const std::vector<std::string*>& d);
     void addDescriptionLine(std::string *line);
-    Outline*& getOutline();
+    Outline* getOutline() const;
     void setOutline(Outline* outline);
 
     void addLink(Link* link);

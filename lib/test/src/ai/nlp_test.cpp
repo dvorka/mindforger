@@ -236,17 +236,24 @@ TEST(AiNlpTestCase, AaUniverse)
 
     ASSERT_LE(1, mind.remind().getOutlinesCount());
 
-    /*
-     * Tokenize repository > make AI to think > find the most similar Notes pair
-     */
+    mind.think();
 
-    mind.dream();
+    // assert associations
+    m8r::Outline* u;
+    if(mind.remind().getOutlines()[0]->getName().find("Alternative") != string::npos) {
+        u = mind.remind().getOutlines()[1];
+    } else {
+        u = mind.remind().getOutlines()[0];
+    }
 
-    // get the best associations of N
-    // TODO find Note by name and use it...
-    // TODO consider AI repository for assoc experiments
-    m8r::Note* n=mind.remind().getOutlines()[0]->getNotes()[0];
+    // get the best associations of 'Albert Einstein'
+    m8r::Note* n=u->getNotes()[0];
     std::vector<std::pair<m8r::Note*,float>> lb{};
     mind.getAssociationsLeaderboard(n, lb);
     m8r::Ai::print(n,lb);
+
+    // asserts
+    ASSERT_EQ("Same Albert Einstein", lb[0].first->getName());
+    ASSERT_EQ(0.75, lb[0].second);
+    ASSERT_EQ("Albert Einstein", lb[1].first->getName());
 }

@@ -299,7 +299,7 @@ void Note::addDescription(const vector<string*>& d)
     description.insert(description.end(),d.begin(),d.end());
 }
 
-Outline*& Note::getOutline()
+Outline* Note::getOutline() const
 {
     return outline;
 }
