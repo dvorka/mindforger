@@ -82,6 +82,12 @@ void Mind::dream()
 void Mind::sleep()
 {
     config.setMindState(Configuration::MindState::SLEEPING);
+
+    ai.amnesia();
+
+    allNotesCache.clear();
+    memoryDwell.clear();
+    triples.clear();
 }
 
 void Mind::learn()
