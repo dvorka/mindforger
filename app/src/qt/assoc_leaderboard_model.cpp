@@ -37,7 +37,7 @@ void AssocLeaderboardModel::removeAllRows()
 
     QStringList tableHeader;
     tableHeader
-        << tr("Associated Note")
+        << tr("Associations")
         << tr("%");
     // IMPROVE set tooltips: items w/ tooltips instead of just strings
     setHorizontalHeaderLabels(tableHeader);
