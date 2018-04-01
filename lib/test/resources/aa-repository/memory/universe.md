@@ -21,7 +21,7 @@ Red giant and white dwarf.
 
 ### Sun
 
-Sun is the star of solar system.
+Sun is the [star](#stars) of solar system.
 
 ## Planets <!-- Metadata: tags: COOL; type: idea; created: 2016-03-31 13:54:45; reads: 55; read: 2016-03-31 13:54:45; revision: 5; modified: 2016-03-31 13:54:45; -->
 
@@ -29,7 +29,7 @@ What about to...
 
 ### Earth
 
-Earth is the third planet of the solar system.
+Earth is the third [planet](./alternative-universe.md#planets) of the solar system.
 
 ### Moon
 

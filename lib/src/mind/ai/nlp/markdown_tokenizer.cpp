@@ -33,22 +33,66 @@ MarkdownTokenizer::~MarkdownTokenizer()
 
 void MarkdownTokenizer::tokenize(CharProvider& md, WordFrequencyList& wfl, bool useBlacklist, bool lowercase, bool stem)
 {
-    // IMPROVE incorporate options
-    UNUSED_ARG(blacklist);
-    UNUSED_ARG(stem);
+    // tokenize relationships
+    bool parseRels=false;
+    vector<pair<string,string>> links{};
+    bool inRelLabel=false;
+    bool inRelLink=false;
 
-    string w{};
+    string w{}, link{};
     while(md.hasNext()) {
-        switch(md.next()) {
+        const char c = md.next();
+
+        // parse relationships/image links
+        if(parseRels) {
+            if(inRelLabel||inRelLink) {
+                link += (md.get());
+            } else {
+                if(link.size()) link.clear();
+            }
+
+            switch(c) {
+            case '\n':
+            case '\r':
+                inRelLabel=inRelLink=false;
+                break;
+            case '[':
+                inRelLabel=true;
+                break;
+            case ']':
+                if(inRelLabel && md.hasNext() && md.getLookahead()=='(') {
+                    inRelLabel=false;
+                    inRelLink=true;
+                } else {
+                    inRelLabel=false;
+                }
+                break;
+            case ')':
+                if(inRelLink) {
+                    // relationship successfully parsed
+                    size_t pos = link.find("](");
+                    links.push_back(std::make_pair(link.substr(0, pos),link.substr(pos+2,link.size()-pos-3)));
+                    MF_DEBUG("  Parsed link: " << links[links.size()-1].first << " / " << links[links.size()-1].second << endl);
+                    inRelLink = false;
+                    link.clear();
+                }
+                break;
+            default:
+                ;
+            }
+        }
+
+        // tokenize text
+        switch(c) {
         case '-':
             // check lookahead to accept words like: self-awareness
             if(md.hasNext() && md.getLookahead()!='-') {
                 w += md.get();
                 break;
             }
-        case ' ':
         case '\n':
         case '\r':
+        case ' ':
         case '\t':
         case '!':
         case '?':
