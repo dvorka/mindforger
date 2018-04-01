@@ -118,10 +118,10 @@ void Ai::learnMemory()
 
                 aaFeature.setHaveMutualRel(false); // TODO
                 aaFeature.setTypeMatches(n1->getType()==n2->getType());
+                aaFeature.setSimilaritySameOutline(n1->getOutline()==n2->getOutline());
                 aaFeature.setSimilarityByTags(calculateSimilarityByTags(n1->getTags(),n2->getTags()));
                 aaFeature.setSimilarityByTitles(calculateSimilarityByTitles(n1->getName(),n2->getName()));
                 aaFeature.setSimilarityByDescription(calculateSimilarityByWords(*bow.get(n1),*bow.get(n2),WORD_RELEVANCY_THRESHOLD));
-                aaFeature.setSimilarityByTitlesInDescription(0.0); // TODO nice
                 aaFeature.setSimilarityBySameTargetRels(0.0); // TODO nice
 
                 // set both values above and below diagonal - detection will be faster later (no check x>y needed)

@@ -39,11 +39,13 @@ public:
     static constexpr int IDX_HAVE_MUTUAL_REL = 0;
     static constexpr int IDX_TYPE_MATCHES = 1;
     static constexpr int IDX_SIMILARITY_BY_TAGS = 2;
-
     static constexpr int IDX_SIMILARITY_BY_TITLES= 3;
     static constexpr int IDX_SIMILARITY_BY_DESCRIPTIONS = 4;
-    static constexpr int IDX_SIMILARITY_BY_TITLES_IN_DESCS = 5;
+    static constexpr int IDX_SAME_OUTLINE = 5;
+
     static constexpr int IDX_SIMILARITY_BY_SAME_TARGETS_RELS = 6;
+
+    // IMPROVE IDX_SIMILARITY_BY_TITLES_IN_DESCS
 
 private:
     std::pair<m8r::Note*,m8r::Note*> notes;
@@ -100,8 +102,8 @@ public:
         features[IDX_SIMILARITY_BY_DESCRIPTIONS] = similarityByDescription;
     }
 
-    void setSimilarityByTitlesInDescription(float similarity) {
-        features[IDX_SIMILARITY_BY_TITLES_IN_DESCS] = similarity;
+    void setSimilaritySameOutline(bool sameOutline) {
+        features[IDX_SAME_OUTLINE] = sameOutline?1.:0.;;
     }
 
     void setSimilarityBySameTargetRels(float similarity) {
@@ -127,12 +129,12 @@ public:
 //                ;
 #endif
         return
-            features[IDX_HAVE_MUTUAL_REL] * 0.3 +
+            features[IDX_HAVE_MUTUAL_REL] * 0.25 +
             features[IDX_TYPE_MATCHES] * 0.1 +
+            features[IDX_SAME_OUTLINE] * 0.05 +
             features[IDX_SIMILARITY_BY_TAGS] * 0.2 +
             features[IDX_SIMILARITY_BY_TITLES] * 0.2 +
             features[IDX_SIMILARITY_BY_DESCRIPTIONS] * 0.2 +
-            features[IDX_SIMILARITY_BY_TITLES_IN_DESCS] * 0.1 +
             features[IDX_SIMILARITY_BY_SAME_TARGETS_RELS] * 0.1
             ;
     }
