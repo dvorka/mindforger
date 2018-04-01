@@ -50,7 +50,7 @@ void Trie::addWord(string s)
         return;
     }
 
-    for(int i=0; i<s.size(); i++) {
+    for(size_t i=0; i<s.size(); i++) {
         Node* child = current->findChild(s[i]);
         if(child != nullptr) {
             current = child;
@@ -72,7 +72,7 @@ bool Trie::findWord(string s) const
     } else {
         Node* current = root;
         while(current != nullptr) {
-            for(int i=0; i<s.size(); i++) {
+            for(size_t i=0; i<s.size(); i++) {
                 Node* n= current->findChild(s[i]);
                 if(n == nullptr) {
                     return false;

@@ -106,15 +106,22 @@ void MainWindowPresenter::doActionMindHack()
 
 void MainWindowPresenter::doActionMindThink()
 {
-    mind->think();
-    statusBar->showMindStatistics();
+    if(mind->remind().getNotesCount()>256) {
+        // run asynchronously
+        QtConcurrent::run(mind, &Mind::think);
+    } else {
+        mind->think();
+    }
+
     mainMenu->showFacetMindThink();
+    orloj->showFacetOutlineList(mind->getOutlines());
 }
 
 void MainWindowPresenter::doActionMindSleep()
 {
     mind->sleep();
-    statusBar->showMindStatistics();
+
+    orloj->showFacetOutlineList(mind->getOutlines());
     mainMenu->showFacetMindSleep();
 }
 

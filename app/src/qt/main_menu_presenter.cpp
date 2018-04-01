@@ -97,6 +97,8 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     case Configuration::MindState::SLEEPING:
         showFacetMindSleep();
         break;
+    default:
+        ; // do nothing for dreaming
     }
 }
 

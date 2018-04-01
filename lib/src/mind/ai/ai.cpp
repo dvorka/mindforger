@@ -73,8 +73,13 @@ void Ai::learnMemory()
 
     // calculate FULL matrix of Ns associativity assessment for every N1 and N2 tuple
     if(aaMatrix) {
+        for(size_t i=0; i<notes.size(); ++i) {
+            aaMatrix[i] = new float[notes.size()];
+        }
         delete aaMatrix;
+        aaMatrix = nullptr;
     }
+    // allocate aaMatrix
     aaMatrix = new float*[notes.size()];
     for(size_t i=0; i<notes.size(); ++i) {
         aaMatrix[i] = new float[notes.size()];
@@ -268,6 +273,9 @@ float Ai::calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyList& v
 
 AssociationAssessmentNotesFeature* Ai::createAaFeature(Note* n1, Note* n2)
 {
+    UNUSED_ARG(n1);
+    UNUSED_ARG(n2);
+
     AssociationAssessmentNotesFeature* result
         = new AssociationAssessmentNotesFeature{};
 

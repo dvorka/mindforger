@@ -190,7 +190,7 @@ namespace string_util
 
     ///functions not available in ANSI C
     /*Converts an integer value into a string.
-      @param value The integer to convert.
+      @param value The integer to convert.
       @param out The character buffer to write the integer as a string into. This can be either a char* or wchar_t* buffer.
       @param length The length of the output buffer (in character count).
       @returns 0 on success, -1 on failure. Will fail if the buffer is either invalid
@@ -296,7 +296,7 @@ namespace string_util
         size_t strPos = 0;
         int intValue = 0;
         //storage for converted values
-        int* digits = new int[length+1]; std::auto_ptr<int> digitsDeleter(digits);
+        int* digits = new int[length+1]; // MD fix: std::auto_ptr<int> digitsDeleter(digits);
         std::memset(digits, 0, sizeof(int)*(length+1));
         while (strPos < length)
             {

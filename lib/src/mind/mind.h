@@ -43,7 +43,7 @@ constexpr auto NO_PARENT = 0xFFFF;
  * Mind can be in the following states:
  *
  * SLEEPING (do nothing)
- *   Mind is cleared and no mental processes are running.
+ *   Mind/AI is cleared and no mental processes are running.
  *
  * THINKING (think)
  *   Mind instantly provides a set of Things (Notes/Outlines/Tags/...) for
@@ -58,8 +58,8 @@ constexpr auto NO_PARENT = 0xFFFF;
  *     For example, for a word written to description user gets relevant Notes.
  *
  * DREAMING (heal and get ready)
- *   Mind is cleared, then Memory content is processed to Mind.
- * Things and Relationships are converted to Triples, implicit/transitive/opposite/...
+ *   Mind is cleared, then Memory content is processed to Mind (AI, NLP, neural network,
+ * triples). Things and Relationships are converted to Triples, implicit/transitive/opposite/...
  * relationships are inferred to Triples as well, etc. Once Memory is processed
  * to Mind, it's checked (for Triples integrity), optimized (redundant Triples
  * are removed). Dreaming is idle when Mind is ready to wake up.
@@ -138,15 +138,15 @@ public:
     /**
      * @brief Think to do useful things for user when searching, viewing and editing.
      *
-     * If NOT initialized, think first switches to dream to prepare memory and AI.
-     * When ready, it starts to think and be useful.
+     * Mind is kept. If Mind is NOT initialized, then think() first switches to dreaming
+     * to prepare AI. When ready, it starts to think and be useful.
      */
     void think();
 
     /**
-     * @brief Dream to detox, optimize, check/clean up mind/memory and prepare to think.
+     * @brief Dream to reset, detox, optimize, check/clean up mind/memory and prepare to think.
      *
-     * When all dreaming activities are DONE, Mind wakes up and switches to THINK mode.
+     * Memory is kept. When all dreaming activities are DONE, Mind wakes up and switches to THINK mode.
      *
      * Mental processes:
      *   > Cleanup/detox: move to limbo, remove orphans, unused memory structures, ...
@@ -159,25 +159,28 @@ public:
      *     > calculate Note in/out rels sets + in/out associations sets + ...
      *     > calculate Galaxies (Galaxy == interconnected Outlines)
      *     > calculate BlackHole (for each Galaxy find Outline with most in/out relationships)
+     *   > AI
+     *     > NLP lexicon, BoW
+     *     > associations neural network
      */
     void dream();
 
     /**
-     * @brief Sleep just to learn Memory and relax.
+     * @brief Sleep to clear Mind except Memory and relax.
      *
-     * Triples are cleared - no thinking or dreaming.
+     * Memory is kept, but Mind is cleared. No thinking or dreaming.
      */
     void sleep();
 
     /**
-     * @brief Learn new MindForger/Markdown repository/directory/file defined by configuration while maintaining current mind state.
+     * @brief Learn new MindForger/Markdown repository/directory/file defined by configuration AND keep the current mind state.
      *
-     * Mind and Memory is reset i.e. this method does NOT add new knowledge, but it starts over.
+     * Mind and Memory is RESET i.e. this method does NOT add new knowledge, but it starts over.
      */
     void learn();
 
     /**
-     * @brief Forget everything while maintaining current mind state.
+     * @brief Forget everything.
      */
     void amnesia();
 

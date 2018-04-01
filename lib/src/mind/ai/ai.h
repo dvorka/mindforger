@@ -106,6 +106,8 @@ public:
     Ai &operator=(const Ai&&) = delete;
     ~Ai();
 
+    bool isConcious() { return aaMatrix != nullptr; }
+
     /**
      * @brief Learn what's in memory to get ready for thinking.
      */
@@ -115,6 +117,23 @@ public:
      * @brief Find Note associations.
      */
     void getAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& assocLeaderboard);
+
+    /**
+     * @brief Forget everything.
+     */
+    void amnesia() {
+        if(aaMatrix) {
+            for(size_t i=0; i<notes.size(); ++i) {
+                aaMatrix[i] = new float[notes.size()];
+            }
+            delete aaMatrix;
+            aaMatrix = nullptr;
+        }
+        notes.clear();
+        outlines.clear();
+        bow.clear();
+        lexicon.clear();
+    }
 
 private:
     /**

@@ -43,6 +43,7 @@
 #include "dialogs/configuration_dialog.h"
 
 #include <QtWidgets>
+#include <QtConcurrent/QtConcurrent>
 
 namespace m8r {
 

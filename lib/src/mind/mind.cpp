@@ -36,32 +36,24 @@ Mind::~Mind()
     // - allNotesCache Notes is just container referencing Memory's Outlines
 }
 
+/*
+ * BEGIN mind control
+ */
+
 void Mind::think()
 {
+    if(!ai.isConcious()) {
+        dream();
+    }
+
     config.setMindState(Configuration::MindState::THINKING);
-
-    amnesia();
-
-    // think
-    memory.learn();
-    // TODO start to think by inferring triples
+    MF_DEBUG("Thinking..." << endl);
 }
 
 void Mind::dream()
 {
-    MF_DEBUG("START: dreaming..." << endl);
+    MF_DEBUG("Dreaming..." << endl);
     config.setMindState(Configuration::MindState::DREAMING);
-
-    // clear trainsient indices, but keep memory
-    allNotesCache.clear();
-    memoryDwell.clear();
-    triples.clear();
-
-    // AI associations NN
-    ai.learnMemory();
-
-
-    // TODO Triples: infer all triples, check, fix, optimize and save
 
     // sanity
     // o integrity check: ...
@@ -71,40 +63,69 @@ void Mind::dream()
     //  - Ns w/o description
     // o attachments
     //  - orphan attachments (not referenced from any O)
-    MF_DEBUG("FINISH: dream" << endl);
+
+    // clear trainsient indices, but keep memory
+    ai.amnesia();
+
+    allNotesCache.clear();
+    memoryDwell.clear();
+    triples.clear();
+
+    // TODO Triples: infer all triples, check, fix, optimize and save
+
+    // AI associations aaMatrix and NN - may take a long time to finish
+    ai.learnMemory();
+
+    MF_DEBUG("Dreaming DONE!" << endl);
 }
 
 void Mind::sleep()
 {
     config.setMindState(Configuration::MindState::SLEEPING);
-
-    amnesia();
-
-    memory.learn();
 }
 
 void Mind::learn()
 {
+    MF_DEBUG("Learning..." << endl);
+
     switch(config.getMindState()) {
     case Configuration::MindState::THINKING:
+        amnesia();
+        memory.learn();
         think();
         break;
     case Configuration::MindState::DREAMING:
-        dream();
+        // TODO either keep dreaming (show warning dialog) OR stop dreaming and think()
+        cerr << "WARNING: cannot learn new repository/file - DREAMING cannot be stopped!" << endl;
         break;
     case Configuration::MindState::SLEEPING:
+        amnesia();
+        memory.learn();
         sleep();
         break;
     }
+
+    MF_DEBUG("Learning DONE" << endl);
 }
 
 void Mind::amnesia()
 {
+    MF_DEBUG("Amnesia..." << endl);
+
+    ai.amnesia();
+
     allNotesCache.clear();
     memoryDwell.clear();
-    memory.amnesia();
     triples.clear();
+
+    memory.amnesia();
+
+    MF_DEBUG("Amnesia DONE!" << endl);
 }
+
+/*
+ * END mind control
+ */
 
 const vector<Note*>& Mind::getMemoryDwell(int pageSize) const
 {
