@@ -76,7 +76,7 @@ TEST(AiBenchmark, DISABLED_AaMatrix)
 
     // get the best associations of N
     m8r::Note* n=mind.remind().getOutlines()[0]->getNotes()[0];
-    std::vector<m8r::Note*> lb{};
+    std::vector<std::pair<m8r::Note*,float>> lb{};
     mind.getAssociationsLeaderboard(n, lb);
     m8r::Ai::print(n,lb);
 }

@@ -216,7 +216,37 @@ TEST(AiNlpTestCase, Repository)
     // TODO find Note by name and use it...
     // TODO consider AI repository for assoc experiments
     m8r::Note* n=mind.remind().getOutlines()[0]->getNotes()[0];
-    std::vector<m8r::Note*> lb{};
+    std::vector<std::pair<m8r::Note*,float>> lb{};
+    mind.getAssociationsLeaderboard(n, lb);
+    m8r::Ai::print(n,lb);
+}
+
+TEST(AiNlpTestCase, AaUniverse)
+{
+    string repositoryPath{"/lib/test/resources/aa-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think();
+    cout << "Statistics:" << endl
+    << "  Outlines: " << mind.remind().getOutlinesCount() << endl
+    << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize() << endl;
+
+    ASSERT_LE(1, mind.remind().getOutlinesCount());
+
+    /*
+     * Tokenize repository > make AI to think > find the most similar Notes pair
+     */
+
+    mind.dream();
+
+    // get the best associations of N
+    // TODO find Note by name and use it...
+    // TODO consider AI repository for assoc experiments
+    m8r::Note* n=mind.remind().getOutlines()[0]->getNotes()[0];
+    std::vector<std::pair<m8r::Note*,float>> lb{};
     mind.getAssociationsLeaderboard(n, lb);
     m8r::Ai::print(n,lb);
 }

@@ -168,11 +168,11 @@ private:
 
 public:
 #ifdef DO_M8F_DEBUG
-    static void print(const Note* n, std::vector<Note*>& leaderboard) {
+    static void print(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard) {
         std::cout << "Note '" << n->getName() << "' AA leaderboard("<< leaderboard.size() <<"):" << std::endl;
         int i=1;
         for(auto& nn:leaderboard) {
-            std::cout << "  #" << i++ << " '" << nn->getName() << "'" << std::endl;
+            std::cout << "  #" << i++ << " '" << nn.first->getName() << "' ~ " << nn.second << std::endl;
         }
     }
 #endif
