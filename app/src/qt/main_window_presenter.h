@@ -125,7 +125,6 @@ public slots:
     void doActionMindHack();
 #endif
     void doActionMindThink();
-    void doActionMindDream();
     void doActionMindSleep();
     void doActionMindLearn();
     void doActionMindRelearn(QString path);

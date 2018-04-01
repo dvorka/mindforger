@@ -111,13 +111,6 @@ void MainWindowPresenter::doActionMindThink()
     mainMenu->showFacetMindThink();
 }
 
-void MainWindowPresenter::doActionMindDream()
-{
-    mind->dream();
-    statusBar->showMindStatistics();
-    mainMenu->showFacetMindDream();
-}
-
 void MainWindowPresenter::doActionMindSleep()
 {
     mind->sleep();

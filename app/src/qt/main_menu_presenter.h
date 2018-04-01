@@ -60,7 +60,6 @@ public:
     void showFacetNoteEdit();
 
     void showFacetMindThink();
-    void showFacetMindDream();
     void showFacetMindSleep();
 
     void addRecentDirectoryOrFile(const QString& path);

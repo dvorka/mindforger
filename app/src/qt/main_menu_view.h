@@ -65,10 +65,10 @@ public:
     QAction* actionMindRemember;
     QAction* actionMindRecall;
     QAction* actionMindThink;
+    //QAction* actionMindDream;
+    QAction* actionMindSleep;
     QAction* actionMindScope;
     QAction* actionMindForget;
-    QAction* actionMindDream;
-    QAction* actionMindSleep;
     QAction* actionMindSnapshot;
     QAction* actionMindPreferences;
     QAction* actionExit;
@@ -116,6 +116,8 @@ public:
     // menu: Outline
     QAction* actionOutlineNew;
     QAction* actionOutlineAssociations;
+    QAction* actionOutlineHome;
+    QAction* actionOutlineStencil;
     QAction* actionOutlineClone;
     QAction* actionOutlineForget;
     QAction* actionOutlineExport;
@@ -136,6 +138,7 @@ public:
     QAction* actionNoteAttach;
     QAction* actionNoteRefactor;
     QAction* actionNoteExtract;
+    QAction* actionNoteStencil;
     QAction* actionNoteClone;
     QAction* actionNoteExport;
     QAction* actionNoteImport;
@@ -160,7 +163,6 @@ public:
     void showFacetNoteEdit(bool repositoryMode=true);
 
     void showFacetMindThink();
-    void showFacetMindDream();
     void showFacetMindSleep();
 
     void addRepositoryOrFileToRelearn(const QString& path);

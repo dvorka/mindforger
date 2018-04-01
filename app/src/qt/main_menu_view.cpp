@@ -79,8 +79,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindForget->setEnabled(false);
 
     // dream ... sanity, integrity, detox, inference, assoc discovery, ...
-    actionMindDream = new QAction(tr("&Dream"), mainWindow);
-    actionMindDream->setStatusTip(tr("Tidy up, clean, re-infer, check and optimize Memory which is otherwise done on your inactivity"));
+    //actionMindDream = new QAction(tr("&Dream"), mainWindow);
+    //actionMindDream->setStatusTip(tr("Tidy up, clean, re-infer, check and optimize Memory which is otherwise done on your inactivity"));
 
     actionMindSnapshot = new QAction(tr("D&ump"), mainWindow);
     actionMindSnapshot->setStatusTip(tr("Create backup archive of the current repository and store it in home directory"));
@@ -106,7 +106,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addAction(actionMindForget);
     menuMind->addSeparator();
     menuMind->addAction(actionMindThink);
-    menuMind->addAction(actionMindDream);
     menuMind->addAction(actionMindSleep);
     menuMind->addSeparator();
     menuMind->addAction(actionMindSnapshot);
@@ -301,6 +300,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineAssociations->setStatusTip(tr("Discover Outlines/Notes associated with the current Outline"));
     actionOutlineAssociations->setEnabled(false);
 
+    actionOutlineHome = new QAction(tr("Make &Home"), mainWindow);
+    actionOutlineHome->setStatusTip(tr("Use the current Outline as home"));
+    actionOutlineHome->setEnabled(false);
+
+    actionOutlineStencil = new QAction(tr("Make &Stencil"), mainWindow);
+    actionOutlineStencil->setStatusTip(tr("Copy the current Outline as to Stencil"));
+    actionOutlineStencil->setEnabled(false);
+
     actionOutlineClone = new QAction(tr("C&lone"), mainWindow);
     actionOutlineClone->setStatusTip(tr("Make copy of the current Outline"));
 
@@ -320,6 +327,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuOutline->addAction(actionOutlineAssociations);
     menuOutline->addAction(actionOutlineForget);
     menuOutline->addSeparator();
+    menuOutline->addAction(actionOutlineHome);
+    menuOutline->addAction(actionOutlineStencil);
     menuOutline->addAction(actionOutlineClone);
     menuOutline->addSeparator();
     menuOutline->addAction(actionOutlineExport);
@@ -373,6 +382,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteExtract = new QAction(tr("E&xtract"), mainWindow);
     actionNoteExtract->setStatusTip(tr("Create new Note from the text selected in the current Note..."));
 
+    actionNoteStencil = new QAction(tr("Make &Stencil"), mainWindow);
+    actionNoteStencil->setStatusTip(tr("Copy the current Outline as to Stencil"));
+    actionNoteStencil->setEnabled(false);
+
     actionNoteClone = new QAction(tr("&Clone"), mainWindow);
     actionNoteClone->setStatusTip(tr("Make a copy of the Note to this or other Outline..."));
 
@@ -402,6 +415,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNote->addAction(actionNoteAttach);
     menuNote->addAction(actionNoteRefactor);
     menuNote->addAction(actionNoteExtract);
+    menuNote->addAction(actionNoteStencil);
     menuNote->addAction(actionNoteClone);
     menuNote->addSeparator();
     menuNote->addAction(actionNoteExport);
@@ -504,21 +518,12 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
 void MainMenuView::showFacetMindThink()
 {
     actionMindThink->setEnabled(false);
-    actionMindDream->setEnabled(true);
-    actionMindSleep->setEnabled(true);
-}
-
-void MainMenuView::showFacetMindDream()
-{
-    actionMindThink->setEnabled(true);
-    actionMindDream->setEnabled(false);
     actionMindSleep->setEnabled(true);
 }
 
 void MainMenuView::showFacetMindSleep()
 {
     actionMindThink->setEnabled(true);
-    actionMindDream->setEnabled(true);
     actionMindSleep->setEnabled(false);
 }
 
@@ -531,4 +536,4 @@ void MainMenuView::addRepositoryOrFileToRelearn(const QString& path)
     submenuMindRelearn->addFile(path);
 }
 
-}
+} // m8r namespace

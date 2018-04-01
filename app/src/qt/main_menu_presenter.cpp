@@ -31,7 +31,6 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionMindHack, SIGNAL(triggered()), mwp, SLOT(doActionMindHack()));
 #endif
     QObject::connect(view->actionMindThink, SIGNAL(triggered()), mwp, SLOT(doActionMindThink()));
-    QObject::connect(view->actionMindDream, SIGNAL(triggered()), mwp, SLOT(doActionMindDream()));
     QObject::connect(view->actionMindSleep, SIGNAL(triggered()), mwp, SLOT(doActionMindSleep()));
     QObject::connect(view->actionMindLearn, SIGNAL(triggered()), mwp, SLOT(doActionMindLearn()));
     for(auto& r:config.getRepositories()) {
@@ -95,9 +94,6 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     case Configuration::MindState::THINKING:
         showFacetMindThink();
         break;
-    case Configuration::MindState::DREAMING:
-        showFacetMindDream();
-        break;
     case Configuration::MindState::SLEEPING:
         showFacetMindSleep();
         break;
@@ -127,11 +123,6 @@ void MainMenuPresenter::showFacetNoteEdit()
 void MainMenuPresenter::showFacetMindThink()
 {
     view->showFacetMindThink();
-}
-
-void MainMenuPresenter::showFacetMindDream()
-{
-    view->showFacetMindDream();
 }
 
 void MainMenuPresenter::showFacetMindSleep()
