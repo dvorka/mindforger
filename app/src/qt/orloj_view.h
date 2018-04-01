@@ -23,7 +23,7 @@
 
 #include "outlines_table_view.h"
 #include "notes_table_view.h"
-#include "outline_view.h"
+#include "outline_view_splitter.h"
 #include "outline_header_view.h"
 #include "outline_header_edit_view.h"
 #include "note_view.h"
@@ -53,7 +53,7 @@ class OrlojView : public QSplitter
 private:
     OutlinesTableView* outlinesTable;
     NotesTableView* notesTable;
-    OutlineView* outlineView;
+    OutlineViewSplitter* outlineView; // experiment
     OutlineHeaderView* outlineHeaderView;
     OutlineHeaderEditView* outlineHeaderEdit;
     NoteView* noteView;
@@ -70,7 +70,7 @@ public:
 
     OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
     NotesTableView* getNotesTable() const { return notesTable; }
-    OutlineView* getOutlineView() const { return outlineView; }
+    OutlineViewSplitter* getOutlineView() const { return outlineView; }
     OutlineHeaderView* getOutlineHeaderView() const { return outlineHeaderView; }
     OutlineHeaderEditView* getOutlineHeaderEdit() const { return outlineHeaderEdit; }
     NoteView* getNoteView() const { return noteView; }

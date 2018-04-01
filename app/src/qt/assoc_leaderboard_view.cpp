@@ -1,5 +1,5 @@
 /*
- outlines_table_view.cpp     MindForger thinking notebook
+ assoc_leaderboard_view.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -10,30 +10,34 @@
 
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "outlines_table_view.h"
+#include "assoc_leaderboard_view.h"
 
 namespace m8r {
 
-OutlinesTableView::OutlinesTableView(QWidget *parent)
-  : QTableView(parent)
+AssocLeaderboardView::AssocLeaderboardView(QWidget* parent)
+    : QTableView(parent)
 {
     verticalHeader()->setVisible(false);
     // BEFARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    setSortingEnabled(true);
+    setSortingEnabled(false);
 
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
-void OutlinesTableView::paintEvent(QPaintEvent* event)
+AssocLeaderboardView::~AssocLeaderboardView()
+{
+}
+
+void AssocLeaderboardView::paintEvent(QPaintEvent* event)
 {
     // ensure that 1st column gets the remaining space from others
     // IMPROVE may kill performance
@@ -42,27 +46,8 @@ void OutlinesTableView::paintEvent(QPaintEvent* event)
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
-    // importance/urgency
+    // % similarity
     this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*12);
-    this->setColumnWidth(2, this->fontMetrics().averageCharWidth()*12);
-    // progress
-    this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*6);
-
-    int normalizedWidth = width()/fontMetrics().averageCharWidth();
-    if(normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH) {
-        this->setColumnWidth(4, 0);
-        this->setColumnWidth(5, 0);
-        this->setColumnWidth(6, 0);
-    } else {
-        // notes
-        this->setColumnWidth(4, this->fontMetrics().averageCharWidth()*5);
-        // rd/wr
-        this->setColumnWidth(5, this->fontMetrics().averageCharWidth()*5);
-        this->setColumnWidth(6, this->fontMetrics().averageCharWidth()*5);
-    }
-
-    // pretty
-    this->setColumnWidth(7, this->fontMetrics().averageCharWidth()*12);
 
     QTableView::paintEvent(event);
 }

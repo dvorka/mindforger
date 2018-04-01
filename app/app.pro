@@ -111,7 +111,11 @@ HEADERS += \
     ./src/qt/dialogs/forget_dialog.h \
     ./src/qt/dialogs/time_scope_dialog.h \
     ./src/qt/dialogs/find_outline_by_tag_dialog.h \
-    ./src/qt/dialogs/find_note_by_tag_dialog.h
+    ./src/qt/dialogs/find_note_by_tag_dialog.h \
+    src/qt/outline_view_splitter.h \
+    src/qt/assoc_leaderboard_model.h \
+    src/qt/assoc_leaderboard_presenter.h \
+    src/qt/assoc_leaderboard_view.h
 
 SOURCES += \
     ./src/qt/mindforger.cpp \
@@ -174,7 +178,11 @@ SOURCES += \
     ./src/qt/dialogs/forget_dialog.cpp \
     ./src/qt/dialogs/time_scope_dialog.cpp \
     ./src/qt/dialogs/find_outline_by_tag_dialog.cpp \
-    ./src/qt/dialogs/find_note_by_tag_dialog.cpp
+    ./src/qt/dialogs/find_note_by_tag_dialog.cpp \
+    src/qt/outline_view_splitter.cpp \
+    src/qt/assoc_leaderboard_model.cpp \
+    src/qt/assoc_leaderboard_presenter.cpp \
+    src/qt/assoc_leaderboard_view.cpp
 
 TRANSLATIONS = \
     ./resources/qt/translations/mindforger_en.ts \

@@ -114,7 +114,7 @@ public:
     /**
      * @brief Find Note associations.
      */
-    void getAssociationsLeaderboard(const Note* n, std::vector<Note*>& associations);
+    void getAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& assocLeaderboard);
 
 private:
     /**

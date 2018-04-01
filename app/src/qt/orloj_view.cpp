@@ -38,8 +38,12 @@ OrlojView::OrlojView(QWidget* parent)
 
     addWidget(new QTextEdit("Inbox"));
 
-    outlineView = new OutlineView(this);
+    // BEGIN experiment
+    outlineView = new OutlineViewSplitter(this);
     addWidget(outlineView);
+    // END experiment
+    //outlineView = new OutlineView(this);
+    //addWidget(outlineView);
 
     outlineHeaderView = new OutlineHeaderView(this);
     addWidget(outlineHeaderView);
@@ -96,6 +100,7 @@ void OrlojView::showFacetOutlines()
 void OrlojView::showFacetOutlinesDetail()
 {
     QSet<QWidget*> v; v << outlinesTable << outlineView;
+
     hideChildren(v);
 }
 
@@ -138,4 +143,4 @@ void OrlojView::showFacetNoteEdit()
     noteEdit->giveFocusToEditor();
 }
 
-}
+} // m8r namespace

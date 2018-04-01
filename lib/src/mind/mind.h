@@ -452,7 +452,7 @@ public:
     /**
      * @brief Find Note associations.
      */
-    void getAssociationsLeaderboard(const Note* n, std::vector<Note*>& leaderboard) {
+    void getAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard) {
         return ai.getAssociationsLeaderboard(n, leaderboard);
     }
 

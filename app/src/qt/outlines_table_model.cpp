@@ -121,4 +121,4 @@ void OutlinesTableModel::addRow(Outline* outline)
     appendRow(items);
 }
 
-}
+} // m8r namespace

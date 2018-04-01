@@ -25,8 +25,11 @@ using namespace std;
 namespace m8r {
 
 NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
-    : qHtml{} // IMPROVE stack overflow if HTML too big?
+    : qHtml{}, // IMPROVE stack overflow if HTML too big?
+      config(Configuration::getInstance())
 {
+    this->mind = orloj->getMind();
+
     this->html = new string{};
 
     this->view = view;
@@ -81,6 +84,22 @@ void NoteViewPresenter::refresh(Note* note)
     }
 
     view->setHtml(qHtml);
+
+    // leaderboard
+    if(config.getMindState()==Configuration::MindState::DREAMING
+         ||
+       config.getMindState()==Configuration::MindState::THINKING)
+    {
+        if(!orloj->getOutlineView()->getAssocLeaderboard()->getView()->isVisible()) {
+            orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(true);
+        }
+        // IMPROVE if note WAS already selected before (did NOT change) do NOT recalculate/refresh
+        mind->getAssociationsLeaderboard(note, assocLeaderboard);
+        // IMPROVE cache aaLead presenter
+        orloj->getOutlineView()->getAssocLeaderboard()->refresh(assocLeaderboard);
+    } else {
+        orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
+    }
 }
 
 void NoteViewPresenter::slotEditNote()

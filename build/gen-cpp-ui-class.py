@@ -88,7 +88,7 @@ TEMPLATE_CPP_FILE='''/*
 
 namespace m8r {{
 
-{}::{}(QWidget *parent)
+{}::{}(QWidget* parent)
 {{
 }}
 

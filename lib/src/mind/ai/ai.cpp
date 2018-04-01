@@ -359,7 +359,7 @@ void Ai::initializeWordBlacklist() {
     wordBlacklist.addWord("want");
 }
 
-void Ai::getAssociationsLeaderboard(const Note* n, vector<Note*>& leaderboard)
+void Ai::getAssociationsLeaderboard(const Note* n, vector<pair<Note*,float>>& leaderboard)
 {
     static const int AA_LEADERBOARD_SIZE = 10;
     static const int AA_LEADERBOARD_LINE_EMPTY = -1;
@@ -413,12 +413,13 @@ void Ai::getAssociationsLeaderboard(const Note* n, vector<Note*>& leaderboard)
         }
     }
 
+    leaderboard.clear();
     MF_DEBUG("Leaderboard of " << n->getName() << ":" << endl);
     for(int i=0; i<AA_LEADERBOARD_SIZE && aaLeaderboard[i][0]!=AA_LEADERBOARD_LINE_EMPTY; i++) {
         MF_DEBUG("  #" << i << " " <<
                  notes[aaLeaderboard[i][0]]->getName() << " (" << notes[aaLeaderboard[i][0]]->getOutline()->getName() << ")" <<
                  " ~ " << aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]] << endl);
-        leaderboard.push_back(notes[aaLeaderboard[i][0]]);
+        leaderboard.push_back(std::make_pair(notes[aaLeaderboard[i][0]],aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]]));
     }
 }
 

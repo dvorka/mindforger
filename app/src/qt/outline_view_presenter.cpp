@@ -20,12 +20,14 @@
 
 namespace m8r {
 
-OutlineViewPresenter::OutlineViewPresenter(OutlineView *view, OrlojPresenter* orloj)
+OutlineViewPresenter::OutlineViewPresenter(OutlineViewSplitter* view, OrlojPresenter* orloj)
     : QObject(orloj), currentOutline{nullptr}
 {
     this->view = view;
     this->outlineTreePresenter
         = new OutlineTreePresenter(view->getOutlineTree(), orloj->getMainWindow(), this);
+    this->assocLeaderboardPresenter
+        = new AssocLeaderboardPresenter(view->getAssocLeaderboard());
 
     QObject::connect(view->getNameLabel(), SIGNAL(clicked()), orloj, SLOT(slotShowOutlineHeader()));
     QObject::connect(view->getOutlineTree(), SIGNAL(signalFromOutlineTreeToOutlines()), orloj, SLOT(slotShowOutlines()));
@@ -41,7 +43,7 @@ void OutlineViewPresenter::refresh(Outline* outline)
     outline->incReads();
 
     currentOutline = outline;
-    view->refreshHeader(outline->getName());
+    //view->refreshHeader(outline->getName());
     outlineTreePresenter->refresh(outline);
 }
 
@@ -55,4 +57,4 @@ void OutlineViewPresenter::selectRowByNote(const Note* note)
     outlineTreePresenter->selectRowByNote(note);
 }
 
-}
+} // m8r namespace

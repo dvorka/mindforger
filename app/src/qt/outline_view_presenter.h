@@ -20,17 +20,20 @@
 #define M8RUI_OUTLINE_VIEW_PRESENTER_H
 
 #include "../../lib/src/model/outline.h"
+#include "../../lib/src/mind/mind.h"
 
 #include <QtWidgets>
 
-#include "outline_view.h"
+#include "outline_view_splitter.h"
 #include "orloj_presenter.h"
 #include "outline_tree_presenter.h"
+#include "assoc_leaderboard_presenter.h"
 
 namespace m8r {
 
 class OrlojPresenter;
 class OutlineTreePresenter;
+class AssocLeaderboardPresenter;
 
 class OutlineViewPresenter : public QObject
 {
@@ -39,11 +42,12 @@ class OutlineViewPresenter : public QObject
 private:
     Outline* currentOutline;
 
-    OutlineView* view;
+    OutlineViewSplitter* view;
     OutlineTreePresenter* outlineTreePresenter;
+    AssocLeaderboardPresenter* assocLeaderboardPresenter;
 
 public:
-    explicit OutlineViewPresenter(OutlineView *view, OrlojPresenter* orloj);
+    explicit OutlineViewPresenter(OutlineViewSplitter* view, OrlojPresenter* orloj);
     OutlineViewPresenter(const OutlineViewPresenter&) = delete;
     OutlineViewPresenter(const OutlineViewPresenter&&) = delete;
     OutlineViewPresenter &operator=(const OutlineViewPresenter&) = delete;
@@ -54,6 +58,7 @@ public:
     void refresh(Note* note);
     void selectRowByNote(const Note* note);
     OutlineTreePresenter* getOutlineTree() const { return outlineTreePresenter; }
+    AssocLeaderboardPresenter* getAssocLeaderboard() const { return assocLeaderboardPresenter; }
 
     ~OutlineViewPresenter();
 };

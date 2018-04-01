@@ -99,7 +99,7 @@ void MainWindowPresenter::initView()
 void MainWindowPresenter::doActionMindHack()
 {
     //qDebug() << "[MindHack] Current facet: " << orloj->getFacet();
-    vector<Note*> l;
+    vector<pair<Note*,float>> l;
     mind->getAssociationsLeaderboard(orloj->getNoteView()->getCurrentNote(), l);
 }
 #endif

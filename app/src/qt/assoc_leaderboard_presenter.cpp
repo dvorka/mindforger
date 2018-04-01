@@ -1,5 +1,5 @@
 /*
- outlines_table_presenter.cpp     MindForger thinking notebook
+ assoc_leaderboard_presenter.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -10,42 +10,42 @@
 
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "outlines_table_presenter.h"
-
-using namespace std;
+#include "assoc_leaderboard_presenter.h"
 
 namespace m8r {
 
-OutlinesTablePresenter::OutlinesTablePresenter(OutlinesTableView* view)
+AssocLeaderboardPresenter::AssocLeaderboardPresenter(AssocLeaderboardView* view)
 {
     this->view = view;
-    this->model = new OutlinesTableModel(this);
+    this->model = new AssocLeaderboardModel(this);
     this->view->setModel(this->model);
 
     // ensure HTML cells rendering
     HtmlDelegate* delegate = new HtmlDelegate();
-    // IMPROVE implement delegates by type e.g. timestamp an reuse them across views
-    //this->view->setItemDelegateForColumn(delegate);
     this->view->setItemDelegate(delegate);
+
+
 }
 
-void OutlinesTablePresenter::refresh(const vector<Outline*>& outlines)
+AssocLeaderboardPresenter::~AssocLeaderboardPresenter()
+{
+}
+
+void AssocLeaderboardPresenter::refresh(std::vector<std::pair<Note*,float>>& assocLeaderboard)
 {
     model->removeAllRows();
-    if(outlines.size()) {
-        for(Outline* outline:outlines) {
-            model->addRow(outline);
+
+    if(assocLeaderboard.size()) {
+        for(auto& i:assocLeaderboard) {
+            model->addRow(i.first, i.second);
         }
     }
-
-    // IMPROVE create hidden column w/ long time used for sorting
-    view->sortByColumn(7, Qt::SortOrder::DescendingOrder);
 }
 
 } // m8r namespace

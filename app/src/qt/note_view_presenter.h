@@ -41,6 +41,10 @@ private:
     std::string* html;
     QString qHtml;
 
+    Configuration& config;
+    Mind* mind;
+    std::vector<std::pair<Note*,float>> assocLeaderboard;
+
     OrlojPresenter* orloj;
 
     NoteView* view;

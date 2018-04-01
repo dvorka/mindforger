@@ -136,7 +136,7 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html)
         footer(*html);
     }
 
-    MF_DEBUG("===" << *html << "=1==" << endl);
+    //MF_DEBUG("===" << *html << "=1==" << endl);
 
     return html;
 }

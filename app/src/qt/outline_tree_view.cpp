@@ -126,4 +126,4 @@ void OutlineTreeView::paintEvent(QPaintEvent* event)
     QTableView::paintEvent(event);
 }
 
-}
+} // m8r namespace
