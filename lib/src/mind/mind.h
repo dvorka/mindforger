@@ -144,7 +144,7 @@ public:
      * Mind is kept. If Mind is NOT initialized, then think() first switches to dreaming
      * to prepare AI. When ready, it starts to think and be useful.
      */
-    void think();
+    bool think();
 
     /**
      * @brief Dream to reset, detox, optimize, check/clean up mind/memory and prepare to think.
@@ -166,26 +166,26 @@ public:
      *     > NLP lexicon, BoW
      *     > associations neural network
      */
-    void dream();
+    bool dream();
 
     /**
      * @brief Sleep to clear Mind except Memory and relax.
      *
      * Memory is kept, but Mind is cleared. No thinking or dreaming.
      */
-    void sleep();
+    bool sleep();
 
     /**
      * @brief Learn new MindForger/Markdown repository/directory/file defined by configuration AND keep the current mind state.
      *
      * Mind and Memory is RESET i.e. this method does NOT add new knowledge, but it starts over.
      */
-    void learn();
+    bool learn();
 
     /**
      * @brief Forget everything.
      */
-    void amnesia();
+    bool amnesia();
 
     /*
      * REMEMBERING

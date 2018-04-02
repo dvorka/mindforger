@@ -42,7 +42,7 @@ class MainMenuPresenter : public QObject
 private:
     MainMenuView* view;
 
-    MainWindowPresenter* maindWindowPresenter;
+    MainWindowPresenter* mainWindowPresenter;
     Configuration& config;
 
 public:

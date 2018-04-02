@@ -141,9 +141,9 @@ public:
 
 #ifdef DO_M8F_DEBUG
     void print() const {
-        std::cout << "Lexicon[" << m.size() << "]:" << std::endl;
+        MF_DEBUG("Lexicon[" << m.size() << "]:" << std::endl);
         for(auto& e:m) {
-            std::cout << "  " << e.second.word << "  " << e.second.frequency << "  " << e.second.weight << std::endl;
+            MF_DEBUG("  " << e.second.word << "  " << e.second.frequency << "  " << e.second.weight << std::endl);
         }
     }
 #endif

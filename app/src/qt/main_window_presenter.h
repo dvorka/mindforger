@@ -104,7 +104,6 @@ public:
 
     // this presenter view
     MainWindowView& getView() const { return view; }
-    void initView();
     const Configuration& getConfiguration() const { return config; }
     MarkdownOutlineRepresentation* getMarkdownRepresentation() const { return mdRepresentation; }
     HtmlOutlineRepresentation* getHtmlRepresentation() const { return htmlRepresentation; }

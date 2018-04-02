@@ -91,8 +91,40 @@ MainWindowPresenter::~MainWindowPresenter()
     // TODO deletes
 }
 
-void MainWindowPresenter::initView()
+void MainWindowPresenter::showInitialView()
 {
+    if(mind->getOutlines().size()) {
+        if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+            if(config.getActiveRepository()->isGithubRepository()) {
+                string key{config.getActiveRepository()->getDir()};
+                key.append(FILE_PATH_SEPARATOR);
+                key.append("README.md");
+                Outline* o = mind->remind().getOutline(key);
+                if(o) {
+                    orloj->showFacetOutline(o);
+                } else {
+                    orloj->showFacetOutlineList(mind->getOutlines());
+                }
+            } else {
+                view.getCli()->setBreadcrumbPath("/outlines");
+                orloj->showFacetOutlineList(mind->getOutlines());
+            }
+        } else { // file
+            // IMPROVE move this method to breadcrumps
+            QString m{"/outlines/"};
+            m.append(QString::fromStdString((*mind->getOutlines().begin())->getName()));
+            view.getCli()->setBreadcrumbPath(m);
+
+            orloj->showFacetOutline(*mind->getOutlines().begin());
+        }
+    } else {
+        // NO Os > nothing to show
+        // IMPROVE show homepage once it's implemented
+        mind->amnesia();
+        orloj->showFacetOutlineList(mind->getOutlines());
+    }
+
+    if(config.getMindState()==Configuration::MindState::THINKING) doThink();
 }
 
 #ifdef DO_M8F_DEBUG
@@ -106,8 +138,10 @@ void MainWindowPresenter::doThink()
 {
     // decide whether to run sync/async
     if(mind->remind().getNotesCount() > config.getAsyncMindConfig()) {
+        MF_DEBUG("Think ASYNC..." << endl);
         QtConcurrent::run(mind, &Mind::think);
     } else {
+        MF_DEBUG("Think SYNC..." << endl);
         mind->think();
     }
 }
@@ -188,44 +222,6 @@ void MainWindowPresenter::doActionMindRelearn(QString path)
             &view,
             tr("Learn"),
             tr("This is neither valid MindForger/Markdown repository nor file."));
-    }
-}
-
-void MainWindowPresenter::showInitialView()
-{
-    if(mind->getOutlines().size()) {
-        if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-            if(config.getActiveRepository()->isGithubRepository()) {
-                string key{config.getActiveRepository()->getDir()};
-                key.append(FILE_PATH_SEPARATOR);
-                key.append("README.md");
-                Outline* o = mind->remind().getOutline(key);
-                if(config.getMindState()==Configuration::MindState::THINKING) doThink();
-                if(o) {
-                    orloj->showFacetOutline(o);
-                } else {
-                    orloj->showFacetOutlineList(mind->getOutlines());
-                }
-            } else {
-                view.getCli()->setBreadcrumbPath("/outlines");
-                if(config.getMindState()==Configuration::MindState::THINKING) doThink();
-                orloj->showFacetOutlineList(mind->getOutlines());
-            }
-        } else { // file
-            // IMPROVE move this method to breadcrumps
-            QString m{"/outlines/"};
-            m.append(QString::fromStdString((*mind->getOutlines().begin())->getName()));
-            view.getCli()->setBreadcrumbPath(m);
-
-            if(config.getMindState()==Configuration::MindState::THINKING) doThink();
-            orloj->showFacetOutline(*mind->getOutlines().begin());
-        }
-    } else {
-        // NO Os > nothing to show
-        // IMPROVE show homepage once it's implemented
-        mind->amnesia();
-        if(config.getMindState()==Configuration::MindState::THINKING) doThink();
-        orloj->showFacetOutlineList(mind->getOutlines());
     }
 }
 
@@ -933,4 +929,4 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
         });
 }
 
-}
+} // m8r namespace

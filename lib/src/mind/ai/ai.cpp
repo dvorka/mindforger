@@ -121,6 +121,7 @@ void Ai::initializeWordBlacklist() {
 
 void Ai::learnMemory()
 {
+    activeThreads++;
     MF_DEBUG("  AI: Learning memory to BoW..." << endl);
 
     memory.getAllNotes(notes);
@@ -162,6 +163,7 @@ void Ai::learnMemory()
     // NN to be trained on demand
 
     MF_DEBUG("  AI: memory learned to BoW!" << endl);
+    activeThreads--;
 }
 
 /* Pre-calculate/calculate code CANNOT be reused as pre-calculate relies on rows w/ lower index
@@ -171,6 +173,7 @@ void Ai::calculateAaRow(size_t y)
 {
     MF_DEBUG("Calculating AA row " << y << "...");
     if(isConcious()) {
+        activeThreads++;
         // calculate row and column that cross diagonal on [y][y]
 
         // check diagonal to find out whether the cross has been already calculated
@@ -210,6 +213,8 @@ void Ai::calculateAaRow(size_t y)
         // set diagonal at the end to indicate calculation is done (consider reentrancy)
         aaMatrix[y][y] = 1.;
 
+        activeThreads--;
+
 #ifdef DO_M8F_DEBUG
         MF_DEBUG("  AA matrix built!" << endl);
         //printAa();
@@ -221,6 +226,7 @@ void Ai::calculateAaRow(size_t y)
 void Ai::precalculateAa()
 {
     if(isConcious()) {
+        activeThreads++;
 #ifdef DO_M8F_DEBUG
         static const float UNIQUE_AA_CELLS = (float)(notes.size()*notes.size()/2.+notes.size()/2.);
         MF_DEBUG("  Building AA matrix w/ " << UNIQUE_AA_CELLS << " UNIQUE rankings..." << endl);
@@ -267,6 +273,7 @@ void Ai::precalculateAa()
                 }
             }
         }
+        activeThreads--;
 
 #ifdef DO_M8F_DEBUG
         MF_DEBUG("  AA matrix built!" << endl);
@@ -420,83 +427,89 @@ AssociationAssessmentNotesFeature* Ai::createAaFeature(Note* n1, Note* n2)
 
 void Ai::getAssociationsLeaderboard(const Note* n, vector<pair<Note*,float>>& leaderboard)
 {
-    // If N was REMOVED, then nobody will ask for leaderboard.
-    // If N was MODIFIED, then leaderboard will not be accurate (but it's not critical).
-    // If N was ADDED, then I don't have data - no leaderboard provided.
-    if(n->getAiAaMatrixIndex() != AA_NOT_SET) {
-        // check cache
-        auto cachedLeaderboard = leaderboardCache.find(n);
-        if(cachedLeaderboard != leaderboardCache.end()) {
-            leaderboard = cachedLeaderboard->second;
-            return;
-        }
+    if(isConcious()) {
+        activeThreads++;
 
-        // calculate row/column of AA matrix & build leaderboard
-        calculateAaRow(n->getAiAaMatrixIndex());
+        // If N was REMOVED, then nobody will ask for leaderboard.
+        // If N was MODIFIED, then leaderboard will not be accurate (but it's not critical).
+        // If N was ADDED, then I don't have data - no leaderboard provided.
+        if(n->getAiAaMatrixIndex() != AA_NOT_SET) {
+            // check cache
+            auto cachedLeaderboard = leaderboardCache.find(n);
+            if(cachedLeaderboard != leaderboardCache.end()) {
+                leaderboard = cachedLeaderboard->second;
+                return;
+            }
 
-        int aaLeaderboard[AA_LEADERBOARD_SIZE][2];
-        for(int i=0; i<AA_LEADERBOARD_SIZE; i++) {
-            aaLeaderboard[i][0]=aaLeaderboard[i][1]=AA_NOT_SET;
-        }
+            // calculate row/column of AA matrix & build leaderboard
+            calculateAaRow(n->getAiAaMatrixIndex());
 
-        float aa;
-        for(size_t x=0, y=n->getAiAaMatrixIndex(); x<notes.size(); x++) {
-            if(x==y) continue; // self on diagonal
+            int aaLeaderboard[AA_LEADERBOARD_SIZE][2];
+            for(int i=0; i<AA_LEADERBOARD_SIZE; i++) {
+                aaLeaderboard[i][0]=aaLeaderboard[i][1]=AA_NOT_SET;
+            }
 
-            aa = aaMatrix[x][y];
+            float aa;
+            for(size_t x=0, y=n->getAiAaMatrixIndex(); x<notes.size(); x++) {
+                if(x==y) continue; // self on diagonal
 
-            if(aaLeaderboard[AA_LEADERBOARD_SIZE-1][0]==AA_NOT_SET
-                 ||
-               aaLeaderboard[AA_LEADERBOARD_SIZE-1][0]<aa)
-            {
-                // find target leaderboard row
-                size_t target;
-                for(target=0; target<AA_LEADERBOARD_SIZE; target++) {
-                    if(aaLeaderboard[target][0]!=AA_NOT_SET) {
-                        if(aa >= aaMatrix[aaLeaderboard[target][0]][aaLeaderboard[target][1]]) {
+                aa = aaMatrix[x][y];
+
+                if(aaLeaderboard[AA_LEADERBOARD_SIZE-1][0]==AA_NOT_SET
+                     ||
+                   aaLeaderboard[AA_LEADERBOARD_SIZE-1][0]<aa)
+                {
+                    // find target leaderboard row
+                    size_t target;
+                    for(target=0; target<AA_LEADERBOARD_SIZE; target++) {
+                        if(aaLeaderboard[target][0]!=AA_NOT_SET) {
+                            if(aa >= aaMatrix[aaLeaderboard[target][0]][aaLeaderboard[target][1]]) {
+                                break;
+                            }
+                        } else {
                             break;
                         }
-                    } else {
-                        break;
                     }
-                }
-                // shift leaderboard
-                int sx=aaLeaderboard[target][0];
-                int sy=aaLeaderboard[target][1];
-                for(size_t ll=target; ll<AA_NOT_SET; ll++) {
-                    if(aaLeaderboard[ll][0]!=AA_NOT_SET) {
-                        int tx=aaLeaderboard[ll][0];
-                        int ty=aaLeaderboard[ll][1];
-                        aaLeaderboard[ll][0]=sx;
-                        aaLeaderboard[ll][1]=sy;
-                        sx=tx;
-                        sy=ty;
-                    } else {
-                        aaLeaderboard[ll][0]=sx;
-                        aaLeaderboard[ll][1]=sy;
-                        break;
+                    // shift leaderboard
+                    int sx=aaLeaderboard[target][0];
+                    int sy=aaLeaderboard[target][1];
+                    for(size_t ll=target; ll<AA_NOT_SET; ll++) {
+                        if(aaLeaderboard[ll][0]!=AA_NOT_SET) {
+                            int tx=aaLeaderboard[ll][0];
+                            int ty=aaLeaderboard[ll][1];
+                            aaLeaderboard[ll][0]=sx;
+                            aaLeaderboard[ll][1]=sy;
+                            sx=tx;
+                            sy=ty;
+                        } else {
+                            aaLeaderboard[ll][0]=sx;
+                            aaLeaderboard[ll][1]=sy;
+                            break;
+                        }
                     }
+                    // assign value
+                    aaLeaderboard[target][0]=x;
+                    aaLeaderboard[target][1]=y;
                 }
-                // assign value
-                aaLeaderboard[target][0]=x;
-                aaLeaderboard[target][1]=y;
             }
+
+            leaderboard.clear();
+
+            MF_DEBUG("Leaderboard of " << n->getName() << " (" << n->getOutline()->getName() << "):" << endl);
+            for(int i=0; i<AA_LEADERBOARD_SIZE && aaLeaderboard[i][0]!=AA_NOT_SET; i++) {
+                MF_DEBUG("  #" << i << " " <<
+                         notes[aaLeaderboard[i][0]]->getName() << " (" << notes[aaLeaderboard[i][0]]->getOutline()->getName() << ")" <<
+                         " ~ " << aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]] << endl);
+                leaderboard.push_back(std::make_pair(notes[aaLeaderboard[i][0]],aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]]));
+            }
+
+            // cache leaderboard (copied)
+            leaderboardCache[n] = leaderboard;
+        } else {
+            leaderboard.clear();
         }
 
-        leaderboard.clear();
-
-        MF_DEBUG("Leaderboard of " << n->getName() << " (" << n->getOutline()->getName() << "):" << endl);
-        for(int i=0; i<AA_LEADERBOARD_SIZE && aaLeaderboard[i][0]!=AA_NOT_SET; i++) {
-            MF_DEBUG("  #" << i << " " <<
-                     notes[aaLeaderboard[i][0]]->getName() << " (" << notes[aaLeaderboard[i][0]]->getOutline()->getName() << ")" <<
-                     " ~ " << aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]] << endl);
-            leaderboard.push_back(std::make_pair(notes[aaLeaderboard[i][0]],aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]]));
-        }
-
-        // cache leaderboard (copied)
-        leaderboardCache[n] = leaderboard;
-    } else {
-        leaderboard.clear();
+        activeThreads--;
     }
 }
 

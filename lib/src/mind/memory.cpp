@@ -48,7 +48,9 @@ vector<Stencil*>& Memory::getStencils(ResourceType type)
 
 void Memory::learn()
 {
-    repositoryIndexer.index(config.getActiveRepository());    
+    aware = true;
+
+    repositoryIndexer.index(config.getActiveRepository());
 
 #ifdef DO_M8F_DEBUG
     MF_DEBUG(endl << "LEARNING repository in mode " << config.getActiveRepository()->getMode() << ":");
@@ -133,6 +135,8 @@ void Memory::learn()
 
 void Memory::amnesia()
 {
+    aware = false;
+
     repositoryIndexer.clear();
 
     // IMPROVE reset ontology i.e. clear custom types & keep only default ontology

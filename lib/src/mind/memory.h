@@ -44,6 +44,11 @@ class Memory
 {
 private:
     /**
+     * @brief Indicates whether Mind learned a repository.
+     */
+    bool aware;
+
+    /**      
      * @brief Cache outlines in memory.
      *
      * If FALSE, then outlines are always loaded from
@@ -83,6 +88,8 @@ public:
      * @brief Learn repository content.
      */
     void learn();
+    bool isAware() { return aware; }
+
     /**
      * @brief Forget everything.
      */

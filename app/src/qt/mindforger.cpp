@@ -205,8 +205,8 @@ int main(int argc, char *argv[])
     m8r::MainWindowView mainWindowView(lookAndFeels);
     m8r::MainWindowPresenter mainWindowPresenter(mainWindowView);
     mainWindowView.showMaximized();
-    mainWindowPresenter.showInitialView();
     mindforgerApplication.font().setPointSize(config.getUiFontPointSize());
+    mainWindowPresenter.showInitialView();
 
     // run application
     return mindforgerApplication.exec();

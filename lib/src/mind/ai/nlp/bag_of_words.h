@@ -82,11 +82,11 @@ public:
 
 #ifdef DO_M8F_DEBUG
     void print() const {
-        std::cout << "BoW[" << bow.size() << "]:" << std::endl;
+        MF_DEBUG("BoW[" << bow.size() << "]:" << std::endl);
         for(auto& e:bow) {
-            std::cout << "  '" << e.first->getName() << "' > ";
+            MF_DEBUG("  '" << e.first->getName() << "' > ");
             e.second->printFlat();
-            std::cout << std::endl;
+            MF_DEBUG(std::endl);
         }
     }
 #endif

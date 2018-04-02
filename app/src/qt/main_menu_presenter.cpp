@@ -24,7 +24,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     : config(Configuration::getInstance())
 {
     this->view = new MainMenuView(mwp->getView());
-    this->maindWindowPresenter = mwp;
+    this->mainWindowPresenter = mwp;
 
     // menu: mind
 #ifdef DO_M8F_DEBUG

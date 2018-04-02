@@ -36,6 +36,17 @@ namespace m8r {
  */
 class Ai
 {
+public:
+    /**
+     * @brief Indicates whether any computation is in progress.
+     *
+     * AI is singletion.
+     *
+     * IMPROVE this is just a quickfix - obviously WRONG. Must be rewritten to monitors
+     * like approach where Mind state change vs. AI computations are critical sections.
+     */
+    int activeThreads;
+
 private:
     /**
      * @brief Word classifiers
@@ -117,6 +128,15 @@ public:
      */
     bool isConcious() { return lexicon.size()>0; }
 
+    bool canSleep() {
+        if(activeThreads) {
+            std::cerr << "Mind learn CANCELLED becaue AI is thinking - wait until AI finishes and try again" << std::endl;
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     /**
      * @brief Learn what's in memory to get ready for thinking.
      */
@@ -127,21 +147,26 @@ public:
      *
      * Clear, but don't deallocate.
      */
-    void sleep() {
-        leaderboardCache.clear();
-        notes.clear();
-        outlines.clear();
-        bow.clear();
-        lexicon.clear();
+    bool sleep() {
+        if(canSleep()) {
+            lexicon.clear();
+            leaderboardCache.clear();
+            notes.clear();
+            outlines.clear();
+            bow.clear();
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
      * @brief Forget everything.
      */
     void amnesia() {
-        aaMatrix.clear();
-
         sleep();
+        aaMatrix.clear();
     }
 
     /**

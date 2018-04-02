@@ -28,6 +28,8 @@ Mind::Mind(Configuration &configuration)
       ai{memory}
 {
     memory.setTimeScope(&timeScopeAspect);
+    ai.activeThreads = 0;
+
     this->mdConfigRepresentation
         = new MarkdownConfigurationRepresentation{};
 }
@@ -44,95 +46,104 @@ Mind::~Mind()
  * BEGIN mind control
  */
 
-void Mind::think()
+bool Mind::think()
 {
     if(!ai.isConcious()) {
-        dream();
+        if(!dream()) {
+            return false;
+        }
     }
 
     config.setMindState(Configuration::MindState::THINKING);
     mdConfigRepresentation->save(config);
-    MF_DEBUG("Thinking..." << endl);
+    MF_DEBUG("@Thinking..." << endl);
+
+    return true;
 }
 
-void Mind::dream()
+bool Mind::dream()
 {
-    MF_DEBUG("Dreaming..." << endl);
-    config.setMindState(Configuration::MindState::DREAMING);
+    MF_DEBUG("@Dreaming..." << endl);
 
-    // sanity
-    // o integrity check: ...
-    // o memory structure check:
-    //  - Os w/o description
-    //  - Os w/o any N
-    //  - Ns w/o description
-    // o attachments
-    //  - orphan attachments (not referenced from any O)
+    if(ai.sleep()) {
+        config.setMindState(Configuration::MindState::DREAMING);
 
-    // clear trainsient indices, but keep memory
-    ai.amnesia();
+        allNotesCache.clear();
+        memoryDwell.clear();
+        triples.clear();
 
-    allNotesCache.clear();
-    memoryDwell.clear();
-    triples.clear();
+        // sanity
+        // o integrity check: ...
+        // o memory structure check:
+        //  - Os w/o description
+        //  - Os w/o any N
+        //  - Ns w/o description
+        // o attachments
+        //  - orphan attachments (not referenced from any O)
 
-    // TODO Triples: infer all triples, check, fix, optimize and save
+        // TODO Triples: infer all triples, check, fix, optimize and save
 
-    // AI associations aaMatrix and NN - may take a long time to finish
-    ai.learnMemory();
+        // AI associations aaMatrix and NN - may take a long time to finish
+        ai.learnMemory();
 
-    MF_DEBUG("Dreaming DONE!" << endl);
-}
-
-void Mind::sleep()
-{
-    config.setMindState(Configuration::MindState::SLEEPING);
-    mdConfigRepresentation->save(config);
-
-    ai.amnesia();
-
-    allNotesCache.clear();
-    memoryDwell.clear();
-    triples.clear();
-}
-
-void Mind::learn()
-{
-    MF_DEBUG("Learning..." << endl);
-
-    switch(config.getMindState()) {
-    case Configuration::MindState::THINKING:
-        amnesia();
-        memory.learn();
-        think();
-        break;
-    case Configuration::MindState::DREAMING:
-        // TODO either keep dreaming (show warning dialog) OR stop dreaming and think()
-        cerr << "WARNING: cannot learn new repository/file - DREAMING cannot be stopped!" << endl;
-        break;
-    case Configuration::MindState::SLEEPING:
-        amnesia();
-        memory.learn();
-        sleep();
-        break;
+        MF_DEBUG("@Dreaming DONE!" << endl);
+        return true;
     }
 
-    MF_DEBUG("Learning DONE" << endl);
+    return false;
 }
 
-void Mind::amnesia()
+bool Mind::sleep()
 {
-    MF_DEBUG("Amnesia..." << endl);
+    MF_DEBUG("@Going to sleeping..." << endl);
 
-    ai.amnesia();
+    if(ai.canSleep()) {
+        config.setMindState(Configuration::MindState::SLEEPING);
+        mdConfigRepresentation->save(config);
 
-    allNotesCache.clear();
-    memoryDwell.clear();
-    triples.clear();
+        ai.sleep();
 
-    memory.amnesia();
+        allNotesCache.clear();
+        memoryDwell.clear();
+        triples.clear();
 
-    MF_DEBUG("Amnesia DONE!" << endl);
+        MF_DEBUG("@Sleeping!" << endl);
+        return true;
+    }
+
+    return false;
+}
+
+bool Mind::learn()
+{
+    MF_DEBUG("@Learning..." << endl);
+
+    if(ai.canSleep()) {
+        amnesia();
+        memory.learn();
+        MF_DEBUG("@Learning DONE" << endl);
+        return true;
+    }
+
+    return false;
+}
+
+bool Mind::amnesia()
+{
+    MF_DEBUG("  @Amnesia..." << endl);
+
+    if(ai.sleep()) {
+        allNotesCache.clear();
+        memoryDwell.clear();
+        triples.clear();
+
+        memory.amnesia();
+        MF_DEBUG("  @Amnesia DONE!" << endl);
+
+        return true;
+    }
+
+    return false;
 }
 
 /*
