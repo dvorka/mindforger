@@ -125,6 +125,7 @@ public slots:
 #ifdef DO_M8F_DEBUG
     void doActionMindHack();
 #endif
+    void doThink();
     void doActionMindThink();
     void doActionMindSleep();
     void doActionMindLearn();

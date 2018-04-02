@@ -26,6 +26,7 @@
 #include "ai/ai.h"
 #include "ontology/thing_class_rel_triple.h"
 #include "../config/configuration.h"
+#include "../representations/markdown/markdown_configuration_representation.h"
 #include "aspect/time_scope_aspect.h"
 
 namespace m8r {
@@ -87,6 +88,8 @@ public:
 
 private:
     Configuration &config;
+    MarkdownConfigurationRepresentation* mdConfigRepresentation;
+
     Memory memory;
     Ai ai;
 

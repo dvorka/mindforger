@@ -46,7 +46,7 @@ void AssocLeaderboardView::paintEvent(QPaintEvent* event)
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
-    // % similarity
+    // % associativity
     this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*12);
 
     QTableView::paintEvent(event);

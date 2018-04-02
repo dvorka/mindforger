@@ -95,19 +95,13 @@ void NoteViewPresenter::refresh(Note* note)
         // decide whether to run sync/async
         if(mind->remind().getNotesCount() > config.getAsyncMindConfig()) {
             // get cached; if NOT cached, then compute leaderboard to be available later
-            cout << "AAW: async? " << endl;
             if(!mind->getCachedAssociationsLeaderboard(note, assocLeaderboard)) {
-                cout << "AAW: async! " << endl;
                 QtConcurrent::run(mind, &Mind::cacheAssociationsLeaderboard, note);
-            } else {
-                cout << "AAW: cache :) " << endl;
-            }
+            } // else cache :)
         } else {
-            cout << "AAW: sync " << endl;
             mind->getAssociationsLeaderboard(note, assocLeaderboard);
         }
 
-        cout << "AAW: show/hide " << assocLeaderboard.size() << endl;
         orloj->getOutlineView()->getAssocLeaderboard()->refresh(assocLeaderboard);
     } else {
         orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
@@ -125,4 +119,4 @@ NoteViewPresenter::~NoteViewPresenter()
     if(htmlRepresentation) delete htmlRepresentation;
 }
 
-}
+} // m8r namespace

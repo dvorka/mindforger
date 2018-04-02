@@ -43,29 +43,44 @@ void AssocLeaderboardModel::removeAllRows()
     setHorizontalHeaderLabels(tableHeader);
 }
 
-void AssocLeaderboardModel::addRow(Note* note, float similarity)
+void AssocLeaderboardModel::addRow(Note* note, float associativity)
 {
     QList<QStandardItem*> items;
     QStandardItem* item;
 
-    QString html, tooltip;
+    QString html;
     html = QString(note->getName().c_str());
     html += " (";
     html.append(QString::fromStdString(note->getOutline()->getName()));
     html += ")";
-    tooltip = html;
 
     // item
     item = new QStandardItem(html);
-    item->setToolTip(tooltip);
+    item->setToolTip(html);
     // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
     item->setData(QVariant::fromValue(note));
     items.append(item);
 
-    QString s{};
-    s += QString::number(similarity*100.);
-    s += "%";
-    items.append(new QStandardItem(s));
+    html.clear();
+    if(associativity>0.29) {
+        html += "<span style='color: #00";
+        if(associativity>0.69) {
+            html += "CC";
+        } else if(associativity>0.49) {
+            html += "AA";
+        } else if(associativity>0.39) {
+            html += "66";
+        } else if(associativity>0.29) {
+            html += "44";
+        }
+        html += "00'>";
+    }
+    html += QString::number(associativity*100.);
+    html += "%";
+    if(associativity>0.29) {
+        html += "</span>";
+    }
+    items.append(new QStandardItem(html));
 
     appendRow(items);
 }

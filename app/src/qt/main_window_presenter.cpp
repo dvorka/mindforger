@@ -102,7 +102,7 @@ void MainWindowPresenter::doActionMindHack()
 }
 #endif
 
-void MainWindowPresenter::doActionMindThink()
+void MainWindowPresenter::doThink()
 {
     // decide whether to run sync/async
     if(mind->remind().getNotesCount() > config.getAsyncMindConfig()) {
@@ -110,9 +110,20 @@ void MainWindowPresenter::doActionMindThink()
     } else {
         mind->think();
     }
+}
 
+void MainWindowPresenter::doActionMindThink()
+{
+    doThink();
     mainMenu->showFacetMindThink();
-    orloj->showFacetOutlineList(mind->getOutlines());
+
+    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+        orloj->showFacetOutlineList(mind->getOutlines());
+    } else {
+        if(mind->getOutlines().size()>0) {
+            orloj->showFacetOutline(*mind->getOutlines().begin());
+        }
+    }
 }
 
 void MainWindowPresenter::doActionMindSleep()
@@ -189,6 +200,7 @@ void MainWindowPresenter::showInitialView()
                 key.append(FILE_PATH_SEPARATOR);
                 key.append("README.md");
                 Outline* o = mind->remind().getOutline(key);
+                if(config.getMindState()==Configuration::MindState::THINKING) doThink();
                 if(o) {
                     orloj->showFacetOutline(o);
                 } else {
@@ -196,19 +208,23 @@ void MainWindowPresenter::showInitialView()
                 }
             } else {
                 view.getCli()->setBreadcrumbPath("/outlines");
+                if(config.getMindState()==Configuration::MindState::THINKING) doThink();
                 orloj->showFacetOutlineList(mind->getOutlines());
             }
-        } else {
+        } else { // file
             // IMPROVE move this method to breadcrumps
             QString m{"/outlines/"};
             m.append(QString::fromStdString((*mind->getOutlines().begin())->getName()));
             view.getCli()->setBreadcrumbPath(m);
+
+            if(config.getMindState()==Configuration::MindState::THINKING) doThink();
             orloj->showFacetOutline(*mind->getOutlines().begin());
         }
     } else {
-        // nothing to show
-        mind->amnesia();
+        // NO Os > nothing to show
         // IMPROVE show homepage once it's implemented
+        mind->amnesia();
+        if(config.getMindState()==Configuration::MindState::THINKING) doThink();
         orloj->showFacetOutlineList(mind->getOutlines());
     }
 }

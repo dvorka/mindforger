@@ -28,10 +28,14 @@ Mind::Mind(Configuration &configuration)
       ai{memory}
 {
     memory.setTimeScope(&timeScopeAspect);
+    this->mdConfigRepresentation
+        = new MarkdownConfigurationRepresentation{};
 }
 
 Mind::~Mind()
 {
+    delete mdConfigRepresentation;
+
     // - Memory destruct outlines
     // - allNotesCache Notes is just container referencing Memory's Outlines
 }
@@ -47,6 +51,7 @@ void Mind::think()
     }
 
     config.setMindState(Configuration::MindState::THINKING);
+    mdConfigRepresentation->save(config);
     MF_DEBUG("Thinking..." << endl);
 }
 
@@ -82,6 +87,7 @@ void Mind::dream()
 void Mind::sleep()
 {
     config.setMindState(Configuration::MindState::SLEEPING);
+    mdConfigRepresentation->save(config);
 
     ai.amnesia();
 

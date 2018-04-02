@@ -34,6 +34,7 @@ constexpr const auto CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL = "* Show Notebo
 constexpr const auto CONFIG_SETTING_SAVE_READS_METADATA_LABEL = "* Save reads metadata: ";
 
 // mind
+constexpr const auto CONFIG_SETTING_MIND_STATE = "* Mind state: ";
 
 // repositories
 constexpr const auto CONFIG_SETTING_ACTIVE_REPOSITORY_LABEL = "* Active repository: ";
@@ -152,6 +153,12 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                                 c.setTimeScope(ts);
                             }
                         }
+                    } else if(line->find(CONFIG_SETTING_MIND_STATE) != std::string::npos) {
+                        if(line->find("think") != std::string::npos) {
+                            c.setMindState(Configuration::MindState::THINKING);
+                        } else {
+                            c.setMindState(Configuration::MindState::SLEEPING);
+                        }
                     }
                 }
             }
@@ -200,12 +207,14 @@ string* MarkdownConfigurationRepresentation::to(Configuration& c)
 string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
 {
     stringstream s{};
-    string timeScopeAsString{};
+    string timeScopeAsString{}, mindStateAsString{"sleep"};
     if(c) {
         c->getTimeScope().toString(timeScopeAsString);
+        if(c->getMindState()==Configuration::MindState::THINKING) mindStateAsString= "think";
     } else {
         timeScopeAsString.assign(Configuration::DEFAULT_TIME_SCOPE);
     }
+
     // IMPROVE build more in compile time and less in runtime
     s <<
          "# MindForger Configuration" << endl <<
@@ -217,6 +226,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "# " << CONFIG_SECTION_MIND << endl <<
          "Mind-related settings:" << endl <<
          endl <<
+         CONFIG_SETTING_MIND_STATE << mindStateAsString << endl <<
+         "    * Examples: sleep, think" << endl <<
          CONFIG_SETTING_TIME_SCOPE_LABEL << timeScopeAsString << endl <<
          "    * Examples: 2y0m0d0h0m (recent 2 years), 0y3m15d0h0m (recent 3 months and 15 days)" << endl <<
          endl <<
