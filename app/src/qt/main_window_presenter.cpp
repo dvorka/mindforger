@@ -98,16 +98,14 @@ void MainWindowPresenter::initView()
 #ifdef DO_M8F_DEBUG
 void MainWindowPresenter::doActionMindHack()
 {
-    //qDebug() << "[MindHack] Current facet: " << orloj->getFacet();
-    vector<pair<Note*,float>> l;
-    mind->getAssociationsLeaderboard(orloj->getNoteView()->getCurrentNote(), l);
+    qDebug() << "[MindHack] Current facet: " << orloj->getFacet();
 }
 #endif
 
 void MainWindowPresenter::doActionMindThink()
 {
-    if(mind->remind().getNotesCount()>256) {
-        // run asynchronously
+    // decide whether to run sync/async
+    if(mind->remind().getNotesCount() > config.getAsyncMindConfig()) {
         QtConcurrent::run(mind, &Mind::think);
     } else {
         mind->think();

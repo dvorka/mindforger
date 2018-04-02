@@ -67,7 +67,6 @@ constexpr const auto UI_EDITOR_KEY_BINDING_EMACS = "emacs";
 constexpr const auto UI_EDITOR_KEY_BINDING_VIM = "vim";
 constexpr const auto UI_EDITOR_KEY_BINDING_WIN = "windows";
 
-
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
 constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_KEY_BINDING = UI_EDITOR_KEY_BINDING_EMACS;
@@ -134,6 +133,8 @@ public:
         WINDOWS
     };
 
+    static constexpr int DEFAULT_ASYNC_MIND_THRESHOLD = 200;
+
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
     static const std::string DEFAULT_TIME_SCOPE;
     static constexpr const bool DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON = true;
@@ -147,7 +148,9 @@ private:
     explicit Configuration();
 
 private:
-    MindState mindState;
+    MindState mindState;    
+    // if count(N) > asyncMindTreshold then long-running mind computations should be run in async
+    unsigned int asyncMindThreshold;
 
     std::string userHomePath;
     std::string configFilePath;
@@ -193,6 +196,7 @@ public:
     Installer* getInstaller() const { return installer; }
     MindState getMindState() const { return mindState; }
     void setMindState(MindState mindState);
+    unsigned int getAsyncMindConfig() const { return asyncMindThreshold; }
 
     std::string& getConfigFilePath() { return configFilePath; }
     void setConfigFilePath(const std::string customConfigFilePath) { configFilePath = customConfigFilePath; }

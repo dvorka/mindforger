@@ -40,11 +40,13 @@ AssocLeaderboardPresenter::~AssocLeaderboardPresenter()
 void AssocLeaderboardPresenter::refresh(std::vector<std::pair<Note*,float>>& assocLeaderboard)
 {
     model->removeAllRows();
-
     if(assocLeaderboard.size()) {
+        view->setVisible(true);
         for(auto& i:assocLeaderboard) {
             model->addRow(i.first, i.second);
         }
+    } else {
+        view->setVisible(false);
     }
 }
 

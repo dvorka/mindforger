@@ -129,12 +129,12 @@ public:
 //                ;
 #endif
         return
-            features[IDX_HAVE_MUTUAL_REL] * 0.25 +
+            // features[IDX_HAVE_MUTUAL_REL] * 0.25 + ... temporarily added to TEXT
             features[IDX_TYPE_MATCHES] * 0.1 +
             features[IDX_SAME_OUTLINE] * 0.05 +
             features[IDX_SIMILARITY_BY_TAGS] * 0.2 +
             features[IDX_SIMILARITY_BY_TITLES] * 0.2 +
-            features[IDX_SIMILARITY_BY_DESCRIPTIONS] * 0.2 +
+            features[IDX_SIMILARITY_BY_DESCRIPTIONS] * (0.2+0.25) +
             features[IDX_SIMILARITY_BY_SAME_TARGETS_RELS] * 0.1
             ;
     }

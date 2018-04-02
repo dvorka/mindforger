@@ -247,7 +247,7 @@ unsigned Memory::getOutlineMarkdownsSize() const
 
 unsigned Memory::getNotesCount() const
 {
-    // IMPROVE introduce dirty flag (add/remove outline and recount only then)
+    // IMPROVE PERFORMANCE cache this number & introduce dirty flag (add/remove outline and recount only then)
     unsigned int result{};
     for(Outline* outline:outlines) {
         result+=outline->getNotes().size();

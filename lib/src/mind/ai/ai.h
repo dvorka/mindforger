@@ -45,6 +45,10 @@ private:
         NEGATIVE = 1<<1
     };
 
+    static constexpr float AA_NOT_SET = -1.;
+    static constexpr int AA_WORD_RELEVANCY_THRESHOLD = 10; // use 10 words w/ highest weight from vectors (and ignore others - irrelevant can bring noice with volume)
+    static constexpr int AA_LEADERBOARD_SIZE = 10;
+
 private:
     Memory& memory;
 
@@ -63,19 +67,21 @@ private:
     std::vector<Note*> notes;
 
     /*
+     * AA leaderboard(s)
+     */
+
+    // Association assessment matrix w/ rankings for any N1/N2 tuple (diagonal symmetry).
+    // Changed from float** to vector<vector>> to enable row/col extension on new N/O (keep & avoid realloc)
+    std::vector<std::vector<float>> aaMatrix;
+
+    // leaderboard cache to avoid re-calculation
+    std::map<const Note*,std::vector<std::pair<Note*,float>>> leaderboardCache;
+
+    /*
      * NN models
      */
 
     // TODO NN: AssociationAssessmentModel
-
-    /*
-     * AA leaderboard(s)
-     */
-
-    // association assessment matrix w/ rankings for any N1/N2 tuple
-    float** aaMatrix;
-
-    // TODO leaderboards cache to avoid re-calculation
 
     /*
      * Classification
@@ -106,7 +112,10 @@ public:
     Ai &operator=(const Ai&&) = delete;
     ~Ai();
 
-    bool isConcious() { return aaMatrix != nullptr; }
+    /**
+     * @brief Is ready to think?
+     */
+    bool isConcious() { return lexicon.size()>0; }
 
     /**
      * @brief Learn what's in memory to get ready for thinking.
@@ -114,26 +123,50 @@ public:
     void learnMemory();
 
     /**
-     * @brief Find Note associations.
+     * @brief Clear.
+     *
+     * Clear, but don't deallocate.
      */
-    void getAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& assocLeaderboard);
-
-    /**
-     * @brief Forget everything.
-     */
-    void amnesia() {
-        if(aaMatrix) {
-            for(size_t i=0; i<notes.size(); ++i) {
-                aaMatrix[i] = new float[notes.size()];
-            }
-            delete aaMatrix;
-            aaMatrix = nullptr;
-        }
+    void sleep() {
+        leaderboardCache.clear();
         notes.clear();
         outlines.clear();
         bow.clear();
         lexicon.clear();
     }
+
+    /**
+     * @brief Forget everything.
+     */
+    void amnesia() {
+        aaMatrix.clear();
+
+        sleep();
+    }
+
+    /**
+     * @brief Precalculate entire AA.
+     */
+    void precalculateAa();
+
+    /**
+     * @brief Calculate AA row/column cross.
+     */
+    void calculateAaRow(size_t y);
+
+    /**
+     * @brief Check AA matrix symmetry.
+     */
+    void assertAaSymmetry();
+
+    /**
+     * @brief Find Note associations.
+     *
+     * This calculates leaderboard on demand (uses cache and/or calculates AA row/column).
+     */
+    void getAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& assocLeaderboard);
+    bool getCachedAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard);
+    void cacheAssociationsLeaderboard(const Note* n);
 
 private:
     /**
@@ -178,13 +211,16 @@ public:
 #endif
     void printAa() {
         std::cout << "AA Matrix:" << std::endl;
-        if(aaMatrix!=nullptr) {
-            for(size_t i=0; i<notes.size(); i++) {
-                for(size_t j=0; j<notes.size(); j++) {
+        for(size_t i=0; i<aaMatrix.size(); i++) {
+            std::cout << "AA[" << i << "] = ";
+            for(size_t j=0; j<aaMatrix.size(); j++) {
+                if(aaMatrix[i][j] == -1) {
+                    std::cout << "_ ";
+                } else {
                     std::cout << aaMatrix[i][j] << " ";
                 }
-                std::cout << std::endl;
             }
+            std::cout << std::endl;
         }
     }
 };

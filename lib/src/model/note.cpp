@@ -32,6 +32,7 @@ Note::Note(const NoteType* type, Outline* outline)
     reads = revision = 0;
     progress = 0;
     flags = 0;
+    aiAaMatrixIndex = -1;
 }
 
 Note::Note(const Note& n)
@@ -54,6 +55,8 @@ Note::Note(const Note& n)
     reads = n.reads;
     revision = n.revision;
     progress = n.progress;
+    // share old N's similarity assessment
+    aiAaMatrixIndex = n.aiAaMatrixIndex;
 
     if(n.tags.size()) {
         tags.insert(tags.end(), n.tags.begin(), n.tags.end());

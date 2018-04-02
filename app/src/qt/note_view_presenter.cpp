@@ -90,12 +90,24 @@ void NoteViewPresenter::refresh(Note* note)
          ||
        config.getMindState()==Configuration::MindState::THINKING)
     {
-        if(!orloj->getOutlineView()->getAssocLeaderboard()->getView()->isVisible()) {
-            orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(true);
+        // IMPROVE if note WAS already selected before (did NOT change), then do NOT refresh (recalc is already smart)
+
+        // decide whether to run sync/async
+        if(mind->remind().getNotesCount() > config.getAsyncMindConfig()) {
+            // get cached; if NOT cached, then compute leaderboard to be available later
+            cout << "AAW: async? " << endl;
+            if(!mind->getCachedAssociationsLeaderboard(note, assocLeaderboard)) {
+                cout << "AAW: async! " << endl;
+                QtConcurrent::run(mind, &Mind::cacheAssociationsLeaderboard, note);
+            } else {
+                cout << "AAW: cache :) " << endl;
+            }
+        } else {
+            cout << "AAW: sync " << endl;
+            mind->getAssociationsLeaderboard(note, assocLeaderboard);
         }
-        // IMPROVE if note WAS already selected before (did NOT change) do NOT recalculate/refresh
-        mind->getAssociationsLeaderboard(note, assocLeaderboard);
-        // IMPROVE cache aaLead presenter
+
+        cout << "AAW: show/hide " << assocLeaderboard.size() << endl;
         orloj->getOutlineView()->getAssocLeaderboard()->refresh(assocLeaderboard);
     } else {
         orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);

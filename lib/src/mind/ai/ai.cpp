@@ -29,263 +29,11 @@ Ai::Ai(Memory& memory)
      tokenizer{lexicon,wordBlacklist}
 {
     initializeWordBlacklist();
-    aaMatrix=nullptr;
     // TODO AA NN
 }
 
 Ai::~Ai()
 {
-}
-
-void Ai::trainAaNn()
-{
-    MF_DEBUG("START: training AA NN..." << endl);
-    // TODO train NN using a reasonable number of features: createAaFeature()
-    MF_DEBUG("FINISH: AA NN trained" << endl);
-}
-
-void Ai::learnMemory()
-{
-    MF_DEBUG("  AI::START: learning memory..." << endl);
-
-    memory.getAllNotes(notes);
-
-    // build lexicon and BoW
-    lexicon.clear();
-    bow.clear();
-    for(Note* n:notes) {
-        NoteCharProvider chars{n};
-        WordFrequencyList* wfl = new WordFrequencyList{&lexicon};
-        tokenizer.tokenize(chars, *wfl);
-
-        bow.add(n, wfl);
-    }
-
-    // prepare DATA to quickly create association assessment features
-    lexicon.recalculateWeights();
-#ifdef DO_M8F_DEBUG
-    lexicon.print();
-#endif
-    bow.reorderDocVectorsByWeight();
-#ifdef DO_M8F_DEBUG
-    bow.print();
-#endif
-
-    // calculate FULL matrix of Ns associativity assessment for every N1 and N2 tuple
-    if(aaMatrix) {
-        for(size_t i=0; i<notes.size(); ++i) {
-            aaMatrix[i] = new float[notes.size()];
-        }
-        delete aaMatrix;
-        aaMatrix = nullptr;
-    }
-    // allocate aaMatrix
-    aaMatrix = new float*[notes.size()];
-    for(size_t i=0; i<notes.size(); ++i) {
-        aaMatrix[i] = new float[notes.size()];
-    }
-
-#ifdef DO_M8F_DEBUG
-    static const float UNIQUE_AA_CELLS = (float)(notes.size()*notes.size()/2.+notes.size()/2.);
-    MF_DEBUG("  Building AA matrix w/ " << UNIQUE_AA_CELLS << " UNIQUE rankings..." << endl);
-    float c=0;
-    float p;
-#endif
-
-    // TODO vectorize this ~ LAUNCH multiple threads calculating values in parallel (portion of rows from the matrix)
-    int WORD_RELEVANCY_THRESHOLD = 10; // use 10 words w/ highest weight from vectors (and ignore others - irrelevant can bring noice with volume)
-    float aa;
-    AssociationAssessmentNotesFeature aaFeature{};
-    for(size_t y=0; y<notes.size(); y++) {
-        notes[y]->setAiAaMatrixIndex(y); // sets index for ALL notes in notes vector
-
-        #ifdef DO_M8F_DEBUG
-        p = c/(UNIQUE_AA_CELLS/100.);
-        MF_DEBUG("    " << (int)p << "% AA matrix rankings for '" << notes[y]->getName() << "'" << endl);
-        #endif
-
-        // calculate only values ABOVE diagonal i.e. initialize x=y
-        for(size_t x=y; x<notes.size(); x++) {
-            #ifdef DO_M8F_DEBUG
-            c++;
-            #endif
-
-            if(x==y) {
-                aaMatrix[x][y] = 1.;
-            } else {
-                Note* n1 = notes[x];
-                Note* n2 = notes[y];
-
-                aaFeature.setHaveMutualRel(false); // TODO
-                aaFeature.setTypeMatches(n1->getType()==n2->getType());
-                aaFeature.setSimilaritySameOutline(n1->getOutline()==n2->getOutline());
-                aaFeature.setSimilarityByTags(calculateSimilarityByTags(n1->getTags(),n2->getTags()));
-                aaFeature.setSimilarityByTitles(calculateSimilarityByTitles(n1->getName(),n2->getName()));
-                aaFeature.setSimilarityByDescription(calculateSimilarityByWords(*bow.get(n1),*bow.get(n2),WORD_RELEVANCY_THRESHOLD));
-                aaFeature.setSimilarityBySameTargetRels(0.0); // TODO nice
-
-                // set both values above and below diagonal - detection will be faster later (no check x>y needed)
-                aa = aaFeature.areNotesAssociatedMetric();
-                //MF_DEBUG("  aa[" << x << "][" << y << "]=" << aa << endl);
-                // TODO store features to be used as input to NN later > can be FIXED array size
-
-                // set AA ranking both below and above diagonal
-                aaMatrix[x][y] = aa;
-                aaMatrix[y][x] = aa;
-            }
-        }
-    }
-#ifdef DO_M8F_DEBUG
-    MF_DEBUG("  AA matrix built!" << endl);
-    //printAa();
-#endif
-
-    // TODO train NN usint aaMatrix - why (incorporate USER data), how much data to use, test set, ...
-    //trainAaNn();
-
-    MF_DEBUG("  AI::FINISH: memory learned" << endl);
-}
-
-float Ai::calculateSimilarityByTitles(const string& t1, const string& t2)
-{
-    StringCharProvider cp1{t1};
-    WordFrequencyList v1{&lexicon};
-    tokenizer.tokenize(cp1, v1, false, true, false);
-    StringCharProvider cp2{t2};
-    WordFrequencyList v2{&lexicon};
-    tokenizer.tokenize(cp2, v2, false, true, false);
-
-    // calculate overlap
-    if(!v1.size() || !v2.size()) {
-        return 0.;
-    } else {
-        // direct access for efficiency
-        WordFrequencyList intersection{&lexicon};
-        float iWeight=0, uWeight=0;
-
-        for(auto& e:v1.iterable()) {
-            uWeight += 1;
-            if(v2.contains(e.first)) {
-                iWeight += 1;
-                intersection.add(e.first);
-            }
-        }
-
-        for(auto& e:v2.iterable()) {
-            if(!intersection.contains(e.first)) {
-                uWeight += 1;
-                if(v1.contains(e.first)) {
-                    iWeight += 1;
-                    // no need to update iVector as it won't be needed
-                }
-            }
-        }
-
-        //MF_DEBUG("  titleSimilarity = "<<iWeight<<" / "<<uWeight << endl);
-
-        return (iWeight/(uWeight/100.))/100;
-    }
-}
-
-// algorithm is based on similarity by words (for now there are no weights - might be added later if needed by other lib functions)
-float Ai::calculateSimilarityByTags(const vector<const Tag*>* t1, const vector<const Tag*>* t2)
-{
-    if(!t1->size()) {
-        if(!t2->size()) {
-            return 1.;
-        } else {
-            return 0.;
-        }
-    } else {
-        // direct access for efficiency
-        vector<const Tag*> intersection{};
-        float iWeight=0, uWeight=0;
-
-        // iterate at most *threashold* words from v1: all + to UNION, matching + to INTERSECTION
-        for(auto& t:*t1) {
-            uWeight += 1;
-            if(std::find(t2->begin(),t2->end(),t) != t2->end()) {
-                iWeight += 1;
-                intersection.push_back(t);
-            }
-        }
-        // uWeight contains weight of v1's tags, iWeight weight of v1 intersection v2
-
-        // iterate tags from v2: w in intersection HANDLED both u&i, w in v2&v1 > intersection else union
-        for(auto& t:*t2) {
-            if(std::find(intersection.begin(),intersection.end(),t) == intersection.end()) {
-                uWeight += 1;
-                if(std::find(t1->begin(),t1->end(),t) != t1->end()) {
-                    iWeight += 1;
-                    // no need to update iVector as it won't be needed
-                }
-            }
-        }
-
-        //MF_DEBUG("  tagSimilarity = "<<iWeight<<" / "<<uWeight << endl);
-
-        // intersection % of union
-        return (iWeight/(uWeight/100.))/100;
-    }
-}
-
-// consider ONLY most valuable words via threshold - many irrelevat words would kill the score (irrelevant words make noise)
-float Ai::calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyList& v2, int threshold)
-{
-    if(!v1.size() || !v2.size()) {
-        return 0.;
-    } else {
-        // direct access for efficiency
-        WordFrequencyList intersection{&lexicon};
-        float iWeight=0, uWeight=0;
-        int t=0;
-
-        // iterate at most *threashold* words from v1: all + to UNION, matching + to INTERSECTION
-        for(auto& e:v1.iterable()) {
-            if(t++>=threshold) break;
-
-            float w = lexicon.get(e.first)->weight;
-            uWeight += w;
-            if(v2.contains(e.first)) {
-                iWeight += w;
-                intersection.add(e.first);
-            }
-        }
-        // uWeight contains weight of 1st 10 v1's words, iWeight weight of v1 intersection v2
-
-        // iterate at most *threashold* words from v2: w in intersection HANDLED both u&i, w in v2&v1 > intersection else union
-        t=0;
-        for(auto& e:v2.iterable()) {
-            // consider at most threashold words from v2
-            if(++t>=threshold) break;
-
-            if(!intersection.contains(e.first)) {
-                float w = lexicon.get(e.first)->weight;
-                uWeight += w;
-                if(v1.contains(e.first)) {
-                    iWeight += w;
-                    // no need to update iVector as it won't be needed
-                }
-            }
-        }
-
-        float result = (iWeight/(uWeight/100.))/100;
-        //MF_DEBUG("  wordSimilarity = "<<iWeight<<" / "<<uWeight <<" (t="<<t<<") -> " << result << endl);
-        return result;
-    }
-}
-
-AssociationAssessmentNotesFeature* Ai::createAaFeature(Note* n1, Note* n2)
-{
-    UNUSED_ARG(n1);
-    UNUSED_ARG(n2);
-
-    AssociationAssessmentNotesFeature* result
-        = new AssociationAssessmentNotesFeature{};
-
-    // TODO all features to be set & calculated
-
-    return result;
 }
 
 void Ai::initializeWordBlacklist() {
@@ -371,69 +119,424 @@ void Ai::initializeWordBlacklist() {
     wordBlacklist.addWord("want");
 }
 
-void Ai::getAssociationsLeaderboard(const Note* n, vector<pair<Note*,float>>& leaderboard)
+void Ai::learnMemory()
 {
-    static const int AA_LEADERBOARD_SIZE = 10;
-    static const int AA_LEADERBOARD_LINE_EMPTY = -1;
+    MF_DEBUG("  AI: Learning memory to BoW..." << endl);
 
-    int aaLeaderboard[AA_LEADERBOARD_SIZE][2];
-    for(int i=0; i<AA_LEADERBOARD_SIZE; i++) {
-        aaLeaderboard[i][0]=aaLeaderboard[i][1]=AA_LEADERBOARD_LINE_EMPTY;
+    memory.getAllNotes(notes);
+    // let N know it's indexed in AI
+    for(size_t i=0; i<notes.size(); i++) notes[i]->setAiAaMatrixIndex(i);
+
+    // build lexicon and BoW
+    lexicon.clear();
+    bow.clear();
+    for(Note* n:notes) {
+        NoteCharProvider chars{n};
+        WordFrequencyList* wfl = new WordFrequencyList{&lexicon};
+        tokenizer.tokenize(chars, *wfl);
+
+        bow.add(n, wfl);
     }
+    // prepare DATA to quickly create association assessment features
+    lexicon.recalculateWeights();
+    bow.reorderDocVectorsByWeight();
 
-    float aa;
-    for(size_t x=0, y=n->getAiAaMatrixIndex(); x<notes.size(); x++) {
-        if(x==y) continue; // self on diagonal
+#ifdef DO_M8F_DEBUG
+    lexicon.print();
+    bow.print();
+#endif
 
-        aa = aaMatrix[x][y];
-
-        if(aaLeaderboard[AA_LEADERBOARD_SIZE-1][0]==AA_LEADERBOARD_LINE_EMPTY
-             ||
-           aaLeaderboard[AA_LEADERBOARD_SIZE-1][0]<aa)
-        {
-            // find target leaderboard row
-            size_t target;
-            for(target=0; target<AA_LEADERBOARD_SIZE; target++) {
-                if(aaLeaderboard[target][0]!=AA_LEADERBOARD_LINE_EMPTY) {
-                    if(aa >= aaMatrix[aaLeaderboard[target][0]][aaLeaderboard[target][1]]) {
-                        break;
-                    }
-                } else {
-                    break;
-                }
-            }
-            // shift leaderboard
-            int sx=aaLeaderboard[target][0];
-            int sy=aaLeaderboard[target][1];
-            for(size_t ll=target; ll<AA_LEADERBOARD_SIZE; ll++) {
-                if(aaLeaderboard[ll][0]!=AA_LEADERBOARD_LINE_EMPTY) {
-                    int tx=aaLeaderboard[ll][0];
-                    int ty=aaLeaderboard[ll][1];
-                    aaLeaderboard[ll][0]=sx;
-                    aaLeaderboard[ll][1]=sy;
-                    sx=tx;
-                    sy=ty;
-                } else {
-                    aaLeaderboard[ll][0]=sx;
-                    aaLeaderboard[ll][1]=sy;
-                    break;
-                }
-            }
-            // assign value
-            aaLeaderboard[target][0]=x;
-            aaLeaderboard[target][1]=y;
+    // AA to be built incrementally - here it'is just initialized
+    if(notes.size() != aaMatrix.size()) {
+        aaMatrix.clear();
+        aaMatrix.resize(notes.size());
+        for(size_t i=0; i<aaMatrix.size(); ++i) {
+            aaMatrix[i].resize(aaMatrix.size(),-1); // C++: method cannot get AA_NOT_SET as parameter - linker complaints
+        }
+    } else {
+        for(size_t i=0; i<aaMatrix.size(); ++i) {
+            std::fill(aaMatrix[i].begin(), aaMatrix[i].end(), AA_NOT_SET);
         }
     }
 
-    leaderboard.clear();
+    // NN to be trained on demand
 
-    MF_DEBUG("Leaderboard of " << n->getName() << " (" << n->getOutline()->getName() << "):" << endl);
-    for(int i=0; i<AA_LEADERBOARD_SIZE && aaLeaderboard[i][0]!=AA_LEADERBOARD_LINE_EMPTY; i++) {
-        MF_DEBUG("  #" << i << " " <<
-                 notes[aaLeaderboard[i][0]]->getName() << " (" << notes[aaLeaderboard[i][0]]->getOutline()->getName() << ")" <<
-                 " ~ " << aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]] << endl);
-        leaderboard.push_back(std::make_pair(notes[aaLeaderboard[i][0]],aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]]));
+    MF_DEBUG("  AI: memory learned to BoW!" << endl);
+}
+
+/* Pre-calculate/calculate code CANNOT be reused as pre-calculate relies on rows w/ lower index
+ * to fill the beginning of the line.
+ */
+void Ai::calculateAaRow(size_t y)
+{
+    MF_DEBUG("Calculating AA row " << y << "...");
+    if(isConcious()) {
+        // calculate row and column that cross diagonal on [y][y]
+
+        // check diagonal to find out whether the cross has been already calculated
+        if(aaMatrix[y][y] == 1.) {
+            return;
+        }
+
+        float aa;
+        AssociationAssessmentNotesFeature aaFeature{};
+
+        notes[y]->setAiAaMatrixIndex(y);
+        for(size_t x=0; x<aaMatrix.size(); x++) {
+            // set diagonal at the end
+            if(x!=y) {
+                // skip if value has been already calculated
+                if(aaMatrix[y][x] == AA_NOT_SET) {
+                    Note* n1 = notes[x];
+                    Note* n2 = notes[y];
+
+                    aaFeature.setHaveMutualRel(false); // TODO
+                    aaFeature.setTypeMatches(n1->getType()==n2->getType());
+                    aaFeature.setSimilaritySameOutline(n1->getOutline()==n2->getOutline());
+                    aaFeature.setSimilarityByTags(calculateSimilarityByTags(n1->getTags(),n2->getTags()));
+                    aaFeature.setSimilarityByTitles(calculateSimilarityByTitles(n1->getName(),n2->getName()));
+                    aaFeature.setSimilarityByDescription(calculateSimilarityByWords(*bow.get(n1),*bow.get(n2),AA_WORD_RELEVANCY_THRESHOLD));
+                    aaFeature.setSimilarityBySameTargetRels(0.0); // TODO nice
+
+                    aa = aaFeature.areNotesAssociatedMetric();
+
+                    // set AA ranking both below and above diagonal - detection will be faster later (no check x>y needed)
+                    aaMatrix[x][y] = aa;
+                    aaMatrix[y][x] = aa;
+                }
+            }
+        }
+
+        // set diagonal at the end to indicate calculation is done (consider reentrancy)
+        aaMatrix[y][y] = 1.;
+
+#ifdef DO_M8F_DEBUG
+        MF_DEBUG("  AA matrix built!" << endl);
+        //printAa();
+        //assertAaSymmetry();
+#endif
     }
+}
+
+void Ai::precalculateAa()
+{
+    if(isConcious()) {
+#ifdef DO_M8F_DEBUG
+        static const float UNIQUE_AA_CELLS = (float)(notes.size()*notes.size()/2.+notes.size()/2.);
+        MF_DEBUG("  Building AA matrix w/ " << UNIQUE_AA_CELLS << " UNIQUE rankings..." << endl);
+        float c=0;
+        float p;
+#endif
+
+        // calculate FULL matrix of Ns associativity assessment for every N1 and N2 tuple
+        float aa;
+        AssociationAssessmentNotesFeature aaFeature{};
+        for(size_t y=0; y<aaMatrix.size(); y++) {
+            notes[y]->setAiAaMatrixIndex(y); // sets index for ALL notes in notes vector
+
+            #ifdef DO_M8F_DEBUG
+            p = c/(UNIQUE_AA_CELLS/100.);
+            MF_DEBUG("    " << (int)p << "% AA matrix rankings for '" << notes[y]->getName() << "'" << endl);
+            #endif
+
+            // calculate only values ABOVE diagonal i.e. initialize x=y
+            for(size_t x=y; x<aaMatrix.size(); x++) {
+                #ifdef DO_M8F_DEBUG
+                c++;
+                #endif
+
+                if(x==y) {
+                    aaMatrix[x][y] = 1.;
+                } else {
+                    Note* n1 = notes[x];
+                    Note* n2 = notes[y];
+
+                    aaFeature.setHaveMutualRel(false); // TODO
+                    aaFeature.setTypeMatches(n1->getType()==n2->getType());
+                    aaFeature.setSimilaritySameOutline(n1->getOutline()==n2->getOutline());
+                    aaFeature.setSimilarityByTags(calculateSimilarityByTags(n1->getTags(),n2->getTags()));
+                    aaFeature.setSimilarityByTitles(calculateSimilarityByTitles(n1->getName(),n2->getName()));
+                    aaFeature.setSimilarityByDescription(calculateSimilarityByWords(*bow.get(n1),*bow.get(n2),AA_WORD_RELEVANCY_THRESHOLD));
+                    aaFeature.setSimilarityBySameTargetRels(0.0); // TODO nice
+
+                    aa = aaFeature.areNotesAssociatedMetric();
+
+                    // set AA ranking both below and above diagonal - detection will be faster later (no check x>y needed)
+                    aaMatrix[x][y] = aa;
+                    aaMatrix[y][x] = aa;
+                }
+            }
+        }
+
+#ifdef DO_M8F_DEBUG
+        MF_DEBUG("  AA matrix built!" << endl);
+        printAa();
+        assertAaSymmetry();
+#endif
+    }
+}
+
+float Ai::calculateSimilarityByTitles(const string& t1, const string& t2)
+{
+    StringCharProvider cp1{t1};
+    WordFrequencyList v1{&lexicon};
+    tokenizer.tokenize(cp1, v1, false, true, false);
+    StringCharProvider cp2{t2};
+    WordFrequencyList v2{&lexicon};
+    tokenizer.tokenize(cp2, v2, false, true, false);
+
+    // calculate overlap
+    if(!v1.size() || !v2.size()) {
+        return 0.;
+    } else {
+        // direct access for efficiency
+        WordFrequencyList intersection{&lexicon};
+        float iWeight=0, uWeight=0;
+
+        for(auto& e:v1.iterable()) {
+            uWeight += 1;
+            if(v2.contains(e.first)) {
+                iWeight += 1;
+                intersection.add(e.first);
+            }
+        }
+
+        for(auto& e:v2.iterable()) {
+            if(!intersection.contains(e.first)) {
+                uWeight += 1;
+                if(v1.contains(e.first)) {
+                    iWeight += 1;
+                    // no need to update iVector as it won't be needed
+                }
+            }
+        }
+
+        //MF_DEBUG("  titleSimilarity = "<<iWeight<<" / "<<uWeight << endl);
+        // intersection % of union
+        return (iWeight/(uWeight/100.))/100;
+    }
+}
+
+// algorithm is based on similarity by words (for now there are no weights - might be added later if needed by other lib functions)
+float Ai::calculateSimilarityByTags(const vector<const Tag*>* t1, const vector<const Tag*>* t2)
+{
+    if(!t1->size()) {
+        if(!t2->size()) {
+            return 1.;
+        } else {
+            return 0.;
+        }
+    } else {
+        // direct access for efficiency
+        vector<const Tag*> intersection{};
+        float iWeight=0, uWeight=0;
+
+        // iterate at most *threashold* words from v1: all + to UNION, matching + to INTERSECTION
+        for(auto& t:*t1) {
+            uWeight += 1;
+            if(std::find(t2->begin(),t2->end(),t) != t2->end()) {
+                iWeight += 1;
+                intersection.push_back(t);
+            }
+        }
+        // uWeight contains weight of v1's tags, iWeight weight of v1 intersection v2
+
+        // iterate tags from v2: w in intersection HANDLED both u&i, w in v2&v1 > intersection else union
+        for(auto& t:*t2) {
+            if(std::find(intersection.begin(),intersection.end(),t) == intersection.end()) {
+                uWeight += 1;
+                if(std::find(t1->begin(),t1->end(),t) != t1->end()) {
+                    iWeight += 1;
+                    // no need to update iVector as it won't be needed
+                }
+            }
+        }
+
+        //MF_DEBUG("  tagSimilarity = "<<iWeight<<" / "<<uWeight << endl);
+        // intersection % of union
+        return (iWeight/(uWeight/100.))/100;
+    }
+}
+
+// consider ONLY most valuable words via threshold - many irrelevat words would kill the score (irrelevant words make noise)
+float Ai::calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyList& v2, int threshold)
+{
+    if(!v1.size() || !v2.size()) {
+        return 0.;
+    } else {
+        // direct access for efficiency
+        WordFrequencyList intersection{&lexicon};
+        float iWeight=0, uWeight=0;
+        int t=0;
+
+        // iterate at most *threashold* words from v1: all + to UNION, matching + to INTERSECTION
+        for(auto& e:v1.iterable()) {
+            if(t++>=threshold) break;
+
+            float w = lexicon.get(e.first)->weight;
+            uWeight += w;
+            if(v2.contains(e.first)) {
+                iWeight += w;
+                intersection.add(e.first);
+            }
+        }
+        // uWeight contains weight of 1st 10 v1's words, iWeight weight of v1 intersection v2
+
+        // iterate at most *threashold* words from v2: w in intersection HANDLED both u&i, w in v2&v1 > intersection else union
+        t=0;
+        for(auto& e:v2.iterable()) {
+            // consider at most threashold words from v2
+            if(++t>=threshold) break;
+
+            if(!intersection.contains(e.first)) {
+                float w = lexicon.get(e.first)->weight;
+                uWeight += w;
+                if(v1.contains(e.first)) {
+                    iWeight += w;
+                    // no need to update iVector as it won't be needed
+                }
+            }
+        }
+
+        // intersection % of union
+        float result = (iWeight/(uWeight/100.))/100;
+        //MF_DEBUG("  wordSimilarity = "<<iWeight<<" / "<<uWeight <<" (t="<<t<<") -> " << result << endl);
+        return result;
+    }
+}
+
+AssociationAssessmentNotesFeature* Ai::createAaFeature(Note* n1, Note* n2)
+{
+    UNUSED_ARG(n1);
+    UNUSED_ARG(n2);
+
+    AssociationAssessmentNotesFeature* result
+        = new AssociationAssessmentNotesFeature{};
+
+    // TODO all features to be set & calculated
+
+    return result;
+}
+
+void Ai::getAssociationsLeaderboard(const Note* n, vector<pair<Note*,float>>& leaderboard)
+{
+    // If N was REMOVED, then nobody will ask for leaderboard.
+    // If N was MODIFIED, then leaderboard will not be accurate (but it's not critical).
+    // If N was ADDED, then I don't have data - no leaderboard provided.
+    if(n->getAiAaMatrixIndex() != AA_NOT_SET) {
+        // check cache
+        auto cachedLeaderboard = leaderboardCache.find(n);
+        if(cachedLeaderboard != leaderboardCache.end()) {
+            leaderboard = cachedLeaderboard->second;
+            return;
+        }
+
+        // calculate row/column of AA matrix & build leaderboard
+        calculateAaRow(n->getAiAaMatrixIndex());
+
+        int aaLeaderboard[AA_LEADERBOARD_SIZE][2];
+        for(int i=0; i<AA_LEADERBOARD_SIZE; i++) {
+            aaLeaderboard[i][0]=aaLeaderboard[i][1]=AA_NOT_SET;
+        }
+
+        float aa;
+        for(size_t x=0, y=n->getAiAaMatrixIndex(); x<notes.size(); x++) {
+            if(x==y) continue; // self on diagonal
+
+            aa = aaMatrix[x][y];
+
+            if(aaLeaderboard[AA_LEADERBOARD_SIZE-1][0]==AA_NOT_SET
+                 ||
+               aaLeaderboard[AA_LEADERBOARD_SIZE-1][0]<aa)
+            {
+                // find target leaderboard row
+                size_t target;
+                for(target=0; target<AA_LEADERBOARD_SIZE; target++) {
+                    if(aaLeaderboard[target][0]!=AA_NOT_SET) {
+                        if(aa >= aaMatrix[aaLeaderboard[target][0]][aaLeaderboard[target][1]]) {
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                // shift leaderboard
+                int sx=aaLeaderboard[target][0];
+                int sy=aaLeaderboard[target][1];
+                for(size_t ll=target; ll<AA_NOT_SET; ll++) {
+                    if(aaLeaderboard[ll][0]!=AA_NOT_SET) {
+                        int tx=aaLeaderboard[ll][0];
+                        int ty=aaLeaderboard[ll][1];
+                        aaLeaderboard[ll][0]=sx;
+                        aaLeaderboard[ll][1]=sy;
+                        sx=tx;
+                        sy=ty;
+                    } else {
+                        aaLeaderboard[ll][0]=sx;
+                        aaLeaderboard[ll][1]=sy;
+                        break;
+                    }
+                }
+                // assign value
+                aaLeaderboard[target][0]=x;
+                aaLeaderboard[target][1]=y;
+            }
+        }
+
+        leaderboard.clear();
+
+        MF_DEBUG("Leaderboard of " << n->getName() << " (" << n->getOutline()->getName() << "):" << endl);
+        for(int i=0; i<AA_LEADERBOARD_SIZE && aaLeaderboard[i][0]!=AA_NOT_SET; i++) {
+            MF_DEBUG("  #" << i << " " <<
+                     notes[aaLeaderboard[i][0]]->getName() << " (" << notes[aaLeaderboard[i][0]]->getOutline()->getName() << ")" <<
+                     " ~ " << aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]] << endl);
+            leaderboard.push_back(std::make_pair(notes[aaLeaderboard[i][0]],aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]]));
+        }
+
+        // cache leaderboard (copied)
+        leaderboardCache[n] = leaderboard;
+    } else {
+        leaderboard.clear();
+    }
+}
+
+bool Ai::getCachedAssociationsLeaderboard(const Note* n, vector<pair<Note*,float>>& leaderboard)
+{
+    auto cachedLeaderboard = leaderboardCache.find(n);
+    if(cachedLeaderboard != leaderboardCache.end()) {
+        leaderboard = cachedLeaderboard->second;
+        return true;
+    } else {
+        leaderboard.clear();
+        return false;
+    }
+}
+
+void Ai::cacheAssociationsLeaderboard(const Note* n)
+{
+    vector<pair<Note*,float>> transient{};
+    getAssociationsLeaderboard(n, transient);
+    MF_DEBUG("AI: cached leaderboard for " << n->getName());
+}
+
+void Ai::trainAaNn()
+{
+    MF_DEBUG("AI: training AA NN..." << endl);
+    // TODO train NN using a reasonable number of features: createAaFeature()
+    MF_DEBUG("AI: AA NN trained!" << endl);
+}
+
+void Ai::assertAaSymmetry()
+{
+    MF_DEBUG("AI: checking AA symmetry..." << endl);
+    for(size_t i=0; i<aaMatrix.size(); ++i) {
+        for(size_t j=0; i<aaMatrix.size(); ++i) {
+            if(aaMatrix[i][j] != aaMatrix[j][i]) {
+                MF_DEBUG("  Symmetry ERROR: aa["<<i<<"]["<<j<<"]" << endl);
+            }
+        }
+    }
+    MF_DEBUG("AI: AA symmetry checked!" << endl);
 }
 
 } // m8r namespace

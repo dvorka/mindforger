@@ -456,7 +456,13 @@ public:
      * @brief Find Note associations.
      */
     void getAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard) {
-        return ai.getAssociationsLeaderboard(n, leaderboard);
+        ai.getAssociationsLeaderboard(n, leaderboard);
+    }
+    bool getCachedAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard) {
+        return ai.getCachedAssociationsLeaderboard(n, leaderboard);
+    }
+    void cacheAssociationsLeaderboard(const Note* n) {
+        ai.cacheAssociationsLeaderboard(n);
     }
 
     /*
