@@ -171,7 +171,7 @@ void Ai::learnMemory()
  */
 void Ai::calculateAaRow(size_t y)
 {
-    MF_DEBUG("Calculating AA row " << y << "...");
+    MF_DEBUG("Calculating AA row " << y << "..." << endl);
     if(isConcious()) {
         activeThreads++;
         // calculate row and column that cross diagonal on [y][y]
@@ -529,7 +529,7 @@ void Ai::cacheAssociationsLeaderboard(const Note* n)
 {
     vector<pair<Note*,float>> transient{};
     getAssociationsLeaderboard(n, transient);
-    MF_DEBUG("AI: cached leaderboard for " << n->getName());
+    MF_DEBUG("AI: cached leaderboard for " << n->getName() << endl);
 }
 
 void Ai::trainAaNn()
