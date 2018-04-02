@@ -20,21 +20,47 @@
 
 namespace m8r {
 
-AssocLeaderboardPresenter::AssocLeaderboardPresenter(AssocLeaderboardView* view)
+AssocLeaderboardPresenter::AssocLeaderboardPresenter(AssocLeaderboardView* view, OrlojPresenter* orloj)
 {
     this->view = view;
     this->model = new AssocLeaderboardModel(this);
     this->view->setModel(this->model);
 
+    this->orloj = orloj;
+
     // ensure HTML cells rendering
     HtmlDelegate* delegate = new HtmlDelegate();
     this->view->setItemDelegate(delegate);
 
+    QObject::connect(
+        view->selectionModel(),
+        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+        this,
+        SLOT(slotShowNote(const QItemSelection&, const QItemSelection&)));
 
 }
 
 AssocLeaderboardPresenter::~AssocLeaderboardPresenter()
 {
+}
+
+void AssocLeaderboardPresenter::slotShowNote(const QItemSelection& selected, const QItemSelection& deselected)
+{
+    Q_UNUSED(deselected);
+
+    QModelIndexList indices = selected.indexes();
+    if(indices.size()) {
+        const QModelIndex& index = indices.at(0);
+        QStandardItem* item
+            = model->itemFromIndex(index);
+        // IMPROVE make my role constant
+        Note* note = item->data(Qt::UserRole + 1).value<Note*>();
+
+        note->incReads();
+        note->makeDirty();
+
+        orloj->showFacetNoteView(note);
+    } // else do nothing
 }
 
 void AssocLeaderboardPresenter::refresh(std::vector<std::pair<Note*,float>>& assocLeaderboard)

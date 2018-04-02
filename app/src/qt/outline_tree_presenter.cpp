@@ -176,4 +176,4 @@ void OutlineTreePresenter::slotSelectPreviousRow()
     }
 }
 
-}
+} // m8r namespace

@@ -165,6 +165,19 @@ void OrlojPresenter::showFacetNoteView()
     setFacet(OrlojPresenterFacets::FACET_VIEW_NOTE);
 }
 
+void OrlojPresenter::showFacetNoteView(Note* note)
+{
+    if(outlineViewPresenter->getCurrentOutline()!=note->getOutline()) {
+        showFacetOutline(note->getOutline());
+    }
+    noteViewPresenter->refresh(note);
+    view->showFacetNoteView();
+    outlineViewPresenter->selectRowByNote(note);
+    mainPresenter->getMainMenu()->showFacetOutlineView();
+    mainPresenter->getStatusBar()->showInfo(QString(tr("Note '%1' selected")).arg(note->getName().c_str()));
+    setFacet(OrlojPresenterFacets::FACET_VIEW_NOTE);
+}
+
 void OrlojPresenter::showFacetNoteEdit(Note* note)
 {
     noteEditPresenter->setNote(note);
@@ -220,11 +233,7 @@ void OrlojPresenter::slotShowNote(const QItemSelection& selected, const QItemSel
         note->incReads();
         note->makeDirty();
 
-        noteViewPresenter->refresh(note);
-        view->showFacetNoteView();
-        mainPresenter->getMainMenu()->showFacetOutlineView();
-        mainPresenter->getStatusBar()->showInfo(QString(tr("Note '%1' selected")).arg(note->getName().c_str()));
-        setFacet(OrlojPresenterFacets::FACET_VIEW_NOTE);
+        showFacetNoteView(note);
     } else {
         mainPresenter->getStatusBar()->showInfo(QString(tr("No Outline selected!")));
     }
@@ -254,4 +263,4 @@ void OrlojPresenter::slotShowNoteAsResult(
     }
 }
 
-}
+} // m8r namespace

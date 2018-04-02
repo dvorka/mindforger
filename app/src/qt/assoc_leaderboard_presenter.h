@@ -23,7 +23,7 @@
 
 #include "assoc_leaderboard_view.h"
 #include "assoc_leaderboard_model.h"
-#include "main_window_presenter.h"
+#include "orloj_presenter.h"
 #include "html_delegate.h"
 
 #include "../../lib/src/model/note.h"
@@ -40,8 +40,10 @@ private:
     AssocLeaderboardView* view;
     AssocLeaderboardModel* model;
 
+    OrlojPresenter* orloj;
+
 public:
-    explicit AssocLeaderboardPresenter(AssocLeaderboardView* view);
+    explicit AssocLeaderboardPresenter(AssocLeaderboardView* view, OrlojPresenter* orloj);
     AssocLeaderboardPresenter(const AssocLeaderboardPresenter&) = delete;
     AssocLeaderboardPresenter(const AssocLeaderboardPresenter&&) = delete;
     AssocLeaderboardPresenter &operator=(const AssocLeaderboardPresenter&) = delete;
@@ -50,6 +52,9 @@ public:
 
     void refresh(std::vector<std::pair<Note*,float>>& assocLeaderboard);
     AssocLeaderboardView* getView() const { return view; }
+
+public slots:
+    void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
 };
 
 }

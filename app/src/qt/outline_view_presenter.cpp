@@ -27,7 +27,7 @@ OutlineViewPresenter::OutlineViewPresenter(OutlineViewSplitter* view, OrlojPrese
     this->outlineTreePresenter
         = new OutlineTreePresenter(view->getOutlineTree(), orloj->getMainWindow(), this);
     this->assocLeaderboardPresenter
-        = new AssocLeaderboardPresenter(view->getAssocLeaderboard());
+        = new AssocLeaderboardPresenter(view->getAssocLeaderboard(), orloj);
 
     QObject::connect(view->getNameLabel(), SIGNAL(clicked()), orloj, SLOT(slotShowOutlineHeader()));
     QObject::connect(view->getOutlineTree(), SIGNAL(signalFromOutlineTreeToOutlines()), orloj, SLOT(slotShowOutlines()));

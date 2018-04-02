@@ -58,4 +58,4 @@ OutlineView::~OutlineView()
 {
 }
 
-}
+} // m8r namespace

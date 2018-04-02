@@ -125,6 +125,7 @@ public:
     void showFacetFtsResult(std::vector<Note*>* result);
     void showFacetOutline(Outline* outline);
     void showFacetNoteView();
+    void showFacetNoteView(Note* note);
     void showFacetNoteEdit(Note* note);
     void showFacetOutlineHeaderEdit(Outline* outline);
 
