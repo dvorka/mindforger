@@ -45,7 +45,7 @@ public:
      * IMPROVE this is just a quickfix - obviously WRONG. Must be rewritten to monitors
      * like approach where Mind state change vs. AI computations are critical sections.
      */
-    int activeThreads;
+    volatile int activeThreads;
 
 private:
     /**
