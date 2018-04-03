@@ -42,13 +42,8 @@ NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
     this->htmlRepresentation
         = orloj->getMainWindow()->getHtmlRepresentation();
 
-    QObject::connect(
-        view, SIGNAL(signalMouseDoubleClickEvent()),
-        this, SLOT(slotEditNote()));
-    QObject::connect(
-        view, SIGNAL(signalFromViewNoteToOutlines()),
-        orloj, SLOT(slotShowOutlines()));
-
+    QObject::connect(view, SIGNAL(signalMouseDoubleClickEvent()), this, SLOT(slotEditNote()));
+    QObject::connect(view, SIGNAL(signalFromViewNoteToOutlines()), orloj, SLOT(slotShowOutlines()));
 }
 
 // IMPROVE first decorate MD with HTML colors > then MD to HTML conversion

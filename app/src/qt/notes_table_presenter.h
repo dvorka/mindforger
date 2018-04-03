@@ -42,6 +42,7 @@ public:
     NotesTablePresenter &operator=(const NotesTablePresenter&&) = delete;
 
     NotesTableModel* getModel() const { return model; }
+    NotesTableView* getView() const { return view; }
 
     void refresh(std::vector<Note*>* notes);
 };

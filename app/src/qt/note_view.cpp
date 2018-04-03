@@ -29,6 +29,7 @@ void NoteView::mouseDoubleClickEvent(QMouseEvent* event)
 {
     Q_UNUSED(event);
 
+    // double click to Note view opens Note editor
     emit signalMouseDoubleClickEvent();
 }
 
@@ -45,4 +46,4 @@ void NoteView::keyPressEvent(QKeyEvent* event)
     QWebView::keyPressEvent(event);
 }
 
-}
+} // m8r namespace

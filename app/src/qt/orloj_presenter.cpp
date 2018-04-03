@@ -64,7 +64,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         view->getNotesTable()->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
-        SLOT(slotShowNoteAsResult(const QItemSelection&, const QItemSelection&)));
+        SLOT(slotShowNoteAsFtsResult(const QItemSelection&, const QItemSelection&)));
 }
 
 int dialogSaveOrCancel()
@@ -180,10 +180,15 @@ void OrlojPresenter::showFacetNoteView(Note* note)
 
 void OrlojPresenter::showFacetNoteEdit(Note* note)
 {
-    noteEditPresenter->setNote(note);
-    view->showFacetNoteEdit();
-    setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
-    mainPresenter->getMainMenu()->showFacetNoteEdit();
+    // if there is FTS result table on the left, then switch to O view facet & N view w/ Note selection, otherwise edit
+    if(notesTablePresenter->getView()->isVisible()) {
+        showFacetNoteView(note);
+    } else {
+        noteEditPresenter->setNote(note);
+        view->showFacetNoteEdit();
+        setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
+        mainPresenter->getMainMenu()->showFacetNoteEdit();
+    }
 }
 
 void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
@@ -239,9 +244,7 @@ void OrlojPresenter::slotShowNote(const QItemSelection& selected, const QItemSel
     }
 }
 
-void OrlojPresenter::slotShowNoteAsResult(
-        const QItemSelection& selected,
-        const QItemSelection& deselected)
+void OrlojPresenter::slotShowNoteAsFtsResult(const QItemSelection& selected, const QItemSelection& deselected)
 {
     Q_UNUSED(deselected);
 

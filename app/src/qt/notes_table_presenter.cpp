@@ -39,4 +39,4 @@ void NotesTablePresenter::refresh(vector<Note*>* result)
     delete result;
 }
 
-}
+} // m8r namespace
