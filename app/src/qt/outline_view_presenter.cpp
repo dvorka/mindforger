@@ -43,7 +43,7 @@ void OutlineViewPresenter::refresh(Outline* outline)
     outline->incReads();
 
     currentOutline = outline;
-    //view->refreshHeader(outline->getName());
+    view->refreshHeader(outline->getName());
     outlineTreePresenter->refresh(outline);
 }
 
