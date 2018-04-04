@@ -23,13 +23,14 @@ namespace m8r {
 using namespace std;
 
 Ai::Ai(Memory& memory)
-    :memory(memory),
+    :aiState(Configuration::MindState::DREAMING),
+     memory(memory),
      lexicon{},
      wordBlacklist{},
-     tokenizer{lexicon,wordBlacklist}
+     tokenizer{lexicon,wordBlacklist},
+     concious(false)
 {
     initializeWordBlacklist();
-    // TODO AA NN
 }
 
 Ai::~Ai()
@@ -119,11 +120,10 @@ void Ai::initializeWordBlacklist() {
     wordBlacklist.addWord("want");
 }
 
-void Ai::learnMemory()
+bool Ai::learnMemoryCode()
 {
-    activeThreads++;
     MF_DEBUG("  AI: Learning memory to BoW..." << endl);
-
+    notes.clear();
     memory.getAllNotes(notes);
     // let N know it's indexed in AI
     for(size_t i=0; i<notes.size(); i++) notes[i]->setAiAaMatrixIndex(i);
@@ -135,7 +135,6 @@ void Ai::learnMemory()
         NoteCharProvider chars{n};
         WordFrequencyList* wfl = new WordFrequencyList{&lexicon};
         tokenizer.tokenize(chars, *wfl);
-
         bow.add(n, wfl);
     }
     // prepare DATA to quickly create association assessment features
@@ -147,7 +146,7 @@ void Ai::learnMemory()
     bow.print();
 #endif
 
-    // AA to be built incrementally - here it'is just initialized
+    // AA to be built incrementally - just initialize it
     if(notes.size() != aaMatrix.size()) {
         aaMatrix.clear();
         aaMatrix.resize(notes.size());
@@ -160,127 +159,148 @@ void Ai::learnMemory()
         }
     }
 
-    // NN to be trained on demand
+    // NN to be trained on demand - just initialize it
+
+    aiState = Configuration::MindState::THINKING;
 
     MF_DEBUG("  AI: memory learned to BoW!" << endl);
-    activeThreads--;
+    return true;
 }
 
-/* Pre-calculate/calculate code CANNOT be reused as pre-calculate relies on rows w/ lower index
- * to fill the beginning of the line.
- */
+future<bool> Ai::learnMemory()
+{
+    lock_guard<mutex> criticalSection{exclusiveAi};
+
+    if(aiState == Configuration::MindState::SLEEPING) {
+        aiState = Configuration::MindState::DREAMING;
+        if(memory.getNotesCount() > Configuration::getInstance().getAsyncMindThreshold()) {
+            // async
+            learnMemoryTask.reset();
+            learnMemoryTask();
+            return learnMemoryTask.get_future();
+        } else {
+            // sync
+            promise<bool> p{};
+            bool status = learnMemoryCode();
+            p.set_value(status);
+            return p.get_future();
+        }
+    } else {
+        promise<bool> p{};
+        p.set_value(false);
+        return p.get_future();
+    }
+}
+
+// Pre-calculate/calculate code CANNOT be reused as pre-calculate relies on rows w/ lower index
+// to fill the beginning of the line.
+// This is a private method called from AI ~ AI state/async/critical sections handled by caller.
 void Ai::calculateAaRow(size_t y)
 {
     MF_DEBUG("Calculating AA row " << y << "..." << endl);
-    if(isConcious()) {
-        activeThreads++;
-        // calculate row and column that cross diagonal on [y][y]
+    // calculate row and column that cross diagonal on [y][y]
 
-        // check diagonal to find out whether the cross has been already calculated
-        if(aaMatrix[y][y] == 1.) {
-            return;
-        }
+    // check diagonal to find out whether the cross has been already calculated
+    if(aaMatrix[y][y] == 1.) {
+        return;
+    }
 
-        float aa;
-        AssociationAssessmentNotesFeature aaFeature{};
+    float aa;
+    AssociationAssessmentNotesFeature aaFeature{};
 
-        notes[y]->setAiAaMatrixIndex(y);
-        for(size_t x=0; x<aaMatrix.size(); x++) {
-            // set diagonal at the end
-            if(x!=y) {
-                // skip if value has been already calculated
-                if(aaMatrix[y][x] == AA_NOT_SET) {
-                    Note* n1 = notes[x];
-                    Note* n2 = notes[y];
+    notes[y]->setAiAaMatrixIndex(y);
+    for(size_t x=0; x<aaMatrix.size(); x++) {
+        // set diagonal at the end
+        if(x!=y) {
+            // skip if value has been already calculated
+            if(aaMatrix[y][x] == AA_NOT_SET) {
+                Note* n1 = notes[x];
+                Note* n2 = notes[y];
 
-                    aaFeature.setHaveMutualRel(false); // TODO
-                    aaFeature.setTypeMatches(n1->getType()==n2->getType());
-                    aaFeature.setSimilaritySameOutline(n1->getOutline()==n2->getOutline());
-                    aaFeature.setSimilarityByTags(calculateSimilarityByTags(n1->getTags(),n2->getTags()));
-                    aaFeature.setSimilarityByTitles(calculateSimilarityByTitles(n1->getName(),n2->getName()));
-                    aaFeature.setSimilarityByDescription(calculateSimilarityByWords(*bow.get(n1),*bow.get(n2),AA_WORD_RELEVANCY_THRESHOLD));
-                    aaFeature.setSimilarityBySameTargetRels(0.0); // TODO nice
+                aaFeature.setHaveMutualRel(false); // TODO
+                aaFeature.setTypeMatches(n1->getType()==n2->getType());
+                aaFeature.setSimilaritySameOutline(n1->getOutline()==n2->getOutline());
+                aaFeature.setSimilarityByTags(calculateSimilarityByTags(n1->getTags(),n2->getTags()));
+                aaFeature.setSimilarityByTitles(calculateSimilarityByTitles(n1->getName(),n2->getName()));
+                aaFeature.setSimilarityByDescription(calculateSimilarityByWords(*bow.get(n1),*bow.get(n2),AA_WORD_RELEVANCY_THRESHOLD));
+                aaFeature.setSimilarityBySameTargetRels(0.0); // TODO nice
 
-                    aa = aaFeature.areNotesAssociatedMetric();
+                aa = aaFeature.areNotesAssociatedMetric();
 
-                    // set AA ranking both below and above diagonal - detection will be faster later (no check x>y needed)
-                    aaMatrix[x][y] = aa;
-                    aaMatrix[y][x] = aa;
-                }
+                // set AA ranking both below and above diagonal - detection will be faster later (no check x>y needed)
+                aaMatrix[x][y] = aa;
+                aaMatrix[y][x] = aa;
             }
         }
+    }
 
-        // set diagonal at the end to indicate calculation is done (consider reentrancy)
-        aaMatrix[y][y] = 1.;
+    // set diagonal at the end to indicate calculation is done (consider reentrancy)
+    aaMatrix[y][y] = 1.;
 
-        activeThreads--;
+    activeThreads--;
 
 #ifdef DO_M8F_DEBUG
-        MF_DEBUG("  AA matrix built!" << endl);
-        //printAa();
-        //assertAaSymmetry();
+    MF_DEBUG("AA row calculated!" << endl);
+    //printAa();
+    //assertAaSymmetry();
 #endif
-    }
 }
 
+// This is a private method called from AI ~ AI state/async/critical sections handled by caller.
 void Ai::precalculateAa()
 {
-    if(isConcious()) {
-        activeThreads++;
 #ifdef DO_M8F_DEBUG
-        static const float UNIQUE_AA_CELLS = (float)(notes.size()*notes.size()/2.+notes.size()/2.);
-        MF_DEBUG("  Building AA matrix w/ " << UNIQUE_AA_CELLS << " UNIQUE rankings..." << endl);
-        float c=0;
-        float p;
+    static const float UNIQUE_AA_CELLS = (float)(notes.size()*notes.size()/2.+notes.size()/2.);
+    MF_DEBUG("  Building AA matrix w/ " << UNIQUE_AA_CELLS << " UNIQUE rankings..." << endl);
+    float c=0;
+    float p;
 #endif
 
-        // calculate FULL matrix of Ns associativity assessment for every N1 and N2 tuple
-        float aa;
-        AssociationAssessmentNotesFeature aaFeature{};
-        for(size_t y=0; y<aaMatrix.size(); y++) {
-            notes[y]->setAiAaMatrixIndex(y); // sets index for ALL notes in notes vector
+    // calculate FULL matrix of Ns associativity assessment for every N1 and N2 tuple
+    float aa;
+    AssociationAssessmentNotesFeature aaFeature{};
+    for(size_t y=0; y<aaMatrix.size(); y++) {
+        notes[y]->setAiAaMatrixIndex(y); // sets index for ALL notes in notes vector
 
-            #ifdef DO_M8F_DEBUG
-            p = c/(UNIQUE_AA_CELLS/100.);
-            MF_DEBUG("    " << (int)p << "% AA matrix rankings for '" << notes[y]->getName() << "'" << endl);
-            #endif
+#ifdef DO_M8F_DEBUG
+        p = c/(UNIQUE_AA_CELLS/100.);
+        MF_DEBUG("    " << (int)p << "% AA matrix rankings for '" << notes[y]->getName() << "'" << endl);
+#endif
 
-            // calculate only values ABOVE diagonal i.e. initialize x=y
-            for(size_t x=y; x<aaMatrix.size(); x++) {
-                #ifdef DO_M8F_DEBUG
-                c++;
-                #endif
+        // calculate only values ABOVE diagonal i.e. initialize x=y
+        for(size_t x=y; x<aaMatrix.size(); x++) {
+#ifdef DO_M8F_DEBUG
+            c++;
+#endif
 
-                if(x==y) {
-                    aaMatrix[x][y] = 1.;
-                } else {
-                    Note* n1 = notes[x];
-                    Note* n2 = notes[y];
+            if(x==y) {
+                aaMatrix[x][y] = 1.;
+            } else {
+                Note* n1 = notes[x];
+                Note* n2 = notes[y];
 
-                    aaFeature.setHaveMutualRel(false); // TODO
-                    aaFeature.setTypeMatches(n1->getType()==n2->getType());
-                    aaFeature.setSimilaritySameOutline(n1->getOutline()==n2->getOutline());
-                    aaFeature.setSimilarityByTags(calculateSimilarityByTags(n1->getTags(),n2->getTags()));
-                    aaFeature.setSimilarityByTitles(calculateSimilarityByTitles(n1->getName(),n2->getName()));
-                    aaFeature.setSimilarityByDescription(calculateSimilarityByWords(*bow.get(n1),*bow.get(n2),AA_WORD_RELEVANCY_THRESHOLD));
-                    aaFeature.setSimilarityBySameTargetRels(0.0); // TODO nice
+                aaFeature.setHaveMutualRel(false); // TODO
+                aaFeature.setTypeMatches(n1->getType()==n2->getType());
+                aaFeature.setSimilaritySameOutline(n1->getOutline()==n2->getOutline());
+                aaFeature.setSimilarityByTags(calculateSimilarityByTags(n1->getTags(),n2->getTags()));
+                aaFeature.setSimilarityByTitles(calculateSimilarityByTitles(n1->getName(),n2->getName()));
+                aaFeature.setSimilarityByDescription(calculateSimilarityByWords(*bow.get(n1),*bow.get(n2),AA_WORD_RELEVANCY_THRESHOLD));
+                aaFeature.setSimilarityBySameTargetRels(0.0); // TODO nice
 
-                    aa = aaFeature.areNotesAssociatedMetric();
+                aa = aaFeature.areNotesAssociatedMetric();
 
-                    // set AA ranking both below and above diagonal - detection will be faster later (no check x>y needed)
-                    aaMatrix[x][y] = aa;
-                    aaMatrix[y][x] = aa;
-                }
+                // set AA ranking both below and above diagonal - detection will be faster later (no check x>y needed)
+                aaMatrix[x][y] = aa;
+                aaMatrix[y][x] = aa;
             }
         }
-        activeThreads--;
+    }
 
 #ifdef DO_M8F_DEBUG
-        MF_DEBUG("  AA matrix built!" << endl);
-        printAa();
-        assertAaSymmetry();
+    MF_DEBUG("  AA matrix built!" << endl);
+    printAa();
+    assertAaSymmetry();
 #endif
-    }
 }
 
 float Ai::calculateSimilarityByTitles(const string& t1, const string& t2)
@@ -425,11 +445,9 @@ AssociationAssessmentNotesFeature* Ai::createAaFeature(Note* n1, Note* n2)
     return result;
 }
 
-void Ai::getAssociationsLeaderboard(const Note* n, vector<pair<Note*,float>>& leaderboard)
+void Ai::createAssociationsLeaderboard(const Note* n, vector<pair<Note*,float>>& leaderboard)
 {
     if(isConcious()) {
-        activeThreads++;
-
         // If N was REMOVED, then nobody will ask for leaderboard.
         // If N was MODIFIED, then leaderboard will not be accurate (but it's not critical).
         // If N was ADDED, then I don't have data - no leaderboard provided.
@@ -505,11 +523,13 @@ void Ai::getAssociationsLeaderboard(const Note* n, vector<pair<Note*,float>>& le
 
             // cache leaderboard (copied)
             leaderboardCache[n] = leaderboard;
+            return true;
         } else {
             leaderboard.clear();
+            return true;
         }
-
-        activeThreads--;
+    } else {
+        return false;
     }
 }
 

@@ -21,6 +21,7 @@
 
 #include <inttypes.h>
 #include <memory>
+#include <mutex>
 
 #include "memory.h"
 #include "ai/ai.h"
@@ -41,14 +42,37 @@ constexpr auto NO_PARENT = 0xFFFF;
  * suggestions, associations, inferences based on what it's host (human)
  * percieves i.e. based on the current though and what host sees/smells/feels.
  *
- * Mind can be in the following states:
+ * Mind lifecycle:
+ *
+ *  SLEEPING     ... initial Mind state
+ *     |
+ *   amnesia(), sleep(), learn()
+ *     |
+ *     V
+ *  SLEEPING
+ *     |
+ *   think()
+ *     |
+ *     V
+ *  DREAMING
+ *     |         ... automatically switches to THINKING once DREAMING is done,
+ *     |             user/API caller cannot change DREAMING to different state
+ *     V
+ *  THINKING
+ *     |
+ *   amnesia(), sleep(), learn()
+ *     |
+ *     V
+ *  SLEEPING
+ *
+ * Mind states description:
  *
  * SLEEPING (do nothing)
  *   Mind/AI is cleared and no mental processes are running.
  *
  * THINKING (think)
- *   Mind instantly provides a set of Things (Notes/Outlines/Tags/...) for
- * a given Thing. When:
+ *   Mind *instantly throwing* (associated) Things (Notes/Outlines/Tags/...) for
+ * a given Thing (N/O/T). When:
  *   - SEARCHING/recalling/Menu:Associate it provides relevant Thing suggestions
  *     as user writes query.
  *     For example, for query string user gets relevant Outlines and Notes.
@@ -58,7 +82,7 @@ constexpr auto NO_PARENT = 0xFFFF;
  *     the text being written.
  *     For example, for a word written to description user gets relevant Notes.
  *
- * DREAMING (heal and get ready)
+ * DREAMING (heal and get ready for thinking)
  *   Mind is cleared, then Memory content is processed to Mind (AI, NLP, neural network,
  * triples). Things and Relationships are converted to Triples, implicit/transitive/opposite/...
  * relationships are inferred to Triples as well, etc. Once Memory is processed
@@ -91,7 +115,10 @@ private:
     MarkdownConfigurationRepresentation* mdConfigRepresentation;
 
     Memory memory;
+
+    // thinking
     Ai ai;
+    std::mutex exclusiveMind;
 
     /**
      * @brief Semantic view of Memory.
@@ -138,6 +165,10 @@ public:
     Mind& operator=(const Mind&&) = delete;
     virtual ~Mind();
 
+    /*
+     * THINKING
+     */
+
     /**
      * @brief Think to do useful things for user when searching, viewing and editing.
      *
@@ -147,29 +178,7 @@ public:
     bool think();
 
     /**
-     * @brief Dream to reset, detox, optimize, check/clean up mind/memory and prepare to think.
-     *
-     * Memory is kept. When all dreaming activities are DONE, Mind wakes up and switches to THINK mode.
-     *
-     * Mental processes:
-     *   > Cleanup/detox: move to limbo, remove orphans, unused memory structures, ...
-     *   > Integrity:
-     *     > update mind w/ memory + memory w/ persistence (FS/DB/...)
-     *     > calculate/fix missing/wrong Outline/Note metadata
-     *   > Optimize:
-     *     > incorporate newly learned knowledge to mind
-     *     > discover (transitive) associations
-     *     > calculate Note in/out rels sets + in/out associations sets + ...
-     *     > calculate Galaxies (Galaxy == interconnected Outlines)
-     *     > calculate BlackHole (for each Galaxy find Outline with most in/out relationships)
-     *   > AI
-     *     > NLP lexicon, BoW
-     *     > associations neural network
-     */
-    bool dream();
-
-    /**
-     * @brief Sleep to clear Mind except Memory and relax.
+     * @brief Sleep to clear Mind, keep Memory and relax.
      *
      * Memory is kept, but Mind is cleared. No thinking or dreaming.
      */
@@ -183,7 +192,7 @@ public:
     bool learn();
 
     /**
-     * @brief Forget everything.
+     * @brief Forget everything e.g. when MF creates a new empty repository.
      */
     bool amnesia();
 
@@ -481,6 +490,28 @@ public:
     // IMPROVE MemoryStatistics getStatistics();
 
 private:
+    /**
+     * @brief Dream to reset, detox, optimize, check/clean up mind/memory and prepare to think.
+     *
+     * Memory is kept. When all dreaming activities are DONE, Mind wakes up and switches to THINK mode.
+     *
+     * Mental processes:
+     *   > Cleanup/detox: move to limbo, remove orphans, unused memory structures, ...
+     *   > Integrity:
+     *     > update mind w/ memory + memory w/ persistence (FS/DB/...)
+     *     > calculate/fix missing/wrong Outline/Note metadata
+     *   > Optimize:
+     *     > incorporate newly learned knowledge to mind
+     *     > discover (transitive) associations
+     *     > calculate Note in/out rels sets + in/out associations sets + ...
+     *     > calculate Galaxies (Galaxy == interconnected Outlines)
+     *     > calculate BlackHole (for each Galaxy find Outline with most in/out relationships)
+     *   > AI
+     *     > NLP lexicon, BoW
+     *     > associations neural network
+     */
+    bool dream();
+
     /**
      * @brief Invoked on remembering Outline/Note/... to flush all inferred knowledge, caches, ...
      */

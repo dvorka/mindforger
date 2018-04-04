@@ -20,6 +20,8 @@
 #define M8R_AI_H
 
 #include <vector>
+#include <future>
+#include <mutex>
 
 #include "../../debug.h"
 #include "../../model/outline.h"
@@ -28,42 +30,57 @@
 #include "./nlp/note_char_provider.h"
 #include "./nlp/bag_of_words.h"
 #include "./association_assessment_notes_feature.h"
+#include "./association_assessment_model.h"
 
 namespace m8r {
 
 /**
  * @brief Mind's AI.
+ *
+ * IMPORTANT: AI cannot be called directory - its methods to be always invoked
+ *            by Mind. Method visibility was not restricted in order to ensure
+ *            AI testability.
+ *
+ * AI lifecycle:
+ *
+ *  SLEEPING            ... initial AI state
+ *     |
+ *   amnesia(), sleep()
+ *     |
+ *     V
+ *  SLEEPING
+ *     |
+ *   learnMemory()
+ *     |
+ *     V
+ *  DREAMING
+ *     |                ... automatically switches to THINKING once Memory is learned
+ *     V
+ *  THINKING
+ *     |
+ *   amnesia(), sleep() ... if no computation is in progress
+ *     |
+ *     V
+ *  SLEEPING
+ *
  */
 class Ai
 {
-public:
-    /**
-     * @brief Indicates whether any computation is in progress.
-     *
-     * AI is singletion.
-     *
-     * IMPROVE this is just a quickfix - obviously WRONG. Must be rewritten to monitors
-     * like approach where Mind state change vs. AI computations are critical sections.
-     */
-    volatile int activeThreads;
-
 private:
-    /**
-     * @brief Word classifiers
-     */
-    enum WClassifier {
-        POSITIVE = 1,
-        NEGATIVE = 1<<1
-    };
-
+    static constexpr int THREAD_POOL_SIZE = 2; // IMPROVE thread pool size to be either configured OR #CPU detected and 1/2 or 1/3 used
     static constexpr float AA_NOT_SET = -1.;
     static constexpr int AA_WORD_RELEVANCY_THRESHOLD = 10; // use 10 words w/ highest weight from vectors (and ignore others - irrelevant can bring noice with volume)
     static constexpr int AA_LEADERBOARD_SIZE = 10;
+    static constexpr int AA_TITLE_WORD_BONUS = 0.2;
 
 private:
+    Configuration::MindState aiState;
+    std::mutex exclusiveAi;
+    std::vector<std::future<bool>> activeComputations;
+
     Memory& memory;
 
-    Lexicon lexicon;
+    Lexicon lexicon; // IMPROVE merge Standford GloVe word vectors (https://nlp.stanford.edu/projects/glove/)
     Trie wordBlacklist;
     BagOfWords bow;
     MarkdownTokenizer tokenizer;
@@ -73,47 +90,27 @@ private:
      */
 
     // Os - vector index is used as ID through other data structures like similarity matrices
-    std::vector<Outline*> outlines;
+    std::vector<Outline*> outlines; // IMPROVE make O* pair where .second is O embedding w/ classifications/attributes
     // Ns - vector index is used as ID through other data structures
-    std::vector<Note*> notes;
+    std::vector<Note*> notes; // IMPROVE make N* pair where .second is N embedding w/ classifications/attributes
 
     /*
-     * AA leaderboard(s)
+     * Associations
      */
 
-    // Association assessment matrix w/ rankings for any N1/N2 tuple (diagonal symmetry).
-    // Changed from float** to vector<vector>> to enable row/col extension on new N/O (keep & avoid realloc)
-    std::vector<std::vector<float>> aaMatrix;
+    // Associations assessment matrix w/ rankings for any N1/N2 tuple (diagonal symmetry).
+    // Changed from float** to vector<vector>> to enable row/col extension on new N/O
+    // (keep & avoid realloc)
+    std::vector<std::vector<float>> aaMatrix; // IMPROVE: notesAA and outlinesAA ~ Notes assocications assessment
 
     // leaderboard cache to avoid re-calculation
     std::map<const Note*,std::vector<std::pair<Note*,float>>> leaderboardCache;
 
     /*
-     * NN models
+     * Neural network models
      */
 
-    // TODO NN: AssociationAssessmentModel
-
-    /*
-     * Classification
-     */
-
-    /* IMPROVE:
-    // long[Os] - O attributes: no description, no Ns, ...
-    long* oClassification;
-    // long[Os][Os] - mutual Os relationships: similarity (%), ...
-    long* oHive;
-
-    // long[Ns] - N attributes: no description, ...
-    long* nClassification;
-    // long[Ns][Ns] - mutual Ns relationships: similarity (%), ...
-    long* nHive;
-
-    // long[Ws] - W attributes: ..., Standford GloVe word vectors (https://nlp.stanford.edu/projects/glove/)
-    long* wClassification;
-    // long[Ws][Ws] - mutual Ws relationships: synonym, antonym, positive/negative, ...
-    long* wHive;
-    */
+    AssociationAssessmentModel* aaModel;
 
 public:
     explicit Ai(Memory& memory);
@@ -126,21 +123,14 @@ public:
     /**
      * @brief Is ready to think?
      */
-    bool isConcious() { return lexicon.size()>0; }
-
-    bool canSleep() {
-        if(activeThreads) {
-            std::cerr << "Mind learn CANCELLED becaue AI is thinking - wait until AI finishes and try again" << std::endl;
-            return false;
-        } else {
-            return true;
-        }
-    }
+    bool isThinking() { return aiState==Configuration::MindState::THINKING; }
 
     /**
      * @brief Learn what's in memory to get ready for thinking.
+     *
+     * LONG running method (huge repositories).
      */
-    void learnMemory();
+    std::future<bool> learnMemory();
 
     /**
      * @brief Clear.
@@ -148,50 +138,40 @@ public:
      * Clear, but don't deallocate.
      */
     bool sleep() {
-        if(canSleep()) {
-            lexicon.clear();
-            leaderboardCache.clear();
-            notes.clear();
-            outlines.clear();
-            bow.clear();
+        std::lock_guard<std::mutex> criticalSection{exclusiveAi};
+        return sleepCode();
+    }
 
-            return true;
+    /**
+     * @brief Forget everything.
+     */
+    bool amnesia() {
+        std::lock_guard<std::mutex> criticalSection{exclusiveAi};
+        if(sleepCode()) {
+            aaMatrix.clear();
         } else {
             return false;
         }
     }
 
     /**
-     * @brief Forget everything.
-     */
-    void amnesia() {
-        sleep();
-        aaMatrix.clear();
-    }
-
-    /**
-     * @brief Precalculate entire AA.
-     */
-    void precalculateAa();
-
-    /**
-     * @brief Calculate AA row/column cross.
-     */
-    void calculateAaRow(size_t y);
-
-    /**
-     * @brief Check AA matrix symmetry.
-     */
-    void assertAaSymmetry();
-
-    /**
-     * @brief Find Note associations.
+     * @brief Get AA leaderboard for N ~ get best Note associations.
+     * @return TRUE if leaderboard was created or is on the way (async computation in progress),
+     *         FALSE if AI not initialized.
      *
-     * This calculates leaderboard on demand (uses cache and/or calculates AA row/column).
+     * This method calculates leaderboard - it uses cache and/or calculates AA cross.
+     *
+     * LONG running method (if result not cached).
      */
-    void getAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& assocLeaderboard);
-    bool getCachedAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard);
-    void cacheAssociationsLeaderboard(const Note* n);
+    std::future<bool> getAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& assocLeaderboard);
+
+private:
+
+    /*
+     * Tasks
+     */
+
+    std::packaged_task<bool> learnMemoryTask{learnMemoryCode};
 
 private:
     /**
@@ -201,6 +181,38 @@ private:
      *   https://github.com/first20hours/google-10000-english
      */
     void initializeWordBlacklist();
+
+    bool learnMemoryCode();
+
+
+    bool sleepCode() {
+        if(activeComputations.empty()) {
+            lexicon.clear();
+            leaderboardCache.clear();
+            notes.clear();
+            outlines.clear();
+            bow.clear();
+
+            aiState = Configuration::MindState::SLEEPING;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @brief Precalculate entire AA.
+     *
+     * LONG running method.
+     */
+    void precalculateAa();
+
+    /**
+     * @brief Calculate AA row/column cross i.e. associations of N with *all* other Ns.
+     *
+     * LONG running method on bigger repositories.
+     */
+    void calculateAaRow(size_t y);
 
     /**
      * @brief Calculate similarity of two word vectors.
@@ -217,12 +229,31 @@ private:
      */
     float calculateSimilarityByTitles(const std::string& t1, const std::string& t2);
 
+    /**
+     * @brief Get AA leaderboard from cache.
+     */
+    bool getCachedAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard);
+    /**
+     * @brief (Re)calculate AA leaderboard.
+     *
+     * LONG running method.
+     */
+    void cacheAssociationsLeaderboard(const Note* n);
+
+    /**
+     * @brief Create NN input feature.
+     */
     AssociationAssessmentNotesFeature* createAaFeature(Note* n1, Note* n2);
 
     /**
      * @brief Train associations assessment neural network once memory is learned.
      */
     void trainAaNn();
+
+    /**
+     * @brief Check AA matrix symmetry.
+     */
+    void assertAaSymmetry();
 
 public:
 #ifdef DO_M8F_DEBUG

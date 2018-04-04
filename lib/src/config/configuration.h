@@ -196,7 +196,7 @@ public:
     Installer* getInstaller() const { return installer; }
     MindState getMindState() const { return mindState; }
     void setMindState(MindState mindState);
-    unsigned int getAsyncMindConfig() const { return asyncMindThreshold; }
+    unsigned int getAsyncMindThreshold() const { return asyncMindThreshold; }
 
     std::string& getConfigFilePath() { return configFilePath; }
     void setConfigFilePath(const std::string customConfigFilePath) { configFilePath = customConfigFilePath; }
