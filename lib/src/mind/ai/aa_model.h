@@ -1,5 +1,5 @@
 /*
- association_assessment_model.h     MindForger thinking notebook
+ aa_model.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -19,10 +19,13 @@
 #ifndef M8R_ASSOCIATION_ASSESSMENT_MODEL_H
 #define M8R_ASSOCIATION_ASSESSMENT_MODEL_H
 
-#include "association_assessment_notes_feature.h"
+#include "aa_notes_feature.h"
 
 namespace m8r {
 
+/**
+ * @brief Associations assessment neural network model.
+ */
 class AssociationAssessmentModel
 {
 public:

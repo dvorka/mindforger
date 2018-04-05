@@ -1,5 +1,5 @@
 /*
- association_assessment_notes_feature.cpp     MindForger thinking notebook
+ ai_aa_weighted_fts.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,22 +16,16 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "association_assessment_notes_feature.h"
+#include "ai_aa_weighted_fts.h"
 
 namespace m8r {
 
-AssociationAssessmentNotesFeature::AssociationAssessmentNotesFeature()
-{
-    clearFeatures();
-}
-
-AssociationAssessmentNotesFeature::~AssociationAssessmentNotesFeature()
+AiAaWeightedFts::AiAaWeightedFts()
 {
 }
 
-void AssociationAssessmentNotesFeature::clearFeatures()
+AiAaWeightedFts::~AiAaWeightedFts()
 {
-    for(int i=0; i<FEATURES_SIZE; i++) features[i]=0.;
 }
 
 } // m8r namespace

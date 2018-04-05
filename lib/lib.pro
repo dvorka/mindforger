@@ -67,18 +67,19 @@ SOURCES += \
     src/mind/ai/ai.cpp \
     src/mind/ai/nlp/markdown_tokenizer.cpp \
     src/mind/ai/nlp/bag_of_words.cpp \
-    src/mind/ai/association_assessment_model.cpp \
-    src/mind/ai/note_embedding.cpp \
-    src/mind/ai/thing_embedding.cpp \
+    src/mind/ai/aa_model.cpp \
     src/mind/ai/nlp/lexicon.cpp \
     src/mind/ai/nlp/note_char_provider.cpp \
     src/mind/ai/nlp/outline_char_provider.cpp \
     src/mind/ai/nlp/string_char_provider.cpp \
     src/mind/ai/nn/genann.c \
-    src/mind/ai/association_assessment_notes_feature.cpp \
     src/mind/ai/nlp/word_frequency_list.cpp \
     src/gear/trie.cpp \
-    src/mind/ai/nlp/stemmer/stemmer.cpp
+    src/mind/ai/nlp/stemmer/stemmer.cpp \
+    src/mind/ai/ai_aa_bow.cpp \
+    src/mind/ai/ai_aa_weighted_fts.cpp \
+    src/mind/ai/aa_model.cpp \
+    src/mind/ai/aa_notes_feature.cpp
 
 HEADERS += \
     ./src/debug.h \
@@ -144,15 +145,12 @@ HEADERS += \
     src/mind/ai/ai.h \
     src/mind/ai/nlp/markdown_tokenizer.h \
     src/mind/ai/nlp/bag_of_words.h \
-    src/mind/ai/association_assessment_model.h \
-    src/mind/ai/note_embedding.h \
-    src/mind/ai/thing_embedding.h \
+    src/mind/ai/aa_model.h \
     src/mind/ai/nlp/lexicon.h \
     src/mind/ai/nlp/note_char_provider.h \
     src/mind/ai/nlp/outline_char_provider.h \
     src/mind/ai/nlp/string_char_provider.h \
     src/mind/ai/nn/genann.h \
-    src/mind/ai/association_assessment_notes_feature.h \
     src/mind/ai/nlp/word_frequency_list.h \
     src/gear/trie.h \
     src/mind/ai/nlp/char_provider.h \
@@ -174,4 +172,9 @@ HEADERS += \
     src/mind/ai/nlp/stemmer/indexing/string_util.h \
     src/mind/ai/nlp/stemmer/utilities/debug_logic.h \
     src/mind/ai/nlp/stemmer/utilities/safe_math.h \
-    src/mind/ai/nlp/stemmer/utilities/utilities.h
+    src/mind/ai/nlp/stemmer/utilities/utilities.h \
+    src/mind/ai/ai_aa_bow.h \
+    src/mind/ai/ai_aa_weighted_fts.h \
+    src/mind/ai/ai_aa.h \
+    src/mind/ai/aa_model.h \
+    src/mind/ai/aa_notes_feature.h

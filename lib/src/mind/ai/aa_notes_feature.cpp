@@ -1,5 +1,5 @@
 /*
- note_embedding.cpp     MindForger thinking notebook
+ association_assessment_notes_feature.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,16 +16,23 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "note_embedding.h"
+
+#include "aa_notes_feature.h"
 
 namespace m8r {
 
-NoteEmbedding::NoteEmbedding()
+AssociationAssessmentNotesFeature::AssociationAssessmentNotesFeature()
+{
+    clearFeatures();
+}
+
+AssociationAssessmentNotesFeature::~AssociationAssessmentNotesFeature()
 {
 }
 
-NoteEmbedding::~NoteEmbedding()
+void AssociationAssessmentNotesFeature::clearFeatures()
 {
+    for(int i=0; i<FEATURES_SIZE; i++) features[i]=0.;
 }
 
 } // m8r namespace

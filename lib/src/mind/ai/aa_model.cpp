@@ -1,5 +1,5 @@
 /*
- association_assessment_model.cpp     MindForger thinking notebook
+ aa_model.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,7 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "association_assessment_model.h"
+
+#include "aa_model.h"
 
 namespace m8r {
 
