@@ -118,12 +118,6 @@ void dumpOutline(m8r::Outline*& outline)
     }
 }
 
-TEST(MindTestCase, Ontology) {
-    cout << endl << "Outline label: " << m8r::Tag::KeyCool();
-
-    // TODO TBD
-}
-
 TEST(MindTestCase, LearnAndRememberMindForgerRepository) {
     // prepare M8R repository
     string repositoryDir{"/tmp/mf-unit-repository-m"};
@@ -150,12 +144,17 @@ TEST(MindTestCase, LearnAndRememberMindForgerRepository) {
     to.append("/memory/outline.md");
     m8r::copyFile(from,to);
 
-    m8r::Configuration& config = m8r::Configuration::getInstance();
+    m8r::Configuration& config = m8r::Configuration::getInstance(); config.clear();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mtc-larmfr.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
-    cout << "Loading repository: " << config.getActiveRepository()->getPath();
+    cout << "Loading repository: " << config.getActiveRepository()->getPath() << endl;
+
     m8r::Mind mind(config);
     mind.learn();
-    mind.think();
+    ASSERT_EQ(m8r::Configuration::MindState::SLEEPING, config.getMindState());
+    mind.think().get();
+    ASSERT_EQ(m8r::Configuration::MindState::THINKING, config.getMindState());
     cout << "Statistics:" << endl
     << "  Outlines: " << mind.remind().getOutlinesCount() << endl
     << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize() << endl;
@@ -200,6 +199,8 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
 
     // 1/3 learn
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mtc-lal.md");
     config.setActiveRepository(config.addRepository(repository));
     cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getDir();
     cout << endl << "Repositories[" << config.getRepositories().size() << "]:";
@@ -211,7 +212,8 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
     EXPECT_EQ(memory.getOntology().getTags().size(), 12);
 
-    mind.think();
+    mind.learn();
+    mind.think().get();
 
     // assert learned MF repository attributes (mind, outlines count, notes count, ontology count, ...)
     EXPECT_GE(config.getRepositories().size(), 1);
@@ -277,7 +279,8 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
         "",
         false);
     config.setActiveRepository(config.addRepository(repository));
-    mind.think();
+    mind.learn();
+    mind.think().get();
 
     EXPECT_GE(config.getRepositories().size(), 1);
     EXPECT_EQ(memory.getOutlines().size(), 2);

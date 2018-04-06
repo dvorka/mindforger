@@ -66,11 +66,7 @@ public:
     AiAaWeightedFts &operator=(const AiAaWeightedFts&&) = delete;
     ~AiAaWeightedFts();
 
-    virtual std::future<bool> dream() {
-        std::promise<bool> p{};
-        p.set_value(false);
-        return p.get_future();
-    }
+    virtual std::future<bool> dream();
 
     virtual std::future<std::vector<std::pair<Note*,float>>> calculateLeaderboard(const Note* n) {
         UNUSED_ARG(n);
@@ -81,11 +77,13 @@ public:
     }
 
     bool sleep() {
-        return false;
+        // FOO implementation
+        return true;
     }
 
     bool amnesia() {
-        return false;
+        // FOO implementation
+        return true;
     }
 };
 

@@ -550,12 +550,10 @@ bool AiAaBoW::sleep() {
 
 // it's presumed that callers ensures the correct Mind state
 bool AiAaBoW::amnesia() {
-    if(sleep()) {
-        aaMatrix.clear();
-        return true;
-    } else {
-        return false;
-    }
+    sleep();
+    aaMatrix.clear();
+
+    return true;
 }
 
 } // m8r namespace

@@ -32,15 +32,18 @@ extern char* getMindforgerGitHomePath();
 
 using namespace std;
 
-TEST(MindTestCase, FTS) {
+TEST(FtsTestCase, FTS) {
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mtc-f.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
 
     m8r::Mind mind(config);
-    mind.think();
+    mind.learn();
+    mind.think().get();
 
     cout << "\nStatistics:";
     cout << "\n  Outlines: " << mind.remind().getOutlinesCount();

@@ -31,6 +31,8 @@ TEST(ConfigurationTestCase, FromConstructor)
     repositoryPath.insert(0, getMindforgerGitHomePath());
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-ctc-fc.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
 
     cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getDir();
@@ -55,11 +57,15 @@ TEST(ConfigurationTestCase, FromEnvironment)
     strcat(envVar, getMindforgerGitHomePath());
     strcat(envVar, relativeRepositoryPath);
     putenv(envVar);
-    cout << "Setting env:" << endl << "  " << envVar;
+    cout << "Setting env:" << endl << "  " << envVar << endl;
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-ctc-fe.md");
 
-    // TODO use code from Configuration constructor to get repo from environment
+    config.setActiveRepository(
+        config.addRepository(
+            m8r::RepositoryIndexer::getRepositoryForPath(config.getRepositoryPathFromEnv())));
 
     if(config.getActiveRepository()) {
         cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getDir();

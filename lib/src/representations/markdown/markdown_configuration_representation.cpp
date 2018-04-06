@@ -56,7 +56,7 @@ MarkdownConfigurationRepresentation::~MarkdownConfigurationRepresentation()
  */
 void MarkdownConfigurationRepresentation::configuration(vector<MarkdownAstNodeSection*>* ast, Configuration& c)
 {
-    c.reset();
+    c.clear();
 
     if(ast) {
         size_t off = 0;

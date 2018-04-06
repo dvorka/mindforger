@@ -60,7 +60,7 @@ bool Mind::learn()
         MF_DEBUG("Mind LEARNED" << endl);
         return true;
     } else {
-        MF_DEBUG("Learn: CANNOT learn because Mind is DREAMING" << endl);
+        MF_DEBUG("Learn: CANNOT learn because Mind is DREAMING and/or there are " << activeProcesses << " active Mind processes" << endl);
         return false;
     }
 }
@@ -138,8 +138,7 @@ bool Mind::mindSleep()
             MF_DEBUG("Mind IS sleeping..." << endl);
             return true;
         } else {
-            // AI cannot asleep because there are active mind processes that use Mind/AI data
-            MF_DEBUG("Sleep: CANNOT asleep because there are active Mind processes" << endl);
+            MF_DEBUG("Sleep: CANNOT asleep because there are " << activeProcesses << " active Mind processes" << endl);
             return false;
         }
     } else {

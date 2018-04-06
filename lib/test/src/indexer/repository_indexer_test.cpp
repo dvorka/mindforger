@@ -142,9 +142,12 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
 
     // test that metadata ARE written
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-ritc-mfr.md");
     config.setActiveRepository(config.addRepository(repository));
     m8r::Mind mind(config);
-    mind.think();
+    mind.learn();
+    mind.think().get();
     m8r::Memory& memory = mind.remind();
     vector<m8r::Outline*> outlines = memory.getOutlines();
     m8r::Outline* outline;
@@ -231,9 +234,12 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
 
     // test that metadata ARE written
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-ritc-mr.md");
     config.setActiveRepository(config.addRepository(repository));
     m8r::Mind mind(config);
-    mind.think();
+    mind.learn();
+    mind.think().get();
 
     m8r::Memory& memory = mind.remind();
     vector<m8r::Outline*> outlines = memory.getOutlines();
@@ -303,9 +309,12 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
 
     // test that metadata ARE written
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-ritc-mff.md");
     config.setActiveRepository(config.addRepository(repository));
     m8r::Mind mind(config);
-    mind.think();
+    mind.learn();
+    mind.think().get();
 
     EXPECT_EQ(repository->getDir(), repositoryPath);
     EXPECT_EQ(repository->getType(), m8r::Repository::RepositoryType::MINDFORGER);
@@ -381,9 +390,12 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
 
     // test that metadata ARE written
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-ritc-mf.md");
     config.setActiveRepository(config.addRepository(repository));
     m8r::Mind mind(config);
-    mind.think();
+    mind.learn();
+    mind.think().get();
 
     EXPECT_EQ(repository->getDir(), repositoryPath);
     EXPECT_EQ(repository->getType(), m8r::Repository::RepositoryType::MARKDOWN);

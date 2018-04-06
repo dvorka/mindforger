@@ -39,6 +39,8 @@ TEST(HtmlTestCase, Outline)
     fileName.insert(0, getMindforgerGitHomePath());
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-o.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
     m8r::Mind mind(config);
     m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology()};
@@ -64,6 +66,8 @@ TEST(HtmlTestCase, Note)
     fileName.insert(0, getMindforgerGitHomePath());
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-n.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
     m8r::Mind mind(config);
     m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology()};
@@ -84,6 +88,8 @@ TEST(HtmlTestCase, NoteLinks)
     fileName.insert(0, getMindforgerGitHomePath());
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-antc-nl.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
     m8r::Mind mind(config);
     m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology()};

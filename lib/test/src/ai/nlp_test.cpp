@@ -172,6 +172,8 @@ TEST(AiNlpTestCase, Tokenizer)
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-antc-t.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
     m8r::Mind mind(config);
     mind.think();
@@ -200,8 +202,9 @@ TEST(AiNlpTestCase, AaRepositoryBow)
     string repositoryPath{"/lib/test/resources/universe-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-antc-r.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
-    // choose BoW AA algorithm
     config.setAaAlgorithm(m8r::Configuration::AssociationAssessmentAlgorithm::BOW);
 
     m8r::Mind mind(config);
@@ -234,8 +237,9 @@ TEST(AiNlpTestCase, AaUniverseBow)
     string repositoryPath{"/lib/test/resources/aa-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-antc-aub.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
-    // choose BoW AA algorithm
     config.setAaAlgorithm(m8r::Configuration::AssociationAssessmentAlgorithm::BOW);
 
     m8r::Mind mind(config);

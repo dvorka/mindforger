@@ -386,10 +386,12 @@ TEST(MarkdownParserTestCase, MarkdownRepresentation)
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
 
-    m8r::Configuration& configuration = m8r::Configuration::getInstance();
-    configuration.setActiveRepository(configuration.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mptc-mr.md");
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
 
-    m8r::Ontology ontology{configuration};
+    m8r::Ontology ontology{config};
 
     string text =
             "## Canonical Message <!-- Metadata: tags: important; type: Goal; created: 2015-05-02 21:30:28; reads: 55; read: 2016-03-31 13:54:45; revision: 3; modified: 2016-03-31 13:54:45; importance: 3/5; urgency: 2/5; progress: 20%; -->\n"
@@ -431,9 +433,11 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPreamble)
 {
     string repositoryPath{"/lib/test/resources/apiary-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
-    m8r::Configuration& configuration = m8r::Configuration::getInstance();
-    configuration.setActiveRepository(configuration.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
-    m8r::Ontology ontology{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mptc-mrp.md");
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    m8r::Ontology ontology{config};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology};
@@ -512,9 +516,11 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPostDeclaredSection)
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     repository->setMode(m8r::Repository::RepositoryMode::FILE);
     repository->setFile(fileName);
-    m8r::Configuration& configuration = m8r::Configuration::getInstance();
-    configuration.setActiveRepository(configuration.addRepository(repository));
-    m8r::Ontology ontology{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mptc-mrpdc.md");
+    config.setActiveRepository(config.addRepository(repository));
+    m8r::Ontology ontology{config};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology};
@@ -580,9 +586,11 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationTrailingHashesSection)
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     repository->setMode(m8r::Repository::RepositoryMode::FILE);
     repository->setFile(fileName);
-    m8r::Configuration& configuration = m8r::Configuration::getInstance();
-    configuration.setActiveRepository(configuration.addRepository(repository));
-    m8r::Ontology ontology{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mptc-mrthc.md");
+    config.setActiveRepository(config.addRepository(repository));
+    m8r::Ontology ontology{config};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology};
@@ -659,9 +667,11 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationEmptyFirstLine)
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     repository->setMode(m8r::Repository::RepositoryMode::FILE);
     repository->setFile(fileName);
-    m8r::Configuration& configuration = m8r::Configuration::getInstance();
-    configuration.setActiveRepository(configuration.addRepository(repository));
-    m8r::Ontology ontology{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mptc-mrefl.md");
+    config.setActiveRepository(config.addRepository(repository));
+    m8r::Ontology ontology{config};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology};
@@ -694,6 +704,8 @@ TEST(MarkdownParserTestCase, FileSystemPersistence)
     repositoryPath.insert(0, getMindforgerGitHomePath());
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mptc-fsp.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
     m8r::Ontology ontology{config};
     m8r::MarkdownOutlineRepresentation mdr{ontology};
@@ -709,6 +721,8 @@ TEST(MarkdownParserBugsTestCase, EmptyNameSkipsEof)
     repositoryPath.insert(0, getMindforgerGitHomePath());
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mptc-ense.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
     m8r::Ontology ontology{config};
 
@@ -756,9 +770,11 @@ TEST(MarkdownParserTestCase, TimeScope)
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     repository->setMode(m8r::Repository::RepositoryMode::FILE);
     repository->setFile(fileName);
-    m8r::Configuration& configuration = m8r::Configuration::getInstance();
-    configuration.setActiveRepository(configuration.addRepository(repository));
-    m8r::Ontology ontology{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mptc-ts.md");
+    config.setActiveRepository(config.addRepository(repository));
+    m8r::Ontology ontology{config};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology};
@@ -806,9 +822,11 @@ TEST(MarkdownParserTestCase, Deadline)
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     repository->setMode(m8r::Repository::RepositoryMode::FILE);
     repository->setFile(fileName);
-    m8r::Configuration& configuration = m8r::Configuration::getInstance();
-    configuration.setActiveRepository(configuration.addRepository(repository));
-    m8r::Ontology ontology{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mptc-d.md");
+    config.setActiveRepository(config.addRepository(repository));
+    m8r::Ontology ontology{config};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology};
@@ -853,9 +871,11 @@ TEST(MarkdownParserTestCase, Links)
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     repository->setMode(m8r::Repository::RepositoryMode::FILE);
     repository->setFile(fileName);
-    m8r::Configuration& configuration = m8r::Configuration::getInstance();
-    configuration.setActiveRepository(configuration.addRepository(repository));
-    m8r::Ontology ontology{configuration};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mptc-l.md");
+    config.setActiveRepository(config.addRepository(repository));
+    m8r::Ontology ontology{config};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology};

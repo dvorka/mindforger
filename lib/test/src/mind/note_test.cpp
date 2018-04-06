@@ -63,6 +63,8 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     m8r::stringToFile(oFile,oContent);
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-ntc-ansnto.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
@@ -158,6 +160,8 @@ TEST(NoteTestCase, PromoteDemoteUpDown) {
     m8r::stringToFile(oFile,oContent);
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-ntc-pdud.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
@@ -320,6 +324,8 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     m8r::stringToFile(oFile,oContent);
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-ntc-dudflc.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
@@ -751,9 +757,12 @@ TEST(NoteTestCase, RefactorNote) {
     m8r::stringToFile(tFile,tContent);
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-ntc-rn.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
     m8r::Mind mind{config};
-    mind.think();
+    mind.learn();
+    mind.think().get();
 
     // test
     m8r::Outline* s = mind.remind().getOutline(sFile);

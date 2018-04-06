@@ -54,6 +54,8 @@ TEST(AiBenchmark, DISABLED_AaMatrix)
     string repositoryPath{"/lib/test/resources/benchmark-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-aib-am.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
     m8r::Mind mind(config);
     mind.think();

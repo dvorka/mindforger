@@ -31,4 +31,15 @@ AiAaWeightedFts::~AiAaWeightedFts()
 {
 }
 
+std::future<bool> AiAaWeightedFts::dream() {
+
+    // FOO implementation
+
+    mind.persistMindState(Configuration::MindState::THINKING);
+
+    std::promise<bool> p{};
+    p.set_value(false);
+    return p.get_future();
+}
+
 } // m8r namespace

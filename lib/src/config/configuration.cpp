@@ -32,19 +32,14 @@ const std::string Configuration::DEFAULT_TIME_SCOPE = std::string{"0y0m0d0h0m"};
 Configuration::Configuration()
     : installer(new Installer{})
 {
-    mindState = MindState::SLEEPING;
-    aaAlgorithm = AssociationAssessmentAlgorithm::WEIGHTED_FTS;
-
+    // default config file path: ~/.mindforger.md
     char *home = getenv(ENV_VAR_HOME);
     userHomePath = string{home};
-
     configFilePath.assign(userHomePath);
     configFilePath.append(FILE_PATH_SEPARATOR);
     configFilePath.append(FILENAME_M8R_CONFIGURATION);
 
-    // repositories - environment variable defined repository path to be used only if desired
-
-    reset();
+    clear();
 }
 
 Configuration::~Configuration()
@@ -60,7 +55,7 @@ Configuration::~Configuration()
     }
 }
 
-void Configuration::reset()
+void Configuration::clear()
 {
     // repositories
     activeRepository = nullptr;
@@ -70,6 +65,8 @@ void Configuration::reset()
     repositories.clear();
 
     // lib
+    mindState = MindState::SLEEPING;
+    aaAlgorithm = AssociationAssessmentAlgorithm::WEIGHTED_FTS;
     writeMetadata = true;
     saveReadsMetadata = DEFAULT_SAVE_READS_METADATA;
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);

@@ -46,9 +46,12 @@ TEST(OutlineTestCase, NewAndDeleteOutline) {
     m8r::stringToFile(oFile,oContent);
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-otc-nado.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
     m8r::Mind mind{config};
-    mind.think();
+    mind.learn();
+    mind.think().get();
 
     EXPECT_EQ(mind.remind().getOutlinesCount(), 1);
     EXPECT_EQ(mind.remind().getNotesCount(), 1);
@@ -71,10 +74,13 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
     m8r::stringToFile(stencilFile,stencilContent);
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-otc-nofs.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
-    mind.think();
+    mind.learn();
+    mind.think().get();
 
     // create Outline using a stencil from MEMORY
     vector<const m8r::Tag*> tags{};
@@ -160,10 +166,13 @@ TEST(OutlineTestCase, CloneOutline) {
     m8r::stringToFile(oFile,oContent);
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-otc-co.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
-    mind.think();
+    mind.learn();
+    mind.think().get();
 
 
     // test

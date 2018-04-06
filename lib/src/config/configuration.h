@@ -97,9 +97,9 @@ public:
     }
 
     enum MindState {
-        THINKING,
-        DREAMING,
-        SLEEPING
+        THINKING, // 0
+        DREAMING, // 1
+        SLEEPING  // 2
     };
 
     enum AssociationAssessmentAlgorithm {
@@ -197,7 +197,7 @@ public:
     Configuration &operator=(const Configuration&&) = delete;
     virtual ~Configuration();
 
-    void reset();
+    void clear();
 
     Installer* getInstaller() const { return installer; }
     MindState getMindState() const { return mindState; }
