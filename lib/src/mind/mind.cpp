@@ -28,7 +28,6 @@ Mind::Mind(Configuration &configuration)
       ai{memory}
 {
     memory.setTimeScope(&timeScopeAspect);
-    ai.activeThreads = 0;
 
     this->mdConfigRepresentation
         = new MarkdownConfigurationRepresentation{};
@@ -78,6 +77,9 @@ bool Mind::think()
  */
 bool Mind::dream()
 {
+
+    // MUST BE PRIVATE
+
     MF_DEBUG("@Dream" << endl);
 
     if(config.getMindState()==Configuration::MindState::SLEEPING) {

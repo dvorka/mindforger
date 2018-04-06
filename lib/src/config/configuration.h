@@ -102,6 +102,11 @@ public:
         SLEEPING
     };
 
+    enum AssociationAssessmentAlgorithm {
+        BOW,
+        WEIGHTED_FTS
+    };
+
     enum MdToHtmlOption {
         // Discount options
         NoLinksOption          = 1<<0, /* don't do link processing, block <a> tags  */
@@ -169,6 +174,7 @@ private:
     TimeScope timeScope;
     std::string timeScopeAsString;
     unsigned int md2HtmlOptions;
+    AssociationAssessmentAlgorithm aaAlgorithm;
 
     // GUI configuration
     std::string uiThemeName;
@@ -236,6 +242,7 @@ public:
     bool isSaveReadsMetadata() const { return saveReadsMetadata; }
     void setSaveReadsMetadata(bool saveReadsMetadata) { this->saveReadsMetadata=saveReadsMetadata; }
     unsigned int getMd2HtmlOptions() const { return md2HtmlOptions; }
+    AssociationAssessmentAlgorithm getAaAlgorithm() const { return aaAlgorithm; }
 
     /*
      * GUI

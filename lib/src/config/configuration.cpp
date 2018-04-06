@@ -33,6 +33,7 @@ Configuration::Configuration()
     : installer(new Installer{})
 {
     mindState = MindState::SLEEPING;
+    aaAlgorithm = AssociationAssessmentAlgorithm::WEIGHTED_FTS;
 
     char *home = getenv(ENV_VAR_HOME);
     userHomePath = string{home};

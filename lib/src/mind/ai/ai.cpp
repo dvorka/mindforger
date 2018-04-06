@@ -25,12 +25,14 @@ using namespace std;
 Ai::Ai(Memory& memory)
     :aiState(Configuration::MindState::SLEEPING)
 {
-    // IMPROVE make the choice of AA implementation configurable
-    aa = new AiAaWeightedFts{memory};
-    //aa = new AiAaBoW{memory};
-
-    learnMemoryTask = new packaged_task<bool>{aa->learnMemory()};
-    calculateLeaderboardTask = new std::packaged_task<std::future<std::vector<std::pair<Note*,float>>>>{aa->calculateLeaderboard()};
+    switch(Configuration::getInstance().getAaAlgorithm()) {
+    case Configuration::AssociationAssessmentAlgorithm::BOW:
+        aa = new AiAaBoW{memory};
+        break;
+    case Configuration::AssociationAssessmentAlgorithm::WEIGHTED_FTS:
+        aa = new AiAaWeightedFts{memory};
+        break;
+    }
 }
 
 Ai::~Ai()

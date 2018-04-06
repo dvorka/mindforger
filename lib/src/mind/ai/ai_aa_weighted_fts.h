@@ -41,6 +41,10 @@ namespace m8r {
  * - find N by name using word
  * - order by...
  *
+ * Closing remarks:
+ *
+ * - this method has own FTS implementation to compute weights and leverage O/N relationships
+ *   while searching the best result
  */
 class AiAaWeightedFts : public AiAssociationsAssessment
 {
@@ -64,8 +68,8 @@ public:
         return false;
     }
 
-    bool getAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& assocLeaderboard) {
-        return false;
+    std::vector<std::pair<Note*,float>> calculateLeaderboard(const Note* n) {
+        return std::vector<std::pair<Note*,float>>{};
     }
 };
 
