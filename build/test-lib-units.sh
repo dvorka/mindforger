@@ -123,6 +123,8 @@ export BUILD_DIR=${SCRIPT_DIR}/../lib/test
 #  - use -v only if you want a lot of info (might be too much)
 if [ ${OPTION_RECOMPILE} ]
 then
+    cd ${BUILD_DIR} && cd .. && make clean && rm *.a && qmake lib.pro
+    cd ${BUILD_DIR} && cd ./src && make clean && qmake src.pro
     cd ${BUILD_DIR} && make clean && qmake mindforger-lib-unit-tests.pro && make -j${M8R_CPU_CORES}
 fi
 
