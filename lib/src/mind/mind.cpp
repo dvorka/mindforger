@@ -23,10 +23,12 @@ using namespace std;
 namespace m8r {
 
 Mind::Mind(Configuration &configuration)
-    : config(configuration),
-      memory(configuration),
-      ai{memory}
+    : config{configuration},
+      memory{configuration},
+      exclusiveMind{}
 {
+    ai = new Ai{memory,*this};
+    activeProcesses = 0;
     memory.setTimeScope(&timeScopeAspect);
 
     this->mdConfigRepresentation
@@ -35,6 +37,7 @@ Mind::Mind(Configuration &configuration)
 
 Mind::~Mind()
 {
+    delete ai;
     delete mdConfigRepresentation;
 
     // - Memory destruct outlines
@@ -42,164 +45,142 @@ Mind::~Mind()
 }
 
 /*
- * BEGIN Mind state
+ * THINKING
  */
 
-/*
- *  This method:
- *    - may run long time
- */
-bool Mind::think()
+bool Mind::learn()
 {
-    lock_guard(exclusiveMind);
-    MF_DEBUG("@Think" << endl);
+    MF_DEBUG("@Learn" << endl);
+    lock_guard<mutex> criticalSection{exclusiveMind};
 
-    if(config.getMindState()==Configuration::MindState::SLEEPING) {
-        // make sure everything is ready for thinking by going to dream
-        if(!dream()) {
-            return false;
-        }
-        config.setMindState(Configuration::MindState::THINKING);
-        mdConfigRepresentation->save(config);
-
-        MF_DEBUG("Thinking..." << endl);
+    if(config.getMindState()!=Configuration::MindState::DREAMING && !activeProcesses) {
+        MF_DEBUG("Learning..." << endl);
+        mindAmnesia();
+        memory.learn();
+        MF_DEBUG("Mind LEARNED" << endl);
         return true;
     } else {
-        // Mind is either already DREAMING or THINKING > it must asleep before calling think().
+        MF_DEBUG("Learn: CANNOT learn because Mind is DREAMING" << endl);
         return false;
     }
 }
 
-/*
- *  This method:
- *    - may run long time
- *    - does NOT need mutex because it's private and can be called from Mind only
- */
-bool Mind::dream()
+future<bool> Mind::think()
 {
-
-    // MUST BE PRIVATE
-
-    MF_DEBUG("@Dream" << endl);
+    MF_DEBUG("@Think" << endl);
+    lock_guard<mutex> criticalSection{exclusiveMind};
 
     if(config.getMindState()==Configuration::MindState::SLEEPING) {
-        if(ai.sleep()) {
-            config.setMindState(Configuration::MindState::DREAMING);
-            MF_DEBUG("Dreaming..." << endl);
-
-            allNotesCache.clear();
-            memoryDwell.clear();
-            triples.clear();
-
-            // sanity
-            // o integrity check: ...
-            // o memory structure check:
-            //  - Os w/o description
-            //  - Os w/o any N
-            //  - Ns w/o description
-            // o attachments
-            //  - orphan attachments (not referenced from any O)
-
-            // TODO Triples: infer all triples, check, fix, optimize and save
-
-            // AI associations aaMatrix and NN - may take a long time to finish
-            ai.learnMemory();
-
-            MF_DEBUG("Dreaming DONE" << endl);
-            return true;
-        } else {
-            // AI cannot asleep because it's running a computation > it must finish first before calling dream().
-            return false;
-        }
+        // get ready for thinking - dream() changes state to THINKING on its finish
+        return mindDream();
     } else {
-        // Mind is either already DREAMING or THINKING > it must asleep before calling dream().
-        return false;
+        MF_DEBUG("Think: CANNOT think because Mind is DREAMING or already THINKING (asleep first)" << endl);
+        promise<bool> p;
+        p.set_value(false);
+        return p.get_future();
+    }
+}
+
+/* It does NOT need mutex because it's private and can be called from Mind only.
+ * This method may run long time. It ALWAYS switches mind state to THINKING when finishes.
+ */
+future<bool> Mind::mindDream()
+{
+    MF_DEBUG("@Dream" << endl);
+
+    // Mind is expected to be clean and SLEEPING
+    if(config.getMindState()==Configuration::MindState::SLEEPING) {
+        MF_DEBUG("Dreaming..." << endl);
+        config.setMindState(Configuration::MindState::DREAMING);
+
+        // sanity
+        // o integrity check: ...
+        // o memory structure check:
+        //  - Os w/o description
+        //  - Os w/o any N
+        //  - Ns w/o description
+        // o attachments
+        //  - orphan attachments (not referenced from any O)
+
+        // triples: infer all triples, check, fix, optimize and save
+
+        // AI: AA, NN, ... may take long time to finish
+        return ai->dream();
+    } else {
+        MF_DEBUG("Dream: CANNOT dream because Mind is not ready ~ SLEEPING (asleep first)" << endl);
+        promise<bool> p;
+        p.set_value(false);
+        return p.get_future();
     }
 }
 
 bool Mind::sleep()
 {
-    lock_guard(exclusiveMind);
     MF_DEBUG("@Sleep" << endl);
+    lock_guard<mutex> criticalSection{exclusiveMind};
+    return mindSleep();
+}
 
-    if(config.getMindState()==Configuration::MindState::THINKING || config.getMindState()==Configuration::MindState::SLEEPING) {
-        if(ai.canSleep()) {
-            config.setMindState(Configuration::MindState::SLEEPING);
-            mdConfigRepresentation->save(config);
-            MF_DEBUG("Sleeping..." << endl);
-
-            ai.sleep();
-
+/*
+ *  This method does NOT need mutex because it's private and it's called from Mind only
+ */
+bool Mind::mindSleep()
+{
+    if(config.getMindState()!=Configuration::MindState::DREAMING && !activeProcesses) {
+        // AI can asleep ONLY if there are no active mental processes
+        if(ai->sleep()) {
             allNotesCache.clear();
             memoryDwell.clear();
             triples.clear();
 
+            config.setMindState(Configuration::MindState::SLEEPING);
+            mdConfigRepresentation->save(config);
+            MF_DEBUG("Mind IS sleeping..." << endl);
             return true;
         } else {
-            // AI cannot asleep because it's running a computation > it must finish first before calling dream().
+            // AI cannot asleep because there are active mind processes that use Mind/AI data
+            MF_DEBUG("Sleep: CANNOT asleep because there are active Mind processes" << endl);
             return false;
         }
     } else {
-        // Mind is DREAMING which cannot be stopped > wait for dream() to finish before calling sleep.
+        MF_DEBUG("Sleep: CANNOT asleep because Mind is DREAMING (wait for dreaming to finish)" << endl);
+        // DREAMING cannot be cancelled > wait for dream() to finish before calling sleep() again.
         return false;
     }
-}
-
-bool Mind::learn()
-{
-    lock_guard(exclusiveMind);
-    MF_DEBUG("@Learn" << endl);
-
-    // if THINK or SLEEP it's OK
-
-
-    if(ai.canSleep()) {
-        config.setMindState(Configuration::MindState::SLEEPING);
-        mdConfigRepresentation->save(config);
-        MF_DEBUG("Learning..." << endl);
-
-        mindAmnesia();
-        memory.learn();
-
-        MF_DEBUG("Learning DONE" << endl);
-        return true;
-    }
-
-    return false;
 }
 
 bool Mind::amnesia()
 {
-    lock_guard(exclusiveMind);
     MF_DEBUG("@Amnesia" << endl);
+    lock_guard<mutex> criticalSection{exclusiveMind};
+    return mindAmnesia();
+}
 
-    mindAmnesia();
+future<vector<pair<Note*,float>>> Mind::getAssociationsLeaderboard(const Note* n) {
+    return ai->getAssociationsLeaderboard(n);
 }
 
 /*
- *  This method:
- *    - does NOT need mutex because it's private and can be called from Mind only
+ *  This method does NOT need mutex because it's private and it's called from Mind only
  */
 bool Mind::mindAmnesia()
 {
-    if(ai.sleep()) {
-        MF_DEBUG("Amnesia..." << endl);
+    if(config.getMindState()!=Configuration::MindState::DREAMING && !activeProcesses) {
+        mindSleep();
 
-        allNotesCache.clear();
-        memoryDwell.clear();
-        triples.clear();
+        // forget EVERYTHING
         memory.amnesia();
 
-        MF_DEBUG("Amnesia DONE" << endl);
-
+        MF_DEBUG("Mind WITH amnesia" << endl);
         return true;
     } else {
+        MF_DEBUG("Amnesia: CANNOT asleep because Mind is DREAMING (waith for dreaming to finish)" << endl);
         return false;
     }
 }
 
 /*
- * END Mind state
+ * REMEMBERING
  */
 
 const vector<Note*>& Mind::getMemoryDwell(int pageSize) const

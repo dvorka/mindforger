@@ -22,13 +22,15 @@ namespace m8r {
 
 using namespace std;
 
-AiAaBoW::AiAaBoW(Memory& memory)
-    : memory(memory),
-    lexicon{},
-    wordBlacklist{},
-    tokenizer{lexicon,wordBlacklist}
+AiAaBoW::AiAaBoW(Memory& memory, Mind& mind)
+    : mind(mind),
+      memory(memory),
+      lexicon{},
+      wordBlacklist{},
+      tokenizer{lexicon,wordBlacklist},
+      learnMemoryTask(std::bind(&AiAaBoW::learnMemorySync,this)),
+      calculateLeaderboardTask([](AiAaBoW* t, const Note* n){ return t->calculateLeaderboardSync(n); })
 {
-    activeComputations = 0;
     initializeWordBlacklist();
 }
 
@@ -119,9 +121,29 @@ void AiAaBoW::initializeWordBlacklist() {
     wordBlacklist.addWord("want");
 }
 
+// it's presumed that callers ensures the correct Mind state
+future<bool> AiAaBoW::dream() {
+    if(memory.getNotesCount() > Configuration::getInstance().getAsyncMindThreshold()) {
+        // async
+        mind.incActiveProcesses();
+        learnMemoryTask.reset();
+        learnMemoryTask();
+        return learnMemoryTask.get_future();
+    } else {
+        // sync
+        promise<bool> p{};
+        bool status = learnMemorySync();
+        p.set_value(status);
+
+        mind.persistMindState(Configuration::MindState::THINKING);
+
+        return p.get_future();
+    }
+}
+
 bool AiAaBoW::learnMemorySync()
 {
-    MF_DEBUG("  AI: Learning memory to BoW..." << endl);
+    MF_DEBUG("  AI dream: Learning memory to BoW..." << endl);
     notes.clear();
     memory.getAllNotes(notes);
     // let N know it's indexed in AI
@@ -154,17 +176,33 @@ bool AiAaBoW::learnMemorySync()
         }
     } else {
         for(size_t i=0; i<aaMatrix.size(); ++i) {
-            std::fill(aaMatrix[i].begin(), aaMatrix[i].end(), AA_NOT_SET);
+            std::fill(aaMatrix[i].begin(), aaMatrix[i].end(), -1); // C++: template cannot get AA_NOT_SET as parameter - linker complaints
         }
     }
 
     // NN to be trained on demand - just initialize it
 
-    ai.setState(Configuration::MindState::THINKING);
-    activeComputations--;
+    mind.persistMindState(Configuration::MindState::THINKING);
 
-    MF_DEBUG("  AI: memory learned to BoW!" << endl);
+    MF_DEBUG("  AI dream: memory learned to BoW!" << endl);
     return true;
+}
+
+// it's presumed that callers ensures the correct Mind state
+future<vector<pair<Note*,float>>> AiAaBoW::calculateLeaderboard(const Note* n) {
+    auto cachedLeaderboard = leaderboardCache.find(n);
+    if(cachedLeaderboard != leaderboardCache.end()) {
+        // sync
+        promise<vector<pair<Note*,float>>> p{};
+        p.set_value(cachedLeaderboard->second);
+        return p.get_future();
+    } else {
+        // async
+        mind.incActiveProcesses();
+        calculateLeaderboardTask.reset();
+        calculateLeaderboardTask(this, n);
+        return calculateLeaderboardTask.get_future();
+    }
 }
 
 // Pre-calculate/calculate code CANNOT be reused as pre-calculate relies on rows w/ lower index
@@ -405,7 +443,7 @@ float AiAaBoW::calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyLi
     }
 }
 
-vector<pair<Note*,float>> AiAaBoW::calculateLeaderboard(const Note* n)
+vector<pair<Note*,float>> AiAaBoW::calculateLeaderboardSync(const Note* n)
 {
     // If N was REMOVED, then nobody will ask for leaderboard.
     // If N was MODIFIED, then leaderboard will not be accurate (but it's not critical).
@@ -416,7 +454,7 @@ vector<pair<Note*,float>> AiAaBoW::calculateLeaderboard(const Note* n)
         auto cachedLeaderboard = leaderboardCache.find(n);
         if(cachedLeaderboard != leaderboardCache.end()) {
             leaderboard = cachedLeaderboard->second;
-            return;
+            return leaderboard;
         }
 
         // calculate row/column of AA matrix & build leaderboard
@@ -483,7 +521,7 @@ vector<pair<Note*,float>> AiAaBoW::calculateLeaderboard(const Note* n)
         leaderboardCache[n] = leaderboard;
     }
 
-    activeComputations--;
+    mind.decActiveProcesses();
     return leaderboard;
 }
 
@@ -500,5 +538,24 @@ void AiAaBoW::assertAaSymmetry()
     MF_DEBUG("AI: AA symmetry checked!" << endl);
 }
 
+// it's presumed that callers ensures the correct Mind state
+bool AiAaBoW::sleep() {
+    lexicon.clear();
+    notes.clear();
+    outlines.clear();
+    bow.clear();
+
+    return true;
+}
+
+// it's presumed that callers ensures the correct Mind state
+bool AiAaBoW::amnesia() {
+    if(sleep()) {
+        aaMatrix.clear();
+        return true;
+    } else {
+        return false;
+    }
+}
 
 } // m8r namespace

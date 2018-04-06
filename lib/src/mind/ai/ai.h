@@ -23,12 +23,11 @@
 #include <future>
 #include <mutex>
 
-#include "../../debug.h"
+#include "../mind.h"
 #include "../../model/outline.h"
 #include "../memory.h"
-#include "./nlp/markdown_tokenizer.h"
-#include "./nlp/note_char_provider.h"
-#include "./aa_notes_feature.h"
+//#include "./nlp/markdown_tokenizer.h"
+//#include "./aa_notes_feature.h"
 #include "./aa_model.h"
 #include "./ai_aa_weighted_fts.h"
 #include "./ai_aa_bow.h"
@@ -68,12 +67,6 @@ namespace m8r {
 class Ai
 {
 private:
-    Configuration::MindState aiState;
-
-    // asynchronous computations handling
-    std::mutex exclusiveAi;
-
-    Memory& memory;
 
     /*
      * Associations
@@ -89,7 +82,7 @@ private:
     AssociationAssessmentModel* aaModel;
 
 public:
-    explicit Ai(Memory& memory);
+    explicit Ai(Memory& memory, Mind& mind);
     Ai(const Ai&) = delete;
     Ai(const Ai&&) = delete;
     Ai &operator=(const Ai&) = delete;
@@ -97,20 +90,14 @@ public:
     ~Ai();
 
     /**
-     * @brief Get AI state.
-     */
-    Configuration::MindState state() { return aiState; }
-    void state(Configuration::MindState state) { aiState = state; }
-
-    /**
      * @brief Learn what's in memory to get ready for thinking.
      *
      * Can be LONG running on huge repositories.
+     * Synchronized by caller ~ Mind.
      */
-    std::future<bool> learnMemory()
+    std::future<bool> dream()
     {
-        std::lock_guard<std::mutex> criticalSection{exclusiveAi};
-        aa->learnMemory();
+        return aa->dream();
     }
 
     /**
@@ -118,25 +105,27 @@ public:
      * @return future w/ the *copy* of the leaderboard (valid even if AI sleep()/amnesia() invoked)
      *
      * Can be LONG running on big repositories.
+     * Synchronized by caller ~ Mind.
      */
-    std::future<std::vector<std::pair<Note*,float>>> calculateAssociationsLeaderboard(const Note* n) {
-        std::lock_guard<std::mutex> criticalSection{exclusiveAi};
+    std::future<std::vector<std::pair<Note*,float>>> getAssociationsLeaderboard(const Note* n) {
         return aa->calculateLeaderboard(n);
     }
 
     /**
      * @brief Clear, but don't deallocate.
+     *
+     * Synchronized by caller ~ Mind.
      */
     bool sleep() {
-        std::lock_guard<std::mutex> criticalSection{exclusiveAi};
         return aa->sleep();
     }
 
     /**
      * @brief Forget everything.
+     *
+     * Synchronized by caller ~ Mind.
      */
     bool amnesia() {
-        std::lock_guard<std::mutex> criticalSection{exclusiveAi};
         return aa->amnesia();
     }
 

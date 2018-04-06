@@ -20,7 +20,10 @@
 
 namespace m8r {
 
-AiAaWeightedFts::AiAaWeightedFts()
+AiAaWeightedFts::AiAaWeightedFts(Memory& memory, Mind& mind)
+    : mind(mind),
+      memory(memory)
+
 {
 }
 

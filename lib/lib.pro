@@ -78,7 +78,6 @@ SOURCES += \
     src/mind/ai/nlp/stemmer/stemmer.cpp \
     src/mind/ai/ai_aa_bow.cpp \
     src/mind/ai/ai_aa_weighted_fts.cpp \
-    src/mind/ai/aa_model.cpp \
     src/mind/ai/aa_notes_feature.cpp
 
 HEADERS += \
@@ -145,7 +144,6 @@ HEADERS += \
     src/mind/ai/ai.h \
     src/mind/ai/nlp/markdown_tokenizer.h \
     src/mind/ai/nlp/bag_of_words.h \
-    src/mind/ai/aa_model.h \
     src/mind/ai/nlp/lexicon.h \
     src/mind/ai/nlp/note_char_provider.h \
     src/mind/ai/nlp/outline_char_provider.h \

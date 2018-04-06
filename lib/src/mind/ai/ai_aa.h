@@ -19,6 +19,7 @@
 #ifndef M8R_AI_ASSOCIATIONS_ASSESSMENT_H
 #define M8R_AI_ASSOCIATIONS_ASSESSMENT_H
 
+#include <future>
 #include <vector>
 
 #include "../../model/outline.h"
@@ -27,33 +28,27 @@ namespace m8r {
 
 /**
  * @brief Asssociations assessment interface.
+ *
+ * Interface enables implementation to perform calculations asychronously (future).
+ * Obviously it can be performed synchronously (if it's fast enough) and just encapsulated
+ * to promise/future.
  */
 class AiAssociationsAssessment
 {
 public:
-    explicit AiAssociationsAssessment();
+    explicit AiAssociationsAssessment() {}
     AiAssociationsAssessment(const AiAssociationsAssessment&) = delete;
     AiAssociationsAssessment(const AiAssociationsAssessment&&) = delete;
     AiAssociationsAssessment &operator=(const AiAssociationsAssessment&) = delete;
     AiAssociationsAssessment &operator=(const AiAssociationsAssessment&&) = delete;
-    ~AiAssociationsAssessment();
+    ~AiAssociationsAssessment() {}
 
     /**
      * @brief Learn what's in memory to get ready for thinking.
      *
      * Can be LONG running (asynchronous execution handled by AI).
      */
-    bool learnMemory() = 0;
-
-    /**
-     * @brief Clear.
-     */
-    bool sleep() = 0;
-
-    /**
-     * @brief Forget everything.
-     */
-    bool amnesia() = 0;
+    virtual std::future<bool> dream() = 0;
 
     /**
      * @brief Get AA leaderboard for N ~ get best Note associations.
@@ -61,7 +56,17 @@ public:
      *
      * Can be LONG running (asynchronous execution handled by AI).
      */
-    std::vector<std::pair<Note*,float>> calculateLeaderboard(const Note* n) = 0;
+    virtual std::future<std::vector<std::pair<Note*,float>>> calculateLeaderboard(const Note* n) = 0;
+
+    /**
+     * @brief Clear.
+     */
+    virtual bool sleep() = 0;
+
+    /**
+     * @brief Forget everything.
+     */
+    virtual bool amnesia() = 0;
 };
 
 }

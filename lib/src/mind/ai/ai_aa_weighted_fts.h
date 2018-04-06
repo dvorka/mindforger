@@ -19,9 +19,15 @@
 #ifndef M8R_AI_ASSOCIATIONS_ASSESSMENT_WEIGHTED_FTS_H
 #define M8R_AI_ASSOCIATIONS_ASSESSMENT_WEIGHTED_FTS_H
 
+#include <future>
+#include <vector>
+
 #include "ai_aa.h"
+#include "../mind.h"
 
 namespace m8r {
+
+class Mind;
 
 /**
  * @brief Weighted FTS based associations assessment.
@@ -48,16 +54,30 @@ namespace m8r {
  */
 class AiAaWeightedFts : public AiAssociationsAssessment
 {
+private:
+    Mind& mind;
+    Memory& memory;
+
 public:
-    explicit AiAaWeightedFts();
+    explicit AiAaWeightedFts(Memory& memory, Mind& mind);
     AiAaWeightedFts(const AiAaWeightedFts&) = delete;
     AiAaWeightedFts(const AiAaWeightedFts&&) = delete;
     AiAaWeightedFts &operator=(const AiAaWeightedFts&) = delete;
     AiAaWeightedFts &operator=(const AiAaWeightedFts&&) = delete;
     ~AiAaWeightedFts();
 
-    bool learnMemory() {
-        return false;
+    virtual std::future<bool> dream() {
+        std::promise<bool> p{};
+        p.set_value(false);
+        return p.get_future();
+    }
+
+    virtual std::future<std::vector<std::pair<Note*,float>>> calculateLeaderboard(const Note* n) {
+        UNUSED_ARG(n);
+
+                                                           std::promise<std::vector<std::pair<Note*,float>>> p{};
+                                                           p.set_value(std::vector<std::pair<Note*,float>>{});
+                                                           return p.get_future();
     }
 
     bool sleep() {
@@ -66,10 +86,6 @@ public:
 
     bool amnesia() {
         return false;
-    }
-
-    std::vector<std::pair<Note*,float>> calculateLeaderboard(const Note* n) {
-        return std::vector<std::pair<Note*,float>>{};
     }
 };
 

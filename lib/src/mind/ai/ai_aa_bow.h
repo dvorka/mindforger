@@ -19,10 +19,17 @@
 #ifndef M8R_AI_ASSOCIATIONS_ASSESSMENT_BOW_H
 #define M8R_AI_ASSOCIATIONS_ASSESSMENT_BOW_H
 
+#include <future>
+
+#include "../mind.h"
 #include "ai_aa.h"
+#include "./nlp/markdown_tokenizer.h"
+#include "./nlp/note_char_provider.h"
 #include "./nlp/bag_of_words.h"
 
 namespace m8r {
+
+class Mind;
 
 /**
  * @brief BoW based associations assessment.
@@ -37,12 +44,13 @@ private:
     static constexpr int AA_TITLE_WORD_BONUS = 0.2;
 
 private:
+    Mind& mind;
+    Memory& memory;
+
     Lexicon lexicon; // IMPROVE merge Standford GloVe word vectors (https://nlp.stanford.edu/projects/glove/)
     Trie wordBlacklist;
     BagOfWords bow;
     MarkdownTokenizer tokenizer;
-
-    int activeComputations;
 
     /*
      * Data sets
@@ -70,86 +78,38 @@ private:
     std::vector<std::vector<float>> aaMatrix; // IMPROVE: notesAA and outlinesAA ~ Notes assocications assessment
 
 public:
-    explicit AiAaBoW();
+    explicit AiAaBoW(Memory& memory, Mind& mind);
     AiAaBoW(const AiAaBoW&) = delete;
     AiAaBoW(const AiAaBoW&&) = delete;
     AiAaBoW &operator=(const AiAaBoW&) = delete;
     AiAaBoW &operator=(const AiAaBoW&&) = delete;
     ~AiAaBoW();
 
-    bool learnMemory() {
-        if(ai.state() == Configuration::MindState::SLEEPING) {
-            ai.setState(Configuration::MindState::DREAMING);
-            if(memory.getNotesCount() > Configuration::getInstance().getAsyncMindThreshold()) {
-                // async
-                activeComputations++;
-                learnMemoryTask.reset();
-                learnMemoryTask();
-                return learnMemoryTask.get_future();
-            } else {
-                // sync
-                promise<bool> p{};
-                bool status = learnMemorySync();
-                p.set_value(status);
-                return p.get_future();
-            }
-        } else {
-            promise<bool> p{};
-            p.set_value(false);
-            return p.get_future();
-        }
-    }
-
-    std::vector<std::pair<Note*,float>> calculateLeaderboard(const Note* n) {
-        if(ai.state() == Configuration::MindState::THINKING) {
-            auto cachedLeaderboard = leaderboardCache.find(n);
-            if(cachedLeaderboard != leaderboardCache.end()) {
-                // sync
-                std::promise<std::future<std::vector<std::pair<Note*,float>>>> p{};
-                p.set_value(cachedLeaderboard->second);
-                return p.get_future();
-            } else {
-                // async
-                activeComputations++;
-                calculateLeaderboardTask.reset();
-                calculateLeaderboardTask();
-                return calculateLeaderboardTask.get_future();
-            }
-        } else {
-            // empty leaderboard indicates that it cannot be created
-            std::promise<std::future<std::vector<std::pair<Note*,float>>> p{};
-            p.set_value(std::vector<std::pair<Note*,float>>);
-            return p.get_future();
-        }
-    }
-
-    bool sleep() {
-        if(activeComputations.empty()) {
-            lexicon.clear();
-            notes.clear();
-            outlines.clear();
-            bow.clear();
-
-            ai.setState(Configuration::MindState::SLEEPING);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    bool amnesia() {
-        if(sleep()) {
-            aaMatrix.clear();
-            return true;
-        } else {
-            return false;
-        }
-    }
+    virtual std::future<bool> dream();
+    virtual std::future<std::vector<std::pair<Note*,float>>> calculateLeaderboard(const Note* n);
+    bool sleep();
+    bool amnesia();
 
 private:
 
+    /*
+     * Tasks
+     */
+
+    // :) function/method signature instead of the return type must be used
+    std::packaged_task<bool ()> learnMemoryTask;
+    std::packaged_task<std::vector<std::pair<Note*,float>> (AiAaBoW*,const Note*)> calculateLeaderboardTask;
+
+private:
+
+    /**
+     * @brief Learn Memory to start thinking.
+     */
     bool learnMemorySync();
 
+    /**
+     * @brief Calculate leaderboard.
+     */
     std::vector<std::pair<Note*,float>> calculateLeaderboardSync(const Note* n);
 
     /**
@@ -198,15 +158,6 @@ private:
      * @brief Get AA leaderboard from cache.
      */
     bool getCachedLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard);
-
-private:
-
-    /*
-     * Tasks
-     */
-
-    std::packaged_task<bool> learnMemoryTask{learnMemorySync()};
-    std::packaged_task<std::future<std::vector<std::pair<Note*,float>>>> calculateLeaderboardTask{calculateLeaderboardSync};
 
 public:
 #ifdef DO_M8F_DEBUG

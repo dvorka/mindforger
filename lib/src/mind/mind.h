@@ -32,6 +32,8 @@
 
 namespace m8r {
 
+class Ai;
+
 constexpr auto NO_PARENT = 0xFFFF;
 
 /**
@@ -112,13 +114,24 @@ public:
 
 private:
     Configuration &config;
+    Memory memory;
     MarkdownConfigurationRepresentation* mdConfigRepresentation;
 
-    Memory memory;
-
-    // thinking
-    Ai ai;
+    /**
+     * Atomic mind state changes and asynchronous computations synchronization
+     * through Mind components and processes.
+     */
     std::mutex exclusiveMind;
+
+    /**
+     * @brief Active mental processes.
+     */
+    int activeProcesses;
+
+    /**
+     * Where the mind thinks.
+     */
+    Ai* ai;
 
     /**
      * @brief Semantic view of Memory.
@@ -152,7 +165,7 @@ private:
     std::vector<Note*> allNotesCache;
 
     /**
-     * @brief Forgetting.
+     * @brief Time scoping.
      */
     TimeScopeAspect timeScopeAspect;
 
@@ -165,24 +178,14 @@ public:
     Mind& operator=(const Mind&&) = delete;
     virtual ~Mind();
 
+    void persistMindState(Configuration::MindState mindState) {
+        config.setMindState(mindState);
+        mdConfigRepresentation->save(config);
+    }
+
     /*
      * THINKING
      */
-
-    /**
-     * @brief Think to do useful things for user when searching, viewing and editing.
-     *
-     * Mind is kept. If Mind is NOT initialized, then think() first switches to dreaming
-     * to prepare AI. When ready, it starts to think and be useful.
-     */
-    bool think();
-
-    /**
-     * @brief Sleep to clear Mind, keep Memory and relax.
-     *
-     * Memory is kept, but Mind is cleared. No thinking or dreaming.
-     */
-    bool sleep();
 
     /**
      * @brief Learn new MindForger/Markdown repository/directory/file defined by configuration AND keep the current mind state.
@@ -192,9 +195,42 @@ public:
     bool learn();
 
     /**
+     * @brief Think to do useful things for user when searching, viewing or editing.
+     *
+     * Mind is kept. If Mind is NOT initialized, then think() first switches to dream()
+     * to prepare AI. When ready, it starts to think to be useful.
+     */
+    std::future<bool> think();
+
+    /**
+     * @brief Sleep to clear Mind, keep Memory and relax.
+     *
+     * Memory is kept, but Mind is cleared. No thinking or dreaming.
+     */
+    bool sleep();
+
+    /**
      * @brief Forget everything e.g. when MF creates a new empty repository.
      */
     bool amnesia();
+
+    /*
+     *  AI
+     */
+
+    /**
+     * Manage active mind processes.
+     */
+    bool isActiveProcesses() const { return activeProcesses==0; }
+    void incActiveProcesses() { activeProcesses++; }
+    void decActiveProcesses() { activeProcesses--; }
+
+    /**
+     * @brief Find Note associations.
+     */
+    std::future<std::vector<std::pair<Note*,float>>> getAssociationsLeaderboard(const Note* n);
+
+    unsigned getTriplesCount() const { return triples.size(); }
 
     /*
      * REMEMBERING
@@ -220,7 +256,7 @@ public:
     size_t getMemoryDwellDepth() const;
 
     /*
-     * FIND
+     * SEARCHING
      */
 
     /**
@@ -232,6 +268,15 @@ public:
     // TODO findFts() - search also outline name and description
     //   >> temporary note of Outline type (never saved), cannot be created by user
     void getOutlineNames(std::vector<std::string>& names) const;
+
+    /*
+     * SCOPING
+     */
+
+    // TODO set scope & propagate it to memory
+    std::string getTimeScopeAsString() { return timeScopeAspect.getTimeScopeAsString(); }
+    bool isTimeScopeEnabled() const { return timeScopeAspect.isEnabled(); }
+    TimeScopeAspect& getTimeScopeAspect() { return timeScopeAspect; }
 
     /*
      * (CROSS) REFERENCES - explicit associations created by the user.
@@ -306,7 +351,7 @@ public:
     std::vector<Note*>* getNotesOfType(const NoteType& type, const Outline& outline) const;
 
     /*
-     * ASSOCIATIONS - associations inferred by MindForger
+     * ASSOCIATIONS
      */
 
     /**
@@ -330,16 +375,7 @@ public:
     std::vector<Note*>* getAssociatedNotes(const std::vector<std::string*> words, const Outline& outline) const;
 
     /*
-     * SCOPING
-     */
-
-    // TODO set scope & propagate it to memory
-    std::string getTimeScopeAsString() { return timeScopeAspect.getTimeScopeAsString(); }
-    bool isTimeScopeEnabled() const { return timeScopeAspect.isEnabled(); }
-    TimeScopeAspect& getTimeScopeAspect() { return timeScopeAspect; }
-
-    /*
-     * OUTLINE MANAGEMENT
+     * OUTLINE MGMT
      */
 
     /**
@@ -365,7 +401,7 @@ public:
     bool outlineForget(std::string outlineKey);
 
     /*
-     * NOTE MANAGEMENT
+     * NOTE MGMT
      */
 
     /**
@@ -461,29 +497,6 @@ public:
             uint16_t fromNoteId);
 
     /*
-     *  AI
-     */
-
-    /**
-     * @brief Find Note associations.
-     */
-    void getAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard) {
-        ai.getAssociationsLeaderboard(n, leaderboard);
-    }
-    bool getCachedAssociationsLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard) {
-        return ai.getCachedAssociationsLeaderboard(n, leaderboard);
-    }
-    void cacheAssociationsLeaderboard(const Note* n) {
-        ai.cacheAssociationsLeaderboard(n);
-    }
-
-    /*
-     * TRIPLES
-     */
-
-    unsigned getTriplesCount() const { return triples.size(); }
-
-    /*
      * DIAGNOSTICS
      */
 
@@ -510,7 +523,10 @@ private:
      *     > NLP lexicon, BoW
      *     > associations neural network
      */
-    bool dream();
+    std::future<bool> mindDream();
+
+    bool mindSleep();
+    bool mindAmnesia();
 
     /**
      * @brief Invoked on remembering Outline/Note/... to flush all inferred knowledge, caches, ...

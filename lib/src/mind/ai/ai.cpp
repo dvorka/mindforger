@@ -22,15 +22,14 @@ namespace m8r {
 
 using namespace std;
 
-Ai::Ai(Memory& memory)
-    :aiState(Configuration::MindState::SLEEPING)
+Ai::Ai(Memory& memory, Mind& mind)
 {
     switch(Configuration::getInstance().getAaAlgorithm()) {
     case Configuration::AssociationAssessmentAlgorithm::BOW:
-        aa = new AiAaBoW{memory};
+        aa = new AiAaBoW{memory,mind};
         break;
     case Configuration::AssociationAssessmentAlgorithm::WEIGHTED_FTS:
-        aa = new AiAaWeightedFts{memory};
+        aa = new AiAaWeightedFts{memory,mind};
         break;
     }
 }

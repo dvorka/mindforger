@@ -33,7 +33,6 @@
 #include "../../../src/mind/ai/nlp/lexicon.h"
 #include "../../../src/mind/ai/nlp/word_frequency_list.h"
 #include "../../../src/mind/ai/nlp/bag_of_words.h"
-#include "../../../src/mind/ai/association_assessment_model.h"
 
 #include <gtest/gtest.h>
 
@@ -104,7 +103,7 @@ TEST(AiNlpTestCase, Lexicon)
 
 }
 
-TEST(AiNlpTestCase, Outline)
+TEST(AiNlpTestCase, BowOutline)
 {
     // FOO outline
     m8r::OutlineType oType{m8r::OutlineType::KeyOutline(),nullptr,m8r::Color::RED()};
@@ -164,6 +163,10 @@ TEST(AiNlpTestCase, Outline)
     ASSERT_EQ(1, bow.size());
 }
 
+/*
+ * AA: BoW
+ */
+
 TEST(AiNlpTestCase, Tokenizer)
 {
     string repositoryPath{"/lib/test/resources/basic-repository"};
@@ -192,12 +195,14 @@ TEST(AiNlpTestCase, Tokenizer)
     ASSERT_EQ(182, narrowed.size());
 }
 
-TEST(AiNlpTestCase, Repository)
+TEST(AiNlpTestCase, AaRepositoryBow)
 {
     string repositoryPath{"/lib/test/resources/universe-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    // choose BoW AA algorithm
+    config.setAaAlgorithm(m8r::Configuration::AssociationAssessmentAlgorithm::BOW);
     m8r::Mind mind(config);
     mind.think();
     cout << "Statistics:" << endl
@@ -210,23 +215,26 @@ TEST(AiNlpTestCase, Repository)
      * Tokenize repository > make AI to think > find the most similar Notes pair
      */
 
-    mind.dream();
+    // TODO to be rewritten mind.dream();
 
     // get the best associations of N
     // TODO find Note by name and use it...
     // TODO consider AI repository for assoc experiments
     m8r::Note* n=mind.remind().getOutlines()[0]->getNotes()[0];
+    UNUSED_ARG(n);
     std::vector<std::pair<m8r::Note*,float>> lb{};
-    mind.getAssociationsLeaderboard(n, lb);
-    m8r::Ai::print(n,lb);
+    // TODO mind.getAssociationsLeaderboard(n, lb);
+    // TODO m8r::Ai::print(n,lb);
 }
 
-TEST(AiNlpTestCase, AaUniverse)
+TEST(AiNlpTestCase, AaUniverseBow)
 {
     string repositoryPath{"/lib/test/resources/aa-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    // choose BoW AA algorithm
+    config.setAaAlgorithm(m8r::Configuration::AssociationAssessmentAlgorithm::BOW);
     m8r::Mind mind(config);
     mind.learn();
     mind.think();
@@ -248,12 +256,27 @@ TEST(AiNlpTestCase, AaUniverse)
 
     // get the best associations of 'Albert Einstein'
     m8r::Note* n=u->getNotes()[0];
+    UNUSED_ARG(n);
     std::vector<std::pair<m8r::Note*,float>> lb{};
-    mind.getAssociationsLeaderboard(n, lb);
-    m8r::Ai::print(n,lb);
+    // TODO mind.getAssociationsLeaderboard(n, lb);
+    // TODO m8r::Ai::print(n,lb);
 
     // asserts
     ASSERT_EQ("Same Albert Einstein", lb[0].first->getName());
     ASSERT_EQ(0.75, lb[0].second);
     ASSERT_EQ("Albert Einstein", lb[1].first->getName());
+}
+
+/*
+ * AA: FTS
+ */
+
+TEST(AiNlpTestCase, AaRepositoryFts)
+{
+    // TODO AaRepositoryFts
+}
+
+TEST(AiNlpTestCase, AaUniverseFts)
+{
+    // TODO AaUniverseFts
 }

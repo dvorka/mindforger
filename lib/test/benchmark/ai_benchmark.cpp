@@ -69,14 +69,15 @@ TEST(AiBenchmark, DISABLED_AaMatrix)
 
     auto beginDream = chrono::high_resolution_clock::now();
 
-    mind.dream();
+    // TODO to be rewritten mind.dream();
 
     auto endDream = chrono::high_resolution_clock::now();
     MF_DEBUG(endl << "Dream DONE in " << chrono::duration_cast<chrono::microseconds>(endDream-beginDream).count()/1000.0 << "ms" << endl);
 
     // get the best associations of N
     m8r::Note* n=mind.remind().getOutlines()[0]->getNotes()[0];
+    UNUSED_ARG(n);
     std::vector<std::pair<m8r::Note*,float>> lb{};
-    mind.getAssociationsLeaderboard(n, lb);
-    m8r::Ai::print(n,lb);
+    // TODO to be rewritten mind.getAssociationsLeaderboard(n, lb);
+    // TODO to be rewritten m8r::Ai::print(n,lb);
 }
