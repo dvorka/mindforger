@@ -45,7 +45,8 @@ TEST(HtmlTestCase, Outline)
     m8r::Mind mind(config);
     m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology()};
     m8r::MarkdownOutlineRepresentation markdownRepresentation(mind.remind().getOntology());
-    mind.think();
+    mind.learn();
+    mind.think().get();
 
     ASSERT_GE(mind.remind().getOutlinesCount(), 1);
 
@@ -72,7 +73,8 @@ TEST(HtmlTestCase, Note)
     m8r::Mind mind(config);
     m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology()};
     m8r::MarkdownOutlineRepresentation markdownRepresentation(mind.remind().getOntology());
-    mind.think();
+    mind.learn();
+    mind.think().get();
 
     ASSERT_GE(mind.remind().getOutlinesCount(), 1);
 
@@ -93,7 +95,8 @@ TEST(HtmlTestCase, NoteLinks)
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
     m8r::Mind mind(config);
     m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology()};
-    mind.think();
+    mind.learn();
+    mind.think().get();
 
     ASSERT_GE(mind.remind().getOutlinesCount(), 1);
 

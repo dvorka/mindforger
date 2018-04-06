@@ -20,14 +20,14 @@
 export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
 #export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
-export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
+#export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
 
 #export OPTION_TEST="AiBenchmark.AaMatrix"
 #export OPTION_TEST="TrieBenchmark.TrieVsMap"
 #export OPTION_TEST="HtmlBenchmark.Outline"
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
-export OPTION_TEST="AiNlpTestCase.AaUniverse"
+#export OPTION_TEST="AiNlpTestCase.AaUniverse"
 #export OPTION_TEST="AiNlpTestCase.Repository"
 #export OPTION_TEST="AiNlpTestCase.Outline"
 #export OPTION_TEST="AiNlpTestCase.Lexicon"
@@ -123,6 +123,7 @@ export BUILD_DIR=${SCRIPT_DIR}/../lib/test
 #  - use -v only if you want a lot of info (might be too much)
 if [ ${OPTION_RECOMPILE} ]
 then
+    cd ${BUILD_DIR} && cd ../../deps && make clean && rm *.a && qmake deps.pro
     cd ${BUILD_DIR} && cd .. && make clean && rm *.a && qmake lib.pro
     cd ${BUILD_DIR} && cd ./src && make clean && qmake src.pro
     cd ${BUILD_DIR} && make clean && qmake mindforger-lib-unit-tests.pro && make -j${M8R_CPU_CORES}

@@ -68,7 +68,8 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
-    mind.think();
+    mind.learn();
+    mind.think().get();
 
     // get the outline and add to it a stencil note
     vector<m8r::Outline*> outlines = memory.getOutlines();
@@ -165,8 +166,8 @@ TEST(NoteTestCase, PromoteDemoteUpDown) {
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
-    mind.think();
-
+    mind.learn();
+    mind.think().get();
 
     // test
     vector<m8r::Outline*> outlines = memory.getOutlines();
@@ -329,8 +330,8 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
-    mind.think();
-
+    mind.learn();
+    mind.think().get();
 
     // test
     vector<m8r::Outline*> outlines = memory.getOutlines();

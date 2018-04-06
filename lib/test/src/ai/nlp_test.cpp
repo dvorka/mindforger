@@ -176,7 +176,8 @@ TEST(AiNlpTestCase, Tokenizer)
     config.setConfigFilePath("/tmp/cfg-antc-t.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
     m8r::Mind mind(config);
-    mind.think();
+    mind.learn();
+    mind.think().get();
     cout << "\nStatistics:";
     cout << "\n  Outlines: " << mind.remind().getOutlinesCount();
     cout << "\n  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
@@ -197,7 +198,7 @@ TEST(AiNlpTestCase, Tokenizer)
     ASSERT_EQ(182, narrowed.size());
 }
 
-TEST(AiNlpTestCase, AaRepositoryBow)
+TEST(AiNlpTestCase, DISABLED_AaRepositoryBow)
 {
     string repositoryPath{"/lib/test/resources/universe-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
@@ -232,7 +233,7 @@ TEST(AiNlpTestCase, AaRepositoryBow)
     m8r::Ai::print(n,leaderboard);
 }
 
-TEST(AiNlpTestCase, AaUniverseBow)
+TEST(AiNlpTestCase, DISABLED_AaUniverseBow)
 {
     string repositoryPath{"/lib/test/resources/aa-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
