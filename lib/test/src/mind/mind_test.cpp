@@ -152,8 +152,14 @@ TEST(MindTestCase, LearnAndRememberMindForgerRepository) {
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    cout << "Loading repository: " << config.getActiveRepository()->getPath();
     m8r::Mind mind(config);
+    mind.learn();
     mind.think();
+    cout << "Statistics:" << endl
+    << "  Outlines: " << mind.remind().getOutlinesCount() << endl
+    << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize() << endl;
+    ASSERT_LE(1, mind.remind().getOutlinesCount());
 
     m8r::Memory& memory = mind.remind();
     vector<m8r::Outline*> outlines = memory.getOutlines();

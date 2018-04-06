@@ -161,14 +161,6 @@ private:
 
 public:
 #ifdef DO_M8F_DEBUG
-    static void print(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard) {
-        std::cout << "Note '" << n->getName() << "' AA leaderboard("<< leaderboard.size() <<"):" << std::endl;
-        int i=1;
-        for(auto& nn:leaderboard) {
-            std::cout << "  #" << i++ << " '" << nn.first->getName() << "' ~ " << nn.second << std::endl;
-        }
-    }
-
     void printAa() {
         std::cout << "AA Matrix:" << std::endl;
         for(size_t i=0; i<aaMatrix.size(); i++) {

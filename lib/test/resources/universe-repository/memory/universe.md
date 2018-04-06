@@ -36,7 +36,7 @@ Moon is earth's moon.
 
 ## Scientists
 
-### Albert Einstain
+### Albert Einstein
 
-Albert Einstain was physicists who explained how the universe works with his Theory of relativity.
+Albert Einstein was physicists who explained how the universe works with his Theory of relativity.
  

@@ -1,5 +1,5 @@
 /*
- association_assessment_notes_feature.h     MindForger thinking notebook
+ aa_notes_feature.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 

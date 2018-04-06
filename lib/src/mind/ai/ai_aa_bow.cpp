@@ -172,11 +172,11 @@ bool AiAaBoW::learnMemorySync()
         aaMatrix.clear();
         aaMatrix.resize(notes.size());
         for(size_t i=0; i<aaMatrix.size(); ++i) {
-            aaMatrix[i].resize(aaMatrix.size(),-1); // C++: method cannot get AA_NOT_SET as parameter - linker complaints
+            aaMatrix[i].resize(aaMatrix.size(),(float)AiAaBoW::AA_NOT_SET); // C++ :-Z constexpr w/ internal linkage does NOT have to be solved in compile time > workaround via temporary var
         }
     } else {
         for(size_t i=0; i<aaMatrix.size(); ++i) {
-            std::fill(aaMatrix[i].begin(), aaMatrix[i].end(), -1); // C++: template cannot get AA_NOT_SET as parameter - linker complaints
+            std::fill(aaMatrix[i].begin(), aaMatrix[i].end(), (float)AiAaBoW::AA_NOT_SET); // C++ :-Z constexpr w/ internal linkage does NOT have to be solved in compile time > workaround via temporary var
         }
     }
 

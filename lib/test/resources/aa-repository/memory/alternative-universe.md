@@ -2,6 +2,6 @@
 
 This outline demonstrates MindForger associations.
 
-# Albert Einstein
+# Same Albert Einstein
 
 Same Note from O Outline. Albert Einstein was physicists who explained how the universe works with his Theory of relativity.

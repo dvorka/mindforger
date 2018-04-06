@@ -172,14 +172,14 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     EXPECT_GE(c.getRepositories().size(), 1);
     EXPECT_NE(c.getRepositories().find(repositoryPath), c.getRepositories().end());
     c.getRepositories().find(repositoryPath)->second->print();
-    EXPECT_EQ(c.getRepositories().find(repositoryPath)->second->getPATH(), repositoryPath);
+    EXPECT_EQ(c.getRepositories().find(repositoryPath)->second->getPath(), repositoryPath);
     EXPECT_EQ(c.getRepositories().find(repositoryPath)->second->getDir(), repositoryDir);
     EXPECT_EQ(c.getRepositories().find(repositoryPath)->second->getFile(), repositoryFilename);
     EXPECT_EQ(c.getRepositories().find(repositoryPath)->second->getMode(), m8r::Repository::RepositoryMode::FILE);
 
     EXPECT_NE(c.getActiveRepository(),nullptr);
     c.getActiveRepository()->print();
-    EXPECT_EQ(c.getActiveRepository()->getPATH(), repositoryPath);
+    EXPECT_EQ(c.getActiveRepository()->getPath(), repositoryPath);
     EXPECT_EQ(c.getActiveRepository()->getDir(), repositoryDir);
     EXPECT_EQ(c.getActiveRepository()->getFile(), repositoryFilename);
     EXPECT_EQ(c.getActiveRepository()->getMode(), m8r::Repository::RepositoryMode::FILE);

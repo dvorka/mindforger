@@ -203,28 +203,30 @@ TEST(AiNlpTestCase, AaRepositoryBow)
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
     // choose BoW AA algorithm
     config.setAaAlgorithm(m8r::Configuration::AssociationAssessmentAlgorithm::BOW);
+
     m8r::Mind mind(config);
-    mind.think();
+    bool learned = mind.learn();
+    ASSERT_EQ(true, learned);
     cout << "Statistics:" << endl
     << "  Outlines: " << mind.remind().getOutlinesCount() << endl
     << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize() << endl;
-
     ASSERT_LE(1, mind.remind().getOutlinesCount());
+
+    future<bool> readyToThink = mind.think();
+    ASSERT_EQ(true, readyToThink.get()); // blocked
+    ASSERT_EQ(m8r::Configuration::MindState::THINKING, config.getMindState());
 
     /*
      * Tokenize repository > make AI to think > find the most similar Notes pair
      */
 
-    // TODO to be rewritten mind.dream();
+    // get the best associations of N w/ given name
+    m8r::Note* n=mind.remind().getOutlines()[0]->getNoteByName("Albert Einstein");
+    ASSERT_NE(nullptr, n);
 
-    // get the best associations of N
-    // TODO find Note by name and use it...
-    // TODO consider AI repository for assoc experiments
-    m8r::Note* n=mind.remind().getOutlines()[0]->getNotes()[0];
-    UNUSED_ARG(n);
-    std::vector<std::pair<m8r::Note*,float>> lb{};
-    // TODO mind.getAssociationsLeaderboard(n, lb);
-    // TODO m8r::Ai::print(n,lb);
+    auto lbFuture = mind.getAssociationsLeaderboard(n);
+    auto leaderboard = lbFuture.get(); // blocked
+    m8r::Ai::print(n,leaderboard);
 }
 
 TEST(AiNlpTestCase, AaUniverseBow)
@@ -235,16 +237,18 @@ TEST(AiNlpTestCase, AaUniverseBow)
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
     // choose BoW AA algorithm
     config.setAaAlgorithm(m8r::Configuration::AssociationAssessmentAlgorithm::BOW);
+
     m8r::Mind mind(config);
-    mind.learn();
-    mind.think();
+    bool learned = mind.learn();
+    ASSERT_EQ(true, learned);
     cout << "Statistics:" << endl
     << "  Outlines: " << mind.remind().getOutlinesCount() << endl
     << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize() << endl;
-
     ASSERT_LE(1, mind.remind().getOutlinesCount());
 
-    mind.think();
+    future<bool> readyToThink = mind.think();
+    ASSERT_EQ(true, readyToThink.get()); // blocked
+    ASSERT_EQ(m8r::Configuration::MindState::THINKING, config.getMindState());
 
     // assert associations
     m8r::Outline* u;
@@ -257,14 +261,14 @@ TEST(AiNlpTestCase, AaUniverseBow)
     // get the best associations of 'Albert Einstein'
     m8r::Note* n=u->getNotes()[0];
     UNUSED_ARG(n);
-    std::vector<std::pair<m8r::Note*,float>> lb{};
-    // TODO mind.getAssociationsLeaderboard(n, lb);
-    // TODO m8r::Ai::print(n,lb);
+    auto lbFuture = mind.getAssociationsLeaderboard(n);
+    auto leaderboard = lbFuture.get(); // blocked
+    m8r::Ai::print(n,leaderboard);
 
     // asserts
-    ASSERT_EQ("Same Albert Einstein", lb[0].first->getName());
-    ASSERT_EQ(0.75, lb[0].second);
-    ASSERT_EQ("Albert Einstein", lb[1].first->getName());
+    ASSERT_EQ("Same Albert Einstein", leaderboard[0].first->getName());
+    ASSERT_FLOAT_EQ(0.9, leaderboard[0].second);
+    ASSERT_EQ("Scientists", leaderboard[1].first->getName());
 }
 
 /*

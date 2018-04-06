@@ -105,9 +105,9 @@ void Configuration::setMindState(MindState mindState)
 Repository* Configuration::addRepository(Repository* repository)
 {
     Repository* clash;
-    if((clash=repositories[repository->getPATH()]) != nullptr) {
+    if((clash=repositories[repository->getPath()]) != nullptr) {
         // deleting clashing repository and update active repository (if needed)
-        repositories.erase(repository->getPATH());
+        repositories.erase(repository->getPath());
         if(activeRepository == clash) {
             activeRepository = repository;
             delete clash;
@@ -115,7 +115,7 @@ Repository* Configuration::addRepository(Repository* repository)
         }
     }
 
-    repositories[repository->getPATH()] = repository;
+    repositories[repository->getPath()] = repository;
 
     return repository;
 }
@@ -137,7 +137,7 @@ std::map<const std::string,Repository*>& Configuration::getRepositories()
 void Configuration::setActiveRepository(Repository* repository)
 {
     if(repository) {
-        if(repositories.find(repository->getPATH()) != repositories.end()) {
+        if(repositories.find(repository->getPath()) != repositories.end()) {
             activeRepository = repository;
 
             memoryPath.clear();

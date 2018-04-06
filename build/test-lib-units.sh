@@ -20,7 +20,7 @@
 #export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
 #export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
-#export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
+export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
 
 #export OPTION_TEST="AiBenchmark.AaMatrix"
 #export OPTION_TEST="TrieBenchmark.TrieVsMap"
@@ -63,7 +63,7 @@ export OPTION_TEST="AiNlpTestCase.AaUniverse"
 #export OPTION_TEST="RepositoryIndexerTestCase.MarkdownFile"
 #export OPTION_TEST="NoteTestCase.*"
 #export OPTION_TEST="NoteTestCase.DeepUpDownFirstLastClone"
-#export OPTION_TEST="MindTestCase.LearnAmnesiaLearn"
+export OPTION_TEST="MindTestCase.LearnAndRememberMindForgerRepository"
 #export OPTION_TEST="DateTimeGearTestCase.Immutability"
 #export OPTION_TEST="ConfigurationTestCase.*"
 #export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"

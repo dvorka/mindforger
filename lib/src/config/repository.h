@@ -90,7 +90,7 @@ public:
     ~Repository();
 
     // IMPROVE rename to getPath() after refactoring
-    std::string& getPATH() { return path; }
+    std::string& getPath() { return path; }
     const std::string& getDir() const { return dir; }
     void setDir(std::string dir) { this->dir = dir; updatePath(); }
     const std::string& getFile() const { return file; }

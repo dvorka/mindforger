@@ -256,7 +256,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "threated as knowledge base, else it's used as a Markdown directory (e.g. metadata"  << endl <<
          "are not stored to Markdown files)." << endl <<
          endl <<
-         CONFIG_SETTING_ACTIVE_REPOSITORY_LABEL << (c&&c->getActiveRepository()?c->getActiveRepository()->getPATH():Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH) <<
+         CONFIG_SETTING_ACTIVE_REPOSITORY_LABEL << (c&&c->getActiveRepository()?c->getActiveRepository()->getPath():Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH) <<
          endl;
 
     if(c) {

@@ -499,6 +499,16 @@ void Outline::addNotes(std::vector<Note*>& notesToAdd, int offset)
     }
 }
 
+Note* Outline::getNoteByName(const std::string& noteName) const
+{
+    for(Note* n:notes) {
+        if(n->getName().find(noteName) != string::npos) {
+            return n;
+        }
+    }
+    return nullptr;
+}
+
 int Outline::getNoteOffset(const Note* note) const
 {
     if(!notes.empty()) {
