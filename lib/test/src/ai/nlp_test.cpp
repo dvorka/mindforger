@@ -198,7 +198,7 @@ TEST(AiNlpTestCase, Tokenizer)
     ASSERT_EQ(182, narrowed.size());
 }
 
-TEST(AiNlpTestCase, DISABLED_AaRepositoryBow)
+TEST(AiNlpTestCase, AaRepositoryBow)
 {
     string repositoryPath{"/lib/test/resources/universe-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());

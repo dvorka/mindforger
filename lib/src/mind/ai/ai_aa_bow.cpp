@@ -252,7 +252,7 @@ void AiAaBoW::calculateAaRow(size_t y)
 
 #ifdef DO_M8F_DEBUG
     MF_DEBUG("AI/AA.BoW: AA row calculated!" << endl);
-    printAa();
+    //printAa();
     //assertAaSymmetry();
 #endif
 }
