@@ -124,13 +124,13 @@ void AiAaBoW::initializeWordBlacklist() {
 // it's presumed that callers ensures the correct Mind state
 future<bool> AiAaBoW::dream() {
     if(memory.getNotesCount() > Configuration::getInstance().getAsyncMindThreshold()) {
-        // async
+        MF_DEBUG("AI/AA.BoW: ASYNC dream..." << endl);
         mind.incActiveProcesses();
         learnMemoryTask.reset();
         learnMemoryTask();
         return learnMemoryTask.get_future();
     } else {
-        // sync
+        MF_DEBUG("AI/AA.BoW: SYNC dream..." << endl);
         promise<bool> p{};
         bool status = learnMemorySync();
         p.set_value(status);
@@ -143,7 +143,7 @@ future<bool> AiAaBoW::dream() {
 
 bool AiAaBoW::learnMemorySync()
 {
-    MF_DEBUG("  AI dream: Learning memory to BoW..." << endl);
+    MF_DEBUG("AI/AA.BoW: LEARNING memory to BoW..." << endl);
     notes.clear();
     memory.getAllNotes(notes);
     // let N know it's indexed in AI
@@ -184,7 +184,7 @@ bool AiAaBoW::learnMemorySync()
 
     mind.persistMindState(Configuration::MindState::THINKING);
 
-    MF_DEBUG("  AI dream: memory learned to BoW!" << endl);
+    MF_DEBUG("AI/AA.BoW: memory LEARNED!" << endl);
     return true;
 }
 
@@ -192,12 +192,12 @@ bool AiAaBoW::learnMemorySync()
 future<vector<pair<Note*,float>>> AiAaBoW::calculateLeaderboard(const Note* n) {
     auto cachedLeaderboard = leaderboardCache.find(n);
     if(cachedLeaderboard != leaderboardCache.end()) {
-        // sync
+        MF_DEBUG("AI/AA.BoW: SYNC leaderboard calculation for '" << n->getName() << "'" << endl);
         promise<vector<pair<Note*,float>>> p{};
         p.set_value(cachedLeaderboard->second);
         return p.get_future();
     } else {
-        // async
+        MF_DEBUG("AI/AA.BoW: ASYNC leaderboard calculation for '" << n->getName() << "'" << endl);
         mind.incActiveProcesses();
         calculateLeaderboardTask.reset();
         calculateLeaderboardTask(this, n);
@@ -210,7 +210,7 @@ future<vector<pair<Note*,float>>> AiAaBoW::calculateLeaderboard(const Note* n) {
 // This is a private method called from AI ~ AI state/async/critical sections handled by caller.
 void AiAaBoW::calculateAaRow(size_t y)
 {
-    MF_DEBUG("Calculating AA row " << y << "..." << endl);
+    MF_DEBUG("AI/AA.BoW: Calculating AA row " << y << "..." << endl);
     // calculate row and column that cross diagonal on [y][y]
 
     // check diagonal to find out whether the cross has been already calculated
@@ -251,8 +251,8 @@ void AiAaBoW::calculateAaRow(size_t y)
     aaMatrix[y][y] = 1.;
 
 #ifdef DO_M8F_DEBUG
-    MF_DEBUG("AA row calculated!" << endl);
-    //printAa();
+    MF_DEBUG("AI/AA.BoW: AA row calculated!" << endl);
+    printAa();
     //assertAaSymmetry();
 #endif
 }
@@ -309,7 +309,7 @@ void AiAaBoW::precalculateAa()
 
 #ifdef DO_M8F_DEBUG
     MF_DEBUG("  AA matrix built!" << endl);
-    printAa();
+    //printAa();
     assertAaSymmetry();
 #endif
 }
@@ -462,7 +462,7 @@ vector<pair<Note*,float>> AiAaBoW::calculateLeaderboardSync(const Note* n)
 
         int aaLeaderboard[AA_LEADERBOARD_SIZE][2];
         for(int i=0; i<AA_LEADERBOARD_SIZE; i++) {
-            aaLeaderboard[i][0]=aaLeaderboard[i][1]=AA_NOT_SET;
+            aaLeaderboard[i][0] = aaLeaderboard[i][1] = AA_NOT_SET;
         }
 
         float aa;
@@ -471,38 +471,40 @@ vector<pair<Note*,float>> AiAaBoW::calculateLeaderboardSync(const Note* n)
 
             aa = aaMatrix[x][y];
 
-            if(aaLeaderboard[AA_LEADERBOARD_SIZE-1][0]==AA_NOT_SET
-                    ||
-                    aaLeaderboard[AA_LEADERBOARD_SIZE-1][0]<aa)
-            {
+            if(aa > aaLeaderboard[AA_LEADERBOARD_SIZE-1][0]) { // covers also lb[][]==NOT_SET (== -1)
                 // find target leaderboard row
                 size_t target;
                 for(target=0; target<AA_LEADERBOARD_SIZE; target++) {
-                    if(aaLeaderboard[target][0]!=AA_NOT_SET) {
-                        if(aa >= aaMatrix[aaLeaderboard[target][0]][aaLeaderboard[target][1]]) {
+                    if(aaLeaderboard[target][0] == AA_NOT_SET) {
+                        break; // fill empty row -> no shift needed
+                    } else {
+                        if(aa > aaMatrix[aaLeaderboard[target][0]][aaLeaderboard[target][1]]) {
                             break;
                         }
-                    } else {
-                        break;
                     }
                 }
-                // shift leaderboard
-                int sx=aaLeaderboard[target][0];
-                int sy=aaLeaderboard[target][1];
-                for(size_t ll=target; ll<AA_NOT_SET; ll++) {
-                    if(aaLeaderboard[ll][0]!=AA_NOT_SET) {
-                        int tx=aaLeaderboard[ll][0];
-                        int ty=aaLeaderboard[ll][1];
-                        aaLeaderboard[ll][0]=sx;
-                        aaLeaderboard[ll][1]=sy;
-                        sx=tx;
-                        sy=ty;
-                    } else {
-                        aaLeaderboard[ll][0]=sx;
-                        aaLeaderboard[ll][1]=sy;
-                        break;
+
+                /// empty row > no shift needed
+                if(aaLeaderboard[target][0] != AA_NOT_SET) {
+                    // shift leaderboard
+                    int sx = aaLeaderboard[target][0];
+                    int sy = aaLeaderboard[target][1];
+                    for(size_t ll=target; ll<AA_LEADERBOARD_SIZE; ll++) {
+                        if(aaLeaderboard[ll][0]!=AA_NOT_SET) {
+                            int tx=aaLeaderboard[ll][0];
+                            int ty=aaLeaderboard[ll][1];
+                            aaLeaderboard[ll][0]=sx;
+                            aaLeaderboard[ll][1]=sy;
+                            sx=tx;
+                            sy=ty;
+                        } else {
+                            aaLeaderboard[ll][0]=sx;
+                            aaLeaderboard[ll][1]=sy;
+                            break;
+                        }
                     }
                 }
+
                 // assign value
                 aaLeaderboard[target][0]=x;
                 aaLeaderboard[target][1]=y;
@@ -513,7 +515,7 @@ vector<pair<Note*,float>> AiAaBoW::calculateLeaderboardSync(const Note* n)
         for(int i=0; i<AA_LEADERBOARD_SIZE && aaLeaderboard[i][0]!=AA_NOT_SET; i++) {
             MF_DEBUG("  #" << i << " " <<
                      notes[aaLeaderboard[i][0]]->getName() << " (" << notes[aaLeaderboard[i][0]]->getOutline()->getName() << ")" <<
-                                                                                                                             " ~ " << aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]] << endl);
+                     " ~ " << aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]] << endl);
             leaderboard.push_back(std::make_pair(notes[aaLeaderboard[i][0]],aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]]));
         }
 

@@ -233,7 +233,7 @@ TEST(AiNlpTestCase, DISABLED_AaRepositoryBow)
     m8r::Ai::print(n,leaderboard);
 }
 
-TEST(AiNlpTestCase, DISABLED_AaUniverseBow)
+TEST(AiNlpTestCase, AaUniverseBow)
 {
     string repositoryPath{"/lib/test/resources/aa-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
@@ -272,8 +272,10 @@ TEST(AiNlpTestCase, DISABLED_AaUniverseBow)
 
     // asserts
     ASSERT_EQ("Same Albert Einstein", leaderboard[0].first->getName());
+    ASSERT_EQ("Universe", leaderboard[0].first->getOutline()->getName());
     ASSERT_FLOAT_EQ(0.9, leaderboard[0].second);
-    ASSERT_EQ("Scientists", leaderboard[1].first->getName());
+    ASSERT_EQ("Same Albert Einstein", leaderboard[1].first->getName());
+    ASSERT_EQ("Alternative Universe", leaderboard[1].first->getOutline()->getName());
 }
 
 /*
