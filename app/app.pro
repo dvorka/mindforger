@@ -115,7 +115,8 @@ HEADERS += \
     src/qt/outline_view_splitter.h \
     src/qt/assoc_leaderboard_model.h \
     src/qt/assoc_leaderboard_presenter.h \
-    src/qt/assoc_leaderboard_view.h
+    src/qt/assoc_leaderboard_view.h \
+    src/qt/gear/async_task_notifications_distributor.h
 
 SOURCES += \
     ./src/qt/mindforger.cpp \
@@ -182,7 +183,8 @@ SOURCES += \
     src/qt/outline_view_splitter.cpp \
     src/qt/assoc_leaderboard_model.cpp \
     src/qt/assoc_leaderboard_presenter.cpp \
-    src/qt/assoc_leaderboard_view.cpp
+    src/qt/assoc_leaderboard_view.cpp \
+    src/qt/gear/async_task_notifications_distributor.cpp
 
 TRANSLATIONS = \
     ./resources/qt/translations/mindforger_en.ts \
