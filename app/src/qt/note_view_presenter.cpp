@@ -81,43 +81,14 @@ void NoteViewPresenter::refresh(Note* note)
     view->setHtml(qHtml);
 
     // leaderboard
-    mind->getAssociationsLeaderboard(note);
-
-
-
-
-
-
-
-
-
-
-    // leaderboard
-    if(config.getMindState()==Configuration::MindState::DREAMING
-         ||
-       config.getMindState()==Configuration::MindState::THINKING)
-    {
-        // IMPROVE if note WAS already selected before (did NOT change), then do NOT refresh (recalc is already smart)
-
-        // decide whether to run sync/async
-        if(mind->remind().getNotesCount() > config.getAsyncMindConfig()) {
-            // get cached; if NOT cached, then compute leaderboard to be available later
-            if(!mind->getCachedAssociationsLeaderboard(note, assocLeaderboard)) {
-                QtConcurrent::run(mind, &Mind::cacheAssociationsLeaderboard, note);
-            } // else cache :)
-        } else {
-            mind->getAssociationsLeaderboard(note, assocLeaderboard);
-        }
-
-        orloj->getOutlineView()->getAssocLeaderboard()->refresh(assocLeaderboard);
+    future<bool> f = mind->getAssociatedNotes(note, associatedNotesLeaderboard);
+    if(f.valid()) {
+        orloj->getOutlineView()->getAssocLeaderboard()->refresh(associatedNotesLeaderboard);
     } else {
         orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
+        // ask notifications distributor to repaint leaderboard later
+        orloj->getMainWindow()->getDistributor()->sendSignalWhenLeaderboardIsReady(std::move(f)); // move
     }
-
-
-
-
-
 }
 
 void NoteViewPresenter::slotEditNote()

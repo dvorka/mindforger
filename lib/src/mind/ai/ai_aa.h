@@ -51,12 +51,18 @@ public:
     virtual std::future<bool> dream() = 0;
 
     /**
-     * @brief Get AA leaderboard for N ~ get best Note associations.
-     * @return *copy* of the leaderboard (valid even if AI sleep()/amnesia() invoked)
+     * @brief Get best associated Ns for N.
+     * @return Explanation:
+     *   - future !VALID ... associated Ns are on the way - wait for future to become valid
+     *                       and then call this method AGAIN (i.e. ASYNC doesn't store associations
+     *                       to provided vector to avoid race conditions in the future).
+     *   - future VALID
+     *     > true  ... associated Ns can be found in vector
+     *     > false ... associated Ns will NOT be computed - Mind's not thinking, memory empty, ...
      *
      * Can be LONG running (asynchronous execution handled by AI).
      */
-    virtual std::future<std::vector<std::pair<Note*,float>>> calculateLeaderboard(const Note* n) = 0;
+    virtual std::future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations) = 0;
 
     /**
      * @brief Clear.

@@ -65,9 +65,10 @@ private:
      * Associations
      */
 
-    // associate as you READ: N -> O/N
+    // associate Ns as you READ: N -> O/N
     // IMPROVE thing*,float - both O and N to be association
     std::map<const Note*,std::vector<std::pair<Note*,float>>> leaderboardCache;
+    std::set<const Note*> leaderboardWip;
 
     // associate as you WRITE: word(s) -> O/N
     // IMPROVE std::map<const Note*,std::vector<std::pair<string*,float>>> leaderboardCache;
@@ -86,9 +87,16 @@ public:
     ~AiAaBoW();
 
     virtual std::future<bool> dream();
-    virtual std::future<std::vector<std::pair<Note*,float>>> calculateLeaderboard(const Note* n);
-    bool sleep();
-    bool amnesia();
+    /**
+     * @brief Get associated Notes.
+     *
+     * If future is valid and true, then associated N are copied to vector passed as arg,
+     * else waith for future to become valid and then call this method again (i.e. async
+     * variant does NOT copies computed associated Ns to provided vector).
+     */
+    virtual std::future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations);
+    virtual bool sleep();
+    virtual bool amnesia();
 
 private:
 
@@ -98,7 +106,7 @@ private:
 
     // :) function/method signature instead of the return type must be used
     std::packaged_task<bool ()> learnMemoryTask;
-    std::packaged_task<std::vector<std::pair<Note*,float>> (AiAaBoW*,const Note*)> calculateLeaderboardTask;
+    std::packaged_task<bool (AiAaBoW*,const Note*)> calculateLeaderboardTask;
 
 private:
 
@@ -108,9 +116,9 @@ private:
     bool learnMemorySync();
 
     /**
-     * @brief Calculate leaderboard.
+     * @brief Calculate leaderboard and indicate that it has been stored to cache.
      */
-    std::vector<std::pair<Note*,float>> calculateLeaderboardSync(const Note* n);
+    bool calculateLeaderboardSync(const Note* n);
 
     /**
      * @brief Initialize blacklist using common words.

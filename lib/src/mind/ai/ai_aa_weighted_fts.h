@@ -68,20 +68,21 @@ public:
 
     virtual std::future<bool> dream();
 
-    virtual std::future<std::vector<std::pair<Note*,float>>> calculateLeaderboard(const Note* n) {
-        UNUSED_ARG(n);
+    virtual std::future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations) {
+        UNUSED_ARG(note);
+        UNUSED_ARG(associations);
 
-                                                           std::promise<std::vector<std::pair<Note*,float>>> p{};
-                                                           p.set_value(std::vector<std::pair<Note*,float>>{});
-                                                           return p.get_future();
+        std::promise<bool> p{};
+        p.set_value(false);
+        return p.get_future();
     }
 
-    bool sleep() {
+    virtual bool sleep() {
         // FOO implementation
         return true;
     }
 
-    bool amnesia() {
+    virtual bool amnesia() {
         // FOO implementation
         return true;
     }

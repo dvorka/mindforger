@@ -173,6 +173,6 @@ HEADERS += \
     src/mind/ai/nlp/stemmer/utilities/utilities.h \
     src/mind/ai/ai_aa_bow.h \
     src/mind/ai/ai_aa_weighted_fts.h \
-    src/mind/ai/ai_aa.h \
     src/mind/ai/aa_model.h \
-    src/mind/ai/aa_notes_feature.h
+    src/mind/ai/aa_notes_feature.h \
+    src/mind/ai/ai_aa.h

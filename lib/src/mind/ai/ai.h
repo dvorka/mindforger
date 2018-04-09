@@ -101,14 +101,13 @@ public:
     }
 
     /**
-     * @brief Calculate or get from cache AA leaderboard for N ~ get best Note associations.
-     * @return future w/ the *copy* of the leaderboard (valid even if AI sleep()/amnesia() invoked)
+     * @brief Get best Note associations.
      *
      * Can be LONG running on big repositories.
      * Synchronized by caller ~ Mind.
      */
-    std::future<std::vector<std::pair<Note*,float>>> getAssociationsLeaderboard(const Note* n) {
-        return aa->calculateLeaderboard(n);
+    std::future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations) {
+        return aa->getAssociatedNotes(note, associations);
     }
 
     /**

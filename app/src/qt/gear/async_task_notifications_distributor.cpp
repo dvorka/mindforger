@@ -20,12 +20,17 @@
 
 namespace m8r {
 
-AsyncTaskNotificationsDistributor::AsyncTaskNotificationsDistributor(QWidget* parent)
+AsyncTaskNotificationsDistributor::AsyncTaskNotificationsDistributor()
 {
 }
 
 AsyncTaskNotificationsDistributor::~AsyncTaskNotificationsDistributor()
 {
+}
+
+void AsyncTaskNotificationsDistributor::run()
+{
+    // TODO to be implemented
 }
 
 } // m8r namespace

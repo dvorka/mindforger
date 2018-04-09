@@ -121,7 +121,7 @@ void AiAaBoW::initializeWordBlacklist() {
     wordBlacklist.addWord("want");
 }
 
-// it's presumed that callers ensures the correct Mind state
+// it's presumed that caller ensures the correct Mind state & synchronization
 future<bool> AiAaBoW::dream() {
     if(memory.getNotesCount() > Configuration::getInstance().getAsyncMindThreshold()) {
         MF_DEBUG("AI/AA.BoW: ASYNC dream..." << endl);
@@ -188,20 +188,33 @@ bool AiAaBoW::learnMemorySync()
     return true;
 }
 
-// it's presumed that callers ensures the correct Mind state
-future<vector<pair<Note*,float>>> AiAaBoW::calculateLeaderboard(const Note* n) {
-    auto cachedLeaderboard = leaderboardCache.find(n);
+// it's presumed that caller ensures the correct Mind state & synchronization
+future<bool> AiAaBoW::getAssociatedNotes(const Note* note, vector<pair<Note*,float>>& associations) {
+    auto cachedLeaderboard = leaderboardCache.find(note);
     if(cachedLeaderboard != leaderboardCache.end()) {
-        MF_DEBUG("AI/AA.BoW: SYNC leaderboard calculation for '" << n->getName() << "'" << endl);
-        promise<vector<pair<Note*,float>>> p{};
-        p.set_value(cachedLeaderboard->second);
-        return p.get_future();
-    } else {
-        MF_DEBUG("AI/AA.BoW: ASYNC leaderboard calculation for '" << n->getName() << "'" << endl);
-        mind.incActiveProcesses();
-        calculateLeaderboardTask.reset();
-        calculateLeaderboardTask(this, n);
-        return calculateLeaderboardTask.get_future();
+        MF_DEBUG("AI/AA.BoW: SYNC leaderboard calculation for '" << note->getName() << "'" << endl);
+        // copy leaderboard to ENSURE it's validity even if Mind/AI will be cleared/asleep/...
+        for(auto p:cachedLeaderboard->second) {
+            associations.push_back(p);
+        }
+        // indicate that it's immediately available
+        promise<bool> p{};
+        p.set_value(true);
+        return p.get_future(); // move
+    } else {        
+        MF_DEBUG("AI/AA.BoW: ASYNC leaderboard calculation for '" << note->getName() << "'" << endl);
+        if(leaderboardWip.find(note) != leaderboardWip.end()) {
+            // calculation WIP & future OWNER will update what needs to be updated -> intentionally NOT sharing futures
+            promise<bool> p{};
+            p.set_value(false);
+            return p.get_future(); // move
+        } else {
+            mind.incActiveProcesses();
+            calculateLeaderboardTask.reset();
+            // calculate leaderboard and return future indicating that it has been stored to cache
+            calculateLeaderboardTask(this, note);
+            return calculateLeaderboardTask.get_future(); // move
+        }
     }
 }
 
@@ -443,18 +456,16 @@ float AiAaBoW::calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyLi
     }
 }
 
-vector<pair<Note*,float>> AiAaBoW::calculateLeaderboardSync(const Note* n)
+bool AiAaBoW::calculateLeaderboardSync(const Note* n)
 {
     // If N was REMOVED, then nobody will ask for leaderboard.
     // If N was MODIFIED, then leaderboard will not be accurate (but it's not critical).
     // If N was ADDED, then I don't have data - no leaderboard provided.
-    vector<pair<Note*,float>> leaderboard{};
     if(n->getAiAaMatrixIndex() != AA_NOT_SET) {
         // check cache
         auto cachedLeaderboard = leaderboardCache.find(n);
         if(cachedLeaderboard != leaderboardCache.end()) {
-            leaderboard = cachedLeaderboard->second;
-            return leaderboard;
+            return true;
         }
 
         // calculate row/column of AA matrix & build leaderboard
@@ -512,6 +523,7 @@ vector<pair<Note*,float>> AiAaBoW::calculateLeaderboardSync(const Note* n)
         }
 
         MF_DEBUG("Leaderboard of " << n->getName() << " (" << n->getOutline()->getName() << "):" << endl);
+        vector<pair<Note*,float>> leaderboard{};
         for(int i=0; i<AA_LEADERBOARD_SIZE && aaLeaderboard[i][0]!=AA_NOT_SET; i++) {
             MF_DEBUG("  #" << i << " " <<
                      notes[aaLeaderboard[i][0]]->getName() << " (" << notes[aaLeaderboard[i][0]]->getOutline()->getName() << ")" <<
@@ -523,8 +535,9 @@ vector<pair<Note*,float>> AiAaBoW::calculateLeaderboardSync(const Note* n)
         leaderboardCache[n] = leaderboard;
     }
 
-    mind.decActiveProcesses();
-    return leaderboard;
+    leaderboardWip.erase(n);
+    mind.decActiveProcesses();    
+    return true;
 }
 
 void AiAaBoW::assertAaSymmetry()
@@ -540,7 +553,7 @@ void AiAaBoW::assertAaSymmetry()
     MF_DEBUG("AI: AA symmetry checked!" << endl);
 }
 
-// it's presumed that callers ensures the correct Mind state
+// it's presumed that caller ensures the correct Mind state & synchronization
 bool AiAaBoW::sleep() {
     lexicon.clear();
     notes.clear();
@@ -550,7 +563,7 @@ bool AiAaBoW::sleep() {
     return true;
 }
 
-// it's presumed that callers ensures the correct Mind state
+// it's presumed that caller ensures the correct Mind state & synchronization
 bool AiAaBoW::amnesia() {
     sleep();
     aaMatrix.clear();

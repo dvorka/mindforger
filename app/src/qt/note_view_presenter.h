@@ -43,7 +43,7 @@ private:
 
     Configuration& config;
     Mind* mind;
-    std::vector<std::pair<Note*,float>> assocLeaderboard;
+    std::vector<std::pair<Note*,float>> associatedNotesLeaderboard;
 
     OrlojPresenter* orloj;
 

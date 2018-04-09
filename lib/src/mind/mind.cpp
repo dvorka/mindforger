@@ -155,28 +155,18 @@ bool Mind::amnesia()
     return mindAmnesia();
 }
 
-future<bool> Mind::calculateAssociatedNotes(const Note* n) {
+future<bool> Mind::getAssociatedNotes(const Note* n, vector<pair<Note*,float>>& associations)
+{
     MF_DEBUG("@NoteAssociations" << endl);
     lock_guard<mutex> criticalSection{exclusiveMind};
 
     if(config.getMindState()==Configuration::MindState::THINKING) {
-        return ai->calculateAssociatedNotes(n);
-    } else {
-        promise<bool> p;
-        p.set_value(false);
-        return p.get_future();
-    }
-}
-
-void Mind::getAssociatedNotes(const Note* n, vector<pair<Note*,float>> associations)
-{
-    MF_DEBUG("@NoteAssociationsCACHE" << endl);
-    lock_guard<mutex> criticalSection{exclusiveMind};
-
-    if(config.getMindState()==Configuration::MindState::THINKING) {
-        return ai->getAssociatedNotes(n, associations);
+        return ai->getAssociatedNotes(n, associations); // move
     } else {
         associations.clear();
+        promise<bool> p{};
+        p.set_value(false);
+        return p.get_future(); // move
     }
 }
 
@@ -412,15 +402,7 @@ vector<Note*>* Mind::getNotesOfType(const NoteType& type, const Outline& outline
     return nullptr;
 }
 
-vector<Note*>* Mind::getAssociatedNotes(const Note& note) const
-{
-    UNUSED_ARG(note);
-
-    return nullptr;
-}
-
-vector<Note*>* Mind::getAssociatedNotes(const Note& note,
-        const Outline& outline) const
+vector<Note*>* Mind::getAssociatedNotes(const Note& note, const Outline& outline) const
 {
     UNUSED_ARG(note);
     UNUSED_ARG(outline);

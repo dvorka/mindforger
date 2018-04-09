@@ -350,20 +350,17 @@ public:
      */
 
     /**
-     * @brief Find/calculate Note's associations.
+     * @brief Get Note's associations.
      *
      * Return value explanation:
      *   - future !VALID ... associated Ns are on the way - wait for future to become valid
+     *                       and then call this method AGAIN (i.e. ASYNC doesn't store associations
+     *                       to provided vector to avoid race conditions in the future).
      *   - future VALID
-     *     > true  ... associated Ns can be found in cache
-     *     > false ... associated Ns will NOT be computed (Mind's not thinking, memory empty, ...)
+     *     > true  ... associated Ns can be found in vector
+     *     > false ... associated Ns will NOT be computed - Mind's not thinking, memory empty, ...
      */
-    std::future<bool> calculateAssociatedNotes(const Note* n);
-
-    /**
-     * @brief Get Note's asssociations from cache.
-     */
-    void getAssociatedNotes(const Note* n, std::vector<std::pair<Note*,float>> associations);
+    std::future<bool> getAssociatedNotes(const Note* n, std::vector<std::pair<Note*,float>>& associations);
 
     // TODO rework methods below: leaderboard to be removed, methods below to be used
 

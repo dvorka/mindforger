@@ -142,8 +142,11 @@ void MainWindowPresenter::doActionMindHack()
 #endif
 
 void MainWindowPresenter::doThink()
-{
+{    
     mind->think();
+
+    orloj->showFacetOutlineList(mind->getOutlines());
+    mainMenu->showFacetMindSleep();
 }
 
 void MainWindowPresenter::doActionMindThink()

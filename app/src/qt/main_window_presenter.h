@@ -111,6 +111,7 @@ public:
     const Configuration& getConfiguration() const { return config; }
     MarkdownOutlineRepresentation* getMarkdownRepresentation() const { return mdRepresentation; }
     HtmlOutlineRepresentation* getHtmlRepresentation() const { return htmlRepresentation; }
+    AsyncTaskNotificationsDistributor* getDistributor() const { return distributor; }
 
     // presenters
     CliAndBreadcrumbsPresenter* getCli() { return cli; }

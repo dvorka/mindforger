@@ -19,6 +19,9 @@
 #ifndef M8RUI_ASYNC_TASK_NOTIFICATIONS_DISTRIBUTOR_H
 #define M8RUI_ASYNC_TASK_NOTIFICATIONS_DISTRIBUTOR_H
 
+#include <vector>
+#include <future>
+
 #include <QThread>
 
 namespace m8r {
@@ -38,6 +41,9 @@ class AsyncTaskNotificationsDistributor : public QThread
 {
     Q_OBJECT
 
+private:
+    std::vector<std::future<bool>> wip;
+
 public:
     explicit AsyncTaskNotificationsDistributor();
     ~AsyncTaskNotificationsDistributor();
@@ -46,6 +52,14 @@ public:
      * @brief Worker thread code.
      */
     void run();
+
+    /*
+     * Futures to be notified
+     */
+
+    void sendSignalWhenLeaderboardIsReady(std::future<bool> future) {
+        wip.push_back(std::move(future));
+    }
 
 // signals that are sent by distributor to GUI components
 signals:
