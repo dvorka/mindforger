@@ -81,6 +81,18 @@ void NoteViewPresenter::refresh(Note* note)
     view->setHtml(qHtml);
 
     // leaderboard
+    mind->getAssociationsLeaderboard(note);
+
+
+
+
+
+
+
+
+
+
+    // leaderboard
     if(config.getMindState()==Configuration::MindState::DREAMING
          ||
        config.getMindState()==Configuration::MindState::THINKING)
@@ -101,6 +113,11 @@ void NoteViewPresenter::refresh(Note* note)
     } else {
         orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
     }
+
+
+
+
+
 }
 
 void NoteViewPresenter::slotEditNote()

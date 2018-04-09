@@ -25,6 +25,8 @@
 
 #include "main_window_view.h"
 #include "main_menu_presenter.h"
+
+#include "gear/async_task_notifications_distributor.h"
 #include "cli_n_breadcrumbs_presenter.h"
 #include "orloj_presenter.h"
 #include "status_bar_presenter.h"
@@ -72,6 +74,8 @@ private:
 
     Configuration& config;
     Mind* mind;
+
+    AsyncTaskNotificationsDistributor* distributor;
 
     MarkdownOutlineRepresentation* mdRepresentation;
     HtmlOutlineRepresentation* htmlRepresentation;

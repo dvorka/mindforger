@@ -155,8 +155,29 @@ bool Mind::amnesia()
     return mindAmnesia();
 }
 
-future<vector<pair<Note*,float>>> Mind::getAssociationsLeaderboard(const Note* n) {
-    return ai->getAssociationsLeaderboard(n);
+future<bool> Mind::calculateAssociatedNotes(const Note* n) {
+    MF_DEBUG("@NoteAssociations" << endl);
+    lock_guard<mutex> criticalSection{exclusiveMind};
+
+    if(config.getMindState()==Configuration::MindState::THINKING) {
+        return ai->calculateAssociatedNotes(n);
+    } else {
+        promise<bool> p;
+        p.set_value(false);
+        return p.get_future();
+    }
+}
+
+void Mind::getAssociatedNotes(const Note* n, vector<pair<Note*,float>> associations)
+{
+    MF_DEBUG("@NoteAssociationsCACHE" << endl);
+    lock_guard<mutex> criticalSection{exclusiveMind};
+
+    if(config.getMindState()==Configuration::MindState::THINKING) {
+        return ai->getAssociatedNotes(n, associations);
+    } else {
+        associations.clear();
+    }
 }
 
 /*

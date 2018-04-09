@@ -30,18 +30,26 @@ namespace m8r {
  *
  * Therefore this distributor notifies GUI components using *signals* so that they
  * can be repainted() by the main Qt thread (signal is added to Qt event queue).
+ *
+ * Distributor is started from MainWindowPresenter where all MVP components are easily
+ * accessible.
  */
 class AsyncTaskNotificationsDistributor : public QThread
 {
     Q_OBJECT
 
 public:
-    explicit AsyncTaskNotificationsDistributor(QWidget* parent);
-    AsyncTaskNotificationsDistributor(const AsyncTaskNotificationsDistributor&) = delete;
-    AsyncTaskNotificationsDistributor(const AsyncTaskNotificationsDistributor&&) = delete;
-    AsyncTaskNotificationsDistributor &operator=(const AsyncTaskNotificationsDistributor&) = delete;
-    AsyncTaskNotificationsDistributor &operator=(const AsyncTaskNotificationsDistributor&&) = delete;
+    explicit AsyncTaskNotificationsDistributor();
     ~AsyncTaskNotificationsDistributor();
+
+    /**
+     * @brief Worker thread code.
+     */
+    void run();
+
+// signals that are sent by distributor to GUI components
+signals:
+    void leaderboardCalculationFinished();
 };
 
 }

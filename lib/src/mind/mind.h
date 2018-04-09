@@ -225,11 +225,6 @@ public:
     void incActiveProcesses() { activeProcesses++; }
     void decActiveProcesses() { activeProcesses--; }
 
-    /**
-     * @brief Find Note associations.
-     */
-    std::future<std::vector<std::pair<Note*,float>>> getAssociationsLeaderboard(const Note* n);
-
     unsigned getTriplesCount() const { return triples.size(); }
 
     /*
@@ -355,9 +350,22 @@ public:
      */
 
     /**
-     * @brief Get associated Notes.
+     * @brief Find/calculate Note's associations.
+     *
+     * Return value explanation:
+     *   - future !VALID ... associated Ns are on the way - wait for future to become valid
+     *   - future VALID
+     *     > true  ... associated Ns can be found in cache
+     *     > false ... associated Ns will NOT be computed (Mind's not thinking, memory empty, ...)
      */
-    std::vector<Note*>* getAssociatedNotes(const Note& note) const;
+    std::future<bool> calculateAssociatedNotes(const Note* n);
+
+    /**
+     * @brief Get Note's asssociations from cache.
+     */
+    void getAssociatedNotes(const Note* n, std::vector<std::pair<Note*,float>> associations);
+
+    // TODO rework methods below: leaderboard to be removed, methods below to be used
 
     /**
      * @brief Get associated Notes within the scope of given Outline.

@@ -71,6 +71,13 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
     QObject::connect(configDialog->getAppTab(), SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
 
+    // async task 2 GUI events distributor
+    distributor = new AsyncTaskNotificationsDistributor();
+    // etup callback for cleanup when it finishes
+    QObject::connect(distributor, SIGNAL(finished()), distributor, SLOT(deleteLater()));
+    // run run()
+    distributor->start();
+
     // let mind think/dream/...
     mind->learn();
 }
@@ -136,14 +143,7 @@ void MainWindowPresenter::doActionMindHack()
 
 void MainWindowPresenter::doThink()
 {
-    // decide whether to run sync/async
-    if(mind->remind().getNotesCount() > config.getAsyncMindConfig()) {
-        MF_DEBUG("Think ASYNC..." << endl);
-        QtConcurrent::run(mind, &Mind::think);
-    } else {
-        MF_DEBUG("Think SYNC..." << endl);
-        mind->think();
-    }
+    mind->think();
 }
 
 void MainWindowPresenter::doActionMindThink()
