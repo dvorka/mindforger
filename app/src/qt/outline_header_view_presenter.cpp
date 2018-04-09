@@ -35,6 +35,10 @@ OutlineHeaderViewPresenter::OutlineHeaderViewPresenter(OutlineHeaderView *view, 
         this, SLOT(slotEditOutlineHeader()));
 }
 
+OutlineHeaderViewPresenter::~OutlineHeaderViewPresenter()
+{
+}
+
 void OutlineHeaderViewPresenter::refresh(Outline* outline)
 {
     currentOutline = outline;
@@ -120,6 +124,9 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
 
     html += QString::fromStdString(MF_HTML_TAIL);
     view->setHtml(html);
+
+    // leaderboard
+    orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
 }
 
 void OutlineHeaderViewPresenter::slotEditOutlineHeader()
@@ -127,8 +134,4 @@ void OutlineHeaderViewPresenter::slotEditOutlineHeader()
     orloj->showFacetOutlineHeaderEdit(currentOutline);
 }
 
-OutlineHeaderViewPresenter::~OutlineHeaderViewPresenter()
-{
-}
-
-}
+} // m8r namespace

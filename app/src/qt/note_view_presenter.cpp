@@ -87,6 +87,7 @@ void NoteViewPresenter::refresh(Note* note)
     view->setHtml(qHtml);
 
     // leaderboard
+    std::vector<std::pair<Note*,float>> associatedNotesLeaderboard;
     shared_future<bool> f = mind->getAssociatedNotes(note, associatedNotesLeaderboard); // move
     if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
         if(f.get()) {
@@ -111,6 +112,7 @@ void NoteViewPresenter::slotEditNote()
 void NoteViewPresenter::slotRefreshLeaderboard(Note* note)
 {
     // show leaderboard only if it's needed & it's ready
+    std::vector<std::pair<Note*,float>> associatedNotesLeaderboard;
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE) && currentNote == note) {
         shared_future<bool> f = mind->getAssociatedNotes(note, associatedNotesLeaderboard); // move
         if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
