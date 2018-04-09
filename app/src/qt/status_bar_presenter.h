@@ -57,6 +57,9 @@ public:
     void showError(const QString& message);
 
     const StatusBarView* getView() const { return view; }
+
+public slots:
+    void slotShowStatistics() { showMindStatistics(); }
 };
 
 }

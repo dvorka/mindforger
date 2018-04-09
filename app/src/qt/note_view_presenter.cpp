@@ -46,6 +46,12 @@ NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
     QObject::connect(view, SIGNAL(signalFromViewNoteToOutlines()), orloj, SLOT(slotShowOutlines()));
 }
 
+NoteViewPresenter::~NoteViewPresenter()
+{
+    if(markdownRepresentation) delete markdownRepresentation;
+    if(htmlRepresentation) delete htmlRepresentation;
+}
+
 // IMPROVE first decorate MD with HTML colors > then MD to HTML conversion
 void NoteViewPresenter::refresh(Note* note)
 {
@@ -102,10 +108,17 @@ void NoteViewPresenter::slotEditNote()
     orloj->showFacetNoteEdit(this->currentNote);
 }
 
-NoteViewPresenter::~NoteViewPresenter()
+void NoteViewPresenter::slotRefreshLeaderboard(Note* note)
 {
-    if(markdownRepresentation) delete markdownRepresentation;
-    if(htmlRepresentation) delete htmlRepresentation;
+    // show leaderboard only if it's needed & it's ready
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE) && currentNote == note) {
+        shared_future<bool> f = mind->getAssociatedNotes(note, associatedNotesLeaderboard); // move
+        if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
+            if(f.get()) {
+                orloj->getOutlineView()->getAssocLeaderboard()->refresh(associatedNotesLeaderboard);
+            }
+        }
+    }
 }
 
 } // m8r namespace

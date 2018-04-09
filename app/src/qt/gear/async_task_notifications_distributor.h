@@ -48,6 +48,8 @@ class AsyncTaskNotificationsDistributor : public QThread
 {
     Q_OBJECT
 
+    static constexpr int SLEEP_INTERVAL = 3000;
+
 public:
 
     enum TaskType {

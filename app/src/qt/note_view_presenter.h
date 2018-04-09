@@ -78,8 +78,9 @@ public:
 
 public slots:
     void slotEditNote();
+    void slotRefreshLeaderboard(Note* note);
 };
 
-}
+} // m8r namespace
 
 #endif // M8RUI_NOTE_VIEW_PRESENTER_H

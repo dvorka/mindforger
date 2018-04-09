@@ -25,6 +25,16 @@ using namespace std;
 AsyncTaskNotificationsDistributor::AsyncTaskNotificationsDistributor(MainWindowPresenter* mwp)
     : mwp(mwp)
 {
+    QObject::connect(
+        this,
+        SIGNAL(statusBarShowStatistics()),
+        mwp->getStatusBar(),
+        SLOT(slotShowStatistics()));
+    QObject::connect(
+        this,
+        SIGNAL(leaderboardRefresh(Note*)),
+        mwp->getOrloj()->getNoteView(),
+        SLOT(slotRefreshLeaderboard(Note*)));
 }
 
 AsyncTaskNotificationsDistributor::~AsyncTaskNotificationsDistributor()
@@ -40,7 +50,7 @@ void AsyncTaskNotificationsDistributor::run()
     while(true) {
         MF_DEBUG("AsyncDistributor: SLEEP..." << endl);
         // IMPROVE consider a condition variable & activiation of checking ONLY if WIP non-empty
-        msleep(5000);
+        msleep(SLEEP_INTERVAL);
 
         if(tasks.size()) {
             std::lock_guard<mutex> criticalSection{tasksMutex};
