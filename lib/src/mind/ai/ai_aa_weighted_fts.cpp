@@ -31,7 +31,7 @@ AiAaWeightedFts::~AiAaWeightedFts()
 {
 }
 
-std::future<bool> AiAaWeightedFts::dream() {
+std::shared_future<bool> AiAaWeightedFts::dream() {
 
     // FOO implementation
 

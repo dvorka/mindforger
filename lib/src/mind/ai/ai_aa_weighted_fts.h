@@ -66,15 +66,15 @@ public:
     AiAaWeightedFts &operator=(const AiAaWeightedFts&&) = delete;
     ~AiAaWeightedFts();
 
-    virtual std::future<bool> dream();
+    virtual std::shared_future<bool> dream();
 
-    virtual std::future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations) {
+    virtual std::shared_future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations) {
         UNUSED_ARG(note);
         UNUSED_ARG(associations);
 
         std::promise<bool> p{};
         p.set_value(false);
-        return p.get_future();
+        return std::shared_future<bool>(p.get_future());
     }
 
     virtual bool sleep() {

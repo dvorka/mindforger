@@ -178,8 +178,12 @@ public:
     Mind& operator=(const Mind&&) = delete;
     virtual ~Mind();
 
+    /**
+     * @brief Synchronize both desired and current state and persist it.
+     */
     void persistMindState(Configuration::MindState mindState) {
         config.setMindState(mindState);
+        config.setDesiredMindState(mindState);
         mdConfigRepresentation->save(config);
     }
 
@@ -188,7 +192,7 @@ public:
      */
 
     /**
-     * @brief Learn new MindForger/Markdown repository/directory/file defined by configuration AND keep the current mind state.
+     * @brief Learn new MindForger/Markdown repository/directory/file defined by configuration AND *preserve* desired mind state (it's NOT changed).
      *
      * Mind and Memory is RESET i.e. this method does NOT add new knowledge, but it starts over.
      */
@@ -200,7 +204,7 @@ public:
      * Mind is kept. If Mind is NOT initialized, then think() first switches to dream()
      * to prepare AI. When ready, it starts to think to be useful.
      */
-    std::future<bool> think();
+    std::shared_future<bool> think();
 
     /**
      * @brief Sleep to clear Mind, keep Memory and relax.
@@ -360,7 +364,7 @@ public:
      *     > true  ... associated Ns can be found in vector
      *     > false ... associated Ns will NOT be computed - Mind's not thinking, memory empty, ...
      */
-    std::future<bool> getAssociatedNotes(const Note* n, std::vector<std::pair<Note*,float>>& associations);
+    std::shared_future<bool> getAssociatedNotes(const Note* n, std::vector<std::pair<Note*,float>>& associations);
 
     // TODO rework methods below: leaderboard to be removed, methods below to be used
 
@@ -528,7 +532,7 @@ private:
      *     > NLP lexicon, BoW
      *     > associations neural network
      */
-    std::future<bool> mindDream();
+    std::shared_future<bool> mindDream();
 
     bool mindSleep();
     bool mindAmnesia();

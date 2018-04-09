@@ -65,7 +65,7 @@ bool Mind::learn()
     }
 }
 
-future<bool> Mind::think()
+shared_future<bool> Mind::think()
 {
     MF_DEBUG("@Think" << endl);
     lock_guard<mutex> criticalSection{exclusiveMind};
@@ -84,7 +84,7 @@ future<bool> Mind::think()
 /* It does NOT need mutex because it's private and can be called from Mind only.
  * This method may run long time. It ALWAYS switches mind state to THINKING when finishes.
  */
-future<bool> Mind::mindDream()
+shared_future<bool> Mind::mindDream()
 {
     MF_DEBUG("@Dream" << endl);
 
@@ -118,7 +118,12 @@ bool Mind::sleep()
 {
     MF_DEBUG("@Sleep" << endl);
     lock_guard<mutex> criticalSection{exclusiveMind};
-    return mindSleep();
+    if(mindSleep()) {
+        persistMindState(Configuration::MindState::SLEEPING);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /*
@@ -133,8 +138,6 @@ bool Mind::mindSleep()
             memoryDwell.clear();
             triples.clear();
 
-            config.setMindState(Configuration::MindState::SLEEPING);
-            mdConfigRepresentation->save(config);
             MF_DEBUG("Mind IS sleeping..." << endl);
             return true;
         } else {
@@ -142,7 +145,7 @@ bool Mind::mindSleep()
             return false;
         }
     } else {
-        MF_DEBUG("Sleep: CANNOT asleep because Mind is DREAMING (wait for dreaming to finish)" << endl);
+        MF_DEBUG("Sleep: CANNOT asleep because Mind is DREAMING (wait for " << activeProcesses << " dreaming processes to finish)" << endl);
         // DREAMING cannot be cancelled > wait for dream() to finish before calling sleep() again.
         return false;
     }
@@ -152,21 +155,26 @@ bool Mind::amnesia()
 {
     MF_DEBUG("@Amnesia" << endl);
     lock_guard<mutex> criticalSection{exclusiveMind};
-    return mindAmnesia();
+    if(mindAmnesia()) {
+        persistMindState(Configuration::MindState::SLEEPING);
+        return true;
+    } else {
+        return false;
+    }
 }
 
-future<bool> Mind::getAssociatedNotes(const Note* n, vector<pair<Note*,float>>& associations)
+shared_future<bool> Mind::getAssociatedNotes(const Note* n, vector<pair<Note*,float>>& associations)
 {
     MF_DEBUG("@NoteAssociations" << endl);
     lock_guard<mutex> criticalSection{exclusiveMind};
 
     if(config.getMindState()==Configuration::MindState::THINKING) {
-        return ai->getAssociatedNotes(n, associations); // move
+        return ai->getAssociatedNotes(n, associations);
     } else {
         associations.clear();
         promise<bool> p{};
         p.set_value(false);
-        return p.get_future(); // move
+        return shared_future<bool>(p.get_future());
     }
 }
 
@@ -184,7 +192,7 @@ bool Mind::mindAmnesia()
         MF_DEBUG("Mind WITH amnesia" << endl);
         return true;
     } else {
-        MF_DEBUG("Amnesia: CANNOT asleep because Mind is DREAMING (waith for dreaming to finish)" << endl);
+        MF_DEBUG("Amnesia: CANNOT asleep because Mind is DREAMING (wait for " << activeProcesses << " dreaming processes to finish)" << endl);
         return false;
     }
 }

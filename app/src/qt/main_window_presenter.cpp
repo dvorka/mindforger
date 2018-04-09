@@ -72,13 +72,12 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(configDialog->getAppTab(), SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
 
     // async task 2 GUI events distributor
-    distributor = new AsyncTaskNotificationsDistributor();
-    // etup callback for cleanup when it finishes
+    distributor = new AsyncTaskNotificationsDistributor(this);
+    // setup callback for cleanup when it finishes
     QObject::connect(distributor, SIGNAL(finished()), distributor, SLOT(deleteLater()));
-    // run run()
     distributor->start();
 
-    // let mind think/dream/...
+    // let Mind to learn active repository & preserve desired state
     mind->learn();
 }
 
@@ -100,6 +99,7 @@ MainWindowPresenter::~MainWindowPresenter()
 
 void MainWindowPresenter::showInitialView()
 {
+    // UI
     if(mind->getOutlines().size()) {
         if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
             if(config.getActiveRepository()->isGithubRepository()) {
@@ -131,7 +131,20 @@ void MainWindowPresenter::showInitialView()
         orloj->showFacetOutlineList(mind->getOutlines());
     }
 
-    if(config.getMindState()==Configuration::MindState::THINKING) doThink();
+    // move Mind to configured state
+    if(config.getDesiredMindState()==Configuration::MindState::THINKING) {
+        MF_DEBUG("InitialView: asking Mind to THINK..." << endl);
+        shared_future<bool> f = mind->think(); // move
+        if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
+            statusBar->showMindStatistics();
+        } else {
+            statusBar->showMindStatistics();
+            // ask notifications distributor to repaint status bar later
+            AsyncTaskNotificationsDistributor::Task* task
+                = new AsyncTaskNotificationsDistributor::Task{f,AsyncTaskNotificationsDistributor::TaskType::DREAM_TO_THINK};
+            distributor->add(task);
+        }
+    }
 }
 
 #ifdef DO_M8F_DEBUG
@@ -141,34 +154,43 @@ void MainWindowPresenter::doActionMindHack()
 }
 #endif
 
-void MainWindowPresenter::doThink()
-{    
-    mind->think();
-
-    orloj->showFacetOutlineList(mind->getOutlines());
-    mainMenu->showFacetMindSleep();
-}
-
 void MainWindowPresenter::doActionMindThink()
 {
-    doThink();
-    mainMenu->showFacetMindThink();
-
-    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-        orloj->showFacetOutlineList(mind->getOutlines());
-    } else {
-        if(mind->getOutlines().size()>0) {
-            orloj->showFacetOutline(*mind->getOutlines().begin());
+    shared_future<bool> f = mind->think(); // move
+    if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
+        // sync
+        if(f.get()) {
+            mainMenu->showFacetMindThink();
+            if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+                orloj->showFacetOutlineList(mind->getOutlines());
+            } else {
+                if(mind->getOutlines().size()>0) {
+                    orloj->showFacetOutline(*mind->getOutlines().begin());
+                }
+            }
+            statusBar->showMindStatistics();
+        } else {
+            mainMenu->showFacetMindSleep();
+            statusBar->showError(tr("Cannot start thinking - please wait until dreaming finishes and then try again"));
         }
+    } else {
+        statusBar->showMindStatistics();
+        // ask notifications distributor to repaint status bar later
+        AsyncTaskNotificationsDistributor::Task* task
+            = new AsyncTaskNotificationsDistributor::Task{f,AsyncTaskNotificationsDistributor::TaskType::DREAM_TO_THINK};
+        distributor->add(task);
     }
 }
 
 void MainWindowPresenter::doActionMindSleep()
 {
-    mind->sleep();
-
-    orloj->showFacetOutlineList(mind->getOutlines());
-    mainMenu->showFacetMindSleep();
+    if(mind->sleep()) {
+        mainMenu->showFacetMindSleep();
+        statusBar->showMindStatistics();
+    } else {
+        statusBar->showMindStatistics();
+        statusBar->showError(tr("Cannot start sleeping - please wait until dreaming finishes and then try again"));
+    }
 }
 
 void MainWindowPresenter::doActionMindLearn()

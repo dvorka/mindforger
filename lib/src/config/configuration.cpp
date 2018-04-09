@@ -66,7 +66,7 @@ void Configuration::clear()
 
     // lib
     mindState = MindState::SLEEPING;
-    aaAlgorithm = AssociationAssessmentAlgorithm::WEIGHTED_FTS;
+    aaAlgorithm = AssociationAssessmentAlgorithm::BOW;
     writeMetadata = true;
     saveReadsMetadata = DEFAULT_SAVE_READS_METADATA;
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
@@ -92,11 +92,6 @@ void Configuration::clear()
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
     uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
     uiShowNotebookEditButton = DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON;
-}
-
-void Configuration::setMindState(MindState mindState)
-{
-    this->mindState = mindState;
 }
 
 Repository* Configuration::addRepository(Repository* repository)

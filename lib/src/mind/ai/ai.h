@@ -95,7 +95,7 @@ public:
      * Can be LONG running on huge repositories.
      * Synchronized by caller ~ Mind.
      */
-    std::future<bool> dream()
+    std::shared_future<bool> dream()
     {
         return aa->dream();
     }
@@ -106,7 +106,7 @@ public:
      * Can be LONG running on big repositories.
      * Synchronized by caller ~ Mind.
      */
-    std::future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations) {
+    std::shared_future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations) {
         return aa->getAssociatedNotes(note, associations);
     }
 

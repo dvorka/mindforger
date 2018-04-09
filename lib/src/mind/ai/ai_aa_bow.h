@@ -86,7 +86,7 @@ public:
     AiAaBoW &operator=(const AiAaBoW&&) = delete;
     ~AiAaBoW();
 
-    virtual std::future<bool> dream();
+    virtual std::shared_future<bool> dream();
     /**
      * @brief Get associated Notes.
      *
@@ -94,31 +94,36 @@ public:
      * else waith for future to become valid and then call this method again (i.e. async
      * variant does NOT copies computed associated Ns to provided vector).
      */
-    virtual std::future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations);
+    virtual std::shared_future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations);
     virtual bool sleep();
     virtual bool amnesia();
 
 private:
 
     /*
-     * Tasks
+     * Worker threads:
+     *  1. packaged task is assigned to thread
+     *  2. thread performs the task and calls detach() on self when finishes
+     *     to indicate that it's ready to be deleted
+     *  3. if main thread detects that !thread.joinable(), then it can be deleted;
+     *     cleanup is done on any new thread launch AND/OR by this class destructor.
      */
 
-    // :) function/method signature instead of the return type must be used
-    std::packaged_task<bool ()> learnMemoryTask;
-    std::packaged_task<bool (AiAaBoW*,const Note*)> calculateLeaderboardTask;
+    // IMPROVE introduce a LIMIT on number of running threads in configuration
+    std::vector<std::thread*> runningWorkers;
+    std::mutex runningWorkersMutex;
 
 private:
 
     /**
      * @brief Learn Memory to start thinking.
      */
-    bool learnMemorySync();
+    bool learnMemorySync(std::thread* t = nullptr);
 
     /**
      * @brief Calculate leaderboard and indicate that it has been stored to cache.
      */
-    bool calculateLeaderboardSync(const Note* n);
+    bool calculateLeaderboardSync(const Note* n, std::thread* t = nullptr);
 
     /**
      * @brief Initialize blacklist using common words.
@@ -166,6 +171,11 @@ private:
      * @brief Get AA leaderboard from cache.
      */
     bool getCachedLeaderboard(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard);
+
+    /**
+     * @brief Remove finished workers and add new one.
+     */
+    void addWorkerAndCleanZombies(std::thread* t);
 
 public:
 #ifdef DO_M8F_DEBUG

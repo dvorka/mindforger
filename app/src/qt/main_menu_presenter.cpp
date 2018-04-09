@@ -90,7 +90,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionHelpCheckForUpdates, SIGNAL(triggered()), mwp, SLOT(doActionHelpCheckForUpdates()));
     QObject::connect(view->actionHelpAbout, SIGNAL(triggered()), mwp, SLOT(doActionHelpAboutMindForger()));
 
-    switch(config.getMindState()) {
+    switch(config.getDesiredMindState()) {
     case Configuration::MindState::THINKING:
         showFacetMindThink();
         break;

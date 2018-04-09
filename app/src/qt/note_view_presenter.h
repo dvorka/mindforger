@@ -20,8 +20,6 @@
 #define M8RUI_NOTE_VIEW_PRESENTER_H
 
 #include "../../lib/src/mind/mind.h"
-//#include "../../lib/src/representations/markdown/markdown_outline_representation.h"
-//#include "../../lib/src/representations/html/html_outline_representation.h"
 
 #include <QtWidgets>
 

@@ -155,9 +155,9 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         }
                     } else if(line->find(CONFIG_SETTING_MIND_STATE) != std::string::npos) {
                         if(line->find("think") != std::string::npos) {
-                            c.setMindState(Configuration::MindState::THINKING);
+                            c.setDesiredMindState(Configuration::MindState::THINKING);
                         } else {
-                            c.setMindState(Configuration::MindState::SLEEPING);
+                            c.setDesiredMindState(Configuration::MindState::SLEEPING);
                         }
                     }
                 }
@@ -210,7 +210,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
     string timeScopeAsString{}, mindStateAsString{"sleep"};
     if(c) {
         c->getTimeScope().toString(timeScopeAsString);
-        if(c->getMindState()==Configuration::MindState::THINKING) mindStateAsString= "think";
+        if(c->getDesiredMindState()==Configuration::MindState::THINKING) mindStateAsString= "think";
     } else {
         timeScopeAsString.assign(Configuration::DEFAULT_TIME_SCOPE);
     }

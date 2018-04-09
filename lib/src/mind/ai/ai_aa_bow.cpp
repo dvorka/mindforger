@@ -27,9 +27,7 @@ AiAaBoW::AiAaBoW(Memory& memory, Mind& mind)
       memory(memory),
       lexicon{},
       wordBlacklist{},
-      tokenizer{lexicon,wordBlacklist},
-      learnMemoryTask(std::bind(&AiAaBoW::learnMemorySync,this)),
-      calculateLeaderboardTask([](AiAaBoW* t, const Note* n){ return t->calculateLeaderboardSync(n); })
+      tokenizer{lexicon,wordBlacklist}
 {
     initializeWordBlacklist();
 }
@@ -121,14 +119,39 @@ void AiAaBoW::initializeWordBlacklist() {
     wordBlacklist.addWord("want");
 }
 
+void AiAaBoW::addWorkerAndCleanZombies(thread* t)
+{
+    lock_guard<mutex> criticalSection{runningWorkersMutex};
+    MF_DEBUG("AI/AA.BoW: workers+zombies " << runningWorkers.size() << endl);
+
+    // PROBLEM: if zombies is erased > future/promise is deleted as well > frontend that has future calls a method on it > crash
+    // delete dead threads
+    //auto zombieIterator
+    //    = std::remove_if(runningWorkers.begin(),
+    //                     runningWorkers.end(),
+    //                     [](const thread* t) { if(!t->joinable()) { delete t; return true; } else return false; });
+    //runningWorkers.erase(zombieIterator, runningWorkers.end());
+
+    // add new one
+    runningWorkers.push_back(t);
+
+    MF_DEBUG("AI/AA.BoW: workers " << runningWorkers.size() << endl);
+}
+
 // it's presumed that caller ensures the correct Mind state & synchronization
-future<bool> AiAaBoW::dream() {
+shared_future<bool> AiAaBoW::dream() {
     if(memory.getNotesCount() > Configuration::getInstance().getAsyncMindThreshold()) {
         MF_DEBUG("AI/AA.BoW: ASYNC dream..." << endl);
         mind.incActiveProcesses();
-        learnMemoryTask.reset();
-        learnMemoryTask();
-        return learnMemoryTask.get_future();
+
+        // packaged task is parametrized by function/method signature (not return type)
+        std::packaged_task<bool (AiAaBoW*,thread*)> learnMemoryTask([](AiAaBoW* a,thread* t) { return a->learnMemorySync(t); });
+        future<bool> result = learnMemoryTask.get_future(); // move
+        thread* t = new thread{};
+        *t = thread(std::move(learnMemoryTask), this, t);
+        addWorkerAndCleanZombies(t);
+
+        return shared_future<bool>(std::move(result));
     } else {
         MF_DEBUG("AI/AA.BoW: SYNC dream..." << endl);
         promise<bool> p{};
@@ -137,11 +160,11 @@ future<bool> AiAaBoW::dream() {
 
         mind.persistMindState(Configuration::MindState::THINKING);
 
-        return p.get_future();
+        return shared_future<bool>(p.get_future());
     }
 }
 
-bool AiAaBoW::learnMemorySync()
+bool AiAaBoW::learnMemorySync(thread* t)
 {
     MF_DEBUG("AI/AA.BoW: LEARNING memory to BoW..." << endl);
     notes.clear();
@@ -183,13 +206,15 @@ bool AiAaBoW::learnMemorySync()
     // NN to be trained on demand - just initialize it
 
     mind.persistMindState(Configuration::MindState::THINKING);
+    mind.decActiveProcesses();
+    t->detach(); // indicate that thread finished
 
     MF_DEBUG("AI/AA.BoW: memory LEARNED!" << endl);
     return true;
 }
 
 // it's presumed that caller ensures the correct Mind state & synchronization
-future<bool> AiAaBoW::getAssociatedNotes(const Note* note, vector<pair<Note*,float>>& associations) {
+shared_future<bool> AiAaBoW::getAssociatedNotes(const Note* note, vector<pair<Note*,float>>& associations) {
     auto cachedLeaderboard = leaderboardCache.find(note);
     if(cachedLeaderboard != leaderboardCache.end()) {
         MF_DEBUG("AI/AA.BoW: SYNC leaderboard calculation for '" << note->getName() << "'" << endl);
@@ -200,20 +225,27 @@ future<bool> AiAaBoW::getAssociatedNotes(const Note* note, vector<pair<Note*,flo
         // indicate that it's immediately available
         promise<bool> p{};
         p.set_value(true);
-        return p.get_future(); // move
+        return shared_future<bool>(p.get_future());
     } else {        
         MF_DEBUG("AI/AA.BoW: ASYNC leaderboard calculation for '" << note->getName() << "'" << endl);
         if(leaderboardWip.find(note) != leaderboardWip.end()) {
             // calculation WIP & future OWNER will update what needs to be updated -> intentionally NOT sharing futures
             promise<bool> p{};
             p.set_value(false);
+            MF_DEBUG("AI/AA.BoW: leaderboard WIP for '" << note->getName() << "'" << endl);
             return p.get_future(); // move
         } else {
             mind.incActiveProcesses();
-            calculateLeaderboardTask.reset();
-            // calculate leaderboard and return future indicating that it has been stored to cache
-            calculateLeaderboardTask(this, note);
-            return calculateLeaderboardTask.get_future(); // move
+            MF_DEBUG("AI/AA.BoW: starting THREAD for '" << note->getName() << "'" << endl);
+
+            // packaged task is parametrized by function/method signature (not return type)
+            packaged_task<bool (AiAaBoW*,const Note*,thread*)> calculateLeaderboardTask([](AiAaBoW* a, const Note* n, thread* t) { return a->calculateLeaderboardSync(n,t); });
+            future<bool> result = calculateLeaderboardTask.get_future(); // move
+            thread* t = new thread{};
+            *t = thread(std::move(calculateLeaderboardTask), this, note, t); // run task w/ handle to self thread
+            addWorkerAndCleanZombies(t);
+
+            return shared_future<bool>(std::move(result));
         }
     }
 }
@@ -456,8 +488,10 @@ float AiAaBoW::calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyLi
     }
 }
 
-bool AiAaBoW::calculateLeaderboardSync(const Note* n)
+bool AiAaBoW::calculateLeaderboardSync(const Note* n, thread* t)
 {
+    MF_DEBUG("AI/AA.BoW: SYNC leaderboard calculation for '" << n->getName() << "' in thread " << t << endl);
+
     // If N was REMOVED, then nobody will ask for leaderboard.
     // If N was MODIFIED, then leaderboard will not be accurate (but it's not critical).
     // If N was ADDED, then I don't have data - no leaderboard provided.
@@ -536,7 +570,8 @@ bool AiAaBoW::calculateLeaderboardSync(const Note* n)
     }
 
     leaderboardWip.erase(n);
-    mind.decActiveProcesses();    
+    mind.decActiveProcesses();
+    t->detach(); // indicate that thread finished
     return true;
 }
 

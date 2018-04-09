@@ -54,6 +54,7 @@ class MainMenuPresenter;
 class CliAndBreadcrumbsPresenter;
 class OrlojPresenter;
 class StatusBarPresenter;
+class AsyncTaskNotificationsDistributor;
 
 /**
  * @brief MindForger main window Presenter.
@@ -129,7 +130,6 @@ public slots:
 #ifdef DO_M8F_DEBUG
     void doActionMindHack();
 #endif
-    void doThink();
     void doActionMindThink();
     void doActionMindSleep();
     void doActionMindLearn();

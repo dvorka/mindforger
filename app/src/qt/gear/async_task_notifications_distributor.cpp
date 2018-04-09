@@ -20,17 +20,64 @@
 
 namespace m8r {
 
-AsyncTaskNotificationsDistributor::AsyncTaskNotificationsDistributor()
+using namespace std;
+
+AsyncTaskNotificationsDistributor::AsyncTaskNotificationsDistributor(MainWindowPresenter* mwp)
+    : mwp(mwp)
 {
 }
 
 AsyncTaskNotificationsDistributor::~AsyncTaskNotificationsDistributor()
 {
+    for(Task* t:tasks) {
+        delete t;
+    }
+    tasks.clear();
 }
 
 void AsyncTaskNotificationsDistributor::run()
 {
-    // TODO to be implemented
+    while(true) {
+        MF_DEBUG("AsyncDistributor: SLEEP..." << endl);
+        // IMPROVE consider a condition variable & activiation of checking ONLY if WIP non-empty
+        msleep(5000);
+
+        if(tasks.size()) {
+            std::lock_guard<mutex> criticalSection{tasksMutex};
+
+            MF_DEBUG("AsyncDistributor: AWAKE wip[" << tasks.size() << "]" << endl);
+            vector<Task*> zombies{};
+            for(Task* t:tasks) {
+                // FYI future<> had to be check for f.valid() as get() in other thread destroys it
+                if(t->isReady()) {
+                    MF_DEBUG("AsyncDistributor: future FINISHED w/ " << boolalpha << t->isSuccessful() << endl);
+                    if(t->isSuccessful()) {
+                        switch(t->getType()) {
+                        case TaskType::DREAM_TO_THINK:
+                            emit statusBarShowStatistics();
+                            break;
+                        case TaskType::NOTE_ASSOCIATIONS:
+                            emit leaderboardRefresh(t->getNote());
+                            break;
+                        }
+
+                        zombies.push_back(t);
+                        delete t;
+                        MF_DEBUG("AsyncDistributor: task DELETED" << endl);
+                    }
+                } else {
+                    MF_DEBUG("AsyncDistributor: future NOT FINISHED" << endl);
+                }
+            }
+
+            if(zombies.size()) {
+                for(Task* t:zombies) {
+                    MF_DEBUG("AsyncDistributor: erasing ZOMBIE task " << t << endl);
+                    tasks.erase(std::remove(tasks.begin(), tasks.end(), t), tasks.end());
+                }
+            }
+        }
+    }
 }
 
 } // m8r namespace

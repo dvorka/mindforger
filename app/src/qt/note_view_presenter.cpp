@@ -81,13 +81,19 @@ void NoteViewPresenter::refresh(Note* note)
     view->setHtml(qHtml);
 
     // leaderboard
-    future<bool> f = mind->getAssociatedNotes(note, associatedNotesLeaderboard);
-    if(f.valid()) {
-        orloj->getOutlineView()->getAssocLeaderboard()->refresh(associatedNotesLeaderboard);
+    shared_future<bool> f = mind->getAssociatedNotes(note, associatedNotesLeaderboard); // move
+    if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
+        if(f.get()) {
+            orloj->getOutlineView()->getAssocLeaderboard()->refresh(associatedNotesLeaderboard);
+        } else {
+            orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
+        }
     } else {
         orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
         // ask notifications distributor to repaint leaderboard later
-        orloj->getMainWindow()->getDistributor()->sendSignalWhenLeaderboardIsReady(std::move(f)); // move
+        AsyncTaskNotificationsDistributor::Task* task = new AsyncTaskNotificationsDistributor::Task{f,AsyncTaskNotificationsDistributor::TaskType::NOTE_ASSOCIATIONS};
+        task->setNote(note);
+        orloj->getMainWindow()->getDistributor()->add(task);
     }
 }
 

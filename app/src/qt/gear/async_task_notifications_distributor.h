@@ -24,7 +24,14 @@
 
 #include <QThread>
 
+#include "../../lib/src/debug.h"
+#include "../../lib/src/model/note.h"
+
+#include "../main_window_presenter.h"
+
 namespace m8r {
+
+class MainWindowPresenter;
 
 /**
  * @brief Worker thread that distributes lib/backend async task/thread results to Qt GUI.
@@ -41,11 +48,46 @@ class AsyncTaskNotificationsDistributor : public QThread
 {
     Q_OBJECT
 
+public:
+
+    enum TaskType {
+        DREAM_TO_THINK,
+        NOTE_ASSOCIATIONS
+    };
+
+    /**
+     * @brief Task to be performed on successful finish of the future.
+     */
+    // IMPROVE this hardcoded data class is stupid and ugly
+    class Task {
+        std::shared_future<bool> f;
+        TaskType tt;
+        Note* n;
+
+    public:
+        explicit Task(std::shared_future<bool> f, TaskType tt) {
+            this->f = f;
+            this->tt = tt;
+        }
+
+        bool isReady() const {
+            return f.wait_for(std::chrono::microseconds(0)) == std::future_status::ready;
+        }
+
+        bool isSuccessful() const { return f.get(); }
+        void setNote(Note* n) { this->n = n; }
+        Note* getNote() const { return n; }
+        TaskType getType() const { return tt; }
+    };
+
 private:
-    std::vector<std::future<bool>> wip;
+    MainWindowPresenter* mwp;
+
+    std::vector<Task*> tasks;
+    std::mutex tasksMutex;
 
 public:
-    explicit AsyncTaskNotificationsDistributor();
+    explicit AsyncTaskNotificationsDistributor(MainWindowPresenter* mwp);
     ~AsyncTaskNotificationsDistributor();
 
     /**
@@ -57,13 +99,15 @@ public:
      * Futures to be notified
      */
 
-    void sendSignalWhenLeaderboardIsReady(std::future<bool> future) {
-        wip.push_back(std::move(future));
+    void add(Task* task) {
+        std::lock_guard<std::mutex> criticalSection{tasksMutex};
+        tasks.push_back(task);
     }
 
 // signals that are sent by distributor to GUI components
 signals:
-    void leaderboardCalculationFinished();
+    void statusBarShowStatistics();
+    void leaderboardRefresh(Note* n);
 };
 
 }

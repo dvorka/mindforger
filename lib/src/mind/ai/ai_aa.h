@@ -48,7 +48,7 @@ public:
      *
      * Can be LONG running (asynchronous execution handled by AI).
      */
-    virtual std::future<bool> dream() = 0;
+    virtual std::shared_future<bool> dream() = 0;
 
     /**
      * @brief Get best associated Ns for N.
@@ -62,7 +62,7 @@ public:
      *
      * Can be LONG running (asynchronous execution handled by AI).
      */
-    virtual std::future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations) = 0;
+    virtual std::shared_future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations) = 0;
 
     /**
      * @brief Clear.

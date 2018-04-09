@@ -153,6 +153,9 @@ private:
     explicit Configuration();
 
 private:
+    // configured Mind state where user wants Mind to be
+    MindState desiredMindState;
+    // current Mind state on the way to desired state
     MindState mindState;    
     // if count(N) > asyncMindTreshold then long-running mind computations should be run in async
     unsigned int asyncMindThreshold;
@@ -201,7 +204,9 @@ public:
 
     Installer* getInstaller() const { return installer; }
     MindState getMindState() const { return mindState; }
-    void setMindState(MindState mindState);
+    void setMindState(MindState mindState) { this->mindState = mindState; }
+    MindState getDesiredMindState() const { return desiredMindState; }
+    void setDesiredMindState(MindState mindState) { this->desiredMindState = mindState; }
     unsigned int getAsyncMindThreshold() const { return asyncMindThreshold; }
 
     std::string& getConfigFilePath() { return configFilePath; }
