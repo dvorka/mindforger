@@ -207,7 +207,7 @@ bool AiAaBoW::learnMemorySync(thread* t)
 
     mind.persistMindState(Configuration::MindState::THINKING);
     mind.decActiveProcesses();
-    t->detach(); // indicate that thread finished
+    if(t) t->detach(); // indicate that thread finished
 
     MF_DEBUG("AI/AA.BoW: memory LEARNED!" << endl);
     return true;
@@ -571,7 +571,7 @@ bool AiAaBoW::calculateLeaderboardSync(const Note* n, thread* t)
 
     leaderboardWip.erase(n);
     mind.decActiveProcesses();
-    t->detach(); // indicate that thread finished
+    if(t) t->detach(); // indicate that thread finished
     return true;
 }
 

@@ -216,7 +216,7 @@ TEST(AiNlpTestCase, AaRepositoryBow)
     << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize() << endl;
     ASSERT_LE(1, mind.remind().getOutlinesCount());
 
-    future<bool> readyToThink = mind.think();
+    shared_future<bool> readyToThink = mind.think();
     ASSERT_EQ(true, readyToThink.get()); // blocked
     ASSERT_EQ(m8r::Configuration::MindState::THINKING, config.getMindState());
 
@@ -228,8 +228,14 @@ TEST(AiNlpTestCase, AaRepositoryBow)
     m8r::Note* n=mind.remind().getOutlines()[0]->getNoteByName("Albert Einstein");
     ASSERT_NE(nullptr, n);
 
-    auto lbFuture = mind.getAssociationsLeaderboard(n);
-    auto leaderboard = lbFuture.get(); // blocked
+    vector<pair<m8r::Note*,float>> leaderboard;
+    auto lbFuture = mind.getAssociatedNotes(n, leaderboard);
+    if(lbFuture.get()) { // blocked
+        mind.getAssociatedNotes(n, leaderboard);
+    }
+
+    ASSERT_EQ(7, leaderboard.size());
+
     m8r::Ai::print(n,leaderboard);
 }
 
@@ -251,7 +257,7 @@ TEST(AiNlpTestCase, AaUniverseBow)
     << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize() << endl;
     ASSERT_LE(1, mind.remind().getOutlinesCount());
 
-    future<bool> readyToThink = mind.think();
+    shared_future<bool> readyToThink = mind.think();
     ASSERT_EQ(true, readyToThink.get()); // blocked
     ASSERT_EQ(m8r::Configuration::MindState::THINKING, config.getMindState());
 
@@ -266,11 +272,15 @@ TEST(AiNlpTestCase, AaUniverseBow)
     // get the best associations of 'Albert Einstein'
     m8r::Note* n=u->getNotes()[0];
     UNUSED_ARG(n);
-    auto lbFuture = mind.getAssociationsLeaderboard(n);
-    auto leaderboard = lbFuture.get(); // blocked
+    vector<pair<m8r::Note*,float>> leaderboard;
+    auto lbFuture = mind.getAssociatedNotes(n, leaderboard);
+    if(lbFuture.get()) { // blocked
+        mind.getAssociatedNotes(n, leaderboard);
+    }
     m8r::Ai::print(n,leaderboard);
 
     // asserts
+    ASSERT_EQ(9, leaderboard.size());
     ASSERT_EQ("Same Albert Einstein", leaderboard[0].first->getName());
     ASSERT_EQ("Universe", leaderboard[0].first->getOutline()->getName());
     ASSERT_FLOAT_EQ(0.9, leaderboard[0].second);
