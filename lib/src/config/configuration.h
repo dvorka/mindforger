@@ -139,6 +139,7 @@ public:
     };
 
     static constexpr int DEFAULT_ASYNC_MIND_THRESHOLD = 200;
+    static constexpr int DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL = 3000;
 
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
     static const std::string DEFAULT_TIME_SCOPE;
@@ -178,6 +179,7 @@ private:
     std::string timeScopeAsString;
     unsigned int md2HtmlOptions;
     AssociationAssessmentAlgorithm aaAlgorithm;
+    int distributorSleepInterval;
 
     // GUI configuration
     std::string uiThemeName;
@@ -249,6 +251,7 @@ public:
     unsigned int getMd2HtmlOptions() const { return md2HtmlOptions; }
     AssociationAssessmentAlgorithm getAaAlgorithm() const { return aaAlgorithm; }
     void setAaAlgorithm(AssociationAssessmentAlgorithm aaa) { aaAlgorithm = aaa; }
+    int getDistributorSleepInterval() const { return distributorSleepInterval; }
 
     /*
      * GUI

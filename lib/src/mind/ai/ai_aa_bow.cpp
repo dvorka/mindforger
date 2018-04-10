@@ -122,7 +122,7 @@ void AiAaBoW::initializeWordBlacklist() {
 void AiAaBoW::addWorkerAndCleanZombies(thread* t)
 {
     lock_guard<mutex> criticalSection{runningWorkersMutex};
-    MF_DEBUG("AI/AA.BoW: workers+zombies " << runningWorkers.size() << endl);
+    MF_DEBUG("AA.BoW: workers+zombies " << runningWorkers.size() << endl);
 
     // PROBLEM: if zombies is erased > future/promise is deleted as well > frontend that has future calls a method on it > crash
     // delete dead threads
@@ -135,13 +135,13 @@ void AiAaBoW::addWorkerAndCleanZombies(thread* t)
     // add new one
     runningWorkers.push_back(t);
 
-    MF_DEBUG("AI/AA.BoW: workers " << runningWorkers.size() << endl);
+    MF_DEBUG("AA.BoW: workers " << runningWorkers.size() << endl);
 }
 
 // it's presumed that caller ensures the correct Mind state & synchronization
 shared_future<bool> AiAaBoW::dream() {
     if(memory.getNotesCount() > Configuration::getInstance().getAsyncMindThreshold()) {
-        MF_DEBUG("AI/AA.BoW: ASYNC dream..." << endl);
+        MF_DEBUG("AA.BoW: ASYNC dream..." << endl);
         mind.incActiveProcesses();
 
         // packaged task is parametrized by function/method signature (not return type)
@@ -153,7 +153,7 @@ shared_future<bool> AiAaBoW::dream() {
 
         return shared_future<bool>(std::move(result));
     } else {
-        MF_DEBUG("AI/AA.BoW: SYNC dream..." << endl);
+        MF_DEBUG("AA.BoW: SYNC dream..." << endl);
         promise<bool> p{};
         bool status = learnMemorySync();
         p.set_value(status);
@@ -166,7 +166,7 @@ shared_future<bool> AiAaBoW::dream() {
 
 bool AiAaBoW::learnMemorySync(thread* t)
 {
-    MF_DEBUG("AI/AA.BoW: LEARNING memory to BoW..." << endl);
+    MF_DEBUG("AA.BoW: LEARNING memory to BoW..." << endl);
     notes.clear();
     memory.getAllNotes(notes);
     // let N know it's indexed in AI
@@ -209,7 +209,7 @@ bool AiAaBoW::learnMemorySync(thread* t)
     mind.decActiveProcesses();
     if(t) t->detach(); // indicate that thread finished
 
-    MF_DEBUG("AI/AA.BoW: memory LEARNED!" << endl);
+    MF_DEBUG("AA.BoW: memory LEARNED!" << endl);
     return true;
 }
 
@@ -217,7 +217,7 @@ bool AiAaBoW::learnMemorySync(thread* t)
 shared_future<bool> AiAaBoW::getAssociatedNotes(const Note* note, vector<pair<Note*,float>>& associations) {
     auto cachedLeaderboard = leaderboardCache.find(note);
     if(cachedLeaderboard != leaderboardCache.end()) {
-        MF_DEBUG("AI/AA.BoW: SYNC leaderboard calculation for '" << note->getName() << "'" << endl);
+        MF_DEBUG("AA.BoW: SYNC leaderboard calculation for '" << note->getName() << "'" << endl);
         // copy leaderboard to ENSURE it's validity even if Mind/AI will be cleared/asleep/...
         for(auto p:cachedLeaderboard->second) {
             associations.push_back(p);
@@ -227,16 +227,16 @@ shared_future<bool> AiAaBoW::getAssociatedNotes(const Note* note, vector<pair<No
         p.set_value(true);
         return shared_future<bool>(p.get_future());
     } else {        
-        MF_DEBUG("AI/AA.BoW: ASYNC leaderboard calculation for '" << note->getName() << "'" << endl);
+        MF_DEBUG("AA.BoW: ASYNC leaderboard calculation for '" << note->getName() << "'" << endl);
         if(leaderboardWip.find(note) != leaderboardWip.end()) {
             // calculation WIP & future OWNER will update what needs to be updated -> intentionally NOT sharing futures
             promise<bool> p{};
             p.set_value(false);
-            MF_DEBUG("AI/AA.BoW: leaderboard WIP for '" << note->getName() << "'" << endl);
+            MF_DEBUG("AA.BoW: leaderboard WIP for '" << note->getName() << "'" << endl);
             return p.get_future(); // move
         } else {
             mind.incActiveProcesses();
-            MF_DEBUG("AI/AA.BoW: starting THREAD for '" << note->getName() << "'" << endl);
+            MF_DEBUG("AA.BoW: starting THREAD for '" << note->getName() << "'" << endl);
 
             // packaged task is parametrized by function/method signature (not return type)
             packaged_task<bool (AiAaBoW*,const Note*,thread*)> calculateLeaderboardTask([](AiAaBoW* a, const Note* n, thread* t) { return a->calculateLeaderboardSync(n,t); });
@@ -255,7 +255,7 @@ shared_future<bool> AiAaBoW::getAssociatedNotes(const Note* note, vector<pair<No
 // This is a private method called from AI ~ AI state/async/critical sections handled by caller.
 void AiAaBoW::calculateAaRow(size_t y)
 {
-    MF_DEBUG("AI/AA.BoW: Calculating AA row " << y << "..." << endl);
+    MF_DEBUG("AA.BoW: Calculating AA row " << y << "..." << endl);
     // calculate row and column that cross diagonal on [y][y]
 
     // check diagonal to find out whether the cross has been already calculated
@@ -296,7 +296,7 @@ void AiAaBoW::calculateAaRow(size_t y)
     aaMatrix[y][y] = 1.;
 
 #ifdef DO_M8F_DEBUG
-    MF_DEBUG("AI/AA.BoW: AA row calculated!" << endl);
+    MF_DEBUG("AA.BoW: AA row calculated!" << endl);
     //printAa();
     //assertAaSymmetry();
 #endif
@@ -490,7 +490,7 @@ float AiAaBoW::calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyLi
 
 bool AiAaBoW::calculateLeaderboardSync(const Note* n, thread* t)
 {
-    MF_DEBUG("AI/AA.BoW: SYNC leaderboard calculation for '" << n->getName() << "' in thread " << t << endl);
+    MF_DEBUG("AA.BoW: SYNC leaderboard calculation for '" << n->getName() << "' in thread " << t << endl);
 
     // If N was REMOVED, then nobody will ask for leaderboard.
     // If N was MODIFIED, then leaderboard will not be accurate (but it's not critical).

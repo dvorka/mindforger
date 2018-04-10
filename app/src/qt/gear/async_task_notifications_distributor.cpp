@@ -25,6 +25,8 @@ using namespace std;
 AsyncTaskNotificationsDistributor::AsyncTaskNotificationsDistributor(MainWindowPresenter* mwp)
     : mwp(mwp)
 {
+    sleepInterval = Configuration::getInstance().getDistributorSleepInterval();
+
     QObject::connect(
         this,
         SIGNAL(statusBarShowStatistics()),
@@ -48,9 +50,8 @@ AsyncTaskNotificationsDistributor::~AsyncTaskNotificationsDistributor()
 void AsyncTaskNotificationsDistributor::run()
 {
     while(true) {
-        MF_DEBUG("AsyncDistributor: SLEEP..." << endl);
         // IMPROVE consider a condition variable & activiation of checking ONLY if WIP non-empty
-        msleep(SLEEP_INTERVAL);
+        msleep(sleepInterval);
 
         if(tasks.size()) {
             std::lock_guard<mutex> criticalSection{tasksMutex};

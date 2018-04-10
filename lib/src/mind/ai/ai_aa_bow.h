@@ -40,7 +40,6 @@ private:
     static constexpr int THREAD_POOL_SIZE = 2; // IMPROVE thread pool size to be either configured OR #CPU detected and 1/2 or 1/3 used
     static constexpr float AA_NOT_SET = -1.;
     static constexpr int AA_WORD_RELEVANCY_THRESHOLD = 10; // use 10 words w/ highest weight from vectors (and ignore others - irrelevant can bring noice with volume)
-    static constexpr int AA_LEADERBOARD_SIZE = 10;
     static constexpr int AA_TITLE_WORD_BONUS = 0.2;
 
 private:
@@ -87,6 +86,7 @@ public:
     ~AiAaBoW();
 
     virtual std::shared_future<bool> dream();
+
     /**
      * @brief Get associated Notes.
      *
@@ -95,7 +95,19 @@ public:
      * variant does NOT copies computed associated Ns to provided vector).
      */
     virtual std::shared_future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations);
+
+    // TODO to be implemented
+    virtual std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations) {
+        UNUSED_ARG(words);
+        UNUSED_ARG(associations);
+
+        std::promise<bool> p{};
+        p.set_value(false);
+        return std::shared_future<bool>(p.get_future());
+    }
+
     virtual bool sleep();
+
     virtual bool amnesia();
 
 private:

@@ -66,7 +66,6 @@ void Configuration::clear()
 
     // lib
     mindState = MindState::SLEEPING;
-    aaAlgorithm = AssociationAssessmentAlgorithm::BOW;
     writeMetadata = true;
     saveReadsMetadata = DEFAULT_SAVE_READS_METADATA;
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
@@ -83,6 +82,8 @@ void Configuration::clear()
             | Configuration::MdToHtmlOption::MathInlineSupport
             | Configuration::MdToHtmlOption::CodeHighlighting
             | Configuration::MdToHtmlOption::DiagramSupport;
+    aaAlgorithm = AssociationAssessmentAlgorithm::WEIGHTED_FTS;
+    distributorSleepInterval = DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL;
 
     // GUI
     uiViewerShowMetadata = true;

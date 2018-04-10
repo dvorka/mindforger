@@ -35,6 +35,9 @@ namespace m8r {
  */
 class AiAssociationsAssessment
 {
+protected:
+    static constexpr int AA_LEADERBOARD_SIZE = 10;
+
 public:
     explicit AiAssociationsAssessment() {}
     AiAssociationsAssessment(const AiAssociationsAssessment&) = delete;
@@ -51,8 +54,8 @@ public:
     virtual std::shared_future<bool> dream() = 0;
 
     /**
-     * @brief Get best associated Ns for N.
-     * @return Explanation:
+     * @brief Get associated Ns for N.
+     * @return return value explanation:
      *   - future !VALID ... associated Ns are on the way - wait for future to become valid
      *                       and then call this method AGAIN (i.e. ASYNC doesn't store associations
      *                       to provided vector to avoid race conditions in the future).
@@ -63,6 +66,11 @@ public:
      * Can be LONG running (asynchronous execution handled by AI).
      */
     virtual std::shared_future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations) = 0;
+
+    /**
+     * @brief Get associated Ns for a set of words.
+     */
+    virtual std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations) = 0;
 
     /**
      * @brief Clear.

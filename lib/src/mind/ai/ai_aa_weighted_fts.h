@@ -20,6 +20,7 @@
 #define M8R_AI_ASSOCIATIONS_ASSESSMENT_WEIGHTED_FTS_H
 
 #include <future>
+#include <set>
 #include <vector>
 
 #include "ai_aa.h"
@@ -54,9 +55,17 @@ class Mind;
  */
 class AiAaWeightedFts : public AiAssociationsAssessment
 {
+    struct WeightedMatchesComparator {
+        bool operator() (const std::pair<Note*,float>& p1, const std::pair<Note*,float>& p2) const {
+            return p1.second < p2.second;
+        }
+    };
+
 private:
     Mind& mind;
     Memory& memory;
+
+    std::vector<Note*> notes;
 
 public:
     explicit AiAaWeightedFts(Memory& memory, Mind& mind);
@@ -67,25 +76,21 @@ public:
     ~AiAaWeightedFts();
 
     virtual std::shared_future<bool> dream();
-
-    virtual std::shared_future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations) {
-        UNUSED_ARG(note);
-        UNUSED_ARG(associations);
-
-        std::promise<bool> p{};
-        p.set_value(false);
-        return std::shared_future<bool>(p.get_future());
-    }
+    virtual std::shared_future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations);
+    virtual std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations);
 
     virtual bool sleep() {
-        // FOO implementation
+        notes.clear();
         return true;
     }
 
     virtual bool amnesia() {
-        // FOO implementation
-        return true;
+        return sleep();
     }
+
+private:
+    std::set<std::pair<Note*,float>,WeightedMatchesComparator>* findAndWeightNote(const std::string& regexp, const bool ignoreCase, Outline* scope);
+    void findAndWeightNote(std::set<std::pair<Note*,float>,WeightedMatchesComparator>* result, const std::string& regexp, const bool ignoreCase, Outline* outline);
 };
 
 }

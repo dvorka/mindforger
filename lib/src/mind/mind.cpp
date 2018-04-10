@@ -229,14 +229,13 @@ void Mind::getOutlineNames(vector<string>& names) const
     }
 }
 
+// One match in either title or body is enought to be added to the result
 void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool ignoreCase, Outline* outline)
 {
-    string s{};
-
     // IMPROVE make this faster - do NOT convert to lower case, but compare it in that method > will do less
     if(ignoreCase) {
         // case INSENSITIVE
-        s.clear();
+        string s{};
         stringToLower(outline->getName(), s);
         if(s.find(regexp)!=string::npos) {
             result->push_back(outline->getOutlineDescriptorAsNote());
