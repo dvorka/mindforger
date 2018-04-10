@@ -57,7 +57,7 @@ class AiAaWeightedFts : public AiAssociationsAssessment
 {
     struct WeightedMatchesComparator {
         bool operator() (const std::pair<Note*,float>& p1, const std::pair<Note*,float>& p2) const {
-            return p1.second < p2.second;
+            return p1.second > p2.second;
         }
     };
 

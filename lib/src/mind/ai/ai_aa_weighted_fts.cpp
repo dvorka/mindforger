@@ -54,6 +54,7 @@ std::shared_future<bool> AiAaWeightedFts::dream()
 std::shared_future<bool> AiAaWeightedFts::getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations)
 {
     // the first OVERsimplified implementation: call WORDs version for N's title
+    // IMPROVE remove self from the result
     return getAssociatedNotes(note->getName(), associations);
 }
 
@@ -176,34 +177,41 @@ void AiAaWeightedFts::findAndWeightNote(set<pair<Note*,float>,WeightedMatchesCom
 
 std::shared_future<bool> AiAaWeightedFts::getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations)
 {
-    set<pair<Note*,float>,WeightedMatchesComparator>* m = findAndWeightNote(words, true, nullptr);
-    unique_ptr<set<pair<Note*,float>,WeightedMatchesComparator>> mKiller{m}; // auto delete
-
-    // calculate leaderboard
-    vector<pair<Note*,float>> leaderboard{};
-    if(m->size()>0) {
 #ifdef DO_M8F_DEBUG
     MF_DEBUG("AA.FTS.words for  '" << words << "'" << endl);
     auto begin = chrono::high_resolution_clock::now();
 #endif
 
-    // TODO build and cache leaderboard
+    // find matches
+    set<pair<Note*,float>,WeightedMatchesComparator>* m = findAndWeightNote(words, true, nullptr);
+    unique_ptr<set<pair<Note*,float>,WeightedMatchesComparator>> mKiller{m}; // auto delete
 
+    // calculate leaderboard
+    if(m->size()>0) {
+        MF_DEBUG("AA.FTS.words '" << words << "' w/ " << m->size() << " matches" << endl);
 
+        // build leaderboard
+        std::set<pair<Note*,float>,WeightedMatchesComparator>::iterator it;
+        for(it = m->begin(); it != m->end(); ++it) {
+            associations.push_back(*it);
+            if(associations.size() >= AA_LEADERBOARD_SIZE) {
+                break;
+            }
+        }
+        // recalculate % (and debug)
+        MF_DEBUG("Leaderboard of '" << words << "' word(s):" << endl);
+        float pc = associations[0].second / 100.;
+        int i=0;
+        for(auto& p:associations) {
+            p.second = p.second/pc/100; // <0,1>
+            MF_DEBUG("  #" << ++i << " " << p.first->getName() << " (" << p.first->getOutline()->getName() << ")" << " ~ " << p.second << endl);
+        }
 
-//        MF_DEBUG("Leaderboard of " << n->getName() << " (" << n->getOutline()->getName() << "):" << endl);
-//        for(int i=0; i<AA_LEADERBOARD_SIZE && aaLeaderboard[i][0]!=AA_NOT_SET; i++) {
-//            MF_DEBUG("  #" << i << " " <<
-//                     notes[aaLeaderboard[i][0]]->getName() << " (" << notes[aaLeaderboard[i][0]]->getOutline()->getName() << ")" <<
-//                     " ~ " << aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]] << endl);
-//            leaderboard.push_back(std::make_pair(notes[aaLeaderboard[i][0]],aaMatrix[aaLeaderboard[i][0]][aaLeaderboard[i][1]]));
-//        }
-//        // cache leaderboard (copied)
-//        leaderboardCache[n] = leaderboard;
+        // no need to CACHE as FTS matching is fast (~100ms on 1.000s Ns repos)
 
 #ifdef DO_M8F_DEBUG
-    auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("AA.FTS.words in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms" << endl);
+        auto end = chrono::high_resolution_clock::now();
+        MF_DEBUG("AA.FTS.words in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms" << endl);
 #endif
         std::promise<bool> p{};
         p.set_value(true);
