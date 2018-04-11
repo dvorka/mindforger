@@ -22,7 +22,7 @@ namespace m8r {
 
 using namespace std;
 
-MarkdownTokenizer::MarkdownTokenizer(Lexicon& lexicon, Trie& blacklist)
+MarkdownTokenizer::MarkdownTokenizer(Lexicon& lexicon, CommonWordsBlacklist& blacklist)
     : lexicon(lexicon), blacklist(blacklist), stemmer{}
 {
 }

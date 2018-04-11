@@ -23,7 +23,7 @@
 
 #include "../../../debug.h"
 #include "../../../gear/lang_utils.h"
-#include "../../../gear/trie.h"
+#include "../../../mind/ai/nlp/common_words_blacklist.h"
 #include "char_provider.h"
 #include "lexicon.h"
 #include "word_frequency_list.h"
@@ -51,12 +51,12 @@ class MarkdownTokenizer
     /**
      * @brief Word blacklist (e.g. and, but, have, do, ...)
      */
-    Trie& blacklist;
+    CommonWordsBlacklist& blacklist;
 
     Stemmer stemmer;
 
 public:
-    explicit MarkdownTokenizer(Lexicon& lexicon, Trie& blacklist);
+    explicit MarkdownTokenizer(Lexicon& lexicon, CommonWordsBlacklist& blacklist);
     MarkdownTokenizer(const MarkdownTokenizer&) = delete;
     MarkdownTokenizer(const MarkdownTokenizer&&) = delete;
     MarkdownTokenizer &operator=(const MarkdownTokenizer&) = delete;

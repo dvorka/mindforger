@@ -24,7 +24,8 @@ using namespace std;
 
 AiAaWeightedFts::AiAaWeightedFts(Memory& memory, Mind& mind)
     : mind(mind),
-      memory(memory)
+      memory(memory),
+      commonWords{}
 {
 }
 
@@ -62,12 +63,12 @@ std::shared_future<bool> AiAaWeightedFts::getAssociatedNotes(const Note* note, s
  * WORDS -> Ns
  */
 
-set<pair<Note*,float>,AiAaWeightedFts::WeightedMatchesComparator>* AiAaWeightedFts::findAndWeightNoteExactMatch(
+vector<pair<Note*,float>>* AiAaWeightedFts::findAndWeightNoteExactMatch(
         const string& regexp,
         const bool ignoreCase,
         Outline* scope)
 {
-    set<pair<Note*,float>,WeightedMatchesComparator>* result = new set<pair<Note*,float>,WeightedMatchesComparator>();
+    vector<pair<Note*,float>>* result = new vector<pair<Note*,float>>();
 
     string r{};
     if(ignoreCase) {
@@ -88,7 +89,12 @@ set<pair<Note*,float>,AiAaWeightedFts::WeightedMatchesComparator>* AiAaWeightedF
     return result;
 }
 
-set<pair<Note*,float>,AiAaWeightedFts::WeightedMatchesComparator>* AiAaWeightedFts::findAndWeightNote(
+bool weightedMatchesComparator(const std::pair<Note*,float>& p1, const std::pair<Note*,float>& p2)
+{
+    return p1.second > p2.second;
+}
+
+vector<pair<Note*,float>>* AiAaWeightedFts::findAndWeightNote(
         const string& regexp,
         const bool ignoreCase,
         Outline* scope,
@@ -97,7 +103,7 @@ set<pair<Note*,float>,AiAaWeightedFts::WeightedMatchesComparator>* AiAaWeightedF
     // IMPROVE if whole search gives 0 associations, then check whether it's multi-word and do word-by-word search and combine scores
     // IMPROVE do NOT search associations for common words and <2 words
 
-    set<pair<Note*,float>,WeightedMatchesComparator>* result
+    vector<pair<Note*,float>>* result
         = findAndWeightNoteExactMatch(regexp, ignoreCase, scope);
 
     // remove self in case that result can become empty
@@ -120,19 +126,29 @@ set<pair<Note*,float>,AiAaWeightedFts::WeightedMatchesComparator>* AiAaWeightedF
 
         // IMPROVE for now it takes the first non-empty result for a word - improve it as described below
         if(words.size()) {
-            set<pair<Note*,float>,WeightedMatchesComparator>* r;
-            // TO BE FINISHED: iterate ALL words, track Note* in result, add & combine scores, ...
+            vector<pair<Note*,float>>* r;
+            // IMPROVE map w/ hashmap
+            map<Note*,pair<Note*,float>> knownMatches;
+            // TO BE FINISHED: iterate first 3 words, track Note* in result, add & combine scores, ...
             // TODO de-duplication to be done using hashset (or auxiliary set w/ Note* as entry to indicate membership)
+            int searchedWords=0;
             for(string& w:words) {
-                r = findAndWeightNoteExactMatch(w, ignoreCase, scope);
-                if(r->size()) {
-                    delete result;
-                    return r;
+                if(++searchedWords > FTS_SEARCH_THRESHOLD_MULTIWORD) {
+                    break;
+                }
+                if(w.size()>1 || !commonWords.findWord(w)) {
+                    r = findAndWeightNoteExactMatch(w, ignoreCase, scope);
+                    if(r->size()) {
+                        delete result;
+                        return r;
+                    }
                 }
                 // TODO to be finished
             }
             // TODO DELETE old result
         }
+    } else {
+        std::sort(result->begin(), result->end(), weightedMatchesComparator);
     }
 
     return result;
@@ -145,7 +161,7 @@ set<pair<Note*,float>,AiAaWeightedFts::WeightedMatchesComparator>* AiAaWeightedF
  * Caller just trims sorted results to the size of leaderboard (iterate set).
  */
 void AiAaWeightedFts::findAndWeightNote(
-    set<pair<Note*,float>,WeightedMatchesComparator>* result,
+    vector<pair<Note*,float>>* result,
     const string& regexp,
     const bool ignoreCase,
     Outline* outline)
@@ -178,7 +194,7 @@ void AiAaWeightedFts::findAndWeightNote(
         }
         if(matches) {
             oScore += 10.*matches;
-            result->insert(std::make_pair(outline->getOutlineDescriptorAsNote(),oScore));
+            result->push_back(std::make_pair(outline->getOutlineDescriptorAsNote(),oScore));
         }
 
         // O's score will contribute to N's score as a bonus > normalize it
@@ -215,7 +231,7 @@ void AiAaWeightedFts::findAndWeightNote(
             }
             if(nScore || matches) {
                 nScore += 10.*matches;
-                result->insert(std::make_pair(note,nScore));
+                result->push_back(std::make_pair(note,nScore));
                 //MF_DEBUG(" AA.FTS '" << regexp << "' > N '" << note->getName() << "' ~ " << nScore << endl);
             }
         }
@@ -227,12 +243,12 @@ void AiAaWeightedFts::findAndWeightNote(
         float oScore{};
         if(outline->getName().find(regexp)!=string::npos) {
             oScore += 100.;
-            result->insert(std::make_pair(outline->getOutlineDescriptorAsNote(),oScore));
+            result->push_back(std::make_pair(outline->getOutlineDescriptorAsNote(),oScore));
         } else {
             for(string* d:outline->getDescription()) {
                 if(d && d->find(regexp)!=string::npos) {
                     oScore += 1.;
-                    result->insert(std::make_pair(outline->getOutlineDescriptorAsNote(),oScore));
+                    result->push_back(std::make_pair(outline->getOutlineDescriptorAsNote(),oScore));
                     // IMPROVE do NOT break and calculate HOW MANY times was matched (do NOT add to result more than once)
                     break;
                 }
@@ -247,12 +263,12 @@ void AiAaWeightedFts::findAndWeightNote(
             nScore = oScore;
             if(note->getName().find(regexp)!=string::npos) {
                 nScore += 100.; // N's O contributed to it's score
-                result->insert(std::make_pair(note,nScore));
+                result->push_back(std::make_pair(note,nScore));
             } else {
                 for(string* d:note->getDescription()) {
                     if(d && d->find(regexp)!=string::npos) {
                         nScore += 10.; // N's O contributed to it's score
-                        result->insert(std::make_pair(note,nScore));
+                        result->push_back(std::make_pair(note,nScore));
                         // IMPROVE do NOT break and calculate HOW MANY times was matched (do NOT add to result more than once)
                         break;
                     }
@@ -273,15 +289,15 @@ std::shared_future<bool> AiAaWeightedFts::getAssociatedNotes(
 #endif
 
     // find matches
-    set<pair<Note*,float>,WeightedMatchesComparator>* m = findAndWeightNote(words, true, nullptr, self);
-    unique_ptr<set<pair<Note*,float>,WeightedMatchesComparator>> mKiller{m}; // auto delete
+    vector<pair<Note*,float>>* m = findAndWeightNote(words, true, nullptr, self);
+    unique_ptr<vector<pair<Note*,float>>> mKiller{m}; // auto delete
 
     // calculate leaderboard
     if(m->size()>0) {
         MF_DEBUG("AA.FTS.words '" << words << "' w/ " << m->size() << " matches" << endl);
 
         // build leaderboard
-        std::set<pair<Note*,float>,WeightedMatchesComparator>::iterator it;
+        std::vector<pair<Note*,float>>::iterator it;
         for(it = m->begin(); it != m->end(); ++it) {
             if(self && self==it->first) {
                 continue;

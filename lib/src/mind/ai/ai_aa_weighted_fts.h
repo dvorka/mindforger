@@ -20,11 +20,13 @@
 #define M8R_AI_ASSOCIATIONS_ASSESSMENT_WEIGHTED_FTS_H
 
 #include <future>
-#include <set>
 #include <vector>
+#include <map>
 
 #include "ai_aa.h"
 #include "../mind.h"
+#include "../../gear/hash_map.h"
+#include "./nlp/common_words_blacklist.h"
 
 namespace m8r {
 
@@ -55,15 +57,13 @@ class Mind;
  */
 class AiAaWeightedFts : public AiAssociationsAssessment
 {
-    struct WeightedMatchesComparator {
-        bool operator() (const std::pair<Note*,float>& p1, const std::pair<Note*,float>& p2) const {
-            return p1.second > p2.second;
-        }
-    };
+    // in case that FTS for name fails, name is split to words - too many words would take too much time
+    static constexpr int FTS_SEARCH_THRESHOLD_MULTIWORD = 3;
 
 private:
     Mind& mind;
     Memory& memory;
+    CommonWordsBlacklist commonWords;
 
     std::vector<Note*> notes;
 
@@ -91,9 +91,9 @@ public:
     }
 
 private:
-    std::set<std::pair<Note*,float>,WeightedMatchesComparator>* findAndWeightNoteExactMatch(const std::string& regexp, const bool ignoreCase, Outline* scope);
-    std::set<std::pair<Note*,float>,WeightedMatchesComparator>* findAndWeightNote(const std::string& regexp, const bool ignoreCase, Outline* scope, const Note* self);
-    void findAndWeightNote(std::set<std::pair<Note*,float>,WeightedMatchesComparator>* result, const std::string& regexp, const bool ignoreCase, Outline* outline);
+    std::vector<std::pair<Note*,float>>* findAndWeightNoteExactMatch(const std::string& regexp, const bool ignoreCase, Outline* scope);
+    std::vector<std::pair<Note*,float>>* findAndWeightNote(const std::string& regexp, const bool ignoreCase, Outline* scope, const Note* self);
+    void findAndWeightNote(std::vector<std::pair<Note*,float>>* result, const std::string& regexp, const bool ignoreCase, Outline* outline);
     std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations, const Note* self);
 };
 

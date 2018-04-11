@@ -29,94 +29,10 @@ AiAaBoW::AiAaBoW(Memory& memory, Mind& mind)
       wordBlacklist{},
       tokenizer{lexicon,wordBlacklist}
 {
-    initializeWordBlacklist();
 }
 
 AiAaBoW::~AiAaBoW()
 {
-}
-
-void AiAaBoW::initializeWordBlacklist() {
-    wordBlacklist.addWord("the");
-    wordBlacklist.addWord("of");
-    wordBlacklist.addWord("and");
-    wordBlacklist.addWord("to");
-    wordBlacklist.addWord("a");
-    wordBlacklist.addWord("in");
-    wordBlacklist.addWord("for");
-    wordBlacklist.addWord("is");
-    wordBlacklist.addWord("on");
-    wordBlacklist.addWord("that");
-    wordBlacklist.addWord("by");
-    wordBlacklist.addWord("this");
-    wordBlacklist.addWord("with");
-    wordBlacklist.addWord("I");
-    wordBlacklist.addWord("you");
-    wordBlacklist.addWord("it");
-    wordBlacklist.addWord("not");
-    wordBlacklist.addWord("or");
-    wordBlacklist.addWord("be");
-    wordBlacklist.addWord("are");
-    wordBlacklist.addWord("from");
-    wordBlacklist.addWord("at");
-    wordBlacklist.addWord("as");
-    wordBlacklist.addWord("your");
-    wordBlacklist.addWord("all");
-    wordBlacklist.addWord("have");
-    wordBlacklist.addWord("new");
-    wordBlacklist.addWord("more");
-    wordBlacklist.addWord("an");
-    wordBlacklist.addWord("was");
-    wordBlacklist.addWord("we");
-    wordBlacklist.addWord("will");
-    wordBlacklist.addWord("can");
-    wordBlacklist.addWord("us");
-    wordBlacklist.addWord("about");
-    wordBlacklist.addWord("if");
-    wordBlacklist.addWord("my");
-    wordBlacklist.addWord("has");
-    wordBlacklist.addWord("but");
-    wordBlacklist.addWord("our");
-    wordBlacklist.addWord("one");
-    wordBlacklist.addWord("other");
-    wordBlacklist.addWord("do");
-    wordBlacklist.addWord("no");
-    wordBlacklist.addWord("they");
-    wordBlacklist.addWord("he");
-    wordBlacklist.addWord("may");
-    wordBlacklist.addWord("what");
-    wordBlacklist.addWord("which");
-    wordBlacklist.addWord("their");
-    wordBlacklist.addWord("any");
-    wordBlacklist.addWord("there");
-    wordBlacklist.addWord("so");
-    wordBlacklist.addWord("his");
-    wordBlacklist.addWord("when");
-    wordBlacklist.addWord("who");
-    wordBlacklist.addWord("also");
-    wordBlacklist.addWord("get");
-    wordBlacklist.addWord("am");
-    wordBlacklist.addWord("been");
-    wordBlacklist.addWord("would");
-    wordBlacklist.addWord("how");
-    wordBlacklist.addWord("were");
-    wordBlacklist.addWord("me");
-    wordBlacklist.addWord("some");
-    wordBlacklist.addWord("these");
-    wordBlacklist.addWord("its");
-    wordBlacklist.addWord("like");
-    wordBlacklist.addWord("than");
-    wordBlacklist.addWord("had");
-    wordBlacklist.addWord("should");
-    wordBlacklist.addWord("her");
-    wordBlacklist.addWord("such");
-    wordBlacklist.addWord("then");
-    wordBlacklist.addWord("where");
-    wordBlacklist.addWord("does");
-    wordBlacklist.addWord("could");
-    wordBlacklist.addWord("did");
-    wordBlacklist.addWord("those");
-    wordBlacklist.addWord("want");
 }
 
 void AiAaBoW::addWorkerAndCleanZombies(thread* t)

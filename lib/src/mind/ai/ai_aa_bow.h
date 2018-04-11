@@ -26,6 +26,7 @@
 #include "./nlp/markdown_tokenizer.h"
 #include "./nlp/note_char_provider.h"
 #include "./nlp/bag_of_words.h"
+#include "./nlp/common_words_blacklist.h"
 
 namespace m8r {
 
@@ -47,7 +48,7 @@ private:
     Memory& memory;
 
     Lexicon lexicon; // IMPROVE merge Standford GloVe word vectors (https://nlp.stanford.edu/projects/glove/)
-    Trie wordBlacklist;
+    CommonWordsBlacklist wordBlacklist;
     BagOfWords bow;
     MarkdownTokenizer tokenizer;
 
