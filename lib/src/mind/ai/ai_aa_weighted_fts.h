@@ -77,7 +77,9 @@ public:
 
     virtual std::shared_future<bool> dream();
     virtual std::shared_future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations);
-    virtual std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations);
+    virtual std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations) {
+        return getAssociatedNotes(words, associations, nullptr);
+    }
 
     virtual bool sleep() {
         notes.clear();
@@ -89,8 +91,10 @@ public:
     }
 
 private:
-    std::set<std::pair<Note*,float>,WeightedMatchesComparator>* findAndWeightNote(const std::string& regexp, const bool ignoreCase, Outline* scope);
+    std::set<std::pair<Note*,float>,WeightedMatchesComparator>* findAndWeightNoteExactMatch(const std::string& regexp, const bool ignoreCase, Outline* scope);
+    std::set<std::pair<Note*,float>,WeightedMatchesComparator>* findAndWeightNote(const std::string& regexp, const bool ignoreCase, Outline* scope, const Note* self);
     void findAndWeightNote(std::set<std::pair<Note*,float>,WeightedMatchesComparator>* result, const std::string& regexp, const bool ignoreCase, Outline* outline);
+    std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations, const Note* self);
 };
 
 }
