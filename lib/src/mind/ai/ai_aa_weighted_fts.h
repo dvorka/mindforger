@@ -76,7 +76,12 @@ public:
     ~AiAaWeightedFts();
 
     virtual std::shared_future<bool> dream();
-    virtual std::shared_future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations);
+
+    // This is initial OVERsimplified implementation - calls WORDs version for N's title.
+    virtual std::shared_future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations) {
+        // IMPROVE consider tags, relationships, ... like in BoW to make it more sophisticated
+        return getAssociatedNotes(note->getName(), associations, note);
+    }
     virtual std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations) {
         return getAssociatedNotes(words, associations, nullptr);
     }
@@ -91,9 +96,10 @@ public:
     }
 
 private:
-    std::vector<std::pair<Note*,float>>* findAndWeightNoteExactMatch(const std::string& regexp, const bool ignoreCase, Outline* scope);
-    std::vector<std::pair<Note*,float>>* findAndWeightNote(const std::string& regexp, const bool ignoreCase, Outline* scope, const Note* self);
-    void findAndWeightNote(std::vector<std::pair<Note*,float>>* result, const std::string& regexp, const bool ignoreCase, Outline* outline);
+    std::vector<std::pair<Note*,float>>* findAndWeightNotes(const std::string& regexps, const bool ignoreCase, Outline* scope);
+    std::vector<std::pair<Note*,float>>* findAndWeightNotesWithFallback(const std::string& regexp, const bool ignoreCase, Outline* scope, const Note* self);
+    void findAndWeightNotesWalker(std::vector<std::pair<Note*,float>>* result, std::vector<std::string>& regexp, const bool ignoreCase, Outline* outline);
+
     std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations, const Note* self);
 };
 

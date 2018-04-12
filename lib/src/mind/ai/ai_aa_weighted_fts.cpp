@@ -33,7 +33,7 @@ AiAaWeightedFts::~AiAaWeightedFts()
 {
 }
 
-std::shared_future<bool> AiAaWeightedFts::dream()
+shared_future<bool> AiAaWeightedFts::dream()
 {
     MF_DEBUG("AA.FTS: LEARNING memory..." << endl);
 
@@ -49,21 +49,11 @@ std::shared_future<bool> AiAaWeightedFts::dream()
 }
 
 /*
- * N -> Ns
- */
-
-std::shared_future<bool> AiAaWeightedFts::getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations)
-{
-    // the first OVERsimplified implementation: call WORDs version for N's title
-    // IMPROVE consider tags, relationships, ... like in BoW to make it more sophisticated
-    return getAssociatedNotes(note->getName(), associations, note);
-}
-
-/*
  * WORDS -> Ns
  */
 
-vector<pair<Note*,float>>* AiAaWeightedFts::findAndWeightNoteExactMatch(
+// assess how much relevant is every N in memory to given word(s)
+vector<pair<Note*,float>>* AiAaWeightedFts::findAndWeightNotes(
         const string& regexp,
         const bool ignoreCase,
         Outline* scope)
@@ -78,11 +68,11 @@ vector<pair<Note*,float>>* AiAaWeightedFts::findAndWeightNoteExactMatch(
     }
 
     if(scope) {
-        findAndWeightNote(result, r, ignoreCase, scope);
+        findAndWeightNotesWithFallback(result, r, ignoreCase, scope);
     } else {
         const vector<m8r::Outline*> outlines = memory.getOutlines();
         for(Outline* outline:outlines) {
-            findAndWeightNote(result, r, ignoreCase, outline);
+            findAndWeightNotesWithFallback(result, r, ignoreCase, outline);
         }
     }
 
@@ -94,15 +84,12 @@ bool weightedMatchesComparator(const std::pair<Note*,float>& p1, const std::pair
     return p1.second > p2.second;
 }
 
-vector<pair<Note*,float>>* AiAaWeightedFts::findAndWeightNote(
+vector<pair<Note*,float>>* AiAaWeightedFts::findAndWeightNoteWithFallback(
         const string& regexp,
         const bool ignoreCase,
         Outline* scope,
         const Note* self)
 {
-    // IMPROVE if whole search gives 0 associations, then check whether it's multi-word and do word-by-word search and combine scores
-    // IMPROVE do NOT search associations for common words and <2 words
-
     vector<pair<Note*,float>>* result
         = findAndWeightNoteExactMatch(regexp, ignoreCase, scope);
 
@@ -127,10 +114,12 @@ vector<pair<Note*,float>>* AiAaWeightedFts::findAndWeightNote(
         // IMPROVE for now it takes the first non-empty result for a word - improve it as described below
         if(words.size()) {
             vector<pair<Note*,float>>* r;
+
             // IMPROVE map w/ hashmap
             map<Note*,pair<Note*,float>> knownMatches;
             // TO BE FINISHED: iterate first 3 words, track Note* in result, add & combine scores, ...
             // TODO de-duplication to be done using hashset (or auxiliary set w/ Note* as entry to indicate membership)
+
             int searchedWords=0;
             for(string& w:words) {
                 if(++searchedWords > FTS_SEARCH_THRESHOLD_MULTIWORD) {
@@ -160,11 +149,11 @@ vector<pair<Note*,float>>* AiAaWeightedFts::findAndWeightNote(
  * Matches are stored to set w/ comparator ensuring the result will be ordered by score.
  * Caller just trims sorted results to the size of leaderboard (iterate set).
  */
-void AiAaWeightedFts::findAndWeightNote(
+void AiAaWeightedFts::findAndWeightNotesInOutline(
+    Outline* outline,
     vector<pair<Note*,float>>* result,
-    const string& regexp,
-    const bool ignoreCase,
-    Outline* outline)
+    vector<const string>& regexps,
+    const bool ignoreCase)
 {
     // IMPROVE make this faster - do NOT convert to lower case, but compare it in that method > will do less
     if(ignoreCase) {
@@ -175,11 +164,14 @@ void AiAaWeightedFts::findAndWeightNote(
         string s{};
         // O.title matches
         stringToLower(outline->getName(), s);
-        if(s.find(regexp)!=string::npos) {
-            oScore += 100.;
+        for(auto& regexp:regexps) {
+            if(s.find(regexp)!=string::npos) {
+                oScore += 100.;
+            }
         }
         // O.description matches
         float matches = 0.;
+                         xxx
         for(string* d:outline->getDescription()) {
             if(d) {
                 s.clear();

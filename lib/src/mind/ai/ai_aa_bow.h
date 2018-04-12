@@ -35,6 +35,9 @@ class Mind;
 /**
  * @brief BoW based associations assessment.
  */
+// IMPROVE rewrite BoW to infer word WEIGHT from it's occurence in O/N title
+// (not by frequency in Lexicon). Incorrect word weight causes this method didn't
+// work. With correctly weighted words it will work (much better).
 class AiAaBoW : public AiAssociationsAssessment
 {
 private:
