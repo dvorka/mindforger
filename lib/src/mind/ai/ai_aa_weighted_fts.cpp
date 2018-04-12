@@ -52,91 +52,80 @@ shared_future<bool> AiAaWeightedFts::dream()
  * WORDS -> Ns
  */
 
-// assess how much relevant is every N in memory to given word(s)
-vector<pair<Note*,float>>* AiAaWeightedFts::findAndWeightNotes(
-        const string& regexp,
-        const bool ignoreCase,
-        Outline* scope)
+bool weightedMatchesComparator(const std::pair<Note*,float>& p1, const std::pair<Note*,float>& p2)
 {
+    return p1.second > p2.second;
+}
+
+vector<pair<Note*,float>>* AiAaWeightedFts::assessNotesWithFallback(const string& regexp, const bool ignoreCase, Outline* scope, const Note* self)
+{
+    vector<string> words{};
     vector<pair<Note*,float>>* result = new vector<pair<Note*,float>>();
 
+    // case (in)sensitivity
     string r{};
     if(ignoreCase) {
         stringToLower(regexp, r);
     } else {
         r.append(regexp);
     }
+    words.push_back(r);
 
+    // exact match
     if(scope) {
-        findAndWeightNotesWithFallback(result, r, ignoreCase, scope);
+        assessNotesInOutline(scope, result, words, ignoreCase);
     } else {
         const vector<m8r::Outline*> outlines = memory.getOutlines();
         for(Outline* outline:outlines) {
-            findAndWeightNotesWithFallback(result, r, ignoreCase, outline);
+            assessNotesInOutline(outline, result, words, ignoreCase);
         }
     }
-
-    return result;
-}
-
-bool weightedMatchesComparator(const std::pair<Note*,float>& p1, const std::pair<Note*,float>& p2)
-{
-    return p1.second > p2.second;
-}
-
-vector<pair<Note*,float>>* AiAaWeightedFts::findAndWeightNoteWithFallback(
-        const string& regexp,
-        const bool ignoreCase,
-        Outline* scope,
-        const Note* self)
-{
-    vector<pair<Note*,float>>* result
-        = findAndWeightNoteExactMatch(regexp, ignoreCase, scope);
-
     // remove self in case that result can become empty
-    if(result->size() == 1 && result->begin()->first == self) {
+    if(self && result->size() == 1 && result->begin()->first == self) {
         result->clear();
     }
-    // IMPROVE this may take longer than single search > implement ASYNC run w/ distributor based refresh
-    if(result->empty()) {
-        // whole regexp wasn't found - if it's multi-word try it word by word and combine result
 
-        // IMPROVE make this faster
-        vector<string> words{};
+    // FALLBACK: if exact match failed, split regexp to words (if it's multi-word) and try FTS assessment word by word
+    if(result->empty()) {
+        // IMPROVE this may take longer than single search > implement ASYNC run w/ distributor based refresh
+        words.clear();
         size_t pos = 0;
-        string s{regexp}, token{};
+        string s{regexp}, token{}, r{};
+        // IMPROVE make split faster
         while((pos = s.find(" ")) != string::npos) {
             token = s.substr(0, pos);
-            words.push_back(token);
+
+            r.clear();
+            if(ignoreCase) {
+                stringToLower(token, r);
+            } else {
+                r.assign(token);
+            }
+            if(r.size()>1 && !commonWords.findWord(r)) {
+                words.push_back(r);
+            }
+
             s.erase(0, pos + 1); // delimiter length ~ 1
         }
 
-        // IMPROVE for now it takes the first non-empty result for a word - improve it as described below
+        // search using words
         if(words.size()) {
-            vector<pair<Note*,float>>* r;
-
-            // IMPROVE map w/ hashmap
-            map<Note*,pair<Note*,float>> knownMatches;
-            // TO BE FINISHED: iterate first 3 words, track Note* in result, add & combine scores, ...
-            // TODO de-duplication to be done using hashset (or auxiliary set w/ Note* as entry to indicate membership)
-
-            int searchedWords=0;
-            for(string& w:words) {
-                if(++searchedWords > FTS_SEARCH_THRESHOLD_MULTIWORD) {
-                    break;
+            // IMPROVE: iterate 3 *most valuable* words (now the first 3 words are considered, value is ignored)
+            words.resize(FTS_SEARCH_THRESHOLD_MULTIWORD);
+            // search using words
+            if(scope) {
+                assessNotesInOutline(scope, result, words, ignoreCase);
+            } else {
+                const vector<m8r::Outline*> outlines = memory.getOutlines();
+                for(Outline* outline:outlines) {
+                    assessNotesInOutline(outline, result, words, ignoreCase);
                 }
-                if(w.size()>1 || !commonWords.findWord(w)) {
-                    r = findAndWeightNoteExactMatch(w, ignoreCase, scope);
-                    if(r->size()) {
-                        delete result;
-                        return r;
-                    }
-                }
-                // TODO to be finished
             }
-            // TODO DELETE old result
         }
-    } else {
+    }
+
+    // sort to have the best match in head
+    if(result->size()) {
         std::sort(result->begin(), result->end(), weightedMatchesComparator);
     }
 
@@ -149,10 +138,10 @@ vector<pair<Note*,float>>* AiAaWeightedFts::findAndWeightNoteWithFallback(
  * Matches are stored to set w/ comparator ensuring the result will be ordered by score.
  * Caller just trims sorted results to the size of leaderboard (iterate set).
  */
-void AiAaWeightedFts::findAndWeightNotesInOutline(
+void AiAaWeightedFts::assessNotesInOutline(
     Outline* outline,
     vector<pair<Note*,float>>* result,
-    vector<const string>& regexps,
+    vector<string>& regexps,
     const bool ignoreCase)
 {
     // IMPROVE make this faster - do NOT convert to lower case, but compare it in that method > will do less
@@ -171,16 +160,17 @@ void AiAaWeightedFts::findAndWeightNotesInOutline(
         }
         // O.description matches
         float matches = 0.;
-                         xxx
         for(string* d:outline->getDescription()) {
             if(d) {
                 s.clear();
                 stringToLower(*d, s);
-                // find them all
-                size_t m = s.find(regexp, 0);
-                while(m != string::npos) {
-                    matches++;
-                    m = s.find(regexp,m+1);
+                for(auto& regexp:regexps) {
+                    // find all matches (regexp matched more than once)
+                    size_t m = s.find(regexp, 0);
+                    while(m != string::npos) {
+                        matches++;
+                        m = s.find(regexp,m+1);
+                    }
                 }
             }
         }
@@ -204,8 +194,10 @@ void AiAaWeightedFts::findAndWeightNotesInOutline(
             // N.title matches
             s.clear();
             stringToLower(note->getName(), s);
-            if(s.find(regexp)!=string::npos) {
-                nScore += 100.;
+            for(auto& regexp:regexps) {
+                if(s.find(regexp)!=string::npos) {
+                    nScore += 100.;
+                }
             }
             // N.description matches
             float matches=0.;
@@ -213,11 +205,13 @@ void AiAaWeightedFts::findAndWeightNotesInOutline(
                 if(d) {
                     s.clear();
                     stringToLower(*d, s);
-                    // find them all
-                    size_t m = s.find(regexp, 0);
-                    while(m != string::npos) {
-                        matches++;
-                        m = s.find(regexp,m+1);
+                    for(auto& regexp:regexps) {
+                        // find them all
+                        size_t m = s.find(regexp, 0);
+                        while(m != string::npos) {
+                            matches++;
+                            m = s.find(regexp,m+1);
+                        }
                     }
                 }
             }
@@ -228,9 +222,8 @@ void AiAaWeightedFts::findAndWeightNotesInOutline(
             }
         }
     } else {
-
         // TODO to be REWRITTEN to match ALL occurences in the description (already done for case insensitive above)
-
+        /*
         // case SENSITIVE
         float oScore{};
         if(outline->getName().find(regexp)!=string::npos) {
@@ -267,6 +260,7 @@ void AiAaWeightedFts::findAndWeightNotesInOutline(
                 }
             }
         }
+        */
     }
 }
 
@@ -281,7 +275,7 @@ std::shared_future<bool> AiAaWeightedFts::getAssociatedNotes(
 #endif
 
     // find matches
-    vector<pair<Note*,float>>* m = findAndWeightNote(words, true, nullptr, self);
+    vector<pair<Note*,float>>* m = assessNotesWithFallback(words, true, nullptr, self);
     unique_ptr<vector<pair<Note*,float>>> mKiller{m}; // auto delete
 
     // calculate leaderboard
