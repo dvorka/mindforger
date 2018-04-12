@@ -82,9 +82,7 @@ public:
         // IMPROVE consider tags, relationships, ... like in BoW to make it more sophisticated
         return getAssociatedNotes(note->getName(), associations, note);
     }
-    virtual std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations) {
-        return getAssociatedNotes(words, associations, nullptr);
-    }
+    virtual std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations, const Note* self);
 
     virtual bool sleep() {
         notes.clear();
@@ -99,7 +97,6 @@ private:
     // getAssociatedNotes(){assessNs,leaderboard}
     //   -> assessNsWithFallback(){2lowercase,iterateOs,fallback}
     //     -> assessNs@O()
-    std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations, const Note* self);
     std::vector<std::pair<Note*,float>>* assessNotesWithFallback(const std::string& regexp, const bool ignoreCase, Outline* scope, const Note* self);
     void assessNotesInOutline(Outline* outline, std::vector<std::pair<Note*,float>>* result, std::vector<std::string>& regexp, const bool ignoreCase);
 

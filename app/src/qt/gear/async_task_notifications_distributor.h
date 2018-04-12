@@ -109,7 +109,9 @@ public:
 // signals that are sent by distributor to GUI components
 signals:
     void statusBarShowStatistics();
+    void showStatusBarInfo(QString msg);
     void leaderboardRefresh(Note* n);
+    void refreshLeaderboardByValue(std::vector<std::pair<Note*,float>>* associations);
 };
 
 }

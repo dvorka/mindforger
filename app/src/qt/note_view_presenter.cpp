@@ -123,4 +123,13 @@ void NoteViewPresenter::slotRefreshLeaderboard(Note* note)
     }
 }
 
+void NoteViewPresenter::slotRefreshLeaderboardByValue(vector<pair<Note*,float>>* associations)
+{
+    // show leaderboard only if it's needed & it's ready
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getOutlineView()->getAssocLeaderboard()->refresh(*associations);
+    }
+    delete associations;
+}
+
 } // m8r namespace

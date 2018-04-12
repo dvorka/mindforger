@@ -31,7 +31,7 @@ NoteEditPresenter::NoteEditPresenter(
         QObject* parent) : QObject(parent)
 {
     this->view = view;
-    this->mainPresenter = mwp;
+    this->mwp = mwp;
 
     view->setEditorShowLineNumbers(Configuration::getInstance().isUiEditorShowLineNumbers());
     view->setEditorEnableSyntaxHighlighting(Configuration::getInstance().isUiEditorEnableSyntaxHighlighting());
@@ -59,22 +59,24 @@ NoteEditPresenter::~NoteEditPresenter()
 
 void NoteEditPresenter::setNote(Note* note)
 {
+    mwp->getOrloj()->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
+
     this->currentNote = note;
     string mdDescription{};
-    mainPresenter->getMarkdownRepresentation()->toDescription(note, &mdDescription);
+    mwp->getMarkdownRepresentation()->toDescription(note, &mdDescription);
 
-    view->setNote(note, mdDescription);
+    view->setNote(note, mdDescription);    
 }
 
 void NoteEditPresenter::slotCloseEditor()
 {
-    mainPresenter->getOrloj()->fromNoteEditBackToView(currentNote);
+    mwp->getOrloj()->fromNoteEditBackToView(currentNote);
 }
 
 void NoteEditPresenter::slotSaveAndCloseEditor()
 {
     slotSaveNote();
-    mainPresenter->getOrloj()->fromNoteEditBackToView(currentNote);
+    mwp->getOrloj()->fromNoteEditBackToView(currentNote);
 }
 
 void NoteEditPresenter::slotSaveNote()
@@ -90,7 +92,7 @@ void NoteEditPresenter::slotSaveNote()
         if(!view->isDescriptionEmpty()) {
             string s{view->getDescription().toStdString()};
             vector<string*> d{};
-            mainPresenter->getMarkdownRepresentation()->description(&s, d);
+            mwp->getMarkdownRepresentation()->description(&s, d);
             currentNote->setDescription(d);
         } else {
             currentNote->clearDescription();
@@ -102,13 +104,13 @@ void NoteEditPresenter::slotSaveNote()
         currentNote->makeModified();
 
         // remember
-        mainPresenter->getMind()->remind().remember(currentNote->getOutlineKey());
-        mainPresenter->getStatusBar()->showInfo(tr("Note saved!"));
+        mwp->getMind()->remind().remember(currentNote->getOutlineKey());
+        mwp->getStatusBar()->showInfo(tr("Note saved!"));
 #ifdef DO_M8F_DEBUG
         qDebug() << "Note " << QString::fromStdString(currentNote->getName()) << " saved!";
 #endif
     } else {
-        mainPresenter->getStatusBar()->showError(tr("Attempt to save data from UI to Note, but no Note is set."));
+        mwp->getStatusBar()->showError(tr("Attempt to save data from UI to Note, but no Note is set."));
     }
 }
 

@@ -63,6 +63,7 @@ public:
     QString getDescription() const { return noteEditor->toPlainText(); }
     bool isDescriptionEmpty() const { return noteEditor->toPlainText().isEmpty(); }
     QString getSelectedText() const { return noteEditor->getSelectedText(); }
+    NoteEditorView* getNoteEditor() const { return noteEditor; }
 
     void giveFocusToEditor() { noteEditor->setFocus(); }
 

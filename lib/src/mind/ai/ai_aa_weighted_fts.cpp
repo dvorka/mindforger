@@ -87,6 +87,7 @@ vector<pair<Note*,float>>* AiAaWeightedFts::assessNotesWithFallback(const string
 
     // FALLBACK: if exact match failed, split regexp to words (if it's multi-word) and try FTS assessment word by word
     if(result->empty()) {
+        MF_DEBUG("AA.FTS.fallback for '" << regexp << "'" << endl);
         // IMPROVE this may take longer than single search > implement ASYNC run w/ distributor based refresh
         words.clear();
         size_t pos = 0;
@@ -102,11 +103,13 @@ vector<pair<Note*,float>>* AiAaWeightedFts::assessNotesWithFallback(const string
                 r.assign(token);
             }
             if(r.size()>1 && !commonWords.findWord(r)) {
+                MF_DEBUG("AA.FTS.fallback   adding word: '" << r << "'" << endl);
                 words.push_back(r);
             }
 
             s.erase(0, pos + 1); // delimiter length ~ 1
         }
+        MF_DEBUG("AA.FTS.fallback words: " << words.size() << endl);
 
         // search using words
         if(words.size()) {
@@ -180,7 +183,7 @@ void AiAaWeightedFts::assessNotesInOutline(
         }
 
         // O's score will contribute to N's score as a bonus > normalize it
-        //MF_DEBUG(" AA.FTS '" << regexp << "' O>N '" << outline->getName() << "' ~ " << oScore << endl);
+        //MF_DEBUG(" AA.FTS O>N '" << outline->getName() << "' ~ " << oScore << endl);
         oScore /= 10.;
 
         // O's N matches
@@ -218,7 +221,7 @@ void AiAaWeightedFts::assessNotesInOutline(
             if(nScore || matches) {
                 nScore += 10.*matches;
                 result->push_back(std::make_pair(note,nScore));
-                //MF_DEBUG(" AA.FTS '" << regexp << "' > N '" << note->getName() << "' ~ " << nScore << endl);
+                //MF_DEBUG(" AA.FTS > N '" << note->getName() << "' ~ " << nScore << endl);
             }
         }
     } else {

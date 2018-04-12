@@ -70,7 +70,7 @@ public:
     /**
      * @brief Get associated Ns for a set of words.
      */
-    virtual std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations) = 0;
+    virtual std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations, const Note* self) = 0;
 
     /**
      * @brief Clear.

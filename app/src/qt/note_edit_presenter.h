@@ -40,7 +40,7 @@ private:
     Note* currentNote;
 
     NoteEditView* view;
-    MainWindowPresenter* mainPresenter;
+    MainWindowPresenter* mwp;
     NoteEditDialog* noteEditDialog;
 
 public:
@@ -52,7 +52,12 @@ public:
     ~NoteEditPresenter();
 
     void setNote(Note* note);
+    Note* getCurrentNote() const { return currentNote; }
     QString getSelectedText() const { return view->getSelectedText(); }
+
+    QString getRelevantWords() const { return view->getNoteEditor()->getRelevantWords(); }
+    int getHitCounter() const { return view->getNoteEditor()->getHitCounter(); }
+    void clearHitCounter() { return view->getNoteEditor()->clearHitCounter(); }
 
 public slots:
     void slotSaveAndCloseEditor();

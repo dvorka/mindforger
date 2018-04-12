@@ -48,6 +48,8 @@ private:
     bool showLineNumbers;
     bool enableSyntaxHighlighting;
 
+    int hitCounter;
+
 public:
     explicit NoteEditorView(QWidget* parent);
     NoteEditorView(const NoteEditorView&) = delete;
@@ -59,6 +61,10 @@ public:
     void setEnableSyntaxHighlighting(bool enable);
     void setStatusBar(const StatusBarView* sb) { this->statusBar = sb; }
     QString getSelectedText() const { return textCursor().selectedText(); }
+
+    void clearHitCounter() { hitCounter=0; }
+    int getHitCounter() const { return hitCounter; }
+    QString getRelevantWords() const;
 
 protected:
     void mousePressEvent(QMouseEvent* event);

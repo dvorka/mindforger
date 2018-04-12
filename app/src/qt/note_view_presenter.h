@@ -78,6 +78,7 @@ public:
 public slots:
     void slotEditNote();
     void slotRefreshLeaderboard(Note* note);
+    void slotRefreshLeaderboardByValue(std::vector<std::pair<Note*,float>>* associations);
 };
 
 } // m8r namespace

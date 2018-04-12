@@ -354,7 +354,7 @@ public:
      */
 
     /**
-     * @brief Get Note's associations.
+     * @brief Get Note's associations (N -> Ns).
      *
      * Return value explanation:
      *   - future !VALID ... associated Ns are on the way - wait for future to become valid
@@ -366,6 +366,11 @@ public:
      */
     std::shared_future<bool> getAssociatedNotes(const Note* n, std::vector<std::pair<Note*,float>>& associations);
 
+    /**
+     * @brief Get word's associations (word -> Ns).
+     */
+    std::shared_future<bool> getAssociatedNotes(const std::string& word, std::vector<std::pair<Note*,float>>& associations, const Note* self=nullptr);
+
     // TODO rework methods below: leaderboard to be removed, methods below to be used
 
     /**
@@ -374,14 +379,9 @@ public:
     std::vector<Note*>* getAssociatedNotes(const Note& note, const Outline& outline) const;
 
     /**
-     * @brief Get associated Notes to a set of words.
-     */
-    std::vector<Note*>* getAssociatedNotes(const std::vector<std::string*> words) const;
-
-    /**
      * @brief Get associated Notes within the scope of given Outline.
      */
-    std::vector<Note*>* getAssociatedNotes(const std::vector<std::string*> words, const Outline& outline) const;
+    std::vector<Note*>* getAssociatedNotes(const std::string& words, const Outline& outline) const;
 
     /*
      * OUTLINE MGMT

@@ -59,6 +59,7 @@ public:
     const StatusBarView* getView() const { return view; }
 
 public slots:
+    void slotShowInfo(QString message) { showInfo(message); }
     void slotShowStatistics() { showMindStatistics(); }
 };
 

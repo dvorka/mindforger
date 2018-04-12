@@ -82,4 +82,4 @@ void NoteEditView::slotSaveNote()
     emit signalSaveNote();
 }
 
-}
+} // m8r namespace

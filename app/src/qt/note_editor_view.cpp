@@ -29,6 +29,8 @@ bool caseInsensitiveLessThan(const QString &a, const QString &b)
 NoteEditorView::NoteEditorView(QWidget* parent)
     : QPlainTextEdit(parent), parent(parent), completedAndSelected(false)
 {
+    hitCounter = 0;
+
     // font
     QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     // alternatively
@@ -101,8 +103,23 @@ void NoteEditorView::setEnableSyntaxHighlighting(bool enable)
     highlighter->setEnabled(enableSyntaxHighlighting);
 }
 
+QString NoteEditorView::getRelevantWords() const
+{
+    rewrite this
+
+    // IMPROVE select/deselect may kill selection & is stupid and ugly
+    textCursor().select(QTextCursor::WordUnderCursor);
+    QString word = textCursor().selectedText();
+    textCursor().clearSelection();
+    return word;
+
+    // IMPROVE get whole line and cut word on which is curser and it before/after siblings: return textCursor().block().text(); ...
+}
+
 void NoteEditorView::keyPressEvent(QKeyEvent *event)
 {
+    hitCounter++;
+
     // IMPROVE get configuration reference and editor mode setting - this must be fast
     if(Configuration::getInstance().getEditorKeyBinding()==Configuration::EditorKeyBindingMode::EMACS) {
         if(event->modifiers() & Qt::ControlModifier){
