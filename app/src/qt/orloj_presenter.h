@@ -88,6 +88,7 @@ public:
     OutlinesTablePresenter* getOutlinesTable() const { return outlinesTablePresenter; }
     NotesTablePresenter* getNotesTable() const { return notesTablePresenter; }
     OutlineViewPresenter* getOutlineView() const { return outlineViewPresenter; }
+    OutlineHeaderViewPresenter* getOutlineHeaderView() const { return outlineHeaderViewPresenter; }
     OutlineHeaderEditPresenter* getOutlineHeaderEdit() const { return outlineHeaderEditPresenter; }
     NoteViewPresenter* getNoteView() const { return noteViewPresenter; }
     NoteEditPresenter* getNoteEdit() const { return noteEditPresenter; }

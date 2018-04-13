@@ -101,6 +101,16 @@ public:
     virtual std::shared_future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations);
 
     // TODO to be implemented
+    virtual std::shared_future<bool> getAssociatedNotes(Outline* outline, std::vector<std::pair<Note*,float>>& associations) {
+        UNUSED_ARG(outline);
+        UNUSED_ARG(associations);
+
+        std::promise<bool> p{};
+        p.set_value(false);
+        return std::shared_future<bool>(p.get_future());
+    }
+
+    // TODO to be implemented
     virtual std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations, const Note* self) {
         UNUSED_ARG(words);
         UNUSED_ARG(associations);

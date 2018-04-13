@@ -259,6 +259,15 @@ void AiAaWeightedFts::assessNotesInOutline(Outline* outline, vector<pair<Note*,f
 }
 
 std::shared_future<bool> AiAaWeightedFts::getAssociatedNotes(
+    const std::string& words,
+    std::vector<std::pair<Note*,float>>& associations,
+    Outline* self)
+{
+    // IMPROVE do O specific associations (instead of simple fallback to N associations)
+    return getAssociatedNotes(words, associations, self->getOutlineDescriptorAsNote());
+}
+
+std::shared_future<bool> AiAaWeightedFts::getAssociatedNotes(
         const std::string& words,
         std::vector<std::pair<Note*,float>>& associations,
         const Note* self)

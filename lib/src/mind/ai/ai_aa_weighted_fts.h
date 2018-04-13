@@ -72,6 +72,13 @@ public:
         // IMPROVE consider tags, relationships, ... like in BoW to make it more sophisticated
         return getAssociatedNotes(note->getName(), associations, note);
     }
+
+    // This is initial OVERsimplified implementation - calls WORDs version for O's title.
+    virtual std::shared_future<bool> getAssociatedNotes(Outline* outline, std::vector<std::pair<Note*,float>>& associations) {
+        // IMPROVE consider tags, relationships, ... like in BoW to make it more sophisticated
+        return getAssociatedNotes(outline->getName(), associations, outline);
+    }
+
     virtual std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations, const Note* self);
 
     virtual bool sleep() {
@@ -86,6 +93,8 @@ public:
 private:
     void refreshNotes(bool checkWatermark);
     void tokenizeAndStripWords(std::string s, const bool ignoreCase, std::vector<std::string>& words);
+
+    std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations, Outline* self);
 
     // getAssociatedNotes(){assessNs,leaderboard}
     //   -> assessNsWithFallback(){2lowercase,iterateOs,fallback}

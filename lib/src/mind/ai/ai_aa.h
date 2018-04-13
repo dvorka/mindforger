@@ -66,6 +66,7 @@ public:
      * Can be LONG running (asynchronous execution handled by AI).
      */
     virtual std::shared_future<bool> getAssociatedNotes(const Note* note, std::vector<std::pair<Note*,float>>& associations) = 0;
+    virtual std::shared_future<bool> getAssociatedNotes(Outline* outline, std::vector<std::pair<Note*,float>>& associations) = 0;
 
     /**
      * @brief Get associated Ns for a set of words.

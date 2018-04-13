@@ -40,7 +40,7 @@ private:
     Note* outlineHeader;
 
     OutlineHeaderEditView* view;
-    MainWindowPresenter* mainPresenter;
+    MainWindowPresenter* mwp;
     OutlineHeaderEditDialog* outlineHeaderEditDialog;
 
 public:
@@ -52,7 +52,12 @@ public:
     ~OutlineHeaderEditPresenter();
 
     void setOutline(Outline* outline);
+    Outline* getCurrentOutline() const { return currentOutline; }
     QString getSelectedText() const { return view->getSelectedText(); }
+
+    QString getRelevantWords() const { return view->getHeaderEditor()->getRelevantWords(); }
+    int getHitCounter() const { return view->getHeaderEditor()->getHitCounter(); }
+    void clearHitCounter() { return view->getHeaderEditor()->clearHitCounter(); }
 
 public slots:
     void slotSaveAndCloseEditor();

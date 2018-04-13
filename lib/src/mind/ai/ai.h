@@ -110,6 +110,10 @@ public:
         return aa->getAssociatedNotes(note, associations);
     }
 
+    std::shared_future<bool> getAssociatedNotes(Outline* outline, std::vector<std::pair<Note*,float>>& associations) {
+        return aa->getAssociatedNotes(outline, associations);
+    }
+
     std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations, const Note* self=nullptr) {
         return aa->getAssociatedNotes(words, associations, self);
     }

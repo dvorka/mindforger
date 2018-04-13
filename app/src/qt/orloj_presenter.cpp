@@ -219,7 +219,7 @@ void OrlojPresenter::fromNoteEditBackToView(Note* note)
 
 void OrlojPresenter::slotShowOutlineHeader()
 {
-    // TODO update view w/ new outline
+    outlineHeaderViewPresenter->refresh(outlineViewPresenter->getCurrentOutline());
     view->showFacetOutlineHeaderView();
 }
 

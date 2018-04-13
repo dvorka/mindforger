@@ -125,7 +125,8 @@ void NoteViewPresenter::slotRefreshLeaderboard(Note* note)
 
 void NoteViewPresenter::slotRefreshLeaderboardByValue(vector<pair<Note*,float>>* associations)
 {
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE))
+    {
         orloj->getOutlineView()->getAssocLeaderboard()->refresh(*associations);
     }
     delete associations;

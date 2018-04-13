@@ -374,6 +374,7 @@ public:
      *     > false ... associated Ns will NOT be computed - Mind's not thinking, memory empty, ...
      */
     std::shared_future<bool> getAssociatedNotes(const Note* n, std::vector<std::pair<Note*,float>>& associations);
+    std::shared_future<bool> getAssociatedNotes(Outline* o, std::vector<std::pair<Note*,float>>& associations);
 
     /**
      * @brief Get word's associations (word -> Ns).

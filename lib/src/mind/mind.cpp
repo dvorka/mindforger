@@ -188,6 +188,21 @@ shared_future<bool> Mind::getAssociatedNotes(const Note* n, vector<pair<Note*,fl
     }
 }
 
+shared_future<bool> Mind::getAssociatedNotes(Outline* o, vector<pair<Note*,float>>& associations)
+{
+    MF_DEBUG("@NoteAssociations" << endl);
+    lock_guard<mutex> criticalSection{exclusiveMind};
+
+    if(config.getMindState()==Configuration::MindState::THINKING) {
+        return ai->getAssociatedNotes(o, associations);
+    } else {
+        associations.clear();
+        promise<bool> p{};
+        p.set_value(false);
+        return shared_future<bool>(p.get_future());
+    }
+}
+
 shared_future<bool> Mind::getAssociatedNotes(const string& words, vector<pair<Note*,float>>& associations, const Note* self)
 {
     MF_DEBUG("@NoteAssociations" << endl);

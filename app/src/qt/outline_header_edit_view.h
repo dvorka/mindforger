@@ -62,6 +62,7 @@ public:
     QString getDescription() const { return noteEditor->toPlainText(); }
     bool isDescriptionEmpty() const { return noteEditor->toPlainText().isEmpty(); }
     QString getSelectedText() const { return noteEditor->getSelectedText(); }
+    NoteEditorView* getHeaderEditor() const { return noteEditor; }
 
 private slots:
     void slotOpenOutlineHeaderPropertiesEditor();

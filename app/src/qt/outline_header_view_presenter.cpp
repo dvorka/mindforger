@@ -22,6 +22,8 @@
 
 namespace m8r {
 
+using namespace std;
+
 OutlineHeaderViewPresenter::OutlineHeaderViewPresenter(OutlineHeaderView *view, OrlojPresenter* orloj)
 {
     this->view = view;
@@ -126,12 +128,34 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
     view->setHtml(html);
 
     // leaderboard
-    orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
+    std::vector<std::pair<Note*,float>> associatedNotesLeaderboard;
+    shared_future<bool> f = orloj->getMind()->getAssociatedNotes(currentOutline, associatedNotesLeaderboard);
+    if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
+        if(f.get()) {
+            orloj->getOutlineView()->getAssocLeaderboard()->refresh(associatedNotesLeaderboard);
+        } else {
+            orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
+        }
+    } else {
+        orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
+        // ask notifications distributor to repaint leaderboard later
+        AsyncTaskNotificationsDistributor::Task* task = new AsyncTaskNotificationsDistributor::Task{f,AsyncTaskNotificationsDistributor::TaskType::NOTE_ASSOCIATIONS};
+        task->setOutline(currentOutline);
+        orloj->getMainWindow()->getDistributor()->add(task);
+    }
 }
 
 void OutlineHeaderViewPresenter::slotEditOutlineHeader()
 {
     orloj->showFacetOutlineHeaderEdit(currentOutline);
+}
+
+void OutlineHeaderViewPresenter::slotRefreshHeaderLeaderboardByValue(vector<pair<Note*,float>>* associations)
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineView()->getAssocLeaderboard()->refresh(*associations);
+    }
+    delete associations;
 }
 
 } // m8r namespace

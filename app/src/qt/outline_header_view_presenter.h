@@ -56,6 +56,7 @@ public:
 
 public slots:
     void slotEditOutlineHeader();
+    void slotRefreshHeaderLeaderboardByValue(std::vector<std::pair<Note*,float>>* associations);
 };
 
 }

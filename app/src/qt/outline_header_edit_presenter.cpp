@@ -28,7 +28,7 @@ OutlineHeaderEditPresenter::OutlineHeaderEditPresenter(
         QObject *parent) : QObject(parent)
 {
     this->view = view;
-    this->mainPresenter = mwp;
+    this->mwp = mwp;
 
     outlineHeaderEditDialog
         = new OutlineHeaderEditDialog{mwp->getMind()->remind().getOntology(), view};
@@ -58,20 +58,20 @@ void OutlineHeaderEditPresenter::setOutline(Outline* outline)
     this->currentOutline = outline;
     string mdDescription{};
     outlineHeader = outline->getOutlineDescriptorAsNote();
-    mainPresenter->getMarkdownRepresentation()->toDescription(outlineHeader, &mdDescription);
+    mwp->getMarkdownRepresentation()->toDescription(outlineHeader, &mdDescription);
 
     view->setOutline(outline, mdDescription);
 }
 
 void OutlineHeaderEditPresenter::slotCloseEditor()
 {
-    mainPresenter->getOrloj()->fromOutlineHeaderEditBackToView(currentOutline);
+    mwp->getOrloj()->fromOutlineHeaderEditBackToView(currentOutline);
 }
 
 void OutlineHeaderEditPresenter::slotSaveAndCloseEditor()
 {
     slotSaveOutlineHeader();
-    mainPresenter->getOrloj()->fromOutlineHeaderEditBackToView(currentOutline);
+    mwp->getOrloj()->fromOutlineHeaderEditBackToView(currentOutline);
 }
 
 void OutlineHeaderEditPresenter::slotSaveOutlineHeader()
@@ -87,7 +87,7 @@ void OutlineHeaderEditPresenter::slotSaveOutlineHeader()
         if(!view->isDescriptionEmpty()) {
             string s{view->getDescription().toStdString()};
             vector<string*> d{};
-            mainPresenter->getMarkdownRepresentation()->description(&s, d);
+            mwp->getMarkdownRepresentation()->description(&s, d);
             currentOutline->setDescription(d);
         } else {
             currentOutline->clearDescription();
@@ -103,10 +103,10 @@ void OutlineHeaderEditPresenter::slotSaveOutlineHeader()
         }
 
         // remember
-        mainPresenter->getMind()->remind().remember(currentOutline->getKey());
-        mainPresenter->getStatusBar()->showInfo(tr("Outline saved!"));
+        mwp->getMind()->remind().remember(currentOutline->getKey());
+        mwp->getStatusBar()->showInfo(tr("Outline saved!"));
     } else {
-        mainPresenter->getStatusBar()->showError(tr("Attempt to save data from UI to Outline, but no Outline is set."));
+        mwp->getStatusBar()->showError(tr("Attempt to save data from UI to Outline, but no Outline is set."));
     }
 }
 

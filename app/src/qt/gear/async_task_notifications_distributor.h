@@ -66,6 +66,7 @@ public:
     class Task {
         std::shared_future<bool> f;
         TaskType tt;
+        Outline* o;
         Note* n;
 
     public:
@@ -79,6 +80,8 @@ public:
         }
 
         bool isSuccessful() const { return f.get(); }
+        void setOutline(Outline* o) { this->o = o; }
+        Outline* getOutline() const { return o; }
         void setNote(Note* n) { this->n = n; }
         Note* getNote() const { return n; }
         TaskType getType() const { return tt; }
@@ -115,6 +118,7 @@ signals:
     void statusBarShowStatistics();
     void showStatusBarInfo(QString msg);
     void leaderboardRefresh(Note* n);
+    void refreshHeaderLeaderboardByValue(std::vector<std::pair<Note*,float>>* associations);
     void refreshLeaderboardByValue(std::vector<std::pair<Note*,float>>* associations);
 };
 
