@@ -295,11 +295,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineNew = new QAction(tr("&New"), mainWindow);
     actionOutlineNew->setStatusTip(tr("Create new Outline to form new ideas, principles, combinations or applications"));
 
-    // associate ... discover Os/Ns associated with the current O/N
-    actionOutlineAssociations = new QAction(tr("&Associations"), mainWindow);
-    actionOutlineAssociations->setStatusTip(tr("Discover Outlines/Notes associated with the current Outline"));
-    actionOutlineAssociations->setEnabled(false);
-
     actionOutlineHome = new QAction(tr("Make &Home"), mainWindow);
     actionOutlineHome->setStatusTip(tr("Use the current Outline as home"));
     actionOutlineHome->setEnabled(false);
@@ -324,7 +319,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     menuOutline = qMenuBar->addMenu(tr("&Outline"));
     menuOutline->addAction(actionOutlineNew);
-    menuOutline->addAction(actionOutlineAssociations);
     menuOutline->addAction(actionOutlineForget);
     menuOutline->addSeparator();
     menuOutline->addAction(actionOutlineHome);
@@ -341,11 +335,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionNoteSave = new QAction(tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
     actionNoteSave->setStatusTip(tr("Save Note being edited"));
-
-    // associate ... discover Os/Ns associated with the current O/N
-    actionNoteAssociations = new QAction(tr("&Associations"), mainWindow);
-    actionNoteAssociations->setStatusTip(tr("Discover Outlines/Notes associated with the current Outline"));
-    actionNoteAssociations->setEnabled(false);
 
     actionNoteForget = new QAction(tr("&Forget\tDelete"), mainWindow); // Delete is handled elsewhere and I don't want menu to handle it
     actionNoteForget->setStatusTip(tr("Forget note"));
@@ -399,7 +388,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     menuNote = qMenuBar->addMenu(tr("&Note"));
     menuNote->addAction(actionNoteNew);
-    menuNote->addAction(actionNoteAssociations);
     menuNote->addAction(actionNoteSave);
     menuNote->addAction(actionNoteClose);
     menuNote->addAction(actionNoteForget);
