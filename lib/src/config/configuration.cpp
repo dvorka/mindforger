@@ -81,8 +81,17 @@ void Configuration::clear()
             | Configuration::MdToHtmlOption::MathSupport
             | Configuration::MdToHtmlOption::MathInlineSupport
             | Configuration::MdToHtmlOption::CodeHighlighting
-            | Configuration::MdToHtmlOption::DiagramSupport;
+            | Configuration::MdToHtmlOption::DiagramSupport;    
     aaAlgorithm = AssociationAssessmentAlgorithm::WEIGHTED_FTS;
+    switch(aaAlgorithm) {
+    case AssociationAssessmentAlgorithm::WEIGHTED_FTS:
+        asyncMindThreshold = DEFAULT_ASYNC_MIND_THRESHOLD_WEIGHTED_FTS;
+        break;
+    case AssociationAssessmentAlgorithm::BOW:
+        asyncMindThreshold = DEFAULT_ASYNC_MIND_THRESHOLD_BOW;
+        break;
+    }
+
     distributorSleepInterval = DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL;
 
     // GUI

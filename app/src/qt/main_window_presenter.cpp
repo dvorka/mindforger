@@ -136,6 +136,10 @@ void MainWindowPresenter::showInitialView()
         MF_DEBUG("InitialView: asking Mind to THINK..." << endl);
         shared_future<bool> f = mind->think(); // move
         if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
+            if(!f.get()) {
+                mainMenu->showFacetMindSleep();
+                statusBar->showError(tr("Cannot think - either Mind already dreaming or repository too big"));
+            }
             statusBar->showMindStatistics();
         } else {
             statusBar->showMindStatistics();
@@ -171,7 +175,7 @@ void MainWindowPresenter::doActionMindThink()
             statusBar->showMindStatistics();
         } else {
             mainMenu->showFacetMindSleep();
-            statusBar->showError(tr("Cannot start thinking - please wait until dreaming finishes and then try again"));
+            statusBar->showError(tr("Cannot think - either Mind already dreaming or repository too big"));
         }
     } else {
         statusBar->showMindStatistics();

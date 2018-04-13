@@ -68,12 +68,21 @@ bool Mind::learn()
 
 shared_future<bool> Mind::think()
 {
-    MF_DEBUG("@Think" << endl);
+    MF_DEBUG("@Think w/ threashold " << config.getAsyncMindThreshold() << endl);
     lock_guard<mutex> criticalSection{exclusiveMind};
 
     if(config.getMindState()==Configuration::MindState::SLEEPING) {
-        // get ready for thinking - dream() changes state to THINKING on its finish
-        return mindDream();
+        if(config.getAsyncMindThreshold() > memory.getNotesCount()) {
+            // get ready for thinking - dream() changes state to THINKING on its finish
+            return mindDream();
+        } else {
+            // IMPROVE design ASYNC AI/AA to handle also huge repositories
+            MF_DEBUG("Think: CANNOT think because number of Notes in Mind is too big" << endl);
+            persistMindState(Configuration::MindState::SLEEPING);
+            promise<bool> p;
+            p.set_value(false);
+            return p.get_future();
+        }
     } else {
         MF_DEBUG("Think: CANNOT think because Mind is DREAMING or already THINKING (asleep first)" << endl);
         promise<bool> p;

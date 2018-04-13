@@ -126,10 +126,10 @@ public:
         NoStyleOption          = 1<<14, /* don't extract <style> blocks */
 
         // postprocessing - makes HTML rendering slow
-        MathSupport              = 1<<15,
-        MathInlineSupport        = 1<<16,
-        CodeHighlighting         = 1<<17,
-        DiagramSupport           = 1<<18
+        MathSupport            = 1<<15,
+        MathInlineSupport      = 1<<16,
+        CodeHighlighting       = 1<<17,
+        DiagramSupport         = 1<<18
     };
 
     enum EditorKeyBindingMode {
@@ -138,7 +138,8 @@ public:
         WINDOWS
     };
 
-    static constexpr int DEFAULT_ASYNC_MIND_THRESHOLD = 200;
+    static constexpr int DEFAULT_ASYNC_MIND_THRESHOLD_BOW = 200;
+    static constexpr int DEFAULT_ASYNC_MIND_THRESHOLD_WEIGHTED_FTS = 10000;
     static constexpr int DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL = 3000;
 
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
