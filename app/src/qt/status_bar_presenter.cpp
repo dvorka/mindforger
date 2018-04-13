@@ -95,7 +95,13 @@ void StatusBarPresenter::showMindStatistics()
     if(mind->isTimeScopeEnabled()) {
         status.append("scope:");
         status.append(mind->getTimeScopeAsString().c_str());
+        status.append("    ");
     }
+
+#ifdef DO_M8F_DEBUG
+    status.append("dw:");
+    status += cLocale.toString(mind->getDeleteWatermark());
+#endif
 
     view->showInfo(status);
 }

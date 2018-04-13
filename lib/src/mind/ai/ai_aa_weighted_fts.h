@@ -27,6 +27,7 @@
 #include "../mind.h"
 #include "../../gear/hash_map.h"
 #include "./nlp/common_words_blacklist.h"
+#include "./nlp/markdown_tokenizer.h"
 
 namespace m8r {
 
@@ -35,25 +36,11 @@ class Mind;
 /**
  * @brief Weighted FTS based associations assessment.
  *
- * Associate as you read ~ Nr associations intuitions:
- *
- * - find O by Nr name words
- * - find N by Nr name words
- * - order by...
- *
- * - Ns may have generic names (Introduction, Resources, User stories, ...) e.g. in
- *   case of GROW or an analysis, but in this case O has the name to associate like Simulator Analysis.
- *
- * Associate as you write ~ word (w/ context) associations intuitions:
- *
- * - find O by name using word
- * - find N by name using word
- * - order by...
- *
- * Closing remarks:
- *
- * - this method has own FTS implementation to compute weights and leverage O/N relationships
- *   while searching the best result
+ * Description:
+ * - This method has own FTS implementation to compute weights and leverage O/N relationships
+ *   while searching the best result.
+ * - IMPROVE this class is designed to run SYNCHRONOUSLY - for ASYNC modus operandi Mind/AI/this class
+ *   cooperation and synchronization protocols must be architected.
  */
 class AiAaWeightedFts : public AiAssociationsAssessment
 {
@@ -66,6 +53,9 @@ private:
     CommonWordsBlacklist commonWords;
 
     std::vector<Note*> notes;
+
+    // IMPROVE in addition to watermark also scope change should be tracked ~ mind.scopeWatermark
+    int lastMindDeleteWatermark;
 
 public:
     explicit AiAaWeightedFts(Memory& memory, Mind& mind);
@@ -94,12 +84,14 @@ public:
     }
 
 private:
+    void refreshNotes(bool checkWatermark);
+    void tokenizeAndStripWords(std::string s, const bool ignoreCase, std::vector<std::string>& words);
+
     // getAssociatedNotes(){assessNs,leaderboard}
     //   -> assessNsWithFallback(){2lowercase,iterateOs,fallback}
     //     -> assessNs@O()
-    std::vector<std::pair<Note*,float>>* assessNotesWithFallback(const std::string& regexp, const bool ignoreCase, Outline* scope, const Note* self);
+    std::vector<std::pair<Note*,float>>* assessNotesWithFallback(const std::string& regexp, Outline* scope, const Note* self);
     void assessNotesInOutline(Outline* outline, std::vector<std::pair<Note*,float>>* result, std::vector<std::string>& regexp, const bool ignoreCase);
-
 };
 
 }

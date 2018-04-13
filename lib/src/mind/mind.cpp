@@ -28,6 +28,7 @@ Mind::Mind(Configuration &configuration)
       exclusiveMind{}
 {
     ai = new Ai{memory,*this};
+    deleteWatermark = 0;
     activeProcesses = 0;
     memory.setTimeScope(&timeScopeAspect);
 
@@ -561,6 +562,8 @@ bool Mind::outlineForget(string outlineKey)
 {
     Outline* o = memory.getOutline(outlineKey);
     if(o) {
+        deleteWatermark++;
+
         memory.forget(o);
         auto k = memory.createLimboKey(&o->getName());
         o->setKey(k);
@@ -653,6 +656,8 @@ Outline* Mind::noteForget(Note* note)
 {
     Outline* o = note->getOutline();
     if(o) {
+        deleteWatermark++;
+
         note->getOutline()->forgetNote(note);
         return o;
     } else {

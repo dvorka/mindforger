@@ -27,20 +27,39 @@ AiAaWeightedFts::AiAaWeightedFts(Memory& memory, Mind& mind)
       memory(memory),
       commonWords{}
 {
+    lastMindDeleteWatermark = mind.getDeleteWatermark();
 }
 
 AiAaWeightedFts::~AiAaWeightedFts()
 {
 }
 
+void AiAaWeightedFts::refreshNotes(bool checkWatermark)
+{
+#ifdef DO_M8F_DEBUG
+    MF_DEBUG("AA.FTS Ns refresh - check watermark " << boolalpha << checkWatermark << endl);
+    auto begin = chrono::high_resolution_clock::now();
+#endif
+
+    if(checkWatermark && lastMindDeleteWatermark==mind.getDeleteWatermark()) {
+        return;
+    }
+    lastMindDeleteWatermark = mind.getDeleteWatermark();
+    notes.clear();
+    memory.getAllNotes(notes);
+
+#ifdef DO_M8F_DEBUG
+    auto end = chrono::high_resolution_clock::now();
+    MF_DEBUG("AA.FTS Ns refreshed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms" << endl);
+#endif
+
+}
+
 shared_future<bool> AiAaWeightedFts::dream()
 {
     MF_DEBUG("AA.FTS: LEARNING memory..." << endl);
 
-    // IMPROVE consider keeping Ns and flushing them only if memory was modified (Mem's watermark as indicator, writes to persist reads don't count)
-    notes.clear();
-    memory.getAllNotes(notes);
-
+    refreshNotes(false);
     mind.persistMindState(Configuration::MindState::THINKING);
 
     std::promise<bool> p{};
@@ -57,10 +76,50 @@ bool weightedMatchesComparator(const std::pair<Note*,float>& p1, const std::pair
     return p1.second > p2.second;
 }
 
-vector<pair<Note*,float>>* AiAaWeightedFts::assessNotesWithFallback(const string& regexp, const bool ignoreCase, Outline* scope, const Note* self)
+void AiAaWeightedFts::tokenizeAndStripWords(string s, const bool ignoreCase, vector<string>& words)
 {
+    size_t pos = 0;
+    string r{};
+    vector<string> tokens{};
+
+    // tokenize
+    while((pos = s.find(" ")) != string::npos) {
+        tokens.push_back(s.substr(0, pos));
+        s.erase(0, pos + 1); // delimiter length ~ 1
+    }
+    if(s.size()) {
+        tokens.push_back(s);
+    }
+
+    // strip
+    for(string token:tokens) {
+        r.clear();
+        if(ignoreCase) {
+            stringToLower(token, r);
+        } else {
+            r.assign(token);
+        }
+        if(r.size()>1 && !commonWords.findWord(r)) {
+            MF_DEBUG("AA.FTS.fallback   stripping word: '" << r << "'" << endl);
+            StringCharProvider cp{r};
+            r = MarkdownTokenizer::stripNonAlpha(cp);
+            if(r.size()) {
+                MF_DEBUG("AA.FTS.fallback   adding word: '" << r << "'" << endl);
+                words.push_back(r);
+            }
+        }
+    }
+}
+
+vector<pair<Note*,float>>* AiAaWeightedFts::assessNotesWithFallback(const string& regexp, Outline* scope, const Note* self)
+{                         
+    // case sensitive version is not needed
+    const bool ignoreCase = true;
+
     vector<string> words{};
     vector<pair<Note*,float>>* result = new vector<pair<Note*,float>>();
+
+    if(regexp.empty()) return result;
 
     // case (in)sensitivity
     string r{};
@@ -90,28 +149,10 @@ vector<pair<Note*,float>>* AiAaWeightedFts::assessNotesWithFallback(const string
         MF_DEBUG("AA.FTS.fallback for '" << regexp << "'" << endl);
         // IMPROVE this may take longer than single search > implement ASYNC run w/ distributor based refresh
         words.clear();
-        size_t pos = 0;
-        string s{regexp}, token{}, r{};
-        // IMPROVE make split faster
-        while((pos = s.find(" ")) != string::npos) {
-            token = s.substr(0, pos);
-
-            r.clear();
-            if(ignoreCase) {
-                stringToLower(token, r);
-            } else {
-                r.assign(token);
-            }
-            if(r.size()>1 && !commonWords.findWord(r)) {
-                MF_DEBUG("AA.FTS.fallback   adding word: '" << r << "'" << endl);
-                words.push_back(r);
-            }
-
-            s.erase(0, pos + 1); // delimiter length ~ 1
-        }
-        MF_DEBUG("AA.FTS.fallback words: " << words.size() << endl);
+        tokenizeAndStripWords(regexp, ignoreCase, words);
 
         // search using words
+        MF_DEBUG("AA.FTS.fallback words: " << words.size() << endl);
         if(words.size()) {
             // IMPROVE: iterate 3 *most valuable* words (now the first 3 words are considered, value is ignored)
             words.resize(FTS_SEARCH_THRESHOLD_MULTIWORD);
@@ -135,17 +176,7 @@ vector<pair<Note*,float>>* AiAaWeightedFts::assessNotesWithFallback(const string
     return result;
 }
 
-/* Find Ns w/ name and/or description matching (regexp) string - counted and weighted
- * matches give score (+ extra bonuses like for N's O having match as well).
- *
- * Matches are stored to set w/ comparator ensuring the result will be ordered by score.
- * Caller just trims sorted results to the size of leaderboard (iterate set).
- */
-void AiAaWeightedFts::assessNotesInOutline(
-    Outline* outline,
-    vector<pair<Note*,float>>* result,
-    vector<string>& regexps,
-    const bool ignoreCase)
+void AiAaWeightedFts::assessNotesInOutline(Outline* outline, vector<pair<Note*,float>>* result, vector<string>& regexps, const bool ignoreCase)
 {
     // IMPROVE make this faster - do NOT convert to lower case, but compare it in that method > will do less
     if(ignoreCase) {
@@ -224,47 +255,7 @@ void AiAaWeightedFts::assessNotesInOutline(
                 //MF_DEBUG(" AA.FTS > N '" << note->getName() << "' ~ " << nScore << endl);
             }
         }
-    } else {
-        // TODO to be REWRITTEN to match ALL occurences in the description (already done for case insensitive above)
-        /*
-        // case SENSITIVE
-        float oScore{};
-        if(outline->getName().find(regexp)!=string::npos) {
-            oScore += 100.;
-            result->push_back(std::make_pair(outline->getOutlineDescriptorAsNote(),oScore));
-        } else {
-            for(string* d:outline->getDescription()) {
-                if(d && d->find(regexp)!=string::npos) {
-                    oScore += 1.;
-                    result->push_back(std::make_pair(outline->getOutlineDescriptorAsNote(),oScore));
-                    // IMPROVE do NOT break and calculate HOW MANY times was matched (do NOT add to result more than once)
-                    break;
-                }
-            }
-        }
-
-        // O's score will contribute to N's score as a bonus > normalize it
-        oScore /= 10.;
-
-        float nScore{};
-        for(Note* note:outline->getNotes()) {
-            nScore = oScore;
-            if(note->getName().find(regexp)!=string::npos) {
-                nScore += 100.; // N's O contributed to it's score
-                result->push_back(std::make_pair(note,nScore));
-            } else {
-                for(string* d:note->getDescription()) {
-                    if(d && d->find(regexp)!=string::npos) {
-                        nScore += 10.; // N's O contributed to it's score
-                        result->push_back(std::make_pair(note,nScore));
-                        // IMPROVE do NOT break and calculate HOW MANY times was matched (do NOT add to result more than once)
-                        break;
-                    }
-                }
-            }
-        }
-        */
-    }
+    } // IMPROVE case sensitive version is NOT needed - was removed - see FTS search
 }
 
 std::shared_future<bool> AiAaWeightedFts::getAssociatedNotes(
@@ -277,8 +268,11 @@ std::shared_future<bool> AiAaWeightedFts::getAssociatedNotes(
     auto begin = chrono::high_resolution_clock::now();
 #endif
 
+    // Ns mut be refreshed from Mind to consider O/N deletes and scope changes
+    refreshNotes(true);
+
     // find matches
-    vector<pair<Note*,float>>* m = assessNotesWithFallback(words, true, nullptr, self);
+    vector<pair<Note*,float>>* m = assessNotesWithFallback(words, nullptr, self);
     unique_ptr<vector<pair<Note*,float>>> mKiller{m}; // auto delete
 
     // calculate leaderboard

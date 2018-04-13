@@ -164,4 +164,68 @@ void MarkdownTokenizer::handleWord(WordFrequencyList& wfl, string &w, bool stem,
     w.clear();
 }
 
+string MarkdownTokenizer::stripNonAlpha(CharProvider& md)
+{
+    string w{};
+
+    while(md.hasNext()) {
+        const char c = md.next();
+
+        // tokenize text
+        switch(c) {
+        case '-':
+            // check lookahead to accept words like: self-awareness
+            if(md.hasNext() && md.getLookahead()!='-') {
+                w += md.get();
+                break;
+            }
+        case '\n':
+        case '\r':
+        case ' ':
+        case '\t':
+        case '!':
+        case '?':
+        case '.':
+        case ',':
+        case ':':
+        case ';':
+        case '#':
+        case '=':
+        case '`':
+        case '(':
+        case ')':
+        case '[':
+        case ']':
+        case '*':
+        case '_':
+        case '"':
+        case '\'':
+        case '~':
+        case '@':
+        case '$':
+        case '%':
+        case '^':
+        case '&':
+        case '+':
+        case '{':
+        case '}':
+        case '|':
+        case '\\':
+        case '<':
+        case '>':
+        case '/':
+            return w;
+        default:
+            if(md.get() < 0) {
+                return w;
+            } else {
+                w += md.get();
+            }
+            break;
+        }
+    }
+
+    return w;
+}
+
 } // m8r namespace

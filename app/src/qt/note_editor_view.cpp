@@ -105,15 +105,26 @@ void NoteEditorView::setEnableSyntaxHighlighting(bool enable)
 
 QString NoteEditorView::getRelevantWords() const
 {
-    rewrite this
-
-    // IMPROVE select/deselect may kill selection & is stupid and ugly
-    textCursor().select(QTextCursor::WordUnderCursor);
-    QString word = textCursor().selectedText();
-    textCursor().clearSelection();
-    return word;
-
     // IMPROVE get whole line and cut word on which is curser and it before/after siblings: return textCursor().block().text(); ...
+    QString result{};
+    if(textCursor().block().text().size()) {
+        QString t = textCursor().block().text();
+        int c = textCursor().positionInBlock();
+        if(t[c]!=' ') {
+            // extend c to LEFT and to RIGHT
+            for(int i=c-1; i>=0; i--) {
+                if(t[i]==' ') break;
+                result.prepend(t[i]);
+            }
+            for(int i=c; i<t.size(); i++) {
+                if(t[i]==' ') break;
+                result.append(t[i]);
+            }
+        }
+    }
+    return result;
+
+    //return textCursor().block().text();
 }
 
 void NoteEditorView::keyPressEvent(QKeyEvent *event)

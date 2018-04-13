@@ -68,6 +68,11 @@ public:
      */
     void tokenize(CharProvider& md, WordFrequencyList& wfl, bool useBlacklist=true, bool lowercase=true, bool stem=true);
 
+    /**
+     * @brief Remove non-alpha numeric characters from the 1st word and return it.
+     */
+    static std::string stripNonAlpha(CharProvider& md);
+
 private:
     inline void handleWord(WordFrequencyList& wfl, std::string &w, bool stem, bool useBlacklist);
 };

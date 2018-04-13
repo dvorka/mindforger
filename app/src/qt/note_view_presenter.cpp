@@ -88,7 +88,7 @@ void NoteViewPresenter::refresh(Note* note)
 
     // leaderboard
     std::vector<std::pair<Note*,float>> associatedNotesLeaderboard;
-    shared_future<bool> f = mind->getAssociatedNotes(note, associatedNotesLeaderboard); // move
+    shared_future<bool> f = mind->getAssociatedNotes(note, associatedNotesLeaderboard);
     if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
         if(f.get()) {
             orloj->getOutlineView()->getAssocLeaderboard()->refresh(associatedNotesLeaderboard);
@@ -114,7 +114,7 @@ void NoteViewPresenter::slotRefreshLeaderboard(Note* note)
     // show leaderboard only if it's needed & it's ready
     std::vector<std::pair<Note*,float>> associatedNotesLeaderboard;
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE) && currentNote == note) {
-        shared_future<bool> f = mind->getAssociatedNotes(note, associatedNotesLeaderboard); // move
+        shared_future<bool> f = mind->getAssociatedNotes(note, associatedNotesLeaderboard);
         if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
             if(f.get()) {
                 orloj->getOutlineView()->getAssocLeaderboard()->refresh(associatedNotesLeaderboard);
@@ -125,7 +125,6 @@ void NoteViewPresenter::slotRefreshLeaderboard(Note* note)
 
 void NoteViewPresenter::slotRefreshLeaderboardByValue(vector<pair<Note*,float>>* associations)
 {
-    // show leaderboard only if it's needed & it's ready
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
         orloj->getOutlineView()->getAssocLeaderboard()->refresh(*associations);
     }

@@ -124,6 +124,13 @@ private:
     std::mutex exclusiveMind;
 
     /**
+     * @brief Delete watermark is incremented when an O or N is deleted.
+     *
+     * This is a dirty flag used by other components to evict caches, etc.
+     */
+    int deleteWatermark;
+
+    /**
      * @brief Active mental processes.
      */
     int activeProcesses;
@@ -177,6 +184,8 @@ public:
     Mind& operator=(const Mind&) = delete;
     Mind& operator=(const Mind&&) = delete;
     virtual ~Mind();
+
+    int getDeleteWatermark() const { return deleteWatermark; }
 
     /**
      * @brief Synchronize both desired and current state and persist it.
