@@ -108,7 +108,7 @@ public:
     };
 
     enum MdToHtmlOption {
-        // Discount options
+        // Discount options: https://www.pell.portland.or.us/~orc/Code/discount/
         NoLinksOption          = 1<<0, /* don't do link processing, block <a> tags  */
         NoImagesOption         = 1<<1, /* don't do image processing, block <img> */
         NoSmartypantsOption    = 1<<2, /* don't run smartypants() */

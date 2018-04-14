@@ -71,17 +71,22 @@ void Configuration::clear()
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
     md2HtmlOptions = 0
     // change default options by enabling flags below
-    //        | Configuration::MdToHtmlOption::AutolinkOption
-    //        | Configuration::MdToHtmlOption::NoStrikethroughOption
-    //        | Configuration::MdToHtmlOption::NoAlphaListOption
-    //        | Configuration::MdToHtmlOption::NoDefinitionListOption
-    //        | Configuration::MdToHtmlOption::NoSmartypantsOption
-    //        | Configuration::MdToHtmlOption::ExtraFootnoteOption
-    //        | Configuration::MdToHtmlOption::NoSuperscriptOption;
-            | Configuration::MdToHtmlOption::MathSupport
-            | Configuration::MdToHtmlOption::MathInlineSupport
-            | Configuration::MdToHtmlOption::CodeHighlighting
-            | Configuration::MdToHtmlOption::DiagramSupport;    
+
+            // DISCOUNT options:
+            | Configuration::MdToHtmlOption::AutolinkOption
+            //| Configuration::MdToHtmlOption::NoStrikethroughOption
+            //| Configuration::MdToHtmlOption::NoAlphaListOption
+            //| Configuration::MdToHtmlOption::NoDefinitionListOption
+            //| Configuration::MdToHtmlOption::NoSmartypantsOption
+            //| Configuration::MdToHtmlOption::NoSuperscriptOption
+            //| Configuration::MdToHtmlOption::ExtraFootnoteOption
+
+            // EXTRA LIBRARIES options:
+            | Configuration::MdToHtmlOption::CodeHighlighting // source code highlighting via highlight.js
+            //| Configuration::MdToHtmlOption::MathInlineSupport // math expressions support via mathjax.js
+            //| Configuration::MdToHtmlOption::MathSupport
+            //| Configuration::MdToHtmlOption::DiagramSupport // diagram support via mermaid.js
+            ;
     aaAlgorithm = AssociationAssessmentAlgorithm::WEIGHTED_FTS;
     switch(aaAlgorithm) {
     case AssociationAssessmentAlgorithm::WEIGHTED_FTS:

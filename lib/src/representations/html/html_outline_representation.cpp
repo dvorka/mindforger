@@ -20,7 +20,7 @@
 
 extern "C" {
 // IMPROVE this expects mkdio.h to be installed in the system - should I rather link Git submodule mkdio.h?
-#include <mkdio.h>
+#include "../../../../deps/discount/mkdio.h"
 }
 
 using namespace std;
@@ -69,7 +69,7 @@ void HtmlOutlineRepresentation::header(string& html)
 #endif
             }
             // qrc:resource to avoid loading from Internet
-            html.append("<script type=\"text/javascript\" src=\"qrc:/js/math-jax-2.7.1.js\"></script>");
+            html.append("<script type=\"text/javascript\" src=\"qrc:/js/mathjax.js\"></script>");
 #ifdef DO_M8F_DEBUG
         html.append("\n");
 #endif
@@ -80,7 +80,7 @@ void HtmlOutlineRepresentation::header(string& html)
         // - try https://mermaidjs.github.io/scripts/mermaid.min.js
         // - live demo: https://mermaidjs.github.io/mermaid-live-editor
         if(lastMfOptions&Configuration::MdToHtmlOption::DiagramSupport) {
-            html.append("<link rel=\"stylesheet\" href=\"qrc:/js/mermaid.css\">"); // CSS to be next to JS
+            html.append("<link rel=\"stylesheet\" href=\"qrc:/html-css/mermaid.css\">"); // CSS to be next to JS
 #ifdef DO_M8F_DEBUG
         html.append("\n");
 #endif
@@ -91,11 +91,9 @@ void HtmlOutlineRepresentation::header(string& html)
         }
 
         // SYNTAX HIGHLIGHTING: for source code via Highlight.js
-        // - CME
+        // - CME        
         if(lastMfOptions&Configuration::MdToHtmlOption::CodeHighlighting) {
-            html.append("<link rel=\"stylesheet\" href=\"");
-            html.append(config.getUiHtmlCssPath());
-            html.append("\">");
+            html.append("<link rel=\"stylesheet\" href=\"qrc:/html-css/highlight.css\">");
 #ifdef DO_M8F_DEBUG
         html.append("\n");
 #endif
@@ -108,6 +106,15 @@ void HtmlOutlineRepresentation::header(string& html)
         html.append("\n");
 #endif
         }
+
+        // THEME:
+        html.append("<link rel=\"stylesheet\" href=\"");
+        html.append(config.getUiHtmlCssPath());
+        html.append("\">");
+#ifdef DO_M8F_DEBUG
+    html.append("\n");
+#endif
+
         html.append("</head><body>");
     }
 }
@@ -139,9 +146,11 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html)
             if(mfOptions!=lastMfOptions) {
                 lastMfOptions = mfOptions;
                 discountOptions
-                      // IMPROVE I don't want TOC, should this be switched ON?
+                    // IMPROVE I don't want TOC, should this be switched ON?
                     = MKD_TOC
                         | MKD_NOSTYLE
+                        | MKD_FENCEDCODE // this enables ``` and ~~~
+                        | MKD_LATEX // this helps to enable mathjax
                         | (mfOptions&Configuration::MdToHtmlOption::AutolinkOption?MKD_AUTOLINK:0)
                         | (mfOptions&Configuration::MdToHtmlOption::NoStrikethroughOption?MKD_NOSTRIKETHROUGH:0)
                         | (mfOptions&Configuration::MdToHtmlOption::NoAlphaListOption?MKD_NOALPHALIST:0)

@@ -9,11 +9,12 @@
     <qresource prefix="/html-css">
         <file alias="dark.css">resources/qt/css/dark.css</file>
         <file alias="light.css">resources/qt/css/light.css</file>
+        <file alias="highlight.css">resources/qt/css/highlight-js-default.css</file>
+        <file alias="mermaid.css">resources/qt/css/mermaid.css</file>
     </qresource>
     <qresource prefix="/js">
-        <file alias="math-jax-2.7.1.js">resources/qt/js/math-jax-2.7.1.js</file>
-        <file alias="mermaid.js">resources/qt/js/mermaid.full.min.js</file>
-        <file alias="highlight.js">resources/qt/js/highlight.pack.js</file>
-        <file alias="mermaid.css">resources/qt/js/mermaid.css</file>
+        <file alias="highlight.js">resources/qt/js/highlight.js</file>
+        <file alias="mathjax.js">resources/qt/js/mathjax-2.7.1.js</file>
+        <file alias="mermaid.js">resources/qt/js/mermaid.js</file>
     </qresource>
 </RCC>
