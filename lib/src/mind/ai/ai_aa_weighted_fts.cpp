@@ -76,7 +76,7 @@ bool weightedMatchesComparator(const std::pair<Note*,float>& p1, const std::pair
     return p1.second > p2.second;
 }
 
-void AiAaWeightedFts::tokenizeAndStripWords(string s, const bool ignoreCase, vector<string>& words)
+void AiAaWeightedFts::tokenizeAndStripString(string s, const bool ignoreCase, vector<string>& words)
 {
     size_t pos = 0;
     string r{};
@@ -113,22 +113,22 @@ void AiAaWeightedFts::tokenizeAndStripWords(string s, const bool ignoreCase, vec
 
 vector<pair<Note*,float>>* AiAaWeightedFts::assessNotesWithFallback(const string& regexp, Outline* scope, const Note* self)
 {                         
-    // case sensitive version is not needed
-    const bool ignoreCase = true;
-
-    vector<string> words{};
     vector<pair<Note*,float>>* result = new vector<pair<Note*,float>>();
-
     if(regexp.empty()) return result;
 
-    // case (in)sensitivity
+    // case is *always* ignored to get more matches (more matches vs. precision trade-off)
+    const bool ignoreCase = true;
+    vector<string> words{};
     string r{};
+
+    // case (in)sensitivity
     if(ignoreCase) {
         stringToLower(regexp, r);
     } else {
         r.append(regexp);
     }
-    words.push_back(r);
+    r = MarkdownTokenizer::stripFrontBackNonAlpha(r);
+    if(r.size()) words.push_back(r);
 
     // exact match
     if(scope) {
@@ -145,11 +145,11 @@ vector<pair<Note*,float>>* AiAaWeightedFts::assessNotesWithFallback(const string
     }
 
     // FALLBACK: if exact match failed, split regexp to words (if it's multi-word) and try FTS assessment word by word
+    // IMPROVE this may take longer than single search > implement ASYNC run w/ distributor based refresh
     if(result->empty()) {
         MF_DEBUG("AA.FTS.fallback for '" << regexp << "'" << endl);
-        // IMPROVE this may take longer than single search > implement ASYNC run w/ distributor based refresh
         words.clear();
-        tokenizeAndStripWords(regexp, ignoreCase, words);
+        tokenizeAndStripString(regexp, ignoreCase, words);
 
         // search using words
         MF_DEBUG("AA.FTS.fallback words: " << words.size() << endl);

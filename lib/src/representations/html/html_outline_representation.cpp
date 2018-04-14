@@ -50,31 +50,63 @@ void HtmlOutlineRepresentation::header(string& html)
         html.append("'><pre>");
     } else {
         html.assign("<html><head>");
-        html.append("<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); }; </script>\n");
 
-        // math via MathJax.js
+        // SCROLLING: scrolling bridge
+        html.append("<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); }; </script>");
+#ifdef DO_M8F_DEBUG
+        html.append("\n");
+#endif
+
+        // MATH: via MathJax.js
+        // - link to the latest version: http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+        // - check newMathJax variable in the script above e.g. https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js
         if(lastMfOptions&Configuration::MdToHtmlOption::MathSupport) {
             // set inline flag
             if(lastMfOptions&Configuration::MdToHtmlOption::MathInlineSupport) {
                 html.append("<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>");
+#ifdef DO_M8F_DEBUG
+        html.append("\n");
+#endif
             }
-            // TODO make this qrc:resource
-            html.append("<script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>\n");
+            // qrc:resource to avoid loading from Internet
+            html.append("<script type=\"text/javascript\" src=\"qrc:/js/math-jax-2.7.1.js\"></script>");
+#ifdef DO_M8F_DEBUG
+        html.append("\n");
+#endif
         }
 
-        // diagrams via mermaid.js
+        // DIAGRAMS: mermaid.js
+        // - download via HTML source of https://mermaidjs.github.io/ or CME
+        // - try https://mermaidjs.github.io/scripts/mermaid.min.js
+        // - live demo: https://mermaidjs.github.io/mermaid-live-editor
         if(lastMfOptions&Configuration::MdToHtmlOption::DiagramSupport) {
-            html.append("<link rel=\"stylesheet\" href=\"qrc:/scripts/mermaid/mermaid.css\">\n");
-            html.append("<script src=\"qrc:/scripts/mermaid/mermaid.full.min.js\"></script>\n");
+            html.append("<link rel=\"stylesheet\" href=\"qrc:/js/mermaid.css\">"); // CSS to be next to JS
+#ifdef DO_M8F_DEBUG
+        html.append("\n");
+#endif
+            html.append("<script src=\"qrc:/js/mermaid.js\"></script>");
+#ifdef DO_M8F_DEBUG
+        html.append("\n");
+#endif
         }
 
-        // source code highlighting via Highlight.js
+        // SYNTAX HIGHLIGHTING: for source code via Highlight.js
+        // - CME
         if(lastMfOptions&Configuration::MdToHtmlOption::CodeHighlighting) {
             html.append("<link rel=\"stylesheet\" href=\"");
             html.append(config.getUiHtmlCssPath());
-            html.append("\">\n");
-            html.append("<script src=\"qrc:/scripts/highlight.js/highlight.pack.js\"></script>\n");
-            html.append("<script>hljs.initHighlightingOnLoad();</script>\n");
+            html.append("\">");
+#ifdef DO_M8F_DEBUG
+        html.append("\n");
+#endif
+            html.append("<script src=\"qrc:/js/highlight.js\"></script>");
+#ifdef DO_M8F_DEBUG
+        html.append("\n");
+#endif
+            html.append("<script>hljs.initHighlightingOnLoad();</script>");
+#ifdef DO_M8F_DEBUG
+        html.append("\n");
+#endif
         }
         html.append("</head><body>");
     }
@@ -136,7 +168,7 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html)
         footer(*html);
     }
 
-    //MF_DEBUG("===" << *html << "=1==" << endl);
+    MF_DEBUG("===" << *html << "=1==" << endl);
 
     return html;
 }

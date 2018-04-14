@@ -90,6 +90,34 @@ FindOutlineByNameDialog::~FindOutlineByNameDialog()
     delete closeButton;
 }
 
+void FindOutlineByNameDialog::show(vector<Thing*>& outlines, vector<string>* customizedNames)
+{
+    choice = nullptr;
+    things.clear();
+    listViewStrings.clear();
+    bool useCustomNames = customizedNames!=nullptr && customizedNames->size()>0;
+    if(outlines.size()) {
+        for(size_t i=0; i<outlines.size(); i++) {
+            things.push_back(outlines[i]);
+            if(useCustomNames) {
+                listViewStrings << QString::fromStdString(customizedNames->at(i));
+            } else {
+                if(outlines.at(i)->getName().size()) {
+                    listViewStrings << QString::fromStdString(outlines[i]->getName());
+                } else {
+                    listViewStrings << "";
+                }
+            }
+        }
+        ((QStringListModel*)listView->model())->setStringList(listViewStrings);
+    }
+
+    findButton->setEnabled(things.size());
+    lineEdit->clear();
+    lineEdit->setFocus();
+    QDialog::show();
+}
+
 void FindOutlineByNameDialog::enableFindButton(const QString& text)
 {
     listViewStrings.clear();
@@ -131,34 +159,6 @@ void FindOutlineByNameDialog::enableFindButton(const QString& text)
         }
         findButton->setEnabled(things.size());
     }
-}
-
-void FindOutlineByNameDialog::show(vector<Thing*>& outlines, vector<string>* customizedNames)
-{
-    choice = nullptr;
-    things.clear();
-    listViewStrings.clear();
-    bool useCustomNames = customizedNames!=nullptr && customizedNames->size()>0;
-    if(outlines.size()) {
-        for(size_t i=0; i<outlines.size(); i++) {
-            things.push_back(outlines[i]);
-            if(useCustomNames) {
-                listViewStrings << QString::fromStdString(customizedNames->at(i));
-            } else {
-                if(outlines.at(i)->getName().size()) {
-                    listViewStrings << QString::fromStdString(outlines[i]->getName());
-                } else {
-                    listViewStrings << "";
-                }
-            }
-        }
-        ((QStringListModel*)listView->model())->setStringList(listViewStrings);
-    }
-
-    findButton->setEnabled(things.size());
-    lineEdit->clear();
-    lineEdit->setFocus();
-    QDialog::show();
 }
 
 void FindOutlineByNameDialog::handleReturn()

@@ -92,7 +92,7 @@ public:
 
 private:
     void refreshNotes(bool checkWatermark);
-    void tokenizeAndStripWords(std::string s, const bool ignoreCase, std::vector<std::string>& words);
+    void tokenizeAndStripString(std::string s, const bool ignoreCase, std::vector<std::string>& words);
 
     std::shared_future<bool> getAssociatedNotes(const std::string& words, std::vector<std::pair<Note*,float>>& associations, Outline* self);
 

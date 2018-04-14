@@ -73,6 +73,16 @@ public:
      */
     static std::string stripNonAlpha(CharProvider& md);
 
+    /**
+     * @brief Strip non-alpha numeric characters from front and back of the string.
+     */
+    static std::string stripFrontBackNonAlpha(std::string s);
+
+    /**
+     * @brief Is non-alpha numberic character?
+     */
+    static bool isNonAlpha(char c);
+
 private:
     inline void handleWord(WordFrequencyList& wfl, std::string &w, bool stem, bool useBlacklist);
 };

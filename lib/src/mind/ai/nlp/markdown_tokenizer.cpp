@@ -164,6 +164,90 @@ void MarkdownTokenizer::handleWord(WordFrequencyList& wfl, string &w, bool stem,
     w.clear();
 }
 
+bool MarkdownTokenizer::isNonAlpha(char c)
+{
+    switch(c) {
+    case '-':
+    case '\n':
+    case '\r':
+    case ' ':
+    case '\t':
+    case '!':
+    case '?':
+    case '.':
+    case ',':
+    case ':':
+    case ';':
+    case '#':
+    case '=':
+    case '`':
+    case '(':
+    case ')':
+    case '[':
+    case ']':
+    case '*':
+    case '_':
+    case '"':
+    case '\'':
+    case '~':
+    case '@':
+    case '$':
+    case '%':
+    case '^':
+    case '&':
+    case '+':
+    case '{':
+    case '}':
+    case '|':
+    case '\\':
+    case '<':
+    case '>':
+    case '/':
+        return true;
+    default:
+        if(c<0) {
+            // high unicode
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+string MarkdownTokenizer::stripFrontBackNonAlpha(string s)
+{
+    MF_DEBUG("Strip F-B before: " << s << endl);
+    if(s.size()) {
+        string w{};
+        // front (points to 1st alpha)
+        size_t f = 0;
+        while(f<s.size() && isNonAlpha(s.at(f))) {
+            f++;
+        }
+        // back (points to last alpha)
+        size_t b = s.size()-1;
+        while(b>=1 && isNonAlpha(s.at(b))) {
+            b--;
+        }
+
+        if(f == b) {
+            w += s.at(f);
+            MF_DEBUG("Strip F-B after : " << w << endl);
+            return w;
+        } else if(f > b) {
+            return w;
+        } else {
+            for(size_t i=f; i<=b; i++) {
+               w += s.at(i);
+            }
+            MF_DEBUG("Strip F-B after : " << w << endl);
+            return w;
+        }
+    } else {
+        return s;
+    }
+}
+
 string MarkdownTokenizer::stripNonAlpha(CharProvider& md)
 {
     string w{};
