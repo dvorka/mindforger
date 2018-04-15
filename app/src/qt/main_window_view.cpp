@@ -24,7 +24,7 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
     : QMainWindow(nullptr), // main window has no parent - it's destroyed by MF main class
       lookAndFeel(lookAndFeel)
 {
-    setWindowTitle("MindForger - "+tr("Thinking Notebook")+" - "+MINDFORGER_VERSION+" - Early Access ");
+    setWindowTitle("MindForger - "+tr("Thinking Notebook")+" - "+MINDFORGER_VERSION+" - Technology Preview ");
 
     centralWidget = new QWidget(this);
 
@@ -50,4 +50,4 @@ QMenuBar* MainWindowView::getMenuBar() const
     return menuBar();
 }
 
-}
+} // m8r namespace
