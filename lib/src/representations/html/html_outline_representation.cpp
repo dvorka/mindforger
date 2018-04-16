@@ -51,6 +51,15 @@ void HtmlOutlineRepresentation::header(string& html)
     } else {
         html.assign("<html><head>");
 
+        if(true) {
+            html.append("<base href=\"file://");
+            html.append(config.getMemoryPath());
+            html.append("/\">");
+#ifdef DO_M8F_DEBUG
+        html.append("\n");
+#endif
+        }
+
         // SCROLLING: scrolling bridge
         html.append("<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); }; </script>");
 #ifdef DO_M8F_DEBUG
@@ -178,7 +187,7 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html)
     }
 
     // debug generated HTML
-    //MF_DEBUG("=== BEGIN HTML ===" << endl << *html << end << "=== END HTML ===" << endl);
+    MF_DEBUG("=== BEGIN HTML ===" << endl << *html << endl << "=== END HTML ===" << endl);
 
     return html;
 }
