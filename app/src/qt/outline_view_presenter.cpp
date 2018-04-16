@@ -50,6 +50,7 @@ void OutlineViewPresenter::refresh(Outline* outline)
 void OutlineViewPresenter::refresh(Note* note)
 {
     outlineTreePresenter->refresh(note);
+    selectRowByNote(note);
 }
 
 void OutlineViewPresenter::insertAndSelect(Note* note)

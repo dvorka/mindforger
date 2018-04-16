@@ -152,7 +152,6 @@ void OutlineTreeModel::refresh(Note* note, int row, bool set)
     }
 }
 
-
 void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
 {
     int row = NO_INDEX;

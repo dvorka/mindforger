@@ -124,6 +124,7 @@ void OutlineTreePresenter::refresh(Note* note)
 void OutlineTreePresenter::insertAndSelect(Note* note)
 {
     int row = model->insertNote(note);
+    view->scrollTo(model->index(row, 0));
     view->selectRow(row);
 }
 
@@ -138,6 +139,7 @@ void OutlineTreePresenter::selectRowByNote(const Note* note)
         int row = model->getRowByNote(note);
         if(row >= 0) {
             view->selectRow(row);
+            view->scrollTo(model->index(row, 0));
             return;
         }
     }
