@@ -41,5 +41,5 @@ code. Please [report](mailto:martin.dvorak@mindforger.com) unacceptable behavior
 
 # Styleguide: Qt
 
-* MindForger uses MVP pattern (see `main_window_presenter.h/cpp`)
-* See `/src/qt` source code for as code style reference.
+* MindForger uses MVP pattern (see `main_window_presenter.h/.cpp`)
+* See `/src/qt` source code for a code style reference.
