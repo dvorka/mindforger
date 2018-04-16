@@ -63,14 +63,14 @@ public:
     HtmlOutlineRepresentation &operator=(const HtmlOutlineRepresentation&&) = delete;
     virtual ~HtmlOutlineRepresentation();
 
-    std::string* to(const std::string* markdown, std::string* html);
+    std::string* to(const std::string* markdown, std::string* html, std::string* basePath=nullptr);
 
     std::string* to(const Outline* outline, std::string* html);
     std::string* toHeader(const Outline* outline, std::string* html);
     std::string* to(const Note* note, std::string* html);
 
 private:
-    void header(std::string& html);
+    void header(std::string& html, std::string* basePath);
     void footer(std::string& html);
 };
 

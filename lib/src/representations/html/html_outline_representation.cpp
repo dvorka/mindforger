@@ -37,7 +37,7 @@ HtmlOutlineRepresentation::~HtmlOutlineRepresentation()
 {
 }
 
-void HtmlOutlineRepresentation::header(string& html)
+void HtmlOutlineRepresentation::header(string& html, string* basePath)
 {
     if(!config.isUiHtmlTheme()) {
         // IMPROVE possibly dark/light variant might be needed (check theme name)
@@ -51,9 +51,9 @@ void HtmlOutlineRepresentation::header(string& html)
     } else {
         html.assign("<html><head>");
 
-        if(true) {
+        if(basePath) {
             html.append("<base href=\"file://");
-            html.append(config.getMemoryPath());
+            html.append(*basePath);
             html.append("/\">");
 #ifdef DO_M8F_DEBUG
         html.append("\n");
@@ -136,10 +136,10 @@ void HtmlOutlineRepresentation::footer(string& html)
     html.append("</body></html>");
 }
 
-string* HtmlOutlineRepresentation::to(const string* markdown, string* html)
+string* HtmlOutlineRepresentation::to(const string* markdown, string* html, string* basePath)
 {
     if(!config.isUiHtmlTheme()) {
-        header(*html);
+        header(*html, basePath);
         html->append(*markdown);
         footer(*html);
     } else {
@@ -181,7 +181,7 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html)
 
         // assemble HTML
         html->clear();
-        header(*html);
+        header(*html, basePath);
         html->append(body);
         footer(*html);
     }
@@ -212,7 +212,9 @@ string* HtmlOutlineRepresentation::toHeader(const Outline* outline, string* html
 string* HtmlOutlineRepresentation::to(const Note* note, string* html)
 {
     string* markdown = markdownRepresentation.to(note);
-    to(markdown, html);
+    string path, file;
+    pathToDirectoryAndFile(note->getOutlineKey(), path, file);
+    to(markdown, html, &path);
     delete markdown;
     return html;
 }
