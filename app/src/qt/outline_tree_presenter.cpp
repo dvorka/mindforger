@@ -93,18 +93,18 @@ void OutlineTreePresenter::refresh(Outline* outline, Outline::Patch* patch)
                             for(size_t p=0; p<parents.size(); p++) {
                                 if(visibleNotes.find(parents[p]) != visibleNotes.end()) {
                                     visibleNotes.insert(p);
-                                    model->addRow(outline->getNotes()[parents[p]]);
+                                    model->addNote(outline->getNotes()[parents[p]]);
                                 }
                             }
                         }
 
                         // N
-                        model->addRow(outline->getNotes()[i]);
+                        model->addNote(outline->getNotes()[i]);
                     }
                 }
             } else {
                 for(Note* note:outline->getNotes()) {
-                    model->addRow(note);
+                    model->addNote(note);
                 }
             }
         }
@@ -119,6 +119,12 @@ void OutlineTreePresenter::refresh(Note* note)
     } else {
         model->refresh(note);
     }
+}
+
+void OutlineTreePresenter::insertAndSelect(Note* note)
+{
+    int row = model->insertNote(note);
+    view->selectRow(row);
 }
 
 void OutlineTreePresenter::clearSelection()

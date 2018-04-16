@@ -59,6 +59,7 @@ public:
 
     void refresh(Outline* outline, Outline::Patch* patch=nullptr);
     void refresh(Note* note);
+    void insertAndSelect(Note* note);
 
     void clearSelection();
     void focus() { view->setFocus(); }

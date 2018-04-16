@@ -56,6 +56,7 @@ public:
     Outline* getCurrentOutline() const { return currentOutline; }
     void refresh(Outline* outline);
     void refresh(Note* note);
+    void insertAndSelect(Note* note);
     void selectRowByNote(const Note* note);
     OutlineTreePresenter* getOutlineTree() const { return outlineTreePresenter; }
     AssocLeaderboardPresenter* getAssocLeaderboard() const { return assocLeaderboardPresenter; }

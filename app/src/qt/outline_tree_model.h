@@ -42,7 +42,8 @@ public:
     OutlineTreeModel &operator=(const OutlineTreeModel&&) = delete;
 
     void removeAllRows();
-    void addRow(Note* note);
+    void addNote(Note* note);
+    int insertNote(Note* note);
     int getRowByNote(const Note* note);
     void refresh(Note* note) { refresh(note, noselection); }
     void refresh(Note* note, int row, bool set=false);
@@ -50,6 +51,7 @@ public:
 
 private:
     void createNameText(QString& name, Note* note);
+    void createRowFor(Note* note, QList<QStandardItem*>& rowItems);
 };
 
 }

@@ -527,6 +527,8 @@ void MainWindowPresenter::handleNoteNew()
         offset++;
     }
 
+    MF_DEBUG("New N: current N offset: " << offset << endl);
+
     u_int16_t depth;
     Note* n = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
     if(n) {
@@ -548,8 +550,14 @@ void MainWindowPresenter::handleNoteNew()
                 newNoteDialog->getStencil());
     if(note) {
         mind->remind().remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
-        // IMPROVE smarter refresh of outline tree (do less then overall load)
-        orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+
+        // insert new N and select it in the tree
+        orloj->getOutlineView()->insertAndSelect(note);
+
+
+        // IMPROVE smarter refresh of outline tree (do less than overall load)
+        //orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+
         orloj->showFacetNoteEdit(note);
     } else {
         QMessageBox::critical(&view, tr("New Note"), tr("Failed to create new Note!"));

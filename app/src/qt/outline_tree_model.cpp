@@ -59,35 +59,52 @@ void OutlineTreeModel::createNameText(QString& html, Note* note)
     noteTypeToHtml(note->getType(), html);
 }
 
-void OutlineTreeModel::addRow(Note* note)
+void OutlineTreeModel::createRowFor(Note* note, QList<QStandardItem*>& rowItems)
 {
-    QList<QStandardItem*> items;
-    QString s{};
-
     // name
     QString name{};
     createNameText(name, note);
     QStandardItem* noteItem = new QStandardItem{name};
     // TODO declare custom role
     noteItem->setData(QVariant::fromValue(note), Qt::UserRole + 1);
-    items.append(noteItem);
+    rowItems.append(noteItem);
     // %
+    QString s{};
     if(note->getProgress()) {
         s.clear();
         s += QString::number(note->getProgress());
         s += "%";
-        items.append(new QStandardItem{s});
+        rowItems.append(new QStandardItem{s});
     } else {
-        items.append(new QStandardItem{""});
+        rowItems.append(new QStandardItem{""});
     }
     // rd/wr
-    items.append(new QStandardItem{QString::number(note->getReads())});
-    items.append(new QStandardItem{QString::number(note->getRevision())});
+    rowItems.append(new QStandardItem{QString::number(note->getReads())});
+    rowItems.append(new QStandardItem{QString::number(note->getRevision())});
     // pretty
     s = note->getModifiedPretty().c_str();
-    items.append(new QStandardItem{s});
+    rowItems.append(new QStandardItem{s});
+}
 
+
+void OutlineTreeModel::addNote(Note* note)
+{
+    QList<QStandardItem*> items;
+    createRowFor(note, items);
     appendRow(items);
+}
+
+int OutlineTreeModel::insertNote(Note* note)
+{
+    if(note) {
+        QList<QStandardItem*> items;
+        createRowFor(note, items);
+        int offset = note->getOutline()->getNoteOffset(note);
+        insertRow(offset, items);
+        return offset;
+    } else {
+        return 0;
+    }
 }
 
 int OutlineTreeModel::getRowByNote(const Note* note)
