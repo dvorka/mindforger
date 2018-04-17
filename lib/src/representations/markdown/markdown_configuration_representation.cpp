@@ -32,6 +32,7 @@ constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key
 constexpr const auto CONFIG_SETTING_TIME_SCOPE_LABEL = "* Time scope: ";
 constexpr const auto CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL = "* Show Notebook edit button: ";
 constexpr const auto CONFIG_SETTING_SAVE_READS_METADATA_LABEL = "* Save reads metadata: ";
+constexpr const auto CONFIG_SETTING_ALLOW_ONLINE_JS_LIBS_LABEL = "* Allow online JavaScript libraries: ";
 
 // mind
 constexpr const auto CONFIG_SETTING_MIND_STATE = "* Mind state: ";
@@ -137,6 +138,12 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                             c.setUiShowNotebookEditButton(true);
                         } else {
                             c.setUiShowNotebookEditButton(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_ALLOW_ONLINE_JS_LIBS_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiAllowOnlineJavascriptLibs(true);
+                        } else {
+                            c.setUiAllowOnlineJavascriptLibs(false);
                         }
                     }
                 }
@@ -248,6 +255,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL << (c?(c->isUiShowNotebookEditButton()?"yes":"no"):(Configuration::DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_SAVE_READS_METADATA_LABEL << (c?(c->isSaveReadsMetadata()?"yes":"no"):(Configuration::DEFAULT_SAVE_READS_METADATA?"yes":"no")) << endl <<
+         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_ALLOW_ONLINE_JS_LIBS_LABEL << (c?(c->isUiAllowOnlineJavascriptLibs()?"yes":"no"):(Configuration::DEFAULT_ALLOW_ONLINE_JS_LIBS?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          endl <<
 

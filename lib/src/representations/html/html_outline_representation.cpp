@@ -77,23 +77,27 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
         html.append("\n");
 #endif
             }
-            // qrc:resource to avoid loading from Internet
-            html.append("<script type=\"text/javascript\" src=\"qrc:/js/mathjax.js\"></script>");
+            if(config.isUiAllowOnlineJavascriptLibs()) {
+                html.append("<script type=\"text/javascript\" src=\"https://cdn.mathjax.org/mathjax/2.7-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>");
+            } else {
+                // qrc:resource to avoid loading from Internet
+                html.append("<script type=\"text/javascript\" src=\"qrc:/js/mathjax.js\"></script>");
+            }
 #ifdef DO_M8F_DEBUG
         html.append("\n");
 #endif
         }
 
         // DIAGRAMS: mermaid.js
-        // - download via HTML source of https://mermaidjs.github.io/ or CME
+        // - download from: https://unpkg.com/mermaid@7.1.0/dist/
         // - try https://mermaidjs.github.io/scripts/mermaid.min.js
         // - live demo: https://mermaidjs.github.io/mermaid-live-editor
         if(lastMfOptions&Configuration::MdToHtmlOption::DiagramSupport) {
-            html.append("<link rel=\"stylesheet\" href=\"qrc:/html-css/mermaid.css\">"); // CSS to be next to JS
-#ifdef DO_M8F_DEBUG
-        html.append("\n");
-#endif
-            html.append("<script src=\"qrc:/js/mermaid.js\"></script>");
+            if(config.isUiAllowOnlineJavascriptLibs()) {
+                html.append("<script src=\"https://mermaidjs.github.io/scripts/mermaid.min.js\"></script>");
+            } else {
+                html.append("<script src=\"qrc:/js/mermaid.js\"></script>");
+            }
 #ifdef DO_M8F_DEBUG
         html.append("\n");
 #endif

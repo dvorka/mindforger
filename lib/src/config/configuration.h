@@ -150,6 +150,7 @@ public:
     static const std::string DEFAULT_UI_THEME_NAME;
     static const std::string DEFAULT_UI_HTML_CSS_THEME;
     static const std::string DEFAULT_EDITOR_KEY_BINDING;
+    static const bool DEFAULT_ALLOW_ONLINE_JS_LIBS = false;
 
 private:
     explicit Configuration();
@@ -184,7 +185,7 @@ private:
 
     // GUI configuration
     std::string uiThemeName;
-    std::string uiHtmlCssPath; // use a CSS (size>0) or render raw MD (size==0)
+    std::string uiHtmlCssPath; // use a CSS (size>0) or render raw MD (size==0)    
     EditorKeyBindingMode uiEditorKeyBinding;
     int uiFontPointSize;
     bool uiShowBreadcrump; // show breadcrump path
@@ -192,6 +193,7 @@ private:
     bool uiEditorShowLineNumbers; // show line numbers
     bool uiEditorEnableSyntaxHighlighting; // toggle syntax highlighting
     bool uiShowNotebookEditButton;
+    bool uiAllowOnlineJsLibs;
 
 private:
     Installer* installer;
@@ -285,6 +287,12 @@ public:
     }
     void setUiHtmlCssPath(const std::string path) {
         if(!path.compare(UI_HTML_THEME_CSS_RAW)) uiHtmlCssPath.clear(); else uiHtmlCssPath = path;
+    }
+    bool isUiAllowOnlineJavascriptLibs() {
+        return uiAllowOnlineJsLibs;
+    }
+    void setUiAllowOnlineJavascriptLibs(bool allow) {
+        uiAllowOnlineJsLibs = allow;
     }
 };
 

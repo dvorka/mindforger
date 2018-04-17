@@ -107,6 +107,7 @@ void Configuration::clear()
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
     uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
     uiShowNotebookEditButton = DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON;
+    uiAllowOnlineJsLibs = false;
 }
 
 Repository* Configuration::addRepository(Repository* repository)
