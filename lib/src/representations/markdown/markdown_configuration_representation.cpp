@@ -257,6 +257,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_SAVE_READS_METADATA_LABEL << (c?(c->isSaveReadsMetadata()?"yes":"no"):(Configuration::DEFAULT_SAVE_READS_METADATA?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_ALLOW_ONLINE_JS_LIBS_LABEL << (c?(c->isUiAllowOnlineJavascriptLibs()?"yes":"no"):(Configuration::DEFAULT_ALLOW_ONLINE_JS_LIBS?"yes":"no")) << endl <<
+         "    * Allow downloading of JavaScript libraries for math and diagram rendering in HTML" << endl <<
          "    * Examples: yes, no" << endl <<
          endl <<
 
