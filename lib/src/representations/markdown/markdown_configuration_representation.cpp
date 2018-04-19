@@ -269,10 +269,10 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_MD_MATH_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableMathInMd()):UI_JS_LIB_NO) << endl <<
          "    * Enable online or offline use MathJax JavaScript library to show math expressions in HTML generated from Markdown." << endl <<
-         "    * Examples: online, offline, no" << endl <<
+         "    * Examples: online, no" << endl <<
          CONFIG_SETTING_MD_DIAGRAM_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableDiagramsInMd()):UI_JS_LIB_NO) << endl <<
          "    * Enable online or offline use Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
-         "    * Examples: online, offline, no" << endl <<
+         "    * Examples: offline, no" << endl <<
          endl <<
 
          "# " << CONFIG_SECTION_REPOSITORIES << endl <<
