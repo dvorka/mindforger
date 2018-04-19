@@ -69,9 +69,9 @@ void Configuration::clear()
     writeMetadata = true;
     saveReadsMetadata = DEFAULT_SAVE_READS_METADATA;
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
-    md2HtmlOptions = 0
-    // change default options by enabling flags below
 
+    // Markdown 2 HTML options
+    md2HtmlOptions = 0
             // DISCOUNT options:
             | Configuration::MdToHtmlOption::AutolinkOption
             //| Configuration::MdToHtmlOption::NoStrikethroughOption
@@ -82,11 +82,12 @@ void Configuration::clear()
             //| Configuration::MdToHtmlOption::ExtraFootnoteOption
 
             // EXTRA LIBRARIES options:
-            | Configuration::MdToHtmlOption::CodeHighlighting // source code highlighting via highlight.js
-            //| Configuration::MdToHtmlOption::MathInlineSupport // math expressions support via mathjax.js
-            //| Configuration::MdToHtmlOption::MathSupport
-            //| Configuration::MdToHtmlOption::DiagramSupport // diagram support via mermaid.js
+            | Configuration::MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js
+            | Configuration::MdToHtmlOption::MathInlineSupport // math expressions support via mathjax.js (flag always enabled - JavaScript online/offline/no decides)
+            | Configuration::MdToHtmlOption::MathSupport
+            | Configuration::MdToHtmlOption::DiagramSupport; // diagram support via mermaid.js (flag always enabled - JavaScript online/offline/no decides)
             ;
+
     aaAlgorithm = AssociationAssessmentAlgorithm::WEIGHTED_FTS;
     switch(aaAlgorithm) {
     case AssociationAssessmentAlgorithm::WEIGHTED_FTS:
@@ -107,7 +108,8 @@ void Configuration::clear()
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
     uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
     uiShowNotebookEditButton = DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON;
-    uiAllowOnlineJsLibs = false;
+    uiEnableMathInMd = JavaScriptLibSupport::NO;
+    uiEnableDiagramsInMd = JavaScriptLibSupport::NO;
 }
 
 Repository* Configuration::addRepository(Repository* repository)

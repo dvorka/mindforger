@@ -67,6 +67,10 @@ constexpr const auto UI_EDITOR_KEY_BINDING_EMACS = "emacs";
 constexpr const auto UI_EDITOR_KEY_BINDING_VIM = "vim";
 constexpr const auto UI_EDITOR_KEY_BINDING_WIN = "windows";
 
+constexpr const auto UI_JS_LIB_ONLINE = "online";
+constexpr const auto UI_JS_LIB_OFFLINE = "offline";
+constexpr const auto UI_JS_LIB_NO = "no";
+
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
 constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_KEY_BINDING = UI_EDITOR_KEY_BINDING_EMACS;
@@ -105,6 +109,12 @@ public:
     enum AssociationAssessmentAlgorithm {
         BOW,
         WEIGHTED_FTS
+    };
+
+    enum JavaScriptLibSupport {
+        ONLINE,
+        OFFLINE,
+        NO
     };
 
     enum MdToHtmlOption {
@@ -193,7 +203,8 @@ private:
     bool uiEditorShowLineNumbers; // show line numbers
     bool uiEditorEnableSyntaxHighlighting; // toggle syntax highlighting
     bool uiShowNotebookEditButton;
-    bool uiAllowOnlineJsLibs;
+    JavaScriptLibSupport uiEnableMathInMd;
+    JavaScriptLibSupport uiEnableDiagramsInMd;
 
 private:
     Installer* installer;
@@ -288,12 +299,16 @@ public:
     void setUiHtmlCssPath(const std::string path) {
         if(!path.compare(UI_HTML_THEME_CSS_RAW)) uiHtmlCssPath.clear(); else uiHtmlCssPath = path;
     }
-    bool isUiAllowOnlineJavascriptLibs() {
-        return uiAllowOnlineJsLibs;
+
+    const char* getJsLibSupportAsString(JavaScriptLibSupport s) const {
+        if(s==JavaScriptLibSupport::ONLINE) return UI_JS_LIB_ONLINE; else
+            if(s==JavaScriptLibSupport::OFFLINE) return UI_JS_LIB_OFFLINE; else return UI_JS_LIB_NO;
     }
-    void setUiAllowOnlineJavascriptLibs(bool allow) {
-        uiAllowOnlineJsLibs = allow;
-    }
+
+    JavaScriptLibSupport getUiEnableMathInMd() { return uiEnableMathInMd; }
+    void setUiEnableMathInMd(JavaScriptLibSupport mode) { uiEnableMathInMd = mode; }
+    JavaScriptLibSupport getUiEnableDiagramsInMd() { return uiEnableDiagramsInMd; }
+    void setUiEnableDiagramsInMd(JavaScriptLibSupport mode) { uiEnableDiagramsInMd = mode; }
 };
 
 } // namespace

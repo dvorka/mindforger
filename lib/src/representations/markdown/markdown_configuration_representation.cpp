@@ -29,10 +29,11 @@ constexpr const auto CONFIG_SECTION_REPOSITORIES= "Repositories";
 constexpr const auto CONFIG_SETTING_UI_THEME_LABEL = "* Theme: ";
 constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* HTML CSS theme: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
-constexpr const auto CONFIG_SETTING_TIME_SCOPE_LABEL = "* Time scope: ";
 constexpr const auto CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL = "* Show Notebook edit button: ";
+constexpr const auto CONFIG_SETTING_MD_MATH_LABEL = "* Enable math support in Markdown: ";
+constexpr const auto CONFIG_SETTING_MD_DIAGRAM_LABEL = "* Enable diagram support in Markdown: ";
+constexpr const auto CONFIG_SETTING_TIME_SCOPE_LABEL = "* Time scope: ";
 constexpr const auto CONFIG_SETTING_SAVE_READS_METADATA_LABEL = "* Save reads metadata: ";
-constexpr const auto CONFIG_SETTING_ALLOW_ONLINE_JS_LIBS_LABEL = "* Allow online JavaScript libraries: ";
 
 // mind
 constexpr const auto CONFIG_SETTING_MIND_STATE = "* Mind state: ";
@@ -126,9 +127,9 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                             c.setUiHtmlCssPath(t);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL) != std::string::npos) {
-                        if(line->find("emacs") != std::string::npos) {
+                        if(line->find(UI_EDITOR_KEY_BINDING_EMACS) != std::string::npos) {
                             c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::EMACS);
-                        } else if(line->find("windows") != std::string::npos) {
+                        } else if(line->find(UI_EDITOR_KEY_BINDING_WIN) != std::string::npos) {
                             c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::WINDOWS);
                         } else {
                             c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::VIM);
@@ -139,11 +140,21 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         } else {
                             c.setUiShowNotebookEditButton(false);
                         }
-                    } else if(line->find(CONFIG_SETTING_ALLOW_ONLINE_JS_LIBS_LABEL) != std::string::npos) {
-                        if(line->find("yes") != std::string::npos) {
-                            c.setUiAllowOnlineJavascriptLibs(true);
+                    } else if(line->find(CONFIG_SETTING_MD_MATH_LABEL) != std::string::npos) {
+                        if(line->find(UI_JS_LIB_ONLINE) != std::string::npos) {
+                            c.setUiEnableMathInMd(Configuration::JavaScriptLibSupport::ONLINE);
+                        } else if(line->find(UI_JS_LIB_OFFLINE) != std::string::npos) {
+                            c.setUiEnableMathInMd(Configuration::JavaScriptLibSupport::OFFLINE);
                         } else {
-                            c.setUiAllowOnlineJavascriptLibs(false);
+                            c.setUiEnableMathInMd(Configuration::JavaScriptLibSupport::NO);
+                        }
+                    } else if(line->find(CONFIG_SETTING_MD_DIAGRAM_LABEL) != std::string::npos) {
+                        if(line->find(UI_JS_LIB_ONLINE) != std::string::npos) {
+                            c.setUiEnableDiagramsInMd(Configuration::JavaScriptLibSupport::ONLINE);
+                        } else if(line->find(UI_JS_LIB_OFFLINE) != std::string::npos) {
+                            c.setUiEnableDiagramsInMd(Configuration::JavaScriptLibSupport::OFFLINE);
+                        } else {
+                            c.setUiEnableDiagramsInMd(Configuration::JavaScriptLibSupport::NO);
                         }
                     }
                 }
@@ -256,9 +267,12 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_SAVE_READS_METADATA_LABEL << (c?(c->isSaveReadsMetadata()?"yes":"no"):(Configuration::DEFAULT_SAVE_READS_METADATA?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
-         CONFIG_SETTING_ALLOW_ONLINE_JS_LIBS_LABEL << (c?(c->isUiAllowOnlineJavascriptLibs()?"yes":"no"):(Configuration::DEFAULT_ALLOW_ONLINE_JS_LIBS?"yes":"no")) << endl <<
-         "    * Allow downloading of JavaScript libraries for math and diagram rendering in HTML" << endl <<
-         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_MD_MATH_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableMathInMd()):UI_JS_LIB_NO) << endl <<
+         "    * Enable online or offline use MathJax JavaScript library to show math expressions in HTML generated from Markdown." << endl <<
+         "    * Examples: online, offline, no" << endl <<
+         CONFIG_SETTING_MD_DIAGRAM_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableDiagramsInMd()):UI_JS_LIB_NO) << endl <<
+         "    * Enable online or offline use Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
+         "    * Examples: online, offline, no" << endl <<
          endl <<
 
          "# " << CONFIG_SECTION_REPOSITORIES << endl <<

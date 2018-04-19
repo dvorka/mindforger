@@ -40,8 +40,8 @@ HtmlOutlineRepresentation::~HtmlOutlineRepresentation()
 void HtmlOutlineRepresentation::header(string& html, string* basePath)
 {
     if(!config.isUiHtmlTheme()) {
-        // IMPROVE possibly dark/light variant might be needed (check theme name)
-        html.assign("<html><body style='color: ");
+        // RAW THEME BACKGROUND
+        html.assign("<!DOCTYPE html>\n<html><body style='color: ");
         if(config.getUiThemeName().find(UI_THEME_LIGHT) != string::npos) {
             html.append("#000>");
         } else {
@@ -49,8 +49,12 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
         }
         html.append("'><pre>");
     } else {
-        html.assign("<html><head>");
+        html.assign("<!DOCTYPE html>\n<html><head>");
+#ifdef DO_M8F_DEBUG
+        html.append("\n");
+#endif
 
+        // RELATIVE URLS: html@base to ensure relative links/images resolution
         if(basePath) {
             html.append("<base href=\"file://");
             html.append(*basePath);
@@ -61,31 +65,39 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
         }
 
         // SCROLLING: scrolling bridge
-        html.append("<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); }; </script>");
+        html.append("<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); };</script>");
 #ifdef DO_M8F_DEBUG
         html.append("\n");
 #endif
 
-        // MATH: via MathJax.js
+        // MATH: MathJax.js
         // - link to the latest version: http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
         // - check newMathJax variable in the script above e.g. https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js
         if(lastMfOptions&Configuration::MdToHtmlOption::MathSupport) {
-            // set inline flag
-            if(lastMfOptions&Configuration::MdToHtmlOption::MathInlineSupport) {
+            switch(config.getUiEnableMathInMd()) {
+            case Configuration::JavaScriptLibSupport::ONLINE:
+                html.append("<script type=\"text/javascript\" src=\"https://cdn.mathjax.org/mathjax/2.7-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>");
+#ifdef DO_M8F_DEBUG
+                html.append("\n");
+#endif
                 html.append("<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>");
 #ifdef DO_M8F_DEBUG
-        html.append("\n");
+                html.append("\n");
 #endif
-            }
-            if(config.isUiAllowOnlineJavascriptLibs()) {
-                html.append("<script type=\"text/javascript\" src=\"https://cdn.mathjax.org/mathjax/2.7-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>");
-            } else {
-                // qrc:resource to avoid loading from Internet
+                break;
+            case Configuration::JavaScriptLibSupport::OFFLINE:
                 html.append("<script type=\"text/javascript\" src=\"qrc:/js/mathjax.js\"></script>");
-            }
 #ifdef DO_M8F_DEBUG
-        html.append("\n");
+                html.append("\n");
 #endif
+                html.append("<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>");
+#ifdef DO_M8F_DEBUG
+                html.append("\n");
+#endif
+                break;
+            default:
+                break;
+            }
         }
 
         // DIAGRAMS: mermaid.js
@@ -93,39 +105,46 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
         // - try https://mermaidjs.github.io/scripts/mermaid.min.js
         // - live demo: https://mermaidjs.github.io/mermaid-live-editor
         if(lastMfOptions&Configuration::MdToHtmlOption::DiagramSupport) {
-            if(config.isUiAllowOnlineJavascriptLibs()) {
-                html.append("<script src=\"https://mermaidjs.github.io/scripts/mermaid.min.js\"></script>");
-            } else {
-                html.append("<script src=\"qrc:/js/mermaid.js\"></script>");
+            switch(config.getUiEnableDiagramsInMd()) {
+            case Configuration::JavaScriptLibSupport::ONLINE:
+                html.append("<script type=\"text/javascript\" src=\"https://mermaidjs.github.io/scripts/mermaid.min.js\"></script>");
+#ifdef DO_M8F_DEBUG
+                html.append("\n");
+#endif
+                break;
+            case Configuration::JavaScriptLibSupport::OFFLINE:
+                html.append("<script type=\"text/javascript\" src=\"qrc:/js/mermaid.js\"></script>");
+#ifdef DO_M8F_DEBUG
+                html.append("\n");
+#endif
+                break;
+            default:
+                break;
             }
-#ifdef DO_M8F_DEBUG
-        html.append("\n");
-#endif
         }
 
-        // SYNTAX HIGHLIGHTING: for source code via Highlight.js
-        // - CME        
+        // SYNTAX HIGHLIGHTING: offline Highlight.js (CME)
         if(lastMfOptions&Configuration::MdToHtmlOption::CodeHighlighting) {
-            html.append("<link rel=\"stylesheet\" href=\"qrc:/html-css/highlight.css\">");
+            html.append("<link rel=\"stylesheet\" href=\"qrc:/html-css/highlight.css\"/>");
 #ifdef DO_M8F_DEBUG
-        html.append("\n");
+            html.append("\n");
 #endif
-            html.append("<script src=\"qrc:/js/highlight.js\"></script>");
+            html.append("<script type=\"text/javascript\" src=\"qrc:/js/highlight.js\"></script>");
 #ifdef DO_M8F_DEBUG
-        html.append("\n");
+            html.append("\n");
 #endif
-            html.append("<script>hljs.initHighlightingOnLoad();</script>");
+            html.append("<script type=\"text/javascript\">hljs.initHighlightingOnLoad();</script>");
 #ifdef DO_M8F_DEBUG
-        html.append("\n");
+            html.append("\n");
 #endif
         }
 
-        // THEME:
+        // UI THEME CSS:
         html.append("<link rel=\"stylesheet\" href=\"");
         html.append(config.getUiHtmlCssPath());
-        html.append("\">");
+        html.append("\"/>");
 #ifdef DO_M8F_DEBUG
-    html.append("\n");
+        html.append("\n");
 #endif
 
         html.append("</head><body>");
