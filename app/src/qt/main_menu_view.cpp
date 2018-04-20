@@ -148,9 +148,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: view
     actionViewHome = new QAction(tr("&Home"), mainWindow);
-    actionViewHome->setStatusTip(tr("Open Home"));
+    actionViewHome->setStatusTip(tr("Open Home Outline"));
     actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
-    actionViewHome->setEnabled(false);
 
     actionViewOrganizer = new QAction(tr("O&rganizer"), mainWindow);
     actionViewOrganizer->setStatusTip(tr("Open Organizer"));
@@ -297,7 +296,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionOutlineHome = new QAction(tr("Make &Home"), mainWindow);
     actionOutlineHome->setStatusTip(tr("Use the current Outline as home"));
-    actionOutlineHome->setEnabled(false);
 
     actionOutlineStencil = new QAction(tr("Make &Stencil"), mainWindow);
     actionOutlineStencil->setStatusTip(tr("Copy the current Outline as to Stencil"));

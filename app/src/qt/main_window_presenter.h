@@ -155,6 +155,7 @@ public slots:
     void handleFindNoteByTag();
 
     // view
+    bool doActionViewHome();
     void doActionViewOutlines();
     void doActionViewToggleRecent();
     void doActionCli();
@@ -164,6 +165,7 @@ public slots:
     void doActionOutlineNew();
     void handleOutlineNew();
     void doActionOutlineClone();
+    void doActionOutlineHome();
     void doActionOutlineForget();
     void doActionOutlineExport();
     void doActionOutlineImport();

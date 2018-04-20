@@ -112,6 +112,12 @@ void MainWindowPresenter::showInitialView()
                 } else {
                     orloj->showFacetOutlineList(mind->getOutlines());
                 }
+            } else if(config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER) {
+                if(!doActionViewHome()) {
+                    // fallback
+                    view.getCli()->setBreadcrumbPath("/outlines");
+                    orloj->showFacetOutlineList(mind->getOutlines());
+                }
             } else {
                 view.getCli()->setBreadcrumbPath("/outlines");
                 orloj->showFacetOutlineList(mind->getOutlines());
@@ -450,6 +456,20 @@ void MainWindowPresenter::doActionViewToggleRecent()
 {
 }
 
+bool MainWindowPresenter::doActionViewHome()
+{
+    vector<const Tag*> tagsFilter{};
+    tagsFilter.push_back(mind->remind().getOntology().findOrCreateTag(Tag::KeyMindForgerHome()));
+    vector<Outline*> homeOutline{};
+    mind->findOutlineByTags(tagsFilter, homeOutline);
+    if(homeOutline.size()) {
+        orloj->showFacetOutline(homeOutline.at(0));
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void MainWindowPresenter::doActionViewOutlines()
 {
     if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
@@ -577,6 +597,19 @@ void MainWindowPresenter::doActionOutlineClone()
         }
     } else {
         QMessageBox::critical(&view, tr("Clone Outline"), tr("Please open and Outline to be cloned."));
+    }
+}
+
+void MainWindowPresenter::doActionOutlineHome()
+{
+    if(orloj->isFacetActiveOutlineManagement()) {
+        const Tag* t = mind->remind().getOntology().findOrCreateTag(Tag::KeyMindForgerHome());
+        Outline* o = orloj->getOutlineView()->getCurrentOutline();
+        if(mind->setOutlineUniqueTag(t, o->getKey())) {
+            statusBar->showInfo(tr("Outline '%1' successfully marked as home").arg(o->getName().c_str()));
+        }
+    } else {
+        QMessageBox::critical(&view, tr("Make Outline home"), tr("Outline can be marked as home only when viewed."));
     }
 }
 

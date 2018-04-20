@@ -307,17 +307,17 @@ public:
      */
 
     /**
-     * @brief Get Outlines tagged by given tags(logical AND).
+     * @brief Get Outlines tagged by given tags (logical AND).
      */
-    std::vector<Outline*>* getTaggedOutlines(const std::vector<Tag*> labels) const;
+    void findOutlineByTags(const std::vector<const Tag*>& tags, std::vector<Outline*>& result) const;
 
     /**
      * @brief Get Notes tagged by given tags (logical AND).
      */
-    std::vector<Note*>* getTaggedNotes(const std::vector<Tag*> tags) const;
+    void findNoteByTags(const std::vector<const Tag*>& tags, std::vector<Note*>& result) const;
 
     /**
-     * @brief Get all tags assingned to Outlines in the memory.
+     * @brief Get all tags assigned to Outlines in the memory.
      */
     std::vector<Tag*>* getOutlinesTags() const;
 
@@ -345,6 +345,16 @@ public:
      * @brief Determine how many Notes are tagged with this tag.
      */
     unsigned getNoteTagCardinality(const Tag& tag) const;
+
+    /**
+     * @brief Remove tag from all Outlines.
+     */
+    void removeTagFromOutlines(const Tag* tag, std::vector<Outline*>& modifiedOutlines);
+
+    /**
+     * @brief Tag Outline and ensure that no other Outline has the tag. Persist modifications.
+     */
+    bool setOutlineUniqueTag(const Tag* tag, const std::string& outlineKey);
 
     /*
      * TYPES

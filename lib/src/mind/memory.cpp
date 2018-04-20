@@ -186,6 +186,7 @@ void Memory::remember(const std::string& outlineKey)
 {
     Outline* o;
     if((o=getOutline(outlineKey)) != nullptr) {
+        o->makeModified();
         o->checkAndFixProperties();
         persistence->save(o);
     } else {

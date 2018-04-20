@@ -210,7 +210,6 @@ void Outline::checkAndFixProperties()
     }
 }
 
-
 bool Outline::isVirgin() const
 {
     if(notes.empty() &&
@@ -224,7 +223,6 @@ bool Outline::isVirgin() const
         return false;
     }
 }
-
 
 void Outline::notifyChange(Note* note)
 {
@@ -392,6 +390,19 @@ int8_t Outline::getUrgency() const
 void Outline::addTag(const Tag* tag)
 {
     tags.push_back(tag);
+}
+
+bool Outline::removeTag(const Tag* tag)
+{
+    if(tags.size()) {
+        for(size_t i=0; i<tags.size(); i++) {
+            if(tag == tags[i]) {
+                tags.erase(tags.begin()+i);
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 void Outline::setUrgency(int8_t urgency)
@@ -605,6 +616,7 @@ void Outline::removeNote(Note* note, bool deallocate)
             }
         }
 
+        // IMPROVE this iterates ALL Ns, but I know that I need to delete just 1st one
         notes.erase(std::remove(notes.begin(), notes.end(), note), notes.end());
     }
 }

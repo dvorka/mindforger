@@ -73,6 +73,8 @@ Ontology::Ontology(const Configuration& configuration)
     tagTaxonomy.add(Tag::KeyWhy(), new Tag{Tag::KeyWhy(), &tagTaxonomy, Color::MF_TURQUOISE()});
     tagTaxonomy.add(Tag::KeyWhere(), new Tag{Tag::KeyWhere(), &tagTaxonomy, Color::MF_TURQUOISE()});
     tagTaxonomy.add(Tag::KeyWho(), new Tag{Tag::KeyWho(), &tagTaxonomy, Color::MF_TURQUOISE()});
+    // features
+    tagTaxonomy.add(Tag::KeyMindForgerHome(), new Tag{Tag::KeyMindForgerHome(), &tagTaxonomy, Color::MF_BLUE()});
     taxonomies[tagTaxonomy.getName()] = &tagTaxonomy;
 
     // taxonomy: outline types

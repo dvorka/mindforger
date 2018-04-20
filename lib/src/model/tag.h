@@ -103,7 +103,12 @@ public:
         return KEY_PROBLEM;
     }
     static const std::string& KeyWho() {
-        static const std::string KEY_PROBLEM = std::string{"who"};
+        static const std::string KEY_MINDFORGER_HOME = std::string{"who"};
+        return KEY_MINDFORGER_HOME;
+    }
+
+    static const std::string& KeyMindForgerHome() {
+        static const std::string KEY_PROBLEM = std::string{"mindforger-home"};
         return KEY_PROBLEM;
     }
 

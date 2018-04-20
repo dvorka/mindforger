@@ -82,4 +82,4 @@ void FilesystemPersistence::save(Outline* outline)
     }
 }
 
-}
+} // m8r namespace

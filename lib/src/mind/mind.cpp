@@ -397,11 +397,10 @@ vector<Note*>* Mind::getRefereeNotes(const Note& note, const Outline& outline) c
     return nullptr;
 }
 
-vector<Note*>* Mind::getTaggedNotes(const vector<Tag*> tags) const
+void Mind::findNoteByTags(const std::vector<const Tag*>& tags, std::vector<Note*>& result) const
 {
     UNUSED_ARG(tags);
-
-    return nullptr;
+    UNUSED_ARG(result);
 }
 
 // IMPROVE PERF use dirty flag to avoid result-rebuilt
@@ -465,12 +464,24 @@ vector<Note*>* Mind::getAssociatedNotes(const string& words, const Outline& outl
     return nullptr;
 }
 
-vector<Outline*>* Mind::getTaggedOutlines(
-        const std::vector<Tag*> labels) const
+void Mind::findOutlineByTags(const std::vector<const Tag*>& tags, std::vector<Outline*>& result) const
 {
-    UNUSED_ARG(labels);
-
-    return nullptr;
+    for(Outline* o:memory.getOutlines()) {
+        bool match = true;
+        for(size_t i=0; i<tags.size(); i++) {
+            if(std::find(
+                        o->getTags()->begin(),
+                        o->getTags()->end(),
+                        tags.at(i)) == o->getTags()->end())
+            {
+                match = false;
+                break;
+            }
+        }
+        if(match) {
+            result.push_back(o);
+        }
+    }
 }
 
 vector<Tag*>* Mind::getOutlinesTags() const
@@ -509,6 +520,38 @@ unsigned Mind::getNoteTagCardinality(const Tag& tag) const
     UNUSED_ARG(tag);
 
     return 0;
+}
+
+void Mind::removeTagFromOutlines(const Tag* tag, vector<Outline*>& modifiedOutlines)
+{
+    vector<const Tag*> tags{};
+    tags.push_back(tag);
+    for(Outline* o:memory.getOutlines()) {
+        if(o->removeTag(tag)) {
+            modifiedOutlines.push_back(o);
+        }
+    }
+}
+
+bool Mind::setOutlineUniqueTag(const Tag* tag, const string& outlineKey)
+{
+    Outline* o=memory.getOutline(outlineKey);
+    if(o) {
+        // strip home tag from all other Outlines
+        vector<Outline*> modifiedOutlines{};
+        removeTagFromOutlines(tag, modifiedOutlines);
+        for(Outline* mo:modifiedOutlines) {
+            // persist Os w/ removed T (timestamp not changed)
+            memory.remember(mo->getKey());
+        }
+
+        // mark O as modified
+        o->addTag(tag);
+        memory.remember(o->getKey());
+        return true;
+    } else {
+        return false;
+    }
 }
 
 string Mind::outlineNew(
