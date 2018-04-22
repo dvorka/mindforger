@@ -536,6 +536,25 @@ void MainWindowPresenter::handleOutlineNew()
     // else Outlines are refreshed on facet change
 }
 
+void MainWindowPresenter::doActionOutlineEdit()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+    ) {
+        Outline* o = orloj->getOutlineView()->getCurrentOutline();
+        if(o) {
+            orloj->showFacetOutlineHeaderEdit(o);
+            return;
+        }
+    }
+    QMessageBox::critical(&view, tr("Edit Outline"), tr("Please open an Outline to edit."));
+}
+
 void MainWindowPresenter::handleNoteNew()
 {
     int offset

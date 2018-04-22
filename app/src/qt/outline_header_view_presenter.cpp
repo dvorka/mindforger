@@ -36,9 +36,7 @@ OutlineHeaderViewPresenter::OutlineHeaderViewPresenter(OutlineHeaderView *view, 
     html = string{};
     html.reserve(10000);
 
-    QObject::connect(
-        view, SIGNAL(signalMouseDoubleClickEvent()),
-        this, SLOT(slotEditOutlineHeader()));
+    QObject::connect(view, SIGNAL(signalMouseDoubleClickEvent()), this, SLOT(slotEditOutlineHeader()));
 }
 
 OutlineHeaderViewPresenter::~OutlineHeaderViewPresenter()

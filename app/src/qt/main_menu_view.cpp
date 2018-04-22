@@ -171,9 +171,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewCli = new QAction(tr("&CLI"), mainWindow);
     actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
     actionViewCli->setStatusTip(tr("Toggle command line"));
-#else
-    cliShortcut = new QShortcut(QKeySequence(Qt::ALT+Qt::Key_X), mainWindow);
-    QObject::connect(cliShortcut, SIGNAL(activated()), this, SLOT(slotShowCli()));
 #endif
 
     actionViewToggleRecent = new QAction(tr("&Recent Notes"), mainWindow);
@@ -210,7 +207,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewNavigator);
     menuView->addAction(actionViewDwell);
 #ifdef DO_M8F_DEBUG
-    menuView->addAction(actionViewCli);
+    // OBSOLETE feature: menuView->addAction(actionViewCli);
 #endif
     menuView->addAction(actionViewLimbo);
     menuView->addSeparator();
@@ -294,6 +291,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineNew = new QAction(tr("&New"), mainWindow);
     actionOutlineNew->setStatusTip(tr("Create new Outline to form new ideas, principles, combinations or applications"));
 
+    actionOutlineEdit = new QAction(tr("&Edit"), mainWindow);
+    actionOutlineEdit ->setStatusTip(tr("Edit current Outline - you can also double click view to open the editor"));
+
     actionOutlineHome = new QAction(tr("Make &Home"), mainWindow);
     actionOutlineHome->setStatusTip(tr("Use the current Outline as home"));
 
@@ -311,12 +311,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineExport->setStatusTip(tr("Export Outline to a file in supported format"));
     actionOutlineExport->setEnabled(false);
 
-    actionOutlineImport = new QAction(tr("Learn"), mainWindow);
+    actionOutlineImport = new QAction(tr("&Learn"), mainWindow);
     actionOutlineImport->setStatusTip(tr("Import Outline from an external file in a supported format"));
     actionOutlineImport->setEnabled(false);
 
     menuOutline = qMenuBar->addMenu(tr("&Outline"));
     menuOutline->addAction(actionOutlineNew);
+    menuOutline->addAction(actionOutlineEdit);
     menuOutline->addAction(actionOutlineForget);
     menuOutline->addSeparator();
     menuOutline->addAction(actionOutlineHome);
@@ -326,10 +327,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuOutline->addAction(actionOutlineExport);
     menuOutline->addAction(actionOutlineImport);
 
-    // menu: note
+    // menu: Note
 
     actionNoteNew = new QAction(tr("&New"), mainWindow);
     actionNoteNew->setStatusTip(tr("Create new Note to form new ideas, principles, combinations and applications"));
+
+    actionNoteEdit = new QAction(tr("&Edit"), mainWindow);
+    actionNoteEdit ->setStatusTip(tr("Edit current Note - you can also double click view to open the editor"));
 
     actionNoteSave = new QAction(tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
     actionNoteSave->setStatusTip(tr("Save Note being edited"));
@@ -386,6 +390,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     menuNote = qMenuBar->addMenu(tr("&Note"));
     menuNote->addAction(actionNoteNew);
+    menuNote->addAction(actionNoteEdit);
     menuNote->addAction(actionNoteSave);
     menuNote->addAction(actionNoteClose);
     menuNote->addAction(actionNoteForget);
@@ -443,10 +448,14 @@ MainMenuView::~MainMenuView()
 
 void MainMenuView::showAllMenuItems()
 {
-    menuMind->setEnabled(true);
-    menuFind->setEnabled(true);
+    menuMind->setEnabled(true);    
+    menuFind->setEnabled(true);    
     menuView->setEnabled(true);
     menuOutline->setEnabled(true);
+    actionOutlineEdit->setEnabled(true);
+    actionOutlineClone->setEnabled(true);
+    actionOutlineHome->setEnabled(true);
+    actionOutlineForget->setEnabled(true);
     menuNote->setEnabled(true);
     menuFormat->setEnabled(true);
     menuHelp->setEnabled(true);
@@ -458,6 +467,10 @@ void MainMenuView::showFacetOutlineList(bool repositoryMode)
 {
     showAllMenuItems();
 
+    actionOutlineEdit->setEnabled(false);
+    actionOutlineClone->setEnabled(false);
+    actionOutlineHome->setEnabled(false);
+    actionOutlineForget->setEnabled(false);
     menuFormat->setEnabled(false);
     menuNote->setEnabled(false);
 

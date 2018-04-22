@@ -153,7 +153,6 @@ public slots:
     void handleFindOutlineByTag();
     void doActionFindNoteByTag();
     void handleFindNoteByTag();
-
     // view
     bool doActionViewHome();
     void doActionViewOutlines();
@@ -161,17 +160,20 @@ public slots:
     void doActionCli();
     void doActionViewDistractionFree();
     void doActionViewFullscreen();
-    // outline
+    // Outline
     void doActionOutlineNew();
+    void doActionOutlineEdit();
     void handleOutlineNew();
     void doActionOutlineClone();
     void doActionOutlineHome();
     void doActionOutlineForget();
     void doActionOutlineExport();
     void doActionOutlineImport();
-    // note
+    // Note
     void doActionNoteNew();
     void handleNoteNew();
+    void doActionNoteEdit();
+    void doActionNoteSave();
     void doActionNoteFirst();
     void doActionNoteUp();
     void doActionNotePromote();
@@ -183,8 +185,6 @@ public slots:
     void doActionNoteExtract();
     void doActionRefactorNoteToOutline();
     void handleRefactorNoteToOutline();
-    void doActionNoteEdit();
-    void doActionNoteSave();
     void doActionNoteForget();
     // help
     void doActionHelpDocumentation();
