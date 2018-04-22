@@ -343,17 +343,18 @@ string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html)
             for(int i=0; i<=4; i++) {
                 htmlHeader += "<td style='border-collapse: collapse; border: none;'>";
                 if(outline->getImportance()>i) {
-                    //htmlHeader += QChar(9733);
+                    htmlHeader += "&#9733;";
                 } else {
-                    //htmlHeader += QChar(9734);
+                    htmlHeader += "&#9734;";
                 }
                 htmlHeader += "</td>";
             }
         } else {
             for(int i=0; i<5; i++) {
-                htmlHeader += "<td style='border-collapse: collapse; border: none;'>";
-                //htmlHeader += QChar(9734);
-                htmlHeader += "</td>";
+                htmlHeader +=
+                        "<td style='border-collapse: collapse; border: none;'>"
+                        "&#9734;"
+                        "</td>";
             }
         }
         htmlHeader +=
@@ -362,20 +363,23 @@ string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html)
         if(outline->getUrgency()>0) {
             for(int i=0; i<=4; i++) {
                 if(outline->getUrgency()>i) {
-                    htmlHeader += "<td style='border-collapse: collapse; border: none;'>";
-                    //htmlHeader += QChar(0x29D7);
-                    htmlHeader += "</td>";
+                    htmlHeader +=
+                            "<td style='border-collapse: collapse; border: none;'>"
+                            "&#x29D7;"
+                            "</td>";
                 } else {
-                    htmlHeader += "<td style='border-collapse: collapse; border: none;'>";
-                    //htmlHeader += QChar(0x29D6);
-                    htmlHeader += "</td>";
+                    htmlHeader +=
+                            "<td style='border-collapse: collapse; border: none;'>"
+                            "&#x29D6;"
+                            "</td>";
                 }
             }
         } else {
             for(int i=0; i<5; i++) {
-                htmlHeader += "<td style='border-collapse: collapse; border: none;'>";
-                //htmlHeader += QChar(0x29D6);
-                htmlHeader += "</td>";
+                htmlHeader +=
+                        "<td style='border-collapse: collapse; border: none;'>"
+                        "&#x29D6;"
+                        "</td>";
             }
         }
     }
@@ -397,6 +401,9 @@ string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html)
             html->find("<body>"), // <body> element index
             6, // <body> element length (chars to be replaced)
             htmlHeader); // new string
+
+    // debug generated HTML
+    MF_DEBUG("=== BEGIN HEADER HTML ===" << endl << *html << endl << "=== END HEADER HTML ===" << endl);
 
     return html;
 }
