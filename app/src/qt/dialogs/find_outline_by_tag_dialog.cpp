@@ -87,6 +87,10 @@ FindOutlineByTagDialog::~FindOutlineByTagDialog()
 void FindOutlineByTagDialog::show(vector<Thing*>& outlines, vector<string>* customizedNames)
 {
     choice = nullptr;
+    // tags are changed > need to be refreshed
+    // IMPROVE dirty flag to avoid refresh that is not needed
+    editTagsGroup->refreshOntologyTags();
+
     things.clear();
     listViewStrings.clear();
     bool useCustomNames = customizedNames!=nullptr && customizedNames->size()>0;

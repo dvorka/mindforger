@@ -333,9 +333,9 @@ void MainWindowPresenter::doActionFindOutlineByTag()
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> os{mind->getOutlines()};
     mind->remind().sortByName(os);
-    vector<Thing*> es{os.begin(),os.end()};
+    vector<Thing*> outlines{os.begin(),os.end()};
 
-    findOutlineByTagDialog->show(es);
+    findOutlineByTagDialog->show(outlines);
 }
 
 void MainWindowPresenter::handleFindOutlineByTag()
