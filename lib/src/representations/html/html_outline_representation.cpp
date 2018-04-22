@@ -283,7 +283,9 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
         // assemble HTML
         html->clear();
         header(*html, basePath);
-        html->append(body);
+        if(body) {
+            html->append(body);
+        }
         footer(*html);
     }
 
