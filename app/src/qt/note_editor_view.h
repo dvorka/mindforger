@@ -57,6 +57,9 @@ public:
     NoteEditorView &operator=(const NoteEditorView&) = delete;
     NoteEditorView &operator=(const NoteEditorView&&) = delete;
 
+    void wrapSelectedText(const QString &tag);
+    void insertMarkdownText(const QString &text, bool newLine=true);
+
     void setShowLineNumbers(bool show);
     void setEnableSyntaxHighlighting(bool enable);
     void setStatusBar(const StatusBarView* sb) { this->statusBar = sb; }
@@ -100,6 +103,6 @@ private:
     LineNumberPanel* lineNumberPanel;
 };
 
-}
+} // m8r namespace
 
 #endif // M8RUI_NOTE_EDITOR_VIEW_H

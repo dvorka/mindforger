@@ -51,6 +51,8 @@ public:
     NoteEditPresenter &operator=(const NoteEditPresenter&&) = delete;
     ~NoteEditPresenter();
 
+    NoteEditView* getView() { return view; }
+
     void setNote(Note* note);
     Note* getCurrentNote() const { return currentNote; }
     QString getSelectedText() const { return view->getSelectedText(); }

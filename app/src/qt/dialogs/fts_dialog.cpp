@@ -89,4 +89,4 @@ FtsDialog::~FtsDialog()
     delete closeButton;
 }
 
-}
+} // m8r namespace

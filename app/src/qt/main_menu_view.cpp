@@ -256,15 +256,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatStrikethrough = new QAction(tr("&Strikethrough"), mainWindow);
     actionFormatStrikethrough->setStatusTip(tr("Format text as strikethrough"));
 
-    actionFormatHighlight = new QAction(tr("&Highlight"), mainWindow);
-    actionFormatHighlight->setStatusTip(tr("Format text as highlighted"));
-
-    actionFormatSubscript = new QAction(tr("Subscript"), mainWindow);
-    actionFormatSubscript->setStatusTip(tr("Format text as subscript"));
-
-    actionFormatSuperscript = new QAction(tr("Superscript"), mainWindow);
-    actionFormatSuperscript->setStatusTip(tr("Format text as superscript"));
-
     actionFormatListBullet = new QAction(tr("Bulleted List"), mainWindow);
     actionFormatListBullet->setStatusTip(tr("Format block as bulleted list"));
 
@@ -286,24 +277,25 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatTable = new QAction(tr("&Table"), mainWindow);
     actionFormatTable->setStatusTip(tr("Insert table"));
 
+    actionFormatHr = new QAction(tr("&Horizontal ruler"), mainWindow);
+    actionFormatHr->setStatusTip(tr("Horizontal ruler"));
+
     menuFormat = qMenuBar->addMenu(tr("&Format"));
     menuFormat->addAction(actionFormatBold);
     menuFormat->addAction(actionFormatItalic);
     menuFormat->addAction(actionFormatCode);
     menuFormat->addAction(actionFormatStrikethrough);
-    menuFormat->addAction(actionFormatHighlight);
-    menuFormat->addAction(actionFormatSubscript);
-    menuFormat->addAction(actionFormatSuperscript);
     menuFormat->addSeparator();
     menuFormat->addAction(actionFormatListBullet);
     menuFormat->addAction(actionFormatListNumber);
     menuFormat->addSeparator();
     menuFormat->addAction(actionFormatCodeBlock);
     menuFormat->addAction(actionFormatBlockQuote);
+    menuFormat->addAction(actionFormatTable);
+    menuFormat->addAction(actionFormatHr);
     menuFormat->addSeparator();
     menuFormat->addAction(actionFormatLink);
     menuFormat->addAction(actionFormatImage);
-    menuFormat->addAction(actionFormatTable);
     menuFormat->setEnabled(false);
 
     // menu: Outline

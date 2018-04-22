@@ -160,6 +160,19 @@ public slots:
     void doActionCli();
     void doActionViewDistractionFree();
     void doActionViewFullscreen();
+    // format
+    void doActionFormatBold();
+    void doActionFormatItalic();
+    void doActionFormatCode();
+    void doActionFormatStrikethrough();
+    void doActionFormatListBullet();
+    void doActionFormatListNumber();
+    void doActionFormatCodeblock();
+    void doActionFormatBlockquote();
+    void doActionFormatLink();
+    void doActionFormatImage();
+    void doActionFormatTable();
+    void doActionFormatHr();
     // Outline
     void doActionOutlineNew();
     void doActionOutlineEdit();

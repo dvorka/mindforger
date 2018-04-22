@@ -110,9 +110,6 @@ public:
     QAction* actionFormatItalic;
     QAction* actionFormatStrikethrough;
     QAction* actionFormatCode;
-    QAction* actionFormatHighlight;
-    QAction* actionFormatSubscript;
-    QAction* actionFormatSuperscript;
     QAction* actionFormatCodeBlock;
     QAction* actionFormatBlockQuote;
     QAction* actionFormatListNumber;
@@ -120,6 +117,7 @@ public:
     QAction* actionFormatLink;
     QAction* actionFormatImage;
     QAction* actionFormatTable;
+    QAction* actionFormatHr;
 
     // menu: Outline
     QAction* actionOutlineNew;

@@ -501,6 +501,151 @@ void MainWindowPresenter::doActionViewFullscreen()
 {
 }
 
+void MainWindowPresenter::doActionFormatBold()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->wrapSelectedText("**");
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->wrapSelectedText("**");
+    }
+}
+
+void MainWindowPresenter::doActionFormatItalic()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->wrapSelectedText("_");
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->wrapSelectedText("_");
+    }
+}
+
+void MainWindowPresenter::doActionFormatCode()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->wrapSelectedText("`");
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->wrapSelectedText("`");
+    }
+}
+
+void MainWindowPresenter::doActionFormatStrikethrough()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->wrapSelectedText("~~");
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->wrapSelectedText("~~");
+    }
+}
+
+void MainWindowPresenter::doActionFormatListBullet()
+{
+    // IMPROVE ask for number of items using dialog
+    int count=3;
+    QString text{"\n"};
+    for(int i=0; i<count; i++) {
+        text += "* ...\n";
+    }
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text);
+    }
+}
+
+void MainWindowPresenter::doActionFormatListNumber()
+{
+    // IMPROVE ask for number of items using dialog
+    int count=3;
+    QString text{"\n"};
+    for(int i=1; i<=count; i++) {
+        text += QString::number(i);
+        text += ". ...\n";
+    }
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text);
+    }
+}
+
+void MainWindowPresenter::doActionFormatCodeblock()
+{
+    // IMPROVE ask for dialect
+    QString text{"\n```\n...\n```\n"};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text);
+    }
+
+}
+
+void MainWindowPresenter::doActionFormatBlockquote()
+{
+    // IMPROVE ask for number of items using dialog
+    QString text{"\n> .\n> .\n> .\n"};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text);
+    }
+}
+
+void MainWindowPresenter::doActionFormatLink()
+{
+    // IMPROVE dialog to specify link params
+    QString text{"[]()"};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false);
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false);
+    }
+}
+
+void MainWindowPresenter::doActionFormatImage()
+{
+    // IMPROVE dialog to specify image params
+    QString text{"![]()"};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false);
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false);
+    }
+}
+
+void MainWindowPresenter::doActionFormatTable()
+{
+    // IMPROVE ask for number of items using dialog
+    int count=3;
+    QString text{"\n . | . | .\n --- | --- | ---\n"};
+    for(int i=1; i<=count; i++) {
+        text += " . | . | .\n";
+    }
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text);
+    }
+}
+
+void MainWindowPresenter::doActionFormatHr()
+{
+    QString text{"\n---"};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text);
+    }
+}
+
 void MainWindowPresenter::doActionOutlineNew()
 {
     newOutlineDialog->show(mind->remind().getStencils(ResourceType::OUTLINE));

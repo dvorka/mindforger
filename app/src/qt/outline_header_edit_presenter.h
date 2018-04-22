@@ -51,6 +51,8 @@ public:
     OutlineHeaderEditPresenter &operator=(const OutlineHeaderEditPresenter&&) = delete;
     ~OutlineHeaderEditPresenter();
 
+    OutlineHeaderEditView* getView() { return view; }
+
     void setOutline(Outline* outline);
     Outline* getCurrentOutline() const { return currentOutline; }
     QString getSelectedText() const { return view->getSelectedText(); }

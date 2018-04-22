@@ -65,6 +65,20 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     // menu: edit
     // no binding needed - it's already bound in the editor ~ menu is rather a documentation
 
+    // menu: format
+    QObject::connect(view->actionFormatBold, SIGNAL(triggered()), mwp, SLOT(doActionFormatBold()));
+    QObject::connect(view->actionFormatItalic, SIGNAL(triggered()), mwp, SLOT(doActionFormatItalic()));
+    QObject::connect(view->actionFormatCode, SIGNAL(triggered()), mwp, SLOT(doActionFormatCode()));
+    QObject::connect(view->actionFormatStrikethrough, SIGNAL(triggered()), mwp, SLOT(doActionFormatStrikethrough()));
+    QObject::connect(view->actionFormatListBullet, SIGNAL(triggered()), mwp, SLOT(doActionFormatListBullet()));
+    QObject::connect(view->actionFormatListNumber, SIGNAL(triggered()), mwp, SLOT(doActionFormatListNumber()));
+    QObject::connect(view->actionFormatCodeBlock, SIGNAL(triggered()), mwp, SLOT(doActionFormatCodeblock()));
+    QObject::connect(view->actionFormatBlockQuote, SIGNAL(triggered()), mwp, SLOT(doActionFormatBlockquote()));
+    QObject::connect(view->actionFormatLink, SIGNAL(triggered()), mwp, SLOT(doActionFormatLink()));
+    QObject::connect(view->actionFormatImage, SIGNAL(triggered()), mwp, SLOT(doActionFormatImage()));
+    QObject::connect(view->actionFormatTable, SIGNAL(triggered()), mwp, SLOT(doActionFormatTable()));
+    QObject::connect(view->actionFormatHr, SIGNAL(triggered()), mwp, SLOT(doActionFormatHr()));
+
     // menu: Outline
     QObject::connect(view->actionOutlineNew, SIGNAL(triggered()), mwp, SLOT(doActionOutlineNew()));
     QObject::connect(view->actionOutlineEdit, SIGNAL(triggered()), mwp, SLOT(doActionOutlineEdit()));

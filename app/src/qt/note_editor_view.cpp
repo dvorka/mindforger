@@ -91,6 +91,48 @@ void NoteEditorView::createConnections()
         this, SLOT(performCompletion()));
 }
 
+void NoteEditorView::wrapSelectedText(const QString &tag)
+{
+    QTextCursor cursor = textCursor();
+    QTextDocument *doc = document();
+    int start = cursor.selectionStart();
+    int end = cursor.selectionEnd();
+    if (cursor.hasSelection() && doc->findBlock(start) == doc->findBlock(end)) {
+        cursor.beginEditBlock();
+        QString text = cursor.selectedText();
+        text.prepend(tag);
+        text.append(tag);
+        cursor.insertText(text);
+        cursor.endEditBlock();
+        cursor.setPosition(start + tag.length());
+        cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, end - start);
+        setTextCursor(cursor);
+    } else if (!cursor.hasSelection()) {
+        cursor.insertText(tag+tag);
+        cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, tag.length());
+        setTextCursor(cursor);
+    }
+
+    setFocus();
+}
+
+void NoteEditorView::insertMarkdownText(const QString &text, bool newLine)
+{
+    QTextCursor cursor = textCursor();
+    if(cursor.hasSelection()) {
+        cursor.clearSelection();
+    }
+    if(newLine) {
+        cursor.movePosition(QTextCursor::StartOfLine);
+        cursor.movePosition(QTextCursor::Down);
+    }
+    cursor.insertText(text);
+    cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, text.length());
+    setTextCursor(cursor);
+
+    setFocus();
+}
+
 void NoteEditorView::setShowLineNumbers(bool show)
 {
     showLineNumbers = show;
