@@ -25,6 +25,7 @@
 
 #include <gtest/gtest.h>
 
+#include "../test_gear.h"
 #include "../../src/representations/html/html_outline_representation.h"
 #include "../../src/mind/mind.h"
 #include "../../src/persistence/filesystem_persistence.h"
@@ -43,7 +44,8 @@ TEST(HtmlTestCase, Outline)
     config.setConfigFilePath("/tmp/cfg-htc-o.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
     m8r::Mind mind(config);
-    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology()};
+    m8r::DummyHtmlColors dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(),dummyColors};
     m8r::MarkdownOutlineRepresentation markdownRepresentation(mind.remind().getOntology());
     mind.learn();
     mind.think().get();
@@ -71,7 +73,8 @@ TEST(HtmlTestCase, Note)
     config.setConfigFilePath("/tmp/cfg-htc-n.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
     m8r::Mind mind(config);
-    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology()};
+    m8r::DummyHtmlColors dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(),dummyColors};
     m8r::MarkdownOutlineRepresentation markdownRepresentation(mind.remind().getOntology());
     mind.learn();
     mind.think().get();
@@ -94,7 +97,8 @@ TEST(HtmlTestCase, NoteLinks)
     config.setConfigFilePath("/tmp/cfg-antc-nl.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
     m8r::Mind mind(config);
-    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology()};
+    m8r::DummyHtmlColors dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(),dummyColors};
     mind.learn();
     mind.think().get();
 

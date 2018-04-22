@@ -224,5 +224,4 @@ void printAst(const vector<MarkdownAstNodeSection*>* ast)
     cout << endl << "End of AST";
 }
 
-} // namespace
-
+} // m8r namespace

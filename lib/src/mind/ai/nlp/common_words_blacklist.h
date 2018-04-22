@@ -39,7 +39,11 @@ public:
     bool findWord(std::string s) const {
         return wordBlacklist.findWord(s);
     }
+    void addWord(std::string word) {
+        wordBlacklist.addWord(word);
+    }
 };
 
-}
+} // m8r namespace
+
 #endif // M8R_COMMON_WORDS_BLACKLIST_H

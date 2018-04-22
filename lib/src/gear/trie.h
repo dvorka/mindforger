@@ -74,7 +74,7 @@ public:
     bool empty() const { return root->children().empty(); }
 
     void addWord(std::string s);
-    bool findWord(std::string s) const;
+    bool findWord(std::string& s) const;
     void deleteWord(std::string s);
 
 private:

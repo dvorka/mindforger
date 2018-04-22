@@ -136,7 +136,7 @@ TEST(AiNlpTestCase, BowOutline)
      */
 
     m8r::Lexicon lexicon{};
-    m8r::Trie wordBlaclist{};
+    m8r::CommonWordsBlacklist wordBlaclist{};
     wordBlaclist.addWord("text");
     m8r::MarkdownTokenizer tokenizer{lexicon, wordBlaclist};
     m8r::StringCharProvider chars{markdown};

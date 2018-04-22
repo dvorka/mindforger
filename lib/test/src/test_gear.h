@@ -23,8 +23,18 @@
 #include <map>
 
 #include "../../src/model/outline.h"
+#include "../../src/representations/html/html_outline_representation.h"
 
 namespace m8r {
+
+class DummyHtmlColors : public m8r::HtmlColorsRepresentation {
+private:
+    std::string textColor;
+    std::string backgroundColor;
+public:
+    virtual std::string& getHtmlTextColor() { return textColor; }
+    virtual std::string& getHtmlBackgroundColor() { return backgroundColor; }
+};
 
 void printOutlineNotes(Outline* o);
 void printLexemType(MarkdownLexemType type);

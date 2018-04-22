@@ -25,6 +25,7 @@
 
 #include <gtest/gtest.h>
 
+#include "../src/test_gear.h"
 #include "../../src/representations/html/html_outline_representation.h"
 #include "../../src/mind/mind.h"
 #include "../../src/persistence/filesystem_persistence.h"
@@ -44,7 +45,8 @@ TEST(HtmlBenchmark, DISABLED_Outline)
     config.setConfigFilePath("/tmp/cfg-hb-o.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
     m8r::Mind mind(config);
-    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology()};
+    m8r::DummyHtmlColors dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(),dummyColors};
     m8r::MarkdownOutlineRepresentation markdownRepresentation(mind.remind().getOntology());
     mind.think();
 

@@ -129,19 +129,19 @@ TEST(MindTestCase, LearnAndRememberMindForgerRepository) {
     string to{};
     string from{};
     from.assign(repositoryTemplate);
-    from += "/flat-nometa.md");
+    from += "/flat-nometa.md";
     to.assign(repositoryDir);
-    to += "/memory/flat-nometa.md");
+    to += "/memory/flat-nometa.md";
     m8r::copyFile(from,to);
     from.assign(repositoryTemplate);
-    from += "/no-metadata.md");
+    from += "/no-metadata.md";
     to.assign(repositoryDir);
-    to += "/memory/no-metadata.md");
+    to += "/memory/no-metadata.md";
     m8r::copyFile(from,to);
     from.assign(repositoryTemplate);
-    from += "/outline.md");
+    from += "/outline.md";
     to.assign(repositoryDir);
-    to += "/memory/outline.md");
+    to += "/memory/outline.md";
     m8r::copyFile(from,to);
 
     m8r::Configuration& config = m8r::Configuration::getInstance(); config.clear();
