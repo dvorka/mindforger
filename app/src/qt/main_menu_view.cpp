@@ -216,6 +216,32 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewDistractionFree);
     menuView->addAction(actionViewFullscreen);
 
+    // menu: edit
+
+    actionEditUndo= new QAction(tr("&Undo\tCtrl+Z"), mainWindow);
+    actionEditUndo->setStatusTip(tr("Undo"));
+
+    actionEditRedo= new QAction(tr("&Redo\tCtrl+Shift+Z"), mainWindow);
+    actionEditRedo->setStatusTip(tr("Redo"));
+
+    actionEditCut= new QAction(tr("Cu&t\tCtrl+X"), mainWindow);
+    actionEditCut->setStatusTip(tr("Cut"));
+
+    actionEditCopy= new QAction(tr("&Copy\tCtrl+C"), mainWindow);
+    actionEditCopy->setStatusTip(tr("Copy"));
+
+    actionEditPaste= new QAction(tr("&Paste\tCtrl+V"), mainWindow);
+    actionEditPaste->setStatusTip(tr("Paste"));
+
+    menuEdit = qMenuBar->addMenu(tr("&Edit"));
+    menuEdit->addAction(actionEditUndo);
+    menuEdit->addAction(actionEditRedo);
+    menuEdit->addSeparator();
+    menuEdit->addAction(actionEditCut);
+    menuEdit->addAction(actionEditCopy);
+    menuEdit->addAction(actionEditPaste);
+    menuEdit->setEnabled(false);
+
     // menu: format
 
     actionFormatBold = new QAction(tr("&Bold"), mainWindow);
@@ -239,23 +265,17 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatSuperscript = new QAction(tr("Superscript"), mainWindow);
     actionFormatSuperscript->setStatusTip(tr("Format text as superscript"));
 
-    // ---
-
     actionFormatListBullet = new QAction(tr("Bulleted List"), mainWindow);
     actionFormatListBullet->setStatusTip(tr("Format block as bulleted list"));
 
     actionFormatListNumber = new QAction(tr("Numbered List"), mainWindow);
     actionFormatListNumber->setStatusTip(tr("Format block as numbered list"));
 
-    // ---
-
     actionFormatCodeBlock = new QAction(tr("C&ode Block"), mainWindow);
     actionFormatCodeBlock->setStatusTip(tr("Format text block as source code"));
 
     actionFormatBlockQuote = new QAction(tr("Block &Quote"), mainWindow);
     actionFormatBlockQuote->setStatusTip(tr("Format text block as blockquote"));
-
-    // ---
 
     actionFormatLink = new QAction(tr("&Link"), mainWindow);
     actionFormatLink->setStatusTip(tr("Insert link to a document, image or file"));
@@ -451,6 +471,7 @@ void MainMenuView::showAllMenuItems()
     menuMind->setEnabled(true);    
     menuFind->setEnabled(true);    
     menuView->setEnabled(true);
+    menuEdit->setEnabled(true);
     menuOutline->setEnabled(true);
     actionOutlineEdit->setEnabled(true);
     actionOutlineClone->setEnabled(true);
@@ -471,12 +492,14 @@ void MainMenuView::showFacetOutlineList(bool repositoryMode)
     actionOutlineClone->setEnabled(false);
     actionOutlineHome->setEnabled(false);
     actionOutlineForget->setEnabled(false);
+    menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
     menuNote->setEnabled(false);
 
     if(!repositoryMode) {
         menuView->setEnabled(false);
         menuOutline->setEnabled(false);
+        menuEdit->setEnabled(false);
         menuFormat->setEnabled(false);
 
         actionFindOutlineByName->setEnabled(false);
@@ -488,11 +511,13 @@ void MainMenuView::showFacetOutlineView(bool repositoryMode)
 {
     showAllMenuItems();
 
+    menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
 
     if(!repositoryMode) {
         menuView->setEnabled(false);
         menuOutline->setEnabled(false);
+        menuEdit->setEnabled(false);
         menuFormat->setEnabled(false);
 
         actionFindOutlineByName->setEnabled(false);
@@ -507,6 +532,7 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
     if(!repositoryMode) {
         menuView->setEnabled(false);
         menuOutline->setEnabled(false);
+        menuEdit->setEnabled(false);
         menuFormat->setEnabled(false);
 
         actionFindOutlineByName->setEnabled(false);

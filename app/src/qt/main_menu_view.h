@@ -50,6 +50,7 @@ public:
     QMenu* menuMind;
     QMenu* menuFind;
     QMenu* menuView;
+    QMenu* menuEdit;
     QMenu* menuOutline;
     QMenu* menuNote;
     QMenu* menuFormat;
@@ -96,6 +97,13 @@ public:
     QAction* actionViewLimbo;
     QAction* actionViewDistractionFree;
     QAction* actionViewFullscreen;
+
+    // menu: Edit
+    QAction* actionEditUndo;
+    QAction* actionEditRedo;
+    QAction* actionEditCut;
+    QAction* actionEditCopy;
+    QAction* actionEditPaste;
 
     // menu: Format
     QAction* actionFormatBold;
