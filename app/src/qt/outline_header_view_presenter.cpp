@@ -50,7 +50,6 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
     currentOutline = outline;
 
     htmlRepresentation->toHeader(outline,&html);
-    MF_DEBUG("=== BEGIN HTML ===" << endl << html << endl << "=== END QHTML ===" << endl);
 
     view->setHtml(QString::fromStdString(html));
 

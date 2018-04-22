@@ -304,103 +304,110 @@ string* HtmlOutlineRepresentation::to(const Outline* outline, string* html)
 
 string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html)
 {
-    string htmlHeader{};
-    htmlHeader.reserve(1000);
+    if(!config.isUiHtmlTheme()) {
+        header(*html, nullptr);
+        string markdown{"# "};
+        markdown += outline->getName();
+        markdown += "\n";
+        markdown += outline->getOutlineDescriptorAsNote()->getDescriptionAsString();
+        html->append(markdown);
+        footer(*html);
+    } else {
+        string htmlHeader{};
+        htmlHeader.reserve(1000);
 
-    // table
-    htmlHeader = "<body>"; // body tag is later replaced in Discount generated HTML > must be present in the header
-    htmlHeader += "<table style='width: 100%; border-collapse: collapse; border: none;";
-    fgBgTextColorStyle(htmlHeader);
-    htmlHeader += "'>"
-            "<tr style='border-collapse: collapse; border: none;'>"
-            "<td style='border-collapse: collapse; border: none;'>"
-            "<h2>";
-    htmlHeader += outline->getName();
-    htmlHeader += "</h2>";
+        // table
+        htmlHeader =
+                "<body>" // body tag is later replaced in Discount generated HTML > must be present in the header
+                "<table style='width: 100%; border-collapse: collapse; border: none;'>"
+                "<tr style='border-collapse: collapse; border: none;'>"
+                "<td style='border-collapse: collapse; border: none;'>"
+                "<h2>";
+        htmlHeader += outline->getName();
+        htmlHeader += "</h2>";
 
-    // O type
-    outlineTypeToHtml(outline->getType(), htmlHeader);
-    htmlHeader += "&nbsp;";
+        // O type
+        outlineTypeToHtml(outline->getType(), htmlHeader);
 
-    // tags, reads/writes and timestamps
-    // IMPROVE show rs/ws/... only if it's MF repository (hide it otherwise) + configuration allows to hide it in all cases
-    outlineMetadataToHtml(outline, htmlHeader);
-    htmlHeader +=
-            "</td>"
-            "<td style='width: 50px; border-collapse: collapse; border: none;'>";
-    if(outline->getProgress()) {
-        htmlHeader += "<h1>";
-        htmlHeader += std::to_string(outline->getProgress());
-        htmlHeader += "%&nbsp;&nbsp;</h1>";
-    }
-    htmlHeader +=
-            "</td>"
-            "<td style='width: 50px; border-collapse: collapse; border: none;'>"
-            "<table style='font-size: 100%; border-collapse: collapse; border: none;'>"
-            "<tr style='border-collapse: collapse; border: none;'>";
-    if(outline->getImportance() || outline->getUrgency()) {
-        if(outline->getImportance() > 0) {
-            for(int i=0; i<=4; i++) {
-                htmlHeader += "<td style='border-collapse: collapse; border: none;'>";
-                if(outline->getImportance()>i) {
-                    htmlHeader += "&#9733;";
-                } else {
-                    htmlHeader += "&#9734;";
-                }
-                htmlHeader += "</td>";
-            }
-        } else {
-            for(int i=0; i<5; i++) {
-                htmlHeader +=
-                        "<td style='border-collapse: collapse; border: none;'>"
-                        "&#9734;"
-                        "</td>";
-            }
+        // tags, reads/writes and timestamps
+        // IMPROVE show rs/ws/... only if it's MF repository (hide it otherwise) + configuration allows to hide it in all cases
+        outlineMetadataToHtml(outline, htmlHeader);
+        htmlHeader +=
+                "</td>"
+                "<td style='width: 50px; border-collapse: collapse; border: none;'>";
+        if(outline->getProgress()) {
+            htmlHeader += "<h1>";
+            htmlHeader += std::to_string(outline->getProgress());
+            htmlHeader += "%&nbsp;&nbsp;</h1>";
         }
         htmlHeader +=
-                "</tr>"
+                "</td>"
+                "<td style='width: 50px; border-collapse: collapse; border: none;'>"
+                "<table style='font-size: 100%; border-collapse: collapse; border: none;'>"
                 "<tr style='border-collapse: collapse; border: none;'>";
-        if(outline->getUrgency()>0) {
-            for(int i=0; i<=4; i++) {
-                if(outline->getUrgency()>i) {
+        if(outline->getImportance() || outline->getUrgency()) {
+            if(outline->getImportance() > 0) {
+                for(int i=0; i<=4; i++) {
+                    htmlHeader += "<td style='border-collapse: collapse; border: none;'>";
+                    if(outline->getImportance()>i) {
+                        htmlHeader += "&#9733;";
+                    } else {
+                        htmlHeader += "&#9734;";
+                    }
+                    htmlHeader += "</td>";
+                }
+            } else {
+                for(int i=0; i<5; i++) {
                     htmlHeader +=
                             "<td style='border-collapse: collapse; border: none;'>"
-                            "&#x29D7;"
+                            "&#9734;"
                             "</td>";
-                } else {
+                }
+            }
+            htmlHeader +=
+                    "</tr>"
+                    "<tr style='border-collapse: collapse; border: none;'>";
+            if(outline->getUrgency()>0) {
+                for(int i=0; i<=4; i++) {
+                    if(outline->getUrgency()>i) {
+                        htmlHeader +=
+                                "<td style='border-collapse: collapse; border: none;'>"
+                                "&#x29D7;"
+                                "</td>";
+                    } else {
+                        htmlHeader +=
+                                "<td style='border-collapse: collapse; border: none;'>"
+                                "&#x29D6;"
+                                "</td>";
+                    }
+                }
+            } else {
+                for(int i=0; i<5; i++) {
                     htmlHeader +=
                             "<td style='border-collapse: collapse; border: none;'>"
                             "&#x29D6;"
                             "</td>";
                 }
             }
-        } else {
-            for(int i=0; i<5; i++) {
-                htmlHeader +=
-                        "<td style='border-collapse: collapse; border: none;'>"
-                        "&#x29D6;"
-                        "</td>";
-            }
         }
+        htmlHeader +=
+                "</tr></table>"
+                "</td>"
+                "</tr></table>";
+
+        // O tags
+        tagsToHtml(outline->getTags(), htmlHeader);
+        htmlHeader += "<br/>";
+
+        // HTML completion
+        string outlineMd{outline->getOutlineDescriptorAsNote()->getDescriptionAsString()};
+        to(&outlineMd, html);
+        // inject custom HTML header
+        html->replace(
+                    html->find("<body>"), // <body> element index
+                    6, // <body> element length (chars to be replaced)
+                    htmlHeader); // new string
     }
-    htmlHeader +=
-            "</tr></table>"
-            "</td>"
-            "</tr></table>";
-
-    // O tags
-    htmlHeader += "<br/>";
-    tagsToHtml(outline->getTags(), htmlHeader);
-    htmlHeader += "<br/>";
-
-    // HTML completion
-    string outlineMd{outline->getOutlineDescriptorAsNote()->getDescriptionAsString()};
-    to(&outlineMd, html);
-    // inject custom HTML header
-    html->replace(
-            html->find("<body>"), // <body> element index
-            6, // <body> element length (chars to be replaced)
-            htmlHeader); // new string
 
     // debug generated HTML
     MF_DEBUG("=== BEGIN HEADER HTML ===" << endl << *html << endl << "=== END HEADER HTML ===" << endl);
