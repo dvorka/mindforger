@@ -55,7 +55,6 @@ public:
     int getMinutes() const { return minuteSpin->value(); }
 
     bool isThreasholdSet() const { return enableCheck->isChecked(); }
-    // TODO get settings from arguments
     void show(bool e, int y=0, int m=0, int d=0, int h=0, int mm=0) {
         enableCheck->setChecked(e);
         enableDisable(e);

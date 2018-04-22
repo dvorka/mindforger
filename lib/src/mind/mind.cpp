@@ -30,6 +30,8 @@ Mind::Mind(Configuration &configuration)
     ai = new Ai{memory,*this};
     deleteWatermark = 0;
     activeProcesses = 0;
+
+    timeScopeAspect.setTimeScope(config.getTimeScope());
     memory.setTimeScope(&timeScopeAspect);
 
     this->mdConfigRepresentation
@@ -403,9 +405,9 @@ void Mind::findNoteByTags(const std::vector<const Tag*>& tags, std::vector<Note*
     UNUSED_ARG(result);
 }
 
-// IMPROVE PERF use dirty flag to avoid result-rebuilt
 const vector<Outline*>& Mind::getOutlines() const
 {
+    // IMPROVE PERF use dirty flag to avoid result-rebuilt
     static vector<Outline*> result{};
 
     if(timeScopeAspect.isEnabled()) {

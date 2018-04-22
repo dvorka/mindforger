@@ -102,7 +102,6 @@ void TimeScopeDialog::enableDisable(bool enable)
     daySpin->setEnabled(enable);
     hourSpin->setEnabled(enable);
     minuteSpin->setEnabled(enable);
-
 }
 
 } // m8r namespace

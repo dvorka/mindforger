@@ -906,17 +906,24 @@ void MainWindowPresenter::doActionMindTimeScope()
 
 void MainWindowPresenter::handleMindTimeScope()
 {
+    TimeScope& ts=mind->getTimeScopeAspect().getTimeScope();
     if(timeScopeDialog->isThreasholdSet()) {
-        TimeScope& ts=mind->getTimeScopeAspect().getTimeScope();
         ts.years=timeScopeDialog->getYears();
         ts.years=timeScopeDialog->getMonths();
         ts.months=timeScopeDialog->getMonths();
         ts.days=timeScopeDialog->getDays();
         ts.hours=timeScopeDialog->getHours();
         ts.minutes=timeScopeDialog->getMinutes();
+
+        ts.recalculateRelativeSecs();
     } else {
-        mind->getTimeScopeAspect().getTimeScope().reset();
+        ts.reset();
     }
+
+    // notify and persist changes
+    mind->getTimeScopeAspect().setTimeScope(ts);
+    config.setTimeScope(mind->getTimeScopeAspect().getTimeScope());
+    mdConfigRepresentation->save(config);
 
     // IMPROVE don't change view to Os, but refresh current one
     doActionViewOutlines();
