@@ -33,7 +33,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     this->view = view;
     this->mind = mind;
 
-    this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable());
+    this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
     this->notesTablePresenter = new NotesTablePresenter(view->getNotesTable());
     this->outlineViewPresenter = new OutlineViewPresenter(view->getOutlineView(), this);
     this->outlineHeaderViewPresenter = new OutlineHeaderViewPresenter(view->getOutlineHeaderView(), this);

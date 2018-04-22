@@ -26,8 +26,8 @@ using namespace std;
 
 namespace m8r {
 
-OutlineTreeModel::OutlineTreeModel(QObject *parent)
-    : QStandardItemModel(parent)
+OutlineTreeModel::OutlineTreeModel(QObject *parent, HtmlOutlineRepresentation* htmlRepresentation)
+    : QStandardItemModel(parent), htmlRepresentation(htmlRepresentation)
 {
     setColumnCount(5);
     setRowCount(0);
@@ -47,43 +47,44 @@ void OutlineTreeModel::removeAllRows()
     setHorizontalHeaderLabels(tableHeader);
 }
 
-void OutlineTreeModel::createNameText(QString& html, Note* note)
+void OutlineTreeModel::createNameText(string& html, Note* note)
 {
     for(auto depth=0; depth<note->getDepth(); depth++) {
-        html += QString::fromUtf8("&nbsp;&nbsp;&nbsp;&nbsp;");
+        html += "&nbsp;&nbsp;&nbsp;&nbsp;";
     }
-    html += QString::fromStdString(note->getName());
+    html += note->getName();
 
-    tagsToHtml(note->getTags(), html);
+    htmlRepresentation->tagsToHtml(note->getTags(), html);
     // IMPROVE make showing of type configurable
-    noteTypeToHtml(note->getType(), html);
+    htmlRepresentation->noteTypeToHtml(note->getType(), html);
 }
 
 void OutlineTreeModel::createRowFor(Note* note, QList<QStandardItem*>& rowItems)
 {
     // name
-    QString name{};
+    string name{};
+    name.reserve(200);
     createNameText(name, note);
-    QStandardItem* noteItem = new QStandardItem{name};
+    QStandardItem* noteItem = new QStandardItem{QString::fromStdString(name)};
     // TODO declare custom role
     noteItem->setData(QVariant::fromValue(note), Qt::UserRole + 1);
-    rowItems.append(noteItem);
+    rowItems += noteItem;
     // %
     QString s{};
     if(note->getProgress()) {
         s.clear();
         s += QString::number(note->getProgress());
         s += "%";
-        rowItems.append(new QStandardItem{s});
+        rowItems += new QStandardItem{s};
     } else {
-        rowItems.append(new QStandardItem{""});
+        rowItems += new QStandardItem{""};
     }
     // rd/wr
-    rowItems.append(new QStandardItem{QString::number(note->getReads())});
-    rowItems.append(new QStandardItem{QString::number(note->getRevision())});
+    rowItems += new QStandardItem{QString::number(note->getReads())};
+    rowItems += new QStandardItem{QString::number(note->getRevision())};
     // pretty
     s = note->getModifiedPretty().c_str();
-    rowItems.append(new QStandardItem{s});
+    rowItems += new QStandardItem{s};
 }
 
 
@@ -125,24 +126,24 @@ void OutlineTreeModel::refresh(Note* note, int row, bool set)
             item(row,0)->setData(QVariant::fromValue(note), Qt::UserRole + 1);
         }
 
-        QString s{};
+        string s{};
+        s.reserve(100);
         createNameText(s, note);
         // refresh content
-        item(row,0)->setText(s);
+        item(row,0)->setText(QString::fromStdString(s));
 
         if(note->getProgress()) {
             s.clear();
-            s += QString::number(note->getProgress());
+            s += std::to_string(note->getProgress());
             s += "%";
-            item(row,1)->setText(s);
+            item(row,1)->setText(QString::fromStdString(s));
         } else {
             item(row,1)->setText("");
         }
 
         item(row,2)->setText(QString::number(note->getReads()));
         item(row,3)->setText(QString::number(note->getRevision()));
-        s = note->getModifiedPretty().c_str();
-        item(row,4)->setText(s);
+        item(row,4)->setText(QString::fromStdString(note->getModifiedPretty().c_str()));
 
         QModelIndex from = createIndex(row, 0, item(row,0));
         QModelIndex to = createIndex(row, 3, item(row,3));
@@ -171,4 +172,4 @@ void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
     refresh(note, row);
 }
 
-}
+} // m8r namespace

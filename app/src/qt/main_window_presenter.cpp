@@ -32,7 +32,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     this->mdRepresentation
         = new MarkdownOutlineRepresentation{mind->ontology()};
     this->htmlRepresentation
-        = new HtmlOutlineRepresentation{mind->ontology()};
+        = new HtmlOutlineRepresentation{mind->ontology(),LookAndFeels::getInstance()};
     this->mdConfigRepresentation
         = new MarkdownConfigurationRepresentation{};
 
@@ -104,8 +104,8 @@ void MainWindowPresenter::showInitialView()
         if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
             if(config.getActiveRepository()->isGithubRepository()) {
                 string key{config.getActiveRepository()->getDir()};
-                key.append(FILE_PATH_SEPARATOR);
-                key.append("README.md");
+                key += FILE_PATH_SEPARATOR;
+                key += "README.md";
                 Outline* o = mind->remind().getOutline(key);
                 if(o) {
                     orloj->showFacetOutline(o);
@@ -125,7 +125,7 @@ void MainWindowPresenter::showInitialView()
         } else { // file
             // IMPROVE move this method to breadcrumps
             QString m{"/outlines/"};
-            m.append(QString::fromStdString((*mind->getOutlines().begin())->getName()));
+            m += QString::fromStdString((*mind->getOutlines().begin())->getName());
             view.getCli()->setBreadcrumbPath(m);
 
             orloj->showFacetOutline(*mind->getOutlines().begin());
@@ -324,7 +324,7 @@ void MainWindowPresenter::handleFindOutlineByName()
         // IMPROVE make this more efficient
         statusBar->showInfo(QString(tr("Outline "))+QString::fromStdString(findOutlineByNameDialog->getChoice()->getName()));
     } else {
-        statusBar->showInfo(QString(tr("Outline not found")+": ").append(findOutlineByNameDialog->getSearchedString()));
+        statusBar->showInfo(QString(tr("Outline not found")+": ") += findOutlineByNameDialog->getSearchedString());
     }
 }
 
@@ -381,7 +381,7 @@ void MainWindowPresenter::handleFindNoteByTag()
         // IMPROVE make this more efficient
         statusBar->showInfo(QString(tr("Note "))+QString::fromStdString(choice->getName()));
     } else {
-        statusBar->showInfo(QString(tr("Note not found")+": ").append(findNoteByNameDialog->getSearchedString()));
+        statusBar->showInfo(QString(tr("Note not found")+": ") += findNoteByNameDialog->getSearchedString());
     }
 }
 
@@ -409,7 +409,7 @@ void MainWindowPresenter::handleRefactorNoteToOutline()
             // IMPROVE make this more efficient .arg() + add Note's name
             statusBar->showInfo(QString(tr("Refactored Note to Outline '"))+QString::fromStdString(refactorNoteToOutlineDialog->getChoice()->getName())+"'...");
         } else {
-            statusBar->showInfo(QString(tr("Target Outline not found")+": ").append(refactorNoteToOutlineDialog->getSearchedString()));
+            statusBar->showInfo(QString(tr("Target Outline not found")+": ") += refactorNoteToOutlineDialog->getSearchedString());
         }
     } else {
         QMessageBox::critical(&view, tr("Refactor Note"), tr("Note to be refactored not specified!"));
@@ -448,7 +448,7 @@ void MainWindowPresenter::handleFindNoteByName()
         // IMPROVE make this more efficient
         statusBar->showInfo(QString(tr("Note "))+QString::fromStdString(choice->getName()));
     } else {
-        statusBar->showInfo(QString(tr("Note not found")+": ").append(findNoteByNameDialog->getSearchedString()));
+        statusBar->showInfo(QString(tr("Note not found")+": ") += findNoteByNameDialog->getSearchedString());
     }
 }
 

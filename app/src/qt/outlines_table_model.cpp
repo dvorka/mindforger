@@ -20,8 +20,10 @@
 
 namespace m8r {
 
-OutlinesTableModel::OutlinesTableModel(QObject* parent)
-    : QStandardItemModel(parent)
+using namespace std;
+
+OutlinesTableModel::OutlinesTableModel(QObject* parent, HtmlOutlineRepresentation* htmlRepresentation)
+    : QStandardItemModel(parent), htmlRepresentation(htmlRepresentation)
 {
     setColumnCount(5);
     setRowCount(0);
@@ -50,23 +52,28 @@ void OutlinesTableModel::addRow(Outline* outline)
     QList<QStandardItem*> items;
     QStandardItem* item;
 
-    QString html, tooltip;
+    string html{}, tooltip{};
+    html.reserve(500);
+    tooltip.reserve(500);
+
     if(outline->getName().size()) {
-        tooltip = QString(outline->getName().c_str());
-        html += tooltip;
+        tooltip = outline->getName();
+        html = tooltip;
     } else {
-        tooltip = QString::fromStdString(outline->getKey());
-        html = html.right(html.size()-html.lastIndexOf(QRegularExpression("/"))-1);
+        tooltip = outline->getKey();
+        // IMPROVE parse out file name
+        string dir{};
+        pathToDirectoryAndFile(tooltip, dir, html);
     }
-    tagsToHtml(outline->getTags(), html);
+    htmlRepresentation->tagsToHtml(outline->getTags(), html);
     // IMPROVE make showing of type  configurable
-    outlineTypeToHtml(outline->getType(), html);
+    htmlRepresentation->outlineTypeToHtml(outline->getType(), html);
     // item
-    item = new QStandardItem(html);
-    item->setToolTip(tooltip);
+    item = new QStandardItem(QString::fromStdString(html));
+    item->setToolTip(QString::fromStdString(tooltip));
     // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
     item->setData(QVariant::fromValue(outline));
-    items.append(item);
+    items += item;
 
     // IMPROVE refactor to methods
     QString s;
@@ -81,7 +88,7 @@ void OutlinesTableModel::addRow(Outline* outline)
             }
         }
     }
-    items.append(new QStandardItem(s));
+    items += new QStandardItem(s);
 
     s.clear();
     if(outline->getUrgency()>0) {
@@ -93,30 +100,30 @@ void OutlinesTableModel::addRow(Outline* outline)
             }
         }
     }
-    items.append(new QStandardItem(s));
+    items += new QStandardItem(s);
 
     s.clear();
     if(outline->getProgress() > 0) {
         s += QString::number(outline->getProgress());
         s += "%";
     }
-    items.append(new QStandardItem(s));
+    items += new QStandardItem(s);
 
     item = new QStandardItem();
     item->setData(QVariant::fromValue((unsigned)(outline->getNotesCount())), Qt::DisplayRole);
-    items.append(item);
+    items += item;
 
     item = new QStandardItem();
     item->setData(QVariant(outline->getReads()), Qt::DisplayRole);
-    items.append(item);
+    items += item;
 
     item = new QStandardItem();
     item->setData(QVariant(outline->getRevision()), Qt::DisplayRole);
-    items.append(item);
+    items += item;
 
     s.clear();
     s += outline->getModifiedPretty().c_str();
-    items.append(new QStandardItem(s));
+    items += new QStandardItem(s);
 
     appendRow(items);
 }

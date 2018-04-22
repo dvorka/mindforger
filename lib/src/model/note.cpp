@@ -233,7 +233,7 @@ void Note::setTags(const vector<const Tag*>* tags)
 }
 
 void Note::addName(const string& s) {
-    name.append(s);
+    name += s;
 }
 
 const NoteType* Note::getType() const
@@ -263,13 +263,13 @@ const vector<string*>& Note::getDescription() const
 }
 
 string Note::getDescriptionAsString() const
-{
-    // IMPROVE cache narrowed description for performance
+{    
+    // IMPROVE cache narrowed description for performance & return it by reference
     string result{};
     if(description.size()) {
         for(string *s:description) {
-            result.append(*s);
-            result.append("\n");
+            result += *s;
+            result += "\n";
         }
     }
     return result;

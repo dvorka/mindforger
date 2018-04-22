@@ -63,8 +63,8 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                         for(const string s:outlineNames) {
                             qs.clear();
                             // TODO commands are constants
-                            qs.append("find outline by name ");
-                            qs.append(QString::fromStdString(s));
+                            qs += "find outline by name ";
+                            qs += QString::fromStdString(s);
                             outlineNamesCompletion << qs;
                         }
                     }
@@ -115,7 +115,7 @@ void CliAndBreadcrumbsPresenter::executeCommand()
                 // TODO efficient
                 mainPresenter->getStatusBar()->showInfo(QString("Outline ")+QString::fromStdString(outlines->front()->getName()));
             } else {
-                mainPresenter->getStatusBar()->showInfo(QString("Outline not found: ").append(QString(name.c_str())));
+                mainPresenter->getStatusBar()->showInfo(QString("Outline not found: ") += QString(name.c_str()));
             }
             view->showBreadcrumb();
             return;

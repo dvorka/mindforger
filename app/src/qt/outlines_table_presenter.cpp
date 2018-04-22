@@ -22,10 +22,10 @@ using namespace std;
 
 namespace m8r {
 
-OutlinesTablePresenter::OutlinesTablePresenter(OutlinesTableView* view)
+OutlinesTablePresenter::OutlinesTablePresenter(OutlinesTableView* view, HtmlOutlineRepresentation* htmlRepresentation)
 {
     this->view = view;
-    this->model = new OutlinesTableModel(this);
+    this->model = new OutlinesTableModel(this, htmlRepresentation);
     this->view->setModel(this->model);
 
     // ensure HTML cells rendering

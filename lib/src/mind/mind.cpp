@@ -353,7 +353,7 @@ vector<Note*>* Mind::findNoteFts(const string& regexp, const bool ignoreCase, Ou
     if(ignoreCase) {
         stringToLower(regexp, r);
     } else {
-        r.append(regexp);
+        r += regexp;
     }
 
     if(scope) {

@@ -20,7 +20,10 @@
 
 namespace m8r {
 
+using namespace std;
+
 LookAndFeels::LookAndFeels()
+    : config(Configuration::getInstance())
 {
     themeNames << UI_THEME_DARK << UI_THEME_LIGHT << UI_THEME_BLACK;
 }
@@ -56,6 +59,7 @@ void LookAndFeels::setTheme(const QString& themeName)
 void LookAndFeels::setDarkTheme()
 {
     textColor = QString("#FFF");
+    backgroundColor =  QString("#353535");
 
     editorBackgroundColor = QString("#353535");
     editorLineNumbersForegroundColor = QString("#777777");
@@ -109,6 +113,7 @@ void LookAndFeels::setDarkTheme()
 void LookAndFeels::setLightTheme()
 {
     textColor = QString("#000");
+    backgroundColor = QString("#FFF");
 
     editorBackgroundColor = QString("#FFF");
     editorLineNumbersForegroundColor = QString("#BBBBBB");
@@ -154,6 +159,7 @@ void LookAndFeels::setLightTheme()
 void LookAndFeels::setBlackTheme()
 {
     textColor = QString("#FFF");
+    backgroundColor = QString("#000");
 
     editorBackgroundColor = QString("#000");
     editorLineNumbersForegroundColor = QString("#555555");
@@ -211,5 +217,52 @@ void LookAndFeels::setBlackTheme()
     mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #000000; border: 1px solid white; }");
     menuStylesheet = QString("QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px;}");
 }
+
+std::string& LookAndFeels::getHtmlTextColor()
+{
+    static string dark{"#000"}, light{"#FFF"};
+
+    if(config.isUiHtmlTheme()) {
+        if(config.getUiHtmlCssPath() == UI_HTML_THEME_CSS_LIGHT) {
+            // light CSS theme
+            return dark;
+        } else {
+            // dark CSS theme
+            return light;
+        }
+    } else {
+        if(config.getUiThemeName() == UI_THEME_LIGHT) {
+            // light RAW theme
+            return dark;
+        } else {
+            // dark RAW themes
+            return light;
+        }
+    }
+}
+
+std::string& LookAndFeels::getHtmlBackgroundColor()
+{
+    static string dark{"#353535"}, light{"#FFF"};
+
+    if(config.isUiHtmlTheme()) {
+        if(config.getUiHtmlCssPath() == UI_HTML_THEME_CSS_LIGHT) {
+            // light CSS theme
+            return light;
+        } else {
+            // dark CSS theme
+            return dark;
+        }
+    } else {
+        if(config.getUiThemeName() == UI_THEME_LIGHT) {
+            // light RAW theme
+            return light;
+        } else {
+            // dark RAW themes
+            return dark;
+        }
+    }
+}
+
 
 } // m8r namespace

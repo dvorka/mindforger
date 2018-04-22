@@ -19,9 +19,12 @@
 #ifndef M8RUI_OUTLINE_TREE_MODEL_H
 #define M8RUI_OUTLINE_TREE_MODEL_H
 
+#include <string>
+
 #include <QtWidgets>
 
 #include "../../lib/src/model/note.h"
+#include "../../lib/src/representations/html/html_outline_representation.h"
 
 #include "notes_table_model.h"
 #include "gear/qutils.h"
@@ -33,9 +36,11 @@ class OutlineTreeModel : public QStandardItemModel
     Q_OBJECT
 
 private:
+    HtmlOutlineRepresentation* htmlRepresentation;
     QList<QModelIndex> noselection;
+
 public:
-    OutlineTreeModel(QObject *parent);
+    OutlineTreeModel(QObject *parent, HtmlOutlineRepresentation* htmlRepresentation);
     OutlineTreeModel(const OutlineTreeModel&) = delete;
     OutlineTreeModel(const OutlineTreeModel&&) = delete;
     OutlineTreeModel &operator=(const OutlineTreeModel&) = delete;
@@ -50,7 +55,7 @@ public:
     void refresh(Note* note, QModelIndexList selection);
 
 private:
-    void createNameText(QString& name, Note* note);
+    void createNameText(std::string& name, Note* note);
     void createRowFor(Note* note, QList<QStandardItem*>& rowItems);
 };
 

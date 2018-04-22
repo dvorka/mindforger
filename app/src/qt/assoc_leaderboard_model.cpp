@@ -51,7 +51,7 @@ void AssocLeaderboardModel::addRow(Note* note, float associativity)
     QString html;
     html = QString(note->getName().c_str());
     html += " (";
-    html.append(QString::fromStdString(note->getOutline()->getName()));
+    html += QString::fromStdString(note->getOutline()->getName());
     html += ")";
 
     // item
@@ -59,7 +59,7 @@ void AssocLeaderboardModel::addRow(Note* note, float associativity)
     item->setToolTip(html);
     // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
     item->setData(QVariant::fromValue(note));
-    items.append(item);
+    items += item;
 
     html.clear();
     if(associativity>0.29) {
@@ -80,7 +80,7 @@ void AssocLeaderboardModel::addRow(Note* note, float associativity)
     if(associativity>0.29) {
         html += "</span>";
     }
-    items.append(new QStandardItem(html));
+    items += new QStandardItem(html);
 
     appendRow(items);
 }

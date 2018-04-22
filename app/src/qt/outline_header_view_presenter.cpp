@@ -30,7 +30,11 @@ OutlineHeaderViewPresenter::OutlineHeaderViewPresenter(OutlineHeaderView *view, 
     this->orloj = orloj;
 
     this->htmlRepresentation
-        = new HtmlOutlineRepresentation{orloj->getMind()->ontology()};
+        = orloj->getMainWindow()->getHtmlRepresentation();
+
+    // IMPORTANT: pre-allocate string using reserve() to ensure good append performance
+    html = string{};
+    html.reserve(10000);
 
     QObject::connect(
         view, SIGNAL(signalMouseDoubleClickEvent()),
@@ -45,87 +49,10 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
 {
     currentOutline = outline;
 
-    // TODO build HTML using Outline > QString build documented in QtDoc for QString
-    QString html(MF_HTML_HEAD);
-    html += QString::fromUtf8(" style='color: ");
-    html += LookAndFeels::getInstance().getTextColor();
-    html += QString::fromUtf8("; background-color: ");
-    html += LookAndFeels::getInstance().getEditorBackgroundColor();
-    html += QString::fromUtf8("; font-size: 90%;'>");
-    // table
-    html += QString::fromUtf8("<table width='100%'><tr>");
-    html += QString::fromUtf8("<td>");
-    html += QString::fromUtf8("<h2>");
-    html += QString::fromStdString(outline->getName());
-    html += QString::fromUtf8("</h2>");
-    outlineTypeToHtml(outline->getType(), html);
-    html += QString::fromUtf8("&nbsp;");
-    // IMPROVE show rs/ws/... only if it's MF repository (hide it otherwise) + configuration allows to hide it in all cases
-    outlineMetadataToHtml(outline, html);
-    html += QString::fromUtf8("</td>");
-    html += QString::fromUtf8("<td style='width: 50px;'>");
-    if(outline->getProgress()) {
-        html += QString::fromUtf8("<h1>");
-        html += QString::number(outline->getProgress());
-        html += QString::fromUtf8("%&nbsp;&nbsp;</h1>");
-    }
-    html += QString::fromUtf8("</td>");
-    html += QString::fromUtf8("<td style='width: 50px;'><table style='font-size: 100%;'><tr>");
-    if(outline->getImportance() || outline->getUrgency()) {
-        if(outline->getImportance() > 0) {
-            for(int i=0; i<=4; i++) {
-                html += QString::fromUtf8("<td>");
-                if(outline->getImportance()>i) {
-                    html += QChar(9733);
-                } else {
-                    html += QChar(9734);
-                }
-                html += QString::fromUtf8("</td>");
-            }
-        } else {
-            for(int i=0; i<5; i++) {
-                html += QString::fromUtf8("<td>");
-                html.append(QChar(9734));
-                html += QString::fromUtf8("</td>");
-            }
-        }
-        html += QString::fromUtf8("</tr>");
-        html += QString::fromUtf8("<tr>");
-        if(outline->getUrgency()>0) {
-            for(int i=0; i<=4; i++) {
-                if(outline->getUrgency()>i) {
-                    html += QString::fromUtf8("<td>");
-                    html += QChar(0x29D7);
-                    html += QString::fromUtf8("</td>");
-                } else {
-                    html += QString::fromUtf8("<td>");
-                    html += QChar(0x29D6);
-                    html += QString::fromUtf8("</td>");
-                }
-            }
-        } else {
-            for(int i=0; i<5; i++) {
-                html += QString::fromUtf8("<td>");
-                html.append(QChar(0x29D6));
-                html += QString::fromUtf8("</td>");
-            }
-        }
-    }
-    html += QString::fromUtf8("</tr></table>");
-    html += QString::fromUtf8("</td>");
-    html += QString::fromUtf8("</tr></table>");
+    htmlRepresentation->toHeader(outline,&html);
+    MF_DEBUG("=== BEGIN HTML ===" << endl << html << endl << "=== END QHTML ===" << endl);
 
-
-
-    html += QString::fromUtf8("<br/>");
-    tagsToHtml(outline->getTags(), html);
-
-    html += QString::fromUtf8("<pre>");
-    html += QString::fromStdString(outline->getDescriptionAsString());
-    html += QString::fromUtf8("</pre>");
-
-    html += QString::fromStdString(MF_HTML_TAIL);
-    view->setHtml(html);
+    view->setHtml(QString::fromStdString(html));
 
     // leaderboard
     std::vector<std::pair<Note*,float>> associatedNotesLeaderboard;

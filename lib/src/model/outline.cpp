@@ -907,9 +907,9 @@ string Outline::getPreambleAsString() const
     string result{};
     if(preamble.size()) {
         for(string *s:preamble) {
-            result.append(*s);
+            result += *s;
             // IMPROVE endl
-            result.append("\n");
+            result += "\n";
         }
     }
     return result;
@@ -938,8 +938,8 @@ string Outline::getDescriptionAsString() const
     string result{};
     if(description.size()) {
         for(string *s:description) {
-            result.append(*s);
-            result.append("\n");
+            result += *s;
+            result += "\n";
         }
     }
     return result;

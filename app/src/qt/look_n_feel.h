@@ -22,7 +22,7 @@
 #include <QtWidgets>
 #include <QSet>
 
-#include "../../lib/src/config/configuration.h"
+#include "../../lib/src/representations/html/html_outline_representation.h"
 
 namespace m8r {
 
@@ -33,7 +33,7 @@ namespace m8r {
  * components and widgets. Therefore passing of L&F instance to each and every
  * instance of the GUI object tree would be inefficient.
  */
-class LookAndFeels
+class LookAndFeels : public HtmlColorsRepresentation
 {
 public:
     static LookAndFeels& getInstance()
@@ -59,6 +59,7 @@ private:
     int fontPointSize;
 
 private:
+    Configuration& config;
     QApplication* mindforgerApplication;
 
     // menu
@@ -66,6 +67,7 @@ private:
 
     // viewer
     QString textColor;
+    QString backgroundColor;
 
     // editor
     QString editorBackgroundColor;
@@ -85,6 +87,10 @@ private:
     QColor editorHtmlAttrName;
     QColor editorHtmlAttrValue;
     QColor editorHtmlComment;
+
+    // HTML
+    QString htmlTextColor;
+    QString htmlBackgroundColor;
 
     // CLI
     QColor cliTextColor;
@@ -139,6 +145,11 @@ public:
     QColor& getEditorHtmlAttrValue() { return editorHtmlAttrValue; }
     QColor& getEditorHtmlComment() { return editorHtmlComment; }
 
+    // HTML
+    virtual std::string& getHtmlTextColor();
+    virtual std::string& getHtmlBackgroundColor();
+
+    // CLI
     const QColor& getCliTextColor() const { return cliTextColor; }
 };
 

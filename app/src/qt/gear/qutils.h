@@ -37,11 +37,5 @@ bool stringMatchByKeywords(const QString& keywords, const QString& s, bool caseS
 void timetToQDate(const time_t t, QDate& qdate);
 void qdateToTm(const QDate& qdate, struct tm& t);
 
-// HTML
-void tagsToHtml(const std::vector<const Tag*>* tags, QString& html);
-void outlineTypeToHtml(const OutlineType*, QString& html);
-void outlineMetadataToHtml(const Outline*, QString& html);
-void noteTypeToHtml(const NoteType* noteType, QString& html);
-
-}
+} // m8r namespace
 #endif // M8R_QUTILS_H

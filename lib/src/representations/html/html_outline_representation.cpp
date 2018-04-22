@@ -19,7 +19,6 @@
 #include "html_outline_representation.h"
 
 extern "C" {
-// IMPROVE this expects mkdio.h to be installed in the system - should I rather link Git submodule mkdio.h?
 #include "../../../../deps/discount/mkdio.h"
 }
 
@@ -27,8 +26,8 @@ using namespace std;
 
 namespace m8r {
 
-HtmlOutlineRepresentation::HtmlOutlineRepresentation(Ontology& ontology)
-    : config(Configuration::getInstance()), markdownRepresentation(ontology)
+HtmlOutlineRepresentation::HtmlOutlineRepresentation(Ontology& ontology, HtmlColorsRepresentation& lf)
+    : config(Configuration::getInstance()), lf(lf), markdownRepresentation(ontology)
 {
     lastMfOptions = discountOptions = 0;
 }
@@ -37,37 +36,112 @@ HtmlOutlineRepresentation::~HtmlOutlineRepresentation()
 {
 }
 
+void HtmlOutlineRepresentation::fgBgTextColorStyle(string& html)
+{
+    html += "color: ";
+    html += lf.getHtmlTextColor();
+    html += "; background-color: ";
+    html += lf.getHtmlBackgroundColor();
+    html += ";";
+}
+
+void HtmlOutlineRepresentation::outlineTypeToHtml(const OutlineType* outlineType, string& html)
+{
+    if(outlineType) {
+        html += "<span style='color: ";
+        html += outlineType->getColor().asHtml();
+        html += "; font-style: italic;'> ";
+        html += outlineType->getName();
+        html += " </span>";
+    }
+}
+
+
+void HtmlOutlineRepresentation::noteTypeToHtml(const NoteType* noteType,string& html)
+{
+    if(noteType) {
+        html += "&nbsp;&nbsp;<span style='color: ";
+        html += noteType->getColor().asHtml();
+        html += "; font-style: italic;'> ";
+        html += noteType->getName();
+
+        // TODO parent-child relationship rendering
+        html += " ";
+        html += "&#9670;"; // composition
+        //html += "&#9671;"; // aggregation
+        //html += "&#9651;"; // isa
+
+        html += " </span>";
+    }
+}
+
+void HtmlOutlineRepresentation::tagsToHtml(const vector<const Tag*>* tags, string& html)
+{
+    //text += "&nbsp;&nbsp;<table cellspacing='0' border='0' style='color: #ffffff; background-color: #00cc00; font-weight: normal;'><tr><td>urgent</td></tr></table>";
+    if(!tags->empty()) {
+        for(const Tag* t:*tags) {
+            if(!stringistring(string("none"), t->getName())) {
+                html += "&nbsp;&nbsp;<span style='color: #ffffff; background-color: ";
+                html += t->getColor().asHtml();
+                html += "; font-weight: normal;'> ";
+                html += t->getName();
+                html += "&nbsp;</span>";
+            }
+        }
+    }
+}
+
+void HtmlOutlineRepresentation::outlineMetadataToHtml(const Outline* outline, string& html)
+{
+    if(outline) {
+        html += "<span style='color: ";
+        html += outline->getType()->getColor().asHtml();
+        html += "; font-style: italic;' title='Last read on ";
+        html += datetimeToString(outline->getRead());
+        html += ", last write on ";
+        html += datetimeToString(outline->getModified());
+        html += "'> with ";
+        html += std::to_string(outline->getReads());
+        html += " reads and ";
+        html += std::to_string(outline->getRevision());
+        html += " writes</span>";
+    }
+}
+
 void HtmlOutlineRepresentation::header(string& html, string* basePath)
 {
     if(!config.isUiHtmlTheme()) {
-        // RAW THEME BACKGROUND
-        html.assign("<!DOCTYPE html>\n<html><body style='color: ");
-        if(config.getUiThemeName().find(UI_THEME_LIGHT) != string::npos) {
-            html.append("#000>");
-        } else {
-            html.append("#FFF");
-        }
-        html.append("'><pre>");
+        // RAW THEME
+        html.assign(
+                    "<!DOCTYPE html>\n"
+                    "<html>"
+                    "<body style='");
+        fgBgTextColorStyle(html);
+        html += "'><pre>";
     } else {
-        html.assign("<!DOCTYPE html>\n<html><head>");
+        // LIGHT/DARK HTML THEME
+        html.assign(
+            "<!DOCTYPE html>\n"
+            "<html>"
+            "<head>");
 #ifdef DO_M8F_DEBUG
-        html.append("\n");
+        html += "\n";
 #endif
 
         // RELATIVE URLS: html@base to ensure relative links/images resolution
         if(basePath) {
-            html.append("<base href=\"file://");
-            html.append(*basePath);
-            html.append("/\">");
+            html += "<base href=\"file://";
+            html += *basePath;
+            html += "/\">";
 #ifdef DO_M8F_DEBUG
-        html.append("\n");
+        html += "\n";
 #endif
         }
 
         // SCROLLING: scrolling bridge
-        html.append("<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); };</script>");
+        html += "<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); };</script>";
 #ifdef DO_M8F_DEBUG
-        html.append("\n");
+        html += "\n";
 #endif
 
         // MATH: MathJax.js
@@ -76,23 +150,23 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
         if(lastMfOptions&Configuration::MdToHtmlOption::MathSupport) {
             switch(config.getUiEnableMathInMd()) {
             case Configuration::JavaScriptLibSupport::ONLINE:
-                html.append("<script type=\"text/javascript\" src=\"https://cdn.mathjax.org/mathjax/2.7-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>");
+                html += "<script type=\"text/javascript\" src=\"https://cdn.mathjax.org/mathjax/2.7-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>";
 #ifdef DO_M8F_DEBUG
-                html.append("\n");
+                html += "\n";
 #endif
-                html.append("<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>");
+                html += "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>";
 #ifdef DO_M8F_DEBUG
-                html.append("\n");
+                html += "\n";
 #endif
                 break;
             case Configuration::JavaScriptLibSupport::OFFLINE:
-                html.append("<script type=\"text/javascript\" src=\"qrc:/js/mathjax.js\"></script>");
+                html += "<script type=\"text/javascript\" src=\"qrc:/js/mathjax.js\"></script>";
 #ifdef DO_M8F_DEBUG
-                html.append("\n");
+                html += "\n";
 #endif
-                html.append("<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>");
+                html += "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>";
 #ifdef DO_M8F_DEBUG
-                html.append("\n");
+                html += "\n";
 #endif
                 break;
             default:
@@ -107,15 +181,15 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
         if(lastMfOptions&Configuration::MdToHtmlOption::DiagramSupport) {
             switch(config.getUiEnableDiagramsInMd()) {
             case Configuration::JavaScriptLibSupport::ONLINE:
-                html.append("<script type=\"text/javascript\" src=\"https://mermaidjs.github.io/scripts/mermaid.min.js\"></script>");
+                html += "<script type=\"text/javascript\" src=\"https://mermaidjs.github.io/scripts/mermaid.min.js\"></script>";
 #ifdef DO_M8F_DEBUG
-                html.append("\n");
+                html += "\n";
 #endif
                 break;
             case Configuration::JavaScriptLibSupport::OFFLINE:
-                html.append("<script type=\"text/javascript\" src=\"qrc:/js/mermaid.js\"></script>");
+                html += "<script type=\"text/javascript\" src=\"qrc:/js/mermaid.js\"></script>";
 #ifdef DO_M8F_DEBUG
-                html.append("\n");
+                html += "\n";
 #endif
                 break;
             default:
@@ -125,38 +199,42 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
 
         // SYNTAX HIGHLIGHTING: offline Highlight.js (CME)
         if(lastMfOptions&Configuration::MdToHtmlOption::CodeHighlighting) {
-            html.append("<link rel=\"stylesheet\" href=\"qrc:/html-css/highlight.css\"/>");
+            html += "<link rel=\"stylesheet\" href=\"qrc:/html-css/highlight.css\"/>";
 #ifdef DO_M8F_DEBUG
-            html.append("\n");
+            html += "\n";
 #endif
-            html.append("<script type=\"text/javascript\" src=\"qrc:/js/highlight.js\"></script>");
+            html += "<script type=\"text/javascript\" src=\"qrc:/js/highlight.js\"></script>";
 #ifdef DO_M8F_DEBUG
-            html.append("\n");
+            html += "\n";
 #endif
-            html.append("<script type=\"text/javascript\">hljs.initHighlightingOnLoad();</script>");
+            html += "<script type=\"text/javascript\">hljs.initHighlightingOnLoad();</script>";
 #ifdef DO_M8F_DEBUG
-            html.append("\n");
+            html += "\n";
 #endif
         }
 
         // UI THEME CSS:
-        html.append("<link rel=\"stylesheet\" href=\"");
-        html.append(config.getUiHtmlCssPath());
-        html.append("\"/>");
+        html += "<link rel=\"stylesheet\" href=\"";
+        html += config.getUiHtmlCssPath();
+        html += "\"/>";
 #ifdef DO_M8F_DEBUG
-        html.append("\n");
+        html += "\n";
 #endif
 
-        html.append("</head><body>");
+        html +=
+            "</head>"
+            "<body>";
     }
 }
 
 void HtmlOutlineRepresentation::footer(string& html)
 {
     if(!config.isUiHtmlTheme()) {
-        html.append("</pre>");
+        html += "</pre>";
     }
-    html.append("</body></html>");
+    html +=
+        "</body>"
+        "</html>";
 }
 
 string* HtmlOutlineRepresentation::to(const string* markdown, string* html, string* basePath)
@@ -166,6 +244,7 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
         html->append(*markdown);
         footer(*html);
     } else {
+        // create HTML body using Discount first
         MMIOT* doc = nullptr;
         if(markdown->size() > 0) {
             // ensure MD ends with new line, otherwise there would be missing characters in output HTML
@@ -196,7 +275,6 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
             doc = mkd_string(markdown->c_str(), markdown->size(), discountOptions);
             mkd_compile(doc, discountOptions);
         }
-
         // TODO check if out is leak OR reused array
         char* body{};
         // compile AST to HTML string
@@ -210,7 +288,7 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
     }
 
     // debug generated HTML
-    MF_DEBUG("=== BEGIN HTML ===" << endl << *html << endl << "=== END HTML ===" << endl);
+    //MF_DEBUG("=== BEGIN HTML ===" << endl << *html << endl << "=== END HTML ===" << endl);
 
     return html;
 }
@@ -224,11 +302,102 @@ string* HtmlOutlineRepresentation::to(const Outline* outline, string* html)
     return html;
 }
 
-string* HtmlOutlineRepresentation::toHeader(const Outline* outline, string* html)
+string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html)
 {
-    string* markdown = markdownRepresentation.toHeader(outline);
-    to(markdown, html);
-    delete markdown;
+    string htmlHeader{};
+    htmlHeader.reserve(1000);
+
+    // table
+    htmlHeader = "<body>"; // body tag is later replaced in Discount generated HTML > must be present in the header
+    htmlHeader += "<table style='width: 100%; border-collapse: collapse; border: none;";
+    fgBgTextColorStyle(htmlHeader);
+    htmlHeader += "'>"
+            "<tr style='border-collapse: collapse; border: none;'>"
+            "<td style='border-collapse: collapse; border: none;'>"
+            "<h2>";
+    htmlHeader += outline->getName();
+    htmlHeader += "</h2>";
+
+    // O type
+    outlineTypeToHtml(outline->getType(), htmlHeader);
+    htmlHeader += "&nbsp;";
+
+    // tags, reads/writes and timestamps
+    // IMPROVE show rs/ws/... only if it's MF repository (hide it otherwise) + configuration allows to hide it in all cases
+    outlineMetadataToHtml(outline, htmlHeader);
+    htmlHeader +=
+            "</td>"
+            "<td style='width: 50px; border-collapse: collapse; border: none;'>";
+    if(outline->getProgress()) {
+        htmlHeader += "<h1>";
+        htmlHeader += std::to_string(outline->getProgress());
+        htmlHeader += "%&nbsp;&nbsp;</h1>";
+    }
+    htmlHeader +=
+            "</td>"
+            "<td style='width: 50px; border-collapse: collapse; border: none;'>"
+            "<table style='font-size: 100%; border-collapse: collapse; border: none;'>"
+            "<tr style='border-collapse: collapse; border: none;'>";
+    if(outline->getImportance() || outline->getUrgency()) {
+        if(outline->getImportance() > 0) {
+            for(int i=0; i<=4; i++) {
+                htmlHeader += "<td style='border-collapse: collapse; border: none;'>";
+                if(outline->getImportance()>i) {
+                    //htmlHeader += QChar(9733);
+                } else {
+                    //htmlHeader += QChar(9734);
+                }
+                htmlHeader += "</td>";
+            }
+        } else {
+            for(int i=0; i<5; i++) {
+                htmlHeader += "<td style='border-collapse: collapse; border: none;'>";
+                //htmlHeader += QChar(9734);
+                htmlHeader += "</td>";
+            }
+        }
+        htmlHeader +=
+                "</tr>"
+                "<tr style='border-collapse: collapse; border: none;'>";
+        if(outline->getUrgency()>0) {
+            for(int i=0; i<=4; i++) {
+                if(outline->getUrgency()>i) {
+                    htmlHeader += "<td style='border-collapse: collapse; border: none;'>";
+                    //htmlHeader += QChar(0x29D7);
+                    htmlHeader += "</td>";
+                } else {
+                    htmlHeader += "<td style='border-collapse: collapse; border: none;'>";
+                    //htmlHeader += QChar(0x29D6);
+                    htmlHeader += "</td>";
+                }
+            }
+        } else {
+            for(int i=0; i<5; i++) {
+                htmlHeader += "<td style='border-collapse: collapse; border: none;'>";
+                //htmlHeader += QChar(0x29D6);
+                htmlHeader += "</td>";
+            }
+        }
+    }
+    htmlHeader +=
+            "</tr></table>"
+            "</td>"
+            "</tr></table>";
+
+    // O tags
+    htmlHeader += "<br/>";
+    tagsToHtml(outline->getTags(), htmlHeader);
+    htmlHeader += "<br/>";
+
+    // HTML completion
+    string outlineMd{outline->getOutlineDescriptorAsNote()->getDescriptionAsString()};
+    to(&outlineMd, html);
+    // inject custom HTML header
+    html->replace(
+            html->find("<body>"), // <body> element index
+            6, // <body> element length (chars to be replaced)
+            htmlHeader); // new string
+
     return html;
 }
 

@@ -19,10 +19,12 @@
 #ifndef M8RUI_OUTLINES_TABLE_MODEL_H
 #define M8RUI_OUTLINES_TABLE_MODEL_H
 
+#include <string>
+
 #include <QtWidgets>
 
 #include "model_meta_definitions.h"
-#include "gear/qutils.h"
+#include "../../lib/src/representations/html/html_outline_representation.h"
 
 namespace m8r {
 
@@ -30,8 +32,11 @@ class OutlinesTableModel : public QStandardItemModel
 {
     Q_OBJECT
 
+private:
+    HtmlOutlineRepresentation* htmlRepresentation;
+
 public:
-    OutlinesTableModel(QObject* parent);
+    OutlinesTableModel(QObject* parent, HtmlOutlineRepresentation* htmlRepresentation);
 
     void removeAllRows();
     void addRow(Outline* outline);

@@ -25,12 +25,15 @@ using namespace std;
 namespace m8r {
 
 NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
-    : qHtml{}, // IMPROVE stack overflow if HTML too big?
-      config(Configuration::getInstance())
+    : config(Configuration::getInstance())
 {
     this->mind = orloj->getMind();
 
-    this->html = new string{};
+    // IMPORTANT: pre-allocate string using reserve() to ensure good append performance
+    html = string{};
+    html.reserve(10000);
+    qHtml = QString();
+    qHtml.reserve(10000);
 
     this->view = view;
     this->orloj = orloj;
@@ -58,30 +61,26 @@ void NoteViewPresenter::refresh(Note* note)
     note->incReads();
     this->currentNote = note;
 
-    // FTS or HTML
     if(!searchExpression.isEmpty()) {
-        // TODO HtmlBuilderClass
-        // header
-        qHtml = QString::fromUtf8("<html><body style='color: ");
-        qHtml += LookAndFeels::getInstance().getTextColor();
-        qHtml += QString::fromUtf8("'><pre>");
+        // FTS result HTML
+        html = "<html><body style='";
+        htmlRepresentation->fgBgTextColorStyle(html);
+        html += "'><pre>";
+        qHtml = QString::fromStdString(html);
+        markdownRepresentation->to(note, &html);
+        qHtml += QString::fromStdString(html);
+        qHtml += QString::fromStdString("</pre></body></html>");
 
-        // N
-        markdownRepresentation->to(note, html);
-        qHtml += QString::fromStdString(*html);
-
-        // highlight
+        // highlight matches
         QString highlighted = QString::fromStdString("<span style='background-color: red; color: white;'>");
         // IMPROVE instead of searched expression that MAY differ in CASE, here should be original string found in the haystack
         highlighted += searchExpression;
         highlighted += QString::fromStdString("</span>");
         qHtml.replace(searchExpression, highlighted, searchIgnoreCase?Qt::CaseInsensitive:Qt::CaseSensitive);
-
-        // footer
-        qHtml += QString::fromStdString("</pre></body></html>");
     } else {
-        htmlRepresentation->to(note, html);
-        qHtml= QString::fromStdString(*html);
+        // HTML
+        htmlRepresentation->to(note, &html);
+        qHtml= QString::fromStdString(html);
     }
 
     view->setHtml(qHtml);

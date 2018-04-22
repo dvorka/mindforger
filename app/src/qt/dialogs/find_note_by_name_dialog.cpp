@@ -46,9 +46,9 @@ void FindNoteByNameDialog::show(vector<Note*> notes)
         if(!scope) {
             for(Note* n:notes) {
                 string s{n->getName()};
-                s.append(" (");
-                s.append(n->getOutline()->getName());
-                s.append(")");
+                s += " (";
+                s += n->getOutline()->getName();
+                s += ")";
                 noteNames.push_back(s);
             }
         } else {

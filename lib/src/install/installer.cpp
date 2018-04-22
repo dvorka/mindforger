@@ -38,35 +38,35 @@ void Installer::createEmptyMindForgerRepository(const string& directory)
         }
         // create skeleton directories: ./memory ./mind ./limbo ./stencils/outlines|notes
         string path{};
-        path.append(directory);
-        path.append(FILE_PATH_SEPARATOR);
-        path.append(FILE_PATH_MEMORY);
+        path += directory;
+        path += FILE_PATH_SEPARATOR;
+        path += FILE_PATH_MEMORY;
         createDirectory(path);
 
         path.assign(directory);
-        path.append(FILE_PATH_SEPARATOR);
-        path.append(FILE_PATH_MIND);
+        path += FILE_PATH_SEPARATOR;
+        path += FILE_PATH_MIND;
         createDirectory(path);
 
         path.assign(directory);
-        path.append(FILE_PATH_SEPARATOR);
-        path.append(FILE_PATH_LIMBO);
+        path += FILE_PATH_SEPARATOR;
+        path += FILE_PATH_LIMBO;
         createDirectory(path);
 
         path.assign(directory);
-        path.append(FILE_PATH_SEPARATOR);
-        path.append(FILE_PATH_STENCILS);
+        path += FILE_PATH_SEPARATOR;
+        path += FILE_PATH_STENCILS;
         createDirectory(path);
 
-        path.append(FILE_PATH_SEPARATOR);
-        path.append(FILE_PATH_OUTLINES);
+        path += FILE_PATH_SEPARATOR;
+        path += FILE_PATH_OUTLINES;
         createDirectory(path);
 
         path.assign(directory);
-        path.append(FILE_PATH_SEPARATOR);
-        path.append(FILE_PATH_STENCILS);
-        path.append(FILE_PATH_SEPARATOR);
-        path.append(FILE_PATH_NOTES);
+        path += FILE_PATH_SEPARATOR;
+        path += FILE_PATH_STENCILS;
+        path += FILE_PATH_SEPARATOR;
+        path += FILE_PATH_NOTES;
         createDirectory(path);
     }
     // IMPROVE else
@@ -80,4 +80,4 @@ void Installer::createDirectory(const string& path) {
     }
 }
 
-}
+} // m8r namespace

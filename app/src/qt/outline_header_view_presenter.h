@@ -39,6 +39,8 @@ private:
     // IMPROVE to model
     Outline* currentOutline;
 
+    std::string html;
+
     OutlineHeaderView* view;
     OrlojPresenter* orloj;
     HtmlOutlineRepresentation* htmlRepresentation;

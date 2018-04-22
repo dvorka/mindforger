@@ -36,7 +36,7 @@ class NoteViewPresenter : public QObject
     Q_OBJECT
 
 private:
-    std::string* html;
+    std::string html;
     QString qHtml;
 
     Configuration& config;

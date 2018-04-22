@@ -34,9 +34,9 @@ void StatusBarView::showInfo(const QString& message) const
 {
     // IMPROVE set style sheet - code below causes SIGSEGV (lookAndFeel nullptr)
     QString style;
-    style.append("color: ");
-    style.append(lookAndFeel.getTextColor());
-    style.append(";");
+    style += "color: ";
+    style += lookAndFeel.getTextColor();
+    style += ";";
     statusBar->setStyleSheet(style);
 
     statusBar->showMessage(message);

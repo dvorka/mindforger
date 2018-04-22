@@ -125,7 +125,7 @@ vector<pair<Note*,float>>* AiAaWeightedFts::assessNotesWithFallback(const string
     if(ignoreCase) {
         stringToLower(regexp, r);
     } else {
-        r.append(regexp);
+        r += regexp;
     }
     r = MarkdownTokenizer::stripFrontBackNonAlpha(r);
     if(r.size()) words.push_back(r);

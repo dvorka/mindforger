@@ -36,4 +36,4 @@ OutlineHeaderView::~OutlineHeaderView()
 {
 }
 
-}
+} // m8r namespace

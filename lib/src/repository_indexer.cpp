@@ -71,20 +71,20 @@ void RepositoryIndexer::index(Repository* repository)
              &&
            repository->getMode() == Repository::RepositoryMode::REPOSITORY
         ) {
-            memoryDirectory.append(FILE_PATH_SEPARATOR);
-            memoryDirectory.append(FILE_PATH_MEMORY);
+            memoryDirectory += FILE_PATH_SEPARATOR;
+            memoryDirectory += FILE_PATH_MEMORY;
 
             outlineStencilsDirectory.assign(repository->getDir());
-            outlineStencilsDirectory.append(FILE_PATH_SEPARATOR);
-            outlineStencilsDirectory.append(FILE_PATH_STENCILS);
-            outlineStencilsDirectory.append(FILE_PATH_SEPARATOR);
-            outlineStencilsDirectory.append(FILE_PATH_OUTLINES);
+            outlineStencilsDirectory += FILE_PATH_SEPARATOR;
+            outlineStencilsDirectory += FILE_PATH_STENCILS;
+            outlineStencilsDirectory += FILE_PATH_SEPARATOR;
+            outlineStencilsDirectory += FILE_PATH_OUTLINES;
 
             noteStencilsDirectory.assign(repository->getDir());
-            noteStencilsDirectory.append(FILE_PATH_SEPARATOR);
-            noteStencilsDirectory.append(FILE_PATH_STENCILS);
-            noteStencilsDirectory.append(FILE_PATH_SEPARATOR);
-            noteStencilsDirectory.append(FILE_PATH_NOTES);
+            noteStencilsDirectory += FILE_PATH_SEPARATOR;
+            noteStencilsDirectory += FILE_PATH_STENCILS;
+            noteStencilsDirectory += FILE_PATH_SEPARATOR;
+            noteStencilsDirectory += FILE_PATH_NOTES;
         } else {
             outlineStencilsDirectory.clear();
             noteStencilsDirectory.clear();
@@ -133,8 +133,8 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
                         }
                         //MF_DEBUG("\nDIVE> " << directory.c_str() << "//" << entry->d_name);
                         path.assign(directory);
-                        path.append(FILE_PATH_SEPARATOR);
-                        path.append(entry->d_name);
+                        path += FILE_PATH_SEPARATOR;
+                        path += entry->d_name;
 
                         updateIndexMemory(path);
                     } else {
@@ -221,9 +221,9 @@ bool RepositoryIndexer::isMindForgerRepository(const string& directory)
     }
 
     string path{};
-    path.append(directory);
-    path.append(FILE_PATH_SEPARATOR);
-    path.append(FILE_PATH_MEMORY);
+    path += directory;
+    path += FILE_PATH_SEPARATOR;
+    path += FILE_PATH_MEMORY;
     if(!isDirectoryOrFileExists(path.c_str())) {
         return false;
     }
@@ -241,12 +241,12 @@ Repository* RepositoryIndexer::getRepositoryForPath(const std::string& path)
                 Repository* r = new Repository(path, Repository::RepositoryType::MARKDOWN);
 
                 string p{path};
-                p.append(FILE_PATH_SEPARATOR);
-                p.append("README.md");
+                p += FILE_PATH_SEPARATOR;
+                p += "README.md";
                 if(isDirectoryOrFileExists(p.c_str())) {
                     p.assign(path);
-                    p.append(FILE_PATH_SEPARATOR);
-                    p.append(".git");
+                    p += FILE_PATH_SEPARATOR;
+                    p += ".git";
                     if(isDirectoryOrFileExists(p.c_str())) {
                         r->setGithubRepository();
                     }
@@ -266,5 +266,4 @@ Repository* RepositoryIndexer::getRepositoryForPath(const std::string& path)
     }
 }
 
-} /* namespace */
-
+} // m8r namespace

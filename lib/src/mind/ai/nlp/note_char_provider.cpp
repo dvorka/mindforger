@@ -26,7 +26,7 @@ NoteCharProvider::NoteCharProvider(Note* note, char delimiter)
     // N description (split in lines) streaming was complicated (check) and therefe slow - narrowing is faster
     s.assign(note->getName());
     s += delimiter;
-    s.append(note->getDescriptionAsString());
+    s += note->getDescriptionAsString();
 
     p = new StringCharProvider{s};
 }

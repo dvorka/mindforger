@@ -36,8 +36,8 @@ Configuration::Configuration()
     char *home = getenv(ENV_VAR_HOME);
     userHomePath = string{home};
     configFilePath.assign(userHomePath);
-    configFilePath.append(FILE_PATH_SEPARATOR);
-    configFilePath.append(FILENAME_M8R_CONFIGURATION);
+    configFilePath += FILE_PATH_SEPARATOR;
+    configFilePath += FILENAME_M8R_CONFIGURATION;
 
     clear();
 }
@@ -151,12 +151,12 @@ void Configuration::setActiveRepository(Repository* repository)
             activeRepository = repository;
 
             memoryPath.clear();
-            memoryPath.append(activeRepository->getDir());
+            memoryPath += activeRepository->getDir();
             memoryPath+=FILE_PATH_SEPARATOR;
             memoryPath+=FILE_PATH_MEMORY;
 
             limboPath.clear();
-            limboPath.append(activeRepository->getDir());
+            limboPath += activeRepository->getDir();
             limboPath+=FILE_PATH_SEPARATOR;
             limboPath+=FILE_PATH_LIMBO;
         } else {
@@ -171,8 +171,8 @@ void Configuration::findOrCreateDefaultRepository()
 {
     if(!activeRepository || activeRepository->getDir().empty()) {
         string defaultRepositoryPath{userHomePath};
-        defaultRepositoryPath.append(FILE_PATH_SEPARATOR);
-        defaultRepositoryPath.append(DIRNAME_M8R_REPOSITORY);
+        defaultRepositoryPath += FILE_PATH_SEPARATOR;
+        defaultRepositoryPath += DIRNAME_M8R_REPOSITORY;
         MF_DEBUG("Checking for default repository existence: " << defaultRepositoryPath << endl);
         if(isDirectoryOrFileExists(defaultRepositoryPath.c_str())) {
             setActiveRepository(addRepository(RepositoryIndexer::getRepositoryForPath(defaultRepositoryPath)));
@@ -199,4 +199,4 @@ const char* Configuration::getEditorFromEnv()
     return editor;
 }
 
-} // namespace
+} // m8r namespace

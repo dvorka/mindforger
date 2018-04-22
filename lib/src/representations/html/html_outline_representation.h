@@ -20,21 +20,24 @@
 #define M8R_HTML_OUTLINE_REPRESENTATION_H_
 
 #include <string>
+#include <vector>
 
 #include "../../model/note.h"
 #include "../markdown/markdown_outline_representation.h"
 
 namespace m8r {
 
-constexpr const auto MF_HTML_HEAD =
-   "<!DOCTYPE html>"
-   "<html>"
-   " <head></head>"
-   " <body";
-
-constexpr const auto MF_HTML_TAIL =
-   " </body>"
-   "</html>";
+/**
+ * @brief The HTML colors representation.
+ *
+ * Interface that provides colors for themed HTML rendering.
+ */
+class HtmlColorsRepresentation
+{
+public:
+    virtual std::string& getHtmlTextColor() = 0;
+    virtual std::string& getHtmlBackgroundColor() = 0;
+};
 
 /**
  * @brief HTML Outline representation.
@@ -44,7 +47,13 @@ constexpr const auto MF_HTML_TAIL =
 class HtmlOutlineRepresentation
 {
 private:
+    // Performance hints:
+    //  - += is ~2x faster than append() (depends on cpp lib implementation)
+    //  - pre-allocation of the string using reserver() is critical to avoid slow re-allocations
+    //  - IMPROVE consider caching of re-used HTML snippets
+
     Configuration& config;
+    HtmlColorsRepresentation& lf;
     MarkdownOutlineRepresentation markdownRepresentation;
 
     /**
@@ -56,7 +65,7 @@ private:
     unsigned int discountOptions;
 
 public:
-    explicit HtmlOutlineRepresentation(Ontology& ontology);
+    explicit HtmlOutlineRepresentation(Ontology& ontology, HtmlColorsRepresentation& lf);
     HtmlOutlineRepresentation(const HtmlOutlineRepresentation&) = delete;
     HtmlOutlineRepresentation(const HtmlOutlineRepresentation&&) = delete;
     HtmlOutlineRepresentation &operator=(const HtmlOutlineRepresentation&) = delete;
@@ -66,8 +75,17 @@ public:
     std::string* to(const std::string* markdown, std::string* html, std::string* basePath=nullptr);
 
     std::string* to(const Outline* outline, std::string* html);
-    std::string* toHeader(const Outline* outline, std::string* html);
+    std::string* toHeader(Outline* outline, std::string* html);
     std::string* to(const Note* note, std::string* html);
+
+    /**
+     * @brief Append "color: 0x...; background-color: 0x...;"
+     */
+    void fgBgTextColorStyle(std::string& html);
+    void outlineTypeToHtml(const OutlineType* outlineType, std::string& html);
+    void noteTypeToHtml(const NoteType* noteType, std::string& html);
+    void tagsToHtml(const std::vector<const Tag*>* tags, std::string& html);
+    void outlineMetadataToHtml(const Outline* outline, std::string& html);
 
 private:
     void header(std::string& html, std::string* basePath);

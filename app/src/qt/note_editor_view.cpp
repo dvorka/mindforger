@@ -118,7 +118,7 @@ QString NoteEditorView::getRelevantWords() const
             }
             for(int i=c; i<t.size(); i++) {
                 if(t[i]==' ') break;
-                result.append(t[i]);
+                result += t[i];
             }
         }
     }
@@ -266,14 +266,14 @@ void NoteEditorView::highlightCurrentLine()
         selection.format.setProperty(QTextFormat::FullWidthSelection, true);
         selection.cursor = textCursor();
         selection.cursor.clearSelection();
-        extraSelections.append(selection);
+        extraSelections += selection;
 
         // IMPROVE if line number changed
         if(isVisible()) {
             QString m{"    "};
-            m.append(QString::number(textCursor().blockNumber()));
-            m.append(":");
-            m.append(QString::number(textCursor().positionInBlock()));
+            m += QString::number(textCursor().blockNumber());
+            m += ":";
+            m += QString::number(textCursor().positionInBlock());
             statusBar->showInfo(m);
         }
     }

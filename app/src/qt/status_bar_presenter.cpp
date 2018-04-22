@@ -53,53 +53,53 @@ void StatusBarPresenter::showMindStatistics()
     // use locale to: 1000 > 1,000
     status.clear();
 
-    status.append(" ");
+    status += " ";
     switch(Configuration::getInstance().getMindState()) {
     case Configuration::MindState::THINKING:
-        status.append("Thinking");
+        status += "Thinking";
         break;
     case Configuration::MindState::DREAMING:
-        status.append("Dreaming");
+        status += "Dreaming";
         break;
     case Configuration::MindState::SLEEPING:
-        status.append("Sleeping");
+        status += "Sleeping";
         break;
     }
-    status.append("    ");
+    status += "    ";
 
     switch(Configuration::getInstance().getActiveRepository()->getType()) {
     case Repository::RepositoryType::MINDFORGER:
-        status.append("MF");
+        status += "MF";
         break;
     case Repository::RepositoryType::MARKDOWN:
-        status.append("MD");
+        status += "MD";
         break;
     }
     switch(Configuration::getInstance().getActiveRepository()->getMode()) {
     case Repository::RepositoryMode::REPOSITORY:
-        status.append(" repository    ");
+        status += " repository    ";
         break;
     case Repository::RepositoryMode::FILE:
-        status.append(" file    ");
+        status += " file    ";
         break;
     }
 
     status += cLocale.toString(mind->remind().getOutlinesCount());
-    status.append(" outlines    ");
+    status += " outlines    ";
     status += cLocale.toString(mind->remind().getNotesCount());
-    status.append(" notes    ");
+    status += " notes    ";
     status += cLocale.toString(mind->getTriplesCount());
-    status.append(" triples    ");
+    status += " triples    ";
     status += cLocale.toString(mind->remind().getOutlineMarkdownsSize());
-    status.append(" bytes    ");
+    status += " bytes    ";
     if(mind->isTimeScopeEnabled()) {
-        status.append("scope:");
-        status.append(mind->getTimeScopeAsString().c_str());
-        status.append("    ");
+        status += "scope:";
+        status += mind->getTimeScopeAsString().c_str();
+        status += "    ";
     }
 
 #ifdef DO_M8F_DEBUG
-    status.append("dw:");
+    status += "dw:";
     status += cLocale.toString(mind->getDeleteWatermark());
 #endif
 

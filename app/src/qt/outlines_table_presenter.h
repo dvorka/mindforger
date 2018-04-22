@@ -21,6 +21,8 @@
 
 #include <QtWidgets>
 
+#include "../../lib/src/representations/html/html_outline_representation.h"
+
 #include "outlines_table_view.h"
 #include "outlines_table_model.h"
 #include "html_delegate.h"
@@ -36,7 +38,7 @@ private:
     OutlinesTableModel* model;
 
 public:
-    OutlinesTablePresenter(OutlinesTableView* view);
+    OutlinesTablePresenter(OutlinesTableView* view, HtmlOutlineRepresentation* htmlRepresentation);
     OutlinesTablePresenter(const OutlinesTablePresenter&) = delete;
     OutlinesTablePresenter(const OutlinesTablePresenter&&) = delete;
     OutlinesTablePresenter &operator=(const OutlinesTablePresenter&) = delete;

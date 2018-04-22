@@ -26,7 +26,7 @@ OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, MainWindowPres
     : QObject(parent)
 {
     this->view = view;
-    this->model = new OutlineTreeModel{view};
+    this->model = new OutlineTreeModel{view, mwp->getHtmlRepresentation()};
     this->view->setModel(this->model);
     this->mind = mwp->getMind();
 
