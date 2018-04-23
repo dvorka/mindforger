@@ -17,10 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-# ubuntu-make-distro.sh [ubuntu version] [mindforger version] [change description]
-#   - ./ubuntu-make-distro.sh raring 1.9.5 "Fixed #25."
-#   - this script to be run from ./launchpad or other dir that allows:
-#     ../git/mindforger
+# See:
+# 
+#  http://packaging.ubuntu.com/html/packaging-new-software.html
+#
 
 if [ -e "../.git" ]
 then
@@ -158,7 +158,7 @@ function releaseForParticularUbuntuVersion() {
     
     # 6) build debs
     echo -e "\n# source & binary debs  ######################################"
-    # build BINARY? deb package
+    # build BINARY? deb package (us uc tells that no GPG signing is needed)
     bzr builddeb -- -us -uc
     # build SIGNED source deb package
     bzr builddeb --source
