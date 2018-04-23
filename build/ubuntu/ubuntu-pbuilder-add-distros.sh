@@ -17,11 +17,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-for DISTRO in precise quantal saucy trusty utopic xenial
+# https://wiki.ubuntu.com/Releases
+# old: precise quantal saucy precise utopic vivid wily yakkety
+# current: trusty xenial artful 
+for DISTRO in trusty xenial artful
 do
-
-sudo pbuilder --create ${DISTRO}
-
+    sudo pbuilder --create ${DISTRO}
+    rm -vf ~/pbuilder/${DISTRO}-base.tgz
+    cp /var/cache/pbuilder/base.tgz ~/pbuilder/${DISTRO}-base.tgz
 done
 
 # eof

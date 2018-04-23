@@ -59,12 +59,12 @@ function checkoutMindforger() {
 
     # copy NEW project files to Bazaar directory
     cp -rvf ${HHSRC}/* ${HHSRC}/*.*  .
-    cd ..
 
     # prune MindForger project files: tests, *.o/... build files, ...
-    # TODO
-    # TODO
-    # TODO
+    make clean
+    rm -rvf build clean.sh clean ./app/mindforger ./lib/libmindforger.a
+
+    cd ..
 }
 
 # ############################################################################
@@ -134,16 +134,16 @@ function releaseForParticularUbuntuVersion() {
     cd ..
     mv mindforger ${HH}
     cd ${HH}
+    # qt version MUST be specified as it CANNOT be configured by installing
+    # qt5-default package: Debian control file does NOT allow virtual packages
+    # like this qt5-default. Instead debian/rules file exports env var w/ Qt choice
     qmake mindforger.pro
     
     # 5) add new version to LOCAL Bazaar
     echo -e "\n# bazaar add & commit  #######################################"
     bzr add .
-    # TODO
-    # TODO
-    # TODO
     # IMPORTANT: commit UPLOADs branch to server
-    #bzr commit -m "Update for ${HH} at ${NOW}."
+    bzr commit -m "Update for ${HH} at ${NOW}."
 
     # 5) create tarball ~ .tgz archive w/ source and required Debian cfg files
     createTarball
@@ -175,18 +175,18 @@ function releaseForParticularUbuntuVersion() {
     # END
     pbuilder-dist ${UBUNTUVERSION} build ${HHRELEASE}.dsc
     
-exit 0
-    
     echo -e "\n# bzr push .deb to Launchpad #################################"
     # from buildarea/ to ./dist
     cd ../${HH}
     echo "Before bzr push: " `pwd`
-    bzr push lp:~ultradvorka/+junk/mindforger-package
-    #bzr push lp:~ultradvorka/mindforger/mindforger
+    bzr push lp:~ultradvorka/+junk/mindforger
     cd ..
     echo "Before dput push: " `pwd`
     # recently added /ppa to fix the path and package rejections
-    dput ppa:ultradvorka/ppa ${HHRELEASE}_source.changes    
+    # MF PPA w/ 64b build only
+    dput ppa:ultradvorka/productivity ${HHRELEASE}_source.changes
+    # HSTR PPA w/ 64b 32b and ARM builds
+    #dput ppa:ultradvorka/ppa ${HHRELEASE}_source.changes
 }
 
 # ############################################################################
@@ -195,11 +195,12 @@ exit 0
 
 export ARG_BAZAAR_MSG="Experimental packaging."
 export ARG_MAJOR_VERSION=0.7.
-export ARG_MINOR_VERSION=1 # minor version is icremented for every Ubuntu version
+export ARG_MINOR_VERSION=2 # minor version is icremented for every Ubuntu version
 
-# Ubuntu version: precise quantal saucy precise utopic / trusty vivid wily xenial yakkety 
 # https://wiki.ubuntu.com/Releases
-for UBUNTU_VERSION in trusty
+# old: precise quantal saucy precise utopic vivid wily yakkety
+# current: trusty xenial artful 
+for UBUNTU_VERSION in xenial
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
