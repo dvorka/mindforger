@@ -130,12 +130,14 @@ function releaseForParticularUbuntuVersion() {
     createChangelog ./debian/changelog
 
     # 4) Qt: generate makefile using qmake
+    echo -e "\n# qmake ######################################################"
     cd ..
     mv mindforger ${HH}
     cd ${HH}
     qmake mindforger.pro
     
     # 5) add new version to LOCAL Bazaar
+    echo -e "\n# bazaar add & commit  #######################################"
     bzr add .
     # TODO
     # TODO
@@ -145,44 +147,46 @@ function releaseForParticularUbuntuVersion() {
 
     # 5) create tarball ~ .tgz archive w/ source and required Debian cfg files
     createTarball
+
+    # x) start GPG agent if it's NOT running
+    if [ -e "${HOME}/.gnupg/S.gpg-agent" ]
+    then
+	echo "OK: GPG agent running."
+    else
+	gpg-agent --daemon
+    fi    
     
-    # 6) build deb
+    # 6) build debs
+    echo -e "\n# source & binary debs  ######################################"
+    # build BINARY? deb package
     bzr builddeb -- -us -uc
-    # build source package
+    # build SIGNED source deb package
     bzr builddeb --source
-    exit 0
-    cd ../build-area
 
-
-
-    # TODO
-    # TODO
-    # TODO
-
-
-    
-    echo -e "\n_ mindforger pbuilder-dist build  _______________________________________________\n"
+    # 7) build it on CLEAN system w/o dependecies
+    echo -e "\n# clean build ~ pbuilder  ####################################"
+    cd ../build-area    
     # IMPORTANT pbuilder's caches in /var and /home MUST be on same physical drive
+    # BEGIN
     export PBUILDFOLDER=/tmp/mindforger-tmp
     rm -rvf ${PBUILDFOLDER}
     mkdir -p ${PBUILDFOLDER}
     cp -rvf ~/pbuilder/*.tgz ${PBUILDFOLDER}
     # END
     pbuilder-dist ${UBUNTUVERSION} build ${HHRELEASE}.dsc
-
-    # push .deb to Launchpad ########################################################
-
+    
+exit 0
+    
+    echo -e "\n# bzr push .deb to Launchpad #################################"
     # from buildarea/ to ./dist
     cd ../${HH}
-
     echo "Before bzr push: " `pwd`
     bzr push lp:~ultradvorka/+junk/mindforger-package
     #bzr push lp:~ultradvorka/mindforger/mindforger
     cd ..
     echo "Before dput push: " `pwd`
     # recently added /ppa to fix the path and package rejections
-    dput ppa:ultradvorka/ppa ${HHRELEASE}_source.changes
-    
+    dput ppa:ultradvorka/ppa ${HHRELEASE}_source.changes    
 }
 
 # ############################################################################
@@ -193,9 +197,9 @@ export ARG_BAZAAR_MSG="Experimental packaging."
 export ARG_MAJOR_VERSION=0.7.
 export ARG_MINOR_VERSION=1 # minor version is icremented for every Ubuntu version
 
-# Ubuntu version: precise quantal saucy precise utopic / trusty vivid wily xenial yakkety artful
+# Ubuntu version: precise quantal saucy precise utopic / trusty vivid wily xenial yakkety 
 # https://wiki.ubuntu.com/Releases
-for UBUNTU_VERSION in xenial
+for UBUNTU_VERSION in trusty
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
