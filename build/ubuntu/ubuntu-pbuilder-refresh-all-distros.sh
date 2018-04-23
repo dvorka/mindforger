@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-for DISTRO in precise quantal saucy trusty utopic
+for DISTRO in precise quantal saucy trusty utopic xenial
 do
 
 sudo pbuilder --create ${DISTRO}

@@ -18,7 +18,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # boostrap new OR refresh distribution base for pbuilder
-export DISTRO=yakkety
+export DISTRO=xenial
 
 sudo pbuilder --create $DISTRO
 rm -vf ~/pbuilder/${DISTRO}-base.tgz

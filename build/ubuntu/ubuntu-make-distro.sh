@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# MindForger thinking notebook
+# MindForger knowledge management tool
 #
 # Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 #
@@ -11,7 +11,7 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
@@ -19,64 +19,72 @@
 
 # ubuntu-make-distro.sh [ubuntu version] [mindforger version] [change description]
 #   - ./ubuntu-make-distro.sh raring 1.9.5 "Fixed #25."
-#   - this script to be run from a directory that allows cd ../git/mindforger
+#   - this script to be run from ./launchpad or other dir that allows:
+#     ../git/mindforger
 
-## https://wiki.ubuntu.com/Releases
-export UBUNTUVERSION=$1
-#export UBUNTUVERSION=precise
-#export UBUNTUVERSION=quantal
-#export UBUNTUVERSION=saucy
-#export UBUNTUVERSION=trusty
-#export UBUNTUVERSION=utopic
-#export UBUNTUVERSION=xenial
-#export UBUNTUVERSION=yakkety
-export HHVERSION=$2
-export HHBZRMSG=$3
+if [ -e "../.git" ]
+then
+  echo "This script must NOT be run from Git repository - run it e.g. from ~/p/mindforger/launchpad instead"
+  exit 1
+fi
 
-export HHRDONLYGIT=/home/dvorka/p/mindforger/git/mindforger
-export BUILDROOT=/tmp/mindforger-launchpad
-export HHSRC=${BUILDROOT}/git/mindforger
-export NOW=`date +%Y-%m-%d--%H-%M-%S`
-export HH=mindforger_${HHVERSION}
-export HHFULLVERSION=${HHVERSION}-0ubuntu1
-export HHRELEASE=mindforger_${HHFULLVERSION}
-export HHBUILD=${BUILDROOT}/mindforger-${NOW}
+# ############################################################################
+# # UNUSED Init MindForger #
+# ############################################################################
 
-# Prepare source code copy and stripe it
-function prepareSourceCode() {
-  mkdir -p ${BUILDDIR}/git
-  cp -vrf ${HHRDONLYGIT} ${BUILDDIR}/git || exit 2
-  rm -vrf ${BUILDDIR}/git/mindforger/.git || exit 3
+function initMindforger() {
+  cp -rvf ${HHSRC} .
+  cd ./mindforger/dist && ./1-dist.sh && rm -vrf ../debian && cd ../..
+  cd ${1}
+  mv mindforger ${HH}
+  tar zcf ${HH}.tgz ${HH}
+  rm -rvf ${HH}
+  bzr dh-make -v mindforger ${HHVERSION} ${HH}.tgz
 }
 
-# Checkout MindForger from bazaar and make MindForger 
+# ############################################################################
+# # Checkout MindForger from bazaar and make it #
+# ############################################################################
+
 function checkoutMindforger() {
-  # Create new branch: bzr init && bzr push lp:~ultradvorka/+junk/mindforger-package
-  bzr checkout lp:~ultradvorka/+junk/mindforger-package
-  #bzr checkout lp:~ultradvorka/mindforger/mindforger
-  mv mindforger-package ${HH}
-  cd ${HH}
-  mv .bzr ..
-  # TODO update
-  rm -rvf debian dist man src LICENSE *.am *.md *.ac auto*.*
-  mv ../.bzr .
-  cp -rvf ${HHSRC}/* ${HHSRC}/*.*  .
-  cd ..
-  mv -v ${HH} mindforger
-  # TODO remove - Makefile is there
-  cd ./mindforger/dist && ./1-dist.sh && cd ../..
+    export HHSRC=$2
+    # Create new branch: bzr init && bzr push lp:~ultradvorka/+junk/mindforger
+    bzr checkout lp:~ultradvorka/+junk/mindforger
+
+    # delete OLD files from Bazaar directory
+    cd mindforger
+    mv .bzr ..
+    rm -rvf app build deps lib man LICENSE *.md
+    mv ../.bzr .
+
+    # copy NEW project files to Bazaar directory
+    cp -rvf ${HHSRC}/* ${HHSRC}/*.*  .
+    cd ..
+
+    # prune MindForger project files: tests, *.o/... build files, ...
+    # TODO
+    # TODO
+    # TODO
 }
+
+# ############################################################################
+# # Build .deb for Ubuntu #
+# ############################################################################
 
 function createChangelog() {
   export MYTS=`date "+%a, %d %b %Y %H:%M:%S"`
   echo "Changelog timestamp: ${MYTS}"
-  echo -e "mindforger (${HHFULLVERSION}) ${UBUNTUVERSION}; urgency=low" > $1
-  echo -e "\n" >> $1
-  echo -e "  * ${HHBZRMSG}" >> $1
-  echo -e "\n" >> $1
-  echo -e " -- Martin Dvorak (Dvorka) <martin.dvorak@mindforger.com>  ${MYTS} +0100" >> $1
-  echo -e "\n" >> $1
+  echo "mindforger (${HHFULLVERSION}) ${UBUNTUVERSION}; urgency=low" > $1
+  echo "" >> $1
+  echo "  * ${HHBZRMSG}" >> $1
+  echo "" >> $1
+  echo " -- Martin Dvorak (Dvorka) <martin.dvorak@mindforger.com>  ${MYTS} +0100" >> $1
+  echo "" >> $1
 }
+
+# ############################################################################
+# # Create tarball #
+# ############################################################################
 
 function createTarball() {
   cd ..
@@ -89,79 +97,109 @@ function createTarball() {
   cd ../${HH}
 }
 
-# main() ###########################################################################
+# ############################################################################
+# # Release for *ONE* particular Ubuntu release #
+# ############################################################################
 
-if [ -e "../../.git" ]
-then
-  echo "Error: This script MUST NOT be run from Git repository - run it e.g. from /tmp/mindforger-launchpad instead"
-  exit 1
-fi
-if [ "$#" -ne 3 ]; then
-  echo "Error: Illegal number of parameters: ${#} (must be 4)"
-  exit 2
-fi
+function releaseForParticularUbuntuVersion() {
+    export SCRIPTHOME=`pwd`
+    export UBUNTUVERSION=$1
+    export HHVERSION=$2
+    export HHBZRMSG=$3
+    export HHFULLVERSION=${HHVERSION}-0ubuntu1
+    export HH=mindforger_${HHVERSION}
+    export HHRELEASE=mindforger_${HHFULLVERSION}
+    #export HHSRC=/home/dvorka/p/mindforger/git/mindforger
+    export HHSRC=/home/dvorka/p/mindforger/launchpad/EXPERIMENTS/mindforger
+    export NOW=`date +%Y-%m-%d--%H-%M-%S`
+    export HHBUILD=mindforger-${NOW}
 
-prepareSourceCode
+    # 1) clean up
+    echo -e "\n# Cleanup ####################################################"
+    rm -rvf *.*~ ./debian
 
-# STOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP
-exit 0
+    # 2) checkout MindForger to work directory
+    echo -e "\n# Checkout MindForger from Bazaar ############################"
+    mkdir ${HHBUILD}
+    cd ${HHBUILD}
+    checkoutMindforger ${HH} ${HHSRC}
+
+    # 3) prepare Debian resources (changelog, descriptor, ...)
+    echo -e "\n# Building deb ###############################################"
+    cd mindforger && cp -rvf ${HHSRC}/build/ubuntu/debian .
+    createChangelog ./debian/changelog
+
+    # 4) Qt: generate makefile using qmake
+    cd ..
+    mv mindforger ${HH}
+    cd ${HH}
+    qmake mindforger.pro
+    
+    # 5) add new version to LOCAL Bazaar
+    bzr add .
+    # TODO
+    # TODO
+    # TODO
+    # IMPORTANT: commit UPLOADs branch to server
+    #bzr commit -m "Update for ${HH} at ${NOW}."
+
+    # 5) create tarball ~ .tgz archive w/ source and required Debian cfg files
+    createTarball
+    
+    # 6) build deb
+    bzr builddeb -- -us -uc
+    # build source package
+    bzr builddeb --source
+    exit 0
+    cd ../build-area
 
 
 
+    # TODO
+    # TODO
+    # TODO
 
 
-# TODO RM: rm -rvf *.*~ ./debian
+    
+    echo -e "\n_ mindforger pbuilder-dist build  _______________________________________________\n"
+    # IMPORTANT pbuilder's caches in /var and /home MUST be on same physical drive
+    export PBUILDFOLDER=/tmp/mindforger-tmp
+    rm -rvf ${PBUILDFOLDER}
+    mkdir -p ${PBUILDFOLDER}
+    cp -rvf ~/pbuilder/*.tgz ${PBUILDFOLDER}
+    # END
+    pbuilder-dist ${UBUNTUVERSION} build ${HHRELEASE}.dsc
 
-mkdir ${HHBUILD} && cd ${HHBUILD} || exit 4
-checkoutMindforger `pwd`
+    # push .deb to Launchpad ########################################################
 
-cd mindforger/dist
+    # from buildarea/ to ./dist
+    cd ../${HH}
 
-# build .deb for Ubuntu #############################################################
+    echo "Before bzr push: " `pwd`
+    bzr push lp:~ultradvorka/+junk/mindforger-package
+    #bzr push lp:~ultradvorka/mindforger/mindforger
+    cd ..
+    echo "Before dput push: " `pwd`
+    # recently added /ppa to fix the path and package rejections
+    dput ppa:ultradvorka/ppa ${HHRELEASE}_source.changes
+    
+}
 
-export SCRIPTHOME=`pwd`
+# ############################################################################
+# # Main #
+# ############################################################################
 
+export ARG_BAZAAR_MSG="Experimental packaging."
+export ARG_MAJOR_VERSION=0.7.
+export ARG_MINOR_VERSION=1 # minor version is icremented for every Ubuntu version
 
-echo -e "\n_ mindforger deb build  _______________________________________________\n"
-
-rm -rvf ../debian
-cp -rvf ${HHSRC}/debian ..
-
-createChangelog ../debian/changelog
-
-cd ../..
-mv mindforger ${HH}
-cd ${HH}
-bzr add .
-bzr commit -m "Update for ${HH} at ${NOW}."
-
-createTarball
-
-bzr builddeb -- -us -uc
-bzr builddeb -S
-cd ../build-area
-
-
-echo -e "\n_ mindforger pbuilder-dist build  _______________________________________________\n"
-# BEGIN: bug workaround - pbuilder's caches in /var and /home must be on same physical drive
-export PBUILDFOLDER=/tmp/mindforger-tmp
-rm -rvf ${PBUILDFOLDER}
-mkdir -p ${PBUILDFOLDER}
-cp -rvf ~/pbuilder/*.tgz ${PBUILDFOLDER}
-# END
-pbuilder-dist ${UBUNTUVERSION} build ${HHRELEASE}.dsc
-
-# push .deb to Launchpad ########################################################
-
-# from buildarea/ to ./dist
-cd ../${HH}
-
-echo "Before bzr push: " `pwd`
-bzr push lp:~ultradvorka/+junk/mindforger-package
-#bzr push lp:~ultradvorka/mindforger/mindforger
-cd ..
-echo "Before dput push: " `pwd`
-# recently added /ppa to fix the path and package rejections
-dput ppa:ultradvorka/ppa ${HHRELEASE}_source.changes
+# Ubuntu version: precise quantal saucy precise utopic / trusty vivid wily xenial yakkety artful
+# https://wiki.ubuntu.com/Releases
+for UBUNTU_VERSION in xenial
+do
+    echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
+    releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
+    MINOR=`expr $MINOR + 1`
+done
 
 # eof
