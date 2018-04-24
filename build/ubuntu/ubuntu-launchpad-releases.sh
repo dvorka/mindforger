@@ -137,6 +137,7 @@ function releaseForParticularUbuntuVersion() {
     # qt version MUST be specified as it CANNOT be configured by installing
     # qt5-default package: Debian control file does NOT allow virtual packages
     # like this qt5-default. Instead debian/rules file exports env var w/ Qt choice
+    #   .pro file is also extended to have 'make install' target
     qmake mindforger.pro
     
     # 5) add new version to LOCAL Bazaar
@@ -195,7 +196,7 @@ function releaseForParticularUbuntuVersion() {
 
 export ARG_BAZAAR_MSG="Experimental packaging."
 export ARG_MAJOR_VERSION=0.7.
-export ARG_MINOR_VERSION=2 # minor version is icremented for every Ubuntu version
+export ARG_MINOR_VERSION=3 # minor version is icremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety

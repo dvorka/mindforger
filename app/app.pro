@@ -196,4 +196,12 @@ TRANSLATIONS = \
 RESOURCES += \
     ./mf-resources.qrc
 
+# ########################################
+# Linux installation: make install
+# ########################################
+
+binfile.files += mindforger
+binfile.path = /usr/bin/
+INSTALLS += binfile
+
 # eof
