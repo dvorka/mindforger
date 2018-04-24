@@ -403,7 +403,9 @@ string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html)
 
         // HTML completion
         string outlineMd{outline->getOutlineDescriptorAsNote()->getDescriptionAsString()};
-        to(&outlineMd, html);
+        string path, file;
+        pathToDirectoryAndFile(outline->getKey(), path, file);
+        to(&outlineMd, html, &path);
         // inject custom HTML header
         html->replace(
                     html->find("<body>"), // <body> element index
