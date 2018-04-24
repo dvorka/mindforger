@@ -56,4 +56,27 @@ SUBDIRS = deps lib app
 lib.depends = deps
 app.depends = lib
 
+# Linux installation: make install
+#unix:configfiles.extra = chmod +x data/config/mindforger/scripts/*; make clean; mv -f mindforger mind
+#configfiles.files += data/config/*
+#configfiles.path = /usr/share/
+binfile.files += app/mindforger
+binfile.path = /usr/bin/
+docfiles.files += doc/*
+docfiles.path = /usr/share/doc/mindforger
+manfiles.files += man/*
+manfiles.path = /usr/share/man/man1/
+iconfiles.files += icons/*
+iconfiles.path = /usr/share/icons/mindforger
+shortcutfiles.files += build/ubuntu/gnome-shell/mindforger.desktop
+shortcutfiles.files += build/ubuntu/gnome-shell/mindforger-icon.png
+shortcutfiles.path = /usr/share/applications/
+
+#INSTALLS += configfiles
+INSTALLS += docfiles
+INSTALLS += manfiles
+INSTALLS += iconfiles
+INSTALLS += shortcutfiles
+INSTALLS += binfile
+
 # eof
