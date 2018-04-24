@@ -61,8 +61,10 @@ function checkoutMindforger() {
     cp -rvf ${HHSRC}/* ${HHSRC}/*.*  .
 
     # prune MindForger project files: tests, *.o/... build files, ...
-    make clean
-    rm -rvf build clean.sh clean ./app/mindforger ./lib/libmindforger.a
+    echo -e "\n# Cleanup de GitRepo ########################################"
+    rm -vrf ./.git ./app/mindforger ./build
+    find . -type f \( -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" \) | while read F; do rm -vf $F; done
+    # ? delete Makefiles
 
     cd ..
 }
@@ -196,7 +198,7 @@ function releaseForParticularUbuntuVersion() {
 
 export ARG_BAZAAR_MSG="Experimental packaging."
 export ARG_MAJOR_VERSION=0.7.
-export ARG_MINOR_VERSION=3 # minor version is icremented for every Ubuntu version
+export ARG_MINOR_VERSION=6 # minor version is icremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety
