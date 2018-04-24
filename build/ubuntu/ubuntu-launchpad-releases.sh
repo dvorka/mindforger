@@ -17,9 +17,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+# Method:
+#   upstream tarball > source deb > binary deb
+#
 # See:
-# 
-#  http://packaging.ubuntu.com/html/packaging-new-software.html
+#   Beginners guide:
+#     http://packaging.ubuntu.com/html/packaging-new-software.html
+#   Debian maintainers guide:
+#     https://www.debian.org/doc/manuals/maint-guide/index.en.html
+#     https://www.debian.org/doc/manuals/debmake-doc/index.en.html
+#   Debian formal doc:
+#     https://www.debian.org/doc/debian-policy/
 #
 
 if [ -e "../.git" ]
@@ -27,20 +35,6 @@ then
   echo "This script must NOT be run from Git repository - run it e.g. from ~/p/mindforger/launchpad instead"
   exit 1
 fi
-
-# ############################################################################
-# # UNUSED Init MindForger #
-# ############################################################################
-
-function initMindforger() {
-  cp -rvf ${HHSRC} .
-  cd ./mindforger/dist && ./1-dist.sh && rm -vrf ../debian && cd ../..
-  cd ${1}
-  mv mindforger ${HH}
-  tar zcf ${HH}.tgz ${HH}
-  rm -rvf ${HH}
-  bzr dh-make -v mindforger ${HHVERSION} ${HH}.tgz
-}
 
 # ############################################################################
 # # Checkout MindForger from bazaar and make it #
@@ -61,31 +55,30 @@ function checkoutMindforger() {
     cp -rvf ${HHSRC}/* ${HHSRC}/*.*  .
 
     # prune MindForger project files: tests, *.o/... build files, ...
-    echo -e "\n# Cleanup de GitRepo ########################################"
+    echo -e "\n# Git repo cleanup ########################################"
     rm -vrf ./.git ./app/mindforger ./build
     find . -type f \( -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" \) | while read F; do rm -vf $F; done
-    # ? delete Makefiles
 
     cd ..
 }
 
 # ############################################################################
-# # Build .deb for Ubuntu #
+# # Create updated changelog #
 # ############################################################################
 
 function createChangelog() {
   export MYTS=`date "+%a, %d %b %Y %H:%M:%S"`
   echo "Changelog timestamp: ${MYTS}"
   echo "mindforger (${HHFULLVERSION}) ${UBUNTUVERSION}; urgency=low" > $1
-  echo "" >> $1
+  echo " " >> $1
   echo "  * ${HHBZRMSG}" >> $1
-  echo "" >> $1
+  echo " " >> $1
   echo " -- Martin Dvorak (Dvorka) <martin.dvorak@mindforger.com>  ${MYTS} +0100" >> $1
   echo "" >> $1
 }
 
 # ############################################################################
-# # Create tarball #
+# # Create upstream tarball #
 # ############################################################################
 
 function createTarball() {
@@ -95,6 +88,7 @@ function createTarball() {
   cp -vrf ../${HH} .
   rm -rvf ${HH}/.bzr
   tar zcf ../${HH}.tgz ${HH}
+  # .orig.tar.gz is required Debian convention
   cp -vf ../${HH}.tgz ../${HH}.orig.tar.gz
   cd ../${HH}
 }
@@ -166,7 +160,7 @@ function releaseForParticularUbuntuVersion() {
     # build SIGNED source deb package
     bzr builddeb --source
 
-    # 7) build it on CLEAN system w/o dependecies
+    # 7) build binary from source deb on CLEAN system - no deps installed
     echo -e "\n# clean build ~ pbuilder  ####################################"
     cd ../build-area    
     # IMPORTANT pbuilder's caches in /var and /home MUST be on same physical drive
@@ -177,7 +171,8 @@ function releaseForParticularUbuntuVersion() {
     cp -rvf ~/pbuilder/*.tgz ${PBUILDFOLDER}
     # END
     pbuilder-dist ${UBUNTUVERSION} build ${HHRELEASE}.dsc
-    
+
+    # 8) upload to Launchpad: push Bazaar and put changes
     echo -e "\n# bzr push .deb to Launchpad #################################"
     # from buildarea/ to ./dist
     cd ../${HH}

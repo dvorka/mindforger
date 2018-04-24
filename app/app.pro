@@ -199,6 +199,7 @@ RESOURCES += \
 # ########################################
 # Linux installation: make install
 # ########################################
+# See http://doc.qt.io/qt-5/qmake-advanced-usage.html
 
 binfile.files += mindforger
 binfile.path = /usr/bin/

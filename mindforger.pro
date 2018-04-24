@@ -59,6 +59,7 @@ app.depends = lib
 # ########################################
 # Linux installation: make install
 # ########################################
+# See http://doc.qt.io/qt-5/qmake-advanced-usage.html
 
 #unix:configfiles.extra = chmod +x data/config/mindforger/scripts/* ; make clean; mv -f mindforger mind
 #configfiles.files += data/config/*
