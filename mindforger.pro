@@ -76,11 +76,12 @@ manfiles.files += man/*
 manfiles.path = /usr/share/man/man1/
 INSTALLS += manfiles
 
-iconfiles.files += icons/*
+iconfiles.files += app/resources/icons/*
 iconfiles.path = /usr/share/icons/mindforger/
 INSTALLS += iconfiles
 
-shortcutfiles.files += build/ubuntu/gnome-shell/mindforger.desktop
+# experiment w/ file
+shortcutfiles.files += app/resources/gnome-shell/mindforger.desktop
 shortcutfiles.path = /usr/share/applications/
 INSTALLS += shortcutfiles
 
