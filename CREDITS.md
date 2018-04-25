@@ -16,6 +16,7 @@ Big thanks to 3rd party FOSS content authors:
 * AMS and SIAM (MathJax.js - math rendering in HTML)
 * Ivan Sagalaev (Highlight.js - source code syntax highlighting)
 * Jamie McGowan (Remarkable - inspiration and code)
+* Andrey Smirnov (Aplty - Debian PPAs mgmt tool)
 * Apiary (API blueprints - test data)
 * Mark Summerfield (Advanced Qt Programming book examples - code snippets)
 * Andres Mejia (Aho-Corasick algorithm implementation - code snippets)
