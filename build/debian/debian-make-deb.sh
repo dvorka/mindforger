@@ -150,6 +150,9 @@ function buildDebPackage() {
 export ARG_BAZAAR_MSG="Experimental Debian package."
 export ARG_VERSION="0.7.1"
 
+# Debian releases: https://www.debian.org/releases/
+#   6/7/8/9/10: squeeze wheezy jessie stretch buster
+
 buildDebPackage ${ARG_VERSION} ${ARG_BAZAAR_MSG}
 
 # eof
