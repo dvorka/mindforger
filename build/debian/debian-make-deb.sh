@@ -90,93 +90,57 @@ function buildDebPackage() {
     #
     # 1) create upstream tarball
     #
-    
     # 1.1) get copy of project source
-    echo -e "\n# Checkout MindForger from Bazaar ############################"
-    mkdir ${HHBUILD}
-    cd ${HHBUILD}
+    echo -e "\n# Get MF project files ############################"
+    mkdir -p ${HHBUILD}/${HH}
+    cd ${HHBUILD}/${HH}
     # copy  project files to current directory
     cp -rvf ${HHSRC}/* ${HHSRC}/*.*  .
     
     # 1.2) prune MindForger project source: tests, *.o/... build files, ...
-    echo -e "\n# Git repo cleanup ########################################"
-    rm -vrf ./.git ./app/mindforger ./build
-    find . -type f \( -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" \) | while read F; do rm -vf $F; done
+    echo -e "\n# MF project cleanup ########################################"
+    rm -vrf ./.git ./app/mindforger ./build ./app/test ./lib/test
+    find . -type f \( -name "*moc_*.cpp" -or -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
 
-    # 1.?) generate makefiles (will be used later to build binary)
-    
-    # 1.3) create tar archive
-    cd ..
+    # 1.3) generate makefiles (will be used later to build binary)
+    qmake -d mindforger.pro
+        
+    # 1.4) create tar archive
     createTarball
 
     #
     # 2) create source deb
-    #
-    
+    #    
     # 2.1) add Debian control files
-    # 2.2) build deb
+    cp -rvf ${HHSRC}/build/debian/debian  .
+    createChangelog ./debian/changelog
+
+    # x) start GPG agent if it's NOT running
+    if [ -e "${HOME}/.gnupg/S.gpg-agent" ]
+    then
+	echo "OK: GPG agent running."
+    else
+	gpg-agent --daemon
+    fi    
+
+    DEBEMAIL="martin.dvorak@mindforger.com"
+    DEBFULLNAME="Martin Dvorak"
+    export DEBEMAIL DEBFULLNAME
+    
+    # 2.2) build binary deb
+    # https://www.debian.org/doc/manuals/maint-guide/build.en.html
+    dpkg-buildpackage -us -uc
+    mkdir -vf deb-binary
+    cp -vf *.dsc *.changes *.deb deb-binary
 
     #
-    # 3) create binary deb
-    #
-    
+    # 3) create source deb
+    #    
     # 3.1) build deb
-
-
-    
-    # 1) clean up
-    echo -e "\n# Cleanup ####################################################"
-    rm -rvf *.*~ ./debian ./bin
-    # TODO clean all extra directories - find copy
-
-    
-
-
-    
-    cd ./hstr/dist && ./1-dist.sh && rm -vrf ../tests && cd ../..
-    cd `pwd`
-    mv mindforger ${HH}
-    tar zcf ${HH}.tgz ${HH}
-    rm -rvf ${HH}
-
-    # bzr dh-make -v packagename version tarball
-    bzr dh_make -v hstr ${HHVERSION} ${HH}.tgz
-
-    # rewrite to native dh_make:
-    #dh_make --single --createorig 
-
-    rm -vf *.orig.tar.gz
-
-    cd hstr/dist
-
-
-
-
-
-    
-    rm -rvf ../debian
-    cp -rvf ${HHSRC}/debian ..
-
-    createChangelog ../debian/changelog
-    cp -vf debian/rules ../debian/rules
-    cp -vf debian/hstr.dirs ../debian/hstr.dirs
-    cp -vf debian/watch ../debian/watch
-
-    # cleanup
-    rm -vrf ../dist ../bin ../doc ../pad.xml
-
-    cd ../..
-    mv hstr ${HH}
-    cd ${HH}
-
-    createTarball
-
-    # 6) build debs
-    echo -e "\n# source & binary debs  ######################################"
-    # build BINARY? deb package (us uc tells that no GPG signing is needed)
-    debuild -us -uc
     # build SIGNED source deb package
-    debuild --source
+    dpkg-buildpackage --source
+    mkdir -vf deb-source
+    cp -vf *.dsc *.changes *.deb deb-binary    
 }
 
 # ############################################################################

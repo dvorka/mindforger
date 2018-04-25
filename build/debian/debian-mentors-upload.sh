@@ -19,7 +19,6 @@
 
 # https://mentors.debian.net/
 
-cd /home/dvorka/p/hstr/launchpad && cd hstr* && pwd
-echo dput mentors hh_*source.changes
+echo dput mentors mindforger_*source.changes
 
 # eof
