@@ -52,12 +52,13 @@ function checkoutMindforger() {
     mv ../.bzr .
 
     # copy NEW project files to Bazaar directory
+    echo -e "\n# Get MF project files ############################"
     cp -rvf ${HHSRC}/* ${HHSRC}/*.*  .
 
     # prune MindForger project files: tests, *.o/... build files, ...
-    echo -e "\n# Git repo cleanup ########################################"
-    rm -vrf ./.git ./app/mindforger ./build
-    find . -type f \( -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" \) | while read F; do rm -vf $F; done
+    echo -e "\n# MF project cleanup ########################################"
+    rm -vrf ./.git ./app/mindforger ./build ./app/test ./lib/test
+    find . -type f \( -name "*moc_*.cpp" -or -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
 
     cd ..
 }
