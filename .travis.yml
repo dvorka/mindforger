@@ -13,27 +13,33 @@ matrix:
             - g++-5
       env:
         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+env:
+  - CC=gcc-5
+  - CXX=g++-5
 
 language: cpp # see https://docs.travis-ci.com/user/languages/cpp/
 compiler:
   - gcc # Travis CI defines CXX=g++ env var
 sudo: required
 dist: trusty # Travis CI provides Precise and Trusty only
+
 before_install:
-  - eval "${MATRIX_EVAL}"
   - sudo apt-get update -qq
   - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-before_install:
- - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
- - sudo apt-get update -qq
- - sudo apt-get install qtbase5-dev libqt5webkit5-dev
- - sudo apt-get install qt5-default qttools5-dev-tools
+  - "sh -e /etc/init.d/xvfb start"  
+  - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
+  - sudo apt-get update -qq
+  - eval "${MATRIX_EVAL}"
+
 install:
+  - sudo apt-get install qtbase5-dev libqt5webkit5-dev
+  - sudo apt-get install qt5-default qttools5-dev-tools
   - sudo apt-get install -qq ccache
-script:
+
+script: # make tests > run tests > make mindforger > install
+  - eval "${MATRIX_EVAL}"
   - cd deps/discount && ./configure.sh && make ; cd ../..
+  - echo "M8RDEBUG: g++ compiler is set to: ${CXX}"
   - qmake -r CONFIG+=travisci QMAKE_CXX=${CXX} mindforger.pro # 2/2 CONFIG is used to skip my CXX redefs in pro files, so that MATRIX can be used
   - make # (fail: make CXX=q++-5)
-  - make check
   - sudo make install
