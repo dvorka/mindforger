@@ -1,18 +1,21 @@
 os:
   - linux
-language: cpp
+language: cpp # see https://docs.travis-ci.com/user/languages/cpp/
 compiler:
-  - g++
+  - gcc # Travis CI defines CXX=g++ env var
 sudo: required
-dist: trusty
+dist: trusty # Travis CI provides Precise and Trusty only
 before_install:
   - sudo apt-get update -qq
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
+before_install:
+ - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
+ - sudo apt-get update -qq
+ - sudo apt-get install qtbase5-dev libqt5webkit5-dev
+ - sudo apt-get install qt5-default qttools5-dev-tools
 install:
-  - sudo apt-get install -qq g++-4.8; sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90; fi
-  - sudo apt-get install ccache
-  - sudo apt-get install -qq qt52base qt52webkit qt52tools
+  - sudo apt-get install -qq ccache
 script:
   - cd deps/discount && ./configure.sh && make ; cd ../..
   - qmake mindforger.pro
