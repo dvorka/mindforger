@@ -135,7 +135,7 @@ function releaseForParticularUbuntuVersion() {
     # qt5-default package: Debian control file does NOT allow virtual packages
     # like this qt5-default. Instead debian/rules file exports env var w/ Qt choice
     #   .pro file is also extended to have 'make install' target
-    qmake mindforger.pro
+    qmake -r mindforger.pro
     
     # 5) add new version to LOCAL Bazaar
     echo -e "\n# bazaar add & commit  #######################################"

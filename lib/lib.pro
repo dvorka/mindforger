@@ -20,8 +20,10 @@ TEMPLATE = lib
 CONFIG += staticlib
 CONFIG -= qt
 
-QMAKE_CXX = ccache g++
-QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
+!travisci {
+  QMAKE_CXX = ccache g++
+  QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
+}
 
 SOURCES += \
     ./src/repository_indexer.cpp \

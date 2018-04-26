@@ -103,7 +103,7 @@ function buildDebPackage() {
     find . -type f \( -name "*moc_*.cpp" -or -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
 
     # 1.3) generate makefiles (will be used later to build binary)
-    qmake -d mindforger.pro
+    qmake -r mindforger.pro
         
     # 1.4) create tar archive
     createTarball

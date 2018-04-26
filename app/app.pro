@@ -46,9 +46,11 @@ LIBS += -L$$OUT_PWD/../deps/discount -lmarkdown
 #
 # - GCC: -std=c++0x ~ -std=c++11
 
-# compiler options
-QMAKE_CXX = ccache g++
-QMAKE_CXXFLAGS += -pedantic -std=c++11
+# compiler options (if not qmake CONFIG+=travisci)
+!travisci {
+  QMAKE_CXX = ccache g++
+  QMAKE_CXXFLAGS += -pedantic -std=c++11
+}
 
 HEADERS += \
     ./src/qt/3rdparty/elasticnodes/edge.h \
