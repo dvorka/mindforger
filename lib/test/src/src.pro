@@ -37,7 +37,9 @@ LIBS += -lgtest
 LIBS += -lpthread
 
 # compiler options
-QMAKE_CXX = ccache g++
+!travisci {
+  QMAKE_CXX = ccache g++
+}
 QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
 
 SOURCES += \
