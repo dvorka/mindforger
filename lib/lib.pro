@@ -22,8 +22,8 @@ CONFIG -= qt
 
 !travisci {
   QMAKE_CXX = ccache g++
-  QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
 }
+QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
 
 SOURCES += \
     ./src/repository_indexer.cpp \
