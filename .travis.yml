@@ -1,7 +1,7 @@
 os:
   - linux
   
-# solution to missing codecvt: upgrade from g++ 4.8 to 5 and unlink
+# 1/2 missing codecvt: upgrade from g++ 4.8 to 5
 matrix:
   include:
     - os: linux
@@ -33,10 +33,9 @@ install:
   - sudo apt-get install -qq ccache
 script:
   - cd deps/discount && ./configure.sh && make ; cd ../..
-  - echo "g++ version" # debug
-  - g++ --version # debug
-  - ls /usr/include/c++/5 # debug
   - qmake mindforger.pro
-  - make
+  - g++ --version # debug
+  - g++-5 --version # debug
+  - make CXX=q++-5 # 2/2 codecvt: ensure that non-default g++ is used
   - make check
   - sudo make install
