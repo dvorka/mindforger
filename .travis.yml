@@ -5,6 +5,21 @@ compiler:
   - gcc # Travis CI defines CXX=g++ env var
 sudo: required
 dist: trusty # Travis CI provides Precise and Trusty only
+
+# solution to missing <codecvt>
+script: 
+  - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-6 /usr/bin/gcc
+  - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-6 /usr/bin/g++
+  - gcc --version
+  - bash build.sh
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-6
+    - g++-6
+
 before_install:
   - sudo apt-get update -qq
   - "export DISPLAY=:99.0"
