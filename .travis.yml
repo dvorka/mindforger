@@ -1,15 +1,19 @@
 os:
   - linux
-     addons: # solution to missing <codecvt>: upgrade from g++ 4.8 to 6
+  
+# solution to missing codecvt: upgrade from g++ 4.8 to 6 and unlink
+matrix:
+  include:
+    - os: linux
+      addons: 
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
             - g++-6
       env:
-         - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
-
-+script:
+        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+script:
   - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-6 /usr/bin/gcc
   - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-6 /usr/bin/g++
   - echo "Upgraded g++"
