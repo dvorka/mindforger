@@ -9,6 +9,12 @@ os:
       env:
          - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
 
++script:
+  - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-6 /usr/bin/gcc
+  - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-6 /usr/bin/g++
+  - echo "Upgraded g++"
+  - g++ --version
+
 language: cpp # see https://docs.travis-ci.com/user/languages/cpp/
 compiler:
   - gcc # Travis CI defines CXX=g++ env var
