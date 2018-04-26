@@ -34,6 +34,7 @@ install:
   - sudo apt-get install -qq ccache
   - sudo apt-get install -qq libgtest-dev
   - cd /usr/src/gtest # I have to build Google Test Framework myself
+  - sudo apt-get install -qq cmake
   - sudo cmake .
   - sudo make
   - sudo mv libg* /usr/lib/
