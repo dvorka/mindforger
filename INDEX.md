@@ -8,7 +8,7 @@ Thinking notebook and Markdown IDE.
 
 ![MindForger](http://test.mindforger.com/images/screenshots/markdown-images.png)
 
-For more detail see https://www.mindforger.com
+For more details see https://www.mindforger.com
 
 ## Installation
 Install MindForger:
