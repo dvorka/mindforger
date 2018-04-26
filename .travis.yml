@@ -34,10 +34,6 @@ install:
 script:
   - cd deps/discount && ./configure.sh && make ; cd ../..
   - qmake mindforger.pro
-  - g++ --version # debug
-  - g++-5 --version # debug
-  - alias g++=g++-5
-  - g++ --version # debug
-  - make # 2/2 codecvt: ensure that non-default g++ is used (fail: make CXX=q++-5)
+  - alias g++=g++-5 && g++ --version && make # 2/2 codecvt: ensure that non-default g++ is used (fail: make CXX=q++-5)
   - make check
   - sudo make install
