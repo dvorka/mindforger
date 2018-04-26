@@ -33,6 +33,7 @@ install:
   - sudo apt-get install -qq qt5-default qttools5-dev-tools
   - sudo apt-get install -qq ccache
   - sudo apt-get install -qq libgtest-dev
+  - "export M8RHOME=`pwd`"
   - cd /usr/src/gtest # I have to build Google Test Framework myself
   - sudo apt-get install -qq cmake
   - sudo cmake .
@@ -40,6 +41,7 @@ install:
   - sudo mv libg* /usr/lib/
 
 script: # make lib unit tests > run lib unit tests > make MF > install MF
+  - cd "${M8RHOME}"
   - eval "${MATRIX_EVAL}"
   - cd deps/discount && ./configure.sh && make ; cd ../..
   - "echo \"M8RDEBUG: g++ compiler is set to: ${CXX}\""  
