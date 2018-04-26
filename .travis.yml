@@ -1,7 +1,7 @@
 os:
   - linux
   
-# solution to missing codecvt: upgrade from g++ 4.8 to 6 and unlink
+# solution to missing codecvt: upgrade from g++ 4.8 to 5 and unlink
 matrix:
   include:
     - os: linux
@@ -10,14 +10,9 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-6
+            - g++-5
       env:
-        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
-script:
-  - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-6 /usr/bin/gcc
-  - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-6 /usr/bin/g++
-  - echo "Upgraded g++"
-  - g++ --version
+        - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
 
 language: cpp # see https://docs.travis-ci.com/user/languages/cpp/
 compiler:
@@ -38,6 +33,9 @@ install:
   - sudo apt-get install -qq ccache
 script:
   - cd deps/discount && ./configure.sh && make ; cd ../..
+  - echo "g++ version" # debug
+  - g++ --version # debug
+  - ls /usr/include/c++/5 # debug
   - qmake mindforger.pro
   - make
   - make check
