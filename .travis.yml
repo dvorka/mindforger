@@ -1,13 +1,13 @@
 os:
   - linux
-     addons: # solution to missing <codecvt>: upgrade from g++ 4.8 to 5
+     addons: # solution to missing <codecvt>: upgrade from g++ 4.8 to 6
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-5
+            - g++-6
       env:
-         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+         - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
 
 language: cpp # see https://docs.travis-ci.com/user/languages/cpp/
 compiler:
