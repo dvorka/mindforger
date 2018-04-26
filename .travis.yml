@@ -1,26 +1,21 @@
 os:
   - linux
+     addons: # solution to missing <codecvt>: upgrade from g++ 4.8 to 5
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env:
+         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+
 language: cpp # see https://docs.travis-ci.com/user/languages/cpp/
 compiler:
   - gcc # Travis CI defines CXX=g++ env var
 sudo: required
 dist: trusty # Travis CI provides Precise and Trusty only
-
-# solution to missing <codecvt>
-script: 
-  - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-6 /usr/bin/gcc
-  - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-6 /usr/bin/g++
-  - gcc --version
-  - bash build.sh
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - gcc-6
-    - g++-6
-
 before_install:
+  - eval "${MATRIX_EVAL}"
   - sudo apt-get update -qq
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
