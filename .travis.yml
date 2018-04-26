@@ -48,7 +48,7 @@ script: # make lib unit tests > run lib unit tests > make MF > install MF
   - cd lib/test # UNIT tests
   - qmake -r CONFIG+=travisci QMAKE_CXX=${CXX} mindforger-lib-unit-tests.pro
   - make
-  - cd src && ./mindforger-lib-unit-tests && cd ../../..
+  - cd src && export M8R_GIT_PATH="${M8RHOME}" && ./mindforger-lib-unit-tests && cd ../../..
   - qmake -r CONFIG+=travisci QMAKE_CXX=${CXX} mindforger.pro
   - make
   - sudo make install
