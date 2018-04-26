@@ -9,3 +9,17 @@ Thinking notebook and Markdown IDE.
 ![MindForger](http://test.mindforger.com/images/screenshots/markdown-images.png)
 
 For more detail see https://www.mindforger.com
+
+## Installation
+Install MindForger:
+* build from [source code](https://github.com/dvorka/mindforger-repository/memory/mindforger/installation.md)
+* download [upstream tarball](https://github.com/dvorka/mindforger-repository/memory/mindforger/installation.md)
+* [Ubuntu](https://github.com/dvorka/mindforger-repository/memory/mindforger/installation.md)
+* [Fedora](https://github.com/dvorka/mindforger-repository/memory/mindforger/installation.md)
+* [Debian](https://github.com/dvorka/mindforger-repository/memory/mindforger/installation.md)
+
+## Documentation
+See https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md
+
+## Bugs
+https://github.com/dvorka/mindforger/issues
