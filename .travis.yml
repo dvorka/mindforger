@@ -4,10 +4,8 @@ language: cpp
 compiler:
   - g++
 sudo: required
-dist: trusty # TODO try xenial
+dist: trusty
 before_install:
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test # for g++ 4.8
-  - sudo add-apt-repository -y ppa:beineri/opt-qt521 # for Qt 5.2
   - sudo apt-get update -qq
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
@@ -15,8 +13,6 @@ install:
   - sudo apt-get install -qq g++-4.8; sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90; fi
   - sudo apt-get install ccache
   - sudo apt-get install -qq qt52base qt52webkit qt52tools
-before_script:
-  - source /opt/qt52/bin/qt52-env.sh
 script:
   - cd deps/discount && ./configure.sh && make ; cd ../..
   - qmake mindforger.pro
