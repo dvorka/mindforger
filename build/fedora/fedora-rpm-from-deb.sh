@@ -22,9 +22,16 @@
 # This script is available from http://www.mindforger.com/fedora/fedora-rpm-from-deb.sh
 # to be easily available in VMs
 
-export PRJNAME="mindforger_0.7.1-1_amd64"
+export MFVERSION="0.7.1"
+export MFPRJNAME="mindforger-${MFVERSION}"
+export AMD64NAME="mindforger_${MFVERSION}-1_amd64"
+export I386NAME="mindforger_${MFVERSION}-1_i386"
+export NOARCHNAME="mindforger_${MFVERSION}-1_noarch"
 
 # IMPORTANT: this script must be run as root
+
+# cleanup
+rm -rvf ${MFPRJNAME} *.rpm
 
 # a) everything works just fine
 # alien -r mindforger_0.7.1-1_amd64.deb
@@ -32,16 +39,26 @@ export PRJNAME="mindforger_0.7.1-1_amd64"
 # b) alien generates RPM that conflicts w/ other RPMs
 #    https://www.electricmonk.nl/log/2017/02/23/how-to-solve-rpms-created-by-alien-having-file-conflicts/
 
-alien -r -g -v "${DEBNAME}.deb"
+alien -r -g -v "${AMD64NAME}.deb"
 
 # remove the following lines:
 #%dir "/"
 #%dir "/usr/bin/"
-sed -i 's#%dir "/"##' ${PRJNAME}/${PRJNAME}-1.spec
-sed -i 's#%dir "/usr/bin/"##' ${PRJNAME}/${PRJNAME}-1.spec
+sed -i 's#%dir "/"##' ${MFPRJNAME}/${MFPRJNAME}-2.spec
+sed -i 's#%dir "/usr/bin/"##' ${MFPRJNAME}/${MFPRJNAME}-2.spec
+sed -i 's#%dir "/usr/lib/"##' ${MFPRJNAME}/${MFPRJNAME}-2.spec
 
 # recreate RPM
-cd ${PRJNAME}
-rpmbuild --target=noarch --buildroot /full/path/to/${PRJNAME}/ -bb cfgtrack-$(REL_VERSION)-2.spec
+cd ${MFPRJNAME}
+export MFRPMROOT=`pwd`
+
+# bin build
+# --target=x86_64 
+# --target=i386
+rpmbuild --target=x86_64 --buildroot ${MFRPMROOT}/ -bb ${MFPRJNAME}-2.spec
+# noarch would be for SOURCE deb
+#rpmbuild --target=noarch --buildroot ${MFRPMROOT}/ -bb ${MFPRJNAME}-2.spec
+
+# sudo dnf install mindforger.rpm
 
 # end
