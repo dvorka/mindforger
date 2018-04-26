@@ -33,7 +33,7 @@ install:
   - sudo apt-get install -qq ccache
 script:
   - cd deps/discount && ./configure.sh && make ; cd ../..
-  - qmake mindforger.pro
-  - alias g++=g++-5 && g++ --version && make # 2/2 codecvt: ensure that non-default g++ is used (fail: make CXX=q++-5)
+  - qmake -r CONFIG+=travisci mindforger.pro # 2/2 CONFIG is used to skip my CXX redefs in pro files, so that MATRIX can be used
+  - make # (fail: make CXX=q++-5)
   - make check
   - sudo make install
