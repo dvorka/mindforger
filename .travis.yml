@@ -39,7 +39,7 @@ install:
 script: # make tests > run tests > make mindforger > install
   - eval "${MATRIX_EVAL}"
   - cd deps/discount && ./configure.sh && make ; cd ../..
-  - echo "M8RDEBUG: g++ compiler is set to: ${CXX}"
+  - "echo \"M8RDEBUG: g++ compiler is set to: ${CXX}\""
   - qmake -r CONFIG+=travisci QMAKE_CXX=${CXX} mindforger.pro # 2/2 CONFIG is used to skip my CXX redefs in pro files, so that MATRIX can be used
   - make # (fail: make CXX=q++-5)
   - sudo make install
