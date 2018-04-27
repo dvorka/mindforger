@@ -198,7 +198,7 @@ export ARG_MINOR_VERSION=6 # minor version is icremented for every Ubuntu versio
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety
-# current: trusty xenial artful 
+# current: trusty xenial artful beaver
 for UBUNTU_VERSION in xenial
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
