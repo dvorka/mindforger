@@ -12,7 +12,7 @@ matrix:
           packages:
             - g++-5
       env:
-        - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+        - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5" # IMPROVE prepend ccache to speed up 2nd build (MF after units)
 
 language: cpp # see https://docs.travis-ci.com/user/languages/cpp/
 compiler:
