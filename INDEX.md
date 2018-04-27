@@ -1,6 +1,6 @@
 # MindForger
 
-![Qt qmake](https://img.shields.io/badge/qt-qmake-green.svg)
+[![Qt qmake](https://img.shields.io/badge/qt-qmake-green.svg)](http://doc.qt.io/qt-5/qmake-manual.html)
 [![Travis CI](https://travis-ci.org/dvorka/mindforger.svg?branch=master)](https://travis-ci.org/dvorka/mindforger)
 [![GitHub issues](https://img.shields.io/github/issues/dvorka/mindforger.svg?maxAge=360)](https://github.com/dvorka/mindforger/issues)
 
