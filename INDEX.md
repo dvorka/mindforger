@@ -8,6 +8,9 @@ Thinking notebook and Markdown IDE - https://www.mindforger.com
 
 ![MindForger](http://test.mindforger.com/images/screenshots/markdown-images.png)
 
+MindForger is open, free, well performing Markdown IDE which respects your privacy and enables security. MindForger 
+is alo human mind inspired personal knowledge management tool.
+
 ## Installation
 Install MindForger:
 * build from [source code](https://github.com/dvorka/mindforger-repository/memory/mindforger/installation.md)
