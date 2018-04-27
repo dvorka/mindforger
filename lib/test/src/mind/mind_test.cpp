@@ -187,7 +187,7 @@ TEST(MindTestCase, LearnAndRememberMindForgerRepository) {
     cout << endl << "";
 }
 
-TEST(MindTestCase, LearnAmnesiaLearn) {
+TEST(MindTestCase, DISABLED_LearnAmnesiaLearn) {
     string repositoryPath{"/lib/test/resources/amnesia-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
     m8r::Repository* repository = new m8r::Repository(
