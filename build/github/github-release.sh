@@ -35,9 +35,9 @@ function createTarball() {
   cd ..
   mkdir work
   cd work
-  cp -vrf ../${HH} .
-  tar zcf ../${HH}.tgz ${HH}
-  cd ../${HH}
+  cp -vrf ../${MF} .
+  tar zcf ../${MF}.tgz ${MF}
+  cd ../${MF}
 }
 
 # ############################################################################
@@ -46,15 +46,15 @@ function createTarball() {
 
 function buildGitHubTarball() {
     export SCRIPTHOME=`pwd`
-    export HHVERSION=$1
-    export HHBZRMSG=$2
-    #export HHFULLVERSION=${HHVERSION}-1.0 # NMU upload
-    export HHFULLVERSION=${HHVERSION}-1    # mantainer upload
-    export HH=mindforger_${HHVERSION}
-    export HHRELEASE=mindforger-${HHFULLVERSION}
-    export HHSRC=/home/dvorka/p/mindforger/git/mindforger
+    export MFVERSION=$1
+    export MFBZRMSG=$2
+    #export MFFULLVERSION=${MFVERSION}-1.0 # NMU upload
+    export MFFULLVERSION=${MFVERSION}-1    # mantainer upload
+    export MF=mindforger_${MFVERSION}
+    export MFRELEASE=mindforger-${MFFULLVERSION}
+    export MFSRC=/home/dvorka/p/mindforger/git/mindforger
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
-    export HHBUILD=mindforger-${NOW}
+    export MFBUILD=mindforger-${NOW}
     export UBUNTUVERSION=unstable
 
     #
@@ -62,10 +62,10 @@ function buildGitHubTarball() {
     #
     # 1.1) get copy of project source
     echo -e "\n# Get MF project files ############################"
-    mkdir -p ${HHBUILD}/${HH}
-    cd ${HHBUILD}/${HH}
+    mkdir -p ${MFBUILD}/${MF}
+    cd ${MFBUILD}/${MF}
     # copy  project files to current directory
-    cp -rvf ${HHSRC}/* ${HHSRC}/*.*  .
+    cp -rvf ${MFSRC}/* ${MFSRC}/*.*  .
     
     # 1.2) prune MindForger project source: tests, *.o/... build files, ...
     echo -e "\n# MF project cleanup ########################################"
