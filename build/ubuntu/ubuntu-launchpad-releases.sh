@@ -41,7 +41,7 @@ fi
 # ############################################################################
 
 function checkoutMindforger() {
-    export HHSRC=$2
+    export MFSRC=$2
     # Create new branch: bzr init && bzr push lp:~ultradvorka/+junk/mindforger
     bzr checkout lp:~ultradvorka/+junk/mindforger
 
@@ -53,7 +53,7 @@ function checkoutMindforger() {
 
     # copy NEW project files to Bazaar directory
     echo -e "\n# Get MF project files ############################"
-    cp -rvf ${HHSRC}/* ${HHSRC}/*.*  .
+    cp -rvf ${MFSRC}/* ${MFSRC}/*.*  .
 
     # prune MindForger project files: tests, *.o/... build files, ...
     echo -e "\n# MF project cleanup ########################################"
@@ -70,9 +70,9 @@ function checkoutMindforger() {
 function createChangelog() {
   export MYTS=`date "+%a, %d %b %Y %H:%M:%S"`
   echo "Changelog timestamp: ${MYTS}"
-  echo "mindforger (${HHFULLVERSION}) ${UBUNTUVERSION}; urgency=low" > $1
+  echo "mindforger (${MFFULLVERSION}) ${UBUNTUVERSION}; urgency=low" > $1
   echo " " >> $1
-  echo "  * ${HHBZRMSG}" >> $1
+  echo "  * ${MFBZRMSG}" >> $1
   echo " " >> $1
   echo " -- Martin Dvorak (Dvorka) <martin.dvorak@mindforger.com>  ${MYTS} +0100" >> $1
   echo "" >> $1
@@ -86,12 +86,12 @@ function createTarball() {
   cd ..
   mkdir work
   cd work
-  cp -vrf ../${HH} .
-  rm -rvf ${HH}/.bzr
-  tar zcf ../${HH}.tgz ${HH}
+  cp -vrf ../${MF} .
+  rm -rvf ${MF}/.bzr
+  tar zcf ../${MF}.tgz ${MF}
   # .orig.tar.gz is required Debian convention
-  cp -vf ../${HH}.tgz ../${HH}.orig.tar.gz
-  cd ../${HH}
+  cp -vf ../${MF}.tgz ../${MF}.orig.tar.gz
+  cd ../${MF}
 }
 
 # ############################################################################
@@ -101,15 +101,15 @@ function createTarball() {
 function releaseForParticularUbuntuVersion() {
     export SCRIPTHOME=`pwd`
     export UBUNTUVERSION=$1
-    export HHVERSION=$2
-    export HHBZRMSG=$3
-    export HHFULLVERSION=${HHVERSION}-0ubuntu1
-    export HH=mindforger_${HHVERSION}
-    export HHRELEASE=mindforger_${HHFULLVERSION}
-    #export HHSRC=/home/dvorka/p/mindforger/git/mindforger
-    export HHSRC=/home/dvorka/p/mindforger/launchpad/EXPERIMENTS/mindforger
+    export MFVERSION=$2
+    export MFBZRMSG=$3
+    export MFFULLVERSION=${MFVERSION}-0ubuntu1
+    export MF=mindforger_${MFVERSION}
+    export MFRELEASE=mindforger_${MFFULLVERSION}
+    #export MFSRC=/home/dvorka/p/mindforger/git/mindforger
+    export MFSRC=/home/dvorka/p/mindforger/launchpad/EXPERIMENTS/mindforger
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
-    export HHBUILD=mindforger-${NOW}
+    export MFBUILD=mindforger-${NOW}
 
     # 1) clean up
     echo -e "\n# Cleanup ####################################################"
@@ -117,20 +117,20 @@ function releaseForParticularUbuntuVersion() {
 
     # 2) checkout MindForger to work directory
     echo -e "\n# Checkout MindForger from Bazaar ############################"
-    mkdir ${HHBUILD}
-    cd ${HHBUILD}
-    checkoutMindforger ${HH} ${HHSRC}
+    mkdir ${MFBUILD}
+    cd ${MFBUILD}
+    checkoutMindforger ${MF} ${MFSRC}
 
     # 3) prepare Debian resources (changelog, descriptor, ...)
     echo -e "\n# Building deb ###############################################"
-    cd mindforger && cp -rvf ${HHSRC}/build/ubuntu/debian .
+    cd mindforger && cp -rvf ${MFSRC}/build/ubuntu/debian .
     createChangelog ./debian/changelog
 
     # 4) Qt: generate makefile using qmake
     echo -e "\n# qmake ######################################################"
     cd ..
-    mv mindforger ${HH}
-    cd ${HH}
+    mv mindforger ${MF}
+    cd ${MF}
     # qt version MUST be specified as it CANNOT be configured by installing
     # qt5-default package: Debian control file does NOT allow virtual packages
     # like this qt5-default. Instead debian/rules file exports env var w/ Qt choice
@@ -141,7 +141,7 @@ function releaseForParticularUbuntuVersion() {
     echo -e "\n# bazaar add & commit  #######################################"
     bzr add .
     # IMPORTANT: commit UPLOADs branch to server
-    bzr commit -m "Update for ${HH} at ${NOW}."
+    bzr commit -m "Update for ${MF} at ${NOW}."
 
     # 5) create tarball ~ .tgz archive w/ source and required Debian cfg files
     createTarball
@@ -171,21 +171,21 @@ function releaseForParticularUbuntuVersion() {
     mkdir -p ${PBUILDFOLDER}
     cp -rvf ~/pbuilder/*.tgz ${PBUILDFOLDER}
     # END
-    pbuilder-dist ${UBUNTUVERSION} build ${HHRELEASE}.dsc
+    pbuilder-dist ${UBUNTUVERSION} build ${MFRELEASE}.dsc
 
     # 8) upload to Launchpad: push Bazaar and put changes
     echo -e "\n# bzr push .deb to Launchpad #################################"
     # from buildarea/ to ./dist
-    cd ../${HH}
+    cd ../${MF}
     echo "Before bzr push: " `pwd`
     bzr push lp:~ultradvorka/+junk/mindforger
     cd ..
     echo "Before dput push: " `pwd`
     # recently added /ppa to fix the path and package rejections
     # MF PPA w/ 64b build only
-    dput ppa:ultradvorka/productivity ${HHRELEASE}_source.changes
+    dput ppa:ultradvorka/productivity ${MFRELEASE}_source.changes
     # HSTR PPA w/ 64b 32b and ARM builds
-    #dput ppa:ultradvorka/ppa ${HHRELEASE}_source.changes
+    #dput ppa:ultradvorka/ppa ${MFRELEASE}_source.changes
 }
 
 # ############################################################################
