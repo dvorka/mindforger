@@ -48,9 +48,9 @@ function createChangelog() {
 
   export MYTS=`date "+%a, %d %b %Y %H:%M:%S"`
   echo "Changelog timestamp: ${MYTS}"
-  echo -e "mindforger (${HHFULLVERSION}) ${UBUNTUVERSION}; urgency=low" > $1
+  echo -e "mindforger (${MFFULLVERSION}) ${UBUNTUVERSION}; urgency=low" > $1
   echo " " >> $1
-  echo -e "  * ${HHBZRMSG}" >> $1
+  echo -e "  * ${MFBZRMSG}" >> $1
   echo " " >> $1
   echo " -- Martin Dvorak (Dvorka) <martin.dvorak@mindforger.com>  ${MYTS} +0100" >> $1
 }
@@ -63,11 +63,11 @@ function createTarball() {
   cd ..
   mkdir work
   cd work
-  cp -vrf ../${HH} .
-  tar zcf ../${HH}.tgz ${HH}
+  cp -vrf ../${MF} .
+  tar zcf ../${MF}.tgz ${MF}
   # .orig.tar.gz is required Debian convention
-  cp -vf ../${HH}.tgz ../${HH}.orig.tar.gz
-  cd ../${HH}
+  cp -vf ../${MF}.tgz ../${MF}.orig.tar.gz
+  cd ../${MF}
 }
 
 # ############################################################################
@@ -76,15 +76,15 @@ function createTarball() {
 
 function buildDebPackage() {
     export SCRIPTHOME=`pwd`
-    export HHVERSION=$1
-    export HHBZRMSG=$2
-    #export HHFULLVERSION=${HHVERSION}-1.0 # NMU upload
-    export HHFULLVERSION=${HHVERSION}-1    # mantainer upload
-    export HH=mindforger_${HHVERSION}
-    export HHRELEASE=mindforger-${HHFULLVERSION}
-    export HHSRC=/home/dvorka/p/mindforger/git/mindforger
+    export MFVERSION=$1
+    export MFBZRMSG=$2
+    #export MFFULLVERSION=${MFVERSION}-1.0 # NMU upload
+    export MFFULLVERSION=${MFVERSION}-1    # mantainer upload
+    export MF=mindforger_${MFVERSION}
+    export MFRELEASE=mindforger-${MFFULLVERSION}
+    export MFSRC=/home/dvorka/p/mindforger/git/mindforger
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
-    export HHBUILD=mindforger-${NOW}
+    export MFBUILD=mindforger-${NOW}
     export UBUNTUVERSION=unstable
 
     #
@@ -92,10 +92,10 @@ function buildDebPackage() {
     #
     # 1.1) get copy of project source
     echo -e "\n# Get MF project files ############################"
-    mkdir -p ${HHBUILD}/${HH}
-    cd ${HHBUILD}/${HH}
+    mkdir -p ${MFBUILD}/${MF}
+    cd ${MFBUILD}/${MF}
     # copy  project files to current directory
-    cp -rvf ${HHSRC}/* ${HHSRC}/*.*  .
+    cp -rvf ${MFSRC}/* ${MFSRC}/*.*  .
     
     # 1.2) prune MindForger project source: tests, *.o/... build files, ...
     echo -e "\n# MF project cleanup ########################################"
@@ -112,7 +112,7 @@ function buildDebPackage() {
     # 2) create source deb
     #    
     # 2.1) add Debian control files
-    cp -rvf ${HHSRC}/build/debian/debian  .
+    cp -rvf ${MFSRC}/build/debian/debian  .
     createChangelog ./debian/changelog
 
     # x) start GPG agent if it's NOT running
