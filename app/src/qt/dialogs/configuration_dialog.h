@@ -131,8 +131,8 @@ private:
 
     QLabel* mathSupportLabel;
     QComboBox* mathSupportCombo;
-    //QLabel* diagramSupportLabel;
-    //QComboBox* diagramSupportCombo;
+    QLabel* diagramSupportLabel;
+    QComboBox* diagramSupportCombo;
     QLabel* srcCodeHighlightingSupportLabel;
     QCheckBox* srcCodeHighlightSupportCheck;
 

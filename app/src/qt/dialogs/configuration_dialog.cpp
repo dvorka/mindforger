@@ -197,11 +197,11 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
     // TODO offline version doesn't work yet: mathSupportCombo->addItem(QString{"offline JavaScript lib"});
     mathSupportCombo->addItem(QString{"online JavaScript lib"});
 
-    //diagramSupportLabel = new QLabel(tr("Diagram support")+":", this),
-    //diagramSupportCombo = new QComboBox{this};
-    //diagramSupportCombo->addItem(QString{"disable"});
-    //diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
-    //diagramSupportCombo->addItem(QString{"online JavaScript lib"});
+    diagramSupportLabel = new QLabel(tr("Diagram support")+":", this),
+    diagramSupportCombo = new QComboBox{this};
+    diagramSupportCombo->addItem(QString{"disable"});
+    diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
+    diagramSupportCombo->addItem(QString{"online JavaScript lib"});
 
     // assembly
     QVBoxLayout* viewerLayout = new QVBoxLayout{this};
@@ -209,9 +209,8 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
     viewerLayout->addWidget(srcCodeHighlightSupportCheck);
     viewerLayout->addWidget(mathSupportLabel);
     viewerLayout->addWidget(mathSupportCombo);
-    // TODO diagram support doesn't work yet
-    //viewerLayout->addWidget(diagramSupportLabel);
-    //viewerLayout->addWidget(diagramSupportCombo);
+    viewerLayout->addWidget(diagramSupportLabel);
+    viewerLayout->addWidget(diagramSupportCombo);
     viewerGroup->setLayout(viewerLayout);
 
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
@@ -226,28 +225,27 @@ ConfigurationDialog::MarkdownTab::~MarkdownTab()
     delete srcCodeHighlightSupportCheck;
     delete mathSupportLabel;
     delete mathSupportCombo;
-    //delete diagramSupportLabel;
-    //delete diagramSupportCombo;
+    delete diagramSupportLabel;
+    delete diagramSupportCombo;
 }
 
 void ConfigurationDialog::MarkdownTab::refresh()
 {
     srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
     mathSupportCombo->setCurrentIndex(config.getUiEnableMathInMd()>0?1:0);
-    //diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
+    diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
 }
 
 void ConfigurationDialog::MarkdownTab::save()
 {
     config.setUiEnableSrcHighlightInMd(srcCodeHighlightSupportCheck->isChecked());
     config.setUiEnableMathInMd(static_cast<Configuration::JavaScriptLibSupport>(mathSupportCombo->currentIndex()>0?2:0));
-    //config.setUiEnableDiagramsInMd(static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex()));
+    config.setUiEnableDiagramsInMd(static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex()));
 }
 
 /*
  * Mind tab
  */
-
 
 ConfigurationDialog::MindTab::MindTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())

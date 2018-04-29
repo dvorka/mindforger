@@ -144,6 +144,30 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
         //html += "\n";
 #endif
 
+
+        // DIAGRAMS: mermaid.js
+        // - CDN: https://cdnjs.com/libraries/mermaid
+        // - download from: https://unpkg.com/mermaid@7.1.0/dist/
+        // - live demo: https://mermaidjs.github.io/mermaid-live-editor
+        if(lastMfOptions&Configuration::MdToHtmlOption::DiagramSupport) {
+            switch(config.getUiEnableDiagramsInMd()) {
+            case Configuration::JavaScriptLibSupport::ONLINE:
+                html += "<script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/mermaid/7.1.2/mermaid.min.js\"></script>";
+#ifdef DO_M8F_DEBUG
+                html += "\n";
+#endif
+                break;
+            case Configuration::JavaScriptLibSupport::OFFLINE:
+                html += "<script type=\"text/javascript\" src=\"qrc:/js/mermaid.js\"></script>";
+#ifdef DO_M8F_DEBUG
+                html += "\n";
+#endif
+                break;
+            default:
+                break;
+            }
+        }
+
         // MATH: MathJax.js
         // - doc: http://docs.mathjax.org/en/latest/start.html
         // - check newMathJax variable in the script above e.g. https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
@@ -165,29 +189,6 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
                 html += "\n";
 #endif
                 html += "<script type=\"text/javascript\" src=\"qrc:/js/mathjax.js?config=TeX-MML-AM_CHTML\"></script>";
-#ifdef DO_M8F_DEBUG
-                html += "\n";
-#endif
-                break;
-            default:
-                break;
-            }
-        }
-
-        // DIAGRAMS: mermaid.js
-        // - download from: https://unpkg.com/mermaid@7.1.0/dist/
-        // - try https://mermaidjs.github.io/scripts/mermaid.min.js
-        // - live demo: https://mermaidjs.github.io/mermaid-live-editor
-        if(lastMfOptions&Configuration::MdToHtmlOption::DiagramSupport) {
-            switch(config.getUiEnableDiagramsInMd()) {
-            case Configuration::JavaScriptLibSupport::ONLINE:
-                html += "<script type=\"text/javascript\" src=\"https://mermaidjs.github.io/scripts/mermaid.min.js\"></script>";
-#ifdef DO_M8F_DEBUG
-                html += "\n";
-#endif
-                break;
-            case Configuration::JavaScriptLibSupport::OFFLINE:
-                html += "<script type=\"text/javascript\" src=\"qrc:/js/mermaid.js\"></script>";
 #ifdef DO_M8F_DEBUG
                 html += "\n";
 #endif
