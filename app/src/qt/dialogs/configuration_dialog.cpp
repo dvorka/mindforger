@@ -28,8 +28,10 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     tabWidget = new QTabWidget;
 
     appTab = new AppTab{this};
+    mdTab = new MarkdownTab{this};
 
     tabWidget->addTab(appTab, tr("Application"));
+    tabWidget->addTab(mdTab, tr("Markdown"));
 
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
@@ -52,6 +54,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
 ConfigurationDialog::~ConfigurationDialog()
 {
     if(appTab) delete appTab;
+    if(mdTab) delete mdTab;
 }
 
 /*
@@ -159,12 +162,45 @@ void ConfigurationDialog::AppTab::saveSlot()
 }
 
 /*
+ * Markdown tab
+ */
+
+ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
+    : QWidget(parent), config(Configuration::getInstance())
+{
+    QGroupBox* editorGroup = new QGroupBox{tr("Editor"), this};
+
+    mathSupportLabel = new QLabel(tr("Diagram support")+":", this),
+    mathSupportCombo = new QComboBox{this};
+    mathSupportCombo->addItem(QString{"disable"});
+    mathSupportCombo->addItem(QString{"enable offline lib"});
+    mathSupportCombo->addItem(QString{"enable online lib"});
+
+    // assembly
+    QVBoxLayout* editorLayout = new QVBoxLayout{this};
+    editorLayout->addWidget(mathSupportLabel);
+    editorLayout->addWidget(mathSupportCombo);
+    editorGroup->setLayout(editorLayout);
+
+    QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(editorGroup);
+    setLayout(boxesLayout);
+}
+
+ConfigurationDialog::MarkdownTab::~MarkdownTab()
+{
+    delete mathSupportLabel;
+    delete mathSupportCombo;
+}
+
+/*
  * Dialog
  */
 
 void ConfigurationDialog::show()
 {
     appTab->refresh();
+    mdTab->refresh();
 
     QDialog::show();
 }

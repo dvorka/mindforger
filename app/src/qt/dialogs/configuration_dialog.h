@@ -32,11 +32,13 @@ class ConfigurationDialog : public QDialog
 {
     Q_OBJECT
 
+    class MarkdownTab;
     class MindTab;
     class AppTab;
 
 private:
     QTabWidget* tabWidget;
+    MarkdownTab* mdTab;
     MindTab* mindTab;
     AppTab* appTab;
 
@@ -106,6 +108,32 @@ signals:
 
 public slots:
     void saveSlot();
+};
+
+
+/**
+ * @brief Markdown tab.
+ */
+class ConfigurationDialog::MarkdownTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    Configuration& config;
+
+    QLabel* mathSupportLabel;
+    QComboBox* mathSupportCombo;
+    QLabel* diagramSupportLabel;
+    QComboBox* diagramSupportCombo;
+    QLabel* srcCodeHighlightingViewerLabel;
+    QCheckBox* srcCodeHighlightingViewerCheck;
+    QLabel* srcCodeHighlightingEditorLabel;
+    QCheckBox* srcCodeHighlightingEditorCheck;
+
+public:
+    explicit MarkdownTab(QWidget* parent);
+    void refresh() {}
+    ~MarkdownTab();
 };
 
 }

@@ -202,6 +202,8 @@ private:
     bool uiViewerShowMetadata; // show reads/writes/... when viewing Outlines and/or Notes.
     bool uiEditorShowLineNumbers; // show line numbers
     bool uiEditorEnableSyntaxHighlighting; // toggle syntax highlighting
+
+    // TODO remove
     bool uiShowNotebookEditButton;
     JavaScriptLibSupport uiEnableMathInMd;
     JavaScriptLibSupport uiEnableDiagramsInMd;
