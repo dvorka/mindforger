@@ -192,10 +192,7 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
     srcCodeHighlightSupportCheck = new QCheckBox{this};
 
     mathSupportLabel = new QLabel(tr("Math support")+":", this),
-    mathSupportCombo = new QComboBox{this};
-    mathSupportCombo->addItem(QString{"disable"});
-    // TODO offline version doesn't work yet: mathSupportCombo->addItem(QString{"offline JavaScript lib"});
-    mathSupportCombo->addItem(QString{"online JavaScript lib"});
+    mathSupportCheck = new QCheckBox{this};
 
     diagramSupportLabel = new QLabel(tr("Diagram support")+":", this),
     diagramSupportCombo = new QComboBox{this};
@@ -208,7 +205,7 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
     viewerLayout->addWidget(srcCodeHighlightingSupportLabel);
     viewerLayout->addWidget(srcCodeHighlightSupportCheck);
     viewerLayout->addWidget(mathSupportLabel);
-    viewerLayout->addWidget(mathSupportCombo);
+    viewerLayout->addWidget(mathSupportCheck);
     viewerLayout->addWidget(diagramSupportLabel);
     viewerLayout->addWidget(diagramSupportCombo);
     viewerGroup->setLayout(viewerLayout);
@@ -224,7 +221,7 @@ ConfigurationDialog::MarkdownTab::~MarkdownTab()
     delete srcCodeHighlightingSupportLabel;
     delete srcCodeHighlightSupportCheck;
     delete mathSupportLabel;
-    delete mathSupportCombo;
+    delete mathSupportCheck;
     delete diagramSupportLabel;
     delete diagramSupportCombo;
 }
@@ -232,14 +229,14 @@ ConfigurationDialog::MarkdownTab::~MarkdownTab()
 void ConfigurationDialog::MarkdownTab::refresh()
 {
     srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
-    mathSupportCombo->setCurrentIndex(config.getUiEnableMathInMd()>0?1:0);
+    mathSupportCheck->setChecked(config.isUiEnableMathInMd());
     diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
 }
 
 void ConfigurationDialog::MarkdownTab::save()
 {
     config.setUiEnableSrcHighlightInMd(srcCodeHighlightSupportCheck->isChecked());
-    config.setUiEnableMathInMd(static_cast<Configuration::JavaScriptLibSupport>(mathSupportCombo->currentIndex()>0?2:0));
+    config.setUiEnableMathInMd(mathSupportCheck->isChecked());
     config.setUiEnableDiagramsInMd(static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex()));
 }
 

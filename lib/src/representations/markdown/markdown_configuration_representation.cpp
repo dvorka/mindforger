@@ -139,12 +139,10 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                             c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::VIM);
                         }
                     } else if(line->find(CONFIG_SETTING_MD_MATH_LABEL) != std::string::npos) {
-                        if(line->find(UI_JS_LIB_ONLINE) != std::string::npos) {
-                            c.setUiEnableMathInMd(Configuration::JavaScriptLibSupport::ONLINE);
-                        } else if(line->find(UI_JS_LIB_OFFLINE) != std::string::npos) {
-                            c.setUiEnableMathInMd(Configuration::JavaScriptLibSupport::OFFLINE);
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiEnableMathInMd(true);
                         } else {
-                            c.setUiEnableMathInMd(Configuration::JavaScriptLibSupport::NO);
+                            c.setUiEnableMathInMd(false);
                         }
                     } else if(line->find(CONFIG_SETTING_MD_DIAGRAM_LABEL) != std::string::npos) {
                         if(line->find(UI_JS_LIB_ONLINE) != std::string::npos) {
@@ -306,12 +304,12 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_MD_HIGHLIGHT_LABEL << (c?(c->isUiEnableSrcHighlightInMd()?"yes":"no"):(Configuration::DEFAULT_MD_HIGHLIGHT?"yes":"no")) << endl <<
          "    * Enable offline Highlight JavaScript library to show source code with syntax highlighting in HTML generated from Markdown." << endl <<
          "    * Examples: yes, no" << endl <<
-         CONFIG_SETTING_MD_MATH_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableMathInMd()):UI_JS_LIB_NO) << endl <<
-         "    * Enable online or offline MathJax JavaScript library to show math expressions in HTML generated from Markdown." << endl <<
-         "    * Examples: online, no" << endl <<
+         CONFIG_SETTING_MD_MATH_LABEL << (c?(c->isUiEnableMathInMd()?"yes":"no"):(Configuration::DEFAULT_MD_MATH?"yes":"no")) << endl <<
+         "    * Enable online MathJax JavaScript library to show math expressions in HTML generated from Markdown." << endl <<
+         "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_MD_DIAGRAM_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableDiagramsInMd()):UI_JS_LIB_NO) << endl <<
          "    * Enable online or offline Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
-         "    * Examples: offline, no" << endl <<
+         "    * Examples: online, offline, no" << endl <<
          endl <<
 
          "# " << CONFIG_SECTION_REPOSITORIES << endl <<

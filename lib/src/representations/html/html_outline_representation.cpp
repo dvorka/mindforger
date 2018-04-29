@@ -170,36 +170,21 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
 
         // MATH: MathJax.js
         // - doc: http://docs.mathjax.org/en/latest/start.html
+        // - CDN: https://cdnjs.com/libraries/mathjax
         // - check newMathJax variable in the script above e.g. https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-        if(lastMfOptions&Configuration::MdToHtmlOption::MathSupport) {
-            switch(config.getUiEnableMathInMd()) {
-            case Configuration::JavaScriptLibSupport::ONLINE:
-                html += "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>";
+        if(config.isUiEnableMathInMd()) {
+            html += "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>";
 #ifdef DO_M8F_DEBUG
-                html += "\n";
+            html += "\n";
 #endif
-                html += "<script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML\"></script>";
+            html += "<script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML\"></script>";
 #ifdef DO_M8F_DEBUG
-                html += "\n";
+            html += "\n";
 #endif
-                break;
-            case Configuration::JavaScriptLibSupport::OFFLINE:
-                html += "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>";
-#ifdef DO_M8F_DEBUG
-                html += "\n";
-#endif
-                html += "<script type=\"text/javascript\" src=\"qrc:/js/mathjax.js?config=TeX-MML-AM_CHTML\"></script>";
-#ifdef DO_M8F_DEBUG
-                html += "\n";
-#endif
-                break;
-            default:
-                break;
-            }
         }
 
         // SYNTAX HIGHLIGHTING: offline Highlight.js (CME)
-        if(lastMfOptions&Configuration::MdToHtmlOption::CodeHighlighting) {
+        if(config.isUiEnableSrcHighlightInMd()) {
             html += "<link rel=\"stylesheet\" href=\"qrc:/html-css/highlight.css\"/>";
 #ifdef DO_M8F_DEBUG
             html += "\n";

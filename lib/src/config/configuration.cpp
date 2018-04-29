@@ -78,8 +78,7 @@ void Configuration::clear()
 
             // EXTRA LIBRARIES options:
             | Configuration::MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js
-            | Configuration::MdToHtmlOption::MathInlineSupport // math expressions support via mathjax.js (flag always enabled - JavaScript online/offline/no decides)
-            | Configuration::MdToHtmlOption::MathSupport
+            //| Configuration::MdToHtmlOption::MathSupport // math expressions support via mathjax.js (flag always enabled - JavaScript online/offline/no decides)
             | Configuration::MdToHtmlOption::DiagramSupport; // diagram support via mermaid.js (flag always enabled - JavaScript online/offline/no decides)
             ;
 
@@ -103,8 +102,6 @@ void Configuration::clear()
     uiThemeName.assign(UI_DEFAULT_THEME);
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
     uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;    
-    // enable src syntax highlighting - via md2HtmlOptions
-    uiEnableMathInMd = JavaScriptLibSupport::NO;
     uiEnableDiagramsInMd = JavaScriptLibSupport::NO;
 }
 

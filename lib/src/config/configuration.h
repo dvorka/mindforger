@@ -137,9 +137,8 @@ public:
 
         // postprocessing - makes HTML rendering slow
         MathSupport            = 1<<15,
-        MathInlineSupport      = 1<<16,
-        CodeHighlighting       = 1<<17,
-        DiagramSupport         = 1<<18
+        CodeHighlighting       = 1<<16,
+        DiagramSupport         = 1<<17
     };
 
     enum EditorKeyBindingMode {
@@ -162,6 +161,7 @@ public:
     static constexpr int DEFAULT_EDITOR_TAB_WIDTH = 4;
     static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
+    static constexpr const bool DEFAULT_MD_MATH = false;
     static constexpr const bool DEFAULT_ALLOW_ONLINE_JS_LIBS = false;
 
 private:
@@ -203,10 +203,8 @@ private:
     bool uiViewerShowMetadata; // show reads/writes/... when viewing Outlines and/or Notes.
     int uiEditorTabWidth;
     bool uiEditorShowLineNumbers; // show line numbers
-    bool uiEditorEnableSyntaxHighlighting; // toggle syntax highlighting
-
-    JavaScriptLibSupport uiEnableMathInMd;
-    JavaScriptLibSupport uiEnableDiagramsInMd;
+    bool uiEditorEnableSyntaxHighlighting; // toggle syntax highlighting    
+    JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
 
 private:
     Installer* installer;
@@ -317,8 +315,17 @@ public:
             md2HtmlOptions &= ~MdToHtmlOption::CodeHighlighting;
         }
     }
-    JavaScriptLibSupport getUiEnableMathInMd() { return uiEnableMathInMd; }
-    void setUiEnableMathInMd(JavaScriptLibSupport mode) { uiEnableMathInMd = mode; }
+    bool isUiEnableMathInMd() {
+        return (md2HtmlOptions&MdToHtmlOption::MathSupport)>0?true:false;
+    }
+    void setUiEnableMathInMd(bool enable) {
+        if(enable) {
+            md2HtmlOptions |= MdToHtmlOption::MathSupport;
+        } else {
+            md2HtmlOptions &= ~MdToHtmlOption::MathSupport;
+        }
+    }
+
     JavaScriptLibSupport getUiEnableDiagramsInMd() { return uiEnableDiagramsInMd; }
     void setUiEnableDiagramsInMd(JavaScriptLibSupport mode) { uiEnableDiagramsInMd = mode; }
 };

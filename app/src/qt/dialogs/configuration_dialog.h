@@ -130,7 +130,7 @@ private:
     Configuration& config;
 
     QLabel* mathSupportLabel;
-    QComboBox* mathSupportCombo;
+    QCheckBox* mathSupportCheck;
     QLabel* diagramSupportLabel;
     QComboBox* diagramSupportCombo;
     QLabel* srcCodeHighlightingSupportLabel;
