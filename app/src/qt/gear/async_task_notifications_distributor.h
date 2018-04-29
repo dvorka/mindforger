@@ -120,6 +120,9 @@ signals:
     void leaderboardRefresh(Note* n);
     void refreshHeaderLeaderboardByValue(std::vector<std::pair<Note*,float>>* associations);
     void refreshLeaderboardByValue(std::vector<std::pair<Note*,float>>* associations);
+
+public slots:
+    void slotConfigurationUpdated();
 };
 
 }

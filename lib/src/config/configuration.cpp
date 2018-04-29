@@ -74,6 +74,7 @@ void Configuration::clear()
     md2HtmlOptions = 0
             // DISCOUNT options:
             | Configuration::MdToHtmlOption::AutolinkOption
+            | Configuration::MdToHtmlOption::NoSuperscriptOption // if enabled it BREAKS MathJax
 
             // EXTRA LIBRARIES options:
             | Configuration::MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js
@@ -101,7 +102,7 @@ void Configuration::clear()
     uiEditorTabWidth = DEFAULT_EDITOR_TAB_WIDTH;
     uiThemeName.assign(UI_DEFAULT_THEME);
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
-    uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
+    uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;    
     // enable src syntax highlighting - via md2HtmlOptions
     uiEnableMathInMd = JavaScriptLibSupport::NO;
     uiEnableDiagramsInMd = JavaScriptLibSupport::NO;

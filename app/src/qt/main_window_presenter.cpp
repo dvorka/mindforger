@@ -77,6 +77,11 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(distributor, SIGNAL(finished()), distributor, SLOT(deleteLater()));
     distributor->start();
 
+    // send signal to components to be updated on a configuration change
+    QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SLOT(slotConfigurationUpdated()));
+    QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getNoteEdit()->getView()->getNoteEditor(), SLOT(slotConfigurationUpdated()));
+    QObject::connect(configDialog, SIGNAL(saveConfigSignal()), distributor, SLOT(slotConfigurationUpdated()));
+
     // let Mind to learn active repository & preserve desired state
     mind->learn();
 }

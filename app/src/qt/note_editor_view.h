@@ -37,6 +37,7 @@ class NoteEditorView : public QPlainTextEdit
 
 private:
     QWidget* parent;
+    QFont f;
 
     bool completedAndSelected;
     QCompleter* completer;
@@ -57,13 +58,12 @@ public:
     NoteEditorView &operator=(const NoteEditorView&) = delete;
     NoteEditorView &operator=(const NoteEditorView&&) = delete;
 
+    QString getSelectedText() const { return textCursor().selectedText(); }
     void wrapSelectedText(const QString &tag);
     void insertMarkdownText(const QString &text, bool newLine=true);
 
     void setShowLineNumbers(bool show);
-    void setEnableSyntaxHighlighting(bool enable);
     void setStatusBar(const StatusBarView* sb) { this->statusBar = sb; }
-    QString getSelectedText() const { return textCursor().selectedText(); }
 
     void clearHitCounter() { hitCounter=0; }
     int getHitCounter() const { return hitCounter; }
@@ -72,35 +72,33 @@ public:
 protected:
     void mousePressEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
+private:
+    void createWidgets();
+    void createConnections();
+    QString textUnderCursor() const;
+    void setEditorTabWidth(int tabWidth);
+    void performCompletion(const QString &completionPrefix);
+    bool handledCompletedAndSelected(QKeyEvent *event);
+    void populateModel(const QString &completionPrefix);
 
+public slots:
+    void slotConfigurationUpdated();
 private slots:
     void insertCompletion(const QString& completion, bool singleWord=false);
     void highlightCurrentLine();
     void performCompletion();
 
-private:
-    void createWidgets();
-    void createConnections();
-
-    QString textUnderCursor() const;
-    void performCompletion(const QString &completionPrefix);
-    bool handledCompletedAndSelected(QKeyEvent *event);
-    void populateModel(const QString &completionPrefix);
-
 // line number panel
+private:
+    LineNumberPanel* lineNumberPanel;
 public:
     void lineNumberPanelPaintEvent(QPaintEvent *event);
     int lineNumberPanelWidth();
-
 protected:
     void resizeEvent(QResizeEvent *event) override;
-
 private slots:
     void updateLineNumberPanelWidth(int newBlockCount);
     void updateLineNumberPanel(const QRect &, int);
-
-private:
-    LineNumberPanel* lineNumberPanel;
 };
 
 } // m8r namespace

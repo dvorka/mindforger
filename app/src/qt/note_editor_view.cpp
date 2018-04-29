@@ -20,6 +20,8 @@
 
 namespace m8r {
 
+using namespace std;
+
 inline
 bool caseInsensitiveLessThan(const QString &a, const QString &b)
 {
@@ -32,20 +34,15 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     hitCounter = 0;
 
     // font
-    QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    f = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     // alternatively
-    //font.setFamily("Courier");
-    //font.setStyleHint(QFont::Monospace);
-    //font.setFixedPitch(true);
-    //font.setPointSize(10);
+    //f.setFamily("Courier");
+    //f.setStyleHint(QFont::Monospace);
+    //f.setFixedPitch(true);
+    //f.setPointSize(10);
+    setFont(f);
 
-    setFont(font);
-
-    // tab width 4 vs 8
-    // IMPROVE move this constant to Configuration (number is number of characters)
-    const int tabStop = 4;
-    QFontMetrics metrics(font);
-    setTabStopWidth(tabStop * metrics.width(' '));
+    setEditorTabWidth(Configuration::getInstance().getUiEditorTabWidth());
 
     createWidgets();
     createConnections();
@@ -57,6 +54,9 @@ NoteEditorView::NoteEditorView(QWidget* parent)
 void NoteEditorView::createWidgets()
 {
     highlighter = new NoteEditHighlight{document()};
+    // syntax highligting
+    enableSyntaxHighlighting = Configuration::getInstance().isUiEditorEnableSyntaxHighlighting();
+    highlighter->setEnabled(enableSyntaxHighlighting);
 
     lineNumberPanel = new LineNumberPanel{this};
     lineNumberPanel->setVisible(showLineNumbers);
@@ -139,12 +139,6 @@ void NoteEditorView::setShowLineNumbers(bool show)
     lineNumberPanel->setVisible(showLineNumbers);
 }
 
-void NoteEditorView::setEnableSyntaxHighlighting(bool enable)
-{
-    enableSyntaxHighlighting = enable;
-    highlighter->setEnabled(enableSyntaxHighlighting);
-}
-
 QString NoteEditorView::getRelevantWords() const
 {
     // IMPROVE get whole line and cut word on which is curser and it before/after siblings: return textCursor().block().text(); ...
@@ -165,8 +159,26 @@ QString NoteEditorView::getRelevantWords() const
         }
     }
     return result;
-
     //return textCursor().block().text();
+}
+
+void NoteEditorView::setEditorTabWidth(int tabWidth)
+{
+    MF_DEBUG("SETTING tabstop: " << tabWidth << endl);
+
+    // tab width: 4 or 8
+    QFontMetrics metrics(f);
+    setTabStopWidth(tabWidth * metrics.width(' '));
+}
+
+void NoteEditorView::slotConfigurationUpdated()
+{
+    MF_DEBUG("CONFIG UPDATED @ editor " << endl);
+
+    enableSyntaxHighlighting = Configuration::getInstance().isUiEditorEnableSyntaxHighlighting();
+    highlighter->setEnabled(enableSyntaxHighlighting);
+
+    setEditorTabWidth(Configuration::getInstance().getUiEditorTabWidth());
 }
 
 void NoteEditorView::keyPressEvent(QKeyEvent *event)
@@ -396,4 +408,4 @@ void NoteEditorView::lineNumberPanelPaintEvent(QPaintEvent* event)
     }
 }
 
-} // namespace
+} // m8r namespace

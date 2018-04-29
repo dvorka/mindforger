@@ -35,7 +35,6 @@ OutlineHeaderEditPresenter::OutlineHeaderEditPresenter(
     this->view->setOutlineHeaderEditDialog(outlineHeaderEditDialog);
 
     view->setEditorShowLineNumbers(Configuration::getInstance().isUiEditorShowLineNumbers());
-    view->setEditorEnableSyntaxHighlighting(Configuration::getInstance().isUiEditorEnableSyntaxHighlighting());
     view->setStatusBar(mwp->getStatusBar()->getView());
 
     QObject::connect(

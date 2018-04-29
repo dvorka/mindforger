@@ -179,4 +179,9 @@ void AsyncTaskNotificationsDistributor::run()
     }
 }
 
+void AsyncTaskNotificationsDistributor::slotConfigurationUpdated()
+{
+    sleepInterval = Configuration::getInstance().getDistributorSleepInterval();
+}
+
 } // m8r namespace

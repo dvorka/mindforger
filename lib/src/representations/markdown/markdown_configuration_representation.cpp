@@ -244,8 +244,6 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
             }
         }
     }
-
-    MF_DEBUG("Loaded config: w/ " << c.getDistributorSleepInterval() << endl);
 }
 
 string* MarkdownConfigurationRepresentation::to(Configuration& c)
@@ -257,8 +255,6 @@ string* MarkdownConfigurationRepresentation::to(Configuration& c)
 
 string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
 {
-    MF_DEBUG("Saving config: " << c << " w/ " << (c?c->getDistributorSleepInterval():3210) << endl);
-
     stringstream s{};
     string timeScopeAsString{}, mindStateAsString{"sleep"};
     if(c) {

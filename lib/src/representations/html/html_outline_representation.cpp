@@ -138,33 +138,33 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
 #endif
         }
 
-        // SCROLLING: scrolling bridge
-        html += "<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); };</script>";
+        // TODO SCROLLING: scrolling bridge
+        //html += "<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); };</script>";
 #ifdef DO_M8F_DEBUG
-        html += "\n";
+        //html += "\n";
 #endif
 
         // MATH: MathJax.js
-        // - link to the latest version: http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-        // - check newMathJax variable in the script above e.g. https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js
+        // - doc: http://docs.mathjax.org/en/latest/start.html
+        // - check newMathJax variable in the script above e.g. https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
         if(lastMfOptions&Configuration::MdToHtmlOption::MathSupport) {
             switch(config.getUiEnableMathInMd()) {
             case Configuration::JavaScriptLibSupport::ONLINE:
-                html += "<script type=\"text/javascript\" src=\"https://cdn.mathjax.org/mathjax/2.7-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>";
+                html += "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>";
 #ifdef DO_M8F_DEBUG
                 html += "\n";
 #endif
-                html += "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>";
+                html += "<script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML\"></script>";
 #ifdef DO_M8F_DEBUG
                 html += "\n";
 #endif
                 break;
             case Configuration::JavaScriptLibSupport::OFFLINE:
-                html += "<script type=\"text/javascript\" src=\"qrc:/js/mathjax.js\"></script>";
+                html += "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>";
 #ifdef DO_M8F_DEBUG
                 html += "\n";
 #endif
-                html += "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>";
+                html += "<script type=\"text/javascript\" src=\"qrc:/js/mathjax.js?config=TeX-MML-AM_CHTML\"></script>";
 #ifdef DO_M8F_DEBUG
                 html += "\n";
 #endif
@@ -290,7 +290,7 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
     }
 
     // debug generated HTML
-    //MF_DEBUG("=== BEGIN HTML ===" << endl << *html << endl << "=== END HTML ===" << endl);
+    MF_DEBUG("=== BEGIN HTML ===" << endl << *html << endl << "=== END HTML ===" << endl);
 
     return html;
 }

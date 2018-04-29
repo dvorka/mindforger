@@ -55,9 +55,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
 
 ConfigurationDialog::~ConfigurationDialog()
 {
-    if(appTab) delete appTab;
-    if(mdTab) delete mdTab;
-    if(mindTab) delete mdTab;
+    // tabs are auto-destructured thaks to parent/child hierarchy
 }
 
 void ConfigurationDialog::show()
@@ -91,7 +89,7 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     themeCombo->addItem(QString{UI_THEME_DARK});
     themeCombo->addItem(QString{UI_THEME_BLACK});
 
-    htmlCssThemeLabel = new QLabel(tr("Viewer theme (CSS)")+":", this);
+    htmlCssThemeLabel = new QLabel(tr("Viewer theme CSS")+":", this);
     htmlCssThemeCombo = new QComboBox{this};
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT});
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_DARK});
@@ -196,14 +194,14 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
     mathSupportLabel = new QLabel(tr("Math support")+":", this),
     mathSupportCombo = new QComboBox{this};
     mathSupportCombo->addItem(QString{"disable"});
-    mathSupportCombo->addItem(QString{"offline JavaScript lib"});
+    // TODO offline version doesn't work yet: mathSupportCombo->addItem(QString{"offline JavaScript lib"});
     mathSupportCombo->addItem(QString{"online JavaScript lib"});
 
-    diagramSupportLabel = new QLabel(tr("Diagram support")+":", this),
-    diagramSupportCombo = new QComboBox{this};
-    diagramSupportCombo->addItem(QString{"disable"});
-    diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
-    diagramSupportCombo->addItem(QString{"online JavaScript lib"});
+    //diagramSupportLabel = new QLabel(tr("Diagram support")+":", this),
+    //diagramSupportCombo = new QComboBox{this};
+    //diagramSupportCombo->addItem(QString{"disable"});
+    //diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
+    //diagramSupportCombo->addItem(QString{"online JavaScript lib"});
 
     // assembly
     QVBoxLayout* viewerLayout = new QVBoxLayout{this};
@@ -211,8 +209,9 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
     viewerLayout->addWidget(srcCodeHighlightSupportCheck);
     viewerLayout->addWidget(mathSupportLabel);
     viewerLayout->addWidget(mathSupportCombo);
-    viewerLayout->addWidget(diagramSupportLabel);
-    viewerLayout->addWidget(diagramSupportCombo);
+    // TODO diagram support doesn't work yet
+    //viewerLayout->addWidget(diagramSupportLabel);
+    //viewerLayout->addWidget(diagramSupportCombo);
     viewerGroup->setLayout(viewerLayout);
 
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
@@ -227,22 +226,22 @@ ConfigurationDialog::MarkdownTab::~MarkdownTab()
     delete srcCodeHighlightSupportCheck;
     delete mathSupportLabel;
     delete mathSupportCombo;
-    delete diagramSupportLabel;
-    delete diagramSupportCombo;
+    //delete diagramSupportLabel;
+    //delete diagramSupportCombo;
 }
 
 void ConfigurationDialog::MarkdownTab::refresh()
 {
     srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
-    mathSupportCombo->setCurrentIndex(config.getUiEnableMathInMd());
-    diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
+    mathSupportCombo->setCurrentIndex(config.getUiEnableMathInMd()>0?1:0);
+    //diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
 }
 
 void ConfigurationDialog::MarkdownTab::save()
 {
     config.setUiEnableSrcHighlightInMd(srcCodeHighlightSupportCheck->isChecked());
-    config.setUiEnableMathInMd(static_cast<Configuration::JavaScriptLibSupport>(mathSupportCombo->currentIndex()));
-    config.setUiEnableDiagramsInMd(static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex()));
+    config.setUiEnableMathInMd(static_cast<Configuration::JavaScriptLibSupport>(mathSupportCombo->currentIndex()>0?2:0));
+    //config.setUiEnableDiagramsInMd(static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex()));
 }
 
 /*
