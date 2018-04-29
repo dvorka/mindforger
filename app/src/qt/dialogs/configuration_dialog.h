@@ -38,9 +38,9 @@ class ConfigurationDialog : public QDialog
 
 private:
     QTabWidget* tabWidget;
+    AppTab* appTab;
     MarkdownTab* mdTab;
     MindTab* mindTab;
-    AppTab* appTab;
 
     QDialogButtonBox *buttonBox;
 
@@ -55,6 +55,11 @@ public:
     AppTab* getAppTab() { return appTab; }
 
     void show();
+
+private slots:
+    void saveSlot();
+signals:
+    void saveConfigSignal();
 };
 
 /**
@@ -65,12 +70,20 @@ class ConfigurationDialog::MindTab : public QWidget
     Q_OBJECT
 
 private:
-    QLabel* nameLabel;
-    QLineEdit* nameEdit;
+    Configuration& config;
+
+    QLabel* saveReadsMetadataLabel;
+    QCheckBox* saveReadsMetadataCheck;
+    QLabel* distributorSleepIntervalLabel;
+    QSpinBox*  distributorSleepIntervalSpin;
 
 public:
-    explicit MindTab(QWidget* parent) : QWidget(parent) {}
-    ~MindTab() {}
+    explicit MindTab(QWidget* parent);
+    ~MindTab();
+
+    // there and back is handled by Dialog's access to this class & Config singleton
+    void refresh();
+    void save();
 };
 
 /*
@@ -88,12 +101,13 @@ private:
     QComboBox* themeCombo;
     QLabel* htmlCssThemeLabel;
     QComboBox* htmlCssThemeCombo;
+
     QLabel* editorKeyBindingLabel;
     QComboBox* editorKeyBindingCombo;
-    QLabel* showOutlineEditButtonLabel;
-    QCheckBox* showOutlineEditButtonCheck;
-    QLabel* saveReadsMetadataLabel;
-    QCheckBox* saveReadsMetadataCheck;
+    QLabel* srcCodeHighlightEditorLabel;
+    QCheckBox* srcCodeHighlightEditorCheck;
+    QLabel* tabWidthLabel;
+    QComboBox* tabWidthCombo;
 
 public:
     explicit AppTab(QWidget* parent);
@@ -101,13 +115,7 @@ public:
 
     // there and back is handled by Dialog's access to this class & Config singleton
     void refresh();
-    void clean();
-
-signals:
-    void saveConfigSignal();
-
-public slots:
-    void saveSlot();
+    void save();
 };
 
 
@@ -125,15 +133,16 @@ private:
     QComboBox* mathSupportCombo;
     QLabel* diagramSupportLabel;
     QComboBox* diagramSupportCombo;
-    QLabel* srcCodeHighlightingViewerLabel;
-    QCheckBox* srcCodeHighlightingViewerCheck;
-    QLabel* srcCodeHighlightingEditorLabel;
-    QCheckBox* srcCodeHighlightingEditorCheck;
+    QLabel* srcCodeHighlightingSupportLabel;
+    QCheckBox* srcCodeHighlightSupportCheck;
 
 public:
     explicit MarkdownTab(QWidget* parent);
-    void refresh() {}
     ~MarkdownTab();
+
+    // there and back is handled by Dialog's access to this class & Config singleton
+    void refresh();
+    void save();
 };
 
 }

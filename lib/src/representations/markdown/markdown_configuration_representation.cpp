@@ -27,16 +27,20 @@ constexpr const auto CONFIG_SECTION_REPOSITORIES= "Repositories";
 
 // application
 constexpr const auto CONFIG_SETTING_UI_THEME_LABEL = "* Theme: ";
-constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* HTML CSS theme: ";
+constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* Markdown CSS theme: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL =  "* Editor syntax highlighting: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL =  "* Editor TAB width: ";
 constexpr const auto CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL = "* Show Notebook edit button: ";
+constexpr const auto CONFIG_SETTING_MD_HIGHLIGHT_LABEL = "* Enable source code syntax highlighting support in Markdown: ";
 constexpr const auto CONFIG_SETTING_MD_MATH_LABEL = "* Enable math support in Markdown: ";
 constexpr const auto CONFIG_SETTING_MD_DIAGRAM_LABEL = "* Enable diagram support in Markdown: ";
-constexpr const auto CONFIG_SETTING_TIME_SCOPE_LABEL = "* Time scope: ";
 constexpr const auto CONFIG_SETTING_SAVE_READS_METADATA_LABEL = "* Save reads metadata: ";
 
 // mind
 constexpr const auto CONFIG_SETTING_MIND_STATE = "* Mind state: ";
+constexpr const auto CONFIG_SETTING_MIND_TIME_SCOPE_LABEL = "* Time scope: ";
+constexpr const auto CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL = "* Async refresh interval (ms): ";
 
 // repositories
 constexpr const auto CONFIG_SETTING_ACTIVE_REPOSITORY_LABEL = "* Active repository: ";
@@ -134,12 +138,6 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         } else {
                             c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::VIM);
                         }
-                    } else if(line->find(CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL) != std::string::npos) {
-                        if(line->find("yes") != std::string::npos) {
-                            c.setUiShowNotebookEditButton(true);
-                        } else {
-                            c.setUiShowNotebookEditButton(false);
-                        }
                     } else if(line->find(CONFIG_SETTING_MD_MATH_LABEL) != std::string::npos) {
                         if(line->find(UI_JS_LIB_ONLINE) != std::string::npos) {
                             c.setUiEnableMathInMd(Configuration::JavaScriptLibSupport::ONLINE);
@@ -156,6 +154,24 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         } else {
                             c.setUiEnableDiagramsInMd(Configuration::JavaScriptLibSupport::NO);
                         }
+                    } else if(line->find(CONFIG_SETTING_MD_HIGHLIGHT_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiEnableSrcHighlightInMd(true);
+                        } else {
+                            c.setUiEnableSrcHighlightInMd(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiEditorEnableSyntaxHighlighting(true);
+                        } else {
+                            c.setUiEditorEnableSyntaxHighlighting(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL) != std::string::npos) {
+                        if(line->find("8") != std::string::npos) {
+                            c.setUiEditorTabWidth(8);
+                        } else {
+                            c.setUiEditorTabWidth(4);
+                        }
                     }
                 }
             }
@@ -163,8 +179,8 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
             MF_DEBUG("PARSING configuration section Mind" << endl);
             for(string* line: *body) {
                 if(line && line->size() && line->at(0)=='*') {
-                    if(line->find(CONFIG_SETTING_TIME_SCOPE_LABEL) != std::string::npos) {
-                        string t = line->substr(strlen(CONFIG_SETTING_TIME_SCOPE_LABEL));
+                    if(line->find(CONFIG_SETTING_MIND_TIME_SCOPE_LABEL) != std::string::npos) {
+                        string t = line->substr(strlen(CONFIG_SETTING_MIND_TIME_SCOPE_LABEL));
                         if(t.size()) {
                             TimeScope ts;
                             if(TimeScope::fromString(t, ts)) {
@@ -177,6 +193,21 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         } else {
                             c.setDesiredMindState(Configuration::MindState::SLEEPING);
                         }
+                    } else if(line->find(CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL) != std::string::npos) {
+                        string t = line->substr(strlen(CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL));
+                        std::string::size_type st;
+                        int i;
+                        try {
+                          i = std::stoi (t,&st);
+                        }
+                        catch(...) {
+                          i = Configuration::DEFAULT_EDITOR_TAB_WIDTH;
+                        }
+                        if(i<0) {
+                            i=Configuration::DEFAULT_EDITOR_TAB_WIDTH;
+                        }
+                        i %=10000;
+                        c.setDistributorSleepInterval(i);
                     }
                 }
             }
@@ -213,6 +244,8 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
             }
         }
     }
+
+    MF_DEBUG("Loaded config: w/ " << c.getDistributorSleepInterval() << endl);
 }
 
 string* MarkdownConfigurationRepresentation::to(Configuration& c)
@@ -224,6 +257,8 @@ string* MarkdownConfigurationRepresentation::to(Configuration& c)
 
 string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
 {
+    MF_DEBUG("Saving config: " << c << " w/ " << (c?c->getDistributorSleepInterval():3210) << endl);
+
     stringstream s{};
     string timeScopeAsString{}, mindStateAsString{"sleep"};
     if(c) {
@@ -246,8 +281,11 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          endl <<
          CONFIG_SETTING_MIND_STATE << mindStateAsString << endl <<
          "    * Examples: sleep, think" << endl <<
-         CONFIG_SETTING_TIME_SCOPE_LABEL << timeScopeAsString << endl <<
+         CONFIG_SETTING_MIND_TIME_SCOPE_LABEL << timeScopeAsString << endl <<
          "    * Examples: 2y0m0d0h0m (recent 2 years), 0y3m15d0h0m (recent 3 months and 15 days)" << endl <<
+         CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL << (c?c->getDistributorSleepInterval():Configuration::DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL+1) << endl <<
+         "    * Sleep interval (miliseconds) between asynchronous mind-related evaluations (associations, ...)" << endl <<
+         "    * Examples: 3000, 5000, 10000" << endl <<
          endl <<
 
          "# " << CONFIG_SECTION_APP << endl <<
@@ -263,15 +301,20 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: qrc:/html-css/light.css, qrc:/html-css/dark.css, raw, /home/user/my-custom-mf-style.css" << endl <<
          CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL << (c?c->getEditorKeyBindingAsString():Configuration::DEFAULT_EDITOR_KEY_BINDING) << endl <<
          "    * Examples: emacs, vim, windows" << endl <<
-         CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL << (c?(c->isUiShowNotebookEditButton()?"yes":"no"):(Configuration::DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON?"yes":"no")) << endl <<
+         CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL << (c?(c->isUiEditorEnableSyntaxHighlighting()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SYNTAX_HIGHLIGHT?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL << (c?c->getUiEditorTabWidth():Configuration::DEFAULT_EDITOR_TAB_WIDTH) << endl <<
+         "    * Examples: 4, 8" << endl <<
          CONFIG_SETTING_SAVE_READS_METADATA_LABEL << (c?(c->isSaveReadsMetadata()?"yes":"no"):(Configuration::DEFAULT_SAVE_READS_METADATA?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_MD_HIGHLIGHT_LABEL << (c?(c->isUiEnableSrcHighlightInMd()?"yes":"no"):(Configuration::DEFAULT_MD_HIGHLIGHT?"yes":"no")) << endl <<
+         "    * Enable offline Highlight JavaScript library to show source code with syntax highlighting in HTML generated from Markdown." << endl <<
+         "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_MD_MATH_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableMathInMd()):UI_JS_LIB_NO) << endl <<
-         "    * Enable online or offline use MathJax JavaScript library to show math expressions in HTML generated from Markdown." << endl <<
+         "    * Enable online or offline MathJax JavaScript library to show math expressions in HTML generated from Markdown." << endl <<
          "    * Examples: online, no" << endl <<
          CONFIG_SETTING_MD_DIAGRAM_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableDiagramsInMd()):UI_JS_LIB_NO) << endl <<
-         "    * Enable online or offline use Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
+         "    * Enable online or offline Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
          "    * Examples: offline, no" << endl <<
          endl <<
 

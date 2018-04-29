@@ -272,4 +272,4 @@ void NoteEditDialog::handleRejected()
     emit rejectedSignal();
 }
 
-}
+} // m8r namespace

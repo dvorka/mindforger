@@ -74,12 +74,6 @@ void Configuration::clear()
     md2HtmlOptions = 0
             // DISCOUNT options:
             | Configuration::MdToHtmlOption::AutolinkOption
-            //| Configuration::MdToHtmlOption::NoStrikethroughOption
-            //| Configuration::MdToHtmlOption::NoAlphaListOption
-            //| Configuration::MdToHtmlOption::NoDefinitionListOption
-            //| Configuration::MdToHtmlOption::NoSmartypantsOption
-            //| Configuration::MdToHtmlOption::NoSuperscriptOption
-            //| Configuration::MdToHtmlOption::ExtraFootnoteOption
 
             // EXTRA LIBRARIES options:
             | Configuration::MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js
@@ -104,10 +98,11 @@ void Configuration::clear()
     uiViewerShowMetadata = true;
     uiEditorEnableSyntaxHighlighting = true;
     uiEditorShowLineNumbers = true;
+    uiEditorTabWidth = DEFAULT_EDITOR_TAB_WIDTH;
     uiThemeName.assign(UI_DEFAULT_THEME);
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
     uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
-    uiShowNotebookEditButton = DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON;
+    // enable src syntax highlighting - via md2HtmlOptions
     uiEnableMathInMd = JavaScriptLibSupport::NO;
     uiEnableDiagramsInMd = JavaScriptLibSupport::NO;
 }

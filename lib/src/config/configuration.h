@@ -112,9 +112,9 @@ public:
     };
 
     enum JavaScriptLibSupport {
-        ONLINE,
-        OFFLINE,
-        NO
+        NO,         // 0
+        OFFLINE,    // 1
+        ONLINE      // 2
     };
 
     enum MdToHtmlOption {
@@ -154,13 +154,15 @@ public:
 
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
     static const std::string DEFAULT_TIME_SCOPE;
-    static constexpr const bool DEFAULT_SHOW_NOTEBOOK_EDIT_BUTTON = true;
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
 
     static const std::string DEFAULT_UI_THEME_NAME;
     static const std::string DEFAULT_UI_HTML_CSS_THEME;
     static const std::string DEFAULT_EDITOR_KEY_BINDING;
-    static const bool DEFAULT_ALLOW_ONLINE_JS_LIBS = false;
+    static constexpr int DEFAULT_EDITOR_TAB_WIDTH = 4;
+    static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
+    static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
+    static constexpr const bool DEFAULT_ALLOW_ONLINE_JS_LIBS = false;
 
 private:
     explicit Configuration();
@@ -186,7 +188,6 @@ private:
     // lib configuration
     bool writeMetadata; // write metadata to MD - enabled in case of MINDFORGER_REPO only by default (can be disabled for all repository types)
     bool saveReadsMetadata; // persist count of Outline and Note reads (requires write to disc on every O/N view)
-    std::string externalEditorPath; // path to external MD editor e.g. Emacs or Remarkable
     TimeScope timeScope;
     std::string timeScopeAsString;
     unsigned int md2HtmlOptions;
@@ -200,11 +201,10 @@ private:
     int uiFontPointSize;
     bool uiShowBreadcrump; // show breadcrump path
     bool uiViewerShowMetadata; // show reads/writes/... when viewing Outlines and/or Notes.
+    int uiEditorTabWidth;
     bool uiEditorShowLineNumbers; // show line numbers
     bool uiEditorEnableSyntaxHighlighting; // toggle syntax highlighting
 
-    // TODO remove
-    bool uiShowNotebookEditButton;
     JavaScriptLibSupport uiEnableMathInMd;
     JavaScriptLibSupport uiEnableDiagramsInMd;
 
@@ -259,7 +259,6 @@ public:
      */
 
     const char* getEditorFromEnv();
-    const std::string& getExternalEditorPath() const { return externalEditorPath; }
     void setTimeScope(const TimeScope& timeScope) { this->timeScope = timeScope; }
     TimeScope& getTimeScope() { return timeScope; }
     bool isSaveReadsMetadata() const { return saveReadsMetadata; }
@@ -268,6 +267,7 @@ public:
     AssociationAssessmentAlgorithm getAaAlgorithm() const { return aaAlgorithm; }
     void setAaAlgorithm(AssociationAssessmentAlgorithm aaa) { aaAlgorithm = aaa; }
     int getDistributorSleepInterval() const { return distributorSleepInterval; }
+    void setDistributorSleepInterval(int sleepInterval) { distributorSleepInterval = sleepInterval; }
 
     /*
      * GUI
@@ -291,8 +291,8 @@ public:
     void setUiEditorShowLineNumbers(bool show) { uiEditorShowLineNumbers = show; }
     bool isUiEditorEnableSyntaxHighlighting() const { return uiEditorEnableSyntaxHighlighting; }
     void setUiEditorEnableSyntaxHighlighting(bool enable) { uiEditorEnableSyntaxHighlighting = enable; }
-    bool isUiShowNotebookEditButton() const { return uiShowNotebookEditButton; }
-    void setUiShowNotebookEditButton(bool show) { uiShowNotebookEditButton = show; }
+    int getUiEditorTabWidth() const { return uiEditorTabWidth; }
+    void setUiEditorTabWidth(int tabWidth) { uiEditorTabWidth = tabWidth; }
     bool isUiShowBreadcrump() const { return uiShowBreadcrump; }
     bool isUiHtmlTheme() const { return !uiHtmlCssPath.empty(); }
     const char* getUiHtmlCssPath() const {
@@ -307,6 +307,16 @@ public:
             if(s==JavaScriptLibSupport::OFFLINE) return UI_JS_LIB_OFFLINE; else return UI_JS_LIB_NO;
     }
 
+    bool isUiEnableSrcHighlightInMd() {
+        return (md2HtmlOptions&MdToHtmlOption::CodeHighlighting)>0?true:false;
+    }
+    void setUiEnableSrcHighlightInMd(bool enable) {
+        if(enable) {
+            md2HtmlOptions |= MdToHtmlOption::CodeHighlighting;
+        } else {
+            md2HtmlOptions &= ~MdToHtmlOption::CodeHighlighting;
+        }
+    }
     JavaScriptLibSupport getUiEnableMathInMd() { return uiEnableMathInMd; }
     void setUiEnableMathInMd(JavaScriptLibSupport mode) { uiEnableMathInMd = mode; }
     JavaScriptLibSupport getUiEnableDiagramsInMd() { return uiEnableDiagramsInMd; }

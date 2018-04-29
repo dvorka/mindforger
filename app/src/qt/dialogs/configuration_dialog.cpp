@@ -29,16 +29,18 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
 
     appTab = new AppTab{this};
     mdTab = new MarkdownTab{this};
+    mindTab = new MindTab{this};
 
     tabWidget->addTab(appTab, tr("Application"));
     tabWidget->addTab(mdTab, tr("Markdown"));
+    tabWidget->addTab(mindTab, tr("Mind"));
 
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
     // signals
     QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    QObject::connect(buttonBox, &QDialogButtonBox::accepted, appTab, &ConfigurationDialog::AppTab::saveSlot);
+    QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &ConfigurationDialog::saveSlot);
 
     QVBoxLayout *mainLayout = new QVBoxLayout{this};
     mainLayout->addWidget(tabWidget);
@@ -47,7 +49,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
 
     // dialog
     setWindowTitle(tr("Adapt"));
-    resize(fontMetrics().averageCharWidth()*55, 0);
+    resize(fontMetrics().averageCharWidth()*65, 0);
     setModal(true);
 }
 
@@ -55,6 +57,25 @@ ConfigurationDialog::~ConfigurationDialog()
 {
     if(appTab) delete appTab;
     if(mdTab) delete mdTab;
+    if(mindTab) delete mdTab;
+}
+
+void ConfigurationDialog::show()
+{
+    appTab->refresh();
+    mdTab->refresh();
+    mindTab->refresh();
+
+    QDialog::show();
+}
+
+void ConfigurationDialog::saveSlot()
+{
+    appTab->save();
+    mdTab->save();
+    mindTab->save();
+
+    emit saveConfigSignal();
 }
 
 /*
@@ -64,15 +85,13 @@ ConfigurationDialog::~ConfigurationDialog()
 ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
-    QGroupBox* settingsGroup = new QGroupBox{tr("Settings"), this};
-
     themeLabel = new QLabel(tr("UI theme (requires restart)")+":", this),
     themeCombo = new QComboBox{this};
     themeCombo->addItem(QString{UI_THEME_LIGHT});
     themeCombo->addItem(QString{UI_THEME_DARK});
     themeCombo->addItem(QString{UI_THEME_BLACK});
 
-    htmlCssThemeLabel = new QLabel(tr("HTML CSS theme")+":", this);
+    htmlCssThemeLabel = new QLabel(tr("Viewer theme (CSS)")+":", this);
     htmlCssThemeCombo = new QComboBox{this};
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT});
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_DARK});
@@ -84,30 +103,37 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     editorKeyBindingCombo->addItem("vim");
     editorKeyBindingCombo->addItem("windows");
 
-    // IMPROVE horizontal panel w/ label & check same line
-    showOutlineEditButtonLabel = new QLabel(tr("Show Notebook edit button")+":", this);
-    showOutlineEditButtonCheck = new QCheckBox(this);
+    srcCodeHighlightEditorLabel = new QLabel(tr("Markdown syntax highlighting")+":", this);
+    srcCodeHighlightEditorCheck = new QCheckBox(this);
 
-    // IMPROVE horizontal panel w/ label & check same line
-    saveReadsMetadataLabel = new QLabel(tr("Save reads metadata")+":", this);
-    saveReadsMetadataCheck = new QCheckBox(this);
+    tabWidthLabel = new QLabel(tr("TAB width")+":", this);
+    tabWidthCombo = new QComboBox(this);
+    tabWidthCombo->addItem(QString{"4"});
+    tabWidthCombo->addItem(QString{"8"});
 
     // assembly
-    QVBoxLayout* settingsLayout = new QVBoxLayout{this};
-    settingsLayout->addWidget(themeLabel);
-    settingsLayout->addWidget(themeCombo);
-    settingsLayout->addWidget(htmlCssThemeLabel);
-    settingsLayout->addWidget(htmlCssThemeCombo);
-    settingsLayout->addWidget(editorKeyBindingLabel);
-    settingsLayout->addWidget(editorKeyBindingCombo);
-    settingsLayout->addWidget(showOutlineEditButtonLabel);
-    settingsLayout->addWidget(showOutlineEditButtonCheck);
-    settingsLayout->addWidget(saveReadsMetadataLabel);
-    settingsLayout->addWidget(saveReadsMetadataCheck);
-    settingsGroup->setLayout(settingsLayout);
+    QVBoxLayout* appearanceLayout = new QVBoxLayout{this};
+    appearanceLayout->addWidget(themeLabel);
+    appearanceLayout->addWidget(themeCombo);
+    appearanceLayout->addWidget(htmlCssThemeLabel);
+    appearanceLayout->addWidget(htmlCssThemeCombo);
+    QGroupBox* appearanceGroup = new QGroupBox{tr("Appearance"), this};
+    appearanceGroup->setLayout(appearanceLayout);
+
+    QVBoxLayout* editorLayout = new QVBoxLayout{this};
+    editorLayout->addWidget(editorKeyBindingLabel);
+    editorLayout->addWidget(editorKeyBindingCombo);
+    editorLayout->addWidget(srcCodeHighlightEditorLabel);
+    editorLayout->addWidget(srcCodeHighlightEditorCheck);
+    editorLayout->addWidget(tabWidthLabel);
+    editorLayout->addWidget(tabWidthCombo);
+    QGroupBox* editorGroup = new QGroupBox{tr("Editor"), this};
+    editorGroup->setLayout(editorLayout);
 
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
-    boxesLayout->addWidget(settingsGroup);
+    boxesLayout->addWidget(appearanceGroup);
+    boxesLayout->addWidget(editorGroup);
+    boxesLayout->addStretch();
     setLayout(boxesLayout);
 }
 
@@ -119,10 +145,10 @@ ConfigurationDialog::AppTab::~AppTab()
     delete htmlCssThemeCombo;
     delete editorKeyBindingLabel;
     delete editorKeyBindingCombo;
-    delete showOutlineEditButtonLabel;
-    delete showOutlineEditButtonCheck;
-    delete saveReadsMetadataLabel;
-    delete saveReadsMetadataCheck;
+    delete srcCodeHighlightEditorLabel;
+    delete srcCodeHighlightEditorCheck;
+    delete tabWidthLabel;
+    delete tabWidthCombo;
 }
 
 void ConfigurationDialog::AppTab::refresh()
@@ -142,23 +168,17 @@ void ConfigurationDialog::AppTab::refresh()
         editorKeyBindingCombo->setCurrentIndex(i);
     }
 
-    showOutlineEditButtonCheck->setChecked(config.isUiShowNotebookEditButton());
-    saveReadsMetadataCheck->setChecked(config.isSaveReadsMetadata());
+    srcCodeHighlightEditorCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
+    tabWidthCombo->setCurrentIndex(tabWidthCombo->findText(QString::number(config.getUiEditorTabWidth())));
 }
 
-void ConfigurationDialog::AppTab::clean()
-{
-}
-
-void ConfigurationDialog::AppTab::saveSlot()
+void ConfigurationDialog::AppTab::save()
 {
     config.setUiThemeName(themeCombo->itemText(themeCombo->currentIndex()).toStdString());
     config.setUiHtmlCssPath(htmlCssThemeCombo->itemText(htmlCssThemeCombo->currentIndex()).toStdString());
     config.setEditorKeyBindingByString(editorKeyBindingCombo->itemText(editorKeyBindingCombo->currentIndex()).toStdString());
-    config.setUiShowNotebookEditButton(showOutlineEditButtonCheck->isChecked());
-    config.setSaveReadsMetadata(saveReadsMetadataCheck->isChecked());
-
-    emit saveConfigSignal();
+    config.setUiEditorEnableSyntaxHighlighting(srcCodeHighlightEditorCheck->isChecked());
+    config.setUiEditorTabWidth(tabWidthCombo->itemText(tabWidthCombo->currentIndex()).toInt());
 }
 
 /*
@@ -168,42 +188,113 @@ void ConfigurationDialog::AppTab::saveSlot()
 ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
-    QGroupBox* editorGroup = new QGroupBox{tr("Editor"), this};
+    QGroupBox* viewerGroup = new QGroupBox{tr("Viewer"), this};
 
-    mathSupportLabel = new QLabel(tr("Diagram support")+":", this),
+    srcCodeHighlightingSupportLabel = new QLabel(tr("Source code syntax highlighting support")+":", this),
+    srcCodeHighlightSupportCheck = new QCheckBox{this};
+
+    mathSupportLabel = new QLabel(tr("Math support")+":", this),
     mathSupportCombo = new QComboBox{this};
     mathSupportCombo->addItem(QString{"disable"});
-    mathSupportCombo->addItem(QString{"enable offline lib"});
-    mathSupportCombo->addItem(QString{"enable online lib"});
+    mathSupportCombo->addItem(QString{"offline JavaScript lib"});
+    mathSupportCombo->addItem(QString{"online JavaScript lib"});
+
+    diagramSupportLabel = new QLabel(tr("Diagram support")+":", this),
+    diagramSupportCombo = new QComboBox{this};
+    diagramSupportCombo->addItem(QString{"disable"});
+    diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
+    diagramSupportCombo->addItem(QString{"online JavaScript lib"});
 
     // assembly
-    QVBoxLayout* editorLayout = new QVBoxLayout{this};
-    editorLayout->addWidget(mathSupportLabel);
-    editorLayout->addWidget(mathSupportCombo);
-    editorGroup->setLayout(editorLayout);
+    QVBoxLayout* viewerLayout = new QVBoxLayout{this};
+    viewerLayout->addWidget(srcCodeHighlightingSupportLabel);
+    viewerLayout->addWidget(srcCodeHighlightSupportCheck);
+    viewerLayout->addWidget(mathSupportLabel);
+    viewerLayout->addWidget(mathSupportCombo);
+    viewerLayout->addWidget(diagramSupportLabel);
+    viewerLayout->addWidget(diagramSupportCombo);
+    viewerGroup->setLayout(viewerLayout);
 
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
-    boxesLayout->addWidget(editorGroup);
+    boxesLayout->addWidget(viewerGroup);
+    boxesLayout->addStretch();
     setLayout(boxesLayout);
 }
 
 ConfigurationDialog::MarkdownTab::~MarkdownTab()
 {
+    delete srcCodeHighlightingSupportLabel;
+    delete srcCodeHighlightSupportCheck;
     delete mathSupportLabel;
     delete mathSupportCombo;
+    delete diagramSupportLabel;
+    delete diagramSupportCombo;
+}
+
+void ConfigurationDialog::MarkdownTab::refresh()
+{
+    srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
+    mathSupportCombo->setCurrentIndex(config.getUiEnableMathInMd());
+    diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
+}
+
+void ConfigurationDialog::MarkdownTab::save()
+{
+    config.setUiEnableSrcHighlightInMd(srcCodeHighlightSupportCheck->isChecked());
+    config.setUiEnableMathInMd(static_cast<Configuration::JavaScriptLibSupport>(mathSupportCombo->currentIndex()));
+    config.setUiEnableDiagramsInMd(static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex()));
 }
 
 /*
- * Dialog
+ * Mind tab
  */
 
-void ConfigurationDialog::show()
-{
-    appTab->refresh();
-    mdTab->refresh();
 
-    QDialog::show();
+ConfigurationDialog::MindTab::MindTab(QWidget *parent)
+    : QWidget(parent), config(Configuration::getInstance())
+{
+    // IMPROVE horizontal panel w/ label & check same line
+    saveReadsMetadataLabel = new QLabel(tr("Save reads metadata")+":", this);
+    saveReadsMetadataCheck = new QCheckBox(this);
+
+    distributorSleepIntervalLabel = new QLabel(tr("Async refresh interval (1 - 10.000ms)")+":", this);
+    distributorSleepIntervalSpin = new QSpinBox(this);
+    distributorSleepIntervalSpin->setMinimum(1);
+    distributorSleepIntervalSpin->setMaximum(10000);
+
+    // assembly
+    QVBoxLayout* pLayout = new QVBoxLayout{this};
+    pLayout->addWidget(saveReadsMetadataLabel);
+    pLayout->addWidget(saveReadsMetadataCheck);
+    pLayout->addWidget(distributorSleepIntervalLabel);
+    pLayout->addWidget(distributorSleepIntervalSpin);
+    QGroupBox* pGroup = new QGroupBox{tr("Persistence"), this};
+    pGroup->setLayout(pLayout);
+
+    QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(pGroup);
+    boxesLayout->addStretch();
+    setLayout(boxesLayout);
 }
 
+ConfigurationDialog::MindTab::~MindTab()
+{
+    delete saveReadsMetadataLabel;
+    delete saveReadsMetadataCheck;
+    delete distributorSleepIntervalLabel;
+    delete distributorSleepIntervalSpin;
+}
+
+void ConfigurationDialog::MindTab::refresh()
+{
+    saveReadsMetadataCheck->setChecked(config.isSaveReadsMetadata());
+    distributorSleepIntervalSpin->setValue(config.getDistributorSleepInterval());
+}
+
+void ConfigurationDialog::MindTab::save()
+{
+    config.setSaveReadsMetadata(saveReadsMetadataCheck->isChecked());
+    config.setDistributorSleepInterval(distributorSleepIntervalSpin->value());
+}
 
 } // m8r namespace
