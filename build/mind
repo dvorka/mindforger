@@ -1,6 +1,0 @@
-#!/bin/bash
-
-cd /home/dvorka/bin && ./mindforger ~/mf > /tmp/mindforger-log.txt 2>&1 &
-
-# eof
-
