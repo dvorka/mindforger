@@ -95,7 +95,7 @@ TEST(ConfigurationTestCase, SaveDefaultConfig)
     string* asString = m8r::fileToString(file.getName());
     EXPECT_NE(asString->find("Theme: light"), std::string::npos);
     EXPECT_NE(asString->find("Time scope: 0y0m0d0h0m"), std::string::npos);
-    EXPECT_NE(asString->find("Show Notebook edit button: yes"), std::string::npos);
+    EXPECT_NE(asString->find("Editor syntax highlighting: yes"), std::string::npos);
     EXPECT_NE(asString->find("Save reads metadata: yes"), std::string::npos);
     EXPECT_NE(asString->find("Active repository: ~/mindforger-repository"), std::string::npos);
     EXPECT_NE(asString->find("Repository: ~/mindforger-repository"), std::string::npos);
@@ -120,7 +120,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     string backupTheme = c.getUiThemeName();
     m8r::TimeScope backupTimeScope = c.getTimeScope();
     bool backupReadsMetadata = c.isSaveReadsMetadata();
-    bool backupNotebookButton = c.isUiShowNotebookEditButton();
+    bool backupNotebookButton = c.isUiEditorEnableSyntaxHighlighting();
     m8r::Repository* backupActiveRepository;
     if(c.isActiveRepository()) {
         backupActiveRepository = c.getActiveRepository();
@@ -137,7 +137,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     m8r::TimeScope ts{1,2,33,4,55};
     c.setTimeScope(ts);
     c.setSaveReadsMetadata(false);
-    c.setUiShowNotebookEditButton(false);
+    c.setUiEditorEnableSyntaxHighlighting(false);
     m8r::Repository* r = new m8r::Repository{
         repositoryDir,
         m8r::Repository::RepositoryType::MARKDOWN,
@@ -152,7 +152,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     string* asString = m8r::fileToString(c.getConfigFilePath());
     EXPECT_NE(asString->find("Theme: CRAZYCOLORS"), std::string::npos);
     EXPECT_NE(asString->find("Time scope: 1y2m33d4h55m"), std::string::npos);
-    EXPECT_NE(asString->find("Show Notebook edit button: no"), std::string::npos);
+    EXPECT_NE(asString->find("Editor syntax highlighting: no"), std::string::npos);
     EXPECT_NE(asString->find("Save reads metadata: no"), std::string::npos);
     EXPECT_NE(asString->find("Active repository: /tmp/custom-repository-single-file.md"), std::string::npos);
     EXPECT_NE(asString->find("Repository: /tmp/custom-repository-single-file.md"), std::string::npos);
@@ -173,7 +173,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     c.getTimeScope().toString(timeScopeAsString);
     EXPECT_EQ(timeScopeAsString, "1y2m33d4h55m");
     EXPECT_FALSE(c.isSaveReadsMetadata());
-    EXPECT_FALSE(c.isUiShowNotebookEditButton());
+    EXPECT_FALSE(c.isUiEditorEnableSyntaxHighlighting());
 
     EXPECT_GE(c.getRepositories().size(), 1);
     EXPECT_NE(c.getRepositories().find(repositoryPath), c.getRepositories().end());
@@ -196,7 +196,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     c.setUiThemeName(backupTheme);
     c.setTimeScope(backupTimeScope);
     c.setSaveReadsMetadata(backupReadsMetadata);
-    c.setUiShowNotebookEditButton(backupNotebookButton);
+    c.setUiEditorEnableSyntaxHighlighting(backupNotebookButton);
     if(backupActiveRepository) {
         c.setActiveRepository(c.addRepository(backupActiveRepository));
     } else {
