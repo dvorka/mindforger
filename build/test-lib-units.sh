@@ -17,22 +17,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
+#export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
 #export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
 #export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
 
+# benchmarks
 #export OPTION_TEST="AiBenchmark.AaMatrix"
 #export OPTION_TEST="TrieBenchmark.TrieVsMap"
 #export OPTION_TEST="HtmlBenchmark.Outline"
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
+# tests
 #export OPTION_TEST="AiNlpTestCase.AaUniverseBow"
 #export OPTION_TEST="AiNlpTestCase.AaRepositoryBow"
 #export OPTION_TEST="AiNlpTestCase.Outline"
 #export OPTION_TEST="AiNlpTestCase.Lexicon"
 #export OPTION_TEST="AiNlpTestCase.Tokenizer"
 #export OPTION_TEST="AiNlpTestCase.Stemmer"
+export OPTION_TEST="HtmlTestCase.TaskList"
 #export OPTION_TEST="HtmlTestCase.NoteLinks"
 #export OPTION_TEST="MarkdownParserTestCase.Links"
 #export OPTION_TEST="MarkdownParserTestCase.TimeScope"
@@ -66,7 +69,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="MindTestCase.LearnAndRememberMindForgerRepository"
 #export OPTION_TEST="DateTimeGearTestCase.Immutability"
 #export OPTION_TEST="ConfigurationTestCase.*"
-export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
+#export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
 #export OPTION_TEST="ConfigurationTestCase.SaveAndLoad"
 ##export OPTION_TEST="ConfigurationTestCase.FromConstructor"
 #export OPTION_TEST="ConfigurationTestCase.Environment"

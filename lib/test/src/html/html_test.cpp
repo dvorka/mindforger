@@ -110,3 +110,28 @@ TEST(HtmlTestCase, NoteLinks)
     // links are NOT resolved - they are kept as they are
     cout << "= BEGIN HTML =" << endl << html << endl << "= END HTML =" << endl;
 }
+
+TEST(HtmlTestCase, TaskList)
+{
+    string fileName{"/lib/test/resources/markdown-repository/memory/feature-task-list.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-antc-tl.md");
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
+    m8r::Mind mind(config);
+    m8r::DummyHtmlColors dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(),dummyColors};
+    mind.learn();
+    mind.think().get();
+
+    ASSERT_GE(mind.remind().getOutlinesCount(), 1);
+
+    string html{};
+    htmlRepresentation.to(mind.remind().getOutlines()[0]->getNotes()[0], &html);
+
+    cout << "= BEGIN HTML =" << endl << html << endl << "= END HTML =" << endl;
+
+    // TODO ASSERT_ input
+}

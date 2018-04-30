@@ -275,8 +275,10 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
         footer(*html);
     }
 
+#ifdef MF_HTML_DEBUG
     // debug generated HTML
     MF_DEBUG("=== BEGIN HTML ===" << endl << *html << endl << "=== END HTML ===" << endl);
+#endif
 
     return html;
 }
@@ -399,8 +401,10 @@ string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html)
                     htmlHeader); // new string
     }
 
+#ifdef MF_HTML_DEBUG
     // debug generated HTML
     MF_DEBUG("=== BEGIN HEADER HTML ===" << endl << *html << endl << "=== END HEADER HTML ===" << endl);
+#endif
 
     return html;
 }
