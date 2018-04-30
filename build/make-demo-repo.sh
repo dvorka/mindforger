@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/bin/bash
 #
 # MindForger thinking notebook
 #
@@ -17,11 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-'''
-Create demo MindForger repository from my personal repository
-'''
+# This script copies nice and safe Outlines from personal repository
+# to demo repository used for creation of screenshots and videos.
 
-safeMarkdowns = {
-    3d-print.md,
-    ubuntu.md
-}
+export timestamp=`date +%Y-%m-%d--%H-%M-%S`
+
+cd ~
+mkdir mf-demo-repository-${timestamp}
+
+# eof
