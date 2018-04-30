@@ -99,7 +99,7 @@ time_t fileModificationTime(const string* filename)
     typedef struct stat attrs;
     attrs t_stat{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; // crazy initializer required by older GCC versions
     stat(filename->c_str(), &t_stat);
-    return t_stat.st_ctime;
+    return t_stat.st_mtime; // modification time ~ file content modification; st_ctime ~ file metata change (more sensitive)
 #elif _WIN32
     // IMPROVE windows code goes here
 #else

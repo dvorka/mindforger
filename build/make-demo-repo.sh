@@ -20,9 +20,21 @@
 # This script copies nice and safe Outlines from personal repository
 # to demo repository used for creation of screenshots and videos.
 
-export timestamp=`date +%Y-%m-%d--%H-%M-%S`
+export TIMESTAMP=`date +%Y-%m-%d--%H-%M-%S`
+export REPONAME="mf-demo-repository-${TIMESTAMP}"
 
-cd ~
-mkdir mf-demo-repository-${timestamp}
+# IMPORTANT: copy MUST protect MODIFICATION time (for Os w/o MF metadata)
+
+cd ~ && mkdir ${REPONAME}
+cd ${REPONAME} && mkdir -v limbo
+cp -vrfp ~/mf/stencils .
+cp -vrfp ~/mf/memory .
+
+rm -vrf ./memory/career
+rm -vrf ./memory/family
+rm -vrf ./memory/estate
+rm -vrf ./memory/finance
+
+rm -vrf ./memory/kitchen-b.md
 
 # eof
