@@ -255,6 +255,9 @@ void MainWindowPresenter::doActionMindRelearn(QString path)
     Repository* r = RepositoryIndexer::getRepositoryForPath(path.toStdString());
     if(r) {
         config.setActiveRepository(config.addRepository(r));
+        // remember new repository
+        mdConfigRepresentation->save(config);
+        // learn and show
         mind->learn();
         showInitialView();
     } else {
