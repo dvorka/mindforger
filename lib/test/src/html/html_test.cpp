@@ -129,9 +129,13 @@ TEST(HtmlTestCase, TaskList)
     ASSERT_GE(mind.remind().getOutlinesCount(), 1);
 
     string html{};
-    htmlRepresentation.to(mind.remind().getOutlines()[0]->getNotes()[0], &html);
-
+    // O header
+    htmlRepresentation.to(mind.remind().getOutlines()[0]->getOutlineDescriptorAsNote(), &html);
     cout << "= BEGIN HTML =" << endl << html << endl << "= END HTML =" << endl;
-
-    // TODO ASSERT_ input
+    EXPECT_NE(std::string::npos, html.find("input"));
+    // N
+    html.clear();
+    htmlRepresentation.to(mind.remind().getOutlines()[0]->getNotes()[0], &html);
+    cout << "= BEGIN HTML =" << endl << html << endl << "= END HTML =" << endl;
+    EXPECT_NE(std::string::npos, html.find("input"));
 }
