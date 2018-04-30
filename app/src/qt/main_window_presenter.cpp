@@ -575,6 +575,25 @@ void MainWindowPresenter::doActionFormatListNumber()
     }
 }
 
+void MainWindowPresenter::doActionFormatListTask()
+{
+    // IMPROVE ask for number of items using dialog
+    int count=3;
+    QString text{"\n"};
+    for(int i=1; i<=count; i++) {
+        text += QString::number(i);
+        text += ". [";
+        if(i%2) text+="x"; else text+=" ";
+        text += "] ...\n";
+    }
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text);
+    }
+}
+
 void MainWindowPresenter::doActionFormatCodeblock()
 {
     // IMPROVE ask for dialect

@@ -262,6 +262,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatListNumber = new QAction(tr("Numbered List"), mainWindow);
     actionFormatListNumber->setStatusTip(tr("Format block as numbered list"));
 
+    actionFormatListTask = new QAction(tr("Task List"), mainWindow);
+    actionFormatListTask->setStatusTip(tr("Format block as task list"));
+
     actionFormatCodeBlock = new QAction(tr("C&ode Block"), mainWindow);
     actionFormatCodeBlock->setStatusTip(tr("Format text block as source code"));
 
@@ -288,6 +291,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addSeparator();
     menuFormat->addAction(actionFormatListBullet);
     menuFormat->addAction(actionFormatListNumber);
+    menuFormat->addAction(actionFormatListTask);
     menuFormat->addSeparator();
     menuFormat->addAction(actionFormatCodeBlock);
     menuFormat->addAction(actionFormatBlockQuote);

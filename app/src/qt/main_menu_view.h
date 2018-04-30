@@ -114,6 +114,7 @@ public:
     QAction* actionFormatBlockQuote;
     QAction* actionFormatListNumber;
     QAction* actionFormatListBullet;
+    QAction* actionFormatListTask;
     QAction* actionFormatLink;
     QAction* actionFormatImage;
     QAction* actionFormatTable;

@@ -167,6 +167,7 @@ public slots:
     void doActionFormatStrikethrough();
     void doActionFormatListBullet();
     void doActionFormatListNumber();
+    void doActionFormatListTask();
     void doActionFormatCodeblock();
     void doActionFormatBlockquote();
     void doActionFormatLink();

@@ -72,6 +72,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionFormatStrikethrough, SIGNAL(triggered()), mwp, SLOT(doActionFormatStrikethrough()));
     QObject::connect(view->actionFormatListBullet, SIGNAL(triggered()), mwp, SLOT(doActionFormatListBullet()));
     QObject::connect(view->actionFormatListNumber, SIGNAL(triggered()), mwp, SLOT(doActionFormatListNumber()));
+    QObject::connect(view->actionFormatListTask, SIGNAL(triggered()), mwp, SLOT(doActionFormatListTask()));
     QObject::connect(view->actionFormatCodeBlock, SIGNAL(triggered()), mwp, SLOT(doActionFormatCodeblock()));
     QObject::connect(view->actionFormatBlockQuote, SIGNAL(triggered()), mwp, SLOT(doActionFormatBlockquote()));
     QObject::connect(view->actionFormatLink, SIGNAL(triggered()), mwp, SLOT(doActionFormatLink()));
