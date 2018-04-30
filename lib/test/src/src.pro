@@ -30,6 +30,7 @@ DEPENDPATH += $$PWD/../../../lib/src
 
 # -L where to look for library, -l link the library
 LIBS += -L$$OUT_PWD/../../../lib -lmindforger
+# MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
 LIBS += -L$$OUT_PWD/../../../deps/discount -ldiscount
 
 # GTest unit test framework library dependencies
