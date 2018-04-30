@@ -37,7 +37,7 @@ DEPENDPATH += $$PWD/../lib/src
 
 # -L where to look for library, -l link the library
 LIBS += -L$$OUT_PWD/../lib -lmindforger
-LIBS += -L$$OUT_PWD/../deps/discount -lmarkdown
+LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
 
 # development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1

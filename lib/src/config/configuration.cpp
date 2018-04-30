@@ -77,9 +77,9 @@ void Configuration::clear()
             | Configuration::MdToHtmlOption::NoSuperscriptOption // if enabled it BREAKS MathJax
 
             // EXTRA LIBRARIES options:
-            | Configuration::MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js
-            //| Configuration::MdToHtmlOption::MathSupport // math expressions support via mathjax.js (flag always enabled - JavaScript online/offline/no decides)
-            | Configuration::MdToHtmlOption::DiagramSupport; // diagram support via mermaid.js (flag always enabled - JavaScript online/offline/no decides)
+            | Configuration::MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js - enabled by default
+            //| Configuration::MdToHtmlOption::MathSupport // math expressions support via mathjax.js - disabled by default
+            //| Configuration::MdToHtmlOption::DiagramSupport; // diagram support via mermaid.js - disabled by default
             ;
 
     aaAlgorithm = AssociationAssessmentAlgorithm::WEIGHTED_FTS;
