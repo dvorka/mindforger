@@ -625,7 +625,7 @@ void MainWindowPresenter::doActionFormatLink()
     QString text{"[]()"};
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false);
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false, 1);
     } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
         orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false);
     }
@@ -637,7 +637,7 @@ void MainWindowPresenter::doActionFormatImage()
     QString text{"![]()"};
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false);
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false, 2);
     } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
         orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false);
     }

@@ -116,7 +116,7 @@ void NoteEditorView::wrapSelectedText(const QString &tag)
     setFocus();
 }
 
-void NoteEditorView::insertMarkdownText(const QString &text, bool newLine)
+void NoteEditorView::insertMarkdownText(const QString &text, bool newLine, int offset)
 {
     QTextCursor cursor = textCursor();
     if(cursor.hasSelection()) {
@@ -127,7 +127,7 @@ void NoteEditorView::insertMarkdownText(const QString &text, bool newLine)
         cursor.movePosition(QTextCursor::Down);
     }
     cursor.insertText(text);
-    cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, text.length());
+    cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, text.length()-offset);
     setTextCursor(cursor);
 
     setFocus();

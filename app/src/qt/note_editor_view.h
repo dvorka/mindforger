@@ -60,7 +60,7 @@ public:
 
     QString getSelectedText() const { return textCursor().selectedText(); }
     void wrapSelectedText(const QString &tag);
-    void insertMarkdownText(const QString &text, bool newLine=true);
+    void insertMarkdownText(const QString &text, bool newLine=true, int offset=0);
 
     void setShowLineNumbers(bool show);
     void setStatusBar(const StatusBarView* sb) { this->statusBar = sb; }
