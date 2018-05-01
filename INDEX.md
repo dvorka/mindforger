@@ -25,6 +25,7 @@ Install MindForger:
 Read 
 
 * https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md
+
 and
 
 ```
