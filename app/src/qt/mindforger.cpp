@@ -59,7 +59,7 @@ using namespace std;
  *
  *
  *
- * Options:
+ * Options proposal:
  *
  * $ mindforger --theme dark
  *   -t
@@ -79,7 +79,7 @@ using namespace std;
  *
  *
  *
- * Terminal CLI commands:
+ * Terminal CLI commands proposal:
  *
  * $ mindforger --command LIST outlines
  * $ mindforger -C LIST outlines
@@ -120,6 +120,7 @@ int main(int argc, char *argv[])
 
     std::string useRepository{};
     QString themeOptionValue{};
+    QString configurationFilePath{};
     if(argc > 1) {
         QCommandLineParser parser;
         // process command line as parameters/options are present
@@ -129,6 +130,10 @@ int main(int argc, char *argv[])
                 QCoreApplication::translate("main", "Use 'dark', 'light' or other GUI <theme>."),
                 QCoreApplication::translate("main", "theme"));
         parser.addOption(themeOption);
+        QCommandLineOption configPathOption(QStringList() << "c" << "config-file-path",
+                QCoreApplication::translate("main", "Load configuration from given <file>."),
+                QCoreApplication::translate("main", "file"));
+        parser.addOption(configPathOption);
 //        QCommandLineOption generateTocOption(QStringList() << "T" << "generate-toc",
 //                QCoreApplication::translate("main", "Generate table of contents for <source> Markdown file."),
 //                QCoreApplication::translate("main", "source"));
@@ -154,12 +159,19 @@ int main(int argc, char *argv[])
         if(parser.isSet(themeOption)) {
             themeOptionValue = parser.value(themeOption);
         }
+
+        if(parser.isSet(configPathOption)) {
+            configurationFilePath = parser.value(configPathOption);
+        }
     }
     // else there are no parameters and options > simply load GUI
 
     // load configuration
     m8r::MarkdownConfigurationRepresentation mdConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
+    if(configurationFilePath.size()) {
+        config.setConfigFilePath(configurationFilePath.toStdString());
+    }
     if(!mdConfigRepresentation.load(config)) {
         mdConfigRepresentation.save(m8r::File{config.getConfigFilePath()});
     }
