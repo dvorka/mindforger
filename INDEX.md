@@ -22,15 +22,7 @@ Install MindForger:
 * [Debian](https://github.com/dvorka/mindforger-repository/memory/mindforger/installation.md)
 
 ## Documentation
-Read 
-
-* https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md
-
-and
-
-```
-man mindforger
-```
+Read https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md and `man mindforger`.
 
 ## Bugs
 https://github.com/dvorka/mindforger/issues
