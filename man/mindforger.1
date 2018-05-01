@@ -1,11 +1,11 @@
 .TH MindForger 1
 .SH NAME
-\fBmindforger\fR \-  easily view, navigate and manage your knowledge or Markdown notes.
+\fBmindforger\fR \-  easily view, navigate and manage your knowledge and/or Markdown files.
 .SH SYNOPSIS
 .B mindforger [options] [<directory>|<file>]
 .SH DESCRIPTION
 .B MindForger
-is a personal thinking notebook.
+is a personal thinking notebook and Markdown IDE.
 
 MindForger is definitive human mind inspired
 .B knowledge management tool
@@ -19,6 +19,9 @@ as it uses Markdown shorthand.
 .TP 
 \fB-r --theme <theme>\fR
 Use specified GUI <theme> like light, dark or black.
+.TP 
+\fB-c --config-path <config-file-path>\fR
+Load configuration from the given file <config-file-path>.
 .TP
 \fB-h --help\fR
 Show help
@@ -38,7 +41,7 @@ Show version information
 MindForger configuration file.
 .TP
 \fB~/mindforger-repository\fR 
-Directory where MindForger expects to find a default repository first.
+Directory where MindForger expects to find a default repository.
 
 .SH EXAMPLES
 .TP
@@ -49,7 +52,7 @@ Open configured/default knowledge repository and use `dark` UI theme.
 Open `ideas.md` Markdown formatted file.
 .TP
 \fBmindforger --theme light ./a-github-project-directory\fR
-Find all Markdown formatted files in `a-github-project-directory` for search/browse/edit and use `light` UI theme.
+Find all Markdown formatted files in `a-github-project-directory` to search/browse/edit and use `light` UI theme.
 
 .SH AUTHOR
 Written by Martin Dvorak <martin.dvorak@mindforger.com>
