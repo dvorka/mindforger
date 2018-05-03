@@ -4,3 +4,6 @@
 [submodule "doc"]
 	path = doc
 	url = https://github.com/dvorka/mindforger-repository.git
+[submodule "deps/cmark"]
+	path = deps/cmark
+	url = https://github.com/dvorka/cmark.git
