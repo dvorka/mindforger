@@ -8,6 +8,7 @@ Big thanks to 3rd party FOSS content authors:
 * Qt Company (Qt - lib and code)
 * Christian Loose (CuteMarkEd - inspiration and code)
 * David Parsons (Discount - Markdown rendering - library)
+* GitHub (CMark - Markdown rendering - library)
 * Google (Google C++ unit testing framework)
 * Knut Sveidqvist (Mermaid.js - diagrams and flowcharts rendering in HTML)
 * AMS and SIAM (MathJax.js - math rendering in HTML)
