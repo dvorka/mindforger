@@ -80,31 +80,28 @@ void OutlineTreePresenter::refresh(Outline* outline, Outline::Patch* patch)
             }
         } else {
             model->removeAllRows();
-            // IMPROVE consider moving skeleton creation for aspects to lib on threshold
-            if(mind->isTimeScopeEnabled()) {
-                set<int> visibleNotes;
-                vector<int> parents;
-                for(size_t i=0; i<outline->getNotesCount(); i++) {
-                    if(mind->getTimeScopeAspect().isInScope(outline->getNotes()[i])) {
-                        // N's parents
-                        parents.clear();
-                        outline->getNotePathToRoot(i, parents);
-                        if(parents.size()) {
-                            for(size_t p=0; p<parents.size(); p++) {
-                                if(visibleNotes.find(parents[p]) != visibleNotes.end()) {
-                                    visibleNotes.insert(p);
-                                    model->addNote(outline->getNotes()[parents[p]]);
-                                }
-                            }
-                        }
+            for(Note* note:outline->getNotes()) {
+                model->addNote(note);
+            }
+        }
 
-                        // N
-                        model->addNote(outline->getNotes()[i]);
+        // forget / time scope: hide view rows ~ there is full model, I just hide what's visible > patch should work
+        if(mind->isTimeScopeEnabled()) {
+            vector<int> parents;
+            for(size_t i=0; i<outline->getNotesCount(); i++) {
+                if(mind->getTimeScopeAspect().isInScope(outline->getNotes()[i])) {
+                    // N's parents
+                    parents.clear();
+                    outline->getNotePathToRoot(i, parents);
+                    if(parents.size()) {
+                        for(size_t p=0; p<parents.size(); p++) {
+                            view->showRow(parents[p]);
+                        }
                     }
-                }
-            } else {
-                for(Note* note:outline->getNotes()) {
-                    model->addNote(note);
+                    // N
+                    view->showRow(i);
+                } else {
+                    view->hideRow(i);
                 }
             }
         }

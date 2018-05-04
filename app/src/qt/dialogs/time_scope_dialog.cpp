@@ -33,7 +33,7 @@ TimeScopeDialog::TimeScopeDialog(QWidget *parent)
     yearSpin = new QSpinBox{this};
     yearSpin->setEnabled(false);
     yearSpin->setMinimum(0);
-    yearSpin->setMaximum(20);
+    yearSpin->setMaximum(50);
     spinsLayout->addWidget(yearSpin);
     spinsLayout->addWidget(new QLabel(tr("year(s)")));
     monthSpin = new QSpinBox{this};

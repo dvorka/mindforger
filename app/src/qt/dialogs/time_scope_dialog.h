@@ -64,6 +64,7 @@ public:
         daySpin->setValue(d);
         hourSpin->setValue(h);
         minuteSpin->setValue(mm);
+
         QDialog::show();
     }
 

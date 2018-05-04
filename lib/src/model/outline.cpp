@@ -579,14 +579,20 @@ void Outline::getNoteChildren(const Note* note, vector<Note*>* children, Outline
     }
 }
 
-void Outline::getNotePathToRoot(const size_t offset, std::vector<int> parents)
+void Outline::getNotePathToRoot(const size_t offset, std::vector<int>& parents)
 {
     if(offset && offset<notes.size()) {
         int parentDepth = notes[offset]->getDepth()-1;
-        for(int i=offset; i>=0; i--) {
-            if(notes[offset]->getDepth() == parentDepth) {
-                parents.insert(parents.begin(),offset);
-                parentDepth--;
+        if(parentDepth >= 0) {
+            for(int i=offset; i>=0; i--) {
+                if(notes[i]->getDepth() == parentDepth) {
+                    parents.push_back(i);
+                    if(!parentDepth) {
+                        return;
+                    } else {
+                        parentDepth--;
+                    }
+                }
             }
         }
     }

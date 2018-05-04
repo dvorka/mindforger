@@ -228,7 +228,7 @@ public:
     /**
      * @brief Get skeleton-style (Note per level) path to root.
      */
-    void getNotePathToRoot(const size_t offset, std::vector<int> parents);
+    void getNotePathToRoot(const size_t offset, std::vector<int>& parents);
     /**
      * @brief Forget Note including its children.
      */

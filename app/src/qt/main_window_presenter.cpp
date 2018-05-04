@@ -1109,7 +1109,6 @@ void MainWindowPresenter::handleMindTimeScope()
     TimeScope& ts=mind->getTimeScopeAspect().getTimeScope();
     if(timeScopeDialog->isThreasholdSet()) {
         ts.years=timeScopeDialog->getYears();
-        ts.years=timeScopeDialog->getMonths();
         ts.months=timeScopeDialog->getMonths();
         ts.days=timeScopeDialog->getDays();
         ts.hours=timeScopeDialog->getHours();
