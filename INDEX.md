@@ -24,5 +24,5 @@ Install MindForger:
 ## Documentation
 Read https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md and `man mindforger`.
 
-## Bugs
+## Bugs and Feature Requests
 https://github.com/dvorka/mindforger/issues
