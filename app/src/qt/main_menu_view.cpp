@@ -256,6 +256,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatStrikethrough = new QAction(tr("&Strikethrough"), mainWindow);
     actionFormatStrikethrough->setStatusTip(tr("Format text as strikethrough"));
 
+    actionFormatKeyboard = new QAction(tr("&Keyboard"), mainWindow);
+    actionFormatKeyboard->setStatusTip(tr("Format text as keyboard input"));
+
     actionFormatListBullet = new QAction(tr("Bulleted List"), mainWindow);
     actionFormatListBullet->setStatusTip(tr("Format block as bulleted list"));
 
@@ -288,6 +291,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatItalic);
     menuFormat->addAction(actionFormatCode);
     menuFormat->addAction(actionFormatStrikethrough);
+    menuFormat->addAction(actionFormatKeyboard);
     menuFormat->addSeparator();
     menuFormat->addAction(actionFormatListBullet);
     menuFormat->addAction(actionFormatListNumber);

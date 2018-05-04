@@ -165,6 +165,7 @@ public slots:
     void doActionFormatItalic();
     void doActionFormatCode();
     void doActionFormatStrikethrough();
+    void doActionFormatKeyboard();
     void doActionFormatListBullet();
     void doActionFormatListNumber();
     void doActionFormatListTask();

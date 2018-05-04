@@ -545,6 +545,15 @@ void MainWindowPresenter::doActionFormatStrikethrough()
     }
 }
 
+void MainWindowPresenter::doActionFormatKeyboard()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->wrapSelectedText("<kbd>", "</kbd>");
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->wrapSelectedText("<kbd>", "</kbd>");
+    }
+}
+
 void MainWindowPresenter::doActionFormatListBullet()
 {
     // IMPROVE ask for number of items using dialog

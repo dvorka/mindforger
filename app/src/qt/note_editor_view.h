@@ -59,7 +59,8 @@ public:
     NoteEditorView &operator=(const NoteEditorView&&) = delete;
 
     QString getSelectedText() const { return textCursor().selectedText(); }
-    void wrapSelectedText(const QString &tag);
+    void wrapSelectedText(const QString &tag) { wrapSelectedText(tag,""); }
+    void wrapSelectedText(const QString &tag, const QString &endTag);
     void insertMarkdownText(const QString &text, bool newLine=true, int offset=0);
 
     void setShowLineNumbers(bool show);

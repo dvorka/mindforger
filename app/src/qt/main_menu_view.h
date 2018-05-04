@@ -109,6 +109,7 @@ public:
     QAction* actionFormatBold;
     QAction* actionFormatItalic;
     QAction* actionFormatStrikethrough;
+    QAction* actionFormatKeyboard;
     QAction* actionFormatCode;
     QAction* actionFormatCodeBlock;
     QAction* actionFormatBlockQuote;
