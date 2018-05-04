@@ -116,6 +116,22 @@ void RepositoryIndexer::updateIndex() {
 #endif
 }
 
+bool RepositoryIndexer::fileHasMarkdownExtension(const std::string& filename)
+{
+    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
+    if(stringEndsWith(filename, FILE_EXTENSION_MD_MD)) {
+        return true;
+    } else if(stringEndsWith(filename, FILE_EXTENSION_MD_MARKDOWN)) {
+        return true;
+    } else if(stringEndsWith(filename, FILE_EXTENSION_MD_MDOWN)) {
+        return true;
+    } else if(stringEndsWith(filename, FILE_EXTENSION_MD_MKDN)) {
+        return true;
+    }
+
+    return false;
+}
+
 void RepositoryIndexer::updateIndexMemory(const string& directory)
 {
     if(repository->getMode() == Repository::RepositoryMode::REPOSITORY) {
@@ -144,7 +160,7 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
                         ppath->append(entry->d_name);
 
                         allFiles.insert(ppath);
-                        if(stringEndsWith(*ppath, FILE_EXTENSION_MARKDOWN)) {
+                        if(fileHasMarkdownExtension(*ppath)) {
                             markdowns.insert(ppath);
                         }
                     }
@@ -159,7 +175,7 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
             path->append(FILE_PATH_SEPARATOR);
             path->append(repository->getFile());
             allFiles.insert(path);
-            if(stringEndsWith(*path, FILE_EXTENSION_MARKDOWN)) {
+            if(fileHasMarkdownExtension(*path)) {
                 markdowns.insert(path);
             }
         }
@@ -180,7 +196,7 @@ void RepositoryIndexer::updateIndexStencils(const string& directory, set<const s
                     path = new string{directory};
                     path->append(FILE_PATH_SEPARATOR);
                     path->append(entry->d_name);
-                    if(stringEndsWith(*path, FILE_EXTENSION_MARKDOWN)) {
+                    if(fileHasMarkdownExtension(*path)) {
                         stencils.insert(path);
                     }
                 }

@@ -53,7 +53,11 @@ constexpr const auto FILE_PATH_LIMBO = "limbo";
 constexpr const auto FILE_PATH_STENCILS = "stencils";
 constexpr const auto FILE_PATH_OUTLINES = "outlines";
 constexpr const auto FILE_PATH_NOTES = "notes";
-constexpr const auto FILE_EXTENSION_MARKDOWN = ".md";
+
+constexpr const auto FILE_EXTENSION_MD_MD = ".md";
+constexpr const auto FILE_EXTENSION_MD_MARKDOWN = ".markdown";
+constexpr const auto FILE_EXTENSION_MD_MDOWN = ".mdown";
+constexpr const auto FILE_EXTENSION_MD_MKDN = ".mkdn";
 
 constexpr const auto UI_THEME_DARK = "dark";
 constexpr const auto UI_THEME_LIGHT = "light";

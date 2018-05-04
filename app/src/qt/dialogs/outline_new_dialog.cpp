@@ -162,17 +162,17 @@ OutlineNewDialog::AdvancedTab::AdvancedTab(const QString& memoryDirPath, QWidget
     setLayout(mainLayout);
 }
 
+OutlineNewDialog::AdvancedTab::~AdvancedTab()
+{
+}
+
 void OutlineNewDialog::AdvancedTab::refreshPath(const QString& name)
 {
     fileLine->setText(
         memoryDirPath+
         FILE_PATH_SEPARATOR+
         QString::fromStdString(normalizeToNcName(name.toStdString(),'-'))+
-        FILE_EXTENSION_MARKDOWN);
-}
-
-OutlineNewDialog::AdvancedTab::~AdvancedTab()
-{
+        FILE_EXTENSION_MD_MD);
 }
 
 /*
@@ -296,4 +296,4 @@ void OutlineNewDialog::refreshPath(const QString& path)
     advancedTab->refreshPath(path);
 }
 
-}
+} // m8r namespace

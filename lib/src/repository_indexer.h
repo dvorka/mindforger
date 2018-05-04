@@ -99,6 +99,7 @@ public:
     char* getTagsFromPath();
 
 private:
+    bool fileHasMarkdownExtension(const std::string& filename);
     void updateIndexMemory(const std::string& directory);
     void updateIndexStencils(const std::string& directory, std::set<const std::string*>& stencils);
 };

@@ -277,12 +277,12 @@ void Memory::sortByName(vector<Outline*>& os)
 
 string Memory::createOutlineKey(const string* name)
 {
-    return persistence->createFileName(config.getMemoryPath(), name, string(FILE_EXTENSION_MARKDOWN));
+    return persistence->createFileName(config.getMemoryPath(), name, string(FILE_EXTENSION_MD_MD));
 }
 
 string Memory::createLimboKey(const string* name)
 {
-    return persistence->createFileName(config.getLimboPath(), name, string(FILE_EXTENSION_MARKDOWN));
+    return persistence->createFileName(config.getLimboPath(), name, string(FILE_EXTENSION_MD_MD));
 }
 
 Outline* Memory::getOutline(const string& key)
