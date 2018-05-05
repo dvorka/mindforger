@@ -27,8 +27,10 @@ See [licenses](./licenses) folder for 3rd party content licensing details.
 
 Acknowledgements to reviewers and testers:
 
-* Floex (reviews)
-* Honza Odstrcil (consultations)
+* Floex (review)
+* Stefan Pacinda (review)
+* Tom Muchka (pitch, personas)
+* Honza Odstrcil (feedback)
 
 Special thanks to:
 
