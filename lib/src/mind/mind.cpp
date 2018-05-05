@@ -328,6 +328,9 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
             }
         }
         for(Note* note:outline->getNotes()) {
+            if(timeScopeAspect.isEnabled() && timeScopeAspect.isOutOfScope(note)) {
+                continue;
+            }
             if(note->getName().find(regexp)!=string::npos) {
                 result->push_back(note);
             } else {
@@ -343,7 +346,7 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
     }
 }
 
-vector<Note*>* Mind::findNoteFts(const string& regexp, const bool ignoreCase, Outline* scope)
+vector<Note*>* Mind::findNoteFts(const string& regexp, const bool ignoreCase, Outline* outlineScope)
 {
     if(allNotesCache.size()) {
         allNotesCache.clear();
@@ -358,11 +361,14 @@ vector<Note*>* Mind::findNoteFts(const string& regexp, const bool ignoreCase, Ou
         r += regexp;
     }
 
-    if(scope) {
-        findNoteFts(result, r, ignoreCase, scope);
+    if(outlineScope) {
+        findNoteFts(result, r, ignoreCase, outlineScope);
     } else {
         const vector<m8r::Outline*> outlines = memory.getOutlines();
         for(Outline* outline:outlines) {
+            if(timeScopeAspect.isEnabled() && timeScopeAspect.isOutOfScope(outline)) {
+                continue;
+            }
             findNoteFts(result, r, ignoreCase, outline);
         }
     }

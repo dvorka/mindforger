@@ -272,7 +272,7 @@ public:
      */
     std::unique_ptr<std::vector<Outline*>> findOutlineByNameFts(const std::string& regexp) const;
     std::vector<Note*>* findNoteByNameFts(const std::string& regexp) const;
-    std::vector<Note*>* findNoteFts(const std::string& regexp, const bool ignoreCase=false, Outline* scope=nullptr);
+    std::vector<Note*>* findNoteFts(const std::string& regexp, const bool ignoreCase=false, Outline* outlineScope=nullptr);
     // TODO findFts() - search also outline name and description
     //   >> temporary note of Outline type (never saved), cannot be created by user
     void getOutlineNames(std::vector<std::string>& names) const;
