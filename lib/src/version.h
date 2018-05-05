@@ -25,11 +25,11 @@ namespace m8r {
 // C++ character const/constexpr concatenation patterns via templates are crazy > using C-style define
 
 // versionning scheme: https://semver.org/
-#define MINDFORGER_VERSION_MAJOR 0
-#define MINDFORGER_VERSION_MINOR 1
-#define MINDFORGER_VERSION_REVISION 0
+#define MINDFORGER_VERSION_MAJOR "0"
+#define MINDFORGER_VERSION_MINOR "10"
+#define MINDFORGER_VERSION_REVISION "0"
 
-#define MINDFORGER_VERSION "0.9.0"
+#define MINDFORGER_VERSION MINDFORGER_VERSION_MAJOR "." MINDFORGER_VERSION_MINOR "." MINDFORGER_VERSION_REVISION
 
 }
 #endif // M8R_VERSION_H
