@@ -90,6 +90,7 @@ void NoteNewDialog::GeneralTab::clean()
     nameEdit->setText(tr("Note"));
     nameEdit->selectAll();
     nameEdit->setFocus();
+    stencilCombo->clear();
     editTagsGroup->clearTagList();
 }
 
