@@ -6,12 +6,12 @@
 [![Documentation](https://img.shields.io/badge/project-documentation-blue.svg)](https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md)
 [![All releases downloads](https://img.shields.io/github/downloads/dvorka/mindforger/total.svg)](https://github.com/dvorka/mindforger/releases)
 
-Documentation:
+Read:
 
-* [user](https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md)
-* [developer](https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md)
+* [user](https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md) documentation
+* [developer](https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md) documentation
 
-Check https://www.mindforger.com and read `man mindforger`
+Check https://www.mindforger.com and `man mindforger`
 
 ## Markdown IDE
 ![MindForger](http://option1.mindforger.com/images/screenshots/markdown-images.png)
