@@ -6,12 +6,7 @@
 [![Documentation](https://img.shields.io/badge/project-documentation-blue.svg)](https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md)
 [![All releases downloads](https://img.shields.io/github/downloads/dvorka/mindforger/total.svg)](https://github.com/dvorka/mindforger/releases)
 
-Read:
-
-* [user](https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md) documentation
-* [developer](https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md) documentation
-
-Check https://www.mindforger.com and `man mindforger`
+https://www.mindforger.com
 
 ## Markdown IDE
 ![MindForger](http://option1.mindforger.com/images/screenshots/markdown-images.png)
@@ -30,6 +25,14 @@ Install MindForger:
 * [Ubuntu](https://github.com/dvorka/mindforger-repository/memory/mindforger/installation.md)
 * [Fedora](https://github.com/dvorka/mindforger-repository/memory/mindforger/installation.md)
 * [Debian](https://github.com/dvorka/mindforger-repository/memory/mindforger/installation.md)
+
+# Documentation
+Read:
+
+* [user](https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md) documentation
+* [developer](https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md) documentation
+
+Check `man mindforger`
 
 ## Bugs and Feature Requests
 https://github.com/dvorka/mindforger/issues
