@@ -34,5 +34,39 @@ Read:
 
 Check `man mindforger`
 
+Feature highlights:
+
+* Single Markdown file editor
+* Menu/dialogs for Markdow syntax - from bold to link creation
+* Multiple Markdown files IDE
+* Find notebook (Markdown file) by full-text search
+* Find notebook by name
+* Find notebook by tag(s)
+* Find note (Markdown section) by full-text search
+* Find note by name
+* Find note by tag(s)
+* Find note within notebook by full-text search
+* Find note within notebook by name
+* Find note within notebook by tag(s)
+* Create notebook using a stencil
+* Mark notebook as home
+* Assign notebook tag(s), importance, urgency, completion % and type.
+* Clone notebook
+* Create note using a stencil
+* Assign note tag(s), completion and type.
+* Clone note
+* Refactor note from notebook to notebook
+* Refactor note (Markdown section) up in notes hierarchy
+* Refactor note down in notes hierarchy
+* Refactor note to the top of notes hierarchy
+* Refactor note to the bottom of notes hierarchy
+* Promote note down in notes hierarchy
+* Demote note down in notes hierarchy
+* Extract note from text
+* Provide associated notes when reading a notebook
+* Provide associated notes when reading a note
+* Provide associated notes when writing text of a note
+* Scope visible notebooks and notes by time (relative forgetting)
+
 ## Bugs and Feature Requests
 https://github.com/dvorka/mindforger/issues
