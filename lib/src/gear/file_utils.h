@@ -69,12 +69,13 @@ struct File
 
 void pathToDirectoryAndFile(const std::string& path, std::string& directory, std::string& file);
 bool stringToLines(const std::string* text, std::vector<std::string*>& lines);
-bool fileToLines(const std::string* filename, std::vector<std::string*>& lines, unsigned long int &filesize);
+bool fileToLines(const std::string* filename, std::vector<std::string*>& lines, unsigned long int& filesize);
 std::string* fileToString(const std::string& filename);
 void stringToFile(const std::string& filename, const std::string& content);
 time_t fileModificationTime(const std::string* filename);
-bool copyFile(const std::string &from, const std::string &to);
-bool moveFile(const std::string &from, const std::string &to);
+bool copyFile(const std::string& from, const std::string& to);
+bool moveFile(const std::string& from, const std::string& to);
+void resolvePath(const std::string& path, std::string& resolvedAbsolutePath);
 bool isDirectoryOrFileExists(const char* path);
 bool isDirectory(const char* path);
 bool isFile(const char* path);

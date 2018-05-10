@@ -125,6 +125,19 @@ bool moveFile(const string &from, const string &to)
     }
 }
 
+void resolvePath(const std::string& path, std::string& resolvedAbsolutePath)
+{
+    // output buffer MUST be set to NULL (check realpath manpage)
+    char * rp = realpath(path.c_str(), NULL);
+    if(!rp) {
+        cerr << "Error: unable to resolve path '" << path << "'" << endl;
+        resolvedAbsolutePath.assign(path);
+    } else {
+        resolvedAbsolutePath.assign(rp);
+        free(rp);
+    }
+}
+
 bool isDirectoryOrFileExists(const char* path)
 {
     struct stat info;

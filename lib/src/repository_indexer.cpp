@@ -247,8 +247,12 @@ bool RepositoryIndexer::isMindForgerRepository(const string& directory)
     return true;
 }
 
-Repository* RepositoryIndexer::getRepositoryForPath(const std::string& path)
+Repository* RepositoryIndexer::getRepositoryForPath(const string& p)
 {
+    MF_DEBUG("Creating repository for path: '" << p << "'" << endl);
+    string path{};
+    resolvePath(p, path);
+    MF_DEBUG("  Resolved absolute path: '" << path << "'" << endl);
     if(isDirectoryOrFileExists(path.c_str())) {
         if(isDirectory(path.c_str())) {
             if(isMindForgerRepository(path)) {

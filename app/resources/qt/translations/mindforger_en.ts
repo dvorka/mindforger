@@ -1262,16 +1262,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="354"/>
-        <source>Outline </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="356"/>
-        <source>Outline not found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="369"/>
         <source>Find Note by Tag</source>
         <translation type="unfinished"></translation>
@@ -1326,11 +1316,13 @@
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="333"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="354"/>
         <source>Notebook </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="335"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="356"/>
         <source>Notebook not found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1740,17 +1732,14 @@
     <name>m8r::OrlojPresenter</name>
     <message>
         <location filename="../../../src/qt/orloj_presenter.cpp" line="157"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="243"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="264"/>
         <source>No Notebook selected!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/orloj_presenter.cpp" line="177"/>
         <source>Note &apos;%1&apos; selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="243"/>
-        <source>No Outline selected!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

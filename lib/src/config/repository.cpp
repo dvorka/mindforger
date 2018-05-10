@@ -47,4 +47,4 @@ void Repository::updatePath()
     }
 }
 
-}
+} // m8r namespace
