@@ -9,12 +9,12 @@
 https://www.mindforger.com
 
 ## Markdown IDE
-![MindForger](http://option1.mindforger.com/images/screenshots/markdown-images.png)
+![MindForger](http://www.mindforger.com/github/github-markdown-ide.png)
 
 MindForger is open, free, well performing Markdown IDE which respects your privacy and enables security. 
 
 ## Thinking Notebook
-![MindForger](http://option3.mindforger.com/images/parallax/1-title-screen.jpg)
+![MindForger](http://www.mindforger.com/github/github-thinking-notebook.png)
 
 MindForger is actually more than an editor or IDE - it's human mind inspired personal knowledge management tool.
 
@@ -67,6 +67,9 @@ Feature highlights:
 * Provide associated notes when reading a note
 * Provide associated notes when writing text of a note
 * Scope visible notebooks and notes by time (relative forgetting)
+
+## Content
+Clone Markdown GitHub repositories to try MindForger.
 
 ## Bugs and Feature Requests
 https://github.com/dvorka/mindforger/issues
