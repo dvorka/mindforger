@@ -76,6 +76,7 @@ public:
     void setSearchIgnoreCase(bool ignoreCase) { searchIgnoreCase = ignoreCase; }
 
 public slots:
+    void slotLinkClicked(const QUrl& url);
     void slotEditNote();
     void slotRefreshLeaderboard(Note* note);
     void slotRefreshLeaderboardByValue(std::vector<std::pair<Note*,float>>* associations);

@@ -23,6 +23,9 @@ namespace m8r {
 NoteView::NoteView(QWidget *parent)
     : QWebView(parent)
 {
+
+    // ensure that link clicks are not handled, but delegated to MF using linkClicked signal
+    page()->setLinkDelegationPolicy(QWebPage::LinkDelegationPolicy::DelegateAllLinks);
 }
 
 void NoteView::mouseDoubleClickEvent(QMouseEvent* event)
