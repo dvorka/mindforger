@@ -120,7 +120,8 @@ HEADERS += \
     src/qt/assoc_leaderboard_presenter.h \
     src/qt/assoc_leaderboard_view.h \
     src/qt/gear/async_task_notifications_distributor.h \
-    src/qt/dialogs/insert_image_dialog.h
+    src/qt/dialogs/insert_image_dialog.h \
+    src/qt/dialogs/insert_link_dialog.h
 
 SOURCES += \
     ./src/qt/mindforger.cpp \
@@ -189,7 +190,8 @@ SOURCES += \
     src/qt/assoc_leaderboard_presenter.cpp \
     src/qt/assoc_leaderboard_view.cpp \
     src/qt/gear/async_task_notifications_distributor.cpp \
-    src/qt/dialogs/insert_image_dialog.cpp
+    src/qt/dialogs/insert_image_dialog.cpp \
+    src/qt/dialogs/insert_link_dialog.cpp
 
 # L10n
 #./resources/qt/translations/mindforger_de.ts
