@@ -19,6 +19,8 @@
 #ifndef M8R_I18NL10N_H
 #define M8R_I18NL10N_H
 
+#include <iostream>
+
 #include <QtWidgets>
 
 namespace m8r {
@@ -26,7 +28,7 @@ namespace m8r {
 /**
  * @brief Initialize Qt localization translator.
  */
-void l8n(QApplication& mindforgerApplication);
+void l10n(QApplication& mindforgerApplication);
 
 }
 #endif // M8R_I18NL10N_H

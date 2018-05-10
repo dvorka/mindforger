@@ -178,9 +178,9 @@ TEST(AiNlpTestCase, Tokenizer)
     m8r::Mind mind(config);
     mind.learn();
     mind.think().get();
-    cout << "\nStatistics:";
-    cout << "\n  Outlines: " << mind.remind().getOutlinesCount();
-    cout << "\n  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
+    cout << endl << "Statistics:";
+    cout << endl << "  Outlines: " << mind.remind().getOutlinesCount();
+    cout << endl << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
 
     ASSERT_EQ(3, mind.remind().getOutlinesCount());
 

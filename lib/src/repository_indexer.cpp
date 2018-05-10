@@ -96,7 +96,7 @@ void RepositoryIndexer::index(Repository* repository)
 
 void RepositoryIndexer::updateIndex() {
 #ifdef DO_M8F_DEBUG
-    MF_DEBUG("\nIndexing repository:\n  " << repository->getDir());
+    MF_DEBUG(endl << "Indexing repository:" << endl << "  " << repository->getDir());
     auto begin = chrono::high_resolution_clock::now();
 #endif
 
@@ -112,7 +112,7 @@ void RepositoryIndexer::updateIndex() {
 
 #ifdef DO_M8F_DEBUG
     auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("\nRepository indexed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
+    MF_DEBUG(endl << "Repository indexed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
 #endif
 }
 
@@ -135,7 +135,7 @@ bool RepositoryIndexer::fileHasMarkdownExtension(const std::string& filename)
 void RepositoryIndexer::updateIndexMemory(const string& directory)
 {
     if(repository->getMode() == Repository::RepositoryMode::REPOSITORY) {
-        MF_DEBUG("\nINDEXING memory DIR: " << directory);
+        MF_DEBUG(endl << "INDEXING memory DIR: " << directory);
         DIR *dir;
         if((dir = opendir(directory.c_str()))) {
             const struct dirent *entry;
@@ -147,14 +147,14 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
                         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
                             continue;
                         }
-                        //MF_DEBUG("\nDIVE> " << directory.c_str() << "//" << entry->d_name);
+                        //MF_DEBUG(endl << "DIVE> " << directory.c_str() << "//" << entry->d_name);
                         path.assign(directory);
                         path += FILE_PATH_SEPARATOR;
                         path += entry->d_name;
 
                         updateIndexMemory(path);
                     } else {
-                        MF_DEBUG("\n  FILE: " << directory.c_str() << "//" << entry->d_name);
+                        MF_DEBUG(endl << "  FILE: " << directory.c_str() << "//" << entry->d_name);
                         ppath = new string{directory};
                         ppath->append(FILE_PATH_SEPARATOR);
                         ppath->append(entry->d_name);
@@ -169,7 +169,7 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
             }
         }
     } else {
-        MF_DEBUG("\nINDEXING memory single FILE: " << repository->getFile() << " in " << repository->getDir());
+        MF_DEBUG(endl << "INDEXING memory single FILE: " << repository->getFile() << " in " << repository->getDir());
         if(repository->getFile().size()) {
             string* path = new string{repository->getDir()};
             path->append(FILE_PATH_SEPARATOR);
@@ -184,7 +184,7 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
 
 void RepositoryIndexer::updateIndexStencils(const string& directory, set<const std::string*>& stencils)
 {
-    MF_DEBUG("\nINDEXING stencils DIR: " << directory);
+    MF_DEBUG(endl << "INDEXING stencils DIR: " << directory);
     DIR *dir;
     if((dir = opendir(directory.c_str()))) {
         const struct dirent *entry;
@@ -192,7 +192,7 @@ void RepositoryIndexer::updateIndexStencils(const string& directory, set<const s
             string *path;
             do {
                 if(entry->d_type != DT_DIR) {
-                    MF_DEBUG("\n  FILE: " << directory.c_str() << "//" << entry->d_name);
+                    MF_DEBUG(endl << "  FILE: " << directory.c_str() << "//" << entry->d_name);
                     path = new string{directory};
                     path->append(FILE_PATH_SEPARATOR);
                     path->append(entry->d_name);

@@ -20,17 +20,24 @@
 
 namespace m8r {
 
-void l8n(QApplication& mindforgerApplication)
+using namespace std;
+
+void l10n(QApplication& mindforgerApplication)
 {
     QTranslator* qtTranslator = new QTranslator();
     qtTranslator->load("qt_"+QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     mindforgerApplication.installTranslator(qtTranslator);
 
-    qDebug() << "Loading locale:" << endl << "  " << ":/translations/mindforger_"+QLocale::system().name()+".qm";
+    qDebug() << "Loading locale :/translations/mindforger_"+QLocale::system().name()+".qm";
     // Qt to delete translator
     QTranslator* mfTranslator = new QTranslator();
-    mfTranslator->load(":/translations/mindforger_"+QLocale::system().name()+".qm");
-    mindforgerApplication.installTranslator(mfTranslator);
+    if(mfTranslator->load(":/translations/mindforger_"+QLocale::system().name()+".qm")) {
+        if(!mindforgerApplication.installTranslator(mfTranslator)) {
+            cerr << "Error: unable to install translator :/translations/mindforger_" << QLocale::system().name().toStdString() << ".qm" << endl;
+        }
+    } else {
+        cerr << "Error: unable to load translator :/translations/mindforger_" << QLocale::system().name().toStdString() << ".qm" << endl;
+    }
 }
 
-}
+} // m8r

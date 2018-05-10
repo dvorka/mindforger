@@ -189,11 +189,12 @@ SOURCES += \
     src/qt/assoc_leaderboard_view.cpp \
     src/qt/gear/async_task_notifications_distributor.cpp
 
+# L10n
+#./resources/qt/translations/mindforger_de.ts
+#./resources/qt/translations/mindforger_fr.ts
+#./resources/qt/translations/mindforger_es.ts
 TRANSLATIONS = \
     ./resources/qt/translations/mindforger_en.ts \
-    ./resources/qt/translations/mindforger_de.ts \
-    ./resources/qt/translations/mindforger_fr.ts \
-    ./resources/qt/translations/mindforger_es.ts \
     ./resources/qt/translations/mindforger_cs.ts
 
 RESOURCES += \

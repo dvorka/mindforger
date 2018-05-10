@@ -173,11 +173,11 @@ void HashMap<VALUE>::stat()
     Entry *entry{};
     for(int slot=0; slot<tableSize; slot++) {
         for(entry=table[slot]; entry!=nullptr; entry=entry->next) {
-            std::cout << "\n" << entry->key;
+            std::cout << std::endl << entry->key;
         }
     }
 }
 
-}
+} // m8r namespace
 
 #endif /* M8R_HASH_MAP_H_ */

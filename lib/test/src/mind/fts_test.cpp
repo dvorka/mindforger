@@ -45,19 +45,19 @@ TEST(FtsTestCase, FTS) {
     mind.learn();
     mind.think().get();
 
-    cout << "\nStatistics:";
-    cout << "\n  Outlines: " << mind.remind().getOutlinesCount();
-    cout << "\n  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
+    cout << endl << "Statistics:";
+    cout << endl << "  Outlines: " << mind.remind().getOutlinesCount();
+    cout << endl << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
 
     string fts("canonicalx");
     vector<m8r::Note*>* result = mind.findNoteFts(fts);
     if(result->size()) {
-        cout << "\nFOUND " << result->size() << " result(s):";
+        cout << endl << "FOUND " << result->size() << " result(s):";
         for(size_t i=0; i<result->size(); i++) {
             cout << endl << "  #" << i << " " << result->at(i)->getName();
         }
     } else {
-        cout << "\nNOTHING found";
+        cout << endl << "NOTHING found";
     }
 
     delete result;

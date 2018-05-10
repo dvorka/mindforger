@@ -65,6 +65,6 @@ TEST(HtmlBenchmark, DISABLED_Outline)
         htmlRepresentation.to(&outlineAsMarkdown, &html);
     }
     auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("\n" << (ITERATIONS*1.1) << "MiB (" << ITERATIONS << "x1.1MiB) MDs 2 HTML converted in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
-    MF_DEBUG(" ~ AVG: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms\n");
+    MF_DEBUG(endl << (ITERATIONS*1.1) << "MiB (" << ITERATIONS << "x1.1MiB) MDs 2 HTML converted in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
+    MF_DEBUG(" ~ AVG: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
 }

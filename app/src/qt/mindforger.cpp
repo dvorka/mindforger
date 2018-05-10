@@ -108,8 +108,8 @@ int main(int argc, char *argv[])
     char *term = getenv(m8r::ENV_VAR_TERM);
     if(term) {
         if(!strcmp("linux", term)) {
-            cerr << QCoreApplication::translate("main", "\nMindForger CANNOT be run from text console - run it from a terminal in GUI.").toUtf8().constData()
-                 << "\n";
+            cerr << endl << QCoreApplication::translate("main", "MindForger CANNOT be run from text console - run it from a terminal in GUI.").toUtf8().constData()
+                 << endl;
             exit(1);
         }
     }
@@ -117,6 +117,8 @@ int main(int argc, char *argv[])
     QApplication mindforgerApplication(argc, argv);
     QApplication::setApplicationName("MindForger");
     QApplication::setApplicationVersion(MINDFORGER_VERSION);
+    mindforgerApplication.setWindowIcon(QIcon(":/icons/mindforger-icon.png"));
+    m8r::l10n(mindforgerApplication);
 
     std::string useRepository{};
     QString themeOptionValue{};
@@ -185,16 +187,13 @@ int main(int argc, char *argv[])
         } else {
             cerr << QCoreApplication::translate("main", "Unable to find given repository/file to open: '").toUtf8().constData()
                  << useRepository
-                 << "'\n";
+                 << "'"
+                 << endl;
             exit(1);
         }
     } else {
         config.findOrCreateDefaultRepository();
     }
-
-    // setup application
-    mindforgerApplication.setWindowIcon(QIcon(":/icons/mindforger-icon.png"));
-    m8r::l8n(mindforgerApplication);
 
     // choose L&F
     m8r::LookAndFeels& lookAndFeels = m8r::LookAndFeels::getInstance();

@@ -60,8 +60,8 @@ TEST(MarkdownParserBenchmark, DISABLED_ParserMeta)
         EXPECT_TRUE(parser.hasMetadata());
     }
     auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("\n" << (ITERATIONS*1.2) << "MiB (" << ITERATIONS << "x1.1MiB) MDs parsed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
-    MF_DEBUG(" ~ AVG: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms\n");
+    MF_DEBUG(endl << (ITERATIONS*1.2) << "MiB (" << ITERATIONS << "x1.1MiB) MDs parsed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
+    MF_DEBUG(" ~ AVG: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
 }
 
 // 2018/03/02 100x = 1.000ms (770MiB)
@@ -84,6 +84,6 @@ TEST(MarkdownParserBenchmark, DISABLED_ParserNoMeta)
         EXPECT_FALSE(parser.hasMetadata());
     }
     auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("\n" << (ITERATIONS*0.77) << "MiB (" << ITERATIONS << "x0.77MiB) MDs parsed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
-    MF_DEBUG(" ~ AVG: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms\n");
+    MF_DEBUG(endl << (ITERATIONS*0.77) << "MiB (" << ITERATIONS << "x0.77MiB) MDs parsed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms");
+    MF_DEBUG(" ~ AVG: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
 }

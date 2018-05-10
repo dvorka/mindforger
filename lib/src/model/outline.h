@@ -324,7 +324,7 @@ struct Outline::Patch {
 
 #ifdef DO_M8F_DEBUG
     void print() const {
-        MF_DEBUG("Patch " << diff << " : start " << start << " count " << count << "\n");
+        MF_DEBUG("Patch " << diff << " : start " << start << " count " << count << std::endl);
     }
 #endif
 };

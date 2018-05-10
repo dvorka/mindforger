@@ -106,7 +106,7 @@ TEST(TrieBenchmark, DISABLED_TrieVsMap)
     }
     auto endTrieBuild = chrono::high_resolution_clock::now();
     MF_DEBUG(words.size() << " words ADDED in " << chrono::duration_cast<chrono::microseconds>(endTrieBuild-beginTrieBuild).count()/1000.0 << "ms" << endl);
-    //MF_DEBUG(" ~ AVG: " << chrono::duration_cast<chrono::microseconds>(endTrieBuild-beginTrieBuild).count()/1000000.0 << "ms\n");
+    //MF_DEBUG(" ~ AVG: " << chrono::duration_cast<chrono::microseconds>(endTrieBuild-beginTrieBuild).count()/1000000.0 << "ms" << endl);
     cout << "TRIE done" << endl;
 
     cout << "Searching TRIE[" << words.size() << "]" << endl;
