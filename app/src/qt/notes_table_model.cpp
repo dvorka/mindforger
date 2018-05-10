@@ -34,7 +34,7 @@ void NotesTableModel::removeAllRows()
     QStringList tableHeader;
     tableHeader
             << tr("Note")
-            << tr("Outline");
+            << tr("Notebook");
     setHorizontalHeaderLabels(tableHeader);
 }
 

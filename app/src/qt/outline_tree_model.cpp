@@ -39,7 +39,7 @@ void OutlineTreeModel::removeAllRows()
 
     QStringList tableHeader;
     tableHeader
-            << tr("Notes")
+            << tr("Outline") // tree of Notes is in fact Notebook's outline
             << tr("Done")
             << tr("Rs")
             << tr("Ws")

@@ -26,11 +26,11 @@ RefactorNoteToOutlineDialog::RefactorNoteToOutlineDialog(QWidget *parent)
     findButton->setText(tr("Refactor"));
 
     // dialog
-    setWindowTitle(tr("Refactor Note to Outline"));
+    setWindowTitle(tr("Refactor Note to Notebook"));
 }
 
 RefactorNoteToOutlineDialog::~RefactorNoteToOutlineDialog()
 {
 }
 
-}
+} // m8r namespace

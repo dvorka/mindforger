@@ -276,7 +276,7 @@ void MainWindowPresenter::doActionExit()
 void MainWindowPresenter::doActionFts()
 {
     if(orloj->isFacetActiveOutlineManagement()) {
-        ftsDialog->setWindowTitle(tr("Full-text Search in Outline"));
+        ftsDialog->setWindowTitle(tr("Full-text Search in Notebook"));
         ftsDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
     } else {
         ftsDialog->setWindowTitle(tr("Full-text Search"));
@@ -311,7 +311,7 @@ void MainWindowPresenter::executeFts(const string& searchedString, const bool ig
 
         orloj->showFacetFtsResult(result);
     } else {
-        QMessageBox::information(&view, tr("Full-text Search Result"), tr("No matching Outline or Note found."));
+        QMessageBox::information(&view, tr("Full-text Search Result"), tr("No matching Notebook or Note found."));
     }
 }
 
@@ -330,9 +330,9 @@ void MainWindowPresenter::handleFindOutlineByName()
     if(findOutlineByNameDialog->getChoice()) {
         orloj->showFacetOutline((Outline*)findOutlineByNameDialog->getChoice());
         // IMPROVE make this more efficient
-        statusBar->showInfo(QString(tr("Outline "))+QString::fromStdString(findOutlineByNameDialog->getChoice()->getName()));
+        statusBar->showInfo(QString(tr("Notebook "))+QString::fromStdString(findOutlineByNameDialog->getChoice()->getName()));
     } else {
-        statusBar->showInfo(QString(tr("Outline not found")+": ") += findOutlineByNameDialog->getSearchedString());
+        statusBar->showInfo(QString(tr("Notebook not found")+": ") += findOutlineByNameDialog->getSearchedString());
     }
 }
 
@@ -351,9 +351,9 @@ void MainWindowPresenter::handleFindOutlineByTag()
     if(findOutlineByTagDialog->getChoice()) {
         orloj->showFacetOutline((Outline*)findOutlineByTagDialog->getChoice());
         // IMPROVE make this more efficient
-        statusBar->showInfo(QString(tr("Outline "))+QString::fromStdString(findOutlineByTagDialog->getChoice()->getName()));
+        statusBar->showInfo(QString(tr("Notebook "))+QString::fromStdString(findOutlineByTagDialog->getChoice()->getName()));
     } else {
-        statusBar->showInfo(QString(tr("Outline not found")));
+        statusBar->showInfo(QString(tr("Notebook not found")));
     }
 }
 
@@ -361,7 +361,7 @@ void MainWindowPresenter::doActionFindNoteByTag()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     if(orloj->isFacetActiveOutlineManagement()) {
-        findNoteByTagDialog->setWindowTitle(tr("Find Note by Tag in Outline"));
+        findNoteByTagDialog->setWindowTitle(tr("Find Note by Tag in Notebook"));
         findNoteByTagDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
         vector<Note*> allNotes(findNoteByTagDialog->getScope()->getNotes());
         findNoteByTagDialog->show(allNotes);
@@ -415,9 +415,9 @@ void MainWindowPresenter::handleRefactorNoteToOutline()
             orloj->showFacetOutline((Outline*)refactorNoteToOutlineDialog->getChoice());
 
             // IMPROVE make this more efficient .arg() + add Note's name
-            statusBar->showInfo(QString(tr("Refactored Note to Outline '"))+QString::fromStdString(refactorNoteToOutlineDialog->getChoice()->getName())+"'...");
+            statusBar->showInfo(QString(tr("Refactored Note to Notebook '"))+QString::fromStdString(refactorNoteToOutlineDialog->getChoice()->getName())+"'...");
         } else {
-            statusBar->showInfo(QString(tr("Target Outline not found")+": ") += refactorNoteToOutlineDialog->getSearchedString());
+            statusBar->showInfo(QString(tr("Target Notebook not found")+": ") += refactorNoteToOutlineDialog->getSearchedString());
         }
     } else {
         QMessageBox::critical(&view, tr("Refactor Note"), tr("Note to be refactored not specified!"));
@@ -428,7 +428,7 @@ void MainWindowPresenter::doActionFindNoteByName()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     if(orloj->isFacetActiveOutlineManagement()) {
-        findNoteByNameDialog->setWindowTitle(tr("Find Note by Name in Outline"));
+        findNoteByNameDialog->setWindowTitle(tr("Find Note by Name in Notebook"));
         findNoteByNameDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
         vector<Note*> allNotes(findNoteByNameDialog->getScope()->getNotes());
         findNoteByNameDialog->show(allNotes);
@@ -481,7 +481,7 @@ bool MainWindowPresenter::doActionViewHome()
 void MainWindowPresenter::doActionViewOutlines()
 {
     if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-        view.getCli()->setBreadcrumbPath("/outlines");
+        view.getCli()->setBreadcrumbPath("/notebooks");
         cli->executeListOutlines();
     }
 }
@@ -733,7 +733,7 @@ void MainWindowPresenter::doActionOutlineEdit()
             return;
         }
     }
-    QMessageBox::critical(&view, tr("Edit Outline"), tr("Please open an Outline to edit."));
+    QMessageBox::critical(&view, tr("Edit Notebook"), tr("Please open an Notebook to edit."));
 }
 
 void MainWindowPresenter::handleNoteNew()
@@ -793,10 +793,10 @@ void MainWindowPresenter::doActionOutlineClone()
             orloj->getOutlineView()->refresh(clonedOutline);
             orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
         } else {
-            QMessageBox::critical(&view, tr("Clone Outline"), tr("Failed to clone Outline!"));
+            QMessageBox::critical(&view, tr("Clone Notebook"), tr("Failed to clone Notebook!"));
         }
     } else {
-        QMessageBox::critical(&view, tr("Clone Outline"), tr("Please open and Outline to be cloned."));
+        QMessageBox::critical(&view, tr("Clone Notebook"), tr("Please open and Notebook to be cloned."));
     }
 }
 
@@ -806,10 +806,10 @@ void MainWindowPresenter::doActionOutlineHome()
         const Tag* t = mind->remind().getOntology().findOrCreateTag(Tag::KeyMindForgerHome());
         Outline* o = orloj->getOutlineView()->getCurrentOutline();
         if(mind->setOutlineUniqueTag(t, o->getKey())) {
-            statusBar->showInfo(tr("Outline '%1' successfully marked as home").arg(o->getName().c_str()));
+            statusBar->showInfo(tr("Notebook '%1' successfully marked as home").arg(o->getName().c_str()));
         }
     } else {
-        QMessageBox::critical(&view, tr("Make Outline home"), tr("Outline can be marked as home only when viewed."));
+        QMessageBox::critical(&view, tr("Make Notebook home"), tr("Notebook can be marked as home only when viewed."));
     }
 }
 
@@ -817,13 +817,13 @@ void MainWindowPresenter::doActionOutlineForget()
 {
     if(orloj->isFacetActiveOutlineManagement()) {
         QMessageBox::StandardButton choice;
-        choice = QMessageBox::question(&view, tr("Delete Outline"), tr("Do you really want to forget current Outline?"));
+        choice = QMessageBox::question(&view, tr("Delete Notebook"), tr("Do you really want to forget current Notebooks?"));
         if (choice == QMessageBox::Yes) {
             mind->outlineForget(orloj->getOutlineView()->getCurrentOutline()->getKey());
             orloj->slotShowOutlines();
         } // else do nothing
     } else {
-        QMessageBox::critical(&view, tr("Delete Outline"), tr("Outline can be forgotten only when viewed."));
+        QMessageBox::critical(&view, tr("Delete Notebook"), tr("Notebook can be forgotten only when viewed."));
     }
 }
 
@@ -848,7 +848,7 @@ void MainWindowPresenter::doActionNoteNew()
                     QString::fromStdString(orloj->getOutlineView()->getCurrentOutline()->getKey()),
                     mind->remind().getStencils(ResourceType::NOTE));
     } else {
-        QMessageBox::critical(&view, tr("New Note"), tr("Open and view an Outline to create new Note."));
+        QMessageBox::critical(&view, tr("New Note"), tr("Open and view a Notebook to create new Note."));
     }
 }
 

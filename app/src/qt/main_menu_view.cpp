@@ -70,7 +70,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // scope ... don't show any N/O older than 1Y/3M/...
     actionMindScope = new QAction(tr("Sco&pe"), mainWindow);
-    actionMindScope->setStatusTip(tr("Don't show Outlines and Notes older than..."));
+    actionMindScope->setStatusTip(tr("Don't show Notebooks and Notes older than..."));
 
     // TODO remove this menu item > make it Configuration option in Mind menu (Limbo or erase)
     // forget ... move to Limbo or erase
@@ -123,17 +123,17 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFts->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
     actionFts->setStatusTip(tr("Note full-text search"));
 
-    actionFindOutlineByName = new QAction(tr("Recall &Outline by Name"), mainWindow);
+    actionFindOutlineByName = new QAction(tr("Recall N&otebook by Name"), mainWindow);
     actionFindOutlineByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
-    actionFindOutlineByName->setStatusTip(tr("Find Outline by name"));
+    actionFindOutlineByName->setStatusTip(tr("Find Notebook by name"));
 
     actionFindNoteByName = new QAction(tr("Recall &Note by Name"), mainWindow);
     actionFindNoteByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
     actionFindNoteByName->setStatusTip(tr("Find Note by name"));
 
-    actionFindOutlineByTag = new QAction(tr("Recall O&utline by Tags"), mainWindow);
+    actionFindOutlineByTag = new QAction(tr("Recall Note&book by Tags"), mainWindow);
     actionFindOutlineByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_U));
-    actionFindOutlineByTag->setStatusTip(tr("Find Outline by tags"));
+    actionFindOutlineByTag->setStatusTip(tr("Find Notebook by tags"));
 
     actionFindNoteByTag = new QAction(tr("Recall Note by &Tags"), mainWindow);
     actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
@@ -148,16 +148,16 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: view
     actionViewHome = new QAction(tr("&Home"), mainWindow);
-    actionViewHome->setStatusTip(tr("Open Home Outline"));
+    actionViewHome->setStatusTip(tr("Open Home Notebook"));
     actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
 
     actionViewOrganizer = new QAction(tr("O&rganizer"), mainWindow);
     actionViewOrganizer->setStatusTip(tr("Open Organizer"));
     actionViewOrganizer->setEnabled(false);
 
-    actionViewOutlines = new QAction(tr("&Outlines"), mainWindow);
+    actionViewOutlines = new QAction(tr("N&otebooks"), mainWindow);
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
-    actionViewOutlines->setStatusTip(tr("Show list of Outlines"));
+    actionViewOutlines->setStatusTip(tr("Show list of Notebooks"));
 
     actionViewNavigator = new QAction(tr("&Navigator"), mainWindow);
     actionViewNavigator->setStatusTip(tr("Open Navigator"));
@@ -182,11 +182,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // Outline/Note marked w/ tag stencil is MOVED among stencils (NOT indexed/searched/...)
     //  + Stencil view allows making a stencil outline again
     //  + Note stencils are notes in a given Outline
-    actionViewStencils->setStatusTip(tr("List Outline and Note stencils"));
+    actionViewStencils->setStatusTip(tr("List Notebook and Note stencils"));
     actionViewStencils->setEnabled(false);
 
     actionViewLimbo = new QAction(tr("&Limbo"), mainWindow);
-    actionViewLimbo->setStatusTip(tr("List forgotten Outlines and Notes"));
+    actionViewLimbo->setStatusTip(tr("List forgotten Notebooks and Notes"));
     actionViewLimbo->setEnabled(false);
 
     actionViewDistractionFree = new QAction(tr("&Distraction Free"), mainWindow);
@@ -309,33 +309,33 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: Outline
 
     actionOutlineNew = new QAction(tr("&New"), mainWindow);
-    actionOutlineNew->setStatusTip(tr("Create new Outline to form new ideas, principles, combinations or applications"));
+    actionOutlineNew->setStatusTip(tr("Create new Notebook to form new ideas, principles, combinations or applications"));
 
     actionOutlineEdit = new QAction(tr("&Edit"), mainWindow);
-    actionOutlineEdit ->setStatusTip(tr("Edit current Outline - you can also double click view to open the editor"));
+    actionOutlineEdit ->setStatusTip(tr("Edit current Notebook - you can also double click view to open the editor"));
 
     actionOutlineHome = new QAction(tr("Make &Home"), mainWindow);
-    actionOutlineHome->setStatusTip(tr("Use the current Outline as home"));
+    actionOutlineHome->setStatusTip(tr("Use the current Notebook as home"));
 
     actionOutlineStencil = new QAction(tr("Make &Stencil"), mainWindow);
-    actionOutlineStencil->setStatusTip(tr("Copy the current Outline as to Stencil"));
+    actionOutlineStencil->setStatusTip(tr("Copy the current Notebook as to Stencil"));
     actionOutlineStencil->setEnabled(false);
 
     actionOutlineClone = new QAction(tr("C&lone"), mainWindow);
-    actionOutlineClone->setStatusTip(tr("Make copy of the current Outline"));
+    actionOutlineClone->setStatusTip(tr("Make copy of the current Notebook"));
 
     actionOutlineForget = new QAction(tr("&Forget"), mainWindow);
-    actionOutlineForget->setStatusTip(tr("Forget Outline and move it to Limbo"));
+    actionOutlineForget->setStatusTip(tr("Forget Notebook and move it to Limbo"));
 
     actionOutlineExport = new QAction(tr("E&xport"), mainWindow);
-    actionOutlineExport->setStatusTip(tr("Export Outline to a file in supported format"));
+    actionOutlineExport->setStatusTip(tr("Export Notebook to a file in supported format"));
     actionOutlineExport->setEnabled(false);
 
     actionOutlineImport = new QAction(tr("&Learn"), mainWindow);
-    actionOutlineImport->setStatusTip(tr("Import Outline from an external file in a supported format"));
+    actionOutlineImport->setStatusTip(tr("Import Notebook from an external file in a supported format"));
     actionOutlineImport->setEnabled(false);
 
-    menuOutline = qMenuBar->addMenu(tr("&Outline"));
+    menuOutline = qMenuBar->addMenu(tr("N&otebook"));
     menuOutline->addAction(actionOutlineNew);
     menuOutline->addAction(actionOutlineEdit);
     menuOutline->addAction(actionOutlineForget);
@@ -388,17 +388,17 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteAttach->setEnabled(false);
 
     actionNoteRefactor = new QAction(tr("&Refactor"), mainWindow);
-    actionNoteRefactor->setStatusTip(tr("Refactor Note to another Outline..."));
+    actionNoteRefactor->setStatusTip(tr("Refactor Note to another Notebook..."));
 
     actionNoteExtract = new QAction(tr("E&xtract"), mainWindow);
     actionNoteExtract->setStatusTip(tr("Create new Note from the text selected in the current Note..."));
 
     actionNoteStencil = new QAction(tr("Make &Stencil"), mainWindow);
-    actionNoteStencil->setStatusTip(tr("Copy the current Outline as to Stencil"));
+    actionNoteStencil->setStatusTip(tr("Copy the current Notebook as to Stencil"));
     actionNoteStencil->setEnabled(false);
 
     actionNoteClone = new QAction(tr("&Clone"), mainWindow);
-    actionNoteClone->setStatusTip(tr("Make a copy of the Note to this or other Outline..."));
+    actionNoteClone->setStatusTip(tr("Make a copy of the Note to this or other Notebook..."));
 
     actionNoteExport = new QAction(tr("E&xport"), mainWindow);
     actionNoteExport->setStatusTip(tr("Export Note to an external file in a supported format"));

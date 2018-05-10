@@ -219,7 +219,7 @@ OutlineHeaderEditDialog::OutlineHeaderEditDialog(Ontology& ontology, QWidget *pa
     mainLayout->addWidget(buttonBox);
     setLayout(mainLayout);
 
-    setWindowTitle(tr("Edit Outline"));
+    setWindowTitle(tr("Edit Notebook"));
     resize(fontMetrics().averageCharWidth()*55, height());
     setModal(true);
 }

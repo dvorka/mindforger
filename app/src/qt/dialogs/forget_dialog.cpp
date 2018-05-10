@@ -25,7 +25,7 @@ ForgetDialog::ForgetDialog(QWidget *parent)
 {
     QVBoxLayout* forgetThresholLayout = new QVBoxLayout{this};
 
-    enableCheck = new QCheckBox{tr("Don't show Outlines and Notes older than")+":", this};
+    enableCheck = new QCheckBox{tr("Don't show Notebooks and Notes older than")+":", this};
     enableCheck->setChecked(false);
 
     QWidget* w = new QWidget(this);

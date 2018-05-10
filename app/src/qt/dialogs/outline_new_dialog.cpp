@@ -32,7 +32,7 @@ OutlineNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     QGroupBox* basicGroup = new QGroupBox{tr("Basic"), this};
 
     nameLabel = new QLabel(tr("Name")+":", this),
-    nameEdit = new QLineEdit(tr("Outline"), this);
+    nameEdit = new QLineEdit(tr("Notebook"), this);
 
     typeLabel = new QLabel(tr("Type")+":", this);
     typeCombo = new QComboBox{this};
@@ -220,7 +220,7 @@ OutlineNewDialog::OutlineNewDialog(
     setLayout(mainLayout);
 
     // dialog
-    setWindowTitle(tr("New Outline"));
+    setWindowTitle(tr("New Notebook"));
     resize(fontMetrics().averageCharWidth()*55, fontMetrics().height()*30);
     setModal(true);
 }

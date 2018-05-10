@@ -31,9 +31,9 @@ FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *pare
     // widgets
     editTagsGroup = new EditTagsPanel{ontology, this};
     editTagsGroup->refreshOntologyTags();
-    editTagsGroup->setTitle(tr("Outline tags:"));
+    editTagsGroup->setTitle(tr("Notebook tags:"));
 
-    QGroupBox* outlinesGroup = new QGroupBox{tr("Outlines:"),this};
+    QGroupBox* outlinesGroup = new QGroupBox{tr("Notebooks:"),this};
     QVBoxLayout* outlinesGroupLayout = new QVBoxLayout{this};
     outlinesGroup->setLayout(outlinesGroupLayout);
     listView = new QListView(this);
@@ -43,7 +43,7 @@ FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *pare
     listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     outlinesGroupLayout->addWidget(listView);
 
-    findButton = new QPushButton{tr("&Open Outline")};
+    findButton = new QPushButton{tr("&Open Notebook")};
     findButton->setDefault(true);
     findButton->setEnabled(false);
 
@@ -71,7 +71,7 @@ FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *pare
     QObject::connect(editTagsGroup, SIGNAL(signalTagSelectionChanged()), this, SLOT(handleTagsChanged()));
 
     // dialog    
-    setWindowTitle(tr("Find Outline by Name"));
+    setWindowTitle(tr("Find Notebook by Name"));
     // height is set to make sure listview gets enough lines
     resize(fontMetrics().averageCharWidth()*55, fontMetrics().height()*30);
     setModal(true);

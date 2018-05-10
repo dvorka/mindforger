@@ -35,7 +35,7 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 
-    label = new QLabel{tr("Outline &name:")};
+    label = new QLabel{tr("&Notebook name:")};
     lineEdit = new MyLineEdit{listView, this};
     label->setBuddy(lineEdit);
 
@@ -44,7 +44,7 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     keywordsCheckBox = new QCheckBox{tr("&Keywords match")};
     keywordsCheckBox->setChecked(true);
 
-    findButton = new QPushButton{tr("&Open Outline")};
+    findButton = new QPushButton{tr("&Open Notebook")};
     findButton->setDefault(true);
     findButton->setEnabled(false);
 
@@ -74,7 +74,7 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     setLayout(mainLayout);
 
     // dialog
-    setWindowTitle(tr("Find Outline by Name"));
+    setWindowTitle(tr("Find Notebook by Name"));
     // height is set to make sure listview gets enough lines
     resize(fontMetrics().averageCharWidth()*55, fontMetrics().height()*30);
     setModal(true);

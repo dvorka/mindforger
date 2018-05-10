@@ -18,7 +18,7 @@
     <name>m8r</name>
     <message>
         <location filename="../../../src/qt/dialogs/forget_dialog.cpp" line="28"/>
-        <source>Don&apos;t show Outlines and Notes older than</source>
+        <source>Don&apos;t show Notebooks and Notes older than</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -92,12 +92,12 @@
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/outline_header_edit_dialog.cpp" line="222"/>
-        <source>Edit Outline</source>
+        <source>Edit Notebook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/time_scope_dialog.cpp" line="28"/>
-        <source>Show only Outlines/Notes modified or viewed in recent</source>
+        <source>Show only Notebooks/Notes modified or viewed in recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -315,7 +315,7 @@
     <name>m8r::FindOutlineByNameDialog</name>
     <message>
         <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="38"/>
-        <source>Outline &amp;name:</source>
+        <source>&amp;Notebook name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -330,7 +330,12 @@
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="47"/>
-        <source>&amp;Open Outline</source>
+        <source>&amp;Open Notebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="77"/>
+        <source>Find Notebook by Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -338,27 +343,22 @@
         <source>&amp;Cancel</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_name_dialog.cpp" line="77"/>
-        <source>Find Outline by Name</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>m8r::FindOutlineByTagDialog</name>
     <message>
         <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="34"/>
-        <source>Outline tags:</source>
+        <source>Notebook tags:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="36"/>
-        <source>Outlines:</source>
+        <source>Notebooks:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="46"/>
-        <source>&amp;Open Outline</source>
+        <source>&amp;Open Notebook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -368,7 +368,7 @@
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="74"/>
-        <source>Find Outline by Name</source>
+        <source>Find Notebook by Name</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -492,11 +492,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="73"/>
-        <source>Don&apos;t show Outlines and Notes older than...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="77"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="327"/>
         <source>&amp;Forget</source>
@@ -553,16 +548,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="126"/>
-        <source>Recall &amp;Outline by Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="128"/>
-        <source>Find Outline by name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="130"/>
         <source>Recall &amp;Note by Name</source>
         <translation type="unfinished"></translation>
@@ -570,16 +555,6 @@
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="132"/>
         <source>Find Note by name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="134"/>
-        <source>Recall O&amp;utline by Tags</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="136"/>
-        <source>Find Outline by tags</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -598,11 +573,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="151"/>
-        <source>Open Home Outline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="154"/>
         <source>O&amp;rganizer</source>
         <translation type="unfinished"></translation>
@@ -610,16 +580,6 @@
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="155"/>
         <source>Open Organizer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="158"/>
-        <source>&amp;Outlines</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="160"/>
-        <source>Show list of Outlines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -668,18 +628,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="185"/>
-        <source>List Outline and Note stencils</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="188"/>
         <source>&amp;Limbo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="73"/>
+        <source>Don&apos;t show Notebooks and Notes older than...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="126"/>
+        <source>Recall N&amp;otebook by Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="128"/>
+        <source>Find Notebook by name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="134"/>
+        <source>Recall Note&amp;book by Tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="136"/>
+        <source>Find Notebook by tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="151"/>
+        <source>Open Home Notebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="158"/>
+        <source>N&amp;otebooks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="160"/>
+        <source>Show list of Notebooks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="185"/>
+        <source>List Notebook and Note stencils</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="189"/>
-        <source>List forgotten Outlines and Notes</source>
+        <source>List forgotten Notebooks and Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -916,22 +916,63 @@
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="312"/>
-        <source>Create new Outline to form new ideas, principles, combinations or applications</source>
+        <source>Create new Notebook to form new ideas, principles, combinations or applications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="315"/>
-        <source>Edit current Outline - you can also double click view to open the editor</source>
+        <source>Edit current Notebook - you can also double click view to open the editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="318"/>
+        <source>Use the current Notebook as home</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="321"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="397"/>
+        <source>Copy the current Notebook as to Stencil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="325"/>
+        <source>Make copy of the current Notebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="328"/>
+        <source>Forget Notebook and move it to Limbo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="331"/>
+        <source>Export Notebook to a file in supported format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="335"/>
+        <source>Import Notebook from an external file in a supported format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="338"/>
+        <source>N&amp;otebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="391"/>
+        <source>Refactor Note to another Notebook...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="401"/>
+        <source>Make a copy of the Note to this or other Notebook...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="317"/>
         <source>Make &amp;Home</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="318"/>
-        <source>Use the current Outline as home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -941,45 +982,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="321"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="397"/>
-        <source>Copy the current Outline as to Stencil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="324"/>
         <source>C&amp;lone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="325"/>
-        <source>Make copy of the current Outline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="328"/>
-        <source>Forget Outline and move it to Limbo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="330"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="403"/>
         <source>E&amp;xport</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="331"/>
-        <source>Export Outline to a file in supported format</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="335"/>
-        <source>Import Outline from an external file in a supported format</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="338"/>
-        <source>&amp;Outline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1098,11 +1108,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="391"/>
-        <source>Refactor Note to another Outline...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="393"/>
         <source>E&amp;xtract</source>
         <translation type="unfinished"></translation>
@@ -1115,11 +1120,6 @@
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="400"/>
         <source>&amp;Clone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="401"/>
-        <source>Make a copy of the Note to this or other Outline...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1252,11 +1252,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="279"/>
-        <source>Full-text Search in Outline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="282"/>
         <source>Full-text Search</source>
         <translation type="unfinished"></translation>
@@ -1267,25 +1262,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="314"/>
-        <source>No matching Outline or Note found.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="333"/>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="354"/>
         <source>Outline </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="335"/>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="356"/>
         <source>Outline not found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="364"/>
-        <source>Find Note by Tag in Outline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1306,16 +1289,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="418"/>
-        <source>Refactored Note to Outline &apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="420"/>
-        <source>Target Outline not found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="423"/>
         <source>Refactor Note</source>
         <translation type="unfinished"></translation>
@@ -1326,23 +1299,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="431"/>
-        <source>Find Note by Name in Outline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="436"/>
         <source>Find Note by Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="736"/>
-        <source>Edit Outline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="736"/>
-        <source>Please open an Outline to edit.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1357,55 +1315,105 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="796"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="799"/>
-        <source>Clone Outline</source>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="279"/>
+        <source>Full-text Search in Notebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="314"/>
+        <source>No matching Notebook or Note found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="333"/>
+        <source>Notebook </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="335"/>
+        <source>Notebook not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="364"/>
+        <source>Find Note by Tag in Notebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="418"/>
+        <source>Refactored Note to Notebook &apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="420"/>
+        <source>Target Notebook not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="431"/>
+        <source>Find Note by Name in Notebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="736"/>
+        <source>Edit Notebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="736"/>
+        <source>Please open an Notebook to edit.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="796"/>
-        <source>Failed to clone Outline!</source>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="799"/>
+        <source>Clone Notebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="796"/>
+        <source>Failed to clone Notebook!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="799"/>
-        <source>Please open and Outline to be cloned.</source>
+        <source>Please open and Notebook to be cloned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="809"/>
-        <source>Outline &apos;%1&apos; successfully marked as home</source>
+        <source>Notebook &apos;%1&apos; successfully marked as home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="812"/>
-        <source>Make Outline home</source>
+        <source>Make Notebook home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="812"/>
-        <source>Outline can be marked as home only when viewed.</source>
+        <source>Notebook can be marked as home only when viewed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="820"/>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="826"/>
-        <source>Delete Outline</source>
+        <source>Delete Notebook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="820"/>
-        <source>Do you really want to forget current Outline?</source>
+        <source>Do you really want to forget current Notebooks?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="826"/>
-        <source>Outline can be forgotten only when viewed.</source>
+        <source>Notebook can be forgotten only when viewed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="851"/>
-        <source>Open and view an Outline to create new Note.</source>
+        <source>Open and view a Notebook to create new Note.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1648,17 +1656,17 @@
 <context>
     <name>m8r::NoteNewDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="153"/>
+        <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="154"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="156"/>
+        <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="157"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="169"/>
+        <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="170"/>
         <source>New Note</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1666,12 +1674,12 @@
 <context>
     <name>m8r::NoteNewDialog::AdvancedTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="103"/>
+        <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="104"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="107"/>
+        <location filename="../../../src/qt/dialogs/note_new_dialog.cpp" line="108"/>
         <source>Location</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1724,7 +1732,7 @@
     </message>
     <message>
         <location filename="../../../src/qt/notes_table_model.cpp" line="37"/>
-        <source>Outline</source>
+        <source>Notebook</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1732,7 +1740,7 @@
     <name>m8r::OrlojPresenter</name>
     <message>
         <location filename="../../../src/qt/orloj_presenter.cpp" line="157"/>
-        <source>No outline selected!</source>
+        <source>No Notebook selected!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1834,47 +1842,47 @@
     <name>m8r::OutlineHeaderEditPresenter</name>
     <message>
         <location filename="../../../src/qt/outline_header_edit_presenter.cpp" line="106"/>
-        <source>Outline saved!</source>
+        <source>Notebook saved!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../src/qt/outline_header_edit_presenter.cpp" line="108"/>
-        <source>Attempt to save data from UI to Outline, but no Outline is set.</source>
+        <source>Attempt to save data from UI to Notebook, but no Notebook is set.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>m8r::OutlineNewDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="201"/>
+        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="202"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="204"/>
+        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="205"/>
         <source>Preamble</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="207"/>
+        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="208"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="222"/>
-        <source>New Outline</source>
+        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="223"/>
+        <source>New Notebook</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>m8r::OutlineNewDialog::AdvancedTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="149"/>
+        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="150"/>
         <source>Expected file name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="153"/>
+        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="154"/>
         <source>Location</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1893,7 +1901,7 @@
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="35"/>
-        <source>Outline</source>
+        <source>Notebook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1925,12 +1933,12 @@
 <context>
     <name>m8r::OutlineNewDialog::PreambleTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="123"/>
+        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="124"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="126"/>
+        <location filename="../../../src/qt/dialogs/outline_new_dialog.cpp" line="127"/>
         <source>Preamble</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1939,7 +1947,7 @@
     <name>m8r::OutlineTreeModel</name>
     <message>
         <location filename="../../../src/qt/outline_tree_model.cpp" line="42"/>
-        <source>Notes</source>
+        <source>Outline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1967,7 +1975,7 @@
     <name>m8r::OutlinesTableModel</name>
     <message>
         <location filename="../../../src/qt/outlines_table_model.cpp" line="38"/>
-        <source>Outline</source>
+        <source>Notebook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2023,7 +2031,7 @@
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/refactor_note_to_outline_dialog.cpp" line="29"/>
-        <source>Refactor Note to Outline</source>
+        <source>Refactor Note to Notebook</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

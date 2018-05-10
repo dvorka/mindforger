@@ -77,7 +77,7 @@ void OutlineHeaderEditPresenter::slotSaveOutlineHeader()
 {
     // set UI data to current note
     if(currentOutline) {
-        string name{"Outline"};
+        string name{"Notebook"};
         if(!view->getName().isEmpty()) {
             name.assign(view->getName().toStdString());
         }
@@ -103,10 +103,10 @@ void OutlineHeaderEditPresenter::slotSaveOutlineHeader()
 
         // remember
         mwp->getMind()->remind().remember(currentOutline->getKey());
-        mwp->getStatusBar()->showInfo(tr("Outline saved!"));
+        mwp->getStatusBar()->showInfo(tr("Notebook saved!"));
     } else {
-        mwp->getStatusBar()->showError(tr("Attempt to save data from UI to Outline, but no Outline is set."));
+        mwp->getStatusBar()->showError(tr("Attempt to save data from UI to Notebook, but no Notebook is set."));
     }
 }
 
-}
+} // m8r namespace
