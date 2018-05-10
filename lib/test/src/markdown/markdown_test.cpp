@@ -712,7 +712,7 @@ TEST(MarkdownParserTestCase, FileSystemPersistence)
     m8r::FilesystemPersistence persistence{config,mdr};
 
     unique_ptr<string> text = unique_ptr<string>(new string{"abc"});
-    cout << persistence.createFileName(string("/tmp"), text.get(), string(FILE_EXTENSION_MARKDOWN));
+    cout << persistence.createFileName(string("/tmp"), text.get(), string(FILE_EXTENSION_MD_MD));
 }
 
 TEST(MarkdownParserBugsTestCase, EmptyNameSkipsEof)
