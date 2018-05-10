@@ -57,6 +57,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     findNoteByTagDialog = new FindNoteByTagDialog{mind->remind().getOntology(), &view};
     refactorNoteToOutlineDialog = new RefactorNoteToOutlineDialog{&view};
     configDialog = new ConfigurationDialog{&view};
+    insertImageDialog = new InsertImageDialog{&view};
 
     // wire signals
     QObject::connect(timeScopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindTimeScope()));
@@ -70,6 +71,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(findNoteByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByTag()));
     QObject::connect(refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
+    QObject::connect(insertImageDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatImage()));
 
     // async task 2 GUI events distributor
     distributor = new AsyncTaskNotificationsDistributor(this);
@@ -98,6 +100,7 @@ MainWindowPresenter::~MainWindowPresenter()
     if(findOutlineByTagDialog) delete findOutlineByTagDialog;
     if(configDialog) delete configDialog;
     //if(findNoteByNameDialog) delete findNoteByNameDialog;
+    if(insertImageDialog) delete insertImageDialog;
 
     // TODO deletes
 }
@@ -268,7 +271,7 @@ void MainWindowPresenter::doActionMindLearn()
     msgBox.exec();
 
     QFileDialog learnDialog{&view};
-    if (msgBox.clickedButton() == repositoryButton) {
+    if(msgBox.clickedButton() == repositoryButton) {
         learnDialog.setWindowTitle(tr("Learn Directory"));
         // learnDialog.setFileMode(QFileDialog::Directory|QFileDialog::ExistingFiles); not supported, therefore
         // >
@@ -690,8 +693,18 @@ void MainWindowPresenter::doActionFormatLink()
 
 void MainWindowPresenter::doActionFormatImage()
 {
-    // IMPROVE dialog to specify image params
-    QString text{"![]()"};
+    insertImageDialog->show();
+}
+
+void MainWindowPresenter::handleFormatImage()
+{
+    insertImageDialog->hide();
+
+    QString text{"!["};
+    text += insertImageDialog->getAlternateText();
+    text += "](";
+    text += insertImageDialog->getPathText();
+    text += ")";
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
         orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false, 2);
