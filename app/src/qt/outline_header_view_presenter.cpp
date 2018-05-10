@@ -37,6 +37,7 @@ OutlineHeaderViewPresenter::OutlineHeaderViewPresenter(OutlineHeaderView *view, 
     html.reserve(10000);
 
     QObject::connect(view, SIGNAL(signalMouseDoubleClickEvent()), this, SLOT(slotEditOutlineHeader()));
+    QObject::connect(view, SIGNAL(linkClicked(QUrl)), this, SLOT(slotLinkClicked(QUrl)));
 }
 
 OutlineHeaderViewPresenter::~OutlineHeaderViewPresenter()
@@ -67,6 +68,11 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
         task->setOutline(currentOutline);
         orloj->getMainWindow()->getDistributor()->add(task);
     }
+}
+
+void OutlineHeaderViewPresenter::slotLinkClicked(const QUrl& url)
+{
+    orloj->getMainWindow()->handleNoteViewLinkClicked(url);
 }
 
 void OutlineHeaderViewPresenter::slotEditOutlineHeader()

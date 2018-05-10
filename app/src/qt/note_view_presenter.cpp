@@ -104,48 +104,9 @@ void NoteViewPresenter::refresh(Note* note)
     }
 }
 
-void NoteViewPresenter::slotLinkClicked(const QUrl& url) {
-    MF_DEBUG("HTML click handler: " << url.toString().toStdString() << std::endl);
-    orloj->getMainWindow()->getStatusBar()->showInfo(QString(tr("Hyperlink %1 clicked...")).arg(url.toString()));
-
-    if(url.toString().size()) {
-        if(url.toString().startsWith("file://")) {
-            string key{url.toString().toStdString()};
-            key.erase(0,7); // remove file prefix
-            size_t offset;
-            if((offset = key.find("#")) != string::npos) {
-                // it CAN be Note
-                key.erase(offset);
-                MF_DEBUG("  O lookup using key: " << key << std::endl);
-
-                // IMPROVE find note within outline
-                Outline* o=orloj->getMind()->remind().getOutline(key);
-                if(o) {
-                    // Notebook for hyperlink found
-                    orloj->showFacetOutline(o);
-                    return;
-                } // else fallback to open using desktop services
-            } else {
-                // it CAN be Outline
-                MF_DEBUG("  O lookup using key: " << key << std::endl);
-                Outline* o=orloj->getMind()->remind().getOutline(key);
-                if(o) {
-                    // Notebook for hyperlink found
-                    orloj->showFacetOutline(o);
-                    return;
-                } // else fallback to open using desktop services
-            }
-
-            // IMPROVE let Qt to open also directories and external files
-            MF_DEBUG("Unable to find Notebook/Note for hyperlink: " << url.toString().toStdString() << " > delegating to OS" << std::endl);
-            if(!QDesktopServices::openUrl(url)) {
-                MF_DEBUG("FAILED to open hyperlink: " << url.toString().toStdString() << std::endl);
-            }
-        } else {
-            // launch URL in browser
-            QDesktopServices::openUrl(url);
-        }
-    }
+void NoteViewPresenter::slotLinkClicked(const QUrl& url)
+{
+    orloj->getMainWindow()->handleNoteViewLinkClicked(url);
 }
 
 void NoteViewPresenter::slotEditNote()

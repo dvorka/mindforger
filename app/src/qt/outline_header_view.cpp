@@ -23,6 +23,8 @@ namespace m8r {
 OutlineHeaderView::OutlineHeaderView(QWidget *parent)
     : QWebView(parent)
 {
+    // ensure that link clicks are not handled, but delegated to MF using linkClicked signal
+    page()->setLinkDelegationPolicy(QWebPage::LinkDelegationPolicy::DelegateAllLinks);
 }
 
 void OutlineHeaderView::mouseDoubleClickEvent(QMouseEvent* event)

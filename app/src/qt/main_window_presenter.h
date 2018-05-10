@@ -123,7 +123,11 @@ public:
     // function
     Mind* getMind() const { return mind; }
 
+    // dashboard(s)
     void showInitialView();
+
+    // N view
+    void handleNoteViewLinkClicked(const QUrl& url);
 
 public slots:
     // mind

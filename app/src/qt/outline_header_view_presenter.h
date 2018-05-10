@@ -57,6 +57,7 @@ public:
     ~OutlineHeaderViewPresenter();
 
 public slots:
+    void slotLinkClicked(const QUrl& url);
     void slotEditOutlineHeader();
     void slotRefreshHeaderLeaderboardByValue(std::vector<std::pair<Note*,float>>* associations);
 };
