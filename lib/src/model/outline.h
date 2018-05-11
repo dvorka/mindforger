@@ -223,6 +223,7 @@ public:
     void addNote(Note*, int offset);
     void addNotes(std::vector<Note*>&, int offset);
     Note* getNoteByName(const std::string& noteName) const;
+    Note* getNoteByMangledName(const std::string& mangledName) const;
     int getNoteOffset(const Note* note) const;
     void getNoteChildren(const Note* note, std::vector<Note*>* children=nullptr, Outline::Patch* patch=nullptr);
     /**

@@ -20,13 +20,167 @@
 
 namespace m8r {
 
+using namespace std;
+
 InsertLinkDialog::InsertLinkDialog(QWidget* parent)
     : QDialog(parent)
 {
+    // widgets
+    linkTextLabel = new QLabel{tr("Link text:")};
+    linkTextEdit = new QLineEdit{};
+    pathLabel = new QLabel{tr("Notebook, Note, file path or web address:")};
+    pathEdit = new QLineEdit{};
+
+    findOutlineButton = new QPushButton{tr("Notebook")};
+    findNoteButton = new QPushButton{tr("Note")};
+    findFileButton = new QPushButton{tr("File")};
+    findDirectoryButton = new QPushButton{tr("Directory")};
+
+    copyToRepoCheckBox = new QCheckBox{tr("Copy to repository")};
+    copyToRepoCheckBox->setEnabled(false);
+
+    // IMPROVE disable/enable find button if text/path is valid: freedom vs validation
+    insertButton = new QPushButton{tr("&Insert")};
+    insertButton->setDefault(true);
+    closeButton = new QPushButton{tr("&Cancel")};
+
+    // dialogs
+    findOutlineByNameDialog = new FindOutlineByNameDialog{this};
+    findOutlineByNameDialog->setWindowTitle(tr("Find Notebook as Link Target"));
+    findNoteByNameDialog = new FindNoteByNameDialog{this};
+    findNoteByNameDialog->setWindowTitle(tr("Find Note as Link Target"));
+
+    // signals
+    QObject::connect(findOutlineButton, SIGNAL(clicked()), this, SLOT(handleFindOutline()));
+    QObject::connect(findNoteButton, SIGNAL(clicked()), this, SLOT(handleFindNote()));
+    QObject::connect(findFileButton, SIGNAL(clicked()), this, SLOT(handleFindFile()));
+    QObject::connect(findDirectoryButton, SIGNAL(clicked()), this, SLOT(handleFindDirectory()));
+    QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineChoice()));
+    QObject::connect(findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteChoice()));
+
+    // assembly
+    QVBoxLayout* mainLayout = new QVBoxLayout{};
+    mainLayout->addWidget(linkTextLabel);
+    mainLayout->addWidget(linkTextEdit);
+    mainLayout->addWidget(pathLabel);
+    mainLayout->addWidget(pathEdit);
+    QHBoxLayout* srcButtonLayout = new QHBoxLayout{};
+    srcButtonLayout->addWidget(findOutlineButton);
+    srcButtonLayout->addWidget(findNoteButton);
+    srcButtonLayout->addWidget(findFileButton);
+    srcButtonLayout->addWidget(findDirectoryButton);
+    srcButtonLayout->addStretch();
+    mainLayout->addLayout(srcButtonLayout);
+    mainLayout->addWidget(copyToRepoCheckBox);
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout{};
+    buttonLayout->addStretch(1);
+    buttonLayout->addWidget(closeButton);
+    buttonLayout->addWidget(insertButton);
+    buttonLayout->addStretch();
+
+    mainLayout->addLayout(buttonLayout);
+    setLayout(mainLayout);
+
+    // dialog
+    setWindowTitle(tr("Insert Link"));
+    resize(fontMetrics().averageCharWidth()*55, height());
+    setModal(true);
 }
 
 InsertLinkDialog::~InsertLinkDialog()
 {
+}
+
+void InsertLinkDialog::show(vector<Thing*>& os, vector<Note*>& ns)
+{
+    linkTextEdit->setText(tr("link"));
+    linkTextEdit->selectAll();
+    linkTextEdit->setFocus();
+    pathEdit->clear();
+
+    outlines = os;
+    notes = ns;
+
+    QDialog::show();
+}
+
+void InsertLinkDialog::handleFindOutline()
+{
+    findOutlineByNameDialog->show(outlines);
+    findOutlineByNameDialog->exec();
+}
+
+void InsertLinkDialog::handleFindOutlineChoice()
+{
+    if(findOutlineByNameDialog->getChoice()) {
+        Outline* choice = (Outline*)findOutlineByNameDialog->getChoice();
+        linkTextEdit->setText(QString::fromStdString(choice->getName()));
+        // IMPROVE relative path if within repository
+        pathEdit->setText(QString::fromStdString(choice->getKey()));
+    }
+}
+
+void InsertLinkDialog::handleFindNote()
+{
+    findNoteByNameDialog->clearScope();
+    findNoteByNameDialog->show(notes);
+    findNoteByNameDialog->exec();
+}
+
+void InsertLinkDialog::handleFindNoteChoice()
+{
+    if(findNoteByNameDialog->getChoice()) {
+        Note* choice = (Note*)findNoteByNameDialog->getChoice();
+        linkTextEdit->setText(QString::fromStdString(choice->getName()));
+        // IMPROVE relative path if within repository
+        QString path{};
+        path += QString::fromStdString(choice->getOutline()->getKey());
+        path += "#";
+        path += QString::fromStdString(choice->getMangledName());
+        pathEdit->setText(path);
+    }
+}
+
+void InsertLinkDialog::handleFindFile()
+{
+    QString homeDirectory
+        = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+
+    QFileDialog fileDialog{this};
+    fileDialog.setWindowTitle(tr("Choose File"));
+    fileDialog.setFileMode(QFileDialog::ExistingFile);
+    fileDialog.setDirectory(homeDirectory);
+    fileDialog.setViewMode(QFileDialog::Detail);
+
+    QStringList fileNames{};
+    if(fileDialog.exec()) {
+        fileNames = fileDialog.selectedFiles();
+        if(fileNames.size()==1) {
+            pathEdit->setText(fileNames[0]);
+        } // else too many files
+    } // else directory closed / nothing choosen
+}
+
+void InsertLinkDialog::handleFindDirectory()
+{
+    QString homeDirectory
+        = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+
+    QFileDialog fileDialog{this};
+    fileDialog.setWindowTitle(tr("Choose Directory"));
+    fileDialog.setFileMode(QFileDialog::Directory);
+    fileDialog.setDirectory(homeDirectory);
+    fileDialog.setViewMode(QFileDialog::Detail);
+
+    QStringList fileNames{};
+    if(fileDialog.exec()) {
+        fileNames = fileDialog.selectedFiles();
+        if(fileNames.size()==1) {
+            pathEdit->setText(fileNames[0]);
+        } // else too many files
+    } // else directory closed / nothing choosen
 }
 
 } // m8r namespace

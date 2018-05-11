@@ -520,6 +520,16 @@ Note* Outline::getNoteByName(const std::string& noteName) const
     return nullptr;
 }
 
+Note* Outline::getNoteByMangledName(const std::string& mangledName) const
+{
+    for(Note* n:notes) {
+        if(!n->getMangledName().compare(mangledName)) {
+            return n;
+        }
+    }
+    return nullptr;
+}
+
 int Outline::getNoteOffset(const Note* note) const
 {
     if(!notes.empty()) {

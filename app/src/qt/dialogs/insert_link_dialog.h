@@ -19,13 +19,40 @@
 #ifndef M8RUI_INSERT_LINK_DIALOG_H
 #define M8RUI_INSERT_LINK_DIALOG_H
 
+#include <vector>
+
 #include <QtWidgets>
+
+#include "find_outline_by_name_dialog.h"
+#include "find_note_by_name_dialog.h"
 
 namespace m8r {
 
 class InsertLinkDialog : public QDialog
 {
     Q_OBJECT
+
+private:
+    std::vector<Thing*> outlines;
+    std::vector<Note*> notes;
+
+    FindOutlineByNameDialog* findOutlineByNameDialog;
+    FindNoteByNameDialog* findNoteByNameDialog;
+
+    QLabel* linkTextLabel;
+    QLineEdit* linkTextEdit;
+    QLabel* pathLabel;
+    QLineEdit* pathEdit;
+
+    QPushButton* findOutlineButton;
+    QPushButton* findNoteButton;
+    QPushButton* findFileButton;
+    QPushButton* findDirectoryButton;
+
+    QCheckBox* copyToRepoCheckBox;
+
+    QPushButton* insertButton;
+    QPushButton* closeButton;
 
 public:
     explicit InsertLinkDialog(QWidget* parent);
@@ -34,6 +61,19 @@ public:
     InsertLinkDialog &operator=(const InsertLinkDialog&) = delete;
     InsertLinkDialog &operator=(const InsertLinkDialog&&) = delete;
     ~InsertLinkDialog();
+
+    void show(std::vector<Thing*>& outlines, std::vector<Note*>& notes);
+    QPushButton* getInsertButton() const { return insertButton; }
+    QString getLinkText() { return linkTextEdit->text(); }
+    QString getPathText() { return pathEdit->text(); }
+
+private slots:
+    void handleFindOutline();
+    void handleFindNote();
+    void handleFindOutlineChoice();
+    void handleFindNoteChoice();
+    void handleFindFile();
+    void handleFindDirectory();
 };
 
 }

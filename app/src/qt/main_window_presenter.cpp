@@ -58,6 +58,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     refactorNoteToOutlineDialog = new RefactorNoteToOutlineDialog{&view};
     configDialog = new ConfigurationDialog{&view};
     insertImageDialog = new InsertImageDialog{&view};
+    insertLinkDialog = new InsertLinkDialog{&view};
 
     // wire signals
     QObject::connect(timeScopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindTimeScope()));
@@ -72,6 +73,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
     QObject::connect(insertImageDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatImage()));
+    QObject::connect(insertLinkDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatLink()));
 
     // async task 2 GUI events distributor
     distributor = new AsyncTaskNotificationsDistributor(this);
@@ -177,15 +179,22 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
             size_t offset;
             if((offset = key.find("#")) != string::npos) {
                 // it CAN be Note
+                string mangledNoteName = key.substr(offset+1);
                 key.erase(offset);
                 MF_DEBUG("  O lookup using key: " << key << std::endl);
 
                 // IMPROVE find note within outline
                 Outline* o=orloj->getMind()->remind().getOutline(key);
                 if(o) {
-                    // Notebook for hyperlink found
-                    orloj->showFacetOutline(o);
-                    return;
+                    Note* n = o->getNoteByMangledName(mangledNoteName);
+                    if(n) {
+                        orloj->showFacetNoteView(n);
+                        return;
+                    } else {
+                        // fallback to Notebook for hyperlink found
+                        orloj->showFacetOutline(o);
+                        return;
+                    }
                 } // else fallback to open using desktop services
             } else {
                 // it CAN be Outline
@@ -681,8 +690,26 @@ void MainWindowPresenter::doActionFormatBlockquote()
 
 void MainWindowPresenter::doActionFormatLink()
 {
-    // IMPROVE dialog to specify link params
-    QString text{"[]()"};
+    // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
+    vector<Outline*> oss{mind->getOutlines()};
+    mind->remind().sortByName(oss);
+    vector<Thing*> os{oss.begin(),oss.end()};
+
+    vector<Note*> ns{};
+    mind->getAllNotes(ns);
+
+    insertLinkDialog->show(os, ns);
+}
+
+void MainWindowPresenter::handleFormatLink()
+{
+    insertLinkDialog->hide();
+
+    QString text{"["};
+    text += insertLinkDialog->getLinkText();
+    text += "](";
+    text += insertLinkDialog->getPathText();
+    text += ")";
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
         orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false, 1);

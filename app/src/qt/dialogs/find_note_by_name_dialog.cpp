@@ -37,7 +37,7 @@ FindNoteByNameDialog::~FindNoteByNameDialog()
 {
 }
 
-void FindNoteByNameDialog::show(vector<Note*> notes)
+void FindNoteByNameDialog::show(vector<Note*>& notes)
 {
     // use parent dialog to handle names + keep shadow vector of (filtered) Notes in here for choice
     // IMPROVE performance - consider pointer instead of string copy

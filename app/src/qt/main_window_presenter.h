@@ -43,6 +43,7 @@
 #include "dialogs/forget_dialog.h"
 #include "dialogs/configuration_dialog.h"
 #include "dialogs/insert_image_dialog.h"
+#include "dialogs/insert_link_dialog.h"
 
 #include <QtWidgets>
 #include <QtConcurrent/QtConcurrent>
@@ -99,6 +100,7 @@ private:
     RefactorNoteToOutlineDialog* refactorNoteToOutlineDialog;
     ConfigurationDialog* configDialog;
     InsertImageDialog* insertImageDialog;
+    InsertLinkDialog* insertLinkDialog;
 
 public:
     explicit MainWindowPresenter(MainWindowView& view);
@@ -177,6 +179,7 @@ public slots:
     void doActionFormatCodeblock();
     void doActionFormatBlockquote();
     void doActionFormatLink();
+    void handleFormatLink();
     void doActionFormatImage();
     void handleFormatImage();
     void doActionFormatTable();

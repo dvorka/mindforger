@@ -32,7 +32,9 @@ private:
     QLineEdit* alternateTextEdit;
     QLabel* pathLabel;
     QLineEdit* pathEdit;
+
     QPushButton* findFileButton;
+
     QCheckBox* copyToRepoCheckBox;
 
     QPushButton* insertButton;

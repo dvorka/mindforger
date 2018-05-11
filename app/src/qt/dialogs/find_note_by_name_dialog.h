@@ -48,7 +48,7 @@ public:
     void setScope(Outline* o) { scope = o; }
     Outline* getScope() { return scope; }
 
-    void show(std::vector<Note*>);
+    void show(std::vector<Note*>&);
 };
 
 }
