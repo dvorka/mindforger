@@ -43,15 +43,18 @@ InsertImageDialog::InsertImageDialog(QWidget* parent)
     QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     // assembly
-    QVBoxLayout *mainLayout = new QVBoxLayout{};
+    QVBoxLayout* mainLayout = new QVBoxLayout{};
     mainLayout->addWidget(alternateTextLabel);
     mainLayout->addWidget(alternateTextEdit);
     mainLayout->addWidget(pathLabel);
     mainLayout->addWidget(pathEdit);
-    mainLayout->addWidget(findFileButton);
+    QHBoxLayout* srcButtonLayout = new QHBoxLayout{};
+    srcButtonLayout->addWidget(findFileButton);
+    srcButtonLayout->addStretch();
+    mainLayout->addLayout(srcButtonLayout);
     mainLayout->addWidget(copyToRepoCheckBox);
 
-    QHBoxLayout *buttonLayout = new QHBoxLayout{};
+    QHBoxLayout* buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
     buttonLayout->addWidget(closeButton);
     buttonLayout->addWidget(insertButton);
