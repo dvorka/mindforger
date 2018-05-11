@@ -111,8 +111,9 @@ shared_future<bool> Mind::mindDream()
         //  - Os w/o description
         //  - Os w/o any N
         //  - Ns w/o description
-        // o attachments
-        //  - orphan attachments (not referenced from any O)
+        // o links
+        //  - broken links (target doesn't exist)
+        //  - orphan files/images not referenced from any O or N by a link
 
         // triples: infer all triples, check, fix, optimize and save
 

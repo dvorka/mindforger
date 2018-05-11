@@ -61,11 +61,12 @@ Note::Note(const Note& n)
     if(n.tags.size()) {
         tags.insert(tags.end(), n.tags.begin(), n.tags.end());
     }
+}
 
-    if(n.attachments.size()) {
-        for(Attachment* a:n.attachments) {
-            attachments.push_back(new Attachment(*a));
-        }
+Note::~Note()
+{
+    for(string* d:description) {
+        delete d;
     }
 }
 
@@ -91,16 +92,6 @@ string Note::getMangledName() const
         std::transform(result.begin(), result.end(), result.begin(), ::tolower);
     }
     return result;
-}
-
-const vector<Attachment*>& Note::getAttachments() const
-{
-    return attachments;
-}
-
-void Note::setAttachments(const vector<Attachment*>& attachments)
-{
-    this->attachments = attachments;
 }
 
 time_t Note::getCreated() const
@@ -268,17 +259,6 @@ const NoteType* Note::getType() const
 void Note::clear()
 {
     description.clear();
-    attachments.clear();
-}
-
-Note::~Note()
-{
-    for(string* d:description) {
-        delete d;
-    }
-    for(Attachment* a:attachments) {
-        delete a;
-    }
 }
 
 const vector<string*>& Note::getDescription() const

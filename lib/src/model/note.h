@@ -24,7 +24,6 @@
 #include <string>
 
 #include "outline.h"
-#include "attachment.h"
 #include "note_type.h"
 #include "tag.h"
 #include "link.h"
@@ -76,8 +75,6 @@ private:
     u_int8_t progress;
     time_t deadline;
 
-    std::vector<Attachment*> attachments;
-
     /*
      * Transient fields
      */
@@ -103,8 +100,6 @@ public:
      * See also https://github.com/dvorka/trainer/blob/master/markdow/section-links-mangling.md
      */
     std::string getMangledName() const;
-    const std::vector<Attachment*>& getAttachments() const;
-    void setAttachments(const std::vector<Attachment*>& attachments);
     time_t getCreated() const;
     void setCreated(time_t created);
     time_t getDeadline() const;

@@ -31,7 +31,6 @@ SOURCES += \
     ./src/gear/file_utils.cpp \
     ./src/gear/string_utils.cpp \
     ./src/mind/ontology/ontology.cpp \
-    ./src/model/attachment.cpp \
     ./src/model/note_type.cpp \
     ./src/model/note.cpp \
     ./src/model/outline_type.cpp \
@@ -101,7 +100,6 @@ HEADERS += \
     ./src/gear/string_utils.h \
     ./src/mind/ontology/ontology_vocabulary.h \
     ./src/mind/ontology/ontology.h \
-    ./src/model/attachment.h \
     ./src/model/note_type.h \
     ./src/model/note.h \
     ./src/model/outline_type.h \
