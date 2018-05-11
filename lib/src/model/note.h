@@ -20,6 +20,8 @@
 #define M8R_NOTE_H_
 
 #include <vector>
+#include <algorithm>
+#include <string>
 
 #include "outline.h"
 #include "attachment.h"
@@ -95,6 +97,12 @@ public:
     void completeProperties(const time_t outlineModificationTime);
     void checkAndFixProperties();
 
+    /**
+     * @brief Return GitHub compatible mangled name to ensure compatiblity between GitHub and MindForger # links.
+     *
+     * See also https://github.com/dvorka/trainer/blob/master/markdow/section-links-mangling.md
+     */
+    std::string getMangledName() const;
     const std::vector<Attachment*>& getAttachments() const;
     void setAttachments(const std::vector<Attachment*>& attachments);
     time_t getCreated() const;

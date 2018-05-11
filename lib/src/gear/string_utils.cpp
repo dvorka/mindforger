@@ -123,7 +123,7 @@ char** stringSplit(
  */
 string normalizeToNcName(string name, char quoteChar) {
     string result = name;
-    if (result.size()) {
+    if(result.size()) {
         if(!isalnum(result[0])) {
             result.insert(0, 1, '_');
         }

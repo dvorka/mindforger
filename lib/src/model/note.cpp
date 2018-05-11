@@ -69,6 +69,30 @@ Note::Note(const Note& n)
     }
 }
 
+string Note::getMangledName() const
+{
+    string result = name;
+    if(result.size()) {
+        // non-alpha or non-num to -
+        for(size_t i=0; i<result.size(); i++) {
+            if(!isalnum(result[i])) {
+                result[i] = '-';
+            }
+        }
+        // remove leading and trailing -
+        while(result.find("-") == 0) {
+            result.erase(0, 1);
+        }
+        size_t len = result.size();
+        while(result.rfind("-") == --len) {
+            result.erase(len, len + 1);
+        }
+        // to lower case
+        std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+    }
+    return result;
+}
+
 const vector<Attachment*>& Note::getAttachments() const
 {
     return attachments;
