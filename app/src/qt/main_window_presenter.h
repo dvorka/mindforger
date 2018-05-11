@@ -44,6 +44,7 @@
 #include "dialogs/configuration_dialog.h"
 #include "dialogs/insert_image_dialog.h"
 #include "dialogs/insert_link_dialog.h"
+#include "dialogs/rows_and_depth_dialog.h"
 
 #include <QtWidgets>
 #include <QtConcurrent/QtConcurrent>
@@ -101,6 +102,7 @@ private:
     ConfigurationDialog* configDialog;
     InsertImageDialog* insertImageDialog;
     InsertLinkDialog* insertLinkDialog;
+    RowsAndDepthDialog* rowsAndDepthDialog;
 
 public:
     explicit MainWindowPresenter(MainWindowView& view);
@@ -173,6 +175,7 @@ public slots:
     void doActionFormatCode();
     void doActionFormatStrikethrough();
     void doActionFormatKeyboard();
+    void handleRowsAndDepth();
     void doActionFormatListBullet();
     void doActionFormatListNumber();
     void doActionFormatListTask();
@@ -204,7 +207,6 @@ public slots:
     void doActionNoteDemote();
     void doActionNoteDown();
     void doActionNoteLast();
-    void doActionNoteAttach();
     void doActionNoteClone();
     void doActionNoteExtract();
     void doActionRefactorNoteToOutline();

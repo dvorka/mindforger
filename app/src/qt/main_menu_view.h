@@ -143,7 +143,6 @@ public:
     QAction* actionNoteUp;
     QAction* actionNoteDown;
     QAction* actionNoteLast;
-    QAction* actionNoteAttach;
     QAction* actionNoteRefactor;
     QAction* actionNoteExtract;
     QAction* actionNoteStencil;

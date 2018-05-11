@@ -59,6 +59,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     configDialog = new ConfigurationDialog{&view};
     insertImageDialog = new InsertImageDialog{&view};
     insertLinkDialog = new InsertLinkDialog{&view};
+    rowsAndDepthDialog = new RowsAndDepthDialog(&view);
 
     // wire signals
     QObject::connect(timeScopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindTimeScope()));
@@ -74,6 +75,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
     QObject::connect(insertImageDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatImage()));
     QObject::connect(insertLinkDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatLink()));
+    QObject::connect(rowsAndDepthDialog->getGenerateButton(), SIGNAL(clicked()), this, SLOT(handleRowsAndDepth()));
 
     // async task 2 GUI events distributor
     distributor = new AsyncTaskNotificationsDistributor(this);
@@ -611,13 +613,54 @@ void MainWindowPresenter::doActionFormatKeyboard()
     }
 }
 
-void MainWindowPresenter::doActionFormatListBullet()
+void MainWindowPresenter::handleRowsAndDepth()
 {
-    // IMPROVE ask for number of items using dialog
-    int count=3;
-    QString text{"\n"};
-    for(int i=0; i<count; i++) {
-        text += "* ...\n";
+    QString text{};
+
+    if(rowsAndDepthDialog->getPurpose()==RowsAndDepthDialog::Purpose::BULLETS) {
+        text += "\n";
+        for(int r=0; r<rowsAndDepthDialog->getRows(); r++) {
+            for(int d=0; d<rowsAndDepthDialog->getDepth(); d++) {
+                for(int t=0; t<d; t++) {
+                    text += "    ";
+                }
+                text += "* ...\n";
+            }
+        }
+    } else if(rowsAndDepthDialog->getPurpose()==RowsAndDepthDialog::Purpose::NUMBERS) {
+        text += "\n";
+        for(int r=0; r<rowsAndDepthDialog->getRows(); r++) {
+            for(int d=0; d<rowsAndDepthDialog->getDepth(); d++) {
+                for(int t=0; t<d; t++) {
+                    text += "    ";
+                }
+                text += QString::number(r+1);
+                text += ". ...\n";
+            }
+        }
+    } else if(rowsAndDepthDialog->getPurpose()==RowsAndDepthDialog::Purpose::TASKS) {
+        text += "\n";
+        for(int r=0; r<rowsAndDepthDialog->getRows(); r++) {
+            for(int d=0; d<rowsAndDepthDialog->getDepth(); d++) {
+                for(int t=0; t<d; t++) {
+                    text += "    ";
+                }
+                text += QString::number(r+1);
+                text += ". [";
+                if(d%2) text+="x"; else text+=" ";
+                text += "] ...\n";
+            }
+        }
+    } else if(rowsAndDepthDialog->getPurpose()==RowsAndDepthDialog::Purpose::BLOCKQUOTE) {
+        for(int r=0; r<rowsAndDepthDialog->getRows(); r++) {
+            text += "\n";
+            for(int d=0; d<rowsAndDepthDialog->getDepth(); d++) {
+                for(int t=0; t<d; t++) {
+                    text += ">";
+                }
+                text += "> ...\n";
+            }
+        }
     }
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
@@ -625,42 +668,24 @@ void MainWindowPresenter::doActionFormatListBullet()
     } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
         orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text);
     }
+}
+
+void MainWindowPresenter::doActionFormatListBullet()
+{
+    rowsAndDepthDialog->setPurpose(RowsAndDepthDialog::Purpose::BULLETS);
+    rowsAndDepthDialog->show();
 }
 
 void MainWindowPresenter::doActionFormatListNumber()
 {
-    // IMPROVE ask for number of items using dialog
-    int count=3;
-    QString text{"\n"};
-    for(int i=1; i<=count; i++) {
-        text += QString::number(i);
-        text += ". ...\n";
-    }
-
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
-    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text);
-    }
+    rowsAndDepthDialog->setPurpose(RowsAndDepthDialog::Purpose::NUMBERS);
+    rowsAndDepthDialog->show();
 }
 
 void MainWindowPresenter::doActionFormatListTask()
 {
-    // IMPROVE ask for number of items using dialog
-    int count=3;
-    QString text{"\n"};
-    for(int i=1; i<=count; i++) {
-        text += QString::number(i);
-        text += ". [";
-        if(i%2) text+="x"; else text+=" ";
-        text += "] ...\n";
-    }
-
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
-    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text);
-    }
+    rowsAndDepthDialog->setPurpose(RowsAndDepthDialog::Purpose::TASKS);
+    rowsAndDepthDialog->show();
 }
 
 void MainWindowPresenter::doActionFormatCodeblock()
@@ -678,8 +703,18 @@ void MainWindowPresenter::doActionFormatCodeblock()
 
 void MainWindowPresenter::doActionFormatBlockquote()
 {
+    rowsAndDepthDialog->setPurpose(RowsAndDepthDialog::Purpose::BLOCKQUOTE);
+    rowsAndDepthDialog->show();
+}
+
+void MainWindowPresenter::doActionFormatTable()
+{
     // IMPROVE ask for number of items using dialog
-    QString text{"\n> .\n> .\n> .\n"};
+    int count=3;
+    QString text{"\n . | . | .\n --- | --- | ---\n"};
+    for(int i=1; i<=count; i++) {
+        text += " . | . | .\n";
+    }
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
         orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
@@ -737,22 +772,6 @@ void MainWindowPresenter::handleFormatImage()
         orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false, 2);
     } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
         orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false);
-    }
-}
-
-void MainWindowPresenter::doActionFormatTable()
-{
-    // IMPROVE ask for number of items using dialog
-    int count=3;
-    QString text{"\n . | . | .\n --- | --- | ---\n"};
-    for(int i=1; i<=count; i++) {
-        text += " . | . | .\n";
-    }
-
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
-    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text);
     }
 }
 
@@ -1045,10 +1064,6 @@ void MainWindowPresenter::doActionNoteClone()
     } else {
         QMessageBox::critical(&view, tr("Clone Note"), tr("Please select a Note to be cloned."));
     }
-}
-
-void MainWindowPresenter::doActionNoteAttach()
-{
 }
 
 void MainWindowPresenter::doActionNoteSave()

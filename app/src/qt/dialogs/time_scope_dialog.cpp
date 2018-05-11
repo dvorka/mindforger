@@ -25,7 +25,7 @@ TimeScopeDialog::TimeScopeDialog(QWidget *parent)
 {
     QVBoxLayout* timepointThresholdLayout = new QVBoxLayout{this};
 
-    enableCheck = new QCheckBox{tr("Show only Notebooks/Notes modified or viewed in recent")+":", this};
+    enableCheck = new QCheckBox{tr("Show Notebooks/Notes modified or viewed in recent")+":", this};
     enableCheck->setChecked(false);
 
     QWidget* w = new QWidget(this);
@@ -74,7 +74,6 @@ TimeScopeDialog::TimeScopeDialog(QWidget *parent)
     buttonLayout->addStretch();
 
     timepointThresholdLayout->addWidget(enableCheck);
-    timepointThresholdLayout->addWidget(w);
     timepointThresholdLayout->addWidget(w);
     timepointThresholdLayout->addLayout(buttonLayout);
 
