@@ -87,7 +87,7 @@ public slots:
 private slots:
     void insertCompletion(const QString& completion, bool singleWord=false);
     void highlightCurrentLine();
-    void performCompletion();
+    bool performCompletion();
 
 // line number panel
 private:

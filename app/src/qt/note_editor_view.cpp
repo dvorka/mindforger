@@ -35,7 +35,7 @@ NoteEditorView::NoteEditorView(QWidget* parent)
 
     // font
     f = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-    // alternatively
+    // alternatives:
     //f.setFamily("Courier");
     //f.setStyleHint(QFont::Monospace);
     //f.setFixedPitch(true);
@@ -196,14 +196,14 @@ void NoteEditorView::keyPressEvent(QKeyEvent *event)
         }
     }
 
-    if (completedAndSelected && handledCompletedAndSelected(event)) {
+    if(completedAndSelected && handledCompletedAndSelected(event)) {
         return;
     } else {
         completedAndSelected = false;
     }
 
-    if (completer->popup()->isVisible()) {
-        switch (event->key()) {
+    if(completer->popup()->isVisible()) {
+        switch(event->key()) {
             case Qt::Key_Up:
             case Qt::Key_Down:
             case Qt::Key_Enter:
@@ -215,7 +215,16 @@ void NoteEditorView::keyPressEvent(QKeyEvent *event)
                 completer->popup()->hide();
                 break;
         }
+    } else {
+        // IMPROVE get configuration reference and setting - this must be fast
+        if(Configuration::getInstance().getMindState()==Configuration::MindState::THINKING) {
+            // TODO automatic completion suggestions when thinking - to be FIXED: doubled chars, backspace doesn't work, ...
+            //if(performCompletion()) {
+            //    event->ignore();
+            //}
+        }
     }
+
     QPlainTextEdit::keyPressEvent(event);
 }
 
@@ -242,14 +251,16 @@ bool NoteEditorView::handledCompletedAndSelected(QKeyEvent *event)
     return true;
 }
 
-void NoteEditorView::performCompletion()
+bool NoteEditorView::performCompletion()
 {
     QTextCursor cursor = textCursor();
     cursor.select(QTextCursor::WordUnderCursor);
     const QString completionPrefix = cursor.selectedText();
-
-    if (!completionPrefix.isEmpty() && completionPrefix.at(completionPrefix.length() - 1).isLetter()) {
+    if(!completionPrefix.isEmpty() && completionPrefix.at(completionPrefix.length()-1).isLetter()) {
         performCompletion(completionPrefix);
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -257,12 +268,12 @@ void NoteEditorView::performCompletion(const QString& completionPrefix)
 {
     populateModel(completionPrefix);
 
-    if (completionPrefix != completer->completionPrefix()) {
+    if(completionPrefix != completer->completionPrefix()) {
         completer->setCompletionPrefix(completionPrefix);
         completer->popup()->setCurrentIndex(completer->completionModel()->index(0, 0));
     }
 
-    if (completer->completionCount() == 1) {
+    if(completer->completionCount() == 1) {
         insertCompletion(completer->currentCompletion(), true);
     } else {
         QRect rect = cursorRect();
@@ -300,7 +311,7 @@ void NoteEditorView::insertCompletion(const QString& completion, bool singleWord
 
 void NoteEditorView::mousePressEvent(QMouseEvent* event)
 {
-    if (completedAndSelected) {
+    if(completedAndSelected) {
         completedAndSelected = false;
         QTextCursor cursor = textCursor();
         cursor.removeSelectedText();
