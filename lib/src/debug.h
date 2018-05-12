@@ -25,7 +25,10 @@
 #include <chrono>
 #include <iostream>
     #define MF_DEBUG(x) do { std::cerr << x; } while (0)
-    //#define MF_HTML_DEBUG
+
+    //#define MF_DEBUG_HTML
+    //#define MF_DEBUG_QRC
+    #define MF_DEBUG_L10N
 #else
     #define MF_DEBUG(x) do {;} while (0)
 #endif

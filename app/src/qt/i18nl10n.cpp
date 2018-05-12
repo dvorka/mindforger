@@ -24,20 +24,23 @@ using namespace std;
 
 void l10n(QApplication& mindforgerApplication)
 {
-    QTranslator* qtTranslator = new QTranslator();
-    qtTranslator->load("qt_"+QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    mindforgerApplication.installTranslator(qtTranslator);
-
-    qDebug() << "Loading locale :/translations/mindforger_"+QLocale::system().name()+".qm";
     // Qt to delete translator
     QTranslator* mfTranslator = new QTranslator();
-    if(mfTranslator->load(":/translations/mindforger_"+QLocale::system().name()+".qm")) {
+    // loader does fallback: :/translations/mindforger_us_EN.qm > :/translations/mindforger_us.qm
+    QString translationPath{":/translations/mindforger_"+QLocale::system().name()+".qm"};
+    MF_DEBUG("Loading locale " << translationPath.toStdString() << endl);
+    if(mfTranslator->load(translationPath)) {
         if(!mindforgerApplication.installTranslator(mfTranslator)) {
-            cerr << "Error: unable to install translator :/translations/mindforger_" << QLocale::system().name().toStdString() << ".qm" << endl;
+#ifdef MF_DEBUG_L10N
+            cerr << "Error: unable to install translator " << translationPath.toStdString() << endl;
+#endif
         }
-    } else {
-        cerr << "Error: unable to load translator :/translations/mindforger_" << QLocale::system().name().toStdString() << ".qm" << endl;
     }
+#ifdef MF_DEBUG_L10N
+    else {
+        cerr << "Error: unable to load translator " << translationPath.toStdString() << endl;
+    }
+#endif
 }
 
 } // m8r

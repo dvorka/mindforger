@@ -115,6 +115,12 @@ int main(int argc, char *argv[])
     }
 
     QApplication mindforgerApplication(argc, argv);
+#ifdef MF_DEBUG_QRC
+    QDirIterator it(":", QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        qDebug() << it.next();
+    }
+#endif
     QApplication::setApplicationName("MindForger");
     QApplication::setApplicationVersion(MINDFORGER_VERSION);
     mindforgerApplication.setWindowIcon(QIcon(":/icons/mindforger-icon.png"));
