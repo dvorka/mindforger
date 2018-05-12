@@ -72,7 +72,6 @@ class ConfigurationDialog::MindTab : public QWidget
 private:
     Configuration& config;
 
-    QLabel* saveReadsMetadataLabel;
     QCheckBox* saveReadsMetadataCheck;
     QLabel* distributorSleepIntervalLabel;
     QSpinBox*  distributorSleepIntervalSpin;
@@ -104,7 +103,6 @@ private:
 
     QLabel* editorKeyBindingLabel;
     QComboBox* editorKeyBindingCombo;
-    QLabel* srcCodeHighlightEditorLabel;
     QCheckBox* srcCodeHighlightEditorCheck;
     QLabel* tabWidthLabel;
     QComboBox* tabWidthCombo;
@@ -129,11 +127,9 @@ class ConfigurationDialog::MarkdownTab : public QWidget
 private:
     Configuration& config;
 
-    QLabel* mathSupportLabel;
     QCheckBox* mathSupportCheck;
     QLabel* diagramSupportLabel;
     QComboBox* diagramSupportCombo;
-    QLabel* srcCodeHighlightingSupportLabel;
     QCheckBox* srcCodeHighlightSupportCheck;
 
 public:

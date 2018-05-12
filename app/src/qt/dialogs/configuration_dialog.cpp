@@ -101,8 +101,7 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     editorKeyBindingCombo->addItem("vim");
     editorKeyBindingCombo->addItem("windows");
 
-    srcCodeHighlightEditorLabel = new QLabel(tr("Markdown syntax highlighting")+":", this);
-    srcCodeHighlightEditorCheck = new QCheckBox(this);
+    srcCodeHighlightEditorCheck = new QCheckBox(tr("Markdown syntax highlighting"), this);
 
     tabWidthLabel = new QLabel(tr("TAB width")+":", this);
     tabWidthCombo = new QComboBox(this);
@@ -121,7 +120,7 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     QVBoxLayout* editorLayout = new QVBoxLayout{this};
     editorLayout->addWidget(editorKeyBindingLabel);
     editorLayout->addWidget(editorKeyBindingCombo);
-    editorLayout->addWidget(srcCodeHighlightEditorLabel);
+    //editorLayout->addWidget(srcCodeHighlightEditorLabel);
     editorLayout->addWidget(srcCodeHighlightEditorCheck);
     editorLayout->addWidget(tabWidthLabel);
     editorLayout->addWidget(tabWidthCombo);
@@ -143,7 +142,6 @@ ConfigurationDialog::AppTab::~AppTab()
     delete htmlCssThemeCombo;
     delete editorKeyBindingLabel;
     delete editorKeyBindingCombo;
-    delete srcCodeHighlightEditorLabel;
     delete srcCodeHighlightEditorCheck;
     delete tabWidthLabel;
     delete tabWidthCombo;
@@ -188,11 +186,9 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
 {
     QGroupBox* viewerGroup = new QGroupBox{tr("Viewer"), this};
 
-    srcCodeHighlightingSupportLabel = new QLabel(tr("Source code syntax highlighting support")+":", this),
-    srcCodeHighlightSupportCheck = new QCheckBox{this};
+    srcCodeHighlightSupportCheck = new QCheckBox{tr("source code syntax highlighting support"), this};
 
-    mathSupportLabel = new QLabel(tr("Math support")+":", this),
-    mathSupportCheck = new QCheckBox{this};
+    mathSupportCheck = new QCheckBox{tr("math support"), this};
 
     diagramSupportLabel = new QLabel(tr("Diagram support")+":", this),
     diagramSupportCombo = new QComboBox{this};
@@ -202,9 +198,7 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
 
     // assembly
     QVBoxLayout* viewerLayout = new QVBoxLayout{this};
-    viewerLayout->addWidget(srcCodeHighlightingSupportLabel);
     viewerLayout->addWidget(srcCodeHighlightSupportCheck);
-    viewerLayout->addWidget(mathSupportLabel);
     viewerLayout->addWidget(mathSupportCheck);
     viewerLayout->addWidget(diagramSupportLabel);
     viewerLayout->addWidget(diagramSupportCombo);
@@ -218,9 +212,7 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
 
 ConfigurationDialog::MarkdownTab::~MarkdownTab()
 {
-    delete srcCodeHighlightingSupportLabel;
     delete srcCodeHighlightSupportCheck;
-    delete mathSupportLabel;
     delete mathSupportCheck;
     delete diagramSupportLabel;
     delete diagramSupportCombo;
@@ -248,8 +240,7 @@ ConfigurationDialog::MindTab::MindTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
     // IMPROVE horizontal panel w/ label & check same line
-    saveReadsMetadataLabel = new QLabel(tr("Save reads metadata")+":", this);
-    saveReadsMetadataCheck = new QCheckBox(this);
+    saveReadsMetadataCheck = new QCheckBox(tr("save reads metadata"), this);
 
     distributorSleepIntervalLabel = new QLabel(tr("Async refresh interval (1 - 10.000ms)")+":", this);
     distributorSleepIntervalSpin = new QSpinBox(this);
@@ -258,7 +249,6 @@ ConfigurationDialog::MindTab::MindTab(QWidget *parent)
 
     // assembly
     QVBoxLayout* pLayout = new QVBoxLayout{this};
-    pLayout->addWidget(saveReadsMetadataLabel);
     pLayout->addWidget(saveReadsMetadataCheck);
     pLayout->addWidget(distributorSleepIntervalLabel);
     pLayout->addWidget(distributorSleepIntervalSpin);
@@ -273,7 +263,6 @@ ConfigurationDialog::MindTab::MindTab(QWidget *parent)
 
 ConfigurationDialog::MindTab::~MindTab()
 {
-    delete saveReadsMetadataLabel;
     delete saveReadsMetadataCheck;
     delete distributorSleepIntervalLabel;
     delete distributorSleepIntervalSpin;
