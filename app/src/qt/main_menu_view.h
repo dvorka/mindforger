@@ -104,6 +104,7 @@ public:
     QAction* actionEditCut;
     QAction* actionEditCopy;
     QAction* actionEditPaste;
+    QAction* actionEditComplete;
 
     // menu: Format
     QAction* actionFormatBold;

@@ -233,6 +233,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditPaste= new QAction(tr("&Paste\tCtrl+V"), mainWindow);
     actionEditPaste->setStatusTip(tr("Paste"));
 
+    actionEditComplete= new QAction(tr("Complete Text\tAlt+/"), mainWindow);
+    actionEditComplete->setStatusTip(tr("Complete word being written using other words in the current Note"));
+
     menuEdit = qMenuBar->addMenu(tr("&Edit"));
     menuEdit->addAction(actionEditUndo);
     menuEdit->addAction(actionEditRedo);
@@ -240,6 +243,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuEdit->addAction(actionEditCut);
     menuEdit->addAction(actionEditCopy);
     menuEdit->addAction(actionEditPaste);
+    menuEdit->addSeparator();
+    menuEdit->addAction(actionEditComplete);
     menuEdit->setEnabled(false);
 
     // menu: format
