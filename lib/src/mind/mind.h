@@ -281,6 +281,8 @@ public:
      * SCOPING
      */
 
+    // TODO scope includes time, tags, ... scopes and performs intersection matching
+
     // TODO set scope & propagate it to memory
     std::string getTimeScopeAsString() { return timeScopeAspect.getTimeScopeAsString(); }
     bool isTimeScopeEnabled() const { return timeScopeAspect.isEnabled(); }

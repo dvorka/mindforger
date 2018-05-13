@@ -16,48 +16,47 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8RUI_TIME_SCOPE_DIALOG_H
-#define M8RUI_TIME_SCOPE_DIALOG_H
+#ifndef M8RUI_SCOPE_DIALOG_H
+#define M8RUI_SCOPE_DIALOG_H
 
 #include <QtWidgets>
 
+#include "../../lib/src/mind/ontology/ontology.h"
+#include "../widgets/edit_tags_panel.h"
+
 namespace m8r {
 
-class TimeScopeDialog : public QDialog
+class ScopeDialog : public QDialog
 {
     Q_OBJECT
 
 private:
-    QCheckBox* enableCheck;
+    Ontology& ontology;
 
+    QCheckBox* enableTimeScopeCheck;
     QSpinBox* yearSpin;
     QSpinBox* monthSpin;
     QSpinBox* daySpin;
     QSpinBox* hourSpin;
     QSpinBox* minuteSpin;
 
+    QCheckBox* enableTagsScopeCheck;
+    EditTagsPanel* editTagsGroup;
+
     QPushButton* setButton;
     QPushButton* closeButton;
 
 public:
-    explicit TimeScopeDialog(QWidget* parent);
-    TimeScopeDialog(const TimeScopeDialog&) = delete;
-    TimeScopeDialog(const TimeScopeDialog&&) = delete;
-    TimeScopeDialog &operator=(const TimeScopeDialog&) = delete;
-    TimeScopeDialog &operator=(const TimeScopeDialog&&) = delete;
-    ~TimeScopeDialog();
+    explicit ScopeDialog(Ontology& ontology, QWidget* parent);
+    ScopeDialog(const ScopeDialog&) = delete;
+    ScopeDialog(const ScopeDialog&&) = delete;
+    ScopeDialog &operator=(const ScopeDialog&) = delete;
+    ScopeDialog &operator=(const ScopeDialog&&) = delete;
+    ~ScopeDialog();
 
-    QPushButton* getSetButton() { return setButton; }
-    int getYears() const { return yearSpin->value(); }
-    int getMonths() const { return monthSpin->value(); }
-    int getDays() const { return daySpin->value(); }
-    int getHours() const { return hourSpin->value(); }
-    int getMinutes() const { return minuteSpin->value(); }
-
-    bool isThreasholdSet() const { return enableCheck->isChecked(); }
     void show(bool e, int y=0, int m=0, int d=0, int h=0, int mm=0) {
-        enableCheck->setChecked(e);
-        enableDisable(e);
+        enableTimeScopeCheck->setChecked(e);
+        enableDisableTimeScope(e);
 
         yearSpin->setValue(y);
         monthSpin->setValue(m);
@@ -65,12 +64,27 @@ public:
         hourSpin->setValue(h);
         minuteSpin->setValue(mm);
 
+        editTagsGroup->refreshOntologyTags();
+
         QDialog::show();
     }
 
+    bool isTimeScopeSet() const { return enableTimeScopeCheck->isChecked(); }
+    int getYears() const { return yearSpin->value(); }
+    int getMonths() const { return monthSpin->value(); }
+    int getDays() const { return daySpin->value(); }
+    int getHours() const { return hourSpin->value(); }
+    int getMinutes() const { return minuteSpin->value(); }
+
+    bool isTagsScopeSet() const { return enableTagsScopeCheck->isChecked(); }
+    const std::vector<const Tag*>* getTags() { return editTagsGroup->getTags(); }
+
+    QPushButton* getSetButton() { return setButton; }
+
 private slots:
-    void enableDisable(bool enable);
+    void enableDisableTimeScope(bool enable);
+    void enableDisableTagScope(bool enable);
 };
 
 }
-#endif // M8RUI_TIME_SCOPE_DIALOG_H
+#endif // M8RUI_SCOPE_DIALOG_H

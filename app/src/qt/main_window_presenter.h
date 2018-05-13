@@ -89,7 +89,7 @@ private:
     OrlojPresenter* orloj;
     StatusBarPresenter* statusBar;
 
-    TimeScopeDialog* timeScopeDialog;
+    ScopeDialog* timeScopeDialog;
     ForgetDialog* forgetDialog;
     OutlineNewDialog* newOutlineDialog;
     NoteNewDialog* newNoteDialog;
@@ -144,7 +144,7 @@ public slots:
     void doActionMindLearn();
     void doActionMindRelearn(QString path);
     void doActionMindTimeScope();
-    void handleMindTimeScope();
+    void handleMindScope();
     void doActionMindForgetting();
     void handleMindForgetting();
     void doActionMindPreferences();

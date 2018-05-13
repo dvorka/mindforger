@@ -80,7 +80,8 @@ SOURCES += \
     src/mind/ai/ai_aa_bow.cpp \
     src/mind/ai/ai_aa_weighted_fts.cpp \
     src/mind/ai/aa_notes_feature.cpp \
-    src/mind/ai/nlp/common_words_blacklist.cpp
+    src/mind/ai/nlp/common_words_blacklist.cpp \
+    src/mind/aspect/tag_scope_aspect.cpp
 
 HEADERS += \
     ./src/debug.h \
@@ -177,4 +178,5 @@ HEADERS += \
     src/mind/ai/aa_model.h \
     src/mind/ai/aa_notes_feature.h \
     src/mind/ai/ai_aa.h \
-    src/mind/ai/nlp/common_words_blacklist.h
+    src/mind/ai/nlp/common_words_blacklist.h \
+    src/mind/aspect/tag_scope_aspect.h

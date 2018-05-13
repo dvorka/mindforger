@@ -20,13 +20,14 @@
 
 namespace m8r {
 
-TimeScopeDialog::TimeScopeDialog(QWidget *parent)
-    : QDialog{parent}
+ScopeDialog::ScopeDialog(Ontology& ontology, QWidget *parent)
+    : QDialog{parent}, ontology(ontology)
 {
     QVBoxLayout* timepointThresholdLayout = new QVBoxLayout{this};
 
-    enableCheck = new QCheckBox{tr("Show Notebooks/Notes modified or viewed in recent")+":", this};
-    enableCheck->setChecked(false);
+    // scope by time
+    enableTimeScopeCheck = new QCheckBox{tr("show Notebooks/Notes modified or viewed in recent")+":", this};
+    enableTimeScopeCheck->setChecked(false);
 
     QWidget* w = new QWidget(this);
     QHBoxLayout* spinsLayout = new QHBoxLayout{this};
@@ -62,6 +63,18 @@ TimeScopeDialog::TimeScopeDialog(QWidget *parent)
     spinsLayout->addWidget(new QLabel(tr("minute(s)")));
     w->setLayout(spinsLayout);
 
+    // scope by tags
+    enableTagsScopeCheck = new QCheckBox{tr("show Notebooks with the following tags")+":", this};
+    enableTagsScopeCheck->setChecked(false);
+
+    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup->refreshOntologyTags();
+    editTagsGroup->setTitle("");
+    // workaround to force hiding of group's title when it's empty
+    editTagsGroup->setStyleSheet("QGroupBox{padding-top:15px; margin-left:5px; margin-top:-15px}");
+    editTagsGroup->setEnabled(false);
+
+    // dialog buttons
     setButton = new QPushButton{tr("&Set")};
     setButton->setDefault(true);
 
@@ -73,14 +86,18 @@ TimeScopeDialog::TimeScopeDialog(QWidget *parent)
     buttonLayout->addWidget(setButton);
     buttonLayout->addStretch();
 
-    timepointThresholdLayout->addWidget(enableCheck);
+    // assembly
+    timepointThresholdLayout->addWidget(enableTimeScopeCheck);
     timepointThresholdLayout->addWidget(w);
+    timepointThresholdLayout->addWidget(enableTagsScopeCheck);
+    timepointThresholdLayout->addWidget(editTagsGroup);
     timepointThresholdLayout->addLayout(buttonLayout);
 
     setLayout(timepointThresholdLayout);
 
     // signals
-    QObject::connect(enableCheck, SIGNAL(clicked(bool)), this, SLOT(enableDisable(bool)));
+    QObject::connect(enableTimeScopeCheck, SIGNAL(clicked(bool)), this, SLOT(enableDisableTimeScope(bool)));
+    QObject::connect(enableTagsScopeCheck, SIGNAL(clicked(bool)), this, SLOT(enableDisableTagScope(bool)));
     connect(setButton, SIGNAL(clicked()), this, SLOT(close()));
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
@@ -89,18 +106,23 @@ TimeScopeDialog::TimeScopeDialog(QWidget *parent)
     setModal(true);
 }
 
-TimeScopeDialog::~TimeScopeDialog()
+ScopeDialog::~ScopeDialog()
 {
     // TODO delete all widgets
 }
 
-void TimeScopeDialog::enableDisable(bool enable)
+void ScopeDialog::enableDisableTimeScope(bool enable)
 {
     yearSpin->setEnabled(enable);
     monthSpin->setEnabled(enable);
     daySpin->setEnabled(enable);
     hourSpin->setEnabled(enable);
     minuteSpin->setEnabled(enable);
+}
+
+void ScopeDialog::enableDisableTagScope(bool enable)
+{
+    editTagsGroup->setEnabled(enable);
 }
 
 } // m8r namespace

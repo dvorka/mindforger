@@ -43,7 +43,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     orloj = new OrlojPresenter{this, view.getOrloj(), mind};
 
     // initialize components
-    timeScopeDialog = new TimeScopeDialog{&view};
+    timeScopeDialog = new ScopeDialog{mind->ontology(), &view};
     forgetDialog = new ForgetDialog{&view};
     newOutlineDialog = new OutlineNewDialog{
                 QString::fromStdString(config.getMemoryPath()),
@@ -62,7 +62,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     rowsAndDepthDialog = new RowsAndDepthDialog(&view);
 
     // wire signals
-    QObject::connect(timeScopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindTimeScope()));
+    QObject::connect(timeScopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
     QObject::connect(forgetDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindForgetting()));
     QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
@@ -1204,10 +1204,10 @@ void MainWindowPresenter::doActionMindTimeScope()
         a.getTimeScope().minutes);
 }
 
-void MainWindowPresenter::handleMindTimeScope()
+void MainWindowPresenter::handleMindScope()
 {
     TimeScope& ts=mind->getTimeScopeAspect().getTimeScope();
-    if(timeScopeDialog->isThreasholdSet()) {
+    if(timeScopeDialog->isTimeScopeSet()) {
         ts.years=timeScopeDialog->getYears();
         ts.months=timeScopeDialog->getMonths();
         ts.days=timeScopeDialog->getDays();

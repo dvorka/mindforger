@@ -24,7 +24,7 @@ namespace m8r {
 using namespace std;
 
 FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *parent)
-    : QDialog(parent), ontology(ontology)
+    : QDialog{parent}, ontology(ontology)
 {
     mode = ThingsMode::OUTLINES;
 
