@@ -47,7 +47,6 @@ HEADERS += \
     ../../lib/src/mind/mind.h \
     ../../lib/src/mind/memory.h \
     ../../lib/src/model/outline_type.h \
-    ../../lib/src/model/attachment.h \
     ../../lib/src/model/outline.h \
     ../../lib/src/model/note.h \
     ../../lib/src/model/note_type.h \
@@ -148,7 +147,6 @@ SOURCES += \
     ../../lib/src/mind/ontology/ontology.cpp \
     ../../lib/src/mind/working_memory.cpp \
     ../../lib/src/repository_indexer.cpp \
-    ../../lib/src/model/attachment.cpp \
     ../../lib/src/model/outline.cpp \
     ../../lib/src/model/note_type.cpp \
     ../../lib/src/model/outline_type.cpp \
