@@ -790,3 +790,56 @@ TEST(NoteTestCase, RefactorNote) {
 
     // IMPROVE assert Os and Ns modified
 }
+
+TEST(NoteTestCase, MangleNoteName) {
+    string repositoryDir{"/tmp/mf-unit-repository-m"};
+    m8r::removeDirectoryRecursively(repositoryDir.c_str());
+    m8r::Installer installer{};
+    installer.createEmptyMindForgerRepository(repositoryDir);
+    string oFile{repositoryDir+"/memory/o.md"};
+    string oContent{
+        "# Section Links Mangling"
+        "\n"
+        "\nThis document elaborates mangling of section names to links."
+        "\n"
+        "\n# Section with space"
+        "\n`section-with-space`"
+        "\n"
+        "\n# Section with 123 number"
+        "\n`section-with-123-number`"
+        "\n"
+        "\n# Question?"
+        "\n`question`"
+        "\n"
+        "\n#   Leading    within and trailing spaces"
+        "\n`leading----within-and-trailing-spaces`"
+        "\n"
+        "\n# ?"
+        "\n`` ... empty"
+        "\n"
+        "\n# @$%^&*("
+        "\n`-1` ... probably GitHub bug (should be empty string)"
+        "\n"};
+    m8r::stringToFile(oFile,oContent);
+
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-ntc-mnn.md");
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    m8r::Mind mind{config};
+    m8r::Memory& memory = mind.remind();
+    mind.learn();
+    mind.think().get(); // ensure that ASYNC learning finishes
+
+    // test
+    vector<m8r::Outline*> outlines = memory.getOutlines();
+    m8r::Outline* o = outlines.at(0);
+
+    EXPECT_EQ(o->getNotesCount(), 6);
+    EXPECT_EQ("section-with-space", o->getNotes()[0]->getMangledName());
+    EXPECT_EQ("section-with-123-number", o->getNotes()[1]->getMangledName());
+    EXPECT_EQ("question", o->getNotes()[2]->getMangledName());
+    EXPECT_EQ("leading----within-and-trailing-spaces", o->getNotes()[3]->getMangledName());
+    EXPECT_EQ("", o->getNotes()[4]->getMangledName());
+    EXPECT_EQ("", o->getNotes()[5]->getMangledName());
+}

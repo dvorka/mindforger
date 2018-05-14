@@ -84,12 +84,16 @@ string Note::getMangledName() const
         while(result.find("-") == 0) {
             result.erase(0, 1);
         }
-        size_t len = result.size();
-        while(result.rfind("-") == --len) {
-            result.erase(len, len + 1);
+        if(result.size()) {
+            size_t len = result.size();
+            while(result.rfind("-") == --len) {
+                result.erase(len, len + 1);
+            }
         }
-        // to lower case
-        std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+        if(result.size()) {
+            // to lower case
+            std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+        }
     }
     return result;
 }
