@@ -1230,7 +1230,7 @@ void MainWindowPresenter::handleMindScope()
     } else {
         mind->getTagsScopeAspect().reset();
     }
-    config.setTagsScope(scopeDialog->getTags());
+    config.setTagsScope(mind->getTagsScopeAspect().getTags());
 
     // save configuration
     mdConfigRepresentation->save(config);
