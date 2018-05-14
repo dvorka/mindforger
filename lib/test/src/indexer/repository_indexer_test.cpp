@@ -439,3 +439,47 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
     EXPECT_EQ(outlineAsString->find("Metadata"), std::string::npos);
     delete outlineAsString;
 }
+
+TEST(RepositoryIndexerTestCase, MakePathRelative)
+{
+    string repositoryPath{"/tmp/mf-relativize"};
+    map<string,string> pathToContent;
+    string path, content;
+
+    path.assign(repositoryPath+"/memory/first.md");
+    content.assign(
+        "# First Outline"
+        "\nFirst outline text."
+        "\n");
+    pathToContent[path] = content;
+
+    path.assign(repositoryPath+"/memory/second.md");
+    content.assign(
+        "# Second Outline"
+        "\nSecond outline text."
+        "\n");
+    pathToContent[path] = content;
+
+    m8r::createEmptyRepository(repositoryPath, pathToContent);
+
+    // test repository indexation
+    m8r::RepositoryIndexer repositoryIndexer{};
+    m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    repositoryIndexer.index(repository);
+    repositoryIndexer.getRepository()->print();
+    auto outlineFiles = repositoryIndexer.getAllOutlineFileNames();
+
+    // asserts
+    EXPECT_EQ(repositoryPath, repository->getDir());
+    EXPECT_EQ(m8r::Repository::RepositoryType::MINDFORGER, repository->getType());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::REPOSITORY, repository->getMode());
+    EXPECT_EQ(2, outlineFiles.size());
+
+    EXPECT_EQ("a/b/c.md", repositoryIndexer.makePathRelative(string{"/tmp/mf-relativize/memory/a/b/c.md"}, repository));
+    EXPECT_EQ("a.png", repositoryIndexer.makePathRelative(string{"/tmp/mf-relativize/memory/a.png"}, repository));
+    EXPECT_EQ("a/b/c/", repositoryIndexer.makePathRelative(string{"/tmp/mf-relativize/memory/a/b/c/"}, repository));
+    EXPECT_EQ("/home/john/doe", repositoryIndexer.makePathRelative(string{"/home/john/doe"}, repository));
+    EXPECT_EQ("", repositoryIndexer.makePathRelative(string{""}, repository));
+    EXPECT_EQ("/", repositoryIndexer.makePathRelative(string{"/"}, repository));
+    EXPECT_EQ("~/.bashrc", repositoryIndexer.makePathRelative(string{"~/.bashrc"}, repository));
+}
