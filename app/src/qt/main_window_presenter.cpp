@@ -743,7 +743,7 @@ void MainWindowPresenter::handleFormatLink()
     QString text{"["};
     text += insertLinkDialog->getLinkText();
     text += "](";
-    text += insertLinkDialog->getPathText();
+    text += QString::fromStdString(RepositoryIndexer::makePathRelative(insertLinkDialog->getPathText().toStdString(), config.getActiveRepository()));
     text += ")";
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {

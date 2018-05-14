@@ -286,4 +286,36 @@ Repository* RepositoryIndexer::getRepositoryForPath(const string& p)
     }
 }
 
+std::string RepositoryIndexer::makePathRelative(const std::string& path, const Repository* repository)
+{
+    // if repository path (given the path) is prefix of path, then path can be made relative
+    string result{path};
+    string memoryPath{repository->getDir()};
+    if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
+        if(repository->getMode() == Repository::RepositoryMode::REPOSITORY) {
+            memoryPath+=FILE_PATH_SEPARATOR;
+            memoryPath+=FILE_PATH_MEMORY;
+            memoryPath+=FILE_PATH_SEPARATOR;
+            if(stringStartsWith(path, memoryPath)) {
+                result.erase(0, memoryPath.size());
+                return result;
+            }
+        } else {
+            memoryPath+=FILE_PATH_SEPARATOR;
+            if(stringStartsWith(path, memoryPath)) {
+                result.erase(0, memoryPath.size());
+                return result;
+            }
+        }
+    } else {
+        memoryPath+=FILE_PATH_SEPARATOR;
+        if(stringStartsWith(path, memoryPath)) {
+            result.erase(0, memoryPath.size());
+            return result;
+        }
+    }
+
+    return path;
+}
+
 } // m8r namespace

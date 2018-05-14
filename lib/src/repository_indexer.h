@@ -52,6 +52,11 @@ public:
      */
     static Repository* getRepositoryForPath(const std::string& path);
 
+    /**
+     * @brief Make path relative if it makes sense for given repository.
+     */
+    static std::string makePathRelative(const std::string& path, const Repository* repository);
+
 private:
     Repository* repository;
 
