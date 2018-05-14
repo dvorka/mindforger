@@ -194,6 +194,7 @@ private:
     bool saveReadsMetadata; // persist count of Outline and Note reads (requires write to disc on every O/N view)
     TimeScope timeScope;
     std::string timeScopeAsString;
+    std::vector<std::string> tagsScope;
     unsigned int md2HtmlOptions;
     AssociationAssessmentAlgorithm aaAlgorithm;
     int distributorSleepInterval;
@@ -263,6 +264,9 @@ public:
     const char* getEditorFromEnv();
     void setTimeScope(const TimeScope& timeScope) { this->timeScope = timeScope; }
     TimeScope& getTimeScope() { return timeScope; }
+    void setTagsScope(const std::vector<std::string>& tags) { tagsScope.assign(tags.begin(), tags.end()); }
+    void setTagsScope(const std::vector<const Tag*>& tags) { tagsScope.clear(); if(tags.size()) for(const Tag* t:tags) tagsScope.push_back(t->getName()); }
+    std::vector<std::string>& getTagsScope() { return tagsScope; }
     bool isSaveReadsMetadata() const { return saveReadsMetadata; }
     void setSaveReadsMetadata(bool saveReadsMetadata) { this->saveReadsMetadata=saveReadsMetadata; }
     unsigned int getMd2HtmlOptions() const { return md2HtmlOptions; }

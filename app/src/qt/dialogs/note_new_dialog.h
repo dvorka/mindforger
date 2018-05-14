@@ -62,7 +62,7 @@ public:
     QString getNoteName() const;
     Stencil* getStencil() const;
     const NoteType* getNoteType() const;
-    const std::vector<const Tag*>* getTags() const;
+    const std::vector<const Tag*>& getTags() const;
     int getProgress() const;
 
     void show(const QString& path, std::vector<Stencil*>& stencils);
@@ -97,7 +97,7 @@ public:
 
     QLineEdit* getNameEdit() const { return nameEdit; }
     QComboBox* getTypeCombo() const { return typeCombo; }
-    const std::vector<const Tag*>* getTags() { return editTagsGroup->getTags(); }
+    const std::vector<const Tag*>& getTags() { return editTagsGroup->getTags(); }
     QSpinBox* getProgressSpin() const { return progressSpin; }
     QComboBox* getStencilCombo() const { return stencilCombo; }
     QComboBox* getPositionCombo() const { return positionCombo; }

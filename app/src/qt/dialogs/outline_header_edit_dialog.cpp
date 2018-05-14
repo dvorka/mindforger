@@ -271,7 +271,7 @@ void OutlineHeaderEditDialog::toOutline()
         currentOutline->setImportance(generalTab->importanceCombo->currentIndex());
         currentOutline->setUrgency(generalTab->urgencyCombo->currentIndex());
         currentOutline->setProgress(generalTab->progressSpin->value());
-        currentOutline->setTags(generalTab->editTagsGroup->getTags());
+        currentOutline->setTags(&generalTab->editTagsGroup->getTags());
 
         // preamble
         std::vector<std::string*> preamble;

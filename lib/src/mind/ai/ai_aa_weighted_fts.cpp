@@ -222,7 +222,7 @@ void AiAaWeightedFts::assessNotesInOutline(Outline* outline, vector<pair<Note*,f
         for(Note* note:outline->getNotes()) {
             nScore = oScore;
             // time scope @ AI
-            if(mind.isTimeScopeEnabled() && mind.getTimeScopeAspect().isOutOfScope(note)) {
+            if(mind.getScopeAspect().isOutOfScope(note)) {
                 continue;
             }
             // N.title matches

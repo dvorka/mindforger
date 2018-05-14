@@ -86,10 +86,10 @@ void OutlineTreePresenter::refresh(Outline* outline, Outline::Patch* patch)
         }
 
         // forget / time scope: hide view rows ~ there is full model, I just hide what's visible > patch should work
-        if(mind->isTimeScopeEnabled()) {
+        if(mind->getScopeAspect().isEnabled()) {
             vector<int> parents;
             for(size_t i=0; i<outline->getNotesCount(); i++) {
-                if(mind->getTimeScopeAspect().isInScope(outline->getNotes()[i])) {
+                if(mind->getScopeAspect().isInScope(outline->getNotes()[i])) {
                     // N's parents
                     parents.clear();
                     outline->getNotePathToRoot(i, parents);

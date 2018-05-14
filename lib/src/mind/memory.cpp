@@ -31,7 +31,7 @@ Memory::Memory(Configuration& configuration)
 {
     persistence = new FilesystemPersistence{configuration, representation};
     cache = true;
-    timeScope = nullptr;
+    mindScope = nullptr;
 }
 
 vector<Stencil*>& Memory::getStencils(ResourceType type)
@@ -299,8 +299,8 @@ void Memory::getAllNotes(vector<Note*>& notes) const
 {
     for(Outline* o:outlines) {
         for(Note* n:o->getNotes()) {
-            if(timeScope && timeScope->isEnabled()) {
-                if(timeScope->isInScope(n)) {
+            if(mindScope) {
+                if(mindScope->isInScope(n)) {
                     notes.push_back(n);
                 }
             } else {
@@ -317,4 +317,4 @@ const OutlineType* Memory::toOutlineType(const MarkdownAstSectionMetadata& meta)
     return ontology.getDefaultOutlineType();
 }
 
-} /* namespace */
+} // m8r namespace

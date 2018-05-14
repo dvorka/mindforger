@@ -25,7 +25,7 @@
 
 #include "../../config/configuration.h"
 #include "markdown_document.h"
-#include "markdown_ast_node.h"
+#include "../../gear/string_utils.h"
 
 namespace m8r {
 

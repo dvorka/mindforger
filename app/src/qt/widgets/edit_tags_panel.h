@@ -75,7 +75,8 @@ public:
     void clearTagList();
     void refreshOntologyTags();
     void refresh(const std::vector<const Tag*>* noteTags);
-    const std::vector<const Tag*>* getTags();
+    const std::vector<const Tag*>& getTags();
+    void setTags(const std::vector<const Tag*>& tags);
 
 signals:
     void signalTagSelectionChanged();

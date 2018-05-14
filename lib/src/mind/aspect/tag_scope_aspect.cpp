@@ -20,35 +20,36 @@
 
 namespace m8r {
 
-TagScopeAspect::TagScopeAspect()
+TagsScopeAspect::TagsScopeAspect(Ontology& ontology)
+    : ontology(ontology)
 {
 }
 
-TagScopeAspect::~TagScopeAspect()
+TagsScopeAspect::~TagsScopeAspect()
 {
 }
 
-bool TagScopeAspect::isOutOfScope(const Outline* o) const
+bool TagsScopeAspect::isOutOfScope(const Outline* o) const
 {
     return !inScope(o->getTags());
 }
 
-bool TagScopeAspect::isOutOfScope(const Note* n) const
+bool TagsScopeAspect::isOutOfScope(const Note* n) const
 {
     return !inScope(n->getTags());
 }
 
-bool TagScopeAspect::isInScope(const Outline* o) const
+bool TagsScopeAspect::isInScope(const Outline* o) const
 {
     return inScope(o->getTags());
 }
 
-bool TagScopeAspect::isInScope(const Note* n) const
+bool TagsScopeAspect::isInScope(const Note* n) const
 {
     return inScope(n->getTags());
 }
 
-bool TagScopeAspect::inScope(const std::vector<const Tag*>* thingTags) const
+bool TagsScopeAspect::inScope(const std::vector<const Tag*>* thingTags) const
 {
     bool hasAllTags=true;
     for(size_t i=0; i<tags.size(); i++) {

@@ -43,7 +43,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     orloj = new OrlojPresenter{this, view.getOrloj(), mind};
 
     // initialize components
-    timeScopeDialog = new ScopeDialog{mind->ontology(), &view};
+    scopeDialog = new ScopeDialog{mind->ontology(), &view};
     forgetDialog = new ForgetDialog{&view};
     newOutlineDialog = new OutlineNewDialog{
                 QString::fromStdString(config.getMemoryPath()),
@@ -62,7 +62,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     rowsAndDepthDialog = new RowsAndDepthDialog(&view);
 
     // wire signals
-    QObject::connect(timeScopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
+    QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
     QObject::connect(forgetDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindForgetting()));
     QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
@@ -810,7 +810,7 @@ void MainWindowPresenter::handleOutlineNew()
         newOutlineDialog->getImportance(),
         newOutlineDialog->getUrgency(),
         newOutlineDialog->getProgress(),
-        newOutlineDialog->getTags(),
+        &newOutlineDialog->getTags(),
         preamble,
         newOutlineDialog->getStencil());
 
@@ -869,7 +869,7 @@ void MainWindowPresenter::handleNoteNew()
                 &name,
                 newNoteDialog->getNoteType(),
                 depth,
-                newNoteDialog->getTags(),
+                &newNoteDialog->getTags(),
                 newNoteDialog->getProgress(),
                 newNoteDialog->getStencil());
     if(note) {
@@ -1194,34 +1194,45 @@ void MainWindowPresenter::doActionMindSnapshot()
 
 void MainWindowPresenter::doActionMindTimeScope()
 {
-    TimeScopeAspect& a=mind->getTimeScopeAspect();
-    timeScopeDialog->show(
-        a.isEnabled(),
-        a.getTimeScope().years,
-        a.getTimeScope().months,
-        a.getTimeScope().days,
-        a.getTimeScope().hours,
-        a.getTimeScope().minutes);
+    TimeScopeAspect& time = mind->getTimeScopeAspect();
+    scopeDialog->show(
+        mind->getTagsScopeAspect().getTags(),
+        time.isEnabled(),
+        time.getTimeScope().years,
+        time.getTimeScope().months,
+        time.getTimeScope().days,
+        time.getTimeScope().hours,
+        time.getTimeScope().minutes);
 }
 
 void MainWindowPresenter::handleMindScope()
 {
+    // time scope
     TimeScope& ts=mind->getTimeScopeAspect().getTimeScope();
-    if(timeScopeDialog->isTimeScopeSet()) {
-        ts.years=timeScopeDialog->getYears();
-        ts.months=timeScopeDialog->getMonths();
-        ts.days=timeScopeDialog->getDays();
-        ts.hours=timeScopeDialog->getHours();
-        ts.minutes=timeScopeDialog->getMinutes();
+    if(scopeDialog->isTimeScopeSet()) {
+        ts.years=scopeDialog->getYears();
+        ts.months=scopeDialog->getMonths();
+        ts.days=scopeDialog->getDays();
+        ts.hours=scopeDialog->getHours();
+        ts.minutes=scopeDialog->getMinutes();
 
         ts.recalculateRelativeSecs();
     } else {
         ts.reset();
     }
-
-    // notify and persist changes
+    // update components
     mind->getTimeScopeAspect().setTimeScope(ts);
     config.setTimeScope(mind->getTimeScopeAspect().getTimeScope());
+
+    // tags scope
+    if(scopeDialog->isTagsScopeSet() && scopeDialog->getTags().size()) {
+        mind->getTagsScopeAspect().setTags(scopeDialog->getTags());
+    } else {
+        mind->getTagsScopeAspect().reset();
+    }
+    config.setTagsScope(scopeDialog->getTags());
+
+    // save configuration
     mdConfigRepresentation->save(config);
 
     // IMPROVE don't change view to Os, but refresh current one

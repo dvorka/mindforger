@@ -1,5 +1,5 @@
 /*
- forget_dialog.cpp     MindForger thinking notebook
+ scope_dialog.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 

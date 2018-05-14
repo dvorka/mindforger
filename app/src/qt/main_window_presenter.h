@@ -89,7 +89,7 @@ private:
     OrlojPresenter* orloj;
     StatusBarPresenter* statusBar;
 
-    ScopeDialog* timeScopeDialog;
+    ScopeDialog* scopeDialog;
     ForgetDialog* forgetDialog;
     OutlineNewDialog* newOutlineDialog;
     NoteNewDialog* newNoteDialog;

@@ -40,6 +40,7 @@ constexpr const auto CONFIG_SETTING_SAVE_READS_METADATA_LABEL = "* Save reads me
 // mind
 constexpr const auto CONFIG_SETTING_MIND_STATE = "* Mind state: ";
 constexpr const auto CONFIG_SETTING_MIND_TIME_SCOPE_LABEL = "* Time scope: ";
+constexpr const auto CONFIG_SETTING_MIND_TAGS_SCOPE_LABEL = "* Tags scope: ";
 constexpr const auto CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL = "* Async refresh interval (ms): ";
 
 // repositories
@@ -185,6 +186,18 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                                 c.setTimeScope(ts);
                             }
                         }
+                    } else if(line->find(CONFIG_SETTING_MIND_TAGS_SCOPE_LABEL) != std::string::npos) {
+                        string t = line->substr(strlen(CONFIG_SETTING_MIND_TAGS_SCOPE_LABEL));
+                        c.getTagsScope().clear();
+                        if(t.size()) {
+                            char **r = stringSplit(t.c_str(), ' ');
+                            int i=0;
+                            while(r[i]) {
+                                c.getTagsScope().push_back(r[i]);
+                                delete[] r[i++];
+                            };
+                            delete[] r;
+                        }
                     } else if(line->find(CONFIG_SETTING_MIND_STATE) != std::string::npos) {
                         if(line->find("think") != std::string::npos) {
                             c.setDesiredMindState(Configuration::MindState::THINKING);
@@ -254,9 +267,19 @@ string* MarkdownConfigurationRepresentation::to(Configuration& c)
 string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
 {
     stringstream s{};
-    string timeScopeAsString{}, mindStateAsString{"sleep"};
+    string timeScopeAsString{}, tagsScopeAsString{}, mindStateAsString{"sleep"};
     if(c) {
+        // time
         c->getTimeScope().toString(timeScopeAsString);
+        // tags
+        if(c->getTagsScope().size()) {
+            for(string& t:c->getTagsScope()) {
+                tagsScopeAsString += t;
+                tagsScopeAsString += ",";
+            }
+            tagsScopeAsString.resize(tagsScopeAsString.size()-1);
+        }
+        // mind state
         if(c->getDesiredMindState()==Configuration::MindState::THINKING) mindStateAsString= "think";
     } else {
         timeScopeAsString.assign(Configuration::DEFAULT_TIME_SCOPE);
@@ -277,6 +300,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: sleep, think" << endl <<
          CONFIG_SETTING_MIND_TIME_SCOPE_LABEL << timeScopeAsString << endl <<
          "    * Examples: 2y0m0d0h0m (recent 2 years), 0y3m15d0h0m (recent 3 months and 15 days)" << endl <<
+         CONFIG_SETTING_MIND_TAGS_SCOPE_LABEL << tagsScopeAsString << endl <<
+         "    * Examples: important (shown Notebooks must be tagged with 'important;); if no tag is specified, then tags scope is disabled" << endl <<
          CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL << (c?c->getDistributorSleepInterval():Configuration::DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL+1) << endl <<
          "    * Sleep interval (miliseconds) between asynchronous mind-related evaluations (associations, ...)" << endl <<
          "    * Examples: 3000, 5000, 10000" << endl <<

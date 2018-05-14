@@ -121,7 +121,7 @@ void FindOutlineByTagDialog::handleTagsChanged()
     auto choosenTags = editTagsGroup->getTags();
 
     int row = 0;
-    if(choosenTags->size()) {
+    if(choosenTags.size()) {
         int visible = 0;
         for(Thing* e:things) {
             const std::vector<const Tag*>* thingTags;
@@ -134,11 +134,11 @@ void FindOutlineByTagDialog::handleTagsChanged()
             }
 
             bool hasAllTags=true;
-            for(size_t i=0; i<editTagsGroup->getTags()->size(); i++) {
+            for(size_t i=0; i<editTagsGroup->getTags().size(); i++) {
                 if(std::find(
                     thingTags->begin(),
                     thingTags->end(),
-                    editTagsGroup->getTags()->at(i)) == thingTags->end())
+                    editTagsGroup->getTags().at(i)) == thingTags->end())
                 {
                     hasAllTags=false;
                     break;

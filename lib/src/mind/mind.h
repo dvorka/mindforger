@@ -26,9 +26,9 @@
 #include "memory.h"
 #include "ai/ai.h"
 #include "ontology/thing_class_rel_triple.h"
+#include "aspect/mind_scope_aspect.h"
 #include "../config/configuration.h"
 #include "../representations/markdown/markdown_configuration_representation.h"
-#include "aspect/time_scope_aspect.h"
 
 namespace m8r {
 
@@ -172,9 +172,17 @@ private:
     std::vector<Note*> allNotesCache;
 
     /**
-     * @brief Time scoping.
+     * @brief Time scope.
      */
     TimeScopeAspect timeScopeAspect;
+    /**
+     * @brief Tags scope.
+     */
+    TagsScopeAspect tagsScopeAspect;
+    /**
+     * @brief Composite Mind scope - time, tag, ...
+     */
+    MindScopeAspect scopeAspect;
 
 public:
     explicit Mind(Configuration &config);
@@ -281,12 +289,15 @@ public:
      * SCOPING
      */
 
-    // TODO scope includes time, tags, ... scopes and performs intersection matching
-
-    // TODO set scope & propagate it to memory
+    // time scope aspect
     std::string getTimeScopeAsString() { return timeScopeAspect.getTimeScopeAsString(); }
-    bool isTimeScopeEnabled() const { return timeScopeAspect.isEnabled(); }
     TimeScopeAspect& getTimeScopeAspect() { return timeScopeAspect; }
+
+    // tags scope aspect
+    TagsScopeAspect& getTagsScopeAspect() { return tagsScopeAspect; }
+
+    // composite mind scope aspect
+    MindScopeAspect& getScopeAspect() { return scopeAspect; }
 
     /*
      * (CROSS) REFERENCES - explicit associations created by the user.

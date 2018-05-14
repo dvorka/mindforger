@@ -36,7 +36,7 @@
 #include "../model/resource_types.h"
 #include "../persistence/persistence.h"
 #include "../persistence/filesystem_persistence.h"
-#include "aspect/time_scope_aspect.h"
+#include "aspect/mind_scope_aspect.h"
 
 namespace m8r {
 
@@ -62,7 +62,7 @@ private:
     Ontology ontology;
     MarkdownOutlineRepresentation representation;
     Persistence* persistence;
-    TimeScopeAspect* timeScope;
+    MindScopeAspect* mindScope;
 
     std::vector<Outline*> outlines;
     std::vector<Note*> notes;
@@ -82,7 +82,7 @@ public:
     Memory& operator=(const Memory&&) = delete;
     virtual ~Memory();
 
-    void setTimeScope(TimeScopeAspect* tsa) { timeScope = tsa; }
+    void setMindScope(MindScopeAspect* mindScopeAspect) { mindScope = mindScopeAspect; }
 
     /**
      * @brief Learn repository content.

@@ -101,7 +101,7 @@ void EditTagsPanel::refresh(const vector<const Tag*>* noteTags)
     ((QStringListModel*)listView->model())->setStringList(listViewStrings);
 }
 
-const std::vector<const Tag*>* EditTagsPanel::getTags()
+const std::vector<const Tag*>& EditTagsPanel::getTags()
 {
     tags.clear();
     if(listViewStrings.size()) {
@@ -109,7 +109,17 @@ const std::vector<const Tag*>* EditTagsPanel::getTags()
             tags.push_back(ontology.findOrCreateTag(s.toStdString()));
         }
     }
-    return &tags;
+    return tags;
+}
+
+void EditTagsPanel::setTags(const std::vector<const Tag*>& tags)
+{
+    clearTagList();
+    for(const Tag* t:tags) {
+        lineEdit->setText(QString::fromStdString(t->getName()));
+        slotAddTag();
+    }
+    lineEdit->clear();
 }
 
 void EditTagsPanel::slotAddTag()

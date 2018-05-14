@@ -248,7 +248,7 @@ void NoteEditDialog::toNote()
         if(generalTab->typeCombo->currentIndex() != -1) {
             currentNote->setType((const NoteType*)(generalTab->typeCombo->itemData(generalTab->typeCombo->currentIndex(), Qt::UserRole).value<const NoteType*>()));
         }
-        currentNote->setTags((generalTab->editTagsGroup->getTags()));
+        currentNote->setTags(&generalTab->editTagsGroup->getTags());
         currentNote->setProgress(generalTab->progressSpin->value());
         if(generalTab->deadlineCheck->isChecked()) {
             tm date {0,0,0,0,0,0,0,0,0,0,0}; // missing initializer required by older GCC versions 4.8.5 and older

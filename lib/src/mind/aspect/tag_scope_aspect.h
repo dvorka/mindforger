@@ -26,18 +26,19 @@
 
 namespace m8r {
 
-class TagScopeAspect : public Aspect
+class TagsScopeAspect : public Aspect
 {
 private:
+    Ontology& ontology;
     std::vector<const Tag*> tags;
 
 public:
-    explicit TagScopeAspect();
-    TagScopeAspect(const TagScopeAspect&) = delete;
-    TagScopeAspect(const TagScopeAspect&&) = delete;
-    TagScopeAspect &operator=(const TagScopeAspect&) = delete;
-    TagScopeAspect &operator=(const TagScopeAspect&&) = delete;
-    ~TagScopeAspect();
+    explicit TagsScopeAspect(Ontology& ontology);
+    TagsScopeAspect(const TagsScopeAspect&) = delete;
+    TagsScopeAspect(const TagsScopeAspect&&) = delete;
+    TagsScopeAspect &operator=(const TagsScopeAspect&) = delete;
+    TagsScopeAspect &operator=(const TagsScopeAspect&&) = delete;
+    ~TagsScopeAspect();
 
     virtual bool isEnabled() const { return !tags.empty(); }
     bool isOutOfScope(const Outline* o) const;
@@ -45,9 +46,21 @@ public:
     bool isInScope(const Outline* o) const;
     bool isInScope(const Note* n) const;
 
-    void setTags(const std::vector<Tag*> t) {
-        tags.assign(t.begin(), t.end());
+    void setTags(const std::vector<const Tag*>& tags) {
+        this->tags.assign(tags.begin(), tags.end());
     }
+    void setTags(std::vector<std::string>& sTags) {
+        tags.clear();
+        if(sTags.size()) {
+            for(std::string& s:sTags) {
+                tags.push_back(ontology.findOrCreateTag(s));
+            }
+        }
+    }
+    const std::vector<const Tag*>& getTags() const {
+        return tags;
+    }
+    void reset() { tags.clear(); }
 
 private:
     bool inScope(const std::vector<const Tag*>* thingTags) const;

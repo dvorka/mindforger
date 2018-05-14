@@ -69,6 +69,7 @@ void Configuration::clear()
     writeMetadata = true;
     saveReadsMetadata = DEFAULT_SAVE_READS_METADATA;
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
+    tagsScope.clear();
 
     // Markdown 2 HTML options
     md2HtmlOptions = 0

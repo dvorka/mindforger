@@ -193,7 +193,7 @@ const NoteType* NoteNewDialog::getNoteType() const
     return (const NoteType*)(generalTab->getTypeCombo()->itemData(generalTab->getTypeCombo()->currentIndex(), Qt::UserRole).value<const NoteType*>());
 }
 
-const std::vector<const Tag*>* NoteNewDialog::getTags() const
+const std::vector<const Tag*>& NoteNewDialog::getTags() const
 {
     return generalTab->getTags();
 }

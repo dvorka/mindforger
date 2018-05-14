@@ -267,7 +267,7 @@ int OutlineNewDialog::getProgress() const
     return generalTab->getProgressSpin()->value();
 }
 
-const std::vector<const Tag*>* OutlineNewDialog::getTags() const
+const std::vector<const Tag*>& OutlineNewDialog::getTags() const
 {
     return generalTab->getTags();
 }

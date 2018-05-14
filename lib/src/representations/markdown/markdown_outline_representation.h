@@ -79,11 +79,12 @@ public:
     virtual std::string* to(const Note* note, std::string* md, bool includeMetadata=true);
     virtual std::string* toDescription(const Note* note, std::string* md);
 
+    static std::string to(const std::vector<const Tag*>* tags);
+
 private:
     Outline* outline(std::vector<MarkdownAstNodeSection*>* ast);
     Note* note(std::vector<MarkdownAstNodeSection*>* ast, const size_t astindex=0, Outline* outline=nullptr);
     void toHeader(const Outline* outline, std::string* md);
-    std::string to(const std::vector<const Tag*>* tags);
     std::string to(const std::vector<Link*>& links);
 };
 

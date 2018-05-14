@@ -71,7 +71,7 @@ public:
     int8_t getImportance() const;
     int8_t getUrgency() const;
     int getProgress() const;
-    const std::vector<const Tag*>* getTags() const;
+    const std::vector<const Tag*>& getTags() const;
 
     void show(std::vector<Stencil*>& stencils);
 
@@ -114,7 +114,7 @@ public:
     UrgencyComboBox* getUrgencyCombo() const { return urgencyCombo; }
     QComboBox* getStencilCombo() const { return stencilCombo; }
     QSpinBox* getProgressSpin() const { return progressSpin; }
-    const std::vector<const Tag*>* getTags() { return editTagsGroup->getTags(); }
+    const std::vector<const Tag*>& getTags() { return editTagsGroup->getTags(); }
 
     void clean();
 };

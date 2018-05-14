@@ -1,5 +1,5 @@
 /*
- forget_dialog.h     MindForger thinking notebook
+ scope_dialog.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -54,17 +54,33 @@ public:
     ScopeDialog &operator=(const ScopeDialog&&) = delete;
     ~ScopeDialog();
 
-    void show(bool e, int y=0, int m=0, int d=0, int h=0, int mm=0) {
-        enableTimeScopeCheck->setChecked(e);
-        enableDisableTimeScope(e);
+    void show(
+            const std::vector<const Tag*>& tags,
+            bool timeEnabled=false,
+            int y=0,
+            int m=0,
+            int d=0,
+            int h=0,
+            int mm=0)
+    {
+        enableTimeScopeCheck->setChecked(timeEnabled);
+        enableDisableTimeScope(timeEnabled);
+        if(timeEnabled) {
+            yearSpin->setValue(y);
+            monthSpin->setValue(m);
+            daySpin->setValue(d);
+            hourSpin->setValue(h);
+            minuteSpin->setValue(mm);
+        }
 
-        yearSpin->setValue(y);
-        monthSpin->setValue(m);
-        daySpin->setValue(d);
-        hourSpin->setValue(h);
-        minuteSpin->setValue(mm);
-
+        enableTagsScopeCheck->setChecked(!tags.empty());
+        enableDisableTagScope(!tags.empty());
         editTagsGroup->refreshOntologyTags();
+        if(tags.size()) {
+            editTagsGroup->setTags(tags);
+        } else {
+            editTagsGroup->clearTagList();
+        }
 
         QDialog::show();
     }
@@ -77,7 +93,7 @@ public:
     int getMinutes() const { return minuteSpin->value(); }
 
     bool isTagsScopeSet() const { return enableTagsScopeCheck->isChecked(); }
-    const std::vector<const Tag*>* getTags() { return editTagsGroup->getTags(); }
+    const std::vector<const Tag*>& getTags() { return editTagsGroup->getTags(); }
 
     QPushButton* getSetButton() { return setButton; }
 

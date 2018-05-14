@@ -92,11 +92,21 @@ void StatusBarPresenter::showMindStatistics()
     status += " triples    ";
     status += cLocale.toString(mind->remind().getOutlineMarkdownsSize());
     status += " bytes    ";
-    if(mind->isTimeScopeEnabled()) {
+    if(mind->getScopeAspect().isEnabled()) {
         status += "scope:";
-        status += mind->getTimeScopeAsString().c_str();
+        if(mind->getTimeScopeAspect().isEnabled()) {
+            status += mind->getTimeScopeAsString().c_str();
+            if(mind->getTagsScopeAspect().isEnabled()) {
+                status += "+tags";
+            }
+        } else {
+            if(mind->getTagsScopeAspect().isEnabled()) {
+                status += "tags";
+            }
+        }
         status += "    ";
     }
+
 
 #ifdef DO_M8F_DEBUG
     status += "dw:";

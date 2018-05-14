@@ -25,14 +25,19 @@ namespace m8r {
 Mind::Mind(Configuration &configuration)
     : config{configuration},
       memory{configuration},
-      exclusiveMind{}
+      exclusiveMind{},
+      timeScopeAspect{},
+      tagsScopeAspect{memory.getOntology()},
+      scopeAspect{timeScopeAspect, tagsScopeAspect}
 {
     ai = new Ai{memory,*this};
     deleteWatermark = 0;
     activeProcesses = 0;
 
     timeScopeAspect.setTimeScope(config.getTimeScope());
-    memory.setTimeScope(&timeScopeAspect);
+    tagsScopeAspect.setTags(config.getTagsScope());
+    memory.setMindScope(&scopeAspect);
+
 
     this->mdConfigRepresentation
         = new MarkdownConfigurationRepresentation{};
@@ -295,7 +300,7 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
             }
         }
         for(Note* note:outline->getNotes()) {
-            if(timeScopeAspect.isEnabled() && timeScopeAspect.isOutOfScope(note)) {
+            if(scopeAspect.isOutOfScope(note)) {
                 continue;
             }
             s.clear();
@@ -329,7 +334,7 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
             }
         }
         for(Note* note:outline->getNotes()) {
-            if(timeScopeAspect.isEnabled() && timeScopeAspect.isOutOfScope(note)) {
+            if(scopeAspect.isOutOfScope(note)) {
                 continue;
             }
             if(note->getName().find(regexp)!=string::npos) {
@@ -367,7 +372,7 @@ vector<Note*>* Mind::findNoteFts(const string& regexp, const bool ignoreCase, Ou
     } else {
         const vector<m8r::Outline*> outlines = memory.getOutlines();
         for(Outline* outline:outlines) {
-            if(timeScopeAspect.isEnabled() && timeScopeAspect.isOutOfScope(outline)) {
+            if(scopeAspect.isOutOfScope(outline)) {
                 continue;
             }
             findNoteFts(result, r, ignoreCase, outline);
@@ -417,10 +422,10 @@ const vector<Outline*>& Mind::getOutlines() const
     // IMPROVE PERF use dirty flag to avoid result-rebuilt
     static vector<Outline*> result{};
 
-    if(timeScopeAspect.isEnabled()) {
+    if(scopeAspect.isEnabled()) {
         result.clear();
         for(Outline* o:memory.getOutlines()) {
-            if(timeScopeAspect.isInScope(o)) {
+            if(scopeAspect.isInScope(o)) {
                 result.push_back(o);
             }
         }
