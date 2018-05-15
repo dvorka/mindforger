@@ -111,8 +111,7 @@ HEADERS += \
     ./src/qt/widgets/importance_combo_box.h \
     ./src/qt/dialogs/refactor_note_to_outline_dialog.h \
     ./src/qt/recent_files_menu.h \
-    ./src/qt/dialogs/forget_dialog.h \
-    ./src/qt/dialogs/time_scope_dialog.h \
+    ./src/qt/dialogs/scope_dialog.h \
     ./src/qt/dialogs/find_outline_by_tag_dialog.h \
     ./src/qt/dialogs/find_note_by_tag_dialog.h \
     src/qt/outline_view_splitter.h \
@@ -182,8 +181,7 @@ SOURCES += \
     ./src/qt/widgets/importance_combo_box.cpp \
     ./src/qt/dialogs/refactor_note_to_outline_dialog.cpp \
     ./src/qt/recent_files_menu.cpp \
-    ./src/qt/dialogs/forget_dialog.cpp \
-    ./src/qt/dialogs/time_scope_dialog.cpp \
+    ./src/qt/dialogs/scope_dialog.cpp \
     ./src/qt/dialogs/find_outline_by_tag_dialog.cpp \
     ./src/qt/dialogs/find_note_by_tag_dialog.cpp \
     src/qt/outline_view_splitter.cpp \

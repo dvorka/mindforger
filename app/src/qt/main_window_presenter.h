@@ -39,8 +39,7 @@
 #include "dialogs/find_note_by_name_dialog.h"
 #include "dialogs/find_note_by_tag_dialog.h"
 #include "dialogs/refactor_note_to_outline_dialog.h"
-#include "dialogs/time_scope_dialog.h"
-#include "dialogs/forget_dialog.h"
+#include "dialogs/scope_dialog.h"
 #include "dialogs/configuration_dialog.h"
 #include "dialogs/insert_image_dialog.h"
 #include "dialogs/insert_link_dialog.h"
@@ -90,7 +89,6 @@ private:
     StatusBarPresenter* statusBar;
 
     ScopeDialog* scopeDialog;
-    ForgetDialog* forgetDialog;
     OutlineNewDialog* newOutlineDialog;
     NoteNewDialog* newNoteDialog;
     FtsDialog* ftsDialog;
@@ -145,8 +143,6 @@ public slots:
     void doActionMindRelearn(QString path);
     void doActionMindTimeScope();
     void handleMindScope();
-    void doActionMindForgetting();
-    void handleMindForgetting();
     void doActionMindPreferences();
     void handleMindPreferences();
     void doActionMindSnapshot();

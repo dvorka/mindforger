@@ -44,11 +44,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // initialize components
     scopeDialog = new ScopeDialog{mind->ontology(), &view};
-    forgetDialog = new ForgetDialog{&view};
-    newOutlineDialog = new OutlineNewDialog{
-                QString::fromStdString(config.getMemoryPath()),
-                mind->remind().getOntology(),
-                &view};
+    newOutlineDialog = new OutlineNewDialog{QString::fromStdString(config.getMemoryPath()), mind->remind().getOntology(), &view};
     newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
     ftsDialog = new FtsDialog{&view};
     findOutlineByNameDialog = new FindOutlineByNameDialog{&view};
@@ -63,7 +59,6 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // wire signals
     QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
-    QObject::connect(forgetDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindForgetting()));
     QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
     QObject::connect(ftsDialog->getFindButton(), SIGNAL(clicked()), this, SLOT(handleFts()));
@@ -1237,14 +1232,6 @@ void MainWindowPresenter::handleMindScope()
 
     // IMPROVE don't change view to Os, but refresh current one
     doActionViewOutlines();
-}
-
-void MainWindowPresenter::doActionMindForgetting()
-{
-}
-
-void MainWindowPresenter::handleMindForgetting()
-{
 }
 
 void MainWindowPresenter::doActionMindPreferences()

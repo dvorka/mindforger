@@ -16,7 +16,7 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "time_scope_dialog.h"
+#include "scope_dialog.h"
 
 namespace m8r {
 
