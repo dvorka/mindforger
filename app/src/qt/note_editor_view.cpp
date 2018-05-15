@@ -22,8 +22,7 @@ namespace m8r {
 
 using namespace std;
 
-inline
-bool caseInsensitiveLessThan(const QString &a, const QString &b)
+inline bool caseInsensitiveLessThan(const QString &a, const QString &b)
 {
     return a.compare(b, Qt::CaseInsensitive) < 0;
 }
@@ -44,23 +43,14 @@ NoteEditorView::NoteEditorView(QWidget* parent)
 
     setEditorTabWidth(Configuration::getInstance().getUiEditorTabWidth());
 
-    createWidgets();
-    createConnections();
-    highlightCurrentLine();
-
-    updateLineNumberPanelWidth(0);
-}
-
-void NoteEditorView::createWidgets()
-{
+    // widgets
     highlighter = new NoteEditHighlight{document()};
-    // syntax highligting
     enableSyntaxHighlighting = Configuration::getInstance().isUiEditorEnableSyntaxHighlighting();
     highlighter->setEnabled(enableSyntaxHighlighting);
-
+    // line numbers
     lineNumberPanel = new LineNumberPanel{this};
     lineNumberPanel->setVisible(showLineNumbers);
-
+    // autocomplete
     model = new QStringListModel{this};
     completer = new QCompleter{this};
     completer->setWidget(this);
@@ -69,27 +59,52 @@ void NoteEditorView::createWidgets()
     completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setWrapAround(true);
+
+    // signals
+    QObject::connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberPanelWidth(int)));
+    QObject::connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberPanel(QRect,int)));
+    QObject::connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
+    QObject::connect(completer, SIGNAL(activated(const QString&)), this, SLOT(insertCompletion(const QString&)));
+    // shortcut signals
+    new QShortcut(QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Slash)), this, SLOT(performCompletion()));
+
+    // show
+    highlightCurrentLine();
+    updateLineNumberPanelWidth(0);
 }
 
-void NoteEditorView::createConnections()
+/*
+ * Configuration
+ */
+
+void NoteEditorView::setShowLineNumbers(bool show)
 {
-    QObject::connect(
-        this, SIGNAL(blockCountChanged(int)),
-        this, SLOT(updateLineNumberPanelWidth(int)));
-    QObject::connect(
-        this, SIGNAL(updateRequest(QRect,int)),
-        this, SLOT(updateLineNumberPanel(QRect,int)));
-
-    QObject::connect(
-        this, SIGNAL(cursorPositionChanged()),
-        this, SLOT(highlightCurrentLine()));
-    QObject::connect(
-        completer, SIGNAL(activated(const QString&)),
-        this, SLOT(insertCompletion(const QString&)));
-    new QShortcut(
-        QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Slash)),
-        this, SLOT(performCompletion()));
+    showLineNumbers = show;
+    lineNumberPanel->setVisible(showLineNumbers);
 }
+
+void NoteEditorView::setEditorTabWidth(int tabWidth)
+{
+    MF_DEBUG("SETTING tabstop: " << tabWidth << endl);
+
+    // tab width: 4 or 8
+    QFontMetrics metrics(f);
+    setTabStopWidth(tabWidth * metrics.width(' '));
+}
+
+void NoteEditorView::slotConfigurationUpdated()
+{
+    MF_DEBUG("CONFIG UPDATED @ editor " << endl);
+
+    enableSyntaxHighlighting = Configuration::getInstance().isUiEditorEnableSyntaxHighlighting();
+    highlighter->setEnabled(enableSyntaxHighlighting);
+
+    setEditorTabWidth(Configuration::getInstance().getUiEditorTabWidth());
+}
+
+/*
+ * Formatting
+ */
 
 void NoteEditorView::wrapSelectedText(const QString &tag, const QString &endTag)
 {
@@ -133,11 +148,9 @@ void NoteEditorView::insertMarkdownText(const QString &text, bool newLine, int o
     setFocus();
 }
 
-void NoteEditorView::setShowLineNumbers(bool show)
-{
-    showLineNumbers = show;
-    lineNumberPanel->setVisible(showLineNumbers);
-}
+/*
+ * Associations
+ */
 
 QString NoteEditorView::getRelevantWords() const
 {
@@ -162,24 +175,9 @@ QString NoteEditorView::getRelevantWords() const
     //return textCursor().block().text();
 }
 
-void NoteEditorView::setEditorTabWidth(int tabWidth)
-{
-    MF_DEBUG("SETTING tabstop: " << tabWidth << endl);
-
-    // tab width: 4 or 8
-    QFontMetrics metrics(f);
-    setTabStopWidth(tabWidth * metrics.width(' '));
-}
-
-void NoteEditorView::slotConfigurationUpdated()
-{
-    MF_DEBUG("CONFIG UPDATED @ editor " << endl);
-
-    enableSyntaxHighlighting = Configuration::getInstance().isUiEditorEnableSyntaxHighlighting();
-    highlighter->setEnabled(enableSyntaxHighlighting);
-
-    setEditorTabWidth(Configuration::getInstance().getUiEditorTabWidth());
-}
+/*
+ * Autocomplete
+ */
 
 void NoteEditorView::keyPressEvent(QKeyEvent *event)
 {
@@ -320,6 +318,10 @@ void NoteEditorView::mousePressEvent(QMouseEvent* event)
     QPlainTextEdit::mousePressEvent(event);
 }
 
+/*
+ * L&F
+ */
+
 void NoteEditorView::highlightCurrentLine()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
@@ -335,10 +337,11 @@ void NoteEditorView::highlightCurrentLine()
 
         // IMPROVE if line number changed
         if(isVisible()) {
-            QString m{"    "};
+            QString m{"  ("};
             m += QString::number(textCursor().blockNumber());
             m += ":";
             m += QString::number(textCursor().positionInBlock());
+            m += ")";
             statusBar->showInfo(m);
         }
     }
@@ -346,7 +349,7 @@ void NoteEditorView::highlightCurrentLine()
 }
 
 /*
- * Line number rendering
+ * Line number panel
  */
 
 int NoteEditorView::lineNumberPanelWidth()
@@ -405,10 +408,15 @@ void NoteEditorView::lineNumberPanelPaintEvent(QPaintEvent* event)
     int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom = top + (int) blockBoundingRect(block).height();
 
+    int currentLine = textCursor().blockNumber();
     while(block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);
-            painter.setPen(LookAndFeels::getInstance().getEditorLineNumbersForegroundColor());
+            if(blockNumber == currentLine) {
+                painter.setPen(QString{"#AA0000"});
+            } else {
+                painter.setPen(LookAndFeels::getInstance().getEditorLineNumbersForegroundColor());
+            }
             painter.drawText(0, top, lineNumberPanel->width(), fontMetrics().height(), Qt::AlignCenter, number);
         }
 

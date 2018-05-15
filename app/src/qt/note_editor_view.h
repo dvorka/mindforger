@@ -31,25 +31,36 @@ namespace m8r {
 
 class LineNumberPanel;
 
+/**
+ * @brief Note editor view.
+ *
+ * Editor is one of the key MindForger components - editor is where thinking notebook can
+ * make difference: auto completion, associations, efficient editation and decent performance.
+ */
 class NoteEditorView : public QPlainTextEdit
 {
     Q_OBJECT
 
 private:
     QWidget* parent;
+
     QFont f;
 
+    // runtime
+    int hitCounter;
+
+    // usability
+    bool enableSyntaxHighlighting;
+    NoteEditHighlight* highlighter;
+    bool showLineNumbers;
+
+    // autocomplete
     bool completedAndSelected;
     QCompleter* completer;
     QStringListModel* model;
 
-    NoteEditHighlight* highlighter;
+    // info
     const StatusBarView* statusBar;
-
-    bool showLineNumbers;
-    bool enableSyntaxHighlighting;
-
-    int hitCounter;
 
 public:
     explicit NoteEditorView(QWidget* parent);
@@ -58,48 +69,54 @@ public:
     NoteEditorView &operator=(const NoteEditorView&) = delete;
     NoteEditorView &operator=(const NoteEditorView&&) = delete;
 
+    void setStatusBar(const StatusBarView* sb) { this->statusBar = sb; }
+
+    // runtime
+    void clearHitCounter() { hitCounter=0; }
+    int getHitCounter() const { return hitCounter; }
+
+    // formatting
     QString getSelectedText() const { return textCursor().selectedText(); }
     void wrapSelectedText(const QString &tag) { wrapSelectedText(tag,""); }
     void wrapSelectedText(const QString &tag, const QString &endTag);
     void insertMarkdownText(const QString &text, bool newLine=true, int offset=0);
 
+    // usability
     void setShowLineNumbers(bool show);
-    void setStatusBar(const StatusBarView* sb) { this->statusBar = sb; }
 
-    void clearHitCounter() { hitCounter=0; }
-    int getHitCounter() const { return hitCounter; }
+    // associations
     QString getRelevantWords() const;
 
+    // autocomplete
 protected:
     void mousePressEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
 private:
-    void createWidgets();
-    void createConnections();
     QString textUnderCursor() const;
     void setEditorTabWidth(int tabWidth);
-    void performCompletion(const QString &completionPrefix);
-    bool handledCompletedAndSelected(QKeyEvent *event);
-    void populateModel(const QString &completionPrefix);
+    void performCompletion(const QString& completionPrefix);
+    bool handledCompletedAndSelected(QKeyEvent* event);
+    void populateModel(const QString& completionPrefix);
 
-public slots:
-    void slotConfigurationUpdated();
 private slots:
     void insertCompletion(const QString& completion, bool singleWord=false);
     void highlightCurrentLine();
     bool performCompletion();
 
-// line number panel
+    // line number panel
 private:
     LineNumberPanel* lineNumberPanel;
 public:
-    void lineNumberPanelPaintEvent(QPaintEvent *event);
+    void lineNumberPanelPaintEvent(QPaintEvent* event);
     int lineNumberPanelWidth();
 protected:
-    void resizeEvent(QResizeEvent *event) override;
+    void resizeEvent(QResizeEvent* event) override;
 private slots:
     void updateLineNumberPanelWidth(int newBlockCount);
-    void updateLineNumberPanel(const QRect &, int);
+    void updateLineNumberPanel(const QRect&, int);
+
+public slots:
+    void slotConfigurationUpdated();
 };
 
 } // m8r namespace
