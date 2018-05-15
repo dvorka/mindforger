@@ -21,7 +21,7 @@
 
 #include <map>
 
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
 #include <iostream>
 #endif
 
@@ -80,7 +80,7 @@ public:
 
     void reorderDocVectorsByWeight();
 
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
     void print() const {
         MF_DEBUG("BoW[" << bow.size() << "]:" << std::endl);
         for(auto& e:bow) {

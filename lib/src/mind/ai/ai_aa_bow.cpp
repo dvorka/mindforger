@@ -101,7 +101,7 @@ bool AiAaBoW::learnMemorySync(thread* t)
     lexicon.recalculateWeights();
     bow.reorderDocVectorsByWeight();
 
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
     lexicon.print();
     bow.print();
 #endif
@@ -211,7 +211,7 @@ void AiAaBoW::calculateAaRow(size_t y)
     // set diagonal at the end to indicate calculation is done (consider reentrancy)
     aaMatrix[y][y] = 1.;
 
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
     MF_DEBUG("AA.BoW: AA row calculated!" << endl);
     //printAa();
     //assertAaSymmetry();
@@ -221,7 +221,7 @@ void AiAaBoW::calculateAaRow(size_t y)
 // This is a private method called from AI ~ AI state/async/critical sections handled by caller.
 void AiAaBoW::precalculateAa()
 {
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
     static const float UNIQUE_AA_CELLS = (float)(notes.size()*notes.size()/2.+notes.size()/2.);
     MF_DEBUG("  Building AA matrix w/ " << UNIQUE_AA_CELLS << " UNIQUE rankings..." << endl);
     float c=0;
@@ -234,14 +234,14 @@ void AiAaBoW::precalculateAa()
     for(size_t y=0; y<aaMatrix.size(); y++) {
         notes[y]->setAiAaMatrixIndex(y); // sets index for ALL notes in notes vector
 
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
         p = c/(UNIQUE_AA_CELLS/100.);
         MF_DEBUG("    " << (int)p << "% AA matrix rankings for '" << notes[y]->getName() << "'" << endl);
 #endif
 
         // calculate only values ABOVE diagonal i.e. initialize x=y
         for(size_t x=y; x<aaMatrix.size(); x++) {
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
             c++;
 #endif
 
@@ -268,7 +268,7 @@ void AiAaBoW::precalculateAa()
         }
     }
 
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
     MF_DEBUG("  AA matrix built!" << endl);
     //printAa();
     assertAaSymmetry();

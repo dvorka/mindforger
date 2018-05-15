@@ -17,7 +17,7 @@
 /*
  * Changes for MindForger:
  * - compilation unit name changed to follow M8R conventions
- * - moved to M8F namespace
+ * - moved to M8R namespace
  * - default parent widget removed from constructor
  * - constructor takes menu title as parameter
  */

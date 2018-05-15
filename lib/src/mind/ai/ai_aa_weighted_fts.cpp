@@ -36,7 +36,7 @@ AiAaWeightedFts::~AiAaWeightedFts()
 
 void AiAaWeightedFts::refreshNotes(bool checkWatermark)
 {
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
     MF_DEBUG("AA.FTS Ns refresh - check watermark " << boolalpha << checkWatermark << endl);
     auto begin = chrono::high_resolution_clock::now();
 #endif
@@ -48,7 +48,7 @@ void AiAaWeightedFts::refreshNotes(bool checkWatermark)
     notes.clear();
     memory.getAllNotes(notes);
 
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
     auto end = chrono::high_resolution_clock::now();
     MF_DEBUG("AA.FTS Ns refreshed in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms" << endl);
 #endif
@@ -272,7 +272,7 @@ std::shared_future<bool> AiAaWeightedFts::getAssociatedNotes(
         std::vector<std::pair<Note*,float>>& associations,
         const Note* self)
 {
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
     MF_DEBUG("AA.FTS.words for  '" << words << "'" << endl);
     auto begin = chrono::high_resolution_clock::now();
 #endif
@@ -317,7 +317,7 @@ std::shared_future<bool> AiAaWeightedFts::getAssociatedNotes(
 
         // no need to CACHE as FTS matching is fast (~100ms on 1.000s Ns repos)
 
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
         auto end = chrono::high_resolution_clock::now();
         MF_DEBUG("AA.FTS.words in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms" << endl);
 #endif

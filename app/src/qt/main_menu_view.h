@@ -56,7 +56,7 @@ public:
     QMenu* menuFormat;
     QMenu* menuHelp;
 
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
     QAction* actionMindHack;
 #endif
     // menu: MindForger
@@ -88,7 +88,7 @@ public:
     QAction* actionViewNavigator;
     QAction* actionViewDwell;
     QAction* actionViewStencils;
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
     QAction* actionViewCli;
 #else
     QShortcut* cliShortcut;

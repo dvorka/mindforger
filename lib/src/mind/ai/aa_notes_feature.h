@@ -117,7 +117,7 @@ public:
      * each similarity aspect A: 10%*A1+40%*A2+...+5%*AN=100% (<=> if As==1).
      */
     float areNotesAssociatedMetric() {
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
 //        std::cout <<
 //                "------------" << std::endl <<
 //                //"'" << notes.first->getName() << "' X '" << notes.second->getName() << "'" << std::endl <<

@@ -108,7 +108,7 @@ void StatusBarPresenter::showMindStatistics()
     }
 
 
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
     status += "dw:";
     status += cLocale.toString(mind->getDeleteWatermark());
 #endif

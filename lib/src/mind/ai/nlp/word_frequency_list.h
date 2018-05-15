@@ -23,7 +23,7 @@
 #include <vector>
 #include <string>
 
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
 #include <iostream>
 #endif
 
@@ -151,7 +151,7 @@ public:
      */
     float recalculateWeight();
 
-#ifdef DO_M8F_DEBUG
+#ifdef DO_M8R_DEBUG
     void print() const {
         std::cout << "WordFrequencyList[" << word2Frequency.size() << "]:" << std::endl;
         for(auto& w:wordsByWeight) {
