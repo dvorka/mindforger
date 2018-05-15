@@ -303,7 +303,9 @@ std::shared_future<bool> AiAaWeightedFts::getAssociatedNotes(
         MF_DEBUG("Leaderboard of '" << words << "' word(s)[" << associations.size() << "]:" << endl);
         if(associations.size()) {
             float pc = associations[0].second / 100.;
+#ifdef DO_M8R_DEBUG
             int i=0;
+#endif
             for(auto& p:associations) {
                 p.second = p.second/pc/100; // <0,1>
                 MF_DEBUG("  #" << ++i << " " << p.first->getName() << " (" << p.first->getOutline()->getName() << ")" << " ~ " << p.second << endl);
