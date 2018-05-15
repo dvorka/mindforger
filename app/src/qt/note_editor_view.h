@@ -92,7 +92,6 @@ protected:
     void mousePressEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
 private:
-    QString textUnderCursor() const;
     void setEditorTabWidth(int tabWidth);
     void performCompletion(const QString& completionPrefix);
     bool handledCompletedAndSelected(QKeyEvent* event);

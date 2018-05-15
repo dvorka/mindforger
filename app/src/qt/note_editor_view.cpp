@@ -226,6 +226,17 @@ void NoteEditorView::keyPressEvent(QKeyEvent *event)
     QPlainTextEdit::keyPressEvent(event);
 }
 
+void NoteEditorView::mousePressEvent(QMouseEvent* event)
+{
+    if(completedAndSelected) {
+        completedAndSelected = false;
+        QTextCursor cursor = textCursor();
+        cursor.removeSelectedText();
+        setTextCursor(cursor);
+    }
+    QPlainTextEdit::mousePressEvent(event);
+}
+
 bool NoteEditorView::handledCompletedAndSelected(QKeyEvent *event)
 {
     completedAndSelected = false;
@@ -307,17 +318,6 @@ void NoteEditorView::insertCompletion(const QString& completion, bool singleWord
     setTextCursor(cursor);
 }
 
-void NoteEditorView::mousePressEvent(QMouseEvent* event)
-{
-    if(completedAndSelected) {
-        completedAndSelected = false;
-        QTextCursor cursor = textCursor();
-        cursor.removeSelectedText();
-        setTextCursor(cursor);
-    }
-    QPlainTextEdit::mousePressEvent(event);
-}
-
 /*
  * L&F
  */
@@ -327,7 +327,6 @@ void NoteEditorView::highlightCurrentLine()
     QList<QTextEdit::ExtraSelection> extraSelections;
     if(!isReadOnly()) {
         QTextEdit::ExtraSelection selection;
-        //QColor lineColor = QColor(Qt::yellow).lighter(160);
         QBrush highlightColor = palette().alternateBase();
         selection.format.setBackground(highlightColor);
         selection.format.setProperty(QTextFormat::FullWidthSelection, true);
@@ -335,7 +334,6 @@ void NoteEditorView::highlightCurrentLine()
         selection.cursor.clearSelection();
         extraSelections += selection;
 
-        // IMPROVE if line number changed
         if(isVisible()) {
             QString m{"  ("};
             m += QString::number(textCursor().blockNumber());
