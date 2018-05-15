@@ -199,7 +199,7 @@ function releaseForParticularUbuntuVersion() {
 
 export ARG_BAZAAR_MSG="Experimental packaging."
 export ARG_MAJOR_VERSION=0.7.
-export ARG_MINOR_VERSION=6 # minor version is icremented for every Ubuntu version
+export ARG_MINOR_VERSION=7 # minor version is icremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety
