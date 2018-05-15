@@ -36,12 +36,6 @@ then
     exit 1
 fi
 
-if ! grep -q "//#ifdef DO_M8R_DEBUG" "../../lib/src/debug.h"
-then
-    echo "This script must NOT be run if debug code is enable - disable DO_M8R_DEBUG first"
-    exit 1
-fi
-
 # ############################################################################
 # # Checkout MindForger from bazaar and make it #
 # ############################################################################
@@ -112,11 +106,16 @@ function releaseForParticularUbuntuVersion() {
     export MFFULLVERSION=${MFVERSION}-0ubuntu1
     export MF=mindforger_${MFVERSION}
     export MFRELEASE=mindforger_${MFFULLVERSION}
-    #export MFSRC=/home/dvorka/p/mindforger/git/mindforger
-    export MFSRC=/home/dvorka/p/mindforger/launchpad/EXPERIMENTS/mindforger
+    export MFSRC=/home/dvorka/p/mindforger/git/mindforger
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
     export MFBUILD=mindforger-${NOW}
 
+    if ! grep -q "//#define DO_M8R_DEBUG" "${MFSRC}/lib/src/debug.h"
+    then
+	echo "This script must NOT be run if debug code is enabled - disable DO_M8R_DEBUG first"
+	exit 1
+    fi
+    
     # 1) clean up
     echo -e "\n# Cleanup ####################################################"
     rm -rvf *.*~ ./debian

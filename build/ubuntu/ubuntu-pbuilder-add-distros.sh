@@ -19,7 +19,7 @@
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety
-# current: trusty xenial artful 
+# current: trusty xenial artful bionic
 for DISTRO in trusty xenial artful
 do
     sudo pbuilder --create ${DISTRO}
