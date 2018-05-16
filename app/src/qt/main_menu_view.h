@@ -60,8 +60,12 @@ public:
     QAction* actionMindHack;
 #endif
     // menu: MindForger
-    QAction* actionMindDevise;
-    QAction* actionMindLearn;
+    QMenu* submenuMindNew;
+    QAction* actionMindNewRepository;
+    QAction* actionMindNewFile;
+    QMenu* submenuMindLearn;
+    QAction* actionMindLearnRepository;
+    QAction* actionMindLearnFile;
     RecentFilesMenu* submenuMindRelearn;
     QAction* actionMindRemember;
     QAction* actionMindRecall;

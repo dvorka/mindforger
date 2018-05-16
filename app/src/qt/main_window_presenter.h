@@ -139,7 +139,8 @@ public slots:
 #endif
     void doActionMindThink();
     void doActionMindSleep();
-    void doActionMindLearn();
+    void doActionMindLearnRepository();
+    void doActionMindLearnFile();
     void doActionMindRelearn(QString path);
     void doActionMindTimeScope();
     void handleMindScope();

@@ -27,6 +27,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     qMenuBar->setStyleSheet(LookAndFeels::getInstance().getMenuStylesheet());
 
     // menu: mind
+    menuMind = qMenuBar->addMenu(tr("&Mind"));
 
 #ifdef DO_M8R_DEBUG
     actionMindHack = new QAction(tr("Mind Hack"), mainWindow);
@@ -34,14 +35,24 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindHack->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
 #endif
 
-    // devise... new MD repository
-    actionMindDevise = new QAction(tr("&New"), mainWindow);
-    actionMindDevise->setStatusTip(tr("Create a brand new MindForger repository..."));
-    actionMindDevise->setEnabled(false);
+    // new/devise... new MD repository
+    submenuMindNew = menuMind->addMenu("&New");
+    submenuMindNew->setEnabled(false);
+    actionMindNewRepository = new QAction(tr("MindForger &Repository"), mainWindow);
+    actionMindNewRepository->setStatusTip(tr("Create a brand new MindForger repository..."));
+    submenuMindNew->addAction(actionMindNewRepository);
+    actionMindNewFile = new QAction(tr("Markdown &File"), mainWindow);
+    actionMindNewFile->setStatusTip(tr("Create a brand new Markdown file..."));
+    submenuMindNew->addAction(actionMindNewFile);
 
     // learn... from a repository, Markdown or TXT file
-    actionMindLearn = new QAction(tr("&Learn"), mainWindow);
-    actionMindLearn->setStatusTip(tr("Learn knowledge by loading a MindForger repository, Markdown repository or file"));
+    submenuMindLearn = menuMind->addMenu("&Learn");
+    actionMindLearnRepository = new QAction(tr("&Directory with Markdowns or MindForger Repository"), mainWindow);
+    actionMindLearnRepository->setStatusTip(tr("Learn knowledge by loading a MindForger repository or a directory with Markdown files..."));
+    submenuMindLearn->addAction(actionMindLearnRepository);
+    actionMindLearnFile = new QAction(tr("Markdown &File"), mainWindow);
+    actionMindLearnFile->setStatusTip(tr("Learn knowledge by loading a Markdown or MindForger file..."));
+    submenuMindLearn->addAction(actionMindLearnFile);
 
     // relearn ... recent repositories and files
     submenuMindRelearn = new RecentFilesMenu(tr("Relearn"), mainWindow);
@@ -96,9 +107,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionExit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Q));
     actionExit->setStatusTip(tr("Leave application"));
 
-    menuMind = qMenuBar->addMenu(tr("&Mind"));
-    menuMind->addAction(actionMindDevise);
-    menuMind->addAction(actionMindLearn);
+    menuMind->addMenu(submenuMindNew);
+    menuMind->addMenu(submenuMindLearn);
     menuMind->addMenu(submenuMindRelearn);
     menuMind->addAction(actionMindRecall);
     menuMind->addAction(actionMindRemember);

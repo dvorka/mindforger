@@ -262,37 +262,40 @@ void MainWindowPresenter::doActionMindSleep()
     }
 }
 
-void MainWindowPresenter::doActionMindLearn()
+void MainWindowPresenter::doActionMindLearnRepository()
 {
     QString homeDirectory
         = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
 
-    // IMPROVE extend Qt's file dialog to support both directory and file section (message box goes away)
-    QMessageBox msgBox{&view};
-    msgBox.setIcon(QMessageBox::Icon::Question);
-    msgBox.setText(tr("Do you want to learn content of directory or file?"));
-    QPushButton* repositoryButton = msgBox.addButton(tr("&Directory"), QMessageBox::ActionRole);
-    QPushButton* fileButton = msgBox.addButton(tr("&File"), QMessageBox::ActionRole);
-    QPushButton* cancelButton = msgBox.addButton(QMessageBox::Cancel);
-    msgBox.exec();
+    QFileDialog learnDialog{&view};
+    learnDialog.setWindowTitle(tr("Learn Directory"));
+    // learnDialog.setFileMode(QFileDialog::Directory|QFileDialog::ExistingFiles); not supported, therefore
+    // >
+    // ASK user: directory/repository or file (choice) > open dialog configured as required
+    learnDialog.setFileMode(QFileDialog::Directory);
+    learnDialog.setDirectory(homeDirectory);
+    learnDialog.setViewMode(QFileDialog::Detail);
+
+    QStringList directoryNames{};
+    if(learnDialog.exec()) {
+        directoryNames = learnDialog.selectedFiles();
+        if(directoryNames.size()==1) {
+            mainMenu->addRecentDirectoryOrFile(directoryNames[0]);
+            doActionMindRelearn(directoryNames[0]);
+        } // else too many files
+    } // else directory closed / nothing choosen
+}
+
+void MainWindowPresenter::doActionMindLearnFile()
+{
+    QString homeDirectory
+        = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
 
     QFileDialog learnDialog{&view};
-    if(msgBox.clickedButton() == repositoryButton) {
-        learnDialog.setWindowTitle(tr("Learn Directory"));
-        // learnDialog.setFileMode(QFileDialog::Directory|QFileDialog::ExistingFiles); not supported, therefore
-        // >
-        // ASK user: directory/repository or file (choice) > open dialog configured as required
-        learnDialog.setFileMode(QFileDialog::Directory);
-        learnDialog.setDirectory(homeDirectory);
-        learnDialog.setViewMode(QFileDialog::Detail);
-    } else if (msgBox.clickedButton() == fileButton) {
-        learnDialog.setWindowTitle(tr("Learn File"));
-        learnDialog.setFileMode(QFileDialog::ExistingFile);
-        learnDialog.setDirectory(homeDirectory);
-        learnDialog.setViewMode(QFileDialog::Detail);
-    } else if (msgBox.clickedButton() == cancelButton) {
-        return;
-    }
+    learnDialog.setWindowTitle(tr("Learn File"));
+    learnDialog.setFileMode(QFileDialog::ExistingFile);
+    learnDialog.setDirectory(homeDirectory);
+    learnDialog.setViewMode(QFileDialog::Detail);
 
     QStringList directoryNames{};
     if(learnDialog.exec()) {

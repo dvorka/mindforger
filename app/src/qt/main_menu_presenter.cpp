@@ -27,12 +27,10 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     this->mainWindowPresenter = mwp;
 
     // menu: mind
-#ifdef DO_M8R_DEBUG
-    QObject::connect(view->actionMindHack, SIGNAL(triggered()), mwp, SLOT(doActionMindHack()));
-#endif
     QObject::connect(view->actionMindThink, SIGNAL(triggered()), mwp, SLOT(doActionMindThink()));
     QObject::connect(view->actionMindSleep, SIGNAL(triggered()), mwp, SLOT(doActionMindSleep()));
-    QObject::connect(view->actionMindLearn, SIGNAL(triggered()), mwp, SLOT(doActionMindLearn()));
+    QObject::connect(view->actionMindLearnRepository, SIGNAL(triggered()), mwp, SLOT(doActionMindLearnRepository()));
+    QObject::connect(view->actionMindLearnFile, SIGNAL(triggered()), mwp, SLOT(doActionMindLearnFile()));
     for(auto& r:config.getRepositories()) {
         view->submenuMindRelearn->addFile(QString::fromStdString(r.first));
     }
@@ -42,6 +40,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionMindPreferences, SIGNAL(triggered()), mwp, SLOT(doActionMindPreferences()));
     QObject::connect(view->actionMindSnapshot, SIGNAL(triggered()), mwp, SLOT(doActionMindSnapshot()));
     QObject::connect(view->actionExit, SIGNAL(triggered()), mwp, SLOT(doActionExit()));
+#ifdef DO_M8R_DEBUG
+    QObject::connect(view->actionMindHack, SIGNAL(triggered()), mwp, SLOT(doActionMindHack()));
+#endif
 
     // menu: find
     QObject::connect(view->actionFts, SIGNAL(triggered()), mwp, SLOT(doActionFts()));

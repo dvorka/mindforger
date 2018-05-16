@@ -220,7 +220,6 @@ void NoteEditorView::keyPressEvent(QKeyEvent *event)
     // completion: letter must be handled~inserted first - now it's time to autocomplete
     if(Configuration::getInstance().isUiEditorEnableAutocomplete()) {
         if(!completer->popup()->isVisible()) {
-            MF_DEBUG("Document lines: " << blockCount() << endl);
             if(blockCount() < Configuration::EDITOR_MAX_AUTOCOMPLETE_LINES) {
                 QChar k{event->key()};
                 if(k.isLetter()) {
