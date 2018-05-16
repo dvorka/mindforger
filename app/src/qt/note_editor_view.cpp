@@ -213,17 +213,23 @@ void NoteEditorView::keyPressEvent(QKeyEvent *event)
                 completer->popup()->hide();
                 break;
         }
-    } else {
-        // IMPROVE get configuration reference and setting - this must be fast
-        if(Configuration::getInstance().getMindState()==Configuration::MindState::THINKING) {
-            // TODO automatic completion suggestions when thinking - to be FIXED: doubled chars, backspace doesn't work, ...
-            //if(performCompletion()) {
-            //    event->ignore();
-            //}
-        }
     }
 
     QPlainTextEdit::keyPressEvent(event);
+
+    // completion: letter must be handled~inserted first
+    if(!completer->popup()->isVisible()) {
+        QChar k{event->key()};
+        if(k.isLetter()) {
+            // IMPROVE get configuration reference and setting - this must be fast
+            if(Configuration::getInstance().getMindState()==Configuration::MindState::THINKING) {
+                // TODO automatic completion suggestions when thinking - to be FIXED: doubled chars, backspace doesn't work, ...
+                if(performCompletion()) {
+                    event->ignore();
+                }
+            }
+        }
+    }
 }
 
 void NoteEditorView::mousePressEvent(QMouseEvent* event)
@@ -275,6 +281,9 @@ bool NoteEditorView::performCompletion()
 
 void NoteEditorView::performCompletion(const QString& completionPrefix)
 {
+    MF_DEBUG("Completing prefix: '" << completionPrefix.toStdString() << "'" << endl);
+
+    // TODO model population is SLOW, don't do it after each hit, but e.g. when user does NOT write
     populateModel(completionPrefix);
 
     if(completionPrefix != completer->completionPrefix()) {
@@ -282,15 +291,16 @@ void NoteEditorView::performCompletion(const QString& completionPrefix)
         completer->popup()->setCurrentIndex(completer->completionModel()->index(0, 0));
     }
 
-    if(completer->completionCount() == 1) {
-        insertCompletion(completer->currentCompletion(), true);
-    } else {
+    // do NOT complete inline - it completes what user doesn't know and is bothering
+    //if(completer->completionCount() == 1) {
+    //    insertCompletion(completer->currentCompletion(), true);
+    //} else {
         QRect rect = cursorRect();
         rect.setWidth(
             completer->popup()->sizeHintForColumn(0) +
             completer->popup()->verticalScrollBar()->sizeHint().width());
         completer->complete(rect);
-    }
+    //}
 }
 
 void NoteEditorView::populateModel(const QString& completionPrefix)
@@ -302,11 +312,14 @@ void NoteEditorView::populateModel(const QString& completionPrefix)
     model->setStringList(strings);
 }
 
+// TODO single word completion to be removed
 void NoteEditorView::insertCompletion(const QString& completion, bool singleWord)
 {
     QTextCursor cursor = textCursor();
     int numberOfCharsToComplete
         = completion.length() - completer->completionPrefix().length();
+
+    // TODO single word completion to be removed
     int insertionPosition
         = cursor.position();
     cursor.insertText(completion.right(numberOfCharsToComplete));

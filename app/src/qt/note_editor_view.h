@@ -46,20 +46,20 @@ private:
 
     QFont f;
 
-    // runtime
-    int hitCounter;
-
     // usability
     bool enableSyntaxHighlighting;
     NoteEditHighlight* highlighter;
     bool showLineNumbers;
+    LineNumberPanel* lineNumberPanel;
+
+    // associations
+    int hitCounter;
 
     // autocomplete
     bool completedAndSelected;
     QCompleter* completer;
     QStringListModel* model;
 
-    // info
     const StatusBarView* statusBar;
 
 public:
@@ -71,21 +71,16 @@ public:
 
     void setStatusBar(const StatusBarView* sb) { this->statusBar = sb; }
 
-    // runtime
-    void clearHitCounter() { hitCounter=0; }
-    int getHitCounter() const { return hitCounter; }
-
     // formatting
     QString getSelectedText() const { return textCursor().selectedText(); }
     void wrapSelectedText(const QString &tag) { wrapSelectedText(tag,""); }
     void wrapSelectedText(const QString &tag, const QString &endTag);
     void insertMarkdownText(const QString &text, bool newLine=true, int offset=0);
 
-    // usability
-    void setShowLineNumbers(bool show);
-
     // associations
     QString getRelevantWords() const;
+    void clearHitCounter() { hitCounter=0; }
+    int getHitCounter() const { return hitCounter; }
 
     // autocomplete
 protected:
@@ -96,24 +91,24 @@ private:
     void performCompletion(const QString& completionPrefix);
     bool handledCompletedAndSelected(QKeyEvent* event);
     void populateModel(const QString& completionPrefix);
-
 private slots:
     void insertCompletion(const QString& completion, bool singleWord=false);
-    void highlightCurrentLine();
     bool performCompletion();
 
-    // line number panel
-private:
-    LineNumberPanel* lineNumberPanel;
+    // line & line number
 public:
     void lineNumberPanelPaintEvent(QPaintEvent* event);
     int lineNumberPanelWidth();
 protected:
     void resizeEvent(QResizeEvent* event) override;
 private slots:
+    void highlightCurrentLine();
     void updateLineNumberPanelWidth(int newBlockCount);
     void updateLineNumberPanel(const QRect&, int);
 
+    // configuration
+public:
+    void setShowLineNumbers(bool show);
 public slots:
     void slotConfigurationUpdated();
 };

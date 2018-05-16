@@ -108,12 +108,10 @@ void AsyncTaskNotificationsDistributor::run()
 
                     mwp->getOrloj()->getNoteEdit()->clearHitCounter();
                 } else if(mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-                    // think as you WRITE: detect inactivity AND refresh leadearboard for active word
-                    MF_DEBUG("AsyncDistributor: think as you WRITE (O) hits: " << mwp->getOrloj()->getOutlineHeaderEdit()->getHitCounter() << endl);
-                    // if there is no activity, then show leaderboard
+                    // think as you WRITE: detect inactivity AND refresh leadearboard for word(s) under cursor
                     if(!mwp->getOrloj()->getOutlineHeaderEdit()->getHitCounter()) {
                         QString words = mwp->getOrloj()->getOutlineHeaderEdit()->getRelevantWords();
-                        MF_DEBUG("AsyncDistributor: think as you WRITE (O) words '" << words.toStdString() << "'" << endl);
+                        MF_DEBUG("AsyncDistributor: think as you WRITE (O) hits: " << mwp->getOrloj()->getOutlineHeaderEdit()->getHitCounter() << " words '" << words.toStdString() << "'" << endl);
                         if(words.size()) {
                             // refresh leaderboard ONLY if it's different
                             if(lastTayWOutline!=mwp->getOrloj()->getOutlineHeaderEdit()->getCurrentOutline() || lastTayWords!=words) {
@@ -125,8 +123,6 @@ void AsyncTaskNotificationsDistributor::run()
                                 // send signal(s) to ensure async
                                 emit showStatusBarInfo("Associated Notes for Outline '"+words+"'...");
                                 emit refreshHeaderLeaderboardByValue(associations);
-                            } else {
-                                MF_DEBUG("AsyncDistributor: SKIPPING think as you WRITE (O) for words '" << words.toStdString() << "'" << endl);
                             }
                         }
                     }
