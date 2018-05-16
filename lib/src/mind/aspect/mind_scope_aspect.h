@@ -49,25 +49,25 @@ public:
     }
     bool isOutOfScope(const Outline* o) const {
         if(timeScope.isEnabled()) {
-            if(timeScope.isInScope(o)) {
-                return false;
+            if(timeScope.isOutOfScope(o)) {
+                return true;
             }
         }
         if(tagsScope.isEnabled()) {
-            if(tagsScope.isInScope(o)) {
-                return false;
+            if(tagsScope.isOutOfScope(o)) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
     bool isOutOfScope(const Note* n) const {
         if(timeScope.isEnabled()) {
-            if(timeScope.isInScope(n)) {
-                return false;
+            if(timeScope.isOutOfScope(n)) {
+                return true;
             }
         }
         // tags are not used w/ Ns
-        return true;
+        return false;
     }
     bool isInScope(const Outline* o) const {
         if(timeScope.isEnabled()) {
