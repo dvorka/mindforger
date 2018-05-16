@@ -164,6 +164,7 @@ public:
     static const std::string DEFAULT_EDITOR_KEY_BINDING;
     static constexpr int DEFAULT_EDITOR_TAB_WIDTH = 4;
     static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
+    static constexpr const bool DEFAULT_EDITOR_AUTOCOMPLETE = true;
     static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_MD_MATH = false;
     static constexpr const bool DEFAULT_ALLOW_ONLINE_JS_LIBS = false;
@@ -211,6 +212,7 @@ private:
     int uiEditorTabWidth;
     bool uiEditorShowLineNumbers; // show line numbers
     bool uiEditorEnableSyntaxHighlighting; // toggle syntax highlighting    
+    bool uiEditorAutocomplete; // toggle autocompletion
     JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
 
 private:
@@ -299,6 +301,8 @@ public:
     void setUiEditorShowLineNumbers(bool show) { uiEditorShowLineNumbers = show; }
     bool isUiEditorEnableSyntaxHighlighting() const { return uiEditorEnableSyntaxHighlighting; }
     void setUiEditorEnableSyntaxHighlighting(bool enable) { uiEditorEnableSyntaxHighlighting = enable; }
+    bool isUiEditorEnableAutocomplete() const { return uiEditorEnableAutocomplete; }
+    void setUiEditorEnableAutocomplete(bool enable) { uiEditorEnableAutocomplete = enable; }
     int getUiEditorTabWidth() const { return uiEditorTabWidth; }
     void setUiEditorTabWidth(int tabWidth) { uiEditorTabWidth = tabWidth; }
     bool isUiShowBreadcrump() const { return uiShowBreadcrump; }

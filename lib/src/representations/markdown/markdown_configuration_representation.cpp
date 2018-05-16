@@ -30,6 +30,7 @@ constexpr const auto CONFIG_SETTING_UI_THEME_LABEL = "* Theme: ";
 constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* Markdown CSS theme: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL =  "* Editor syntax highlighting: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL =  "* Editor autocomplete: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL =  "* Editor TAB width: ";
 constexpr const auto CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL = "* Show Notebook edit button: ";
 constexpr const auto CONFIG_SETTING_MD_HIGHLIGHT_LABEL = "* Enable source code syntax highlighting support in Markdown: ";
@@ -164,6 +165,12 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                             c.setUiEditorEnableSyntaxHighlighting(true);
                         } else {
                             c.setUiEditorEnableSyntaxHighlighting(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiEditorEnableAutocomplete(true);
+                        } else {
+                            c.setUiEditorEnableAutocomplete(false);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL) != std::string::npos) {
                         if(line->find("8") != std::string::npos) {
@@ -321,6 +328,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL << (c?c->getEditorKeyBindingAsString():Configuration::DEFAULT_EDITOR_KEY_BINDING) << endl <<
          "    * Examples: emacs, vim, windows" << endl <<
          CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL << (c?(c->isUiEditorEnableSyntaxHighlighting()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SYNTAX_HIGHLIGHT?"yes":"no")) << endl <<
+         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL << (c?(c->isUiEditorEnableAutocomplete()?"yes":"no"):(Configuration::DEFAULT_EDITOR_AUTOCOMPLETE?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL << (c?c->getUiEditorTabWidth():Configuration::DEFAULT_EDITOR_TAB_WIDTH) << endl <<
          "    * Examples: 4, 8" << endl <<

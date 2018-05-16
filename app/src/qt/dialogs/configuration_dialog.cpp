@@ -101,7 +101,8 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     editorKeyBindingCombo->addItem("vim");
     editorKeyBindingCombo->addItem("windows");
 
-    srcCodeHighlightEditorCheck = new QCheckBox(tr("Markdown syntax highlighting"), this);
+    editorMdSyntaxHighlightCheck = new QCheckBox(tr("Markdown syntax highlighting"), this);
+    editorAutocompleteCheck = new QCheckBox(tr("Autocomplete"), this);
 
     tabWidthLabel = new QLabel(tr("TAB width")+":", this);
     tabWidthCombo = new QComboBox(this);
@@ -120,8 +121,8 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     QVBoxLayout* editorLayout = new QVBoxLayout{this};
     editorLayout->addWidget(editorKeyBindingLabel);
     editorLayout->addWidget(editorKeyBindingCombo);
-    //editorLayout->addWidget(srcCodeHighlightEditorLabel);
-    editorLayout->addWidget(srcCodeHighlightEditorCheck);
+    editorLayout->addWidget(editorMdSyntaxHighlightCheck);
+    editorLayout->addWidget(editorAutocompleteCheck);
     editorLayout->addWidget(tabWidthLabel);
     editorLayout->addWidget(tabWidthCombo);
     QGroupBox* editorGroup = new QGroupBox{tr("Editor"), this};
@@ -142,7 +143,8 @@ ConfigurationDialog::AppTab::~AppTab()
     delete htmlCssThemeCombo;
     delete editorKeyBindingLabel;
     delete editorKeyBindingCombo;
-    delete srcCodeHighlightEditorCheck;
+    delete editorMdSyntaxHighlightCheck;
+    delete editorAutocompleteCheck;
     delete tabWidthLabel;
     delete tabWidthCombo;
 }
@@ -164,7 +166,8 @@ void ConfigurationDialog::AppTab::refresh()
         editorKeyBindingCombo->setCurrentIndex(i);
     }
 
-    srcCodeHighlightEditorCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
+    editorMdSyntaxHighlightCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
+    editorAutocompleteCheck->setChecked(config.isUiEditorEnableAutocomplete());
     tabWidthCombo->setCurrentIndex(tabWidthCombo->findText(QString::number(config.getUiEditorTabWidth())));
 }
 
@@ -173,7 +176,8 @@ void ConfigurationDialog::AppTab::save()
     config.setUiThemeName(themeCombo->itemText(themeCombo->currentIndex()).toStdString());
     config.setUiHtmlCssPath(htmlCssThemeCombo->itemText(htmlCssThemeCombo->currentIndex()).toStdString());
     config.setEditorKeyBindingByString(editorKeyBindingCombo->itemText(editorKeyBindingCombo->currentIndex()).toStdString());
-    config.setUiEditorEnableSyntaxHighlighting(srcCodeHighlightEditorCheck->isChecked());
+    config.setUiEditorEnableSyntaxHighlighting(editorMdSyntaxHighlightCheck->isChecked());
+    config.setUiEditorEnableAutocomplete(editorAutocompleteCheck->isChecked());
     config.setUiEditorTabWidth(tabWidthCombo->itemText(tabWidthCombo->currentIndex()).toInt());
 }
 

@@ -103,7 +103,8 @@ private:
 
     QLabel* editorKeyBindingLabel;
     QComboBox* editorKeyBindingCombo;
-    QCheckBox* srcCodeHighlightEditorCheck;
+    QCheckBox* editorMdSyntaxHighlightCheck;
+    QCheckBox* editorAutocompleteCheck;
     QLabel* tabWidthLabel;
     QComboBox* tabWidthCombo;
 
