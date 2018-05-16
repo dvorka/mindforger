@@ -217,15 +217,18 @@ void NoteEditorView::keyPressEvent(QKeyEvent *event)
 
     QPlainTextEdit::keyPressEvent(event);
 
-    // completion: letter must be handled~inserted first
+    // completion: letter must be handled~inserted first - now it's time to autocomplete
     if(!completer->popup()->isVisible()) {
-        QChar k{event->key()};
-        if(k.isLetter()) {
-            // IMPROVE get configuration reference and setting - this must be fast
-            if(Configuration::getInstance().getMindState()==Configuration::MindState::THINKING) {
-                // TODO automatic completion suggestions when thinking - to be FIXED: doubled chars, backspace doesn't work, ...
-                if(performCompletion()) {
-                    event->ignore();
+        MF_DEBUG("Document lines: " << blockCount() << endl);
+        if(blockCount() < Configuration::EDITOR_MAX_AUTOCOMPLETE_LINES) {
+            QChar k{event->key()};
+            if(k.isLetter()) {
+                // IMPROVE get configuration reference and setting - this must be fast
+                if(Configuration::getInstance().getMindState()==Configuration::MindState::THINKING) {
+                    // TODO automatic completion suggestions when thinking - to be FIXED: doubled chars, backspace doesn't work, ...
+                    if(performCompletion()) {
+                        event->ignore();
+                    }
                 }
             }
         }
@@ -320,8 +323,7 @@ void NoteEditorView::insertCompletion(const QString& completion, bool singleWord
         = completion.length() - completer->completionPrefix().length();
 
     // TODO single word completion to be removed
-    int insertionPosition
-        = cursor.position();
+    int insertionPosition = cursor.position();
     cursor.insertText(completion.right(numberOfCharsToComplete));
     if(singleWord) {
         cursor.setPosition(insertionPosition);

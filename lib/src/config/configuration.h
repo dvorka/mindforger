@@ -168,6 +168,8 @@ public:
     static constexpr const bool DEFAULT_MD_MATH = false;
     static constexpr const bool DEFAULT_ALLOW_ONLINE_JS_LIBS = false;
 
+    static constexpr int EDITOR_MAX_AUTOCOMPLETE_LINES = 1000;
+
 private:
     explicit Configuration();
 
