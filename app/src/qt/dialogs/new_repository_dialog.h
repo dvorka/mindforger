@@ -19,6 +19,9 @@
 #ifndef M8RUI_NEW_REPOSITORY_DIALOG_H
 #define M8RUI_NEW_REPOSITORY_DIALOG_H
 
+#include "../../lib/src/gear/string_utils.h"
+#include "../../lib/src/gear/file_utils.h"
+
 #include <QtWidgets>
 
 namespace m8r {
@@ -32,6 +35,8 @@ private:
 
     QLabel* repositoryNameLabel;
     QLineEdit* repositoryNameEdit;
+    QLabel* dirLabel;
+    QLineEdit* dirEdit;
     QLabel* pathLabel;
     QLineEdit* pathEdit;
 
@@ -53,8 +58,12 @@ public:
 
     void show();
     QPushButton* getNewButton() const { return newButton; }
+    QString getRepositoryPath() const { return pathEdit->text(); }
+    bool isCopyDoc() const { return copyDocCheckbox->isChecked(); }
+    bool isCopyStencils() const { return copyStencilsCheckbox->isChecked(); }
 
 private slots:
+    void refreshPath();
     void handleFindDirectory();
 };
 

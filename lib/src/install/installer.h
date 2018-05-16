@@ -45,7 +45,12 @@ public:
      *
      * Creates the directory and the skeleton of empty repository in it.
      */
-    void createEmptyMindForgerRepository(const std::string& directory);
+    bool createEmptyMindForgerRepository(const std::string& directory);
+
+    /**
+     * @brief Init empty MindForger repository w/ default documentation and stencils.
+     */
+    bool initMindForgerRepository(bool copyDoc, bool copyStencils);
 
 private:
     void createDirectory(const std::string& path);

@@ -183,13 +183,13 @@ char* makeTempDirectory(char* dirNamePrefix)
     return mkdtemp(tmpl);
 }
 
-int removeDirectoryRecursively(const char *path)
+int removeDirectoryRecursively(const char* path)
 {
-   DIR *d = opendir(path);
+   DIR* d = opendir(path);
    size_t path_len = strlen(path);
    int r = -1;
    if(d) {
-      struct dirent *p;
+      struct dirent* p;
       r = 0;
       while(!r && (p=readdir(d))) {
           int r2 = -1;
@@ -220,6 +220,48 @@ int removeDirectoryRecursively(const char *path)
    }
    if(!r) {
       r = rmdir(path);
+   }
+
+   return r;
+}
+
+int copyDirectoryRecursively(const char* srcPath, const char* dstPath)
+{
+   DIR *d = opendir(srcPath);
+   size_t path_len = strlen(srcPath);
+   int r = -1;
+   if(d) {
+      struct dirent *p;
+      r = 0;
+      while(!r && (p=readdir(d))) {
+          int r2 = -1;
+          char *buf;
+          size_t len;
+          // skip the names "." and ".." as I don't want to recurse on them
+          if (!strcmp(p->d_name, ".") || !strcmp(p->d_name, "..")) {
+             continue;
+          }
+          len = path_len + strlen(p->d_name) + 2;
+          buf = new char[len];
+          if(buf) {
+             struct stat statbuf;
+             // IMPROVE MF_DEBUG
+             snprintf(buf, len, "%s/%s", srcPath, p->d_name);
+             if (!stat(buf, &statbuf)) {
+                if (S_ISDIR(statbuf.st_mode)) {
+                   r2 = removeDirectoryRecursively(buf);
+                } else {
+                   r2 = unlink(buf);
+                }
+             }
+             delete[] buf;
+          }
+          r = r2;
+      }
+      closedir(d);
+   }
+   if(!r) {
+      r = rmdir(srcPath);
    }
 
    return r;

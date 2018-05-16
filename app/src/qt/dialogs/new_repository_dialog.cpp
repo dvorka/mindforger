@@ -28,13 +28,16 @@ NewRepositoryDialog::NewRepositoryDialog(QWidget* parent)
     // widgets
     repositoryNameLabel = new QLabel{tr("Repository name:")};
     repositoryNameEdit = new QLineEdit{};
-    pathLabel = new QLabel{tr("Create repository in directory:")};
+    dirLabel = new QLabel{tr("Repository directory:")};
+    dirEdit = new QLineEdit{};
+    pathLabel = new QLabel{tr("Repository to be created in:")};
     pathEdit = new QLineEdit{};
+    pathEdit->setEnabled(false);
 
-    findDirectoryButton = new QPushButton{tr("Directory")};
+    findDirectoryButton = new QPushButton{tr("Find Directory")};
 
-    copyStencilsCheckbox= new QCheckBox{tr("copy stencils to repository")};
-    copyDocCheckbox = new QCheckBox{tr("copy stencils to repository")};
+    copyStencilsCheckbox= new QCheckBox{tr("include stencils")};
+    copyDocCheckbox = new QCheckBox{tr("include documentation")};
 
     // IMPROVE disable/enable find button if text/path is valid: freedom vs validation
     newButton = new QPushButton{tr("&New")};
@@ -42,21 +45,26 @@ NewRepositoryDialog::NewRepositoryDialog(QWidget* parent)
     closeButton = new QPushButton{tr("&Cancel")};
 
     // signals
+    QObject::connect(repositoryNameEdit, SIGNAL(textChanged(const QString&)), this, SLOT(refreshPath()));
+    QObject::connect(dirEdit, SIGNAL(textChanged(const QString&)), this, SLOT(refreshPath()));
     QObject::connect(findDirectoryButton, SIGNAL(clicked()), this, SLOT(handleFindDirectory()));
+    QObject::connect(newButton, SIGNAL(clicked()), this, SLOT(close()));
     QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     // assembly
     QVBoxLayout* mainLayout = new QVBoxLayout{};
     mainLayout->addWidget(repositoryNameLabel);
     mainLayout->addWidget(repositoryNameEdit);
-    mainLayout->addWidget(pathLabel);
-    mainLayout->addWidget(pathEdit);
+    mainLayout->addWidget(dirLabel);
+    mainLayout->addWidget(dirEdit);
     QHBoxLayout* srcButtonLayout = new QHBoxLayout{};
     srcButtonLayout->addWidget(findDirectoryButton);
     srcButtonLayout->addStretch();
     mainLayout->addLayout(srcButtonLayout);
     mainLayout->addWidget(copyStencilsCheckbox);
     mainLayout->addWidget(copyDocCheckbox);
+    mainLayout->addWidget(pathLabel);
+    mainLayout->addWidget(pathEdit);
 
     QHBoxLayout* buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
@@ -69,7 +77,7 @@ NewRepositoryDialog::NewRepositoryDialog(QWidget* parent)
 
     // dialog
     setWindowTitle(tr("Create New Repository"));
-    resize(fontMetrics().averageCharWidth()*55, height());
+    resize(fontMetrics().averageCharWidth()*60, height());
     setModal(true);
 }
 
@@ -82,12 +90,37 @@ void NewRepositoryDialog::show()
     repositoryNameEdit->setText(tr("mindforger-repository"));
     repositoryNameEdit->selectAll();
     repositoryNameEdit->setFocus();
-    pathEdit->setText(homeDirectory);
+    dirEdit->setText(homeDirectory);
+
+    refreshPath();
 
     copyStencilsCheckbox->setChecked(true);
     copyDocCheckbox->setChecked(true);
 
     QDialog::show();
+}
+
+void NewRepositoryDialog::refreshPath()
+{
+    // dir
+    QString directory{dirEdit->text()};
+    if(directory.isEmpty()) {
+        directory = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+    }
+    if(!directory.endsWith(FILE_PATH_SEPARATOR)) {
+        directory.append(FILE_PATH_SEPARATOR);
+    }
+    // name
+    QString name{repositoryNameEdit->text()};
+    if(name.isEmpty()) {
+        name = tr("mindforger-repository");
+    } else {
+        name = QString::fromStdString(normalizeToNcName(name.toStdString(),'-'));
+    }
+    // path = dir + name
+    QString path = directory+name;
+
+    pathEdit->setText(path);
 }
 
 void NewRepositoryDialog::handleFindDirectory()

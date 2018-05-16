@@ -212,7 +212,7 @@ OutlineNewDialog::OutlineNewDialog(
     // signals
     QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    QObject::connect(generalTab->getNameEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(refreshPath(const QString &)));
+    QObject::connect(generalTab->getNameEdit(), SIGNAL(textChanged(const QString&)), this, SLOT(refreshPath(const QString&)));
 
     QVBoxLayout *mainLayout = new QVBoxLayout{this};
     mainLayout->addWidget(tabWidget);

@@ -81,7 +81,8 @@ bool isDirectoryOrFileExists(const char* path);
 bool isDirectory(const char* path);
 bool isFile(const char* path);
 char* makeTempDirectory(char* dirNamePefix);
-int removeDirectoryRecursively(const char *path);
+int removeDirectoryRecursively(const char* path);
+int copyDirectoryRecursively(const char* srcPath, const char* dstPath);
 
 } // m8r namespace
 

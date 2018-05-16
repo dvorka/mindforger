@@ -234,9 +234,26 @@ void MainWindowPresenter::doActionMindNewRepository()
 
 void MainWindowPresenter::handleMindNewRepository()
 {
-    // try to create directory, dialog w/ error if EXIST, error if CANNOT be created
-    // once created, create skeleton within it
-    // try to copy resources (don't report errors if stencils not there - cerr only
+    // if directory exists, then fail
+    if(isDirectoryOrFileExists(newRepositoryDialog->getRepositoryPath().toStdString().c_str())) {
+        QMessageBox::critical(&view, tr("New Repository Error"), tr("Specified repository path already exists!"));
+        return;
+    }
+
+    // create repository
+    if(!config.getInstaller()->createEmptyMindForgerRepository(newRepositoryDialog->getRepositoryPath().toStdString())) {
+        QMessageBox::critical(&view, tr("New Repository Error"), tr("Failed to create empty repository!"));
+        return;
+    }
+
+    // copy doc and stencils
+    config.getInstaller()->initMindForgerRepository(
+        newRepositoryDialog->isCopyDoc(),
+        newRepositoryDialog->isCopyStencils()
+    );
+
+    // open new repository
+    doActionMindRelearn(newRepositoryDialog->getRepositoryPath());
 }
 
 void MainWindowPresenter::doActionMindNewFile()

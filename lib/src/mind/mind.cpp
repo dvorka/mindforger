@@ -615,7 +615,6 @@ string Mind::outlineNew(
             outline->addNote(note);
         }
 
-
         memory.remember(outline);
         onRemembering();
     } else {

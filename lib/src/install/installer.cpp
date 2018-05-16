@@ -30,7 +30,7 @@ Installer::~Installer()
 {
 }
 
-void Installer::createEmptyMindForgerRepository(const string& directory)
+bool Installer::createEmptyMindForgerRepository(const string& directory)
 {
     if(!directory.empty()) {
         if(!isDirectoryOrFileExists(directory.c_str())) {
@@ -68,8 +68,22 @@ void Installer::createEmptyMindForgerRepository(const string& directory)
         path += FILE_PATH_SEPARATOR;
         path += FILE_PATH_NOTES;
         createDirectory(path);
+
+        return true;
     }
-    // IMPROVE else
+
+    return false;
+}
+
+bool Installer::initMindForgerRepository(bool copyDoc, bool copyStencils)
+{
+    if(copyDoc) {
+
+    }
+
+    if(copyStencils) {
+
+    }
 }
 
 void Installer::createDirectory(const string& path) {
