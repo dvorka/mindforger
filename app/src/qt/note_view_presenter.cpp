@@ -62,7 +62,7 @@ void NoteViewPresenter::refresh(Note* note)
     note->incReads();
     this->currentNote = note;
 
-    if(!searchExpression.isEmpty()) {
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_FTS_RESULT) || orloj->isFacetActive(OrlojPresenterFacets::FACET_FTS_VIEW_NOTE)) {
         // FTS result HTML
         html = "<html><body style='";
         htmlRepresentation->fgBgTextColorStyle(html);
@@ -130,8 +130,7 @@ void NoteViewPresenter::slotRefreshLeaderboard(Note* note)
 
 void NoteViewPresenter::slotRefreshLeaderboardByValue(vector<pair<Note*,float>>* associations)
 {
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE))
-    {
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
         orloj->getOutlineView()->getAssocLeaderboard()->refresh(*associations);
     }
     delete associations;

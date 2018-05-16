@@ -259,7 +259,7 @@ void OrlojPresenter::slotShowNoteAsFtsResult(const QItemSelection& selected, con
         view->showFacetFtsResultDetail();
         mainPresenter->getMainMenu()->showFacetOutlineList();
         mainPresenter->getStatusBar()->showInfo(QString(note->getName().c_str()));
-        setFacet(OrlojPresenterFacets::FACET_VIEW_NOTE);
+        setFacet(OrlojPresenterFacets::FACET_FTS_VIEW_NOTE);
     } else {
         mainPresenter->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
     }

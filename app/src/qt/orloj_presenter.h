@@ -47,13 +47,14 @@ class OutlineViewPresenter;
 
 enum OrlojPresenterFacets {
     FACET_NONE,                 // 0
-    FACET_FTS_RESULT,           // 1
-    FACET_LIST_OUTLINES,        // 2
-    FACET_VIEW_OUTLINE,         // 3
-    FACET_VIEW_OUTLINE_HEADER,  // 4
-    FACET_EDIT_OUTLINE_HEADER,  // 5
-    FACET_VIEW_NOTE,            // 6
-    FACET_EDIT_NOTE             // 7
+    FACET_LIST_OUTLINES,        // 1
+    FACET_VIEW_OUTLINE,         // 2
+    FACET_VIEW_OUTLINE_HEADER,  // 3
+    FACET_EDIT_OUTLINE_HEADER,  // 4
+    FACET_VIEW_NOTE,            // 5
+    FACET_EDIT_NOTE,            // 6
+    FACET_FTS_RESULT,           // 7
+    FACET_FTS_VIEW_NOTE,        // 8
 };
 
 class OrlojPresenter : public QObject
