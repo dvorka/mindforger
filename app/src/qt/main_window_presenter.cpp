@@ -1264,6 +1264,8 @@ void MainWindowPresenter::doActionHelpDocumentation()
      * Ctrl+s
      * Alt+LeftArrow ... save and exit editor
      */
+
+    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger-repository"});
 }
 
 void MainWindowPresenter::doActionHelpWeb()

@@ -115,7 +115,7 @@ std::string datetimeToPrettyHtml(const time_t* ts)
         break;
     case Pretty::THIS_YEAR:
         background = "888888";
-        strftime(text, sizeof(text), "%B %e", &tsS);
+        strftime(text, sizeof(text), "%b %e", &tsS);
         break;
     case Pretty::THIS_WEEK:
         background= "555555";
