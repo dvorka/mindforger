@@ -210,8 +210,8 @@ private:
     bool uiShowBreadcrump; // show breadcrump path
     bool uiViewerShowMetadata; // show reads/writes/... when viewing Outlines and/or Notes.
     int uiEditorTabWidth;
-    bool uiEditorShowLineNumbers; // show line numbers
-    bool uiEditorEnableSyntaxHighlighting; // toggle syntax highlighting    
+    bool uiEditorLineNumbers; // show line numbers
+    bool uiEditorSyntaxHighlighting; // toggle syntax highlighting
     bool uiEditorAutocomplete; // toggle autocompletion
     JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
 
@@ -297,12 +297,12 @@ public:
     int getUiFontPointSize() const { return uiFontPointSize; }
     const std::string& getUiThemeName() const { return uiThemeName; }
     void setUiThemeName(const std::string theme) { uiThemeName = theme; }
-    bool isUiEditorShowLineNumbers() const { return uiEditorShowLineNumbers; }
-    void setUiEditorShowLineNumbers(bool show) { uiEditorShowLineNumbers = show; }
-    bool isUiEditorEnableSyntaxHighlighting() const { return uiEditorEnableSyntaxHighlighting; }
-    void setUiEditorEnableSyntaxHighlighting(bool enable) { uiEditorEnableSyntaxHighlighting = enable; }
-    bool isUiEditorEnableAutocomplete() const { return uiEditorEnableAutocomplete; }
-    void setUiEditorEnableAutocomplete(bool enable) { uiEditorEnableAutocomplete = enable; }
+    bool isUiEditorShowLineNumbers() const { return uiEditorLineNumbers; }
+    void setUiEditorShowLineNumbers(bool show) { uiEditorLineNumbers = show; }
+    bool isUiEditorEnableSyntaxHighlighting() const { return uiEditorSyntaxHighlighting; }
+    void setUiEditorEnableSyntaxHighlighting(bool enable) { uiEditorSyntaxHighlighting = enable; }
+    bool isUiEditorEnableAutocomplete() const { return uiEditorAutocomplete; }
+    void setUiEditorEnableAutocomplete(bool enable) { uiEditorAutocomplete = enable; }
     int getUiEditorTabWidth() const { return uiEditorTabWidth; }
     void setUiEditorTabWidth(int tabWidth) { uiEditorTabWidth = tabWidth; }
     bool isUiShowBreadcrump() const { return uiShowBreadcrump; }

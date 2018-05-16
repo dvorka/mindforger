@@ -102,7 +102,7 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     editorKeyBindingCombo->addItem("windows");
 
     editorMdSyntaxHighlightCheck = new QCheckBox(tr("Markdown syntax highlighting"), this);
-    editorAutocompleteCheck = new QCheckBox(tr("Autocomplete"), this);
+    editorAutocompleteCheck = new QCheckBox(tr("autocomplete"), this);
 
     tabWidthLabel = new QLabel(tr("TAB width")+":", this);
     tabWidthCombo = new QComboBox(this);

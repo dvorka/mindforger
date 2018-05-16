@@ -97,9 +97,9 @@ void Configuration::clear()
 
     // GUI
     uiViewerShowMetadata = true;
-    uiEditorEnableSyntaxHighlighting = true;
+    uiEditorSyntaxHighlighting = true;
     uiEditorAutocomplete = true;
-    uiEditorShowLineNumbers = true;
+    uiEditorLineNumbers = true;
     uiEditorTabWidth = DEFAULT_EDITOR_TAB_WIDTH;
     uiThemeName.assign(UI_DEFAULT_THEME);
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);

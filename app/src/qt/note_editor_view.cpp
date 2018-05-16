@@ -218,14 +218,12 @@ void NoteEditorView::keyPressEvent(QKeyEvent *event)
     QPlainTextEdit::keyPressEvent(event);
 
     // completion: letter must be handled~inserted first - now it's time to autocomplete
-    if(!completer->popup()->isVisible()) {
-        MF_DEBUG("Document lines: " << blockCount() << endl);
-        if(blockCount() < Configuration::EDITOR_MAX_AUTOCOMPLETE_LINES) {
-            QChar k{event->key()};
-            if(k.isLetter()) {
-                // IMPROVE get configuration reference and setting - this must be fast
-                if(Configuration::getInstance().getMindState()==Configuration::MindState::THINKING) {
-                    // TODO automatic completion suggestions when thinking - to be FIXED: doubled chars, backspace doesn't work, ...
+    if(Configuration::getInstance().isUiEditorEnableAutocomplete()) {
+        if(!completer->popup()->isVisible()) {
+            MF_DEBUG("Document lines: " << blockCount() << endl);
+            if(blockCount() < Configuration::EDITOR_MAX_AUTOCOMPLETE_LINES) {
+                QChar k{event->key()};
+                if(k.isLetter()) {
                     if(performCompletion()) {
                         event->ignore();
                     }
