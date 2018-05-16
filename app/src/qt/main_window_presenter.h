@@ -44,6 +44,8 @@
 #include "dialogs/insert_image_dialog.h"
 #include "dialogs/insert_link_dialog.h"
 #include "dialogs/rows_and_depth_dialog.h"
+#include "dialogs/new_repository_dialog.h"
+#include "dialogs/new_file_dialog.h"
 
 #include <QtWidgets>
 #include <QtConcurrent/QtConcurrent>
@@ -101,6 +103,8 @@ private:
     InsertImageDialog* insertImageDialog;
     InsertLinkDialog* insertLinkDialog;
     RowsAndDepthDialog* rowsAndDepthDialog;
+    NewRepositoryDialog* newRepositoryDialog;
+    NewFileDialog* newFileDialog;
 
 public:
     explicit MainWindowPresenter(MainWindowView& view);
@@ -137,6 +141,10 @@ public slots:
 #ifdef DO_M8R_DEBUG
     void doActionMindHack();
 #endif
+    void doActionMindNewRepository();
+    void handleMindNewRepository();
+    void doActionMindNewFile();
+    void handleMindNewFile();
     void doActionMindThink();
     void doActionMindSleep();
     void doActionMindLearnRepository();

@@ -27,6 +27,8 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     this->mainWindowPresenter = mwp;
 
     // menu: mind
+    QObject::connect(view->actionMindNewRepository, SIGNAL(triggered()), mwp, SLOT(doActionMindNewRepository()));
+    QObject::connect(view->actionMindNewFile, SIGNAL(triggered()), mwp, SLOT(doActionMindNewFile()));
     QObject::connect(view->actionMindThink, SIGNAL(triggered()), mwp, SLOT(doActionMindThink()));
     QObject::connect(view->actionMindSleep, SIGNAL(triggered()), mwp, SLOT(doActionMindSleep()));
     QObject::connect(view->actionMindLearnRepository, SIGNAL(triggered()), mwp, SLOT(doActionMindLearnRepository()));

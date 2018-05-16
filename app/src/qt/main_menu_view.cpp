@@ -37,7 +37,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // new/devise... new MD repository
     submenuMindNew = menuMind->addMenu("&New");
-    submenuMindNew->setEnabled(false);
     actionMindNewRepository = new QAction(tr("MindForger &Repository"), mainWindow);
     actionMindNewRepository->setStatusTip(tr("Create a brand new MindForger repository..."));
     submenuMindNew->addAction(actionMindNewRepository);

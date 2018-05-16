@@ -56,6 +56,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     insertImageDialog = new InsertImageDialog{&view};
     insertLinkDialog = new InsertLinkDialog{&view};
     rowsAndDepthDialog = new RowsAndDepthDialog(&view);
+    newRepositoryDialog = new NewRepositoryDialog(&view);
+    newFileDialog = new NewFileDialog(&view);
 
     // wire signals
     QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
@@ -71,6 +73,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(insertImageDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatImage()));
     QObject::connect(insertLinkDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatLink()));
     QObject::connect(rowsAndDepthDialog->getGenerateButton(), SIGNAL(clicked()), this, SLOT(handleRowsAndDepth()));
+    QObject::connect(newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
+    //QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindFileRepository()));
 
     // async task 2 GUI events distributor
     distributor = new AsyncTaskNotificationsDistributor(this);
@@ -222,6 +226,27 @@ void MainWindowPresenter::doActionMindHack()
     qDebug() << "[MindHack] Current facet: " << orloj->getFacet();
 }
 #endif
+
+void MainWindowPresenter::doActionMindNewRepository()
+{
+    newRepositoryDialog->show();
+}
+
+void MainWindowPresenter::handleMindNewRepository()
+{
+    // try to create directory, dialog w/ error if EXIST, error if CANNOT be created
+    // once created, create skeleton within it
+    // try to copy resources (don't report errors if stencils not there - cerr only
+}
+
+void MainWindowPresenter::doActionMindNewFile()
+{
+    newFileDialog->show();
+}
+
+void MainWindowPresenter::handleMindNewFile()
+{
+}
 
 void MainWindowPresenter::doActionMindThink()
 {

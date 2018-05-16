@@ -1,5 +1,5 @@
 /*
- insert_image_dialog.cpp     MindForger thinking notebook
+ new_repository_dialog.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,88 +16,96 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "insert_image_dialog.h"
+#include "new_repository_dialog.h"
 
 namespace m8r {
 
-InsertImageDialog::InsertImageDialog(QWidget* parent)
+NewRepositoryDialog::NewRepositoryDialog(QWidget* parent)
     : QDialog(parent)
 {
+    homeDirectory = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+
     // widgets
-    alternateTextLabel = new QLabel{tr("Alternate text:")};
-    alternateTextEdit = new QLineEdit{};
-    pathLabel = new QLabel{tr("Image file path or web address (URL):")};
+    repositoryNameLabel = new QLabel{tr("Repository name:")};
+    repositoryNameEdit = new QLineEdit{};
+    pathLabel = new QLabel{tr("Create repository in directory:")};
     pathEdit = new QLineEdit{};
 
-    findFileButton = new QPushButton{tr("File")};
-    copyToRepoCheckBox = new QCheckBox{tr("copy image to repository")};
-    copyToRepoCheckBox->setEnabled(false);
+    findDirectoryButton = new QPushButton{tr("Directory")};
+
+    copyStencilsCheckbox= new QCheckBox{tr("copy stencils to repository")};
+    copyDocCheckbox = new QCheckBox{tr("copy stencils to repository")};
 
     // IMPROVE disable/enable find button if text/path is valid: freedom vs validation
-    insertButton = new QPushButton{tr("&Insert")};
-    insertButton->setDefault(true);
+    newButton = new QPushButton{tr("&New")};
+    newButton->setDefault(true);
     closeButton = new QPushButton{tr("&Cancel")};
 
     // signals
-    QObject::connect(findFileButton, SIGNAL(clicked()), this, SLOT(handleFindFile()));
+    QObject::connect(findDirectoryButton, SIGNAL(clicked()), this, SLOT(handleFindDirectory()));
     QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     // assembly
     QVBoxLayout* mainLayout = new QVBoxLayout{};
-    mainLayout->addWidget(alternateTextLabel);
-    mainLayout->addWidget(alternateTextEdit);
+    mainLayout->addWidget(repositoryNameLabel);
+    mainLayout->addWidget(repositoryNameEdit);
     mainLayout->addWidget(pathLabel);
     mainLayout->addWidget(pathEdit);
     QHBoxLayout* srcButtonLayout = new QHBoxLayout{};
-    srcButtonLayout->addWidget(findFileButton);
+    srcButtonLayout->addWidget(findDirectoryButton);
     srcButtonLayout->addStretch();
     mainLayout->addLayout(srcButtonLayout);
-    mainLayout->addWidget(copyToRepoCheckBox);
+    mainLayout->addWidget(copyStencilsCheckbox);
+    mainLayout->addWidget(copyDocCheckbox);
 
     QHBoxLayout* buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
     buttonLayout->addWidget(closeButton);
-    buttonLayout->addWidget(insertButton);
+    buttonLayout->addWidget(newButton);
     buttonLayout->addStretch();
 
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
 
     // dialog
-    setWindowTitle(tr("Insert Image"));
+    setWindowTitle(tr("Create New Repository"));
     resize(fontMetrics().averageCharWidth()*55, height());
     setModal(true);
 }
 
-InsertImageDialog::~InsertImageDialog()
+NewRepositoryDialog::~NewRepositoryDialog()
 {
 }
 
-void InsertImageDialog::show() {
-    alternateTextEdit->setText(tr("Image"));
-    alternateTextEdit->selectAll();
-    alternateTextEdit->setFocus();
-    pathEdit->clear();
+void NewRepositoryDialog::show()
+{
+    repositoryNameEdit->setText(tr("mindforger-repository"));
+    repositoryNameEdit->selectAll();
+    repositoryNameEdit->setFocus();
+    pathEdit->setText(homeDirectory);
+
+    copyStencilsCheckbox->setChecked(true);
+    copyDocCheckbox->setChecked(true);
 
     QDialog::show();
 }
 
-void InsertImageDialog::handleFindFile()
+void NewRepositoryDialog::handleFindDirectory()
 {
     QString homeDirectory
         = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
 
     QFileDialog fileDialog{this};
-    fileDialog.setWindowTitle(tr("Choose File with Image"));
-    fileDialog.setFileMode(QFileDialog::ExistingFile);
+    fileDialog.setWindowTitle(tr("Choose Directory"));
+    fileDialog.setFileMode(QFileDialog::Directory);
     fileDialog.setDirectory(homeDirectory);
     fileDialog.setViewMode(QFileDialog::Detail);
 
-    QStringList imageFileNames{};
+    QStringList fileNames{};
     if(fileDialog.exec()) {
-        imageFileNames = fileDialog.selectedFiles();
-        if(imageFileNames.size()==1) {
-            pathEdit->setText(imageFileNames[0]);
+        fileNames = fileDialog.selectedFiles();
+        if(fileNames.size()==1) {
+            pathEdit->setText(fileNames[0]);
         } // else too many files
     } // else directory closed / nothing choosen
 }
