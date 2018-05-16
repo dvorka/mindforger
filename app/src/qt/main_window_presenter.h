@@ -146,6 +146,7 @@ public slots:
     void handleMindScope();
     void doActionMindPreferences();
     void handleMindPreferences();
+    void doActionMindRemember();
     void doActionMindSnapshot();
     void doActionExit();
     // recall

@@ -54,21 +54,20 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindLearnFile->setStatusTip(tr("Learn knowledge by loading a Markdown or MindForger file..."));
     submenuMindLearn->addAction(actionMindLearnFile);
 
-    // relearn ... recent repositories and files
-    submenuMindRelearn = new RecentFilesMenu(tr("Relearn"), mainWindow);
-    submenuMindRelearn->setStatusTip(tr("Relearn recently opened MindForger repositories, Markdown repositories or files"));
+    // re-learn/remind ... recent repositories and files
+    submenuMindRelearn = new RecentFilesMenu(tr("&Remind"), mainWindow);
+    submenuMindRelearn->setStatusTip(tr("Re-learn recently opened MindForger repositories, Markdown repositories or files"));
     submenuMindRelearn->setEnabled(false);
 
     // remember... by flushing caches, saving unsaved Ns, saving Os/Ns with changed read metadata, ...
     actionMindRemember = new QAction(tr("Re&member"), mainWindow);
-    actionMindRemember->setStatusTip(tr("Remember Things by ensuring Memory persistence"));
-    actionMindRemember->setEnabled(false);
+    actionMindRemember->setStatusTip(tr("Persist all Things in Memory"));
 
-    // remind ... smart *combined* (semantic) mind search using FTS/associations/... to find O or N
-    actionMindRecall = new QAction(tr("&Recall"), mainWindow);
+    // recall ... smart *combined* (semantic) mind search using FTS/associations/... to find O or N
+    //actionMindRecall = new QAction(tr("&Recall"), mainWindow);
     // IMPROVE show memory dwell as a base for reminding a note
-    actionMindRecall->setStatusTip(tr("Recall a Note by searching memory dwell, associations and similar Notes"));
-    actionMindRecall->setEnabled(false);
+    //actionMindRecall->setStatusTip(tr("Recall a Note by searching memory dwell, associations and similar Notes"));
+    //actionMindRecall->setEnabled(false);
 
     // think ... toggle mental processes ~ enable associations/similarity/search based suggestions on searching/reading/writing notes
     actionMindThink = new QAction(tr("&Think"), mainWindow);
@@ -77,10 +76,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // sleep ... opposite to think ~ stop mental processes and clear Mind
     actionMindSleep = new QAction(tr("&Sleep"), mainWindow);
     actionMindSleep->setStatusTip(tr("Stop sugggestions and clear Mind"));
-    actionMindSleep->setEnabled(false);
 
     // scope ... don't show any N/O older than 1Y/3M/...
-    actionMindScope = new QAction(tr("Sco&pe"), mainWindow);
+    actionMindScope = new QAction(tr("S&cope"), mainWindow);
     actionMindScope->setStatusTip(tr("Don't show Notebooks and Notes older than..."));
 
     // TODO remove this menu item > make it Configuration option in Mind menu (Limbo or erase)
@@ -93,13 +91,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     //actionMindDream = new QAction(tr("&Dream"), mainWindow);
     //actionMindDream->setStatusTip(tr("Tidy up, clean, re-infer, check and optimize Memory which is otherwise done on your inactivity"));
 
-    actionMindSnapshot = new QAction(tr("D&ump"), mainWindow);
+    actionMindSnapshot = new QAction(tr("Ret&ain"), mainWindow);
     actionMindSnapshot->setStatusTip(tr("Create backup archive of the current repository and store it in home directory"));
     actionMindSnapshot->setEnabled(false);
 
     // TODO submenu: printer, HTML, PDF
 
-    actionMindPreferences = new QAction(tr("&Adapt"), mainWindow);
+    actionMindPreferences = new QAction(tr("Ada&pt"), mainWindow);
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
     actionMindPreferences->setStatusTip(tr("Adapt Mind by setting your preferences..."));
 
@@ -110,16 +108,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addMenu(submenuMindNew);
     menuMind->addMenu(submenuMindLearn);
     menuMind->addMenu(submenuMindRelearn);
-    menuMind->addAction(actionMindRecall);
-    menuMind->addAction(actionMindRemember);
     menuMind->addAction(actionMindScope);
-    menuMind->addAction(actionMindForget);
-    menuMind->addSeparator();
     menuMind->addAction(actionMindThink);
     menuMind->addAction(actionMindSleep);
-    menuMind->addSeparator();
+    menuMind->addAction(actionMindRemember);
     menuMind->addAction(actionMindSnapshot);
     menuMind->addAction(actionMindPreferences);
+    menuMind->addAction(actionMindForget);
     menuMind->addSeparator();
     menuMind->addAction(actionExit);
 #ifdef DO_M8R_DEBUG
@@ -551,14 +546,14 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
 
 void MainMenuView::showFacetMindThink()
 {
-    actionMindThink->setEnabled(false);
-    actionMindSleep->setEnabled(true);
+    actionMindThink->setVisible(false);
+    actionMindSleep->setVisible(true);
 }
 
 void MainMenuView::showFacetMindSleep()
 {
-    actionMindThink->setEnabled(true);
-    actionMindSleep->setEnabled(false);
+    actionMindThink->setVisible(true);
+    actionMindSleep->setVisible(false);
 }
 
 void MainMenuView::addRepositoryOrFileToRelearn(const QString& path)

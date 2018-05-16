@@ -1186,6 +1186,11 @@ void MainWindowPresenter::doActionNoteDemote()
     }
 }
 
+void MainWindowPresenter::doActionMindRemember()
+{
+    mdConfigRepresentation->save(config);
+}
+
 void MainWindowPresenter::doActionMindSnapshot()
 {
 }

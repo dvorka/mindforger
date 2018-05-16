@@ -68,7 +68,6 @@ public:
     QAction* actionMindLearnFile;
     RecentFilesMenu* submenuMindRelearn;
     QAction* actionMindRemember;
-    QAction* actionMindRecall;
     QAction* actionMindThink;
     //QAction* actionMindDream;
     QAction* actionMindSleep;
