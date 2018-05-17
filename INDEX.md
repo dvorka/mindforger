@@ -34,7 +34,7 @@ Read:
 
 Check `man mindforger`
 
-Feature highlights:
+Features:
 
 * Single Markdown file editor
 * Menu/dialogs for Markdow syntax - from bold to link creation
