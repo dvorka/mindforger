@@ -46,7 +46,7 @@ script: # make lib unit tests > run lib unit tests > make MF > install MF
   - cd deps/discount && ./configure.sh && make ; cd ../..
   - "echo \"M8RDEBUG: g++ compiler is set to: ${CXX}\""  
   - cd lib/test # UNIT tests
-  - qmake -r CONFIG+=travisci QMAKE_CXX=${CXX} mindforger-lib-unit-tests.pro
+  - qmake -r CONFIG+=travisci CONFIG+=mfunits QMAKE_CXX=${CXX} mindforger-lib-unit-tests.pro
   - make
   - cd src && export M8R_GIT_PATH="${M8RHOME}" && ./mindforger-lib-unit-tests > /tmp/mindforger-unit-tests.log 2>&1 ; true
   - cd ../../..

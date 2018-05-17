@@ -22,7 +22,8 @@ using namespace std;
 
 namespace m8r {
 
-const std::string Installer::DEFAULT_SYSTEM_REPOSITORY_PATH = std::string{"/usr/share/doc/mindforger"};
+// IMPROVE platform specific delimiters
+const std::string Installer::FILE_PATH_DEFAULT_SYSTEM_REPOSITORY = std::string{"/usr/share/doc/mindforger"};
 
 Installer::Installer()
 {
@@ -36,7 +37,9 @@ bool Installer::createEmptyMindForgerRepository(const string& directory)
 {
     if(!directory.empty()) {
         if(!isDirectoryOrFileExists(directory.c_str())) {
-            createDirectory(directory);
+            if(!createDirectory(directory)) {
+                return false;
+            }
         }
         // create skeleton directories: ./memory ./mind ./limbo ./stencils/outlines|notes
         string path{};
@@ -77,22 +80,47 @@ bool Installer::createEmptyMindForgerRepository(const string& directory)
     return false;
 }
 
-bool Installer::initMindForgerRepository(bool copyDoc, bool copyStencils)
+bool Installer::initMindForgerRepository(bool copyDoc, bool copyStencils, const char* dstRepository)
 {
-    if(copyDoc) {
+    if(isDirectoryOrFileExists(dstRepository)) {
+        if(isDirectoryOrFileExists(FILE_PATH_DEFAULT_SYSTEM_REPOSITORY.c_str())) {
+            if(copyDoc) {
+                string srcPath{FILE_PATH_DEFAULT_SYSTEM_REPOSITORY};
+                srcPath += FILE_PATH_SEPARATOR;
+                srcPath += FILE_PATH_MEMORY;
+                string dstPath{dstRepository};
+                dstPath += FILE_PATH_SEPARATOR;
+                dstPath += FILE_PATH_MEMORY;
+                if(isDirectoryOrFileExists(srcPath.c_str())) {
+                    copyDirectoryRecursively(srcPath.c_str(), dstPath.c_str());
+                } else {
+                    cerr << "ERROR: attempt to copy documentation failed - source directory doesn't exist" << endl;
+                }
+            }
 
-    }
+            if(copyStencils) {
+                string srcPath{FILE_PATH_DEFAULT_SYSTEM_REPOSITORY};
+                srcPath += FILE_PATH_SEPARATOR;
+                srcPath += FILE_PATH_STENCILS;
+                string dstPath{dstRepository};
+                dstPath += FILE_PATH_SEPARATOR;
+                dstPath += FILE_PATH_STENCILS;
+                if(isDirectoryOrFileExists(srcPath.c_str())) {
+                    copyDirectoryRecursively(srcPath.c_str(), dstPath.c_str());
+                } else {
+                    cerr << "ERROR: attempt to copy stencils failed - source directory doesn't exist" << endl;
+                }
+            }
 
-    if(copyStencils) {
-
-    }
-}
-
-void Installer::createDirectory(const string& path) {
-    int e = mkdir(path.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
-    if(e) {
-        cerr << "Failed to create directory '" << path << "' with error " << e;
-        throw MindForgerException("Directory creation failed.");
+            // resource copy is NOT intentionally strict - copy what's possible, ignore eventual errors
+            return true;
+        } else {
+            cerr << "ERROR: default source repository not found in " << FILE_PATH_DEFAULT_SYSTEM_REPOSITORY << endl;
+            return false;
+        }
+    } else {
+        cerr << "ERROR: it is expected that empty target repository exists " << dstRepository << endl;
+        return false;
     }
 }
 

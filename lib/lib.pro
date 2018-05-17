@@ -20,6 +20,9 @@ TEMPLATE = lib
 CONFIG += staticlib
 CONFIG -= qt
 
+mfunits {
+  DEFINES = DO_M8R_DEBUG
+}
 !travisci {
   QMAKE_CXX = ccache g++
 }

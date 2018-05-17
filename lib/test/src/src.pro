@@ -63,7 +63,8 @@ SOURCES += \
     ./html/html_test.cpp \
     ./ai/nlp_test.cpp \
     ../benchmark/trie_benchmark.cpp \
-    ../benchmark/ai_benchmark.cpp
+    ../benchmark/ai_benchmark.cpp \
+    gear/file_utils_test.cpp
 
 HEADERS += \
     ./test_gear.h

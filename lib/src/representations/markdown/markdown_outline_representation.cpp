@@ -364,7 +364,6 @@ void MarkdownOutlineRepresentation::description(const std::string* md, std::vect
     }
 }
 
-
 string* MarkdownOutlineRepresentation::to(const Outline* outline)
 {
     string* md = new string{};

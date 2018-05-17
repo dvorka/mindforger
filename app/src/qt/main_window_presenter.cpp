@@ -247,10 +247,13 @@ void MainWindowPresenter::handleMindNewRepository()
     }
 
     // copy doc and stencils
-    config.getInstaller()->initMindForgerRepository(
+    if(!config.getInstaller()->initMindForgerRepository(
         newRepositoryDialog->isCopyDoc(),
-        newRepositoryDialog->isCopyStencils()
-    );
+        newRepositoryDialog->isCopyStencils(),
+        newRepositoryDialog->getRepositoryPath().toStdString().c_str()
+    )) {
+        statusBar->showError(tr("ERROR: repository created, but attempt to copy documentation and/or stencils failed"));
+    }
 
     // open new repository
     doActionMindRelearn(newRepositoryDialog->getRepositoryPath());

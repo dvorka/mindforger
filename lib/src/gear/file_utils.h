@@ -36,6 +36,7 @@
 #include <vector>
 
 #include "../debug.h"
+#include "../exceptions.h"
 
 #ifdef __linux__
 constexpr const auto FILE_PATH_SEPARATOR = "/";
@@ -83,6 +84,7 @@ bool isFile(const char* path);
 char* makeTempDirectory(char* dirNamePefix);
 int removeDirectoryRecursively(const char* path);
 int copyDirectoryRecursively(const char* srcPath, const char* dstPath);
+bool createDirectory(const std::string& path);
 
 } // m8r namespace
 

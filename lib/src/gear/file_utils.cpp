@@ -172,6 +172,16 @@ bool isFile(const char* path)
     }
 }
 
+bool createDirectory(const string& path) {
+    int e = mkdir(path.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+    if(e) {
+        cerr << "Failed to create directory '" << path << "' with error " << e;
+        return false;
+    } else {
+        return true;
+    }
+}
+
 char* makeTempDirectory(char* dirNamePrefix)
 {
     char tmpl[100];
@@ -189,82 +199,88 @@ int removeDirectoryRecursively(const char* path)
    size_t path_len = strlen(path);
    int r = -1;
    if(d) {
-      struct dirent* p;
-      r = 0;
-      while(!r && (p=readdir(d))) {
-          int r2 = -1;
-          char *buf;
-          size_t len;
-          // skip the names "." and ".." as I don't want to recurse on them
-          if (!strcmp(p->d_name, ".") || !strcmp(p->d_name, "..")) {
-             continue;
-          }
-          len = path_len + strlen(p->d_name) + 2;
-          buf = new char[len];
-          if(buf) {
-             struct stat statbuf;
-             // IMPROVE MF_DEBUG
-             snprintf(buf, len, "%s/%s", path, p->d_name);
-             if (!stat(buf, &statbuf)) {
-                if (S_ISDIR(statbuf.st_mode)) {
-                   r2 = removeDirectoryRecursively(buf);
-                } else {
-                   r2 = unlink(buf);
-                }
-             }
-             delete[] buf;
-          }
-          r = r2;
-      }
-      closedir(d);
+       struct dirent* p;
+       r = 0;
+       while(!r && (p=readdir(d))) {
+           int r2 = -1;
+           char *buf;
+           size_t len;
+           // skip the names "." and ".." as I don't want to recurse on them
+           if(!strcmp(p->d_name, ".") || !strcmp(p->d_name, "..")) {
+               continue;
+           }
+           len = path_len + strlen(p->d_name) + 2;
+           buf = new char[len];
+           if(buf) {
+               struct stat statbuf;
+               // IMPROVE MF_DEBUG
+               snprintf(buf, len, "%s/%s", path, p->d_name);
+               if(!stat(buf, &statbuf)) {
+                   if(S_ISDIR(statbuf.st_mode)) {
+                       r2 = removeDirectoryRecursively(buf);
+                   } else {
+                       r2 = unlink(buf);
+                   }
+               }
+               delete[] buf;
+           }
+           r = r2;
+       }
+       closedir(d);
    }
    if(!r) {
-      r = rmdir(path);
+       r = rmdir(path);
    }
 
    return r;
 }
 
+// IMPROVE error handling to be fixed
 int copyDirectoryRecursively(const char* srcPath, const char* dstPath)
 {
-   DIR *d = opendir(srcPath);
-   size_t path_len = strlen(srcPath);
-   int r = -1;
-   if(d) {
-      struct dirent *p;
-      r = 0;
-      while(!r && (p=readdir(d))) {
-          int r2 = -1;
-          char *buf;
-          size_t len;
-          // skip the names "." and ".." as I don't want to recurse on them
-          if (!strcmp(p->d_name, ".") || !strcmp(p->d_name, "..")) {
-             continue;
-          }
-          len = path_len + strlen(p->d_name) + 2;
-          buf = new char[len];
-          if(buf) {
-             struct stat statbuf;
-             // IMPROVE MF_DEBUG
-             snprintf(buf, len, "%s/%s", srcPath, p->d_name);
-             if (!stat(buf, &statbuf)) {
-                if (S_ISDIR(statbuf.st_mode)) {
-                   r2 = removeDirectoryRecursively(buf);
-                } else {
-                   r2 = unlink(buf);
-                }
-             }
-             delete[] buf;
-          }
-          r = r2;
-      }
-      closedir(d);
-   }
-   if(!r) {
-      r = rmdir(srcPath);
-   }
+    DIR *d = opendir(srcPath);
+    size_t path_len = strlen(srcPath);
+    int r = -1;
+    if(d) {
+        MF_DEBUG("DIR: " << dstPath << endl);
+        if(!isDirectoryOrFileExists(dstPath)) createDirectory(string{dstPath});
 
-   return r;
+        struct dirent *p;
+        r = 0;
+        while(!r && (p=readdir(d))) {
+            int r2 = -1;
+            char *srcBuf, *dstBuf;
+            size_t len;
+            // skip the names "." and ".." as I don't want to recurse on them
+            if(!strcmp(p->d_name, ".") || !strcmp(p->d_name, "..")) {
+                continue;
+            }
+            len = path_len + strlen(p->d_name) + 2;
+            srcBuf = new char[len];
+            dstBuf = new char[len];
+            if(srcBuf) {
+                struct stat statbuf;
+                // IMPROVE MF_DEBUG
+                snprintf(srcBuf, len, "%s/%s", srcPath, p->d_name);
+                snprintf(dstBuf, len, "%s/%s", dstPath, p->d_name);
+                if(!stat(srcBuf, &statbuf)) {
+                    if(S_ISDIR(statbuf.st_mode)) {
+                        r2 = copyDirectoryRecursively(srcBuf, dstBuf);
+                    } else {
+                        MF_DEBUG("FILE: " << dstBuf << endl);
+                        if(!isDirectoryOrFileExists(dstBuf)) copyFile(string{srcBuf}, string{dstBuf});
+                        r2 = 0;
+                    }
+                }
+                delete[] srcBuf;
+                delete[] dstBuf;
+            }
+            r = r2;
+        }
+        closedir(d);
+    }
+
+    return r;
 }
 
 } // m8r namespace

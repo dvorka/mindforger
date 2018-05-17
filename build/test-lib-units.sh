@@ -29,12 +29,15 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
 # tests
+#export OPTION_TEST="FileGearTestCase.DeepCopy"
+export OPTION_TEST="FileGearTestCase.DeepCopyToExisting"
 #export OPTION_TEST="AiNlpTestCase.AaUniverseBow"
 #export OPTION_TEST="AiNlpTestCase.AaRepositoryBow"
 #export OPTION_TEST="AiNlpTestCase.Outline"
 #export OPTION_TEST="AiNlpTestCase.Lexicon"
 #export OPTION_TEST="AiNlpTestCase.Tokenizer"
 #export OPTION_TEST="AiNlpTestCase.Stemmer"
+#export OPTION_TEST="HtmlTestCase.*"
 #export OPTION_TEST="HtmlTestCase.TaskList"
 #export OPTION_TEST="HtmlTestCase.NoteLinks"
 #export OPTION_TEST="MarkdownParserTestCase.Links"
@@ -64,7 +67,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="RepositoryIndexerTestCase.MindForgerRepository"
 #export OPTION_TEST="RepositoryIndexerTestCase.MindForgerFile"
 #export OPTION_TEST="RepositoryIndexerTestCase.MarkdownFile"
-export OPTION_TEST="RepositoryIndexerTestCase.MakePathRelative"
+#export OPTION_TEST="RepositoryIndexerTestCase.MakePathRelative"
 #export OPTION_TEST="NoteTestCase.*"
 #export OPTION_TEST="NoteTestCase.MangleNoteName"
 #export OPTION_TEST="NoteTestCase.DeepUpDownFirstLastClone"
@@ -73,7 +76,7 @@ export OPTION_TEST="RepositoryIndexerTestCase.MakePathRelative"
 #export OPTION_TEST="ConfigurationTestCase.*"
 #export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
 #export OPTION_TEST="ConfigurationTestCase.SaveAndLoad"
-##export OPTION_TEST="ConfigurationTestCase.FromConstructor"
+#export OPTION_TEST="ConfigurationTestCase.FromConstructor"
 #export OPTION_TEST="ConfigurationTestCase.Environment"
 #export OPTION_TEST="MarkdownParserTestCase.Bug37Notrailing"
 #export OPTION_TEST="MarkdownParserBugsTestCase.*"
@@ -128,10 +131,16 @@ export BUILD_DIR=${SCRIPT_DIR}/../lib/test
 #  - use -v only if you want a lot of info (might be too much)
 if [ ${OPTION_RECOMPILE} ]
 then
-    cd ${BUILD_DIR} && cd ../../deps && make clean && rm *.a && qmake deps.pro
-    cd ${BUILD_DIR} && cd .. && make clean && rm *.a && qmake lib.pro
-    cd ${BUILD_DIR} && cd ./src && make clean && qmake src.pro
-    cd ${BUILD_DIR} && make clean && qmake mindforger-lib-unit-tests.pro && make -j${M8R_CPU_CORES}
+    # cleanup
+    cd ${BUILD_DIR} && cd ../../deps && make clean && rm *.a
+    cd ${BUILD_DIR} && cd .. && make clean && rm *.a
+    cd ${BUILD_DIR} && cd ./src && make clean
+    # recursive qmake and recompilation - IMPORTANT: mfunits ensures MF_DEBUG is enabled in library src
+    cd ${BUILD_DIR} && make clean && qmake -r mindforger-lib-unit-tests.pro CONFIG+=mfunits && make -j${M8R_CPU_CORES}
+    if [ ${?} -ne 0 ]
+    then
+	exit 1
+    fi
 fi
 
 # logs

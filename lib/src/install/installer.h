@@ -33,7 +33,7 @@ namespace m8r {
 class Installer
 {
 public:
-    static const std::string DEFAULT_SYSTEM_REPOSITORY_PATH;
+    static const std::string FILE_PATH_DEFAULT_SYSTEM_REPOSITORY;
 
 public:
     explicit Installer();
@@ -53,10 +53,7 @@ public:
     /**
      * @brief Init empty MindForger repository w/ default documentation and stencils.
      */
-    bool initMindForgerRepository(bool copyDoc, bool copyStencils);
-
-private:
-    void createDirectory(const std::string& path);
+    bool initMindForgerRepository(bool copyDoc, bool copyStencils, const char* dstRepository);
 };
 
 }
