@@ -174,7 +174,9 @@ void Configuration::findOrCreateDefaultRepository()
         } else {
             // create default repository w/ default content using Installer class
             MF_DEBUG("  Creating a default MF repository in " << defaultRepositoryPath << endl);
-            installer->createEmptyMindForgerRepository(defaultRepositoryPath);
+            if(installer->createEmptyMindForgerRepository(defaultRepositoryPath)) {
+                installer->initMindForgerRepository(true, true, defaultRepositoryPath.c_str());
+            }
             if(!activeRepository) {
                 setActiveRepository(addRepository(new Repository(defaultRepositoryPath)));
             }
