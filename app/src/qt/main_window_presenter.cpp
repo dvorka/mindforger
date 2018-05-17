@@ -74,7 +74,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(insertLinkDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatLink()));
     QObject::connect(rowsAndDepthDialog->getGenerateButton(), SIGNAL(clicked()), this, SLOT(handleRowsAndDepth()));
     QObject::connect(newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
-    //QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindFileRepository()));
+    QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
 
     // async task 2 GUI events distributor
     distributor = new AsyncTaskNotificationsDistributor(this);
@@ -266,6 +266,18 @@ void MainWindowPresenter::doActionMindNewFile()
 
 void MainWindowPresenter::handleMindNewFile()
 {
+    if(isDirectoryOrFileExists(newFileDialog->getFilePath().toStdString().c_str())) {
+        QMessageBox::critical(&view, tr("New Markdown File Error"), tr("Specified file path already exists!"));
+        return;
+    }
+
+    // create foo file ...
+    stringToFile(
+        newFileDialog->getFilePath().toStdString(),
+        "# New Markdown File\n\nThis is a new Markdown file created by MindForger.\n\n#Section 1\nThe first section.\n\n");
+
+    // ... and open it
+    doActionMindRelearn(newFileDialog->getFilePath());
 }
 
 void MainWindowPresenter::doActionMindThink()

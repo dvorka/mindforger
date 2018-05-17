@@ -21,11 +21,28 @@
 
 #include <QtWidgets>
 
+#include "../../lib/src/config/configuration.h"
+
 namespace m8r {
 
-class NewFileDialog : public QObject
+class NewFileDialog : public QDialog
 {
     Q_OBJECT
+
+private:
+    QString homeDirectory;
+
+    QLabel* fileNameLabel;
+    QLineEdit* repositoryNameEdit;
+    QLabel* dirLabel;
+    QLineEdit* dirEdit;
+    QLabel* pathLabel;
+    QLineEdit* pathEdit;
+
+    QPushButton* findDirectoryButton;
+
+    QPushButton* newButton;
+    QPushButton* closeButton;
 
 public:
     explicit NewFileDialog(QWidget* parent);
@@ -35,7 +52,13 @@ public:
     NewFileDialog &operator=(const NewFileDialog&&) = delete;
     ~NewFileDialog();
 
-    void show() {}
+    void show();
+    QPushButton* getNewButton() const { return newButton; }
+    QString getFilePath() const { return pathEdit->text(); } // file path
+
+private slots:
+    void refreshPath();
+    void handleFindDirectory();
 };
 
 }
