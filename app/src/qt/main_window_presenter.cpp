@@ -964,8 +964,15 @@ void MainWindowPresenter::doActionOutlineHome()
     if(orloj->isFacetActiveOutlineManagement()) {
         const Tag* t = mind->remind().getOntology().findOrCreateTag(Tag::KeyMindForgerHome());
         Outline* o = orloj->getOutlineView()->getCurrentOutline();
-        if(mind->setOutlineUniqueTag(t, o->getKey())) {
-            statusBar->showInfo(tr("Notebook '%1' successfully marked as home").arg(o->getName().c_str()));
+        // if O has tag, then toggle (remove) it, else set the tag
+        if(o->hasTag(t)) {
+            o->removeTag(t);
+            mind->remind().remember(o->getKey());
+            statusBar->showInfo(tr("Home tag toggled/removed - Notebook '%1' is no longer home").arg(o->getName().c_str()));
+        } else {
+            if(mind->setOutlineUniqueTag(t, o->getKey())) {
+                statusBar->showInfo(tr("Notebook '%1' successfully marked as home").arg(o->getName().c_str()));
+            }
         }
     } else {
         QMessageBox::critical(&view, tr("Make Notebook home"), tr("Notebook can be marked as home only when viewed."));

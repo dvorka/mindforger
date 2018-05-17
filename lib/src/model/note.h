@@ -129,6 +129,13 @@ public:
     void addTag(const Tag* tag);
     void setTag(const Tag* tag);
     void setTags(const std::vector<const Tag*>* tags);
+    bool hasTag(const Tag* tag) const {
+        if(std::find(tags.begin(), tags.end(), tag) == tags.end()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     void addName(const std::string& s);
     const NoteType* getType() const;
     void setType(const NoteType* type);

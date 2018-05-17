@@ -184,6 +184,13 @@ public:
     void setTags(const std::vector<const Tag*>* tags);
     void addTag(const Tag* tag);
     bool removeTag(const Tag* tag);
+    bool hasTag(const Tag* tag) const {
+        if(std::find(tags.begin(), tags.end(), tag) == tags.end()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     time_t getModified() const;
     void makeModified();
     void setModified();
