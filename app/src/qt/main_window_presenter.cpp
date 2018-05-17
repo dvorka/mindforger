@@ -1106,10 +1106,6 @@ void MainWindowPresenter::doActionNoteClone()
     }
 }
 
-void MainWindowPresenter::doActionNoteSave()
-{
-}
-
 void MainWindowPresenter::doActionNoteFirst()
 {
     Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();

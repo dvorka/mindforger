@@ -342,13 +342,21 @@ void MarkdownOutlineRepresentation::description(const std::string* md, std::vect
 {
     if(md) {
         istringstream is(*md);
+        bool codeblock=false;
         static const char SECTION = '#';
+        static const char CB = '`';
         for(string line; std::getline(is, line); ) {
-            // TODO add quoting of multiline sections that use === and ---
-            // quote description: TAB all lines starting with # to ensure correct sections separation
-            if(line.size() && line.at(0)==SECTION) {
-                line += "    ";
+            // stupid and ugly hack: TAB all lines starting with # to ensure correct sections separation
+            // (user creates such line when edits N description)
+            if(line.size()>=3 && line[0]==CB && line[1]==CB && line[2]==CB) {
+                codeblock = !codeblock;
             }
+            if(line.size() && line.at(0)==SECTION && !codeblock) {
+                line.insert(0, " ");
+            }
+
+            // TODO add quoting of multiline sections that use === and ---
+
             description.push_back(new string{line});
         }
     } else {

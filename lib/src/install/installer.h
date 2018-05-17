@@ -33,6 +33,9 @@ namespace m8r {
 class Installer
 {
 public:
+    static const std::string DEFAULT_SYSTEM_REPOSITORY_PATH;
+
+public:
     explicit Installer();
     Installer(const Installer&) = delete;
     Installer(const Installer&&) = delete;

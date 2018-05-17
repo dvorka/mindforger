@@ -90,6 +90,7 @@ void NoteEditPresenter::slotSaveNote()
 
         if(!view->isDescriptionEmpty()) {
             string s{view->getDescription().toStdString()};
+            //MF_DEBUG("- BEGIN N description -" << endl << s << "- END N description -" << endl);
             vector<string*> d{};
             mwp->getMarkdownRepresentation()->description(&s, d);
             currentNote->setDescription(d);
@@ -105,9 +106,7 @@ void NoteEditPresenter::slotSaveNote()
         // remember
         mwp->getMind()->remind().remember(currentNote->getOutlineKey());
         mwp->getStatusBar()->showInfo(tr("Note saved!"));
-#ifdef DO_M8R_DEBUG
-        qDebug() << "Note " << QString::fromStdString(currentNote->getName()) << " saved!";
-#endif
+        MF_DEBUG("Note '" << currentNote->getName() << "' saved!" << endl);
     } else {
         mwp->getStatusBar()->showError(tr("Attempt to save data from UI to Note, but no Note is set."));
     }

@@ -22,6 +22,8 @@ using namespace std;
 
 namespace m8r {
 
+const std::string Installer::DEFAULT_SYSTEM_REPOSITORY_PATH = std::string{"/usr/share/doc/mindforger"};
+
 Installer::Installer()
 {
 }
