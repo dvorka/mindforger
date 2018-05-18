@@ -170,8 +170,12 @@ void MainWindowPresenter::showInitialView()
 
 void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
 {
+#ifdef DO_M8R_DEBUG
     MF_DEBUG("HTML click handler: " << url.toString().toStdString() << std::endl);
-    orloj->getMainWindow()->getStatusBar()->showInfo(QString(tr("Hyperlink %1 clicked...")).arg(url.toString()));
+    MF_DEBUG("  Memory path: " << config.getMemoryPath() << endl);
+#endif
+
+    statusBar->showInfo(QString(tr("Hyperlink %1 clicked...")).arg(url.toString()));
 
     if(url.toString().size()) {
         if(url.toString().startsWith("file://")) {
@@ -180,23 +184,49 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
             size_t offset;
             if((offset = key.find("#")) != string::npos) {
                 // it CAN be Note
-                string mangledNoteName = key.substr(offset+1);
-                key.erase(offset);
-                MF_DEBUG("  O lookup using key: " << key << std::endl);
 
-                // IMPROVE find note within outline
-                Outline* o=orloj->getMind()->remind().getOutline(key);
-                if(o) {
-                    Note* n = o->getNoteByMangledName(mangledNoteName);
-                    if(n) {
-                        orloj->showFacetNoteView(n);
-                        return;
-                    } else {
-                        // fallback to Notebook for hyperlink found
-                        orloj->showFacetOutline(o);
-                        return;
+                // HANDLE relative N link: #mangled-section-name
+                //   Qt completes relative link w/ base URL which is set to MEMORY path:
+                //   /repository/memory/#mangled-section-name
+                string relativeLinkPrefix{config.getMemoryPath()};
+                relativeLinkPrefix.append(FILE_PATH_SEPARATOR);
+                relativeLinkPrefix.append("#");
+                MF_DEBUG("  Relative prefix: " << relativeLinkPrefix << endl);
+                if(stringStartsWith(key, relativeLinkPrefix)) {
+                    // it's a relative link within current O
+                    string mangledNoteName = key.substr(offset+1);
+                    MF_DEBUG("  N lookup using: " << mangledNoteName << endl);
+                    Outline* o=orloj->getMind()->remind().getOutline(orloj->getOutlineView()->getCurrentOutline()->getKey());
+                    if(o) {
+                        Note* n = o->getNoteByMangledName(mangledNoteName);
+                        if(n) {
+                            orloj->showFacetNoteView(n);
+                            return;
+                        }
                     }
-                } // else fallback to open using desktop services
+                    // if N not found, then link is broken - do nothing
+                    statusBar->showInfo(QString(tr("Link target not found for relative link %1")).arg(QString::fromStdString(mangledNoteName)));
+                    return;
+                } else {
+                    // HANDLE O#N link
+                    string mangledNoteName = key.substr(offset+1);
+                    key.erase(offset);
+                    MF_DEBUG("  O lookup using key: " << key << endl);
+
+                    // IMPROVE find note within outline
+                    Outline* o=orloj->getMind()->remind().getOutline(key);
+                    if(o) {
+                        Note* n = o->getNoteByMangledName(mangledNoteName);
+                        if(n) {
+                            orloj->showFacetNoteView(n);
+                            return;
+                        } else {
+                            // fallback to Notebook for hyperlink found
+                            orloj->showFacetOutline(o);
+                            return;
+                        }
+                    } // else fallback to open using desktop services
+                }
             } else {
                 // it CAN be Outline
                 MF_DEBUG("  O lookup using key: " << key << std::endl);

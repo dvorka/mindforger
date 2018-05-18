@@ -38,8 +38,6 @@ void NoteView::mouseDoubleClickEvent(QMouseEvent* event)
 
 void NoteView::keyPressEvent(QKeyEvent* event)
 {
-    // IMPROVE remove qDebug() << "[NoteView] KEY event" << event->key();
-
     if(event->modifiers() & Qt::AltModifier){
         if(event->key()==Qt::Key_Left) {
             signalFromViewNoteToOutlines();

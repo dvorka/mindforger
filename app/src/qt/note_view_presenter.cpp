@@ -45,6 +45,8 @@ NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
     this->htmlRepresentation
         = orloj->getMainWindow()->getHtmlRepresentation();
 
+    this->currentNote = nullptr;
+
     QObject::connect(view, SIGNAL(linkClicked(QUrl)), this, SLOT(slotLinkClicked(QUrl)));
     QObject::connect(view, SIGNAL(signalMouseDoubleClickEvent()), this, SLOT(slotEditNote()));
     QObject::connect(view, SIGNAL(signalFromViewNoteToOutlines()), orloj, SLOT(slotShowOutlines()));
