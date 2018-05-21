@@ -58,7 +58,11 @@ public:
      * If target absolute path is in the current repository, then construct
      * relative path from current absolute path to target absolute path.
      */
-    static std::string makePathRelative(const std::string& path, const Repository* repository);
+    static std::string makePathRelative(
+            const Repository* currentRepository,
+            const std::string& srcAbsoluteFile,
+            const std::string& dstAbsolutePath,
+            const bool dstIsFile=true);
 
 private:
     Repository* repository;

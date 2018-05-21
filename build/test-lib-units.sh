@@ -30,7 +30,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 
 # tests
 #export OPTION_TEST="FileGearTestCase.DeepCopy"
-export OPTION_TEST="FileGearTestCase.DeepCopyToExisting"
+#export OPTION_TEST="FileGearTestCase.DeepCopyToExisting"
 #export OPTION_TEST="AiNlpTestCase.AaUniverseBow"
 #export OPTION_TEST="AiNlpTestCase.AaRepositoryBow"
 #export OPTION_TEST="AiNlpTestCase.Outline"
@@ -67,7 +67,7 @@ export OPTION_TEST="FileGearTestCase.DeepCopyToExisting"
 #export OPTION_TEST="RepositoryIndexerTestCase.MindForgerRepository"
 #export OPTION_TEST="RepositoryIndexerTestCase.MindForgerFile"
 #export OPTION_TEST="RepositoryIndexerTestCase.MarkdownFile"
-#export OPTION_TEST="RepositoryIndexerTestCase.MakePathRelative"
+export OPTION_TEST="RepositoryIndexerTestCase.MakePathRelative"
 #export OPTION_TEST="NoteTestCase.*"
 #export OPTION_TEST="NoteTestCase.MangleNoteName"
 #export OPTION_TEST="NoteTestCase.DeepUpDownFirstLastClone"

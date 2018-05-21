@@ -468,18 +468,96 @@ TEST(RepositoryIndexerTestCase, MakePathRelative)
     repositoryIndexer.index(repository);
     repositoryIndexer.getRepository()->print();
     auto outlineFiles = repositoryIndexer.getAllOutlineFileNames();
+    MF_DEBUG(endl);
 
     // asserts
     EXPECT_EQ(repositoryPath, repository->getDir());
-    EXPECT_EQ(m8r::Repository::RepositoryType::MINDFORGER, repository->getType());
-    EXPECT_EQ(m8r::Repository::RepositoryMode::REPOSITORY, repository->getMode());
     EXPECT_EQ(2, outlineFiles.size());
 
-    EXPECT_EQ("a/b/c.md", repositoryIndexer.makePathRelative(string{"/tmp/mf-relativize/memory/a/b/c.md"}, repository));
-    EXPECT_EQ("a.png", repositoryIndexer.makePathRelative(string{"/tmp/mf-relativize/memory/a.png"}, repository));
-    EXPECT_EQ("a/b/c/", repositoryIndexer.makePathRelative(string{"/tmp/mf-relativize/memory/a/b/c/"}, repository));
-    EXPECT_EQ("/home/john/doe", repositoryIndexer.makePathRelative(string{"/home/john/doe"}, repository));
-    EXPECT_EQ("", repositoryIndexer.makePathRelative(string{""}, repository));
-    EXPECT_EQ("/", repositoryIndexer.makePathRelative(string{"/"}, repository));
-    EXPECT_EQ("~/.bashrc", repositoryIndexer.makePathRelative(string{"~/.bashrc"}, repository));
+    /*
+     * MF repository
+     */
+
+    EXPECT_EQ(m8r::Repository::RepositoryType::MINDFORGER, repository->getType());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::REPOSITORY, repository->getMode());
+
+    // MF/MD: same dir
+    EXPECT_EQ("dst.md", repositoryIndexer.makePathRelative(
+       repository,
+       string{"/tmp/mf-relativize/memory/src.md"},
+       string{"/tmp/mf-relativize/memory/dst.md"}));
+    EXPECT_EQ("dst.md#n1", repositoryIndexer.makePathRelative(
+       repository,
+       string{"/tmp/mf-relativize/memory/src.md"},
+       string{"/tmp/mf-relativize/memory/dst.md#n1"}));
+
+    // MF/MD: src parent of dst
+    EXPECT_EQ("a/b/c/dst.md", repositoryIndexer.makePathRelative(
+       repository,
+       string{"/tmp/mf-relativize/memory/src.md"},
+       string{"/tmp/mf-relativize/memory/a/b/c/dst.md"}));
+    EXPECT_EQ("a/b/c/dst.md#n1", repositoryIndexer.makePathRelative(
+       repository,
+       string{"/tmp/mf-relativize/memory/src.md"},
+       string{"/tmp/mf-relativize/memory/a/b/c/dst.md#n1"}));
+
+    // MF/MD: dst parent of src
+    EXPECT_EQ("../../../dst.md", repositoryIndexer.makePathRelative(
+       repository,
+       string{"/tmp/mf-relativize/memory/a/b/c/src.md"},
+       string{"/tmp/mf-relativize/memory/dst.md"}));
+    EXPECT_EQ("../../../dst.md#n1", repositoryIndexer.makePathRelative(
+       repository,
+       string{"/tmp/mf-relativize/memory/a/b/c/src.md"},
+       string{"/tmp/mf-relativize/memory/dst.md#n1"}));
+
+    // MF/MD: siblings
+    EXPECT_EQ("../../A/B/dst.md", repositoryIndexer.makePathRelative(
+       repository,
+       string{"/tmp/mf-relativize/memory/a/b/src.md"},
+       string{"/tmp/mf-relativize/memory/A/B/dst.md"}));
+    EXPECT_EQ("../../A/B/dst.md#n1", repositoryIndexer.makePathRelative(
+       repository,
+       string{"/tmp/mf-relativize/memory/a/b/src.md"},
+       string{"/tmp/mf-relativize/memory/A/B/dst.md#n1"}));
+
+    // out of repo
+    EXPECT_EQ("/tmp/dst.md", repositoryIndexer.makePathRelative(
+       repository,
+       string{"/tmp/mf-relativize/memory/a/b/src.md"},
+       string{"/tmp/dst.md"}));
+
+    // robustness
+    EXPECT_EQ("/", repositoryIndexer.makePathRelative(
+       repository,
+       string{"/tmp/mf-relativize/memory/a/b/src.md"},
+       string{"/"}));
+    EXPECT_EQ("", repositoryIndexer.makePathRelative(
+       repository,
+       string{""},
+       string{""}));
+
+    /*
+     * MD repository
+     */
+
+    /*
+     * MF file
+     */
+
+    /*
+     * MD file
+     */
+
+
+
+//    EXPECT_EQ("a/b/c.md", repositoryIndexer.makePathRelative(string{"/tmp/mf-relativize/memory/a/b/c.md"}, repository));
+//    EXPECT_EQ("a.png", repositoryIndexer.makePathRelative(string{"/tmp/mf-relativize/memory/a.png"}, repository));
+//    EXPECT_EQ("a/b/c/", repositoryIndexer.makePathRelative(string{"/tmp/mf-relativize/memory/a/b/c/"}, repository));
+//    EXPECT_EQ("/home/john/doe", repositoryIndexer.makePathRelative(string{"/home/john/doe"}, repository));
+//    EXPECT_EQ("", repositoryIndexer.makePathRelative(string{""}, repository));
+//    EXPECT_EQ("/", repositoryIndexer.makePathRelative(string{"/"}, repository));
+//    EXPECT_EQ("~/.bashrc", repositoryIndexer.makePathRelative(string{"~/.bashrc"}, repository));
+
+    // add src in deep
 }

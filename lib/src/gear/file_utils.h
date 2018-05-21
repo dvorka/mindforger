@@ -40,6 +40,7 @@
 
 #ifdef __linux__
 constexpr const auto FILE_PATH_SEPARATOR = "/";
+constexpr const auto FILE_PATH_SEPARATOR_CHAR = '/';
 #elif _WIN32
 constexpr const auto FILE_PATH_SEPARATOR = "\\";
 #else
