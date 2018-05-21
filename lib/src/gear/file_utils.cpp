@@ -172,6 +172,16 @@ bool isFile(const char* path)
     }
 }
 
+bool isPathRelative(const string& path)
+{
+    // IMPROVE relative vs. absolute is platform specific (remind Windows; new C++ standards have methods for this)
+    if(path.size() && path.at(0) == '/') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 bool createDirectory(const string& path) {
     int e = mkdir(path.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
     if(e) {

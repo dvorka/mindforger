@@ -81,6 +81,7 @@ void resolvePath(const std::string& path, std::string& resolvedAbsolutePath);
 bool isDirectoryOrFileExists(const char* path);
 bool isDirectory(const char* path);
 bool isFile(const char* path);
+bool isPathRelative(const std::string& path);
 char* makeTempDirectory(char* dirNamePefix);
 int removeDirectoryRecursively(const char* path);
 int copyDirectoryRecursively(const char* srcPath, const char* dstPath);

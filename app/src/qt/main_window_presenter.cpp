@@ -168,15 +168,56 @@ void MainWindowPresenter::showInitialView()
     }
 }
 
+
+/* Link handling analysis
+ *
+ * PROBLEM:
+ *
+ *   QWebView RESOLVES clicked link and then delegates it's handling to this
+ *   method. The problem is that this handler does NOT get original link, but
+ *   RESOLVED link - which might be resolved differently than I expected.
+ *     For link resolution is IMPORTANT baseUrl specified within HTML source
+ *   passed to QWebView for rendering.
+ *
+ * Input:
+ *
+ *   Qt URL    ... URL resolved by QWebView using a.href and html@baseUrl
+ *   Current O ... link clicked in description of a N from O
+ *   Current N ... link clicked in description of a N from O
+ *
+ * Outline link types:
+ *
+ *   ABSOLUTE link
+ *     - a.href: /home/user/mf/memory/d/o.md
+ *     - Qt URL: file:///home/user/mf/memory/d/o.md
+ *   RELATIVE link SAME directory:
+ *     - a.href: o.md
+ *     - Qt URL: file:///home/user/mf/memory/d/o.md
+ *               HTML.baseUrl + a.href
+ *   RELATIVE link DIFFERENT directory:
+ *     - a.href: ../d/o.md
+ *     - Qt URL: file:///home/user/mf/memory/d/o.md
+ *               HTML.baseUrl + a.href
+ *
+ * Note link types
+ *
+ *   RELATIVE LINKS:
+ *     - a.href: #mangled-note-name
+ *     - Qt URL:
+ *   ... and all O links above w/ #mangled-note-name suffix
+ *
+ */
 void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
 {
 #ifdef DO_M8R_DEBUG
-    MF_DEBUG("HTML click handler: " << url.toString().toStdString() << std::endl);
+    MF_DEBUG("HTML clickHandler: " << endl);
+    MF_DEBUG("  Qt URL     : " << url.toString().toStdString() << endl);
     MF_DEBUG("  Memory path: " << config.getMemoryPath() << endl);
+    MF_DEBUG("  Current O  : " << orloj->getOutlineView()->getCurrentOutline()->getKey() << endl);
 #endif
 
     statusBar->showInfo(QString(tr("Hyperlink %1 clicked...")).arg(url.toString()));
-
+    Outline* currentOutline = orloj->getOutlineView()->getCurrentOutline();
     if(url.toString().size()) {
         if(url.toString().startsWith("file://")) {
             string key{url.toString().toStdString()};
@@ -186,16 +227,16 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
                 // it CAN be Note
 
                 // HANDLE relative N link: #mangled-section-name
-                //   Qt completes relative link w/ base URL which is set to MEMORY path:
-                //   /repository/memory/#mangled-section-name
-                string relativeLinkPrefix{config.getMemoryPath()};
+                string currentDir{}, currentFile{};
+                pathToDirectoryAndFile(currentOutline->getKey(), currentDir, currentFile);
+                string relativeLinkPrefix{currentDir};
                 relativeLinkPrefix.append(FILE_PATH_SEPARATOR);
                 relativeLinkPrefix.append("#");
                 MF_DEBUG("  Relative prefix: " << relativeLinkPrefix << endl);
                 if(stringStartsWith(key, relativeLinkPrefix)) {
                     // it's a relative link within current O
                     string mangledNoteName = key.substr(offset+1);
-                    MF_DEBUG("  N lookup using: " << mangledNoteName << endl);
+                    MF_DEBUG("HTML clickHandler - N lookup using: " << mangledNoteName << endl);
                     Outline* o=orloj->getMind()->remind().getOutline(orloj->getOutlineView()->getCurrentOutline()->getKey());
                     if(o) {
                         Note* n = o->getNoteByMangledName(mangledNoteName);
@@ -208,10 +249,10 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
                     statusBar->showInfo(QString(tr("Link target not found for relative link %1")).arg(QString::fromStdString(mangledNoteName)));
                     return;
                 } else {
-                    // HANDLE O#N link
+                    // HANDLE O#N link - O can be in a memory SUBDIRECTORY
                     string mangledNoteName = key.substr(offset+1);
                     key.erase(offset);
-                    MF_DEBUG("  O lookup using key: " << key << endl);
+                    MF_DEBUG("HTML clickHandler - O lookup using key: " << key << endl);
 
                     // IMPROVE find note within outline
                     Outline* o=orloj->getMind()->remind().getOutline(key);
@@ -229,10 +270,11 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
                 }
             } else {
                 // it CAN be Outline
-                MF_DEBUG("  O lookup using key: " << key << std::endl);
+
+                // QWebView resolves URL (it is NEVER relative) - use resolved URL as is
+                MF_DEBUG("  O lookup using path: " << key << std::endl);
                 Outline* o=orloj->getMind()->remind().getOutline(key);
                 if(o) {
-                    // Notebook for hyperlink found
                     orloj->showFacetOutline(o);
                     return;
                 } // else fallback to open using desktop services
