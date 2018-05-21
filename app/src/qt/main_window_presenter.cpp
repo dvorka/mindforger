@@ -168,8 +168,7 @@ void MainWindowPresenter::showInitialView()
     }
 }
 
-
-/* Link handling analysis
+/* Link handling hints
  *
  * PROBLEM:
  *
@@ -863,6 +862,9 @@ void MainWindowPresenter::doActionFormatLink()
     insertLinkDialog->show(os, ns);
 }
 
+/*
+ * See InsertLinkDialog for link creation hints
+ */
 void MainWindowPresenter::handleFormatLink()
 {
     insertLinkDialog->hide();

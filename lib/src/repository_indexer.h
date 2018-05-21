@@ -54,6 +54,9 @@ public:
 
     /**
      * @brief Make path relative if it makes sense for given repository.
+     *
+     * If target absolute path is in the current repository, then construct
+     * relative path from current absolute path to target absolute path.
      */
     static std::string makePathRelative(const std::string& path, const Repository* repository);
 

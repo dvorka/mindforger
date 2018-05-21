@@ -68,6 +68,22 @@ public:
     QString getPathText() { return pathEdit->text(); }
 
 private slots:
+
+    /* Link creation hints
+     *
+     *   These methods insert to MD links created using link dialog. All link transformations
+     *   (relative/absolute/...) MUST be done by the dialog, because user MUST be allowed to
+     *   tweak link within dialog's EDIT line (before calling this method) to have full
+     *   control.
+     *
+     * Default dialog link transformations:
+     *
+     *   Outline: link SHOULD be relative to the current O (tricky)
+     *   Note   : link SHOULD be relative to the current O (tricky)
+     *   Dir    : keep link as is (consider relativization for the SAME MD repo)
+     *   File   : keep link as is (consider relativization for the SAME MD repo)
+     */
+
     void handleFindOutline();
     void handleFindNote();
     void handleFindOutlineChoice();
