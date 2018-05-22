@@ -292,141 +292,106 @@ std::string RepositoryIndexer::makePathRelative(
         const std::string& dstAbsolutePath,
         const bool dstIsFile)
 {
+    MF_DEBUG("Relativize " << srcAbsoluteFile << " > " << dstAbsolutePath << endl);
     // src O is always in the current directory, check whether dst is there as well
     string memoryPath{repository->getDir()};
-    if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
-        if(repository->getMode() == Repository::RepositoryMode::REPOSITORY) {
+    // handling for both repository types MINDFORGER/MARKDOWN is almost identical
+    if(repository->getMode() == Repository::RepositoryMode::REPOSITORY) {
+        if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
             memoryPath+=FILE_PATH_SEPARATOR;
             memoryPath+=FILE_PATH_MEMORY;
             memoryPath+=FILE_PATH_SEPARATOR;
-            if(stringStartsWith(dstAbsolutePath, memoryPath)) {
-                // both src and dst are in the same repository
+        }
+        if(stringStartsWith(dstAbsolutePath, memoryPath)) {
+            // both src and dst are in the same repository
 
-                // detect: same dir / src parent dst / dst parent src / siblings
-                string srcFile{}, srcDir{};
-                pathToDirectoryAndFile(srcAbsoluteFile, srcDir, srcFile);
-                string dstFile{}, dstDir{};
-                if(dstIsFile) {
-                    pathToDirectoryAndFile(dstAbsolutePath, dstDir, dstFile);
-                } else {
-                    dstDir.assign(dstAbsolutePath);
-                }
-
-                // same dir
-                if(!srcDir.compare(dstDir)) {
-                    return dstFile;
-                } else if(stringStartsWith(dstDir, srcDir)) {
-                    // src parent of dst > suffix
-                    string result{dstAbsolutePath};
-                    result.erase(0, srcDir.size());
-                    if(result.at(0) == FILE_PATH_SEPARATOR_CHAR) {
-                        result.erase(0, 1);
-                    }
-                    return result;
-                } else if(stringStartsWith(srcDir, dstDir)) {
-                    // dst parent of src > ../dstFile
-                    string result{srcAbsoluteFile};
-                    result.erase(0, dstDir.size());
-                    if(result.at(0) == FILE_PATH_SEPARATOR_CHAR) {
-                        result.erase(0, 1);
-                    }
-                    size_t parents = std::count(result.begin(), result.end(), FILE_PATH_SEPARATOR_CHAR);
-                    result.clear();
-                    for(size_t i=0; i<parents; i++) {
-                        result+="..";
-                        result+=FILE_PATH_SEPARATOR;
-                    }
-                    result+=dstFile;
-                    return result;
-                } else {
-                    // different directories next to each other > use repository path as shared root
-                    // UP from src
-                    string memoryPath{repository->getDir()};
-                    memoryPath+=FILE_PATH_SEPARATOR;
-                    memoryPath+=FILE_PATH_MEMORY;
-                    memoryPath+=FILE_PATH_SEPARATOR;
-                    string s{srcAbsoluteFile};
-                    s.erase(0, memoryPath.size());
-                    if(s.at(0) == FILE_PATH_SEPARATOR_CHAR) {
-                        s.erase(0, 1);
-                    }
-                    size_t parents = std::count(s.begin(), s.end(), FILE_PATH_SEPARATOR_CHAR);
-                    string result{};
-                    for(size_t i=0; i<parents; i++) {
-                        result+="..";
-                        result+=FILE_PATH_SEPARATOR;
-                    }
-                    // DOWN to dst
-                    s.assign(dstDir);
-                    s.erase(0, memoryPath.size());
-                    if(s.at(0) == FILE_PATH_SEPARATOR_CHAR) {
-                        s.erase(0, 1);
-                    }
-                    result.append(s);
-                    if(dstFile.size()) {
-                        result+=FILE_PATH_SEPARATOR;
-                        result.append(dstFile);
-                    }
-                    return result;
-                }
-            }
-            // not in the same repository
-            return dstAbsolutePath;
-        } else {
-            // MF file ~ no repository ~ handle just the same directory, absolute link otherwise
-            // same dir
+            // detect: same dir / src parent dst / dst parent src / siblings
             string srcFile{}, srcDir{};
             pathToDirectoryAndFile(srcAbsoluteFile, srcDir, srcFile);
             string dstFile{}, dstDir{};
             if(dstIsFile) {
                 pathToDirectoryAndFile(dstAbsolutePath, dstDir, dstFile);
-                if(!srcDir.compare(dstDir)) {
-                    return dstFile;
-                }
+            } else {
+                dstDir.assign(dstAbsolutePath);
             }
-            return dstAbsolutePath;
-        }
-    } else {
-        // MD repository
 
-        // TODO
+            // same dir
+            if(!srcDir.compare(dstDir)) {
+                return dstFile;
+            } else if(stringStartsWith(dstDir, srcDir)) {
+                // src parent of dst > suffix
+                string result{dstAbsolutePath};
+                result.erase(0, srcDir.size());
+                if(result.at(0) == FILE_PATH_SEPARATOR_CHAR) {
+                    result.erase(0, 1);
+                }
+                return result;
+            } else if(stringStartsWith(srcDir, dstDir)) {
+                // dst parent of src > ../dstFile
+                string result{srcAbsoluteFile};
+                result.erase(0, dstDir.size());
+                if(result.at(0) == FILE_PATH_SEPARATOR_CHAR) {
+                    result.erase(0, 1);
+                }
+                size_t parents = std::count(result.begin(), result.end(), FILE_PATH_SEPARATOR_CHAR);
+                result.clear();
+                for(size_t i=0; i<parents; i++) {
+                    result+="..";
+                    result+=FILE_PATH_SEPARATOR;
+                }
+                result+=dstFile;
+                return result;
+            } else {
+                // different directories next to each other > use repository path as shared root
+                // UP from src
+                string memoryPath{repository->getDir()};
+                if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
+                    memoryPath+=FILE_PATH_SEPARATOR;
+                    memoryPath+=FILE_PATH_MEMORY;
+                    memoryPath+=FILE_PATH_SEPARATOR;
+                }
+                string s{srcAbsoluteFile};
+                s.erase(0, memoryPath.size());
+                if(s.at(0) == FILE_PATH_SEPARATOR_CHAR) {
+                    s.erase(0, 1);
+                }
+                size_t parents = std::count(s.begin(), s.end(), FILE_PATH_SEPARATOR_CHAR);
+                string result{};
+                for(size_t i=0; i<parents; i++) {
+                    result+="..";
+                    result+=FILE_PATH_SEPARATOR;
+                }
+                // DOWN to dst
+                s.assign(dstDir);
+                s.erase(0, memoryPath.size());
+                if(s.at(0) == FILE_PATH_SEPARATOR_CHAR) {
+                    s.erase(0, 1);
+                }
+                result.append(s);
+                if(dstFile.size()) {
+                    result+=FILE_PATH_SEPARATOR;
+                    result.append(dstFile);
+                }
+                return result;
+            }
+        }
+        // not in the same repository
+        return dstAbsolutePath;
+    } else {
+        // MF/MD file ~ no repository ~ handle just the same directory, absolute link otherwise
+        // same dir
+        string srcFile{}, srcDir{};
+        pathToDirectoryAndFile(srcAbsoluteFile, srcDir, srcFile);
+        string dstFile{}, dstDir{};
+        if(dstIsFile) {
+            pathToDirectoryAndFile(dstAbsolutePath, dstDir, dstFile);
+            if(!srcDir.compare(dstDir)) {
+                return dstFile;
+            }
+        }
     }
 
     return dstAbsolutePath;
-
-
-
-
-
-
-    // if repository path (given the path) is prefix of path, then path can be made relative
-//    string result{path};
-//    string memoryPath{repository->getDir()};
-//    if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
-//        if(repository->getMode() == Repository::RepositoryMode::REPOSITORY) {
-//            memoryPath+=FILE_PATH_SEPARATOR;
-//            memoryPath+=FILE_PATH_MEMORY;
-//            memoryPath+=FILE_PATH_SEPARATOR;
-//            if(stringStartsWith(path, memoryPath)) {
-//                result.erase(0, memoryPath.size());
-//                return result;
-//            }
-//        } else {
-//            memoryPath+=FILE_PATH_SEPARATOR;
-//            if(stringStartsWith(path, memoryPath)) {
-//                result.erase(0, memoryPath.size());
-//                return result;
-//            }
-//        }
-//    } else {
-//        memoryPath+=FILE_PATH_SEPARATOR;
-//        if(stringStartsWith(path, memoryPath)) {
-//            result.erase(0, memoryPath.size());
-//            return result;
-//        }
-//    }
-
-//    return path;
 }
 
 } // m8r namespace

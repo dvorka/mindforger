@@ -107,7 +107,7 @@ public:
 
 #ifdef DO_M8R_DEBUG
     void print() const {
-        MF_DEBUG(std::endl << "Path: '" << path << "' Dir: '" << dir << "' file: '" << file << "' type: " << type << ", mode: " << mode << ", RD_ONLY: " << readOnly << std::flush);
+        MF_DEBUG(std::endl << "Repo - Path: '" << path << "' Dir: '" << dir << "' file: '" << file << "' type: " << type << ", mode: " << mode << ", RD_ONLY: " << readOnly << std::endl);
     }
 #endif
 
