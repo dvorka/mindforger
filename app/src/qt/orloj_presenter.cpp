@@ -138,7 +138,7 @@ void OrlojPresenter::showFacetOutline(Outline* outline)
     outline->makeDirty();
 
     mainPresenter->getMainMenu()->showFacetOutlineView();
-    mainPresenter->getStatusBar()->showInfo(QString("Notebook '%1' selected...").arg(outline->getName().c_str()));
+    mainPresenter->getStatusBar()->showInfo(QString("Notebook '%1'   %2").arg(outline->getName().c_str()).arg(outline->getKey().c_str()));
 }
 
 void OrlojPresenter::slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected)
@@ -153,7 +153,6 @@ void OrlojPresenter::slotShowOutline(const QItemSelection& selected, const QItem
         Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
         showFacetOutline(outline);
     } else {
-        // TODO i18n
         mainPresenter->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
     }
 }
@@ -174,7 +173,11 @@ void OrlojPresenter::showFacetNoteView(Note* note)
     view->showFacetNoteView();
     outlineViewPresenter->selectRowByNote(note);
     mainPresenter->getMainMenu()->showFacetOutlineView();
-    mainPresenter->getStatusBar()->showInfo(QString(tr("Note '%1' selected")).arg(note->getName().c_str()));
+
+    QString p{note->getOutline()->getKey().c_str()};
+    p += "#";
+    p += note->getMangledName().c_str();
+    mainPresenter->getStatusBar()->showInfo(QString(tr("Note '%1'   %2")).arg(note->getName().c_str()).arg(p));
     setFacet(OrlojPresenterFacets::FACET_VIEW_NOTE);
 }
 
@@ -240,7 +243,8 @@ void OrlojPresenter::slotShowNote(const QItemSelection& selected, const QItemSel
 
         showFacetNoteView(note);
     } else {
-        mainPresenter->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
+        Outline* outline = outlineViewPresenter->getCurrentOutline();
+        mainPresenter->getStatusBar()->showInfo(QString("Notebook '%1'   %2").arg(outline->getName().c_str()).arg(outline->getKey().c_str()));
     }
 }
 
