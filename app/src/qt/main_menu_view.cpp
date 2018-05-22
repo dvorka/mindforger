@@ -151,6 +151,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFind->addAction(actionFindNoteByTag);
 
     // menu: view
+
     actionViewHome = new QAction(tr("&Home"), mainWindow);
     actionViewHome->setStatusTip(tr("Open Home Notebook"));
     actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
@@ -361,6 +362,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteNew = new QAction(tr("&New"), mainWindow);
     actionNoteNew->setStatusTip(tr("Create new Note to form new ideas, principles, combinations and applications"));
 
+    actionNoteHoist= new QAction(tr("&Hoist"), mainWindow);
+    actionNoteHoist->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
+    actionNoteHoist->setStatusTip(tr("Hoist/de-hoist Note to focus on Note being viewed or edited"));
+
     actionNoteEdit = new QAction(tr("&Edit"), mainWindow);
     actionNoteEdit ->setStatusTip(tr("Edit current Note - you can also double click view to open the editor"));
 
@@ -414,6 +419,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     menuNote = qMenuBar->addMenu(tr("&Note"));
     menuNote->addAction(actionNoteNew);
+    menuNote->addAction(actionNoteHoist);
     menuNote->addAction(actionNoteEdit);
     menuNote->addAction(actionNoteSave);
     menuNote->addAction(actionNoteClose);

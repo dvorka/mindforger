@@ -45,6 +45,7 @@ class OutlineHeaderEditView;
  * 2: outline tree, outline hoist
  * 3: note view, outline edit
  * 4: note edit
+ * ...
  */
 class OrlojView : public QSplitter
 {
@@ -53,7 +54,7 @@ class OrlojView : public QSplitter
 private:
     OutlinesTableView* outlinesTable;
     NotesTableView* notesTable;
-    OutlineViewSplitter* outlineView; // experiment
+    OutlineViewSplitter* outlineView;
     OutlineHeaderView* outlineHeaderView;
     OutlineHeaderEditView* outlineHeaderEdit;
     NoteView* noteView;
@@ -115,6 +116,15 @@ public:
      * @brief Note edit
      */
     void showFacetNoteEdit();
+
+    /*
+     * Hoisting
+     */
+
+    void showFacetHoistedOutlineHeaderView();
+    void showFacetHoistedOutlineHeaderEdit();
+    void showFacetHoistedNoteView();
+    void showFacetHoistedNoteEdit();
 
 private:
     /**

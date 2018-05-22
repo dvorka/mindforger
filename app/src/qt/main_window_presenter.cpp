@@ -1109,6 +1109,22 @@ void MainWindowPresenter::doActionNoteEdit()
     QMessageBox::critical(&view, tr("Edit Note"), tr("Please select a Note to edit."));
 }
 
+void MainWindowPresenter::doActionNoteHoist()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE))
+    {
+        orloj->toggleCurrentFacetHoisting();
+    }
+}
+
 void MainWindowPresenter::doActionNoteForget()
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)

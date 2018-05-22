@@ -202,6 +202,23 @@ void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
     mainPresenter->getMainMenu()->showFacetNoteEdit();
 }
 
+void OrlojPresenter::toggleCurrentFacetHoisting()
+{
+    MF_DEBUG("CHOICE ");
+    if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+         ||
+       isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)) {
+        view->showFacetHoistedOutlineHeaderView();
+    } else if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
+        view->showFacetHoistedNoteView();
+    } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        view->showFacetHoistedNoteEdit();
+    } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        MF_DEBUG("CHOOSEN");
+        view->showFacetHoistedOutlineHeaderEdit();
+    }
+}
+
 void OrlojPresenter::fromOutlineHeaderEditBackToView(Outline* outline)
 {
     outlineHeaderViewPresenter->refresh(outline);

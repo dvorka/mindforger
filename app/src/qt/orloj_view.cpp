@@ -143,4 +143,36 @@ void OrlojView::showFacetNoteEdit()
     noteEdit->giveFocusToEditor();
 }
 
+/*
+ * Hoisting.
+ */
+
+void OrlojView::showFacetHoistedOutlineHeaderView()
+{
+    QSet<QWidget*> v; v << outlineHeaderView;
+    hideChildren(v);
+    outlineHeaderView->setFocus();
+}
+
+void OrlojView::showFacetHoistedOutlineHeaderEdit()
+{
+    MF_DEBUG("IM THERE");
+    QSet<QWidget*> v; v << outlineHeaderEdit;
+    outlineHeaderEdit->giveFocusToEditor();
+}
+
+void OrlojView::showFacetHoistedNoteView()
+{
+    QSet<QWidget*> v; v << noteView;
+    hideChildren(v);
+    noteView->setFocus();
+}
+
+void OrlojView::showFacetHoistedNoteEdit()
+{
+    QSet<QWidget*> v; v << noteEdit;
+    hideChildren(v);
+    noteEdit->giveFocusToEditor();
+}
+
 } // m8r namespace

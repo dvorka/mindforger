@@ -63,6 +63,8 @@ public:
     QString getSelectedText() const { return noteEditor->getSelectedText(); }
     NoteEditorView* getHeaderEditor() const { return noteEditor; }
 
+    void giveFocusToEditor() { noteEditor->setFocus(); }
+
 private slots:
     void slotOpenOutlineHeaderPropertiesEditor();
     void slotSaveOutlineHeader();
