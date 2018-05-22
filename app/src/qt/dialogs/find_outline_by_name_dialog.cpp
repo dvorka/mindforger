@@ -39,9 +39,9 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     lineEdit = new MyLineEdit{listView, this};
     label->setBuddy(lineEdit);
 
-    caseCheckBox = new QCheckBox{tr("&Ignore case")};
+    caseCheckBox = new QCheckBox{tr("&ignore case")};
     caseCheckBox->setChecked(true);
-    keywordsCheckBox = new QCheckBox{tr("&Keywords match")};
+    keywordsCheckBox = new QCheckBox{tr("&keywords match")};
     keywordsCheckBox->setChecked(true);
 
     findButton = new QPushButton{tr("&Open Notebook")};
