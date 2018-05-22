@@ -33,6 +33,8 @@ class InsertLinkDialog : public QDialog
     Q_OBJECT
 
 private:
+    const Repository* activeRepository;
+    const Outline* currentOutline;
     std::vector<Thing*> outlines;
     std::vector<Note*> notes;
 
@@ -62,7 +64,11 @@ public:
     InsertLinkDialog &operator=(const InsertLinkDialog&&) = delete;
     ~InsertLinkDialog();
 
-    void show(std::vector<Thing*>& outlines, std::vector<Note*>& notes);
+    void show(
+            const Repository* repository,
+            const Outline* outline,
+            std::vector<Thing*>& outlines,
+            std::vector<Note*>& notes);
     QPushButton* getInsertButton() const { return insertButton; }
     QString getLinkText() { return linkTextEdit->text(); }
     QString getPathText() { return pathEdit->text(); }

@@ -93,8 +93,15 @@ InsertLinkDialog::~InsertLinkDialog()
 {
 }
 
-void InsertLinkDialog::show(vector<Thing*>& os, vector<Note*>& ns)
+void InsertLinkDialog::show(
+        const Repository* repository,
+        const Outline* outline,
+        vector<Thing*>& os,
+        vector<Note*>& ns)
 {
+    this->activeRepository = repository;
+    this->currentOutline = outline;
+
     linkTextEdit->setText(tr("link"));
     linkTextEdit->selectAll();
     linkTextEdit->setFocus();
@@ -117,8 +124,9 @@ void InsertLinkDialog::handleFindOutlineChoice()
     if(findOutlineByNameDialog->getChoice()) {
         Outline* choice = (Outline*)findOutlineByNameDialog->getChoice();
         linkTextEdit->setText(QString::fromStdString(choice->getName()));
-        // IMPROVE relative path if within repository
-        pathEdit->setText(QString::fromStdString(choice->getKey()));
+
+        string p = RepositoryIndexer::makePathRelative(activeRepository, currentOutline->getKey(), choice->getKey());
+        pathEdit->setText(QString::fromStdString(p));
     }
 }
 
@@ -134,12 +142,13 @@ void InsertLinkDialog::handleFindNoteChoice()
     if(findNoteByNameDialog->getChoice()) {
         Note* choice = (Note*)findNoteByNameDialog->getChoice();
         linkTextEdit->setText(QString::fromStdString(choice->getName()));
-        // IMPROVE relative path if within repository
-        QString path{};
-        path += QString::fromStdString(choice->getOutline()->getKey());
-        path += "#";
-        path += QString::fromStdString(choice->getMangledName());
-        pathEdit->setText(path);
+
+        string dstPath{};
+        dstPath += choice->getOutline()->getKey();
+        dstPath += "#";
+        dstPath += choice->getMangledName();
+        string p = RepositoryIndexer::makePathRelative(activeRepository, currentOutline->getKey(), dstPath);
+        pathEdit->setText(QString::fromStdString(p));
     }
 }
 

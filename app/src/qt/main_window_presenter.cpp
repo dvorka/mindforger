@@ -859,7 +859,7 @@ void MainWindowPresenter::doActionFormatLink()
     vector<Note*> ns{};
     mind->getAllNotes(ns);
 
-    insertLinkDialog->show(os, ns);
+    insertLinkDialog->show(config.getActiveRepository(), orloj->getOutlineView()->getCurrentOutline(), os, ns);
 }
 
 /*
@@ -872,7 +872,7 @@ void MainWindowPresenter::handleFormatLink()
     QString text{"["};
     text += insertLinkDialog->getLinkText();
     text += "](";
-    text += QString::fromStdString(RepositoryIndexer::makePathRelative(insertLinkDialog->getPathText().toStdString(), config.getActiveRepository()));
+    text += QString::fromStdString(insertLinkDialog->getPathText().toStdString());
     text += ")";
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
