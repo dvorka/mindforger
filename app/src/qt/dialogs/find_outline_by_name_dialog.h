@@ -68,6 +68,7 @@ private:
 
 protected:
     QLabel* label;
+    QCheckBox* scopeCheckBox;
     QPushButton* findButton;
 
 public:
@@ -83,7 +84,7 @@ public:
     QPushButton* getFindButton() const { return findButton; }
     Thing* getChoice() const { return choice; }
 
-    void show(std::vector<Thing*>& outlines, std::vector<std::string>* customizedNames=nullptr);
+    void show(std::vector<Thing*>& outlines, std::vector<std::string>* customizedNames=nullptr, bool showScopeCheck=false);
 
 signals:
     void searchFinished();

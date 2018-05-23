@@ -43,6 +43,10 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     caseCheckBox->setChecked(true);
     keywordsCheckBox = new QCheckBox{tr("&keywords match")};
     keywordsCheckBox->setChecked(true);
+    scopeCheckBox = new QCheckBox{tr("&current Notebook's Notes only")};
+    scopeCheckBox->setChecked(false);
+    scopeCheckBox->setVisible(false);
+
 
     findButton = new QPushButton{tr("&Open Notebook")};
     findButton->setDefault(true);
@@ -63,6 +67,7 @@ FindOutlineByNameDialog::FindOutlineByNameDialog(QWidget *parent)
     mainLayout->addWidget(listView);
     mainLayout->addWidget(caseCheckBox);
     mainLayout->addWidget(keywordsCheckBox);
+    mainLayout->addWidget(scopeCheckBox);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
@@ -90,20 +95,29 @@ FindOutlineByNameDialog::~FindOutlineByNameDialog()
     delete closeButton;
 }
 
-void FindOutlineByNameDialog::show(vector<Thing*>& outlines, vector<string>* customizedNames)
+void FindOutlineByNameDialog::show(vector<Thing*>& things, vector<string>* customizedNames, bool showScopeCheck)
 {
     choice = nullptr;
+
+    scopeCheckBox->setEnabled(false); // TODO WIP
+    if(showScopeCheck) {
+        scopeCheckBox->setVisible(true);
+        scopeCheckBox->setChecked(true);
+    } else {
+        scopeCheckBox->setVisible(false);
+    }
+
     things.clear();
     listViewStrings.clear();
     bool useCustomNames = customizedNames!=nullptr && customizedNames->size()>0;
-    if(outlines.size()) {
-        for(size_t i=0; i<outlines.size(); i++) {
-            things.push_back(outlines[i]);
+    if(things.size()) {
+        for(size_t i=0; i<things.size(); i++) {
+            things.push_back(things[i]);
             if(useCustomNames) {
                 listViewStrings << QString::fromStdString(customizedNames->at(i));
             } else {
-                if(outlines.at(i)->getName().size()) {
-                    listViewStrings << QString::fromStdString(outlines[i]->getName());
+                if(things.at(i)->getName().size()) {
+                    listViewStrings << QString::fromStdString(things[i]->getName());
                 } else {
                     listViewStrings << "";
                 }

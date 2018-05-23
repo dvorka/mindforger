@@ -59,7 +59,7 @@ void FindNoteByNameDialog::show(vector<Note*>& notes)
     }
 
     vector<Thing*> es{notes.begin(), notes.end()};
-    FindOutlineByNameDialog::show(es, &noteNames);
+    FindOutlineByNameDialog::show(es, &noteNames, scope!=nullptr);
 }
 
 } // m8r namespace
