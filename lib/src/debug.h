@@ -26,9 +26,13 @@
 #include <iostream>
     #define MF_DEBUG(x) do { std::cerr << x; } while (0)
 
+    // enable/disable verbose debug info of particular components
     //#define MF_DEBUG_HTML
     //#define MF_DEBUG_QRC
     //#define MF_DEBUG_L10N
+
+    // show WIP features
+    //#define MF_WIP
 #else
     #define MF_DEBUG(x) do {;} while (0)
 #endif

@@ -111,9 +111,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addAction(actionMindThink);
     menuMind->addAction(actionMindSleep);
     menuMind->addAction(actionMindRemember);
+#ifdef MF_WIP
     menuMind->addAction(actionMindSnapshot);
+#endif
     menuMind->addAction(actionMindPreferences);
+#ifdef MF_WIP
     menuMind->addAction(actionMindForget);
+#endif
     menuMind->addSeparator();
     menuMind->addAction(actionExit);
 #ifdef DO_M8R_DEBUG
@@ -206,8 +210,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     menuView = qMenuBar->addMenu(tr("&View"));
     menuView->addAction(actionViewHome);
+#ifdef MF_WIP
     menuView->addAction(actionViewOrganizer);
+#endif
     menuView->addAction(actionViewOutlines);
+#ifdef MF_WIP
     menuView->addAction(actionViewStencils);
     menuView->addAction(actionViewNavigator);
     menuView->addAction(actionViewDwell);
@@ -220,6 +227,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addSeparator();
     menuView->addAction(actionViewDistractionFree);
     menuView->addAction(actionViewFullscreen);
+#endif
 
     // menu: edit
 
@@ -351,11 +359,15 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuOutline->addAction(actionOutlineForget);
     menuOutline->addSeparator();
     menuOutline->addAction(actionOutlineHome);
+#ifdef MF_WIP
     menuOutline->addAction(actionOutlineStencil);
-    menuOutline->addAction(actionOutlineClone);
+#endif
+    menuOutline->addAction(actionOutlineClone);   
+#ifdef MF_WIP
     menuOutline->addSeparator();
     menuOutline->addAction(actionOutlineExport);
     menuOutline->addAction(actionOutlineImport);
+#endif
 
     // menu: Note
 
@@ -435,11 +447,15 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNote->addSeparator();
     menuNote->addAction(actionNoteRefactor);
     menuNote->addAction(actionNoteExtract);
+#ifdef MF_WIP
     menuNote->addAction(actionNoteStencil);
+#endif
     menuNote->addAction(actionNoteClone);
+#ifdef MF_WIP
     menuNote->addSeparator();
     menuNote->addAction(actionNoteExport);
     menuNote->addAction(actionNoteImport);
+#endif
     menuNote->setEnabled(false);
 
     // menu: help
