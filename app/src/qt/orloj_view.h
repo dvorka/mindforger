@@ -121,6 +121,7 @@ public:
      * Hoisting
      */
 
+    bool isHoistView();
     void showFacetHoistedOutlineHeaderView();
     void showFacetHoistedOutlineHeaderEdit();
     void showFacetHoistedNoteView();

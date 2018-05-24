@@ -20,6 +20,8 @@
 
 namespace m8r {
 
+using namespace std;
+
 OrlojView::OrlojView(QWidget* parent)
     : QSplitter(Qt::Horizontal, parent)
 {
@@ -147,6 +149,23 @@ void OrlojView::showFacetNoteEdit()
  * Hoisting.
  */
 
+bool OrlojView::isHoistView()
+{
+    if(!outlineView->isVisible()) {
+        if(outlineHeaderView->isVisible()) {
+            return true;
+        } else if(outlineHeaderEdit->isVisible()) {
+            return true;
+        } else if(noteView->isVisible()) {
+            return true;
+        } else if(noteEdit->isVisible()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void OrlojView::showFacetHoistedOutlineHeaderView()
 {
     QSet<QWidget*> v; v << outlineHeaderView;
@@ -156,8 +175,8 @@ void OrlojView::showFacetHoistedOutlineHeaderView()
 
 void OrlojView::showFacetHoistedOutlineHeaderEdit()
 {
-    MF_DEBUG("IM THERE");
     QSet<QWidget*> v; v << outlineHeaderEdit;
+    hideChildren(v);
     outlineHeaderEdit->giveFocusToEditor();
 }
 

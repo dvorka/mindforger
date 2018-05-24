@@ -204,18 +204,30 @@ void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
 
 void OrlojPresenter::toggleCurrentFacetHoisting()
 {
-    MF_DEBUG("CHOICE ");
-    if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
-         ||
-       isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)) {
-        view->showFacetHoistedOutlineHeaderView();
-    } else if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
-        view->showFacetHoistedNoteView();
-    } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-        view->showFacetHoistedNoteEdit();
-    } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-        MF_DEBUG("CHOOSEN");
-        view->showFacetHoistedOutlineHeaderEdit();
+    if(view->isHoistView()) {
+        if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+             ||
+           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)) {
+            view->showFacetOutlineHeaderView();
+        } else if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
+            view->showFacetNoteView();
+        } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            view->showFacetNoteEdit();
+        } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            view->showFacetOutlineHeaderEdit();
+        }
+    } else {
+        if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+             ||
+           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)) {
+            view->showFacetHoistedOutlineHeaderView();
+        } else if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
+            view->showFacetHoistedNoteView();
+        } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            view->showFacetHoistedNoteEdit();
+        } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            view->showFacetHoistedOutlineHeaderEdit();
+        }
     }
 }
 
