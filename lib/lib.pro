@@ -184,4 +184,5 @@ HEADERS += \
     src/mind/ai/ai_aa.h \
     src/mind/ai/nlp/common_words_blacklist.h \
     src/mind/aspect/tag_scope_aspect.h \
-    src/mind/aspect/mind_scope_aspect.h
+    src/mind/aspect/mind_scope_aspect.h \
+    src/compilation.h
