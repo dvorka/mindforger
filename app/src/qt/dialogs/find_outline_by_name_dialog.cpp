@@ -95,7 +95,7 @@ FindOutlineByNameDialog::~FindOutlineByNameDialog()
     delete closeButton;
 }
 
-void FindOutlineByNameDialog::show(vector<Thing*>& things, vector<string>* customizedNames, bool showScopeCheck)
+void FindOutlineByNameDialog::show(vector<Thing*>& ts, vector<string>* customizedNames, bool showScopeCheck)
 {
     choice = nullptr;
 
@@ -110,14 +110,14 @@ void FindOutlineByNameDialog::show(vector<Thing*>& things, vector<string>* custo
     things.clear();
     listViewStrings.clear();
     bool useCustomNames = customizedNames!=nullptr && customizedNames->size()>0;
-    if(things.size()) {
-        for(size_t i=0; i<things.size(); i++) {
-            things.push_back(things[i]);
+    if(ts.size()) {
+        for(size_t i=0; i<ts.size(); i++) {
+            things.push_back(ts[i]);
             if(useCustomNames) {
                 listViewStrings << QString::fromStdString(customizedNames->at(i));
             } else {
-                if(things.at(i)->getName().size()) {
-                    listViewStrings << QString::fromStdString(things[i]->getName());
+                if(ts.at(i)->getName().size()) {
+                    listViewStrings << QString::fromStdString(ts[i]->getName());
                 } else {
                     listViewStrings << "";
                 }
