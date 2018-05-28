@@ -33,6 +33,7 @@ FtsDialog::FtsDialog(QWidget *parent)
     lineEdit->setCompleter(completer);
 
     caseCheckBox = new QCheckBox{tr("&Ignore case")};
+    caseCheckBox->setChecked(true);
 
     findButton = new QPushButton{tr("&Search")};
     findButton->setDefault(true);
