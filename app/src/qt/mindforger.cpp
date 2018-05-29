@@ -191,11 +191,16 @@ int main(int argc, char *argv[])
         if(r) {
             config.setActiveRepository(config.addRepository(r));
         } else {
-            cerr << QCoreApplication::translate("main", "Unable to find given repository/file to open: '").toUtf8().constData()
-                 << useRepository
-                 << "'"
-                 << endl;
-            exit(1);
+            if(config.createEmptyMarkdownFile(useRepository)) {
+                r = m8r::RepositoryIndexer::getRepositoryForPath(useRepository);
+                config.setActiveRepository(config.addRepository(r));
+            } else {
+                cerr << QCoreApplication::translate("main", "Unable to find given repository/file to open: '").toUtf8().constData()
+                     << useRepository
+                     << "'"
+                     << endl;
+                exit(1);
+            }
         }
     } else {
         config.findOrCreateDefaultRepository();

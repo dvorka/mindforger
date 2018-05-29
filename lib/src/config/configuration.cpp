@@ -162,6 +162,17 @@ void Configuration::setActiveRepository(Repository* repository)
     }
 }
 
+bool Configuration::createEmptyMarkdownFile(const string& file)
+{
+    if(file.size() && file.find(FILE_PATH_SEPARATOR)==string::npos && RepositoryIndexer::fileHasMarkdownExtension(file)) {
+        // as it is filename w/o path I can try to create empty O in the current directory
+        stringToFile(file, DEFAULT_NEW_OUTLINE);
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void Configuration::findOrCreateDefaultRepository()
 {
     if(!activeRepository || activeRepository->getDir().empty()) {

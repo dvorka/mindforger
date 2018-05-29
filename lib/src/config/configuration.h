@@ -80,6 +80,9 @@ constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_KEY_BINDING = UI_EDITOR_KEY_BINDING_EMACS;
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
+// improve platform/language specific
+constexpr const auto DEFAULT_NEW_OUTLINE = "# New Notebook\n...\n\n##Note\n...\n\n";
+
 class Installer;
 
 /**
@@ -239,6 +242,12 @@ public:
     const std::string& getMemoryPath() const { return memoryPath; }
     const std::string& getLimboPath() const { return limboPath; }
     const char* getRepositoryPathFromEnv();
+    /**
+     * @brief Create empty Markdown file.
+     *
+     * Create empty Markdown file if its name was given on command line - no dirs and a supported MD extension.
+     */
+    bool createEmptyMarkdownFile(const std::string& file);
     /**
      * @brief Find or create default MindForger repository.
      *
