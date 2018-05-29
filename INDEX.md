@@ -22,7 +22,7 @@ MindForger is actually more than an editor or IDE - it's human mind inspired per
 Install MindForger:
                            
 * build from [source code](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md)
-* download [upstream tarball](https://github.com/dvorka/mindforger-repository/memory/mindforger/installation.md)
+* download [upstream tarball](https://github.com/dvorka/mindforger/releases)
 * [Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#ubuntu-)
 * [Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#fedora-)
 * [Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#debian-)
@@ -30,12 +30,12 @@ Install MindForger:
 # Documentation
 Read:
 
-* [Why MindForger?](https://github.com/dvorka/mindforger-repository/blob/memory/mindforger/why-mindforger.md)
-* [Installation](https://github.com/dvorka/mindforger-repository/blob/memory/mindforger/installation.md) 
-* [User documentation](https://github.com/dvorka/mindforger-repository/blob/memory/mindforger/user-documentation.md) 
-* [Documentation developer](https://github.com/dvorka/mindforger-repository/blob/memory/mindforger/developer-documentation.md)
-* [Project history](https://github.com/dvorka/mindforger-repository/blob/memory/mindforger/history.md)
-* [FAQ](https://github.com/dvorka/mindforger-repository/blob/memory/mindforger/faq.md)
+* [Why MindForger?](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/why-mindforger.md)
+* [Installation](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md) 
+* [User documentation](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/user-documentation.md) 
+* [Documentation developer](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/developer-documentation.md)
+* [Project history](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/history.md)
+* [FAQ](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/faq.md)
 
 Check `man mindforger`
 
