@@ -30,8 +30,12 @@ Install MindForger:
 # Documentation
 Read:
 
-* [user](https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md) documentation
-* [developer](https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md) documentation
+* [Why MindForger?](https://github.com/dvorka/mindforger-repository/blob/memory/mindforger/why-mindforger.md)
+* [Installation](https://github.com/dvorka/mindforger-repository/blob/memory/mindforger/installation.md) 
+* [User documentation](https://github.com/dvorka/mindforger-repository/blob/memory/mindforger/user-documentation.md) 
+* [Documentation developer](https://github.com/dvorka/mindforger-repository/blob/memory/mindforger/developer-documentation.md)
+* [Project history](https://github.com/dvorka/mindforger-repository/blob/memory/mindforger/history.md)
+* [FAQ](https://github.com/dvorka/mindforger-repository/blob/memory/mindforger/faq.md)
 
 Check `man mindforger`
 
