@@ -9,7 +9,7 @@
 https://www.mindforger.com
 
 ## Markdown IDE
-![MindForger](http://www.mindforger.com/github/github-markdown-ide.png)
+![MindForger](http://www.mindforger.com/github/github-markdown-ide.png?)
 
 MindForger is open, free, well performing Markdown IDE which respects your privacy and enables security. 
 
