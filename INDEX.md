@@ -81,8 +81,5 @@ Features:
 * Provide associated notes when writing text of a note
 * Scope visible notebooks and notes by time (relative forgetting)
 
-## Content
-Clone Markdown GitHub repositories to try MindForger.
-
 ## Bugs and Feature Requests
 https://github.com/dvorka/mindforger/issues
