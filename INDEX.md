@@ -6,6 +6,12 @@
 [![Documentation](https://img.shields.io/badge/project-documentation-blue.svg)](https://github.com/dvorka/mindforger-repository/memory/mindforger/index.md)
 [![All releases downloads](https://img.shields.io/github/downloads/dvorka/mindforger/total.svg)](https://github.com/dvorka/mindforger/releases)
 
+Are you drowning in information, but starving for **knowledge**? Where do you keep your **private remarks** 
+like ideas, personal plans, gift tips, how-tos, dreams, business vision, finance strategy, auto 
+coaching notes? Loads of documents, sketches and remarks spread around the file system, cloud, 
+web and Post-it notes? Are you affraid about your **privacy**? Are you able to **find** then once you create them? 
+Do you know how they are mutually **related** when you read or write them? No?
+
 https://www.mindforger.com
 
 ## Markdown IDE
