@@ -518,6 +518,16 @@ TEST(RepositoryIndexerTestCase, MakePathRelative)
        string{"/tmp/mf-relativize/memory/a/b/src.md"},
        string{"/tmp/mf-relativize/memory/A/B/dst.md#n1"}));
 
+    // MF/MD: same file
+    EXPECT_EQ("#n1", repositoryIndexer.makePathRelative(
+       repository,
+       string{"/tmp/mf-relativize/memory/a/b/src.md"},
+       string{"/tmp/mf-relativize/memory/a/b/src.md#n1"}));
+    EXPECT_EQ("src.md", repositoryIndexer.makePathRelative(
+       repository,
+       string{"/tmp/mf-relativize/memory/a/b/src.md"},
+       string{"/tmp/mf-relativize/memory/a/b/src.md#"}));
+
     // out of repo
     EXPECT_EQ("/tmp/dst.md", repositoryIndexer.makePathRelative(
        repository,
@@ -621,6 +631,20 @@ TEST(RepositoryIndexerTestCase, MakePathRelative)
     EXPECT_EQ(m8r::Repository::RepositoryType::MINDFORGER, repository->getType());
     EXPECT_EQ(m8r::Repository::RepositoryMode::FILE, repository->getMode());
 
+    // MF/MD: same file
+    EXPECT_EQ("#n1", repositoryIndexer.makePathRelative(
+       repository,
+       string{"/tmp/mf-relativize/memory/first.md"},
+       string{"/tmp/mf-relativize/memory/first.md#n1"}));
+    EXPECT_EQ("first.md", repositoryIndexer.makePathRelative(
+       repository,
+       string{"/tmp/mf-relativize/memory/first.md"},
+       string{"/tmp/mf-relativize/memory/first.md#"}));
+    EXPECT_EQ("#n1", repositoryIndexer.makePathRelative(
+       repository,
+       string{"first.md"},
+       string{"first.md#n1"}));
+
     // MF/MD: same dir
     EXPECT_EQ("dst.md", repositoryIndexer.makePathRelative(
        repository,
@@ -629,7 +653,7 @@ TEST(RepositoryIndexerTestCase, MakePathRelative)
     EXPECT_EQ("dst.md#n1", repositoryIndexer.makePathRelative(
        repository,
        string{"/tmp/mf-relativize/memory/first.md"},
-       string{"/tmp/mf-relativize/memory/dst.md#n1"}));
+       string{"/tmp/mf-relativize/memory/dst.md#n1"}));    
 
     // everything else is absolute
 

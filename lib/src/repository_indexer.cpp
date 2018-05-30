@@ -317,6 +317,18 @@ std::string RepositoryIndexer::makePathRelative(
 
             // same dir
             if(!srcDir.compare(dstDir)) {
+                // same file w/ anchor: #anchor
+                size_t anchorIdx = dstFile.find("#");
+                if(anchorIdx != string::npos) {
+                    string anchor = dstFile.substr(anchorIdx);
+                    string anchorHost = dstFile.substr(0, anchorIdx);
+                    if(anchor.size()==1) {
+                        return anchorHost;
+                    }
+                    if(!srcFile.compare(anchorHost)) {
+                        return anchor;
+                    }
+                }
                 return dstFile;
             } else if(stringStartsWith(dstDir, srcDir)) {
                 // src parent of dst > suffix
@@ -386,6 +398,18 @@ std::string RepositoryIndexer::makePathRelative(
         if(dstIsFile) {
             pathToDirectoryAndFile(dstAbsolutePath, dstDir, dstFile);
             if(!srcDir.compare(dstDir)) {
+                // same file w/ anchor: #anchor
+                size_t anchorIdx = dstFile.find("#");
+                if(anchorIdx != string::npos) {
+                    string anchor = dstFile.substr(anchorIdx);
+                    string anchorHost = dstFile.substr(0, anchorIdx);
+                    if(anchor.size()==1) {
+                        return anchorHost;
+                    }
+                    if(!srcFile.compare(anchorHost)) {
+                        return anchor;
+                    }
+                }
                 return dstFile;
             }
         }
