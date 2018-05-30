@@ -27,7 +27,7 @@ NewFileDialog::NewFileDialog(QWidget* parent)
 
     // widgets
     fileNameLabel = new QLabel{tr("Markdown name:")};
-    repositoryNameEdit = new QLineEdit{};
+    fileNameEdit = new QLineEdit{};
     dirLabel = new QLabel{tr("Target directory:")};
     dirEdit = new QLineEdit{};
     pathLabel = new QLabel{tr("File to be created:")};
@@ -42,7 +42,7 @@ NewFileDialog::NewFileDialog(QWidget* parent)
     closeButton = new QPushButton{tr("&Cancel")};
 
     // signals
-    QObject::connect(repositoryNameEdit, SIGNAL(textChanged(const QString&)), this, SLOT(refreshPath()));
+    QObject::connect(fileNameEdit, SIGNAL(textChanged(const QString&)), this, SLOT(refreshPath()));
     QObject::connect(dirEdit, SIGNAL(textChanged(const QString&)), this, SLOT(refreshPath()));
     QObject::connect(findDirectoryButton, SIGNAL(clicked()), this, SLOT(handleFindDirectory()));
     QObject::connect(newButton, SIGNAL(clicked()), this, SLOT(close()));
@@ -51,7 +51,7 @@ NewFileDialog::NewFileDialog(QWidget* parent)
     // assembly
     QVBoxLayout* mainLayout = new QVBoxLayout{};
     mainLayout->addWidget(fileNameLabel);
-    mainLayout->addWidget(repositoryNameEdit);
+    mainLayout->addWidget(fileNameEdit);
     mainLayout->addWidget(dirLabel);
     mainLayout->addWidget(dirEdit);
     QHBoxLayout* srcButtonLayout = new QHBoxLayout{};
@@ -82,9 +82,9 @@ NewFileDialog::~NewFileDialog()
 
 void NewFileDialog::show()
 {
-    repositoryNameEdit->setText(tr("name"));
-    repositoryNameEdit->selectAll();
-    repositoryNameEdit->setFocus();
+    fileNameEdit->setText(tr("name"));
+    fileNameEdit->selectAll();
+    fileNameEdit->setFocus();
     dirEdit->setText(homeDirectory);
 
     refreshPath();
@@ -103,7 +103,7 @@ void NewFileDialog::refreshPath()
         directory.append(FILE_PATH_SEPARATOR);
     }
     // name
-    QString name{repositoryNameEdit->text()};
+    QString name{fileNameEdit->text()};
     if(name.isEmpty()) {
         name = tr("name");
     } else {
@@ -130,7 +130,7 @@ void NewFileDialog::handleFindDirectory()
     if(fileDialog.exec()) {
         fileNames = fileDialog.selectedFiles();
         if(fileNames.size()==1) {
-            pathEdit->setText(fileNames[0]);
+            dirEdit->setText(fileNames[0]);
         } // else too many files
     } // else directory closed / nothing choosen
 }

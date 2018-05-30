@@ -33,7 +33,7 @@ private:
     QString homeDirectory;
 
     QLabel* fileNameLabel;
-    QLineEdit* repositoryNameEdit;
+    QLineEdit* fileNameEdit;
     QLabel* dirLabel;
     QLineEdit* dirEdit;
     QLabel* pathLabel;

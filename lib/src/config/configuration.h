@@ -81,7 +81,7 @@ constexpr const auto UI_DEFAULT_EDITOR_KEY_BINDING = UI_EDITOR_KEY_BINDING_EMACS
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
 // improve platform/language specific
-constexpr const auto DEFAULT_NEW_OUTLINE = "# New Notebook\n...\n\n##Note\n...\n\n";
+constexpr const auto DEFAULT_NEW_OUTLINE = "# New Markdown File\n\nThis is a new Markdown file created by MindForger.\n\n#Section 1\nThe first section.\n\n";
 
 class Installer;
 

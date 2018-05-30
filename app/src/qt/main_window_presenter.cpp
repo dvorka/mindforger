@@ -345,7 +345,7 @@ void MainWindowPresenter::handleMindNewFile()
     // create foo file ...
     stringToFile(
         newFileDialog->getFilePath().toStdString(),
-        "# New Markdown File\n\nThis is a new Markdown file created by MindForger.\n\n#Section 1\nThe first section.\n\n");
+        DEFAULT_NEW_OUTLINE);
 
     // ... and open it
     doActionMindRelearn(newFileDialog->getFilePath());
