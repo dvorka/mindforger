@@ -51,7 +51,7 @@ constexpr const auto FILE_PATH_MEMORY = "memory";
 constexpr const auto FILE_PATH_MIND = "mind";
 constexpr const auto FILE_PATH_LIMBO = "limbo";
 constexpr const auto FILE_PATH_STENCILS = "stencils";
-constexpr const auto FILE_PATH_OUTLINES = "outlines";
+constexpr const auto FILE_PATH_OUTLINES = "notebooks";
 constexpr const auto FILE_PATH_NOTES = "notes";
 
 constexpr const auto FILE_EXTENSION_MD_MD = ".md";
