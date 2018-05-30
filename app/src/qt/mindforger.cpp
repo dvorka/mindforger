@@ -160,7 +160,8 @@ int main(int argc, char *argv[])
         if(arguments.size()==1) {
             useRepository.assign(arguments[0].toStdString());
         } else if(arguments.size()>1) {
-            cerr << "Too many arguments (" << dec << arguments.size() + ") - at most one directory or file can be specified!" << endl;
+            // TODO i18n
+            cerr << "Error: Too many arguments (" << dec << arguments.size() + ") - at most one directory or file can be specified" << endl;
             return 1;
         }
 
@@ -195,7 +196,7 @@ int main(int argc, char *argv[])
                 r = m8r::RepositoryIndexer::getRepositoryForPath(useRepository);
                 config.setActiveRepository(config.addRepository(r));
             } else {
-                cerr << QCoreApplication::translate("main", "Unable to find given repository/file to open: '").toUtf8().constData()
+                cerr << QCoreApplication::translate("main", "Error: Unable to find given repository/file to open - open MindForger without parameters and create it from menu Mind/New: '").toUtf8().constData()
                      << useRepository
                      << "'"
                      << endl;

@@ -147,13 +147,17 @@ void Configuration::setActiveRepository(Repository* repository)
 
             memoryPath.clear();
             memoryPath += activeRepository->getDir();
-            memoryPath+=FILE_PATH_SEPARATOR;
-            memoryPath+=FILE_PATH_MEMORY;
 
             limboPath.clear();
             limboPath += activeRepository->getDir();
-            limboPath+=FILE_PATH_SEPARATOR;
-            limboPath+=FILE_PATH_LIMBO;
+
+            if(repository->getType()==Repository::RepositoryType::MINDFORGER && repository->getMode()==Repository::RepositoryMode::REPOSITORY) {
+                memoryPath+=FILE_PATH_SEPARATOR;
+                memoryPath+=FILE_PATH_MEMORY;
+
+                limboPath+=FILE_PATH_SEPARATOR;
+                limboPath+=FILE_PATH_LIMBO;
+            }
         } else {
             throw MindForgerException{"Active repository must be one of repositories known to Configuration!"};
         }
