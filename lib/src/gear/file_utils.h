@@ -24,6 +24,15 @@
 #include <sys/dir.h>
 #include <unistd.h>
 
+#include <zlib.h>
+#if defined(MSDOS) || defined(OS2) || defined(WIN32) || defined(__CYGWIN__)
+#  include <fcntl.h>
+#  include <io.h>
+#  define SET_BINARY_MODE(file) setmode(fileno(file), O_BINARY)
+#else
+#  define SET_BINARY_MODE(file)
+#endif
+
 #include <ctime>
 #include <cstdio>
 #include <cstring>
@@ -37,6 +46,7 @@
 
 #include "../debug.h"
 #include "../exceptions.h"
+#include "string_utils.h"
 
 #ifdef __linux__
 constexpr const auto FILE_PATH_SEPARATOR = "/";
@@ -55,7 +65,6 @@ constexpr const auto SYSTEM_TEMP_DIRECTORY = "c:\\Windows\\Temp";
 constexpr const auto SYSTEM_TEMP_DIRECTORY = "/tmp";
 #endif
 
-
 namespace m8r {
 
 struct File
@@ -69,6 +78,14 @@ struct File
 
     const std::string& getName() const noexcept { return name; }
 };
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+int ungzip(const char* srcFile, const char* dstFile);
+#ifdef __cplusplus
+}
+#endif
 
 void pathToDirectoryAndFile(const std::string& path, std::string& directory, std::string& file);
 bool stringToLines(const std::string* text, std::vector<std::string*>& lines);
@@ -85,7 +102,7 @@ bool isFile(const char* path);
 bool isPathRelative(const std::string& path);
 char* makeTempDirectory(char* dirNamePefix);
 int removeDirectoryRecursively(const char* path);
-int copyDirectoryRecursively(const char* srcPath, const char* dstPath);
+int copyDirectoryRecursively(const char* srcPath, const char* dstPath, bool extractGz=false);
 bool createDirectory(const std::string& path);
 
 } // m8r namespace

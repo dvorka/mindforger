@@ -63,6 +63,27 @@ TEST(FileGearTestCase, DeepCopy)
     ASSERT_TRUE(m8r::isDirectoryOrFileExists(p.c_str()));
 }
 
+// deep copy of the real production documentation - this test to be disabled and run MANUALLY
+TEST(FileGearTestCase, DeepProductionCopy)
+{
+    string srcRepositoryDir{"/usr/share/doc/mindforger"};
+    m8r::removeDirectoryRecursively(srcRepositoryDir.c_str());
+    string dstRepositoryDir{"/tmp/mf-file-gear-REAL-doc"};
+    m8r::removeDirectoryRecursively(dstRepositoryDir.c_str());
+    string p;
+
+    // asserts
+    p.assign("/usr/share/doc/mindforger/README.md");
+    ASSERT_TRUE(m8r::isDirectoryOrFileExists(p.c_str()));
+
+    // test
+    m8r::copyDirectoryRecursively(srcRepositoryDir.c_str(), dstRepositoryDir.c_str(), true);
+
+    // asserts
+    p.assign(dstRepositoryDir); p.append("/stencils/notebook/swot.md");
+    ASSERT_TRUE(m8r::isDirectoryOrFileExists(p.c_str()));
+}
+
 TEST(FileGearTestCase, DeepCopyToExisting)
 {
     string srcRepositoryDir{"/tmp/mf-file-gear-repository-SRCE"};

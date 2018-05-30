@@ -39,6 +39,7 @@ namespace m8r {
 bool stringStartsWith(const char* s, const char* prefix);
 bool stringStartsWith(const std::string& s, const char* prefix);
 bool stringStartsWith(const std::string& s, const std::string& prefix);
+bool stringEndsWith(const char* s, const char* suffix);
 bool stringEndsWith(const std::string& s, const char* suffix);
 bool stringEndsWith(const std::string& s, const std::string& suffix);
 char** stringSplit(const char* s, const char delimiter);

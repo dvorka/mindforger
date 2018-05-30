@@ -253,5 +253,7 @@ RESOURCES += \
 # Enable GTest unit test framework library by linking dependencies
 #unix|win32: LIBS += -lgtest
 #unix|win32: LIBS += -lpthread
+# zlib
+#unix|win32: LIBS += -lz
 
 # eof

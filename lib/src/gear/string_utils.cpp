@@ -48,6 +48,19 @@ bool stringEndsWith(const string& s, const string& suffix)
     return equal(suffix.rbegin(), suffix.rend(), s.rbegin());
 }
 
+bool stringEndsWith(const char* s, const char* suffix)
+{
+    if (!s || !suffix) {
+        return 0;
+    }
+    size_t sLng = strlen(s);
+    size_t suffixLng = strlen(suffix);
+    if (suffixLng >  sLng) {
+        return 0;
+    }
+    return strncmp(s + sLng - suffixLng, suffix, suffixLng) == 0;
+}
+
 bool stringEndsWith(const string& s, const char* suffix)
 {
     if (!s.c_str() || !suffix) {

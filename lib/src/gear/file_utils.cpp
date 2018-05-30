@@ -245,11 +245,266 @@ int removeDirectoryRecursively(const char* path)
    return r;
 }
 
+
+
+
+
+#ifdef GZIP_DEFLATE_VIA_ZIP_LIBRARY
+
+void unzip(const char* srcFile, const char* dstFile)
+{
+    int err = 0;
+    zip* z = zip_open(srcFile, 0, &err);
+
+    struct zip_stat zipStat;
+    zip_stat_init(&zipStat);
+    zip_stat(z, dstFile, 0, &zipStat);
+
+    char* contents = new char[zipStat.size];
+
+    zip_file* f = zip_fopen(z, dstFile, 0);
+    const zip_int64_t did_read = zip_fread(f, contents, zipStat.size);
+    if(did_read > 0) {
+        zip_fclose(f);
+    }
+
+    zip_close(z);
+
+    delete[] contents;
+}
+
+#endif
+
+#ifdef GZIP_DEFLATE_VIA_ZLIB_PIPE_
+
+int ungzipFile(FILE* source, FILE* dest)
+{
+    #define CHUNK 16384
+
+    /* avoid end-of-line conversions */
+    SET_BINARY_MODE(source);
+    SET_BINARY_MODE(dest);
+
+    int ret;
+    unsigned have;
+    z_stream strm;
+    unsigned char in[CHUNK];
+    unsigned char out[CHUNK];
+
+    /* allocate inflate state */
+    strm.zalloc = Z_NULL;
+    strm.zfree = Z_NULL;
+    strm.opaque = Z_NULL;
+    strm.avail_in = 0;
+    strm.next_in = Z_NULL;
+    ret = inflateInit(&strm);
+    if (ret != Z_OK)
+        return ret;
+
+    /* decompress until deflate stream ends or end of file */
+    do {
+        strm.avail_in = fread(in, 1, CHUNK, source);
+        if (ferror(source)) {
+            (void)inflateEnd(&strm);
+            return Z_ERRNO;
+        }
+        if (strm.avail_in == 0)
+            break;
+        strm.next_in = in;
+
+        /* run inflate() on input until output buffer not full */
+        do {
+            strm.avail_out = CHUNK;
+            strm.next_out = out;
+            ret = inflate(&strm, Z_NO_FLUSH);
+
+
+            // IMPROVE don't want to crash assert(ret != Z_STREAM_ERROR);  /* state not clobbered */
+            if(ret == Z_STREAM_ERROR) return Z_STREAM_ERROR;
+
+
+            switch (ret) {
+            case Z_NEED_DICT:
+                ret = Z_DATA_ERROR;     /* and fall through */
+            case Z_DATA_ERROR:
+            case Z_MEM_ERROR:
+                (void)inflateEnd(&strm);
+                return ret;
+            }
+            have = CHUNK - strm.avail_out;
+            if (fwrite(out, 1, have, dest) != have || ferror(dest)) {
+                (void)inflateEnd(&strm);
+                return Z_ERRNO;
+            }
+        } while (strm.avail_out == 0);
+
+        /* done when inflate() says it's done */
+    } while (ret != Z_STREAM_END);
+
+    /* clean up and return */
+    (void)inflateEnd(&strm);
+    return ret == Z_STREAM_END ? Z_OK : Z_DATA_ERROR;
+}
+
+int ungzip(const char* srcFile, const char* dstFile)
+{
+    if(isDirectoryOrFileExists(srcFile) && !isDirectoryOrFileExists(dstFile)) {
+        FILE* srcFILE = fopen(srcFile, "r");
+        FILE* dstFILE = fopen(dstFile, "r+");
+        int r = ungzipFile(srcFILE, dstFILE);
+
+        // IMPROVE polish error messages - debug/cerr
+        if(r != Z_OK) {
+            fputs("zpipe: ", stderr);
+            switch (r) {
+            case Z_ERRNO:
+                if (ferror(stdin))
+                    fputs("error reading stdin\n", stderr);
+                if (ferror(stdout))
+                    fputs("error writing stdout\n", stderr);
+                break;
+            case Z_STREAM_ERROR:
+                fputs("invalid compression level\n", stderr);
+                break;
+            case Z_DATA_ERROR:
+                fputs("invalid or incomplete deflate data\n", stderr);
+                break;
+            case Z_MEM_ERROR:
+                fputs("out of memory\n", stderr);
+                break;
+            case Z_VERSION_ERROR:
+                fputs("zlib version mismatch!\n", stderr);
+            }
+        }
+        return r;
+    }
+
+    return Z_STREAM_ERROR;
+}
+
+#endif
+
+// TODO this code must be completely rewritten
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* The following macro calls a zlib routine and checks the return
+   value. If the return value ("status") is not OK, it prints an error
+   message and exits the program. Zlib's error statuses are all less
+   than zero. */
+
+#define GZIP_CALL_ZLIB(x) {                                                  \
+        int status;                                                     \
+        status = x;                                                     \
+        if (status < 0) {                                               \
+            fprintf (stderr,                                            \
+                     "%s:%d: %s returned a bad status of %d.\n",        \
+                     __FILE__, __LINE__, #x, status);                   \
+            exit (EXIT_FAILURE);                                        \
+        }                                                               \
+    }
+
+/* if "test" is true, print an error message and halt execution. */
+
+#define GZIP_FAIL(test,message) {                             \
+        if (test) {                                      \
+            inflateEnd (& strm);                         \
+            fprintf (stderr, "%s:%d: " message           \
+                     " file '%s' failed: %s\n",          \
+                     __FILE__, __LINE__, srcFile,      \
+                     strerror (errno));                  \
+            exit (EXIT_FAILURE);                         \
+        }                                                \
+    }
+
+
+int ungzip(const char* srcFile, const char* dstFile)
+{
+    UNUSED_ARG(dstFile);
+
+    // IMPROVE make these variables
+#define CHUNK 0x4000
+#define windowBits 15
+#define ENABLE_ZLIB_GZIP 32
+
+    FILE* srcFILE;
+    FILE* dstFILE;
+    z_stream strm = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    unsigned char in[CHUNK];
+    unsigned char out[CHUNK];
+
+    strm.zalloc = Z_NULL;
+    strm.zfree = Z_NULL;
+    strm.opaque = Z_NULL;
+    strm.next_in = in;
+    strm.avail_in = 0;
+    GZIP_CALL_ZLIB (inflateInit2 (& strm, windowBits | ENABLE_ZLIB_GZIP));
+
+    // IMPROVE error reporting
+    if(!isDirectoryOrFileExists(srcFile) || isDirectoryOrFileExists(dstFile)) {
+        return Z_STREAM_ERROR;
+    }
+
+    // open src file
+    srcFILE = fopen (srcFile, "rb");
+    GZIP_FAIL (! srcFILE, "open");
+
+    // open dst file
+    dstFILE = fopen(dstFile, "wb");
+    GZIP_FAIL (! dstFILE, "open");
+
+    while (1) {
+        int bytes_read;
+        int zlib_status;
+
+        bytes_read = fread (in, sizeof (char), sizeof (in), srcFILE);
+        GZIP_FAIL (ferror (srcFILE), "read");
+        strm.avail_in = bytes_read;
+        strm.next_in = in;
+        do {
+            unsigned have;
+            strm.avail_out = CHUNK;
+            strm.next_out = out;
+            zlib_status = inflate (& strm, Z_NO_FLUSH);
+
+            switch (zlib_status) {
+            case Z_OK:
+            case Z_STREAM_END:
+            case Z_BUF_ERROR:
+                break;
+            default:
+                inflateEnd (& strm);
+                fprintf (stderr, "Gzip error %d in '%s'.\n", zlib_status, srcFile);
+                return -1;
+            }
+
+            have = CHUNK - strm.avail_out;
+
+            // write deflated data
+            fwrite(out, sizeof (unsigned char), have, dstFILE);
+        } while (strm.avail_out == 0);
+
+        if (feof (srcFILE)) {
+            inflateEnd (& strm);
+            break;
+        }
+    }
+    GZIP_FAIL (fclose (srcFILE), "close");
+    GZIP_FAIL (fclose (dstFILE), "close");
+    return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+
 // IMPROVE error handling to be fixed
-int copyDirectoryRecursively(const char* srcPath, const char* dstPath)
+int copyDirectoryRecursively(const char* srcPath, const char* dstPath, bool extractGz)
 {
     DIR *d = opendir(srcPath);
-    size_t path_len = strlen(srcPath);
+    size_t srcPathLen = strlen(srcPath);
+    size_t dstPathLen = strlen(dstPath);
     int r = -1;
     if(d) {
         MF_DEBUG("DIR: " << dstPath << endl);
@@ -260,25 +515,40 @@ int copyDirectoryRecursively(const char* srcPath, const char* dstPath)
         while(!r && (p=readdir(d))) {
             int r2 = -1;
             char *srcBuf, *dstBuf;
-            size_t len;
+            size_t srcLen, dstLen;
             // skip the names "." and ".." as I don't want to recurse on them
             if(!strcmp(p->d_name, ".") || !strcmp(p->d_name, "..")) {
                 continue;
             }
-            len = path_len + strlen(p->d_name) + 2;
-            srcBuf = new char[len];
-            dstBuf = new char[len];
+            srcLen = srcPathLen + strlen(p->d_name) + 2;
+            dstLen = dstPathLen + strlen(p->d_name) + 2;
+            srcBuf = new char[srcLen];
+            dstBuf = new char[dstLen];
             if(srcBuf) {
                 struct stat statbuf;
                 // IMPROVE MF_DEBUG
-                snprintf(srcBuf, len, "%s/%s", srcPath, p->d_name);
-                snprintf(dstBuf, len, "%s/%s", dstPath, p->d_name);
+                snprintf(srcBuf, srcLen, "%s/%s", srcPath, p->d_name);
+                snprintf(dstBuf, dstLen, "%s/%s", dstPath, p->d_name);
                 if(!stat(srcBuf, &statbuf)) {
                     if(S_ISDIR(statbuf.st_mode)) {
-                        r2 = copyDirectoryRecursively(srcBuf, dstBuf);
+                        r2 = copyDirectoryRecursively(srcBuf, dstBuf, extractGz);
                     } else {
                         MF_DEBUG("FILE: " << dstBuf << endl);
-                        if(!isDirectoryOrFileExists(dstBuf)) copyFile(string{srcBuf}, string{dstBuf});
+                        if(!isDirectoryOrFileExists(dstBuf)) {
+                            copyFile(string{srcBuf}, string{dstBuf});
+                            if(extractGz) {
+                                if(stringEndsWith(dstBuf,".gz") && strlen(dstBuf)>3) {
+                                    char* dstExt = new char[strlen(dstBuf)+1];
+                                    strcpy(dstExt, dstBuf);
+                                    if(strlen(dstExt)>3) {
+                                        dstExt[strlen(dstExt)-3] = 0;
+                                        MF_DEBUG("  ungzip: '" << dstBuf << "' > '" << dstExt << "'" << endl);
+                                        ungzip(dstBuf, dstExt);
+                                    }
+                                    delete[] dstExt;
+                                }
+                            }
+                        }
                         r2 = 0;
                     }
                 }

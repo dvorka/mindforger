@@ -39,6 +39,8 @@ DEPENDPATH += $$PWD/../lib/src
 LIBS += -L$$OUT_PWD/../lib -lmindforger
 # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
 LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
+# zlib
+LIBS += -lz
 
 # development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1
