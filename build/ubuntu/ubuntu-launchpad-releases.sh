@@ -198,17 +198,17 @@ function releaseForParticularUbuntuVersion() {
 # ############################################################################
 
 export ARG_BAZAAR_MSG="Experimental packaging."
-export ARG_MAJOR_VERSION=0.7.
-export ARG_MINOR_VERSION=8 # minor version is icremented for every Ubuntu version
+export ARG_MAJOR_VERSION=1.42.
+export ARG_MINOR_VERSION=1 # minor version is icremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety
 # current: trusty xenial artful bionic
-for UBUNTU_VERSION in xenial
+for UBUNTU_VERSION in trusty xenial artful bionic
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
-    MINOR=`expr $MINOR + 1`
+    ARG_MINOR_VERSION=`expr $ARG_MINOR_VERSION + 1`
 done
 
 # eof
