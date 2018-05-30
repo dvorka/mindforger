@@ -138,7 +138,7 @@ void NewRepositoryDialog::handleFindDirectory()
     if(fileDialog.exec()) {
         fileNames = fileDialog.selectedFiles();
         if(fileNames.size()==1) {
-            pathEdit->setText(fileNames[0]);
+            dirEdit->setText(fileNames[0]);
         } // else too many files
     } // else directory closed / nothing choosen
 }
