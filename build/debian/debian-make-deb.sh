@@ -132,12 +132,11 @@ function buildDebPackage() {
     DEBEMAIL="martin.dvorak@mindforger.com"
     DEBFULLNAME="Martin Dvorak"
     export DEBEMAIL DEBFULLNAME
-    
+
     # 2.2) build binary deb
     # https://www.debian.org/doc/manuals/maint-guide/build.en.html
     dpkg-buildpackage -us -uc
-    mkdir -vf deb-binary
-    cp -vf *.dsc *.changes *.deb deb-binary
+    pushd .. && mkdir -v deb-binary && cp -vf *.dsc *.changes *.deb deb-binary && popd
 
     #
     # 3) create source deb
@@ -145,8 +144,7 @@ function buildDebPackage() {
     # 3.1) build deb
     # build SIGNED source deb package
     dpkg-buildpackage --source
-    mkdir -vf deb-source
-    cp -vf *.dsc *.changes *.deb deb-binary    
+    pushd .. && mkdir -v deb-source && cp -vf *.dsc *.changes *.deb deb-source && popd
 }
 
 # ############################################################################
