@@ -204,6 +204,7 @@ export ARG_MINOR_VERSION=1 # minor version is icremented for every Ubuntu versio
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety
 # current: trusty xenial artful bionic
+# MF supported (trusty has old GCC): xenial artful bionic
 for UBUNTU_VERSION in trusty xenial artful bionic
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
