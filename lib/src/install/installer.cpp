@@ -92,7 +92,7 @@ bool Installer::initMindForgerRepository(bool copyDoc, bool copyStencils, const 
                 dstPath += FILE_PATH_SEPARATOR;
                 dstPath += FILE_PATH_MEMORY;
                 if(isDirectoryOrFileExists(srcPath.c_str())) {
-                    copyDirectoryRecursively(srcPath.c_str(), dstPath.c_str());
+                    copyDirectoryRecursively(srcPath.c_str(), dstPath.c_str(), true);
                 } else {
                     cerr << "ERROR: attempt to copy documentation failed - source directory doesn't exist" << endl;
                 }
@@ -106,7 +106,7 @@ bool Installer::initMindForgerRepository(bool copyDoc, bool copyStencils, const 
                 dstPath += FILE_PATH_SEPARATOR;
                 dstPath += FILE_PATH_STENCILS;
                 if(isDirectoryOrFileExists(srcPath.c_str())) {
-                    copyDirectoryRecursively(srcPath.c_str(), dstPath.c_str());
+                    copyDirectoryRecursively(srcPath.c_str(), dstPath.c_str(), true);
                 } else {
                     cerr << "ERROR: attempt to copy stencils failed - source directory doesn't exist" << endl;
                 }
