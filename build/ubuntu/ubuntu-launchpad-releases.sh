@@ -163,7 +163,6 @@ function releaseForParticularUbuntuVersion() {
     echo -e "\n# source & binary debs  ######################################"
     # build BINARY? deb package (us uc tells that no GPG signing is needed)
     bzr builddeb -- -us -uc
-exit 0
     # build SIGNED source deb package
     bzr builddeb --source
 

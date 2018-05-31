@@ -86,8 +86,8 @@ function buildGitHubTarball() {
 # # Main #
 # ############################################################################
 
-export ARG_BAZAAR_MSG="Experimental Debian package."
-export ARG_VERSION="0.7.1"
+export ARG_BAZAAR_MSG="Initial MindForger release."
+export ARG_VERSION="1.42.0"
 
 buildGitHubTarball ${ARG_VERSION} ${ARG_BAZAAR_MSG}
 
