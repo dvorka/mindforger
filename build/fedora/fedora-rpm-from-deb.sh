@@ -22,7 +22,9 @@
 # This script is available from http://www.mindforger.com/fedora/fedora-rpm-from-deb.sh
 # to be easily available in VMs
 
-export MFVERSION="0.7.1"
+# This script must be run w/ ROOT priviledges (alien)
+
+export MFVERSION="1.42.0"
 export MFPRJNAME="mindforger-${MFVERSION}"
 export AMD64NAME="mindforger_${MFVERSION}-1_amd64"
 export I386NAME="mindforger_${MFVERSION}-1_i386"

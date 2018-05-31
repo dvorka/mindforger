@@ -20,19 +20,6 @@
 # Debian releases: https://www.debian.org/releases/
 #   6/7/8/9/10: squeeze wheezy jessie stretch buster
 
-# create new repository: Debian stretch, mindforger-release
-#aptly repo create -distribution=stretch -component=main mindforger-release
-
-# add DEB to repo
-#aptly repo add mindforger-release mindforger_0.7.1-1_amd64.deb
-
-# show repo content
-#aptly repo show -with-packages mindforger-release
-
-# create snapshot in the time of release
-#aptly snapshot create mindforger-0.7.1 from repo mindforger-release
-
-# publish snapshot to local filesystem so that it can be uploaded
-#aptly publish snapshot mindforger-0.7.1
+# ... see MindForger ~/mf Notebook for release procedure steps...
 
 # eof
