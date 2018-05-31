@@ -163,6 +163,7 @@ function releaseForParticularUbuntuVersion() {
     echo -e "\n# source & binary debs  ######################################"
     # build BINARY? deb package (us uc tells that no GPG signing is needed)
     bzr builddeb -- -us -uc
+exit 0
     # build SIGNED source deb package
     bzr builddeb --source
 
@@ -199,13 +200,13 @@ function releaseForParticularUbuntuVersion() {
 
 export ARG_BAZAAR_MSG="Experimental packaging."
 export ARG_MAJOR_VERSION=1.42.
-export ARG_MINOR_VERSION=1 # minor version is icremented for every Ubuntu version
+export ARG_MINOR_VERSION=5 # minor version is icremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety
 # current: trusty xenial artful bionic
 # MF supported (trusty has old GCC): xenial artful bionic
-for UBUNTU_VERSION in trusty xenial artful bionic
+for UBUNTU_VERSION in bionic
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
