@@ -54,8 +54,10 @@ LIBS += -lz
 #
 # - GCC: -std=c++0x ~ -std=c++11
 
-# compiler options (if not qmake CONFIG+=travisci)
-!travisci {
+# compiler options (qmake CONFIG+=mfnoccache ...)
+mfnoccache {
+  QMAKE_CXX = g++
+} else {
   QMAKE_CXX = ccache g++
 }
 QMAKE_CXXFLAGS += -pedantic -std=c++11

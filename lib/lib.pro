@@ -23,7 +23,9 @@ CONFIG -= qt
 mfunits {
   DEFINES = DO_M8R_DEBUG
 }
-!travisci {
+mfnoccache {
+  QMAKE_CXX = g++
+} else {
   QMAKE_CXX = ccache g++
 }
 QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
