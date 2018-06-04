@@ -44,7 +44,7 @@ LIBS += -lpthread
 # compiler options
 mfnoccache {
   QMAKE_CXX = g++
-} else {
+} else:!mfnocxx {
   QMAKE_CXX = ccache g++
 }
 QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg

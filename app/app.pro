@@ -57,7 +57,7 @@ LIBS += -lz
 # compiler options (qmake CONFIG+=mfnoccache ...)
 mfnoccache {
   QMAKE_CXX = g++
-} else {
+} else:!mfnocxx {
   QMAKE_CXX = ccache g++
 }
 QMAKE_CXXFLAGS += -pedantic -std=c++11
