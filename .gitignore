@@ -4,3 +4,4 @@ Makefile
 *.*~
 moc_*.cpp
 TEST_LOG*.*
+.qmake.stash
