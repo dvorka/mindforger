@@ -49,10 +49,6 @@ private:
      * @brief Active palette.
      */
     QPalette palette;
-    /**
-     * @brief Active stylesheet.
-     */
-    char* stylesheet;
 
     QSet<QString> themeNames;
 
