@@ -42,7 +42,7 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     m8r::removeDirectoryRecursively(repositoryDir.c_str());
     m8r::Installer installer{};
     installer.createEmptyMindForgerRepository(repositoryDir);
-    string stencilFile{repositoryDir+"/stencils/outlines/o-s.md"};
+    string stencilFile{repositoryDir+"/stencils/notebooks/o-s.md"};
     string stencilContent{
         "# Stencil Test Outline"
         "\n"

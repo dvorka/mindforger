@@ -38,7 +38,7 @@ TEST(FileGearTestCase, DeepCopy)
     m8r::createDirectory(string{srcRepositoryDir+"/memory/mindforger-doc"});
     m8r::stringToFile(oFile,oContent);
     // O stencil
-    oFile.assign(srcRepositoryDir+"/stencils/outlines/s-o1.md");
+    oFile.assign(srcRepositoryDir+"/stencils/notebooks/s-o1.md");
     oContent.assign("# Test Outline\n\nOutline text.\n\n## Note 1\nNote 1 text.\n");
     m8r::stringToFile(oFile,oContent);
     // N stencil
@@ -50,7 +50,7 @@ TEST(FileGearTestCase, DeepCopy)
     // asserts
     p.assign(srcRepositoryDir); p.append("/memory/mindforger-doc/o1.md");
     ASSERT_TRUE(m8r::isDirectoryOrFileExists(p.c_str()));
-    p.assign(srcRepositoryDir); p.append("/stencils/outlines/s-o1.md");
+    p.assign(srcRepositoryDir); p.append("/stencils/notebooks/s-o1.md");
     ASSERT_TRUE(m8r::isDirectoryOrFileExists(p.c_str()));
 
     // test
@@ -59,12 +59,12 @@ TEST(FileGearTestCase, DeepCopy)
     // asserts
     p.assign(dstRepositoryDir); p.append("/memory/mindforger-doc/o1.md");
     ASSERT_TRUE(m8r::isDirectoryOrFileExists(p.c_str()));
-    p.assign(dstRepositoryDir); p.append("/stencils/outlines/s-o1.md");
+    p.assign(dstRepositoryDir); p.append("/stencils/notebooks/s-o1.md");
     ASSERT_TRUE(m8r::isDirectoryOrFileExists(p.c_str()));
 }
 
 // deep copy of the real production documentation - this test to be disabled and run MANUALLY
-TEST(FileGearTestCase, DeepProductionCopy)
+TEST(FileGearTestCase, DISABLED_DeepProductionCopy)
 {
     string srcRepositoryDir{"/usr/share/doc/mindforger"};
     m8r::removeDirectoryRecursively(srcRepositoryDir.c_str());
@@ -99,7 +99,7 @@ TEST(FileGearTestCase, DeepCopyToExisting)
     m8r::createDirectory(string{srcRepositoryDir+"/memory/mindforger-doc"});
     m8r::stringToFile(oFile,oContent);
     // O stencil
-    oFile.assign(srcRepositoryDir+"/stencils/outlines/s-o1.md");
+    oFile.assign(srcRepositoryDir+"/stencils/notebooks/s-o1.md");
     oContent.assign("# Test Outline\n\nOutline text.\n\n## Note 1\nNote 1 text.\n");
     m8r::stringToFile(oFile,oContent);
     // N stencil
@@ -111,7 +111,7 @@ TEST(FileGearTestCase, DeepCopyToExisting)
     // asserts
     p.assign(srcRepositoryDir); p.append("/memory/mindforger-doc/o1.md");
     ASSERT_TRUE(m8r::isDirectoryOrFileExists(p.c_str()));
-    p.assign(srcRepositoryDir); p.append("/stencils/outlines/s-o1.md");
+    p.assign(srcRepositoryDir); p.append("/stencils/notebooks/s-o1.md");
     ASSERT_TRUE(m8r::isDirectoryOrFileExists(p.c_str()));
 
     // test
@@ -120,6 +120,6 @@ TEST(FileGearTestCase, DeepCopyToExisting)
     // asserts
     p.assign(dstRepositoryDir); p.append("/memory/mindforger-doc/o1.md");
     ASSERT_TRUE(m8r::isDirectoryOrFileExists(p.c_str()));
-    p.assign(dstRepositoryDir); p.append("/stencils/outlines/s-o1.md");
+    p.assign(dstRepositoryDir); p.append("/stencils/notebooks/s-o1.md");
     ASSERT_TRUE(m8r::isDirectoryOrFileExists(p.c_str()));
 }

@@ -227,7 +227,7 @@ TEST(MarkdownParserTestCase, MarkdownParserSections)
     cout << endl << "- Parser ----------------------------------------------";
     MarkdownParserSections parser(lexer);
     parser.parse();
-    EXPECT_TRUE(parser.hasMetadata());
+    EXPECT_FALSE(parser.hasMetadata());
     printAst(parser.getAst());
     cout << endl << "- DONE ----------------------------------------------";
     cout << endl;
@@ -391,7 +391,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentation)
     config.setConfigFilePath("/tmp/cfg-mptc-mr.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
 
-    m8r::Ontology ontology{config};
+    m8r::Ontology ontology{};
 
     string text =
             "## Canonical Message <!-- Metadata: tags: important; type: Goal; created: 2015-05-02 21:30:28; reads: 55; read: 2016-03-31 13:54:45; revision: 3; modified: 2016-03-31 13:54:45; importance: 3/5; urgency: 2/5; progress: 20%; -->\n"
@@ -437,7 +437,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPreamble)
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-mrp.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
-    m8r::Ontology ontology{config};
+    m8r::Ontology ontology{};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology};
@@ -520,7 +520,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPostDeclaredSection)
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-mrpdc.md");
     config.setActiveRepository(config.addRepository(repository));
-    m8r::Ontology ontology{config};
+    m8r::Ontology ontology{};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology};
@@ -590,7 +590,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationTrailingHashesSection)
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-mrthc.md");
     config.setActiveRepository(config.addRepository(repository));
-    m8r::Ontology ontology{config};
+    m8r::Ontology ontology{};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology};
@@ -671,7 +671,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationEmptyFirstLine)
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-mrefl.md");
     config.setActiveRepository(config.addRepository(repository));
-    m8r::Ontology ontology{config};
+    m8r::Ontology ontology{};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology};
@@ -707,9 +707,9 @@ TEST(MarkdownParserTestCase, FileSystemPersistence)
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-fsp.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
-    m8r::Ontology ontology{config};
+    m8r::Ontology ontology{};
     m8r::MarkdownOutlineRepresentation mdr{ontology};
-    m8r::FilesystemPersistence persistence{config,mdr};
+    m8r::FilesystemPersistence persistence{mdr};
 
     unique_ptr<string> text = unique_ptr<string>(new string{"abc"});
     cout << persistence.createFileName(string("/tmp"), text.get(), string(FILE_EXTENSION_MD_MD));
@@ -724,7 +724,7 @@ TEST(MarkdownParserBugsTestCase, EmptyNameSkipsEof)
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-ense.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
-    m8r::Ontology ontology{config};
+    m8r::Ontology ontology{};
 
     m8r::MarkdownOutlineRepresentation mdr{ontology};
     string outlineFilename{"/lib/test/resources/bugs-repository/memory/bug-37.md"};
@@ -774,7 +774,7 @@ TEST(MarkdownParserTestCase, TimeScope)
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-ts.md");
     config.setActiveRepository(config.addRepository(repository));
-    m8r::Ontology ontology{config};
+    m8r::Ontology ontology{};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology};
@@ -826,7 +826,7 @@ TEST(MarkdownParserTestCase, Deadline)
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-d.md");
     config.setActiveRepository(config.addRepository(repository));
-    m8r::Ontology ontology{config};
+    m8r::Ontology ontology{};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology};
@@ -875,7 +875,7 @@ TEST(MarkdownParserTestCase, Links)
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-l.md");
     config.setActiveRepository(config.addRepository(repository));
-    m8r::Ontology ontology{config};
+    m8r::Ontology ontology{};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology};
