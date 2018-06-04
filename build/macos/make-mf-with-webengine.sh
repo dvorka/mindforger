@@ -19,7 +19,7 @@
 
 # make project w/ QtWebEngine instead QtWebKit
 
-cd ..
+cd ../..
 make clean
 qmake -r CONFIG+=mfwebengine mindforger.pro && make -j 8
 
