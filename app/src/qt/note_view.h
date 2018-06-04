@@ -24,12 +24,21 @@
 #include "note_view_model.h"
 
 #include <QtWidgets>
-#include <QWebView>
+#include <QtWidgets>
+#ifdef MF_QT_WEB_ENGINE
+  #include <QWebEngineView>
+#else
+  #include <QWebView>
+#endif
 #include <QUrl>
 
 namespace m8r {
 
+#ifdef MF_QT_WEB_ENGINE
+class NoteView: public QWebEngineView
+#else
 class NoteView: public QWebView
+#endif
 {
     Q_OBJECT
 

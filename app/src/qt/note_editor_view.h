@@ -84,8 +84,8 @@ public:
 
     // autocomplete
 protected:
-    void mousePressEvent(QMouseEvent* event);
-    void keyPressEvent(QKeyEvent* event);
+    void mousePressEvent(QMouseEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
 private:
     void setEditorTabWidth(int tabWidth);
     void performCompletion(const QString& completionPrefix);
