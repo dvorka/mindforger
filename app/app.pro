@@ -27,6 +27,7 @@ QT += widgets
 #   - webengine on Windows and macOS
 mfwebengine {
     QT += webengine
+    DEFINES = MF_QT_WEB_ENGINE
 } else {
     QT += webkit
     QT += webkitwidgets
