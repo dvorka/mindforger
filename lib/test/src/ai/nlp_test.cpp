@@ -186,7 +186,9 @@ TEST(AiNlpTestCase, Tokenizer)
 
     // test N narrowing to string using char provider
     cout << endl << endl << "Testing M NARROWING using tokenizer:" << endl;
-    m8r::Note* n=mind.remind().getOutlines()[0]->getNotes()[0];
+    unique_ptr<vector<m8r::Outline*>> os = mind.findOutlineByNameFts("Canonical Message");
+    ASSERT_EQ(1, os.get()->size());
+    m8r::Note* n=os.get()->at(0)->getNotes()[0];
     cout << "- BEGIN original ---" << endl << n->getName() << endl << n->getDescriptionAsString() << endl
          << "- END original >>>>> BEGIN char stream ---" << endl;
     m8r::NoteCharProvider nNarrower{n};
@@ -195,7 +197,7 @@ TEST(AiNlpTestCase, Tokenizer)
         narrowed += nNarrower.next();
     }
     cout << narrowed << endl << "- END char stream --" << endl;
-    ASSERT_EQ(182, narrowed.size());
+    ASSERT_EQ(184, narrowed.size());
 }
 
 TEST(AiNlpTestCase, AaRepositoryBow)

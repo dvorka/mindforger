@@ -152,7 +152,7 @@ std::vector<char*>* HashMap<VALUE>::keys()
 {
     if(entrySize) {
         std::vector<char*>* result = new std::vector<char*>{};
-        int i{}, j{};
+        int i{};
         Entry *p{};
         for(i=0; i<tableSize; i++) {
             p=table[i];

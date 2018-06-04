@@ -21,11 +21,18 @@
 namespace m8r {
 
 NoteView::NoteView(QWidget *parent)
+#ifdef MF_QT_WEB_ENGINE
+    : QWebEngineView(parent)
+#else
     : QWebView(parent)
+#endif
 {
-
+#ifdef MF_QT_WEB_ENGINE
+    // TODO QWebEngine click handler to be implemented
+#else
     // ensure that link clicks are not handled, but delegated to MF using linkClicked signal
     page()->setLinkDelegationPolicy(QWebPage::LinkDelegationPolicy::DelegateAllLinks);
+#endif
 }
 
 void NoteView::mouseDoubleClickEvent(QMouseEvent* event)
@@ -44,7 +51,11 @@ void NoteView::keyPressEvent(QKeyEvent* event)
         }
     }
 
+#ifdef MF_QT_WEB_ENGINE
+    QWebEngineView::keyPressEvent(event);
+#else
     QWebView::keyPressEvent(event);
+#endif
 }
 
 } // m8r namespace

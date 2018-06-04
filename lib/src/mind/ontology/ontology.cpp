@@ -28,9 +28,8 @@ string Ontology::KEY_TAXONOMY_NOTE_TYPES = string("NoteTypes");
 string Ontology::KEY_TAXONOMY_RELATIONSHIP_TYPES = string("RelationshipTypes");
 string Ontology::KEY_TAXONOMY_TAGS = string("Tags");
 
-Ontology::Ontology(const Configuration& configuration)
-    : config(configuration),
-      thing(KEY_THING, Clazz::ROOT_CLASS),
+Ontology::Ontology()
+    : thing(KEY_THING, Clazz::ROOT_CLASS),
       colorPalette{}
 {
     // color palette

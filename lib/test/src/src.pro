@@ -42,7 +42,9 @@ LIBS += -lgtest
 LIBS += -lpthread
 
 # compiler options
-!travisci {
+mfnoccache {
+  QMAKE_CXX = g++
+} else:!mfnocxx {
   QMAKE_CXX = ccache g++
 }
 QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg

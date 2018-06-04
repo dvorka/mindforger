@@ -98,9 +98,6 @@ private:
     static std::string KEY_TAXONOMY_TAGS;
 
 private:
-    // ontology is loaded from the configuration (and by harvesting memory content)
-    const Configuration &config;
-
     /**
      * @brief the root of everything
      */
@@ -180,8 +177,7 @@ private:
     Palette colorPalette;
 
 public:
-    Ontology() = delete;
-    Ontology(const Configuration &configuration);
+    explicit Ontology();
     Ontology(const Ontology&) = delete;
     Ontology(const Ontology&&) = delete;
     Ontology &operator=(const Ontology&) = delete;

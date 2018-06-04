@@ -48,6 +48,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+#########################################################################
+#
+# QMake build options:
+#   qmake CONFIG+=mfnoccache  ... do not use ccache to build the project
+#   qmake CONFIG+=mfnocxx     ... do not define CXX i.e. g++
+#   qmake CONFIG+=mfunits     ... options to run unit tests e.g. define debugs
+#   qmake CONFIG+=mfwebengine ... build project w/ Qt webengine instead with Qt webkit
+#
+#########################################################################
+
+
 TEMPLATE = subdirs
 
 SUBDIRS = deps lib app

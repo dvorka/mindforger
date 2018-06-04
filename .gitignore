@@ -1,7 +1,8 @@
+mindforger.pro.user
 Makefile
 *.o
 *.a
 *.*~
 moc_*.cpp
 TEST_LOG*.*
-.qmake.stash
+*.stash

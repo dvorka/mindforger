@@ -208,9 +208,9 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     m8r::Mind mind(config);
     m8r::Memory& memory = mind.remind();
 
-    EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
-    EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
-    EXPECT_EQ(memory.getOntology().getTags().size(), 12);
+    EXPECT_EQ(2, memory.getOntology().getOutlineTypes().size());
+    EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
+    EXPECT_EQ(13, memory.getOntology().getTags().size());
 
     mind.learn();
     mind.think().get();
@@ -224,7 +224,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(memory.getNotesCount(), 8);
     EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
     EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
-    EXPECT_EQ(memory.getOntology().getTags().size(), 15);
+    EXPECT_EQ(16, memory.getOntology().getTags().size());
 
     // 2/3 amnesia - assert mind and memory cleaned (+Valgrind memory check)
     mind.amnesia();
@@ -236,7 +236,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(memory.getNotesCount(), 0);
     EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
     EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
-    EXPECT_EQ(memory.getOntology().getTags().size(), 15); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
+    EXPECT_EQ(16, memory.getOntology().getTags().size()); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
 
     // 3/3 learn - MARKDOWN repository (not MINDFORGER repository as above)
     repositoryPath.assign("/tmp/mf-unit-amnesia");
@@ -290,7 +290,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(memory.getStencils(m8r::ResourceType::NOTE).size(), 0);
     EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
     EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
-    EXPECT_EQ(memory.getOntology().getTags().size(), 15); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
+    EXPECT_EQ(16, memory.getOntology().getTags().size()); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
 }
 
 // TODO start w/ empty repository (do I need it?)

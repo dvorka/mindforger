@@ -104,6 +104,10 @@ time_t fileModificationTime(const string* filename)
     // IMPROVE windows code goes here
 #else
     // IMPROVE complete the code
+    typedef struct stat attrs;
+    attrs t_stat{};
+    stat(filename->c_str(), &t_stat);
+    return t_stat.st_mtime; // modification time ~ file content modification; st_ctime ~ file metata change (more sensitive)
 #endif
 }
 

@@ -32,7 +32,6 @@ constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key
 constexpr const auto CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL =  "* Editor syntax highlighting: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL =  "* Editor autocomplete: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL =  "* Editor TAB width: ";
-constexpr const auto CONFIG_SETTING_UI_SHOW_O_EDIT_BUTTON_LABEL = "* Show Notebook edit button: ";
 constexpr const auto CONFIG_SETTING_MD_HIGHLIGHT_LABEL = "* Enable source code syntax highlighting support in Markdown: ";
 constexpr const auto CONFIG_SETTING_MD_MATH_LABEL = "* Enable math support in Markdown: ";
 constexpr const auto CONFIG_SETTING_MD_DIAGRAM_LABEL = "* Enable diagram support in Markdown: ";

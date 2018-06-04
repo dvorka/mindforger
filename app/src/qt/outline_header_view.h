@@ -20,11 +20,19 @@
 #define M8RUI_OUTLINE_HEADER_VIEW_H
 
 #include <QtWidgets>
-#include <QWebView>
+#ifdef MF_QT_WEB_ENGINE
+  #include <QWebEngineView>
+#else
+  #include <QWebView>
+#endif
 
 namespace m8r {
 
-class OutlineHeaderView : public QWebView
+#ifdef MF_QT_WEB_ENGINE
+  class OutlineHeaderView : public QWebEngineView
+#else
+  class OutlineHeaderView : public QWebView
+#endif
 {
     Q_OBJECT
 

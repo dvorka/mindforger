@@ -26,10 +26,10 @@ namespace m8r {
 
 Memory::Memory(Configuration& configuration)
     : config(configuration),
-      ontology(config),
+      ontology(),
       representation(ontology)
 {
-    persistence = new FilesystemPersistence{configuration, representation};
+    persistence = new FilesystemPersistence{representation};
     cache = true;
     mindScope = nullptr;
 }

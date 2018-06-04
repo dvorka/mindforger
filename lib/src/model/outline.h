@@ -69,7 +69,7 @@ private:
     static const NoteType NOTE_4_OUTLINE_TYPE;
 
 public:
-    class Patch;
+    struct Patch;
 
 private:
     OutlineMemoryLocation memoryLocation;

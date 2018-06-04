@@ -79,7 +79,7 @@ private:
      * Neural network models
      */
 
-    AssociationAssessmentModel* aaModel;
+    // TODO AssociationAssessmentModel* aaModel;
 
 public:
     explicit Ai(Memory& memory, Mind& mind);
