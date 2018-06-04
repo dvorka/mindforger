@@ -24,11 +24,8 @@ using namespace std;
 
 namespace m8r {
 
-FilesystemPersistence::FilesystemPersistence(
-        Configuration& configuration,
-        MarkdownOutlineRepresentation& representation
-)
-    : configuration(configuration), mdRepresentation(representation)
+FilesystemPersistence::FilesystemPersistence(MarkdownOutlineRepresentation& representation)
+    : mdRepresentation(representation)
 {
 }
 

@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
             useRepository.assign(arguments[0].toStdString());
         } else if(arguments.size()>1) {
             // TODO i18n
-            cerr << "Error: Too many arguments (" << dec << arguments.size() + ") - at most one directory or file can be specified" << endl;
+            cerr << "Error: Too many arguments (" << dec << arguments.size() << ") - at most one directory or file can be specified" << endl;
             return 1;
         }
 

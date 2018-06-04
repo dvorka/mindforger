@@ -150,6 +150,8 @@ public:
     void setTransitive(bool t) { transitive = t; }
     bool isSymetric() const { return symetric; }
     void setSymetric(bool s) { symetric = s; }
+
+    const Color& getColor() const { return color; }
 };
 
 /**

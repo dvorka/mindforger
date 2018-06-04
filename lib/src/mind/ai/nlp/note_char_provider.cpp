@@ -21,7 +21,7 @@
 namespace m8r {
 
 NoteCharProvider::NoteCharProvider(Note* note, char delimiter)
-    : CharProvider{}, n(note)
+    : CharProvider{}
 {
     // N description (split in lines) streaming was complicated (check) and therefe slow - narrowing is faster
     s.assign(note->getName());

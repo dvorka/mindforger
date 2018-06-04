@@ -36,7 +36,6 @@ namespace m8r {
 class NoteCharProvider : public CharProvider
 {
 private:
-    Note* n;
     std::string s;
     StringCharProvider* p;
 

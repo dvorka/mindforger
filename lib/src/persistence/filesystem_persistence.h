@@ -31,11 +31,10 @@ namespace m8r {
 class FilesystemPersistence : public Persistence
 {
 private:
-    Configuration& configuration;
     MarkdownOutlineRepresentation& mdRepresentation;
 
 public:
-    FilesystemPersistence(Configuration& configuration, MarkdownOutlineRepresentation& representation);
+    FilesystemPersistence(MarkdownOutlineRepresentation& representation);
     FilesystemPersistence(const FilesystemPersistence&) = delete;
     FilesystemPersistence(const FilesystemPersistence&&) = delete;
     FilesystemPersistence &operator=(const FilesystemPersistence&) = delete;
