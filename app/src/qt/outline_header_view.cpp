@@ -22,9 +22,9 @@ namespace m8r {
 
 OutlineHeaderView::OutlineHeaderView(QWidget *parent)
 #ifdef MF_QT_WEB_ENGINE
-    : QWebView(parent)
-#else
     : QWebEngineView(parent)
+#else
+    : QWebView(parent)
 #endif
 {
 #ifdef MF_QT_WEB_ENGINE
