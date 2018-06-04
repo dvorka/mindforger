@@ -20,14 +20,17 @@ TEMPLATE = app
 
 QT += widgets
 
-# webengine
-#QT += webenginewidgets
-
-# webkit is supposed to be obsoleted by webengine, but webengine is disabled
+# webkit is supposed to be OBSOLETED by webengine, but webengine is disabled
 # on Linux since Qt 5.9 due to its tragic performance > conditional compilation
-# seems to be the only way (webkit on Linux, webengine on Windows)
-QT += webkit
-QT += webkitwidgets
+# seems to be the only way:
+#   - webkit on Linux
+#   - webengine on Windows and macOS
+mfwebengine {
+    QT += webengine
+} else {
+    QT += webkit
+    QT += webkitwidgets
+}
 
 # dependencies
 INCLUDEPATH += $$PWD/../deps/discount
