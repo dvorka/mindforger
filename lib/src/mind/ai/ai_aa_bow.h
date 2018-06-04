@@ -44,7 +44,7 @@ private:
     static constexpr int THREAD_POOL_SIZE = 2; // IMPROVE thread pool size to be either configured OR #CPU detected and 1/2 or 1/3 used
     static constexpr float AA_NOT_SET = -1.;
     static constexpr int AA_WORD_RELEVANCY_THRESHOLD = 10; // use 10 words w/ highest weight from vectors (and ignore others - irrelevant can bring noice with volume)
-    static constexpr int AA_TITLE_WORD_BONUS = 0.2;
+    static constexpr float AA_TITLE_WORD_BONUS = 0.2;
 
 private:
     Mind& mind;
