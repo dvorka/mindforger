@@ -19,6 +19,7 @@
 
 # make project w/ QtWebEngine instead QtWebKit
 
+echo "IMPORTANT: build midnforger/deps/discount before running this script!"
 cd ../..
 make clean
 qmake -r mindforger.pro && make -j 8
