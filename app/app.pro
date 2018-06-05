@@ -25,7 +25,7 @@ QT += widgets
 # seems to be the only way:
 #   - webkit on Linux
 #   - webengine on Windows and macOS
-mfwebengine {
+macx|mfwebengine {
     QT += webengine
     QT += webenginewidgets
     DEFINES = MF_QT_WEB_ENGINE
