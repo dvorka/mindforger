@@ -21,6 +21,6 @@
 
 cd ../..
 make clean
-qmake -r CONFIG+=mfwebengine mindforger.pro && make -j 8
+qmake -r mindforger.pro && make -j 8
 
 # eof
