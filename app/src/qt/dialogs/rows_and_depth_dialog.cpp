@@ -31,7 +31,7 @@ RowsAndDepthDialog::RowsAndDepthDialog(QWidget* parent)
     mainLayout->addWidget(label);
 
     QWidget* w = new QWidget(this);
-    QHBoxLayout* spinsLayout = new QHBoxLayout{this};
+    QHBoxLayout* spinsLayout = new QHBoxLayout{w}; // layout MUST get widget to CONSTRUCTOR
     rowsSpin = new QSpinBox{this};
     rowsSpin->setMinimum(1);
     rowsSpin->setMaximum(50);

@@ -30,7 +30,7 @@ ScopeDialog::ScopeDialog(Ontology& ontology, QWidget *parent)
     enableTimeScopeCheck->setChecked(false);
 
     QWidget* w = new QWidget(this);
-    QHBoxLayout* spinsLayout = new QHBoxLayout{this};
+    QHBoxLayout* spinsLayout = new QHBoxLayout{w}; // layout MUST get widget to CONSTRUCTOR
     yearSpin = new QSpinBox{this};
     yearSpin->setEnabled(false);
     yearSpin->setMinimum(0);
@@ -61,7 +61,6 @@ ScopeDialog::ScopeDialog(Ontology& ontology, QWidget *parent)
     minuteSpin->setMaximum(59);
     spinsLayout->addWidget(minuteSpin);
     spinsLayout->addWidget(new QLabel(tr("minute(s)")));
-    w->setLayout(spinsLayout);
 
     // scope by tags
     enableTagsScopeCheck = new QCheckBox{tr("show Notebooks with the following tags")+":", this};
