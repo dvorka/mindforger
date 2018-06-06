@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 #ifdef MF_DEBUG_QRC
     QDirIterator it(":", QDirIterator::Subdirectories);
     while (it.hasNext()) {
-        qDebug() << it.next();
+        MF_DEBUG(it.next() << endl);
     }
 #endif
     QApplication::setApplicationName("MindForger");

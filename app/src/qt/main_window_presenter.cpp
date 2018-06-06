@@ -294,7 +294,7 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
 #ifdef DO_M8R_DEBUG
 void MainWindowPresenter::doActionMindHack()
 {
-    qDebug() << "[MindHack] Current facet: " << orloj->getFacet();
+    MF_DEBUG("[MindHack] Current facet: " << orloj->getFacet() << endl);
 }
 #endif
 

@@ -186,7 +186,7 @@ NoteEditDialog::NoteEditDialog(Ontology& ontology, QWidget* parent)
     // IMPROVE extra wiring below to be removed - I was unable to connect QDialog::accept from outside :-/
     QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &NoteEditDialog::handleAccepted);
     QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &NoteEditDialog::handleRejected);
-    //QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, [=](){ qDebug("NoteEditDialog OK"); });
+    //QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, [=](){ MF_DEBUG("NoteEditDialog OK" << endl); });
 
     QVBoxLayout *mainLayout = new QVBoxLayout{this};
     mainLayout->addWidget(tabWidget);
@@ -211,7 +211,7 @@ void NoteEditDialog::show()
             if(i>=0) {
                 generalTab->typeCombo->setCurrentIndex(i);
             } else {
-                qDebug() << "Unknown Note type: " << QString::fromStdString(currentNote->getType()->getName());
+                MF_DEBUG("Unknown Note type: " << QString::fromStdString(currentNote->getType()->getName()) << endl);
             }
         }
         generalTab->editTagsGroup->refresh(currentNote->getTags());
@@ -258,7 +258,7 @@ void NoteEditDialog::toNote()
             currentNote->setDeadline(0);
         }
     } else {
-        qDebug("Attempt to save data from dialog to Note, but no Note is set.");
+        MF_DEBUG("Attempt to save data from dialog to Note, but no Note is set." << endl);
     }
 }
 

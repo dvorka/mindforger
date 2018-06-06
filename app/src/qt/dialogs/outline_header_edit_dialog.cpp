@@ -212,7 +212,7 @@ OutlineHeaderEditDialog::OutlineHeaderEditDialog(Ontology& ontology, QWidget *pa
     // IMPROVE extra wiring below to be removed - I was unable to connect QDialog::accept from outside :-/
     QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &OutlineHeaderEditDialog::handleAccepted);
     QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &OutlineHeaderEditDialog::handleRejected);
-    //QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, [=](){ qDebug("NoteEditDialog OK"); });
+    //QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, [=](){ MF_DEBUG("NoteEditDialog OK" << endl); });
 
     QVBoxLayout *mainLayout = new QVBoxLayout{this};
     mainLayout->addWidget(tabWidget);
@@ -240,7 +240,7 @@ void OutlineHeaderEditDialog::show()
             if(i>=0) {
                 generalTab->typeCombo->setCurrentIndex(i);
             } else {
-                qDebug() << "Unknown Outline type: " << QString::fromStdString(currentOutline->getType()->getName());
+                MF_DEBUG("Unknown Outline type: " << QString::fromStdString(currentOutline->getType()->getName()) << endl);
             }
         }
         generalTab->importanceCombo->setCurrentIndex(currentOutline->getImportance());
@@ -282,7 +282,7 @@ void OutlineHeaderEditDialog::toOutline()
         }
         currentOutline->setPreamble(preamble);
     } else {
-        qDebug("Attempt to save data from dialog to Outline, but no Outline is set.");
+        MF_DEBUG("Attempt to save data from dialog to Outline, but no Outline is set." << endl);
     }
 }
 

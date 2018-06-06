@@ -78,7 +78,7 @@ int dialogSaveOrCancel()
 
 void OrlojPresenter::onFacetChange(const OrlojPresenterFacets targetFacet) const
 {
-    qDebug() << "Facet CHANGE: " << activeFacet << " > " << targetFacet;
+    MF_DEBUG("Facet CHANGE: " << activeFacet << " > " << targetFacet);
 
     if(activeFacet == OrlojPresenterFacets::FACET_EDIT_NOTE) {
         if(targetFacet != OrlojPresenterFacets::FACET_VIEW_NOTE) {
