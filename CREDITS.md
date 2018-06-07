@@ -18,7 +18,7 @@ Big thanks to 3rd party FOSS content authors:
 * Lewis Van Winkle (GENANN - minimal neural network - library)
 * Oleander Software (Oleander stemming library - stemmer - library)
 * Jamie McGowan (Remarkable - inspiration and code)
-* Andrey Smirnov (Aplty - Debian PPAs mgmt tool)
+* Andrey Smirnov (Aptly - Debian PPAs mgmt tool)
 * Apiary (API blueprints - test data)
 * Mark Summerfield (Advanced Qt Programming book examples - code snippets)
 * Andres Mejia (Aho-Corasick algorithm implementation - code snippets)
