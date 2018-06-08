@@ -114,28 +114,24 @@ int main(int argc, char *argv[])
         }
     }
 
-    // macOS requires to pass --disable-web-security parameter to QApplication to allow loading of images by QWebEngine
+    // stupid & ugly reused code as macOS requires to pass --disable-web-security parameter to QApplication
+    // so that it allows loading of images by QWebEngine
 #ifdef __APPLE__
-    // IMPROVE one param doesn't requires array - simply manually add one param w/o cycle (this is reused code)
-    QStringList argumentsAdded;
-    argumentsAdded.append("--disable-web-security");
-    int i = 0;
-    int newArgc = argc + argumentsAdded.size();
-    // IMPROVE leak & new to be used (this is reused code)
-    char** newArgv = (char**)malloc((newArgc+1) * sizeof(char*));
-    for(i=0; i<argc; i++) {
-        size_t length = strlen(argv[i])+1;
-        // IMPROVE leak & new to be used (this is reused code)
-        newArgv[i] = (char*)malloc(length);
-        memcpy(newArgv[i], argv[i], length);
+    char ARG_DISABLE_WEB_SECURITY[] = "--disable-web-security";
+    int newArgc = argc+1+1;
+    char** newArgv = new char*[newArgc];
+    for(int i=0; i<argc; i++) {
+        newArgv[i] = argv[i];
     }
-    i=0;
-    for(QString s:argumentsAdded) {
-        newArgv[argc+i]  = new char[s.toLocal8Bit().size()+1];
-        strcpy(newArgv[argc+i], s.toLocal8Bit().constData());
-        i++;
+    newArgv[argc] = ARG_DISABLE_WEB_SECURITY;
+    newArgv[argc+1] = nullptr;
+
+    cout << "args: " << newArgc << endl;
+    for(int i=0; i<newArgc; i++) {
+        if(newArgv[i]) {
+            cout << "arg " << i << ": " << newArgv[i] << endl;
+        }
     }
-    newArgv[newArgc] = NULL;
 
     QApplication mindforgerApplication(newArgc, newArgv);
 #else
