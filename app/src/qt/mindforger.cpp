@@ -114,7 +114,34 @@ int main(int argc, char *argv[])
         }
     }
 
+    // macOS requires to pass --disable-web-security parameter to QApplication to allow loading of images by QWebEngine
+#ifdef __APPLE__
+    // IMPROVE one param doesn't requires array - simply manually add one param w/o cycle (this is reused code)
+    QStringList argumentsAdded;
+    argumentsAdded.append("--disable-web-security");
+    int i = 0;
+    int newArgc = argc + argumentsAdded.size();
+    // IMPROVE leak & new to be used (this is reused code)
+    char** newArgv = (char**)malloc((newArgc+1) * sizeof(char*));
+    for(i=0; i<argc; i++) {
+        size_t length = strlen(argv[i])+1;
+        // IMPROVE leak & new to be used (this is reused code)
+        newArgv[i] = (char*)malloc(length);
+        memcpy(newArgv[i], argv[i], length);
+    }
+    i=0;
+    for(QString s:argumentsAdded) {
+        newArgv[argc+i]  = new char[s.toLocal8Bit().size()+1];
+        strcpy(newArgv[argc+i], s.toLocal8Bit().constData());
+        i++;
+    }
+    newArgv[newArgc] = NULL;
+
+    QApplication mindforgerApplication(newArgc, newArgv);
+#else
     QApplication mindforgerApplication(argc, argv);
+#endif
+
 #ifdef MF_DEBUG_QRC
     QDirIterator it(":", QDirIterator::Subdirectories);
     while (it.hasNext()) {
@@ -142,10 +169,11 @@ int main(int argc, char *argv[])
                 QCoreApplication::translate("main", "Load configuration from given <file>."),
                 QCoreApplication::translate("main", "file"));
         parser.addOption(configPathOption);
-//        QCommandLineOption generateTocOption(QStringList() << "T" << "generate-toc",
-//                QCoreApplication::translate("main", "Generate table of contents for <source> Markdown file."),
-//                QCoreApplication::translate("main", "source"));
-//        parser.addOption(generateTocOption);
+#ifdef __APPLE__
+        QCommandLineOption macosDisableSecurityOption(QStringList() << "S" << "disable-web-security",
+                QCoreApplication::translate("main", "Disable WebEngine security to allow loading of images on macOS."));
+        parser.addOption(macosDisableSecurityOption);
+#endif
         QCommandLineOption versionOption=parser.addVersionOption();
         QCommandLineOption helpOption=parser.addHelpOption();
         // process the actual command line arguments given by the user
