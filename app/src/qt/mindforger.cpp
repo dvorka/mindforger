@@ -126,13 +126,6 @@ int main(int argc, char *argv[])
     newArgv[argc] = ARG_DISABLE_WEB_SECURITY;
     newArgv[argc+1] = nullptr;
 
-    cout << "args: " << newArgc << endl;
-    for(int i=0; i<newArgc; i++) {
-        if(newArgv[i]) {
-            cout << "arg " << i << ": " << newArgv[i] << endl;
-        }
-    }
-
     QApplication mindforgerApplication(newArgc, newArgv);
 #else
     QApplication mindforgerApplication(argc, argv);
