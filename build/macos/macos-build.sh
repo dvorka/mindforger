@@ -19,9 +19,16 @@
 
 # make project w/ QtWebEngine instead QtWebKit
 
-echo "IMPORTANT: build midnforger/deps/discount before running this script!"
+echo "IMPORTANT: build mindforger/deps/discount before running this script!"
+
 cd ../..
 make clean
-qmake -r mindforger.pro && make -j 8
+qmake -r -config release mindforger.pro
+make -j 8
+
+# cd to directory w/ mindforger.app/ directory
+cd ..
+
+macdeployqt -dmg mindforger.app
 
 # eof
