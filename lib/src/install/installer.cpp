@@ -32,6 +32,14 @@ Installer::Installer()
     : filePathDefaultSystemRepository{FILE_PATH_DEFAULT_LINUX_SYSTEM_REPOSITORY}
 #endif
 {
+#ifdef __APPLE__
+    // append path in DMG from the executable to documentation in resources directory
+    if(filePathDefaultSystemRepository.size()) {
+        filePathDefaultSystemRepository.erase(filePathDefaultSystemRepository.find_last_of("/")+1);
+        filePathDefaultSystemRepository.append("../Resources/");
+        filePathDefaultSystemRepository.append(DIRNAME_M8R_REPOSITORY);
+    }
+#endif
 }
 
 Installer::~Installer()
@@ -99,7 +107,9 @@ bool Installer::initMindForgerRepository(bool copyDoc, bool copyStencils, const 
                 if(isDirectoryOrFileExists(srcPath.c_str())) {
                     copyDirectoryRecursively(srcPath.c_str(), dstPath.c_str(), true);
                 } else {
-                    cerr << "ERROR: attempt to copy documentation failed - source directory doesn't exist" << endl;
+                    cerr << "ERROR: attempt to copy documentation failed - source directory doesn't exist: "
+                         << filePathDefaultSystemRepository
+                         << endl;
                 }
             }
 

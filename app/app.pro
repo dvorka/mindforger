@@ -138,7 +138,7 @@ HEADERS += \
     ./src/qt/dialogs/new_file_dialog.h \
     ./src/qt/dialogs/new_repository_dialog.h
 
-mfwebengine {
+macx|mfwebengine {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
 }
 
@@ -214,8 +214,8 @@ SOURCES += \
     ./src/qt/dialogs/new_file_dialog.cpp \
     ./src/qt/dialogs/new_repository_dialog.cpp
 
-mfwebengine {
-    SOURCES += src/qt/web_engine_page_link_navigation_policy.cpp
+macx|mfwebengine {
+    SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp
 }
 
 # L10n
@@ -249,8 +249,8 @@ macx {
     ICON = $$PWD/resources/icons/mindforger.icns
     #ICON = app/resources/icons/mindforger.icns
 
-    macosdocfiles.files = $$PWD/../documentation
-    macosdocfiles.path = Contents/Resources
+    macosdocfiles.files = $$PWD/../doc/limbo $$PWD/../doc/memory $$PWD/../doc/stencils $$PWD/../doc/README.md
+    macosdocfiles.path = Contents/Resources/mindforger-repository
     QMAKE_BUNDLE_DATA += macosdocfiles
 }
 

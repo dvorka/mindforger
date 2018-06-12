@@ -567,4 +567,26 @@ int copyDirectoryRecursively(const char* srcPath, const char* dstPath, bool extr
     return r;
 }
 
+#ifdef __APPLE__
+
+char* getMacOsExecutablePath() {
+    static char exePath[2048];
+    uint32_t len = sizeof(exePath);
+    if(_NSGetExecutablePath(exePath, &len) != 0) {
+        // buffer too small
+        exePath[0] = '\0';
+    } else {
+        // resolve symlinks, ., .. if possible
+        char *canonicalPath = realpath(exePath, NULL);
+        if(canonicalPath != NULL) {
+            strncpy(exePath,canonicalPath,len);
+            free(canonicalPath);
+        }
+    }
+
+    return exePath;
+}
+
+#endif
+
 } // m8r namespace
