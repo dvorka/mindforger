@@ -1057,13 +1057,13 @@ void MainWindowPresenter::doActionOutlineForget()
 {
     if(orloj->isFacetActiveOutlineManagement()) {
         QMessageBox::StandardButton choice;
-        choice = QMessageBox::question(&view, tr("Delete Notebook"), tr("Do you really want to forget current Notebooks?"));
+        choice = QMessageBox::question(&view, tr("Forget Notebook"), tr("Do you really want to forget current Notebook?"));
         if (choice == QMessageBox::Yes) {
             mind->outlineForget(orloj->getOutlineView()->getCurrentOutline()->getKey());
             orloj->slotShowOutlines();
         } // else do nothing
     } else {
-        QMessageBox::critical(&view, tr("Delete Notebook"), tr("Notebook can be forgotten only when viewed."));
+        QMessageBox::critical(&view, tr("Forget Notebook"), tr("Notebook can be forgotten only when viewed."));
     }
 }
 
