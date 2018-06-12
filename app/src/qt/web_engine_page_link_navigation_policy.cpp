@@ -20,6 +20,8 @@
 
 namespace m8r {
 
+#ifdef MF_QT_WEB_ENGINE
+
 WebEnginePageLinkNavigationPolicy::WebEnginePageLinkNavigationPolicy(QObject* parent)
  : QWebEnginePage(parent)
 {
@@ -28,5 +30,7 @@ WebEnginePageLinkNavigationPolicy::WebEnginePageLinkNavigationPolicy(QObject* pa
 WebEnginePageLinkNavigationPolicy::~WebEnginePageLinkNavigationPolicy()
 {
 }
+
+#endif
 
 } // m8r namespace
