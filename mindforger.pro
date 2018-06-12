@@ -97,4 +97,20 @@ shortcutfiles.files += app/resources/gnome-shell/mindforger.desktop
 shortcutfiles.path = /usr/share/applications/
 INSTALLS += shortcutfiles
 
+# ########################################
+# macOS DMG content
+# ########################################
+
+macx {
+    # ask for APP BUNDLE generation
+    CONFIG += app_bundle  # to remove, do CONFIG -= app_bundle
+
+    ICON = app/resources/icons/mindforger.icns
+
+    #macosdocfiles.files = $$PWD/doc/*
+    macosdocfiles.files = doc/
+    macosdocfiles.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += macosdocfiles
+}
+
 # eof
