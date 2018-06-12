@@ -20,16 +20,14 @@
 # make project w/ QtWebEngine instead QtWebKit
 
 echo "IMPORTANT: build mindforger/deps/discount before running this script!"
-echo "IMPORTANT: mindforger must be built to mindforger/../build-mindforger-debug directory"
 
+rm -vrf ../../app/mindforger.app ../../app/mindforger.dmg
 cd ../..
 make clean
 qmake -r -config release mindforger.pro
 make -j 8
 
 # cd to directory w/ mindforger.app/ directory
-cd ..
-
-macdeployqt -dmg mindforger.app
+cd app && macdeployqt mindforger.app -dmg -always-overwrite
 
 # eof

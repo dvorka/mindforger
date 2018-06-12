@@ -230,4 +230,20 @@ binfile.files += mindforger
 binfile.path = /usr/bin/
 INSTALLS += binfile
 
+# ########################################
+# macOS DMG content
+# ########################################
+
+macx {
+    # ask for APP BUNDLE generation
+    CONFIG += app_bundle  # to remove, do CONFIG -= app_bundle
+
+    ICON = $$PWD/resources/icons/mindforger.icns
+    #ICON = app/resources/icons/mindforger.icns
+
+    #macosdocfiles.files = $$PWD/../doc/*
+    #macosdocfiles.path = Contents/Resources
+    #QMAKE_BUNDLE_DATA += macosdocfiles
+}
+
 # eof

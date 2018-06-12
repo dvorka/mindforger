@@ -6,3 +6,4 @@ Makefile
 moc_*.cpp
 TEST_LOG*.*
 *.stash
+*.*Store
