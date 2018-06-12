@@ -330,7 +330,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineNew->setStatusTip(tr("Create new Notebook to form new ideas, principles, combinations or applications"));
 
 #ifdef __APPLE__
-    actionOutlineEdit = new QAction(tr("&Edit\t⌘+e"), mainWindow);
+    actionOutlineEdit = new QAction(tr("&Edit"), mainWindow);
+    actionOutlineEdit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
 #else
     actionOutlineEdit = new QAction(tr("&Edit"), mainWindow);
 #endif
@@ -383,7 +384,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteHoist->setStatusTip(tr("Hoist/de-hoist Note to focus on Note being viewed or edited"));
 
 #ifdef __APPLE__
-    actionNoteEdit = new QAction(tr("&Edit\t⌘+e"), mainWindow);
+    actionNoteEdit = new QAction(tr("&Edit"), mainWindow);
+    actionNoteEdit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
 #else
     actionNoteEdit = new QAction(tr("&Edit\tCtrl+e"), mainWindow);
 #endif
