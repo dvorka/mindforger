@@ -33,7 +33,10 @@ namespace m8r {
 class Installer
 {
 public:
-    static const std::string FILE_PATH_DEFAULT_SYSTEM_REPOSITORY;
+    static const std::string FILE_PATH_DEFAULT_LINUX_SYSTEM_REPOSITORY;
+
+private:
+    std::string filePathDefaultSystemRepository;
 
 public:
     explicit Installer();

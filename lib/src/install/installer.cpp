@@ -23,9 +23,14 @@ using namespace std;
 namespace m8r {
 
 // IMPROVE platform specific delimiters
-const std::string Installer::FILE_PATH_DEFAULT_SYSTEM_REPOSITORY = std::string{"/usr/share/doc/mindforger"};
+const std::string Installer::FILE_PATH_DEFAULT_LINUX_SYSTEM_REPOSITORY = std::string{"/usr/share/doc/mindforger"};
 
 Installer::Installer()
+#ifdef __APPLE__
+    : filePathDefaultSystemRepository{getMacOsExecutablePath()}
+#else
+    : filePathDefaultSystemRepository{FILE_PATH_DEFAULT_LINUX_SYSTEM_REPOSITORY}
+#endif
 {
 }
 
@@ -83,9 +88,9 @@ bool Installer::createEmptyMindForgerRepository(const string& directory)
 bool Installer::initMindForgerRepository(bool copyDoc, bool copyStencils, const char* dstRepository)
 {
     if(isDirectoryOrFileExists(dstRepository)) {
-        if(isDirectoryOrFileExists(FILE_PATH_DEFAULT_SYSTEM_REPOSITORY.c_str())) {
+        if(isDirectoryOrFileExists(filePathDefaultSystemRepository.c_str())) {
             if(copyDoc) {
-                string srcPath{FILE_PATH_DEFAULT_SYSTEM_REPOSITORY};
+                string srcPath{filePathDefaultSystemRepository};
                 srcPath += FILE_PATH_SEPARATOR;
                 srcPath += FILE_PATH_MEMORY;
                 string dstPath{dstRepository};
@@ -99,7 +104,7 @@ bool Installer::initMindForgerRepository(bool copyDoc, bool copyStencils, const 
             }
 
             if(copyStencils) {
-                string srcPath{FILE_PATH_DEFAULT_SYSTEM_REPOSITORY};
+                string srcPath{filePathDefaultSystemRepository};
                 srcPath += FILE_PATH_SEPARATOR;
                 srcPath += FILE_PATH_STENCILS;
                 string dstPath{dstRepository};
@@ -115,7 +120,7 @@ bool Installer::initMindForgerRepository(bool copyDoc, bool copyStencils, const 
             // resource copy is NOT intentionally strict - copy what's possible, ignore eventual errors
             return true;
         } else {
-            cerr << "ERROR: default source repository not found in " << FILE_PATH_DEFAULT_SYSTEM_REPOSITORY << endl;
+            cerr << "ERROR: default source repository not found in " << filePathDefaultSystemRepository << endl;
             return false;
         }
     } else {

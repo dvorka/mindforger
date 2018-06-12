@@ -26,11 +26,15 @@
 
 #include <zlib.h>
 #if defined(MSDOS) || defined(OS2) || defined(WIN32) || defined(__CYGWIN__)
-#  include <fcntl.h>
-#  include <io.h>
-#  define SET_BINARY_MODE(file) setmode(fileno(file), O_BINARY)
+  #include <fcntl.h>
+  #include <io.h>
+  #define SET_BINARY_MODE(file) setmode(fileno(file), O_BINARY)
 #else
-#  define SET_BINARY_MODE(file)
+  #define SET_BINARY_MODE(file)
+#endif
+
+#ifdef __APPLE__
+  #include <mach-o/dyld.h>
 #endif
 
 #include <ctime>
@@ -106,6 +110,31 @@ char* makeTempDirectory(char* dirNamePefix);
 int removeDirectoryRecursively(const char* path);
 int copyDirectoryRecursively(const char* srcPath, const char* dstPath, bool extractGz=false);
 bool createDirectory(const std::string& path);
+
+#ifdef __APPLE__
+/**
+ * @brief Get path to the the executable on macOS.
+ *
+ * Method is not reentrant - it returns pointer to the static buffer.
+ */
+char* getMacOsExecutablePath() {
+    char exePath[2048];
+    uint32_t len = sizeof(exePath);
+    if(_NSGetExecutablePath(exePath, &len) != 0) {
+        // buffer too small
+        exePath[0] = '\0';
+    } else {
+        // resolve symlinks, ., .. if possible
+        char *canonicalPath = realpath(exePath, NULL);
+        if(canonicalPath != NULL) {
+            strncpy(exePath,canonicalPath,len);
+            free(canonicalPath);
+        }
+    }
+
+    return exePath;
+}
+#endif
 
 } // m8r namespace
 
