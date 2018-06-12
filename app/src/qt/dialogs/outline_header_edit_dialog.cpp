@@ -20,6 +20,8 @@
 
 namespace m8r {
 
+using namespace std;
+
 /*
  * General tab
  */
@@ -240,7 +242,7 @@ void OutlineHeaderEditDialog::show()
             if(i>=0) {
                 generalTab->typeCombo->setCurrentIndex(i);
             } else {
-                MF_DEBUG("Unknown Outline type: " << QString::fromStdString(currentOutline->getType()->getName()) << endl);
+                MF_DEBUG("Unknown Outline type: " << currentOutline->getType()->getName() << endl);
             }
         }
         generalTab->importanceCombo->setCurrentIndex(currentOutline->getImportance());

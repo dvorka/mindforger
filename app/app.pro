@@ -127,17 +127,20 @@ HEADERS += \
     ./src/qt/dialogs/scope_dialog.h \
     ./src/qt/dialogs/find_outline_by_tag_dialog.h \
     ./src/qt/dialogs/find_note_by_tag_dialog.h \
-    src/qt/outline_view_splitter.h \
-    src/qt/assoc_leaderboard_model.h \
-    src/qt/assoc_leaderboard_presenter.h \
-    src/qt/assoc_leaderboard_view.h \
-    src/qt/gear/async_task_notifications_distributor.h \
-    src/qt/dialogs/insert_image_dialog.h \
-    src/qt/dialogs/insert_link_dialog.h \
-    src/qt/dialogs/rows_and_depth_dialog.h \
-    src/qt/dialogs/new_file_dialog.h \
-    src/qt/dialogs/new_repository_dialog.h \
-    src/qt/web_engine_page_link_navigation_policy.h
+    ./src/qt/outline_view_splitter.h \
+    ./src/qt/assoc_leaderboard_model.h \
+    ./src/qt/assoc_leaderboard_presenter.h \
+    ./src/qt/assoc_leaderboard_view.h \
+    ./src/qt/gear/async_task_notifications_distributor.h \
+    ./src/qt/dialogs/insert_image_dialog.h \
+    ./src/qt/dialogs/insert_link_dialog.h \
+    ./src/qt/dialogs/rows_and_depth_dialog.h \
+    ./src/qt/dialogs/new_file_dialog.h \
+    ./src/qt/dialogs/new_repository_dialog.h
+
+mfwebengine {
+    HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
+}
 
 SOURCES += \
     ./src/qt/mindforger.cpp \
@@ -200,17 +203,20 @@ SOURCES += \
     ./src/qt/dialogs/scope_dialog.cpp \
     ./src/qt/dialogs/find_outline_by_tag_dialog.cpp \
     ./src/qt/dialogs/find_note_by_tag_dialog.cpp \
-    src/qt/outline_view_splitter.cpp \
-    src/qt/assoc_leaderboard_model.cpp \
-    src/qt/assoc_leaderboard_presenter.cpp \
-    src/qt/assoc_leaderboard_view.cpp \
-    src/qt/gear/async_task_notifications_distributor.cpp \
-    src/qt/dialogs/insert_image_dialog.cpp \
-    src/qt/dialogs/insert_link_dialog.cpp \
-    src/qt/dialogs/rows_and_depth_dialog.cpp \
-    src/qt/dialogs/new_file_dialog.cpp \
-    src/qt/dialogs/new_repository_dialog.cpp \
-    src/qt/web_engine_page_link_navigation_policy.cpp
+    ./src/qt/outline_view_splitter.cpp \
+    ./src/qt/assoc_leaderboard_model.cpp \
+    ./src/qt/assoc_leaderboard_presenter.cpp \
+    ./src/qt/assoc_leaderboard_view.cpp \
+    ./src/qt/gear/async_task_notifications_distributor.cpp \
+    ./src/qt/dialogs/insert_image_dialog.cpp \
+    ./src/qt/dialogs/insert_link_dialog.cpp \
+    ./src/qt/dialogs/rows_and_depth_dialog.cpp \
+    ./src/qt/dialogs/new_file_dialog.cpp \
+    ./src/qt/dialogs/new_repository_dialog.cpp
+
+mfwebengine {
+    SOURCES += src/qt/web_engine_page_link_navigation_policy.cpp
+}
 
 # L10n
 #./resources/qt/translations/mindforger_de.ts

@@ -211,7 +211,7 @@ void NoteEditDialog::show()
             if(i>=0) {
                 generalTab->typeCombo->setCurrentIndex(i);
             } else {
-                MF_DEBUG("Unknown Note type: " << QString::fromStdString(currentNote->getType()->getName()) << endl);
+                MF_DEBUG("Unknown Note type: " << currentNote->getType()->getName() << endl);
             }
         }
         generalTab->editTagsGroup->refresh(currentNote->getTags());
