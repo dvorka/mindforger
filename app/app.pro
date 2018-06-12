@@ -249,7 +249,7 @@ macx {
     ICON = $$PWD/resources/icons/mindforger.icns
     #ICON = app/resources/icons/mindforger.icns
 
-    macosdocfiles.files = $$PWD/../doc
+    macosdocfiles.files = $$PWD/../documentation
     macosdocfiles.path = Contents/Resources
     QMAKE_BUNDLE_DATA += macosdocfiles
 }
