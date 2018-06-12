@@ -97,12 +97,13 @@ void InsertLinkDialog::show(
         const Repository* repository,
         const Outline* outline,
         vector<Thing*>& os,
-        vector<Note*>& ns)
+        vector<Note*>& ns,
+        const QString& selectedText)
 {
     this->activeRepository = repository;
     this->currentOutline = outline;
 
-    linkTextEdit->setText(tr("link"));
+    linkTextEdit->setText(selectedText.size()?selectedText:tr("link"));
     linkTextEdit->selectAll();
     linkTextEdit->setFocus();
     pathEdit->clear();

@@ -859,7 +859,19 @@ void MainWindowPresenter::doActionFormatLink()
     vector<Note*> ns{};
     mind->getAllNotes(ns);
 
-    insertLinkDialog->show(config.getActiveRepository(), orloj->getOutlineView()->getCurrentOutline(), os, ns);
+    QString selectedText;
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        selectedText = orloj->getNoteEdit()->getView()->getNoteEditor()->getSelectedText();
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        selectedText = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getSelectedText();
+    }
+
+    insertLinkDialog->show(
+        config.getActiveRepository(),
+        orloj->getOutlineView()->getCurrentOutline(),
+        os,
+        ns,
+        selectedText);
 }
 
 /*
@@ -876,8 +888,14 @@ void MainWindowPresenter::handleFormatLink()
     text += ")";
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        if(orloj->getNoteEdit()->getView()->getNoteEditor()->getSelectedText().size()) {
+            orloj->getNoteEdit()->getView()->getNoteEditor()->removeSelectedText();
+        }
         orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false, 1);
     } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        if(orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getSelectedText().size()) {
+            orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->removeSelectedText();
+        }
         orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false);
     }
 }

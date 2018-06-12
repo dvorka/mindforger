@@ -112,7 +112,7 @@ void NoteEditorView::wrapSelectedText(const QString &tag, const QString &endTag)
     QTextDocument *doc = document();
     int start = cursor.selectionStart();
     int end = cursor.selectionEnd();
-    if (cursor.hasSelection() && doc->findBlock(start) == doc->findBlock(end)) {
+    if(cursor.hasSelection() && doc->findBlock(start) == doc->findBlock(end)) {
         cursor.beginEditBlock();
         QString text = cursor.selectedText();
         text.prepend(tag);
@@ -122,7 +122,7 @@ void NoteEditorView::wrapSelectedText(const QString &tag, const QString &endTag)
         cursor.setPosition(start + tag.length());
         cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, end - start);
         setTextCursor(cursor);
-    } else if (!cursor.hasSelection()) {
+    } else if(!cursor.hasSelection()) {
         if(endTag.size()) cursor.insertText(tag+endTag); else cursor.insertText(tag+tag);
         cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, tag.length());
         setTextCursor(cursor);

@@ -75,6 +75,7 @@ public:
     QString getSelectedText() const { return textCursor().selectedText(); }
     void wrapSelectedText(const QString &tag) { wrapSelectedText(tag,""); }
     void wrapSelectedText(const QString &tag, const QString &endTag);
+    void removeSelectedText() { textCursor().removeSelectedText(); }
     void insertMarkdownText(const QString &text, bool newLine=true, int offset=0);
 
     // associations
