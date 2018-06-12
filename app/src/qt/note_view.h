@@ -24,7 +24,6 @@
 #include "note_view_model.h"
 
 #include <QtWidgets>
-#include <QtWidgets>
 #ifdef MF_QT_WEB_ENGINE
   #include <QWebEngineView>
 #else
@@ -54,8 +53,17 @@ public:
 
     void setModel(NoteViewModel* noteModel) { this->noteModel = noteModel; }
 
+#ifdef MF_QT_WEB_ENGINE
+// this is ugly and stupid workaround for handling double-click event in QWebEngineView
+private:
+    QObject *childObj = NULL;
+protected:
+    bool event(QEvent* evt) override;
+    bool eventFilter(QObject *obj, QEvent *ev) override;
+#else
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
     virtual void keyPressEvent(QKeyEvent*) override;
+#endif
 
 signals:
     void signalMouseDoubleClickEvent();

@@ -19,15 +19,16 @@
 #ifndef M8R_DEBUG_H_
 #define M8R_DEBUG_H_
 
-// DO_M8R_DEBUG to be set when running qmake: DEFINES = DO_M8R_DEBUG
-
+// DO_M8R_DEBUG to be enabled in qmake:
+//   - configuration: DEFINES = DO_M8R_DEBUG
+//   - command line: CONFIG += mfunits
 #ifdef DO_M8R_DEBUG
 #include <chrono>
 #include <iostream>
     #define MF_DEBUG(x) do { std::cerr << x; } while (0)
 
     // enable/disable verbose debug info of particular components
-    #define MF_DEBUG_HTML
+    //#define MF_DEBUG_HTML
     //#define MF_DEBUG_QRC
     //#define MF_DEBUG_L10N
 

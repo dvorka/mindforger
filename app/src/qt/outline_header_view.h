@@ -19,6 +19,8 @@
 #ifndef M8RUI_OUTLINE_HEADER_VIEW_H
 #define M8RUI_OUTLINE_HEADER_VIEW_H
 
+#include "../../lib/src/debug.h"
+
 #include <QtWidgets>
 #ifdef MF_QT_WEB_ENGINE
   #include <QWebEngineView>
@@ -42,10 +44,18 @@ public:
     OutlineHeaderView(const OutlineHeaderView&&) = delete;
     OutlineHeaderView &operator=(const OutlineHeaderView&) = delete;
     OutlineHeaderView &operator=(const OutlineHeaderView&&) = delete;
-
-    virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
-
     ~OutlineHeaderView();
+
+#ifdef MF_QT_WEB_ENGINE
+// this is ugly and stupid workaround for handling double-click event in QWebEngineView
+private:
+    QObject *childObj = NULL;
+protected:
+    bool event(QEvent* evt) override;
+    bool eventFilter(QObject *obj, QEvent *ev) override;
+#else
+    virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
+#endif
 
 signals:
     void signalMouseDoubleClickEvent();

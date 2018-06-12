@@ -20,6 +20,8 @@
 
 namespace m8r {
 
+using namespace std;
+
 NoteView::NoteView(QWidget *parent)
 #ifdef MF_QT_WEB_ENGINE
     : QWebEngineView(parent)
@@ -34,6 +36,37 @@ NoteView::NoteView(QWidget *parent)
     page()->setLinkDelegationPolicy(QWebPage::LinkDelegationPolicy::DelegateAllLinks);
 #endif
 }
+
+#ifdef MF_QT_WEB_ENGINE
+
+bool NoteView::event(QEvent* event)
+{
+    MF_DEBUG(event->type() << endl);
+    if (event->type() == QEvent::ChildPolished) {
+        QChildEvent *childEvent = static_cast<QChildEvent*>(event);
+        childObj = childEvent->child();
+        if (childObj) {
+            childObj->installEventFilter(this);
+        }
+    }
+
+    return QWebEngineView::event(event);
+}
+
+bool NoteView::eventFilter(QObject *obj, QEvent *event)
+{
+    if(obj == childObj) {
+        if(event->type() == QEvent::MouseButtonDblClick) {
+            // double click to Note view opens Note editor
+            emit signalMouseDoubleClickEvent();
+            return true;
+        }
+    }
+
+    return QWebEngineView::eventFilter(obj, event);
+}
+
+#else
 
 void NoteView::mouseDoubleClickEvent(QMouseEvent* event)
 {
@@ -51,11 +84,9 @@ void NoteView::keyPressEvent(QKeyEvent* event)
         }
     }
 
-#ifdef MF_QT_WEB_ENGINE
-    QWebEngineView::keyPressEvent(event);
-#else
     QWebView::keyPressEvent(event);
-#endif
 }
+
+#endif
 
 } // m8r namespace

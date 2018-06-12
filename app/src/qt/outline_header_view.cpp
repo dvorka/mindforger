@@ -20,6 +20,8 @@
 
 namespace m8r {
 
+using namespace std;
+
 OutlineHeaderView::OutlineHeaderView(QWidget *parent)
 #ifdef MF_QT_WEB_ENGINE
     : QWebEngineView(parent)
@@ -35,6 +37,41 @@ OutlineHeaderView::OutlineHeaderView(QWidget *parent)
 #endif
 }
 
+OutlineHeaderView::~OutlineHeaderView()
+{
+}
+
+#ifdef MF_QT_WEB_ENGINE
+
+bool OutlineHeaderView::event(QEvent* event)
+{
+    MF_DEBUG(event->type() << endl);
+    if (event->type() == QEvent::ChildPolished) {
+        QChildEvent *childEvent = static_cast<QChildEvent*>(event);
+        childObj = childEvent->child();
+        if (childObj) {
+            childObj->installEventFilter(this);
+        }
+    }
+
+    return QWebEngineView::event(event);
+}
+
+bool OutlineHeaderView::eventFilter(QObject *obj, QEvent *event)
+{
+    if(obj == childObj) {
+        if(event->type() == QEvent::MouseButtonDblClick) {
+            // double click to Note view opens Note editor
+            emit signalMouseDoubleClickEvent();
+            return true;
+        }
+    }
+
+    return QWebEngineView::eventFilter(obj, event);
+}
+
+#else
+
 void OutlineHeaderView::mouseDoubleClickEvent(QMouseEvent* event)
 {
     Q_UNUSED(event);
@@ -42,8 +79,6 @@ void OutlineHeaderView::mouseDoubleClickEvent(QMouseEvent* event)
     emit signalMouseDoubleClickEvent();
 }
 
-OutlineHeaderView::~OutlineHeaderView()
-{
-}
+#endif
 
 } // m8r namespace
