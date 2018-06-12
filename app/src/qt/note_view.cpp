@@ -30,7 +30,8 @@ NoteView::NoteView(QWidget *parent)
 #endif
 {
 #ifdef MF_QT_WEB_ENGINE
-    // TODO QWebEngine click handler to be implemented
+    LinkNavigationPolicyWebEnginePage* p = new LinkNavigationPolicyWebEnginePage{};
+    setPage(p);
 #else
     // ensure that link clicks are not handled, but delegated to MF using linkClicked signal
     page()->setLinkDelegationPolicy(QWebPage::LinkDelegationPolicy::DelegateAllLinks);

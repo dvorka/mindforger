@@ -19,6 +19,7 @@
 #ifndef M8RUI_NOTE_VIEW_H
 #define M8RUI_NOTE_VIEW_H
 
+#include "../../lib/src/debug.h"
 #include "../../lib/src/model/note.h"
 
 #include "note_view_model.h"
@@ -32,6 +33,38 @@
 #include <QUrl>
 
 namespace m8r {
+
+#ifdef MF_QT_WEB_ENGINE
+
+class WebEnginePageLinkNavigationPolicy : public QWebEnginePage
+{
+    Q_OBJECT
+
+public:
+    WebEnginePageLinkNavigationPolicy(QObject* parent = 0) : QWebEnginePage(parent) {}
+
+    bool acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool isMainFrame)
+    {
+#ifdef DO_M8R_DEBUG
+        MF_DEBUG("acceptNavigationRequest(" << url << "," << type << "," << isMainFrame << ")" << std::endl);
+#else
+        UNUSED_ARG(type);
+        UNUSED_ARG(isMainFrame);
+#endif
+
+        if(type == QWebEnginePage::NavigationTypeLinkClicked) {
+            emit signalLinkClicked(url);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+signals:
+    void signalLinkClicked(const QUrl& url);
+};
+
+#endif
 
 #ifdef MF_QT_WEB_ENGINE
 class NoteView: public QWebEngineView
@@ -54,7 +87,9 @@ public:
     void setModel(NoteViewModel* noteModel) { this->noteModel = noteModel; }
 
 #ifdef MF_QT_WEB_ENGINE
-// this is ugly and stupid workaround for handling double-click event in QWebEngineView
+    QWebEnginePage* getPage() const { return page(); }
+
+// this is ugly and stupid workaround for handling double-click events in QWebEngineView
 private:
     QObject *childObj = NULL;
 protected:
