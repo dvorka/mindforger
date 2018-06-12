@@ -30,6 +30,7 @@ NoteView::NoteView(QWidget *parent)
 #endif
 {
 #ifdef MF_QT_WEB_ENGINE
+    // ensure that link clicks are not handled, but delegated to MF using linkClicked signal
     LinkNavigationPolicyWebEnginePage* p = new LinkNavigationPolicyWebEnginePage{};
     setPage(p);
 #else

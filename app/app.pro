@@ -136,7 +136,8 @@ HEADERS += \
     src/qt/dialogs/insert_link_dialog.h \
     src/qt/dialogs/rows_and_depth_dialog.h \
     src/qt/dialogs/new_file_dialog.h \
-    src/qt/dialogs/new_repository_dialog.h
+    src/qt/dialogs/new_repository_dialog.h \
+    src/qt/web_engine_page_link_navigation_policy.h
 
 SOURCES += \
     ./src/qt/mindforger.cpp \
@@ -208,7 +209,8 @@ SOURCES += \
     src/qt/dialogs/insert_link_dialog.cpp \
     src/qt/dialogs/rows_and_depth_dialog.cpp \
     src/qt/dialogs/new_file_dialog.cpp \
-    src/qt/dialogs/new_repository_dialog.cpp
+    src/qt/dialogs/new_repository_dialog.cpp \
+    src/qt/web_engine_page_link_navigation_policy.cpp
 
 # L10n
 #./resources/qt/translations/mindforger_de.ts

@@ -27,44 +27,13 @@
 #include <QtWidgets>
 #ifdef MF_QT_WEB_ENGINE
   #include <QWebEngineView>
+  #include "web_engine_page_link_navigation_policy.h"
 #else
   #include <QWebView>
 #endif
 #include <QUrl>
 
 namespace m8r {
-
-#ifdef MF_QT_WEB_ENGINE
-
-class WebEnginePageLinkNavigationPolicy : public QWebEnginePage
-{
-    Q_OBJECT
-
-public:
-    WebEnginePageLinkNavigationPolicy(QObject* parent = 0) : QWebEnginePage(parent) {}
-
-    bool acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool isMainFrame)
-    {
-#ifdef DO_M8R_DEBUG
-        MF_DEBUG("acceptNavigationRequest(" << url << "," << type << "," << isMainFrame << ")" << std::endl);
-#else
-        UNUSED_ARG(type);
-        UNUSED_ARG(isMainFrame);
-#endif
-
-        if(type == QWebEnginePage::NavigationTypeLinkClicked) {
-            emit signalLinkClicked(url);
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-signals:
-    void signalLinkClicked(const QUrl& url);
-};
-
-#endif
 
 #ifdef MF_QT_WEB_ENGINE
 class NoteView: public QWebEngineView

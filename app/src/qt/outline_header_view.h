@@ -47,6 +47,8 @@ public:
     ~OutlineHeaderView();
 
 #ifdef MF_QT_WEB_ENGINE
+    QWebEnginePage* getPage() const { return page(); }
+
 // this is ugly and stupid workaround for handling double-click event in QWebEngineView
 private:
     QObject *childObj = NULL;
