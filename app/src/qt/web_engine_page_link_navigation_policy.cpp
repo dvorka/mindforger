@@ -20,7 +20,8 @@
 
 namespace m8r {
 
-WebEnginePageLinkNavigationPolicy::WebEnginePageLinkNavigationPolicy(QWidget* parent)
+WebEnginePageLinkNavigationPolicy::WebEnginePageLinkNavigationPolicy(QObject* parent)
+ : QWebEnginePage(parent)
 {
 }
 

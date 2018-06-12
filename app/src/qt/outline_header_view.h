@@ -24,6 +24,7 @@
 #include <QtWidgets>
 #ifdef MF_QT_WEB_ENGINE
   #include <QWebEngineView>
+  #include "web_engine_page_link_navigation_policy.h"
 #else
   #include <QWebView>
 #endif

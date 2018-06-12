@@ -19,7 +19,13 @@
 #ifndef M8RUI_WEB_ENGINE_PAGE_LINK_NAVIGATION_POLICY_H
 #define M8RUI_WEB_ENGINE_PAGE_LINK_NAVIGATION_POLICY_H
 
+#include "../lib/src/gear/lang_utils.h"
+#include "../lib/src/debug.h"
+
 #include <QtWidgets>
+#ifdef MF_QT_WEB_ENGINE
+  #include <QWebEngineView>
+#endif
 
 namespace m8r {
 
@@ -30,7 +36,7 @@ class WebEnginePageLinkNavigationPolicy : public QWebEnginePage
     Q_OBJECT
 
 public:
-    explicit WebEnginePageLinkNavigationPolicy(QObject* parent = 0) : QWebEnginePage(parent) {}
+    explicit WebEnginePageLinkNavigationPolicy(QObject* parent = 0);
     WebEnginePageLinkNavigationPolicy(const WebEnginePageLinkNavigationPolicy&) = delete;
     WebEnginePageLinkNavigationPolicy(const WebEnginePageLinkNavigationPolicy&&) = delete;
     WebEnginePageLinkNavigationPolicy &operator=(const WebEnginePageLinkNavigationPolicy&) = delete;
