@@ -20,6 +20,7 @@
 # make project w/ QtWebEngine instead QtWebKit
 
 echo "IMPORTANT: build mindforger/deps/discount before running this script!"
+echo "IMPORTANT: mindforger must be built to mindforger/../build-mindforger-debug directory"
 
 cd ../..
 make clean

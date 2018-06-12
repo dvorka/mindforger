@@ -1124,7 +1124,7 @@ void MainWindowPresenter::doActionNoteEdit()
             return;
         }
     }
-    QMessageBox::critical(&view, tr("Edit Note"), tr("Please select a Note to edit."));
+    QMessageBox::critical(&view, tr("Edit Note"), tr("Please select a Note to edit in the outline."));
 }
 
 void MainWindowPresenter::doActionNoteHoist()

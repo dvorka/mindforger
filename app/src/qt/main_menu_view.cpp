@@ -329,7 +329,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineNew = new QAction(tr("&New"), mainWindow);
     actionOutlineNew->setStatusTip(tr("Create new Notebook to form new ideas, principles, combinations or applications"));
 
+#ifdef __APPLE__
+    actionOutlineEdit = new QAction(tr("&Edit\t⌘+e"), mainWindow);
+#else
     actionOutlineEdit = new QAction(tr("&Edit"), mainWindow);
+#endif
     actionOutlineEdit ->setStatusTip(tr("Edit current Notebook - you can also double click view to open the editor"));
 
     actionOutlineHome = new QAction(tr("Make &Home"), mainWindow);
@@ -378,7 +382,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteHoist->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
     actionNoteHoist->setStatusTip(tr("Hoist/de-hoist Note to focus on Note being viewed or edited"));
 
-    actionNoteEdit = new QAction(tr("&Edit"), mainWindow);
+#ifdef __APPLE__
+    actionNoteEdit = new QAction(tr("&Edit\t⌘+e"), mainWindow);
+#else
+    actionNoteEdit = new QAction(tr("&Edit\tCtrl+e"), mainWindow);
+#endif
     actionNoteEdit ->setStatusTip(tr("Edit current Note - you can also double click view to open the editor"));
 
     actionNoteSave = new QAction(tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
@@ -387,7 +395,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteForget = new QAction(tr("&Forget\tDelete"), mainWindow); // Delete is handled elsewhere and I don't want menu to handle it
     actionNoteForget->setStatusTip(tr("Forget note"));
 
+#ifdef __APPLE__
+    actionNoteClose = new QAction(tr("Leave\t⌘+Left"), mainWindow); // Alt+Left is handled elsewhere and I don't want menu to handle it
+#else
     actionNoteClose = new QAction(tr("Leave\tAlt+Left"), mainWindow); // Alt+Left is handled elsewhere and I don't want menu to handle it
+#endif
     actionNoteClose->setStatusTip(tr("Save leave editor of Note being changed"));
 
     actionNotePromote = new QAction(tr("&Promote\tCtrl+Left"), mainWindow); // handled from Outline tree
