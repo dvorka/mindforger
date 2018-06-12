@@ -1124,7 +1124,12 @@ void MainWindowPresenter::doActionNoteEdit()
             return;
         }
     }
+
+#ifdef __APPLE__
+    doActionOutlineEdit();
+#else
     QMessageBox::critical(&view, tr("Edit Note"), tr("Please select a Note to edit in the outline."));
+#endif
 }
 
 void MainWindowPresenter::doActionNoteHoist()
