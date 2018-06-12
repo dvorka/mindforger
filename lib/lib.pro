@@ -20,7 +20,7 @@ TEMPLATE = lib
 CONFIG += staticlib
 CONFIG -= qt
 
-mfunits {
+mfdebug|mfunits {
   DEFINES = DO_M8R_DEBUG
 }
 mfnoccache {

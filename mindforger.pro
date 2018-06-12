@@ -51,10 +51,11 @@
 #########################################################################
 #
 # QMake build options:
-#   qmake CONFIG+=mfnoccache  ... do not use ccache to build the project
-#   qmake CONFIG+=mfnocxx     ... do not define CXX i.e. g++
-#   qmake CONFIG+=mfunits     ... options to run unit tests e.g. define debugs
 #   qmake CONFIG+=mfwebengine ... build project w/ Qt webengine instead with Qt webkit
+#   qmake CONFIG+=mfnocxx     ... do not define CXX i.e. g++
+#   qmake CONFIG+=mfnoccache  ... do not use ccache to build the project
+#   qmake CONFIG+=mfdebug     ... show debug messages
+#   qmake CONFIG+=mfunits     ... options to run unit tests
 #
 #########################################################################
 

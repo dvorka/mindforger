@@ -20,6 +20,10 @@ TEMPLATE = app
 
 QT += widgets
 
+mfdebug|mfunits {
+  DEFINES = DO_M8R_DEBUG
+}
+
 # webkit is supposed to be OBSOLETED by webengine, but webengine is disabled
 # on Linux since Qt 5.9 due to its tragic performance > conditional compilation
 # seems to be the only way:

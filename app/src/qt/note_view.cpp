@@ -47,7 +47,7 @@ void NoteView::keyPressEvent(QKeyEvent* event)
 {
     if(event->modifiers() & Qt::AltModifier){
         if(event->key()==Qt::Key_Left) {
-            signalFromViewNoteToOutlines();
+            emit signalFromViewNoteToOutlines();
         }
     }
 
