@@ -110,11 +110,12 @@ function releaseForParticularUbuntuVersion() {
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
     export MFBUILD=mindforger-${NOW}
 
-    if ! grep -q "//#define DO_M8R_DEBUG" "${MFSRC}/lib/src/debug.h"
-    then
-	echo "This script must NOT be run if debug code is enabled - disable DO_M8R_DEBUG first"
-	exit 1
-    fi
+    # DO_M8R_DEBUG is disabled by default now
+    #if ! grep -q "//#define DO_M8R_DEBUG" "${MFSRC}/lib/src/debug.h"
+    #then
+    #	echo "This script must NOT be run if debug code is enabled - disable DO_M8R_DEBUG first"
+    #	exit 1
+    #fi
     
     # 1) clean up
     echo -e "\n# Cleanup ####################################################"
@@ -199,13 +200,13 @@ function releaseForParticularUbuntuVersion() {
 
 export ARG_BAZAAR_MSG="Experimental packaging."
 export ARG_MAJOR_VERSION=1.42.
-export ARG_MINOR_VERSION=5 # minor version is icremented for every Ubuntu version
+export ARG_MINOR_VERSION=6 # minor version is icremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety
 # current: trusty xenial artful bionic
 # MF supported (trusty has old GCC): xenial artful bionic
-for UBUNTU_VERSION in bionic
+for UBUNTU_VERSION in bionic artful xenial
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
