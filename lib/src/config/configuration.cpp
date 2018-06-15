@@ -115,9 +115,8 @@ Repository* Configuration::addRepository(Repository* repository)
         repositories.erase(repository->getPath());
         if(activeRepository == clash) {
             activeRepository = repository;
-            delete clash;
-
         }
+        delete clash;
     }
 
     repositories[repository->getPath()] = repository;

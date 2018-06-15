@@ -58,8 +58,9 @@ MarkdownConfigurationRepresentation::~MarkdownConfigurationRepresentation()
 }
 
 /*
- * Parse Configuration represented as AST while aiming to be as ROBUST as possible i.e. handle
- * eventual user typos and incorrect formatting.
+ * Parse Configuration represented as AST and delete AST. Aim to be
+ * as ROBUST as possible ~ handle eventual user typos and incorrect
+ * formatting.
  */
 void MarkdownConfigurationRepresentation::configuration(vector<MarkdownAstNodeSection*>* ast, Configuration& c)
 {
@@ -89,6 +90,10 @@ void MarkdownConfigurationRepresentation::configuration(vector<MarkdownAstNodeSe
                 vector<string*>* sectionBody;
                 sectionBody = ast->at(i)->moveBody();
                 configuration(ast->at(i)->getText(), sectionBody, c);
+
+                for(string* l:*sectionBody) {
+                    delete l;
+                }
                 delete sectionBody;
             }
         }

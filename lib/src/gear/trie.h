@@ -22,9 +22,6 @@
 #include <vector>
 #include <string>
 
-// TODO remove
-#include <iostream>
-
 namespace m8r {
 
 /**

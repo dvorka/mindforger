@@ -34,6 +34,17 @@ Repository::Repository(
     flags = 0;
 }
 
+Repository::Repository(const Repository& r)
+{
+    dir = r.dir;
+    file = r.file;
+    path = r.path;
+    type = r.type;
+    mode = r.mode;
+    readOnly = r.readOnly;
+    flags = r.flags;
+}
+
 Repository::~Repository()
 {
 }

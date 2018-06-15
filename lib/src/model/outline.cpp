@@ -37,6 +37,7 @@ Outline::Outline(const OutlineType* type)
     importance = urgency = progress = 0;
     bytesize = 0;
     flags = 0;
+    dirty = false;
 
     outlineDescriptorAsNote = new Note(&NOTE_4_OUTLINE_TYPE, this);
 }
@@ -118,6 +119,9 @@ Outline::Outline(const Outline& o)
     }
 
     outlineDescriptorAsNote = nullptr;
+
+    flags = o.flags;
+    dirty = o.dirty;
 }
 
 void Outline::completeProperties(const time_t fileModificationTime)
