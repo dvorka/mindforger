@@ -87,7 +87,7 @@ public:
     AiAaBoW(const AiAaBoW&&) = delete;
     AiAaBoW &operator=(const AiAaBoW&) = delete;
     AiAaBoW &operator=(const AiAaBoW&&) = delete;
-    ~AiAaBoW();
+    virtual ~AiAaBoW();
 
     virtual std::shared_future<bool> dream();
 

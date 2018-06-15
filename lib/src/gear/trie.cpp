@@ -34,7 +34,7 @@ Trie::~Trie()
 }
 
 void Trie::destroy(Node* n)
-{
+{    
     for(Node* c:n->mChildren) {
         destroy(c);
     }
@@ -52,6 +52,7 @@ void Trie::addWord(string s)
 
     for(size_t i=0; i<s.size(); i++) {
         Node* child = current->findChild(s[i]);
+
         if(child != nullptr) {
             current = child;
         } else {
@@ -60,8 +61,10 @@ void Trie::addWord(string s)
             current->appendChild(n);
             current = n;
         }
-        if(i == s.size()-1)
+
+        if(i == s.size()-1) {
             current->setWordMarker();
+        }
     }
 }
 

@@ -293,9 +293,10 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(16, memory.getOntology().getTags().size()); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
 }
 
-// TODO start w/ empty repository (do I need it?)
-// TODO learn MD repository
-// TODO learn MF repository (might be test above)
-// TODO learn MD file
-// TODO learn MF file
-// TODO test readonly
+TEST(MindTestCase, CommonWordsBlacklist) {
+    m8r::CommonWordsBlacklist blacklist{};
+
+    ASSERT_TRUE(blacklist.findWord("I"));
+    ASSERT_TRUE(blacklist.findWord("you"));
+    ASSERT_TRUE(blacklist.findWord("the"));
+}
