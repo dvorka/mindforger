@@ -25,9 +25,11 @@ using namespace std;
 OrlojView::OrlojView(QWidget* parent)
     : QSplitter(Qt::Horizontal, parent)
 {
-    addWidget(new QTextEdit("Home: outlines (link), Notes (l), bytes (l), graphs, recent"));
+    // TODO to be implemented
+    //addWidget(new QTextEdit("Home: outlines (link), Notes (l), bytes (l), graphs, recent"), this);
 
-    addWidget(new QTextEdit("Organizer"));
+    // TODO to be implemented
+    //addWidget(new QTextEdit("Organizer", this));
 
     outlinesTable = new OutlinesTableView(this);
     addWidget(outlinesTable);
@@ -35,17 +37,14 @@ OrlojView::OrlojView(QWidget* parent)
     notesTable = new NotesTableView(this);
     addWidget(notesTable);
 
-    navigator = new GraphWidget;
-    addWidget(navigator);
+    // TODO to be implemented
+    //navigator = new GraphWidget(this);
+    //addWidget(navigator);
 
-    addWidget(new QTextEdit("Inbox"));
+    //addWidget(new QTextEdit("Inbox", this));
 
-    // BEGIN experiment
     outlineView = new OutlineViewSplitter(this);
     addWidget(outlineView);
-    // END experiment
-    //outlineView = new OutlineView(this);
-    //addWidget(outlineView);
 
     outlineHeaderView = new OutlineHeaderView(this);
     addWidget(outlineHeaderView);
@@ -53,12 +52,14 @@ OrlojView::OrlojView(QWidget* parent)
     outlineHeaderEdit = new OutlineHeaderEditView(this);
     addWidget(outlineHeaderEdit);
 
-    addWidget(new QTextEdit("Outline HTML single page"));
+    // TODO to be removed
+    //addWidget(new QTextEdit("Outline HTML single page", this));
 
     noteView = new NoteView(this);
     addWidget(noteView);
 
-    addWidget(new QTextEdit("Outline single page edit"));
+    // TODO to be removed
+    //addWidget(new QTextEdit("Outline single page edit", this));
 
     noteEdit = new NoteEditView{this};
     addWidget(noteEdit);

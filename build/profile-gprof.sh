@@ -17,10 +17,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-# Set window size for creation of screenshots for web mf.com: 1360x768 (then use Screenshot app)
+# Gprof:
+# 1. build project w/
+#   QMAKE_CXXFLAGS_DEBUG *= -pg
+#   QMAKE_LFLAGS_DEBUG *= -pg
+# 2. run mindforger - it will generate gmon.out
+# 3. load gmon.out to analyse it
 
-echo "IMPORTANT: before running this script make sure window is NOT maximized or half sized - use rectangle button that allows window resizing (using right-down corner)"
+# This script does 2nd and 3rd step
 
-wmctrl -r "MindForger - Thinking Notebook - 0.6.0 - Technology Preview" -e 0,0,0,1360,768
+export OPENREPO="~/tmp/EMPTY"
+
+cd ../app && rm -vf gmon.out && ./mindforger ${OPENREPO}  && gprof ./mindforger gmon.out > GPROF-ANALYSIS.txt && less GPROF-ANALYSIS.txt
 
 # eof
+

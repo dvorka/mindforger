@@ -27,7 +27,7 @@
 
 namespace m8r {
 
-class OutlinesTableView: public QTableView
+class OutlinesTableView : public QTableView
 {
     Q_OBJECT
 
@@ -48,6 +48,7 @@ public:
 
     virtual void paintEvent(QPaintEvent* event) override;
 };
+
 
 }
 

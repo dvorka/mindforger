@@ -42,10 +42,10 @@ void OutlinesTablePresenter::refresh(const vector<Outline*>& outlines)
         for(Outline* outline:outlines) {
             model->addRow(outline);
         }
-    }
 
-    // IMPROVE create hidden column w/ long time used for sorting
-    view->sortByColumn(7, Qt::SortOrder::DescendingOrder);
+        // IMPROVE create hidden column w/ long time used for sorting
+        view->sortByColumn(7, Qt::SortOrder::DescendingOrder);
+    }
 }
 
 } // m8r namespace
