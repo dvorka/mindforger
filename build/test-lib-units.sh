@@ -40,6 +40,7 @@ export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to d
 #export OPTION_TEST="AiNlpTestCase.Tokenizer"
 #export OPTION_TEST="AiNlpTestCase.Stemmer"
 #export OPTION_TEST="HtmlTestCase.*"
+#export OPTION_TEST="HtmlTestCase.Outline"
 #export OPTION_TEST="HtmlTestCase.TaskList"
 #export OPTION_TEST="HtmlTestCase.NoteLinks"
 #export OPTION_TEST="MarkdownParserTestCase.Links"
