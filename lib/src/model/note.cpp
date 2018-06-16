@@ -70,6 +70,9 @@ Note::~Note()
     for(string* d:description) {
         delete d;
     }
+    for(Link* l:links) {
+        delete l;
+    }
 }
 
 string Note::getMangledName() const

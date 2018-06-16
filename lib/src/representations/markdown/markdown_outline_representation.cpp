@@ -170,6 +170,13 @@ Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>*
                     outline->setTimeScope(astNode->getMetadata().getTimeScope());
                 }
 
+                if(astNode->getMetadata().getLinks().size()) {
+                    for(auto l:astNode->getMetadata().getLinks()) {
+                        outline->addLink(l);
+                    }
+                    astNode->getMetadata().clearLinks();
+                }
+
                 if(astNode->getMetadata().getTags().size()) {
                     // IMPROVE move to for scope
                     const Tag* t;
@@ -177,13 +184,6 @@ Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>*
                         t = ontology.findOrCreateTag(*s);
                         outline->addTag(t);
                     }
-                }
-
-                if(astNode->getMetadata().getLinks().size()) {
-                    for(auto l:astNode->getMetadata().getLinks()) {
-                        outline->addLink(l);
-                    }
-                    astNode->getMetadata().clearLinks();
                 }
 
                 vector<string*>* body = ast->at(off)->moveBody();

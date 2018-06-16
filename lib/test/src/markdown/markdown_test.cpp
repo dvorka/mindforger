@@ -478,8 +478,10 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPreamble)
     string* serialized = mdr.to(o);
     EXPECT_EQ(*original, *serialized);
 
-    cout << endl << "- DONE ----------------------------------------------" << endl;
+    delete original;
+    delete serialized;
     delete o;
+    cout << endl << "- DONE ----------------------------------------------" << endl;
 }
 
 TEST(MarkdownParserTestCase, MarkdownRepresentationPostDeclaredSection)
@@ -553,6 +555,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPostDeclaredSection)
     EXPECT_EQ(content, *serialized);
 
     delete serialized;
+    delete o;
 }
 
 TEST(MarkdownParserTestCase, MarkdownRepresentationTrailingHashesSection)
@@ -640,6 +643,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationTrailingHashesSection)
     EXPECT_EQ(content, *serialized);
 
     delete serialized;
+    delete o;
 }
 
 TEST(MarkdownParserTestCase, MarkdownRepresentationEmptyFirstLine)
@@ -696,6 +700,8 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationEmptyFirstLine)
     cout << endl << "'" << o->getName() << "'";
     EXPECT_EQ(o->getName(), "First Markdown");
     EXPECT_EQ(o->getDescription().size(), 2);
+
+    delete o;
 }
 
 TEST(MarkdownParserTestCase, FileSystemPersistence)
@@ -798,6 +804,7 @@ TEST(MarkdownParserTestCase, TimeScope)
     EXPECT_NE(serialized->find("scope: 1y2m3d4h5m;"), std::string::npos);
 
     delete serialized;
+    delete o;
 }
 
 TEST(MarkdownParserTestCase, Deadline)
@@ -847,6 +854,7 @@ TEST(MarkdownParserTestCase, Deadline)
     EXPECT_NE(serialized->find("deadline: 2010-11-12 13:14:15"), std::string::npos);
 
     delete serialized;
+    delete o;
 }
 
 TEST(MarkdownParserTestCase, Links)
@@ -901,4 +909,5 @@ TEST(MarkdownParserTestCase, Links)
     EXPECT_NE(serialized->find("[is a](./y.md#a-z)"), std::string::npos);
 
     delete serialized;
+    delete o;
 }

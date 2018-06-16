@@ -43,6 +43,7 @@ export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to d
 #export OPTION_TEST="HtmlTestCase.Outline"
 #export OPTION_TEST="HtmlTestCase.TaskList"
 #export OPTION_TEST="HtmlTestCase.NoteLinks"
+#export OPTION_TEST="MarkdownParserTestCase.*"
 #export OPTION_TEST="MarkdownParserTestCase.Links"
 #export OPTION_TEST="MarkdownParserTestCase.TimeScope"
 #export OPTION_TEST="MarkdownParserTestCase.Deadline"

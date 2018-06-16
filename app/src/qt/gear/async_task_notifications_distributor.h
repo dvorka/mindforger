@@ -22,8 +22,6 @@
 #include <vector>
 #include <future>
 
-#include <QThread>
-
 #include "../../lib/src/debug.h"
 #include "../../lib/src/model/note.h"
 

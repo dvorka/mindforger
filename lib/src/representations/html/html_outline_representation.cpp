@@ -231,6 +231,9 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
         footer(*html);
     } else {
         // create HTML body using Discount first
+        html->clear();
+        header(*html, basePath);
+
         MMIOT* doc = nullptr;
         if(markdown->size() > 0) {
             // ensure MD ends with new line, otherwise there would be missing characters in output HTML
@@ -260,18 +263,22 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
             // compile to AST - a tree of paragraph
             doc = mkd_string(markdown->c_str(), markdown->size(), discountOptions);
             mkd_compile(doc, discountOptions);
-        }
-        // TODO check if out is leak OR reused array
-        char* body{};
-        // compile AST to HTML string
-        mkd_document(doc, &body);
 
-        // assemble HTML
-        html->clear();
-        header(*html, basePath);
-        if(body) {
-            html->append(body);
+            char* body = nullptr;
+            if(doc) {
+                // compile AST to HTML string
+                int bodySize = mkd_document(doc, &body);
+
+                MF_DEBUG("Markdown > " << bodySize << "B HTML" << endl);
+                if(bodySize && body) {
+                    html->append(body);
+                    // body is not memory leak - it's freed automatically
+                }
+
+                mkd_cleanup(doc);
+            }
         }
+
         footer(*html);
     }
 
