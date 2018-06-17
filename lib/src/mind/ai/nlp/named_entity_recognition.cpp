@@ -96,6 +96,10 @@ vector<string> NamedEntityRecognition::tokenizeFile(const string& filename)
 
 bool NamedEntityRecognition::recognizePersons(vector<pair<string,float>>& result)
 {
+    UNUSED_ARG(result);
+
+
+
     std::lock_guard<mutex> criticalSection{initMutex};
 
     if(loadAndInitNerModel()) {
@@ -107,6 +111,10 @@ bool NamedEntityRecognition::recognizePersons(vector<pair<string,float>>& result
 
 bool NamedEntityRecognition::recognizePersons(const Outline* outline, vector<pair<string,float>>& result)
 {
+    UNUSED_ARG(result);
+
+
+
     std::lock_guard<mutex> criticalSection{initMutex};
 
     if(loadAndInitNerModel())     {
