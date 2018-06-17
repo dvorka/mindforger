@@ -792,6 +792,15 @@ void Mind::onRemembering()
     allNotesCache.clear();
 }
 
+/*
+ * NRE
+ */
+
+void Mind::recognizePersons(const Outline* outline, std::vector<std::pair<std::string,float>> result) {
+    ai->recognizePersons(outline, result);
+}
+
+
 // unique_ptr template BREAKS Qt Developer indentation > stored at EOF
 unique_ptr<vector<Outline*>> Mind::findOutlineByNameFts(const string& expr) const
 {

@@ -110,10 +110,10 @@ function releaseForParticularUbuntuVersion() {
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
     export MFBUILD=mindforger-${NOW}
 
-    # DO_M8R_DEBUG is disabled by default now
-    #if ! grep -q "//#define DO_M8R_DEBUG" "${MFSRC}/lib/src/debug.h"
+    # DO_MF_DEBUG is disabled by default now
+    #if ! grep -q "//#define DO_MF_DEBUG" "${MFSRC}/lib/src/debug.h"
     #then
-    #	echo "This script must NOT be run if debug code is enabled - disable DO_M8R_DEBUG first"
+    #	echo "This script must NOT be run if debug code is enabled - disable DO_MF_DEBUG first"
     #	exit 1
     #fi
     

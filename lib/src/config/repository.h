@@ -105,7 +105,7 @@ public:
     bool isGithubRepository() const { return flags & FLAG_MASK_GITHUB_REPO; }
     void setGithubRepository() { flags |= FLAG_MASK_GITHUB_REPO; }
 
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     void print() const {
         MF_DEBUG(std::endl << "Repo - Path: '" << path << "' Dir: '" << dir << "' file: '" << file << "' type: " << type << ", mode: " << mode << ", RD_ONLY: " << readOnly << std::endl);
     }

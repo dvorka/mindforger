@@ -29,7 +29,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: mind
     menuMind = qMenuBar->addMenu(tr("&Mind"));
 
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     actionMindHack = new QAction(tr("Mind Hack"), mainWindow);
     actionMindHack->setStatusTip(tr("Mind hacking and debugging hook"));
     actionMindHack->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
@@ -120,7 +120,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
     menuMind->addSeparator();
     menuMind->addAction(actionExit);
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     menuMind->addSeparator();
     menuMind->addAction(actionMindHack);
 #endif
@@ -147,7 +147,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
     actionFindNoteByTag->setStatusTip(tr("Find Note by tags"));
 
-#ifdef MF_WIP
+#ifdef MF_MITIE
     actionFindNerPersons = new QAction(tr("Recall &Persons"), mainWindow);
     actionFindNerPersons->setStatusTip(tr("Find persons using Named Entity Resolution (NER)"));
 
@@ -167,7 +167,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFind->addAction(actionFindNoteByName);
     menuFind->addAction(actionFindOutlineByTag);
     menuFind->addAction(actionFindNoteByTag);    
-#ifdef MF_WIP
+#ifdef MF_MITIE
     menuFind->addSeparator();
     menuFind->addAction(actionFindNerPersons);
     menuFind->addAction(actionFindNerLocations);
@@ -197,7 +197,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewDwell->setStatusTip(tr("Open memory dwell"));
     actionViewDwell->setEnabled(false);
 
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     actionViewCli = new QAction(tr("&CLI"), mainWindow);
     actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
     actionViewCli->setStatusTip(tr("Toggle command line"));
@@ -239,7 +239,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewStencils);
     menuView->addAction(actionViewNavigator);
     menuView->addAction(actionViewDwell);
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     // OBSOLETE feature: menuView->addAction(actionViewCli);
 #endif
     menuView->addAction(actionViewLimbo);

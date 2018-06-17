@@ -52,7 +52,7 @@ void Memory::learn()
 
     repositoryIndexer.index(config.getActiveRepository());
 
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     MF_DEBUG(endl << "LEARNING repository in mode " << config.getActiveRepository()->getMode() << ":");
     auto begin = chrono::high_resolution_clock::now();
 #endif
@@ -127,7 +127,7 @@ void Memory::learn()
         } // else wrong number of files (typically none)
     }
 
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     auto end = chrono::high_resolution_clock::now();
     MF_DEBUG("LEARNED in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms" << endl);
 #endif

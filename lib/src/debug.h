@@ -19,10 +19,10 @@
 #ifndef M8R_DEBUG_H_
 #define M8R_DEBUG_H_
 
-// DO_M8R_DEBUG to be enabled in qmake:
-//   - configuration: DEFINES = DO_M8R_DEBUG
+// DO_MF_DEBUG to be enabled in qmake:
+//   - configuration: DEFINES = DO_MF_DEBUG
 //   - command line: CONFIG += mfunits
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
 #include <chrono>
 #include <iostream>
     #define MF_DEBUG(x) do { std::cerr << x; } while (0)

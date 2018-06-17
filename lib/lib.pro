@@ -20,8 +20,19 @@ TEMPLATE = lib
 CONFIG += staticlib
 CONFIG -= qt
 
+# dependencies
+#  - INCLUDEPATH is used during compilation to find included header files.
+#  - DEPENDPATH is used to resolve dependencies between header and source files, eg. which source files need to be recompiled when certain header file changes.
+INCLUDEPATH += $$PWD/../deps/discount
+DEPENDPATH += $$PWD/../deps/discount
+!mfnomitie {
+    DEFINES += MF_MITIE
+    INCLUDEPATH += $$PWD/../deps/mitie/mitielib/include
+    DEPENDPATH += $$PWD/../deps/mitie/mitielib/include
+}
+
 mfdebug|mfunits {
-  DEFINES = DO_M8R_DEBUG
+  DEFINES += DO_MF_DEBUG
 }
 mfnoccache {
   QMAKE_CXX = g++
@@ -87,7 +98,8 @@ SOURCES += \
     src/mind/ai/aa_notes_feature.cpp \
     src/mind/ai/nlp/common_words_blacklist.cpp \
     src/mind/aspect/tag_scope_aspect.cpp \
-    src/mind/aspect/mind_scope_aspect.cpp
+    src/mind/aspect/mind_scope_aspect.cpp \
+    src/mind/ai/nlp/named_entity_recognition.cpp
 
 HEADERS += \
     ./src/debug.h \
@@ -187,4 +199,5 @@ HEADERS += \
     src/mind/ai/nlp/common_words_blacklist.h \
     src/mind/aspect/tag_scope_aspect.h \
     src/mind/aspect/mind_scope_aspect.h \
-    src/compilation.h
+    src/compilation.h \
+    src/mind/ai/nlp/named_entity_recognition.h

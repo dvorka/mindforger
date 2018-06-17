@@ -20,8 +20,12 @@ TEMPLATE = app
 
 QT += widgets
 
+!mfnomitie {
+  DEFINES += MF_MITIE
+}
+
 mfdebug|mfunits {
-  DEFINES = DO_M8R_DEBUG
+  DEFINES += DO_MF_DEBUG
 }
 
 # webkit is supposed to be OBSOLETED by webengine, but webengine is disabled
@@ -41,10 +45,6 @@ macx|mfwebengine {
 # dependencies
 #  - INCLUDEPATH is used during compilation to find included header files.
 #  - DEPENDPATH is used to resolve dependencies between header and source files, eg. which source files need to be recompiled when certain header file changes.
-INCLUDEPATH += $$PWD/../deps/discount
-DEPENDPATH += $$PWD/../deps/discount
-INCLUDEPATH += $$PWD/../deps/mitie/include
-DEPENDPATH += $$PWD/../deps/mitie
 INCLUDEPATH += $$PWD/../lib/src
 DEPENDPATH += $$PWD/../lib/src
 

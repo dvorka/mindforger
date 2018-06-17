@@ -205,7 +205,7 @@ private:
     void addWorkerAndCleanZombies(std::thread* t);
 
 public:
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     void printAa() {
         std::cout << "AA Matrix:" << std::endl;
         for(size_t i=0; i<aaMatrix.size(); i++) {

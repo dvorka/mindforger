@@ -124,7 +124,7 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
             "<!DOCTYPE html>\n"
             "<html>"
             "<head>");
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
         html += "\n";
 #endif
 
@@ -133,14 +133,14 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
             html += "<base href=\"file://";
             html += *basePath;
             html += "/\">";
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
         html += "\n";
 #endif
         }
 
         // TODO SCROLLING: scrolling bridge
         //html += "<script type=\"text/javascript\">window.onscroll = function() { synchronizer.webViewScrolled(); };</script>";
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
         //html += "\n";
 #endif
 
@@ -153,13 +153,13 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
             switch(config.getUiEnableDiagramsInMd()) {
             case Configuration::JavaScriptLibSupport::ONLINE:
                 html += "<script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/mermaid/7.1.2/mermaid.min.js\"></script>";
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
                 html += "\n";
 #endif
                 break;
             case Configuration::JavaScriptLibSupport::OFFLINE:
                 html += "<script type=\"text/javascript\" src=\"qrc:/js/mermaid.js\"></script>";
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
                 html += "\n";
 #endif
                 break;
@@ -174,11 +174,11 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
         // - check newMathJax variable in the script above e.g. https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
         if(config.isUiEnableMathInMd()) {
             html += "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>";
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
             html += "\n";
 #endif
             html += "<script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML\"></script>";
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
             html += "\n";
 #endif
         }
@@ -186,15 +186,15 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
         // SYNTAX HIGHLIGHTING: offline Highlight.js (CME)
         if(config.isUiEnableSrcHighlightInMd()) {
             html += "<link rel=\"stylesheet\" href=\"qrc:/html-css/highlight.css\"/>";
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
             html += "\n";
 #endif
             html += "<script type=\"text/javascript\" src=\"qrc:/js/highlight.js\"></script>";
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
             html += "\n";
 #endif
             html += "<script type=\"text/javascript\">hljs.initHighlightingOnLoad();</script>";
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
             html += "\n";
 #endif
         }
@@ -203,7 +203,7 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
         html += "<link rel=\"stylesheet\" href=\"";
         html += config.getUiHtmlCssPath();
         html += "\"/>";
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
         html += "\n";
 #endif
 

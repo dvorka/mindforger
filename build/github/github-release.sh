@@ -57,11 +57,12 @@ function buildGitHubTarball() {
     export MFBUILD=mindforger-${NOW}
     export UBUNTUVERSION=unstable
 
-    if ! grep -q "//#define DO_M8R_DEBUG" "${MFSRC}/lib/src/debug.h"
-    then
-	echo "This script must NOT be run if debug code is enabled - disable DO_M8R_DEBUG first"
-	exit 1
-    fi
+    # DO_MF_DEBUG is disabled by default now
+    #if ! grep -q "//#define DO_MF_DEBUG" "${MFSRC}/lib/src/debug.h"
+    #then
+    #echo "This script must NOT be run if debug code is enabled - disable DO_MF_DEBUG first"
+    #exit 1
+    #fi
     
     #
     # 1) create tarball

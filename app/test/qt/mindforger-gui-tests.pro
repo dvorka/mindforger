@@ -239,7 +239,7 @@ SOURCES += \
 
 # Enable MindForger test/profiling code
 QMAKE_CXX = ccache g++
-QMAKE_CXXFLAGS += -pedantic -std=c++11 -DDO_M8R_DEBUG
+QMAKE_CXXFLAGS += -pedantic -std=c++11 -DDO_MF_DEBUG
 
 TRANSLATIONS = src/qt/translations/mindforger_en.ts \
     ../../src/qt/translations/mindforger_de.ts \

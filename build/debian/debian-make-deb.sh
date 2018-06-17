@@ -87,9 +87,9 @@ function buildDebPackage() {
     export MFBUILD=mindforger-${NOW}
     export UBUNTUVERSION=unstable
 
-    if ! grep -q "//#define DO_M8R_DEBUG" "${MFSRC}/lib/src/debug.h"
+    if ! grep -q "//#define DO_MF_DEBUG" "${MFSRC}/lib/src/debug.h"
     then
-	echo "This script must NOT be run if debug code is enabled - disable DO_M8R_DEBUG first"
+    echo "This script must NOT be run if debug code is enabled - disable DO_MF_DEBUG first"
 	exit 1
     fi
     

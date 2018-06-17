@@ -56,7 +56,7 @@ public:
     QMenu* menuFormat;
     QMenu* menuHelp;
 
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     QAction* actionMindHack;
 #endif
     // menu: MindForger
@@ -83,10 +83,12 @@ public:
     QAction* actionFindNoteByName;
     QAction* actionFindOutlineByTag;
     QAction* actionFindNoteByTag;
+#ifdef MF_MITIE
     QAction* actionFindNerPersons;
     QAction* actionFindNerLocations;
     QAction* actionFindNerOrganizations;
     QAction* actionFindNerMisc;
+#endif
 
     // menu: View
     QAction* actionViewHome;
@@ -95,7 +97,7 @@ public:
     QAction* actionViewNavigator;
     QAction* actionViewDwell;
     QAction* actionViewStencils;
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     QAction* actionViewCli;
 #else
     QShortcut* cliShortcut;

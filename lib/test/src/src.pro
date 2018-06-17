@@ -18,7 +18,7 @@
 TARGET = mindforger-lib-unit-tests
 TEMPLATE = app
 
-DEFINES = DO_M8R_DEBUG
+DEFINES = DO_MF_DEBUG
 
 CONFIG += console
 CONFIG -= app_bundle

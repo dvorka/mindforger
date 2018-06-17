@@ -330,7 +330,7 @@ struct Outline::Patch {
      */
     unsigned int count;
 
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     void print() const {
         MF_DEBUG("Patch " << diff << " : start " << start << " count " << count << std::endl);
     }

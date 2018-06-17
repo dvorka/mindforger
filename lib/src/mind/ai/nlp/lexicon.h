@@ -23,7 +23,7 @@
 #include <vector>
 #include <string>
 
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
 #include <iostream>
 #endif
 
@@ -139,7 +139,7 @@ public:
         }
     }
 
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     void print() const {
         MF_DEBUG("Lexicon[" << m.size() << "]:" << std::endl);
         for(auto& e:m) {

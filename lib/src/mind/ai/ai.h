@@ -26,11 +26,12 @@
 #include "../mind.h"
 #include "../../model/outline.h"
 #include "../memory.h"
-//#include "./nlp/markdown_tokenizer.h"
-//#include "./aa_notes_feature.h"
 #include "./aa_model.h"
 #include "./ai_aa_weighted_fts.h"
 #include "./ai_aa_bow.h"
+#ifdef MF_MITIE
+    #include "./nlp/named_entity_recognition.h"
+#endif
 
 namespace m8r {
 
@@ -76,6 +77,13 @@ private:
     AiAssociationsAssessment* aa;
 
     /*
+     * Named entity resolution (NER)
+     */
+#ifdef MF_MITIE
+    NamedEntityRecognition ner;
+#endif
+
+    /*
      * Neural network models
      */
 
@@ -119,6 +127,13 @@ public:
     }
 
     /**
+     * @brief Recognize person names in O.
+     */
+    void recognizePersons(const Outline* outline, std::vector<std::pair<std::string,float>> result) {
+        ner.recognizePersons(outline, result);
+    }
+
+    /**
      * @brief Clear, but don't deallocate.
      *
      * Synchronized by caller ~ Mind.
@@ -144,7 +159,7 @@ private:
     void trainAaNn();
 
 public:
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     static void print(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard) {
         std::cout << "Note '" << n->getName() << "' AA leaderboard("<< leaderboard.size() <<"):" << std::endl;
         int i=1;

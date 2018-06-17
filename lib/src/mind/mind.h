@@ -249,6 +249,12 @@ public:
     unsigned getTriplesCount() const { return triples.size(); }
 
     /*
+     * NRE
+     */
+
+    void recognizePersons(const Outline* outline, std::vector<std::pair<std::string,float>> result);
+
+    /*
      * REMEMBERING
      */
 

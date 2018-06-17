@@ -189,7 +189,7 @@ public:
 
     const Clazz& getThing() const { return thing; }
 
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     void print() const {}
 #endif
 

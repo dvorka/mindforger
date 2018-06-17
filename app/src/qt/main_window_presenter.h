@@ -138,7 +138,7 @@ public:
 
 public slots:
     // mind
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     void doActionMindHack();
 #endif
     void doActionMindNewRepository();
@@ -168,6 +168,8 @@ public slots:
     void handleFindOutlineByTag();
     void doActionFindNoteByTag();
     void handleFindNoteByTag();
+    void doActionFindNerPersons();
+    void handleFindNerPersons();
     // view
     bool doActionViewHome();
     void doActionViewOutlines();

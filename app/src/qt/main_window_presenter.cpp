@@ -208,7 +208,7 @@ void MainWindowPresenter::showInitialView()
  */
 void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
 {
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
     MF_DEBUG("HTML clickHandler: " << endl);
     MF_DEBUG("  Qt URL     : " << url.toString().toStdString() << endl);
     MF_DEBUG("  Memory path: " << config.getMemoryPath() << endl);
@@ -291,7 +291,7 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
     }
 }
 
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
 void MainWindowPresenter::doActionMindHack()
 {
     MF_DEBUG("[MindHack] Current facet: " << orloj->getFacet() << endl);
@@ -643,6 +643,22 @@ void MainWindowPresenter::handleFindNoteByName()
     } else {
         statusBar->showInfo(QString(tr("Note not found")+": ") += findNoteByNameDialog->getSearchedString());
     }
+}
+
+void MainWindowPresenter::doActionFindNerPersons()
+{
+    if(orloj->isFacetActiveOutlineManagement()) {
+        vector<pair<string,float>> result;
+
+        // TODO important - show progress bar - it may take long time
+        mind->recognizePersons(orloj->getOutlineView()->getCurrentOutline(), result);
+    } else {
+        QMessageBox::critical(&view, tr("NER"), tr("Memory NER not implemented yet."));
+    }
+}
+
+void MainWindowPresenter::handleFindNerPersons()
+{
 }
 
 void MainWindowPresenter::doActionViewToggleRecent()
@@ -1464,7 +1480,7 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
         QString{tr("About MindForger")},
         QString{
             "<b>MindForger " MINDFORGER_VERSION "</b>"
-#ifdef DO_M8R_DEBUG
+#ifdef DO_MF_DEBUG
             "&nbsp;&nbsp;&nbsp;&nbsp;" __DATE__ " " __TIME__
             "&nbsp;&nbsp;&nbsp;&nbsp; Qt " QT_VERSION_STR
 #endif
