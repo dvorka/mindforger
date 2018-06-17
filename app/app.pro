@@ -39,8 +39,12 @@ macx|mfwebengine {
 }
 
 # dependencies
+#  - INCLUDEPATH is used during compilation to find included header files.
+#  - DEPENDPATH is used to resolve dependencies between header and source files, eg. which source files need to be recompiled when certain header file changes.
 INCLUDEPATH += $$PWD/../deps/discount
 DEPENDPATH += $$PWD/../deps/discount
+INCLUDEPATH += $$PWD/../deps/mitie/include
+DEPENDPATH += $$PWD/../deps/mitie
 INCLUDEPATH += $$PWD/../lib/src
 DEPENDPATH += $$PWD/../lib/src
 
@@ -48,6 +52,8 @@ DEPENDPATH += $$PWD/../lib/src
 LIBS += -L$$OUT_PWD/../lib -lmindforger
 # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
 LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
+# MF links MITIE for AI/NLP/DL
+LIBS += -L$$OUT_PWD/../deps/mitie/mitielib -lmitie
 # zlib
 LIBS += -lz
 

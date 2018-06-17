@@ -73,11 +73,6 @@ app.depends = lib
 # ########################################
 # See http://doc.qt.io/qt-5/qmake-advanced-usage.html
 
-#unix:configfiles.extra = chmod +x data/config/mindforger/scripts/* ; make clean; mv -f mindforger mind
-#configfiles.files += data/config/*
-#configfiles.path = /usr/share/
-#INSTALLS += configfiles
-
 #IMPORTANT: binfile MUST be specified in app/app.pro (project next to/that builds binary)
 
 docfiles.files += doc/*
