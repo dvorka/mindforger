@@ -33,7 +33,7 @@
     //#define MF_DEBUG_L10N
 
     // show WIP features
-    //#define MF_WIP
+    #define MF_WIP
 #else
     #define MF_DEBUG(x) do {;} while (0)
 #endif

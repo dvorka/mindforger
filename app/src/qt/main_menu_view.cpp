@@ -147,12 +147,33 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
     actionFindNoteByTag->setStatusTip(tr("Find Note by tags"));
 
+#ifdef MF_WIP
+    actionFindNerPersons = new QAction(tr("Recall &Persons"), mainWindow);
+    actionFindNerPersons->setStatusTip(tr("Find persons using Named Entity Resolution (NER)"));
+
+    actionFindNerLocations = new QAction(tr("Recall &Locations"), mainWindow);
+    actionFindNerLocations->setStatusTip(tr("Find locations using Named Entity Resolution (NER)"));
+
+    actionFindNerOrganizations = new QAction(tr("Recall Organizations"), mainWindow);
+    actionFindNerOrganizations->setStatusTip(tr("Find organizations using Named Entity Resolution (NER)"));
+
+    actionFindNerMisc = new QAction(tr("Recall Other Entities"), mainWindow);
+    actionFindNerMisc->setStatusTip(tr("Find miscellaneous entities using Named Entity Resolution (NER)"));
+#endif
+
     menuFind = qMenuBar->addMenu(tr("&Recall"));
     menuFind->addAction(actionFts);
     menuFind->addAction(actionFindOutlineByName);
     menuFind->addAction(actionFindNoteByName);
     menuFind->addAction(actionFindOutlineByTag);
-    menuFind->addAction(actionFindNoteByTag);
+    menuFind->addAction(actionFindNoteByTag);    
+#ifdef MF_WIP
+    menuFind->addSeparator();
+    menuFind->addAction(actionFindNerPersons);
+    menuFind->addAction(actionFindNerLocations);
+    menuFind->addAction(actionFindNerOrganizations);
+    menuFind->addAction(actionFindNerMisc);
+#endif
 
     // menu: view
 

@@ -83,6 +83,10 @@ public:
     QAction* actionFindNoteByName;
     QAction* actionFindOutlineByTag;
     QAction* actionFindNoteByTag;
+    QAction* actionFindNerPersons;
+    QAction* actionFindNerLocations;
+    QAction* actionFindNerOrganizations;
+    QAction* actionFindNerMisc;
 
     // menu: View
     QAction* actionViewHome;
