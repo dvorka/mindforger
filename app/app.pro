@@ -142,7 +142,11 @@ HEADERS += \
     ./src/qt/dialogs/insert_link_dialog.h \
     ./src/qt/dialogs/rows_and_depth_dialog.h \
     ./src/qt/dialogs/new_file_dialog.h \
-    ./src/qt/dialogs/new_repository_dialog.h
+    ./src/qt/dialogs/new_repository_dialog.h \
+    src/qt/dialogs/ner_choose_tag_types_dialog.h \
+    src/qt/dialogs/ner_result_dialog.h \
+    src/qt/ner_leaderboard_model.h \
+    src/qt/ner_leaderboard_view.h
 
 macx|mfwebengine {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
@@ -218,7 +222,11 @@ SOURCES += \
     ./src/qt/dialogs/insert_link_dialog.cpp \
     ./src/qt/dialogs/rows_and_depth_dialog.cpp \
     ./src/qt/dialogs/new_file_dialog.cpp \
-    ./src/qt/dialogs/new_repository_dialog.cpp
+    ./src/qt/dialogs/new_repository_dialog.cpp \
+    src/qt/dialogs/ner_choose_tag_types_dialog.cpp \
+    src/qt/dialogs/ner_result_dialog.cpp \
+    src/qt/ner_leaderboard_model.cpp \
+    src/qt/ner_leaderboard_view.cpp
 
 macx|mfwebengine {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp

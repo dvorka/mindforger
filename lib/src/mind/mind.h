@@ -252,6 +252,7 @@ public:
      * NRE
      */
 
+    bool isNerInitilized() const;
     void recognizePersons(const Outline* outline, std::vector<std::pair<std::string,float>> result);
 
     /*

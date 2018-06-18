@@ -1,5 +1,5 @@
 /*
- assoc_leaderboard_view.cpp     MindForger thinking notebook
+ ner_leaderboard_view.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,11 +16,11 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "assoc_leaderboard_view.h"
+#include "ner_leaderboard_view.h"
 
 namespace m8r {
 
-AssocLeaderboardView::AssocLeaderboardView(QWidget* parent)
+NerLeaderboardView::NerLeaderboardView(QWidget* parent)
     : QTableView(parent)
 {
     verticalHeader()->setVisible(false);
@@ -36,11 +36,11 @@ AssocLeaderboardView::AssocLeaderboardView(QWidget* parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
-AssocLeaderboardView::~AssocLeaderboardView()
+NerLeaderboardView::~NerLeaderboardView()
 {
 }
 
-void AssocLeaderboardView::paintEvent(QPaintEvent* event)
+void NerLeaderboardView::paintEvent(QPaintEvent* event)
 {
     // ensure that 1st column gets the remaining space from others
     // IMPROVE may kill performance
@@ -48,8 +48,10 @@ void AssocLeaderboardView::paintEvent(QPaintEvent* event)
 
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
-    // % associativity
-    this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*12);
+    // type
+    this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*15);
+    // %
+    this->setColumnWidth(2, this->fontMetrics().averageCharWidth()*12);
 
     QTableView::paintEvent(event);
 }

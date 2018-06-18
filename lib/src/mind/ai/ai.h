@@ -126,6 +126,8 @@ public:
         return aa->getAssociatedNotes(words, associations, self);
     }
 
+    bool isNerInitialized() const { return ner.isInitialized(); }
+
     /**
      * @brief Recognize person names in O.
      */

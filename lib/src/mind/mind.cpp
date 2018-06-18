@@ -796,6 +796,11 @@ void Mind::onRemembering()
  * NRE
  */
 
+bool Mind::isNerInitilized() const
+{
+    return ai->isNerInitialized();
+}
+
 void Mind::recognizePersons(const Outline* outline, std::vector<std::pair<std::string,float>> result) {
     ai->recognizePersons(outline, result);
 }

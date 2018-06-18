@@ -22,6 +22,16 @@ using namespace std;
 
 namespace m8r {
 
+void RecognizePersonsWorkerThread::run()
+{
+    mind->recognizePersons(orloj->getOutlineView()->getCurrentOutline(), *result);
+
+    progressDialog->hide();
+    delete progressDialog;
+
+    MF_DEBUG("NER initialization and prediction WORKER finished" << endl);
+}
+
 MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     : view(view),
       config(Configuration::getInstance())
@@ -58,6 +68,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     rowsAndDepthDialog = new RowsAndDepthDialog(&view);
     newRepositoryDialog = new NewRepositoryDialog(&view);
     newFileDialog = new NewFileDialog(&view);
+    nerChooseTagsDialog = new NerChooseTagTypesDialog(&view);
 
     // wire signals
     QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
@@ -75,6 +86,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(rowsAndDepthDialog->getGenerateButton(), SIGNAL(clicked()), this, SLOT(handleRowsAndDepth()));
     QObject::connect(newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
+
+    QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleFindNerPersons()));
 
     // async task 2 GUI events distributor
     distributor = new AsyncTaskNotificationsDistributor(this);
@@ -648,17 +661,60 @@ void MainWindowPresenter::handleFindNoteByName()
 void MainWindowPresenter::doActionFindNerPersons()
 {
     if(orloj->isFacetActiveOutlineManagement()) {
-        vector<pair<string,float>> result;
-
-        // TODO important - show progress bar - it may take long time
-        mind->recognizePersons(orloj->getOutlineView()->getCurrentOutline(), result);
+        nerChooseTagsDialog->clearCheckboxes();
+        nerChooseTagsDialog->getPersonsCheckbox()->setChecked(true);
+        nerChooseTagsDialog->show();
     } else {
+        statusBar->showInfo(tr("Initializing NER and predicting..."));
+
         QMessageBox::critical(&view, tr("NER"), tr("Memory NER not implemented yet."));
     }
 }
 
 void MainWindowPresenter::handleFindNerPersons()
 {
+    nerChooseTagsDialog->hide();
+
+    if(mind->isNerInitilized()) {
+        statusBar->showInfo(tr("Recognizing named entities..."));
+
+        vector<pair<string,float>> result;
+        mind->recognizePersons(orloj->getOutlineView()->getCurrentOutline(), result);
+
+        statusBar->showInfo(tr("NER finished"));
+    } else {
+        statusBar->showInfo(tr("Initializing NER and recognizing named entities..."));
+
+        // launch async worker
+        vector<pair<string,float>> result;
+        QDialog* progressDialog = new QDialog{&view};
+        RecognizePersonsWorkerThread* workerThread
+            = new RecognizePersonsWorkerThread{mind, orloj, &result, progressDialog};
+        QObject::connect(workerThread, SIGNAL(finished()), this, SLOT(handleFindNerPersonsShowResult()));
+        workerThread->start();
+
+        // show progress dialog - will be closed by worker
+        QVBoxLayout* mainLayout = new QVBoxLayout{};
+        QLabel* l = new QLabel{tr(" Initializing (the first run only) NER and predicting... ")};
+        mainLayout->addWidget(l);
+        progressDialog->setLayout(mainLayout);
+        progressDialog->setWindowTitle(tr("NER"));
+        //progressDialog->resize(fontMetrics().averageCharWidth()*35, height());
+        //progressDialog->setModal(true);
+        progressDialog->update();
+        progressDialog->activateWindow();
+        progressDialog->show();
+        // dialog is deleted by worker thread
+    }
+}
+
+void MainWindowPresenter::handleFindNerPersonsShowResult()
+{
+    MF_DEBUG("Showing NER result..." << endl);
+    statusBar->showInfo(tr("NER predicition finished"));
+
+    // TODO
+
 }
 
 void MainWindowPresenter::doActionViewToggleRecent()

@@ -46,6 +46,7 @@
 #include "dialogs/rows_and_depth_dialog.h"
 #include "dialogs/new_repository_dialog.h"
 #include "dialogs/new_file_dialog.h"
+#include "dialogs/ner_choose_tag_types_dialog.h"
 
 #include <QtWidgets>
 #include <QtConcurrent/QtConcurrent>
@@ -58,6 +59,29 @@ class CliAndBreadcrumbsPresenter;
 class OrlojPresenter;
 class StatusBarPresenter;
 class AsyncTaskNotificationsDistributor;
+
+class RecognizePersonsWorkerThread : public QThread
+{
+    Mind* mind;
+    OrlojPresenter* orloj;
+    vector<pair<string,float>>* result;
+    QDialog* progressDialog;
+
+public:
+    explicit RecognizePersonsWorkerThread(
+        Mind* m,
+        OrlojPresenter* o,
+        vector<pair<string,float>>* r,
+        QDialog* d)
+    {
+        this->mind = m;
+        this->orloj = o;
+        this->result = r;
+        this->progressDialog = d;
+    }
+
+    void run();
+};
 
 /**
  * @brief MindForger main window Presenter.
@@ -105,6 +129,7 @@ private:
     RowsAndDepthDialog* rowsAndDepthDialog;
     NewRepositoryDialog* newRepositoryDialog;
     NewFileDialog* newFileDialog;
+    NerChooseTagTypesDialog *nerChooseTagsDialog;
 
 public:
     explicit MainWindowPresenter(MainWindowView& view);
@@ -170,6 +195,7 @@ public slots:
     void handleFindNoteByTag();
     void doActionFindNerPersons();
     void handleFindNerPersons();
+    void handleFindNerPersonsShowResult();
     // view
     bool doActionViewHome();
     void doActionViewOutlines();
