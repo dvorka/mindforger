@@ -21,6 +21,8 @@
 
 #include <QtWidgets>
 
+#include "html_delegate.h"
+
 namespace m8r {
 
 class NerLeaderboardView : public QTableView

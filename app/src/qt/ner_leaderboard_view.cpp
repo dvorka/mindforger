@@ -34,6 +34,10 @@ NerLeaderboardView::NerLeaderboardView(QWidget* parent)
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
+
+    // ensure HTML cells rendering
+    HtmlDelegate* delegate = new HtmlDelegate();
+    setItemDelegate(delegate);
 }
 
 NerLeaderboardView::~NerLeaderboardView()

@@ -81,6 +81,8 @@ void NerResultDialog::show(std::vector<NerNamedEntity>& entities)
     }
 
     QDialog::show();
+
+    leaderboardView->sortByColumn(2, Qt::SortOrder::DescendingOrder);
 }
 
 void NerResultDialog::handleChoice()
