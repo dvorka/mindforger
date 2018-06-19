@@ -77,7 +77,7 @@ private:
     AiAssociationsAssessment* aa;
 
     /*
-     * Named entity resolution (NER)
+     * Named-entity recognition (NER)
      */
 #ifdef MF_MITIE
     NamedEntityRecognition ner;
@@ -131,7 +131,7 @@ public:
     /**
      * @brief Recognize person names in O.
      */
-    void recognizePersons(const Outline* outline, std::vector<std::pair<std::string,float>> result) {
+    void recognizePersons(const Outline* outline, std::vector<NerNamedEntity> result) {
         ner.recognizePersons(outline, result);
     }
 

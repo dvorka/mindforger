@@ -36,6 +36,19 @@
 
 namespace m8r {
 
+struct NerNamedEntity
+{
+    std::string name;
+    std::string type;
+    float score;
+
+    explicit NerNamedEntity(const std::string& n, const std::string& t, float s) {
+        this->name = n;
+        this->type = t;
+        this->score = s;
+    }
+};
+
 class NamedEntityRecognition
 {
 private:
@@ -65,12 +78,12 @@ public:
     /**
      * @brief NRE persons in memory.
      */
-    bool recognizePersons(std::vector<std::pair<std::string,float>>& result);
+    bool recognizePersons(std::vector<NerNamedEntity>& result);
 
     /**
      * @brief NRE persons in O.
      */
-    bool recognizePersons(const Outline* outline, std::vector<std::pair<std::string,float>>& result);
+    bool recognizePersons(const Outline* outline, std::vector<NerNamedEntity>& result);
 
 private:
     std::vector<std::string> tokenizeFile(const std::string& filename);

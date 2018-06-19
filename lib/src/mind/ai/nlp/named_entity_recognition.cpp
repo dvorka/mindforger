@@ -94,7 +94,7 @@ vector<string> NamedEntityRecognition::tokenizeFile(const string& filename)
     return tokens;
 }
 
-bool NamedEntityRecognition::recognizePersons(vector<pair<string,float>>& result)
+bool NamedEntityRecognition::recognizePersons(vector<NerNamedEntity>& result)
 {
     UNUSED_ARG(result);
 
@@ -109,7 +109,7 @@ bool NamedEntityRecognition::recognizePersons(vector<pair<string,float>>& result
     return false;
 }
 
-bool NamedEntityRecognition::recognizePersons(const Outline* outline, vector<pair<string,float>>& result)
+bool NamedEntityRecognition::recognizePersons(const Outline* outline, vector<NerNamedEntity>& result)
 {
     UNUSED_ARG(result);
 
@@ -132,15 +132,15 @@ bool NamedEntityRecognition::recognizePersons(const Outline* outline, vector<pai
             // Additionally, if it is useful for your application a confidence score for each "chunk"
             // is available by using the predict() method.  The larger the score the more
             // confident MITIE is in the tag.
-    #ifdef DO_MF_DEBUG
+#ifdef DO_MF_DEBUG
             MF_DEBUG("NER predicting..." << endl);
             auto begin = chrono::high_resolution_clock::now();
-    #endif
+#endif
             nerModel.predict(tokens, chunks, chunk_tags, chunk_scores);
-    #ifdef DO_MF_DEBUG
+#ifdef DO_MF_DEBUG
             auto end = chrono::high_resolution_clock::now();
             MF_DEBUG("NER prediction done in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms" << endl);
-    #endif
+#endif
 
             // If a confidence score is not necessary for your application you can detect entities
             // using the operator() method as shown in the following line.
@@ -148,15 +148,23 @@ bool NamedEntityRecognition::recognizePersons(const Outline* outline, vector<pai
 
             MF_DEBUG("\nNumber of named entities detected: " << chunks.size() << endl);
             const std::vector<string> tagstr = nerModel.get_tag_name_strings();
+            string entityName{};
             for (unsigned int i = 0; i < chunks.size(); ++i) {
                 MF_DEBUG("   Tag " << chunk_tags[i] << ": ");
                 MF_DEBUG("Score: " << fixed << setprecision(3) << chunk_scores[i] << ": ");
                 MF_DEBUG("" << tagstr[chunk_tags[i]] << ": ");
                 // chunks[i] defines a half open range in tokens that contains the entity.
-                for (unsigned long j = chunks[i].first; j < chunks[i].second; ++j) {
+                entityName.clear();
+                for(unsigned long j = chunks[i].first; j < chunks[i].second; ++j) {
+                    entityName += tokens[j];
+                    entityName += " ";
                     MF_DEBUG(tokens[j] << " ");
                 }
+                entityName.pop_back(); // remove trailing " "
                 MF_DEBUG(endl);
+
+                NerNamedEntity entity{entityName,tagstr[chunk_tags[i]],chunk_scores[i]};
+                result.push_back(entity);
             }
 
             return true;

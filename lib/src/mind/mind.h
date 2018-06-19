@@ -29,6 +29,7 @@
 #include "aspect/mind_scope_aspect.h"
 #include "../config/configuration.h"
 #include "../representations/markdown/markdown_configuration_representation.h"
+#include "ai/nlp/named_entity_recognition.h"
 
 namespace m8r {
 
@@ -253,7 +254,7 @@ public:
      */
 
     bool isNerInitilized() const;
-    void recognizePersons(const Outline* outline, std::vector<std::pair<std::string,float>> result);
+    void recognizePersons(const Outline* outline, std::vector<NerNamedEntity> result);
 
     /*
      * REMEMBERING
