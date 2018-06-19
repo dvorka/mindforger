@@ -27,7 +27,7 @@ NerMainWindowWorkerThread::~NerMainWindowWorkerThread()
 
 void NerMainWindowWorkerThread::process()
 {
-    mind->recognizePersons(orloj->getOutlineView()->getCurrentOutline(), *result);
+    mind->recognizePersons(orloj->getOutlineView()->getCurrentOutline(), entityFilter, *result);
 
     progressDialog->hide();
 

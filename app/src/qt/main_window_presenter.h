@@ -144,7 +144,7 @@ public:
     void handleNoteViewLinkClicked(const QUrl& url);
 
     // NER
-    NerMainWindowWorkerThread* startNerWorkerThread(Mind* m, OrlojPresenter* o, std::vector<NerNamedEntity>* r, QDialog* d);
+    NerMainWindowWorkerThread* startNerWorkerThread(Mind* m, OrlojPresenter* o, int f, std::vector<NerNamedEntity>* r, QDialog* d);
 
 public slots:
     // mind
@@ -179,8 +179,11 @@ public slots:
     void doActionFindNoteByTag();
     void handleFindNoteByTag();
     void doActionFindNerPersons();
-    void handleFindNerPersons();
-    void chooseNerEntityResult(vector<NerNamedEntity>* nerEntities);
+    void doActionFindNerLocations();
+    void doActionFindNerOrganizations();
+    void doActionFindNerMisc();
+    void handleFindNerEntities();
+    void chooseNerEntityResult(vector<NerNamedEntity>*);
     void handleChooseNerEntityResult();
     void handleFtsNerEntity();
     // view

@@ -55,6 +55,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionFindOutlineByTag, SIGNAL(triggered()), mwp, SLOT(doActionFindOutlineByTag()));
     QObject::connect(view->actionFindNoteByTag, SIGNAL(triggered()), mwp, SLOT(doActionFindNoteByTag()));
     QObject::connect(view->actionFindNerPersons, SIGNAL(triggered()), mwp, SLOT(doActionFindNerPersons()));
+    QObject::connect(view->actionFindNerLocations, SIGNAL(triggered()), mwp, SLOT(doActionFindNerLocations()));
+    QObject::connect(view->actionFindNerOrganizations, SIGNAL(triggered()), mwp, SLOT(doActionFindNerOrganizations()));
+    QObject::connect(view->actionFindNerMisc, SIGNAL(triggered()), mwp, SLOT(doActionFindNerMisc()));
 
     // menu: view
     QObject::connect(view->actionViewHome, SIGNAL(triggered()), mwp, SLOT(doActionViewHome()));

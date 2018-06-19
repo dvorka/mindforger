@@ -254,7 +254,7 @@ public:
      */
 
     bool isNerInitilized() const;
-    void recognizePersons(const Outline* outline, std::vector<NerNamedEntity>& result);
+    void recognizePersons(const Outline* outline, int entityFilter, std::vector<NerNamedEntity>& result);
 
     /*
      * REMEMBERING

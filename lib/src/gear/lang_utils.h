@@ -24,4 +24,7 @@
 //   "Any expression can be explicitly converted to type 'cv void'. Such expression value is discarded."
 #define UNUSED_ARG(expr) do { (void)(expr); } while (0)
 
+// ROUNDF(3.141592, 100) = 3.14
+#define ROUND_FLOAT(f, c) (((float)((int)((f) * (c))) / (c)))
+
 #endif // M8R_LANG_UTILS_H

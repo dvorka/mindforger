@@ -72,7 +72,7 @@ public:
     /**
      * @brief NRE persons in O.
      */
-    bool recognizePersons(const Outline* outline, std::vector<NerNamedEntity>& result);
+    bool recognizePersons(const Outline* outline, int entityTypeFilter, std::vector<NerNamedEntity>& result);
 
 private:
     std::vector<std::string> tokenizeFile(const std::string& filename);

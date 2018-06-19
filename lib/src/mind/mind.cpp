@@ -801,8 +801,8 @@ bool Mind::isNerInitilized() const
     return ai->isNerInitialized();
 }
 
-void Mind::recognizePersons(const Outline* outline, std::vector<NerNamedEntity>& result) {
-    ai->recognizePersons(outline, result);
+void Mind::recognizePersons(const Outline* outline, int entityFilter, std::vector<NerNamedEntity>& result) {
+    ai->recognizePersons(outline, entityFilter, result);
 }
 
 

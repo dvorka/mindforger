@@ -77,9 +77,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(rowsAndDepthDialog->getGenerateButton(), SIGNAL(clicked()), this, SLOT(handleRowsAndDepth()));
     QObject::connect(newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
-    QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleFindNerPersons()));
-    QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleFtsNerEntity()));
-    QObject::connect(nerResultDialog, SIGNAL(searchFinished()), this, SLOT(handleFtsNerEntity()));
+    QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleFindNerEntities()));
+    QObject::connect(nerResultDialog, SIGNAL(choiceFinished()), this, SLOT(handleFtsNerEntity()));
 
     // async task 2 GUI events distributor
     distributor = new AsyncTaskNotificationsDistributor(this);
@@ -660,7 +659,39 @@ void MainWindowPresenter::doActionFindNerPersons()
         nerChooseTagsDialog->show();
     } else {
         statusBar->showInfo(tr("Initializing NER and predicting..."));
-
+        QMessageBox::critical(&view, tr("NER"), tr("Memory NER not implemented yet."));
+    }
+}
+void MainWindowPresenter::doActionFindNerLocations()
+{
+    if(orloj->isFacetActiveOutlineManagement()) {
+        nerChooseTagsDialog->clearCheckboxes();
+        nerChooseTagsDialog->getLocationsCheckbox()->setChecked(true);
+        nerChooseTagsDialog->show();
+    } else {
+        statusBar->showInfo(tr("Initializing NER and predicting..."));
+        QMessageBox::critical(&view, tr("NER"), tr("Memory NER not implemented yet."));
+    }
+}
+void MainWindowPresenter::doActionFindNerOrganizations()
+{
+    if(orloj->isFacetActiveOutlineManagement()) {
+        nerChooseTagsDialog->clearCheckboxes();
+        nerChooseTagsDialog->getOrganizationsCheckbox()->setChecked(true);
+        nerChooseTagsDialog->show();
+    } else {
+        statusBar->showInfo(tr("Initializing NER and predicting..."));
+        QMessageBox::critical(&view, tr("NER"), tr("Memory NER not implemented yet."));
+    }
+}
+void MainWindowPresenter::doActionFindNerMisc()
+{
+    if(orloj->isFacetActiveOutlineManagement()) {
+        nerChooseTagsDialog->clearCheckboxes();
+        nerChooseTagsDialog->getMiscCheckbox()->setChecked(true);
+        nerChooseTagsDialog->show();
+    } else {
+        statusBar->showInfo(tr("Initializing NER and predicting..."));
         QMessageBox::critical(&view, tr("NER"), tr("Memory NER not implemented yet."));
     }
 }
@@ -668,12 +699,13 @@ void MainWindowPresenter::doActionFindNerPersons()
 NerMainWindowWorkerThread* MainWindowPresenter::startNerWorkerThread(
         Mind* m,
         OrlojPresenter* o,
+        int f,
         std::vector<NerNamedEntity>* r,
         QDialog* d)
 {
     QThread* thread = new QThread;
     NerMainWindowWorkerThread* worker
-        = new NerMainWindowWorkerThread(thread, m, o, r, d);
+        = new NerMainWindowWorkerThread(thread, m, o, f, r, d);
 
     // signals
     worker->moveToThread(thread);
@@ -693,16 +725,25 @@ NerMainWindowWorkerThread* MainWindowPresenter::startNerWorkerThread(
 }
 
 // handleFindNerPerson() -> handleChooseNerEntityResult() -> handleFtsNerEntity()
-void MainWindowPresenter::handleFindNerPersons()
+void MainWindowPresenter::handleFindNerEntities()
 {
     nerChooseTagsDialog->hide();
+
+    int entityFilter{};
+    entityFilter =
+          (nerChooseTagsDialog->getPersonsCheckbox()->isChecked()?NerNamedEntityType::PERSON:0) |
+          (nerChooseTagsDialog->getLocationsCheckbox()->isChecked()?NerNamedEntityType::LOCATION:0) |
+          (nerChooseTagsDialog->getOrganizationsCheckbox()->isChecked()?NerNamedEntityType::ORGANIZATION:0) |
+          (nerChooseTagsDialog->getMiscCheckbox()->isChecked()?NerNamedEntityType::MISC:0);
+
+    MF_DEBUG("Named-entity type filter: " << entityFilter << endl);
 
     vector<NerNamedEntity>* result
         = new vector<NerNamedEntity>{};
     if(mind->isNerInitilized()) {
         statusBar->showInfo(tr("Recognizing named entities..."));
 
-        mind->recognizePersons(orloj->getOutlineView()->getCurrentOutline(), *result);
+        mind->recognizePersons(orloj->getOutlineView()->getCurrentOutline(), entityFilter, *result);
 
         chooseNerEntityResult(result);
     } else {
@@ -712,7 +753,7 @@ void MainWindowPresenter::handleFindNerPersons()
         QDialog* progressDialog
             = new QDialog{&view};
         nerWorker
-            = startNerWorkerThread(mind, orloj, result, progressDialog);
+            = startNerWorkerThread(mind, orloj, entityFilter, result, progressDialog);
 
         // show PROGRESS dialog - will be closed by worker
         QVBoxLayout* mainLayout = new QVBoxLayout{};
@@ -753,9 +794,12 @@ void MainWindowPresenter::handleChooseNerEntityResult()
 
 void MainWindowPresenter::handleFtsNerEntity()
 {
-    // get FTS string from ner result dialog string .getChoice()
-
-    // TODO FTS
+    if(nerResultDialog->getChoice().size()) {
+        executeFts(
+            nerResultDialog->getChoice(),
+            false,
+            orloj->getOutlineView()->getCurrentOutline());
+    }
 }
 
 void MainWindowPresenter::doActionViewToggleRecent()

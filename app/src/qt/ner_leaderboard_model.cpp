@@ -41,13 +41,13 @@ void NerLeaderboardModel::removeAllRows()
     tableHeader
         << tr("Name")
         << tr("Type")
-        << tr("%");
+        << tr("Score");
 
     // IMPROVE set tooltips: items w/ tooltips instead of just strings
     setHorizontalHeaderLabels(tableHeader);
 }
 
-void NerLeaderboardModel::addRow(string& entityName, string& entityType, float score)
+void NerLeaderboardModel::addRow(string& entityName, NerNamedEntityType entityType, float score)
 {
     QList<QStandardItem*> items;
     QStandardItem* item;
@@ -61,12 +61,25 @@ void NerLeaderboardModel::addRow(string& entityName, string& entityType, float s
     items += item;
 
     html.clear();
-    html += QString::fromStdString(entityType);
+    switch(entityType) {
+    case NerNamedEntityType::PERSON:
+        html += tr("person");
+        break;
+    case NerNamedEntityType::LOCATION:
+        html += tr("location");
+        break;
+    case NerNamedEntityType::ORGANIZATION:
+        html += tr("organization");
+        break;
+    case NerNamedEntityType::MISC:
+        html += tr("misc");
+        break;
+    }
+
     item = new QStandardItem(html);
     item->setToolTip(html);
     items += item;
 
-    // TODO HTML not rendered in table :-Z
     html.clear();
     if(score>0.29) {
         html += "<span style='color: #00";
@@ -81,8 +94,8 @@ void NerLeaderboardModel::addRow(string& entityName, string& entityType, float s
         }
         html += "00'>";
     }
-    html += QString::number(score*100.);
-    html += "%";
+    score = ROUND_FLOAT(score, 1000);
+    html += QString::number(score);
     if(score>0.29) {
         html += "</span>";
     }

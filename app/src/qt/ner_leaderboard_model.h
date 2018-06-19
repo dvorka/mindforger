@@ -21,6 +21,9 @@
 
 #include <QtWidgets>
 
+#include "../../../lib/src/mind/ai/nlp/ner_named_entity.h"
+#include "../../../lib/src/gear/lang_utils.h"
+
 namespace m8r {
 
 class NerLeaderboardModel : public QStandardItemModel
@@ -36,7 +39,7 @@ public:
     ~NerLeaderboardModel();
 
     void removeAllRows();
-    void addRow(std::string& entityName, std::string& entityType, float score);
+    void addRow(std::string& entityName, NerNamedEntityType entityType, float score);
 };
 
 }

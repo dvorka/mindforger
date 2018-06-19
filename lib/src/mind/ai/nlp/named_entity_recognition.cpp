@@ -109,7 +109,7 @@ bool NamedEntityRecognition::recognizePersons(vector<NerNamedEntity>& result)
     return false;
 }
 
-bool NamedEntityRecognition::recognizePersons(const Outline* outline, vector<NerNamedEntity>& result)
+bool NamedEntityRecognition::recognizePersons(const Outline* outline, int entityTypeFilter, vector<NerNamedEntity>& result)
 {
     std::lock_guard<mutex> criticalSection{initMutex};
 
@@ -146,21 +146,23 @@ bool NamedEntityRecognition::recognizePersons(const Outline* outline, vector<Ner
             const std::vector<string> tagstr = nerModel.get_tag_name_strings();
             string entityName{};
             for (unsigned int i = 0; i < chunks.size(); ++i) {
-                MF_DEBUG("   Tag " << chunk_tags[i] << ": ");
-                MF_DEBUG("Score: " << fixed << setprecision(3) << chunk_scores[i] << ": ");
-                MF_DEBUG("" << tagstr[chunk_tags[i]] << ": ");
-                // chunks[i] defines a half open range in tokens that contains the entity.
-                entityName.clear();
-                for(unsigned long j = chunks[i].first; j < chunks[i].second; ++j) {
-                    entityName += tokens[j];
-                    entityName += " ";
-                    MF_DEBUG(tokens[j] << " ");
-                }
-                entityName.pop_back(); // remove trailing " "
-                MF_DEBUG(endl);
+                if((1<<chunk_tags[i]) & entityTypeFilter) {
+                    MF_DEBUG("   Tag " << chunk_tags[i] << ": ");
+                    MF_DEBUG("Score: " << fixed << setprecision(3) << chunk_scores[i] << ": ");
+                    MF_DEBUG("" << tagstr[chunk_tags[i]] << ": ");
+                    // chunks[i] defines a half open range in tokens that contains the entity.
+                    entityName.clear();
+                    for(unsigned long j = chunks[i].first; j < chunks[i].second; ++j) {
+                        entityName += tokens[j];
+                        entityName += " ";
+                        MF_DEBUG(tokens[j] << " ");
+                    }
+                    entityName.pop_back(); // remove trailing " "
+                    MF_DEBUG(endl);
 
-                NerNamedEntity entity{entityName,tagstr[chunk_tags[i]],static_cast<float>(chunk_scores[i])};
-                result.push_back(entity);
+                    NerNamedEntity entity{entityName,static_cast<NerNamedEntityType>(1<<chunk_tags[i]),static_cast<float>(chunk_scores[i])};
+                    result.push_back(entity);
+                }
             }
 
             return true;

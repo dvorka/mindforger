@@ -26,6 +26,8 @@
 #include "../ner_leaderboard_model.h"
 #include "../ner_leaderboard_view.h"
 
+#include "../../../../lib/src/debug.h"
+
 namespace m8r {
 
 class NerResultDialog : public QDialog
@@ -33,6 +35,8 @@ class NerResultDialog : public QDialog
     Q_OBJECT
 
 private:
+    std::string choice;
+
     QLabel* label;
     NerLeaderboardModel* leaderboardModel;
     NerLeaderboardView* leaderboardView;
@@ -48,14 +52,16 @@ public:
     ~NerResultDialog();
 
     QPushButton* getFindButton() const { return findButton; }
+    std::string getChoice() const { return choice; }
 
     void show(std::vector<NerNamedEntity>& entities);
 
 signals:
-    void searchFinished();
+    void choiceFinished();
 
 private slots:
     void handleChoice();
+    void slotRowSelected(const QItemSelection& selected, const QItemSelection& deselected);
 };
 
 }

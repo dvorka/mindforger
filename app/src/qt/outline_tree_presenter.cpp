@@ -34,7 +34,7 @@ OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, MainWindowPres
     HtmlDelegate* delegate = new HtmlDelegate{};
     this->view->setItemDelegate(delegate);
 
-    // signals and slots
+    // signals
     QObject::connect(view, SIGNAL(signalSelectNextRow()), this, SLOT(slotSelectNextRow()));
     QObject::connect(view, SIGNAL(signalSelectPreviousRow()), this, SLOT(slotSelectPreviousRow()));
 

@@ -51,6 +51,7 @@ class NerMainWindowWorkerThread : public QObject
 
     Mind* mind;
     OrlojPresenter* orloj;
+    int entityFilter;
     std::vector<NerNamedEntity>* result;
     QDialog* progressDialog;
 
@@ -59,12 +60,14 @@ public:
         QThread* t,
         Mind* m,
         OrlojPresenter* o,
+        int f,
         std::vector<NerNamedEntity>* r,
         QDialog* d)
     {
         this->thread = t;
         this->mind = m;
         this->orloj = o;
+        this->entityFilter = f;
         this->result = r;
         this->progressDialog = d;
     }

@@ -26,6 +26,8 @@ OutlineTreeView::OutlineTreeView(QWidget* parent)
     verticalHeader()->setVisible(false);
     // BEFARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+    verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+
     setSortingEnabled(false);
 
     setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -104,7 +106,6 @@ void OutlineTreeView::paintEvent(QPaintEvent* event)
     // IMPROVE may kill performance
     this->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 
-    verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
     int normalizedWidth = width()/fontMetrics().averageCharWidth();

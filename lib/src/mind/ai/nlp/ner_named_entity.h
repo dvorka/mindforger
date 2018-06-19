@@ -23,13 +23,20 @@
 
 namespace m8r {
 
+enum NerNamedEntityType {
+    PERSON = 1<<0,
+    LOCATION = 1<<1,
+    ORGANIZATION = 1<<2,
+    MISC = 1<<3
+};
+
 struct NerNamedEntity
 {
     std::string name;
-    std::string type;
+    NerNamedEntityType type;
     float score;
 
-    explicit NerNamedEntity(const std::string& n, const std::string& t, float s) {
+    explicit NerNamedEntity(const std::string& n, NerNamedEntityType t, float s) {
         this->name = n;
         this->type = t;
         this->score = s;

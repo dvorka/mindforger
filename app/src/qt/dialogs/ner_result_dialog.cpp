@@ -20,6 +20,8 @@
 
 namespace m8r {
 
+using namespace std;
+
 NerResultDialog::NerResultDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -32,13 +34,18 @@ NerResultDialog::NerResultDialog(QWidget* parent)
 
     findButton = new QPushButton{tr("&Find Entity in Notes")};
     findButton->setDefault(true);
-    findButton->setEnabled(false);
+    findButton->setEnabled(false);    
 
     closeButton = new QPushButton{tr("&Cancel")};
 
     // signals
-    connect(findButton, SIGNAL(clicked()), this, SLOT(handleChoice()));
-    connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    QObject::connect(findButton, SIGNAL(clicked()), this, SLOT(handleChoice()));
+    QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    QObject::connect(
+        leaderboardView->selectionModel(),
+        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+        this,
+        SLOT(slotRowSelected(const QItemSelection&, const QItemSelection&)));
 
     // assembly
     QVBoxLayout *mainLayout = new QVBoxLayout{};
@@ -59,7 +66,6 @@ NerResultDialog::NerResultDialog(QWidget* parent)
     // height is set to make sure listview gets enough lines
     resize(fontMetrics().averageCharWidth()*75, fontMetrics().height()*30);
     setModal(true);
-
 }
 
 NerResultDialog::~NerResultDialog()
@@ -72,6 +78,7 @@ NerResultDialog::~NerResultDialog()
 
 void NerResultDialog::show(std::vector<NerNamedEntity>& entities)
 {
+    choice.clear();
     leaderboardModel->removeAllRows();
 
     if(entities.size()) {
@@ -87,13 +94,25 @@ void NerResultDialog::show(std::vector<NerNamedEntity>& entities)
 
 void NerResultDialog::handleChoice()
 {
-    // TODO table validity / choice ~ disable button if(listView->currentIndex().isValid()) {
-        QDialog::close();
-
-        // TODO signal to get entity name "..." string as parameter
-        emit searchFinished();
-    //}
+    QDialog::close();
+    emit choiceFinished();
 }
 
+void NerResultDialog::slotRowSelected(const QItemSelection& selected, const QItemSelection& deselected)
+{
+    Q_UNUSED(deselected);
+
+    QModelIndexList indices = selected.indexes();
+    if(indices.size()) {
+        const QModelIndex& index = indices.at(0);
+        QStandardItem* item = leaderboardModel->itemFromIndex(index);
+        choice = item->text().toStdString();
+        if(choice.size()) {
+            findButton->setEnabled(true);
+        } else {
+            findButton->setEnabled(false);
+        }
+    }
+}
 
 } // m8r namespace

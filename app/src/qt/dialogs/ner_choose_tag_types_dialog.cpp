@@ -29,7 +29,7 @@ NerChooseTagTypesDialog::NerChooseTagTypesDialog(QWidget* parent)
     personsCheckBox = new QCheckBox{tr("persons")};
     locationsCheckBox = new QCheckBox{tr("locations")};
     organizationsCheckBox = new QCheckBox{tr("organizations")};
-    miscCheckBox = new QCheckBox{tr("misc")};
+    miscCheckBox = new QCheckBox{tr("other entities")};
 
     chooseButton = new QPushButton{tr("&Choose")};
     chooseButton->setDefault(true);
