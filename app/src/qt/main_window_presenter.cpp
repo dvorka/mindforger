@@ -87,7 +87,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
 
-    QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleFindNerPersons()));
+    QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleChooseNerEntityResult()));
+    QObject::connect(nerResultDialog, SIGNAL(searchFinished()), this, SLOT(handleFtsNerEntity()));
 
     // async task 2 GUI events distributor
     distributor = new AsyncTaskNotificationsDistributor(this);
@@ -678,7 +679,7 @@ void MainWindowPresenter::handleFindNerPersons()
     if(mind->isNerInitilized()) {
         statusBar->showInfo(tr("Recognizing named entities..."));
 
-        vector<pair<string,float>> result;
+        vector<NerNamedEntity> result;
         mind->recognizePersons(orloj->getOutlineView()->getCurrentOutline(), result);
 
         statusBar->showInfo(tr("NER finished"));
@@ -686,10 +687,10 @@ void MainWindowPresenter::handleFindNerPersons()
         statusBar->showInfo(tr("Initializing NER and recognizing named entities..."));
 
         // launch async worker
-        vector<pair<string,float>> result;
+        vector<NerNamedEntity>* result = new vector<NerNamedEntity>{};
         QDialog* progressDialog = new QDialog{&view};
         RecognizePersonsWorkerThread* workerThread
-            = new RecognizePersonsWorkerThread{mind, orloj, &result, progressDialog};
+            = new RecognizePersonsWorkerThread{mind, orloj, result, progressDialog};
         QObject::connect(workerThread, SIGNAL(finished()), this, SLOT(handleFindNerPersonsShowResult()));
         workerThread->start();
 
@@ -708,13 +709,21 @@ void MainWindowPresenter::handleFindNerPersons()
     }
 }
 
-void MainWindowPresenter::handleFindNerPersonsShowResult()
+void MainWindowPresenter::handleChooseNerEntityResult()
 {
     MF_DEBUG("Showing NER result..." << endl);
     statusBar->showInfo(tr("NER predicition finished"));
 
+    nerResultDialog->show(nert);
+
     // TODO
 
+    // TODO delete result
+}
+
+void MainMenuPresenter::handleFtsNerEntity()
+{
+    // TODO FTS
 }
 
 void MainWindowPresenter::doActionViewToggleRecent()

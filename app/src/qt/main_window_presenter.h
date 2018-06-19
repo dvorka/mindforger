@@ -47,6 +47,7 @@
 #include "dialogs/new_repository_dialog.h"
 #include "dialogs/new_file_dialog.h"
 #include "dialogs/ner_choose_tag_types_dialog.h"
+#include "dialogs/ner_result_dialog.h"
 
 #include <QtWidgets>
 #include <QtConcurrent/QtConcurrent>
@@ -64,14 +65,14 @@ class RecognizePersonsWorkerThread : public QThread
 {
     Mind* mind;
     OrlojPresenter* orloj;
-    vector<pair<string,float>>* result;
+    vector<NerNamedEntity>* result;
     QDialog* progressDialog;
 
 public:
     explicit RecognizePersonsWorkerThread(
         Mind* m,
         OrlojPresenter* o,
-        vector<pair<string,float>>* r,
+        vector<NerNamedEntity>* r,
         QDialog* d)
     {
         this->mind = m;
@@ -130,6 +131,7 @@ private:
     NewRepositoryDialog* newRepositoryDialog;
     NewFileDialog* newFileDialog;
     NerChooseTagTypesDialog *nerChooseTagsDialog;
+    NerResultDialog* nerResultDialog;
 
 public:
     explicit MainWindowPresenter(MainWindowView& view);

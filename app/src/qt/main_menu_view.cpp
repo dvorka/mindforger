@@ -149,16 +149,16 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
 #ifdef MF_MITIE
     actionFindNerPersons = new QAction(tr("Recall &Persons"), mainWindow);
-    actionFindNerPersons->setStatusTip(tr("Find persons using Named Entity Resolution (NER)"));
+    actionFindNerPersons->setStatusTip(tr("Find persons using Named-entity recognition (NER)"));
 
     actionFindNerLocations = new QAction(tr("Recall &Locations"), mainWindow);
-    actionFindNerLocations->setStatusTip(tr("Find locations using Named Entity Resolution (NER)"));
+    actionFindNerLocations->setStatusTip(tr("Find locations using Named-entity recognition (NER)"));
 
     actionFindNerOrganizations = new QAction(tr("Recall Organizations"), mainWindow);
-    actionFindNerOrganizations->setStatusTip(tr("Find organizations using Named Entity Resolution (NER)"));
+    actionFindNerOrganizations->setStatusTip(tr("Find organizations using Named-entity recognition (NER)"));
 
     actionFindNerMisc = new QAction(tr("Recall Other Entities"), mainWindow);
-    actionFindNerMisc->setStatusTip(tr("Find miscellaneous entities using Named Entity Resolution (NER)"));
+    actionFindNerMisc->setStatusTip(tr("Find miscellaneous entities using Named-entity recognition (NER)"));
 #endif
 
     menuFind = qMenuBar->addMenu(tr("&Recall"));
