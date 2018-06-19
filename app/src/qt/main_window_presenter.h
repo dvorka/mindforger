@@ -27,6 +27,7 @@
 #include "main_menu_presenter.h"
 
 #include "gear/async_task_notifications_distributor.h"
+#include "ner_main_window_worker_thread.h"
 #include "cli_n_breadcrumbs_presenter.h"
 #include "orloj_presenter.h"
 #include "status_bar_presenter.h"
@@ -60,29 +61,7 @@ class CliAndBreadcrumbsPresenter;
 class OrlojPresenter;
 class StatusBarPresenter;
 class AsyncTaskNotificationsDistributor;
-
-class RecognizePersonsWorkerThread : public QThread
-{
-    Mind* mind;
-    OrlojPresenter* orloj;
-    vector<NerNamedEntity>* result;
-    QDialog* progressDialog;
-
-public:
-    explicit RecognizePersonsWorkerThread(
-        Mind* m,
-        OrlojPresenter* o,
-        vector<NerNamedEntity>* r,
-        QDialog* d)
-    {
-        this->mind = m;
-        this->orloj = o;
-        this->result = r;
-        this->progressDialog = d;
-    }
-
-    void run();
-};
+class NerMainWindowWorkerThread;
 
 /**
  * @brief MindForger main window Presenter.
@@ -105,6 +84,7 @@ private:
     Mind* mind;
 
     AsyncTaskNotificationsDistributor* distributor;
+    NerMainWindowWorkerThread* nerWorker;
 
     MarkdownOutlineRepresentation* mdRepresentation;
     HtmlOutlineRepresentation* htmlRepresentation;
@@ -163,6 +143,9 @@ public:
     // N view
     void handleNoteViewLinkClicked(const QUrl& url);
 
+    // NER
+    NerMainWindowWorkerThread* startNerWorkerThread(Mind* m, OrlojPresenter* o, std::vector<NerNamedEntity>* r, QDialog* d);
+
 public slots:
     // mind
 #ifdef DO_MF_DEBUG
@@ -197,7 +180,9 @@ public slots:
     void handleFindNoteByTag();
     void doActionFindNerPersons();
     void handleFindNerPersons();
-    void handleFindNerPersonsShowResult();
+    void chooseNerEntityResult(vector<NerNamedEntity>* nerEntities);
+    void handleChooseNerEntityResult();
+    void handleFtsNerEntity();
     // view
     bool doActionViewHome();
     void doActionViewOutlines();

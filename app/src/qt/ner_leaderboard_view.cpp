@@ -29,7 +29,7 @@ NerLeaderboardView::NerLeaderboardView(QWidget* parent)
     // IMPORTANT this must b in constructors - causes CPU high consuption loop if in paintEvent()!
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
-    setSortingEnabled(false);
+    setSortingEnabled(true);
 
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);

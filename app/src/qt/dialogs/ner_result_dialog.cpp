@@ -28,7 +28,7 @@ NerResultDialog::NerResultDialog(QWidget* parent)
     leaderboardView = new NerLeaderboardView(this);
     leaderboardView->setModel(leaderboardModel);
 
-    label = new QLabel{tr("Named entities:")};
+    label = new QLabel{tr("Recognized named entities:")};
 
     findButton = new QPushButton{tr("&Find Entity in Notes")};
     findButton->setDefault(true);
@@ -57,7 +57,7 @@ NerResultDialog::NerResultDialog(QWidget* parent)
     // dialog
     setWindowTitle(tr("Find Named Entities"));
     // height is set to make sure listview gets enough lines
-    resize(fontMetrics().averageCharWidth()*55, fontMetrics().height()*30);
+    resize(fontMetrics().averageCharWidth()*75, fontMetrics().height()*30);
     setModal(true);
 
 }
@@ -68,6 +68,19 @@ NerResultDialog::~NerResultDialog()
     delete leaderboardView;
     delete leaderboardModel;
     delete closeButton;
+}
+
+void NerResultDialog::show(std::vector<NerNamedEntity>& entities)
+{
+    leaderboardModel->removeAllRows();
+
+    if(entities.size()) {
+        for(NerNamedEntity& e:entities) {
+            leaderboardModel->addRow(e.name, e.type, e.score);
+        }
+    }
+
+    QDialog::show();
 }
 
 void NerResultDialog::handleChoice()

@@ -111,10 +111,6 @@ bool NamedEntityRecognition::recognizePersons(vector<NerNamedEntity>& result)
 
 bool NamedEntityRecognition::recognizePersons(const Outline* outline, vector<NerNamedEntity>& result)
 {
-    UNUSED_ARG(result);
-
-
-
     std::lock_guard<mutex> criticalSection{initMutex};
 
     if(loadAndInitNerModel())     {
@@ -163,7 +159,7 @@ bool NamedEntityRecognition::recognizePersons(const Outline* outline, vector<Ner
                 entityName.pop_back(); // remove trailing " "
                 MF_DEBUG(endl);
 
-                NerNamedEntity entity{entityName,tagstr[chunk_tags[i]],chunk_scores[i]};
+                NerNamedEntity entity{entityName,tagstr[chunk_tags[i]],static_cast<float>(chunk_scores[i])};
                 result.push_back(entity);
             }
 

@@ -22,16 +22,6 @@ using namespace std;
 
 namespace m8r {
 
-void RecognizePersonsWorkerThread::run()
-{
-    mind->recognizePersons(orloj->getOutlineView()->getCurrentOutline(), *result);
-
-    progressDialog->hide();
-    delete progressDialog;
-
-    MF_DEBUG("NER initialization and prediction WORKER finished" << endl);
-}
-
 MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     : view(view),
       config(Configuration::getInstance())
@@ -69,6 +59,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     newRepositoryDialog = new NewRepositoryDialog(&view);
     newFileDialog = new NewFileDialog(&view);
     nerChooseTagsDialog = new NerChooseTagTypesDialog(&view);
+    nerResultDialog = new NerResultDialog(&view);
 
     // wire signals
     QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
@@ -86,8 +77,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(rowsAndDepthDialog->getGenerateButton(), SIGNAL(clicked()), this, SLOT(handleRowsAndDepth()));
     QObject::connect(newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
-
-    QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleChooseNerEntityResult()));
+    QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleFindNerPersons()));
+    QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleFtsNerEntity()));
     QObject::connect(nerResultDialog, SIGNAL(searchFinished()), this, SLOT(handleFtsNerEntity()));
 
     // async task 2 GUI events distributor
@@ -95,6 +86,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     // setup callback for cleanup when it finishes
     QObject::connect(distributor, SIGNAL(finished()), distributor, SLOT(deleteLater()));
     distributor->start();
+    // NER worker
+    nerWorker = nullptr;
 
     // send signal to components to be updated on a configuration change
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SLOT(slotConfigurationUpdated()));
@@ -672,34 +665,61 @@ void MainWindowPresenter::doActionFindNerPersons()
     }
 }
 
+NerMainWindowWorkerThread* MainWindowPresenter::startNerWorkerThread(
+        Mind* m,
+        OrlojPresenter* o,
+        std::vector<NerNamedEntity>* r,
+        QDialog* d)
+{
+    QThread* thread = new QThread;
+    NerMainWindowWorkerThread* worker
+        = new NerMainWindowWorkerThread(thread, m, o, r, d);
+
+    // signals
+    worker->moveToThread(thread);
+    // TODO implement dialog w/ error handling - QObject::connect(worker, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
+    QObject::connect(thread, SIGNAL(started()), worker, SLOT(process()));
+    // open dialog to choose from result(s)
+    QObject::connect(worker, SIGNAL(finished()), this, SLOT(handleChooseNerEntityResult()));
+    // worker's finished signal quits thread ~ thread CANNOT be reused
+    QObject::connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
+    // schedule thread for automatic deletion by Qt - I delete worker myself
+    //QObject::connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
+    QObject::connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+
+    thread->start();
+
+    return worker;
+}
+
+// handleFindNerPerson() -> handleChooseNerEntityResult() -> handleFtsNerEntity()
 void MainWindowPresenter::handleFindNerPersons()
 {
     nerChooseTagsDialog->hide();
 
+    vector<NerNamedEntity>* result
+        = new vector<NerNamedEntity>{};
     if(mind->isNerInitilized()) {
         statusBar->showInfo(tr("Recognizing named entities..."));
 
-        vector<NerNamedEntity> result;
-        mind->recognizePersons(orloj->getOutlineView()->getCurrentOutline(), result);
+        mind->recognizePersons(orloj->getOutlineView()->getCurrentOutline(), *result);
 
-        statusBar->showInfo(tr("NER finished"));
+        chooseNerEntityResult(result);
     } else {
         statusBar->showInfo(tr("Initializing NER and recognizing named entities..."));
 
         // launch async worker
-        vector<NerNamedEntity>* result = new vector<NerNamedEntity>{};
-        QDialog* progressDialog = new QDialog{&view};
-        RecognizePersonsWorkerThread* workerThread
-            = new RecognizePersonsWorkerThread{mind, orloj, result, progressDialog};
-        QObject::connect(workerThread, SIGNAL(finished()), this, SLOT(handleFindNerPersonsShowResult()));
-        workerThread->start();
+        QDialog* progressDialog
+            = new QDialog{&view};
+        nerWorker
+            = startNerWorkerThread(mind, orloj, result, progressDialog);
 
-        // show progress dialog - will be closed by worker
+        // show PROGRESS dialog - will be closed by worker
         QVBoxLayout* mainLayout = new QVBoxLayout{};
         QLabel* l = new QLabel{tr(" Initializing (the first run only) NER and predicting... ")};
         mainLayout->addWidget(l);
         progressDialog->setLayout(mainLayout);
-        progressDialog->setWindowTitle(tr("NER"));
+        progressDialog->setWindowTitle(tr("Named-entity Recognition"));
         //progressDialog->resize(fontMetrics().averageCharWidth()*35, height());
         //progressDialog->setModal(true);
         progressDialog->update();
@@ -709,20 +729,32 @@ void MainWindowPresenter::handleFindNerPersons()
     }
 }
 
-void MainWindowPresenter::handleChooseNerEntityResult()
+void MainWindowPresenter::chooseNerEntityResult(vector<NerNamedEntity>* nerEntities)
 {
-    MF_DEBUG("Showing NER result..." << endl);
+    MF_DEBUG("Showing NER results to choose one entity for FTS..." << endl);
     statusBar->showInfo(tr("NER predicition finished"));
 
-    nerResultDialog->show(nert);
-
-    // TODO
-
-    // TODO delete result
+    if(nerEntities && nerEntities->size()) {
+        nerResultDialog->show(*nerEntities);
+    } else {
+        QMessageBox::information(&view, tr("Named-entity Recognition"), tr("No named entities recognized."));
+    }
 }
 
-void MainMenuPresenter::handleFtsNerEntity()
+void MainWindowPresenter::handleChooseNerEntityResult()
 {
+    vector<NerNamedEntity>* nerEntities = nerWorker->getResult();
+    chooseNerEntityResult(nerEntities);
+
+    // cleanup: thread is deleted by Qt (deleteLater() signal)
+    delete nerEntities;
+    delete nerWorker;
+}
+
+void MainWindowPresenter::handleFtsNerEntity()
+{
+    // get FTS string from ner result dialog string .getChoice()
+
     // TODO FTS
 }
 

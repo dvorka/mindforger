@@ -131,7 +131,7 @@ public:
     /**
      * @brief Recognize person names in O.
      */
-    void recognizePersons(const Outline* outline, std::vector<NerNamedEntity> result) {
+    void recognizePersons(const Outline* outline, std::vector<NerNamedEntity>& result) {
         ner.recognizePersons(outline, result);
     }
 

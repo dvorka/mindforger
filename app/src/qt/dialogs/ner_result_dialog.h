@@ -21,6 +21,8 @@
 
 #include <QtWidgets>
 
+#include "../../../../lib/src/mind/ai/nlp/ner_named_entity.h"
+
 #include "../ner_leaderboard_model.h"
 #include "../ner_leaderboard_view.h"
 
@@ -47,7 +49,7 @@ public:
 
     QPushButton* getFindButton() const { return findButton; }
 
-    void show(std::vector<std::string>& entities);
+    void show(std::vector<NerNamedEntity>& entities);
 
 signals:
     void searchFinished();

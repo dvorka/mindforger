@@ -32,22 +32,11 @@
 #include "../../deps/mitie/mitielib/include/mitie/conll_tokenizer.h"
 #include "../../deps/mitie/mitielib/include/mitie.h"
 
+#include "ner_named_entity.h"
+
 #include "../../../model/outline.h"
 
 namespace m8r {
-
-struct NerNamedEntity
-{
-    std::string name;
-    std::string type;
-    float score;
-
-    explicit NerNamedEntity(const std::string& n, const std::string& t, float s) {
-        this->name = n;
-        this->type = t;
-        this->score = s;
-    }
-};
 
 class NamedEntityRecognition
 {

@@ -99,7 +99,8 @@ SOURCES += \
     src/mind/ai/nlp/common_words_blacklist.cpp \
     src/mind/aspect/tag_scope_aspect.cpp \
     src/mind/aspect/mind_scope_aspect.cpp \
-    src/mind/ai/nlp/named_entity_recognition.cpp
+    src/mind/ai/nlp/named_entity_recognition.cpp \
+    src/mind/ai/nlp/ner_named_entity.cpp
 
 HEADERS += \
     ./src/debug.h \
@@ -200,4 +201,5 @@ HEADERS += \
     src/mind/aspect/tag_scope_aspect.h \
     src/mind/aspect/mind_scope_aspect.h \
     src/compilation.h \
-    src/mind/ai/nlp/named_entity_recognition.h
+    src/mind/ai/nlp/named_entity_recognition.h \
+    src/mind/ai/nlp/ner_named_entity.h

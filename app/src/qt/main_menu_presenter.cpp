@@ -39,10 +39,8 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->submenuMindRelearn, SIGNAL(recentFileTriggered(QString)), mwp, SLOT(doActionMindRelearn(QString)));
     QObject::connect(view->actionMindScope, SIGNAL(triggered()), mwp, SLOT(doActionMindTimeScope()));
     QObject::connect(view->actionMindRemember, SIGNAL(triggered()), mwp, SLOT(doActionMindRemember()));
-#ifdef DO_MF_DEBUG
     // TODO tobe finished
-    QObject::connect(view->actionMindForget, SIGNAL(triggered()), mwp, SLOT(doActionMindForgetting()));
-#endif
+    //QObject::connect(view->actionMindForget, SIGNAL(triggered()), mwp, SLOT(doActionMindForgetting()));
     QObject::connect(view->actionMindPreferences, SIGNAL(triggered()), mwp, SLOT(doActionMindPreferences()));
     QObject::connect(view->actionMindSnapshot, SIGNAL(triggered()), mwp, SLOT(doActionMindSnapshot()));
     QObject::connect(view->actionExit, SIGNAL(triggered()), mwp, SLOT(doActionExit()));
