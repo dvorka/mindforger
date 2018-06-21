@@ -52,8 +52,10 @@ DEPENDPATH += $$PWD/../lib/src
 LIBS += -L$$OUT_PWD/../lib -lmindforger
 # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
 LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
-# MF links MITIE for AI/NLP/DL
-LIBS += -L$$OUT_PWD/../deps/mitie/mitielib -lmitie
+mfner {
+  # MF links MITIE for AI/NLP/DL
+  LIBS += -L$$OUT_PWD/../deps/mitie/mitielib -lmitie
+}
 # zlib
 LIBS += -lz
 
