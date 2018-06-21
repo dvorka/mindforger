@@ -317,6 +317,7 @@ bool MarkdownParserSections::sectionMetadataRule(
             bool done=false;
             time_t t;
             vector<string*>* tags;
+            vector<Link*>* links;
             while(!done && (next=lookahead(offset+1))!=nullptr) {
                 offset++;
                 switch(next->getType()) {
@@ -367,7 +368,9 @@ bool MarkdownParserSections::sectionMetadataRule(
                     }
                     break;
                 case MarkdownLexemType::META_PROPERTY_links:
-                    meta.setLinks(parsePropertyValueLinks(offset));
+                    links = parsePropertyValueLinks(offset);
+                    meta.setLinks(links);
+                    delete links;
                     break;
                 default:
                     done=true;
@@ -559,9 +562,10 @@ vector<Link*>* MarkdownParserSections::parsePropertyValueLinks(size_t& offset)
     const MarkdownLexem* valueLexem = parsePropertyValue(offset);
     if(valueLexem != nullptr) {
         string* t = lexer.getText(valueLexem);
-        if(t!=nullptr) {
+        if(t != nullptr) {
             if(t->size()) {
                 vector<Link*>* result = new vector<Link*>{};
+
                 istringstream split(*t);
                 string s;
                 while(getline(split, s, ',')) {
@@ -570,13 +574,18 @@ vector<Link*>* MarkdownParserSections::parsePropertyValueLinks(size_t& offset)
                         result->push_back(l);
                     }
                 }
-                if(result->empty()) {
-                    delete result;
-                } else {
+                delete t;
+
+                if(result->size()) {
                     return result;
+                } else {
+                    delete result;
+                    return nullptr;
                 }
+            } else {
+                delete t;
+                return nullptr;
             }
-            delete t;
         }
     }
 

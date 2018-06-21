@@ -60,7 +60,12 @@ TEST(HtmlTestCase, Outline)
     string html{};
     htmlRepresentation.to(&markdown, &html);
 
-    cout << "= BEGIN HTML =" << endl << html << endl << "= END HTML =" << endl;
+    // HTML not printed - it is huge
+    // cout << "= BEGIN HTML =" << endl << html << endl << "= END HTML =" << endl;
+
+    EXPECT_NE(std::string::npos, html.find("increment"));
+    EXPECT_NE(std::string::npos, html.find("Meyers"));
+    EXPECT_NE(std::string::npos, html.find("Stroustrup"));
 }
 
 TEST(HtmlTestCase, Note)

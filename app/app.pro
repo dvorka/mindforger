@@ -72,6 +72,10 @@ mfnoccache {
 }
 QMAKE_CXXFLAGS += -pedantic -std=c++11
 
+# profiling: instrument code for gprof
+#QMAKE_CXXFLAGS_DEBUG *= -pg
+#QMAKE_LFLAGS_DEBUG *= -pg
+
 HEADERS += \
     ./src/qt/3rdparty/elasticnodes/edge.h \
     ./src/qt/3rdparty/elasticnodes/graphwidget.h \

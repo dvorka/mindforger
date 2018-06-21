@@ -61,12 +61,17 @@ Note::Note(const Note& n)
     if(n.tags.size()) {
         tags.insert(tags.end(), n.tags.begin(), n.tags.end());
     }
+
+    flags = n.flags;
 }
 
 Note::~Note()
 {
     for(string* d:description) {
         delete d;
+    }
+    for(Link* l:links) {
+        delete l;
     }
 }
 

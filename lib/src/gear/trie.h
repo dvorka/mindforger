@@ -41,7 +41,10 @@ private:
         std::vector<Node*> mChildren;
 
     public:
-        Node() { mContent = ' '; mMarker = false; }
+        explicit Node() {
+            mContent = ' ';
+            mMarker = false;
+        }
         ~Node() {}
         char content() const { return mContent; }
         void setContent(char c) { mContent = c; }

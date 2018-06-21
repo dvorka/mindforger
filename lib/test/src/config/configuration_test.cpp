@@ -123,7 +123,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     bool backupNotebookButton = c.isUiEditorEnableSyntaxHighlighting();
     m8r::Repository* backupActiveRepository;
     if(c.isActiveRepository()) {
-        backupActiveRepository = c.getActiveRepository();
+        backupActiveRepository = new m8r::Repository(*c.getActiveRepository());
     } else {
         backupActiveRepository = nullptr;
     }

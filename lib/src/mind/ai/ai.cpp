@@ -34,6 +34,8 @@ Ai::Ai(Memory& memory, Mind& mind)
     case Configuration::AssociationAssessmentAlgorithm::WEIGHTED_FTS:
         aa = new AiAaWeightedFts{memory,mind};
         break;
+    default:
+        aa = nullptr;
     }
 
 #ifdef MF_NER
@@ -45,6 +47,7 @@ Ai::Ai(Memory& memory, Mind& mind)
 
 Ai::~Ai()
 {
+    if(aa) delete aa;
 }
 
 void Ai::trainAaNn()

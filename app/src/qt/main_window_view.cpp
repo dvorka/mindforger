@@ -21,7 +21,7 @@
 namespace m8r {
 
 MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
-    : QMainWindow(nullptr), // main window has no parent - it's destroyed by MF main class
+    : QMainWindow(nullptr), // main window has no parent - it is destroyed by main MF class
       lookAndFeel(lookAndFeel)
 {
     setWindowTitle("MindForger - "+tr("Thinking Notebook")+" - "+MINDFORGER_VERSION+" - Technology Preview ");

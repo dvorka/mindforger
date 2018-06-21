@@ -36,6 +36,7 @@ NotesTableView::NotesTableView(QWidget *parent)
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
     QHeaderView* header = this->horizontalHeader();
+    // IMPORTANT resize mode MUST NOT be set in paintEvent, otherwise it causes high CPU consumption loop
     header->setSectionResizeMode(QHeaderView::Stretch);
 }
 

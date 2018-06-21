@@ -44,7 +44,7 @@ public:
     AiAssociationsAssessment(const AiAssociationsAssessment&&) = delete;
     AiAssociationsAssessment &operator=(const AiAssociationsAssessment&) = delete;
     AiAssociationsAssessment &operator=(const AiAssociationsAssessment&&) = delete;
-    ~AiAssociationsAssessment() {}
+    virtual ~AiAssociationsAssessment() {}
 
     /**
      * @brief Learn what's in memory to get ready for thinking.

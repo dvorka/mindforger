@@ -81,9 +81,9 @@ public:
         std::string dir,
         RepositoryType type=RepositoryType::MINDFORGER,
         RepositoryMode mode=RepositoryMode::REPOSITORY,
-        std::string file = "",
+        std::string file="",
         bool readOnly=false);
-    Repository(const Repository&) = delete;
+    Repository(const Repository& r);
     Repository(const Repository&&) = delete;
     Repository &operator=(const Repository&) = delete;
     Repository &operator=(const Repository&&) = delete;
@@ -97,7 +97,7 @@ public:
     void setFile(std::string file) { this->file = file; updatePath(); }
     RepositoryType getType() const { return type; }
     void setType(RepositoryType type) { this->type = type; }
-    void setMode(RepositoryMode mode) { this->mode=mode; }
+    void setMode(RepositoryMode mode) { this->mode = mode; }
     RepositoryMode getMode() const { return mode; }
     bool isReadOnly() const { return readOnly; }
     void setReadOnly(bool readOnly) { this->readOnly = readOnly; }

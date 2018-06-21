@@ -63,7 +63,7 @@ public:
     AiAaWeightedFts(const AiAaWeightedFts&&) = delete;
     AiAaWeightedFts &operator=(const AiAaWeightedFts&) = delete;
     AiAaWeightedFts &operator=(const AiAaWeightedFts&&) = delete;
-    ~AiAaWeightedFts();
+    virtual ~AiAaWeightedFts();
 
     virtual std::shared_future<bool> dream();
 

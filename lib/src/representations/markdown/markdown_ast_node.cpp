@@ -245,7 +245,7 @@ TimeScope& MarkdownAstSectionMetadata::getTimeScope()
 
 void MarkdownAstSectionMetadata::setTimeScope(const TimeScope& timeScope)
 {
-    this->timeScope=timeScope;
+    this->timeScope = timeScope;
 }
 
 time_t MarkdownAstSectionMetadata::getDeadline() const
@@ -255,7 +255,7 @@ time_t MarkdownAstSectionMetadata::getDeadline() const
 
 void MarkdownAstSectionMetadata::setDeadline(time_t deadline)
 {
-    this->deadline=deadline;
+    this->deadline = deadline;
 }
 
 const std::vector<Link*>& MarkdownAstSectionMetadata::getLinks() const
@@ -266,7 +266,7 @@ const std::vector<Link*>& MarkdownAstSectionMetadata::getLinks() const
 void MarkdownAstSectionMetadata::setLinks(std::vector<Link*>* links)
 {
     if(links) {
-        this->links=std::move(*links);
+        this->links = std::move(*links);
     } else {
         this->links.clear();
     }

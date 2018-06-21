@@ -24,7 +24,8 @@ OutlineTreeView::OutlineTreeView(QWidget* parent)
     : QTableView(parent)
 {
     verticalHeader()->setVisible(false);
-    // BEFARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    // BEFARE this kills performance:
+    // verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 

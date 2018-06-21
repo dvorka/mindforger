@@ -19,7 +19,7 @@
 
 export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
-#export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
+export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
 #export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
 
 # benchmarks
@@ -29,6 +29,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
 # tests
+#export OPTION_TEST="TrieTestCase.AddAndSearch"
 #export OPTION_TEST="FileGearTestCase.DeepCopy"
 #export OPTION_TEST="FileGearTestCase.DeepProductionCopy"
 #export OPTION_TEST="FileGearTestCase.DeepCopyToExisting"
@@ -39,8 +40,10 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="AiNlpTestCase.Tokenizer"
 #export OPTION_TEST="AiNlpTestCase.Stemmer"
 #export OPTION_TEST="HtmlTestCase.*"
+#export OPTION_TEST="HtmlTestCase.Outline"
 #export OPTION_TEST="HtmlTestCase.TaskList"
 #export OPTION_TEST="HtmlTestCase.NoteLinks"
+#export OPTION_TEST="MarkdownParserTestCase.*"
 #export OPTION_TEST="MarkdownParserTestCase.Links"
 #export OPTION_TEST="MarkdownParserTestCase.TimeScope"
 #export OPTION_TEST="MarkdownParserTestCase.Deadline"
@@ -73,13 +76,15 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="NoteTestCase.MangleNoteName"
 #export OPTION_TEST="NoteTestCase.DeepUpDownFirstLastClone"
 #export OPTION_TEST="MindTestCase.LearnAndRememberMindForgerRepository"
-export OPTION_TEST="MindTestCase.LearnAmnesiaLearn"
+#export OPTION_TEST="MindTestCase.LearnAmnesiaLearn"
+#export OPTION_TEST="MindTestCase.CommonWordsBlacklist"
 #export OPTION_TEST="DateTimeGearTestCase.Immutability"
 #export OPTION_TEST="ConfigurationTestCase.*"
 #export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
 #export OPTION_TEST="ConfigurationTestCase.SaveAndLoad"
 #export OPTION_TEST="ConfigurationTestCase.FromConstructor"
-#export OPTION_TEST="ConfigurationTestCase.Environment"
+#export OPTION_TEST="ConfigurationTestCase.FromEnvironment"
+#export OPTION_TEST="ConfigurationTestCase.Save*"
 #export OPTION_TEST="MarkdownParserTestCase.Bug37Notrailing"
 #export OPTION_TEST="MarkdownParserBugsTestCase.*"
 #export OPTION_TEST="NoteTestCase.PromoteDemoteUpDownNote"

@@ -70,10 +70,10 @@ void AsyncTaskNotificationsDistributor::run()
     Outline* lastTayWOutline{};
     Note* lastTayWNote{};
 
-
     while(true) {
         // IMPROVE consider a condition variable & activiation of checking ONLY if WIP non-empty
         msleep(sleepInterval);
+        //MF_DEBUG("AsyncDistributor: wake up...");
 
         /*
          * AA FTS algorithm - SYNCHRONOUS

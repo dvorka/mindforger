@@ -20,11 +20,17 @@
 
 namespace m8r {
 
+using namespace std;
+
 OutlinesTableView::OutlinesTableView(QWidget *parent)
   : QTableView(parent)
 {
     verticalHeader()->setVisible(false);
-    // BEFARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    // BEFARE ::ResizeToContents this kills performance - use ::Fixed instead:
+    // verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    // IMPORTANT resize mode MUST NOT be set in paintEvent, otherwise it causes high CPU consumption loop
+    verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
     setSortingEnabled(true);
 
@@ -39,7 +45,6 @@ void OutlinesTableView::paintEvent(QPaintEvent* event)
     // IMPROVE may kill performance
     this->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 
-    verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
     // importance/urgency
