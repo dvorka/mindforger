@@ -34,6 +34,7 @@ Install MindForger:
 * [Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#ubuntu-)
 * [Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#debian-)
 * [Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#fedora-)
+* [Arch Linux](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#arch-linux-)
 
 # Documentation
 Read:
