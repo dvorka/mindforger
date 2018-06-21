@@ -147,7 +147,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
     actionFindNoteByTag->setStatusTip(tr("Find Note by tags"));
 
-#ifdef MF_MITIE
+#ifdef MF_NER
     actionFindNerPersons = new QAction(tr("Recall &Persons"), mainWindow);
     actionFindNerPersons->setStatusTip(tr("Find persons using Named-entity recognition (NER)"));
 
@@ -167,7 +167,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFind->addAction(actionFindNoteByName);
     menuFind->addAction(actionFindOutlineByTag);
     menuFind->addAction(actionFindNoteByTag);    
-#ifdef MF_MITIE
+#ifdef MF_NER
     menuFind->addSeparator();
     menuFind->addAction(actionFindNerPersons);
     menuFind->addAction(actionFindNerLocations);

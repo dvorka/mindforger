@@ -58,8 +58,10 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     rowsAndDepthDialog = new RowsAndDepthDialog(&view);
     newRepositoryDialog = new NewRepositoryDialog(&view);
     newFileDialog = new NewFileDialog(&view);
+#ifdef MF_NER
     nerChooseTagsDialog = new NerChooseTagTypesDialog(&view);
     nerResultDialog = new NerResultDialog(&view);
+#endif
 
     // wire signals
     QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
@@ -77,16 +79,20 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(rowsAndDepthDialog->getGenerateButton(), SIGNAL(clicked()), this, SLOT(handleRowsAndDepth()));
     QObject::connect(newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
+#ifdef MF_NER
     QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleFindNerEntities()));
     QObject::connect(nerResultDialog, SIGNAL(choiceFinished()), this, SLOT(handleFtsNerEntity()));
+#endif
 
     // async task 2 GUI events distributor
     distributor = new AsyncTaskNotificationsDistributor(this);
     // setup callback for cleanup when it finishes
     QObject::connect(distributor, SIGNAL(finished()), distributor, SLOT(deleteLater()));
     distributor->start();
+#ifdef MF_NER
     // NER worker
     nerWorker = nullptr;
+#endif
 
     // send signal to components to be updated on a configuration change
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SLOT(slotConfigurationUpdated()));
@@ -651,6 +657,8 @@ void MainWindowPresenter::handleFindNoteByName()
     }
 }
 
+#ifdef MF_NER
+
 void MainWindowPresenter::doActionFindNerPersons()
 {
     if(orloj->isFacetActiveOutlineManagement()) {
@@ -801,6 +809,8 @@ void MainWindowPresenter::handleFtsNerEntity()
             orloj->getOutlineView()->getCurrentOutline());
     }
 }
+
+#endif
 
 void MainWindowPresenter::doActionViewToggleRecent()
 {

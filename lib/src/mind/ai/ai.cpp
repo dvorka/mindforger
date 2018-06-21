@@ -23,7 +23,7 @@ namespace m8r {
 using namespace std;
 
 Ai::Ai(Memory& memory, Mind& mind)
-#ifdef MF_MITIE
+#ifdef MF_NER
     : ner{}
 #endif
 {
@@ -36,7 +36,7 @@ Ai::Ai(Memory& memory, Mind& mind)
         break;
     }
 
-#ifdef MF_MITIE
+#ifdef MF_NER
     // TODO get MODEL location from configuration
     static std::string nerModelPath{"/home/dvorka/p/mindforger/lab/ner/MITIE/MITIE-models/english/ner_model.dat"};
     ner.setNerModel(nerModelPath);

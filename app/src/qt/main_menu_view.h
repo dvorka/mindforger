@@ -83,7 +83,7 @@ public:
     QAction* actionFindNoteByName;
     QAction* actionFindOutlineByTag;
     QAction* actionFindNoteByTag;
-#ifdef MF_MITIE
+#ifdef MF_NER
     QAction* actionFindNerPersons;
     QAction* actionFindNerLocations;
     QAction* actionFindNerOrganizations;

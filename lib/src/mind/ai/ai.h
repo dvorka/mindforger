@@ -29,7 +29,7 @@
 #include "./aa_model.h"
 #include "./ai_aa_weighted_fts.h"
 #include "./ai_aa_bow.h"
-#ifdef MF_MITIE
+#ifdef MF_NER
     #include "./nlp/named_entity_recognition.h"
 #endif
 
@@ -76,10 +76,11 @@ private:
     // Associations assessment implemenations: AA @ weighted FTS, AA @ BoW
     AiAssociationsAssessment* aa;
 
+#ifdef MF_NER
     /*
      * Named-entity recognition (NER)
      */
-#ifdef MF_MITIE
+
     NamedEntityRecognition ner;
 #endif
 
@@ -126,6 +127,7 @@ public:
         return aa->getAssociatedNotes(words, associations, self);
     }
 
+#ifdef MF_NER
     bool isNerInitialized() const { return ner.isInitialized(); }
 
     /**
@@ -134,6 +136,7 @@ public:
     void recognizePersons(const Outline* outline, int entityFilter, std::vector<NerNamedEntity>& result) {
         ner.recognizePersons(outline, entityFilter, result);
     }
+#endif
 
     /**
      * @brief Clear, but don't deallocate.

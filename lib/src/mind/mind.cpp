@@ -792,8 +792,10 @@ void Mind::onRemembering()
     allNotesCache.clear();
 }
 
+#ifdef MF_NER
+
 /*
- * NRE
+ * NER
  */
 
 bool Mind::isNerInitilized() const
@@ -805,6 +807,7 @@ void Mind::recognizePersons(const Outline* outline, int entityFilter, std::vecto
     ai->recognizePersons(outline, entityFilter, result);
 }
 
+#endif
 
 // unique_ptr template BREAKS Qt Developer indentation > stored at EOF
 unique_ptr<vector<Outline*>> Mind::findOutlineByNameFts(const string& expr) const

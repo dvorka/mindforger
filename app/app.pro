@@ -20,8 +20,8 @@ TEMPLATE = app
 
 QT += widgets
 
-!mfnomitie {
-  DEFINES += MF_MITIE
+mfner {
+  DEFINES += MF_NER
 }
 
 mfdebug|mfunits {
@@ -142,16 +142,20 @@ HEADERS += \
     ./src/qt/dialogs/insert_link_dialog.h \
     ./src/qt/dialogs/rows_and_depth_dialog.h \
     ./src/qt/dialogs/new_file_dialog.h \
-    ./src/qt/dialogs/new_repository_dialog.h \
+    ./src/qt/dialogs/new_repository_dialog.h
+
+macx|mfwebengine {
+    HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
+}
+mfner {
+    HEADERS += \
     src/qt/dialogs/ner_choose_tag_types_dialog.h \
     src/qt/dialogs/ner_result_dialog.h \
     src/qt/ner_leaderboard_model.h \
     src/qt/ner_leaderboard_view.h \
     src/qt/ner_main_window_worker_thread.h
-
-macx|mfwebengine {
-    HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
 }
+
 
 SOURCES += \
     ./src/qt/mindforger.cpp \
@@ -223,15 +227,18 @@ SOURCES += \
     ./src/qt/dialogs/insert_link_dialog.cpp \
     ./src/qt/dialogs/rows_and_depth_dialog.cpp \
     ./src/qt/dialogs/new_file_dialog.cpp \
-    ./src/qt/dialogs/new_repository_dialog.cpp \
+    ./src/qt/dialogs/new_repository_dialog.cpp
+
+macx|mfwebengine {
+    SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp
+}
+mfner {
+    SOURCES += \
     src/qt/dialogs/ner_choose_tag_types_dialog.cpp \
     src/qt/dialogs/ner_result_dialog.cpp \
     src/qt/ner_leaderboard_model.cpp \
     src/qt/ner_leaderboard_view.cpp \
     src/qt/ner_main_window_worker_thread.cpp
-
-macx|mfwebengine {
-    SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp
 }
 
 # L10n

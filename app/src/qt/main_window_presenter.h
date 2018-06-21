@@ -27,7 +27,9 @@
 #include "main_menu_presenter.h"
 
 #include "gear/async_task_notifications_distributor.h"
-#include "ner_main_window_worker_thread.h"
+#ifdef MF_NER
+    #include "ner_main_window_worker_thread.h"
+#endif
 #include "cli_n_breadcrumbs_presenter.h"
 #include "orloj_presenter.h"
 #include "status_bar_presenter.h"
@@ -84,7 +86,9 @@ private:
     Mind* mind;
 
     AsyncTaskNotificationsDistributor* distributor;
+#ifdef MF_NER
     NerMainWindowWorkerThread* nerWorker;
+#endif
 
     MarkdownOutlineRepresentation* mdRepresentation;
     HtmlOutlineRepresentation* htmlRepresentation;
@@ -178,6 +182,7 @@ public slots:
     void handleFindOutlineByTag();
     void doActionFindNoteByTag();
     void handleFindNoteByTag();
+#ifdef MF_NER
     void doActionFindNerPersons();
     void doActionFindNerLocations();
     void doActionFindNerOrganizations();
@@ -186,6 +191,7 @@ public slots:
     void chooseNerEntityResult(vector<NerNamedEntity>*);
     void handleChooseNerEntityResult();
     void handleFtsNerEntity();
+#endif
     // view
     bool doActionViewHome();
     void doActionViewOutlines();

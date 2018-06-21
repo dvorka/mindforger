@@ -29,7 +29,9 @@
 #include "aspect/mind_scope_aspect.h"
 #include "../config/configuration.h"
 #include "../representations/markdown/markdown_configuration_representation.h"
-#include "ai/nlp/named_entity_recognition.h"
+#ifdef MF_NER
+    #include "ai/nlp/named_entity_recognition.h"
+#endif
 
 namespace m8r {
 
@@ -249,12 +251,16 @@ public:
 
     unsigned getTriplesCount() const { return triples.size(); }
 
+#ifdef MF_NER
+
     /*
      * NRE
      */
 
     bool isNerInitilized() const;
     void recognizePersons(const Outline* outline, int entityFilter, std::vector<NerNamedEntity>& result);
+
+#endif
 
     /*
      * REMEMBERING
