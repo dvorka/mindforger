@@ -103,6 +103,8 @@ private:
 
     QLabel* editorKeyBindingLabel;
     QComboBox* editorKeyBindingCombo;
+    QLabel* editorFontLabel;
+    QPushButton* editorFontButton;
     QCheckBox* editorMdSyntaxHighlightCheck;
     QCheckBox* editorAutocompleteCheck;
     QLabel* tabWidthLabel;
@@ -111,10 +113,14 @@ private:
 public:
     explicit AppTab(QWidget* parent);
     ~AppTab();
+    QFont editorFont;
 
     // there and back is handled by Dialog's access to this class & Config singleton
     void refresh();
     void save();
+
+private slots:
+    void getFont();
 };
 
 

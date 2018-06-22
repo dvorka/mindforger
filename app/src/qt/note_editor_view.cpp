@@ -32,15 +32,7 @@ NoteEditorView::NoteEditorView(QWidget* parent)
 {
     hitCounter = 0;
 
-    // font
-    f = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-    // alternatives:
-    //f.setFamily("Courier");
-    //f.setStyleHint(QFont::Monospace);
-    //f.setFixedPitch(true);
-    //f.setPointSize(10);
-    setFont(f);
-
+    setEditorFont(Configuration::getInstance().getEditorFont());
     setEditorTabWidth(Configuration::getInstance().getUiEditorTabWidth());
 
     // widgets
@@ -92,6 +84,20 @@ void NoteEditorView::setEditorTabWidth(int tabWidth)
     setTabStopWidth(tabWidth * metrics.width(' '));
 }
 
+void NoteEditorView::setEditorFont(std::string fontName)
+{
+    QFont editorFont;
+    QString qFontName = QString::fromStdString(fontName);
+    if (QString::compare(qFontName, "")==0) { // No font defined, set to default
+        editorFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+        Configuration::getInstance().setEditorFont(editorFont.toString().toUtf8().constData());
+    } else {
+        editorFont.fromString(qFontName);
+        setFont(editorFont);
+    }
+
+}
+
 void NoteEditorView::slotConfigurationUpdated()
 {
     MF_DEBUG("CONFIG UPDATED @ editor " << endl);
@@ -100,6 +106,7 @@ void NoteEditorView::slotConfigurationUpdated()
     highlighter->setEnabled(enableSyntaxHighlighting);
 
     setEditorTabWidth(Configuration::getInstance().getUiEditorTabWidth());
+    setEditorFont(Configuration::getInstance().getEditorFont());
 }
 
 /*
