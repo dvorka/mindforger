@@ -101,6 +101,10 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     editorKeyBindingCombo->addItem("vim");
     editorKeyBindingCombo->addItem("windows");
 
+    editorFontLabel = new QLabel(tr("Editor font")+":", this);
+    editorFontButton = new QPushButton(QFontDatabase::systemFont(QFontDatabase::FixedFont).family());//QFont().defaultFamily());
+    QObject::connect(editorFontButton, &QPushButton::clicked, this, &ConfigurationDialog::AppTab::getFont);
+
     editorMdSyntaxHighlightCheck = new QCheckBox(tr("Markdown syntax highlighting"), this);
     editorAutocompleteCheck = new QCheckBox(tr("autocomplete"), this);
 
@@ -121,6 +125,10 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     QVBoxLayout* editorLayout = new QVBoxLayout{this};
     editorLayout->addWidget(editorKeyBindingLabel);
     editorLayout->addWidget(editorKeyBindingCombo);
+    QHBoxLayout *fontLayout = new QHBoxLayout{this};
+    fontLayout->addWidget(editorFontLabel);
+    fontLayout->addWidget(editorFontButton);
+    editorLayout->addLayout(fontLayout);
     editorLayout->addWidget(editorMdSyntaxHighlightCheck);
     editorLayout->addWidget(editorAutocompleteCheck);
     editorLayout->addWidget(tabWidthLabel);
@@ -143,6 +151,8 @@ ConfigurationDialog::AppTab::~AppTab()
     delete htmlCssThemeCombo;
     delete editorKeyBindingLabel;
     delete editorKeyBindingCombo;
+    delete editorFontLabel;
+    delete editorFontButton;
     delete editorMdSyntaxHighlightCheck;
     delete editorAutocompleteCheck;
     delete tabWidthLabel;
@@ -166,6 +176,13 @@ void ConfigurationDialog::AppTab::refresh()
         editorKeyBindingCombo->setCurrentIndex(i);
     }
 
+    QString fontName = QString::fromStdString(config.getEditorFont());
+    if (fontName.length()>16) {
+        fontName.resize(16);
+        fontName.append("...");
+    }
+    editorFontButton->setText(fontName);
+
     editorMdSyntaxHighlightCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
     editorAutocompleteCheck->setChecked(config.isUiEditorEnableAutocomplete());
     tabWidthCombo->setCurrentIndex(tabWidthCombo->findText(QString::number(config.getUiEditorTabWidth())));
@@ -176,9 +193,21 @@ void ConfigurationDialog::AppTab::save()
     config.setUiThemeName(themeCombo->itemText(themeCombo->currentIndex()).toStdString());
     config.setUiHtmlCssPath(htmlCssThemeCombo->itemText(htmlCssThemeCombo->currentIndex()).toStdString());
     config.setEditorKeyBindingByString(editorKeyBindingCombo->itemText(editorKeyBindingCombo->currentIndex()).toStdString());
+    config.setEditorFont(editorFont.toString().toUtf8().constData());
     config.setUiEditorEnableSyntaxHighlighting(editorMdSyntaxHighlightCheck->isChecked());
     config.setUiEditorEnableAutocomplete(editorAutocompleteCheck->isChecked());
     config.setUiEditorTabWidth(tabWidthCombo->itemText(tabWidthCombo->currentIndex()).toInt());
+}
+
+void ConfigurationDialog::AppTab::getFont()
+{
+    bool ok;
+    QFont font;
+    font.fromString(QString::fromStdString(config.getEditorFont()));
+    editorFont = QFontDialog::getFont(&ok, font, this);
+    if (ok) {
+         editorFontButton->setText(editorFont.family());
+    }
 }
 
 /*

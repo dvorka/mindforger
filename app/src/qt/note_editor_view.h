@@ -89,6 +89,7 @@ protected:
     void keyPressEvent(QKeyEvent* event) override;
 private:
     void setEditorTabWidth(int tabWidth);
+    void setEditorFont(std::string fontName);
     void performCompletion(const QString& completionPrefix);
     bool handledCompletedAndSelected(QKeyEvent* event);
     void populateModel(const QString& completionPrefix);

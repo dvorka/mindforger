@@ -78,6 +78,7 @@ constexpr const auto UI_JS_LIB_NO = "no";
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
 constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_KEY_BINDING = UI_EDITOR_KEY_BINDING_EMACS;
+constexpr const auto UI_DEFAULT_EDITOR_FONT = "Courier New,12";
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
 // improve platform/language specific
@@ -165,6 +166,7 @@ public:
     static const std::string DEFAULT_UI_THEME_NAME;
     static const std::string DEFAULT_UI_HTML_CSS_THEME;
     static const std::string DEFAULT_EDITOR_KEY_BINDING;
+    static const std::string DEFAULT_EDITOR_FONT;
     static constexpr int DEFAULT_EDITOR_TAB_WIDTH = 4;
     static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOCOMPLETE = true;
@@ -209,6 +211,7 @@ private:
     std::string uiThemeName;
     std::string uiHtmlCssPath; // use a CSS (size>0) or render raw MD (size==0)    
     EditorKeyBindingMode uiEditorKeyBinding;
+    std::string editorFont;
     int uiFontPointSize;
     bool uiShowBreadcrump; // show breadcrump path
     bool uiViewerShowMetadata; // show reads/writes/... when viewing Outlines and/or Notes.
@@ -303,6 +306,8 @@ public:
         else if (!binding.compare(UI_EDITOR_KEY_BINDING_VIM)) uiEditorKeyBinding=EditorKeyBindingMode::VIM;
         else uiEditorKeyBinding=EditorKeyBindingMode::EMACS;
     }
+    void setEditorFont(std::string font) { this->editorFont = font; }
+    std::string getEditorFont() { return this->editorFont; }
     int getUiFontPointSize() const { return uiFontPointSize; }
     const std::string& getUiThemeName() const { return uiThemeName; }
     void setUiThemeName(const std::string theme) { uiThemeName = theme; }
