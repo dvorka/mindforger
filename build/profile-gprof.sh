@@ -28,7 +28,7 @@
 
 export OPENREPO="~/tmp/EMPTY"
 
-cd ../app && rm -vf gmon.out && ./mindforger ${OPENREPO}  && gprof ./mindforger gmon.out > GPROF-ANALYSIS.txt && less GPROF-ANALYSIS.txt
+cd ../app && rm -vf gmon.out && ./mindforger ${OPENREPO} && gprof ./mindforger gmon.out > GPROF-ANALYSIS.txt && less GPROF-ANALYSIS.txt
 
 # eof
 
