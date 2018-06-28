@@ -83,6 +83,8 @@ public:
     QAction* actionFindNoteByName;
     QAction* actionFindOutlineByTag;
     QAction* actionFindNoteByTag;
+    QAction* actionFindSimilarityByTitle;
+    QAction* actionFindSimilarityByContent;
 #ifdef MF_NER
     QAction* actionFindNerPersons;
     QAction* actionFindNerLocations;

@@ -147,6 +147,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
     actionFindNoteByTag->setStatusTip(tr("Find Note by tags"));
 
+    actionFindSimilarityByTitle = new QAction(tr("Recall Similar Notes by Name"), mainWindow);
+    actionFindSimilarityByTitle->setStatusTip(tr("Find similar Notes by current Note name"));
+    actionFindSimilarityByTitle->setEnabled(false);
+
+    actionFindSimilarityByContent= new QAction(tr("Recall Similar Notes by Content"), mainWindow);
+    actionFindSimilarityByContent->setStatusTip(tr("Find similar Notes by current Note text/content/description"));
+    actionFindSimilarityByContent->setEnabled(false);
+
 #ifdef MF_NER
     actionFindNerPersons = new QAction(tr("Recall &Persons"), mainWindow);
     actionFindNerPersons->setStatusTip(tr("Find persons using Named-entity recognition (NER)"));
@@ -167,6 +175,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFind->addAction(actionFindNoteByName);
     menuFind->addAction(actionFindOutlineByTag);
     menuFind->addAction(actionFindNoteByTag);    
+    menuFind->addSeparator();
+    menuFind->addAction(actionFindSimilarityByTitle);
+    menuFind->addAction(actionFindSimilarityByContent);
 #ifdef MF_NER
     menuFind->addSeparator();
     menuFind->addAction(actionFindNerPersons);
