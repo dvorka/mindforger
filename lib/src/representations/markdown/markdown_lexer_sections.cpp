@@ -635,6 +635,8 @@ void MarkdownLexerSections::addLineToLexems(const unsigned short int offset)
 
 bool MarkdownLexerSections::nextToken(const unsigned short int offset) {
     if(offset<lines.size()) {
+        //MF_DEBUG(*lines[offset] << endl);
+        MF_DEBUG(offset << endl);
         if(lines[offset]->size()==0) {
             lexems.push_back(symbolTable.LEXEM.BR);
             return true;
