@@ -20,22 +20,53 @@
 
 namespace m8r {
 
+using namespace std;
+
 OrganizerPresenter::OrganizerPresenter(OrganizerView* view)
 {
     this->view = view;
+
+    doFirstPresenter = new OrganizerQuadrantPresenter(view->getDoFirst(), tr("Do first"));
+    doSoonPresenter = new OrganizerQuadrantPresenter(view->getDoSoon(), tr("Do soon"));
+    doSometimePresenter = new OrganizerQuadrantPresenter(view->getDoSometime(), tr("Do sometime"));
+    planDedicatedTimePresenter = new OrganizerQuadrantPresenter(view->getPlanDedicatedTime(), tr("Plan dedicated time"));
 }
 
 OrganizerPresenter::~OrganizerPresenter()
 {
 }
 
-void OrganizerPresenter::refresh(std::vector<Outline*> outlines)
+void OrganizerPresenter::refresh(const vector<Outline*>& os)
 {
-    if(outlines.size()) {
-        view->refresh(outlines);
-    } else {
-        view->clear();
+    vector<Outline*> doFirstOs;
+    vector<Outline*> doSoonOs;
+    vector<Outline*> doSometimeOs;
+    vector<Outline*> planDedicatedTimeOs;
+
+    if(os.size()) {
+        for(Outline* o:os) {
+            if(o->getUrgency()>2) {
+                if(o->getImportance()>2) {
+                    doFirstOs.push_back(o);
+                } else {
+                    doSoonOs.push_back(o);
+                }
+            } else {
+                if(o->getImportance()>2) {
+                    planDedicatedTimeOs.push_back(o);
+                } else {
+                    if(o->getImportance()>0) {
+                        doSometimeOs.push_back(o);
+                    }
+                }
+            }
+        }
     }
+
+    doFirstPresenter->refresh(doFirstOs);
+    doSoonPresenter->refresh(doSoonOs);
+    doSometimePresenter->refresh(doSometimeOs);
+    planDedicatedTimePresenter->refresh(planDedicatedTimeOs);
 }
 
 } // m8r namespace

@@ -23,21 +23,26 @@ namespace m8r {
 OrganizerView::OrganizerView(QWidget* parent)
     : QSplitter{Qt::Horizontal,parent}
 {
-    left = new QSplitter(this);
+    left = new QSplitter(Qt::Vertical, this);
+    doSoon = new OrganizerQuadrantView(left);
+    doSometime = new OrganizerQuadrantView(left);
+    left->addWidget(doSoon);
+    left->addWidget(doSometime);
     addWidget(left);
-    right = new QSplitter(this);
+
+    right = new QSplitter(Qt::Vertical, this);
+    doFirst = new OrganizerQuadrantView(right);
+    planDedicatedTime = new OrganizerQuadrantView(right);
+    right->addWidget(doFirst);
+    right->addWidget(planDedicatedTime);
     addWidget(right);
 
     // the first parameter is index
-    setStretchFactor(0, 1);
-    setStretchFactor(1, 1);
+//    setStretchFactor(0, 1);
+//    setStretchFactor(1, 1);
 }
 
 OrganizerView::~OrganizerView()
-{
-}
-
-void OrganizerView::refresh(std::vector<Outline*> outlines)
 {
 }
 

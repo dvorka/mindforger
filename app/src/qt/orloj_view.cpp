@@ -32,6 +32,7 @@ OrlojView::OrlojView(QWidget* parent)
     //addWidget(new QTextEdit("Organizer", this));
 
     organizer = new OrganizerView(this);
+    addWidget(organizer);
 
     outlinesTable = new OutlinesTableView(this);
     addWidget(outlinesTable);

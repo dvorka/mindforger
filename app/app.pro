@@ -150,7 +150,10 @@ HEADERS += \
     ./src/qt/dialogs/new_file_dialog.h \
     ./src/qt/dialogs/new_repository_dialog.h \
     src/qt/organizer_view.h \
-    src/qt/organizer_presenter.h
+    src/qt/organizer_presenter.h \
+    src/qt/organizer_quadrant_model.h \
+    src/qt/organizer_quadrant_presenter.h \
+    src/qt/organizer_quadrant_view.h
 
 macx|mfwebengine {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
@@ -237,7 +240,10 @@ SOURCES += \
     ./src/qt/dialogs/new_file_dialog.cpp \
     ./src/qt/dialogs/new_repository_dialog.cpp \
     src/qt/organizer_view.cpp \
-    src/qt/organizer_presenter.cpp
+    src/qt/organizer_presenter.cpp \
+    src/qt/organizer_quadrant_model.cpp \
+    src/qt/organizer_quadrant_presenter.cpp \
+    src/qt/organizer_quadrant_view.cpp
 
 macx|mfwebengine {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp

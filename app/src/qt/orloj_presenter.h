@@ -45,6 +45,7 @@ class NoteEditPresenter;
 class OutlineHeaderViewPresenter;
 class OutlineHeaderEditPresenter;
 class OutlineViewPresenter;
+class OrganizerPresenter;
 
 enum OrlojPresenterFacets {
     FACET_NONE,                 // 0

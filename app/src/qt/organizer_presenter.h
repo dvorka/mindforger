@@ -19,17 +19,28 @@
 #ifndef M8RUI_ORGANIZER_PRESENTER_H
 #define M8RUI_ORGANIZER_PRESENTER_H
 
+#include <vector>
+
 #include <QtWidgets>
 
 #include "organizer_view.h"
 
+#include "organizer_quadrant_presenter.h"
+
 namespace m8r {
+
+class OrganizerQuadrantPresenter;
 
 class OrganizerPresenter : public QObject
 {
     Q_OBJECT
 
     OrganizerView* view;
+
+    OrganizerQuadrantPresenter* doFirstPresenter;
+    OrganizerQuadrantPresenter* doSoonPresenter;
+    OrganizerQuadrantPresenter* doSometimePresenter;
+    OrganizerQuadrantPresenter* planDedicatedTimePresenter;
 
 public:
     explicit OrganizerPresenter(OrganizerView* view);
@@ -39,7 +50,7 @@ public:
     OrganizerPresenter &operator=(const OrganizerPresenter&&) = delete;
     ~OrganizerPresenter();
 
-    void refresh(std::vector<Outline*> outlines);
+    void refresh(const std::vector<Outline*>& os);
 };
 
 }

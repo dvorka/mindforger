@@ -21,19 +21,26 @@
 
 #include <QtWidgets>
 
+#include "model_meta_definitions.h"
+
 namespace m8r {
 
-class OrganizerQuadrantModel : public QObject
+class OrganizerQuadrantModel : public QStandardItemModel
 {
     Q_OBJECT
 
+    QString title;
+
 public:
-    explicit OrganizerQuadrantModel(QWidget* parent);
+    explicit OrganizerQuadrantModel(QString& title, QWidget* parent);
     OrganizerQuadrantModel(const OrganizerQuadrantModel&) = delete;
     OrganizerQuadrantModel(const OrganizerQuadrantModel&&) = delete;
     OrganizerQuadrantModel &operator=(const OrganizerQuadrantModel&) = delete;
     OrganizerQuadrantModel &operator=(const OrganizerQuadrantModel&&) = delete;
     ~OrganizerQuadrantModel();
+
+    void removeAllRows();
+    void addRow(Outline* outline);
 };
 
 }

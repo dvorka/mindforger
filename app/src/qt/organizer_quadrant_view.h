@@ -23,7 +23,7 @@
 
 namespace m8r {
 
-class OrganizerQuadrantView : public QObject
+class OrganizerQuadrantView : public QTableView
 {
     Q_OBJECT
 
@@ -34,6 +34,8 @@ public:
     OrganizerQuadrantView &operator=(const OrganizerQuadrantView&) = delete;
     OrganizerQuadrantView &operator=(const OrganizerQuadrantView&&) = delete;
     ~OrganizerQuadrantView();
+
+    virtual void paintEvent(QPaintEvent* event) override;
 };
 
 }

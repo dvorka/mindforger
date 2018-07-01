@@ -21,11 +21,32 @@
 namespace m8r {
 
 OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent)
+    : QTableView(parent)
 {
+    verticalHeader()->setVisible(false);
+    // BEFARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    // IMPORTANT this must b in constructors - causes CPU high consuption loop if in paintEvent()!
+    verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    horizontalHeader()->setStretchLastSection(true);
+
+    setSortingEnabled(false);
+
+    setEditTriggers(QAbstractItemView::NoEditTriggers);
+    setSelectionBehavior(QAbstractItemView::SelectRows);
+    setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
 OrganizerQuadrantView::~OrganizerQuadrantView()
 {
+}
+
+void OrganizerQuadrantView::paintEvent(QPaintEvent* event)
+{
+    verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
+
+    QTableView::paintEvent(event);
+
 }
 
 } // m8r namespace

@@ -23,12 +23,16 @@
 
 #include "../../lib/src/model/note.h"
 
+#include "organizer_quadrant_view.h"
+
 namespace m8r {
 
 /**
  * @brief Eisenhower matrix aka organizer view.
  *
- * Do soon/Do first/Do sometime/Plan dedicated time
+ * Do soon     | Do first
+ * ------------+---------------------
+ * Do sometime | Plan dedicated time
  */
 class OrganizerView : public QSplitter
 {
@@ -38,6 +42,11 @@ private:
     QSplitter* left;
     QSplitter* right;
 
+    OrganizerQuadrantView* doFirst;
+    OrganizerQuadrantView* doSoon;
+    OrganizerQuadrantView* planDedicatedTime;
+    OrganizerQuadrantView* doSometime;
+
 public:
     explicit OrganizerView(QWidget* parent);
     OrganizerView(const OrganizerView&) = delete;
@@ -46,8 +55,10 @@ public:
     OrganizerView &operator=(const OrganizerView&&) = delete;
     ~OrganizerView();
 
-    void refresh(std::vector<Outline*> outlines);
-    void clear() {}
+    OrganizerQuadrantView* getDoFirst() { return doFirst; }
+    OrganizerQuadrantView* getDoSoon() { return doSoon; }
+    OrganizerQuadrantView* getDoSometime() { return doSometime; }
+    OrganizerQuadrantView* getPlanDedicatedTime() { return planDedicatedTime; }
 };
 
 }

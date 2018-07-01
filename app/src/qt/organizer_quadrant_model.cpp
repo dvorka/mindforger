@@ -20,12 +20,46 @@
 
 namespace m8r {
 
-OrganizerQuadrantModel::OrganizerQuadrantModel(QWidget* parent)
+OrganizerQuadrantModel::OrganizerQuadrantModel(QString& title, QWidget* parent)
+    : QStandardItemModel(parent)
 {
+    setColumnCount(1);
+    setRowCount(0);
+
+    this->title = title;
 }
 
 OrganizerQuadrantModel::~OrganizerQuadrantModel()
 {
+}
+
+void OrganizerQuadrantModel::removeAllRows()
+{
+    QStandardItemModel::clear();
+
+    QStringList tableHeader;
+    tableHeader
+        << title;
+    // IMPROVE set tooltips: items w/ tooltips instead of just strings
+    setHorizontalHeaderLabels(tableHeader);
+}
+
+void OrganizerQuadrantModel::addRow(Outline* outline)
+{
+    QList<QStandardItem*> items;
+    QStandardItem* item;
+
+    QString html;
+    html = QString(outline->getName().c_str());
+
+    // item
+    item = new QStandardItem(html);
+    item->setToolTip(html);
+    // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
+    item->setData(QVariant::fromValue(outline));
+    items += item;
+
+    appendRow(items);
 }
 
 } // m8r namespace

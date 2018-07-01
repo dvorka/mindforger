@@ -21,19 +21,39 @@
 
 #include <QtWidgets>
 
+#include "organizer_quadrant_view.h"
+#include "organizer_quadrant_model.h"
+#include "orloj_presenter.h"
+#include "html_delegate.h"
+
+#include "../../lib/src/model/outline.h"
+
 namespace m8r {
+
+class OrlojPresenter;
 
 class OrganizerQuadrantPresenter : public QObject
 {
     Q_OBJECT
 
+    OrganizerQuadrantView* view;
+    OrganizerQuadrantModel* model;
+
+    OrlojPresenter* orloj;
+
 public:
-    explicit OrganizerQuadrantPresenter(QWidget* parent);
+    explicit OrganizerQuadrantPresenter(OrganizerQuadrantView* view, QString title);
     OrganizerQuadrantPresenter(const OrganizerQuadrantPresenter&) = delete;
     OrganizerQuadrantPresenter(const OrganizerQuadrantPresenter&&) = delete;
     OrganizerQuadrantPresenter &operator=(const OrganizerQuadrantPresenter&) = delete;
     OrganizerQuadrantPresenter &operator=(const OrganizerQuadrantPresenter&&) = delete;
     ~OrganizerQuadrantPresenter();
+
+    void refresh(const std::vector<Outline*>& os);
+    OrganizerQuadrantView* getView() const { return view; }
+
+public slots:
+    void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
 };
 
 }

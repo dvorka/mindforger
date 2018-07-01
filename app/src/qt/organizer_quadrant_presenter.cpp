@@ -20,12 +20,57 @@
 
 namespace m8r {
 
-OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(QWidget* parent)
+OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(OrganizerQuadrantView* view, QString title)
 {
+    this->view = view;
+    this->model = new OrganizerQuadrantModel(title, view);
+    this->view->setModel(this->model);
+
+    this->orloj = orloj;
+
+    // ensure HTML cells rendering
+    HtmlDelegate* delegate = new HtmlDelegate();
+    this->view->setItemDelegate(delegate);
+
+    QObject::connect(
+        view->selectionModel(),
+        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+        this,
+        SLOT(slotShowNote(const QItemSelection&, const QItemSelection&)));
 }
 
 OrganizerQuadrantPresenter::~OrganizerQuadrantPresenter()
 {
+}
+
+void OrganizerQuadrantPresenter::slotShowNote(const QItemSelection& selected, const QItemSelection& deselected)
+{
+    Q_UNUSED(deselected);
+
+    QModelIndexList indices = selected.indexes();
+    if(indices.size()) {
+        const QModelIndex& index = indices.at(0);
+        QStandardItem* item
+            = model->itemFromIndex(index);
+        // IMPROVE make my role constant
+        Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
+
+        outline->incReads();
+        outline->makeDirty();
+
+        orloj->showFacetOutline(outline);
+    } // else do nothing
+}
+
+void OrganizerQuadrantPresenter::refresh(const std::vector<Outline*>& os)
+{
+    model->removeAllRows();
+    if(os.size()) {
+        view->setVisible(true);
+        for(auto& o:os) {
+            model->addRow(o);
+        }
+    }
 }
 
 } // m8r namespace
