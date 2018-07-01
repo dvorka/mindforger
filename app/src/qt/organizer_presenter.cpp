@@ -1,5 +1,5 @@
 /*
- outline_view_splitter.cpp     MindForger thinking notebook
+ organizer_presenter.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,27 +16,26 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "outline_view_splitter.h"
+#include "organizer_presenter.h"
 
 namespace m8r {
 
-OutlineViewSplitter::OutlineViewSplitter(QWidget* parent)
-    : QSplitter{Qt::Vertical,parent}
+OrganizerPresenter::OrganizerPresenter(OrganizerView* view)
 {
-    outlineView = new OutlineView(this);
-    addWidget(outlineView);
-    assocLeaderboardView = new AssocLeaderboardView(this);
-    addWidget(assocLeaderboardView);
-
-    assocLeaderboardView->setVisible(false);
-
-    // the first parameter is index
-    setStretchFactor(0, 2);
-    setStretchFactor(1, 1);
+    this->view = view;
 }
 
-OutlineViewSplitter::~OutlineViewSplitter()
+OrganizerPresenter::~OrganizerPresenter()
 {
+}
+
+void OrganizerPresenter::refresh(std::vector<Outline*> outlines)
+{
+    if(outlines.size()) {
+        view->refresh(outlines);
+    } else {
+        view->clear();
+    }
 }
 
 } // m8r namespace

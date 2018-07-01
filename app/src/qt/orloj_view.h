@@ -21,6 +21,7 @@
 
 #include <QtWidgets>
 
+#include "organizer_view.h"
 #include "outlines_table_view.h"
 #include "notes_table_view.h"
 #include "outline_view_splitter.h"
@@ -52,6 +53,7 @@ class OrlojView : public QSplitter
     Q_OBJECT
 
 private:
+    OrganizerView* organizer;
     OutlinesTableView* outlinesTable;
     NotesTableView* notesTable;
     OutlineViewSplitter* outlineView;
@@ -69,6 +71,7 @@ public:
     OrlojView &operator=(const OrlojView&) = delete;
     OrlojView &operator=(const OrlojView&&) = delete;
 
+    OrganizerView* getOrganizer() const { return organizer; }
     OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
     NotesTableView* getNotesTable() const { return notesTable; }
     OutlineViewSplitter* getOutlineView() const { return outlineView; }
@@ -76,6 +79,11 @@ public:
     OutlineHeaderEditView* getOutlineHeaderEdit() const { return outlineHeaderEdit; }
     NoteView* getNoteView() const { return noteView; }
     NoteEditView* getNoteEdit() const { return noteEdit; }
+
+    /**
+     * @brief Organizer
+     */
+    void showFacetOrganizer();
 
     /**
      * @brief List of Outlines

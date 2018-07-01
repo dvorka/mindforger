@@ -31,6 +31,8 @@ OrlojView::OrlojView(QWidget* parent)
     // TODO to be implemented
     //addWidget(new QTextEdit("Organizer", this));
 
+    organizer = new OrganizerView(this);
+
     outlinesTable = new OutlinesTableView(this);
     addWidget(outlinesTable);
 
@@ -92,6 +94,12 @@ void OrlojView::fiftyFifty()
         sizes << half;
     }
     setSizes(sizes);
+}
+
+void OrlojView::showFacetOrganizer()
+{
+    QSet<QWidget*> v; v << organizer;
+    hideChildren(v);
 }
 
 void OrlojView::showFacetOutlines()

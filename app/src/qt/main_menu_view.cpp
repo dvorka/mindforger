@@ -182,8 +182,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
 
     actionViewOrganizer = new QAction(tr("O&rganizer"), mainWindow);
-    actionViewOrganizer->setStatusTip(tr("Open Organizer"));
-    actionViewOrganizer->setEnabled(false);
+    actionViewOrganizer->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_W));
+    actionViewOrganizer->setStatusTip(tr("Open Eisenhower matrix aka Organizer"));
 
     actionViewOutlines = new QAction(tr("N&otebooks"), mainWindow);
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
@@ -533,6 +533,7 @@ void MainMenuView::showAllMenuItems()
     menuView->setEnabled(true);
     menuEdit->setEnabled(true);
     menuOutline->setEnabled(true);
+    actionViewOrganizer->setEnabled(true);
     actionOutlineEdit->setEnabled(true);
     actionOutlineClone->setEnabled(true);
     actionOutlineHome->setEnabled(true);

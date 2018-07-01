@@ -37,7 +37,6 @@ AssocLeaderboardPresenter::AssocLeaderboardPresenter(AssocLeaderboardView* view,
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowNote(const QItemSelection&, const QItemSelection&)));
-
 }
 
 AssocLeaderboardPresenter::~AssocLeaderboardPresenter()

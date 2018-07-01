@@ -816,6 +816,11 @@ void MainWindowPresenter::doActionViewToggleRecent()
 {
 }
 
+void MainWindowPresenter::doActionViewOrganizer()
+{
+    orloj->showFacetOrganizer(mind->getOutlines());
+}
+
 bool MainWindowPresenter::doActionViewHome()
 {
     vector<const Tag*> tagsFilter{};

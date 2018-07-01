@@ -193,6 +193,7 @@ public slots:
     void handleFtsNerEntity();
 #endif
     // view
+    void doActionViewOrganizer();
     bool doActionViewHome();
     void doActionViewOutlines();
     void doActionViewToggleRecent();

@@ -27,6 +27,7 @@
 #include <QtWidgets>
 
 #include "orloj_view.h"
+#include "organizer_presenter.h"
 #include "main_window_presenter.h"
 #include "outlines_table_presenter.h"
 #include "notes_table_presenter.h"
@@ -55,6 +56,7 @@ enum OrlojPresenterFacets {
     FACET_EDIT_NOTE,            // 6
     FACET_FTS_RESULT,           // 7
     FACET_FTS_VIEW_NOTE,        // 8
+    FACET_ORGANIZER            // 9
 };
 
 class OrlojPresenter : public QObject
@@ -69,6 +71,7 @@ private:
     OrlojView* view;
     Mind* mind;
 
+    OrganizerPresenter* organizerPresenter;
     OutlinesTablePresenter* outlinesTablePresenter;
     NotesTablePresenter* notesTablePresenter;
     OutlineViewPresenter* outlineViewPresenter;
@@ -85,6 +88,7 @@ public:
     Mind* getMind() { return mind; }
 
     OrlojView* getView() const { return view; }
+    OrganizerPresenter* getOrganizer() const { return organizerPresenter; }
     MainWindowPresenter* getMainWindow() const { return mainPresenter; }
     OutlinesTablePresenter* getOutlinesTable() const { return outlinesTablePresenter; }
     NotesTablePresenter* getNotesTable() const { return notesTablePresenter; }
@@ -123,6 +127,7 @@ public:
      */
     void onFacetChange(const OrlojPresenterFacets targetFacet) const;
 
+    void showFacetOrganizer(const std::vector<Outline*>& outlines);
     void showFacetOutlineList(const std::vector<Outline*>& outlines);
     void showFacetFtsResult(std::vector<Note*>* result);
     void showFacetOutline(Outline* outline);

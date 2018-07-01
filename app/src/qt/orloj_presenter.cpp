@@ -33,6 +33,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     this->view = view;
     this->mind = mind;
 
+    this->organizerPresenter = new OrganizerPresenter(view->getOrganizer());
     this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
     this->notesTablePresenter = new NotesTablePresenter(view->getNotesTable());
     this->outlineViewPresenter = new OutlineViewPresenter(view->getOutlineView(), this);
@@ -101,6 +102,14 @@ void OrlojPresenter::onFacetChange(const OrlojPresenterFacets targetFacet) const
     if(targetFacet == OrlojPresenterFacets::FACET_VIEW_OUTLINE) {
         outlineViewPresenter->getOutlineTree()->focus();
     }
+}
+
+void OrlojPresenter::showFacetOrganizer(const vector<Outline*>& outlines)
+{
+    setFacet(OrlojPresenterFacets::FACET_ORGANIZER);
+    organizerPresenter->refresh(outlines);
+    view->showFacetOrganizer();
+    mainPresenter->getStatusBar()->showMindStatistics();
 }
 
 void OrlojPresenter::showFacetOutlineList(const vector<Outline*>& outlines)
