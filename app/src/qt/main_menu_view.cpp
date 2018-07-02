@@ -178,22 +178,22 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: view
 
     actionViewHome = new QAction(tr("&Home"), mainWindow);
-    actionViewHome->setStatusTip(tr("Open Home Notebook"));
+    actionViewHome->setStatusTip(tr("Open Home Notebook..."));
 
     actionViewOrganizer = new QAction(tr("O&rganizer"), mainWindow);
-    actionViewOrganizer->setStatusTip(tr("Open Organizer"));
-    actionViewOrganizer->setEnabled(false);
+    actionViewOrganizer->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_W));
+    actionViewOrganizer->setStatusTip(tr("Open Organizer ~ Eisenhower matrix..."));
 
     actionViewOutlines = new QAction(tr("N&otebooks"), mainWindow);
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
-    actionViewOutlines->setStatusTip(tr("Show list of Notebooks"));
+    actionViewOutlines->setStatusTip(tr("Show list of Notebooks..."));
 
     actionViewNavigator = new QAction(tr("&Navigator"), mainWindow);
-    actionViewNavigator->setStatusTip(tr("Open Navigator"));
+    actionViewNavigator->setStatusTip(tr("Open Navigator..."));
     actionViewNavigator->setEnabled(false);
 
     actionViewDwell = new QAction(tr("&Memory Dwell"), mainWindow);
-    actionViewDwell->setStatusTip(tr("Open memory dwell"));
+    actionViewDwell->setStatusTip(tr("Open memory dwell..."));
     actionViewDwell->setEnabled(false);
 
 #ifdef DO_MF_DEBUG
@@ -203,7 +203,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
 
     actionViewToggleRecent = new QAction(tr("&Recent Notes"), mainWindow);
-    actionViewToggleRecent->setStatusTip(tr("View recently modified Notes"));
+    actionViewToggleRecent->setStatusTip(tr("View recently modified Notes..."));
     actionViewToggleRecent->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_R));
     actionViewToggleRecent->setEnabled(false);
 
@@ -211,11 +211,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // Outline/Note marked w/ tag stencil is MOVED among stencils (NOT indexed/searched/...)
     //  + Stencil view allows making a stencil outline again
     //  + Note stencils are notes in a given Outline
-    actionViewStencils->setStatusTip(tr("List Notebook and Note stencils"));
+    actionViewStencils->setStatusTip(tr("List Notebook and Note stencils..."));
     actionViewStencils->setEnabled(false);
 
     actionViewLimbo = new QAction(tr("&Limbo"), mainWindow);
-    actionViewLimbo->setStatusTip(tr("List forgotten Notebooks and Notes"));
+    actionViewLimbo->setStatusTip(tr("List forgotten Notebooks and Notes..."));
     actionViewLimbo->setEnabled(false);
 
     actionViewDistractionFree = new QAction(tr("&Distraction Free"), mainWindow);
@@ -230,9 +230,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     menuView = qMenuBar->addMenu(tr("&View"));
     menuView->addAction(actionViewHome);
-#ifdef MF_WIP
     menuView->addAction(actionViewOrganizer);
-#endif
     menuView->addAction(actionViewOutlines);
 #ifdef MF_WIP
     menuView->addAction(actionViewStencils);
@@ -532,6 +530,7 @@ void MainMenuView::showAllMenuItems()
     menuView->setEnabled(true);
     menuEdit->setEnabled(true);
     menuOutline->setEnabled(true);
+    actionViewOrganizer->setEnabled(true);
     actionOutlineEdit->setEnabled(true);
     actionOutlineClone->setEnabled(true);
     actionOutlineHome->setEnabled(true);

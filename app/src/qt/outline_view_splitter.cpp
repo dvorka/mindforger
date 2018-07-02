@@ -30,8 +30,9 @@ OutlineViewSplitter::OutlineViewSplitter(QWidget* parent)
 
     assocLeaderboardView->setVisible(false);
 
-    setStretchFactor(0,2);
-    setStretchFactor(1,1);
+    // the first parameter is index
+    setStretchFactor(0, 2);
+    setStretchFactor(1, 1);
 }
 
 OutlineViewSplitter::~OutlineViewSplitter()

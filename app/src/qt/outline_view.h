@@ -43,12 +43,11 @@ public:
     OutlineView(const OutlineView&&) = delete;
     OutlineView &operator=(const OutlineView&) = delete;
     OutlineView &operator=(const OutlineView&&) = delete;
+    ~OutlineView();
 
     void refreshHeader(const std::string& name);
     const QPushButton* getNameLabel() const { return nameLabel; }
     OutlineTreeView* getOutlineTree() const { return outlineTreeView; }
-
-    ~OutlineView();
 };
 
 }

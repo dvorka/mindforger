@@ -818,6 +818,13 @@ void MainWindowPresenter::doActionViewToggleRecent()
 {
 }
 
+void MainWindowPresenter::doActionViewOrganizer()
+{
+    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+        orloj->showFacetOrganizer(mind->getOutlines());
+    }
+}
+
 bool MainWindowPresenter::doActionViewHome()
 {
     vector<const Tag*> tagsFilter{};

@@ -28,8 +28,8 @@ OrlojView::OrlojView(QWidget* parent)
     // TODO to be implemented
     //addWidget(new QTextEdit("Home: outlines (link), Notes (l), bytes (l), graphs, recent"), this);
 
-    // TODO to be implemented
-    //addWidget(new QTextEdit("Organizer", this));
+    organizer = new OrganizerView(this);
+    addWidget(organizer);
 
     outlinesTable = new OutlinesTableView(this);
     addWidget(outlinesTable);
@@ -92,6 +92,12 @@ void OrlojView::fiftyFifty()
         sizes << half;
     }
     setSizes(sizes);
+}
+
+void OrlojView::showFacetOrganizer()
+{
+    QSet<QWidget*> v; v << organizer;
+    hideChildren(v);
 }
 
 void OrlojView::showFacetOutlines()

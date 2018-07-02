@@ -26,9 +26,9 @@
 #include "orloj_presenter.h"
 #include "html_delegate.h"
 
-#include "../../lib/src/model/note.h"
-
 #include <QtWidgets>
+
+#include "../../lib/src/model/note.h"
 
 namespace m8r {
 

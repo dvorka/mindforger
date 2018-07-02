@@ -1,5 +1,5 @@
 /*
- assoc_leaderboard_presenter.cpp     MindForger thinking notebook
+ organizer_quadrant_presenter.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,14 +16,17 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "assoc_leaderboard_presenter.h"
+#include "organizer_quadrant_presenter.h"
 
 namespace m8r {
 
-AssocLeaderboardPresenter::AssocLeaderboardPresenter(AssocLeaderboardView* view, OrlojPresenter* orloj)
+OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
+        OrganizerQuadrantView* view,
+        OrlojPresenter* orloj,
+        QString title)
 {
     this->view = view;
-    this->model = new AssocLeaderboardModel(this);
+    this->model = new OrganizerQuadrantModel(title, this);
     this->view->setModel(this->model);
 
     this->orloj = orloj;
@@ -36,14 +39,14 @@ AssocLeaderboardPresenter::AssocLeaderboardPresenter(AssocLeaderboardView* view,
         view->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
-        SLOT(slotShowNote(const QItemSelection&, const QItemSelection&)));
+        SLOT(slotShowOutline(const QItemSelection&, const QItemSelection&)));
 }
 
-AssocLeaderboardPresenter::~AssocLeaderboardPresenter()
+OrganizerQuadrantPresenter::~OrganizerQuadrantPresenter()
 {
 }
 
-void AssocLeaderboardPresenter::slotShowNote(const QItemSelection& selected, const QItemSelection& deselected)
+void OrganizerQuadrantPresenter::slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected)
 {
     Q_UNUSED(deselected);
 
@@ -53,25 +56,23 @@ void AssocLeaderboardPresenter::slotShowNote(const QItemSelection& selected, con
         QStandardItem* item
             = model->itemFromIndex(index);
         // IMPROVE make my role constant
-        Note* note = item->data(Qt::UserRole + 1).value<Note*>();
+        Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
 
-        note->incReads();
-        note->makeDirty();
+        outline->incReads();
+        outline->makeDirty();
 
-        orloj->showFacetNoteView(note);
+        orloj->showFacetOutline(outline);
     } // else do nothing
 }
 
-void AssocLeaderboardPresenter::refresh(std::vector<std::pair<Note*,float>>& assocLeaderboard)
+void OrganizerQuadrantPresenter::refresh(const std::vector<Outline*>& os, bool urgency, bool importance)
 {
     model->removeAllRows();
-    if(assocLeaderboard.size()) {
+    if(os.size()) {
         view->setVisible(true);
-        for(auto& i:assocLeaderboard) {
-            model->addRow(i.first, i.second);
+        for(auto& o:os) {
+            model->addRow(o, urgency, importance);
         }
-    } else {
-        view->setVisible(false);
     }
 }
 
