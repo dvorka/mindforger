@@ -20,10 +20,13 @@
 
 namespace m8r {
 
-OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(OrganizerQuadrantView* view, QString title)
+OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
+        OrganizerQuadrantView* view,
+        OrlojPresenter* orloj,
+        QString title)
 {
     this->view = view;
-    this->model = new OrganizerQuadrantModel(title, view);
+    this->model = new OrganizerQuadrantModel(title, this);
     this->view->setModel(this->model);
 
     this->orloj = orloj;
@@ -36,14 +39,14 @@ OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(OrganizerQuadrantView* vi
         view->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
-        SLOT(slotShowNote(const QItemSelection&, const QItemSelection&)));
+        SLOT(slotShowOutline(const QItemSelection&, const QItemSelection&)));
 }
 
 OrganizerQuadrantPresenter::~OrganizerQuadrantPresenter()
 {
 }
 
-void OrganizerQuadrantPresenter::slotShowNote(const QItemSelection& selected, const QItemSelection& deselected)
+void OrganizerQuadrantPresenter::slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected)
 {
     Q_UNUSED(deselected);
 
@@ -62,13 +65,13 @@ void OrganizerQuadrantPresenter::slotShowNote(const QItemSelection& selected, co
     } // else do nothing
 }
 
-void OrganizerQuadrantPresenter::refresh(const std::vector<Outline*>& os)
+void OrganizerQuadrantPresenter::refresh(const std::vector<Outline*>& os, bool urgency, bool importance)
 {
     model->removeAllRows();
     if(os.size()) {
         view->setVisible(true);
         for(auto& o:os) {
-            model->addRow(o);
+            model->addRow(o, urgency, importance);
         }
     }
 }

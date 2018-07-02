@@ -24,12 +24,12 @@
 #include <QtWidgets>
 
 #include "organizer_view.h"
-
 #include "organizer_quadrant_presenter.h"
 
 namespace m8r {
 
 class OrganizerQuadrantPresenter;
+class OrlojPresenter;
 
 class OrganizerPresenter : public QObject
 {
@@ -43,7 +43,7 @@ class OrganizerPresenter : public QObject
     OrganizerQuadrantPresenter* planDedicatedTimePresenter;
 
 public:
-    explicit OrganizerPresenter(OrganizerView* view);
+    explicit OrganizerPresenter(OrganizerView* view, OrlojPresenter* orloj);
     OrganizerPresenter(const OrganizerPresenter&) = delete;
     OrganizerPresenter(const OrganizerPresenter&&) = delete;
     OrganizerPresenter &operator=(const OrganizerPresenter&) = delete;

@@ -33,7 +33,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     this->view = view;
     this->mind = mind;
 
-    this->organizerPresenter = new OrganizerPresenter(view->getOrganizer());
+    this->organizerPresenter = new OrganizerPresenter(view->getOrganizer(), this);
     this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
     this->notesTablePresenter = new NotesTablePresenter(view->getNotesTable());
     this->outlineViewPresenter = new OutlineViewPresenter(view->getOutlineView(), this);
@@ -79,7 +79,7 @@ int dialogSaveOrCancel()
 
 void OrlojPresenter::onFacetChange(const OrlojPresenterFacets targetFacet) const
 {
-    MF_DEBUG("Facet CHANGE: " << activeFacet << " > " << targetFacet);
+    MF_DEBUG("Facet CHANGE: " << activeFacet << " > " << targetFacet << endl);
 
     if(activeFacet == OrlojPresenterFacets::FACET_EDIT_NOTE) {
         if(targetFacet != OrlojPresenterFacets::FACET_VIEW_NOTE) {
@@ -109,6 +109,7 @@ void OrlojPresenter::showFacetOrganizer(const vector<Outline*>& outlines)
     setFacet(OrlojPresenterFacets::FACET_ORGANIZER);
     organizerPresenter->refresh(outlines);
     view->showFacetOrganizer();
+    mainPresenter->getMainMenu()->showFacetOrganizer();
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
@@ -154,15 +155,17 @@ void OrlojPresenter::slotShowOutline(const QItemSelection& selected, const QItem
 {
     Q_UNUSED(deselected);
 
-    QModelIndexList indices = selected.indexes();
-    if(indices.size()) {
-        const QModelIndex& index = indices.at(0);
-        QStandardItem* item = outlinesTablePresenter->getModel()->itemFromIndex(index);
-        // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
-        Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
-        showFacetOutline(outline);
-    } else {
-        mainPresenter->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
+    if(activeFacet != OrlojPresenterFacets::FACET_ORGANIZER) {
+        QModelIndexList indices = selected.indexes();
+        if(indices.size()) {
+            const QModelIndex& index = indices.at(0);
+            QStandardItem* item = outlinesTablePresenter->getModel()->itemFromIndex(index);
+            // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
+            Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
+            showFacetOutline(outline);
+        } else {
+            mainPresenter->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
+        }
     }
 }
 

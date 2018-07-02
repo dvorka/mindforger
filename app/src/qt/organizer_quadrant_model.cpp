@@ -20,7 +20,7 @@
 
 namespace m8r {
 
-OrganizerQuadrantModel::OrganizerQuadrantModel(QString& title, QWidget* parent)
+OrganizerQuadrantModel::OrganizerQuadrantModel(QString& title, QObject* parent)
     : QStandardItemModel(parent)
 {
     setColumnCount(1);
@@ -38,19 +38,35 @@ void OrganizerQuadrantModel::removeAllRows()
     QStandardItemModel::clear();
 
     QStringList tableHeader;
-    tableHeader
-        << title;
+    tableHeader << title;
     // IMPROVE set tooltips: items w/ tooltips instead of just strings
     setHorizontalHeaderLabels(tableHeader);
 }
 
-void OrganizerQuadrantModel::addRow(Outline* outline)
+void OrganizerQuadrantModel::addRow(Outline* outline, bool urgency, bool importance)
 {
     QList<QStandardItem*> items;
     QStandardItem* item;
 
     QString html;
     html = QString(outline->getName().c_str());
+
+    if(urgency) {
+        if(outline->getUrgency()) {
+            html += " ";
+            for(int i=1; i<=outline->getUrgency(); i++) {
+                html += QChar(0x29D7);
+            }
+        }
+    }
+    if(importance) {
+        if(outline->getImportance()) {
+            html += " ";
+            for(int i=1; i<=outline->getImportance(); i++) {
+                html += QChar(9733);
+            }
+        }
+    }
 
     // item
     item = new QStandardItem(html);

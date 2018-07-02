@@ -24,6 +24,8 @@ OrganizerView::OrganizerView(QWidget* parent)
     : QSplitter{Qt::Horizontal,parent}
 {
     left = new QSplitter(Qt::Vertical, this);
+    left->setStretchFactor(0, 1);
+    left->setStretchFactor(1, 1);
     doSoon = new OrganizerQuadrantView(left);
     doSometime = new OrganizerQuadrantView(left);
     left->addWidget(doSoon);
@@ -31,15 +33,16 @@ OrganizerView::OrganizerView(QWidget* parent)
     addWidget(left);
 
     right = new QSplitter(Qt::Vertical, this);
+    right->setStretchFactor(0, 1);
+    right->setStretchFactor(1, 1);
     doFirst = new OrganizerQuadrantView(right);
     planDedicatedTime = new OrganizerQuadrantView(right);
     right->addWidget(doFirst);
     right->addWidget(planDedicatedTime);
     addWidget(right);
 
-    // the first parameter is index
-//    setStretchFactor(0, 1);
-//    setStretchFactor(1, 1);
+    setStretchFactor(0, 1);
+    setStretchFactor(1, 1);
 }
 
 OrganizerView::~OrganizerView()

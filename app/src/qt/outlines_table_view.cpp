@@ -29,8 +29,8 @@ OutlinesTableView::OutlinesTableView(QWidget *parent)
 
     // BEFARE ::ResizeToContents this kills performance - use ::Fixed instead:
     // verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    // IMPORTANT resize mode MUST NOT be set in paintEvent, otherwise it causes high CPU consumption loop
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    // IMPORTANT resize mode MUST NOT be set in paintEvent, otherwise it causes high CPU consumption loop
 
     setSortingEnabled(true);
 

@@ -818,7 +818,9 @@ void MainWindowPresenter::doActionViewToggleRecent()
 
 void MainWindowPresenter::doActionViewOrganizer()
 {
-    orloj->showFacetOrganizer(mind->getOutlines());
+    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+        orloj->showFacetOrganizer(mind->getOutlines());
+    }
 }
 
 bool MainWindowPresenter::doActionViewHome()

@@ -42,18 +42,18 @@ class OrganizerQuadrantPresenter : public QObject
     OrlojPresenter* orloj;
 
 public:
-    explicit OrganizerQuadrantPresenter(OrganizerQuadrantView* view, QString title);
+    explicit OrganizerQuadrantPresenter(OrganizerQuadrantView* view, OrlojPresenter* orloj, QString title);
     OrganizerQuadrantPresenter(const OrganizerQuadrantPresenter&) = delete;
     OrganizerQuadrantPresenter(const OrganizerQuadrantPresenter&&) = delete;
     OrganizerQuadrantPresenter &operator=(const OrganizerQuadrantPresenter&) = delete;
     OrganizerQuadrantPresenter &operator=(const OrganizerQuadrantPresenter&&) = delete;
     ~OrganizerQuadrantPresenter();
 
-    void refresh(const std::vector<Outline*>& os);
+    void refresh(const std::vector<Outline*>& os, bool urgency, bool importance);
     OrganizerQuadrantView* getView() const { return view; }
 
 public slots:
-    void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected);
 };
 
 }

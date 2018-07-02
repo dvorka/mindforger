@@ -141,6 +141,11 @@ MainMenuPresenter::~MainMenuPresenter()
     // TODO deletes: actions
 }
 
+void MainMenuPresenter::showFacetOrganizer()
+{
+    view->showFacetOutlineList(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
+}
+
 void MainMenuPresenter::showFacetOutlineList()
 {
     view->showFacetOutlineList(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);

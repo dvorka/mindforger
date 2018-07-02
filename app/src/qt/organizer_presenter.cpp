@@ -22,14 +22,15 @@ namespace m8r {
 
 using namespace std;
 
-OrganizerPresenter::OrganizerPresenter(OrganizerView* view)
+OrganizerPresenter::OrganizerPresenter(OrganizerView* view, OrlojPresenter* orloj)
 {
     this->view = view;
 
-    doFirstPresenter = new OrganizerQuadrantPresenter(view->getDoFirst(), tr("Do first"));
-    doSoonPresenter = new OrganizerQuadrantPresenter(view->getDoSoon(), tr("Do soon"));
-    doSometimePresenter = new OrganizerQuadrantPresenter(view->getDoSometime(), tr("Do sometime"));
-    planDedicatedTimePresenter = new OrganizerQuadrantPresenter(view->getPlanDedicatedTime(), tr("Plan dedicated time"));
+    QString t{};
+    doFirstPresenter = new OrganizerQuadrantPresenter(view->getDoFirst(), orloj, tr("Do first"));
+    doSoonPresenter = new OrganizerQuadrantPresenter(view->getDoSoon(), orloj, tr("Do soon"));
+    doSometimePresenter = new OrganizerQuadrantPresenter(view->getDoSometime(), orloj, tr("Do sometime"));
+    planDedicatedTimePresenter = new OrganizerQuadrantPresenter(view->getPlanDedicatedTime(), orloj, tr("Plan dedicated time"));
 }
 
 OrganizerPresenter::~OrganizerPresenter()
@@ -63,10 +64,10 @@ void OrganizerPresenter::refresh(const vector<Outline*>& os)
         }
     }
 
-    doFirstPresenter->refresh(doFirstOs);
-    doSoonPresenter->refresh(doSoonOs);
-    doSometimePresenter->refresh(doSometimeOs);
-    planDedicatedTimePresenter->refresh(planDedicatedTimeOs);
+    doFirstPresenter->refresh(doFirstOs, true, true);
+    doSoonPresenter->refresh(doSoonOs, true, false);
+    doSometimePresenter->refresh(doSometimeOs, false, false);
+    planDedicatedTimePresenter->refresh(planDedicatedTimeOs, false, true);
 }
 
 } // m8r namespace

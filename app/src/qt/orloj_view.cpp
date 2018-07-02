@@ -28,9 +28,6 @@ OrlojView::OrlojView(QWidget* parent)
     // TODO to be implemented
     //addWidget(new QTextEdit("Home: outlines (link), Notes (l), bytes (l), graphs, recent"), this);
 
-    // TODO to be implemented
-    //addWidget(new QTextEdit("Organizer", this));
-
     organizer = new OrganizerView(this);
     addWidget(organizer);
 

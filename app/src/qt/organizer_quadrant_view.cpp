@@ -24,13 +24,14 @@ OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent)
     : QTableView(parent)
 {
     verticalHeader()->setVisible(false);
-    // BEFARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    // IMPORTANT this must b in constructors - causes CPU high consuption loop if in paintEvent()!
+    // BEFARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
+    // IMPORTANT this must b in constructors - causes CPU high consuption loop if in paintEvent()!
     horizontalHeader()->setStretchLastSection(true);
 
-    setSortingEnabled(false);
+    setSortingEnabled(true);
 
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -43,10 +44,7 @@ OrganizerQuadrantView::~OrganizerQuadrantView()
 
 void OrganizerQuadrantView::paintEvent(QPaintEvent* event)
 {
-    verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
-
     QTableView::paintEvent(event);
-
 }
 
 } // m8r namespace

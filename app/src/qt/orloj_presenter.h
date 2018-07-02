@@ -57,7 +57,7 @@ enum OrlojPresenterFacets {
     FACET_EDIT_NOTE,            // 6
     FACET_FTS_RESULT,           // 7
     FACET_FTS_VIEW_NOTE,        // 8
-    FACET_ORGANIZER            // 9
+    FACET_ORGANIZER             // 9
 };
 
 class OrlojPresenter : public QObject

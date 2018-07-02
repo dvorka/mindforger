@@ -32,7 +32,7 @@ class OrganizerQuadrantModel : public QStandardItemModel
     QString title;
 
 public:
-    explicit OrganizerQuadrantModel(QString& title, QWidget* parent);
+    explicit OrganizerQuadrantModel(QString& title, QObject* parent);
     OrganizerQuadrantModel(const OrganizerQuadrantModel&) = delete;
     OrganizerQuadrantModel(const OrganizerQuadrantModel&&) = delete;
     OrganizerQuadrantModel &operator=(const OrganizerQuadrantModel&) = delete;
@@ -40,7 +40,7 @@ public:
     ~OrganizerQuadrantModel();
 
     void removeAllRows();
-    void addRow(Outline* outline);
+    void addRow(Outline* outline, bool urgency=false, bool importance=false);
 };
 
 }
