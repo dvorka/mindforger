@@ -911,3 +911,20 @@ TEST(MarkdownParserTestCase, Links)
     delete serialized;
     delete o;
 }
+
+TEST(MarkdownParserTestCase, Bug622Loop64kLinesOverflow)
+{
+    string fileName{"/lib/test/resources/bugs-repository/memory/bug-622-70k-lines.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    cout << endl << "- Lexer ----------------------------------------------";
+    MarkdownLexerSections lexer(&fileName);
+    lexer.tokenize();
+    // file too big - do NOT print: printLexems(lexer.getLexems());
+    cout << endl << "- Parser ----------------------------------------------";
+    MarkdownParserSections parser(lexer);
+    parser.parse();
+    // file too big - do NOT print: printAst(parser.getAst());
+    ASSERT_EQ(parser.getAst()->size(), 71234);
+    cout << endl << "- DONE ----------------------------------------------";
+    cout << endl;
+}
