@@ -235,7 +235,7 @@ void MarkdownLexerSections::tokenize(const string* text)
     }
 }
 
-bool MarkdownLexerSections::lexWhitespaces(const unsigned short offset, unsigned short int& idx)
+bool MarkdownLexerSections::lexWhitespaces(const unsigned offset, unsigned short int& idx)
 {
     unsigned short int i = idx+1;
     if(lines[offset]!=nullptr) {
@@ -251,7 +251,7 @@ bool MarkdownLexerSections::lexWhitespaces(const unsigned short offset, unsigned
     return false;
 }
 
-bool MarkdownLexerSections::startsWithCodeBlockSymbol(const unsigned short offset) const
+bool MarkdownLexerSections::startsWithCodeBlockSymbol(const unsigned offset) const
 {
     if(lines[offset]!=nullptr && lines[offset]->size()>=3
          &&
@@ -263,7 +263,7 @@ bool MarkdownLexerSections::startsWithCodeBlockSymbol(const unsigned short offse
     }
 }
 
-bool MarkdownLexerSections::startsWithHtmlCommentEndSymbol(const unsigned short offset, const unsigned short idx) const
+bool MarkdownLexerSections::startsWithHtmlCommentEndSymbol(const unsigned offset, const unsigned short idx) const
 {
     if(lines[offset]!=nullptr && lines[offset]->size()>=(size_t)(idx+3)
          &&
@@ -275,7 +275,7 @@ bool MarkdownLexerSections::startsWithHtmlCommentEndSymbol(const unsigned short 
     }
 }
 
-bool MarkdownLexerSections::lexSectionSymbol(const unsigned short offset, unsigned short int& idx)
+bool MarkdownLexerSections::lexSectionSymbol(const unsigned offset, unsigned short int& idx)
 {
     unsigned depth = 0; // depth = [0,n)
     if(lines[offset]!=nullptr) {
@@ -294,7 +294,7 @@ bool MarkdownLexerSections::lexSectionSymbol(const unsigned short offset, unsign
     return false;
 }
 
-bool MarkdownLexerSections::lexHtmlCommentBeginSymbol(const unsigned short offset, unsigned short int& idx)
+bool MarkdownLexerSections::lexHtmlCommentBeginSymbol(const unsigned offset, unsigned short int& idx)
 {
     if(lines[offset]!=nullptr && lines[offset]->size()>=(size_t)(idx+4)
          &&
@@ -308,7 +308,7 @@ bool MarkdownLexerSections::lexHtmlCommentBeginSymbol(const unsigned short offse
     }
 }
 
-bool MarkdownLexerSections::lexHtmlCommentEndSymbol(const unsigned short offset, unsigned short int& idx)
+bool MarkdownLexerSections::lexHtmlCommentEndSymbol(const unsigned offset, unsigned short int& idx)
 {
     if(lines[offset]!=nullptr && lines[offset]->size()>=(size_t)(idx+3)
          &&
@@ -322,7 +322,7 @@ bool MarkdownLexerSections::lexHtmlCommentEndSymbol(const unsigned short offset,
     }
 }
 
-bool MarkdownLexerSections::lexMetadataSymbol(const unsigned short offset, unsigned short int& idx)
+bool MarkdownLexerSections::lexMetadataSymbol(const unsigned offset, unsigned short int& idx)
 {
     // case insensitive 'metadata'
     if(lines[offset]!=nullptr && lines[offset]->size()>=(size_t)(idx+9)
@@ -345,7 +345,7 @@ bool MarkdownLexerSections::lexMetadataSymbol(const unsigned short offset, unsig
     }
 }
 
-bool MarkdownLexerSections::lexMetaPropertyName(const unsigned short offset, unsigned short int& idx)
+bool MarkdownLexerSections::lexMetaPropertyName(const unsigned offset, unsigned short int& idx)
 {
     if(lines[offset]->size() > (size_t)(idx+1)) {
         switch(lines[offset]->at(idx+1)) {
@@ -527,7 +527,7 @@ bool MarkdownLexerSections::lexMetaPropertyName(const unsigned short offset, uns
 /**
  * Tokenize the remaining part of the line regardless what's there.
  */
-bool MarkdownLexerSections::lexToEndOfHtmlComment(const unsigned short offset, unsigned short int& idx)
+bool MarkdownLexerSections::lexToEndOfHtmlComment(const unsigned offset, unsigned short int& idx)
 {
     if(lines[offset]!=nullptr && lines[offset]->size()>(size_t)(idx+1)) {
         unsigned short int i;
@@ -559,7 +559,7 @@ bool MarkdownLexerSections::lexToEndOfHtmlComment(const unsigned short offset, u
     return false;
 }
 
-bool MarkdownLexerSections::lexPostDeclaredSectionHeader(const unsigned short int offset, const char delimiter)
+bool MarkdownLexerSections::lexPostDeclaredSectionHeader(const unsigned int offset, const char delimiter)
 {
     if (offset == 0 || inCodeBlock) {
         // if the first MD document line starts with '=' > markdown document w/ preamble || in code > ignore
@@ -627,13 +627,13 @@ bool MarkdownLexerSections::lexPostDeclaredSectionHeader(const unsigned short in
     }
 }
 
-void MarkdownLexerSections::addLineToLexems(const unsigned short int offset)
+void MarkdownLexerSections::addLineToLexems(const unsigned int offset)
 {
     lexems.push_back(new MarkdownLexem{MarkdownLexemType::LINE, offset, 0, MarkdownLexem::WHOLE_LINE});
     lexems.push_back(symbolTable.LEXEM.BR);
 }
 
-bool MarkdownLexerSections::nextToken(const unsigned short int offset) {
+bool MarkdownLexerSections::nextToken(const unsigned int offset) {
     if(offset<lines.size()) {
         if(lines[offset]->size()==0) {
             lexems.push_back(symbolTable.LEXEM.BR);
@@ -771,7 +771,7 @@ bool MarkdownLexerSections::nextToken(const unsigned short int offset) {
     }
 }
 
-bool MarkdownLexerSections::isSameCharsLine(const unsigned short offset, const char c) const
+bool MarkdownLexerSections::isSameCharsLine(const unsigned offset, const char c) const
 {
     // fail fast
     if(lines[offset]!=nullptr && lines[offset]->size()
@@ -788,7 +788,7 @@ bool MarkdownLexerSections::isSameCharsLine(const unsigned short offset, const c
     return false;
 }
 
-bool MarkdownLexerSections::lookahead(const unsigned short offset, const unsigned short idx) const
+bool MarkdownLexerSections::lookahead(const unsigned offset, const unsigned short idx) const
 {
     if(lines[offset]->size() > (size_t)(idx+1)) {
         return true;
@@ -797,7 +797,7 @@ bool MarkdownLexerSections::lookahead(const unsigned short offset, const unsigne
     }
 }
 
-bool MarkdownLexerSections::lexMetaPropertyNameValueDelimiter(const unsigned short offset, unsigned short int& idx)
+bool MarkdownLexerSections::lexMetaPropertyNameValueDelimiter(const unsigned offset, unsigned short int& idx)
 {
     if(lines[offset]->size()>(size_t)(idx+1) && lines[offset]->at(idx+1)==':') {
         idx++;
@@ -808,7 +808,7 @@ bool MarkdownLexerSections::lexMetaPropertyNameValueDelimiter(const unsigned sho
     }
 }
 
-bool MarkdownLexerSections::lexMetaPropertyValue(const unsigned short offset, unsigned short int& idx)
+bool MarkdownLexerSections::lexMetaPropertyValue(const unsigned offset, unsigned short int& idx)
 {
     if(lines[offset]!=nullptr && lines[offset]->size()>(size_t)(idx+1)) {
         unsigned short int i;
@@ -825,7 +825,7 @@ bool MarkdownLexerSections::lexMetaPropertyValue(const unsigned short offset, un
     return false;
 }
 
-bool MarkdownLexerSections::lexMetaPropertyDelimiter(const unsigned short offset, unsigned short int& idx)
+bool MarkdownLexerSections::lexMetaPropertyDelimiter(const unsigned offset, unsigned short int& idx)
 {
     if(lines[offset]->size()>(size_t)(idx+1) && lines[offset]->at(idx+1)==';') {
         lexems.push_back(symbolTable.LEXEM.META_PROPERTY_DELIMITER);
