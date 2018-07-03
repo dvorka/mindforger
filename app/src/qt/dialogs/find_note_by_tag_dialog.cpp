@@ -28,8 +28,9 @@ FindNoteByTagDialog::FindNoteByTagDialog(Ontology& ontology, QWidget *parent)
     mode = ThingsMode::NOTES;
 
     // widgets
+    outlinesGroup->setTitle(tr("Notes:"));
     editTagsGroup->setTitle(tr("Note tags:"));
-    findButton->setText(tr("&Open Note"));
+    findButton->setText(tr("&Open Note"));    
 
     // dialog
     setWindowTitle(tr("Find Note by Tags"));
@@ -39,7 +40,7 @@ FindNoteByTagDialog::~FindNoteByTagDialog()
 {
 }
 
-void FindNoteByTagDialog::show(vector<Note*> notes)
+void FindNoteByTagDialog::show(vector<Note*> notes, const Tag* tag)
 {
     // use parent dialog to handle names + keep shadow vector of (filtered) Notes in here for choice
     // IMPROVE performance - consider pointer instead of string copy
@@ -61,7 +62,7 @@ void FindNoteByTagDialog::show(vector<Note*> notes)
     }
 
     vector<Thing*> es{notes.begin(), notes.end()};
-    FindOutlineByTagDialog::show(es, &noteNames);
+    FindOutlineByTagDialog::show(es, tag, &noteNames);
 }
 
 } // m8r namespace

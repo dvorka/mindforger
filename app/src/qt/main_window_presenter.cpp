@@ -560,17 +560,26 @@ void MainWindowPresenter::doActionFindNoteByTag()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     if(orloj->isFacetActiveOutlineManagement()) {
-        findNoteByTagDialog->setWindowTitle(tr("Find Note by Tag in Notebook"));
+        findNoteByTagDialog->setWindowTitle(tr("Find Note by Tags in Notebook"));
         findNoteByTagDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
         vector<Note*> allNotes(findNoteByTagDialog->getScope()->getNotes());
         findNoteByTagDialog->show(allNotes);
     } else {
-        findNoteByTagDialog->setWindowTitle(tr("Find Note by Tag"));
+        findNoteByTagDialog->setWindowTitle(tr("Find Note by Tags"));
         findNoteByTagDialog->clearScope();
         vector<Note*> allNotes{};
         mind->getAllNotes(allNotes);
         findNoteByTagDialog->show(allNotes);
     }
+}
+
+void MainWindowPresenter::doTriggerFindNoteByTag(const Tag* tag)
+{
+    findNoteByTagDialog->setWindowTitle(tr("Find Note by Tags (Notebooks are excluded)"));
+    findNoteByTagDialog->clearScope();
+    vector<Note*> allNotes{};
+    mind->getAllNotes(allNotes);
+    findNoteByTagDialog->show(allNotes, tag);
 }
 
 void MainWindowPresenter::handleFindNoteByTag()

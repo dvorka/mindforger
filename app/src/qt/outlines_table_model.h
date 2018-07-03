@@ -32,7 +32,6 @@ class OutlinesTableModel : public QStandardItemModel
 {
     Q_OBJECT
 
-private:
     HtmlOutlineRepresentation* htmlRepresentation;
 
 public:

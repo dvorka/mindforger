@@ -20,12 +20,33 @@
 
 namespace m8r {
 
-TagsTablePresenter::TagsTablePresenter(QWidget* parent)
+TagsTablePresenter::TagsTablePresenter(TagsTableView* view, HtmlOutlineRepresentation* htmlRepresentation)
 {
+    this->view = view;
+    this->model = new TagsTableModel(this, htmlRepresentation);
+    this->view->setModel(this->model);
+
+    // ensure HTML cells rendering
+    HtmlDelegate* delegate = new HtmlDelegate();
+    // IMPROVE implement delegates by type e.g. timestamp an reuse them across views
+    //this->view->setItemDelegateForColumn(delegate);
+    this->view->setItemDelegate(delegate);
 }
 
 TagsTablePresenter::~TagsTablePresenter()
 {
+}
+
+void TagsTablePresenter::refresh(const std::map<const Tag*, int>& tags)
+{
+    model->removeAllRows();
+    if(tags.size()) {
+        for(const auto& t:tags) {
+            model->addRow(t.first, t.second);
+        }
+    }
+
+    view->sortByColumn(1, Qt::SortOrder::DescendingOrder);
 }
 
 } // m8r namespace

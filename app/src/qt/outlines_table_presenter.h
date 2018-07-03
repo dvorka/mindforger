@@ -33,7 +33,6 @@ class OutlinesTablePresenter : public QObject
 {
     Q_OBJECT
 
-private:
     OutlinesTableView* view;
     OutlinesTableModel* model;
 

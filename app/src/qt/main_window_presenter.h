@@ -181,6 +181,7 @@ public slots:
     void doActionFindOutlineByTag();
     void handleFindOutlineByTag();
     void doActionFindNoteByTag();
+    void doTriggerFindNoteByTag(const Tag* tag);
     void handleFindNoteByTag();
 #ifdef MF_NER
     void doActionFindNerPersons();

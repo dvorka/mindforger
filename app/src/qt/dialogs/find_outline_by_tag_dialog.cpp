@@ -33,7 +33,7 @@ FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *pare
     editTagsGroup->refreshOntologyTags();
     editTagsGroup->setTitle(tr("Notebook tags:"));
 
-    QGroupBox* outlinesGroup = new QGroupBox{tr("Notebooks:"),this};
+    outlinesGroup = new QGroupBox{tr("Notebooks:"),this};
     QVBoxLayout* outlinesGroupLayout = new QVBoxLayout{this};
     outlinesGroup->setLayout(outlinesGroupLayout);
     listView = new QListView(this);
@@ -71,7 +71,7 @@ FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *pare
     QObject::connect(editTagsGroup, SIGNAL(signalTagSelectionChanged()), this, SLOT(handleTagsChanged()));
 
     // dialog    
-    setWindowTitle(tr("Find Notebook by Name"));
+    setWindowTitle(tr("Find Notebook by Tags"));
     // height is set to make sure listview gets enough lines
     resize(fontMetrics().averageCharWidth()*55, fontMetrics().height()*30);
     setModal(true);
@@ -84,7 +84,7 @@ FindOutlineByTagDialog::~FindOutlineByTagDialog()
     delete closeButton;
 }
 
-void FindOutlineByTagDialog::show(vector<Thing*>& outlines, vector<string>* customizedNames)
+void FindOutlineByTagDialog::show(vector<Thing*>& outlines, const Tag* tag, vector<string>* customizedNames)
 {
     choice = nullptr;
     // tags are changed > need to be refreshed
@@ -112,6 +112,11 @@ void FindOutlineByTagDialog::show(vector<Thing*>& outlines, vector<string>* cust
 
     findButton->setEnabled(things.size());
     editTagsGroup->clearTagList();
+    if(tag) {
+        editTagsGroup->getLineEdit()->setText(QString::fromStdString(tag->getName()));
+        editTagsGroup->slotAddTag();
+    }
+    editTagsGroup->getLineEdit()->clear();
     editTagsGroup->getLineEdit()->setFocus();
     QDialog::show();
 }

@@ -21,19 +21,33 @@
 
 #include <QtWidgets>
 
+#include "../../lib/src/representations/html/html_outline_representation.h"
+
+#include "tags_table_view.h"
+#include "tags_table_model.h"
+#include "html_delegate.h"
+
 namespace m8r {
 
 class TagsTablePresenter : public QObject
 {
     Q_OBJECT
 
+    TagsTableView* view;
+    TagsTableModel* model;
+
 public:
-    explicit TagsTablePresenter(QWidget* parent);
+    explicit TagsTablePresenter(TagsTableView* view, HtmlOutlineRepresentation* htmlRepresentation);
     TagsTablePresenter(const TagsTablePresenter&) = delete;
     TagsTablePresenter(const TagsTablePresenter&&) = delete;
     TagsTablePresenter &operator=(const TagsTablePresenter&) = delete;
     TagsTablePresenter &operator=(const TagsTablePresenter&&) = delete;
     ~TagsTablePresenter();
+
+    TagsTableModel* getModel() const { return model; }
+    TagsTableView* getView() const { return view; }
+
+    void refresh(const std::map<const Tag*, int>& tags);
 };
 
 }

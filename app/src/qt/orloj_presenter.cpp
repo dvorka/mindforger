@@ -34,7 +34,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     this->mind = mind;
 
     this->organizerPresenter = new OrganizerPresenter(view->getOrganizer(), this);
-    this->tagCloudPresenter = new TagCloudPresenter(view->getTagCloud());
+    this->tagCloudPresenter = new TagsTablePresenter(view->getTagCloud(), mainPresenter->getHtmlRepresentation());
     this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
     this->notesTablePresenter = new NotesTablePresenter(view->getNotesTable());
     this->outlineViewPresenter = new OutlineViewPresenter(view->getOutlineView(), this);
@@ -67,6 +67,12 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowNoteAsFtsResult(const QItemSelection&, const QItemSelection&)));
+    // click Tag in Tags to view Recall by Tag detail
+    QObject::connect(
+        view->getTagCloud()->selectionModel(),
+        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+        this,
+        SLOT(slotShowTagRecallDialog(const QItemSelection&, const QItemSelection&)));
 }
 
 int dialogSaveOrCancel()
@@ -186,6 +192,25 @@ void OrlojPresenter::showFacetTagCloud()
 
     mainPresenter->getStatusBar()->showInfo(QString("%2 Tags").arg(tags.size()));
 }
+
+void OrlojPresenter::slotShowTagRecallDialog(const QItemSelection& selected, const QItemSelection& deselected)
+{
+    Q_UNUSED(deselected);
+
+    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD) {
+        QModelIndexList indices = selected.indexes();
+        if(indices.size()) {
+            const QModelIndex& index = indices.at(0);
+            QStandardItem* item = tagCloudPresenter->getModel()->itemFromIndex(index);
+            // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
+            const Tag* tag = item->data(Qt::UserRole + 1).value<const Tag*>();
+            mainPresenter->doTriggerFindNoteByTag(tag);
+        } else {
+            mainPresenter->getStatusBar()->showInfo(QString(tr("No Tag selected!")));
+        }
+    }
+}
+
 
 void OrlojPresenter::showFacetNoteView()
 {

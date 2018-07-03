@@ -19,21 +19,31 @@
 #ifndef M8RUI_TAGS_TABLE_MODEL_H
 #define M8RUI_TAGS_TABLE_MODEL_H
 
+#include <string>
+
 #include <QtWidgets>
+
+#include "model_meta_definitions.h"
+#include "../../lib/src/representations/html/html_outline_representation.h"
 
 namespace m8r {
 
-class TagsTableModel : public QObject
+class TagsTableModel : public QStandardItemModel
 {
     Q_OBJECT
 
+    HtmlOutlineRepresentation* htmlRepresentation;
+
 public:
-    explicit TagsTableModel(QWidget* parent);
+    explicit TagsTableModel(QObject* parent, HtmlOutlineRepresentation* htmlRepresentation);
     TagsTableModel(const TagsTableModel&) = delete;
     TagsTableModel(const TagsTableModel&&) = delete;
     TagsTableModel &operator=(const TagsTableModel&) = delete;
     TagsTableModel &operator=(const TagsTableModel&&) = delete;
     ~TagsTableModel();
+
+    void removeAllRows();
+    void addRow(const Tag* tag, int cardinality);
 };
 
 }

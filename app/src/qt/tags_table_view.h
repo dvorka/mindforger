@@ -23,10 +23,12 @@
 
 namespace m8r {
 
-class TagsTableView : public QObject
+class TagsTableView : public QTableView
 {
     Q_OBJECT
 
+public:
+    static const int COLUMN_COUNT = 2;
 public:
     explicit TagsTableView(QWidget* parent);
     TagsTableView(const TagsTableView&) = delete;
@@ -34,6 +36,10 @@ public:
     TagsTableView &operator=(const TagsTableView&) = delete;
     TagsTableView &operator=(const TagsTableView&&) = delete;
     ~TagsTableView();
+
+    int getColumnCount() { return COLUMN_COUNT; }
+
+    virtual void paintEvent(QPaintEvent* event) override;
 };
 
 }

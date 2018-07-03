@@ -53,6 +53,7 @@ protected:
     };
 
     ThingsMode mode;
+    QGroupBox* outlinesGroup;
     EditTagsPanel* editTagsGroup;
     QPushButton* findButton;
 
@@ -67,7 +68,7 @@ public:
     QPushButton* getFindButton() const { return findButton; }
     Thing* getChoice() const { return choice; }
 
-    void show(std::vector<Thing*>& outlines, std::vector<std::string>* customizedNames=nullptr);
+    void show(std::vector<Thing*>& outlines, const Tag* tag=nullptr, std::vector<std::string>* customizedNames=nullptr);
 
 signals:
     void searchFinished();

@@ -28,7 +28,7 @@
 
 #include "orloj_view.h"
 #include "organizer_presenter.h"
-#include "tag_cloud_presenter.h"
+#include "tags_table_presenter.h"
 #include "main_window_presenter.h"
 #include "outlines_table_presenter.h"
 #include "notes_table_presenter.h"
@@ -76,7 +76,7 @@ private:
     Mind* mind;
 
     OrganizerPresenter* organizerPresenter;
-    TagCloudPresenter* tagCloudPresenter;
+    TagsTablePresenter* tagCloudPresenter;
     OutlinesTablePresenter* outlinesTablePresenter;
     NotesTablePresenter* notesTablePresenter;
     OutlineViewPresenter* outlineViewPresenter;
@@ -153,6 +153,7 @@ public slots:
     void slotShowOutlineHeader();
     void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
     void slotShowNoteAsFtsResult(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotShowTagRecallDialog(const QItemSelection& selected, const QItemSelection& deselected);
 };
 
 } // m8r namespace

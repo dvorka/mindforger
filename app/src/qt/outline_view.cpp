@@ -38,7 +38,7 @@ OutlineView::OutlineView(QWidget *parent)
     QFont nameFont = nameLabel->font();
     nameFont.setPointSize(nameFont.pointSize()+nameFont.pointSize()/4);
     nameFont.setBold(true);
-    nameFont.setUnderline(true);
+    // subjectively this is too much: nameFont.setUnderline(true);
     nameLabel->setFont(nameFont);
     headerVerticalLayout.addWidget(nameLabel);
 

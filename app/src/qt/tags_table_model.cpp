@@ -20,12 +20,54 @@
 
 namespace m8r {
 
-TagsTableModel::TagsTableModel(QWidget* parent)
+using namespace std;
+
+TagsTableModel::TagsTableModel(QObject* parent, HtmlOutlineRepresentation* htmlRepresentation)
+    : QStandardItemModel(parent), htmlRepresentation(htmlRepresentation)
 {
+    setColumnCount(2);
+    setRowCount(0);
 }
 
 TagsTableModel::~TagsTableModel()
 {
+}
+
+void TagsTableModel::removeAllRows()
+{
+    QStandardItemModel::clear();
+
+    QStringList tableHeader;
+    tableHeader
+        << tr("Tag")
+        << tr("Ts");
+    // IMPROVE set tooltips: items w/ tooltips instead of just strings
+    setHorizontalHeaderLabels(tableHeader);
+}
+
+void TagsTableModel::addRow(const Tag* tag, int cardinality)
+{
+    QList<QStandardItem*> items;
+    QStandardItem* item;
+
+    // tag name
+    string html{}, tooltip{};
+    tooltip = tag->getName();
+    vector<const Tag*> tags;
+    tags.push_back(tag);
+    htmlRepresentation->tagsToHtml(&tags, html);
+    item = new QStandardItem(QString::fromStdString(html));
+    item->setToolTip(QString::fromStdString(tooltip));
+    // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
+    item->setData(QVariant::fromValue(tag));
+    items += item;
+
+    // cardinality
+    item = new QStandardItem();
+    item->setData(QVariant::fromValue((int)(cardinality)), Qt::DisplayRole);
+    items += item;
+
+    appendRow(items);
 }
 
 } // m8r namespace

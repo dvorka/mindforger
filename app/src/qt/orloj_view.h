@@ -22,7 +22,7 @@
 #include <QtWidgets>
 
 #include "organizer_view.h"
-#include "tag_cloud_view.h"
+#include "tags_table_view.h"
 #include "outlines_table_view.h"
 #include "notes_table_view.h"
 #include "outline_view_splitter.h"
@@ -55,7 +55,7 @@ class OrlojView : public QSplitter
 
 private:
     OrganizerView* organizer;
-    TagCloudView* tagCloud;
+    TagsTableView* tagCloud;
     OutlinesTableView* outlinesTable;
     NotesTableView* notesTable;
     OutlineViewSplitter* outlineView;
@@ -74,7 +74,7 @@ public:
     OrlojView &operator=(const OrlojView&&) = delete;
 
     OrganizerView* getOrganizer() const { return organizer; }
-    TagCloudView* getTagCloud() const { return tagCloud; }
+    TagsTableView* getTagCloud() const { return tagCloud; }
     OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
     NotesTableView* getNotesTable() const { return notesTable; }
     OutlineViewSplitter* getOutlineView() const { return outlineView; }

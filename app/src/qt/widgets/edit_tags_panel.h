@@ -81,8 +81,9 @@ public:
 signals:
     void signalTagSelectionChanged();
 
-private slots:
+public slots:
     void slotAddTag();
+private slots:
     void slotRemoveTag();
 };
 

@@ -21,11 +21,34 @@
 namespace m8r {
 
 TagsTableView::TagsTableView(QWidget* parent)
+    : QTableView(parent)
 {
+    verticalHeader()->setVisible(false);
+    verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+
+    setSortingEnabled(true);
+
+    setEditTriggers(QAbstractItemView::NoEditTriggers);
+    setSelectionBehavior(QAbstractItemView::SelectRows);
+    setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
 TagsTableView::~TagsTableView()
 {
+}
+
+void TagsTableView::paintEvent(QPaintEvent* event)
+{
+    // ensure that 1st column gets the remaining space from others
+    // IMPROVE may kill performance
+    this->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+
+    verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
+
+    // cardinality
+    this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*6);
+
+    QTableView::paintEvent(event);
 }
 
 } // m8r namespace

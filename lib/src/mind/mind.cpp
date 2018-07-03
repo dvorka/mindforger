@@ -512,7 +512,10 @@ void Mind::getTagsCardinality(std::map<const Tag*,int>& tagsCardinality)
 {
     if(ontology().getTags().size()) {
         for(const Tag* t:ontology().getTags().values()) {
-            tagsCardinality[t] = 0;
+            // IMPROVE make NONE exclusion faster (checks in three loops below)
+            if(!stringistring(string("none"), t->getName())) {
+                tagsCardinality[t] = 0;
+            }
         }
         const vector<Outline*>& outlines = memory.getOutlines();
         bool doO, doN;
@@ -527,7 +530,9 @@ void Mind::getTagsCardinality(std::map<const Tag*,int>& tagsCardinality)
             }
             if(doO) {
                 for(const Tag* ot:*o->getTags()) {
-                    tagsCardinality[ot] = tagsCardinality[ot]+1;
+                    if(!stringistring(string("none"), ot->getName())) {
+                        tagsCardinality[ot] = tagsCardinality[ot]+1;
+                    }
                 }
 
                 doN = false;
@@ -541,7 +546,9 @@ void Mind::getTagsCardinality(std::map<const Tag*,int>& tagsCardinality)
                     }
                     if(doN) {
                         for(const Tag* nt:*n->getTags()) {
-                            tagsCardinality[nt] = tagsCardinality[nt]+1;
+                            if(!stringistring(string("none"), nt->getName())) {
+                                tagsCardinality[nt] = tagsCardinality[nt]+1;
+                            }
                         }
                     }
                 }

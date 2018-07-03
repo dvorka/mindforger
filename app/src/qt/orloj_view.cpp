@@ -31,7 +31,7 @@ OrlojView::OrlojView(QWidget* parent)
     organizer = new OrganizerView(this);
     addWidget(organizer);
 
-    tagCloud = new TagCloudView(this);
+    tagCloud = new TagsTableView(this);
     addWidget(tagCloud);
 
     outlinesTable = new OutlinesTableView(this);
