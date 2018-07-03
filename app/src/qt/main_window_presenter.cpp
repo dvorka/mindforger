@@ -847,6 +847,11 @@ void MainWindowPresenter::doActionViewOutlines()
     }
 }
 
+void MainWindowPresenter::doActionViewTagCloud()
+{
+    orloj->showFacetTagCloud();
+}
+
 void MainWindowPresenter::doActionCli()
 {
     view.getCli()->setBreadcrumbPath("/");

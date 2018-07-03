@@ -181,12 +181,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewHome->setStatusTip(tr("Open Home Notebook..."));
 
     actionViewOrganizer = new QAction(tr("O&rganizer"), mainWindow);
-    actionViewOrganizer->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_W));
     actionViewOrganizer->setStatusTip(tr("Open Organizer ~ Eisenhower matrix..."));
 
     actionViewOutlines = new QAction(tr("N&otebooks"), mainWindow);
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
     actionViewOutlines->setStatusTip(tr("Show list of Notebooks..."));
+
+    actionViewTags = new QAction(tr("&Tags"), mainWindow);
+    actionViewTags->setStatusTip(tr("Open Tag cloud..."));
 
     actionViewNavigator = new QAction(tr("&Navigator"), mainWindow);
     actionViewNavigator->setStatusTip(tr("Open Navigator..."));
@@ -232,6 +234,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewHome);
     menuView->addAction(actionViewOrganizer);
     menuView->addAction(actionViewOutlines);
+    menuView->addAction(actionViewTags);
 #ifdef MF_WIP
     menuView->addAction(actionViewStencils);
     menuView->addAction(actionViewNavigator);

@@ -1,4 +1,4 @@
-A portion of MindForger code has been inspired by Qt elastic nodes example:
+A portion of MindForger code has been inspired by Qt flow layout example:
 
  Copyright (C) 2016 The Qt Company Ltd.
 

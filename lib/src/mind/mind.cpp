@@ -503,9 +503,53 @@ vector<Tag*>* Mind::getOutlinesTags() const
     return nullptr;
 }
 
-vector<Tag*>* Mind::getTags() const
+Taxonomy<Tag>& Mind::getTags()
 {
-    return nullptr;
+    return ontology().getTags();
+}
+
+void Mind::getTagsCardinality(std::map<const Tag*,int>& tagsCardinality)
+{
+    if(ontology().getTags().size()) {
+        for(const Tag* t:ontology().getTags().values()) {
+            tagsCardinality[t] = 0;
+        }
+        const vector<Outline*>& outlines = memory.getOutlines();
+        bool doO, doN;
+        for(Outline* o:outlines) {
+            doO = false;
+            if(scopeAspect.isEnabled()) {
+                if(scopeAspect.isInScope(o)) {
+                    doO = true;
+                }
+            } else {
+                doO = true;
+            }
+            if(doO) {
+                for(const Tag* ot:*o->getTags()) {
+                    tagsCardinality[ot] = tagsCardinality[ot]+1;
+                }
+
+                doN = false;
+                for(Note* n:o->getNotes()) {
+                    if(scopeAspect.isEnabled()) {
+                        if(scopeAspect.isInScope(n)) {
+                            doN = true;
+                        }
+                    } else {
+                        doN = true;
+                    }
+                    if(doN) {
+                        for(const Tag* nt:*n->getTags()) {
+                            tagsCardinality[nt] = tagsCardinality[nt]+1;
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        tagsCardinality.clear();
+    }
 }
 
 vector<Tag*>* Mind::getNoteTags(const Outline& outline) const

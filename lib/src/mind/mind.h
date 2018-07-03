@@ -351,7 +351,12 @@ public:
     /**
      * @brief Get all tags used in the memory.
      */
-    std::vector<Tag*>* getTags() const;
+    Taxonomy<Tag>& getTags();
+
+    /**
+     * @brief Get tags w/ cardinality.
+     */
+    void getTagsCardinality(std::map<const Tag*,int>& tagsCardinality);
 
     /**
      * @brief Get all tags used in the Outline by its Notes.

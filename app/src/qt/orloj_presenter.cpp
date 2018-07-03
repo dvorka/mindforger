@@ -34,6 +34,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     this->mind = mind;
 
     this->organizerPresenter = new OrganizerPresenter(view->getOrganizer(), this);
+    this->tagCloudPresenter = new TagCloudPresenter(view->getTagCloud());
     this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
     this->notesTablePresenter = new NotesTablePresenter(view->getNotesTable());
     this->outlineViewPresenter = new OutlineViewPresenter(view->getOutlineView(), this);
@@ -155,7 +156,11 @@ void OrlojPresenter::slotShowOutline(const QItemSelection& selected, const QItem
 {
     Q_UNUSED(deselected);
 
-    if(activeFacet != OrlojPresenterFacets::FACET_ORGANIZER) {
+    if(activeFacet!=OrlojPresenterFacets::FACET_ORGANIZER
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_TAG_CLOUD
+      )
+    {
         QModelIndexList indices = selected.indexes();
         if(indices.size()) {
             const QModelIndex& index = indices.at(0);
@@ -167,6 +172,19 @@ void OrlojPresenter::slotShowOutline(const QItemSelection& selected, const QItem
             mainPresenter->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
         }
     }
+}
+
+void OrlojPresenter::showFacetTagCloud()
+{
+    setFacet(OrlojPresenterFacets::FACET_TAG_CLOUD);
+
+    map<const Tag*,int> tags{};
+    mind->getTagsCardinality(tags);
+    tagCloudPresenter->refresh(tags);
+
+    view->showFacetTagCloud();
+
+    mainPresenter->getStatusBar()->showInfo(QString("%2 Tags").arg(tags.size()));
 }
 
 void OrlojPresenter::showFacetNoteView()

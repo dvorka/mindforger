@@ -28,6 +28,7 @@
 
 #include "orloj_view.h"
 #include "organizer_presenter.h"
+#include "tag_cloud_presenter.h"
 #include "main_window_presenter.h"
 #include "outlines_table_presenter.h"
 #include "notes_table_presenter.h"
@@ -39,13 +40,14 @@
 
 namespace m8r {
 
+class OrganizerPresenter;
+class TagCloudPresenter;
 class NotePresenter;
 class NoteViewPresenter;
 class NoteEditPresenter;
 class OutlineHeaderViewPresenter;
 class OutlineHeaderEditPresenter;
 class OutlineViewPresenter;
-class OrganizerPresenter;
 
 enum OrlojPresenterFacets {
     FACET_NONE,                 // 0
@@ -57,7 +59,8 @@ enum OrlojPresenterFacets {
     FACET_EDIT_NOTE,            // 6
     FACET_FTS_RESULT,           // 7
     FACET_FTS_VIEW_NOTE,        // 8
-    FACET_ORGANIZER             // 9
+    FACET_ORGANIZER,            // 9
+    FACET_TAG_CLOUD             // 10
 };
 
 class OrlojPresenter : public QObject
@@ -73,6 +76,7 @@ private:
     Mind* mind;
 
     OrganizerPresenter* organizerPresenter;
+    TagCloudPresenter* tagCloudPresenter;
     OutlinesTablePresenter* outlinesTablePresenter;
     NotesTablePresenter* notesTablePresenter;
     OutlineViewPresenter* outlineViewPresenter;
@@ -129,6 +133,7 @@ public:
     void onFacetChange(const OrlojPresenterFacets targetFacet) const;
 
     void showFacetOrganizer(const std::vector<Outline*>& outlines);
+    void showFacetTagCloud();
     void showFacetOutlineList(const std::vector<Outline*>& outlines);
     void showFacetFtsResult(std::vector<Note*>* result);
     void showFacetOutline(Outline* outline);

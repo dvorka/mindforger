@@ -31,6 +31,9 @@ OrlojView::OrlojView(QWidget* parent)
     organizer = new OrganizerView(this);
     addWidget(organizer);
 
+    tagCloud = new TagCloudView(this);
+    addWidget(tagCloud);
+
     outlinesTable = new OutlinesTableView(this);
     addWidget(outlinesTable);
 
@@ -40,8 +43,6 @@ OrlojView::OrlojView(QWidget* parent)
     // TODO to be implemented
     //navigator = new GraphWidget(this);
     //addWidget(navigator);
-
-    //addWidget(new QTextEdit("Inbox", this));
 
     outlineView = new OutlineViewSplitter(this);
     addWidget(outlineView);
@@ -91,6 +92,12 @@ void OrlojView::fiftyFifty()
 void OrlojView::showFacetOrganizer()
 {
     QSet<QWidget*> v; v << organizer;
+    hideChildren(v);
+}
+
+void OrlojView::showFacetTagCloud()
+{
+    QSet<QWidget*> v; v << tagCloud;
     hideChildren(v);
 }
 

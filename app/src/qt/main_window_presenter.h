@@ -194,6 +194,7 @@ public slots:
 #endif
     // view
     void doActionViewOrganizer();
+    void doActionViewTagCloud();
     bool doActionViewHome();
     void doActionViewOutlines();
     void doActionViewToggleRecent();
