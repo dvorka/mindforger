@@ -52,14 +52,8 @@ OrlojView::OrlojView(QWidget* parent)
     outlineHeaderEdit = new OutlineHeaderEditView(this);
     addWidget(outlineHeaderEdit);
 
-    // TODO to be removed
-    //addWidget(new QTextEdit("Outline HTML single page", this));
-
     noteView = new NoteView(this);
     addWidget(noteView);
-
-    // TODO to be removed
-    //addWidget(new QTextEdit("Outline single page edit", this));
 
     noteEdit = new NoteEditView{this};
     addWidget(noteEdit);
