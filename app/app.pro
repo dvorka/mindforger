@@ -156,7 +156,10 @@ HEADERS += \
     src/qt/organizer_quadrant_view.h \
     src/qt/tag_cloud_presenter.h \
     src/qt/tag_cloud_view.h \
-    src/qt/layouts/flow_layout.h
+    src/qt/layouts/flow_layout.h \
+    src/qt/tags_table_model.h \
+    src/qt/tags_table_presenter.h \
+    src/qt/tags_table_view.h
 
 macx|mfwebengine {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
@@ -249,7 +252,10 @@ SOURCES += \
     src/qt/organizer_quadrant_view.cpp \
     src/qt/tag_cloud_presenter.cpp \
     src/qt/tag_cloud_view.cpp \
-    src/qt/layouts/flow_layout.cpp
+    src/qt/layouts/flow_layout.cpp \
+    src/qt/tags_table_model.cpp \
+    src/qt/tags_table_presenter.cpp \
+    src/qt/tags_table_view.cpp
 
 macx|mfwebengine {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp

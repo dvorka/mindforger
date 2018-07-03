@@ -64,6 +64,7 @@ private:
     // viewer
     QString textColor;
     QString backgroundColor;
+    QString highlightColor;
 
     // editor
     QString editorBackgroundColor;
@@ -123,6 +124,7 @@ public:
 
     const QString& getTextColor() const { return textColor; }
     const QString& getEditorBackgroundColor() const { return editorBackgroundColor; }
+    const QString& getHighlightColor() const { return highlightColor; }
 
     const QString& getEditorLineNumbersForegroundColor() const { return editorLineNumbersForegroundColor; }
     const QString& getEditorLineNumbersBackgroundColor() const { return editorLineNumbersBackgroundColor; }

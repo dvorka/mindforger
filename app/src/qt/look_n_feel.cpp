@@ -60,6 +60,7 @@ void LookAndFeels::setDarkTheme()
 {
     textColor = QString("#FFF");
     backgroundColor =  QString("#353535");
+    highlightColor = QString("#008C00"); // RGB: 0, 140, 0
 
     editorBackgroundColor = QString("#353535");
     editorLineNumbersForegroundColor = QString("#777777");
@@ -114,6 +115,7 @@ void LookAndFeels::setLightTheme()
 {
     textColor = QString("#000");
     backgroundColor = QString("#FFF");
+    highlightColor = QString("#ED764D"); // RGB: 237, 118, 77
 
     editorBackgroundColor = QString("#FFF");
     editorLineNumbersForegroundColor = QString("#BBBBBB");
@@ -160,6 +162,7 @@ void LookAndFeels::setBlackTheme()
 {
     textColor = QString("#FFF");
     backgroundColor = QString("#000");
+    highlightColor = QString("#2A82DA"); // RGB: 42, 130, 218
 
     editorBackgroundColor = QString("#000");
     editorLineNumbersForegroundColor = QString("#555555");

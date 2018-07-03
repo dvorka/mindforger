@@ -24,6 +24,7 @@
 #include "../../lib/src/gear/lang_utils.h"
 
 #include "outline_tree_view.h"
+#include "look_n_feel.h"
 
 namespace m8r {
 
