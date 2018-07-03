@@ -48,8 +48,13 @@ void OrganizerQuadrantModel::addRow(Outline* outline, bool urgency, bool importa
     QList<QStandardItem*> items;
     QStandardItem* item;
 
+    // IMPROVE consider moving this to HTML representation
     QString html;
     html = QString(outline->getName().c_str());
+
+    html += "<span style='color: ";
+    html += QString::fromStdString(Color::DARK_GRAY().asHtml());
+    html += ";'>";
 
     if(urgency) {
         if(outline->getUrgency()) {
@@ -67,6 +72,8 @@ void OrganizerQuadrantModel::addRow(Outline* outline, bool urgency, bool importa
             }
         }
     }
+
+    html += " </span>";
 
     // item
     item = new QStandardItem(html);

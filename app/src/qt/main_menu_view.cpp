@@ -178,13 +178,15 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: view
 
     actionViewHome = new QAction(tr("&Home"), mainWindow);
+    actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
     actionViewHome->setStatusTip(tr("Open Home Notebook..."));
 
-    actionViewOrganizer = new QAction(tr("O&rganizer"), mainWindow);
-    actionViewOrganizer->setStatusTip(tr("Open Organizer ~ Eisenhower matrix..."));
+    actionViewOrganizer = new QAction(tr("&Eisenhower Matrix"), mainWindow);
+    actionViewOrganizer->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
+    actionViewOrganizer->setStatusTip(tr("Open Eisenhower matrix..."));
 
     actionViewOutlines = new QAction(tr("N&otebooks"), mainWindow);
-    actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
+    actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
     actionViewOutlines->setStatusTip(tr("Show list of Notebooks..."));
 
     actionViewTags = new QAction(tr("&Tags"), mainWindow);
@@ -206,7 +208,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionViewToggleRecent = new QAction(tr("&Recent Notes"), mainWindow);
     actionViewToggleRecent->setStatusTip(tr("View recently modified Notes..."));
-    actionViewToggleRecent->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_R));
+    actionViewToggleRecent->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_R));
     actionViewToggleRecent->setEnabled(false);
 
     actionViewStencils = new QAction(tr("&Stencils"), mainWindow);
