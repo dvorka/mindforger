@@ -142,35 +142,35 @@ public:
     size_t size() const { return lexems.size(); }
 
 private:
-    bool nextToken(const unsigned short int offset);
+    bool nextToken(const unsigned int offset);
 
-    inline bool lookahead(const unsigned short offset, const unsigned short idx) const;
+    inline bool lookahead(const unsigned offset, const unsigned short idx) const;
     void toggleInCodeBlock() { inCodeBlock=!inCodeBlock; }
 
-    inline bool isSameCharsLine(const unsigned short offset, const char c) const;
-    inline bool startsWithCodeBlockSymbol(const unsigned short offset) const;
-    inline bool startsWithHtmlCommentEndSymbol(const unsigned short offset, const unsigned short int idx) const;
+    inline bool isSameCharsLine(const unsigned offset, const char c) const;
+    inline bool startsWithCodeBlockSymbol(const unsigned offset) const;
+    inline bool startsWithHtmlCommentEndSymbol(const unsigned offset, const unsigned short int idx) const;
 
-    inline bool lexWhitespaces(const unsigned short offset, unsigned short int& idx);
-    inline bool lexSectionSymbol(const unsigned short offset, unsigned short int& idx);
-    inline bool lexHtmlCommentBeginSymbol(const unsigned short offset, unsigned short int& idx);
-    inline bool lexHtmlCommentEndSymbol(const unsigned short offset, unsigned short int& idx);
-    inline bool lexMetadataSymbol(const unsigned short offset, unsigned short int& idx);
-    inline bool lexMetaPropertyName(const unsigned short offset, unsigned short int& idx);
-    inline bool lexMetaPropertyNameValueDelimiter(const unsigned short offset, unsigned short int& idx);
-    inline bool lexMetaPropertyValue(const unsigned short offset, unsigned short int& idx);
-    inline bool lexMetaPropertyDelimiter(const unsigned short offset, unsigned short int& idx);
-    inline bool lexToEndOfHtmlComment(const unsigned short offset, unsigned short int& idx);
-    inline bool lexPostDeclaredSectionHeader(const unsigned short offset, const char delimiter);
+    inline bool lexWhitespaces(const unsigned offset, unsigned short int& idx);
+    inline bool lexSectionSymbol(const unsigned offset, unsigned short int& idx);
+    inline bool lexHtmlCommentBeginSymbol(const unsigned offset, unsigned short int& idx);
+    inline bool lexHtmlCommentEndSymbol(const unsigned offset, unsigned short int& idx);
+    inline bool lexMetadataSymbol(const unsigned offset, unsigned short int& idx);
+    inline bool lexMetaPropertyName(const unsigned offset, unsigned short int& idx);
+    inline bool lexMetaPropertyNameValueDelimiter(const unsigned offset, unsigned short int& idx);
+    inline bool lexMetaPropertyValue(const unsigned offset, unsigned short int& idx);
+    inline bool lexMetaPropertyDelimiter(const unsigned offset, unsigned short int& idx);
+    inline bool lexToEndOfHtmlComment(const unsigned offset, unsigned short int& idx);
+    inline bool lexPostDeclaredSectionHeader(const unsigned offset, const char delimiter);
 
-    inline void addLineToLexems(const unsigned short offset);
+    inline void addLineToLexems(const unsigned offset);
 
     /**
      * @brief Insert back section lexem if "standalone line section declaration" found.
      *
      * Tokenize previous line as section header and prepend SECTION lexem with given depth.
      */
-    void fixBackDeclaredSection(const unsigned short offset, const unsigned short sectionDepth);
+    void fixBackDeclaredSection(const unsigned offset, const unsigned short sectionDepth);
 };
 
 } // m8r namespace

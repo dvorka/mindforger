@@ -179,7 +179,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionViewHome = new QAction(tr("&Home"), mainWindow);
     actionViewHome->setStatusTip(tr("Open Home Notebook..."));
-    actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
 
     actionViewOrganizer = new QAction(tr("O&rganizer"), mainWindow);
     actionViewOrganizer->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_W));
@@ -406,7 +405,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteEdit = new QAction(tr("&Edit"), mainWindow);
     actionNoteEdit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
 #else
-    actionNoteEdit = new QAction(tr("&Edit\tCtrl+e"), mainWindow);
+    actionNoteEdit = new QAction(tr("&Edit\tCtrl+E"), mainWindow);
 #endif
     actionNoteEdit ->setStatusTip(tr("Edit current Note - you can also double click view to open the editor"));
 

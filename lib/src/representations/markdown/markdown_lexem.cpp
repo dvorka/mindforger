@@ -27,12 +27,13 @@ unsigned short int MarkdownLexem::WHOLE_LINE = USHRT_MAX;
 MarkdownLexem::MarkdownLexem(MarkdownLexemType type)
     : type(type), depth(0)
 {
-    off = idx = lng = depth = 0;
+    idx = lng = depth = 0;
+    off = 0;
 }
 
 MarkdownLexem::MarkdownLexem(
         MarkdownLexemType type,
-        unsigned short int offset,
+        unsigned int offset,
         unsigned short int index,
         unsigned short int lenght)
 {
@@ -79,7 +80,7 @@ void MarkdownLexem::setLng(unsigned short int lng)
     this->lng = lng;
 }
 
-void MarkdownLexem::setOff(unsigned short int off)
+void MarkdownLexem::setOff(unsigned int off)
 {
     this->off = off;
 }

@@ -19,7 +19,7 @@
 
 #export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
-export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
+#export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
 #export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
 
 # benchmarks
@@ -33,7 +33,7 @@ export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to d
 #export OPTION_TEST="FileGearTestCase.DeepCopy"
 #export OPTION_TEST="FileGearTestCase.DeepProductionCopy"
 #export OPTION_TEST="FileGearTestCase.DeepCopyToExisting"
-export OPTION_TEST="AiNlpTestCase.*"
+#export OPTION_TEST="AiNlpTestCase.*"
 #export OPTION_TEST="AiNlpTestCase.AaUniverseBow"
 #export OPTION_TEST="AiNlpTestCase.AaRepositoryBow"
 #export OPTION_TEST="AiNlpTestCase.Outline"
@@ -45,6 +45,7 @@ export OPTION_TEST="AiNlpTestCase.*"
 #export OPTION_TEST="HtmlTestCase.TaskList"
 #export OPTION_TEST="HtmlTestCase.NoteLinks"
 #export OPTION_TEST="MarkdownParserTestCase.*"
+export OPTION_TEST="MarkdownParserTestCase.Bug622Loop64kLinesOverflow"
 #export OPTION_TEST="MarkdownParserTestCase.Links"
 #export OPTION_TEST="MarkdownParserTestCase.TimeScope"
 #export OPTION_TEST="MarkdownParserTestCase.Deadline"

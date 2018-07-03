@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env python
 #
 # MindForger thinking notebook
 #
@@ -17,18 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-# Gprof:
-# 1. build project w/
-#   QMAKE_CXXFLAGS_DEBUG *= -pg
-#   QMAKE_LFLAGS_DEBUG *= -pg
-# 2. run mindforger - it will generate gmon.out
-# 3. load gmon.out to analyse it
+# Generate MD file w/ >64k lines to get test data for a bug that caused
+# line counter overflow and MD parser loop
 
-# This script does 2nd and 3rd step
-
-export OPENREPO="~/tmp/EMPTY"
-
-cd ../app && rm -vf gmon.out && ./mindforger ${OPENREPO} && gprof ./mindforger gmon.out > GPROF-ANALYSIS.txt && less GPROF-ANALYSIS.txt
+for i in range(71234):
+    print "# {}".format(i)
+    print "T."
 
 # eof
-

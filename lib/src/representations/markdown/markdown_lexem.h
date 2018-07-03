@@ -82,9 +82,9 @@ public:
 private:
     MarkdownLexemType type;
     /**
-     * @brief Offset - line number where text presents (USHRT_MAX represents no text, 64k lines max)
+     * @brief Offset - line number where text presents (2^32 lines - I had >64k lines MD books)
      */
-    unsigned short int off;
+    unsigned int off;
     /**
      * @brief Index - beginning of the text on the line (64k chars line length max).
      */
@@ -103,7 +103,7 @@ public:
     explicit MarkdownLexem(MarkdownLexemType type);
     MarkdownLexem(
             MarkdownLexemType type,
-            unsigned short int offset,
+            unsigned int offset,
             unsigned short int index,
             unsigned short int lenght);
     MarkdownLexem(MarkdownLexemType type, unsigned short int depth);
@@ -121,8 +121,8 @@ public:
     void setIdx(unsigned short int idx);
     unsigned short int getLng() const { return lng; }
     void setLng(unsigned short int lng);
-    unsigned short int getOff() const { return off; }
-    void setOff(unsigned short int off);
+    unsigned int getOff() const { return off; }
+    void setOff(unsigned int off);
 };
 
 } // m8r namespace

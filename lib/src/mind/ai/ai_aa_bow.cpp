@@ -33,6 +33,12 @@ AiAaBoW::AiAaBoW(Memory& memory, Mind& mind)
 
 AiAaBoW::~AiAaBoW()
 {
+    // delete dead threads
+    auto zombieIterator
+        = std::remove_if(runningWorkers.begin(),
+                         runningWorkers.end(),
+                         [](const thread* t) { if(!t->joinable()) { delete t; return true; } else return false; });
+    runningWorkers.erase(zombieIterator, runningWorkers.end());
 }
 
 void AiAaBoW::addWorkerAndCleanZombies(thread* t)
@@ -40,13 +46,10 @@ void AiAaBoW::addWorkerAndCleanZombies(thread* t)
     lock_guard<mutex> criticalSection{runningWorkersMutex};
     MF_DEBUG("AA.BoW: workers+zombies " << runningWorkers.size() << endl);
 
-    // PROBLEM: if zombies is erased > future/promise is deleted as well > frontend that has future calls a method on it > crash
-    // delete dead threads
-    //auto zombieIterator
-    //    = std::remove_if(runningWorkers.begin(),
-    //                     runningWorkers.end(),
-    //                     [](const thread* t) { if(!t->joinable()) { delete t; return true; } else return false; });
-    //runningWorkers.erase(zombieIterator, runningWorkers.end());
+    // IMPROVE: if zombies is erased > future/promise is deleted as well > frontend that has future calls a method on it > crash
+    //   - temporal SOLUTION: threads are deleted on MF exit (i.e. finished threads are kept in memory for whole MF run)
+    //     (see destructor for dead threads code to move in here)
+    //   - IDEA: frontend could use a thread hook to indicate that it got future and t can be freed
 
     // add new one
     runningWorkers.push_back(t);

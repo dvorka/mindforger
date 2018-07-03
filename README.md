@@ -83,5 +83,8 @@ Features:
 * Provide associated notes when writing text of a note
 * Scope visible notebooks and notes by time (relative forgetting)
 
+## In the News
+Read about `MindForger` on [FOSSMint](https://www.fossmint.com/mindforger-notebook-and-markdown-ide/).
+
 ## Bugs and Feature Requests
 https://github.com/dvorka/mindforger/issues

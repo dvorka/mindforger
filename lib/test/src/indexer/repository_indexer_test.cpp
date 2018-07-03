@@ -666,4 +666,6 @@ TEST(RepositoryIndexerTestCase, MakePathRelative)
        repository,
        string{"/tmp/mf-relativize/memory/first.md"},
        string{"/tmp/mf-relativize/memory/a/b/c/dst.md#n1"}));
+
+    delete repository;
 }

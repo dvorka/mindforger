@@ -400,6 +400,8 @@ void MainWindowPresenter::doActionMindSleep()
         statusBar->showMindStatistics();
         statusBar->showError(tr("Cannot start sleeping - please wait until dreaming finishes and then try again"));
     }
+
+    orloj->getOutlineView()->getAssocLeaderboard()->getView()->hide();
 }
 
 void MainWindowPresenter::doActionMindLearnRepository()
