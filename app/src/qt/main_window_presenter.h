@@ -182,6 +182,7 @@ public slots:
     void handleFindOutlineByTag();
     void doActionFindNoteByTag();
     void doTriggerFindNoteByTag(const Tag* tag);
+    void doSwitchFindByTagDialog(bool toFindNotesByTag);
     void handleFindNoteByTag();
 #ifdef MF_NER
     void doActionFindNerPersons();

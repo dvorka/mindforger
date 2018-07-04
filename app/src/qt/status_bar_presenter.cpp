@@ -85,7 +85,7 @@ void StatusBarPresenter::showMindStatistics()
     }
 
     status += cLocale.toString(mind->remind().getOutlinesCount());
-    status += " outlines    ";
+    status += " notebooks    ";
     status += cLocale.toString(mind->remind().getNotesCount());
     status += " notes    ";
     status += cLocale.toString(mind->getTriplesCount());

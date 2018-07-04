@@ -47,11 +47,14 @@ FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *pare
     findButton->setDefault(true);
     findButton->setEnabled(false);
 
+    switchOutlineNoteDialogsButton = new QPushButton{tr("&Find Note")};
+
     closeButton = new QPushButton{tr("&Cancel")};
 
     // signals
-    connect(findButton, SIGNAL(clicked()), this, SLOT(handleChoice()));
-    connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    QObject::connect(switchOutlineNoteDialogsButton, SIGNAL(clicked()), this, SLOT(switchDialogsSlot()));
+    QObject::connect(findButton, SIGNAL(clicked()), this, SLOT(handleChoice()));
 
     // assembly
     QVBoxLayout* mainLayout = new QVBoxLayout{};
@@ -61,6 +64,7 @@ FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *pare
     QHBoxLayout *buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
     buttonLayout->addWidget(closeButton);
+    buttonLayout->addWidget(switchOutlineNoteDialogsButton);
     buttonLayout->addWidget(findButton);
     buttonLayout->addStretch();
 
@@ -84,7 +88,7 @@ FindOutlineByTagDialog::~FindOutlineByTagDialog()
     delete closeButton;
 }
 
-void FindOutlineByTagDialog::show(vector<Thing*>& outlines, const Tag* tag, vector<string>* customizedNames)
+void FindOutlineByTagDialog::show(vector<Thing*>& outlines, vector<const Tag*>* tags, vector<string>* customizedNames)
 {
     choice = nullptr;
     // tags are changed > need to be refreshed
@@ -112,13 +116,21 @@ void FindOutlineByTagDialog::show(vector<Thing*>& outlines, const Tag* tag, vect
 
     findButton->setEnabled(things.size());
     editTagsGroup->clearTagList();
-    if(tag) {
-        editTagsGroup->getLineEdit()->setText(QString::fromStdString(tag->getName()));
-        editTagsGroup->slotAddTag();
+    if(tags) {
+        for(const Tag* tag:*tags) {
+            editTagsGroup->getLineEdit()->setText(QString::fromStdString(tag->getName()));
+            editTagsGroup->slotAddTag();
+        }
     }
     editTagsGroup->getLineEdit()->clear();
     editTagsGroup->getLineEdit()->setFocus();
     QDialog::show();
+}
+
+void FindOutlineByTagDialog::getChosenTags(std::vector<const Tag*>* tags)
+{
+    const vector<const Tag*>& ts = editTagsGroup->getTags();
+    *tags = ts;
 }
 
 void FindOutlineByTagDialog::handleTagsChanged()

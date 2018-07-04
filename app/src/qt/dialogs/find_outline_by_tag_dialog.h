@@ -55,6 +55,7 @@ protected:
     ThingsMode mode;
     QGroupBox* outlinesGroup;
     EditTagsPanel* editTagsGroup;
+    QPushButton* switchOutlineNoteDialogsButton;
     QPushButton* findButton;
 
 public:
@@ -66,17 +67,24 @@ public:
     ~FindOutlineByTagDialog();
 
     QPushButton* getFindButton() const { return findButton; }
+    QPushButton* getSwitchButton() const { return switchOutlineNoteDialogsButton; }
+    void getChosenTags(std::vector<const Tag*>* tags);
     Thing* getChoice() const { return choice; }
 
-    void show(std::vector<Thing*>& outlines, const Tag* tag=nullptr, std::vector<std::string>* customizedNames=nullptr);
+    void show(
+        std::vector<Thing*>& outlines,
+        std::vector<const Tag*>* tags=nullptr,
+        std::vector<std::string>* customizedNames=nullptr);
 
 signals:
     void searchFinished();
+    void switchDialogs(bool toFindNotesDialog);
 
 private slots:
     void handleTagsChanged();
     void handleChoice();
     void handleReturn();
+    void switchDialogsSlot() { emit switchDialogs(mode==ThingsMode::OUTLINES); }
 };
 
 }

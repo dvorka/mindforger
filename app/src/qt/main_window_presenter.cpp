@@ -71,7 +71,9 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
     QObject::connect(findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByName()));
     QObject::connect(findOutlineByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByTag()));
+    QObject::connect(findOutlineByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
     QObject::connect(findNoteByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByTag()));
+    QObject::connect(findNoteByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
     QObject::connect(refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
     QObject::connect(insertImageDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatImage()));
@@ -575,11 +577,37 @@ void MainWindowPresenter::doActionFindNoteByTag()
 
 void MainWindowPresenter::doTriggerFindNoteByTag(const Tag* tag)
 {
-    findNoteByTagDialog->setWindowTitle(tr("Find Note by Tags (Notebooks are excluded)"));
-    findNoteByTagDialog->clearScope();
+    findNoteByTagDialog->setWindowTitle(tr("Find Note by Tags"));
+    findNoteByTagDialog->clearScope();    
     vector<Note*> allNotes{};
     mind->getAllNotes(allNotes);
-    findNoteByTagDialog->show(allNotes, tag);
+    vector<const Tag*> tags{};
+    tags.push_back(tag);
+    findNoteByTagDialog->show(allNotes, &tags);
+}
+
+void MainWindowPresenter::doSwitchFindByTagDialog(bool toFindNotesByTag)
+{
+    // switch dialogs and transfer selected tags
+    vector<const Tag*>* tags = new vector<const Tag*>{};
+    if(toFindNotesByTag) {
+        findOutlineByTagDialog->hide();
+        findOutlineByTagDialog->getChosenTags(tags);
+
+        vector<Note*> allNotes{};
+        mind->getAllNotes(allNotes);
+        findNoteByTagDialog->show(allNotes, tags);
+
+    } else {
+        findNoteByTagDialog->hide();
+        findNoteByTagDialog->getChosenTags(tags);
+
+        vector<Outline*> os{mind->getOutlines()};
+        mind->remind().sortByName(os);
+        vector<Thing*> outlines{os.begin(),os.end()};
+        findOutlineByTagDialog->show(outlines, tags);
+    }
+    delete tags;
 }
 
 void MainWindowPresenter::handleFindNoteByTag()
