@@ -190,6 +190,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewOutlines->setStatusTip(tr("Show list of Notebooks..."));
 
     actionViewTags = new QAction(tr("&Tags"), mainWindow);
+    actionViewTags->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_G));
     actionViewTags->setStatusTip(tr("Open Tag cloud..."));
 
     actionViewNavigator = new QAction(tr("&Navigator"), mainWindow);
