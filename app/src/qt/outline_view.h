@@ -28,12 +28,29 @@
 
 namespace m8r {
 
+class OutlineNamePushButton : public QPushButton
+{
+public:
+    explicit OutlineNamePushButton(QWidget* parent) : QPushButton{parent} {}
+
+protected:
+    virtual void enterEvent(QEvent *) {
+        setCursor(QCursor(Qt::PointingHandCursor));
+        update();
+    }
+
+    virtual void leaveEvent(QEvent *) {
+        setCursor(QCursor(Qt::ArrowCursor));
+        update();
+    }
+};
+
 class OutlineView : public QWidget
 {
     Q_OBJECT
 
 private:
-    QPushButton* nameLabel;
+    OutlineNamePushButton* nameLabel;
     OutlineTreeView *outlineTreeView;
 
     QVBoxLayout headerVerticalLayout;

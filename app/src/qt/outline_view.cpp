@@ -26,15 +26,18 @@ OutlineView::OutlineView(QWidget *parent)
     : QWidget(parent)
 {
     // KISS & ONCE: show the name only - details to be rendered by Outline header view
-    nameLabel = new QPushButton{parent};
+    nameLabel = new OutlineNamePushButton{parent};
     nameLabel->sizePolicy().setHorizontalPolicy(QSizePolicy::Maximum);
     nameLabel->setToolTip(tr("Click this Notebook name to open its Markdown preview in the right panel"));
     // make button to look like label
+    nameLabel->setStyleSheet("QPushButton{ border: 0px; }");
+#ifdef NO_LONGER_NEEDED
     string css{};
     css += "QPushButton{ border: 0px; } QPushButton:hover{ background-color:";
     css += LookAndFeels::getInstance().getHighlightColor().toStdString();
     css += "; }";
     nameLabel->setStyleSheet(QString::fromStdString(css));
+#endif
     QFont nameFont = nameLabel->font();
     nameFont.setPointSize(nameFont.pointSize()+nameFont.pointSize()/4);
     nameFont.setBold(true);
