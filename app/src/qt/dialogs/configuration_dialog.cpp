@@ -125,10 +125,8 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     QVBoxLayout* editorLayout = new QVBoxLayout{this};
     editorLayout->addWidget(editorKeyBindingLabel);
     editorLayout->addWidget(editorKeyBindingCombo);
-    QHBoxLayout *fontLayout = new QHBoxLayout{this};
-    fontLayout->addWidget(editorFontLabel);
-    fontLayout->addWidget(editorFontButton);
-    editorLayout->addLayout(fontLayout);
+    editorLayout->addWidget(editorFontLabel);
+    editorLayout->addWidget(editorFontButton);
     editorLayout->addWidget(editorMdSyntaxHighlightCheck);
     editorLayout->addWidget(editorAutocompleteCheck);
     editorLayout->addWidget(tabWidthLabel);
