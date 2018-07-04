@@ -79,6 +79,10 @@ void OutlinesTableModel::addRow(Outline* outline)
     QString s;
 
     s.clear();
+    // stupid and ugly: correct sorting is ensured by making appropriate HTML (alpha sort), don't know how to sort using data role
+    s += "<div title='";
+    s += outline->getImportance();
+    s += "'>";
     if(outline->getImportance() > 0) {
         for(int i=0; i<=4; i++) {
             if(outline->getImportance()>i) {
@@ -88,7 +92,10 @@ void OutlinesTableModel::addRow(Outline* outline)
             }
         }
     }
-    items += new QStandardItem(s);
+    s += "</div>";
+    item = new QStandardItem(s);
+    item->setData(QVariant::fromValue((int8_t)(outline->getImportance())), Qt::UserRole);
+    items += item;
 
     s.clear();
     if(outline->getUrgency()>0) {
@@ -100,7 +107,9 @@ void OutlinesTableModel::addRow(Outline* outline)
             }
         }
     }
-    items += new QStandardItem(s);
+    item = new QStandardItem(s);
+    item->setData(QVariant::fromValue((int8_t)(outline->getUrgency())), Qt::UserRole);
+    items += item;
 
     s.clear();
     if(outline->getProgress() > 0) {
