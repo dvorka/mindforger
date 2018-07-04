@@ -55,16 +55,16 @@ TEST(MarkdownParserTestCase, MarkdownLexerSections)
     printLexems(lexems);
 
     // asserts
-    EXPECT_EQ(lexems[0]->getType(), MarkdownLexemType::BEGIN_DOC);
+    EXPECT_EQ(MarkdownLexemType::BEGIN_DOC, lexems[0]->getType());
 
-    EXPECT_EQ(lexems[1]->getType(), MarkdownLexemType::SECTION);
-    EXPECT_EQ(lexems[1]->getDepth(), 0);
+    EXPECT_EQ(MarkdownLexemType::SECTION, lexems[1]->getType());
+    EXPECT_EQ(0, lexems[1]->getDepth());
 
-    EXPECT_EQ(lexems[2]->getType(), MarkdownLexemType::WHITESPACES);
-    EXPECT_EQ(lexems[3]->getType(), MarkdownLexemType::TEXT);
-    EXPECT_EQ(lexems[3]->getOff(), 0);
-    EXPECT_EQ(lexems[3]->getIdx(), 2);
-    EXPECT_EQ(lexems[3]->getLng(), 9);
+    EXPECT_EQ(MarkdownLexemType::WHITESPACES, lexems[2]->getType());
+    EXPECT_EQ(MarkdownLexemType::TEXT, lexems[3]->getType());
+    EXPECT_EQ(0, lexems[3]->getOff());
+    EXPECT_EQ(2, lexems[3]->getIdx());
+    EXPECT_EQ(9, lexems[3]->getLng());
 }
 
 TEST(MarkdownParserTestCase, MarkdownLexerSectionsNoMetadata)
@@ -92,12 +92,12 @@ TEST(MarkdownParserTestCase, MarkdownLexerSectionsPreamble)
     printLexems(lexems);
 
     // asserts
-    EXPECT_EQ(lexems[0]->getType(), MarkdownLexemType::BEGIN_DOC);
-    EXPECT_EQ(lexems[1]->getType(), MarkdownLexemType::LINE);
-    EXPECT_EQ(lexems[2]->getType(), MarkdownLexemType::BR);
-    EXPECT_EQ(lexems[3]->getType(), MarkdownLexemType::BR);
-    EXPECT_EQ(lexems[4]->getType(), MarkdownLexemType::SECTION);
-    EXPECT_EQ(lexems[4]->getDepth(), 0);
+    EXPECT_EQ(MarkdownLexemType::BEGIN_DOC, lexems[0]->getType());
+    EXPECT_EQ(MarkdownLexemType::LINE, lexems[1]->getType());
+    EXPECT_EQ(MarkdownLexemType::BR, lexems[2]->getType());
+    EXPECT_EQ(MarkdownLexemType::BR, lexems[3]->getType());
+    EXPECT_EQ(MarkdownLexemType::SECTION, lexems[4]->getType());
+    EXPECT_EQ(0, lexems[4]->getDepth());
 }
 
 TEST(MarkdownParserTestCase, MarkdownLexerSectionsPostDeclaredHeaders)
@@ -113,12 +113,12 @@ TEST(MarkdownParserTestCase, MarkdownLexerSectionsPostDeclaredHeaders)
     printLexems(lexems);
 
     // asserts
-    EXPECT_EQ(lexems[0]->getType(), MarkdownLexemType::BEGIN_DOC);
-    EXPECT_EQ(lexems[1]->getType(), MarkdownLexemType::SECTION_equals);
-    EXPECT_EQ(lexems[2]->getType(), MarkdownLexemType::LINE);
-    EXPECT_EQ(lexems[3]->getType(), MarkdownLexemType::BR);
-    EXPECT_EQ(lexems[4]->getType(), MarkdownLexemType::LINE);
-    EXPECT_EQ(lexems[5]->getType(), MarkdownLexemType::BR);
+    EXPECT_EQ(MarkdownLexemType::BEGIN_DOC, lexems[0]->getType());
+    EXPECT_EQ(MarkdownLexemType::SECTION_equals, lexems[1]->getType());
+    EXPECT_EQ(MarkdownLexemType::LINE, lexems[2]->getType());
+    EXPECT_EQ(MarkdownLexemType::BR, lexems[3]->getType());
+    EXPECT_EQ(MarkdownLexemType::LINE, lexems[4]->getType());
+    EXPECT_EQ(MarkdownLexemType::BR, lexems[5]->getType());
 }
 
 TEST(MarkdownParserTestCase, MarkdownLexerSectionsPostDeclaredHeaders2)
@@ -151,12 +151,12 @@ TEST(MarkdownParserTestCase, MarkdownLexerSectionsPostDeclaredHeaders2)
     printLexems(lexems);
 
     // asserts
-    EXPECT_EQ(lexems[0]->getType(), MarkdownLexemType::BEGIN_DOC);
-    EXPECT_EQ(lexems[1]->getType(), MarkdownLexemType::SECTION_equals);
-    EXPECT_EQ(lexems[2]->getType(), MarkdownLexemType::LINE);
-    EXPECT_EQ(lexems[3]->getType(), MarkdownLexemType::BR);
-    EXPECT_EQ(lexems[4]->getType(), MarkdownLexemType::LINE);
-    EXPECT_EQ(lexems[5]->getType(), MarkdownLexemType::BR);
+    EXPECT_EQ(MarkdownLexemType::BEGIN_DOC, lexems[0]->getType());
+    EXPECT_EQ(MarkdownLexemType::SECTION_equals, lexems[1]->getType());
+    EXPECT_EQ(MarkdownLexemType::LINE, lexems[2]->getType());
+    EXPECT_EQ(MarkdownLexemType::BR, lexems[3]->getType());
+    EXPECT_EQ(MarkdownLexemType::LINE, lexems[4]->getType());
+    EXPECT_EQ(MarkdownLexemType::BR, lexems[5]->getType());
 }
 
 TEST(MarkdownParserTestCase, MarkdownLexerTimeScope)
@@ -182,8 +182,8 @@ TEST(MarkdownParserTestCase, MarkdownLexerTimeScope)
     printLexems(lexems);
 
     // asserts
-    EXPECT_EQ(lexems[0]->getType(), MarkdownLexemType::BEGIN_DOC);
-    EXPECT_EQ(lexems[9]->getType(), MarkdownLexemType::META_PROPERTY_scope);
+    EXPECT_EQ(MarkdownLexemType::BEGIN_DOC, lexems[0]->getType());
+    EXPECT_EQ(MarkdownLexemType::META_PROPERTY_scope, lexems[9]->getType());
 }
 
 TEST(MarkdownParserTestCase, MarkdownLexerLinks)
@@ -209,8 +209,8 @@ TEST(MarkdownParserTestCase, MarkdownLexerLinks)
     printLexems(lexems);
 
     // asserts
-    EXPECT_EQ(lexems[0]->getType(), MarkdownLexemType::BEGIN_DOC);
-    EXPECT_EQ(lexems[9]->getType(), MarkdownLexemType::META_PROPERTY_links);
+    EXPECT_EQ(MarkdownLexemType::BEGIN_DOC, lexems[0]->getType());
+    EXPECT_EQ(MarkdownLexemType::META_PROPERTY_links, lexems[9]->getType());
 }
 
 TEST(MarkdownParserTestCase, MarkdownParserSections)
@@ -245,7 +245,7 @@ TEST(MarkdownParserTestCase, MarkdownParserSectionsPreamble)
     lexer.tokenize();
     const std::vector<MarkdownLexem*>& lexems = lexer.getLexems();
     printLexems(lexems);
-    EXPECT_EQ(lexems.size(), 62);
+    EXPECT_EQ(62, lexems.size());
 
     cout << endl << "- Parser ----------------------------------------------";
     MarkdownParserSections parser(lexer);
@@ -253,10 +253,10 @@ TEST(MarkdownParserTestCase, MarkdownParserSectionsPreamble)
     EXPECT_TRUE(!parser.hasMetadata());
     std::vector<MarkdownAstNodeSection*>* ast = parser.getAst();
     printAst(ast);
-    EXPECT_EQ(ast->size(), 4);
+    EXPECT_EQ(4, ast->size());
     // preamble section
     EXPECT_TRUE(ast->at(0)->isPreambleSection());
-    EXPECT_EQ(ast->at(0)->getText(), nullptr);
+    EXPECT_EQ(nullptr, ast->at(0)->getText());
 
     cout << endl << "- DONE ----------------------------------------------";
     cout << endl;
@@ -290,7 +290,7 @@ TEST(MarkdownParserTestCase, MarkdownParserSectionsEmptyFirstLine)
     lexer.tokenize();
     const std::vector<MarkdownLexem*>& lexems = lexer.getLexems();
     printLexems(lexems);
-    EXPECT_EQ(lexems.size(), 31);
+    EXPECT_EQ(31, lexems.size());
 
     cout << endl << "- Parser ----------------------------------------------";
     MarkdownParserSections parser(lexer);
@@ -298,10 +298,10 @@ TEST(MarkdownParserTestCase, MarkdownParserSectionsEmptyFirstLine)
     EXPECT_TRUE(!parser.hasMetadata());
     std::vector<MarkdownAstNodeSection*>* ast = parser.getAst();
     printAst(ast);
-    EXPECT_EQ(ast->size(), 4);
+    EXPECT_EQ(4, ast->size());
     // preamble section
     EXPECT_TRUE(ast->at(0)->isPreambleSection());
-    EXPECT_EQ(ast->at(0)->getText(), nullptr);
+    EXPECT_EQ(nullptr, ast->at(0)->getText());
 
     cout << endl << "- DONE ----------------------------------------------";
     cout << endl;
@@ -340,7 +340,7 @@ TEST(MarkdownParserTestCase, Bug37Meta)
     parser.parse();
     EXPECT_TRUE(parser.hasMetadata());
     printAst(parser.getAst());
-    ASSERT_EQ(parser.getAst()->size(), 4);
+    ASSERT_EQ(4, parser.getAst()->size());
     cout << endl << "- DONE ----------------------------------------------";
     cout << endl;
 }
@@ -358,7 +358,7 @@ TEST(MarkdownParserTestCase, Bug37Nometa)
     parser.parse();
     EXPECT_FALSE(parser.hasMetadata());
     printAst(parser.getAst());
-    ASSERT_EQ(parser.getAst()->size(), 4);
+    ASSERT_EQ(4, parser.getAst()->size());
     cout << endl << "- DONE ----------------------------------------------";
     cout << endl;
 }
@@ -376,7 +376,7 @@ TEST(MarkdownParserTestCase, Bug37Notrailing)
     parser.parse();
     EXPECT_FALSE(parser.hasMetadata());
     printAst(parser.getAst());
-    ASSERT_EQ(parser.getAst()->size(), 4);
+    ASSERT_EQ(4, parser.getAst()->size());
     cout << endl << "- DONE ----------------------------------------------";
     cout << endl;
 }
@@ -448,30 +448,30 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPreamble)
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
-    EXPECT_NE(o, nullptr);
-    EXPECT_EQ(o->getNotesCount(), 2);
+    EXPECT_NE(nullptr, o);
+    EXPECT_EQ(2, o->getNotesCount());
 
     cout << endl << "- Preamble ---";
-    EXPECT_EQ(o->getPreamble().size(), 2);
+    EXPECT_EQ(2, o->getPreamble().size());
     cout << endl << "'" << *(o->getPreamble()[0]) << "'";
     cout << endl << "'" << *(o->getPreamble()[1]) << "'";
-    EXPECT_EQ(*(o->getPreamble()[0]), "FORMAT: 1A");
-    EXPECT_EQ(*(o->getPreamble()[1]), "");
+    EXPECT_EQ("FORMAT: 1A", *(o->getPreamble()[0]));
+    EXPECT_EQ("", *(o->getPreamble()[1]));
     EXPECT_TRUE(o->isApiaryBlueprint());
 
     cout << endl << "- Outline ---";
     cout << endl << "'" << o->getName() << "'";
-    EXPECT_EQ(o->getName(), "The Simplest API");
-    EXPECT_EQ(o->getDescription().size(), 15);
+    EXPECT_EQ("The Simplest API", o->getName());
+    EXPECT_EQ(15, o->getDescription().size());
 
     cout << endl << "- N[0] ---";
     cout << endl << "'" << o->getNotes()[0]->getName() << "'";
-    EXPECT_EQ(o->getNotes()[0]->getName(), "API Blueprint");
-    EXPECT_EQ(o->getNotes()[0]->getDescription().size(), 3);
+    EXPECT_EQ("API Blueprint", o->getNotes()[0]->getName());
+    EXPECT_EQ(3, o->getNotes()[0]->getDescription().size());
 
     cout << endl << "- N[1] ---";
     cout << endl << "'" << o->getNotes()[1]->getName() << "'";
-    EXPECT_EQ(o->getNotes()[1]->getName(), "GET /message");
+    EXPECT_EQ("GET /message", o->getNotes()[1]->getName());
 
     // preamble serialization check
     string* original = m8r::fileToString(o->getKey());
@@ -530,23 +530,23 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPostDeclaredSection)
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
-    EXPECT_NE(o, nullptr);
-    ASSERT_EQ(o->getNotesCount(), 4);
+    EXPECT_NE(nullptr, o);
+    ASSERT_EQ(4, o->getNotesCount());
 
     cout << endl << "- O ---";
     cout << endl << "Name: '" << o->getName() << "'";
-    EXPECT_EQ(o->getName(), "Outline Name");
+    EXPECT_EQ("Outline Name", o->getName());
     cout << endl << "Desc: '" << o->getDescriptionAsString() << "'";
-    EXPECT_EQ(o->getDescription().size(), 2);
+    EXPECT_EQ(2, o->getDescription().size());
 
-    EXPECT_EQ(o->getNotes()[0]->getName(), "First Section");
-    EXPECT_EQ(o->getNotes()[0]->getDescription().size(), 2);
-    EXPECT_EQ(o->getNotes()[1]->getName(), "Second Section");
-    EXPECT_EQ(o->getNotes()[1]->getDescription().size(), 3);
-    EXPECT_EQ(o->getNotes()[2]->getName(), "Note 2");
-    EXPECT_EQ(o->getNotes()[2]->getDescription().size(), 3);
-    EXPECT_EQ(o->getNotes()[3]->getName(), "Note 3");
-    EXPECT_EQ(o->getNotes()[3]->getDescription().size(), 2);
+    EXPECT_EQ("First Section", o->getNotes()[0]->getName());
+    EXPECT_EQ(2, o->getNotes()[0]->getDescription().size());
+    EXPECT_EQ("Second Section", o->getNotes()[1]->getName());
+    EXPECT_EQ(3, o->getNotes()[1]->getDescription().size());
+    EXPECT_EQ("Note 2", o->getNotes()[2]->getName());
+    EXPECT_EQ(3, o->getNotes()[2]->getDescription().size());
+    EXPECT_EQ("Note 3", o->getNotes()[3]->getName());
+    EXPECT_EQ(2, o->getNotes()[3]->getDescription().size());
 
     // serialize
     string* serialized = mdr.to(o);
@@ -601,40 +601,40 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationTrailingHashesSection)
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
-    EXPECT_NE(o, nullptr);
-    ASSERT_EQ(o->getNotesCount(), 5);
+    EXPECT_NE(nullptr, o);
+    ASSERT_EQ(5, o->getNotesCount());
 
     cout << endl << "- O ---";
     cout << endl << "Name: '" << o->getName() << "'";
-    EXPECT_EQ(o->getName(), "Outline Name");
+    EXPECT_EQ("Outline Name", o->getName());
     cout << endl << "Desc: '" << o->getDescriptionAsString() << "'";
-    EXPECT_EQ(o->isPostDeclaredSection(), false);
-    EXPECT_EQ(o->isTrailingHashesSection(), true);
+    EXPECT_EQ(false, o->isPostDeclaredSection());
+    EXPECT_EQ(true, o->isTrailingHashesSection());
 
-    EXPECT_EQ(o->getNotes()[0]->getName(), "First Section");
-    EXPECT_EQ(o->getNotes()[0]->isPostDeclaredSection(), false);
-    EXPECT_EQ(o->getNotes()[0]->isTrailingHashesSection(), true);
-    EXPECT_EQ(o->getNotes()[0]->getDescription().size(), 2);
+    EXPECT_EQ("First Section", o->getNotes()[0]->getName());
+    EXPECT_EQ(false, o->getNotes()[0]->isPostDeclaredSection());
+    EXPECT_EQ(true, o->getNotes()[0]->isTrailingHashesSection());
+    EXPECT_EQ(2, o->getNotes()[0]->getDescription().size());
 
-    EXPECT_EQ(o->getNotes()[1]->getName(), "WRONG 1 ##");
-    EXPECT_EQ(o->getNotes()[1]->isPostDeclaredSection(), false);
-    EXPECT_EQ(o->getNotes()[1]->isTrailingHashesSection(), false);
-    EXPECT_EQ(o->getNotes()[1]->getDescription().size(), 2);
+    EXPECT_EQ("WRONG 1 ##", o->getNotes()[1]->getName());
+    EXPECT_EQ(false, o->getNotes()[1]->isPostDeclaredSection());
+    EXPECT_EQ(false, o->getNotes()[1]->isTrailingHashesSection());
+    EXPECT_EQ(2, o->getNotes()[1]->getDescription().size());
 
-    EXPECT_EQ(o->getNotes()[2]->getName(), "Second Section");
-    EXPECT_EQ(o->getNotes()[2]->isPostDeclaredSection(), false);
-    EXPECT_EQ(o->getNotes()[2]->isTrailingHashesSection(), true);
-    EXPECT_EQ(o->getNotes()[2]->getDescription().size(), 2);
+    EXPECT_EQ("Second Section", o->getNotes()[2]->getName());
+    EXPECT_EQ(false, o->getNotes()[2]->isPostDeclaredSection());
+    EXPECT_EQ(true, o->getNotes()[2]->isTrailingHashesSection());
+    EXPECT_EQ(2, o->getNotes()[2]->getDescription().size());
 
-    EXPECT_EQ(o->getNotes()[3]->getName(), "WRONG 2 #");
-    EXPECT_EQ(o->getNotes()[3]->isPostDeclaredSection(), false);
-    EXPECT_EQ(o->getNotes()[3]->isTrailingHashesSection(), false);
-    EXPECT_EQ(o->getNotes()[3]->getDescription().size(), 2);
+    EXPECT_EQ("WRONG 2 #", o->getNotes()[3]->getName());
+    EXPECT_EQ(false, o->getNotes()[3]->isPostDeclaredSection());
+    EXPECT_EQ(false, o->getNotes()[3]->isTrailingHashesSection());
+    EXPECT_EQ(2, o->getNotes()[3]->getDescription().size());
 
-    EXPECT_EQ(o->getNotes()[4]->getName(), "Note 3");
-    EXPECT_EQ(o->getNotes()[4]->isPostDeclaredSection(), false);
-    EXPECT_EQ(o->getNotes()[4]->isTrailingHashesSection(), true);
-    EXPECT_EQ(o->getNotes()[4]->getDescription().size(), 2);
+    EXPECT_EQ("Note 3", o->getNotes()[4]->getName());
+    EXPECT_EQ(false, o->getNotes()[4]->isPostDeclaredSection());
+    EXPECT_EQ(true, o->getNotes()[4]->isTrailingHashesSection());
+    EXPECT_EQ(2, o->getNotes()[4]->getDescription().size());
 
     // serialize
     string* serialized = mdr.to(o);
@@ -683,23 +683,23 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationEmptyFirstLine)
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
-    EXPECT_NE(o, nullptr);
-    EXPECT_EQ(o->getNotesCount(), 2);
+    EXPECT_NE(nullptr, o);
+    EXPECT_EQ(2, o->getNotesCount());
 
     cout << endl << "- Preamble ---";
-    EXPECT_EQ(o->getPreamble().size(), 3);
+    EXPECT_EQ(3, o->getPreamble().size());
     cout << endl << "'" << *(o->getPreamble()[0]) << "'";
     cout << endl << "'" << *(o->getPreamble()[1]) << "'";
     cout << endl << "'" << *(o->getPreamble()[2]) << "'";
-    EXPECT_EQ(*(o->getPreamble()[0]), "");
-    EXPECT_EQ(*(o->getPreamble()[1]), "");
-    EXPECT_EQ(*(o->getPreamble()[2]), "");
+    EXPECT_EQ("", *(o->getPreamble()[0]));
+    EXPECT_EQ("", *(o->getPreamble()[1]));
+    EXPECT_EQ("", *(o->getPreamble()[2]));
     EXPECT_TRUE(!o->isApiaryBlueprint());
 
     cout << endl << "- Outline ---";
     cout << endl << "'" << o->getName() << "'";
-    EXPECT_EQ(o->getName(), "First Markdown");
-    EXPECT_EQ(o->getDescription().size(), 2);
+    EXPECT_EQ("First Markdown", o->getName());
+    EXPECT_EQ(2, o->getDescription().size());
 
     delete o;
 }
@@ -788,20 +788,20 @@ TEST(MarkdownParserTestCase, TimeScope)
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
-    EXPECT_NE(o, nullptr);
+    EXPECT_NE(nullptr, o);
     string timeScopeAsString{};
     o->getTimeScope().toString(timeScopeAsString);
     cout << endl << "Time scope: " << timeScopeAsString << " (" << o->getTimeScope().relativeSecs << "s)";
-    EXPECT_EQ(o->getTimeScope().relativeSecs, 36993900);
+    EXPECT_EQ(36993900, o->getTimeScope().relativeSecs);
     o->getTimeScope().toString(timeScopeAsString);
-    EXPECT_EQ(timeScopeAsString, "1y2m3d4h5m");
-    EXPECT_EQ(o->getNotesCount(), 2);
+    EXPECT_EQ("1y2m3d4h5m", timeScopeAsString);
+    EXPECT_EQ(2, o->getNotesCount());
 
     // serialize
     string* serialized = mdr.to(o);
     cout << endl << "- SERIALIZED ---";
     cout << endl << *serialized;
-    EXPECT_NE(serialized->find("scope: 1y2m3d4h5m;"), std::string::npos);
+    EXPECT_NE(std::string::npos, serialized->find("scope: 1y2m3d4h5m;"));
 
     delete serialized;
     delete o;
@@ -841,17 +841,17 @@ TEST(MarkdownParserTestCase, Deadline)
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
-    EXPECT_NE(o, nullptr);
-    EXPECT_EQ(o->getNotesCount(), 2);
+    EXPECT_NE(nullptr, o);
+    EXPECT_EQ(2, o->getNotesCount());
 
     cout << endl << "Deadline: " << o->getNotes()[0]->getDeadline();
-    EXPECT_EQ(o->getNotes()[0]->getDeadline(), 1289564055);
+    EXPECT_EQ(1289564055, o->getNotes()[0]->getDeadline());
 
     // serialize
     string* serialized = mdr.to(o);
     cout << endl << "- SERIALIZED ---";
     cout << endl << *serialized;
-    EXPECT_NE(serialized->find("deadline: 2010-11-12 13:14:15"), std::string::npos);
+    EXPECT_NE(std::string::npos, serialized->find("deadline: 2010-11-12 13:14:15"));
 
     delete serialized;
     delete o;
@@ -891,22 +891,22 @@ TEST(MarkdownParserTestCase, Links)
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
-    EXPECT_NE(o, nullptr);
-    EXPECT_EQ(o->getNotesCount(), 2);
+    EXPECT_NE(nullptr, o);
+    EXPECT_EQ(2, o->getNotesCount());
 
     cout << endl << "O links: " << o->getLinksCount();
-    EXPECT_EQ(o->getLinksCount(), 1);
+    EXPECT_EQ(1, o->getLinksCount());
 
     cout << endl << "N links: " << o->getNotes()[0]->getLinksCount();
-    EXPECT_EQ(o->getNotes()[0]->getLinksCount(), 2);
+    EXPECT_EQ(2, o->getNotes()[0]->getLinksCount());
 
     // serialize
     string* serialized = mdr.to(o);
     cout << endl << "- SERIALIZED ---";
     cout << endl << *serialized;
-    EXPECT_NE(serialized->find("[same as](./o1.md)"), std::string::npos);
-    EXPECT_NE(serialized->find("[opposite of](./x.md)"), std::string::npos);
-    EXPECT_NE(serialized->find("[is a](./y.md#a-z)"), std::string::npos);
+    EXPECT_NE(std::string::npos, serialized->find("[same as](./o1.md)"));
+    EXPECT_NE(std::string::npos, serialized->find("[opposite of](./x.md)"));
+    EXPECT_NE(std::string::npos, serialized->find("[is a](./y.md#a-z)"));
 
     delete serialized;
     delete o;
@@ -924,7 +924,7 @@ TEST(MarkdownParserTestCase, Bug622Loop64kLinesOverflow)
     MarkdownParserSections parser(lexer);
     parser.parse();
     // file too big - do NOT print: printAst(parser.getAst());
-    ASSERT_EQ(parser.getAst()->size(), 71234);
+    ASSERT_EQ(71234, parser.getAst()->size());
     cout << endl << "- DONE ----------------------------------------------";
     cout << endl;
 }

@@ -39,10 +39,10 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     repositoryPath.assign("/lib/test/resources/basic-repository");
     repositoryPath.insert(0, getMindforgerGitHomePath());
     m8r::Repository* r = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
-    ASSERT_NE(r, nullptr);
-    EXPECT_EQ(r->getType(),m8r::Repository::RepositoryType::MINDFORGER);
-    EXPECT_EQ(r->getMode(),m8r::Repository::RepositoryMode::REPOSITORY);
-    EXPECT_EQ(r->getDir(),repositoryPath);
+    ASSERT_NE(nullptr, r);
+    EXPECT_EQ(m8r::Repository::RepositoryType::MINDFORGER, r->getType());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::REPOSITORY, r->getMode());
+    EXPECT_EQ(repositoryPath, r->getDir());
     EXPECT_TRUE(r->getFile().empty());
     delete r;
 
@@ -50,10 +50,10 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     repositoryPath.assign("/lib/test/resources/basic-repository/memory");
     repositoryPath.insert(0, getMindforgerGitHomePath());
     r = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
-    ASSERT_NE(r, nullptr);
-    EXPECT_EQ(r->getType(),m8r::Repository::RepositoryType::MARKDOWN);
-    EXPECT_EQ(r->getMode(),m8r::Repository::RepositoryMode::REPOSITORY);
-    EXPECT_EQ(r->getDir(),repositoryPath);
+    ASSERT_NE(nullptr, r);
+    EXPECT_EQ(m8r::Repository::RepositoryType::MARKDOWN, r->getType());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::REPOSITORY, r->getMode());
+    EXPECT_EQ(repositoryPath, r->getDir());
     EXPECT_TRUE(r->getFile().empty());
     delete r;
 
@@ -64,11 +64,11 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     directoryName.insert(0, getMindforgerGitHomePath());
     fileName.assign("flat-metadata.md");
     r = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
-    ASSERT_NE(r, nullptr);
-    EXPECT_EQ(r->getType(),m8r::Repository::RepositoryType::MINDFORGER);
-    EXPECT_EQ(r->getMode(),m8r::Repository::RepositoryMode::FILE);
-    EXPECT_EQ(r->getDir(),directoryName);
-    EXPECT_EQ(r->getFile(),fileName);
+    ASSERT_NE(nullptr, r);
+    EXPECT_EQ(m8r::Repository::RepositoryType::MINDFORGER, r->getType());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::FILE, r->getMode());
+    EXPECT_EQ(directoryName, r->getDir());
+    EXPECT_EQ(fileName, r->getFile());
     delete r;
 
     // MD file
@@ -78,12 +78,12 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     directoryName.insert(0, getMindforgerGitHomePath());
     fileName.assign("no-metadata.md");
     r = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
-    ASSERT_NE(r, nullptr);
+    ASSERT_NE(nullptr, r);
     // it's OK - MF is default type BEFORE parsing (MF doesn't delete metadata, MD would erase them)
-    EXPECT_EQ(r->getType(),m8r::Repository::RepositoryType::MINDFORGER);
-    EXPECT_EQ(r->getMode(),m8r::Repository::RepositoryMode::FILE);
-    EXPECT_EQ(r->getDir(),directoryName);
-    EXPECT_EQ(r->getFile(),fileName);
+    EXPECT_EQ(m8r::Repository::RepositoryType::MINDFORGER, r->getType());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::FILE, r->getMode());
+    EXPECT_EQ(directoryName, r->getDir());
+    EXPECT_EQ(fileName, r->getFile());
     delete r;
 }
 
@@ -131,10 +131,10 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
     auto outlineFiles = repositoryIndexer.getAllOutlineFileNames();
 
     // asserts
-    EXPECT_EQ(repository->getDir(), repositoryPath);
-    EXPECT_EQ(repository->getType(), m8r::Repository::RepositoryType::MINDFORGER);
-    EXPECT_EQ(repository->getMode(), m8r::Repository::RepositoryMode::REPOSITORY);
-    EXPECT_EQ(repository->isReadOnly(), false);
+    EXPECT_EQ(repositoryPath, repository->getDir());
+    EXPECT_EQ(m8r::Repository::RepositoryType::MINDFORGER, repository->getType());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::REPOSITORY, repository->getMode());
+    EXPECT_EQ(false, repository->isReadOnly());
     EXPECT_EQ(2, outlineFiles.size());
     EXPECT_EQ(2, repositoryIndexer.getMarkdownFiles().size());
     EXPECT_EQ(0, repositoryIndexer.getNoteStencilsFileNames().size());
@@ -155,7 +155,7 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
     if(outlines.size()>0) {
         for(m8r::Outline*& o:outlines) {
             dumpOutline(o);
-            ASSERT_EQ(o->getFormat(), m8r::MarkdownDocument::Format::MINDFORGER);
+            ASSERT_EQ(m8r::MarkdownDocument::Format::MINDFORGER, o->getFormat());
             if(o->getName() == string("First Outline")) {
                 outline = o;
             }
@@ -165,16 +165,16 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
     }
 
     // assert
-    ASSERT_NE(outline, nullptr);
+    ASSERT_NE(nullptr, outline);
     // write outline > metadata to be written
     string* outlineAsString = m8r::fileToString(outline->getKey());
-    EXPECT_EQ(outlineAsString->find("Metadata"), std::string::npos);
+    EXPECT_EQ(std::string::npos, outlineAsString->find("Metadata"));
     delete outlineAsString;
 
     mind.remind().remember(outline);
 
     outlineAsString = m8r::fileToString(outline->getKey());
-    EXPECT_NE(outlineAsString->find("Metadata"), std::string::npos);
+    EXPECT_NE(std::string::npos, outlineAsString->find("Metadata"));
     delete outlineAsString;
 }
 
@@ -185,7 +185,7 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
 
     m8r::removeDirectoryRecursively(repositoryPath.c_str());
     int e = mkdir(repositoryPath.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
-    ASSERT_EQ(e, 0);
+    ASSERT_EQ(0, e);
 
     path.assign(repositoryPath+"/first.md");
     content.assign(
@@ -223,10 +223,10 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
     auto outlineFiles = repositoryIndexer.getAllOutlineFileNames();
 
     // asserts
-    EXPECT_EQ(repository->getDir(), repositoryPath);
-    EXPECT_EQ(repository->getType(), m8r::Repository::RepositoryType::MARKDOWN);
-    EXPECT_EQ(repository->getMode(), m8r::Repository::RepositoryMode::REPOSITORY);
-    EXPECT_EQ(repository->isReadOnly(), false);
+    EXPECT_EQ(repositoryPath, repository->getDir());
+    EXPECT_EQ(m8r::Repository::RepositoryType::MARKDOWN, repository->getType());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::REPOSITORY, repository->getMode());
+    EXPECT_EQ(false, repository->isReadOnly());
     EXPECT_EQ(2, outlineFiles.size());
     EXPECT_EQ(2, repositoryIndexer.getMarkdownFiles().size());
     EXPECT_EQ(0, repositoryIndexer.getNoteStencilsFileNames().size());
@@ -248,7 +248,7 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
     if(outlines.size()>0) {
         for(m8r::Outline*& o:outlines) {
             dumpOutline(o);
-            ASSERT_EQ(o->getFormat(), m8r::MarkdownDocument::Format::MARKDOWN);
+            ASSERT_EQ(m8r::MarkdownDocument::Format::MARKDOWN, o->getFormat());
             if(o->getName() == string("First Markdown")) {
                 outline = o;
             }
@@ -258,17 +258,17 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
     }
 
     // assert
-    ASSERT_NE(outline, nullptr);
+    ASSERT_NE(nullptr, outline);
     // write outline > metadata to be written
     string* outlineAsString = m8r::fileToString(outline->getKey());
-    EXPECT_EQ(outlineAsString->find("Metadata"), std::string::npos);
+    EXPECT_EQ(std::string::npos, outlineAsString->find("Metadata"));
     delete outlineAsString;
 
     outline->setName("Dirty");
     mind.remind().remember(outline);
 
     outlineAsString = m8r::fileToString(outline->getKey());
-    EXPECT_EQ(outlineAsString->find("Metadata"), std::string::npos);
+    EXPECT_EQ(std::string::npos, outlineAsString->find("Metadata"));
     delete outlineAsString;
 }
 
@@ -316,10 +316,10 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
     mind.learn();
     mind.think().get();
 
-    EXPECT_EQ(repository->getDir(), repositoryPath);
-    EXPECT_EQ(repository->getType(), m8r::Repository::RepositoryType::MINDFORGER);
-    EXPECT_EQ(repository->getMode(), m8r::Repository::RepositoryMode::FILE);
-    EXPECT_EQ(repository->isReadOnly(), false);
+    EXPECT_EQ(repositoryPath, repository->getDir());
+    EXPECT_EQ(m8r::Repository::RepositoryType::MINDFORGER, repository->getType());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::FILE, repository->getMode());
+    EXPECT_EQ(false, repository->isReadOnly());
 
     m8r::Memory& memory = mind.remind();
     vector<m8r::Outline*> outlines = memory.getOutlines();
@@ -328,7 +328,7 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
     if(outlines.size()>0) {
         for(m8r::Outline*& o:outlines) {
             dumpOutline(o);
-            ASSERT_EQ(o->getFormat(), m8r::MarkdownDocument::Format::MINDFORGER);
+            ASSERT_EQ(m8r::MarkdownDocument::Format::MINDFORGER, o->getFormat());
             if(o->getName() == string("First Outline")) {
                 outline = o;
             }
@@ -338,18 +338,18 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
     }
 
     // assert
-    ASSERT_NE(outline, nullptr);
+    ASSERT_NE(nullptr, outline);
     cout << endl << "Loading saved O from " << outline->getKey() << flush;
     // write outline > metadata to be written
     string* outlineAsString = m8r::fileToString(outline->getKey());
-    EXPECT_NE(outlineAsString->find("Metadata"), std::string::npos);
+    EXPECT_NE(std::string::npos, outlineAsString->find("Metadata"));
     delete outlineAsString;
 
     outline->setName("Dirty");
     mind.remind().remember(outline);
 
     outlineAsString = m8r::fileToString(outline->getKey());
-    EXPECT_NE(outlineAsString->find("Metadata"), std::string::npos);
+    EXPECT_NE(std::string::npos, outlineAsString->find("Metadata"));
     delete outlineAsString;
 }
 
@@ -397,10 +397,10 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
     mind.learn();
     mind.think().get();
 
-    EXPECT_EQ(repository->getDir(), repositoryPath);
-    EXPECT_EQ(repository->getType(), m8r::Repository::RepositoryType::MARKDOWN);
-    EXPECT_EQ(repository->getMode(), m8r::Repository::RepositoryMode::FILE);
-    EXPECT_EQ(repository->isReadOnly(), false);
+    EXPECT_EQ(repositoryPath, repository->getDir());
+    EXPECT_EQ(m8r::Repository::RepositoryType::MARKDOWN, repository->getType());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::FILE, repository->getMode());
+    EXPECT_EQ(false, repository->isReadOnly());
 
     m8r::Memory& memory = mind.remind();
     vector<m8r::Outline*> outlines = memory.getOutlines();
@@ -409,7 +409,7 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
     if(outlines.size()>0) {
         for(m8r::Outline*& o:outlines) {
             dumpOutline(o);
-            ASSERT_EQ(o->getFormat(), m8r::MarkdownDocument::Format::MARKDOWN);
+            ASSERT_EQ(m8r::MarkdownDocument::Format::MARKDOWN, o->getFormat());
             if(o->getName() == string("First Markdown")) {
                 outline = o;
             }
@@ -419,10 +419,10 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
     }
 
     // asserts
-    ASSERT_NE(outline, nullptr);
+    ASSERT_NE(nullptr, outline);
     // assert O contains NO metadata
     string* outlineAsString = m8r::fileToString(outline->getKey());
-    EXPECT_EQ(outlineAsString->find("Metadata"), std::string::npos);
+    EXPECT_EQ(std::string::npos, outlineAsString->find("Metadata"));
     EXPECT_EQ(*outlineAsString, content);
     delete outlineAsString;
 
@@ -436,7 +436,7 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
     outline->setName("Dirty");
     mind.remind().remember(outline);
     outlineAsString = m8r::fileToString(outline->getKey());
-    EXPECT_EQ(outlineAsString->find("Metadata"), std::string::npos);
+    EXPECT_EQ(std::string::npos, outlineAsString->find("Metadata"));
     delete outlineAsString;
 }
 

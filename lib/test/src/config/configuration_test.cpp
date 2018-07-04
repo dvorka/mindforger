@@ -93,12 +93,12 @@ TEST(ConfigurationTestCase, SaveDefaultConfig)
 
     // asserts
     string* asString = m8r::fileToString(file.getName());
-    EXPECT_NE(asString->find("Theme: light"), std::string::npos);
-    EXPECT_NE(asString->find("Time scope: 0y0m0d0h0m"), std::string::npos);
-    EXPECT_NE(asString->find("Editor syntax highlighting: yes"), std::string::npos);
-    EXPECT_NE(asString->find("Save reads metadata: yes"), std::string::npos);
-    EXPECT_NE(asString->find("Active repository: ~/mindforger-repository"), std::string::npos);
-    EXPECT_NE(asString->find("Repository: ~/mindforger-repository"), std::string::npos);
+    EXPECT_NE(std::string::npos, asString->find("Theme: light"));
+    EXPECT_NE(std::string::npos, asString->find("Time scope: 0y0m0d0h0m"));
+    EXPECT_NE(std::string::npos, asString->find("Editor syntax highlighting: yes"));
+    EXPECT_NE(std::string::npos, asString->find("Save reads metadata: yes"));
+    EXPECT_NE(std::string::npos, asString->find("Active repository: ~/mindforger-repository"));
+    EXPECT_NE(std::string::npos, asString->find("Repository: ~/mindforger-repository"));
     delete asString;
 }
 
@@ -150,12 +150,12 @@ TEST(ConfigurationTestCase, SaveAndLoad)
 
     // asserts
     string* asString = m8r::fileToString(c.getConfigFilePath());
-    EXPECT_NE(asString->find("Theme: CRAZYCOLORS"), std::string::npos);
-    EXPECT_NE(asString->find("Time scope: 1y2m33d4h55m"), std::string::npos);
-    EXPECT_NE(asString->find("Editor syntax highlighting: no"), std::string::npos);
-    EXPECT_NE(asString->find("Save reads metadata: no"), std::string::npos);
-    EXPECT_NE(asString->find("Active repository: /tmp/custom-repository-single-file.md"), std::string::npos);
-    EXPECT_NE(asString->find("Repository: /tmp/custom-repository-single-file.md"), std::string::npos);
+    EXPECT_NE(std::string::npos, asString->find("Theme: CRAZYCOLORS"));
+    EXPECT_NE(std::string::npos, asString->find("Time scope: 1y2m33d4h55m"));
+    EXPECT_NE(std::string::npos, asString->find("Editor syntax highlighting: no"));
+    EXPECT_NE(std::string::npos, asString->find("Save reads metadata: no"));
+    EXPECT_NE(std::string::npos, asString->find("Active repository: /tmp/custom-repository-single-file.md"));
+    EXPECT_NE(std::string::npos, asString->find("Repository: /tmp/custom-repository-single-file.md"));
     delete asString;
     // r deleted by configuration destructor
 
@@ -169,26 +169,26 @@ TEST(ConfigurationTestCase, SaveAndLoad)
 
     // asserts
     ASSERT_TRUE(loaded);
-    EXPECT_EQ(c.getUiThemeName(), "CRAZYCOLORS");
+    EXPECT_EQ("CRAZYCOLORS", c.getUiThemeName());
     c.getTimeScope().toString(timeScopeAsString);
-    EXPECT_EQ(timeScopeAsString, "1y2m33d4h55m");
+    EXPECT_EQ("1y2m33d4h55m", timeScopeAsString);
     EXPECT_FALSE(c.isSaveReadsMetadata());
     EXPECT_FALSE(c.isUiEditorEnableSyntaxHighlighting());
 
     EXPECT_GE(c.getRepositories().size(), 1);
-    EXPECT_NE(c.getRepositories().find(repositoryPath), c.getRepositories().end());
+    EXPECT_NE(c.getRepositories().end(), c.getRepositories().find(repositoryPath));
     c.getRepositories().find(repositoryPath)->second->print();
-    EXPECT_EQ(c.getRepositories().find(repositoryPath)->second->getPath(), repositoryPath);
-    EXPECT_EQ(c.getRepositories().find(repositoryPath)->second->getDir(), repositoryDir);
-    EXPECT_EQ(c.getRepositories().find(repositoryPath)->second->getFile(), repositoryFilename);
-    EXPECT_EQ(c.getRepositories().find(repositoryPath)->second->getMode(), m8r::Repository::RepositoryMode::FILE);
+    EXPECT_EQ(repositoryPath, c.getRepositories().find(repositoryPath)->second->getPath());
+    EXPECT_EQ(repositoryDir, c.getRepositories().find(repositoryPath)->second->getDir());
+    EXPECT_EQ(repositoryFilename, c.getRepositories().find(repositoryPath)->second->getFile());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::FILE, c.getRepositories().find(repositoryPath)->second->getMode());
 
-    EXPECT_NE(c.getActiveRepository(),nullptr);
+    EXPECT_NE(nullptr, c.getActiveRepository());
     c.getActiveRepository()->print();
-    EXPECT_EQ(c.getActiveRepository()->getPath(), repositoryPath);
-    EXPECT_EQ(c.getActiveRepository()->getDir(), repositoryDir);
-    EXPECT_EQ(c.getActiveRepository()->getFile(), repositoryFilename);
-    EXPECT_EQ(c.getActiveRepository()->getMode(), m8r::Repository::RepositoryMode::FILE);
+    EXPECT_EQ(repositoryPath, c.getActiveRepository()->getPath());
+    EXPECT_EQ(repositoryDir, c.getActiveRepository()->getDir());
+    EXPECT_EQ(repositoryFilename, c.getActiveRepository()->getFile());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::FILE, c.getActiveRepository()->getMode());
     // r deleted by configuration destructor
 
     // configuration cleanup

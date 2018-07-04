@@ -30,12 +30,12 @@ TEST(StringGearTestCase, StringToNcName)
     string s("123 text 456");
     string r = normalizeToNcName(s, '-');
     cout << s << " => " << r << endl;
-    ASSERT_EQ(r, "123-text-456");
+    ASSERT_EQ("123-text-456", r);
 
     s.assign("čeština už je tu!");
     r = normalizeToNcName(s, '-');
     cout << s << " => " << r << endl;
-    ASSERT_EQ(r, "---e--tina-u---je-tu-");
+    ASSERT_EQ("---e--tina-u---je-tu-", r);
 }
 
 TEST(StringGearTestCase, Split)
@@ -51,11 +51,11 @@ TEST(StringGearTestCase, Split)
         cout << "  '" << r[i++] << "'" << endl;
     }
 
-    EXPECT_STREQ(r[0], "a");
-    EXPECT_STREQ(r[1], "bb");
-    EXPECT_STREQ(r[2], "ccc");
+    EXPECT_STREQ("a", r[0]);
+    EXPECT_STREQ("bb", r[1]);
+    EXPECT_STREQ("ccc", r[2]);
 
-    EXPECT_EQ(i, 3);
+    EXPECT_EQ(3, i);
     i=0; while(r[i]) { delete[] r[i++]; }; delete[] r;
 return;
     s = (char*)"type: OUTLINE; created: 2016-05-02 21:30:27; reads: 0; read: 2016-05-02 21:30:27; writes: 1; written: 2016-05-02 21:30:27; importance: 0; urgency: 0; id: urn:mindforger.com:outline:agttaW5kLWZvcmdlcnIWCxIOR2FlT3V0bGluZUJlYW4Y7Ls1DA;";
@@ -65,7 +65,7 @@ return;
     while(r[i]) {
         cout << "  '" << r[i++] << "'" << endl;
     }
-    EXPECT_EQ(i, 9);
+    EXPECT_EQ(9, i);
     i=0; while(r[i]) { delete r[i++]; }; delete r;
 }
 

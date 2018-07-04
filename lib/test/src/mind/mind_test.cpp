@@ -86,7 +86,7 @@ void dumpOutline(m8r::Outline*& outline)
     cout << endl << "  Notes[" << outline->getNotes().size() << "]:";
     if (outline->getNotes().size()) {
         for (m8r::Note* note : outline->getNotes()) {
-            ASSERT_TRUE(note != nullptr);
+            ASSERT_NE(nullptr, note);
             cout << endl << "    '" << note->getName() << "' (name)";
             cout << endl << "    '" << note->getDepth() << "' (depth)";
             cout << endl << "    "
@@ -99,8 +99,8 @@ void dumpOutline(m8r::Outline*& outline)
                             << " (tag)";
                 }
             }
-            ASSERT_TRUE(note->getType() != nullptr);
-            ASSERT_NE(note->getType()->getName(), "");
+            ASSERT_NE(nullptr, note->getType());
+            ASSERT_NE("", note->getType()->getName());
             cout << endl << "    "
                     << (note->getType() ? note->getType()->getName() : "NULL")
                     << " (type)";
@@ -217,25 +217,25 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
 
     // assert learned MF repository attributes (mind, outlines count, notes count, ontology count, ...)
     EXPECT_GE(config.getRepositories().size(), 1);
-    EXPECT_EQ(memory.getStencils(m8r::ResourceType::OUTLINE).size(), 1);
-    EXPECT_EQ(memory.getStencils(m8r::ResourceType::NOTE).size(), 1);
-    EXPECT_EQ(memory.getOutlines().size(), 3);
-    EXPECT_EQ(memory.getOutlinesCount(), 3);
-    EXPECT_EQ(memory.getNotesCount(), 8);
-    EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
-    EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
+    EXPECT_EQ(1, memory.getStencils(m8r::ResourceType::OUTLINE).size());
+    EXPECT_EQ(1, memory.getStencils(m8r::ResourceType::NOTE).size());
+    EXPECT_EQ(3, memory.getOutlines().size());
+    EXPECT_EQ(3, memory.getOutlinesCount());
+    EXPECT_EQ(8, memory.getNotesCount());
+    EXPECT_EQ(2, memory.getOntology().getOutlineTypes().size());
+    EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
     EXPECT_EQ(16, memory.getOntology().getTags().size());
 
     // 2/3 amnesia - assert mind and memory cleaned (+Valgrind memory check)
     mind.amnesia();
-    EXPECT_GE(config.getRepositories().size(), 1);
-    EXPECT_EQ(memory.getStencils(m8r::ResourceType::OUTLINE).size(), 0);
-    EXPECT_EQ(memory.getStencils(m8r::ResourceType::NOTE).size(), 0);
-    EXPECT_EQ(memory.getOutlines().size(), 0);
-    EXPECT_EQ(memory.getOutlinesCount(), 0);
-    EXPECT_EQ(memory.getNotesCount(), 0);
-    EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
-    EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
+    EXPECT_GE(1, config.getRepositories().size());
+    EXPECT_EQ(0, memory.getStencils(m8r::ResourceType::OUTLINE).size());
+    EXPECT_EQ(0, memory.getStencils(m8r::ResourceType::NOTE).size());
+    EXPECT_EQ(0, memory.getOutlines().size());
+    EXPECT_EQ(0, memory.getOutlinesCount());
+    EXPECT_EQ(0, memory.getNotesCount());
+    EXPECT_EQ(2, memory.getOntology().getOutlineTypes().size());
+    EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
     EXPECT_EQ(16, memory.getOntology().getTags().size()); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
 
     // 3/3 learn - MARKDOWN repository (not MINDFORGER repository as above)
@@ -283,13 +283,13 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     mind.think().get();
 
     EXPECT_GE(config.getRepositories().size(), 1);
-    EXPECT_EQ(memory.getOutlines().size(), 2);
-    EXPECT_EQ(memory.getOutlinesCount(), 2);
-    EXPECT_EQ(memory.getNotesCount(), 4);
-    EXPECT_EQ(memory.getStencils(m8r::ResourceType::OUTLINE).size(), 0);
-    EXPECT_EQ(memory.getStencils(m8r::ResourceType::NOTE).size(), 0);
-    EXPECT_EQ(memory.getOntology().getOutlineTypes().size(), 2);
-    EXPECT_EQ(memory.getOntology().getNoteTypes().size(), 16);
+    EXPECT_EQ(2, memory.getOutlines().size());
+    EXPECT_EQ(2, memory.getOutlinesCount());
+    EXPECT_EQ(4, memory.getNotesCount());
+    EXPECT_EQ(0, memory.getStencils(m8r::ResourceType::OUTLINE).size());
+    EXPECT_EQ(0, memory.getStencils(m8r::ResourceType::NOTE).size());
+    EXPECT_EQ(2, memory.getOntology().getOutlineTypes().size());
+    EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
     EXPECT_EQ(16, memory.getOntology().getTags().size()); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
 }
 

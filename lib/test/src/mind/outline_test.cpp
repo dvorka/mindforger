@@ -53,14 +53,14 @@ TEST(OutlineTestCase, NewAndDeleteOutline) {
     mind.learn();
     mind.think().get();
 
-    EXPECT_EQ(mind.remind().getOutlinesCount(), 1);
-    EXPECT_EQ(mind.remind().getNotesCount(), 1);
+    EXPECT_EQ(1, mind.remind().getOutlinesCount());
+    EXPECT_EQ(1, mind.remind().getNotesCount());
 
     // just delete 1 outline w/ 1 note from memory (and check w/ Valgrind)
     mind.outlineForget(mind.remind().getOutlines()[0]->getKey());
 
-    EXPECT_EQ(mind.remind().getOutlinesCount(), 0);
-    EXPECT_EQ(mind.remind().getNotesCount(), 0);
+    EXPECT_EQ(0, mind.remind().getOutlinesCount());
+    EXPECT_EQ(0, mind.remind().getNotesCount());
 }
 
 TEST(OutlineTestCase, NewOutlineFromStencil) {
@@ -120,8 +120,8 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
                 outlineStencil.get());
 
     // asserts
-    EXPECT_EQ(mind.remind().getOutlinesCount(), 2);
-    EXPECT_EQ(mind.remind().getNotesCount(), 3);
+    EXPECT_EQ(2, mind.remind().getOutlinesCount());
+    EXPECT_EQ(3, mind.remind().getNotesCount());
 }
 
 TEST(OutlineTestCase, CloneOutline) {
@@ -184,13 +184,13 @@ TEST(OutlineTestCase, CloneOutline) {
     EXPECT_TRUE(o->getFormat()==m8r::MarkdownDocument::Format::MINDFORGER);
     EXPECT_TRUE(c != nullptr);
     EXPECT_TRUE(c->getFormat()==m8r::MarkdownDocument::Format::MINDFORGER);
-    EXPECT_EQ(mind.remind().getOutlinesCount(), 2);
-    EXPECT_EQ(mind.remind().getNotesCount(), 18);
+    EXPECT_EQ(2, mind.remind().getOutlinesCount());
+    EXPECT_EQ(18, mind.remind().getNotesCount());
     cout << "O key: " << o->getKey() << endl;
     cout << "C key: " << c->getKey() << endl;
     EXPECT_NE(o->getKey(), c->getKey());
-    EXPECT_EQ(o->getName(), "Note Operations Test Outline");
-    EXPECT_EQ(c->getName(), "Copy of Note Operations Test Outline");
+    EXPECT_EQ("Note Operations Test Outline", o->getName());
+    EXPECT_EQ("Copy of Note Operations Test Outline", c->getName());
     EXPECT_EQ(o->getDescription().size(), c->getDescription().size());
     EXPECT_NE(o->getModified(), c->getModified());
 }

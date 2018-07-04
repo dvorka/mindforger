@@ -143,7 +143,7 @@ TEST(DateTimeGearTestCase, MdDateTimeParsing)
     cout << "min: " << datetime.tm_min << endl;
     cout << "sec: " << datetime.tm_sec << endl;
     cout << endl;
-    EXPECT_EQ(datetime.tm_year, 104);
+    EXPECT_EQ(104, datetime.tm_year);
 
     datetimeFrom("1976-11-12 18:31:01", &datetime);
     cout << "year+1900: " << datetime.tm_year << endl; // year =  tm_year+1900
@@ -153,7 +153,7 @@ TEST(DateTimeGearTestCase, MdDateTimeParsing)
     cout << "min: " << datetime.tm_min << endl;
     cout << "sec: " << datetime.tm_sec << endl;
     cout << endl;
-    EXPECT_EQ(datetime.tm_year, 76);
+    EXPECT_EQ(76, datetime.tm_year);
 
     datetimeFrom("2016-12-30 5:31:01", &datetime);
     cout << "year+1900: " << datetime.tm_year << endl; // year =  tm_year+1900
@@ -163,5 +163,5 @@ TEST(DateTimeGearTestCase, MdDateTimeParsing)
     cout << "min: " << datetime.tm_min << endl;
     cout << "sec: " << datetime.tm_sec << endl;
     cout << endl;
-    EXPECT_EQ(datetime.tm_year, 116);
+    EXPECT_EQ(116, datetime.tm_year);
 }
