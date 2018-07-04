@@ -22,6 +22,7 @@
 #include <QtWidgets>
 
 #include "model_meta_definitions.h"
+#include "../../lib/src/representations/html/html_outline_representation.h"
 
 namespace m8r {
 
@@ -31,8 +32,10 @@ class OrganizerQuadrantModel : public QStandardItemModel
 
     QString title;
 
+    HtmlOutlineRepresentation* htmlRepresentation;
+
 public:
-    explicit OrganizerQuadrantModel(QString& title, QObject* parent);
+    explicit OrganizerQuadrantModel(QString& title, QObject* parent, HtmlOutlineRepresentation* htmlRepresentation);
     OrganizerQuadrantModel(const OrganizerQuadrantModel&) = delete;
     OrganizerQuadrantModel(const OrganizerQuadrantModel&&) = delete;
     OrganizerQuadrantModel &operator=(const OrganizerQuadrantModel&) = delete;

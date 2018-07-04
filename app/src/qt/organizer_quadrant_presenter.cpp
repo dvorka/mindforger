@@ -26,7 +26,7 @@ OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
         QString title)
 {
     this->view = view;
-    this->model = new OrganizerQuadrantModel(title, this);
+    this->model = new OrganizerQuadrantModel(title, this, orloj->getMainWindow()->getHtmlRepresentation());
     this->view->setModel(this->model);
 
     this->orloj = orloj;

@@ -20,8 +20,10 @@
 
 namespace m8r {
 
-OrganizerQuadrantModel::OrganizerQuadrantModel(QString& title, QObject* parent)
-    : QStandardItemModel(parent)
+using namespace std;
+
+OrganizerQuadrantModel::OrganizerQuadrantModel(QString& title, QObject* parent, HtmlOutlineRepresentation* htmlRepresentation)
+    : QStandardItemModel(parent), htmlRepresentation(htmlRepresentation)
 {
     setColumnCount(1);
     setRowCount(0);
@@ -49,12 +51,16 @@ void OrganizerQuadrantModel::addRow(Outline* outline, bool urgency, bool importa
     QStandardItem* item;
 
     // IMPROVE consider moving this to HTML representation
-    QString html;
-    html = QString(outline->getName().c_str());
+    string h{outline->getName().c_str()};
 
-    html += "<span style='color: ";
-    html += QString::fromStdString(Color::DARK_GRAY().asHtml());
-    html += ";'>";
+    htmlRepresentation->tagsToHtml(outline->getTags(), h);
+
+    h += "<span style='color: ";
+    h += Color::DARK_GRAY().asHtml();
+    h += ";'>";
+
+    QString html{};
+    html += QString::fromStdString(h);
 
     if(urgency) {
         if(outline->getUrgency()) {
