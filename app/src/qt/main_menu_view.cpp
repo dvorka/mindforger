@@ -178,7 +178,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: view
 
     actionViewHome = new QAction(tr("&Home"), mainWindow);
-    actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
     actionViewHome->setStatusTip(tr("Open Home Notebook..."));
 
     actionViewOrganizer = new QAction(tr("&Eisenhower Matrix"), mainWindow);

@@ -305,6 +305,9 @@ void OrlojPresenter::toggleCurrentFacetHoisting()
 
 void OrlojPresenter::fromOutlineHeaderEditBackToView(Outline* outline)
 {
+    // LEFT: update O name above Ns tree
+    outlineViewPresenter->refresh(outline->getName());
+    // RIGHT
     outlineHeaderViewPresenter->refresh(outline);
     view->showFacetOutlineHeaderView();
     setFacet(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER);

@@ -54,6 +54,7 @@ public:
     OutlineViewPresenter &operator=(const OutlineViewPresenter&&) = delete;
 
     Outline* getCurrentOutline() const { return currentOutline; }
+    void refresh(std::string outlineName) { view->refreshHeader(outlineName); }
     void refresh(Outline* outline);
     void refresh(Note* note);
     void insertAndSelect(Note* note);
