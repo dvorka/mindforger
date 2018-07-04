@@ -265,14 +265,24 @@ const vector<Outline*>& Memory::getOutlines() const
     return outlines;
 }
 
-bool compareStrings(const Outline* o1, const Outline* o2)
+bool compareOutlineNames(const Outline* o1, const Outline* o2)
 {
     return o1->getName().compare(o2->getName()) < 0;
 }
 
 void Memory::sortByName(vector<Outline*>& os)
 {
-    std::sort(os.begin(), os.end(), compareStrings);
+    std::sort(os.begin(), os.end(), compareOutlineNames);
+}
+
+bool compareNoteReads(const Note* n1, const Note* n2)
+{
+    return n1->getRead() < n2->getRead();
+}
+
+void Memory::sortByRead(vector<Note*>& ns)
+{
+    std::sort(ns.begin(), ns.end(), compareNoteReads);
 }
 
 string Memory::createOutlineKey(const string* name)

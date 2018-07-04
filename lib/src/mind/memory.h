@@ -171,6 +171,7 @@ public:
      */
 
     void sortByName(std::vector<Outline*>& sorted);
+    void sortByRead(std::vector<Note*>& sorted);
     RepositoryIndexer& getRepositoryIndexer() { return repositoryIndexer; }
 
 private:
