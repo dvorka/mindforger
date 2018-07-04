@@ -25,6 +25,7 @@
 #include "tags_table_view.h"
 #include "outlines_table_view.h"
 #include "notes_table_view.h"
+#include "recent_notes_table_view.h"
 #include "outline_view_splitter.h"
 #include "outline_header_view.h"
 #include "outline_header_edit_view.h"
@@ -58,6 +59,7 @@ private:
     TagsTableView* tagCloud;
     OutlinesTableView* outlinesTable;
     NotesTableView* notesTable;
+    RecentNotesTableView* recentNotesTable;
     OutlineViewSplitter* outlineView;
     OutlineHeaderView* outlineHeaderView;
     OutlineHeaderEditView* outlineHeaderEdit;
@@ -77,6 +79,7 @@ public:
     TagsTableView* getTagCloud() const { return tagCloud; }
     OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
     NotesTableView* getNotesTable() const { return notesTable; }
+    RecentNotesTableView* getRecentNotesTable() const { return recentNotesTable; }
     OutlineViewSplitter* getOutlineView() const { return outlineView; }
     OutlineHeaderView* getOutlineHeaderView() const { return outlineHeaderView; }
     OutlineHeaderEditView* getOutlineHeaderEdit() const { return outlineHeaderEdit; }
@@ -102,6 +105,11 @@ public:
      * @brief Outline detail: name and tree of Notes
      */
     void showFacetOutlinesDetail();
+
+    /**
+     * @brief Recent Notes.
+     */
+    void showFacetRecentNotes();
 
     /**
      * @brief FTS result list - Notes w/o detail

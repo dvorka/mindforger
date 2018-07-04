@@ -71,7 +71,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 #else
     QObject::connect(view, SIGNAL(showCli()), mwp, SLOT(doActionCli()));
 #endif
-    QObject::connect(view->actionViewToggleRecent, SIGNAL(triggered()), mwp, SLOT(doActionViewToggleRecent()));
+    QObject::connect(view->actionViewRecentNotes, SIGNAL(triggered()), mwp, SLOT(doActionViewRecentNotes()));
     QObject::connect(view->actionViewDistractionFree, SIGNAL(triggered()), mwp, SLOT(doActionViewDistractionFree()));
     QObject::connect(view->actionViewFullscreen, SIGNAL(triggered()), mwp, SLOT(doActionViewFullscreen()));
 

@@ -1,5 +1,5 @@
 /*
- tags_table_view.h     MindForger thinking notebook
+ recent_notes_table_view.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,27 +16,27 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8RUI_TAGS_TABLE_VIEW_H
-#define M8RUI_TAGS_TABLE_VIEW_H
+#ifndef M8RUI_RECENT_NOTES_TABLE_VIEW_H
+#define M8RUI_RECENT_NOTES_TABLE_VIEW_H
 
 #include <QtWidgets>
 
 namespace m8r {
 
-class TagsTableView : public QTableView
+class RecentNotesTableView : public QTableView
 {
     Q_OBJECT
 
 public:
-    explicit TagsTableView(QWidget* parent);
-    TagsTableView(const TagsTableView&) = delete;
-    TagsTableView(const TagsTableView&&) = delete;
-    TagsTableView &operator=(const TagsTableView&) = delete;
-    TagsTableView &operator=(const TagsTableView&&) = delete;
-    ~TagsTableView();
+    explicit RecentNotesTableView(QWidget* parent);
+    RecentNotesTableView(const RecentNotesTableView&) = delete;
+    RecentNotesTableView(const RecentNotesTableView&&) = delete;
+    RecentNotesTableView &operator=(const RecentNotesTableView&) = delete;
+    RecentNotesTableView &operator=(const RecentNotesTableView&&) = delete;
+    ~RecentNotesTableView();
 
     virtual void paintEvent(QPaintEvent* event) override;
 };
 
 }
-#endif // M8RUI_TAGS_TABLE_VIEW_H
+#endif // M8RUI_RECENT_NOTES_TABLE_VIEW_H

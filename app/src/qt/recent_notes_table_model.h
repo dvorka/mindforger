@@ -1,5 +1,5 @@
 /*
- tags_table_model.h     MindForger thinking notebook
+ recent_notes_table_model.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8RUI_TAGS_TABLE_MODEL_H
-#define M8RUI_TAGS_TABLE_MODEL_H
+#ifndef M8RUI_RECENT_NOTES_TABLE_MODEL_H
+#define M8RUI_RECENT_NOTES_TABLE_MODEL_H
 
 #include <QtWidgets>
 
@@ -26,23 +26,23 @@
 
 namespace m8r {
 
-class TagsTableModel : public QStandardItemModel
+class RecentNotesTableModel : public QStandardItemModel
 {
     Q_OBJECT
 
     HtmlOutlineRepresentation* htmlRepresentation;
 
 public:
-    explicit TagsTableModel(QObject* parent, HtmlOutlineRepresentation* htmlRepresentation);
-    TagsTableModel(const TagsTableModel&) = delete;
-    TagsTableModel(const TagsTableModel&&) = delete;
-    TagsTableModel &operator=(const TagsTableModel&) = delete;
-    TagsTableModel &operator=(const TagsTableModel&&) = delete;
-    ~TagsTableModel();
+    explicit RecentNotesTableModel(QObject* parent, HtmlOutlineRepresentation* htmlRepresentation);
+    RecentNotesTableModel(const RecentNotesTableModel&) = delete;
+    RecentNotesTableModel(const RecentNotesTableModel&&) = delete;
+    RecentNotesTableModel &operator=(const RecentNotesTableModel&) = delete;
+    RecentNotesTableModel &operator=(const RecentNotesTableModel&&) = delete;
+    ~RecentNotesTableModel();
 
     void removeAllRows();
-    void addRow(const Tag* tag, int cardinality);
+    void addRow(const Note* n);
 };
 
 }
-#endif // M8RUI_TAGS_TABLE_MODEL_H
+#endif // M8RUI_RECENT_NOTES_TABLE_MODEL_H

@@ -37,6 +37,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     this->tagCloudPresenter = new TagsTablePresenter(view->getTagCloud(), mainPresenter->getHtmlRepresentation());
     this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
     this->notesTablePresenter = new NotesTablePresenter(view->getNotesTable());
+    this->recentNotesTablePresenter = new RecentNotesTablePresenter(view->getRecentNotesTable(), mainPresenter->getHtmlRepresentation());
     this->outlineViewPresenter = new OutlineViewPresenter(view->getOutlineView(), this);
     this->outlineHeaderViewPresenter = new OutlineHeaderViewPresenter(view->getOutlineHeaderView(), this);
     this->outlineHeaderEditPresenter = new OutlineHeaderEditPresenter(view->getOutlineHeaderEdit(), mainPresenter, this);
@@ -67,6 +68,12 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowNoteAsFtsResult(const QItemSelection&, const QItemSelection&)));
+    // click Tag in Tags to view Recall by Tag detail
+    QObject::connect(
+        view->getRecentNotesTable()->selectionModel(),
+        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+        this,
+        SLOT(slotShowRecentNote(const QItemSelection&, const QItemSelection&)));
     // click Tag in Tags to view Recall by Tag detail
     QObject::connect(
         view->getTagCloud()->selectionModel(),
@@ -109,6 +116,14 @@ void OrlojPresenter::onFacetChange(const OrlojPresenterFacets targetFacet) const
     if(targetFacet == OrlojPresenterFacets::FACET_VIEW_OUTLINE) {
         outlineViewPresenter->getOutlineTree()->focus();
     }
+}
+
+void OrlojPresenter::showFacetRecentNotes(const vector<Note*>& notes)
+{
+    setFacet(OrlojPresenterFacets::FACET_RECENT_NOTES);
+    recentNotesTablePresenter->refresh(notes);
+    view->showFacetRecentNotes();
+    mainPresenter->getStatusBar()->showMindStatistics();
 }
 
 void OrlojPresenter::showFacetOrganizer(const vector<Outline*>& outlines)
@@ -165,6 +180,8 @@ void OrlojPresenter::slotShowOutline(const QItemSelection& selected, const QItem
     if(activeFacet!=OrlojPresenterFacets::FACET_ORGANIZER
          &&
        activeFacet!=OrlojPresenterFacets::FACET_TAG_CLOUD
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_RECENT_NOTES
       )
     {
         QModelIndexList indices = selected.indexes();
@@ -350,6 +367,29 @@ void OrlojPresenter::slotShowNoteAsFtsResult(const QItemSelection& selected, con
         setFacet(OrlojPresenterFacets::FACET_FTS_VIEW_NOTE);
     } else {
         mainPresenter->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
+    }
+}
+
+void OrlojPresenter::slotShowRecentNote(const QItemSelection& selected, const QItemSelection& deselected)
+{
+    Q_UNUSED(deselected);
+
+    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES) {
+        QModelIndexList indices = selected.indexes();
+        if(indices.size()) {
+            const QModelIndex& index = indices.at(0);
+            QStandardItem* item = recentNotesTablePresenter->getModel()->itemFromIndex(index);
+            // TODO make my role constant
+            const Note* note = item->data(Qt::UserRole + 1).value<const Note*>();
+
+            showFacetOutline(note->getOutline());
+            showFacetNoteView();
+            getOutlineView()->selectRowByNote(note);
+            // IMPROVE make this more efficient
+            mainPresenter->getStatusBar()->showInfo(QString(tr("Note "))+QString::fromStdString(note->getName()));
+        } else {
+            mainPresenter->getStatusBar()->showInfo(QString(tr("No Note selected!")));
+        }
     }
 }
 

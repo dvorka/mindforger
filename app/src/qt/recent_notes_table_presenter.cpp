@@ -1,5 +1,5 @@
 /*
- tags_table_presenter.cpp     MindForger thinking notebook
+ recent_notes_table_presenter.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,16 +16,16 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "tags_table_presenter.h"
+#include "recent_notes_table_presenter.h"
 
 namespace m8r {
 
 using namespace std;
 
-TagsTablePresenter::TagsTablePresenter(TagsTableView* view, HtmlOutlineRepresentation* htmlRepresentation)
+RecentNotesTablePresenter::RecentNotesTablePresenter(RecentNotesTableView* view, HtmlOutlineRepresentation* htmlRepresentation)
 {
     this->view = view;
-    this->model = new TagsTableModel(this, htmlRepresentation);
+    this->model = new RecentNotesTableModel(this, htmlRepresentation);
     this->view->setModel(this->model);
 
     // ensure HTML cells rendering
@@ -35,20 +35,22 @@ TagsTablePresenter::TagsTablePresenter(TagsTableView* view, HtmlOutlineRepresent
     this->view->setItemDelegate(delegate);
 }
 
-TagsTablePresenter::~TagsTablePresenter()
+RecentNotesTablePresenter::~RecentNotesTablePresenter()
 {
 }
 
-void TagsTablePresenter::refresh(const map<const Tag*, int>& tags)
+void RecentNotesTablePresenter::refresh(const vector<Note*>& notes)
 {
     model->removeAllRows();
-    if(tags.size()) {
-        for(const auto& t:tags) {
-            model->addRow(t.first, t.second);
+    if(notes.size()) {
+        int uiLimit = Configuration::getInstance().getRecentNotesUiLimit();
+        for(Note* n:notes) {
+            if(uiLimit) uiLimit--; else break;
+            model->addRow(n);            
         }
     }
 
-    view->sortByColumn(1, Qt::SortOrder::DescendingOrder);
+    view->sortByColumn(4, Qt::SortOrder::DescendingOrder);
 }
 
 } // m8r namespace

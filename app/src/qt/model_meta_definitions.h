@@ -43,6 +43,7 @@ Q_DECLARE_METATYPE(m8r::OutlineType*)
 Q_DECLARE_METATYPE(const m8r::OutlineType*)
 
 Q_DECLARE_METATYPE(m8r::Note*)
+Q_DECLARE_METATYPE(const m8r::Note*)
 Q_DECLARE_METATYPE(m8r::NoteType*)
 Q_DECLARE_METATYPE(const m8r::NoteType*)
 

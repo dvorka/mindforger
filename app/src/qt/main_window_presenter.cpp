@@ -851,8 +851,11 @@ void MainWindowPresenter::handleFtsNerEntity()
 
 #endif
 
-void MainWindowPresenter::doActionViewToggleRecent()
+void MainWindowPresenter::doActionViewRecentNotes()
 {
+    vector<Note*> notes{};
+    mind->getAllNotes(notes, true);
+    orloj->showFacetRecentNotes(notes);
 }
 
 void MainWindowPresenter::doActionViewOrganizer()
@@ -910,6 +913,11 @@ void MainWindowPresenter::doActionViewDistractionFree()
 
 void MainWindowPresenter::doActionViewFullscreen()
 {
+    if(view.isFullScreen()) {
+        view.showMaximized();
+    } else {
+        view.showFullScreen();
+    }
 }
 
 void MainWindowPresenter::doActionFormatBold()

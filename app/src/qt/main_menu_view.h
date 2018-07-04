@@ -103,7 +103,7 @@ public:
 #else
     QShortcut* cliShortcut;
 #endif
-    QAction* actionViewToggleRecent;
+    QAction* actionViewRecentNotes;
     QAction* actionViewLimbo;
     QAction* actionViewDistractionFree;
     QAction* actionViewFullscreen;

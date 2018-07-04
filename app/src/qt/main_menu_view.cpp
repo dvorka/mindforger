@@ -131,16 +131,16 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFts->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
     actionFts->setStatusTip(tr("Note full-text search"));
 
-    actionFindOutlineByName = new QAction(tr("Recall N&otebook by Name"), mainWindow);
-    actionFindOutlineByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
+    actionFindOutlineByName = new QAction(tr("Recall Note&book by Name"), mainWindow);
+    actionFindOutlineByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
     actionFindOutlineByName->setStatusTip(tr("Find Notebook by name"));
 
     actionFindNoteByName = new QAction(tr("Recall &Note by Name"), mainWindow);
     actionFindNoteByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
     actionFindNoteByName->setStatusTip(tr("Find Note by name"));
 
-    actionFindOutlineByTag = new QAction(tr("Recall Note&book by Tags"), mainWindow);
-    actionFindOutlineByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_U));
+    actionFindOutlineByTag = new QAction(tr("Recall Notebook by T&ags"), mainWindow);
+    actionFindOutlineByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
     actionFindOutlineByTag->setStatusTip(tr("Find Notebook by tags"));
 
     actionFindNoteByTag = new QAction(tr("Recall Note by &Tags"), mainWindow);
@@ -186,7 +186,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewOrganizer->setStatusTip(tr("Open Eisenhower matrix..."));
 
     actionViewOutlines = new QAction(tr("N&otebooks"), mainWindow);
-    actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
+    actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
     actionViewOutlines->setStatusTip(tr("Show list of Notebooks..."));
 
     actionViewTags = new QAction(tr("&Tags"), mainWindow);
@@ -206,10 +206,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewCli->setStatusTip(tr("Toggle command line"));
 #endif
 
-    actionViewToggleRecent = new QAction(tr("&Recent Notes"), mainWindow);
-    actionViewToggleRecent->setStatusTip(tr("View recently modified Notes..."));
-    actionViewToggleRecent->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_R));
-    actionViewToggleRecent->setEnabled(false);
+    actionViewRecentNotes = new QAction(tr("&Recent Notes"), mainWindow);
+    actionViewRecentNotes->setStatusTip(tr("View recently modified Notes..."));
+    actionViewRecentNotes->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_R));
 
     actionViewStencils = new QAction(tr("&Stencils"), mainWindow);
     // Outline/Note marked w/ tag stencil is MOVED among stencils (NOT indexed/searched/...)
@@ -228,9 +227,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewDistractionFree->setEnabled(false);
 
     actionViewFullscreen = new QAction(tr("&Fullscreen"), mainWindow);
-    actionViewFullscreen->setShortcut(tr("F11"));
-    actionViewFullscreen->setStatusTip(tr("Fullscreen"));
-    actionViewFullscreen->setEnabled(false);
+    actionViewFullscreen->setShortcut(QKeySequence(Qt::Key_F11));
+    actionViewFullscreen->setStatusTip(tr("Toggle fullscreen"));
 
     menuView = qMenuBar->addMenu(tr("&View"));
     menuView->addAction(actionViewHome);
@@ -241,16 +239,16 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewStencils);
     menuView->addAction(actionViewNavigator);
     menuView->addAction(actionViewDwell);
-#ifdef DO_MF_DEBUG
     // OBSOLETE feature: menuView->addAction(actionViewCli);
-#endif
     menuView->addAction(actionViewLimbo);
-    menuView->addSeparator();
-    menuView->addAction(actionViewToggleRecent);
-    menuView->addSeparator();
-    menuView->addAction(actionViewDistractionFree);
-    menuView->addAction(actionViewFullscreen);
 #endif
+    menuView->addSeparator();
+    menuView->addAction(actionViewRecentNotes);
+    menuView->addSeparator();
+#ifdef MF_WIP
+    menuView->addAction(actionViewDistractionFree);
+#endif
+    menuView->addAction(actionViewFullscreen);
 
     // menu: edit
 

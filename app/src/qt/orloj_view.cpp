@@ -40,6 +40,9 @@ OrlojView::OrlojView(QWidget* parent)
     notesTable = new NotesTableView(this);
     addWidget(notesTable);
 
+    recentNotesTable = new RecentNotesTableView(this);
+    addWidget(recentNotesTable);
+
     // TODO to be implemented
     //navigator = new GraphWidget(this);
     //addWidget(navigator);
@@ -111,6 +114,12 @@ void OrlojView::showFacetOutlinesDetail()
 {
     QSet<QWidget*> v; v << outlinesTable << outlineView;
 
+    hideChildren(v);
+}
+
+void OrlojView::showFacetRecentNotes()
+{
+    QSet<QWidget*> v; v << recentNotesTable;
     hideChildren(v);
 }
 

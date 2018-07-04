@@ -319,6 +319,7 @@ public:
     void setUiEditorEnableAutocomplete(bool enable) { uiEditorAutocomplete = enable; }
     int getUiEditorTabWidth() const { return uiEditorTabWidth; }
     void setUiEditorTabWidth(int tabWidth) { uiEditorTabWidth = tabWidth; }
+    int getRecentNotesUiLimit() const { return 150; }
     bool isUiShowBreadcrump() const { return uiShowBreadcrump; }
     bool isUiHtmlTheme() const { return !uiHtmlCssPath.empty(); }
     const char* getUiHtmlCssPath() const {

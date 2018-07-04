@@ -164,14 +164,14 @@ public:
     /**
      * @brief Get notes of all outlines.
      */
-    void getAllNotes(std::vector<Note*>& notes) const;
+    void getAllNotes(std::vector<Note*>& notes, bool sortByRead=false) const;
 
     /*
      * UTILS
      */
 
-    void sortByName(std::vector<Outline*>& sorted);
-    void sortByRead(std::vector<Note*>& sorted);
+    void sortByName(std::vector<Outline*>& sorted) const;
+    void sortByRead(std::vector<Note*>& sorted) const;
     RepositoryIndexer& getRepositoryIndexer() { return repositoryIndexer; }
 
 private:

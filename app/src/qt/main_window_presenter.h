@@ -199,7 +199,7 @@ public slots:
     void doActionViewTagCloud();
     bool doActionViewHome();
     void doActionViewOutlines();
-    void doActionViewToggleRecent();
+    void doActionViewRecentNotes();
     void doActionCli();
     void doActionViewDistractionFree();
     void doActionViewFullscreen();

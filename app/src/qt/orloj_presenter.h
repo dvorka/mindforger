@@ -29,6 +29,7 @@
 #include "orloj_view.h"
 #include "organizer_presenter.h"
 #include "tags_table_presenter.h"
+#include "recent_notes_table_presenter.h"
 #include "main_window_presenter.h"
 #include "outlines_table_presenter.h"
 #include "notes_table_presenter.h"
@@ -60,7 +61,8 @@ enum OrlojPresenterFacets {
     FACET_FTS_RESULT,           // 7
     FACET_FTS_VIEW_NOTE,        // 8
     FACET_ORGANIZER,            // 9
-    FACET_TAG_CLOUD             // 10
+    FACET_TAG_CLOUD,            // 10
+    FACET_RECENT_NOTES          // 11
 };
 
 class OrlojPresenter : public QObject
@@ -79,6 +81,7 @@ private:
     TagsTablePresenter* tagCloudPresenter;
     OutlinesTablePresenter* outlinesTablePresenter;
     NotesTablePresenter* notesTablePresenter;
+    RecentNotesTablePresenter* recentNotesTablePresenter;
     OutlineViewPresenter* outlineViewPresenter;
     OutlineHeaderViewPresenter* outlineHeaderViewPresenter;
     OutlineHeaderEditPresenter* outlineHeaderEditPresenter;
@@ -97,6 +100,7 @@ public:
     MainWindowPresenter* getMainWindow() const { return mainPresenter; }
     OutlinesTablePresenter* getOutlinesTable() const { return outlinesTablePresenter; }
     NotesTablePresenter* getNotesTable() const { return notesTablePresenter; }
+    RecentNotesTablePresenter* getRecentNotesTable() const { return recentNotesTablePresenter; }
     OutlineViewPresenter* getOutlineView() const { return outlineViewPresenter; }
     OutlineHeaderViewPresenter* getOutlineHeaderView() const { return outlineHeaderViewPresenter; }
     OutlineHeaderEditPresenter* getOutlineHeaderEdit() const { return outlineHeaderEditPresenter; }
@@ -135,6 +139,7 @@ public:
     void showFacetOrganizer(const std::vector<Outline*>& outlines);
     void showFacetTagCloud();
     void showFacetOutlineList(const std::vector<Outline*>& outlines);
+    void showFacetRecentNotes(const std::vector<Note*>& notes);
     void showFacetFtsResult(std::vector<Note*>* result);
     void showFacetOutline(Outline* outline);
     void showFacetNoteView();
@@ -153,6 +158,7 @@ public slots:
     void slotShowOutlineHeader();
     void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
     void slotShowNoteAsFtsResult(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotShowRecentNote(const QItemSelection& selected, const QItemSelection& deselected);
     void slotShowTagRecallDialog(const QItemSelection& selected, const QItemSelection& deselected);
 };
 
