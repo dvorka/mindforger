@@ -88,8 +88,10 @@ void StatusBarPresenter::showMindStatistics()
     status += " notebooks    ";
     status += cLocale.toString(mind->remind().getNotesCount());
     status += " notes    ";
+#ifdef MF_WIP
     status += cLocale.toString(mind->getTriplesCount());
     status += " triples    ";
+#endif
     status += cLocale.toString(mind->remind().getOutlineMarkdownsSize());
     status += " bytes    ";
     if(mind->getScopeAspect().isEnabled()) {
