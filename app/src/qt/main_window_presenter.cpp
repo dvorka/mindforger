@@ -865,6 +865,11 @@ void MainWindowPresenter::doActionViewOrganizer()
     }
 }
 
+void MainWindowPresenter::doActionViewKnowledgeGraphNavigator()
+{
+    orloj->showFacetKnowledgeGraphNavigator();
+}
+
 bool MainWindowPresenter::doActionViewHome()
 {
     vector<const Tag*> tagsFilter{};

@@ -43,9 +43,10 @@ OrlojView::OrlojView(QWidget* parent)
     recentNotesTable = new RecentNotesTableView(this);
     addWidget(recentNotesTable);
 
-    // TODO to be implemented
-    //navigator = new GraphWidget(this);
-    //addWidget(navigator);
+#ifdef MF_WIP
+    navigator = new GraphWidget(this);
+    addWidget(navigator);
+#endif
 
     outlineView = new OutlineViewSplitter(this);
     addWidget(outlineView);
@@ -160,6 +161,12 @@ void OrlojView::showFacetNoteEdit()
     QSet<QWidget*> v; v << outlineView << noteEdit;
     hideChildren(v);
     noteEdit->giveFocusToEditor();
+}
+
+void OrlojView::showFacetKnowledgeGraphNavigator()
+{
+    QSet<QWidget*> v; v << navigator;
+    hideChildren(v);
 }
 
 /*

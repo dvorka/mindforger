@@ -62,7 +62,8 @@ enum OrlojPresenterFacets {
     FACET_FTS_VIEW_NOTE,        // 8
     FACET_ORGANIZER,            // 9
     FACET_TAG_CLOUD,            // 10
-    FACET_RECENT_NOTES          // 11
+    FACET_RECENT_NOTES,         // 11
+    FACET_NAVIGATOR             // 12
 };
 
 class OrlojPresenter : public QObject
@@ -140,6 +141,7 @@ public:
     void showFacetTagCloud();
     void showFacetOutlineList(const std::vector<Outline*>& outlines);
     void showFacetRecentNotes(const std::vector<Note*>& notes);
+    void showFacetKnowledgeGraphNavigator();
     void showFacetFtsResult(std::vector<Note*>* result);
     void showFacetOutline(Outline* outline);
     void showFacetNoteView();

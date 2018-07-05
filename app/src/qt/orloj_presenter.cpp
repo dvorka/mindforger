@@ -135,6 +135,14 @@ void OrlojPresenter::showFacetOrganizer(const vector<Outline*>& outlines)
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
+void OrlojPresenter::showFacetKnowledgeGraphNavigator()
+{
+    setFacet(OrlojPresenterFacets::FACET_NAVIGATOR);
+    // navigatorPresenter->refresh(...);
+    view->showFacetKnowledgeGraphNavigator();
+    mainPresenter->getStatusBar()->showMindStatistics();
+}
+
 void OrlojPresenter::showFacetOutlineList(const vector<Outline*>& outlines)
 {
     setFacet(OrlojPresenterFacets::FACET_LIST_OUTLINES);

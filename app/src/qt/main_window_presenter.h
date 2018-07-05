@@ -200,6 +200,7 @@ public slots:
     bool doActionViewHome();
     void doActionViewOutlines();
     void doActionViewRecentNotes();
+    void doActionViewKnowledgeGraphNavigator();
     void doActionCli();
     void doActionViewDistractionFree();
     void doActionViewFullscreen();

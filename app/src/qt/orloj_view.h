@@ -85,6 +85,7 @@ public:
     OutlineHeaderEditView* getOutlineHeaderEdit() const { return outlineHeaderEdit; }
     NoteView* getNoteView() const { return noteView; }
     NoteEditView* getNoteEdit() const { return noteEdit; }
+    GraphWidget* getKnowledgeGraphNavigator() const { return navigator; }
 
     /**
      * @brief Organizer
@@ -140,6 +141,11 @@ public:
      * @brief Note edit
      */
     void showFacetNoteEdit();
+
+    /**
+     * @brief Knowledge graph navigator
+     */
+    void showFacetKnowledgeGraphNavigator();
 
     /*
      * Hoisting

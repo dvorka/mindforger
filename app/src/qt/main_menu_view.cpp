@@ -192,9 +192,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewTags->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_G));
     actionViewTags->setStatusTip(tr("Open Tag cloud..."));
 
-    actionViewNavigator = new QAction(tr("&Navigator"), mainWindow);
-    actionViewNavigator->setStatusTip(tr("Open Navigator..."));
-    actionViewNavigator->setEnabled(false);
+    actionViewNavigator = new QAction(tr("Knowledge Graph &Navigator"), mainWindow);
+    actionViewNavigator->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_K));
+    actionViewNavigator->setStatusTip(tr("Open knowledge graph Navigator..."));
 
     actionViewDwell = new QAction(tr("&Memory Dwell"), mainWindow);
     actionViewDwell->setStatusTip(tr("Open memory dwell..."));
