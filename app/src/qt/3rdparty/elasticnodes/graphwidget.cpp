@@ -15,8 +15,8 @@
 
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
-/****************************************************************************
+
+ ****************************************************************************
  **
  ** Copyright (C) 2016 The Qt Company Ltd.
  ** Contact: https://www.qt.io/licensing/
@@ -74,70 +74,108 @@
 
 #include <QKeyEvent>
 
-GraphWidget::GraphWidget(QWidget *parent)
+//using namespace std;
+//using namespace m8r;
+
+static int WIDTH = 1920;
+static int HEIGHT = 1080;
+
+NavigatorView::NavigatorView(QWidget *parent)
 	: QGraphicsView(parent), timerId(0)
 {
-	QGraphicsScene *scene = new QGraphicsScene(this);
-	scene->setItemIndexMethod(QGraphicsScene::NoIndex);
-	scene->setSceneRect(-200, -200, 400, 400);
-	setScene(scene);
+    // scene is peephole rectangle to the whole view (QGraphicsView)
+    navigatorScene = new QGraphicsScene(this);
+    navigatorScene->setItemIndexMethod(QGraphicsScene::NoIndex);
+    // the first two args specify location of the [0,0]
+    navigatorScene->setSceneRect(-WIDTH/4, -HEIGHT/4, WIDTH, HEIGHT);
+    setScene(navigatorScene);
+
 	setCacheMode(CacheBackground);
-	setViewportUpdateMode(BoundingRectViewportUpdate);
+    setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
 	setRenderHint(QPainter::Antialiasing);
 	setTransformationAnchor(AnchorUnderMouse);
-	scale(qreal(0.8), qreal(0.8));
-	setMinimumSize(400, 400);
-	setWindowTitle(tr("Elastic Nodes"));
-
-	Node *node1 = new Node(this);
-	Node *node2 = new Node(this);
-	Node *node3 = new Node(this);
-	Node *node4 = new Node(this);
-	centerNode = new Node(this);
-	Node *node6 = new Node(this);
-	Node *node7 = new Node(this);
-	Node *node8 = new Node(this);
-	Node *node9 = new Node(this);
-	scene->addItem(node1);
-	scene->addItem(node2);
-	scene->addItem(node3);
-	scene->addItem(node4);
-	scene->addItem(centerNode);
-	scene->addItem(node6);
-	scene->addItem(node7);
-	scene->addItem(node8);
-	scene->addItem(node9);
-	scene->addItem(new Edge(node1, node2));
-	scene->addItem(new Edge(node2, node3));
-	scene->addItem(new Edge(node2, centerNode));
-	scene->addItem(new Edge(node3, node6));
-	scene->addItem(new Edge(node4, node1));
-	scene->addItem(new Edge(node4, centerNode));
-	scene->addItem(new Edge(centerNode, node6));
-	scene->addItem(new Edge(centerNode, node8));
-	scene->addItem(new Edge(node6, node9));
-	scene->addItem(new Edge(node7, node4));
-	scene->addItem(new Edge(node8, node7));
-	scene->addItem(new Edge(node9, node8));
-
-	node1->setPos(-50, -50);
-	node2->setPos(0, -50);
-	node3->setPos(50, -50);
-	node4->setPos(-50, 0);
-	centerNode->setPos(0, 0);
-	node6->setPos(50, 0);
-	node7->setPos(-50, 50);
-	node8->setPos(0, 50);
-	node9->setPos(50, 50);
+    //scale(qreal(0.8), qreal(0.8));
+    setMinimumSize(WIDTH, HEIGHT);
 }
 
-void GraphWidget::itemMoved()
+void NavigatorView::refresh(std::vector<const m8r::Tag*> tags)
+{
+    navigatorScene->clear();
+
+    // central node
+    mfNode = new Node(QString{"MF"}, this);
+    navigatorScene->addItem(mfNode);
+    mfNode->setPos(0, 0);
+
+    int avoidIdenticalPosition{};
+    Node* n;
+    for(const m8r::Tag* t:tags) {
+        // TODO set color
+        // TODO set name
+        // TODO set type
+        n = new Node(QString::fromStdString(t->getName()), this);
+        navigatorScene->addItem(n);
+        // TODO make edges directed
+        navigatorScene->addItem(new Edge(mfNode, n));
+        n->setPos(-avoidIdenticalPosition, -avoidIdenticalPosition);
+
+        avoidIdenticalPosition += 10;
+    }
+
+//    Node *node1 = new Node(this);
+//	Node *node2 = new Node(this);
+//	Node *node3 = new Node(this);
+//	Node *node4 = new Node(this);
+//	centerNode = new Node(this);
+//	Node *node6 = new Node(this);
+//	Node *node7 = new Node(this);
+//	Node *node8 = new Node(this);
+//	Node *node9 = new Node(this);
+//	scene->addItem(node1);
+//	scene->addItem(node2);
+//	scene->addItem(node3);
+//	scene->addItem(node4);
+//	scene->addItem(centerNode);
+//	scene->addItem(node6);
+//	scene->addItem(node7);
+//	scene->addItem(node8);
+//	scene->addItem(node9);
+//	scene->addItem(new Edge(node1, node2));
+//	scene->addItem(new Edge(node2, node3));
+//	scene->addItem(new Edge(node2, centerNode));
+//	scene->addItem(new Edge(node3, node6));
+//	scene->addItem(new Edge(node4, node1));
+//	scene->addItem(new Edge(node4, centerNode));
+//	scene->addItem(new Edge(centerNode, node6));
+//	scene->addItem(new Edge(centerNode, node8));
+//	scene->addItem(new Edge(node6, node9));
+//	scene->addItem(new Edge(node7, node4));
+//	scene->addItem(new Edge(node8, node7));
+//	scene->addItem(new Edge(node9, node8));
+
+//	node1->setPos(-50, -50);
+//	node2->setPos(0, -50);
+//	node3->setPos(50, -50);
+//	node4->setPos(-50, 0);
+//	centerNode->setPos(0, 0);
+//	node6->setPos(50, 0);
+//	node7->setPos(-50, 50);
+//	node8->setPos(0, 50);
+//	node9->setPos(50, 50);
+}
+
+void NavigatorView::refresh(m8r::Outline* o)
+{
+
+}
+
+void NavigatorView::itemMoved()
 {
 	if (!timerId)
 		timerId = startTimer(1000 / 25);
 }
 
-void GraphWidget::keyPressEvent(QKeyEvent *event)
+void NavigatorView::keyPressEvent(QKeyEvent *event)
 {
 	switch (event->key()) {
 	case Qt::Key_Up:
@@ -167,12 +205,12 @@ void GraphWidget::keyPressEvent(QKeyEvent *event)
 	}
 }
 
-void GraphWidget::timerEvent(QTimerEvent *event)
+void NavigatorView::timerEvent(QTimerEvent *event)
 {
 	Q_UNUSED(event);
 
 	QList<Node *> nodes;
-	foreach (QGraphicsItem *item, scene()->items()) {
+    foreach (QGraphicsItem *item, scene()->items()) {
 		if (Node *node = qgraphicsitem_cast<Node *>(item))
 			nodes << node;
 	}
@@ -193,32 +231,32 @@ void GraphWidget::timerEvent(QTimerEvent *event)
 }
 
 #ifndef QT_NO_WHEELEVENT
-void GraphWidget::wheelEvent(QWheelEvent *event)
+void NavigatorView::wheelEvent(QWheelEvent *event)
 {
 	scaleView(pow((double)2, -event->delta() / 240.0));
 }
 #endif
 
-void GraphWidget::drawBackground(QPainter *painter, const QRectF &rect)
+void NavigatorView::drawBackground(QPainter *painter, const QRectF &rect)
 {
 	Q_UNUSED(rect);
 
-	// Shadow
-	QRectF sceneRect = this->sceneRect();
-	QRectF rightShadow(sceneRect.right(), sceneRect.top() + 5, 5, sceneRect.height());
-	QRectF bottomShadow(sceneRect.left() + 5, sceneRect.bottom(), sceneRect.width(), 5);
-	if (rightShadow.intersects(rect) || rightShadow.contains(rect))
-		painter->fillRect(rightShadow, Qt::darkGray);
-	if (bottomShadow.intersects(rect) || bottomShadow.contains(rect))
-		painter->fillRect(bottomShadow, Qt::darkGray);
+//	// Shadow
+    QRectF sceneRect = this->sceneRect();
+//	QRectF rightShadow(sceneRect.right(), sceneRect.top() + 5, 5, sceneRect.height());
+//	QRectF bottomShadow(sceneRect.left() + 5, sceneRect.bottom(), sceneRect.width(), 5);
+//	if (rightShadow.intersects(rect) || rightShadow.contains(rect))
+//		painter->fillRect(rightShadow, Qt::darkGray);
+//	if (bottomShadow.intersects(rect) || bottomShadow.contains(rect))
+//		painter->fillRect(bottomShadow, Qt::darkGray);
 
-	// Fill
-	QLinearGradient gradient(sceneRect.topLeft(), sceneRect.bottomRight());
-	gradient.setColorAt(0, Qt::white);
-	gradient.setColorAt(1, Qt::lightGray);
-	painter->fillRect(rect.intersected(sceneRect), gradient);
-	painter->setBrush(Qt::NoBrush);
-	painter->drawRect(sceneRect);
+//	// Fill
+//	QLinearGradient gradient(sceneRect.topLeft(), sceneRect.bottomRight());
+//	gradient.setColorAt(0, Qt::white);
+//	gradient.setColorAt(1, Qt::lightGray);
+//	painter->fillRect(rect.intersected(sceneRect), gradient);
+//	painter->setBrush(Qt::NoBrush);
+//	painter->drawRect(sceneRect);
 
 	// Text
 	QRectF textRect(sceneRect.left() + 4, sceneRect.top() + 4,
@@ -236,16 +274,16 @@ void GraphWidget::drawBackground(QPainter *painter, const QRectF &rect)
 	painter->drawText(textRect, message);
 }
 
-void GraphWidget::scaleView(qreal scaleFactor)
+void NavigatorView::scaleView(qreal scaleFactor)
 {
 	qreal factor = transform().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
-	if (factor < 0.07 || factor > 100)
-		return;
+    if (factor < 0.07 || factor > 100)
+        return;
 
 	scale(scaleFactor, scaleFactor);
 }
 
-void GraphWidget::shuffle()
+void NavigatorView::shuffle()
 {
 	foreach (QGraphicsItem *item, scene()->items()) {
 		if (qgraphicsitem_cast<Node *>(item))
@@ -253,12 +291,12 @@ void GraphWidget::shuffle()
 	}
 }
 
-void GraphWidget::zoomIn()
+void NavigatorView::zoomIn()
 {
 	scaleView(qreal(1.2));
 }
 
-void GraphWidget::zoomOut()
+void NavigatorView::zoomOut()
 {
 	scaleView(1 / qreal(1.2));
 }

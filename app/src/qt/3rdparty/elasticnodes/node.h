@@ -15,8 +15,8 @@
 
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
-/****************************************************************************
+
+ ****************************************************************************
  **
  ** Copyright (C) 2016 The Qt Company Ltd.
  ** Contact: https://www.qt.io/licensing/
@@ -73,13 +73,15 @@
 #include <QList>
 
 class Edge;
-class GraphWidget;
+class NavigatorView;
 class QGraphicsSceneMouseEvent;
 
 class Node : public QGraphicsItem
 {
+    QString name;
+
  public:
-	Node(GraphWidget *graphWidget);
+    Node(const QString& name, NavigatorView *graphWidget);
 
 	void addEdge(Edge *edge);
 	QList<Edge *> edges() const;
@@ -103,7 +105,7 @@ class Node : public QGraphicsItem
  private:
 	QList<Edge *> edgeList;
 	QPointF newPos;
-	GraphWidget *graph;
+    NavigatorView *graph;
 };
 
 #endif // MarkdownAstNodeSection_H

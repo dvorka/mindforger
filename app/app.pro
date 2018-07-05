@@ -159,7 +159,8 @@ HEADERS += \
     src/qt/tags_table_view.h \
     src/qt/recent_notes_table_model.h \
     src/qt/recent_notes_table_presenter.h \
-    src/qt/recent_notes_table_view.h
+    src/qt/recent_notes_table_view.h \
+    src/qt/navigator_presenter.h
 
 macx|mfwebengine {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
@@ -255,7 +256,8 @@ SOURCES += \
     src/qt/tags_table_view.cpp \
     src/qt/recent_notes_table_model.cpp \
     src/qt/recent_notes_table_presenter.cpp \
-    src/qt/recent_notes_table_view.cpp
+    src/qt/recent_notes_table_view.cpp \
+    src/qt/navigator_presenter.cpp
 
 macx|mfwebengine {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp

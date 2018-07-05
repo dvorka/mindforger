@@ -15,8 +15,8 @@
 
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
-/****************************************************************************
+
+ ****************************************************************************
  **
  ** Copyright (C) 2016 The Qt Company Ltd.
  ** Contact: https://www.qt.io/licensing/
@@ -66,26 +66,42 @@
  **
  ****************************************************************************/
 
-#ifndef GRAPHWIDGET_H
-#define GRAPHWIDGET_H
+#ifndef M8R_NAVIGATOR_VIEW_H
+#define M8R_NAVIGATOR_VIEW_H
 
 #include <QGraphicsView>
 
+#include "../../../../../lib/src/model/outline.h"
+
 class Node;
 
-class GraphWidget : public QGraphicsView
+// TODO refactor this to m8r namespace, change dir to navigator/, rename h,cpp files
+
+/**
+ * @brief Knowledge graph navigator view.
+ *
+ * @see http://doc.qt.io/qt-5/qtwidgets-graphicsview-elasticnodes-example.html
+ */
+class NavigatorView : public QGraphicsView
 {
     Q_OBJECT
 
- public:
-    GraphWidget(QWidget *parent = 0);
+    QGraphicsScene* navigatorScene;
+
+    Node* mfNode;
+
+public:
+    NavigatorView(QWidget *parent = 0);
 
     void itemMoved();
 
-    public slots:
-	    void shuffle();
-	    void zoomIn();
-	    void zoomOut();
+    void refresh(std::vector<const m8r::Tag*> tags);
+    void refresh(m8r::Outline* o);
+
+public slots:
+    void shuffle();
+    void zoomIn();
+    void zoomOut();
 
  protected:
 	    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
@@ -102,4 +118,4 @@ class GraphWidget : public QGraphicsView
 	    Node *centerNode;
 };
 
-#endif // GRAPHWIDGET_H
+#endif // M8R_NAVIGATOR_VIEW_H

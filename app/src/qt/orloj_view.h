@@ -66,7 +66,7 @@ private:
     NoteView* noteView;
     NoteEditView* noteEdit;
 
-    GraphWidget* navigator;
+    NavigatorView* navigator;
 
 public:
     explicit OrlojView(QWidget* parent);
@@ -85,7 +85,7 @@ public:
     OutlineHeaderEditView* getOutlineHeaderEdit() const { return outlineHeaderEdit; }
     NoteView* getNoteView() const { return noteView; }
     NoteEditView* getNoteEdit() const { return noteEdit; }
-    GraphWidget* getKnowledgeGraphNavigator() const { return navigator; }
+    NavigatorView* getNavigator() const { return navigator; }
 
     /**
      * @brief Organizer

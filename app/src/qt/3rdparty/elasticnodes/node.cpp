@@ -15,8 +15,8 @@
 
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
-/****************************************************************************
+
+ ****************************************************************************
  **
  ** Copyright (C) 2016 The Qt Company Ltd.
  ** Contact: https://www.qt.io/licensing/
@@ -75,12 +75,13 @@
 #include <QPainter>
 #include <QStyleOption>
 
-Node::Node(GraphWidget *graphWidget)
-	: graph(graphWidget)
+Node::Node(const QString& name, NavigatorView *graphWidget)
+    : name(name), graph(graphWidget)
 {
 	setFlag(ItemIsMovable);
 	setFlag(ItemSendsGeometryChanges);
 	setCacheMode(DeviceCoordinateCache);
+    // ensure nodes are rendered above edges
 	setZValue(-1);
 }
 
@@ -183,6 +184,15 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 	painter->setPen(QPen(Qt::black, 0));
 	painter->drawEllipse(-10, -10, 20, 20);
+
+
+
+    QFont font = painter->font();
+    font.setBold(true);
+    font.setPointSize(14);
+    painter->setFont(font);
+    painter->setPen(Qt::lightGray);
+    painter->drawText(-10, -10, name);
 }
 
 QVariant Node::itemChange(GraphicsItemChange change, const QVariant &value)

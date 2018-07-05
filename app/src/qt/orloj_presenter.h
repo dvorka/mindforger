@@ -38,6 +38,7 @@
 #include "outline_header_edit_presenter.h"
 #include "note_view_presenter.h"
 #include "note_edit_presenter.h"
+#include "navigator_presenter.h"
 
 namespace m8r {
 
@@ -88,6 +89,7 @@ private:
     OutlineHeaderEditPresenter* outlineHeaderEditPresenter;
     NoteViewPresenter* noteViewPresenter;
     NoteEditPresenter* noteEditPresenter;
+    NavigatorPresenter* navigatorPresenter;
 
 public:
     OrlojPresenter(MainWindowPresenter* mainPresenter,

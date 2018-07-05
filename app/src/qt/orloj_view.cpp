@@ -44,7 +44,7 @@ OrlojView::OrlojView(QWidget* parent)
     addWidget(recentNotesTable);
 
 #ifdef MF_WIP
-    navigator = new GraphWidget(this);
+    navigator = new NavigatorView(this);
     addWidget(navigator);
 #endif
 
