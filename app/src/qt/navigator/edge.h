@@ -66,20 +66,25 @@
  **
  ****************************************************************************/
 
-#ifndef EDGE_H
-#define EDGE_H
+#ifndef M8RUI_NAVIGATOR_EDGE_H
+#define M8RUI_NAVIGATOR_EDGE_H
 
 #include <QGraphicsItem>
 
-class Node;
+namespace m8r {
 
-class Edge : public QGraphicsItem
+class NavigatorNode;
+
+/**
+ * @brief Knowledge graph navigator edge.
+ */
+class NavigatorEdge : public QGraphicsItem
 {
  public:
-    Edge(Node *getSrcNode, Node *getDstNode);
+    NavigatorEdge(NavigatorNode *getSrcNode, NavigatorNode *getDstNode);
 
-    Node *getSrcNode() const;
-    Node *getDstNode() const;
+    NavigatorNode *getSrcNode() const;
+    NavigatorNode *getDstNode() const;
 
 	void adjust();
 
@@ -91,7 +96,7 @@ class Edge : public QGraphicsItem
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
 
  private:
-    Node *srcNode, *dstNode;
+    NavigatorNode *srcNode, *dstNode;
 
     QPointF srcPoint;
     QPointF dstPoint;
@@ -100,4 +105,5 @@ class Edge : public QGraphicsItem
     void paintLineWithTwoArrows(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
-#endif // EDGE_H
+}
+#endif // M8RUI_NAVIGATOR_EDGE_H

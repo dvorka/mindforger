@@ -73,10 +73,12 @@
 
 #include <QPainter>
 
-static const double Pi = 3.14159265358979323846264338327950288419717;
-static double TwoPi = 2.0 * Pi;
+namespace m8r {
 
-Edge::Edge(Node *source, Node *destination)
+static const double PI = 3.14159265358979323846264338327950288419717;
+static double TWO_PI = 2.0*PI;
+
+NavigatorEdge::NavigatorEdge(NavigatorNode *source, NavigatorNode *destination)
 	: arrowSize(10)
 {
 	setAcceptedMouseButtons(0);
@@ -90,17 +92,17 @@ Edge::Edge(Node *source, Node *destination)
     setZValue(1);
 }
 
-Node *Edge::getSrcNode() const
+NavigatorNode *NavigatorEdge::getSrcNode() const
 {
     return srcNode;
 }
 
-Node *Edge::getDstNode() const
+NavigatorNode *NavigatorEdge::getDstNode() const
 {
     return dstNode;
 }
 
-void Edge::adjust()
+void NavigatorEdge::adjust()
 {
     if (!srcNode || !dstNode)
 		return;
@@ -119,7 +121,7 @@ void Edge::adjust()
 	}
 }
 
-QRectF Edge::boundingRect() const
+QRectF NavigatorEdge::boundingRect() const
 {
     if (!srcNode || !dstNode)
 		return QRectF();
@@ -127,14 +129,15 @@ QRectF Edge::boundingRect() const
 	qreal penWidth = 1;
 	qreal extra = (penWidth + arrowSize) / 2.0;
 
-    return QRectF(srcPoint, QSizeF(dstPoint.x() - srcPoint.x(),
-                      dstPoint.y() - srcPoint.y()))
+    return QRectF(
+                srcPoint,
+                QSizeF(dstPoint.x() - srcPoint.x(), dstPoint.y() - srcPoint.y()))
 		.normalized()
 		.adjusted(-extra, -extra, extra, extra);
 }
 
 // MindRaider style edge: draw triangle that represents oriented arrow
-void Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget*)
+void NavigatorEdge::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget*)
 {
     if (!srcNode || !dstNode)
         return;
@@ -151,7 +154,7 @@ void Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget*)
 }
 
 // Line w/ two arrows edge
-void Edge::paintLineWithTwoArrows(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+void NavigatorEdge::paintLineWithTwoArrows(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     if (!srcNode || !dstNode)
 		return;
@@ -167,18 +170,20 @@ void Edge::paintLineWithTwoArrows(QPainter *painter, const QStyleOptionGraphicsI
     // Draw the arrows
     double angle = ::acos(line.dx() / line.length());
     if (line.dy() >= 0)
-        angle = TwoPi - angle;
+        angle = TWO_PI - angle;
 
-    QPointF sourceArrowP1 = srcPoint + QPointF(sin(angle + Pi / 3) * arrowSize,
-                              cos(angle + Pi / 3) * arrowSize);
-    QPointF sourceArrowP2 = srcPoint + QPointF(sin(angle + Pi - Pi / 3) * arrowSize,
-                              cos(angle + Pi - Pi / 3) * arrowSize);
-    QPointF destArrowP1 = dstPoint + QPointF(sin(angle - Pi / 3) * arrowSize,
-                          cos(angle - Pi / 3) * arrowSize);
-    QPointF destArrowP2 = dstPoint + QPointF(sin(angle - Pi + Pi / 3) * arrowSize,
-                          cos(angle - Pi + Pi / 3) * arrowSize);
+    QPointF sourceArrowP1 = srcPoint + QPointF(sin(angle + PI / 3) * arrowSize,
+                              cos(angle + PI / 3) * arrowSize);
+    QPointF sourceArrowP2 = srcPoint + QPointF(sin(angle + PI - PI / 3) * arrowSize,
+                              cos(angle + PI - PI / 3) * arrowSize);
+    QPointF destArrowP1 = dstPoint + QPointF(sin(angle - PI / 3) * arrowSize,
+                          cos(angle - PI / 3) * arrowSize);
+    QPointF destArrowP2 = dstPoint + QPointF(sin(angle - PI + PI / 3) * arrowSize,
+                          cos(angle - PI + PI / 3) * arrowSize);
 
     painter->setBrush(Qt::black);
     painter->drawPolygon(QPolygonF() << line.p1() << sourceArrowP1 << sourceArrowP2);
     painter->drawPolygon(QPolygonF() << line.p2() << destArrowP1 << destArrowP2);
 }
+
+} // m8r namespace

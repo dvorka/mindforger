@@ -31,7 +31,7 @@
 #include "outline_header_edit_view.h"
 #include "note_view.h"
 #include "note_edit_view.h"
-#include "3rdparty/elasticnodes/graphwidget.h"
+#include "navigator/navigator_view.h"
 
 namespace m8r {
 

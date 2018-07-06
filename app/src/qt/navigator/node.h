@@ -66,28 +66,33 @@
  **
  ****************************************************************************/
 
-#ifndef MarkdownAstNodeSection_H
-#define MarkdownAstNodeSection_H
+#ifndef M8RUI_NAVIGATOR_NODE_H
+#define M8RUI_NAVIGATOR_NODE_H
 
-#include <QGraphicsItem>
-#include <QList>
+#include <QtWidgets>
 
-class Edge;
+namespace m8r {
+
+class NavigatorEdge;
 class NavigatorView;
-class QGraphicsSceneMouseEvent;
 
-class Node : public QGraphicsItem
+/**
+ * @brief Knowledge graph navigator node.
+ */
+class NavigatorNode : public QGraphicsItem
 {
     QString nodeName;
+    NavigatorView* navigator;
     QColor nodeColor;
+
     qreal nodeWidth = 100;
     qreal nodeHeight = 15;
 
  public:
-    Node(const QString& name, NavigatorView* navigator, const QColor& color);
+    NavigatorNode(const QString& name, NavigatorView* navigator, const QColor& color);
 
-	void addEdge(Edge *edge);
-	QList<Edge *> edges() const;
+    void addEdge(NavigatorEdge* edge);
+    QList<NavigatorEdge*> edges() const;
 
 	enum { Type = UserType + 1 };
 	int type() const Q_DECL_OVERRIDE { return Type; }
@@ -95,22 +100,22 @@ class Node : public QGraphicsItem
 	void calculateForces();
 	bool advance();
 
-	QRectF boundingRect() const Q_DECL_OVERRIDE;
-	QPainterPath shape() const Q_DECL_OVERRIDE;
-	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
+    QRectF boundingRect() const override;
+    QPainterPath shape() const override;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
  protected:
-	QVariant itemChange(GraphicsItemChange change, const QVariant &value) Q_DECL_OVERRIDE;
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
-	void mousePressEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
 
  private:
-	QList<Edge *> edgeList;
+    QList<NavigatorEdge*> edgeList;
 	QPointF newPos;
-    NavigatorView* navigator;
 
     void paintCircleWithShade(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 };
 
-#endif // MarkdownAstNodeSection_H
+}
+#endif // M8RUI_NAVIGATOR_NODE_H

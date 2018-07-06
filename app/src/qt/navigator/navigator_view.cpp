@@ -66,13 +66,15 @@
  **
  ****************************************************************************/
 
-#include "graphwidget.h"
+#include "navigator_view.h"
 #include "edge.h"
 #include "node.h"
 
 #include <math.h>
 
 #include <QKeyEvent>
+
+namespace m8r {
 
 NavigatorView::NavigatorView(QWidget* parent)
 	: QGraphicsView(parent), timerId(0)
@@ -102,21 +104,21 @@ void NavigatorView::refresh(std::vector<const m8r::Tag*> tags)
     navigatorScene->clear();
 
     // central node
-    mfNode = new Node(QString{"< Mind >"}, this, Qt::black);
+    mfNode = new NavigatorNode(QString{"< Mind >"}, this, Qt::black);
     navigatorScene->addItem(mfNode);
     mfNode->setPos(0, 0);
 
     int avoidIdenticalPosition{};
-    Node* n;
-    Edge* e;
+    NavigatorNode* n;
+    NavigatorEdge* e;
     for(const m8r::Tag* t:tags) {
         // TODO set color
         // TODO set name
         // TODO set type
-        n = new Node(QString::fromStdString(t->getName()), this, QColor(t->getColor().asLong()));
+        n = new NavigatorNode(QString::fromStdString(t->getName()), this, QColor(t->getColor().asLong()));
         n->setZValue(2);
         navigatorScene->addItem(n);
-        e = new Edge(mfNode, n);
+        e = new NavigatorEdge(mfNode, n);
         navigatorScene->addItem(e);
         n->setPos(-avoidIdenticalPosition, -avoidIdenticalPosition);
 
@@ -169,17 +171,17 @@ void NavigatorView::timerEvent(QTimerEvent *event)
 {
 	Q_UNUSED(event);
 
-    QList<Node*> nodes;
+    QList<NavigatorNode*> nodes;
     foreach(QGraphicsItem *item, scene()->items()) {
-        if(Node *node = qgraphicsitem_cast<Node *>(item))
+        if(NavigatorNode *node = qgraphicsitem_cast<NavigatorNode *>(item))
 			nodes << node;
 	}
 
-    foreach(Node *node, nodes)
+    foreach(NavigatorNode *node, nodes)
 		node->calculateForces();
 
 	bool itemsMoved = false;
-    foreach(Node *node, nodes) {
+    foreach(NavigatorNode *node, nodes) {
         if(node->advance())
 			itemsMoved = true;
 	}
@@ -249,7 +251,7 @@ void NavigatorView::scaleView(qreal scaleFactor)
 void NavigatorView::shuffle()
 {
 	foreach (QGraphicsItem *item, scene()->items()) {
-		if (qgraphicsitem_cast<Node *>(item))
+        if (qgraphicsitem_cast<NavigatorNode *>(item))
 			item->setPos(-150 + qrand() % 300, -150 + qrand() % 300);
 	}
 }
@@ -263,3 +265,5 @@ void NavigatorView::zoomOut()
 {
 	scaleView(1 / qreal(1.2));
 }
+
+}  // m8r namespace

@@ -79,9 +79,9 @@ QMAKE_CXXFLAGS += -pedantic -std=c++11
 #QMAKE_LFLAGS_DEBUG *= -pg
 
 HEADERS += \
-    ./src/qt/3rdparty/elasticnodes/edge.h \
-    ./src/qt/3rdparty/elasticnodes/graphwidget.h \
-    ./src/qt/3rdparty/elasticnodes/node.h \
+    ./src/qt/navigator/edge.h \
+    ./src/qt/navigator/navigator_view.h \
+    ./src/qt/navigator/node.h \
     ./src/qt/main_window_view.h \
     ./src/qt/outlines_table_view.h \
     ./src/qt/outlines_table_presenter.h \
@@ -174,12 +174,11 @@ mfner {
     src/qt/ner_main_window_worker_thread.h
 }
 
-
 SOURCES += \
     ./src/qt/mindforger.cpp \
-    ./src/qt/3rdparty/elasticnodes/edge.cpp \
-    ./src/qt/3rdparty/elasticnodes/graphwidget.cpp \
-    ./src/qt/3rdparty/elasticnodes/node.cpp \
+    ./src/qt/navigator/edge.cpp \
+    ./src/qt/navigator/navigator_view.cpp \
+    ./src/qt/navigator/node.cpp \
     ./src/qt/main_window_view.cpp \
     ./src/qt/outlines_table_view.cpp \
     ./src/qt/outlines_table_presenter.cpp \

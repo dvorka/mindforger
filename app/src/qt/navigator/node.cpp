@@ -68,14 +68,16 @@
 
 #include "edge.h"
 #include "node.h"
-#include "graphwidget.h"
+#include "navigator_view.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QStyleOption>
 
-Node::Node(const QString& name, NavigatorView* navigator, const QColor& color)
+namespace m8r {
+
+NavigatorNode::NavigatorNode(const QString& name, NavigatorView* navigator, const QColor& color)
     : nodeName(name), navigator(navigator), nodeColor(color)
 {
 	setFlag(ItemIsMovable);
@@ -85,47 +87,51 @@ Node::Node(const QString& name, NavigatorView* navigator, const QColor& color)
     setZValue(2);
 }
 
-void Node::addEdge(Edge *edge)
+void NavigatorNode::addEdge(NavigatorEdge *edge)
 {
 	edgeList << edge;
 	edge->adjust();
 }
 
-QList<Edge *> Node::edges() const
+QList<NavigatorEdge *> NavigatorNode::edges() const
 {
 	return edgeList;
 }
 
-void Node::calculateForces()
+/**
+ * Force-drive graph: magnets and rubber bands
+ */
+void NavigatorNode::calculateForces()
 {
 	if (!scene() || scene()->mouseGrabberItem() == this) {
 		newPos = pos();
 		return;
 	}
 
-	// Sum up all forces pushing this item away
+    // NODES ~ MAGNETS: sum up all forces pushing this item away
 	qreal xvel = 0;
 	qreal yvel = 0;
-	foreach (QGraphicsItem *item, scene()->items()) {
-		Node *node = qgraphicsitem_cast<Node *>(item);
-		if (!node)
+    foreach(QGraphicsItem* item, scene()->items()) {
+        NavigatorNode* node = qgraphicsitem_cast<NavigatorNode*>(item);
+        if(!node) {
 			continue;
+        }
 
 		QPointF vec = mapToItem(node, 0, 0);
 		qreal dx = vec.x();
 		qreal dy = vec.y();
-		double l = 2.0 * (dx * dx + dy * dy);
-		if (l > 0) {
+        double l = 2.0 * (dx*dx + dy*dy);
+        if(l > 0) {
 			xvel += (dx * 150.0) / l;
 			yvel += (dy * 150.0) / l;
 		}
 	}
 
-	// Now subtract all forces pulling items together
+    // EDGES ~ RUBBERS: now subtract all forces pulling items together
 	double weight = (edgeList.size() + 1) * 10;
-	foreach (Edge *edge, edgeList) {
+    foreach(NavigatorEdge *edge, edgeList) {
 		QPointF vec;
-        if (edge->getSrcNode() == this)
+        if(edge->getSrcNode() == this)
             vec = mapToItem(edge->getDstNode(), 0, 0);
 		else
             vec = mapToItem(edge->getSrcNode(), 0, 0);
@@ -133,16 +139,18 @@ void Node::calculateForces()
 		yvel -= vec.y() / weight;
 	}
 
-	if (qAbs(xvel) < 0.1 && qAbs(yvel) < 0.1)
+    if(qAbs(xvel) < 0.1 && qAbs(yvel) < 0.1) {
 		xvel = yvel = 0;
+    }
 
+    // recalculate position
 	QRectF sceneRect = scene()->sceneRect();
 	newPos = pos() + QPointF(xvel, yvel);
 	newPos.setX(qMin(qMax(newPos.x(), sceneRect.left() + 10), sceneRect.right() - 10));
 	newPos.setY(qMin(qMax(newPos.y(), sceneRect.top() + 10), sceneRect.bottom() - 10));
 }
 
-bool Node::advance()
+bool NavigatorNode::advance()
 {
 	if (newPos == pos())
 		return false;
@@ -152,7 +160,7 @@ bool Node::advance()
 }
 
 // IMPORTANT bondingRect MUST be sect correctly, otherwise drawing is CLIPPED (text or shape)
-QRectF Node::boundingRect() const
+QRectF NavigatorNode::boundingRect() const
 {
     qreal adjust = 2;
 
@@ -160,7 +168,7 @@ QRectF Node::boundingRect() const
     return QRectF( -nodeWidth/2 - adjust, -nodeHeight/2 - adjust, nodeWidth + adjust, nodeHeight + adjust);
 }
 
-QPainterPath Node::shape() const
+QPainterPath NavigatorNode::shape() const
 {
 	QPainterPath path;
 	path.addEllipse(-10, -10, 20, 20);
@@ -168,7 +176,7 @@ QPainterPath Node::shape() const
 }
 
 // IMPORTANT this method must be FAST - every CPU tick matters
-void Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* )
+void NavigatorNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* )
 {
     // IMPROVE color and shape driven by node type
 
@@ -201,7 +209,7 @@ void Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWid
     painter->drawText((-nodeWidth+PADDING_WIDTH)/2, 0+PADDING_HEIGHT/2+2, nodeName);
 }
 
-void Node::paintCircleWithShade(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* )
+void NavigatorNode::paintCircleWithShade(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* )
 {
     painter->setPen(Qt::NoPen);
     painter->setBrush(Qt::darkGray);
@@ -223,11 +231,11 @@ void Node::paintCircleWithShade(QPainter* painter, const QStyleOptionGraphicsIte
     painter->drawEllipse(-10, -10, 20, 20);
 }
 
-QVariant Node::itemChange(GraphicsItemChange change, const QVariant &value)
+QVariant NavigatorNode::itemChange(GraphicsItemChange change, const QVariant &value)
 {
 	switch (change) {
 	case ItemPositionHasChanged:
-		foreach (Edge *edge, edgeList)
+        foreach (NavigatorEdge *edge, edgeList)
 			edge->adjust();
         navigator->itemMoved();
 		break;
@@ -238,14 +246,16 @@ QVariant Node::itemChange(GraphicsItemChange change, const QVariant &value)
 	return QGraphicsItem::itemChange(change, value);
 }
 
-void Node::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void NavigatorNode::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
 	update();
 	QGraphicsItem::mousePressEvent(event);
 }
 
-void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void NavigatorNode::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
 	update();
 	QGraphicsItem::mouseReleaseEvent(event);
 }
+
+} // m8r namespace

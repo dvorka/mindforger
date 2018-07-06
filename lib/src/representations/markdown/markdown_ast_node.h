@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef M8R_MARKDOWN_AST_MarkdownAstNodeSection_H_
-#define M8R_MARKDOWN_AST_MarkdownAstNodeSection_H_
+#ifndef M8R_MARKDOWN_AST_M8RUI_NAVIGATOR_NODE_H_
+#define M8R_MARKDOWN_AST_M8RUI_NAVIGATOR_NODE_H_
 
 #include <string>
 
@@ -211,4 +211,4 @@ public:
 
 } // m8r namespace
 
-#endif /* M8R_MARKDOWN_AST_MarkdownAstNodeSection_H_ */
+#endif /* M8R_MARKDOWN_AST_M8RUI_NAVIGATOR_NODE_H_ */

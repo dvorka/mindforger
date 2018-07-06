@@ -22,7 +22,7 @@
 #include <QtWidgets>
 
 #include "../../lib/src/model/tag.h"
-#include "3rdparty/elasticnodes/graphwidget.h"
+#include "navigator/navigator_view.h"
 
 namespace m8r {
 

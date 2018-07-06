@@ -71,11 +71,11 @@
 
 #include <QGraphicsView>
 
-#include "../../../../../lib/src/model/outline.h"
+#include "../../../../lib/src/model/outline.h"
 
-class Node;
+namespace m8r {
 
-// TODO refactor this to m8r namespace, change dir to navigator/, rename h,cpp files
+class NavigatorNode;
 
 /**
  * @brief Knowledge graph navigator view.
@@ -88,7 +88,7 @@ class NavigatorView : public QGraphicsView
 
     QGraphicsScene* navigatorScene;
 
-    Node* mfNode;
+    NavigatorNode* mfNode;
 
 public:
     NavigatorView(QWidget *parent = 0);
@@ -115,7 +115,8 @@ public slots:
 
  private:
 	    int timerId;
-	    Node *centerNode;
+        NavigatorNode *centerNode;
 };
 
+}
 #endif // M8R_NAVIGATOR_VIEW_H

@@ -273,4 +273,3 @@ void MarkdownAstSectionMetadata::setLinks(std::vector<Link*>* links)
 }
 
 } // m8r namespace
-
