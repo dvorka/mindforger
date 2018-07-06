@@ -76,10 +76,10 @@ class Node;
 class Edge : public QGraphicsItem
 {
  public:
-	Edge(Node *sourceNode, Node *destNode);
+    Edge(Node *getSrcNode, Node *getDstNode);
 
-	Node *sourceNode() const;
-	Node *destNode() const;
+    Node *getSrcNode() const;
+    Node *getDstNode() const;
 
 	void adjust();
 
@@ -91,11 +91,13 @@ class Edge : public QGraphicsItem
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
 
  private:
-	Node *source, *dest;
+    Node *srcNode, *dstNode;
 
-	QPointF sourcePoint;
-	QPointF destPoint;
+    QPointF srcPoint;
+    QPointF dstPoint;
 	qreal arrowSize;
+
+    void paintLineWithTwoArrows(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 #endif // EDGE_H

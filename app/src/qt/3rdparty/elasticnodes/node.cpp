@@ -75,14 +75,14 @@
 #include <QPainter>
 #include <QStyleOption>
 
-Node::Node(const QString& name, NavigatorView *graphWidget)
-    : name(name), graph(graphWidget)
+Node::Node(const QString& name, NavigatorView* navigator, const QColor& color)
+    : nodeName(name), navigator(navigator), nodeColor(color)
 {
 	setFlag(ItemIsMovable);
 	setFlag(ItemSendsGeometryChanges);
 	setCacheMode(DeviceCoordinateCache);
-    // ensure nodes are rendered above edges
-	setZValue(-1);
+    // ensure nodes are rendered above edges: higher z makes item rendered last i.e. above items w/ lower z
+    setZValue(2);
 }
 
 void Node::addEdge(Edge *edge)
@@ -125,10 +125,10 @@ void Node::calculateForces()
 	double weight = (edgeList.size() + 1) * 10;
 	foreach (Edge *edge, edgeList) {
 		QPointF vec;
-		if (edge->sourceNode() == this)
-			vec = mapToItem(edge->destNode(), 0, 0);
+        if (edge->getSrcNode() == this)
+            vec = mapToItem(edge->getDstNode(), 0, 0);
 		else
-			vec = mapToItem(edge->sourceNode(), 0, 0);
+            vec = mapToItem(edge->getSrcNode(), 0, 0);
 		xvel -= vec.x() / weight;
 		yvel -= vec.y() / weight;
 	}
@@ -151,16 +151,13 @@ bool Node::advance()
 	return true;
 }
 
+// IMPORTANT bondingRect MUST be sect correctly, otherwise drawing is CLIPPED (text or shape)
 QRectF Node::boundingRect() const
 {
-	qreal adjust = 2;
+    qreal adjust = 2;
+
     //return QRectF( -10 - adjust, -10 - adjust, 23 + adjust, 23 + adjust);
-
-    // IMPORTANT this is the key
-
-    // TODO tune 123 to something smarter
-
-    return QRectF( -10 - adjust, -10 - adjust, 123 + adjust, 23 + adjust);
+    return QRectF( -nodeWidth/2 - adjust, -nodeHeight/2 - adjust, nodeWidth + adjust, nodeHeight + adjust);
 }
 
 QPainterPath Node::shape() const
@@ -170,7 +167,41 @@ QPainterPath Node::shape() const
 	return path;
 }
 
+// IMPORTANT this method must be FAST - every CPU tick matters
 void Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* )
+{
+    // IMPROVE color and shape driven by node type
+
+    // IMPROVE get font from navigator
+    //navigator->getNodeFont();
+    // IMPROVE calculate this only ONCE - font to be passed from parent and used through all the code
+    QFont font = painter->font();
+    font.setPointSize(10);
+    painter->setFont(font);
+
+    QFontMetrics fm = painter->fontMetrics();
+    qreal PADDING_WIDTH = 10;
+    qreal PADDING_HEIGHT = 6;
+    int textWidth = fm.width(nodeName);
+    int textHeight = fm.height();
+    nodeWidth = textWidth + PADDING_WIDTH;
+    nodeHeight = textHeight + PADDING_HEIGHT;
+
+    // TODO measure text (constructor) width and rectangle width driven by width w/ a limit and trailing ...
+
+    // rectangle
+    QRectF rectF{-nodeWidth/2,-nodeHeight/2, nodeWidth, nodeHeight};
+    painter->setPen(QPen(Qt::darkGray, 0));
+    painter->setBrush(nodeColor);
+    painter->drawRect(rectF);
+
+    // label ... IMPORTANT: check boundingRect() to ensure text is NOT clipped
+    // IMPROVE detect white to avoid white on white
+    painter->setPen(Qt::white);
+    painter->drawText((-nodeWidth+PADDING_WIDTH)/2, 0+PADDING_HEIGHT/2+2, nodeName);
+}
+
+void Node::paintCircleWithShade(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* )
 {
     painter->setPen(Qt::NoPen);
     painter->setBrush(Qt::darkGray);
@@ -190,17 +221,6 @@ void Node::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWid
 
     painter->setPen(QPen(Qt::black, 0));
     painter->drawEllipse(-10, -10, 20, 20);
-
-
-
-    // label
-    painter->setPen(Qt::lightGray);
-    QFont font = painter->font();
-    font.setPointSize(10);
-    painter->setFont(font);
-
-    // IMPORTANT: check boundingRect() to ensure text is NOT clipped
-    painter->drawText(15, 0, name);
 }
 
 QVariant Node::itemChange(GraphicsItemChange change, const QVariant &value)
@@ -209,7 +229,7 @@ QVariant Node::itemChange(GraphicsItemChange change, const QVariant &value)
 	case ItemPositionHasChanged:
 		foreach (Edge *edge, edgeList)
 			edge->adjust();
-		graph->itemMoved();
+        navigator->itemMoved();
 		break;
 	default:
 		break;

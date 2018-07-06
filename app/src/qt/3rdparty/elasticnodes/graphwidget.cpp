@@ -74,9 +74,6 @@
 
 #include <QKeyEvent>
 
-//using namespace std;
-//using namespace m8r;
-
 NavigatorView::NavigatorView(QWidget* parent)
 	: QGraphicsView(parent), timerId(0)
 {    
@@ -105,20 +102,22 @@ void NavigatorView::refresh(std::vector<const m8r::Tag*> tags)
     navigatorScene->clear();
 
     // central node
-    mfNode = new Node(QString{"MF"}, this);
+    mfNode = new Node(QString{"< Mind >"}, this, Qt::black);
     navigatorScene->addItem(mfNode);
     mfNode->setPos(0, 0);
 
     int avoidIdenticalPosition{};
     Node* n;
+    Edge* e;
     for(const m8r::Tag* t:tags) {
         // TODO set color
         // TODO set name
         // TODO set type
-        n = new Node(QString::fromStdString(t->getName()), this);
+        n = new Node(QString::fromStdString(t->getName()), this, QColor(t->getColor().asLong()));
+        n->setZValue(2);
         navigatorScene->addItem(n);
-        // TODO make edges directed
-        navigatorScene->addItem(new Edge(mfNode, n));
+        e = new Edge(mfNode, n);
+        navigatorScene->addItem(e);
         n->setPos(-avoidIdenticalPosition, -avoidIdenticalPosition);
 
         avoidIdenticalPosition += 10;
@@ -170,22 +169,22 @@ void NavigatorView::timerEvent(QTimerEvent *event)
 {
 	Q_UNUSED(event);
 
-	QList<Node *> nodes;
-    foreach (QGraphicsItem *item, scene()->items()) {
-		if (Node *node = qgraphicsitem_cast<Node *>(item))
+    QList<Node*> nodes;
+    foreach(QGraphicsItem *item, scene()->items()) {
+        if(Node *node = qgraphicsitem_cast<Node *>(item))
 			nodes << node;
 	}
 
-	foreach (Node *node, nodes)
+    foreach(Node *node, nodes)
 		node->calculateForces();
 
 	bool itemsMoved = false;
-	foreach (Node *node, nodes) {
-		if (node->advance())
+    foreach(Node *node, nodes) {
+        if(node->advance())
 			itemsMoved = true;
 	}
 
-	if (!itemsMoved) {
+    if(!itemsMoved) {
 		killTimer(timerId);
 		timerId = 0;
 	}
@@ -200,30 +199,32 @@ void NavigatorView::wheelEvent(QWheelEvent *event)
 
 void NavigatorView::drawBackground(QPainter *painter, const QRectF &rect)
 {
-	Q_UNUSED(rect);
+    Q_UNUSED(painter);
+    Q_UNUSED(rect);
 
-//	// Shadow
+/*
+    // Shadow
     QRectF sceneRect = this->sceneRect();
-//	QRectF rightShadow(sceneRect.right(), sceneRect.top() + 5, 5, sceneRect.height());
-//	QRectF bottomShadow(sceneRect.left() + 5, sceneRect.bottom(), sceneRect.width(), 5);
-//	if (rightShadow.intersects(rect) || rightShadow.contains(rect))
-//		painter->fillRect(rightShadow, Qt::darkGray);
-//	if (bottomShadow.intersects(rect) || bottomShadow.contains(rect))
-//		painter->fillRect(bottomShadow, Qt::darkGray);
+    QRectF rightShadow(sceneRect.right(), sceneRect.top() + 5, 5, sceneRect.height());
+    QRectF bottomShadow(sceneRect.left() + 5, sceneRect.bottom(), sceneRect.width(), 5);
+    if (rightShadow.intersects(rect) || rightShadow.contains(rect))
+        painter->fillRect(rightShadow, Qt::darkGray);
+    if (bottomShadow.intersects(rect) || bottomShadow.contains(rect))
+        painter->fillRect(bottomShadow, Qt::darkGray);
 
-//	// Fill
-//	QLinearGradient gradient(sceneRect.topLeft(), sceneRect.bottomRight());
-//	gradient.setColorAt(0, Qt::white);
-//	gradient.setColorAt(1, Qt::lightGray);
-//	painter->fillRect(rect.intersected(sceneRect), gradient);
-//	painter->setBrush(Qt::NoBrush);
-//	painter->drawRect(sceneRect);
+    // Fill
+    QLinearGradient gradient(sceneRect.topLeft(), sceneRect.bottomRight());
+    gradient.setColorAt(0, Qt::white);
+    gradient.setColorAt(1, Qt::lightGray);
+    painter->fillRect(rect.intersected(sceneRect), gradient);
+    painter->setBrush(Qt::NoBrush);
+    painter->drawRect(sceneRect);
 
-	// Text
-	QRectF textRect(sceneRect.left() + 4, sceneRect.top() + 4,
-			sceneRect.width() - 4, sceneRect.height() - 4);
-	QString message(tr("Click and drag the nodes around, and zoom with the mouse "
-			   "wheel or the '+' and '-' keys"));
+    // Text
+    QRectF textRect(sceneRect.left() + 4, sceneRect.top() + 4,
+            sceneRect.width() - 4, sceneRect.height() - 4);
+    QString message(tr("Click and drag the nodes around, and zoom with the mouse "
+               "wheel or the '+' and '-' keys"));
 
 	QFont font = painter->font();
 	font.setBold(true);
@@ -233,6 +234,7 @@ void NavigatorView::drawBackground(QPainter *painter, const QRectF &rect)
 	painter->drawText(textRect.translated(2, 2), message);
 	painter->setPen(Qt::black);
 	painter->drawText(textRect, message);
+*/
 }
 
 void NavigatorView::scaleView(qreal scaleFactor)

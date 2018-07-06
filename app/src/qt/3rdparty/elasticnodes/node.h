@@ -78,10 +78,13 @@ class QGraphicsSceneMouseEvent;
 
 class Node : public QGraphicsItem
 {
-    QString name;
+    QString nodeName;
+    QColor nodeColor;
+    qreal nodeWidth = 100;
+    qreal nodeHeight = 15;
 
  public:
-    Node(const QString& name, NavigatorView *graphWidget);
+    Node(const QString& name, NavigatorView* navigator, const QColor& color);
 
 	void addEdge(Edge *edge);
 	QList<Edge *> edges() const;
@@ -105,7 +108,9 @@ class Node : public QGraphicsItem
  private:
 	QList<Edge *> edgeList;
 	QPointF newPos;
-    NavigatorView *graph;
+    NavigatorView* navigator;
+
+    void paintCircleWithShade(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 };
 
 #endif // MarkdownAstNodeSection_H
