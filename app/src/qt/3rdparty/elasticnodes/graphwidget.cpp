@@ -77,29 +77,31 @@
 //using namespace std;
 //using namespace m8r;
 
-static int WIDTH = 1920;
-static int HEIGHT = 1080;
-
-NavigatorView::NavigatorView(QWidget *parent)
+NavigatorView::NavigatorView(QWidget* parent)
 	: QGraphicsView(parent), timerId(0)
-{
+{    
     // scene is peephole rectangle to the whole view (QGraphicsView)
     navigatorScene = new QGraphicsScene(this);
     navigatorScene->setItemIndexMethod(QGraphicsScene::NoIndex);
-    // the first two args specify location of the [0,0]
-    navigatorScene->setSceneRect(-WIDTH/4, -HEIGHT/4, WIDTH, HEIGHT);
     setScene(navigatorScene);
 
 	setCacheMode(CacheBackground);
     setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
 	setRenderHint(QPainter::Antialiasing);
 	setTransformationAnchor(AnchorUnderMouse);
-    //scale(qreal(0.8), qreal(0.8));
-    setMinimumSize(WIDTH, HEIGHT);
 }
 
 void NavigatorView::refresh(std::vector<const m8r::Tag*> tags)
 {
+    // IMPROVE: resize scene also on window resize event
+    int w = static_cast<QWidget*>(parent())->width();
+    int h = static_cast<QWidget*>(parent())->height();
+    // the first two args specify location of the [0,0]
+    navigatorScene->setSceneRect(-w/4, -h/4, w, h);
+    // scale scene to avoid scroll bars
+    scale(qreal(0.99), qreal(0.99));
+    //setMinimumSize(WIDTH, HEIGHT);
+
     navigatorScene->clear();
 
     // central node
@@ -121,52 +123,11 @@ void NavigatorView::refresh(std::vector<const m8r::Tag*> tags)
 
         avoidIdenticalPosition += 10;
     }
-
-//    Node *node1 = new Node(this);
-//	Node *node2 = new Node(this);
-//	Node *node3 = new Node(this);
-//	Node *node4 = new Node(this);
-//	centerNode = new Node(this);
-//	Node *node6 = new Node(this);
-//	Node *node7 = new Node(this);
-//	Node *node8 = new Node(this);
-//	Node *node9 = new Node(this);
-//	scene->addItem(node1);
-//	scene->addItem(node2);
-//	scene->addItem(node3);
-//	scene->addItem(node4);
-//	scene->addItem(centerNode);
-//	scene->addItem(node6);
-//	scene->addItem(node7);
-//	scene->addItem(node8);
-//	scene->addItem(node9);
-//	scene->addItem(new Edge(node1, node2));
-//	scene->addItem(new Edge(node2, node3));
-//	scene->addItem(new Edge(node2, centerNode));
-//	scene->addItem(new Edge(node3, node6));
-//	scene->addItem(new Edge(node4, node1));
-//	scene->addItem(new Edge(node4, centerNode));
-//	scene->addItem(new Edge(centerNode, node6));
-//	scene->addItem(new Edge(centerNode, node8));
-//	scene->addItem(new Edge(node6, node9));
-//	scene->addItem(new Edge(node7, node4));
-//	scene->addItem(new Edge(node8, node7));
-//	scene->addItem(new Edge(node9, node8));
-
-//	node1->setPos(-50, -50);
-//	node2->setPos(0, -50);
-//	node3->setPos(50, -50);
-//	node4->setPos(-50, 0);
-//	centerNode->setPos(0, 0);
-//	node6->setPos(50, 0);
-//	node7->setPos(-50, 50);
-//	node8->setPos(0, 50);
-//	node9->setPos(50, 50);
 }
 
 void NavigatorView::refresh(m8r::Outline* o)
 {
-
+    UNUSED_ARG(o);
 }
 
 void NavigatorView::itemMoved()
