@@ -78,7 +78,7 @@ namespace m8r {
 static const double PI = 3.14159265358979323846264338327950288419717;
 static double TWO_PI = 2.0*PI;
 
-NavigatorEdge::NavigatorEdge(NavigatorNode *source, NavigatorNode *destination)
+NavigatorEdge::NavigatorEdge(NavigatorNode* source, NavigatorNode* destination)
 	: arrowSize(10)
 {
 	setAcceptedMouseButtons(0);

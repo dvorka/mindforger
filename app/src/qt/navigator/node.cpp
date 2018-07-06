@@ -83,7 +83,8 @@ NavigatorNode::NavigatorNode(const QString& name, NavigatorView* navigator, cons
 	setFlag(ItemIsMovable);
 	setFlag(ItemSendsGeometryChanges);
 	setCacheMode(DeviceCoordinateCache);
-    // ensure nodes are rendered above edges: higher z makes item rendered last i.e. above items w/ lower z
+
+    // ensure nodes are rendered above edges: higher Z makes item rendered later i.e. above items w/ lower Z
     setZValue(2);
 }
 
@@ -171,7 +172,7 @@ QRectF NavigatorNode::boundingRect() const
 QPainterPath NavigatorNode::shape() const
 {
 	QPainterPath path;
-	path.addEllipse(-10, -10, 20, 20);
+    path.addEllipse(-10, -10, 20, 20);
 	return path;
 }
 
