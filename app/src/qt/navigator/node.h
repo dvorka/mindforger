@@ -84,12 +84,13 @@ class NavigatorNode : public QGraphicsItem
     QString nodeName;
     NavigatorView* navigator;
     QColor nodeColor;
+    bool nodeBold;
 
     qreal nodeWidth = 100;
     qreal nodeHeight = 15;
 
  public:
-    NavigatorNode(const QString& name, NavigatorView* navigator, const QColor& color);
+    NavigatorNode(const QString& name, NavigatorView* navigator, const QColor& color, bool bold=false);
 
     void addEdge(NavigatorEdge* edge);
     QList<NavigatorEdge*> edges() const;

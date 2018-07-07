@@ -77,8 +77,8 @@
 
 namespace m8r {
 
-NavigatorNode::NavigatorNode(const QString& name, NavigatorView* navigator, const QColor& color)
-    : nodeName(name), navigator(navigator), nodeColor(color)
+NavigatorNode::NavigatorNode(const QString& name, NavigatorView* navigator, const QColor& color, bool bold)
+    : nodeName(name), navigator(navigator), nodeColor(color), nodeBold(bold)
 {
 	setFlag(ItemIsMovable);
 	setFlag(ItemSendsGeometryChanges);
@@ -186,6 +186,7 @@ void NavigatorNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     // IMPROVE calculate this only ONCE - font to be passed from parent and used through all the code
     QFont font = painter->font();
     font.setPointSize(10);
+    font.setBold(nodeBold);
     painter->setFont(font);
 
     QFontMetrics fm = painter->fontMetrics();
@@ -234,10 +235,11 @@ void NavigatorNode::paintCircleWithShade(QPainter* painter, const QStyleOptionGr
 
 QVariant NavigatorNode::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-	switch (change) {
+    switch(change) {
 	case ItemPositionHasChanged:
-        foreach (NavigatorEdge *edge, edgeList)
+        foreach (NavigatorEdge *edge, edgeList) {
 			edge->adjust();
+        }
         navigator->itemMoved();
 		break;
 	default:
@@ -255,7 +257,11 @@ void NavigatorNode::mousePressEvent(QGraphicsSceneMouseEvent* event)
 
 void NavigatorNode::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
-	update();
+    MF_DEBUG("Node " << nodeName.toStdString() << " clicked " << endl);
+
+    navigator->refreshOnNodeSelection(this);
+
+    update();
 	QGraphicsItem::mouseReleaseEvent(event);
 }
 

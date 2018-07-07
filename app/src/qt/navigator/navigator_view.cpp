@@ -90,11 +90,11 @@ NavigatorView::NavigatorView(QWidget* parent)
 	setTransformationAnchor(AnchorUnderMouse);
 }
 
-void NavigatorView::refresh(std::vector<const m8r::Tag*> tags)
+void NavigatorView::refresh(std::vector<const m8r::Tag*>& tags)
 {
     // IMPROVE: resize scene also on window resize event
-    int w = static_cast<QWidget*>(parent())->width();
-    int h = static_cast<QWidget*>(parent())->height();
+    w = static_cast<QWidget*>(parent())->width();
+    h = static_cast<QWidget*>(parent())->height();
     // the first two args specify location of the [0,0]
     navigatorScene->setSceneRect(-w/4, -h/4, w, h);
     // scale scene to avoid scroll bars
@@ -104,11 +104,16 @@ void NavigatorView::refresh(std::vector<const m8r::Tag*> tags)
     navigatorScene->clear();
 
     // central node
-    mfNode = new NavigatorNode(QString{"< Mind >"}, this, Qt::black);
-    navigatorScene->addItem(mfNode);
-    mfNode->setPos(0, 0);
+    mindNode = new NavigatorNode(QString{"MIND"}, this, Qt::black, true);
+    navigatorScene->addItem(mindNode);
+    mindNode->setPos(0, 0);
 
-    int avoidIdenticalPosition{};
+    tagsNode = addMindNode(QString{"tags"});
+    outlinesNode = addMindNode(QString{"outlines"});
+    notesNode = addMindNode(QString{"notes"});
+    limboNode = addMindNode(QString{"limbo"});
+    stencilsNode = addMindNode(QString{"stencils"});
+
     NavigatorNode* n;
     NavigatorEdge* e;
     for(const m8r::Tag* t:tags) {
@@ -116,14 +121,20 @@ void NavigatorView::refresh(std::vector<const m8r::Tag*> tags)
         // TODO set name
         // TODO set type
         n = new NavigatorNode(QString::fromStdString(t->getName()), this, QColor(t->getColor().asLong()));
-        n->setZValue(2);
         navigatorScene->addItem(n);
-        e = new NavigatorEdge(mfNode, n);
+        e = new NavigatorEdge(tagsNode, n);
         navigatorScene->addItem(e);
-        n->setPos(-avoidIdenticalPosition, -avoidIdenticalPosition);
-
-        avoidIdenticalPosition += 10;
+        n->setPos(qrand()%w, qrand()%h);
     }
+}
+
+NavigatorNode* NavigatorView::addMindNode(const QString& label)
+{
+    NavigatorNode* n = new NavigatorNode(label, this, Qt::black, true);
+    navigatorScene->addItem(n);
+    n->setPos(qrand()%w, qrand()%h);
+    navigatorScene->addItem(new NavigatorEdge(mindNode, n));
+    return n;
 }
 
 void NavigatorView::refresh(m8r::Outline* o)
@@ -131,27 +142,46 @@ void NavigatorView::refresh(m8r::Outline* o)
     UNUSED_ARG(o);
 }
 
+void NavigatorView::refreshOnNodeSelection(NavigatorNode* selectedNode)
+{
+    // TODO synchronize timer event and delete
+
+    scene()->clear();
+
+//    for(QGraphicsItem* gi:items()) {
+//        if(gi != selectedNode) {
+//            scene()->removeItem(gi);
+//            delete gi;
+//        }
+//    }
+}
+
 void NavigatorView::itemMoved()
 {
-	if (!timerId)
-		timerId = startTimer(1000 / 25);
+    if(!timerId) {
+        // IMPROVE dynamic refresh rate
+        timerId = startTimer(1000/25);
+    }
 }
 
 void NavigatorView::keyPressEvent(QKeyEvent *event)
 {
 	switch (event->key()) {
-	case Qt::Key_Up:
-		centerNode->moveBy(0, -20);
-		break;
-	case Qt::Key_Down:
-		centerNode->moveBy(0, 20);
-		break;
-	case Qt::Key_Left:
-		centerNode->moveBy(-20, 0);
-		break;
-	case Qt::Key_Right:
-		centerNode->moveBy(20, 0);
-		break;
+
+    // IMPROVE choose last selected node and move that selected node
+//	case Qt::Key_Up:
+//        mindNode->moveBy(0, -20);
+//		break;
+//	case Qt::Key_Down:
+//        mindNode->moveBy(0, 20);
+//		break;
+//	case Qt::Key_Left:
+//        mindNode->moveBy(-20, 0);
+//		break;
+//	case Qt::Key_Right:
+//        mindNode->moveBy(20, 0);
+//		break;
+
 	case Qt::Key_Plus:
 		zoomIn();
 		break;

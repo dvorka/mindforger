@@ -86,36 +86,44 @@ class NavigatorView : public QGraphicsView
 {
     Q_OBJECT
 
+private:
+    int timerId{}, w{}, h{};
+
     QGraphicsScene* navigatorScene;
 
-    NavigatorNode* mfNode;
+    NavigatorNode* mindNode;
+    NavigatorNode* tagsNode;
+    NavigatorNode* outlinesNode;
+    NavigatorNode* notesNode;
+    NavigatorNode* limboNode;
+    NavigatorNode* stencilsNode;
 
 public:
     NavigatorView(QWidget *parent = 0);
 
     void itemMoved();
 
-    void refresh(std::vector<const m8r::Tag*> tags);
+    void refresh(std::vector<const m8r::Tag*>& tags);
     void refresh(m8r::Outline* o);
+
+    void refreshOnNodeSelection(NavigatorNode* selectedNode);
 
 public slots:
     void shuffle();
     void zoomIn();
     void zoomOut();
 
- protected:
-	    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
-	    void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
+protected:
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
 #ifndef QT_NO_WHEELEVENT
-	    void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
+    void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
 #endif
-	    void drawBackground(QPainter *painter, const QRectF &rect) Q_DECL_OVERRIDE;
+    void drawBackground(QPainter *painter, const QRectF &rect) Q_DECL_OVERRIDE;
+    void scaleView(qreal scaleFactor);
 
-	    void scaleView(qreal scaleFactor);
-
- private:
-	    int timerId;
-        NavigatorNode *centerNode;
+private:
+    NavigatorNode* addMindNode(const QString& label);
 };
 
 }
