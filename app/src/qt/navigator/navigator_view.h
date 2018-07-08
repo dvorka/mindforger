@@ -69,6 +69,8 @@
 #ifndef M8R_NAVIGATOR_VIEW_H
 #define M8R_NAVIGATOR_VIEW_H
 
+#include <mutex>
+
 #include <QGraphicsView>
 
 #include "../../../../lib/src/model/outline.h"
@@ -89,7 +91,12 @@ class NavigatorView : public QGraphicsView
     Q_OBJECT
 
 private:
-    int timerId{}, w{}, h{};    
+    std::mutex refreshMutex;
+
+    int timerId, w, h;
+
+    // stupid and ugly: multi-threading & weak Qt API
+    std::vector<QGraphicsItem*> garbageItems;
 
     QGraphicsScene* navigatorScene;
 
@@ -99,6 +106,8 @@ private:
     NavigatorNode* notesNode;
     NavigatorNode* limboNode;
     NavigatorNode* stencilsNode;
+
+    NavigatorNode* keepMeKillOthers;
 
     bool renderLegend;
 
@@ -110,15 +119,12 @@ public:
     void refresh(std::vector<const m8r::Tag*>& tags);
     void refresh(m8r::Outline* o);
 
-signals:
-    void nodeSelectedSignal(NavigatorNode* selectedNode);
+    void refreshOnNodeSelection(NavigatorNode* selectedNode);
 
 public slots:
     void shuffle();
     void zoomIn();
     void zoomOut();
-
-    void refreshOnNodeSelection(NavigatorNode* selectedNode);
 
 protected:
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;

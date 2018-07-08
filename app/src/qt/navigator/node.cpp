@@ -160,7 +160,7 @@ bool NavigatorNode::advance()
 	return true;
 }
 
-// IMPORTANT bondingRect MUST be sect correctly, otherwise drawing is CLIPPED (text or shape)
+// IMPORTANT boundingRect MUST be sect correctly, otherwise drawing is CLIPPED (text or shape)
 QRectF NavigatorNode::boundingRect() const
 {
     qreal adjust = 2;
@@ -177,7 +177,7 @@ QPainterPath NavigatorNode::shape() const
 }
 
 // IMPORTANT this method must be FAST - every CPU tick matters
-void NavigatorNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* )
+void NavigatorNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
     // IMPROVE color and shape driven by node type
 
@@ -257,12 +257,12 @@ void NavigatorNode::mousePressEvent(QGraphicsSceneMouseEvent* event)
 
 void NavigatorNode::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
-    MF_DEBUG("FDG node selected: '" << nodeName.toStdString() << "'" << endl);
+    MF_DEBUG("FDG node selected: '" << nodeName.toStdString() << "'" << std::endl);
 
     update();
     QGraphicsItem::mouseReleaseEvent(event);
 
-    emit navigator->nodeSelectedSignal(this);
+    navigator->refreshOnNodeSelection(this);
 }
 
 } // m8r namespace

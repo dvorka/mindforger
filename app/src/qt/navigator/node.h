@@ -92,6 +92,8 @@ class NavigatorNode : public QGraphicsItem
  public:
     NavigatorNode(const QString& name, NavigatorView* navigator, const QColor& color, bool bold=false);
 
+    const QString& getName() const { return nodeName; }
+
     void addEdge(NavigatorEdge* edge);
     QList<NavigatorEdge*> edges() const;
 
@@ -115,7 +117,7 @@ class NavigatorNode : public QGraphicsItem
     QList<NavigatorEdge*> edgeList;
 	QPointF newPos;
 
-    void paintCircleWithShade(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+    void paintCircleWithShade(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
 }
