@@ -257,12 +257,12 @@ void NavigatorNode::mousePressEvent(QGraphicsSceneMouseEvent* event)
 
 void NavigatorNode::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
-    MF_DEBUG("Node " << nodeName.toStdString() << " clicked " << endl);
-
-    navigator->refreshOnNodeSelection(this);
+    MF_DEBUG("FDG node selected: '" << nodeName.toStdString() << "'" << endl);
 
     update();
-	QGraphicsItem::mouseReleaseEvent(event);
+    QGraphicsItem::mouseReleaseEvent(event);
+
+    emit navigator->nodeSelectedSignal(this);
 }
 
 } // m8r namespace

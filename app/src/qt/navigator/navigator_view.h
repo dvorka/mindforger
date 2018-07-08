@@ -78,7 +78,9 @@ namespace m8r {
 class NavigatorNode;
 
 /**
- * @brief Knowledge graph navigator view.
+ * @brief knowledge graph navigator view.
+ *
+ * Knowledge graph is based on force-directed graph based (FDB) - magnets and rubber bands.
  *
  * @see http://doc.qt.io/qt-5/qtwidgets-graphicsview-elasticnodes-example.html
  */
@@ -87,7 +89,7 @@ class NavigatorView : public QGraphicsView
     Q_OBJECT
 
 private:
-    int timerId{}, w{}, h{};
+    int timerId{}, w{}, h{};    
 
     QGraphicsScene* navigatorScene;
 
@@ -98,6 +100,8 @@ private:
     NavigatorNode* limboNode;
     NavigatorNode* stencilsNode;
 
+    bool renderLegend;
+
 public:
     NavigatorView(QWidget *parent = 0);
 
@@ -106,12 +110,15 @@ public:
     void refresh(std::vector<const m8r::Tag*>& tags);
     void refresh(m8r::Outline* o);
 
-    void refreshOnNodeSelection(NavigatorNode* selectedNode);
+signals:
+    void nodeSelectedSignal(NavigatorNode* selectedNode);
 
 public slots:
     void shuffle();
     void zoomIn();
     void zoomOut();
+
+    void refreshOnNodeSelection(NavigatorNode* selectedNode);
 
 protected:
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;

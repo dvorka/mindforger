@@ -77,7 +77,7 @@
 namespace m8r {
 
 NavigatorView::NavigatorView(QWidget* parent)
-	: QGraphicsView(parent), timerId(0)
+    : QGraphicsView(parent), timerId{0}, renderLegend{true}
 {    
     // scene is peephole rectangle to the whole view (QGraphicsView)
     navigatorScene = new QGraphicsScene(this);
@@ -88,6 +88,10 @@ NavigatorView::NavigatorView(QWidget* parent)
     setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
 	setRenderHint(QPainter::Antialiasing);
 	setTransformationAnchor(AnchorUnderMouse);
+
+    // signals
+    // on Node selection signals MUST be used (instead of a method call) as naviagor may destroy nodes on refresh
+    QObject::connect(this, SIGNAL(nodeSelectedSignal(NavigatorNode*)), this, SLOT(refreshOnNodeSelection(NavigatorNode*)));
 }
 
 void NavigatorView::refresh(std::vector<const m8r::Tag*>& tags)
@@ -146,14 +150,14 @@ void NavigatorView::refreshOnNodeSelection(NavigatorNode* selectedNode)
 {
     // TODO synchronize timer event and delete
 
-    scene()->clear();
+//    navigatorScene->clear();
 
-//    for(QGraphicsItem* gi:items()) {
-//        if(gi != selectedNode) {
-//            scene()->removeItem(gi);
-//            delete gi;
-//        }
-//    }
+    for(QGraphicsItem* gi:items()) {
+        if(gi != selectedNode) {
+            scene()->removeItem(gi);
+            delete gi;
+        }
+    }
 }
 
 void NavigatorView::itemMoved()
