@@ -24,6 +24,7 @@
 #include <mutex>
 
 #include "memory.h"
+#include "knowledge_graph.h"
 #include "ai/ai.h"
 #include "ontology/thing_class_rel_triple.h"
 #include "aspect/mind_scope_aspect.h"
@@ -36,6 +37,7 @@
 namespace m8r {
 
 class Ai;
+class KnowledgeGraph;
 
 constexpr auto NO_PARENT = 0xFFFF;
 
@@ -142,6 +144,11 @@ private:
      * Where the mind thinks.
      */
     Ai* ai;
+
+    /**
+     * @brief Knowledge graph mind representation.
+     */
+    KnowledgeGraph* knowledgeGraph;
 
     /**
      * @brief Semantic view of Memory.

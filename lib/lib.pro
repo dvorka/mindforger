@@ -98,7 +98,8 @@ SOURCES += \
     src/mind/ai/aa_notes_feature.cpp \
     src/mind/ai/nlp/common_words_blacklist.cpp \
     src/mind/aspect/tag_scope_aspect.cpp \
-    src/mind/aspect/mind_scope_aspect.cpp
+    src/mind/aspect/mind_scope_aspect.cpp \
+    src/mind/knowledge_graph.cpp
 
 mfner {
     SOURCES += \
@@ -204,7 +205,8 @@ HEADERS += \
     src/mind/ai/nlp/common_words_blacklist.h \
     src/mind/aspect/tag_scope_aspect.h \
     src/mind/aspect/mind_scope_aspect.h \
-    src/compilation.h
+    src/compilation.h \
+    src/mind/knowledge_graph.h
 
 mfner {
     HEADERS += \

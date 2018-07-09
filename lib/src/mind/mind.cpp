@@ -34,6 +34,8 @@ Mind::Mind(Configuration &configuration)
     deleteWatermark = 0;
     activeProcesses = 0;
 
+    knowledgeGraph = new KnowledgeGraph{this};
+
     timeScopeAspect.setTimeScope(config.getTimeScope());
     tagsScopeAspect.setTags(config.getTagsScope());
     memory.setMindScope(&scopeAspect);
@@ -46,6 +48,7 @@ Mind::Mind(Configuration &configuration)
 Mind::~Mind()
 {
     delete ai;
+    delete knowledgeGraph;
     delete mdConfigRepresentation;
 
     // - Memory destruct outlines
