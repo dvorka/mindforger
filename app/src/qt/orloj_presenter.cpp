@@ -43,7 +43,9 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     this->outlineHeaderEditPresenter = new OutlineHeaderEditPresenter(view->getOutlineHeaderEdit(), mainPresenter, this);
     this->noteViewPresenter = new NoteViewPresenter(view->getNoteView(), this);
     this->noteEditPresenter = new NoteEditPresenter(view->getNoteEdit(), mainPresenter, this);
-    this->navigatorPresenter = new NavigatorPresenter(view->getNavigator(), this);
+#ifdef WIP
+    this->navigatorPresenter = new NavigatorPresenter(view->getNavigator(), this, mind->getKnowledgeGraph());
+#endif
 
     /* Orloj presenter WIRES signals and slots between VIEWS and PRESENTERS.
      *
@@ -139,7 +141,7 @@ void OrlojPresenter::showFacetOrganizer(const vector<Outline*>& outlines)
 void OrlojPresenter::showFacetKnowledgeGraphNavigator()
 {
     setFacet(OrlojPresenterFacets::FACET_NAVIGATOR);
-    navigatorPresenter->refresh(mind->getTags().values());
+    navigatorPresenter->showInitialView();
     view->showFacetKnowledgeGraphNavigator();
     mainPresenter->getStatusBar()->showMindStatistics();
 }

@@ -81,19 +81,19 @@ class NavigatorNode;
 class NavigatorEdge : public QGraphicsItem
 {
  public:
-    NavigatorEdge(NavigatorNode *getSrcNode, NavigatorNode *getDstNode);
+    NavigatorEdge(NavigatorNode* getSrcNode, NavigatorNode* getDstNode);
 
-    NavigatorNode *getSrcNode() const;
-    NavigatorNode *getDstNode() const;
+    NavigatorNode* getSrcNode() const;
+    NavigatorNode* getDstNode() const;
 
 	void adjust();
 
 	enum { Type = UserType + 2 };
-	int type() const Q_DECL_OVERRIDE { return Type; }
+    int type() const override { return Type; }
 
  protected:
-	QRectF boundingRect() const Q_DECL_OVERRIDE;
-	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) Q_DECL_OVERRIDE;
+    QRectF boundingRect() const override;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
  private:
     NavigatorNode *srcNode, *dstNode;
@@ -102,7 +102,7 @@ class NavigatorEdge : public QGraphicsItem
     QPointF dstPoint;
 	qreal arrowSize;
 
-    void paintLineWithTwoArrows(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paintLineWithTwoArrows(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 };
 
 }

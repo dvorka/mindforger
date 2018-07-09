@@ -77,9 +77,14 @@
 
 namespace m8r {
 
-NavigatorNode::NavigatorNode(const QString& name, NavigatorView* navigator, const QColor& color, bool bold)
-    : nodeName(name), navigator(navigator), nodeColor(color), nodeBold(bold)
+NavigatorNode::NavigatorNode(KnowledgeGraphNode* knowledgeGraphNode, NavigatorView* navigator, const QColor& color, bool bold)
+    : knowledgeGraphNode(knowledgeGraphNode),
+      nodeColor(color),
+      nodeBold(bold),
+      navigator(navigator)
 {
+    nodeName = QString::fromStdString(knowledgeGraphNode->getName());
+
 	setFlag(ItemIsMovable);
 	setFlag(ItemSendsGeometryChanges);
 	setCacheMode(DeviceCoordinateCache);
@@ -165,7 +170,6 @@ QRectF NavigatorNode::boundingRect() const
 {
     qreal adjust = 2;
 
-    //return QRectF( -10 - adjust, -10 - adjust, 23 + adjust, 23 + adjust);
     return QRectF( -nodeWidth/2 - adjust, -nodeHeight/2 - adjust, nodeWidth + adjust, nodeHeight + adjust);
 }
 
@@ -173,6 +177,7 @@ QPainterPath NavigatorNode::shape() const
 {
 	QPainterPath path;
     path.addEllipse(-10, -10, 20, 20);
+
 	return path;
 }
 
@@ -255,14 +260,31 @@ void NavigatorNode::mousePressEvent(QGraphicsSceneMouseEvent* event)
 	QGraphicsItem::mousePressEvent(event);
 }
 
+void NavigatorNode::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+{
+    if ((event->buttons() & Qt::LeftButton)) {
+        dragging=true;
+    }
+
+    update();
+    QGraphicsItem::mouseMoveEvent(event);
+}
+
 void NavigatorNode::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
-    MF_DEBUG("FDG node selected: '" << nodeName.toStdString() << "'" << std::endl);
-
     update();
     QGraphicsItem::mouseReleaseEvent(event);
 
-    navigator->refreshOnNodeSelection(this);
+    if(event->button() == Qt::LeftButton) {
+        if(dragging) {
+            // drag & drop
+            dragging = false;
+        }
+        else {
+            // click ~ node selected ~ let navigator know about node selection
+            navigator->iWasSelected(this);
+        }
+    }
 }
 
 } // m8r namespace

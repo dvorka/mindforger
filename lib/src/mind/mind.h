@@ -256,6 +256,12 @@ public:
     void incActiveProcesses() { activeProcesses++; }
     void decActiveProcesses() { activeProcesses--; }
 
+    /*
+     * Knowledge graph
+     */
+
+    KnowledgeGraph* getKnowledgeGraph() const { return knowledgeGraph; }
+
     unsigned getTriplesCount() const { return triples.size(); }
 
 #ifdef MF_NER

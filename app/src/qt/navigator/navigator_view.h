@@ -73,6 +73,7 @@
 
 #include <QGraphicsView>
 
+#include "../../../../lib/src/mind/knowledge_graph.h"
 #include "../../../../lib/src/model/outline.h"
 
 namespace m8r {
@@ -84,6 +85,9 @@ class NavigatorNode;
  *
  * Knowledge graph is based on force-directed graph based (FDB) - magnets and rubber bands.
  *
+ * Synchronization & UI threads: selected node sets subgraph, timerEvent()
+ * then refreshes view which avoids the need for extra synchronization.
+ *
  * @see http://doc.qt.io/qt-5/qtwidgets-graphicsview-elasticnodes-example.html
  */
 class NavigatorView : public QGraphicsView
@@ -91,6 +95,9 @@ class NavigatorView : public QGraphicsView
     Q_OBJECT
 
 private:
+    QGraphicsScene* navigatorScene;
+
+    // IMPROVE is mutex still needed?
     std::mutex refreshMutex;
 
     int timerId, w, h;
@@ -98,45 +105,47 @@ private:
     // stupid and ugly: multi-threading & weak Qt API
     std::vector<QGraphicsItem*> garbageItems;
 
-    QGraphicsScene* navigatorScene;
+    // subgraph to be rendered
+    KnowledgeSubGraph* subgraph;
 
-    NavigatorNode* mindNode;
-    NavigatorNode* tagsNode;
-    NavigatorNode* outlinesNode;
-    NavigatorNode* notesNode;
-    NavigatorNode* limboNode;
-    NavigatorNode* stencilsNode;
-
-    NavigatorNode* keepMeKillOthers;
-
-    bool renderLegend;
+    bool doShowLegend;
 
 public:
-    NavigatorView(QWidget *parent = 0);
+    NavigatorView(QWidget* parent);
+    ~NavigatorView();
 
     void itemMoved();
 
-    void refresh(std::vector<const m8r::Tag*>& tags);
-    void refresh(m8r::Outline* o);
+    void iWasSelected(NavigatorNode* selectedNode);
+    void refreshOnNextTimerTick(KnowledgeSubGraph* subgraph) {
+        std::lock_guard<std::mutex> criticalSection{refreshMutex};
 
-    void refreshOnNodeSelection(NavigatorNode* selectedNode);
+        updateNavigatorView();
+        this->subgraph = subgraph;
+        itemMoved(); // kick timer if not running
+    }
+
+protected:
+    void drawBackground(QPainter *painter, const QRectF &rect) override;
+    void scaleView(qreal scaleFactor);
+
+    void keyPressEvent(QKeyEvent *event) override;
+    void timerEvent(QTimerEvent *event) override;
+#ifndef QT_NO_WHEELEVENT
+    void wheelEvent(QWheelEvent *event) override;
+#endif
+
+private:
+    void updateNavigatorView();
+    void clearGarbageItems();
+
+signals:
+    void nodeSelectedSignal(NavigatorNode* selectedNode);
 
 public slots:
     void shuffle();
     void zoomIn();
     void zoomOut();
-
-protected:
-    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
-    void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
-#ifndef QT_NO_WHEELEVENT
-    void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
-#endif
-    void drawBackground(QPainter *painter, const QRectF &rect) Q_DECL_OVERRIDE;
-    void scaleView(qreal scaleFactor);
-
-private:
-    NavigatorNode* addMindNode(const QString& label);
 };
 
 }

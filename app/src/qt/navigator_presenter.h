@@ -22,7 +22,9 @@
 #include <QtWidgets>
 
 #include "../../lib/src/model/tag.h"
+#include "../../lib/src/mind/knowledge_graph.h"
 #include "navigator/navigator_view.h"
+#include "navigator/node.h"
 
 namespace m8r {
 
@@ -31,16 +33,22 @@ class NavigatorPresenter : public QObject
     Q_OBJECT
 
     NavigatorView* view;
+    KnowledgeGraph* knowledgeGraph;
+
+    KnowledgeSubGraph subgraph;
 
 public:
-    explicit NavigatorPresenter(NavigatorView* view, QObject* parent);
+    explicit NavigatorPresenter(NavigatorView* view, QObject* parent, KnowledgeGraph* knowledgeGraph);
     NavigatorPresenter(const NavigatorPresenter&) = delete;
     NavigatorPresenter(const NavigatorPresenter&&) = delete;
     NavigatorPresenter &operator=(const NavigatorPresenter&) = delete;
     NavigatorPresenter &operator=(const NavigatorPresenter&&) = delete;
     ~NavigatorPresenter();
 
-    void refresh(std::vector<const Tag*> tags);
+    void showInitialView();
+
+private slots:
+    void nodeSelectedSlot(NavigatorNode* node);
 };
 
 }

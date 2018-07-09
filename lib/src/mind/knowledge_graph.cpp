@@ -20,13 +20,127 @@
 
 namespace m8r {
 
+/*
+ * Knowledge SUB graph
+ */
+
+KnowledgeSubGraph::KnowledgeSubGraph(KnowledgeGraphNode* centralNode)
+{
+    this->centralNode = centralNode;
+}
+
+/*
+ * Knowledge graph
+ */
+
 KnowledgeGraph::KnowledgeGraph(Mind* mind)
     : mind{mind}
 {
+    mindNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::MIND, "MIND"};
+    tagsNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::TAGS, "tags"};
+    outlinesNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINES, "outlines"};
+    notesNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTES, "notes"};
+    limboNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::LIMBO, "limbo"};
+    stencilsNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::STENCILS, "stencils"};
 }
 
 KnowledgeGraph::~KnowledgeGraph()
 {
+    delete mindNode;
+    delete tagsNode;
+    delete outlinesNode;
+    delete notesNode;
+    delete limboNode;
+    delete stencilsNode;
+}
+
+KnowledgeGraphNode* KnowledgeGraph::getNode(KnowledgeGraphNodeType type)
+{
+    switch(type) {
+    case KnowledgeGraphNodeType::MIND:
+        return mindNode;
+    case KnowledgeGraphNodeType::OUTLINES:
+        return outlinesNode;
+    case KnowledgeGraphNodeType::OUTLINE:
+        return nullptr;
+    case KnowledgeGraphNodeType::NOTES:
+        return notesNode;
+    case KnowledgeGraphNodeType::NOTE:
+        return nullptr;
+    case KnowledgeGraphNodeType::TAGS:
+        return tagsNode;
+    case KnowledgeGraphNodeType::STENCILS:
+        return stencilsNode;
+    case KnowledgeGraphNodeType::LIMBO:
+        return limboNode;
+    }
+
+    return nullptr;
+}
+
+void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeSubGraph& subgraph, int hops)
+{
+    UNUSED_ARG(hops);
+
+    subgraph.clear();
+
+    if(centralNode == mindNode) {
+        subgraph.setCentralNode(mindNode);
+
+        subgraph.addChild(tagsNode);
+        subgraph.addChild(outlinesNode);
+        subgraph.addChild(notesNode);
+        subgraph.addChild(stencilsNode);
+        subgraph.addChild(limboNode);
+
+        return;
+    } else if(centralNode == outlinesNode) {
+        subgraph.setCentralNode(outlinesNode);
+
+        subgraph.addParent(mindNode);
+
+        return;
+    } else if(centralNode == notesNode) {
+        subgraph.setCentralNode(notesNode);
+
+        subgraph.addParent(mindNode);
+
+        return;
+    } else if(centralNode == tagsNode) {
+        subgraph.setCentralNode(tagsNode);
+
+        std::vector<const Tag*>& tags = mind->getTags().values();
+        KnowledgeGraphNode* n;
+        for(const Tag* t:tags) {
+            // TODO: reuse and delete - map<Thing*,Node*>
+            n = new KnowledgeGraphNode{KnowledgeGraphNodeType::TAGS, t->getName(), t->getColor().asLong()};
+            subgraph.addChild(n);
+        }
+
+        subgraph.addParent(mindNode);
+
+        return;
+    } else if(centralNode == stencilsNode) {
+        subgraph.setCentralNode(stencilsNode);
+
+        subgraph.addParent(mindNode);
+
+        return;
+    } else if(centralNode == limboNode) {
+        subgraph.setCentralNode(limboNode);
+
+        subgraph.addParent(mindNode);
+
+        return;
+    }
+
+    if(centralNode->getType() == KnowledgeGraphNodeType::OUTLINE) {
+
+        return;
+    } else if(centralNode->getType() == KnowledgeGraphNodeType::OUTLINE) {
+
+        return;
+    }
 }
 
 } // m8r namespace

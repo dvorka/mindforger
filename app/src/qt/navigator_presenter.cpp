@@ -20,19 +20,30 @@
 
 namespace m8r {
 
-NavigatorPresenter::NavigatorPresenter(NavigatorView* view, QObject* parent)
-    : QObject(parent)
+NavigatorPresenter::NavigatorPresenter(NavigatorView* view, QObject* parent, KnowledgeGraph* knowledgeGraph)
+    : QObject(parent),
+      view{view},
+      knowledgeGraph{knowledgeGraph},
+      subgraph{knowledgeGraph->getNode(KnowledgeGraphNodeType::MIND)}
 {
-    this->view = view;
+    // signals
+    QObject::connect(view, SIGNAL(nodeSelectedSignal(NavigatorNode*)), this, SLOT(nodeSelectedSlot(NavigatorNode*)));
 }
 
 NavigatorPresenter::~NavigatorPresenter()
 {
 }
 
-void NavigatorPresenter::refresh(std::vector<const Tag*> tags)
+void NavigatorPresenter::showInitialView()
 {
-    view->refresh(tags);
+    knowledgeGraph->getRelatedNodes(knowledgeGraph->getNode(KnowledgeGraphNodeType::MIND), subgraph);
+    view->refreshOnNextTimerTick(&subgraph);
+}
+
+void NavigatorPresenter::nodeSelectedSlot(NavigatorNode* node)
+{
+    knowledgeGraph->getRelatedNodes(node->getKnowledgeGraphNode(), subgraph);
+    view->refreshOnNextTimerTick(&subgraph);
 }
 
 } // m8r namespace

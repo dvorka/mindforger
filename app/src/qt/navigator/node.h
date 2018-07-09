@@ -71,6 +71,8 @@
 
 #include <QtWidgets>
 
+#include "../../../../lib/src/mind/knowledge_graph.h"
+
 namespace m8r {
 
 class NavigatorEdge;
@@ -81,24 +83,31 @@ class NavigatorView;
  */
 class NavigatorNode : public QGraphicsItem
 {
+    KnowledgeGraphNode* knowledgeGraphNode;
+
     QString nodeName;
-    NavigatorView* navigator;
     QColor nodeColor;
     bool nodeBold;
 
     qreal nodeWidth = 100;
     qreal nodeHeight = 15;
 
- public:
-    NavigatorNode(const QString& name, NavigatorView* navigator, const QColor& color, bool bold=false);
+    NavigatorView* navigator;
 
+    bool dragging;
+
+ public:
+    NavigatorNode(KnowledgeGraphNode* knowledgeGraphNode, NavigatorView* navigator, const QColor& color, bool bold=false);
+
+    KnowledgeGraphNode* getKnowledgeGraphNode() const { return knowledgeGraphNode; }
     const QString& getName() const { return nodeName; }
 
     void addEdge(NavigatorEdge* edge);
     QList<NavigatorEdge*> edges() const;
 
+    // IMPROVE to be removed - no longer neeed?
 	enum { Type = UserType + 1 };
-	int type() const Q_DECL_OVERRIDE { return Type; }
+    int type() const override { return Type; }
 
 	void calculateForces();
 	bool advance();
@@ -111,12 +120,14 @@ class NavigatorNode : public QGraphicsItem
     QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
 
  private:
     QList<NavigatorEdge*> edgeList;
 	QPointF newPos;
 
+    // IMPROVE to be removed
     void paintCircleWithShade(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
 };
 

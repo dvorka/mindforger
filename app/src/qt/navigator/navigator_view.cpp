@@ -78,36 +78,15 @@ namespace m8r {
 
 using namespace std;
 
-
-
-
-
-
-
-
-// graph structure to be in LIB - simple rendering of descriptors (name, bool systemNode) in here
-
-
-
-
-
-
-
-
-
-
-
-
-
 NavigatorView::NavigatorView(QWidget* parent)
     : QGraphicsView(parent),
       timerId{0},
       w{},
       h{},
       garbageItems{},
-      renderLegend{true},
-      keepMeKillOthers{}
-{    
+      subgraph{},
+      doShowLegend{true}
+{
     // scene is peephole rectangle to the whole view (QGraphicsView)
     navigatorScene = new QGraphicsScene(this);
     navigatorScene->setItemIndexMethod(QGraphicsScene::NoIndex);
@@ -119,16 +98,20 @@ NavigatorView::NavigatorView(QWidget* parent)
 	setTransformationAnchor(AnchorUnderMouse);
 }
 
-void NavigatorView::refresh(vector<const Tag*>& tags)
+NavigatorView::~NavigatorView()
 {
-    // IMPROVE clear navigator view when it's hidden to save memory earlier
-    // IMPROVE destructor to do this
     navigatorScene->clear();
+    clearGarbageItems();
+}
+
+void NavigatorView::clearGarbageItems()
+{
     for(QGraphicsItem* i:garbageItems) delete i;
     garbageItems.clear();
+}
 
-    keepMeKillOthers = nullptr;
-
+void NavigatorView::updateNavigatorView()
+{
     // IMPROVE: resize scene also on window resize event
     w = static_cast<QWidget*>(parent())->width();
     h = static_cast<QWidget*>(parent())->height();
@@ -137,39 +120,10 @@ void NavigatorView::refresh(vector<const Tag*>& tags)
     // scale scene to avoid scroll bars
     scale(qreal(0.99), qreal(0.99));
     //setMinimumSize(WIDTH, HEIGHT);
-
-//    NavigatorNode* n;
-//    NavigatorEdge* e;
-//    for(const Tag* t:tags) {
-//        // TODO set color
-//        // TODO set name
-//        // TODO set type
-//        n = new NavigatorNode(QString::fromStdString(t->getName()), this, QColor(t->getColor().asLong()));
-//        navigatorScene->addItem(n);
-//        e = new NavigatorEdge(tagsNode, n);
-//        navigatorScene->addItem(e);
-//        n->setPos(qrand()%w, qrand()%h);
-//    }
-}
-
-NavigatorNode* NavigatorView::addMindNode(const QString& label)
-{
-    NavigatorNode* n = new NavigatorNode(label, this, Qt::black, true);
-    navigatorScene->addItem(n);
-    n->setPos(qrand()%w, qrand()%h);
-    navigatorScene->addItem(new NavigatorEdge(mindNode, n));
-    return n;
-}
-
-void NavigatorView::refresh(m8r::Outline* o)
-{
-    UNUSED_ARG(o);
 }
 
 void NavigatorView::itemMoved()
 {
-    MF_DEBUG("FDG.itemMoved()" << endl);
-
     if(!timerId) {
         // IMPROVE dynamic refresh rate
         timerId = startTimer(1000/25);
@@ -211,44 +165,91 @@ void NavigatorView::keyPressEvent(QKeyEvent *event)
 
 void NavigatorView::timerEvent(QTimerEvent *event)
 {
-    Q_UNUSED(event);
     lock_guard<mutex> criticalSection{refreshMutex};
-    MF_DEBUG("FDG.timerEvent() LOCK" << endl);
+    Q_UNUSED(event);
 
-    if(keepMeKillOthers) {
-        MF_DEBUG("  KILL others: " << keepMeKillOthers->getName().toStdString() << endl);
-        // remove all nodes
-        //navigatorScene->clear();
+    // if subgraph != nullptr then it's a request to draw new scene
+    if(subgraph) {
 
-        // keep (some) node(s)
-        MF_DEBUG(" BEFORE scene[" << scene()->items().size() << "]" << endl);
-        for(QGraphicsItem* item:scene()->items()) {
-            MF_DEBUG("  FDG.destroy()[" << item->childItems().size() << "]" << endl);
+        //  REMOVE old nodes
 
-            NavigatorNode* n = qgraphicsitem_cast<NavigatorNode*>(item);
-            if(n) {
-                // kill node
-                if(n != keepMeKillOthers) {
-                    MF_DEBUG("    NODE " << n->getName().toStdString() << endl);
-                    navigatorScene->removeItem(n);
+        NavigatorNode* selectedNode{};
+        // blank scene > the first (central) node must be created
+        if(navigatorScene->items().isEmpty()) {
+            MF_DEBUG("  NEW view - CREATING central node: " << subgraph->getCentralNode()->getName() << endl);
+            // empty scene ~ it's save to clear garbage
+            clearGarbageItems();
+
+            selectedNode = new NavigatorNode(subgraph->getCentralNode(), this, subgraph->getCentralNode()->getColor());
+            navigatorScene->addItem(selectedNode);
+            selectedNode->setPos(0, 0);
+        } else {
+            MF_DEBUG("  KILL all except selected node: " << subgraph->getCentralNode()->getName() << endl);
+            MF_DEBUG("  BEFORE scene[" << navigatorScene->items().size() << "]" << endl);
+            for(QGraphicsItem* item:navigatorScene->items()) {
+                MF_DEBUG("   FDG.destroy()[" << item->childItems().size() << "]" << endl);
+
+                NavigatorNode* n = qgraphicsitem_cast<NavigatorNode*>(item);
+                if(n) {
+                    // kill node
+                    if(n->getKnowledgeGraphNode() != subgraph->getCentralNode()) {
+                        MF_DEBUG("    NODE " << n->getName().toStdString() << endl);
+                        navigatorScene->removeItem(n);
+
+                        // mouse events CANNOT be stopped (events go to item being removed) > deleted on navigator view HIDE
+                        garbageItems.push_back(item);
+                    } else {
+                        MF_DEBUG("    SAFE: " << subgraph->getCentralNode()->getName() << endl);
+                        selectedNode = n;
+                    }
+                } else {
+                    MF_DEBUG("    EDGE " << endl);
+                    // kill edge
+                    navigatorScene->removeItem(item);
+
                     // mouse events CANNOT be stopped (events go to item being removed) > deleted on navigator view HIDE
                     garbageItems.push_back(item);
                 }
-            } else {
-                MF_DEBUG("    EDGE " << endl);
-                // kill edge
-                navigatorScene->removeItem(item);
-                // mouse events CANNOT be stopped (events go to item being removed) > deleted on navigator view HIDE
-                garbageItems.push_back(item);
             }
+            MF_DEBUG("  AFTER scene[" << navigatorScene->items().size() << "]" << endl);
         }
-        MF_DEBUG(" AFTER scene[" << scene()->items().size() << "]" << endl);
 
-        keepMeKillOthers = nullptr;
+        //  ADD new nodes
+
+        NavigatorNode* n;
+        NavigatorEdge* e;
+        std::vector<KnowledgeGraphNode*>& children = subgraph->getChildren();
+        MF_DEBUG("  ADD children[" << children.size() << "]" << endl);
+        // TODO QColor(t->getColor().asLong())
+        for(KnowledgeGraphNode* kn:children) {
+            // newly created nodes and edges will be destroyed by garbage items collector
+            n = new NavigatorNode(kn, this, QColor(kn->getColor()));
+            navigatorScene->addItem(n);
+            e = new NavigatorEdge(selectedNode, n);
+            navigatorScene->addItem(e);
+            n->setPos(qrand()%w, qrand()%h);
+        }
+
+        std::vector<KnowledgeGraphNode*>& parents = subgraph->getParents();
+        MF_DEBUG("  ADD parents[" << parents.size() << "]" << endl);
+        for(KnowledgeGraphNode* kn:parents) {
+            // newly created nodes and edges will be destroyed by garbage items collector
+            n = new NavigatorNode(kn, this, QColor(kn->getColor()));
+            navigatorScene->addItem(n);
+            e = new NavigatorEdge(n, selectedNode);
+            navigatorScene->addItem(e);
+            n->setPos(qrand()%w, qrand()%h);
+        }
+
+        subgraph = nullptr;
+
+        MF_DEBUG("  DONE scene[" << navigatorScene->items().size() << "]" << endl);
     }
 
+    // RENDER scene
+
     QList<NavigatorNode*> nodes;
-    foreach(QGraphicsItem *item, scene()->items()) {
+    foreach(QGraphicsItem *item, navigatorScene->items()) {
         if(NavigatorNode *node = qgraphicsitem_cast<NavigatorNode *>(item))
             nodes << node;
     }
@@ -268,72 +269,36 @@ void NavigatorView::timerEvent(QTimerEvent *event)
         killTimer(timerId);
         timerId = 0;
     }
-
-    //MF_DEBUG("FDG.timerEvent() UNLOCK" << endl);
 }
 
 #ifndef QT_NO_WHEELEVENT
 void NavigatorView::wheelEvent(QWheelEvent *event)
 {
-    MF_DEBUG("FDG.wheelEvent()" << endl);
-
     scaleView(pow((double)2, -event->delta() / 240.0));
 }
 #endif
 
 void NavigatorView::drawBackground(QPainter *painter, const QRectF &rect)
 {
-    Q_UNUSED(painter);
     Q_UNUSED(rect);
 
-    MF_DEBUG("FDG.drawBackground()" << endl);
+    // TODO configurable from configuration, setting refreshed to local field on refresh() invocation (performance)
+    if(doShowLegend) {
+        QRectF sceneRect = this->sceneRect();
+        QRectF textRect(sceneRect.left() + 4, sceneRect.top() + 4, sceneRect.width() - 4, sceneRect.height() - 4);
+        QString message(tr("Click and drag the nodes around, and zoom with the mouse wheel or the '+' and '-' keys"));
 
-/*
-    // Shadow
-    QRectF sceneRect = this->sceneRect();public:
-   enum { Type = UserType + 1 };
-
-   int type() const
-   {
-       // Enable the use of qgraphicsitem_cast with this item.
-       return Type;
-   }
-    QRectF rightShadow(sceneRect.right(), sceneRect.top() + 5, 5, sceneRect.height());
-    QRectF bottomShadow(sceneRect.left() + 5, sceneRect.bottom(), sceneRect.width(), 5);
-    if (rightShadow.intersects(rect) || rightShadow.contains(rect))
-        painter->fillRect(rightShadow, Qt::darkGray);
-    if (bottomShadow.intersects(rect) || bottomShadow.contains(rect))
-        painter->fillRect(bottomShadow, Qt::darkGray);
-
-    // Fill
-    QLinearGradient gradient(sceneRect.topLeft(), sceneRect.bottomRight());
-    gradient.setColorAt(0, Qt::white);
-    gradient.setColorAt(1, Qt::lightGray);
-    painter->fillRect(rect.intersected(sceneRect), gradient);
-    painter->setBrush(Qt::NoBrush);
-    painter->drawRect(sceneRect);
-
-    // Text
-    QRectF textRect(sceneRect.left() + 4, sceneRect.top() + 4,
-            sceneRect.width() - 4, sceneRect.height() - 4);
-    QString message(tr("Click and drag the nodes around, and zoom with the mouse "
-               "wheel or the '+' and '-' keys"));
-
-	QFont font = painter->font();
-	font.setBold(true);
-	font.setPointSize(14);
-	painter->setFont(font);
-	painter->setPen(Qt::lightGray);
-	painter->drawText(textRect.translated(2, 2), message);
-	painter->setPen(Qt::black);
-	painter->drawText(textRect, message);
-*/
+        QFont font = painter->font();
+        font.setBold(true);
+        font.setPointSize(10);
+        painter->setFont(font);
+        painter->setPen(Qt::darkGray);
+        painter->drawText(textRect, message);
+    }
 }
 
 void NavigatorView::scaleView(qreal scaleFactor)
 {
-    MF_DEBUG("FDG.scaleView()" << endl);
-
     qreal factor = transform().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
     if (factor < 0.07 || factor > 100)
         return;
@@ -343,9 +308,7 @@ void NavigatorView::scaleView(qreal scaleFactor)
 
 void NavigatorView::shuffle()
 {
-    MF_DEBUG("FDG.shuffle()" << endl);
-
-    foreach (QGraphicsItem *item, scene()->items()) {
+    foreach (QGraphicsItem *item, navigatorScene->items()) {
         if (qgraphicsitem_cast<NavigatorNode *>(item))
 			item->setPos(-150 + qrand() % 300, -150 + qrand() % 300);
 	}
@@ -353,15 +316,11 @@ void NavigatorView::shuffle()
 
 void NavigatorView::zoomIn()
 {
-    MF_DEBUG("FDG.zoomIn()" << endl);
-
     scaleView(qreal(1.2));
 }
 
 void NavigatorView::zoomOut()
 {
-    MF_DEBUG("FDG.zoomOut()" << endl);
-
     scaleView(1 / qreal(1.2));
 }
 
@@ -369,47 +328,9 @@ void NavigatorView::zoomOut()
  * ... refresh on a specific node selection ...
  */
 
-void NavigatorView::refreshOnNodeSelection(NavigatorNode* selectedNode)
+void NavigatorView::iWasSelected(NavigatorNode* selectedNode)
 {
-    lock_guard<mutex> criticalSection{refreshMutex};
-    MF_DEBUG("FDG.refreshOnNodeSelection() LOCK" << endl);
-
-    keepMeKillOthers = selectedNode;
-
-    MF_DEBUG("FDG.refreshOnNodeSelection() UNLOCK" << endl);
+    emit nodeSelectedSignal(selectedNode);
 }
-
-//void NavigatorView::refreshOnMindNodeSelection(NavigatorNode* mindNode)
-//{
-//    tagsNode = addMindNode(QString{"tags"});
-//    outlinesNode = addMindNode(QString{"outlines"});
-//    notesNode = addMindNode(QString{"notes"});
-//    limboNode = addMindNode(QString{"limbo"});
-//    stencilsNode = addMindNode(QString{"stencils"});
-//}
-
-//void NavigatorView::refreshOnTagsNodeSelection(NavigatorNode* tagsNode)
-//{
-//    mindNode = new NavigatorNode(QString{"MIND"}, this, Qt::black, true);
-//    navigatorScene->addItem(mindNode);
-//    mindNode->setPos(0, 0);
-//}
-
-//void NavigatorView::refreshOnOutlinesNodeSelection()
-//{
-//}
-
-//void NavigatorView::refreshOnNotesNodeSelection()
-//{
-//}
-
-//void NavigatorView::refreshOnLimboNodeSelection()
-//{
-//}
-
-//void NavigatorView::refreshOnStencilsNodeSelection()
-//{
-//}
-
 
 }  // m8r namespace
