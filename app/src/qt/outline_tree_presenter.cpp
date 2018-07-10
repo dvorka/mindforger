@@ -45,6 +45,7 @@ OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, MainWindowPres
     QObject::connect(view, SIGNAL(signalChangeDown()), mwp, SLOT(doActionNoteDown()));
     QObject::connect(view, SIGNAL(signalChangeLast()), mwp, SLOT(doActionNoteLast()));
 
+    QObject::connect(view, SIGNAL(signalOutlineOrNoteEdit()), mwp, SLOT(doActionOutlineOrNoteEdit()));
     QObject::connect(view, SIGNAL(signalEdit()), mwp, SLOT(doActionNoteEdit()));
     QObject::connect(view, SIGNAL(signalForget()), mwp, SLOT(doActionNoteForget()));
 }

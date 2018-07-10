@@ -235,6 +235,7 @@ public slots:
     void doActionNoteNew();
     void handleNoteNew();
     void doActionNoteHoist();
+    void doActionOutlineOrNoteEdit();
     void doActionNoteEdit();
     void doActionNoteFirst();
     void doActionNoteUp();

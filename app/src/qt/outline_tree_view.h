@@ -96,7 +96,8 @@ signals:
     void signalChangeFirst();
     void signalChangeLast();
 
-    void signalEdit();
+    void signalOutlineOrNoteEdit(); // O or N edit
+    void signalEdit(); // N edit
     void signalForget();
 };
 

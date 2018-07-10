@@ -1341,6 +1341,24 @@ void MainWindowPresenter::doActionNoteNew()
     }
 }
 
+void MainWindowPresenter::doActionOutlineOrNoteEdit()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+    ) {
+        Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+        if(note) {
+            orloj->showFacetNoteEdit(note);
+            return;
+        }
+    }
+
+    doActionOutlineEdit();
+}
+
 void MainWindowPresenter::doActionNoteEdit()
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
