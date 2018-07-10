@@ -52,21 +52,24 @@ OutlineView::OutlineView(QWidget *parent)
     setLayout(&headerVerticalLayout);
 }
 
+OutlineView::~OutlineView()
+{
+}
+
 void OutlineView::refreshHeader(const std::string& name)
 {
     if(!name.empty()) {
         QFontMetrics metrics(nameLabel->font());
         // IMPROVE nameLabel has incorrect size before rendered for the first time - find a better solution than fixed width
         QString elidedText
-            = metrics.elidedText(QString::fromStdString(name), Qt::ElideRight, nameLabel->width()<100?1920/2:nameLabel->width());
+            = metrics.elidedText(
+               QString::fromStdString(name),
+               Qt::ElideRight,
+               width()-20);
         nameLabel->setText(elidedText);
     } else {
         nameLabel->setText("");
     }
-}
-
-OutlineView::~OutlineView()
-{
 }
 
 } // m8r namespace
