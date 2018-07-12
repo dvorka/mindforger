@@ -1,6 +1,6 @@
-mindforger (1.42.1-1) unstable; urgency=low
+mindforger (1.43.0-1) unstable; urgency=low
  
-  * Initial MindForger release.
+  * Initial Eisenhower matrix.
  
  -- Martin Dvorak (Dvorka) <martin.dvorak@mindforger.com>  Mon, 23 Apr 2018 14:11:33 +0100
 

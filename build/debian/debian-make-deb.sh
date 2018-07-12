@@ -152,8 +152,8 @@ function buildDebPackage() {
 # # Main #
 # ############################################################################
 
-export ARG_BAZAAR_MSG="Initial MindForger release."
-export ARG_VERSION="1.42.10"
+export ARG_BAZAAR_MSG="Eisenhower matrix."
+export ARG_VERSION="1.43.0"
 
 # Debian releases: https://www.debian.org/releases/
 #   6/7/8/9/10: squeeze wheezy jessie stretch buster

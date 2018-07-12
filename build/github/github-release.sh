@@ -87,7 +87,7 @@ function buildGitHubTarball() {
 # # Main #
 # ############################################################################
 
-export ARG_BAZAAR_MSG="Initial MindForger release."
+export ARG_BAZAAR_MSG="Eisenhower matrix."
 export ARG_VERSION="1.43.0"
 
 buildGitHubTarball ${ARG_VERSION} ${ARG_BAZAAR_MSG}
