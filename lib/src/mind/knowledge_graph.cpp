@@ -20,20 +20,28 @@
 
 namespace m8r {
 
+using namespace std;
+
 /*
  * Knowledge SUB graph
  */
 
-KnowledgeSubGraph::KnowledgeSubGraph(KnowledgeGraphNode* centralNode)
+KnowledgeSubGraph::KnowledgeSubGraph(KnowledgeGraphNode* centralNode, int limit)
+    : centralNode(centralNode), limit(limit)
 {
-    this->centralNode = centralNode;
+    this->count = limit-1;
 }
 
 /*
  * Knowledge graph
  */
 
-KnowledgeGraph::KnowledgeGraph(Mind* mind)
+KnowledgeGraph::KnowledgeGraph(
+        Mind* mind,
+        long unsigned coreColor,
+        long unsigned outlinesColor,
+        long unsigned notesColor
+        )
     : mind{mind}
 {
     mindNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::MIND, "MIND"};
@@ -42,6 +50,10 @@ KnowledgeGraph::KnowledgeGraph(Mind* mind)
     notesNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTES, "notes"};
     limboNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::LIMBO, "limbo"};
     stencilsNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::STENCILS, "stencils"};
+
+    this->coreColor = coreColor;
+    this->outlinesColor = outlinesColor;
+    this->notesColor = notesColor;
 }
 
 KnowledgeGraph::~KnowledgeGraph()
@@ -61,29 +73,30 @@ KnowledgeGraphNode* KnowledgeGraph::getNode(KnowledgeGraphNodeType type)
         return mindNode;
     case KnowledgeGraphNodeType::OUTLINES:
         return outlinesNode;
-    case KnowledgeGraphNodeType::OUTLINE:
-        return nullptr;
     case KnowledgeGraphNodeType::NOTES:
         return notesNode;
-    case KnowledgeGraphNodeType::NOTE:
-        return nullptr;
     case KnowledgeGraphNodeType::TAGS:
         return tagsNode;
     case KnowledgeGraphNodeType::STENCILS:
         return stencilsNode;
     case KnowledgeGraphNodeType::LIMBO:
         return limboNode;
+    case KnowledgeGraphNodeType::OUTLINE:
+    case KnowledgeGraphNodeType::NOTE:
+    case KnowledgeGraphNodeType::TAG:
+    case KnowledgeGraphNodeType::STENCIL:
+        return nullptr;
     }
 
     return nullptr;
 }
 
-void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeSubGraph& subgraph, int hops)
+// TODO this method leaks a lot - knowledge graph nodes
+void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeSubGraph& subgraph)
 {
-    UNUSED_ARG(hops);
-
     subgraph.clear();
 
+    // significant ontology things
     if(centralNode == mindNode) {
         subgraph.setCentralNode(mindNode);
 
@@ -97,11 +110,35 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
     } else if(centralNode == outlinesNode) {
         subgraph.setCentralNode(outlinesNode);
 
+        const vector<Outline*>& outlines = mind->getOutlines();
+        if(outlines.size()) {
+            KnowledgeGraphNode* k;
+            for(Outline* o:outlines) {
+                // TODO: reuse and delete - map<Thing*,Node*>
+                k = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINE, o->getName(), outlinesColor};
+                k->setThing(o);
+                subgraph.addChild(k);
+            }
+        }
+
         subgraph.addParent(mindNode);
 
         return;
     } else if(centralNode == notesNode) {
         subgraph.setCentralNode(notesNode);
+
+        // IMPROVE limit maximum number of Ns to be rendered - avoid MF trashing when rendering 1M of nodes
+        vector<Note*> notes{};
+        mind->getAllNotes(notes);
+        if(notes.size()) {
+            KnowledgeGraphNode* k;
+            for(Note* n:notes) {
+                // TODO: reuse and delete - map<Thing*,Node*>
+                k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
+                k->setThing(n);
+                subgraph.addChild(k);
+            }
+        }
 
         subgraph.addParent(mindNode);
 
@@ -113,7 +150,7 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
         KnowledgeGraphNode* n;
         for(const Tag* t:tags) {
             // TODO: reuse and delete - map<Thing*,Node*>
-            n = new KnowledgeGraphNode{KnowledgeGraphNodeType::TAGS, t->getName(), t->getColor().asLong()};
+            n = new KnowledgeGraphNode{KnowledgeGraphNodeType::TAG, t->getName(), t->getColor().asLong()};
             subgraph.addChild(n);
         }
 
@@ -134,10 +171,86 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
         return;
     }
 
+    // things by type
     if(centralNode->getType() == KnowledgeGraphNodeType::OUTLINE) {
+        subgraph.setCentralNode(centralNode);
+
+        Outline* o = static_cast<Outline*>(centralNode->getThing());
+        KnowledgeGraphNode* k;
+        for(Note* n:o->getNotes()) {
+            // TODO: reuse and delete - map<Thing*,Node*>
+            k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
+            k->setThing(n);
+            subgraph.addChild(k);
+        }
+
+        const std::vector<const Tag*>* tags = o->getTags();
+        for(const Tag* t:*tags) {
+            // TODO: reuse and delete - map<Thing*,Node*>
+            k = new KnowledgeGraphNode{KnowledgeGraphNodeType::TAG, t->getName(), t->getColor().asLong()};
+            subgraph.addChild(k);
+        }
+
+        subgraph.addParent(outlinesNode);
 
         return;
-    } else if(centralNode->getType() == KnowledgeGraphNodeType::OUTLINE) {
+    } else if(centralNode->getType() == KnowledgeGraphNodeType::NOTE) {
+        subgraph.setCentralNode(centralNode);
+
+        Note* n = static_cast<Note*>(centralNode->getThing());
+        KnowledgeGraphNode* k;
+        k = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINE, n->getOutline()->getName(), outlinesColor};
+        k->setThing(n->getOutline());
+        subgraph.addParent(k);
+
+        const std::vector<const Tag*>* tags = n->getTags();
+        for(const Tag* t:*tags) {
+            // TODO: reuse and delete - map<Thing*,Node*>
+            k = new KnowledgeGraphNode{KnowledgeGraphNodeType::TAG, t->getName(), t->getColor().asLong()};
+            subgraph.addChild(k);
+        }
+
+        subgraph.addParent(notesNode);
+
+        return;
+    } else if(centralNode->getType() == KnowledgeGraphNodeType::TAG) {
+        subgraph.setCentralNode(centralNode);
+
+        vector<const Tag*> tags{};
+        tags.push_back(mind->ontology().findOrCreateTag(centralNode->getName()));
+        // Os
+        vector<Outline*> outlines{};
+        mind->findOutlinesByTags(tags, outlines);
+        if(outlines.size()) {
+            KnowledgeGraphNode* k;
+            for(Outline* o:outlines) {
+                // TODO: reuse and delete - map<Thing*,Node*>
+                k = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINE, o->getName(), outlinesColor};
+                k->setThing(o);
+                subgraph.addChild(k);
+            }
+        }
+
+        // Ns
+        vector<Note*> notes{};
+        mind->findNotesByTags(tags, notes);
+        if(notes.size()) {
+            KnowledgeGraphNode* k;
+            for(Note* n:notes) {
+                // TODO: reuse and delete - map<Thing*,Node*>
+                k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
+                k->setThing(n);
+                subgraph.addChild(k);
+            }
+        }
+
+        subgraph.addParent(tagsNode);
+
+        return;
+    } else if(centralNode->getType() == KnowledgeGraphNodeType::STENCIL) {
+        subgraph.setCentralNode(centralNode);
+
+        subgraph.addParent(stencilsNode);
 
         return;
     }

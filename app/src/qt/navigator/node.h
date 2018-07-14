@@ -86,6 +86,7 @@ class NavigatorNode : public QGraphicsItem
     KnowledgeGraphNode* knowledgeGraphNode;
 
     QString nodeName;
+    QString nodeType;
     QColor nodeColor;
     bool nodeBold;
 
@@ -95,6 +96,8 @@ class NavigatorNode : public QGraphicsItem
     NavigatorView* navigator;
 
     bool dragging;
+
+    bool showType;
 
  public:
     NavigatorNode(KnowledgeGraphNode* knowledgeGraphNode, NavigatorView* navigator, const QColor& color, bool bold=false);
@@ -126,9 +129,6 @@ class NavigatorNode : public QGraphicsItem
  private:
     QList<NavigatorEdge*> edgeList;
 	QPointF newPos;
-
-    // IMPROVE to be removed
-    void paintCircleWithShade(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
 };
 
 }

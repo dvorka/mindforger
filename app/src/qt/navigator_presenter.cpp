@@ -24,7 +24,8 @@ NavigatorPresenter::NavigatorPresenter(NavigatorView* view, QObject* parent, Kno
     : QObject(parent),
       view{view},
       knowledgeGraph{knowledgeGraph},
-      subgraph{knowledgeGraph->getNode(KnowledgeGraphNodeType::MIND)}
+      // TODO improve configuration
+      subgraph{knowledgeGraph->getNode(KnowledgeGraphNodeType::MIND), 150}
 {
     // signals
     QObject::connect(view, SIGNAL(nodeSelectedSignal(NavigatorNode*)), this, SLOT(nodeSelectedSlot(NavigatorNode*)));

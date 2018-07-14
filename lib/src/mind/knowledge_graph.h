@@ -33,7 +33,9 @@ enum class KnowledgeGraphNodeType {
     NOTES,
     NOTE,
     TAGS,
+    TAG,
     STENCILS,
+    STENCIL,
     LIMBO
 };
 
@@ -45,7 +47,11 @@ class KnowledgeGraphNode {
     Thing* thing;
 
 public:
-    explicit KnowledgeGraphNode(KnowledgeGraphNodeType type, const std::string& name, long unsigned color=0x000000) {
+    explicit KnowledgeGraphNode(
+       KnowledgeGraphNodeType type,
+       const std::string& name,
+       long unsigned color=0x000000
+    ) {
         this->type = type;
         this->name = name;
         this->color = color;
@@ -66,9 +72,12 @@ class KnowledgeSubGraph
     std::vector<KnowledgeGraphNode*> children;
     // IMPROVE map<> all;
 
+    // ensure that knowledge graph size (number of nodes) is smaller than limit
+    int limit;
+    int count;
+
 public:
-    //explicit KnowledgeSubGraph() {}
-    explicit KnowledgeSubGraph(KnowledgeGraphNode* centralNode);
+    explicit KnowledgeSubGraph(KnowledgeGraphNode* centralNode, int limit=INT_MAX);
     KnowledgeSubGraph(const KnowledgeSubGraph&) = delete;
     KnowledgeSubGraph(const KnowledgeSubGraph&&) = delete;
     KnowledgeSubGraph &operator=(const KnowledgeSubGraph&) = delete;
@@ -78,14 +87,16 @@ public:
     void setCentralNode(KnowledgeGraphNode* centralNode) { this->centralNode = centralNode; }
     KnowledgeGraphNode* getCentralNode() const { return centralNode; }
     // IMPROVE bool contains(KnowledgeGraphNode node) { return false; }
-    void addParent(KnowledgeGraphNode* p) { parents.push_back(p); }
-    void addChild(KnowledgeGraphNode* c) { children.push_back(c); }
+    void addParent(KnowledgeGraphNode* p) { if(count-- > 0) parents.push_back(p); }
+    void addChild(KnowledgeGraphNode* c) { if(count-- > 0) children.push_back(c); }
     std::vector<KnowledgeGraphNode*>& getParents() { return parents; }
     std::vector<KnowledgeGraphNode*>& getChildren() { return children; }
+    int size() { return 1 + parents.size() + children.size(); }
     void clear() {
         centralNode = nullptr;
         parents.clear();
         children.clear();
+        count = limit-1;
     }
 };
 
@@ -100,8 +111,16 @@ class KnowledgeGraph
     KnowledgeGraphNode* limboNode;
     KnowledgeGraphNode* stencilsNode;
 
+    long unsigned coreColor;
+    long unsigned outlinesColor;
+    long unsigned notesColor;
+
 public:
-    explicit KnowledgeGraph(Mind* mind);
+    explicit KnowledgeGraph(
+            Mind* mind,
+            long unsigned coreColor=0x000000,
+            long unsigned outlinesColor=0x220000,
+            long unsigned notesColor=0x000022);
     KnowledgeGraph(const KnowledgeGraph&) = delete;
     KnowledgeGraph(const KnowledgeGraph&&) = delete;
     KnowledgeGraph &operator=(const KnowledgeGraph&) = delete;
@@ -109,7 +128,7 @@ public:
     ~KnowledgeGraph();
 
     KnowledgeGraphNode* getNode(KnowledgeGraphNodeType type);
-    void getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeSubGraph& subgraph, int hops=1);
+    void getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeSubGraph& subgraph);
 };
 
 }

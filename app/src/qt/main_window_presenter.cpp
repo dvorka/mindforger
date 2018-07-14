@@ -875,7 +875,7 @@ bool MainWindowPresenter::doActionViewHome()
     vector<const Tag*> tagsFilter{};
     tagsFilter.push_back(mind->remind().getOntology().findOrCreateTag(Tag::KeyMindForgerHome()));
     vector<Outline*> homeOutline{};
-    mind->findOutlineByTags(tagsFilter, homeOutline);
+    mind->findOutlinesByTags(tagsFilter, homeOutline);
     if(homeOutline.size()) {
         orloj->showFacetOutline(homeOutline.at(0));
         return true;

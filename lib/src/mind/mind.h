@@ -349,12 +349,12 @@ public:
     /**
      * @brief Get Outlines tagged by given tags (logical AND).
      */
-    void findOutlineByTags(const std::vector<const Tag*>& tags, std::vector<Outline*>& result) const;
+    void findOutlinesByTags(const std::vector<const Tag*>& tags, std::vector<Outline*>& result) const;
 
     /**
      * @brief Get Notes tagged by given tags (logical AND).
      */
-    void findNoteByTags(const std::vector<const Tag*>& tags, std::vector<Note*>& result) const;
+    void findNotesByTags(const std::vector<const Tag*>& tags, std::vector<Note*>& result) const;
 
     /**
      * @brief Get all tags assigned to Outlines in the memory.

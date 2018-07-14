@@ -414,10 +414,27 @@ vector<Note*>* Mind::getRefereeNotes(const Note& note, const Outline& outline) c
     return nullptr;
 }
 
-void Mind::findNoteByTags(const std::vector<const Tag*>& tags, std::vector<Note*>& result) const
+void Mind::findNotesByTags(const vector<const Tag*>& tags, vector<Note*>& result) const
 {
-    UNUSED_ARG(tags);
-    UNUSED_ARG(result);
+    vector<Note*> allNotes{};
+    memory.getAllNotes(allNotes);
+    for(Note* n:allNotes) {
+        const vector<const Tag*>* thingTags = n->getTags();
+        bool hasAllTags=true;
+        for(size_t i=0; i<tags.size(); i++) {
+            if(std::find(
+                        thingTags->begin(),
+                        thingTags->end(),
+                        tags.at(i)) == thingTags->end())
+            {
+                hasAllTags=false;
+                break;
+            }
+        }
+        if(hasAllTags) {
+            result.push_back(n);
+        }
+    }
 }
 
 const vector<Outline*>& Mind::getOutlines() const
@@ -481,21 +498,21 @@ vector<Note*>* Mind::getAssociatedNotes(const string& words, const Outline& outl
     return nullptr;
 }
 
-void Mind::findOutlineByTags(const std::vector<const Tag*>& tags, std::vector<Outline*>& result) const
+void Mind::findOutlinesByTags(const std::vector<const Tag*>& tags, std::vector<Outline*>& result) const
 {
     for(Outline* o:memory.getOutlines()) {
-        bool match = true;
+        bool allMatched = true;
         for(size_t i=0; i<tags.size(); i++) {
             if(std::find(
                         o->getTags()->begin(),
                         o->getTags()->end(),
                         tags.at(i)) == o->getTags()->end())
             {
-                match = false;
+                allMatched = false;
                 break;
             }
         }
-        if(match) {
+        if(allMatched) {
             result.push_back(o);
         }
     }

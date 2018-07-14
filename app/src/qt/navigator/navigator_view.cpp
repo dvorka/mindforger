@@ -176,42 +176,54 @@ void NavigatorView::timerEvent(QTimerEvent *event)
         NavigatorNode* selectedNode{};
         // blank scene > the first (central) node must be created
         if(navigatorScene->items().isEmpty()) {
-            MF_DEBUG("  NEW view - CREATING central node: " << subgraph->getCentralNode()->getName() << endl);
-            // empty scene ~ it's save to clear garbage
-            clearGarbageItems();
+            if(subgraph->getCentralNode()) {
+                MF_DEBUG("  NEW view - CREATING central node: " << subgraph->getCentralNode()->getName() << endl);
+                // empty scene ~ it's save to clear garbage
+                clearGarbageItems();
 
-            selectedNode = new NavigatorNode(subgraph->getCentralNode(), this, subgraph->getCentralNode()->getColor());
-            navigatorScene->addItem(selectedNode);
-            selectedNode->setPos(0, 0);
+                selectedNode = new NavigatorNode(subgraph->getCentralNode(), this, subgraph->getCentralNode()->getColor());
+                navigatorScene->addItem(selectedNode);
+                selectedNode->setPos(0, 0);
+            } else {
+                MF_DEBUG("  sub-graph is EMPTY");
+                navigatorScene->clear();
+                return;
+            }
         } else {
-            MF_DEBUG("  KILL all except selected node: " << subgraph->getCentralNode()->getName() << endl);
-            MF_DEBUG("  BEFORE scene[" << navigatorScene->items().size() << "]" << endl);
-            for(QGraphicsItem* item:navigatorScene->items()) {
-                MF_DEBUG("   FDG.destroy()[" << item->childItems().size() << "]" << endl);
+            if(subgraph->getCentralNode()) {
+                MF_DEBUG("  KILL all except selected node: " << subgraph->getCentralNode()->getName() << endl);
+                MF_DEBUG("  BEFORE scene[" << navigatorScene->items().size() << "]" << endl);
+                for(QGraphicsItem* item:navigatorScene->items()) {
+                    MF_DEBUG("   FDG.destroy()[" << item->childItems().size() << "]" << endl);
 
-                NavigatorNode* n = qgraphicsitem_cast<NavigatorNode*>(item);
-                if(n) {
-                    // kill node
-                    if(n->getKnowledgeGraphNode() != subgraph->getCentralNode()) {
-                        MF_DEBUG("    NODE " << n->getName().toStdString() << endl);
-                        navigatorScene->removeItem(n);
+                    NavigatorNode* n = qgraphicsitem_cast<NavigatorNode*>(item);
+                    if(n) {
+                        // kill node
+                        if(n->getKnowledgeGraphNode() != subgraph->getCentralNode()) {
+                            MF_DEBUG("    NODE " << n->getName().toStdString() << endl);
+                            navigatorScene->removeItem(n);
+
+                            // mouse events CANNOT be stopped (events go to item being removed) > deleted on navigator view HIDE
+                            garbageItems.push_back(item);
+                        } else {
+                            MF_DEBUG("    SAFE: " << subgraph->getCentralNode()->getName() << endl);
+                            selectedNode = n;
+                        }
+                    } else {
+                        MF_DEBUG("    EDGE " << endl);
+                        // kill edge
+                        navigatorScene->removeItem(item);
 
                         // mouse events CANNOT be stopped (events go to item being removed) > deleted on navigator view HIDE
                         garbageItems.push_back(item);
-                    } else {
-                        MF_DEBUG("    SAFE: " << subgraph->getCentralNode()->getName() << endl);
-                        selectedNode = n;
                     }
-                } else {
-                    MF_DEBUG("    EDGE " << endl);
-                    // kill edge
-                    navigatorScene->removeItem(item);
-
-                    // mouse events CANNOT be stopped (events go to item being removed) > deleted on navigator view HIDE
-                    garbageItems.push_back(item);
                 }
+                MF_DEBUG("  AFTER scene[" << navigatorScene->items().size() << "]" << endl);
+            } else {
+                MF_DEBUG("  sub-graph is EMPTY");
+                navigatorScene->clear();
+                return;
             }
-            MF_DEBUG("  AFTER scene[" << navigatorScene->items().size() << "]" << endl);
         }
 
         //  ADD new nodes

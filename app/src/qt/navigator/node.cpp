@@ -77,14 +77,35 @@
 
 namespace m8r {
 
-NavigatorNode::NavigatorNode(KnowledgeGraphNode* knowledgeGraphNode, NavigatorView* navigator, const QColor& color, bool bold)
+NavigatorNode::NavigatorNode(
+        KnowledgeGraphNode* knowledgeGraphNode,
+        NavigatorView* navigator,
+        const QColor& color,
+        bool bold
+    )
     : knowledgeGraphNode(knowledgeGraphNode),
       nodeColor(color),
       nodeBold(bold),
       navigator(navigator)
 {
     nodeName = QString::fromStdString(knowledgeGraphNode->getName());
+    showType = true;
+    switch(knowledgeGraphNode->getType()) {
+    case KnowledgeGraphNodeType::TAG:
+        nodeType.append("t");
+        break;
+    case KnowledgeGraphNodeType::OUTLINE:
+        nodeType.append("o");
+        break;
+    case KnowledgeGraphNodeType::NOTE:
+        nodeType.append("n");
+        break;
+    default:
+        showType = false;
+        break;
+    }
 
+    // Qt flags
 	setFlag(ItemIsMovable);
 	setFlag(ItemSendsGeometryChanges);
 	setCacheMode(DeviceCoordinateCache);
@@ -93,7 +114,7 @@ NavigatorNode::NavigatorNode(KnowledgeGraphNode* knowledgeGraphNode, NavigatorVi
     setZValue(2);
 }
 
-void NavigatorNode::addEdge(NavigatorEdge *edge)
+void NavigatorNode::addEdge(NavigatorEdge* edge)
 {
 	edgeList << edge;
 	edge->adjust();
@@ -137,10 +158,11 @@ void NavigatorNode::calculateForces()
 	double weight = (edgeList.size() + 1) * 10;
     foreach(NavigatorEdge *edge, edgeList) {
 		QPointF vec;
-        if(edge->getSrcNode() == this)
+        if(edge->getSrcNode() == this) {
             vec = mapToItem(edge->getDstNode(), 0, 0);
-		else
+        } else {
             vec = mapToItem(edge->getSrcNode(), 0, 0);
+        }
 		xvel -= vec.x() / weight;
 		yvel -= vec.y() / weight;
 	}
@@ -168,16 +190,20 @@ bool NavigatorNode::advance()
 // IMPORTANT boundingRect MUST be sect correctly, otherwise drawing is CLIPPED (text or shape)
 QRectF NavigatorNode::boundingRect() const
 {
-    qreal adjust = 2;
-
-    return QRectF( -nodeWidth/2 - adjust, -nodeHeight/2 - adjust, nodeWidth + adjust, nodeHeight + adjust);
+    qreal adjust = 2; // spacing + type rect
+    qreal typeAdjust = 20;
+    return QRectF(
+                -nodeWidth/2 - adjust,
+                -nodeHeight/2 - adjust,
+                nodeWidth + adjust + typeAdjust,
+                nodeHeight + adjust + typeAdjust);
 }
 
+// shape size is used to get click events
 QPainterPath NavigatorNode::shape() const
 {
 	QPainterPath path;
-    path.addEllipse(-10, -10, 20, 20);
-
+    path.addRect(-nodeWidth/2, -nodeHeight/2, nodeWidth, nodeHeight);
 	return path;
 }
 
@@ -202,40 +228,34 @@ void NavigatorNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
     nodeWidth = textWidth + PADDING_WIDTH;
     nodeHeight = textHeight + PADDING_HEIGHT;
 
-    // TODO measure text (constructor) width and rectangle width driven by width w/ a limit and trailing ...
-
+    // node name
     // rectangle
     QRectF rectF{-nodeWidth/2,-nodeHeight/2, nodeWidth, nodeHeight};
     painter->setPen(QPen(Qt::darkGray, 0));
     painter->setBrush(nodeColor);
-    painter->drawRect(rectF);
-
-    // label ... IMPORTANT: check boundingRect() to ensure text is NOT clipped
-    // IMPROVE detect white to avoid white on white
+    if(showType) {
+        painter->drawRect(rectF);
+    } else {
+        painter->drawRoundRect(rectF);
+    }
+    // text
+    //   IMPORTANT: check boundingRect() to ensure text is NOT clipped
+    //   IMPROVE detect white to avoid white on white
     painter->setPen(Qt::white);
     painter->drawText((-nodeWidth+PADDING_WIDTH)/2, 0+PADDING_HEIGHT/2+2, nodeName);
-}
 
-void NavigatorNode::paintCircleWithShade(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* )
-{
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(Qt::darkGray);
-    painter->drawEllipse(-7, -7, 20, 20);
-
-    QRadialGradient gradient(-3, -3, 10);
-    if (option->state & QStyle::State_Sunken) {
-        gradient.setCenter(3, 3);
-        gradient.setFocalPoint(3, 3);
-        gradient.setColorAt(1, QColor(Qt::yellow).light(120));
-        gradient.setColorAt(0, QColor(Qt::darkYellow).light(120));
-    } else {
-        gradient.setColorAt(0, Qt::yellow);
-        gradient.setColorAt(1, Qt::darkYellow);
+    // node type
+    if(showType) {
+        // rectangle
+        QRectF rectT{nodeWidth/2 - 5, nodeHeight/2 - 5, 15, 15};
+        painter->setPen(QPen(Qt::darkGray, 0));
+        painter->setBrush(Qt::darkGray);
+        painter->drawRect(rectT);
+        // text
+        painter->setPen(Qt::white);
+        int textPadding = 7;
+        painter->drawText(nodeWidth/2 - 5 + textPadding - 3, nodeHeight/2 + textPadding, nodeType);
     }
-    painter->setBrush(gradient);
-
-    painter->setPen(QPen(Qt::black, 0));
-    painter->drawEllipse(-10, -10, 20, 20);
 }
 
 QVariant NavigatorNode::itemChange(GraphicsItemChange change, const QVariant &value)

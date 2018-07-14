@@ -51,11 +51,11 @@
 #########################################################################
 #
 # QMake build options:
-#   qmake CONFIG+=mfwebengine ... build project w/ Qt webengine instead with Qt webkit
+#   qmake CONFIG+=mfwebengine ... build project w/ Qt WebEngine instead of Qt WebKit
 #   qmake CONFIG+=mfner       ... build project w/ NER and link dlib/MITIE
 #   qmake CONFIG+=mfnocxx     ... do NOT define CXX i.e. g++
 #   qmake CONFIG+=mfnoccache  ... do NOT use ccache to build the project
-#   qmake CONFIG+=mfdebug     ... show debug messages
+#   qmake CONFIG+=mfdebug     ... show debug messages + include WIP code
 #   qmake CONFIG+=mfunits     ... options to run unit tests
 #
 #########################################################################
