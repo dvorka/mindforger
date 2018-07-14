@@ -1,3 +1,4 @@
+
 /*
  main.cpp     MindForger thinking notebook
 
