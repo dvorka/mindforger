@@ -145,7 +145,9 @@ public:
     /**
      * @brief Knowledge graph navigator
      */
-    void showFacetKnowledgeGraphNavigator();
+    void showFacetNavigator();
+    void showFacetNavigatorOutline();
+    void showFacetNavigatorNote();
 
     /*
      * Hoisting

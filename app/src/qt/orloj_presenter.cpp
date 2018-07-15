@@ -83,6 +83,16 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowTagRecallDialog(const QItemSelection&, const QItemSelection&)));
+    // navigator
+    QObject::connect(
+        navigatorPresenter, SIGNAL(outlineSelectedSignal(Outline*)),
+        this, SLOT(slotShowOutlineNavigator(Outline*)));
+    QObject::connect(
+        navigatorPresenter, SIGNAL(noteSelectedSignal(Note*)),
+        this, SLOT(slotShowNoteNavigator(Note*)));
+    QObject::connect(
+        navigatorPresenter, SIGNAL(thingSelectedSignal()),
+        this, SLOT(slotShowNavigator()));
 }
 
 int dialogSaveOrCancel()
@@ -144,7 +154,7 @@ void OrlojPresenter::showFacetKnowledgeGraphNavigator()
 {
     setFacet(OrlojPresenterFacets::FACET_NAVIGATOR);
     navigatorPresenter->showInitialView();
-    view->showFacetKnowledgeGraphNavigator();
+    view->showFacetNavigator();
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
@@ -173,16 +183,22 @@ void OrlojPresenter::showFacetFtsResult(vector<Note*>* result)
 
 void OrlojPresenter::showFacetOutline(Outline* outline)
 {
-    setFacet(OrlojPresenterFacets::FACET_VIEW_OUTLINE);
+    if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
+        outlineHeaderViewPresenter->refresh(outline);
+        view->showFacetNavigatorOutline();
+    } else {
+        setFacet(OrlojPresenterFacets::FACET_VIEW_OUTLINE);
 
-    outlineViewPresenter->refresh(outline);
-    outlineHeaderViewPresenter->refresh(outline);
-    view->showFacetOutlineHeaderView();
+        outlineViewPresenter->refresh(outline);
+        outlineHeaderViewPresenter->refresh(outline);
+        view->showFacetOutlineHeaderView();
+    }
 
     outline->incReads();
     outline->makeDirty();
 
     mainPresenter->getMainMenu()->showFacetOutlineView();
+
     mainPresenter->getStatusBar()->showInfo(QString("Notebook '%1'   %2").arg(outline->getName().c_str()).arg(outline->getKey().c_str()));
 }
 
@@ -243,7 +259,6 @@ void OrlojPresenter::slotShowTagRecallDialog(const QItemSelection& selected, con
     }
 }
 
-
 void OrlojPresenter::showFacetNoteView()
 {
     view->showFacetNoteView();
@@ -253,19 +268,26 @@ void OrlojPresenter::showFacetNoteView()
 
 void OrlojPresenter::showFacetNoteView(Note* note)
 {
-    if(outlineViewPresenter->getCurrentOutline()!=note->getOutline()) {
-        showFacetOutline(note->getOutline());
+    if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
+        noteViewPresenter->refresh(note);
+        view->showFacetNavigatorNote();
+        mainPresenter->getMainMenu()->showFacetOutlineView();
+    } else {
+        if(outlineViewPresenter->getCurrentOutline()!=note->getOutline()) {
+            showFacetOutline(note->getOutline());
+        }
+        noteViewPresenter->refresh(note);
+        view->showFacetNoteView();
+        outlineViewPresenter->selectRowByNote(note);
+        mainPresenter->getMainMenu()->showFacetOutlineView();
+
+        setFacet(OrlojPresenterFacets::FACET_VIEW_NOTE);
     }
-    noteViewPresenter->refresh(note);
-    view->showFacetNoteView();
-    outlineViewPresenter->selectRowByNote(note);
-    mainPresenter->getMainMenu()->showFacetOutlineView();
 
     QString p{note->getOutline()->getKey().c_str()};
     p += "#";
     p += note->getMangledName().c_str();
     mainPresenter->getStatusBar()->showInfo(QString(tr("Note '%1'   %2")).arg(note->getName().c_str()).arg(p));
-    setFacet(OrlojPresenterFacets::FACET_VIEW_NOTE);
 }
 
 void OrlojPresenter::showFacetNoteEdit(Note* note)
@@ -364,6 +386,29 @@ void OrlojPresenter::slotShowNote(const QItemSelection& selected, const QItemSel
     } else {
         Outline* outline = outlineViewPresenter->getCurrentOutline();
         mainPresenter->getStatusBar()->showInfo(QString("Notebook '%1'   %2").arg(outline->getName().c_str()).arg(outline->getKey().c_str()));
+    }
+}
+
+void OrlojPresenter::slotShowNavigator()
+{
+    view->showFacetNavigator();
+}
+
+void OrlojPresenter::slotShowNoteNavigator(Note* note)
+{
+    if(note) {
+        note->incReads();
+        note->makeDirty();
+
+        showFacetNoteView(note);
+    }
+}
+
+void OrlojPresenter::slotShowOutlineNavigator(Outline* outline)
+{
+    if(outline) {
+        // timestamps are updated by O header view
+        showFacetOutline(outline);
     }
 }
 

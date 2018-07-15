@@ -45,11 +45,17 @@ public:
     NavigatorPresenter &operator=(const NavigatorPresenter&&) = delete;
     ~NavigatorPresenter();
 
+    NavigatorView* getView() const { return view; }
     void showInitialView();
     void cleanupBeforeHide() { view->cleanupBeforeHide(); }
 
 private slots:
     void nodeSelectedSlot(NavigatorNode* node);
+
+signals:
+    void thingSelectedSignal();
+    void outlineSelectedSignal(Outline* note);
+    void noteSelectedSignal(Note* note);
 };
 
 }

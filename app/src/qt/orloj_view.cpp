@@ -163,9 +163,21 @@ void OrlojView::showFacetNoteEdit()
     noteEdit->giveFocusToEditor();
 }
 
-void OrlojView::showFacetKnowledgeGraphNavigator()
+void OrlojView::showFacetNavigator()
 {
     QSet<QWidget*> v; v << navigator;
+    hideChildren(v);
+}
+
+void OrlojView::showFacetNavigatorOutline()
+{
+    QSet<QWidget*> v; v << navigator << outlineHeaderView;
+    hideChildren(v);
+}
+
+void OrlojView::showFacetNavigatorNote()
+{
+    QSet<QWidget*> v; v << navigator << noteView;
     hideChildren(v);
 }
 

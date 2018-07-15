@@ -88,10 +88,11 @@ class NavigatorNode : public QGraphicsItem
     QString nodeName;
     QString nodeType;
     QColor nodeColor;
+    qreal nodeEdgeLenght;
     bool nodeBold;
 
-    qreal nodeWidth = 100;
-    qreal nodeHeight = 15;
+    qreal defaultNodeWidth = 100;
+    qreal defaultNodeHeight = 15;
 
     NavigatorView* navigator;
 
@@ -100,7 +101,12 @@ class NavigatorNode : public QGraphicsItem
     bool showType;
 
  public:
-    NavigatorNode(KnowledgeGraphNode* knowledgeGraphNode, NavigatorView* navigator, const QColor& color, bool bold=false);
+    NavigatorNode(
+            KnowledgeGraphNode* knowledgeGraphNode,
+            NavigatorView* navigator,
+            const QColor& color,
+            qreal edgeLenght=150,
+            bool bold=false);
 
     KnowledgeGraphNode* getKnowledgeGraphNode() const { return knowledgeGraphNode; }
     const QString& getName() const { return nodeName; }

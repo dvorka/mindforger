@@ -81,10 +81,12 @@ NavigatorNode::NavigatorNode(
         KnowledgeGraphNode* knowledgeGraphNode,
         NavigatorView* navigator,
         const QColor& color,
+        qreal edgeLenght,
         bool bold
     )
     : knowledgeGraphNode(knowledgeGraphNode),
       nodeColor(color),
+      nodeEdgeLenght(edgeLenght),
       nodeBold(bold),
       navigator(navigator)
 {
@@ -149,8 +151,8 @@ void NavigatorNode::calculateForces()
 		qreal dy = vec.y();
         double l = 2.0 * (dx*dx + dy*dy);
         if(l > 0) {
-			xvel += (dx * 150.0) / l;
-			yvel += (dy * 150.0) / l;
+            xvel += (dx * nodeEdgeLenght) / l;
+            yvel += (dy * nodeEdgeLenght) / l;
 		}
 	}
 
@@ -193,17 +195,17 @@ QRectF NavigatorNode::boundingRect() const
     qreal adjust = 2; // spacing + type rect
     qreal typeAdjust = 20;
     return QRectF(
-                -nodeWidth/2 - adjust,
-                -nodeHeight/2 - adjust,
-                nodeWidth + adjust + typeAdjust,
-                nodeHeight + adjust + typeAdjust);
+                -defaultNodeWidth/2 - adjust,
+                -defaultNodeHeight/2 - adjust,
+                defaultNodeWidth + adjust + typeAdjust,
+                defaultNodeHeight + adjust + typeAdjust);
 }
 
 // shape size is used to get click events
 QPainterPath NavigatorNode::shape() const
 {
 	QPainterPath path;
-    path.addRect(-nodeWidth/2, -nodeHeight/2, nodeWidth, nodeHeight);
+    path.addRect(-defaultNodeWidth/2, -defaultNodeHeight/2, defaultNodeWidth, defaultNodeHeight);
 	return path;
 }
 
@@ -225,12 +227,12 @@ void NavigatorNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
     qreal PADDING_HEIGHT = 6;
     int textWidth = fm.width(nodeName);
     int textHeight = fm.height();
-    nodeWidth = textWidth + PADDING_WIDTH;
-    nodeHeight = textHeight + PADDING_HEIGHT;
+    defaultNodeWidth = textWidth + PADDING_WIDTH;
+    defaultNodeHeight = textHeight + PADDING_HEIGHT;
 
     // node name
     // rectangle
-    QRectF rectF{-nodeWidth/2,-nodeHeight/2, nodeWidth, nodeHeight};
+    QRectF rectF{-defaultNodeWidth/2,-defaultNodeHeight/2, defaultNodeWidth, defaultNodeHeight};
     painter->setPen(QPen(Qt::darkGray, 0));
     painter->setBrush(nodeColor);
     if(showType) {
@@ -242,19 +244,19 @@ void NavigatorNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
     //   IMPORTANT: check boundingRect() to ensure text is NOT clipped
     //   IMPROVE detect white to avoid white on white
     painter->setPen(Qt::white);
-    painter->drawText((-nodeWidth+PADDING_WIDTH)/2, 0+PADDING_HEIGHT/2+2, nodeName);
+    painter->drawText((-defaultNodeWidth+PADDING_WIDTH)/2, 0+PADDING_HEIGHT/2+2, nodeName);
 
     // node type
     if(showType) {
         // rectangle
-        QRectF rectT{nodeWidth/2 - 5, nodeHeight/2 - 5, 15, 15};
+        QRectF rectT{defaultNodeWidth/2 - 5, defaultNodeHeight/2 - 5, 15, 15};
         painter->setPen(QPen(Qt::darkGray, 0));
         painter->setBrush(Qt::darkGray);
         painter->drawRect(rectT);
         // text
         painter->setPen(Qt::white);
         int textPadding = 7;
-        painter->drawText(nodeWidth/2 - 5 + textPadding - 3, nodeHeight/2 + textPadding, nodeType);
+        painter->drawText(defaultNodeWidth/2 - 5 + textPadding - 3, defaultNodeHeight/2 + textPadding, nodeType);
     }
 }
 

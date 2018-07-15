@@ -164,6 +164,9 @@ public slots:
     void slotShowNoteAsFtsResult(const QItemSelection& selected, const QItemSelection& deselected);
     void slotShowRecentNote(const QItemSelection& selected, const QItemSelection& deselected);
     void slotShowTagRecallDialog(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotShowNavigator();
+    void slotShowNoteNavigator(Note* note);
+    void slotShowOutlineNavigator(Outline* outline);
 };
 
 } // m8r namespace

@@ -45,6 +45,17 @@ void NavigatorPresenter::nodeSelectedSlot(NavigatorNode* node)
 {
     knowledgeGraph->getRelatedNodes(node->getKnowledgeGraphNode(), subgraph);
     view->refreshOnNextTimerTick(&subgraph);
+    switch(node->getKnowledgeGraphNode()->getType()) {
+    case KnowledgeGraphNodeType::OUTLINE:
+        emit outlineSelectedSignal(static_cast<Outline*>(node->getKnowledgeGraphNode()->getThing()));
+        break;
+    case KnowledgeGraphNodeType::NOTE:
+        emit noteSelectedSignal(static_cast<Note*>(node->getKnowledgeGraphNode()->getThing()));
+        break;
+    default:
+        emit thingSelectedSignal();
+        break;
+    }
 }
 
 } // m8r namespace
