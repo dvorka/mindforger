@@ -23,8 +23,12 @@ CONFIG -= qt
 # dependencies
 #  - INCLUDEPATH is used during compilation to find included header files.
 #  - DEPENDPATH is used to resolve dependencies between header and source files, eg. which source files need to be recompiled when certain header file changes.
-INCLUDEPATH += $$PWD/../deps/discount
-DEPENDPATH += $$PWD/../deps/discount
+mfnomd2html {
+  DEFINES += MF_NO_MD_2_HTML
+} else {
+  INCLUDEPATH += $$PWD/../deps/discount
+  DEPENDPATH += $$PWD/../deps/discount
+}
 mfner {
     DEFINES += MF_NER
     INCLUDEPATH += $$PWD/../deps/mitie/mitielib/include

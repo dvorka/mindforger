@@ -36,7 +36,7 @@ mfdebug|mfunits {
 macx|mfwebengine {
     QT += webengine
     QT += webenginewidgets
-    DEFINES = MF_QT_WEB_ENGINE
+    DEFINES += MF_QT_WEB_ENGINE
 } else {
     QT += webkit
     QT += webkitwidgets
@@ -50,8 +50,12 @@ DEPENDPATH += $$PWD/../lib/src
 
 # -L where to look for library, -l link the library
 LIBS += -L$$OUT_PWD/../lib -lmindforger
-# MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
-LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
+mfnomd2html {
+  DEFINES += MF_NO_MD_2_HTML
+} else {
+  # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
+  LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
+}
 mfner {
   # MF links MITIE for AI/NLP/DL
   LIBS += -L$$OUT_PWD/../deps/mitie/mitielib -lmitie

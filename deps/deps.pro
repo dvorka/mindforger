@@ -50,6 +50,8 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS = discount
+!mfnomd2html {
+  SUBDIRS = discount
+}
 
 # eof

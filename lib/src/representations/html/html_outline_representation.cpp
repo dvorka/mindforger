@@ -18,9 +18,11 @@
  */
 #include "html_outline_representation.h"
 
-extern "C" {
-#include "../../../../deps/discount/mkdio.h"
-}
+#ifndef MF_NO_MD_2_HTML
+  extern "C" {
+  #include "../../../../deps/discount/mkdio.h"
+  }
+#endif
 
 using namespace std;
 
@@ -234,12 +236,18 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
         html->clear();
         header(*html, basePath);
 
-        MMIOT* doc = nullptr;
         if(markdown->size() > 0) {
             // ensure MD ends with new line, otherwise there would be missing characters in output HTML
             if(markdown->at(markdown->size()-1) != '\n') {
                 markdown += '\n';
             }
+
+#ifdef MF_NO_MD_2_HTML
+            html->append("<pre>");
+            html->append(*markdown);
+            html->append("</pre>");
+#else
+            MMIOT* doc = nullptr;
 
             // options
             unsigned int mfOptions = config.getMd2HtmlOptions();
@@ -277,6 +285,7 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
 
                 mkd_cleanup(doc);
             }
+#endif
         }
 
         footer(*html);
