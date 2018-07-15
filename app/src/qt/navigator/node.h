@@ -83,22 +83,23 @@ class NavigatorView;
  */
 class NavigatorNode : public QGraphicsItem
 {
+    NavigatorView* navigator;
     KnowledgeGraphNode* knowledgeGraphNode;
 
-    QString nodeName;
     QString nodeType;
+    QString nodeName;
+    QString nodeCardinality;
+    int nodeCardinalityPixelWidth;
     QColor nodeColor;
-    qreal nodeEdgeLenght;
-    bool nodeBold;
 
+    bool showType;
+    bool showBold;
+
+    qreal edgeLenght;
     qreal defaultNodeWidth = 100;
     qreal defaultNodeHeight = 15;
 
-    NavigatorView* navigator;
-
     bool dragging;
-
-    bool showType;
 
  public:
     NavigatorNode(

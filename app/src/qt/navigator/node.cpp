@@ -84,11 +84,11 @@ NavigatorNode::NavigatorNode(
         qreal edgeLenght,
         bool bold
     )
-    : knowledgeGraphNode(knowledgeGraphNode),
+    : navigator(navigator),
+      knowledgeGraphNode(knowledgeGraphNode),
       nodeColor(color),
-      nodeEdgeLenght(edgeLenght),
-      nodeBold(bold),
-      navigator(navigator)
+      showBold(bold),
+      edgeLenght(edgeLenght)
 {
     nodeName = QString::fromStdString(knowledgeGraphNode->getName());
     showType = true;
@@ -106,6 +106,8 @@ NavigatorNode::NavigatorNode(
         showType = false;
         break;
     }
+    nodeCardinality = QString::fromStdString("13");
+    nodeCardinalityPixelWidth = 13;
 
     // Qt flags
 	setFlag(ItemIsMovable);
@@ -151,8 +153,8 @@ void NavigatorNode::calculateForces()
 		qreal dy = vec.y();
         double l = 2.0 * (dx*dx + dy*dy);
         if(l > 0) {
-            xvel += (dx * nodeEdgeLenght) / l;
-            yvel += (dy * nodeEdgeLenght) / l;
+            xvel += (dx * edgeLenght) / l;
+            yvel += (dy * edgeLenght) / l;
 		}
 	}
 
@@ -196,12 +198,12 @@ QRectF NavigatorNode::boundingRect() const
     qreal typeAdjust = 20;
     return QRectF(
                 -defaultNodeWidth/2 - adjust,
-                -defaultNodeHeight/2 - adjust,
+                -defaultNodeHeight/2 - adjust - typeAdjust,
                 defaultNodeWidth + adjust + typeAdjust,
-                defaultNodeHeight + adjust + typeAdjust);
+                defaultNodeHeight + adjust + 2*typeAdjust);
 }
 
-// shape size is used to get click events
+// shape size is used to get vieport for accepting click events related to this graphics object
 QPainterPath NavigatorNode::shape() const
 {
 	QPainterPath path;
@@ -219,7 +221,7 @@ void NavigatorNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
     // IMPROVE calculate this only ONCE - font to be passed from parent and used through all the code
     QFont font = painter->font();
     font.setPointSize(10);
-    font.setBold(nodeBold);
+    font.setBold(showBold);
     painter->setFont(font);
 
     QFontMetrics fm = painter->fontMetrics();
@@ -252,6 +254,19 @@ void NavigatorNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
         QRectF rectT{defaultNodeWidth/2 - 5, defaultNodeHeight/2 - 5, 15, 15};
         painter->setPen(QPen(Qt::darkGray, 0));
         painter->setBrush(Qt::darkGray);
+        painter->drawRect(rectT);
+        // text
+        painter->setPen(Qt::white);
+        int textPadding = 7;
+        painter->drawText(defaultNodeWidth/2 - 5 + textPadding - 3, defaultNodeHeight/2 + textPadding, nodeType);
+    }
+
+    // node cardinality
+    if(nodeCardinalityPixelWidth) {
+        // rectangle
+        QRectF rectT{defaultNodeWidth/2 - 5, -20, 15, 15};
+        painter->setPen(QPen(Qt::white, 0));
+        painter->setBrush(Qt::red);
         painter->drawRect(rectT);
         // text
         painter->setPen(Qt::white);
