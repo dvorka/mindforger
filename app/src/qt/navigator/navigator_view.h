@@ -80,8 +80,11 @@ namespace m8r {
 
 class NavigatorNode;
 
+// IMPROVE enjoy improving this class to achieve maximum rendering performance, there
+//         is a lot of space for improvement
+
 /**
- * @brief knowledge graph navigator view.
+ * @brief Knowledge graph navigator view.
  *
  * Knowledge graph is based on force-directed graph based (FDB) - magnets and rubber bands.
  *
