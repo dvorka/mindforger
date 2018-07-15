@@ -46,6 +46,7 @@ public:
     ~NavigatorPresenter();
 
     void showInitialView();
+    void cleanupBeforeHide() { view->cleanupBeforeHide(); }
 
 private slots:
     void nodeSelectedSlot(NavigatorNode* node);

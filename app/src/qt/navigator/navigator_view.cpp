@@ -110,6 +110,17 @@ void NavigatorView::clearGarbageItems()
     garbageItems.clear();
 }
 
+void NavigatorView::cleanupBeforeHide() {
+    lock_guard<mutex> criticalSection{refreshMutex};
+    MF_DEBUG("BEFORE NAVIGATOR.hide() scene[" << navigatorScene->items().size() << "]" << endl);
+
+    // TODO codereview to ensure that there are no memory leaks
+    clearGarbageItems();
+    navigatorScene->clear();
+
+    MF_DEBUG("AFTER NAVIGATOR.hide() scene[" << navigatorScene->items().size() << "]" << endl);
+}
+
 void NavigatorView::updateNavigatorView()
 {
     // IMPROVE: resize scene also on window resize event

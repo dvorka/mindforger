@@ -125,6 +125,8 @@ public:
         itemMoved(); // kick timer if not running
     }
 
+    void cleanupBeforeHide();
+
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
     void scaleView(qreal scaleFactor);

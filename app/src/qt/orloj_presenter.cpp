@@ -114,6 +114,8 @@ void OrlojPresenter::onFacetChange(const OrlojPresenterFacets targetFacet) const
             }
             return;
         }
+    } if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
+        navigatorPresenter->cleanupBeforeHide();
     }
 
     if(targetFacet == OrlojPresenterFacets::FACET_VIEW_OUTLINE) {
@@ -191,6 +193,8 @@ void OrlojPresenter::slotShowOutline(const QItemSelection& selected, const QItem
     if(activeFacet!=OrlojPresenterFacets::FACET_ORGANIZER
          &&
        activeFacet!=OrlojPresenterFacets::FACET_TAG_CLOUD
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_NAVIGATOR
          &&
        activeFacet!=OrlojPresenterFacets::FACET_RECENT_NOTES
       )
