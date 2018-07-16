@@ -26,7 +26,8 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
 {
     setWindowTitle("MindForger - "+tr("Thinking Notebook")+" - "+MINDFORGER_VERSION+" - Technology Preview ");
 
-    addToolBar(Qt::BottomToolBarArea, new MainToolbarView{this});
+    toolBarView = new MainToolbarView{this};
+    addToolBar(Qt::BottomToolBarArea, toolBarView);
 
     centralWidget = new QWidget(this);
 
@@ -45,11 +46,6 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
 MainWindowView::~MainWindowView()
 {
     delete centralWidget;
-}
-
-QMenuBar* MainWindowView::getMenuBar() const
-{
-    return menuBar();
 }
 
 } // m8r namespace

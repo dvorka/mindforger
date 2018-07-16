@@ -161,10 +161,11 @@ public slots:
     void handleMindNewFile();
     void doActionMindThink();
     void doActionMindSleep();
+    void doActionMindToggleThink();
     void doActionMindLearnRepository();
     void doActionMindLearnFile();
     void doActionMindRelearn(QString path);
-    void doActionMindTimeScope();
+    void doActionMindTimeTagScope();
     void handleMindScope();
     void doActionMindPreferences();
     void handleMindPreferences();

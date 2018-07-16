@@ -38,6 +38,8 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
     actionFindObyTag = addAction(QIcon(":/icons/find-o-tag.svg"), "Recall Notebook by Tag");
     actionFindNbyTag = addAction(QIcon(":/icons/find-n-tag.svg"), "Recall Note by Tag");
     addSeparator();
+    actionBackToPreviousNote= addAction(QIcon(":/icons/back.svg"), "Back to Previous Note");
+    addSeparator();
     actionThink = addAction(QIcon(":/icons/think.svg"), "Think / Sleep");
     addSeparator();
     actionScope = addAction(QIcon(":/icons/scope.svg"), "Scope Mind");

@@ -37,7 +37,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         view->submenuMindRelearn->addFile(QString::fromStdString(r.first));
     }
     QObject::connect(view->submenuMindRelearn, SIGNAL(recentFileTriggered(QString)), mwp, SLOT(doActionMindRelearn(QString)));
-    QObject::connect(view->actionMindScope, SIGNAL(triggered()), mwp, SLOT(doActionMindTimeScope()));
+    QObject::connect(view->actionMindScope, SIGNAL(triggered()), mwp, SLOT(doActionMindTimeTagScope()));
     QObject::connect(view->actionMindRemember, SIGNAL(triggered()), mwp, SLOT(doActionMindRemember()));
     // TODO tobe finished
     //QObject::connect(view->actionMindForget, SIGNAL(triggered()), mwp, SLOT(doActionMindForgetting()));
@@ -48,7 +48,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionMindHack, SIGNAL(triggered()), mwp, SLOT(doActionMindHack()));
 #endif
 
-    // menu: find
+    // menu: recall
     QObject::connect(view->actionFts, SIGNAL(triggered()), mwp, SLOT(doActionFts()));
     QObject::connect(view->actionFindOutlineByName, SIGNAL(triggered()), mwp, SLOT(doActionFindOutlineByName()));
     QObject::connect(view->actionFindNoteByName, SIGNAL(triggered()), mwp, SLOT(doActionFindNoteByName()));

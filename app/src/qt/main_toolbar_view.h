@@ -33,6 +33,7 @@ class MainToolbarView : public QToolBar
 
     MainWindowView* mainWindow;
 
+public:
     QAction* actionNewNotebook;
     QAction* actionViewEisenhower;
     QAction* actionViewOutlines;
@@ -44,6 +45,7 @@ class MainToolbarView : public QToolBar
     QAction* actionFindNbyName;
     QAction* actionFindObyTag;
     QAction* actionFindNbyTag;
+    QAction* actionBackToPreviousNote;
     QAction* actionThink;
     QAction* actionScope;
     QAction* actionAdapt;

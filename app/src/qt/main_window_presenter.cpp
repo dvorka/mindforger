@@ -81,6 +81,25 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(rowsAndDepthDialog->getGenerateButton(), SIGNAL(clicked()), this, SLOT(handleRowsAndDepth()));
     QObject::connect(newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
+    // wire toolbar signals
+    QObject::connect(view.getToolBar()->actionNewNotebook, SIGNAL(triggered()), this, SLOT(doActionOutlineNew()));
+    QObject::connect(view.getToolBar()->actionViewEisenhower, SIGNAL(triggered()), this, SLOT(doActionViewOrganizer()));
+    QObject::connect(view.getToolBar()->actionViewOutlines, SIGNAL(triggered()), this, SLOT(doActionViewOutlines()));
+    QObject::connect(view.getToolBar()->actionViewNavigator, SIGNAL(triggered()), this, SLOT(doActionViewKnowledgeGraphNavigator()));
+    QObject::connect(view.getToolBar()->actionViewTags, SIGNAL(triggered()), this, SLOT(doActionViewTagCloud()));
+    QObject::connect(view.getToolBar()->actionViewRecentNotes, SIGNAL(triggered()), this, SLOT(doActionViewRecentNotes()));
+    QObject::connect(view.getToolBar()->actionFindFts, SIGNAL(triggered()), this, SLOT(doActionFts()));
+    QObject::connect(view.getToolBar()->actionFindObyName, SIGNAL(triggered()), this, SLOT(doActionFindOutlineByName()));
+    QObject::connect(view.getToolBar()->actionFindNbyName, SIGNAL(triggered()), this, SLOT(doActionFindNoteByName()));
+    QObject::connect(view.getToolBar()->actionFindObyTag, SIGNAL(triggered()), this, SLOT(doActionFindOutlineByTag()));
+    QObject::connect(view.getToolBar()->actionFindNbyTag, SIGNAL(triggered()), this, SLOT(doActionFindNoteByTag()));
+    // TODO implement back action
+    QObject::connect(view.getToolBar()->actionBackToPreviousNote, SIGNAL(triggered()), this, SLOT(doActionViewRecentNotes()));
+    QObject::connect(view.getToolBar()->actionThink, SIGNAL(triggered()), this, SLOT(doActionMindToggleThink()));
+    QObject::connect(view.getToolBar()->actionScope, SIGNAL(triggered()), this, SLOT(doActionMindTimeTagScope()));
+    QObject::connect(view.getToolBar()->actionAdapt, SIGNAL(triggered()), this, SLOT(doActionMindPreferences()));
+    QObject::connect(view.getToolBar()->actionHelp, SIGNAL(triggered()), this, SLOT(doActionHelpDocumentation()));
+
 #ifdef MF_NER
     QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleFindNerEntities()));
     QObject::connect(nerResultDialog, SIGNAL(choiceFinished()), this, SLOT(handleFtsNerEntity()));
@@ -404,6 +423,15 @@ void MainWindowPresenter::doActionMindSleep()
     }
 
     orloj->getOutlineView()->getAssocLeaderboard()->getView()->hide();
+}
+
+void MainWindowPresenter::doActionMindToggleThink()
+{
+    if(config.getMindState()==Configuration::MindState::THINKING) {
+        doActionMindSleep();
+    } else {
+        doActionMindThink();
+    }
 }
 
 void MainWindowPresenter::doActionMindLearnRepository()
@@ -1617,7 +1645,7 @@ void MainWindowPresenter::doActionMindSnapshot()
 {
 }
 
-void MainWindowPresenter::doActionMindTimeScope()
+void MainWindowPresenter::doActionMindTimeTagScope()
 {
     TimeScopeAspect& time = mind->getTimeScopeAspect();
     scopeDialog->show(
