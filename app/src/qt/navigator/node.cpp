@@ -106,8 +106,12 @@ NavigatorNode::NavigatorNode(
         showType = false;
         break;
     }
-    nodeCardinality = QString::fromStdString("13");
-    nodeCardinalityPixelWidth = 13;
+    if(knowledgeGraphNode->getCardinality()) {
+        nodeCardinality = QString::number(knowledgeGraphNode->getCardinality());
+        nodeCardinalityPixelWidth = (log10(knowledgeGraphNode->getCardinality()) - 1) * 9;
+    } else {
+        nodeCardinalityPixelWidth = 0;
+    }
 
     // Qt flags
 	setFlag(ItemIsMovable);
@@ -130,7 +134,10 @@ QList<NavigatorEdge *> NavigatorNode::edges() const
 }
 
 /**
- * Force-drive graph: magnets and rubber bands
+ * @brief Force-drive graph: repulse magnets and rubber bands.
+ *
+ * IMPORTANT: method primarily calculates RELATIVE coordinates change for this node (vectors),
+ *            finally it calculates new node position which is stored to newPos
  */
 void NavigatorNode::calculateForces()
 {
@@ -139,59 +146,78 @@ void NavigatorNode::calculateForces()
 		return;
 	}
 
-    // NODES ~ MAGNETS: sum up all forces pushing this item away
-	qreal xvel = 0;
-	qreal yvel = 0;
-    foreach(QGraphicsItem* item, scene()->items()) {
-        NavigatorNode* node = qgraphicsitem_cast<NavigatorNode*>(item);
-        if(!node) {
+    // NODES ~ REPULSE MAGNETS: sum up all forces pushing this node AWAY
+    qreal xVelocity = 0;
+    qreal yVelocity = 0;
+    foreach(QGraphicsItem* otherItem, scene()->items()) {
+        NavigatorNode* otherNode = qgraphicsitem_cast<NavigatorNode*>(otherItem);
+        if(!otherNode) {
 			continue;
         }
 
-		QPointF vec = mapToItem(node, 0, 0);
-		qreal dx = vec.x();
-		qreal dy = vec.y();
+        // this node's coordinate system:
+        // - this node is in [0, 0]
+        // - other node coordinate is in fact vector:
+        //   > this node is at the beginning of the vector
+        //   > other node is at the end of other vector
+        QPointF vector = mapToItem(otherNode, 0, 0);
+        qreal dx = vector.x();
+        qreal dy = vector.y();
+        // formula that calculates and ADDs forces driving this node away in X and Y direction
         double l = 2.0 * (dx*dx + dy*dy);
+        // if nodes have DIFFERENT coordinates, then add AWAY forces
         if(l > 0) {
-            xvel += (dx * edgeLenght) / l;
-            yvel += (dy * edgeLenght) / l;
-		}
-	}
-
-    // EDGES ~ RUBBERS: now subtract all forces pulling items together
-	double weight = (edgeList.size() + 1) * 10;
-    foreach(NavigatorEdge *edge, edgeList) {
-		QPointF vec;
-        if(edge->getSrcNode() == this) {
-            vec = mapToItem(edge->getDstNode(), 0, 0);
-        } else {
-            vec = mapToItem(edge->getSrcNode(), 0, 0);
+            xVelocity += (dx * edgeLenght) / l;
+            yVelocity += (dy * edgeLenght) / l;
         }
-		xvel -= vec.x() / weight;
-		yvel -= vec.y() / weight;
 	}
 
-    if(qAbs(xvel) < 0.1 && qAbs(yvel) < 0.1) {
-		xvel = yvel = 0;
+    // EDGES ~ RUBBER BANDS: sum up all forces pulling this node TOGETHER & SUBSTRACT it from forces pulling items together
+	double weight = (edgeList.size() + 1) * 10;
+    foreach(NavigatorEdge* edge, edgeList) {
+        QPointF vector;
+        if(edge->getSrcNode() == this) {
+            vector = mapToItem(edge->getDstNode(), 0, 0);
+        } else {
+            vector = mapToItem(edge->getSrcNode(), 0, 0);
+        }
+        // substract TOGETHER forces from away forces
+        xVelocity -= vector.x() / weight;
+        yVelocity -= vector.y() / weight;
+	}
+
+    // round velocity to avoid moving FOREVER
+    // - stops redraw if change is small
+    // - higher threshold avoids "floating" graph moving a tiny fraction of pixels
+    // - original value 0.1
+    if(qAbs(xVelocity) < 0.3 && qAbs(yVelocity) < 0.3) {
+        xVelocity = yVelocity = 0;
     }
 
-    // recalculate position
+    // ensure node fits in scene
 	QRectF sceneRect = scene()->sceneRect();
-	newPos = pos() + QPointF(xvel, yvel);
+    newPos = pos() + QPointF(xVelocity, yVelocity);
 	newPos.setX(qMin(qMax(newPos.x(), sceneRect.left() + 10), sceneRect.right() - 10));
 	newPos.setY(qMin(qMax(newPos.y(), sceneRect.top() + 10), sceneRect.bottom() - 10));
+
+    // newPos contains new node position which will be applied on advance() invocation
 }
 
+/**
+ * @brief Apply new position calculated by calculateForces()
+ */
 bool NavigatorNode::advance()
 {
-	if (newPos == pos())
+    if (newPos == pos()) {
 		return false;
+    }
 
 	setPos(newPos);
+
 	return true;
 }
 
-// IMPORTANT boundingRect MUST be sect correctly, otherwise drawing is CLIPPED (text or shape)
+// IMPORTANT boundingRect MUST be sect correctly, otherwise this node rendering is CLIPPED (text or shape)
 QRectF NavigatorNode::boundingRect() const
 {
     qreal adjust = 2; // spacing + type rect
@@ -199,11 +225,13 @@ QRectF NavigatorNode::boundingRect() const
     return QRectF(
                 -defaultNodeWidth/2 - adjust,
                 -defaultNodeHeight/2 - adjust - typeAdjust,
-                defaultNodeWidth + adjust + typeAdjust,
+                defaultNodeWidth + adjust + typeAdjust + 10+nodeCardinalityPixelWidth,
                 defaultNodeHeight + adjust + 2*typeAdjust);
 }
 
-// shape size is used to get vieport for accepting click events related to this graphics object
+/**
+ * @brief Shape size is used to get vieport for accepting click events related to this graphics object.
+ */
 QPainterPath NavigatorNode::shape() const
 {
 	QPainterPath path;
@@ -252,8 +280,8 @@ void NavigatorNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
     if(showType) {
         // rectangle
         QRectF rectT{defaultNodeWidth/2 - 5, defaultNodeHeight/2 - 5, 15, 15};
-        painter->setPen(QPen(Qt::darkGray, 0));
-        painter->setBrush(Qt::darkGray);
+        painter->setPen(QPen(Qt::black, 0));
+        painter->setBrush(Qt::black);
         painter->drawRect(rectT);
         // text
         painter->setPen(Qt::white);
@@ -264,14 +292,13 @@ void NavigatorNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
     // node cardinality
     if(nodeCardinalityPixelWidth) {
         // rectangle
-        QRectF rectT{defaultNodeWidth/2 - 5, -20, 15, 15};
+        QRectF rectT{defaultNodeWidth/2 - 5, -20, 15+9 + nodeCardinalityPixelWidth, 15};
         painter->setPen(QPen(Qt::white, 0));
-        painter->setBrush(Qt::red);
+        painter->setBrush(Qt::white);
         painter->drawRect(rectT);
         // text
-        painter->setPen(Qt::white);
-        int textPadding = 7;
-        painter->drawText(defaultNodeWidth/2 - 5 + textPadding - 3, defaultNodeHeight/2 + textPadding, nodeType);
+        painter->setPen(Qt::black);
+        painter->drawText(defaultNodeWidth/2, -8, nodeCardinality);
     }
 }
 

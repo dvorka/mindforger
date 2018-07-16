@@ -369,6 +369,7 @@ public:
     /**
      * @brief Get tags w/ cardinality.
      */
+    // TODO int to unsigned int
     void getTagsCardinality(std::map<const Tag*,int>& tagsCardinality);
 
     /**

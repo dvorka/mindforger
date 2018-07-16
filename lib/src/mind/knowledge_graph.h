@@ -44,21 +44,26 @@ class KnowledgeGraphNode {
     enum KnowledgeGraphNodeType type;
     std::string name;
     long unsigned color;
+    unsigned int cardinality;
     Thing* thing;
 
 public:
     explicit KnowledgeGraphNode(
        KnowledgeGraphNodeType type,
        const std::string& name,
-       long unsigned color=0x000000
+       long unsigned color=0x000000,
+       unsigned int cardinality=0
     ) {
         this->type = type;
         this->name = name;
         this->color = color;
+        this->cardinality = cardinality;
     }
     void setThing(Thing* thing) { this->thing = thing; }
     const std::string& getName() const { return name; }
     long getColor() const { return color; }
+    int getCardinality() const { return cardinality; }
+    void setCardinality(unsigned int cardinality) { this->cardinality = cardinality; }
     KnowledgeGraphNodeType getType() const { return type; }
     Thing* getThing() const { return thing; }
     Outline* getOutline() const { return static_cast<Outline*>(thing); }

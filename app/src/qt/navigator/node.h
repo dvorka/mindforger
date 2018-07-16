@@ -89,7 +89,7 @@ class NavigatorNode : public QGraphicsItem
     QString nodeType;
     QString nodeName;
     QString nodeCardinality;
-    int nodeCardinalityPixelWidth;
+    qreal nodeCardinalityPixelWidth;
     QColor nodeColor;
 
     bool showType;

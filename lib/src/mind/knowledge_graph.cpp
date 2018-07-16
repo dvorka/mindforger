@@ -44,9 +44,9 @@ KnowledgeGraph::KnowledgeGraph(
         )
     : mind{mind}
 {
-    mindNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::MIND, "MIND"};
+    mindNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::MIND, "MIND", coreColor, 5};
     tagsNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::TAGS, "tags"};
-    outlinesNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINES, "outlines"};
+    outlinesNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINES, "notebooks"};
     notesNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTES, "notes"};
     limboNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::LIMBO, "limbo"};
     stencilsNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::STENCILS, "stencils"};
@@ -96,6 +96,12 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
 {
     subgraph.clear();
 
+    // refresh core nodes cardinalities
+    tagsNode->setCardinality(static_cast<unsigned int>(mind->getTags().size()));
+    outlinesNode->setCardinality(mind->remind().getOutlinesCount());
+    notesNode->setCardinality(mind->remind().getNotesCount());
+    stencilsNode->setCardinality(static_cast<unsigned int>(mind->remind().getStencils().size()));
+
     // significant ontology things
     if(centralNode == mindNode) {
         subgraph.setCentralNode(mindNode);
@@ -115,7 +121,7 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
             KnowledgeGraphNode* k;
             for(Outline* o:outlines) {
                 // TODO: reuse and delete - map<Thing*,Node*>
-                k = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINE, o->getName(), outlinesColor};
+                k = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINE, o->getName(), outlinesColor, static_cast<unsigned int>(o->getNotesCount())};
                 k->setThing(o);
                 subgraph.addChild(k);
             }
@@ -146,11 +152,14 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
     } else if(centralNode == tagsNode) {
         subgraph.setCentralNode(tagsNode);
 
-        std::vector<const Tag*>& tags = mind->getTags().values();
+        // IMPROVE iterate map, don't load tags
+        map<const Tag*,int> tagsCardinality{};
+        mind->getTagsCardinality(tagsCardinality);
         KnowledgeGraphNode* n;
+        vector<const Tag*>& tags = mind->getTags().values();
         for(const Tag* t:tags) {
             // TODO: reuse and delete - map<Thing*,Node*>
-            n = new KnowledgeGraphNode{KnowledgeGraphNodeType::TAG, t->getName(), t->getColor().asLong()};
+            n = new KnowledgeGraphNode{KnowledgeGraphNodeType::TAG, t->getName(), t->getColor().asLong(), static_cast<unsigned>(tagsCardinality[t])};
             subgraph.addChild(n);
         }
 
@@ -199,7 +208,7 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
 
         Note* n = static_cast<Note*>(centralNode->getThing());
         KnowledgeGraphNode* k;
-        k = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINE, n->getOutline()->getName(), outlinesColor};
+        k = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINE, n->getOutline()->getName(), outlinesColor, static_cast<unsigned int>(n->getOutline()->getNotesCount())};
         k->setThing(n->getOutline());
         subgraph.addParent(k);
 
@@ -225,7 +234,7 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
             KnowledgeGraphNode* k;
             for(Outline* o:outlines) {
                 // TODO: reuse and delete - map<Thing*,Node*>
-                k = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINE, o->getName(), outlinesColor};
+                k = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINE, o->getName(), outlinesColor, static_cast<unsigned int>(o->getNotesCount())};
                 k->setThing(o);
                 subgraph.addChild(k);
             }

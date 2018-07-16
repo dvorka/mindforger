@@ -85,7 +85,7 @@ NavigatorView::NavigatorView(QWidget* parent)
       h{},
       garbageItems{},
       subgraph{},
-      doShowLegend{true}
+      doShowLegend{false}
 {
     // scene is peephole rectangle to the whole view (QGraphicsView)
     navigatorScene = new QGraphicsScene(this);
@@ -249,7 +249,7 @@ void NavigatorView::timerEvent(QTimerEvent *event)
             navigatorScene->addItem(n);
             e = new NavigatorEdge(selectedNode, n);
             navigatorScene->addItem(e);
-            n->setPos(qrand()%w, qrand()%h);
+            n->setPos(qrand()%w/2, qrand()%h/2);
         }
 
         std::vector<KnowledgeGraphNode*>& parents = subgraph->getParents();
@@ -260,7 +260,7 @@ void NavigatorView::timerEvent(QTimerEvent *event)
             navigatorScene->addItem(n);
             e = new NavigatorEdge(n, selectedNode);
             navigatorScene->addItem(e);
-            n->setPos(qrand()%w, qrand()%h);
+            n->setPos(qrand()%w/2, qrand()%h/2);
         }
 
         subgraph = nullptr;
