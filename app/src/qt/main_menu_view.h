@@ -23,7 +23,6 @@
 
 #include "../../lib/src/debug.h"
 
-#include "main_menu_presenter.h"
 #include "main_window_view.h"
 #include "recent_files_menu.h"
 
@@ -42,7 +41,6 @@ class MainMenuView : public QObject
 {
     Q_OBJECT
 
-private:
     MainWindowView* mainWindow;
     QMenuBar* qMenuBar;
 

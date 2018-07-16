@@ -25,6 +25,7 @@
 #include "../../lib/src/version.h"
 
 #include "main_window_presenter.h"
+#include "main_toolbar_view.h"
 #include "main_menu_presenter.h"
 #include "cli_n_breadcrumbs_view.h"
 #include "orloj_view.h"
@@ -33,6 +34,7 @@
 namespace m8r {
 
 class MainWindowPresenter;
+class MainToolbarView;
 class CliAndBreadcrumbsView;
 
 /**
@@ -54,6 +56,7 @@ private:
 
     CliAndBreadcrumbsView* cliView;
     OrlojView* orlojView;
+    MainToolbarView* toolBarView;
     StatusBarView* statusBarView;
 
 public:

@@ -96,7 +96,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // TODO submenu: printer, HTML, PDF
 
-    actionMindPreferences = new QAction(tr("Ada&pt"), mainWindow);
+    actionMindPreferences = new QAction(tr("&Adapt"), mainWindow);
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
     actionMindPreferences->setStatusTip(tr("Adapt Mind by setting your preferences..."));
 

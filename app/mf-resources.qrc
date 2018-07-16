@@ -1,6 +1,22 @@
 <RCC>
     <qresource prefix="/icons">
         <file alias="mindforger-icon.png">resources/qt/images/mindforger-icon.png</file>
+        <file alias="new.svg">resources/icons/new.svg</file>
+        <file alias="adapt.svg">resources/icons/adapt.svg</file>
+        <file alias="back.svg">resources/icons/back.svg</file>
+        <file alias="find-fts.svg">resources/icons/find-fts.svg</file>
+        <file alias="help.svg">resources/icons/help.svg</file>
+        <file alias="scope.svg">resources/icons/scope.svg</file>
+        <file alias="view-navigator.svg">resources/icons/view-navigator.svg</file>
+        <file alias="view-outlines.svg">resources/icons/view-outlines.svg</file>
+        <file alias="view-recent-notes.svg">resources/icons/view-recent-notes.svg</file>
+        <file alias="view-tags.svg">resources/icons/view-tags.svg</file>
+        <file alias="view-eisenhower.svg">resources/icons/view-eisenhower.svg</file>
+        <file alias="think.svg">resources/icons/think.svg</file>
+        <file alias="find-n-name.svg">resources/icons/find-n-name.svg</file>
+        <file alias="find-n-tag.svg">resources/icons/find-n-tag.svg</file>
+        <file alias="find-o-name.svg">resources/icons/find-o-name.svg</file>
+        <file alias="find-o-tag.svg">resources/icons/find-o-tag.svg</file>
     </qresource>
     <qresource prefix="/translations">
         <file alias="mindforger_cs_CZ.qm">resources/qt/translations/mindforger_cs.qm</file>
