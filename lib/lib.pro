@@ -210,7 +210,8 @@ HEADERS += \
     src/mind/aspect/tag_scope_aspect.h \
     src/mind/aspect/mind_scope_aspect.h \
     src/compilation.h \
-    src/mind/knowledge_graph.h
+    src/mind/knowledge_graph.h \
+    src/strptime.h
 
 mfner {
     HEADERS += \

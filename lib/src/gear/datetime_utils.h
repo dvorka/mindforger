@@ -24,6 +24,8 @@
 #include <cstring>
 #include <string>
 
+#include "../strptime.h"
+
 #include "string_utils.h"
 
 namespace m8r {
