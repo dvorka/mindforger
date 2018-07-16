@@ -142,8 +142,10 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
             if((entry = readdir(dir))) {
                 string path;
                 string *ppath;
+                struct stat st;
+                stat(entry->d_name, &st);
                 do {
-                    if(entry->d_type == DT_DIR) {
+                    if(S_ISDIR(st.st_mode)) {
                         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
                             continue;
                         }
@@ -190,8 +192,10 @@ void RepositoryIndexer::updateIndexStencils(const string& directory, set<const s
         const struct dirent *entry;
         if((entry = readdir(dir))) {
             string *path;
+            struct stat st;
+            stat(entry->d_name, &st);
             do {
-                if(entry->d_type != DT_DIR) {
+                if(S_ISDIR(st.st_mode)) {
                     MF_DEBUG(endl << "  FILE: " << directory.c_str() << "//" << entry->d_name);
                     path = new string{directory};
                     path->append(FILE_PATH_SEPARATOR);

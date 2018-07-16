@@ -21,7 +21,6 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/dir.h>
 #include <unistd.h>
 
 #include <zlib.h>
@@ -31,6 +30,7 @@
   #define SET_BINARY_MODE(file) setmode(fileno(file), O_BINARY)
 #else
   #define SET_BINARY_MODE(file)
+  #include <sys/dir.h>
 #endif
 
 #ifdef __APPLE__
