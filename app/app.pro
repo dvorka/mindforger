@@ -28,11 +28,11 @@ mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
 }
 
-# webkit is supposed to be OBSOLETED by webengine, but webengine is disabled
+# QtWebkit is supposed to be OBSOLETED by QtWebEngine, but webengine is disabled
 # on Linux since Qt 5.9 due to its tragic performance > conditional compilation
 # seems to be the only way:
-#   - webkit on Linux
-#   - webengine on Windows and macOS
+#   - QtWebkit on Linux, QtWebkit on Windows (prefered: binary available + compilable w/ MinGw)
+#   - QtWebengine on macOS, QtWebengine on Windows (requires Visual Studio)
 macx|mfwebengine {
     QT += webengine
     QT += webenginewidgets
