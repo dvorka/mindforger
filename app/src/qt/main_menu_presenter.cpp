@@ -66,9 +66,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionViewOrganizer, SIGNAL(triggered()), mwp, SLOT(doActionViewOrganizer()));
     QObject::connect(view->actionViewOutlines, SIGNAL(triggered()), mwp, SLOT(doActionViewOutlines()));
     QObject::connect(view->actionViewTags, SIGNAL(triggered()), mwp, SLOT(doActionViewTagCloud()));
-#ifdef MF_WIP
     QObject::connect(view->actionViewNavigator, SIGNAL(triggered()), mwp, SLOT(doActionViewKnowledgeGraphNavigator()));
-#endif
 #ifdef DO_MF_DEBUG
     QObject::connect(view->actionViewCli, SIGNAL(triggered()), mwp, SLOT(doActionCli()));
 #else

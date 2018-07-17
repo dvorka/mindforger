@@ -43,9 +43,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     this->outlineHeaderEditPresenter = new OutlineHeaderEditPresenter(view->getOutlineHeaderEdit(), mainPresenter, this);
     this->noteViewPresenter = new NoteViewPresenter(view->getNoteView(), this);
     this->noteEditPresenter = new NoteEditPresenter(view->getNoteEdit(), mainPresenter, this);
-#ifdef MF_WIP
     this->navigatorPresenter = new NavigatorPresenter(view->getNavigator(), this, mind->getKnowledgeGraph());
-#endif
 
     /* Orloj presenter WIRES signals and slots between VIEWS and PRESENTERS.
      *

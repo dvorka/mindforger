@@ -43,10 +43,8 @@ OrlojView::OrlojView(QWidget* parent)
     recentNotesTable = new RecentNotesTableView(this);
     addWidget(recentNotesTable);
 
-#ifdef MF_WIP
     navigator = new NavigatorView(this);
     addWidget(navigator);
-#endif
 
     outlineView = new OutlineViewSplitter(this);
     addWidget(outlineView);
