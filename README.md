@@ -51,7 +51,7 @@ Read:
 Check `man mindforger`
 
 ## In the News
-Read about `MindForger` on [FOSSMint](https://www.fossmint.com/mindforger-notebook-and-markdown-ide/).
+Read about MindForger on [FOSSMint](https://www.fossmint.com/mindforger-notebook-and-markdown-ide/).
 
 ## Bugs and Feature Requests
 https://github.com/dvorka/mindforger/issues
