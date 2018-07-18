@@ -83,6 +83,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
     // wire toolbar signals
     QObject::connect(view.getToolBar()->actionNewNotebook, SIGNAL(triggered()), this, SLOT(doActionOutlineNew()));
+    QObject::connect(view.getToolBar()->actionOpenRepository, SIGNAL(triggered()), this, SLOT(doActionMindLearnRepository()));
+    QObject::connect(view.getToolBar()->actionOpenFile, SIGNAL(triggered()), this, SLOT(doActionMindLearnFile()));
     QObject::connect(view.getToolBar()->actionViewEisenhower, SIGNAL(triggered()), this, SLOT(doActionViewOrganizer()));
     QObject::connect(view.getToolBar()->actionViewOutlines, SIGNAL(triggered()), this, SLOT(doActionViewOutlines()));
     QObject::connect(view.getToolBar()->actionViewNavigator, SIGNAL(triggered()), this, SLOT(doActionViewKnowledgeGraphNavigator()));
@@ -440,7 +442,7 @@ void MainWindowPresenter::doActionMindLearnRepository()
         = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
 
     QFileDialog learnDialog{&view};
-    learnDialog.setWindowTitle(tr("Learn Directory"));
+    learnDialog.setWindowTitle(tr("Learn Directory or MindForger Repository"));
     // learnDialog.setFileMode(QFileDialog::Directory|QFileDialog::ExistingFiles); not supported, therefore
     // >
     // ASK user: directory/repository or file (choice) > open dialog configured as required
@@ -464,7 +466,7 @@ void MainWindowPresenter::doActionMindLearnFile()
         = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
 
     QFileDialog learnDialog{&view};
-    learnDialog.setWindowTitle(tr("Learn File"));
+    learnDialog.setWindowTitle(tr("Learn Markdown File"));
     learnDialog.setFileMode(QFileDialog::ExistingFile);
     learnDialog.setDirectory(homeDirectory);
     learnDialog.setViewMode(QFileDialog::Detail);
