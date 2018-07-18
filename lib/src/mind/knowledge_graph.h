@@ -90,6 +90,7 @@ public:
     ~KnowledgeSubGraph() {}
 
     void setCentralNode(KnowledgeGraphNode* centralNode) { this->centralNode = centralNode; }
+    void setMaxNodes(int maxNodes) { this->maxSubgraphNodes = maxNodes; }
     KnowledgeGraphNode* getCentralNode() const { return centralNode; }
     // IMPROVE bool contains(KnowledgeGraphNode node) { return false; }
     void addParent(KnowledgeGraphNode* p) { if(count-- > 0) parents.push_back(p); }

@@ -37,14 +37,15 @@ NavigatorPresenter::~NavigatorPresenter()
 
 void NavigatorPresenter::showInitialView()
 {
+    subgraph.setMaxNodes(Configuration::getInstance().getNavigatorMaxNodes());
     knowledgeGraph->getRelatedNodes(knowledgeGraph->getNode(KnowledgeGraphNodeType::MIND), subgraph);
-    view->refreshOnNextTimerTick(&subgraph);
+    view->refreshOnNextTimerTick(&subgraph, Configuration::getInstance().isNavigatorShowLegend());
 }
 
 void NavigatorPresenter::nodeSelectedSlot(NavigatorNode* node)
 {
     knowledgeGraph->getRelatedNodes(node->getKnowledgeGraphNode(), subgraph);
-    view->refreshOnNextTimerTick(&subgraph);
+    view->refreshOnNextTimerTick(&subgraph, Configuration::getInstance().isNavigatorShowLegend());
     switch(node->getKnowledgeGraphNode()->getType()) {
     case KnowledgeGraphNodeType::OUTLINE:
         emit outlineSelectedSignal(static_cast<Outline*>(node->getKnowledgeGraphNode()->getThing()));
