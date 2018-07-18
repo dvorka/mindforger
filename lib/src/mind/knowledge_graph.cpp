@@ -26,10 +26,10 @@ using namespace std;
  * Knowledge SUB graph
  */
 
-KnowledgeSubGraph::KnowledgeSubGraph(KnowledgeGraphNode* centralNode, int limit)
-    : centralNode(centralNode), limit(limit)
+KnowledgeSubGraph::KnowledgeSubGraph(KnowledgeGraphNode* centralNode, int maxSubgraphNodes)
+    : centralNode(centralNode), maxSubgraphNodes(maxSubgraphNodes)
 {
-    this->count = limit-1;
+    this->count = maxSubgraphNodes-1;
 }
 
 /*

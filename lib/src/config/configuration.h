@@ -164,15 +164,21 @@ public:
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
 
     static const std::string DEFAULT_UI_THEME_NAME;
+    static constexpr const bool UI_DEFAULT_SHOW_TOOLBAR = true;
     static const std::string DEFAULT_UI_HTML_CSS_THEME;
     static const std::string DEFAULT_EDITOR_KEY_BINDING;
     static const std::string DEFAULT_EDITOR_FONT;
     static constexpr int DEFAULT_EDITOR_TAB_WIDTH = 4;
     static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOCOMPLETE = true;
+    static constexpr const bool DEFAULT_EDITOR_TABS_AS_SPACES = false;
+    static constexpr const bool DEFAULT_MD_QUOTE_SECTIONS = true;
     static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_MD_MATH = false;
     static constexpr const bool DEFAULT_ALLOW_ONLINE_JS_LIBS = false;
+
+    static constexpr int DEFAULT_NAVIGATOR_MAX_NODES = 150;
+    static constexpr const bool DEFAULT_NAVIGATOR_SHOW_LEGEND = false;
 
     static constexpr int EDITOR_MAX_AUTOCOMPLETE_LINES = 1000;
 
@@ -206,6 +212,7 @@ private:
     unsigned int md2HtmlOptions;
     AssociationAssessmentAlgorithm aaAlgorithm;
     int distributorSleepInterval;
+    bool markdownQuoteSections;
 
     // GUI configuration
     std::string uiThemeName;
@@ -220,6 +227,10 @@ private:
     bool uiEditorSyntaxHighlighting; // toggle syntax highlighting
     bool uiEditorAutocomplete; // toggle autocompletion
     JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
+    bool uiEditorTabsAsSpaces;
+    bool uiShowToolbar;
+    int navigatorMaxNodes;
+    bool navigatorShowLegend;
 
 private:
     Installer* installer;
@@ -290,6 +301,8 @@ public:
     void setAaAlgorithm(AssociationAssessmentAlgorithm aaa) { aaAlgorithm = aaa; }
     int getDistributorSleepInterval() const { return distributorSleepInterval; }
     void setDistributorSleepInterval(int sleepInterval) { distributorSleepInterval = sleepInterval; }
+    bool isMarkdownQuoteSections() const { return markdownQuoteSections; }
+    void setMarkdownQuoteSections(bool markdownQuoteSections) { this->markdownQuoteSections = markdownQuoteSections; }
 
     /*
      * GUI
@@ -357,6 +370,15 @@ public:
 
     JavaScriptLibSupport getUiEnableDiagramsInMd() { return uiEnableDiagramsInMd; }
     void setUiEnableDiagramsInMd(JavaScriptLibSupport mode) { uiEnableDiagramsInMd = mode; }
+    bool isUiShowToolbar() const { return uiShowToolbar; }
+    void setUiShowToolbar(bool showToolbar){ this->uiShowToolbar = showToolbar; }
+    bool isUiEditorTabsAsSpaces() const { return uiEditorTabsAsSpaces; }
+    void setUiEditorTabsAsSpaces(bool uiEditorTabsAsSpaces){ this->uiEditorTabsAsSpaces = uiEditorTabsAsSpaces; }
+
+    bool isNavigatorShowLegend() const { return navigatorShowLegend; }
+    void setNavigatorShowLegend(bool navigatorShowLegend) { this->navigatorShowLegend = navigatorShowLegend; }
+    int getNavigatorMaxNodes() const { return navigatorMaxNodes; }
+    void setNavigatorMaxNodes(int navigatorMaxNodes) { this->navigatorMaxNodes = navigatorMaxNodes; }
 };
 
 } // namespace

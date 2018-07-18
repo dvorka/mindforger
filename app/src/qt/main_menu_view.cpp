@@ -90,7 +90,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     //actionMindDream = new QAction(tr("&Dream"), mainWindow);
     //actionMindDream->setStatusTip(tr("Tidy up, clean, re-infer, check and optimize Memory which is otherwise done on your inactivity"));
 
-    actionMindSnapshot = new QAction(tr("Ret&ain"), mainWindow);
+    actionMindSnapshot = new QAction(tr("Retain"), mainWindow);
     actionMindSnapshot->setStatusTip(tr("Create backup archive of the current repository and store it in home directory"));
     actionMindSnapshot->setEnabled(false);
 

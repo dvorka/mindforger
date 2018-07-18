@@ -78,7 +78,7 @@ class KnowledgeSubGraph
     // IMPROVE map<> all;
 
     // ensure that knowledge graph size (number of nodes) is smaller than limit
-    int limit;
+    int maxSubgraphNodes;
     int count;
 
 public:
@@ -101,7 +101,7 @@ public:
         centralNode = nullptr;
         parents.clear();
         children.clear();
-        count = limit-1;
+        count = maxSubgraphNodes-1;
     }
 };
 
