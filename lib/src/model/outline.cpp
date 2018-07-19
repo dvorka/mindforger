@@ -73,6 +73,7 @@ void Outline::resetClonedOutline(Outline* o)
     o->setRead(o->modified);
     o->setModifiedPretty();
     o->completeProperties(o->getModified());
+    o->outlineDescriptorAsNote = nullptr;
 }
 
 Outline::Outline(const Outline& o)
@@ -118,7 +119,7 @@ Outline::Outline(const Outline& o)
         tags.insert(tags.end(), o.tags.begin(), o.tags.end());
     }
 
-    outlineDescriptorAsNote = nullptr;
+    outlineDescriptorAsNote = new Note(&NOTE_4_OUTLINE_TYPE, this);
 
     flags = o.flags;
     dirty = o.dirty;
