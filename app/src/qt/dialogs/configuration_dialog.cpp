@@ -178,7 +178,7 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
 
     editorMdSyntaxHighlightCheck = new QCheckBox(tr("Markdown syntax highlighting"), this);
     editorAutocompleteCheck = new QCheckBox(tr("autocomplete"), this);
-    editorQuoteSectionsCheck = new QCheckBox(tr("quote sections (# in description)"), this);
+    //editorQuoteSectionsCheck = new QCheckBox(tr("quote sections (# in description)"), this);
     editorTabsAsSpacesCheck = new QCheckBox(tr("TABs as SPACEs"), this);
 
     editorTabWidthLabel = new QLabel(tr("TAB width")+":", this);
@@ -194,10 +194,10 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
     editorLayout->addWidget(editorFontButton);
     editorLayout->addWidget(editorTabWidthLabel);
     editorLayout->addWidget(editorTabWidthCombo);
+    editorLayout->addWidget(editorTabsAsSpacesCheck);
     editorLayout->addWidget(editorMdSyntaxHighlightCheck);
     editorLayout->addWidget(editorAutocompleteCheck);
-    editorLayout->addWidget(editorQuoteSectionsCheck);
-    editorLayout->addWidget(editorTabsAsSpacesCheck);
+    //editorLayout->addWidget(editorQuoteSectionsCheck);
     QGroupBox* editorGroup = new QGroupBox{tr("Editor"), this};
     editorGroup->setLayout(editorLayout);
 
@@ -225,7 +225,7 @@ ConfigurationDialog::MarkdownTab::~MarkdownTab()
     delete editorAutocompleteCheck;
     delete editorTabWidthLabel;
     delete editorTabWidthCombo;
-    delete editorQuoteSectionsCheck;
+    //delete editorQuoteSectionsCheck;
     delete editorTabsAsSpacesCheck;
 }
 
@@ -255,7 +255,7 @@ void ConfigurationDialog::MarkdownTab::refresh()
     editorMdSyntaxHighlightCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
     editorAutocompleteCheck->setChecked(config.isUiEditorEnableAutocomplete());
     editorTabWidthCombo->setCurrentIndex(editorTabWidthCombo->findText(QString::number(config.getUiEditorTabWidth())));
-    editorQuoteSectionsCheck->setChecked(config.isMarkdownQuoteSections());
+    //editorQuoteSectionsCheck->setChecked(config.isMarkdownQuoteSections());
     editorTabsAsSpacesCheck->setChecked(config.isUiEditorTabsAsSpaces());
 }
 
@@ -271,7 +271,7 @@ void ConfigurationDialog::MarkdownTab::save()
     config.setUiEditorEnableSyntaxHighlighting(editorMdSyntaxHighlightCheck->isChecked());
     config.setUiEditorEnableAutocomplete(editorAutocompleteCheck->isChecked());
     config.setUiEditorTabWidth(editorTabWidthCombo->itemText(editorTabWidthCombo->currentIndex()).toInt());
-    config.setMarkdownQuoteSections(editorQuoteSectionsCheck->isChecked());
+    //config.setMarkdownQuoteSections(editorQuoteSectionsCheck->isChecked());
     config.setUiEditorTabsAsSpaces(editorTabsAsSpacesCheck->isChecked());
 }
 

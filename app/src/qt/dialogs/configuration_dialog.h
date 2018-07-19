@@ -162,7 +162,7 @@ private:
     QCheckBox* editorAutocompleteCheck;
     QLabel* editorTabWidthLabel;
     QComboBox* editorTabWidthCombo;
-    QCheckBox* editorQuoteSectionsCheck;
+    // TODO QCheckBox* editorQuoteSectionsCheck;
     QCheckBox* editorTabsAsSpacesCheck;
 
     QFont editorFont;

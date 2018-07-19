@@ -43,6 +43,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     orloj = new OrlojPresenter{this, view.getOrloj(), mind};
 
     // initialize components
+    view.getToolBar()->setVisible(config.isUiShowToolbar());
     scopeDialog = new ScopeDialog{mind->ontology(), &view};
     newOutlineDialog = new OutlineNewDialog{QString::fromStdString(config.getMemoryPath()), mind->remind().getOntology(), &view};
     newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
@@ -61,7 +62,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 #ifdef MF_NER
     nerChooseTagsDialog = new NerChooseTagTypesDialog(&view);
     nerResultDialog = new NerResultDialog(&view);
-#endif
+#endif    
 
     // wire signals
     QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
@@ -1702,6 +1703,7 @@ void MainWindowPresenter::doActionMindPreferences()
 void MainWindowPresenter::handleMindPreferences()
 {
     mdConfigRepresentation->save(config);
+    view.getToolBar()->setVisible(config.isUiShowToolbar());
 }
 
 void MainWindowPresenter::doActionHelpDocumentation()

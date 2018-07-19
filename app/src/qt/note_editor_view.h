@@ -60,6 +60,9 @@ private:
     QCompleter* completer;
     QStringListModel* model;
 
+    bool tabsAsSpaces;
+    int tabWidth;
+
     const StatusBarView* statusBar;
 
 public:
@@ -89,11 +92,13 @@ protected:
     void keyPressEvent(QKeyEvent* event) override;
 private:
     void setEditorTabWidth(int tabWidth);
+    void setEditorTabsAsSpacesPolicy(bool tabsAsSpaces);
     void setEditorFont(std::string fontName);
     void performCompletion(const QString& completionPrefix);
     bool handledCompletedAndSelected(QKeyEvent* event);
     void populateModel(const QString& completionPrefix);
 private slots:
+    void insertTab();
     void insertCompletion(const QString& completion, bool singleWord=false);
     bool performCompletion();
 
