@@ -28,11 +28,15 @@ constexpr const auto CONFIG_SECTION_REPOSITORIES= "Repositories";
 // application
 constexpr const auto CONFIG_SETTING_UI_THEME_LABEL = "* Theme: ";
 constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* Markdown CSS theme: ";
+constexpr const auto CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL =  "* Show toolbar: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_FONT_LABEL =  "* Editor font: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL =  "* Editor syntax highlighting: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL =  "* Editor autocomplete: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL =  "* Editor TAB width: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_TABS_AS_SPACES_LABEL =  "* Editor insert SPACEs for TAB: ";
+constexpr const auto CONFIG_SETTING_NAVIGATOR_GRAPH_NODES_LABEL = "* Navigator max knowledge graph nodes: ";
+constexpr const auto CONFIG_SETTING_NAVIGATOR_SHOW_LEGEND_LABEL = "* Navigator legend: ";
 constexpr const auto CONFIG_SETTING_MD_HIGHLIGHT_LABEL = "* Enable source code syntax highlighting support in Markdown: ";
 constexpr const auto CONFIG_SETTING_MD_MATH_LABEL = "* Enable math support in Markdown: ";
 constexpr const auto CONFIG_SETTING_MD_DIAGRAM_LABEL = "* Enable diagram support in Markdown: ";
@@ -234,7 +238,7 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         if(i<0) {
                             i=Configuration::DEFAULT_EDITOR_TAB_WIDTH;
                         }
-                        i %=10000;
+                        i %= 10000;
                         c.setDistributorSleepInterval(i);
                     }
                 }
