@@ -27,14 +27,14 @@ Big thanks to 3rd party FOSS content authors:
 
 See [licenses](./licenses) folder for 3rd party content licensing details.
 
-Acknowledgements to researchers and visionaries:
+Acknowledgements to researchers:
 
-* Karel Moulik (consultations, long term vision and ideas)
+* Karel Moulik (long term vision and ideas, consultations)
 * Gekaremi (comprehensive AI/NLP research, ideas and suggestions)
+* Tomas Sieger (MindForger applications ideas, consultations)
 
 Acknowledgements to reviewers and testers:
 
-* Tomas Sieger (consultations)
 * Floex (review, testing)
 * Stefan Pacinda (review, testing)
 * Honza Odstrcil (feedback)
