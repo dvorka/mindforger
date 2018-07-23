@@ -27,10 +27,14 @@ Big thanks to 3rd party FOSS content authors:
 
 See [licenses](./licenses) folder for 3rd party content licensing details.
 
+Acknowledgements to researchers and visionaries:
+
+* Karel Moulik (consultations, long term vision and ideas)
+* Gekaremi (comprehensive AI/NLP research, ideas and suggestions)
+
 Acknowledgements to reviewers and testers:
 
 * Tomas Sieger (consultations)
-* Karel Moulik (consultations)
 * Floex (review, testing)
 * Stefan Pacinda (review, testing)
 * Honza Odstrcil (feedback)
