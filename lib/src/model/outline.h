@@ -220,7 +220,7 @@ public:
     const std::vector<Note*>& getNotes() const;
     size_t getNotesCount() const;
     void setNotes(const std::vector<Note*>& notes);
-    void addNote(Note*);
+    void addNote(Note*);    
     /**
      * @brief Clone Note including its children.
      *
@@ -232,6 +232,10 @@ public:
     Note* getNoteByName(const std::string& noteName) const;
     Note* getNoteByMangledName(const std::string& mangledName) const;
     int getNoteOffset(const Note* note) const;
+    /**
+     * @brief Get direct child Ns of N (if specified) or O (if N not specified) - depth gap can be >1
+     */
+    void getDirectChildNotes(std::vector<Note*>& children, const Note* note=nullptr);
     void getNoteChildren(const Note* note, std::vector<Note*>* children=nullptr, Outline::Patch* patch=nullptr);
     /**
      * @brief Get skeleton-style (Note per level) path to root.

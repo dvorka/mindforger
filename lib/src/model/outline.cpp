@@ -551,6 +551,36 @@ int Outline::getNoteOffset(const Note* note) const
     return -1;
 }
 
+void Outline::getDirectChildNotes(std::vector<Note*>& children, const Note* note)
+{
+    if(notes.size()) {
+        vector<Note*>* ns;
+        vector<Note*> allNoteChildren{};
+        if(note) {
+            getNoteChildren(note, &allNoteChildren);
+            ns = &allNoteChildren;
+        } else {
+            ns = &notes;
+        }
+
+        // determine min depth
+        u_int16_t minDepth = 2^15;
+        for(Note* n:*ns) {
+            if(minDepth > n->getDepth()) {
+                minDepth = n->getDepth();
+            }
+        }
+
+        // find all Ns w/ minimal depth
+        for(Note* n:notes) {
+            if(minDepth == n->getDepth()) {
+                children.push_back(n);
+            }
+        }
+    }
+}
+
+// IMPROVE: if gap between Ns level is >1, this method doesn't work (user has freedom to make arbitrary depth)
 void Outline::getNoteChildren(const Note* note, vector<Note*>* children, Outline::Patch* patch)
 {
     if(note) {

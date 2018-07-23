@@ -187,10 +187,9 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
         Outline* o = static_cast<Outline*>(centralNode->getThing());
         KnowledgeGraphNode* k;
         // child Ns only
-
-        // TODO o->getNoteChildren(); + create method for getNoteChildren() ~ outline top level - determine min depth and then take Ns from this depth (might be slow)
-
-        for(Note* n:o->getNotes()) {
+        vector<Note*> children{};
+        o->getDirectChildNotes(children);
+        for(Note* n:children) {
             // TODO: reuse and delete - map<Thing*,Node*>
             k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
             k->setThing(n);
@@ -215,6 +214,16 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
         k = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINE, n->getOutline()->getName(), outlinesColor, static_cast<unsigned int>(n->getOutline()->getNotesCount())};
         k->setThing(n->getOutline());
         subgraph.addParent(k);
+
+        // child Ns
+        vector<Note*> children{};
+        n->getOutline()->getDirectChildNotes(children, n);
+        for(Note* n:children) {
+            // TODO: reuse and delete - map<Thing*,Node*>
+            k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
+            k->setThing(n);
+            subgraph.addChild(k);
+        }
 
         const std::vector<const Tag*>* tags = n->getTags();
         for(const Tag* t:*tags) {
