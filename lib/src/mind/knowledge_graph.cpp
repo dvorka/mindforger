@@ -186,6 +186,10 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
 
         Outline* o = static_cast<Outline*>(centralNode->getThing());
         KnowledgeGraphNode* k;
+        // child Ns only
+
+        // TODO o->getNoteChildren(); + create method for getNoteChildren() ~ outline top level - determine min depth and then take Ns from this depth (might be slow)
+
         for(Note* n:o->getNotes()) {
             // TODO: reuse and delete - map<Thing*,Node*>
             k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
