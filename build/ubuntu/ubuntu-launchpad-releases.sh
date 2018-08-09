@@ -17,8 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-# Method:
-#   upstream tarball > source deb > binary deb
+# This script builds: upstream tarball > source deb > binary deb
 #
 # See:
 #   Beginners guide:
@@ -29,12 +28,6 @@
 #   Debian formal doc:
 #     https://www.debian.org/doc/debian-policy/
 #
-
-if [ -e "../.git" ]
-then
-    echo "This script must NOT be run from Git repository - run it e.g. from ~/p/mindforger/launchpad instead"
-    exit 1
-fi
 
 # ############################################################################
 # # Checkout MindForger from bazaar and make it #
@@ -95,14 +88,14 @@ function createTarball() {
 }
 
 # ############################################################################
-# # Release for *ONE* particular Ubuntu release #
+# # Release for *ONE* particular Ubuntu version #
 # ############################################################################
 
 function releaseForParticularUbuntuVersion() {
     export SCRIPTHOME=`pwd`
-    export UBUNTUVERSION=$1
-    export MFVERSION=$2
-    export MFBZRMSG=$3
+    export UBUNTUVERSION=${1}
+    export MFVERSION=${2}
+    export MFBZRMSG=${3}
     export MFFULLVERSION=${MFVERSION}-0ubuntu1
     export MF=mindforger_${MFVERSION}
     export MFRELEASE=mindforger_${MFFULLVERSION}
@@ -162,9 +155,9 @@ function releaseForParticularUbuntuVersion() {
     
     # 6) build debs
     echo -e "\n# source & binary debs  ######################################"
-    # build BINARY? deb package (us uc tells that no GPG signing is needed)
+    # build .deb package (us uc tells that no GPG signing is needed)
     bzr builddeb -- -us -uc
-    # build SIGNED source deb package
+    # build SIGNED source .deb package
     bzr builddeb --source
 
     # 7) build binary from source deb on CLEAN system - no deps installed
@@ -198,9 +191,15 @@ function releaseForParticularUbuntuVersion() {
 # # Main #
 # ############################################################################
 
+if [ -e "../../.git" ]
+then
+    echo "This script must NOT be run from Git repository - run it e.g. from ~/p/mindforger/launchpad instead"
+    exit 1
+fi
+
 export ARG_BAZAAR_MSG="Experimental packaging."
 export ARG_MAJOR_VERSION=1.43.
-export ARG_MINOR_VERSION=0 # minor version is icremented for every Ubuntu version
+export ARG_MINOR_VERSION=0 # minor version is incremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety
