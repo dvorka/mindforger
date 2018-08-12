@@ -36,6 +36,6 @@ echo "Package..."
 # and non-brew (qt.io) macdeployqt MUST be used (specify path and/or put macdeployqt to path):
 #   export MACDEPLOY="/Users/dvorka/Qt/5.11.0/clang_64/bin/macdeployqt"
 export MACDEPLOY="macdeployqt"
-cd app && ${MACDEPLOY} mindforger.app -executable=mindforger.app/Contents/MacOS/mindforger -dmg -always-overwrite
+cd ../../app && ${MACDEPLOY} mindforger.app -executable=mindforger.app/Contents/MacOS/mindforger -dmg -always-overwrite
 
 # eof
