@@ -97,6 +97,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(view.getToolBar()->actionFindObyTag, SIGNAL(triggered()), this, SLOT(doActionFindOutlineByTag()));
     QObject::connect(view.getToolBar()->actionFindNbyTag, SIGNAL(triggered()), this, SLOT(doActionFindNoteByTag()));
     // TODO implement back action
+    QObject::connect(view.getToolBar()->actionHomeOutline, SIGNAL(triggered()), this, SLOT(doActionViewHome()));
     QObject::connect(view.getToolBar()->actionBackToPreviousNote, SIGNAL(triggered()), this, SLOT(doActionViewRecentNotes()));
     QObject::connect(view.getToolBar()->actionThink, SIGNAL(triggered()), this, SLOT(doActionMindToggleThink()));
     QObject::connect(view.getToolBar()->actionScope, SIGNAL(triggered()), this, SLOT(doActionMindTimeTagScope()));

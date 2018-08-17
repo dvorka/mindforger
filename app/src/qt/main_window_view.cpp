@@ -27,7 +27,8 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
     setWindowTitle("MindForger - "+tr("Thinking Notebook")+" - "+MINDFORGER_VERSION+" - Technology Preview ");
 
     toolBarView = new MainToolbarView{this};
-    addToolBar(Qt::BottomToolBarArea, toolBarView);
+    // IMPROVE toolbar position to be configurable
+    addToolBar(Qt::TopToolBarArea, toolBarView);
 
     centralWidget = new QWidget(this);
 

@@ -551,8 +551,6 @@ int Outline::getNoteOffset(const Note* note) const
     return -1;
 }
 
-unit test for normal gaps and big gaps
-
 void Outline::getDirectChildNotes(std::vector<Note*>& children, const Note* note)
 {
     if(notes.size()) {
