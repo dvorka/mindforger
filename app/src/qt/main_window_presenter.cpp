@@ -912,6 +912,7 @@ bool MainWindowPresenter::doActionViewHome()
         orloj->showFacetOutline(homeOutline.at(0));
         return true;
     } else {
+        statusBar->showInfo(tr("Home Notebook is not defined!"));
         return false;
     }
 }

@@ -178,6 +178,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: view
 
     actionViewHome = new QAction(tr("&Home"), mainWindow);
+    actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
     actionViewHome->setStatusTip(tr("Open Home Notebook..."));
 
     actionViewOrganizer = new QAction(tr("&Eisenhower Matrix"), mainWindow);
@@ -401,7 +402,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteNew->setStatusTip(tr("Create new Note to form new ideas, principles, combinations and applications"));
 
     actionNoteHoist= new QAction(tr("&Hoist"), mainWindow);
-    actionNoteHoist->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
+    actionNoteHoist->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_I));
     actionNoteHoist->setStatusTip(tr("Hoist/de-hoist Note to focus on Note being viewed or edited"));
 
 #ifdef __APPLE__
