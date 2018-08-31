@@ -1252,14 +1252,17 @@ void MainWindowPresenter::doActionOutlineEdit()
 }
 
 void MainWindowPresenter::handleNoteNew()
-{
+{    
     int offset
         = orloj->getOutlineView()->getOutlineTree()->getCurrentRow();
     if(offset == OutlineTreePresenter::NO_ROW) {
         offset = NO_PARENT;
     } else {
-        // new note to be sibling below the current line (if offset>o.notes.size(), then it's appended)
-        offset++;
+        if(newNoteDialog->isPositionBelow()) {
+            offset++;
+        }
+        // else position is ABOVE
+
     }
 
     MF_DEBUG("New N: current N offset: " << offset << endl);

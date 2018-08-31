@@ -360,7 +360,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineEdit ->setStatusTip(tr("Edit current Notebook - you can also double click view to open the editor"));
 
     actionOutlineHome = new QAction(tr("Make &Home"), mainWindow);
-    actionOutlineHome->setStatusTip(tr("Use the current Notebook as home"));
+    actionOutlineHome->setStatusTip(tr("Toggle tag indicating whether to use the current Notebook as home"));
 
     actionOutlineStencil = new QAction(tr("Make &Stencil"), mainWindow);
     actionOutlineStencil->setStatusTip(tr("Copy the current Notebook as to Stencil"));

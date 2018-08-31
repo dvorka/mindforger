@@ -148,8 +148,8 @@ NoteNewDialog::NoteNewDialog(
     }
     QComboBox* combo=generalTab->getPositionCombo();
     // IMPROVE i18n - text is localized, QVariant keeps a constant (e.g. enum)
-    combo->addItem("First child");
-    combo->addItem("Last child");
+    combo->addItem("Above selected Note");
+    combo->addItem("Below selection Note");
     // stencils may be added/changed/removed - refreshed each time dialog is shown
     tabWidget->addTab(generalTab, tr("General"));
 
@@ -225,6 +225,10 @@ void NoteNewDialog::show(const QString& path, vector<Stencil*>& stencils)
 
     advancedTab->refreshLocation(path);
     QDialog::show();
+}
+
+bool NoteNewDialog::isPositionBelow() {
+    return generalTab->isPositionBelow();
 }
 
 }
