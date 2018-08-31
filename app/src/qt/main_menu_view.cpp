@@ -45,7 +45,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     submenuMindNew->addAction(actionMindNewFile);
 
     // learn... from a repository, Markdown or TXT file
-    submenuMindLearn = menuMind->addMenu("&Learn");
+    submenuMindLearn = menuMind->addMenu(tr("&Learn"));
     actionMindLearnRepository = new QAction(tr("&Directory with Markdowns or MindForger Repository"), mainWindow);
     actionMindLearnRepository->setStatusTip(tr("Learn knowledge by loading a MindForger repository or a directory with Markdown files..."));
     submenuMindLearn->addAction(actionMindLearnRepository);
@@ -376,7 +376,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineExport->setStatusTip(tr("Export Notebook to a file in supported format"));
     actionOutlineExport->setEnabled(false);
 
-    actionOutlineImport = new QAction(tr("&Learn"), mainWindow);
+    actionOutlineImport = new QAction(tr("&Import"), mainWindow);
     actionOutlineImport->setStatusTip(tr("Import Notebook from an external file in a supported format"));
     actionOutlineImport->setEnabled(false);
 
@@ -417,7 +417,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteSave->setStatusTip(tr("Save Note being edited"));
 
     actionNoteForget = new QAction(tr("&Forget\tDelete"), mainWindow); // Delete is handled elsewhere and I don't want menu to handle it
-    actionNoteForget->setStatusTip(tr("Forget note"));
+    actionNoteForget->setStatusTip(tr("Forget Note"));
 
 #ifdef __APPLE__
     actionNoteClose = new QAction(tr("Leave\t⌘+Left"), mainWindow); // Alt+Left is handled elsewhere and I don't want menu to handle it
@@ -461,7 +461,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteExport->setStatusTip(tr("Export Note to an external file in a supported format"));
     actionNoteExport->setEnabled(false);
 
-    actionNoteImport = new QAction(tr("Learn"), mainWindow);
+    actionNoteImport = new QAction(tr("Import"), mainWindow);
     actionNoteImport->setStatusTip(tr("Import Note from an external file in a supported format"));
     actionNoteImport->setEnabled(false);
 

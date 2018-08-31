@@ -94,12 +94,14 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     themeCombo->addItem(QString{UI_THEME_BLACK});
 
     showToolbarCheck = new QCheckBox(tr("show toolbar"), this);
+    nerdMenuCheck = new QCheckBox(tr("nerd menu (requires restart)"), this);
 
     // assembly
     QVBoxLayout* appearanceLayout = new QVBoxLayout{this};
     appearanceLayout->addWidget(themeLabel);
     appearanceLayout->addWidget(themeCombo);
     appearanceLayout->addWidget(showToolbarCheck);
+    appearanceLayout->addWidget(nerdMenuCheck);
     QGroupBox* appearanceGroup = new QGroupBox{tr("Appearance"), this};
     appearanceGroup->setLayout(appearanceLayout);
 
@@ -123,12 +125,14 @@ void ConfigurationDialog::AppTab::refresh()
         themeCombo->setCurrentIndex(i);
     }
     showToolbarCheck->setChecked(config.isUiShowToolbar());
+    nerdMenuCheck->setChecked(config.isUiNerdTargetAudience());
 }
 
 void ConfigurationDialog::AppTab::save()
 {
     config.setUiThemeName(themeCombo->itemText(themeCombo->currentIndex()).toStdString());
     config.setUiShowToolbar(showToolbarCheck->isChecked());
+    config.setUiNerdTargetAudience(nerdMenuCheck->isChecked());
 }
 
 /*

@@ -163,8 +163,10 @@ public:
     static const std::string DEFAULT_TIME_SCOPE;
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
 
+    static constexpr const bool UI_DEFAULT_NERD_TARGET_AUDIENCE = true;
     static const std::string DEFAULT_UI_THEME_NAME;
-    static constexpr const bool UI_DEFAULT_SHOW_TOOLBAR = true;
+    static constexpr const bool DEFAULT_UI_SHOW_TOOLBAR = true;
+    static constexpr const bool DEFAULT_UI_NERD_MENU = false;
     static const std::string DEFAULT_UI_HTML_CSS_THEME;
     static const std::string DEFAULT_EDITOR_KEY_BINDING;
     static const std::string DEFAULT_EDITOR_FONT;
@@ -215,6 +217,7 @@ private:
     bool markdownQuoteSections;
 
     // GUI configuration
+    bool uiNerdTargetAudience;
     std::string uiThemeName;
     std::string uiHtmlCssPath; // use a CSS (size>0) or render raw MD (size==0)    
     EditorKeyBindingMode uiEditorKeyBinding;
@@ -322,6 +325,8 @@ public:
     void setEditorFont(std::string font) { this->editorFont = font; }
     std::string getEditorFont() { return this->editorFont; }
     int getUiFontPointSize() const { return uiFontPointSize; }
+    bool isUiNerdTargetAudience() const { return uiNerdTargetAudience; }
+    void setUiNerdTargetAudience(bool nerdAudience) { uiNerdTargetAudience = nerdAudience; }
     const std::string& getUiThemeName() const { return uiThemeName; }
     void setUiThemeName(const std::string theme) { uiThemeName = theme; }
     bool isUiEditorShowLineNumbers() const { return uiEditorLineNumbers; }

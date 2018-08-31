@@ -29,6 +29,7 @@ constexpr const auto CONFIG_SECTION_REPOSITORIES= "Repositories";
 constexpr const auto CONFIG_SETTING_UI_THEME_LABEL = "* Theme: ";
 constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* Markdown CSS theme: ";
 constexpr const auto CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL =  "* Show toolbar: ";
+constexpr const auto CONFIG_SETTING_UI_NERD_MENU=  "* Nerd menu: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_FONT_LABEL =  "* Editor font: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL =  "* Editor syntax highlighting: ";
@@ -140,6 +141,18 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         if(t.size()) {
                             // TODO: IMPORTANT - this is potential SECURITY threat - theme name is NOT validated
                             c.setUiHtmlCssPath(t);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiShowToolbar(true);
+                        } else {
+                            c.setUiShowToolbar(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_NERD_MENU) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiNerdTargetAudience(true);
+                        } else {
+                            c.setUiNerdTargetAudience(false);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL) != std::string::npos) {
                         if(line->find(UI_EDITOR_KEY_BINDING_EMACS) != std::string::npos) {
@@ -339,6 +352,10 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          // ... well I know this is potential security hole, but I believe MF users have good intentions
          "      also specify path to any CSS file to be used." << endl <<
          "    * Examples: qrc:/html-css/light.css, qrc:/html-css/dark.css, raw, /home/user/my-custom-mf-style.css" << endl <<
+         CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL<< (c?(c->isUiShowToolbar()?"yes":"no"):(Configuration::DEFAULT_UI_SHOW_TOOLBAR?"yes":"no")) << endl <<
+         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_NERD_MENU << (c?(c->isUiNerdTargetAudience()?"yes":"no"):(Configuration::DEFAULT_UI_NERD_MENU?"yes":"no")) << endl <<
+         "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL << (c?c->getEditorKeyBindingAsString():Configuration::DEFAULT_EDITOR_KEY_BINDING) << endl <<
          "    * Examples: emacs, vim, windows" << endl <<
          CONFIG_SETTING_UI_EDITOR_FONT_LABEL << (c?c->getEditorFont():Configuration::DEFAULT_EDITOR_FONT) << endl <<

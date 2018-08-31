@@ -24,6 +24,8 @@
     <qresource prefix="/translations">
         <file alias="mindforger_cs_CZ.qm">resources/qt/translations/mindforger_cs.qm</file>
         <file alias="mindforger_en_US.qm">resources/qt/translations/mindforger_en.qm</file>
+        <file alias="mindforger_nerd_cs_CZ.qm">resources/qt/translations/mindforger_nerd_cs.qm</file>
+        <file alias="mindforger_nerd_en_US.qm">resources/qt/translations/mindforger_nerd_en.qm</file>
     </qresource>
     <qresource prefix="/html-css">
         <file alias="dark.css">resources/qt/css/dark.css</file>

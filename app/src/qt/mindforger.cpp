@@ -141,7 +141,6 @@ int main(int argc, char *argv[])
     QApplication::setApplicationName("MindForger");
     QApplication::setApplicationVersion(MINDFORGER_VERSION);
     mindforgerApplication.setWindowIcon(QIcon(":/icons/mindforger-icon.png"));
-    m8r::l10n(mindforgerApplication);
 
     std::string useRepository{};
     QString themeOptionValue{};
@@ -202,6 +201,9 @@ int main(int argc, char *argv[])
     if(!mdConfigRepresentation.load(config)) {
         mdConfigRepresentation.save(m8r::File{config.getConfigFilePath()});
     }
+
+    // l10n is initalized after conf so that it can be configured by MF
+    m8r::l10n(mindforgerApplication);
 
     m8r::initRandomizer();
 

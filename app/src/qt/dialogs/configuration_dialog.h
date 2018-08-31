@@ -102,6 +102,7 @@ private:
     QComboBox* themeCombo;
 
     QCheckBox* showToolbarCheck;
+    QCheckBox* nerdMenuCheck;
 
 public:
     explicit AppTab(QWidget* parent);

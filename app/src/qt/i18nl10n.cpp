@@ -26,8 +26,12 @@ void l10n(QApplication& mindforgerApplication)
 {
     // Qt to delete translator
     QTranslator* mfTranslator = new QTranslator();
+    QString translatorTargetAudience{};
+    if(Configuration::getInstance().isUiNerdTargetAudience()) {
+        translatorTargetAudience.append("nerd_");
+    }
     // loader does fallback: :/translations/mindforger_us_EN.qm > :/translations/mindforger_us.qm
-    QString translationPath{":/translations/mindforger_"+QLocale::system().name()+".qm"};
+    QString translationPath{":/translations/mindforger_"+translatorTargetAudience+QLocale::system().name()+".qm"};
     MF_DEBUG("Loading locale " << translationPath.toStdString() << endl);
     if(mfTranslator->load(translationPath)) {
         if(!mindforgerApplication.installTranslator(mfTranslator)) {

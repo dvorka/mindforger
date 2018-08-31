@@ -98,6 +98,7 @@ void Configuration::clear()
     distributorSleepInterval = DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL;
 
     // GUI
+    uiNerdTargetAudience = false;
     uiViewerShowMetadata = true;
     uiEditorSyntaxHighlighting = true;
     uiEditorAutocomplete = true;
@@ -108,7 +109,8 @@ void Configuration::clear()
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
     uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;    
     uiEnableDiagramsInMd = JavaScriptLibSupport::NO;
-    uiShowToolbar = UI_DEFAULT_SHOW_TOOLBAR;
+    uiShowToolbar = DEFAULT_UI_SHOW_TOOLBAR;
+    uiNerdTargetAudience = DEFAULT_UI_NERD_MENU;
     navigatorMaxNodes = DEFAULT_NAVIGATOR_MAX_NODES;
     navigatorShowLegend = DEFAULT_NAVIGATOR_SHOW_LEGEND;
 }
