@@ -173,7 +173,7 @@ public:
     static constexpr int DEFAULT_EDITOR_TAB_WIDTH = 4;
     static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOCOMPLETE = true;
-    static constexpr const bool DEFAULT_EDITOR_TABS_AS_SPACES = false;
+    static constexpr const bool DEFAULT_EDITOR_TABS_AS_SPACES = true;
     static constexpr const bool DEFAULT_MD_QUOTE_SECTIONS = true;
     static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_MD_MATH = false;

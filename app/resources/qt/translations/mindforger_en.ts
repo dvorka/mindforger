@@ -628,7 +628,7 @@
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="30"/>
         <source>&amp;Mind</source>
-        <translation type="unfinished">File</translation>
+        <translation type="unfinished">Fi&amp;le</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="33"/>
@@ -860,7 +860,7 @@
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="164"/>
         <source>&amp;Recall</source>
-        <translation type="unfinished">Find</translation>
+        <translation type="unfinished">F&amp;ind</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="180"/>
