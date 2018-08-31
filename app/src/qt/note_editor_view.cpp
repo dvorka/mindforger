@@ -135,8 +135,13 @@ void NoteEditorView::wrapSelectedText(const QString &tag, const QString &endTag)
         cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, end - start);
         setTextCursor(cursor);
     } else if(!cursor.hasSelection()) {
-        if(endTag.size()) cursor.insertText(tag+endTag); else cursor.insertText(tag+tag);
-        cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, tag.length());
+        if(endTag.size()) {
+            cursor.insertText(tag+endTag);
+            cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, endTag.length());
+        } else {
+            cursor.insertText(tag+tag);
+            cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, tag.length());
+        }
         setTextCursor(cursor);
     }
 
