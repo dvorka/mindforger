@@ -66,7 +66,8 @@ void OrganizerQuadrantModel::addRow(Outline* outline, bool urgency, bool importa
         if(outline->getUrgency()) {
             html += " ";
             for(int i=1; i<=outline->getUrgency(); i++) {
-                html += QChar(0x29D7);
+                html += QChar(0x25D5); // timer clock
+                //html += QChar(0x29D7); // sand clocks - not in fonts on macOS and Fedora
             }
         }
     }

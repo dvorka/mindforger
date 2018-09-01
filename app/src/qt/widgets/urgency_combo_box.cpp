@@ -29,9 +29,11 @@ UrgencyComboBox::UrgencyComboBox(QWidget *parent)
         s.clear();
         for(int j=1; j<=5; j++) {
             if(j<=i) {
-                s += QChar(0x29D7);
+                s += QChar(0x25D5); // timer clock
+                //s += QChar(0x29D7); // sand clocks - not in fonts on macOS and Fedora
             } else {
-                s += QChar(0x29D6);
+                s += QChar(0x25F4); // timer clocks
+                //s += QChar(0x29D6); // sand clocks
             }
         }
         addItem(s, QVariant::fromValue<int>(i));
