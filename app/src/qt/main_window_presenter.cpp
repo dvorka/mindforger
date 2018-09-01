@@ -185,6 +185,8 @@ void MainWindowPresenter::showInitialView()
         orloj->showFacetOutlineList(mind->getOutlines());
     }
 
+    view.setFileOrDirectory(QString::fromStdString(config.getActiveRepository()->getPath()));
+
     // move Mind to configured state
     if(config.getDesiredMindState()==Configuration::MindState::THINKING) {
         MF_DEBUG("InitialView: asking Mind to THINK..." << endl);

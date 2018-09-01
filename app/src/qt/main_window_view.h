@@ -49,6 +49,8 @@ class MainWindowView: public QMainWindow
     Q_OBJECT
 
 private:
+    QString windowTitleSkeleton;
+
     LookAndFeels& lookAndFeel;
 
     QWidget* centralWidget;
@@ -72,6 +74,8 @@ public:
     CliAndBreadcrumbsView* getCli() const { return cliView; }
     OrlojView* getOrloj() const { return orlojView; }
     StatusBarView* getStatusBar() const { return statusBarView; }
+
+    void setFileOrDirectory(QString f);
 };
 
 }

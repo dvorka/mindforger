@@ -24,7 +24,8 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
     : QMainWindow(nullptr), // main window has no parent - it is destroyed by main MF class
       lookAndFeel(lookAndFeel)
 {
-    setWindowTitle("MindForger - "+tr("Thinking Notebook")+" - "+MINDFORGER_VERSION+" - Technology Preview ");
+    windowTitleSkeleton = "MindForger - "+tr("Thinking Notebook")+" - "+MINDFORGER_VERSION;
+    setWindowTitle(windowTitleSkeleton);
 
     toolBarView = new MainToolbarView{this};
     // IMPROVE toolbar position to be configurable
@@ -42,6 +43,11 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
     setCentralWidget(centralWidget);
 
     statusBarView = new StatusBarView(statusBar(), lookAndFeel);
+}
+
+void MainWindowView::setFileOrDirectory(QString f)
+{
+    setWindowTitle(windowTitleSkeleton+" - "+f+" ");
 }
 
 MainWindowView::~MainWindowView()

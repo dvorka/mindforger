@@ -89,7 +89,6 @@ public:
     Repository &operator=(const Repository&&) = delete;
     ~Repository();
 
-    // IMPROVE rename to getPath() after refactoring
     std::string& getPath() { return path; }
     const std::string& getDir() const { return dir; }
     void setDir(std::string dir) { this->dir = dir; updatePath(); }
