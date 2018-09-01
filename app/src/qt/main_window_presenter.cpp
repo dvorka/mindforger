@@ -367,6 +367,7 @@ void MainWindowPresenter::handleMindNewRepository()
 
     // open new repository
     doActionMindRelearn(newRepositoryDialog->getRepositoryPath());
+    mainMenu->addRecentDirectoryOrFile(newRepositoryDialog->getRepositoryPath());
 }
 
 void MainWindowPresenter::doActionMindNewFile()
@@ -388,6 +389,7 @@ void MainWindowPresenter::handleMindNewFile()
 
     // ... and open it
     doActionMindRelearn(newFileDialog->getFilePath());
+    mainMenu->addRecentDirectoryOrFile(newFileDialog->getFilePath());
 }
 
 void MainWindowPresenter::doActionMindThink()
