@@ -40,6 +40,8 @@ packageMindForger() {
     #   export MACDEPLOY="/Users/dvorka/Qt/5.11.0/clang_64/bin/macdeployqt"
     export MACDEPLOY="macdeployqt"
     cd ../../app && ${MACDEPLOY} mindforger.app -executable=mindforger.app/Contents/MacOS/mindforger -dmg -always-overwrite
+
+    echo "Find result in app/mindforger.dmg and app/mindforger.app/..."
 }
 
 # main #########################################################################
