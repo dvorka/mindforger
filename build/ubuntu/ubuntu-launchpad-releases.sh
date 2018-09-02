@@ -202,10 +202,9 @@ export ARG_MAJOR_VERSION=1.46.
 export ARG_MINOR_VERSION=0 # minor version is incremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
-# old: precise quantal saucy precise utopic vivid wily yakkety
-# current: trusty xenial artful bionic
-# MF supported (trusty has old GCC): xenial artful bionic
-for UBUNTU_VERSION in bionic artful xenial
+# old: precise quantal saucy precise utopic vivid wily yakkety trusty (old GCC) artful
+# current: xenial bionic
+for UBUNTU_VERSION in bionic xenial
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"

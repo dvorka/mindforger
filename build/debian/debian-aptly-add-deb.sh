@@ -41,7 +41,7 @@ echo "See 'MindForger Release Guide#Debian and my PPA' notebook for detailed ste
 #aptly snapshot drop mf-test-snapshot
 
 # create snapshot in the time of release - note release NAME 
-#aptly snapshot create mindforger-1.42.0 from repo mindforger-com-ppa
+#aptly snapshot create mindforger-1.46.0-snapshot from repo mindforger-com-ppa
 
 # show published snapshots
 #aptly publish list 

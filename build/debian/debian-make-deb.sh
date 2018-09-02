@@ -143,8 +143,8 @@ function buildDebPackage() {
     # 3) create source deb
     #    
     # 3.1) build deb
-    # build SIGNED source deb package
-    dpkg-buildpackage --source
+    # build source deb package
+    dpkg-buildpackage -S
     pushd .. && mkdir -v deb-source && cp -vf *.dsc *.changes *.deb deb-source && popd
 }
 
