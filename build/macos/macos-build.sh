@@ -19,23 +19,32 @@
 
 # make project w/ QtWebEngine instead QtWebKit
 
-echo "IMPORTANT: build mindforger/deps/discount before running this script!"
+buildMindForger() {
+    echo "IMPORTANT: build mindforger/deps/discount before running this script!"
 
-echo "Clean..."
-rm -vrf ../../app/mindforger.app ../../app/mindforger.dmg
-cd ../..
-make clean
+    echo "Clean..."
+    rm -vrf ../../app/mindforger.app ../../app/mindforger.dmg
+    cd ../..
+    make clean
 
-echo "Build..."
-qmake -r -config release mindforger.pro
-make -j 8
+    echo "Build..."
+    qmake -r -config release mindforger.pro
+    make -j 8
+}
 
-echo "Package..."
-# In order to link QWebEngine correctly, macdeployqt must be run as follows:
-#   macdeployqt <TARGET>.app -executable=<TARGET>.app/Contents/MacOS/<TARGET>
-# and non-brew (qt.io) macdeployqt MUST be used (specify path and/or put macdeployqt to path):
-#   export MACDEPLOY="/Users/dvorka/Qt/5.11.0/clang_64/bin/macdeployqt"
-export MACDEPLOY="macdeployqt"
-cd ../../app && ${MACDEPLOY} mindforger.app -executable=mindforger.app/Contents/MacOS/mindforger -dmg -always-overwrite
+packageMindForger() {
+    echo "Package..."
+    # In order to link QWebEngine correctly, macdeployqt must be run as follows:
+    #   macdeployqt <TARGET>.app -executable=<TARGET>.app/Contents/MacOS/<TARGET>
+    # and non-brew (qt.io) macdeployqt MUST be used (specify path and/or put macdeployqt to path):
+    #   export MACDEPLOY="/Users/dvorka/Qt/5.11.0/clang_64/bin/macdeployqt"
+    export MACDEPLOY="macdeployqt"
+    cd ../../app && ${MACDEPLOY} mindforger.app -executable=mindforger.app/Contents/MacOS/mindforger -dmg -always-overwrite
+}
+
+# main #########################################################################
+
+#buildMindForger
+packageMindForger
 
 # eof
