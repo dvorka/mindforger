@@ -76,7 +76,8 @@ function buildGitHubTarball() {
     
     # 1.2) prune MindForger project source: tests, *.o/... build files, ...
     echo -e "\n# MF project cleanup ########################################"
-    rm -vrf ./.git ./app/mindforger ./build
+    rm -vrf ./.git ./app/mindforger ./build ./app/test ./lib/test
+    rm -vf ./mindforger.pro.user ./mindforger.pro.user.macos ./mindforger.pro.user.ubuntu
     find . -type f \( -name "*moc_*.cpp" -or -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
         
     # 1.4) create tar archive
