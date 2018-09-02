@@ -1812,7 +1812,7 @@
         <location filename="../../../src/qt/main_window_presenter.cpp" line="1349"/>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="1355"/>
         <source>Forget Notebook</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Deprecate Notebook</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="1349"/>
@@ -1847,7 +1847,7 @@
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="1456"/>
         <source>Please select a Note to forget.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Please select a Note to delete.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="1476"/>
