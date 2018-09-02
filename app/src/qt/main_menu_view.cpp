@@ -416,7 +416,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteSave = new QAction(tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
     actionNoteSave->setStatusTip(tr("Save Note being edited"));
 
-    actionNoteForget = new QAction(tr("&Forget\tDelete"), mainWindow); // Delete is handled elsewhere and I don't want menu to handle it
+    actionNoteForget = new QAction(tr("&Forget\tDel"), mainWindow); // Delete is handled elsewhere and I don't want menu to handle it
     actionNoteForget->setStatusTip(tr("Forget Note"));
 
 #ifdef __APPLE__
