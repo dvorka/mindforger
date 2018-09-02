@@ -378,12 +378,14 @@ string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html)
                     if(outline->getUrgency()>i) {
                         htmlHeader +=
                                 "<td style='border-collapse: collapse; border: none;'>"
-                                "&#x29D7;"
+                                "&#x25D5;"
+                                //"&#x29D7;" // sand clocks
                                 "</td>";
                     } else {
                         htmlHeader +=
                                 "<td style='border-collapse: collapse; border: none;'>"
-                                "&#x29D6;"
+                                "&#x25F4;"
+                                //"&#x29D6;" // sand clocks
                                 "</td>";
                     }
                 }

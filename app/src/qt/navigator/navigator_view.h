@@ -120,11 +120,12 @@ public:
     void itemMoved();
 
     void iWasSelected(NavigatorNode* selectedNode);
-    void refreshOnNextTimerTick(KnowledgeSubGraph* subgraph) {
+    void refreshOnNextTimerTick(KnowledgeSubGraph* subgraph, bool doShowLegend) {
         std::lock_guard<std::mutex> criticalSection{refreshMutex};
 
         updateNavigatorView();
         this->subgraph = subgraph;
+        this->doShowLegend = doShowLegend;
         itemMoved(); // kick timer if not running
     }
 

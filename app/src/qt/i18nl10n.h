@@ -23,6 +23,8 @@
 
 #include <QtWidgets>
 
+#include "config/configuration.h"
+
 #include "debug.h"
 
 namespace m8r {

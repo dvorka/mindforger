@@ -38,6 +38,8 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     // widgets
     highlighter = new NoteEditHighlight{document()};
     enableSyntaxHighlighting = Configuration::getInstance().isUiEditorEnableSyntaxHighlighting();
+    tabsAsSpaces = Configuration::getInstance().isUiEditorTabsAsSpaces();
+    tabWidth = Configuration::getInstance().getUiEditorTabWidth();
     highlighter->setEnabled(enableSyntaxHighlighting);
     // line numbers
     lineNumberPanel = new LineNumberPanel{this};
@@ -77,11 +79,15 @@ void NoteEditorView::setShowLineNumbers(bool show)
 
 void NoteEditorView::setEditorTabWidth(int tabWidth)
 {
-    MF_DEBUG("SETTING tabstop: " << tabWidth << endl);
-
     // tab width: 4 or 8
     QFontMetrics metrics(f);
+    this->tabWidth = tabWidth;
     setTabStopWidth(tabWidth * metrics.width(' '));
+}
+
+void NoteEditorView::setEditorTabsAsSpacesPolicy(bool tabsAsSpaces)
+{
+    this->tabsAsSpaces = tabsAsSpaces;
 }
 
 void NoteEditorView::setEditorFont(std::string fontName)
@@ -100,12 +106,11 @@ void NoteEditorView::setEditorFont(std::string fontName)
 
 void NoteEditorView::slotConfigurationUpdated()
 {
-    MF_DEBUG("CONFIG UPDATED @ editor " << endl);
-
     enableSyntaxHighlighting = Configuration::getInstance().isUiEditorEnableSyntaxHighlighting();
     highlighter->setEnabled(enableSyntaxHighlighting);
 
     setEditorTabWidth(Configuration::getInstance().getUiEditorTabWidth());
+    setEditorTabsAsSpacesPolicy(Configuration::getInstance().isUiEditorTabsAsSpaces());
     setEditorFont(Configuration::getInstance().getEditorFont());
 }
 
@@ -130,8 +135,13 @@ void NoteEditorView::wrapSelectedText(const QString &tag, const QString &endTag)
         cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, end - start);
         setTextCursor(cursor);
     } else if(!cursor.hasSelection()) {
-        if(endTag.size()) cursor.insertText(tag+endTag); else cursor.insertText(tag+tag);
-        cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, tag.length());
+        if(endTag.size()) {
+            cursor.insertText(tag+endTag);
+            cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, endTag.length());
+        } else {
+            cursor.insertText(tag+tag);
+            cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, tag.length());
+        }
         setTextCursor(cursor);
     }
 
@@ -219,6 +229,15 @@ void NoteEditorView::keyPressEvent(QKeyEvent *event)
             default:
                 completer->popup()->hide();
                 break;
+        }
+    } else {
+        switch(event->key()) {
+            case Qt::Key_Tab:
+            if(tabsAsSpaces) {
+                insertTab();
+                return;
+            }
+            break;
         }
     }
 
@@ -335,6 +354,18 @@ void NoteEditorView::insertCompletion(const QString& completion, bool singleWord
         completedAndSelected = true;
     }
     setTextCursor(cursor);
+}
+
+void NoteEditorView::insertTab()
+{
+    QString completion{};
+    if(tabWidth == 8) {
+        completion.append("        ");
+    } else {
+        completion.append("    ");
+    }
+    QTextCursor cursor = textCursor();
+    cursor.insertText(completion);
 }
 
 /*

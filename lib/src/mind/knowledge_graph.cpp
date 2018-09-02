@@ -26,10 +26,10 @@ using namespace std;
  * Knowledge SUB graph
  */
 
-KnowledgeSubGraph::KnowledgeSubGraph(KnowledgeGraphNode* centralNode, int limit)
-    : centralNode(centralNode), limit(limit)
+KnowledgeSubGraph::KnowledgeSubGraph(KnowledgeGraphNode* centralNode, int maxSubgraphNodes)
+    : centralNode(centralNode), maxSubgraphNodes(maxSubgraphNodes)
 {
-    this->count = limit-1;
+    this->count = maxSubgraphNodes-1;
 }
 
 /*
@@ -186,7 +186,10 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
 
         Outline* o = static_cast<Outline*>(centralNode->getThing());
         KnowledgeGraphNode* k;
-        for(Note* n:o->getNotes()) {
+        // child Ns only
+        vector<Note*> children{};
+        o->getDirectChildNotes(children);
+        for(Note* n:children) {
             // TODO: reuse and delete - map<Thing*,Node*>
             k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
             k->setThing(n);
@@ -211,6 +214,16 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
         k = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINE, n->getOutline()->getName(), outlinesColor, static_cast<unsigned int>(n->getOutline()->getNotesCount())};
         k->setThing(n->getOutline());
         subgraph.addParent(k);
+
+        // child Ns
+        vector<Note*> children{};
+        n->getOutline()->getDirectChildNotes(children, n);
+        for(Note* n:children) {
+            // TODO: reuse and delete - map<Thing*,Node*>
+            k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
+            k->setThing(n);
+            subgraph.addChild(k);
+        }
 
         const std::vector<const Tag*>* tags = n->getTags();
         for(const Tag* t:*tags) {

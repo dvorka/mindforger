@@ -45,7 +45,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     submenuMindNew->addAction(actionMindNewFile);
 
     // learn... from a repository, Markdown or TXT file
-    submenuMindLearn = menuMind->addMenu("&Learn");
+    submenuMindLearn = menuMind->addMenu(tr("&Learn"));
     actionMindLearnRepository = new QAction(tr("&Directory with Markdowns or MindForger Repository"), mainWindow);
     actionMindLearnRepository->setStatusTip(tr("Learn knowledge by loading a MindForger repository or a directory with Markdown files..."));
     submenuMindLearn->addAction(actionMindLearnRepository);
@@ -90,7 +90,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     //actionMindDream = new QAction(tr("&Dream"), mainWindow);
     //actionMindDream->setStatusTip(tr("Tidy up, clean, re-infer, check and optimize Memory which is otherwise done on your inactivity"));
 
-    actionMindSnapshot = new QAction(tr("Ret&ain"), mainWindow);
+    actionMindSnapshot = new QAction(tr("Retain"), mainWindow);
     actionMindSnapshot->setStatusTip(tr("Create backup archive of the current repository and store it in home directory"));
     actionMindSnapshot->setEnabled(false);
 
@@ -178,6 +178,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: view
 
     actionViewHome = new QAction(tr("&Home"), mainWindow);
+    actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
     actionViewHome->setStatusTip(tr("Open Home Notebook..."));
 
     actionViewOrganizer = new QAction(tr("&Eisenhower Matrix"), mainWindow);
@@ -235,8 +236,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewOrganizer);
     menuView->addAction(actionViewOutlines);
     menuView->addAction(actionViewTags);
-    menuView->addAction(actionViewNavigator);
 #ifdef MF_WIP
+    menuView->addAction(actionViewNavigator);
     menuView->addAction(actionViewStencils);
     menuView->addAction(actionViewDwell);
     // OBSOLETE feature: menuView->addAction(actionViewCli);
@@ -359,7 +360,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineEdit ->setStatusTip(tr("Edit current Notebook - you can also double click view to open the editor"));
 
     actionOutlineHome = new QAction(tr("Make &Home"), mainWindow);
-    actionOutlineHome->setStatusTip(tr("Use the current Notebook as home"));
+    actionOutlineHome->setStatusTip(tr("Toggle tag indicating whether to use the current Notebook as home"));
 
     actionOutlineStencil = new QAction(tr("Make &Stencil"), mainWindow);
     actionOutlineStencil->setStatusTip(tr("Copy the current Notebook as to Stencil"));
@@ -375,7 +376,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineExport->setStatusTip(tr("Export Notebook to a file in supported format"));
     actionOutlineExport->setEnabled(false);
 
-    actionOutlineImport = new QAction(tr("&Learn"), mainWindow);
+    actionOutlineImport = new QAction(tr("&Import"), mainWindow);
     actionOutlineImport->setStatusTip(tr("Import Notebook from an external file in a supported format"));
     actionOutlineImport->setEnabled(false);
 
@@ -401,7 +402,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteNew->setStatusTip(tr("Create new Note to form new ideas, principles, combinations and applications"));
 
     actionNoteHoist= new QAction(tr("&Hoist"), mainWindow);
-    actionNoteHoist->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
+    actionNoteHoist->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_I));
     actionNoteHoist->setStatusTip(tr("Hoist/de-hoist Note to focus on Note being viewed or edited"));
 
 #ifdef __APPLE__
@@ -415,8 +416,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteSave = new QAction(tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
     actionNoteSave->setStatusTip(tr("Save Note being edited"));
 
-    actionNoteForget = new QAction(tr("&Forget\tDelete"), mainWindow); // Delete is handled elsewhere and I don't want menu to handle it
-    actionNoteForget->setStatusTip(tr("Forget note"));
+    actionNoteForget = new QAction(tr("&Forget\tDel"), mainWindow); // Delete is handled elsewhere and I don't want menu to handle it
+    actionNoteForget->setStatusTip(tr("Forget Note"));
 
 #ifdef __APPLE__
     actionNoteClose = new QAction(tr("Leave\t⌘+Left"), mainWindow); // Alt+Left is handled elsewhere and I don't want menu to handle it
@@ -460,7 +461,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteExport->setStatusTip(tr("Export Note to an external file in a supported format"));
     actionNoteExport->setEnabled(false);
 
-    actionNoteImport = new QAction(tr("Learn"), mainWindow);
+    actionNoteImport = new QAction(tr("Import"), mainWindow);
     actionNoteImport->setStatusTip(tr("Import Note from an external file in a supported format"));
     actionNoteImport->setEnabled(false);
 

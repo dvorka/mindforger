@@ -43,6 +43,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     orloj = new OrlojPresenter{this, view.getOrloj(), mind};
 
     // initialize components
+    view.getToolBar()->setVisible(config.isUiShowToolbar());
     scopeDialog = new ScopeDialog{mind->ontology(), &view};
     newOutlineDialog = new OutlineNewDialog{QString::fromStdString(config.getMemoryPath()), mind->remind().getOntology(), &view};
     newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
@@ -61,7 +62,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 #ifdef MF_NER
     nerChooseTagsDialog = new NerChooseTagTypesDialog(&view);
     nerResultDialog = new NerResultDialog(&view);
-#endif
+#endif    
 
     // wire signals
     QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
@@ -75,7 +76,6 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(findNoteByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByTag()));
     QObject::connect(findNoteByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
     QObject::connect(refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
-    QObject::connect(configDialog, SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
     QObject::connect(insertImageDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatImage()));
     QObject::connect(insertLinkDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatLink()));
     QObject::connect(rowsAndDepthDialog->getGenerateButton(), SIGNAL(clicked()), this, SLOT(handleRowsAndDepth()));
@@ -83,6 +83,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
     // wire toolbar signals
     QObject::connect(view.getToolBar()->actionNewNotebook, SIGNAL(triggered()), this, SLOT(doActionOutlineNew()));
+    QObject::connect(view.getToolBar()->actionOpenRepository, SIGNAL(triggered()), this, SLOT(doActionMindLearnRepository()));
+    QObject::connect(view.getToolBar()->actionOpenFile, SIGNAL(triggered()), this, SLOT(doActionMindLearnFile()));
     QObject::connect(view.getToolBar()->actionViewEisenhower, SIGNAL(triggered()), this, SLOT(doActionViewOrganizer()));
     QObject::connect(view.getToolBar()->actionViewOutlines, SIGNAL(triggered()), this, SLOT(doActionViewOutlines()));
     QObject::connect(view.getToolBar()->actionViewNavigator, SIGNAL(triggered()), this, SLOT(doActionViewKnowledgeGraphNavigator()));
@@ -94,6 +96,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(view.getToolBar()->actionFindObyTag, SIGNAL(triggered()), this, SLOT(doActionFindOutlineByTag()));
     QObject::connect(view.getToolBar()->actionFindNbyTag, SIGNAL(triggered()), this, SLOT(doActionFindNoteByTag()));
     // TODO implement back action
+    QObject::connect(view.getToolBar()->actionHomeOutline, SIGNAL(triggered()), this, SLOT(doActionViewHome()));
     QObject::connect(view.getToolBar()->actionBackToPreviousNote, SIGNAL(triggered()), this, SLOT(doActionViewRecentNotes()));
     QObject::connect(view.getToolBar()->actionThink, SIGNAL(triggered()), this, SLOT(doActionMindToggleThink()));
     QObject::connect(view.getToolBar()->actionScope, SIGNAL(triggered()), this, SLOT(doActionMindTimeTagScope()));
@@ -116,6 +119,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 #endif
 
     // send signal to components to be updated on a configuration change
+    QObject::connect(configDialog, SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SLOT(slotConfigurationUpdated()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getNoteEdit()->getView()->getNoteEditor(), SLOT(slotConfigurationUpdated()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), distributor, SLOT(slotConfigurationUpdated()));
@@ -180,6 +184,8 @@ void MainWindowPresenter::showInitialView()
         mind->amnesia();
         orloj->showFacetOutlineList(mind->getOutlines());
     }
+
+    view.setFileOrDirectory(QString::fromStdString(config.getActiveRepository()->getPath()));
 
     // move Mind to configured state
     if(config.getDesiredMindState()==Configuration::MindState::THINKING) {
@@ -361,6 +367,7 @@ void MainWindowPresenter::handleMindNewRepository()
 
     // open new repository
     doActionMindRelearn(newRepositoryDialog->getRepositoryPath());
+    mainMenu->addRecentDirectoryOrFile(newRepositoryDialog->getRepositoryPath());
 }
 
 void MainWindowPresenter::doActionMindNewFile()
@@ -382,6 +389,7 @@ void MainWindowPresenter::handleMindNewFile()
 
     // ... and open it
     doActionMindRelearn(newFileDialog->getFilePath());
+    mainMenu->addRecentDirectoryOrFile(newFileDialog->getFilePath());
 }
 
 void MainWindowPresenter::doActionMindThink()
@@ -440,7 +448,7 @@ void MainWindowPresenter::doActionMindLearnRepository()
         = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
 
     QFileDialog learnDialog{&view};
-    learnDialog.setWindowTitle(tr("Learn Directory"));
+    learnDialog.setWindowTitle(tr("Learn Directory or MindForger Repository"));
     // learnDialog.setFileMode(QFileDialog::Directory|QFileDialog::ExistingFiles); not supported, therefore
     // >
     // ASK user: directory/repository or file (choice) > open dialog configured as required
@@ -464,7 +472,7 @@ void MainWindowPresenter::doActionMindLearnFile()
         = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
 
     QFileDialog learnDialog{&view};
-    learnDialog.setWindowTitle(tr("Learn File"));
+    learnDialog.setWindowTitle(tr("Learn Markdown File"));
     learnDialog.setFileMode(QFileDialog::ExistingFile);
     learnDialog.setDirectory(homeDirectory);
     learnDialog.setViewMode(QFileDialog::Detail);
@@ -908,6 +916,7 @@ bool MainWindowPresenter::doActionViewHome()
         orloj->showFacetOutline(homeOutline.at(0));
         return true;
     } else {
+        statusBar->showInfo(tr("Home Notebook is not defined!"));
         return false;
     }
 }
@@ -1247,14 +1256,17 @@ void MainWindowPresenter::doActionOutlineEdit()
 }
 
 void MainWindowPresenter::handleNoteNew()
-{
+{    
     int offset
         = orloj->getOutlineView()->getOutlineTree()->getCurrentRow();
     if(offset == OutlineTreePresenter::NO_ROW) {
         offset = NO_PARENT;
     } else {
-        // new note to be sibling below the current line (if offset>o.notes.size(), then it's appended)
-        offset++;
+        if(newNoteDialog->isPositionBelow()) {
+            offset++;
+        }
+        // else position is ABOVE
+
     }
 
     MF_DEBUG("New N: current N offset: " << offset << endl);
@@ -1700,6 +1712,7 @@ void MainWindowPresenter::doActionMindPreferences()
 void MainWindowPresenter::handleMindPreferences()
 {
     mdConfigRepresentation->save(config);
+    view.getToolBar()->setVisible(config.isUiShowToolbar());
 }
 
 void MainWindowPresenter::doActionHelpDocumentation()

@@ -25,7 +25,7 @@ NavigatorPresenter::NavigatorPresenter(NavigatorView* view, QObject* parent, Kno
       view{view},
       knowledgeGraph{knowledgeGraph},
       // TODO improve configuration
-      subgraph{knowledgeGraph->getNode(KnowledgeGraphNodeType::MIND), 150}
+      subgraph{knowledgeGraph->getNode(KnowledgeGraphNodeType::MIND), Configuration::getInstance().getNavigatorMaxNodes()}
 {
     // signals
     QObject::connect(view, SIGNAL(nodeSelectedSignal(NavigatorNode*)), this, SLOT(nodeSelectedSlot(NavigatorNode*)));
@@ -37,14 +37,15 @@ NavigatorPresenter::~NavigatorPresenter()
 
 void NavigatorPresenter::showInitialView()
 {
+    subgraph.setMaxNodes(Configuration::getInstance().getNavigatorMaxNodes());
     knowledgeGraph->getRelatedNodes(knowledgeGraph->getNode(KnowledgeGraphNodeType::MIND), subgraph);
-    view->refreshOnNextTimerTick(&subgraph);
+    view->refreshOnNextTimerTick(&subgraph, Configuration::getInstance().isNavigatorShowLegend());
 }
 
 void NavigatorPresenter::nodeSelectedSlot(NavigatorNode* node)
 {
     knowledgeGraph->getRelatedNodes(node->getKnowledgeGraphNode(), subgraph);
-    view->refreshOnNextTimerTick(&subgraph);
+    view->refreshOnNextTimerTick(&subgraph, Configuration::getInstance().isNavigatorShowLegend());
     switch(node->getKnowledgeGraphNode()->getType()) {
     case KnowledgeGraphNodeType::OUTLINE:
         emit outlineSelectedSignal(static_cast<Outline*>(node->getKnowledgeGraphNode()->getThing()));

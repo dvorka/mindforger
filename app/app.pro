@@ -281,6 +281,8 @@ mfner {
 #./resources/qt/translations/mindforger_fr.ts
 #./resources/qt/translations/mindforger_es.ts
 TRANSLATIONS = \
+    ./resources/qt/translations/mindforger_nerd_en.ts \
+    ./resources/qt/translations/mindforger_nerd_cs.ts \
     ./resources/qt/translations/mindforger_en.ts \
     ./resources/qt/translations/mindforger_cs.ts
 

@@ -64,6 +64,8 @@ public:
     const NoteType* getNoteType() const;
     const std::vector<const Tag*>& getTags() const;
     int getProgress() const;
+    bool isPositionBelow();
+    bool isPositionAbove() { return !isPositionBelow(); }
 
     void show(const QString& path, std::vector<Stencil*>& stencils);
 };
@@ -102,6 +104,8 @@ public:
     QComboBox* getStencilCombo() const { return stencilCombo; }
     QComboBox* getPositionCombo() const { return positionCombo; }
 
+    bool isPositionBelow() { return positionCombo->currentIndex()==1; }
+
     void clean();
 };
 
@@ -123,4 +127,5 @@ public:
 };
 
 }
+
 #endif // M8RUI_NOTE_NEW_DIALOG_H

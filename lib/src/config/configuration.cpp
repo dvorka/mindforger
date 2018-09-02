@@ -71,6 +71,7 @@ void Configuration::clear()
     saveReadsMetadata = DEFAULT_SAVE_READS_METADATA;
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
     tagsScope.clear();
+    markdownQuoteSections = DEFAULT_MD_QUOTE_SECTIONS;
 
     // Markdown 2 HTML options
     md2HtmlOptions = 0
@@ -97,15 +98,21 @@ void Configuration::clear()
     distributorSleepInterval = DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL;
 
     // GUI
+    uiNerdTargetAudience = false;
     uiViewerShowMetadata = true;
     uiEditorSyntaxHighlighting = true;
     uiEditorAutocomplete = true;
     uiEditorLineNumbers = true;
+    uiEditorTabsAsSpaces = DEFAULT_EDITOR_TABS_AS_SPACES;
     uiEditorTabWidth = DEFAULT_EDITOR_TAB_WIDTH;
     uiThemeName.assign(UI_DEFAULT_THEME);
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
     uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;    
     uiEnableDiagramsInMd = JavaScriptLibSupport::NO;
+    uiShowToolbar = DEFAULT_UI_SHOW_TOOLBAR;
+    uiNerdTargetAudience = DEFAULT_UI_NERD_MENU;
+    navigatorMaxNodes = DEFAULT_NAVIGATOR_MAX_NODES;
+    navigatorShowLegend = DEFAULT_NAVIGATOR_SHOW_LEGEND;
 }
 
 Repository* Configuration::addRepository(Repository* repository)

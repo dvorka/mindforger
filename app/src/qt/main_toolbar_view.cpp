@@ -26,9 +26,17 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
 
     actionNewNotebook = addAction(QIcon(":/icons/new.svg"), tr("New Notebook"));
     addSeparator();
+    actionOpenRepository = addAction(QIcon(":/icons/open-repository.svg"), tr("Open a directory with Markdowns or MindForger repository"));
+    actionOpenFile = addAction(QIcon(":/icons/open-file.svg"), tr("Open Markdown file"));
+    addSeparator();
+    actionHomeOutline = addAction(QIcon(":/icons/home.svg"), "Open home Notebook");
+    actionBackToPreviousNote = addAction(QIcon(":/icons/back.svg"), "Back to Previous Note");
+    addSeparator();
     actionViewEisenhower = addAction(QIcon(":/icons/view-eisenhower.svg"), tr("View Eisenhower Matrix"));
     actionViewOutlines = addAction(QIcon(":/icons/view-outlines.svg"), tr("View Notebooks"));
+#ifdef MF_WIP
     actionViewNavigator = addAction(QIcon(":/icons/view-navigator.svg"), tr("View Knowledge Graph Navigator"));
+#endif
     actionViewTags = addAction(QIcon(":/icons/view-tags.svg"), tr("View Tags"));
     actionViewRecentNotes = addAction(QIcon(":/icons/view-recent-notes.svg"), tr("View Recent Notes"));
     addSeparator();
@@ -37,8 +45,6 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
     actionFindNbyName = addAction(QIcon(":/icons/find-n-name.svg"), "Recall Note by Name");
     actionFindObyTag = addAction(QIcon(":/icons/find-o-tag.svg"), "Recall Notebook by Tag");
     actionFindNbyTag = addAction(QIcon(":/icons/find-n-tag.svg"), "Recall Note by Tag");
-    addSeparator();
-    actionBackToPreviousNote= addAction(QIcon(":/icons/back.svg"), "Back to Previous Note");
     addSeparator();
     actionThink = addAction(QIcon(":/icons/think.svg"), "Think / Sleep");
     addSeparator();

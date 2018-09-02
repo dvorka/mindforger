@@ -17,10 +17,15 @@
         <file alias="find-n-tag.svg">resources/icons/find-n-tag.svg</file>
         <file alias="find-o-name.svg">resources/icons/find-o-name.svg</file>
         <file alias="find-o-tag.svg">resources/icons/find-o-tag.svg</file>
+        <file alias="open-file.svg">resources/icons/open-file.svg</file>
+        <file alias="open-repository.svg">resources/icons/open-repository.svg</file>
+        <file alias="home.svg">resources/icons/home.svg</file>
     </qresource>
     <qresource prefix="/translations">
         <file alias="mindforger_cs_CZ.qm">resources/qt/translations/mindforger_cs.qm</file>
         <file alias="mindforger_en_US.qm">resources/qt/translations/mindforger_en.qm</file>
+        <file alias="mindforger_nerd_cs_CZ.qm">resources/qt/translations/mindforger_nerd_cs.qm</file>
+        <file alias="mindforger_nerd_en_US.qm">resources/qt/translations/mindforger_nerd_en.qm</file>
     </qresource>
     <qresource prefix="/html-css">
         <file alias="dark.css">resources/qt/css/dark.css</file>

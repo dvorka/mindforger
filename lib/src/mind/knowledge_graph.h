@@ -78,7 +78,7 @@ class KnowledgeSubGraph
     // IMPROVE map<> all;
 
     // ensure that knowledge graph size (number of nodes) is smaller than limit
-    int limit;
+    int maxSubgraphNodes;
     int count;
 
 public:
@@ -90,6 +90,7 @@ public:
     ~KnowledgeSubGraph() {}
 
     void setCentralNode(KnowledgeGraphNode* centralNode) { this->centralNode = centralNode; }
+    void setMaxNodes(int maxNodes) { this->maxSubgraphNodes = maxNodes; }
     KnowledgeGraphNode* getCentralNode() const { return centralNode; }
     // IMPROVE bool contains(KnowledgeGraphNode node) { return false; }
     void addParent(KnowledgeGraphNode* p) { if(count-- > 0) parents.push_back(p); }
@@ -101,7 +102,7 @@ public:
         centralNode = nullptr;
         parents.clear();
         children.clear();
-        count = limit-1;
+        count = maxSubgraphNodes-1;
     }
 };
 

@@ -14,7 +14,7 @@ Big thanks to 3rd party FOSS content authors:
 * Knut Sveidqvist (Mermaid.js - diagrams and flowcharts rendering in HTML)
 * AMS and SIAM (MathJax.js - math rendering in HTML)
 * Ivan Sagalaev (Highlight.js - source code syntax highlighting)
-* Danny Allen (Primary icon theme - icons)
+* Danny Allen (Primary icon theme store.kde.com - icons)
 * Travis CI (travis-ci.org - continous integration tests and builds infrastructure)
 * Raimund Hocke (SikuliX - GUI automation testing)
 * Lewis Van Winkle (GENANN - minimal neural network - library)
