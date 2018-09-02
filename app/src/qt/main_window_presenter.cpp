@@ -87,7 +87,9 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(view.getToolBar()->actionOpenFile, SIGNAL(triggered()), this, SLOT(doActionMindLearnFile()));
     QObject::connect(view.getToolBar()->actionViewEisenhower, SIGNAL(triggered()), this, SLOT(doActionViewOrganizer()));
     QObject::connect(view.getToolBar()->actionViewOutlines, SIGNAL(triggered()), this, SLOT(doActionViewOutlines()));
+#ifdef MF_WIP
     QObject::connect(view.getToolBar()->actionViewNavigator, SIGNAL(triggered()), this, SLOT(doActionViewKnowledgeGraphNavigator()));
+#endif
     QObject::connect(view.getToolBar()->actionViewTags, SIGNAL(triggered()), this, SLOT(doActionViewTagCloud()));
     QObject::connect(view.getToolBar()->actionViewRecentNotes, SIGNAL(triggered()), this, SLOT(doActionViewRecentNotes()));
     QObject::connect(view.getToolBar()->actionFindFts, SIGNAL(triggered()), this, SLOT(doActionFts()));
