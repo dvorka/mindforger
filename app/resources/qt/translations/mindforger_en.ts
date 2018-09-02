@@ -359,7 +359,7 @@
     <message>
         <location filename="../../../src/qt/widgets/edit_name_and_buttons_panel.cpp" line="33"/>
         <source>Remember</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Save</translation>
     </message>
     <message>
         <location filename="../../../src/qt/widgets/edit_name_and_buttons_panel.cpp" line="35"/>
