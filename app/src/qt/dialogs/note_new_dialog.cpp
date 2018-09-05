@@ -34,6 +34,10 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     nameLabel = new QLabel(tr("Name")+":", this),
     nameEdit = new QLineEdit(tr("Note"), this);
 
+    // moving edit tags to this position changes TAB ORDER ~ it's selected as 2nd field
+    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup->refreshOntologyTags();
+
     positionLabel = new QLabel(tr("Position")+":", this);
     positionCombo = new QComboBox(this);
 
@@ -47,9 +51,6 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     progressSpin = new QSpinBox{this};
     progressSpin->setMinimum(0);
     progressSpin->setMaximum(100);
-
-    editTagsGroup = new EditTagsPanel{ontology, this};
-    editTagsGroup->refreshOntologyTags();
 
     // assembly
     QVBoxLayout* basicLayout = new QVBoxLayout{this};
@@ -205,6 +206,9 @@ int NoteNewDialog::getProgress() const
 
 void NoteNewDialog::show(const QString& path, vector<Stencil*>& stencils)
 {
+    // try to remember previous stencil
+    QString selectedStencil = generalTab->getStencilCombo()->currentText();
+
     generalTab->clean();
 
     // IMPROVE re-load only if stencils are dirty
@@ -217,7 +221,7 @@ void NoteNewDialog::show(const QString& path, vector<Stencil*>& stencils)
                 combo->addItem(QString::fromStdString(t->getName()), QVariant::fromValue<Stencil*>(t));
             }
         }
-        combo->setCurrentText("");
+        combo->setCurrentText(selectedStencil);
     } else {
         generalTab->getStencilCombo()->clear();
         generalTab->getStencilCombo()->setEnabled(false);
