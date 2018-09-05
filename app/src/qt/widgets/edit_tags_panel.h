@@ -77,6 +77,10 @@ public:
     void refresh(const std::vector<const Tag*>* noteTags);
     const std::vector<const Tag*>& getTags();
     void setTags(const std::vector<const Tag*>& tags);
+    void setFocusAddingTag() {
+        lineEdit->setFocus();
+        lineEdit->selectAll();
+    }
 
 signals:
     void signalTagSelectionChanged();

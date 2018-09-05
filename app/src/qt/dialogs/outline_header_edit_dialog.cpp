@@ -261,6 +261,8 @@ void OutlineHeaderEditDialog::show()
         advancedTab->fileLine->setText(QString::fromStdString(currentOutline->getKey()));
     }
 
+    generalTab->editTagsGroup->setFocusAddingTag();
+
     QDialog::show();
 }
 

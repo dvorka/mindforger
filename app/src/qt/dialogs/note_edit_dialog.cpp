@@ -239,6 +239,8 @@ void NoteEditDialog::show()
         advancedTab->fileLine->setText(QString::fromStdString(currentNote->getOutlineKey()));
     }
 
+    generalTab->editTagsGroup->setFocusAddingTag();
+
     QDialog::show();
 }
 
@@ -251,7 +253,7 @@ void NoteEditDialog::toNote()
         currentNote->setTags(&generalTab->editTagsGroup->getTags());
         currentNote->setProgress(generalTab->progressSpin->value());
         if(generalTab->deadlineCheck->isChecked()) {
-            tm date {0,0,0,0,0,0,0,0,0,0,0}; // missing initializer required by older GCC versions 4.8.5 and older
+            tm date {0,0,0,0,0,0,0,0,0,0,0}; // missing initializer required by older GCC versions (4.8.5 and older)
             qdateToTm(generalTab->deadlineEdit->dateTime().date(), date);
             currentNote->setDeadline(datetimeSeconds(&date));
         } else {

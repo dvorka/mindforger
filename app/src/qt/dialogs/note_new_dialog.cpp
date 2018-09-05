@@ -34,6 +34,12 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     nameLabel = new QLabel(tr("Name")+":", this),
     nameEdit = new QLineEdit(tr("Note"), this);
 
+    positionLabel = new QLabel(tr("Position")+":", this);
+    positionCombo = new QComboBox(this);
+
+    stencilLabel = new QLabel(tr("Stencil")+":", this);
+    stencilCombo = new QComboBox(this);
+
     typeLabel = new QLabel(tr("Type")+":", this);
     typeCombo = new QComboBox(this);
 
@@ -42,12 +48,6 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     progressSpin->setMinimum(0);
     progressSpin->setMaximum(100);
 
-    stencilLabel = new QLabel(tr("Stencil")+":", this);
-    stencilCombo = new QComboBox(this);
-
-    positionLabel = new QLabel(tr("Position")+":", this);
-    positionCombo = new QComboBox(this);
-
     editTagsGroup = new EditTagsPanel{ontology, this};
     editTagsGroup->refreshOntologyTags();
 
@@ -55,14 +55,14 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     QVBoxLayout* basicLayout = new QVBoxLayout{this};
     basicLayout->addWidget(nameLabel);
     basicLayout->addWidget(nameEdit);
+    basicLayout->addWidget(positionLabel);
+    basicLayout->addWidget(positionCombo);
+    basicLayout->addWidget(stencilLabel);
+    basicLayout->addWidget(stencilCombo);
     basicLayout->addWidget(typeLabel);
     basicLayout->addWidget(typeCombo);
     basicLayout->addWidget(progressLabel);
     basicLayout->addWidget(progressSpin);
-    basicLayout->addWidget(stencilLabel);
-    basicLayout->addWidget(stencilCombo);
-    basicLayout->addWidget(positionLabel);
-    basicLayout->addWidget(positionCombo);
     basicGroup->setLayout(basicLayout);
 
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
