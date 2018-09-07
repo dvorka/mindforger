@@ -14,7 +14,6 @@ with MindForger development will be **highly appreciated**!
 Don't hesitate to contact [me](mailto:martin.dvorak@mindforger.com).
 
 
-
 # Code of Conduct
 This project and everyone participating in it is governed by the 
 [MindForger Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold this
