@@ -151,6 +151,9 @@ MainWindowPresenter::~MainWindowPresenter()
 
 void MainWindowPresenter::showInitialView()
 {
+    MF_DEBUG("Initial view to show " << mind->getOutlines().size() << " Os" << endl);
+    MF_DEBUG("Initial view to show " << mind->remind().getOutlinesCount() << " Os" << endl);
+
     // UI
     if(mind->getOutlines().size()) {
         if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {

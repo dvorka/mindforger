@@ -82,7 +82,7 @@ void FilesystemPersistence::save(Outline* outline)
 void FilesystemPersistence::saveAsHtml(Outline* outline, const string& fileName)
 {
     string* text = new string{};
-    htmlRepresentation.to(outline, text);
+    htmlRepresentation.to(outline, text, true);
     std::ofstream out(fileName);
     out << *text;
     out.close();

@@ -347,6 +347,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->setEnabled(false);
 
     // menu: Outline
+    menuOutline = qMenuBar->addMenu(tr("N&otebook"));
 
     actionOutlineNew = new QAction(tr("&New"), mainWindow);
     actionOutlineNew->setStatusTip(tr("Create new Notebook to form new ideas, principles, combinations or applications"));
@@ -372,7 +373,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineForget = new QAction(tr("&Forget"), mainWindow);
     actionOutlineForget->setStatusTip(tr("Forget Notebook and move it to Limbo"));
 
-    submenuOutlineExport = menuMind->addMenu("E&xport");
+    submenuOutlineExport = menuOutline->addMenu("E&xport");
     actionOutlineHtmlExport = new QAction(tr("Export to &HTML"), mainWindow);
     actionOutlineHtmlExport->setStatusTip(tr("Export Notebook to a file in HTML format"));
     submenuOutlineExport->addAction(actionOutlineHtmlExport);
@@ -381,7 +382,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineImport->setStatusTip(tr("Import Notebook from an external file in a supported format"));
     actionOutlineImport->setEnabled(false);
 
-    menuOutline = qMenuBar->addMenu(tr("N&otebook"));
     menuOutline->addAction(actionOutlineNew);
     menuOutline->addAction(actionOutlineEdit);
     menuOutline->addAction(actionOutlineForget);

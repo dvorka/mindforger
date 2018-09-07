@@ -27,6 +27,11 @@
 
 namespace m8r {
 
+constexpr const auto JS_LIB_MERMAILD_URL = "https://cdnjs.cloudflare.com/ajax/libs/mermaid/7.1.2/mermaid.min.js";
+
+// CSS cannot be downloaded from raw.githubusercontent.com (probably wrong content type) where it would be auto updated > www.mindforger.com hosting
+constexpr const auto EXPORT_DEFAULT_CSS_URL = "http://www.mindforger.com/support/export/css/light.css";
+
 /**
  * @brief The HTML colors representation.
  *
@@ -88,10 +93,19 @@ public:
     HtmlOutlineRepresentation &operator=(const HtmlOutlineRepresentation&&) = delete;
     virtual ~HtmlOutlineRepresentation();
 
-    std::string* to(const std::string* markdown, std::string* html, std::string* basePath=nullptr);
+    std::string* to(
+        const std::string* markdown,
+        std::string* html,
+        std::string* basePath=nullptr,
+        bool standalone=false);
 
-    std::string* to(const Outline* outline, std::string* html);
-    std::string* toHeader(Outline* outline, std::string* html);
+    /**
+     * @brief Export Outline to HTML.
+     *
+     * Outline is rendered to be shown in MF, standalone option indicates HTML export.
+     */
+    std::string* to(const Outline* outline, std::string* html, bool standalone=false);
+    std::string* toHeader(Outline* outline, std::string* html, bool standalone=false);
     std::string* to(const Note* note, std::string* html);
 
     /**
@@ -104,7 +118,7 @@ public:
     void outlineMetadataToHtml(const Outline* outline, std::string& html);
 
 private:
-    void header(std::string& html, std::string* basePath);
+    void header(std::string& html, std::string* basePath, bool standalone);
     void footer(std::string& html);
 };
 

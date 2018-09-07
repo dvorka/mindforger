@@ -2,6 +2,15 @@
 
 MindForger known issues.
 
+# 1.47.0
+
+* Notebook HTML export doesn't export local images: links to filesystem are kept intact,
+  images are not copied.
+* MermaidJs does NOT work if HighlightJs is active. Workaround: MermaidJs/HighlightJs
+  can be enabled/disabled from the configuration.
+* WebEngine on 10.13 might be broken - root cause is not clear.
+* Frontend memleaks.
+
 # 1.46.0
 
 * MermaidJs does NOT work if HighlightJs is active. Workaround: MermaidJs/HighlightJs

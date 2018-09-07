@@ -121,7 +121,7 @@ void HtmlOutlineRepresentation::outlineMetadataToHtml(const Outline* outline, st
     }
 }
 
-void HtmlOutlineRepresentation::header(string& html, string* basePath)
+void HtmlOutlineRepresentation::header(string& html, string* basePath, bool standalone)
 {
     if(!config.isUiHtmlTheme()) {
         // RAW THEME
@@ -162,10 +162,16 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
         // - CDN: https://cdnjs.com/libraries/mermaid
         // - download from: https://unpkg.com/mermaid@7.1.0/dist/
         // - live demo: https://mermaidjs.github.io/mermaid-live-editor
-        if(lastMfOptions&Configuration::MdToHtmlOption::DiagramSupport) {
+        if(standalone) {
+            html += "<script type=\"text/javascript\" src=\"";
+            html += JS_LIB_MERMAILD_URL;
+            html += "\"></script>";
+        } else if(lastMfOptions&Configuration::MdToHtmlOption::DiagramSupport) {
             switch(config.getUiEnableDiagramsInMd()) {
             case Configuration::JavaScriptLibSupport::ONLINE:
-                html += "<script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/mermaid/7.1.2/mermaid.min.js\"></script>";
+                html += "<script type=\"text/javascript\" src=\"";
+                html += JS_LIB_MERMAILD_URL;
+                html += "\"></script>";
 #ifdef DO_MF_DEBUG
                 html += "\n";
 #endif
@@ -185,7 +191,7 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
         // - doc: http://docs.mathjax.org/en/latest/start.html
         // - CDN: https://cdnjs.com/libraries/mathjax
         // - check newMathJax variable in the script above e.g. https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-        if(config.isUiEnableMathInMd()) {
+        if(standalone || config.isUiEnableMathInMd()) {
             html += "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>";
 #ifdef DO_MF_DEBUG
             html += "\n";
@@ -197,7 +203,11 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
         }
 
         // SYNTAX HIGHLIGHTING: offline Highlight.js (CME)
-        if(config.isUiEnableSrcHighlightInMd()) {
+        if(standalone) {
+            html += "<link rel=\"stylesheet\" href=\"http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/default.min.css\">";
+            html += "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js\"></script>";
+            html += "<script>hljs.initHighlightingOnLoad();</script>";
+        } else if(config.isUiEnableSrcHighlightInMd()) {
             html += "<link rel=\"stylesheet\" href=\"qrc:/html-css/highlight.css\"/>";
 #ifdef DO_MF_DEBUG
             html += "\n";
@@ -214,7 +224,11 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath)
 
         // UI THEME CSS:
         html += "<link rel=\"stylesheet\" href=\"";
-        html += config.getUiHtmlCssPath();
+        if(standalone) {
+            html += EXPORT_DEFAULT_CSS_URL;
+        } else {
+            html += config.getUiHtmlCssPath();
+        }
         html += "\"/>";
 #ifdef DO_MF_DEBUG
         html += "\n";
@@ -236,16 +250,16 @@ void HtmlOutlineRepresentation::footer(string& html)
         "</html>";
 }
 
-string* HtmlOutlineRepresentation::to(const string* markdown, string* html, string* basePath)
+string* HtmlOutlineRepresentation::to(const string* markdown, string* html, string* basePath, bool standalone)
 {
     if(!config.isUiHtmlTheme()) {
-        header(*html, basePath);
+        header(*html, basePath, standalone);
         html->append(*markdown);
         footer(*html);
     } else {
         // create HTML body using Discount first
         html->clear();
-        header(*html, basePath);
+        header(*html, basePath, standalone);
 
         if(markdown->size() > 0) {
             // ensure MD ends with new line, otherwise there would be missing characters in output HTML
@@ -310,19 +324,19 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
     return html;
 }
 
-string* HtmlOutlineRepresentation::to(const Outline* outline, string* html)
+string* HtmlOutlineRepresentation::to(const Outline* outline, string* html, bool standalone)
 {
     // IMPROVE markdown can be processed by Mind to be enriched with various links and relationships
     string* markdown = markdownRepresentation.to(outline);    
-    to(markdown, html);
+    to(markdown, html, nullptr, standalone);
     delete markdown;
     return html;
 }
 
-string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html)
+string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html, bool standalone)
 {
     if(!config.isUiHtmlTheme()) {
-        header(*html, nullptr);
+        header(*html, nullptr, standalone);
         string markdown{"# "};
         markdown += outline->getName();
         markdown += "\n";

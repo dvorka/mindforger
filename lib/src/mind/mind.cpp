@@ -68,7 +68,7 @@ bool Mind::learn()
         MF_DEBUG("Learning..." << endl);
         mindAmnesia();
         memory.learn();
-        MF_DEBUG("Mind LEARNED" << endl);
+        MF_DEBUG("Mind LEARNED " << memory.getOutlinesCount() << " Os" << endl);
         return true;
     } else {
         MF_DEBUG("Learn: CANNOT learn because Mind is DREAMING and/or there are " << activeProcesses << " active Mind processes" << endl);
