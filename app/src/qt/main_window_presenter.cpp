@@ -151,8 +151,7 @@ MainWindowPresenter::~MainWindowPresenter()
 
 void MainWindowPresenter::showInitialView()
 {
-    MF_DEBUG("Initial view to show " << mind->getOutlines().size() << " Os" << endl);
-    MF_DEBUG("Initial view to show " << mind->remind().getOutlinesCount() << " Os" << endl);
+    MF_DEBUG("Initial view to show " << mind->getOutlines().size() << " Os (scope is applied if active)" << endl);
 
     // UI
     if(mind->getOutlines().size()) {

@@ -374,8 +374,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineForget->setStatusTip(tr("Forget Notebook and move it to Limbo"));
 
     submenuOutlineExport = menuOutline->addMenu("E&xport");
-    actionOutlineHtmlExport = new QAction(tr("Export to &HTML"), mainWindow);
+    actionOutlineHtmlExport = new QAction(tr("&HTML"), mainWindow);
     actionOutlineHtmlExport->setStatusTip(tr("Export Notebook to a file in HTML format"));
+    // TODO Markdown
+    // TODO Markdown with meta (status: Markdown with MindForger metadata
     submenuOutlineExport->addAction(actionOutlineHtmlExport);
 
     actionOutlineImport = new QAction(tr("&Import"), mainWindow);
