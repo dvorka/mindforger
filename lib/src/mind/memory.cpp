@@ -25,11 +25,12 @@ using namespace std;
 namespace m8r {
 
 Memory::Memory(Configuration& configuration)
-    : config(configuration),
-      ontology(),
-      representation(ontology)
+    : config{configuration},
+      ontology{},
+      mdRepresentation{ontology},
+      htmlRepresentation{ontology}
 {
-    persistence = new FilesystemPersistence{representation};
+    persistence = new FilesystemPersistence{mdRepresentation,htmlRepresentation};
     cache = true;
     mindScope = nullptr;
 }
@@ -60,7 +61,7 @@ void Memory::learn()
     if(config.getActiveRepository()->getMode() == Repository::RepositoryMode::REPOSITORY) {
         MF_DEBUG(endl << "Markdown files:");
         for(const string* markdownFile:repositoryIndexer.getMarkdownFiles()) {
-            Outline* outline = representation.outline(File(*markdownFile));
+            Outline* outline = mdRepresentation.outline(File(*markdownFile));
             MF_DEBUG(endl << "  '" << *markdownFile << "' format " << (outline->getFormat()==MarkdownDocument::Format::MINDFORGER?"MF":"MD"));
 
             // fix O type according to repository type
@@ -104,7 +105,7 @@ void Memory::learn()
         MF_DEBUG(endl << "Single markdown file: " << repositoryIndexer.getMarkdownFiles().size());
         if(repositoryIndexer.getMarkdownFiles().size() == 1) {
             const string* markdownFile = *repositoryIndexer.getMarkdownFiles().begin();
-            Outline* outline = representation.outline(File(*markdownFile));
+            Outline* outline = mdRepresentation.outline(File(*markdownFile));
             MF_DEBUG(endl << "  '" << *markdownFile << "' format " << (outline->getFormat()==MarkdownDocument::Format::MINDFORGER?"MF":"MD"));
 
             // MD file format determines repository type
@@ -167,7 +168,7 @@ void Memory::amnesia()
 Outline* Memory::createOutline(Stencil* stencil)
 {
     if(stencil && ResourceType::OUTLINE==stencil->getType()) {
-        return representation.outline(File(stencil->getFilePath()));
+        return mdRepresentation.outline(File(stencil->getFilePath()));
     } else {
         return nullptr;
     }
@@ -176,7 +177,7 @@ Outline* Memory::createOutline(Stencil* stencil)
 Note* Memory::createNote(Stencil* stencil)
 {
     if(stencil && ResourceType::NOTE==stencil->getType()) {
-        return representation.note(File(stencil->getFilePath()));
+        return mdRepresentation.note(File(stencil->getFilePath()));
     } else {
         return nullptr;
     }
@@ -209,6 +210,11 @@ void Memory::remember(Outline* outline)
         outlines.push_back(outline);
         outlinesMap.insert(map<string,Outline*>::value_type(outline->getKey(), outline));
     }
+}
+
+void Memory::exportToHtml(Outline* outline, std::string fileName)
+{
+    persistence->saveAsHtml(outline, fileName);
 }
 
 void Memory::forget(Outline* outline)

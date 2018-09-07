@@ -24,8 +24,8 @@ using namespace std;
 
 namespace m8r {
 
-FilesystemPersistence::FilesystemPersistence(MarkdownOutlineRepresentation& representation)
-    : mdRepresentation(representation)
+FilesystemPersistence::FilesystemPersistence(MarkdownOutlineRepresentation& mdRepresentation, HtmlOutlineRepresentation& htmlRepresentation)
+    : mdRepresentation(mdRepresentation), htmlRepresentation(htmlRepresentation)
 {
 }
 
@@ -36,8 +36,8 @@ FilesystemPersistence::~FilesystemPersistence()
 void FilesystemPersistence::load(Stencil* stencil)
 {
     if(stencil) {
-        std::ifstream t{stencil->getFilePath()};
-        std::string* str = new string{};
+        ifstream t{stencil->getFilePath()};
+        string* str = new string{};
         t.seekg(0, std::ios::end);
         str->reserve(t.tellg());
         t.seekg(0, std::ios::beg);
@@ -77,6 +77,16 @@ void FilesystemPersistence::save(Outline* outline)
 
         outline->clearDirty();
     }
+}
+
+void FilesystemPersistence::saveAsHtml(Outline* outline, const string& fileName)
+{
+    string* text = new string{};
+    htmlRepresentation.to(outline, text);
+    std::ofstream out(fileName);
+    out << *text;
+    out.close();
+    delete text;
 }
 
 } // m8r namespace

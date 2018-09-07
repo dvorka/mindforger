@@ -28,10 +28,21 @@ using namespace std;
 
 namespace m8r {
 
-HtmlOutlineRepresentation::HtmlOutlineRepresentation(Ontology& ontology, HtmlColorsRepresentation& lf)
-    : config(Configuration::getInstance()), lf(lf), markdownRepresentation(ontology)
+HtmlOutlineRepresentation::HtmlOutlineRepresentation(Ontology& ontology)
+    : config(Configuration::getInstance()),
+      exportColors{},
+      lf{exportColors},
+      markdownRepresentation(ontology)
 {
     lastMfOptions = discountOptions = 0;
+}
+
+
+HtmlOutlineRepresentation::HtmlOutlineRepresentation(Ontology& ontology, HtmlColorsRepresentation& lf)
+    : HtmlOutlineRepresentation{ontology}
+{
+    lastMfOptions = discountOptions = 0;
+    this->lf = lf;
 }
 
 HtmlOutlineRepresentation::~HtmlOutlineRepresentation()

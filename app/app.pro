@@ -165,7 +165,8 @@ HEADERS += \
     src/qt/recent_notes_table_presenter.h \
     src/qt/recent_notes_table_view.h \
     src/qt/navigator_presenter.h \
-    src/qt/main_toolbar_view.h
+    src/qt/main_toolbar_view.h \
+    src/qt/dialogs/export_file_dialog.h
 
 macx|mfwebengine {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
@@ -262,7 +263,8 @@ SOURCES += \
     src/qt/recent_notes_table_presenter.cpp \
     src/qt/recent_notes_table_view.cpp \
     src/qt/navigator_presenter.cpp \
-    src/qt/main_toolbar_view.cpp
+    src/qt/main_toolbar_view.cpp \
+    src/qt/dialogs/export_file_dialog.cpp
 
 macx|mfwebengine {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp

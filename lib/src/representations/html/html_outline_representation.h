@@ -39,6 +39,20 @@ public:
     virtual std::string& getHtmlBackgroundColor() = 0;
 };
 
+class HtmlExportColorsRepresentation : public HtmlColorsRepresentation
+{
+public:
+    explicit HtmlExportColorsRepresentation() {}
+    HtmlExportColorsRepresentation(const HtmlExportColorsRepresentation&) = delete;
+    HtmlExportColorsRepresentation(const HtmlExportColorsRepresentation&&) = delete;
+    HtmlExportColorsRepresentation &operator=(const HtmlExportColorsRepresentation&) = delete;
+    HtmlExportColorsRepresentation &operator=(const HtmlExportColorsRepresentation&&) = delete;
+    virtual ~HtmlExportColorsRepresentation() {}
+
+    virtual std::string& getHtmlTextColor() { static std::string TEXT_COLOR = std::string{"#000000"}; return TEXT_COLOR; }
+    virtual std::string& getHtmlBackgroundColor() { static std::string BACKGROUND_COLOR = std::string{"#FFFFFF"}; return BACKGROUND_COLOR; }
+};
+
 /**
  * @brief HTML Outline representation.
  *
@@ -53,6 +67,7 @@ private:
     //  - IMPROVE consider caching of re-used HTML snippets
 
     Configuration& config;
+    HtmlExportColorsRepresentation exportColors;
     HtmlColorsRepresentation& lf;
     MarkdownOutlineRepresentation markdownRepresentation;
 
@@ -66,6 +81,7 @@ private:
 
 public:
     explicit HtmlOutlineRepresentation(Ontology& ontology, HtmlColorsRepresentation& lf);
+    explicit HtmlOutlineRepresentation(Ontology& ontology);
     HtmlOutlineRepresentation(const HtmlOutlineRepresentation&) = delete;
     HtmlOutlineRepresentation(const HtmlOutlineRepresentation&&) = delete;
     HtmlOutlineRepresentation &operator=(const HtmlOutlineRepresentation&) = delete;

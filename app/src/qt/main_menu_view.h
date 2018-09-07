@@ -137,7 +137,8 @@ public:
     QAction* actionOutlineStencil;
     QAction* actionOutlineClone;
     QAction* actionOutlineForget;
-    QAction* actionOutlineExport;
+    QMenu* submenuOutlineExport;
+    QAction* actionOutlineHtmlExport;
     QAction* actionOutlineImport;
 
     // menu: Note

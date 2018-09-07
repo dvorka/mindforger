@@ -59,6 +59,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     rowsAndDepthDialog = new RowsAndDepthDialog(&view);
     newRepositoryDialog = new NewRepositoryDialog(&view);
     newFileDialog = new NewFileDialog(&view);
+    exportOutlineToHtmlDialog = new ExportFileDialog(&view);
 #ifdef MF_NER
     nerChooseTagsDialog = new NerChooseTagTypesDialog(&view);
     nerResultDialog = new NerResultDialog(&view);
@@ -81,6 +82,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(rowsAndDepthDialog->getGenerateButton(), SIGNAL(clicked()), this, SLOT(handleRowsAndDepth()));
     QObject::connect(newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
+    QObject::connect(exportOutlineToHtmlDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineHtmlExport()));
     // wire toolbar signals
     QObject::connect(view.getToolBar()->actionNewNotebook, SIGNAL(triggered()), this, SLOT(doActionOutlineNew()));
     QObject::connect(view.getToolBar()->actionOpenRepository, SIGNAL(triggered()), this, SLOT(doActionMindLearnRepository()));
@@ -1358,8 +1360,33 @@ void MainWindowPresenter::doActionOutlineForget()
     }
 }
 
-void MainWindowPresenter::doActionOutlineExport()
+void MainWindowPresenter::doActionOutlineHtmlExport()
 {
+    exportOutlineToHtmlDialog->show();
+}
+
+void MainWindowPresenter::handleOutlineHtmlExport()
+{
+    if(isDirectoryOrFileExists(newFileDialog->getFilePath().toStdString().c_str())) {
+        QMessageBox::critical(&view, tr("Export Error"), tr("Specified file path already exists!"));
+    } else {
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+             ||
+           orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+             ||
+           orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
+             ||
+           orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+        ) {
+            Outline* o = orloj->getOutlineView()->getCurrentOutline();
+            if(o) {
+                mind->remind().exportToHtml(o, exportOutlineToHtmlDialog->getFilePath().toStdString());
+                return;
+            }
+        }
+
+        QMessageBox::critical(&view, tr("Export Error"), tr("Unable to find Notebook to export!"));
+    }
 }
 
 void MainWindowPresenter::doActionOutlineImport()

@@ -29,6 +29,7 @@
 #include "../repository_indexer.h"
 #include "../representations/markdown/markdown_document.h"
 #include "../representations/markdown/markdown_outline_representation.h"
+#include "../representations/html/html_outline_representation.h"
 #include "../model/outline.h"
 #include "../model/note.h"
 #include "../model/stencil.h"
@@ -60,7 +61,8 @@ private:
     Configuration& config;    
     RepositoryIndexer repositoryIndexer;
     Ontology ontology;
-    MarkdownOutlineRepresentation representation;
+    MarkdownOutlineRepresentation mdRepresentation;
+    HtmlOutlineRepresentation htmlRepresentation;
     Persistence* persistence;
     MindScopeAspect* mindScope;
 
@@ -115,6 +117,11 @@ public:
      * @brief Remember new Outline.
      */
     void remember(Outline* outline);
+
+    /**
+     * @brief Export Outline to HTML.
+     */
+    void exportToHtml(Outline* outline, std::string fileName);
 
     /**
      * @brief Forget Outline.

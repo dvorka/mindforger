@@ -41,8 +41,11 @@ private:
 
     QPushButton* findDirectoryButton;
 
-    QPushButton* newButton;
     QPushButton* closeButton;
+
+protected:
+    QString extension;
+    QPushButton* newButton;
 
 public:
     explicit NewFileDialog(QWidget* parent);

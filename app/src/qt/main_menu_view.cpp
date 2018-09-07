@@ -372,9 +372,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineForget = new QAction(tr("&Forget"), mainWindow);
     actionOutlineForget->setStatusTip(tr("Forget Notebook and move it to Limbo"));
 
-    actionOutlineExport = new QAction(tr("E&xport"), mainWindow);
-    actionOutlineExport->setStatusTip(tr("Export Notebook to a file in supported format"));
-    actionOutlineExport->setEnabled(false);
+    submenuOutlineExport = menuMind->addMenu("E&xport");
+    actionOutlineHtmlExport = new QAction(tr("Export to &HTML"), mainWindow);
+    actionOutlineHtmlExport->setStatusTip(tr("Export Notebook to a file in HTML format"));
+    submenuOutlineExport->addAction(actionOutlineHtmlExport);
 
     actionOutlineImport = new QAction(tr("&Import"), mainWindow);
     actionOutlineImport->setStatusTip(tr("Import Notebook from an external file in a supported format"));
@@ -392,7 +393,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuOutline->addAction(actionOutlineClone);   
 #ifdef MF_WIP
     menuOutline->addSeparator();
-    menuOutline->addAction(actionOutlineExport);
+    menuOutline->addMenu(submenuOutlineExport);
     menuOutline->addAction(actionOutlineImport);
 #endif
 
@@ -542,6 +543,7 @@ void MainMenuView::showAllMenuItems()
     menuNote->setEnabled(true);
     menuFormat->setEnabled(true);
     menuHelp->setEnabled(true);
+    submenuOutlineExport->setEnabled(true);
 
     actionFindOutlineByName->setEnabled(true);
 }
@@ -557,6 +559,7 @@ void MainMenuView::showFacetOutlineList(bool repositoryMode)
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
     menuNote->setEnabled(false);
+    submenuOutlineExport->setEnabled(false);
 
     if(!repositoryMode) {
         menuView->setEnabled(false);

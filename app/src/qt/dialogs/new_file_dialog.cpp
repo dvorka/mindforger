@@ -25,6 +25,9 @@ NewFileDialog::NewFileDialog(QWidget* parent)
 {
     homeDirectory = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
 
+    setWindowTitle(tr("Create New Markdown File"));
+    extension = QString::fromStdString(FILE_EXTENSION_MD_MD);
+
     // widgets
     fileNameLabel = new QLabel{tr("Markdown name:")};
     fileNameEdit = new QLineEdit{};
@@ -37,7 +40,7 @@ NewFileDialog::NewFileDialog(QWidget* parent)
     findDirectoryButton = new QPushButton{tr("Find Directory")};
 
     // IMPROVE disable/enable find button if text/path is valid: freedom vs validation
-    newButton = new QPushButton{tr("&New")};
+    newButton = new QPushButton{tr("New")};
     newButton->setDefault(true);
     closeButton = new QPushButton{tr("&Cancel")};
 
@@ -71,7 +74,6 @@ NewFileDialog::NewFileDialog(QWidget* parent)
     setLayout(mainLayout);
 
     // dialog
-    setWindowTitle(tr("Create New Markdown File"));
     resize(fontMetrics().averageCharWidth()*60, height());
     setModal(true);
 }
@@ -110,7 +112,7 @@ void NewFileDialog::refreshPath()
         name = QString::fromStdString(normalizeToNcName(name.toStdString(),'-'));
     }
     // path = dir + name
-    QString path = directory+name+QString::fromStdString(FILE_EXTENSION_MD_MD);
+    QString path = directory+name+extension;
 
     pathEdit->setText(path);
 }

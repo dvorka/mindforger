@@ -49,6 +49,7 @@
 #include "dialogs/rows_and_depth_dialog.h"
 #include "dialogs/new_repository_dialog.h"
 #include "dialogs/new_file_dialog.h"
+#include "dialogs/export_file_dialog.h"
 #include "dialogs/ner_choose_tag_types_dialog.h"
 #include "dialogs/ner_result_dialog.h"
 
@@ -78,6 +79,11 @@ class NerMainWindowWorkerThread;
 class MainWindowPresenter : public QObject
 {
     Q_OBJECT
+
+    static QString NEW_MD_FILE_TITLE;
+    static QString NEW_MD_FILE_EXTENSION;
+    static QString EXPORT_O_TO_HTML_TITLE;
+    static QString EXPORT_O_TO_HTML_EXTENSION;
 
 private:
     MainWindowView& view;
@@ -114,6 +120,7 @@ private:
     RowsAndDepthDialog* rowsAndDepthDialog;
     NewRepositoryDialog* newRepositoryDialog;
     NewFileDialog* newFileDialog;
+    ExportFileDialog* exportOutlineToHtmlDialog;
     NerChooseTagTypesDialog *nerChooseTagsDialog;
     NerResultDialog* nerResultDialog;
 
@@ -230,7 +237,8 @@ public slots:
     void doActionOutlineClone();
     void doActionOutlineHome();
     void doActionOutlineForget();
-    void doActionOutlineExport();
+    void doActionOutlineHtmlExport();
+    void handleOutlineHtmlExport();
     void doActionOutlineImport();
     // Note
     void doActionNoteNew();

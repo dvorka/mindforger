@@ -25,6 +25,7 @@
 #include "../config/configuration.h"
 #include "../model/stencil.h"
 #include "../representations/markdown/markdown_outline_representation.h"
+#include "../representations/html/html_outline_representation.h"
 
 namespace m8r {
 
@@ -32,9 +33,10 @@ class FilesystemPersistence : public Persistence
 {
 private:
     MarkdownOutlineRepresentation& mdRepresentation;
+    HtmlOutlineRepresentation& htmlRepresentation;
 
 public:
-    FilesystemPersistence(MarkdownOutlineRepresentation& representation);
+    FilesystemPersistence(MarkdownOutlineRepresentation& mdRepresentation, HtmlOutlineRepresentation& htmlRepresentation);
     FilesystemPersistence(const FilesystemPersistence&) = delete;
     FilesystemPersistence(const FilesystemPersistence&&) = delete;
     FilesystemPersistence &operator=(const FilesystemPersistence&) = delete;
@@ -54,6 +56,7 @@ public:
      */
     virtual void load(Stencil* stencil);
     virtual void save(Outline* outline);
+    virtual void saveAsHtml(Outline* o, const std::string& fileName);
 };
 
 }
