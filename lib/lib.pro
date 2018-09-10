@@ -103,7 +103,8 @@ SOURCES += \
     src/mind/ai/nlp/common_words_blacklist.cpp \
     src/mind/aspect/tag_scope_aspect.cpp \
     src/mind/aspect/mind_scope_aspect.cpp \
-    src/mind/knowledge_graph.cpp
+    src/mind/knowledge_graph.cpp \
+    src/representations/twiki/twiki_outline_representation.cpp
 
 mfner {
     SOURCES += \
@@ -210,7 +211,8 @@ HEADERS += \
     src/mind/aspect/tag_scope_aspect.h \
     src/mind/aspect/mind_scope_aspect.h \
     src/compilation.h \
-    src/mind/knowledge_graph.h
+    src/mind/knowledge_graph.h \
+    src/representations/twiki/twiki_outline_representation.h
 
 mfner {
     HEADERS += \
