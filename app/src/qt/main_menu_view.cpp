@@ -380,9 +380,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // TODO Markdown with meta (status: Markdown with MindForger metadata
     submenuOutlineExport->addAction(actionOutlineHtmlExport);
 
-    actionOutlineImport = new QAction(tr("&Import"), mainWindow);
-    actionOutlineImport->setStatusTip(tr("Import Notebook from an external file in a supported format"));
-    actionOutlineImport->setEnabled(false);
+    submenuOutlineImport = menuOutline->addMenu(tr("&Import"));
+    actionOutlineTWikiImport= new QAction(tr("&TWiki"), mainWindow);
+    actionOutlineTWikiImport->setStatusTip(tr("Import Notebook from an external TWiki file and restart MindForger"));
+    submenuOutlineImport->addAction(actionOutlineTWikiImport);
 
     menuOutline->addAction(actionOutlineNew);
     menuOutline->addAction(actionOutlineEdit);
@@ -396,7 +397,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #ifdef MF_WIP
     menuOutline->addSeparator();
     menuOutline->addMenu(submenuOutlineExport);
-    menuOutline->addAction(actionOutlineImport);
+    menuOutline->addMenu(submenuOutlineImport);
 #endif
 
     // menu: Note

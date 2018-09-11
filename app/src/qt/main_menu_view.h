@@ -139,7 +139,8 @@ public:
     QAction* actionOutlineForget;
     QMenu* submenuOutlineExport;
     QAction* actionOutlineHtmlExport;
-    QAction* actionOutlineImport;
+    QMenu* submenuOutlineImport;
+    QAction* actionOutlineTWikiImport;
 
     // menu: Note
     QAction* actionNoteNew;

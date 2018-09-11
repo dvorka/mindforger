@@ -239,7 +239,7 @@ public slots:
     void doActionOutlineForget();
     void doActionOutlineHtmlExport();
     void handleOutlineHtmlExport();
-    void doActionOutlineImport();
+    void doActionOutlineTWikiImport();
     // Note
     void doActionNoteNew();
     void handleNoteNew();

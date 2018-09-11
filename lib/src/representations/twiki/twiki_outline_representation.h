@@ -19,21 +19,28 @@
 #ifndef M8R_TWIKI_OUTLINE_REPRESENTATION_H
 #define M8R_TWIKI_OUTLINE_REPRESENTATION_H
 
-#include "../outline_representation.h"
+#include "../markdown/markdown_outline_representation.h"
+#include "../../persistence/persistence.h"
+#include "../../gear/string_utils.h"
 
 namespace m8r {
 
-class TWikiOutlineRepresentation : OutlineRepresentation
+class TWikiOutlineRepresentation
 {
+    MarkdownOutlineRepresentation& markdownRepresentation;
+    Persistence* persistence;
+
+    std::vector<std::string*> lines;
+
 public:
-    explicit TWikiOutlineRepresentation();
+    explicit TWikiOutlineRepresentation(MarkdownOutlineRepresentation& markdownRepresentation, Persistence* persistence);
     TWikiOutlineRepresentation(const TWikiOutlineRepresentation&) = delete;
     TWikiOutlineRepresentation(const TWikiOutlineRepresentation&&) = delete;
     TWikiOutlineRepresentation &operator=(const TWikiOutlineRepresentation&) = delete;
     TWikiOutlineRepresentation &operator=(const TWikiOutlineRepresentation&&) = delete;
     virtual ~TWikiOutlineRepresentation();
 
-    virtual Outline* outline(const m8r::File& file);
+    bool outline(const m8r::File& file, const m8r::File& outlineFile);
 };
 
 }

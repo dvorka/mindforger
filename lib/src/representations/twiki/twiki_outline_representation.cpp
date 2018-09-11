@@ -20,8 +20,14 @@
 
 namespace m8r {
 
-TWikiOutlineRepresentation::TWikiOutlineRepresentation()
-    : OutlineRepresentation{}
+using namespace std;
+
+TWikiOutlineRepresentation::TWikiOutlineRepresentation(
+        MarkdownOutlineRepresentation& markdownRepresentation,
+        Persistence* persistence
+)
+    : markdownRepresentation(markdownRepresentation),
+      persistence(persistence)
 {
 }
 
@@ -29,19 +35,62 @@ TWikiOutlineRepresentation::~TWikiOutlineRepresentation()
 {
 }
 
-virtual Outline* TWikiOutlineRepresentation::outline(const m8r::File& file)
+bool TWikiOutlineRepresentation::outline(const m8r::File& sourceFile, const m8r::File& outlineFile)
 {
     // straightforward conversion: only sections are converted, the rest is kept intact
-    fileSize = 0;
-    if(fileToLines(filePath, lines, fileSize)) {
-        unsigned offset = 0;
+    MF_DEBUG("TWiki export of " << sourceFile.getName() << " to " << outlineFile.getName() << " ... " << endl);
+    unsigned long int fileSize = 0;
+    lines.clear();
+    if(fileToLines(&sourceFile.getName(), lines, fileSize)) {
+        if(lines.size()) {
+            std::ofstream out(outlineFile.getName());
+            string section{};
+            unsigned offset;
+            for(string* l:lines) {
+                if(l) {
+                    if(l->size()) {
+                        if(stringStartsWith(*l,"---+")) {
+                            // TWiki section > MD section
+                            section.clear();
+                            offset = 3;
+                            while(l->at(offset)=='+') {
+                                section.append("#");
+                                if(l->size() < ++offset) {
+                                    break;
+                                }
+                            }
+                            if(l->size() > offset) {
+                                section.append(l->substr(offset));
+                            }
+                            out << section << endl;
+                        } else {
+                            out << *l << endl;
+                        }
+                    }
+                    delete l;
+                }
+            }
+            out.close();
+            lines.clear();
+        } else {
+            return false;
+        }
+    } else {
+        return false;
     }
 
-    // TODO save converted file and load it using Markdown representation
+    MF_DEBUG("MD for TWiki written to file - loading MD to create new O..." << endl);
+    Outline* o = markdownRepresentation.outline(outlineFile);
 
-    // TODO add twiki and import tags
+    // save outline to target destination
+    persistence->save(o);
 
-    // TODO save outline to target destination
+    // IMPORTANT: TWiki file is concerted, but NOT loaded to mind - repository must be RELOADED
+    //            to ensure correct indexation of the new O + no need to solve MF modes (repo, single file, ...)
+
+    delete o;
+
+    return true;
 }
 
 } // m8r namespace

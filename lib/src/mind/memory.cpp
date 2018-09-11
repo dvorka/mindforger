@@ -27,10 +27,11 @@ namespace m8r {
 Memory::Memory(Configuration& configuration)
     : config{configuration},
       ontology{},
+      persistence(new FilesystemPersistence{mdRepresentation,htmlRepresentation}),
       mdRepresentation{ontology},
-      htmlRepresentation{ontology}
+      htmlRepresentation{ontology},
+      twikiRepresentation{mdRepresentation, persistence}
 {
-    persistence = new FilesystemPersistence{mdRepresentation,htmlRepresentation};
     cache = true;
     mindScope = nullptr;
 }
@@ -172,6 +173,11 @@ Outline* Memory::createOutline(Stencil* stencil)
     } else {
         return nullptr;
     }
+}
+
+bool Memory::learnOutlineTWiki(const string& twikiFileName, const string& outlineFileName)
+{
+    return twikiRepresentation.outline(File{twikiFileName}, File{outlineFileName});
 }
 
 Note* Memory::createNote(Stencil* stencil)

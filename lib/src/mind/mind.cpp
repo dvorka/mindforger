@@ -40,7 +40,6 @@ Mind::Mind(Configuration &configuration)
     tagsScopeAspect.setTags(config.getTagsScope());
     memory.setMindScope(&scopeAspect);
 
-
     this->mdConfigRepresentation
         = new MarkdownConfigurationRepresentation{};
 }
@@ -694,6 +693,36 @@ string Mind::outlineNew(
 
     return outline?outline->getKey():nullptr;
 }
+
+Outline* Mind::learnOutlineTWiki(const string& twikiFile)
+{
+    string directory{}, file{};
+    pathToDirectoryAndFile(twikiFile, directory, file);
+    if(!file.size()) {
+        file.assign("twiki-outline");
+    }
+    string outlineKey = memory.createOutlineKey(&file);
+    if(memory.learnOutlineTWiki(twikiFile, outlineKey)) {
+        // IMPROVE: this is heavy operation - load just O
+        learn();
+        Outline* o = memory.getOutline(outlineKey);
+        if(o) {
+            // add twiki and import tags
+            o->addTag(memory.getOntology().findOrCreateTag("twiki"));
+            o->addTag(memory.getOntology().findOrCreateTag("import"));
+
+            memory.remember(o);
+            onRemembering();
+            return o;
+        } else {
+            MF_DEBUG("Unable to load imported O: " << outlineKey << endl);
+            return nullptr;
+        }
+    } else {
+        return nullptr;
+    }
+}
+
 
 Outline* Mind::outlineClone(const std::string& outlineKey)
 {

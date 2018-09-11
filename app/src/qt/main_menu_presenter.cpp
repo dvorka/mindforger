@@ -102,7 +102,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionOutlineHome, SIGNAL(triggered()), mwp, SLOT(doActionOutlineHome()));
     QObject::connect(view->actionOutlineClone, SIGNAL(triggered()), mwp, SLOT(doActionOutlineClone()));
     QObject::connect(view->actionOutlineHtmlExport, SIGNAL(triggered()), mwp, SLOT(doActionOutlineHtmlExport()));
-    QObject::connect(view->actionOutlineImport, SIGNAL(triggered()), mwp, SLOT(doActionOutlineImport()));
+    QObject::connect(view->actionOutlineTWikiImport, SIGNAL(triggered()), mwp, SLOT(doActionOutlineTWikiImport()));
 
     // menu: Note
     QObject::connect(view->actionNoteNew, SIGNAL(triggered()), mwp, SLOT(doActionNoteNew()));

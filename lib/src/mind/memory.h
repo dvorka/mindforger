@@ -30,6 +30,7 @@
 #include "../representations/markdown/markdown_document.h"
 #include "../representations/markdown/markdown_outline_representation.h"
 #include "../representations/html/html_outline_representation.h"
+#include "../representations/twiki/twiki_outline_representation.h"
 #include "../model/outline.h"
 #include "../model/note.h"
 #include "../model/stencil.h"
@@ -61,9 +62,10 @@ private:
     Configuration& config;    
     RepositoryIndexer repositoryIndexer;
     Ontology ontology;
+    Persistence* persistence;
     MarkdownOutlineRepresentation mdRepresentation;
     HtmlOutlineRepresentation htmlRepresentation;
-    Persistence* persistence;
+    TWikiOutlineRepresentation twikiRepresentation;
     MindScopeAspect* mindScope;
 
     std::vector<Outline*> outlines;
@@ -103,6 +105,12 @@ public:
      * @brief Create Outline from stencil, but don't learn it yet.
      */
     Outline* createOutline(Stencil* stencil);
+
+    /**
+     * @brief Convert TWiki file to MD file (O not instantiated).
+     */
+    bool learnOutlineTWiki(const std::string& twikiFileName, const std::string& outlineFileName);
+
     /**
      * @brief Create Note from stencil, but don't learn it yet.
      */

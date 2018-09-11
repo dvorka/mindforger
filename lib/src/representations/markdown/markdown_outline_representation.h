@@ -81,6 +81,8 @@ public:
 
     static std::string to(const std::vector<const Tag*>* tags);
 
+    Ontology& getOntology() { return ontology; }
+
 private:
     Outline* outline(std::vector<MarkdownAstNodeSection*>* ast);
     Note* note(std::vector<MarkdownAstNodeSection*>* ast, const size_t astindex=0, Outline* outline=nullptr);

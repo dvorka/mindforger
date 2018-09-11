@@ -1391,8 +1391,34 @@ void MainWindowPresenter::handleOutlineHtmlExport()
     }
 }
 
-void MainWindowPresenter::doActionOutlineImport()
+void MainWindowPresenter::doActionOutlineTWikiImport()
 {
+    QString homeDirectory
+        = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+
+    QFileDialog importDialog{&view};
+    importDialog.setWindowTitle(tr("Import TWiki File"));
+    importDialog.setFileMode(QFileDialog::ExistingFile);
+    importDialog.setDirectory(homeDirectory);
+    importDialog.setViewMode(QFileDialog::Detail);
+
+    QStringList directoryNames{};
+    if(importDialog.exec()) {
+        directoryNames = importDialog.selectedFiles();
+        if(directoryNames.size()==1) {
+            mind->learnOutlineTWiki(directoryNames[0].toStdString());
+
+            // refresh O view
+            if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+                orloj->showFacetOutlineList(mind->getOutlines());
+            } else {
+                if(mind->getOutlines().size()>0) {
+                    orloj->showFacetOutline(*mind->getOutlines().begin());
+                }
+            }
+            statusBar->showMindStatistics();
+        } // else too many files
+    } // else directory closed / nothing choosen
 }
 
 void MainWindowPresenter::doActionNoteNew()

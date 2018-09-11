@@ -466,6 +466,14 @@ public:
             const std::vector<std::string*>* preamble = nullptr,
             Stencil* outlineStencil = nullptr);
 
+    /**
+     * @brief Import O from a TWiki file.
+     */
+    Outline* learnOutlineTWiki(const std::string& twikiFile);
+
+    /**
+     * @brief Clone O.
+     */
     Outline* outlineClone(const std::string& outlineKey);
 
     /**
