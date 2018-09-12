@@ -715,7 +715,8 @@ TEST(MarkdownParserTestCase, FileSystemPersistence)
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
     m8r::Ontology ontology{};
     m8r::MarkdownOutlineRepresentation mdr{ontology};
-    m8r::FilesystemPersistence persistence{mdr};
+    m8r::HtmlOutlineRepresentation htmlr{ontology};
+    m8r::FilesystemPersistence persistence{mdr, htmlr};
 
     unique_ptr<string> text = unique_ptr<string>(new string{"abc"});
     cout << persistence.createFileName(string("/tmp"), text.get(), string(FILE_EXTENSION_MD_MD));
