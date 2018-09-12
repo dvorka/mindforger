@@ -105,13 +105,11 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     // check whether running in GUI (and not in text console tty)
-    char *term = getenv(m8r::ENV_VAR_TERM);
-    if(term) {
-        if(!strcmp("linux", term)) {
-            cerr << endl << QCoreApplication::translate("main", "MindForger CANNOT be run from text console - run it from a terminal in GUI.").toUtf8().constData()
-                 << endl;
-            exit(1);
-        }
+    char *term = getenv(m8r::ENV_VAR_DISPLAY);
+    if(!term || !strlen(term)) {
+        cerr << endl << QCoreApplication::translate("main", "MindForger CANNOT be run from text console - run it from a terminal in GUI.").toUtf8().constData()
+             << endl;
+        exit(1);
     }
 
     // stupid & ugly reused code as macOS requires to pass --disable-web-security parameter to QApplication
