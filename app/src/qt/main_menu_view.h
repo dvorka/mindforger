@@ -129,6 +129,7 @@ public:
     QAction* actionFormatImage;
     QAction* actionFormatTable;
     QAction* actionFormatHr;
+    QAction* actionFormatToc;
 
     // menu: Outline
     QAction* actionOutlineNew;

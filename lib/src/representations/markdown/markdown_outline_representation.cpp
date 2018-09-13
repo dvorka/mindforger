@@ -498,5 +498,35 @@ string* MarkdownOutlineRepresentation::toDescription(const Note* note, string* m
     return md;
 }
 
+string* MarkdownOutlineRepresentation::toc(const Outline* outline, bool tags, bool links)
+{
+    UNUSED_ARG(links);
+
+    string* md = new string{};
+    if(outline) {
+        for(Note* n:outline->getNotes()) {
+            for(int i=0; i<n->getDepth(); i++) {
+                md->append("    ");
+            }
+            if(links) md->append("* [");
+            md->append(n->getName());
+            if(links) md->append("](#");
+            md->append(n->getMangledName());
+            if(links) md->append(")");
+
+            if(tags) {
+                for(const Tag* t:*n->getTags()) {
+                    md->append(" <kbd>");
+                    md->append(t->getName());
+                    md->append("</kbd>");
+                }
+            }
+
+            md->append("\n");
+        }
+    }
+    return md;
+}
+
 
 } // m8r namespace

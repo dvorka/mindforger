@@ -1088,6 +1088,23 @@ void MainWindowPresenter::doActionFormatListTask()
     rowsAndDepthDialog->show();
 }
 
+void MainWindowPresenter::doActionFormatToc()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+            || orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER))
+    {
+        string* text = mdRepresentation->toc(orloj->getOutlineView()->getCurrentOutline());
+
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(QString::fromStdString(*text));
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(QString::fromStdString(*text));
+        }
+
+        delete text;
+    }
+}
+
 void MainWindowPresenter::doActionFormatCodeblock()
 {
     // IMPROVE ask for dialect
@@ -1098,7 +1115,6 @@ void MainWindowPresenter::doActionFormatCodeblock()
     } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
         orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text);
     }
-
 }
 
 void MainWindowPresenter::doActionFormatBlockquote()

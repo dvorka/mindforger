@@ -81,6 +81,11 @@ public:
 
     static std::string to(const std::vector<const Tag*>* tags);
 
+    /**
+     * @brief Generate table of contents
+     */
+    virtual std::string* toc(const Outline* outline, bool tags=true, bool links=true);
+
     Ontology& getOntology() { return ontology; }
 
 private:

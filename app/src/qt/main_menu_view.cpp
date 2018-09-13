@@ -308,6 +308,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatListTask = new QAction(tr("Task List"), mainWindow);
     actionFormatListTask->setStatusTip(tr("Format block as task list"));
 
+    actionFormatToc = new QAction(tr("T&able of Contents"), mainWindow);
+    actionFormatToc ->setStatusTip(tr("Insert Notebook's table of contents"));
+
     actionFormatCodeBlock = new QAction(tr("C&ode Block"), mainWindow);
     actionFormatCodeBlock->setStatusTip(tr("Format text block as source code"));
 
@@ -337,6 +340,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatListNumber);
     menuFormat->addAction(actionFormatListTask);
     menuFormat->addSeparator();
+    menuFormat->addAction(actionFormatToc);
     menuFormat->addAction(actionFormatCodeBlock);
     menuFormat->addAction(actionFormatBlockQuote);
     menuFormat->addAction(actionFormatTable);
