@@ -138,10 +138,12 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
         mind->getAllNotes(notes);
         if(notes.size()) {
             KnowledgeGraphNode* k;
+            std::vector<Note*> nc;
             for(Note* n:notes) {
                 // TODO: reuse and delete - map<Thing*,Node*>
                 k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
                 k->setThing(n);
+                k->setCardinality(n->getOutline()->getDirectNoteChildrenCount());
                 subgraph.addChild(k);
             }
         }
@@ -188,7 +190,7 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
         KnowledgeGraphNode* k;
         // child Ns only
         vector<Note*> children{};
-        o->getDirectChildNotes(children);
+        o->getDirectNoteChildren(children);
         for(Note* n:children) {
             // TODO: reuse and delete - map<Thing*,Node*>
             k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
@@ -217,7 +219,7 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
 
         // child Ns
         vector<Note*> children{};
-        n->getOutline()->getDirectChildNotes(children, n);
+        n->getOutline()->getDirectNoteChildren(n, children);
         for(Note* n:children) {
             // TODO: reuse and delete - map<Thing*,Node*>
             k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};

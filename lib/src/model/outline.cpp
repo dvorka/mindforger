@@ -551,7 +551,34 @@ int Outline::getNoteOffset(const Note* note) const
     return -1;
 }
 
-void Outline::getDirectChildNotes(std::vector<Note*>& children, const Note* note)
+void Outline::getDirectNoteChildren(std::vector<Note*>& children)
+{
+    if(notes.size()) {
+        vector<Note*> children{};
+
+        // check and track minimal direct child N depth
+        if(notes[0]->getDepth() > 0) {
+
+        }
+
+        // determine min depth
+        u_int16_t minDepth = 2^15;
+        for(Note* n:notes) {
+            if(minDepth > n->getDepth()) {
+                minDepth = n->getDepth();
+            }
+        }
+
+        // find all Ns w/ minimal depth
+        for(Note* n:notes) {
+            if(minDepth == n->getDepth()) {
+                children.push_back(n);
+            }
+        }
+    }
+}
+
+void Outline::getDirectNoteChildren(const Note* note, std::vector<Note*>& children)
 {
     if(notes.size()) {
         vector<Note*>* ns;
@@ -591,7 +618,7 @@ void Outline::getNoteChildren(const Note* note, vector<Note*>* children, Outline
             }
             return;
         } else {
-            // IMPROVE this is SLOW o(n) - consider keeping order of note within it as a field
+            // IMPROVE this is SLOW o(n) - consider keeping order of N within it as a field
             auto offset = std::find(notes.begin(), notes.end(), note);
             if(offset != notes.end()) {
                 auto index = std::distance(notes.begin(), offset);

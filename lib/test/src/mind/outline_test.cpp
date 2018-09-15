@@ -194,3 +194,46 @@ TEST(OutlineTestCase, CloneOutline) {
     EXPECT_EQ(o->getDescription().size(), c->getDescription().size());
     EXPECT_NE(o->getModified(), c->getModified());
 }
+
+TEST(OutlineTestCase, DirectOutlineNoteChildren) {
+    // prepare M8R repository and let the mind think...
+    string repositoryDir{"/tmp/mf-unit-repository-o-child-n"};
+    m8r::removeDirectoryRecursively(repositoryDir.c_str());
+    m8r::Installer installer{};
+    installer.createEmptyMindForgerRepository(repositoryDir);
+    string oFile{repositoryDir+"/memory/o.md"};
+    string oContent{
+        "# Outline"
+        "\nO1."
+        "\n### 1" // direct child
+        "\nT1."
+        "\n## 2" // direct child
+        "\nT2."
+        "\n### 3"
+        "\nT3."
+        "\n# 33" // direct child
+        "\nT33."
+        "\n### 333"
+        "\nT333."
+        "\n# 4" // direct child
+        "\nT4."
+        "\n"};
+    m8r::stringToFile(oFile,oContent);
+
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-otc-ocn.md");
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    m8r::Mind mind{config};
+    m8r::Memory& memory = mind.remind();
+    mind.learn();
+    mind.think().get();
+
+    // test
+    vector<m8r::Outline*> outlines = memory.getOutlines();
+    m8r::Outline* o = outlines.at(0);
+
+    // asserts
+    EXPECT_EQ(1, mind.remind().getOutlinesCount());
+    EXPECT_EQ(4, o->getDirectNoteChildrenCount());
+}

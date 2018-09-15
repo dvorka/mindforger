@@ -232,10 +232,40 @@ public:
     Note* getNoteByName(const std::string& noteName) const;
     Note* getNoteByMangledName(const std::string& mangledName) const;
     int getNoteOffset(const Note* note) const;
+
     /**
-     * @brief Get direct child Ns of N (if specified) or O (if N not specified) - depth gap can be >1
+     * @brief Get direct Os children.
+     *
+     * This method returns N children of the O REGARDLESS how big
+     * the gap in depth is. Consider the following example:
+     *
+     * O . . . .
+     * . . . . 1
+     * . . . 2 .
+     * . . . . 3
+     * . . 4 . .
+     * . . . 5 .
+     * . . . . 6
+     * . 7 . . .
+     * . . 8 . .
+     * . 9 . . .
+     *
+     * Ns: 1, 2, 4, 7 and 9 will be returned. Therefore the method
+     * description cound be reformulated as Ns whose PARENT is O
+     * are returned regardless how big depth GAP is between O and N.
+     *
      */
-    void getDirectChildNotes(std::vector<Note*>& children, const Note* note=nullptr);
+    void getDirectNoteChildren(std::vector<Note*>& children);
+    size_t getDirectNoteChildrenCount() { std::vector<Note*> c; getDirectNoteChildren(c); return c.size(); }
+    /**
+     * @brief Get direct Ns children.
+     *
+     * This method returns N children of the N REGARDLESS how big
+     * the gap in depth is.
+     */
+    void getDirectNoteChildren(const Note* note, std::vector<Note*>& children);
+    size_t getDirectNoteChildrenCount(const Note* note) { std::vector<Note*> c; getDirectNoteChildren(note, c); return c.size(); }
+
     void getNoteChildren(const Note* note, std::vector<Note*>* children=nullptr, Outline::Patch* patch=nullptr);
     /**
      * @brief Get skeleton-style (Note per level) path to root.
