@@ -50,6 +50,7 @@ void RecentNotesTablePresenter::refresh(const vector<Note*>& notes)
         }
     }
 
+    // order by read timestamp
     view->sortByColumn(4, Qt::SortOrder::DescendingOrder);
 }
 

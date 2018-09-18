@@ -45,10 +45,14 @@ void RecentNotesTableView::paintEvent(QPaintEvent* event)
 
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
-    // ... TODO all N properties...
+    // rds/wrs
+    this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*5);
+    this->setColumnWidth(2, this->fontMetrics().averageCharWidth()*5);
 
+    // pretty: rd/wr
+    this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*12);
     // pretty
-    this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*6);
+    this->setColumnWidth(4, this->fontMetrics().averageCharWidth()*12);
 
     QTableView::paintEvent(event);
 }

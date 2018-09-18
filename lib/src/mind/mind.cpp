@@ -776,7 +776,6 @@ Note* Mind::noteNew(
             n->setName(*name);
         }
         n->setModified();
-        n->setModifiedPretty();
         if(noteType) {
             n->setType(noteType);
         }
@@ -786,6 +785,9 @@ Note* Mind::noteNew(
         }
         n->setProgress(progress);
         n->completeProperties(n->getModified());
+
+        n->setReadPretty();
+        n->setModifiedPretty();
 
         o->addNote(n, NO_PARENT==offset?0:offset);
         return n;

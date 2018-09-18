@@ -173,6 +173,21 @@ void Note::setModifiedPretty(const string& modifiedPretty)
     this->modifiedPretty = modifiedPretty;
 }
 
+const string& Note::getReadPretty() const
+{
+    return readPretty;
+}
+
+void Note::setReadPretty()
+{
+    this->readPretty = datetimeToPrettyHtml(read);
+}
+
+void Note::setReadPretty(const string& readPretty)
+{
+    this->readPretty = readPretty;
+}
+
 u_int8_t Note::getProgress() const
 {
     return progress;
@@ -191,6 +206,7 @@ time_t Note::getRead() const
 void Note::setRead(time_t read)
 {
     this->read = read;
+    setReadPretty();
 }
 
 u_int32_t Note::getReads() const

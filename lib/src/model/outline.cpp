@@ -171,11 +171,12 @@ void Outline::completeProperties(const time_t fileModificationTime)
         reads = revision;
     }
 
-    // Notes
+    // Ns
     if(notes.size()) {
         for(Note* n:notes) {
             n->completeProperties(modified);
             n->setModifiedPretty();
+            n->setReadPretty();
         }
     }
 
@@ -185,7 +186,7 @@ void Outline::completeProperties(const time_t fileModificationTime)
 
 void Outline::checkAndFixProperties()
 {
-    // Notes
+    // Ns
     time_t latestNote{};
     if(notes.size()) {
         for(Note* n:notes) {

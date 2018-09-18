@@ -70,6 +70,7 @@ private:
     std::string modifiedPretty;
     u_int32_t revision;
     time_t read;
+    std::string readPretty;
     u_int32_t reads;
 
     u_int8_t progress;
@@ -118,6 +119,9 @@ public:
     void setProgress(u_int8_t progress);
     time_t getRead() const;
     void setRead(time_t read);
+    const std::string& getReadPretty() const;
+    void setReadPretty();
+    void setReadPretty(const std::string& readPretty);
     u_int32_t getReads() const;
     void setReads(u_int32_t reads);
     u_int32_t getRevision() const;

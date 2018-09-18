@@ -40,9 +40,9 @@ void RecentNotesTableModel::removeAllRows()
     QStringList tableHeader;
     tableHeader
         << tr("Note")
-        << tr("Done")
         << tr("Rs")
         << tr("Ws")
+        << tr("Read")
         << tr("Modified");
     // IMPROVE set tooltips: items w/ tooltips instead of just strings
     setHorizontalHeaderLabels(tableHeader);
@@ -79,13 +79,6 @@ void RecentNotesTableModel::addRow(const Note* n)
     // IMPROVE refactor to methods
     QString s;
 
-    s.clear();
-    if(n->getProgress() > 0) {
-        s += QString::number(n->getProgress());
-        s += "%";
-    }
-    items += new QStandardItem(s);
-
     item = new QStandardItem();
     item->setData(QVariant(n->getReads()), Qt::DisplayRole);
     items += item;
@@ -93,6 +86,10 @@ void RecentNotesTableModel::addRow(const Note* n)
     item = new QStandardItem();
     item->setData(QVariant(n->getRevision()), Qt::DisplayRole);
     items += item;
+
+    s.clear();
+    s += n->getReadPretty().c_str();
+    items += new QStandardItem(s);
 
     s.clear();
     s += n->getModifiedPretty().c_str();
