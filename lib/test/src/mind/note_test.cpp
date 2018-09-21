@@ -843,3 +843,69 @@ TEST(NoteTestCase, MangleNoteName) {
     EXPECT_EQ("", o->getNotes()[4]->getMangledName());
     EXPECT_EQ("", o->getNotes()[5]->getMangledName());
 }
+
+TEST(NoteTestCase, DirectNoteChildren) {
+    // prepare M8R repository and let the mind think...
+    string repositoryDir{"/tmp/mf-unit-repository-n-child-n"};
+    m8r::removeDirectoryRecursively(repositoryDir.c_str());
+    m8r::Installer installer{};
+    installer.createEmptyMindForgerRepository(repositoryDir);
+    string oFile{repositoryDir+"/memory/o.md"};
+    /*
+     * O . . .
+     * . N . .
+     * . . . 1
+     * . . 2 .
+     * . . . 3
+     * . . 4 .
+     * . 5 . .
+     * 6 . . .
+     *
+     * Ns: 1, 2 and 4 to be returned.
+     */
+    string oContent{
+        "# Outline"
+        "\nO1."
+        "\n## N"
+        "\nTN."
+        "\n#### 1" // direct child
+        "\nT1."
+        "\n### 2"
+        "\nT2."
+        "\n#### 3"
+        "\nT3."
+        "\n### 4" // direct child
+        "\nT4"
+        "\n## 5"
+        "\nT5."
+        "\n# 6"
+        "\nT6."
+        "\n"};
+    m8r::stringToFile(oFile,oContent);
+
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-ntc-ncn.md");
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    m8r::Mind mind{config};
+    m8r::Memory& memory = mind.remind();
+    mind.learn();
+    mind.think().get();
+
+    // test
+    vector<m8r::Outline*> outlines = memory.getOutlines();
+    m8r::Outline* o = outlines.at(0);
+    m8r::Note* n = o->getNotes()[0];
+
+    // asserts
+    EXPECT_EQ(1, mind.remind().getOutlinesCount());
+    EXPECT_EQ("N", n->getName());
+
+    vector<m8r::Note*> directChildren{};
+    o->getDirectNoteChildren(n, directChildren);
+    EXPECT_EQ(3, directChildren.size());
+
+    EXPECT_EQ("1", directChildren[0]->getName());
+    EXPECT_EQ("2", directChildren[1]->getName());
+    EXPECT_EQ("4", directChildren[2]->getName());
+}

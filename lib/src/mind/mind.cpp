@@ -815,7 +815,7 @@ Outline* Mind::noteRefactor(Note* noteToRefactor, const string& targetOutlineKey
         if(targetOutline) {
             vector<Note*> children{};
             Outline* sourceOutline = noteToRefactor->getOutline();
-            sourceOutline->getNoteChildren(noteToRefactor, &children);
+            sourceOutline->getAllNoteChildren(noteToRefactor, &children);
             children.insert(children.begin(), noteToRefactor);
             // IMPROVE allow passing parent for the Note in the target Outline
             targetOutline->addNotes(children, 0);

@@ -265,7 +265,7 @@ public:
     void getDirectNoteChildren(const Note* note, std::vector<Note*>& children);
     size_t getDirectNoteChildrenCount(const Note* note) { std::vector<Note*> c; getDirectNoteChildren(note, c); return c.size(); }
 
-    void getNoteChildren(const Note* note, std::vector<Note*>* children=nullptr, Outline::Patch* patch=nullptr);
+    void getAllNoteChildren(const Note* note, std::vector<Note*>* children=nullptr, Outline::Patch* patch=nullptr);
     /**
      * @brief Get skeleton-style (Note per level) path to root.
      */

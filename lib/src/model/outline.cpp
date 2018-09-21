@@ -460,7 +460,7 @@ Note* Outline::cloneNote(const Note* clonedNote)
         Note* newNote;
 
         vector<Note*> children{};
-        getNoteChildren(clonedNote, &children);
+        getAllNoteChildren(clonedNote, &children);
         offset += 1+children.size();
         if(children.size()) {
             if((unsigned int)offset < notes.size()) {
@@ -568,37 +568,31 @@ void Outline::getDirectNoteChildren(vector<Note*>& directChildren)
     }
 }
 
-void Outline::getDirectNoteChildren(const Note* note, std::vector<Note*>& children)
+void Outline::getDirectNoteChildren(const Note* note, std::vector<Note*>& directChildren)
 {
-    if(notes.size()) {
-        vector<Note*>* ns;
-        vector<Note*> allNoteChildren{};
-        if(note) {
-            getNoteChildren(note, &allNoteChildren);
-            ns = &allNoteChildren;
-        } else {
-            ns = &notes;
-        }
+    if(note) {
+        if(notes.size()) {
+            vector<Note*> allNoteChildren{};
+            getAllNoteChildren(note, &allNoteChildren);
 
-        // determine min depth
-        u_int16_t minDepth = 2^15;
-        for(Note* n:*ns) {
-            if(minDepth > n->getDepth()) {
-                minDepth = n->getDepth();
+            // child depth is initialized to a big nuber
+            //  +
+            // any non-monotonous non-growing depth is detected as direct child
+            u_int16_t minDepth = 2^15;
+            for(Note* n:allNoteChildren) {
+                if(minDepth >= n->getDepth()) {
+                    directChildren.push_back(n);
+                    minDepth = n->getDepth();
+                }
             }
         }
-
-        // find all Ns w/ minimal depth
-        for(Note* n:notes) {
-            if(minDepth == n->getDepth()) {
-                children.push_back(n);
-            }
-        }
+    } else {
+        getDirectNoteChildren(directChildren);
     }
 }
 
 // IMPROVE: if gap between Ns level is >1, this method doesn't work (user has freedom to make arbitrary depth)
-void Outline::getNoteChildren(const Note* note, vector<Note*>* children, Outline::Patch* patch)
+void Outline::getAllNoteChildren(const Note* note, vector<Note*>* children, Outline::Patch* patch)
 {
     if(note) {
         if(note == notes[notes.size()-1]) {
@@ -738,7 +732,7 @@ void Outline::promoteNote(Note* note, Outline::Patch* patch)
     if(note) {
         if(note->getDepth()) {
             vector<Note*> children{};
-            getNoteChildren(note, &children, patch);
+            getAllNoteChildren(note, &children, patch);
             note->promote();
             note->makeModified();
             for(Note* n:children) {
@@ -762,7 +756,7 @@ void Outline::demoteNote(Note* note, Outline::Patch* patch)
     if(note) {
         if(note->getDepth() < MAX_NOTE_DEPTH) {
             vector<Note*> children{};
-            getNoteChildren(note, &children, patch);
+            getAllNoteChildren(note, &children, patch);
             note->demote();
             note->makeModified();
             for(Note* n:children) {
@@ -798,7 +792,7 @@ void Outline::moveNoteToFirst(Note* note, Outline::Patch* patch)
 
         if(siblingOffset != NO_SIBLING) {
             vector<Note*> children{};
-            getNoteChildren(note, &children);
+            getAllNoteChildren(note, &children);
             if(patch) {
                 // upper tier to patch [sibling's offset, note's last child]
                 patch->diff = Outline::Patch::Diff::MOVE;
@@ -838,7 +832,7 @@ void Outline::moveNoteUp(Note* note, Outline::Patch* patch)
         int siblingOffset = getOffsetOfAboveNoteSibling(note, noteOffset);
         if(siblingOffset != NO_SIBLING) {
             vector<Note*> children{};
-            getNoteChildren(note, &children);
+            getAllNoteChildren(note, &children);
             if(patch) {
                 // upper tier to patch [sibling's offset, note's last child]
                 patch->diff = Outline::Patch::Diff::MOVE;
@@ -879,7 +873,7 @@ void Outline::moveNoteDown(Note* note, Outline::Patch* patch)
         if(siblingOffset != NO_SIBLING) {
             Note* sibling = notes[siblingOffset];
             vector<Note*> siblingChildren{};
-            getNoteChildren(sibling, &siblingChildren);
+            getAllNoteChildren(sibling, &siblingChildren);
             if(patch) {
                 // upper tier to patch [note's original offset,sibling's last child]
                 patch->diff = Outline::Patch::Diff::MOVE;
@@ -888,7 +882,7 @@ void Outline::moveNoteDown(Note* note, Outline::Patch* patch)
             }
             // modify outline: cut & insert (COPY moved Note below sibling, DELETE original Note)
             vector<Note*> children{};
-            getNoteChildren(note, &children);
+            getAllNoteChildren(note, &children);
             int belowSiblingIndex = siblingOffset+siblingChildren.size()+1;
             notes.insert(notes.begin()+belowSiblingIndex, note);
             if(children.size()) {
@@ -930,7 +924,7 @@ void Outline::moveNoteToLast(Note* note, Outline::Patch* patch)
         if(siblingOffset != NO_SIBLING) {
             Note* sibling = notes[siblingOffset];
             vector<Note*> siblingChildren{};
-            getNoteChildren(sibling, &siblingChildren);
+            getAllNoteChildren(sibling, &siblingChildren);
             if(patch) {
                 // upper tier to patch [note's original offset,sibling's last child]
                 patch->diff = Outline::Patch::Diff::MOVE;
@@ -939,7 +933,7 @@ void Outline::moveNoteToLast(Note* note, Outline::Patch* patch)
             }
             // modify outline: cut & insert (COPY moved Note below sibling, DELETE original Note)
             vector<Note*> children{};
-            getNoteChildren(note, &children);
+            getAllNoteChildren(note, &children);
             int belowSiblingIndex = siblingOffset+siblingChildren.size()+1;
             notes.insert(notes.begin()+belowSiblingIndex, note);
             if(children.size()) {
