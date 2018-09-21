@@ -65,7 +65,7 @@ NoteViewPresenter::~NoteViewPresenter()
 // IMPROVE first decorate MD with HTML colors > then MD to HTML conversion
 void NoteViewPresenter::refresh(Note* note)
 {
-    note->incReads();
+    note->makeRead();
     this->currentNote = note;
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_FTS_RESULT) || orloj->isFacetActive(OrlojPresenterFacets::FACET_FTS_VIEW_NOTE)) {

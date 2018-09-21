@@ -154,6 +154,12 @@ void Note::setModified()
 
 void Note::setModified(time_t modified)
 {
+#ifdef MF_DEBUG
+    if(created > datetimeNow()) MF_DEBUG("ERROR (s): attempt to set N creation timestamp from the future: " << outline->getKey() << " # " << name << endl);
+    if(read > datetimeNow()) MF_DEBUG("ERROR (s): attempt to set N read timestamp from the future: " << outline->getKey() << " # " << name << endl);
+    if(modified > datetimeNow()) MF_DEBUG("ERROR (s): attempt to set N modification timestamp from the future: " << outline->getKey() << " # " << name << endl);
+#endif
+
     this->modified = modified;
     setModifiedPretty();
 }
@@ -207,6 +213,12 @@ void Note::setRead(time_t read)
 {
     this->read = read;
     setReadPretty();
+}
+
+void Note::makeRead()
+{
+    setRead(datetimeNow());
+    incReads();
 }
 
 u_int32_t Note::getReads() const
@@ -436,6 +448,12 @@ void Note::checkAndFixProperties()
     if(name.empty()) {
         name.assign("Note");
     }
+
+#ifdef MF_DEBUG
+    if(created > datetimeNow()) MF_DEBUG("ERROR: attempt to set N creation timestamp from the future: " << outline->getKey() << " # " << name << endl);
+    if(read > datetimeNow()) MF_DEBUG("ERROR: attempt to set N read timestamp from the future: " << outline->getKey() << " # " << name << endl);
+    if(modified > datetimeNow()) MF_DEBUG("ERROR: attempt to set N modification timestamp from the future: " << outline->getKey() << " # " << name << endl);
+#endif
 }
 
 void Note::addLink(Link* link)

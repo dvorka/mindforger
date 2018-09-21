@@ -94,7 +94,7 @@ std::string datetimeToPrettyHtml(const time_t* ts)
         if(tsS.tm_mon==nowS->tm_mon && tsS.tm_mday==nowS->tm_mday) {
             pretty = Pretty::TODAY;
         } else {
-            if(now-*ts < SIX_DAYS) {
+            if(now-*ts < SIX_DAYS && tsS.tm_wday<=nowS->tm_wday) {
                 pretty = Pretty::THIS_WEEK;
             } else {
                 pretty = Pretty::THIS_YEAR;

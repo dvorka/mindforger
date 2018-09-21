@@ -119,6 +119,7 @@ public:
     void setProgress(u_int8_t progress);
     time_t getRead() const;
     void setRead(time_t read);
+    void makeRead();
     const std::string& getReadPretty() const;
     void setReadPretty();
     void setReadPretty(const std::string& readPretty);

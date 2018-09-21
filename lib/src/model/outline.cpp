@@ -214,6 +214,12 @@ void Outline::checkAndFixProperties()
     if(name.empty()) {
         name.assign("Outline");
     }
+
+#ifdef MF_DEBUG
+    if(created > datetimeNow()) MF_DEBUG("ERROR (s): attempt to set O creation timestamp from the future: " << getKey() << " ~ " << name << endl);
+    if(read > datetimeNow()) MF_DEBUG("ERROR (s): attempt to set O read timestamp from the future: " << getKey() << " ~ " << name << endl);
+    if(modified > datetimeNow()) MF_DEBUG("ERROR (s): attempt to set O modification timestamp from the future: " << getKey() << " ~ " << name << endl);
+#endif
 }
 
 bool Outline::isVirgin() const
