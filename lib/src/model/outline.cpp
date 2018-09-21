@@ -552,28 +552,17 @@ int Outline::getNoteOffset(const Note* note) const
     return -1;
 }
 
-void Outline::getDirectNoteChildren(std::vector<Note*>& children)
+void Outline::getDirectNoteChildren(vector<Note*>& directChildren)
 {
     if(notes.size()) {
-        vector<Note*> children{};
-
-        // check and track minimal direct child N depth
-        if(notes[0]->getDepth() > 0) {
-
-        }
-
-        // determine min depth
+        // child depth is initialized to a big nuber
+        //  +
+        // any non-monotonous non-growing depth is detected as direct child
         u_int16_t minDepth = 2^15;
         for(Note* n:notes) {
-            if(minDepth > n->getDepth()) {
+            if(minDepth >= n->getDepth()) {
+                directChildren.push_back(n);
                 minDepth = n->getDepth();
-            }
-        }
-
-        // find all Ns w/ minimal depth
-        for(Note* n:notes) {
-            if(minDepth == n->getDepth()) {
-                children.push_back(n);
             }
         }
     }

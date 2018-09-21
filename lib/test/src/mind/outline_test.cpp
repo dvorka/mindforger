@@ -202,6 +202,17 @@ TEST(OutlineTestCase, DirectOutlineNoteChildren) {
     m8r::Installer installer{};
     installer.createEmptyMindForgerRepository(repositoryDir);
     string oFile{repositoryDir+"/memory/o.md"};
+    /*
+     * O . . .
+     * . . . 1
+     * . . 2 .
+     * . . . 3
+     * 4 . . .
+     * . . . 5
+     * 6 . . .
+     *
+     * Ns: 1, 2, 4 and 6 to be returned.
+     */
     string oContent{
         "# Outline"
         "\nO1."
@@ -211,12 +222,12 @@ TEST(OutlineTestCase, DirectOutlineNoteChildren) {
         "\nT2."
         "\n### 3"
         "\nT3."
-        "\n# 33" // direct child
-        "\nT33."
-        "\n### 333"
-        "\nT333."
         "\n# 4" // direct child
-        "\nT4."
+        "\nT4"
+        "\n### 5"
+        "\nT5."
+        "\n# 6" // direct child
+        "\nT6."
         "\n"};
     m8r::stringToFile(oFile,oContent);
 
@@ -235,5 +246,13 @@ TEST(OutlineTestCase, DirectOutlineNoteChildren) {
 
     // asserts
     EXPECT_EQ(1, mind.remind().getOutlinesCount());
-    EXPECT_EQ(4, o->getDirectNoteChildrenCount());
+
+    vector<m8r::Note*> directChildren{};
+    o->getDirectNoteChildren(directChildren);
+    EXPECT_EQ(4, directChildren.size());
+
+    EXPECT_EQ("1", directChildren[0]->getName());
+    EXPECT_EQ("2", directChildren[1]->getName());
+    EXPECT_EQ("4", directChildren[2]->getName());
+    EXPECT_EQ("6", directChildren[3]->getName());
 }

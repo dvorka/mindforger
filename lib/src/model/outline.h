@@ -251,9 +251,8 @@ public:
      * . 9 . . .
      *
      * Ns: 1, 2, 4, 7 and 9 will be returned. Therefore the method
-     * description cound be reformulated as Ns whose PARENT is O
+     * description could be reformulated as Ns whose PARENT is O
      * are returned regardless how big depth GAP is between O and N.
-     *
      */
     void getDirectNoteChildren(std::vector<Note*>& children);
     size_t getDirectNoteChildrenCount() { std::vector<Note*> c; getDirectNoteChildren(c); return c.size(); }
