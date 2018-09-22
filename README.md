@@ -1,12 +1,11 @@
 # Thinking Notebook & Markdown IDE
 
 [![Travis CI](https://travis-ci.org/dvorka/mindforger.svg?branch=master)](https://travis-ci.org/dvorka/mindforger)
-<!--
 [![Current release](https://img.shields.io/github/release/dvorka/mindforger.svg)](https://github.com/dvorka/mindforger/releases)
-[![GitHub issues](https://img.shields.io/github/issues/dvorka/mindforger.svg?maxAge=360)](https://github.com/dvorka/mindforger/issues)
 [![Documentation](https://img.shields.io/badge/project-documentation-blue.svg)](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md)
+[![GitHub issues](https://img.shields.io/github/issues/dvorka/mindforger.svg?maxAge=360)](https://github.com/dvorka/mindforger/issues)
 [![All releases downloads](https://img.shields.io/github/downloads/dvorka/mindforger/total.svg)](https://github.com/dvorka/mindforger/releases)
--->
+[![AUR](https://img.shields.io/aur/license/yaourt.svg)](https://github.com/dvorka/mindforger/blob/master/LICENSE)
 
 Are you drowning in information, but starving for **knowledge**? Where do you keep your **private remarks** 
 like ideas, personal plans, gift tips, how-tos, dreams, business vision, finance strategy, auto 
