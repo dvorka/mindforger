@@ -216,9 +216,9 @@ void Outline::checkAndFixProperties()
     }
 
 #ifdef MF_DEBUG
-    if(created > datetimeNow()) MF_DEBUG("ERROR (s): attempt to set O creation timestamp from the future: " << getKey() << " ~ " << name << endl);
-    if(read > datetimeNow()) MF_DEBUG("ERROR (s): attempt to set O read timestamp from the future: " << getKey() << " ~ " << name << endl);
-    if(modified > datetimeNow()) MF_DEBUG("ERROR (s): attempt to set O modification timestamp from the future: " << getKey() << " ~ " << name << endl);
+    MF_ASSERT_FUTURE_CREATE(created, getKey(), name);
+    MF_ASSERT_FUTURE_READ(created, getKey(), name);
+    MF_ASSERT_FUTURE_MODIFICATION(created, getKey(), name);
 #endif
 }
 

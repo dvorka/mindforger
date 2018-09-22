@@ -155,9 +155,9 @@ void Note::setModified()
 void Note::setModified(time_t modified)
 {
 #ifdef MF_DEBUG
-    if(created > datetimeNow()) MF_DEBUG("ERROR (s): attempt to set N creation timestamp from the future: " << outline->getKey() << " # " << name << endl);
-    if(read > datetimeNow()) MF_DEBUG("ERROR (s): attempt to set N read timestamp from the future: " << outline->getKey() << " # " << name << endl);
-    if(modified > datetimeNow()) MF_DEBUG("ERROR (s): attempt to set N modification timestamp from the future: " << outline->getKey() << " # " << name << endl);
+    MF_ASSERT_FUTURE_CREATE(created, outline->getKey() << " # " << name, name);
+    MF_ASSERT_FUTURE_READ(created, outline->getKey() << " # " << name, name);
+    MF_ASSERT_FUTURE_MODIFICATION(created, outline->getKey() << " # " << name, name);
 #endif
 
     this->modified = modified;
@@ -450,9 +450,9 @@ void Note::checkAndFixProperties()
     }
 
 #ifdef MF_DEBUG
-    if(created > datetimeNow()) MF_DEBUG("ERROR: attempt to set N creation timestamp from the future: " << outline->getKey() << " # " << name << endl);
-    if(read > datetimeNow()) MF_DEBUG("ERROR: attempt to set N read timestamp from the future: " << outline->getKey() << " # " << name << endl);
-    if(modified > datetimeNow()) MF_DEBUG("ERROR: attempt to set N modification timestamp from the future: " << outline->getKey() << " # " << name << endl);
+    MF_ASSERT_FUTURE_CREATE(created, outline->getKey() << " # " << name, name);
+    MF_ASSERT_FUTURE_READ(created, outline->getKey() << " # " << name, name);
+    MF_ASSERT_FUTURE_MODIFICATION(created, outline->getKey() << " # " << name, name);
 #endif
 }
 

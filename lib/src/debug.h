@@ -35,6 +35,11 @@
 
     // show WIP features
     #define MF_WIP
+
+    // future timestamps check
+    #define MF_ASSERT_FUTURE_CREATE(TIMESTAMP, KEY, NAME) if(TIMESTAMP > datetimeNow()) { std::cerr << "ERROR (s): attempt to set CREATION timestamp from the future: " << KEY << " ~ " << NAME << endl; abort(); }
+    #define MF_ASSERT_FUTURE_READ(TIMESTAMP, KEY, NAME) if(TIMESTAMP > datetimeNow()) { std::cerr << "ERROR (s): attempt to set READ timestamp from the future: " << KEY << " ~ " << NAME << endl; abort(); }
+    #define MF_ASSERT_FUTURE_MODIFICATION(TIMESTAMP, KEY, NAME) if(TIMESTAMP > datetimeNow()) { std::cerr << "ERROR (s): attempt to set MODIFICATION timestamp from the future: " << KEY << " ~ " << NAME << endl; abort(); }
 #else
     #define MF_DEBUG(x) do {;} while (0)
 #endif
