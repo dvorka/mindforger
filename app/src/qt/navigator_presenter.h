@@ -46,7 +46,12 @@ public:
     ~NavigatorPresenter();
 
     NavigatorView* getView() const { return view; }
+
     void showInitialView();
+    void showInitialView(Outline* outline);
+    void showInitialView(Note* note);
+    void showInitialViewTags();
+
     void cleanupBeforeHide() { view->cleanupBeforeHide(); }
 
 private slots:

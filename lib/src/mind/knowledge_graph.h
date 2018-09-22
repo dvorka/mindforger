@@ -134,6 +134,8 @@ public:
     ~KnowledgeGraph();
 
     KnowledgeGraphNode* getNode(KnowledgeGraphNodeType type);
+    KnowledgeGraphNode* getNode(Outline* outline);
+    KnowledgeGraphNode* getNode(Note* note);
     void getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeSubGraph& subgraph);
 };
 

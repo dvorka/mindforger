@@ -42,6 +42,27 @@ void NavigatorPresenter::showInitialView()
     view->refreshOnNextTimerTick(&subgraph, Configuration::getInstance().isNavigatorShowLegend());
 }
 
+void NavigatorPresenter::showInitialView(Outline* outline)
+{
+    subgraph.setMaxNodes(Configuration::getInstance().getNavigatorMaxNodes());
+    knowledgeGraph->getRelatedNodes(knowledgeGraph->getNode(outline), subgraph);
+    view->refreshOnNextTimerTick(&subgraph, Configuration::getInstance().isNavigatorShowLegend());
+}
+
+void NavigatorPresenter::showInitialView(Note* note)
+{
+    subgraph.setMaxNodes(Configuration::getInstance().getNavigatorMaxNodes());
+    knowledgeGraph->getRelatedNodes(knowledgeGraph->getNode(note), subgraph);
+    view->refreshOnNextTimerTick(&subgraph, Configuration::getInstance().isNavigatorShowLegend());
+}
+
+void NavigatorPresenter::showInitialViewTags()
+{
+    subgraph.setMaxNodes(Configuration::getInstance().getNavigatorMaxNodes());
+    knowledgeGraph->getRelatedNodes(knowledgeGraph->getNode(KnowledgeGraphNodeType::TAGS), subgraph);
+    view->refreshOnNextTimerTick(&subgraph, Configuration::getInstance().isNavigatorShowLegend());
+}
+
 void NavigatorPresenter::nodeSelectedSlot(NavigatorNode* node)
 {
     knowledgeGraph->getRelatedNodes(node->getKnowledgeGraphNode(), subgraph);

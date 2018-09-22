@@ -150,9 +150,36 @@ void OrlojPresenter::showFacetOrganizer(const vector<Outline*>& outlines)
 
 void OrlojPresenter::showFacetKnowledgeGraphNavigator()
 {
-    setFacet(OrlojPresenterFacets::FACET_NAVIGATOR);
-    navigatorPresenter->showInitialView();
-    view->showFacetNavigator();
+    switch(activeFacet) {
+    case OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER:
+    case OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER:
+    case OrlojPresenterFacets::FACET_VIEW_OUTLINE:
+        setFacet(OrlojPresenterFacets::FACET_NAVIGATOR);
+        navigatorPresenter->showInitialView(outlineViewPresenter->getCurrentOutline());
+        slotShowOutlineNavigator(outlineViewPresenter->getCurrentOutline());
+        break;
+    case OrlojPresenterFacets::FACET_VIEW_NOTE:
+        setFacet(OrlojPresenterFacets::FACET_NAVIGATOR);
+        navigatorPresenter->showInitialView(noteViewPresenter->getCurrentNote());
+        slotShowNoteNavigator(noteViewPresenter->getCurrentNote());
+        break;
+    case OrlojPresenterFacets::FACET_EDIT_NOTE:
+        setFacet(OrlojPresenterFacets::FACET_NAVIGATOR);
+        navigatorPresenter->showInitialView(noteEditPresenter->getCurrentNote());
+        slotShowNoteNavigator(noteEditPresenter->getCurrentNote());
+        break;
+    case OrlojPresenterFacets::FACET_TAG_CLOUD:
+        setFacet(OrlojPresenterFacets::FACET_NAVIGATOR);
+        navigatorPresenter->showInitialViewTags();
+        view->showFacetNavigator();
+        break;
+    default:
+        setFacet(OrlojPresenterFacets::FACET_NAVIGATOR);
+        navigatorPresenter->showInitialView();
+        view->showFacetNavigator();
+        break;
+    }
+
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 

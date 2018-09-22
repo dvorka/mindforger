@@ -91,6 +91,27 @@ KnowledgeGraphNode* KnowledgeGraph::getNode(KnowledgeGraphNodeType type)
     return nullptr;
 }
 
+KnowledgeGraphNode* KnowledgeGraph::getNode(Outline* o)
+{
+    KnowledgeGraphNode* k = new KnowledgeGraphNode{
+            KnowledgeGraphNodeType::OUTLINE,
+            o->getName(),
+            outlinesColor,
+            static_cast<unsigned int>(o->getNotesCount())};
+    k->setThing(o);
+
+    return k;
+}
+
+KnowledgeGraphNode* KnowledgeGraph::getNode(Note* n)
+{
+    KnowledgeGraphNode* k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
+    k->setThing(n);
+    k->setCardinality(n->getOutline()->getDirectNoteChildrenCount(n));
+
+    return k;
+}
+
 // TODO this method leaks a lot - knowledge graph nodes
 void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeSubGraph& subgraph)
 {
@@ -143,7 +164,7 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
                 // TODO: reuse and delete - map<Thing*,Node*>
                 k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
                 k->setThing(n);
-                k->setCardinality(n->getOutline()->getDirectNoteChildrenCount());
+                k->setCardinality(n->getOutline()->getDirectNoteChildrenCount(n));
                 subgraph.addChild(k);
             }
         }
@@ -195,6 +216,7 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
             // TODO: reuse and delete - map<Thing*,Node*>
             k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
             k->setThing(n);
+            k->setCardinality(n->getOutline()->getDirectNoteChildrenCount(n));
             subgraph.addChild(k);
         }
 
@@ -224,6 +246,7 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
             // TODO: reuse and delete - map<Thing*,Node*>
             k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
             k->setThing(n);
+            k->setCardinality(n->getOutline()->getDirectNoteChildrenCount(n));
             subgraph.addChild(k);
         }
 
@@ -264,6 +287,7 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
                 // TODO: reuse and delete - map<Thing*,Node*>
                 k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
                 k->setThing(n);
+                k->setCardinality(n->getOutline()->getDirectNoteChildrenCount(n));
                 subgraph.addChild(k);
             }
         }

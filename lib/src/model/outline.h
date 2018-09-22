@@ -255,7 +255,8 @@ public:
      * are returned regardless how big depth GAP is between O and N.
      */
     void getDirectNoteChildren(std::vector<Note*>& children);
-    size_t getDirectNoteChildrenCount() { std::vector<Note*> c; getDirectNoteChildren(c); return c.size(); }
+    // IMPROVE cache w/ dirty flag
+    size_t getDirectNoteChildrenCount() { std::vector<Note*> c{}; getDirectNoteChildren(c); return c.size(); }
     /**
      * @brief Get direct Ns children.
      *
@@ -263,7 +264,7 @@ public:
      * the gap in depth is.
      */
     void getDirectNoteChildren(const Note* note, std::vector<Note*>& children);
-    size_t getDirectNoteChildrenCount(const Note* note) { std::vector<Note*> c; getDirectNoteChildren(note, c); return c.size(); }
+    size_t getDirectNoteChildrenCount(const Note* note) { std::vector<Note*> c{}; getDirectNoteChildren(note, c); return c.size(); }
 
     void getAllNoteChildren(const Note* note, std::vector<Note*>* children=nullptr, Outline::Patch* patch=nullptr);
     /**
