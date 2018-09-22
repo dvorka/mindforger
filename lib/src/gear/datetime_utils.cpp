@@ -121,7 +121,7 @@ std::string datetimeToPrettyHtml(const time_t* ts)
         background= "555555";
         strftime(text, sizeof(text), "%A", &tsS);
         break;
-    // TODO this month
+    // IMPROVE this month
     case Pretty::TODAY:
         background = "000000";
         strftime(text, sizeof(text), "%R", &tsS);

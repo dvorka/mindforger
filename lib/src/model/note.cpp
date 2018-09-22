@@ -154,11 +154,7 @@ void Note::setModified()
 
 void Note::setModified(time_t modified)
 {
-#ifdef MF_DEBUG
-    MF_ASSERT_FUTURE_CREATE(created, outline->getKey() << " # " << name, name);
-    MF_ASSERT_FUTURE_READ(created, outline->getKey() << " # " << name, name);
-    MF_ASSERT_FUTURE_MODIFICATION(created, outline->getKey() << " # " << name, name);
-#endif
+    MF_ASSERT_FUTURE_TIMESTAMPS(created, read, modified, outline->getKey() << "# " << name, name);
 
     this->modified = modified;
     setModifiedPretty();
@@ -449,11 +445,7 @@ void Note::checkAndFixProperties()
         name.assign("Note");
     }
 
-#ifdef MF_DEBUG
-    MF_ASSERT_FUTURE_CREATE(created, outline->getKey() << " # " << name, name);
-    MF_ASSERT_FUTURE_READ(created, outline->getKey() << " # " << name, name);
-    MF_ASSERT_FUTURE_MODIFICATION(created, outline->getKey() << " # " << name, name);
-#endif
+    MF_ASSERT_FUTURE_TIMESTAMPS(created, read, modified, outline->getKey() << " # " << name, name);
 }
 
 void Note::addLink(Link* link)

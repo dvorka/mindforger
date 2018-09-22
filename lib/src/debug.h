@@ -37,9 +37,17 @@
     #define MF_WIP
 
     // future timestamps check
-    #define MF_ASSERT_FUTURE_CREATE(TIMESTAMP, KEY, NAME) if(TIMESTAMP > datetimeNow()) { std::cerr << "ERROR (s): attempt to set CREATION timestamp from the future: " << KEY << " ~ " << NAME << endl; abort(); }
-    #define MF_ASSERT_FUTURE_READ(TIMESTAMP, KEY, NAME) if(TIMESTAMP > datetimeNow()) { std::cerr << "ERROR (s): attempt to set READ timestamp from the future: " << KEY << " ~ " << NAME << endl; abort(); }
-    #define MF_ASSERT_FUTURE_MODIFICATION(TIMESTAMP, KEY, NAME) if(TIMESTAMP > datetimeNow()) { std::cerr << "ERROR (s): attempt to set MODIFICATION timestamp from the future: " << KEY << " ~ " << NAME << endl; abort(); }
+    #define MF_ASSERT_WHERE " (" << __FILE__ << ":" << __LINE__ << ")"
+    #define MF_ASSERT_FUTURE_CREATE(TIMESTAMP, KEY, NAME) \
+        if(TIMESTAMP > datetimeNow()) { std::cerr << "ERROR: attempt to set future CREATION timestamp: " << KEY << " ~ " << NAME << MF_ASSERT_WHERE << endl; abort(); }
+    #define MF_ASSERT_FUTURE_READ(TIMESTAMP, KEY, NAME) \
+        if(TIMESTAMP > datetimeNow()) { std::cerr << "ERROR: attempt to set future READ timestamp: " << KEY << " ~ " << NAME << MF_ASSERT_WHERE << endl; abort(); }
+    #define MF_ASSERT_FUTURE_MODIFICATION(TIMESTAMP, KEY, NAME) \
+        if(TIMESTAMP > datetimeNow()) { std::cerr << "ERROR: attempt to set future MODIFICATION timestamp: " << KEY << " ~ " << NAME << MF_ASSERT_WHERE << endl; abort(); }
+    #define MF_ASSERT_FUTURE_TIMESTAMPS(C_TS, R_TS, M_TS, KEY, NAME) \
+        MF_ASSERT_FUTURE_CREATE(C_TS, KEY, NAME); \
+        MF_ASSERT_FUTURE_READ(R_TS, KEY, NAME); \
+        MF_ASSERT_FUTURE_MODIFICATION(M_TS, KEY, NAME);
 #else
     #define MF_DEBUG(x) do {;} while (0)
 #endif

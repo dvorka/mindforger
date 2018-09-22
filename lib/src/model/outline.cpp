@@ -195,12 +195,14 @@ void Outline::checkAndFixProperties()
                 latestNote = n->getModified();
             }
         }
+    } else {
+        latestNote = datetimeNow() - (5 * 365*24*60*60); // ys * ds*d*h*m
     }
+
     if(latestNote > modified) {
         modified = latestNote;
         setModifiedPretty();
     }
-
     if(revision > reads) {
         reads = revision;
     }
@@ -215,11 +217,7 @@ void Outline::checkAndFixProperties()
         name.assign("Outline");
     }
 
-#ifdef MF_DEBUG
-    MF_ASSERT_FUTURE_CREATE(created, getKey(), name);
-    MF_ASSERT_FUTURE_READ(created, getKey(), name);
-    MF_ASSERT_FUTURE_MODIFICATION(created, getKey(), name);
-#endif
+    MF_ASSERT_FUTURE_TIMESTAMPS(created, read, modified, getKey(), name);
 }
 
 bool Outline::isVirgin() const
