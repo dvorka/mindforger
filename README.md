@@ -27,10 +27,8 @@ MindForger is open, free, well performing Markdown IDE which respects your priva
 MindForger is actually more than an editor or IDE - it's human mind inspired personal knowledge management tool.
 
 ## Installation
-Install MindForger:
-                           
-* build from [source code](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md)
-* download [upstream tarball](https://github.com/dvorka/mindforger/releases)
+Install:
+
 * [Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#ubuntu-)
 * [Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#debian-)
 * [Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#fedora-)
@@ -38,7 +36,18 @@ Install MindForger:
 * [macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#macos-)
 * [Windows WSL](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#wsl-)
 
-# Documentation
+Build:
+
+* [build on Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-ubuntu-)
+* [build on Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-debian-)
+* [build on Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-fedora-)
+* [build on macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-macos-)
+* [build on Windows Subsystem for Linux (WSL)](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-wsl-)
+
+Tarball:
+
+* [download tarball](https://github.com/dvorka/mindforger/releases)
+## Documentation
 Read:
 
 * [Why MindForger?](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/why-mindforger.md)
