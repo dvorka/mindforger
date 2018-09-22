@@ -46,7 +46,14 @@ char* datetimeTo(const struct tm* datetime, char* result)
     if(datetime->tm_isdst) {
         tm c {0,0,0,0,0,0,0,0,0,0,0}; // missing initializer required by older GCC versions 4.8.5 and older
         memcpy(&c, datetime, sizeof(c));
-        if(c.tm_hour) c.tm_hour=datetime->tm_hour-1; else c.tm_hour = 23;
+        if(c.tm_hour) {
+            c.tm_hour=datetime->tm_hour-1;
+        } else {
+            // time travel back in time may have impact on y/m/... > roundtrip required
+            time_t backOneHour = mktime(&c) - 60*60;
+            localtime_r(&backOneHour, &c);
+        }
+
         strftime(result, sizeof(result)*100, "%Y-%m-%d %H:%M:%S", &c);
     } else {
         strftime(result, sizeof(result)*100, "%Y-%m-%d %H:%M:%S", datetime);
