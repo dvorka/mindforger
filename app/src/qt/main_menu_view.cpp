@@ -293,6 +293,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatCode = new QAction(tr("&Code"), mainWindow);
     actionFormatCode->setStatusTip(tr("Format text as inlined source code"));
 
+    actionFormatMath = new QAction(tr("&Math"), mainWindow);
+    actionFormatMath->setStatusTip(tr("Format text as math (MathJax)"));
+
     actionFormatStrikethrough = new QAction(tr("&Strikethrough"), mainWindow);
     actionFormatStrikethrough->setStatusTip(tr("Format text as strikethrough"));
 
@@ -314,13 +317,16 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatCodeBlock = new QAction(tr("C&ode Block"), mainWindow);
     actionFormatCodeBlock->setStatusTip(tr("Format text block as source code"));
 
+    actionFormatMathBlock = new QAction(tr("Math Block"), mainWindow);
+    actionFormatMathBlock->setStatusTip(tr("Format text block as math (MathJax)"));
+
     actionFormatBlockQuote = new QAction(tr("Block &Quote"), mainWindow);
     actionFormatBlockQuote->setStatusTip(tr("Format text block as blockquote"));
 
     actionFormatLink = new QAction(tr("&Link"), mainWindow);
     actionFormatLink->setStatusTip(tr("Insert link to a document, image or file"));
 
-    actionFormatImage = new QAction(tr("I&mage"), mainWindow);
+    actionFormatImage = new QAction(tr("Ima&ge"), mainWindow);
     actionFormatImage->setStatusTip(tr("Insert image"));
 
     actionFormatTable = new QAction(tr("&Table"), mainWindow);
@@ -333,6 +339,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatBold);
     menuFormat->addAction(actionFormatItalic);
     menuFormat->addAction(actionFormatCode);
+    menuFormat->addAction(actionFormatMath);
     menuFormat->addAction(actionFormatStrikethrough);
     menuFormat->addAction(actionFormatKeyboard);
     menuFormat->addSeparator();
@@ -342,6 +349,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addSeparator();
     menuFormat->addAction(actionFormatToc);
     menuFormat->addAction(actionFormatCodeBlock);
+    menuFormat->addAction(actionFormatMathBlock);
     menuFormat->addAction(actionFormatBlockQuote);
     menuFormat->addAction(actionFormatTable);
     menuFormat->addAction(actionFormatHr);

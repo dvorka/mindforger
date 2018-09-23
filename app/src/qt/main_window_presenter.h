@@ -216,6 +216,7 @@ public slots:
     void doActionFormatBold();
     void doActionFormatItalic();
     void doActionFormatCode();
+    void doActionFormatMath();
     void doActionFormatStrikethrough();
     void doActionFormatKeyboard();
     void handleRowsAndDepth();
@@ -223,7 +224,8 @@ public slots:
     void doActionFormatListNumber();
     void doActionFormatListTask();
     void doActionFormatToc();
-    void doActionFormatCodeblock();
+    void doActionFormatCodeBlock();
+    void doActionFormatMathBlock();
     void doActionFormatBlockquote();
     void doActionFormatLink();
     void handleFormatLink();

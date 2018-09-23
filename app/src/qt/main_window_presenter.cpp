@@ -995,6 +995,15 @@ void MainWindowPresenter::doActionFormatCode()
     }
 }
 
+void MainWindowPresenter::doActionFormatMath()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->wrapSelectedText("$");
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->wrapSelectedText("$");
+    }
+}
+
 void MainWindowPresenter::doActionFormatStrikethrough()
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
@@ -1105,10 +1114,21 @@ void MainWindowPresenter::doActionFormatToc()
     }
 }
 
-void MainWindowPresenter::doActionFormatCodeblock()
+void MainWindowPresenter::doActionFormatCodeBlock()
 {
     // IMPROVE ask for dialect
     QString text{"\n```\n...\n```\n"};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text);
+    }
+}
+
+void MainWindowPresenter::doActionFormatMathBlock()
+{
+    QString text{"\n$$\n...\n$$\n"};
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
         orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);

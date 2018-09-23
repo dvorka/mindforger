@@ -121,6 +121,8 @@ public:
     QAction* actionFormatKeyboard;
     QAction* actionFormatCode;
     QAction* actionFormatCodeBlock;
+    QAction* actionFormatMath;
+    QAction* actionFormatMathBlock;
     QAction* actionFormatBlockQuote;
     QAction* actionFormatListNumber;
     QAction* actionFormatListBullet;
