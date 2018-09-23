@@ -40,7 +40,7 @@ OutlineViewPresenter::~OutlineViewPresenter()
 
 void OutlineViewPresenter::refresh(Outline* outline)
 {
-    outline->incReads();
+    outline->makeRead();
 
     currentOutline = outline;
     view->refreshHeader(outline->getName());

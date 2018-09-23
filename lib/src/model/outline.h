@@ -212,6 +212,7 @@ public:
     void setReads(u_int32_t reads);
     time_t getRead() const;
     void setRead(time_t read);
+    void makeRead();
     OutlineMemoryLocation getMemoryLocation() const;
     void setMemoryLocation(OutlineMemoryLocation memoryLocation);
     unsigned int getBytesize() const;
@@ -288,6 +289,7 @@ public:
     void moveNoteToLast(Note* note, Outline::Patch* patch=nullptr);
 
     Note* getOutlineDescriptorAsNote();
+    const NoteType* getOutlineDescriptorNoteType() const { return &NOTE_4_OUTLINE_TYPE; }
 
     bool isDirty() const { return dirty; }
     void makeDirty() { dirty = true; }

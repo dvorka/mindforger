@@ -471,9 +471,11 @@ void OrlojPresenter::slotShowRecentNote(const QItemSelection& selected, const QI
             const Note* note = item->data(Qt::UserRole + 1).value<const Note*>();
 
             showFacetOutline(note->getOutline());
-            showFacetNoteView();
-            getOutlineView()->selectRowByNote(note);
-            // IMPROVE make this more efficient
+            if(note->getType() != note->getOutline()->getOutlineDescriptorNoteType()) {
+                // IMPROVE make this more efficient
+                showFacetNoteView();
+                getOutlineView()->selectRowByNote(note);
+            }
             mainPresenter->getStatusBar()->showInfo(QString(tr("Note "))+QString::fromStdString(note->getName()));
         } else {
             mainPresenter->getStatusBar()->showInfo(QString(tr("No Note selected!")));

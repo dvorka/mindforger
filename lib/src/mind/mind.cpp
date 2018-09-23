@@ -461,9 +461,9 @@ vector<Outline*>* Mind::getOutlinesOfType(const OutlineType& type) const
     return nullptr;
 }
 
-void Mind::getAllNotes(std::vector<Note*>& notes, bool sortByRead) const
+void Mind::getAllNotes(std::vector<Note*>& notes, bool sortByRead, bool addNoteForOutline) const
 {
-    return memory.getAllNotes(notes, sortByRead);
+    return memory.getAllNotes(notes, sortByRead, addNoteForOutline);
 }
 
 vector<Note*>* Mind::getNotesOfType(const NoteType& type) const

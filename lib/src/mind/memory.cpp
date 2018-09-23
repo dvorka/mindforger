@@ -317,9 +317,19 @@ Outline* Memory::getOutline(const string& key)
     }
 }
 
-void Memory::getAllNotes(vector<Note*>& notes, bool doSortByRead) const
+void Memory::getAllNotes(vector<Note*>& notes, bool doSortByRead, bool addNoteForOutline) const
 {
     for(Outline* o:outlines) {
+        if(addNoteForOutline) {
+            if(mindScope) {
+                if(mindScope->isInScope(o)) {
+                    notes.push_back(o->getOutlineDescriptorAsNote());
+                }
+            } else {
+                notes.push_back(o->getOutlineDescriptorAsNote());
+            }
+        }
+
         for(Note* n:o->getNotes()) {
             if(mindScope) {
                 if(mindScope->isInScope(n)) {

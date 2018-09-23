@@ -177,9 +177,12 @@ public:
     Outline* getOutline(const std::string &key);
 
     /**
-     * @brief Get notes of all outlines.
+     * @brief Get Ns of all outlines.
+     *
+     * @param sortByRead        sort Ns using read timestamp
+     * @param addNoteForOutline add also N for every O
      */
-    void getAllNotes(std::vector<Note*>& notes, bool sortByRead=false) const;
+    void getAllNotes(std::vector<Note*>& notes, bool sortByRead=false, bool addNoteForOutline=false) const;
 
     /*
      * UTILS

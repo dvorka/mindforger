@@ -435,6 +435,12 @@ void Outline::setRead(time_t read)
     this->read = read;
 }
 
+void Outline::makeRead()
+{
+    setRead(datetimeNow());
+    incReads();
+}
+
 void Outline::setReads(u_int32_t reads)
 {
     this->reads = reads;
@@ -1047,6 +1053,12 @@ Note* Outline::getOutlineDescriptorAsNote()
 {
     outlineDescriptorAsNote->setName(name);
     outlineDescriptorAsNote->setDescription(description);
+    outlineDescriptorAsNote->setCreated(created);
+    outlineDescriptorAsNote->setModified(modified);
+    outlineDescriptorAsNote->setRead(read);
+    outlineDescriptorAsNote->setReads(reads);
+    outlineDescriptorAsNote->setRevision(revision);
+
     return outlineDescriptorAsNote;
 }
 
