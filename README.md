@@ -43,6 +43,10 @@ Build:
 * [build on macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-macos-)
 * [build on Windows Subsystem for Linux (WSL)](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-wsl-)
 
+Docker:
+
+* [build and run container](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-and-run-container-)
+
 Tarball:
 
 * [download tarball](https://github.com/dvorka/mindforger/releases)

@@ -16,7 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Use this Dockerfile to create a Docker container using:
-# $ docker build mindforger
+# $ docker build -t mindforger:latest mindforger
 
 FROM ubuntu:16.04
 
@@ -36,7 +36,6 @@ RUN apt-get -y update
 RUN apt-get -y install mindforger
 
 # run MindForger
-RUN echo "Run MindForger:"
-RUN echo "$ xhost +local:root && docker run -it --env=\"DISPLAY\" --env=\"QT_X11_NO_MITSHM=1\" --volume=\"/tmp/.X11-unix:/tmp/.X11-unix:rw\" <image_id> mindforger"
+CMD echo -e "\nRun MindForger:\n  $ xhost +local:root && docker run -it --env=\"DISPLAY\" --env=\"QT_X11_NO_MITSHM=1\" --volume=\"/tmp/.X11-unix:/tmp/.X11-unix:rw\" mindforger:latest mindforger"
 
 # eof
