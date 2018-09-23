@@ -45,7 +45,7 @@ Build:
 
 Docker:
 
-* [build and run container](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-and-run-container-)
+* [build and run container](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-and-run-in-container-)
 
 Tarball:
 
