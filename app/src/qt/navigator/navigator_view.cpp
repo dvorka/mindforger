@@ -85,7 +85,7 @@ NavigatorView::NavigatorView(QWidget* parent)
       h{},
       garbageItems{},
       subgraph{},
-      doShowLegend{false}
+      doShowLegend{true}
 {
     // scene is peephole rectangle to the whole view (QGraphicsView)
     navigatorScene = new QGraphicsScene(this);
@@ -96,12 +96,23 @@ NavigatorView::NavigatorView(QWidget* parent)
     setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
 	setRenderHint(QPainter::Antialiasing);
 	setTransformationAnchor(AnchorUnderMouse);
+
+    // defaults
+    initialEdgeLenght = EDGE_LENGTH_DEFAULT;
 }
 
 NavigatorView::~NavigatorView()
 {
     navigatorScene->clear();
     clearGarbageItems();
+}
+
+void NavigatorView::checkAndFixInitialEdgeLength(qreal& l) {
+    if(l < EDGE_LENGTH_MIN) {
+        l = EDGE_LENGTH_MIN;
+    } else if(l > EDGE_LENGTH_MAX) {
+        l = EDGE_LENGTH_MAX;
+    }
 }
 
 void NavigatorView::clearGarbageItems()
@@ -127,8 +138,9 @@ void NavigatorView::updateNavigatorView()
     h = static_cast<QWidget*>(parent())->height();
     // the first two args specify location of the [0,0]
     navigatorScene->setSceneRect(-w/4, -h/4, w, h);
-    // scale scene to avoid scroll bars
-    scale(qreal(0.99), qreal(0.99));
+
+    // IMPROVE (removed as not needed): scale scene to avoid scroll bars
+    //scale(qreal(0.99), qreal(0.99));
     //setMinimumSize(WIDTH, HEIGHT);
 }
 
@@ -158,14 +170,26 @@ void NavigatorView::keyPressEvent(QKeyEvent *event)
 //        mindNode->moveBy(20, 0);
 //		break;
 
-	case Qt::Key_Plus:
-		zoomIn();
+    // zooming
+    case Qt::Key_Plus:
+        zoomIn();
 		break;
-	case Qt::Key_Minus:
-		zoomOut();
-		break;
+    case Qt::Key_Minus:
+        zoomOut();
+        break;
+
+    // edge lenght
+    case Qt::Key_ParenLeft:
+        if(initialEdgeLenght>EDGE_LENGTH_MIN) initialEdgeLenght-=EDGE_LENGTH_DELTA;
+        refreshOnNextTimerTick();
+        break;
+    case Qt::Key_ParenRight:
+        if(initialEdgeLenght<EDGE_LENGTH_MAX) initialEdgeLenght+=EDGE_LENGTH_DELTA;
+        refreshOnNextTimerTick();
+        break;
+
+    // shuffle
 	case Qt::Key_Space:
-	case Qt::Key_Enter:
 		shuffle();
 		break;
 	default:
@@ -291,30 +315,41 @@ void NavigatorView::timerEvent(QTimerEvent *event)
         killTimer(timerId);
         timerId = 0;
     }
+
+    int scrollRange= (horizontalScrollBar()->maximum()-horizontalScrollBar()->minimum())/2;
+    horizontalScrollBar()->setValue(horizontalScrollBar()->minimum()+scrollRange);
+    scrollRange= (verticalScrollBar()->maximum()-verticalScrollBar()->minimum())/2;
+    verticalScrollBar()->setValue(verticalScrollBar()->minimum()+scrollRange);
 }
 
 #ifndef QT_NO_WHEELEVENT
 void NavigatorView::wheelEvent(QWheelEvent *event)
 {
-    scaleView(pow((double)2, -event->delta() / 240.0));
+    // edge stretching
+    initialEdgeLenght += event->delta()>0?initialEdgeLenght/3:initialEdgeLenght/-3;
+    checkAndFixInitialEdgeLength(initialEdgeLenght);
+    refreshOnNextTimerTick();
+
+    // zooming
+    // scaleView(pow((double)2, -event->delta() / 240.0));
 }
 #endif
 
 void NavigatorView::drawBackground(QPainter *painter, const QRectF &rect)
 {
-    Q_UNUSED(rect);
-
     // TODO configurable from configuration, setting refreshed to local field on refresh() invocation (performance)
-    if(doShowLegend) {
-        QRectF sceneRect = this->sceneRect();
-        QRectF textRect(sceneRect.left() + 4, sceneRect.top() + 4, sceneRect.width() - 4, sceneRect.height() - 4);
-        QString message(tr("Click and drag the nodes around, and zoom with the mouse wheel or the '+' and '-' keys"));
+    if(false) {
+        //QRectF sceneRect = this->sceneRect();
+        QRectF sceneRect = rect;
 
         QFont font = painter->font();
-        font.setBold(true);
+        font.setBold(false);
         font.setPointSize(10);
         painter->setFont(font);
         painter->setPen(Qt::darkGray);
+
+        QRectF textRect(sceneRect.left()+10, sceneRect.top()+sceneRect.height()-30, sceneRect.width()-10, 30);
+        QString message(tr("Click and DRAG the nodes around | STRETCH edges with the mouse wheel or '(' and ')' keys | ZOOM with '+' and '-' keys"));
         painter->drawText(textRect, message);
     }
 }

@@ -95,7 +95,6 @@ class NavigatorNode : public QGraphicsItem
     bool showType;
     bool showBold;
 
-    qreal edgeLenght;
     qreal defaultNodeWidth = 100;
     qreal defaultNodeHeight = 15;
 
@@ -106,7 +105,6 @@ class NavigatorNode : public QGraphicsItem
             KnowledgeGraphNode* knowledgeGraphNode,
             NavigatorView* navigator,
             const QColor& color,
-            qreal edgeLenght=150,
             bool bold=false);
 
     KnowledgeGraphNode* getKnowledgeGraphNode() const { return knowledgeGraphNode; }

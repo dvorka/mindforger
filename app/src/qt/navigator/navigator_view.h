@@ -97,6 +97,11 @@ class NavigatorView : public QGraphicsView
 {
     Q_OBJECT
 
+    static constexpr qreal EDGE_LENGTH_DEFAULT = 300.0;
+    static constexpr qreal EDGE_LENGTH_DELTA = 30.0;
+    static constexpr qreal EDGE_LENGTH_MAX = 5000.0;
+    static constexpr qreal EDGE_LENGTH_MIN = EDGE_LENGTH_DELTA*2.0;
+
 private:
     QGraphicsScene* navigatorScene;
 
@@ -113,13 +118,18 @@ private:
 
     bool doShowLegend;
 
+    qreal initialEdgeLenght;
+
 public:
     NavigatorView(QWidget* parent);
     ~NavigatorView();
 
+    qreal getInitialEdgeLenght() const { return initialEdgeLenght; }
+    void checkAndFixInitialEdgeLength(qreal& l);
+
     void itemMoved();
 
-    void iWasSelected(NavigatorNode* selectedNode);
+    void iWasSelected(NavigatorNode* selectedNode);    
     void refreshOnNextTimerTick(KnowledgeSubGraph* subgraph, bool doShowLegend) {
         std::lock_guard<std::mutex> criticalSection{refreshMutex};
 
@@ -127,6 +137,9 @@ public:
         this->subgraph = subgraph;
         this->doShowLegend = doShowLegend;
         itemMoved(); // kick timer if not running
+    }
+    void refreshOnNextTimerTick() {
+        refreshOnNextTimerTick(subgraph, doShowLegend);
     }
 
     void cleanupBeforeHide();

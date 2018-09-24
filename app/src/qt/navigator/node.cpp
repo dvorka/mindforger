@@ -81,14 +81,12 @@ NavigatorNode::NavigatorNode(
         KnowledgeGraphNode* knowledgeGraphNode,
         NavigatorView* navigator,
         const QColor& color,
-        qreal edgeLenght,
         bool bold
     )
     : navigator(navigator),
       knowledgeGraphNode(knowledgeGraphNode),
       nodeColor(color),
-      showBold(bold),
-      edgeLenght(edgeLenght)
+      showBold(bold)
 {
     nodeName = QString::fromStdString(knowledgeGraphNode->getName());
     showType = true;
@@ -167,8 +165,8 @@ void NavigatorNode::calculateForces()
         double l = 2.0 * (dx*dx + dy*dy);
         // if nodes have DIFFERENT coordinates, then add AWAY forces
         if(l > 0) {
-            xVelocity += (dx * edgeLenght) / l;
-            yVelocity += (dy * edgeLenght) / l;
+            xVelocity += (dx * navigator->getInitialEdgeLenght()) / l;
+            yVelocity += (dy * navigator->getInitialEdgeLenght()) / l;
         }
 	}
 
