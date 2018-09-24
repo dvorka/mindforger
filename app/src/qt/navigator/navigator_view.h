@@ -75,6 +75,7 @@
 
 #include "../../../../lib/src/mind/knowledge_graph.h"
 #include "../../../../lib/src/model/outline.h"
+#include "../look_n_feel.h"
 
 namespace m8r {
 
@@ -148,6 +149,7 @@ protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;
     void scaleView(qreal scaleFactor);
 
+    void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void timerEvent(QTimerEvent *event) override;
 #ifndef QT_NO_WHEELEVENT

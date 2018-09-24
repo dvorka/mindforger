@@ -122,6 +122,7 @@ public:
 
     const QString& getMenuStylesheet() const { return menuStylesheet; }
 
+    const QString& getBackgroundColor() const { return backgroundColor; }
     const QString& getTextColor() const { return textColor; }
     const QString& getEditorBackgroundColor() const { return editorBackgroundColor; }
     const QString& getHighlightColor() const { return highlightColor; }
