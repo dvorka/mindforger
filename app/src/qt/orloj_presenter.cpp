@@ -321,6 +321,10 @@ void OrlojPresenter::showFacetNoteEdit(Note* note)
     if(notesTablePresenter->getView()->isVisible()) {
         showFacetNoteView(note);
     } else {
+        if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
+            outlineViewPresenter->refresh(note->getOutline());
+        }
+
         noteEditPresenter->setNote(note);
         view->showFacetNoteEdit();
         setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
@@ -330,6 +334,10 @@ void OrlojPresenter::showFacetNoteEdit(Note* note)
 
 void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
 {
+    if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
+        outlineViewPresenter->refresh(outline);
+    }
+
     outlineHeaderEditPresenter->setOutline(outline);
     view->showFacetOutlineHeaderEdit();
     setFacet(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER);

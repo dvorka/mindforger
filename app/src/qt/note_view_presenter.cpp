@@ -116,7 +116,7 @@ void NoteViewPresenter::slotLinkClicked(const QUrl& url)
 }
 
 void NoteViewPresenter::slotEditNote()
-{
+{    
     orloj->showFacetNoteEdit(this->currentNote);
 }
 

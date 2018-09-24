@@ -344,26 +344,6 @@ void NavigatorView::wheelEvent(QWheelEvent *event)
 }
 #endif
 
-void NavigatorView::drawBackground(QPainter *painter, const QRectF &rect)
-{
-    // TODO configurable from configuration, setting refreshed to local field on refresh() invocation (performance)
-    if(true) {
-        QString message(tr("CLICK & DRAG nodes around | STRETCH edges with the mouse wheel or '(' and ')' keys | ZOOM with '+' and '-' keys"));
-
-        QRectF sceneRect = this->sceneRect();
-
-        QFont font = painter->font();
-        font.setBold(false);
-        font.setPointSize(10);
-        painter->setFont(font);
-        painter->setPen(Qt::darkGray);
-
-        QRectF textRect(rect.left()+10, sceneRect.top()+sceneRect.height()-30, sceneRect.width(), 30);
-        painter->fillRect(textRect, backgroundBrush());
-        painter->drawText(textRect, message);
-    }
-}
-
 void NavigatorView::scaleView(qreal scaleFactor)
 {
     qreal factor = transform().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();

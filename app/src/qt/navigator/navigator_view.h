@@ -146,7 +146,6 @@ public:
     void cleanupBeforeHide();
 
 protected:
-    void drawBackground(QPainter *painter, const QRectF &rect) override;
     void scaleView(qreal scaleFactor);
 
     void resizeEvent(QResizeEvent *event) override;
