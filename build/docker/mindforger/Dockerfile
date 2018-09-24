@@ -34,4 +34,10 @@ RUN apt-get update && \
     apt-get -y update && \
     apt-get -y install mindforger
 
+ENV QT_GRAPHICSSYSTEM native
+
+RUN useradd -ms /bin/bash mindforger-user
+USER mindforger-user
+WORKDIR /home/mindforger-user
+
 # eof
