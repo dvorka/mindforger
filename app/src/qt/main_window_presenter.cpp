@@ -84,7 +84,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
     QObject::connect(exportOutlineToHtmlDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineHtmlExport()));
     // wire toolbar signals
-    QObject::connect(view.getToolBar()->actionNewNotebook, SIGNAL(triggered()), this, SLOT(doActionOutlineNew()));
+    QObject::connect(view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()), this, SLOT(doActionOutlineOrNoteNew()));
     QObject::connect(view.getToolBar()->actionOpenRepository, SIGNAL(triggered()), this, SLOT(doActionMindLearnRepository()));
     QObject::connect(view.getToolBar()->actionOpenFile, SIGNAL(triggered()), this, SLOT(doActionMindLearnFile()));
     QObject::connect(view.getToolBar()->actionViewEisenhower, SIGNAL(triggered()), this, SLOT(doActionViewOrganizer()));
@@ -1253,6 +1253,20 @@ void MainWindowPresenter::doActionFormatHr()
 void MainWindowPresenter::doActionOutlineNew()
 {
     newOutlineDialog->show(mind->remind().getStencils(ResourceType::OUTLINE));
+}
+
+void MainWindowPresenter::doActionOutlineOrNoteNew()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE))
+    {
+        doActionNoteNew();
+    } else {
+        doActionOutlineNew();
+    }
 }
 
 void MainWindowPresenter::handleOutlineNew()

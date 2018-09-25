@@ -237,6 +237,7 @@ public slots:
     void doActionFormatHr();
     // Outline
     void doActionOutlineNew();
+    void doActionOutlineOrNoteNew();
     void doActionOutlineEdit();
     void handleOutlineNew();
     void doActionOutlineClone();

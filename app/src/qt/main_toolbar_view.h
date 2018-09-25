@@ -34,7 +34,7 @@ class MainToolbarView : public QToolBar
     MainWindowView* mainWindow;
 
 public:
-    QAction* actionNewNotebook;
+    QAction* actionNewOutlineOrNote;
     QAction* actionOpenRepository;
     QAction* actionOpenFile;
     QAction* actionViewEisenhower;

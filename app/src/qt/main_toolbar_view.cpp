@@ -24,7 +24,7 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
     : QToolBar{mainWindowView}, mainWindow{mainWindowView}
 {
 
-    actionNewNotebook = addAction(QIcon(":/icons/new.svg"), tr("New Notebook"));
+    actionNewOutlineOrNote = addAction(QIcon(":/icons/new.svg"), tr("New Notebook"));
     addSeparator();
     actionOpenRepository = addAction(QIcon(":/icons/open-repository.svg"), tr("Open a directory with Markdowns or MindForger repository"));
     actionOpenFile = addAction(QIcon(":/icons/open-file.svg"), tr("Open Markdown file"));
