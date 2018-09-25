@@ -34,9 +34,9 @@ enum class KnowledgeGraphNodeType {
     NOTE,
     TAGS,
     TAG,
-    STENCILS,
-    STENCIL,
-    LIMBO
+    //STENCILS,
+    //STENCIL,
+    //LIMBO
 };
 
 class KnowledgeGraphNode {
@@ -114,8 +114,8 @@ class KnowledgeGraph
     KnowledgeGraphNode* tagsNode;
     KnowledgeGraphNode* outlinesNode;
     KnowledgeGraphNode* notesNode;
-    KnowledgeGraphNode* limboNode;
-    KnowledgeGraphNode* stencilsNode;
+    //KnowledgeGraphNode* limboNode;
+    //KnowledgeGraphNode* stencilsNode;
 
     long unsigned coreColor;
     long unsigned outlinesColor;
@@ -124,6 +124,7 @@ class KnowledgeGraph
 public:
     explicit KnowledgeGraph(
             Mind* mind,
+            long unsigned mindColor=0x008C00,
             long unsigned coreColor=0x000000,
             long unsigned outlinesColor=0x220000,
             long unsigned notesColor=0x000022);

@@ -137,15 +137,44 @@ QRectF NavigatorEdge::boundingRect() const
 }
 
 // MindRaider style edge: draw triangle that represents oriented arrow
-void NavigatorEdge::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget*)
+void NavigatorEdge::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
     if (!srcNode || !dstNode)
         return;
 
-    // IMPROVE edge type to have assigned SHAPE (triangle/line/...) and COLOR
+    // draw arrow: line + 1/3 of edge length tringle
 
-    // IMPROVE thickness to be constant
-    // IMPROVE based on direction add to x or y (commpare src and dst point - it's easy)
+    // line
+    painter->setPen(QPen(Qt::darkGray, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter->drawLine(srcPoint, dstPoint);
+
+    // 1/3 triangle
+    qreal dx{dstPoint.rx()-srcPoint.rx()};
+    qreal dy{dstPoint.ry()-srcPoint.ry()};
+    qreal ix{}, iy{};
+    dx /= -3.0;
+    dy /= -3.0;
+    QPointF srcTriPoint{dstPoint.rx()+dx, dstPoint.ry()+dy};
+    if(qAbs(dx) < qAbs(dy)) {
+        ix = 5;
+    } else {
+        iy = 5;
+    }
+    QPointF s1{srcTriPoint.rx()-ix, srcTriPoint.ry()-iy};
+    QPointF s2{srcTriPoint.rx()+ix, srcTriPoint.ry()+iy};
+
+    painter->setBrush(Qt::darkGray);
+    painter->drawPolygon(QPolygonF() << s1 << s2 << dstPoint);
+}
+
+
+// IMPROVE: NavigateEdge::paintLine ... is simpler than triangle ~ just w/o deltas
+
+void NavigatorEdge::paintTriangle(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+{
+    if (!srcNode || !dstNode)
+        return;
+
     QPointF s1{srcPoint.rx()-5, srcPoint.ry()};
     QPointF s2{srcPoint.rx()+5, srcPoint.ry()};
     painter->setPen(QPen(Qt::darkGray, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
@@ -163,11 +192,11 @@ void NavigatorEdge::paintLineWithTwoArrows(QPainter *painter, const QStyleOption
     if (qFuzzyCompare(line.length(), qreal(0.)))
         return;
 
-    // Draw the line itself
+    // draw the line itself
     painter->setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->drawLine(line);
 
-    // Draw the arrows
+    // draw the arrows
     double angle = ::acos(line.dx() / line.length());
     if (line.dy() >= 0)
         angle = TWO_PI - angle;

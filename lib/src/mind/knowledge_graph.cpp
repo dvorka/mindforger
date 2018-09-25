@@ -38,18 +38,19 @@ KnowledgeSubGraph::KnowledgeSubGraph(KnowledgeGraphNode* centralNode, int maxSub
 
 KnowledgeGraph::KnowledgeGraph(
         Mind* mind,
+        long unsigned mindColor,
         long unsigned coreColor,
         long unsigned outlinesColor,
         long unsigned notesColor
         )
     : mind{mind}
 {
-    mindNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::MIND, "MIND", coreColor, 5};
+    mindNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::MIND, "MIND", mindColor, 5};
     tagsNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::TAGS, "tags"};
     outlinesNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::OUTLINES, "notebooks"};
     notesNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTES, "notes"};
-    limboNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::LIMBO, "limbo"};
-    stencilsNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::STENCILS, "stencils"};
+    //limboNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::LIMBO, "limbo"};
+    //stencilsNode = new KnowledgeGraphNode{KnowledgeGraphNodeType::STENCILS, "stencils"};
 
     this->coreColor = coreColor;
     this->outlinesColor = outlinesColor;
@@ -62,8 +63,8 @@ KnowledgeGraph::~KnowledgeGraph()
     delete tagsNode;
     delete outlinesNode;
     delete notesNode;
-    delete limboNode;
-    delete stencilsNode;
+    //delete limboNode;
+    //delete stencilsNode;
 }
 
 KnowledgeGraphNode* KnowledgeGraph::getNode(KnowledgeGraphNodeType type)
@@ -77,14 +78,16 @@ KnowledgeGraphNode* KnowledgeGraph::getNode(KnowledgeGraphNodeType type)
         return notesNode;
     case KnowledgeGraphNodeType::TAGS:
         return tagsNode;
+    /*
     case KnowledgeGraphNodeType::STENCILS:
         return stencilsNode;
     case KnowledgeGraphNodeType::LIMBO:
         return limboNode;
+    case KnowledgeGraphNodeType::STENCIL:
+    */
     case KnowledgeGraphNodeType::OUTLINE:
     case KnowledgeGraphNodeType::NOTE:
     case KnowledgeGraphNodeType::TAG:
-    case KnowledgeGraphNodeType::STENCIL:
         return nullptr;
     }
 
@@ -121,7 +124,8 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
     tagsNode->setCardinality(static_cast<unsigned int>(mind->getTags().size()));
     outlinesNode->setCardinality(mind->remind().getOutlinesCount());
     notesNode->setCardinality(mind->remind().getNotesCount());
-    stencilsNode->setCardinality(static_cast<unsigned int>(mind->remind().getStencils().size()));
+    //stencilsNode->setCardinality(static_cast<unsigned int>(mind->remind().getStencils().size()));
+    //limboNode->...
 
     // significant ontology things
     if(centralNode == mindNode) {
@@ -130,8 +134,8 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
         subgraph.addChild(tagsNode);
         subgraph.addChild(outlinesNode);
         subgraph.addChild(notesNode);
-        subgraph.addChild(stencilsNode);
-        subgraph.addChild(limboNode);
+        //subgraph.addChild(stencilsNode);
+        //subgraph.addChild(limboNode);
 
         return;
     } else if(centralNode == outlinesNode) {
@@ -189,7 +193,7 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
         subgraph.addParent(mindNode);
 
         return;
-    } else if(centralNode == stencilsNode) {
+    } else /* if(centralNode == stencilsNode) {
         subgraph.setCentralNode(stencilsNode);
 
         subgraph.addParent(mindNode);
@@ -201,7 +205,7 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
         subgraph.addParent(mindNode);
 
         return;
-    }
+    } */
 
     // things by type
     if(centralNode->getType() == KnowledgeGraphNodeType::OUTLINE) {
@@ -295,13 +299,13 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
         subgraph.addParent(tagsNode);
 
         return;
-    } else if(centralNode->getType() == KnowledgeGraphNodeType::STENCIL) {
+    } /* else if(centralNode->getType() == KnowledgeGraphNodeType::STENCIL) {
         subgraph.setCentralNode(centralNode);
 
         subgraph.addParent(stencilsNode);
 
         return;
-    }
+    } */
 }
 
 } // m8r namespace

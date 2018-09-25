@@ -102,6 +102,7 @@ class NavigatorEdge : public QGraphicsItem
     QPointF dstPoint;
 	qreal arrowSize;
 
+    void paintTriangle(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
     void paintLineWithTwoArrows(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
 };
 

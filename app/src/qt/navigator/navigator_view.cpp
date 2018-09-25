@@ -325,6 +325,7 @@ void NavigatorView::timerEvent(QTimerEvent *event)
         timerId = 0;
     }
 
+    // CENTER scene using scroll bars
     int scrollRange= (horizontalScrollBar()->maximum()-horizontalScrollBar()->minimum())/2;
     horizontalScrollBar()->setValue(horizontalScrollBar()->minimum()+scrollRange);
     scrollRange= (verticalScrollBar()->maximum()-verticalScrollBar()->minimum())/2;
@@ -370,10 +371,6 @@ void NavigatorView::zoomOut()
 {
     scaleView(1 / qreal(1.2));
 }
-
-/*
- * ... refresh on a specific node selection ...
- */
 
 void NavigatorView::iWasSelected(NavigatorNode* selectedNode)
 {
