@@ -48,9 +48,10 @@ public:
     QMenu* menuMind;
     QMenu* menuFind;
     QMenu* menuView;
-    QMenu* menuEdit;
+    QMenu* menuNavigator;
     QMenu* menuOutline;
     QMenu* menuNote;
+    QMenu* menuEdit;
     QMenu* menuFormat;
     QMenu* menuHelp;
 
@@ -106,32 +107,12 @@ public:
     QAction* actionViewDistractionFree;
     QAction* actionViewFullscreen;
 
-    // menu: Edit
-    QAction* actionEditUndo;
-    QAction* actionEditRedo;
-    QAction* actionEditCut;
-    QAction* actionEditCopy;
-    QAction* actionEditPaste;
-    QAction* actionEditComplete;
-
-    // menu: Format
-    QAction* actionFormatBold;
-    QAction* actionFormatItalic;
-    QAction* actionFormatStrikethrough;
-    QAction* actionFormatKeyboard;
-    QAction* actionFormatCode;
-    QAction* actionFormatCodeBlock;
-    QAction* actionFormatMath;
-    QAction* actionFormatMathBlock;
-    QAction* actionFormatBlockQuote;
-    QAction* actionFormatListNumber;
-    QAction* actionFormatListBullet;
-    QAction* actionFormatListTask;
-    QAction* actionFormatLink;
-    QAction* actionFormatImage;
-    QAction* actionFormatTable;
-    QAction* actionFormatHr;
-    QAction* actionFormatToc;
+    // menu: Navigator
+    QAction* actionNavigatorZoomIn;
+    QAction* actionNavigatorZoomOut;
+    QAction* actionNavigatorEdgesStretch;
+    QAction* actionNavigatorEdgesShrink;
+    QAction* actionNavigatorShuffle;
 
     // menu: Outline
     QAction* actionOutlineNew;
@@ -164,6 +145,33 @@ public:
     QAction* actionNoteClone;
     QAction* actionNoteExport;
     QAction* actionNoteImport;
+
+    // menu: Edit
+    QAction* actionEditUndo;
+    QAction* actionEditRedo;
+    QAction* actionEditCut;
+    QAction* actionEditCopy;
+    QAction* actionEditPaste;
+    QAction* actionEditComplete;
+
+    // menu: Format
+    QAction* actionFormatBold;
+    QAction* actionFormatItalic;
+    QAction* actionFormatStrikethrough;
+    QAction* actionFormatKeyboard;
+    QAction* actionFormatCode;
+    QAction* actionFormatCodeBlock;
+    QAction* actionFormatMath;
+    QAction* actionFormatMathBlock;
+    QAction* actionFormatBlockQuote;
+    QAction* actionFormatListNumber;
+    QAction* actionFormatListBullet;
+    QAction* actionFormatListTask;
+    QAction* actionFormatLink;
+    QAction* actionFormatImage;
+    QAction* actionFormatTable;
+    QAction* actionFormatHr;
+    QAction* actionFormatToc;
 
     // menu: Help
     QAction* actionHelpDocumentation;

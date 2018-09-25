@@ -171,20 +171,21 @@ void NavigatorView::keyPressEvent(QKeyEvent *event)
 //		break;
 
     // zooming
-    case Qt::Key_Plus:
-        zoomIn();
+    case Qt::Key_Z:
+        if(event->modifiers() & Qt::ShiftModifier) {
+            zoomIn();
+        } else {
+            zoomOut();
+        }
 		break;
-    case Qt::Key_Minus:
-        zoomOut();
-        break;
 
     // edge lenght
-    case Qt::Key_ParenLeft:
-        if(initialEdgeLenght>EDGE_LENGTH_MIN) initialEdgeLenght-=EDGE_LENGTH_DELTA;
-        refreshOnNextTimerTick();
-        break;
-    case Qt::Key_ParenRight:
-        if(initialEdgeLenght<EDGE_LENGTH_MAX) initialEdgeLenght+=EDGE_LENGTH_DELTA;
+    case Qt::Key_E:
+        if(event->modifiers() & Qt::ShiftModifier) {
+            if(initialEdgeLenght>EDGE_LENGTH_MIN) initialEdgeLenght-=EDGE_LENGTH_DELTA;
+        } else {
+            if(initialEdgeLenght<EDGE_LENGTH_MAX) initialEdgeLenght+=EDGE_LENGTH_DELTA;
+        }
         refreshOnNextTimerTick();
         break;
 
