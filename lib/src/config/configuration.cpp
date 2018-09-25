@@ -111,8 +111,7 @@ void Configuration::clear()
     uiEnableDiagramsInMd = JavaScriptLibSupport::NO;
     uiShowToolbar = DEFAULT_UI_SHOW_TOOLBAR;
     uiNerdTargetAudience = DEFAULT_UI_NERD_MENU;
-    navigatorMaxNodes = DEFAULT_NAVIGATOR_MAX_NODES;
-    navigatorShowLegend = DEFAULT_NAVIGATOR_SHOW_LEGEND;
+    navigatorMaxNodes = DEFAULT_NAVIGATOR_MAX_GRAPH_NODES;
 }
 
 Repository* Configuration::addRepository(Repository* repository)

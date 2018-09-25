@@ -84,8 +84,7 @@ NavigatorView::NavigatorView(QWidget* parent)
       w{},
       h{},
       garbageItems{},
-      subgraph{},
-      doShowLegend{true}
+      subgraph{}
 {
     // scene is peephole rectangle to the whole view (QGraphicsView)
     navigatorScene = new QGraphicsScene(this);

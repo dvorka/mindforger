@@ -123,8 +123,6 @@ class ConfigurationDialog::NavigatorTab : public QWidget
 private:
     Configuration& config;
 
-    QCheckBox* showLegendCheck;
-
     QLabel* maxNodesLabel;
     QSpinBox*  maxNodesSpin;
 

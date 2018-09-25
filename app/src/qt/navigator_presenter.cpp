@@ -39,28 +39,28 @@ void NavigatorPresenter::showInitialView()
 {
     subgraph.setMaxNodes(Configuration::getInstance().getNavigatorMaxNodes());
     knowledgeGraph->getRelatedNodes(knowledgeGraph->getNode(KnowledgeGraphNodeType::MIND), subgraph);
-    view->refreshOnNextTimerTick(&subgraph, Configuration::getInstance().isNavigatorShowLegend());
+    view->refreshOnNextTimerTick(&subgraph);
 }
 
 void NavigatorPresenter::showInitialView(Outline* outline)
 {
     subgraph.setMaxNodes(Configuration::getInstance().getNavigatorMaxNodes());
     knowledgeGraph->getRelatedNodes(knowledgeGraph->getNode(outline), subgraph);
-    view->refreshOnNextTimerTick(&subgraph, Configuration::getInstance().isNavigatorShowLegend());
+    view->refreshOnNextTimerTick(&subgraph);
 }
 
 void NavigatorPresenter::showInitialView(Note* note)
 {
     subgraph.setMaxNodes(Configuration::getInstance().getNavigatorMaxNodes());
     knowledgeGraph->getRelatedNodes(knowledgeGraph->getNode(note), subgraph);
-    view->refreshOnNextTimerTick(&subgraph, Configuration::getInstance().isNavigatorShowLegend());
+    view->refreshOnNextTimerTick(&subgraph);
 }
 
 void NavigatorPresenter::showInitialViewTags()
 {
     subgraph.setMaxNodes(Configuration::getInstance().getNavigatorMaxNodes());
     knowledgeGraph->getRelatedNodes(knowledgeGraph->getNode(KnowledgeGraphNodeType::TAGS), subgraph);
-    view->refreshOnNextTimerTick(&subgraph, Configuration::getInstance().isNavigatorShowLegend());
+    view->refreshOnNextTimerTick(&subgraph);
 }
 
 void NavigatorPresenter::shuffle()
@@ -71,7 +71,7 @@ void NavigatorPresenter::shuffle()
 void NavigatorPresenter::nodeSelectedSlot(NavigatorNode* node)
 {
     knowledgeGraph->getRelatedNodes(node->getKnowledgeGraphNode(), subgraph);
-    view->refreshOnNextTimerTick(&subgraph, Configuration::getInstance().isNavigatorShowLegend());
+    view->refreshOnNextTimerTick(&subgraph);
     switch(node->getKnowledgeGraphNode()->getType()) {
     case KnowledgeGraphNodeType::OUTLINE:
         emit outlineSelectedSignal(static_cast<Outline*>(node->getKnowledgeGraphNode()->getThing()));

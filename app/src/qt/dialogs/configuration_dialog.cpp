@@ -177,7 +177,7 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
     editorKeyBindingCombo->addItem("windows");
 
     editorFontLabel = new QLabel(tr("Editor font")+":", this);
-    editorFontButton = new QPushButton(QFontDatabase::systemFont(QFontDatabase::FixedFont).family());//QFont().defaultFamily());
+    editorFontButton = new QPushButton(QFontDatabase::systemFont(QFontDatabase::FixedFont).family());
     QObject::connect(editorFontButton, &QPushButton::clicked, this, &ConfigurationDialog::MarkdownTab::getFont);
 
     editorMdSyntaxHighlightCheck = new QCheckBox(tr("Markdown syntax highlighting"), this);
@@ -249,12 +249,8 @@ void ConfigurationDialog::MarkdownTab::refresh()
         editorKeyBindingCombo->setCurrentIndex(i);
     }
 
-    QString fontName = QString::fromStdString(config.getEditorFont());
-    if (fontName.length()>16) {
-        fontName.resize(16);
-        fontName.append("...");
-    }
-    editorFontButton->setText(fontName);
+    editorFont.fromString(QString::fromStdString(config.getEditorFont()));
+    editorFontButton->setText(editorFont.family());
 
     editorMdSyntaxHighlightCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
     editorAutocompleteCheck->setChecked(config.isUiEditorEnableAutocomplete());
@@ -271,7 +267,7 @@ void ConfigurationDialog::MarkdownTab::save()
     config.setUiEnableDiagramsInMd(static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex()));
 
     config.setEditorKeyBindingByString(editorKeyBindingCombo->itemText(editorKeyBindingCombo->currentIndex()).toStdString());
-    config.setEditorFont(editorFont.toString().toUtf8().constData());
+    config.setEditorFont(editorFont.family().append(",").append(QString::number(editorFont.pointSize())).toStdString());
     config.setUiEditorEnableSyntaxHighlighting(editorMdSyntaxHighlightCheck->isChecked());
     config.setUiEditorEnableAutocomplete(editorAutocompleteCheck->isChecked());
     config.setUiEditorTabWidth(editorTabWidthCombo->itemText(editorTabWidthCombo->currentIndex()).toInt());
@@ -281,11 +277,12 @@ void ConfigurationDialog::MarkdownTab::save()
 
 void ConfigurationDialog::MarkdownTab::getFont()
 {
-    bool ok;
     QFont font;
     font.fromString(QString::fromStdString(config.getEditorFont()));
+
+    bool ok;
     editorFont = QFontDialog::getFont(&ok, font, this);
-    if (ok) {
+    if(ok) {
          editorFontButton->setText(editorFont.family());
     }
 }
@@ -345,8 +342,6 @@ void ConfigurationDialog::MindTab::save()
 ConfigurationDialog::NavigatorTab::NavigatorTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
-    showLegendCheck = new QCheckBox(tr("show graph legend as background watermark"), this);
-
     maxNodesLabel = new QLabel(tr("Max graph nodes (150 by default)")+":", this);
     maxNodesSpin = new QSpinBox(this);
     maxNodesSpin->setMinimum(1);
@@ -356,7 +351,6 @@ ConfigurationDialog::NavigatorTab::NavigatorTab(QWidget *parent)
     QVBoxLayout* pLayout = new QVBoxLayout{this};
     pLayout->addWidget(maxNodesLabel);
     pLayout->addWidget(maxNodesSpin);
-    pLayout->addWidget(showLegendCheck);
     QGroupBox* pGroup = new QGroupBox{tr("Knowledge Graph"), this};
     pGroup->setLayout(pLayout);
 
@@ -368,20 +362,17 @@ ConfigurationDialog::NavigatorTab::NavigatorTab(QWidget *parent)
 
 ConfigurationDialog::NavigatorTab::~NavigatorTab()
 {
-    delete showLegendCheck;
     delete maxNodesLabel;
     delete maxNodesSpin;
 }
 
 void ConfigurationDialog::NavigatorTab::refresh()
 {
-    showLegendCheck->setChecked(config.isNavigatorShowLegend());
     maxNodesSpin->setValue(config.getNavigatorMaxNodes());
 }
 
 void ConfigurationDialog::NavigatorTab::save()
 {
-    config.setNavigatorShowLegend(showLegendCheck->isChecked());
     config.setNavigatorMaxNodes(maxNodesSpin->value());
 }
 

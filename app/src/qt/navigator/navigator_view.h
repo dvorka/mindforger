@@ -117,8 +117,6 @@ private:
     // subgraph to be rendered
     KnowledgeSubGraph* subgraph;
 
-    bool doShowLegend;
-
     qreal initialEdgeLenght;
 
 public:
@@ -131,16 +129,15 @@ public:
     void itemMoved();
 
     void iWasSelected(NavigatorNode* selectedNode);    
-    void refreshOnNextTimerTick(KnowledgeSubGraph* subgraph, bool doShowLegend) {
+    void refreshOnNextTimerTick(KnowledgeSubGraph* subgraph) {
         std::lock_guard<std::mutex> criticalSection{refreshMutex};
 
         updateNavigatorView();
         this->subgraph = subgraph;
-        this->doShowLegend = doShowLegend;
         itemMoved(); // kick timer if not running
     }
     void refreshOnNextTimerTick() {
-        refreshOnNextTimerTick(subgraph, doShowLegend);
+        refreshOnNextTimerTick(subgraph);
     }
 
     void cleanupBeforeHide();

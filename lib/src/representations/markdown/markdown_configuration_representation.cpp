@@ -36,8 +36,7 @@ constexpr const auto CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL =  "* Edito
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL =  "* Editor autocomplete: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL =  "* Editor TAB width: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TABS_AS_SPACES_LABEL =  "* Editor insert SPACEs for TAB: ";
-constexpr const auto CONFIG_SETTING_NAVIGATOR_GRAPH_NODES_LABEL = "* Navigator max knowledge graph nodes: ";
-constexpr const auto CONFIG_SETTING_NAVIGATOR_SHOW_LEGEND_LABEL = "* Navigator legend: ";
+constexpr const auto CONFIG_SETTING_NAVIGATOR_MAX_GRAPH_NODES_LABEL = "* Navigator max knowledge graph nodes: ";
 constexpr const auto CONFIG_SETTING_MD_HIGHLIGHT_LABEL = "* Enable source code syntax highlighting support in Markdown: ";
 constexpr const auto CONFIG_SETTING_MD_MATH_LABEL = "* Enable math support in Markdown: ";
 constexpr const auto CONFIG_SETTING_MD_DIAGRAM_LABEL = "* Enable diagram support in Markdown: ";
@@ -211,6 +210,20 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         } else {
                             c.setUiEditorTabWidth(4);
                         }
+                    } else if(line->find(CONFIG_SETTING_NAVIGATOR_MAX_GRAPH_NODES_LABEL) != std::string::npos) {
+                        string t = line->substr(strlen(CONFIG_SETTING_NAVIGATOR_MAX_GRAPH_NODES_LABEL));
+                        std::string::size_type st;
+                        int i;
+                        try {
+                          i = std::stoi (t,&st);
+                        }
+                        catch(...) {
+                          i = Configuration::DEFAULT_NAVIGATOR_MAX_GRAPH_NODES;
+                        }
+                        if(i<0) {
+                            i=Configuration::DEFAULT_NAVIGATOR_MAX_GRAPH_NODES;
+                        }
+                        c.setNavigatorMaxNodes(i);
                     }
                 }
             }
@@ -367,7 +380,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL << (c?c->getEditorKeyBindingAsString():Configuration::DEFAULT_EDITOR_KEY_BINDING) << endl <<
          "    * Examples: emacs, vim, windows" << endl <<
          CONFIG_SETTING_UI_EDITOR_FONT_LABEL << (c?c->getEditorFont():Configuration::DEFAULT_EDITOR_FONT) << endl <<
-         "    * Examples: Courier New,12" << endl <<
+         "    * Examples: " << Configuration::DEFAULT_EDITOR_FONT << endl <<
          CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL << (c?(c->isUiEditorEnableSyntaxHighlighting()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SYNTAX_HIGHLIGHT?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL << (c?(c->isUiEditorEnableAutocomplete()?"yes":"no"):(Configuration::DEFAULT_EDITOR_AUTOCOMPLETE?"yes":"no")) << endl <<
@@ -385,6 +398,9 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_MD_DIAGRAM_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableDiagramsInMd()):UI_JS_LIB_NO) << endl <<
          "    * Enable online or offline Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
          "    * Examples: online, offline, no" << endl <<
+         CONFIG_SETTING_NAVIGATOR_MAX_GRAPH_NODES_LABEL << (c?c->getNavigatorMaxNodes():Configuration::DEFAULT_NAVIGATOR_MAX_GRAPH_NODES) << endl <<
+         "    * Maximum number of knowledge graph navigator nodes (performance vs. readability trade-off)." << endl <<
+         "    * Examples: 150" << endl <<
          endl <<
 
          "# " << CONFIG_SECTION_REPOSITORIES << endl <<

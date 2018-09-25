@@ -80,7 +80,7 @@ constexpr const auto UI_JS_LIB_NO = "no";
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
 constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_KEY_BINDING = UI_EDITOR_KEY_BINDING_EMACS;
-constexpr const auto UI_DEFAULT_EDITOR_FONT = "Courier New,12";
+constexpr const auto UI_DEFAULT_EDITOR_FONT = "Monospace,10";
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
 // improve platform/language specific
@@ -173,6 +173,7 @@ public:
     static const std::string DEFAULT_EDITOR_KEY_BINDING;
     static const std::string DEFAULT_EDITOR_FONT;
     static constexpr int DEFAULT_EDITOR_TAB_WIDTH = 4;
+    static constexpr int DEFAULT_NAVIGATOR_MAX_GRAPH_NODES = 150;
     static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOCOMPLETE = true;
     static constexpr const bool DEFAULT_EDITOR_TABS_AS_SPACES = true;
@@ -181,7 +182,6 @@ public:
     static constexpr const bool DEFAULT_MD_MATH = false;
     static constexpr const bool DEFAULT_ALLOW_ONLINE_JS_LIBS = false;
 
-    static constexpr int DEFAULT_NAVIGATOR_MAX_NODES = 150;
     static constexpr const bool DEFAULT_NAVIGATOR_SHOW_LEGEND = false;
 
     static constexpr int EDITOR_MAX_AUTOCOMPLETE_LINES = 1000;
@@ -235,7 +235,6 @@ private:
     bool uiEditorTabsAsSpaces;
     bool uiShowToolbar;
     int navigatorMaxNodes;
-    bool navigatorShowLegend;
 
 private:
     Installer* installer;
@@ -382,8 +381,6 @@ public:
     bool isUiEditorTabsAsSpaces() const { return uiEditorTabsAsSpaces; }
     void setUiEditorTabsAsSpaces(bool uiEditorTabsAsSpaces){ this->uiEditorTabsAsSpaces = uiEditorTabsAsSpaces; }
 
-    bool isNavigatorShowLegend() const { return navigatorShowLegend; }
-    void setNavigatorShowLegend(bool navigatorShowLegend) { this->navigatorShowLegend = navigatorShowLegend; }
     int getNavigatorMaxNodes() const { return navigatorMaxNodes; }
     void setNavigatorMaxNodes(int navigatorMaxNodes) { this->navigatorMaxNodes = navigatorMaxNodes; }
 };
