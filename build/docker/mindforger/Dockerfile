@@ -25,15 +25,17 @@ FROM ubuntu:16.04
 
 MAINTAINER "Martin Dvorak" <martin.dvorak@mindforger.com>
 
-# IMPROVE: run MF under normal user
-
 # update APT, add MindForger PPA and install MindForger
 RUN apt-get update && \
+    apt-get install -y locales && \
+    locale-gen en_US en_US.UTF-8 && \
     apt-get -y install software-properties-common && \
     add-apt-repository -y ppa:ultradvorka/productivity && \
     apt-get -y update && \
     apt-get -y install mindforger
 
+# ensure locale despite locale-gen
+ENV LANG=en_US.UTF-8 LANGUAGE=en_US
 ENV QT_GRAPHICSSYSTEM native
 
 RUN useradd -ms /bin/bash mindforger-user
