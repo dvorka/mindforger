@@ -156,26 +156,12 @@ void NavigatorView::keyPressEvent(QKeyEvent *event)
 {
 	switch (event->key()) {
 
-    // IMPROVE choose last selected node and move that selected node
-//	case Qt::Key_Up:
-//        mindNode->moveBy(0, -20);
-//		break;
-//	case Qt::Key_Down:
-//        mindNode->moveBy(0, 20);
-//		break;
-//	case Qt::Key_Left:
-//        mindNode->moveBy(-20, 0);
-//		break;
-//	case Qt::Key_Right:
-//        mindNode->moveBy(20, 0);
-//		break;
-
     // zooming
     case Qt::Key_Z:
         if(event->modifiers() & Qt::ShiftModifier) {
-            zoomIn();
-        } else {
             zoomOut();
+        } else {
+            zoomIn();
         }
 		break;
 
@@ -193,6 +179,21 @@ void NavigatorView::keyPressEvent(QKeyEvent *event)
 	case Qt::Key_Space:
 		shuffle();
 		break;
+
+    // IMPROVE choose last selected node and move that selected node
+    //	case Qt::Key_Up:
+    //        mindNode->moveBy(0, -20);
+    //		break;
+    //	case Qt::Key_Down:
+    //        mindNode->moveBy(0, 20);
+    //		break;
+    //	case Qt::Key_Left:
+    //        mindNode->moveBy(-20, 0);
+    //		break;
+    //	case Qt::Key_Right:
+    //        mindNode->moveBy(20, 0);
+    //		break;
+
 	default:
 		QGraphicsView::keyPressEvent(event);
 	}

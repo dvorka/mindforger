@@ -56,6 +56,7 @@ public:
     MainMenuView* getView() { return view; }
 
     void showFacetOrganizer();
+    void showFacetNavigator();
 
     void showFacetOutlineList();
     void showFacetOutlineView();

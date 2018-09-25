@@ -52,6 +52,8 @@ public:
     void showInitialView(Note* note);
     void showInitialViewTags();
 
+    void shuffle();
+
     void cleanupBeforeHide() { view->cleanupBeforeHide(); }
 
 private slots:

@@ -195,6 +195,8 @@ public:
     void showFacetMindThink();
     void showFacetMindSleep();
 
+    void showFacetNavigator();
+
     void addRepositoryOrFileToRelearn(const QString& path);
 
 private:

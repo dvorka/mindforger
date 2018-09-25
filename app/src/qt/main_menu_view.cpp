@@ -27,6 +27,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     qMenuBar->setStyleSheet(LookAndFeels::getInstance().getMenuStylesheet());
 
     // menu: mind
+
     menuMind = qMenuBar->addMenu(tr("&Mind"));
 
 #ifdef DO_MF_DEBUG
@@ -251,114 +252,35 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
     menuView->addAction(actionViewFullscreen);
 
-    // menu: edit
+    // menu: navigator
 
-    actionEditUndo= new QAction(tr("&Undo\tCtrl+Z"), mainWindow);
-    actionEditUndo->setStatusTip(tr("Undo"));
+    actionNavigatorEdgesStretch = new QAction(tr("Str&etch edges\te | mouse wheel"), mainWindow);
+    actionNavigatorEdgesStretch->setStatusTip(tr("Stretch knowledge graph edges"));
 
-    actionEditRedo= new QAction(tr("&Redo\tCtrl+Shift+Z"), mainWindow);
-    actionEditRedo->setStatusTip(tr("Redo"));
+    actionNavigatorEdgesShrink= new QAction(tr("&Sh&rink edge\tE | mouse wheel"), mainWindow);
+    actionNavigatorEdgesShrink->setStatusTip(tr("Shring knowledge graph edges"));
 
-    actionEditCut= new QAction(tr("Cu&t\tCtrl+X"), mainWindow);
-    actionEditCut->setStatusTip(tr("Cut"));
+    actionNavigatorZoomIn = new QAction(tr("Zoom &in\tz"), mainWindow);
+    actionNavigatorZoomIn->setStatusTip(tr("Zoom in knowledge graph"));
 
-    actionEditCopy= new QAction(tr("&Copy\tCtrl+C"), mainWindow);
-    actionEditCopy->setStatusTip(tr("Copy"));
+    actionNavigatorZoomOut = new QAction(tr("Zoom &out\tZ"), mainWindow);
+    actionNavigatorZoomOut->setStatusTip(tr("Zoom out knowledge graph"));
 
-    actionEditPaste= new QAction(tr("&Paste\tCtrl+V"), mainWindow);
-    actionEditPaste->setStatusTip(tr("Paste"));
+    actionNavigatorShuffle = new QAction(tr("&Shuffle\tSpace"), mainWindow);
+    actionNavigatorShuffle->setStatusTip(tr("Shuffle knowledge graph"));
 
-    actionEditComplete= new QAction(tr("Complete Text\tAlt+/"), mainWindow);
-    actionEditComplete->setStatusTip(tr("Complete word being written using other words in the current Note"));
-
-    menuEdit = qMenuBar->addMenu(tr("&Edit"));
-    menuEdit->addAction(actionEditUndo);
-    menuEdit->addAction(actionEditRedo);
-    menuEdit->addSeparator();
-    menuEdit->addAction(actionEditCut);
-    menuEdit->addAction(actionEditCopy);
-    menuEdit->addAction(actionEditPaste);
-    menuEdit->addSeparator();
-    menuEdit->addAction(actionEditComplete);
-    menuEdit->setEnabled(false);
-
-    // menu: format
-
-    actionFormatBold = new QAction(tr("&Bold"), mainWindow);
-    actionFormatBold->setStatusTip(tr("Format text as bold"));
-
-    actionFormatItalic = new QAction(tr("&Italic"), mainWindow);
-    actionFormatItalic->setStatusTip(tr("Format text as italic"));
-
-    actionFormatCode = new QAction(tr("&Code"), mainWindow);
-    actionFormatCode->setStatusTip(tr("Format text as inlined source code"));
-
-    actionFormatMath = new QAction(tr("&Math"), mainWindow);
-    actionFormatMath->setStatusTip(tr("Format text as math (MathJax)"));
-
-    actionFormatStrikethrough = new QAction(tr("&Strikethrough"), mainWindow);
-    actionFormatStrikethrough->setStatusTip(tr("Format text as strikethrough"));
-
-    actionFormatKeyboard = new QAction(tr("&Keyboard"), mainWindow);
-    actionFormatKeyboard->setStatusTip(tr("Format text as keyboard input"));
-
-    actionFormatListBullet = new QAction(tr("Bulleted List"), mainWindow);
-    actionFormatListBullet->setStatusTip(tr("Format block as bulleted list"));
-
-    actionFormatListNumber = new QAction(tr("Numbered List"), mainWindow);
-    actionFormatListNumber->setStatusTip(tr("Format block as numbered list"));
-
-    actionFormatListTask = new QAction(tr("Task List"), mainWindow);
-    actionFormatListTask->setStatusTip(tr("Format block as task list"));
-
-    actionFormatToc = new QAction(tr("T&able of Contents"), mainWindow);
-    actionFormatToc ->setStatusTip(tr("Insert Notebook's table of contents"));
-
-    actionFormatCodeBlock = new QAction(tr("C&ode Block"), mainWindow);
-    actionFormatCodeBlock->setStatusTip(tr("Format text block as source code"));
-
-    actionFormatMathBlock = new QAction(tr("Math Block"), mainWindow);
-    actionFormatMathBlock->setStatusTip(tr("Format text block as math (MathJax)"));
-
-    actionFormatBlockQuote = new QAction(tr("Block &Quote"), mainWindow);
-    actionFormatBlockQuote->setStatusTip(tr("Format text block as blockquote"));
-
-    actionFormatLink = new QAction(tr("&Link"), mainWindow);
-    actionFormatLink->setStatusTip(tr("Insert link to a document, image or file"));
-
-    actionFormatImage = new QAction(tr("Ima&ge"), mainWindow);
-    actionFormatImage->setStatusTip(tr("Insert image"));
-
-    actionFormatTable = new QAction(tr("&Table"), mainWindow);
-    actionFormatTable->setStatusTip(tr("Insert table"));
-
-    actionFormatHr = new QAction(tr("&Horizontal ruler"), mainWindow);
-    actionFormatHr->setStatusTip(tr("Horizontal ruler"));
-
-    menuFormat = qMenuBar->addMenu(tr("&Format"));
-    menuFormat->addAction(actionFormatBold);
-    menuFormat->addAction(actionFormatItalic);
-    menuFormat->addAction(actionFormatCode);
-    menuFormat->addAction(actionFormatMath);
-    menuFormat->addAction(actionFormatStrikethrough);
-    menuFormat->addAction(actionFormatKeyboard);
-    menuFormat->addSeparator();
-    menuFormat->addAction(actionFormatListBullet);
-    menuFormat->addAction(actionFormatListNumber);
-    menuFormat->addAction(actionFormatListTask);
-    menuFormat->addSeparator();
-    menuFormat->addAction(actionFormatToc);
-    menuFormat->addAction(actionFormatCodeBlock);
-    menuFormat->addAction(actionFormatMathBlock);
-    menuFormat->addAction(actionFormatBlockQuote);
-    menuFormat->addAction(actionFormatTable);
-    menuFormat->addAction(actionFormatHr);
-    menuFormat->addSeparator();
-    menuFormat->addAction(actionFormatLink);
-    menuFormat->addAction(actionFormatImage);
-    menuFormat->setEnabled(false);
+    menuNavigator = qMenuBar->addMenu(tr("Na&vigator"));
+    menuNavigator->addAction(actionNavigatorEdgesStretch);
+    menuNavigator->addAction(actionNavigatorEdgesShrink);
+    menuNavigator->addSeparator();
+    menuNavigator->addAction(actionNavigatorZoomIn);
+    menuNavigator->addAction(actionNavigatorZoomOut);
+    menuNavigator->addSeparator();
+    menuNavigator->addAction(actionNavigatorShuffle);
+    menuNavigator->setEnabled(false);
 
     // menu: Outline
+
     menuOutline = qMenuBar->addMenu(tr("N&otebook"));
 
     actionOutlineNew = new QAction(tr("&New"), mainWindow);
@@ -510,6 +432,113 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
     menuNote->setEnabled(false);
 
+    // menu: edit
+
+    actionEditUndo= new QAction(tr("&Undo\tCtrl+Z"), mainWindow);
+    actionEditUndo->setStatusTip(tr("Undo"));
+
+    actionEditRedo= new QAction(tr("&Redo\tCtrl+Shift+Z"), mainWindow);
+    actionEditRedo->setStatusTip(tr("Redo"));
+
+    actionEditCut= new QAction(tr("Cu&t\tCtrl+X"), mainWindow);
+    actionEditCut->setStatusTip(tr("Cut"));
+
+    actionEditCopy= new QAction(tr("&Copy\tCtrl+C"), mainWindow);
+    actionEditCopy->setStatusTip(tr("Copy"));
+
+    actionEditPaste= new QAction(tr("&Paste\tCtrl+V"), mainWindow);
+    actionEditPaste->setStatusTip(tr("Paste"));
+
+    actionEditComplete= new QAction(tr("Complete Text\tAlt+/"), mainWindow);
+    actionEditComplete->setStatusTip(tr("Complete word being written using other words in the current Note"));
+
+    menuEdit = qMenuBar->addMenu(tr("&Edit"));
+    menuEdit->addAction(actionEditUndo);
+    menuEdit->addAction(actionEditRedo);
+    menuEdit->addSeparator();
+    menuEdit->addAction(actionEditCut);
+    menuEdit->addAction(actionEditCopy);
+    menuEdit->addAction(actionEditPaste);
+    menuEdit->addSeparator();
+    menuEdit->addAction(actionEditComplete);
+    menuEdit->setEnabled(false);
+
+    // menu: format
+
+    actionFormatBold = new QAction(tr("&Bold"), mainWindow);
+    actionFormatBold->setStatusTip(tr("Format text as bold"));
+
+    actionFormatItalic = new QAction(tr("&Italic"), mainWindow);
+    actionFormatItalic->setStatusTip(tr("Format text as italic"));
+
+    actionFormatCode = new QAction(tr("&Code"), mainWindow);
+    actionFormatCode->setStatusTip(tr("Format text as inlined source code"));
+
+    actionFormatMath = new QAction(tr("&Math"), mainWindow);
+    actionFormatMath->setStatusTip(tr("Format text as math (MathJax)"));
+
+    actionFormatStrikethrough = new QAction(tr("&Strikethrough"), mainWindow);
+    actionFormatStrikethrough->setStatusTip(tr("Format text as strikethrough"));
+
+    actionFormatKeyboard = new QAction(tr("&Keyboard"), mainWindow);
+    actionFormatKeyboard->setStatusTip(tr("Format text as keyboard input"));
+
+    actionFormatListBullet = new QAction(tr("Bulleted List"), mainWindow);
+    actionFormatListBullet->setStatusTip(tr("Format block as bulleted list"));
+
+    actionFormatListNumber = new QAction(tr("Numbered List"), mainWindow);
+    actionFormatListNumber->setStatusTip(tr("Format block as numbered list"));
+
+    actionFormatListTask = new QAction(tr("Task List"), mainWindow);
+    actionFormatListTask->setStatusTip(tr("Format block as task list"));
+
+    actionFormatToc = new QAction(tr("T&able of Contents"), mainWindow);
+    actionFormatToc ->setStatusTip(tr("Insert Notebook's table of contents"));
+
+    actionFormatCodeBlock = new QAction(tr("C&ode Block"), mainWindow);
+    actionFormatCodeBlock->setStatusTip(tr("Format text block as source code"));
+
+    actionFormatMathBlock = new QAction(tr("Math Block"), mainWindow);
+    actionFormatMathBlock->setStatusTip(tr("Format text block as math (MathJax)"));
+
+    actionFormatBlockQuote = new QAction(tr("Block &Quote"), mainWindow);
+    actionFormatBlockQuote->setStatusTip(tr("Format text block as blockquote"));
+
+    actionFormatLink = new QAction(tr("&Link"), mainWindow);
+    actionFormatLink->setStatusTip(tr("Insert link to a document, image or file"));
+
+    actionFormatImage = new QAction(tr("Ima&ge"), mainWindow);
+    actionFormatImage->setStatusTip(tr("Insert image"));
+
+    actionFormatTable = new QAction(tr("&Table"), mainWindow);
+    actionFormatTable->setStatusTip(tr("Insert table"));
+
+    actionFormatHr = new QAction(tr("&Horizontal ruler"), mainWindow);
+    actionFormatHr->setStatusTip(tr("Horizontal ruler"));
+
+    menuFormat = qMenuBar->addMenu(tr("&Format"));
+    menuFormat->addAction(actionFormatBold);
+    menuFormat->addAction(actionFormatItalic);
+    menuFormat->addAction(actionFormatCode);
+    menuFormat->addAction(actionFormatMath);
+    menuFormat->addAction(actionFormatStrikethrough);
+    menuFormat->addAction(actionFormatKeyboard);
+    menuFormat->addSeparator();
+    menuFormat->addAction(actionFormatListBullet);
+    menuFormat->addAction(actionFormatListNumber);
+    menuFormat->addAction(actionFormatListTask);
+    menuFormat->addSeparator();
+    menuFormat->addAction(actionFormatToc);
+    menuFormat->addAction(actionFormatCodeBlock);
+    menuFormat->addAction(actionFormatMathBlock);
+    menuFormat->addAction(actionFormatBlockQuote);
+    menuFormat->addAction(actionFormatTable);
+    menuFormat->addAction(actionFormatHr);
+    menuFormat->addSeparator();
+    menuFormat->addAction(actionFormatLink);
+    menuFormat->addAction(actionFormatImage);
+    menuFormat->setEnabled(false);
+
     // menu: help
 
     actionHelpDocumentation = new QAction(tr("&Documentation"), mainWindow);
@@ -550,6 +579,7 @@ void MainMenuView::showAllMenuItems()
     menuView->setEnabled(true);
     menuEdit->setEnabled(true);
     menuOutline->setEnabled(true);
+    menuNavigator->setEnabled(true);
     actionViewOrganizer->setEnabled(true);
     actionOutlineEdit->setEnabled(true);
     actionOutlineClone->setEnabled(true);
@@ -571,6 +601,7 @@ void MainMenuView::showFacetOutlineList(bool repositoryMode)
     actionOutlineClone->setEnabled(false);
     actionOutlineHome->setEnabled(false);
     actionOutlineForget->setEnabled(false);
+    menuNavigator->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
     menuNote->setEnabled(false);
@@ -591,6 +622,7 @@ void MainMenuView::showFacetOutlineView(bool repositoryMode)
 {
     showAllMenuItems();
 
+    menuNavigator->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
 
@@ -608,6 +640,8 @@ void MainMenuView::showFacetOutlineView(bool repositoryMode)
 void MainMenuView::showFacetNoteEdit(bool repositoryMode)
 {
     showAllMenuItems();
+
+    menuNavigator->setEnabled(false);
 
     if(!repositoryMode) {
         menuView->setEnabled(false);
@@ -629,6 +663,15 @@ void MainMenuView::showFacetMindSleep()
 {
     actionMindThink->setVisible(true);
     actionMindSleep->setVisible(false);
+}
+
+void MainMenuView::showFacetNavigator()
+{
+    showAllMenuItems();
+
+    menuNote->setEnabled(false);
+    menuEdit->setEnabled(false);
+    menuFormat->setEnabled(false);
 }
 
 void MainMenuView::addRepositoryOrFileToRelearn(const QString& path)

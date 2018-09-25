@@ -968,6 +968,13 @@ void MainWindowPresenter::doActionViewFullscreen()
     }
 }
 
+void MainWindowPresenter::doActionNavigatorShuffle()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_NAVIGATOR)) {
+        orloj->getNavigator()->shuffle();
+    }
+}
+
 void MainWindowPresenter::doActionFormatBold()
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {

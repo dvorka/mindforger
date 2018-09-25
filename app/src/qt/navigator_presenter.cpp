@@ -63,6 +63,11 @@ void NavigatorPresenter::showInitialViewTags()
     view->refreshOnNextTimerTick(&subgraph, Configuration::getInstance().isNavigatorShowLegend());
 }
 
+void NavigatorPresenter::shuffle()
+{
+    view->shuffle();
+}
+
 void NavigatorPresenter::nodeSelectedSlot(NavigatorNode* node)
 {
     knowledgeGraph->getRelatedNodes(node->getKnowledgeGraphNode(), subgraph);

@@ -100,6 +100,7 @@ public:
 
     OrlojView* getView() const { return view; }
     OrganizerPresenter* getOrganizer() const { return organizerPresenter; }
+    NavigatorPresenter* getNavigator() const { return navigatorPresenter; }
     MainWindowPresenter* getMainWindow() const { return mainPresenter; }
     OutlinesTablePresenter* getOutlinesTable() const { return outlinesTablePresenter; }
     NotesTablePresenter* getNotesTable() const { return notesTablePresenter; }

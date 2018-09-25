@@ -212,6 +212,8 @@ public slots:
     void doActionCli();
     void doActionViewDistractionFree();
     void doActionViewFullscreen();
+    // navigator
+    void doActionNavigatorShuffle();
     // format
     void doActionFormatBold();
     void doActionFormatItalic();

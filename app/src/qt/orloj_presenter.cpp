@@ -180,6 +180,7 @@ void OrlojPresenter::showFacetKnowledgeGraphNavigator()
         break;
     }
 
+    mainPresenter->getMainMenu()->showFacetNavigator();
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
