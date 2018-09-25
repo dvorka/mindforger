@@ -36,7 +36,6 @@ RUN apt-get update && \
 
 # ensure locale despite locale-gen
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US
-ENV QT_GRAPHICSSYSTEM native
 
 RUN useradd -ms /bin/bash mindforger-user
 USER mindforger-user
