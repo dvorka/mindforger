@@ -40,6 +40,7 @@ void RecentNotesTableModel::removeAllRows()
     QStringList tableHeader;
     tableHeader
         << tr("Note")
+        << tr("Notebook")
         << tr("Rs")
         << tr("Ws")
         << tr("Read")
@@ -78,6 +79,10 @@ void RecentNotesTableModel::addRow(const Note* n)
 
     // IMPROVE refactor to methods
     QString s;
+
+    s.clear();
+    s += n->getOutline()->getName().c_str();
+    items += new QStandardItem(s);
 
     item = new QStandardItem();
     item->setData(QVariant(n->getReads()), Qt::DisplayRole);

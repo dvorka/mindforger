@@ -43,16 +43,25 @@ void RecentNotesTableView::paintEvent(QPaintEvent* event)
     // IMPROVE may kill performance
     this->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 
+    // N
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
+    // O
+    int normalizedWidth = width()/fontMetrics().averageCharWidth();
+    if(normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH) {
+        this->setColumnWidth(1, 0);
+    } else {
+        this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*50);
+    }
+
     // rds/wrs
-    this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*5);
     this->setColumnWidth(2, this->fontMetrics().averageCharWidth()*5);
+    this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*5);
 
     // pretty: rd/wr
-    this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*12);
-    // pretty
     this->setColumnWidth(4, this->fontMetrics().averageCharWidth()*12);
+    // pretty
+    this->setColumnWidth(5, this->fontMetrics().averageCharWidth()*12);
 
     QTableView::paintEvent(event);
 }
