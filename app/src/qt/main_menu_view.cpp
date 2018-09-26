@@ -237,8 +237,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewOrganizer);
     menuView->addAction(actionViewOutlines);
     menuView->addAction(actionViewTags);
-#ifdef MF_WIP
     menuView->addAction(actionViewNavigator);
+#ifdef MF_WIP
     menuView->addAction(actionViewStencils);
     menuView->addAction(actionViewDwell);
     // OBSOLETE feature: menuView->addAction(actionViewCli);
