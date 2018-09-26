@@ -50,6 +50,7 @@
         MF_ASSERT_FUTURE_MODIFICATION(M_TS, KEY, NAME);
 #else
     #define MF_DEBUG(x) do {;} while (0)
+    #define MF_ASSERT_FUTURE_TIMESTAMPS(x1,x2,x3,x4,x5) do {;} while (0)
 #endif
 
 #endif /* M8R_DEBUG_H_ */
