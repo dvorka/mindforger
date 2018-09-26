@@ -17,12 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-# Set window size for creation of screenshots for web mf.com: 1360x768 (then use Screenshot app)
-
-echo "IMPORTANT: before running this script make sure window is NOT maximized or half sized - use rectangle button that allows window resizing (using right-down corner)"
-
-wmctrl -r "MindForger - Thinking Notebook - 1.47.0 - /home/dvorka/mf" -e 0,0,0,1360,768
-wmctrl -r "MindForger - Thinking Notebook - 1.47.0 - /home/dvorka/demo" -e 0,0,0,1360,768
-#wmctrl -r "MindForger - Thinking Notebook - 1.47.0 - /home/dvorka/p/mindforger/git/mindforger-repository" -e 0,0,0,1360,768
+docker start $(cat ~/.mindforger.docker)
 
 # eof
