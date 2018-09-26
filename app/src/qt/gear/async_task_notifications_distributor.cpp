@@ -40,19 +40,14 @@ AsyncTaskNotificationsDistributor::AsyncTaskNotificationsDistributor(MainWindowP
 
     QObject::connect(
         this,
-        SIGNAL(leaderboardRefresh(Note*)),
-        mwp->getOrloj()->getNoteView(),
-        SLOT(slotRefreshLeaderboard(Note*)));
-    QObject::connect(
-        this,
-        SIGNAL(refreshHeaderLeaderboardByValue(std::vector<std::pair<Note*,float>>*)),
+        SIGNAL(refreshHeaderLeaderboardByValue(AssociatedNotes*)),
         mwp->getOrloj()->getOutlineHeaderView(),
-        SLOT(slotRefreshHeaderLeaderboardByValue(std::vector<std::pair<Note*,float>>*)));
+        SLOT(slotRefreshHeaderLeaderboardByValue(AssociatedNotes*)));
     QObject::connect(
         this,
-        SIGNAL(refreshLeaderboardByValue(std::vector<std::pair<Note*,float>>*)),
+        SIGNAL(refreshLeaderboardByValue(AssociatedNotes*)),
         mwp->getOrloj()->getNoteView(),
-        SLOT(slotRefreshLeaderboardByValue(std::vector<std::pair<Note*,float>>*)));
+        SLOT(slotRefreshLeaderboardByValue(AssociatedNotes*)));
 }
 
 AsyncTaskNotificationsDistributor::~AsyncTaskNotificationsDistributor()
@@ -71,104 +66,130 @@ void AsyncTaskNotificationsDistributor::run()
     Note* lastTayWNote{};
 
     while(true) {
-        // IMPROVE consider a condition variable & activiation of checking ONLY if WIP non-empty
         msleep(sleepInterval);
-        //MF_DEBUG("AsyncDistributor: wake up...");
+        MF_DEBUG("AsyncDistributor: wake up w/ associations need " << (int)mwp->getMind()->needForAssociations() << endl);
+        if(mwp->getMind()->needForAssociations()
+             ||
+           mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+             ||
+           mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER))
+        {
+            mwp->getMind()->meditateAssociations();
 
-        /*
-         * AA FTS algorithm - SYNCHRONOUS
-         */
+            /*
+             * AA FTS algorithm
+             */
 
-        // IMPROVE WFTS algorithm is performed SYNCHRONOUSLY - reliable ASYNC protocol was NOT designed yet
-        if(Configuration::getInstance().getAaAlgorithm()==Configuration::AssociationAssessmentAlgorithm::WEIGHTED_FTS) {
-            if(Configuration::getInstance().getMindState()==Configuration::MindState::THINKING) {
-                if(mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-                    // think as you WRITE: detect inactivity AND refresh leadearboard for active word
-                    MF_DEBUG("AsyncDistributor: think as you WRITE (N) hits: " << mwp->getOrloj()->getNoteEdit()->getHitCounter() << endl);
-                    // if there is no activity, then show leaderboard
-                    if(!mwp->getOrloj()->getNoteEdit()->getHitCounter()) {
-                        QString words = mwp->getOrloj()->getNoteEdit()->getRelevantWords();
-                        MF_DEBUG("AsyncDistributor: think as you WRITE (N) words '" << words.toStdString() << "'" << endl);
-                        if(words.size()) {
-                            // refresh leaderboard ONLY if it's different
-                            if(lastTayWNote!=mwp->getOrloj()->getNoteEdit()->getCurrentNote() || lastTayWords!=words) {
-                                lastTayWNote = mwp->getOrloj()->getNoteEdit()->getCurrentNote();
-                                lastTayWords = words;
+            if(Configuration::getInstance().getAaAlgorithm()==Configuration::AssociationAssessmentAlgorithm::WEIGHTED_FTS) {
 
-                                vector<pair<Note*,float>>* associations = new vector<pair<Note*,float>>{};
-                                mwp->getMind()->getAssociatedNotes(words.toStdString(), *associations, mwp->getOrloj()->getNoteEdit()->getCurrentNote());
-                                // send signal(s) to ensure async
-                                emit showStatusBarInfo("Associated Notes for '"+words+"'...");
-                                emit refreshLeaderboardByValue(associations);
-                            } else {
-                                MF_DEBUG("AsyncDistributor: SKIPPING think as you WRITE (N) for words '" << words.toStdString() << "'" << endl);
+                if(Configuration::getInstance().getMindState()==Configuration::MindState::THINKING) {
+
+                    if(mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+                         ||
+                       mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER))
+                    {
+                        AssociatedNotes* associations = new AssociatedNotes{OUTLINE, mwp->getOrloj()->getOutlineView()->getCurrentOutline()};
+                        mwp->getMind()->getAssociatedNotes(*associations);
+                        // send signal(s) to ensure async
+                        emit showStatusBarInfo("Associated Notes for Notebook '"+QString::fromStdString(mwp->getOrloj()->getOutlineView()->getCurrentOutline()->getName())+"'...");
+                        emit refreshHeaderLeaderboardByValue(associations);
+                    } else if(mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
+                        AssociatedNotes* associations = new AssociatedNotes{NOTE, mwp->getOrloj()->getNoteView()->getCurrentNote()};
+                        mwp->getMind()->getAssociatedNotes(*associations);
+                        // send signal(s) to ensure async
+                        emit showStatusBarInfo("Associated Notes for Note '"+QString::fromStdString(mwp->getOrloj()->getNoteView()->getCurrentNote()->getName())+"'...");
+                        emit refreshLeaderboardByValue(associations);
+                    } else if(mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+                        // think as you WRITE: detect inactivity AND refresh leadearboard for active word
+                        MF_DEBUG("AsyncDistributor: think as you WRITE (N) hits: " << mwp->getOrloj()->getNoteEdit()->getHitCounter() << endl);
+                        // if there is no activity, then show leaderboard
+                        if(!mwp->getOrloj()->getNoteEdit()->getHitCounter()) {
+                            QString words = mwp->getOrloj()->getNoteEdit()->getRelevantWords();
+                            MF_DEBUG("AsyncDistributor: think as you WRITE (N) words '" << words.toStdString() << "'" << endl);
+                            if(words.size()) {
+                                // refresh leaderboard ONLY if it's different
+                                if(lastTayWNote!=mwp->getOrloj()->getNoteEdit()->getCurrentNote() || lastTayWords!=words) {
+                                    lastTayWNote = mwp->getOrloj()->getNoteEdit()->getCurrentNote();
+                                    lastTayWords = words;
+
+                                    AssociatedNotes* associations = new AssociatedNotes{WORD, words.toStdString(), mwp->getOrloj()->getNoteEdit()->getCurrentNote()};
+                                    mwp->getMind()->getAssociatedNotes(*associations);
+                                    // send signal(s) to ensure async
+                                    emit showStatusBarInfo("Associated Notes for word(s) '"+words+"'...");
+                                    emit refreshLeaderboardByValue(associations);
+                                } else {
+                                    MF_DEBUG("AsyncDistributor: SKIPPING think as you WRITE (N) for words '" << words.toStdString() << "'" << endl);
+                                }
                             }
                         }
-                    }
 
-                    mwp->getOrloj()->getNoteEdit()->clearHitCounter();
-                } else if(mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-                    // think as you WRITE: detect inactivity AND refresh leadearboard for word(s) under cursor
-                    if(!mwp->getOrloj()->getOutlineHeaderEdit()->getHitCounter()) {
-                        QString words = mwp->getOrloj()->getOutlineHeaderEdit()->getRelevantWords();
-                        MF_DEBUG("AsyncDistributor: think as you WRITE (O) hits: " << mwp->getOrloj()->getOutlineHeaderEdit()->getHitCounter() << " words '" << words.toStdString() << "'" << endl);
-                        if(words.size()) {
-                            // refresh leaderboard ONLY if it's different
-                            if(lastTayWOutline!=mwp->getOrloj()->getOutlineHeaderEdit()->getCurrentOutline() || lastTayWords!=words) {
-                                lastTayWOutline= mwp->getOrloj()->getOutlineHeaderEdit()->getCurrentOutline();
-                                lastTayWords = words;
+                        mwp->getOrloj()->getNoteEdit()->clearHitCounter();
+                    } else if(mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+                        // think as you WRITE: detect inactivity AND refresh leadearboard for word(s) under cursor
+                        if(!mwp->getOrloj()->getOutlineHeaderEdit()->getHitCounter()) {
+                            QString words = mwp->getOrloj()->getOutlineHeaderEdit()->getRelevantWords();
+                            MF_DEBUG("AsyncDistributor: think as you WRITE (O) hits: " << mwp->getOrloj()->getOutlineHeaderEdit()->getHitCounter() << " words '" << words.toStdString() << "'" << endl);
+                            if(words.size()) {
+                                // refresh leaderboard ONLY if it's different
+                                if(lastTayWOutline!=mwp->getOrloj()->getOutlineHeaderEdit()->getCurrentOutline() || lastTayWords!=words) {
+                                    lastTayWOutline= mwp->getOrloj()->getOutlineHeaderEdit()->getCurrentOutline();
+                                    lastTayWords = words;
 
-                                vector<pair<Note*,float>>* associations = new vector<pair<Note*,float>>{};
-                                mwp->getMind()->getAssociatedNotes(words.toStdString(), *associations, mwp->getOrloj()->getOutlineHeaderEdit()->getCurrentOutline()->getOutlineDescriptorAsNote());
-                                // send signal(s) to ensure async
-                                emit showStatusBarInfo("Associated Notes for Outline '"+words+"'...");
-                                emit refreshHeaderLeaderboardByValue(associations);
+                                    AssociatedNotes* associations = new AssociatedNotes{WORD, words.toStdString(), mwp->getOrloj()->getOutlineHeaderEdit()->getCurrentOutline()->getOutlineDescriptorAsNote()};
+                                    mwp->getMind()->getAssociatedNotes(*associations);
+                                    // send signal(s) to ensure async (associations instance must NOT be deleted)
+                                    emit showStatusBarInfo("Associated Notes for word(s) '"+words+"'...");
+                                    emit refreshHeaderLeaderboardByValue(associations);
+                                } else {
+                                    MF_DEBUG("AsyncDistributor: SKIPPING think as you WRITE (O) for words '" << words.toStdString() << "'" << endl);
+                                }
                             }
                         }
+
+                        mwp->getOrloj()->getOutlineHeaderEdit()->clearHitCounter();
                     }
-
-                    mwp->getOrloj()->getOutlineHeaderEdit()->clearHitCounter();
-                }
-            }
-        }
-
-        /*
-         * AA BoW algorithm - ASYNCHRONOUS (experimental & buggy as it's unable to handle O/N deletes ~ instable)
-         */
-
-        // distribute signals from asynch tasks to frontend components
-        if(Configuration::getInstance().getAaAlgorithm()==Configuration::AssociationAssessmentAlgorithm::BOW && tasks.size()) {
-            std::lock_guard<mutex> criticalSection{tasksMutex};
-
-            MF_DEBUG("AsyncDistributor: AWAKE wip[" << tasks.size() << "]" << endl);
-            vector<Task*> zombies{};
-            for(Task* t:tasks) {
-                // FYI future<> had to be check for f.valid() as get() in other thread destroys it
-                if(t->isReady()) {
-                    MF_DEBUG("AsyncDistributor: future FINISHED w/ " << boolalpha << t->isSuccessful() << endl);
-                    if(t->isSuccessful()) {
-                        switch(t->getType()) {
-                        case TaskType::DREAM_TO_THINK:
-                            emit statusBarShowStatistics();
-                            break;
-                        case TaskType::NOTE_ASSOCIATIONS:
-                            emit leaderboardRefresh(t->getNote());
-                            break;
-                        }
-
-                        zombies.push_back(t);
-                        delete t;
-                        MF_DEBUG("AsyncDistributor: task DELETED" << endl);
-                    }
-                } else {
-                    MF_DEBUG("AsyncDistributor: future NOT FINISHED" << endl);
                 }
             }
 
-            if(zombies.size()) {
-                for(Task* t:zombies) {
-                    MF_DEBUG("AsyncDistributor: erasing ZOMBIE task " << t << endl);
-                    tasks.erase(std::remove(tasks.begin(), tasks.end(), t), tasks.end());
+            /*
+             * AA BoW algorithm - ASYNCHRONOUS (experimental & buggy as it's unable to handle O/N deletes ~ instable)
+             */
+
+            // distribute signals from asynch tasks to frontend components
+            if(Configuration::getInstance().getAaAlgorithm()==Configuration::AssociationAssessmentAlgorithm::BOW && tasks.size()) {
+                std::lock_guard<mutex> criticalSection{tasksMutex};
+
+                MF_DEBUG("AsyncDistributor: AWAKE wip[" << tasks.size() << "]" << endl);
+                vector<Task*> zombies{};
+                for(Task* t:tasks) {
+                    // FYI future<> had to be check for f.valid() as get() in other thread destroys it
+                    if(t->isReady()) {
+                        MF_DEBUG("AsyncDistributor: future FINISHED w/ " << boolalpha << t->isSuccessful() << endl);
+                        if(t->isSuccessful()) {
+                            switch(t->getType()) {
+                            case TaskType::DREAM_TO_THINK:
+                                emit statusBarShowStatistics();
+                                break;
+                                // DEAD code
+                            //case TaskType::NOTE_ASSOCIATIONS:
+                            //    emit leaderboardRefresh(t->getNote());
+                            //    break;
+                            }
+
+                            zombies.push_back(t);
+                            delete t;
+                            MF_DEBUG("AsyncDistributor: task DELETED" << endl);
+                        }
+                    } else {
+                        MF_DEBUG("AsyncDistributor: future NOT FINISHED" << endl);
+                    }
+                }
+
+                if(zombies.size()) {
+                    for(Task* t:zombies) {
+                        MF_DEBUG("AsyncDistributor: erasing ZOMBIE task " << t << endl);
+                        tasks.erase(std::remove(tasks.begin(), tasks.end(), t), tasks.end());
+                    }
                 }
             }
         }

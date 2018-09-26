@@ -21,14 +21,15 @@
 
 #include <vector>
 
+#include "../../lib/src/model/note.h"
+#include "../lib/src/mind/associated_notes.h"
+
 #include "assoc_leaderboard_view.h"
 #include "assoc_leaderboard_model.h"
 #include "orloj_presenter.h"
 #include "html_delegate.h"
 
 #include <QtWidgets>
-
-#include "../../lib/src/model/note.h"
 
 namespace m8r {
 
@@ -42,6 +43,9 @@ private:
 
     OrlojPresenter* orloj;
 
+
+    AssociatedNotes* lastAssociations;
+
 public:
     explicit AssocLeaderboardPresenter(AssocLeaderboardView* view, OrlojPresenter* orloj);
     AssocLeaderboardPresenter(const AssocLeaderboardPresenter&) = delete;
@@ -50,7 +54,7 @@ public:
     AssocLeaderboardPresenter &operator=(const AssocLeaderboardPresenter&&) = delete;
     ~AssocLeaderboardPresenter();
 
-    void refresh(std::vector<std::pair<Note*,float>>& assocLeaderboard);
+    void refresh(AssociatedNotes* associations);
     AssocLeaderboardView* getView() const { return view; }
 
 public slots:

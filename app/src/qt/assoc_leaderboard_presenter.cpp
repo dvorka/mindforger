@@ -37,10 +37,13 @@ AssocLeaderboardPresenter::AssocLeaderboardPresenter(AssocLeaderboardView* view,
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowNote(const QItemSelection&, const QItemSelection&)));
+
+    lastAssociations = nullptr;
 }
 
 AssocLeaderboardPresenter::~AssocLeaderboardPresenter()
 {
+    if(lastAssociations) delete lastAssociations;
 }
 
 void AssocLeaderboardPresenter::slotShowNote(const QItemSelection& selected, const QItemSelection& deselected)
@@ -62,14 +65,32 @@ void AssocLeaderboardPresenter::slotShowNote(const QItemSelection& selected, con
     } // else do nothing
 }
 
-void AssocLeaderboardPresenter::refresh(std::vector<std::pair<Note*,float>>& assocLeaderboard)
+void AssocLeaderboardPresenter::refresh(AssociatedNotes* associations)
 {
-    model->removeAllRows();
-    if(assocLeaderboard.size()) {
-        view->setVisible(true);
-        for(auto& i:assocLeaderboard) {
+    if(associations->getAssociations()->size()) {
+
+        lastAssociations = associations;
+
+        switch(associations->getSourceType()) {
+        case OUTLINE:
+            model->setTitle(QString::fromStdString(associations->getOutline()->getName()));
+            break;
+        case NOTE:
+            model->setTitle(QString::fromStdString(associations->getNote()->getName()));
+            break;
+        case WORD:
+            model->setTitle(QString::fromStdString(associations->getWord()));
+            break;
+        default:
+            model->setTitle(tr("Associations"));
+        }
+
+        model->removeAllRows();
+        for(auto& i:*lastAssociations->getAssociations()) {
             model->addRow(i.first, i.second);
         }
+
+        view->setVisible(true);
     } else {
         view->setVisible(false);
     }

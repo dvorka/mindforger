@@ -45,6 +45,13 @@ void AssocLeaderboardModel::removeAllRows()
 
 void AssocLeaderboardModel::addRow(Note* note, float associativity)
 {
+    QStringList tableHeader;
+    tableHeader
+        << (tr("Associations")+(title.size()?tr(" for '")+title+tr("'"):tr("")))
+        << tr("%");
+    // IMPROVE set tooltips: items w/ tooltips instead of just strings
+    setHorizontalHeaderLabels(tableHeader);
+
     QList<QStandardItem*> items;
     QStandardItem* item;
 

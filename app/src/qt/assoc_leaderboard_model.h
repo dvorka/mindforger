@@ -30,6 +30,8 @@ class AssocLeaderboardModel : public QStandardItemModel
 {
     Q_OBJECT
 
+    QString title;
+
 public:
     explicit AssocLeaderboardModel(QObject* parent);
     AssocLeaderboardModel(const AssocLeaderboardModel&) = delete;
@@ -40,6 +42,8 @@ public:
 
     void removeAllRows();
     void addRow(Note* note, float similarity);
+
+    void setTitle(QString title) { this->title = title; }
 };
 
 }

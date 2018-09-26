@@ -21,6 +21,7 @@
 
 #include "../../lib/src/model/outline.h"
 #include "../../lib/src/representations/html/html_outline_representation.h"
+#include "../../lib/src/mind/associated_notes.h"
 
 #include <QtWidgets>
 
@@ -59,7 +60,7 @@ public:
 public slots:
     void slotLinkClicked(const QUrl& url);
     void slotEditOutlineHeader();
-    void slotRefreshHeaderLeaderboardByValue(std::vector<std::pair<Note*,float>>* associations);
+    void slotRefreshHeaderLeaderboardByValue(AssociatedNotes* associations);
 };
 
 }

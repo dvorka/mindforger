@@ -61,6 +61,9 @@ public:
     int getHitCounter() const { return view->getHeaderEditor()->getHitCounter(); }
     void clearHitCounter() { return view->getHeaderEditor()->clearHitCounter(); }
 
+private slots:
+    void slotKeyPressed();
+
 public slots:
     void slotSaveAndCloseEditor();
     void slotCloseEditor();

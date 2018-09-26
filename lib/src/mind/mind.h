@@ -26,6 +26,7 @@
 #include "memory.h"
 #include "knowledge_graph.h"
 #include "ai/ai.h"
+#include "associated_notes.h"
 #include "ontology/thing_class_rel_triple.h"
 #include "aspect/mind_scope_aspect.h"
 #include "../config/configuration.h"
@@ -139,6 +140,11 @@ private:
      * @brief Active mental processes.
      */
     int activeProcesses;
+
+    /**
+     * @brief Need for associations.
+     */
+    char associationsSemaphore;
 
     /**
      * Where the mind thinks.
@@ -418,6 +424,10 @@ public:
      * ASSOCIATIONS
      */
 
+    void associate() { ++associationsSemaphore; }
+    char needForAssociations() const { return associationsSemaphore; }
+    void meditateAssociations() { associationsSemaphore = 0; }
+
     /**
      * @brief Get Note's associations (N -> Ns).
      *
@@ -429,25 +439,7 @@ public:
      *     > true  ... associated Ns can be found in vector
      *     > false ... associated Ns will NOT be computed - Mind's not thinking, memory empty, ...
      */
-    std::shared_future<bool> getAssociatedNotes(const Note* n, std::vector<std::pair<Note*,float>>& associations);
-    std::shared_future<bool> getAssociatedNotes(Outline* o, std::vector<std::pair<Note*,float>>& associations);
-
-    /**
-     * @brief Get word's associations (word -> Ns).
-     */
-    std::shared_future<bool> getAssociatedNotes(const std::string& word, std::vector<std::pair<Note*,float>>& associations, const Note* self=nullptr);
-
-    // TODO rework methods below: leaderboard to be removed, methods below to be used
-
-    /**
-     * @brief Get associated Notes within the scope of given Outline.
-     */
-    std::vector<Note*>* getAssociatedNotes(const Note& note, const Outline& outline) const;
-
-    /**
-     * @brief Get associated Notes within the scope of given Outline.
-     */
-    std::vector<Note*>* getAssociatedNotes(const std::string& words, const Outline& outline) const;
+    std::shared_future<bool> getAssociatedNotes(AssociatedNotes& associations);
 
     /*
      * OUTLINE MGMT

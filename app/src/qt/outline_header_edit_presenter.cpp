@@ -37,6 +37,7 @@ OutlineHeaderEditPresenter::OutlineHeaderEditPresenter(
     view->setEditorShowLineNumbers(Configuration::getInstance().isUiEditorShowLineNumbers());
     view->setStatusBar(mwp->getStatusBar()->getView());
 
+    // signals
     QObject::connect(
         view, SIGNAL(signalSaveOutlineHeader()),
         this, SLOT(slotSaveOutlineHeader()));
@@ -60,6 +61,11 @@ void OutlineHeaderEditPresenter::setOutline(Outline* outline)
     mwp->getMarkdownRepresentation()->toDescription(outlineHeader, &mdDescription);
 
     view->setOutline(outline, mdDescription);
+}
+
+void OutlineHeaderEditPresenter::slotKeyPressed()
+{
+    mwp->getMind()->associate();
 }
 
 void OutlineHeaderEditPresenter::slotCloseEditor()

@@ -53,25 +53,10 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
     currentOutline = outline;
 
     htmlRepresentation->toHeader(outline,&html);
-
     view->setHtml(QString::fromStdString(html));
 
     // leaderboard
-    std::vector<std::pair<Note*,float>> associatedNotesLeaderboard;
-    shared_future<bool> f = orloj->getMind()->getAssociatedNotes(currentOutline, associatedNotesLeaderboard);
-    if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
-        if(f.get()) {
-            orloj->getOutlineView()->getAssocLeaderboard()->refresh(associatedNotesLeaderboard);
-        } else {
-            orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
-        }
-    } else {
-        orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
-        // ask notifications distributor to repaint leaderboard later
-        AsyncTaskNotificationsDistributor::Task* task = new AsyncTaskNotificationsDistributor::Task{f,AsyncTaskNotificationsDistributor::TaskType::NOTE_ASSOCIATIONS};
-        task->setOutline(currentOutline);
-        orloj->getMainWindow()->getDistributor()->add(task);
-    }
+    orloj->getMind()->associate();
 }
 
 void OutlineHeaderViewPresenter::slotLinkClicked(const QUrl& url)
@@ -84,12 +69,17 @@ void OutlineHeaderViewPresenter::slotEditOutlineHeader()
     orloj->showFacetOutlineHeaderEdit(currentOutline);
 }
 
-void OutlineHeaderViewPresenter::slotRefreshHeaderLeaderboardByValue(vector<pair<Note*,float>>* associations)
+void OutlineHeaderViewPresenter::slotRefreshHeaderLeaderboardByValue(AssociatedNotes* associations)
 {
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-        orloj->getOutlineView()->getAssocLeaderboard()->refresh(*associations);
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) // leaderboard for edit @ view
+    {
+        orloj->getOutlineView()->getAssocLeaderboard()->refresh(associations);
+        delete associations;
     }
-    delete associations;
 }
 
 } // m8r namespace

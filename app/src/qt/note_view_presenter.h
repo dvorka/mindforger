@@ -78,8 +78,7 @@ public:
 public slots:
     void slotLinkClicked(const QUrl& url);
     void slotEditNote();
-    void slotRefreshLeaderboard(Note* note);
-    void slotRefreshLeaderboardByValue(std::vector<std::pair<Note*,float>>* associations);
+    void slotRefreshLeaderboardByValue(AssociatedNotes* associations);
 };
 
 } // m8r namespace

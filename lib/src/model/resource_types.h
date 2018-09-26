@@ -24,7 +24,8 @@ namespace m8r {
 enum ResourceType {
     OUTLINE,
     NOTE,
-    ATTACHMENT
+    ATTACHMENT,
+    WORD
 };
 
 } // m8r namespace

@@ -33,6 +33,7 @@ Mind::Mind(Configuration &configuration)
     ai = new Ai{memory,*this};
     deleteWatermark = 0;
     activeProcesses = 0;
+    associationsSemaphore = 0;
 
     knowledgeGraph = new KnowledgeGraph{this};
 
@@ -154,6 +155,8 @@ bool Mind::mindSleep()
     if(config.getMindState()!=Configuration::MindState::DREAMING && !activeProcesses) {
         // AI can asleep ONLY if there are no active mental processes
         if(ai->sleep()) {
+            meditateAssociations();
+
             allNotesCache.clear();
             memoryDwell.clear();
             triples.clear();
@@ -183,49 +186,31 @@ bool Mind::amnesia()
     }
 }
 
-shared_future<bool> Mind::getAssociatedNotes(const Note* n, vector<pair<Note*,float>>& associations)
+shared_future<bool> Mind::getAssociatedNotes(AssociatedNotes& associations)
 {
-    MF_DEBUG("@NoteAssociations" << endl);
     lock_guard<mutex> criticalSection{exclusiveMind};
 
     if(config.getMindState()==Configuration::MindState::THINKING) {
-        return ai->getAssociatedNotes(n, associations);
-    } else {
-        associations.clear();
-        promise<bool> p{};
-        p.set_value(false);
-        return shared_future<bool>(p.get_future());
+        switch(associations.getSourceType()) {
+        case OUTLINE:
+            MF_DEBUG("Outline associations..." << endl);
+            return ai->getAssociatedNotes(associations.getOutline(), *associations.getAssociations());
+            break;
+        case NOTE:
+            MF_DEBUG("Note associations..." << endl);
+            return ai->getAssociatedNotes(associations.getNote(), *associations.getAssociations());
+        case WORD:
+            MF_DEBUG("Word associations..." << endl);
+            return ai->getAssociatedNotes(associations.getWord(), *associations.getAssociations(), associations.getNote());
+        default:
+            ; // NOP
+        }
     }
-}
 
-shared_future<bool> Mind::getAssociatedNotes(Outline* o, vector<pair<Note*,float>>& associations)
-{
-    MF_DEBUG("@NoteAssociations" << endl);
-    lock_guard<mutex> criticalSection{exclusiveMind};
-
-    if(config.getMindState()==Configuration::MindState::THINKING) {
-        return ai->getAssociatedNotes(o, associations);
-    } else {
-        associations.clear();
-        promise<bool> p{};
-        p.set_value(false);
-        return shared_future<bool>(p.get_future());
-    }
-}
-
-shared_future<bool> Mind::getAssociatedNotes(const string& words, vector<pair<Note*,float>>& associations, const Note* self)
-{
-    MF_DEBUG("@NoteAssociations" << endl);
-    lock_guard<mutex> criticalSection{exclusiveMind};
-
-    if(config.getMindState()==Configuration::MindState::THINKING) {
-        return ai->getAssociatedNotes(words, associations, self);
-    } else {
-        associations.clear();
-        promise<bool> p{};
-        p.set_value(false);
-        return shared_future<bool>(p.get_future());
-    }
+    associations.getAssociations()->clear();
+    promise<bool> p{};
+    p.set_value(false);
+    return shared_future<bool>(p.get_future());
 }
 
 /*
@@ -476,22 +461,6 @@ vector<Note*>* Mind::getNotesOfType(const NoteType& type) const
 vector<Note*>* Mind::getNotesOfType(const NoteType& type, const Outline& outline) const
 {
     UNUSED_ARG(type);
-    UNUSED_ARG(outline);
-
-    return nullptr;
-}
-
-vector<Note*>* Mind::getAssociatedNotes(const Note& note, const Outline& outline) const
-{
-    UNUSED_ARG(note);
-    UNUSED_ARG(outline);
-
-    return nullptr;
-}
-
-vector<Note*>* Mind::getAssociatedNotes(const string& words, const Outline& outline) const
-{
-    UNUSED_ARG(words);
     UNUSED_ARG(outline);
 
     return nullptr;

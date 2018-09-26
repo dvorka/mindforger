@@ -67,6 +67,11 @@ void NoteEditPresenter::setNote(Note* note)
     view->setNote(note, mdDescription);    
 }
 
+void NoteEditPresenter::slotKeyPressed()
+{
+    mwp->getMind()->associate();
+}
+
 void NoteEditPresenter::slotCloseEditor()
 {
     mwp->getOrloj()->fromNoteEditBackToView(currentNote);

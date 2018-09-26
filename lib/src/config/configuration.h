@@ -159,7 +159,7 @@ public:
 
     static constexpr int DEFAULT_ASYNC_MIND_THRESHOLD_BOW = 200;
     static constexpr int DEFAULT_ASYNC_MIND_THRESHOLD_WEIGHTED_FTS = 10000;
-    static constexpr int DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL = 3000;
+    static constexpr int DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL = 500;
 
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
     static const std::string DEFAULT_TIME_SCOPE;

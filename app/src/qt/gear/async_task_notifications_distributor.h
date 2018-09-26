@@ -24,6 +24,7 @@
 
 #include "../../lib/src/debug.h"
 #include "../../lib/src/model/note.h"
+#include "../../lib/src/mind/associated_notes.h"
 
 #include "../main_window_presenter.h"
 
@@ -53,8 +54,8 @@ class AsyncTaskNotificationsDistributor : public QThread
 public:
 
     enum TaskType {
-        DREAM_TO_THINK,
-        NOTE_ASSOCIATIONS
+        DREAM_TO_THINK
+        // IMPROVE ,NOTE_ASSOCIATIONS
     };
 
     /**
@@ -88,10 +89,10 @@ public:
 private:
     MainWindowPresenter* mwp;
 
+    int sleepInterval;
+
     std::vector<Task*> tasks;
     std::mutex tasksMutex;
-
-    int sleepInterval;
 
 public:
     explicit AsyncTaskNotificationsDistributor(MainWindowPresenter* mwp);
@@ -115,11 +116,11 @@ public:
 signals:
     void statusBarShowStatistics();
     void showStatusBarInfo(QString msg);
-    void leaderboardRefresh(Note* n);
-    void refreshHeaderLeaderboardByValue(std::vector<std::pair<Note*,float>>* associations);
-    void refreshLeaderboardByValue(std::vector<std::pair<Note*,float>>* associations);
+    void refreshHeaderLeaderboardByValue(AssociatedNotes* associations);
+    void refreshLeaderboardByValue(AssociatedNotes* associations);
 
 public slots:
+
     void slotConfigurationUpdated();
 };
 

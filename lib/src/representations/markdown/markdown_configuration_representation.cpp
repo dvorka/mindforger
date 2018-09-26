@@ -357,7 +357,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: important (shown Notebooks must be tagged with 'important;); if no tag is specified, then tags scope is disabled" << endl <<
          CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL << (c?c->getDistributorSleepInterval():Configuration::DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL+1) << endl <<
          "    * Sleep interval (miliseconds) between asynchronous mind-related evaluations (associations, ...)" << endl <<
-         "    * Examples: 3000, 5000, 10000" << endl <<
+         "    * Examples: 500, 1000, 3000, 5000" << endl <<
          endl <<
 
          "# " << CONFIG_SECTION_APP << endl <<

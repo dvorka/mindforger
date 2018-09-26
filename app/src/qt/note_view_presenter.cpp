@@ -93,21 +93,7 @@ void NoteViewPresenter::refresh(Note* note)
     view->setHtml(qHtml);
 
     // leaderboard
-    std::vector<std::pair<Note*,float>> associatedNotesLeaderboard;
-    shared_future<bool> f = mind->getAssociatedNotes(note, associatedNotesLeaderboard);
-    if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
-        if(f.get()) {
-            orloj->getOutlineView()->getAssocLeaderboard()->refresh(associatedNotesLeaderboard);
-        } else {
-            orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
-        }
-    } else {
-        orloj->getOutlineView()->getAssocLeaderboard()->getView()->setVisible(false);
-        // ask notifications distributor to repaint leaderboard later
-        AsyncTaskNotificationsDistributor::Task* task = new AsyncTaskNotificationsDistributor::Task{f,AsyncTaskNotificationsDistributor::TaskType::NOTE_ASSOCIATIONS};
-        task->setNote(note);
-        orloj->getMainWindow()->getDistributor()->add(task);
-    }
+    mind->associate();
 }
 
 void NoteViewPresenter::slotLinkClicked(const QUrl& url)
@@ -120,26 +106,15 @@ void NoteViewPresenter::slotEditNote()
     orloj->showFacetNoteEdit(this->currentNote);
 }
 
-void NoteViewPresenter::slotRefreshLeaderboard(Note* note)
+void NoteViewPresenter::slotRefreshLeaderboardByValue(AssociatedNotes* associations)
 {
-    // show leaderboard only if it's needed & it's ready
-    std::vector<std::pair<Note*,float>> associatedNotesLeaderboard;
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE) && currentNote == note) {
-        shared_future<bool> f = mind->getAssociatedNotes(note, associatedNotesLeaderboard);
-        if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
-            if(f.get()) {
-                orloj->getOutlineView()->getAssocLeaderboard()->refresh(associatedNotesLeaderboard);
-            }
-        }
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) // leaderboard for edit @ view
+    {
+        orloj->getOutlineView()->getAssocLeaderboard()->refresh(associations);
+        delete associations;
     }
-}
-
-void NoteViewPresenter::slotRefreshLeaderboardByValue(vector<pair<Note*,float>>* associations)
-{
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-        orloj->getOutlineView()->getAssocLeaderboard()->refresh(*associations);
-    }
-    delete associations;
 }
 
 } // m8r namespace
