@@ -21,6 +21,8 @@
 
 echo "IMPORTANT: before running this script make sure window is NOT maximized or half sized - use rectangle button that allows window resizing (using right-down corner)"
 
-wmctrl -r "MindForger - Thinking Notebook - 0.6.0 - Technology Preview" -e 0,0,0,1360,768
+wmctrl -r "MindForger - Thinking Notebook - 1.47.0 - /home/dvorka/mf" -e 0,0,0,1360,768
+wmctrl -r "MindForger - Thinking Notebook - 1.47.0 - /home/dvorka/demo" -e 0,0,0,1360,768
+#wmctrl -r "MindForger - Thinking Notebook - 1.47.0 - /home/dvorka/p/mindforger/git/mindforger-repository" -e 0,0,0,1360,768
 
 # eof
