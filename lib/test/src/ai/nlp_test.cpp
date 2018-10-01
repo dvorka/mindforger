@@ -200,7 +200,8 @@ TEST(AiNlpTestCase, Tokenizer)
     ASSERT_EQ(184, narrowed.size());
 }
 
-TEST(AiNlpTestCase, AaRepositoryBow)
+// IMPROVE disabled as AA API changed - it will be re-enable once BoW becomes main AA algorithm again
+TEST(AiNlpTestCase, DISABLED_AaRepositoryBow)
 {
     string repositoryPath{"/lib/test/resources/universe-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
@@ -230,18 +231,20 @@ TEST(AiNlpTestCase, AaRepositoryBow)
     m8r::Note* n=mind.remind().getOutlines()[0]->getNoteByName("Albert Einstein");
     ASSERT_NE(nullptr, n);
 
-    vector<pair<m8r::Note*,float>> leaderboard;
-    auto lbFuture = mind.getAssociatedNotes(n, leaderboard);
-    if(lbFuture.get()) { // blocked
-        mind.getAssociatedNotes(n, leaderboard);
-    }
+    m8r::AssociatedNotes associations{m8r::ResourceType::NOTE, n};
+    cout << "BEFORE =========" << endl;
+    auto lbFuture = mind.getAssociatedNotes(associations);
+    lbFuture.get();  // blocked
+    while(!associations.getAssociations()->size()) cout << ".";
+    cout << "AFTER =========" << endl;
 
-    ASSERT_EQ(7, leaderboard.size());
+    ASSERT_EQ(7, associations.getAssociations()->size());
 
-    m8r::Ai::print(n,leaderboard);
+    m8r::Ai::print(n,*associations.getAssociations());
 }
 
-TEST(AiNlpTestCase, AaUniverseBow)
+// IMPROVE disabled as AA API changed - it will be re-enable once BoW becomes main AA algorithm again
+TEST(AiNlpTestCase, DISABLED_AaUniverseBow)
 {
     string repositoryPath{"/lib/test/resources/aa-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
@@ -274,20 +277,19 @@ TEST(AiNlpTestCase, AaUniverseBow)
     // get the best associations of 'Albert Einstein'
     m8r::Note* n=u->getNotes()[0];
     UNUSED_ARG(n);
-    vector<pair<m8r::Note*,float>> leaderboard;
-    auto lbFuture = mind.getAssociatedNotes(n, leaderboard);
-    if(lbFuture.get()) { // blocked
-        mind.getAssociatedNotes(n, leaderboard);
-    }
-    m8r::Ai::print(n,leaderboard);
+    m8r::AssociatedNotes associations{m8r::ResourceType::NOTE, n};
+    auto lbFuture = mind.getAssociatedNotes(associations);
+    m8r::Ai::print(n,*associations.getAssociations());
+    lbFuture.get(); // blocked
+    vector<pair<m8r::Note*,float>>* leaderboard = associations.getAssociations();
 
     // asserts
-    ASSERT_EQ(9, leaderboard.size());
-    ASSERT_EQ("Same Albert Einstein", leaderboard[0].first->getName());
-    ASSERT_EQ("Universe", leaderboard[0].first->getOutline()->getName());
-    ASSERT_FLOAT_EQ(0.9, leaderboard[0].second);
-    ASSERT_EQ("Same Albert Einstein", leaderboard[1].first->getName());
-    ASSERT_EQ("Alternative Universe", leaderboard[1].first->getOutline()->getName());
+    ASSERT_EQ(9, leaderboard->size());
+    ASSERT_EQ("Same Albert Einstein", (*leaderboard)[0].first->getName());
+    ASSERT_EQ("Universe", (*leaderboard)[0].first->getOutline()->getName());
+    ASSERT_FLOAT_EQ(0.9, (*leaderboard)[0].second);
+    ASSERT_EQ("Same Albert Einstein", (*leaderboard)[1].first->getName());
+    ASSERT_EQ("Alternative Universe", (*leaderboard)[1].first->getOutline()->getName());
 }
 
 /*

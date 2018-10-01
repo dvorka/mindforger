@@ -39,7 +39,7 @@ class AssociatedNotes
 
 public:
     explicit AssociatedNotes(ResourceType source, Outline* outline);
-    explicit AssociatedNotes(ResourceType source, Note* outline);
+    explicit AssociatedNotes(ResourceType source, Note* note);
     explicit AssociatedNotes(ResourceType source, const std::string& word, Note* self=nullptr);
     AssociatedNotes(const AssociatedNotes&) = delete;
     AssociatedNotes(const AssociatedNotes&&) = delete;

@@ -192,7 +192,8 @@ TEST(OutlineTestCase, CloneOutline) {
     EXPECT_EQ("Note Operations Test Outline", o->getName());
     EXPECT_EQ("Copy of Note Operations Test Outline", c->getName());
     EXPECT_EQ(o->getDescription().size(), c->getDescription().size());
-    EXPECT_NE(o->getModified(), c->getModified());
+    EXPECT_GE(c->getModified(), c->getCreated());
+    EXPECT_GE(c->getRead(), c->getModified());
 }
 
 TEST(OutlineTestCase, DirectOutlineNoteChildren) {

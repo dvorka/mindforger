@@ -68,11 +68,10 @@ void Outline::resetClonedOutline(Outline* o)
     o->setReads(1);
     o->setRevision(0);
     o->setModified();
-    o->setCreated(o->modified);
-    o->modified++;
-    o->setRead(o->modified);
+    o->setCreated(modified);
+    o->setRead(modified);
     o->setModifiedPretty();
-    o->completeProperties(o->getModified());
+    o->completeProperties(modified);
     o->outlineDescriptorAsNote = nullptr;
 }
 
@@ -457,7 +456,7 @@ void Outline::resetClonedNote(Note* n)
     n->setReads(1);
     n->setRevision(0);
     n->setModified();
-    n->setModified(n->getModified()+1);
+    n->setModified(n->getModified());
     n->setRead(n->getModified());
     n->setModifiedPretty();
     n->completeProperties(n->getModified());
