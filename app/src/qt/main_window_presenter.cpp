@@ -1363,7 +1363,11 @@ void MainWindowPresenter::handleNoteNew()
         // IMPROVE smarter refresh of outline tree (do less than overall load)
         //orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
 
-        orloj->showFacetNoteEdit(note);
+        if(newNoteDialog->isOpenInEditor()) {
+            orloj->showFacetNoteEdit(note);
+        } else {
+            orloj->showFacetNoteView(note);
+        }
     } else {
         QMessageBox::critical(&view, tr("New Note"), tr("Failed to create new Note!"));
     }

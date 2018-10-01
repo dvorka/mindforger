@@ -41,6 +41,9 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     positionLabel = new QLabel(tr("Position")+":", this);
     positionCombo = new QComboBox(this);
 
+    viewEditLabel = new QLabel(tr("Edit or view after creation")+":", this);
+    viewEditCombo = new QComboBox(this);
+
     stencilLabel = new QLabel(tr("Stencil")+":", this);
     stencilCombo = new QComboBox(this);
 
@@ -58,6 +61,8 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     basicLayout->addWidget(nameEdit);
     basicLayout->addWidget(positionLabel);
     basicLayout->addWidget(positionCombo);
+    basicLayout->addWidget(viewEditLabel);
+    basicLayout->addWidget(viewEditCombo);
     basicLayout->addWidget(stencilLabel);
     basicLayout->addWidget(stencilCombo);
     basicLayout->addWidget(typeLabel);
@@ -80,6 +85,8 @@ NoteNewDialog::GeneralTab::~GeneralTab()
     delete typeCombo;
     delete positionLabel;
     delete positionCombo;
+    delete viewEditLabel;
+    delete viewEditCombo;
     delete progressLabel;
     delete progressSpin;
     delete stencilLabel;
@@ -151,6 +158,10 @@ NoteNewDialog::NoteNewDialog(
     // IMPROVE i18n - text is localized, QVariant keeps a constant (e.g. enum)
     combo->addItem("Above selected Note");
     combo->addItem("Below selection Note");
+    combo=generalTab->getViewEditCombo();
+    // IMPROVE i18n - text is localized, QVariant keeps a constant (e.g. enum)
+    combo->addItem("Edit");
+    combo->addItem("View");
     // stencils may be added/changed/removed - refreshed each time dialog is shown
     tabWidget->addTab(generalTab, tr("General"));
 
@@ -231,8 +242,12 @@ void NoteNewDialog::show(const QString& path, vector<Stencil*>& stencils)
     QDialog::show();
 }
 
-bool NoteNewDialog::isPositionBelow() {
+bool NoteNewDialog::isPositionBelow() const {
     return generalTab->isPositionBelow();
+}
+
+bool NoteNewDialog::isOpenInEditor() const {
+    return generalTab->isOpenInEditor();
 }
 
 }

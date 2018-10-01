@@ -64,8 +64,9 @@ public:
     const NoteType* getNoteType() const;
     const std::vector<const Tag*>& getTags() const;
     int getProgress() const;
-    bool isPositionBelow();
-    bool isPositionAbove() { return !isPositionBelow(); }
+    bool isPositionBelow() const;
+    bool isPositionAbove() const { return !isPositionBelow(); }
+    bool isOpenInEditor() const;
 
     void show(const QString& path, std::vector<Stencil*>& stencils);
 };
@@ -90,6 +91,8 @@ private:
     QComboBox* stencilCombo;
     QLabel* positionLabel;
     QComboBox* positionCombo;
+    QLabel* viewEditLabel;
+    QComboBox* viewEditCombo;
 
     EditTagsPanel* editTagsGroup;
 
@@ -103,8 +106,10 @@ public:
     QSpinBox* getProgressSpin() const { return progressSpin; }
     QComboBox* getStencilCombo() const { return stencilCombo; }
     QComboBox* getPositionCombo() const { return positionCombo; }
+    QComboBox* getViewEditCombo() const { return viewEditCombo; }
 
-    bool isPositionBelow() { return positionCombo->currentIndex()==1; }
+    bool isPositionBelow() const { return positionCombo->currentIndex()==1; }
+    bool isOpenInEditor() const { return viewEditCombo->currentIndex()==0; }
 
     void clean();
 };
