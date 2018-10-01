@@ -1121,6 +1121,18 @@ void MainWindowPresenter::doActionFormatToc()
     }
 }
 
+// IMPROVE: consolidate methods which just insert a (semi)static string
+void MainWindowPresenter::doActionFormatTimestamp()
+{
+    QString text = QString::fromStdString(datetimeToString(datetimeNow()));
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false, text.size());
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false, text.size());
+    }
+}
+
 void MainWindowPresenter::doActionFormatCodeBlock()
 {
     // IMPROVE ask for dialect

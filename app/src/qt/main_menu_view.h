@@ -172,6 +172,7 @@ public:
     QAction* actionFormatTable;
     QAction* actionFormatHr;
     QAction* actionFormatToc;
+    QAction* actionFormatTimestamp;
 
     // menu: Help
     QAction* actionHelpDocumentation;

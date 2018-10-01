@@ -226,6 +226,7 @@ public slots:
     void doActionFormatListNumber();
     void doActionFormatListTask();
     void doActionFormatToc();
+    void doActionFormatTimestamp();
     void doActionFormatCodeBlock();
     void doActionFormatMathBlock();
     void doActionFormatBlockquote();

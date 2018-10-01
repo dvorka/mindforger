@@ -493,6 +493,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatToc = new QAction(tr("T&able of Contents"), mainWindow);
     actionFormatToc ->setStatusTip(tr("Insert Notebook's table of contents"));
 
+    actionFormatTimestamp = new QAction(tr("&Timestamp"), mainWindow);
+    actionFormatTimestamp ->setStatusTip(tr("Insert current date and time"));
+
     actionFormatCodeBlock = new QAction(tr("C&ode Block"), mainWindow);
     actionFormatCodeBlock->setStatusTip(tr("Format text block as source code"));
 
@@ -508,8 +511,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatImage = new QAction(tr("Ima&ge"), mainWindow);
     actionFormatImage->setStatusTip(tr("Insert image"));
 
-    actionFormatTable = new QAction(tr("&Table"), mainWindow);
-    actionFormatTable->setStatusTip(tr("Insert table"));
+    actionFormatTable = new QAction(tr("Table"), mainWindow);
+    actionFormatTable->setStatusTip(tr("Insert table..."));
 
     actionFormatHr = new QAction(tr("&Horizontal ruler"), mainWindow);
     actionFormatHr->setStatusTip(tr("Horizontal ruler"));
@@ -527,6 +530,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatListTask);
     menuFormat->addSeparator();
     menuFormat->addAction(actionFormatToc);
+    menuFormat->addAction(actionFormatTimestamp);
     menuFormat->addAction(actionFormatCodeBlock);
     menuFormat->addAction(actionFormatMathBlock);
     menuFormat->addAction(actionFormatBlockQuote);
