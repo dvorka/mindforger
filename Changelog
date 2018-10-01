@@ -1,6 +1,8 @@
-2018-09-26  Martin Dvorak  <martin.dvorak@mindforger.com>
+2018-10-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-  * Released v1.47 - Knowledge graph navigator, HTML notebook export, TWiki document import, recent notes (significant improvement) and Docker distro.
+  * Released v1.47 - Knowledge graph navigator, HTML notebook export,
+    TWiki document import, recent notes (significant improvement), asynchronous
+    associations calculation and Docker distro.
 
 2018-09-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 
