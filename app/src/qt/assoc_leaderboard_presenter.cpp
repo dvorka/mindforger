@@ -89,11 +89,12 @@ void AssocLeaderboardPresenter::refresh(AssociatedNotes* associations)
         for(auto& i:*lastAssociations->getAssociations()) {
             model->addRow(i.first, i.second);
         }
-
-        view->setVisible(true);
     } else {
-        view->setVisible(false);
+        model->removeAllRows();
     }
+
+    view->setVisible(true);
+    // do NOT hide leaderboard using view->setVisible(false); as it kills usability e.g. selected N in the tree can be hidden
 }
 
 } // m8r namespace
