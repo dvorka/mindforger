@@ -328,11 +328,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuOutline->addAction(actionOutlineStencil);
 #endif
     menuOutline->addAction(actionOutlineClone);   
-#ifdef MF_WIP
     menuOutline->addSeparator();
-    menuOutline->addMenu(submenuOutlineExport);
     menuOutline->addMenu(submenuOutlineImport);
-#endif
+    menuOutline->addMenu(submenuOutlineExport);
 
     // menu: Note
 
