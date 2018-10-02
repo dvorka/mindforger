@@ -34,9 +34,7 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
     addSeparator();
     actionViewEisenhower = addAction(QIcon(":/icons/view-eisenhower.svg"), tr("View Eisenhower Matrix"));
     actionViewOutlines = addAction(QIcon(":/icons/view-outlines.svg"), tr("View Notebooks"));
-#ifdef MF_WIP
     actionViewNavigator = addAction(QIcon(":/icons/view-navigator.svg"), tr("View Knowledge Graph Navigator"));
-#endif
     actionViewTags = addAction(QIcon(":/icons/view-tags.svg"), tr("View Tags"));
     actionViewRecentNotes = addAction(QIcon(":/icons/view-recent-notes.svg"), tr("View Recent Notes"));
     addSeparator();
