@@ -197,7 +197,7 @@ TEST(AiNlpTestCase, Tokenizer)
         narrowed += nNarrower.next();
     }
     cout << narrowed << endl << "- END char stream --" << endl;
-    ASSERT_EQ(184, narrowed.size());
+    ASSERT_EQ(146, narrowed.size());
 }
 
 // IMPROVE disabled as AA API changed - it will be re-enable once BoW becomes main AA algorithm again
