@@ -248,9 +248,9 @@ size_t Mind::getMemoryDwellDepth() const
     return memoryDwell.size();
 }
 
-vector<Note*>* Mind::findNoteByNameFts(const string& regexp) const
+vector<Note*>* Mind::findNoteByNameFts(const string& pattern) const
 {
-    UNUSED_ARG(regexp);
+    UNUSED_ARG(pattern);
 
     return nullptr;
 }
@@ -265,21 +265,25 @@ void Mind::getOutlineNames(vector<string>& names) const
 }
 
 // One match in either title or body is enought to be added to the result
-void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool ignoreCase, Outline* outline)
+void Mind::findNoteFts(
+        vector<Note*>* result,
+        const string& pattern,
+        const FtsSearch searchMode,
+        Outline* outline)
 {
     // IMPROVE make this faster - do NOT convert to lower case, but compare it in that method > will do less
-    if(ignoreCase) {
-        // case INSENSITIVE
+    // IMPROVE avoid duplicate code - introduce an pre-processing iface (lower/nop) and used one code
+    if(searchMode == FtsSearch::IGNORE_CASE) {
         string s{};
         stringToLower(outline->getName(), s);
-        if(s.find(regexp)!=string::npos) {
+        if(s.find(pattern)!=string::npos) {
             result->push_back(outline->getOutlineDescriptorAsNote());
         } else {
             for(string* d:outline->getDescription()) {
                 if(d) {
                     s.clear();
                     stringToLower(*d, s);
-                    if(s.find(regexp)!=string::npos) {
+                    if(s.find(pattern)!=string::npos) {
                         result->push_back(outline->getOutlineDescriptorAsNote());
                         break;
                     }
@@ -292,14 +296,14 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
             }
             s.clear();
             stringToLower(note->getName(), s);
-            if(s.find(regexp)!=string::npos) {
+            if(s.find(pattern)!=string::npos) {
                 result->push_back(note);
             } else {
                 for(string* d:note->getDescription()) {
                     if(d) {
                         s.clear();
                         stringToLower(*d, s);
-                        if(s.find(regexp)!=string::npos) {
+                        if(s.find(pattern)!=string::npos) {
                             result->push_back(note);
                             break;
                         }
@@ -307,13 +311,12 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
                 }
             }
         }
-    } else {
-        // case SENSITIVE
-        if(outline->getName().find(regexp)!=string::npos) {
+    } else if (searchMode == FtsSearch::EXACT) {
+        if(outline->getName().find(pattern)!=string::npos) {
             result->push_back(outline->getOutlineDescriptorAsNote());
         } else {
             for(string* d:outline->getDescription()) {
-                if(d && d->find(regexp)!=string::npos) {
+                if(d && d->find(pattern)!=string::npos) {
                     result->push_back(outline->getOutlineDescriptorAsNote());
                     // avoid multiple matches in the result
                     break;
@@ -324,11 +327,41 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
             if(scopeAspect.isOutOfScope(note)) {
                 continue;
             }
-            if(note->getName().find(regexp)!=string::npos) {
+            if(note->getName().find(pattern)!=string::npos) {
                 result->push_back(note);
             } else {
                 for(string* d:note->getDescription()) {
-                    if(d && d->find(regexp)!=string::npos) {
+                    if(d && d->find(pattern)!=string::npos) {
+                        result->push_back(note);
+                        // avoid multiple matches in the result
+                        break;
+                    }
+                }
+            }
+        }
+    } else if (searchMode == FtsSearch::REGEXP) {
+        std::smatch matchedString;
+        std::regex regex{pattern};
+        if(std::regex_search(outline->getName(), matchedString, regex)) {
+            result->push_back(outline->getOutlineDescriptorAsNote());
+        } else {
+            for(string* d:outline->getDescription()) {
+                if(d && std::regex_search(*d, matchedString, regex)) {
+                    result->push_back(outline->getOutlineDescriptorAsNote());
+                    // avoid multiple matches in the result
+                    break;
+                }
+            }
+        }
+        for(Note* note:outline->getNotes()) {
+            if(scopeAspect.isOutOfScope(note)) {
+                continue;
+            }
+            if(std::regex_search(outline->getName(), matchedString, regex)) {
+                result->push_back(note);
+            } else {
+                for(string* d:note->getDescription()) {
+                    if(d && std::regex_search(*d, matchedString, regex)) {
                         result->push_back(note);
                         // avoid multiple matches in the result
                         break;
@@ -339,7 +372,8 @@ void Mind::findNoteFts(vector<Note*>* result, const string& regexp, const bool i
     }
 }
 
-vector<Note*>* Mind::findNoteFts(const string& regexp, const bool ignoreCase, Outline* outlineScope)
+// IMPROVE consider result be parameter passed by caller (reuse, mem)
+vector<Note*>* Mind::findNoteFts(const string& pattern, FtsSearch searchMode, Outline* outlineScope)
 {
     if(allNotesCache.size()) {
         allNotesCache.clear();
@@ -348,21 +382,21 @@ vector<Note*>* Mind::findNoteFts(const string& regexp, const bool ignoreCase, Ou
     vector<Note*>* result = new vector<Note*>();
 
     string r{};
-    if(ignoreCase) {
-        stringToLower(regexp, r);
+    if(searchMode == FtsSearch::IGNORE_CASE) {
+        stringToLower(pattern, r);
     } else {
-        r += regexp;
+        r.assign(pattern);
     }
 
     if(outlineScope) {
-        findNoteFts(result, r, ignoreCase, outlineScope);
+        findNoteFts(result, r, searchMode, outlineScope);
     } else {
         const vector<m8r::Outline*> outlines = memory.getOutlines();
         for(Outline* outline:outlines) {
             if(scopeAspect.isOutOfScope(outline)) {
                 continue;
             }
-            findNoteFts(result, r, ignoreCase, outline);
+            findNoteFts(result, r, searchMode, outline);
         }
     }
     return result;
@@ -881,15 +915,15 @@ void Mind::recognizePersons(const Outline* outline, int entityFilter, std::vecto
 #endif
 
 // unique_ptr template BREAKS Qt Developer indentation > stored at EOF
-unique_ptr<vector<Outline*>> Mind::findOutlineByNameFts(const string& expr) const
+unique_ptr<vector<Outline*>> Mind::findOutlineByNameFts(const string& pattern) const
 {
     // IMPROVE implement regexp and other search options by reusing HSTR code
     // IMPROVE PERF this method is extremely inefficient > use cached map (stack member) evicted on memory modification
     unique_ptr<vector<Outline*>> result{new vector<Outline*>()};
-    if(expr.size()) {
+    if(pattern.size()) {
         vector<Outline*> outlines = memory.getOutlines();
         for(Outline* outline:outlines) {
-            if(!expr.compare(outline->getName())) {
+            if(!pattern.compare(outline->getName())) {
                 result->push_back(outline);
             }
         }

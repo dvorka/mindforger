@@ -10,9 +10,9 @@ Requirements:
 
 * I'm loooking for an algorithm that will *hash* ...
 
-Attachments: <!-- Metadata: type: attachments; -->
+Attachments:
 
-* [Custom Attachment Name](./notebook.attachment-1.txt)
+* [Custom attachment Name](./notebook.attachment-1.txt)
 
 ### Hash Code
 

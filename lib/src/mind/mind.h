@@ -22,6 +22,7 @@
 #include <inttypes.h>
 #include <memory>
 #include <mutex>
+#include <regex>
 
 #include "memory.h"
 #include "knowledge_graph.h"
@@ -41,6 +42,12 @@ class Ai;
 class KnowledgeGraph;
 
 constexpr auto NO_PARENT = 0xFFFF;
+
+enum class FtsSearch {
+    EXACT,
+    IGNORE_CASE,
+    REGEXP
+};
 
 /**
  * @brief Mind.
@@ -311,9 +318,12 @@ public:
     /**
      * @brief Find outline by name - exact match.
      */
-    std::unique_ptr<std::vector<Outline*>> findOutlineByNameFts(const std::string& regexp) const;
-    std::vector<Note*>* findNoteByNameFts(const std::string& regexp) const;
-    std::vector<Note*>* findNoteFts(const std::string& regexp, const bool ignoreCase=false, Outline* outlineScope=nullptr);
+    std::unique_ptr<std::vector<Outline*>> findOutlineByNameFts(const std::string& pattern) const;
+    std::vector<Note*>* findNoteByNameFts(const std::string& pattern) const;
+    std::vector<Note*>* findNoteFts(
+            const std::string& pattern,
+            const FtsSearch mode = FtsSearch::EXACT,
+            Outline* outlineScope=nullptr);
     // TODO findFts() - search also outline name and description
     //   >> temporary note of Outline type (never saved), cannot be created by user
     void getOutlineNames(std::vector<std::string>& names) const;
@@ -610,8 +620,8 @@ private:
 
     void findNoteFts(
             std::vector<Note*>* result,
-            const std::string& regexp,
-            const bool ignoreCase,
+            const std::string& pattern,
+            const FtsSearch searchMode,
             Outline* outline);
 };
 

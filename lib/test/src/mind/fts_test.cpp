@@ -32,6 +32,20 @@ extern char* getMindforgerGitHomePath();
 
 using namespace std;
 
+void printFtsResult(vector<m8r::Note*>* result)
+{
+    if(result->size()) {
+        cout << " FOUND " << result->size() << " result(s):" << endl;
+        for(size_t i=0; i<result->size(); i++) {
+            cout << "  #" << i << " " <<
+                    result->at(i)->getOutline()->getName() << " / " <<
+                    result->at(i)->getName() << endl;
+        }
+    } else {
+        cout << " NOTHING found" << endl;
+    }
+}
+
 TEST(FtsTestCase, FTS) {
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
@@ -45,20 +59,34 @@ TEST(FtsTestCase, FTS) {
     mind.learn();
     mind.think().get();
 
-    cout << endl << "Statistics:";
-    cout << endl << "  Outlines: " << mind.remind().getOutlinesCount();
-    cout << endl << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
+    cout << endl << "Statistics:" << endl;
+    cout << "  Outlines: " << mind.remind().getOutlinesCount() << endl;
+    cout << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize() << endl;
 
-    string fts("canonicalx");
-    vector<m8r::Note*>* result = mind.findNoteFts(fts);
-    if(result->size()) {
-        cout << endl << "FOUND " << result->size() << " result(s):";
-        for(size_t i=0; i<result->size(); i++) {
-            cout << endl << "  #" << i << " " << result->at(i)->getName();
-        }
-    } else {
-        cout << endl << "NOTHING found";
-    }
+    cout << "EXACT search..." << endl;
 
+    string pattern("hash");
+    vector<m8r::Note*>* result = mind.findNoteFts(pattern, m8r::FtsSearch::EXACT);
+    printFtsResult(result);
+    EXPECT_NE(nullptr, result);
+    EXPECT_EQ(2, result->size());
+    delete result;
+
+    cout << "IGNORE CASE search..." << endl;
+
+    pattern.assign("hash");
+    result = mind.findNoteFts(pattern, m8r::FtsSearch::IGNORE_CASE);
+    printFtsResult(result);
+    EXPECT_NE(nullptr, result);
+    EXPECT_EQ(3, result->size());
+    delete result;
+
+    cout << "REGEX search..." << endl;
+
+    pattern.assign("lo*king");
+    result = mind.findNoteFts(pattern, m8r::FtsSearch::REGEXP);
+    printFtsResult(result);
+    EXPECT_NE(nullptr, result);
+    EXPECT_EQ(2, result->size());
     delete result;
 }

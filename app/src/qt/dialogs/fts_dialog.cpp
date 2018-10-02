@@ -32,8 +32,17 @@ FtsDialog::FtsDialog(QWidget *parent)
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     lineEdit->setCompleter(completer);
 
-    caseCheckBox = new QCheckBox{tr("&ignore case")};
-    caseCheckBox->setChecked(true);
+    searchModeRadios = new QGroupBox{tr("Match:"), this};
+    exactRadio = new QRadioButton{tr("&Exact"), searchModeRadios};
+    ignoreRadio = new QRadioButton{tr("&Ignore case"), searchModeRadios};
+    regexRadio = new QRadioButton{tr("&Regular expression"), searchModeRadios};
+    ignoreRadio->setChecked(true);
+    QVBoxLayout* vbox = new QVBoxLayout{this};
+    vbox->addWidget(exactRadio);
+    vbox->addWidget(ignoreRadio);
+    vbox->addWidget(regexRadio);
+    vbox->addStretch(1);
+    searchModeRadios->setLayout(vbox);
 
     findButton = new QPushButton{tr("&Search")};
     findButton->setDefault(true);
@@ -50,7 +59,7 @@ FtsDialog::FtsDialog(QWidget *parent)
     QVBoxLayout *mainLayout = new QVBoxLayout{};
     mainLayout->addWidget(label);
     mainLayout->addWidget(lineEdit);
-    mainLayout->addWidget(caseCheckBox);
+    mainLayout->addWidget(searchModeRadios);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
@@ -85,7 +94,7 @@ FtsDialog::~FtsDialog()
     delete label;
     delete lineEdit;
     delete completer;
-    delete caseCheckBox;
+    delete searchModeRadios;
     delete findButton;
     delete closeButton;
 }

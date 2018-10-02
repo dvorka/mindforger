@@ -527,27 +527,27 @@ void MainWindowPresenter::doActionFts()
 
 void MainWindowPresenter::handleFts()
 {
-    QString searchedString = ftsDialog->getSearchedString();
+    QString searchedString = ftsDialog->getSearchPattern();
     ftsDialog->hide();
     executeFts(
         searchedString.toStdString(),
-        ftsDialog->getCaseCheckbox()->isChecked(),
+        ftsDialog->isExact()?FtsSearch::EXACT:(ftsDialog->isRegex()?FtsSearch::REGEXP:FtsSearch::IGNORE_CASE),
         ftsDialog->getScope());
 }
 
-void MainWindowPresenter::executeFts(const string& searchedString, const bool ignoreCase, Outline* scope) const
+void MainWindowPresenter::executeFts(const string& pattern, const FtsSearch searchMode, Outline* scope) const
 {
-    vector<Note*>* result = mind->findNoteFts(searchedString, ignoreCase, scope);
+    vector<Note*>* result = mind->findNoteFts(pattern, searchMode, scope);
 
     QString info = QString::number(result->size());
     info += QString::fromUtf8(" result(s) found for '");
-    info += QString::fromStdString(searchedString);
+    info += QString::fromStdString(pattern);
     info += QString::fromUtf8("'");
     view.getStatusBar()->showInfo(info);
 
     if(result && result->size()) {
-        orloj->getNoteView()->setSearchExpression(searchedString);
-        orloj->getNoteView()->setSearchIgnoreCase(ignoreCase);
+        orloj->getNoteView()->setSearchPattern(pattern);
+        orloj->getNoteView()->setSearchIgnoreCase(searchMode==FtsSearch::IGNORE_CASE?true:false);
 
         orloj->showFacetFtsResult(result);
     } else {
