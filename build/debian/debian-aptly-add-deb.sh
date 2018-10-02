@@ -38,7 +38,7 @@ echo "See 'MindForger Release Guide#Debian and my PPA' notebook for detailed ste
 #aptly snapshot list 
 
 # delete snapshot(s) ONLY if needed - publish must be deleted first!
-#aptly snapshot drop mf-test-snapshot
+#aptly snapshot drop mindforger-1.46.0-snapshot
 
 # create snapshot in the time of release - note release NAME 
 #aptly snapshot create mindforger-1.47.0-snapshot from repo mindforger-com-ppa

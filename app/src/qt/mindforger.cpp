@@ -105,12 +105,15 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     // check whether running in GUI (and not in text console tty)
+#ifndef __APPLE__
     char *term = getenv(m8r::ENV_VAR_DISPLAY);
     if(!term || !strlen(term)) {
-        cerr << endl << QCoreApplication::translate("main", "MindForger CANNOT be run from text console - run it from a terminal in GUI.").toUtf8().constData()
+        cerr << endl << QCoreApplication::translate("main", "MindForger CANNOT be run from text console - set DISPLAY environment variable or run MindForger from GUI.").toUtf8().constData()
              << endl;
         exit(1);
     }
+    // default terminal macOS environment: TERM=xterm-256color DISPLAY=
+#endif
 
     // stupid & ugly reused code as macOS requires to pass --disable-web-security parameter to QApplication
     // so that it allows loading of images by QWebEngine
