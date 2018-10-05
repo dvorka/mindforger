@@ -31,6 +31,7 @@
         <file alias="dark.css">resources/qt/css/dark.css</file>
         <file alias="light.css">resources/qt/css/light.css</file>
         <file alias="highlight.css">resources/qt/css/highlight-js-default.css</file>
+        <file alias="light-compact.css">resources/qt/css/light-compact.css</file>
     </qresource>
     <qresource prefix="/js">
         <file alias="highlight.js">resources/qt/js/highlight.js</file>
