@@ -550,6 +550,15 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionHelpWeb = new QAction(tr("&Web"), mainWindow);
     actionHelpWeb->setStatusTip(tr("Open MindForger web"));
 
+    actionHelpMarkdown = new QAction(tr("&Markdown tutorial"), mainWindow);
+    actionHelpMarkdown->setStatusTip(tr("Open Markdown tutorial"));
+
+    actionHelpMathJaxQuickReference= new QAction(tr("MathJax cheatsheet"), mainWindow);
+    actionHelpMathJaxQuickReference->setStatusTip(tr("Open Markdown quick reference"));
+
+    actionHelpMathJaxLivePreview = new QAction(tr("MathJax live preview"), mainWindow);
+    actionHelpMathJaxLivePreview->setStatusTip(tr("Open Markdown live demo"));
+
     actionHelpReportBug = new QAction(tr("Report &Bug or Request Feature"), mainWindow);
     actionHelpReportBug->setStatusTip(tr("Report bug or suggest an enhancement"));
 
@@ -565,6 +574,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuHelp->addSeparator();
     menuHelp->addAction(actionHelpReportBug);
     menuHelp->addAction(actionHelpCheckForUpdates);
+    menuHelp->addSeparator();
+    menuHelp->addAction(actionHelpMarkdown);
+    menuHelp->addAction(actionHelpMathJaxQuickReference);
+    menuHelp->addAction(actionHelpMathJaxLivePreview);
     menuHelp->addSeparator();
     menuHelp->addAction(actionHelpAbout);
 }

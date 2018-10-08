@@ -267,6 +267,9 @@ public slots:
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();
+    void doActionHelpMarkdown();
+    void doActionHelpMathJaxLivePreview();
+    void doActionHelpMathJaxQuickReference();
     void doActionHelpReportBug();
     void doActionHelpCheckForUpdates();
     void doActionHelpAboutMindForger();

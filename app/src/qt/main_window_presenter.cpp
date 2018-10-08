@@ -1844,23 +1844,27 @@ void MainWindowPresenter::handleMindPreferences()
 
 void MainWindowPresenter::doActionHelpDocumentation()
 {
-    // Open MD w/ documentation
-
-    /* Keyboard shortcuts:
-     *
-     * Editor shortcuts:
-     *
-     * Ctrl+g ... exit editor without saving
-     * Ctrl+s
-     * Alt+LeftArrow ... save and exit editor
-     */
-
-    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger-repository"});
+    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md"});
 }
 
 void MainWindowPresenter::doActionHelpWeb()
 {
     QDesktopServices::openUrl(QUrl{"http://www.mindforger.com"});
+}
+
+void MainWindowPresenter::doActionHelpMarkdown()
+{
+    QDesktopServices::openUrl(QUrl{"https://guides.github.com/features/mastering-markdown/"});
+}
+
+void MainWindowPresenter::doActionHelpMathJaxLivePreview()
+{
+    QDesktopServices::openUrl(QUrl{"https://www.mathjax.org/#demo"});
+}
+
+void MainWindowPresenter::doActionHelpMathJaxQuickReference()
+{
+    QDesktopServices::openUrl(QUrl{"https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference"});
 }
 
 void MainWindowPresenter::doActionHelpReportBug()

@@ -132,6 +132,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionHelpWeb, SIGNAL(triggered()), mwp, SLOT(doActionHelpWeb()));
     QObject::connect(view->actionHelpReportBug, SIGNAL(triggered()), mwp, SLOT(doActionHelpReportBug()));
     QObject::connect(view->actionHelpCheckForUpdates, SIGNAL(triggered()), mwp, SLOT(doActionHelpCheckForUpdates()));
+    QObject::connect(view->actionHelpMarkdown, SIGNAL(triggered()), mwp, SLOT(doActionHelpMarkdown()));
+    QObject::connect(view->actionHelpMathJaxQuickReference, SIGNAL(triggered()), mwp, SLOT(doActionHelpMathJaxQuickReference()));
+    QObject::connect(view->actionHelpMathJaxLivePreview, SIGNAL(triggered()), mwp, SLOT(doActionHelpMathJaxLivePreview()));
     QObject::connect(view->actionHelpAbout, SIGNAL(triggered()), mwp, SLOT(doActionHelpAboutMindForger()));
 
     switch(config.getDesiredMindState()) {

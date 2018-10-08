@@ -177,6 +177,11 @@ public:
     // menu: Help
     QAction* actionHelpDocumentation;
     QAction* actionHelpWeb;
+
+    QAction* actionHelpMarkdown;
+    QAction* actionHelpMathJaxLivePreview;
+    QAction* actionHelpMathJaxQuickReference;
+
     QAction* actionHelpReportBug;
     QAction* actionHelpCheckForUpdates;
     QAction* actionHelpAbout;
