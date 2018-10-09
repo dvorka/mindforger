@@ -338,7 +338,7 @@ string* HtmlOutlineRepresentation::to(const Outline* outline, string* html, bool
     return html;
 }
 
-string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html, bool standalone)
+string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html, bool standalone, bool autolinking)
 {
     if(!config.isUiHtmlTheme()) {
         header(*html, nullptr, standalone);
@@ -438,9 +438,17 @@ string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html, bool
         htmlHeader += "<br/>";
 
         // HTML completion
-        string outlineMd{outline->getOutlineDescriptorAsNote()->getDescriptionAsString()};
+        string outlineMd{};
         string path, file;
         pathToDirectoryAndFile(outline->getKey(), path, file);
+        if(autolinking) {
+            markdownRepresentation.toDescription(
+                        outline->getOutlineDescriptorAsNote(),
+                        &outlineMd,
+                        autolinking);
+        } else {
+            outlineMd.append(outline->getOutlineDescriptorAsNote()->getDescriptionAsString());
+        }
         to(&outlineMd, html, &path);
         // inject custom HTML header
         html->replace(
@@ -461,7 +469,7 @@ string* HtmlOutlineRepresentation::to(const Note* note, string* html, bool autol
 {
     string* markdown = new string{};
     markdown->reserve(MarkdownOutlineRepresentation::AVG_NOTE_SIZE);
-    markdownRepresentation.to(note, markdown, autolinking);
+    markdownRepresentation.to(note, markdown, true, autolinking);
 
     string path, file;
     pathToDirectoryAndFile(note->getOutlineKey(), path, file);

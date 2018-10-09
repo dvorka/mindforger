@@ -115,7 +115,7 @@ public:
      * Outline is rendered to be shown in MF, standalone option indicates HTML export.
      */
     std::string* to(const Outline* outline, std::string* html, bool standalone=false);
-    std::string* toHeader(Outline* outline, std::string* html, bool standalone=false);
+    std::string* toHeader(Outline* outline, std::string* html, bool standalone=false, bool autolinking=false);
     std::string* to(const Note* note, std::string* html, bool autolinking=false);
 
     /**

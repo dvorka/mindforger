@@ -428,7 +428,7 @@ string* MarkdownOutlineRepresentation::to(const Note* note)
     return to(note, md);
 }
 
-string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool autolinking, bool includeMetadata)
+string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool includeMetadata, bool autolinking)
 {
     md->clear();
 
@@ -492,9 +492,9 @@ string* MarkdownOutlineRepresentation::toDescription(const Note* note, string* m
     MF_DEBUG("YYY b:" << autolinking << " ptr:" << descriptionInterceptor << " " << note->getName() << " " << endl);
     if(descriptionInterceptor && autolinking) {
         vector<string*> autolinkedDescription{};
-        MF_DEBUG("N " << note << endl);
         descriptionInterceptor->process(note->getDescription(), autolinkedDescription);
         toString(autolinkedDescription, *md);
+
         for(string* s:autolinkedDescription) {
             delete s;
         }

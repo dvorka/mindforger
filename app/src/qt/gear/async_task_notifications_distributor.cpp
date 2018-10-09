@@ -67,7 +67,7 @@ void AsyncTaskNotificationsDistributor::run()
 
     while(true) {
         msleep(sleepInterval);
-        MF_DEBUG("AsyncDistributor: wake up w/ associations need " << (int)mwp->getMind()->needForAssociations() << endl);
+        //MF_DEBUG("AsyncDistributor: wake up w/ associations need " << (int)mwp->getMind()->needForAssociations() << endl);
         if(mwp->getMind()->needForAssociations()
              ||
            mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)

@@ -42,7 +42,7 @@ void AutolinkingPreprocessor::updateIndices()
 
 void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::vector<std::string*>& amd)
 {
-    MF_DEBUG("Autolinker..." << endl);
+    MF_DEBUG("Autolinker:" << endl);
 
     // IMPROVE consider sync (in case that it's really needed)
     if(!notes.size()) {
@@ -53,15 +53,19 @@ void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::
         for(string* l:md) {
             // every line to be autolinked separately
             size_t found;
+            bool linked;
+            string* nl = new string{};
             if(l && l->size()) {
-                MF_DEBUG("B>" << *l << endl);
-                string* nl = new string{};
+                MF_DEBUG(">>" << *l << ">>" << endl);
+                linked = false;
 
                 // find longest match
                 // IMPROVE Aho-Corasick @ trie
                 // IMPROVE the first match is found
                 for(Note* n:notes) {
                     if((found=l->find(n->getName())) != string::npos) {
+                        linked = true;
+
                         // make it link
                         nl->append(l->substr(0,found));
                         nl->append("[");
@@ -71,11 +75,23 @@ void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::
                         nl->append("#");
                         nl->append(n->getMangledName());
                         nl->append(")");
+                        nl->append(l->substr(found+n->getName().size()));
+                        //nl->append("\n");
 
-                        amd.push_back(nl);
+                        // IMPROVE match > 1 on the line
+                        break;
                     }
-                    // IMPROVE match > 1 on the line
                 }
+
+                if(!linked) {
+                    nl->append(*l);
+                    //nl->append("\n");
+                }
+
+                MF_DEBUG("<<" << *nl << "<<" << endl);
+                amd.push_back(nl);
+            } else {
+                amd.push_back(nl);
             }
         }
     }

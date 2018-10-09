@@ -92,7 +92,7 @@ public:
     virtual std::string* toPreamble(const Outline* outline, std::string* md);
     virtual std::string* toHeader(const Outline* outline);
     virtual std::string* to(const Note* note);
-    virtual std::string* to(const Note* note, std::string* md, bool autolinking=false, bool includeMetadata=true);
+    virtual std::string* to(const Note* note, std::string* md, bool includeMetadata=true, bool autolinking=false);
     virtual std::string* toDescription(const Note* note, std::string* md, bool autolinking=false);
 
     static std::string to(const std::vector<const Tag*>* tags);
