@@ -489,7 +489,6 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
 
 string* MarkdownOutlineRepresentation::toDescription(const Note* note, string* md, bool autolinking)
 {
-    MF_DEBUG("YYY b:" << autolinking << " ptr:" << descriptionInterceptor << " " << note->getName() << " " << endl);
     if(descriptionInterceptor && autolinking) {
         vector<string*> autolinkedDescription{};
         descriptionInterceptor->process(note->getDescription(), autolinkedDescription);
