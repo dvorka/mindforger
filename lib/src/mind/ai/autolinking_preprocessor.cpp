@@ -51,7 +51,7 @@ void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::
 
     if(md.size()) {
         for(string* l:md) {
-            // every line to be autolinked separately
+            // every line is autolinked SEPARATELY
             size_t found;
             bool linked;
             string* nl = new string{};
@@ -59,9 +59,13 @@ void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::
                 MF_DEBUG(">>" << *l << ">>" << endl);
                 linked = false;
 
-                // find longest match
                 // IMPROVE Aho-Corasick @ trie
                 // IMPROVE the first match is found
+                // IMPROVE ORDER of Ns determines what will be found > have active O Ns in head, etc.
+
+                // TODO:
+                // chop words from the beginning of line one by one and try to find
+                // PREFIX of the line
                 for(Note* n:notes) {
                     if((found=l->find(n->getName())) != string::npos) {
                         linked = true;
@@ -82,6 +86,9 @@ void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::
                         break;
                     }
                 }
+
+                // TODO chop
+                //str=str.substr(str.find_first_of(" \t")+1);
 
                 if(!linked) {
                     nl->append(*l);
