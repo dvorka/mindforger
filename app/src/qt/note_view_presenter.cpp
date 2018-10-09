@@ -86,7 +86,8 @@ void NoteViewPresenter::refresh(Note* note)
         qHtml.replace(searchExpression, highlighted, searchIgnoreCase?Qt::CaseInsensitive:Qt::CaseSensitive);
     } else {
         // HTML
-        htmlRepresentation->to(note, &html);
+        MF_DEBUG("PRESENTER " << Configuration::getInstance().isAutolinking() << endl);
+        htmlRepresentation->to(note, &html, Configuration::getInstance().isAutolinking());
         qHtml= QString::fromStdString(html);
     }
 

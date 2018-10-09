@@ -32,6 +32,7 @@ MarkdownOutlineRepresentation::MarkdownOutlineRepresentation(Ontology& ontology,
 
 MarkdownOutlineRepresentation::~MarkdownOutlineRepresentation()
 {
+    delete descriptionInterceptor;
 }
 
 // IMPROVE return the last N doesn't seem to have much sense...
@@ -427,7 +428,7 @@ string* MarkdownOutlineRepresentation::to(const Note* note)
     return to(note, md);
 }
 
-string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool includeMetadata)
+string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool autolinking, bool includeMetadata)
 {
     md->clear();
 
@@ -481,15 +482,17 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
         md->append("\n");
     }
 
-    toDescription(note, md);
+    toDescription(note, md, autolinking);
 
     return md;
 }
 
-string* MarkdownOutlineRepresentation::toDescription(const Note* note, string* md)
+string* MarkdownOutlineRepresentation::toDescription(const Note* note, string* md, bool autolinking)
 {
-    if(Configuration::getInstance().isAutolinking()) {
+    MF_DEBUG("YYY b:" << autolinking << " ptr:" << descriptionInterceptor << " " << note->getName() << " " << endl);
+    if(descriptionInterceptor && autolinking) {
         vector<string*> autolinkedDescription{};
+        MF_DEBUG("N " << note << endl);
         descriptionInterceptor->process(note->getDescription(), autolinkedDescription);
         toString(autolinkedDescription, *md);
         for(string* s:autolinkedDescription) {

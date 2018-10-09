@@ -28,11 +28,13 @@ using namespace std;
 
 namespace m8r {
 
-HtmlOutlineRepresentation::HtmlOutlineRepresentation(Ontology& ontology)
+HtmlOutlineRepresentation::HtmlOutlineRepresentation(
+        Ontology& ontology,
+        RepresentationInterceptor* descriptionInterceptor)
     : config(Configuration::getInstance()),
       exportColors{},
       lf{exportColors},
-      markdownRepresentation(ontology)
+      markdownRepresentation(ontology, descriptionInterceptor)
 {
     lastMfOptions = discountOptions = 0;
 }
@@ -452,9 +454,12 @@ string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html, bool
     return html;
 }
 
-string* HtmlOutlineRepresentation::to(const Note* note, string* html)
+string* HtmlOutlineRepresentation::to(const Note* note, string* html, bool autolinking)
 {
-    string* markdown = markdownRepresentation.to(note);
+    string* markdown = new string{};
+    markdown->reserve(MarkdownOutlineRepresentation::AVG_NOTE_SIZE);
+    markdownRepresentation.to(note, markdown, autolinking);
+
     string path, file;
     pathToDirectoryAndFile(note->getOutlineKey(), path, file);
     to(markdown, html, &path);

@@ -30,7 +30,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // representations
     this->mdRepresentation
-        = new MarkdownOutlineRepresentation{mind->ontology()};
+        = new MarkdownOutlineRepresentation{mind->ontology(), new AutolinkingPreprocessor{*mind}};
     this->htmlRepresentation
         = new HtmlOutlineRepresentation{mind->ontology(),LookAndFeels::getInstance()};
     this->mdConfigRepresentation
@@ -1008,6 +1008,83 @@ void MainWindowPresenter::doActionFormatMath()
     }
 }
 
+void MainWindowPresenter::doActionFormatMathFrac()
+{
+    insertMarkdownText("\\frac{}{}", false, 6);
+}
+void MainWindowPresenter::doActionFormatMathSum()
+{
+    insertMarkdownText("\\sum_{i=0}^n", false, 12);
+}
+void MainWindowPresenter::doActionFormatMathInt()
+{
+    insertMarkdownText("\\int_{x}^{y}", false, 12);
+}
+void MainWindowPresenter::doActionFormatMathIiint()
+{
+    insertMarkdownText("\\iiint", false, 3);
+}
+void MainWindowPresenter::doActionFormatMathAlpha()
+{
+    insertMarkdownText("\\alpha", false, 6);
+}
+void MainWindowPresenter::doActionFormatMathBeta()
+{
+    insertMarkdownText("\\beta", false, 5);
+}
+void MainWindowPresenter::doActionFormatMathDelta()
+{
+    insertMarkdownText("\\Delta", false, 6);
+}
+void MainWindowPresenter::doActionFormatMathGama()
+{
+    insertMarkdownText("\\Gama", false, 5);
+}
+void MainWindowPresenter::doActionFormatMathText()
+{
+    insertMarkdownText("\\text{}", false, 6);
+}
+void MainWindowPresenter::doActionFormatMathBar()
+{
+    insertMarkdownText("\\bar", false, 4);
+}
+void MainWindowPresenter::doActionFormatMathHat()
+{
+    insertMarkdownText("\\hat", false, 4);
+}
+void MainWindowPresenter::doActionFormatMathDot()
+{
+    insertMarkdownText("\\dot", false, 4);
+}
+void MainWindowPresenter::doActionFormatMathOverrightarrow()
+{
+    insertMarkdownText("\\overrightarrow", false, 15);
+}
+void MainWindowPresenter::doActionFormatMathCup()
+{
+    insertMarkdownText("\\cup", false, 4);
+}
+void MainWindowPresenter::doActionFormatMathCap()
+{
+    insertMarkdownText("\\cap", false, 4);
+}
+void MainWindowPresenter::doActionFormatMathEmptyset()
+{
+    insertMarkdownText("\\emptyset", false, 9);
+}
+void MainWindowPresenter::doActionFormatMathIn()
+{
+    insertMarkdownText("\\in", false, 3);
+}
+void MainWindowPresenter::doActionFormatMathNotin()
+{
+    insertMarkdownText("\\notin", false, 6);
+}
+void MainWindowPresenter::doActionFormatMathSqrt()
+{
+    insertMarkdownText("\\sqrt{}", false, 6);
+}
+
 void MainWindowPresenter::doActionFormatStrikethrough()
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
@@ -1200,6 +1277,15 @@ void MainWindowPresenter::doActionFormatLink()
         selectedText);
 }
 
+void MainWindowPresenter::insertMarkdownText(const QString& text, bool newline, int offset)
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, newline, offset);
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, newline, offset);
+    }
+}
+
 /*
  * See InsertLinkDialog for link creation hints
  */
@@ -1222,7 +1308,7 @@ void MainWindowPresenter::handleFormatLink()
         if(orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getSelectedText().size()) {
             orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->removeSelectedText();
         }
-        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false);
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false, 1);
     }
 }
 

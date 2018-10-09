@@ -472,21 +472,54 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatCode = new QAction(tr("&Code"), mainWindow);
     actionFormatCode->setStatusTip(tr("Format text as inlined source code"));
 
-    // Math
-    submenuFormatMath = menuOutline->addMenu(tr("&Math"));
-    actionFormatMathFraction= new QAction(tr("&Fraction"), mainWindow);
-    submenuFormatMath->addAction(actionFormatMathFraction);
-//    actionFormatMathSum= new QAction(tr("&Sum"), mainWindow);
-//    submenuFormatMath->addAction(actionFormatSumFraction);
-//    actionFormatMathSum= new QAction(tr("&Sum"), mainWindow);
-//    submenuFormatMath->addAction(actionFormatSumFraction);
-//    int, iiint
-//    alpha, beta, Delta, Omega
-//    text;
-//    accents submenu
-//    bar, hat, dot, overrightarrow;
-//    cup; cap; emptyset, in, notin;
-//    sqrt;
+    actionFormatMath = new QAction(tr("&Math"), mainWindow);
+    actionFormatMath->setStatusTip(tr("Format text as math (MathJax)"));
+
+    // MathJax
+    submenuFormatMathJax = menuOutline->addMenu(tr("MathJa&x"));
+    actionFormatMathText= new QAction(tr("&text"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathText);
+    submenuFormatMathJax->addSeparator();
+    actionFormatMathFraction= new QAction(tr("&fraction"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathFraction);
+    actionFormatMathSum= new QAction(tr("&sum"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathSum);
+    actionFormatMathSqrt= new QAction(tr("s&quare root"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathSqrt);
+    submenuFormatMathJax->addSeparator();
+    actionFormatMathInt= new QAction(tr("&integral"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathInt);
+    actionFormatMathIiint= new QAction(tr("integrals"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathIiint);
+    submenuFormatMathJax->addSeparator();
+    actionFormatMathAlpha= new QAction(tr("&alpha"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathAlpha);
+    actionFormatMathBeta= new QAction(tr("&beta"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathBeta);
+    actionFormatMathGama= new QAction(tr("&Gama"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathGama);
+    actionFormatMathDelta= new QAction(tr("&Delta"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathDelta);
+    submenuFormatMathJax->addSeparator();
+    actionFormatMathBar= new QAction(tr("&bar"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathBar);
+    actionFormatMathHat= new QAction(tr("&hat"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathHat);
+    actionFormatMathDot= new QAction(tr("&dot"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathDot);
+    actionFormatMathOverrightarrow= new QAction(tr("&overrightarrow"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathOverrightarrow);
+    submenuFormatMathJax->addSeparator();
+    actionFormatMathCup= new QAction(tr("&cup"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathCup);
+    actionFormatMathCap= new QAction(tr("&cap"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathCap);
+    actionFormatMathEmptyset= new QAction(tr("&empty set"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathEmptyset);
+    actionFormatMathIn= new QAction(tr("&in"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathIn);
+    actionFormatMathNotin= new QAction(tr("&not in"), mainWindow);
+    submenuFormatMathJax->addAction(actionFormatMathNotin);
 
     actionFormatStrikethrough = new QAction(tr("&Strikethrough"), mainWindow);
     actionFormatStrikethrough->setStatusTip(tr("Format text as strikethrough"));
@@ -534,9 +567,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatBold);
     menuFormat->addAction(actionFormatItalic);
     menuFormat->addAction(actionFormatCode);
-#ifdef MF_WIP
-    menuFormat->addMenu(submenuFormatMath);
-#endif
+    menuFormat->addAction(actionFormatMath);
     menuFormat->addAction(actionFormatStrikethrough);
     menuFormat->addAction(actionFormatKeyboard);
     menuFormat->addSeparator();
@@ -545,6 +576,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatListTask);
     menuFormat->addSeparator();
     menuFormat->addAction(actionFormatToc);
+    menuFormat->addMenu(submenuFormatMathJax);
     menuFormat->addAction(actionFormatTimestamp);
     menuFormat->addAction(actionFormatCodeBlock);
     menuFormat->addAction(actionFormatMathBlock);

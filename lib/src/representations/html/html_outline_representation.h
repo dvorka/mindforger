@@ -85,7 +85,10 @@ private:
     unsigned int discountOptions;
 
 public:
-    explicit HtmlOutlineRepresentation(Ontology& ontology, HtmlColorsRepresentation& lf);
+    explicit HtmlOutlineRepresentation(
+            Ontology& ontology,
+            HtmlColorsRepresentation& lf,
+            RepresentationInterceptor* descriptionInterceptor=nullptr);
     explicit HtmlOutlineRepresentation(Ontology& ontology);
     HtmlOutlineRepresentation(const HtmlOutlineRepresentation&) = delete;
     HtmlOutlineRepresentation(const HtmlOutlineRepresentation&&) = delete;
@@ -106,7 +109,7 @@ public:
      */
     std::string* to(const Outline* outline, std::string* html, bool standalone=false);
     std::string* toHeader(Outline* outline, std::string* html, bool standalone=false);
-    std::string* to(const Note* note, std::string* html);
+    std::string* to(const Note* note, std::string* html, bool autolinking=false);
 
     /**
      * @brief Append "color: 0x...; background-color: 0x...;"

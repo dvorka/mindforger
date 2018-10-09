@@ -27,6 +27,7 @@ namespace m8r {
 class RepresentationInterceptor
 {
 public:
+    virtual ~RepresentationInterceptor() {}
 
     virtual void process(const std::vector<std::string*>& in, std::vector<std::string*>& out) = 0;
 };

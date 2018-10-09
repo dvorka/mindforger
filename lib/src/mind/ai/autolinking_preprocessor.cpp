@@ -38,6 +38,8 @@ AutolinkingPreprocessor::~AutolinkingPreprocessor()
 
 void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::vector<std::string*>& amd)
 {
+    MF_DEBUG("Autolinker..." << endl);
+
     if(md.size()) {
         for(string* l:md) {
             // every line to be autolinked separately

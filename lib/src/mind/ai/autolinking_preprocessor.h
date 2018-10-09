@@ -42,7 +42,7 @@ public:
     AutolinkingPreprocessor(const AutolinkingPreprocessor&&) = delete;
     AutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&) = delete;
     AutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&&) = delete;
-    ~AutolinkingPreprocessor();
+    virtual ~AutolinkingPreprocessor();
 
     virtual void process(const std::vector<std::string*>& md, std::vector<std::string*>& amd) override;
 

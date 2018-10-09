@@ -20,6 +20,7 @@
 #define M8RUI_MAIN_WINDOW_PRESENTER_H
 
 #include "../../lib/src/mind/mind.h"
+#include "../../lib/src/mind/ai/autolinking_preprocessor.h"
 #include "../../lib/src/representations/html/html_outline_representation.h"
 #include "../../lib/src/representations/markdown/markdown_configuration_representation.h"
 
@@ -219,6 +220,25 @@ public slots:
     void doActionFormatItalic();
     void doActionFormatCode();
     void doActionFormatMath();
+    void doActionFormatMathFrac();
+    void doActionFormatMathSum();
+    void doActionFormatMathInt();
+    void doActionFormatMathIiint();
+    void doActionFormatMathAlpha();
+    void doActionFormatMathBeta();
+    void doActionFormatMathDelta();
+    void doActionFormatMathGama();
+    void doActionFormatMathText();
+    void doActionFormatMathBar();
+    void doActionFormatMathHat();
+    void doActionFormatMathDot();
+    void doActionFormatMathOverrightarrow();
+    void doActionFormatMathCup();
+    void doActionFormatMathCap();
+    void doActionFormatMathEmptyset();
+    void doActionFormatMathIn();
+    void doActionFormatMathNotin();
+    void doActionFormatMathSqrt();
     void doActionFormatStrikethrough();
     void doActionFormatKeyboard();
     void handleRowsAndDepth();
@@ -275,6 +295,9 @@ public slots:
     void doActionHelpAboutMindForger();
 
     void executeFts(const std::string& pattern, const FtsSearch searchMode, Outline* scope=nullptr) const;
+
+private:
+    void insertMarkdownText(const QString& text, bool newline=false, int offset=0);
 };
 
 }
