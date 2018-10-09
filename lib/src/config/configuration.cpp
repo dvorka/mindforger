@@ -69,6 +69,7 @@ void Configuration::clear()
     mindState = MindState::SLEEPING;
     writeMetadata = true;
     saveReadsMetadata = DEFAULT_SAVE_READS_METADATA;
+    autolinking = DEFAULT_AUTOLINKING;
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
     tagsScope.clear();
     markdownQuoteSections = DEFAULT_MD_QUOTE_SECTIONS;

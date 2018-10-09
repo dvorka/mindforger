@@ -149,4 +149,14 @@ string normalizeToNcName(string name, char quoteChar) {
     return result;
 }
 
+void toString(const std::vector<std::string*>& ss, std::string& os)
+{
+    if(ss.size()) {
+        for(std::string *s:ss) {
+            os += *s;
+            os += "\n";
+        }
+    }
+}
+
 } /* namespace */

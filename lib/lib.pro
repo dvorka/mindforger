@@ -105,7 +105,8 @@ SOURCES += \
     src/mind/aspect/mind_scope_aspect.cpp \
     src/mind/knowledge_graph.cpp \
     src/representations/twiki/twiki_outline_representation.cpp \
-    src/mind/associated_notes.cpp
+    src/mind/associated_notes.cpp \
+    src/mind/ai/autolinking_preprocessor.cpp
 
 mfner {
     SOURCES += \
@@ -214,7 +215,9 @@ HEADERS += \
     src/compilation.h \
     src/mind/knowledge_graph.h \
     src/representations/twiki/twiki_outline_representation.h \
-    src/mind/associated_notes.h
+    src/mind/associated_notes.h \
+    src/mind/ai/autolinking_preprocessor.h \
+    src/representations/representation_interceptor.h
 
 mfner {
     HEADERS += \

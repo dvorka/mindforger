@@ -27,6 +27,7 @@
 #include "../../model/outline.h"
 #include "../../mind/ontology/ontology.h"
 #include "../outline_representation.h"
+#include "../representation_interceptor.h"
 
 namespace m8r {
 
@@ -56,8 +57,12 @@ private:
     // tags, outline types and note types are dynamic (not fixed)
     Ontology& ontology;
 
+    RepresentationInterceptor* descriptionInterceptor;
+
 public:
-    explicit MarkdownOutlineRepresentation(Ontology& ontology);
+    explicit MarkdownOutlineRepresentation(
+        Ontology& ontology,
+        RepresentationInterceptor* descriptionInterceptor=nullptr);
     MarkdownOutlineRepresentation(const MarkdownOutlineRepresentation&) = delete;
     MarkdownOutlineRepresentation(const MarkdownOutlineRepresentation&&) = delete;
     MarkdownOutlineRepresentation &operator=(const MarkdownOutlineRepresentation&) = delete;

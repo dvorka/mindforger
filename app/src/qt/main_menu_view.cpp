@@ -472,8 +472,21 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatCode = new QAction(tr("&Code"), mainWindow);
     actionFormatCode->setStatusTip(tr("Format text as inlined source code"));
 
-    actionFormatMath = new QAction(tr("&Math"), mainWindow);
-    actionFormatMath->setStatusTip(tr("Format text as math (MathJax)"));
+    // Math
+    submenuFormatMath = menuOutline->addMenu(tr("&Math"));
+    actionFormatMathFraction= new QAction(tr("&Fraction"), mainWindow);
+    submenuFormatMath->addAction(actionFormatMathFraction);
+//    actionFormatMathSum= new QAction(tr("&Sum"), mainWindow);
+//    submenuFormatMath->addAction(actionFormatSumFraction);
+//    actionFormatMathSum= new QAction(tr("&Sum"), mainWindow);
+//    submenuFormatMath->addAction(actionFormatSumFraction);
+//    int, iiint
+//    alpha, beta, Delta, Omega
+//    text;
+//    accents submenu
+//    bar, hat, dot, overrightarrow;
+//    cup; cap; emptyset, in, notin;
+//    sqrt;
 
     actionFormatStrikethrough = new QAction(tr("&Strikethrough"), mainWindow);
     actionFormatStrikethrough->setStatusTip(tr("Format text as strikethrough"));
@@ -521,7 +534,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatBold);
     menuFormat->addAction(actionFormatItalic);
     menuFormat->addAction(actionFormatCode);
-    menuFormat->addAction(actionFormatMath);
+#ifdef MF_WIP
+    menuFormat->addMenu(submenuFormatMath);
+#endif
     menuFormat->addAction(actionFormatStrikethrough);
     menuFormat->addAction(actionFormatKeyboard);
     menuFormat->addSeparator();

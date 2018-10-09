@@ -161,7 +161,8 @@ public:
     QAction* actionFormatKeyboard;
     QAction* actionFormatCode;
     QAction* actionFormatCodeBlock;
-    QAction* actionFormatMath;
+    QMenu* submenuFormatMath;
+    QAction* actionFormatMathFraction;
     QAction* actionFormatMathBlock;
     QAction* actionFormatBlockQuote;
     QAction* actionFormatListNumber;

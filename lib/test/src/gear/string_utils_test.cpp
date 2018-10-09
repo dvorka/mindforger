@@ -101,3 +101,14 @@ TEST(StringGearTestCase, Trim)
     EXPECT_EQ(0, strcmp("", r));
     delete[] r;
 }
+
+
+TEST(StringGearTestCase, VectorToString)
+{
+    vector<string*> v{};
+    string s{};
+
+    toString(v, s);
+
+    ASSERT_EQ(0, s.size());
+}

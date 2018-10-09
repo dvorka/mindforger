@@ -69,7 +69,8 @@ SOURCES += \
     ../benchmark/trie_benchmark.cpp \
     ../benchmark/ai_benchmark.cpp \
     gear/file_utils_test.cpp \
-    gear/trie_test.cpp
+    gear/trie_test.cpp \
+    ai/autolinking_test.cpp
 
 HEADERS += \
     ./test_gear.h

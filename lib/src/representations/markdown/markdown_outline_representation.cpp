@@ -24,8 +24,9 @@ namespace m8r {
 
 using namespace std;
 
-MarkdownOutlineRepresentation::MarkdownOutlineRepresentation(Ontology& ontology)
-    : ontology(ontology)
+MarkdownOutlineRepresentation::MarkdownOutlineRepresentation(Ontology& ontology, RepresentationInterceptor* descriptionInterceptor)
+    : ontology(ontology),
+      descriptionInterceptor(descriptionInterceptor)
 {
 }
 
@@ -487,14 +488,17 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
 
 string* MarkdownOutlineRepresentation::toDescription(const Note* note, string* md)
 {
-    const vector<string*>& description=note->getDescription();
-    if(description.size()) {
-        for(string *s:description) {
-            md->append(*s);
-            // IMPROVE endl
-            md->append("\n");
+    if(Configuration::getInstance().isAutolinking()) {
+        vector<string*> autolinkedDescription{};
+        descriptionInterceptor->process(note->getDescription(), autolinkedDescription);
+        toString(autolinkedDescription, *md);
+        for(string* s:autolinkedDescription) {
+            delete s;
         }
+    } else {
+        toString(note->getDescription(), *md);
     }
+
     return md;
 }
 

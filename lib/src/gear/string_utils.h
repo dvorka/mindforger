@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <functional>
 #include <locale>
+#include <vector>
 
 #include "lang_utils.h"
 
@@ -144,6 +145,8 @@ static inline std::string to_stringl(time_t x)
   delete[] buf;
   return str;
 }
+
+void toString(const std::vector<std::string*>& ss, std::string& os);
 
 } /* namespace*/
 
