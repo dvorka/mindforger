@@ -26,19 +26,28 @@ AutolinkingPreprocessor::AutolinkingPreprocessor(Mind& mind)
     : mind(mind),
       noteNames{}
 {
-    mind.getAllNotes(notes);
-    for(Note* n:notes) {
-        noteNames.insert(n->getName());
-    }
 }
 
 AutolinkingPreprocessor::~AutolinkingPreprocessor()
 {
 }
 
+void AutolinkingPreprocessor::updateIndices()
+{
+    mind.getAllNotes(notes);
+    for(Note* n:notes) {
+        noteNames.insert(n->getName());
+    }
+}
+
 void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::vector<std::string*>& amd)
 {
     MF_DEBUG("Autolinker..." << endl);
+
+    // IMPROVE consider sync (in case that it's really needed)
+    if(!notes.size()) {
+        updateIndices();
+    }
 
     if(md.size()) {
         for(string* l:md) {

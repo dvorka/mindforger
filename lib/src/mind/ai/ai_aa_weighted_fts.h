@@ -32,6 +32,7 @@
 namespace m8r {
 
 class Mind;
+class Memory;
 
 /**
  * @brief Weighted FTS based associations assessment.

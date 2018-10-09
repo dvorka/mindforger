@@ -268,7 +268,7 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
         subgraph.setCentralNode(centralNode);
 
         vector<const Tag*> tags{};
-        tags.push_back(mind->ontology().findOrCreateTag(centralNode->getName()));
+        tags.push_back(mind->getOntology().findOrCreateTag(centralNode->getName()));
         // Os
         vector<Outline*> outlines{};
         mind->findOutlinesByTags(tags, outlines);

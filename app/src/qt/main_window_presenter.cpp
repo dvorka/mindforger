@@ -29,10 +29,10 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     mind = new Mind{config};
 
     // representations
-    this->mdRepresentation
-        = new MarkdownOutlineRepresentation{mind->ontology(), new AutolinkingPreprocessor{*mind}};
     this->htmlRepresentation
-        = new HtmlOutlineRepresentation{mind->ontology(),LookAndFeels::getInstance()};
+        = new HtmlOutlineRepresentation{mind->getOntology(), LookAndFeels::getInstance(), new AutolinkingPreprocessor{*mind}};
+    this->mdRepresentation
+        = &htmlRepresentation->getMarkdownRepresentation();
     this->mdConfigRepresentation
         = new MarkdownConfigurationRepresentation{};
 
@@ -44,8 +44,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // initialize components
     view.getToolBar()->setVisible(config.isUiShowToolbar());
-    scopeDialog = new ScopeDialog{mind->ontology(), &view};
-    newOutlineDialog = new OutlineNewDialog{QString::fromStdString(config.getMemoryPath()), mind->remind().getOntology(), &view};
+    scopeDialog = new ScopeDialog{mind->getOntology(), &view};
+    newOutlineDialog = new OutlineNewDialog{QString::fromStdString(config.getMemoryPath()), mind->getOntology(), &view};
     newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
     ftsDialog = new FtsDialog{&view};
     findOutlineByNameDialog = new FindOutlineByNameDialog{&view};

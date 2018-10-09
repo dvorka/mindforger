@@ -24,12 +24,15 @@ using namespace std;
 
 namespace m8r {
 
-Memory::Memory(Configuration& configuration)
+Memory::Memory(
+        Configuration& configuration,
+        Ontology& ontology,
+        HtmlOutlineRepresentation& htmlRepresentation)
     : config{configuration},
-      ontology{},
-      persistence(new FilesystemPersistence{mdRepresentation,htmlRepresentation}),
-      mdRepresentation{ontology},
-      htmlRepresentation{ontology},
+      ontology{ontology},
+      htmlRepresentation{htmlRepresentation},
+      mdRepresentation{htmlRepresentation.getMarkdownRepresentation()},
+      persistence(new FilesystemPersistence{mdRepresentation, htmlRepresentation}),
       twikiRepresentation{mdRepresentation, persistence}
 {
     cache = true;

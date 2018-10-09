@@ -127,8 +127,10 @@ public:
 
 private:
     Configuration &config;
-    Memory memory;
+    Ontology ontology;
+    HtmlOutlineRepresentation htmlRepresentation;
     MarkdownConfigurationRepresentation* mdConfigRepresentation;
+    Memory memory;
 
     /**
      * Atomic mind state changes and asynchronous computations synchronization
@@ -300,7 +302,7 @@ public:
     /**
      * @brief Get ontology.
      */
-    Ontology& ontology() { return memory.getOntology(); }
+    Ontology& getOntology() { return ontology; }
 
     /**
      * @brief Get memory dwell.

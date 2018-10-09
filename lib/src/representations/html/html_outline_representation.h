@@ -73,7 +73,7 @@ private:
 
     Configuration& config;
     HtmlExportColorsRepresentation exportColors;
-    HtmlColorsRepresentation& lf;
+    HtmlColorsRepresentation& lf;    
     MarkdownOutlineRepresentation markdownRepresentation;
 
     /**
@@ -85,11 +85,18 @@ private:
     unsigned int discountOptions;
 
 public:
+    /**
+     * @brief Html O representation.
+     *
+     * Representation interceptor is the head of the interceptor chain.
+     */
     explicit HtmlOutlineRepresentation(
             Ontology& ontology,
             HtmlColorsRepresentation& lf,
-            RepresentationInterceptor* descriptionInterceptor=nullptr);
-    explicit HtmlOutlineRepresentation(Ontology& ontology);
+            RepresentationInterceptor* descriptionInterceptor);
+    explicit HtmlOutlineRepresentation(
+            Ontology& ontology,
+            RepresentationInterceptor* descriptionInterceptor);
     HtmlOutlineRepresentation(const HtmlOutlineRepresentation&) = delete;
     HtmlOutlineRepresentation(const HtmlOutlineRepresentation&&) = delete;
     HtmlOutlineRepresentation &operator=(const HtmlOutlineRepresentation&) = delete;
@@ -119,6 +126,8 @@ public:
     void noteTypeToHtml(const NoteType* noteType, std::string& html);
     void tagsToHtml(const std::vector<const Tag*>* tags, std::string& html);
     void outlineMetadataToHtml(const Outline* outline, std::string& html);
+
+    MarkdownOutlineRepresentation& getMarkdownRepresentation() { return markdownRepresentation; }
 
 private:
     void header(std::string& html, std::string* basePath, bool standalone);

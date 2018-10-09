@@ -59,12 +59,12 @@ private:
      */
     bool cache;
 
-    Configuration& config;    
     RepositoryIndexer repositoryIndexer;
-    Ontology ontology;
+    Configuration& config;
+    Ontology& ontology;
+    HtmlOutlineRepresentation& htmlRepresentation;
+    MarkdownOutlineRepresentation& mdRepresentation;
     Persistence* persistence;
-    MarkdownOutlineRepresentation mdRepresentation;
-    HtmlOutlineRepresentation htmlRepresentation;
     TWikiOutlineRepresentation twikiRepresentation;
     MindScopeAspect* mindScope;
 
@@ -79,7 +79,10 @@ private:
     std::map<std::string,Outline*> outlinesMap;
 
 public:
-    explicit Memory(Configuration& configuration);
+    explicit Memory(
+            Configuration& configuration,
+            Ontology& ontology,
+            HtmlOutlineRepresentation& htmlRepresentation);
     Memory(const Memory&) = delete;
     Memory(const Memory&&) = delete;
     Memory& operator=(const Memory&) = delete;

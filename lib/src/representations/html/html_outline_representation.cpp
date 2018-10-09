@@ -40,8 +40,11 @@ HtmlOutlineRepresentation::HtmlOutlineRepresentation(
 }
 
 
-HtmlOutlineRepresentation::HtmlOutlineRepresentation(Ontology& ontology, HtmlColorsRepresentation& lf)
-    : HtmlOutlineRepresentation{ontology}
+HtmlOutlineRepresentation::HtmlOutlineRepresentation(
+        Ontology& ontology,
+        HtmlColorsRepresentation& lf,
+        RepresentationInterceptor* descriptionInterceptor)
+    : HtmlOutlineRepresentation{ontology, descriptionInterceptor}
 {
     lastMfOptions = discountOptions = 0;
     this->lf = lf;

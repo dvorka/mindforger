@@ -18,16 +18,21 @@
  */
 #include "mind.h"
 
+#include "./ai/autolinking_preprocessor.h"
+
 using namespace std;
 
 namespace m8r {
 
 Mind::Mind(Configuration &configuration)
     : config{configuration},
-      memory{configuration},
+      ontology{},
+      htmlRepresentation{ontology, new AutolinkingPreprocessor{*this}},
+      mdConfigRepresentation(new MarkdownConfigurationRepresentation{}),
+      memory{configuration, ontology, htmlRepresentation},
       exclusiveMind{},
       timeScopeAspect{},
-      tagsScopeAspect{memory.getOntology()},
+      tagsScopeAspect{ontology},
       scopeAspect{timeScopeAspect, tagsScopeAspect}
 {
     ai = new Ai{memory,*this};
@@ -40,9 +45,6 @@ Mind::Mind(Configuration &configuration)
     timeScopeAspect.setTimeScope(config.getTimeScope());
     tagsScopeAspect.setTags(config.getTagsScope());
     memory.setMindScope(&scopeAspect);
-
-    this->mdConfigRepresentation
-        = new MarkdownConfigurationRepresentation{};
 }
 
 Mind::~Mind()
@@ -527,13 +529,13 @@ vector<Tag*>* Mind::getOutlinesTags() const
 
 Taxonomy<Tag>& Mind::getTags()
 {
-    return ontology().getTags();
+    return ontology.getTags();
 }
 
 void Mind::getTagsCardinality(std::map<const Tag*,int>& tagsCardinality)
 {
-    if(ontology().getTags().size()) {
-        for(const Tag* t:ontology().getTags().values()) {
+    if(ontology.getTags().size()) {
+        for(const Tag* t:ontology.getTags().values()) {
             // IMPROVE make NONE exclusion faster (checks in three loops below)
             if(!stringistring(string("none"), t->getName())) {
                 tagsCardinality[t] = 0;
@@ -658,7 +660,7 @@ string Mind::outlineNew(
         outline = memory.createOutline(outlineStencil);
         outline->setModified();
     } else {
-        outline = new Outline{ontology().getDefaultOutlineType()};
+        outline = new Outline{ontology.getDefaultOutlineType()};
     }
 
     if(preamble && preamble->size()) {
@@ -772,7 +774,7 @@ Note* Mind::noteNew(
         Note* n = memory.createNote(noteStencil);
         if(!n) {
             // IMPROVE make note type method parameter w/ a default
-            n = new Note(ontology().findOrCreateNoteType(NoteType::KeyNote()),o);
+            n = new Note(ontology.findOrCreateNoteType(NoteType::KeyNote()),o);
         }
         n->setOutline(o);
         if(name) {

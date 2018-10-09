@@ -46,6 +46,8 @@ public:
 
     virtual void process(const std::vector<std::string*>& md, std::vector<std::string*>& amd) override;
 
+private:
+
     /**
      * @brief Update N names/links indices.
      */

@@ -65,9 +65,15 @@ private:
     RepresentationInterceptor* descriptionInterceptor;
 
 public:
+
+    /**
+     * @brief Markdown representation.
+     *
+     * Interceptor is the head of interceptor chain.
+     */
     explicit MarkdownOutlineRepresentation(
         Ontology& ontology,
-        RepresentationInterceptor* descriptionInterceptor=nullptr);
+        RepresentationInterceptor* descriptionInterceptor);
     MarkdownOutlineRepresentation(const MarkdownOutlineRepresentation&) = delete;
     MarkdownOutlineRepresentation(const MarkdownOutlineRepresentation&&) = delete;
     MarkdownOutlineRepresentation &operator=(const MarkdownOutlineRepresentation&) = delete;
