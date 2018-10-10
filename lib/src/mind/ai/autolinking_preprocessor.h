@@ -34,7 +34,7 @@ class AutolinkingPreprocessor : public RepresentationInterceptor
 
     std::vector<Note*> notes;
     // IMPROVE trie
-    std::set<std::string> noteNames;
+    std::vector<std::string> noteNames;
 
 public:
     explicit AutolinkingPreprocessor(Mind& mind);

@@ -24,6 +24,7 @@ using namespace std;
 
 AutolinkingPreprocessor::AutolinkingPreprocessor(Mind& mind)
     : mind(mind),
+      notes{},
       noteNames{}
 {
 }
@@ -32,12 +33,28 @@ AutolinkingPreprocessor::~AutolinkingPreprocessor()
 {
 }
 
+bool nameSizeComparator(const string& n1, const string& n2)
+{
+    return n1.size() > n2.size();
+}
+
 void AutolinkingPreprocessor::updateIndices()
 {
+    notes.clear();
+    noteNames.clear();
+
     mind.getAllNotes(notes);
+
+    // deduplicate names
+    set<string> noteSet;
     for(Note* n:notes) {
-        noteNames.insert(n->getName());
+        noteSet.insert(n->getName());
     }
+    // sort names from longest to shortest (to have best ~ longest matches)
+    for(string n:noteSet) {
+        noteNames.push_back(n);
+    }
+    std::sort(noteNames.begin(), noteNames.end(), nameSizeComparator);
 }
 
 void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::vector<std::string*>& amd)
@@ -49,50 +66,84 @@ void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::
         updateIndices();
     }
 
+    // IMPROVE ORDER of Ns determines what will be found > have active O Ns in head, etc.
+
     if(md.size()) {
         for(string* l:md) {
             // every line is autolinked SEPARATELY
-            size_t found;
-            bool linked;
             string* nl = new string{};
             if(l && l->size()) {
-                MF_DEBUG(">>" << *l << ">>" << endl);
-                linked = false;
+                string w{*l}, chop{};
+                MF_DEBUG(">>" << w << ">>" << endl);
 
-                // IMPROVE Aho-Corasick @ trie
-                // IMPROVE the first match is found
-                // IMPROVE ORDER of Ns determines what will be found > have active O Ns in head, etc.
+                while(w.size()>0) {
+                    // find match which is PREFIX of chopped line
+                    size_t found;
+                    bool linked = false;
+                    // IMPROVE loop to be changed to Aho-Corasic trie
+                    for(Note* n:notes) {
+                        if((found=w.find(n->getName())) != string::npos
+                              &&
+                            !found)
+                        {
+                            // avoid word PREFIX matches ~ ensure that WHOLE world is matched
 
-                // TODO:
-                // chop words from the beginning of line one by one and try to find
-                // PREFIX of the line
-                for(Note* n:notes) {
-                    if((found=l->find(n->getName())) != string::npos) {
-                        linked = true;
+                            string m{" \t,:;.!?<>{}&()-+/*"};
+                            char c{w.size()==n->getName().size()?' ':w.at(n->getName().size())};
+                            MF_DEBUG("  c: '" << c << "'" << endl);
+                            if(w.size()==n->getName().size()
+                                 ||
+                               m.find(c)!=string::npos)
+                            {
+                                linked = true;
 
-                        // make it link
-                        nl->append(l->substr(0,found));
-                        nl->append("[");
-                        nl->append(n->getName());
-                        nl->append("](");
-                        nl->append(n->getOutlineKey());
-                        nl->append("#");
-                        nl->append(n->getMangledName());
-                        nl->append(")");
-                        nl->append(l->substr(found+n->getName().size()));
-                        //nl->append("\n");
+                                nl->append(l->substr(0,found));
+                                nl->append("[");
+                                nl->append(n->getName());
+                                nl->append("](");
+                                nl->append(n->getOutlineKey());
+                                nl->append("#");
+                                nl->append(n->getMangledName());
+                                nl->append(")");
 
-                        // IMPROVE match > 1 on the line
-                        break;
+                                *nl += c;
+
+                                // chop linked prefix word
+                                w = w.substr(n->getName().size()+(w.size()==n->getName().size()?0:1));
+
+                                break;
+                            }
+                        }
                     }
-                }
 
-                // TODO chop
-                //str=str.substr(str.find_first_of(" \t")+1);
+                    // chop one world from the beginning
+                    MF_DEBUG("   l>" << std::boolalpha << linked << endl);
+                    if(linked) {
+                        // prefix has been linked + chopped
+                        // IMPROVE SPACE vs. TAB
+                        nl->append(" ");
+                    } else {
+                        // current w prefix was NOT linked > chop it and append it
+                        size_t begin = w.find_first_of(" \t");
+                        if(begin != string::npos) {
+                            chop = w.substr(0, begin);
+                            w = w.substr(begin+1);
+                            nl->append(chop);
+                            nl->append(" ");
 
-                if(!linked) {
-                    nl->append(*l);
-                    //nl->append("\n");
+                            MF_DEBUG("  -c>" << chop << endl);
+                            MF_DEBUG("   w>" << w << endl);
+                            MF_DEBUG("   <<" << *nl << endl);
+                        } else {
+                            // no more words (prefix already checked) > DONE
+                            nl->append(w);
+
+                            MF_DEBUG("   w>" << w << endl);
+                            MF_DEBUG("   <<" << *nl << endl);
+
+                            break;
+                        }
+                    }
                 }
 
                 MF_DEBUG("<<" << *nl << "<<" << endl);

@@ -65,7 +65,7 @@ void StatusBarPresenter::showMindStatistics()
         status += "Sleeping";
         break;
     }
-    status += "    ";
+    status += "   ";
 
     switch(Configuration::getInstance().getActiveRepository()->getType()) {
     case Repository::RepositoryType::MINDFORGER:
@@ -77,23 +77,23 @@ void StatusBarPresenter::showMindStatistics()
     }
     switch(Configuration::getInstance().getActiveRepository()->getMode()) {
     case Repository::RepositoryMode::REPOSITORY:
-        status += " repository    ";
+        status += " repository   ";
         break;
     case Repository::RepositoryMode::FILE:
-        status += " file    ";
+        status += " file   ";
         break;
     }
 
     status += cLocale.toString(mind->remind().getOutlinesCount());
-    status += " notebooks    ";
+    status += " notebooks   ";
     status += cLocale.toString(mind->remind().getNotesCount());
-    status += " notes    ";
+    status += " notes   ";
 #ifdef MF_WIP
     status += cLocale.toString(mind->getTriplesCount());
-    status += " triples    ";
+    status += " triples   ";
 #endif
     status += cLocale.toString(mind->remind().getOutlineMarkdownsSize());
-    status += " bytes    ";
+    status += " bytes   ";
     if(mind->getScopeAspect().isEnabled()) {
         status += "scope:";
         if(mind->getTimeScopeAspect().isEnabled()) {
@@ -106,7 +106,11 @@ void StatusBarPresenter::showMindStatistics()
                 status += "tags";
             }
         }
-        status += "    ";
+        status += "   ";
+    }
+
+    if(Configuration::getInstance().isAutolinking()) {
+        status += "autolinking   ";
     }
 
 
