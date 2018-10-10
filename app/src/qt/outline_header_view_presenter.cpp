@@ -52,7 +52,7 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
 {
     currentOutline = outline;
 
-    htmlRepresentation->toHeader(outline, &html, Configuration::getInstance().isAutolinking());
+    htmlRepresentation->toHeader(outline, &html, false, Configuration::getInstance().isAutolinking());
     view->setHtml(QString::fromStdString(html));
 
     // leaderboard
