@@ -170,6 +170,7 @@ public slots:
     void doActionMindThink();
     void doActionMindSleep();
     void doActionMindToggleThink();
+    void doActionMindToggleAutolink();
     void doActionMindLearnRepository();
     void doActionMindLearnFile();
     void doActionMindRelearn(QString path);

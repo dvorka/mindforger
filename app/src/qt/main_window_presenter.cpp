@@ -190,6 +190,12 @@ void MainWindowPresenter::showInitialView()
 
     view.setFileOrDirectory(QString::fromStdString(config.getActiveRepository()->getPath()));
 
+    if(config.isAutolinking()) {
+        mainMenu->showFacetMindAutolinkEnable();
+    } else {
+        mainMenu->showFacetMindAutolinkDisable();
+    }
+
     // move Mind to configured state
     if(config.getDesiredMindState()==Configuration::MindState::THINKING) {
         MF_DEBUG("InitialView: asking Mind to THINK..." << endl);
@@ -442,6 +448,29 @@ void MainWindowPresenter::doActionMindToggleThink()
         doActionMindSleep();
     } else {
         doActionMindThink();
+    }
+}
+
+void MainWindowPresenter::doActionMindToggleAutolink()
+{
+    if(config.isAutolinking()) {
+        config.setAutolinking(false);
+        mainMenu->showFacetMindAutolinkDisable();
+    } else {
+        config.setAutolinking(true);
+        mainMenu->showFacetMindAutolinkEnable();
+    }
+
+    mdConfigRepresentation->save(config);
+    // refresh view
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE))
+    {
+        orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE))
+    {
+        orloj->showFacetNoteView(orloj->getOutlineView()->getOutlineTree()->getCurrentNote());
     }
 }
 

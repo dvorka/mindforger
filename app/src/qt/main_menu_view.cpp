@@ -71,11 +71,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // think ... toggle mental processes ~ enable associations/similarity/search based suggestions on searching/reading/writing notes
     actionMindThink = new QAction(tr("&Think"), mainWindow);
-    actionMindThink->setStatusTip(tr("Start to suggest matching, similar and associated Notes while searching, reading and writing"));
+    actionMindThink->setCheckable(true);
+    actionMindThink->setStatusTip(tr("Think to suggest matching, similar and associated Notes while searching, reading and writing"));
 
-    // sleep ... opposite to think ~ stop mental processes and clear Mind
-    actionMindSleep = new QAction(tr("&Sleep"), mainWindow);
-    actionMindSleep->setStatusTip(tr("Stop sugggestions and clear Mind"));
+    // think ... toggle mental processes ~ enable associations/similarity/search based suggestions on searching/reading/writing notes
+    actionMindAutolink = new QAction(tr("&Autolink"), mainWindow);
+    actionMindAutolink->setCheckable(true);
+    actionMindAutolink->setStatusTip(tr("Automatically inject links to relevant Notebooks and Notes when browsing HTML preview"));
+    actionMindAutolink->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
 
     // scope ... don't show any N/O older than 1Y/3M/...
     actionMindScope = new QAction(tr("S&cope"), mainWindow);
@@ -110,7 +113,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addMenu(submenuMindRelearn);
     menuMind->addAction(actionMindScope);
     menuMind->addAction(actionMindThink);
-    menuMind->addAction(actionMindSleep);
+    menuMind->addAction(actionMindAutolink);
     menuMind->addAction(actionMindRemember);
 #ifdef MF_WIP
     menuMind->addAction(actionMindSnapshot);
@@ -140,8 +143,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFindNoteByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
     actionFindNoteByName->setStatusTip(tr("Find Note by name"));
 
-    actionFindOutlineByTag = new QAction(tr("Recall Notebook by T&ags"), mainWindow);
-    actionFindOutlineByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
+    actionFindOutlineByTag = new QAction(tr("Recall Notebook by Ta&gs"), mainWindow);
+    actionFindOutlineByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_X));
     actionFindOutlineByTag->setStatusTip(tr("Find Notebook by tags"));
 
     actionFindNoteByTag = new QAction(tr("Recall Note by &Tags"), mainWindow);
@@ -717,15 +720,22 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
 
 void MainMenuView::showFacetMindThink()
 {
-    actionMindThink->setVisible(false);
-    actionMindSleep->setVisible(true);
+    actionMindThink->setChecked(true);
 }
-
 void MainMenuView::showFacetMindSleep()
 {
-    actionMindThink->setVisible(true);
-    actionMindSleep->setVisible(false);
+    actionMindThink->setChecked(false);
 }
+
+void MainMenuView::showFacetMindAutolinkEnable()
+{
+    actionMindAutolink->setChecked(true);
+}
+void MainMenuView::showFacetMindAutolinkDisable()
+{
+    actionMindAutolink->setChecked(false);
+}
+
 
 void MainMenuView::showFacetNavigator()
 {

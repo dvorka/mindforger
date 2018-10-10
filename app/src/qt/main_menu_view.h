@@ -68,8 +68,7 @@ public:
     RecentFilesMenu* submenuMindRelearn;
     QAction* actionMindRemember;
     QAction* actionMindThink;
-    //QAction* actionMindDream;
-    QAction* actionMindSleep;
+    QAction* actionMindAutolink;
     QAction* actionMindScope;
     QAction* actionMindForget;
     QAction* actionMindSnapshot;
@@ -220,6 +219,9 @@ public:
 
     void showFacetMindThink();
     void showFacetMindSleep();
+
+    void showFacetMindAutolinkEnable();
+    void showFacetMindAutolinkDisable();
 
     void showFacetNavigator();
 

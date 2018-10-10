@@ -29,8 +29,8 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     // menu: mind
     QObject::connect(view->actionMindNewRepository, SIGNAL(triggered()), mwp, SLOT(doActionMindNewRepository()));
     QObject::connect(view->actionMindNewFile, SIGNAL(triggered()), mwp, SLOT(doActionMindNewFile()));
-    QObject::connect(view->actionMindThink, SIGNAL(triggered()), mwp, SLOT(doActionMindThink()));
-    QObject::connect(view->actionMindSleep, SIGNAL(triggered()), mwp, SLOT(doActionMindSleep()));
+    QObject::connect(view->actionMindThink, SIGNAL(triggered()), mwp, SLOT(doActionMindToggleThink()));
+    QObject::connect(view->actionMindAutolink, SIGNAL(triggered()), mwp, SLOT(doActionMindToggleAutolink()));
     QObject::connect(view->actionMindLearnRepository, SIGNAL(triggered()), mwp, SLOT(doActionMindLearnRepository()));
     QObject::connect(view->actionMindLearnFile, SIGNAL(triggered()), mwp, SLOT(doActionMindLearnFile()));
     for(auto& r:config.getRepositories()) {
@@ -39,8 +39,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->submenuMindRelearn, SIGNAL(recentFileTriggered(QString)), mwp, SLOT(doActionMindRelearn(QString)));
     QObject::connect(view->actionMindScope, SIGNAL(triggered()), mwp, SLOT(doActionMindTimeTagScope()));
     QObject::connect(view->actionMindRemember, SIGNAL(triggered()), mwp, SLOT(doActionMindRemember()));
-    // TODO tobe finished
-    //QObject::connect(view->actionMindForget, SIGNAL(triggered()), mwp, SLOT(doActionMindForgetting()));
+    // TODO QObject::connect(view->actionMindForget, SIGNAL(triggered()), mwp, SLOT(doActionMindForgetting()));
     QObject::connect(view->actionMindPreferences, SIGNAL(triggered()), mwp, SLOT(doActionMindPreferences()));
     QObject::connect(view->actionMindSnapshot, SIGNAL(triggered()), mwp, SLOT(doActionMindSnapshot()));
     QObject::connect(view->actionExit, SIGNAL(triggered()), mwp, SLOT(doActionExit()));
@@ -202,10 +201,18 @@ void MainMenuPresenter::showFacetMindThink()
 {
     view->showFacetMindThink();
 }
-
 void MainMenuPresenter::showFacetMindSleep()
 {
     view->showFacetMindSleep();
+}
+
+void MainMenuPresenter::showFacetMindAutolinkEnable()
+{
+    view->showFacetMindAutolinkEnable();
+}
+void MainMenuPresenter::showFacetMindAutolinkDisable()
+{
+    view->showFacetMindAutolinkDisable();
 }
 
 void MainMenuPresenter::addRecentDirectoryOrFile(const QString& path)

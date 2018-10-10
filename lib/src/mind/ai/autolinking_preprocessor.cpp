@@ -60,7 +60,7 @@ void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::
 {
     MF_DEBUG("Autolinker:" << endl);
 
-    // TODO bool insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
+    bool insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
 
     // IMPROVE consider synchronization ONLY in case that it's really needed
     updateIndices();
@@ -74,37 +74,61 @@ void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::
         for(string* l:md) {
             // every line is autolinked SEPARATELY
 
+            string* nl = new string{};
+
             // skip code/math/... blocks
             if(stringStartsWith(*l,CODE_BLOCK)) {
-                inCodeBlock = !inCodeBlock;
+                inCodeBlock = !inCodeBlock;                
+
+                nl->append(*l);
+                amd.push_back(nl);
+                continue;
             } else if(stringStartsWith(*l,MATH_BLOCK)) {
                 inMathBlock= !inMathBlock;
+
+                nl->append(*l);
+                amd.push_back(nl);
+                continue;
             }
 
-            string* nl = new string{};
             if(l && l->size()) {
-                if(inCodeBlock || inMathBlock) {
-                    nl->append(*l);
-                    amd.push_back(nl);
-                    continue;
-                }
-
                 string w{*l}, chop{};
                 MF_DEBUG(">>" << w << ">>" << endl);
 
                 while(w.size()>0) {
                     // find match which is PREFIX of chopped line
-                    size_t found;
                     bool linked = false;
 
                     // IMPROVE loop to be changed to Aho-Corasic trie
 
                     // inject Os, then Ns
                     for(Thing* t:things) {
-                        if((found=w.find(t->getAutolinkingAlias())) != string::npos
+                        size_t found;
+                        bool match, insensitiveMatch;
+                        string lowerAlias{};
+
+                        if((found=w.find(t->getAutolinkingAlias()))!=string::npos
                               &&
                             !found)
                         {
+                            match = true; insensitiveMatch = false;
+                        } else {
+                            lowerAlias.assign(t->getAutolinkingAlias());
+                            lowerAlias[0] = std::tolower(t->getAutolinkingAlias()[0]);
+
+                            if(insensitive
+                                 &&
+                               (found=w.find(lowerAlias))!=string::npos
+                                 &&
+                               !found)
+                            {
+                                match = insensitiveMatch = true;
+                            } else {
+                                match = false;
+                            }
+                        }
+
+                        if(match) {
                             // avoid word PREFIX matches ~ ensure that WHOLE world is matched
 
                             string m{" \t,:;.!?<>{}&()-+/*"};
@@ -118,7 +142,7 @@ void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::
 
                                 injectLink(
                                     nl,
-                                    t->getAutolinkingAlias(),
+                                    insensitiveMatch?lowerAlias:t->getAutolinkingAlias(),
                                     t->getKey());
 
                                 *nl += c;
