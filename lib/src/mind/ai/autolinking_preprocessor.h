@@ -32,9 +32,7 @@ class AutolinkingPreprocessor : public RepresentationInterceptor
 {
     Mind& mind;
 
-    std::vector<Note*> notes;
-    // IMPROVE trie
-    std::vector<std::string> noteNames;
+    std::vector<Thing*> things;
 
 public:
     explicit AutolinkingPreprocessor(Mind& mind);
@@ -52,6 +50,11 @@ private:
      * @brief Update N names/links indices.
      */
     void updateIndices();
+
+    void injectLink(
+            std::string* line,
+            const std::string& label,
+            const std::string& link);
 };
 
 }

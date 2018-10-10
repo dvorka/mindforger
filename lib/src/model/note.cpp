@@ -41,6 +41,7 @@ Note::Note(const Note& n)
       type(n.type)
 {
     name = n.name;
+    autolinkName();
     if(n.description.size()) {
         for(string* s:n.description) {
             description.push_back(new string(*s));
@@ -282,6 +283,7 @@ void Note::setTags(const vector<const Tag*>* tags)
 
 void Note::addName(const string& s) {
     name += s;
+    autolinkName();
 }
 
 const NoteType* Note::getType() const
@@ -443,9 +445,20 @@ void Note::checkAndFixProperties()
 
     if(name.empty()) {
         name.assign("Note");
+        autolinkName();
     }
 
     MF_ASSERT_FUTURE_TIMESTAMPS(created, read, modified, outline->getKey() << " # " << name, name);
+}
+
+const string& Note::getKey()
+{
+    key.clear();
+    key.append(outline->getKey());
+    key.append("#");
+    key.append(getMangledName());
+
+    return key;
 }
 
 void Note::addLink(Link* link)

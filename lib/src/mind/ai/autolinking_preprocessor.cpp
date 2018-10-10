@@ -24,8 +24,7 @@ using namespace std;
 
 AutolinkingPreprocessor::AutolinkingPreprocessor(Mind& mind)
     : mind(mind),
-      notes{},
-      noteNames{}
+      things{}
 {
 }
 
@@ -33,46 +32,65 @@ AutolinkingPreprocessor::~AutolinkingPreprocessor()
 {
 }
 
-bool nameSizeComparator(const string& n1, const string& n2)
+bool autolinkingAliasSizeComparator(const Thing* t1, const Thing* t2)
 {
-    return n1.size() > n2.size();
+    return t1->getAutolinkingAlias().size() > t2->getAutolinkingAlias().size();
 }
 
 void AutolinkingPreprocessor::updateIndices()
 {
-    notes.clear();
-    noteNames.clear();
+    things.clear();
 
+    // Ns
+    std::vector<Note*> notes;
     mind.getAllNotes(notes);
-
-    // deduplicate names
-    set<string> noteSet;
-    for(Note* n:notes) {
-        noteSet.insert(n->getName());
-    }
     // sort names from longest to shortest (to have best ~ longest matches)
-    for(string n:noteSet) {
-        noteNames.push_back(n);
+    std::sort(notes.begin(), notes.end(), autolinkingAliasSizeComparator);
+    for(Thing* t:notes) things.push_back(t);
+
+    // Os
+    std::vector<Outline*> outlines;
+    const vector<Outline*>& os=mind.getOutlines();
+    for(Outline* o:os) outlines.push_back(o);
+    std::sort(outlines.begin(), outlines.end(), autolinkingAliasSizeComparator);
+    for(Thing* t:outlines) things.push_back(t);
+
+    for(Thing* t:things) {
+        MF_DEBUG("" << t->getAutolinkingAlias() << endl);
     }
-    std::sort(noteNames.begin(), noteNames.end(), nameSizeComparator);
 }
 
 void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::vector<std::string*>& amd)
 {
     MF_DEBUG("Autolinker:" << endl);
 
-    // IMPROVE consider sync (in case that it's really needed)
-    if(!notes.size()) {
-        updateIndices();
-    }
+    // IMPROVE consider synchronization ONLY in case that it's really needed
+    updateIndices();
 
     // IMPROVE ORDER of Ns determines what will be found > have active O Ns in head, etc.
 
     if(md.size()) {
+        bool inCodeBlock=false, inMathBlock=false;
+        static const string CODE_BLOCK{"```"};
+        static const string MATH_BLOCK{"$$"};
         for(string* l:md) {
             // every line is autolinked SEPARATELY
+
+            // skip code/math/... blocks
+            if(stringStartsWith(*l,CODE_BLOCK)) {
+                inCodeBlock = !inCodeBlock;
+            } else if(stringStartsWith(*l,MATH_BLOCK)) {
+                inMathBlock= !inMathBlock;
+            }
+
             string* nl = new string{};
             if(l && l->size()) {
+                if(inCodeBlock || inMathBlock) {
+                    nl->append(*l);
+                    amd.push_back(nl);
+                    continue;
+                }
+
                 string w{*l}, chop{};
                 MF_DEBUG(">>" << w << ">>" << endl);
 
@@ -80,36 +98,35 @@ void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::
                     // find match which is PREFIX of chopped line
                     size_t found;
                     bool linked = false;
+
                     // IMPROVE loop to be changed to Aho-Corasic trie
-                    for(Note* n:notes) {
-                        if((found=w.find(n->getName())) != string::npos
+
+                    // inject Os, then Ns
+                    for(Thing* t:things) {
+                        if((found=w.find(t->getAutolinkingAlias())) != string::npos
                               &&
                             !found)
                         {
                             // avoid word PREFIX matches ~ ensure that WHOLE world is matched
 
                             string m{" \t,:;.!?<>{}&()-+/*"};
-                            char c{w.size()==n->getName().size()?' ':w.at(n->getName().size())};
+                            char c{w.size()==t->getAutolinkingAlias().size()?' ':w.at(t->getAutolinkingAlias().size())};
                             MF_DEBUG("  c: '" << c << "'" << endl);
-                            if(w.size()==n->getName().size()
+                            if(w.size()==t->getAutolinkingAlias().size()
                                  ||
                                m.find(c)!=string::npos)
                             {
                                 linked = true;
 
-                                nl->append(l->substr(0,found));
-                                nl->append("[");
-                                nl->append(n->getName());
-                                nl->append("](");
-                                nl->append(n->getOutlineKey());
-                                nl->append("#");
-                                nl->append(n->getMangledName());
-                                nl->append(")");
+                                injectLink(
+                                    nl,
+                                    t->getAutolinkingAlias(),
+                                    t->getKey());
 
                                 *nl += c;
 
                                 // chop linked prefix word
-                                w = w.substr(n->getName().size()+(w.size()==n->getName().size()?0:1));
+                                w = w.substr(t->getAutolinkingAlias().size()+(w.size()==t->getAutolinkingAlias().size()?0:1));
 
                                 break;
                             }
@@ -153,6 +170,18 @@ void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::
             }
         }
     }
+}
+
+void AutolinkingPreprocessor::injectLink(
+            std::string* nl,
+            const std::string& label,
+            const std::string& link)
+{
+    nl->append("[");
+    nl->append(label);
+    nl->append("](");
+    nl->append(link);
+    nl->append(")");
 }
 
 } // m8r namespace

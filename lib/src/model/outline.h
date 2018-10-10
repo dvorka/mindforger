@@ -79,7 +79,6 @@ private:
      * of associated repository, can be used as ID.
      */
     // IMPROVE make Key object w/ equals - std::string and sequence integer for fast equals
-    std::string key;
 
     // various format, structure, semantic, ... flags (bit)
     int flags;

@@ -95,6 +95,8 @@ public:
     void completeProperties(const time_t outlineModificationTime);
     void checkAndFixProperties();
 
+    virtual const std::string& getKey();
+
     /**
      * @brief Return GitHub compatible mangled name to ensure compatiblity between GitHub and MindForger # links.
      *

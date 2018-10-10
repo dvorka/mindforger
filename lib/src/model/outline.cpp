@@ -83,6 +83,7 @@ Outline::Outline(const Outline& o)
 
     // IMPROVE i18n
     name = "Copy of " + o.name;
+    autolinkName();
     if(o.description.size()) {
         for(string* s:o.description) {
             description.push_back(new string(*s));
@@ -214,6 +215,7 @@ void Outline::checkAndFixProperties()
 
     if(name.empty()) {
         name.assign("Outline");
+        autolinkName();
     }
 
     MF_ASSERT_FUTURE_TIMESTAMPS(created, read, modified, getKey(), name);

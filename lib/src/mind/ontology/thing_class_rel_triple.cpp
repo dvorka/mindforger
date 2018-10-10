@@ -26,9 +26,13 @@ using namespace std;
  * Thing
  */
 
+long Thing::sequence = 0;
+
 Thing::Thing()
-    : name("")
-{}
+    : key{std::to_string(++sequence)},
+      name{}
+{
+}
 
 Thing::Thing(const string name)
 {
@@ -37,6 +41,20 @@ Thing::Thing(const string name)
 
 Thing::~Thing()
 {
+}
+
+void Thing::autolinkName()
+{
+    if(name.size()) {
+        auto pos = name.find(":");
+        if(pos != string::npos) {
+            autolinkingAlias = name.substr(0, pos);
+        } else {
+            autolinkingAlias = name;
+        }
+    } else {
+        autolinkingAlias.clear();
+    }
 }
 
 /*

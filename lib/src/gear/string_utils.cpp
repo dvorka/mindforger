@@ -26,6 +26,9 @@ namespace m8r {
 
 bool stringStartsWith(const char* s, const char* prefix)
 {
+    assert(s);
+    assert(prefix);
+
     size_t prefixLng = strlen(prefix), sLng = strlen(s);
     return sLng < prefixLng ? false : strncmp(prefix, s, prefixLng) == 0;
 }

@@ -41,7 +41,15 @@ class Relationship;
  */
 class Thing
 {
+private:
+    static long sequence;
+
 protected:
+    /**
+     * @brief Thing identifier.
+     */
+    std::string key;
+
     /**
      * @brief Display name.
      */
@@ -55,6 +63,13 @@ protected:
      */
     std::set<Relationship*> relationships;
 
+    /*
+     * Transient fields
+     */
+
+    // name used for autolinking
+    std::string autolinkingAlias;
+
 public:
     Thing();
     explicit Thing(const std::string name);
@@ -64,11 +79,17 @@ public:
     Thing &operator=(const Thing&&) = delete;
     virtual ~Thing();
 
+    virtual const std::string& getKey() { return key; }
+
     const std::string& getName() const { return name; }
-    void setName(const std::string& name) { this->name = name; }
+    virtual void setName(const std::string& name) { this->name = name; autolinkName();}
+    const std::string& getAutolinkingAlias() const { return autolinkingAlias; }
 
     const std::set<Relationship*> getRelationships() const { return relationships; }
     size_t getRelationshipsCount() const { return relationships.size(); }
+
+protected:
+    void autolinkName();
 };
 
 /**
