@@ -41,13 +41,6 @@ void AutolinkingPreprocessor::updateIndices()
 {
     things.clear();
 
-    // Ns
-    std::vector<Note*> notes;
-    mind.getAllNotes(notes);
-    // sort names from longest to shortest (to have best ~ longest matches)
-    std::sort(notes.begin(), notes.end(), autolinkingAliasSizeComparator);
-    for(Thing* t:notes) things.push_back(t);
-
     // Os
     std::vector<Outline*> outlines;
     const vector<Outline*>& os=mind.getOutlines();
@@ -55,14 +48,19 @@ void AutolinkingPreprocessor::updateIndices()
     std::sort(outlines.begin(), outlines.end(), autolinkingAliasSizeComparator);
     for(Thing* t:outlines) things.push_back(t);
 
-    for(Thing* t:things) {
-        MF_DEBUG("" << t->getAutolinkingAlias() << endl);
-    }
+    // Ns
+    std::vector<Note*> notes;
+    mind.getAllNotes(notes);
+    // sort names from longest to shortest (to have best ~ longest matches)
+    std::sort(notes.begin(), notes.end(), autolinkingAliasSizeComparator);
+    for(Thing* t:notes) things.push_back(t);
 }
 
 void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::vector<std::string*>& amd)
 {
     MF_DEBUG("Autolinker:" << endl);
+
+    // TODO bool insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
 
     // IMPROVE consider synchronization ONLY in case that it's really needed
     updateIndices();

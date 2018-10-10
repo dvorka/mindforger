@@ -166,6 +166,8 @@ public:
     static const std::string DEFAULT_TIME_SCOPE;
 
     static constexpr const bool DEFAULT_AUTOLINKING = true;
+    static constexpr const bool DEFAULT_AUTOLINKING_COLON_SPLIT = true;
+    static constexpr const bool DEFAULT_AUTOLINKING_CASE_INSENSITIVE = true;
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
 
     static constexpr const bool UI_DEFAULT_NERD_TARGET_AUDIENCE = true;
@@ -214,6 +216,8 @@ private:
     bool writeMetadata; // write metadata to MD - enabled in case of MINDFORGER_REPO only by default (can be disabled for all repository types)
     bool saveReadsMetadata; // persist count of Outline and Note reads (requires write to disc on every O/N view)
     bool autolinking; // enable MD autolinking
+    bool autolinkingColonSplit;
+    bool autolinkingCaseInsensitive;
     TimeScope timeScope;
     std::string timeScopeAsString;
     std::vector<std::string> tagsScope;
@@ -306,6 +310,10 @@ public:
     void setSaveReadsMetadata(bool saveReadsMetadata) { this->saveReadsMetadata=saveReadsMetadata; }
     bool isAutolinking() const { return autolinking; }
     void setAutolinking(bool autolinking) { this->autolinking=autolinking; }
+    bool isAutolinkingColonSplit() const { return autolinkingColonSplit; }
+    void setAutolinkingColonSplit(bool autolinkingColonSplit) { this->autolinkingColonSplit=autolinkingColonSplit; }
+    bool isAutolinkingCaseInsensitive() const { return autolinkingCaseInsensitive; }
+    void setAutolinkingCaseInsensitive(bool autolinkingCaseInsensitive) { this->autolinkingCaseInsensitive=autolinkingCaseInsensitive; }
     unsigned int getMd2HtmlOptions() const { return md2HtmlOptions; }
     AssociationAssessmentAlgorithm getAaAlgorithm() const { return aaAlgorithm; }
     void setAaAlgorithm(AssociationAssessmentAlgorithm aaa) { aaAlgorithm = aaa; }

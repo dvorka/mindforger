@@ -70,6 +70,8 @@ void Configuration::clear()
     writeMetadata = true;
     saveReadsMetadata = DEFAULT_SAVE_READS_METADATA;
     autolinking = DEFAULT_AUTOLINKING;
+    autolinkingColonSplit = DEFAULT_AUTOLINKING_COLON_SPLIT;
+    autolinkingCaseInsensitive = DEFAULT_AUTOLINKING_CASE_INSENSITIVE;
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
     tagsScope.clear();
     markdownQuoteSections = DEFAULT_MD_QUOTE_SECTIONS;
