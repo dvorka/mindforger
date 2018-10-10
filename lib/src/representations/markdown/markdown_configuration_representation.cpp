@@ -25,6 +25,13 @@ constexpr const auto CONFIG_SECTION_APP = "Application";
 constexpr const auto CONFIG_SECTION_MIND = "Mind";
 constexpr const auto CONFIG_SECTION_REPOSITORIES= "Repositories";
 
+// mind
+constexpr const auto CONFIG_SETTING_MIND_STATE = "* Mind state: ";
+constexpr const auto CONFIG_SETTING_MIND_TIME_SCOPE_LABEL = "* Time scope: ";
+constexpr const auto CONFIG_SETTING_MIND_TAGS_SCOPE_LABEL = "* Tags scope: ";
+constexpr const auto CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL = "* Async refresh interval (ms): ";
+constexpr const auto CONFIG_SETTING_MIND_AUTOLINKING = "* Autolinking: ";
+
 // application
 constexpr const auto CONFIG_SETTING_UI_THEME_LABEL = "* Theme: ";
 constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* Markdown CSS theme: ";
@@ -41,12 +48,6 @@ constexpr const auto CONFIG_SETTING_MD_HIGHLIGHT_LABEL = "* Enable source code s
 constexpr const auto CONFIG_SETTING_MD_MATH_LABEL = "* Enable math support in Markdown: ";
 constexpr const auto CONFIG_SETTING_MD_DIAGRAM_LABEL = "* Enable diagram support in Markdown: ";
 constexpr const auto CONFIG_SETTING_SAVE_READS_METADATA_LABEL = "* Save reads metadata: ";
-
-// mind
-constexpr const auto CONFIG_SETTING_MIND_STATE = "* Mind state: ";
-constexpr const auto CONFIG_SETTING_MIND_TIME_SCOPE_LABEL = "* Time scope: ";
-constexpr const auto CONFIG_SETTING_MIND_TAGS_SCOPE_LABEL = "* Tags scope: ";
-constexpr const auto CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL = "* Async refresh interval (ms): ";
 
 // repositories
 constexpr const auto CONFIG_SETTING_ACTIVE_REPOSITORY_LABEL = "* Active repository: ";
@@ -272,6 +273,12 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         }
                         i %= 10000;
                         c.setDistributorSleepInterval(i);
+                    } else if(line->find(CONFIG_SETTING_MIND_AUTOLINKING) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setAutolinking(true);
+                        } else {
+                            c.setAutolinking(false);
+                        }
                     }
                 }
             }
@@ -358,6 +365,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL << (c?c->getDistributorSleepInterval():Configuration::DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL+1) << endl <<
          "    * Sleep interval (miliseconds) between asynchronous mind-related evaluations (associations, ...)" << endl <<
          "    * Examples: 500, 1000, 3000, 5000" << endl <<
+         CONFIG_SETTING_MIND_AUTOLINKING << (c?(c->isAutolinking()?"yes":"no"):(Configuration::DEFAULT_AUTOLINKING?"yes":"no")) << endl <<
+         "    * Examples: yes, no" << endl <<
          endl <<
 
          "# " << CONFIG_SECTION_APP << endl <<
