@@ -75,14 +75,14 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     vector<m8r::Outline*> outlines = memory.getOutlines();
     m8r::Outline* o = outlines.at(0);
     vector<const m8r::Tag*> tags{};
-    tags.push_back(mind.ontology().findOrCreateTag(m8r::Tag::KeyImportant()));
+    tags.push_back(mind.getOntology().findOrCreateTag(m8r::Tag::KeyImportant()));
     m8r::Stencil* stencil = memory.getStencils(m8r::ResourceType::NOTE).at(0);
     string name{"!!! STENCIL Note !!!"};
     mind.noteNew(
                 o->getKey(),
                 0,
                 &name,
-                mind.ontology().findOrCreateNoteType(m8r::NoteType::KeyAction()),
+                mind.getOntology().findOrCreateNoteType(m8r::NoteType::KeyAction()),
                 0,
                 &tags,
                 0,
@@ -94,7 +94,7 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
                 o->getKey(),
                 2,
                 &deepName,
-                mind.ontology().findOrCreateNoteType(m8r::NoteType::KeyAction()),
+                mind.getOntology().findOrCreateNoteType(m8r::NoteType::KeyAction()),
                 0,
                 &tags,
                 0,

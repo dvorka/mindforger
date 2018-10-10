@@ -46,8 +46,8 @@ TEST(HtmlBenchmark, DISABLED_Outline)
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
     m8r::Mind mind(config);
     m8r::DummyHtmlColors dummyColors{};
-    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(),dummyColors};
-    m8r::MarkdownOutlineRepresentation markdownRepresentation(mind.remind().getOntology());
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(),dummyColors,nullptr};
+    m8r::MarkdownOutlineRepresentation markdownRepresentation(mind.remind().getOntology(),nullptr);
     mind.think();
 
     ASSERT_GE(mind.remind().getOutlinesCount(), 1);

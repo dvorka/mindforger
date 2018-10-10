@@ -33,6 +33,7 @@
 
 #include "../../../src/config/configuration.h"
 #include "../../../src/mind/ontology/ontology.h"
+#include "../../../src/mind/ai/autolinking_preprocessor.h"
 #include "../../../src/persistence/filesystem_persistence.h"
 
 #include "../test_gear.h"
@@ -400,7 +401,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentation)
             "\n";
 
     cout << endl << "- MD > Note ----------------------------------------------";
-    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
 
     unique_ptr<Note> note = unique_ptr<Note>(mdr.note(&text));
     if(note) {
@@ -440,7 +441,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPreamble)
     m8r::Ontology ontology{};
 
     // parse
-    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
     unique_ptr<string> fileName
             = unique_ptr<string>(new string{"/lib/test/resources/apiary-repository/memory/01. Simplest API.md"});
     fileName.get()->insert(0, getMindforgerGitHomePath());
@@ -525,7 +526,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPostDeclaredSection)
     m8r::Ontology ontology{};
 
     // parse
-    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
     File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
@@ -596,7 +597,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationTrailingHashesSection)
     m8r::Ontology ontology{};
 
     // parse
-    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
     File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
@@ -678,7 +679,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationEmptyFirstLine)
     m8r::Ontology ontology{};
 
     // parse
-    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
     File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
@@ -714,8 +715,8 @@ TEST(MarkdownParserTestCase, FileSystemPersistence)
     config.setConfigFilePath("/tmp/cfg-mptc-fsp.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
     m8r::Ontology ontology{};
-    m8r::MarkdownOutlineRepresentation mdr{ontology};
-    m8r::HtmlOutlineRepresentation htmlr{ontology};
+    m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
+    m8r::HtmlOutlineRepresentation htmlr{ontology, nullptr};
     m8r::FilesystemPersistence persistence{mdr, htmlr};
 
     unique_ptr<string> text = unique_ptr<string>(new string{"abc"});
@@ -733,7 +734,7 @@ TEST(MarkdownParserBugsTestCase, EmptyNameSkipsEof)
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
     m8r::Ontology ontology{};
 
-    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
     string outlineFilename{"/lib/test/resources/bugs-repository/memory/bug-37.md"};
     outlineFilename.insert(0, getMindforgerGitHomePath());
     m8r::Outline* o = mdr.outline(outlineFilename);
@@ -784,7 +785,7 @@ TEST(MarkdownParserTestCase, TimeScope)
     m8r::Ontology ontology{};
 
     // parse
-    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
     File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
@@ -837,7 +838,7 @@ TEST(MarkdownParserTestCase, Deadline)
     m8r::Ontology ontology{};
 
     // parse
-    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
     File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
@@ -887,7 +888,7 @@ TEST(MarkdownParserTestCase, Links)
     m8r::Ontology ontology{};
 
     // parse
-    m8r::MarkdownOutlineRepresentation mdr{ontology};
+    m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
     File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 

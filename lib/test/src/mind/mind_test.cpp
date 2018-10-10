@@ -172,7 +172,7 @@ TEST(MindTestCase, LearnAndRememberMindForgerRepository) {
     }
 
     cout << endl << endl << "- Outline > MD ----------------------------------------------";
-    m8r::MarkdownOutlineRepresentation mdr{memory.getOntology()};
+    m8r::MarkdownOutlineRepresentation mdr{memory.getOntology(), nullptr};
     string outlineMd{} ;
     cout << endl << " " << *mdr.to(outlines[0], &outlineMd);
 
