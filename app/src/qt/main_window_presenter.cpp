@@ -30,7 +30,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // representations
     this->htmlRepresentation
-        = new HtmlOutlineRepresentation{mind->getOntology(), LookAndFeels::getInstance(), new AutolinkingPreprocessor{*mind}};
+        = mind->getHtmlRepresentation();
     this->mdRepresentation
         = &htmlRepresentation->getMarkdownRepresentation();
     this->mdConfigRepresentation

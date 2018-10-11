@@ -18,8 +18,6 @@
  */
 #include "mind.h"
 
-#include "./ai/autolinking_preprocessor.h"
-
 using namespace std;
 
 namespace m8r {
@@ -27,7 +25,8 @@ namespace m8r {
 Mind::Mind(Configuration &configuration)
     : config{configuration},
       ontology{},
-      htmlRepresentation{ontology, new AutolinkingPreprocessor{*this}},
+      autoInterceptor(new AutolinkingPreprocessor{*this, false}),
+      htmlRepresentation{ontology, autoInterceptor},
       mdConfigRepresentation(new MarkdownConfigurationRepresentation{}),
       memory{configuration, ontology, htmlRepresentation},
       exclusiveMind{},
@@ -52,6 +51,7 @@ Mind::~Mind()
     delete ai;
     delete knowledgeGraph;
     delete mdConfigRepresentation;
+    delete autoInterceptor;
 
     // - Memory destruct outlines
     // - allNotesCache Notes is just container referencing Memory's Outlines

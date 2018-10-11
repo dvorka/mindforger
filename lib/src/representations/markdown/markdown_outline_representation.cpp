@@ -32,7 +32,6 @@ MarkdownOutlineRepresentation::MarkdownOutlineRepresentation(Ontology& ontology,
 
 MarkdownOutlineRepresentation::~MarkdownOutlineRepresentation()
 {
-    delete descriptionInterceptor;
 }
 
 // IMPROVE return the last N doesn't seem to have much sense...

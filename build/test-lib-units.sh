@@ -20,7 +20,7 @@
 #export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
 #export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
-#export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
+export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
 
 # benchmarks
 #export OPTION_TEST="AiBenchmark.AaMatrix"

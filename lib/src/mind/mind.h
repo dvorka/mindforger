@@ -36,10 +36,13 @@
     #include "ai/nlp/named_entity_recognition.h"
 #endif
 
+#include "./ai/autolinking_preprocessor.h"
+
 namespace m8r {
 
 class Ai;
 class KnowledgeGraph;
+class AutolinkingPreprocessor;
 
 constexpr auto NO_PARENT = 0xFFFF;
 
@@ -128,6 +131,7 @@ public:
 private:
     Configuration &config;
     Ontology ontology;
+    AutolinkingPreprocessor* autoInterceptor;
     HtmlOutlineRepresentation htmlRepresentation;
     MarkdownConfigurationRepresentation* mdConfigRepresentation;
     Memory memory;
@@ -217,6 +221,8 @@ public:
     Mind& operator=(const Mind&) = delete;
     Mind& operator=(const Mind&&) = delete;
     virtual ~Mind();
+
+    HtmlOutlineRepresentation* getHtmlRepresentation() { return &htmlRepresentation; }
 
     int getDeleteWatermark() const { return deleteWatermark; }
 
