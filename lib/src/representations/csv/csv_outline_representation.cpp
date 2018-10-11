@@ -63,15 +63,12 @@ void CsvOutlineRepresentation::to(const vector<Outline*>& os, const m8r::File& s
 
 void CsvOutlineRepresentation::toHeader(std::ofstream& out)
 {
-    // Outline CSV line
-    // type, id,     title,  reads, writes, created, modified, read, description
-    // o/n , string, string, int,   int,    long,    long,     long, string
-
-    // Note CSV line
-    // type, id, title, reads, writes, created, modified, read, description
+    // O/N CSV line
+    // id,     type, title, offset, depth, reads, writes, created, modified, read, description
+    // string, o/n,  int,   int,    int,   int,   int,    long,    long,     long, string
 
     // TODO tags|tags
-    out << "type,id,title,reads,writes,created,modified,read,description\n";
+    out << "id,type,title,offset,depth,reads,writes,created,modified,read,description\n";
 }
 
 void CsvOutlineRepresentation::to(const Outline* o, ofstream& out)
@@ -81,10 +78,13 @@ void CsvOutlineRepresentation::to(const Outline* o, ofstream& out)
     MF_DEBUG("  " << o->getName() << endl);
 
     // O
-    out << "o,";
     out << o->getKey() << ",";
+    out << "o,";
     s.clear(); quoteValue(o->getName(), s);
     out << s << ",";
+    // O's offset and depth == 0
+    out << "0,";
+    out << "0,";
     out << o->getReads() << ",";
     out << o->getRevision() << ",";
     out << o->getCreated() << ",";
@@ -96,11 +96,16 @@ void CsvOutlineRepresentation::to(const Outline* o, ofstream& out)
 
     // Ns
     const vector<Note*>& ns = o->getNotes();
+    int offset = 1;
     for(Note* n:ns) {
-        out << "n,";
         out << n->getKey() << ",";
+        out << "n,";
         s.clear(); quoteValue(n->getName(), s);
         out << s << ",";
+        // N's offset: <1,inf>
+        out << offset++ << ",";
+        // N's depth: <1,inf>
+        out << (n->getDepth()+1) << ",";
         out << n->getReads() << ",";
         out << n->getRevision() << ",";
         out << n->getCreated() << ",";
