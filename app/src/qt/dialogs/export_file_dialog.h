@@ -30,7 +30,7 @@ class ExportFileDialog : public NewFileDialog
     Q_OBJECT
 
 public:
-    explicit ExportFileDialog(QWidget* parent);
+    explicit ExportFileDialog(QString title, QString button, QString extension, QWidget* parent);
     ExportFileDialog(const ExportFileDialog&) = delete;
     ExportFileDialog(const ExportFileDialog&&) = delete;
     ExportFileDialog &operator=(const ExportFileDialog&) = delete;

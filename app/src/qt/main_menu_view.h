@@ -73,6 +73,8 @@ public:
     QAction* actionMindForget;
     QAction* actionMindSnapshot;
     QAction* actionMindPreferences;
+    QMenu* submenuMindExport;
+    QAction* actionMindExportCsv;
     QAction* actionExit;
 
     // menu: Find

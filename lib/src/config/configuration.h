@@ -55,6 +55,7 @@ constexpr const auto FILE_PATH_OUTLINES = "notebooks";
 constexpr const auto FILE_PATH_NOTES = "notes";
 
 constexpr const auto FILE_EXTENSION_HTML = ".html";
+constexpr const auto FILE_EXTENSION_CSV= ".csv";
 
 constexpr const auto FILE_EXTENSION_MD_MD = ".md";
 constexpr const auto FILE_EXTENSION_MD_MARKDOWN = ".markdown";

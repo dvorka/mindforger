@@ -31,6 +31,7 @@
 #include "../representations/markdown/markdown_outline_representation.h"
 #include "../representations/html/html_outline_representation.h"
 #include "../representations/twiki/twiki_outline_representation.h"
+#include "../representations/csv/csv_outline_representation.h"
 #include "../model/outline.h"
 #include "../model/note.h"
 #include "../model/stencil.h"
@@ -66,6 +67,7 @@ private:
     MarkdownOutlineRepresentation& mdRepresentation;
     Persistence* persistence;
     TWikiOutlineRepresentation twikiRepresentation;
+    CsvOutlineRepresentation csvRepresentation;
     MindScopeAspect* mindScope;
 
     std::vector<Outline*> outlines;
@@ -132,7 +134,12 @@ public:
     /**
      * @brief Export Outline to HTML.
      */
-    void exportToHtml(Outline* outline, std::string fileName);
+    void exportToHtml(Outline* outline, const std::string& fileName);
+
+    /**
+     * @brief Export Mind to CSV.
+     */
+    void exportToCsv(const std::string& fileName);
 
     /**
      * @brief Forget Outline.

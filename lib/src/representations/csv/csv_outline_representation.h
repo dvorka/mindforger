@@ -19,19 +19,24 @@
 #ifndef M8R_CSV_OUTLINE_REPRESENTATION_H
 #define M8R_CSV_OUTLINE_REPRESENTATION_H
 
-#include "../markdown/markdown_outline_representation.h"
-#include "../../persistence/persistence.h"
-#include "../../gear/string_utils.h"
+#include <iostream>
+#include <vector>
+
+#include "../../model/outline.h"
+#include "../../gear/file_utils.h"
 
 namespace m8r {
 
+/**
+ * @brief The primary CSV purpose is to be ML bridge.
+ *
+ * CSV format is therefore designed to make loading of CSVs as datasets to ML frameworks.
+ * No library is used to make things simple - also parsing is not needed, just serialization.
+ *
+ * Spec: https://tools.ietf.org/html/rfc4180
+ */
 class CsvOutlineRepresentation
 {
-    MarkdownOutlineRepresentation& markdownRepresentation;
-    Persistence* persistence;
-
-    std::vector<std::string*> lines;
-
 public:
     explicit CsvOutlineRepresentation();
     CsvOutlineRepresentation(const CsvOutlineRepresentation&) = delete;
@@ -40,9 +45,13 @@ public:
     CsvOutlineRepresentation &operator=(const CsvOutlineRepresentation&&) = delete;
     virtual ~CsvOutlineRepresentation();
 
-    // TODO add cout method for ALL Os saving
-    bool outline(const m8r::File& file, const m8r::File& outlineFile);
-    // TODO write header
+    void to(const std::vector<Outline*>&, const m8r::File& sourceFile);
+
+    void toHeader(std::ofstream& out);
+    void to(const Outline* o, std::ofstream& out);
+private:
+    void quoteValue(const std::string& is, std::string& os);
+
 };
 
 }

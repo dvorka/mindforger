@@ -20,12 +20,112 @@
 
 namespace m8r {
 
+using namespace std;
+
 CsvOutlineRepresentation::CsvOutlineRepresentation()
 {
 }
 
 CsvOutlineRepresentation::~CsvOutlineRepresentation()
 {
+}
+
+/**
+ * @brief Serialize O to CSV in "Recent view" style
+ *
+ * O is serialized as N descriptor, only shared fields are serialized to avoid sparse
+ * lines
+ */
+void CsvOutlineRepresentation::to(const vector<Outline*>& os, const m8r::File& sourceFile)
+{
+    MF_DEBUG("Exporting MIND to CSV " << sourceFile.getName() << endl);
+
+    if(sourceFile.getName().size()) {
+        if(os.size()) {
+            std::ofstream out{};
+            try {
+                out.open(sourceFile.getName());
+
+                toHeader(out);
+                for(Outline* o:os) {
+                    to(o, out);
+                }
+            } catch (const std::ofstream::failure& e) {
+                cerr << "Error: unable to open/write file " << sourceFile.getName();
+            }
+
+            out.close();
+        }
+    } else {
+        cerr << "Error: target file name is empty";
+    }
+}
+
+void CsvOutlineRepresentation::toHeader(std::ofstream& out)
+{
+    // Outline CSV line
+    // type, id,     title,  reads, writes, created, modified, read, description
+    // o/n , string, string, int,   int,    long,    long,     long, string
+
+    // Note CSV line
+    // type, id, title, reads, writes, created, modified, read, description
+
+    // TODO tags|tags
+    out << "type,id,title,reads,writes,created,modified,read,description\n";
+}
+
+void CsvOutlineRepresentation::to(const Outline* o, ofstream& out)
+{
+    string s{};
+
+    MF_DEBUG("  " << o->getName() << endl);
+
+    // O
+    out << "o,";
+    out << o->getKey() << ",";
+    s.clear(); quoteValue(o->getName(), s);
+    out << s << ",";
+    out << o->getReads() << ",";
+    out << o->getRevision() << ",";
+    out << o->getCreated() << ",";
+    out << o->getModified() << ",";
+    out << o->getRead() << ",";
+    s.clear(); quoteValue(o->getDescriptionAsString(" "), s);
+    out << s;
+    out << "\n";
+
+    // Ns
+    const vector<Note*>& ns = o->getNotes();
+    for(Note* n:ns) {
+        out << "n,";
+        out << n->getKey() << ",";
+        s.clear(); quoteValue(n->getName(), s);
+        out << s << ",";
+        out << n->getReads() << ",";
+        out << n->getRevision() << ",";
+        out << n->getCreated() << ",";
+        out << n->getModified() << ",";
+        out << n->getRead() << ",";
+        s.clear(); quoteValue(n->getDescriptionAsString(" "), s);
+        out << s;
+        out << "\n";
+    }
+}
+
+void CsvOutlineRepresentation::quoteValue(const std::string& is, std::string& os)
+{
+    if(is.size()) {
+        os.append(" ");
+        os.append(is);
+
+        //os.append(is);
+        while(os.find("\"") != std::string::npos) {
+          os.replace(os.find("\""),1,"\"\"");
+        }
+
+        os[0] = '\"';
+        os.append("\"");
+    }
 }
 
 } // m8r namespace

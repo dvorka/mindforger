@@ -169,7 +169,7 @@ public:
     void addPreambleLine(std::string *line);
     void setPreamble(const std::vector<std::string*>& preamble);
     const std::vector<std::string*>& getDescription() const;
-    std::string getDescriptionAsString() const;
+    std::string getDescriptionAsString(const std::string& separator="\n") const;
     void addDescriptionLine(std::string *);
     void setDescription(const std::vector<std::string*>& description);
     void clearDescription();

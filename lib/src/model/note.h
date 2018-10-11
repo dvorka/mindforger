@@ -147,7 +147,7 @@ public:
     const NoteType* getType() const;
     void setType(const NoteType* type);
     const std::vector<std::string*>& getDescription() const;
-    std::string getDescriptionAsString() const;
+    std::string getDescriptionAsString(const std::string& separator="\n") const;
     void setDescription(const std::vector<std::string*>& description);
     void moveDescription(std::vector<std::string*>& target);
     void clearDescription();

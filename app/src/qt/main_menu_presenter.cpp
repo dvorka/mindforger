@@ -42,6 +42,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     // TODO QObject::connect(view->actionMindForget, SIGNAL(triggered()), mwp, SLOT(doActionMindForgetting()));
     QObject::connect(view->actionMindPreferences, SIGNAL(triggered()), mwp, SLOT(doActionMindPreferences()));
     QObject::connect(view->actionMindSnapshot, SIGNAL(triggered()), mwp, SLOT(doActionMindSnapshot()));
+    QObject::connect(view->actionMindExportCsv, SIGNAL(triggered()), mwp, SLOT(doActionMindCsvExport()));
     QObject::connect(view->actionExit, SIGNAL(triggered()), mwp, SLOT(doActionExit()));
 #ifdef DO_MF_DEBUG
     QObject::connect(view->actionMindHack, SIGNAL(triggered()), mwp, SLOT(doActionMindHack()));

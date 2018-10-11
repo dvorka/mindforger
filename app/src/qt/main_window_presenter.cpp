@@ -59,7 +59,10 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     rowsAndDepthDialog = new RowsAndDepthDialog(&view);
     newRepositoryDialog = new NewRepositoryDialog(&view);
     newFileDialog = new NewFileDialog(&view);
-    exportOutlineToHtmlDialog = new ExportFileDialog(&view);
+    exportOutlineToHtmlDialog
+       = new ExportFileDialog(tr("Export Notebook to HTML"),tr("Export"),QString::fromStdString(FILE_EXTENSION_HTML),&view);
+    exportMindToCsvDialog
+       = new ExportFileDialog(tr("Export Mind to CSV"),tr("Export"),QString::fromStdString(FILE_EXTENSION_CSV),&view);
 #ifdef MF_NER
     nerChooseTagsDialog = new NerChooseTagTypesDialog(&view);
     nerResultDialog = new NerResultDialog(&view);
@@ -83,6 +86,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
     QObject::connect(exportOutlineToHtmlDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineHtmlExport()));
+    QObject::connect(exportMindToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
     // wire toolbar signals
     QObject::connect(view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()), this, SLOT(doActionOutlineOrNoteNew()));
     QObject::connect(view.getToolBar()->actionOpenRepository, SIGNAL(triggered()), this, SLOT(doActionMindLearnRepository()));
@@ -1573,6 +1577,20 @@ void MainWindowPresenter::handleOutlineHtmlExport()
         }
 
         QMessageBox::critical(&view, tr("Export Error"), tr("Unable to find Notebook to export!"));
+    }
+}
+
+void MainWindowPresenter::doActionMindCsvExport()
+{
+    exportMindToCsvDialog->show();
+}
+
+void MainWindowPresenter::handleMindCsvExport()
+{
+    if(isDirectoryOrFileExists(newFileDialog->getFilePath().toStdString().c_str())) {
+        QMessageBox::critical(&view, tr("Export Error"), tr("Specified file path already exists!"));
+    } else {
+        mind->remind().exportToCsv(exportMindToCsvDialog->getFilePath().toStdString());
     }
 }
 

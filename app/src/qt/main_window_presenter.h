@@ -122,6 +122,7 @@ private:
     NewRepositoryDialog* newRepositoryDialog;
     NewFileDialog* newFileDialog;
     ExportFileDialog* exportOutlineToHtmlDialog;
+    ExportFileDialog* exportMindToCsvDialog;
     NerChooseTagTypesDialog *nerChooseTagsDialog;
     NerResultDialog* nerResultDialog;
 
@@ -180,6 +181,8 @@ public slots:
     void handleMindPreferences();
     void doActionMindRemember();
     void doActionMindSnapshot();
+    void doActionMindCsvExport();
+    void handleMindCsvExport();
     void doActionExit();
     // recall
     void doActionFts();

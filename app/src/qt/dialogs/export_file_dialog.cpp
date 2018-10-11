@@ -20,12 +20,12 @@
 
 namespace m8r {
 
-ExportFileDialog::ExportFileDialog(QWidget* parent)
+ExportFileDialog::ExportFileDialog(QString title, QString button, QString extension, QWidget* parent)
     : NewFileDialog{parent}
 {
-    setWindowTitle(tr("Export Notebook to HTML"));
-    extension = QString::fromStdString(FILE_EXTENSION_HTML);
-    newButton->setText(tr("Export"));
+    setWindowTitle(title);
+    this->extension = extension;
+    newButton->setText(button);
 }
 
 ExportFileDialog::~ExportFileDialog()

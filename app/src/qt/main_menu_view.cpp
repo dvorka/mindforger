@@ -104,6 +104,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
     actionMindPreferences->setStatusTip(tr("Adapt Mind by setting your preferences..."));
 
+    submenuMindExport = menuMind->addMenu("&Export");
+    actionMindExportCsv = new QAction(tr("&CSV"), mainWindow);
+    actionMindExportCsv->setStatusTip(tr("Export all Notebooks/Markdown files as a single CSV file"));
+    submenuMindExport->addAction(actionMindExportCsv);
+
     actionExit = new QAction(tr("E&xit"), mainWindow);
     actionExit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Q));
     actionExit->setStatusTip(tr("Leave application"));
@@ -122,6 +127,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #ifdef MF_WIP
     menuMind->addAction(actionMindForget);
 #endif
+    menuMind->addSeparator();
+    menuMind->addMenu(submenuMindExport);
     menuMind->addSeparator();
     menuMind->addAction(actionExit);
 #ifdef DO_MF_DEBUG

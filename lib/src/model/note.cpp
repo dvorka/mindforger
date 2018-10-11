@@ -301,14 +301,14 @@ const vector<string*>& Note::getDescription() const
     return description;
 }
 
-string Note::getDescriptionAsString() const
+string Note::getDescriptionAsString(const std::string& separator) const
 {    
     // IMPROVE cache narrowed description for performance & return it by reference
     string result{};
     if(description.size()) {
         for(string *s:description) {
             result += *s;
-            result += "\n";
+            result += separator;
         }
     }
     return result;

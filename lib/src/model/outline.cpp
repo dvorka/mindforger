@@ -1005,14 +1005,14 @@ const vector<string*>& Outline::getDescription() const
     return description;
 }
 
-string Outline::getDescriptionAsString() const
+string Outline::getDescriptionAsString(const std::string& separator) const
 {
     // IMPROVE cache narrowed description for performance
     string result{};
     if(description.size()) {
         for(string *s:description) {
             result += *s;
-            result += "\n";
+            result += separator;
         }
     }
     return result;

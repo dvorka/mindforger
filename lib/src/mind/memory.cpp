@@ -33,7 +33,8 @@ Memory::Memory(
       htmlRepresentation{htmlRepresentation},
       mdRepresentation{htmlRepresentation.getMarkdownRepresentation()},
       persistence(new FilesystemPersistence{mdRepresentation, htmlRepresentation}),
-      twikiRepresentation{mdRepresentation, persistence}
+      twikiRepresentation{mdRepresentation, persistence},
+      csvRepresentation{}
 {
     cache = true;
     mindScope = nullptr;
@@ -221,9 +222,14 @@ void Memory::remember(Outline* outline)
     }
 }
 
-void Memory::exportToHtml(Outline* outline, std::string fileName)
+void Memory::exportToHtml(Outline* outline, const string& fileName)
 {
     persistence->saveAsHtml(outline, fileName);
+}
+
+void Memory::exportToCsv(const string&  fileName)
+{
+    csvRepresentation.to(outlines, fileName);
 }
 
 void Memory::forget(Outline* outline)
