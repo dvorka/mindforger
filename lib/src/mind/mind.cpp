@@ -25,7 +25,7 @@ namespace m8r {
 Mind::Mind(Configuration &configuration)
     : config{configuration},
       ontology{},
-      autoInterceptor(new AutolinkingPreprocessor{*this, false}),
+      autoInterceptor(new AutolinkingPreprocessor{*this}),
       htmlRepresentation{ontology, autoInterceptor},
       mdConfigRepresentation(new MarkdownConfigurationRepresentation{}),
       memory{configuration, ontology, htmlRepresentation},
