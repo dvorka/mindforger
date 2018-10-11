@@ -91,7 +91,3 @@ TEST(AutolinkingTestCase, MarkdownRepresentation)
 
     delete autolinkedString;
 }
-
-// TODO negative empty repr.
-// TODO
-// TODO link crash
