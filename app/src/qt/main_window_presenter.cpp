@@ -2019,7 +2019,6 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
         QString{
             "<b>MindForger " MINDFORGER_VERSION "</b>"
 #ifdef DO_MF_DEBUG
-            "&nbsp;&nbsp;&nbsp;&nbsp;" __DATE__ " " __TIME__
             "&nbsp;&nbsp;&nbsp;&nbsp; Qt " QT_VERSION_STR
 #endif
             "<br>"
