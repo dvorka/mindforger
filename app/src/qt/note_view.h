@@ -67,6 +67,7 @@ protected:
 #else
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
     virtual void keyPressEvent(QKeyEvent*) override;
+    virtual void wheelEvent(QWheelEvent*) override;
 #endif
 
 signals:

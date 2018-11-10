@@ -36,6 +36,8 @@ OutlineHeaderView::OutlineHeaderView(QWidget *parent)
 #else
     // ensure that link clicks are not handled, but delegated to MF using linkClicked signal
     page()->setLinkDelegationPolicy(QWebPage::LinkDelegationPolicy::DelegateAllLinks);
+    // zoom
+    setZoomFactor(Configuration::getInstance().getUiHtmlZoomFactor());
 #endif
 }
 

@@ -110,7 +110,8 @@ void Configuration::clear()
     uiEditorTabWidth = DEFAULT_EDITOR_TAB_WIDTH;
     uiThemeName.assign(UI_DEFAULT_THEME);
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
-    uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;    
+    uiHtmlZoom = DEFAULT_UI_HTML_ZOOM;
+    uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
     uiEnableDiagramsInMd = JavaScriptLibSupport::NO;
     uiShowToolbar = DEFAULT_UI_SHOW_TOOLBAR;
     uiNerdTargetAudience = DEFAULT_UI_NERD_MENU;

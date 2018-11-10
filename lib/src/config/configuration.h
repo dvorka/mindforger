@@ -176,6 +176,7 @@ public:
     static constexpr const bool DEFAULT_UI_SHOW_TOOLBAR = true;
     static constexpr const bool DEFAULT_UI_NERD_MENU = false;
     static const std::string DEFAULT_UI_HTML_CSS_THEME;
+    static const int DEFAULT_UI_HTML_ZOOM = 100;
     static const std::string DEFAULT_EDITOR_KEY_BINDING;
     static const std::string DEFAULT_EDITOR_FONT;
     static constexpr int DEFAULT_EDITOR_TAB_WIDTH = 4;
@@ -230,7 +231,8 @@ private:
     // GUI configuration
     bool uiNerdTargetAudience;
     std::string uiThemeName;
-    std::string uiHtmlCssPath; // use a CSS (size>0) or render raw MD (size==0)    
+    std::string uiHtmlCssPath; // use a CSS (size>0) or render raw MD (size==0)
+    int uiHtmlZoom;
     EditorKeyBindingMode uiEditorKeyBinding;
     std::string editorFont;
     int uiFontPointSize;
@@ -362,6 +364,17 @@ public:
     void setUiHtmlCssPath(const std::string path) {
         if(!path.compare(UI_HTML_THEME_CSS_RAW)) uiHtmlCssPath.clear(); else uiHtmlCssPath = path;
     }
+    int getUiHtmlZoom() const { return uiHtmlZoom; }
+    void incUiHtmlZoom() { if(uiHtmlZoom<500) uiHtmlZoom += 10; }
+    void decUiHtmlZoom() { if(uiHtmlZoom>40) uiHtmlZoom-= 10; }
+    float getUiHtmlZoomFactor() const {
+        return (float)uiHtmlZoom/100.;
+    }
+    /**
+     * @brief Set HTML zoom of Markdown viewer.
+     * @param zoom  value between 25% and 500%
+     */
+    void setUiHtmlZoom(int zoom) { uiHtmlZoom = zoom; }
 
     const char* getJsLibSupportAsString(JavaScriptLibSupport s) const {
         if(s==JavaScriptLibSupport::ONLINE) return UI_JS_LIB_ONLINE; else

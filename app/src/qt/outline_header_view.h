@@ -20,6 +20,7 @@
 #define M8RUI_OUTLINE_HEADER_VIEW_H
 
 #include "../../lib/src/debug.h"
+#include "../../lib/src/config/configuration.h"
 
 #include <QtWidgets>
 #ifdef MF_QT_WEB_ENGINE

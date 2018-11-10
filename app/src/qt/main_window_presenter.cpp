@@ -1972,7 +1972,10 @@ void MainWindowPresenter::doActionMindPreferences()
 void MainWindowPresenter::handleMindPreferences()
 {
     mdConfigRepresentation->save(config);
+
     view.getToolBar()->setVisible(config.isUiShowToolbar());
+    view.getOrloj()->getNoteView()->setZoomFactor(config.getUiHtmlZoomFactor());
+    view.getOrloj()->getOutlineHeaderView()->setZoomFactor(config.getUiHtmlZoomFactor());
 }
 
 void MainWindowPresenter::doActionHelpDocumentation()

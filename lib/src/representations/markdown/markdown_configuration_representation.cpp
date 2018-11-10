@@ -35,6 +35,7 @@ constexpr const auto CONFIG_SETTING_MIND_AUTOLINKING = "* Autolinking: ";
 // application
 constexpr const auto CONFIG_SETTING_UI_THEME_LABEL = "* Theme: ";
 constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* Markdown CSS theme: ";
+constexpr const auto CONFIG_SETTING_UI_HTML_ZOOM_LABEL = "* Markdown HTML zoom: ";
 constexpr const auto CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL =  "* Show toolbar: ";
 constexpr const auto CONFIG_SETTING_UI_NERD_MENU=  "* Nerd menu: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
@@ -142,6 +143,20 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                             // TODO: IMPORTANT - this is potential SECURITY threat - theme name is NOT validated
                             c.setUiHtmlCssPath(t);
                         }
+                    } else if(line->find(CONFIG_SETTING_UI_HTML_ZOOM_LABEL) != std::string::npos) {
+                        string t = line->substr(strlen(CONFIG_SETTING_UI_HTML_ZOOM_LABEL));
+                        std::string::size_type st;
+                        int i;
+                        try {
+                          i = std::stoi (t,&st);
+                        }
+                        catch(...) {
+                          i = Configuration::DEFAULT_UI_HTML_ZOOM;
+                        }
+                        if(i<25 || i>500) {
+                            i=Configuration::DEFAULT_UI_HTML_ZOOM;
+                        }
+                        c.setUiHtmlZoom(i);
                     } else if(line->find(CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
                             c.setUiShowToolbar(true);
@@ -380,6 +395,10 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          // ... well I know this is potential security hole, but I believe MF users have good intentions
          "      also specify path to any CSS file to be used." << endl <<
          "    * Examples: qrc:/html-css/light.css, qrc:/html-css/dark.css, raw, /home/user/my-custom-mf-style.css" << endl <<
+         CONFIG_SETTING_UI_HTML_ZOOM_LABEL << (c?c->getUiHtmlZoom():Configuration::DEFAULT_UI_HTML_ZOOM) << endl <<
+         "    * Zoom factor of HTML view generated for Markdown. Zoom value can be between 25 and 500" << endl <<
+         "      Where 25 is 25%, 100 is 100% and 500 is 500% zoom." << endl <<
+         "    * Examples: 25, 100, 300" << endl <<
          CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL<< (c?(c->isUiShowToolbar()?"yes":"no"):(Configuration::DEFAULT_UI_SHOW_TOOLBAR?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_NERD_MENU << (c?(c->isUiNerdTargetAudience()?"yes":"no"):(Configuration::DEFAULT_UI_NERD_MENU?"yes":"no")) << endl <<

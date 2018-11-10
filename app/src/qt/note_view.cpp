@@ -36,6 +36,8 @@ NoteView::NoteView(QWidget *parent)
 #else
     // ensure that link clicks are not handled, but delegated to MF using linkClicked signal
     page()->setLinkDelegationPolicy(QWebPage::LinkDelegationPolicy::DelegateAllLinks);
+    // zoom
+    setZoomFactor(Configuration::getInstance().getUiHtmlZoomFactor());
 #endif
 }
 
@@ -87,6 +89,23 @@ void NoteView::keyPressEvent(QKeyEvent* event)
     }
 
     QWebView::keyPressEvent(event);
+}
+
+void NoteView::wheelEvent(QWheelEvent* event)
+{
+    if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
+        if(!event->angleDelta().isNull()) {
+            if(event->angleDelta().ry()>0) {
+                Configuration::getInstance().incUiHtmlZoom();
+            } else {
+                Configuration::getInstance().decUiHtmlZoom();
+            }
+            setZoomFactor(Configuration::getInstance().getUiHtmlZoomFactor());
+            return;
+        }
+    }
+
+    QWebView::wheelEvent(event);
 }
 
 #endif

@@ -33,14 +33,16 @@ class ConfigurationDialog : public QDialog
     Q_OBJECT
 
     class AppTab;
-    class MarkdownTab;
+    class ViewerTab;
+    class EditorTab;
     class NavigatorTab;
     class MindTab;
 
 private:
     QTabWidget* tabWidget;
     AppTab* appTab;
-    MarkdownTab* mdTab;
+    ViewerTab* viewerTab;
+    EditorTab* editorTab;
     NavigatorTab* navigatorTab;
     MindTab* mindTab;
 
@@ -137,9 +139,9 @@ public:
 
 
 /**
- * @brief Markdown tab.
+ * @brief Viewer tab.
  */
-class ConfigurationDialog::MarkdownTab : public QWidget
+class ConfigurationDialog::ViewerTab : public QWidget
 {
     Q_OBJECT
 
@@ -148,10 +150,31 @@ private:
 
     QLabel* htmlCssThemeLabel;
     QComboBox* htmlCssThemeCombo;
+    QLabel* zoomLabel;
+    QSpinBox* zoomSpin;
     QCheckBox* mathSupportCheck;
     QLabel* diagramSupportLabel;
     QComboBox* diagramSupportCombo;
     QCheckBox* srcCodeHighlightSupportCheck;
+
+public:
+    explicit ViewerTab(QWidget* parent);
+    ~ViewerTab();
+
+    // there and back is handled by Dialog's access to this class & Config singleton
+    void refresh();
+    void save();
+};
+
+/**
+ * @brief Editor tab.
+ */
+class ConfigurationDialog::EditorTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    Configuration& config;
 
     QLabel* editorKeyBindingLabel;
     QComboBox* editorKeyBindingCombo;
@@ -167,8 +190,8 @@ private:
     QFont editorFont;
 
 public:
-    explicit MarkdownTab(QWidget* parent);
-    ~MarkdownTab();
+    explicit EditorTab(QWidget* parent);
+    ~EditorTab();
 
     // there and back is handled by Dialog's access to this class & Config singleton
     void refresh();

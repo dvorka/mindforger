@@ -333,7 +333,7 @@ float AiAaBoW::calculateSimilarityByTags(const vector<const Tag*>* t1, const vec
         vector<const Tag*> intersection{};
         float iWeight=0, uWeight=0;
 
-        // iterate at most *threashold* words from v1: all + to UNION, matching + to INTERSECTION
+        // iterate at most *threshold* words from v1: all + to UNION, matching + to INTERSECTION
         for(auto& t:*t1) {
             uWeight += 1;
             if(std::find(t2->begin(),t2->end(),t) != t2->end()) {
@@ -371,7 +371,7 @@ float AiAaBoW::calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyLi
         float iWeight=0, uWeight=0;
         int t=0;
 
-        // iterate at most *threashold* words from v1: all + to UNION, matching + to INTERSECTION
+        // iterate at most *threshold* words from v1: all + to UNION, matching + to INTERSECTION
         for(auto& e:v1.iterable()) {
             if(t++>=threshold) break;
 
@@ -384,10 +384,10 @@ float AiAaBoW::calculateSimilarityByWords(WordFrequencyList& v1, WordFrequencyLi
         }
         // uWeight contains weight of 1st 10 v1's words, iWeight weight of v1 intersection v2
 
-        // iterate at most *threashold* words from v2: w in intersection HANDLED both u&i, w in v2&v1 > intersection else union
+        // iterate at most *threshold* words from v2: w in intersection HANDLED both u&i, w in v2&v1 > intersection else union
         t=0;
         for(auto& e:v2.iterable()) {
-            // consider at most threashold words from v2
+            // consider at most threshold words from v2
             if(++t>=threshold) break;
 
             if(!intersection.contains(e.first)) {

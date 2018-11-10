@@ -80,7 +80,7 @@ bool Mind::learn()
 
 shared_future<bool> Mind::think()
 {
-    MF_DEBUG("@Think w/ threashold " << config.getAsyncMindThreshold() << endl);
+    MF_DEBUG("@Think w/ threshold " << config.getAsyncMindThreshold() << endl);
     lock_guard<mutex> criticalSection{exclusiveMind};
 
     if(config.getMindState()==Configuration::MindState::SLEEPING) {

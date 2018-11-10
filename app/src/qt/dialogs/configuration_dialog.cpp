@@ -28,12 +28,14 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     tabWidget = new QTabWidget;
 
     appTab = new AppTab{this};
-    mdTab = new MarkdownTab{this};
+    viewerTab = new ViewerTab{this};
+    editorTab = new EditorTab{this};
     navigatorTab = new NavigatorTab{this};
     mindTab = new MindTab{this};
 
     tabWidget->addTab(appTab, tr("Application"));
-    tabWidget->addTab(mdTab, tr("Markdown"));
+    tabWidget->addTab(viewerTab, tr("Viewer"));
+    tabWidget->addTab(editorTab, tr("Editor"));
     tabWidget->addTab(navigatorTab, tr("Navigator"));
     tabWidget->addTab(mindTab, tr("Mind"));
 
@@ -63,7 +65,8 @@ ConfigurationDialog::~ConfigurationDialog()
 void ConfigurationDialog::show()
 {
     appTab->refresh();
-    mdTab->refresh();
+    viewerTab->refresh();
+    editorTab->refresh();
     navigatorTab->refresh();
     mindTab->refresh();
 
@@ -73,7 +76,8 @@ void ConfigurationDialog::show()
 void ConfigurationDialog::saveSlot()
 {
     appTab->save();
-    mdTab->save();
+    viewerTab->save();
+    editorTab->save();
     navigatorTab->save();
     mindTab->save();
 
@@ -136,13 +140,13 @@ void ConfigurationDialog::AppTab::save()
 }
 
 /*
- * Markdown tab
+ * Viewer tab
  */
 
-ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
+ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
-    QGroupBox* viewerGroup = new QGroupBox{tr("Viewer"), this};
+    QGroupBox* viewerGroup = new QGroupBox{tr("HTML Viewer"), this};
 
     htmlCssThemeLabel = new QLabel(tr("Viewer theme CSS")+":", this);
     htmlCssThemeCombo = new QComboBox{this};
@@ -150,6 +154,11 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
     //htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT_COMPACT});
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_DARK});
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_RAW});
+
+    zoomLabel = new QLabel(tr("HTML zoom (100 is 100%)")+":", this);
+    zoomSpin = new QSpinBox(this);
+    zoomSpin->setMinimum(25);
+    zoomSpin->setMaximum(500);
 
     srcCodeHighlightSupportCheck = new QCheckBox{tr("source code syntax highlighting support"), this};
 
@@ -165,12 +174,61 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
     QVBoxLayout* viewerLayout = new QVBoxLayout{this};
     viewerLayout->addWidget(htmlCssThemeLabel);
     viewerLayout->addWidget(htmlCssThemeCombo);
+    viewerLayout->addWidget(zoomLabel);
+    viewerLayout->addWidget(zoomSpin);
     viewerLayout->addWidget(diagramSupportLabel);
     viewerLayout->addWidget(diagramSupportCombo);
     viewerLayout->addWidget(srcCodeHighlightSupportCheck);
     viewerLayout->addWidget(mathSupportCheck);
     viewerGroup->setLayout(viewerLayout);
 
+    QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(viewerGroup);
+    boxesLayout->addStretch();
+    setLayout(boxesLayout);
+}
+
+ConfigurationDialog::ViewerTab::~ViewerTab()
+{
+    delete htmlCssThemeLabel;
+    delete htmlCssThemeCombo;
+    delete zoomLabel;
+    delete zoomSpin;
+    delete srcCodeHighlightSupportCheck;
+    delete mathSupportCheck;
+    delete diagramSupportLabel;
+    delete diagramSupportCombo;
+}
+
+void ConfigurationDialog::ViewerTab::refresh()
+{
+    int i = htmlCssThemeCombo->findText(QString::fromStdString(config.getUiHtmlCssPath()));
+    if(i>=0) {
+        htmlCssThemeCombo->setCurrentIndex(i);
+    }
+
+    zoomSpin->setValue(config.getUiHtmlZoom());
+    srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
+    mathSupportCheck->setChecked(config.isUiEnableMathInMd());
+    diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
+}
+
+void ConfigurationDialog::ViewerTab::save()
+{
+    config.setUiHtmlCssPath(htmlCssThemeCombo->itemText(htmlCssThemeCombo->currentIndex()).toStdString());
+    config.setUiHtmlZoom(zoomSpin->value());
+    config.setUiEnableSrcHighlightInMd(srcCodeHighlightSupportCheck->isChecked());
+    config.setUiEnableMathInMd(mathSupportCheck->isChecked());
+    config.setUiEnableDiagramsInMd(static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex()));
+}
+
+/*
+ * Editor tab
+ */
+
+ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
+    : QWidget(parent), config(Configuration::getInstance())
+{
     editorKeyBindingLabel = new QLabel(tr("Editor key binding")+":", this);
     editorKeyBindingCombo = new QComboBox{this};
     editorKeyBindingCombo->addItem("emacs");
@@ -179,7 +237,7 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
 
     editorFontLabel = new QLabel(tr("Editor font")+":", this);
     editorFontButton = new QPushButton(QFontDatabase::systemFont(QFontDatabase::FixedFont).family());
-    QObject::connect(editorFontButton, &QPushButton::clicked, this, &ConfigurationDialog::MarkdownTab::getFont);
+    QObject::connect(editorFontButton, &QPushButton::clicked, this, &ConfigurationDialog::EditorTab::getFont);
 
     editorMdSyntaxHighlightCheck = new QCheckBox(tr("Markdown syntax highlighting"), this);
     editorAutocompleteCheck = new QCheckBox(tr("autocomplete"), this);
@@ -203,25 +261,17 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
     editorLayout->addWidget(editorMdSyntaxHighlightCheck);
     editorLayout->addWidget(editorAutocompleteCheck);
     //editorLayout->addWidget(editorQuoteSectionsCheck);
-    QGroupBox* editorGroup = new QGroupBox{tr("Editor"), this};
+    QGroupBox* editorGroup = new QGroupBox{tr("Markdown Editor"), this};
     editorGroup->setLayout(editorLayout);
 
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
-    boxesLayout->addWidget(viewerGroup);
     boxesLayout->addWidget(editorGroup);
     boxesLayout->addStretch();
     setLayout(boxesLayout);
 }
 
-ConfigurationDialog::MarkdownTab::~MarkdownTab()
+ConfigurationDialog::EditorTab::~EditorTab()
 {
-    delete htmlCssThemeLabel;
-    delete htmlCssThemeCombo;
-    delete srcCodeHighlightSupportCheck;
-    delete mathSupportCheck;
-    delete diagramSupportLabel;
-    delete diagramSupportCombo;
-
     delete editorKeyBindingLabel;
     delete editorKeyBindingCombo;
     delete editorFontLabel;
@@ -234,18 +284,9 @@ ConfigurationDialog::MarkdownTab::~MarkdownTab()
     delete editorTabsAsSpacesCheck;
 }
 
-void ConfigurationDialog::MarkdownTab::refresh()
+void ConfigurationDialog::EditorTab::refresh()
 {
-    int i = htmlCssThemeCombo->findText(QString::fromStdString(config.getUiHtmlCssPath()));
-    if(i>=0) {
-        htmlCssThemeCombo->setCurrentIndex(i);
-    }
-
-    srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
-    mathSupportCheck->setChecked(config.isUiEnableMathInMd());
-    diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
-
-    i = editorKeyBindingCombo->findText(QString::fromStdString(config.getEditorKeyBindingAsString()));
+    int i = editorKeyBindingCombo->findText(QString::fromStdString(config.getEditorKeyBindingAsString()));
     if(i>=0) {
         editorKeyBindingCombo->setCurrentIndex(i);
     }
@@ -260,13 +301,8 @@ void ConfigurationDialog::MarkdownTab::refresh()
     editorTabsAsSpacesCheck->setChecked(config.isUiEditorTabsAsSpaces());
 }
 
-void ConfigurationDialog::MarkdownTab::save()
+void ConfigurationDialog::EditorTab::save()
 {
-    config.setUiHtmlCssPath(htmlCssThemeCombo->itemText(htmlCssThemeCombo->currentIndex()).toStdString());
-    config.setUiEnableSrcHighlightInMd(srcCodeHighlightSupportCheck->isChecked());
-    config.setUiEnableMathInMd(mathSupportCheck->isChecked());
-    config.setUiEnableDiagramsInMd(static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex()));
-
     config.setEditorKeyBindingByString(editorKeyBindingCombo->itemText(editorKeyBindingCombo->currentIndex()).toStdString());
     config.setEditorFont(editorFont.family().append(",").append(QString::number(editorFont.pointSize())).toStdString());
     config.setUiEditorEnableSyntaxHighlighting(editorMdSyntaxHighlightCheck->isChecked());
@@ -276,7 +312,7 @@ void ConfigurationDialog::MarkdownTab::save()
     config.setUiEditorTabsAsSpaces(editorTabsAsSpacesCheck->isChecked());
 }
 
-void ConfigurationDialog::MarkdownTab::getFont()
+void ConfigurationDialog::EditorTab::getFont()
 {
     QFont font;
     font.fromString(QString::fromStdString(config.getEditorFont()));
@@ -352,7 +388,7 @@ ConfigurationDialog::NavigatorTab::NavigatorTab(QWidget *parent)
     QVBoxLayout* pLayout = new QVBoxLayout{this};
     pLayout->addWidget(maxNodesLabel);
     pLayout->addWidget(maxNodesSpin);
-    QGroupBox* pGroup = new QGroupBox{tr("Knowledge Graph"), this};
+    QGroupBox* pGroup = new QGroupBox{tr("Knowledge Graph Navigator"), this};
     pGroup->setLayout(pLayout);
 
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
