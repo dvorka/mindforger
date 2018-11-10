@@ -155,7 +155,7 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_DARK});
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_RAW});
 
-    zoomLabel = new QLabel(tr("HTML zoom (100 is 100%)")+":", this);
+    zoomLabel = new QLabel(tr("HTML zoom (100 is 100%, Ctrl + mouse wheel)")+":", this);
     zoomSpin = new QSpinBox(this);
     zoomSpin->setMinimum(25);
     zoomSpin->setMaximum(500);
