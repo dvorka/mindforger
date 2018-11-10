@@ -197,8 +197,8 @@ then
     exit 1
 fi
 
-export ARG_BAZAAR_MSG="MindForger 1.47 release."
-export ARG_MAJOR_VERSION=1.47.
+export ARG_BAZAAR_MSG="MindForger 1.48 release."
+export ARG_MAJOR_VERSION=1.48.
 export ARG_MINOR_VERSION=0 # minor version is incremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
