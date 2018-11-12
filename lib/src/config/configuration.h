@@ -81,7 +81,6 @@ constexpr const auto UI_JS_LIB_NO = "no";
 
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
 constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
-constexpr const auto UI_DEFAULT_EDITOR_KEY_BINDING = UI_EDITOR_KEY_BINDING_WIN;
 constexpr const auto UI_DEFAULT_EDITOR_FONT = "Monospace,10";
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
@@ -177,7 +176,6 @@ public:
     static constexpr const bool DEFAULT_UI_NERD_MENU = false;
     static const std::string DEFAULT_UI_HTML_CSS_THEME;
     static const int DEFAULT_UI_HTML_ZOOM = 100;
-    static const std::string DEFAULT_EDITOR_KEY_BINDING;
     static const std::string DEFAULT_EDITOR_FONT;
     static constexpr int DEFAULT_EDITOR_TAB_WIDTH = 4;
     static constexpr int DEFAULT_NAVIGATOR_MAX_GRAPH_NODES = 150;
@@ -330,9 +328,12 @@ public:
      */
 
     EditorKeyBindingMode getEditorKeyBinding() const { return uiEditorKeyBinding; }
+    static const char* editorKeyBindingToString(EditorKeyBindingMode keyBinding) {
+        if(keyBinding==EditorKeyBindingMode::EMACS) return UI_EDITOR_KEY_BINDING_EMACS; else
+            if(keyBinding==EditorKeyBindingMode::WINDOWS) return UI_EDITOR_KEY_BINDING_WIN; else return UI_EDITOR_KEY_BINDING_VIM;
+    }
     const char* getEditorKeyBindingAsString() const {
-        if(uiEditorKeyBinding==EditorKeyBindingMode::EMACS) return UI_EDITOR_KEY_BINDING_EMACS; else
-            if(uiEditorKeyBinding==EditorKeyBindingMode::WINDOWS) return UI_EDITOR_KEY_BINDING_WIN; else return UI_EDITOR_KEY_BINDING_VIM;
+        return editorKeyBindingToString(uiEditorKeyBinding);
     }
     void setEditorKeyBinding(EditorKeyBindingMode keyBinding) { this->uiEditorKeyBinding=keyBinding; }
     void setEditorKeyBindingByString(const std::string& binding) {

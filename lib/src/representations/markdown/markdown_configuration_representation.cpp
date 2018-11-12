@@ -405,7 +405,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_TABS_AS_SPACES_LABEL << (c?(c->isUiEditorTabsAsSpaces()?"yes":"no"):(Configuration::DEFAULT_EDITOR_TABS_AS_SPACES?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
-         CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL << (c?c->getEditorKeyBindingAsString():Configuration::DEFAULT_EDITOR_KEY_BINDING) << endl <<
+         CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL << (c?c->getEditorKeyBindingAsString():Configuration::editorKeyBindingToString(Configuration::EditorKeyBindingMode::WINDOWS)) << endl <<
          "    * Examples: emacs, vim, windows" << endl <<
          CONFIG_SETTING_UI_EDITOR_FONT_LABEL << (c?c->getEditorFont():Configuration::DEFAULT_EDITOR_FONT) << endl <<
          "    * Examples: " << Configuration::DEFAULT_EDITOR_FONT << endl <<
