@@ -74,6 +74,7 @@ TEST(AutolinkingTestCase, MarkdownRepresentation)
     config.clear();
     config.setConfigFilePath("/tmp/cfg-atc-mr.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setAutolinking(true);
     m8r::Mind mind(config);
     mind.learn();
     mind.think().get();
@@ -90,4 +91,39 @@ TEST(AutolinkingTestCase, MarkdownRepresentation)
     cout << "= BEGIN AUTO! MD =" << endl << *autolinkedString << endl << "= END AUTO! MD =" << endl;
 
     delete autolinkedString;
+}
+
+
+TEST(AutolinkingTestCase, CrashAndBurn)
+{
+    string repositoryPath{"/lib/test/resources/autolinking-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-atc-cnb.md");
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setAutolinking(true);
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think().get();
+    cout << endl << "Statistics:";
+    cout << endl << "  Outlines: " << mind.remind().getOutlinesCount();
+    cout << endl << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
+    ASSERT_EQ(1, mind.remind().getOutlinesCount());
+    m8r::AutolinkingPreprocessor autolinker{mind};
+
+    cout << endl << endl << "Testing MD autolinking:" << endl;
+    m8r::Note* n = mind.remind().getOutlines()[0]->getNotes()[0];
+    vector<string*> autolinkedMd{};
+    autolinker.process(n->getDescription(), autolinkedMd);
+    string autolinkedString{};
+    m8r::toString(autolinkedMd, autolinkedString);
+    cout << "= BEGIN AUTO MD =" << endl << autolinkedString << endl << "= END AUTO MD =" << endl;
+
+    // ensure original links are intact
+    EXPECT_NE(std::string::npos, autolinkedString.find("[with Blue sky](./and/link/to/Blue)"));
+
+    for(string* s:autolinkedMd) {
+        delete s;
+    }
 }

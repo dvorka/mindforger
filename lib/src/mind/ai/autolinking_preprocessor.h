@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <regex>
 
 #include "../mind.h"
 #include "../../representations/representation_interceptor.h"
@@ -55,6 +56,8 @@ private:
             std::string* line,
             const std::string& label,
             const std::string& link);
+
+    bool findLinkOrInlineCode(const std::string* nl);
 };
 
 }

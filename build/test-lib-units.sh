@@ -29,7 +29,8 @@ export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
 # tests
-export OPTION_TEST="AutolinkingTestCase.*"
+#export OPTION_TEST="AutolinkingTestCase.*"
+export OPTION_TEST="AutolinkingTestCase.CrashAndBurn"
 #export OPTION_TEST="FtsTestCase.*"
 #export OPTION_TEST="TrieTestCase.AddAndSearch"
 #export OPTION_TEST="FileGearTestCase.DeepCopy"

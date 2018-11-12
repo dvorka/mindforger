@@ -91,6 +91,15 @@ void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::
                 continue;
             }
 
+            // IMPROVE before Aho-Corasic is available rather skip lines where
+            // either MD link or inline code presents to preserve syntax correctness.
+            if(findLinkOrInlineCode(l)) {
+
+                nl->append(*l);
+                amd.push_back(nl);
+                continue;
+            }
+
             if(l && l->size()) {
                 string w{*l}, chop{};
                 MF_DEBUG(">>" << w << ">>" << endl);
@@ -194,16 +203,36 @@ void AutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::
     }
 }
 
-void AutolinkingPreprocessor::injectLink(
-            std::string* nl,
-            const std::string& label,
-            const std::string& link)
+void AutolinkingPreprocessor::injectLink(string* nl, const string& label, const string& link)
 {
     nl->append("[");
     nl->append(label);
     nl->append("](");
     nl->append(link);
     nl->append(")");
+}
+
+bool AutolinkingPreprocessor::findLinkOrInlineCode(const string* nl)
+{
+    // see editor highligting regexps, test it at https://www.regextester.com
+    static const std::string LINK_PATTERN{"\\[(:?[\\S\\s]+)\\]\\(\\S+\\)"};
+    static const std::string CODE_PATTERN{"`[\\S\\s]+`"};
+    static const std::string MATH_PATTERN{"\\$[\\S\\s]+\\$"};
+
+    std::smatch matchedString;
+    std::regex linkRegex{LINK_PATTERN};
+    std::regex codeRegex{CODE_PATTERN};
+    std::regex mathRegex{MATH_PATTERN};
+    if(std::regex_search(*nl, matchedString, linkRegex)
+         ||
+       std::regex_search(*nl, matchedString, codeRegex)
+         ||
+       std::regex_search(*nl, matchedString, mathRegex))
+    {
+        return true;
+    }
+
+    return false;
 }
 
 } // m8r namespace
