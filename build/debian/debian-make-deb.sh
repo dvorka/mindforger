@@ -82,7 +82,7 @@ function buildDebPackage() {
     export MFFULLVERSION=${MFVERSION}-1    # mantainer upload
     export MF=mindforger_${MFVERSION}
     export MFRELEASE=mindforger-${MFFULLVERSION}
-    export MFSRC=/home/dvorka/p/mindforger/git/mindforger
+    export MFSRC="~/p/mindforger/git/mindforger"
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
     export MFBUILD=mindforger-${NOW}
     export UBUNTUVERSION=unstable
@@ -152,8 +152,8 @@ function buildDebPackage() {
 # # Main #
 # ############################################################################
 
-export ARG_BAZAAR_MSG="MindForger 1.48 release."
-export ARG_VERSION="1.48.0"
+export ARG_BAZAAR_MSG="MindForger 1.48.2 release."
+export ARG_VERSION="1.48.2"
 
 # Debian releases: https://www.debian.org/releases/
 #   6/7/8/9/10: squeeze wheezy jessie stretch buster
