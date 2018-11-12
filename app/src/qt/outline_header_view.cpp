@@ -83,6 +83,23 @@ void OutlineHeaderView::mouseDoubleClickEvent(QMouseEvent* event)
     emit signalMouseDoubleClickEvent();
 }
 
+void OutlineHeaderView::wheelEvent(QWheelEvent* event)
+{
+    if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
+        if(!event->angleDelta().isNull()) {
+            if(event->angleDelta().ry()>0) {
+                Configuration::getInstance().incUiHtmlZoom();
+            } else {
+                Configuration::getInstance().decUiHtmlZoom();
+            }
+            setZoomFactor(Configuration::getInstance().getUiHtmlZoomFactor());
+            return;
+        }
+    }
+
+    QWebView::wheelEvent(event);
+}
+
 #endif
 
 } // m8r namespace

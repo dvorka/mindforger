@@ -88,8 +88,8 @@ function buildGitHubTarball() {
 # # Main #
 # ############################################################################
 
-export ARG_BAZAAR_MSG="MindForger 1.47 release."
-export ARG_VERSION="1.47.0"
+export ARG_BAZAAR_MSG="MindForger 1.48 release."
+export ARG_VERSION="1.48.1"
 
 buildGitHubTarball ${ARG_VERSION} ${ARG_BAZAAR_MSG}
 

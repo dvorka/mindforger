@@ -197,14 +197,14 @@ then
     exit 1
 fi
 
-export ARG_BAZAAR_MSG="MindForger 1.47 release."
-export ARG_MAJOR_VERSION=1.47.
-export ARG_MINOR_VERSION=0 # minor version is incremented for every Ubuntu version
+export ARG_BAZAAR_MSG="MindForger 1.48.2 release."
+export ARG_MAJOR_VERSION=1.48.
+export ARG_MINOR_VERSION=10 # minor version is incremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety trusty (old GCC) artful
-# current: xenial bionic
-for UBUNTU_VERSION in bionic xenial
+# current: xenial bionic cosmic
+for UBUNTU_VERSION in xenial bionic cosmic
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
