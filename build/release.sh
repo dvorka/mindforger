@@ -5,18 +5,18 @@
 export SCRIPT_HOME=`pwd`
 
 # Ubuntu
-cp -vf ubuntu/ubuntu-launchpad-releases.sh ~/p/mindforger/launchpad
-cd ~/p/mindforger/launchpad && ./ubuntu-launchpad-releases.sh
+cp -vf ubuntu/ubuntu-launchpad-releases.sh /home/dvorka/p/mindforger/launchpad
+cd /home/dvorka/p/mindforger/launchpad && ./ubuntu-launchpad-releases.sh
 
 # tarball
 cd ${SCRIPT_HOME}
-cp -vf tarball/tarball-build.sh ~/p/mindforger/release
-cd ~/p/mindforger/release && ./tarball-build.sh
+cp -vf tarball/tarball-build.sh /home/dvorka/p/mindforger/release
+cd /home/dvorka/p/mindforger/release && ./tarball-build.sh
 
 # .deb
 cd ${SCRIPT_HOME}
-cp -vf debian/debian-make-deb.sh ~/p/mindforger/debian
-cd ~/p/mindforger/debian && ./debian-make-deb.sh
+cp -vf debian/debian-make-deb.sh /home/dvorka/p/mindforger/debian
+cd /home/dvorka/p/mindforger/debian && ./debian-make-deb.sh
 
 # .rpm (SSH to running Fedora - copy there and back)
 

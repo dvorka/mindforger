@@ -82,7 +82,7 @@ function buildDebPackage() {
     export MFFULLVERSION=${MFVERSION}-1    # mantainer upload
     export MF=mindforger_${MFVERSION}
     export MFRELEASE=mindforger-${MFFULLVERSION}
-    export MFSRC="~/p/mindforger/git/mindforger"
+    export MFSRC="/home/dvorka/p/mindforger/git/mindforger"
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
     export MFBUILD=mindforger-${NOW}
     export UBUNTUVERSION=unstable

@@ -28,28 +28,30 @@ echo "See 'MindForger Release Guide#Debian and my PPA' notebook for detailed ste
 # show repository basic info
 #aptly repo show mindforger-com-ppa
 
-# add .deb to repository
-#aptly repo add mindforger-com-ppa mindforger_1.42.1-1_amd64.deb
-
 # show repo content w/ packages
 #aptly repo show -with-packages mindforger-com-ppa
 
 # show snapshots
 #aptly snapshot list 
 
-# delete snapshot(s) ONLY if needed - publish must be deleted first!
-#aptly snapshot drop mindforger-1.46.0-snapshot
-
-# create snapshot in the time of release - note release NAME 
-#aptly snapshot create mindforger-1.48.0-snapshot from repo mindforger-com-ppa
-
 # show published snapshots
 #aptly publish list 
+
+echo "Add new .deb to PPA"
 
 # delete published snapshot(s) ONLY if needed
 #aptly publish drop stretch
 
+# delete snapshot(s) ONLY if needed - publish must be deleted first!
+#aptly snapshot drop mindforger-1.46.0-snapshot
+
+# add .deb to repository
+#aptly repo add mindforger-com-ppa mindforger_1.42.1-1_amd64.deb
+
+# create snapshot in the time of release - note release NAME 
+#aptly snapshot create mindforger-1.48.0-snapshot from repo mindforger-com-ppa
+
 # publish snapshot to local filesystem so that it can be uploaded - note release NAME
-#aptly publish snapshot mindforger-1.42.0
+#aptly publish snapshot mindforger-1.48.2-snapshot
 
 # eof
