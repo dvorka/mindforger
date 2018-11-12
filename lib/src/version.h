@@ -29,7 +29,7 @@ namespace m8r {
 // versionning scheme: https://semver.org/
 #define MINDFORGER_VERSION_MAJOR "1"
 #define MINDFORGER_VERSION_MINOR "48"
-#define MINDFORGER_VERSION_REVISION "0"
+#define MINDFORGER_VERSION_REVISION "1"
 
 #ifdef DO_MF_DEBUG
 #define MINDFORGER_NIGHTLY " (" __DATE__ " " __TIME__ ")"

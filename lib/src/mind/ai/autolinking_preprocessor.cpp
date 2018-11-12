@@ -218,16 +218,20 @@ bool AutolinkingPreprocessor::findLinkOrInlineCode(const string* nl)
     static const std::string LINK_PATTERN{"\\[(:?[\\S\\s]+)\\]\\(\\S+\\)"};
     static const std::string CODE_PATTERN{"`[\\S\\s]+`"};
     static const std::string MATH_PATTERN{"\\$[\\S\\s]+\\$"};
+    static const std::string HTTP_PATTERN{"https?://"};
 
     std::smatch matchedString;
     std::regex linkRegex{LINK_PATTERN};
     std::regex codeRegex{CODE_PATTERN};
     std::regex mathRegex{MATH_PATTERN};
+    std::regex httpRegex{HTTP_PATTERN};
     if(std::regex_search(*nl, matchedString, linkRegex)
          ||
        std::regex_search(*nl, matchedString, codeRegex)
          ||
-       std::regex_search(*nl, matchedString, mathRegex))
+       std::regex_search(*nl, matchedString, mathRegex)
+        ||
+       std::regex_search(*nl, matchedString, httpRegex))
     {
         return true;
     }
