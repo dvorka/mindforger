@@ -21,7 +21,7 @@
 namespace m8r {
 
 MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
-    : QToolBar{mainWindowView}, mainWindow{mainWindowView}
+    : QToolBar{tr("Main Toolbar"), mainWindowView}, mainWindow{mainWindowView}
 {
 
     actionNewOutlineOrNote = addAction(QIcon(":/icons/new.svg"), tr("New Notebook"));
