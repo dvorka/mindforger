@@ -151,7 +151,7 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     htmlCssThemeLabel = new QLabel(tr("Viewer theme CSS")+":", this);
     htmlCssThemeCombo = new QComboBox{this};
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT});
-    //htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT_COMPACT});
+    // htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT_COMPACT});
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_DARK});
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_RAW});
 
