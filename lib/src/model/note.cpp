@@ -424,7 +424,7 @@ void Note::completeProperties(const time_t outlineModificationTime)
     }
 
     if(description.empty()) {
-        description.push_back(new string{"..."});
+        description.push_back(new string{""});
     }
 
     checkAndFixProperties();
