@@ -19,29 +19,17 @@
 #ifndef M8R_AUTOLINKING_PREPROCESSOR_H
 #define M8R_AUTOLINKING_PREPROCESSOR_H
 
-#include <vector>
-#include <string>
-
-#include "../../representations/representation_interceptor.h"
-
 namespace m8r {
 
-/**
- * @brief Autolinking preprocecesssor abstract class.
- */
-class AutolinkingPreprocessor : public RepresentationInterceptor
+class AutolinkingPreprocessor
 {
-
-
 public:
-    explicit AutolinkingPreprocessor(Mind& mind);
+    explicit AutolinkingPreprocessor();
     AutolinkingPreprocessor(const AutolinkingPreprocessor&) = delete;
     AutolinkingPreprocessor(const AutolinkingPreprocessor&&) = delete;
     AutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&) = delete;
     AutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&&) = delete;
-    virtual ~AutolinkingPreprocessor() {}
-
-    virtual void process(const std::vector<std::string*>& in, std::vector<std::string*>& out) = 0;
+    ~AutolinkingPreprocessor();
 };
 
 }

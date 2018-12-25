@@ -1,5 +1,5 @@
 /*
- autolinking_preprocessor.cpp     MindForger thinking notebook
+ aho_corasick_autolinking_preprocessor.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,15 +16,15 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "autolinking_preprocessor.h"
+#include "aho_corasick_autolinking_preprocessor.h"
 
 namespace m8r {
 
-AutolinkingPreprocessor::AutolinkingPreprocessor()
+AhoCorasickAutolinkingPreprocessor::AhoCorasickAutolinkingPreprocessor()
 {
 }
 
-AutolinkingPreprocessor::~AutolinkingPreprocessor()
+AhoCorasickAutolinkingPreprocessor::~AhoCorasickAutolinkingPreprocessor()
 {
 }
 

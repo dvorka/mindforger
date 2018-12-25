@@ -36,6 +36,8 @@ extern void toString(const std::vector<std::string*> ss, std::string& os);
 
 using namespace std;
 
+naivex
+
 TEST(AutolinkingTestCase, Autolinker)
 {
     string repositoryPath{"/lib/test/resources/basic-repository"};

@@ -107,7 +107,9 @@ SOURCES += \
     src/representations/twiki/twiki_outline_representation.cpp \
     src/mind/associated_notes.cpp \
     src/mind/ai/autolinking_preprocessor.cpp \
-    src/representations/csv/csv_outline_representation.cpp
+    src/representations/csv/csv_outline_representation.cpp \
+    src/mind/ai/autolinking/aho_corasick_autolinking_preprocessor.cpp \
+    src/mind/ai/autolinking/naive_autolinking_preprocessor.cpp
 
 mfner {
     SOURCES += \
@@ -219,7 +221,9 @@ HEADERS += \
     src/mind/associated_notes.h \
     src/mind/ai/autolinking_preprocessor.h \
     src/representations/representation_interceptor.h \
-    src/representations/csv/csv_outline_representation.h
+    src/representations/csv/csv_outline_representation.h \
+    src/mind/ai/autolinking/aho_corasick_autolinking_preprocessor.h \
+    src/mind/ai/autolinking/naive_autolinking_preprocessor.h
 
 mfner {
     HEADERS += \
