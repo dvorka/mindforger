@@ -22,6 +22,7 @@
 #include <vector>
 #include <string>
 
+#include "../mind.h"
 #include "../../representations/representation_interceptor.h"
 
 namespace m8r {
@@ -31,7 +32,9 @@ namespace m8r {
  */
 class AutolinkingPreprocessor : public RepresentationInterceptor
 {
-
+protected:
+    Mind& mind;
+    std::vector<Thing*> things;
 
 public:
     explicit AutolinkingPreprocessor(Mind& mind);
@@ -39,7 +42,7 @@ public:
     AutolinkingPreprocessor(const AutolinkingPreprocessor&&) = delete;
     AutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&) = delete;
     AutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&&) = delete;
-    virtual ~AutolinkingPreprocessor() {}
+    virtual ~AutolinkingPreprocessor();
 
     virtual void process(const std::vector<std::string*>& in, std::vector<std::string*>& out) = 0;
 };

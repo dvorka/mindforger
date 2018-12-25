@@ -23,8 +23,7 @@ namespace m8r {
 using namespace std;
 
 NaiveAutolinkingPreprocessor::NaiveAutolinkingPreprocessor(Mind& mind)
-    : super(mind),
-      things{}
+    : AutolinkingPreprocessor(mind)
 {
 }
 

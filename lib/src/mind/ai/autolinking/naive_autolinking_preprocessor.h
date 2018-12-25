@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_AUTOLINKING_PREPROCESSOR_H
-#define M8R_AUTOLINKING_PREPROCESSOR_H
+#ifndef M8R_NAIVE_AUTOLINKING_PREPROCESSOR_H
+#define M8R_NAIVE_AUTOLINKING_PREPROCESSOR_H
 
 #include <set>
 #include <regex>
@@ -54,4 +54,4 @@ private:
 };
 
 }
-#endif // M8R_AUTOLINKING_PREPROCESSOR_H
+#endif // M8R_NAIVE_AUTOLINKING_PREPROCESSOR_H

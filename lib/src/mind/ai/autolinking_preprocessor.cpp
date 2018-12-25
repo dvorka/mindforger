@@ -20,7 +20,9 @@
 
 namespace m8r {
 
-AutolinkingPreprocessor::AutolinkingPreprocessor()
+AutolinkingPreprocessor::AutolinkingPreprocessor(Mind& mind)
+    : mind(mind),
+      things{}
 {
 }
 
