@@ -19,21 +19,26 @@
 #ifndef M8R_NAIVE_AUTOLINKING_PREPROCESSOR_H
 #define M8R_NAIVE_AUTOLINKING_PREPROCESSOR_H
 
-#include <set>
-#include <regex>
-
 #include "../autolinking_preprocessor.h"
+#include "../../mind.h"
+#include "../../../representations/markdown/markdown_outline_representation.h"
 
 namespace m8r {
 
+/**
+ * @brief Simplistic and slow autolinking implementation.
+ */
 class NaiveAutolinkingPreprocessor : public AutolinkingPreprocessor
 {
+    Mind& mind;
+    std::vector<Thing*> things;
+
 public:
     explicit NaiveAutolinkingPreprocessor(Mind& mind);
-    NaiveAutolinkingPreprocessor(const AutolinkingPreprocessor&) = delete;
-    NaiveAutolinkingPreprocessor(const AutolinkingPreprocessor&&) = delete;
-    NaiveAutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&) = delete;
-    NaiveAutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&&) = delete;
+    NaiveAutolinkingPreprocessor(const NaiveAutolinkingPreprocessor&) = delete;
+    NaiveAutolinkingPreprocessor(const NaiveAutolinkingPreprocessor&&) = delete;
+    NaiveAutolinkingPreprocessor &operator=(const NaiveAutolinkingPreprocessor&) = delete;
+    NaiveAutolinkingPreprocessor &operator=(const NaiveAutolinkingPreprocessor&&) = delete;
     virtual ~NaiveAutolinkingPreprocessor();
 
     virtual void process(const std::vector<std::string*>& md, std::vector<std::string*>& amd) override;
@@ -44,13 +49,6 @@ private:
      * @brief Update N names/links indices.
      */
     void updateIndices();
-
-    void injectLink(
-            std::string* line,
-            const std::string& label,
-            const std::string& link);
-
-    bool findLinkOrInlineCode(const std::string* nl);
 };
 
 }

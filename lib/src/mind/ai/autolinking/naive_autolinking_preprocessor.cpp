@@ -23,17 +23,14 @@ namespace m8r {
 using namespace std;
 
 NaiveAutolinkingPreprocessor::NaiveAutolinkingPreprocessor(Mind& mind)
-    : AutolinkingPreprocessor(mind)
+    : AutolinkingPreprocessor{},
+      mind(mind),
+      things{}
 {
 }
 
 NaiveAutolinkingPreprocessor::~NaiveAutolinkingPreprocessor()
 {
-}
-
-bool autolinkingAliasSizeComparator(const Thing* t1, const Thing* t2)
-{
-    return t1->getAutolinkingAlias().size() > t2->getAutolinkingAlias().size();
 }
 
 void NaiveAutolinkingPreprocessor::updateIndices()
@@ -44,14 +41,14 @@ void NaiveAutolinkingPreprocessor::updateIndices()
     std::vector<Outline*> outlines;
     const vector<Outline*>& os=mind.getOutlines();
     for(Outline* o:os) outlines.push_back(o);
-    std::sort(outlines.begin(), outlines.end(), autolinkingAliasSizeComparator);
+    std::sort(outlines.begin(), outlines.end(), aliasSizeComparator);
     for(Thing* t:outlines) things.push_back(t);
 
     // Ns
     std::vector<Note*> notes;
     mind.getAllNotes(notes);
     // sort names from longest to shortest (to have best ~ longest matches)
-    std::sort(notes.begin(), notes.end(), autolinkingAliasSizeComparator);
+    std::sort(notes.begin(), notes.end(), aliasSizeComparator);
     for(Thing* t:notes) things.push_back(t);
 }
 
@@ -92,7 +89,7 @@ void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, 
 
             // IMPROVE before Aho-Corasic is available rather skip lines where
             // either MD link or inline code presents to preserve syntax correctness.
-            if(findLinkOrInlineCode(l)) {
+            if(containsLinkCodeMath(l)) {
 
                 nl->append(*l);
                 amd.push_back(nl);
@@ -148,10 +145,10 @@ void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, 
                             {
                                 linked = true;
 
-                                injectLink(
-                                    nl,
+                                MarkdownOutlineRepresentation::toLink(
                                     insensitiveMatch?lowerAlias:t->getAutolinkingAlias(),
-                                    t->getKey());
+                                    t->getKey(),
+                                    nl);
 
                                 *nl += c;
 
@@ -200,42 +197,6 @@ void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, 
             }
         }
     }
-}
-
-void NaiveAutolinkingPreprocessor::injectLink(string* nl, const string& label, const string& link)
-{
-    nl->append("[");
-    nl->append(label);
-    nl->append("](");
-    nl->append(link);
-    nl->append(")");
-}
-
-bool NaiveAutolinkingPreprocessor::findLinkOrInlineCode(const string* nl)
-{
-    // see editor highligting regexps, test it at https://www.regextester.com
-    static const std::string LINK_PATTERN{"\\[(:?[\\S\\s]+)\\]\\(\\S+\\)"};
-    static const std::string CODE_PATTERN{"`[\\S\\s]+`"};
-    static const std::string MATH_PATTERN{"\\$[\\S\\s]+\\$"};
-    static const std::string HTTP_PATTERN{"https?://"};
-
-    std::smatch matchedString;
-    std::regex linkRegex{LINK_PATTERN};
-    std::regex codeRegex{CODE_PATTERN};
-    std::regex mathRegex{MATH_PATTERN};
-    std::regex httpRegex{HTTP_PATTERN};
-    if(std::regex_search(*nl, matchedString, linkRegex)
-         ||
-       std::regex_search(*nl, matchedString, codeRegex)
-         ||
-       std::regex_search(*nl, matchedString, mathRegex)
-        ||
-       std::regex_search(*nl, matchedString, httpRegex))
-    {
-        return true;
-    }
-
-    return false;
 }
 
 } // m8r namespace

@@ -36,7 +36,7 @@
     #include "ai/nlp/named_entity_recognition.h"
 #endif
 
-#include "./ai/autolinking_preprocessor.h"
+#include "ai/autolinking/naive_autolinking_preprocessor.h"
 
 namespace m8r {
 

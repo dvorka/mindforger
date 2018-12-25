@@ -404,6 +404,17 @@ string MarkdownOutlineRepresentation::to(const vector<const Tag*>* tags)
     return s;
 }
 
+string* MarkdownOutlineRepresentation::toLink(const string& label, const string& link, string* md)
+{
+    md->append("[");
+    md->append(label);
+    md->append("](");
+    md->append(link);
+    md->append(")");
+
+    return md;
+}
+
 string MarkdownOutlineRepresentation::to(const vector<Link*>& links)
 {
     string s;

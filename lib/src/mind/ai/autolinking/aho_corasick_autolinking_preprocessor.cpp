@@ -20,12 +20,43 @@
 
 namespace m8r {
 
-AhoCorasickAutolinkingPreprocessor::AhoCorasickAutolinkingPreprocessor()
+using namespace std;
+
+AhoCorasickAutolinkingPreprocessor::AhoCorasickAutolinkingPreprocessor(Mind& mind)
+    : AutolinkingPreprocessor{},
+      mind(mind),
+      things{}
 {
 }
 
 AhoCorasickAutolinkingPreprocessor::~AhoCorasickAutolinkingPreprocessor()
 {
+}
+
+void AhoCorasickAutolinkingPreprocessor::rebuildSearchStructure()
+{
+    Trie* trie = new Trie{};
+
+
+    // TODO rewrite...
+
+    things.clear();
+
+    // Os
+    std::vector<Outline*> outlines;
+    const vector<Outline*>& os=mind.getOutlines();
+    for(Outline* o:os) outlines.push_back(o);
+    std::sort(outlines.begin(), outlines.end(), aliasSizeComparator);
+    for(Thing* t:outlines) things.push_back(t);
+
+    // Ns
+    std::vector<Note*> notes;
+    mind.getAllNotes(notes);
+    // sort names from longest to shortest (to have best ~ longest matches)
+    std::sort(notes.begin(), notes.end(), aliasSizeComparator);
+    for(Thing* t:notes) things.push_back(t);
+
+    // TODO build trie
 }
 
 } // m8r namespace

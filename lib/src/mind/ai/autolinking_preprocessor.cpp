@@ -20,14 +20,46 @@
 
 namespace m8r {
 
-AutolinkingPreprocessor::AutolinkingPreprocessor(Mind& mind)
-    : mind(mind),
-      things{}
+using namespace std;
+
+// see editor highligting regexps, test it at https://www.regextester.com
+const string AutolinkingPreprocessor::PATTERN_LINK = string{"\\[(:?[\\S\\s]+)\\]\\(\\S+\\)"};
+const string AutolinkingPreprocessor::PATTERN_CODE = string{"`[\\S\\s]+`"};
+const string AutolinkingPreprocessor::PATTERN_MATH = string{"\\$[\\S\\s]+\\$"};
+const string AutolinkingPreprocessor::PATTERN_HTTP = string{"https?://"};
+
+AutolinkingPreprocessor::AutolinkingPreprocessor()
+    : linkRegex{PATTERN_LINK},
+      codeRegex{PATTERN_CODE},
+      mathRegex{PATTERN_MATH},
+      httpRegex{PATTERN_HTTP}
 {
 }
 
 AutolinkingPreprocessor::~AutolinkingPreprocessor()
 {
+}
+
+bool AutolinkingPreprocessor::containsLinkCodeMath(const string* line)
+{
+    std::smatch matchedString;
+    if(std::regex_search(*line, matchedString, linkRegex)
+         ||
+       std::regex_search(*line, matchedString, codeRegex)
+         ||
+       std::regex_search(*line, matchedString, mathRegex)
+        ||
+       std::regex_search(*line, matchedString, httpRegex))
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool AutolinkingPreprocessor::aliasSizeComparator(const Thing* t1, const Thing* t2)
+{
+    return t1->getAutolinkingAlias().size() > t2->getAutolinkingAlias().size();
 }
 
 } // m8r namespace

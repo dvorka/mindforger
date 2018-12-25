@@ -19,17 +19,26 @@
 #ifndef M8R_AHO_CORASICK_AUTOLINKING_PREPROCESSOR_H
 #define M8R_AHO_CORASICK_AUTOLINKING_PREPROCESSOR_H
 
+#include "../autolinking_preprocessor.h"
+#include "../../../gear/trie.h"
+#include "../../mind.h"
+
 namespace m8r {
 
-class AhoCorasickAutolinkingPreprocessor
+class AhoCorasickAutolinkingPreprocessor : public AutolinkingPreprocessor
 {
+    Mind& mind;
+    std::vector<Thing*> things;
+
 public:
-    explicit AhoCorasickAutolinkingPreprocessor();
+    explicit AhoCorasickAutolinkingPreprocessor(Mind& mind);
     AhoCorasickAutolinkingPreprocessor(const AhoCorasickAutolinkingPreprocessor&) = delete;
     AhoCorasickAutolinkingPreprocessor(const AhoCorasickAutolinkingPreprocessor&&) = delete;
     AhoCorasickAutolinkingPreprocessor &operator=(const AhoCorasickAutolinkingPreprocessor&) = delete;
     AhoCorasickAutolinkingPreprocessor &operator=(const AhoCorasickAutolinkingPreprocessor&&) = delete;
     ~AhoCorasickAutolinkingPreprocessor();
+
+    void rebuildSearchStructure();
 };
 
 }

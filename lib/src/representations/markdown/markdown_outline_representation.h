@@ -96,6 +96,7 @@ public:
     virtual std::string* toDescription(const Note* note, std::string* md, bool autolinking=false);
 
     static std::string to(const std::vector<const Tag*>* tags);
+    static std::string* toLink(const std::string& label, const std::string& link, std::string* md);
 
     /**
      * @brief Generate table of contents

@@ -19,10 +19,9 @@
 #ifndef M8R_AUTOLINKING_PREPROCESSOR_H
 #define M8R_AUTOLINKING_PREPROCESSOR_H
 
-#include <vector>
-#include <string>
+#include <regex>
 
-#include "../mind.h"
+#include "../../mind/ontology/thing_class_rel_triple.h"
 #include "../../representations/representation_interceptor.h"
 
 namespace m8r {
@@ -32,12 +31,20 @@ namespace m8r {
  */
 class AutolinkingPreprocessor : public RepresentationInterceptor
 {
+public:
+    static const std::string PATTERN_LINK;
+    static const std::string PATTERN_CODE;
+    static const std::string PATTERN_MATH;
+    static const std::string PATTERN_HTTP;
+
 protected:
-    Mind& mind;
-    std::vector<Thing*> things;
+    std::regex linkRegex;
+    std::regex codeRegex;
+    std::regex mathRegex;
+    std::regex httpRegex;
 
 public:
-    explicit AutolinkingPreprocessor(Mind& mind);
+    explicit AutolinkingPreprocessor();
     AutolinkingPreprocessor(const AutolinkingPreprocessor&) = delete;
     AutolinkingPreprocessor(const AutolinkingPreprocessor&&) = delete;
     AutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&) = delete;
@@ -45,6 +52,10 @@ public:
     virtual ~AutolinkingPreprocessor();
 
     virtual void process(const std::vector<std::string*>& in, std::vector<std::string*>& out) = 0;
+
+    bool containsLinkCodeMath(const std::string* line);
+
+    static bool aliasSizeComparator(const Thing* t1, const Thing* t2);
 };
 
 }
