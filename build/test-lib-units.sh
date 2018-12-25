@@ -17,9 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
+#export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
-export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
+#export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
 #export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
 
 # benchmarks
@@ -29,8 +29,8 @@ export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to d
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
 # tests
-#export OPTION_TEST="AutolinkingTestCase.*"
-export OPTION_TEST="AutolinkingTestCase.CrashAndBurn"
+export OPTION_TEST="AutolinkingTestCase.*"
+#export OPTION_TEST="AutolinkingTestCase.CrashAndBurn"
 #export OPTION_TEST="FtsTestCase.*"
 #export OPTION_TEST="TrieTestCase.AddAndSearch"
 #export OPTION_TEST="FileGearTestCase.DeepCopy"
