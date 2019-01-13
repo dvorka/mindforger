@@ -86,7 +86,7 @@ public:
     AhoCorasickAutolinkingPreprocessor(const AhoCorasickAutolinkingPreprocessor&&) = delete;
     AhoCorasickAutolinkingPreprocessor &operator=(const AhoCorasickAutolinkingPreprocessor&) = delete;
     AhoCorasickAutolinkingPreprocessor &operator=(const AhoCorasickAutolinkingPreprocessor&&) = delete;
-    ~AhoCorasickAutolinkingPreprocessor();
+    virtual ~AhoCorasickAutolinkingPreprocessor();
 
     void rebuildSearchStructure();
 };
