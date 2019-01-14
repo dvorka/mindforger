@@ -1,5 +1,5 @@
 /*
- version.h     MindForger thinking notebook
+ discount_markdown_transcoder.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,28 +16,23 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_VERSION_H
-#define M8R_VERSION_H
+#ifndef M8R_DISCOUNT_MARKDOWN_TRANSCODER_H
+#define M8R_DISCOUNT_MARKDOWN_TRANSCODER_H
 
-#include "debug.h"
+#include "markdown_transcoder.h"
 
 namespace m8r {
 
-// constexpr char const* MINDFORGER_VERSION = "18.1.5 alpha";
-// C++ character const/constexpr concatenation patterns via templates are crazy > using C-style define
-
-// versionning scheme: https://semver.org/
-#define MINDFORGER_VERSION_MAJOR "1"
-#define MINDFORGER_VERSION_MINOR "49"
-#define MINDFORGER_VERSION_REVISION "0"
-
-#ifdef DO_MF_DEBUG
-#define MINDFORGER_NIGHTLY " (" __DATE__ " " __TIME__ ")"
-#else
-#define MINDFORGER_NIGHTLY ""
-#endif
-
-#define MINDFORGER_VERSION MINDFORGER_VERSION_MAJOR "." MINDFORGER_VERSION_MINOR "." MINDFORGER_VERSION_REVISION MINDFORGER_NIGHTLY
+class DiscountMarkdownTranscoder : public MarkdownTranscoder
+{
+public:
+    explicit DiscountMarkdownTranscoder();
+    DiscountMarkdownTranscoder(const DiscountMarkdownTranscoder&) = delete;
+    DiscountMarkdownTranscoder(const DiscountMarkdownTranscoder&&) = delete;
+    DiscountMarkdownTranscoder &operator=(const DiscountMarkdownTranscoder&) = delete;
+    DiscountMarkdownTranscoder &operator=(const DiscountMarkdownTranscoder&&) = delete;
+    ~DiscountMarkdownTranscoder();
+};
 
 }
-#endif // M8R_VERSION_H
+#endif // M8R_DISCOUNT_MARKDOWN_TRANSCODER_H

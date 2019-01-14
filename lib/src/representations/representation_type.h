@@ -1,5 +1,5 @@
 /*
- autolinking_preprocessor.h     MindForger thinking notebook
+ representation_type.h     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,21 +16,20 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_AUTOLINKING_PREPROCESSOR_H
-#define M8R_AUTOLINKING_PREPROCESSOR_H
+#ifndef M8R_REPRESENTATION_TYPE_H
+#define M8R_REPRESENTATION_TYPE_H
 
 namespace m8r {
 
-class AutolinkingPreprocessor
+enum class RepresentationType
 {
-public:
-    explicit AutolinkingPreprocessor();
-    AutolinkingPreprocessor(const AutolinkingPreprocessor&) = delete;
-    AutolinkingPreprocessor(const AutolinkingPreprocessor&&) = delete;
-    AutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&) = delete;
-    AutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&&) = delete;
-    ~AutolinkingPreprocessor();
+	MARKDOWN,
+	HTML,
+	PDF,
+	TXT,
+	CSV,
+	TWIKI
 };
 
 }
-#endif // M8R_AUTOLINKING_PREPROCESSOR_H
+#endif // M8R_REPRESENTATION_TYPE_H

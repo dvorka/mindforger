@@ -1,5 +1,5 @@
 /*
- autolinking_preprocessor.cpp     MindForger thinking notebook
+ discount_markdown_transcoder.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,15 +16,21 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "autolinking_preprocessor.h"
+#include "discount_markdown_transcoder.h"
+
+#ifndef MF_NO_MD_2_HTML
+  extern "C" {
+  #include "../../../../deps/discount/mkdio.h"
+  }
+#endif
 
 namespace m8r {
 
-AutolinkingPreprocessor::AutolinkingPreprocessor()
+DiscountMarkdownTranscoder::DiscountMarkdownTranscoder()
 {
 }
 
-AutolinkingPreprocessor::~AutolinkingPreprocessor()
+DiscountMarkdownTranscoder::~DiscountMarkdownTranscoder()
 {
 }
 
