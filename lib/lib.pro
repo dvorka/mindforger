@@ -38,12 +38,13 @@ mfner {
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
 }
+#TODO make this conditional on non-windows
 mfnoccache {
-  QMAKE_CXX = g++
+  #QMAKE_CXX = g++
 } else:!mfnocxx {
-  QMAKE_CXX = ccache g++
+  #QMAKE_CXX = ccache g++
 }
-QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
+#QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
 
 SOURCES += \
     ./src/repository_indexer.cpp \
@@ -168,6 +169,7 @@ HEADERS += \
     ./src/config/configuration.h \
     ./src/install/installer.h \
     ./src/config/repository.h \
+    ./src/config/config.h \
     ./src/mind/ontology/thing_class_rel_triple.h \
     ./src/mind/ontology/taxonomy.h \
     ./src/mind/aspect/aspect.h \
@@ -228,10 +230,24 @@ HEADERS += \
     src/mind/ai/autolinking/naive_autolinking_preprocessor.h \
     src/representations/markdown/markdown_transcoder.h \
     src/representations/markdown/discount_markdown_transcoder.h \
-    src/representations/representation_type.h
+    src/representations/representation_type.h \
+    src/config/config.h
 
 mfner {
     HEADERS += \
     src/mind/ai/nlp/named_entity_recognition.h \
     src/mind/ai/nlp/ner_named_entity.h
 }    
+
+win32 {
+    HEADERS += \
+    build\windows\dirent\dirent.h
+}
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlib
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibd
+#TODO make path parametrizable
+win32 {
+ INCLUDEPATH += $$PWD/../../../libs/zlib/include
+ DEPENDPATH += $$PWD/../../../libs/zlib/include
+}
