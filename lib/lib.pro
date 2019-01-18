@@ -242,6 +242,10 @@ mfner {
 win32 {
     HEADERS += \
     build\windows\dirent\dirent.h
+    build\windows\strptime\strptime.h
+
+    SOURCES += \
+    build\windows\strptime\strptime.c
 }
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlib

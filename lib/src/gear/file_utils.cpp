@@ -101,7 +101,21 @@ time_t fileModificationTime(const string* filename)
     stat(filename->c_str(), &t_stat);
     return t_stat.st_mtime; // modification time ~ file content modification; st_ctime ~ file metata change (more sensitive)
 #elif _WIN32
-    // IMPROVE windows code goes here
+    time_t tMod = 0;
+    FILETIME ft;
+    HANDLE hFile;
+    ULARGE_INTEGER ull;
+    hFile = CreateFileA(filename->c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+    if(hFile != INVALID_HANDLE_VALUE) {
+        if(GetFileTime(hFile, nullptr, nullptr, &ft)) {
+            // Convert the last-write time to local time.
+            ull.LowPart = ft.dwLowDateTime;
+            ull.HighPart = ft.dwHighDateTime;
+            tMod = ull.QuadPart / 10000000ULL - 11644473600ULL;
+        }
+        CloseHandle(hFile);
+    }
+    return tMod;
 #else
     // IMPROVE complete the code
     typedef struct stat attrs;
@@ -129,8 +143,22 @@ bool moveFile(const string &from, const string &to)
     }
 }
 
+#define BUFSIZE 4096
+
 void resolvePath(const std::string& path, std::string& resolvedAbsolutePath)
 {
+#ifdef WIN32
+    char  buffer[BUFSIZE] = "";
+    if(GetFullPathNameA(path.c_str(), BUFSIZE, buffer, nullptr)) {
+        resolvedAbsolutePath.assign(buffer);
+
+    } else {
+        cerr << "Error: unable to resolve path '" << path << "'" << endl;
+        resolvedAbsolutePath.assign(path);
+    }
+
+
+#else
     // output buffer MUST be set to NULL (check realpath manpage)
     char * rp = realpath(path.c_str(), NULL);
     if(!rp) {
@@ -140,6 +168,7 @@ void resolvePath(const std::string& path, std::string& resolvedAbsolutePath)
         resolvedAbsolutePath.assign(rp);
         free(rp);
     }
+#endif //WIN32
 }
 
 bool isDirectoryOrFileExists(const char* path)
@@ -187,7 +216,12 @@ bool isPathRelative(const string& path)
 }
 
 bool createDirectory(const string& path) {
+#ifdef WIN32
+    int e = _mkdir(path.c_str());
+#else
     int e = mkdir(path.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+#endif
+
     if(e) {
         cerr << "Failed to create directory '" << path << "' with error " << e;
         return false;
@@ -243,7 +277,11 @@ int removeDirectoryRecursively(const char* path)
        closedir(d);
    }
    if(!r) {
+#ifdef WIN32
+       r = _rmdir(path);
+#else
        r = rmdir(path);
+#endif
    }
 
    return r;

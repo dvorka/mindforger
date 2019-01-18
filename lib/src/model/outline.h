@@ -351,7 +351,7 @@ struct Outline::Patch {
         // Notes given by boundaries were moved/shuffled i.e. Notes are on different offsets
         MOVE,
         // Notes given by boundaries were deleted
-        DELETE
+        ERASE
     };
 
     Diff diff;
