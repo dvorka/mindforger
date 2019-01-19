@@ -2,6 +2,10 @@
 
 Written by [Martin Dvorak](http://me.mindforger.com).
 
+Acknowledgements to contributors:
+
+* Vlasta 'Saman' Hajek / [Bonitoo.io](https://www.bonitoo.io/) (Windows port)
+
 Big thanks to 3rd party FOSS content authors:
 
 * John Gruber (Markdown - spec)
@@ -35,7 +39,7 @@ Acknowledgements to researchers:
 
 Acknowledgements to reviewers and testers:
 
-* Floex (review, testing)
+* Tomas 'Floex' Dvorak (review, testing)
 * Stefan Pacinda (review, testing)
 * Honza Odstrcil (feedback)
 
@@ -44,3 +48,4 @@ Special thanks to:
 * Bjarne Stroustrup (C++ - for inspiring visions and being the authority behind C++ language)
 * Linus Torvalds (Linux and Git - for being inspiration and strong opinions)
 * Richard Stallman (GNU and GNU GPL - for passionate software freedom activism)
+
