@@ -226,13 +226,38 @@ bool createDirectory(const string& path) {
 
 char* makeTempDirectory(char* dirNamePrefix)
 {
-    char tmpl[100];
+#ifdef WIN32
+    char *ret = nullptr;
+    char  *tempPathBuffer = new char[MAX_PATH];
+    UUID uuid;
+    RPC_CSTR uuidStr;
+    DWORD c = GetTempPathA(MAX_PATH, tempPathBuffer);
+    strcat(tempPathBuffer, FILE_PATH_SEPARATOR);
+    if (strlen(tempPathBuffer) + strlen(dirNamePrefix) < MAX_PATH) {
+        strcat(tempPathBuffer, dirNamePrefix);
+        UuidCreate(&uuid);
+        UuidToStringA(&uuid, &uuidStr);
+        if (strlen(tempPathBuffer) + strlen((char *)uuidStr) < MAX_PATH) {
+             strcat(tempPathBuffer, (char *)uuidStr);
+             if (CreateDirectoryA(tempPathBuffer, nullptr)) {
+                 ret = tempPathBuffer;
+             }
+        }
+        RpcStringFreeA(&uuidStr);
+    }
+    if (ret == nullptr) {
+        delete [] tempPathBuffer;
+    }
+    return ret;
+#else
+    char *tmpl = new char[100];
     tmpl[0] = 0;
     strcat(tmpl, SYSTEM_TEMP_DIRECTORY);
     strcat(tmpl, FILE_PATH_SEPARATOR);
     strcat(tmpl, dirNamePrefix);
     strcat(tmpl, "XXXXXX");
     return mkdtemp(tmpl);
+#endif
 }
 
 int removeDirectoryRecursively(const char* path)
