@@ -26,14 +26,8 @@ void pathToDirectoryAndFile(const std::string& path, std::string& directory, std
 {
     if(!path.empty()) {
         size_t found;
-#ifdef __linux__
-        found=path.find_last_of("/");
-#elif _WIN32
-        found=path.find_last_of("\\");
-#else
         // IMPROVE complete the code
-        found=path.find_last_of("/");
-#endif
+        found=path.find_last_of(FILE_PATH_SEPARATOR);
         if(found == string::npos) {
             directory = ".";
         } else {
