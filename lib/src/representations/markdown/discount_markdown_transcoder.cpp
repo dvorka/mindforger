@@ -18,7 +18,7 @@
 */
 #include "discount_markdown_transcoder.h"
 
-#ifndef MF_NO_MD_2_HTML
+#if not defined MF_NO_MD_2_HTML && not defined WIN32
   extern "C" {
   #include "../../../../deps/discount/mkdio.h"
   }
