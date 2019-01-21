@@ -25,6 +25,7 @@
 #include <sys/types.h>
 
 #include "../debug.h"
+#include "../config/config.h"
 
 namespace m8r {
 
