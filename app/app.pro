@@ -33,10 +33,11 @@ mfdebug|mfunits {
 # seems to be the only way:
 #   - webkit on Linux
 #   - webengine on Windows and macOS
-macx|mfwebengine {
+win32|macx|mfwebengine {
+    DEFINES += MF_QT_WEB_ENGINE
     QT += webengine
     QT += webenginewidgets
-    DEFINES += MF_QT_WEB_ENGINE
+
 } else {
     QT += webkit
     QT += webkitwidgets
@@ -49,8 +50,11 @@ INCLUDEPATH += $$PWD/../lib/src
 DEPENDPATH += $$PWD/../lib/src
 
 # -L where to look for library, -l link the library
-LIBS += -L$$OUT_PWD/../lib -lmindforger
-mfnomd2html {
+!win32: LIBS += -L$$OUT_PWD/../lib -lmindforger
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-mindforger-release/lib/release -lmindforger
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-mindforger-debug/lib/debug -lmindforger
+
+win32|mfnomd2html {
   DEFINES += MF_NO_MD_2_HTML
 } else {
   # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
@@ -61,7 +65,18 @@ mfner {
   LIBS += -L$$OUT_PWD/../deps/mitie/mitielib -lmitie
 }
 # zlib
-LIBS += -lz
+!win32: LIBS += -lz
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibwapi
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibwapi
+
+win32 {
+    LIBS += -lRpcrt4 -lOle32
+}
+#TODO make path somehow parametrizable
+win32 {
+ INCLUDEPATH += $$PWD/../../../libs/zlib/include
+ DEPENDPATH += $$PWD/../../../libs/zlib/include
+}
 
 # development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1
@@ -71,13 +86,14 @@ LIBS += -lz
 # - GCC: -std=c++0x ~ -std=c++11
 
 # compiler options (qmake CONFIG+=mfnoccache ...)
-mfnoccache {
-  QMAKE_CXX = g++
-} else:!mfnocxx {
-  QMAKE_CXX = ccache g++
+!win32 {
+    mfnoccache {
+      QMAKE_CXX = g++
+    } else:!mfnocxx {
+      QMAKE_CXX = ccache g++
+    }
+    QMAKE_CXXFLAGS += -pedantic -std=c++11
 }
-QMAKE_CXXFLAGS += -pedantic -std=c++11
-
 # profiling: instrument code for gprof
 #QMAKE_CXXFLAGS_DEBUG *= -pg
 #QMAKE_LFLAGS_DEBUG *= -pg
@@ -168,7 +184,7 @@ HEADERS += \
     src/qt/main_toolbar_view.h \
     src/qt/dialogs/export_file_dialog.h
 
-macx|mfwebengine {
+win32|macx|mfwebengine {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
 }
 mfner {
@@ -266,7 +282,7 @@ SOURCES += \
     src/qt/main_toolbar_view.cpp \
     src/qt/dialogs/export_file_dialog.cpp
 
-macx|mfwebengine {
+win32|macx|mfwebengine {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp
 }
 mfner {
@@ -276,6 +292,14 @@ mfner {
     src/qt/ner_leaderboard_model.cpp \
     src/qt/ner_leaderboard_view.cpp \
     src/qt/ner_main_window_worker_thread.cpp
+}
+
+win32 {
+    HEADERS += \
+    ../build/windows/getopt/getopt.h
+
+    SOURCES += \
+    ../build/windows/getopt/getopt.c
 }
 
 # L10n
@@ -315,5 +339,4 @@ macx {
     macosdocfiles.path = Contents/Resources/mindforger-repository
     QMAKE_BUNDLE_DATA += macosdocfiles
 }
-
 # eof
