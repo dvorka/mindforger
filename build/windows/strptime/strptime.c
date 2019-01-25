@@ -37,8 +37,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <sys/localedef.h>
-#include <sys/types.h>
+//#include <sys/localedef.h>
+//#include <sys/types.h>
 #include <ctype.h>
 #include <locale.h>
 #include <string.h>
@@ -52,6 +52,7 @@
 #define ALT_E			0x01
 #define ALT_O			0x02
 #define	LEGAL_ALT(x)		{ if (alt_format & ~(x)) return (0); }
+#define TM_YEAR_BASE   (1900)
 
 
 static	int conv_num(const char **, int *, int, int);
@@ -178,12 +179,12 @@ literal:
 			for (i = 0; i < 7; i++) {
 				/* Full name. */
 				len = strlen(day[i]);
-				if (strncasecmp(day[i], bp, len) == 0)
+                if (_strnicmp(day[i], bp, len) == 0)
 					break;
 
 				/* Abbreviated name. */
 				len = strlen(abday[i]);
-				if (strncasecmp(abday[i], bp, len) == 0)
+                if (_strnicmp(abday[i], bp, len) == 0)
 					break;
 			}
 
@@ -202,12 +203,12 @@ literal:
 			for (i = 0; i < 12; i++) {
 				/* Full name. */
 				len = strlen(mon[i]);
-				if (strncasecmp(mon[i], bp, len) == 0)
+                if (_strnicmp(mon[i], bp, len) == 0)
 					break;
 
 				/* Abbreviated name. */
 				len = strlen(abmon[i]);
-				if (strncasecmp(abmon[i], bp, len) == 0)
+                if (_strnicmp(abmon[i], bp, len) == 0)
 					break;
 			}
 
@@ -282,7 +283,7 @@ literal:
 		case 'p':	/* The locale's equivalent of AM/PM. */
 			LEGAL_ALT(0);
 			/* AM? */
-			if (strcasecmp(am_pm[0], bp) == 0) {
+            if (_stricmp (am_pm[0], bp) == 0) {
 				if (tm->tm_hour > 11)
 					return (0);
 
@@ -290,7 +291,7 @@ literal:
 				break;
 			}
 			/* PM? */
-			else if (strcasecmp(am_pm[1], bp) == 0) {
+            else if (_stricmp(am_pm[1], bp) == 0) {
 				if (tm->tm_hour > 11)
 					return (0);
 
