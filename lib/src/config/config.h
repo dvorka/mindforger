@@ -10,7 +10,7 @@ typedef short int   u_int8_t;
 typedef int u_int16_t;
 typedef long int  u_int32_t;
 typedef unsigned int uint;
-#include "../../build/windows/dirent/dirent.h"
+#include "../../../build/windows/dirent/dirent.h"
 #include <io.h>
 #include <direct.h>
 #else
