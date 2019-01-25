@@ -18,6 +18,12 @@
  */
 
 #include "configuration.h"
+#include "config.h"
+
+#ifdef _WIN32
+#include <Shlobj.h>
+#include <KnownFolders.h>
+#endif //_WIN32
 
 namespace m8r {
 
@@ -32,13 +38,25 @@ const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
 Configuration::Configuration()
     : installer(new Installer{})
 {
+    char *home;
     // default config file path: ~/.mindforger.md
-    char *home = getenv(ENV_VAR_HOME);
+#ifdef _WIN32
+    PWSTR wpath;
+    size_t num;
+    SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &wpath);
+    home = new char[MAX_PATH];
+    wcstombs_s(&num, home, MAX_PATH, wpath, MAX_PATH);
+    CoTaskMemFree(wpath);
+#else
+    home = getenv(ENV_VAR_HOME);
+#endif //_WIN32
     userHomePath = string{home};
     configFilePath.assign(userHomePath);
     configFilePath += FILE_PATH_SEPARATOR;
     configFilePath += FILENAME_M8R_CONFIGURATION;
-
+#ifdef _WIN32
+    delete [] home;
+#endif //_WIN32
     clear();
 }
 

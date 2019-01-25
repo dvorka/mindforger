@@ -19,11 +19,10 @@
 #ifndef M8R_INSTALLER_H
 #define M8R_INSTALLER_H
 
-#include <dirent.h>
-
 #include <string>
 #include <iostream>
 
+#include "../config/config.h"
 #include "../config/configuration.h"
 #include "../gear/file_utils.h"
 #include "../exceptions.h"

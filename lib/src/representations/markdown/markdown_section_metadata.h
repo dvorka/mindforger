@@ -21,6 +21,7 @@
 
 #include <cstdlib>
 #include <ctime>
+#include "../../config/config.h"
 
 namespace m8r {
 

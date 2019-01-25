@@ -108,7 +108,11 @@ char** stringSplit(
         size_t i  = 0;
         char *offset{};
         char *copy = strdup(s);
+#ifdef WIN32
+        char* token = strtok_s(copy, delim, &offset);
+#else
         char* token = strtok_r(copy, delim, &offset);
+#endif
         while(token) {
             // strdup() on new operator
             size_t len = strlen(token);
@@ -119,7 +123,11 @@ char** stringSplit(
                 result[i] = nullptr;
             }
             i++;
-            token = strtok_r(0, delim, &offset);
+#ifdef WIN32
+        token = strtok_s(0, delim, &offset);
+#else
+        token = strtok_r(0, delim, &offset);
+#endif
             // TODO implement auto increase result
             assert(i<=resultBaseSize);
         }

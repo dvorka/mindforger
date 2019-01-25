@@ -18,9 +18,9 @@
  */
 #include "html_outline_representation.h"
 
-#ifndef MF_NO_MD_2_HTML
+#if not defined MF_NO_MD_2_HTML && not defined WIN32
   extern "C" {
-  #include "../../../../deps/discount/mkdio.h"
+    #include "../../../../deps/discount/mkdio.h"
   }
 #endif
 
@@ -257,6 +257,7 @@ void HtmlOutlineRepresentation::footer(string& html)
 
 string* HtmlOutlineRepresentation::to(const string* markdown, string* html, string* basePath, bool standalone)
 {
+#ifndef WIN32
     if(!config.isUiHtmlTheme()) {
         header(*html, basePath, standalone);
         html->append(*markdown);
@@ -327,6 +328,12 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
 #endif
 
     return html;
+#else //WIN32
+    header(*html, basePath, standalone);
+    html->append(*markdown);
+    footer(*html);
+    return html;
+#endif //WIN32
 }
 
 string* HtmlOutlineRepresentation::to(const Outline* outline, string* html, bool standalone)

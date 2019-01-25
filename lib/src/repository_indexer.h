@@ -19,9 +19,9 @@
 #ifndef M8R_REPOSITORY_INDEXER_H_
 #define M8R_REPOSITORY_INDEXER_H_
 
-#include <dirent.h>
+#include "config/config.h"
 #include <sys/types.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include <cstdio>
 #include <cstring>
