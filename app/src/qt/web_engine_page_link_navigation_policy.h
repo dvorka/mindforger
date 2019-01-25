@@ -46,7 +46,7 @@ public:
     bool acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool isMainFrame)
     {
 #ifdef DO_MF_DEBUG
-        MF_DEBUG("acceptNavigationRequest(" << url << "," << type << "," << isMainFrame << ")" << std::endl);
+        MF_DEBUG("acceptNavigationRequest(" << url.toString().toStdString() << "," << type << "," << isMainFrame << ")" << std::endl);
 #else
         UNUSED_ARG(type);
         UNUSED_ARG(isMainFrame);
