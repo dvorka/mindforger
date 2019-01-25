@@ -23,7 +23,7 @@ CONFIG -= qt
 # dependencies
 #  - INCLUDEPATH is used during compilation to find included header files.
 #  - DEPENDPATH is used to resolve dependencies between header and source files, eg. which source files need to be recompiled when certain header file changes.
-mfnomd2html {
+win32|mfnomd2html {
   DEFINES += MF_NO_MD_2_HTML
 } else {
   INCLUDEPATH += $$PWD/../deps/discount
@@ -38,13 +38,15 @@ mfner {
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
 }
-#TODO make this conditional on non-windows
-mfnoccache {
-  #QMAKE_CXX = g++
-} else:!mfnocxx {
-  #QMAKE_CXX = ccache g++
+
+!win32 {
+    mfnoccache {
+      QMAKE_CXX = g++
+    } else:!mfnocxx {
+      QMAKE_CXX = ccache g++
+    }
+    QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
 }
-#QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
 
 SOURCES += \
     ./src/repository_indexer.cpp \
@@ -241,16 +243,13 @@ mfner {
 
 win32 {
     HEADERS += \
-    build\windows\dirent\dirent.h
-    build\windows\strptime\strptime.h
+    ../build/windows/dirent/dirent.h \
+    ../build/windows/strptime/strptime.h
 
     SOURCES += \
-    build\windows\strptime\strptime.c
+    ../build/windows/strptime/strptime.c
 }
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlib
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibd
-#TODO make path parametrizable
 win32 {
  INCLUDEPATH += $$PWD/../../../libs/zlib/include
  DEPENDPATH += $$PWD/../../../libs/zlib/include
