@@ -253,11 +253,11 @@ void NoteEditDialog::toNote()
         currentNote->setTags(&generalTab->editTagsGroup->getTags());
         currentNote->setProgress(generalTab->progressSpin->value());
         if(generalTab->deadlineCheck->isChecked()) {
-#ifdef WIN32
+#ifdef _WIN32
             tm date {0,0,0,0,0,0,0,0,0};
 #else
             tm date {0,0,0,0,0,0,0,0,0,0,0}; // missing initializer required by older GCC versions (4.8.5 and older)
-#endif //WIN32
+#endif //_WIN32
             qdateToTm(generalTab->deadlineEdit->dateTime().date(), date);
             currentNote->setDeadline(datetimeSeconds(&date));
         } else {

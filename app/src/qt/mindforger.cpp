@@ -19,11 +19,11 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#ifndef WIN32
+#ifndef _WIN32
 #  include <getopt.h>
 #else
 #  include "../../build/windows/getopt/getopt.h"
-#endif //WIN32
+#endif //_WIN32
 #include <QtWidgets>
 
 #include "../../lib/src/version.h"
