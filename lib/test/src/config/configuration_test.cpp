@@ -80,7 +80,14 @@ TEST(ConfigurationTestCase, FromEnvironment)
     cout << endl;
 
     // unset environment variable
+#ifdef _WIN32
+    envVar[0] = 0;
+    strcat(envVar, m8r::ENV_VAR_M8R_REPOSITORY);
+    strcat(envVar, "=");
+   _putenv(envVar);
+#else
     unsetenv(m8r::ENV_VAR_M8R_REPOSITORY);
+#endif //_WIN32
     delete[] envVar;
 }
 
