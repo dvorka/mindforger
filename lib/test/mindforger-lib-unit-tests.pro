@@ -22,7 +22,7 @@ SUBDIRS = deps lib src
 # where to find the sub projects - give the folders
 deps.subdir = ../../deps
 lib.subdir  = ../../lib
-test.subdir  = ./src
+src.subdir  = ./src
 
 # build dependencies
 lib.depends = deps
