@@ -25,30 +25,59 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 # dependencies
-INCLUDEPATH += $$PWD/../../../deps/discount
-DEPENDPATH += $$PWD/../../../deps/discount
+win32|mfnomd2html {
+  DEFINES += MF_NO_MD_2_HTML
+} else {
+    INCLUDEPATH += $$PWD/../../../deps/discount
+    DEPENDPATH += $$PWD/../../../deps/discount
+}
 INCLUDEPATH += $$PWD/../../../lib/src
 DEPENDPATH += $$PWD/../../../lib/src
 
 # -L where to look for library, -l link the library
-LIBS += -L$$OUT_PWD/../../../lib -lmindforger
-# MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
-LIBS += -L$$OUT_PWD/../../../deps/discount -ldiscount
+!win32: LIBS += -L$$OUT_PWD/../../../lib -lmindforger
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../../lib/release -lmindforger
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../lib/debug -lmindforger
+
+!win32:!mfnomd2html {
+    # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
+    LIBS += -L$$OUT_PWD/../../../deps/discount -ldiscount
+}
 # zlib
-LIBS += -lz
+!win32: LIBS += -lz
+win32:CONFIG(release, debug|release): LIBS += -Lc:/libs/zlib/lib/ -lzlibwapi
+else:win32:CONFIG(debug, debug|release): LIBS += -Lc:/libs/zlib/lib/ -lzlibwapi
+
+#
+win32 {
+    LIBS += -lRpcrt4 -lOle32 -lShell32
+}
+
+#TODO make path somehow parametrizable
+win32 {
+    INCLUDEPATH +=  C:/libs/zlib/include
+    DEPENDPATH +=  C:/libs/zlib/include
+}
 
 # GTest unit test framework library dependencies
-LIBS += -lgtest
-LIBS += -lpthread
+win32 {
+    INCLUDEPATH += "c:/Program Files/googletest-distribution/include"
+    CONFIG(release, debug|release): LIBS += -L"c:/Program Files/googletest-distribution/lib" -lgtest
+    else:CONFIG(debug, debug|release): LIBS += -L"c:/Program Files/googletest-distribution/lib" -lgtestd
+} else {
+    LIBS += -lgtest
+    LIBS += -lpthread
+}
 
 # compiler options
-mfnoccache {
-  QMAKE_CXX = g++
-} else:!mfnocxx {
-  QMAKE_CXX = ccache g++
+!win32 {
+    mfnoccache {
+      QMAKE_CXX = g++
+    } else:!mfnocxx {
+      QMAKE_CXX = ccache g++
+    }
+    QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
 }
-QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
-
 SOURCES += \
     ./gear/datetime_test.cpp \
     ./gear/string_utils_test.cpp \
