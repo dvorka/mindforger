@@ -24,7 +24,7 @@
 #include "../config/config.h"
 
 #include <zlib.h>
-#if defined(MSDOS) || defined(OS2) || defined(WIN32) || defined(__CYGWIN__)
+#if defined(MSDOS) || defined(OS2) || defined(_WIN32) || defined(__CYGWIN__)
   #include <fcntl.h>
   #include <io.h>
   #define SET_BINARY_MODE(file) setmode(fileno(file), O_BINARY)

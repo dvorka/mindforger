@@ -44,7 +44,7 @@ struct tm* datetimeFrom(const char* s, struct tm* datetime)
 char* datetimeTo(const struct tm* datetime, char* result)
 {
     if(datetime->tm_isdst) {
-#ifndef WIN32
+#ifndef _WIN32
         tm c {0,0,0,0,0,0,0,0,0,0,0}; // missing initializer required by older GCC versions 4.8.5 and older
 #else
         tm c {0,0,0,0,0,0,0,0,0};
@@ -55,7 +55,7 @@ char* datetimeTo(const struct tm* datetime, char* result)
         } else {
             // time travel back in time may have impact on y/m/... > roundtrip required
             time_t backOneHour = mktime(&c) - 60*60;
-#ifndef WIN32
+#ifndef _WIN32
             localtime_r(&backOneHour, &c);
 #else
             localtime_s(&c, &backOneHour);

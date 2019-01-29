@@ -141,7 +141,7 @@ bool moveFile(const string &from, const string &to)
 
 void resolvePath(const std::string& path, std::string& resolvedAbsolutePath)
 {
-#ifdef WIN32
+#ifdef _WIN32
     char  buffer[BUFSIZE] = "";
     if(GetFullPathNameA(path.c_str(), BUFSIZE, buffer, nullptr)) {
         resolvedAbsolutePath.assign(buffer);
@@ -162,7 +162,7 @@ void resolvePath(const std::string& path, std::string& resolvedAbsolutePath)
         resolvedAbsolutePath.assign(rp);
         free(rp);
     }
-#endif //WIN32
+#endif //_WIN32
 }
 
 bool isDirectoryOrFileExists(const char* path)
@@ -210,7 +210,7 @@ bool isPathRelative(const string& path)
 }
 
 bool createDirectory(const string& path) {
-#ifdef WIN32
+#ifdef _WIN32
     int e = _mkdir(path.c_str());
 #else
     int e = mkdir(path.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
@@ -226,7 +226,7 @@ bool createDirectory(const string& path) {
 
 char* makeTempDirectory(char* dirNamePrefix)
 {
-#ifdef WIN32
+#ifdef _WIN32
     char *ret = nullptr;
     char  *tempPathBuffer = new char[MAX_PATH];
     UUID uuid;
@@ -296,7 +296,7 @@ int removeDirectoryRecursively(const char* path)
        closedir(d);
    }
    if(!r) {
-#ifdef WIN32
+#ifdef _WIN32
        r = _rmdir(path);
 #else
        r = rmdir(path);
