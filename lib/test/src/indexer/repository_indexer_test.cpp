@@ -184,7 +184,11 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
     string path, content;
 
     m8r::removeDirectoryRecursively(repositoryPath.c_str());
+#ifdef _WIN32
+    int e = _mkdir(repositoryPath.c_str());
+#else
     int e = mkdir(repositoryPath.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+#endif // _WIN32
     ASSERT_EQ(0, e);
 
     path.assign(repositoryPath+"/first.md");
