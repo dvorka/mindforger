@@ -147,12 +147,13 @@ char** stringSplit(
  */
 string normalizeToNcName(string name, char quoteChar) {
     string result = name;
+	locale l("");
     if(result.size()) {
-        if(!isalnum(result[0])) {
+        if(!isalnum(result[0], l)) {
             result.insert(0, 1, '_');
         }
         for(size_t i=0; i<result.size(); i++) {
-            if(!isalnum(result[i])) {
+            if(!isalnum(result[i],l)) {
                 result[i] = quoteChar;
             }
         }
