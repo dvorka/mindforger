@@ -43,5 +43,7 @@ void printAst(const std::vector<MarkdownAstNodeSection*>* ast);
 
 void createEmptyRepository(std::string& repositoryDir, std::map<std::string,std::string>& pathToContent);
 
+std::string platformSpecificPath(const char *path);
+
 }
 #endif // M8R_TEST_GEAR_H

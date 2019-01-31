@@ -18,6 +18,7 @@
  */
 
 #include "test_gear.h"
+#include "../../src/gear/file_utils.h"
 
 namespace m8r {
 
@@ -222,6 +223,16 @@ void printAst(const vector<MarkdownAstNodeSection*>* ast)
         cout << "  EMPTY";
     }
     cout << endl << "End of AST";
+}
+
+std::string platformSpecificPath(const char *path) {
+	std::string s = path;
+	std::replace(s.begin(), s.end(), '/', FILE_PATH_SEPARATOR_CHAR); 
+	bool absolute = s.find_first_of(FILE_PATH_SEPARATOR_CHAR) == 0;
+	if (absolute) {
+		s.insert(0, "c:");
+	}
+	return s;
 }
 
 } // m8r namespace
