@@ -20,6 +20,7 @@
 #include "../../../src/representations/markdown/markdown_configuration_representation.h"
 
 #include <gtest/gtest.h>
+#include "../test_gear.h"
 
 extern char* getMindforgerGitHomePath();
 
@@ -111,11 +112,11 @@ TEST(ConfigurationTestCase, SaveDefaultConfig)
 
 TEST(ConfigurationTestCase, SaveAndLoad)
 {
-    string file{"/tmp/.mindforger.md"};
-    string repositoryDir{"/tmp"};
+    string file{m8r::platformSpecificPath("/tmp/.mindforger.md")};
+    string repositoryDir{ m8r::platformSpecificPath("/tmp")};
     string repositoryFilename{"custom-repository-single-file.md"};
     string repositoryPath{repositoryDir};
-    repositoryPath+="/"; repositoryPath+=repositoryFilename;
+    repositoryPath+= FILE_PATH_SEPARATOR; repositoryPath+=repositoryFilename;
     std::ofstream out(repositoryPath);
     out << "# Just a Test" << endl;
     out.close();
@@ -161,8 +162,8 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     EXPECT_NE(std::string::npos, asString->find("Time scope: 1y2m33d4h55m"));
     EXPECT_NE(std::string::npos, asString->find("Editor syntax highlighting: no"));
     EXPECT_NE(std::string::npos, asString->find("Save reads metadata: no"));
-    EXPECT_NE(std::string::npos, asString->find("Active repository: /tmp/custom-repository-single-file.md"));
-    EXPECT_NE(std::string::npos, asString->find("Repository: /tmp/custom-repository-single-file.md"));
+    EXPECT_NE(std::string::npos, asString->find(string("Active repository: ") + m8r::platformSpecificPath("/tmp/custom-repository-single-file.md")));
+    EXPECT_NE(std::string::npos, asString->find(string("Repository: ") + m8r::platformSpecificPath("/tmp/custom-repository-single-file.md")));
     delete asString;
     // r deleted by configuration destructor
 
