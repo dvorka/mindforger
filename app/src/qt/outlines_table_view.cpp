@@ -55,10 +55,15 @@ void OutlinesTableView::paintEvent(QPaintEvent* event)
 
     int normalizedWidth = width()/fontMetrics().averageCharWidth();
     if(normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH) {
-        this->setColumnWidth(4, 0);
-        this->setColumnWidth(5, 0);
-        this->setColumnWidth(6, 0);
+        this->setColumnHidden(4, true);
+        this->setColumnHidden(5, true);
+        this->setColumnHidden(6, true);
     } else {
+        if(this->isColumnHidden(4)) {
+            this->setColumnHidden(4, false);
+            this->setColumnHidden(5, false);
+            this->setColumnHidden(6, false);
+        }
         // notes
         this->setColumnWidth(4, this->fontMetrics().averageCharWidth()*5);
         // rd/wr

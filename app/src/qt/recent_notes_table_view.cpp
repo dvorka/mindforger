@@ -49,8 +49,9 @@ void RecentNotesTableView::paintEvent(QPaintEvent* event)
     // O
     int normalizedWidth = width()/fontMetrics().averageCharWidth();
     if(normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH) {
-        this->setColumnWidth(1, 0);
+        this->setColumnHidden(1, true);
     } else {
+        this->setColumnHidden(1, false);
         this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*50);
     }
 
