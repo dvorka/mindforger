@@ -41,6 +41,8 @@ OutlinesTableView::OutlinesTableView(QWidget *parent)
 
 void OutlinesTableView::paintEvent(QPaintEvent* event)
 {
+    MF_DEBUG("OutlinesTableView::paintEvent" << event << std::endl);
+
     // ensure that 1st column gets the remaining space from others
     // IMPROVE may kill performance
     this->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);

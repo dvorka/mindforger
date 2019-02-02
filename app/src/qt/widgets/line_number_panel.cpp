@@ -26,6 +26,10 @@ LineNumberPanel::LineNumberPanel(NoteEditorView* editor)
     mdEditor = editor;
 }
 
+LineNumberPanel::~LineNumberPanel()
+{
+}
+
 QSize LineNumberPanel::sizeHint() const
 {
     return QSize(mdEditor->lineNumberPanelWidth(), 0);
@@ -33,11 +37,9 @@ QSize LineNumberPanel::sizeHint() const
 
 void LineNumberPanel::paintEvent(QPaintEvent* event)
 {
-    mdEditor->lineNumberPanelPaintEvent(event);
-}
+    MF_DEBUG("LineNumberPanel::paintEvent" << event << std::endl);
 
-LineNumberPanel::~LineNumberPanel()
-{
+    mdEditor->lineNumberPanelPaintEvent(event);
 }
 
 }

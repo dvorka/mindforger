@@ -26,7 +26,7 @@ AssocLeaderboardView::AssocLeaderboardView(QWidget* parent)
     verticalHeader()->setVisible(false);
     // BEFARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    // IMPORTANT this must b in constructors - causes CPU high consuption loop if in paintEvent()!
+    // IMPORTANT this must be in constructors - causes CPU high consuption loop if in paintEvent()!
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
     setSortingEnabled(false);
@@ -42,6 +42,8 @@ AssocLeaderboardView::~AssocLeaderboardView()
 
 void AssocLeaderboardView::paintEvent(QPaintEvent* event)
 {
+    MF_DEBUG("AssocLeaderboardView::paintEvent" << event << std::endl);
+
     // ensure that 1st column gets the remaining space from others
     // IMPROVE may kill performance
     this->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
