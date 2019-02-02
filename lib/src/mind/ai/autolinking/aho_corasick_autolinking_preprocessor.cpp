@@ -35,10 +35,7 @@ AhoCorasickAutolinkingPreprocessor::~AhoCorasickAutolinkingPreprocessor()
 
 void AhoCorasickAutolinkingPreprocessor::rebuildSearchStructure()
 {
-    Trie* trie = new Trie{};
-    MF_DEBUG("Trie: " << trie);
-
-    // TODO rewrite...
+    // TODO WIP Aho-Corasick implementation: consider 3rd party code instead of mine implementation
 
     things.clear();
 
