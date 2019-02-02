@@ -1,3 +1,18 @@
+2019-02-03  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+   * Released v1.48.3 - Stabilization: fixing 100% CPU consumption in
+     table views on Ubuntu 18.04
+
+2018-11-13  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+   * Released v1.48.2 - Autolinking stabilization: less breaking of MD
+     lines with links, math and code.
+
+2018-11-10  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+   * Released v1.48 - CSV export, autolinking preview, mathjax format
+     menu.
+
 2018-10-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 
   * Released v1.47 - Knowledge graph navigator, regex-based FTS, HTML notebook

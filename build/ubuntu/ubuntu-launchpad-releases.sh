@@ -199,7 +199,7 @@ fi
 
 export ARG_BAZAAR_MSG="MindForger 1.48.2 release."
 export ARG_MAJOR_VERSION=1.48.
-export ARG_MINOR_VERSION=20 # minor version is incremented for every Ubuntu version
+export ARG_MINOR_VERSION=30 # minor version is incremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety trusty (old GCC) artful
