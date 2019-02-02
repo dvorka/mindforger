@@ -95,15 +95,10 @@ void Configuration::clear()
 
     // Markdown 2 HTML options
     md2HtmlOptions = 0
-            // DISCOUNT options:
-            | Configuration::MdToHtmlOption::AutolinkOption
-            | Configuration::MdToHtmlOption::NoSuperscriptOption // if enabled it BREAKS MathJax
-
-            // EXTRA LIBRARIES options:
-            | Configuration::MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js - enabled by default
-            //| Configuration::MdToHtmlOption::MathSupport // math expressions support via mathjax.js - disabled by default
-            //| Configuration::MdToHtmlOption::DiagramSupport; // diagram support via mermaid.js - disabled by default
-            ;
+        | MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js - enabled by default
+        //| MdToHtmlOption::MathSupport // math expressions support via mathjax.js - disabled by default
+        //| MdToHtmlOption::DiagramSupport; // diagram support via mermaid.js - disabled by default
+        ;
 
     aaAlgorithm = AssociationAssessmentAlgorithm::WEIGHTED_FTS;
     switch(aaAlgorithm) {

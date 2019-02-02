@@ -33,6 +33,7 @@
 #include "../exceptions.h"
 #include "../model/tag.h"
 #include "../install/installer.h"
+#include "../representations/markdown/markdown_transcoder.h"
 
 namespace m8r {
 
@@ -126,30 +127,6 @@ public:
         NO,         // 0
         OFFLINE,    // 1
         ONLINE      // 2
-    };
-
-    enum MdToHtmlOption {
-        // Discount options: https://www.pell.portland.or.us/~orc/Code/discount/
-        NoLinksOption          = 1<<0, /* don't do link processing, block <a> tags  */
-        NoImagesOption         = 1<<1, /* don't do image processing, block <img> */
-        NoSmartypantsOption    = 1<<2, /* don't run smartypants() */
-        NoHtmlOption           = 1<<3, /* don't allow raw html through AT ALL */
-        NoSuperscriptOption    = 1<<4, /* don't process a^2 as superscript(<sup>) */
-        NoTablesOption         = 1<<5, /* disallow tables */
-        NoStrikethroughOption  = 1<<6, /* forbid ~~strikethrough~~ */
-        TableOfContentsOption  = 1<<7, /* do table-of-contents processing */
-        AutolinkOption         = 1<<8, /* make http://foo.com link even without <>s */
-        NoHeaderOption         = 1<<9, /* don't process header blocks */
-        NoDivQuoteOption       = 1<<10, /* forbid >%class% blocks */
-        NoAlphaListOption      = 1<<11, /* forbid alphabetic lists */
-        NoDefinitionListOption = 1<<12, /* forbid definition lists */
-        ExtraFootnoteOption    = 1<<13, /* enable markdown extra-style footnotes */
-        NoStyleOption          = 1<<14, /* don't extract <style> blocks */
-
-        // postprocessing - makes HTML rendering slow
-        MathSupport            = 1<<15,
-        CodeHighlighting       = 1<<16,
-        DiagramSupport         = 1<<17
     };
 
     enum EditorKeyBindingMode {

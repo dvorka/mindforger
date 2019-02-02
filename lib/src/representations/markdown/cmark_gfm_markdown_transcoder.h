@@ -20,9 +20,15 @@
 #define M8R_CMARK_GFM_MARKDOWN_TRANSCODER_H
 
 #include "markdown_transcoder.h"
+#include "../../gear/lang_utils.h"
 
 namespace m8r {
 
+/**
+ * @brief cmark based Markdown to HTML transcoder.
+ *
+ * https://github.com/github/cmark-gfm
+ */
 class CmarkGfmMarkdownTranscoder : public MarkdownTranscoder
 {
 public:
@@ -31,7 +37,12 @@ public:
     CmarkGfmMarkdownTranscoder(const CmarkGfmMarkdownTranscoder&&) = delete;
     CmarkGfmMarkdownTranscoder &operator=(const CmarkGfmMarkdownTranscoder&) = delete;
     CmarkGfmMarkdownTranscoder &operator=(const CmarkGfmMarkdownTranscoder&&) = delete;
-    ~CmarkGfmMarkdownTranscoder();
+    virtual ~CmarkGfmMarkdownTranscoder();
+
+    virtual std::string* to(
+            RepresentationType format,
+            const std::string* markdown,
+            std::string* html);
 };
 
 }

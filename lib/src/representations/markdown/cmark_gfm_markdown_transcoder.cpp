@@ -20,12 +20,23 @@
 
 namespace m8r {
 
+using namespace std;
+
 CmarkGfmMarkdownTranscoder::CmarkGfmMarkdownTranscoder()
 {
 }
 
 CmarkGfmMarkdownTranscoder::~CmarkGfmMarkdownTranscoder()
 {
+}
+
+string* CmarkGfmMarkdownTranscoder::to(RepresentationType format, const string* markdown, string* html)
+{
+    UNUSED_ARG(format);
+
+    html->append(*markdown);
+
+    return html;
 }
 
 } // m8r namespace

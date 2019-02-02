@@ -18,15 +18,9 @@
  */
 #include "html_outline_representation.h"
 
-#if not defined MF_NO_MD_2_HTML && not defined _WIN32
-  extern "C" {
-    #include "../../../../deps/discount/mkdio.h"
-  }
-#endif
+namespace m8r {
 
 using namespace std;
-
-namespace m8r {
 
 HtmlOutlineRepresentation::HtmlOutlineRepresentation(
         Ontology& ontology,
@@ -36,9 +30,21 @@ HtmlOutlineRepresentation::HtmlOutlineRepresentation(
       lf{exportColors},
       markdownRepresentation(ontology, descriptionInterceptor)
 {
-    lastMfOptions = discountOptions = 0;
+    lastMfOptions = 0;
+
+#if defined _WIN32
+    markdownTranscoder = new CmarkGfmMarkdownTranscoder{};
+#else
+    markdownTranscoder = new DiscountMarkdownTranscoder{};
+#endif
 }
 
+HtmlOutlineRepresentation::~HtmlOutlineRepresentation()
+{
+    if(markdownTranscoder) {
+        delete markdownTranscoder;
+    }
+}
 
 HtmlOutlineRepresentation::HtmlOutlineRepresentation(
         Ontology& ontology,
@@ -46,12 +52,8 @@ HtmlOutlineRepresentation::HtmlOutlineRepresentation(
         RepresentationInterceptor* descriptionInterceptor)
     : HtmlOutlineRepresentation{ontology, descriptionInterceptor}
 {
-    lastMfOptions = discountOptions = 0;
+    lastMfOptions = 0;
     this->lf = lf;
-}
-
-HtmlOutlineRepresentation::~HtmlOutlineRepresentation()
-{
 }
 
 void HtmlOutlineRepresentation::fgBgTextColorStyle(string& html)
@@ -73,7 +75,6 @@ void HtmlOutlineRepresentation::outlineTypeToHtml(const OutlineType* outlineType
         html += " </span>";
     }
 }
-
 
 void HtmlOutlineRepresentation::noteTypeToHtml(const NoteType* noteType,string& html)
 {
@@ -171,7 +172,7 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
             html += "<script type=\"text/javascript\" src=\"";
             html += JS_LIB_MERMAILD_URL;
             html += "\"></script>";
-        } else if(lastMfOptions&Configuration::MdToHtmlOption::DiagramSupport) {
+        } else if(lastMfOptions&MdToHtmlOption::DiagramSupport) {
             switch(config.getUiEnableDiagramsInMd()) {
             case Configuration::JavaScriptLibSupport::ONLINE:
                 html += "<script type=\"text/javascript\" src=\"";
@@ -278,44 +279,7 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
             html->append(*markdown);
             html->append("</pre>");
 #else
-            MMIOT* doc = nullptr;
-
-            // options
-            unsigned int mfOptions = config.getMd2HtmlOptions();
-            if(mfOptions!=lastMfOptions) {
-                lastMfOptions = mfOptions;
-                discountOptions
-                    // IMPROVE I don't want TOC, should this be switched ON?
-                    = MKD_TOC
-                        | MKD_NOSTYLE
-                        | MKD_FENCEDCODE // this enables ``` and ~~~
-                        | MKD_LATEX // this helps to enable mathjax
-                        | (mfOptions&Configuration::MdToHtmlOption::AutolinkOption?MKD_AUTOLINK:0)
-                        | (mfOptions&Configuration::MdToHtmlOption::NoStrikethroughOption?MKD_NOSTRIKETHROUGH:0)
-                        | (mfOptions&Configuration::MdToHtmlOption::NoAlphaListOption?MKD_NOALPHALIST:0)
-                        | (mfOptions&Configuration::MdToHtmlOption::NoDefinitionListOption?MKD_NODLIST:0)
-                        | (mfOptions&Configuration::MdToHtmlOption::NoSmartypantsOption?MKD_NOPANTS:0)
-                        | (mfOptions&Configuration::MdToHtmlOption::ExtraFootnoteOption?MKD_EXTRA_FOOTNOTE:0)
-                        | (mfOptions&Configuration::MdToHtmlOption::NoSuperscriptOption?MKD_NOSUPERSCRIPT:0);
-            }
-
-            // compile to AST - a tree of paragraph
-            doc = mkd_string(markdown->c_str(), markdown->size(), discountOptions);
-            mkd_compile(doc, discountOptions);
-
-            char* body = nullptr;
-            if(doc) {
-                // compile AST to HTML string
-                int bodySize = mkd_document(doc, &body);
-
-                MF_DEBUG("Markdown > " << bodySize << "B HTML" << endl);
-                if(bodySize && body) {
-                    html->append(body);
-                    // body is not memory leak - it's freed automatically
-                }
-
-                mkd_cleanup(doc);
-            }
+            markdownTranscoder->to(RepresentationType::HTML, markdown, html);
 #endif
         }
 

@@ -25,6 +25,27 @@
 
 namespace m8r {
 
+// JavaScript based diagrams for HTML
+constexpr const auto JS_LIB_MERMAILD_URL = "https://cdnjs.cloudflare.com/ajax/libs/mermaid/7.1.2/mermaid.min.js";
+
+// CSS cannot be downloaded from raw.githubusercontent.com (probably wrong content type) where it would be auto updated > www.mindforger.com hosting
+constexpr const auto EXPORT_DEFAULT_CSS_URL = "http://www.mindforger.com/support/export/css/light.css";
+
+/**
+ * @brief Markdown to HTML options.
+ *
+ * IMPORTANT:
+ * Lower 16 bits are reserved for 3rd party implementations,
+ * higher 16 bits are used for transcoder independent options.
+ */
+enum MdToHtmlOption
+{
+    // Math/code highlight/diagram via .js libs - can make HTML rendering slow
+    MathSupport            = 1<<16,
+    CodeHighlighting       = 1<<17,
+    DiagramSupport         = 1<<18
+};
+
 /**
  * @brief The Markdown transcoder.
  *
@@ -39,12 +60,19 @@ public:
     MarkdownTranscoder(const MarkdownTranscoder&&) = delete;
     MarkdownTranscoder &operator=(const MarkdownTranscoder&) = delete;
     MarkdownTranscoder &operator=(const MarkdownTranscoder&&) = delete;
-    ~MarkdownTranscoder();
+    virtual ~MarkdownTranscoder();
 
-    std::string* to(
+    /**
+     * @brief Convert HTML representation to given representation.
+     *
+     * @param representationType target representation type.
+     * @param markdown input in Markdown format.
+     * @param representation output in given representation type.
+     */
+    virtual std::string* to(
             const RepresentationType representationType,
             const std::string* markdown,
-            std::string* representation);
+            std::string* representation) = 0;
 
 };
 
