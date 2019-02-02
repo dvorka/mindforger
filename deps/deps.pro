@@ -17,9 +17,7 @@
 
 TEMPLATE = subdirs
 
-!win32 {
-    !mfnomd2html {
-      SUBDIRS = discount
-    }
+!mfnomd2html {
+  SUBDIRS = discount
 }
 # eof

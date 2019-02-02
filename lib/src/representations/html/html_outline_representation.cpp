@@ -257,7 +257,7 @@ void HtmlOutlineRepresentation::footer(string& html)
 
 string* HtmlOutlineRepresentation::to(const string* markdown, string* html, string* basePath, bool standalone)
 {
-#ifndef _WIN32
+//#ifndef _WIN32
     if(!config.isUiHtmlTheme()) {
         header(*html, basePath, standalone);
         html->append(*markdown);
@@ -328,12 +328,12 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
 #endif
 
     return html;
-#else //_WIN32
+//#else //_WIN32
     header(*html, basePath, standalone);
     html->append(*markdown);
     footer(*html);
     return html;
-#endif //_WIN32
+//#endif //_WIN32
 }
 
 string* HtmlOutlineRepresentation::to(const Outline* outline, string* html, bool standalone)

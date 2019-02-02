@@ -54,11 +54,15 @@ DEPENDPATH += $$PWD/../lib/src
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-mindforger-release/lib/release -lmindforger
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-mindforger-debug/lib/debug -lmindforger
 
-win32|mfnomd2html {
+mfnomd2html {
   DEFINES += MF_NO_MD_2_HTML
 } else {
   # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
-  LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
+  win32 {
+    LIBS += -L$$OUT_PWD/../deps/discount/_build/debug/debug -ldiscount
+  } else {
+    LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
+  }
 }
 mfner {
   # MF links MITIE for AI/NLP/DL
