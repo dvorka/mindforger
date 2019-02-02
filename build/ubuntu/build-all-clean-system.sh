@@ -21,3 +21,25 @@
 # Having MindForger Git repository clone, it installs all dependencies
 # and builds the project.
 
+SCRIPT_HOME=`pwd`
+
+# Git
+cd ../..
+git submodule init
+git submodule update
+
+# deps install
+sudo apt-get install build-essential zlib1g-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache
+
+# deps build
+export MF_BUILD="/tmp"
+cd deps/discount
+./configure.sh
+make
+
+# build
+cd ${SCRIPT_HOME}/../..
+qmake -r mindforger.pro
+make -j 8
+
+# eof
