@@ -18,7 +18,7 @@
 */
 #include "discount_markdown_transcoder.h"
 
-#if not defined MF_NO_MD_2_HTML && not defined _WIN32
+#if not defined MF_NO_MD_2_HTML
   extern "C" {
   #include "../../../../deps/discount/mkdio.h"
   }
@@ -40,6 +40,7 @@ DiscountMarkdownTranscoder::~DiscountMarkdownTranscoder()
 
 std::string* DiscountMarkdownTranscoder::to(RepresentationType format, const string* markdown, string* html)
 {
+#if not defined MF_NO_MD_2_HTML
     if(format == RepresentationType::HTML) {
         MMIOT* doc = nullptr;
 
@@ -82,7 +83,9 @@ std::string* DiscountMarkdownTranscoder::to(RepresentationType format, const str
         // fallback to identity() ~ Markdown
         html->append(*markdown);
     }
-
+#else
+    html->append(*markdown);
+#endif //MF_NO_MD_2_HTML
     return html;
 }
 
