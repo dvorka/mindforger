@@ -233,9 +233,8 @@ string platformSpecificPath(const char *path) {
     if (absolute) {
         s.insert(0, "c:");
     }
-#else
-    return s;
 #endif
+    return s;
 }
 
 } // m8r namespace
