@@ -345,7 +345,7 @@ void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
     mainPresenter->getMainMenu()->showFacetNoteEdit();
 }
 
-void OrlojPresenter::toggleCurrentFacetHoisting()
+bool OrlojPresenter::toggleCurrentFacetHoisting()
 {
     if(view->isHoistView()) {
         if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
@@ -359,6 +359,8 @@ void OrlojPresenter::toggleCurrentFacetHoisting()
         } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
             view->showFacetOutlineHeaderEdit();
         }
+
+        return false;
     } else {
         if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
              ||
@@ -371,6 +373,8 @@ void OrlojPresenter::toggleCurrentFacetHoisting()
         } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
             view->showFacetHoistedOutlineHeaderEdit();
         }
+
+        return true;
     }
 }
 

@@ -241,9 +241,11 @@ private:
     bool uiEditorSyntaxHighlighting; // toggle syntax highlighting
     bool uiEditorAutocomplete; // toggle autocompletion
     JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
+    int navigatorMaxNodes;
     bool uiEditorTabsAsSpaces;
     bool uiShowToolbar;
-    int navigatorMaxNodes;
+    bool uiDistractionFreeMode; // fullscreen, no split, hidden toolbar + menu
+    bool uiHoistedMode; // no split
 
 private:
     Installer* installer;
@@ -405,13 +407,18 @@ public:
 
     JavaScriptLibSupport getUiEnableDiagramsInMd() { return uiEnableDiagramsInMd; }
     void setUiEnableDiagramsInMd(JavaScriptLibSupport mode) { uiEnableDiagramsInMd = mode; }
-    bool isUiShowToolbar() const { return uiShowToolbar; }
-    void setUiShowToolbar(bool showToolbar){ this->uiShowToolbar = showToolbar; }
-    bool isUiEditorTabsAsSpaces() const { return uiEditorTabsAsSpaces; }
-    void setUiEditorTabsAsSpaces(bool uiEditorTabsAsSpaces){ this->uiEditorTabsAsSpaces = uiEditorTabsAsSpaces; }
 
     int getNavigatorMaxNodes() const { return navigatorMaxNodes; }
     void setNavigatorMaxNodes(int navigatorMaxNodes) { this->navigatorMaxNodes = navigatorMaxNodes; }
+    bool isUiEditorTabsAsSpaces() const { return uiEditorTabsAsSpaces; }
+    void setUiEditorTabsAsSpaces(bool uiEditorTabsAsSpaces){ this->uiEditorTabsAsSpaces = uiEditorTabsAsSpaces; }
+
+    bool isUiShowToolbar() const { return uiShowToolbar; }
+    void setUiShowToolbar(bool showToolbar){ this->uiShowToolbar = showToolbar; }
+    bool isUiDistractionFreeMode() const { return uiDistractionFreeMode; }
+    void setUiDistractionFreeMode(bool distractionFreeMode){ this->uiDistractionFreeMode = distractionFreeMode; }
+    bool isUiHoistedMode() const { return uiHoistedMode; }
+    void setUiHoistedMode(bool hoisted){ this->uiHoistedMode = hoisted; }
 };
 
 } // namespace

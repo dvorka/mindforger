@@ -1677,7 +1677,7 @@ void MainWindowPresenter::doActionNoteEdit()
 #ifdef __APPLE__
     doActionOutlineEdit();
 #else
-    QMessageBox::critical(&view, tr("Edit Note"), tr("Please select a Note to edit in the outline."));
+    QMessageBox::critical(&view, tr("Edit Note"), tr("Please select a Note to edit in the Notebook."));
 #endif
 }
 
@@ -1693,7 +1693,7 @@ void MainWindowPresenter::doActionNoteHoist()
          ||
        orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE))
     {
-        orloj->toggleCurrentFacetHoisting();
+        config.setUiHoistedMode(orloj->toggleCurrentFacetHoisting());
     }
 }
 

@@ -152,7 +152,7 @@ public:
     void showFacetNoteEdit(Note* note);
     void showFacetOutlineHeaderEdit(Outline* outline);
 
-    void toggleCurrentFacetHoisting();
+    bool toggleCurrentFacetHoisting();
 
     void fromOutlineHeaderEditBackToView(Outline* outline);
     void fromNoteEditBackToView(Note* note);

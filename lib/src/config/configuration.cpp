@@ -131,9 +131,11 @@ void Configuration::clear()
     uiHtmlZoom = DEFAULT_UI_HTML_ZOOM;
     uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
     uiEnableDiagramsInMd = JavaScriptLibSupport::NO;
-    uiShowToolbar = DEFAULT_UI_SHOW_TOOLBAR;
     uiNerdTargetAudience = DEFAULT_UI_NERD_MENU;
     navigatorMaxNodes = DEFAULT_NAVIGATOR_MAX_GRAPH_NODES;
+    uiShowToolbar = DEFAULT_UI_SHOW_TOOLBAR;
+    uiDistractionFreeMode = false;
+    uiHoistedMode = false;
 }
 
 Repository* Configuration::addRepository(Repository* repository)
