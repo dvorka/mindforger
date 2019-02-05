@@ -31,11 +31,12 @@ HtmlOutlineRepresentation::HtmlOutlineRepresentation(
       markdownRepresentation(ontology, descriptionInterceptor)
 {
     lastMfOptions = 0;
-
-#if defined _WIN32
+#if defined  MF_MD_2_HTML_CMARK
     markdownTranscoder = new CmarkGfmMarkdownTranscoder{};
-#else
+#elif defined MF_MD_2_HTML_DISCOUNT
     markdownTranscoder = new DiscountMarkdownTranscoder{};
+#else
+    markdownTranscoder = nullptr;
 #endif
 }
 

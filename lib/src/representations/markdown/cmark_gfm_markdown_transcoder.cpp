@@ -16,11 +16,14 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "cmark_gfm_markdown_transcoder.h"
-#include <cmark-gfm.h>
-#include <cmark-gfm-core-extensions.h>
-#include <registry.h>
-#include <parser.h>
+#ifdef MF_MD_2_HTML_CMARK
+#  include <cmark-gfm.h>
+#  include <cmark-gfm-core-extensions.h>
+#  include <registry.h>
+#  include <parser.h>
+#endif //MF_MD_2_HTML_CMARK
 
 namespace m8r {
 
@@ -42,6 +45,7 @@ string* CmarkGfmMarkdownTranscoder::to(RepresentationType format, const string* 
     if (mfOptions != lastMfOptions) {
         lastMfOptions = mfOptions;
     }
+#ifdef MF_MD_2_HTML_CMARK
     if (format == RepresentationType::HTML) {
         //TODO VH: move to some general init code?
         cmark_gfm_core_extensions_ensure_registered();
@@ -71,7 +75,9 @@ string* CmarkGfmMarkdownTranscoder::to(RepresentationType format, const string* 
     else {
         html->append(*markdown);
     }
-
+#else
+    html->append(*markdown);
+#endif
     return html;
 }
 
