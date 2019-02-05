@@ -51,15 +51,30 @@ DEPENDPATH += $$PWD/../lib/src
 
 # -L where to look for library, -l link the library
 !win32: LIBS += -L$$OUT_PWD/../lib -lmindforger
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-mindforger-release/lib/release -lmindforger
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-mindforger-debug/lib/debug -lmindforger
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../_build/lib/release -lmindforger
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../_build/lib/debug -lmindforger
 
-win32|mfnomd2html {
-  DEFINES += MF_NO_MD_2_HTML
-} else {
-  # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
-  LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
+#discount if mfmd2htmldiscount and not windows otherwise cmark
+!mfnomd2html {
+  win32 {
+    CONFIG(release, debug|release) {
+        LIBS += -L$$PWD/../deps/cmark-gfm/_build/src/Release -lcmark-gfm_static
+        LIBS += -L$$PWD/../deps/cmark-gfm/_build/extensions/Release -lcmark-gfm-extensions_static
+    } else:CONFIG(debug, debug|release) {
+        LIBS += -L$$PWD/../deps/cmark-gfm/_build/src/Debug -lcmark-gfm_static
+        LIBS += -L$$PWD/../deps/cmark-gfm/_build/extensions/Debug -lcmark-gfm-extensions_static
+    }
+  } else:mfmd2htmldiscount {
+      # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
+      LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
+    } else {
+      #cmark
+      LIBS += -L$$PWD/../deps/cmark-gfm/build/src -lcmark-gfm_static
+      LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions_static
+    }
 }
+
+
 mfner {
   # MF links MITIE for AI/NLP/DL
   LIBS += -L$$OUT_PWD/../deps/mitie/mitielib -lmitie
