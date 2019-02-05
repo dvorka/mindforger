@@ -24,13 +24,6 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-# dependencies
-win32|mfnomd2html {
-  DEFINES += MF_NO_MD_2_HTML
-} else {
-    INCLUDEPATH += $$PWD/../../../deps/discount
-    DEPENDPATH += $$PWD/../../../deps/discount
-}
 INCLUDEPATH += $$PWD/../../../lib/src
 DEPENDPATH += $$PWD/../../../lib/src
 
@@ -39,10 +32,27 @@ DEPENDPATH += $$PWD/../../../lib/src
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../../lib/release -lmindforger
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../lib/debug -lmindforger
 
-!win32:!mfnomd2html {
-    # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
-    LIBS += -L$$OUT_PWD/../../../deps/discount -ldiscount
+#discount if mfmd2htmldiscount and not windows otherwise cmark
+!mfnomd2html {
+  win32 {
+    CONFIG(release, debug|release) {
+        LIBS += -L$$PWD/../../../deps/cmark-gfm/_build/src/Release -lcmark-gfm_static
+        LIBS += -L$$PWD/../../../deps/cmark-gfm/_build/extensions/Release -lcmark-gfm-extensions_static
+    } else:CONFIG(debug, debug|release) {
+        LIBS += -L$$PWD/../../../deps/cmark-gfm/_build/src/Debug -lcmark-gfm_static
+        LIBS += -L$$PWD/../../../deps/cmark-gfm/_build/extensions/Debug -lcmark-gfm-extensions_static
+    }
+  } else:mfmd2htmldiscount {
+      # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
+      LIBS += -L$$OUT_PWD/../../../deps/discount -ldiscount
+    } else {
+      #cmark
+      LIBS += -L$$PWD/../../../deps/cmark-gfm/build/src -lcmark-gfm_static
+      LIBS += -L$$PWD/../../../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions_static
+    }
 }
+
+
 # zlib
 !win32: LIBS += -lz
 win32:CONFIG(release, debug|release): LIBS += -Lc:/libs/zlib/lib/ -lzlibwapi
