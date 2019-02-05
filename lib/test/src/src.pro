@@ -36,19 +36,19 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../lib/debug 
 !mfnomd2html {
   win32 {
     CONFIG(release, debug|release) {
-        LIBS += -L$$PWD/../../../deps/cmark-gfm/_build/src/Release -lcmark-gfm_static
-        LIBS += -L$$PWD/../../../deps/cmark-gfm/_build/extensions/Release -lcmark-gfm-extensions_static
+        LIBS += -L$$PWD/../../../deps/cmark-gfm/build/src/Release -lcmark-gfm_static
+        LIBS += -L$$PWD/../../../deps/cmark-gfm/build/extensions/Release -lcmark-gfm-extensions_static
     } else:CONFIG(debug, debug|release) {
-        LIBS += -L$$PWD/../../../deps/cmark-gfm/_build/src/Debug -lcmark-gfm_static
-        LIBS += -L$$PWD/../../../deps/cmark-gfm/_build/extensions/Debug -lcmark-gfm-extensions_static
+        LIBS += -L$$PWD/../../../deps/cmark-gfm/build/src/Debug -lcmark-gfm_static
+        LIBS += -L$$PWD/../../../deps/cmark-gfm/build/extensions/Debug -lcmark-gfm-extensions_static
     }
   } else:mfmd2htmldiscount {
       # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
       LIBS += -L$$OUT_PWD/../../../deps/discount -ldiscount
     } else {
       #cmark
-      LIBS += -L$$PWD/../../../deps/cmark-gfm/build/src -lcmark-gfm_static
-      LIBS += -L$$PWD/../../../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions_static
+      LIBS += -L$$PWD/../../../deps/cmark-gfm/build/src -lcmark-gfm
+      LIBS += -L$$PWD/../../../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions
     }
 }
 
