@@ -28,24 +28,17 @@ CONFIG -= qt
 mfnomd2html {
   DEFINES += MF_NO_MD_2_HTML
 } else {
-  win32|!mfmd2htmldiscount {
+  mfmd2htmldiscount {
+    DEFINES += MF_MD_2_HTML_DISCOUNT
+    INCLUDEPATH += $$PWD/../deps/discount
+    DEPENDPATH += $$PWD/../deps/discount
+  } else {
     DEFINES += MF_MD_2_HTML_CMARK CMARK_GFM_STATIC_DEFINE CMARK_GFM_EXTENSIONS_STATIC_DEFINE
     INCLUDEPATH += $$PWD/../deps/cmark-gfm/src
     INCLUDEPATH += $$PWD/../deps/cmark-gfm/extensions
-    INCLUDEPATH += $$PWD/../deps/cmark-gfm/_build/src
-    INCLUDEPATH += $$PWD/../deps/cmark-gfm/_build/extensions
-  } else {
-    DEFINES += MF_MD_2_HTML_DISCOUNT
-    INCLUDEPATH += $$PWD/../../../deps/discount
-    DEPENDPATH += $$PWD/../../../deps/discount
+    INCLUDEPATH += $$PWD/../deps/cmark-gfm/build/src
+    INCLUDEPATH += $$PWD/../deps/cmark-gfm/build/extensions
   }
-}
-
-
-
-# include cmark-gfm exports
-win32:!mfmd2htmldiscount {
-
 }
 
 mfner {
