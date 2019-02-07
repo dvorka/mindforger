@@ -58,6 +58,8 @@ mfdebug|mfunits {
       QMAKE_CXX = ccache g++
     }
     QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
+} else {
+    QMAKE_CXXFLAGS += /MP
 }
 
 SOURCES += \
