@@ -624,9 +624,8 @@ int copyDirectoryRecursively(const char* srcPath, const char* dstPath, bool extr
     return r;
 }
 
+char* getExecutablePath() {
 #ifdef __APPLE__
-
-char* getMacOsExecutablePath() {
     static char exePath[2048];
     uint32_t len = sizeof(exePath);
     if(_NSGetExecutablePath(exePath, &len) != 0) {
@@ -640,10 +639,17 @@ char* getMacOsExecutablePath() {
             free(canonicalPath);
         }
     }
-
     return exePath;
+#elif defined(_WIN32)
+    static char exePath[MAX_PATH+1];
+    GetModuleFileNameA( nullptr, exePath, MAX_PATH );
+    return exePath;
+#else
+    return nullptr;
+#endif
+
 }
 
-#endif
+
 
 } // m8r namespace
