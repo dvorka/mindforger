@@ -29,8 +29,8 @@ DEPENDPATH += $$PWD/../../../lib/src
 
 # -L where to look for library, -l link the library
 !win32: LIBS += -L$$OUT_PWD/../../../lib -lmindforger
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../../lib/release -lmindforger
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../lib/debug -lmindforger
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../release -lmindforger
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../debug -lmindforger
 
 #discount if mfmd2htmldiscount and not windows otherwise cmark
 !mfnomd2html {
@@ -87,6 +87,8 @@ win32 {
       QMAKE_CXX = ccache g++
     }
     QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
+} else {
+    QMAKE_CXXFLAGS += /MP
 }
 SOURCES += \
     ./gear/datetime_test.cpp \
