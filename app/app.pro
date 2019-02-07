@@ -51,8 +51,8 @@ DEPENDPATH += $$PWD/../lib/src
 
 # -L where to look for library, -l link the library
 !win32: LIBS += -L$$OUT_PWD/../lib -lmindforger
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../_build/lib/release -lmindforger
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../_build/lib/debug -lmindforger
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../lib/release -lmindforger
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/debug -lmindforger
 
 #discount if mfmd2htmldiscount and not windows otherwise cmark
 !mfnomd2html {
@@ -96,7 +96,7 @@ win32 {
 # development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1
 # - S7    64b:   GCC 4.8.5, Qt 5.2.1
-# - Win10 64b: MinGW 4.9.2, Qt 5.10.0
+# - Win10 64b: MSVC 2017, Qt 5.12.0
 #
 # - GCC: -std=c++0x ~ -std=c++11
 
@@ -108,6 +108,8 @@ win32 {
       QMAKE_CXX = ccache g++
     }
     QMAKE_CXXFLAGS += -pedantic -std=c++11
+} else {
+    QMAKE_CXXFLAGS += /MP
 }
 # profiling: instrument code for gprof
 #QMAKE_CXXFLAGS_DEBUG *= -pg
@@ -354,4 +356,5 @@ macx {
     macosdocfiles.path = Contents/Resources/mindforger-repository
     QMAKE_BUNDLE_DATA += macosdocfiles
 }
+
 # eof
