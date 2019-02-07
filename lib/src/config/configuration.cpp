@@ -43,20 +43,28 @@ Configuration::Configuration()
 #ifdef _WIN32
     PWSTR wpath;
     size_t num;
+
+    SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &wpath);
+    char *docPath = new char[MAX_PATH];
+    wcstombs_s(&num, docPath, MAX_PATH, wpath, MAX_PATH);
+    CoTaskMemFree(wpath);
+    userDocPath =  string{docPath};
+    delete [] docPath;
+
     SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &wpath);
     home = new char[MAX_PATH];
     wcstombs_s(&num, home, MAX_PATH, wpath, MAX_PATH);
     CoTaskMemFree(wpath);
+    userHomePath = string{home};
+    delete [] home;
 #else
     home = getenv(ENV_VAR_HOME);
-#endif //_WIN32
     userHomePath = string{home};
+    userDocPath = string{home};
+#endif //_WIN32
     configFilePath.assign(userHomePath);
     configFilePath += FILE_PATH_SEPARATOR;
     configFilePath += FILENAME_M8R_CONFIGURATION;
-#ifdef _WIN32
-    delete [] home;
-#endif //_WIN32
     clear();
 }
 
@@ -203,7 +211,7 @@ bool Configuration::createEmptyMarkdownFile(const string& file)
 void Configuration::findOrCreateDefaultRepository()
 {
     if(!activeRepository || activeRepository->getDir().empty()) {
-        string defaultRepositoryPath{userHomePath};
+        string defaultRepositoryPath{userDocPath};
         defaultRepositoryPath += FILE_PATH_SEPARATOR;
         defaultRepositoryPath += DIRNAME_M8R_REPOSITORY;
         MF_DEBUG("Checking for default repository existence: " << defaultRepositoryPath << endl);

@@ -180,6 +180,8 @@ private:
     unsigned int asyncMindThreshold;
 
     std::string userHomePath;
+    // Some platforms, e.g. Windows, distinquishes user home and user documents
+    std::string userDocPath;
     std::string configFilePath;
 
     Repository* activeRepository;
