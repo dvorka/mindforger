@@ -357,4 +357,7 @@ macx {
     QMAKE_BUNDLE_DATA += macosdocfiles
 }
 
+win32 {
+    RC_FILE = $$PWD/resources/windows/mindforger.rc
+}
 # eof
