@@ -24,7 +24,11 @@ CONFIG -= qt
 #  - INCLUDEPATH is used during compilation to find included header files.
 #  - DEPENDPATH is used to resolve dependencies between header and source files, eg. which source files need to be recompiled when certain header file changes.
 
-# dependencies
+#TODO: remove after resolving issue with build with cmark on windows
+!win32:!mfnomd2html {
+  CONFIG += mfmd2htmldiscount
+}
+
 mfnomd2html {
   DEFINES += MF_NO_MD_2_HTML
 } else {

@@ -32,6 +32,12 @@ DEPENDPATH += $$PWD/../../../lib/src
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../release -lmindforger
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../debug -lmindforger
 
+#TODO: remove after resolving issue with build with cmark on windows
+!win32:!mfnomd2html {
+  CONFIG += mfmd2htmldiscount
+}
+
+
 #discount if mfmd2htmldiscount and not windows otherwise cmark
 !mfnomd2html {
   win32 {
