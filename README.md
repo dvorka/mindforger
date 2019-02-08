@@ -8,7 +8,7 @@
 [![AUR](https://img.shields.io/aur/license/yaourt.svg)](https://github.com/dvorka/mindforger/blob/master/LICENSE)
 <a href="https://twitter.com/intent/follow?screen_name=mindforger"><img src="https://img.shields.io/twitter/follow/mindforger.svg?style=social&logo=twitter" alt="follow on Twitter"></a>
 
-Are you drowning in information, but starving for **knowledge**? Where do you keep your **private remarks** 
+Are you **drowning** in **information**, but **starving** for **knowledge**? Where do you keep your **private remarks** 
 like ideas, personal plans, gift tips, how-tos, dreams, business vision, finance strategy, auto 
 coaching notes? Loads of documents, sketches and remarks spread around the file system, cloud, 
 web and Post-it notes? Are you afraid of your knowledge **privacy**? Are you able to **find** then once you create them? 
