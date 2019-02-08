@@ -1,9 +1,9 @@
 #include <windows.h>
-#include "..\..\..\lib\src\version.h"
+#include "..\..\..\lib\src\app_info.h"
 IDI_ICON1               ICON    DISCARDABLE     "../icons/mindforger.ico"
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION    1,49,0,0
-PRODUCTVERSION 1,49,0,0
+FILEVERSION    MINDFORGER_VERSION_DWORD
+PRODUCTVERSION MINDFORGER_VERSION_DWORD
 FILEOS 0x0
 FILETYPE VFT_APP
 BEGIN
@@ -11,13 +11,13 @@ BEGIN
     {
         BLOCK "040904E4"
         {
-            VALUE "CompanyName",        "MindForger"
-            VALUE "FileDescription",    "MindForger Thinking Notebook"
-            VALUE "FileVersion",        MINDFORGER_VERSION
-            VALUE "LegalCopyright",     "\xA9 2019 Martin Dvorak. All Rights Reserved"
-            VALUE "OriginalFilename",   "mindforger.exe"
-            VALUE "ProductName",        "MindForger"
-            VALUE "ProductVersion",     MINDFORGER_VERSION
+            VALUE "CompanyName",        MINDFORGER_APP_COMPANY
+            VALUE "FileDescription",    MINDFORGER_APP_DESCIPTION
+            VALUE "FileVersion",        MINDFORGER_VERSION_STRING
+            VALUE "LegalCopyright",     MINDFORGER_APP_LEGAL
+            VALUE "OriginalFilename",   MINDFORGER_APP_EXE
+            VALUE "ProductName",        MINDFORGER_APP_NAME
+            VALUE "ProductVersion",     MINDFORGER_VERSION_STRING
         }
     }
     BLOCK "VarFileInfo"
