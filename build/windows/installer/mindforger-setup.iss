@@ -2,7 +2,6 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #include "..\..\..\lib\src\app_info.h"
-#define MyAppExeName "mindforger.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -18,8 +17,8 @@ AppSupportURL={#MINDFORGER_APP_URL}
 AppUpdatesURL={#MINDFORGER_APP_URL}
 DefaultDirName={pf}\{#MINDFORGER_APP_NAME}
 DefaultGroupName={#MINDFORGER_APP_NAME}
-LicenseFile=C:\git\mindforger\LICENSE
-OutputDir=C:\git\mindforger\app\release\installer
+LicenseFile=..\..\..\LICENSE
+OutputDir=..\..\..\app\release\installer
 OutputBaseFilename=mindforger-setup
 Compression=lzma
 SolidCompression=yes
