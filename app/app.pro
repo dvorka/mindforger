@@ -50,11 +50,16 @@ INCLUDEPATH += $$PWD/../lib/src
 DEPENDPATH += $$PWD/../lib/src
 
 # -L where to look for library, -l link the library
-!win32: LIBS += -L$$OUT_PWD/../lib -lmindforger
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../lib/release -lmindforger
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/debug -lmindforger
 
-#TODO: remove after resolving issue with build with cmark on windows
+win32 {
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../lib/release -lmindforger
+    else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/debug -lmindforger
+} else {
+    #linux, macos
+    LIBS += -L$$OUT_PWD/../lib -lmindforger
+}
+
+#TODO: remove after resolving issue with build with cmark on linux
 !win32:!mfnomd2html {
   CONFIG += mfmd2htmldiscount
 }
@@ -84,10 +89,14 @@ mfner {
   # MF links MITIE for AI/NLP/DL
   LIBS += -L$$OUT_PWD/../deps/mitie/mitielib -lmitie
 }
+
 # zlib
-!win32: LIBS += -lz
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibwapi
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibwapi
+win32 {
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibwapi
+    else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibwapi
+} else {
+    LIBS += -lz
+}
 
 win32 {
     LIBS += -lRpcrt4 -lOle32
@@ -106,15 +115,16 @@ win32 {
 # - GCC: -std=c++0x ~ -std=c++11
 
 # compiler options (qmake CONFIG+=mfnoccache ...)
-!win32 {
+win32{
+    QMAKE_CXXFLAGS += /MP
+} else {
+    # linux and macos
     mfnoccache {
       QMAKE_CXX = g++
     } else:!mfnocxx {
       QMAKE_CXX = ccache g++
     }
     QMAKE_CXXFLAGS += -pedantic -std=c++11
-} else {
-    QMAKE_CXXFLAGS += /MP
 }
 # profiling: instrument code for gprof
 #QMAKE_CXXFLAGS_DEBUG *= -pg
@@ -307,6 +317,7 @@ SOURCES += \
 win32|macx|mfwebengine {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp
 }
+
 mfner {
     SOURCES += \
     src/qt/dialogs/ner_choose_tag_types_dialog.cpp \
@@ -363,6 +374,7 @@ macx {
 }
 
 win32 {
+    # icon and exe detail information
     RC_FILE = $$PWD/resources/windows/mindforger.rc
 }
 # eof

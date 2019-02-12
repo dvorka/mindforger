@@ -28,9 +28,12 @@ INCLUDEPATH += $$PWD/../../../lib/src
 DEPENDPATH += $$PWD/../../../lib/src
 
 # -L where to look for library, -l link the library
-!win32: LIBS += -L$$OUT_PWD/../../../lib -lmindforger
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../release -lmindforger
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../debug -lmindforger
+win32 {
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../../release -lmindforger
+    else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../debug -lmindforger
+} else {
+    LIBS += -L$$OUT_PWD/../../../lib -lmindforger
+}
 
 #TODO: remove after resolving issue with build with cmark on windows
 !win32:!mfnomd2html {
@@ -48,7 +51,8 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../debug -lmindforge
         LIBS += -L$$PWD/../../../deps/cmark-gfm/build/src/Debug -lcmark-gfm_static
         LIBS += -L$$PWD/../../../deps/cmark-gfm/build/extensions/Debug -lcmark-gfm-extensions_static
     }
-  } else:mfmd2htmldiscount {
+  } else {
+    mfmd2htmldiscount {
       # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
       LIBS += -L$$OUT_PWD/../../../deps/discount -ldiscount
     } else {
@@ -56,13 +60,17 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../debug -lmindforge
       LIBS += -L$$PWD/../../../deps/cmark-gfm/build/src -lcmark-gfm
       LIBS += -L$$PWD/../../../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions
     }
+  }
 }
 
 
 # zlib
-!win32: LIBS += -lz
-win32:CONFIG(release, debug|release): LIBS += -Lc:/libs/zlib/lib/ -lzlibwapi
-else:win32:CONFIG(debug, debug|release): LIBS += -Lc:/libs/zlib/lib/ -lzlibwapi
+win32 {
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibwapi
+    else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibwapi
+} else {
+    LIBS += -lz
+}
 
 #
 win32 {
@@ -86,16 +94,18 @@ win32 {
 }
 
 # compiler options
-!win32 {
+win32{
+    QMAKE_CXXFLAGS += /MP
+} else {
+    # linux and macos
     mfnoccache {
       QMAKE_CXX = g++
     } else:!mfnocxx {
       QMAKE_CXX = ccache g++
     }
-    QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
-} else {
-    QMAKE_CXXFLAGS += /MP
+    QMAKE_CXXFLAGS += -pedantic -std=c++11
 }
+
 SOURCES += \
     ./gear/datetime_test.cpp \
     ./gear/string_utils_test.cpp \

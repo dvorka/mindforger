@@ -45,6 +45,12 @@ mfnomd2html {
   }
 }
 
+#zlib on windows
+win32 {
+ INCLUDEPATH += $$PWD/../../../libs/zlib/include
+ DEPENDPATH += $$PWD/../../../libs/zlib/include
+}
+
 mfner {
     DEFINES += MF_NER
     INCLUDEPATH += $$PWD/../deps/mitie/mitielib/include
@@ -55,15 +61,17 @@ mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
 }
 
-!win32 {
+# compiler options (qmake CONFIG+=mfnoccache ...)
+win32{
+    QMAKE_CXXFLAGS += /MP
+} else {
+    # linux and macos
     mfnoccache {
       QMAKE_CXX = g++
     } else:!mfnocxx {
       QMAKE_CXX = ccache g++
     }
-    QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
-} else {
-    QMAKE_CXXFLAGS += /MP
+    QMAKE_CXXFLAGS += -pedantic -std=c++11
 }
 
 SOURCES += \
@@ -270,7 +278,3 @@ win32 {
     ../build/windows/strptime/strptime.c
 }
 
-win32 {
- INCLUDEPATH += $$PWD/../../../libs/zlib/include
- DEPENDPATH += $$PWD/../../../libs/zlib/include
-}
