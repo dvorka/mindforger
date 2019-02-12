@@ -1,0 +1,48 @@
+version: 1.49.{build}
+
+skip_commits:
+  files:
+    - '**/*.md'
+
+environment:
+   - m8r_repository: "{APPVEYOR_BUILD_FOLDER}"
+
+image: Visual Studio 2017
+
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+
+# build platform, i.e. x86, x64, Any CPU. This setting is optional.
+platform: x64
+
+
+# build Configuration, i.e. Debug, Release, etc.
+configuration: Release
+
+install:
+  - set QT_DIR=C:\Qt\5.9.7\msvc2017_64
+  - set PATH=%PATH%;%QTDIR%\bin
+  - set M8R_HOME=%APPVEYOR_BUILD_FOLDER%
+
+build_script:
+ - echo m8r_repository var: {m8r_repository}
+ - echo m8r_repository env var: %M8R_HOME%
+ - cd
+ - cd deps\cmark-gfm
+ - cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF ..
+ - cmake --build . --config Release -- /m
+ - cmake --build . --config Debug -- /m 
+ - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+ - qmake -r mindforger.pro
+ - nmake
+
+before_test:
+ - cd lib\test
+ - qmake -r mindforger-lib-unit-tests.pro "CONFIG+=debug" "CONFIG+=mfdebug" "CONFIG+=mfunit"
+ - nmake
+
+test_script:
+ - set M8R_GIT_PATH=%M8R_HOME%
+ - %M8R_HOME%\lib\test\src\debug\mindforger-lib-unit-tests.exe
