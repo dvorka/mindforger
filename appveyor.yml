@@ -26,6 +26,10 @@ install:
   - set PATH=%PATH%;%QTDIR%\bin
   - set M8R_HOME=%APPVEYOR_BUILD_FOLDER%
 
+before_build:
+ - git submodule init
+ - git submodule update
+
 build_script:
  - echo m8r_repository var: "{m8r_repository}"
  - echo m8r_repository env var: "%M8R_HOME%"
