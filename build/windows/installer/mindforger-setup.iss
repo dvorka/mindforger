@@ -36,7 +36,7 @@ Source: "..\..\..\\app\release\mindforger.exe"; DestDir: "{app}\bin"; Flags: ign
 Source: "c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.14.26405\vcredist_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Source: "..\..\..\app\release\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs
 Source: "..\..\..\doc\*"; DestDir: "{app}\Resources\mindforger-repository"; Flags: recursesubdirs
-Source: "..\..\..\..\..\libs\zlib\lib\zlibwapi.dll"; DestDir: "{app}\bin"
+Source: "..\..\..\deps\zlib-win\lib\zlibwapi.dll"; DestDir: "{app}\bin"
 
 [Icons]
 Name: "{group}\{#MINDFORGER_APP_NAME}"; Filename: "{app}\bin\{#MINDFORGER_APP_EXE}"
