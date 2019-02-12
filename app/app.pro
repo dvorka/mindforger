@@ -92,8 +92,11 @@ mfner {
 
 # zlib
 win32 {
-    CONFIG(release, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibwapi
-    else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibwapi
+    INCLUDEPATH += $$PWD/../deps/zlib-win/include
+    DEPENDPATH += $$PWD/../deps/zlib-win/include
+    
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../deps/zlib-win/lib/ -lzlibwapi
+    else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../deps/zlib-win/lib/ -lzlibwapi
 } else {
     LIBS += -lz
 }
@@ -101,12 +104,6 @@ win32 {
 win32 {
     LIBS += -lRpcrt4 -lOle32
 }
-#TODO make path somehow parametrizable
-win32 {
- INCLUDEPATH += $$PWD/../../../libs/zlib/include
- DEPENDPATH += $$PWD/../../../libs/zlib/include
-}
-
 # development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1
 # - S7    64b:   GCC 4.8.5, Qt 5.2.1

@@ -66,8 +66,11 @@ win32 {
 
 # zlib
 win32 {
-    CONFIG(release, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibwapi
-    else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibwapi
+    INCLUDEPATH += $$PWD/../../../deps/zlib-win/include
+    DEPENDPATH += $$PWD/../../../deps/zlib-win/include
+
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../../../deps/zlib-win/lib/ -lzlibwapi
+    else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../deps/zlib-win/lib/ -lzlibwapi
 } else {
     LIBS += -lz
 }
@@ -75,12 +78,6 @@ win32 {
 #
 win32 {
     LIBS += -lRpcrt4 -lOle32 -lShell32
-}
-
-#TODO make path somehow parametrizable
-win32 {
-    INCLUDEPATH +=  C:/libs/zlib/include
-    DEPENDPATH +=  C:/libs/zlib/include
 }
 
 # GTest unit test framework library dependencies

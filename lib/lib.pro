@@ -47,8 +47,8 @@ mfnomd2html {
 
 #zlib on windows
 win32 {
- INCLUDEPATH += $$PWD/../../../libs/zlib/include
- DEPENDPATH += $$PWD/../../../libs/zlib/include
+ INCLUDEPATH += $$PWD/../deps/zlib-win/include
+ DEPENDPATH += $$PWD/../deps/zlib-win/include
 }
 
 mfner {
