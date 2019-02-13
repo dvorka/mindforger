@@ -57,7 +57,7 @@ build_script:
  - nmake
  - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
  - dir "c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC"
- - '"C:\Program Files (x86)\Inno Setup 5\iscc.exe /Qp build\windows\installer\mindforger-setup.iss'
+ - '"C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Qp build\windows\installer\mindforger-setup.iss'
 
 before_test:
  - cd "%M8R_HOME%\lib\test"
