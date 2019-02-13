@@ -28,6 +28,7 @@ install:
  - mkdir temp
  - cd temp
  - curl -LfSs -o gtest.zip https://github.com/google/googletest/archive/release-1.8.1.zip
+ - 7z x gtest.zip
  - cd googletest-release-1.8.1
  - mkdir build
  - cd build
