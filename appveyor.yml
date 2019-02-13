@@ -35,7 +35,9 @@ build_script:
  - echo m8r_repository env var: "%M8R_HOME%"
  - cd
  - cd deps
- - cd cmark-gfm
+ - dir
+ - cd 'cmark-gfm'
+ - dir
  - cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF ..
  - cmake --build . --config Release -- /m
  - cmake --build . --config Debug -- /m 
