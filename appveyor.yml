@@ -55,6 +55,9 @@ build_script:
  - cd "%M8R_HOME%"
  - qmake -r mindforger.pro
  - nmake
+ - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
+ - dir "c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC"
+ - '"C:\Program Files (x86)\Inno Setup 5\iscc.exe /Qp build\windows\installer\mindforger-setup.iss'
 
 before_test:
  - cd "%M8R_HOME%\lib\test"
@@ -63,4 +66,16 @@ before_test:
 
 test_script:
  - set M8R_GIT_PATH=%M8R_HOME%
- - '%M8R_HOME%\lib\test\src\debug\mindforger-lib-unit-tests.exe'
+ - set PATH=%PATH%;%M8R_HOME%\deps\zlib-win\lib
+ - cd "%M8R_HOME%" 
+ - lib\test\src\debug\mindforger-lib-unit-tests.exe >temp\mindforger-unit-tests.log 2>&1
+ - ps: Get-Content $env:temp\mindforger-unit-tests.log -Wait -Tail 20
+
+artifacts:
+  - path: app\release\installer\mindforger-setup.exe
+    name: Installer
+
+  - path: temp\mindforger-unit-tests.log
+    name: Test log
+    type: zip
+
