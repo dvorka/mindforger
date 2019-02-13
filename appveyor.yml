@@ -22,13 +22,23 @@ platform: x64
 configuration: Release
 
 install:
-  - set QT_DIR=C:\Qt\5.9.7\msvc2017_64
-  - set PATH=%PATH%;%QT_DIR%\bin
-  - set M8R_HOME=%APPVEYOR_BUILD_FOLDER%
+ - set QT_DIR=C:\Qt\5.9.7\msvc2017_64
+ - set PATH=%PATH%;%QT_DIR%\bin
+ - set M8R_HOME=%APPVEYOR_BUILD_FOLDER%
+ - mkdir temp
+ - cd temp
+ - curl -LfSs -o gtest.zip https://github.com/google/googletest/archive/release-1.8.1.zip
+ - cd googletest-release-1.8.1
+ - mkdir build
+ - cd build
+ - cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -Dgtest_build_samples=OFF -Dgtest_build_tests=OFF -Dgmock_build_tests=OFF -Dgtest_force_shared_crt=ON ..
+ - cmake --build . --config Debug -- /m
+ - cmake -DBUILD_TYPE=Debug -P cmake_install.cmake  
 
 before_build:
  - git submodule init
  - git submodule update
+
 
 build_script:
  - echo m8r_repository var: "{m8r_repository}"
@@ -47,7 +57,6 @@ build_script:
 
 before_test:
  - cd lib\test
- - cd
  - qmake -r mindforger-lib-unit-tests.pro "CONFIG+=debug" "CONFIG+=mfdebug" "CONFIG+=mfunit"
  - nmake
 
