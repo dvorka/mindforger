@@ -55,9 +55,9 @@ build_script:
  - cd "%M8R_HOME%"
  - qmake -r mindforger.pro
  - nmake
- - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
- - dir "c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC"
- - '"C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Qp build\windows\installer\mindforger-setup.iss'
+# - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
+# - dir "c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC"
+# - '"C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Qp build\windows\installer\mindforger-setup.iss'
 
 before_test:
  - cd "%M8R_HOME%\lib\test"
@@ -72,8 +72,8 @@ test_script:
  - ps: Get-Content $env:temp\mindforger-unit-tests.log -Wait -Tail 20
 
 artifacts:
-  - path: app\release\installer\mindforger-setup.exe
-    name: Installer
+#  - path: app\release\installer\mindforger-setup.exe
+#    name: Installer
 
   - path: temp\mindforger-unit-tests.log
     name: Test log
