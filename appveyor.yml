@@ -56,7 +56,7 @@ build_script:
  - qmake -r mindforger.pro
  - nmake
 # - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
-# - dir "c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC"
+ - tree "c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC"
 # - '"C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Qp build\windows\installer\mindforger-setup.iss'
 
 before_test:
