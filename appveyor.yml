@@ -36,7 +36,7 @@ build_script:
  - cd
  - cd deps
  - dir
- - cd 'cmark-gfm'
+ - cd "cmark-gfm"
  - dir
  - cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF ..
  - cmake --build . --config Release -- /m
