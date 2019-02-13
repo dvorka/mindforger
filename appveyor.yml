@@ -23,7 +23,7 @@ configuration: Release
 
 install:
   - set QT_DIR=C:\Qt\5.9.7\msvc2017_64
-  - set PATH=%PATH%;%QTDIR%\bin
+  - set PATH=%PATH%;%QT_DIR%\bin
   - set M8R_HOME=%APPVEYOR_BUILD_FOLDER%
 
 before_build:
