@@ -33,11 +33,9 @@ before_build:
 build_script:
  - echo m8r_repository var: "{m8r_repository}"
  - echo m8r_repository env var: "%M8R_HOME%"
- - cd
- - cd deps
- - dir
- - cd "cmark-gfm"
- - dir
+ - cd deps\cmark-gfm
+ - mkdir build
+ - cd build
  - cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF ..
  - cmake --build . --config Release -- /m
  - cmake --build . --config Debug -- /m 
@@ -48,7 +46,7 @@ build_script:
  - nmake
 
 before_test:
- - cd 'lib\test'
+ - cd lib\test
  - cd
  - qmake -r mindforger-lib-unit-tests.pro "CONFIG+=debug" "CONFIG+=mfdebug" "CONFIG+=mfunit"
  - nmake
