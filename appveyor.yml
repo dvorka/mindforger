@@ -37,6 +37,7 @@ install:
  - cmake -DBUILD_TYPE=Debug -P cmake_install.cmake  
 
 before_build:
+ - cd "%M8R_HOME%"
  - git submodule init
  - git submodule update
 
@@ -44,7 +45,7 @@ before_build:
 build_script:
  - echo m8r_repository var: "{m8r_repository}"
  - echo m8r_repository env var: "%M8R_HOME%"
- - cd deps\cmark-gfm
+ - cd "%M8R_HOME%\deps\cmark-gfm"
  - mkdir build
  - cd build
  - cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF ..
@@ -52,12 +53,11 @@ build_script:
  - cmake --build . --config Debug -- /m 
  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
  - cd "%M8R_HOME%"
- - cd
  - qmake -r mindforger.pro
  - nmake
 
 before_test:
- - cd lib\test
+ - cd "%M8R_HOME%\lib\test"
  - qmake -r mindforger-lib-unit-tests.pro "CONFIG+=debug" "CONFIG+=mfdebug" "CONFIG+=mfunit"
  - nmake
 
