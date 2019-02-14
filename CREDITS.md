@@ -20,7 +20,8 @@ Big thanks to 3rd party FOSS content authors:
 * AMS and SIAM (MathJax.js - math rendering in HTML)
 * Ivan Sagalaev (Highlight.js - source code syntax highlighting)
 * Danny Allen (Primary icon theme store.kde.com - icons)
-* Travis CI (travis-ci.org - continous integration tests and builds infrastructure)
+* Travis CI (travis-ci.org - continous integration tests and builds infra - Ubuntu, macOS)
+* AppVeyor CI (appveyor.com - continous integration tests and builds infra - Windows
 * Raimund Hocke (SikuliX - GUI automation testing)
 * Lewis Van Winkle (GENANN - minimal neural network - library)
 * Oleander Software (Oleander stemming library - stemmer - library)
