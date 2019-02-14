@@ -6,7 +6,6 @@ skip_commits:
 
 environment:
    m8r_repository: "{APPVEYOR_BUILD_FOLDER}"
-   APPVEYOR_RDP_PASSWORD: "W3lcome_1"
 
 image: Visual Studio 2017
 
@@ -48,8 +47,8 @@ before_build:
 
 
 build_script:
- - cmd: ECHO m8r_repository var: "{m8r_repository}"
- - cmd: ECHO m8r_repository env var: "%M8R_HOME%"
+ - ECHO m8r_repository var - "{m8r_repository}"
+ - ECHO m8r_repository env var - "%M8R_HOME%"
  - cd "%M8R_HOME%\deps\cmark-gfm"
  - mkdir build
  - cd build
