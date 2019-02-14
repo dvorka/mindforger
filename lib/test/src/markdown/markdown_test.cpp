@@ -849,7 +849,13 @@ TEST(MarkdownParserTestCase, Deadline)
     EXPECT_EQ(2, o->getNotesCount());
 
     cout << endl << "Deadline: " << o->getNotes()[0]->getDeadline();
-    EXPECT_EQ(1289564055, o->getNotes()[0]->getDeadline());
+#ifdef _WIN32
+    tm deadLineDate = { 15,14,13,12,10,110, 0, 0, 0 };
+#else
+    tm deadLineDate = { 15,14,13,12,10,110, 0, 0, 0, 0, 0 };
+#endif // _WIN32
+    time_t deadLine = mktime(&deadLineDate);
+    EXPECT_EQ(deadLine, o->getNotes()[0]->getDeadline());
 
     // serialize
     string* serialized = mdr.to(o);
