@@ -2,9 +2,9 @@
 
 This is a copy of Windows port of Zlib 1.2.3.
 
-Header files in the `include` folder were taken from [Zlib dev package](http://gnuwin32.sourceforge.net/downlinks/zlib-lib-zip.php).  
+**Header files** in the `include` folder were taken from [Zlib dev package](http://gnuwin32.sourceforge.net/downlinks/zlib-lib-zip.php).  
 
-`include/zconf.h` was patched to fix compilation on Windows, using the following diff:
+Configuration header `include/zconf.h` was patched to fix compilation on Windows - diff:
 ```
   289,294c289,291
   < #  if not defined(WINDOWS) && not defined(WIN32)
@@ -22,5 +22,4 @@ Header files in the `include` folder were taken from [Zlib dev package](http://g
 
 ```
 
-Binaries in the `lib` folder were taken from [64-bit build of Zlib](http://www.winimage.com/zLibDll/zlib123dllx64.zip) 
-
+**Binaries** in the `lib` folder were taken from [64-bit build of Zlib](http://www.winimage.com/zLibDll/zlib123dllx64.zip).
