@@ -33,7 +33,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "..\..\..\\app\release\mindforger.exe"; DestDir: "{app}\bin"; Flags: ignoreversion 64bit
-Source: "c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.14.26405\vcredist_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
+Source: "{#VcRedistPath}"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Source: "..\..\..\app\release\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs
 Source: "..\..\..\doc\*"; DestDir: "{app}\Resources\mindforger-repository"; Flags: recursesubdirs
 Source: "..\..\..\deps\zlib-win\lib\zlibwapi.dll"; DestDir: "{app}\bin"

@@ -13,7 +13,7 @@ if "%ERRORLEVEL%" neq "0" goto :err
 echo ====================================
 echo Building MindForger installer
 echo ====================================
-"%MF_ICSS%" /Qp build\windows\installer\mindforger-setup.iss
+"%MF_ICSS%" /Qp /DVcRedistPath="%VC_REDIST_PATH%" build\windows\installer\mindforger-setup.iss
 if "%ERRORLEVEL%" neq "0" goto :err
 
 :end
