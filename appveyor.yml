@@ -5,7 +5,7 @@ skip_commits:
     - '**/*.md'
 
 environment:
-   m8r_repository: "{APPVEYOR_BUILD_FOLDER}"
+   APPVEYOR_SAVE_CACHE_ON_ERROR: true
 
 image: Visual Studio 2017
 
@@ -21,24 +21,18 @@ platform: x64
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Release
 
-cache: c:\cache
+cache: 
+ - c:\cache
+ - C:\Program Files\googletest-distribution 
 
 install:
  - set QT_DIR=C:\Qt\5.9.7\msvc2017_64
  - set PATH=%PATH%;%QT_DIR%\bin
  - set M8R_HOME=%APPVEYOR_BUILD_FOLDER%
  - if not exist c:\cache mkdir c:\cache
+# on the image vcredist is in C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012 
  - if not exist c:\cache\vcredist_x64.exe  curl -LfSs -o c:\cache\vcredist_x64.exe https://aka.ms/vs/15/release/vc_redist.x64.exe
- - mkdir temp
- - cd temp
- - curl -LfSs -o gtest.zip https://github.com/google/googletest/archive/release-1.8.1.zip
- - 7z x gtest.zip
- - cd googletest-release-1.8.1
- - mkdir build
- - cd build
- - cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -Dgtest_build_samples=OFF -Dgtest_build_tests=OFF -Dgmock_build_tests=OFF -Dgtest_force_shared_crt=ON ..
- - cmake --build . --config Debug -- /m
- - cmake -DBUILD_TYPE=Debug -P cmake_install.cmake  
+ - if not exit C:\Program Files\googletest-distribution cd %TEMP% && curl -LfSs -o gtest.zip https://github.com/google/googletest/archive/release-1.8.1.zip && && 7z x gtest.zip && cd googletest-release-1.8.1 && mkdir build && cd build && cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -Dgtest_build_samples=OFF -Dgtest_build_tests=OFF -Dgmock_build_tests=OFF -Dgtest_force_shared_crt=ON .. && cmake --build . --config Debug -- /m &&  cmake -DBUILD_TYPE=Debug -P cmake_install.cmake  
 
 before_build:
  - cd "%M8R_HOME%"
@@ -47,8 +41,6 @@ before_build:
 
 
 build_script:
- - ECHO m8r_repository var - "{m8r_repository}"
- - ECHO m8r_repository env var - "%M8R_HOME%"
  - cd "%M8R_HOME%\deps\cmark-gfm"
  - mkdir build
  - cd build
@@ -60,23 +52,19 @@ build_script:
  - qmake -r mindforger.pro
  - nmake
  - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
- - tree "c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC"
-#C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012 
- - '"C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Qp /DVcRedistPath=c:\cache\vcredist_x64.exe build\windows\installer\mindforger-setup.iss'
+ - '"C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Q /DVcRedistPath=c:\cache\vcredist_x64.exe build\windows\installer\mindforger-setup.iss'
 
 before_test:
  - cd "%M8R_HOME%\lib\test"
  - qmake -r mindforger-lib-unit-tests.pro "CONFIG+=debug" "CONFIG+=mfdebug" "CONFIG+=mfunit"
  - nmake
-
+ - if not exist c:\tmp mkdir c:\tmp
 test_script:
  - set M8R_GIT_PATH=%M8R_HOME%
  - set PATH=%PATH%;%M8R_HOME%\deps\zlib-win\lib
  - cd "%M8R_HOME%" 
- - lib\test\src\debug\mindforger-lib-unit-tests.exe >temp\mindforger-unit-tests.log 2>&1
-
-after_test:
- - ps: Get-Content $env:temp\mindforger-unit-tests.log -Wait -Tail 20
+ - lib\test\src\debug\mindforger-lib-unit-tests.exe >mindforger-unit-tests.log 2>&1 & set TestExcitCode=%ERRORLEVEL% & exit 0
+ - ps: Get-Content mindforger-unit-tests.log -Wait -Tail 20
 
 artifacts:
   - path: app\release\installer\mindforger-setup.exe
@@ -85,6 +73,9 @@ artifacts:
   - path: temp\mindforger-unit-tests.log
     name: Test log
     type: zip
+
+before_deploy:
+ - cmd: if  "%TestExcitCode%" neq "0" exit %TestExcitCode%
 
 on_finish:
 #  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
