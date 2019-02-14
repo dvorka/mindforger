@@ -45,13 +45,12 @@ build_script:
  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
  - cd "%M8R_HOME%" && qmake -r mindforger.pro && nmake
  - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime && "C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Q /DVcRedistPath=c:\cache\vcredist_x64.exe build\windows\installer\mindforger-setup.iss
- - if "%APPVEYOR_REPO_BRANCH%" eq "master" appveyor PushArtifact app\release\installer\mindforger-setup.exe
+ - if "%APPVEYOR_REPO_BRANCH%" equ "master" appveyor PushArtifact app\release\installer\mindforger-setup.exe
 
 before_test:
- - cd "%M8R_HOME%\lib\test"
- - qmake -r mindforger-lib-unit-tests.pro "CONFIG+=debug" "CONFIG+=mfdebug" "CONFIG+=mfunit"
- - nmake
+ - pushd "%M8R_HOME%\lib\test" && qmake -r mindforger-lib-unit-tests.pro "CONFIG+=debug" "CONFIG+=mfdebug" "CONFIG+=mfunit" && nmake && popd
  - if not exist c:\tmp mkdir c:\tmp
+
 test_script:
  - set M8R_GIT_PATH=%M8R_HOME%
  - set PATH=%PATH%;%M8R_HOME%\deps\zlib-win\lib
@@ -63,4 +62,3 @@ test_script:
 on_finish:
 # also set environment variable for password before uncomenting
 #  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-
