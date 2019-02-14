@@ -32,7 +32,7 @@ install:
  - if not exist c:\cache mkdir c:\cache
 # on the image vcredist is in C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012 
  - if not exist c:\cache\vcredist_x64.exe  curl -LfSs -o c:\cache\vcredist_x64.exe https://aka.ms/vs/15/release/vc_redist.x64.exe
- - if not exist "C:\Program Files\googletest-distribution" cd %TEMP% && curl -LfSs -o gtest.zip https://github.com/google/googletest/archive/release-1.8.1.zip && && 7z x gtest.zip && cd googletest-release-1.8.1 && mkdir build && cd build && cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -Dgtest_build_samples=OFF -Dgtest_build_tests=OFF -Dgmock_build_tests=OFF -Dgtest_force_shared_crt=ON .. && cmake --build . --config Debug -- /m &&  cmake -DBUILD_TYPE=Debug -P cmake_install.cmake  
+ - if not exist "C:\Program Files\googletest-distribution" cd %TEMP% && curl -LfSs -o gtest.zip https://github.com/google/googletest/archive/release-1.8.1.zip && 7z x gtest.zip && cd googletest-release-1.8.1 && mkdir build && cd build && cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -Dgtest_build_samples=OFF -Dgtest_build_tests=OFF -Dgmock_build_tests=OFF -Dgtest_force_shared_crt=ON .. && cmake --build . --config Debug -- /m &&  cmake -DBUILD_TYPE=Debug -P cmake_install.cmake  
 
 before_build:
  - cd "%M8R_HOME%"
