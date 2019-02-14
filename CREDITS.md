@@ -4,7 +4,7 @@ Written by [Martin Dvorak](http://me.mindforger.com).
 
 Acknowledgements to contributors:
 
-* Vlasta 'Saman' Hajek / [Bonitoo.io](https://www.bonitoo.io/) (Windows port)
+* Vlasta 'Šaman' Hajek / [Bonitoo.io](https://www.bonitoo.io/) (Windows port)
 
 Big thanks to 3rd party FOSS content authors:
 
