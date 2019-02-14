@@ -22,10 +22,14 @@ platform: x64
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Release
 
+cache: c:\cache
+
 install:
  - set QT_DIR=C:\Qt\5.9.7\msvc2017_64
  - set PATH=%PATH%;%QT_DIR%\bin
  - set M8R_HOME=%APPVEYOR_BUILD_FOLDER%
+ - if not exist c:\cache mkdir c:\cache
+ - if not exist c:\cache\vcredist_x64.exe  curl -LfSs -o c:\cache\vcredist_x64.exe https://aka.ms/vs/15/release/vc_redist.x64.exe
  - mkdir temp
  - cd temp
  - curl -LfSs -o gtest.zip https://github.com/google/googletest/archive/release-1.8.1.zip
@@ -44,8 +48,8 @@ before_build:
 
 
 build_script:
- - echo m8r_repository var: "{m8r_repository}"
- - echo m8r_repository env var: "%M8R_HOME%"
+ - cmd: ECHO m8r_repository var: "{m8r_repository}"
+ - cmd: ECHO m8r_repository env var: "%M8R_HOME%"
  - cd "%M8R_HOME%\deps\cmark-gfm"
  - mkdir build
  - cd build
@@ -56,9 +60,10 @@ build_script:
  - cd "%M8R_HOME%"
  - qmake -r mindforger.pro
  - nmake
-# - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
+ - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
  - tree "c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC"
-# - '"C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Qp build\windows\installer\mindforger-setup.iss'
+#C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012 
+ - '"C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Qp /DVcRedistPath=c:\cache\vcredist_x64.exe build\windows\installer\mindforger-setup.iss'
 
 before_test:
  - cd "%M8R_HOME%\lib\test"
@@ -70,16 +75,18 @@ test_script:
  - set PATH=%PATH%;%M8R_HOME%\deps\zlib-win\lib
  - cd "%M8R_HOME%" 
  - lib\test\src\debug\mindforger-lib-unit-tests.exe >temp\mindforger-unit-tests.log 2>&1
+
+after_test:
  - ps: Get-Content $env:temp\mindforger-unit-tests.log -Wait -Tail 20
 
 artifacts:
-#  - path: app\release\installer\mindforger-setup.exe
-#    name: Installer
+  - path: app\release\installer\mindforger-setup.exe
+    name: mindforger-setup.exe
 
   - path: temp\mindforger-unit-tests.log
     name: Test log
     type: zip
 
 on_finish:
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
