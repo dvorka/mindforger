@@ -64,7 +64,7 @@ test_script:
  - set PATH=%PATH%;%M8R_HOME%\deps\zlib-win\lib
  - cd "%M8R_HOME%" 
  - lib\test\src\debug\mindforger-lib-unit-tests.exe >mindforger-unit-tests.log 2>&1 & set TestExcitCode=%ERRORLEVEL% & exit 0
- - ps: Get-Content mindforger-unit-tests.log -Wait -Tail 20
+ - ps: Get-Content mindforger-unit-tests.log -Tail 20
 
 artifacts:
   - path: app\release\installer\mindforger-setup.exe
