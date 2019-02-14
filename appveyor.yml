@@ -41,18 +41,11 @@ before_build:
 
 
 build_script:
- - cd "%M8R_HOME%\deps\cmark-gfm"
- - mkdir build
- - cd build
- - cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF ..
- - cmake --build . --config Release -- /m
- - cmake --build . --config Debug -- /m 
+ - pushd "%M8R_HOME%\deps\cmark-gfm" && mkdir build && cd build && cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . --config Release -- /m && cmake --build . --config Debug -- /m && popd
  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
- - cd "%M8R_HOME%"
- - qmake -r mindforger.pro
- - nmake
- - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
- - '"C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Q /DVcRedistPath=c:\cache\vcredist_x64.exe build\windows\installer\mindforger-setup.iss'
+ - cd "%M8R_HOME%" && qmake -r mindforger.pro && nmake
+ - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime && "C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Q /DVcRedistPath=c:\cache\vcredist_x64.exe build\windows\installer\mindforger-setup.iss
+ - if "%APPVEYOR_REPO_BRANCH%" eq "master" appveyor PushArtifact app\release\installer\mindforger-setup.exe
 
 before_test:
  - cd "%M8R_HOME%\lib\test"
@@ -65,18 +58,9 @@ test_script:
  - cd "%M8R_HOME%" 
  - lib\test\src\debug\mindforger-lib-unit-tests.exe >mindforger-unit-tests.log 2>&1 & set TestExcitCode=%ERRORLEVEL% & exit 0
  - ps: Get-Content mindforger-unit-tests.log -Tail 20
-
-artifacts:
-  - path: app\release\installer\mindforger-setup.exe
-    name: mindforger-setup.exe
-
-  - path: mindforger-unit-tests.log
-    name: Test log
-    type: zip
-
-before_deploy:
- - cmd: if  "%TestExcitCode%" neq "0" exit %TestExcitCode%
+ - if "%TestExcitCode%" neq "0" appveyor PushArtifact mindforger-unit-tests.log & exit 1
 
 on_finish:
+# also set environment variable for password before uncomenting
 #  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
