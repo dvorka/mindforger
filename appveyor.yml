@@ -6,7 +6,6 @@ skip_commits:
 
 environment:
    APPVEYOR_SAVE_CACHE_ON_ERROR: true
-   APPVEYOR_RDP_PASSWORD: "W3lcome_1"
 
 image: Visual Studio 2017
 
@@ -53,15 +52,20 @@ before_test:
  - if not exist c:\tmp mkdir c:\tmp
 
 test_script:
- - set M8R_GIT_PATH=%M8R_HOME%
- - set PATH=%PATH%;%M8R_HOME%\deps\zlib-win\lib
- - cd "%M8R_HOME%" 
- - lib\test\src\debug\mindforger-lib-unit-tests.exe --gtest_output=xml:tests.xml >mindforger-unit-tests.log & set TestExitCode=%ERRORLEVEL% & exit 0
- - ps: Get-Content mindforger-unit-tests.log -Tail 20
- - ps: (new-object net.webclient).UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\tests.xml))
- - echo  Test exit code - "%TestExitCode%"
- - if "%TestExitCode%" neq "0 " appveyor PushArtifact mindforger-unit-tests.log & exit 1
+ - ps: |
+     $env:M8R_GIT_PATH=$env:M8R_HOME
+     $env:PATH+=";$env:M8R_HOME\deps\zlib-win\lib"
+     cd $env:M8R_HOME
+     & lib\test\src\debug\mindforger-lib-unit-tests.exe --gtest_output=xml:tests.xml >mindforger-unit-tests.log 2>&1
+     $TestExitCode=$LastExitCode
+     Get-Content mindforger-unit-tests.log -Tail 20
+     (new-object net.webclient).UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\tests.xml))
+     Write-Output "Test exit code: $TestExitCode"
+     if ($TestExitCode -ne 0) {
+       Push-AppveyorArtifact mindforger-unit-tests.log -Type zip
+       throw "Exec: tests failed" 
+     }
 
 on_finish:
-# also set environment variable for password before uncommenting
- - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+# also set APPVEYOR_RDP_PASSWORD environment variable for password before uncommenting
+# - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
