@@ -6,6 +6,7 @@ skip_commits:
 
 environment:
    APPVEYOR_SAVE_CACHE_ON_ERROR: true
+   APPVEYOR_RDP_PASSWORD: "W3lcome_1"
 
 image: Visual Studio 2017
 
@@ -58,8 +59,9 @@ test_script:
  - lib\test\src\debug\mindforger-lib-unit-tests.exe --gtest_output=xml:tests.xml >mindforger-unit-tests.log & set TestExitCode=%ERRORLEVEL% & exit 0
  - ps: Get-Content mindforger-unit-tests.log -Tail 20
  - ps: (new-object net.webclient).UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\tests.xml))
- - if %TestExitCode% neq 0 appveyor PushArtifact mindforger-unit-tests.log & exit 1
+ - echo  Test exit code - "%TestExitCode%"
+ - if "%TestExitCode%" neq "0 " appveyor PushArtifact mindforger-unit-tests.log & exit 1
 
 on_finish:
-# also set environment variable for password before uncomenting
-#  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+# also set environment variable for password before uncommenting
+ - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
