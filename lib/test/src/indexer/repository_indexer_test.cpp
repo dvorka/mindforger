@@ -36,7 +36,7 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     string repositoryPath, directoryName, fileName;
 
     // MF repository
-    repositoryPath.assign("/lib/test/resources/basic-repository");
+    repositoryPath.assign(FILE_PATH_SEPARATOR + m8r::platformSpecificPath("lib/test/resources/basic-repository"));
     repositoryPath.insert(0, getMindforgerGitHomePath());
     m8r::Repository* r = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     ASSERT_NE(nullptr, r);
@@ -47,7 +47,7 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     delete r;
 
     // MD repository
-    repositoryPath.assign("/lib/test/resources/basic-repository/memory");
+    repositoryPath.assign(FILE_PATH_SEPARATOR + m8r::platformSpecificPath("lib/test/resources/basic-repository/memory"));
     repositoryPath.insert(0, getMindforgerGitHomePath());
     r = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     ASSERT_NE(nullptr, r);
@@ -58,9 +58,9 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     delete r;
 
     // MF file
-    repositoryPath.assign("/lib/test/resources/basic-repository/memory/flat-metadata.md");
+    repositoryPath.assign(FILE_PATH_SEPARATOR + m8r::platformSpecificPath("lib/test/resources/basic-repository/memory/flat-metadata.md"));
     repositoryPath.insert(0, getMindforgerGitHomePath());
-    directoryName.assign("/lib/test/resources/basic-repository/memory");
+    directoryName.assign(FILE_PATH_SEPARATOR + m8r::platformSpecificPath("lib/test/resources/basic-repository/memory"));
     directoryName.insert(0, getMindforgerGitHomePath());
     fileName.assign("flat-metadata.md");
     r = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
@@ -72,9 +72,9 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     delete r;
 
     // MD file
-    repositoryPath.assign("/lib/test/resources/basic-repository/memory/no-metadata.md");
+    repositoryPath.assign(FILE_PATH_SEPARATOR + m8r::platformSpecificPath("lib/test/resources/basic-repository/memory/no-metadata.md"));
     repositoryPath.insert(0, getMindforgerGitHomePath());
-    directoryName.assign("/lib/test/resources/basic-repository/memory");
+    directoryName.assign(FILE_PATH_SEPARATOR + m8r::platformSpecificPath("lib/test/resources/basic-repository/memory"));
     directoryName.insert(0, getMindforgerGitHomePath());
     fileName.assign("no-metadata.md");
     r = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
@@ -89,11 +89,11 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
 
 TEST(RepositoryIndexerTestCase, MindForgerRepository)
 {
-    string repositoryPath{"/tmp/mf-unit-repository-indexer-mf"};
+    string repositoryPath{m8r::platformSpecificPath("/tmp/mf-unit-repository-indexer-mf")};
     map<string,string> pathToContent;
     string path, content;
 
-    path.assign(repositoryPath+"/memory/first.md");
+    path.assign(repositoryPath + FILE_PATH_SEPARATOR + m8r::platformSpecificPath("memory/first.md"));
     content.assign(
         "# First Outline"
         "\n"
@@ -107,7 +107,7 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
         "\n");
     pathToContent[path] = content;
 
-    path.assign(repositoryPath+"/memory/second.md");
+    path.assign(repositoryPath+ FILE_PATH_SEPARATOR + m8r::platformSpecificPath("memory/second.md"));
     content.assign(
         "# Second Outline"
         "\n"
@@ -143,7 +143,7 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
     // test that metadata ARE written
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
-    config.setConfigFilePath("/tmp/cfg-ritc-mfr.md");
+    config.setConfigFilePath(m8r::platformSpecificPath("/tmp/cfg-ritc-mfr.md"));
     config.setActiveRepository(config.addRepository(repository));
     m8r::Mind mind(config);
     mind.learn();
@@ -180,14 +180,18 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
 
 TEST(RepositoryIndexerTestCase, MarkdownRepository)
 {
-    string repositoryPath{"/tmp/mf-unit-repository-indexer-md"};
+    string repositoryPath{m8r::platformSpecificPath("/tmp/mf-unit-repository-indexer-md")};
     string path, content;
 
     m8r::removeDirectoryRecursively(repositoryPath.c_str());
+#ifdef _WIN32
+    int e = _mkdir(repositoryPath.c_str());
+#else
     int e = mkdir(repositoryPath.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+#endif // _WIN32
     ASSERT_EQ(0, e);
 
-    path.assign(repositoryPath+"/first.md");
+    path.assign(repositoryPath+ FILE_PATH_SEPARATOR + "first.md");
     content.assign(
         "# First Markdown"
         "\n"
@@ -235,7 +239,7 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
     // test that metadata ARE written
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
-    config.setConfigFilePath("/tmp/cfg-ritc-mr.md");
+    config.setConfigFilePath(m8r::platformSpecificPath("/tmp/cfg-ritc-mr.md"));
     config.setActiveRepository(config.addRepository(repository));
     m8r::Mind mind(config);
     mind.learn();
@@ -274,10 +278,10 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
 
 TEST(RepositoryIndexerTestCase, MindForgerFile)
 {
-    string repositoryPath{"/tmp"};
+    string repositoryPath{m8r::platformSpecificPath("/tmp")};
     string fileName{"repository-indexer-single-mf-file.md"};
     string content;
-    string filePath{repositoryPath+"/"+fileName};
+    string filePath{repositoryPath+FILE_PATH_SEPARATOR+fileName};
 
     content.assign(
         "# First Outline <!-- Metadata: type: Outline; created: 2017-02-02 06:31:09; reads: 35; read: 2018-01-07 08:05:58; revision: 36; modified: 2018-01-07 08:06:05; importance: 0/5; urgency: 0/5; progress: 0%; -->"
@@ -310,7 +314,7 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
     // test that metadata ARE written
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
-    config.setConfigFilePath("/tmp/cfg-ritc-mff.md");
+    config.setConfigFilePath(m8r::platformSpecificPath("/tmp/cfg-ritc-mff.md"));
     config.setActiveRepository(config.addRepository(repository));
     m8r::Mind mind(config);
     mind.learn();
@@ -355,10 +359,10 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
 
 TEST(RepositoryIndexerTestCase, MarkdownFile)
 {
-    string repositoryPath{"/tmp"};
+    string repositoryPath{ m8r::platformSpecificPath("/tmp")};
     string fileName{"repository-indexer-single-md-file.md"};
     string content;
-    string filePath{repositoryPath+"/"+fileName};
+    string filePath{repositoryPath+FILE_PATH_SEPARATOR+fileName};
 
     content.assign(
         "# First Markdown"
@@ -391,7 +395,7 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
     // test that metadata ARE written
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
-    config.setConfigFilePath("/tmp/cfg-ritc-mf.md");
+    config.setConfigFilePath(m8r::platformSpecificPath("/tmp/cfg-ritc-mf.md"));
     config.setActiveRepository(config.addRepository(repository));
     m8r::Mind mind(config);
     mind.learn();
@@ -442,18 +446,18 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
 
 TEST(RepositoryIndexerTestCase, MakePathRelative)
 {
-    string repositoryPath{"/tmp/mf-relativize"};
+    string repositoryPath{ m8r::platformSpecificPath("/tmp/mf-relativize")};
     map<string,string> pathToContent;
     string path, content;
 
-    path.assign(repositoryPath+"/memory/first.md");
+    path.assign(repositoryPath + FILE_PATH_SEPARATOR + m8r::platformSpecificPath("memory/first.md"));
     content.assign(
         "# First Outline"
         "\nFirst outline text."
         "\n");
     pathToContent[path] = content;
 
-    path.assign(repositoryPath+"/memory/second.md");
+    path.assign(repositoryPath + FILE_PATH_SEPARATOR + m8r::platformSpecificPath("memory/second.md"));
     content.assign(
         "# Second Outline"
         "\nSecond outline text."
@@ -481,64 +485,64 @@ TEST(RepositoryIndexerTestCase, MakePathRelative)
     // MF/MD: same dir
     EXPECT_EQ("dst.md", repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/src.md"},
-       string{"/tmp/mf-relativize/memory/dst.md"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/dst.md")}));
     EXPECT_EQ("dst.md#n1", repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/src.md"},
-       string{"/tmp/mf-relativize/memory/dst.md#n1"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/dst.md#n1")}));
 
     // MF/MD: src parent of dst
-    EXPECT_EQ("a/b/c/dst.md", repositoryIndexer.makePathRelative(
+    EXPECT_EQ(m8r::platformSpecificPath("a/b/c/dst.md"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/src.md"},
-       string{"/tmp/mf-relativize/memory/a/b/c/dst.md"}));
-    EXPECT_EQ("a/b/c/dst.md#n1", repositoryIndexer.makePathRelative(
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/c/dst.md")}));
+    EXPECT_EQ(m8r::platformSpecificPath("a/b/c/dst.md#n1"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/src.md"},
-       string{"/tmp/mf-relativize/memory/a/b/c/dst.md#n1"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/c/dst.md#n1")}));
 
     // MF/MD: dst parent of src
-    EXPECT_EQ("../../../dst.md", repositoryIndexer.makePathRelative(
+    EXPECT_EQ(m8r::platformSpecificPath("../../../dst.md"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/a/b/c/src.md"},
-       string{"/tmp/mf-relativize/memory/dst.md"}));
-    EXPECT_EQ("../../../dst.md#n1", repositoryIndexer.makePathRelative(
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/c/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/dst.md")}));
+    EXPECT_EQ(m8r::platformSpecificPath("../../../dst.md#n1"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/a/b/c/src.md"},
-       string{"/tmp/mf-relativize/memory/dst.md#n1"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/c/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/dst.md#n1")}));
 
     // MF/MD: siblings
-    EXPECT_EQ("../../A/B/dst.md", repositoryIndexer.makePathRelative(
+    EXPECT_EQ(m8r::platformSpecificPath("../../A/B/dst.md"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/a/b/src.md"},
-       string{"/tmp/mf-relativize/memory/A/B/dst.md"}));
-    EXPECT_EQ("../../A/B/dst.md#n1", repositoryIndexer.makePathRelative(
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/A/B/dst.md")}));
+    EXPECT_EQ(m8r::platformSpecificPath("../../A/B/dst.md#n1"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/a/b/src.md"},
-       string{"/tmp/mf-relativize/memory/A/B/dst.md#n1"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/A/B/dst.md#n1")}));
 
     // MF/MD: same file
     EXPECT_EQ("#n1", repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/a/b/src.md"},
-       string{"/tmp/mf-relativize/memory/a/b/src.md#n1"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/src.md")},
+		string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/src.md#n1") }));
     EXPECT_EQ("src.md", repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/a/b/src.md"},
-       string{"/tmp/mf-relativize/memory/a/b/src.md#"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/src.md#")}));
 
     // out of repo
-    EXPECT_EQ("/tmp/dst.md", repositoryIndexer.makePathRelative(
+    EXPECT_EQ(m8r::platformSpecificPath("/tmp/dst.md"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/a/b/src.md"},
-       string{"/tmp/dst.md"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/dst.md")}));
 
     // robustness
-    EXPECT_EQ("/", repositoryIndexer.makePathRelative(
+    EXPECT_EQ(m8r::platformSpecificPath("/"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/a/b/src.md"},
-       string{"/"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/src.md")},
+       string{ m8r::platformSpecificPath("/")}));
     EXPECT_EQ("", repositoryIndexer.makePathRelative(
        repository,
        string{""},
@@ -548,7 +552,7 @@ TEST(RepositoryIndexerTestCase, MakePathRelative)
      * MD repository
      */
 
-    repositoryPath += "/memory";
+    repositoryPath += string(FILE_PATH_SEPARATOR) + "memory";
     MF_DEBUG("RELATIVIZE MD repository: " << repositoryPath << endl);
     delete repository;
     repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
@@ -563,54 +567,54 @@ TEST(RepositoryIndexerTestCase, MakePathRelative)
     // MF/MD: same dir
     EXPECT_EQ("dst.md", repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/src.md"},
-       string{"/tmp/mf-relativize/memory/dst.md"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/dst.md")}));
     EXPECT_EQ("dst.md#n1", repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/src.md"},
-       string{"/tmp/mf-relativize/memory/dst.md#n1"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/dst.md#n1")}));
 
     // MF/MD: src parent of dst
-    EXPECT_EQ("a/b/c/dst.md", repositoryIndexer.makePathRelative(
+    EXPECT_EQ(m8r::platformSpecificPath("a/b/c/dst.md"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/src.md"},
-       string{"/tmp/mf-relativize/memory/a/b/c/dst.md"}));
-    EXPECT_EQ("a/b/c/dst.md#n1", repositoryIndexer.makePathRelative(
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/c/dst.md")}));
+    EXPECT_EQ(m8r::platformSpecificPath("a/b/c/dst.md#n1"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/src.md"},
-       string{"/tmp/mf-relativize/memory/a/b/c/dst.md#n1"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/c/dst.md#n1")}));
 
     // MF/MD: dst parent of src
-    EXPECT_EQ("../../../dst.md", repositoryIndexer.makePathRelative(
+    EXPECT_EQ(m8r::platformSpecificPath("../../../dst.md"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/a/b/c/src.md"},
-       string{"/tmp/mf-relativize/memory/dst.md"}));
-    EXPECT_EQ("../../../dst.md#n1", repositoryIndexer.makePathRelative(
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/c/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/dst.md")}));
+    EXPECT_EQ(m8r::platformSpecificPath("../../../dst.md#n1"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/a/b/c/src.md"},
-       string{"/tmp/mf-relativize/memory/dst.md#n1"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/c/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/dst.md#n1")}));
 
     // MF/MD: siblings
-    EXPECT_EQ("../../A/B/dst.md", repositoryIndexer.makePathRelative(
+    EXPECT_EQ(m8r::platformSpecificPath("../../A/B/dst.md"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/a/b/src.md"},
-       string{"/tmp/mf-relativize/memory/A/B/dst.md"}));
-    EXPECT_EQ("../../A/B/dst.md#n1", repositoryIndexer.makePathRelative(
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/A/B/dst.md")}));
+    EXPECT_EQ(m8r::platformSpecificPath("../../A/B/dst.md#n1"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/a/b/src.md"},
-       string{"/tmp/mf-relativize/memory/A/B/dst.md#n1"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/A/B/dst.md#n1")}));
 
     // out of repo
-    EXPECT_EQ("/tmp/dst.md", repositoryIndexer.makePathRelative(
+    EXPECT_EQ(m8r::platformSpecificPath("/tmp/dst.md"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/a/b/src.md"},
-       string{"/tmp/dst.md"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/src.md")},
+       string{ m8r::platformSpecificPath("/tmp/dst.md")}));
 
     // robustness
-    EXPECT_EQ("/", repositoryIndexer.makePathRelative(
+    EXPECT_EQ(m8r::platformSpecificPath("/"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/a/b/src.md"},
-       string{"/"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/src.md")},
+       string{ m8r::platformSpecificPath("/")}));
     EXPECT_EQ("", repositoryIndexer.makePathRelative(
        repository,
        string{""},
@@ -619,7 +623,7 @@ TEST(RepositoryIndexerTestCase, MakePathRelative)
     /*
      * MD file & MF file - relativization doesn't care about content
      */
-    repositoryPath += "/first.md";
+    repositoryPath += string(FILE_PATH_SEPARATOR) + "first.md";
     MF_DEBUG("RELATIVIZE MF/MD file: " << repositoryPath << endl);
     delete repository;
     repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
@@ -634,12 +638,12 @@ TEST(RepositoryIndexerTestCase, MakePathRelative)
     // MF/MD: same file
     EXPECT_EQ("#n1", repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/first.md"},
-       string{"/tmp/mf-relativize/memory/first.md#n1"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/first.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/first.md#n1")}));
     EXPECT_EQ("first.md", repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/first.md"},
-       string{"/tmp/mf-relativize/memory/first.md#"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/first.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/first.md#")}));
     EXPECT_EQ("#n1", repositoryIndexer.makePathRelative(
        repository,
        string{"first.md"},
@@ -648,24 +652,24 @@ TEST(RepositoryIndexerTestCase, MakePathRelative)
     // MF/MD: same dir
     EXPECT_EQ("dst.md", repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/first.md"},
-       string{"/tmp/mf-relativize/memory/dst.md"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/first.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/dst.md")}));
     EXPECT_EQ("dst.md#n1", repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/first.md"},
-       string{"/tmp/mf-relativize/memory/dst.md#n1"}));    
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/first.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/dst.md#n1")}));
 
     // everything else is absolute
 
     // MF/MD: src parent of dst
-    EXPECT_EQ("/tmp/mf-relativize/memory/a/b/c/dst.md", repositoryIndexer.makePathRelative(
+    EXPECT_EQ(m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/c/dst.md"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/first.md"},
-       string{"/tmp/mf-relativize/memory/a/b/c/dst.md"}));
-    EXPECT_EQ("/tmp/mf-relativize/memory/a/b/c/dst.md#n1", repositoryIndexer.makePathRelative(
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/first.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/c/dst.md")}));
+    EXPECT_EQ(m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/c/dst.md#n1"), repositoryIndexer.makePathRelative(
        repository,
-       string{"/tmp/mf-relativize/memory/first.md"},
-       string{"/tmp/mf-relativize/memory/a/b/c/dst.md#n1"}));
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/first.md")},
+       string{ m8r::platformSpecificPath("/tmp/mf-relativize/memory/a/b/c/dst.md#n1")}));
 
     delete repository;
 }

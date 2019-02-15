@@ -4,7 +4,7 @@ Written by [Martin Dvorak](http://me.mindforger.com).
 
 Acknowledgements to contributors:
 
-* Vlasta 'Saman' Hajek / [Bonitoo.io](https://www.bonitoo.io/) (Windows port)
+* Vlasta 'Šaman' Hajek / [Bonitoo.io](https://www.bonitoo.io/) (Windows port)
 
 Big thanks to 3rd party FOSS content authors:
 
@@ -13,13 +13,15 @@ Big thanks to 3rd party FOSS content authors:
 * Christian Loose (CuteMarkEd - inspiration and code)
 * David Parsons (Discount - Markdown rendering - library)
 * Davis E. King (MITIE - AI/NLP library and tools for information extraction - library)
-* GitHub (CMark - Markdown rendering - library)
+* GitHub (CMark GFM - Markdown rendering - library)
+* Jean-loup Gailly, Mark Adler (Zlib - library)
 * Google (Google C++ unit testing framework)
 * Knut Sveidqvist (Mermaid.js - diagrams and flowcharts rendering in HTML)
 * AMS and SIAM (MathJax.js - math rendering in HTML)
 * Ivan Sagalaev (Highlight.js - source code syntax highlighting)
 * Danny Allen (Primary icon theme store.kde.com - icons)
-* Travis CI (travis-ci.org - continous integration tests and builds infrastructure)
+* Travis CI (travis-ci.org - continous integration tests and builds infra - Ubuntu, macOS)
+* AppVeyor CI (appveyor.com - continous integration tests and builds infra - Windows
 * Raimund Hocke (SikuliX - GUI automation testing)
 * Lewis Van Winkle (GENANN - minimal neural network - library)
 * Oleander Software (Oleander stemming library - stemmer - library)

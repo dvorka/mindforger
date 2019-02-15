@@ -23,12 +23,34 @@ CONFIG -= qt
 # dependencies
 #  - INCLUDEPATH is used during compilation to find included header files.
 #  - DEPENDPATH is used to resolve dependencies between header and source files, eg. which source files need to be recompiled when certain header file changes.
-win32|mfnomd2html {
+
+#TODO: remove after resolving issue with build with cmark on windows
+!win32:!mfnomd2html {
+  CONFIG += mfmd2htmldiscount
+}
+
+mfnomd2html {
   DEFINES += MF_NO_MD_2_HTML
 } else {
-  INCLUDEPATH += $$PWD/../deps/discount
-  DEPENDPATH += $$PWD/../deps/discount
+  mfmd2htmldiscount {
+    DEFINES += MF_MD_2_HTML_DISCOUNT
+    INCLUDEPATH += $$PWD/../deps/discount
+    DEPENDPATH += $$PWD/../deps/discount
+  } else {
+    DEFINES += MF_MD_2_HTML_CMARK CMARK_GFM_STATIC_DEFINE CMARK_GFM_EXTENSIONS_STATIC_DEFINE
+    INCLUDEPATH += $$PWD/../deps/cmark-gfm/src
+    INCLUDEPATH += $$PWD/../deps/cmark-gfm/extensions
+    INCLUDEPATH += $$PWD/../deps/cmark-gfm/build/src
+    INCLUDEPATH += $$PWD/../deps/cmark-gfm/build/extensions
+  }
 }
+
+#zlib on windows
+win32 {
+ INCLUDEPATH += $$PWD/../deps/zlib-win/include
+ DEPENDPATH += $$PWD/../deps/zlib-win/include
+}
+
 mfner {
     DEFINES += MF_NER
     INCLUDEPATH += $$PWD/../deps/mitie/mitielib/include
@@ -39,13 +61,17 @@ mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
 }
 
-!win32 {
+# compiler options (qmake CONFIG+=mfnoccache ...)
+win32{
+    QMAKE_CXXFLAGS += /MP
+} else {
+    # linux and macos
     mfnoccache {
       QMAKE_CXX = g++
     } else:!mfnocxx {
       QMAKE_CXX = ccache g++
     }
-    QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
+    QMAKE_CXXFLAGS += -pedantic -std=c++11
 }
 
 SOURCES += \
@@ -252,7 +278,3 @@ win32 {
     ../build/windows/strptime/strptime.c
 }
 
-win32 {
- INCLUDEPATH += $$PWD/../../../libs/zlib/include
- DEPENDPATH += $$PWD/../../../libs/zlib/include
-}

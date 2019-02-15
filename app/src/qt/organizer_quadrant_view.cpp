@@ -44,6 +44,7 @@ OrganizerQuadrantView::~OrganizerQuadrantView()
 
 void OrganizerQuadrantView::paintEvent(QPaintEvent* event)
 {
+    MF_DEBUG("OrganizerQuadrantView::paintEvent" << event << std::endl);
     QTableView::paintEvent(event);
 }
 

@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <Windows.h>
 //typedef uint8_t   u_int8_t;
 //typedef uint16_t  u_int16_t;
@@ -17,6 +17,6 @@ typedef unsigned int uint;
 #include <dirent.h>
 #include <sys/dir.h>
 #include <unistd.h>
-#endif // WIN32
+#endif // _WIN32
 
 #endif // CONFIG_H

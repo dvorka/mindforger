@@ -108,7 +108,7 @@ char** stringSplit(
         size_t i  = 0;
         char *offset{};
         char *copy = strdup(s);
-#ifdef WIN32
+#ifdef _WIN32
         char* token = strtok_s(copy, delim, &offset);
 #else
         char* token = strtok_r(copy, delim, &offset);
@@ -123,7 +123,7 @@ char** stringSplit(
                 result[i] = nullptr;
             }
             i++;
-#ifdef WIN32
+#ifdef _WIN32
         token = strtok_s(0, delim, &offset);
 #else
         token = strtok_r(0, delim, &offset);
@@ -148,11 +148,11 @@ char** stringSplit(
 string normalizeToNcName(string name, char quoteChar) {
     string result = name;
     if(result.size()) {
-        if(!isalnum(result[0])) {
+        if(!isalnum(result[0], locale())) {
             result.insert(0, 1, '_');
         }
         for(size_t i=0; i<result.size(); i++) {
-            if(!isalnum(result[i])) {
+            if(!isalnum(result[i],locale())) {
                 result[i] = quoteChar;
             }
         }

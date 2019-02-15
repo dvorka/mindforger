@@ -21,6 +21,8 @@
 
 #include <QtWidgets>
 
+#include "../../../lib/src/debug.h"
+
 namespace m8r {
 
 class TagsTableView : public QTableView

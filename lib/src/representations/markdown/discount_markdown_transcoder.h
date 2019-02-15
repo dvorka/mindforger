@@ -21,17 +21,63 @@
 
 #include "markdown_transcoder.h"
 
+#include "../../config/configuration.h"
+
 namespace m8r {
 
+/**
+ * @brief Discount options.
+ *
+ * See https://www.pell.portland.or.us/~orc/Code/discount/
+ */
+ enum DiscountOption {
+    NoLinksOption          = 1<<0, /* don't do link processing, block <a> tags  */
+    NoImagesOption         = 1<<1, /* don't do image processing, block <img> */
+    NoSmartypantsOption    = 1<<2, /* don't run smartypants() */
+    NoHtmlOption           = 1<<3, /* don't allow raw html through AT ALL */
+    NoSuperscriptOption    = 1<<4, /* don't process a^2 as superscript(<sup>) */
+    NoTablesOption         = 1<<5, /* disallow tables */
+    NoStrikethroughOption  = 1<<6, /* forbid ~~strikethrough~~ */
+    TableOfContentsOption  = 1<<7, /* do table-of-contents processing */
+    AutolinkOption         = 1<<8, /* make http://foo.com link even without <>s */
+    NoHeaderOption         = 1<<9, /* don't process header blocks */
+    NoDivQuoteOption       = 1<<10, /* forbid >%class% blocks */
+    NoAlphaListOption      = 1<<11, /* forbid alphabetic lists */
+    NoDefinitionListOption = 1<<12, /* forbid definition lists */
+    ExtraFootnoteOption    = 1<<13, /* enable markdown extra-style footnotes */
+    NoStyleOption          = 1<<14, /* don't extract <style> blocks */
+};
+
+/**
+ * @brief Discount based Markdown to HTML transcoder.
+ *
+ * See https://github.com/Orc/discount
+ */
 class DiscountMarkdownTranscoder : public MarkdownTranscoder
 {
+private:
+    Configuration& config;
+
+    /**
+     * @brief MindForger MD 2 HTML options.
+     *
+     * If MF options don't change, then Discount options doesn't have to be recalculated.
+     */
+    unsigned int lastMfOptions;
+    unsigned int discountOptions;
+
 public:
     explicit DiscountMarkdownTranscoder();
     DiscountMarkdownTranscoder(const DiscountMarkdownTranscoder&) = delete;
     DiscountMarkdownTranscoder(const DiscountMarkdownTranscoder&&) = delete;
     DiscountMarkdownTranscoder &operator=(const DiscountMarkdownTranscoder&) = delete;
     DiscountMarkdownTranscoder &operator=(const DiscountMarkdownTranscoder&&) = delete;
-    ~DiscountMarkdownTranscoder();
+    virtual ~DiscountMarkdownTranscoder();
+
+    virtual std::string* to(
+            RepresentationType format,
+            const std::string* markdown,
+            std::string* html);
 };
 
 }

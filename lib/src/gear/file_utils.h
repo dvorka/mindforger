@@ -24,7 +24,7 @@
 #include "../config/config.h"
 
 #include <zlib.h>
-#if defined(MSDOS) || defined(OS2) || defined(WIN32) || defined(__CYGWIN__)
+#if defined(MSDOS) || defined(OS2) || defined(_WIN32) || defined(__CYGWIN__)
   #include <fcntl.h>
   #include <io.h>
   #define SET_BINARY_MODE(file) setmode(fileno(file), O_BINARY)
@@ -110,15 +110,12 @@ int removeDirectoryRecursively(const char* path);
 int copyDirectoryRecursively(const char* srcPath, const char* dstPath, bool extractGz=false);
 bool createDirectory(const std::string& path);
 
-#ifdef __APPLE__
 /**
- * @brief Get path to the the executable on macOS.
+ * @brief Get path to the the executable on macOS or windows. Othewise returns nullptr.
  *
  * Method is not reentrant - it returns pointer to the static buffer.
  */
-char* getMacOsExecutablePath();
-#endif
-
+char* getExecutablePath();
 } // m8r namespace
 
 #endif /* M8R_FILE_UTILS_H_ */

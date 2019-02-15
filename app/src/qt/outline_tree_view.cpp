@@ -24,10 +24,9 @@ OutlineTreeView::OutlineTreeView(QWidget* parent)
     : QTableView(parent)
 {
     verticalHeader()->setVisible(false);
-    // BEFARE this kills performance:
-    // verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    // BEFARE: this kills performance in case of big(ger) tables
+    // verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     setSortingEnabled(false);
 
@@ -36,6 +35,9 @@ OutlineTreeView::OutlineTreeView(QWidget* parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
     // disable TAB and Ctrl+O up/down navigation (Ctrl+O no longer bound)
     setTabKeyNavigation(false);
+
+    // BEVARE: this call cannot go paint() otherwise leads to loop and crazy CPU
+    verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 }
 
 void OutlineTreeView::keyPressEvent(QKeyEvent* event)
@@ -107,9 +109,11 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
 
 void OutlineTreeView::paintEvent(QPaintEvent* event)
 {
+    MF_DEBUG("OutlineTreeView::paintEvent" << event << std::endl);
+
+    // SUSPECTED to cause high CPU consumption due paint() event loop
     // ensure that 1st column gets the remaining space from others
-    // IMPROVE may kill performance
-    this->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 

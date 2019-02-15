@@ -24,8 +24,8 @@
 
 #include <gtest/gtest.h>
 
-#include "../../src/gear/trie.h"
-#include "../../src/gear/file_utils.h"
+#include "gear/trie.h"
+#include "gear/file_utils.h"
 
 using namespace std;
 

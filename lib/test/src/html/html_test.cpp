@@ -21,14 +21,16 @@
 #include <iostream>
 #include <memory>
 #include <cstdio>
-#include <unistd.h>
+#ifndef _WIN32
+#  include <unistd.h>
+#endif //_WIN32
 
 #include <gtest/gtest.h>
 
 #include "../test_gear.h"
-#include "../../src/representations/html/html_outline_representation.h"
-#include "../../src/mind/mind.h"
-#include "../../src/persistence/filesystem_persistence.h"
+#include "representations/html/html_outline_representation.h"
+#include "mind/mind.h"
+#include "persistence/filesystem_persistence.h"
 
 using namespace std;
 

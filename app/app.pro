@@ -50,43 +50,72 @@ INCLUDEPATH += $$PWD/../lib/src
 DEPENDPATH += $$PWD/../lib/src
 
 # -L where to look for library, -l link the library
-!win32: LIBS += -L$$OUT_PWD/../lib -lmindforger
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-mindforger-release/lib/release -lmindforger
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-mindforger-debug/lib/debug -lmindforger
 
-win32|mfnomd2html {
-  DEFINES += MF_NO_MD_2_HTML
+win32 {
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../lib/release -lmindforger
+    else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/debug -lmindforger
 } else {
-  # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
-  LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
+    #linux, macos
+    LIBS += -L$$OUT_PWD/../lib -lmindforger
 }
+
+#TODO: remove after resolving issue with build with cmark on linux
+!win32:!mfnomd2html {
+  CONFIG += mfmd2htmldiscount
+}
+
+#discount if mfmd2htmldiscount and not windows otherwise cmark
+!mfnomd2html {
+  win32 {
+    CONFIG(release, debug|release) {
+        LIBS += -L$$PWD/../deps/cmark-gfm/build/src/Release -lcmark-gfm_static
+        LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions/Release -lcmark-gfm-extensions_static
+    } else:CONFIG(debug, debug|release) {
+        LIBS += -L$$PWD/../deps/cmark-gfm/build/src/Debug -lcmark-gfm_static
+        LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions/Debug -lcmark-gfm-extensions_static
+    }
+  } else:mfmd2htmldiscount {
+      # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
+      LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
+    } else {
+      #cmark
+      LIBS += -L$$PWD/../deps/cmark-gfm/build/src -lcmark-gfm
+      LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions
+    }
+}
+
+
 mfner {
   # MF links MITIE for AI/NLP/DL
   LIBS += -L$$OUT_PWD/../deps/mitie/mitielib -lmitie
 }
+
 # zlib
-!win32: LIBS += -lz
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibwapi
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../libs/zlib/lib/ -lzlibwapi
+win32 {
+    INCLUDEPATH += $$PWD/../deps/zlib-win/include
+    DEPENDPATH += $$PWD/../deps/zlib-win/include
+    
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../deps/zlib-win/lib/ -lzlibwapi
+    else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../deps/zlib-win/lib/ -lzlibwapi
+} else {
+    LIBS += -lz
+}
 
 win32 {
     LIBS += -lRpcrt4 -lOle32
 }
-#TODO make path somehow parametrizable
-win32 {
- INCLUDEPATH += $$PWD/../../../libs/zlib/include
- DEPENDPATH += $$PWD/../../../libs/zlib/include
-}
-
 # development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1
 # - S7    64b:   GCC 4.8.5, Qt 5.2.1
-# - Win10 64b: MinGW 4.9.2, Qt 5.10.0
+# - Win10 64b: MSVC 2017, Qt 5.12.0
 #
 # - GCC: -std=c++0x ~ -std=c++11
 
 # compiler options (qmake CONFIG+=mfnoccache ...)
-!win32 {
+win32{
+    QMAKE_CXXFLAGS += /MP
+} else {
+    # linux and macos
     mfnoccache {
       QMAKE_CXX = g++
     } else:!mfnocxx {
@@ -285,6 +314,7 @@ SOURCES += \
 win32|macx|mfwebengine {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp
 }
+
 mfner {
     SOURCES += \
     src/qt/dialogs/ner_choose_tag_types_dialog.cpp \
@@ -338,5 +368,10 @@ macx {
     macosdocfiles.files = $$PWD/../doc/limbo $$PWD/../doc/memory $$PWD/../doc/stencils $$PWD/../doc/README.md
     macosdocfiles.path = Contents/Resources/mindforger-repository
     QMAKE_BUNDLE_DATA += macosdocfiles
+}
+
+win32 {
+    # icon and exe detail information
+    RC_FILE = $$PWD/resources/windows/mindforger.rc
 }
 # eof

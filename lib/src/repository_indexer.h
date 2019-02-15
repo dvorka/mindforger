@@ -21,7 +21,9 @@
 
 #include "config/config.h"
 #include <sys/types.h>
-//#include <unistd.h>
+#ifndef _WIN32
+#  include <unistd.h>
+#endif //_WIN32
 
 #include <cstdio>
 #include <cstring>

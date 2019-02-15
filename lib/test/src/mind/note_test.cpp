@@ -38,11 +38,11 @@ using namespace std;
 
 TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     // prepare M8R repository and let the mind think...
-    string repositoryDir{"/tmp/mf-unit-repository-o"};
+    string repositoryDir{ m8r::platformSpecificPath("/tmp/mf-unit-repository-o")};
     m8r::removeDirectoryRecursively(repositoryDir.c_str());
     m8r::Installer installer{};
     installer.createEmptyMindForgerRepository(repositoryDir);
-    string stencilFile{repositoryDir+"/stencils/notebooks/o-s.md"};
+    string stencilFile{repositoryDir+ FILE_PATH_SEPARATOR +m8r::platformSpecificPath("stencils/notebooks/o-s.md")};
     string stencilContent{
         "# Stencil Test Outline"
         "\n"
@@ -55,16 +55,16 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
         "\nNote 2 text."
         "\n"};
     m8r::stringToFile(stencilFile,stencilContent);
-    stencilFile.assign(repositoryDir+"/stencils/notes/n-s.md");
+    stencilFile.assign(repositoryDir+ FILE_PATH_SEPARATOR + m8r::platformSpecificPath("stencils/notes/n-s.md"));
     stencilContent.assign("## Stencil Single Note\nNote text.\n");
     m8r::stringToFile(stencilFile,stencilContent);
-    string oFile{repositoryDir+"/memory/outline.md"};
+    string oFile{repositoryDir + FILE_PATH_SEPARATOR + m8r::platformSpecificPath("memory/outline.md")};
     string oContent{"# Test Outline\n\nOutline text.\n\n## Note 1\nNote 1 text.\n\n##Note 2\nNote 2 text.\n"};
     m8r::stringToFile(oFile,oContent);
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
-    config.setConfigFilePath("/tmp/cfg-ntc-ansnto.md");
+    config.setConfigFilePath( m8r::platformSpecificPath("/tmp/cfg-ntc-ansnto.md"));
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
@@ -140,11 +140,11 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
 
 TEST(NoteTestCase, PromoteDemoteUpDown) {
     // prepare M8R repository and let the mind think...
-    string repositoryDir{"/tmp/mf-unit-repository-o"};
+    string repositoryDir{m8r::platformSpecificPath("/tmp/mf-unit-repository-o")};
     m8r::removeDirectoryRecursively(repositoryDir.c_str());
     m8r::Installer installer{};
     installer.createEmptyMindForgerRepository(repositoryDir);
-    string oFile{repositoryDir+"/memory/o.md"};
+    string oFile{repositoryDir + FILE_PATH_SEPARATOR + m8r::platformSpecificPath("memory/o.md")};
     string oContent{
         "# Note Operations Test Outline"
         "\nOutline text."
@@ -162,7 +162,7 @@ TEST(NoteTestCase, PromoteDemoteUpDown) {
 
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
-    config.setConfigFilePath("/tmp/cfg-ntc-pdud.md");
+    config.setConfigFilePath( m8r::platformSpecificPath("/tmp/cfg-ntc-pdud.md"));
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
@@ -681,12 +681,12 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
 
 TEST(NoteTestCase, RefactorNote) {
     // prepare M8R repository and let the mind think...
-    string repositoryDir{"/tmp/mf-unit-repository-refactor"};
+    string repositoryDir{ m8r::platformSpecificPath("/tmp/mf-unit-repository-refactor")};
     m8r::removeDirectoryRecursively(repositoryDir.c_str());
     m8r::Installer installer{};
     installer.createEmptyMindForgerRepository(repositoryDir);
     // source O
-    string sFile{repositoryDir+"/memory/source.md"};
+    string sFile{repositoryDir + FILE_PATH_SEPARATOR + m8r::platformSpecificPath("memory/source.md")};
     string sContent{
         "# Source Test Outline"
         "\nOutline text."
@@ -722,7 +722,7 @@ TEST(NoteTestCase, RefactorNote) {
     m8r::stringToFile(sFile,sContent);
 
     // target O
-    string tFile{repositoryDir+"/memory/target.md"};
+    string tFile{repositoryDir + FILE_PATH_SEPARATOR + m8r::platformSpecificPath("memory/target.md")};
     string tContent{
         "# Target Test Outline"
         "\nOutline text."

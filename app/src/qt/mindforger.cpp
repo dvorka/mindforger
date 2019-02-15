@@ -19,11 +19,11 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#ifndef WIN32
+#ifndef _WIN32
 #  include <getopt.h>
 #else
 #  include "../../build/windows/getopt/getopt.h"
-#endif //WIN32
+#endif //_WIN32
 #include <QtWidgets>
 
 #include "../../lib/src/version.h"
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 
     // stupid & ugly reused code as macOS requires to pass --disable-web-security parameter to QApplication
     // so that it allows loading of images by QWebEngine
-#ifdef __APPLE__
+#if defined (__APPLE__) || defined(_WIN32)
     char ARG_DISABLE_WEB_SECURITY[] = "--disable-web-security";
     int newArgc = argc+1+1;
     char** newArgv = new char*[newArgc];

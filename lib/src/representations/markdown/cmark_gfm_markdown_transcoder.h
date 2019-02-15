@@ -20,18 +20,48 @@
 #define M8R_CMARK_GFM_MARKDOWN_TRANSCODER_H
 
 #include "markdown_transcoder.h"
+#include "../../gear/lang_utils.h"
+#include "../../config/configuration.h"
 
 namespace m8r {
+    /**
+    * @brief CmarkGfm options.
+    *
+    * See https://github.com/github/cmark-gfm/blob/master/src/cmark-gfm.h#L673
+    */
+enum class CmarkGfmOption {
+    //TODO VH: complete this
+    
+};
 
+/**
+ * @brief cmark based Markdown to HTML transcoder.
+ *
+ * https://github.com/github/cmark-gfm
+ */
 class CmarkGfmMarkdownTranscoder : public MarkdownTranscoder
 {
+    Configuration& config;
+
+    /**
+    * @brief MindForger MD 2 HTML options.
+    *
+    * If MF options don't change, then Cmark options doesn't have to be recalculated.
+    */
+    unsigned int lastMfOptions;
+    unsigned int cmarkOptions;
 public:
     explicit CmarkGfmMarkdownTranscoder();
     CmarkGfmMarkdownTranscoder(const CmarkGfmMarkdownTranscoder&) = delete;
     CmarkGfmMarkdownTranscoder(const CmarkGfmMarkdownTranscoder&&) = delete;
     CmarkGfmMarkdownTranscoder &operator=(const CmarkGfmMarkdownTranscoder&) = delete;
     CmarkGfmMarkdownTranscoder &operator=(const CmarkGfmMarkdownTranscoder&&) = delete;
-    ~CmarkGfmMarkdownTranscoder();
+    virtual ~CmarkGfmMarkdownTranscoder();
+
+    virtual std::string* to(
+            RepresentationType format,
+            const std::string* markdown,
+            std::string* html);
 };
 
 }
