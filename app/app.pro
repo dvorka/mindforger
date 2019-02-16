@@ -43,9 +43,11 @@ win32|macx|mfwebengine {
     QT += webkitwidgets
 }
 
-# dependencies
+# Dependencies:
 #  - INCLUDEPATH is used during compilation to find included header files.
-#  - DEPENDPATH is used to resolve dependencies between header and source files, eg. which source files need to be recompiled when certain header file changes.
+#  - DEPENDPATH is used to resolve dependencies between header and source
+#    files, e.g. which source files need to be recompiled when certain header
+#    file changes.
 INCLUDEPATH += $$PWD/../lib/src
 DEPENDPATH += $$PWD/../lib/src
 
@@ -59,12 +61,7 @@ win32 {
     LIBS += -L$$OUT_PWD/../lib -lmindforger
 }
 
-#TODO: remove after resolving issue with build with cmark on linux
-!win32:!mfnomd2html {
-  CONFIG += mfmd2htmldiscount
-}
-
-#discount if mfmd2htmldiscount and not windows otherwise cmark
+# discount if mfmd2htmldiscount and not windows otherwise cmark
 !mfnomd2html {
   win32 {
     CONFIG(release, debug|release) {
@@ -78,9 +75,9 @@ win32 {
       # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
       LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
     } else {
-      #cmark
-      LIBS += -L$$PWD/../deps/cmark-gfm/build/src -lcmark-gfm
+      # cmark
       LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions
+      LIBS += -L$$PWD/../deps/cmark-gfm/build/src -lcmark-gfm
     }
 }
 

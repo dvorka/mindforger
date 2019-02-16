@@ -20,14 +20,10 @@ TEMPLATE = lib
 CONFIG += staticlib
 CONFIG -= qt
 
-# dependencies
-#  - INCLUDEPATH is used during compilation to find included header files.
-#  - DEPENDPATH is used to resolve dependencies between header and source files, eg. which source files need to be recompiled when certain header file changes.
-
-#TODO: remove after resolving issue with build with cmark on windows
-!win32:!mfnomd2html {
-  CONFIG += mfmd2htmldiscount
-}
+# Dependencies:
+# - INCLUDEPATH is used during compilation to find included header files.
+# - DEPENDPATH is used to resolve dependencies between header and source files,
+#   e.g. which source files need to be recompiled when certain header file changes.
 
 mfnomd2html {
   DEFINES += MF_NO_MD_2_HTML
