@@ -35,7 +35,8 @@ Install:
 * [Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#fedora-)
 * [Arch Linux](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#arch-linux-)
 * [macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#macos-)
-* [Windows WSL](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#wsl-)
+* [Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#windows-)
+* [WSL](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#wsl-)
 
 Build:
 
@@ -43,7 +44,8 @@ Build:
 * [build on Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-debian-)
 * [build on Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-fedora-)
 * [build on macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-macos-)
-* [build on Windows Subsystem for Linux (WSL)](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-wsl-)
+* [build on Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-windows-)
+* [build on WSL](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-wsl-)
 
 Docker:
 
