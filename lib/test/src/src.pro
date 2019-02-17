@@ -35,12 +35,6 @@ win32 {
     LIBS += -L$$OUT_PWD/../../../lib -lmindforger
 }
 
-#TODO: remove after resolving issue with build with cmark on windows
-!win32:!mfnomd2html {
-  CONFIG += mfmd2htmldiscount
-}
-
-
 #discount if mfmd2htmldiscount and not windows otherwise cmark
 !mfnomd2html {
   win32 {
@@ -57,8 +51,8 @@ win32 {
       LIBS += -L$$OUT_PWD/../../../deps/discount -ldiscount
     } else {
       #cmark
-      LIBS += -L$$PWD/../../../deps/cmark-gfm/build/src -lcmark-gfm
       LIBS += -L$$PWD/../../../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions
+      LIBS += -L$$PWD/../../../deps/cmark-gfm/build/src -lcmark-gfm
     }
   }
 }
