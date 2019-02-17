@@ -30,21 +30,21 @@ MindForger is actually more than an editor or IDE - it's human mind inspired per
 ## Installation
 Install:
 
+* [Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#windows-)
 * [Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#ubuntu-)
 * [Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#debian-)
 * [Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#fedora-)
 * [Arch Linux](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#arch-linux-)
 * [macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#macos-)
-* [Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#windows-)
 * [WSL](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#wsl-)
 
 Build:
 
+* [build on Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-windows-)
 * [build on Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-ubuntu-)
 * [build on Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-debian-)
 * [build on Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-fedora-)
 * [build on macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-macos-)
-* [build on Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-windows-)
 * [build on WSL](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-wsl-)
 
 Docker:
