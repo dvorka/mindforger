@@ -135,7 +135,6 @@ SOURCES += \
     src/representations/csv/csv_outline_representation.cpp \
     src/mind/ai/autolinking/aho_corasick_autolinking_preprocessor.cpp \
     src/mind/ai/autolinking/naive_autolinking_preprocessor.cpp \
-    src/representations/markdown/markdown_transcoder.cpp \
     src/representations/markdown/discount_markdown_transcoder.cpp \
     src/representations/markdown/cmark_gfm_markdown_transcoder.cpp
 
