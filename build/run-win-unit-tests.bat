@@ -20,14 +20,23 @@ rem This script copies nice and safe Outlines from personal repository
 rem to demo repository used for creation of screenshots and videos.
 @echo on
 
-:: auxiliary var
-set "MF_BASE=%~dp0%.."
-:: call MSVC 2017 Development Environment Setup
-call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
-:: call Qt Development Environment Setup
-call "C:\software\Qt\5.12.0\msvc2017_64\bin\qtenv2.bat"
-:: set PATH to cmake and zlib 
-set "PATH=%PATH%;c:\Program Files\CMake\bin;%MF_BASE%\deps\zlib-win\lib"
-:: set path to Inno Setup 5 script compiler
-set "MF_ICSS=c:\Program Files (x86)\Inno Setup 5\ISCC.exe"
-set "VC_REDIST_PATH=c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.14.26405\vcredist_x64.exe"
+setlocal
+call "%~dp0%\env.bat"
+
+set "MF_TEST=%MF_BASE%\lib\test\src\debug\mindforger-lib-unit-tests.exe"
+
+if not exist "%MF_TEST%" goto :err
+call :normalize %MF_BASE%
+set "M8R_GIT_PATH=%RET_V%"
+"%MF_TEST%" %*
+goto :end
+:err
+echo ====================================
+echo MindForger unit tests cannot be found.
+echo ====================================
+:end
+endlocal
+pause
+
+:normalize
+  set RET_V=%~dpfn1%
