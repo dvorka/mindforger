@@ -1,3 +1,21 @@
+# appveyor.yml     AppVeyor CI configuration file for MindForger
+#
+# Copyright (C) 2014-2019
+#
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 version: 1.49.{build}
 
 skip_commits:
@@ -9,14 +27,12 @@ environment:
 
 image: Visual Studio 2017
 
-
 #---------------------------------#
 #       build configuration       #
 #---------------------------------#
 
 # build platform, i.e. x86, x64, Any CPU. This setting is optional.
 platform: x64
-
 
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Release
@@ -38,7 +54,6 @@ before_build:
  - cd "%M8R_HOME%"
  - git submodule init
  - git submodule update
-
 
 build_script:
  - pushd "%M8R_HOME%\deps\cmark-gfm" && mkdir build && cd build && cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . --config Release -- /m && cmake --build . --config Debug -- /m && popd
