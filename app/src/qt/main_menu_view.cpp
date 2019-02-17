@@ -118,7 +118,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addMenu(submenuMindRelearn);
     menuMind->addAction(actionMindScope);
     menuMind->addAction(actionMindThink);
+#ifdef MF_WIP
     menuMind->addAction(actionMindAutolink);
+#endif
     menuMind->addAction(actionMindRemember);
 #ifdef MF_WIP
     menuMind->addAction(actionMindSnapshot);

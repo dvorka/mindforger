@@ -84,6 +84,7 @@ std::string* DiscountMarkdownTranscoder::to(RepresentationType format, const str
         html->append(*markdown);
     }
 #else
+    UNUSED_ARG(format);
     html->append(*markdown);
 #endif //MF_NO_MD_2_HTML
     return html;
