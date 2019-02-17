@@ -290,7 +290,9 @@ public:
     std::vector<std::string>& getTagsScope() { return tagsScope; }
     bool isSaveReadsMetadata() const { return saveReadsMetadata; }
     void setSaveReadsMetadata(bool saveReadsMetadata) { this->saveReadsMetadata=saveReadsMetadata; }
-    bool isAutolinking() const { return autolinking; }
+    // TODO force disabling autolinking
+    // bool isAutolinking() const { return autolinking; }
+    bool isAutolinking() const { return false; }
     void setAutolinking(bool autolinking) { this->autolinking=autolinking; }
     bool isAutolinkingColonSplit() const { return autolinkingColonSplit; }
     void setAutolinkingColonSplit(bool autolinkingColonSplit) { this->autolinkingColonSplit=autolinkingColonSplit; }

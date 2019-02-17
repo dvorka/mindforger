@@ -24,7 +24,7 @@
 #include <cstring>
 #include <string>
 #ifdef _WIN32
-#include "../../../build/windows/strptime/strptime.h"
+#include "../../../deps/strptime/strptime.h"
 #endif //_WIN32
 #include "string_utils.h"
 

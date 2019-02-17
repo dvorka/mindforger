@@ -22,7 +22,7 @@
 #ifndef _WIN32
 #  include <getopt.h>
 #else
-#  include "../../build/windows/getopt/getopt.h"
+#  include "../../deps/getopt/getopt.h"
 #endif //_WIN32
 #include <QtWidgets>
 

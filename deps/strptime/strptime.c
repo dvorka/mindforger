@@ -1,4 +1,3 @@
-
 /*	$Id$	*/
 /*	$NetBSD: strptime.c,v 1.18 1999/04/29 02:58:30 tv Exp $	*/
 
@@ -35,6 +34,10 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/* 
+ * Copyright (c) 2019 modifications by Vlasta 'Saman' Hajek for MindForger
  */
 
 //#include <sys/localedef.h>

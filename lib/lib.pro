@@ -267,10 +267,9 @@ mfner {
 
 win32 {
     HEADERS += \
-    ../build/windows/dirent/dirent.h \
-    ../build/windows/strptime/strptime.h
+    ../deps/dirent/dirent.h \
+    ../deps/strptime/strptime.h
 
     SOURCES += \
-    ../build/windows/strptime/strptime.c
+    ../deps/strptime/strptime.c
 }
-

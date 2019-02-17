@@ -323,10 +323,10 @@ mfner {
 
 win32 {
     HEADERS += \
-    ../build/windows/getopt/getopt.h
+    ../deps/getopt/getopt.h
 
     SOURCES += \
-    ../build/windows/getopt/getopt.c
+    ../deps/getopt/getopt.c
 }
 
 # L10n
