@@ -55,12 +55,12 @@ enum MdToHtmlOption
 class MarkdownTranscoder
 {    
 public:
-    explicit MarkdownTranscoder();
+    explicit MarkdownTranscoder() {}
     MarkdownTranscoder(const MarkdownTranscoder&) = delete;
     MarkdownTranscoder(const MarkdownTranscoder&&) = delete;
     MarkdownTranscoder &operator=(const MarkdownTranscoder&) = delete;
     MarkdownTranscoder &operator=(const MarkdownTranscoder&&) = delete;
-    virtual ~MarkdownTranscoder();
+    virtual ~MarkdownTranscoder() {}
 
     /**
      * @brief Convert HTML representation to given representation.
