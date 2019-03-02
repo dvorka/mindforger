@@ -35,6 +35,5 @@
     </qresource>
     <qresource prefix="/js">
         <file alias="highlight.js">resources/qt/js/highlight.js</file>
-        <file alias="mermaid.js">resources/qt/js/mermaid.js</file>
     </qresource>
 </RCC>
