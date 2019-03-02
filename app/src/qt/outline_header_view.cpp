@@ -36,13 +36,10 @@ OutlineHeaderView::OutlineHeaderView(QWidget *parent)
 #else
     // ensure that link clicks are not handled, but delegated to MF using linkClicked signal
     page()->setLinkDelegationPolicy(QWebPage::LinkDelegationPolicy::DelegateAllLinks);
+#endif
+
     // zoom
     setZoomFactor(Configuration::getInstance().getUiHtmlZoomFactor());
-#endif
-}
-
-OutlineHeaderView::~OutlineHeaderView()
-{
 }
 
 #ifdef MF_QT_WEB_ENGINE
@@ -67,11 +64,30 @@ bool OutlineHeaderView::eventFilter(QObject *obj, QEvent *event)
         if(event->type() == QEvent::MouseButtonDblClick) {
             // double click to Note view opens Note editor
             emit signalMouseDoubleClickEvent();
+            event->accept();
             return true;
         }
     }
 
     return QWebEngineView::eventFilter(obj, event);
+}
+
+void OutlineHeaderView::wheelEvent(QWheelEvent* event)
+{
+    if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
+        if(!event->angleDelta().isNull()) {
+            if(event->angleDelta().ry()>0) {
+                Configuration::getInstance().incUiHtmlZoom();
+            } else {
+                Configuration::getInstance().decUiHtmlZoom();
+            }
+            setZoomFactor(Configuration::getInstance().getUiHtmlZoomFactor());
+            event->accept();
+            return;
+        }
+    }
+
+    OutlineHeaderView::wheelEvent(event);
 }
 
 #else

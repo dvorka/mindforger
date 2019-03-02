@@ -64,6 +64,7 @@ bool NoteView::eventFilter(QObject *obj, QEvent *event)
         if(event->type() == QEvent::MouseButtonDblClick) {
             // double click to Note view opens Note editor
             emit signalMouseDoubleClickEvent();
+            event->accept();
             return true;
         }
     }
@@ -92,6 +93,7 @@ void NoteView::wheelEvent(QWheelEvent* event)
                 Configuration::getInstance().decUiHtmlZoom();
             }
             setZoomFactor(Configuration::getInstance().getUiHtmlZoomFactor());
+            event->accept();
             return;
         }
     }

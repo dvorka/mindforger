@@ -33,9 +33,9 @@
 namespace m8r {
 
 #ifdef MF_QT_WEB_ENGINE
-  class OutlineHeaderView : public QWebEngineView
+class OutlineHeaderView : public QWebEngineView
 #else
-  class OutlineHeaderView : public QWebView
+class OutlineHeaderView : public QWebView
 #endif
 {
     Q_OBJECT
@@ -46,21 +46,21 @@ public:
     OutlineHeaderView(const OutlineHeaderView&&) = delete;
     OutlineHeaderView &operator=(const OutlineHeaderView&) = delete;
     OutlineHeaderView &operator=(const OutlineHeaderView&&) = delete;
-    ~OutlineHeaderView();
+    virtual ~OutlineHeaderView() override {}
 
 #ifdef MF_QT_WEB_ENGINE
     QWebEnginePage* getPage() const { return page(); }
 
 // this is ugly and stupid workaround for handling double-click event in QWebEngineView
 private:
-    QObject *childObj = NULL;
+    QObject *childObj = nullptr;
 protected:
     bool event(QEvent* evt) override;
     bool eventFilter(QObject *obj, QEvent *ev) override;
 #else
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
-    virtual void wheelEvent(QWheelEvent*) override;
 #endif
+    virtual void wheelEvent(QWheelEvent*) override;
 
 signals:
     void signalMouseDoubleClickEvent();

@@ -272,7 +272,12 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
     if(url.toString().size()) {
         if(url.toString().startsWith("file://")) {
             string key{url.toString().toStdString()};
+#if defined(WIN32) || defined(WIN64)
+            key.erase(0,8); // remove file prefix
+            std::replace( key.begin(), key.end(), '/', '\\');
+#else
             key.erase(0,7); // remove file prefix
+#endif
             size_t offset;
             if((offset = key.find("#")) != string::npos) {
                 // it CAN be Note
