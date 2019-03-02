@@ -3,6 +3,27 @@
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
+/*
+ * MindForger thinking notebook
+ * Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ *
+ * This header file has been modified for MindForger as follows:
+
+  289,294c289,291
+  < #  if not defined(WINDOWS) && not defined(WIN32)
+  < #    include <unistd.h>    / * for SEEK_* and off_t * /
+  < #    ifdef VMS
+  < #      include <unixio.h>   / * for off_t * /
+    < #    endif
+    < #    define z_off_t off_t
+    ---
+  > #  include <unistd.h>    / * for SEEK_* and off_t * /
+    > #  ifdef VMS
+  > #    include <unixio.h>   / * for off_t * /
+    295a293
+    > #  define z_off_t off_t
+ */
+
 /* @(#) $Id$ */
 
 #ifndef ZCONF_H

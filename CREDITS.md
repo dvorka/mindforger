@@ -16,6 +16,7 @@ Big thanks to 3rd party FOSS content authors:
 * NetBSD Foundation (strptime - Windows port - lib)
 * Toni Ronkko (dirent - Windows port - lib)
 * Microsoft (getopt - Windows port - lib)
+* Jordan Russell ([jrsoftware.org](http://jrsoftware.org) - Windows installer framework)
 * Davis E. King ([MITIE](https://github.com/mit-nlp/MITIE) - AI/NLP library and tools for information extraction - library)
 * Jean-loup Gailly, Mark Adler ([Zlib](https://sourceforge.net/projects/gnuwin32/) - library)
 * Google ([Google C++ unit testing framework](https://github.com/google/googletest))
