@@ -60,15 +60,15 @@ public:
 
 // this is ugly and stupid workaround for handling double-click events in QWebEngineView
 private:
-    QObject *childObj = NULL;
+    QObject *childObj = nullptr;
 protected:
     bool event(QEvent* evt) override;
     bool eventFilter(QObject *obj, QEvent *ev) override;
 #else
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
+#endif
     virtual void keyPressEvent(QKeyEvent*) override;
     virtual void wheelEvent(QWheelEvent*) override;
-#endif
 
 signals:
     void signalMouseDoubleClickEvent();

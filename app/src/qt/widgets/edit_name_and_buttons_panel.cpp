@@ -33,6 +33,7 @@ EditNameAndButtonsPanel::EditNameAndButtonsPanel(Mode mode, QWidget* parent)
     rememberButton = new QPushButton{tr("Remember"), this};
     rememberButton->setToolTip("Alt+Left");
     cancelButton = new QPushButton{tr("Cancel"), this};
+    cancelButton->setToolTip("Ctrl+G");
 
     // assembly
     layout = new QHBoxLayout{this};

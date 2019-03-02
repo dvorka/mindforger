@@ -36,9 +36,10 @@ NoteView::NoteView(QWidget *parent)
 #else
     // ensure that link clicks are not handled, but delegated to MF using linkClicked signal
     page()->setLinkDelegationPolicy(QWebPage::LinkDelegationPolicy::DelegateAllLinks);
+#endif
+
     // zoom
     setZoomFactor(Configuration::getInstance().getUiHtmlZoomFactor());
-#endif
 }
 
 #ifdef MF_QT_WEB_ENGINE
@@ -68,6 +69,34 @@ bool NoteView::eventFilter(QObject *obj, QEvent *event)
     }
 
     return QWebEngineView::eventFilter(obj, event);
+}
+
+void NoteView::keyPressEvent(QKeyEvent* event)
+{
+    if(event->modifiers() & Qt::AltModifier){
+        if(event->key()==Qt::Key_Left) {
+            emit signalFromViewNoteToOutlines();
+        }
+    }
+
+    QWebEngineView::keyPressEvent(event);
+}
+
+void NoteView::wheelEvent(QWheelEvent* event)
+{
+    if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
+        if(!event->angleDelta().isNull()) {
+            if(event->angleDelta().ry()>0) {
+                Configuration::getInstance().incUiHtmlZoom();
+            } else {
+                Configuration::getInstance().decUiHtmlZoom();
+            }
+            setZoomFactor(Configuration::getInstance().getUiHtmlZoomFactor());
+            return;
+        }
+    }
+
+    QWebEngineView::wheelEvent(event);
 }
 
 #else
