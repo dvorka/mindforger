@@ -19,11 +19,11 @@
 
 #include "cmark_gfm_markdown_transcoder.h"
 #ifdef MF_MD_2_HTML_CMARK
-#  include <cmark-gfm.h>
-#  include <cmark-gfm-core-extensions.h>
-#  include <registry.h>
-#  include <parser.h>
-#endif //MF_MD_2_HTML_CMARK
+  #include <cmark-gfm.h>
+  #include <cmark-gfm-core-extensions.h>
+  #include <registry.h>
+  #include <parser.h>
+#endif // MF_MD_2_HTML_CMARK
 
 namespace m8r {
 

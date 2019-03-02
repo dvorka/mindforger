@@ -24,13 +24,14 @@
 #include "../../config/configuration.h"
 
 namespace m8r {
+
     /**
     * @brief CmarkGfm options.
     *
     * See https://github.com/github/cmark-gfm/blob/master/src/cmark-gfm.h#L673
     */
 enum class CmarkGfmOption {
-    //TODO VH: complete this
+    // TODO VH: complete this
     
 };
 
