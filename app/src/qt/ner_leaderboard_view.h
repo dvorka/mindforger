@@ -35,9 +35,9 @@ public:
     NerLeaderboardView(const NerLeaderboardView&&) = delete;
     NerLeaderboardView &operator=(const NerLeaderboardView&) = delete;
     NerLeaderboardView &operator=(const NerLeaderboardView&&) = delete;
-    ~NerLeaderboardView();
+    virtual ~NerLeaderboardView() override {}
 
-    virtual void paintEvent(QPaintEvent* event) override;
+    virtual void resizeEvent(QResizeEvent* event) override;
 };
 
 }

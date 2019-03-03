@@ -38,14 +38,4 @@ OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
-OrganizerQuadrantView::~OrganizerQuadrantView()
-{
-}
-
-void OrganizerQuadrantView::paintEvent(QPaintEvent* event)
-{
-    MF_DEBUG("OrganizerQuadrantView::paintEvent" << event << std::endl);
-    QTableView::paintEvent(event);
-}
-
 } // m8r namespace

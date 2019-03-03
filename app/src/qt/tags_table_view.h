@@ -35,9 +35,9 @@ public:
     TagsTableView(const TagsTableView&&) = delete;
     TagsTableView &operator=(const TagsTableView&) = delete;
     TagsTableView &operator=(const TagsTableView&&) = delete;
-    ~TagsTableView();
+    virtual ~TagsTableView() override {}
 
-    virtual void paintEvent(QPaintEvent* event) override;
+    virtual void resizeEvent(QResizeEvent* event) override;
 };
 
 }

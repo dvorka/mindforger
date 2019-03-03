@@ -37,7 +37,7 @@ public:
     LineNumberPanel(const LineNumberPanel&&) = delete;
     LineNumberPanel &operator=(const LineNumberPanel&) = delete;
     LineNumberPanel &operator=(const LineNumberPanel&&) = delete;
-    ~LineNumberPanel();
+    virtual ~LineNumberPanel() override {}
 
     QSize sizeHint() const override;
 

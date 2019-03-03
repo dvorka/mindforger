@@ -30,7 +30,6 @@ OutlinesTableView::OutlinesTableView(QWidget *parent)
     // BEFARE ::ResizeToContents this kills performance - use ::Fixed instead:
     // verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    // IMPORTANT resize mode MUST NOT be set in paintEvent, otherwise it causes high CPU consumption loop
 
     setSortingEnabled(true);
 
@@ -41,12 +40,12 @@ OutlinesTableView::OutlinesTableView(QWidget *parent)
 
 void OutlinesTableView::resizeEvent(QResizeEvent* event)
 {
-    MF_DEBUG("OutlinesTableView::resizeEvent" << event << std::endl);
+    MF_DEBUG("OutlinesTableView::resizeEvent " << event << std::endl);
 
-    // ensure that 1st column gets the remaining space from others
-    // IMPROVE may kill performance
-    this->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-
+    if(horizontalHeader()->length() > 0) {
+        // ensure that 1st column gets the remaining space from others
+        horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    }
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
     // importance/urgency

@@ -35,9 +35,7 @@ public:
     OrganizerQuadrantView(const OrganizerQuadrantView&&) = delete;
     OrganizerQuadrantView &operator=(const OrganizerQuadrantView&) = delete;
     OrganizerQuadrantView &operator=(const OrganizerQuadrantView&&) = delete;
-    ~OrganizerQuadrantView();
-
-    virtual void paintEvent(QPaintEvent* event) override;
+    virtual ~OrganizerQuadrantView() {}
 };
 
 }

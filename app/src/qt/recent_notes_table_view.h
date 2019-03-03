@@ -38,9 +38,9 @@ public:
     RecentNotesTableView(const RecentNotesTableView&&) = delete;
     RecentNotesTableView &operator=(const RecentNotesTableView&) = delete;
     RecentNotesTableView &operator=(const RecentNotesTableView&&) = delete;
-    ~RecentNotesTableView();
+    virtual ~RecentNotesTableView() override {}
 
-    virtual void paintEvent(QPaintEvent* event) override;
+    virtual void resizeEvent(QResizeEvent* event) override;
 };
 
 }

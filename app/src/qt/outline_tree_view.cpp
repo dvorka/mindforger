@@ -36,7 +36,6 @@ OutlineTreeView::OutlineTreeView(QWidget* parent)
     // disable TAB and Ctrl+O up/down navigation (Ctrl+O no longer bound)
     setTabKeyNavigation(false);
 
-    // BEVARE: this call cannot go paint() otherwise leads to loop and crazy CPU
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 }
 
@@ -107,14 +106,14 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
     QWidget::keyPressEvent(event);
 }
 
-void OutlineTreeView::paintEvent(QPaintEvent* event)
+void OutlineTreeView::resizeEvent(QResizeEvent* event)
 {
-    MF_DEBUG("OutlineTreeView::paintEvent" << event << std::endl);
+    MF_DEBUG("OutlineTreeView::resizeEvent " << event << std::endl);
 
-    // SUSPECTED to cause high CPU consumption due paint() event loop
-    // ensure that 1st column gets the remaining space from others
-    horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-
+    if(horizontalHeader()->length() > 0) {
+        // ensure that 1st column gets the remaining space from others
+        horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    }
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
     int normalizedWidth = width()/fontMetrics().averageCharWidth();
@@ -133,7 +132,7 @@ void OutlineTreeView::paintEvent(QPaintEvent* event)
     // pretty
     this->setColumnWidth(4, this->fontMetrics().averageCharWidth()*12);
 
-    QTableView::paintEvent(event);
+    QTableView::resizeEvent(event);
 }
 
 } // m8r namespace

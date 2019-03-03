@@ -43,6 +43,7 @@ public:
     OutlinesTableView(const OutlinesTableView&&) = delete;
     OutlinesTableView &operator=(const OutlinesTableView&) = delete;
     OutlinesTableView &operator=(const OutlinesTableView&&) = delete;
+    virtual ~OutlinesTableView() override {}
 
     int getColumnCount() { return COLUMN_COUNT; }
 

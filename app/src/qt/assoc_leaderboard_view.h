@@ -35,9 +35,9 @@ public:
     AssocLeaderboardView(const AssocLeaderboardView&&) = delete;
     AssocLeaderboardView &operator=(const AssocLeaderboardView&) = delete;
     AssocLeaderboardView &operator=(const AssocLeaderboardView&&) = delete;
-    ~AssocLeaderboardView();
+    virtual ~AssocLeaderboardView() override {}
 
-    virtual void paintEvent(QPaintEvent* event) override;
+    virtual void resizeEvent(QResizeEvent* event) override;
 };
 
 }

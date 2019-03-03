@@ -26,7 +26,7 @@ AssocLeaderboardView::AssocLeaderboardView(QWidget* parent)
     verticalHeader()->setVisible(false);
     // BEFARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    // IMPORTANT this must be in constructors - causes CPU high consuption loop if in paintEvent()!
+    // IMPORTANT this must be in constructors - causes CPU high consuption loop if in an event handler
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
     setSortingEnabled(false);
@@ -36,24 +36,20 @@ AssocLeaderboardView::AssocLeaderboardView(QWidget* parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
-AssocLeaderboardView::~AssocLeaderboardView()
+void AssocLeaderboardView::resizeEvent(QResizeEvent* event)
 {
-}
+    MF_DEBUG("AssocLeaderboardView::resizeEvent " << event << std::endl);
 
-void AssocLeaderboardView::paintEvent(QPaintEvent* event)
-{
-    MF_DEBUG("AssocLeaderboardView::paintEvent" << event << std::endl);
-
-    // ensure that 1st column gets the remaining space from others
-    // IMPROVE may kill performance
-    this->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-
+    if(horizontalHeader()->length() > 0) {
+        // ensure that 1st column gets the remaining space from others
+        horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    }
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
     // % associativity
     this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*12);
 
-    QTableView::paintEvent(event);
+    QTableView::resizeEvent(event);
 }
 
 } // m8r namespace
