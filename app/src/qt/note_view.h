@@ -1,7 +1,7 @@
 /*
  note_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -58,17 +58,14 @@ public:
 #ifdef MF_QT_WEB_ENGINE
     QWebEnginePage* getPage() const { return page(); }
 
-// this is ugly and stupid workaround for handling double-click events in QWebEngineView
-private:
-    QObject *childObj = NULL;
 protected:
     bool event(QEvent* evt) override;
     bool eventFilter(QObject *obj, QEvent *ev) override;
 #else
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
+#endif
     virtual void keyPressEvent(QKeyEvent*) override;
     virtual void wheelEvent(QWheelEvent*) override;
-#endif
 
 signals:
     void signalMouseDoubleClickEvent();

@@ -1,7 +1,7 @@
 /*
  web_engine_page_link_navigation_policy.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ public:
     bool acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool isMainFrame)
     {
 #ifdef DO_MF_DEBUG
-        MF_DEBUG("acceptNavigationRequest(" << url << "," << type << "," << isMainFrame << ")" << std::endl);
+        MF_DEBUG("acceptNavigationRequest(" << url.toString().toStdString() << "," << type << "," << isMainFrame << ")" << std::endl);
 #else
         UNUSED_ARG(type);
         UNUSED_ARG(isMainFrame);

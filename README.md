@@ -1,12 +1,13 @@
 # Thinking Notebook & Markdown IDE
 
 [![Travis CI](https://travis-ci.org/dvorka/mindforger.svg?branch=master)](https://travis-ci.org/dvorka/mindforger)
+[![Appveyor CI](https://ci.appveyor.com/api/projects/status/iemop280po84od66?svg=true)](https://ci.appveyor.com/project/dvorka/mindforger)
 [![Current release](https://img.shields.io/github/release/dvorka/mindforger.svg)](https://github.com/dvorka/mindforger/releases)
-[![Documentation](https://img.shields.io/badge/project-documentation-blue.svg)](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md)
 [![GitHub issues](https://img.shields.io/github/issues/dvorka/mindforger.svg?maxAge=360)](https://github.com/dvorka/mindforger/issues)
 [![All releases downloads](https://img.shields.io/github/downloads/dvorka/mindforger/total.svg)](https://github.com/dvorka/mindforger/releases)
 [![AUR](https://img.shields.io/aur/license/yaourt.svg)](https://github.com/dvorka/mindforger/blob/master/LICENSE)
 <a href="https://twitter.com/intent/follow?screen_name=mindforger"><img src="https://img.shields.io/twitter/follow/mindforger.svg?style=social&logo=twitter" alt="follow on Twitter"></a>
+<!-- [![Documentation](https://img.shields.io/badge/project-documentation-blue.svg)](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md) -->
 
 Are you **drowning** in **information**, but **starving** for **knowledge**? Where do you keep your **private remarks** 
 like ideas, personal plans, gift tips, how-tos, dreams, business vision, finance strategy, auto 
@@ -29,20 +30,22 @@ MindForger is actually more than an editor or IDE - it's human mind inspired per
 ## Installation
 Install:
 
+* [Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#windows-)
 * [Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#ubuntu-)
 * [Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#debian-)
 * [Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#fedora-)
 * [Arch Linux](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#arch-linux-)
 * [macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#macos-)
-* [Windows WSL](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#wsl-)
+* [WSL](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#wsl-)
 
 Build:
 
+* [build on Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-windows-)
 * [build on Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-ubuntu-)
 * [build on Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-debian-)
 * [build on Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-fedora-)
 * [build on macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-macos-)
-* [build on Windows Subsystem for Linux (WSL)](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-wsl-)
+* [build on WSL](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-wsl-)
 
 Docker:
 

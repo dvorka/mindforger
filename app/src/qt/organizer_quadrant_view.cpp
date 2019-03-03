@@ -1,7 +1,7 @@
 /*
  organizer_quadrant_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -36,15 +36,6 @@ OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent)
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
-}
-
-OrganizerQuadrantView::~OrganizerQuadrantView()
-{
-}
-
-void OrganizerQuadrantView::paintEvent(QPaintEvent* event)
-{
-    QTableView::paintEvent(event);
 }
 
 } // m8r namespace

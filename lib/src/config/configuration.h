@@ -1,7 +1,7 @@
 /*
  configuration.h     M8r configuration management
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include "../exceptions.h"
 #include "../model/tag.h"
 #include "../install/installer.h"
+#include "../representations/markdown/markdown_transcoder.h"
 
 namespace m8r {
 
@@ -65,6 +66,7 @@ constexpr const auto FILE_EXTENSION_MD_MKDN = ".mkdn";
 constexpr const auto UI_THEME_DARK = "dark";
 constexpr const auto UI_THEME_LIGHT = "light";
 constexpr const auto UI_THEME_BLACK = "black";
+constexpr const auto UI_THEME_NATIVE = "native";
 
 constexpr const auto UI_HTML_THEME_CSS_LIGHT = "qrc:/html-css/light.css";
 constexpr const auto UI_HTML_THEME_CSS_LIGHT_COMPACT = "qrc:/html-css/light-compact.css";
@@ -128,30 +130,6 @@ public:
         ONLINE      // 2
     };
 
-    enum MdToHtmlOption {
-        // Discount options: https://www.pell.portland.or.us/~orc/Code/discount/
-        NoLinksOption          = 1<<0, /* don't do link processing, block <a> tags  */
-        NoImagesOption         = 1<<1, /* don't do image processing, block <img> */
-        NoSmartypantsOption    = 1<<2, /* don't run smartypants() */
-        NoHtmlOption           = 1<<3, /* don't allow raw html through AT ALL */
-        NoSuperscriptOption    = 1<<4, /* don't process a^2 as superscript(<sup>) */
-        NoTablesOption         = 1<<5, /* disallow tables */
-        NoStrikethroughOption  = 1<<6, /* forbid ~~strikethrough~~ */
-        TableOfContentsOption  = 1<<7, /* do table-of-contents processing */
-        AutolinkOption         = 1<<8, /* make http://foo.com link even without <>s */
-        NoHeaderOption         = 1<<9, /* don't process header blocks */
-        NoDivQuoteOption       = 1<<10, /* forbid >%class% blocks */
-        NoAlphaListOption      = 1<<11, /* forbid alphabetic lists */
-        NoDefinitionListOption = 1<<12, /* forbid definition lists */
-        ExtraFootnoteOption    = 1<<13, /* enable markdown extra-style footnotes */
-        NoStyleOption          = 1<<14, /* don't extract <style> blocks */
-
-        // postprocessing - makes HTML rendering slow
-        MathSupport            = 1<<15,
-        CodeHighlighting       = 1<<16,
-        DiagramSupport         = 1<<17
-    };
-
     enum EditorKeyBindingMode {
         EMACS,
         VIM,
@@ -203,6 +181,8 @@ private:
     unsigned int asyncMindThreshold;
 
     std::string userHomePath;
+    // Some platforms, e.g. Windows, distinquishes user home and user documents
+    std::string userDocPath;
     std::string configFilePath;
 
     Repository* activeRepository;
@@ -241,9 +221,11 @@ private:
     bool uiEditorSyntaxHighlighting; // toggle syntax highlighting
     bool uiEditorAutocomplete; // toggle autocompletion
     JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
+    int navigatorMaxNodes;
     bool uiEditorTabsAsSpaces;
     bool uiShowToolbar;
-    int navigatorMaxNodes;
+    bool uiDistractionFreeMode; // fullscreen, no split, hidden toolbar + menu
+    bool uiHoistedMode; // no split
 
 private:
     Installer* installer;
@@ -309,7 +291,9 @@ public:
     std::vector<std::string>& getTagsScope() { return tagsScope; }
     bool isSaveReadsMetadata() const { return saveReadsMetadata; }
     void setSaveReadsMetadata(bool saveReadsMetadata) { this->saveReadsMetadata=saveReadsMetadata; }
-    bool isAutolinking() const { return autolinking; }
+    // TODO force disabling autolinking
+    // bool isAutolinking() const { return autolinking; }
+    bool isAutolinking() const { return false; }
     void setAutolinking(bool autolinking) { this->autolinking=autolinking; }
     bool isAutolinkingColonSplit() const { return autolinkingColonSplit; }
     void setAutolinkingColonSplit(bool autolinkingColonSplit) { this->autolinkingColonSplit=autolinkingColonSplit; }
@@ -405,13 +389,18 @@ public:
 
     JavaScriptLibSupport getUiEnableDiagramsInMd() { return uiEnableDiagramsInMd; }
     void setUiEnableDiagramsInMd(JavaScriptLibSupport mode) { uiEnableDiagramsInMd = mode; }
-    bool isUiShowToolbar() const { return uiShowToolbar; }
-    void setUiShowToolbar(bool showToolbar){ this->uiShowToolbar = showToolbar; }
-    bool isUiEditorTabsAsSpaces() const { return uiEditorTabsAsSpaces; }
-    void setUiEditorTabsAsSpaces(bool uiEditorTabsAsSpaces){ this->uiEditorTabsAsSpaces = uiEditorTabsAsSpaces; }
 
     int getNavigatorMaxNodes() const { return navigatorMaxNodes; }
     void setNavigatorMaxNodes(int navigatorMaxNodes) { this->navigatorMaxNodes = navigatorMaxNodes; }
+    bool isUiEditorTabsAsSpaces() const { return uiEditorTabsAsSpaces; }
+    void setUiEditorTabsAsSpaces(bool uiEditorTabsAsSpaces){ this->uiEditorTabsAsSpaces = uiEditorTabsAsSpaces; }
+
+    bool isUiShowToolbar() const { return uiShowToolbar; }
+    void setUiShowToolbar(bool showToolbar){ this->uiShowToolbar = showToolbar; }
+    bool isUiDistractionFreeMode() const { return uiDistractionFreeMode; }
+    void setUiDistractionFreeMode(bool distractionFreeMode){ this->uiDistractionFreeMode = distractionFreeMode; }
+    bool isUiHoistedMode() const { return uiHoistedMode; }
+    void setUiHoistedMode(bool hoisted){ this->uiHoistedMode = hoisted; }
 };
 
 } // namespace

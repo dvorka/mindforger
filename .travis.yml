@@ -1,6 +1,6 @@
 # .travis.yml     Travis CI configuration file for MindForger
 #
-# Copyright (C) 2014-2018  Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2014-2019  Martin Dvorak <martin.dvorak@mindforger.com>
 #
 #
 # This program is free software; you can redistribute it and/or
@@ -61,14 +61,15 @@ install:
 script: # make lib unit tests > run lib unit tests > make MF > install MF
   - cd "${M8RHOME}"
   - eval "${MATRIX_EVAL}"
-  - cd deps/discount && ./configure.sh && make ; cd ../..
+  - cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . && cd ../../..
+  - "cd deps/discount && ./configure.sh && make ; cd ../.."
   - "echo \"M8RDEBUG: g++ compiler is set to: ${CXX}\""  
   - cd lib/test # UNIT tests
   - qmake -r CONFIG+=mfnocxx CONFIG+=mfunits QMAKE_CXX=${CXX} mindforger-lib-unit-tests.pro
   - make
-  - cd src && export M8R_GIT_PATH="${M8RHOME}" && ./mindforger-lib-unit-tests > /tmp/mindforger-unit-tests.log 2>&1 ; true
+  - cd src && export M8R_GIT_PATH="${M8RHOME}" && ./mindforger-lib-unit-tests > /tmp/mindforger-unit-tests.log 2>&1 # ; true
   - cd ../../..
-  - tail /tmp/mindforger-unit-tests.log
+  - cat /tmp/mindforger-unit-tests.log
   - qmake -r CONFIG+=mfnocxx QMAKE_CXX=${CXX} mindforger.pro
   - make
   - sudo make install

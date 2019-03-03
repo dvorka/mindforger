@@ -1,7 +1,7 @@
 /*
  trie_test.cpp     MindForger application test
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -24,8 +24,8 @@
 
 #include <gtest/gtest.h>
 
-#include "../../src/gear/trie.h"
-#include "../../src/gear/file_utils.h"
+#include "gear/trie.h"
+#include "gear/file_utils.h"
 
 using namespace std;
 

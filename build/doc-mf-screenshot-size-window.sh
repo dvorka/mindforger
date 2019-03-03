@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,8 +21,8 @@
 
 echo "IMPORTANT: before running this script make sure window is NOT maximized or half sized - use rectangle button that allows window resizing (using right-down corner)"
 
-wmctrl -r "MindForger - Thinking Notebook - 1.48.0 - /home/dvorka/mf" -e 0,0,0,1360,768
-wmctrl -r "MindForger - Thinking Notebook - 1.48.0 - /home/dvorka/demo" -e 0,0,0,1360,768
-#wmctrl -r "MindForger - Thinking Notebook - 1.48.0 - /home/dvorka/p/mindforger/git/mindforger-repository" -e 0,0,0,1360,768
+wmctrl -r "MindForger - Thinking Notebook - 1.49.0 - /home/dvorka/mf" -e 0,0,0,1360,768
+wmctrl -r "MindForger - Thinking Notebook - 1.49.0 - /home/dvorka/demo" -e 0,0,0,1360,768
+#wmctrl -r "MindForger - Thinking Notebook - 1.49.0 - /home/dvorka/p/mindforger/git/mindforger-repository" -e 0,0,0,1360,768
 
 # eof

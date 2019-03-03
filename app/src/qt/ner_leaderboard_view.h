@@ -1,7 +1,7 @@
 /*
  ner_leaderboard_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -35,9 +35,9 @@ public:
     NerLeaderboardView(const NerLeaderboardView&&) = delete;
     NerLeaderboardView &operator=(const NerLeaderboardView&) = delete;
     NerLeaderboardView &operator=(const NerLeaderboardView&&) = delete;
-    ~NerLeaderboardView();
+    virtual ~NerLeaderboardView() override {}
 
-    virtual void paintEvent(QPaintEvent* event) override;
+    virtual void resizeEvent(QResizeEvent* event) override;
 };
 
 }

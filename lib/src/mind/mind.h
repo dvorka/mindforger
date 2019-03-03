@@ -1,7 +1,7 @@
 /*
  mind.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@
     #include "ai/nlp/named_entity_recognition.h"
 #endif
 
-#include "./ai/autolinking_preprocessor.h"
+#include "ai/autolinking/naive_autolinking_preprocessor.h"
 
 namespace m8r {
 

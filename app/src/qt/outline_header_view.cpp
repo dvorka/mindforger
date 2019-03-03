@@ -1,7 +1,7 @@
 /*
  outline_header_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -36,23 +36,20 @@ OutlineHeaderView::OutlineHeaderView(QWidget *parent)
 #else
     // ensure that link clicks are not handled, but delegated to MF using linkClicked signal
     page()->setLinkDelegationPolicy(QWebPage::LinkDelegationPolicy::DelegateAllLinks);
+#endif
+
     // zoom
     setZoomFactor(Configuration::getInstance().getUiHtmlZoomFactor());
-#endif
-}
-
-OutlineHeaderView::~OutlineHeaderView()
-{
 }
 
 #ifdef MF_QT_WEB_ENGINE
 
 bool OutlineHeaderView::event(QEvent* event)
 {
-    MF_DEBUG(event->type() << endl);
+    // INSTALL event filter to every child - child polished event is received 1+x for every child
     if (event->type() == QEvent::ChildPolished) {
         QChildEvent *childEvent = static_cast<QChildEvent*>(event);
-        childObj = childEvent->child();
+        QObject *childObj = childEvent->child();
         if (childObj) {
             childObj->installEventFilter(this);
         }
@@ -63,15 +60,32 @@ bool OutlineHeaderView::event(QEvent* event)
 
 bool OutlineHeaderView::eventFilter(QObject *obj, QEvent *event)
 {
-    if(obj == childObj) {
-        if(event->type() == QEvent::MouseButtonDblClick) {
-            // double click to Note view opens Note editor
-            emit signalMouseDoubleClickEvent();
-            return true;
-        }
+    if(event->type() == QEvent::MouseButtonDblClick) {
+        // double click to Note view opens Note editor
+        emit signalMouseDoubleClickEvent();
+        event->accept();
+        return true;
     }
 
     return QWebEngineView::eventFilter(obj, event);
+}
+
+void OutlineHeaderView::wheelEvent(QWheelEvent* event)
+{
+    if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
+        if(!event->angleDelta().isNull()) {
+            if(event->angleDelta().ry()>0) {
+                Configuration::getInstance().incUiHtmlZoom();
+            } else {
+                Configuration::getInstance().decUiHtmlZoom();
+            }
+            setZoomFactor(Configuration::getInstance().getUiHtmlZoomFactor());
+            event->accept();
+            return;
+        }
+    }
+
+    OutlineHeaderView::wheelEvent(event);
 }
 
 #else

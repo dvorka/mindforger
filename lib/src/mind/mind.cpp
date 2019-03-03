@@ -1,7 +1,7 @@
 /*
  mind.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ namespace m8r {
 Mind::Mind(Configuration &configuration)
     : config{configuration},
       ontology{},
-      autoInterceptor(new AutolinkingPreprocessor{*this}),
+      autoInterceptor(new NaiveAutolinkingPreprocessor{*this}),
       htmlRepresentation{ontology, autoInterceptor},
       mdConfigRepresentation(new MarkdownConfigurationRepresentation{}),
       memory{configuration, ontology, htmlRepresentation},

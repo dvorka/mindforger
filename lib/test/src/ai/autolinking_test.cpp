@@ -1,7 +1,7 @@
 /*
  nlp_test.cpp     MindForger application test
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -25,9 +25,9 @@
 #include "../../../src/mind/mind.h"
 #include "../../../src/mind/ai/ai.h"
 #include "../../../src/representations/markdown/markdown_outline_representation.h"
-#include "../../../src/mind/ai/autolinking_preprocessor.h"
+#include "../../../src/mind/ai/autolinking/naive_autolinking_preprocessor.h"
 
-#include "../src/test_gear.h"
+#include "../test_gear.h"
 
 #include <gtest/gtest.h>
 
@@ -36,7 +36,8 @@ extern void toString(const std::vector<std::string*> ss, std::string& os);
 
 using namespace std;
 
-TEST(AutolinkingTestCase, Autolinker)
+
+TEST(AutolinkingTestCase, NaiveAutolinker)
 {
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
@@ -51,7 +52,7 @@ TEST(AutolinkingTestCase, Autolinker)
     cout << endl << "  Outlines: " << mind.remind().getOutlinesCount();
     cout << endl << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
     ASSERT_EQ(3, mind.remind().getOutlinesCount());
-    m8r::AutolinkingPreprocessor autolinker{mind};
+    m8r::NaiveAutolinkingPreprocessor autolinker{mind};
 
     cout << endl << endl << "Testing MD autolinking:" << endl;
     m8r::Note* n = mind.remind().getOutlines()[0]->getNotes()[0];
@@ -66,7 +67,7 @@ TEST(AutolinkingTestCase, Autolinker)
     }
 }
 
-TEST(AutolinkingTestCase, MarkdownRepresentation)
+TEST(AutolinkingTestCase, NaiveMarkdownRepresentation)
 {
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
@@ -82,7 +83,7 @@ TEST(AutolinkingTestCase, MarkdownRepresentation)
     cout << endl << "  Outlines: " << mind.remind().getOutlinesCount();
     cout << endl << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
     ASSERT_EQ(3, mind.remind().getOutlinesCount());
-    m8r::AutolinkingPreprocessor autolinker{mind};
+    m8r::NaiveAutolinkingPreprocessor autolinker{mind};
     m8r::MarkdownOutlineRepresentation mdRepresentation{mind.remind().getOntology(), &autolinker};
 
     cout << endl << endl << "Testing MD autolinking:" << endl;
@@ -93,8 +94,7 @@ TEST(AutolinkingTestCase, MarkdownRepresentation)
     delete autolinkedString;
 }
 
-
-TEST(AutolinkingTestCase, CrashAndBurn)
+TEST(AutolinkingTestCase, NaiveCrashAndBurn)
 {
     string repositoryPath{"/lib/test/resources/autolinking-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
@@ -110,7 +110,7 @@ TEST(AutolinkingTestCase, CrashAndBurn)
     cout << endl << "  Outlines: " << mind.remind().getOutlinesCount();
     cout << endl << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
     ASSERT_EQ(1, mind.remind().getOutlinesCount());
-    m8r::AutolinkingPreprocessor autolinker{mind};
+    m8r::NaiveAutolinkingPreprocessor autolinker{mind};
 
     cout << endl << endl << "Testing MD autolinking:" << endl;
     m8r::Note* n = mind.remind().getOutlines()[0]->getNotes()[0];

@@ -1,7 +1,7 @@
 /*
  ner_leaderboard_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ NerLeaderboardView::NerLeaderboardView(QWidget* parent)
     verticalHeader()->setVisible(false);
     // BEFARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    // IMPORTANT this must b in constructors - causes CPU high consuption loop if in paintEvent()!
+    // IMPORTANT this must b in constructors - causes CPU high consuption loop if in an event handler
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
     setSortingEnabled(true);
@@ -40,16 +40,14 @@ NerLeaderboardView::NerLeaderboardView(QWidget* parent)
     setItemDelegate(delegate);
 }
 
-NerLeaderboardView::~NerLeaderboardView()
+void NerLeaderboardView::resizeEvent(QResizeEvent* event)
 {
-}
+    MF_DEBUG("NerLeaderboardView::resizeEvent " << event << std::endl);
 
-void NerLeaderboardView::paintEvent(QPaintEvent* event)
-{
-    // ensure that 1st column gets the remaining space from others
-    // IMPROVE may kill performance
-    this->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-
+    if(horizontalHeader()->length() > 0) {
+        // ensure that 1st column gets the remaining space from others
+        horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    }
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
     // type
@@ -57,7 +55,7 @@ void NerLeaderboardView::paintEvent(QPaintEvent* event)
     // %
     this->setColumnWidth(2, this->fontMetrics().averageCharWidth()*12);
 
-    QTableView::paintEvent(event);
+    QTableView::resizeEvent(event);
 }
 
 } // m8r namespace

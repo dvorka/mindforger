@@ -1,7 +1,7 @@
 /*
  look_n_feel.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ using namespace std;
 LookAndFeels::LookAndFeels()
     : config(Configuration::getInstance())
 {
-    themeNames << UI_THEME_DARK << UI_THEME_LIGHT << UI_THEME_BLACK;
+    themeNames << UI_THEME_DARK << UI_THEME_LIGHT << UI_THEME_BLACK << UI_THEME_NATIVE;
 }
 
 void LookAndFeels::init(QApplication* mindforgerApplication)
@@ -50,6 +50,8 @@ void LookAndFeels::setTheme(const QString& themeName)
         setDarkTheme();
     } else if(UI_THEME_BLACK == themeName.toStdString()) {
         setBlackTheme();
+    } else if(UI_THEME_NATIVE == themeName.toStdString()) {
+        setNativeTheme();
     }
 }
 
@@ -219,6 +221,14 @@ void LookAndFeels::setBlackTheme()
     // IMPROVE tooltips are set in two ways
     mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #000000; border: 1px solid white; }");
     menuStylesheet = QString("QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px;}");
+}
+
+void LookAndFeels::setNativeTheme()
+{}
+
+bool LookAndFeels::isThemeNative() const
+{
+    return UI_THEME_NATIVE == config.getUiThemeName();
 }
 
 std::string& LookAndFeels::getHtmlTextColor()

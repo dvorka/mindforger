@@ -4,9 +4,9 @@
 [submodule "deps/discount"]
 	path = deps/discount
 	url = https://github.com/dvorka/discount.git
-[submodule "deps/cmark"]
-	path = deps/cmark
-	url = https://github.com/dvorka/cmark.git
 [submodule "deps/mitie"]
 	path = deps/mitie
 	url = https://github.com/dvorka/MITIE.git
+[submodule "deps/cmark-gfm"]
+	path = deps/cmark-gfm
+	url = https://github.com/dvorka/cmark.git

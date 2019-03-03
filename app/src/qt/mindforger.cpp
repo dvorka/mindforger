@@ -1,7 +1,7 @@
 /*
  main.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -19,8 +19,11 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include <getopt.h>
-
+#ifndef _WIN32
+#  include <getopt.h>
+#else
+#  include "../../deps/getopt/getopt.h"
+#endif //_WIN32
 #include <QtWidgets>
 
 #include "../../lib/src/version.h"
@@ -105,7 +108,7 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     // check whether running in GUI (and not in text console tty)
-#ifndef __APPLE__
+#if not defined(__APPLE__) && not defined (_WIN32)
     char *term = getenv(m8r::ENV_VAR_DISPLAY);
     if(!term || !strlen(term)) {
         cerr << endl << QCoreApplication::translate("main", "MindForger CANNOT be run from text console - set DISPLAY environment variable or run MindForger from GUI.").toUtf8().constData()
@@ -117,7 +120,7 @@ int main(int argc, char *argv[])
 
     // stupid & ugly reused code as macOS requires to pass --disable-web-security parameter to QApplication
     // so that it allows loading of images by QWebEngine
-#ifdef __APPLE__
+#if defined (__APPLE__) || defined(_WIN32)
     char ARG_DISABLE_WEB_SECURITY[] = "--disable-web-security";
     int newArgc = argc+1+1;
     char** newArgv = new char*[newArgc];

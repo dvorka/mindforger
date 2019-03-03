@@ -1,7 +1,7 @@
 /*
  organizer_quadrant_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -21,6 +21,8 @@
 
 #include <QtWidgets>
 
+#include "../../../lib/src/debug.h"
+
 namespace m8r {
 
 class OrganizerQuadrantView : public QTableView
@@ -33,9 +35,7 @@ public:
     OrganizerQuadrantView(const OrganizerQuadrantView&&) = delete;
     OrganizerQuadrantView &operator=(const OrganizerQuadrantView&) = delete;
     OrganizerQuadrantView &operator=(const OrganizerQuadrantView&&) = delete;
-    ~OrganizerQuadrantView();
-
-    virtual void paintEvent(QPaintEvent* event) override;
+    virtual ~OrganizerQuadrantView() {}
 };
 
 }

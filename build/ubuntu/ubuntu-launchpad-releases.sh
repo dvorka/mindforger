@@ -2,7 +2,7 @@
 #
 # MindForger knowledge management tool
 #
-# Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -171,7 +171,7 @@ function releaseForParticularUbuntuVersion() {
     cp -rvf ~/pbuilder/*.tgz ${PBUILDFOLDER}
     # END
     pbuilder-dist ${UBUNTUVERSION} build ${MFRELEASE}.dsc
-
+    
     # 8) upload to Launchpad: push Bazaar and put changes
     echo -e "\n# bzr push .deb to Launchpad #################################"
     # from buildarea/ to ./dist
@@ -197,9 +197,9 @@ then
     exit 1
 fi
 
-export ARG_BAZAAR_MSG="MindForger 1.48.2 release."
-export ARG_MAJOR_VERSION=1.48.
-export ARG_MINOR_VERSION=30 # minor version is incremented for every Ubuntu version
+export ARG_BAZAAR_MSG="MindForger 1.49.0 release."
+export ARG_MAJOR_VERSION=1.49.
+export ARG_MINOR_VERSION=0 # minor version is incremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety trusty (old GCC) artful

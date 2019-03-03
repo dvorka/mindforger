@@ -1,7 +1,7 @@
 /*
  markdown_benchmark.cpp     MindForger markdown test
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -21,14 +21,16 @@
 #include <iostream>
 #include <memory>
 #include <cstdio>
-#include <unistd.h>
+#ifndef _WIN32
+#  include <unistd.h>
+#endif //_WIN32
 
 #include <gtest/gtest.h>
 
 #include "../test_gear.h"
-#include "../../src/representations/html/html_outline_representation.h"
-#include "../../src/mind/mind.h"
-#include "../../src/persistence/filesystem_persistence.h"
+#include "representations/html/html_outline_representation.h"
+#include "mind/mind.h"
+#include "persistence/filesystem_persistence.h"
 
 using namespace std;
 

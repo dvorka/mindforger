@@ -1,7 +1,7 @@
 /*
  test_gear.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -42,6 +42,8 @@ void printLexems(const std::vector<MarkdownLexem*>& lexems);
 void printAst(const std::vector<MarkdownAstNodeSection*>* ast);
 
 void createEmptyRepository(std::string& repositoryDir, std::map<std::string,std::string>& pathToContent);
+
+std::string platformSpecificPath(const char *path);
 
 }
 #endif // M8R_TEST_GEAR_H

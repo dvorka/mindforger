@@ -1,7 +1,7 @@
 /*
  markdown_parser_sections.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -18,6 +18,7 @@
  */
 
 #include "markdown_parser_sections.h"
+#include "../../config/config.h"
 
 const char *DEFAULT_NAME= "A thing";
 const char *DEFAULT_MARKDOWN_NAME= "Outline";

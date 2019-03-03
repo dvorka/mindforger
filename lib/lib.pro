@@ -1,6 +1,6 @@
 # mindforger-lib.pro     MindForger thinking notebook
 #
-# Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software ; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,30 +20,57 @@ TEMPLATE = lib
 CONFIG += staticlib
 CONFIG -= qt
 
-# dependencies
-#  - INCLUDEPATH is used during compilation to find included header files.
-#  - DEPENDPATH is used to resolve dependencies between header and source files, eg. which source files need to be recompiled when certain header file changes.
+# Dependencies:
+# - INCLUDEPATH is used during compilation to find included header files.
+# - DEPENDPATH is used to resolve dependencies between header and source files,
+#   e.g. which source files need to be recompiled when certain header file changes.
+
 mfnomd2html {
   DEFINES += MF_NO_MD_2_HTML
 } else {
-  INCLUDEPATH += $$PWD/../deps/discount
-  DEPENDPATH += $$PWD/../deps/discount
+  mfmd2htmldiscount {
+    DEFINES += MF_MD_2_HTML_DISCOUNT
+    INCLUDEPATH += $$PWD/../deps/discount
+    DEPENDPATH += $$PWD/../deps/discount
+  } else {
+    DEFINES += MF_MD_2_HTML_CMARK CMARK_GFM_STATIC_DEFINE CMARK_GFM_EXTENSIONS_STATIC_DEFINE
+    INCLUDEPATH += $$PWD/../deps/cmark-gfm/src
+    INCLUDEPATH += $$PWD/../deps/cmark-gfm/extensions
+    INCLUDEPATH += $$PWD/../deps/cmark-gfm/build/src
+    INCLUDEPATH += $$PWD/../deps/cmark-gfm/build/extensions
+  }
 }
+
+# Zlib on Windows
+win32 {
+ INCLUDEPATH += $$PWD/../deps/zlib-win/include
+ DEPENDPATH += $$PWD/../deps/zlib-win/include
+}
+
+# NER library
 mfner {
     DEFINES += MF_NER
     INCLUDEPATH += $$PWD/../deps/mitie/mitielib/include
     DEPENDPATH += $$PWD/../deps/mitie/mitielib/include
 }
 
+# debug
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
 }
-mfnoccache {
-  QMAKE_CXX = g++
-} else:!mfnocxx {
-  QMAKE_CXX = ccache g++
+
+# compiler options (qmake CONFIG+=mfnoccache ...)
+win32{
+    QMAKE_CXXFLAGS += /MP
+} else {
+    # linux and macos
+    mfnoccache {
+      QMAKE_CXX = g++
+    } else:!mfnocxx {
+      QMAKE_CXX = ccache g++
+    }
+    QMAKE_CXXFLAGS += -pedantic -std=c++11
 }
-QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
 
 SOURCES += \
     ./src/repository_indexer.cpp \
@@ -107,7 +134,11 @@ SOURCES += \
     src/representations/twiki/twiki_outline_representation.cpp \
     src/mind/associated_notes.cpp \
     src/mind/ai/autolinking_preprocessor.cpp \
-    src/representations/csv/csv_outline_representation.cpp
+    src/representations/csv/csv_outline_representation.cpp \
+    src/mind/ai/autolinking/aho_corasick_autolinking_preprocessor.cpp \
+    src/mind/ai/autolinking/naive_autolinking_preprocessor.cpp \
+    src/representations/markdown/discount_markdown_transcoder.cpp \
+    src/representations/markdown/cmark_gfm_markdown_transcoder.cpp
 
 mfner {
     SOURCES += \
@@ -164,6 +195,7 @@ HEADERS += \
     ./src/config/configuration.h \
     ./src/install/installer.h \
     ./src/config/repository.h \
+    ./src/config/config.h \
     ./src/mind/ontology/thing_class_rel_triple.h \
     ./src/mind/ontology/taxonomy.h \
     ./src/mind/aspect/aspect.h \
@@ -219,10 +251,26 @@ HEADERS += \
     src/mind/associated_notes.h \
     src/mind/ai/autolinking_preprocessor.h \
     src/representations/representation_interceptor.h \
-    src/representations/csv/csv_outline_representation.h
+    src/representations/csv/csv_outline_representation.h \
+    src/mind/ai/autolinking/aho_corasick_autolinking_preprocessor.h \
+    src/mind/ai/autolinking/naive_autolinking_preprocessor.h \
+    src/representations/markdown/markdown_transcoder.h \
+    src/representations/markdown/discount_markdown_transcoder.h \
+    src/representations/representation_type.h \
+    src/config/config.h \
+    src/representations/markdown/cmark_gfm_markdown_transcoder.h
 
 mfner {
     HEADERS += \
     src/mind/ai/nlp/named_entity_recognition.h \
     src/mind/ai/nlp/ner_named_entity.h
 }    
+
+win32 {
+    HEADERS += \
+    ../deps/dirent/dirent.h \
+    ../deps/strptime/strptime.h
+
+    SOURCES += \
+    ../deps/strptime/strptime.c
+}

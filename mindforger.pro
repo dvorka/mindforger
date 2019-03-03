@@ -1,6 +1,6 @@
 # mindforger.pro     Qt project file for MindForger
 #
-# Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,13 +18,14 @@
 #########################################################################
 #
 # QMake build options:
-#   qmake CONFIG+=mfwebengine ... build project w/ Qt WebEngine instead of Qt WebKit
-#   qmake CONFIG+=mfner       ... build project w/ NER and link dlib/MITIE
-#   qmake CONFIG+=mfnomd2html ... build project w/o Markdown 2 HTML library (Discount)
-#   qmake CONFIG+=mfnocxx     ... do NOT define CXX i.e. g++
-#   qmake CONFIG+=mfnoccache  ... do NOT use ccache to build the project
-#   qmake CONFIG+=mfdebug     ... show debug messages + include WIP code
-#   qmake CONFIG+=mfunits     ... options to run unit tests
+#   qmake CONFIG+=mfwebengine       ... build project w/ Qt WebEngine instead of Qt WebKit
+#   qmake CONFIG+=mfner             ... build project w/ NER and link dlib/MITIE
+#   qmake CONFIG+=mfnomd2html       ... build project w/o Markdown 2 HTML library (Discount, cmark-gfm)
+#   qmake CONFIG+=mfmd2htmldiscount ... build project w/ Markdown 2 HTML library Discount instead of cmark-gfm
+#   qmake CONFIG+=mfnocxx           ... do NOT define CXX i.e. g++
+#   qmake CONFIG+=mfnoccache        ... do NOT use ccache to build the project
+#   qmake CONFIG+=mfdebug           ... show debug messages + include WIP code
+#   qmake CONFIG+=mfunits           ... options to run unit tests
 #
 #########################################################################
 

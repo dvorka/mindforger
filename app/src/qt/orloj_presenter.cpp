@@ -1,7 +1,7 @@
 /*
  outline_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -345,7 +345,7 @@ void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
     mainPresenter->getMainMenu()->showFacetNoteEdit();
 }
 
-void OrlojPresenter::toggleCurrentFacetHoisting()
+bool OrlojPresenter::toggleCurrentFacetHoisting()
 {
     if(view->isHoistView()) {
         if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
@@ -359,6 +359,8 @@ void OrlojPresenter::toggleCurrentFacetHoisting()
         } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
             view->showFacetOutlineHeaderEdit();
         }
+
+        return false;
     } else {
         if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
              ||
@@ -371,6 +373,8 @@ void OrlojPresenter::toggleCurrentFacetHoisting()
         } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
             view->showFacetHoistedOutlineHeaderEdit();
         }
+
+        return true;
     }
 }
 

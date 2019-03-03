@@ -1,7 +1,7 @@
 /*
  installer.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -19,11 +19,10 @@
 #ifndef M8R_INSTALLER_H
 #define M8R_INSTALLER_H
 
-#include <dirent.h>
-
 #include <string>
 #include <iostream>
 
+#include "../config/config.h"
 #include "../config/configuration.h"
 #include "../gear/file_utils.h"
 #include "../exceptions.h"

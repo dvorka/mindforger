@@ -1,7 +1,7 @@
 /*
  datetime_test.cpp     MindForger application test
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -64,7 +64,11 @@ TEST(DateTimeGearTestCase, Immutability)
             "2016-12-21 12:45:33",
             "2018-12-17 23:30:00"
             };
+#ifndef _WIN32
     tm from{0,0,0,0,0,0,0,0,0,0,0};
+#else
+    tm from{0,0,0,0,0,0,0,0,0};
+#endif //_WIN32
     char to[50];
     time_t timet;
     cout << "Original (char*) -> Parsed (tm) -> time_t -> Roundtrip (char*)" << endl;

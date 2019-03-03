@@ -1,7 +1,7 @@
 /*
  markdown_test.cpp     MindForger markdown test
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -21,7 +21,9 @@
 #include <iostream>
 #include <memory>
 #include <cstdio>
-#include <unistd.h>
+#ifndef _WIN32
+#  include <unistd.h>
+#endif
 
 #include <gtest/gtest.h>
 
@@ -847,7 +849,13 @@ TEST(MarkdownParserTestCase, Deadline)
     EXPECT_EQ(2, o->getNotesCount());
 
     cout << endl << "Deadline: " << o->getNotes()[0]->getDeadline();
-    EXPECT_EQ(1289564055, o->getNotes()[0]->getDeadline());
+#ifdef _WIN32
+    tm deadLineDate = { 15,14,13,12,10,110, 0, 0, 0 };
+#else
+    tm deadLineDate = { 15,14,13,12,10,110, 0, 0, 0, 0, 0 };
+#endif // _WIN32
+    time_t deadLine = mktime(&deadLineDate);
+    EXPECT_EQ(deadLine, o->getNotes()[0]->getDeadline());
 
     // serialize
     string* serialized = mdr.to(o);

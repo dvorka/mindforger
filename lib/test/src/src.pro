@@ -1,6 +1,6 @@
 # mindforger-lib-unit-tests.pro     MindForger thinking notebook
 #
-# Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software ; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,30 +24,78 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-# dependencies
-INCLUDEPATH += $$PWD/../../../deps/discount
-DEPENDPATH += $$PWD/../../../deps/discount
 INCLUDEPATH += $$PWD/../../../lib/src
 DEPENDPATH += $$PWD/../../../lib/src
 
 # -L where to look for library, -l link the library
-LIBS += -L$$OUT_PWD/../../../lib -lmindforger
-# MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
-LIBS += -L$$OUT_PWD/../../../deps/discount -ldiscount
+win32 {
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../../release -lmindforger
+    else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../debug -lmindforger
+} else {
+    LIBS += -L$$OUT_PWD/../../../lib -lmindforger
+}
+
+#discount if mfmd2htmldiscount and not windows otherwise cmark
+!mfnomd2html {
+  win32 {
+    CONFIG(release, debug|release) {
+        LIBS += -L$$PWD/../../../deps/cmark-gfm/build/src/Release -lcmark-gfm_static
+        LIBS += -L$$PWD/../../../deps/cmark-gfm/build/extensions/Release -lcmark-gfm-extensions_static
+    } else:CONFIG(debug, debug|release) {
+        LIBS += -L$$PWD/../../../deps/cmark-gfm/build/src/Debug -lcmark-gfm_static
+        LIBS += -L$$PWD/../../../deps/cmark-gfm/build/extensions/Debug -lcmark-gfm-extensions_static
+    }
+  } else {
+    mfmd2htmldiscount {
+      # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
+      LIBS += -L$$OUT_PWD/../../../deps/discount -ldiscount
+    } else {
+      #cmark
+      LIBS += -L$$PWD/../../../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions
+      LIBS += -L$$PWD/../../../deps/cmark-gfm/build/src -lcmark-gfm
+    }
+  }
+}
+
+
 # zlib
-LIBS += -lz
+win32 {
+    INCLUDEPATH += $$PWD/../../../deps/zlib-win/include
+    DEPENDPATH += $$PWD/../../../deps/zlib-win/include
+
+    CONFIG(release, debug|release): LIBS += -L$$PWD/../../../deps/zlib-win/lib/ -lzlibwapi
+    else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../deps/zlib-win/lib/ -lzlibwapi
+} else {
+    LIBS += -lz
+}
+
+#
+win32 {
+    LIBS += -lRpcrt4 -lOle32 -lShell32
+}
 
 # GTest unit test framework library dependencies
-LIBS += -lgtest
-LIBS += -lpthread
+win32 {
+    INCLUDEPATH += "c:/Program Files/googletest-distribution/include"
+    CONFIG(release, debug|release): LIBS += -L"c:/Program Files/googletest-distribution/lib" -lgtest
+    else:CONFIG(debug, debug|release): LIBS += -L"c:/Program Files/googletest-distribution/lib" -lgtestd
+} else {
+    LIBS += -lgtest
+    LIBS += -lpthread
+}
 
 # compiler options
-mfnoccache {
-  QMAKE_CXX = g++
-} else:!mfnocxx {
-  QMAKE_CXX = ccache g++
+win32{
+    QMAKE_CXXFLAGS += /MP
+} else {
+    # linux and macos
+    mfnoccache {
+      QMAKE_CXX = g++
+    } else:!mfnocxx {
+      QMAKE_CXX = ccache g++
+    }
+    QMAKE_CXXFLAGS += -pedantic -std=c++11
 }
-QMAKE_CXXFLAGS += -std=c++0x -pedantic -g -pg
 
 SOURCES += \
     ./gear/datetime_test.cpp \

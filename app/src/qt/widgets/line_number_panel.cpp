@@ -1,7 +1,7 @@
 /*
  line_number_panel.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -33,11 +33,11 @@ QSize LineNumberPanel::sizeHint() const
 
 void LineNumberPanel::paintEvent(QPaintEvent* event)
 {
-    mdEditor->lineNumberPanelPaintEvent(event);
-}
+    MF_DEBUG("LineNumberPanel::paintEvent" << event << std::endl);
 
-LineNumberPanel::~LineNumberPanel()
-{
+    mdEditor->lineNumberPanelPaintEvent(event);
+
+    QWidget::paintEvent(event);
 }
 
 }

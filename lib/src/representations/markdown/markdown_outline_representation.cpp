@@ -1,7 +1,7 @@
 /*
  markdown_outline_representation.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -402,6 +402,17 @@ string MarkdownOutlineRepresentation::to(const vector<const Tag*>* tags)
         s.resize(s.size()-1);
     }
     return s;
+}
+
+string* MarkdownOutlineRepresentation::toLink(const string& label, const string& link, string* md)
+{
+    md->append("[");
+    md->append(label);
+    md->append("](");
+    md->append(link);
+    md->append(")");
+
+    return md;
 }
 
 string MarkdownOutlineRepresentation::to(const vector<Link*>& links)

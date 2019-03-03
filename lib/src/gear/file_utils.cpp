@@ -1,7 +1,7 @@
 /*
  file_utils.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -26,14 +26,8 @@ void pathToDirectoryAndFile(const std::string& path, std::string& directory, std
 {
     if(!path.empty()) {
         size_t found;
-#ifdef __linux__
-        found=path.find_last_of("/");
-#elif _WIN32
-        found=path.find_last_of("\\");
-#else
         // IMPROVE complete the code
-        found=path.find_last_of("/");
-#endif
+        found=path.find_last_of(FILE_PATH_SEPARATOR);
         if(found == string::npos) {
             directory = ".";
         } else {
@@ -41,6 +35,14 @@ void pathToDirectoryAndFile(const std::string& path, std::string& directory, std
         }
 
         file = path.substr(found+1);
+    }
+}
+
+void pathToLinuxDelimiters(const std::string& path, std::string& linuxPath)
+{
+    if(!path.empty()) {
+        linuxPath.assign(path);
+        std::replace(linuxPath.begin(), linuxPath.end(), '\\', '/');
     }
 }
 
@@ -101,7 +103,21 @@ time_t fileModificationTime(const string* filename)
     stat(filename->c_str(), &t_stat);
     return t_stat.st_mtime; // modification time ~ file content modification; st_ctime ~ file metata change (more sensitive)
 #elif _WIN32
-    // IMPROVE windows code goes here
+    time_t tMod = 0;
+    FILETIME ft;
+    HANDLE hFile;
+    ULARGE_INTEGER ull;
+    hFile = CreateFileA(filename->c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+    if(hFile != INVALID_HANDLE_VALUE) {
+        if(GetFileTime(hFile, nullptr, nullptr, &ft)) {
+            // Convert the last-write time to local time.
+            ull.LowPart = ft.dwLowDateTime;
+            ull.HighPart = ft.dwHighDateTime;
+            tMod = ull.QuadPart / 10000000ULL - 11644473600ULL;
+        }
+        CloseHandle(hFile);
+    }
+    return tMod;
 #else
     // IMPROVE complete the code
     typedef struct stat attrs;
@@ -129,8 +145,22 @@ bool moveFile(const string &from, const string &to)
     }
 }
 
+#define BUFSIZE 4096
+
 void resolvePath(const std::string& path, std::string& resolvedAbsolutePath)
 {
+#ifdef _WIN32
+    char  buffer[BUFSIZE] = "";
+    if(GetFullPathNameA(path.c_str(), BUFSIZE, buffer, nullptr)) {
+        resolvedAbsolutePath.assign(buffer);
+
+    } else {
+        cerr << "Error: unable to resolve path '" << path << "'" << endl;
+        resolvedAbsolutePath.assign(path);
+    }
+
+
+#else
     // output buffer MUST be set to NULL (check realpath manpage)
     char * rp = realpath(path.c_str(), NULL);
     if(!rp) {
@@ -140,6 +170,7 @@ void resolvePath(const std::string& path, std::string& resolvedAbsolutePath)
         resolvedAbsolutePath.assign(rp);
         free(rp);
     }
+#endif //_WIN32
 }
 
 bool isDirectoryOrFileExists(const char* path)
@@ -187,7 +218,12 @@ bool isPathRelative(const string& path)
 }
 
 bool createDirectory(const string& path) {
+#ifdef _WIN32
+    int e = _mkdir(path.c_str());
+#else
     int e = mkdir(path.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+#endif
+
     if(e) {
         cerr << "Failed to create directory '" << path << "' with error " << e;
         return false;
@@ -198,13 +234,38 @@ bool createDirectory(const string& path) {
 
 char* makeTempDirectory(char* dirNamePrefix)
 {
-    char tmpl[100];
+#ifdef _WIN32
+    char *ret = nullptr;
+    char  *tempPathBuffer = new char[MAX_PATH];
+    UUID uuid;
+    RPC_CSTR uuidStr;
+    DWORD c = GetTempPathA(MAX_PATH, tempPathBuffer);
+    strcat(tempPathBuffer, FILE_PATH_SEPARATOR);
+    if (strlen(tempPathBuffer) + strlen(dirNamePrefix) < MAX_PATH) {
+        strcat(tempPathBuffer, dirNamePrefix);
+        UuidCreate(&uuid);
+        UuidToStringA(&uuid, &uuidStr);
+        if (strlen(tempPathBuffer) + strlen((char *)uuidStr) < MAX_PATH) {
+             strcat(tempPathBuffer, (char *)uuidStr);
+             if (CreateDirectoryA(tempPathBuffer, nullptr)) {
+                 ret = tempPathBuffer;
+             }
+        }
+        RpcStringFreeA(&uuidStr);
+    }
+    if (ret == nullptr) {
+        delete [] tempPathBuffer;
+    }
+    return ret;
+#else
+    char *tmpl = new char[100];
     tmpl[0] = 0;
     strcat(tmpl, SYSTEM_TEMP_DIRECTORY);
     strcat(tmpl, FILE_PATH_SEPARATOR);
     strcat(tmpl, dirNamePrefix);
     strcat(tmpl, "XXXXXX");
     return mkdtemp(tmpl);
+#endif
 }
 
 int removeDirectoryRecursively(const char* path)
@@ -243,7 +304,11 @@ int removeDirectoryRecursively(const char* path)
        closedir(d);
    }
    if(!r) {
+#ifdef _WIN32
+       r = _rmdir(path);
+#else
        r = rmdir(path);
+#endif
    }
 
    return r;
@@ -567,9 +632,8 @@ int copyDirectoryRecursively(const char* srcPath, const char* dstPath, bool extr
     return r;
 }
 
+char* getExecutablePath() {
 #ifdef __APPLE__
-
-char* getMacOsExecutablePath() {
     static char exePath[2048];
     uint32_t len = sizeof(exePath);
     if(_NSGetExecutablePath(exePath, &len) != 0) {
@@ -583,10 +647,17 @@ char* getMacOsExecutablePath() {
             free(canonicalPath);
         }
     }
-
     return exePath;
+#elif defined(_WIN32)
+    static char exePath[MAX_PATH+1];
+    GetModuleFileNameA( nullptr, exePath, MAX_PATH );
+    return exePath;
+#else
+    return nullptr;
+#endif
+
 }
 
-#endif
+
 
 } // m8r namespace

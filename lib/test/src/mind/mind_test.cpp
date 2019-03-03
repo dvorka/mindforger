@@ -1,7 +1,7 @@
 /*
  mind_test.cpp     MindForger mind test
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -242,7 +242,11 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     repositoryPath.assign("/tmp/mf-unit-amnesia");
     string path, content;
     m8r::removeDirectoryRecursively(repositoryPath.c_str());
+#ifdef _WIN32
+    int e = _mkdir(repositoryPath.c_str());
+#else
     int e = mkdir(repositoryPath.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
+#endif // _WIN32
     ASSERT_EQ(e, 0);
     path.assign(repositoryPath+"/1.md");
     content.assign(

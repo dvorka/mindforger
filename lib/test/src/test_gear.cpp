@@ -1,7 +1,7 @@
 /*
  test_gear.cpp     MindForger test utils and gears
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -18,6 +18,7 @@
  */
 
 #include "test_gear.h"
+#include "../../src/gear/file_utils.h"
 
 namespace m8r {
 
@@ -222,6 +223,18 @@ void printAst(const vector<MarkdownAstNodeSection*>* ast)
         cout << "  EMPTY";
     }
     cout << endl << "End of AST";
+}
+
+string platformSpecificPath(const char *path) {
+    string s{path};
+#ifdef _WIN32
+    std::replace(s.begin(), s.end(), '/', FILE_PATH_SEPARATOR_CHAR);
+    bool absolute = s.find_first_of(FILE_PATH_SEPARATOR_CHAR) == 0;
+    if (absolute) {
+        s.insert(0, "c:");
+    }
+#endif
+    return s;
 }
 
 } // m8r namespace

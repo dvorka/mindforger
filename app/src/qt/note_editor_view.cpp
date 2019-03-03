@@ -1,7 +1,7 @@
 /*
  note_editor_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -449,7 +449,9 @@ void NoteEditorView::resizeEvent(QResizeEvent* e)
 void NoteEditorView::lineNumberPanelPaintEvent(QPaintEvent* event)
 {
     QPainter painter(lineNumberPanel);
-    painter.fillRect(event->rect(), LookAndFeels::getInstance().getEditorLineNumbersBackgroundColor());
+    if(!LookAndFeels::getInstance().isThemeNative()) {
+        painter.fillRect(event->rect(), LookAndFeels::getInstance().getEditorLineNumbersBackgroundColor());
+    }
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();

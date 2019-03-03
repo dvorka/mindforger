@@ -1,7 +1,7 @@
 /*
  configuration_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -96,6 +96,7 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     themeCombo->addItem(QString{UI_THEME_LIGHT});
     themeCombo->addItem(QString{UI_THEME_DARK});
     themeCombo->addItem(QString{UI_THEME_BLACK});
+    themeCombo->addItem(QString{UI_THEME_NATIVE});
 
     showToolbarCheck = new QCheckBox(tr("show toolbar"), this);
     nerdMenuCheck = new QCheckBox(tr("nerd menu (requires restart)"), this);
@@ -151,7 +152,7 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     htmlCssThemeLabel = new QLabel(tr("Viewer theme CSS")+":", this);
     htmlCssThemeCombo = new QComboBox{this};
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT});
-    //htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT_COMPACT});
+    // htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT_COMPACT});
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_DARK});
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_RAW});
 

@@ -1,7 +1,7 @@
 /*
  time_scope.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 #include <sys/types.h>
 
 #include "../debug.h"
+#include "../config/config.h"
 
 namespace m8r {
 

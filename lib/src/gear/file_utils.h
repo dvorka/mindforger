@@ -1,7 +1,7 @@
 /*
  file_utils.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -21,11 +21,10 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/dir.h>
-#include <unistd.h>
+#include "../config/config.h"
 
 #include <zlib.h>
-#if defined(MSDOS) || defined(OS2) || defined(WIN32) || defined(__CYGWIN__)
+#if defined(MSDOS) || defined(OS2) || defined(_WIN32) || defined(__CYGWIN__)
   #include <fcntl.h>
   #include <io.h>
   #define SET_BINARY_MODE(file) setmode(fileno(file), O_BINARY)
@@ -94,6 +93,7 @@ int ungzip(const char* srcFile, const char* dstFile);
 #endif
 
 void pathToDirectoryAndFile(const std::string& path, std::string& directory, std::string& file);
+void pathToLinuxDelimiters(const std::string& path, std::string& linuxPath);
 bool stringToLines(const std::string* text, std::vector<std::string*>& lines);
 bool fileToLines(const std::string* filename, std::vector<std::string*>& lines, unsigned long int& filesize);
 std::string* fileToString(const std::string& filename);
@@ -111,15 +111,12 @@ int removeDirectoryRecursively(const char* path);
 int copyDirectoryRecursively(const char* srcPath, const char* dstPath, bool extractGz=false);
 bool createDirectory(const std::string& path);
 
-#ifdef __APPLE__
 /**
- * @brief Get path to the the executable on macOS.
+ * @brief Get path to the the executable on macOS or windows. Othewise returns nullptr.
  *
  * Method is not reentrant - it returns pointer to the static buffer.
  */
-char* getMacOsExecutablePath();
-#endif
-
+char* getExecutablePath();
 } // m8r namespace
 
 #endif /* M8R_FILE_UTILS_H_ */

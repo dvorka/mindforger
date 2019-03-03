@@ -1,7 +1,7 @@
 /*
  outlines_table_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -43,12 +43,12 @@ public:
     OutlinesTableView(const OutlinesTableView&&) = delete;
     OutlinesTableView &operator=(const OutlinesTableView&) = delete;
     OutlinesTableView &operator=(const OutlinesTableView&&) = delete;
+    virtual ~OutlinesTableView() override {}
 
     int getColumnCount() { return COLUMN_COUNT; }
 
-    virtual void paintEvent(QPaintEvent* event) override;
+    virtual void resizeEvent(QResizeEvent* event) override;
 };
-
 
 }
 

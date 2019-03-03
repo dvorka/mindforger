@@ -1,7 +1,7 @@
 /*
  html_outline_representation.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -24,13 +24,11 @@
 
 #include "../../model/note.h"
 #include "../markdown/markdown_outline_representation.h"
+#include "../markdown/markdown_transcoder.h"
+#include "../markdown/cmark_gfm_markdown_transcoder.h"
+#include "../markdown/discount_markdown_transcoder.h"
 
 namespace m8r {
-
-constexpr const auto JS_LIB_MERMAILD_URL = "https://cdnjs.cloudflare.com/ajax/libs/mermaid/7.1.2/mermaid.min.js";
-
-// CSS cannot be downloaded from raw.githubusercontent.com (probably wrong content type) where it would be auto updated > www.mindforger.com hosting
-constexpr const auto EXPORT_DEFAULT_CSS_URL = "http://www.mindforger.com/support/export/css/light.css";
 
 /**
  * @brief The HTML colors representation.
@@ -75,14 +73,14 @@ private:
     HtmlExportColorsRepresentation exportColors;
     HtmlColorsRepresentation& lf;    
     MarkdownOutlineRepresentation markdownRepresentation;
+    MarkdownTranscoder* markdownTranscoder;
 
     /**
-     * @brief Last MindForger MD 2 HTML options.
+     * @brief MindForger MD 2 other representation options.
      *
-     * If MF options don't change, then Discount options doesn't have to be recalculated.
+     * If MF options don't change, then it doesn't have to be recalculated.
      */
     unsigned int lastMfOptions;
-    unsigned int discountOptions;
 
 public:
     /**

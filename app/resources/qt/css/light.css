@@ -114,12 +114,12 @@ li p.first {
 li {
   margin: 0; }
 ul, ol {
-  padding-left: 30px; }
+    margin: 0;
+    padding-left: 30px; }
 
 ul :first-child, ol :first-child {
   margin-top: 0;
-  margin-bottom: 0;
-}
+  margin-bottom: 0; }
 
 dl {
   padding: 0; }

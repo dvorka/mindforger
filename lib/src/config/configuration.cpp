@@ -1,7 +1,7 @@
 /*
  configuration.cpp     M8r configuration management
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -18,27 +18,53 @@
  */
 
 #include "configuration.h"
+#include "config.h"
+
+#ifdef _WIN32
+#include <Shlobj.h>
+#include <KnownFolders.h>
+#endif // _WIN32
 
 namespace m8r {
 
 using namespace std;
 
-const std::string Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH = std::string{FILE_PATH_M8R_REPOSITORY};
-const std::string Configuration::DEFAULT_UI_THEME_NAME = std::string{UI_DEFAULT_THEME};
-const std::string Configuration::DEFAULT_UI_HTML_CSS_THEME = std::string{UI_DEFAULT_HTML_CSS_THEME};
-const std::string Configuration::DEFAULT_EDITOR_FONT= std::string{UI_DEFAULT_EDITOR_FONT};
-const std::string Configuration::DEFAULT_TIME_SCOPE = std::string{"0y0m0d0h0m"};
+const string Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH = string{FILE_PATH_M8R_REPOSITORY};
+const string Configuration::DEFAULT_UI_THEME_NAME = string{UI_DEFAULT_THEME};
+const string Configuration::DEFAULT_UI_HTML_CSS_THEME = string{UI_DEFAULT_HTML_CSS_THEME};
+const string Configuration::DEFAULT_EDITOR_FONT= string{UI_DEFAULT_EDITOR_FONT};
+const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
 
 Configuration::Configuration()
     : installer(new Installer{})
 {
+    char *home;
     // default config file path: ~/.mindforger.md
-    char *home = getenv(ENV_VAR_HOME);
+#ifdef _WIN32
+    PWSTR wpath;
+    size_t num;
+
+    SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &wpath);
+    char *docPath = new char[MAX_PATH];
+    wcstombs_s(&num, docPath, MAX_PATH, wpath, MAX_PATH);
+    CoTaskMemFree(wpath);
+    userDocPath =  string{docPath};
+    delete [] docPath;
+
+    SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &wpath);
+    home = new char[MAX_PATH];
+    wcstombs_s(&num, home, MAX_PATH, wpath, MAX_PATH);
+    CoTaskMemFree(wpath);
     userHomePath = string{home};
+    delete [] home;
+#else
+    home = getenv(ENV_VAR_HOME);
+    userHomePath = string{home};
+    userDocPath = string{home};
+#endif //_WIN32
     configFilePath.assign(userHomePath);
     configFilePath += FILE_PATH_SEPARATOR;
     configFilePath += FILENAME_M8R_CONFIGURATION;
-
     clear();
 }
 
@@ -77,15 +103,10 @@ void Configuration::clear()
 
     // Markdown 2 HTML options
     md2HtmlOptions = 0
-            // DISCOUNT options:
-            | Configuration::MdToHtmlOption::AutolinkOption
-            | Configuration::MdToHtmlOption::NoSuperscriptOption // if enabled it BREAKS MathJax
-
-            // EXTRA LIBRARIES options:
-            | Configuration::MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js - enabled by default
-            //| Configuration::MdToHtmlOption::MathSupport // math expressions support via mathjax.js - disabled by default
-            //| Configuration::MdToHtmlOption::DiagramSupport; // diagram support via mermaid.js - disabled by default
-            ;
+        | MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js - enabled by default
+        //| MdToHtmlOption::MathSupport // math expressions support via mathjax.js - disabled by default
+        //| MdToHtmlOption::DiagramSupport; // diagram support via mermaid.js - disabled by default
+        ;
 
     aaAlgorithm = AssociationAssessmentAlgorithm::WEIGHTED_FTS;
     switch(aaAlgorithm) {
@@ -113,9 +134,11 @@ void Configuration::clear()
     uiHtmlZoom = DEFAULT_UI_HTML_ZOOM;
     uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
     uiEnableDiagramsInMd = JavaScriptLibSupport::NO;
-    uiShowToolbar = DEFAULT_UI_SHOW_TOOLBAR;
     uiNerdTargetAudience = DEFAULT_UI_NERD_MENU;
     navigatorMaxNodes = DEFAULT_NAVIGATOR_MAX_GRAPH_NODES;
+    uiShowToolbar = DEFAULT_UI_SHOW_TOOLBAR;
+    uiDistractionFreeMode = false;
+    uiHoistedMode = false;
 }
 
 Repository* Configuration::addRepository(Repository* repository)
@@ -190,7 +213,7 @@ bool Configuration::createEmptyMarkdownFile(const string& file)
 void Configuration::findOrCreateDefaultRepository()
 {
     if(!activeRepository || activeRepository->getDir().empty()) {
-        string defaultRepositoryPath{userHomePath};
+        string defaultRepositoryPath{userDocPath};
         defaultRepositoryPath += FILE_PATH_SEPARATOR;
         defaultRepositoryPath += DIRNAME_M8R_REPOSITORY;
         MF_DEBUG("Checking for default repository existence: " << defaultRepositoryPath << endl);

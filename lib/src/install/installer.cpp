@@ -1,7 +1,7 @@
 /*
  installer.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -26,17 +26,17 @@ namespace m8r {
 const std::string Installer::FILE_PATH_DEFAULT_LINUX_SYSTEM_REPOSITORY = std::string{"/usr/share/doc/mindforger"};
 
 Installer::Installer()
-#ifdef __APPLE__
-    : filePathDefaultSystemRepository{getMacOsExecutablePath()}
+#if defined(__APPLE__) || defined(_WIN32)
+    : filePathDefaultSystemRepository{getExecutablePath()}
 #else
     : filePathDefaultSystemRepository{FILE_PATH_DEFAULT_LINUX_SYSTEM_REPOSITORY}
 #endif
 {
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(_WIN32)
     // append path in DMG from the executable to documentation in resources directory
     if(filePathDefaultSystemRepository.size()) {
-        filePathDefaultSystemRepository.erase(filePathDefaultSystemRepository.find_last_of("/")+1);
-        filePathDefaultSystemRepository.append("../Resources/");
+        filePathDefaultSystemRepository.erase(filePathDefaultSystemRepository.find_last_of(FILE_PATH_SEPARATOR)+1);
+        filePathDefaultSystemRepository.append("..").append(FILE_PATH_SEPARATOR).append("Resources").append(FILE_PATH_SEPARATOR);
         filePathDefaultSystemRepository.append(DIRNAME_M8R_REPOSITORY);
     }
 #endif

@@ -1,7 +1,7 @@
 /*
  notes_table_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -35,9 +35,10 @@ NotesTableView::NotesTableView(QWidget *parent)
 
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
-    QHeaderView* header = this->horizontalHeader();
-    // IMPORTANT resize mode MUST NOT be set in paintEvent, otherwise it causes high CPU consumption loop
-    header->setSectionResizeMode(QHeaderView::Stretch);
+    if(horizontalHeader()->length() > 0) {
+        // IMPORTANT resize mode MUST NOT be set in paint event, otherwise it causes high CPU consumption loop
+        horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    }
 }
 
 } // m8r namespace

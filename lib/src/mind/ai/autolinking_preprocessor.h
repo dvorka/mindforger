@@ -1,7 +1,7 @@
 /*
  autolinking_preprocessor.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -19,45 +19,43 @@
 #ifndef M8R_AUTOLINKING_PREPROCESSOR_H
 #define M8R_AUTOLINKING_PREPROCESSOR_H
 
-#include <string>
-#include <vector>
-#include <set>
 #include <regex>
 
-#include "../mind.h"
+#include "../../mind/ontology/thing_class_rel_triple.h"
 #include "../../representations/representation_interceptor.h"
 
 namespace m8r {
 
+/**
+ * @brief Autolinking preprocecesssor abstract class.
+ */
 class AutolinkingPreprocessor : public RepresentationInterceptor
 {
-    Mind& mind;
+public:
+    static const std::string PATTERN_LINK;
+    static const std::string PATTERN_CODE;
+    static const std::string PATTERN_MATH;
+    static const std::string PATTERN_HTTP;
 
-    std::vector<Thing*> things;
+protected:
+    std::regex linkRegex;
+    std::regex codeRegex;
+    std::regex mathRegex;
+    std::regex httpRegex;
 
 public:
-    explicit AutolinkingPreprocessor(Mind& mind);
+    explicit AutolinkingPreprocessor();
     AutolinkingPreprocessor(const AutolinkingPreprocessor&) = delete;
     AutolinkingPreprocessor(const AutolinkingPreprocessor&&) = delete;
     AutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&) = delete;
     AutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&&) = delete;
     virtual ~AutolinkingPreprocessor();
 
-    virtual void process(const std::vector<std::string*>& md, std::vector<std::string*>& amd) override;
+    virtual void process(const std::vector<std::string*>& in, std::vector<std::string*>& out) = 0;
 
-private:
+    bool containsLinkCodeMath(const std::string* line);
 
-    /**
-     * @brief Update N names/links indices.
-     */
-    void updateIndices();
-
-    void injectLink(
-            std::string* line,
-            const std::string& label,
-            const std::string& link);
-
-    bool findLinkOrInlineCode(const std::string* nl);
+    static bool aliasSizeComparator(const Thing* t1, const Thing* t2);
 };
 
 }

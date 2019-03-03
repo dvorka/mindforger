@@ -1,6 +1,10 @@
 *.pro.user
 *.pro.user.*
 Makefile
+Makefile.*
+Release/
+Debug/
+.vs/
 *.o
 *.a
 *.*~
@@ -8,3 +12,5 @@ moc_*.cpp
 TEST_LOG*.*
 *.stash
 *.*Store
+*.vcx*
+*.sln

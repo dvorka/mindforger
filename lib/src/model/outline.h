@@ -1,7 +1,7 @@
 /*
  outline.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -351,7 +351,7 @@ struct Outline::Patch {
         // Notes given by boundaries were moved/shuffled i.e. Notes are on different offsets
         MOVE,
         // Notes given by boundaries were deleted
-        DELETE
+        ERASE
     };
 
     Diff diff;

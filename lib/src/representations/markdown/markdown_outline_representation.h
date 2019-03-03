@@ -1,7 +1,7 @@
 /*
  markdown_outline_representation.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -96,6 +96,7 @@ public:
     virtual std::string* toDescription(const Note* note, std::string* md, bool autolinking=false);
 
     static std::string to(const std::vector<const Tag*>* tags);
+    static std::string* toLink(const std::string& label, const std::string& link, std::string* md);
 
     /**
      * @brief Generate table of contents

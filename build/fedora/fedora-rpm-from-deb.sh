@@ -2,7 +2,7 @@
 #
 # MindForger knowledge management tool
 #
-# Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 
 # This script must be run w/ ROOT priviledges (alien)
 
-export MFVERSION="1.48.2"
+export MFVERSION="1.49.0"
 export MFPRJNAME="mindforger-${MFVERSION}"
 export AMD64NAME="mindforger_${MFVERSION}-1_amd64"
 export I386NAME="mindforger_${MFVERSION}-1_i386"

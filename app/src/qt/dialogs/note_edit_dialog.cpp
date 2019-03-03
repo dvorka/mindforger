@@ -1,7 +1,7 @@
 /*
  note_edit_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -253,7 +253,11 @@ void NoteEditDialog::toNote()
         currentNote->setTags(&generalTab->editTagsGroup->getTags());
         currentNote->setProgress(generalTab->progressSpin->value());
         if(generalTab->deadlineCheck->isChecked()) {
+#ifdef _WIN32
+            tm date {0,0,0,0,0,0,0,0,0};
+#else
             tm date {0,0,0,0,0,0,0,0,0,0,0}; // missing initializer required by older GCC versions (4.8.5 and older)
+#endif //_WIN32
             qdateToTm(generalTab->deadlineEdit->dateTime().date(), date);
             currentNote->setDeadline(datetimeSeconds(&date));
         } else {

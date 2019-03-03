@@ -1,7 +1,7 @@
 /*
  datetime_utils.h     MindForger thinking notebook
 
- Copyright (C) 2016-2018 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,7 +23,9 @@
 #include <ctime>
 #include <cstring>
 #include <string>
-
+#ifdef _WIN32
+#include "../../../deps/strptime/strptime.h"
+#endif //_WIN32
 #include "string_utils.h"
 
 namespace m8r {
