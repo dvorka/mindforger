@@ -43,15 +43,15 @@ echo "Add new .deb to PPA"
 #aptly publish drop stretch
 
 # delete snapshot(s) ONLY if needed - publish must be deleted first!
-#aptly snapshot drop mindforger-1.46.0-snapshot
+#aptly snapshot drop mindforger-1.49.0-snapshot
 
 # add .deb to repository
-#aptly repo add mindforger-com-ppa mindforger_1.42.1-1_amd64.deb
+#aptly repo add mindforger-com-ppa mindforger_1.49.1-1_amd64.deb
 
 # create snapshot in the time of release - note release NAME 
-#aptly snapshot create mindforger-1.48.0-snapshot from repo mindforger-com-ppa
+#aptly snapshot create mindforger-1.49.0-snapshot from repo mindforger-com-ppa
 
 # publish snapshot to local filesystem so that it can be uploaded - note release NAME
-#aptly publish snapshot mindforger-1.48.2-snapshot
+#aptly publish snapshot mindforger-1.49.0-snapshot
 
 # eof
