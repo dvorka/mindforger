@@ -41,18 +41,20 @@ mfnomd2html {
   }
 }
 
-#zlib on windows
+# Zlib on Windows
 win32 {
  INCLUDEPATH += $$PWD/../deps/zlib-win/include
  DEPENDPATH += $$PWD/../deps/zlib-win/include
 }
 
+# NER library
 mfner {
     DEFINES += MF_NER
     INCLUDEPATH += $$PWD/../deps/mitie/mitielib/include
     DEPENDPATH += $$PWD/../deps/mitie/mitielib/include
 }
 
+# debug
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
 }

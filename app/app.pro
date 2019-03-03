@@ -61,7 +61,7 @@ win32 {
     LIBS += -L$$OUT_PWD/../lib -lmindforger
 }
 
-# discount if mfmd2htmldiscount and not windows otherwise cmark
+# Markdown to HTML: Discount if mfmd2htmldiscount and not Windows otherwise cmark-gfm
 !mfnomd2html {
   win32 {
     CONFIG(release, debug|release) {
@@ -75,19 +75,26 @@ win32 {
       # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
       LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
     } else {
-      # cmark
+      # cmark-gfm
+
+      # cmark-gfm to be built by qmake to enable clean system build for Launchpad's debuild
+      libcmark-gfm.target = libcmark-gfm
+      libcmark-gfm.commands = cd -L$$PWD/../deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
+      libcmark-gfm_clean.commands = cd -L$$PWD/../deps/cmark-gfm rm -rvf build
+      QT_EXTRA_TARGETS += libcmark-gfm
+
       LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions
       LIBS += -L$$PWD/../deps/cmark-gfm/build/src -lcmark-gfm
     }
 }
 
-
+# NER library
 mfner {
   # MF links MITIE for AI/NLP/DL
   LIBS += -L$$OUT_PWD/../deps/mitie/mitielib -lmitie
 }
 
-# zlib
+# Zlib
 win32 {
     INCLUDEPATH += $$PWD/../deps/zlib-win/include
     DEPENDPATH += $$PWD/../deps/zlib-win/include
@@ -101,13 +108,14 @@ win32 {
 win32 {
     LIBS += -lRpcrt4 -lOle32
 }
+
 # development environment remarks:
 # - Beast 64b:   GCC 5.4.0, Qt 5.5.1
 # - S7    64b:   GCC 4.8.5, Qt 5.2.1
 # - Win10 64b: MSVC 2017, Qt 5.12.0
 #
 # - GCC: -std=c++0x ~ -std=c++11
-
+#
 # compiler options (qmake CONFIG+=mfnoccache ...)
 win32{
     QMAKE_CXXFLAGS += /MP
@@ -120,6 +128,7 @@ win32{
     }
     QMAKE_CXXFLAGS += -pedantic -std=c++11
 }
+
 # profiling: instrument code for gprof
 #QMAKE_CXXFLAGS_DEBUG *= -pg
 #QMAKE_LFLAGS_DEBUG *= -pg
@@ -367,8 +376,13 @@ macx {
     QMAKE_BUNDLE_DATA += macosdocfiles
 }
 
+# ########################################
+# Windows .exe content
+# ########################################
+
 win32 {
     # icon and exe detail information
     RC_FILE = $$PWD/resources/windows/mindforger.rc
 }
+
 # eof
