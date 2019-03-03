@@ -108,7 +108,7 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     // check whether running in GUI (and not in text console tty)
-#if not defined(__APPLE___) && not defined (_WIN32)
+#if not defined(__APPLE__) && not defined (_WIN32)
     char *term = getenv(m8r::ENV_VAR_DISPLAY);
     if(!term || !strlen(term)) {
         cerr << endl << QCoreApplication::translate("main", "MindForger CANNOT be run from text console - set DISPLAY environment variable or run MindForger from GUI.").toUtf8().constData()
