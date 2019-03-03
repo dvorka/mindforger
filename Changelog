@@ -1,11 +1,22 @@
 2019-03-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 
   * Released v1.49 - native Windows version, Discount replaced with cmark-gfm
-    as HTML preview engine.
+    as HTML preview engine and fix of 100% CPU consumption in table views.
 
-2018-10-10  Martin Dvorak  <martin.dvorak@mindforger.com>
+2019-02-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-  * Released v1.48 - CSV Export, MathJax Menu and Autolinking preview.
+   * Released v1.48.3 - Stabilization: partial fix of 100% CPU consumption in
+     table views on Ubuntu 18.04
+
+2018-11-13  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+   * Released v1.48.2 - Autolinking stabilization: less breaking of MD
+     lines with links, math and code.
+
+2018-11-10  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+   * Released v1.48 - CSV export, autolinking preview, MathJax format
+     menu.
 
 2018-10-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 

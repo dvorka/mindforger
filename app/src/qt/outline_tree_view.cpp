@@ -118,10 +118,15 @@ void OutlineTreeView::resizeEvent(QResizeEvent* event)
 
     int normalizedWidth = width()/fontMetrics().averageCharWidth();
     if(normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH) {
-        this->setColumnWidth(1, 0);
-        this->setColumnWidth(2, 0);
-        this->setColumnWidth(3, 0);
+        this->setColumnHidden(1, true);
+        this->setColumnHidden(2, true);
+        this->setColumnHidden(3, true);
     } else {
+        if(this->isColumnHidden(1)) {
+            this->setColumnHidden(1, false);
+            this->setColumnHidden(2, false);
+            this->setColumnHidden(3, false);
+        }
         // progress
         this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*6);
         // rd/wr
