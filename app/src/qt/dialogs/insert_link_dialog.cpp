@@ -123,10 +123,11 @@ void InsertLinkDialog::handleFindOutline()
 void InsertLinkDialog::handleFindOutlineChoice()
 {
     if(findOutlineByNameDialog->getChoice()) {
-        Outline* choice = (Outline*)findOutlineByNameDialog->getChoice();
+        Outline* choice = static_cast<Outline*>(findOutlineByNameDialog->getChoice());
         linkTextEdit->setText(QString::fromStdString(choice->getName()));
 
         string p = RepositoryIndexer::makePathRelative(activeRepository, currentOutline->getKey(), choice->getKey());
+        pathToLinuxDelimiters(p, p);
         pathEdit->setText(QString::fromStdString(p));
     }
 }
@@ -141,7 +142,7 @@ void InsertLinkDialog::handleFindNote()
 void InsertLinkDialog::handleFindNoteChoice()
 {
     if(findNoteByNameDialog->getChoice()) {
-        Note* choice = (Note*)findNoteByNameDialog->getChoice();
+        Note* choice = static_cast<Note*>(findNoteByNameDialog->getChoice());
         linkTextEdit->setText(QString::fromStdString(choice->getName()));
 
         string dstPath{};

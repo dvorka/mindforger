@@ -38,6 +38,14 @@ void pathToDirectoryAndFile(const std::string& path, std::string& directory, std
     }
 }
 
+void pathToLinuxDelimiters(const std::string& path, std::string& linuxPath)
+{
+    if(!path.empty()) {
+        linuxPath.assign(path);
+        std::replace(linuxPath.begin(), linuxPath.end(), '\\', '/');
+    }
+}
+
 bool stringToLines(const string* text, vector<string*>& lines)
 {
     if(text && text->size()) {

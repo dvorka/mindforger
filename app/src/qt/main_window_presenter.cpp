@@ -274,7 +274,7 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
             string key{url.toString().toStdString()};
 #if defined(WIN32) || defined(WIN64)
             key.erase(0,8); // remove file prefix
-            std::replace( key.begin(), key.end(), '/', '\\');
+            std::replace(key.begin(), key.end(), '/', '\\');
 #else
             key.erase(0,7); // remove file prefix
 #endif
