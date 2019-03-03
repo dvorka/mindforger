@@ -25,7 +25,7 @@ using namespace std;
 LookAndFeels::LookAndFeels()
     : config(Configuration::getInstance())
 {
-    themeNames << UI_THEME_DARK << UI_THEME_LIGHT << UI_THEME_BLACK;
+    themeNames << UI_THEME_DARK << UI_THEME_LIGHT << UI_THEME_BLACK << UI_THEME_NATIVE;
 }
 
 void LookAndFeels::init(QApplication* mindforgerApplication)
@@ -224,7 +224,11 @@ void LookAndFeels::setBlackTheme()
 }
 
 void LookAndFeels::setNativeTheme()
+{}
+
+bool LookAndFeels::isThemeNative() const
 {
+    return UI_THEME_NATIVE == config.getUiThemeName();
 }
 
 std::string& LookAndFeels::getHtmlTextColor()

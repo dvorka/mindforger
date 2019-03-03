@@ -119,6 +119,7 @@ public:
     void setNativeTheme();
 
     void init(QApplication* mindforgerApplication);
+    bool isThemeNative() const;
     bool isThemeNameValid(const QString&) const;
     void setFontPointSize(int fontPointSize) { this->fontPointSize = fontPointSize; }
     int getFontPointSize() const { return fontPointSize; }

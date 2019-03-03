@@ -81,7 +81,7 @@ constexpr const auto UI_JS_LIB_ONLINE = "online";
 constexpr const auto UI_JS_LIB_OFFLINE = "offline";
 constexpr const auto UI_JS_LIB_NO = "no";
 
-constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
+constexpr const auto UI_DEFAULT_THEME = UI_THEME_NATIVE;
 constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_FONT = "Monospace,10";
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;

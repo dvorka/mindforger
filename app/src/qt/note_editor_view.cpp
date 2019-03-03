@@ -449,7 +449,9 @@ void NoteEditorView::resizeEvent(QResizeEvent* e)
 void NoteEditorView::lineNumberPanelPaintEvent(QPaintEvent* event)
 {
     QPainter painter(lineNumberPanel);
-    painter.fillRect(event->rect(), LookAndFeels::getInstance().getEditorLineNumbersBackgroundColor());
+    if(!LookAndFeels::getInstance().isThemeNative()) {
+        painter.fillRect(event->rect(), LookAndFeels::getInstance().getEditorLineNumbersBackgroundColor());
+    }
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
