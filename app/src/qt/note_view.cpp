@@ -46,10 +46,10 @@ NoteView::NoteView(QWidget *parent)
 
 bool NoteView::event(QEvent* event)
 {
-    MF_DEBUG(event->type() << endl);
+    // INSTALL event filter to every child - child polished event is received 1+x for every child
     if (event->type() == QEvent::ChildPolished) {
-        QChildEvent *childEvent = static_cast<QChildEvent*>(event);
-        childObj = childEvent->child();
+        QChildEvent* childEvent = static_cast<QChildEvent*>(event);
+        QObject* childObj = childEvent->child();
         if (childObj) {
             childObj->installEventFilter(this);
         }
@@ -60,13 +60,11 @@ bool NoteView::event(QEvent* event)
 
 bool NoteView::eventFilter(QObject *obj, QEvent *event)
 {
-    if(obj == childObj) {
-        if(event->type() == QEvent::MouseButtonDblClick) {
-            // double click to Note view opens Note editor
-            emit signalMouseDoubleClickEvent();
-            event->accept();
-            return true;
-        }
+    if(event->type() == QEvent::MouseButtonDblClick) {
+        // double click to Note view opens Note editor
+        emit signalMouseDoubleClickEvent();
+        event->accept();
+        return true;
     }
 
     return QWebEngineView::eventFilter(obj, event);

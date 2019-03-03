@@ -58,9 +58,6 @@ public:
 #ifdef MF_QT_WEB_ENGINE
     QWebEnginePage* getPage() const { return page(); }
 
-// this is ugly and stupid workaround for handling double-click events in QWebEngineView
-private:
-    QObject *childObj = nullptr;
 protected:
     bool event(QEvent* evt) override;
     bool eventFilter(QObject *obj, QEvent *ev) override;
