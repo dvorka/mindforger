@@ -23,7 +23,7 @@
 #ifdef _WIN32
 #include <Shlobj.h>
 #include <KnownFolders.h>
-#endif //_WIN32
+#endif // _WIN32
 
 namespace m8r {
 

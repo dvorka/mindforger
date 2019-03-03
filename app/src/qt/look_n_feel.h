@@ -114,6 +114,10 @@ public:
      */
     void setBlackTheme();
 
+    /* Set operating system native theme.
+     */
+    void setNativeTheme();
+
     void init(QApplication* mindforgerApplication);
     bool isThemeNameValid(const QString&) const;
     void setFontPointSize(int fontPointSize) { this->fontPointSize = fontPointSize; }

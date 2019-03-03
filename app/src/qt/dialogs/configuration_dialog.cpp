@@ -96,6 +96,7 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     themeCombo->addItem(QString{UI_THEME_LIGHT});
     themeCombo->addItem(QString{UI_THEME_DARK});
     themeCombo->addItem(QString{UI_THEME_BLACK});
+    themeCombo->addItem(QString{UI_THEME_NATIVE});
 
     showToolbarCheck = new QCheckBox(tr("show toolbar"), this);
     nerdMenuCheck = new QCheckBox(tr("nerd menu (requires restart)"), this);

@@ -66,6 +66,7 @@ constexpr const auto FILE_EXTENSION_MD_MKDN = ".mkdn";
 constexpr const auto UI_THEME_DARK = "dark";
 constexpr const auto UI_THEME_LIGHT = "light";
 constexpr const auto UI_THEME_BLACK = "black";
+constexpr const auto UI_THEME_NATIVE = "native";
 
 constexpr const auto UI_HTML_THEME_CSS_LIGHT = "qrc:/html-css/light.css";
 constexpr const auto UI_HTML_THEME_CSS_LIGHT_COMPACT = "qrc:/html-css/light-compact.css";

@@ -388,7 +388,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "Application settings:" << endl <<
          endl <<
          CONFIG_SETTING_UI_THEME_LABEL << (c?c->getUiThemeName():Configuration::DEFAULT_UI_THEME_NAME) << endl <<
-         "    * Examples: dark, light" << endl <<
+         "    * Examples: dark, light, native" << endl <<
          CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL << (c?c->getUiHtmlCssPath():Configuration::DEFAULT_UI_HTML_CSS_THEME) << endl <<
          "    * Normal themes (dark, light) style HTML generated from Markdown," << endl <<
          "      while raw theme shows syntax-highlighted Markdown only. You can" << endl <<
