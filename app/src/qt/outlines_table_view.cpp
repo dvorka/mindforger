@@ -39,9 +39,9 @@ OutlinesTableView::OutlinesTableView(QWidget *parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
-void OutlinesTableView::paintEvent(QPaintEvent* event)
+void OutlinesTableView::resizeEvent(QResizeEvent* event)
 {
-    MF_DEBUG("OutlinesTableView::paintEvent" << event << std::endl);
+    MF_DEBUG("OutlinesTableView::resizeEvent" << event << std::endl);
 
     // ensure that 1st column gets the remaining space from others
     // IMPROVE may kill performance
@@ -71,7 +71,7 @@ void OutlinesTableView::paintEvent(QPaintEvent* event)
     // pretty
     this->setColumnWidth(7, this->fontMetrics().averageCharWidth()*12);
 
-    QTableView::paintEvent(event);
+    QTableView::resizeEvent(event);
 }
 
 } // m8r namespace
