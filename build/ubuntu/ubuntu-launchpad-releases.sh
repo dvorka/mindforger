@@ -51,8 +51,8 @@ function checkoutMindforger() {
     # prune MindForger project files: tests, *.o/... build files, ...
     echo -e "\n# MF project cleanup ########################################"
     rm -vrf ./.git ./app/mindforger ./build ./app/test ./lib/test
+    # IMPROVE: static libraries lib*.a are NOT deleted to keep cmark-gfm dependency libs
     find . -type f \( -name "*moc_*.cpp" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
-    #find . -type f \( -name "*moc_*.cpp" -or -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
 
     cd ..
 }
@@ -203,12 +203,12 @@ fi
 
 export ARG_BAZAAR_MSG="MindForger 1.49.0 release."
 export ARG_MAJOR_VERSION=1.49.
-export ARG_MINOR_VERSION=4 # minor version is incremented for every Ubuntu version
+export ARG_MINOR_VERSION=5 # minor version is incremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety trusty (old GCC) artful
 # current: xenial bionic cosmic
-for UBUNTU_VERSION in xenial
+for UBUNTU_VERSION in xenial bionic cosmic
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
