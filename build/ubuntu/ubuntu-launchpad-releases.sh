@@ -51,7 +51,8 @@ function checkoutMindforger() {
     # prune MindForger project files: tests, *.o/... build files, ...
     echo -e "\n# MF project cleanup ########################################"
     rm -vrf ./.git ./app/mindforger ./build ./app/test ./lib/test
-    find . -type f \( -name "*moc_*.cpp" -or -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
+    find . -type f \( -name "*moc_*.cpp" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
+    #find . -type f \( -name "*moc_*.cpp" -or -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
 
     cd ..
 }
@@ -125,7 +126,10 @@ function releaseForParticularUbuntuVersion() {
     cd mindforger && cp -rvf ${MFSRC}/build/ubuntu/debian .
     createChangelog ./debian/changelog
 
-    # 4) Qt: generate makefile using qmake
+    # 4.1) build MF dependencies
+    cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . && cd ../../..
+        
+    # 4.2) Qt: generate makefile using qmake
     echo -e "\n# qmake ######################################################"
     cd ..
     mv mindforger ${MF}
@@ -155,8 +159,8 @@ function releaseForParticularUbuntuVersion() {
     
     # 6) build debs
     echo -e "\n# source & binary debs  ######################################"
-    # build .deb package (us uc tells that no GPG signing is needed)
-    bzr builddeb -- -us -uc
+    # OPTIONAL: build .deb package (us uc tells that no GPG signing is needed)
+    # bzr builddeb -- -us -uc -j7
     # build SIGNED source .deb package
     bzr builddeb --source
 
@@ -199,12 +203,12 @@ fi
 
 export ARG_BAZAAR_MSG="MindForger 1.49.0 release."
 export ARG_MAJOR_VERSION=1.49.
-export ARG_MINOR_VERSION=0 # minor version is incremented for every Ubuntu version
+export ARG_MINOR_VERSION=4 # minor version is incremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily yakkety trusty (old GCC) artful
 # current: xenial bionic cosmic
-for UBUNTU_VERSION in xenial bionic cosmic
+for UBUNTU_VERSION in xenial
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
