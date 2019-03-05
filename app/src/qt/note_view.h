@@ -63,9 +63,9 @@ protected:
     bool eventFilter(QObject *obj, QEvent *ev) override;
 #else
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
+    virtual void wheelEvent(QWheelEvent*) override;
 #endif
     virtual void keyPressEvent(QKeyEvent*) override;
-    virtual void wheelEvent(QWheelEvent*) override;
 
 signals:
     void signalMouseDoubleClickEvent();

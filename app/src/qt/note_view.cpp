@@ -81,6 +81,7 @@ void NoteView::keyPressEvent(QKeyEvent* event)
     QWebEngineView::keyPressEvent(event);
 }
 
+/*
 void NoteView::wheelEvent(QWheelEvent* event)
 {
     if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
@@ -98,6 +99,7 @@ void NoteView::wheelEvent(QWheelEvent* event)
 
     QWebEngineView::wheelEvent(event);
 }
+*/
 
 #else
 

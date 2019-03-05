@@ -70,6 +70,7 @@ bool OutlineHeaderView::eventFilter(QObject *obj, QEvent *event)
     return QWebEngineView::eventFilter(obj, event);
 }
 
+/*
 void OutlineHeaderView::wheelEvent(QWheelEvent* event)
 {
     if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
@@ -87,6 +88,7 @@ void OutlineHeaderView::wheelEvent(QWheelEvent* event)
 
     OutlineHeaderView::wheelEvent(event);
 }
+*/
 
 #else
 

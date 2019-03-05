@@ -56,8 +56,8 @@ protected:
     bool eventFilter(QObject *obj, QEvent *ev) override;
 #else
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
-#endif
     virtual void wheelEvent(QWheelEvent*) override;
+#endif
 
 signals:
     void signalMouseDoubleClickEvent();
