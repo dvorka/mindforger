@@ -96,7 +96,7 @@ void NoteView::wheelEvent(QWheelEvent* event)
         }
     }
 
-    QWebEngineView::wheelEvent(event);
+    //QWebEngineView::wheelEvent(event);
 }
 
 #else

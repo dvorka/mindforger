@@ -85,7 +85,7 @@ void OutlineHeaderView::wheelEvent(QWheelEvent* event)
         }
     }
 
-    OutlineHeaderView::wheelEvent(event);
+    //OutlineHeaderView::wheelEvent(event);
 }
 
 #else
