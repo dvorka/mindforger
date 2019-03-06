@@ -1,3 +1,8 @@
+2019-03-06  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+  * Released v1.49.1 - Stabilization: Ctrl-mouse wheel HTML preview zooming
+    removed on Windows as it caused MindForger to crash.
+
 2019-03-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 
   * Released v1.49 - native Windows version, Discount replaced with cmark-gfm
