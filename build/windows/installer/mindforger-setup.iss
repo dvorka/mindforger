@@ -23,6 +23,7 @@ OutputBaseFilename=mindforger-setup
 Compression=lzma
 SolidCompression=yes
 ArchitecturesInstallIn64BitMode=x64
+UninstallDisplayIcon={app}\bin\{#MINDFORGER_APP_EXE}
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
