@@ -32,13 +32,19 @@ NotesTableView::NotesTableView(QWidget *parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
     // disable TAB and Ctrl-O up/down navigation
     setTabKeyNavigation(false);
+}
 
-    verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
+void NotesTableView::resizeEvent(QResizeEvent* event)
+{
+    UNUSED_ARG(event);
 
     if(horizontalHeader()->length() > 0) {
-        // IMPORTANT resize mode MUST NOT be set in paint event, otherwise it causes high CPU consumption loop
+        // ensure that 1st column gets the remaining space from others
         horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     }
+    verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
+
+    QTableView::resizeEvent(event);
 }
 
 } // m8r namespace
