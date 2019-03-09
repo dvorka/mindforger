@@ -153,8 +153,8 @@ function buildDebPackage() {
 # # Main #
 # ############################################################################
 
-export ARG_BAZAAR_MSG="MindForger 1.49.0 release."
-export ARG_VERSION="1.49.0"
+export ARG_BAZAAR_MSG="MindForger 1.49.2 release."
+export ARG_VERSION="1.49.2"
 
 # Debian releases: https://www.debian.org/releases/
 #   6/7/8/9/10: squeeze wheezy jessie stretch buster

@@ -1,3 +1,8 @@
+2019-03-09  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+   * Released v1.49.2 - Stabilization: fixed scrolling loop on Win,
+     missing Win installer icon, panel maximization of FTS result page.
+
 2019-03-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 
   * Released v1.49 - native Windows version, Discount replaced with cmark-gfm
