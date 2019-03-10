@@ -96,7 +96,7 @@ void NoteView::wheelEvent(QWheelEvent* event)
         }
     }
 
-    QWebEngineView::wheelEvent(event);
+    // do NOT forward event to the parent as it would cause loop
 }
 
 #else

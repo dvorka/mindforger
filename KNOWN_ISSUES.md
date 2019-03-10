@@ -1,6 +1,7 @@
 # Known Issues
 
-MindForger known issues - see also [GitHub issues](https://github.com/dvorka/mindforger/issues?q=is%3Aissue+is%3Aopen+label%3A%22%3Abeetle%3A+bug%22).
+MindForger known issues - see also 
+[GitHub issues](https://github.com/dvorka/mindforger/issues?q=is%3Aissue+is%3Aopen+label%3A%22bug+%3Abeetle%3A%22).
 
 # 1.49.0
 
