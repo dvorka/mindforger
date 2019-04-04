@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
                 QCoreApplication::translate("main", "Load configuration from given <file>."),
                 QCoreApplication::translate("main", "file"));
         parser.addOption(configPathOption);
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(_WIN32)
         QCommandLineOption macosDisableSecurityOption(QStringList() << "S" << "disable-web-security",
                 QCoreApplication::translate("main", "Disable WebEngine security to allow loading of images on macOS."));
         parser.addOption(macosDisableSecurityOption);
