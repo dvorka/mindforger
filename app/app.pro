@@ -344,8 +344,10 @@ win32 {
 #./resources/qt/translations/mindforger_es.ts
 TRANSLATIONS = \
     ./resources/qt/translations/mindforger_nerd_en.ts \
+    ./resources/qt/translations/mindforger_nerd_pt.ts \
     ./resources/qt/translations/mindforger_nerd_cs.ts \
     ./resources/qt/translations/mindforger_en.ts \
+    ./resources/qt/translations/mindforger_pt.ts \
     ./resources/qt/translations/mindforger_cs.ts
 
 RESOURCES += \

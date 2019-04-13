@@ -26,6 +26,8 @@
         <file alias="mindforger_en_US.qm">resources/qt/translations/mindforger_en.qm</file>
         <file alias="mindforger_nerd_cs_CZ.qm">resources/qt/translations/mindforger_nerd_cs.qm</file>
         <file alias="mindforger_nerd_en_US.qm">resources/qt/translations/mindforger_nerd_en.qm</file>
+        <file alias="mindforger_pt_BR.qm">resources/qt/translations/mindforger_pt.qm</file>
+        <file alias="mindforger_nerd_pt_BR.qm">resources/qt/translations/mindforger_nerd_pt.qm</file>
     </qresource>
     <qresource prefix="/html-css">
         <file alias="dark.css">resources/qt/css/dark.css</file>
