@@ -22,6 +22,7 @@
 namespace m8r {
 
 enum ResourceType {
+    REPOSITORY,
     OUTLINE,
     NOTE,
     ATTACHMENT,

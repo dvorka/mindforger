@@ -477,4 +477,39 @@ void NoteEditorView::lineNumberPanelPaintEvent(QPaintEvent* event)
     }
 }
 
+/*
+ * Search
+ */
+
+void NoteEditorView::findString(const QString s, bool reverse, bool caseSensitive, bool wholeWords)
+{
+    QTextDocument::FindFlags flag;
+    if(reverse) flag |= QTextDocument::FindBackward;
+    if(caseSensitive) flag |= QTextDocument::FindCaseSensitively;
+    if(wholeWords) flag |= QTextDocument::FindWholeWords;
+
+    QTextCursor cursor = this->textCursor();
+    QTextCursor cursorSaved = cursor;
+
+    if(!find(s, flag)) {
+        // nothing is found > jump to start/end
+        cursor.movePosition(reverse?QTextCursor::End:QTextCursor::Start);
+
+        // the cursor is set at the beginning/end of the document (if search is reverse or not),
+        // in the next "find", if the word is found, now you will change the cursor position
+        setTextCursor(cursor);
+
+        if(!find(s, flag)) {
+            // no match in whole document
+            QMessageBox msgBox;
+            msgBox.setText(tr("String not found."));
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            msgBox.exec();
+
+            // word not found - set the cursor back to its initial position
+            setTextCursor(cursorSaved);
+        }
+    }
+}
 } // m8r namespace

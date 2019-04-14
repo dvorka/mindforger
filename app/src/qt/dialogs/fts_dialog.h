@@ -21,6 +21,7 @@
 
 #include <QtWidgets>
 
+#include "../../lib/src/model/resource_types.h"
 #include "../../lib/src/model/outline.h"
 
 namespace m8r {
@@ -39,6 +40,7 @@ private:
     QPushButton* findButton;
     QPushButton* closeButton;
 
+    ResourceType scopeType;
     Outline* scope;
 
 protected:
@@ -55,8 +57,9 @@ public:
     FtsDialog &operator=(const FtsDialog&&) = delete;
     ~FtsDialog();
 
-    void clearScope() { scope = nullptr; }
-    void setScope(Outline* o) { scope = o; }
+    void clearScope();
+    void setScope(ResourceType t, Outline* s);
+    ResourceType getScopeType() { return scopeType; }
     Outline* getScope() { return scope; }
 
     QString getSearchPattern() const { return lineEdit->text(); }

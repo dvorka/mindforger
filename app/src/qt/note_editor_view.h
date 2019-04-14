@@ -81,6 +81,9 @@ public:
     void removeSelectedText() { textCursor().removeSelectedText(); }
     void insertMarkdownText(const QString &text, bool newLine=true, int offset=0);
 
+    // search
+    void findString(const QString s, bool reverse, bool casesens, bool words);
+
     // associations
     QString getRelevantWords() const;
     void clearHitCounter() { hitCounter=0; }

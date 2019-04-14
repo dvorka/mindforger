@@ -112,14 +112,20 @@ public:
     NoteEditPresenter* getNoteEdit() const { return noteEditPresenter; }
 
     bool isFacetActive(const OrlojPresenterFacets facet) const { return activeFacet==facet;}
-    bool isFacetActiveOutlineManagement() {
+    bool isFacetActiveOutlineOrNoteView() {
         if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
              ||
            isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
              ||
-           isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
-             ||
-           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    bool isFacetActiveOutlineOrNoteEdit() {
+        if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
              ||
            isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER))
         {

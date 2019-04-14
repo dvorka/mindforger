@@ -76,6 +76,34 @@ FtsDialog::FtsDialog(QWidget *parent)
     setModal(true);
 }
 
+void FtsDialog::clearScope()
+{
+    searchModeRadios->setVisible(true);
+
+    scopeType = ResourceType::REPOSITORY;
+    scope = nullptr;
+}
+
+/**
+ * @brief Set the scope for search.
+ *
+ * If scope type is repository, then whole MF repository is FTS,
+ * else if scope type is O, then active O is FTS, else if
+ * scope is NOTE, active N/O header editor is searched.
+ */
+void FtsDialog::setScope(ResourceType t, Outline* s)
+{
+    // TODO rewrite search mode radios to have either GLOBAL FTS options or N editor options
+    if(t == ResourceType::NOTE) {
+        searchModeRadios->setVisible(false);
+    } else {
+        searchModeRadios->setVisible(true);
+    }
+
+    scopeType = t;
+    scope = s;
+}
+
 void FtsDialog::enableFindButton(const QString& text)
 {
     findButton->setEnabled(!text.isEmpty());

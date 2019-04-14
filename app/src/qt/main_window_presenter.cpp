@@ -553,9 +553,16 @@ void MainWindowPresenter::doActionExit()
 
 void MainWindowPresenter::doActionFts()
 {
-    if(orloj->isFacetActiveOutlineManagement()) {
-        ftsDialog->setWindowTitle(tr("Full-text Search in Notebook"));
-        ftsDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
+    if(orloj->isFacetActiveOutlineOrNoteView()) {
+        ftsDialog->setWindowTitle(tr("Notebook Full-text Search"));
+        ftsDialog->setScope(
+            ResourceType::OUTLINE,
+            orloj->getOutlineView()->getCurrentOutline());
+    } else if(orloj->isFacetActiveOutlineOrNoteEdit()) {
+        ftsDialog->setWindowTitle(tr("Note Full-text Search"));
+        ftsDialog->setScope(
+            ResourceType::NOTE,
+            orloj->getOutlineView()->getCurrentOutline());
     } else {
         ftsDialog->setWindowTitle(tr("Full-text Search"));
         ftsDialog->clearScope();
@@ -567,10 +574,24 @@ void MainWindowPresenter::handleFts()
 {
     QString searchedString = ftsDialog->getSearchPattern();
     ftsDialog->hide();
-    executeFts(
-        searchedString.toStdString(),
-        ftsDialog->isExact()?FtsSearch::EXACT:(ftsDialog->isRegex()?FtsSearch::REGEXP:FtsSearch::IGNORE_CASE),
-        ftsDialog->getScope());
+
+    switch(ftsDialog->getScopeType()) {
+    case ResourceType::NOTE:
+        // TODO improve FTS dialog - regexps and reverse/... searches
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            orloj->getNoteEdit()->getView()->getNoteEditor()->findString(
+                searchedString, false, ftsDialog->isExact(), false);
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->findString(
+                searchedString, false, ftsDialog->isExact(), false);
+        }
+        break;
+    default:
+        executeFts(
+            searchedString.toStdString(),
+            ftsDialog->isExact()?FtsSearch::EXACT:(ftsDialog->isRegex()?FtsSearch::REGEXP:FtsSearch::IGNORE_CASE),
+            ftsDialog->getScope());
+    }
 }
 
 void MainWindowPresenter::executeFts(const string& pattern, const FtsSearch searchMode, Outline* scope) const
@@ -638,7 +659,7 @@ void MainWindowPresenter::handleFindOutlineByTag()
 void MainWindowPresenter::doActionFindNoteByTag()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
-    if(orloj->isFacetActiveOutlineManagement()) {
+    if(orloj->isFacetActiveOutlineOrNoteView() || orloj->isFacetActiveOutlineOrNoteEdit()) {
         findNoteByTagDialog->setWindowTitle(tr("Find Note by Tags in Notebook"));
         findNoteByTagDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
         vector<Note*> allNotes(findNoteByTagDialog->getScope()->getNotes());
@@ -740,7 +761,7 @@ void MainWindowPresenter::handleRefactorNoteToOutline()
 void MainWindowPresenter::doActionFindNoteByName()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
-    if(orloj->isFacetActiveOutlineManagement()) {
+    if(orloj->isFacetActiveOutlineOrNoteView() || orloj->isFacetActiveOutlineOrNoteEdit()) {
         findNoteByNameDialog->setWindowTitle(tr("Find Note by Name in Notebook"));
         findNoteByNameDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
         vector<Note*> allNotes(findNoteByNameDialog->getScope()->getNotes());
@@ -1524,7 +1545,7 @@ void MainWindowPresenter::doActionOutlineClone()
 
 void MainWindowPresenter::doActionOutlineHome()
 {
-    if(orloj->isFacetActiveOutlineManagement()) {
+    if(orloj->isFacetActiveOutlineOrNoteView()) {
         const Tag* t = mind->remind().getOntology().findOrCreateTag(Tag::KeyMindForgerHome());
         Outline* o = orloj->getOutlineView()->getCurrentOutline();
         // if O has tag, then toggle (remove) it, else set the tag
@@ -1544,7 +1565,7 @@ void MainWindowPresenter::doActionOutlineHome()
 
 void MainWindowPresenter::doActionOutlineForget()
 {
-    if(orloj->isFacetActiveOutlineManagement()) {
+    if(orloj->isFacetActiveOutlineOrNoteView()) {
         QMessageBox::StandardButton choice;
         choice = QMessageBox::question(&view, tr("Forget Notebook"), tr("Do you really want to forget current Notebook?"));
         if (choice == QMessageBox::Yes) {
