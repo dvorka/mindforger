@@ -1,4 +1,3 @@
-
 /*
  note_edit_presenter.cpp     MindForger thinking notebook
 

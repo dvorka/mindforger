@@ -94,7 +94,7 @@ void NoteEditorView::setEditorFont(std::string fontName)
 {
     QFont editorFont;
     QString qFontName = QString::fromStdString(fontName);
-    if (QString::compare(qFontName, "")==0) { // No font defined, set to default
+    if(QString::compare(qFontName, "")==0) { // No font defined, set to default
         editorFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
         Configuration::getInstance().setEditorFont(editorFont.toString().toUtf8().constData());
     } else {
