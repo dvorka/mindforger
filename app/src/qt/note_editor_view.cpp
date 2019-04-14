@@ -200,6 +200,14 @@ void NoteEditorView::keyPressEvent(QKeyEvent *event)
 {
     hitCounter++;
 
+    if(event->modifiers() & Qt::ControlModifier) {
+        switch (event->key()) {
+        case Qt::Key_F:
+            findStringAgain();
+            return; // exit to override default key binding
+        }
+    }
+
     // IMPROVE get configuration reference and editor mode setting - this must be fast
     if(Configuration::getInstance().getEditorKeyBinding()==Configuration::EditorKeyBindingMode::EMACS) {
         if(event->modifiers() & Qt::ControlModifier){
@@ -483,6 +491,11 @@ void NoteEditorView::lineNumberPanelPaintEvent(QPaintEvent* event)
 
 void NoteEditorView::findString(const QString s, bool reverse, bool caseSensitive, bool wholeWords)
 {
+    lastFindString = s;
+    lastFindReverse = reverse;
+    lastCaseSensitive = caseSensitive;
+    lastWholeWords = wholeWords;
+
     QTextDocument::FindFlags flag;
     if(reverse) flag |= QTextDocument::FindBackward;
     if(caseSensitive) flag |= QTextDocument::FindCaseSensitively;
@@ -500,16 +513,24 @@ void NoteEditorView::findString(const QString s, bool reverse, bool caseSensitiv
         setTextCursor(cursor);
 
         if(!find(s, flag)) {
-            // no match in whole document
-            QMessageBox msgBox;
-            msgBox.setText(tr("String not found."));
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setDefaultButton(QMessageBox::Ok);
-            msgBox.exec();
+            QMessageBox::information(
+                        this,
+                        tr("Full-text Search Result"),
+                        tr("No matching text found."),
+                        QMessageBox::Ok,
+                        QMessageBox::Ok);
 
-            // word not found - set the cursor back to its initial position
+            // set the cursor back to its initial position
             setTextCursor(cursorSaved);
         }
     }
 }
+
+void NoteEditorView::findStringAgain()
+{
+    if(!lastFindString.isEmpty()) {
+        findString(lastFindString, lastFindReverse, lastCaseSensitive, lastWholeWords);
+    }
+}
+
 } // m8r namespace

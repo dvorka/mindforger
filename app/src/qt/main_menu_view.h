@@ -148,6 +148,8 @@ public:
     QAction* actionNoteImport;
 
     // menu: Edit
+    QAction* actionEditFind;
+    QAction* actionEditFindNext;
     QAction* actionEditUndo;
     QAction* actionEditRedo;
     QAction* actionEditCut;

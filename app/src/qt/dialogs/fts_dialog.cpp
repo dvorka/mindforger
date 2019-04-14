@@ -23,6 +23,9 @@ namespace m8r {
 FtsDialog::FtsDialog(QWidget *parent)
     : QDialog(parent)
 {
+    // facet
+    scopeType = ResourceType::REPOSITORY;
+
     // widgets
     label = new QLabel{tr("Text to &find:")};
     lineEdit = new QLineEdit{this};
@@ -32,12 +35,24 @@ FtsDialog::FtsDialog(QWidget *parent)
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     lineEdit->setCompleter(completer);
 
+    editorSearchModeChecks = new QGroupBox{tr("Match:"), this};
+    editorIgnoreCheck = new QCheckBox{tr("&Ignore case"), editorSearchModeChecks};
+    editorWordCheck = new QCheckBox{tr("&Whole words"), editorSearchModeChecks};
+    editorReverseCheck = new QCheckBox{tr("&Reverse"), editorSearchModeChecks};
+    editorIgnoreCheck->setChecked(true);
+    QVBoxLayout* vbox = new QVBoxLayout{this};
+    vbox->addWidget(editorIgnoreCheck);
+    vbox->addWidget(editorWordCheck);
+    vbox->addWidget(editorReverseCheck);
+    vbox->addStretch(1);
+    editorSearchModeChecks->setLayout(vbox);
+
     searchModeRadios = new QGroupBox{tr("Match:"), this};
     exactRadio = new QRadioButton{tr("&Exact"), searchModeRadios};
     ignoreRadio = new QRadioButton{tr("&Ignore case"), searchModeRadios};
     regexRadio = new QRadioButton{tr("&Regular expression"), searchModeRadios};
     ignoreRadio->setChecked(true);
-    QVBoxLayout* vbox = new QVBoxLayout{this};
+    vbox = new QVBoxLayout{this};
     vbox->addWidget(exactRadio);
     vbox->addWidget(ignoreRadio);
     vbox->addWidget(regexRadio);
@@ -59,6 +74,7 @@ FtsDialog::FtsDialog(QWidget *parent)
     QVBoxLayout *mainLayout = new QVBoxLayout{};
     mainLayout->addWidget(label);
     mainLayout->addWidget(lineEdit);
+    mainLayout->addWidget(editorSearchModeChecks);
     mainLayout->addWidget(searchModeRadios);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout{};
@@ -73,15 +89,19 @@ FtsDialog::FtsDialog(QWidget *parent)
     // dialog
     setWindowTitle(tr("Full-text Search"));
     resize(fontMetrics().averageCharWidth()*35, height());
+    updateFacet();
     setModal(true);
 }
 
-void FtsDialog::clearScope()
+void FtsDialog::updateFacet()
 {
-    searchModeRadios->setVisible(true);
-
-    scopeType = ResourceType::REPOSITORY;
-    scope = nullptr;
+    if(scopeType == ResourceType::NOTE) {
+        editorSearchModeChecks->setVisible(true);
+        searchModeRadios->setVisible(false);
+    } else {
+        editorSearchModeChecks->setVisible(false);
+        searchModeRadios->setVisible(true);
+    }
 }
 
 /**
@@ -93,15 +113,10 @@ void FtsDialog::clearScope()
  */
 void FtsDialog::setScope(ResourceType t, Outline* s)
 {
-    // TODO rewrite search mode radios to have either GLOBAL FTS options or N editor options
-    if(t == ResourceType::NOTE) {
-        searchModeRadios->setVisible(false);
-    } else {
-        searchModeRadios->setVisible(true);
-    }
-
     scopeType = t;
     scope = s;
+
+    updateFacet();
 }
 
 void FtsDialog::enableFindButton(const QString& text)

@@ -105,7 +105,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionNoteClone, SIGNAL(triggered()), mwp, SLOT(doActionNoteClone()));
 
     // menu: edit
-    // no binding needed - it's already bound in the editor ~ menu is rather a documentation
+    QObject::connect(view->actionEditFind, SIGNAL(triggered()), mwp, SLOT(doActionEditFind()));
+    QObject::connect(view->actionEditFindNext, SIGNAL(triggered()), mwp, SLOT(doActionEditFindAgain()));
+    // no other bindings needed - it's already bound in the editor ~ menu is rather a documentation
 
     // menu: format
     QObject::connect(view->actionFormatBold, SIGNAL(triggered()), mwp, SLOT(doActionFormatBold()));

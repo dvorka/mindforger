@@ -63,6 +63,12 @@ private:
     bool tabsAsSpaces;
     int tabWidth;
 
+    // find
+    QString lastFindString;
+    bool lastFindReverse;
+    bool lastCaseSensitive;
+    bool lastWholeWords;
+
     const StatusBarView* statusBar;
 
 public:
@@ -83,6 +89,7 @@ public:
 
     // search
     void findString(const QString s, bool reverse, bool casesens, bool words);
+    void findStringAgain();
 
     // associations
     QString getRelevantWords() const;

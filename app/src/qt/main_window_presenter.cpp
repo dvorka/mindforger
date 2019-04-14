@@ -577,13 +577,18 @@ void MainWindowPresenter::handleFts()
 
     switch(ftsDialog->getScopeType()) {
     case ResourceType::NOTE:
-        // TODO improve FTS dialog - regexps and reverse/... searches
         if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
             orloj->getNoteEdit()->getView()->getNoteEditor()->findString(
-                searchedString, false, ftsDialog->isExact(), false);
+                searchedString,
+                ftsDialog->isEditorReverse(),
+                ftsDialog->isEditorCaseInsensitive(),
+                ftsDialog->isEditorWords());
         } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
             orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->findString(
-                searchedString, false, ftsDialog->isExact(), false);
+                searchedString,
+                ftsDialog->isEditorReverse(),
+                ftsDialog->isEditorCaseInsensitive(),
+                ftsDialog->isEditorWords());
         }
         break;
     default:
@@ -1931,6 +1936,20 @@ void MainWindowPresenter::doActionNoteDemote()
         }
     } else {
         QMessageBox::critical(&view, tr("Demote Note"), tr("Please select a Note to be demoted."));
+    }
+}
+
+void MainWindowPresenter::doActionEditFind()
+{
+    doActionFts();
+}
+
+void MainWindowPresenter::doActionEditFindAgain()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->findStringAgain();
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->findStringAgain();
     }
 }
 

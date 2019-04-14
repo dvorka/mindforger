@@ -288,6 +288,9 @@ public slots:
     void doActionRefactorNoteToOutline();
     void handleRefactorNoteToOutline();
     void doActionNoteForget();
+    // edit
+    void doActionEditFind();
+    void doActionEditFindAgain();
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();

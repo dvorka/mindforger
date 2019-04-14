@@ -33,7 +33,11 @@ class FtsDialog : public QDialog
 private:
     QLineEdit* lineEdit;
     QCheckBox* caseCheckBox;
+    QGroupBox* editorSearchModeChecks;
     QGroupBox* searchModeRadios;
+    QCheckBox* editorIgnoreCheck;
+    QCheckBox* editorWordCheck;
+    QCheckBox* editorReverseCheck;
     QRadioButton* exactRadio;
     QRadioButton* ignoreRadio;
     QRadioButton* regexRadio;
@@ -57,18 +61,24 @@ public:
     FtsDialog &operator=(const FtsDialog&&) = delete;
     ~FtsDialog();
 
-    void clearScope();
     void setScope(ResourceType t, Outline* s);
+    void clearScope() {
+        setScope(ResourceType::REPOSITORY, nullptr);
+    }
     ResourceType getScopeType() { return scopeType; }
     Outline* getScope() { return scope; }
 
     QString getSearchPattern() const { return lineEdit->text(); }
+    bool isEditorCaseInsensitive() const { return editorIgnoreCheck->isChecked(); }
+    bool isEditorWords() const { return editorWordCheck->isChecked(); }
+    bool isEditorReverse() const { return editorReverseCheck->isChecked(); }
     bool isExact() const { return exactRadio->isChecked(); }
     bool isCaseInsensitive() const { return ignoreRadio->isChecked(); }
     bool isRegex() const { return regexRadio->isChecked(); }
     QPushButton* getFindButton() const { return findButton; }
 
     void show() { lineEdit->selectAll(); lineEdit->setFocus(); QDialog::show(); }
+    void updateFacet();
 
 private slots:
     void enableFindButton(const QString &text);

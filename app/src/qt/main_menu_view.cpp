@@ -444,6 +444,12 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: edit
 
+    actionEditFind = new QAction(tr("Find\tCtrl+Shift+F"), mainWindow);
+    actionEditFind->setStatusTip(tr("Search Note text"));
+
+    actionEditFindNext = new QAction(tr("Find Next\tCtrl+F"), mainWindow);
+    actionEditFindNext->setStatusTip(tr("Search Note text again"));
+
     actionEditUndo= new QAction(tr("&Undo\tCtrl+Z"), mainWindow);
     actionEditUndo->setStatusTip(tr("Undo"));
 
@@ -463,6 +469,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditComplete->setStatusTip(tr("Complete word being written using other words in the current Note"));
 
     menuEdit = qMenuBar->addMenu(tr("&Edit"));
+    menuEdit->addAction(actionEditFind);
+    menuEdit->addAction(actionEditFindNext);
+    menuEdit->addSeparator();
     menuEdit->addAction(actionEditUndo);
     menuEdit->addAction(actionEditRedo);
     menuEdit->addSeparator();
