@@ -58,7 +58,7 @@ void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, 
 
     bool insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
 
-    // IMPROVE consider synchronization ONLY in case that it's really needed
+    // IMPROVE consider synchronization ONLY in case that it's really needed - watermark num of saves remember and compare
     updateIndices();
 
     // IMPROVE ORDER of Ns determines what will be found > have active O Ns in head, etc.
@@ -90,7 +90,6 @@ void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, 
             // IMPROVE before Aho-Corasic is available rather skip lines where
             // either MD link or inline code presents to preserve syntax correctness.
             if(containsLinkCodeMath(l)) {
-
                 nl->append(*l);
                 amd.push_back(nl);
                 continue;

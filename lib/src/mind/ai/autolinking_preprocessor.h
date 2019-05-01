@@ -27,7 +27,12 @@
 namespace m8r {
 
 /**
- * @brief Autolinking preprocecesssor abstract class.
+ * @brief Autolinking pre-processor abstract class.
+ *
+ * Autolinking pre-processor injects into Markdown text links to
+ * Os and Ns based on their names found in the text. Output is
+ * valid Markdown which is typically rendered to HTML or other
+ * representation.
  */
 class AutolinkingPreprocessor : public RepresentationInterceptor
 {
