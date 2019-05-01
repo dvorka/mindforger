@@ -38,6 +38,7 @@ win32 {
 #discount if mfmd2htmldiscount and not windows otherwise cmark
 !mfnomd2html {
   win32 {
+    DEFINES += MF_MD_2_HTML_CMARK
     CONFIG(release, debug|release) {
         LIBS += -L$$PWD/../../../deps/cmark-gfm/build/src/Release -lcmark-gfm_static
         LIBS += -L$$PWD/../../../deps/cmark-gfm/build/extensions/Release -lcmark-gfm-extensions_static
@@ -47,14 +48,22 @@ win32 {
     }
   } else {
     mfmd2htmldiscount {
+      DEFINES += MF_MD_2_HTML_DISCOUNT
       # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
       LIBS += -L$$OUT_PWD/../../../deps/discount -ldiscount
     } else {
-      #cmark
+      # cmark
+      DEFINES += MF_MD_2_HTML_CMARK
+      INCLUDEPATH += $$PWD/../../../deps/cmark-gfm/src
+      INCLUDEPATH += $$PWD/../../../deps/cmark-gfm/extensions
+      INCLUDEPATH += $$PWD/../../../deps/cmark-gfm/build/src
+      INCLUDEPATH += $$PWD/../../../deps/cmark-gfm/build/extensions
       LIBS += -L$$PWD/../../../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions
       LIBS += -L$$PWD/../../../deps/cmark-gfm/build/src -lcmark-gfm
     }
   }
+} else {
+  DEFINES += MF_NO_MD_2_HTML
 }
 
 
@@ -116,9 +125,10 @@ SOURCES += \
     ./ai/nlp_test.cpp \
     ../benchmark/trie_benchmark.cpp \
     ../benchmark/ai_benchmark.cpp \
-    gear/file_utils_test.cpp \
-    gear/trie_test.cpp \
-    ai/autolinking_test.cpp
+    ./gear/file_utils_test.cpp \
+    ./gear/trie_test.cpp \
+    ./ai/autolinking_test.cpp \
+    ./ai/autolinking_cmark_test.cpp
 
 HEADERS += \
     ./test_gear.h

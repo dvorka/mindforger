@@ -30,7 +30,8 @@ namespace m8r {
     *
     * See https://github.com/github/cmark-gfm/blob/master/src/cmark-gfm.h#L673
     */
-enum class CmarkGfmOption {
+enum class CmarkGfmOption
+{
     // TODO VH: complete this
     
 };

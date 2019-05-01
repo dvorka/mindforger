@@ -1,5 +1,5 @@
 /*
- nlp_test.cpp     MindForger application test
+ autolinkin_test.cpp     MindForger application test
 
  Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
