@@ -138,7 +138,8 @@ SOURCES += \
     src/mind/ai/autolinking/aho_corasick_autolinking_preprocessor.cpp \
     src/mind/ai/autolinking/naive_autolinking_preprocessor.cpp \
     src/representations/markdown/discount_markdown_transcoder.cpp \
-    src/representations/markdown/cmark_gfm_markdown_transcoder.cpp
+    src/representations/markdown/cmark_gfm_markdown_transcoder.cpp \
+    src/mind/ai/autolinking/cmark_aho_corasick_autolinking_preprocessor.cpp
 
 mfner {
     SOURCES += \
@@ -258,7 +259,8 @@ HEADERS += \
     src/representations/markdown/discount_markdown_transcoder.h \
     src/representations/representation_type.h \
     src/config/config.h \
-    src/representations/markdown/cmark_gfm_markdown_transcoder.h
+    src/representations/markdown/cmark_gfm_markdown_transcoder.h \
+    src/mind/ai/autolinking/cmark_aho_corasick_autolinking_preprocessor.h
 
 mfner {
     HEADERS += \

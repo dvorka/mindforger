@@ -143,7 +143,7 @@ public:
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
     static const std::string DEFAULT_TIME_SCOPE;
 
-    static constexpr const bool DEFAULT_AUTOLINKING = false;
+    static constexpr const bool DEFAULT_AUTOLINKING = true;
     static constexpr const bool DEFAULT_AUTOLINKING_COLON_SPLIT = true;
     static constexpr const bool DEFAULT_AUTOLINKING_CASE_INSENSITIVE = true;
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
@@ -291,9 +291,7 @@ public:
     std::vector<std::string>& getTagsScope() { return tagsScope; }
     bool isSaveReadsMetadata() const { return saveReadsMetadata; }
     void setSaveReadsMetadata(bool saveReadsMetadata) { this->saveReadsMetadata=saveReadsMetadata; }
-    // TODO force disabling autolinking
-    // bool isAutolinking() const { return autolinking; }
-    bool isAutolinking() const { return false; }
+    bool isAutolinking() const { return autolinking; }
     void setAutolinking(bool autolinking) { this->autolinking=autolinking; }
     bool isAutolinkingColonSplit() const { return autolinkingColonSplit; }
     void setAutolinkingColonSplit(bool autolinkingColonSplit) { this->autolinkingColonSplit=autolinkingColonSplit; }
