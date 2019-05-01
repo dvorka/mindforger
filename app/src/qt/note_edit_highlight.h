@@ -39,6 +39,7 @@ private:
         Link,
         Autolink,
         Codeblock,
+        Mathblock,
         UnorderedList,
         OrderedList,
 
@@ -66,7 +67,8 @@ private:
     QTextCharFormat strikethroughFormat;
     QTextCharFormat linkFormat;
     QTextCharFormat listFormat;
-    QTextCharFormat codeblockFormat;
+    QTextCharFormat codeBlockFormat;
+    QTextCharFormat mathBlockFormat;
 
     // HTML formats
     QTextCharFormat htmlTagFormat;

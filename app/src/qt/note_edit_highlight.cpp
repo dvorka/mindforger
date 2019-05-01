@@ -56,6 +56,7 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     addRegex(Link, "\\[(:?[\\S\\s]+)\\]\\(\\S+\\)");
     addRegex(Autolink, "https?://\\S+",false);
     addRegex(Codeblock, "`[\\S\\s]+`");
+    addRegex(Mathblock, "\\$[\\S\\s]+\\$");
     addRegex(UnorderedList, "^(:?    )*[\\*\\+\\-] ");
     addRegex(OrderedList, "^(:?    )*\\d\\. ");
     // IMPROVE highlight tasks (red/green) that overwrite lists , BUT new regexps make highlighting slower - is it worth to highlight it?
@@ -71,7 +72,8 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     strikethroughFormat.setForeground(lookAndFeels.getEditorStrikethrough());
     linkFormat.setForeground(lookAndFeels.getEditorLink());
     listFormat.setForeground(lookAndFeels.getEditorList());
-    codeblockFormat.setForeground(lookAndFeels.getEditorCodeblock());
+    codeBlockFormat.setForeground(lookAndFeels.getEditorCodeblock());
+    mathBlockFormat.setForeground(lookAndFeels.getEditorCodeblock());
 
 #if QT_VERSION > QT_VERSION_CHECK(5, 5, 0)
     bolderFormat.setFontWeight(QFont::ExtraBold);
@@ -168,7 +170,10 @@ void NoteEditHighlight::highlightPatterns(const QString& text)
                 setFormat(index, length, strikethroughFormat);
                 break;
             case Codeblock:
-                setFormat(index, length, codeblockFormat);
+                setFormat(index, length, codeBlockFormat);
+                break;
+            case Mathblock:
+                setFormat(index, length, mathBlockFormat);
                 break;
             case Link:
                 setFormat(index, length, linkFormat);
@@ -221,12 +226,12 @@ bool NoteEditHighlight::highlightMultilineMdCode(const QString &text)
         // already inside block
         if(!text.compare(TOKEN)) {
             // finish block ~ don't send anything
-            setFormat(0, TOKEN.length(), codeblockFormat);
+            setFormat(0, TOKEN.length(), codeBlockFormat);
             return true;
         } else {
             // continue block
             setCurrentBlockState(currentBlockState()|InCode);
-            setFormat(0, text.size(), codeblockFormat);
+            setFormat(0, text.size(), codeBlockFormat);
             return true;
         }
     } else {
@@ -234,7 +239,7 @@ bool NoteEditHighlight::highlightMultilineMdCode(const QString &text)
         if(text.startsWith(TOKEN)) {
             // enter block ~ don't send anything
             setCurrentBlockState(currentBlockState()|InCode);
-            setFormat(0, text.size(), codeblockFormat);
+            setFormat(0, text.size(), codeBlockFormat);
             return true;
         } else {
             setCurrentBlockState(Normal);
