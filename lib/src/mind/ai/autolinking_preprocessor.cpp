@@ -22,9 +22,13 @@ namespace m8r {
 
 using namespace std;
 
+const string AutolinkingPreprocessor::CODE_BLOCK = string{"```"};
+const string AutolinkingPreprocessor::MATH_BLOCK = string{"$$"};
+
 AutolinkingPreprocessor::AutolinkingPreprocessor(Mind& mind)
     : things{},
-      mind{mind}
+      insensitive{true},
+      mind{mind}    
 {
 }
 
@@ -39,7 +43,7 @@ bool AutolinkingPreprocessor::aliasSizeComparator(const Thing* t1, const Thing* 
 
 void AutolinkingPreprocessor::updateIndices()
 {
-    // TODO update indices only if an O/N is modified (except writing read timestamps)
+    // IMPROVE update indices only if an O/N is modified (except writing read timestamps)
 #ifdef DO_MF_DEBUG
     auto begin = chrono::high_resolution_clock::now();
 #endif
@@ -62,7 +66,7 @@ void AutolinkingPreprocessor::updateIndices()
 
 #ifdef DO_MF_DEBUG
     auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("[Autolink] idx created in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
+    MF_DEBUG("[Autolinking] idx created in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
 #endif
 }
 

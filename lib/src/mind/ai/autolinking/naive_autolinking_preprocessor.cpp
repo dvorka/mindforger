@@ -60,32 +60,29 @@ bool NaiveAutolinkingPreprocessor::containsLinkCodeMath(const string* line)
 
 void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::vector<std::string*>& amd)
 {
-    MF_DEBUG("Autolinker:" << endl);
+    MF_DEBUG("[Autolinking] NAIVE" << endl);
 
-    bool insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
+    insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
 
-    // IMPROVE consider synchronization ONLY in case that it's really needed - watermark num of saves remember and compare
     updateIndices();
 
     // IMPROVE ORDER of Ns determines what will be found > have active O Ns in head, etc.
 
     if(md.size()) {
         bool inCodeBlock=false, inMathBlock=false;
-        static const string CODE_BLOCK{"```"};
-        static const string MATH_BLOCK{"$$"};
         for(string* l:md) {
             // every line is autolinked SEPARATELY
 
             string* nl = new string{};
 
             // skip code/math/... blocks
-            if(stringStartsWith(*l,CODE_BLOCK)) {
+            if(stringStartsWith(*l, CODE_BLOCK)) {
                 inCodeBlock = !inCodeBlock;                
 
                 nl->append(*l);
                 amd.push_back(nl);
                 continue;
-            } else if(stringStartsWith(*l,MATH_BLOCK)) {
+            } else if(stringStartsWith(*l, MATH_BLOCK)) {
                 inMathBlock= !inMathBlock;
 
                 nl->append(*l);
@@ -93,8 +90,8 @@ void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, 
                 continue;
             }
 
-            // IMPROVE before Aho-Corasic is available rather skip lines where
-            // either MD link or inline code presents to preserve syntax correctness.
+            // NAIVE skip lines where is either MD link or inline code presents
+            // to preserve syntax correctness (potential matches might be lost)
             if(containsLinkCodeMath(l)) {
                 nl->append(*l);
                 amd.push_back(nl);
@@ -103,7 +100,7 @@ void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, 
 
             if(l && l->size()) {
                 string w{*l}, chop{};
-                MF_DEBUG(">>" << w << ">>" << endl);
+                MF_DEBUG(">>" << w << "<<" << endl);
 
                 while(w.size()>0) {
                     // find match which is PREFIX of chopped line

@@ -34,8 +34,13 @@ namespace m8r {
  */
 class AutolinkingPreprocessor : public RepresentationInterceptor
 {
+public:
+    static const std::string CODE_BLOCK;
+    static const std::string MATH_BLOCK;
+
 protected:
     std::vector<Thing*> things;
+    bool insensitive;
 
     Mind& mind;
 

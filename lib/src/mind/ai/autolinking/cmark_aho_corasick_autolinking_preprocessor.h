@@ -19,6 +19,12 @@
 #ifndef M8R_CMARK_AHO_CORASICK_AUTOLINKING_PREPROCESSOR_H
 #define M8R_CMARK_AHO_CORASICK_AUTOLINKING_PREPROCESSOR_H
 
+#ifdef MF_MD_2_HTML_CMARK
+  #include <cmark-gfm.h>
+#endif
+
+#include "../autolinking_preprocessor.h"
+
 namespace m8r {
 
 /**
@@ -74,15 +80,28 @@ namespace m8r {
  *     is opened (think Wikipedia cross-road page) and user can choose which link
  *     to use.
  */
-class CmarkAhoCorasickAutolinkingPreprocessor
+class CmarkAhoCorasickAutolinkingPreprocessor : public AutolinkingPreprocessor
 {
 public:
-    explicit CmarkAhoCorasickAutolinkingPreprocessor();
+    explicit CmarkAhoCorasickAutolinkingPreprocessor(Mind& mind);
     CmarkAhoCorasickAutolinkingPreprocessor(const CmarkAhoCorasickAutolinkingPreprocessor&) = delete;
     CmarkAhoCorasickAutolinkingPreprocessor(const CmarkAhoCorasickAutolinkingPreprocessor&&) = delete;
     CmarkAhoCorasickAutolinkingPreprocessor &operator=(const CmarkAhoCorasickAutolinkingPreprocessor&) = delete;
     CmarkAhoCorasickAutolinkingPreprocessor &operator=(const CmarkAhoCorasickAutolinkingPreprocessor&&) = delete;
     ~CmarkAhoCorasickAutolinkingPreprocessor();
+
+    virtual void process(const std::vector<std::string*>& md, std::vector<std::string*>& amd) override;
+
+private:
+    /**
+     * @brief Parse MD line to AST to get MD snippets which are safe for links injection.
+     */
+    void parseMarkdownLine(std::string* md, std::string* amd);
+
+    /**
+     * @brief Inject Os and Ns links to given Markdown snippet.
+     */
+    void injectThingsLinks(std::string* t, std::string* at);
 };
 
 }

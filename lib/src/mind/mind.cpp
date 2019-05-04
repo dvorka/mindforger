@@ -19,6 +19,7 @@
 #include "mind.h"
 
 #include "ai/autolinking/naive_autolinking_preprocessor.h"
+#include "ai/autolinking/cmark_aho_corasick_autolinking_preprocessor.h"
 
 using namespace std;
 
@@ -27,7 +28,11 @@ namespace m8r {
 Mind::Mind(Configuration &configuration)
     : config{configuration},
       ontology{},
+#if defined  MF_MD_2_HTML_CMARK
+      autoInterceptor(new CmarkAhoCorasickAutolinkingPreprocessor{*this}),
+#else
       autoInterceptor(new NaiveAutolinkingPreprocessor{*this}),
+#endif
       htmlRepresentation{ontology, autoInterceptor},
       mdConfigRepresentation(new MarkdownConfigurationRepresentation{}),
       memory{configuration, ontology, htmlRepresentation},
