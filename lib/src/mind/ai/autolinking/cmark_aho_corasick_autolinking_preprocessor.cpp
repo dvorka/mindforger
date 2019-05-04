@@ -78,6 +78,13 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(const std::vector<std::str
 
 void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md, std::string* amd)
 {
+    /*
+     * TODO ... setting link is WRONG > AST must be modified instead
+     */
+
+#ifdef DO_MF_DEBUG
+    MF_DEBUG("[Autolinking] parse line '" << *md << "'" << endl);
+#endif
 #ifdef MF_MD_2_HTML_CMARK
     const char* smd = md->c_str();
     cmark_node* document = cmark_parse_document(
@@ -85,20 +92,14 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
         strlen(smd),
         CMARK_OPT_DEFAULT);
 
-    cout << endl;
-
-    char* xml = cmark_render_xml(document, 0);
-    cout << "cmark AST as XML:" << endl << endl;
-    cout << xml << endl;
-
-    char* txt = cmark_render_commonmark(document, 0, 100);
-    cout << "cmark AST as MD:" << endl << endl;
-    cout << txt << endl;
+    MF_DEBUG(endl);
 
     // AST iteration
 
     cmark_event_type ev_type;
     cmark_iter *iter = cmark_iter_new(document);
+
+    string itxt{}, otxt{};
 
     while ((ev_type = cmark_iter_next(iter)) != CMARK_EVENT_DONE) {
         cmark_node *cur = cmark_iter_get_node(iter);
@@ -132,7 +133,11 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
             cout << " image";
             break;
         case CMARK_NODE_TEXT:
-            cout << " text";
+            cout << " text " << cmark_node_get_literal(cur);
+            itxt.assign(cmark_node_get_literal(cur));
+            otxt.clear();
+            injectThingsLinks(&itxt, &otxt);
+            cmark_node_set_literal(cur, otxt.c_str());
             break;
         default:
             cout << " .";
@@ -157,6 +162,17 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
     // stay there.
 
     // TODO serialize AST to amd
+    char* txt = cmark_render_commonmark(document, 0, 100);
+    MF_DEBUG("OUTPUT cmark AST as MD:" << endl << endl);
+    MF_DEBUG(txt << endl);
+
+    char* xml = cmark_render_xml(document, 0);
+    MF_DEBUG("cmark AST as XML:" << endl << endl);
+    MF_DEBUG(xml << endl);
+
+    txt = cmark_render_plaintext(document, 0, 100);
+    MF_DEBUG("OUTPUT cmark AST as TXT:" << endl << endl);
+    MF_DEBUG(txt << endl);
 
 #else
     // TODO copy md to amd

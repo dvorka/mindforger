@@ -66,7 +66,7 @@ void AutolinkingPreprocessor::updateIndices()
 
 #ifdef DO_MF_DEBUG
     auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("[Autolinking] idx created in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
+    MF_DEBUG("[Autolinking] idx updated in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
 #endif
 }
 
