@@ -22,17 +22,9 @@ namespace m8r {
 
 using namespace std;
 
-// see editor highligting regexps, test it at https://www.regextester.com
-const string AutolinkingPreprocessor::PATTERN_LINK = string{"\\[(:?[\\S\\s]+)\\]\\(\\S+\\)"};
-const string AutolinkingPreprocessor::PATTERN_CODE = string{"`[\\S\\s]+`"};
-const string AutolinkingPreprocessor::PATTERN_MATH = string{"\\$[\\S\\s]+\\$"};
-const string AutolinkingPreprocessor::PATTERN_HTTP = string{"https?://"};
-
-AutolinkingPreprocessor::AutolinkingPreprocessor()
-    : linkRegex{PATTERN_LINK},
-      codeRegex{PATTERN_CODE},
-      mathRegex{PATTERN_MATH},
-      httpRegex{PATTERN_HTTP}
+AutolinkingPreprocessor::AutolinkingPreprocessor(Mind& mind)
+    : things{},
+      mind{mind}
 {
 }
 
@@ -40,26 +32,38 @@ AutolinkingPreprocessor::~AutolinkingPreprocessor()
 {
 }
 
-bool AutolinkingPreprocessor::containsLinkCodeMath(const string* line)
-{
-    std::smatch matchedString;
-    if(std::regex_search(*line, matchedString, linkRegex)
-         ||
-       std::regex_search(*line, matchedString, codeRegex)
-         ||
-       std::regex_search(*line, matchedString, mathRegex)
-        ||
-       std::regex_search(*line, matchedString, httpRegex))
-    {
-        return true;
-    }
-
-    return false;
-}
-
 bool AutolinkingPreprocessor::aliasSizeComparator(const Thing* t1, const Thing* t2)
 {
     return t1->getAutolinkingAlias().size() > t2->getAutolinkingAlias().size();
+}
+
+void AutolinkingPreprocessor::updateIndices()
+{
+    // TODO update indices only if an O/N is modified (except writing read timestamps)
+#ifdef DO_MF_DEBUG
+    auto begin = chrono::high_resolution_clock::now();
+#endif
+
+    things.clear();
+
+    // Os
+    std::vector<Outline*> outlines;
+    const vector<Outline*>& os=mind.getOutlines();
+    for(Outline* o:os) outlines.push_back(o);
+    std::sort(outlines.begin(), outlines.end(), aliasSizeComparator);
+    for(Thing* t:outlines) things.push_back(t);
+
+    // Ns
+    std::vector<Note*> notes;
+    mind.getAllNotes(notes);
+    // sort names from longest to shortest (to have best ~ longest matches)
+    std::sort(notes.begin(), notes.end(), aliasSizeComparator);
+    for(Thing* t:notes) things.push_back(t);
+
+#ifdef DO_MF_DEBUG
+    auto end = chrono::high_resolution_clock::now();
+    MF_DEBUG("[Autolink] idx created in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
+#endif
 }
 
 } // m8r namespace

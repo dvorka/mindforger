@@ -19,9 +19,10 @@
 #ifndef M8R_NAIVE_AUTOLINKING_PREPROCESSOR_H
 #define M8R_NAIVE_AUTOLINKING_PREPROCESSOR_H
 
+#include <regex>
+#include <string>
+
 #include "../autolinking_preprocessor.h"
-#include "../../mind.h"
-#include "../../../representations/markdown/markdown_outline_representation.h"
 
 namespace m8r {
 
@@ -30,8 +31,17 @@ namespace m8r {
  */
 class NaiveAutolinkingPreprocessor : public AutolinkingPreprocessor
 {
-    Mind& mind;
-    std::vector<Thing*> things;
+public:
+    static const std::string PATTERN_LINK;
+    static const std::string PATTERN_CODE;
+    static const std::string PATTERN_MATH;
+    static const std::string PATTERN_HTTP;
+
+private:
+    std::regex linkRegex;
+    std::regex codeRegex;
+    std::regex mathRegex;
+    std::regex httpRegex;
 
 public:
     explicit NaiveAutolinkingPreprocessor(Mind& mind);
@@ -44,11 +54,7 @@ public:
     virtual void process(const std::vector<std::string*>& md, std::vector<std::string*>& amd) override;
 
 private:
-
-    /**
-     * @brief Update N names/links indices.
-     */
-    void updateIndices();
+    bool containsLinkCodeMath(const std::string* line);
 };
 
 }

@@ -19,37 +19,28 @@
 #ifndef M8R_AUTOLINKING_PREPROCESSOR_H
 #define M8R_AUTOLINKING_PREPROCESSOR_H
 
-#include <regex>
-
-#include "../../mind/ontology/thing_class_rel_triple.h"
 #include "../../representations/representation_interceptor.h"
+#include "../../mind/mind.h"
+#include "../../debug.h"
 
 namespace m8r {
 
 /**
  * @brief Autolinking pre-processor abstract class.
  *
- * Autolinking pre-processor injects into Markdown text links to
- * Os and Ns based on their names found in the text. Output is
- * valid Markdown which is typically rendered to HTML or other
- * representation.
+ * Autolinking pre-processor injects Os and Ns text links to Markdown
+ * text based on their names. Pre-processor output is valid Markdown text
+ * which is typically rendered to HTML or other representation.
  */
 class AutolinkingPreprocessor : public RepresentationInterceptor
 {
-public:
-    static const std::string PATTERN_LINK;
-    static const std::string PATTERN_CODE;
-    static const std::string PATTERN_MATH;
-    static const std::string PATTERN_HTTP;
-
 protected:
-    std::regex linkRegex;
-    std::regex codeRegex;
-    std::regex mathRegex;
-    std::regex httpRegex;
+    std::vector<Thing*> things;
+
+    Mind& mind;
 
 public:
-    explicit AutolinkingPreprocessor();
+    explicit AutolinkingPreprocessor(Mind& mind);
     AutolinkingPreprocessor(const AutolinkingPreprocessor&) = delete;
     AutolinkingPreprocessor(const AutolinkingPreprocessor&&) = delete;
     AutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&) = delete;
@@ -58,9 +49,16 @@ public:
 
     virtual void process(const std::vector<std::string*>& in, std::vector<std::string*>& out) = 0;
 
-    bool containsLinkCodeMath(const std::string* line);
-
+protected:
+    /**
+     * @brief Comparator used to sort Os/Ns by name (w/ stripped abbreviation prefix).
+     */
     static bool aliasSizeComparator(const Thing* t1, const Thing* t2);
+
+    /**
+     * @brief Update indice of all Ns and Os.
+     */
+    void updateIndices();
 };
 
 }

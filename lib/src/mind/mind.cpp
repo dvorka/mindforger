@@ -18,6 +18,8 @@
  */
 #include "mind.h"
 
+#include "ai/autolinking/naive_autolinking_preprocessor.h"
+
 using namespace std;
 
 namespace m8r {

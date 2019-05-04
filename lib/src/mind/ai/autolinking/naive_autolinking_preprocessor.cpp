@@ -22,10 +22,18 @@ namespace m8r {
 
 using namespace std;
 
+// see editor highligting regexps, test it at https://www.regextester.com
+const string NaiveAutolinkingPreprocessor::PATTERN_LINK = string{"\\[(:?[\\S\\s]+)\\]\\(\\S+\\)"};
+const string NaiveAutolinkingPreprocessor::PATTERN_CODE = string{"`[\\S\\s]+`"};
+const string NaiveAutolinkingPreprocessor::PATTERN_MATH = string{"\\$[\\S\\s]+\\$"};
+const string NaiveAutolinkingPreprocessor::PATTERN_HTTP = string{"https?://"};
+
 NaiveAutolinkingPreprocessor::NaiveAutolinkingPreprocessor(Mind& mind)
-    : AutolinkingPreprocessor{},
-      mind(mind),
-      things{}
+    : AutolinkingPreprocessor{mind},
+      linkRegex{PATTERN_LINK},
+      codeRegex{PATTERN_CODE},
+      mathRegex{PATTERN_MATH},
+      httpRegex{PATTERN_HTTP}
 {
 }
 
@@ -33,23 +41,21 @@ NaiveAutolinkingPreprocessor::~NaiveAutolinkingPreprocessor()
 {
 }
 
-void NaiveAutolinkingPreprocessor::updateIndices()
+bool NaiveAutolinkingPreprocessor::containsLinkCodeMath(const string* line)
 {
-    things.clear();
+    std::smatch matchedString;
+    if(std::regex_search(*line, matchedString, linkRegex)
+         ||
+       std::regex_search(*line, matchedString, codeRegex)
+         ||
+       std::regex_search(*line, matchedString, mathRegex)
+        ||
+       std::regex_search(*line, matchedString, httpRegex))
+    {
+        return true;
+    }
 
-    // Os
-    std::vector<Outline*> outlines;
-    const vector<Outline*>& os=mind.getOutlines();
-    for(Outline* o:os) outlines.push_back(o);
-    std::sort(outlines.begin(), outlines.end(), aliasSizeComparator);
-    for(Thing* t:outlines) things.push_back(t);
-
-    // Ns
-    std::vector<Note*> notes;
-    mind.getAllNotes(notes);
-    // sort names from longest to shortest (to have best ~ longest matches)
-    std::sort(notes.begin(), notes.end(), aliasSizeComparator);
-    for(Thing* t:notes) things.push_back(t);
+    return false;
 }
 
 void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::vector<std::string*>& amd)

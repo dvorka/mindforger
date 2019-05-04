@@ -31,18 +31,16 @@
 #include "ontology/thing_class_rel_triple.h"
 #include "aspect/mind_scope_aspect.h"
 #include "../config/configuration.h"
+#include "../representations/representation_interceptor.h"
 #include "../representations/markdown/markdown_configuration_representation.h"
 #ifdef MF_NER
     #include "ai/nlp/named_entity_recognition.h"
 #endif
 
-#include "ai/autolinking/naive_autolinking_preprocessor.h"
-
 namespace m8r {
 
 class Ai;
 class KnowledgeGraph;
-class AutolinkingPreprocessor;
 
 constexpr auto NO_PARENT = 0xFFFF;
 
@@ -131,7 +129,7 @@ public:
 private:
     Configuration &config;
     Ontology ontology;
-    AutolinkingPreprocessor* autoInterceptor;
+    RepresentationInterceptor* autoInterceptor;
     HtmlOutlineRepresentation htmlRepresentation;
     MarkdownConfigurationRepresentation* mdConfigRepresentation;
     Memory memory;

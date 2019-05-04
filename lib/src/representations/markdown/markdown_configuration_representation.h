@@ -23,9 +23,8 @@
 #include <vector>
 #include <iostream>
 
-#include "../../config/configuration.h"
 #include "markdown_document.h"
-#include "../../gear/string_utils.h"
+#include "../../config/configuration.h"
 
 namespace m8r {
 
