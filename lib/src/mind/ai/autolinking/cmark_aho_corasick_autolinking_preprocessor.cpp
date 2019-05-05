@@ -101,8 +101,18 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
 
     string itxt{}, otxt{};
 
+    cmark_node* linkNode{};
+    cmark_node* txtNode{};
+    cmark_node* zombieNode{};
+
     while ((ev_type = cmark_iter_next(iter)) != CMARK_EVENT_DONE) {
         cmark_node *cur = cmark_iter_get_node(iter);
+
+        if(zombieNode) {
+            cmark_node_unlink(zombieNode);
+            cmark_node_free(zombieNode);
+            zombieNode = nullptr;
+        }
 
         // do something with `cur` and `ev_type`
         switch(ev_type) {
@@ -134,10 +144,31 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
             break;
         case CMARK_NODE_TEXT:
             cout << " text " << cmark_node_get_literal(cur);
-            itxt.assign(cmark_node_get_literal(cur));
-            otxt.clear();
-            injectThingsLinks(&itxt, &otxt);
-            cmark_node_set_literal(cur, otxt.c_str());
+
+            // replace text node w/ sequence of text and link nodes
+
+            // inject link
+            linkNode = cmark_node_new(CMARK_NODE_LINK);
+            cmark_node_set_url(linkNode,"http://acme.com#ANCHOR");
+            cmark_node_set_literal(linkNode, "MY-LITERAL");
+
+            txtNode = cmark_node_new(CMARK_NODE_TEXT);
+            cmark_node_set_literal(txtNode, "1-LINK-LITERAL");
+            cmark_node_append_child(linkNode, txtNode);
+
+            cmark_node_insert_before(cur, linkNode);
+
+            // inject text
+            txtNode = cmark_node_new(CMARK_NODE_TEXT);
+            cmark_node_set_literal(txtNode, "2-TXT-NODE");
+            cmark_node_insert_after(linkNode, txtNode);
+
+            zombieNode = cur;
+
+            //itxt.assign(cmark_node_get_literal(cur));
+            //otxt.clear();
+            //injectThingsLinks(&itxt, &otxt);
+            //cmark_node_set_literal(cur, otxt.c_str());
             break;
         default:
             cout << " .";
