@@ -107,17 +107,15 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
 
     // AST iteration
 
-    cmark_event_type ev_type;
-    cmark_iter *iter = cmark_iter_new(document);
+    cmark_event_type eventType;
+    cmark_iter *i = cmark_iter_new(document);
 
     string itxt{}, otxt{};
 
-    cmark_node* linkNode{};
-    cmark_node* txtNode{};
     cmark_node* zombieNode{};
 
-    while ((ev_type = cmark_iter_next(iter)) != CMARK_EVENT_DONE) {
-        cmark_node *cur = cmark_iter_get_node(iter);
+    while ((eventType = cmark_iter_next(i)) != CMARK_EVENT_DONE) {
+        cmark_node *node = cmark_iter_get_node(i);
 
         if(zombieNode) {
             cmark_node_unlink(zombieNode);
@@ -126,7 +124,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
         }
 
         // do something with `cur` and `ev_type`
-        switch(ev_type) {
+        switch(eventType) {
         case CMARK_EVENT_ENTER:
             cout << "ENTER";
             break;
@@ -143,7 +141,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
             cout << ".";
         }
 
-        switch(cmark_node_get_type(cur)) {
+        switch(cmark_node_get_type(node)) {
         case CMARK_NODE_CODE:
             cout << " code";
             break;
@@ -154,34 +152,11 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
             cout << " image";
             break;
         case CMARK_NODE_TEXT:
-            cout << " text " << cmark_node_get_literal(cur);
+            cout << " text " << cmark_node_get_literal(node);
 
-            /*
             // replace text node w/ sequence of text and link nodes
-
-            // inject link
-            linkNode = cmark_node_new(CMARK_NODE_LINK);
-            cmark_node_set_url(linkNode,"http://acme.com#ANCHOR");
-            cmark_node_set_literal(linkNode, "MY-LITERAL");
-
-            txtNode = cmark_node_new(CMARK_NODE_TEXT);
-            cmark_node_set_literal(txtNode, "1-LINK-LITERAL");
-            cmark_node_append_child(linkNode, txtNode);
-
-            cmark_node_insert_before(cur, linkNode);
-
-            // inject text
-            txtNode = cmark_node_new(CMARK_NODE_TEXT);
-            cmark_node_set_literal(txtNode, "2-TXT-NODE");
-            cmark_node_insert_after(linkNode, txtNode);
-
-            zombieNode = cur;
-            */
-
-            itxt.assign(cmark_node_get_literal(cur));
-            otxt.clear();
-            injectThingsLinks(&itxt, &otxt);
-            //cmark_node_set_literal(cur, otxt.c_str());
+            injectThingsLinks(node);
+            zombieNode = node;
 
             break;
         default:
@@ -191,7 +166,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
         cout << endl;
     }
 
-    cmark_iter_free(iter);
+    cmark_iter_free(i);
 
     // Nodes must only be modified after an `EXIT` event,
     // or an `ENTER` event for leaf nodes.
@@ -210,25 +185,35 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
     char* xml = cmark_render_xml(document, 0);
     MF_DEBUG("[Autolinking] Line's cmark AST as XML:" << endl << endl);
     MF_DEBUG(xml << endl);
+    free(xml);
 
     char* txt = cmark_render_commonmark(document, 0, 100);
     MF_DEBUG("[Autolinking] Line's cmark AST as MD:" << endl << endl);
     MF_DEBUG(txt << endl);
+    free(txt);
 #endif
 
+    // TODO set correct
+    char* cmm = cmark_render_commonmark(document, 0, 0);
+    amd->assign(cmm);
+    free(cmm);
 #else
     // TODO copy md to amd
 #endif
 }
 
-void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(string* t, string* at)
+void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* origNode)
 {
-#ifdef DO_MF_DEBUG
-    MF_DEBUG("[Autolinking] Injecting links to: '" << *t << "'" << endl);
-#endif
-
     // copy w to t as it will be chopped word/match by word/match from head to tail
-    string w{*t}, chop{};
+    string w{cmark_node_get_literal(origNode)}, at{}, chop{};
+
+    cmark_node* node{};
+    cmark_node* linkNode{};
+    cmark_node* txtNode{};
+
+#ifdef DO_MF_DEBUG
+    MF_DEBUG("[Autolinking] Injecting links to: '" << w << "'" << endl);
+#endif
 
     while(w.size()>0) {
         // find match which is PREFIX of chopped line
@@ -238,6 +223,9 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(string* t, strin
 
         // IMPROVE existing (non-Aho-Corasic) algorithm can be optimized:
         // - sort Os/Ns alphabetically
+        //     - search structure: map w/ leading char as key and list of
+        //       Os/Ns names ordered by length as value
+        //         - have this for both case in/sensitive cases ~ 2 structs
         //     - sort words with the same 1st word by length
         //     - remember begin-end of words starting with the char
         // - determine first w character
@@ -287,17 +275,38 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(string* t, strin
                 {
                     linked = true;
 
-                    // TODO XXX if at>0 then add AST text node (clear AT), else nothing
-                    // TODO XXX add AST link node
+                    // IMPROVE make this method
+                    // AST: add text node w/ content preceding link
+                    if(at.size()) {
+                        txtNode = cmark_node_new(CMARK_NODE_TEXT);
+                        cmark_node_set_literal(txtNode, at.c_str());
+                        // IMPROVE make this private method
+                        if(node) {
+                            cmark_node_insert_after(node, txtNode);
+                        } else {
+                            cmark_node_insert_before(origNode, txtNode);
+                        }
+                        node = txtNode;
 
-                    // append link
-                    MarkdownOutlineRepresentation::toLink(
-                        insensitiveMatch?lowerAlias:t->getAutolinkingAlias(),
-                        t->getKey(),
-                        at);
+                        at.clear();
+                    }
+
+                    // IMPROVE make this method
+                    // AST: add link
+                    linkNode = cmark_node_new(CMARK_NODE_LINK);
+                    cmark_node_set_url(linkNode, t->getKey().c_str());
+                    txtNode = cmark_node_new(CMARK_NODE_TEXT);
+                    cmark_node_set_literal(txtNode, insensitiveMatch?lowerAlias.c_str():t->getAutolinkingAlias().c_str());
+                    cmark_node_append_child(linkNode, txtNode);
+                    if(node) {
+                        cmark_node_insert_after(node, linkNode);
+                    } else {
+                        cmark_node_insert_before(origNode, linkNode);
+                    }
+                    node = linkNode;
 
                     // append trailing char
-                    *at += c;
+                    at += c;
 
                     // chop linked prefix word from input word w
                     w = w.substr(t->getAutolinkingAlias().size()+(w.size()==t->getAutolinkingAlias().size()?0:1));
@@ -314,36 +323,44 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(string* t, strin
             // prefix has been linked + chopped
             // IMPROVE trailing should be already appended above
             // IMPROVE SPACE vs. TAB
-            at->append(" ");
+            at.append(" ");
         } else {
             // current w prefix was NOT linked > chop it and append it
             size_t begin = w.find_first_of(" \t");
             if(begin != string::npos) {
                 chop = w.substr(0, begin);
                 w = w.substr(begin+1);
-                at->append(chop);
-                at->append(" ");
+                at.append(chop);
+                at.append(" ");
 
                 MF_DEBUG("  -c>" << chop << endl);
                 MF_DEBUG("   w>" << w << endl);
-                MF_DEBUG("   <<" << *at << endl);
+                MF_DEBUG("   <<" << at << endl);
             } else {
                 // no more words (prefix already checked) > DONE
-                at->append(w);
+                at.append(w);
 
                 MF_DEBUG("   w>" << w << endl);
-                MF_DEBUG("   <<" << *at << endl);
+                MF_DEBUG("   <<" << at << endl);
 
                 break;
             }
         }
     }
 
-    // TODO XXX if at>0 then add AST text node, else nothing
+    // AST: add text node w/ content preceding link
+    if(at.size()) {
+        txtNode = cmark_node_new(CMARK_NODE_TEXT);
+        cmark_node_set_literal(txtNode, at.c_str());
+        if(node) {
+            cmark_node_insert_after(node, txtNode);
+        } else {
+            cmark_node_insert_before(origNode, txtNode);
+        }
+        node = txtNode;
 
-    // TODO XXX serialize whole AST to at and return it
-
-    MF_DEBUG("<<" << *at << "<<" << endl);
+        // not required: at.clear();
+    }
 }
 
 } // m8r namespace
