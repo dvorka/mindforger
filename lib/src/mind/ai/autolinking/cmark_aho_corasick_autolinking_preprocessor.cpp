@@ -18,6 +18,25 @@
 */
 #include "cmark_aho_corasick_autolinking_preprocessor.h"
 
+/*
+ * Plan:
+ *
+ * - ensure correctness FIRST:
+ *    - no trailing spaces
+ *    - protection of bullet lists
+ *    - protection of links/images/...
+ *
+ * - polish correct version
+ *    - code to methods
+ *    - extra debugs away
+ *
+ * - performance
+ *    - map search structure instead of Aho
+ *    - benchmark on C
+ *    - configurable time limit on autolinking and leave on exceeding it
+ *
+ */
+
 namespace m8r {
 
 using namespace std;
@@ -94,6 +113,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
 {
 #ifdef DO_MF_DEBUG
     MF_DEBUG("[Autolinking] parsing line '" << *md << "'" << endl);
+    MF_DEBUG(endl);
 #endif
 
 #ifdef MF_MD_2_HTML_CMARK
@@ -103,16 +123,12 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
         strlen(smd),
         CMARK_OPT_DEFAULT);
 
-    MF_DEBUG(endl);
-
     // AST iteration
-
-    cmark_event_type eventType;
     cmark_iter *i = cmark_iter_new(document);
-
-    string itxt{}, otxt{};
-
+    cmark_event_type eventType;
     cmark_node* zombieNode{};
+
+    bool inLinkImgOrCode = false;
 
     while ((eventType = cmark_iter_next(i)) != CMARK_EVENT_DONE) {
         cmark_node *node = cmark_iter_get_node(i);
@@ -123,63 +139,64 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
             zombieNode = nullptr;
         }
 
+        // IMPROVE make this a debug method
         // do something with `cur` and `ev_type`
         switch(eventType) {
         case CMARK_EVENT_ENTER:
-            cout << "ENTER";
+            MF_DEBUG("ENTER");
             break;
         case CMARK_EVENT_EXIT:
-            cout << "LEAVE";
+            MF_DEBUG("LEAVE");
             break;
         case CMARK_EVENT_DONE:
-            cout << "DONE";
+            MF_DEBUG("DONE");
             break;
         case CMARK_EVENT_NONE:
-            cout << "NONE";
+            MF_DEBUG("NONE");
             break;
         default:
-            cout << ".";
+            MF_DEBUG(".");
         }
+
+        // Nodes must only be modified after an `EXIT` event,
+        // or an `ENTER` event for leaf nodes.
+
+        // inlined autolinking constructions to avoid - auto-link in:
+        // - link
+        // - image
+        // - code
+        // ... iterate nodes and skip <text/> if UNDER link/image/code,
+        // otherwise trim text and try to autolink it.
 
         switch(cmark_node_get_type(node)) {
         case CMARK_NODE_CODE:
-            cout << " code";
-            break;
+            MF_DEBUG(" code");
         case CMARK_NODE_LINK:
-            cout << " link";
-            break;
+            MF_DEBUG(" link");
         case CMARK_NODE_IMAGE:
-            cout << " image";
+            MF_DEBUG(" image");
+            if(eventType == CMARK_EVENT_ENTER) {
+                inLinkImgOrCode = true;
+            } else if (eventType == CMARK_EVENT_EXIT) {
+                inLinkImgOrCode = false;
+            }
             break;
         case CMARK_NODE_TEXT:
-            cout << " text " << cmark_node_get_literal(node);
-
-            // replace text node w/ sequence of text and link nodes
-            injectThingsLinks(node);
-            zombieNode = node;
-
+            MF_DEBUG(" text '" << cmark_node_get_literal(node) << "'" << endl);
+            if(!inLinkImgOrCode) {
+                // replace text node w/ sequence of text and link nodes
+                injectThingsLinks(node);
+                zombieNode = node;
+            }
             break;
         default:
-            cout << " .";
+            MF_DEBUG(" .");
         }
 
-        cout << endl;
+        MF_DEBUG(endl);
     }
 
     cmark_iter_free(i);
-
-    // Nodes must only be modified after an `EXIT` event,
-    // or an `ENTER` event for leaf nodes.
-
-    // inlined autolinking constructions to avoid - auto-link in:
-    // - link
-    // - image
-    // - code
-    // ... iterate nodes and skip <text/> if UNDER link/image/code,
-    // otherwise trim text and try to autolink it.
-    //
-    // Set autolinked text and then try to serialize to MD, it should
-    // stay there.
 
 #ifdef DO_MF_DEBUG
     char* xml = cmark_render_xml(document, 0);
@@ -323,7 +340,9 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
             // prefix has been linked + chopped
             // IMPROVE trailing should be already appended above
             // IMPROVE SPACE vs. TAB
-            at.append(" ");
+
+            // IMPROVE append only in CERTAIN cases - determine when
+            //at.append(" ");
         } else {
             // current w prefix was NOT linked > chop it and append it
             size_t begin = w.find_first_of(" \t");
