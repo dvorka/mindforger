@@ -34,12 +34,21 @@ CmarkAhoCorasickAutolinkingPreprocessor::~CmarkAhoCorasickAutolinkingPreprocesso
 void CmarkAhoCorasickAutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::vector<std::string*>& amd)
 {
 #ifdef MF_MD_2_HTML_CMARK
-    MF_DEBUG("[Autolinking] CMARK-AHO" << endl);
+
+#ifdef DO_MF_DEBUG
+    MF_DEBUG("[Autolinking] begin CMARK-AHO" << endl);
+    auto begin = chrono::high_resolution_clock::now();
+#endif
 
     updateIndices();
     insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
 
     if(md.size()) {
+
+        // IMPROVE measure time in here and if over give limit, than STOP injecting
+        // and leave i.e. what happens is that a time SLA will be fulfilled and
+        // some part (prefix) of the input MD will be autolinked.
+
         bool inCodeBlock=false, inMathBlock=false;
         for(string* l:md) {
             // every line is autolinked SEPARATELY
@@ -71,6 +80,11 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(const std::vector<std::str
             }
         }
     }
+#ifdef DO_MF_DEBUG
+    auto end = chrono::high_resolution_clock::now();
+    MF_DEBUG("[Autolinking] done - MD autolinked in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
+#endif
+
 #else
     amd = md;
 #endif
@@ -78,13 +92,10 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(const std::vector<std::str
 
 void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md, std::string* amd)
 {
-    /*
-     * TODO ... setting link is WRONG > AST must be modified instead
-     */
-
 #ifdef DO_MF_DEBUG
-    MF_DEBUG("[Autolinking] parse line '" << *md << "'" << endl);
+    MF_DEBUG("[Autolinking] parsing line '" << *md << "'" << endl);
 #endif
+
 #ifdef MF_MD_2_HTML_CMARK
     const char* smd = md->c_str();
     cmark_node* document = cmark_parse_document(
@@ -145,6 +156,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
         case CMARK_NODE_TEXT:
             cout << " text " << cmark_node_get_literal(cur);
 
+            /*
             // replace text node w/ sequence of text and link nodes
 
             // inject link
@@ -164,11 +176,13 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
             cmark_node_insert_after(linkNode, txtNode);
 
             zombieNode = cur;
+            */
 
-            //itxt.assign(cmark_node_get_literal(cur));
-            //otxt.clear();
-            //injectThingsLinks(&itxt, &otxt);
+            itxt.assign(cmark_node_get_literal(cur));
+            otxt.clear();
+            injectThingsLinks(&itxt, &otxt);
             //cmark_node_set_literal(cur, otxt.c_str());
+
             break;
         default:
             cout << " .";
@@ -192,18 +206,15 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
     // Set autolinked text and then try to serialize to MD, it should
     // stay there.
 
-    // TODO serialize AST to amd
-    char* txt = cmark_render_commonmark(document, 0, 100);
-    MF_DEBUG("OUTPUT cmark AST as MD:" << endl << endl);
-    MF_DEBUG(txt << endl);
-
+#ifdef DO_MF_DEBUG
     char* xml = cmark_render_xml(document, 0);
-    MF_DEBUG("cmark AST as XML:" << endl << endl);
+    MF_DEBUG("[Autolinking] Line's cmark AST as XML:" << endl << endl);
     MF_DEBUG(xml << endl);
 
-    txt = cmark_render_plaintext(document, 0, 100);
-    MF_DEBUG("OUTPUT cmark AST as TXT:" << endl << endl);
+    char* txt = cmark_render_commonmark(document, 0, 100);
+    MF_DEBUG("[Autolinking] Line's cmark AST as MD:" << endl << endl);
     MF_DEBUG(txt << endl);
+#endif
 
 #else
     // TODO copy md to amd
@@ -213,16 +224,26 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
 void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(string* t, string* at)
 {
 #ifdef DO_MF_DEBUG
-    MF_DEBUG("[Autolinking] Injecting to '" << *t << "'" << endl);
+    MF_DEBUG("[Autolinking] Injecting links to: '" << *t << "'" << endl);
 #endif
 
+    // copy w to t as it will be chopped word/match by word/match from head to tail
     string w{*t}, chop{};
 
     while(w.size()>0) {
         // find match which is PREFIX of chopped line
         bool linked = false;
 
-        // IMPROVE loop to be changed to Aho-Corasic trie
+        // IMPROVE rewrite string search to Aho-Corasic trie
+
+        // IMPROVE existing (non-Aho-Corasic) algorithm can be optimized:
+        // - sort Os/Ns alphabetically
+        //     - sort words with the same 1st word by length
+        //     - remember begin-end of words starting with the char
+        // - determine first w character
+        //     - search only Os/Ns w/ that particular 1st character only
+        // ... this will speed up search significantly, perhaps it can be
+        // 10x faster than search for all Os/Ns names
 
         // inject Os, then Ns
         for(Thing* t:things) {
@@ -230,6 +251,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(string* t, strin
             bool match, insensitiveMatch;
             string lowerAlias{};
 
+            // FIND: accept occurences in the HEAD of word only
             if((found=w.find(t->getAutolinkingAlias()))!=string::npos
                   &&
                 !found)
@@ -239,6 +261,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(string* t, strin
                 lowerAlias.assign(t->getAutolinkingAlias());
                 lowerAlias[0] = std::tolower(t->getAutolinkingAlias()[0]);
 
+                // FIND: accept occurences in the HEAD of word only
                 if(insensitive
                      &&
                    (found=w.find(lowerAlias))!=string::npos
@@ -255,6 +278,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(string* t, strin
                 // avoid word PREFIX matches ~ ensure that WHOLE world is matched
 
                 string m{" \t,:;.!?<>{}&()-+/*"};
+                // determine trailing char c
                 char c{w.size()==t->getAutolinkingAlias().size()?' ':w.at(t->getAutolinkingAlias().size())};
                 MF_DEBUG("  c: '" << c << "'" << endl);
                 if(w.size()==t->getAutolinkingAlias().size()
@@ -263,25 +287,32 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(string* t, strin
                 {
                     linked = true;
 
+                    // TODO XXX if at>0 then add AST text node (clear AT), else nothing
+                    // TODO XXX add AST link node
+
+                    // append link
                     MarkdownOutlineRepresentation::toLink(
                         insensitiveMatch?lowerAlias:t->getAutolinkingAlias(),
                         t->getKey(),
                         at);
 
+                    // append trailing char
                     *at += c;
 
-                    // chop linked prefix word
+                    // chop linked prefix word from input word w
                     w = w.substr(t->getAutolinkingAlias().size()+(w.size()==t->getAutolinkingAlias().size()?0:1));
 
+                    // leave Os/Ns loop on the first match
                     break;
                 }
             }
         }
 
-        // chop one world from the beginning
+        //
         MF_DEBUG("   l>" << std::boolalpha << linked << endl);
         if(linked) {
             // prefix has been linked + chopped
+            // IMPROVE trailing should be already appended above
             // IMPROVE SPACE vs. TAB
             at->append(" ");
         } else {
@@ -307,6 +338,10 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(string* t, strin
             }
         }
     }
+
+    // TODO XXX if at>0 then add AST text node, else nothing
+
+    // TODO XXX serialize whole AST to at and return it
 
     MF_DEBUG("<<" << *at << "<<" << endl);
 }
