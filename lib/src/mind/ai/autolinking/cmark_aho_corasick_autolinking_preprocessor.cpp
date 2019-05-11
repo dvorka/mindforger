@@ -25,12 +25,14 @@
  *    - no trailing spaces
  *    - protection of bullet lists
  *    - protection of links/images/...
+ *    - blacklist ~ don't autolink e.g. http (to protect cmark's URLs autolinking)
  *
  * - polish correct version
  *    - code to methods
  *    - extra debugs away
  *
  * - performance
+ *    - avoid autolinking whole O on its load - it's not needed
  *    - map search structure instead of Aho
  *    - benchmark on C
  *    - configurable time limit on autolinking and leave on exceeding it
@@ -222,21 +224,24 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
 void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* origNode)
 {
     // copy w to t as it will be chopped word/match by word/match from head to tail
-    string w{cmark_node_get_literal(origNode)}, at{}, chop{};
+    string txt{cmark_node_get_literal(origNode)}, at{}, chop{};
 
     cmark_node* node{};
     cmark_node* linkNode{};
     cmark_node* txtNode{};
 
 #ifdef DO_MF_DEBUG
-    MF_DEBUG("[Autolinking] Injecting links to: '" << w << "'" << endl);
+    MF_DEBUG("[Autolinking] Injecting links to: '" << txt << "'" << endl);
 #endif
 
-    while(w.size()>0) {
+    while(txt.size()>0) {
         // find match which is PREFIX of chopped line
         bool linked = false;
 
         // IMPROVE rewrite string search to Aho-Corasic trie
+
+        // IMPROVE non-Aho-Corasic, but TRIE search to speed up search - search
+        // input prefix in trie made of all strings
 
         // IMPROVE existing (non-Aho-Corasic) algorithm can be optimized:
         // - sort Os/Ns alphabetically
@@ -250,14 +255,14 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
         // ... this will speed up search significantly, perhaps it can be
         // 10x faster than search for all Os/Ns names
 
-        // inject Os, then Ns
+        // check all Os/Ns for being prefix of txt (Os first, Ns then)
         for(Thing* t:things) {
             size_t found;
             bool match, insensitiveMatch;
             string lowerAlias{};
 
             // FIND: accept occurences in the HEAD of word only
-            if((found=w.find(t->getAutolinkingAlias()))!=string::npos
+            if((found=txt.find(t->getAutolinkingAlias()))!=string::npos
                   &&
                 !found)
             {
@@ -269,7 +274,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
                 // FIND: accept occurences in the HEAD of word only
                 if(insensitive
                      &&
-                   (found=w.find(lowerAlias))!=string::npos
+                   (found=txt.find(lowerAlias))!=string::npos
                      &&
                    !found)
                 {
@@ -282,13 +287,15 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
             if(match) {
                 // avoid word PREFIX matches ~ ensure that WHOLE world is matched
 
-                string m{" \t,:;.!?<>{}&()-+/*"};
+                // allowed trailing characters (_... added)
+                string tMatch{" \t,:;.!?<>{}&()-+/*_=%~#$^[]'\""};
                 // determine trailing char c
-                char c{w.size()==t->getAutolinkingAlias().size()?' ':w.at(t->getAutolinkingAlias().size())};
-                MF_DEBUG("  c: '" << c << "'" << endl);
-                if(w.size()==t->getAutolinkingAlias().size()
+                char tChar{txt.size()==t->getAutolinkingAlias().size()?' ':txt.at(t->getAutolinkingAlias().size())};
+                MF_DEBUG("  trailing char: '" << tChar << "'" << endl);
+
+                if(txt.size()==t->getAutolinkingAlias().size()
                      ||
-                   m.find(c)!=string::npos)
+                   tMatch.find(tChar)!=string::npos)
                 {
                     linked = true;
 
@@ -323,10 +330,10 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
                     node = linkNode;
 
                     // append trailing char
-                    at += c;
+                    // MD11 at += c;
 
                     // chop linked prefix word from input word w
-                    w = w.substr(t->getAutolinkingAlias().size()+(w.size()==t->getAutolinkingAlias().size()?0:1));
+                    txt = txt.substr(t->getAutolinkingAlias().size()+(txt.size()==t->getAutolinkingAlias().size()?0:1));
 
                     // leave Os/Ns loop on the first match
                     break;
@@ -334,7 +341,6 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
             }
         }
 
-        //
         MF_DEBUG("   l>" << std::boolalpha << linked << endl);
         if(linked) {
             // prefix has been linked + chopped
@@ -345,21 +351,21 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
             //at.append(" ");
         } else {
             // current w prefix was NOT linked > chop it and append it
-            size_t begin = w.find_first_of(" \t");
+            size_t begin = txt.find_first_of(" \t");
             if(begin != string::npos) {
-                chop = w.substr(0, begin);
-                w = w.substr(begin+1);
+                chop = txt.substr(0, begin);
+                txt = txt.substr(begin+1);
                 at.append(chop);
                 at.append(" ");
 
                 MF_DEBUG("  -c>" << chop << endl);
-                MF_DEBUG("   w>" << w << endl);
+                MF_DEBUG("   w>" << txt << endl);
                 MF_DEBUG("   <<" << at << endl);
             } else {
                 // no more words (prefix already checked) > DONE
-                at.append(w);
+                at.append(txt);
 
-                MF_DEBUG("   w>" << w << endl);
+                MF_DEBUG("   w>" << txt << endl);
                 MF_DEBUG("   <<" << at << endl);
 
                 break;

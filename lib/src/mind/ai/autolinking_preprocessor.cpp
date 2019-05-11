@@ -64,6 +64,26 @@ void AutolinkingPreprocessor::updateIndices()
     std::sort(notes.begin(), notes.end(), aliasSizeComparator);
     for(Thing* t:notes) things.push_back(t);
 
+    // Os+Ns trie
+    Trie trie{};
+    string lowerName{};
+    MF_DEBUG("[Autolinking] trie:" << endl);
+    for(Thing* t:things) {
+
+        // TODO add name
+
+
+        // add name w/ 1st lower case letter
+        lowerName.assign(t->getAutolinkingAlias());
+        lowerName[0] = std::tolower(t->getAutolinkingAlias()[0]);
+        trie.addWord(lowerName);
+        MF_DEBUG("  '" << lowerName << "'" << endl);
+        // add abbrev (if present)
+        trie.addWord(t->getAutolinkingAlias());
+        MF_DEBUG("  '" << t->getAutolinkingAlias() << "'" << endl);
+    }
+    MF_DEBUG("[Autolinking] trie building DONE" << endl);
+
 #ifdef DO_MF_DEBUG
     auto end = chrono::high_resolution_clock::now();
     MF_DEBUG("[Autolinking] idx updated in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
