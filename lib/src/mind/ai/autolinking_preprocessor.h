@@ -21,6 +21,7 @@
 
 #include "../../representations/representation_interceptor.h"
 #include "../../mind/mind.h"
+#include "../../gear/trie.h"
 #include "../../debug.h"
 
 namespace m8r {
