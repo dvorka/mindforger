@@ -25,6 +25,7 @@
  *    - no trailing spaces
  *    - protection of bullet lists
  *    - protection of links/images/...
+ *    - protection of inlined MATH $..$
  *
  * - polish correct version
  *    - code to methods
@@ -56,6 +57,10 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(const std::vector<std::str
 
 #ifdef DO_MF_DEBUG
     MF_DEBUG("[Autolinking] begin CMARK-AHO" << endl);
+    string ds{};
+    toString(md, ds);
+    MF_DEBUG("[Autolinking] input:" << endl << ">>" << ds << "<<" << endl);
+
     auto begin = chrono::high_resolution_clock::now();
 #endif
 
@@ -90,18 +95,20 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(const std::vector<std::str
             }
 
             if(l && l->size()) {
-                MF_DEBUG(">>" << *l << ">>" << endl);
                 parseMarkdownLine(l, nl);
-                MF_DEBUG("<<" << *nl << "<<" << endl);
                 amd.push_back(nl);
             } else {
-                amd.push_back(nl);
+                amd.push_back(l);
             }
         }
     }
 #ifdef DO_MF_DEBUG
+    ds.clear();
+    toString(amd, ds);
+    MF_DEBUG("[Autolinking] output:" << endl << ">>" << ds << "<<" << endl);
+
     auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("[Autolinking] done - MD autolinked in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
+    MF_DEBUG("[Autolinking] MD autolinked in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
 #endif
 
 #else
@@ -112,11 +119,18 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(const std::vector<std::str
 void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md, std::string* amd)
 {
 #ifdef DO_MF_DEBUG
-    MF_DEBUG("[Autolinking] parsing line '" << *md << "'" << endl);
-    MF_DEBUG(endl);
+    MF_DEBUG("[Autolinking] parsing line:" << endl << ">>" << *md << "<<" << endl);
 #endif
 
 #ifdef MF_MD_2_HTML_CMARK
+    // cmark identifies '    * my bullet' as code block, which is wrong...
+    bool notCodeBlock=false;
+    if(stringStartsWith(*md, "    ")) {
+        (*md)[0] = '@';
+        notCodeBlock = true;
+        MF_DEBUG("[Autolinking] NO CODE FIX:" << endl << ">>" << *md << "<<" << endl);
+    }
+
     const char* smd = md->c_str();
     cmark_node* document = cmark_parse_document(
         smd,
@@ -198,22 +212,25 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
 
     cmark_iter_free(i);
 
+    // TODO set correct
+    char* cmm = cmark_render_commonmark(document, 0, 0);
+    amd->assign(cmm);
+    if(notCodeBlock) {
+        amd[0] = ' ';
+    }
+    amd->pop_back();
+
 #ifdef DO_MF_DEBUG
     char* xml = cmark_render_xml(document, 0);
     MF_DEBUG("[Autolinking] Line's cmark AST as XML:" << endl << endl);
     MF_DEBUG(xml << endl);
     free(xml);
 
-    char* txt = cmark_render_commonmark(document, 0, 100);
-    MF_DEBUG("[Autolinking] Line's cmark AST as MD:" << endl << endl);
-    MF_DEBUG(txt << endl);
-    free(txt);
+    MF_DEBUG("[Autolinking] Line's cmark AST as MD:" << endl << ">>" << *amd << "<<" << endl);
 #endif
 
-    // TODO set correct
-    char* cmm = cmark_render_commonmark(document, 0, 0);
-    amd->assign(cmm);
     free(cmm);
+
 #else
     // TODO copy md to amd
 #endif
@@ -340,9 +357,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
             // prefix has been linked + chopped
             // IMPROVE trailing should be already appended above
             // IMPROVE SPACE vs. TAB
-
-            // IMPROVE append only in CERTAIN cases - determine when
-            //at.append(" ");
+            at.append(" ");
         } else {
             // current w prefix was NOT linked > chop it and append it
             size_t begin = w.find_first_of(" \t");

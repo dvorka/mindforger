@@ -102,7 +102,6 @@ TEST(StringGearTestCase, Trim)
     delete[] r;
 }
 
-
 TEST(StringGearTestCase, VectorToString)
 {
     vector<string*> v{};
@@ -111,4 +110,13 @@ TEST(StringGearTestCase, VectorToString)
     toString(v, s);
 
     ASSERT_EQ(0, s.size());
+}
+
+TEST(StringGearTestCase, StringTweaks)
+{
+    string s{"12345"};
+
+    s[0] = 'a';
+
+    ASSERT_STREQ("a2345", s.c_str());
 }
