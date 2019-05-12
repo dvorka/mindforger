@@ -24,12 +24,13 @@
  * - ensure correctness FIRST ~ unit tests:
  *    - no trailing spaces
  *    - protection of bullet lists
+ *    - protection of deep bullet lists
  *    - protection of links/images/...
  *    - protection of inlined MATH $..$
  *    - blacklist ~ don't autolink e.g. http (to protect cmark's URLs autolinking)
  *
- * - polish correct version
- *    - code to methods
+ * - code sytle
+ *    - copy/paste code to methods
  *
  * - performance
  *    - avoid autolinking whole O on its load - it's not needed
@@ -41,6 +42,8 @@
 namespace m8r {
 
 using namespace std;
+
+const string CmarkAhoCorasickAutolinkingPreprocessor::TRAILING_CHARS = string{" \t,:;.!?<>{}&()-+/*\\_=%~#$^[]'\""};
 
 CmarkAhoCorasickAutolinkingPreprocessor::CmarkAhoCorasickAutolinkingPreprocessor(Mind& mind)
     : AutolinkingPreprocessor{mind}
@@ -54,7 +57,9 @@ CmarkAhoCorasickAutolinkingPreprocessor::~CmarkAhoCorasickAutolinkingPreprocesso
 /**
  * @brief Inject links into MD represented as a list of strings.
  */
-void CmarkAhoCorasickAutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::vector<std::string*>& amd)
+void CmarkAhoCorasickAutolinkingPreprocessor::process(
+        const std::vector<std::string*>& md,
+        std::vector<std::string*>& amd)
 {
 #ifdef MF_MD_2_HTML_CMARK
 
@@ -244,6 +249,49 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(const std::strin
 #endif
 }
 
+cmark_node* CmarkAhoCorasickAutolinkingPreprocessor::addAstLinkNode(
+        cmark_node* origNode,
+        cmark_node* node,
+        string& pre)
+{
+    cmark_node* linkNode{};
+    cmark_node* txtNode{};
+
+    linkNode = cmark_node_new(CMARK_NODE_LINK);
+    string link{MF_URL_PROTOCOL};
+    link.append(pre);
+    cmark_node_set_url(linkNode, link.c_str());
+    txtNode = cmark_node_new(CMARK_NODE_TEXT);
+    cmark_node_set_literal(txtNode, pre.c_str());
+    cmark_node_append_child(linkNode, txtNode);
+    if(node) {
+        cmark_node_insert_after(node, linkNode);
+    } else {
+        cmark_node_insert_before(origNode, linkNode);
+    }
+    return linkNode;
+}
+
+cmark_node* CmarkAhoCorasickAutolinkingPreprocessor::addAstTxtNode(
+        cmark_node* origNode,
+        cmark_node* node,
+        string& at)
+{
+    cmark_node* txtNode{};
+
+    txtNode = cmark_node_new(CMARK_NODE_TEXT);
+    cmark_node_set_literal(txtNode, at.c_str());
+    if(node) {
+        cmark_node_insert_after(node, txtNode);
+    } else {
+        cmark_node_insert_before(origNode, txtNode);
+    }
+
+    at.clear();
+
+    return txtNode;
+}
+
 void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* origNode)
 {
     // copy w to t as it will be chopped word/match by word/match from head to tail
@@ -252,11 +300,6 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
     size_t preSize{};
 
     cmark_node* node{};
-    cmark_node* linkNode{};
-    cmark_node* txtNode{};
-
-    // allowed trailing chars (\\... added newly)
-    string tMatch{" \t,:;.!?<>{}&()-+/*\\_=%~#$^[]'\""};
 
 #ifdef DO_MF_DEBUG
     MF_DEBUG("[Autolinking] Injecting links to: '" << txt << "'" << endl);
@@ -266,7 +309,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
         // skip trailing chars and append them
         preSize = 0;
         while(preSize < txt.size()) {
-            if(tMatch.find(txt.at(preSize)) != string::npos) {
+            if(TRAILING_CHARS.find(txt.at(preSize)) != string::npos) {
                 preSize++;
             } else {
                 break;
@@ -295,41 +338,18 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
             // determine trailing char
             char tChar{txt.size()==pre.size()?' ':txt.at(pre.size())};
             MF_DEBUG("    Match's trailing char: '" << tChar << "'" << endl);
-            if(tMatch.find(tChar) != string::npos
+            if(TRAILING_CHARS.find(tChar) != string::npos
                  ||
                txt.size() == pre.size()) {
 
                 // AST: add text node w/ content preceding link
                 // IMPROVE make this method
                 if(at.size()) {
-                    txtNode = cmark_node_new(CMARK_NODE_TEXT);
-                    cmark_node_set_literal(txtNode, at.c_str());
-                    // IMPROVE make this private method
-                    if(node) {
-                        cmark_node_insert_after(node, txtNode);
-                    } else {
-                        cmark_node_insert_before(origNode, txtNode);
-                    }
-                    node = txtNode;
-
-                    at.clear();
+                    node = addAstTxtNode(origNode, node, at);
                 }
 
                 // AST: add link
-                // IMPROVE make this method
-                linkNode = cmark_node_new(CMARK_NODE_LINK);
-                string link{MF_URL_PROTOCOL};
-                link.append(pre);
-                cmark_node_set_url(linkNode, link.c_str());
-                txtNode = cmark_node_new(CMARK_NODE_TEXT);
-                cmark_node_set_literal(txtNode, pre.c_str());
-                cmark_node_append_child(linkNode, txtNode);
-                if(node) {
-                    cmark_node_insert_after(node, linkNode);
-                } else {
-                    cmark_node_insert_before(origNode, linkNode);
-                }
-                node = linkNode;
+                node = addAstLinkNode(origNode, node, pre);
 
                 // chop linked prefix word from input word w
                 if(txt.size() == pre.size()) {
@@ -399,21 +419,9 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
     }
 
     // AST: add text node w/ content preceding link
-    // IMPROVE make this method
-        if(at.size()) {
-            txtNode = cmark_node_new(CMARK_NODE_TEXT);
-            cmark_node_set_literal(txtNode, at.c_str());
-            // IMPROVE make this private method
-            if(node) {
-                cmark_node_insert_after(node, txtNode);
-            } else {
-                cmark_node_insert_before(origNode, txtNode);
-            }
-            node = txtNode;
-
-            // IMPROVE: can be commented
-            at.clear();
-        }
+    if(at.size()) {
+        node = addAstTxtNode(origNode, node, at);
     }
+}
 
 } // m8r namespace

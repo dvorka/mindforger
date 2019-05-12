@@ -33,10 +33,10 @@ namespace m8r {
  * Autolinking implementation which aims to be both precise (cmark-gfm AST)
  * and fast (Aho-Corasick).
  *
- * This autolinking implementation has two goals:
+ * Ideal autolinking implementation has two goals:
  *
- *  - performance
  *  - correctness
+ *  - performance
  *
  * It aims to be FAST, therefore it's based on Aho-Corasick search
  * structure when autolinking lines.
@@ -82,6 +82,10 @@ namespace m8r {
  */
 class CmarkAhoCorasickAutolinkingPreprocessor : public AutolinkingPreprocessor
 {
+protected:
+    // allowed text MD snippets words trailing chars (\\... added newly)
+    static const std::string TRAILING_CHARS;
+
 public:
     explicit CmarkAhoCorasickAutolinkingPreprocessor(Mind& mind);
     CmarkAhoCorasickAutolinkingPreprocessor(const CmarkAhoCorasickAutolinkingPreprocessor&) = delete;
@@ -102,6 +106,9 @@ private:
      * @brief Inject Os and Ns links to given Markdown snippet.
      */
     void injectThingsLinks(cmark_node* node);
+
+    cmark_node* addAstLinkNode(cmark_node* origNode, cmark_node* node, std::string& pre);
+    cmark_node* addAstTxtNode(cmark_node* origNode, cmark_node* node, std::string& at);
 };
 
 }

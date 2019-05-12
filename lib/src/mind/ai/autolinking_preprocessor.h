@@ -39,6 +39,7 @@ public:
     static const std::string CODE_BLOCK;
     static const std::string MATH_BLOCK;
     static const std::string MF_URL_PROTOCOL;
+    static const std::string FILE_URL_PROTOCOL;
 
 protected:
     std::vector<Thing*> things;

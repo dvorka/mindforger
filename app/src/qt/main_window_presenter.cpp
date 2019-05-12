@@ -276,13 +276,16 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
             findOutlineByNameDialog->getKeywordsCheckbox()->setChecked(false);
             findOutlineByNameDialog->setSearchedString(
                 QString::fromStdString(url.toString().toStdString().substr(AutolinkingPreprocessor::MF_URL_PROTOCOL.size())));
+
             vector<Thing*> allThings{};
-            mind->getAllThings(allThings);
-            findOutlineByNameDialog->show(allThings);
+            vector<string>* thingsNames = new vector<string>{};
+            mind->getAllThings(allThings, thingsNames);
+
+            findOutlineByNameDialog->show(allThings, thingsNames);
             return;
         }
 
-        if(url.toString().startsWith("file://")) {
+        if(url.toString().startsWith(QString::fromStdString(AutolinkingPreprocessor::FILE_URL_PROTOCOL))) {
             string key{url.toString().toStdString()};
 #if defined(WIN32) || defined(WIN64)
             key.erase(0,8); // remove file prefix

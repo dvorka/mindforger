@@ -45,6 +45,7 @@ void FindNoteByNameDialog::show(vector<Note*>& notes)
     if(notes.size()) {
         if(!scope) {
             for(Note* n:notes) {
+                // IMPROVE make this Note's method: getScopedName()
                 string s{n->getName()};
                 s += " (";
                 s += n->getOutline()->getName();

@@ -464,16 +464,27 @@ void Mind::findNotesByTags(const vector<const Tag*>& tags, vector<Note*>& result
     }
 }
 
-void Mind::getAllThings(std::vector<Thing*>& things)
+void Mind::getAllThings(vector<Thing*>& things, vector<string>* thingsNames)
 {
     const vector<Outline*>& os = getOutlines();
     for(Outline* o:os) {
         things.push_back(o);
+        if(thingsNames) {
+            thingsNames->push_back(o->getName());
+        }
     }
     vector<Note*> ns{};
     getAllNotes(ns);
     for(Note* n:ns) {
         things.push_back(n);
+        if(thingsNames) {
+            // IMPROVE make this Note's method: getScopedName()
+            string s{n->getName()};
+            s += " (";
+            s += n->getOutline()->getName();
+            s += ")";
+            thingsNames->push_back(s);
+        }
     }
 }
 
