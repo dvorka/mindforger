@@ -80,16 +80,17 @@ public:
     ~FindOutlineByNameDialog();
 
     QString getSearchedString() const { return lineEdit->text(); }
-    void setSearchedString(const QString& text) {
-        lineEdit->setText(text);
-        enableFindButton(text);
-    }
+    void setSearchedString(const QString& text) {lineEdit->setText(text); }
     QCheckBox* getCaseCheckbox() const { return caseCheckBox; }
     QCheckBox* getKeywordsCheckbox() const { return keywordsCheckBox; }
     QPushButton* getFindButton() const { return findButton; }
     Thing* getChoice() const { return choice; }
 
-    void show(std::vector<Thing*>& outlines, std::vector<std::string>* customizedNames=nullptr, bool showScopeCheck=false);
+    void show(
+            std::vector<Thing*>& outlines,
+            std::vector<std::string>* customizedNames=nullptr,
+            bool showScopeCheck=false,
+            bool init=true);
 
 signals:
     void searchFinished();

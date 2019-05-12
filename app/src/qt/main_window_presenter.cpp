@@ -281,7 +281,7 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
             vector<string>* thingsNames = new vector<string>{};
             mind->getAllThings(allThings, thingsNames);
 
-            findOutlineByNameDialog->show(allThings, thingsNames);
+            findOutlineByNameDialog->show(allThings, thingsNames, false, false);
             return;
         }
 

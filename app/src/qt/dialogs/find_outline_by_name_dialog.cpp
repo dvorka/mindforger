@@ -95,7 +95,11 @@ FindOutlineByNameDialog::~FindOutlineByNameDialog()
     delete closeButton;
 }
 
-void FindOutlineByNameDialog::show(vector<Thing*>& ts, vector<string>* customizedNames, bool showScopeCheck)
+void FindOutlineByNameDialog::show(
+        vector<Thing*>& ts,
+        vector<string>* customizedNames,
+        bool showScopeCheck,
+        bool init)
 {
     choice = nullptr;
 
@@ -127,8 +131,14 @@ void FindOutlineByNameDialog::show(vector<Thing*>& ts, vector<string>* customize
     }
 
     findButton->setEnabled(things.size());
-    lineEdit->clear();
-    lineEdit->setFocus();
+
+    if(init) {
+        lineEdit->clear();
+        lineEdit->setFocus();
+    } else {
+        enableFindButton(lineEdit->text());
+    }
+
     QDialog::show();
 }
 
