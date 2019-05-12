@@ -34,7 +34,7 @@ using namespace std;
 
 extern char* getMindforgerGitHomePath();
 
-TEST(AutolinkingCmarkTestCase, DISABLED_CmarkAst)
+TEST(AutolinkingCmarkTestCase, CmarkAst)
 {
     const char* examples[5];
     examples[0] = "Hello *world*!";
@@ -56,10 +56,12 @@ TEST(AutolinkingCmarkTestCase, DISABLED_CmarkAst)
         char* xml = cmark_render_xml(document, 0);
         cout << "cmark AST as XML:" << endl << endl;
         cout << xml << endl;
+        free(xml);
 
         char* txt = cmark_render_commonmark(document, 0, 100);
         cout << "cmark AST as MD:" << endl << endl;
         cout << txt << endl;
+        free(txt);
 
         // AST iteration
 
@@ -111,17 +113,9 @@ TEST(AutolinkingCmarkTestCase, DISABLED_CmarkAst)
 
         // Nodes must only be modified after an `EXIT` event,
         // or an `ENTER` event for leaf nodes.
-    }
 
-    // inlined autolinking constructions to avoid - auto-link in:
-    // - link
-    // - image
-    // - code
-    // ... iterate nodes and skip <text/> if UNDER link/image/code,
-    // otherwise trim text and try to autolink it.
-    //
-    // Set autolinked text and then try to serialize to MD, it should
-    // stay there.
+        cmark_node_free(document);
+    }
 }
 
 TEST(AutolinkingCmarkTestCase, MicroRepo)
@@ -156,7 +150,7 @@ TEST(AutolinkingCmarkTestCase, MicroRepo)
     }
 }
 
-TEST(AutolinkingCmarkTestCase, DISABLED_BasicRepo)
+TEST(AutolinkingCmarkTestCase, BasicRepo)
 {
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
