@@ -270,6 +270,17 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
     statusBar->showInfo(QString(tr("Hyperlink %1 clicked...")).arg(url.toString()));
     Outline* currentOutline = orloj->getOutlineView()->getCurrentOutline();
     if(url.toString().size()) {
+        if(url.toString().startsWith(QString::fromStdString(AutolinkingPreprocessor::MF_URL_PROTOCOL))) {
+            MF_DEBUG("  URL type   : MindForger" << endl);
+            findNoteByNameDialog->setWindowTitle(tr("Autolinked Notebooks and Notes"));
+            findNoteByNameDialog->clearScope();
+            // TODO findNoteByNameDialog->setSearchedString();
+            vector<Note*> allNotes{};
+            mind->getAllNotes(allNotes);
+            findNoteByNameDialog->show(allNotes);
+            return;
+        }
+
         if(url.toString().startsWith("file://")) {
             string key{url.toString().toStdString()};
 #if defined(WIN32) || defined(WIN64)

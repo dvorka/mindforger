@@ -43,10 +43,13 @@ void Trie::destroy(Node* n)
 
 void Trie::addWord(string s)
 {
+    MF_DEBUG("  trie.add(): '" << s << "'" << endl);
+
     Node* current = root;
 
     if(!s.size()) {
-        current->setWordMarker(); // an empty word
+        // support of empty words is not desired
+        // current->setWordMarker();
         return;
     }
 

@@ -49,11 +49,18 @@ void Thing::autolinkName()
         auto pos = name.find(":");
         if(pos != string::npos) {
             autolinkingAlias = name.substr(0, pos);
+            autolinkingAbbr = autolinkingAlias;
+            autolinkingName = name.substr(pos+1);
+            autolinkingName = stringLeftTrim(autolinkingName);
         } else {
             autolinkingAlias = name;
+            autolinkingName = name;
+            autolinkingAbbr.clear();
         }
     } else {
         autolinkingAlias.clear();
+        autolinkingName.clear();
+        autolinkingAbbr.clear();
     }
 }
 

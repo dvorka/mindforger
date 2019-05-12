@@ -21,7 +21,7 @@
 /*
  * Plan:
  *
- * - ensure correctness FIRST:
+ * - ensure correctness FIRST ~ unit tests:
  *    - no trailing spaces
  *    - protection of bullet lists
  *    - protection of links/images/...
@@ -30,14 +30,12 @@
  *
  * - polish correct version
  *    - code to methods
- *    - extra debugs away
  *
  * - performance
  *    - avoid autolinking whole O on its load - it's not needed
  *    - map search structure instead of Aho
  *    - benchmark on C
  *    - configurable time limit on autolinking and leave on exceeding it
- *
  */
 
 namespace m8r {
@@ -220,14 +218,14 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(const std::strin
 
     cmark_iter_free(i);
 
-    if(attic.size()) {
-        amd[0] = ' ';
-    }
-
     char* cmm = cmark_render_commonmark(document, 0, 0);
     amd->assign(cmm);
     amd->pop_back();
 
+    if(attic.size()) {
+        (*amd)[4] = ' ';
+        amd->erase(0, 1);
+    }
 
 #ifdef DO_MF_DEBUG
     char* xml = cmark_render_xml(document, 0);
@@ -320,8 +318,9 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
                 // AST: add link
                 // IMPROVE make this method
                 linkNode = cmark_node_new(CMARK_NODE_LINK);
-                // TODO find note w/ that name (might be lowercase or abbrev) - annotate trie?
-                cmark_node_set_url(linkNode, "http://FAKE.LINK");
+                string link{MF_URL_PROTOCOL};
+                link.append(pre);
+                cmark_node_set_url(linkNode, link.c_str());
                 txtNode = cmark_node_new(CMARK_NODE_TEXT);
                 cmark_node_set_literal(txtNode, pre.c_str());
                 cmark_node_append_child(linkNode, txtNode);

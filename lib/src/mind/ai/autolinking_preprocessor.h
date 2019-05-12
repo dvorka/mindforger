@@ -38,6 +38,7 @@ class AutolinkingPreprocessor : public RepresentationInterceptor
 public:
     static const std::string CODE_BLOCK;
     static const std::string MATH_BLOCK;
+    static const std::string MF_URL_PROTOCOL;
 
 protected:
     std::vector<Thing*> things;
@@ -70,6 +71,10 @@ protected:
      * @brief Update trie-based Os and Ns names index.
      */
     void updateTrieIndex();
+    /**
+     * @brief Add thing's name (and abbrev) to trie.
+     */
+    void addThingToTrie(const Thing *t);
 };
 
 }
