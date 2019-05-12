@@ -28,11 +28,13 @@
 #ifdef MF_MD_2_HTML_CMARK
 #include <cmark-gfm.h>
 
+#include "../../../src/mind/ai/autolinking/cmark_aho_corasick_autolinking_preprocessor.h"
 
 using namespace std;
 
+extern char* getMindforgerGitHomePath();
 
-TEST(AutolinkingCmarkTestCase, CmarkAst)
+TEST(AutolinkingCmarkTestCase, DISABLED_CmarkAst)
 {
     const char* examples[5];
     examples[0] = "Hello *world*!";
@@ -120,6 +122,36 @@ TEST(AutolinkingCmarkTestCase, CmarkAst)
     //
     // Set autolinked text and then try to serialize to MD, it should
     // stay there.
+}
+
+TEST(AutolinkingCmarkTestCase, BasicRepo)
+{
+    string repositoryPath{"/lib/test/resources/basic-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-atc-a.md");
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think().get();
+    cout << endl << "Statistics:";
+    cout << endl << "  Outlines: " << mind.remind().getOutlinesCount();
+    cout << endl << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
+    ASSERT_EQ(3, mind.remind().getOutlinesCount());
+    m8r::CmarkAhoCorasickAutolinkingPreprocessor autolinker{mind};
+
+    cout << endl << endl << "Testing MD autolinking:" << endl;
+    m8r::Note* n = mind.remind().getOutlines()[0]->getNotes()[0];
+    vector<string*> autolinkedMd{};
+    autolinker.process(n->getDescription(), autolinkedMd);
+    string autolinkedString{};
+    m8r::toString(autolinkedMd, autolinkedString);
+    cout << "= BEGIN AUTO MD =" << endl << autolinkedString << endl << "= END AUTO MD =" << endl;
+
+    for(string* s:autolinkedMd) {
+        delete s;
+    }
 }
 
 #endif // MF_MD_2_HTML_CMARK
