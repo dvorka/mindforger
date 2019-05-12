@@ -102,7 +102,6 @@ private:
      * @brief Inject Os and Ns links to given Markdown snippet.
      */
     void injectThingsLinks(cmark_node* node);
-    void injectThingsLinksOld(cmark_node* node);
 };
 
 }

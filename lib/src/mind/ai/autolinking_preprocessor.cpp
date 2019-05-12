@@ -114,7 +114,7 @@ void AutolinkingPreprocessor::updateTrieIndex()
     std::vector<Note*> notes;
     mind.getAllNotes(notes);
     size += notes.size();
-    for(Thing* n:notes) {
+    for(Note* n:notes) {
         // TODO make this function
 
         // add name w/ 1st lower case letter

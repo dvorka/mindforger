@@ -268,10 +268,10 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
         }
         if(preSize) {
             // chop trailing chars prefix from input and append it to result
-            at.append(txt.substr(0, preSize-1));
+            at.append(txt.substr(0, preSize));
             txt = txt.substr(preSize);
 
-            MF_DEBUG("  Skipping trailing chars: '" << txt.substr(0, preSize-1) << "'" << endl);
+            MF_DEBUG("  Skipping trailing chars: '" << txt.substr(0, preSize) << "'" << endl);
             MF_DEBUG("     txt: '" << txt << "'" << endl);
             MF_DEBUG("     at : '" << at  << "'" << endl);
         }
@@ -282,12 +282,16 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
         if(trie->findLongestPrefixWord(txt, pre)) {
             MF_DEBUG("    Matched prefix: '" << pre << "'" << endl);
 
-            // avoid word PREFIX matches ~ ensure that WHOLE world is matched
+            // avoid word PREFIX matches ~ ensure that WHOLE world is matched:
+            // - match followed by trailing char
+            // - match until EOL
 
             // determine trailing char
             char tChar{txt.size()==pre.size()?' ':txt.at(pre.size())};
             MF_DEBUG("    Match's trailing char: '" << tChar << "'" << endl);
-            if(tMatch.find(tChar) != string::npos) {
+            if(tMatch.find(tChar) != string::npos
+                 ||
+               txt.size() == pre.size()) {
 
                 // AST: add text node w/ content preceding link
                 // IMPROVE make this method
@@ -321,10 +325,16 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
                 node = linkNode;
 
                 // chop linked prefix word from input word w
-                txt = txt.substr(pre.size()+(txt.size()==pre.size()?0:1));
+                if(txt.size() == pre.size()) {
+                    txt.clear();
+                } else {
+                    txt = txt.substr(pre.size());
+                }
+                // trailing char will be handled later
+                at.clear();
 
-                MF_DEBUG("     txt: '" << txt << "'" << endl);
-                MF_DEBUG("     at : '" << at  << "'" << endl);
+                MF_DEBUG("    txt: '" << txt << "'" << endl);
+                MF_DEBUG("    at : '" << at  << "'" << endl);
             } else {
                 // invalid trailing char > matched a NOT-whole-world prefix > skip and append one word
 
@@ -380,171 +390,23 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
             }
         }
     }
-}
 
-void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinksOld(cmark_node* origNode)
-{
-    // copy w to t as it will be chopped word/match by word/match from head to tail
-    string txt{cmark_node_get_literal(origNode)}, at{}, chop{};
-
-    cmark_node* node{};
-    cmark_node* linkNode{};
-    cmark_node* txtNode{};
-
-#ifdef DO_MF_DEBUG
-    MF_DEBUG("[Autolinking] Injecting links to: '" << txt << "'" << endl);
-#endif
-
-    while(txt.size()>0) {
-        // find match which is PREFIX of chopped line
-        bool linked = false;
-
-        // IMPROVE rewrite string search to Aho-Corasic trie
-
-        // IMPROVE non-Aho-Corasic, but TRIE search to speed up search - search
-        // input prefix in trie made of all strings
-
-        // IMPROVE existing (non-Aho-Corasic) algorithm can be optimized:
-        // - sort Os/Ns alphabetically
-        //     - search structure: map w/ leading char as key and list of
-        //       Os/Ns names ordered by length as value
-        //         - have this for both case in/sensitive cases ~ 2 structs
-        //     - sort words with the same 1st word by length
-        //     - remember begin-end of words starting with the char
-        // - determine first w character
-        //     - search only Os/Ns w/ that particular 1st character only
-        // ... this will speed up search significantly, perhaps it can be
-        // 10x faster than search for all Os/Ns names
-
-        // check all Os/Ns for being prefix of txt (Os first, Ns then)
-        for(Thing* t:things) {
-            size_t found;
-            bool match, insensitiveMatch;
-            string lowerAlias{};
-
-            // FIND: accept occurences in the HEAD of word only
-            if((found=txt.find(t->getAutolinkingAlias()))!=string::npos
-                  &&
-                !found)
-            {
-                match = true; insensitiveMatch = false;
+        // AST: add text node w/ content preceding link
+        // IMPROVE make this method
+        if(at.size()) {
+            txtNode = cmark_node_new(CMARK_NODE_TEXT);
+            cmark_node_set_literal(txtNode, at.c_str());
+            // IMPROVE make this private method
+            if(node) {
+                cmark_node_insert_after(node, txtNode);
             } else {
-                lowerAlias.assign(t->getAutolinkingAlias());
-                lowerAlias[0] = std::tolower(t->getAutolinkingAlias()[0]);
-
-                // FIND: accept occurences in the HEAD of word only
-                if(insensitive
-                     &&
-                   (found=txt.find(lowerAlias))!=string::npos
-                     &&
-                   !found)
-                {
-                    match = insensitiveMatch = true;
-                } else {
-                    match = false;
-                }
+                cmark_node_insert_before(origNode, txtNode);
             }
+            node = txtNode;
 
-            if(match) {
-                // avoid word PREFIX matches ~ ensure that WHOLE world is matched
-
-                // allowed trailing characters (_... added)
-                string tMatch{" \t,:;.!?<>{}&()-+/*_=%~#$^[]'\""};
-                // determine trailing char c
-                char tChar{txt.size()==t->getAutolinkingAlias().size()?' ':txt.at(t->getAutolinkingAlias().size())};
-                MF_DEBUG("  trailing char: '" << tChar << "'" << endl);
-
-                if(txt.size()==t->getAutolinkingAlias().size()
-                     ||
-                   tMatch.find(tChar)!=string::npos)
-                {
-                    linked = true;
-
-                    // IMPROVE make this method
-                    // AST: add text node w/ content preceding link
-                    if(at.size()) {
-                        txtNode = cmark_node_new(CMARK_NODE_TEXT);
-                        cmark_node_set_literal(txtNode, at.c_str());
-                        // IMPROVE make this private method
-                        if(node) {
-                            cmark_node_insert_after(node, txtNode);
-                        } else {
-                            cmark_node_insert_before(origNode, txtNode);
-                        }
-                        node = txtNode;
-
-                        at.clear();
-                    }
-
-                    // IMPROVE make this method
-                    // AST: add link
-                    linkNode = cmark_node_new(CMARK_NODE_LINK);
-                    cmark_node_set_url(linkNode, t->getKey().c_str());
-                    txtNode = cmark_node_new(CMARK_NODE_TEXT);
-                    cmark_node_set_literal(txtNode, insensitiveMatch?lowerAlias.c_str():t->getAutolinkingAlias().c_str());
-                    cmark_node_append_child(linkNode, txtNode);
-                    if(node) {
-                        cmark_node_insert_after(node, linkNode);
-                    } else {
-                        cmark_node_insert_before(origNode, linkNode);
-                    }
-                    node = linkNode;
-
-                    // append trailing char
-                    // MD11 at += c;
-
-                    // chop linked prefix word from input word w
-                    txt = txt.substr(t->getAutolinkingAlias().size()+(txt.size()==t->getAutolinkingAlias().size()?0:1));
-
-                    // leave Os/Ns loop on the first match
-                    break;
-                }
-            }
+            // IMPROVE: can be commented
+            at.clear();
         }
-
-        MF_DEBUG("   l>" << std::boolalpha << linked << endl);
-        if(linked) {
-            // prefix has been linked + chopped
-            // IMPROVE trailing should be already appended above
-            // IMPROVE SPACE vs. TAB
-            at.append(" ");
-        } else {
-            // current w prefix was NOT linked > chop it and append it
-            size_t begin = txt.find_first_of(" \t");
-            if(begin != string::npos) {
-                chop = txt.substr(0, begin);
-                txt = txt.substr(begin+1);
-                at.append(chop);
-                at.append(" ");
-
-                MF_DEBUG("  -c>" << chop << endl);
-                MF_DEBUG("   w>" << txt << endl);
-                MF_DEBUG("   <<" << at << endl);
-            } else {
-                // no more words (prefix already checked) > DONE
-                at.append(txt);
-
-                MF_DEBUG("   w>" << txt << endl);
-                MF_DEBUG("   <<" << at << endl);
-
-                break;
-            }
-        }
-    }
-
-    // AST: add text node w/ content preceding link
-    if(at.size()) {
-        txtNode = cmark_node_new(CMARK_NODE_TEXT);
-        cmark_node_set_literal(txtNode, at.c_str());
-        if(node) {
-            cmark_node_insert_after(node, txtNode);
-        } else {
-            cmark_node_insert_before(origNode, txtNode);
-        }
-        node = txtNode;
-
-        // not required: at.clear();
-    }
 }
 
 } // m8r namespace
