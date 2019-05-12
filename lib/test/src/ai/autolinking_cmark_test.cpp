@@ -124,13 +124,45 @@ TEST(AutolinkingCmarkTestCase, DISABLED_CmarkAst)
     // stay there.
 }
 
-TEST(AutolinkingCmarkTestCase, BasicRepo)
+TEST(AutolinkingCmarkTestCase, MicroRepo)
+{
+    string repositoryPath{"/lib/test/resources/autolinking-micro-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-act-amr.md");
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think().get();
+    cout << endl << "Statistics:";
+    cout << endl << "  Outlines: " << mind.remind().getOutlinesCount();
+    cout << endl << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
+    ASSERT_EQ(1, mind.remind().getOutlinesCount());
+
+    // autolinking
+    cout << endl << endl << "Testing MD autolinking:" << endl;
+    m8r::CmarkAhoCorasickAutolinkingPreprocessor autolinker{mind};
+    m8r::Note* n = mind.remind().getOutlines()[0]->getNotes()[0];
+    vector<string*> autolinkedMd{};
+    autolinker.process(n->getDescription(), autolinkedMd);
+
+    string autolinkedString{};
+    m8r::toString(autolinkedMd, autolinkedString);
+    cout << "= BEGIN AUTO MD =" << endl << autolinkedString << endl << "= END AUTO MD =" << endl;
+
+    for(string* s:autolinkedMd) {
+        delete s;
+    }
+}
+
+TEST(AutolinkingCmarkTestCase, DISABLED_BasicRepo)
 {
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
-    config.setConfigFilePath("/tmp/cfg-atc-a.md");
+    config.setConfigFilePath("/tmp/cfg-act-br.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
     m8r::Mind mind(config);
     mind.learn();

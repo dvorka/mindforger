@@ -35,6 +35,10 @@ AutolinkingPreprocessor::AutolinkingPreprocessor(Mind& mind)
 
 AutolinkingPreprocessor::~AutolinkingPreprocessor()
 {
+    if(trie) {
+        delete trie;
+        trie = nullptr;
+    }
 }
 
 bool AutolinkingPreprocessor::aliasSizeComparator(const Thing* t1, const Thing* t2)

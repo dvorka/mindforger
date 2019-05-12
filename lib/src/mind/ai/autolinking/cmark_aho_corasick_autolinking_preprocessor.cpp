@@ -53,6 +53,9 @@ CmarkAhoCorasickAutolinkingPreprocessor::~CmarkAhoCorasickAutolinkingPreprocesso
 {
 }
 
+/**
+ * @brief Inject links into MD represented as a list of strings.
+ */
 void CmarkAhoCorasickAutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::vector<std::string*>& amd)
 {
 #ifdef MF_MD_2_HTML_CMARK
@@ -66,8 +69,8 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(const std::vector<std::str
     auto begin = chrono::high_resolution_clock::now();
 #endif
 
-    updateTrieIndex();
     insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
+    updateTrieIndex();
 
     if(md.size()) {
 
@@ -78,29 +81,30 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(const std::vector<std::str
         bool inCodeBlock=false, inMathBlock=false;
         for(string* l:md) {
             // every line is autolinked SEPARATELY
-
             string* nl = new string{};
 
             // skip code/math/... blocks
             if(stringStartsWith(*l, CODE_BLOCK)) {
                 inCodeBlock = !inCodeBlock;
 
-                nl->append(*l);
+                nl->assign(*l);
                 amd.push_back(nl);
-                continue;
             } else if(stringStartsWith(*l, MATH_BLOCK)) {
                 inMathBlock= !inMathBlock;
 
-                nl->append(*l);
+                nl->assign(*l);
                 amd.push_back(nl);
-                continue;
-            }
-
-            if(l && l->size()) {
-                parseMarkdownLine(l, nl);
-                amd.push_back(nl);
+            } else if(l) {
+                if(l->size()) {
+                    parseMarkdownLine(l, nl);
+                    amd.push_back(nl);
+                } else {
+                    nl->assign(*l);
+                    amd.push_back(nl);
+                }
             } else {
-                amd.push_back(l);
+                delete nl;
+                amd.push_back(nullptr);
             }
         }
     }
@@ -118,22 +122,24 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(const std::vector<std::str
 #endif
 }
 
-void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md, std::string* amd)
+void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(const std::string* md, std::string* amd)
 {
 #ifdef DO_MF_DEBUG
     MF_DEBUG("[Autolinking] parsing line:" << endl << ">>" << *md << "<<" << endl);
 #endif
 
 #ifdef MF_MD_2_HTML_CMARK
-    // cmark identifies '    * my bullet' as code block, which is wrong...
-    bool notCodeBlock=false;
-    if(stringStartsWith(*md, "    ")) {
-        (*md)[0] = '@';
-        notCodeBlock = true;
-        MF_DEBUG("[Autolinking] NO CODE FIX:" << endl << ">>" << *md << "<<" << endl);
+    const char* smd = md->c_str();
+
+    // cmark identifies '    * my bullet' as code block, which is wrong > workaround
+    string attic{};
+    if(stringStartsWith(smd, "    ")) {
+        attic.assign(*md);
+        attic[0] = '@';
+        smd = attic.c_str();
+        MF_DEBUG("[Autolinking] avoiding CODE block interpretation:" << endl << ">>" << attic << "<<" << endl);
     }
 
-    const char* smd = md->c_str();
     cmark_node* document = cmark_parse_document(
         smd,
         strlen(smd),
@@ -214,13 +220,14 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
 
     cmark_iter_free(i);
 
-    // TODO set correct
-    char* cmm = cmark_render_commonmark(document, 0, 0);
-    amd->assign(cmm);
-    if(notCodeBlock) {
+    if(attic.size()) {
         amd[0] = ' ';
     }
+
+    char* cmm = cmark_render_commonmark(document, 0, 0);
+    amd->assign(cmm);
     amd->pop_back();
+
 
 #ifdef DO_MF_DEBUG
     char* xml = cmark_render_xml(document, 0);
@@ -232,9 +239,10 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
 #endif
 
     free(cmm);
+    cmark_node_free(document);
 
 #else
-    // TODO copy md to amd
+    amd->assign(*md);
 #endif
 }
 
@@ -391,8 +399,8 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
         }
     }
 
-        // AST: add text node w/ content preceding link
-        // IMPROVE make this method
+    // AST: add text node w/ content preceding link
+    // IMPROVE make this method
         if(at.size()) {
             txtNode = cmark_node_new(CMARK_NODE_TEXT);
             cmark_node_set_literal(txtNode, at.c_str());
@@ -407,6 +415,6 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
             // IMPROVE: can be commented
             at.clear();
         }
-}
+    }
 
 } // m8r namespace

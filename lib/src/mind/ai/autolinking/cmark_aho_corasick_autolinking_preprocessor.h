@@ -96,7 +96,7 @@ private:
     /**
      * @brief Parse MD line to AST to get MD snippets which are safe for links injection.
      */
-    void parseMarkdownLine(std::string* md, std::string* amd);
+    void parseMarkdownLine(const std::string* md, std::string* amd);
 
     /**
      * @brief Inject Os and Ns links to given Markdown snippet.
