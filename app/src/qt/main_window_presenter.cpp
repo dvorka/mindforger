@@ -272,12 +272,13 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
     if(url.toString().size()) {
         if(url.toString().startsWith(QString::fromStdString(AutolinkingPreprocessor::MF_URL_PROTOCOL))) {
             MF_DEBUG("  URL type   : MindForger" << endl);
-            findNoteByNameDialog->setWindowTitle(tr("Autolinked Notebooks and Notes"));
-            findNoteByNameDialog->clearScope();
-            // TODO findNoteByNameDialog->setSearchedString();
-            vector<Note*> allNotes{};
-            mind->getAllNotes(allNotes);
-            findNoteByNameDialog->show(allNotes);
+            findOutlineByNameDialog->setWindowTitle(tr("Autolinked Notebooks and Notes"));
+            findOutlineByNameDialog->getKeywordsCheckbox()->setChecked(false);
+            findOutlineByNameDialog->setSearchedString(
+                QString::fromStdString(url.toString().toStdString().substr(AutolinkingPreprocessor::MF_URL_PROTOCOL.size())));
+            vector<Thing*> allThings{};
+            mind->getAllThings(allThings);
+            findOutlineByNameDialog->show(allThings);
             return;
         }
 

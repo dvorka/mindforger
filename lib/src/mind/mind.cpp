@@ -464,6 +464,19 @@ void Mind::findNotesByTags(const vector<const Tag*>& tags, vector<Note*>& result
     }
 }
 
+void Mind::getAllThings(std::vector<Thing*>& things)
+{
+    const vector<Outline*>& os = getOutlines();
+    for(Outline* o:os) {
+        things.push_back(o);
+    }
+    vector<Note*> ns{};
+    getAllNotes(ns);
+    for(Note* n:ns) {
+        things.push_back(n);
+    }
+}
+
 const vector<Outline*>& Mind::getOutlines() const
 {
     // IMPROVE PERF use dirty flag to avoid result-rebuilt

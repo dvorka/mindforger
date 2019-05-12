@@ -428,6 +428,7 @@ public:
      * TYPES
      */
 
+    void getAllThings(std::vector<Thing*>& things);
     // IMPROVE rename to getAllOs()
     const std::vector<Outline*>& getOutlines() const;
     std::vector<Outline*>* getOutlinesOfType(const OutlineType& type) const;
