@@ -27,8 +27,9 @@ const string AutolinkingPreprocessor::MATH_BLOCK = string{"$$"};
 
 AutolinkingPreprocessor::AutolinkingPreprocessor(Mind& mind)
     : things{},
+      trie{nullptr},
       insensitive{true},
-      mind{mind}    
+      mind{mind}
 {
 }
 
@@ -44,7 +45,9 @@ bool AutolinkingPreprocessor::aliasSizeComparator(const Thing* t1, const Thing* 
 void AutolinkingPreprocessor::updateIndices()
 {
     // IMPROVE update indices only if an O/N is modified (except writing read timestamps)
+
 #ifdef DO_MF_DEBUG
+    MF_DEBUG("[Autolinking] Updating indices..." << endl);
     auto begin = chrono::high_resolution_clock::now();
 #endif
 
@@ -64,29 +67,69 @@ void AutolinkingPreprocessor::updateIndices()
     std::sort(notes.begin(), notes.end(), aliasSizeComparator);
     for(Thing* t:notes) things.push_back(t);
 
-    // Os+Ns trie
-    Trie trie{};
+#ifdef DO_MF_DEBUG
+    auto end = chrono::high_resolution_clock::now();
+    MF_DEBUG("  Indices updated in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
+#endif
+}
+
+void AutolinkingPreprocessor::updateTrieIndex()
+{
+    // IMPROVE update indices only if an O/N is modified (except writing read timestamps)
+
+#ifdef DO_MF_DEBUG
+    MF_DEBUG("[Autolinking] Updating trie index..." << endl);
+    auto begin = chrono::high_resolution_clock::now();
+#endif
+
     string lowerName{};
-    MF_DEBUG("[Autolinking] trie:" << endl);
-    for(Thing* t:things) {
+    int size{};
 
-        // TODO add name
+    // clear
+    if(trie) {
+        delete trie;
+    }
+    trie = new Trie{};
 
+    // Os
+    const vector<Outline*>& os=mind.getOutlines();
+    size = os.size();
+    for(Outline* o:os) {
+        // TODO add name (w/o abbrev), lower name and abbrev (if exists)
+        // getAutolinkingName()
+        // getAutolinkingAbbrev()
+        // ... keep getAutolinkingAlias() as is
 
         // add name w/ 1st lower case letter
-        lowerName.assign(t->getAutolinkingAlias());
-        lowerName[0] = std::tolower(t->getAutolinkingAlias()[0]);
-        trie.addWord(lowerName);
-        MF_DEBUG("  '" << lowerName << "'" << endl);
+        lowerName.assign(o->getAutolinkingAlias());
+        lowerName[0] = std::tolower(o->getAutolinkingAlias()[0]);
+        trie->addWord(lowerName);
+        //MF_DEBUG("  '" << lowerName << "'" << endl);
         // add abbrev (if present)
-        trie.addWord(t->getAutolinkingAlias());
-        MF_DEBUG("  '" << t->getAutolinkingAlias() << "'" << endl);
+        trie->addWord(o->getAutolinkingAlias());
+        //MF_DEBUG("  '" << o->getAutolinkingAlias() << "'" << endl);
     }
-    MF_DEBUG("[Autolinking] trie building DONE" << endl);
+
+    // Ns
+    std::vector<Note*> notes;
+    mind.getAllNotes(notes);
+    size += notes.size();
+    for(Thing* n:notes) {
+        // TODO make this function
+
+        // add name w/ 1st lower case letter
+        lowerName.assign(n->getAutolinkingAlias());
+        lowerName[0] = std::tolower(n->getAutolinkingAlias()[0]);
+        trie->addWord(lowerName);
+        //MF_DEBUG("  '" << lowerName << "'" << endl);
+        // add abbrev (if present)
+        trie->addWord(n->getAutolinkingAlias());
+        //MF_DEBUG("  '" << n->getAutolinkingAlias() << "'" << endl);
+    }
 
 #ifdef DO_MF_DEBUG
     auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("[Autolinking] idx updated in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
+    MF_DEBUG("[Autolinking] trie w/ " << size << " things updated in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
 #endif
 }
 

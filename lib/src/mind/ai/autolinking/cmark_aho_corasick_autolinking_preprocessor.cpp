@@ -66,7 +66,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(const std::vector<std::str
     auto begin = chrono::high_resolution_clock::now();
 #endif
 
-    updateIndices();
+    updateTrieIndex();
     insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
 
     if(md.size()) {
@@ -239,6 +239,150 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(std::string* md,
 }
 
 void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* origNode)
+{
+    // copy w to t as it will be chopped word/match by word/match from head to tail
+    string txt{cmark_node_get_literal(origNode)};
+    string pre{}, at{}, chop{};
+    size_t preSize{};
+
+    cmark_node* node{};
+    cmark_node* linkNode{};
+    cmark_node* txtNode{};
+
+    // allowed trailing chars (\\... added newly)
+    string tMatch{" \t,:;.!?<>{}&()-+/*\\_=%~#$^[]'\""};
+
+#ifdef DO_MF_DEBUG
+    MF_DEBUG("[Autolinking] Injecting links to: '" << txt << "'" << endl);
+#endif
+
+    while(txt.size()>0) {
+        // skip trailing chars and append them
+        preSize = 0;
+        while(preSize < txt.size()) {
+            if(tMatch.find(txt.at(preSize)) != string::npos) {
+                preSize++;
+            } else {
+                break;
+            }
+        }
+        if(preSize) {
+            // chop trailing chars prefix from input and append it to result
+            at.append(txt.substr(0, preSize-1));
+            txt = txt.substr(preSize);
+
+            MF_DEBUG("  Skipping trailing chars: '" << txt.substr(0, preSize-1) << "'" << endl);
+            MF_DEBUG("     txt: '" << txt << "'" << endl);
+            MF_DEBUG("     at : '" << at  << "'" << endl);
+        }
+
+        // try to match word
+        pre.clear();
+        MF_DEBUG("  Trie search txt: '" << txt << "'" << endl);
+        if(trie->findLongestPrefixWord(txt, pre)) {
+            MF_DEBUG("    Matched prefix: '" << pre << "'" << endl);
+
+            // avoid word PREFIX matches ~ ensure that WHOLE world is matched
+
+            // determine trailing char
+            char tChar{txt.size()==pre.size()?' ':txt.at(pre.size())};
+            MF_DEBUG("    Match's trailing char: '" << tChar << "'" << endl);
+            if(tMatch.find(tChar) != string::npos) {
+
+                // AST: add text node w/ content preceding link
+                // IMPROVE make this method
+                if(at.size()) {
+                    txtNode = cmark_node_new(CMARK_NODE_TEXT);
+                    cmark_node_set_literal(txtNode, at.c_str());
+                    // IMPROVE make this private method
+                    if(node) {
+                        cmark_node_insert_after(node, txtNode);
+                    } else {
+                        cmark_node_insert_before(origNode, txtNode);
+                    }
+                    node = txtNode;
+
+                    at.clear();
+                }
+
+                // AST: add link
+                // IMPROVE make this method
+                linkNode = cmark_node_new(CMARK_NODE_LINK);
+                // TODO find note w/ that name (might be lowercase or abbrev) - annotate trie?
+                cmark_node_set_url(linkNode, "http://FAKE.LINK");
+                txtNode = cmark_node_new(CMARK_NODE_TEXT);
+                cmark_node_set_literal(txtNode, pre.c_str());
+                cmark_node_append_child(linkNode, txtNode);
+                if(node) {
+                    cmark_node_insert_after(node, linkNode);
+                } else {
+                    cmark_node_insert_before(origNode, linkNode);
+                }
+                node = linkNode;
+
+                // chop linked prefix word from input word w
+                txt = txt.substr(pre.size()+(txt.size()==pre.size()?0:1));
+
+                MF_DEBUG("     txt: '" << txt << "'" << endl);
+                MF_DEBUG("     at : '" << at  << "'" << endl);
+            } else {
+                // invalid trailing char > matched a NOT-whole-world prefix > skip and append one word
+
+                // TODO make it method
+                // current w prefix was NOT linked > chop it and append it
+                size_t begin = txt.find_first_of(" \t");
+                if(begin != string::npos) {
+                    chop = txt.substr(0, begin);
+                    txt = txt.substr(begin+1);
+                    at.append(chop);
+                    // TODO IMPORTANT append what was found - space or tab! simply index there
+                    at.append(" ");
+
+                    MF_DEBUG("  Skiping word: '" << chop << "'" << endl);
+                    MF_DEBUG("     txt: '" << txt << "'" << endl);
+                    MF_DEBUG("     at : '" << at  << "'" << endl);
+                } else {
+                    // no more words (prefix already checked) > DONE
+                    at.append(txt);
+
+                    MF_DEBUG("  DONE no-more words: '" << chop << "'" << endl);
+                    MF_DEBUG("     txt: '" << txt << "'" << endl);
+                    MF_DEBUG("     at : '" << at  << "'" << endl);
+
+                    break;
+                }
+            }
+        } else {
+            // didn't match prefix > skip and append one word
+
+            // TODO make it method
+            // current w prefix was NOT linked > chop it and append it
+            size_t begin = txt.find_first_of(" \t");
+            if(begin != string::npos) {
+                chop = txt.substr(0, begin);
+                txt = txt.substr(begin+1);
+                at.append(chop);
+                // TODO IMPORTANT append what was found - space or tab! simply index there
+                at.append(" ");
+
+                MF_DEBUG("  Skiping word: '" << chop << "'" << endl);
+                MF_DEBUG("     txt: '" << txt << "'" << endl);
+                MF_DEBUG("     at : '" << at  << "'" << endl);
+            } else {
+                // no more words (prefix already checked) > DONE
+                at.append(txt);
+
+                MF_DEBUG("  DONE no-more words: '" << chop << "'" << endl);
+                MF_DEBUG("     txt: '" << txt << "'" << endl);
+                MF_DEBUG("     at : '" << at  << "'" << endl);
+
+                break;
+            }
+        }
+    }
+}
+
+void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinksOld(cmark_node* origNode)
 {
     // copy w to t as it will be chopped word/match by word/match from head to tail
     string txt{cmark_node_get_literal(origNode)}, at{}, chop{};

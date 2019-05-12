@@ -93,4 +93,45 @@ bool Trie::findWord(string& s) const
     }
 }
 
+bool Trie::findLongestPrefixWord(string& s, string& r) const
+{
+    if(root->children().empty()) {
+        return false;
+    } else {
+        int longestWordSize{};
+
+        Node* current = root;
+        if(current != nullptr) {
+            for(size_t i=0; i<s.size(); i++) {
+                Node* n = current->findChild(s[i]);
+                if(n == nullptr) {
+                    // TODO make this method
+                    if(longestWordSize) {
+                        r = r.substr(0, longestWordSize);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                current = n;
+                r += s[i];
+                if(current->wordMarker()) {
+                    longestWordSize = r.size();
+                }
+            }
+
+            // TODO make this method
+            if(longestWordSize) {
+                r = r.substr(0, longestWordSize);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+}
+
 } // m8r namespace

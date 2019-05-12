@@ -41,6 +41,7 @@ public:
 
 protected:
     std::vector<Thing*> things;
+    Trie* trie;
     bool insensitive;
 
     Mind& mind;
@@ -65,6 +66,10 @@ protected:
      * @brief Update indice of all Ns and Os.
      */
     void updateIndices();
+    /**
+     * @brief Update trie-based Os and Ns names index.
+     */
+    void updateTrieIndex();
 };
 
 }

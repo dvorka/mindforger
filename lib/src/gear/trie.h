@@ -22,6 +22,8 @@
 #include <vector>
 #include <string>
 
+#include "../debug.h"
+
 namespace m8r {
 
 /**
@@ -77,7 +79,14 @@ public:
     bool empty() const { return root->children().empty(); }
 
     void addWord(std::string s);
+    /**
+     * @brief Determine whether s is known to trie.
+     */
     bool findWord(std::string& s) const;
+    /**
+     * @brief Find longest word which is prefix of s.
+     */
+    bool findLongestPrefixWord(std::string& s, std::string& r) const;
     void deleteWord(std::string s);
 
 private:
