@@ -22,9 +22,9 @@
  * Plan:
  *
  * - ensure correctness FIRST ~ unit tests:
+ *    - protection of deep bullet lists
  *    - no trailing spaces
  *    - protection of bullet lists
- *    - protection of deep bullet lists
  *    - protection of links/images/...
  *    - protection of inlined MATH $..$
  *    - blacklist ~ don't autolink e.g. http (to protect cmark's URLs autolinking)
