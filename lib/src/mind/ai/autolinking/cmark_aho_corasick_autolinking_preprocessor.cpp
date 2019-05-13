@@ -33,6 +33,9 @@
  *    - copy/paste code to methods
  *
  * - performance
+ *    - avoid trie rebuild:
+ *      - synchronous: add new N name to trie on its save()
+ *      - async: after save let trie rebuild async in other thread to update it (trie access must be synchronized)
  *    - avoid autolinking whole O on its load - it's not needed
  *    - map search structure instead of Aho
  *    - benchmark on C
