@@ -98,7 +98,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(
                 nl->assign(*l);
                 amd.push_back(nl);
             } else if(l) {
-                if(l->size()) {
+                if(l->size() && !inCodeBlock && !inMathBlock) {
                     parseMarkdownLine(l, nl);
                     amd.push_back(nl);
                 } else {
