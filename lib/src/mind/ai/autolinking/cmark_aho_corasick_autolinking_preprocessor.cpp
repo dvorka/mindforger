@@ -22,10 +22,15 @@
  * Plan:
  *
  * - ensure correctness FIRST ~ unit tests:
+ *    x protection of bullet lists
  *    - protection of deep bullet lists
- *    - no trailing spaces
- *    - protection of bullet lists
- *    - protection of links/images/...
+ *      (the problem list that deep bullet list cannot be
+ *      autolinked as line, but whole block > consider
+ *      injecting AST, rather than lines - CMARK needs
+ *      to know context of previous/next line)
+ *      >>> perhaps it could be faster than line by line autoinjections
+ *    x no trailing spaces
+ *    x protection of links/images/...
  *    - protection of inlined MATH $..$
  *    - blacklist ~ don't autolink e.g. http (to protect cmark's URLs autolinking)
  *
@@ -33,12 +38,13 @@
  *    - copy/paste code to methods
  *
  * - performance
- *    - avoid trie rebuild:
- *      - synchronous: add new N name to trie on its save()
- *      - async: after save let trie rebuild async in other thread to update it (trie access must be synchronized)
- *    - avoid autolinking whole O on its load - it's not needed
+ *    - avoid trie rebuild - on N save():
+ *      1) synchronous: add new N name to trie on its save()
+ *      2) async: after save let trie rebuild async in other
+ *         thread to update it (trie access must be synchronized)
+ *    - avoid autolinking whole O on its load - it's not needed > debug why it happens
  *    - map search structure instead of Aho
- *    - benchmark on C
+ *    - benchmark on C++ repo
  *    - configurable time limit on autolinking and leave on exceeding it
  */
 
@@ -137,9 +143,9 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(const std::strin
 #ifdef MF_MD_2_HTML_CMARK
     const char* smd = md->c_str();
 
-    // cmark identifies '    * my bullet' as code block, which is wrong > workaround
+    // cmark identifies '   * my bullet' as code block, which is wrong > workaround
     string attic{};
-    if(stringStartsWith(smd, "    ")) {
+    if(stringStartsWith(smd, "   ")) {
         attic.assign(*md);
         attic[0] = '@';
         smd = attic.c_str();
