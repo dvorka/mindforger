@@ -39,6 +39,11 @@
  *
  * - performance
  *    - avoid trie rebuild - on N save():
+ *      ! implement delete operation on trie:
+ *       - enhance trie w/ refcount for words so that delete knows whether to remove or not
+ *       - implement delete() operation:
+ *        - finds word mark, decreases refcount, if it's leaf than it goes up deletes orphan
+ *      OR:
  *      1) synchronous: add new N name to trie on its save()
  *      2) async: after save let trie rebuild async in other
  *         thread to update it (trie access must be synchronized)
