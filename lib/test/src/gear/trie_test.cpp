@@ -33,19 +33,72 @@ extern char* getMindforgerGitHomePath();
 
 TEST(TrieTestCase, AddAndSearch)
 {
+    // GIVEN
     vector<string> words{};
     words.push_back("I");
     words.push_back("you");
     words.push_back("yours");
     words.push_back("he");
 
+    // WHEN
     cout << "Building TRIE[" << words.size() << "]:" << endl;
     m8r::Trie trie{};
     for(string& w:words) {
         trie.addWord(w);
     }
 
+    // THEN
+    trie.print();
+
     ASSERT_EQ(false, trie.empty());
     string s{"yours"};
     ASSERT_TRUE(trie.findWord(s));
+}
+
+TEST(TrieTestCase, AddAndRemove)
+{
+    // add word twice > print
+    // remove word w/ refcount 1 > print
+    // remove word w/ refcount 2 > print
+    // find removed word (False)
+
+    // build trie
+    vector<string> words{};
+    words.push_back("A");
+    words.push_back("twice");
+    words.push_back("twice");
+    words.push_back("once");
+    words.push_back("BB");
+    m8r::Trie trie{};
+    for(string& w:words) {
+        trie.addWord(w);
+    }
+
+    cout << "INITIAL trie..." << endl;
+    trie.print();
+
+    // remove word w/ refcount 1
+    string word{"once"};
+    ASSERT_TRUE(trie.findWord(word));
+    cout << "REMOVING (1) word..." << endl;
+    trie.removeWord(word);
+    cout << "AFTER (1) remove..." << endl;
+    trie.print();
+    ASSERT_FALSE(trie.findWord(word));
+
+    // remove word w/ refcount 2
+    word.assign("twice");
+    ASSERT_TRUE(trie.findWord(word));
+    cout << "REMOVING (1/2) word..." << endl;
+    trie.removeWord(word, true);
+    cout << "AFTER (1/2) remove..." << endl;
+    trie.print();
+    ASSERT_TRUE(trie.findWord(word));
+
+    cout << "REMOVING (2/2) word..." << endl;
+    trie.removeWord(word, true);
+    cout << "AFTER (2/2) remove..." << endl;
+    int count = trie.print();
+    ASSERT_FALSE(trie.findWord(word));
+    ASSERT_EQ(13, count);
 }

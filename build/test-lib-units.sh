@@ -29,11 +29,12 @@ export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to d
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
 # tests
-export OPTION_TEST="AutolinkingCmarkTestCase.*"
+#export OPTION_TEST="AutolinkingCmarkTestCase.*"
 #export OPTION_TEST="AutolinkingTestCase.*"
 #export OPTION_TEST="AutolinkingTestCase.CrashAndBurn"
 #export OPTION_TEST="FtsTestCase.*"
-#export OPTION_TEST="TrieTestCase.AddAndSearch"
+#export OPTION_TEST="TrieTestCase.*"
+export OPTION_TEST="TrieTestCase.AddAndRemove"
 #export OPTION_TEST="FileGearTestCase.DeepCopy"
 #export OPTION_TEST="FileGearTestCase.DeepProductionCopy"
 #export OPTION_TEST="FileGearTestCase.DeepCopyToExisting"

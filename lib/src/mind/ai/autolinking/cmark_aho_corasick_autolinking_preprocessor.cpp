@@ -19,6 +19,15 @@
 #include "cmark_aho_corasick_autolinking_preprocessor.h"
 
 /*
+ * High priority:
+ *
+ * - trie ref counting
+ * - trie delete
+ * - row based MD2HTML > block based MD2>HTML
+ * - O or N edit: always DELETE old name and add new name to TRIE
+ *
+ * - autolink tags: if no N/O found on click, then open tags dialog
+ *
  * Plan:
  *
  * - ensure correctness FIRST ~ unit tests:
@@ -34,7 +43,10 @@
  *    - protection of inlined MATH $..$
  *    - blacklist ~ don't autolink e.g. http (to protect cmark's URLs autolinking)
  *
- * - code sytle
+ * - bugs
+ *    - click link > dialog > choose > crash
+ *
+ * - code style
  *    - copy/paste code to methods
  *
  * - performance
