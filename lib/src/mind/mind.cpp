@@ -39,7 +39,9 @@ Mind::Mind(Configuration &configuration)
       exclusiveMind{},
       timeScopeAspect{},
       tagsScopeAspect{ontology},
-      scopeAspect{timeScopeAspect, tagsScopeAspect}
+      scopeAspect{timeScopeAspect, tagsScopeAspect},
+      autoThings{},
+      autoTrie{nullptr}
 {
     ai = new Ai{memory,*this};
     deleteWatermark = 0;
@@ -925,16 +927,21 @@ void Mind::noteDemote(Note* note, Outline::Patch* patch)
     }
 }
 
+void Memory::noteOnRename(const std::string& oldName, const std::string& newName)
+{
+    xxx
+}
+
 void Mind::onRemembering()
 {
     allNotesCache.clear();
 }
 
-#ifdef MF_NER
-
 /*
  * NER
  */
+
+#ifdef MF_NER
 
 bool Mind::isNerInitilized() const
 {

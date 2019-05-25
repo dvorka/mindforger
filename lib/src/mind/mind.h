@@ -26,6 +26,7 @@
 
 #include "memory.h"
 #include "knowledge_graph.h"
+#include "ai/autolinking/autolinking_mind.h"
 #include "ai/ai.h"
 #include "associated_notes.h"
 #include "ontology/thing_class_rel_triple.h"
@@ -129,6 +130,7 @@ public:
 private:
     Configuration &config;
     Ontology ontology;
+    AutolinkingMind* autoMind;
     RepresentationInterceptor* autoInterceptor;
     HtmlOutlineRepresentation htmlRepresentation;
     MarkdownConfigurationRepresentation* mdConfigRepresentation;
@@ -587,6 +589,11 @@ public:
     std::string makeNoteOutline(
             std::string fromOutlineKey,
             uint16_t fromNoteId);
+
+    /**
+     * @brief Actions to perform on N rename.
+     */
+    void noteOnRename(const std::string& oldName, const std::string& newName);
 
     /*
      * DIAGNOSTICS

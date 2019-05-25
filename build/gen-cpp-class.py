@@ -103,6 +103,7 @@ if len(sys.argv) == 2:
     nameDash = arg.lower()
     nameMacro = arg.upper()
     with open(nameDash+".h", "w") as text_file:
+        # TODO f-string
         text_file.write(TEMPLATE_HEADER_FILE.format(
             nameDash,
             nameMacro,nameMacro,
@@ -111,6 +112,7 @@ if len(sys.argv) == 2:
             nameMacro))
 
     with open(nameDash+".cpp", "w") as text_file:
+        # TODO f-string
         text_file.write(TEMPLATE_CPP_FILE.format(
             nameDash,
             nameDash,

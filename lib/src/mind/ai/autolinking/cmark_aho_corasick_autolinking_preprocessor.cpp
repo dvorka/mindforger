@@ -21,8 +21,7 @@
 /*
  * High priority:
  *
- * - trie ref counting
- * - trie delete
+ * - move trie to memory(or mind) and keep it up to date there (based on mind state)
  * - row based MD2HTML > block based MD2>HTML
  * - O or N edit: always DELETE old name and add new name to TRIE
  *

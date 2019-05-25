@@ -42,8 +42,6 @@ public:
     static const std::string FILE_URL_PROTOCOL;
 
 protected:
-    std::vector<Thing*> things;
-    Trie* trie;
     bool insensitive;
 
     Mind& mind;
@@ -57,38 +55,9 @@ public:
     virtual ~AutolinkingPreprocessor();
 
     /**
-     * @brief Rebuild indices (like trie) e.g. on new MD/repository load.
-     */
-    virtual void reindex() = 0;
-
-    /**
      * @brief Inject links to given MD source (list of rows) and return valid MD string.
      */
     virtual void process(const std::vector<std::string*>& in, std::string& out) = 0;
-
-    /**
-     * @brief Clear indices.
-     */
-    virtual void clear();
-
-protected:
-    /**
-     * @brief Comparator used to sort Os/Ns by name (w/ stripped abbreviation prefix).
-     */
-    static bool aliasSizeComparator(const Thing* t1, const Thing* t2);
-
-    /**
-     * @brief Update indice of all Ns and Os.
-     */
-    void updateThingsIndex();
-    /**
-     * @brief Update trie-based Os and Ns names index.
-     */
-    void updateTrieIndex();
-    /**
-     * @brief Add thing's name (and abbrev) to trie.
-     */
-    void addThingToTrie(const Thing *t);
 };
 
 }

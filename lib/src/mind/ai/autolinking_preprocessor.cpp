@@ -28,117 +28,13 @@ const string AutolinkingPreprocessor::MF_URL_PROTOCOL = string{"mindforger://"};
 const string AutolinkingPreprocessor::FILE_URL_PROTOCOL = string{"file://"};
 
 AutolinkingPreprocessor::AutolinkingPreprocessor(Mind& mind)
-    : things{},
-      trie{nullptr},
-      insensitive{true},
+    : insensitive{true},
       mind{mind}
 {
 }
 
 AutolinkingPreprocessor::~AutolinkingPreprocessor()
 {
-    if(trie) {
-        delete trie;
-        trie = nullptr;
-    }
-}
-
-bool AutolinkingPreprocessor::aliasSizeComparator(const Thing* t1, const Thing* t2)
-{
-    return t1->getAutolinkingAlias().size() > t2->getAutolinkingAlias().size();
-}
-
-void AutolinkingPreprocessor::updateThingsIndex()
-{
-    // IMPROVE update indices only if an O/N is modified (except writing read timestamps)
-
-#ifdef DO_MF_DEBUG
-    MF_DEBUG("[Autolinking] Updating indices..." << endl);
-    auto begin = chrono::high_resolution_clock::now();
-#endif
-
-    things.clear();
-
-    // Os
-    std::vector<Outline*> outlines;
-    const vector<Outline*>& os=mind.getOutlines();
-    for(Outline* o:os) outlines.push_back(o);
-    std::sort(outlines.begin(), outlines.end(), aliasSizeComparator);
-    for(Thing* t:outlines) things.push_back(t);
-
-    // Ns
-    std::vector<Note*> notes;
-    mind.getAllNotes(notes);
-    // sort names from longest to shortest (to have best ~ longest matches)
-    std::sort(notes.begin(), notes.end(), aliasSizeComparator);
-    for(Thing* t:notes) things.push_back(t);
-
-#ifdef DO_MF_DEBUG
-    auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("  Indices updated in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
-#endif
-}
-
-void AutolinkingPreprocessor::updateTrieIndex()
-{
-    // IMPROVE update indices only if an O/N is modified (except writing read timestamps)
-
-#ifdef DO_MF_DEBUG
-    MF_DEBUG("[Autolinking] Updating trie index..." << endl);
-    auto begin = chrono::high_resolution_clock::now();
-    int size{};
-#endif
-
-    clear();
-
-    // Os
-    const vector<Outline*>& os=mind.getOutlines();
-#ifdef DO_MF_DEBUG
-    size = os.size();
-#endif
-    for(Outline* o:os) {
-        addThingToTrie(o);
-    }
-
-    // Ns
-    std::vector<Note*> notes;
-    mind.getAllNotes(notes);
-#ifdef DO_MF_DEBUG
-    size += notes.size();
-#endif
-    for(Note* n:notes) {
-        addThingToTrie(n);
-    }
-
-    // IMPROVE: add also tags
-
-#ifdef DO_MF_DEBUG
-    auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("[Autolinking] trie w/ " << size << " things updated in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
-#endif
-}
-
-void AutolinkingPreprocessor::addThingToTrie(const Thing *t) {
-    // name
-    trie->addWord(t->getAutolinkingName());
-    // name w/ lowercase 1st letter
-    string lowerName{t->getAutolinkingName()};
-    lowerName[0] = std::tolower(t->getAutolinkingName()[0]);
-    trie->addWord(lowerName);
-    // abbrev (if present)
-    trie->addWord(t->getAutolinkingAbbr());
-}
-
-void AutolinkingPreprocessor::clear()
-{
-    things.clear();
-
-    if(trie) {
-        delete trie;
-    }
-    trie = new Trie{};
-
-    MF_DEBUG("[Autolinking] indices CLEARed" << endl);
 }
 
 } // m8r namespace

@@ -133,6 +133,7 @@ void Memory::learn()
         } // else wrong number of files (typically none)
     }
 
+    // autolinking
     mdRepresentation.reindex();
 
 #ifdef DO_MF_DEBUG
@@ -171,6 +172,7 @@ void Memory::amnesia()
     }
     noteStencils.clear();
 
+    // autolinking
     mdRepresentation.clear();
 }
 
