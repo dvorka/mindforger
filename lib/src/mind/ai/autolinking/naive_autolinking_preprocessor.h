@@ -51,7 +51,8 @@ public:
     NaiveAutolinkingPreprocessor &operator=(const NaiveAutolinkingPreprocessor&&) = delete;
     virtual ~NaiveAutolinkingPreprocessor();
 
-    virtual void process(const std::vector<std::string*>& md, std::vector<std::string*>& amd) override;
+    virtual void reindex();
+    virtual void process(const std::vector<std::string*>& md, std::string& amd) override;
 
 private:
     bool containsLinkCodeMath(const std::string* line);

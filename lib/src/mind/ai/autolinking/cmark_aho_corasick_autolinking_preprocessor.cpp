@@ -80,12 +80,17 @@ CmarkAhoCorasickAutolinkingPreprocessor::~CmarkAhoCorasickAutolinkingPreprocesso
 {
 }
 
+void CmarkAhoCorasickAutolinkingPreprocessor::reindex()
+{
+    updateTrieIndex();
+}
+
 /**
  * @brief Inject links into MD represented as a list of strings.
  */
 void CmarkAhoCorasickAutolinkingPreprocessor::process(
         const std::vector<std::string*>& md,
-        std::vector<std::string*>& amd)
+        std::string& amd)
 {
 #ifdef MF_MD_2_HTML_CMARK
 
@@ -98,8 +103,10 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(
     auto begin = chrono::high_resolution_clock::now();
 #endif
 
+    // TODO rewrite
+    std::vector<std::string*> amdl{};
+
     insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
-    updateTrieIndex();
 
     if(md.size()) {
 
@@ -117,37 +124,38 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(
                 inCodeBlock = !inCodeBlock;
 
                 nl->assign(*l);
-                amd.push_back(nl);
+                amdl.push_back(nl);
             } else if(stringStartsWith(*l, MATH_BLOCK)) {
                 inMathBlock= !inMathBlock;
 
                 nl->assign(*l);
-                amd.push_back(nl);
+                amdl.push_back(nl);
             } else if(l) {
                 if(l->size() && !inCodeBlock && !inMathBlock) {
                     parseMarkdownLine(l, nl);
-                    amd.push_back(nl);
+                    amdl.push_back(nl);
                 } else {
                     nl->assign(*l);
-                    amd.push_back(nl);
+                    amdl.push_back(nl);
                 }
             } else {
                 delete nl;
-                amd.push_back(nullptr);
+                amdl.push_back(nullptr);
             }
         }
     }
+
+    toString(amdl, amd);
+
 #ifdef DO_MF_DEBUG
-    ds.clear();
-    toString(amd, ds);
-    MF_DEBUG("[Autolinking] output:" << endl << ">>" << ds << "<<" << endl);
+    MF_DEBUG("[Autolinking] output:" << endl << ">>" << amd << "<<" << endl);
 
     auto end = chrono::high_resolution_clock::now();
     MF_DEBUG("[Autolinking] MD autolinked in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
 #endif
 
 #else
-    amd = md;
+    toString(md, amd);
 #endif
 }
 
@@ -234,6 +242,9 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(const std::strin
             break;
         case CMARK_NODE_TEXT:
             MF_DEBUG(" text '" << cmark_node_get_literal(node) << "'" << endl);
+
+            // TODO: block - split lines by new line
+
             if(!inLinkImgOrCode) {
                 // replace text node w/ sequence of text and link nodes
                 injectThingsLinks(node);

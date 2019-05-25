@@ -48,7 +48,7 @@ bool AutolinkingPreprocessor::aliasSizeComparator(const Thing* t1, const Thing* 
     return t1->getAutolinkingAlias().size() > t2->getAutolinkingAlias().size();
 }
 
-void AutolinkingPreprocessor::updateIndices()
+void AutolinkingPreprocessor::updateThingsIndex()
 {
     // IMPROVE update indices only if an O/N is modified (except writing read timestamps)
 
@@ -89,11 +89,7 @@ void AutolinkingPreprocessor::updateTrieIndex()
     int size{};
 #endif
 
-    // clear
-    if(trie) {
-        delete trie;
-    }
-    trie = new Trie{};
+    clear();
 
     // Os
     const vector<Outline*>& os=mind.getOutlines();
@@ -131,6 +127,18 @@ void AutolinkingPreprocessor::addThingToTrie(const Thing *t) {
     trie->addWord(lowerName);
     // abbrev (if present)
     trie->addWord(t->getAutolinkingAbbr());
+}
+
+void AutolinkingPreprocessor::clear()
+{
+    things.clear();
+
+    if(trie) {
+        delete trie;
+    }
+    trie = new Trie{};
+
+    MF_DEBUG("[Autolinking] indices CLEARed" << endl);
 }
 
 } // m8r namespace

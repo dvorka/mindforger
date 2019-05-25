@@ -94,7 +94,8 @@ public:
     CmarkAhoCorasickAutolinkingPreprocessor &operator=(const CmarkAhoCorasickAutolinkingPreprocessor&&) = delete;
     ~CmarkAhoCorasickAutolinkingPreprocessor();
 
-    virtual void process(const std::vector<std::string*>& md, std::vector<std::string*>& amd) override;
+    virtual void reindex() override;
+    virtual void process(const std::vector<std::string*>& md, std::string& amd) override;
 
 private:
     /**

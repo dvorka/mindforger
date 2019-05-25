@@ -56,7 +56,20 @@ public:
     AutolinkingPreprocessor &operator=(const AutolinkingPreprocessor&&) = delete;
     virtual ~AutolinkingPreprocessor();
 
-    virtual void process(const std::vector<std::string*>& in, std::vector<std::string*>& out) = 0;
+    /**
+     * @brief Rebuild indices (like trie) e.g. on new MD/repository load.
+     */
+    virtual void reindex() = 0;
+
+    /**
+     * @brief Inject links to given MD source (list of rows) and return valid MD string.
+     */
+    virtual void process(const std::vector<std::string*>& in, std::string& out) = 0;
+
+    /**
+     * @brief Clear indices.
+     */
+    virtual void clear();
 
 protected:
     /**
@@ -67,7 +80,7 @@ protected:
     /**
      * @brief Update indice of all Ns and Os.
      */
-    void updateIndices();
+    void updateThingsIndex();
     /**
      * @brief Update trie-based Os and Ns names index.
      */

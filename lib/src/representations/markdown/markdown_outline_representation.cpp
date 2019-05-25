@@ -500,13 +500,7 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
 string* MarkdownOutlineRepresentation::toDescription(const Note* note, string* md, bool autolinking)
 {
     if(descriptionInterceptor && autolinking) {
-        vector<string*> autolinkedDescription{};
-        descriptionInterceptor->process(note->getDescription(), autolinkedDescription);
-        toString(autolinkedDescription, *md);
-
-        for(string* s:autolinkedDescription) {
-            delete s;
-        }
+        descriptionInterceptor->process(note->getDescription(), *md);
     } else {
         toString(note->getDescription(), *md);
     }
@@ -544,5 +538,15 @@ string* MarkdownOutlineRepresentation::toc(const Outline* outline, bool tags, bo
     return md;
 }
 
+
+void MarkdownOutlineRepresentation::reindex()
+{
+    descriptionInterceptor->reindex();
+}
+
+void MarkdownOutlineRepresentation::clear()
+{
+    descriptionInterceptor->clear();
+}
 
 } // m8r namespace

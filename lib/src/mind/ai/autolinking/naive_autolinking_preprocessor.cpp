@@ -58,13 +58,20 @@ bool NaiveAutolinkingPreprocessor::containsLinkCodeMath(const string* line)
     return false;
 }
 
-void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::vector<std::string*>& amd)
+void NaiveAutolinkingPreprocessor::reindex()
+{
+    updateThingsIndex();
+}
+
+void NaiveAutolinkingPreprocessor::process(const vector<string*>& md, string &amd)
 {
     MF_DEBUG("[Autolinking] NAIVE" << endl);
 
     insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
 
-    updateIndices();
+    reindex();
+
+    std::vector<std::string*> amdl;
 
     // IMPROVE ORDER of Ns determines what will be found > have active O Ns in head, etc.
 
@@ -80,13 +87,13 @@ void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, 
                 inCodeBlock = !inCodeBlock;                
 
                 nl->append(*l);
-                amd.push_back(nl);
+                amdl.push_back(nl);
                 continue;
             } else if(stringStartsWith(*l, MATH_BLOCK)) {
                 inMathBlock= !inMathBlock;
 
                 nl->append(*l);
-                amd.push_back(nl);
+                amdl.push_back(nl);
                 continue;
             }
 
@@ -94,7 +101,7 @@ void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, 
             // to preserve syntax correctness (potential matches might be lost)
             if(containsLinkCodeMath(l)) {
                 nl->append(*l);
-                amd.push_back(nl);
+                amdl.push_back(nl);
                 continue;
             }
 
@@ -193,12 +200,14 @@ void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, 
                 }
 
                 MF_DEBUG("<<" << *nl << "<<" << endl);
-                amd.push_back(nl);
+                amdl.push_back(nl);
             } else {
-                amd.push_back(nl);
+                amdl.push_back(nl);
             }
         }
     }
+
+    toString(amdl, amd);
 }
 
 } // m8r namespace
