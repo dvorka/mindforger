@@ -29,9 +29,7 @@ class RepresentationInterceptor
 public:
     virtual ~RepresentationInterceptor() {}
 
-    virtual void reindex() = 0;
     virtual void process(const std::vector<std::string*>& in, std::string& out) = 0;
-    virtual void clear() = 0;
 };
 
 }

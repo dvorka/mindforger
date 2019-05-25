@@ -36,12 +36,11 @@ Mind::Mind(Configuration &configuration)
       htmlRepresentation{ontology, autoInterceptor},
       mdConfigRepresentation(new MarkdownConfigurationRepresentation{}),
       memory{configuration, ontology, htmlRepresentation},
+      autolinking{new AutolinkingMind{*this}},
       exclusiveMind{},
       timeScopeAspect{},
       tagsScopeAspect{ontology},
-      scopeAspect{timeScopeAspect, tagsScopeAspect},
-      autoThings{},
-      autoTrie{nullptr}
+      scopeAspect{timeScopeAspect, tagsScopeAspect}
 {
     ai = new Ai{memory,*this};
     deleteWatermark = 0;
@@ -79,6 +78,7 @@ bool Mind::learn()
         MF_DEBUG("Learning..." << endl);
         mindAmnesia();
         memory.learn();
+        autolink()->reindex();
         MF_DEBUG("Mind LEARNED " << memory.getOutlinesCount() << " Os" << endl);
         return true;
     } else {
@@ -234,6 +234,7 @@ bool Mind::mindAmnesia()
 
         // forget EVERYTHING
         memory.amnesia();
+        autolink()->clear();
 
         MF_DEBUG("Mind WITH amnesia" << endl);
         return true;
@@ -927,9 +928,9 @@ void Mind::noteDemote(Note* note, Outline::Patch* patch)
     }
 }
 
-void Memory::noteOnRename(const std::string& oldName, const std::string& newName)
+void Mind::noteOnRename(const std::string& oldName, const std::string& newName)
 {
-    xxx
+    throw new MindForgerException("Not implemented!");
 }
 
 void Mind::onRemembering()

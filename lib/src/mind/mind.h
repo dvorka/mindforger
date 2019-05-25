@@ -42,6 +42,7 @@ namespace m8r {
 
 class Ai;
 class KnowledgeGraph;
+class AutolinkingMind;
 
 constexpr auto NO_PARENT = 0xFFFF;
 
@@ -130,11 +131,11 @@ public:
 private:
     Configuration &config;
     Ontology ontology;
-    AutolinkingMind* autoMind;
     RepresentationInterceptor* autoInterceptor;
     HtmlOutlineRepresentation htmlRepresentation;
     MarkdownConfigurationRepresentation* mdConfigRepresentation;
     Memory memory;
+    AutolinkingMind* autolinking;
 
     /**
      * Atomic mind state changes and asynchronous computations synchronization
@@ -276,6 +277,12 @@ public:
     bool isActiveProcesses() const { return activeProcesses==0; }
     void incActiveProcesses() { activeProcesses++; }
     void decActiveProcesses() { activeProcesses--; }
+
+    /*
+     * Autolinking
+     */
+
+    AutolinkingMind* autolink() const { return autolinking; }
 
     /*
      * Knowledge graph

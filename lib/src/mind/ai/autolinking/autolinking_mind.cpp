@@ -20,6 +20,8 @@
 
 namespace m8r {
 
+using namespace std;
+
 AutolinkingMind::AutolinkingMind(Mind& mind)
     : mind{mind}
 {
@@ -38,7 +40,7 @@ bool AutolinkingMind::aliasSizeComparator(const Thing* t1, const Thing* t2)
     return t1->getAutolinkingAlias().size() > t2->getAutolinkingAlias().size();
 }
 
-void Mind::autolinkUpdateThingsIndex()
+void AutolinkingMind::updateThingsIndex()
 {
     // IMPROVE update indices only if an O/N is modified (except writing read timestamps)
 
@@ -47,21 +49,21 @@ void Mind::autolinkUpdateThingsIndex()
     auto begin = chrono::high_resolution_clock::now();
 #endif
 
-    autolinkThings.clear();
+    things.clear();
 
     // Os
     std::vector<Outline*> outlines;
     const vector<Outline*>& os=mind.getOutlines();
     for(Outline* o:os) outlines.push_back(o);
     std::sort(outlines.begin(), outlines.end(), aliasSizeComparator);
-    for(Thing* t:outlines) autolinkThings.push_back(t);
+    for(Thing* t:outlines) things.push_back(t);
 
     // Ns
     std::vector<Note*> notes;
     mind.getAllNotes(notes);
     // sort names from longest to shortest (to have best ~ longest matches)
     std::sort(notes.begin(), notes.end(), aliasSizeComparator);
-    for(Thing* t:notes) autolinkThings.push_back(t);
+    for(Thing* t:notes) things.push_back(t);
 
 #ifdef DO_MF_DEBUG
     auto end = chrono::high_resolution_clock::now();
@@ -69,7 +71,7 @@ void Mind::autolinkUpdateThingsIndex()
 #endif
 }
 
-void Mind::autolinkUpdateTrieIndex()
+void AutolinkingMind::updateTrieIndex()
 {
     // IMPROVE update indices only if an O/N is modified (except writing read timestamps)
 
@@ -87,7 +89,7 @@ void Mind::autolinkUpdateTrieIndex()
     size = os.size();
 #endif
     for(Outline* o:os) {
-        autolinkAddThingToTrie(o);
+        addThingToTrie(o);
     }
 
     // Ns
@@ -97,7 +99,7 @@ void Mind::autolinkUpdateTrieIndex()
     size += notes.size();
 #endif
     for(Note* n:notes) {
-        autolinkAddThingToTrie(n);
+        addThingToTrie(n);
     }
 
     // IMPROVE: add also tags
@@ -108,25 +110,25 @@ void Mind::autolinkUpdateTrieIndex()
 #endif
 }
 
-void Mind::autolinkAddThingToTrie(const Thing *t) {
+void AutolinkingMind::addThingToTrie(const Thing *t) {
     // name
-    autolinkTrie->addWord(t->getAutolinkingName());
+    trie->addWord(t->getAutolinkingName());
     // name w/ lowercase 1st letter
     string lowerName{t->getAutolinkingName()};
     lowerName[0] = std::tolower(t->getAutolinkingName()[0]);
-    autolinkTrie->addWord(lowerName);
+    trie->addWord(lowerName);
     // abbrev (if present)
-    autolinkTrie->addWord(t->getAutolinkingAbbr());
+    trie->addWord(t->getAutolinkingAbbr());
 }
 
-void Mind::autolinkClear()
+void AutolinkingMind::clear()
 {
-    autolinkThings.clear();
+    things.clear();
 
-    if(autolinkTrie) {
-        delete autolinkTrie;
+    if(trie) {
+        delete trie;
     }
-    autolinkTrie = new Trie{};
+    trie = new Trie{};
 
     MF_DEBUG("[Autolinking] indices CLEARed" << endl);
 }

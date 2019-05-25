@@ -133,9 +133,6 @@ void Memory::learn()
         } // else wrong number of files (typically none)
     }
 
-    // autolinking
-    mdRepresentation.reindex();
-
 #ifdef DO_MF_DEBUG
     auto end = chrono::high_resolution_clock::now();
     MF_DEBUG("LEARNED in " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000.0 << "ms" << endl);
@@ -171,9 +168,6 @@ void Memory::amnesia()
         delete stencil;
     }
     noteStencils.clear();
-
-    // autolinking
-    mdRepresentation.clear();
 }
 
 Outline* Memory::createOutline(Stencil* stencil)

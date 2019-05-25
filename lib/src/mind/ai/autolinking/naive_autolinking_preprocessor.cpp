@@ -18,6 +18,8 @@
 */
 #include "naive_autolinking_preprocessor.h"
 
+#ifndef MF_MD_2_HTML_CMARK
+
 namespace m8r {
 
 using namespace std;
@@ -58,18 +60,11 @@ bool NaiveAutolinkingPreprocessor::containsLinkCodeMath(const string* line)
     return false;
 }
 
-void NaiveAutolinkingPreprocessor::reindex()
-{
-    updateThingsIndex();
-}
-
 void NaiveAutolinkingPreprocessor::process(const vector<string*>& md, string &amd)
 {
     MF_DEBUG("[Autolinking] NAIVE" << endl);
 
     insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
-
-    reindex();
 
     std::vector<std::string*> amdl;
 
@@ -116,7 +111,7 @@ void NaiveAutolinkingPreprocessor::process(const vector<string*>& md, string &am
                     // IMPROVE loop to be changed to Aho-Corasic trie
 
                     // inject Os, then Ns
-                    for(Thing* t:things) {
+                    for(Thing* t:mind.autolink()->getThings()) {
                         size_t found;
                         bool match, insensitiveMatch;
                         string lowerAlias{};
@@ -211,3 +206,4 @@ void NaiveAutolinkingPreprocessor::process(const vector<string*>& md, string &am
 }
 
 } // m8r namespace
+#endif

@@ -19,6 +19,8 @@
 #ifndef M8R_NAIVE_AUTOLINKING_PREPROCESSOR_H
 #define M8R_NAIVE_AUTOLINKING_PREPROCESSOR_H
 
+#ifndef MF_MD_2_HTML_CMARK
+
 #include <regex>
 #include <string>
 
@@ -51,7 +53,6 @@ public:
     NaiveAutolinkingPreprocessor &operator=(const NaiveAutolinkingPreprocessor&&) = delete;
     virtual ~NaiveAutolinkingPreprocessor();
 
-    virtual void reindex();
     virtual void process(const std::vector<std::string*>& md, std::string& amd) override;
 
 private:
@@ -59,4 +60,5 @@ private:
 };
 
 }
+#endif // MF_MD_2_HTML_CMARK
 #endif // M8R_NAIVE_AUTOLINKING_PREPROCESSOR_H

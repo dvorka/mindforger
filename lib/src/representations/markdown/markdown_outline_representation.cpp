@@ -538,15 +538,4 @@ string* MarkdownOutlineRepresentation::toc(const Outline* outline, bool tags, bo
     return md;
 }
 
-
-void MarkdownOutlineRepresentation::reindex()
-{
-    descriptionInterceptor->reindex();
-}
-
-void MarkdownOutlineRepresentation::clear()
-{
-    descriptionInterceptor->clear();
-}
-
 } // m8r namespace

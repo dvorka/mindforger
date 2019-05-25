@@ -94,17 +94,12 @@ public:
     CmarkAhoCorasickAutolinkingPreprocessor &operator=(const CmarkAhoCorasickAutolinkingPreprocessor&&) = delete;
     ~CmarkAhoCorasickAutolinkingPreprocessor();
 
-    virtual void reindex() override;
-
     /**
      * @brief Autolink Markdown.
      *
      * Provide previous Thing's name to update indices.
      */
-    virtual void process(
-        const std::vector<std::string*>& md,
-        std::string& amd,
-        std::string* lastName=nullptr) override;
+    virtual void process(const std::vector<std::string*>& md, std::string& amd) override;
 
 private:
     /**

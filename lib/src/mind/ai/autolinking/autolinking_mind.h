@@ -20,11 +20,14 @@
 #define M8R_AUTOLINKING_MIND_H
 
 #include <vector>
+#include <chrono>
 
 #include "../../../gear/trie.h"
 #include "../../mind.h"
 
 namespace m8r {
+
+class Mind;
 
 /**
  * @brief Things autolinking indices and inferences.
@@ -32,8 +35,11 @@ namespace m8r {
 class AutolinkingMind
 {
 private:
-    std::vector<Thing*> autolinkThings;
-    Trie* autolinkTrie;
+#ifdef MF_MD_2_HTML_CMARK
+    Trie* trie;
+#else
+    std::vector<Thing*> things;
+#endif
 
     Mind& mind;
 
@@ -48,7 +54,31 @@ public:
     /**
      * @brief Rebuild indices (like trie) e.g. on new MD/repository load.
      */
-    virtual void reindex() = 0;
+    virtual void reindex() {
+#ifdef MF_MD_2_HTML_CMARK
+        updateTrieIndex();
+#else
+        updateThingsIndex();
+#endif
+    }
+
+#ifdef MF_MD_2_HTML_CMARK
+    /**
+     * @brief Update trie-based Os and Ns names index.
+     */
+    void updateTrieIndex();
+
+    bool findLongestPrefixWord(std::string& s, std::string& r) const {
+        return trie->findLongestPrefixWord(s, r);
+    }
+#else
+    /**
+     * @brief Update indice of all Ns and Os.
+     */
+    void updateThingsIndex();
+
+    std::vector<Thing*> getThings() { return things; }
+#endif
 
     /**
      * @brief Clear indices.
@@ -61,18 +91,12 @@ protected:
      */
     static bool aliasSizeComparator(const Thing* t1, const Thing* t2);
 
-    /**
-     * @brief Update indice of all Ns and Os.
-     */
-    void updateThingsIndex();
-    /**
-     * @brief Update trie-based Os and Ns names index.
-     */
-    void updateTrieIndex();
+#ifdef MF_MD_2_HTML_CMARK
     /**
      * @brief Add thing's name (and abbrev) to trie.
      */
     void addThingToTrie(const Thing *t);
+#endif
 };
 
 }
