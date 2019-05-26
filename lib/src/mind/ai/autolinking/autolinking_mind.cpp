@@ -27,16 +27,17 @@ namespace m8r {
 using namespace std;
 
 AutolinkingMind::AutolinkingMind(Mind& mind)
-    : mind{mind}
+    : mind{mind},
+      trie{nullptr}
+{
+}
+
+AutolinkingMind::~AutolinkingMind()
 {
     if(trie) {
         delete trie;
         trie = nullptr;
     }
-}
-
-AutolinkingMind::~AutolinkingMind()
-{
 }
 
 bool AutolinkingMind::aliasSizeComparator(const Thing* t1, const Thing* t2)
@@ -109,14 +110,18 @@ void AutolinkingMind::update(const std::string& oldName, const std::string& newN
 {
     MF_DEBUG("Autolink update: '" << oldName << " > '" << newName << "'" << endl);
 
-    if(oldName.size()) {
-        Thing t{oldName};
-        removeThingFromTrie(&t);
+    if(oldName.compare(newName)) {
+        if(oldName.size()) {
+            Thing t{oldName};
+            removeThingFromTrie(&t);
+        }
+        if(newName.size()) {
+            Thing t{newName};
+            addThingToTrie(&t);
+        }
     }
-    if(newName.size()) {
-        Thing t{newName};
-        addThingToTrie(&t);
-    }
+
+    MF_DEBUG("DONE autolink update: '" << oldName << "' > '" << newName << "'" << endl);
 }
 
 void AutolinkingMind::clear()

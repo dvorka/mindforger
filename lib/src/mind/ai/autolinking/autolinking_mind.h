@@ -24,6 +24,7 @@
 #include <vector>
 #include <chrono>
 
+#include "../../../debug.h"
 #include "../../ontology/thing_class_rel_triple.h"
 #include "../../../gear/trie.h"
 

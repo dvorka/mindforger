@@ -43,30 +43,31 @@ void Trie::destroy(Node* n)
 
 void Trie::addWord(string s)
 {
-    MF_DEBUG("  trie.add(): '" << s << "'" << endl);
+    MF_DEBUG("trie.add(" << s << ")" << endl);
+    if(s.size()) {
+        Node* current = root;
 
-    Node* current = root;
-
-    if(!s.size()) {
-        // support of empty words is NOT desired
-        // current->setWordMarker();
-        return;
-    }
-
-    for(size_t i=0; i<s.size(); i++) {
-        Node* child = current->findChild(s[i]);
-
-        if(child != nullptr) {
-            current = child;
-        } else {
-            Node* n= new Node();
-            n->setContent(s[i]);
-            current->appendChild(n);
-            current = n;
+        if(!s.size()) {
+            // support of empty words is NOT desired
+            // current->setWordMarker();
+            return;
         }
 
-        if(i == s.size()-1) {
-            current->setWordMarker();
+        for(size_t i=0; i<s.size(); i++) {
+            Node* child = current->findChild(s[i]);
+
+            if(child != nullptr) {
+                current = child;
+            } else {
+                Node* n= new Node();
+                n->setContent(s[i]);
+                current->appendChild(n);
+                current = n;
+            }
+
+            if(i == s.size()-1) {
+                current->setWordMarker();
+            }
         }
     }
 }
@@ -85,29 +86,32 @@ void Trie::addWord(string s)
  */
 bool Trie::removeWord(const string& s, bool decRefCountOnly)
 {
-    if(root->children().empty()) {
-        return false;
-    } else {
-        Node* current = root;
-        while(current != nullptr) {
-            for(size_t i=0; i<s.size(); i++) {
-                Node* n = current->findChild(s[i]);
-                if(n == nullptr) {
-                    return false;
+    MF_DEBUG("trie.remove(" << s << ")" << endl);
+    if(s.size()) {
+        if(root->children().empty()) {
+            return false;
+        } else {
+            Node* current = root;
+            while(current != nullptr) {
+                for(size_t i=0; i<s.size(); i++) {
+                    Node* n = current->findChild(s[i]);
+                    if(n == nullptr) {
+                        return false;
+                    }
+                    current = n;
                 }
-                current = n;
-            }
 
-            if(current->wordMarker()) {
-                if(decRefCountOnly) {
-                    current->decRefCount();
-                } else {
-                    current->setRefCount(0);
+                if(current->wordMarker()) {
+                    if(decRefCountOnly) {
+                        current->decRefCount();
+                    } else {
+                        current->setRefCount(0);
+                    }
+                    return true;
                 }
-                return true;
             }
+            return false;
         }
-        return false;
     }
 }
 

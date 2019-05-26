@@ -20,9 +20,12 @@
 
 namespace m8r {
 
+using namespace std;
+
 CommonWordsBlacklist::CommonWordsBlacklist()
     : wordBlacklist{}
 {
+    MF_DEBUG("Common words blacklist:" << endl);
     wordBlacklist.addWord("the");
     wordBlacklist.addWord("of");
     wordBlacklist.addWord("and");

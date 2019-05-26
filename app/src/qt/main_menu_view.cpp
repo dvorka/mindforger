@@ -75,7 +75,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindThink->setStatusTip(tr("Think to suggest matching, similar and associated Notes while searching, reading and writing"));
 
     // think ... toggle mental processes ~ enable associations/similarity/search based suggestions on searching/reading/writing notes
-    actionMindAutolink = new QAction(tr("&Autolink (experimental)"), mainWindow);
+    actionMindAutolink = new QAction(tr("&Autolink"), mainWindow);
     actionMindAutolink->setCheckable(true);
     actionMindAutolink->setStatusTip(tr("Automatically inject links to relevant Notebooks and Notes when browsing HTML preview"));
     actionMindAutolink->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
