@@ -83,6 +83,83 @@ CmarkAhoCorasickAutolinkingPreprocessor::~CmarkAhoCorasickAutolinkingPreprocesso
  * @brief Inject links into MD represented as a list of strings.
  */
 void CmarkAhoCorasickAutolinkingPreprocessor::process(
+        const vector<string*>& md,
+        string& amd)
+{
+#ifdef MF_MD_2_HTML_CMARK
+
+#ifdef DO_MF_DEBUG
+    MF_DEBUG("[Autolinking] begin CMARK-AHO" << endl);
+    string ds{};
+    toString(md, ds);
+    MF_DEBUG("[Autolinking] input:" << endl << ">>" << ds << "<<" << endl);
+
+    auto begin = chrono::high_resolution_clock::now();
+#endif
+
+    vector<string*> block{};
+    string blockString{};
+
+
+    // TODO rewrite
+    std::vector<std::string*> amdl{};
+
+    insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
+
+    if(md.size()) {
+
+        // IMPROVE measure time in here and if over give limit, than STOP injecting
+        // and leave i.e. what happens is that a time SLA will be fulfilled and
+        // some part (prefix) of the input MD will be autolinked.
+
+        bool inCodeBlock=false, inMathBlock=false;
+        for(string* l:md) {
+            // skip code/math/... blocks
+            if(l && stringStartsWith(*l, CODE_BLOCK)) {
+                block.push_back(l);
+                if(inCodeBlock) {
+                    // TODO make it function
+                    blockString.clear();
+                    toString(block, blockString);
+                    amd.append(blockString);
+                    block.clear();
+                }
+                // else  TODO AST 2 MD and inject
+                inCodeBlock = !inCodeBlock;
+            } else if(l && stringStartsWith(*l, MATH_BLOCK)) {
+                block.push_back(l);
+                if(inMathBlock) {
+                    // TODO make it function
+                    blockString.clear();
+                    toString(block, blockString);
+                    amd.append(blockString);
+                    block.clear();
+                }
+                // else  TODO AST 2 MD and inject
+                inMathBlock= !inMathBlock;
+            } else {
+                block.push_back(l);
+            }
+        }
+    }
+
+    // TODO AST 2 MD and inject
+
+    toString(amdl, amd);
+
+#ifdef DO_MF_DEBUG
+    MF_DEBUG("[Autolinking] output:" << endl << ">>" << amd << "<<" << endl);
+
+    auto end = chrono::high_resolution_clock::now();
+    MF_DEBUG("[Autolinking] MD autolinked in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
+#endif
+
+#else
+    toString(md, amd);
+#endif
+}
+
+void CmarkAhoCorasickAutolinkingPreprocessor::processLineByLine(
         const std::vector<std::string*>& md,
         std::string& amd)
 {
