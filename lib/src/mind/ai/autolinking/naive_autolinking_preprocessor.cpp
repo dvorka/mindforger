@@ -60,11 +60,45 @@ bool NaiveAutolinkingPreprocessor::containsLinkCodeMath(const string* line)
     return false;
 }
 
+void NaiveAutolinkingPreprocessor::updateThingsIndex()
+{
+    // IMPROVE update indices only if an O/N is modified (except writing read timestamps)
+
+#ifdef DO_MF_DEBUG
+    MF_DEBUG("[Autolinking] Updating indices..." << endl);
+    auto begin = chrono::high_resolution_clock::now();
+#endif
+
+    things.clear();
+
+    // Os
+    std::vector<Outline*> outlines;
+    const vector<Outline*>& os=mind.getOutlines();
+    for(Outline* o:os) outlines.push_back(o);
+    std::sort(outlines.begin(), outlines.end(), aliasSizeComparator);
+    for(Thing* t:outlines) things.push_back(t);
+
+    // Ns
+    std::vector<Note*> notes;
+    mind.getAllNotes(notes);
+    // sort names from longest to shortest (to have best ~ longest matches)
+    std::sort(notes.begin(), notes.end(), aliasSizeComparator);
+    for(Thing* t:notes) things.push_back(t);
+
+#ifdef DO_MF_DEBUG
+    auto end = chrono::high_resolution_clock::now();
+    MF_DEBUG("  Indices updated in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
+#endif
+}
+
 void NaiveAutolinkingPreprocessor::process(const vector<string*>& md, string &amd)
 {
     MF_DEBUG("[Autolinking] NAIVE" << endl);
 
     insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
+
+    // IMPROVE: inefficient ~ used as naive autolinker is for experiments only
+    updateThingsIndex();
 
     std::vector<std::string*> amdl;
 
@@ -205,5 +239,11 @@ void NaiveAutolinkingPreprocessor::process(const vector<string*>& md, string &am
     toString(amdl, amd);
 }
 
+void NaiveAutolinkingPreprocessor::clear()
+{
+    things.clear();
+    MF_DEBUG("[Autolinking] indices CLEARed" << endl);
+}
+
 } // m8r namespace
-#endif
+#endif // MF_MD_2_HTML_CMARK

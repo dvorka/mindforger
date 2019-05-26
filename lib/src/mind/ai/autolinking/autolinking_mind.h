@@ -19,29 +19,27 @@
 #ifndef M8R_AUTOLINKING_MIND_H
 #define M8R_AUTOLINKING_MIND_H
 
+#ifdef MF_MD_2_HTML_CMARK
+
 #include <vector>
 #include <chrono>
 
+#include "../../ontology/thing_class_rel_triple.h"
 #include "../../../gear/trie.h"
-#include "../../mind.h"
 
 namespace m8r {
 
 class Mind;
 
 /**
- * @brief Things autolinking indices and inferences.
+ * @brief Autolinking indices and inferences.
  */
 class AutolinkingMind
 {
 private:
-#ifdef MF_MD_2_HTML_CMARK
-    Trie* trie;
-#else
-    std::vector<Thing*> things;
-#endif
-
     Mind& mind;
+
+    Trie* trie;
 
 public:
     explicit AutolinkingMind(Mind& mind);
@@ -54,36 +52,26 @@ public:
     /**
      * @brief Rebuild indices (like trie) e.g. on new MD/repository load.
      */
-    virtual void reindex() {
-#ifdef MF_MD_2_HTML_CMARK
+    void reindex() {
         updateTrieIndex();
-#else
-        updateThingsIndex();
-#endif
     }
 
-#ifdef MF_MD_2_HTML_CMARK
     /**
-     * @brief Update trie-based Os and Ns names index.
+     * @brief Update indices on a thing rename.
      */
-    void updateTrieIndex();
+    void update(const std::string& oldName, const std::string& newName);
 
+    /**
+     * @brief Find longest autolinking match.
+     */
     bool findLongestPrefixWord(std::string& s, std::string& r) const {
         return trie->findLongestPrefixWord(s, r);
     }
-#else
-    /**
-     * @brief Update indice of all Ns and Os.
-     */
-    void updateThingsIndex();
-
-    std::vector<Thing*> getThings() { return things; }
-#endif
 
     /**
      * @brief Clear indices.
      */
-    virtual void clear();
+   void clear();
 
 protected:
     /**
@@ -91,13 +79,24 @@ protected:
      */
     static bool aliasSizeComparator(const Thing* t1, const Thing* t2);
 
-#ifdef MF_MD_2_HTML_CMARK
+    static std::string getLowerName(const std::string& name);
+
+    /**
+     * @brief Update trie-based Os and Ns names index.
+     */
+    void updateTrieIndex();
+
     /**
      * @brief Add thing's name (and abbrev) to trie.
      */
     void addThingToTrie(const Thing *t);
-#endif
+
+    /**
+     * @brief Remove thing's name (and abbrev) from trie.
+     */
+    void removeThingFromTrie(const Thing *t);
 };
 
 }
+#endif // MF_MD_2_HTML_CMARK
 #endif // M8R_AUTOLINKING_MIND_H

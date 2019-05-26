@@ -83,7 +83,7 @@ void Trie::addWord(string s)
  * are not destroyed immediately, but when the whole trie
  * is destroyed.
  */
-bool Trie::removeWord(string& s, bool decRefCountOnly)
+bool Trie::removeWord(const string& s, bool decRefCountOnly)
 {
     if(root->children().empty()) {
         return false;
@@ -132,7 +132,7 @@ bool Trie::findWord(string& s) const
     }
 }
 
-bool Trie::findLongestPrefixWord(string& s, string& r) const
+bool Trie::findLongestPrefixWord(const string& s, string& r) const
 {
     if(root->children().empty()) {
         return false;

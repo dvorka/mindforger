@@ -87,6 +87,10 @@ void OutlineHeaderEditPresenter::slotSaveOutlineHeader()
         if(!view->getName().isEmpty()) {
             name.assign(view->getName().toStdString());
         }
+
+        // ensure autolinking indices are updated on O rename
+        mwp->getMind()->autolinkUpdate(currentOutline->getName(), view->getName().toStdString());
+
         currentOutline->setName(name);
 
         if(!view->isDescriptionEmpty()) {

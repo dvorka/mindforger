@@ -18,6 +18,10 @@
 */
 #include "autolinking_mind.h"
 
+#include "../../mind.h"
+
+#ifdef MF_MD_2_HTML_CMARK
+
 namespace m8r {
 
 using namespace std;
@@ -38,37 +42,6 @@ AutolinkingMind::~AutolinkingMind()
 bool AutolinkingMind::aliasSizeComparator(const Thing* t1, const Thing* t2)
 {
     return t1->getAutolinkingAlias().size() > t2->getAutolinkingAlias().size();
-}
-
-void AutolinkingMind::updateThingsIndex()
-{
-    // IMPROVE update indices only if an O/N is modified (except writing read timestamps)
-
-#ifdef DO_MF_DEBUG
-    MF_DEBUG("[Autolinking] Updating indices..." << endl);
-    auto begin = chrono::high_resolution_clock::now();
-#endif
-
-    things.clear();
-
-    // Os
-    std::vector<Outline*> outlines;
-    const vector<Outline*>& os=mind.getOutlines();
-    for(Outline* o:os) outlines.push_back(o);
-    std::sort(outlines.begin(), outlines.end(), aliasSizeComparator);
-    for(Thing* t:outlines) things.push_back(t);
-
-    // Ns
-    std::vector<Note*> notes;
-    mind.getAllNotes(notes);
-    // sort names from longest to shortest (to have best ~ longest matches)
-    std::sort(notes.begin(), notes.end(), aliasSizeComparator);
-    for(Thing* t:notes) things.push_back(t);
-
-#ifdef DO_MF_DEBUG
-    auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("  Indices updated in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
-#endif
 }
 
 void AutolinkingMind::updateTrieIndex()
@@ -110,21 +83,44 @@ void AutolinkingMind::updateTrieIndex()
 #endif
 }
 
+string AutolinkingMind::getLowerName(const std::string& name)
+{
+    string lowerName{name};
+    lowerName[0] = std::tolower(name[0]);
+    return lowerName;
+}
+
 void AutolinkingMind::addThingToTrie(const Thing *t) {
     // name
     trie->addWord(t->getAutolinkingName());
     // name w/ lowercase 1st letter
-    string lowerName{t->getAutolinkingName()};
-    lowerName[0] = std::tolower(t->getAutolinkingName()[0]);
-    trie->addWord(lowerName);
+    trie->addWord(getLowerName(t->getAutolinkingName()));
     // abbrev (if present)
     trie->addWord(t->getAutolinkingAbbr());
 }
 
+void AutolinkingMind::removeThingFromTrie(const Thing *t) {
+    trie->removeWord(t->getAutolinkingName());
+    trie->removeWord(getLowerName(t->getAutolinkingName()));
+    trie->removeWord(t->getAutolinkingAbbr());
+}
+
+void AutolinkingMind::update(const std::string& oldName, const std::string& newName)
+{
+    MF_DEBUG("Autolink update: '" << oldName << " > '" << newName << "'" << endl);
+
+    if(oldName.size()) {
+        Thing t{oldName};
+        removeThingFromTrie(&t);
+    }
+    if(newName.size()) {
+        Thing t{newName};
+        addThingToTrie(&t);
+    }
+}
+
 void AutolinkingMind::clear()
 {
-    things.clear();
-
     if(trie) {
         delete trie;
     }
@@ -134,3 +130,4 @@ void AutolinkingMind::clear()
 }
 
 } // m8r namespace
+#endif // MF_MD_2_HTML_CMARK

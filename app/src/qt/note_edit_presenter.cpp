@@ -86,14 +86,14 @@ void NoteEditPresenter::slotSaveNote()
 {
     // set UI data to current note
     if(currentNote) {
-        // update autolinking indices
-        mwp->getMind()->remind().getxxx
-
-
         string name{"Note"};
         if(!view->getName().isEmpty()) {
             name.assign(view->getName().toStdString());
         }
+
+        // ensure autolinking indices are updated on N rename
+        mwp->getMind()->autolinkUpdate(currentNote->getName(), view->getName().toStdString());
+
         currentNote->setName(name);
 
         if(!view->isDescriptionEmpty()) {

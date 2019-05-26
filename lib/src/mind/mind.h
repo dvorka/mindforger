@@ -26,7 +26,6 @@
 
 #include "memory.h"
 #include "knowledge_graph.h"
-#include "ai/autolinking/autolinking_mind.h"
 #include "ai/ai.h"
 #include "associated_notes.h"
 #include "ontology/thing_class_rel_triple.h"
@@ -282,7 +281,8 @@ public:
      * Autolinking
      */
 
-    AutolinkingMind* autolink() const { return autolinking; }
+    void autolinkUpdate(const std::string& oldName, const std::string& newName) const;
+    bool autolinkFindLongestPrefixWord(std::string& s, std::string& r) const;
 
     /*
      * Knowledge graph

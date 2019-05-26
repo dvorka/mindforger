@@ -18,8 +18,12 @@
  */
 #include "mind.h"
 
-#include "ai/autolinking/naive_autolinking_preprocessor.h"
-#include "ai/autolinking/cmark_aho_corasick_autolinking_preprocessor.h"
+#ifdef MF_MD_2_HTML_CMARK
+  #include "ai/autolinking/autolinking_mind.h"
+  #include "ai/autolinking/cmark_aho_corasick_autolinking_preprocessor.h"
+# else
+  #include "ai/autolinking/naive_autolinking_preprocessor.h"
+#endif
 
 using namespace std;
 
@@ -36,7 +40,11 @@ Mind::Mind(Configuration &configuration)
       htmlRepresentation{ontology, autoInterceptor},
       mdConfigRepresentation(new MarkdownConfigurationRepresentation{}),
       memory{configuration, ontology, htmlRepresentation},
+#ifdef MF_MD_2_HTML_CMARK
       autolinking{new AutolinkingMind{*this}},
+#else
+      autolinking{nullptr}
+#endif
       exclusiveMind{},
       timeScopeAspect{},
       tagsScopeAspect{ontology},
@@ -78,7 +86,9 @@ bool Mind::learn()
         MF_DEBUG("Learning..." << endl);
         mindAmnesia();
         memory.learn();
-        autolink()->reindex();
+#ifdef MF_MD_2_HTML_CMARK
+        autolinking->reindex();
+#endif
         MF_DEBUG("Mind LEARNED " << memory.getOutlinesCount() << " Os" << endl);
         return true;
     } else {
@@ -234,8 +244,9 @@ bool Mind::mindAmnesia()
 
         // forget EVERYTHING
         memory.amnesia();
-        autolink()->clear();
-
+#ifdef MF_MD_2_HTML_CMARK
+        autolinking->clear();
+#endif
         MF_DEBUG("Mind WITH amnesia" << endl);
         return true;
     } else {
@@ -245,7 +256,27 @@ bool Mind::mindAmnesia()
 }
 
 /*
- * REMEMBERING
+ * Autolinking
+ */
+
+void Mind::autolinkUpdate(const std::string& oldName, const std::string& newName) const
+{
+#ifdef MF_MD_2_HTML_CMARK
+    autolinking->update(oldName, newName);
+#endif
+}
+
+bool Mind::autolinkFindLongestPrefixWord(std::string& s, std::string& r) const
+{
+#ifdef MF_MD_2_HTML_CMARK
+    return autolinking->findLongestPrefixWord(s, r);
+#elif
+    return false;
+#endif
+}
+
+/*
+ * Remembering
  */
 
 const vector<Note*>& Mind::getMemoryDwell(int pageSize) const
@@ -930,7 +961,7 @@ void Mind::noteDemote(Note* note, Outline::Patch* patch)
 
 void Mind::noteOnRename(const std::string& oldName, const std::string& newName)
 {
-    throw new MindForgerException("Not implemented!");
+    autolinking->update(oldName, newName);
 }
 
 void Mind::onRemembering()

@@ -45,6 +45,8 @@ private:
     std::regex mathRegex;
     std::regex httpRegex;
 
+    std::vector<Thing*> things;
+
 public:
     explicit NaiveAutolinkingPreprocessor(Mind& mind);
     NaiveAutolinkingPreprocessor(const NaiveAutolinkingPreprocessor&) = delete;
@@ -54,9 +56,12 @@ public:
     virtual ~NaiveAutolinkingPreprocessor();
 
     virtual void process(const std::vector<std::string*>& md, std::string& amd) override;
+    void clear();
 
 private:
     bool containsLinkCodeMath(const std::string* line);
+    void updateThingsIndex();
+    std::vector<Thing*> getThings() { return things; }
 };
 
 }

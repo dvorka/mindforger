@@ -359,7 +359,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* orig
         // try to match word
         pre.clear();
         MF_DEBUG("  Trie search txt: '" << txt << "'" << endl);
-        if(mind.autolink()->findLongestPrefixWord(txt, pre)) {
+        if(mind.autolinkFindLongestPrefixWord(txt, pre)) {
             MF_DEBUG("    Matched prefix: '" << pre << "'" << endl);
 
             // avoid word PREFIX matches ~ ensure that WHOLE world is matched:

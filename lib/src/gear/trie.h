@@ -88,14 +88,13 @@ public:
      */
     bool findWord(std::string& s) const;
     /**
-     * @brief Remove word from trie.
-     */
-    bool removeWord(std::string& s, bool decRefCountOnly=false);
-    /**
      * @brief Find longest word which is prefix of s.
      */
-    bool findLongestPrefixWord(std::string& s, std::string& r) const;
-    void deleteWord(std::string s);
+    bool findLongestPrefixWord(const std::string& s, std::string& r) const;
+    /**
+     * @brief Remove word from trie.
+     */
+    bool removeWord(const std::string& s, bool decRefCountOnly=false);
 
     /**
      * @brief Print trie (backgracking).

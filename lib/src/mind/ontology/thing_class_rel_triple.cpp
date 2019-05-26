@@ -36,7 +36,7 @@ Thing::Thing()
 
 Thing::Thing(const string name)
 {
-    this->name = name;
+    setName(name);
 }
 
 Thing::~Thing()
