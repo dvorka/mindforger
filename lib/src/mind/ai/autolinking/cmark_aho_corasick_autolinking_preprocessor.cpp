@@ -118,12 +118,17 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(
             if(l && stringStartsWith(*l, CODE_BLOCK)) {
                 block.push_back(l);
                 if(inCodeBlock) {
+                    // end of block > append it as it is
                     // TODO make it function
                     blockString.clear();
                     toString(block, blockString);
                     amd.append(blockString);
                     block.clear();
+                    MF_DEBUG("'" << amd << "'" << endl);
+                } else {
+                    // beginning of block > autolink and append
                 }
+
                 // else  TODO AST 2 MD and inject
                 inCodeBlock = !inCodeBlock;
             } else if(l && stringStartsWith(*l, MATH_BLOCK)) {
@@ -134,6 +139,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(
                     toString(block, blockString);
                     amd.append(blockString);
                     block.clear();
+                    MF_DEBUG("'" << amd << "'" << endl);
                 }
                 // else  TODO AST 2 MD and inject
                 inMathBlock= !inMathBlock;
@@ -144,8 +150,13 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(
     }
 
     // TODO AST 2 MD and inject
+    if(block.size()) {
+        blockString.clear();
+        toString(block, blockString);
+        amd.append(blockString);
+    }
 
-    toString(amdl, amd);
+    MF_DEBUG("'" << amd << "'" << endl);
 
 #ifdef DO_MF_DEBUG
     MF_DEBUG("[Autolinking] output:" << endl << ">>" << amd << "<<" << endl);

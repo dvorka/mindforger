@@ -110,9 +110,10 @@ bool Trie::removeWord(const string& s, bool decRefCountOnly)
                     return true;
                 }
             }
-            return false;
         }
     }
+
+    return false;
 }
 
 bool Trie::findWord(string& s) const

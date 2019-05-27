@@ -100,6 +100,7 @@ public:
      * Provide previous Thing's name to update indices.
      */
     virtual void process(const std::vector<std::string*>& md, std::string& amd) override;
+    virtual void processLineByLine(const std::vector<std::string*>& md, std::string& amd);
 
 private:
     /**
