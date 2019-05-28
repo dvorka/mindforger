@@ -100,9 +100,13 @@ public:
      * Provide previous Thing's name to update indices.
      */
     virtual void process(const std::vector<std::string*>& md, std::string& amd) override;
-    virtual void processLineByLine(const std::vector<std::string*>& md, std::string& amd);
 
 private:
+    virtual void processLineByLine(const std::vector<std::string*>& md, std::string& amd);
+
+    void processProtectedBlock(std::vector<std::string*>& block, std::string& amd);
+    void processAndAutolinkBlock(std::vector<std::string*>& block, std::string& amd);
+
     /**
      * @brief Parse MD line to AST to get MD snippets which are safe for links injection.
      */
