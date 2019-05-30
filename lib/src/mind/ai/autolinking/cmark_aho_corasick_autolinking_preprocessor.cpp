@@ -21,7 +21,7 @@
 /*
  * High priority:
  *
- * - move trie to memory(or mind) and keep it up to date there (based on mind state)
+ * - move trie to memory (or mind) and keep it up to date there (based on mind state)
  * - row based MD2HTML > block based MD2>HTML
  * - O or N edit: always DELETE old name and add new name to TRIE
  *
@@ -97,9 +97,13 @@ void CmarkAhoCorasickAutolinkingPreprocessor::processAndAutolinkBlock(
         string& amd)
 {
     if(block.size()) {
-        string blockString{};
+        string blockString{}, autolinkedBlock{};
         toString(block, blockString);
-        amd.append(blockString);
+        MF_DEBUG("111");
+        parseMarkdownLine(&blockString, &autolinkedBlock);
+        MF_DEBUG("222");
+        amd.append(autolinkedBlock);
+        MF_DEBUG("333");
         block.clear();
     }
     MF_DEBUG("Appended AUTOLINKED block:" << endl << "'" << amd << "'" << endl);
@@ -153,7 +157,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(
         }
     }
 
-    processProtectedBlock(block, amd);
+    processAndAutolinkBlock(block, amd);
 
 #ifdef DO_MF_DEBUG
     MF_DEBUG("[Autolinking] output:" << endl << ">>>" << amd << "<<<" << endl);
