@@ -118,13 +118,15 @@ TEST(AutolinkingCmarkTestCase, CmarkAst)
     }
 }
 
-TEST(AutolinkingCmarkTestCase, MicroRepo)
+TEST(AutolinkingCmarkTestCase, NanoRepo)
 {
-    string repositoryPath{"/lib/test/resources/autolinking-micro-repository"};
+    // GIVEN
+    // autolink 1 file with 1 section
+    string repositoryPath{"/lib/test/resources/autolinking-nano-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
-    config.setConfigFilePath("/tmp/cfg-act-amr.md");
+    config.setConfigFilePath("/tmp/cfg-act-anr.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
     m8r::Mind mind(config);
     mind.learn();
@@ -134,20 +136,15 @@ TEST(AutolinkingCmarkTestCase, MicroRepo)
     cout << endl << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
     ASSERT_EQ(1, mind.remind().getOutlinesCount());
 
-    // autolinking
+    // WHEN
     cout << endl << endl << "Testing MD autolinking:" << endl;
     m8r::CmarkAhoCorasickAutolinkingPreprocessor autolinker{mind};
     m8r::Note* n = mind.remind().getOutlines()[0]->getNotes()[0];
-    vector<string*> autolinkedMd{};
+    string autolinkedMd{};
     autolinker.process(n->getDescription(), autolinkedMd);
 
-    string autolinkedString{};
-    m8r::toString(autolinkedMd, autolinkedString);
-    cout << "= BEGIN AUTO MD =" << endl << autolinkedString << endl << "= END AUTO MD =" << endl;
-
-    for(string* s:autolinkedMd) {
-        delete s;
-    }
+    // THEN
+    cout << "= BEGIN AUTO MD =" << endl << autolinkedMd << endl << "= END AUTO MD =" << endl;
 }
 
 TEST(AutolinkingCmarkTestCase, BasicRepo)
@@ -169,15 +166,9 @@ TEST(AutolinkingCmarkTestCase, BasicRepo)
 
     cout << endl << endl << "Testing MD autolinking:" << endl;
     m8r::Note* n = mind.remind().getOutlines()[0]->getNotes()[0];
-    vector<string*> autolinkedMd{};
+    string autolinkedMd{};
     autolinker.process(n->getDescription(), autolinkedMd);
-    string autolinkedString{};
-    m8r::toString(autolinkedMd, autolinkedString);
-    cout << "= BEGIN AUTO MD =" << endl << autolinkedString << endl << "= END AUTO MD =" << endl;
-
-    for(string* s:autolinkedMd) {
-        delete s;
-    }
+    cout << "= BEGIN AUTO MD =" << endl << autolinkedMd << endl << "= END AUTO MD =" << endl;
 }
 
 #endif // MF_MD_2_HTML_CMARK

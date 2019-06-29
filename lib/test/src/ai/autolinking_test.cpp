@@ -36,6 +36,7 @@ extern void toString(const std::vector<std::string*> ss, std::string& os);
 
 using namespace std;
 
+#ifndef MF_MD_2_HTML_CMARK
 
 TEST(AutolinkingTestCase, NaiveAutolinker)
 {
@@ -127,3 +128,5 @@ TEST(AutolinkingTestCase, NaiveCrashAndBurn)
         delete s;
     }
 }
+
+#endif
