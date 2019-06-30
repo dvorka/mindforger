@@ -30,6 +30,7 @@ export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to d
 
 # tests
 export OPTION_TEST="AutolinkingCmarkTestCase.*"
+export OPTION_TEST="AutolinkingCmarkTestCase.NanoRepo"
 #export OPTION_TEST="AutolinkingTestCase.*"
 #export OPTION_TEST="AutolinkingTestCase.CrashAndBurn"
 #export OPTION_TEST="FtsTestCase.*"
