@@ -41,7 +41,7 @@ void Trie::destroy(Node* n)
     delete n;
 }
 
-void Trie::addWord(string s)
+void Trie::addWord(const string& s)
 {
     MF_DEBUG("trie.add(" << s << ")" << endl);
     if(s.size()) {
@@ -59,7 +59,7 @@ void Trie::addWord(string s)
             if(child != nullptr) {
                 current = child;
             } else {
-                Node* n= new Node();
+                Node* n = new Node();
                 n->setContent(s[i]);
                 current->appendChild(n);
                 current = n;

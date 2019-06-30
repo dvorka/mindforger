@@ -82,7 +82,7 @@ public:
 
     bool empty() const { return root->children().empty(); }
 
-    void addWord(std::string s);
+    void addWord(const std::string& s);
     /**
      * @brief Is the word known to trie?
      */

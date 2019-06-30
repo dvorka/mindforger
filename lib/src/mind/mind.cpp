@@ -68,6 +68,7 @@ Mind::~Mind()
     delete knowledgeGraph;
     delete mdConfigRepresentation;
     delete autoInterceptor;
+    delete autolinking;
 
     // - Memory destruct outlines
     // - allNotesCache Notes is just container referencing Memory's Outlines

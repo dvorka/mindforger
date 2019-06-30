@@ -141,10 +141,44 @@ TEST(AutolinkingCmarkTestCase, NanoRepo)
     m8r::CmarkAhoCorasickAutolinkingPreprocessor autolinker{mind};
     m8r::Note* n = mind.remind().getOutlines()[0]->getNotes()[0];
     string autolinkedMd{};
+    // multiple iterations to check that there are no memory leaks
+    for(int i=0; i<1; i++) {
+        autolinker.process(n->getDescription(), autolinkedMd);
+    }
+
+    // THEN
+    cout << "= BEGIN AUTO MD =" << endl << autolinkedMd << endl << "= END AUTO MD =" << endl;
+    ASSERT_STREQ("Text of [AAA](mindforger://AAA).", autolinkedMd.c_str());
+}
+
+TEST(AutolinkingCmarkTestCase, MicroRepo)
+{
+    // GIVEN
+    // autolink 1 file with 1 section
+    string repositoryPath{"/lib/test/resources/autolinking-micro-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-act-anr.md");
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think().get();
+    cout << endl << "Statistics:";
+    cout << endl << "  Outlines: " << mind.remind().getOutlinesCount();
+    cout << endl << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
+    ASSERT_EQ(1, mind.remind().getOutlinesCount());
+
+    // WHEN
+    cout << endl << endl << "Testing MD autolinking:" << endl;
+    m8r::CmarkAhoCorasickAutolinkingPreprocessor autolinker{mind};
+    m8r::Note* n = mind.remind().getOutlines()[0]->getNotes()[0];
+    string autolinkedMd{};
     autolinker.process(n->getDescription(), autolinkedMd);
 
     // THEN
     cout << "= BEGIN AUTO MD =" << endl << autolinkedMd << endl << "= END AUTO MD =" << endl;
+    ASSERT_STREQ("Text of [AAA](mindforger://AAA).", autolinkedMd.c_str());
 }
 
 TEST(AutolinkingCmarkTestCase, BasicRepo)
