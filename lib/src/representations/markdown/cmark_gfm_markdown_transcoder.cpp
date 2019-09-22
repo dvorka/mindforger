@@ -42,11 +42,11 @@ string* CmarkGfmMarkdownTranscoder::to(RepresentationType format, const string* 
 {
     // options
     unsigned int mfOptions = config.getMd2HtmlOptions();
-    if (mfOptions != lastMfOptions) {
+    if(mfOptions != lastMfOptions) {
         lastMfOptions = mfOptions;
     }
 #ifdef MF_MD_2_HTML_CMARK
-    if (format == RepresentationType::HTML) {
+    if(format == RepresentationType::HTML) {
         //TODO VH: move to some general init code?
         cmark_gfm_core_extensions_ensure_registered();
         cmark_mem *mem = cmark_get_default_mem_allocator();
