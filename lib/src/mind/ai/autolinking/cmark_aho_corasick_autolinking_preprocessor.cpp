@@ -22,7 +22,10 @@
  * High priority:
  *
  * - move trie to memory (or mind) and keep it up to date there (based on mind state)
- * - row based MD2HTML > block based MD2>HTML
+ * - switch from row based MD>HTML TO block based MD2>HTML
+ *   - the reason is that MD lines cannot be correctly converted w/o context
+ *     e.g. multi-item deep bullet lists (tab prefix causes parser to make it code block)
+ *   - the solution is to let CMARK parse MD, traverse and inject links to AST as needed
  * - O or N edit: always DELETE old name and add new name to TRIE
  *
  * - autolink tags: if no N/O found on click, then open tags dialog
