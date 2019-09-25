@@ -21,6 +21,7 @@
 /*
  * High priority:
  *
+ * - unit tests first, manual tests then
  * - move trie to memory (or mind) and keep it up to date there (based on mind state)
  * - switch from row based MD>HTML TO block based MD2>HTML
  *   - the reason is that MD lines cannot be correctly converted w/o context
