@@ -4,7 +4,7 @@
 #define MINDFORGER_VERSION_STRING "1.50.0"
 #define MINDFORGER_VERSION_DWORD 1,50,0,2
 #define MINDFORGER_APP_NAME   "MindForger"
-#define MINDFORGER_APP_DESCIPTION  "MindForger Thinking Notebook"
+#define MINDFORGER_APP_DESCRIPTION  "MindForger Thinking Notebook"
 #define MINDFORGER_APP_AUTHOR "Martin Dvorak"
 #define MINDFORGER_APP_URL "https://www.mindforger.com"
 #define MINDFORGER_APP_COMPANY   MINDFORGER_APP_NAME
