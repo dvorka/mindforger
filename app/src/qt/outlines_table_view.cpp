@@ -38,6 +38,33 @@ OutlinesTableView::OutlinesTableView(QWidget *parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
+void OutlinesTableView::keyPressEvent(QKeyEvent* event)
+{
+    if(!(event->modifiers() & Qt::AltModifier)
+         &&
+       !(event->modifiers() & Qt::ControlModifier)
+         &&
+       !(event->modifiers() & Qt::ShiftModifier))
+    {
+        switch(event->key()) {
+        case Qt::Key_Return:
+        case Qt::Key_Right:
+            emit signalShowSelectedOutline();
+            break;
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+        // IMPROVE left to cancel selection
+        case Qt::Key_Left:
+            QTableView::keyPressEvent(event);
+            break;
+        }
+
+        return;
+    }
+
+    QTableView::keyPressEvent(event);
+}
+
 void OutlinesTableView::resizeEvent(QResizeEvent* event)
 {
     MF_DEBUG("OutlinesTableView::resizeEvent " << event << std::endl);

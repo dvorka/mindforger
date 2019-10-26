@@ -48,4 +48,13 @@ void OutlinesTablePresenter::refresh(const vector<Outline*>& outlines)
     }
 }
 
+int OutlinesTablePresenter::getCurrentRow() const
+{
+    QModelIndexList indexes = view->selectionModel()->selection().indexes();
+    for(int i=0; i<indexes.count(); i++) {
+        return indexes.at(i).row();
+    }
+    return NO_ROW;
+}
+
 } // m8r namespace

@@ -47,7 +47,7 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
             signalFromOutlineTreeToOutlines();
         }
     } else {
-        // TODO up/down/promote/demote note tree changes
+        // up/down/promote/demote note tree changes
         if(event->modifiers() & Qt::ControlModifier){
             if(event->modifiers() & Qt::ShiftModifier) {
                 switch(event->key()) {
@@ -94,10 +94,14 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
                 emit signalSelectNextRow();
                 break;
             case Qt::Key_Return:
+            case Qt::Key_Right:
                 emit signalEdit();
                 break;
             case Qt::Key_Delete:
                 emit signalForget();
+                break;
+            case Qt::Key_Left:
+                signalFromOutlineTreeToOutlines();
                 break;
             }
         }

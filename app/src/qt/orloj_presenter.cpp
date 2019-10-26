@@ -51,12 +51,25 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
      * and widgets - it can show/hide what's needed and then pass control to children.
      */
 
+    // hit enter in Outlines to view Outline detail
+    QObject::connect(
+        view->getOutlinesTable(),
+        SIGNAL(signalShowSelectedOutline()),
+        this,
+        SLOT(slotShowSelectedOutline()));
+    QObject::connect(
+        view->getOutlinesTable(),
+        SIGNAL(signalFindOutlineByName()),
+        mainPresenter,
+        SLOT(doActionFindOutlineByName()));
     // click Outline in Outlines to view Outline detail
+    /* from click to E2E keyboard
     QObject::connect(
         view->getOutlinesTable()->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowOutline(const QItemSelection&, const QItemSelection&)));
+    */
     // click Outline tree to view Note
     QObject::connect(
         view->getOutlineView()->getOutlineTree()->selectionModel(),
@@ -226,6 +239,33 @@ void OrlojPresenter::showFacetOutline(Outline* outline)
     mainPresenter->getMainMenu()->showFacetOutlineView();
 
     mainPresenter->getStatusBar()->showInfo(QString("Notebook '%1'   %2").arg(outline->getName().c_str()).arg(outline->getKey().c_str()));
+}
+
+void OrlojPresenter::slotShowSelectedOutline()
+{
+    if(activeFacet!=OrlojPresenterFacets::FACET_ORGANIZER
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_TAG_CLOUD
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_NAVIGATOR
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_RECENT_NOTES
+      )
+    {
+        int row = outlinesTablePresenter->getCurrentRow();
+        if(row != OutlinesTablePresenter::NO_ROW) {
+            QStandardItem* item = outlinesTablePresenter->getModel()->item(row);
+            // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
+            if(item) {
+                Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
+                showFacetOutline(outline);
+                return;
+            } else {
+                mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Notebook not found!")));
+            }
+        }
+        mainPresenter->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
+    }
 }
 
 void OrlojPresenter::slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected)

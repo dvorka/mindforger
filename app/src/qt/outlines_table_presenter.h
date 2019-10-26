@@ -37,6 +37,9 @@ class OutlinesTablePresenter : public QObject
     OutlinesTableModel* model;
 
 public:
+    static const int NO_ROW = -1;
+
+public:
     OutlinesTablePresenter(OutlinesTableView* view, HtmlOutlineRepresentation* htmlRepresentation);
     OutlinesTablePresenter(const OutlinesTablePresenter&) = delete;
     OutlinesTablePresenter(const OutlinesTablePresenter&&) = delete;
@@ -47,6 +50,7 @@ public:
     OutlinesTableView* getView() const { return view; }
 
     void refresh(const std::vector<Outline*>& outlines);
+    int getCurrentRow() const;
 };
 
 }

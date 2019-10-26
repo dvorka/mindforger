@@ -47,7 +47,12 @@ public:
 
     int getColumnCount() { return COLUMN_COUNT; }
 
+    virtual void keyPressEvent(QKeyEvent* event) override;
     virtual void resizeEvent(QResizeEvent* event) override;
+
+signals:
+    void signalShowSelectedOutline();
+    void signalFindOutlineByName();
 };
 
 }

@@ -165,6 +165,7 @@ public:
 
 public slots:
     void slotShowOutlines();
+    void slotShowSelectedOutline();
     void slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected);
     void slotShowOutlineHeader();
     void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
