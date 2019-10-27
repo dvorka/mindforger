@@ -84,6 +84,8 @@ public:
     void refreshNotes(const QModelIndex& from, const QModelIndex& to) { dataChanged(from, to); }
 
 signals:
+    void signalOutlineShow();
+
     void signalFromOutlineTreeToOutlines();
 
     void signalSelectNextRow();

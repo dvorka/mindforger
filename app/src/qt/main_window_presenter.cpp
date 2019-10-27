@@ -1920,6 +1920,11 @@ void MainWindowPresenter::doActionNoteLast()
     }
 }
 
+void MainWindowPresenter::doActionOutlineShow()
+{
+    orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+}
+
 void MainWindowPresenter::doActionNotePromote()
 {
     Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();

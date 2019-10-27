@@ -45,6 +45,8 @@ void OutlinesTablePresenter::refresh(const vector<Outline*>& outlines)
 
         // IMPROVE create hidden column w/ long time used for sorting
         view->sortByColumn(7, Qt::SortOrder::DescendingOrder);
+
+        this->view->setCurrentIndex(this->model->index(0, 0));
     }
 }
 
