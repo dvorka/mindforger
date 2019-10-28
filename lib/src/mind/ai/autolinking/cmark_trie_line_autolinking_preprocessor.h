@@ -1,5 +1,5 @@
 /*
- cmark_aho_corasick_autolinking_preprocessor.h     MindForger thinking notebook
+ cmark_trie_line_autolinking_preprocessor.h     MindForger thinking notebook
 
  Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_CMARK_AHO_CORASICK_AUTOLINKING_PREPROCESSOR_H
-#define M8R_CMARK_AHO_CORASICK_AUTOLINKING_PREPROCESSOR_H
+#ifndef M8R_CMARK_TRIE_LINE_AUTOLINKING_PREPROCESSOR_H
+#define M8R_CMARK_TRIE_LINE_AUTOLINKING_PREPROCESSOR_H
 
 #ifdef MF_MD_2_HTML_CMARK
   #include <cmark-gfm.h>
@@ -28,16 +28,16 @@
 /*
  * DEPRECATED
  *
- * This line-based autolinker has been deprecated by document-based autlinker.
+ * This line-based autolinker has been deprecated by block-based autlinker.
  */
 
 namespace m8r {
 
 /**
- * @brief cmark-gfm AST and Aho-Corasick autolinking pre-processor.
+ * @brief cmark-gfm AST and Trie autolinking pre-processor.
  *
  * Autolinking implementation which aims to be both precise (cmark-gfm AST)
- * and fast (Aho-Corasick).
+ * and fast (Trie).
  *
  * Ideal autolinking implementation has two goals:
  *
@@ -86,19 +86,19 @@ namespace m8r {
  *     is opened (think Wikipedia cross-road page) and user can choose which link
  *     to use.
  */
-class CmarkAhoCorasickAutolinkingPreprocessor : public AutolinkingPreprocessor
+class CmarkTrieLineAutolinkingPreprocessor : public AutolinkingPreprocessor
 {
 protected:
     // allowed text MD snippets words trailing chars (\\... added newly)
     static const std::string TRAILING_CHARS;
 
 public:
-    explicit CmarkAhoCorasickAutolinkingPreprocessor(Mind& mind);
-    CmarkAhoCorasickAutolinkingPreprocessor(const CmarkAhoCorasickAutolinkingPreprocessor&) = delete;
-    CmarkAhoCorasickAutolinkingPreprocessor(const CmarkAhoCorasickAutolinkingPreprocessor&&) = delete;
-    CmarkAhoCorasickAutolinkingPreprocessor &operator=(const CmarkAhoCorasickAutolinkingPreprocessor&) = delete;
-    CmarkAhoCorasickAutolinkingPreprocessor &operator=(const CmarkAhoCorasickAutolinkingPreprocessor&&) = delete;
-    ~CmarkAhoCorasickAutolinkingPreprocessor();
+    explicit CmarkTrieLineAutolinkingPreprocessor(Mind& mind);
+    CmarkTrieLineAutolinkingPreprocessor(const CmarkTrieLineAutolinkingPreprocessor&) = delete;
+    CmarkTrieLineAutolinkingPreprocessor(const CmarkTrieLineAutolinkingPreprocessor&&) = delete;
+    CmarkTrieLineAutolinkingPreprocessor &operator=(const CmarkTrieLineAutolinkingPreprocessor&) = delete;
+    CmarkTrieLineAutolinkingPreprocessor &operator=(const CmarkTrieLineAutolinkingPreprocessor&&) = delete;
+    ~CmarkTrieLineAutolinkingPreprocessor();
 
     /**
      * @brief Autolink Markdown.
@@ -128,4 +128,4 @@ private:
 };
 
 }
-#endif // M8R_CMARK_AHO_CORASICK_AUTOLINKING_PREPROCESSOR_H
+#endif // M8R_CMARK_TRIE_LINE_AUTOLINKING_PREPROCESSOR_H

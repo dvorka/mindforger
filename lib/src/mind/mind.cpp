@@ -20,7 +20,7 @@
 
 #ifdef MF_MD_2_HTML_CMARK
   #include "ai/autolinking/autolinking_mind.h"
-  #include "ai/autolinking/cmark_aho_corasick_autolinking_preprocessor.h"
+  #include "ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h"
 # else
   #include "ai/autolinking/naive_autolinking_preprocessor.h"
 #endif
@@ -33,7 +33,7 @@ Mind::Mind(Configuration &configuration)
     : config{configuration},
       ontology{},
 #if defined  MF_MD_2_HTML_CMARK
-      autoInterceptor(new CmarkAhoCorasickAutolinkingPreprocessor{*this}),
+      autoInterceptor(new CmarkAhoCorasickBlockAutolinkingPreprocessor{*this}),
 #else
       autoInterceptor(new NaiveAutolinkingPreprocessor{*this}),
 #endif

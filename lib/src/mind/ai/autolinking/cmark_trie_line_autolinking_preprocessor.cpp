@@ -1,5 +1,5 @@
 /*
- cmark_aho_corasick_autolinking_preprocessor.cpp     MindForger thinking notebook
+ cmark_trie_line_autolinking_preprocessor.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,10 +16,16 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "cmark_aho_corasick_autolinking_preprocessor.h"
+#include "cmark_trie_line_autolinking_preprocessor.h"
 
 /*
- * High priority:
+ * DEPRECATED
+ *
+ * This line-based autolinker has been deprecated by block-based autlinker.
+ */
+
+/*
+ * High priority tasks:
  *
  * - unit tests first, manual tests then
  * - move trie to memory (or mind) and keep it up to date there (based on mind state)
@@ -72,18 +78,18 @@ namespace m8r {
 
 using namespace std;
 
-const string CmarkAhoCorasickAutolinkingPreprocessor::TRAILING_CHARS = string{" \t,:;.!?<>{}&()-+/*\\_=%~#$^[]'\""};
+const string CmarkTrieLineAutolinkingPreprocessor::TRAILING_CHARS = string{" \t,:;.!?<>{}&()-+/*\\_=%~#$^[]'\""};
 
-CmarkAhoCorasickAutolinkingPreprocessor::CmarkAhoCorasickAutolinkingPreprocessor(Mind& mind)
+CmarkTrieLineAutolinkingPreprocessor::CmarkTrieLineAutolinkingPreprocessor(Mind& mind)
     : AutolinkingPreprocessor{mind}
 {
 }
 
-CmarkAhoCorasickAutolinkingPreprocessor::~CmarkAhoCorasickAutolinkingPreprocessor()
+CmarkTrieLineAutolinkingPreprocessor::~CmarkTrieLineAutolinkingPreprocessor()
 {
 }
 
-void CmarkAhoCorasickAutolinkingPreprocessor::processProtectedBlock(
+void CmarkTrieLineAutolinkingPreprocessor::processProtectedBlock(
         vector<string*>& block,
         string& amd)
 {
@@ -96,7 +102,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::processProtectedBlock(
     MF_DEBUG("Appended PROTECTED block:" << endl << "'" << amd << "'" << endl);
 }
 
-void CmarkAhoCorasickAutolinkingPreprocessor::processAndAutolinkBlock(
+void CmarkTrieLineAutolinkingPreprocessor::processAndAutolinkBlock(
         vector<string*>& block,
         string& amd)
 {
@@ -113,7 +119,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::processAndAutolinkBlock(
     MF_DEBUG("Appended AUTOLINKED block:" << endl << "'" << amd << "'" << endl);
 }
 
-void CmarkAhoCorasickAutolinkingPreprocessor::process(
+void CmarkTrieLineAutolinkingPreprocessor::process(
         const vector<string*>& md,
         string& amd)
 {
@@ -177,7 +183,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::process(
 
 
 
-void CmarkAhoCorasickAutolinkingPreprocessor::processLineByLine(
+void CmarkTrieLineAutolinkingPreprocessor::processLineByLine(
         const std::vector<std::string*>& md,
         std::string& amd)
 {
@@ -248,7 +254,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::processLineByLine(
 #endif
 }
 
-void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(const std::string* md, std::string* amd)
+void CmarkTrieLineAutolinkingPreprocessor::parseMarkdownLine(const std::string* md, std::string* amd)
 {
 #ifdef DO_MF_DEBUG
     MF_DEBUG("[Autolinking] parsing line:" << endl << ">>" << *md << "<<" << endl);
@@ -376,7 +382,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(const std::strin
 }
 
 // TODO move this to helper parent class ~ Cmark autolinker
-cmark_node* CmarkAhoCorasickAutolinkingPreprocessor::addAstLinkNode(
+cmark_node* CmarkTrieLineAutolinkingPreprocessor::addAstLinkNode(
         cmark_node* origNode,
         cmark_node* node,
         string& pre)
@@ -400,7 +406,7 @@ cmark_node* CmarkAhoCorasickAutolinkingPreprocessor::addAstLinkNode(
 }
 
 // TODO move this to helper parent class
-cmark_node* CmarkAhoCorasickAutolinkingPreprocessor::addAstTxtNode(
+cmark_node* CmarkTrieLineAutolinkingPreprocessor::addAstTxtNode(
         cmark_node* origNode,
         cmark_node* node,
         string& at)
@@ -420,7 +426,7 @@ cmark_node* CmarkAhoCorasickAutolinkingPreprocessor::addAstTxtNode(
     return txtNode;
 }
 
-void CmarkAhoCorasickAutolinkingPreprocessor::injectThingsLinks(cmark_node* origNode)
+void CmarkTrieLineAutolinkingPreprocessor::injectThingsLinks(cmark_node* origNode)
 {
     // copy w to t as it will be chopped word/match by word/match from head to tail
     string txt{cmark_node_get_literal(origNode)};

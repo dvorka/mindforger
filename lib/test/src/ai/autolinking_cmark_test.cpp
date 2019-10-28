@@ -29,7 +29,7 @@
 #ifdef MF_MD_2_HTML_CMARK
 #include <cmark-gfm.h>
 
-#include "../../../src/mind/ai/autolinking/cmark_aho_corasick_autolinking_preprocessor.h"
+#include "../../../src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h"
 
 using namespace std;
 
@@ -152,7 +152,7 @@ TEST(AutolinkingCmarkTestCase, CmarkAstRowWalker)
 //
 // Open questions:
 // - is AST iterator invalidated on AST modification?
-TEST(AutolinkingCmarkTestCase, CmarkAstTransformer)
+TEST(AutolinkingCmarkTestCase, CmarkAstBlockTransformer)
 {
     const char* text =
         "Hello *world*!\n"
@@ -163,6 +163,14 @@ TEST(AutolinkingCmarkTestCase, CmarkAstTransformer)
         "   1. [numbered SECOND level](http://mf)\n"
         "       1. numbered THIRD level\n"
         "\n"
+        "AVOID code:\n"
+        "```\n"
+        "...source code...\n"
+        "```\n"
+        "AVOID math:\n"
+        "$$\n"
+        "...math...\n"
+        "$$\n"
         "DONE";
 
     // AST rendering
@@ -255,8 +263,6 @@ TEST(AutolinkingCmarkTestCase, CmarkAstTransformer)
     cmark_node* txtPreNode;
     cmark_node* txtPostNode;
 
-    cmark_node_type lastNodes[2]{};
-
     vector<cmark_node*> zombies{};
 
     while ((ev_type = cmark_iter_next(iter)) != CMARK_EVENT_DONE) {
@@ -265,10 +271,6 @@ TEST(AutolinkingCmarkTestCase, CmarkAstTransformer)
         switch(ev_type) {
         case CMARK_EVENT_ENTER:
             cout << "->";
-
-            lastNodes[0] = lastNodes[1];
-            lastNodes[1] = cmark_node_get_type(cur);
-
             break;
         case CMARK_EVENT_EXIT:
             cout << "<-";
@@ -381,7 +383,7 @@ TEST(AutolinkingCmarkTestCase, NanoRepo)
 
     // WHEN
     cout << endl << endl << "Testing MD autolinking:" << endl;
-    m8r::CmarkAhoCorasickAutolinkingPreprocessor autolinker{mind};
+    m8r::CmarkAhoCorasickBlockAutolinkingPreprocessor autolinker{mind};
     m8r::Note* n = mind.remind().getOutlines()[0]->getNotes()[0];
     string autolinkedMd{};
     // multiple iterations to check that there are no memory leaks
@@ -414,7 +416,7 @@ TEST(AutolinkingCmarkTestCase, MicroRepo)
 
     // WHEN
     cout << endl << endl << "Testing MD autolinking:" << endl;
-    m8r::CmarkAhoCorasickAutolinkingPreprocessor autolinker{mind};
+    m8r::CmarkAhoCorasickBlockAutolinkingPreprocessor autolinker{mind};
     m8r::Note* n = mind.remind().getOutlines()[0]->getNotes()[0];
     string autolinkedMd{};
     autolinker.process(n->getDescription(), autolinkedMd);
@@ -439,7 +441,7 @@ TEST(AutolinkingCmarkTestCase, BasicRepo)
     cout << endl << "  Outlines: " << mind.remind().getOutlinesCount();
     cout << endl << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
     ASSERT_EQ(3, mind.remind().getOutlinesCount());
-    m8r::CmarkAhoCorasickAutolinkingPreprocessor autolinker{mind};
+    m8r::CmarkAhoCorasickBlockAutolinkingPreprocessor autolinker{mind};
 
     cout << endl << endl << "Testing MD autolinking:" << endl;
     m8r::Note* n = mind.remind().getOutlines()[0]->getNotes()[0];
