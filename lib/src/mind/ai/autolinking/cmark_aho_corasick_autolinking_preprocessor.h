@@ -25,6 +25,12 @@
 
 #include "../autolinking_preprocessor.h"
 
+/*
+ * DEPRECATED
+ *
+ * This line-based autolinker has been deprecated by document-based autlinker.
+ */
+
 namespace m8r {
 
 /**

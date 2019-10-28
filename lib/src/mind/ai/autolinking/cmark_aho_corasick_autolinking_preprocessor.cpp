@@ -375,6 +375,7 @@ void CmarkAhoCorasickAutolinkingPreprocessor::parseMarkdownLine(const std::strin
 #endif
 }
 
+// TODO move this to helper parent class ~ Cmark autolinker
 cmark_node* CmarkAhoCorasickAutolinkingPreprocessor::addAstLinkNode(
         cmark_node* origNode,
         cmark_node* node,
@@ -398,6 +399,7 @@ cmark_node* CmarkAhoCorasickAutolinkingPreprocessor::addAstLinkNode(
     return linkNode;
 }
 
+// TODO move this to helper parent class
 cmark_node* CmarkAhoCorasickAutolinkingPreprocessor::addAstTxtNode(
         cmark_node* origNode,
         cmark_node* node,

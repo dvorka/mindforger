@@ -18,6 +18,7 @@
  */
 
 #include <vector>
+#include <stack>
 #include <string>
 #include <string.h>
 
@@ -34,7 +35,7 @@ using namespace std;
 
 extern char* getMindforgerGitHomePath();
 
-TEST(AutolinkingCmarkTestCase, CmarkAst)
+TEST(AutolinkingCmarkTestCase, CmarkAstRowWalker)
 {
     const char* examples[5];
     examples[0] = "Hello *world*!";
@@ -116,6 +117,248 @@ TEST(AutolinkingCmarkTestCase, CmarkAst)
 
         cmark_node_free(document);
     }
+}
+
+/**
+ * @brief Test whether postponed autolinking AST transformation is iterator and mem integrity OK.
+ */
+// Transformer observations:
+// - <text> nodes to be autolinked only
+// - <text> node is ALWAYS child of <paragraph> node
+//    - <text> node w/ different parent, like <link>, <emph> or <strong>,
+//      must NOT be autolinked
+// - autolinking modifies AST in a way that original tree:
+//     <paragraph>
+//       ...
+//       <text>...</text>
+//       ...
+//     </paragraph>
+//   is changed to AST like:
+//     <paragraph>
+//       ...
+//       <text>...</text>
+//       <link>...</link>
+//       <text>...</text>
+//       <link>...</link>
+//       ...
+//     </paragraph>
+//
+// Transformer strategy:
+//
+// Insert new nodes BEFORE obsolete one to protect iterator
+// and delete obsolete node(s) when iterator moves to next item
+// OR introduce GARBAGE COLLECTOR and delete all obsolete nodes
+// at the end when AST is walked and iterator released.
+//
+// Open questions:
+// - is AST iterator invalidated on AST modification?
+TEST(AutolinkingCmarkTestCase, CmarkAstTransformer)
+{
+    const char* text =
+        "Hello *world*!\n"
+        "* bullet [link label](http://acme)\n"
+        "   * level 1 bullet, **bold** `code`\n"
+        "> quote text w/ *italic* text\n"
+        "1. numbered FIRST section w/ `code` text\n"
+        "   1. [numbered SECOND level](http://mf)\n"
+        "       1. numbered THIRD level\n"
+        "\n"
+        "DONE";
+
+    // AST rendering
+    cmark_node* document = cmark_parse_document(
+        text,
+        strlen(text),
+        CMARK_OPT_DEFAULT);
+
+    cout << endl;
+
+    char* xml = cmark_render_xml(document, 0);
+    cout << "cmark AST as XML:" << endl << endl;
+    cout << xml << endl;
+    free(xml);
+
+    char* txt = cmark_render_commonmark(document, 0, 100);
+    cout << "cmark AST as MD:" << endl << endl;
+    cout << txt << endl;
+    free(txt);
+
+    //
+    // AST dump
+    //
+
+    cmark_event_type ev_type;
+    cmark_iter *iter = cmark_iter_new(document);
+
+    while ((ev_type = cmark_iter_next(iter)) != CMARK_EVENT_DONE) {
+        cmark_node *cur = cmark_iter_get_node(iter);
+
+        // do something with `cur` and `ev_type`
+        switch(ev_type) {
+        case CMARK_EVENT_ENTER:
+            cout << "->";
+            break;
+        case CMARK_EVENT_EXIT:
+            cout << "<-";
+            break;
+        case CMARK_EVENT_DONE:
+            cout << "DONE";
+            break;
+        case CMARK_EVENT_NONE:
+            cout << "NONE";
+            break;
+        default:
+            cout << ":";
+        }
+
+        switch(cmark_node_get_type(cur)) {
+        case CMARK_NODE_CODE:
+            cout << " code";
+            break;
+        case CMARK_NODE_LINK:
+            cout << " link";
+            break;
+        case CMARK_NODE_IMAGE:
+            cout << " image";
+            break;
+        case CMARK_NODE_TEXT:
+            cout << " text";
+            break;
+        case CMARK_NODE_PARAGRAPH:
+            cout << " paragraph";
+            break;
+        default:
+            cout << " .";
+        }
+
+        cout << endl;
+    }
+
+    cmark_iter_free(iter);
+
+    // Nodes must only be modified after an `EXIT` event,
+    // or an `ENTER` event for leaf nodes.
+
+    //
+    // TRANSFORMER
+    //
+
+    cout << endl << endl << "TRANSFORMATION:" << endl;
+
+    iter = cmark_iter_new(document);
+
+    string s{};
+
+    cmark_node* txtNodeToReplace;
+    cmark_node* linkNode;
+    cmark_node* linkTextNode;
+    cmark_node* txtPreNode;
+    cmark_node* txtPostNode;
+
+    cmark_node_type lastNodes[2]{};
+
+    vector<cmark_node*> zombies{};
+
+    while ((ev_type = cmark_iter_next(iter)) != CMARK_EVENT_DONE) {
+        cmark_node *cur = cmark_iter_get_node(iter);
+
+        switch(ev_type) {
+        case CMARK_EVENT_ENTER:
+            cout << "->";
+
+            lastNodes[0] = lastNodes[1];
+            lastNodes[1] = cmark_node_get_type(cur);
+
+            break;
+        case CMARK_EVENT_EXIT:
+            cout << "<-";
+            break;
+        case CMARK_EVENT_DONE:
+            cout << "DONE";
+            break;
+        case CMARK_EVENT_NONE:
+            cout << "NONE";
+            break;
+        default:
+            cout << ":";
+        }
+
+        switch(cmark_node_get_type(cur)) {
+        case CMARK_NODE_CODE:
+            cout << " code";
+            break;
+        case CMARK_NODE_LINK:
+            cout << " link";
+            break;
+        case CMARK_NODE_IMAGE:
+            cout << " image";
+            break;
+        case CMARK_NODE_TEXT:
+            cout << " text";
+
+            txtNodeToReplace = cur;
+
+            if(CMARK_NODE_PARAGRAPH != cmark_node_get_type(cmark_node_parent(txtNodeToReplace))) {
+                cout << " SKIPPING: " << cmark_node_get_literal(txtNodeToReplace);
+                break;
+            }
+
+            s.clear();
+            s.append("PREFIX:");
+            s.append(cmark_node_get_literal(txtNodeToReplace));
+
+            // split orig txt node to: txt, link, txt nodes
+
+            txtPreNode = cmark_node_new(CMARK_NODE_TEXT);
+            cmark_node_set_literal(txtPreNode, s.c_str());
+            cmark_node_insert_before(txtNodeToReplace, txtPreNode);
+
+            linkNode = cmark_node_new(CMARK_NODE_LINK);
+            cmark_node_set_url(linkNode, "http://acme");
+            linkTextNode = cmark_node_new(CMARK_NODE_TEXT);
+            cmark_node_set_literal(linkTextNode, "LINK-TEXT");
+            cmark_node_append_child(linkNode, linkTextNode);
+            cmark_node_insert_before(txtNodeToReplace, linkNode);
+
+            txtPostNode = cmark_node_new(CMARK_NODE_TEXT);
+            cmark_node_set_literal(txtPostNode, "POSTFIX-TEXT");
+            cmark_node_insert_before(txtNodeToReplace, txtPostNode);
+
+            zombies.push_back(txtNodeToReplace);
+
+            break;
+        case CMARK_NODE_PARAGRAPH:
+            cout << " paragraph";
+            break;
+        default:
+            cout << " .";
+        }
+
+        cout << endl;
+    }
+
+    cmark_iter_free(iter);
+
+    // IMPORTANT: remove all garbage nodes from document
+    cout << "Removing zombie nodes:" << endl;
+    for(cmark_node* zombieNode: zombies) {
+        cout << "    " << cmark_node_get_literal(zombieNode) << endl;
+        cmark_node_unlink(zombieNode);
+        cmark_node_free(zombieNode);
+    }
+    cout << "DONE zombies" << endl;
+
+    xml = cmark_render_xml(document, 0);
+    cout << endl << "TRANSFORMED AST as XML:" << endl << endl;
+    cout << xml << endl;
+    free(xml);
+
+    txt = cmark_render_commonmark(document, 0, 100);
+    cout << "TRANSFORMED AST as MD:" << endl << endl;
+    cout << txt << endl;
+    free(txt);
+
+    cmark_node_free(document);
 }
 
 TEST(AutolinkingCmarkTestCase, NanoRepo)
