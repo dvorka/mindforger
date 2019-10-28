@@ -269,12 +269,12 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
         header(*html, basePath, standalone);
 
         if(markdown->size() > 0) {
-            // ensure MD ends with new line, otherwise there would be missing characters in output HTML
-            if(markdown->at(markdown->size()-1) != '\n') {
-                markdown += '\n';
-            }
-
 #ifdef MF_NO_MD_2_HTML
+            // Discount: make sure that MD ends with new line, otherwise there would be missing characters in output HTML
+            //if(markdown->at(markdown->size()-1) != '\n') {
+            //    markdown->append("\n");
+            //}
+
             html->append("<pre>");
             html->append(*markdown);
             html->append("</pre>");

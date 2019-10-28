@@ -23,8 +23,17 @@
  *
  * - unit tests first, manual tests then
  * - integrity
+ *    - finish navigation after clicking autolinked link
+ *      - 1 match > does nothing
+ *      - multiple matches > SIGSEGV in choice dialog
+ *    - N title not rendered if section depth too high >6 (make it GH bug)
+ *    - HtmlOutlineRepresentation#271 - trailing new line
+ *    - SIGSEGV click autolinked link w/ one match > dialog > Show > SIGSEGV
+ *    - broken find outline by name dialog w/ autolinking customization: WRONG title & search
  *    - protect multiline MATH blocks $$ (track $$ literasl + skip literals starting w/ $$)
  *    - autolink tags: if no N/O found on click, then open tags dialog
+ *    - better matching: consider lowercasing of first characters of all words in title
+ *      (JavaScript algorithm library uses upper case words as title convention - no matches)
  * - performance
  *    - move trie to memory (or mind) and keep it up to date there (based on mind state)
  *    - O or N edit: always DELETE old name and add new name to TRIE
