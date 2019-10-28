@@ -34,6 +34,8 @@
  *    - autolink tags: if no N/O found on click, then open tags dialog
  *    - better matching: consider lowercasing of first characters of all words in title
  *      (JavaScript algorithm library uses upper case words as title convention - no matches)
+ * - bugs
+ *    - cmark leaks when ALL unit tests are run (not just cmark test case)
  * - performance
  *    - move trie to memory (or mind) and keep it up to date there (based on mind state)
  *    - O or N edit: always DELETE old name and add new name to TRIE
