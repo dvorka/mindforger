@@ -67,6 +67,14 @@ void OutlinesTableView::keyPressEvent(QKeyEvent* event)
     QTableView::keyPressEvent(event);
 }
 
+void OutlinesTableView::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    Q_UNUSED(event);
+
+    // double click to O opens it
+    emit signalShowSelectedOutline();
+}
+
 void OutlinesTableView::resizeEvent(QResizeEvent* event)
 {
     MF_DEBUG("OutlinesTableView::resizeEvent " << event << std::endl);

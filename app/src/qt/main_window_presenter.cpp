@@ -49,6 +49,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
     ftsDialog = new FtsDialog{&view};
     findOutlineByNameDialog = new FindOutlineByNameDialog{&view};
+    findThingByNameDialog = new FindOutlineByNameDialog{&view};
     findNoteByNameDialog = new FindNoteByNameDialog{&view};
     findOutlineByTagDialog = new FindOutlineByTagDialog{mind->remind().getOntology(), &view};
     findNoteByTagDialog = new FindNoteByTagDialog{mind->remind().getOntology(), &view};
@@ -74,6 +75,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
     QObject::connect(ftsDialog->getFindButton(), SIGNAL(clicked()), this, SLOT(handleFts()));
     QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
+    QObject::connect(findThingByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindThingByName()));
     QObject::connect(findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByName()));
     QObject::connect(findOutlineByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByTag()));
     QObject::connect(findOutlineByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
@@ -141,6 +143,7 @@ MainWindowPresenter::~MainWindowPresenter()
     if(newOutlineDialog) delete newOutlineDialog;
     if(ftsDialog) delete ftsDialog;
     if(findOutlineByNameDialog) delete findOutlineByNameDialog;
+    if(findThingByNameDialog) delete findThingByNameDialog;
     if(findNoteByNameDialog) delete findNoteByNameDialog;
     if(findOutlineByTagDialog) delete findOutlineByTagDialog;
     if(configDialog) delete configDialog;
@@ -272,16 +275,16 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
     if(url.toString().size()) {
         if(url.toString().startsWith(QString::fromStdString(AutolinkingPreprocessor::MF_URL_PROTOCOL))) {
             MF_DEBUG("  URL type   : MindForger" << endl);
-            findOutlineByNameDialog->setWindowTitle(tr("Autolinked Notebooks and Notes"));
-            findOutlineByNameDialog->getKeywordsCheckbox()->setChecked(false);
-            findOutlineByNameDialog->setSearchedString(
+            findThingByNameDialog->setWindowTitle(tr("Autolinked Notebooks and Notes"));
+            findThingByNameDialog->getKeywordsCheckbox()->setChecked(false);
+            findThingByNameDialog->setSearchedString(
                 QString::fromStdString(url.toString().toStdString().substr(AutolinkingPreprocessor::MF_URL_PROTOCOL.size())));
 
             vector<Thing*> allThings{};
             vector<string>* thingsNames = new vector<string>{};
             mind->getAllThings(allThings, thingsNames);
 
-            findOutlineByNameDialog->show(allThings, thingsNames, false, false);
+            findThingByNameDialog->show(allThings, thingsNames, false, false);
             return;
         }
 
@@ -652,6 +655,21 @@ void MainWindowPresenter::handleFindOutlineByName()
         statusBar->showInfo(QString(tr("Notebook "))+QString::fromStdString(findOutlineByNameDialog->getChoice()->getName()));
     } else {
         statusBar->showInfo(QString(tr("Notebook not found")+": ") += findOutlineByNameDialog->getSearchedString());
+    }
+}
+
+void MainWindowPresenter::handleFindThingByName()
+{
+    if(findThingByNameDialog->getChoice()) {
+        if(mind->remind().getOutline(findThingByNameDialog->getChoice()->getKey())) {
+            orloj->showFacetOutline((Outline*)findThingByNameDialog->getChoice());
+            statusBar->showInfo(QString(tr("Notebook "))+QString::fromStdString(findThingByNameDialog->getChoice()->getKey()));
+        } else {
+            orloj->showFacetNoteView((Note*)findThingByNameDialog->getChoice());
+            statusBar->showInfo(QString(tr("Note "))+QString::fromStdString(findThingByNameDialog->getChoice()->getKey()));
+        }
+    } else {
+        statusBar->showInfo(QString(tr("Thing not found")+": ") += findThingByNameDialog->getSearchedString());
     }
 }
 

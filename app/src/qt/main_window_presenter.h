@@ -111,6 +111,7 @@ private:
     NoteNewDialog* newNoteDialog;
     FtsDialog* ftsDialog;
     FindOutlineByNameDialog* findOutlineByNameDialog;
+    FindOutlineByNameDialog* findThingByNameDialog;
     FindNoteByNameDialog* findNoteByNameDialog;
     FindOutlineByTagDialog* findOutlineByTagDialog;
     FindNoteByTagDialog* findNoteByTagDialog;
@@ -189,6 +190,7 @@ public slots:
     void handleFts();
     void doActionFindOutlineByName();
     void handleFindOutlineByName();
+    void handleFindThingByName();
     void doActionFindNoteByName();
     void handleFindNoteByName();
     void doActionFindOutlineByTag();
