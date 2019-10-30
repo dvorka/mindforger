@@ -481,6 +481,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuEdit->setEnabled(false);
 
     // menu: format
+    menuFormat = qMenuBar->addMenu(tr("&Format"));
 
     actionFormatBold = new QAction(tr("&Bold"), mainWindow);
     actionFormatBold->setStatusTip(tr("Format text as bold"));
@@ -495,7 +496,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatMath->setStatusTip(tr("Format text as math (MathJax)"));
 
     // MathJax
-    submenuFormatMathJax = menuOutline->addMenu(tr("MathJa&x"));
+    submenuFormatMathJax = menuFormat->addMenu(tr("MathJa&x"));
     actionFormatMathText= new QAction(tr("&text"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathText);
     submenuFormatMathJax->addSeparator();
@@ -582,7 +583,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatHr = new QAction(tr("&Horizontal ruler"), mainWindow);
     actionFormatHr->setStatusTip(tr("Horizontal ruler"));
 
-    menuFormat = qMenuBar->addMenu(tr("&Format"));
     menuFormat->addAction(actionFormatBold);
     menuFormat->addAction(actionFormatItalic);
     menuFormat->addAction(actionFormatCode);
