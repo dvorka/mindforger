@@ -25,6 +25,8 @@ using namespace std;
 const string AutolinkingPreprocessor::CODE_BLOCK = string{"```"};
 const string AutolinkingPreprocessor::MATH_BLOCK = string{"$$"};
 const string AutolinkingPreprocessor::MF_URL_PROTOCOL = string{"mindforger://"};
+const string AutolinkingPreprocessor::MF_URL_HOST = string{"links.mindforger.com"};
+const string AutolinkingPreprocessor::MF_URL_PREFIX = AutolinkingPreprocessor::MF_URL_PROTOCOL + AutolinkingPreprocessor::MF_URL_HOST + "/";
 const string AutolinkingPreprocessor::FILE_URL_PROTOCOL = string{"file://"};
 
 AutolinkingPreprocessor::AutolinkingPreprocessor(Mind& mind)

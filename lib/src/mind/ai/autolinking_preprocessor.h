@@ -35,10 +35,15 @@ namespace m8r {
  */
 class AutolinkingPreprocessor : public RepresentationInterceptor
 {
+private:
+    static const std::string MF_URL_PROTOCOL;
+    static const std::string MF_URL_HOST;
+
 public:
+    // autolinked Os/Ns may contain whitespaces/..., therefore cannot be hostname, but dir/file in URL
+    static const std::string MF_URL_PREFIX;
     static const std::string CODE_BLOCK;
     static const std::string MATH_BLOCK;
-    static const std::string MF_URL_PROTOCOL;
     static const std::string FILE_URL_PROTOCOL;
 
 protected:

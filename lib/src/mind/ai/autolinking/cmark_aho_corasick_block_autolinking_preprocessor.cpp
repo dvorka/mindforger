@@ -176,7 +176,7 @@ cmark_node* CmarkAhoCorasickBlockAutolinkingPreprocessor::injectAstLinkNode(
     cmark_node* linkNode{cmark_node_new(CMARK_NODE_LINK)};
     cmark_node* txtNode{};
 
-    string link{MF_URL_PROTOCOL};
+    string link{MF_URL_PREFIX};
     link.append(text);
     cmark_node_set_url(linkNode, link.c_str());
     txtNode = cmark_node_new(CMARK_NODE_TEXT);

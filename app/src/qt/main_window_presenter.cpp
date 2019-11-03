@@ -273,12 +273,12 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
     statusBar->showInfo(QString(tr("Hyperlink %1 clicked...")).arg(url.toString()));
     Outline* currentOutline = orloj->getOutlineView()->getCurrentOutline();
     if(url.toString().size()) {
-        if(url.toString().startsWith(QString::fromStdString(AutolinkingPreprocessor::MF_URL_PROTOCOL))) {
+        if(url.toString().startsWith(QString::fromStdString(AutolinkingPreprocessor::MF_URL_PREFIX))) {
             MF_DEBUG("  URL type   : MindForger" << endl);
             findThingByNameDialog->setWindowTitle(tr("Autolinked Notebooks and Notes"));
             findThingByNameDialog->getKeywordsCheckbox()->setChecked(false);
             findThingByNameDialog->setSearchedString(
-                QString::fromStdString(url.toString().toStdString().substr(AutolinkingPreprocessor::MF_URL_PROTOCOL.size())));
+                QString::fromStdString(url.toString().toStdString().substr(AutolinkingPreprocessor::MF_URL_PREFIX.size())));
 
             vector<Thing*> allThings{};
             vector<string>* thingsNames = new vector<string>{};
