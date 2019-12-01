@@ -50,7 +50,7 @@ void AutolinkingMind::updateTrieIndex()
     // IMPROVE update indices only if an O/N is modified (except writing read timestamps)
 
 #ifdef DO_MF_DEBUG
-    MF_DEBUG("[Autolinking] Updating trie index..." << endl);
+    MF_DEBUG("[Autolinking] Rebuilding trie index..." << endl);
     auto begin = chrono::high_resolution_clock::now();
     int size{};
 #endif

@@ -225,6 +225,13 @@ void CmarkAhoCorasickBlockAutolinkingPreprocessor::injectThingsLinks(
         // skip trailing chars and append them
         preSize = 0;
         while(preSize < txt.size()) {
+            // check $$ to detect begin/end of math (MathJax) section to ignore it
+            if(txt.size()>=2 && '$'==txt.at(0) && '$'==txt.at(1)) {
+                MF_DEBUG("MATH matched");
+                // TODO toggle math
+                preSize+=2;
+            }
+
             if(TRAILING_CHARS.find(txt.at(preSize)) != string::npos) {
                 preSize++;
             } else {
@@ -243,6 +250,7 @@ void CmarkAhoCorasickBlockAutolinkingPreprocessor::injectThingsLinks(
 
         // try to match word
         pre.clear();
+
         MF_DEBUG("  Trie search txt: '" << txt << "'" << endl);
         if(mind.autolinkFindLongestPrefixWord(txt, pre)) {
             MF_DEBUG("    Matched prefix: '" << pre << "'" << endl);

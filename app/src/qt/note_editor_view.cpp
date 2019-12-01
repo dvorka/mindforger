@@ -62,6 +62,9 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     // shortcut signals
     new QShortcut(QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Slash)), this, SLOT(performCompletion()));
 
+    // capabilities
+    setAcceptDrops(true);
+
     // show
     highlightCurrentLine();
     updateLineNumberPanelWidth(0);
@@ -112,6 +115,30 @@ void NoteEditorView::slotConfigurationUpdated()
     setEditorTabWidth(Configuration::getInstance().getUiEditorTabWidth());
     setEditorTabsAsSpacesPolicy(Configuration::getInstance().isUiEditorTabsAsSpaces());
     setEditorFont(Configuration::getInstance().getEditorFont());
+}
+
+/**
+  * Drag & drop
+  */
+
+void NoteEditorView::dragEnterEvent(QDragEnterEvent* event)
+{
+    MF_DEBUG("D&D enter...");
+
+    if (event->mimeData()->hasFormat("text/plain")) {
+        event->acceptProposedAction();
+    }
+}
+
+void NoteEditorView::dropEvent(QDropEvent* event)
+{
+    MF_DEBUG("D&D text: " << event->mimeData()->text().toStdString() << endl);
+    // example: file:///home/dvorka/Desktop/sa-presentation.png
+    // mimeTypeCombo->addItems(event->mimeData()->formats());
+    // TODO open image dialog w/ prefilled name (file name) and path (regext for image extension OR linked file)
+    // TODO implement image copy
+
+    event->acceptProposedAction();
 }
 
 /*
