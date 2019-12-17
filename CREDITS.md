@@ -25,7 +25,7 @@ Big thanks to 3rd party FOSS content authors:
 * Ivan Sagalaev ([Highlight.js](https://highlightjs.org/) - source code syntax highlighting)
 * Danny Allen (Primary icon theme store.kde.com - icons)
 * Travis CI ([travis-ci.org](https://travis-ci.org/) - continous integration tests and builds infra - Ubuntu, macOS)
-* AppVeyor CI ([appveyor.com](https://www.appveyor.com/) - continous integration tests and builds infra - Windows
+* AppVeyor CI ([appveyor.com](https://www.appveyor.com/) - continous integration tests and builds infra - Windows)
 * Raimund Hocke ([SikuliX](http://sikulix.com/)- GUI automation testing)
 * Lewis Van Winkle ([GENANN](https://github.com/codeplea/genann) - minimal neural network - library)
 * Oleander Software ([Oleander stemming library](http://www.oleandersolutions.com/stemming/stemming.html) - stemmer - library)
