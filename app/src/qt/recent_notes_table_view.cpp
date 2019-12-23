@@ -20,9 +20,11 @@
 
 namespace m8r {
 
-RecentNotesTableView::RecentNotesTableView(QWidget* parent)
+RecentNotesTableView::RecentNotesTableView(QWidget* parent, bool isDashboardlet)
     : QTableView(parent)
 {
+    this->isDashboardlet = isDashboardlet;
+
     verticalHeader()->setVisible(false);
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
@@ -45,20 +47,26 @@ void RecentNotesTableView::resizeEvent(QResizeEvent* event)
 
     // O
     int normalizedWidth = width()/fontMetrics().averageCharWidth();
-    if(normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH) {
+    if(normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH || isDashboardlet) {
         this->setColumnHidden(1, true);
     } else {
         this->setColumnHidden(1, false);
         this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*50);
     }
 
-    // rds/wrs
-    this->setColumnWidth(2, this->fontMetrics().averageCharWidth()*5);
-    this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*5);
+    if(isDashboardlet) {
+        this->setColumnHidden(2, true);
+        this->setColumnHidden(3, true);
+        this->setColumnHidden(4, true);
+    } else {
+        // rds/wrs
+        this->setColumnWidth(2, this->fontMetrics().averageCharWidth()*5);
+        this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*5);
 
-    // pretty: rd/wr
-    this->setColumnWidth(4, this->fontMetrics().averageCharWidth()*12);
-    // pretty
+        // pretty rd
+        this->setColumnWidth(4, this->fontMetrics().averageCharWidth()*12);
+    }
+    // pretty wr
     this->setColumnWidth(5, this->fontMetrics().averageCharWidth()*12);
 
     QTableView::resizeEvent(event);

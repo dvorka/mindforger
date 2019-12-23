@@ -41,9 +41,9 @@ NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
     this->view->setModel(this->model);
 
     this->markdownRepresentation
-        = orloj->getMainWindow()->getMarkdownRepresentation();
+        = orloj->getMainPresenter()->getMarkdownRepresentation();
     this->htmlRepresentation
-        = orloj->getMainWindow()->getHtmlRepresentation();
+        = orloj->getMainPresenter()->getHtmlRepresentation();
 
     this->currentNote = nullptr;
 
@@ -102,7 +102,7 @@ void NoteViewPresenter::refresh(Note* note)
 
 void NoteViewPresenter::slotLinkClicked(const QUrl& url)
 {
-    orloj->getMainWindow()->handleNoteViewLinkClicked(url);
+    orloj->getMainPresenter()->handleNoteViewLinkClicked(url);
 }
 
 void NoteViewPresenter::slotEditNote()

@@ -39,7 +39,7 @@ void RecentNotesTableModel::removeAllRows()
 
     QStringList tableHeader;
     tableHeader
-        << tr("Note")
+        << tr("Recent Notes & Notebooks")
         << tr("Notebook")
         << tr("Rs")
         << tr("Ws")

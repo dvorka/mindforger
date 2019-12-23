@@ -21,8 +21,6 @@
 
 #include <QtWidgets>
 
-#include "../../lib/src/model/note.h"
-
 #include "organizer_quadrant_view.h"
 
 namespace m8r {

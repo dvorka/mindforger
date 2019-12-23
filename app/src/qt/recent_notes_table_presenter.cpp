@@ -23,7 +23,7 @@ namespace m8r {
 using namespace std;
 
 RecentNotesTablePresenter::RecentNotesTablePresenter(RecentNotesTableView* view, HtmlOutlineRepresentation* htmlRepresentation)
-{
+{       
     this->view = view;
     this->model = new RecentNotesTableModel(this, htmlRepresentation);
     this->view->setModel(this->model);

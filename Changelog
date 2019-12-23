@@ -1,3 +1,8 @@
+2019-12-24  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+   * Released v1.50 - Autolinking rewrite to get high-performance,
+     robust and extensible implementation.
+
 2019-03-09  Martin Dvorak  <martin.dvorak@mindforger.com>
 
    * Released v1.49.2 - Stabilization: fixed scrolling loop on Win,

@@ -27,6 +27,7 @@
 #include <QtWidgets>
 
 #include "orloj_view.h"
+#include "dashboard_presenter.h"
 #include "organizer_presenter.h"
 #include "tags_table_presenter.h"
 #include "recent_notes_table_presenter.h"
@@ -42,6 +43,7 @@
 
 namespace m8r {
 
+class DashboardPresenter;
 class OrganizerPresenter;
 class TagCloudPresenter;
 class NotePresenter;
@@ -64,7 +66,8 @@ enum OrlojPresenterFacets {
     FACET_ORGANIZER,            // 9
     FACET_TAG_CLOUD,            // 10
     FACET_RECENT_NOTES,         // 11
-    FACET_NAVIGATOR             // 12
+    FACET_NAVIGATOR,            // 12
+    FACET_DASHBOARD             // 13
 };
 
 class OrlojPresenter : public QObject
@@ -79,6 +82,7 @@ private:
     OrlojView* view;
     Mind* mind;
 
+    DashboardPresenter* dashboardPresenter;
     OrganizerPresenter* organizerPresenter;
     TagsTablePresenter* tagCloudPresenter;
     OutlinesTablePresenter* outlinesTablePresenter;
@@ -99,9 +103,10 @@ public:
     Mind* getMind() { return mind; }
 
     OrlojView* getView() const { return view; }
+    DashboardPresenter* getDashboard() const { return dashboardPresenter; }
     OrganizerPresenter* getOrganizer() const { return organizerPresenter; }
     NavigatorPresenter* getNavigator() const { return navigatorPresenter; }
-    MainWindowPresenter* getMainWindow() const { return mainPresenter; }
+    MainWindowPresenter* getMainPresenter() const { return mainPresenter; }
     OutlinesTablePresenter* getOutlinesTable() const { return outlinesTablePresenter; }
     NotesTablePresenter* getNotesTable() const { return notesTablePresenter; }
     RecentNotesTablePresenter* getRecentNotesTable() const { return recentNotesTablePresenter; }
@@ -146,6 +151,7 @@ public:
      */
     void onFacetChange(const OrlojPresenterFacets targetFacet) const;
 
+    void showFacetDashboard(const std::vector<Outline*>& outlines, const std::vector<Note*>& notes);
     void showFacetOrganizer(const std::vector<Outline*>& outlines);
     void showFacetTagCloud();
     void showFacetOutlineList(const std::vector<Outline*>& outlines);

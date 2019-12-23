@@ -174,7 +174,9 @@ void MainWindowPresenter::showInitialView()
                 if(!doActionViewHome()) {
                     // fallback
                     view.getCli()->setBreadcrumbPath("/outlines");
-                    orloj->showFacetOutlineList(mind->getOutlines());
+                    vector<Note*> allNotes{};
+                    mind->getAllNotes(allNotes);
+                    orloj->showFacetDashboard(mind->getOutlines(), allNotes);
                 }
             } else {
                 view.getCli()->setBreadcrumbPath("/outlines");
@@ -992,6 +994,16 @@ void MainWindowPresenter::doActionViewRecentNotes()
     vector<Note*> notes{};
     mind->getAllNotes(notes, true, true);
     orloj->showFacetRecentNotes(notes);
+}
+
+void MainWindowPresenter::doActionViewDashboard()
+{
+    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+        vector<Note*> notes{};
+        mind->getAllNotes(notes, true, true);
+        // IMPROVE consider trimming the list to avoid making it huge - it's just dashboardlet
+        orloj->showFacetDashboard(mind->getOutlines(), notes);
+    }
 }
 
 void MainWindowPresenter::doActionViewOrganizer()

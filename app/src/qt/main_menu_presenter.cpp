@@ -62,6 +62,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 #endif
 
     // menu: view
+    QObject::connect(view->actionViewDashboard, SIGNAL(triggered()), mwp, SLOT(doActionViewDashboard()));
     QObject::connect(view->actionViewHome, SIGNAL(triggered()), mwp, SLOT(doActionViewHome()));
     QObject::connect(view->actionViewOrganizer, SIGNAL(triggered()), mwp, SLOT(doActionViewOrganizer()));
     QObject::connect(view->actionViewOutlines, SIGNAL(triggered()), mwp, SLOT(doActionViewOutlines()));
@@ -173,6 +174,11 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 MainMenuPresenter::~MainMenuPresenter()
 {
     // TODO deletes: actions
+}
+
+void MainMenuPresenter::showFacetDashboard()
+{
+    view->showFacetOutlineList(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
 }
 
 void MainMenuPresenter::showFacetOrganizer()

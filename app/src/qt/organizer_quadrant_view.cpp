@@ -31,7 +31,8 @@ OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent)
     // IMPORTANT this must b in constructors - causes CPU high consuption loop if in paintEvent()!
     horizontalHeader()->setStretchLastSection(true);
 
-    setSortingEnabled(true);
+    // IMPROVE sorting breaks width (redraw method to be overriden)
+    setSortingEnabled(false);
 
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);

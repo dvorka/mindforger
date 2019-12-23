@@ -210,6 +210,7 @@ public slots:
     void handleFtsNerEntity();
 #endif
     // view
+    void doActionViewDashboard();
     void doActionViewOrganizer();
     void doActionViewTagCloud();
     bool doActionViewHome();

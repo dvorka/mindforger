@@ -21,6 +21,7 @@
 
 #include <QtWidgets>
 
+#include "dashboard_view.h"
 #include "organizer_view.h"
 #include "tags_table_view.h"
 #include "outlines_table_view.h"
@@ -55,6 +56,7 @@ class OrlojView : public QSplitter
     Q_OBJECT
 
 private:
+    DashboardView* dashboard;
     OrganizerView* organizer;
     TagsTableView* tagCloud;
     OutlinesTableView* outlinesTable;
@@ -75,6 +77,7 @@ public:
     OrlojView &operator=(const OrlojView&) = delete;
     OrlojView &operator=(const OrlojView&&) = delete;
 
+    DashboardView* getDashboard() const { return dashboard; }
     OrganizerView* getOrganizer() const { return organizer; }
     TagsTableView* getTagCloud() const { return tagCloud; }
     OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
@@ -86,6 +89,11 @@ public:
     NoteView* getNoteView() const { return noteView; }
     NoteEditView* getNoteEdit() const { return noteEdit; }
     NavigatorView* getNavigator() const { return navigator; }
+
+    /**
+     * @brief Dashboard
+     */
+    void showFacetDashboard();
 
     /**
      * @brief Organizer

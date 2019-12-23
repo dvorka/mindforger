@@ -33,7 +33,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #ifdef DO_MF_DEBUG
     actionMindHack = new QAction(tr("Mind Hack"), mainWindow);
     actionMindHack->setStatusTip(tr("Mind hacking and debugging hook"));
-    actionMindHack->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
+    actionMindHack->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_Z));
 #endif
 
     // new/devise... new MD repository
@@ -100,7 +100,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // TODO submenu: printer, HTML, PDF
 
-    actionMindPreferences = new QAction(tr("&Adapt"), mainWindow);
+    actionMindPreferences = new QAction(tr("A&dapt"), mainWindow);
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
     actionMindPreferences->setStatusTip(tr("Adapt Mind by setting your preferences..."));
 
@@ -188,7 +188,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: view
 
-    actionViewHome = new QAction(tr("&Home"), mainWindow);
+    actionViewDashboard = new QAction(tr("&Dashboard"), mainWindow);
+    actionViewDashboard->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
+    actionViewDashboard->setStatusTip(tr("Open Dashboard..."));
+
+    actionViewHome = new QAction(tr("&Home Notebook"), mainWindow);
     actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
     actionViewHome->setStatusTip(tr("Open Home Notebook..."));
 
@@ -233,7 +237,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewLimbo->setStatusTip(tr("List forgotten Notebooks and Notes..."));
     actionViewLimbo->setEnabled(false);
 
-    actionViewDistractionFree = new QAction(tr("&Distraction Free"), mainWindow);
+    actionViewDistractionFree = new QAction(tr("D&mainWindowViewistraction Free"), mainWindow);
     actionViewDistractionFree->setShortcut(QKeySequence(Qt::Key_F5));
     actionViewDistractionFree->setStatusTip(tr("Toggle distraction free mode"));
     actionViewDistractionFree->setEnabled(false);
@@ -243,6 +247,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewFullscreen->setStatusTip(tr("Toggle fullscreen"));
 
     menuView = qMenuBar->addMenu(tr("&View"));
+    menuView->addAction(actionViewDashboard);
     menuView->addAction(actionViewHome);
     menuView->addAction(actionViewOrganizer);
     menuView->addAction(actionViewOutlines);

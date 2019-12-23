@@ -35,7 +35,7 @@ void OutlinesTableModel::removeAllRows()
 
     QStringList tableHeader;
     tableHeader
-        << tr("Notebook")
+        << tr("Notebooks")
         << tr("Importance")
         << tr("Urgency")
         << tr("Done")

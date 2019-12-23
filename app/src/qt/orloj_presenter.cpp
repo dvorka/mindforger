@@ -33,6 +33,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     this->view = view;
     this->mind = mind;
 
+    this->dashboardPresenter = new DashboardPresenter(view->getDashboard(), this);
     this->organizerPresenter = new OrganizerPresenter(view->getOrganizer(), this);
     this->tagCloudPresenter = new TagsTablePresenter(view->getTagCloud(), mainPresenter->getHtmlRepresentation());
     this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
@@ -149,6 +150,15 @@ void OrlojPresenter::showFacetRecentNotes(const vector<Note*>& notes)
     setFacet(OrlojPresenterFacets::FACET_RECENT_NOTES);
     recentNotesTablePresenter->refresh(notes);
     view->showFacetRecentNotes();
+    mainPresenter->getStatusBar()->showMindStatistics();
+}
+
+void OrlojPresenter::showFacetDashboard(const vector<Outline*>& outlines, const vector<Note*>& notes)
+{
+    setFacet(OrlojPresenterFacets::FACET_DASHBOARD);
+    dashboardPresenter->refresh(outlines, notes);
+    view->showFacetDashboard();
+    mainPresenter->getMainMenu()->showFacetDashboard();
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 

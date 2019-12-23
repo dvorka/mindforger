@@ -30,7 +30,7 @@ OutlineHeaderViewPresenter::OutlineHeaderViewPresenter(OutlineHeaderView *view, 
     this->orloj = orloj;
 
     this->htmlRepresentation
-        = orloj->getMainWindow()->getHtmlRepresentation();
+        = orloj->getMainPresenter()->getHtmlRepresentation();
 
     // IMPORTANT: pre-allocate string using reserve() to ensure good append performance
     html = string{};
@@ -61,7 +61,7 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
 
 void OutlineHeaderViewPresenter::slotLinkClicked(const QUrl& url)
 {
-    orloj->getMainWindow()->handleNoteViewLinkClicked(url);
+    orloj->getMainPresenter()->handleNoteViewLinkClicked(url);
 }
 
 void OutlineHeaderViewPresenter::slotEditOutlineHeader()

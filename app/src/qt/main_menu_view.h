@@ -91,6 +91,7 @@ public:
 #endif
 
     // menu: View
+    QAction* actionViewDashboard;
     QAction* actionViewHome;
     QAction* actionViewOrganizer;
     QAction* actionViewOutlines;

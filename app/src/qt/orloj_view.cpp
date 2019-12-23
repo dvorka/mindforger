@@ -25,8 +25,8 @@ using namespace std;
 OrlojView::OrlojView(QWidget* parent)
     : QSplitter(Qt::Horizontal, parent)
 {
-    // TODO to be implemented
-    //addWidget(new QTextEdit("Home: outlines (link), Notes (l), bytes (l), graphs, recent"), this);
+    dashboard = new DashboardView(this);
+    addWidget(dashboard);
 
     organizer = new OrganizerView(this);
     addWidget(organizer);
@@ -89,6 +89,12 @@ void OrlojView::fiftyFifty()
         sizes << half;
     }
     setSizes(sizes);
+}
+
+void OrlojView::showFacetDashboard()
+{
+    QSet<QWidget*> v; v << dashboard;
+    hideChildren(v);
 }
 
 void OrlojView::showFacetOrganizer()

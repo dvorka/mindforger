@@ -32,8 +32,10 @@ class RecentNotesTableView : public QTableView
     // if view is width < threshold columns, then shows simplified view w/o Mind-related columns
     static constexpr int SIMPLIFIED_VIEW_THRESHOLD_WIDTH = 75*2;
 
+    bool isDashboardlet;
+
 public:
-    explicit RecentNotesTableView(QWidget* parent);
+    explicit RecentNotesTableView(QWidget* parent, bool isDashboardlet=false);
     RecentNotesTableView(const RecentNotesTableView&) = delete;
     RecentNotesTableView(const RecentNotesTableView&&) = delete;
     RecentNotesTableView &operator=(const RecentNotesTableView&) = delete;

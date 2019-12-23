@@ -33,6 +33,8 @@ class RecentNotesTablePresenter : public QObject
 {
     Q_OBJECT
 
+    bool isDashboardlet;
+
     RecentNotesTableView* view;
     RecentNotesTableModel* model;
 

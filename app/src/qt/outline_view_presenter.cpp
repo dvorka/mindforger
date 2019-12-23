@@ -25,7 +25,7 @@ OutlineViewPresenter::OutlineViewPresenter(OutlineViewSplitter* view, OrlojPrese
 {
     this->view = view;
     this->outlineTreePresenter
-        = new OutlineTreePresenter(view->getOutlineTree(), orloj->getMainWindow(), this);
+        = new OutlineTreePresenter(view->getOutlineTree(), orloj->getMainPresenter(), this);
     this->assocLeaderboardPresenter
         = new AssocLeaderboardPresenter(view->getAssocLeaderboard(), orloj);
 

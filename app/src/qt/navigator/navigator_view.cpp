@@ -349,8 +349,9 @@ void NavigatorView::wheelEvent(QWheelEvent *event)
 void NavigatorView::scaleView(qreal scaleFactor)
 {
     qreal factor = transform().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
-    if (factor < 0.07 || factor > 100)
+    if (factor < 0.07 || factor > 100) {
         return;
+    }
 
 	scale(scaleFactor, scaleFactor);
 }
