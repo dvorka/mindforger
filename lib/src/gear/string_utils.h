@@ -149,6 +149,20 @@ static inline std::string to_stringl(time_t x)
 
 void toString(const std::vector<std::string*>& ss, std::string& os);
 
+static inline std::string stringIntFormat(std::string value, char thousandSep = ',')
+{
+    int len = value.length();
+    int dlen = 3;
+
+    while(len > dlen) {
+        value.insert(len - dlen, 1, thousandSep);
+        dlen += 4;
+        len += 1;
+    }
+
+    return value;
+}
+
 } /* namespace*/
 
 #endif /* M8R_STRING_UTILS_H_ */

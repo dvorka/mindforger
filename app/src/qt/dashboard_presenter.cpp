@@ -84,10 +84,10 @@ void DashboardPresenter::refresh(
             "</ul>"
             "MindForger repository <b>statistics</b>:"
             "<ul>"
-            "<li>- <b>" + QString::number(os.size()) + "</b> notebooks.</li>"
-            "<li>- <b>" + QString::number(ns.size()) + "</b> notes.</li>"
-            "<li>- <b>" + QString::number(ts.size()) + "</b> tags.</li>"
-            "<li>- <b>" + QString::number(bytes) + "</b> bytes.</li>"
+            "<li>- <b>" + QString::fromStdString(stringIntFormat(std::to_string(os.size()))) + "</b> notebooks.</li>"
+            "<li>- <b>" + QString::fromStdString(stringIntFormat(std::to_string(ns.size()))) + "</b> notes.</li>"
+            "<li>- <b>" + QString::fromStdString(stringIntFormat(std::to_string(ts.size()))) + "</b> tags.</li>"
+            "<li>- <b>" + QString::fromStdString(stringIntFormat(std::to_string(bytes))) + "</b> bytes.</li>"
             "<li>- Most used notebook: <b>" + QString::fromStdString(stats->mostReadOutline?stats->mostReadOutline->getName():"") + "</b>.</li>"
             "<li>- Most used note: <b>" + QString::fromStdString(stats->mostReadNote?stats->mostReadNote->getName():"") + "</b> in "
             "<b>" + QString::fromStdString(stats->mostReadNote?stats->mostReadNote->getOutline()->getName():"") + "</b>.</li>"
@@ -100,33 +100,18 @@ void DashboardPresenter::refresh(
             "</font></center></body></html>"
     ));
 
-    // TODO this is duplicated code w/ organizer
     vector<Outline*> doFirstOs;
-    vector<Outline*> doSoonOs;
-    vector<Outline*> doSometimeOs;
-    vector<Outline*> planDedicatedTimeOs;
-
     if(os.size()) {
         for(Outline* o:os) {
             if(o->getUrgency()>2) {
                 if(o->getImportance()>2) {
                     doFirstOs.push_back(o);
-                } else {
-                    doSoonOs.push_back(o);
-                }
-            } else {
-                if(o->getImportance()>2) {
-                    planDedicatedTimeOs.push_back(o);
-                } else {
-                    if(o->getImportance()>0) {
-                        doSometimeOs.push_back(o);
-                    }
                 }
             }
         }
     }
-
     doFirstDashboardletPresenter->refresh(doFirstOs, true, true);
+
     outlinesDashboardletPresenter->refresh(os);
     recentDashboardletPresenter->refresh(ns);
     // IMPROVE: consider showing recent O: navigatorDashboardletPresenter->showInitialView(ns[0]->getOutline());

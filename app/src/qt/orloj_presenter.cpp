@@ -172,7 +172,7 @@ void OrlojPresenter::showFacetDashboard() {
     setFacet(OrlojPresenterFacets::FACET_DASHBOARD);
 
     vector<Note*> allNotes{};
-    mind->getAllNotes(allNotes);
+    mind->getAllNotes(allNotes, true, true);
     map<const Tag*,int> allTags{};
     mind->getTagsCardinality(allTags);
 

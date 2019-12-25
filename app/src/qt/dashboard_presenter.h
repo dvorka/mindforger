@@ -23,6 +23,8 @@
 
 #include <QtWidgets>
 
+#include "../../lib/src/gear/string_utils.h"
+
 #include "orloj_presenter.h"
 #include "dashboard_view.h"
 #include "organizer_quadrant_presenter.h"
