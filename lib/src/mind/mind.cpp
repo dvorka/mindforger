@@ -60,6 +60,13 @@ Mind::Mind(Configuration &configuration)
     timeScopeAspect.setTimeScope(config.getTimeScope());
     tagsScopeAspect.setTags(config.getTagsScope());
     memory.setMindScope(&scopeAspect);
+
+    stats = new MindStatistics();
+    stats->mostReadOutline = nullptr;
+    stats->mostWrittenOutline = nullptr;
+    stats->mostReadNote = nullptr;
+    stats->mostWrittenNote = nullptr;
+    stats->mostUsedTag = nullptr;
 }
 
 Mind::~Mind()
@@ -598,7 +605,7 @@ Taxonomy<Tag>& Mind::getTags()
     return ontology.getTags();
 }
 
-void Mind::getTagsCardinality(std::map<const Tag*,int>& tagsCardinality)
+void Mind::getTagsCardinality(map<const Tag*,int>& tagsCardinality)
 {
     if(ontology.getTags().size()) {
         for(const Tag* t:ontology.getTags().values()) {
@@ -968,6 +975,65 @@ void Mind::noteOnRename(const std::string& oldName, const std::string& newName)
 void Mind::onRemembering()
 {
     allNotesCache.clear();
+}
+
+MindStatistics* Mind::getStatistics()
+{
+    const vector<Outline*>&os = memory.getOutlines();
+    if(os.size()) {
+        u_int32_t maxReads=0;
+        u_int32_t maxWrites=0;
+        for(Outline* o:os) {
+            if(o->getReads() > maxReads) {
+                maxReads = o->getReads();
+                stats->mostReadOutline = o;
+            }
+            if(o->getRevision() > maxWrites) {
+                maxWrites = o->getRevision();
+                stats->mostWrittenOutline = o;
+            }
+        }
+    } else {
+        stats->mostReadOutline = nullptr;
+        stats->mostWrittenOutline = nullptr;
+    }
+
+    vector<Note*> ns{};
+    memory.getAllNotes(ns);
+    if(ns.size()) {
+        u_int32_t maxReads=0;
+        u_int32_t maxWrites=0;
+        for(Note* n:ns) {
+            if(n->getReads() > maxReads) {
+                maxReads = n->getReads();
+                stats->mostReadNote = n;
+            }
+            if(n->getRevision() > maxWrites) {
+                maxWrites = n->getRevision();
+                stats->mostWrittenNote = n;
+            }
+        }
+    } else {
+        stats->mostReadNote = nullptr;
+        stats->mostWrittenNote = nullptr;
+    }
+
+    map<const Tag*,int> ts{};
+    getTagsCardinality(ts);
+    if(ts.size()) {
+        map<const Tag*,int>::iterator it{};
+        int maxCardinality = 0;
+        for(it = ts.begin(); it != ts.end(); it++) {
+            if(it->second > maxCardinality) {
+                stats->mostUsedTag = it->first;
+                maxCardinality = it->second;
+            }
+        }
+    } else {
+        stats->mostUsedTag = nullptr;
+    }
+
+    return stats;
 }
 
 /*

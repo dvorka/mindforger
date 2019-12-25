@@ -119,8 +119,10 @@ private:
 
     qreal initialEdgeLenght;
 
+    bool isDashboardlet;
+
 public:
-    NavigatorView(QWidget* parent);
+    NavigatorView(QWidget* parent, bool isDashboardlet=false);
     ~NavigatorView();
 
     qreal getInitialEdgeLenght() const { return initialEdgeLenght; }
@@ -151,6 +153,7 @@ protected:
 #ifndef QT_NO_WHEELEVENT
     void wheelEvent(QWheelEvent *event) override;
 #endif
+    void mousePressEvent(QMouseEvent* mouseEvent) override;
 
 private:
     void updateNavigatorView();
@@ -158,6 +161,7 @@ private:
 
 signals:
     void nodeSelectedSignal(NavigatorNode* selectedNode);
+    void clickToSwitchFacet();
 
 public slots:
     void shuffle();

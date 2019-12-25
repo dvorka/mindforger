@@ -35,10 +35,12 @@ private:
     // if view is width < threshold columns, then shows simplified view w/o Mind-related columns
     static constexpr int SIMPLIFIED_VIEW_THRESHOLD_WIDTH = 75*2;
 
+    bool isDashboardlet;
+
 public:
     static const int COLUMN_COUNT = 7;
 public:
-    explicit OutlinesTableView(QWidget* parent);
+    explicit OutlinesTableView(QWidget* parent, bool isDashboardlet=false);
     OutlinesTableView(const OutlinesTableView&) = delete;
     OutlinesTableView(const OutlinesTableView&&) = delete;
     OutlinesTableView &operator=(const OutlinesTableView&) = delete;

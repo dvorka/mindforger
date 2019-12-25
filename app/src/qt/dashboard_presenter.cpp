@@ -26,27 +26,112 @@ DashboardPresenter::DashboardPresenter(DashboardView* view, OrlojPresenter* orlo
 {
     this->view = view;
 
-    organizerDashboardletPresenter = new OrganizerPresenter(
-                view->getOrganizerDashboardlet(),
-                orloj);
-    recentDashboardletPresenter = new RecentNotesTablePresenter(
-                view->getRecentDashboardlet(),
-                orloj->getMainPresenter()->getHtmlRepresentation());
+    doFirstDashboardletPresenter = new OrganizerQuadrantPresenter(
+        view->getDoFirstDashboardlet(),
+        orloj,
+        tr("Do first")
+    );
+    outlinesDashboardletPresenter = new OutlinesTablePresenter(
+        view->getOutlinesDashboardlet(),
+        orloj->getMainPresenter()->getHtmlRepresentation()
+    );
     navigatorDashboardletPresenter = new NavigatorPresenter(
-                view->getNavigatorDashboardlet(),
-                this,
-                orloj->getMind()->getKnowledgeGraph());
+        view->getNavigatorDashboardlet(),
+        this,
+        orloj->getMind()->getKnowledgeGraph()
+    );
+    recentDashboardletPresenter = new RecentNotesTablePresenter(
+        view->getRecentDashboardlet(),
+        orloj->getMainPresenter()->getHtmlRepresentation()
+    );
+    tagsDashboardletPresenter = new TagsTablePresenter(
+        view->getTagsDashboardlet(),
+        orloj->getMainPresenter()->getHtmlRepresentation()
+    );
 }
 
 DashboardPresenter::~DashboardPresenter()
 {
 }
 
-void DashboardPresenter::refresh(const vector<Outline*>& os, const vector<Note*>& ns)
+void DashboardPresenter::refresh(
+        const vector<Outline*>& os,
+        const vector<Note*>& ns,
+        const map<const Tag*,int>& ts,
+        int bytes,
+        MindStatistics* stats)
 {
-    organizerDashboardletPresenter->refresh(os);
+    view->getWelcomeDashboardlet()->setHtml(
+        QString(
+            "<html><body bgcolor='#fff'><center>"
+            "<font color='black'>"
+            "<br/>"
+            "<h1>We are MindForger!</h1>"
+            "<br/>"
+            "<a href='https://www.mindforger.com'>MindForger</a> is human mind inspired personal "
+            "<a href='http://www.mindforger.com/#vision'>knowledge management tool</a>. "
+            "It's also open, free, well performing "
+            "<a href='http://www.mindforger.com/#floss'>Markdown IDE</a> which respects "
+            "your privacy and enables security."
+            "<ul>"
+            "<li>- <a href='https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md'>Documentation</a>.</li>"
+            "<li>- <a href='https://www.mindforger.com/#download'>Releases</a>, "
+            "<a href='https://github.com/dvorka/mindforger'>source code</a> and "
+            "<a href='https://github.com/dvorka/mindforger/issues'>bugs</a>.</li>"
+            "<li>- <a href='https://twitter.com/mindforger'>Twitter</a>, "
+            "<a href='http://www.facebook.com/pages/MindForger/172099806154112'>Facebook</a> and "
+            "<a href='https://www.youtube.com/user/MindForgerChannel'>YouTube</a>.</li>"
+            "</ul>"
+            "MindForger repository <b>statistics</b>:"
+            "<ul>"
+            "<li>- <b>" + QString::number(os.size()) + "</b> notebooks.</li>"
+            "<li>- <b>" + QString::number(ns.size()) + "</b> notes.</li>"
+            "<li>- <b>" + QString::number(ts.size()) + "</b> tags.</li>"
+            "<li>- <b>" + QString::number(bytes) + "</b> bytes.</li>"
+            "<li>- Most used notebook: <b>" + QString::fromStdString(stats->mostReadOutline?stats->mostReadOutline->getName():"") + "</b>.</li>"
+            "<li>- Most used note: <b>" + QString::fromStdString(stats->mostReadNote?stats->mostReadNote->getName():"") + "</b> in "
+            "<b>" + QString::fromStdString(stats->mostReadNote?stats->mostReadNote->getOutline()->getName():"") + "</b>.</li>"
+            // TODO RD vs. WR: "<li>- Most written notebook: <b>" + QString::fromStdString(stats->mostWrittenOutline?stats->mostWrittenOutline->getName():"") + "</b>.</li>"
+            // TODO RD vs. WR: "<li>- Most written note: <b>" + QString::fromStdString(stats->mostWrittenNote?stats->mostWrittenNote->getName():"") + "</b>.</li>"
+            "<li>- Most used tag: <b><span style='background-color: " + QString::fromStdString(stats->mostUsedTag?stats->mostUsedTag->getColor().asHtml():"") + "'>&nbsp;"
+            "" + QString::fromStdString(stats->mostUsedTag?stats->mostUsedTag->getName():"") + "&nbsp;</span></b>.</li>"
+            // TODO O w/ most Ns
+            "</ul>"
+            "</font></center></body></html>"
+    ));
+
+    // TODO this is duplicated code w/ organizer
+    vector<Outline*> doFirstOs;
+    vector<Outline*> doSoonOs;
+    vector<Outline*> doSometimeOs;
+    vector<Outline*> planDedicatedTimeOs;
+
+    if(os.size()) {
+        for(Outline* o:os) {
+            if(o->getUrgency()>2) {
+                if(o->getImportance()>2) {
+                    doFirstOs.push_back(o);
+                } else {
+                    doSoonOs.push_back(o);
+                }
+            } else {
+                if(o->getImportance()>2) {
+                    planDedicatedTimeOs.push_back(o);
+                } else {
+                    if(o->getImportance()>0) {
+                        doSometimeOs.push_back(o);
+                    }
+                }
+            }
+        }
+    }
+
+    doFirstDashboardletPresenter->refresh(doFirstOs, true, true);
+    outlinesDashboardletPresenter->refresh(os);
     recentDashboardletPresenter->refresh(ns);
+    // IMPROVE: consider showing recent O: navigatorDashboardletPresenter->showInitialView(ns[0]->getOutline());
     navigatorDashboardletPresenter->showInitialView();
+    tagsDashboardletPresenter->refresh(ts);
 }
 
 } // m8r namespace

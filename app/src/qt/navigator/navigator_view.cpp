@@ -78,7 +78,7 @@ namespace m8r {
 
 using namespace std;
 
-NavigatorView::NavigatorView(QWidget* parent)
+NavigatorView::NavigatorView(QWidget* parent, bool isDashboardlet)
     : QGraphicsView(parent),
       timerId{0},
       w{},
@@ -96,8 +96,10 @@ NavigatorView::NavigatorView(QWidget* parent)
 	setRenderHint(QPainter::Antialiasing);
 	setTransformationAnchor(AnchorUnderMouse);
 
+    this->isDashboardlet = isDashboardlet;
+
     // defaults
-    initialEdgeLenght = EDGE_LENGTH_DEFAULT;
+    initialEdgeLenght = isDashboardlet?EDGE_LENGTH_DEFAULT*3:EDGE_LENGTH_DEFAULT;
 }
 
 NavigatorView::~NavigatorView()
@@ -327,9 +329,13 @@ void NavigatorView::timerEvent(QTimerEvent *event)
     }
 
     // CENTER scene using scroll bars
-    int scrollRange= (horizontalScrollBar()->maximum()-horizontalScrollBar()->minimum())/2;
+    int vCenteringTweak = isDashboardlet?10:2;
+    int hCenteringTweak = isDashboardlet?10:2;
+
+    int scrollRange = (horizontalScrollBar()->maximum()-horizontalScrollBar()->minimum())/hCenteringTweak;
     horizontalScrollBar()->setValue(horizontalScrollBar()->minimum()+scrollRange);
-    scrollRange= (verticalScrollBar()->maximum()-verticalScrollBar()->minimum())/2;
+
+    scrollRange = (verticalScrollBar()->maximum()-verticalScrollBar()->minimum())/vCenteringTweak;
     verticalScrollBar()->setValue(verticalScrollBar()->minimum()+scrollRange);
 }
 
@@ -354,6 +360,15 @@ void NavigatorView::scaleView(qreal scaleFactor)
     }
 
 	scale(scaleFactor, scaleFactor);
+}
+
+void NavigatorView::mousePressEvent(QMouseEvent* mouseEvent)
+{
+    if(isDashboardlet) {
+        emit clickToSwitchFacet();
+    } else {
+        QGraphicsView::mousePressEvent(mouseEvent);
+    }
 }
 
 void NavigatorView::shuffle()

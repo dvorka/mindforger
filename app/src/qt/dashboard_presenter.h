@@ -25,14 +25,17 @@
 
 #include "orloj_presenter.h"
 #include "dashboard_view.h"
-#include "organizer_presenter.h"
+#include "organizer_quadrant_presenter.h"
 #include "recent_notes_table_presenter.h"
 #include "navigator_presenter.h"
+#include "tags_table_presenter.h"
+#include "outlines_table_view.h"
 
 namespace m8r {
 
-class OrganizerPresenter;
+class OrganizerQuadrantPresenter;
 class OrlojPresenter;
+class OutlinesTablePresenter;
 
 class DashboardPresenter : public QObject
 {
@@ -40,10 +43,12 @@ class DashboardPresenter : public QObject
 
     DashboardView* view;
 
-    OrganizerPresenter* organizerDashboardletPresenter;
+    OrganizerQuadrantPresenter* doFirstDashboardletPresenter;
+    OrganizerQuadrantPresenter* doSoonDashboardletPresenter;
     RecentNotesTablePresenter* recentDashboardletPresenter;
     NavigatorPresenter* navigatorDashboardletPresenter;
-    // TODO ...
+    TagsTablePresenter* tagsDashboardletPresenter;
+    OutlinesTablePresenter* outlinesDashboardletPresenter;
 
 public:
     explicit DashboardPresenter(DashboardView* view, OrlojPresenter* orloj);
@@ -53,7 +58,19 @@ public:
     DashboardPresenter &operator=(const DashboardPresenter&&) = delete;
     ~DashboardPresenter();
 
-    void refresh(const std::vector<Outline*>& os, const std::vector<Note*>& ns);
+    DashboardView* getView() { return view; }
+
+    void refresh(
+            const std::vector<Outline*>& os,
+            const std::vector<Note*>& ns,
+            const std::map<const Tag*,int>& ts,
+            int bytes,
+            MindStatistics* stats
+    );
+
+    RecentNotesTablePresenter* getRecentNotesPresenter() { return recentDashboardletPresenter; }
+    TagsTablePresenter* getTagsPresenter() { return tagsDashboardletPresenter; }
+    OutlinesTablePresenter* getOutlinesPresenter() { return outlinesDashboardletPresenter; }
 };
 
 }

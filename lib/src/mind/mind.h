@@ -51,6 +51,16 @@ enum class FtsSearch {
     REGEXP
 };
 
+struct MindStatistics {
+    Outline* mostReadOutline;
+    Outline* mostWrittenOutline;
+
+    Note* mostReadNote;
+    Note* mostWrittenNote;
+
+    const Tag* mostUsedTag;
+};
+
 /**
  * @brief Mind.
  *
@@ -135,6 +145,7 @@ private:
     MarkdownConfigurationRepresentation* mdConfigRepresentation;
     Memory memory;
     AutolinkingMind* autolinking;
+    MindStatistics* stats;
 
     /**
      * Atomic mind state changes and asynchronous computations synchronization
@@ -606,7 +617,11 @@ public:
      * DIAGNOSTICS
      */
 
-    // IMPROVE MemoryStatistics getStatistics();
+    /*
+     * STATISTICS
+     */
+
+    MindStatistics* getStatistics();
 
 private:
     /**

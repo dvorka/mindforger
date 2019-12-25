@@ -21,31 +21,36 @@
 
 #include <QtWidgets>
 
-#include "organizer_view.h"
+#include "organizer_quadrant_view.h"
 #include "recent_notes_table_view.h"
 #include "navigator/navigator_view.h"
+#include "tags_table_view.h"
+#include "outlines_table_view.h"
 
 namespace m8r {
 
 /**
  * @brief Dashboard
- *
- * We are MF   | Recent
- * ------------+---------------------
- * Navigator   | Eisenhower
  */
 class DashboardView : public QSplitter
 {
     Q_OBJECT
 
 private:    
+    // if view is width < threshold columns, then shows simplified view w/o Mind-related columns
+    static constexpr int SIMPLIFIED_VIEW_THRESHOLD_WIDTH = 75*2;
+
     QSplitter* left;
+    QSplitter* middle;
     QSplitter* right;
 
-    QTextEdit* welcomeDashboardlet;
-    OrganizerView* organizerDashboardlet;
+    QTextBrowser* welcomeDashboardlet;
+    OrganizerQuadrantView* doFirstDashboardlet;
+    OrganizerQuadrantView* doSoonDashboardlet;
     NavigatorView* navigatorDashboardlet;
     RecentNotesTableView* recentDashboardlet;
+    TagsTableView* tagsDashboardlet;
+    OutlinesTableView* outlinesDashboardlet;
 
 public:
     explicit DashboardView(QWidget* parent);
@@ -55,10 +60,15 @@ public:
     DashboardView &operator=(const DashboardView&&) = delete;
     ~DashboardView();
 
-    QTextEdit* getWelcomeDashboardlet() { return welcomeDashboardlet; }
-    OrganizerView* getOrganizerDashboardlet() { return organizerDashboardlet; }
+    QTextBrowser* getWelcomeDashboardlet() { return welcomeDashboardlet; }
+    OrganizerQuadrantView* getDoFirstDashboardlet() { return doFirstDashboardlet; }
+    OutlinesTableView* getOutlinesDashboardlet() { return outlinesDashboardlet; }
     NavigatorView* getNavigatorDashboardlet() { return navigatorDashboardlet; }
     RecentNotesTableView* getRecentDashboardlet() { return recentDashboardlet; }
+    TagsTableView* getTagsDashboardlet() { return tagsDashboardlet; }
+
+protected:
+    void resizeEvent(QResizeEvent* event) override;
 };
 
 }

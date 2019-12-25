@@ -89,6 +89,12 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
     QObject::connect(exportOutlineToHtmlDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineHtmlExport()));
     QObject::connect(exportMindToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
+    QObject::connect(
+        orloj->getDashboard()->getView()->getNavigatorDashboardlet(),
+        SIGNAL(clickToSwitchFacet()),
+        this,
+        SLOT(doActionViewKnowledgeGraphNavigator())
+    );
     // wire toolbar signals
     QObject::connect(view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()), this, SLOT(doActionOutlineOrNoteNew()));
     QObject::connect(view.getToolBar()->actionOpenRepository, SIGNAL(triggered()), this, SLOT(doActionMindLearnRepository()));
@@ -174,9 +180,7 @@ void MainWindowPresenter::showInitialView()
                 if(!doActionViewHome()) {
                     // fallback
                     view.getCli()->setBreadcrumbPath("/outlines");
-                    vector<Note*> allNotes{};
-                    mind->getAllNotes(allNotes);
-                    orloj->showFacetDashboard(mind->getOutlines(), allNotes);
+                    orloj->showFacetDashboard();
                 }
             } else {
                 view.getCli()->setBreadcrumbPath("/outlines");
@@ -999,10 +1003,7 @@ void MainWindowPresenter::doActionViewRecentNotes()
 void MainWindowPresenter::doActionViewDashboard()
 {
     if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-        vector<Note*> notes{};
-        mind->getAllNotes(notes, true, true);
-        // IMPROVE consider trimming the list to avoid making it huge - it's just dashboardlet
-        orloj->showFacetDashboard(mind->getOutlines(), notes);
+        orloj->showFacetDashboard();
     }
 }
 

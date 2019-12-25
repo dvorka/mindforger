@@ -27,49 +27,64 @@ DashboardView::DashboardView(QWidget* parent)
     left->setStretchFactor(0, 1);
     left->setStretchFactor(1, 1);
 
-    // welcome
-    welcomeDashboardlet = new QTextEdit(left);
-    welcomeDashboardlet->document()->setHtml(
-        QString(
-             "<html><body bgcolor='#fff'>"
-             "<font color='black'>"
-             "<h1>We are MindForger</h1>"
-             "Are you drowning in information, but starving for knowledge?"
-             "<ul>"
-             "<li><a href='https://www.mindforger.com'>Documentation</a></li>"
-             "<li>Twitter, Facebook, YouTube</li>"
-             "<li>Releases, source code and bugs</li>"
-             "<li>Ubuntu</li>"
-             "<li></li>"
-             "</ul>"
-             "</font></body></html>"
-        ));
-
-    // recent
-    recentDashboardlet = new RecentNotesTableView(left, true);
-    recentDashboardlet->size().setHeight(100);
-    recentDashboardlet->size().setWidth(100);
-
-    left->addWidget(welcomeDashboardlet);
-    left->addWidget(recentDashboardlet);
-    addWidget(left);
+    middle = new QSplitter(Qt::Vertical, this);
+    middle->setStretchFactor(0, 1);
+    middle->setStretchFactor(1, 1);
 
     right = new QSplitter(Qt::Vertical, this);
     right->setStretchFactor(0, 1);
     right->setStretchFactor(1, 1);
 
+    // welcome
+    welcomeDashboardlet = new QTextBrowser(left);
+    welcomeDashboardlet->setOpenExternalLinks(true);
+    left->addWidget(welcomeDashboardlet);
+
+    // recent
+    recentDashboardlet = new RecentNotesTableView(left, true);
+    left->addWidget(recentDashboardlet);
+
+    // organizer quadrants
+    doFirstDashboardlet = new OrganizerQuadrantView(middle);
+    middle->addWidget(doFirstDashboardlet);
+
+    // tags
+    tagsDashboardlet = new TagsTableView(middle);
+    middle->addWidget(tagsDashboardlet);
+
     // navigator
-    navigatorDashboardlet = new NavigatorView(right);
+    navigatorDashboardlet = new NavigatorView(right, true);
+    // IMPROVE should go to resize event
+    int windowHeight=parent->parentWidget()->parentWidget()->size().height();
+    navigatorDashboardlet->setFixedHeight(windowHeight);
+    right->addWidget(navigatorDashboardlet);
 
-    // organizer
-    organizerDashboardlet = new OrganizerView(right);
+    // outlines
+    outlinesDashboardlet = new OutlinesTableView(right, true);
+    right->addWidget(outlinesDashboardlet);
 
-    //right->addWidget(navigatorDashboardlet);
-    right->addWidget(organizerDashboardlet);
-    addWidget(right);
-
+    // self ~ horizontal splitter
     setStretchFactor(0, 1);
     setStretchFactor(1, 1);
+    setStretchFactor(2, 1);
+
+    addWidget(left);
+    addWidget(middle);
+    addWidget(right);
+}
+
+void DashboardView::resizeEvent(QResizeEvent* event)
+{
+    UNUSED_ARG(event);
+
+    int normalizedWidth = width()/fontMetrics().averageCharWidth();
+    if(normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH) {
+        middle->setVisible(false);
+    } else {
+        middle->setVisible(true);
+    }
+
+    QSplitter::resizeEvent(event);
 }
 
 DashboardView::~DashboardView()

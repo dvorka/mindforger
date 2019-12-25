@@ -22,9 +22,11 @@ namespace m8r {
 
 using namespace std;
 
-OutlinesTableView::OutlinesTableView(QWidget *parent)
+OutlinesTableView::OutlinesTableView(QWidget *parent, bool isDashboardlet)
   : QTableView(parent)
 {
+    this->isDashboardlet = isDashboardlet;
+
     verticalHeader()->setVisible(false);
 
     // BEFARE ::ResizeToContents this kills performance - use ::Fixed instead:
@@ -85,14 +87,20 @@ void OutlinesTableView::resizeEvent(QResizeEvent* event)
     }
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
 
-    // importance/urgency
-    this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*12);
-    this->setColumnWidth(2, this->fontMetrics().averageCharWidth()*12);
-    // progress
-    this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*6);
+    if(isDashboardlet) {
+        this->setColumnHidden(1, true);
+        this->setColumnHidden(2, true);
+        this->setColumnHidden(3, true);
+    } else {
+        // importance/urgency
+        this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*12);
+        this->setColumnWidth(2, this->fontMetrics().averageCharWidth()*12);
+        // progress
+        this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*6);
+    }
 
     int normalizedWidth = width()/fontMetrics().averageCharWidth();
-    if(normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH) {
+    if(normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH || isDashboardlet) {
         this->setColumnHidden(4, true);
         this->setColumnHidden(5, true);
         this->setColumnHidden(6, true);

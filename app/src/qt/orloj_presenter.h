@@ -151,7 +151,7 @@ public:
      */
     void onFacetChange(const OrlojPresenterFacets targetFacet) const;
 
-    void showFacetDashboard(const std::vector<Outline*>& outlines, const std::vector<Note*>& notes);
+    void showFacetDashboard();
     void showFacetOrganizer(const std::vector<Outline*>& outlines);
     void showFacetTagCloud();
     void showFacetOutlineList(const std::vector<Outline*>& outlines);

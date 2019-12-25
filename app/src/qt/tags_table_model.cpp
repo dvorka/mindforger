@@ -39,7 +39,7 @@ void TagsTableModel::removeAllRows()
 
     QStringList tableHeader;
     tableHeader
-        << tr("Tag")
+        << tr("Tags")
         << tr("Ts");
     // IMPROVE set tooltips: items w/ tooltips instead of just strings
     setHorizontalHeaderLabels(tableHeader);
