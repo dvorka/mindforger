@@ -1,6 +1,6 @@
 # mindforger-app.pro     Qt project file for MindForger
 #
-# Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
