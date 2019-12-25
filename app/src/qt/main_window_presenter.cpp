@@ -1,7 +1,7 @@
 /*
  main_window_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -2134,7 +2134,7 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
             "<br>Contact me at <a href='mailto:martin.dvorak@mindforger.com'>&lt;martin.dvorak@mindforger.com&gt;</a>"
             " or see <a href='https://www.mindforger.com'>www.mindforger.com</a> for more information."
             "<br>"
-            "<br>Copyright (C) 2016-2019 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/blob/master/CREDITS.md'>contributors</a>."
+            "<br>Copyright (C) 2016-2020 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/blob/master/CREDITS.md'>contributors</a>."
         });
 }
 
