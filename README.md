@@ -1,4 +1,4 @@
-# Thinking Notebook & Markdown IDE
+# Thinking Notebook & Markdown Editor
 
 [![Travis CI](https://travis-ci.org/dvorka/mindforger.svg?branch=master)](https://travis-ci.org/dvorka/mindforger)
 [![Appveyor CI](https://ci.appveyor.com/api/projects/status/iemop280po84od66?svg=true)](https://ci.appveyor.com/project/dvorka/mindforger)
@@ -17,10 +17,10 @@ Do you know how are they mutually **related** when you read or write them? No?
 
 https://www.mindforger.com
 
-## Markdown IDE
+## Markdown Editor
 ![MindForger](http://www.mindforger.com/github/github-markdown-ide.png?)
 
-MindForger is open, free, well performing Markdown IDE which respects your privacy and enables security. 
+MindForger is open, free, well performing Markdown editor which respects your privacy and enables security. 
 
 ## Thinking Notebook
 ![MindForger](http://www.mindforger.com/github/github-thinking-notebook.png)

@@ -63,15 +63,14 @@ void DashboardPresenter::refresh(
 {
     view->getWelcomeDashboardlet()->setHtml(
         QString(
-            "<html><body bgcolor='#fff'><center>"
-            "<font color='black'>"
+            "<html><body bgcolor='#fff' color='#000'><font color='black'><center>"
             "<br/>"
             "<h1>We are MindForger!</h1>"
             "<br/>"
             "<a href='https://www.mindforger.com'>MindForger</a> is human mind inspired personal "
             "<a href='http://www.mindforger.com/#vision'>knowledge management tool</a>. "
             "It's also open, free, well performing "
-            "<a href='http://www.mindforger.com/#floss'>Markdown IDE</a> which respects "
+            "<a href='http://www.mindforger.com/#floss'>Markdown editor</a> which respects "
             "your privacy and enables security."
             "<ul>"
             "<li>- <a href='https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md'>Documentation</a>.</li>"
@@ -82,7 +81,20 @@ void DashboardPresenter::refresh(
             "<a href='http://www.facebook.com/pages/MindForger/172099806154112'>Facebook</a> and "
             "<a href='https://www.youtube.com/user/MindForgerChannel'>YouTube</a>.</li>"
             "</ul>"
-            "MindForger repository <b>statistics</b>:"
+            "<b>Tips</b>:"
+            "</center>"
+            "<ul>"
+            "<li>- Return to this <b>dashboard</b> with <code>Ctrl-Shift-d</code>.</li>"
+            "<li>- <b>List</b> notebooks/Markdown files with <code>Ctrl-Shift-o</code>.</li>"
+            "<li>- <b>Open</b> any item in table <b>listing</b> with "
+            "mouse <b>double-click</b>.</li>"
+            "<li>- <b>Edit</b> note with HTML preview <b>double-click</b> or "
+            "using <code>Ctrl-e</code>.</li>"
+            "<li>- <b>Zoom</b> note HTML preview with <code>Ctrl-</code><b>mouse wheel</b> "
+            "or <b>scroll</b>.</li>"
+            "</ul>"
+            "<center>"
+            "<b>Statistics</b>:"
             "<ul>"
             "<li>- <b>" + QString::fromStdString(stringIntFormat(std::to_string(os.size()))) + "</b> notebooks.</li>"
             "<li>- <b>" + QString::fromStdString(stringIntFormat(std::to_string(ns.size()))) + "</b> notes.</li>"
@@ -97,7 +109,7 @@ void DashboardPresenter::refresh(
             "" + QString::fromStdString(stats->mostUsedTag?stats->mostUsedTag->getName():"") + "&nbsp;</span></b>.</li>"
             // TODO O w/ most Ns
             "</ul>"
-            "</font></center></body></html>"
+            "</center></font></body></html>"
     ));
 
     vector<Outline*> doFirstOs;

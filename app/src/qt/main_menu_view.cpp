@@ -138,37 +138,37 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: recall
 
-    actionFts = new QAction(tr("&Full-text Search"), mainWindow);
+    actionFts = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Full-text Search"), mainWindow);
     actionFts->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
     actionFts->setStatusTip(tr("Note full-text search"));
 
-    actionFindOutlineByName = new QAction(tr("Recall Note&book by Name"), mainWindow);
+    actionFindOutlineByName = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Note&book by Name"), mainWindow);
     actionFindOutlineByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
     actionFindOutlineByName->setStatusTip(tr("Find Notebook by name"));
 
-    actionFindNoteByName = new QAction(tr("Recall &Note by Name"), mainWindow);
+    actionFindNoteByName = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall &Note by Name"), mainWindow);
     actionFindNoteByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
     actionFindNoteByName->setStatusTip(tr("Find Note by name"));
 
-    actionFindOutlineByTag = new QAction(tr("Recall Notebook by Ta&gs"), mainWindow);
+    actionFindOutlineByTag = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Notebook by Ta&gs"), mainWindow);
     actionFindOutlineByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_X));
     actionFindOutlineByTag->setStatusTip(tr("Find Notebook by tags"));
 
-    actionFindNoteByTag = new QAction(tr("Recall Note by &Tags"), mainWindow);
+    actionFindNoteByTag = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Note by &Tags"), mainWindow);
     actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
     actionFindNoteByTag->setStatusTip(tr("Find Note by tags"));
 
 #ifdef MF_NER
-    actionFindNerPersons = new QAction(tr("Recall &Persons"), mainWindow);
+    actionFindNerPersons = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall &Persons"), mainWindow);
     actionFindNerPersons->setStatusTip(tr("Find persons using Named-entity recognition (NER)"));
 
-    actionFindNerLocations = new QAction(tr("Recall &Locations"), mainWindow);
+    actionFindNerLocations = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall &Locations"), mainWindow);
     actionFindNerLocations->setStatusTip(tr("Find locations using Named-entity recognition (NER)"));
 
-    actionFindNerOrganizations = new QAction(tr("Recall Organizations"), mainWindow);
+    actionFindNerOrganizations = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Organizations"), mainWindow);
     actionFindNerOrganizations->setStatusTip(tr("Find organizations using Named-entity recognition (NER)"));
 
-    actionFindNerMisc = new QAction(tr("Recall Other Entities"), mainWindow);
+    actionFindNerMisc = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Other Entities"), mainWindow);
     actionFindNerMisc->setStatusTip(tr("Find miscellaneous entities using Named-entity recognition (NER)"));
 #endif
 
@@ -242,7 +242,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewDistractionFree->setStatusTip(tr("Toggle distraction free mode"));
     actionViewDistractionFree->setEnabled(false);
 
-    actionViewFullscreen = new QAction(tr("&Fullscreen"), mainWindow);
+    actionViewFullscreen = new QAction(QIcon(":/menu-icons/fullscreen.svg"), tr("&Fullscreen"), mainWindow);
     actionViewFullscreen->setShortcut(QKeySequence(Qt::Key_F11));
     actionViewFullscreen->setStatusTip(tr("Toggle fullscreen"));
 
@@ -447,10 +447,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: edit
 
-    actionEditFind = new QAction(tr("Find\tCtrl+Shift+F"), mainWindow);
+    actionEditFind = new QAction(QIcon(":/menu-icons/find.svg"), tr("Find\tCtrl+Shift+F"), mainWindow);
     actionEditFind->setStatusTip(tr("Search Note text"));
 
-    actionEditFindNext = new QAction(tr("Find Next\tCtrl+F"), mainWindow);
+    actionEditFindNext = new QAction(QIcon(":/menu-icons/find.svg"), tr("Find Next\tCtrl+F"), mainWindow);
     actionEditFindNext->setStatusTip(tr("Search Note text again"));
 
     actionEditUndo= new QAction(QIcon(":/menu-icons/undo.svg"), tr("&Undo\tCtrl+Z"), mainWindow);
