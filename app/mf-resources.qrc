@@ -36,4 +36,28 @@
     <qresource prefix="/js">
         <file alias="highlight.js">resources/qt/js/highlight.js</file>
     </qresource>
+    <qresource prefix="/menu-icons">
+        <file alias="redo.svg">resources/menu-icons/light_edit-redo.svg</file>
+        <file alias="exit.svg">resources/menu-icons/light_application-exit.svg</file>
+        <file alias="configure.svg">resources/menu-icons/light_configure.svg</file>
+        <file alias="edit.svg">resources/menu-icons/light_document-edit.svg</file>
+        <file alias="export.svg">resources/menu-icons/light_document-export.svg</file>
+        <file alias="new.svg">resources/menu-icons/light_document-new.svg</file>
+        <file alias="save.svg">resources/menu-icons/light_document-save.svg</file>
+        <file alias="copy.svg">resources/menu-icons/light_edit-copy.svg</file>
+        <file alias="delete.svg">resources/menu-icons/light_edit-delete.svg</file>
+        <file alias="home.svg">resources/menu-icons/light_go-home.svg</file>
+        <file alias="tag.svg">resources/menu-icons/light_tag.svg</file>
+        <file alias="bug.svg">resources/menu-icons/light_tools-report-bug.svg</file>
+        <file alias="fullscreen.svg">resources/menu-icons/light_view-fullscreen.svg</file>
+        <file alias="image.svg">resources/menu-icons/light_view-preview.svg</file>
+        <file alias="refresh.svg">resources/menu-icons/light_view-refresh.svg</file>
+        <file alias="link.svg">resources/menu-icons/light_link.svg</file>
+        <file alias="cut.svg">resources/menu-icons/light_edit-cut.svg</file>
+        <file alias="paste.svg">resources/menu-icons/light_edit-paste.svg</file>
+        <file alias="import.svg">resources/menu-icons/light_document-import.svg</file>
+        <file alias="zoom-in.svg">resources/menu-icons/light_zoom-in.svg</file>
+        <file alias="zoom-out.svg">resources/menu-icons/light_zoom-out.svg</file>
+        <file alias="undo.svg">resources/menu-icons/light_edit-undo.svg</file>
+    </qresource>
 </RCC>

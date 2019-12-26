@@ -37,7 +37,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
 
     // new/devise... new MD repository
-    submenuMindNew = menuMind->addMenu("&New");
+    submenuMindNew = menuMind->addMenu(QIcon(":/menu-icons/new.svg"), "&New");
     actionMindNewRepository = new QAction(tr("MindForger &Repository"), mainWindow);
     actionMindNewRepository->setStatusTip(tr("Create a brand new MindForger repository..."));
     submenuMindNew->addAction(actionMindNewRepository);
@@ -60,7 +60,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     submenuMindRelearn->setEnabled(false);
 
     // remember... by flushing caches, saving unsaved Ns, saving Os/Ns with changed read metadata, ...
-    actionMindRemember = new QAction(tr("Re&member"), mainWindow);
+    actionMindRemember = new QAction(QIcon(":/menu-icons/save.svg"), tr("Re&member"), mainWindow);
     actionMindRemember->setStatusTip(tr("Persist all Things in Memory"));
 
     // recall ... smart *combined* (semantic) mind search using FTS/associations/... to find O or N
@@ -75,7 +75,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindThink->setStatusTip(tr("Think to suggest matching, similar and associated Notes while searching, reading and writing"));
 
     // think ... toggle mental processes ~ enable associations/similarity/search based suggestions on searching/reading/writing notes
-    actionMindAutolink = new QAction(tr("&Autolink"), mainWindow);
+    actionMindAutolink = new QAction(QIcon(":/menu-icons/link.svg"), tr("&Autolink"), mainWindow);
     actionMindAutolink->setCheckable(true);
     actionMindAutolink->setStatusTip(tr("Automatically inject links to relevant Notebooks and Notes when browsing HTML preview"));
     actionMindAutolink->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
@@ -86,7 +86,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // TODO remove this menu item > make it Configuration option in Mind menu (Limbo or erase)
     // forget ... move to Limbo or erase
-    actionMindForget = new QAction(tr("&Forget"), mainWindow);
+    actionMindForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Forget"), mainWindow);
     actionMindForget->setStatusTip(tr("Limbo vs erase memory..."));
     actionMindForget->setEnabled(false);
 
@@ -100,16 +100,16 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // TODO submenu: printer, HTML, PDF
 
-    actionMindPreferences = new QAction(tr("A&dapt"), mainWindow);
+    actionMindPreferences = new QAction(QIcon(":/menu-icons/configure.svg"), tr("A&dapt"), mainWindow);
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
     actionMindPreferences->setStatusTip(tr("Adapt Mind by setting your preferences..."));
 
-    submenuMindExport = menuMind->addMenu("&Export");
+    submenuMindExport = menuMind->addMenu(QIcon(":/menu-icons/export.svg"), "&Export");
     actionMindExportCsv = new QAction(tr("&CSV"), mainWindow);
     actionMindExportCsv->setStatusTip(tr("Export all Notebooks/Markdown files as a single CSV file"));
     submenuMindExport->addAction(actionMindExportCsv);
 
-    actionExit = new QAction(tr("E&xit"), mainWindow);
+    actionExit = new QAction(QIcon(":/menu-icons/exit.svg"), tr("E&xit"), mainWindow);
     actionExit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Q));
     actionExit->setStatusTip(tr("Leave application"));
 
@@ -192,7 +192,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewDashboard->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
     actionViewDashboard->setStatusTip(tr("Open Dashboard..."));
 
-    actionViewHome = new QAction(tr("&Home Notebook"), mainWindow);
+    actionViewHome = new QAction(QIcon(":/menu-icons/home.svg"), tr("&Home Notebook"), mainWindow);
     actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
     actionViewHome->setStatusTip(tr("Open Home Notebook..."));
 
@@ -204,7 +204,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
     actionViewOutlines->setStatusTip(tr("Show list of Notebooks..."));
 
-    actionViewTags = new QAction(tr("&Tags"), mainWindow);
+    actionViewTags = new QAction(QIcon(":/menu-icons/tag.svg"), tr("&Tags"), mainWindow);
     actionViewTags->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_G));
     actionViewTags->setStatusTip(tr("Open Tag cloud..."));
 
@@ -298,31 +298,31 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     menuOutline = qMenuBar->addMenu(tr("N&otebook"));
 
-    actionOutlineNew = new QAction(tr("&New"), mainWindow);
+    actionOutlineNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
     actionOutlineNew->setStatusTip(tr("Create new Notebook to form new ideas, principles, combinations or applications"));
 
 #ifdef __APPLE__
-    actionOutlineEdit = new QAction(tr("&Edit"), mainWindow);
+    actionOutlineEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
     actionOutlineEdit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
 #else
-    actionOutlineEdit = new QAction(tr("&Edit"), mainWindow);
+    actionOutlineEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
 #endif
     actionOutlineEdit ->setStatusTip(tr("Edit current Notebook - you can also double click view to open the editor"));
 
-    actionOutlineHome = new QAction(tr("Make &Home"), mainWindow);
+    actionOutlineHome = new QAction(QIcon(":/menu-icons/home.svg"), tr("Make &Home"), mainWindow);
     actionOutlineHome->setStatusTip(tr("Toggle tag indicating whether to use the current Notebook as home"));
 
     actionOutlineStencil = new QAction(tr("Make &Stencil"), mainWindow);
     actionOutlineStencil->setStatusTip(tr("Copy the current Notebook as to Stencil"));
     actionOutlineStencil->setEnabled(false);
 
-    actionOutlineClone = new QAction(tr("C&lone"), mainWindow);
+    actionOutlineClone = new QAction(QIcon(":/menu-icons/copy.svg"), tr("C&lone"), mainWindow);
     actionOutlineClone->setStatusTip(tr("Make copy of the current Notebook"));
 
-    actionOutlineForget = new QAction(tr("&Forget"), mainWindow);
+    actionOutlineForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Forget"), mainWindow);
     actionOutlineForget->setStatusTip(tr("Forget Notebook and move it to Limbo"));
 
-    submenuOutlineExport = menuOutline->addMenu("E&xport");
+    submenuOutlineExport = menuOutline->addMenu(QIcon(":/menu-icons/export.svg"), "E&xport");
     actionOutlineHtmlExport = new QAction(tr("&HTML"), mainWindow);
     actionOutlineHtmlExport->setStatusTip(tr("Export Notebook to a file in HTML format"));
     // TODO Markdown
@@ -349,7 +349,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: Note
 
-    actionNoteNew = new QAction(tr("&New"), mainWindow);
+    actionNoteNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
     actionNoteNew->setStatusTip(tr("Create new Note to form new ideas, principles, combinations and applications"));
 
     actionNoteHoist= new QAction(tr("&Hoist"), mainWindow);
@@ -357,17 +357,17 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteHoist->setStatusTip(tr("Hoist/de-hoist Note to focus on Note being viewed or edited"));
 
 #ifdef __APPLE__
-    actionNoteEdit = new QAction(tr("&Edit"), mainWindow);
+    actionNoteEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
     actionNoteEdit->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_E));
 #else
-    actionNoteEdit = new QAction(tr("&Edit\tCtrl+E"), mainWindow);
+    actionNoteEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit\tCtrl+E"), mainWindow);
 #endif
     actionNoteEdit ->setStatusTip(tr("Edit current Note - you can also double click view to open the editor"));
 
-    actionNoteSave = new QAction(tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
+    actionNoteSave = new QAction(QIcon(":/menu-icons/save.svg"), tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
     actionNoteSave->setStatusTip(tr("Save Note being edited"));
 
-    actionNoteForget = new QAction(tr("&Forget\tDel"), mainWindow); // Delete is handled elsewhere and I don't want menu to handle it
+    actionNoteForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Forget\tDel"), mainWindow); // Delete is handled elsewhere and I don't want menu to handle it
     actionNoteForget->setStatusTip(tr("Forget Note"));
 
 #ifdef __APPLE__
@@ -453,19 +453,19 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditFindNext = new QAction(tr("Find Next\tCtrl+F"), mainWindow);
     actionEditFindNext->setStatusTip(tr("Search Note text again"));
 
-    actionEditUndo= new QAction(tr("&Undo\tCtrl+Z"), mainWindow);
+    actionEditUndo= new QAction(QIcon(":/menu-icons/undo.svg"), tr("&Undo\tCtrl+Z"), mainWindow);
     actionEditUndo->setStatusTip(tr("Undo"));
 
-    actionEditRedo= new QAction(tr("&Redo\tCtrl+Shift+Z"), mainWindow);
+    actionEditRedo= new QAction(QIcon(":/menu-icons/redo.svg"), tr("&Redo\tCtrl+Shift+Z"), mainWindow);
     actionEditRedo->setStatusTip(tr("Redo"));
 
-    actionEditCut= new QAction(tr("Cu&t\tCtrl+X"), mainWindow);
+    actionEditCut= new QAction(QIcon(":/menu-icons/cut.svg"), tr("Cu&t\tCtrl+X"), mainWindow);
     actionEditCut->setStatusTip(tr("Cut"));
 
-    actionEditCopy= new QAction(tr("&Copy\tCtrl+C"), mainWindow);
+    actionEditCopy= new QAction(QIcon(":/menu-icons/copy.svg"), tr("&Copy\tCtrl+C"), mainWindow);
     actionEditCopy->setStatusTip(tr("Copy"));
 
-    actionEditPaste= new QAction(tr("&Paste\tCtrl+V"), mainWindow);
+    actionEditPaste= new QAction(QIcon(":/menu-icons/paste.svg"), tr("&Paste\tCtrl+V"), mainWindow);
     actionEditPaste->setStatusTip(tr("Paste"));
 
     actionEditComplete= new QAction(tr("Complete Text\tAlt+/"), mainWindow);
@@ -630,7 +630,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionHelpMathJaxLivePreview = new QAction(tr("MathJax live preview"), mainWindow);
     actionHelpMathJaxLivePreview->setStatusTip(tr("Open Markdown live demo"));
 
-    actionHelpReportBug = new QAction(tr("Report &Bug or Request Feature"), mainWindow);
+    actionHelpReportBug = new QAction(QIcon(":/menu-icons/bug.svg"), tr("Report &Bug or Request Feature"), mainWindow);
     actionHelpReportBug->setStatusTip(tr("Report bug or suggest an enhancement"));
 
     actionHelpCheckForUpdates = new QAction(tr("&Check for Updates"), mainWindow);
