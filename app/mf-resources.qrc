@@ -59,5 +59,6 @@
         <file alias="zoom-in.svg">resources/menu-icons/light_zoom-in.svg</file>
         <file alias="zoom-out.svg">resources/menu-icons/light_zoom-out.svg</file>
         <file alias="undo.svg">resources/menu-icons/light_edit-undo.svg</file>
+        <file alias="find.svg">resources/menu-icons/light_tool_zoom.svg</file>
     </qresource>
 </RCC>
