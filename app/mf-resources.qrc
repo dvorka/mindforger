@@ -60,5 +60,28 @@
         <file alias="zoom-out.svg">resources/menu-icons/light_zoom-out.svg</file>
         <file alias="undo.svg">resources/menu-icons/light_edit-undo.svg</file>
         <file alias="find.svg">resources/menu-icons/light_tool_zoom.svg</file>
+        <file alias="filter.svg">resources/menu-icons/light_view-filter.svg</file>
+        <file alias="cross.svg">resources/menu-icons/light_addlayer.svg</file>
+        <file alias="open.svg">resources/menu-icons/light_document-open.svg</file>
+        <file alias="open-recent.svg">resources/menu-icons/light_document-open-recent.svg</file>
+        <file alias="clear.svg">resources/menu-icons/light_edit-clear.svg</file>
+        <file alias="help.svg">resources/menu-icons/light_system-help.svg</file>
+        <file alias="grid.svg">resources/menu-icons/light_view-grid.svg</file>
+        <file alias="list-text.svg">resources/menu-icons/light_view-list-text.svg</file>
+        <file alias="dashboard.svg">resources/menu-icons/light_view-list-details.svg</file>
+        <file alias="down.svg">resources/menu-icons/light_arrow-down.svg</file>
+        <file alias="bottom.svg">resources/menu-icons/light_arrow-downleft.svg</file>
+        <file alias="left.svg">resources/menu-icons/light_arrow-left.svg</file>
+        <file alias="right.svg">resources/menu-icons/light_arrow-right.svg</file>
+        <file alias="top.svg">resources/menu-icons/light_arrow-topleft.svg</file>
+        <file alias="up.svg">resources/menu-icons/light_arrow-up.svg</file>
+        <file alias="download.svg">resources/menu-icons/light_download.svg</file>
+        <file alias="stencil.svg">resources/menu-icons/light_addduplicateframe.svg</file>
+        <file alias="refactor.svg">resources/menu-icons/light_preset-switcher.svg</file>
+        <file alias="off.svg">resources/menu-icons/light_onionOff.svg</file>
+        <file alias="on.svg">resources/menu-icons/light_onionOn.svg</file>
+        <file alias="limbo.svg">resources/menu-icons/light_process-stop.svg</file>
+        <file alias="write.svg">resources/menu-icons/light_calligraphy.svg</file>
+        <file alias="pin.svg">resources/menu-icons/light_krita_tool_reference_images.svg</file>
     </qresource>
 </RCC>

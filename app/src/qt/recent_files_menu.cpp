@@ -25,6 +25,7 @@ namespace m8r {
 RecentFilesMenu::RecentFilesMenu(const QString &title, QWidget* parent) :
     QMenu(title, parent)
 {
+    setIcon(QIcon(":/menu-icons/open-recent.svg"));
 }
 
 void RecentFilesMenu::readState()
@@ -87,7 +88,7 @@ void RecentFilesMenu::updateMenu()
     clear();
 
     foreach (const QString& recentFile, recentFiles) {
-        QAction *action = addAction(recentFile);
+        QAction *action = addAction(QIcon(":/menu-icons/open-recent.svg"), recentFile);
         action->setData(recentFile);
 
         connect(action, SIGNAL(triggered()),
@@ -95,7 +96,12 @@ void RecentFilesMenu::updateMenu()
     }
 
     addSeparator();
-    addAction(tr("Clear Menu"), this, SLOT(clearMenu()));
+    addAction(
+        QIcon(":/menu-icons/clear.svg"),
+        tr("Clear Menu"),
+        this,
+        SLOT(clearMenu())
+    );
 
     setEnabled(!recentFiles.empty());
 }
