@@ -42,7 +42,12 @@ public:
     RecentNotesTableView &operator=(const RecentNotesTableView&&) = delete;
     virtual ~RecentNotesTableView() override {}
 
+    virtual void keyPressEvent(QKeyEvent* event) override;
+    virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
     virtual void resizeEvent(QResizeEvent* event) override;
+
+signals:
+    void signalShowSelectedRecentNote();
 };
 
 }

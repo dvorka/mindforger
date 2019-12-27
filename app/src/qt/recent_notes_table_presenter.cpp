@@ -52,6 +52,19 @@ void RecentNotesTablePresenter::refresh(const vector<Note*>& notes)
 
     // order by read timestamp
     view->sortByColumn(4, Qt::SortOrder::DescendingOrder);
+
+    this->view->setCurrentIndex(this->model->index(0, 0));
+    this->view->setFocus();
+}
+
+
+int RecentNotesTablePresenter::getCurrentRow() const
+{
+    QModelIndexList indexes = view->selectionModel()->selection().indexes();
+    for(int i=0; i<indexes.count(); i++) {
+        return indexes.at(i).row();
+    }
+    return NO_ROW;
 }
 
 } // m8r namespace

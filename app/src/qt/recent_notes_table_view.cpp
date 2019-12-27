@@ -35,6 +35,43 @@ RecentNotesTableView::RecentNotesTableView(QWidget* parent, bool isDashboardlet)
     setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
+void RecentNotesTableView::keyPressEvent(QKeyEvent* event)
+{
+    if(!(event->modifiers() & Qt::AltModifier)
+         &&
+       !(event->modifiers() & Qt::ControlModifier)
+         &&
+       !(event->modifiers() & Qt::ShiftModifier))
+    {
+        switch(event->key()) {
+        case Qt::Key_Return:
+        case Qt::Key_Right:
+            emit signalShowSelectedRecentNote();
+            return;
+        case Qt::Key_Down:
+            QTableView::keyPressEvent(event);
+            return;
+        case Qt::Key_Up:
+        // IMPROVE left to cancel selection
+        case Qt::Key_Left:
+            QTableView::keyPressEvent(event);
+            return;
+        }
+
+        return;
+    }
+
+    QTableView::keyPressEvent(event);
+}
+
+void RecentNotesTableView::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    Q_UNUSED(event);
+
+    // double click to O/N opens it
+    emit signalShowSelectedRecentNote();
+}
+
 void RecentNotesTableView::resizeEvent(QResizeEvent* event)
 {
     MF_DEBUG("RecentNotesTableView::resizeEvent " << event << std::endl);

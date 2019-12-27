@@ -39,6 +39,9 @@ class RecentNotesTablePresenter : public QObject
     RecentNotesTableModel* model;
 
 public:
+    static const int NO_ROW = -1;
+
+public:
     explicit RecentNotesTablePresenter(RecentNotesTableView* view, HtmlOutlineRepresentation* htmlRepresentation);
     RecentNotesTablePresenter(const RecentNotesTablePresenter&) = delete;
     RecentNotesTablePresenter(const RecentNotesTablePresenter&&) = delete;
@@ -50,6 +53,7 @@ public:
     RecentNotesTableView* getView() const { return view; }
 
     void refresh(const std::vector<Note*>& notes);
+    int getCurrentRow() const;
 };
 
 }

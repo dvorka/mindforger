@@ -47,6 +47,7 @@ void OutlinesTablePresenter::refresh(const vector<Outline*>& outlines)
         view->sortByColumn(7, Qt::SortOrder::DescendingOrder);
 
         this->view->setCurrentIndex(this->model->index(0, 0));
+        this->view->setFocus();
     }
 }
 

@@ -68,37 +68,62 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         SIGNAL(signalFindOutlineByName()),
         mainPresenter,
         SLOT(doActionFindOutlineByName()));
-    // click Outline in Outlines to view Outline detail
-    /* from click to E2E keyboard
-    QObject::connect(
-        view->getOutlinesTable()->selectionModel(),
-        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-        this,
-        SLOT(slotShowOutline(const QItemSelection&, const QItemSelection&)));
-    */
     // click Outline tree to view Note
     QObject::connect(
         view->getOutlineView()->getOutlineTree()->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowNote(const QItemSelection&, const QItemSelection&)));
-    // click FTS result to view Note
+    // TODO (FTS will be rewritten E2E) click FTS result to view Note
     QObject::connect(
         view->getNotesTable()->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowNoteAsFtsResult(const QItemSelection&, const QItemSelection&)));
-    // click Tag in Tags to view Recall by Tag detail
+    // hit ENTER in recent Os/Ns to view O/N detail
     QObject::connect(
-        view->getRecentNotesTable()->selectionModel(),
+        view->getRecentNotesTable(),
+        SIGNAL(signalShowSelectedRecentNote()),
+        this,
+        SLOT(slotShowSelectedRecentNote()));
+    QObject::connect(
+        view->getDashboard()->getRecentDashboardlet(),
+        SIGNAL(signalShowSelectedRecentNote()),
+        this,
+        SLOT(slotShowSelectedRecentNote()));
+    // hit ENTER in Tags to view Recall by Tag detail
+    QObject::connect(
+        view->getTagCloud(),
+        SIGNAL(signalShowDialogForTag()),
+        this,
+        SLOT(slotShowSelectedTagRecallDialog()));
+    QObject::connect(
+        view->getDashboard()->getTagsDashboardlet(),
+        SIGNAL(signalShowDialogForTag()),
+        this,
+        SLOT(slotShowSelectedTagRecallDialog()));
+    // navigator
+    QObject::connect(
+        navigatorPresenter, SIGNAL(outlineSelectedSignal(Outline*)),
+        this, SLOT(slotShowOutlineNavigator(Outline*)));
+    QObject::connect(
+        navigatorPresenter, SIGNAL(noteSelectedSignal(Note*)),
+        this, SLOT(slotShowNoteNavigator(Note*)));
+    QObject::connect(
+        navigatorPresenter, SIGNAL(thingSelectedSignal()),
+        this, SLOT(slotShowNavigator()));
+
+    /*
+     * ... former click-to-view BEFORE switch to keyboard-only
+     */
+
+    /*
+    // click Outline in Outlines to view Outline detail
+    QObject::connect(
+        view->getOutlinesTable()->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
-        SLOT(slotShowRecentNote(const QItemSelection&, const QItemSelection&)));
-    QObject::connect(
-        view->getDashboard()->getRecentDashboardlet()->selectionModel(),
-        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-        this,
-        SLOT(slotShowRecentNote(const QItemSelection&, const QItemSelection&)));
+        SLOT(slotShowOutline(const QItemSelection&, const QItemSelection&)));
     // click Tag in Tags to view Recall by Tag detail
     QObject::connect(
         view->getTagCloud()->selectionModel(),
@@ -110,16 +135,18 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowTagRecallDialog(const QItemSelection&, const QItemSelection&)));
-    // navigator
+    // click recent N/O in recent Os/Ns to view O/N detail
     QObject::connect(
-        navigatorPresenter, SIGNAL(outlineSelectedSignal(Outline*)),
-        this, SLOT(slotShowOutlineNavigator(Outline*)));
+        view->getRecentNotesTable()->selectionModel(),
+        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+        this,
+        SLOT(slotShowRecentNote(const QItemSelection&, const QItemSelection&)));
     QObject::connect(
-        navigatorPresenter, SIGNAL(noteSelectedSignal(Note*)),
-        this, SLOT(slotShowNoteNavigator(Note*)));
-    QObject::connect(
-        navigatorPresenter, SIGNAL(thingSelectedSignal()),
-        this, SLOT(slotShowNavigator()));
+        view->getDashboard()->getRecentDashboardlet()->selectionModel(),
+        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+        this,
+        SLOT(slotShowRecentNote(const QItemSelection&, const QItemSelection&)));
+    */
 }
 
 int dialogSaveOrCancel()
@@ -353,15 +380,58 @@ void OrlojPresenter::showFacetTagCloud()
     mainPresenter->getStatusBar()->showInfo(QString("%2 Tags").arg(tags.size()));
 }
 
+void OrlojPresenter::slotShowSelectedTagRecallDialog()
+{
+    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD
+         ||
+       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
+      )
+    {
+        int row;
+        if(activeFacet==OrlojPresenterFacets::FACET_DASHBOARD) {
+            row = dashboardPresenter->getTagsPresenter()->getCurrentRow();
+        } else {
+            row = tagCloudPresenter->getCurrentRow();
+        }
+        if(row != OutlinesTablePresenter::NO_ROW) {
+            QStandardItem* item;
+            switch(activeFacet) {
+            case OrlojPresenterFacets::FACET_TAG_CLOUD:
+                item = tagCloudPresenter->getModel()->item(row);
+                break;
+            case OrlojPresenterFacets::FACET_DASHBOARD:
+                item = dashboardPresenter->getTagsPresenter()->getModel()->item(row);
+                break;
+            default:
+                item = nullptr;
+            }
+            // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
+            if(item) {
+                const Tag* tag = item->data(Qt::UserRole + 1).value<const Tag*>();
+                mainPresenter->doTriggerFindNoteByTag(tag);
+            } else {
+                mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Tag not found!")));
+            }
+        } else {
+            mainPresenter->getStatusBar()->showInfo(QString(tr("No Tag selected!")));
+        }
+    }
+}
+
 void OrlojPresenter::slotShowTagRecallDialog(const QItemSelection& selected, const QItemSelection& deselected)
 {
     Q_UNUSED(deselected);
 
-    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD || activeFacet == OrlojPresenterFacets::FACET_DASHBOARD) {
+    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD
+         ||
+       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
+      )
+    {
         QModelIndexList indices = selected.indexes();
         if(indices.size()) {
             const QModelIndex& index = indices.at(0);
             QStandardItem* item;
+            // TODO if 2 switch
             if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD) {
                 item = tagCloudPresenter->getModel()->itemFromIndex(index);
             } else {
@@ -562,11 +632,60 @@ void OrlojPresenter::slotShowNoteAsFtsResult(const QItemSelection& selected, con
     }
 }
 
+void OrlojPresenter::slotShowSelectedRecentNote()
+{
+    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES
+         ||
+       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
+      )
+    {
+        int row;
+        if(activeFacet==OrlojPresenterFacets::FACET_DASHBOARD) {
+            row = dashboardPresenter->getRecentNotesPresenter()->getCurrentRow();
+        } else {
+            row = recentNotesTablePresenter->getCurrentRow();
+        }
+        if(row != OutlinesTablePresenter::NO_ROW) {
+            QStandardItem* item;
+            switch(activeFacet) {
+            case OrlojPresenterFacets::FACET_RECENT_NOTES:
+                item = recentNotesTablePresenter->getModel()->item(row);
+                break;
+            case OrlojPresenterFacets::FACET_DASHBOARD:
+                item = dashboardPresenter->getRecentNotesPresenter()->getModel()->item(row);
+                break;
+            default:
+                item = nullptr;
+            }
+            // TODO make my role constant
+            if(item) {
+                const Note* note = item->data(Qt::UserRole + 1).value<const Note*>();
+
+                showFacetOutline(note->getOutline());
+                if(note->getType() != note->getOutline()->getOutlineDescriptorNoteType()) {
+                    // IMPROVE make this more efficient
+                    showFacetNoteView();
+                    getOutlineView()->selectRowByNote(note);
+                }
+                mainPresenter->getStatusBar()->showInfo(QString(tr("Note "))+QString::fromStdString(note->getName()));
+            } else {
+                mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Notebook/Note not found!")));
+            }
+        } else {
+            mainPresenter->getStatusBar()->showInfo(QString(tr("No Note selected!")));
+        }
+    }
+}
+
 void OrlojPresenter::slotShowRecentNote(const QItemSelection& selected, const QItemSelection& deselected)
 {
     Q_UNUSED(deselected);
 
-    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES || activeFacet == OrlojPresenterFacets::FACET_DASHBOARD) {
+    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES
+         ||
+       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
+      )
+    {
         QModelIndexList indices = selected.indexes();
         if(indices.size()) {
             const QModelIndex& index = indices.at(0);

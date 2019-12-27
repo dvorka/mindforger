@@ -49,6 +49,18 @@ void TagsTablePresenter::refresh(const map<const Tag*, int>& tags)
     }
 
     view->sortByColumn(1, Qt::SortOrder::DescendingOrder);
+
+    this->view->setCurrentIndex(this->model->index(0, 0));
+    this->view->setFocus();
+}
+
+int TagsTablePresenter::getCurrentRow() const
+{
+    QModelIndexList indexes = view->selectionModel()->selection().indexes();
+    for(int i=0; i<indexes.count(); i++) {
+        return indexes.at(i).row();
+    }
+    return NO_ROW;
 }
 
 } // m8r namespace

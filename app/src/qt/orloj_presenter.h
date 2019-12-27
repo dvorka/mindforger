@@ -176,7 +176,9 @@ public slots:
     void slotShowOutlineHeader();
     void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
     void slotShowNoteAsFtsResult(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotShowSelectedRecentNote();
     void slotShowRecentNote(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotShowSelectedTagRecallDialog();
     void slotShowTagRecallDialog(const QItemSelection& selected, const QItemSelection& deselected);
     void slotShowNavigator();
     void slotShowNoteNavigator(Note* note);

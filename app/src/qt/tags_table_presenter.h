@@ -37,6 +37,9 @@ class TagsTablePresenter : public QObject
     TagsTableModel* model;
 
 public:
+    static const int NO_ROW = -1;
+
+public:
     explicit TagsTablePresenter(TagsTableView* view, HtmlOutlineRepresentation* htmlRepresentation);
     TagsTablePresenter(const TagsTablePresenter&) = delete;
     TagsTablePresenter(const TagsTablePresenter&&) = delete;
@@ -48,6 +51,7 @@ public:
     TagsTableView* getView() const { return view; }
 
     void refresh(const std::map<const Tag*, int>& tags);
+    int getCurrentRow() const;
 };
 
 }
