@@ -20,6 +20,7 @@
         <file alias="open-file.svg">resources/icons/open-file.svg</file>
         <file alias="open-repository.svg">resources/icons/open-repository.svg</file>
         <file alias="home.svg">resources/icons/home.svg</file>
+        <file>resources/menu-icons/light_folder-documents.svg</file>
     </qresource>
     <qresource prefix="/translations">
         <file alias="mindforger_cs_CZ.qm">resources/qt/translations/mindforger_cs.qm</file>
@@ -83,5 +84,6 @@
         <file alias="limbo.svg">resources/menu-icons/light_process-stop.svg</file>
         <file alias="write.svg">resources/menu-icons/light_calligraphy.svg</file>
         <file alias="pin.svg">resources/menu-icons/light_krita_tool_reference_images.svg</file>
+        <file alias="document.svg">resources/menu-icons/light_folder-documents.svg</file>
     </qresource>
 </RCC>

@@ -43,7 +43,10 @@ class DashboardPresenter : public QObject
 {
     Q_OBJECT
 
+private:
     DashboardView* view;
+
+    Configuration& config;
 
     OrganizerQuadrantPresenter* doFirstDashboardletPresenter;
     OrganizerQuadrantPresenter* doSoonDashboardletPresenter;

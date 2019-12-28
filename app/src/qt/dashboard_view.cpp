@@ -21,7 +21,8 @@
 namespace m8r {
 
 DashboardView::DashboardView(QWidget* parent)
-    : QSplitter{Qt::Horizontal,parent}
+    : QSplitter{Qt::Horizontal,parent},
+      isMindForgerRepository(false)
 {
     left = new QSplitter(Qt::Vertical, this);
     left->setStretchFactor(0, 1);
@@ -73,12 +74,22 @@ DashboardView::DashboardView(QWidget* parent)
     addWidget(right);
 }
 
+void DashboardView::setMindForgerMode(bool isMindForgerRepository)
+{
+    this->isMindForgerRepository = isMindForgerRepository;
+    if(isMindForgerRepository) {
+        middle->setVisible(true);
+    } else {
+        middle->setVisible(false);
+    }
+}
+
 void DashboardView::resizeEvent(QResizeEvent* event)
 {
     UNUSED_ARG(event);
 
     int normalizedWidth = width()/fontMetrics().averageCharWidth();
-    if(normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH) {
+    if(!isMindForgerRepository || normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH) {
         middle->setVisible(false);
     } else {
         middle->setVisible(true);

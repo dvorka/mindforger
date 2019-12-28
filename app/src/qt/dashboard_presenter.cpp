@@ -23,6 +23,7 @@ namespace m8r {
 using namespace std;
 
 DashboardPresenter::DashboardPresenter(DashboardView* view, OrlojPresenter* orloj)
+    : config(Configuration::getInstance())
 {
     this->view = view;
 
@@ -128,6 +129,13 @@ void DashboardPresenter::refresh(
     // IMPROVE: consider showing recent O: navigatorDashboardletPresenter->showInitialView(ns[0]->getOutline());
     navigatorDashboardletPresenter->showInitialView();
     tagsDashboardletPresenter->refresh(ts);
+
+    view->setMindForgerMode(
+        doFirstOs.size() > 0
+          &&
+        config.getActiveRepository()->getType()
+         ==
+        Repository::RepositoryType::MINDFORGER);
 }
 
 } // m8r namespace

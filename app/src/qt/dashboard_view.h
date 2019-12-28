@@ -40,6 +40,8 @@ private:
     // if view is width < threshold columns, then shows simplified view w/o Mind-related columns
     static constexpr int SIMPLIFIED_VIEW_THRESHOLD_WIDTH = 75*2;
 
+    bool isMindForgerRepository;
+
     QSplitter* left;
     QSplitter* middle;
     QSplitter* right;
@@ -59,6 +61,8 @@ public:
     DashboardView &operator=(const DashboardView&) = delete;
     DashboardView &operator=(const DashboardView&&) = delete;
     ~DashboardView();
+
+    void setMindForgerMode(bool isMindForgerRepository);
 
     QTextBrowser* getWelcomeDashboardlet() { return welcomeDashboardlet; }
     OrganizerQuadrantView* getDoFirstDashboardlet() { return doFirstDashboardlet; }

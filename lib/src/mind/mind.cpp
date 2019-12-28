@@ -979,6 +979,7 @@ void Mind::onRemembering()
 
 MindStatistics* Mind::getStatistics()
 {
+    // IMPROVE cache it until memory is dirty
     const vector<Outline*>&os = memory.getOutlines();
     if(os.size()) {
         u_int32_t maxReads=0;

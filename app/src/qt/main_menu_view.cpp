@@ -621,13 +621,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionHelpWeb = new QAction(QIcon(":/menu-icons/link.svg"), tr("&Web"), mainWindow);
     actionHelpWeb->setStatusTip(tr("Open MindForger web"));
 
-    actionHelpMarkdown = new QAction(tr("&Markdown tutorial"), mainWindow);
+    actionHelpMarkdown = new QAction(QIcon(":/menu-icons/document.svg"), tr("&Markdown tutorial"), mainWindow);
     actionHelpMarkdown->setStatusTip(tr("Open Markdown tutorial"));
 
-    actionHelpMathJaxQuickReference= new QAction(tr("MathJax cheatsheet"), mainWindow);
+    actionHelpMathJaxQuickReference= new QAction(QIcon(":/menu-icons/document.svg"), tr("MathJax cheatsheet"), mainWindow);
     actionHelpMathJaxQuickReference->setStatusTip(tr("Open Markdown quick reference"));
 
-    actionHelpMathJaxLivePreview = new QAction(tr("MathJax live preview"), mainWindow);
+    actionHelpMathJaxLivePreview = new QAction(QIcon(":/menu-icons/document.svg"), tr("MathJax live preview"), mainWindow);
     actionHelpMathJaxLivePreview->setStatusTip(tr("Open Markdown live demo"));
 
     actionHelpReportBug = new QAction(QIcon(":/menu-icons/bug.svg"), tr("Report &Bug or Request Feature"), mainWindow);
