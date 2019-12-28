@@ -90,6 +90,8 @@ void MarkdownTokenizer::tokenize(CharProvider& md, WordFrequencyList& wfl, bool 
                 w += md.get();
                 break;
             }
+            // avoid compiler fall-through warning
+            [[fallthrough]];
         case '\n':
         case '\r':
         case ' ':

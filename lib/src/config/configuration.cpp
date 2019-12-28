@@ -181,13 +181,18 @@ void Configuration::setActiveRepository(Repository* repository)
             memoryPath.clear();
             memoryPath += activeRepository->getDir();
 
+            // TODO limbo class
             limboPath.clear();
             limboPath += activeRepository->getDir();
 
-            if(repository->getType()==Repository::RepositoryType::MINDFORGER && repository->getMode()==Repository::RepositoryMode::REPOSITORY) {
+            if(repository->getType()==Repository::RepositoryType::MINDFORGER
+                 &&
+               repository->getMode()==Repository::RepositoryMode::REPOSITORY)
+            {
                 memoryPath+=FILE_PATH_SEPARATOR;
                 memoryPath+=FILE_PATH_MEMORY;
 
+                // TODO limbo class
                 limboPath+=FILE_PATH_SEPARATOR;
                 limboPath+=FILE_PATH_LIMBO;
             }

@@ -34,7 +34,8 @@ Memory::Memory(
       mdRepresentation{htmlRepresentation.getMarkdownRepresentation()},
       persistence(new FilesystemPersistence{mdRepresentation, htmlRepresentation}),
       twikiRepresentation{mdRepresentation, persistence},
-      csvRepresentation{}
+      csvRepresentation{},
+      limbo{configuration}
 {
     cache = true;
     mindScope = nullptr;

@@ -23,8 +23,12 @@ void HtmlDelegate::paint(
         const QStyleOptionViewItem& option,
         const QModelIndex& index) const
 {
-    // TODO v4 is deprecated since qt 5.7
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
+    QStyleOptionViewItem optionV4 = option;
+#else
+    // v4 is deprecated since qt 5.7
     QStyleOptionViewItemV4 optionV4 = option;
+#endif
     initStyleOption(&optionV4, index);
 
     QStyle *style = optionV4.widget? optionV4.widget->style() : QApplication::style();
@@ -53,8 +57,12 @@ QSize HtmlDelegate::sizeHint(
         const QStyleOptionViewItem& option,
         const QModelIndex& index) const
 {
-    // TODO v4 is deprecated since qt 5.7
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
+    QStyleOptionViewItem optionV4 = option;
+#else
+    // v4 is deprecated since qt 5.7
     QStyleOptionViewItemV4 optionV4 = option;
+#endif
     initStyleOption(&optionV4, index);
 
     QTextDocument doc;

@@ -40,6 +40,7 @@
 #include "../persistence/persistence.h"
 #include "../persistence/filesystem_persistence.h"
 #include "aspect/mind_scope_aspect.h"
+#include "limbo.h"
 
 namespace m8r {
 
@@ -69,6 +70,7 @@ private:
     TWikiOutlineRepresentation twikiRepresentation;
     CsvOutlineRepresentation csvRepresentation;
     MindScopeAspect* mindScope;
+    Limbo limbo;
 
     std::vector<Outline*> outlines;
     std::vector<Note*> notes;

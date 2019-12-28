@@ -99,7 +99,6 @@ SOURCES += \
     ./src/mind/memory_dwell.cpp \
     ./src/mind/memory.cpp \
     ./src/mind/mind.cpp \
-    ./src/mind/planner.cpp \
     ./src/mind/working_memory.cpp \
     ./src/config/configuration.cpp \
     ./src/install/installer.cpp \
@@ -139,7 +138,8 @@ SOURCES += \
     src/representations/markdown/discount_markdown_transcoder.cpp \
     src/representations/markdown/cmark_gfm_markdown_transcoder.cpp \
     src/mind/ai/autolinking/autolinking_mind.cpp \
-    src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.cpp
+    src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.cpp \
+    src/mind/limbo.cpp
 
 mfner {
     SOURCES += \
@@ -189,7 +189,6 @@ HEADERS += \
     ./src/mind/memory_dwell.h \
     ./src/mind/memory.h \
     ./src/mind/mind.h \
-    ./src/mind/planner.h \
     ./src/mind/working_memory.h \
     ./src/mind/mind_listener.h \
     ./src/config/color.h \
@@ -260,7 +259,8 @@ HEADERS += \
     src/config/config.h \
     src/representations/markdown/cmark_gfm_markdown_transcoder.h \
     src/mind/ai/autolinking/autolinking_mind.h \
-    src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h
+    src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h \
+    src/mind/limbo.h
 
 mfner {
     HEADERS += \

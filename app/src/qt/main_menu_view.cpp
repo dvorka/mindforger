@@ -235,7 +235,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionViewLimbo = new QAction(QIcon(":/menu-icons/limbo.svg"), tr("&Limbo"), mainWindow);
     actionViewLimbo->setStatusTip(tr("List forgotten Notebooks and Notes..."));
+    actionViewLimbo->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_L));
     actionViewLimbo->setEnabled(false);
+    // TODO same handler as Help/Documentation - open dir w/ limbo files
 
     actionViewDistractionFree = new QAction(QIcon(":/menu-icons/off.svg"), tr("D&istraction Free"), mainWindow);
     actionViewDistractionFree->setShortcut(QKeySequence(Qt::Key_F5));

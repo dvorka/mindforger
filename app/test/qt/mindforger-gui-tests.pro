@@ -41,7 +41,6 @@ QT += testlib
 
 HEADERS += \
     ../../lib/src/mind/memory_dwell.h \
-    ../../lib/src/mind/planner.h \
     ../../lib/src/mind/ontology/ontology.h \
     ../../lib/src/mind/working_memory.h \
     ../../lib/src/mind/mind.h \
@@ -140,7 +139,6 @@ HEADERS += \
     ../../src/qt/recent_files_menu.h
 
 SOURCES += \
-    ../../lib/src/mind/planner.cpp \
     ../../lib/src/mind/memory_dwell.cpp \
     ../../lib/src/mind/memory.cpp \
     ../../lib/src/mind/mind.cpp \
