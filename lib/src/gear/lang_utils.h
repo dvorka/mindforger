@@ -27,4 +27,10 @@
 // ROUNDF(3.141592, 100) = 3.14
 #define ROUND_FLOAT(f, c) (((float)((int)((f) * (c))) / (c)))
 
+#if defined(__GNUC__) && __GNUC__ >= 7
+ #define MF_FALL_THROUGH __attribute__ ((fallthrough))
+#else
+ #define MF_FALL_THROUGH ((void)0)
+#endif /* __GNUC__ >= 7 */
+
 #endif // M8R_LANG_UTILS_H

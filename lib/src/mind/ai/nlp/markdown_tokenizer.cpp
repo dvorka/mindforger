@@ -91,7 +91,7 @@ void MarkdownTokenizer::tokenize(CharProvider& md, WordFrequencyList& wfl, bool 
                 break;
             }
             // avoid compiler fall-through warning
-            [[fallthrough]];
+            MF_FALL_THROUGH;
         case '\n':
         case '\r':
         case ' ':
