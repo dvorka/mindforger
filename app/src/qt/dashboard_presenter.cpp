@@ -87,19 +87,19 @@ void DashboardPresenter::refresh(
             "<ul>"
             "<li>Return to this <b>dashboard</b> with <code>Ctrl-Shift-d</code>.</li>"
             "<li><b>List</b> notebooks/Markdown files with <code>Ctrl-Shift-o</code>.</li>"
-            "<li><b>Open</b> any item in table <b>listing</b> with "
-            "mouse <b>double-click</b>.</li>"
+            "<li><b>Open</b> item in a table <b>listing</b> with "
+            "<b>double-click</b> or <code>ENTER</code>.</li>"
             "<li><b>Edit</b> note with HTML preview <b>double-click</b> or "
-            "using <code>Ctrl-e</code>.</li>"
+            "<code>Ctrl-e</code>.</li>"
             "<li><b>Zoom</b> note HTML preview with <code>Ctrl-</code><b>mouse wheel</b> "
             "or <b>scroll</b>.</li>"
             "</ul>"
             "<b>Statistics</b>:"
             "<ul>"
-            "<li><b>" + QString::fromStdString(stringIntFormat(std::to_string(os.size()))) + "</b> notebooks, "
-            "<b>" + QString::fromStdString(stringIntFormat(std::to_string(ns.size()))) + "</b> notes, "
-            "<b>" + QString::fromStdString(stringIntFormat(std::to_string(ts.size()))) + "</b> tags and "
-            "<b>" + QString::fromStdString(stringIntFormat(std::to_string(bytes))) + "</b> bytes.</li>"
+            "<li><b>" + stringFormatIntAsUs(os.size()) + "</b> notebooks, "
+            "<b>" + stringFormatIntAsUs(ns.size()) + "</b> notes, "
+            "<b>" + stringFormatIntAsUs(ts.size()) + "</b> tags and "
+            "<b>" + stringFormatIntAsUs(bytes) + "</b> bytes.</li>"
             "<li>Most used notebook: <b>" + QString::fromStdString(stats->mostReadOutline?stats->mostReadOutline->getName():"") + "</b>.</li>"
             "<li>Most used note: <b>" + QString::fromStdString(stats->mostReadNote?stats->mostReadNote->getName():"") + "</b> in "
             "<b>" + QString::fromStdString(stats->mostReadNote?stats->mostReadNote->getOutline()->getName():"") + "</b>.</li>"
@@ -136,6 +136,8 @@ void DashboardPresenter::refresh(
         config.getActiveRepository()->getType()
          ==
         Repository::RepositoryType::MINDFORGER);
+
+    view->getRecentDashboardlet()->setFocus();
 }
 
 } // m8r namespace

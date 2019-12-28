@@ -27,6 +27,11 @@ void initRandomizer()
     qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 }
 
+QString stringFormatIntAsUs(int i)
+{
+    return QString::fromStdString(stringIntFormat(std::to_string(i)));
+}
+
 bool stringMatchByKeywords(const QString& keywords, const QString& s, bool caseSensitive)
 {
     if(keywords.size()) {

@@ -44,13 +44,9 @@ void StatusBarPresenter::showError(const QString& message)
 
 void StatusBarPresenter::showMindStatistics()
 {
-    const QLocale& cLocale = QLocale::c(); // "C" seems to be a default locale
-
     // IMPROVE string builder
     // IMPROVE const delimiter "    "
 
-    // use %L1 to localize
-    // use locale to: 1000 > 1,000
     status.clear();
 
     status += " ";
@@ -84,15 +80,16 @@ void StatusBarPresenter::showMindStatistics()
         break;
     }
 
-    status += cLocale.toString(mind->remind().getOutlinesCount());
+    // IMPROVE helper method @ QString gear
+    status += stringFormatIntAsUs(mind->remind().getOutlinesCount());
     status += " notebooks   ";
-    status += cLocale.toString(mind->remind().getNotesCount());
+    status += stringFormatIntAsUs(mind->remind().getNotesCount());
     status += " notes   ";
 #ifdef MF_WIP
-    status += cLocale.toString(mind->getTriplesCount());
+    status += stringFormatIntAsUs(mind->getTriplesCount());
     status += " triples   ";
 #endif
-    status += cLocale.toString(mind->remind().getOutlineMarkdownsSize());
+    status += stringFormatIntAsUs(mind->remind().getOutlineMarkdownsSize());
     status += " bytes   ";
     if(mind->getScopeAspect().isEnabled()) {
         status += "scope:";
@@ -116,7 +113,7 @@ void StatusBarPresenter::showMindStatistics()
 
 #ifdef DO_MF_DEBUG
     status += "watermark:";
-    status += cLocale.toString(mind->getDeleteWatermark());
+    status += stringFormatIntAsUs(mind->getDeleteWatermark());
 #endif
 
     view->showInfo(status);

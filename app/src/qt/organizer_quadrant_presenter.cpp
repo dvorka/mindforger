@@ -35,15 +35,54 @@ OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
     HtmlDelegate* delegate = new HtmlDelegate();
     this->view->setItemDelegate(delegate);
 
+    // hit ENTER to open selected O
+    QObject::connect(
+        view,
+        SIGNAL(signalShowSelectedOutline()),
+        this,
+        SLOT(slotShowSelectedOutline()));
+
+    /* click O to open O
     QObject::connect(
         view->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowOutline(const QItemSelection&, const QItemSelection&)));
+    */
 }
 
 OrganizerQuadrantPresenter::~OrganizerQuadrantPresenter()
 {
+}
+
+int OrganizerQuadrantPresenter::getCurrentRow() const
+{
+    QModelIndexList indexes = view->selectionModel()->selection().indexes();
+    for(int i=0; i<indexes.count(); i++) {
+        return indexes.at(i).row();
+    }
+    return NO_ROW;
+}
+
+void OrganizerQuadrantPresenter::slotShowSelectedOutline()
+{
+    int row = getCurrentRow();
+    if(row != NO_ROW) {
+        QStandardItem* item = model->item(row);
+        if(item) {
+            // IMPROVE make my role constant
+            Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
+
+            outline->incReads();
+            outline->makeDirty();
+
+            orloj->showFacetOutline(outline);
+        } else {
+            orloj->getMainPresenter()->getStatusBar()->showInfo(QString(tr("Selected Notebook not found!")));
+        }
+    } else {
+        orloj->getMainPresenter()->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
+    }
 }
 
 void OrganizerQuadrantPresenter::slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected)
@@ -73,6 +112,9 @@ void OrganizerQuadrantPresenter::refresh(const std::vector<Outline*>& os, bool u
         for(auto& o:os) {
             model->addRow(o, urgency, importance);
         }
+
+        this->view->setCurrentIndex(this->model->index(0, 0));
+        this->view->setFocus();
     }
 }
 

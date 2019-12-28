@@ -23,6 +23,7 @@
 
 #include <QtWidgets>
 
+#include "gear/qutils.h"
 #include "status_bar_view.h"
 
 namespace m8r {

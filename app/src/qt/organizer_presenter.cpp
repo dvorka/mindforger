@@ -67,6 +67,8 @@ void OrganizerPresenter::refresh(const vector<Outline*>& os)
     doSoonPresenter->refresh(doSoonOs, true, false);
     doSometimePresenter->refresh(doSometimeOs, false, false);
     planDedicatedTimePresenter->refresh(planDedicatedTimeOs, false, true);
+
+    view->getDoFirst()->setFocus();
 }
 
 } // m8r namespace

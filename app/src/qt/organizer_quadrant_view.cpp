@@ -39,4 +39,41 @@ OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
+void OrganizerQuadrantView::keyPressEvent(QKeyEvent* event)
+{
+    if(!(event->modifiers() & Qt::AltModifier)
+         &&
+       !(event->modifiers() & Qt::ControlModifier)
+         &&
+       !(event->modifiers() & Qt::ShiftModifier))
+    {
+        switch(event->key()) {
+        case Qt::Key_Return:
+        case Qt::Key_Right:
+            emit signalShowSelectedOutline();
+            return;
+        case Qt::Key_Down:
+            QTableView::keyPressEvent(event);
+            return;
+        case Qt::Key_Up:
+        // IMPROVE left to cancel selection
+        case Qt::Key_Left:
+            QTableView::keyPressEvent(event);
+            return;
+        }
+
+        return;
+    }
+
+    QTableView::keyPressEvent(event);
+}
+
+void OrganizerQuadrantView::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    Q_UNUSED(event);
+
+    // double click to O/N opens it
+    emit signalShowSelectedOutline();
+}
+
 } // m8r namespace

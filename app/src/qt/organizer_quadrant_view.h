@@ -36,6 +36,12 @@ public:
     OrganizerQuadrantView &operator=(const OrganizerQuadrantView&) = delete;
     OrganizerQuadrantView &operator=(const OrganizerQuadrantView&&) = delete;
     virtual ~OrganizerQuadrantView() {}
+
+    virtual void keyPressEvent(QKeyEvent* event) override;
+    virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
+
+signals:
+    void signalShowSelectedOutline();
 };
 
 }

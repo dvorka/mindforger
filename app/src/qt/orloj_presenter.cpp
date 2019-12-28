@@ -645,7 +645,7 @@ void OrlojPresenter::slotShowSelectedRecentNote()
         } else {
             row = recentNotesTablePresenter->getCurrentRow();
         }
-        if(row != OutlinesTablePresenter::NO_ROW) {
+        if(row != RecentNotesTablePresenter::NO_ROW) {
             QStandardItem* item;
             switch(activeFacet) {
             case OrlojPresenterFacets::FACET_RECENT_NOTES:

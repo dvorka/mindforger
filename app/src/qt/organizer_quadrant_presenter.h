@@ -36,6 +36,9 @@ class OrganizerQuadrantPresenter : public QObject
 {
     Q_OBJECT
 
+private:
+    static const int NO_ROW = -1;
+
     OrganizerQuadrantView* view;
     OrganizerQuadrantModel* model;
 
@@ -49,10 +52,12 @@ public:
     OrganizerQuadrantPresenter &operator=(const OrganizerQuadrantPresenter&&) = delete;
     ~OrganizerQuadrantPresenter();
 
+    int getCurrentRow() const;
     void refresh(const std::vector<Outline*>& os, bool urgency, bool importance);
     OrganizerQuadrantView* getView() const { return view; }
 
 public slots:
+    void slotShowSelectedOutline();
     void slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected);
 };
 

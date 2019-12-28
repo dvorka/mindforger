@@ -30,6 +30,9 @@ namespace m8r {
 
 void initRandomizer();
 
+// int
+QString stringFormatIntAsUs(int i);
+
 // string
 bool stringMatchByKeywords(const QString& keywords, const QString& s, bool caseSensitive=true);
 
