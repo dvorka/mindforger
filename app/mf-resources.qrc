@@ -85,5 +85,6 @@
         <file alias="write.svg">resources/menu-icons/light_calligraphy.svg</file>
         <file alias="pin.svg">resources/menu-icons/light_krita_tool_reference_images.svg</file>
         <file alias="document.svg">resources/menu-icons/light_folder-documents.svg</file>
+        <file alias="folder.svg">resources/menu-icons/light_folder.svg</file>
     </qresource>
 </RCC>

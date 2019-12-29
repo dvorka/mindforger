@@ -149,7 +149,7 @@ public:
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
     static const std::string DEFAULT_TIME_SCOPE;
 
-    static constexpr const bool DEFAULT_AUTOLINKING = true;
+    static constexpr const bool DEFAULT_AUTOLINKING = false;
     static constexpr const bool DEFAULT_AUTOLINKING_COLON_SPLIT = true;
     static constexpr const bool DEFAULT_AUTOLINKING_CASE_INSENSITIVE = true;
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
