@@ -127,6 +127,7 @@ void Configuration::clear()
     uiEditorAutocomplete = true;
     uiEditorLineNumbers = true;
     uiEditorTabsAsSpaces = DEFAULT_EDITOR_TABS_AS_SPACES;
+    uiEditorAutosave = DEFAULT_EDITOR_AUTOSAVE;
     uiEditorTabWidth = DEFAULT_EDITOR_TAB_WIDTH;
     uiEditorKeyBinding = EditorKeyBindingMode::WINDOWS;
     uiThemeName.assign(UI_DEFAULT_THEME);
@@ -137,6 +138,7 @@ void Configuration::clear()
     uiNerdTargetAudience = DEFAULT_UI_NERD_MENU;
     navigatorMaxNodes = DEFAULT_NAVIGATOR_MAX_GRAPH_NODES;
     uiShowToolbar = DEFAULT_UI_SHOW_TOOLBAR;
+    uiExpertMode = DEFAULT_UI_EXPERT_MODE;
     uiDistractionFreeMode = false;
     uiHoistedMode = false;
 }

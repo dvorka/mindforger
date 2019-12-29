@@ -49,7 +49,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 #endif
 
     // menu: recall
-    QObject::connect(view->actionFts, SIGNAL(triggered()), mwp, SLOT(doActionFts()));
+    QObject::connect(view->actionFindFts, SIGNAL(triggered()), mwp, SLOT(doActionFts()));
     QObject::connect(view->actionFindOutlineByName, SIGNAL(triggered()), mwp, SLOT(doActionFindOutlineByName()));
     QObject::connect(view->actionFindNoteByName, SIGNAL(triggered()), mwp, SLOT(doActionFindNoteByName()));
     QObject::connect(view->actionFindOutlineByTag, SIGNAL(triggered()), mwp, SLOT(doActionFindOutlineByTag()));

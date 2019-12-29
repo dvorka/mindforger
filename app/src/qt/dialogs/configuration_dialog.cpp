@@ -98,19 +98,36 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     themeCombo->addItem(QString{UI_THEME_BLACK});
     themeCombo->addItem(QString{UI_THEME_NATIVE});
 
+    startupLabel = new QLabel(tr("Start to view")+":", this),
+    startupCombo = new QComboBox{this};
+    startupCombo->addItem(QString{START_TO_DASHBOARD});
+    startupCombo->addItem(QString{START_TO_OUTLINES});
+    startupCombo->addItem(QString{START_TO_TAGS});
+    startupCombo->addItem(QString{START_TO_RECENT});
+    startupCombo->addItem(QString{START_TO_EISENHOWER_MATRIX});
+
     showToolbarCheck = new QCheckBox(tr("show toolbar"), this);
+    uiExpertModeCheck = new QCheckBox(tr("I don't need buttons - I know all keyboard shortcuts!"), this);
     nerdMenuCheck = new QCheckBox(tr("nerd menu (requires restart)"), this);
 
     // assembly
+    QVBoxLayout* startupLayout = new QVBoxLayout{this};
+    startupLayout->addWidget(startupLabel);
+    startupLayout->addWidget(startupCombo);
+    QGroupBox* startupGroup = new QGroupBox{tr("Startup"), this};
+    startupGroup->setLayout(startupLayout);
+
     QVBoxLayout* appearanceLayout = new QVBoxLayout{this};
     appearanceLayout->addWidget(themeLabel);
     appearanceLayout->addWidget(themeCombo);
     appearanceLayout->addWidget(showToolbarCheck);
+    appearanceLayout->addWidget(uiExpertModeCheck);
     appearanceLayout->addWidget(nerdMenuCheck);
     QGroupBox* appearanceGroup = new QGroupBox{tr("Appearance"), this};
     appearanceGroup->setLayout(appearanceLayout);
 
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(startupGroup);
     boxesLayout->addWidget(appearanceGroup);
     boxesLayout->addStretch();
     setLayout(boxesLayout);
@@ -130,6 +147,7 @@ void ConfigurationDialog::AppTab::refresh()
         themeCombo->setCurrentIndex(i);
     }
     showToolbarCheck->setChecked(config.isUiShowToolbar());
+    uiExpertModeCheck->setChecked(config.isUiExpertMode());
     nerdMenuCheck->setChecked(config.isUiNerdTargetAudience());
 }
 
@@ -137,6 +155,7 @@ void ConfigurationDialog::AppTab::save()
 {
     config.setUiThemeName(themeCombo->itemText(themeCombo->currentIndex()).toStdString());
     config.setUiShowToolbar(showToolbarCheck->isChecked());
+    config.setUiExpertMode(uiExpertModeCheck->isChecked());
     config.setUiNerdTargetAudience(nerdMenuCheck->isChecked());
 }
 
@@ -244,6 +263,7 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     editorAutocompleteCheck = new QCheckBox(tr("autocomplete"), this);
     //editorQuoteSectionsCheck = new QCheckBox(tr("quote sections (# in description)"), this);
     editorTabsAsSpacesCheck = new QCheckBox(tr("TABs as SPACEs"), this);
+    editorAutosaveCheck = new QCheckBox(tr("autosave on Note editor close"), this);
 
     editorTabWidthLabel = new QLabel(tr("TAB width")+":", this);
     editorTabWidthCombo = new QComboBox(this);
@@ -261,6 +281,7 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     editorLayout->addWidget(editorTabsAsSpacesCheck);
     editorLayout->addWidget(editorMdSyntaxHighlightCheck);
     editorLayout->addWidget(editorAutocompleteCheck);
+    editorLayout->addWidget(editorAutosaveCheck);
     //editorLayout->addWidget(editorQuoteSectionsCheck);
     QGroupBox* editorGroup = new QGroupBox{tr("Markdown Editor"), this};
     editorGroup->setLayout(editorLayout);
@@ -300,6 +321,7 @@ void ConfigurationDialog::EditorTab::refresh()
     editorTabWidthCombo->setCurrentIndex(editorTabWidthCombo->findText(QString::number(config.getUiEditorTabWidth())));
     //editorQuoteSectionsCheck->setChecked(config.isMarkdownQuoteSections());
     editorTabsAsSpacesCheck->setChecked(config.isUiEditorTabsAsSpaces());
+    editorAutosaveCheck->setChecked(config.isUiEditorAutosave());
 }
 
 void ConfigurationDialog::EditorTab::save()
@@ -311,6 +333,7 @@ void ConfigurationDialog::EditorTab::save()
     config.setUiEditorTabWidth(editorTabWidthCombo->itemText(editorTabWidthCombo->currentIndex()).toInt());
     //config.setMarkdownQuoteSections(editorQuoteSectionsCheck->isChecked());
     config.setUiEditorTabsAsSpaces(editorTabsAsSpacesCheck->isChecked());
+    config.setUiEditorAutosave(editorAutosaveCheck->isChecked());
 }
 
 void ConfigurationDialog::EditorTab::getFont()
@@ -343,13 +366,18 @@ ConfigurationDialog::MindTab::MindTab(QWidget *parent)
     // assembly
     QVBoxLayout* pLayout = new QVBoxLayout{this};
     pLayout->addWidget(saveReadsMetadataCheck);
-    pLayout->addWidget(distributorSleepIntervalLabel);
-    pLayout->addWidget(distributorSleepIntervalSpin);
     QGroupBox* pGroup = new QGroupBox{tr("Persistence"), this};
     pGroup->setLayout(pLayout);
 
+    QVBoxLayout* nLayout = new QVBoxLayout{this};
+    nLayout->addWidget(distributorSleepIntervalLabel);
+    nLayout->addWidget(distributorSleepIntervalSpin);
+    QGroupBox* nGroup = new QGroupBox{tr("Notifications"), this};
+    nGroup->setLayout(nLayout);
+
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
     boxesLayout->addWidget(pGroup);
+    boxesLayout->addWidget(nGroup);
     boxesLayout->addStretch();
     setLayout(boxesLayout);
 }

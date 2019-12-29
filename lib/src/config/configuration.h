@@ -68,6 +68,12 @@ constexpr const auto UI_THEME_LIGHT = "light";
 constexpr const auto UI_THEME_BLACK = "black";
 constexpr const auto UI_THEME_NATIVE = "native";
 
+constexpr const auto START_TO_DASHBOARD = "dashboard";
+constexpr const auto START_TO_OUTLINES = "outlines";
+constexpr const auto START_TO_TAGS = "tags";
+constexpr const auto START_TO_RECENT = "recent";
+constexpr const auto START_TO_EISENHOWER_MATRIX = "Eisehower";
+
 constexpr const auto UI_HTML_THEME_CSS_LIGHT = "qrc:/html-css/light.css";
 constexpr const auto UI_HTML_THEME_CSS_LIGHT_COMPACT = "qrc:/html-css/light-compact.css";
 constexpr const auto UI_HTML_THEME_CSS_DARK = "qrc:/html-css/dark.css";
@@ -151,6 +157,7 @@ public:
     static constexpr const bool UI_DEFAULT_NERD_TARGET_AUDIENCE = true;
     static const std::string DEFAULT_UI_THEME_NAME;
     static constexpr const bool DEFAULT_UI_SHOW_TOOLBAR = true;
+    static constexpr const bool DEFAULT_UI_EXPERT_MODE = false;
     static constexpr const bool DEFAULT_UI_NERD_MENU = false;
     static const std::string DEFAULT_UI_HTML_CSS_THEME;
     static const int DEFAULT_UI_HTML_ZOOM = 100;
@@ -160,6 +167,7 @@ public:
     static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOCOMPLETE = true;
     static constexpr const bool DEFAULT_EDITOR_TABS_AS_SPACES = true;
+    static constexpr const bool DEFAULT_EDITOR_AUTOSAVE = false;
     static constexpr const bool DEFAULT_MD_QUOTE_SECTIONS = true;
     static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_MD_MATH = false;
@@ -223,7 +231,9 @@ private:
     JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
     int navigatorMaxNodes;
     bool uiEditorTabsAsSpaces;
+    bool uiEditorAutosave;
     bool uiShowToolbar;
+    bool uiExpertMode;
     bool uiDistractionFreeMode; // fullscreen, no split, hidden toolbar + menu
     bool uiHoistedMode; // no split
 
@@ -392,9 +402,13 @@ public:
     void setNavigatorMaxNodes(int navigatorMaxNodes) { this->navigatorMaxNodes = navigatorMaxNodes; }
     bool isUiEditorTabsAsSpaces() const { return uiEditorTabsAsSpaces; }
     void setUiEditorTabsAsSpaces(bool uiEditorTabsAsSpaces){ this->uiEditorTabsAsSpaces = uiEditorTabsAsSpaces; }
+    bool isUiEditorAutosave() const { return uiEditorAutosave; }
+    void setUiEditorAutosave(bool uiEditorAutosave){ this->uiEditorAutosave = uiEditorAutosave; }
 
     bool isUiShowToolbar() const { return uiShowToolbar; }
     void setUiShowToolbar(bool showToolbar){ this->uiShowToolbar = showToolbar; }
+    bool isUiExpertMode() const { return uiExpertMode; }
+    void setUiExpertMode(bool uiExpertMode){ this->uiExpertMode= uiExpertMode; }
     bool isUiDistractionFreeMode() const { return uiDistractionFreeMode; }
     void setUiDistractionFreeMode(bool distractionFreeMode){ this->uiDistractionFreeMode = distractionFreeMode; }
     bool isUiHoistedMode() const { return uiHoistedMode; }

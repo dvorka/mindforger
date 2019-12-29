@@ -80,6 +80,7 @@ public:
     OutlineTreeView &operator=(const OutlineTreeView&&) = delete;
 
     virtual void keyPressEvent(QKeyEvent* event) override;
+    virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
     virtual void resizeEvent(QResizeEvent* event) override;
     void refreshNotes(const QModelIndex& from, const QModelIndex& to) { dataChanged(from, to); }
 

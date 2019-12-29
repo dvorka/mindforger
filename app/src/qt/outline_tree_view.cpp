@@ -113,6 +113,14 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
     QWidget::keyPressEvent(event);
 }
 
+void OutlineTreeView::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    Q_UNUSED(event);
+
+    // double click to N opens it
+    emit signalEdit();
+}
+
 void OutlineTreeView::resizeEvent(QResizeEvent* event)
 {
     MF_DEBUG("OutlineTreeView::resizeEvent " << event << std::endl);

@@ -29,7 +29,7 @@ namespace m8r {
 /**
  * @brief The Limbo.
  *
- * Limbo is where deleted Os, Ns and other MF things may last until they ar purged:
+ * Limbo is where deleted Os, Ns and other MF things may last until they are purged:
  *
  * - deleted O is moved to Limbo
  *   > MF repository: ${REPOSITORY}/limbo/ *.md
@@ -56,6 +56,9 @@ private:
 
     std::vector<Outline*> limboOutlines;
 
+    std::string osLimboDirPath;
+    std::string nsLimboFilePath;
+
 public:
     explicit Limbo(Configuration& configuration);
     Limbo(const Limbo&) = delete;
@@ -64,12 +67,21 @@ public:
     Limbo &operator=(const Limbo&&) = delete;
     ~Limbo();
 
-    // TODO get Os limbo dir path
-    // TODO get Ns limbo file path
-    // TODO forget *O
-    // TODO forget *N
-    // TODO purge limbo *O
-    // TODO purge Ns limbo
+    /**
+     * @brief Reinitilize paths on MD, MD dir or MF repository open.
+     */
+    //void reinit();
+
+    //const std::string& getOutlinesLimboDirPath() const { return limboPath; }
+    //const std::string& getNotesLimboFilePath() const { return limboPath; }
+
+    //void forget(Outline* o);
+    //void forget(Note* n);
+
+    /**
+     * @brief Purge all Os and Ns in limbo.
+     */
+    //void purgeLimbo();
 };
 
 }

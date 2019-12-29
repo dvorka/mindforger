@@ -27,7 +27,8 @@ namespace m8r {
 OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
                                OrlojView* view,
                                Mind* mind)
-    : activeFacet{OrlojPresenterFacets::FACET_NONE}
+    : activeFacet{OrlojPresenterFacets::FACET_NONE},
+      skipEditNoteCheck{false}
 {
     this->mainPresenter = mainPresenter;
     this->view = view;
@@ -152,37 +153,35 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
 int dialogSaveOrCancel()
 {
     QMessageBox msgBox{};
-    msgBox.setText("Do you want to save changes to the edited Note?");
-    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Save);
-    return msgBox.exec();
+    // TODO l10n
+    msgBox.setText("Do you want to save Note changes?");
+    QPushButton* discard = msgBox.addButton("&Discard changes", QMessageBox::DestructiveRole);
+    QPushButton* autosave = msgBox.addButton("Do not ask && &autosave", QMessageBox::AcceptRole);
+    QPushButton* edit = msgBox.addButton("Continue &editation", QMessageBox::YesRole);
+    QPushButton* save = msgBox.addButton("&Save", QMessageBox::ActionRole);
+    msgBox.exec();
+
+    QAbstractButton* choosen = msgBox.clickedButton();
+    if(discard == choosen) {
+        return OrlojButtonRoles::DISCARD_ROLE;
+    } else if(autosave == choosen) {
+        return OrlojButtonRoles::AUTOSAVE_ROLE;
+    } else if(edit == choosen) {
+        return OrlojButtonRoles::EDIT_ROLE;
+    } else if(save == choosen) {
+        return OrlojButtonRoles::SAVE_ROLE;
+    }
+
+    return OrlojButtonRoles::INVALID_ROLE;
 }
 
 void OrlojPresenter::onFacetChange(const OrlojPresenterFacets targetFacet) const
 {
     MF_DEBUG("Facet CHANGE: " << activeFacet << " > " << targetFacet << endl);
 
-    if(activeFacet == OrlojPresenterFacets::FACET_EDIT_NOTE) {
-        if(targetFacet != OrlojPresenterFacets::FACET_VIEW_NOTE) {
-            int decision = dialogSaveOrCancel();
-            if(decision==QMessageBox::Save) {
-                  noteEditPresenter->slotSaveNote();
-            }
-            return;
-        }
-    } else if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
-        if(targetFacet != OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER) {
-            int decision = dialogSaveOrCancel();
-            if(decision==QMessageBox::Save) {
-                outlineHeaderEditPresenter->slotSaveOutlineHeader();
-            }
-            return;
-        }
-    } if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
+    if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
         navigatorPresenter->cleanupBeforeHide();
-    }
-
-    if(targetFacet == OrlojPresenterFacets::FACET_VIEW_OUTLINE) {
+    } else if(targetFacet == OrlojPresenterFacets::FACET_VIEW_OUTLINE) {
         outlineViewPresenter->getOutlineTree()->focus();
     }
 }
@@ -560,15 +559,89 @@ void OrlojPresenter::fromNoteEditBackToView(Note* note)
     showFacetNoteView();
 }
 
+bool OrlojPresenter::avoidDataLossOnNoteEdit()
+{
+    // avoid lost of N editor changes
+    if(skipEditNoteCheck) {
+        skipEditNoteCheck=false;
+        if(activeFacet == OrlojPresenterFacets::FACET_EDIT_NOTE) {
+            noteEditPresenter->getView()->getNoteEditor()->setFocus();
+        } else if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
+            outlineHeaderEditPresenter->getView()->getHeaderEditor()->setFocus();
+        }
+        return true;
+    } else {
+        if(activeFacet == OrlojPresenterFacets::FACET_EDIT_NOTE) {
+            int decision{};
+            if(Configuration::getInstance().isUiEditorAutosave()) {
+                decision = OrlojButtonRoles::SAVE_ROLE;
+            } else {
+                decision = dialogSaveOrCancel();
+            }
+
+            switch(decision) {
+            case OrlojButtonRoles::DISCARD_ROLE:
+                // do nothing
+                break;
+            case OrlojButtonRoles::AUTOSAVE_ROLE:
+                Configuration::getInstance().setUiEditorAutosave(true);
+                mainPresenter->getConfigRepresentation()->save(Configuration::getInstance());
+                MF_FALL_THROUGH;
+            case OrlojButtonRoles::SAVE_ROLE:
+                noteEditPresenter->slotSaveNote();
+                break;
+            case OrlojButtonRoles::EDIT_ROLE:
+                MF_FALL_THROUGH;
+            default:
+                // rollback ~ select previous N and continue
+                // ugly & stupid hack to disable signal emitted on N selection in O tree
+                skipEditNoteCheck=true;
+                outlineViewPresenter->selectRowByNote(noteEditPresenter->getCurrentNote());
+                return true;
+            }
+        } else if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
+            int decision = dialogSaveOrCancel();
+            switch(decision) {
+            case OrlojButtonRoles::DISCARD_ROLE:
+                // do nothing
+                break;
+            case OrlojButtonRoles::AUTOSAVE_ROLE:
+                Configuration::getInstance().setUiEditorAutosave(true);
+                mainPresenter->getConfigRepresentation()->save(Configuration::getInstance());
+                MF_FALL_THROUGH;
+            case OrlojButtonRoles::SAVE_ROLE:
+                outlineHeaderEditPresenter->slotSaveOutlineHeader();
+                break;
+            case OrlojButtonRoles::EDIT_ROLE:
+                MF_FALL_THROUGH;
+            default:
+                // rollback ~ select previous N and continue
+                // ugly & stupid hack to disable signal emitted on N selection in O tree
+                skipEditNoteCheck=true;
+                outlineViewPresenter->getOutlineTree()->clearSelection();
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 void OrlojPresenter::slotShowOutlineHeader()
 {
+    if(avoidDataLossOnNoteEdit()) return;
+
+    // refresh header
     outlineHeaderViewPresenter->refresh(outlineViewPresenter->getCurrentOutline());
+    setFacet(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER);
     view->showFacetOutlineHeaderView();
 }
 
 void OrlojPresenter::slotShowNote(const QItemSelection& selected, const QItemSelection& deselected)
 {
     Q_UNUSED(deselected);
+
+    if(avoidDataLossOnNoteEdit()) return;
 
     QModelIndexList indices = selected.indexes();
     if(indices.size()) {

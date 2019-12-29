@@ -70,6 +70,14 @@ enum OrlojPresenterFacets {
     FACET_DASHBOARD             // 13
 };
 
+enum OrlojButtonRoles {
+    AUTOSAVE_ROLE,
+    DISCARD_ROLE,
+    EDIT_ROLE,
+    SAVE_ROLE,
+    INVALID_ROLE = -1
+};
+
 class OrlojPresenter : public QObject
 {
     Q_OBJECT
@@ -94,6 +102,8 @@ private:
     NoteViewPresenter* noteViewPresenter;
     NoteEditPresenter* noteEditPresenter;
     NavigatorPresenter* navigatorPresenter;
+
+    bool skipEditNoteCheck;
 
 public:
     OrlojPresenter(MainWindowPresenter* mainPresenter,
@@ -183,6 +193,9 @@ public slots:
     void slotShowNavigator();
     void slotShowNoteNavigator(Note* note);
     void slotShowOutlineNavigator(Outline* outline);
+
+private:
+    bool avoidDataLossOnNoteEdit();
 };
 
 } // m8r namespace

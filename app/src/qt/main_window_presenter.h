@@ -139,6 +139,7 @@ public:
     MainWindowView& getView() const { return view; }
     const Configuration& getConfiguration() const { return config; }
     MarkdownOutlineRepresentation* getMarkdownRepresentation() const { return mdRepresentation; }
+    MarkdownConfigurationRepresentation* getConfigRepresentation() const { return mdConfigRepresentation; }
     HtmlOutlineRepresentation* getHtmlRepresentation() const { return htmlRepresentation; }
     AsyncTaskNotificationsDistributor* getDistributor() const { return distributor; }
 

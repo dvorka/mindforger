@@ -138,9 +138,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: recall
 
-    actionFts = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Full-text Search"), mainWindow);
-    actionFts->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
-    actionFts->setStatusTip(tr("Note full-text search"));
+    actionFindFts = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Full-text Search"), mainWindow);
+    actionFindFts->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
+    actionFindFts->setStatusTip(tr("Note full-text search"));
 
     actionFindOutlineByName = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Note&book by Name"), mainWindow);
     actionFindOutlineByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
@@ -173,7 +173,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
 
     menuFind = qMenuBar->addMenu(tr("&Recall"));
-    menuFind->addAction(actionFts);
+    menuFind->addAction(actionFindFts);
     menuFind->addAction(actionFindOutlineByName);
     menuFind->addAction(actionFindNoteByName);
     menuFind->addAction(actionFindOutlineByTag);
@@ -660,25 +660,63 @@ MainMenuView::~MainMenuView()
     // TODO deletes (menus DO not delete > menuBar creates them)
 }
 
+/**
+ * @brief Show all menu items.
+ *
+ * Strategy is to always enable ALL menu items and accelerators, THEN
+ * disable what's not desired in given facet.
+ */
 void MainMenuView::showAllMenuItems()
 {
-    menuMind->setEnabled(true);    
-    menuFind->setEnabled(true);    
+    menuMind->setEnabled(true);
+    // autolink: leave as is - it's not that simple as it's status, not just action
+    actionExit->setEnabled(true);
+
+    menuFind->setEnabled(true);
+    actionFindFts->setEnabled(true);
+    actionFindOutlineByName->setEnabled(true);
+    actionFindOutlineByTag->setEnabled(true);
+    actionFindNoteByName->setEnabled(true);
+    actionFindNoteByTag->setEnabled(true);
+
     menuView->setEnabled(true);
-    menuEdit->setEnabled(true);
-    menuOutline->setEnabled(true);
+    actionViewDashboard->setEnabled(true);
+    actionViewHome->setEnabled(true);
+    actionViewOrganizer->setEnabled(true);
+    actionViewOutlines->setEnabled(true);
+    actionViewTags->setEnabled(true);
+    actionViewNavigator->setEnabled(true);
+    actionViewLimbo->setEnabled(true);
+    actionViewRecentNotes->setEnabled(true);
+
     menuNavigator->setEnabled(true);
     actionViewOrganizer->setEnabled(true);
     actionOutlineEdit->setEnabled(true);
     actionOutlineClone->setEnabled(true);
     actionOutlineHome->setEnabled(true);
     actionOutlineForget->setEnabled(true);
-    menuNote->setEnabled(true);
-    menuFormat->setEnabled(true);
-    menuHelp->setEnabled(true);
+
+    menuOutline->setEnabled(true);
     submenuOutlineExport->setEnabled(true);
 
+    menuNote->setEnabled(true);
+    actionNoteForget->setEnabled(true);
+    actionNotePromote->setEnabled(true);
+    actionNoteDemote->setEnabled(true);
+    actionNoteFirst->setEnabled(true);
+    actionNoteUp->setEnabled(true);
+    actionNoteDown->setEnabled(true);
+    actionNoteLast->setEnabled(true);
+
+    menuEdit->setEnabled(true);
+
+    menuFormat->setEnabled(true);
+
+    menuHelp->setEnabled(true);
+
     actionFindOutlineByName->setEnabled(true);
+
+    mainWindow->getToolBar()->setEnabled(true);
 }
 
 void MainMenuView::showFacetOutlineList(bool repositoryMode)
@@ -729,7 +767,46 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
 {
     showAllMenuItems();
 
+    menuMind->setEnabled(false);
+    actionExit->setEnabled(false);
+
+    menuFind->setEnabled(false);
+    actionFindFts->setEnabled(false);
+    actionFindOutlineByName->setEnabled(false);
+    actionFindOutlineByTag->setEnabled(false);
+    actionFindNoteByName->setEnabled(false);
+    actionFindNoteByTag->setEnabled(false);
+
+    menuView->setEnabled(false);
+    actionViewDashboard->setEnabled(false);
+    actionViewHome->setEnabled(false);
+    actionViewOrganizer->setEnabled(false);
+    actionViewOutlines->setEnabled(false);
+    actionViewTags->setEnabled(false);
+    actionViewNavigator->setEnabled(false);
+    actionViewLimbo->setEnabled(false);
+    actionViewRecentNotes->setEnabled(false);
+
     menuNavigator->setEnabled(false);
+    actionViewOrganizer->setEnabled(false);
+    actionOutlineEdit->setEnabled(false);
+    actionOutlineClone->setEnabled(false);
+    actionOutlineHome->setEnabled(false);
+    actionOutlineForget->setEnabled(false);
+
+    menuOutline->setEnabled(false);
+    submenuOutlineExport->setEnabled(false);
+
+    menuNote->setEnabled(false);
+    actionNoteForget->setEnabled(false);
+    actionNotePromote->setEnabled(false);
+    actionNoteDemote->setEnabled(false);
+    actionNoteFirst->setEnabled(false);
+    actionNoteUp->setEnabled(false);
+    actionNoteDown->setEnabled(false);
+    actionNoteLast->setEnabled(false);
+
+    mainWindow->getToolBar()->setEnabled(false);
 
     if(!repositoryMode) {
         menuView->setEnabled(false);
@@ -758,7 +835,6 @@ void MainMenuView::showFacetMindAutolinkDisable()
 {
     actionMindAutolink->setChecked(false);
 }
-
 
 void MainMenuView::showFacetNavigator()
 {

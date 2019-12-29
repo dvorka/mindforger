@@ -103,7 +103,11 @@ private:
     QLabel* themeLabel;
     QComboBox* themeCombo;
 
+    QLabel* startupLabel;
+    QComboBox* startupCombo;
+
     QCheckBox* showToolbarCheck;
+    QCheckBox* uiExpertModeCheck;
     QCheckBox* nerdMenuCheck;
 
 public:
@@ -182,6 +186,7 @@ private:
     QPushButton* editorFontButton;
     QCheckBox* editorMdSyntaxHighlightCheck;
     QCheckBox* editorAutocompleteCheck;
+    QCheckBox* editorAutosaveCheck;
     QLabel* editorTabWidthLabel;
     QComboBox* editorTabWidthCombo;
     // TODO QCheckBox* editorQuoteSectionsCheck;

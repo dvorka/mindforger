@@ -82,4 +82,4 @@ void EditNameAndButtonsPanel::handleCloseNoteEditDialog()
     noteEditDialog->toNote();
 }
 
-}
+} // m8r namespace
