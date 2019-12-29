@@ -393,7 +393,7 @@ TEST(AutolinkingCmarkTestCase, NanoRepo)
 
     // THEN
     cout << "= BEGIN AUTO MD =" << endl << autolinkedMd << endl << "= END AUTO MD =" << endl;
-    ASSERT_STREQ("Text of [AAA](mindforger://AAA).", autolinkedMd.c_str());
+    ASSERT_STREQ("Text of [AAA](mindforger://links.mindforger.com/AAA).", autolinkedMd.c_str());
 }
 
 TEST(AutolinkingCmarkTestCase, MicroRepo)
@@ -422,8 +422,8 @@ TEST(AutolinkingCmarkTestCase, MicroRepo)
     autolinker.process(n->getDescription(), autolinkedMd);
 
     // THEN
-    cout << "= BEGIN AUTO MD =" << endl << autolinkedMd << endl << "= END AUTO MD =" << endl;
-    ASSERT_STREQ("Text of [AAA](mindforger://AAA).", autolinkedMd.c_str());
+    cout << "= BEGIN AUTO MD =" << endl << autolinkedMd.c_str() << endl << "= END AUTO MD =" << endl;
+    ASSERT_STREQ("Text of [AAA](mindforger://links.mindforger.com/AAA).", autolinkedMd.c_str());
 }
 
 TEST(AutolinkingCmarkTestCase, BasicRepo)
