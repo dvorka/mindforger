@@ -152,9 +152,11 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
 
 int dialogSaveOrCancel()
 {
-    QMessageBox msgBox{};
-    // TODO l10n
-    msgBox.setText("Do you want to save Note changes?");
+    // l10n by moving this dialog either to Qt class OR view class
+    QMessageBox msgBox{
+        QMessageBox::Question,
+        "Save Note",
+        "Do you want to save Note changes?"};
     QPushButton* discard = msgBox.addButton("&Discard changes", QMessageBox::DestructiveRole);
     QPushButton* autosave = msgBox.addButton("Do not ask && &autosave", QMessageBox::AcceptRole);
     QPushButton* edit = msgBox.addButton("Continue &editation", QMessageBox::YesRole);
