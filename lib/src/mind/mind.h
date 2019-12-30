@@ -453,7 +453,7 @@ public:
     const std::vector<Outline*>& getOutlines() const;
     std::vector<Outline*>* getOutlinesOfType(const OutlineType& type) const;
 
-    void getAllNotes(std::vector<Note*>& notes, bool sortByRead=false, bool addNoteForOutline=false) const;
+    std::vector<Note*>& getAllNotes(std::vector<Note*>& notes, bool sortByRead=false, bool addNoteForOutline=false) const;
     std::vector<Note*>* getNotesOfType(const NoteType& type) const;
     std::vector<Note*>* getNotesOfType(const NoteType& type, const Outline& outline) const;
 

@@ -194,7 +194,7 @@ public:
      * @param sortByRead        sort Ns using read timestamp
      * @param addNoteForOutline add also N for every O
      */
-    void getAllNotes(std::vector<Note*>& notes, bool sortByRead=false, bool addNoteForOutline=false) const;
+    std::vector<Note*>& getAllNotes(std::vector<Note*>& notes, bool sortByRead=false, bool addNoteForOutline=false) const;
 
     /*
      * UTILS

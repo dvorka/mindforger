@@ -327,7 +327,7 @@ Outline* Memory::getOutline(const string& key)
     }
 }
 
-void Memory::getAllNotes(vector<Note*>& notes, bool doSortByRead, bool addNoteForOutline) const
+std::vector<Note*>& Memory::getAllNotes(vector<Note*>& notes, bool doSortByRead, bool addNoteForOutline) const
 {
     for(Outline* o:outlines) {
         if(addNoteForOutline) {
@@ -354,6 +354,8 @@ void Memory::getAllNotes(vector<Note*>& notes, bool doSortByRead, bool addNoteFo
     if(doSortByRead) {
         sortByRead(notes);
     }
+
+    return notes;
 }
 
 const OutlineType* Memory::toOutlineType(const MarkdownAstSectionMetadata& meta)

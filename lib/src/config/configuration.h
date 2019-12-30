@@ -73,6 +73,8 @@ constexpr const auto START_TO_OUTLINES = "outlines";
 constexpr const auto START_TO_TAGS = "tags";
 constexpr const auto START_TO_RECENT = "recent";
 constexpr const auto START_TO_EISENHOWER_MATRIX = "Eisehower";
+constexpr const auto START_TO_HOME_OUTLINE = "home";
+constexpr const auto DEFAULT_STARTUP_VIEW = START_TO_OUTLINES;
 
 constexpr const auto UI_HTML_THEME_CSS_LIGHT = "qrc:/html-css/light.css";
 constexpr const auto UI_HTML_THEME_CSS_LIGHT_COMPACT = "qrc:/html-css/light-compact.css";
@@ -155,6 +157,7 @@ public:
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
 
     static constexpr const bool UI_DEFAULT_NERD_TARGET_AUDIENCE = true;
+    static const std::string DEFAULT_STARTUP_VIEW_NAME;
     static const std::string DEFAULT_UI_THEME_NAME;
     static constexpr const bool DEFAULT_UI_SHOW_TOOLBAR = true;
     static constexpr const bool DEFAULT_UI_EXPERT_MODE = false;
@@ -216,6 +219,7 @@ private:
 
     // GUI configuration
     bool uiNerdTargetAudience;
+    std::string startupView;
     std::string uiThemeName;
     std::string uiHtmlCssPath; // use a CSS (size>0) or render raw MD (size==0)
     int uiHtmlZoom;
@@ -338,6 +342,8 @@ public:
     int getUiFontPointSize() const { return uiFontPointSize; }
     bool isUiNerdTargetAudience() const { return uiNerdTargetAudience; }
     void setUiNerdTargetAudience(bool nerdAudience) { uiNerdTargetAudience = nerdAudience; }
+    const std::string& getStartupView() const { return startupView; }
+    void setStartupView(const std::string view) { startupView = view; }
     const std::string& getUiThemeName() const { return uiThemeName; }
     void setUiThemeName(const std::string theme) { uiThemeName = theme; }
     bool isUiEditorShowLineNumbers() const { return uiEditorLineNumbers; }

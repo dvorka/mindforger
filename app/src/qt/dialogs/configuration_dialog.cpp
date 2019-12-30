@@ -105,6 +105,7 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     startupCombo->addItem(QString{START_TO_TAGS});
     startupCombo->addItem(QString{START_TO_RECENT});
     startupCombo->addItem(QString{START_TO_EISENHOWER_MATRIX});
+    startupCombo->addItem(QString{START_TO_HOME_OUTLINE});
 
     showToolbarCheck = new QCheckBox(tr("show toolbar"), this);
     uiExpertModeCheck = new QCheckBox(tr("I don't need buttons - I know all keyboard shortcuts!"), this);
@@ -137,12 +138,18 @@ ConfigurationDialog::AppTab::~AppTab()
 {
     delete themeLabel;
     delete themeCombo;
+    delete startupLabel;
+    delete startupCombo;
     delete showToolbarCheck;
 }
 
 void ConfigurationDialog::AppTab::refresh()
 {
-    int i = themeCombo->findText(QString::fromStdString(config.getUiThemeName()));
+    int i = startupCombo->findText(QString::fromStdString(config.getStartupView()));
+    if(i>=0) {
+        startupCombo->setCurrentIndex(i);
+    }
+    i = themeCombo->findText(QString::fromStdString(config.getUiThemeName()));
     if(i>=0) {
         themeCombo->setCurrentIndex(i);
     }
@@ -153,6 +160,7 @@ void ConfigurationDialog::AppTab::refresh()
 
 void ConfigurationDialog::AppTab::save()
 {
+    config.setStartupView(startupCombo->itemText(startupCombo->currentIndex()).toStdString());
     config.setUiThemeName(themeCombo->itemText(themeCombo->currentIndex()).toStdString());
     config.setUiShowToolbar(showToolbarCheck->isChecked());
     config.setUiExpertMode(uiExpertModeCheck->isChecked());

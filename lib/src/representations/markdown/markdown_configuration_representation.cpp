@@ -33,6 +33,7 @@ constexpr const auto CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL = "* Async refresh
 constexpr const auto CONFIG_SETTING_MIND_AUTOLINKING = "* Autolinking: ";
 
 // application
+constexpr const auto CONFIG_SETTING_STARTUP_VIEW_LABEL = "* Startup view: ";
 constexpr const auto CONFIG_SETTING_UI_THEME_LABEL = "* Theme: ";
 constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* Markdown CSS theme: ";
 constexpr const auto CONFIG_SETTING_UI_HTML_ZOOM_LABEL = "* Markdown HTML zoom: ";
@@ -132,6 +133,12 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                             c.setSaveReadsMetadata(true);
                         } else {
                             c.setSaveReadsMetadata(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_STARTUP_VIEW_LABEL) != std::string::npos) {
+                        string t = line->substr(strlen(CONFIG_SETTING_STARTUP_VIEW_LABEL));
+                        // NOTE: startup view is NOT validated
+                        if(t.size()) {
+                            c.setStartupView(t);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_THEME_LABEL) != std::string::npos) {
                         string t = line->substr(strlen(CONFIG_SETTING_UI_THEME_LABEL));
@@ -401,6 +408,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "# " << CONFIG_SECTION_APP << endl <<
          "Application settings:" << endl <<
          endl <<
+         CONFIG_SETTING_STARTUP_VIEW_LABEL << (c?c->getStartupView():Configuration::DEFAULT_STARTUP_VIEW_NAME) << endl <<
+         "    * Examples: dashboard, outlines, tags, recent, home, Eisenhower" << endl <<
          CONFIG_SETTING_UI_THEME_LABEL << (c?c->getUiThemeName():Configuration::DEFAULT_UI_THEME_NAME) << endl <<
          "    * Examples: dark, light, native" << endl <<
          CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL << (c?c->getUiHtmlCssPath():Configuration::DEFAULT_UI_HTML_CSS_THEME) << endl <<

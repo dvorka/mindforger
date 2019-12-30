@@ -177,10 +177,24 @@ void MainWindowPresenter::showInitialView()
                     orloj->showFacetOutlineList(mind->getOutlines());
                 }
             } else if(config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER) {
-                if(!doActionViewHome()) {
-                    // fallback
-                    view.getCli()->setBreadcrumbPath("/outlines");
+                if(!string{START_TO_DASHBOARD}.compare(config.getStartupView())) {
                     orloj->showFacetDashboard();
+                } else if(!string{START_TO_OUTLINES}.compare(config.getStartupView())) {
+                    orloj->showFacetOutlineList(mind->getOutlines());
+                } else if(!string{START_TO_TAGS}.compare(config.getStartupView())) {
+                    orloj->showFacetTagCloud();
+                } else if(!string{START_TO_RECENT}.compare(config.getStartupView())) {
+                    vector<Note*> notes{};
+                    orloj->showFacetRecentNotes(mind->getAllNotes(notes));
+                } else if(!string{START_TO_EISENHOWER_MATRIX}.compare(config.getStartupView())) {
+                    orloj->showFacetOrganizer(mind->getOutlines());
+                } else if(!string{START_TO_HOME_OUTLINE}.compare(config.getStartupView())) {
+                    if(!doActionViewHome()) {
+                        // fallback
+                        orloj->showFacetOutlineList(mind->getOutlines());
+                    }
+                } else {
+                    orloj->showFacetOutlineList(mind->getOutlines());
                 }
             } else {
                 view.getCli()->setBreadcrumbPath("/outlines");
