@@ -26,7 +26,7 @@
 
 namespace m8r {
 
-class EditNameAndButtonsPanel : public QWidget
+class EditNamePanel : public QWidget
 {
     Q_OBJECT
 
@@ -47,12 +47,12 @@ private:
     NoteEditDialog* noteEditDialog;
 
 public:
-    explicit EditNameAndButtonsPanel(Mode mode, QWidget* parent);
-    EditNameAndButtonsPanel(const EditNameAndButtonsPanel&) = delete;
-    EditNameAndButtonsPanel(const EditNameAndButtonsPanel&&) = delete;
-    EditNameAndButtonsPanel &operator=(const EditNameAndButtonsPanel&) = delete;
-    EditNameAndButtonsPanel &operator=(const EditNameAndButtonsPanel&&) = delete;
-    ~EditNameAndButtonsPanel();
+    explicit EditNamePanel(Mode mode, QWidget* parent);
+    EditNamePanel(const EditNamePanel&) = delete;
+    EditNamePanel(const EditNamePanel&&) = delete;
+    EditNamePanel &operator=(const EditNamePanel&) = delete;
+    EditNamePanel &operator=(const EditNamePanel&&) = delete;
+    ~EditNamePanel();
 
 /*
  * NOTE mode

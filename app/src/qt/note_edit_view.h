@@ -37,7 +37,7 @@ class NoteEditView : public QWidget
 private:
     Note* currentNote;
 
-    EditNameAndButtonsPanel* topNamePanel;
+    EditNamePanel* topNamePanel;
     NoteEditorView* noteEditor;
     EditButtonsPanel* bottomButtonsPanel;
 

@@ -26,7 +26,7 @@ NoteEditView::NoteEditView(QWidget* parent)
     : QWidget(parent)
 {
     // widgets
-    topNamePanel = new EditNameAndButtonsPanel{EditNameAndButtonsPanel::Mode::NOTE_MODE, this};
+    topNamePanel = new EditNamePanel{EditNamePanel::Mode::NOTE_MODE, this};
     noteEditor = new NoteEditorView{this};
     bottomButtonsPanel = new EditButtonsPanel{EditButtonsPanel::Mode::NOTE_MODE, this};
 

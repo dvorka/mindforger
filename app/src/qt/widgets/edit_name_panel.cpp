@@ -22,7 +22,7 @@ namespace m8r {
 
 using namespace std;
 
-EditNameAndButtonsPanel::EditNameAndButtonsPanel(Mode mode, QWidget* parent)
+EditNamePanel::EditNamePanel(Mode mode, QWidget* parent)
     : QWidget(parent), mode(mode)
 {
     // widgets
@@ -36,7 +36,7 @@ EditNameAndButtonsPanel::EditNameAndButtonsPanel(Mode mode, QWidget* parent)
     setLayout(layout);
 }
 
-EditNameAndButtonsPanel::~EditNameAndButtonsPanel()
+EditNamePanel::~EditNamePanel()
 {
     delete label;
     delete lineEdit;
