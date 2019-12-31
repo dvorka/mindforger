@@ -180,7 +180,6 @@ HEADERS += \
     ./src/qt/dialogs/fts_dialog.h \
     ./src/qt/dialogs/find_outline_by_name_dialog.h \
     ./src/qt/dialogs/find_note_by_name_dialog.h \
-    ./src/qt/widgets/edit_name_and_buttons_panel.h \
     ./src/qt/dialogs/note_edit_dialog.h \
     ./src/qt/dialogs/configuration_dialog.h \
     ./src/qt/widgets/edit_tags_panel.h \
@@ -219,7 +218,9 @@ HEADERS += \
     src/qt/main_toolbar_view.h \
     src/qt/dialogs/export_file_dialog.h \
     src/qt/dashboard_view.h \
-    src/qt/dashboard_presenter.h
+    src/qt/dashboard_presenter.h \
+    src/qt/widgets/edit_buttons_panel.h \
+    src/qt/widgets/edit_name_panel.h
 
 win32|macx|mfwebengine {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
@@ -280,7 +281,6 @@ SOURCES += \
     ./src/qt/dialogs/fts_dialog.cpp \
     ./src/qt/dialogs/find_outline_by_name_dialog.cpp \
     ./src/qt/dialogs/find_note_by_name_dialog.cpp \
-    ./src/qt/widgets/edit_name_and_buttons_panel.cpp \
     ./src/qt/dialogs/note_edit_dialog.cpp \
     ./src/qt/dialogs/configuration_dialog.cpp \
     ./src/qt/widgets/edit_tags_panel.cpp \
@@ -319,7 +319,9 @@ SOURCES += \
     src/qt/main_toolbar_view.cpp \
     src/qt/dialogs/export_file_dialog.cpp \
     src/qt/dashboard_view.cpp \
-    src/qt/dashboard_presenter.cpp
+    src/qt/dashboard_presenter.cpp \
+    src/qt/widgets/edit_buttons_panel.cpp \
+    src/qt/widgets/edit_name_panel.cpp
 
 win32|macx|mfwebengine {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp

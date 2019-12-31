@@ -24,7 +24,8 @@
 #include "../../lib/src/model/outline.h"
 
 #include "note_editor_view.h"
-#include "widgets/edit_name_and_buttons_panel.h"
+#include "widgets/edit_name_panel.h"
+#include "widgets/edit_buttons_panel.h"
 
 namespace m8r {
 
@@ -35,8 +36,9 @@ class OutlineHeaderEditView : public QWidget
 private:
     Outline* currentOutline;
 
-    EditNameAndButtonsPanel* editNameAndButtonsPanel;
+    EditNamePanel* topNamePanel;
     NoteEditorView* noteEditor;
+    EditButtonsPanel* bottomButtonsPanel;
 
 public:
     explicit OutlineHeaderEditView(QWidget* parent);
@@ -47,17 +49,18 @@ public:
     ~OutlineHeaderEditView();
 
     void setOutlineHeaderEditDialog(OutlineHeaderEditDialog* outlineHeaderEditDialog) {
-        editNameAndButtonsPanel->setOutlineHeaderEditDialog(outlineHeaderEditDialog);
+        bottomButtonsPanel->setOutlineHeaderEditDialog(outlineHeaderEditDialog);
     }
     void setOutline(Outline* outline, std::string mdDescription) {
         currentOutline = outline;
-        editNameAndButtonsPanel->setOutline(outline);
+        topNamePanel->setOutline(outline);
+        bottomButtonsPanel->setOutline(outline);
         noteEditor->setPlainText(QString::fromStdString(mdDescription));
     }
     void setEditorShowLineNumbers(bool show) { noteEditor->setShowLineNumbers(show); }
     void setStatusBar(const StatusBarView* statusBar) { noteEditor->setStatusBar(statusBar); }
 
-    QString getName() const { return editNameAndButtonsPanel->getName(); }
+    QString getName() const { return topNamePanel->getName(); }
     QString getDescription() const { return noteEditor->toPlainText(); }
     bool isDescriptionEmpty() const { return noteEditor->toPlainText().isEmpty(); }
     QString getSelectedText() const { return noteEditor->getSelectedText(); }
