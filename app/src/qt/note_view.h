@@ -88,6 +88,7 @@ public:
     ~NoteView();
 
     NoteViewerView* getViever() const { return noteViewer; }
+    ViewToEditEditButtonsPanel* getEditPanel() const { return view2EditPanel; }
 
     void setModel(NoteViewModel* noteModel) { this->noteModel = noteModel; }
     void setZoomFactor(qreal factor) {

@@ -88,6 +88,7 @@ public:
     ~OutlineHeaderView();
 
     OutlineHeaderViewerView* getViever() const { return headerViewer; }
+    ViewToEditEditButtonsPanel* getEditPanel() const { return view2EditPanel; }
 
     void setModel(OutlineHeaderViewModel* outlineHeaderModel) {
         this->outlineHeaderModel = outlineHeaderModel;

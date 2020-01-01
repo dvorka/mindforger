@@ -65,6 +65,7 @@ public:
     bool isDescriptionEmpty() const { return noteEditor->toPlainText().isEmpty(); }
     QString getSelectedText() const { return noteEditor->getSelectedText(); }
     NoteEditorView* getHeaderEditor() const { return noteEditor; }
+    EditButtonsPanel* getButtonsPanel() const { return bottomButtonsPanel; }
 
     void giveFocusToEditor() { noteEditor->setFocus(); }
 

@@ -43,7 +43,6 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     orloj = new OrlojPresenter{this, view.getOrloj(), mind};
 
     // initialize components
-    view.getToolBar()->setVisible(config.isUiShowToolbar());
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOutlineDialog = new OutlineNewDialog{QString::fromStdString(config.getMemoryPath()), mind->getOntology(), &view};
     newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
@@ -67,7 +66,9 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 #ifdef MF_NER
     nerChooseTagsDialog = new NerChooseTagTypesDialog(&view);
     nerResultDialog = new NerResultDialog(&view);
-#endif    
+#endif
+    // show/hide widgets based on configuration
+    handleMindPreferences();
 
     // wire signals
     QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
@@ -2103,7 +2104,11 @@ void MainWindowPresenter::handleMindPreferences()
 
     view.getToolBar()->setVisible(config.isUiShowToolbar());
     view.getOrloj()->getNoteView()->setZoomFactor(config.getUiHtmlZoomFactor());
+    view.getOrloj()->getNoteView()->getEditPanel()->setVisible(!config.isUiExpertMode());
     view.getOrloj()->getOutlineHeaderView()->setZoomFactor(config.getUiHtmlZoomFactor());
+    view.getOrloj()->getOutlineHeaderView()->getEditPanel()->setVisible(!config.isUiExpertMode());
+    view.getOrloj()->getNoteEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
+    view.getOrloj()->getOutlineHeaderEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
 }
 
 void MainWindowPresenter::doActionHelpDocumentation()
