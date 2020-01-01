@@ -41,7 +41,8 @@ cache:
  - C:\Program Files\googletest-distribution 
 
 install:
- - set QT_DIR=C:\Qt\5.9.7\msvc2017_64
+ - set QT_DIR=C:\Qt\5.9.8\msvc2017_64
+# - set QT_DIR=C:\Qt\5.9.7\msvc2017_64
  - set PATH=%PATH%;%QT_DIR%\bin
  - set M8R_HOME=%APPVEYOR_BUILD_FOLDER%
  - if not exist c:\cache mkdir c:\cache
