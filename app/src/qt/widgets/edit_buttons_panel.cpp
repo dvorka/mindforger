@@ -22,7 +22,7 @@ namespace m8r {
 
 using namespace std;
 
-EditButtonsPanel::EditButtonsPanel(Mode mode, QWidget* parent)
+EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
     : QWidget(parent), mode(mode)
 {
     // widgets
@@ -35,13 +35,14 @@ EditButtonsPanel::EditButtonsPanel(Mode mode, QWidget* parent)
 
     // assembly
     layout = new QHBoxLayout{this};
+    layout->addStretch(1);
+    layout->addWidget(cancelButton);
     layout->addWidget(moreButton);
     layout->addWidget(rememberButton);
-    layout->addWidget(cancelButton);
     setLayout(layout);
 
     // signals
-    if(mode==Mode::OUTLINE_MODE) {
+    if(mode==MfWidgetMode::OUTLINE_MODE) {
         QObject::connect(moreButton, SIGNAL(clicked()), this, SLOT(handleShowOutlineHeaderEditDialog()));
     } else {
         QObject::connect(moreButton, SIGNAL(clicked()), this, SLOT(handleShowNoteEditDialog()));

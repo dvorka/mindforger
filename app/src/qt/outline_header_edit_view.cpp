@@ -24,9 +24,9 @@ OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
     : QWidget(parent)
 {
     // widgets
-    topNamePanel = new EditNamePanel{EditNamePanel::Mode::OUTLINE_MODE, this};
+    topNamePanel = new EditNamePanel{MfWidgetMode::OUTLINE_MODE, this};
     noteEditor = new NoteEditorView{this};
-    bottomButtonsPanel = new EditButtonsPanel{EditButtonsPanel::Mode::OUTLINE_MODE, this};
+    bottomButtonsPanel = new EditButtonsPanel{MfWidgetMode::OUTLINE_MODE, this};
 
     // assembly
     QVBoxLayout* layout = new QVBoxLayout{this};

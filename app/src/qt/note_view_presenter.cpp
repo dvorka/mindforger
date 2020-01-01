@@ -48,12 +48,23 @@ NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
     this->currentNote = nullptr;
 
 #ifdef MF_QT_WEB_ENGINE
-    QObject::connect(view->getPage(), SIGNAL(signalLinkClicked(QUrl)), this, SLOT(slotLinkClicked(QUrl)));
+    QObject::connect(
+        view->getViever()->getPage(), SIGNAL(signalLinkClicked(QUrl)),
+        this, SLOT(slotLinkClicked(QUrl)));
 #else
-    QObject::connect(view, SIGNAL(linkClicked(QUrl)), this, SLOT(slotLinkClicked(QUrl)));
+    QObject::connect(
+        view->getViever(), SIGNAL(linkClicked(QUrl)),
+        this, SLOT(slotLinkClicked(QUrl)));
 #endif
-    QObject::connect(view, SIGNAL(signalMouseDoubleClickEvent()), this, SLOT(slotEditNote()));
-    QObject::connect(view, SIGNAL(signalFromViewNoteToOutlines()), orloj, SLOT(slotShowOutlines()));
+    QObject::connect(
+        view->getViever(), SIGNAL(signalMouseDoubleClickEvent()),
+        this, SLOT(slotEditNote()));
+    QObject::connect(
+        view, SIGNAL(signalOpenEditor()),
+        this, SLOT(slotEditNote()));
+    QObject::connect(
+        view->getViever(), SIGNAL(signalFromViewNoteToOutlines()),
+        orloj, SLOT(slotShowOutlines()));
 }
 
 NoteViewPresenter::~NoteViewPresenter()

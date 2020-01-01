@@ -22,6 +22,10 @@
 #include "../../lib/src/debug.h"
 #include "../../lib/src/config/configuration.h"
 
+#include "outline_header_view_model.h"
+#include "widgets/mf_widgets.h"
+#include "widgets/view_to_edit_buttons_panel.h"
+
 #include <QtWidgets>
 #ifdef MF_QT_WEB_ENGINE
   #include <QWebEngineView>
@@ -33,20 +37,20 @@
 namespace m8r {
 
 #ifdef MF_QT_WEB_ENGINE
-class OutlineHeaderView : public QWebEngineView
+class OutlineHeaderViewerView : public QWebEngineView
 #else
-class OutlineHeaderView : public QWebView
+class OutlineHeaderViewerView : public QWebView
 #endif
 {
     Q_OBJECT
 
 public:
-    explicit OutlineHeaderView(QWidget* parent);
-    OutlineHeaderView(const OutlineHeaderView&) = delete;
-    OutlineHeaderView(const OutlineHeaderView&&) = delete;
-    OutlineHeaderView &operator=(const OutlineHeaderView&) = delete;
-    OutlineHeaderView &operator=(const OutlineHeaderView&&) = delete;
-    virtual ~OutlineHeaderView() override {}
+    explicit OutlineHeaderViewerView(QWidget* parent);
+    OutlineHeaderViewerView(const OutlineHeaderViewerView&) = delete;
+    OutlineHeaderViewerView(const OutlineHeaderViewerView&&) = delete;
+    OutlineHeaderViewerView &operator=(const OutlineHeaderViewerView&) = delete;
+    OutlineHeaderViewerView &operator=(const OutlineHeaderViewerView&&) = delete;
+    virtual ~OutlineHeaderViewerView() override {}
 
 #ifdef MF_QT_WEB_ENGINE
     QWebEnginePage* getPage() const { return page(); }
@@ -57,10 +61,49 @@ protected:
 #else
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
 #endif
+    virtual void keyPressEvent(QKeyEvent*) override;
     virtual void wheelEvent(QWheelEvent*) override;
 
 signals:
     void signalMouseDoubleClickEvent();
+    void signalFromViewOutlineHeaderToOutlines();
+};
+
+class OutlineHeaderView : public QWidget
+{
+    Q_OBJECT
+
+private:
+    OutlineHeaderViewModel* outlineHeaderModel;
+
+    OutlineHeaderViewerView* headerViewer;
+    ViewToEditEditButtonsPanel* view2EditPanel;
+
+public:
+    OutlineHeaderView(QWidget* parent);
+    OutlineHeaderView(const OutlineHeaderView&) = delete;
+    OutlineHeaderView(const OutlineHeaderView&&) = delete;
+    OutlineHeaderView&operator=(const OutlineHeaderView&) = delete;
+    OutlineHeaderView&operator=(const OutlineHeaderView&&) = delete;
+    ~OutlineHeaderView();
+
+    OutlineHeaderViewerView* getViever() const { return headerViewer; }
+
+    void setModel(OutlineHeaderViewModel* outlineHeaderModel) {
+        this->outlineHeaderModel = outlineHeaderModel;
+    }
+    void setZoomFactor(qreal factor) {
+        headerViewer->setZoomFactor(factor);
+    }
+    void setHtml(const QString& html, const QUrl& baseUrl = QUrl()) {
+        headerViewer->setHtml(html, baseUrl);
+    }
+
+private slots:
+    void slotOpenEditor();
+
+signals:
+    void signalOpenEditor();
 };
 
 }

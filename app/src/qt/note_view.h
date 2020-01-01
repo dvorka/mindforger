@@ -23,6 +23,8 @@
 #include "../../lib/src/model/note.h"
 
 #include "note_view_model.h"
+#include "widgets/mf_widgets.h"
+#include "widgets/view_to_edit_buttons_panel.h"
 
 #include <QtWidgets>
 #ifdef MF_QT_WEB_ENGINE
@@ -36,24 +38,19 @@
 namespace m8r {
 
 #ifdef MF_QT_WEB_ENGINE
-class NoteView: public QWebEngineView
+class NoteViewer: public QWebEngineView
 #else
-class NoteView: public QWebView
+class NoteViewerView: public QWebView
 #endif
 {
     Q_OBJECT
 
-private:
-    NoteViewModel* noteModel;
-
 public:
-    NoteView(QWidget* parent);
-    NoteView(const NoteView&) = delete;
-    NoteView(const NoteView&&) = delete;
-    NoteView &operator=(const NoteView&) = delete;
-    NoteView &operator=(const NoteView&&) = delete;
-
-    void setModel(NoteViewModel* noteModel) { this->noteModel = noteModel; }
+    NoteViewerView(QWidget* parent);
+    NoteViewerView(const NoteViewerView&) = delete;
+    NoteViewerView(const NoteViewerView&&) = delete;
+    NoteViewerView &operator=(const NoteViewerView&) = delete;
+    NoteViewerView &operator=(const NoteViewerView&&) = delete;
 
 #ifdef MF_QT_WEB_ENGINE
     QWebEnginePage* getPage() const { return page(); }
@@ -70,6 +67,41 @@ protected:
 signals:
     void signalMouseDoubleClickEvent();
     void signalFromViewNoteToOutlines();
+};
+
+class NoteView : public QWidget
+{
+    Q_OBJECT
+
+private:
+    NoteViewModel* noteModel;
+
+    NoteViewerView* noteViewer;
+    ViewToEditEditButtonsPanel* view2EditPanel;
+
+public:
+    NoteView(QWidget* parent);
+    NoteView(const NoteView&) = delete;
+    NoteView(const NoteView&&) = delete;
+    NoteView&operator=(const NoteView&) = delete;
+    NoteView&operator=(const NoteView&&) = delete;
+    ~NoteView();
+
+    NoteViewerView* getViever() const { return noteViewer; }
+
+    void setModel(NoteViewModel* noteModel) { this->noteModel = noteModel; }
+    void setZoomFactor(qreal factor) {
+        noteViewer->setZoomFactor(factor);
+    }
+    void setHtml(const QString& html, const QUrl& baseUrl = QUrl()) {
+        noteViewer->setHtml(html, baseUrl);
+    }
+
+private slots:
+    void slotOpenEditor();
+
+signals:
+    void signalOpenEditor();
 };
 
 }

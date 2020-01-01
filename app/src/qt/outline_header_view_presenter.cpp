@@ -24,7 +24,9 @@ namespace m8r {
 
 using namespace std;
 
-OutlineHeaderViewPresenter::OutlineHeaderViewPresenter(OutlineHeaderView *view, OrlojPresenter* orloj)
+OutlineHeaderViewPresenter::OutlineHeaderViewPresenter(
+        OutlineHeaderView* view,
+        OrlojPresenter* orloj)
 {
     this->view = view;
     this->orloj = orloj;
@@ -37,11 +39,23 @@ OutlineHeaderViewPresenter::OutlineHeaderViewPresenter(OutlineHeaderView *view, 
     html.reserve(10000);
 
 #ifdef MF_QT_WEB_ENGINE
-    QObject::connect(view->getPage(), SIGNAL(signalLinkClicked(QUrl)), this, SLOT(slotLinkClicked(QUrl)));
+    QObject::connect(
+        view->getViever()->getPage(), SIGNAL(signalLinkClicked(QUrl)),
+        this, SLOT(slotLinkClicked(QUrl)));
 #else
-    QObject::connect(view, SIGNAL(linkClicked(QUrl)), this, SLOT(slotLinkClicked(QUrl)));
+    QObject::connect(
+        view->getViever(), SIGNAL(linkClicked(QUrl)),
+        this, SLOT(slotLinkClicked(QUrl)));
 #endif
-    QObject::connect(view, SIGNAL(signalMouseDoubleClickEvent()), this, SLOT(slotEditOutlineHeader()));
+    QObject::connect(
+        view->getViever(), SIGNAL(signalMouseDoubleClickEvent()),
+        this, SLOT(slotEditOutlineHeader()));
+    QObject::connect(
+        view, SIGNAL(signalOpenEditor()),
+        this, SLOT(slotEditOutlineHeader()));
+    QObject::connect(
+        view->getViever(), SIGNAL(signalFromViewOutlineHeaderToOutlines()),
+        orloj, SLOT(slotShowOutlines()));
 }
 
 OutlineHeaderViewPresenter::~OutlineHeaderViewPresenter()

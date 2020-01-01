@@ -21,6 +21,7 @@
 
 #include <QtWidgets>
 
+#include "mf_widgets.h"
 #include "../dialogs/note_edit_dialog.h"
 #include "../dialogs/outline_header_edit_dialog.h"
 
@@ -30,14 +31,8 @@ class EditNamePanel : public QWidget
 {
     Q_OBJECT
 
-public:
-    enum Mode {
-        OUTLINE_MODE,
-        NOTE_MODE
-    };
-
 private:
-    Mode mode;
+    MfWidgetMode mode;
 
     QHBoxLayout* layout;
     QLabel* label;
@@ -47,7 +42,7 @@ private:
     NoteEditDialog* noteEditDialog;
 
 public:
-    explicit EditNamePanel(Mode mode, QWidget* parent);
+    explicit EditNamePanel(MfWidgetMode mode, QWidget* parent);
     EditNamePanel(const EditNamePanel&) = delete;
     EditNamePanel(const EditNamePanel&&) = delete;
     EditNamePanel &operator=(const EditNamePanel&) = delete;

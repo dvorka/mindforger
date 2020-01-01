@@ -220,7 +220,10 @@ HEADERS += \
     src/qt/dashboard_view.h \
     src/qt/dashboard_presenter.h \
     src/qt/widgets/edit_buttons_panel.h \
-    src/qt/widgets/edit_name_panel.h
+    src/qt/widgets/edit_name_panel.h \
+    src/qt/widgets/view_to_edit_buttons_panel.h \
+    src/qt/widgets/mf_widgets.h \
+    src/qt/outline_header_view_model.h
 
 win32|macx|mfwebengine {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
@@ -321,7 +324,10 @@ SOURCES += \
     src/qt/dashboard_view.cpp \
     src/qt/dashboard_presenter.cpp \
     src/qt/widgets/edit_buttons_panel.cpp \
-    src/qt/widgets/edit_name_panel.cpp
+    src/qt/widgets/edit_name_panel.cpp \
+    src/qt/widgets/view_to_edit_buttons_panel.cpp \
+    src/qt/widgets/mf_widgets.cpp \
+    src/qt/outline_header_view_model.cpp
 
 win32|macx|mfwebengine {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp

@@ -22,7 +22,7 @@ namespace m8r {
 
 using namespace std;
 
-OutlineHeaderView::OutlineHeaderView(QWidget *parent)
+OutlineHeaderViewerView::OutlineHeaderViewerView(QWidget *parent)
 #ifdef MF_QT_WEB_ENGINE
     : QWebEngineView(parent)
 #else
@@ -70,6 +70,17 @@ bool OutlineHeaderView::eventFilter(QObject *obj, QEvent *event)
     return QWebEngineView::eventFilter(obj, event);
 }
 
+void OutlineHeaderView::keyPressEvent(QKeyEvent* event)
+{
+    if(event->modifiers() & Qt::AltModifier){
+        if(event->key()==Qt::Key_Left) {
+            emit signalFromViewOutlineHeaderToOutlines();
+        }
+    }
+
+    QWebEngineView::keyPressEvent(event);
+}
+
 void OutlineHeaderView::wheelEvent(QWheelEvent* event)
 {
     if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
@@ -90,14 +101,25 @@ void OutlineHeaderView::wheelEvent(QWheelEvent* event)
 
 #else
 
-void OutlineHeaderView::mouseDoubleClickEvent(QMouseEvent* event)
+void OutlineHeaderViewerView::mouseDoubleClickEvent(QMouseEvent* event)
 {
     Q_UNUSED(event);
 
     emit signalMouseDoubleClickEvent();
 }
 
-void OutlineHeaderView::wheelEvent(QWheelEvent* event)
+void OutlineHeaderViewerView::keyPressEvent(QKeyEvent* event)
+{
+    if(event->modifiers() & Qt::AltModifier){
+        if(event->key()==Qt::Key_Left) {
+            emit signalFromViewOutlineHeaderToOutlines();
+        }
+    }
+
+    QWebView::keyPressEvent(event);
+}
+
+void OutlineHeaderViewerView::wheelEvent(QWheelEvent* event)
 {
     if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
         if(!event->angleDelta().isNull()) {
@@ -115,5 +137,36 @@ void OutlineHeaderView::wheelEvent(QWheelEvent* event)
 }
 
 #endif
+
+OutlineHeaderView::OutlineHeaderView(QWidget* parent)
+    : QWidget(parent)
+{
+    // widgets
+    headerViewer = new OutlineHeaderViewerView{this};
+    view2EditPanel = new ViewToEditEditButtonsPanel{MfWidgetMode::OUTLINE_MODE, this};
+
+    // assembly
+    QVBoxLayout* layout = new QVBoxLayout{this};
+    // ensure that wont be extra space around member widgets
+    layout->setContentsMargins(QMargins(0,0,0,0));
+    layout->addWidget(headerViewer);
+    view2EditPanel->setFixedHeight(2*view2EditPanel->getEditButton()->height());
+    layout->addWidget(view2EditPanel);
+    setLayout(layout);
+
+    // signals
+    QObject::connect(
+        view2EditPanel->getEditButton(), SIGNAL(clicked()),
+        this, SLOT(slotOpenEditor()));
+}
+
+OutlineHeaderView::~OutlineHeaderView()
+{
+}
+
+void OutlineHeaderView::slotOpenEditor()
+{
+    emit signalOpenEditor();
+}
 
 } // m8r namespace

@@ -1,5 +1,5 @@
 /*
- edit_name_panel.cpp     MindForger thinking notebook
+ mf_widgets.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,31 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "edit_name_panel.h"
+#include "mf_widgets.h"
 
 namespace m8r {
-
-using namespace std;
-
-EditNamePanel::EditNamePanel(MfWidgetMode mode, QWidget* parent)
-    : QWidget(parent), mode(mode)
-{
-    // widgets
-    label = new QLabel{tr("Name:"), this};
-    lineEdit = new QLineEdit{parent};
-
-    // assembly
-    layout = new QHBoxLayout{this};
-    layout->addWidget(label);
-    layout->addWidget(lineEdit);
-    setLayout(layout);
-}
-
-EditNamePanel::~EditNamePanel()
-{
-    delete label;
-    delete lineEdit;
-    delete layout;
-}
 
 } // m8r namespace

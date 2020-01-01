@@ -26,9 +26,9 @@ NoteEditView::NoteEditView(QWidget* parent)
     : QWidget(parent)
 {
     // widgets
-    topNamePanel = new EditNamePanel{EditNamePanel::Mode::NOTE_MODE, this};
+    topNamePanel = new EditNamePanel{MfWidgetMode::NOTE_MODE, this};
     noteEditor = new NoteEditorView{this};
-    bottomButtonsPanel = new EditButtonsPanel{EditButtonsPanel::Mode::NOTE_MODE, this};
+    bottomButtonsPanel = new EditButtonsPanel{MfWidgetMode::NOTE_MODE, this};
 
     // assembly
     QVBoxLayout* layout = new QVBoxLayout{this};

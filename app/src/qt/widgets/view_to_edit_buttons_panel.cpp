@@ -1,5 +1,5 @@
 /*
- edit_name_panel.cpp     MindForger thinking notebook
+ view_to_edit_buttons_panel.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,30 +16,31 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "edit_name_panel.h"
+#include "view_to_edit_buttons_panel.h"
 
 namespace m8r {
 
 using namespace std;
 
-EditNamePanel::EditNamePanel(MfWidgetMode mode, QWidget* parent)
+ViewToEditEditButtonsPanel::ViewToEditEditButtonsPanel(MfWidgetMode mode, QWidget* parent)
     : QWidget(parent), mode(mode)
 {
     // widgets
-    label = new QLabel{tr("Name:"), this};
-    lineEdit = new QLineEdit{parent};
+    editButton = new QPushButton{tr("Edit"), this};
+    editButton->setToolTip("Ctrl+E");
+
+    // TODO Show whole Notebook OR Show Notebook description (toggle buttons)
 
     // assembly
     layout = new QHBoxLayout{this};
-    layout->addWidget(label);
-    layout->addWidget(lineEdit);
+    layout->addStretch(1);
+    layout->addWidget(editButton);
     setLayout(layout);
 }
 
-EditNamePanel::~EditNamePanel()
+ViewToEditEditButtonsPanel::~ViewToEditEditButtonsPanel()
 {
-    delete label;
-    delete lineEdit;
+    delete editButton;
     delete layout;
 }
 
