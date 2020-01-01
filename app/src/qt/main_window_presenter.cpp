@@ -91,10 +91,16 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(exportOutlineToHtmlDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineHtmlExport()));
     QObject::connect(exportMindToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
     QObject::connect(
-        orloj->getDashboard()->getView()->getNavigatorDashboardlet(),
-        SIGNAL(clickToSwitchFacet()),
-        this,
-        SLOT(doActionViewKnowledgeGraphNavigator())
+        orloj->getDashboard()->getView()->getNavigatorDashboardlet(), SIGNAL(clickToSwitchFacet()),
+        this, SLOT(doActionViewKnowledgeGraphNavigator())
+    );
+    QObject::connect(
+        orloj->getNoteEdit()->getView()->getNoteEditor(), SIGNAL(signalDnDropUrl(QString)),
+        this, SLOT(doActionFormatLink(QString))
+    );
+    QObject::connect(
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SIGNAL(signalDnDropUrl(QString)),
+        this, SLOT(doActionFormatLink(QString))
     );
     // wire toolbar signals
     QObject::connect(view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()), this, SLOT(doActionOutlineOrNoteNew()));
@@ -1377,7 +1383,7 @@ void MainWindowPresenter::doActionFormatTable()
     }
 }
 
-void MainWindowPresenter::doActionFormatLink()
+void MainWindowPresenter::doActionFormatLink(QString link)
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> oss{mind->getOutlines()};
@@ -1399,7 +1405,13 @@ void MainWindowPresenter::doActionFormatLink()
         orloj->getOutlineView()->getCurrentOutline(),
         os,
         ns,
-        selectedText);
+        selectedText,
+        link);
+}
+
+void MainWindowPresenter::doActionFormatLink()
+{
+    doActionFormatLink(QString{});
 }
 
 void MainWindowPresenter::insertMarkdownText(const QString& text, bool newline, int offset)

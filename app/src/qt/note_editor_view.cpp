@@ -121,22 +121,17 @@ void NoteEditorView::slotConfigurationUpdated()
   * Drag & drop
   */
 
-void NoteEditorView::dragEnterEvent(QDragEnterEvent* event)
-{
-    MF_DEBUG("D&D enter...");
-
-    if (event->mimeData()->hasFormat("text/plain")) {
-        event->acceptProposedAction();
-    }
-}
-
 void NoteEditorView::dropEvent(QDropEvent* event)
 {
-    MF_DEBUG("D&D text: " << event->mimeData()->text().toStdString() << endl);
-    // example: file:///home/dvorka/Desktop/sa-presentation.png
-    // mimeTypeCombo->addItems(event->mimeData()->formats());
-    // TODO open image dialog w/ prefilled name (file name) and path (regext for image extension OR linked file)
-    // TODO implement image copy
+    if(event->mimeData()->hasUrls()
+         &&
+       event->mimeData()->hasFormat("text/plain")
+         &&
+       event->mimeData()->urls().size())
+    {
+        MF_DEBUG("D&D drop: '" << event->mimeData()->urls().first().url().trimmed().toStdString() << "'" << endl);
+        signalDnDropUrl(event->mimeData()->urls().first().url());
+    }
 
     event->acceptProposedAction();
 }

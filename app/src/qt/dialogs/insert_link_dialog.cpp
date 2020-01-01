@@ -98,7 +98,8 @@ void InsertLinkDialog::show(
         const Outline* outline,
         vector<Thing*>& os,
         vector<Note*>& ns,
-        const QString& selectedText)
+        const QString& selectedText,
+        const QString& link)
 {
     this->activeRepository = repository;
     this->currentOutline = outline;
@@ -107,6 +108,9 @@ void InsertLinkDialog::show(
     linkTextEdit->selectAll();
     linkTextEdit->setFocus();
     pathEdit->clear();
+    if(link.size()) {
+        pathEdit->setText(link);
+    }
 
     outlines = os;
     notes = ns;

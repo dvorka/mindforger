@@ -88,7 +88,6 @@ public:
     void insertMarkdownText(const QString &text, bool newLine=true, int offset=0);
 
     // drag & drop
-    void dragEnterEvent(QDragEnterEvent* event) override;
     void dropEvent(QDropEvent* event) override;
 
     // search
@@ -132,6 +131,9 @@ public:
     void setShowLineNumbers(bool show);
 public slots:
     void slotConfigurationUpdated();
+
+signals:
+    void signalDnDropUrl(QString);
 };
 
 } // m8r namespace

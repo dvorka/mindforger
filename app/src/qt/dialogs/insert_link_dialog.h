@@ -69,7 +69,8 @@ public:
             const Outline* outline,
             std::vector<Thing*>& outlines,
             std::vector<Note*>& notes,
-            const QString& selectedText);
+            const QString& selectedText,
+            const QString& link);
     QPushButton* getInsertButton() const { return insertButton; }
     QString getLinkText() { return linkTextEdit->text(); }
     QString getPathText() { return pathEdit->text(); }

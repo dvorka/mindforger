@@ -258,6 +258,7 @@ public slots:
     void doActionFormatCodeBlock();
     void doActionFormatMathBlock();
     void doActionFormatBlockquote();
+    void doActionFormatLink(QString link);
     void doActionFormatLink();
     void handleFormatLink();
     void doActionFormatImage();
