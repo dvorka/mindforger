@@ -130,9 +130,14 @@ void NoteEditorView::dropEvent(QDropEvent* event)
        event->mimeData()->urls().size())
     {
         MF_DEBUG("D&D drop: '" << event->mimeData()->urls().first().url().trimmed().toStdString() << "'" << endl);
-        signalDnDropUrl(event->mimeData()->urls().first().url());
+        signalDnDropUrl(event->mimeData()->urls().first().url().replace("file://",""));
     }
 
+    event->acceptProposedAction();
+}
+
+void NoteEditorView::dragMoveEvent(QDragMoveEvent *event)
+{
     event->acceptProposedAction();
 }
 

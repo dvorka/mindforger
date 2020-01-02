@@ -89,6 +89,7 @@ public:
 
     // drag & drop
     void dropEvent(QDropEvent* event) override;
+    void dragMoveEvent(QDragMoveEvent* event) override;
 
     // search
     void findString(const QString s, bool reverse, bool casesens, bool words);
