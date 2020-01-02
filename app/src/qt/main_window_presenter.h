@@ -311,6 +311,7 @@ public slots:
 
 private:
     void insertMarkdownText(const QString& text, bool newline=false, int offset=0);
+    void copyLinkOrImageToRepository(const std::string& srcPath, QString& path);
 };
 
 }

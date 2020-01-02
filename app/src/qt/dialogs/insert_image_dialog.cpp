@@ -31,7 +31,7 @@ InsertImageDialog::InsertImageDialog(QWidget* parent)
 
     findFileButton = new QPushButton{tr("File")};
     copyToRepoCheckBox = new QCheckBox{tr("copy image to repository")};
-    copyToRepoCheckBox->setEnabled(false);
+    copyToRepoCheckBox->setEnabled(true);
 
     // IMPROVE disable/enable find button if text/path is valid: freedom vs validation
     insertButton = new QPushButton{tr("&Insert")};

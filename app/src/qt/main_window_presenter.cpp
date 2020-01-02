@@ -1400,6 +1400,13 @@ void MainWindowPresenter::doActionFormatLink(QString link)
         selectedText = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getSelectedText();
     }
 
+    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+        insertLinkDialog->getCopyCheckBox()->setEnabled(true);
+    } else {
+        insertLinkDialog->getCopyCheckBox()->setChecked(false);
+        insertLinkDialog->getCopyCheckBox()->setEnabled(false);
+    }
+
     insertLinkDialog->show(
         config.getActiveRepository(),
         orloj->getOutlineView()->getCurrentOutline(),
@@ -1423,6 +1430,40 @@ void MainWindowPresenter::insertMarkdownText(const QString& text, bool newline, 
     }
 }
 
+void MainWindowPresenter::copyLinkOrImageToRepository(const string& srcPath, QString& path)
+{
+    if(isDirectoryOrFileExists(srcPath.c_str())) {
+        QString pathPrefix{};
+        string oPath = orloj->getNoteEdit()->getCurrentNote()->getOutlineKey();
+        if(stringEndsWith(oPath, ".md")) {
+            pathPrefix = QString::fromStdString(oPath.substr(0, oPath.length()-3));
+        } else {
+            pathPrefix = QString::fromStdString(oPath);
+        }
+        pathPrefix.append(".");
+
+        string d{}, f{};
+        pathToDirectoryAndFile(srcPath, d, f);
+        QString pathSuffix{QString::fromStdString(f)};
+
+        path = pathPrefix + pathSuffix;
+        while(isDirectoryOrFileExists(path.toStdString().c_str())) {
+            pathSuffix.prepend("_");
+            path = pathPrefix + pathSuffix;
+        }
+        copyFile(srcPath, path.toStdString());
+
+        d.clear();
+        f.clear();
+        pathToDirectoryAndFile(path.toStdString(), d, f);
+        path = QString::fromStdString(f);
+    } else {
+        // fallback: create link, but don't copy
+        path = insertLinkDialog->getPathText();
+        statusBar->showInfo(tr("Given path '%1' doesn't exist - target will not be copied, but link will be created").arg(path.toStdString().c_str()));
+    }
+}
+
 /*
  * See InsertLinkDialog for link creation hints
  */
@@ -1430,10 +1471,17 @@ void MainWindowPresenter::handleFormatLink()
 {
     insertLinkDialog->hide();
 
+    QString path{};
+    if(insertLinkDialog->isCopyToRepo()) {
+        copyLinkOrImageToRepository(insertLinkDialog->getPathText().toStdString(), path);
+    } else {
+        path = insertLinkDialog->getPathText();
+    }
+
     QString text{"["};
     text += insertLinkDialog->getLinkText();
     text += "](";
-    text += QString::fromStdString(insertLinkDialog->getPathText().toStdString());
+    text += path;
     text += ")";
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
@@ -1451,6 +1499,13 @@ void MainWindowPresenter::handleFormatLink()
 
 void MainWindowPresenter::doActionFormatImage()
 {
+    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+        insertImageDialog->getCopyCheckBox()->setEnabled(true);
+    } else {
+        insertImageDialog->getCopyCheckBox()->setChecked(false);
+        insertImageDialog->getCopyCheckBox()->setEnabled(false);
+    }
+
     insertImageDialog->show();
 }
 
@@ -1458,10 +1513,17 @@ void MainWindowPresenter::handleFormatImage()
 {
     insertImageDialog->hide();
 
+    QString path{};
+    if(insertImageDialog->isCopyToRepo()) {
+        copyLinkOrImageToRepository(insertImageDialog->getPathText().toStdString(), path);
+    } else {
+        path = insertImageDialog->getPathText();
+    }
+
     QString text{"!["};
     text += insertImageDialog->getAlternateText();
     text += "](";
-    text += insertImageDialog->getPathText();
+    text += path;
     text += ")";
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {

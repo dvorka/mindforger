@@ -52,6 +52,8 @@ public:
     QPushButton* getInsertButton() const { return insertButton; }
     QString getAlternateText() { return alternateTextEdit->text(); }
     QString getPathText() { return pathEdit->text(); }
+    bool isCopyToRepo() const { return copyToRepoCheckBox->isChecked(); }
+    QCheckBox* getCopyCheckBox() const { return copyToRepoCheckBox; }
 
 private slots:
     void handleFindFile();

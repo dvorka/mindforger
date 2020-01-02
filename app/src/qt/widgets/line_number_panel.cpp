@@ -33,11 +33,11 @@ QSize LineNumberPanel::sizeHint() const
 
 void LineNumberPanel::paintEvent(QPaintEvent* event)
 {
-    MF_DEBUG("LineNumberPanel::paintEvent" << event << std::endl);
+    // MF_DEBUG("LineNumberPanel::paintEvent" << event << std::endl);
 
     mdEditor->lineNumberPanelPaintEvent(event);
 
     QWidget::paintEvent(event);
 }
 
-}
+} // m8r namespace

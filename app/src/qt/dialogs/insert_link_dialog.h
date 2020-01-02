@@ -72,8 +72,10 @@ public:
             const QString& selectedText,
             const QString& link);
     QPushButton* getInsertButton() const { return insertButton; }
-    QString getLinkText() { return linkTextEdit->text(); }
-    QString getPathText() { return pathEdit->text(); }
+    QString getLinkText() const { return linkTextEdit->text(); }
+    QString getPathText() const { return pathEdit->text(); }
+    bool isCopyToRepo() const { return copyToRepoCheckBox->isChecked(); }
+    QCheckBox* getCopyCheckBox() const { return copyToRepoCheckBox; }
 
 private slots:
 
