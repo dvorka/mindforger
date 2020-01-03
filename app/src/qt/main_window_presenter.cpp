@@ -1434,7 +1434,12 @@ void MainWindowPresenter::copyLinkOrImageToRepository(const string& srcPath, QSt
 {
     if(isDirectoryOrFileExists(srcPath.c_str())) {
         QString pathPrefix{};
-        string oPath = orloj->getNoteEdit()->getCurrentNote()->getOutlineKey();
+        string oPath{};
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            oPath = orloj->getNoteEdit()->getCurrentNote()->getOutlineKey();
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            oPath = orloj->getOutlineHeaderEdit()->getCurrentOutline()->getKey();
+        }
         if(stringEndsWith(oPath, ".md")) {
             pathPrefix = QString::fromStdString(oPath.substr(0, oPath.length()-3));
         } else {

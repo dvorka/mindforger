@@ -136,8 +136,9 @@ void NoteEditorView::dropEvent(QDropEvent* event)
     event->acceptProposedAction();
 }
 
-void NoteEditorView::dragMoveEvent(QDragMoveEvent *event)
+void NoteEditorView::dragMoveEvent(QDragMoveEvent* event)
 {
+    // needed to protect text cursor functionality after drop
     event->acceptProposedAction();
 }
 
