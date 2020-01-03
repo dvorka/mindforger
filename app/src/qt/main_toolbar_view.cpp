@@ -47,6 +47,9 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
         QIcon(":/icons/back.svg"),
         "Back to Previous Note");
     addSeparator();
+    actionViewDashboard = addAction(
+        QIcon(":/icons/dashboard.svg"),
+        tr("View Dashboard"));
     actionViewEisenhower = addAction(
         QIcon(":/icons/view-eisenhower.svg"),
         tr("View Eisenhower Matrix"));

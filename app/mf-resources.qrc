@@ -21,6 +21,7 @@
         <file alias="open-repository.svg">resources/icons/open-repository.svg</file>
         <file alias="home.svg">resources/icons/home.svg</file>
         <file>resources/menu-icons/light_folder-documents.svg</file>
+        <file alias="dashboard.svg">resources/icons/dashboard.svg</file>
     </qresource>
     <qresource prefix="/translations">
         <file alias="mindforger_cs_CZ.qm">resources/qt/translations/mindforger_cs.qm</file>

@@ -37,8 +37,9 @@ public:
     QAction* actionNewOutlineOrNote;
     QAction* actionOpenRepository;
     QAction* actionOpenFile;
-    QAction* actionViewEisenhower;
+    QAction* actionViewDashboard;
     QAction* actionViewOutlines;
+    QAction* actionViewEisenhower;
     QAction* actionViewNavigator;
     QAction* actionViewTags;
     QAction* actionViewRecentNotes;

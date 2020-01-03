@@ -23,7 +23,7 @@ Big thanks to 3rd party FOSS content authors:
 * Knut Sveidqvist ([Mermaid.js](https://mermaidjs.github.io/) - diagrams and flowcharts rendering in HTML)
 * AMS and SIAM ([MathJax.js](https://www.mathjax.org/) - math rendering in HTML)
 * Ivan Sagalaev ([Highlight.js](https://highlightjs.org/) - source code syntax highlighting)
-* Danny Allen (primary icon theme store.kde.com - icons)
+* Danny Allen (primary [icon theme](https://store.kde.org/content/show.php?content=18317) store.kde.com - icons)
 * Krita (https://github.com/KDE/krita - menu icons)
 * Travis CI ([travis-ci.org](https://travis-ci.org/) - continous integration tests and builds infra - Ubuntu, macOS)
 * AppVeyor CI ([appveyor.com](https://www.appveyor.com/) - continous integration tests and builds infra - Windows
