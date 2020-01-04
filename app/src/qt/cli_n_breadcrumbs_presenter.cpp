@@ -23,7 +23,7 @@ using namespace std;
 namespace m8r {
 
 CliAndBreadcrumbsPresenter::CliAndBreadcrumbsPresenter(
-        const MainWindowPresenter* mainPresenter,
+        MainWindowPresenter* mainPresenter,
         CliAndBreadcrumbsView* view,
         Mind* mind)
     : mainPresenter(mainPresenter), view(view), mind(mind)
@@ -130,8 +130,8 @@ void CliAndBreadcrumbsPresenter::executeFts(QString& command)
 {
     string searchedString = command.toStdString().substr(4);
     if(!searchedString.empty()) {
-        // IMPROVE get ignore case from the command and pass it as 2nd parameter
-        mainPresenter->executeFts(searchedString, FtsSearch::EXACT);
+        // IMPROVE send search string & get ignore case from the command and pass it as 2nd parameter
+        mainPresenter->slotHandleFts();
     }
 }
 

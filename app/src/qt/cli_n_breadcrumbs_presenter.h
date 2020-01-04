@@ -38,13 +38,13 @@ class CliAndBreadcrumbsPresenter : public QObject
     Q_OBJECT
 
 private:
-    const MainWindowPresenter* mainPresenter;
+    MainWindowPresenter* mainPresenter;
     CliAndBreadcrumbsView* view;
     Mind* mind;
 
 public:
     CliAndBreadcrumbsPresenter(
-            const MainWindowPresenter* mainPresenter,
+            MainWindowPresenter* mainPresenter,
             CliAndBreadcrumbsView* view,
             Mind* mind);
 

@@ -60,7 +60,6 @@ private:
     OrganizerView* organizer;
     TagsTableView* tagCloud;
     OutlinesTableView* outlinesTable;
-    NotesTableView* notesTable;
     RecentNotesTableView* recentNotesTable;
     OutlineViewSplitter* outlineView;
     OutlineHeaderView* outlineHeaderView;
@@ -81,8 +80,6 @@ public:
     OrganizerView* getOrganizer() const { return organizer; }
     TagsTableView* getTagCloud() const { return tagCloud; }
     OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
-    // TODO remove when not needed (was FTS result)
-    NotesTableView* getNotesTable() const { return notesTable; }
     RecentNotesTableView* getRecentNotesTable() const { return recentNotesTable; }
     OutlineViewSplitter* getOutlineView() const { return outlineView; }
     OutlineHeaderView* getOutlineHeaderView() const { return outlineHeaderView; }
@@ -120,16 +117,6 @@ public:
      * @brief Recent Notes.
      */
     void showFacetRecentNotes();
-
-    /**
-     * @brief FTS result list - Notes w/o detail
-     */
-    void showFacetFtsResult();
-
-    /**
-     * @brief FTS result list - Notes w/ detail
-     */
-    void showFacetFtsResultDetail();
 
     /**
      * @brief Outline header view

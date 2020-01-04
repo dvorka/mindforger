@@ -79,31 +79,15 @@ void NoteViewPresenter::refresh(Note* note)
     note->makeRead();
     this->currentNote = note;
 
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_FTS_RESULT) || orloj->isFacetActive(OrlojPresenterFacets::FACET_FTS_VIEW_NOTE)) {
-        // FTS result HTML
-        html = "<html><body style='";
-        htmlRepresentation->fgBgTextColorStyle(html);
-        html += "'><pre>";
-        qHtml = QString::fromStdString(html);
-        markdownRepresentation->to(note, &html);
-        qHtml += QString::fromStdString(html);
-        qHtml += QString::fromStdString("</pre></body></html>");
+    // autolinking debug
+    // MF_DEBUG("H " << htmlRepresentation << endl);
+    // MF_DEBUG("N " << note << endl);
+    // MF_DEBUG("T " << html << endl);
+    // MF_DEBUG("A " << Configuration::getInstance().isAutolinking() << endl);
 
-        // highlight matches
-        QString highlighted = QString::fromStdString("<span style='background-color: red; color: white;'>");
-        // IMPROVE instead of searched expression that MAY differ in CASE, here should be original string found in the haystack
-        highlighted += searchExpression;
-        highlighted += QString::fromStdString("</span>");
-        qHtml.replace(searchExpression, highlighted, searchIgnoreCase?Qt::CaseInsensitive:Qt::CaseSensitive);
-    } else {
-        // HTML
-        MF_DEBUG("H " << htmlRepresentation << endl);
-        MF_DEBUG("N " << note << endl);
-        MF_DEBUG("T " << html << endl);
-        MF_DEBUG("A " << Configuration::getInstance().isAutolinking() << endl);
-        htmlRepresentation->to(note, &html, Configuration::getInstance().isAutolinking());
-        qHtml= QString::fromStdString(html);
-    }
+    // HTML
+    htmlRepresentation->to(note, &html, Configuration::getInstance().isAutolinking());
+    qHtml= QString::fromStdString(html);
 
     view->setHtml(qHtml);
 

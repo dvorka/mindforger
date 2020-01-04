@@ -647,27 +647,6 @@ void MainWindowPresenter::slotHandleFts()
     }
 }
 
-// TODO deprecated
-void MainWindowPresenter::executeFts(const string& pattern, const FtsSearch searchMode, Outline* scope) const
-{
-    vector<Note*>* result = mind->findNoteFts(pattern, searchMode, scope);
-
-    QString info = QString::number(result->size());
-    info += QString::fromUtf8(" result(s) found for '");
-    info += QString::fromStdString(pattern);
-    info += QString::fromUtf8("'");
-    view.getStatusBar()->showInfo(info);
-
-    if(result && result->size()) {
-        orloj->getNoteView()->setSearchPattern(pattern);
-        orloj->getNoteView()->setSearchIgnoreCase(searchMode==FtsSearch::IGNORE_CASE?true:false);
-
-        orloj->showFacetFtsResult(result);
-    } else {
-        QMessageBox::information(&view, tr("Full-text Search Result"), tr("No matching Notebook or Note found."));
-    }
-}
-
 void MainWindowPresenter::doActionFindOutlineByName()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save

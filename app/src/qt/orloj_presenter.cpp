@@ -38,7 +38,6 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     this->organizerPresenter = new OrganizerPresenter(view->getOrganizer(), this);
     this->tagCloudPresenter = new TagsTablePresenter(view->getTagCloud(), mainPresenter->getHtmlRepresentation());
     this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
-    this->notesTablePresenter = new NotesTablePresenter(view->getNotesTable());
     this->recentNotesTablePresenter = new RecentNotesTablePresenter(view->getRecentNotesTable(), mainPresenter->getHtmlRepresentation());
     this->outlineViewPresenter = new OutlineViewPresenter(view->getOutlineView(), this);
     this->outlineHeaderViewPresenter = new OutlineHeaderViewPresenter(view->getOutlineHeaderView(), this);
@@ -270,14 +269,6 @@ void OrlojPresenter::slotShowOutlines()
     showFacetOutlineList(mind->getOutlines());
 }
 
-void OrlojPresenter::showFacetFtsResult(vector<Note*>* result)
-{
-    setFacet(OrlojPresenterFacets::FACET_FTS_RESULT);
-    notesTablePresenter->refresh(result);
-    mainPresenter->getMainMenu()->showFacetOutlineList();
-    view->showFacetFtsResult();
-}
-
 void OrlojPresenter::showFacetOutline(Outline* outline)
 {
     if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
@@ -474,19 +465,14 @@ void OrlojPresenter::showFacetNoteView(Note* note)
 
 void OrlojPresenter::showFacetNoteEdit(Note* note)
 {
-    // if there is FTS result table on the left, then switch to O view facet & N view w/ Note selection, otherwise edit
-    if(notesTablePresenter->getView()->isVisible()) {
-        showFacetNoteView(note);
-    } else {
-        if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
-            outlineViewPresenter->refresh(note->getOutline());
-        }
-
-        noteEditPresenter->setNote(note);
-        view->showFacetNoteEdit();
-        setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
-        mainPresenter->getMainMenu()->showFacetNoteEdit();
+    if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
+        outlineViewPresenter->refresh(note->getOutline());
     }
+
+    noteEditPresenter->setNote(note);
+    view->showFacetNoteEdit();
+    setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
+    mainPresenter->getMainMenu()->showFacetNoteEdit();
 }
 
 void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)

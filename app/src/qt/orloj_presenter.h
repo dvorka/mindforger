@@ -61,13 +61,12 @@ enum OrlojPresenterFacets {
     FACET_EDIT_OUTLINE_HEADER,  // 4
     FACET_VIEW_NOTE,            // 5
     FACET_EDIT_NOTE,            // 6
-    FACET_FTS_RESULT,           // 7
-    FACET_FTS_VIEW_NOTE,        // 8
-    FACET_ORGANIZER,            // 9
-    FACET_TAG_CLOUD,            // 10
-    FACET_RECENT_NOTES,         // 11
-    FACET_NAVIGATOR,            // 12
-    FACET_DASHBOARD             // 13
+    FACET_FTS_VIEW_NOTE,        // 7
+    FACET_ORGANIZER,            // 8
+    FACET_TAG_CLOUD,            // 9
+    FACET_RECENT_NOTES,         // 10
+    FACET_NAVIGATOR,            // 11
+    FACET_DASHBOARD             // 12
 };
 
 enum OrlojButtonRoles {
@@ -94,7 +93,6 @@ private:
     OrganizerPresenter* organizerPresenter;
     TagsTablePresenter* tagCloudPresenter;
     OutlinesTablePresenter* outlinesTablePresenter;
-    NotesTablePresenter* notesTablePresenter;
     RecentNotesTablePresenter* recentNotesTablePresenter;
     OutlineViewPresenter* outlineViewPresenter;
     OutlineHeaderViewPresenter* outlineHeaderViewPresenter;
@@ -118,7 +116,6 @@ public:
     NavigatorPresenter* getNavigator() const { return navigatorPresenter; }
     MainWindowPresenter* getMainPresenter() const { return mainPresenter; }
     OutlinesTablePresenter* getOutlinesTable() const { return outlinesTablePresenter; }
-    NotesTablePresenter* getNotesTable() const { return notesTablePresenter; }
     RecentNotesTablePresenter* getRecentNotesTable() const { return recentNotesTablePresenter; }
     OutlineViewPresenter* getOutlineView() const { return outlineViewPresenter; }
     OutlineHeaderViewPresenter* getOutlineHeaderView() const { return outlineHeaderViewPresenter; }
