@@ -137,7 +137,11 @@ void FtsDialog::updateFacet()
     if(scopeType == ResourceType::NOTE) {
         editorSearchModeChecks->setVisible(true);
         searchModeRadios->setVisible(false);
+        resultSplit->setVisible(false);
         openButton->setVisible(false);
+        // ugly & stupid, but dialog size is set only when called twice
+        setSizeSearchFacet();
+        setSizeSearchFacet();
     } else {
         editorSearchModeChecks->setVisible(false);
         searchModeRadios->setVisible(true);

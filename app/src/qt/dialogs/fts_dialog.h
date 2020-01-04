@@ -47,7 +47,7 @@ private:
 
     QSplitter* resultSplit;
     NotesTableView* resultListingView;
-    // TODO move to FTS dialog presenter
+    // IMPROVE move to FTS dialog presenter
     NotesTablePresenter* resultListingPresenter;
     QTextBrowser* resultPreview;
 
