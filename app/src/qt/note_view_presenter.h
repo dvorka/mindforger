@@ -65,6 +65,7 @@ public:
     ~NoteViewPresenter();
 
     NoteViewModel* getModel() const { return model; }
+    NoteView* getView() const { return view; }
     Note* getCurrentNote() { return currentNote; }
 
     void refresh(Note* note);

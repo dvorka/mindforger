@@ -20,6 +20,8 @@
 
 namespace m8r {
 
+using namespace std;
+
 FtsDialog::FtsDialog(QWidget *parent)
     : QDialog(parent)
 {
@@ -59,38 +61,75 @@ FtsDialog::FtsDialog(QWidget *parent)
     vbox->addStretch(1);
     searchModeRadios->setLayout(vbox);
 
-    findButton = new QPushButton{tr("&Search")};
-    findButton->setDefault(true);
-    findButton->setEnabled(false);
-
+    // buttons
+    openButton = new QPushButton{tr("&Open")};
+    openButton->setEnabled(false);
+    searchButton = new QPushButton{tr("&Search")};
+    searchButton->setDefault(true);
+    searchButton->setEnabled(false);
     closeButton = new QPushButton{tr("&Cancel")};
 
-    // signals
-    connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(enableFindButton(const QString&)));
-    connect(findButton, SIGNAL(clicked()), this, SLOT(addExpressionToHistory()));
+    // assembly
+    QVBoxLayout* searchLayout = new QVBoxLayout{};
+    searchLayout->addWidget(label);
+    searchLayout->addWidget(lineEdit);
+    searchLayout->addWidget(searchButton);
+    searchLayout->addWidget(editorSearchModeChecks);
+    searchLayout->addWidget(searchModeRadios);
+
+    resultSplit = new QSplitter{Qt::Vertical, parent};
+    // Os listing
+    resultListingView = new NotesTableView(resultSplit);
+    resultListingPresenter = new NotesTablePresenter(resultListingView);
+    resultSplit->addWidget(resultListingView);
+    // matches within O
+    resultPreview = new QTextBrowser(resultSplit);
+    resultPreview->setOpenExternalLinks(false);
+    resultSplit->addWidget(resultPreview);
+    resultSplit->setVisible(false);
+
+    // signals (intra view only - other signals in presenter)
+    connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(enableSearchButton(const QString&)));
+    connect(searchButton, SIGNAL(clicked()), this, SLOT(addExpressionToHistory()));
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
-    // assembly
-    QVBoxLayout *mainLayout = new QVBoxLayout{};
-    mainLayout->addWidget(label);
-    mainLayout->addWidget(lineEdit);
-    mainLayout->addWidget(editorSearchModeChecks);
-    mainLayout->addWidget(searchModeRadios);
-
-    QHBoxLayout *buttonLayout = new QHBoxLayout{};
+    QHBoxLayout* buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
     buttonLayout->addWidget(closeButton);
-    buttonLayout->addWidget(findButton);
+    buttonLayout->addWidget(openButton);
     buttonLayout->addStretch();
 
+    QVBoxLayout* mainLayout = new QVBoxLayout{};
+    mainLayout->addLayout(searchLayout);
+    mainLayout->addWidget(resultSplit);
     mainLayout->addLayout(buttonLayout);
+
     setLayout(mainLayout);
 
     // dialog
     setWindowTitle(tr("Full-text Search"));
-    resize(fontMetrics().averageCharWidth()*35, height());
+    setSizeSearchFacet();
     updateFacet();
     setModal(true);
+}
+
+FtsDialog::~FtsDialog()
+{
+    delete label;
+    delete lineEdit;
+    delete completer;
+    delete searchModeRadios;
+    delete searchButton;
+    delete closeButton;
+
+    delete resultPreview;
+    delete resultListingView;
+    delete resultSplit;
+}
+
+void FtsDialog::refreshResult(std::vector<Note*>* notes)
+{
+    resultListingPresenter->refresh(notes);
 }
 
 void FtsDialog::updateFacet()
@@ -98,9 +137,11 @@ void FtsDialog::updateFacet()
     if(scopeType == ResourceType::NOTE) {
         editorSearchModeChecks->setVisible(true);
         searchModeRadios->setVisible(false);
+        openButton->setVisible(false);
     } else {
         editorSearchModeChecks->setVisible(false);
         searchModeRadios->setVisible(true);
+        openButton->setVisible(true);
     }
 }
 
@@ -119,27 +160,46 @@ void FtsDialog::setScope(ResourceType t, Outline* s)
     updateFacet();
 }
 
-void FtsDialog::enableFindButton(const QString& text)
+void FtsDialog::setSizeSearchFacet()
 {
-    findButton->setEnabled(!text.isEmpty());
+    resize(fontMetrics().averageCharWidth()*90, fontMetrics().height()*12);
+}
+
+void FtsDialog::setSizeResultFacet()
+{
+    resize(fontMetrics().averageCharWidth()*90, fontMetrics().height()*35);
+}
+
+void FtsDialog::enableSearchButton(const QString& text)
+{
+    if(text.isEmpty()) {
+        searchButton->setEnabled(false);
+        resultSplit->setVisible(false);
+        // ugly & stupid, but dialog size is set only when called twice
+        setSizeSearchFacet();
+        setSizeSearchFacet();
+    } else {
+        searchButton->setEnabled(true);
+    }
 }
 
 void FtsDialog::addExpressionToHistory()
 {
-    if(lineEdit->text().size()) {
-        completerStrings.insert(0, lineEdit->text());
-        ((QStringListModel*)completer->model())->setStringList(completerStrings);
-    }
-}
+    if(scopeType == ResourceType::NOTE) {
+        emit signalNoteScopeSearch();
+    } else {
+        if(lineEdit->text().size()) {
+            completerStrings.insert(0, lineEdit->text());
+            ((QStringListModel*)completer->model())->setStringList(completerStrings);
 
-FtsDialog::~FtsDialog()
-{
-    delete label;
-    delete lineEdit;
-    delete completer;
-    delete searchModeRadios;
-    delete findButton;
-    delete closeButton;
+            resultPreview->setHtml(QString{});
+            resultSplit->setVisible(true);
+            setSizeResultFacet();
+        } else {
+            resultSplit->setVisible(false);
+            setSizeSearchFacet();
+        }
+    }
 }
 
 } // m8r namespace

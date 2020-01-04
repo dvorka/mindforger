@@ -47,6 +47,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     newOutlineDialog = new OutlineNewDialog{QString::fromStdString(config.getMemoryPath()), mind->getOntology(), &view};
     newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
     ftsDialog = new FtsDialog{&view};
+    ftsDialogPresenter = new FtsDialogPresenter(ftsDialog, mind, orloj);
     findOutlineByNameDialog = new FindOutlineByNameDialog{&view};
     findThingByNameDialog = new FindOutlineByNameDialog{&view};
     findNoteByNameDialog = new FindNoteByNameDialog{&view};
@@ -74,7 +75,6 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
     QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
-    QObject::connect(ftsDialog->getFindButton(), SIGNAL(clicked()), this, SLOT(handleFts()));
     QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
     QObject::connect(findThingByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindThingByName()));
     QObject::connect(findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByName()));
@@ -118,7 +118,6 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(view.getToolBar()->actionFindObyTag, SIGNAL(triggered()), this, SLOT(doActionFindOutlineByTag()));
     QObject::connect(view.getToolBar()->actionFindNbyTag, SIGNAL(triggered()), this, SLOT(doActionFindNoteByTag()));
     QObject::connect(view.getToolBar()->actionHomeOutline, SIGNAL(triggered()), this, SLOT(doActionViewHome()));
-    QObject::connect(view.getToolBar()->actionBackToPreviousNote, SIGNAL(triggered()), this, SLOT(doActionViewRecentNotes()));
     QObject::connect(view.getToolBar()->actionThink, SIGNAL(triggered()), this, SLOT(doActionMindToggleThink()));
     QObject::connect(view.getToolBar()->actionScope, SIGNAL(triggered()), this, SLOT(doActionMindTimeTagScope()));
     QObject::connect(view.getToolBar()->actionAdapt, SIGNAL(triggered()), this, SLOT(doActionMindPreferences()));
@@ -155,6 +154,7 @@ MainWindowPresenter::~MainWindowPresenter()
     if(mainMenu) delete mainMenu;
     if(statusBar) delete statusBar;
     if(newOutlineDialog) delete newOutlineDialog;
+    if(ftsDialogPresenter) delete ftsDialogPresenter;
     if(ftsDialog) delete ftsDialog;
     if(findOutlineByNameDialog) delete findOutlineByNameDialog;
     if(findThingByNameDialog) delete findThingByNameDialog;
@@ -616,11 +616,11 @@ void MainWindowPresenter::doActionFts()
     ftsDialog->show();
 }
 
-void MainWindowPresenter::handleFts()
+void MainWindowPresenter::slotHandleFts()
 {
-    QString searchedString = ftsDialog->getSearchPattern();
     ftsDialog->hide();
 
+    QString searchedString = ftsDialog->getSearchPattern();
     switch(ftsDialog->getScopeType()) {
     case ResourceType::NOTE:
         if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
@@ -638,13 +638,16 @@ void MainWindowPresenter::handleFts()
         }
         break;
     default:
-        executeFts(
-            searchedString.toStdString(),
-            ftsDialog->isExact()?FtsSearch::EXACT:(ftsDialog->isRegex()?FtsSearch::REGEXP:FtsSearch::IGNORE_CASE),
-            ftsDialog->getScope());
+        // repository or O FTS
+        if(ftsDialogPresenter->getSelectedNote()) {
+            orloj->showFacetOutline(ftsDialogPresenter->getSelectedNote()->getOutline());
+            orloj->showFacetNoteView(ftsDialogPresenter->getSelectedNote());
+            orloj->getNoteView()->getView()->getViever()->findText(searchedString);
+        }
     }
 }
 
+// TODO deprecated
 void MainWindowPresenter::executeFts(const string& pattern, const FtsSearch searchMode, Outline* scope) const
 {
     vector<Note*>* result = mind->findNoteFts(pattern, searchMode, scope);

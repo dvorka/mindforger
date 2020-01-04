@@ -49,7 +49,6 @@ public:
     QAction* actionFindObyTag;
     QAction* actionFindNbyTag;
     QAction* actionHomeOutline;
-    QAction* actionBackToPreviousNote;
     QAction* actionThink;
     QAction* actionScope;
     QAction* actionAdapt;

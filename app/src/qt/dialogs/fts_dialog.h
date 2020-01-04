@@ -21,6 +21,9 @@
 
 #include <QtWidgets>
 
+#include "../notes_table_view.h"
+#include "../notes_table_presenter.h"
+
 #include "../../lib/src/model/resource_types.h"
 #include "../../lib/src/model/outline.h"
 
@@ -41,7 +44,15 @@ private:
     QRadioButton* exactRadio;
     QRadioButton* ignoreRadio;
     QRadioButton* regexRadio;
-    QPushButton* findButton;
+
+    QSplitter* resultSplit;
+    NotesTableView* resultListingView;
+    // TODO move to FTS dialog presenter
+    NotesTablePresenter* resultListingPresenter;
+    QTextBrowser* resultPreview;
+
+    QPushButton* openButton;
+    QPushButton* searchButton;
     QPushButton* closeButton;
 
     ResourceType scopeType;
@@ -61,6 +72,12 @@ public:
     FtsDialog &operator=(const FtsDialog&&) = delete;
     ~FtsDialog();
 
+    QPushButton* getSearchButton() const { return searchButton; }
+    QPushButton* getOpenButton() const { return openButton; }
+    NotesTableView* getResultListingView() const { return resultListingView; }
+    NotesTablePresenter* getResultListingPresenter() const { return resultListingPresenter; }
+    QTextBrowser* getResultPreview() const { return resultPreview; }
+
     void setScope(ResourceType t, Outline* s);
     void clearScope() {
         setScope(ResourceType::REPOSITORY, nullptr);
@@ -75,13 +92,29 @@ public:
     bool isExact() const { return exactRadio->isChecked(); }
     bool isCaseInsensitive() const { return ignoreRadio->isChecked(); }
     bool isRegex() const { return regexRadio->isChecked(); }
-    QPushButton* getFindButton() const { return findButton; }
 
-    void show() { lineEdit->selectAll(); lineEdit->setFocus(); QDialog::show(); }
+    void show() {
+        lineEdit->selectAll();
+        lineEdit->setFocus();
+        QDialog::show();
+    }
+    void hideResult() {
+        resultSplit->setVisible(false);
+        setSizeSearchFacet();
+    }
     void updateFacet();
 
+    void refreshResult(std::vector<Note*>* notes);
+
+private:
+    void setSizeSearchFacet();
+    void setSizeResultFacet();
+
+signals:
+    void signalNoteScopeSearch();
+
 private slots:
-    void enableFindButton(const QString &text);
+    void enableSearchButton(const QString &text);
     void addExpressionToHistory();
 };
 

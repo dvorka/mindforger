@@ -81,6 +81,7 @@ public:
     OrganizerView* getOrganizer() const { return organizer; }
     TagsTableView* getTagCloud() const { return tagCloud; }
     OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
+    // TODO remove when not needed (was FTS result)
     NotesTableView* getNotesTable() const { return notesTable; }
     RecentNotesTableView* getRecentNotesTable() const { return recentNotesTable; }
     OutlineViewSplitter* getOutlineView() const { return outlineView; }

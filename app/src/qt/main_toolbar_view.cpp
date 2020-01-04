@@ -43,9 +43,6 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
         QIcon(":/icons/home.svg"),
         //QIcon(":/menu-icons/home.svg"),
         "Open home Notebook");
-    actionBackToPreviousNote = addAction(
-        QIcon(":/icons/back.svg"),
-        "Back to Previous Note");
     addSeparator();
     actionViewDashboard = addAction(
         QIcon(":/icons/dashboard.svg"),

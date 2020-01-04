@@ -37,7 +37,7 @@
 
 #include "dialogs/outline_new_dialog.h"
 #include "dialogs/note_new_dialog.h"
-#include "dialogs/fts_dialog.h"
+#include "dialogs/fts_dialog_presenter.h"
 #include "dialogs/find_outline_by_name_dialog.h"
 #include "dialogs/find_outline_by_tag_dialog.h"
 #include "dialogs/find_note_by_name_dialog.h"
@@ -66,6 +66,8 @@ class OrlojPresenter;
 class StatusBarPresenter;
 class AsyncTaskNotificationsDistributor;
 class NerMainWindowWorkerThread;
+class FtsDialog;
+class FtsDialogPresenter;
 
 /**
  * @brief MindForger main window Presenter.
@@ -110,6 +112,7 @@ private:
     OutlineNewDialog* newOutlineDialog;
     NoteNewDialog* newNoteDialog;
     FtsDialog* ftsDialog;
+    FtsDialogPresenter* ftsDialogPresenter;
     FindOutlineByNameDialog* findOutlineByNameDialog;
     FindOutlineByNameDialog* findThingByNameDialog;
     FindNoteByNameDialog* findNoteByNameDialog;
@@ -188,7 +191,6 @@ public slots:
     void doActionExit();
     // recall
     void doActionFts();
-    void handleFts();
     void doActionFindOutlineByName();
     void handleFindOutlineByName();
     void handleFindThingByName();
@@ -308,6 +310,7 @@ public slots:
     void doActionHelpAboutMindForger();
 
     void executeFts(const std::string& pattern, const FtsSearch searchMode, Outline* scope=nullptr) const;
+    void slotHandleFts();
 
 private:
     void insertMarkdownText(const QString& text, bool newline=false, int offset=0);

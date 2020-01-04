@@ -75,12 +75,6 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowNote(const QItemSelection&, const QItemSelection&)));
-    // TODO (FTS will be rewritten E2E) click FTS result to view Note
-    QObject::connect(
-        view->getNotesTable()->selectionModel(),
-        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-        this,
-        SLOT(slotShowNoteAsFtsResult(const QItemSelection&, const QItemSelection&)));
     // hit ENTER in recent Os/Ns to view O/N detail
     QObject::connect(
         view->getRecentNotesTable(),
@@ -683,27 +677,6 @@ void OrlojPresenter::slotShowOutlineNavigator(Outline* outline)
     if(outline) {
         // timestamps are updated by O header view
         showFacetOutline(outline);
-    }
-}
-
-void OrlojPresenter::slotShowNoteAsFtsResult(const QItemSelection& selected, const QItemSelection& deselected)
-{
-    Q_UNUSED(deselected);
-
-    QModelIndexList indices = selected.indexes();
-    if(indices.size()) {
-        const QModelIndex& index = indices.at(0);
-        QStandardItem* item = notesTablePresenter->getModel()->itemFromIndex(index);
-        // TODO make my role constant
-        Note* note = item->data(Qt::UserRole + 1).value<Note*>();
-
-        noteViewPresenter->refresh(note);
-        view->showFacetFtsResultDetail();
-        mainPresenter->getMainMenu()->showFacetOutlineList();
-        mainPresenter->getStatusBar()->showInfo(QString(note->getName().c_str()));
-        setFacet(OrlojPresenterFacets::FACET_FTS_VIEW_NOTE);
-    } else {
-        mainPresenter->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
     }
 }
 

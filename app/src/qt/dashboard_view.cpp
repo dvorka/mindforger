@@ -21,18 +21,18 @@
 namespace m8r {
 
 DashboardView::DashboardView(QWidget* parent)
-    : QSplitter{Qt::Horizontal,parent},
+    : QSplitter{Qt::Horizontal, parent},
       isMindForgerRepository(false)
 {
-    left = new QSplitter(Qt::Vertical, this);
+    left = new QSplitter{Qt::Vertical, this};
     left->setStretchFactor(0, 1);
     left->setStretchFactor(1, 1);
 
-    middle = new QSplitter(Qt::Vertical, this);
+    middle = new QSplitter{Qt::Vertical, this};
     middle->setStretchFactor(0, 1);
     middle->setStretchFactor(1, 1);
 
-    right = new QSplitter(Qt::Vertical, this);
+    right = new QSplitter{Qt::Vertical, this};
     right->setStretchFactor(0, 1);
     right->setStretchFactor(1, 1);
 
