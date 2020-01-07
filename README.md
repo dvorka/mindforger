@@ -68,7 +68,7 @@ Read:
 Check `man mindforger`
 
 ## In the News
-Read about MindForger on [FOSSMint](https://www.fossmint.com/mindforger-notebook-and-markdown-ide/), [Fedora Magazine](https://fedoramagazine.org/4-try-copr-december-2018/) and [MOONGIFT.jp](https://www.moongift.jp/2018/12/mindforger-markdown%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9/).
+Read about MindForger on [FOSSMint](https://www.fossmint.com/mindforger-notebook-and-markdown-ide/), [Fedora Magazine](https://fedoramagazine.org/4-try-copr-december-2018/), [UbuntuPIT](https://www.ubuntupit.com/mindforger-a-privacy-focused-thinking-notebook-and-markdown-ide-for-linux/), [AppImageHub](https://www.appimagehub.com/p/1257573/), [root.cz](https://www.root.cz/clanky/softwarova-sklizen-19-9-2018/) and [MOONGIFT.jp](https://www.moongift.jp/2018/12/mindforger-markdown%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9/).
 
 ## Bugs and Feature Requests
 https://github.com/dvorka/mindforger/issues

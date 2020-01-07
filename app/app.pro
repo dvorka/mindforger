@@ -224,7 +224,8 @@ HEADERS += \
     src/qt/widgets/view_to_edit_buttons_panel.h \
     src/qt/widgets/mf_widgets.h \
     src/qt/outline_header_view_model.h \
-    src/qt/dialogs/fts_dialog_presenter.h
+    src/qt/dialogs/fts_dialog_presenter.h \
+    src/qt/gear/apple_utils.h
 
 win32|macx|mfwebengine {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h

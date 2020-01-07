@@ -66,6 +66,8 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
     actionFindFts = addAction(
         QIcon(":/icons/find-fts.svg"),
         "Full-text search");
+    // TODO add FTS edit line widget w/ completion from breadcrumps
+    /*
     actionFindObyName = addAction(
         QIcon(":/icons/find-o-name.svg"),
         "Recall Notebook by Name");
@@ -78,6 +80,7 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
     actionFindNbyTag = addAction(
         QIcon(":/icons/find-n-tag.svg"),
         "Recall Note by Tag");
+    */
     addSeparator();
     actionThink = addAction(
         QIcon(":/icons/think.svg"),

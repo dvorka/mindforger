@@ -44,10 +44,12 @@ public:
     QAction* actionViewTags;
     QAction* actionViewRecentNotes;
     QAction* actionFindFts;
+    /*
     QAction* actionFindObyName;
     QAction* actionFindNbyName;
     QAction* actionFindObyTag;
     QAction* actionFindNbyTag;
+    */
     QAction* actionHomeOutline;
     QAction* actionThink;
     QAction* actionScope;

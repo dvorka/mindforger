@@ -113,10 +113,12 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(view.getToolBar()->actionViewTags, SIGNAL(triggered()), this, SLOT(doActionViewTagCloud()));
     QObject::connect(view.getToolBar()->actionViewRecentNotes, SIGNAL(triggered()), this, SLOT(doActionViewRecentNotes()));
     QObject::connect(view.getToolBar()->actionFindFts, SIGNAL(triggered()), this, SLOT(doActionFts()));
+    /*
     QObject::connect(view.getToolBar()->actionFindObyName, SIGNAL(triggered()), this, SLOT(doActionFindOutlineByName()));
     QObject::connect(view.getToolBar()->actionFindNbyName, SIGNAL(triggered()), this, SLOT(doActionFindNoteByName()));
     QObject::connect(view.getToolBar()->actionFindObyTag, SIGNAL(triggered()), this, SLOT(doActionFindOutlineByTag()));
     QObject::connect(view.getToolBar()->actionFindNbyTag, SIGNAL(triggered()), this, SLOT(doActionFindNoteByTag()));
+    */
     QObject::connect(view.getToolBar()->actionHomeOutline, SIGNAL(triggered()), this, SLOT(doActionViewHome()));
     QObject::connect(view.getToolBar()->actionThink, SIGNAL(triggered()), this, SLOT(doActionMindToggleThink()));
     QObject::connect(view.getToolBar()->actionScope, SIGNAL(triggered()), this, SLOT(doActionMindTimeTagScope()));
