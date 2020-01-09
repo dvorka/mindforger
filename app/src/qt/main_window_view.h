@@ -56,7 +56,6 @@ private:
     QWidget* centralWidget;
     QVBoxLayout *centralLayout;
 
-    CliAndBreadcrumbsView* cliView;
     OrlojView* orlojView;
     MainToolbarView* toolBarView;
     StatusBarView* statusBarView;
@@ -71,7 +70,7 @@ public:
 
     QMenuBar* getMenuBar() const { return menuBar(); }
     MainToolbarView* getToolBar() const { return toolBarView; }
-    CliAndBreadcrumbsView* getCli() const { return cliView; }
+    CliAndBreadcrumbsView* getCli() const;
     OrlojView* getOrloj() const { return orlojView; }
     StatusBarView* getStatusBar() const { return statusBarView; }
 

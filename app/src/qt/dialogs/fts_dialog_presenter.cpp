@@ -45,6 +45,12 @@ FtsDialogPresenter::~FtsDialogPresenter()
 {
 }
 
+void FtsDialogPresenter::doSearch()
+{
+    slotSearch();
+    view->addExpressionToHistory();
+}
+
 void FtsDialogPresenter::slotSearch()
 {
     doFts(

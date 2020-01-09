@@ -113,16 +113,18 @@ void CliAndBreadcrumbsPresenter::executeCommand()
             if(outlines && outlines->size()) {
                 mainPresenter->getOrloj()->showFacetOutline(outlines->front());
                 // TODO efficient
-                mainPresenter->getStatusBar()->showInfo(QString("Outline ")+QString::fromStdString(outlines->front()->getName()));
+                mainPresenter->getStatusBar()->showInfo(tr("Outline ")+QString::fromStdString(outlines->front()->getName()));
             } else {
-                mainPresenter->getStatusBar()->showInfo(QString("Outline not found: ") += QString(name.c_str()));
+                mainPresenter->getStatusBar()->showInfo(tr("Outline not found: ") += QString(name.c_str()));
             }
             view->showBreadcrumb();
             return;
         }
-        mainPresenter->getStatusBar()->showError(QString::fromUtf8("Unknown command!"));
+
+        // do FTS as fallback
+        mainPresenter->doFts(view->getCommand(), true);
     } else {
-        mainPresenter->getStatusBar()->showError(QString::fromUtf8("No command!"));
+        mainPresenter->getStatusBar()->showError(tr("No command!"));
     }
 }
 
@@ -135,11 +137,13 @@ void CliAndBreadcrumbsPresenter::executeFts(QString& command)
     }
 }
 
+// TODO call main window handler
 void CliAndBreadcrumbsPresenter::executeListOutlines()
 {
     mainPresenter->getOrloj()->showFacetOutlineList(mind->getOutlines());
 }
 
+// TODO call main window handler
 void CliAndBreadcrumbsPresenter::executeListNotes()
 {
     if(mainPresenter->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)

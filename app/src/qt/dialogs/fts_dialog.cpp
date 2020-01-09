@@ -199,6 +199,11 @@ void FtsDialog::addExpressionToHistory()
             resultPreview->setHtml(QString{});
             resultSplit->setVisible(true);
             setSizeResultFacet();
+
+            // select the first match
+            resultListingView->setFocus();
+            resultListingView->setCurrentIndex(
+                resultListingPresenter->getModel()->index(0, 0));
         } else {
             resultSplit->setVisible(false);
             setSizeSearchFacet();

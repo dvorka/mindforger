@@ -53,7 +53,8 @@ private:
     QLabel* breadcrumbsLabel;
     CliView* cli;
     QCompleter* cliCompleter;
-    QPushButton* goButton;
+
+    bool zenMode;
 
 public:
     static const QString CMD_EXIT;
@@ -61,49 +62,18 @@ public:
     static const QString CMD_FIND_OUTLINE_BY_NAME;
 
 public:
-    explicit CliAndBreadcrumbsView(QWidget *parent);
+    explicit CliAndBreadcrumbsView(QWidget* parent, bool zenMode=true);
 
     void updateCompleterModel(const QStringList *list=nullptr);
     void forceInitialCompletion();
     QString getFirstCompletion() const;
     void setBreadcrumbPath(const QString& path);
-    void setCommand(const char* command)
-    {
-        cli->setText(command);
-    }
-    const QString getCommand() const
-    {
-        return cli->text();
-    }
-    void show()
-    {
-        breadcrumbsLabel->show();
-        cli->show();
-        cliCompleter->complete();
-        goButton->show();
-    }
-    void hide()
-    {
-        breadcrumbsLabel->hide();
-        cli->hide();
-        goButton->hide();
-    }
-    void showBreadcrumb()
-    {
-        breadcrumbsLabel->show();
-        cli->hide();
-        goButton->hide();
-    }
-    void showCli(bool selectAll=true)
-    {
-        show();
-        cli->setFocus();
-        if(selectAll) {
-            cli->selectAll();
-        }
-
-        cliCompleter->complete();
-    }
+    void setCommand(const char* command);
+    const QString getCommand() const;
+    void show();
+    void hide();
+    void showBreadcrumb();
+    void showCli(bool selectAll=true);
 };
 
 }

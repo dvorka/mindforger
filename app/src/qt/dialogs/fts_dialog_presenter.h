@@ -53,6 +53,8 @@ public:
     FtsDialog* getView() const { return view; }
     Note* getSelectedNote() const { return selectedNote; }
 
+    void doSearch();
+
 private:
     QString &getNoteWithMatchesAsHtml(const Note* note);
     void doFts(const std::string& pattern, const FtsSearch searchMode, Outline* scope) const;

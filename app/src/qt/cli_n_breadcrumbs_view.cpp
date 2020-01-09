@@ -42,12 +42,17 @@ void CliView::keyPressEvent(QKeyEvent* event)
     QLineEdit::keyPressEvent(event);
 }
 
+/*
+ * CliAndBreadcrumbsView
+ */
+
 const QString CliAndBreadcrumbsView::CMD_HELP = "help";
 const QString CliAndBreadcrumbsView::CMD_EXIT = "exit";
 const QString CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME = "find outline by name ";
 
 // TODO migrate all commands to constants
 const QStringList CliAndBreadcrumbsView::DEFAULT_CMDS = QStringList()
+        /*
         << CMD_HELP
         << CMD_EXIT
         // home tools
@@ -76,20 +81,25 @@ const QStringList CliAndBreadcrumbsView::DEFAULT_CMDS = QStringList()
 
         // TODO new outline
         // TODO new note
+        */;
 
 
-CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent)
-    : QWidget(parent)
+CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent, bool zenMode)
+    : QWidget(parent),
+      zenMode{zenMode}
 {
     setFixedHeight(this->fontMetrics().height()*1.5);
 
     QHBoxLayout* layout = new QHBoxLayout(this);
     // ensure that wont be extra space around member widgets
-    layout->setContentsMargins(QMargins(0,0,0,0));
+    layout->setContentsMargins(QMargins(0, 0, 0, 0));
     setLayout(layout);
 
-    breadcrumbsLabel = new QLabel();
+    breadcrumbsLabel = new QLabel(this);
     breadcrumbsLabel->setText("$");
+    if(zenMode) {
+        breadcrumbsLabel->hide();
+    }
     layout->addWidget(breadcrumbsLabel);
 
     cli = new CliView(this, parent);
@@ -98,9 +108,6 @@ CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent)
     cliCompleter->setCompletionMode(QCompleter::PopupCompletion);
     cli->setCompleter(cliCompleter);
     layout->addWidget(cli);
-
-    goButton = new QPushButton(tr("Run"));
-    layout->addWidget(goButton);
 
     showBreadcrumb();
 }
@@ -125,7 +132,7 @@ QString CliAndBreadcrumbsView::getFirstCompletion() const
     }
 }
 
-void CliAndBreadcrumbsView::updateCompleterModel(const QStringList *list)
+void CliAndBreadcrumbsView::updateCompleterModel(const QStringList* list)
 {
     QStringListModel* completerModel=(QStringListModel*)cliCompleter->model();
     if(completerModel==nullptr) {
@@ -140,7 +147,57 @@ void CliAndBreadcrumbsView::updateCompleterModel(const QStringList *list)
 
 void CliAndBreadcrumbsView::setBreadcrumbPath(const QString& path)
 {
-    breadcrumbsLabel->setText(path);
+    if(zenMode) {
+        breadcrumbsLabel->setText("");
+    } else {
+        breadcrumbsLabel->setText(path);
+    }
 }
 
+void CliAndBreadcrumbsView::setCommand(const char* command)
+{
+    cli->setText(command);
 }
+
+const QString CliAndBreadcrumbsView::getCommand() const
+{
+    return cli->text();
+}
+
+void CliAndBreadcrumbsView::show()
+{
+    if(!zenMode) {
+        breadcrumbsLabel->show();
+    }
+    cli->show();
+    cliCompleter->complete();
+}
+
+void CliAndBreadcrumbsView::hide()
+{
+    if(!zenMode) {
+        breadcrumbsLabel->hide();
+        cli->hide();
+    }
+}
+
+void CliAndBreadcrumbsView::showBreadcrumb()
+{
+    if(!zenMode) {
+        breadcrumbsLabel->show();
+        cli->hide();
+    }
+}
+
+void CliAndBreadcrumbsView::showCli(bool selectAll)
+{
+    show();
+    cli->setFocus();
+    if(selectAll) {
+        cli->selectAll();
+    }
+
+    cliCompleter->complete();
+}
+
+} // m8r namespace

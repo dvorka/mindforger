@@ -191,6 +191,7 @@ public slots:
     void doActionExit();
     // recall
     void doActionFts();
+    void doFts(const QString& pattern, bool doSearch=false);
     void doActionFindOutlineByName();
     void handleFindOutlineByName();
     void handleFindThingByName();

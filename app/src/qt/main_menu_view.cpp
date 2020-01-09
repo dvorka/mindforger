@@ -216,11 +216,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewDwell->setStatusTip(tr("Open memory dwell..."));
     actionViewDwell->setEnabled(false);
 
-#ifdef DO_MF_DEBUG
-    actionViewCli = new QAction(tr("&CLI"), mainWindow);
+    actionViewCli = new QAction(QIcon(":/menu-icons/cli.svg"), tr("&CLI"), mainWindow);
     actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
-    actionViewCli->setStatusTip(tr("Toggle command line"));
-#endif
+    actionViewCli->setStatusTip(tr("Activate command line interface..."));
 
     actionViewRecentNotes = new QAction(QIcon(":/menu-icons/open-recent.svg"), tr("&Recent Notes"), mainWindow);
     actionViewRecentNotes->setStatusTip(tr("View recently modified Notes..."));
@@ -255,10 +253,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewOutlines);
     menuView->addAction(actionViewTags);
     menuView->addAction(actionViewNavigator);
+    menuView->addAction(actionViewCli);
 #ifdef MF_WIP
     menuView->addAction(actionViewStencils);
     menuView->addAction(actionViewDwell);
-    // OBSOLETE feature: menuView->addAction(actionViewCli);
     menuView->addAction(actionViewLimbo);
 #endif
     menuView->addSeparator();

@@ -22,16 +22,20 @@
 #include <QtWidgets>
 
 #include "main_window_view.h"
+#include "cli_n_breadcrumbs_presenter.h"
 
 namespace m8r {
 
 class MainWindowView;
+class CliAndBreadcrumbsView;
 
 class MainToolbarView : public QToolBar
 {
     Q_OBJECT
 
     MainWindowView* mainWindow;
+
+    CliAndBreadcrumbsView* cli;
 
 public:
     QAction* actionNewOutlineOrNote;
@@ -44,12 +48,6 @@ public:
     QAction* actionViewTags;
     QAction* actionViewRecentNotes;
     QAction* actionFindFts;
-    /*
-    QAction* actionFindObyName;
-    QAction* actionFindNbyName;
-    QAction* actionFindObyTag;
-    QAction* actionFindNbyTag;
-    */
     QAction* actionHomeOutline;
     QAction* actionThink;
     QAction* actionScope;
@@ -63,6 +61,8 @@ public:
     MainToolbarView &operator=(const MainToolbarView&) = delete;
     MainToolbarView &operator=(const MainToolbarView&&) = delete;
     ~MainToolbarView();
+
+    CliAndBreadcrumbsView* getCli() const { return cli;}
 };
 
 }

@@ -34,8 +34,6 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
     centralWidget = new QWidget(this);
 
     centralLayout = new QVBoxLayout{centralWidget};
-    cliView = new CliAndBreadcrumbsView{centralWidget};
-    centralLayout->addWidget(cliView);
     orlojView = new OrlojView{centralWidget};
     centralLayout->addWidget(orlojView);
 
@@ -45,14 +43,19 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
     statusBarView = new StatusBarView(statusBar(), lookAndFeel);
 }
 
-void MainWindowView::setFileOrDirectory(QString f)
-{
-    setWindowTitle(windowTitleSkeleton+" - "+f+" ");
-}
-
 MainWindowView::~MainWindowView()
 {
     delete centralWidget;
+}
+
+CliAndBreadcrumbsView* MainWindowView::getCli() const
+{
+    return toolBarView->getCli();
+}
+
+void MainWindowView::setFileOrDirectory(QString f)
+{
+    setWindowTitle(windowTitleSkeleton+" - "+f+" ");
 }
 
 } // m8r namespace

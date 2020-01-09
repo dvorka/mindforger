@@ -1,27 +1,8 @@
 <RCC>
     <qresource prefix="/icons">
         <file alias="mindforger-icon.png">resources/qt/images/mindforger-icon.png</file>
-        <file alias="x-new.svg">resources/icons/new.svg</file>
-        <file alias="x-adapt.svg">resources/icons/adapt.svg</file>
         <file alias="back.svg">resources/icons/back.svg</file>
-        <file alias="x-find-fts.svg">resources/icons/find-fts.svg</file>
-        <file alias="x-help.svg">resources/icons/help.svg</file>
-        <file alias="x-scope.svg">resources/icons/scope.svg</file>
-        <file alias="x-view-navigator.svg">resources/icons/view-navigator.svg</file>
-        <file alias="x-view-outlines.svg">resources/icons/view-outlines.svg</file>
-        <file alias="x-view-recent-notes.svg">resources/icons/view-recent-notes.svg</file>
-        <file alias="x-view-tags.svg">resources/icons/view-tags.svg</file>
-        <file alias="x-view-eisenhower.svg">resources/icons/view-eisenhower.svg</file>
-        <file alias="x-think.svg">resources/icons/think.svg</file>
-        <file alias="find-n-name.svg">resources/icons/find-n-name.svg</file>
-        <file alias="find-n-tag.svg">resources/icons/find-n-tag.svg</file>
-        <file alias="find-o-name.svg">resources/icons/find-o-name.svg</file>
-        <file alias="find-o-tag.svg">resources/icons/find-o-tag.svg</file>
-        <file alias="x-open-file.svg">resources/icons/open-file.svg</file>
-        <file alias="x-open-repository.svg">resources/icons/open-repository.svg</file>
-        <file alias="x-home.svg">resources/icons/home.svg</file>
         <file>resources/menu-icons/light_folder-documents.svg</file>
-        <file alias="dashboard.svg">resources/icons/dashboard.svg</file>
         <file alias="home.svg">resources/icons/flat-home.svg</file>
         <file alias="new.svg">resources/icons/flat-new.svg</file>
         <file alias="open-file.svg">resources/icons/flat-open-file.svg</file>
@@ -102,5 +83,6 @@
         <file alias="pin.svg">resources/menu-icons/light_krita_tool_reference_images.svg</file>
         <file alias="document.svg">resources/menu-icons/light_folder-documents.svg</file>
         <file alias="folder.svg">resources/menu-icons/light_folder.svg</file>
+        <file alias="cli.svg">resources/menu-icons/light_drive-harddisk.svg</file>
     </qresource>
 </RCC>

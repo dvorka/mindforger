@@ -25,25 +25,37 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
 {
     // TOOLBAR: L&F driven toolbar icons - dark vs. light
 
+    actionFindFts = addAction(
+        QIcon(":/icons/find-fts.svg"),
+        "Full-text search");
+
+    cli = new CliAndBreadcrumbsView{this};
+    addWidget(cli);
+    cli->show();
+
+    addSeparator();
+
     actionNewOutlineOrNote = addAction(
         QIcon(":/icons/new.svg"),
-        //QIcon(":/menu-icons/new.svg"),
         tr("New Notebook"));
+
     addSeparator();
+
     actionOpenRepository = addAction(
         QIcon(":/icons/open-repository.svg"),
-        //QIcon(":/menu-icons/folder.svg"),
         tr("Open a directory with Markdowns or MindForger repository"));
     actionOpenFile = addAction(
-        //QIcon(":/menu-icons/open.svg"),
         QIcon(":/icons/open-file.svg"),
         tr("Open Markdown file"));
+
     addSeparator();
+
     actionHomeOutline = addAction(
         QIcon(":/icons/home.svg"),
-        //QIcon(":/menu-icons/home.svg"),
         "Open home Notebook");
+
     addSeparator();
+
     actionViewDashboard = addAction(
         QIcon(":/icons/dashboard.svg"),
         tr("View Dashboard"));
@@ -62,40 +74,24 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
     actionViewRecentNotes = addAction(
         QIcon(":/icons/view-recent-notes.svg"),
         tr("View Recent Notes"));
+
     addSeparator();
-    actionFindFts = addAction(
-        QIcon(":/icons/find-fts.svg"),
-        "Full-text search");
-    // TODO add FTS edit line widget w/ completion from breadcrumps
-    /*
-    actionFindObyName = addAction(
-        QIcon(":/icons/find-o-name.svg"),
-        "Recall Notebook by Name");
-    actionFindNbyName = addAction(
-        QIcon(":/icons/find-n-name.svg"),
-        "Recall Note by Name");
-    actionFindObyTag = addAction(
-        QIcon(":/icons/find-o-tag.svg"),
-        "Recall Notebook by Tag");
-    actionFindNbyTag = addAction(
-        QIcon(":/icons/find-n-tag.svg"),
-        "Recall Note by Tag");
-    */
-    addSeparator();
+
     actionThink = addAction(
         QIcon(":/icons/think.svg"),
-        //QIcon(":/menu-icons/on.svg"),
         "Think / Sleep");
+
     addSeparator();
+
     actionScope = addAction(
         QIcon(":/icons/scope.svg"),
-        //QIcon(":/menu-icons/filter.svg"),
         "Scope Mind");
     actionAdapt = addAction(
         QIcon(":/icons/adapt.svg"),
-        //QIcon(":/menu-icons/configure.svg"),
         "Adapt");
+
     addSeparator();
+
     actionHelp = addAction(
         QIcon(":/icons/help.svg"),
         "Open Documentation");

@@ -86,6 +86,7 @@ public:
     Outline* getScope() { return scope; }
 
     QString getSearchPattern() const { return lineEdit->text(); }
+    void setSearchPattern(const QString& searchPattern) { lineEdit->setText(searchPattern); }
     bool isEditorCaseInsensitive() const { return editorIgnoreCheck->isChecked(); }
     bool isEditorWords() const { return editorWordCheck->isChecked(); }
     bool isEditorReverse() const { return editorReverseCheck->isChecked(); }
@@ -113,9 +114,11 @@ private:
 signals:
     void signalNoteScopeSearch();
 
+public slots:
+    void addExpressionToHistory();
+
 private slots:
     void enableSearchButton(const QString &text);
-    void addExpressionToHistory();
 };
 
 }
