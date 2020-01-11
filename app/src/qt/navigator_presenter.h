@@ -57,12 +57,12 @@ public:
     void cleanupBeforeHide() { view->cleanupBeforeHide(); }
 
 private slots:
-    void nodeSelectedSlot(NavigatorNode* node);
+    void slotNodeSelected(NavigatorNode* node);
 
 signals:
-    void thingSelectedSignal();
-    void outlineSelectedSignal(Outline* note);
-    void noteSelectedSignal(Note* note);
+    void signalThingSelected();
+    void signalOutlineSelected(Outline* note);
+    void signalNoteSelected(Note* note);
 };
 
 }

@@ -299,12 +299,14 @@ size_t Mind::getMemoryDwellDepth() const
     return memoryDwell.size();
 }
 
+/*
 vector<Note*>* Mind::findNoteByNameFts(const string& pattern) const
 {
     UNUSED_ARG(pattern);
 
     return nullptr;
 }
+*/
 
 void Mind::getOutlineNames(vector<string>& names) const
 {
@@ -506,26 +508,66 @@ void Mind::findNotesByTags(const vector<const Tag*>& tags, vector<Note*>& result
     }
 }
 
-void Mind::getAllThings(vector<Thing*>& things, vector<string>* thingsNames)
+void Mind::getAllThings(
+    vector<Thing*>& things,
+    vector<string>* thingsNames,
+    string* pattern,
+    ThingNameSerialization as)
 {
     const vector<Outline*>& os = getOutlines();
     for(Outline* o:os) {
-        things.push_back(o);
-        if(thingsNames) {
-            thingsNames->push_back(o->getName());
+        if((pattern && stringStartsWith(o->getName(), *pattern))
+              ||
+            pattern==nullptr)
+        {
+            things.push_back(o);
+            if(thingsNames) {
+                thingsNames->push_back(o->getName());
+            }
         }
     }
     vector<Note*> ns{};
     getAllNotes(ns);
     for(Note* n:ns) {
-        things.push_back(n);
-        if(thingsNames) {
-            // IMPROVE make this Note's method: getScopedName()
-            string s{n->getName()};
-            s += " (";
-            s += n->getOutline()->getName();
-            s += ")";
-            thingsNames->push_back(s);
+        if((pattern && stringStartsWith(n->getName(), *pattern))
+              ||
+            pattern==nullptr)
+        {
+            things.push_back(n);
+            if(thingsNames) {
+                string s{};
+                switch(as) {
+                case ThingNameSerialization::NAME:
+                    s += n->getName();
+                    break;
+                case ThingNameSerialization::LINK:
+                    // IMPROVE make this Note's method
+                    {
+                        s += "[";
+                        s += n->getName();
+                        s += " (";
+                        s += n->getOutline()->getName();
+                        s += ")](";
+                        string p = RepositoryIndexer::makePathRelative(
+                             config.getActiveRepository(), n->getOutline()->getKey(), n->getKey());
+                        pathToLinuxDelimiters(p, p);
+                        s += p;
+                        s += ")";
+                        break;
+                    }
+                case ThingNameSerialization::SCOPED_NAME:
+                default:
+                    {
+                        // IMPROVE make this Note's method: getScopedName()
+                        s += n->getName();
+                        s += " (";
+                        s += n->getOutline()->getName();
+                        s += ")";
+                        break;
+                    }
+                }
+                thingsNames->push_back(s);
+            }
         }
     }
 }

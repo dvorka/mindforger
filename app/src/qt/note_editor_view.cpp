@@ -48,7 +48,8 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     model = new QStringListModel{this};
     completer = new QCompleter{this};
     completer->setWidget(this);
-    completer->setCompletionMode(QCompleter::PopupCompletion);
+    // must be in unfiltered mode to show links
+    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     completer->setModel(model);
     completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
@@ -60,7 +61,9 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     QObject::connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
     QObject::connect(completer, SIGNAL(activated(const QString&)), this, SLOT(insertCompletion(const QString&)));
     // shortcut signals
-    new QShortcut(QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Slash)), this, SLOT(performCompletion()));
+    new QShortcut(
+        QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_Slash)),
+        this, SLOT(slotStartLinkCompletion()));
 
     // capabilities
     setAcceptDrops(true);
@@ -285,7 +288,7 @@ void NoteEditorView::keyPressEvent(QKeyEvent *event)
             if(blockCount() < Configuration::EDITOR_MAX_AUTOCOMPLETE_LINES) {
                 QChar k{event->key()};
                 if(k.isLetter()) {
-                    if(performCompletion()) {
+                    if(performTextCompletion()) {
                         event->ignore();
                     }
                 }
@@ -328,26 +331,37 @@ bool NoteEditorView::handledCompletedAndSelected(QKeyEvent *event)
     return true;
 }
 
-bool NoteEditorView::performCompletion()
+const QString NoteEditorView::getCompletionPrefix()
 {
     QTextCursor cursor = textCursor();
     cursor.select(QTextCursor::WordUnderCursor);
     const QString completionPrefix = cursor.selectedText();
     if(!completionPrefix.isEmpty() && completionPrefix.at(completionPrefix.length()-1).isLetter()) {
-        performCompletion(completionPrefix);
-        return true;
+        return completionPrefix;
     } else {
-        return false;
+        return QString{};
     }
 }
 
-void NoteEditorView::performCompletion(const QString& completionPrefix)
+bool NoteEditorView::performTextCompletion()
+{
+    const QString completionPrefix = getCompletionPrefix();
+    if(!completionPrefix.isEmpty()) {
+        performTextCompletion(completionPrefix);
+        return true;
+    }
+
+    return false;
+}
+
+void NoteEditorView::performTextCompletion(const QString& completionPrefix)
 {
     MF_DEBUG("Completing prefix: '" << completionPrefix.toStdString() << "'" << endl);
 
     // TODO model population is SLOW, don't do it after each hit, but e.g. when user does NOT write
     populateModel(completionPrefix);
 
+    completer->setCompletionMode(QCompleter::PopupCompletion);
     if(completionPrefix != completer->completionPrefix()) {
         completer->setCompletionPrefix(completionPrefix);
         completer->popup()->setCurrentIndex(completer->completionModel()->index(0, 0));
@@ -365,6 +379,45 @@ void NoteEditorView::performCompletion(const QString& completionPrefix)
     //}
 }
 
+void NoteEditorView::slotStartLinkCompletion()
+{
+    const QString completionPrefix = getCompletionPrefix();
+    if(!completionPrefix.isEmpty()) {
+        // ask mind (via Orloj) for links > editor gets signal whose handlings opens completion dialog
+        emit signalGetLinksForPattern(completionPrefix);
+    }
+}
+
+void NoteEditorView::slotPerformLinkCompletion(
+    const QString& completionPrefix,
+    vector<string>* links)
+{
+    MF_DEBUG("Completing prefix: '" << completionPrefix.toStdString() << "' w/ " << links->size() << " links" << endl);
+
+    if(!links->empty()) {
+        // populate model for links
+        QStringList linksAsStrings{};
+        for(string& s:*links) {
+            linksAsStrings.append(QString::fromStdString(s));
+        }
+        // IMPROVE sort links so that they are the most relevant
+        model->setStringList(linksAsStrings);
+        delete links;
+
+        // perform completion
+        completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+        if(completionPrefix != completer->completionPrefix()) {
+            completer->setCompletionPrefix(completionPrefix);
+            completer->popup()->setCurrentIndex(completer->completionModel()->index(0, 0));
+        }
+        QRect rect = cursorRect();
+        rect.setWidth(
+            completer->popup()->sizeHintForColumn(0) +
+            completer->popup()->verticalScrollBar()->sizeHint().width());
+        completer->complete(rect);
+    }
+}
+
 void NoteEditorView::populateModel(const QString& completionPrefix)
 {
     QStringList strings = toPlainText().split(QRegExp{"\\W+"});
@@ -374,16 +427,26 @@ void NoteEditorView::populateModel(const QString& completionPrefix)
     model->setStringList(strings);
 }
 
-// TODO single word completion to be removed
 void NoteEditorView::insertCompletion(const QString& completion, bool singleWord)
 {
     QTextCursor cursor = textCursor();
-    int numberOfCharsToComplete
-        = completion.length() - completer->completionPrefix().length();
 
-    // TODO single word completion to be removed
-    int insertionPosition = cursor.position();
-    cursor.insertText(completion.right(numberOfCharsToComplete));
+    int insertionPosition;
+    if(completion.startsWith("[")) {
+        for(int i=0; i<completer->completionPrefix().length(); i++) {
+            cursor.deletePreviousChar();
+        }
+        // single word completion to be removed (not used, but migth be useful)
+        insertionPosition = cursor.position();
+        cursor.insertText(completion.right(completion.length()));
+    } else {
+        int numberOfCharsToComplete
+            = completion.length() - completer->completionPrefix().length();
+        // single word completion to be removed (not used, but migth be useful)
+        insertionPosition = cursor.position();
+        cursor.insertText(completion.right(numberOfCharsToComplete));
+    }
+
     if(singleWord) {
         cursor.setPosition(insertionPosition);
         cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);

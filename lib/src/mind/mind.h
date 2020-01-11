@@ -61,6 +61,12 @@ struct MindStatistics {
     const Tag* mostUsedTag;
 };
 
+enum class ThingNameSerialization {
+    NAME,
+    SCOPED_NAME,
+    LINK
+};
+
 /**
  * @brief Mind.
  *
@@ -345,7 +351,7 @@ public:
      * @brief Find outline by name - exact match.
      */
     std::unique_ptr<std::vector<Outline*>> findOutlineByNameFts(const std::string& pattern) const;
-    std::vector<Note*>* findNoteByNameFts(const std::string& pattern) const;
+    //std::vector<Note*>* findNoteByNameFts(const std::string& pattern) const;
     std::vector<Note*>* findNoteFts(
             const std::string& pattern,
             const FtsSearch mode = FtsSearch::EXACT,
@@ -448,7 +454,11 @@ public:
      * TYPES
      */
 
-    void getAllThings(std::vector<Thing*>& things, std::vector<std::string>* thingsNames=nullptr);
+    void getAllThings(
+            std::vector<Thing*>& things,
+            std::vector<std::string>* thingsNames=nullptr,
+            std::string* pattern=nullptr,
+            ThingNameSerialization as=ThingNameSerialization::SCOPED_NAME);
     // IMPROVE rename to getAllOs()
     const std::vector<Outline*>& getOutlines() const;
     std::vector<Outline*>* getOutlinesOfType(const OutlineType& type) const;

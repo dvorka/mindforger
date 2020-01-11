@@ -472,8 +472,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditPaste= new QAction(QIcon(":/menu-icons/paste.svg"), tr("&Paste\tCtrl+V"), mainWindow);
     actionEditPaste->setStatusTip(tr("Paste"));
 
-    actionEditComplete= new QAction(QIcon(":/menu-icons/on.svg"), tr("Complete Text\tAlt+/"), mainWindow);
-    actionEditComplete->setStatusTip(tr("Complete word being written using other words in the current Note"));
+    actionEditComplete= new QAction(QIcon(":/menu-icons/on.svg"), tr("Complete Link\tCtrl+/"), mainWindow);
+    actionEditComplete->setStatusTip(tr("Complete word being written by finding link to Notebook or Note"));
 
     menuEdit = qMenuBar->addMenu(tr("&Edit"));
     menuEdit->addAction(actionEditFind);

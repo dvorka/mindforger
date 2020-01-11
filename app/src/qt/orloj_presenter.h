@@ -189,6 +189,10 @@ public slots:
     void slotShowNavigator();
     void slotShowNoteNavigator(Note* note);
     void slotShowOutlineNavigator(Outline* outline);
+    void slotGetLinksForPattern(const QString& pattern);
+
+signals:
+    void signalLinksForPattern(const QString& completionPrefix, std::vector<std::string>* links);
 
 private:
     bool avoidDataLossOnNoteEdit();

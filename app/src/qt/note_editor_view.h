@@ -108,13 +108,18 @@ private:
     void setEditorTabWidth(int tabWidth);
     void setEditorTabsAsSpacesPolicy(bool tabsAsSpaces);
     void setEditorFont(std::string fontName);
-    void performCompletion(const QString& completionPrefix);
+    const QString getCompletionPrefix();
+    bool performTextCompletion();
+    void performTextCompletion(const QString& completionPrefix);
+    void performLinkCompletion(const QString& completionPrefix);
     bool handledCompletedAndSelected(QKeyEvent* event);
     void populateModel(const QString& completionPrefix);
 private slots:
     void insertTab();
     void insertCompletion(const QString& completion, bool singleWord=false);
-    bool performCompletion();
+    void slotStartLinkCompletion();
+public slots:
+    void slotPerformLinkCompletion(const QString& completionPrefix, std::vector<std::string>* links);
 
     // line & line number
 public:
@@ -135,6 +140,7 @@ public slots:
 
 signals:
     void signalDnDropUrl(QString);
+    void signalGetLinksForPattern(const QString&);
 };
 
 } // m8r namespace

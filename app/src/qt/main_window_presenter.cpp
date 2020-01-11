@@ -1475,6 +1475,7 @@ void MainWindowPresenter::handleFormatLink()
         path = insertLinkDialog->getPathText();
     }
 
+    // IMPROVE make this reusable method
     QString text{"["};
     text += insertLinkDialog->getLinkText();
     text += "](";

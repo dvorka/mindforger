@@ -98,14 +98,21 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         SLOT(slotShowSelectedTagRecallDialog()));
     // navigator
     QObject::connect(
-        navigatorPresenter, SIGNAL(outlineSelectedSignal(Outline*)),
+        navigatorPresenter, SIGNAL(signalOutlineSelected(Outline*)),
         this, SLOT(slotShowOutlineNavigator(Outline*)));
     QObject::connect(
-        navigatorPresenter, SIGNAL(noteSelectedSignal(Note*)),
+        navigatorPresenter, SIGNAL(signalNoteSelected(Note*)),
         this, SLOT(slotShowNoteNavigator(Note*)));
     QObject::connect(
-        navigatorPresenter, SIGNAL(thingSelectedSignal()),
+        navigatorPresenter, SIGNAL(signalThingSelected()),
         this, SLOT(slotShowNavigator()));
+    // editor getting data from the backend
+    QObject::connect(
+        view->getNoteEdit()->getNoteEditor(), SIGNAL(signalGetLinksForPattern(const QString&)),
+        this, SLOT(slotGetLinksForPattern(const QString&)));
+    QObject::connect(
+        this, SIGNAL(signalLinksForPattern(const QString&, std::vector<std::string>*)),
+        view->getNoteEdit()->getNoteEditor(), SLOT(slotPerformLinkCompletion(const QString&, std::vector<std::string>*)));
 
     /*
      * ... former click-to-view BEFORE switch to keyboard-only
@@ -664,6 +671,24 @@ void OrlojPresenter::slotShowOutlineNavigator(Outline* outline)
         // timestamps are updated by O header view
         showFacetOutline(outline);
     }
+}
+
+/**
+ * @brief Return MD links for given O/N name prefix (pattern).
+ *
+ * For example 'Mi' > { '[MindForger](mf/projects.md#mind-forger)', '[Middle](mf/places.md#middle) }'
+ */
+void OrlojPresenter::slotGetLinksForPattern(const QString& pattern)
+{
+    vector<Thing*> allThings{};
+    vector<string> thingsNames = vector<string>{};
+    string prefix{pattern.toStdString()};
+    mind->getAllThings(allThings, &thingsNames, &prefix, ThingNameSerialization::LINK);
+
+    vector<string>* links = new vector<string>{};
+    *links = thingsNames;
+
+    emit signalLinksForPattern(pattern, links);
 }
 
 void OrlojPresenter::slotShowSelectedRecentNote()
