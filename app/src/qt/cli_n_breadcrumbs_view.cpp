@@ -82,9 +82,9 @@ const QStringList CliAndBreadcrumbsView::DEFAULT_CMDS = QStringList()
         // TODO new outline
         // TODO new note
         */
-        << CMD_FIND_OUTLINE_BY_NAME
         << CMD_FTS
         << CMD_LIST_OUTLINES
+        << CMD_FIND_OUTLINE_BY_NAME
         ;
 
 
@@ -107,7 +107,7 @@ CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent, bool zenMode)
     layout->addWidget(breadcrumbsLabel);
 
     cli = new CliView(this, parent);
-    cliCompleter = new QCompleter(DEFAULT_CMDS, parent);
+    cliCompleter = new QCompleter(new QStandardItemModel{}, parent);
     cliCompleter->setCaseSensitivity(Qt::CaseSensitivity::CaseInsensitive);
     cliCompleter->setCompletionMode(QCompleter::PopupCompletion);
     cli->setCompleter(cliCompleter);
@@ -116,22 +116,40 @@ CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent, bool zenMode)
     showBreadcrumb();
 }
 
+void appendToStandardModel(const QStringList& list, QStandardItemModel* completerModel) {
+    for(const auto& i:list) {
+        QStandardItem* item = new QStandardItem(i);
+        if(i.startsWith(".")) {
+            item->setIcon(QIcon(":/menu-icons/cli.svg"));
+        } else {
+            item->setIcon(QIcon(":/menu-icons/find.svg"));
+        }
+        // IMPROVE item->setToolTip("tool tip");
+        completerModel->appendRow(item);
+    }
+}
+
 void CliAndBreadcrumbsView::updateCompleterModel(const QStringList* list)
 {
-    QStringListModel* completerModel=(QStringListModel*)cliCompleter->model();
+    QStandardItemModel* completerModel=(QStandardItemModel*)cliCompleter->model();
     if(completerModel==nullptr) {
-        completerModel = new QStringListModel();
-    }
-
-    QStringList completerItems{};
-    completerItems.append(cliCompleterHistoryList);
-    if(list==nullptr) {
-        completerItems.append(DEFAULT_CMDS);
+        completerModel = new QStandardItemModel();
     } else {
-        completerItems.append(*list);
+        QModelIndex start = completerModel->index(0, 0);
+        for(int r=0; r < completerModel->rowCount(start); ++r) {
+            QModelIndex idx = completerModel->index(r, 0, start);
+            QStandardItem* i = completerModel->itemFromIndex(idx);
+            delete i;
+        }
+
+        completerModel->clear();
     }
 
-    completerModel->setStringList(completerItems);
+    appendToStandardModel(cliCompleterHistoryList, completerModel);
+    if(list!=nullptr) {
+        appendToStandardModel(*list, completerModel);
+    }
+    appendToStandardModel(DEFAULT_CMDS, completerModel);
 }
 
 void CliAndBreadcrumbsView::forceFtsHistoryCompletion()
@@ -202,7 +220,7 @@ void CliAndBreadcrumbsView::showCli(bool selectAll)
     if(selectAll) {
         cli->selectAll();
     }
-
+    updateCompleterModel();
     cliCompleter->complete();
 }
 
