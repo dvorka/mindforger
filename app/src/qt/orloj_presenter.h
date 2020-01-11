@@ -193,6 +193,7 @@ public slots:
 
 signals:
     void signalLinksForPattern(const QString& completionPrefix, std::vector<std::string>* links);
+    void signalLinksForHeaderPattern(const QString& completionPrefix, std::vector<std::string>* links);
 
 private:
     bool avoidDataLossOnNoteEdit();

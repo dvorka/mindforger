@@ -113,6 +113,12 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     QObject::connect(
         this, SIGNAL(signalLinksForPattern(const QString&, std::vector<std::string>*)),
         view->getNoteEdit()->getNoteEditor(), SLOT(slotPerformLinkCompletion(const QString&, std::vector<std::string>*)));
+    QObject::connect(
+        view->getOutlineHeaderEdit()->getHeaderEditor(), SIGNAL(signalGetLinksForPattern(const QString&)),
+        this, SLOT(slotGetLinksForPattern(const QString&)));
+    QObject::connect(
+        this, SIGNAL(signalLinksForHeaderPattern(const QString&, std::vector<std::string>*)),
+        view->getOutlineHeaderEdit()->getHeaderEditor(), SLOT(slotPerformLinkCompletion(const QString&, std::vector<std::string>*)));
 
     /*
      * ... former click-to-view BEFORE switch to keyboard-only
@@ -683,17 +689,29 @@ void OrlojPresenter::slotGetLinksForPattern(const QString& pattern)
     vector<Thing*> allThings{};
     vector<string> thingsNames = vector<string>{};
     string prefix{pattern.toStdString()};
+
+    Outline* currentOutline;
+    if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
+        currentOutline = outlineHeaderEditPresenter->getCurrentOutline();
+    } else {
+        currentOutline = noteEditPresenter->getCurrentNote()->getOutline();
+    }
+
     mind->getAllThings(
         allThings,
         &thingsNames,
         &prefix,
         ThingNameSerialization::LINK,
-        noteEditPresenter->getCurrentNote()->getOutline());
+        currentOutline);
 
     vector<string>* links = new vector<string>{};
     *links = thingsNames;
 
-    emit signalLinksForPattern(pattern, links);
+    if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
+        emit signalLinksForHeaderPattern(pattern, links);
+    } else {
+        emit signalLinksForPattern(pattern, links);
+    }
 }
 
 void OrlojPresenter::slotShowSelectedRecentNote()

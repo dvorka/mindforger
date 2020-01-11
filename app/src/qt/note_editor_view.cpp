@@ -405,10 +405,11 @@ void NoteEditorView::slotPerformLinkCompletion(
         delete links;
 
         // perform completion
-        int COMPLETER_POPUP_WIDTH=500;
+        int COMPLETER_POPUP_WIDTH=fontMetrics().averageCharWidth()*50;
         completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
         completer->popup()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         completer->popup()->setMaximumWidth(COMPLETER_POPUP_WIDTH);
+        completer->popup()->setMinimumHeight(fontMetrics().height()*3);
         if(completionPrefix != completer->completionPrefix()) {
             completer->setCompletionPrefix(completionPrefix);
             completer->popup()->setCurrentIndex(completer->completionModel()->index(0, 0));
