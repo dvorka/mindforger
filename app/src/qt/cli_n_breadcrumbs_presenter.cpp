@@ -47,10 +47,9 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
 
     QString command = view->getCommand();
     if(command.size()) {
-        // TODO convert to qstring once
-        // TODO commands are constants
-        if(command.startsWith(QString::fromUtf8("find outline by name "))) {
-            QString prefix(QString::fromStdString(command.toStdString().substr(20)));
+        if(command.startsWith(CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME)) {
+            QString prefix(QString::fromStdString(
+                 command.toStdString().substr(CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME.size()-1)));
             if(prefix.size()) {
                 mainPresenter->getStatusBar()->showInfo(prefix);
                 if(prefix.size()==1) {
@@ -63,7 +62,7 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                         for(const string s:outlineNames) {
                             qs.clear();
                             // TODO commands are constants
-                            qs += "find outline by name ";
+                            qs += CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME;
                             qs += QString::fromStdString(s);
                             outlineNamesCompletion << qs;
                         }
@@ -79,7 +78,7 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
     }
 
     // fallback
-    view->forceInitialCompletion();
+    view->forceFtsHistoryCompletion();
 }
 
 // TODO i18n
@@ -87,35 +86,37 @@ void CliAndBreadcrumbsPresenter::executeCommand()
 {
     QString command = view->getCommand();
     if(command.size()) {
-        // TODO convert to qstring once
-        if(command.startsWith(QString::fromUtf8("fts "))) {
+        view->addCompleterItem(command);
+
+        if(command.startsWith(CliAndBreadcrumbsView::CMD_FTS)) {
             executeFts(command);
             view->showBreadcrumb();
             return;
         }
-        // TODO constant
-        if(command.startsWith(QString::fromUtf8("list outlines"))) {
+        if(command.startsWith(CliAndBreadcrumbsView::CMD_LIST_OUTLINES)) {
             executeListOutlines();
             view->showBreadcrumb();
             return;
         }
-        if(command.startsWith(view->CMD_FIND_OUTLINE_BY_NAME)) {
-            string name = command.toStdString().substr(21);
+        if(command.startsWith(CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME)) {
+            string name = command.toStdString().substr(
+                CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME.size());
             unique_ptr<vector<Outline*>> outlines = mind->findOutlineByNameFts(name);
             if(!outlines || !outlines->size()) {
                 // IMPROVE memory leak if outlines && !outlines->size()
                 QString firstCompletion = view->getFirstCompletion();
                 if(firstCompletion != QString::null) {
-                    name = view->getFirstCompletion().toStdString().substr(21);
+                    name = view->getFirstCompletion().toStdString().substr(
+                        CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME.size());
                     outlines = mind->findOutlineByNameFts(name);
                 }
             }
             if(outlines && outlines->size()) {
                 mainPresenter->getOrloj()->showFacetOutline(outlines->front());
                 // TODO efficient
-                mainPresenter->getStatusBar()->showInfo(tr("Outline ")+QString::fromStdString(outlines->front()->getName()));
+                mainPresenter->getStatusBar()->showInfo(tr("Notebook ")+QString::fromStdString(outlines->front()->getName()));
             } else {
-                mainPresenter->getStatusBar()->showInfo(tr("Outline not found: ") += QString(name.c_str()));
+                mainPresenter->getStatusBar()->showInfo(tr("Notebook not found: ") += QString(name.c_str()));
             }
             view->showBreadcrumb();
             return;
@@ -130,14 +131,13 @@ void CliAndBreadcrumbsPresenter::executeCommand()
 
 void CliAndBreadcrumbsPresenter::executeFts(QString& command)
 {
-    string searchedString = command.toStdString().substr(4);
+    string searchedString = command.toStdString().substr(
+         CliAndBreadcrumbsView::CMD_FTS.size());
     if(!searchedString.empty()) {
-        // IMPROVE send search string & get ignore case from the command and pass it as 2nd parameter
-        mainPresenter->slotHandleFts();
+        mainPresenter->doFts(QString::fromStdString(searchedString), true);
     }
 }
 
-// TODO call main window handler
 void CliAndBreadcrumbsPresenter::executeListOutlines()
 {
     mainPresenter->getOrloj()->showFacetOutlineList(mind->getOutlines());

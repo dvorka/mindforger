@@ -42,6 +42,9 @@ FtsDialogPresenter::FtsDialogPresenter(FtsDialog* view, Mind* mind, OrlojPresent
         view->getResultListingView(), SIGNAL(signalShowSelectedNote()),
         orloj->getMainPresenter(), SLOT(slotHandleFts()));
     QObject::connect(
+        view->getResultListingView(), SIGNAL(signalEscape()),
+        this, SLOT(slotHideDialog()));
+    QObject::connect(
         view, SIGNAL(signalNoteScopeSearch()),
         orloj->getMainPresenter(), SLOT(slotHandleFts()));
 }

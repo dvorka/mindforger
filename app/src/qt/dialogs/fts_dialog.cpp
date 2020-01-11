@@ -93,9 +93,6 @@ FtsDialog::FtsDialog(QWidget *parent)
         lineEdit, SIGNAL(textChanged(const QString &)),
         this, SLOT(enableSearchButton(const QString&)));
     QObject::connect(
-        searchButton, SIGNAL(clicked()),
-        this, SLOT(searchAndAddPatternToHistory()));
-    QObject::connect(
         closeButton, SIGNAL(clicked()),
         this, SLOT(close()));
 

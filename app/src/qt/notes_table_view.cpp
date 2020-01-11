@@ -20,7 +20,7 @@
 
 namespace m8r {
 
-NotesTableView::NotesTableView(QWidget *parent)
+NotesTableView::NotesTableView(QWidget* parent)
     : QTableView(parent)
 {
     verticalHeader()->setVisible(false);
@@ -52,6 +52,8 @@ void NotesTableView::keyPressEvent(QKeyEvent* event)
         case Qt::Key_Left:
             QTableView::keyPressEvent(event);
             return;
+        case Qt::Key_Escape:
+            emit signalEscape();
         }
 
         return;

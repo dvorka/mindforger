@@ -62,6 +62,9 @@ private:
 private slots:
     void slotSearch();
     void slotShowMatchingNotePreview(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotHideDialog() {
+        view->hide();
+    }
 };
 
 }

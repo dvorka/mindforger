@@ -45,6 +45,7 @@ protected:
 
 signals:
     void signalShowSelectedNote();
+    void signalEscape();
 };
 
 }

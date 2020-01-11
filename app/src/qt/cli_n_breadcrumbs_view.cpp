@@ -46,9 +46,9 @@ void CliView::keyPressEvent(QKeyEvent* event)
  * CliAndBreadcrumbsView
  */
 
-const QString CliAndBreadcrumbsView::CMD_HELP = "help";
-const QString CliAndBreadcrumbsView::CMD_EXIT = "exit";
-const QString CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME = "find outline by name ";
+const QString CliAndBreadcrumbsView::CMD_FTS = ".fts ";
+const QString CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME = ".find outline by name ";
+const QString CliAndBreadcrumbsView::CMD_LIST_OUTLINES = ".list outlines";
 
 // TODO migrate all commands to constants
 const QStringList CliAndBreadcrumbsView::DEFAULT_CMDS = QStringList()
@@ -81,7 +81,11 @@ const QStringList CliAndBreadcrumbsView::DEFAULT_CMDS = QStringList()
 
         // TODO new outline
         // TODO new note
-        */;
+        */
+        << CMD_FIND_OUTLINE_BY_NAME
+        << CMD_FTS
+        << CMD_LIST_OUTLINES
+        ;
 
 
 CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent, bool zenMode)
@@ -112,13 +116,28 @@ CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent, bool zenMode)
     showBreadcrumb();
 }
 
-void CliAndBreadcrumbsView::forceInitialCompletion()
+void CliAndBreadcrumbsView::updateCompleterModel(const QStringList* list)
 {
     QStringListModel* completerModel=(QStringListModel*)cliCompleter->model();
     if(completerModel==nullptr) {
         completerModel = new QStringListModel();
     }
-    completerModel->setStringList(DEFAULT_CMDS);
+
+    QStringList completerItems{};
+    completerItems.append(cliCompleterHistoryList);
+    if(list==nullptr) {
+        completerItems.append(DEFAULT_CMDS);
+    } else {
+        completerItems.append(*list);
+    }
+
+    completerModel->setStringList(completerItems);
+}
+
+void CliAndBreadcrumbsView::forceFtsHistoryCompletion()
+{
+    updateCompleterModel();
+
     // ensure completion is shown despite there is NO filtering character
     cliCompleter->complete();
 }
@@ -129,19 +148,6 @@ QString CliAndBreadcrumbsView::getFirstCompletion() const
         return cliCompleter->currentCompletion();
     } else {
         return QString::null;
-    }
-}
-
-void CliAndBreadcrumbsView::updateCompleterModel(const QStringList* list)
-{
-    QStringListModel* completerModel=(QStringListModel*)cliCompleter->model();
-    if(completerModel==nullptr) {
-        completerModel = new QStringListModel();
-    }
-    if(list==nullptr) {
-        completerModel->setStringList(DEFAULT_CMDS);
-    } else {
-        completerModel->setStringList(*list);
     }
 }
 

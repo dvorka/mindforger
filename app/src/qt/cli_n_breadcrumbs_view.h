@@ -53,19 +53,23 @@ private:
     QLabel* breadcrumbsLabel;
     CliView* cli;
     QCompleter* cliCompleter;
+    QStringList cliCompleterHistoryList;
 
     bool zenMode;
 
 public:
-    static const QString CMD_EXIT;
-    static const QString CMD_HELP;
+    static const QString CMD_FTS;
     static const QString CMD_FIND_OUTLINE_BY_NAME;
+    static const QString CMD_LIST_OUTLINES;
 
 public:
     explicit CliAndBreadcrumbsView(QWidget* parent, bool zenMode=true);
 
-    void updateCompleterModel(const QStringList *list=nullptr);
-    void forceInitialCompletion();
+    void addCompleterItem(const QString& item) {
+        cliCompleterHistoryList.insert(0, item);
+    }
+    void updateCompleterModel(const QStringList* list=nullptr);
+    void forceFtsHistoryCompletion();
     QString getFirstCompletion() const;
     void setBreadcrumbPath(const QString& path);
     void setCommand(const char* command);
