@@ -99,11 +99,7 @@ public:
     QAction* actionViewNavigator;
     QAction* actionViewDwell;
     QAction* actionViewStencils;
-#ifdef DO_MF_DEBUG
     QAction* actionViewCli;
-#else
-    QShortcut* cliShortcut;
-#endif
     QAction* actionViewRecentNotes;
     QAction* actionViewLimbo;
     QAction* actionViewDistractionFree;

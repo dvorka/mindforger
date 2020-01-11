@@ -76,9 +76,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // think ... toggle mental processes ~ enable associations/similarity/search based suggestions on searching/reading/writing notes
     actionMindAutolink = new QAction(QIcon(":/menu-icons/link.svg"), tr("&Autolink"), mainWindow);
+#ifdef DO_MF_DEBUG
     actionMindAutolink->setCheckable(true);
     actionMindAutolink->setStatusTip(tr("Automatically inject links to relevant Notebooks and Notes when browsing HTML preview"));
     actionMindAutolink->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
+#else
+    actionMindAutolink->setVisible(false);
+#endif
 
     // scope ... don't show any N/O older than 1Y/3M/...
     actionMindScope = new QAction(QIcon(":/menu-icons/filter.svg"), tr("S&cope"), mainWindow);
