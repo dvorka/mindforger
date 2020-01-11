@@ -49,10 +49,7 @@ void RecentNotesTableView::keyPressEvent(QKeyEvent* event)
             emit signalShowSelectedRecentNote();
             return;
         case Qt::Key_Down:
-            QTableView::keyPressEvent(event);
-            return;
         case Qt::Key_Up:
-        // IMPROVE left to cancel selection
         case Qt::Key_Left:
             QTableView::keyPressEvent(event);
             return;

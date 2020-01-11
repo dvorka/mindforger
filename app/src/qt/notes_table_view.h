@@ -38,7 +38,13 @@ public:
     NotesTableView &operator=(const NotesTableView&) = delete;
     NotesTableView &operator=(const NotesTableView&&) = delete;
 
+protected:
+    virtual void keyPressEvent(QKeyEvent* event) override;
+    virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
     virtual void resizeEvent(QResizeEvent* event) override;
+
+signals:
+    void signalShowSelectedNote();
 };
 
 }

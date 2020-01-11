@@ -27,7 +27,9 @@ FtsDialogPresenter::FtsDialogPresenter(FtsDialog* view, Mind* mind, OrlojPresent
       mind{mind},
       orloj{orloj}
 {
-    QObject::connect(view->getSearchButton(), SIGNAL(clicked()), this, SLOT(slotSearch()));
+    QObject::connect(
+        view->getSearchButton(), SIGNAL(clicked()),
+        this, SLOT(slotSearch()));
     QObject::connect(
         view->getResultListingView()->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
@@ -35,6 +37,9 @@ FtsDialogPresenter::FtsDialogPresenter(FtsDialog* view, Mind* mind, OrlojPresent
         SLOT(slotShowMatchingNotePreview(const QItemSelection&, const QItemSelection&)));
     QObject::connect(
         view->getOpenButton(), SIGNAL(clicked()),
+        orloj->getMainPresenter(), SLOT(slotHandleFts()));
+    QObject::connect(
+        view->getResultListingView(), SIGNAL(signalShowSelectedNote()),
         orloj->getMainPresenter(), SLOT(slotHandleFts()));
     QObject::connect(
         view, SIGNAL(signalNoteScopeSearch()),
@@ -48,7 +53,6 @@ FtsDialogPresenter::~FtsDialogPresenter()
 void FtsDialogPresenter::doSearch()
 {
     slotSearch();
-    view->addExpressionToHistory();
 }
 
 void FtsDialogPresenter::slotSearch()
@@ -101,8 +105,11 @@ void FtsDialogPresenter::doFts(
         view->refreshResult(result);
     } else {
         view->hideResult();
+        view->getResultListingPresenter()->getModel()->removeAllRows();
         QMessageBox::information(view, tr("Full-text Search Result"), tr("No matching Notebook or Note found."));
     }
+
+    view->searchAndAddPatternToHistory();
 }
 
 void FtsDialogPresenter::slotShowMatchingNotePreview(const QItemSelection& selected, const QItemSelection& deselected)

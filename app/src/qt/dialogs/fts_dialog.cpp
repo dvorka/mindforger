@@ -89,9 +89,15 @@ FtsDialog::FtsDialog(QWidget *parent)
     resultSplit->setVisible(false);
 
     // signals (intra view only - other signals in presenter)
-    connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(enableSearchButton(const QString&)));
-    connect(searchButton, SIGNAL(clicked()), this, SLOT(addExpressionToHistory()));
-    connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    QObject::connect(
+        lineEdit, SIGNAL(textChanged(const QString &)),
+        this, SLOT(enableSearchButton(const QString&)));
+    QObject::connect(
+        searchButton, SIGNAL(clicked()),
+        this, SLOT(searchAndAddPatternToHistory()));
+    QObject::connect(
+        closeButton, SIGNAL(clicked()),
+        this, SLOT(close()));
 
     QHBoxLayout* buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
@@ -187,7 +193,7 @@ void FtsDialog::enableSearchButton(const QString& text)
     }
 }
 
-void FtsDialog::addExpressionToHistory()
+void FtsDialog::searchAndAddPatternToHistory()
 {
     if(scopeType == ResourceType::NOTE) {
         emit signalNoteScopeSearch();
@@ -196,14 +202,16 @@ void FtsDialog::addExpressionToHistory()
             completerStrings.insert(0, lineEdit->text());
             ((QStringListModel*)completer->model())->setStringList(completerStrings);
 
-            resultPreview->setHtml(QString{});
-            resultSplit->setVisible(true);
-            setSizeResultFacet();
+            if(getResultSize() > 0) {
+                resultPreview->setHtml(QString{});
+                resultSplit->setVisible(true);
+                setSizeResultFacet();
 
-            // select the first match
-            resultListingView->setFocus();
-            resultListingView->setCurrentIndex(
-                resultListingPresenter->getModel()->index(0, 0));
+                // select the first match
+                resultListingView->setFocus();
+                resultListingView->setCurrentIndex(
+                    resultListingPresenter->getModel()->index(0, 0));
+            }
         } else {
             resultSplit->setVisible(false);
             setSizeSearchFacet();

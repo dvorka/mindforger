@@ -106,6 +106,7 @@ public:
     void updateFacet();
 
     void refreshResult(std::vector<Note*>* notes);
+    int getResultSize() const { return resultListingPresenter->getModel()->rowCount(); }
 
 private:
     void setSizeSearchFacet();
@@ -115,7 +116,7 @@ signals:
     void signalNoteScopeSearch();
 
 public slots:
-    void addExpressionToHistory();
+    void searchAndAddPatternToHistory();
 
 private slots:
     void enableSearchButton(const QString &text);

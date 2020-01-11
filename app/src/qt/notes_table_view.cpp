@@ -34,6 +34,40 @@ NotesTableView::NotesTableView(QWidget *parent)
     setTabKeyNavigation(false);
 }
 
+void NotesTableView::keyPressEvent(QKeyEvent* event)
+{
+    if(!(event->modifiers() & Qt::AltModifier)
+         &&
+       !(event->modifiers() & Qt::ControlModifier)
+         &&
+       !(event->modifiers() & Qt::ShiftModifier))
+    {
+        switch(event->key()) {
+        case Qt::Key_Return:
+        case Qt::Key_Right:
+            emit signalShowSelectedNote();
+            return;
+        case Qt::Key_Down:
+        case Qt::Key_Up:
+        case Qt::Key_Left:
+            QTableView::keyPressEvent(event);
+            return;
+        }
+
+        return;
+    }
+
+    QTableView::keyPressEvent(event);
+}
+
+void NotesTableView::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    Q_UNUSED(event);
+
+    // double click to O/N opens it
+    emit signalShowSelectedNote();
+}
+
 void NotesTableView::resizeEvent(QResizeEvent* event)
 {
     UNUSED_ARG(event);

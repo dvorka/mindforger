@@ -42,6 +42,7 @@ public:
     RecentNotesTableView &operator=(const RecentNotesTableView&&) = delete;
     virtual ~RecentNotesTableView() override {}
 
+protected:
     virtual void keyPressEvent(QKeyEvent* event) override;
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
     virtual void resizeEvent(QResizeEvent* event) override;
