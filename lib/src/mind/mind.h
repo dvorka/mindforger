@@ -458,7 +458,8 @@ public:
             std::vector<Thing*>& things,
             std::vector<std::string>* thingsNames=nullptr,
             std::string* pattern=nullptr,
-            ThingNameSerialization as=ThingNameSerialization::SCOPED_NAME);
+            ThingNameSerialization as=ThingNameSerialization::SCOPED_NAME,
+            Outline* currentO=nullptr);
     // IMPROVE rename to getAllOs()
     const std::vector<Outline*>& getOutlines() const;
     std::vector<Outline*>* getOutlinesOfType(const OutlineType& type) const;

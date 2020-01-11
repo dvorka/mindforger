@@ -512,7 +512,8 @@ void Mind::getAllThings(
     vector<Thing*>& things,
     vector<string>* thingsNames,
     string* pattern,
-    ThingNameSerialization as)
+    ThingNameSerialization as,
+    Outline* currentO)
 {
     const vector<Outline*>& os = getOutlines();
     for(Outline* o:os) {
@@ -522,7 +523,30 @@ void Mind::getAllThings(
         {
             things.push_back(o);
             if(thingsNames) {
-                thingsNames->push_back(o->getName());
+                string s{};
+                switch(as) {
+                case ThingNameSerialization::LINK:
+                    // IMPROVE make this Note's method
+                    {
+                        s += "[";
+                        s += o->getName();
+                        s += "](";
+                        string p = RepositoryIndexer::makePathRelative(
+                             config.getActiveRepository(),
+                             currentO?currentO->getKey():o->getKey(),
+                             o->getKey());
+                        pathToLinuxDelimiters(p, p);
+                        s += p;
+                        s += ")";
+                        break;
+                    }
+                case ThingNameSerialization::NAME:
+                case ThingNameSerialization::SCOPED_NAME:
+                default:
+                    s += o->getName();
+                    break;
+                }
+                thingsNames->push_back(s);
             }
         }
     }
@@ -549,7 +573,9 @@ void Mind::getAllThings(
                         s += n->getOutline()->getName();
                         s += ")](";
                         string p = RepositoryIndexer::makePathRelative(
-                             config.getActiveRepository(), n->getOutline()->getKey(), n->getKey());
+                             config.getActiveRepository(),
+                             currentO?currentO->getKey():n->getOutline()->getKey(),
+                             n->getKey());
                         pathToLinuxDelimiters(p, p);
                         s += p;
                         s += ")";

@@ -683,7 +683,12 @@ void OrlojPresenter::slotGetLinksForPattern(const QString& pattern)
     vector<Thing*> allThings{};
     vector<string> thingsNames = vector<string>{};
     string prefix{pattern.toStdString()};
-    mind->getAllThings(allThings, &thingsNames, &prefix, ThingNameSerialization::LINK);
+    mind->getAllThings(
+        allThings,
+        &thingsNames,
+        &prefix,
+        ThingNameSerialization::LINK,
+        noteEditPresenter->getCurrentNote()->getOutline());
 
     vector<string>* links = new vector<string>{};
     *links = thingsNames;
