@@ -405,15 +405,16 @@ void NoteEditorView::slotPerformLinkCompletion(
         delete links;
 
         // perform completion
+        int COMPLETER_POPUP_WIDTH=500;
         completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+        completer->popup()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        completer->popup()->setMaximumWidth(COMPLETER_POPUP_WIDTH);
         if(completionPrefix != completer->completionPrefix()) {
             completer->setCompletionPrefix(completionPrefix);
             completer->popup()->setCurrentIndex(completer->completionModel()->index(0, 0));
         }
         QRect rect = cursorRect();
-        rect.setWidth(
-            completer->popup()->sizeHintForColumn(0) +
-            completer->popup()->verticalScrollBar()->sizeHint().width());
+        rect.setWidth(COMPLETER_POPUP_WIDTH);
         completer->complete(rect);
     }
 }
