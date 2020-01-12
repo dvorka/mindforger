@@ -19,10 +19,6 @@
 #ifndef M8R_CMARK_AHO_CORASICK_BLOCK_AUTOLINKING_PREPROCESSOR_H
 #define M8R_CMARK_AHO_CORASICK_BLOCK_AUTOLINKING_PREPROCESSOR_H
 
-#ifdef MF_MD_2_HTML_CMARK
-  #include <cmark-gfm.h>
-#endif
-
 #include "../autolinking_preprocessor.h"
 
 namespace m8r {
@@ -95,7 +91,7 @@ namespace m8r {
  */
 class CmarkAhoCorasickBlockAutolinkingPreprocessor : public AutolinkingPreprocessor
 {
-protected:
+public:
     // allowed text MD snippets words trailing chars (\\... added newly)
     static const std::string TRAILING_CHARS;
 
@@ -111,13 +107,6 @@ public:
      * @brief Autolink Markdown.
      */
     virtual void process(const std::vector<std::string*>& md, std::string& amd) override;
-
-private:
-    cmark_node* injectAstLinkNode(
-            cmark_node* srcNode, cmark_node* node, std::string& text);
-    cmark_node* injectAstTxtNode(
-            cmark_node* srcNode, cmark_node* node, std::string& text);
-    void injectThingsLinks(cmark_node* srcNode);
 };
 
 }

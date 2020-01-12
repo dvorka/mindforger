@@ -17,6 +17,9 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "cmark_aho_corasick_block_autolinking_preprocessor.h"
+#ifdef MF_MD_2_HTML_CMARK
+  #include <cmark-gfm.h>
+#endif
 
 /*
  * High priority tasks:
@@ -71,104 +74,12 @@ namespace m8r {
 
 using namespace std;
 
-const string CmarkAhoCorasickBlockAutolinkingPreprocessor::TRAILING_CHARS = string{" \t,:;.!?<>{}&()-+/*\\_=%~#$^[]'\""};
+/*
+ * OOC methods to avoid the need for having cmark-gfm.h in the header which causes
+ * problems with Windows build.
+ */
 
-CmarkAhoCorasickBlockAutolinkingPreprocessor::CmarkAhoCorasickBlockAutolinkingPreprocessor(Mind& mind)
-    : AutolinkingPreprocessor{mind}
-{
-}
-
-CmarkAhoCorasickBlockAutolinkingPreprocessor::~CmarkAhoCorasickBlockAutolinkingPreprocessor()
-{
-}
-
-void CmarkAhoCorasickBlockAutolinkingPreprocessor::process(
-        const vector<string*>& md,
-        string& amd)
-{
-#ifdef MF_MD_2_HTML_CMARK
-
-#ifdef DO_MF_DEBUG
-    MF_DEBUG("[Autolinking] begin CMARK" << endl);
-    string ds{};
-    toString(md, ds);
-    MF_DEBUG("[Autolinking] input:" << endl << ">>>" << ds << "<<<" << endl);
-
-    auto begin = chrono::high_resolution_clock::now();
-#endif
-
-    insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
-
-    // IMPROVE measure time in here and if over give limit, than STOP injecting
-    // and leave i.e. what happens is that a time SLA will be fulfilled and
-    // some part (prefix) of the input MD will be autolinked.
-
-    if(md.size()) {
-        string mds{};
-        toString(md, mds);
-        const char* mdsc{mds.c_str()};
-
-        cmark_node* document = cmark_parse_document(
-            mdsc,
-            strlen(mdsc),
-            CMARK_OPT_DEFAULT);
-
-        cmark_iter* astWalker = cmark_iter_new(document);
-
-        vector<cmark_node*> zombies{};
-
-        while (cmark_iter_next(astWalker) != CMARK_EVENT_DONE) {
-            cmark_node* node = cmark_iter_get_node(astWalker);
-
-            // process TEXT nodes whose parent is PARAGRAPH
-            if(CMARK_NODE_TEXT == cmark_node_get_type(node)
-                 &&
-               CMARK_NODE_PARAGRAPH == cmark_node_get_type(cmark_node_parent(node)))
-            {
-                MF_DEBUG("[Autolinking] text node: '" << cmark_node_get_literal(node) << "'" << endl);
-                injectThingsLinks(node);
-                zombies.push_back(node);
-            }
-        }
-
-        cmark_iter_free(astWalker);
-
-        MF_DEBUG("[Autolinking] killing zombies:" << endl);
-        for(cmark_node* zombieNode: zombies) {
-            MF_DEBUG("    " << cmark_node_get_literal(zombieNode) << endl);
-            cmark_node_unlink(zombieNode);
-            cmark_node_free(zombieNode);
-        }
-        MF_DEBUG("[Autolinking] DONE zombies" << endl);
-
-        char* cmm = cmark_render_commonmark(document, 0, 0);
-        if(cmm) {
-            amd.assign(cmm);
-            delete cmm;
-            amd.pop_back();
-        } else {
-            amd.clear();
-        }
-
-        cmark_node_free(document);
-    } else {
-        amd.clear();
-    }
-
-#ifdef DO_MF_DEBUG
-    MF_DEBUG("[Autolinking] output:" << endl << ">>>" << amd << "<<<" << endl);
-
-    auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("[Autolinking] MD autolinked in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
-#endif
-
-#else
-    // cmark-gfm not available - returning Markdown as is
-    toString(md, amd);
-#endif
-}
-
-cmark_node* CmarkAhoCorasickBlockAutolinkingPreprocessor::injectAstLinkNode(
+cmark_node* injectAstLinkNode(
         cmark_node* srcNode,
         cmark_node* node,
         string& text)
@@ -176,7 +87,7 @@ cmark_node* CmarkAhoCorasickBlockAutolinkingPreprocessor::injectAstLinkNode(
     cmark_node* linkNode{cmark_node_new(CMARK_NODE_LINK)};
     cmark_node* txtNode{};
 
-    string link{MF_URL_PREFIX};
+    string link{AutolinkingPreprocessor::MF_URL_PREFIX};
     link.append(text);
     cmark_node_set_url(linkNode, link.c_str());
     txtNode = cmark_node_new(CMARK_NODE_TEXT);
@@ -190,7 +101,7 @@ cmark_node* CmarkAhoCorasickBlockAutolinkingPreprocessor::injectAstLinkNode(
     return linkNode;
 }
 
-cmark_node* CmarkAhoCorasickBlockAutolinkingPreprocessor::injectAstTxtNode(
+cmark_node* injectAstTxtNode(
         cmark_node* srcNode,
         cmark_node* node,
         string& text)
@@ -207,8 +118,8 @@ cmark_node* CmarkAhoCorasickBlockAutolinkingPreprocessor::injectAstTxtNode(
     return txtNode;
 }
 
-void CmarkAhoCorasickBlockAutolinkingPreprocessor::injectThingsLinks(
-        cmark_node* srcNode)
+void injectThingsLinks(
+        cmark_node* srcNode, Mind& mind)
 {
     // copy w to t as it will be chopped word/match by word/match from head to tail
     string txt{cmark_node_get_literal(srcNode)};
@@ -232,7 +143,7 @@ void CmarkAhoCorasickBlockAutolinkingPreprocessor::injectThingsLinks(
                 preSize+=2;
             }
 
-            if(TRAILING_CHARS.find(txt.at(preSize)) != string::npos) {
+            if(CmarkAhoCorasickBlockAutolinkingPreprocessor::TRAILING_CHARS.find(txt.at(preSize)) != string::npos) {
                 preSize++;
             } else {
                 break;
@@ -262,7 +173,7 @@ void CmarkAhoCorasickBlockAutolinkingPreprocessor::injectThingsLinks(
             // determine trailing char
             char tChar{txt.size()==pre.size()?' ':txt.at(pre.size())};
             MF_DEBUG("    Match's trailing char: '" << tChar << "'" << endl);
-            if(TRAILING_CHARS.find(tChar) != string::npos
+            if(CmarkAhoCorasickBlockAutolinkingPreprocessor::TRAILING_CHARS.find(tChar) != string::npos
                  ||
                txt.size() == pre.size()) {
 
@@ -346,6 +257,107 @@ void CmarkAhoCorasickBlockAutolinkingPreprocessor::injectThingsLinks(
     if(at.size()) {
         node = injectAstTxtNode(srcNode, node, at);
     }
+}
+
+/*
+ * Preprocessor.
+ */
+
+const string CmarkAhoCorasickBlockAutolinkingPreprocessor::TRAILING_CHARS = string{" \t,:;.!?<>{}&()-+/*\\_=%~#$^[]'\""};
+
+CmarkAhoCorasickBlockAutolinkingPreprocessor::CmarkAhoCorasickBlockAutolinkingPreprocessor(Mind& mind)
+    : AutolinkingPreprocessor{mind}
+{
+}
+
+CmarkAhoCorasickBlockAutolinkingPreprocessor::~CmarkAhoCorasickBlockAutolinkingPreprocessor()
+{
+}
+
+void CmarkAhoCorasickBlockAutolinkingPreprocessor::process(
+        const vector<string*>& md,
+        string& amd)
+{
+#ifdef MF_MD_2_HTML_CMARK
+
+#ifdef DO_MF_DEBUG
+    MF_DEBUG("[Autolinking] begin CMARK" << endl);
+    string ds{};
+    toString(md, ds);
+    MF_DEBUG("[Autolinking] input:" << endl << ">>>" << ds << "<<<" << endl);
+
+    auto begin = chrono::high_resolution_clock::now();
+#endif
+
+    insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
+
+    // IMPROVE measure time in here and if over give limit, than STOP injecting
+    // and leave i.e. what happens is that a time SLA will be fulfilled and
+    // some part (prefix) of the input MD will be autolinked.
+
+    if(md.size()) {
+        string mds{};
+        toString(md, mds);
+        const char* mdsc{mds.c_str()};
+
+        cmark_node* document = cmark_parse_document(
+            mdsc,
+            strlen(mdsc),
+            CMARK_OPT_DEFAULT);
+
+        cmark_iter* astWalker = cmark_iter_new(document);
+
+        vector<cmark_node*> zombies{};
+
+        while (cmark_iter_next(astWalker) != CMARK_EVENT_DONE) {
+            cmark_node* node = cmark_iter_get_node(astWalker);
+
+            // process TEXT nodes whose parent is PARAGRAPH
+            if(CMARK_NODE_TEXT == cmark_node_get_type(node)
+                 &&
+               CMARK_NODE_PARAGRAPH == cmark_node_get_type(cmark_node_parent(node)))
+            {
+                MF_DEBUG("[Autolinking] text node: '" << cmark_node_get_literal(node) << "'" << endl);
+                injectThingsLinks(node, mind);
+                zombies.push_back(node);
+            }
+        }
+
+        cmark_iter_free(astWalker);
+
+        MF_DEBUG("[Autolinking] killing zombies:" << endl);
+        for(cmark_node* zombieNode: zombies) {
+            MF_DEBUG("    " << cmark_node_get_literal(zombieNode) << endl);
+            cmark_node_unlink(zombieNode);
+            cmark_node_free(zombieNode);
+        }
+        MF_DEBUG("[Autolinking] DONE zombies" << endl);
+
+        char* cmm = cmark_render_commonmark(document, 0, 0);
+        if(cmm) {
+            amd.assign(cmm);
+            delete cmm;
+            amd.pop_back();
+        } else {
+            amd.clear();
+        }
+
+        cmark_node_free(document);
+    } else {
+        amd.clear();
+    }
+
+#ifdef DO_MF_DEBUG
+    MF_DEBUG("[Autolinking] output:" << endl << ">>>" << amd << "<<<" << endl);
+
+    auto end = chrono::high_resolution_clock::now();
+    MF_DEBUG("[Autolinking] MD autolinked in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
+#endif
+
+#else
+    // cmark-gfm not available - returning Markdown as is
+    toString(md, amd);
+#endif
 }
 
 } // m8r namespace
