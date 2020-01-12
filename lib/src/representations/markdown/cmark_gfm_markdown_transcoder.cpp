@@ -18,6 +18,7 @@
 */
 
 #include "cmark_gfm_markdown_transcoder.h"
+// cmark-gfm headers must NOT be included in header - Win builds fail
 #ifdef MF_MD_2_HTML_CMARK
   #include <cmark-gfm.h>
   #include <cmark-gfm-core-extensions.h>

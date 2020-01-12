@@ -44,6 +44,20 @@
  * Conditional compilation:
  *
  * - ifdef __APPLE__ / if defined(__APPLE__)
+ *
+ *
+ *
+ * Qt
+ *
+ * enum Qt::Modifier:
+ *   This enum provides shorter names for the keyboard modifier
+ *   keys supported by Qt. On macOS, the CTRL value corresponds
+ *   to the Command keys on the keyboard, and the META value
+ *   corresponds to the Control keys.
+ *
+ * macOS command == Qt Ctrl
+ * macOS control == Qt Meta
+ *
  */
 namespace m8r {
 
