@@ -352,10 +352,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuOutline->addMenu(submenuOutlineExport);
 
     // menu: Note
-
+#ifdef __APPLE__
     actionNoteNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
+    actionNoteNew->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+#else
+    actionNoteNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
+#endif
     actionNoteNew->setStatusTip(tr("Create new Note to form new ideas, principles, combinations and applications"));
-
     actionNoteHoist= new QAction(QIcon(":/menu-icons/fullscreen.svg"), tr("&Hoist"), mainWindow);
     actionNoteHoist->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_I));
     actionNoteHoist->setStatusTip(tr("Hoist/de-hoist Note to focus on Note being viewed or edited"));

@@ -60,6 +60,7 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
                 }
             } else {
                 switch(event->key()) {
+#ifndef __APPLE__
                 case Qt::Key_Up:
                     emit signalChangeUp();
                     break;
@@ -72,6 +73,7 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
                 case Qt::Key_Right:
                     emit signalChangeDemote();
                     break;
+#endif
                 case Qt::Key_E:
                     emit signalOutlineOrNoteEdit();
                     break;
