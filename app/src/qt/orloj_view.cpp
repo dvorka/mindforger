@@ -141,9 +141,13 @@ void OrlojView::showFacetOutlineHeaderEdit()
 
 void OrlojView::showFacetNoteView()
 {
-    QSet<QWidget*> v; v << outlineView << noteView;
-    hideChildren(v);
-    outlineView->getOutlineTree()->setFocus();
+    if(true) {
+        showFacetHoistedNoteView();
+    } else {
+        QSet<QWidget*> v; v << outlineView << noteView;
+        hideChildren(v);
+        outlineView->getOutlineTree()->setFocus();
+    }
 }
 
 void OrlojView::showFacetNoteEdit()

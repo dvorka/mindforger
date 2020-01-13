@@ -1863,6 +1863,7 @@ void MainWindowPresenter::doActionNoteHoist()
        orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE))
     {
         config.setUiHoistedMode(orloj->toggleCurrentFacetHoisting());
+        getMainMenu()->getView()->actionNoteHoist->setChecked(config.isUiHoistedMode());
     }
 }
 

@@ -360,6 +360,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
     actionNoteNew->setStatusTip(tr("Create new Note to form new ideas, principles, combinations and applications"));
     actionNoteHoist= new QAction(QIcon(":/menu-icons/fullscreen.svg"), tr("&Hoist"), mainWindow);
+    actionNoteHoist->setCheckable(false);
     actionNoteHoist->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_I));
     actionNoteHoist->setStatusTip(tr("Hoist/de-hoist Note to focus on Note being viewed or edited"));
 
