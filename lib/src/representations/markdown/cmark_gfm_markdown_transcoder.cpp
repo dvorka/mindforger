@@ -48,17 +48,28 @@ string* CmarkGfmMarkdownTranscoder::to(RepresentationType format, const string* 
     }
 #ifdef MF_MD_2_HTML_CMARK
     if(format == RepresentationType::HTML) {
+        // preprocessing: cmark-gfm is NOT able to render sections w/ depth > 6 (###### at most)
+        int CMARK_MAX_SECTION_DEPTH=6;
+        int overflow=0;
+        if(markdown && markdown->length()>CMARK_MAX_SECTION_DEPTH && markdown->at(CMARK_MAX_SECTION_DEPTH)=='#') {
+            int i=0;
+            while(markdown->at(i)=='#') {
+                i++;
+            }
+            overflow=i>=CMARK_MAX_SECTION_DEPTH?i-CMARK_MAX_SECTION_DEPTH:0;
+        }
+
         //TODO VH: move to some general init code?
         cmark_gfm_core_extensions_ensure_registered();
-        cmark_mem *mem = cmark_get_default_mem_allocator();
+        cmark_mem* mem = cmark_get_default_mem_allocator();
         //TODO VH: use extensions per config
-        cmark_llist *syntax_extensions = cmark_list_syntax_extensions(mem);
+        cmark_llist* syntax_extensions = cmark_list_syntax_extensions(mem);
         //TODO VH: parse options
-        cmark_parser *parser = cmark_parser_new(CMARK_OPT_DEFAULT | CMARK_OPT_UNSAFE);
-        for (cmark_llist *tmp = syntax_extensions; tmp; tmp = tmp->next) {
-            cmark_parser_attach_syntax_extension(parser, (cmark_syntax_extension *)tmp->data);
+        cmark_parser* parser = cmark_parser_new(CMARK_OPT_DEFAULT | CMARK_OPT_UNSAFE);
+        for (cmark_llist* tmp = syntax_extensions; tmp; tmp = tmp->next) {
+            cmark_parser_attach_syntax_extension(parser, (cmark_syntax_extension*)tmp->data);
         }
-        cmark_parser_feed(parser, markdown->c_str(), markdown->size());
+        cmark_parser_feed(parser, markdown->c_str()+overflow, markdown->size()-overflow);
 
         cmark_node *doc = cmark_parser_finish(parser);
         //cmark_node *doc = cmark_parse_document (markdown->c_str(), markdown->size(), CMARK_OPT_DEFAULT | CMARK_OPT_UNSAFE);
