@@ -17,6 +17,7 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "cmark_aho_corasick_block_autolinking_preprocessor.h"
+// cmark-gfm headers must NOT be included in header - Win builds fail
 #ifdef MF_MD_2_HTML_CMARK
   #include <cmark-gfm.h>
 #endif

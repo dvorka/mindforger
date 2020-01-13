@@ -55,8 +55,9 @@
  *   to the Command keys on the keyboard, and the META value
  *   corresponds to the Control keys.
  *
- * macOS command == Qt Ctrl
- * macOS control == Qt Meta
+ * Qt KEY_CTRL -> macOS command (CMD)
+ * Qt KEY_META -> macOS control (CTRL)
+ * Qt KEY_ALT  -> macos option  (OPTION)
  *
  */
 namespace m8r {
