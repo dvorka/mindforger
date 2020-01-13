@@ -53,7 +53,7 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     addRegex(Italic, "_[\\S\\s]+_");
     addRegex(Italicer, "__[\\S\\s]+\\__");
     addRegex(Strikethrough, "~~[\\S\\s]+\\~~");
-    addRegex(Link, "\\[(:?[\\S\\s]+)\\]\\(\\S+\\)");
+    addRegex(Link, "\\[(:?[\\S\\s]+)\\]\\([\\S\\s]+\\)");
     addRegex(Autolink, "https?://\\S+",false);
     addRegex(Codeblock, "`[\\S\\s]+`");
     addRegex(Mathblock, "\\$[\\S\\s]+\\$");

@@ -25,6 +25,7 @@
 
 namespace m8r {
 
+// TODO ...Highlighted
 class NoteEditHighlight : public QSyntaxHighlighter
 {
     Q_OBJECT
