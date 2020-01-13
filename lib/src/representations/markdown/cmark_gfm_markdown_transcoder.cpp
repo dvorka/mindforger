@@ -49,10 +49,10 @@ string* CmarkGfmMarkdownTranscoder::to(RepresentationType format, const string* 
 #ifdef MF_MD_2_HTML_CMARK
     if(format == RepresentationType::HTML) {
         // preprocessing: cmark-gfm is NOT able to render sections w/ depth > 6 (###### at most)
-        int CMARK_MAX_SECTION_DEPTH=6;
+        size_t CMARK_MAX_SECTION_DEPTH=6;
         int overflow=0;
         if(markdown && markdown->length()>CMARK_MAX_SECTION_DEPTH && markdown->at(CMARK_MAX_SECTION_DEPTH)=='#') {
-            int i=0;
+            size_t i=0;
             while(markdown->at(i)=='#') {
                 i++;
             }
