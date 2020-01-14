@@ -127,21 +127,29 @@ void OrlojView::showFacetRecentNotes()
 
 void OrlojView::showFacetOutlineHeaderView()
 {
-    QSet<QWidget*> v; v << outlineView << outlineHeaderView;
-    hideChildren(v);
-    outlineView->getOutlineTree()->clearSelection();
+    if(menuView->actionViewHoist->isChecked()) {
+        showFacetHoistedOutlineHeaderView();
+    } else {
+        QSet<QWidget*> v; v << outlineView << outlineHeaderView;
+        hideChildren(v);
+        outlineView->getOutlineTree()->clearSelection();
+    }
 }
 
 void OrlojView::showFacetOutlineHeaderEdit()
 {
-    QSet<QWidget*> v; v << outlineView << outlineHeaderEdit;
-    hideChildren(v);
-    outlineHeaderEdit->giveFocusToEditor();
+    if(menuView->actionViewHoist->isChecked()) {
+        showFacetHoistedOutlineHeaderEdit();
+    } else {
+        QSet<QWidget*> v; v << outlineView << outlineHeaderEdit;
+        hideChildren(v);
+        outlineHeaderEdit->giveFocusToEditor();
+    }
 }
 
 void OrlojView::showFacetNoteView()
 {
-    if(true) {
+    if(menuView->actionViewHoist->isChecked()) {
         showFacetHoistedNoteView();
     } else {
         QSet<QWidget*> v; v << outlineView << noteView;
@@ -152,9 +160,13 @@ void OrlojView::showFacetNoteView()
 
 void OrlojView::showFacetNoteEdit()
 {
-    QSet<QWidget*> v; v << outlineView << noteEdit;
-    hideChildren(v);
-    noteEdit->giveFocusToEditor();
+    if(menuView->actionViewHoist->isChecked()) {
+        showFacetHoistedNoteEdit();
+    } else {
+        QSet<QWidget*> v; v << outlineView << noteEdit;
+        hideChildren(v);
+        noteEdit->giveFocusToEditor();
+    }
 }
 
 void OrlojView::showFacetNavigator()
@@ -179,21 +191,9 @@ void OrlojView::showFacetNavigatorNote()
  * Hoisting.
  */
 
-bool OrlojView::isHoistView()
+bool OrlojView::isHoisting() const
 {
-    if(!outlineView->isVisible()) {
-        if(outlineHeaderView->isVisible()) {
-            return true;
-        } else if(outlineHeaderEdit->isVisible()) {
-            return true;
-        } else if(noteView->isVisible()) {
-            return true;
-        } else if(noteEdit->isVisible()) {
-            return true;
-        }
-    }
-
-    return false;
+    return menuView->actionViewHoist->isChecked();
 }
 
 void OrlojView::showFacetHoistedOutlineHeaderView()

@@ -32,10 +32,12 @@
 #include "outline_header_edit_view.h"
 #include "note_view.h"
 #include "note_edit_view.h"
+#include "main_menu_view.h"
 #include "navigator/navigator_view.h"
 
 namespace m8r {
 
+class MainMenuView;
 class NoteEditorView;
 class OutlineHeaderEditView;
 
@@ -67,6 +69,7 @@ private:
     NoteView* noteView;
     NoteEditView* noteEdit;
 
+    MainMenuView* menuView;
     NavigatorView* navigator;
 
 public:
@@ -87,6 +90,8 @@ public:
     NoteView* getNoteView() const { return noteView; }
     NoteEditView* getNoteEdit() const { return noteEdit; }
     NavigatorView* getNavigator() const { return navigator; }
+
+    void setMainMenu(MainMenuView* menuView) { this->menuView=menuView; }
 
     /**
      * @brief Dashboard
@@ -149,7 +154,7 @@ public:
      * Hoisting
      */
 
-    bool isHoistView();
+    bool isHoisting() const;
     void showFacetHoistedOutlineHeaderView();
     void showFacetHoistedOutlineHeaderEdit();
     void showFacetHoistedNoteView();

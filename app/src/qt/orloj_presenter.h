@@ -52,6 +52,7 @@ class NoteEditPresenter;
 class OutlineHeaderViewPresenter;
 class OutlineHeaderEditPresenter;
 class OutlineViewPresenter;
+class OrlojView;
 
 enum OrlojPresenterFacets {
     FACET_NONE,                 // 0
@@ -171,7 +172,7 @@ public:
     void showFacetNoteEdit(Note* note);
     void showFacetOutlineHeaderEdit(Outline* outline);
 
-    bool toggleCurrentFacetHoisting();
+    bool applyFacetHoisting();
 
     void fromOutlineHeaderEditBackToView(Outline* outline);
     void fromNoteEditBackToView(Note* note);

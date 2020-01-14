@@ -29,6 +29,8 @@
 
 namespace m8r {
 
+class OrlojPresenter;
+
 class FtsDialogPresenter : public QObject
 {
     Q_OBJECT

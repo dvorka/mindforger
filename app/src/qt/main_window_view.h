@@ -33,6 +33,7 @@
 
 namespace m8r {
 
+class OrlojView;
 class MainWindowPresenter;
 class MainToolbarView;
 class CliAndBreadcrumbsView;

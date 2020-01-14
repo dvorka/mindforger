@@ -70,6 +70,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionViewNavigator, SIGNAL(triggered()), mwp, SLOT(doActionViewKnowledgeGraphNavigator()));
     QObject::connect(view->actionViewCli, SIGNAL(triggered()), mwp, SLOT(doActionCli()));
     QObject::connect(view->actionViewRecentNotes, SIGNAL(triggered()), mwp, SLOT(doActionViewRecentNotes()));
+    QObject::connect(view->actionViewHoist, SIGNAL(triggered()), mwp, SLOT(doActionNoteHoist()));
     QObject::connect(view->actionViewDistractionFree, SIGNAL(triggered()), mwp, SLOT(doActionViewDistractionFree()));
     QObject::connect(view->actionViewFullscreen, SIGNAL(triggered()), mwp, SLOT(doActionViewFullscreen()));
 
@@ -88,7 +89,6 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 
     // menu: Note
     QObject::connect(view->actionNoteNew, SIGNAL(triggered()), mwp, SLOT(doActionNoteNew()));
-    QObject::connect(view->actionNoteHoist, SIGNAL(triggered()), mwp, SLOT(doActionNoteHoist()));
     QObject::connect(view->actionNoteEdit, SIGNAL(triggered()), mwp, SLOT(doActionNoteEdit()));
     QObject::connect(view->actionNoteForget, SIGNAL(triggered()), mwp, SLOT(doActionNoteForget()));
     QObject::connect(view->actionNotePromote, SIGNAL(triggered()), mwp, SLOT(doActionNotePromote()));

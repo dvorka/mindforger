@@ -500,26 +500,13 @@ void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
     mainPresenter->getMainMenu()->showFacetNoteEdit();
 }
 
-bool OrlojPresenter::toggleCurrentFacetHoisting()
+bool OrlojPresenter::applyFacetHoisting()
 {
-    if(view->isHoistView()) {
+    if(Configuration::getInstance().isUiHoistedMode()) {
         if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
              ||
-           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)) {
-            view->showFacetOutlineHeaderView();
-        } else if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
-            view->showFacetNoteView();
-        } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-            view->showFacetNoteEdit();
-        } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-            view->showFacetOutlineHeaderEdit();
-        }
-
-        return false;
-    } else {
-        if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
-             ||
-           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)) {
+           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER))
+        {
             view->showFacetHoistedOutlineHeaderView();
         } else if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
             view->showFacetHoistedNoteView();
@@ -527,6 +514,21 @@ bool OrlojPresenter::toggleCurrentFacetHoisting()
             view->showFacetHoistedNoteEdit();
         } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
             view->showFacetHoistedOutlineHeaderEdit();
+        }
+
+        return false;
+    } else {
+        if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+             ||
+           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER))
+        {
+            view->showFacetOutlineHeaderView();
+        } else if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
+            view->showFacetNoteView();
+        } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            view->showFacetNoteEdit();
+        } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            view->showFacetOutlineHeaderEdit();
         }
 
         return true;

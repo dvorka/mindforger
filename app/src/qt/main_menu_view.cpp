@@ -241,6 +241,12 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewLimbo->setEnabled(false);
     // TODO same handler as Help/Documentation - open dir w/ limbo files
 
+    actionViewHoist = new QAction(QIcon(":/menu-icons/fullscreen.svg"), tr("Ho&ist Note"), mainWindow);
+    actionViewHoist->setCheckable(true);
+    actionViewHoist->setChecked(false);
+    actionViewHoist->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_I));
+    actionViewHoist->setStatusTip(tr("Hoist/de-hoist Note to focus on Note being viewed or edited"));
+
     actionViewDistractionFree = new QAction(QIcon(":/menu-icons/off.svg"), tr("D&istraction Free"), mainWindow);
     actionViewDistractionFree->setShortcut(QKeySequence(Qt::Key_F5));
     actionViewDistractionFree->setStatusTip(tr("Toggle distraction free mode"));
@@ -266,6 +272,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addSeparator();
     menuView->addAction(actionViewRecentNotes);
     menuView->addSeparator();
+    menuView->addAction(actionViewHoist);
 #ifdef MF_WIP
     menuView->addAction(actionViewDistractionFree);
 #endif
@@ -359,10 +366,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
 #endif
     actionNoteNew->setStatusTip(tr("Create new Note to form new ideas, principles, combinations and applications"));
-    actionNoteHoist= new QAction(QIcon(":/menu-icons/fullscreen.svg"), tr("&Hoist"), mainWindow);
-    actionNoteHoist->setCheckable(false);
-    actionNoteHoist->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_I));
-    actionNoteHoist->setStatusTip(tr("Hoist/de-hoist Note to focus on Note being viewed or edited"));
 
 #ifdef __APPLE__
     actionNoteEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
@@ -426,7 +429,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     menuNote = qMenuBar->addMenu(tr("&Note"));
     menuNote->addAction(actionNoteNew);
-    menuNote->addAction(actionNoteHoist);
     menuNote->addAction(actionNoteEdit);
     menuNote->addAction(actionNoteSave);
     menuNote->addAction(actionNoteClose);

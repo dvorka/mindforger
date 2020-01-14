@@ -38,7 +38,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // assemble presenters w/ UI
     statusBar = new StatusBarPresenter{view.getStatusBar(), mind};
-    mainMenu = new MainMenuPresenter{this};
+    mainMenu = new MainMenuPresenter{this}; view.getOrloj()->setMainMenu(mainMenu->getView());
     cli = new CliAndBreadcrumbsPresenter{this, view.getCli(), mind};
     orloj = new OrlojPresenter{this, view.getOrloj(), mind};
 
@@ -1862,8 +1862,8 @@ void MainWindowPresenter::doActionNoteHoist()
          ||
        orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE))
     {
-        config.setUiHoistedMode(orloj->toggleCurrentFacetHoisting());
-        getMainMenu()->getView()->actionNoteHoist->setChecked(config.isUiHoistedMode());
+        config.setUiHoistedMode(getMainMenu()->getView()->actionViewHoist->isChecked());
+        orloj->applyFacetHoisting();
     }
 }
 

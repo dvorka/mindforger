@@ -126,7 +126,7 @@ public:
 
     // menu: Note
     QAction* actionNoteNew;
-    QAction* actionNoteHoist;
+    QAction* actionViewHoist;
     QAction* actionNoteEdit;
     QAction* actionNoteSave;
     QAction* actionNoteClose;

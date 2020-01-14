@@ -66,7 +66,17 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
 {
     currentOutline = outline;
 
-    htmlRepresentation->toHeader(outline, &html, false, Configuration::getInstance().isAutolinking());
+    if(Configuration::getInstance().isUiHoistedMode()) {
+        // TODO inject TOC
+        // TODO full O rendering doesn't support autolinking (consider performance)
+        htmlRepresentation->to(outline, &html);
+    } else {
+        htmlRepresentation->toHeader(
+            outline,
+            &html,
+            false,
+            Configuration::getInstance().isAutolinking());
+    }
     view->setHtml(QString::fromStdString(html));
 
     // leaderboard
