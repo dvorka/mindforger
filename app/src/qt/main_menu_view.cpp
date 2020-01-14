@@ -241,7 +241,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewLimbo->setEnabled(false);
     // TODO same handler as Help/Documentation - open dir w/ limbo files
 
-    actionViewHoist = new QAction(QIcon(":/menu-icons/fullscreen.svg"), tr("Ho&ist Note"), mainWindow);
+    actionViewHoist = new QAction(QIcon(":/menu-icons/hoisting.svg"), tr("Ho&isting"), mainWindow);
     actionViewHoist->setCheckable(true);
     actionViewHoist->setChecked(false);
     actionViewHoist->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_I));

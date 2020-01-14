@@ -54,7 +54,7 @@
         <file alias="cut.svg">resources/menu-icons/light_edit-cut.svg</file>
         <file alias="paste.svg">resources/menu-icons/light_edit-paste.svg</file>
         <file alias="import.svg">resources/menu-icons/light_document-import.svg</file>
-        <file alias="zoom-in.svg">resources/menu-icons/light_zoom-in.svg</file>
+        <file alias="hoisting.svg">resources/menu-icons/light_zoom-in.svg</file>
         <file alias="zoom-out.svg">resources/menu-icons/light_zoom-out.svg</file>
         <file alias="undo.svg">resources/menu-icons/light_edit-undo.svg</file>
         <file alias="find.svg">resources/menu-icons/light_tool_zoom.svg</file>
