@@ -164,6 +164,17 @@ OutlineHeaderView::~OutlineHeaderView()
 {
 }
 
+void OutlineHeaderView::keyPressEvent(QKeyEvent* event)
+{
+    if(event->modifiers() & Qt::ControlModifier){
+        if(event->key()==Qt::Key_E) {
+            emit signalOpenEditor();
+        }
+    }
+
+    QWidget::keyPressEvent(event);
+}
+
 void OutlineHeaderView::slotOpenEditor()
 {
     emit signalOpenEditor();

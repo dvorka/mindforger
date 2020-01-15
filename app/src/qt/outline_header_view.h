@@ -100,6 +100,9 @@ public:
         headerViewer->setHtml(html, baseUrl);
     }
 
+protected:
+    void keyPressEvent(QKeyEvent* event) override;
+
 private slots:
     void slotOpenEditor();
 

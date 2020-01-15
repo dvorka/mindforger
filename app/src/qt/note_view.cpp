@@ -165,6 +165,17 @@ NoteView::~NoteView()
 {
 }
 
+void NoteView::keyPressEvent(QKeyEvent* event)
+{
+    if(event->modifiers() & Qt::ControlModifier){
+        if(event->key()==Qt::Key_E) {
+            emit signalOpenEditor();
+        }
+    }
+
+    QWidget::keyPressEvent(event);
+}
+
 void NoteView::slotOpenEditor()
 {
     emit signalOpenEditor();
