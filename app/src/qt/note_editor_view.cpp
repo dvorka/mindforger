@@ -28,7 +28,9 @@ inline bool caseInsensitiveLessThan(const QString &a, const QString &b)
 }
 
 NoteEditorView::NoteEditorView(QWidget* parent)
-    : QPlainTextEdit(parent), parent(parent), completedAndSelected(false)
+    : QPlainTextEdit(parent),
+      parent(parent),
+      completedAndSelected(false)
 {
     hitCounter = 0;
 

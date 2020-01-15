@@ -152,6 +152,7 @@ public:
     QAction* actionEditCut;
     QAction* actionEditCopy;
     QAction* actionEditPaste;
+    QAction* actionEditWordWrap;
     QAction* actionEditComplete;
 
     // menu: Format

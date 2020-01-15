@@ -463,22 +463,26 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditFindNext = new QAction(QIcon(":/menu-icons/find.svg"), tr("Find Next\tCtrl+F"), mainWindow);
     actionEditFindNext->setStatusTip(tr("Search Note text again"));
 
-    actionEditUndo= new QAction(QIcon(":/menu-icons/undo.svg"), tr("&Undo\tCtrl+Z"), mainWindow);
+    actionEditUndo = new QAction(QIcon(":/menu-icons/undo.svg"), tr("&Undo\tCtrl+Z"), mainWindow);
     actionEditUndo->setStatusTip(tr("Undo"));
 
-    actionEditRedo= new QAction(QIcon(":/menu-icons/redo.svg"), tr("&Redo\tCtrl+Shift+Z"), mainWindow);
+    actionEditRedo = new QAction(QIcon(":/menu-icons/redo.svg"), tr("&Redo\tCtrl+Shift+Z"), mainWindow);
     actionEditRedo->setStatusTip(tr("Redo"));
 
-    actionEditCut= new QAction(QIcon(":/menu-icons/cut.svg"), tr("Cu&t\tCtrl+X"), mainWindow);
+    actionEditCut = new QAction(QIcon(":/menu-icons/cut.svg"), tr("Cu&t\tCtrl+X"), mainWindow);
     actionEditCut->setStatusTip(tr("Cut"));
 
-    actionEditCopy= new QAction(QIcon(":/menu-icons/copy.svg"), tr("&Copy\tCtrl+C"), mainWindow);
+    actionEditCopy = new QAction(QIcon(":/menu-icons/copy.svg"), tr("&Copy\tCtrl+C"), mainWindow);
     actionEditCopy->setStatusTip(tr("Copy"));
 
-    actionEditPaste= new QAction(QIcon(":/menu-icons/paste.svg"), tr("&Paste\tCtrl+V"), mainWindow);
+    actionEditPaste = new QAction(QIcon(":/menu-icons/paste.svg"), tr("&Paste\tCtrl+V"), mainWindow);
     actionEditPaste->setStatusTip(tr("Paste"));
 
-    actionEditComplete= new QAction(QIcon(":/menu-icons/on.svg"), tr("Complete Link\tCtrl+/"), mainWindow);
+    actionEditWordWrap = new QAction(QIcon(":/menu-icons/word-wrap.svg"), tr("Word Wrap"), mainWindow);
+    actionEditWordWrap->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_W));
+    actionEditWordWrap->setStatusTip(tr("Toggle word wrap mode"));
+
+    actionEditComplete = new QAction(QIcon(":/menu-icons/on.svg"), tr("Complete Link\tCtrl+/"), mainWindow);
     actionEditComplete->setStatusTip(tr("Complete word being written by finding link to Notebook or Note"));
 
     menuEdit = qMenuBar->addMenu(tr("&Edit"));
@@ -492,6 +496,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuEdit->addAction(actionEditCopy);
     menuEdit->addAction(actionEditPaste);
     menuEdit->addSeparator();
+    menuEdit->addAction(actionEditWordWrap);
     menuEdit->addAction(actionEditComplete);
     menuEdit->setEnabled(false);
 

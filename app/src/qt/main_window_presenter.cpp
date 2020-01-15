@@ -2110,6 +2110,24 @@ void MainWindowPresenter::doActionEditFindAgain()
     }
 }
 
+void MainWindowPresenter::doActionEditWordWrapToggle()
+{
+    NoteEditorView* editor{};
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        editor = orloj->getNoteEdit()->getView()->getNoteEditor();
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        editor = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor();
+    } else {
+        return;
+    }
+
+    if(editor->wordWrapMode() == QTextOption::NoWrap) {
+        editor->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    } else {
+        editor->setWordWrapMode(QTextOption::NoWrap);
+    }
+}
+
 void MainWindowPresenter::doActionMindRemember()
 {
     mdConfigRepresentation->save(config);

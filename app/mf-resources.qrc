@@ -84,5 +84,6 @@
         <file alias="document.svg">resources/menu-icons/light_folder-documents.svg</file>
         <file alias="folder.svg">resources/menu-icons/light_folder.svg</file>
         <file alias="cli.svg">resources/menu-icons/light_drive-harddisk.svg</file>
+        <file alias="word-wrap.svg">resources/menu-icons/light_word_wrap.svg</file>
     </qresource>
 </RCC>

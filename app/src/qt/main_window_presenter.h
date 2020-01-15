@@ -300,6 +300,7 @@ public slots:
     // edit
     void doActionEditFind();
     void doActionEditFindAgain();
+    void doActionEditWordWrapToggle();
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();
