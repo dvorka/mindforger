@@ -44,7 +44,7 @@ NoteViewerView::NoteViewerView(QWidget *parent)
 
 #ifdef MF_QT_WEB_ENGINE
 
-bool NoteView::event(QEvent* event)
+bool NoteViewerView::event(QEvent* event)
 {
     // INSTALL event filter to every child - child polished event is received 1+x for every child
     if (event->type() == QEvent::ChildPolished) {
@@ -58,7 +58,7 @@ bool NoteView::event(QEvent* event)
     return QWebEngineView::event(event);
 }
 
-bool NoteView::eventFilter(QObject *obj, QEvent *event)
+bool NoteViewerView::eventFilter(QObject* obj, QEvent *event)
 {
     if(event->type() == QEvent::MouseButtonDblClick) {
         // double click to Note view opens Note editor
@@ -70,7 +70,7 @@ bool NoteView::eventFilter(QObject *obj, QEvent *event)
     return QWebEngineView::eventFilter(obj, event);
 }
 
-void NoteView::keyPressEvent(QKeyEvent* event)
+void NoteViewerView::keyPressEvent(QKeyEvent* event)
 {
     if(event->modifiers() & Qt::AltModifier){
         if(event->key()==Qt::Key_Left) {
@@ -81,7 +81,7 @@ void NoteView::keyPressEvent(QKeyEvent* event)
     QWebEngineView::keyPressEvent(event);
 }
 
-void NoteView::wheelEvent(QWheelEvent* event)
+void NoteViewerView::wheelEvent(QWheelEvent* event)
 {
     if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
         if(!event->angleDelta().isNull()) {

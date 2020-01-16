@@ -44,7 +44,7 @@ OutlineHeaderViewerView::OutlineHeaderViewerView(QWidget *parent)
 
 #ifdef MF_QT_WEB_ENGINE
 
-bool OutlineHeaderView::event(QEvent* event)
+bool OutlineHeaderViewerView::event(QEvent* event)
 {
     // INSTALL event filter to every child - child polished event is received 1+x for every child
     if (event->type() == QEvent::ChildPolished) {
@@ -58,7 +58,7 @@ bool OutlineHeaderView::event(QEvent* event)
     return QWebEngineView::event(event);
 }
 
-bool OutlineHeaderView::eventFilter(QObject *obj, QEvent *event)
+bool OutlineHeaderViewerView::eventFilter(QObject *obj, QEvent *event)
 {
     if(event->type() == QEvent::MouseButtonDblClick) {
         // double click to Note view opens Note editor
@@ -70,7 +70,7 @@ bool OutlineHeaderView::eventFilter(QObject *obj, QEvent *event)
     return QWebEngineView::eventFilter(obj, event);
 }
 
-void OutlineHeaderView::keyPressEvent(QKeyEvent* event)
+void OutlineHeaderViewerView::keyPressEvent(QKeyEvent* event)
 {
     if(event->modifiers() & Qt::AltModifier){
         if(event->key()==Qt::Key_Left) {
@@ -81,7 +81,7 @@ void OutlineHeaderView::keyPressEvent(QKeyEvent* event)
     QWebEngineView::keyPressEvent(event);
 }
 
-void OutlineHeaderView::wheelEvent(QWheelEvent* event)
+void OutlineHeaderViewerView::wheelEvent(QWheelEvent* event)
 {
     if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
         if(!event->angleDelta().isNull()) {

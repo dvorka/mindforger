@@ -38,7 +38,7 @@
 namespace m8r {
 
 #ifdef MF_QT_WEB_ENGINE
-class NoteViewer: public QWebEngineView
+class NoteViewerView: public QWebEngineView
 #else
 class NoteViewerView: public QWebView
 #endif
@@ -85,7 +85,7 @@ public:
     NoteView(const NoteView&&) = delete;
     NoteView&operator=(const NoteView&) = delete;
     NoteView&operator=(const NoteView&&) = delete;
-    ~NoteView();
+    virtual ~NoteView() override;
 
     NoteViewerView* getViever() const { return noteViewer; }
     ViewToEditEditButtonsPanel* getEditPanel() const { return view2EditPanel; }
