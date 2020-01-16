@@ -26,6 +26,8 @@
 
 #include <gtest/gtest.h>
 
+// cmark-gfm include is broken on Windows
+#ifndef _WIN32
 #ifdef MF_MD_2_HTML_CMARK
 #include <cmark-gfm.h>
 
@@ -451,3 +453,4 @@ TEST(AutolinkingCmarkTestCase, BasicRepo)
 }
 
 #endif // MF_MD_2_HTML_CMARK
+#endif // WINDOWS
