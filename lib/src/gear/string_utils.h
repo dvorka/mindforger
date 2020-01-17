@@ -61,7 +61,7 @@ std::string normalizeToNcName(std::string name, char quoteChar);
  */
 static inline bool stringistring(const std::string& a, const std::string& b)
 {
-    unsigned int asize = a.size();
+    unsigned long long asize = a.size();
     if(b.size()==asize) {
         for(unsigned int i = 0; i < asize; ++i) {
             if(tolower(a[i]) != tolower(b[i])) {
@@ -88,7 +88,7 @@ static inline void stringToLower(const std::string& s, std::string& lowerS)
  */
 static inline char *stringTrim(const char *s) {
     if(s) {
-        while(isspace((unsigned char)*s)) {
+        while(isspace(static_cast<unsigned char>(*s))) {
             s++;
         }
         if(*s == 0) {
@@ -97,14 +97,14 @@ static inline char *stringTrim(const char *s) {
             return result;
         }
 
-        const char *end = s + strlen(s) - 1;
-        while(end > s && isspace((unsigned char)*end)) {
+        const char* end = s + strlen(s) - 1;
+        while(end > s && isspace(static_cast<unsigned char>(*end))) {
             end--;
         }
         ++ end;
 
-        size_t resultSize = end - s;
-        char *result = new char[resultSize + 1];
+        size_t resultSize = static_cast<size_t>(end - s);
+        char* result = new char[resultSize + 1];
         memcpy(result, s, resultSize);
         result[resultSize] = 0;
 
@@ -151,8 +151,8 @@ void toString(const std::vector<std::string*>& ss, std::string& os);
 
 static inline std::string stringIntFormat(std::string value, char thousandSep = ',')
 {
-    int len = value.length();
-    int dlen = 3;
+    auto len = value.length();
+    auto dlen = 3;
 
     while(len > dlen) {
         value.insert(len - dlen, 1, thousandSep);
