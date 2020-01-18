@@ -22,13 +22,9 @@ namespace m8r {
 
 using namespace std;
 
-Palette::Palette()
-{
-}
+Palette::Palette() = default;
 
-Palette::~Palette()
-{
-}
+Palette::~Palette() = default;
 
 void Palette::addBuiltInColors()
 {
@@ -62,13 +58,13 @@ const Color& Palette::findOrCreate(unsigned char r, unsigned char g, unsigned ch
     auto result = colorsMap.find(k);
     if(result!=colorsMap.end()) {
         return result->second;
-    } else {
-        Color* newColor = new Color{r,g,b};
-        colors.push_back(newColor);
-        colorsMap.insert(std::pair<unsigned long,const Color&>(newColor->asLong(), *newColor));
-        customColors.push_back(std::unique_ptr<Color>(newColor));
-        return *newColor;
     }
+
+    Color* newColor = new Color{r,g,b};
+    colors.push_back(newColor);
+    colorsMap.insert(std::pair<unsigned long,const Color&>(newColor->asLong(), *newColor));
+    customColors.push_back(std::unique_ptr<Color>(newColor));
+    return *newColor;
 }
 
 const Color& Palette::colorForName(const string& name) const

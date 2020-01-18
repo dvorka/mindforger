@@ -26,8 +26,6 @@ Lexicon::Lexicon()
     maxFrequency = 1;
 }
 
-Lexicon::~Lexicon()
-{
-}
+Lexicon::~Lexicon() = default;
 
 } // m8r namespace

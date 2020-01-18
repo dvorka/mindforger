@@ -37,7 +37,20 @@ const string Configuration::DEFAULT_EDITOR_FONT= string{UI_DEFAULT_EDITOR_FONT};
 const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
 
 Configuration::Configuration()
-    : repositories{},
+    : asyncMindThreshold{},
+      activeRepository{},
+      repositories{},
+      writeMetadata{},
+      saveReadsMetadata{},
+      autolinking{},
+      autolinkingColonSplit{},
+      autolinkingCaseInsensitive{},
+      md2HtmlOptions{},
+      distributorSleepInterval{},
+      markdownQuoteSections{},
+      uiNerdTargetAudience{},
+      uiHtmlZoom{},
+      uiFontPointSize{},
       installer(new Installer{})
 {
     char* home;
@@ -168,9 +181,9 @@ Repository* Configuration::getActiveRepository() const
 {
     if(activeRepository) {
         return activeRepository;
-    } else {
-        throw MindForgerException{"Active repository not set!"};
     }
+
+    throw MindForgerException{"Active repository not set!"};
 }
 
 std::map<const std::string,Repository*>& Configuration::getRepositories()
@@ -212,13 +225,13 @@ void Configuration::setActiveRepository(Repository* repository)
 
 bool Configuration::createEmptyMarkdownFile(const string& file)
 {
-    if(file.size() && file.find(FILE_PATH_SEPARATOR)==string::npos && RepositoryIndexer::fileHasMarkdownExtension(file)) {
+    if(!file.empty() && file.find(FILE_PATH_SEPARATOR)==string::npos && RepositoryIndexer::fileHasMarkdownExtension(file)) {
         // as it is filename w/o path I can try to create empty O in the current directory
         stringToFile(file, DEFAULT_NEW_OUTLINE);
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 void Configuration::findOrCreateDefaultRepository()
