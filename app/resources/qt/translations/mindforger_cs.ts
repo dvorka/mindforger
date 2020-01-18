@@ -723,6 +723,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>&amp;Adapt</source>
+        <translation type="obsolete">&amp;Preferences</translation>
+    </message>
+    <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="109"/>
         <source>Adapt Mind by setting your preferences...</source>
         <translation type="unfinished"></translation>
