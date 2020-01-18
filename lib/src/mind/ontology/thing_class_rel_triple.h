@@ -1,7 +1,7 @@
 /*
  thing_class_rel_triple.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 #include <set>
 
 #include "../../config/color.h"
+#include "../../gear/string_utils.h"
 
 /*
  * Thing, Class, Relationship, RelationshipType and Triple
@@ -68,6 +69,9 @@ protected:
      */
 
     // name used for autolinking
+    std::string autolinkingName;
+    std::string autolinkingAbbr;
+    // autolinking: abbrev (if exists), name otherwise
     std::string autolinkingAlias;
 
 public:
@@ -83,6 +87,8 @@ public:
 
     const std::string& getName() const { return name; }
     virtual void setName(const std::string& name) { this->name = name; autolinkName();}
+    const std::string& getAutolinkingName() const { return autolinkingName; }
+    const std::string& getAutolinkingAbbr() const { return autolinkingAbbr; }
     const std::string& getAutolinkingAlias() const { return autolinkingAlias; }
 
     const std::set<Relationship*> getRelationships() const { return relationships; }

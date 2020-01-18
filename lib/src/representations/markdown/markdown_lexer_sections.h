@@ -1,7 +1,7 @@
 /*
  markdown_lexer_sections.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -109,7 +109,7 @@ private:
     unsigned lastBrTokensOffset;
     bool inCodeBlock;
 
-    unsigned long int fileSize;
+    size_t fileSize;
     std::vector<std::string*> lines;
     // IMPROVE prepare a LexemPool: vector + MarkdownLexem[1000] and allocate from there (performance)
     std::vector<MarkdownLexem*> lexems;
@@ -132,7 +132,7 @@ public:
     std::string* getText(const MarkdownLexem*);
 
     void setFilePath(const std::string*& filePath) { this->filePath = filePath; }
-    unsigned long int getFileSize() const { return fileSize; }
+    size_t getFileSize() const { return fileSize; }
     const std::vector<MarkdownLexem*>& getLexems() const { return lexems; }
     const std::vector<std::string*>& getLines() const { return lines; }
     const MarkdownSymbolTable& getSymbolTable() const { return symbolTable; }

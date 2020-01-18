@@ -1,7 +1,7 @@
 /*
- edit_name_and_buttons_panel.h     MindForger thinking notebook
+ edit_buttons_panel.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -16,32 +16,25 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_EDIT_NAME_AND_BUTTONS_PANEL_H
-#define M8R_EDIT_NAME_AND_BUTTONS_PANEL_H
+#ifndef M8R_EDIT_BUTTONS_PANEL_H
+#define M8R_EDIT_BUTTONS_PANEL_H
 
 #include <QtWidgets>
 
+#include "mf_widgets.h"
 #include "../dialogs/note_edit_dialog.h"
 #include "../dialogs/outline_header_edit_dialog.h"
 
 namespace m8r {
 
-class EditNameAndButtonsPanel : public QWidget
+class EditButtonsPanel : public QWidget
 {
     Q_OBJECT
 
-public:
-    enum Mode {
-        OUTLINE_MODE,
-        NOTE_MODE
-    };
-
 private:
-    Mode mode;
+    MfWidgetMode mode;
 
     QHBoxLayout* layout;
-    QLabel* label;
-    QLineEdit* lineEdit;
     QPushButton* moreButton;
     QPushButton* rememberButton;
     QPushButton* cancelButton;
@@ -50,12 +43,12 @@ private:
     NoteEditDialog* noteEditDialog;
 
 public:
-    explicit EditNameAndButtonsPanel(Mode mode, QWidget* parent);
-    EditNameAndButtonsPanel(const EditNameAndButtonsPanel&) = delete;
-    EditNameAndButtonsPanel(const EditNameAndButtonsPanel&&) = delete;
-    EditNameAndButtonsPanel &operator=(const EditNameAndButtonsPanel&) = delete;
-    EditNameAndButtonsPanel &operator=(const EditNameAndButtonsPanel&&) = delete;
-    ~EditNameAndButtonsPanel();
+    explicit EditButtonsPanel(MfWidgetMode mode, QWidget* parent);
+    EditButtonsPanel(const EditButtonsPanel&) = delete;
+    EditButtonsPanel(const EditButtonsPanel&&) = delete;
+    EditButtonsPanel &operator=(const EditButtonsPanel&) = delete;
+    EditButtonsPanel &operator=(const EditButtonsPanel&&) = delete;
+    ~EditButtonsPanel();
 
 /*
  * NOTE mode
@@ -69,7 +62,6 @@ public:
     }
     void setNote(Note* note) {
         noteEditDialog->setNote(note);
-        lineEdit->setText(QString::fromStdString(note->getName()));
     }
 
 public slots:
@@ -88,7 +80,6 @@ public slots:
     }
     void setOutline(Outline* outline) {
         outlineHeaderEditDialog->setOutline(outline);
-        lineEdit->setText(QString::fromStdString(outline->getName()));
     }
 
 public slots:
@@ -96,11 +87,10 @@ public slots:
     void handleCloseOutlineHeaderEditDialog();
 
 public:
-    QString getName() const { return lineEdit->text(); }
     QPushButton* getRememberButton() const { return rememberButton; }
     QPushButton* getCancelButton() const { return cancelButton; }
 
 };
 
 }
-#endif // M8R_EDIT_NAME_AND_BUTTONS_PANEL_H
+#endif // M8R_EDIT_BUTTONS_PANEL_H

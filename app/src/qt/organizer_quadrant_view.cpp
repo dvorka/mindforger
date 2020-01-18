@@ -1,7 +1,7 @@
 /*
  organizer_quadrant_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -31,11 +31,49 @@ OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent)
     // IMPORTANT this must b in constructors - causes CPU high consuption loop if in paintEvent()!
     horizontalHeader()->setStretchLastSection(true);
 
-    setSortingEnabled(true);
+    // IMPROVE sorting breaks width (redraw method to be overriden)
+    setSortingEnabled(false);
 
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
+}
+
+void OrganizerQuadrantView::keyPressEvent(QKeyEvent* event)
+{
+    if(!(event->modifiers() & Qt::AltModifier)
+         &&
+       !(event->modifiers() & Qt::ControlModifier)
+         &&
+       !(event->modifiers() & Qt::ShiftModifier))
+    {
+        switch(event->key()) {
+        case Qt::Key_Return:
+        case Qt::Key_Right:
+            emit signalShowSelectedOutline();
+            return;
+        case Qt::Key_Down:
+            QTableView::keyPressEvent(event);
+            return;
+        case Qt::Key_Up:
+        // IMPROVE left to cancel selection
+        case Qt::Key_Left:
+            QTableView::keyPressEvent(event);
+            return;
+        }
+
+        return;
+    }
+
+    QTableView::keyPressEvent(event);
+}
+
+void OrganizerQuadrantView::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    Q_UNUSED(event);
+
+    // double click to O/N opens it
+    emit signalShowSelectedOutline();
 }
 
 } // m8r namespace

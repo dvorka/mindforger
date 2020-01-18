@@ -1,7 +1,7 @@
 /*
  insert_image_dialog.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -52,6 +52,8 @@ public:
     QPushButton* getInsertButton() const { return insertButton; }
     QString getAlternateText() { return alternateTextEdit->text(); }
     QString getPathText() { return pathEdit->text(); }
+    bool isCopyToRepo() const { return copyToRepoCheckBox->isChecked(); }
+    QCheckBox* getCopyCheckBox() const { return copyToRepoCheckBox; }
 
 private slots:
     void handleFindFile();

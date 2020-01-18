@@ -1,7 +1,7 @@
 /*
  find_note_by_name_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -45,6 +45,7 @@ void FindNoteByNameDialog::show(vector<Note*>& notes)
     if(notes.size()) {
         if(!scope) {
             for(Note* n:notes) {
+                // IMPROVE make this Note's method: getScopedName()
                 string s{n->getName()};
                 s += " (";
                 s += n->getOutline()->getName();

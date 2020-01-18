@@ -1,7 +1,7 @@
 /*
  memory.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -34,7 +34,8 @@ Memory::Memory(
       mdRepresentation{htmlRepresentation.getMarkdownRepresentation()},
       persistence(new FilesystemPersistence{mdRepresentation, htmlRepresentation}),
       twikiRepresentation{mdRepresentation, persistence},
-      csvRepresentation{}
+      csvRepresentation{},
+      limbo{configuration}
 {
     cache = true;
     mindScope = nullptr;
@@ -326,7 +327,7 @@ Outline* Memory::getOutline(const string& key)
     }
 }
 
-void Memory::getAllNotes(vector<Note*>& notes, bool doSortByRead, bool addNoteForOutline) const
+std::vector<Note*>& Memory::getAllNotes(vector<Note*>& notes, bool doSortByRead, bool addNoteForOutline) const
 {
     for(Outline* o:outlines) {
         if(addNoteForOutline) {
@@ -353,6 +354,8 @@ void Memory::getAllNotes(vector<Note*>& notes, bool doSortByRead, bool addNoteFo
     if(doSortByRead) {
         sortByRead(notes);
     }
+
+    return notes;
 }
 
 const OutlineType* Memory::toOutlineType(const MarkdownAstSectionMetadata& meta)

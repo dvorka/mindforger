@@ -1,7 +1,7 @@
 /*
  outline_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 #include <QtWidgets>
 
+#include "dashboard_view.h"
 #include "organizer_view.h"
 #include "tags_table_view.h"
 #include "outlines_table_view.h"
@@ -31,10 +32,12 @@
 #include "outline_header_edit_view.h"
 #include "note_view.h"
 #include "note_edit_view.h"
+#include "main_menu_view.h"
 #include "navigator/navigator_view.h"
 
 namespace m8r {
 
+class MainMenuView;
 class NoteEditorView;
 class OutlineHeaderEditView;
 
@@ -55,10 +58,10 @@ class OrlojView : public QSplitter
     Q_OBJECT
 
 private:
+    DashboardView* dashboard;
     OrganizerView* organizer;
     TagsTableView* tagCloud;
     OutlinesTableView* outlinesTable;
-    NotesTableView* notesTable;
     RecentNotesTableView* recentNotesTable;
     OutlineViewSplitter* outlineView;
     OutlineHeaderView* outlineHeaderView;
@@ -66,6 +69,7 @@ private:
     NoteView* noteView;
     NoteEditView* noteEdit;
 
+    MainMenuView* menuView;
     NavigatorView* navigator;
 
 public:
@@ -75,10 +79,10 @@ public:
     OrlojView &operator=(const OrlojView&) = delete;
     OrlojView &operator=(const OrlojView&&) = delete;
 
+    DashboardView* getDashboard() const { return dashboard; }
     OrganizerView* getOrganizer() const { return organizer; }
     TagsTableView* getTagCloud() const { return tagCloud; }
     OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
-    NotesTableView* getNotesTable() const { return notesTable; }
     RecentNotesTableView* getRecentNotesTable() const { return recentNotesTable; }
     OutlineViewSplitter* getOutlineView() const { return outlineView; }
     OutlineHeaderView* getOutlineHeaderView() const { return outlineHeaderView; }
@@ -86,6 +90,13 @@ public:
     NoteView* getNoteView() const { return noteView; }
     NoteEditView* getNoteEdit() const { return noteEdit; }
     NavigatorView* getNavigator() const { return navigator; }
+
+    void setMainMenu(MainMenuView* menuView) { this->menuView=menuView; }
+
+    /**
+     * @brief Dashboard
+     */
+    void showFacetDashboard();
 
     /**
      * @brief Organizer
@@ -111,16 +122,6 @@ public:
      * @brief Recent Notes.
      */
     void showFacetRecentNotes();
-
-    /**
-     * @brief FTS result list - Notes w/o detail
-     */
-    void showFacetFtsResult();
-
-    /**
-     * @brief FTS result list - Notes w/ detail
-     */
-    void showFacetFtsResultDetail();
 
     /**
      * @brief Outline header view
@@ -153,7 +154,7 @@ public:
      * Hoisting
      */
 
-    bool isHoistView();
+    bool isHoisting() const;
     void showFacetHoistedOutlineHeaderView();
     void showFacetHoistedOutlineHeaderEdit();
     void showFacetHoistedNoteView();

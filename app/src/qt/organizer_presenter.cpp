@@ -1,7 +1,7 @@
 /*
  organizer_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@ OrganizerPresenter::OrganizerPresenter(OrganizerView* view, OrlojPresenter* orlo
 {
     this->view = view;
 
-    QString t{};
     doFirstPresenter = new OrganizerQuadrantPresenter(view->getDoFirst(), orloj, tr("Do first"));
     doSoonPresenter = new OrganizerQuadrantPresenter(view->getDoSoon(), orloj, tr("Do soon"));
     doSometimePresenter = new OrganizerQuadrantPresenter(view->getDoSometime(), orloj, tr("Do sometime"));
@@ -68,6 +67,8 @@ void OrganizerPresenter::refresh(const vector<Outline*>& os)
     doSoonPresenter->refresh(doSoonOs, true, false);
     doSometimePresenter->refresh(doSometimeOs, false, false);
     planDedicatedTimePresenter->refresh(planDedicatedTimeOs, false, true);
+
+    view->getDoFirst()->setFocus();
 }
 
 } // m8r namespace

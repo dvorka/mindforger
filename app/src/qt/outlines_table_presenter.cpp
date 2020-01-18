@@ -1,7 +1,7 @@
 /*
  outlines_table_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -45,7 +45,19 @@ void OutlinesTablePresenter::refresh(const vector<Outline*>& outlines)
 
         // IMPROVE create hidden column w/ long time used for sorting
         view->sortByColumn(7, Qt::SortOrder::DescendingOrder);
+
+        this->view->setCurrentIndex(this->model->index(0, 0));
+        this->view->setFocus();
     }
+}
+
+int OutlinesTablePresenter::getCurrentRow() const
+{
+    QModelIndexList indexes = view->selectionModel()->selection().indexes();
+    for(int i=0; i<indexes.count(); i++) {
+        return indexes.at(i).row();
+    }
+    return NO_ROW;
 }
 
 } // m8r namespace

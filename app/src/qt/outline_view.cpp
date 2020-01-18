@@ -1,7 +1,7 @@
 /*
  outline_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ OutlineView::OutlineView(QWidget *parent)
     QFont nameFont = nameLabel->font();
     nameFont.setPointSize(nameFont.pointSize()+nameFont.pointSize()/4);
     nameFont.setBold(true);
-    // subjectively this is too much: nameFont.setUnderline(true);
+    // subjective - this is too much: nameFont.setUnderline(true);
     nameLabel->setFont(nameFont);
     headerVerticalLayout.addWidget(nameLabel);
 

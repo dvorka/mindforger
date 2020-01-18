@@ -1,8 +1,7 @@
-
 /*
  note_edit_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -91,6 +90,10 @@ void NoteEditPresenter::slotSaveNote()
         if(!view->getName().isEmpty()) {
             name.assign(view->getName().toStdString());
         }
+
+        // ensure autolinking indices are updated on N rename
+        mwp->getMind()->autolinkUpdate(currentNote->getName(), view->getName().toStdString());
+
         currentNote->setName(name);
 
         if(!view->isDescriptionEmpty()) {
@@ -110,8 +113,7 @@ void NoteEditPresenter::slotSaveNote()
 
         // remember
         mwp->getMind()->remind().remember(currentNote->getOutlineKey());
-        mwp->getStatusBar()->showInfo(tr("Note saved!"));
-        MF_DEBUG("Note '" << currentNote->getName() << "' saved!" << endl);
+        mwp->getStatusBar()->showInfo(tr("Note '%1' saved").arg(QString::fromStdString(currentNote->getName())));
     } else {
         mwp->getStatusBar()->showError(tr("Attempt to save data from UI to Note, but no Note is set."));
     }

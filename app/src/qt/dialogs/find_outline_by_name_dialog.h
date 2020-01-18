@@ -1,7 +1,7 @@
 /*
  find_outline_by_name_dialog.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -80,11 +80,17 @@ public:
     ~FindOutlineByNameDialog();
 
     QString getSearchedString() const { return lineEdit->text(); }
+    void setSearchedString(const QString& text) {lineEdit->setText(text); }
     QCheckBox* getCaseCheckbox() const { return caseCheckBox; }
+    QCheckBox* getKeywordsCheckbox() const { return keywordsCheckBox; }
     QPushButton* getFindButton() const { return findButton; }
     Thing* getChoice() const { return choice; }
 
-    void show(std::vector<Thing*>& outlines, std::vector<std::string>* customizedNames=nullptr, bool showScopeCheck=false);
+    void show(
+            std::vector<Thing*>& outlines,
+            std::vector<std::string>* customizedNames=nullptr,
+            bool showScopeCheck=false,
+            bool init=true);
 
 signals:
     void searchFinished();

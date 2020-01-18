@@ -1,7 +1,7 @@
 /*
  csv_outline_representation.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -51,7 +51,7 @@ void CsvOutlineRepresentation::to(const vector<Outline*>& os, const m8r::File& s
                     to(o, out);
                 }
             } catch (const std::ofstream::failure& e) {
-                cerr << "Error: unable to open/write file " << sourceFile.getName();
+                cerr << "Error: unable to open/write file " << sourceFile.getName() << " " << e.what();
             }
 
             out.close();

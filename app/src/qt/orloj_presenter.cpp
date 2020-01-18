@@ -1,7 +1,7 @@
 /*
  outline_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -27,16 +27,17 @@ namespace m8r {
 OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
                                OrlojView* view,
                                Mind* mind)
-    : activeFacet{OrlojPresenterFacets::FACET_NONE}
+    : activeFacet{OrlojPresenterFacets::FACET_NONE},
+      skipEditNoteCheck{false}
 {
     this->mainPresenter = mainPresenter;
     this->view = view;
     this->mind = mind;
 
+    this->dashboardPresenter = new DashboardPresenter(view->getDashboard(), this);
     this->organizerPresenter = new OrganizerPresenter(view->getOrganizer(), this);
     this->tagCloudPresenter = new TagsTablePresenter(view->getTagCloud(), mainPresenter->getHtmlRepresentation());
     this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
-    this->notesTablePresenter = new NotesTablePresenter(view->getNotesTable());
     this->recentNotesTablePresenter = new RecentNotesTablePresenter(view->getRecentNotesTable(), mainPresenter->getHtmlRepresentation());
     this->outlineViewPresenter = new OutlineViewPresenter(view->getOutlineView(), this);
     this->outlineHeaderViewPresenter = new OutlineHeaderViewPresenter(view->getOutlineHeaderView(), this);
@@ -51,82 +52,144 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
      * and widgets - it can show/hide what's needed and then pass control to children.
      */
 
-    // click Outline in Outlines to view Outline detail
+    // hit enter in Outlines to view Outline detail
     QObject::connect(
-        view->getOutlinesTable()->selectionModel(),
-        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+        view->getOutlinesTable(),
+        SIGNAL(signalShowSelectedOutline()),
         this,
-        SLOT(slotShowOutline(const QItemSelection&, const QItemSelection&)));
+        SLOT(slotShowSelectedOutline()));
+    QObject::connect(
+        view->getDashboard()->getOutlinesDashboardlet(),
+        SIGNAL(signalShowSelectedOutline()),
+        this,
+        SLOT(slotShowSelectedOutline()));
+    QObject::connect(
+        view->getOutlinesTable(),
+        SIGNAL(signalFindOutlineByName()),
+        mainPresenter,
+        SLOT(doActionFindOutlineByName()));
     // click Outline tree to view Note
     QObject::connect(
         view->getOutlineView()->getOutlineTree()->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowNote(const QItemSelection&, const QItemSelection&)));
-    // click FTS result to view Note
+    // hit ENTER in recent Os/Ns to view O/N detail
     QObject::connect(
-        view->getNotesTable()->selectionModel(),
+        view->getRecentNotesTable(),
+        SIGNAL(signalShowSelectedRecentNote()),
+        this,
+        SLOT(slotShowSelectedRecentNote()));
+    QObject::connect(
+        view->getDashboard()->getRecentDashboardlet(),
+        SIGNAL(signalShowSelectedRecentNote()),
+        this,
+        SLOT(slotShowSelectedRecentNote()));
+    // hit ENTER in Tags to view Recall by Tag detail
+    QObject::connect(
+        view->getTagCloud(),
+        SIGNAL(signalShowDialogForTag()),
+        this,
+        SLOT(slotShowSelectedTagRecallDialog()));
+    QObject::connect(
+        view->getDashboard()->getTagsDashboardlet(),
+        SIGNAL(signalShowDialogForTag()),
+        this,
+        SLOT(slotShowSelectedTagRecallDialog()));
+    // navigator
+    QObject::connect(
+        navigatorPresenter, SIGNAL(signalOutlineSelected(Outline*)),
+        this, SLOT(slotShowOutlineNavigator(Outline*)));
+    QObject::connect(
+        navigatorPresenter, SIGNAL(signalNoteSelected(Note*)),
+        this, SLOT(slotShowNoteNavigator(Note*)));
+    QObject::connect(
+        navigatorPresenter, SIGNAL(signalThingSelected()),
+        this, SLOT(slotShowNavigator()));
+    // editor getting data from the backend
+    QObject::connect(
+        view->getNoteEdit()->getNoteEditor(), SIGNAL(signalGetLinksForPattern(const QString&)),
+        this, SLOT(slotGetLinksForPattern(const QString&)));
+    QObject::connect(
+        this, SIGNAL(signalLinksForPattern(const QString&, std::vector<std::string>*)),
+        view->getNoteEdit()->getNoteEditor(), SLOT(slotPerformLinkCompletion(const QString&, std::vector<std::string>*)));
+    QObject::connect(
+        view->getOutlineHeaderEdit()->getHeaderEditor(), SIGNAL(signalGetLinksForPattern(const QString&)),
+        this, SLOT(slotGetLinksForPattern(const QString&)));
+    QObject::connect(
+        this, SIGNAL(signalLinksForHeaderPattern(const QString&, std::vector<std::string>*)),
+        view->getOutlineHeaderEdit()->getHeaderEditor(), SLOT(slotPerformLinkCompletion(const QString&, std::vector<std::string>*)));
+
+    /*
+     * ... former click-to-view BEFORE switch to keyboard-only
+     */
+
+    /*
+    // click Outline in Outlines to view Outline detail
+    QObject::connect(
+        view->getOutlinesTable()->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
-        SLOT(slotShowNoteAsFtsResult(const QItemSelection&, const QItemSelection&)));
-    // click Tag in Tags to view Recall by Tag detail
-    QObject::connect(
-        view->getRecentNotesTable()->selectionModel(),
-        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-        this,
-        SLOT(slotShowRecentNote(const QItemSelection&, const QItemSelection&)));
+        SLOT(slotShowOutline(const QItemSelection&, const QItemSelection&)));
     // click Tag in Tags to view Recall by Tag detail
     QObject::connect(
         view->getTagCloud()->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
         this,
         SLOT(slotShowTagRecallDialog(const QItemSelection&, const QItemSelection&)));
-    // navigator
     QObject::connect(
-        navigatorPresenter, SIGNAL(outlineSelectedSignal(Outline*)),
-        this, SLOT(slotShowOutlineNavigator(Outline*)));
+        view->getDashboard()->getTagsDashboardlet()->selectionModel(),
+        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+        this,
+        SLOT(slotShowTagRecallDialog(const QItemSelection&, const QItemSelection&)));
+    // click recent N/O in recent Os/Ns to view O/N detail
     QObject::connect(
-        navigatorPresenter, SIGNAL(noteSelectedSignal(Note*)),
-        this, SLOT(slotShowNoteNavigator(Note*)));
+        view->getRecentNotesTable()->selectionModel(),
+        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+        this,
+        SLOT(slotShowRecentNote(const QItemSelection&, const QItemSelection&)));
     QObject::connect(
-        navigatorPresenter, SIGNAL(thingSelectedSignal()),
-        this, SLOT(slotShowNavigator()));
+        view->getDashboard()->getRecentDashboardlet()->selectionModel(),
+        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+        this,
+        SLOT(slotShowRecentNote(const QItemSelection&, const QItemSelection&)));
+    */
 }
 
 int dialogSaveOrCancel()
 {
-    QMessageBox msgBox{};
-    msgBox.setText("Do you want to save changes to the edited Note?");
-    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Save);
-    return msgBox.exec();
+    // l10n by moving this dialog either to Qt class OR view class
+    QMessageBox msgBox{
+        QMessageBox::Question,
+        "Save Note",
+        "Do you want to save Note changes?"};
+    QPushButton* discard = msgBox.addButton("&Discard changes", QMessageBox::DestructiveRole);
+    QPushButton* autosave = msgBox.addButton("Do not ask && &autosave", QMessageBox::AcceptRole);
+    QPushButton* edit = msgBox.addButton("Continue &editation", QMessageBox::YesRole);
+    QPushButton* save = msgBox.addButton("&Save", QMessageBox::ActionRole);
+    msgBox.exec();
+
+    QAbstractButton* choosen = msgBox.clickedButton();
+    if(discard == choosen) {
+        return OrlojButtonRoles::DISCARD_ROLE;
+    } else if(autosave == choosen) {
+        return OrlojButtonRoles::AUTOSAVE_ROLE;
+    } else if(edit == choosen) {
+        return OrlojButtonRoles::EDIT_ROLE;
+    } else if(save == choosen) {
+        return OrlojButtonRoles::SAVE_ROLE;
+    }
+
+    return OrlojButtonRoles::INVALID_ROLE;
 }
 
 void OrlojPresenter::onFacetChange(const OrlojPresenterFacets targetFacet) const
 {
     MF_DEBUG("Facet CHANGE: " << activeFacet << " > " << targetFacet << endl);
 
-    if(activeFacet == OrlojPresenterFacets::FACET_EDIT_NOTE) {
-        if(targetFacet != OrlojPresenterFacets::FACET_VIEW_NOTE) {
-            int decision = dialogSaveOrCancel();
-            if(decision==QMessageBox::Save) {
-                  noteEditPresenter->slotSaveNote();
-            }
-            return;
-        }
-    } else if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
-        if(targetFacet != OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER) {
-            int decision = dialogSaveOrCancel();
-            if(decision==QMessageBox::Save) {
-                outlineHeaderEditPresenter->slotSaveOutlineHeader();
-            }
-            return;
-        }
-    } if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
+    if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
         navigatorPresenter->cleanupBeforeHide();
-    }
-
-    if(targetFacet == OrlojPresenterFacets::FACET_VIEW_OUTLINE) {
+    } else if(targetFacet == OrlojPresenterFacets::FACET_VIEW_OUTLINE) {
         outlineViewPresenter->getOutlineTree()->focus();
     }
 }
@@ -136,6 +199,26 @@ void OrlojPresenter::showFacetRecentNotes(const vector<Note*>& notes)
     setFacet(OrlojPresenterFacets::FACET_RECENT_NOTES);
     recentNotesTablePresenter->refresh(notes);
     view->showFacetRecentNotes();
+    mainPresenter->getStatusBar()->showMindStatistics();
+}
+
+void OrlojPresenter::showFacetDashboard() {
+    setFacet(OrlojPresenterFacets::FACET_DASHBOARD);
+
+    vector<Note*> allNotes{};
+    mind->getAllNotes(allNotes, true, true);
+    map<const Tag*,int> allTags{};
+    mind->getTagsCardinality(allTags);
+
+    dashboardPresenter->refresh(
+        mind->getOutlines(),
+        allNotes,
+        allTags,
+        mind->remind().getOutlineMarkdownsSize(),
+        mind->getStatistics()
+    );
+    view->showFacetDashboard();
+    mainPresenter->getMainMenu()->showFacetDashboard();
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
@@ -199,14 +282,6 @@ void OrlojPresenter::slotShowOutlines()
     showFacetOutlineList(mind->getOutlines());
 }
 
-void OrlojPresenter::showFacetFtsResult(vector<Note*>* result)
-{
-    setFacet(OrlojPresenterFacets::FACET_FTS_RESULT);
-    notesTablePresenter->refresh(result);
-    mainPresenter->getMainMenu()->showFacetOutlineList();
-    view->showFacetFtsResult();
-}
-
 void OrlojPresenter::showFacetOutline(Outline* outline)
 {
     if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
@@ -226,6 +301,43 @@ void OrlojPresenter::showFacetOutline(Outline* outline)
     mainPresenter->getMainMenu()->showFacetOutlineView();
 
     mainPresenter->getStatusBar()->showInfo(QString("Notebook '%1'   %2").arg(outline->getName().c_str()).arg(outline->getKey().c_str()));
+}
+
+void OrlojPresenter::slotShowSelectedOutline()
+{
+    if(activeFacet!=OrlojPresenterFacets::FACET_ORGANIZER
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_TAG_CLOUD
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_NAVIGATOR
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_RECENT_NOTES
+      )
+    {
+        int row;
+        if(activeFacet==OrlojPresenterFacets::FACET_DASHBOARD) {
+            row = dashboardPresenter->getOutlinesPresenter()->getCurrentRow();
+        } else {
+            row = outlinesTablePresenter->getCurrentRow();
+        }
+        if(row != OutlinesTablePresenter::NO_ROW) {
+            QStandardItem* item;
+            if(activeFacet==OrlojPresenterFacets::FACET_DASHBOARD) {
+                item = dashboardPresenter->getOutlinesPresenter()->getModel()->item(row);
+            } else {
+                item = outlinesTablePresenter->getModel()->item(row);
+            }
+            // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
+            if(item) {
+                Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
+                showFacetOutline(outline);
+                return;
+            } else {
+                mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Notebook not found!")));
+            }
+        }
+        mainPresenter->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
+    }
 }
 
 void OrlojPresenter::slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected)
@@ -267,15 +379,63 @@ void OrlojPresenter::showFacetTagCloud()
     mainPresenter->getStatusBar()->showInfo(QString("%2 Tags").arg(tags.size()));
 }
 
+void OrlojPresenter::slotShowSelectedTagRecallDialog()
+{
+    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD
+         ||
+       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
+      )
+    {
+        int row;
+        if(activeFacet==OrlojPresenterFacets::FACET_DASHBOARD) {
+            row = dashboardPresenter->getTagsPresenter()->getCurrentRow();
+        } else {
+            row = tagCloudPresenter->getCurrentRow();
+        }
+        if(row != OutlinesTablePresenter::NO_ROW) {
+            QStandardItem* item;
+            switch(activeFacet) {
+            case OrlojPresenterFacets::FACET_TAG_CLOUD:
+                item = tagCloudPresenter->getModel()->item(row);
+                break;
+            case OrlojPresenterFacets::FACET_DASHBOARD:
+                item = dashboardPresenter->getTagsPresenter()->getModel()->item(row);
+                break;
+            default:
+                item = nullptr;
+            }
+            // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
+            if(item) {
+                const Tag* tag = item->data(Qt::UserRole + 1).value<const Tag*>();
+                mainPresenter->doTriggerFindNoteByTag(tag);
+            } else {
+                mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Tag not found!")));
+            }
+        } else {
+            mainPresenter->getStatusBar()->showInfo(QString(tr("No Tag selected!")));
+        }
+    }
+}
+
 void OrlojPresenter::slotShowTagRecallDialog(const QItemSelection& selected, const QItemSelection& deselected)
 {
     Q_UNUSED(deselected);
 
-    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD) {
+    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD
+         ||
+       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
+      )
+    {
         QModelIndexList indices = selected.indexes();
         if(indices.size()) {
             const QModelIndex& index = indices.at(0);
-            QStandardItem* item = tagCloudPresenter->getModel()->itemFromIndex(index);
+            QStandardItem* item;
+            // TODO if 2 switch
+            if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD) {
+                item = tagCloudPresenter->getModel()->itemFromIndex(index);
+            } else {
+                item = dashboardPresenter->getTagsPresenter()->getModel()->itemFromIndex(index);
+            }
             // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
             const Tag* tag = item->data(Qt::UserRole + 1).value<const Tag*>();
             mainPresenter->doTriggerFindNoteByTag(tag);
@@ -318,19 +478,14 @@ void OrlojPresenter::showFacetNoteView(Note* note)
 
 void OrlojPresenter::showFacetNoteEdit(Note* note)
 {
-    // if there is FTS result table on the left, then switch to O view facet & N view w/ Note selection, otherwise edit
-    if(notesTablePresenter->getView()->isVisible()) {
-        showFacetNoteView(note);
-    } else {
-        if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
-            outlineViewPresenter->refresh(note->getOutline());
-        }
-
-        noteEditPresenter->setNote(note);
-        view->showFacetNoteEdit();
-        setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
-        mainPresenter->getMainMenu()->showFacetNoteEdit();
+    if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
+        outlineViewPresenter->refresh(note->getOutline());
     }
+
+    noteEditPresenter->setNote(note);
+    view->showFacetNoteEdit();
+    setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
+    mainPresenter->getMainMenu()->showFacetNoteEdit();
 }
 
 void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
@@ -345,26 +500,13 @@ void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
     mainPresenter->getMainMenu()->showFacetNoteEdit();
 }
 
-bool OrlojPresenter::toggleCurrentFacetHoisting()
+bool OrlojPresenter::applyFacetHoisting()
 {
-    if(view->isHoistView()) {
+    if(Configuration::getInstance().isUiHoistedMode()) {
         if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
              ||
-           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)) {
-            view->showFacetOutlineHeaderView();
-        } else if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
-            view->showFacetNoteView();
-        } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-            view->showFacetNoteEdit();
-        } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-            view->showFacetOutlineHeaderEdit();
-        }
-
-        return false;
-    } else {
-        if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
-             ||
-           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)) {
+           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER))
+        {
             view->showFacetHoistedOutlineHeaderView();
         } else if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
             view->showFacetHoistedNoteView();
@@ -372,6 +514,21 @@ bool OrlojPresenter::toggleCurrentFacetHoisting()
             view->showFacetHoistedNoteEdit();
         } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
             view->showFacetHoistedOutlineHeaderEdit();
+        }
+
+        return false;
+    } else {
+        if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+             ||
+           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER))
+        {
+            view->showFacetOutlineHeaderView();
+        } else if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
+            view->showFacetNoteView();
+        } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            view->showFacetNoteEdit();
+        } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            view->showFacetOutlineHeaderEdit();
         }
 
         return true;
@@ -399,15 +556,89 @@ void OrlojPresenter::fromNoteEditBackToView(Note* note)
     showFacetNoteView();
 }
 
+bool OrlojPresenter::avoidDataLossOnNoteEdit()
+{
+    // avoid lost of N editor changes
+    if(skipEditNoteCheck) {
+        skipEditNoteCheck=false;
+        if(activeFacet == OrlojPresenterFacets::FACET_EDIT_NOTE) {
+            noteEditPresenter->getView()->getNoteEditor()->setFocus();
+        } else if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
+            outlineHeaderEditPresenter->getView()->getHeaderEditor()->setFocus();
+        }
+        return true;
+    } else {
+        if(activeFacet == OrlojPresenterFacets::FACET_EDIT_NOTE) {
+            int decision{};
+            if(Configuration::getInstance().isUiEditorAutosave()) {
+                decision = OrlojButtonRoles::SAVE_ROLE;
+            } else {
+                decision = dialogSaveOrCancel();
+            }
+
+            switch(decision) {
+            case OrlojButtonRoles::DISCARD_ROLE:
+                // do nothing
+                break;
+            case OrlojButtonRoles::AUTOSAVE_ROLE:
+                Configuration::getInstance().setUiEditorAutosave(true);
+                mainPresenter->getConfigRepresentation()->save(Configuration::getInstance());
+                MF_FALL_THROUGH;
+            case OrlojButtonRoles::SAVE_ROLE:
+                noteEditPresenter->slotSaveNote();
+                break;
+            case OrlojButtonRoles::EDIT_ROLE:
+                MF_FALL_THROUGH;
+            default:
+                // rollback ~ select previous N and continue
+                // ugly & stupid hack to disable signal emitted on N selection in O tree
+                skipEditNoteCheck=true;
+                outlineViewPresenter->selectRowByNote(noteEditPresenter->getCurrentNote());
+                return true;
+            }
+        } else if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
+            int decision = dialogSaveOrCancel();
+            switch(decision) {
+            case OrlojButtonRoles::DISCARD_ROLE:
+                // do nothing
+                break;
+            case OrlojButtonRoles::AUTOSAVE_ROLE:
+                Configuration::getInstance().setUiEditorAutosave(true);
+                mainPresenter->getConfigRepresentation()->save(Configuration::getInstance());
+                MF_FALL_THROUGH;
+            case OrlojButtonRoles::SAVE_ROLE:
+                outlineHeaderEditPresenter->slotSaveOutlineHeader();
+                break;
+            case OrlojButtonRoles::EDIT_ROLE:
+                MF_FALL_THROUGH;
+            default:
+                // rollback ~ select previous N and continue
+                // ugly & stupid hack to disable signal emitted on N selection in O tree
+                skipEditNoteCheck=true;
+                outlineViewPresenter->getOutlineTree()->clearSelection();
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 void OrlojPresenter::slotShowOutlineHeader()
 {
+    if(avoidDataLossOnNoteEdit()) return;
+
+    // refresh header
     outlineHeaderViewPresenter->refresh(outlineViewPresenter->getCurrentOutline());
+    setFacet(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER);
     view->showFacetOutlineHeaderView();
 }
 
 void OrlojPresenter::slotShowNote(const QItemSelection& selected, const QItemSelection& deselected)
 {
     Q_UNUSED(deselected);
+
+    if(avoidDataLossOnNoteEdit()) return;
 
     QModelIndexList indices = selected.indexes();
     if(indices.size()) {
@@ -450,24 +681,83 @@ void OrlojPresenter::slotShowOutlineNavigator(Outline* outline)
     }
 }
 
-void OrlojPresenter::slotShowNoteAsFtsResult(const QItemSelection& selected, const QItemSelection& deselected)
+/**
+ * @brief Return MD links for given O/N name prefix (pattern).
+ *
+ * For example 'Mi' > { '[MindForger](mf/projects.md#mind-forger)', '[Middle](mf/places.md#middle) }'
+ */
+void OrlojPresenter::slotGetLinksForPattern(const QString& pattern)
 {
-    Q_UNUSED(deselected);
+    vector<Thing*> allThings{};
+    vector<string> thingsNames = vector<string>{};
+    string prefix{pattern.toStdString()};
 
-    QModelIndexList indices = selected.indexes();
-    if(indices.size()) {
-        const QModelIndex& index = indices.at(0);
-        QStandardItem* item = notesTablePresenter->getModel()->itemFromIndex(index);
-        // TODO make my role constant
-        Note* note = item->data(Qt::UserRole + 1).value<Note*>();
-
-        noteViewPresenter->refresh(note);
-        view->showFacetFtsResultDetail();
-        mainPresenter->getMainMenu()->showFacetOutlineList();
-        mainPresenter->getStatusBar()->showInfo(QString(note->getName().c_str()));
-        setFacet(OrlojPresenterFacets::FACET_FTS_VIEW_NOTE);
+    Outline* currentOutline;
+    if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
+        currentOutline = outlineHeaderEditPresenter->getCurrentOutline();
     } else {
-        mainPresenter->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
+        currentOutline = noteEditPresenter->getCurrentNote()->getOutline();
+    }
+
+    mind->getAllThings(
+        allThings,
+        &thingsNames,
+        &prefix,
+        ThingNameSerialization::LINK,
+        currentOutline);
+
+    vector<string>* links = new vector<string>{};
+    *links = thingsNames;
+
+    if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
+        emit signalLinksForHeaderPattern(pattern, links);
+    } else {
+        emit signalLinksForPattern(pattern, links);
+    }
+}
+
+void OrlojPresenter::slotShowSelectedRecentNote()
+{
+    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES
+         ||
+       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
+      )
+    {
+        int row;
+        if(activeFacet==OrlojPresenterFacets::FACET_DASHBOARD) {
+            row = dashboardPresenter->getRecentNotesPresenter()->getCurrentRow();
+        } else {
+            row = recentNotesTablePresenter->getCurrentRow();
+        }
+        if(row != RecentNotesTablePresenter::NO_ROW) {
+            QStandardItem* item;
+            switch(activeFacet) {
+            case OrlojPresenterFacets::FACET_RECENT_NOTES:
+                item = recentNotesTablePresenter->getModel()->item(row);
+                break;
+            case OrlojPresenterFacets::FACET_DASHBOARD:
+                item = dashboardPresenter->getRecentNotesPresenter()->getModel()->item(row);
+                break;
+            default:
+                item = nullptr;
+            }
+            // TODO make my role constant
+            if(item) {
+                const Note* note = item->data(Qt::UserRole + 1).value<const Note*>();
+
+                showFacetOutline(note->getOutline());
+                if(note->getType() != note->getOutline()->getOutlineDescriptorNoteType()) {
+                    // IMPROVE make this more efficient
+                    showFacetNoteView();
+                    getOutlineView()->selectRowByNote(note);
+                }
+                mainPresenter->getStatusBar()->showInfo(QString(tr("Note "))+QString::fromStdString(note->getName()));
+            } else {
+                mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Notebook/Note not found!")));
+            }
+        } else {
+            mainPresenter->getStatusBar()->showInfo(QString(tr("No Note selected!")));
+        }
     }
 }
 
@@ -475,11 +765,20 @@ void OrlojPresenter::slotShowRecentNote(const QItemSelection& selected, const QI
 {
     Q_UNUSED(deselected);
 
-    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES) {
+    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES
+         ||
+       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
+      )
+    {
         QModelIndexList indices = selected.indexes();
         if(indices.size()) {
             const QModelIndex& index = indices.at(0);
-            QStandardItem* item = recentNotesTablePresenter->getModel()->itemFromIndex(index);
+            QStandardItem* item;
+            if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES) {
+                item = recentNotesTablePresenter->getModel()->itemFromIndex(index);
+            } else {
+                item = dashboardPresenter->getRecentNotesPresenter()->getModel()->itemFromIndex(index);
+            }
             // TODO make my role constant
             const Note* note = item->data(Qt::UserRole + 1).value<const Note*>();
 

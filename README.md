@@ -1,4 +1,4 @@
-# Thinking Notebook & Markdown IDE
+# Thinking Notebook & Markdown Editor
 
 [![Travis CI](https://travis-ci.org/dvorka/mindforger.svg?branch=master)](https://travis-ci.org/dvorka/mindforger)
 [![Appveyor CI](https://ci.appveyor.com/api/projects/status/iemop280po84od66?svg=true)](https://ci.appveyor.com/project/dvorka/mindforger)
@@ -17,10 +17,10 @@ Do you know how are they mutually **related** when you read or write them? No?
 
 https://www.mindforger.com
 
-## Markdown IDE
+## Markdown Editor
 ![MindForger](http://www.mindforger.com/github/github-markdown-ide.png?)
 
-MindForger is open, free, well performing Markdown IDE which respects your privacy and enables security. 
+MindForger is open, free, well performing Markdown editor which respects your privacy and enables security. 
 
 ## Thinking Notebook
 ![MindForger](http://www.mindforger.com/github/github-thinking-notebook.png)
@@ -31,20 +31,20 @@ MindForger is actually more than an editor or IDE - it's human mind inspired per
 Install:
 
 * [Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#windows-)
+* [macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#macos-)
 * [Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#ubuntu-)
 * [Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#debian-)
 * [Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#fedora-)
 * [Arch Linux](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#arch-linux-)
-* [macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#macos-)
 * [WSL](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#wsl-)
 
 Build:
 
 * [build on Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-windows-)
+* [build on macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-macos-)
 * [build on Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-ubuntu-)
 * [build on Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-debian-)
 * [build on Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-fedora-)
-* [build on macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-macos-)
 * [build on WSL](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-wsl-)
 
 Docker:
@@ -68,7 +68,7 @@ Read:
 Check `man mindforger`
 
 ## In the News
-Read about MindForger on [FOSSMint](https://www.fossmint.com/mindforger-notebook-and-markdown-ide/), [Fedora Magazine](https://fedoramagazine.org/4-try-copr-december-2018/) and [MOONGIFT.jp](https://www.moongift.jp/2018/12/mindforger-markdown%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9/).
+Read about MindForger on [FOSSMint](https://www.fossmint.com/mindforger-notebook-and-markdown-ide/), [Fedora Magazine](https://fedoramagazine.org/4-try-copr-december-2018/), [UbuntuPIT](https://www.ubuntupit.com/mindforger-a-privacy-focused-thinking-notebook-and-markdown-ide-for-linux/), [AppImageHub](https://www.appimagehub.com/p/1257573/), [root.cz](https://www.root.cz/clanky/softwarova-sklizen-19-9-2018/) and [MOONGIFT.jp](https://www.moongift.jp/2018/12/mindforger-markdown%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9/).
 
 ## Bugs and Feature Requests
 https://github.com/dvorka/mindforger/issues

@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
-#export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
+export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
 #export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
 
 # benchmarks
@@ -29,10 +29,16 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
 # tests
-export OPTION_TEST="AutolinkingTestCase.*"
+#export OPTION_TEST="AutolinkingCmarkTestCase.*"
+#export OPTION_TEST="AutolinkingCmarkTestCase.CmarkAstRowWalker"
+#export OPTION_TEST="AutolinkingCmarkTestCase.CmarkAstBlockTransformer"
+#export OPTION_TEST="AutolinkingCmarkTestCase.NanoRepo"
+#export OPTION_TEST="AutolinkingCmarkTestCase.MicroRepo"
+#export OPTION_TEST="AutolinkingTestCase.*"
 #export OPTION_TEST="AutolinkingTestCase.CrashAndBurn"
 #export OPTION_TEST="FtsTestCase.*"
-#export OPTION_TEST="TrieTestCase.AddAndSearch"
+#export OPTION_TEST="TrieTestCase.*"
+#export OPTION_TEST="TrieTestCase.AddAndRemove"
 #export OPTION_TEST="FileGearTestCase.DeepCopy"
 #export OPTION_TEST="FileGearTestCase.DeepProductionCopy"
 #export OPTION_TEST="FileGearTestCase.DeepCopyToExisting"
@@ -45,7 +51,7 @@ export OPTION_TEST="AutolinkingTestCase.*"
 #export OPTION_TEST="AiNlpTestCase.Stemmer"
 #export OPTION_TEST="HtmlTestCase.*"
 #export OPTION_TEST="HtmlTestCase.Outline"
-#export OPTION_TEST="HtmlTestCase.TaskList"
+export OPTION_TEST="HtmlTestCase.TaskList"
 #export OPTION_TEST="HtmlTestCase.NoteLinks"
 #export OPTION_TEST="MarkdownParserTestCase.*"
 #export OPTION_TEST="MarkdownParserTestCase.Bug622Loop64kLinesOverflow"

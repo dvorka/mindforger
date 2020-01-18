@@ -1,7 +1,7 @@
 /*
  configuration.h     M8r configuration management
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -67,6 +67,14 @@ constexpr const auto UI_THEME_DARK = "dark";
 constexpr const auto UI_THEME_LIGHT = "light";
 constexpr const auto UI_THEME_BLACK = "black";
 constexpr const auto UI_THEME_NATIVE = "native";
+
+constexpr const auto START_TO_DASHBOARD = "dashboard";
+constexpr const auto START_TO_OUTLINES = "outlines";
+constexpr const auto START_TO_TAGS = "tags";
+constexpr const auto START_TO_RECENT = "recent";
+constexpr const auto START_TO_EISENHOWER_MATRIX = "Eisehower";
+constexpr const auto START_TO_HOME_OUTLINE = "home";
+constexpr const auto DEFAULT_STARTUP_VIEW = START_TO_OUTLINES;
 
 constexpr const auto UI_HTML_THEME_CSS_LIGHT = "qrc:/html-css/light.css";
 constexpr const auto UI_HTML_THEME_CSS_LIGHT_COMPACT = "qrc:/html-css/light-compact.css";
@@ -149,8 +157,10 @@ public:
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
 
     static constexpr const bool UI_DEFAULT_NERD_TARGET_AUDIENCE = true;
+    static const std::string DEFAULT_STARTUP_VIEW_NAME;
     static const std::string DEFAULT_UI_THEME_NAME;
     static constexpr const bool DEFAULT_UI_SHOW_TOOLBAR = true;
+    static constexpr const bool DEFAULT_UI_EXPERT_MODE = false;
     static constexpr const bool DEFAULT_UI_NERD_MENU = false;
     static const std::string DEFAULT_UI_HTML_CSS_THEME;
     static const int DEFAULT_UI_HTML_ZOOM = 100;
@@ -160,6 +170,7 @@ public:
     static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOCOMPLETE = true;
     static constexpr const bool DEFAULT_EDITOR_TABS_AS_SPACES = true;
+    static constexpr const bool DEFAULT_EDITOR_AUTOSAVE = false;
     static constexpr const bool DEFAULT_MD_QUOTE_SECTIONS = true;
     static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_MD_MATH = false;
@@ -208,6 +219,7 @@ private:
 
     // GUI configuration
     bool uiNerdTargetAudience;
+    std::string startupView;
     std::string uiThemeName;
     std::string uiHtmlCssPath; // use a CSS (size>0) or render raw MD (size==0)
     int uiHtmlZoom;
@@ -223,7 +235,9 @@ private:
     JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
     int navigatorMaxNodes;
     bool uiEditorTabsAsSpaces;
+    bool uiEditorAutosave;
     bool uiShowToolbar;
+    bool uiExpertMode;
     bool uiDistractionFreeMode; // fullscreen, no split, hidden toolbar + menu
     bool uiHoistedMode; // no split
 
@@ -291,9 +305,7 @@ public:
     std::vector<std::string>& getTagsScope() { return tagsScope; }
     bool isSaveReadsMetadata() const { return saveReadsMetadata; }
     void setSaveReadsMetadata(bool saveReadsMetadata) { this->saveReadsMetadata=saveReadsMetadata; }
-    // TODO force disabling autolinking
-    // bool isAutolinking() const { return autolinking; }
-    bool isAutolinking() const { return false; }
+    bool isAutolinking() const { return autolinking; }
     void setAutolinking(bool autolinking) { this->autolinking=autolinking; }
     bool isAutolinkingColonSplit() const { return autolinkingColonSplit; }
     void setAutolinkingColonSplit(bool autolinkingColonSplit) { this->autolinkingColonSplit=autolinkingColonSplit; }
@@ -330,6 +342,8 @@ public:
     int getUiFontPointSize() const { return uiFontPointSize; }
     bool isUiNerdTargetAudience() const { return uiNerdTargetAudience; }
     void setUiNerdTargetAudience(bool nerdAudience) { uiNerdTargetAudience = nerdAudience; }
+    const std::string& getStartupView() const { return startupView; }
+    void setStartupView(const std::string view) { startupView = view; }
     const std::string& getUiThemeName() const { return uiThemeName; }
     void setUiThemeName(const std::string theme) { uiThemeName = theme; }
     bool isUiEditorShowLineNumbers() const { return uiEditorLineNumbers; }
@@ -353,7 +367,7 @@ public:
     void incUiHtmlZoom() { if(uiHtmlZoom<500) uiHtmlZoom += 10; }
     void decUiHtmlZoom() { if(uiHtmlZoom>40) uiHtmlZoom-= 10; }
     float getUiHtmlZoomFactor() const {
-        return (float)uiHtmlZoom/100.;
+        return static_cast<float>(uiHtmlZoom)/100.f;
     }
     /**
      * @brief Set HTML zoom of Markdown viewer.
@@ -394,9 +408,13 @@ public:
     void setNavigatorMaxNodes(int navigatorMaxNodes) { this->navigatorMaxNodes = navigatorMaxNodes; }
     bool isUiEditorTabsAsSpaces() const { return uiEditorTabsAsSpaces; }
     void setUiEditorTabsAsSpaces(bool uiEditorTabsAsSpaces){ this->uiEditorTabsAsSpaces = uiEditorTabsAsSpaces; }
+    bool isUiEditorAutosave() const { return uiEditorAutosave; }
+    void setUiEditorAutosave(bool uiEditorAutosave){ this->uiEditorAutosave = uiEditorAutosave; }
 
     bool isUiShowToolbar() const { return uiShowToolbar; }
     void setUiShowToolbar(bool showToolbar){ this->uiShowToolbar = showToolbar; }
+    bool isUiExpertMode() const { return uiExpertMode; }
+    void setUiExpertMode(bool uiExpertMode){ this->uiExpertMode= uiExpertMode; }
     bool isUiDistractionFreeMode() const { return uiDistractionFreeMode; }
     void setUiDistractionFreeMode(bool distractionFreeMode){ this->uiDistractionFreeMode = distractionFreeMode; }
     bool isUiHoistedMode() const { return uiHoistedMode; }

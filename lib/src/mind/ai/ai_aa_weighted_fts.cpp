@@ -1,7 +1,7 @@
 /*
  ai_aa_weighted_fts.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -183,17 +183,17 @@ void AiAaWeightedFts::assessNotesInOutline(Outline* outline, vector<pair<Note*,f
         // case INSENSITIVE
 
         // O matches
-        float oScore = 0;
+        float oScore = 0.f;
         string s{};
         // O.title matches
         stringToLower(outline->getName(), s);
         for(auto& regexp:regexps) {
             if(s.find(regexp)!=string::npos) {
-                oScore += 100.;
+                oScore += 100.f;
             }
         }
         // O.description matches
-        float matches = 0.;
+        float matches = 0.f;
         for(string* d:outline->getDescription()) {
             if(d) {
                 s.clear();
@@ -208,17 +208,17 @@ void AiAaWeightedFts::assessNotesInOutline(Outline* outline, vector<pair<Note*,f
                 }
             }
         }
-        if(matches) {
-            oScore += 10.*matches;
+        if(matches != 0.f) {
+            oScore += 10.f*matches;
             result->push_back(std::make_pair(outline->getOutlineDescriptorAsNote(),oScore));
         }
 
         // O's score will contribute to N's score as a bonus > normalize it
         //MF_DEBUG(" AA.FTS O>N '" << outline->getName() << "' ~ " << oScore << endl);
-        oScore /= 10.;
+        oScore /= 10.f;
 
         // O's N matches
-        float nScore = 0;
+        float nScore = 0.f;
         for(Note* note:outline->getNotes()) {
             nScore = oScore;
             // time scope @ AI
@@ -230,7 +230,7 @@ void AiAaWeightedFts::assessNotesInOutline(Outline* outline, vector<pair<Note*,f
             stringToLower(note->getName(), s);
             for(auto& regexp:regexps) {
                 if(s.find(regexp)!=string::npos) {
-                    nScore += 100.;
+                    nScore += 100.f;
                 }
             }
             // N.description matches
@@ -249,8 +249,8 @@ void AiAaWeightedFts::assessNotesInOutline(Outline* outline, vector<pair<Note*,f
                     }
                 }
             }
-            if(nScore || matches) {
-                nScore += 10.*matches;
+            if(nScore!=0.f || matches!=0.f) {
+                nScore += 10.f*matches;
                 result->push_back(std::make_pair(note,nScore));
                 //MF_DEBUG(" AA.FTS > N '" << note->getName() << "' ~ " << nScore << endl);
             }
@@ -302,7 +302,7 @@ std::shared_future<bool> AiAaWeightedFts::getAssociatedNotes(
         // recalculate % (and debug)
         MF_DEBUG("Leaderboard of '" << words << "' word(s)[" << associations.size() << "]:" << endl);
         if(associations.size()) {
-            float pc = associations[0].second / 100.;
+            float pc = associations[0].second / 100.f;
 #ifdef DO_MF_DEBUG
             int i=0;
 #endif

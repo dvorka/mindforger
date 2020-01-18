@@ -1,7 +1,7 @@
 /*
  string-utils.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -54,12 +54,12 @@ bool stringEndsWith(const string& s, const string& suffix)
 bool stringEndsWith(const char* s, const char* suffix)
 {
     if (!s || !suffix) {
-        return 0;
+        return false;
     }
     size_t sLng = strlen(s);
     size_t suffixLng = strlen(suffix);
     if (suffixLng >  sLng) {
-        return 0;
+        return false;
     }
     return strncmp(s + sLng - suffixLng, suffix, suffixLng) == 0;
 }
@@ -67,12 +67,12 @@ bool stringEndsWith(const char* s, const char* suffix)
 bool stringEndsWith(const string& s, const char* suffix)
 {
     if (!s.c_str() || !suffix) {
-        return 0;
+        return false;
     }
     size_t sLng = strlen(s.c_str());
     size_t suffixLng = strlen(suffix);
     if (suffixLng >  sLng) {
-        return 0;
+        return false;
     }
     return strncmp(s.c_str() + sLng - suffixLng, suffix, suffixLng) == 0;
 }
@@ -101,16 +101,17 @@ char** stringSplit(
     UNUSED_ARG(resultIncSize);
 
     char **result;
-    result = new char*[resultBaseSize];
+    result = new char*[static_cast<unsigned int>(resultBaseSize)];
     const char delim[2] = { delimiter, 0};
 
     if(result) {
         size_t i  = 0;
-        char *offset{};
-        char *copy = strdup(s);
+        char* offset{};
 #ifdef _WIN32
+        char* copy = _strdup(s);
         char* token = strtok_s(copy, delim, &offset);
 #else
+        char* copy = strdup(s);
         char* token = strtok_r(copy, delim, &offset);
 #endif
         while(token) {
@@ -124,12 +125,12 @@ char** stringSplit(
             }
             i++;
 #ifdef _WIN32
-        token = strtok_s(0, delim, &offset);
+        token = strtok_s(nullptr, delim, &offset);
 #else
-        token = strtok_r(0, delim, &offset);
+        token = strtok_r(nullptr, delim, &offset);
 #endif
             // TODO implement auto increase result
-            assert(i<=resultBaseSize);
+            assert(i <= static_cast<size_t>(resultBaseSize));
         }
         result[i] = nullptr;
         free(copy);
@@ -147,7 +148,7 @@ char** stringSplit(
  */
 string normalizeToNcName(string name, char quoteChar) {
     string result = name;
-    if(result.size()) {
+    if(!result.empty()) {
         if(!isalnum(result[0], locale())) {
             result.insert(0, 1, '_');
         }
@@ -162,7 +163,7 @@ string normalizeToNcName(string name, char quoteChar) {
 
 void toString(const std::vector<std::string*>& ss, std::string& os)
 {
-    if(ss.size()) {
+    if(!ss.empty()) {
         for(std::string *s:ss) {
             os += *s;
             os += "\n";

@@ -1,7 +1,7 @@
 /*
  outline_tree_model.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -143,7 +143,7 @@ void OutlineTreeModel::refresh(Note* note, int row, bool set)
 
         item(row,2)->setText(QString::number(note->getReads()));
         item(row,3)->setText(QString::number(note->getRevision()));
-        item(row,4)->setText(QString::fromStdString(note->getModifiedPretty().c_str()));
+        item(row,4)->setText(QString::fromStdString(note->getModifiedPretty()));
 
         QModelIndex from = createIndex(row, 0, item(row,0));
         QModelIndex to = createIndex(row, 3, item(row,3));

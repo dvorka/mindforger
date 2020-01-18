@@ -34,10 +34,10 @@
 	</Company_Info>
 	<Program_Info>
 		<Program_Name>MindForger</Program_Name>
-		<Program_Version>1.49.2</Program_Version>
-		<Program_Release_Month>03</Program_Release_Month>
-		<Program_Release_Day>09</Program_Release_Day>
-		<Program_Release_Year>2019</Program_Release_Year>
+		<Program_Version>1.50.0</Program_Version>
+		<Program_Release_Month>01</Program_Release_Month>
+		<Program_Release_Day>01</Program_Release_Day>
+		<Program_Release_Year>2020</Program_Release_Year>
 		<Program_Cost_Dollars />
 		<Program_Cost_Other_Code />
 		<Program_Cost_Other />
@@ -70,10 +70,10 @@
 		<English>
 			<Keywords>notebook, knowledge, ai, markdown, ide, ml, nlp</Keywords>
 			<Char_Desc_45>Thinking note taking application.</Char_Desc_45>
-			<Char_Desc_80>MindForger is open, free, well performing thinking note taking application with Markdown IDE which respects your privacy.</Char_Desc_80>
+			<Char_Desc_80>MindForger is open, free, well performing thinking note taking application with Markdown editor which respects your privacy.</Char_Desc_80>
 			<Char_Desc_250>Are you drowning in information, but starving for knowledge?   Where do you keep your private remarks like ideas, personal plans, exam preparation notes, gift tips, how-tos, dreams, business visions, finance strategies, meeting minutes and auto coach</Char_Desc_250>
 			<Char_Desc_450>Are you drowning in information, but starving for knowledge?   Where do you keep your private remarks like ideas, personal plans, exam preparation notes, gift tips, how-tos, dreams, business visions, finance strategies, meeting minutes and auto coaching notes? Loads of documents, sketches and remarks spread around the file system, cloud, web and Post-it notes? Are you affraid of your knowledge privacy? Are you able to find particular remarks once</Char_Desc_450>
-			<Char_Desc_2000>Are you drowning in information, but starving for knowledge?   Where do you keep your private remarks like ideas, personal plans, exam preparation notes, gift tips, how-tos, dreams, business visions, finance strategies, meeting minutes and auto coaching notes? Loads of documents, sketches and remarks spread around the file system, cloud, web and Post-it notes? Are you affraid of your knowledge privacy? Are you able to find particular remarks once you create them? Do you know how are the remarks mutually related when you browse, read or write them? No?  MindForger is open, free, well performing thinking note taking application with Markdown IDE which respects your privacy.</Char_Desc_2000>
+			<Char_Desc_2000>Are you drowning in information, but starving for knowledge?   Where do you keep your private remarks like ideas, personal plans, exam preparation notes, gift tips, how-tos, dreams, business visions, finance strategies, meeting minutes and auto coaching notes? Loads of documents, sketches and remarks spread around the file system, cloud, web and Post-it notes? Are you affraid of your knowledge privacy? Are you able to find particular remarks once you create them? Do you know how are the remarks mutually related when you browse, read or write them? No?  MindForger is open, free, well performing thinking note taking application with Markdown editor which respects your privacy.</Char_Desc_2000>
 		</English>
 	</Program_Descriptions>
 	<Web_Info>

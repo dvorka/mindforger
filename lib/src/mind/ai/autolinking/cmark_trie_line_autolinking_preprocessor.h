@@ -1,7 +1,7 @@
 /*
- aho_corasick_autolinking_preprocessor.h     MindForger thinking notebook
+ cmark_trie_line_autolinking_preprocessor.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -16,22 +16,33 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_AHO_CORASICK_AUTOLINKING_PREPROCESSOR_H
-#define M8R_AHO_CORASICK_AUTOLINKING_PREPROCESSOR_H
+#ifndef M8R_CMARK_TRIE_LINE_AUTOLINKING_PREPROCESSOR_H
+#define M8R_CMARK_TRIE_LINE_AUTOLINKING_PREPROCESSOR_H
+
+#ifdef MF_MD_2_HTML_CMARK
+  #include <cmark-gfm.h>
+#endif
 
 #include "../autolinking_preprocessor.h"
-#include "../../../gear/trie.h"
-#include "../../mind.h"
+
+/*
+ * DEPRECATED
+ *
+ * This line-based autolinker has been deprecated by block-based autlinker.
+ */
 
 namespace m8r {
 
 /**
- * @brief Aho-Corasick search based autolinking pre-processor.
+ * @brief cmark-gfm AST and Trie autolinking pre-processor.
  *
- * This autolinking implementation has two goals:
+ * Autolinking implementation which aims to be both precise (cmark-gfm AST)
+ * and fast (Trie).
  *
- *  - performance
+ * Ideal autolinking implementation has two goals:
+ *
  *  - correctness
+ *  - performance
  *
  * It aims to be FAST, therefore it's based on Aho-Corasick search
  * structure when autolinking lines.
@@ -75,21 +86,46 @@ namespace m8r {
  *     is opened (think Wikipedia cross-road page) and user can choose which link
  *     to use.
  */
-class AhoCorasickAutolinkingPreprocessor : public AutolinkingPreprocessor
+class CmarkTrieLineAutolinkingPreprocessor : public AutolinkingPreprocessor
 {
-    Mind& mind;
-    std::vector<Thing*> things;
+protected:
+    // allowed text MD snippets words trailing chars (\\... added newly)
+    static const std::string TRAILING_CHARS;
 
 public:
-    explicit AhoCorasickAutolinkingPreprocessor(Mind& mind);
-    AhoCorasickAutolinkingPreprocessor(const AhoCorasickAutolinkingPreprocessor&) = delete;
-    AhoCorasickAutolinkingPreprocessor(const AhoCorasickAutolinkingPreprocessor&&) = delete;
-    AhoCorasickAutolinkingPreprocessor &operator=(const AhoCorasickAutolinkingPreprocessor&) = delete;
-    AhoCorasickAutolinkingPreprocessor &operator=(const AhoCorasickAutolinkingPreprocessor&&) = delete;
-    virtual ~AhoCorasickAutolinkingPreprocessor();
+    explicit CmarkTrieLineAutolinkingPreprocessor(Mind& mind);
+    CmarkTrieLineAutolinkingPreprocessor(const CmarkTrieLineAutolinkingPreprocessor&) = delete;
+    CmarkTrieLineAutolinkingPreprocessor(const CmarkTrieLineAutolinkingPreprocessor&&) = delete;
+    CmarkTrieLineAutolinkingPreprocessor &operator=(const CmarkTrieLineAutolinkingPreprocessor&) = delete;
+    CmarkTrieLineAutolinkingPreprocessor &operator=(const CmarkTrieLineAutolinkingPreprocessor&&) = delete;
+    ~CmarkTrieLineAutolinkingPreprocessor();
 
-    void rebuildSearchStructure();
+    /**
+     * @brief Autolink Markdown.
+     *
+     * Provide previous Thing's name to update indices.
+     */
+    virtual void process(const std::vector<std::string*>& md, std::string& amd) override;
+
+private:
+    virtual void processLineByLine(const std::vector<std::string*>& md, std::string& amd);
+
+    void processProtectedBlock(std::vector<std::string*>& block, std::string& amd);
+    void processAndAutolinkBlock(std::vector<std::string*>& block, std::string& amd);
+
+    /**
+     * @brief Parse MD line to AST to get MD snippets which are safe for links injection.
+     */
+    void parseMarkdownLine(const std::string* md, std::string* amd);
+
+    /**
+     * @brief Inject Os and Ns links to given Markdown snippet.
+     */
+    void injectThingsLinks(cmark_node* node);
+
+    cmark_node* addAstLinkNode(cmark_node* origNode, cmark_node* node, std::string& pre);
+    cmark_node* addAstTxtNode(cmark_node* origNode, cmark_node* node, std::string& at);
 };
 
 }
-#endif // M8R_AHO_CORASICK_AUTOLINKING_PREPROCESSOR_H
+#endif // M8R_CMARK_TRIE_LINE_AUTOLINKING_PREPROCESSOR_H

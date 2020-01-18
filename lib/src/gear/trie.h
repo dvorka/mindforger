@@ -1,7 +1,7 @@
 /*
  trie.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -22,6 +22,8 @@
 #include <vector>
 #include <string>
 
+#include "../debug.h"
+
 namespace m8r {
 
 /**
@@ -37,19 +39,23 @@ private:
 
     private:
         char mContent;
-        bool mMarker;
+        // >1 it is word with given references, 0 it's char inside a word
+        int mRefCount;
         std::vector<Node*> mChildren;
 
     public:
         explicit Node() {
             mContent = ' ';
-            mMarker = false;
+            mRefCount = 0;
         }
         ~Node() {}
         char content() const { return mContent; }
         void setContent(char c) { mContent = c; }
-        bool wordMarker() const { return mMarker; }
-        void setWordMarker() { mMarker = true; }
+        bool wordMarker() const { return mRefCount>0; }
+        int refCount() const { return mRefCount; }
+        int decRefCount() { if(mRefCount > 0) { mRefCount--; }; return mRefCount; }
+        void setRefCount(int refCount) { mRefCount=refCount; }
+        void setWordMarker() { ++mRefCount; }
         void appendChild(Node* child) { mChildren.push_back(child); }
         std::vector<Node*> children() const { return mChildren; }
 
@@ -76,11 +82,27 @@ public:
 
     bool empty() const { return root->children().empty(); }
 
-    void addWord(std::string s);
+    void addWord(const std::string& s);
+    /**
+     * @brief Is the word known to trie?
+     */
     bool findWord(std::string& s) const;
-    void deleteWord(std::string s);
+    /**
+     * @brief Find longest word which is prefix of s.
+     */
+    bool findLongestPrefixWord(const std::string& s, std::string& r) const;
+    /**
+     * @brief Remove word from trie.
+     */
+    bool removeWord(const std::string& s, bool decRefCountOnly=false);
+
+    /**
+     * @brief Print trie (backgracking).
+     */
+    int print() const;
 
 private:
+    int resursivePrint(std::string prefix, const Node* n, int count) const;
     void destroy(Node* n);
 };
 

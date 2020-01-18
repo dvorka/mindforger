@@ -1,7 +1,7 @@
 /*
  datetime_utils.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ namespace m8r {
 
 time_t datetimeNow()
 {
-    return time(0);
+    return time(nullptr);
 }
 
 /**
@@ -96,12 +96,12 @@ std::string datetimeToPrettyHtml(const time_t ts)
 }
 
 constexpr time_t SIX_DAYS = 60 * 60 * 24 * 6;
-std::string datetimeToPrettyHtml(const time_t* ts)
+std::string datetimeToPrettyHtml(const time_t* seconds)
 {
     time_t now;
     time(&now);
 
-    tm tsS = *localtime(ts);
+    tm tsS = *localtime(seconds);
     tm* nowS = localtime(&now);
 
     Pretty pretty = Pretty::LONG_TIME_AGO;
@@ -110,14 +110,14 @@ std::string datetimeToPrettyHtml(const time_t* ts)
         if(tsS.tm_mon==nowS->tm_mon && tsS.tm_mday==nowS->tm_mday) {
             pretty = Pretty::TODAY;
         } else {
-            if(now-*ts < SIX_DAYS && tsS.tm_wday<=nowS->tm_wday) {
+            if(now-*seconds < SIX_DAYS && tsS.tm_wday<=nowS->tm_wday) {
                 pretty = Pretty::THIS_WEEK;
             } else {
                 pretty = Pretty::THIS_YEAR;
             }
         }
     } else {
-        if(now-*ts < SIX_DAYS) {
+        if(now-*seconds < SIX_DAYS) {
             pretty = Pretty::THIS_WEEK;
         }
     }
@@ -148,7 +148,7 @@ std::string datetimeToPrettyHtml(const time_t* ts)
     std::string result;
     result =
             "<div title='" +
-            to_stringl(*ts) +
+            to_stringl(*seconds) +
             "' style='background-color: #" +
             string(background) +
             "; color: #ffffff; text-align: center; white-space: pre;'>" + "&nbsp;&nbsp;" +

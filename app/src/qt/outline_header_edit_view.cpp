@@ -1,7 +1,7 @@
 /*
  outline_header_edit_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -24,15 +24,17 @@ OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
     : QWidget(parent)
 {
     // widgets
-    editNameAndButtonsPanel = new EditNameAndButtonsPanel{EditNameAndButtonsPanel::Mode::OUTLINE_MODE, this};
+    topNamePanel = new EditNamePanel{MfWidgetMode::OUTLINE_MODE, this};
     noteEditor = new NoteEditorView{this};
+    bottomButtonsPanel = new EditButtonsPanel{MfWidgetMode::OUTLINE_MODE, this};
 
     // assembly
     QVBoxLayout* layout = new QVBoxLayout{this};
     // ensure that wont be extra space around member widgets
     layout->setContentsMargins(QMargins(0,0,0,0));
-    layout->addWidget(editNameAndButtonsPanel);
+    layout->addWidget(topNamePanel);
     layout->addWidget(noteEditor);
+    layout->addWidget(bottomButtonsPanel);
     setLayout(layout);
 
     // signals
@@ -49,10 +51,10 @@ OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
         QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_S)),
         this, SLOT(slotSaveOutlineHeader()));
     QObject::connect(
-        editNameAndButtonsPanel->getRememberButton(), SIGNAL(clicked()),
+        bottomButtonsPanel->getRememberButton(), SIGNAL(clicked()),
         this, SLOT(slotSaveAndCloseEditor()));
     QObject::connect(
-        editNameAndButtonsPanel->getCancelButton(), SIGNAL(clicked()),
+        bottomButtonsPanel->getCancelButton(), SIGNAL(clicked()),
         this, SLOT(slotCloseEditor()));
 }
 
@@ -62,7 +64,7 @@ OutlineHeaderEditView::~OutlineHeaderEditView()
 
 void OutlineHeaderEditView::slotOpenOutlineHeaderPropertiesEditor()
 {
-    editNameAndButtonsPanel->handleShowOutlineHeaderEditDialog();
+    bottomButtonsPanel->handleShowOutlineHeaderEditDialog();
 }
 
 void OutlineHeaderEditView::slotSaveAndCloseEditor()

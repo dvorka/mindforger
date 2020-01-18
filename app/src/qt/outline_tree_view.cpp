@@ -1,7 +1,7 @@
 /*
  outline_tree_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
             signalFromOutlineTreeToOutlines();
         }
     } else {
-        // TODO up/down/promote/demote note tree changes
+        // up/down/promote/demote note tree changes
         if(event->modifiers() & Qt::ControlModifier){
             if(event->modifiers() & Qt::ShiftModifier) {
                 switch(event->key()) {
@@ -60,6 +60,7 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
                 }
             } else {
                 switch(event->key()) {
+#ifndef __APPLE__
                 case Qt::Key_Up:
                     emit signalChangeUp();
                     break;
@@ -72,6 +73,7 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
                 case Qt::Key_Right:
                     emit signalChangeDemote();
                     break;
+#endif
                 case Qt::Key_E:
                     emit signalOutlineOrNoteEdit();
                     break;
@@ -87,6 +89,9 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
         } else {
             // up/down note tree navigation
             switch(event->key()) {
+            case Qt::Key_Escape:
+                emit signalOutlineShow();
+                break;
             case Qt::Key_Up:
                 emit signalSelectPreviousRow();
                 break;
@@ -94,16 +99,28 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
                 emit signalSelectNextRow();
                 break;
             case Qt::Key_Return:
+            case Qt::Key_Right:
                 emit signalEdit();
                 break;
             case Qt::Key_Delete:
                 emit signalForget();
+                break;
+            case Qt::Key_Left:
+                signalFromOutlineTreeToOutlines();
                 break;
             }
         }
     }
 
     QWidget::keyPressEvent(event);
+}
+
+void OutlineTreeView::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    Q_UNUSED(event);
+
+    // double click to N opens it
+    emit signalEdit();
 }
 
 void OutlineTreeView::resizeEvent(QResizeEvent* event)

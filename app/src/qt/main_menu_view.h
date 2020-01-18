@@ -1,7 +1,7 @@
 /*
  main_menu.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -78,7 +78,7 @@ public:
     QAction* actionExit;
 
     // menu: Find
-    QAction* actionFts;
+    QAction* actionFindFts;
     QAction* actionFindOutlineByName;
     QAction* actionFindNoteByName;
     QAction* actionFindOutlineByTag;
@@ -91,6 +91,7 @@ public:
 #endif
 
     // menu: View
+    QAction* actionViewDashboard;
     QAction* actionViewHome;
     QAction* actionViewOrganizer;
     QAction* actionViewOutlines;
@@ -98,11 +99,7 @@ public:
     QAction* actionViewNavigator;
     QAction* actionViewDwell;
     QAction* actionViewStencils;
-#ifdef DO_MF_DEBUG
     QAction* actionViewCli;
-#else
-    QShortcut* cliShortcut;
-#endif
     QAction* actionViewRecentNotes;
     QAction* actionViewLimbo;
     QAction* actionViewDistractionFree;
@@ -129,7 +126,7 @@ public:
 
     // menu: Note
     QAction* actionNoteNew;
-    QAction* actionNoteHoist;
+    QAction* actionViewHoist;
     QAction* actionNoteEdit;
     QAction* actionNoteSave;
     QAction* actionNoteClose;
@@ -148,11 +145,14 @@ public:
     QAction* actionNoteImport;
 
     // menu: Edit
+    QAction* actionEditFind;
+    QAction* actionEditFindNext;
     QAction* actionEditUndo;
     QAction* actionEditRedo;
     QAction* actionEditCut;
     QAction* actionEditCopy;
     QAction* actionEditPaste;
+    QAction* actionEditWordWrap;
     QAction* actionEditComplete;
 
     // menu: Format

@@ -1,7 +1,7 @@
 /*
  recent_notes_table_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ namespace m8r {
 using namespace std;
 
 RecentNotesTablePresenter::RecentNotesTablePresenter(RecentNotesTableView* view, HtmlOutlineRepresentation* htmlRepresentation)
-{
+{       
     this->view = view;
     this->model = new RecentNotesTableModel(this, htmlRepresentation);
     this->view->setModel(this->model);
@@ -52,6 +52,19 @@ void RecentNotesTablePresenter::refresh(const vector<Note*>& notes)
 
     // order by read timestamp
     view->sortByColumn(4, Qt::SortOrder::DescendingOrder);
+
+    this->view->setCurrentIndex(this->model->index(0, 0));
+    this->view->setFocus();
+}
+
+
+int RecentNotesTablePresenter::getCurrentRow() const
+{
+    QModelIndexList indexes = view->selectionModel()->selection().indexes();
+    for(int i=0; i<indexes.count(); i++) {
+        return indexes.at(i).row();
+    }
+    return NO_ROW;
 }
 
 } // m8r namespace

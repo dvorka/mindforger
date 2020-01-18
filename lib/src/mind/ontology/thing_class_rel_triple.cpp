@@ -1,7 +1,7 @@
 /*
  thing.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ Thing::Thing()
 
 Thing::Thing(const string name)
 {
-    this->name = name;
+    setName(name);
 }
 
 Thing::~Thing()
@@ -49,11 +49,18 @@ void Thing::autolinkName()
         auto pos = name.find(":");
         if(pos != string::npos) {
             autolinkingAlias = name.substr(0, pos);
+            autolinkingAbbr = autolinkingAlias;
+            autolinkingName = name.substr(pos+1);
+            autolinkingName = stringLeftTrim(autolinkingName);
         } else {
             autolinkingAlias = name;
+            autolinkingName = name;
+            autolinkingAbbr.clear();
         }
     } else {
         autolinkingAlias.clear();
+        autolinkingName.clear();
+        autolinkingAbbr.clear();
     }
 }
 

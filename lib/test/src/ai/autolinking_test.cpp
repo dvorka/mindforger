@@ -1,7 +1,7 @@
 /*
- nlp_test.cpp     MindForger application test
+ autolinkin_test.cpp     MindForger application test
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@ extern void toString(const std::vector<std::string*> ss, std::string& os);
 
 using namespace std;
 
+#ifndef MF_MD_2_HTML_CMARK
 
 TEST(AutolinkingTestCase, NaiveAutolinker)
 {
@@ -127,3 +128,5 @@ TEST(AutolinkingTestCase, NaiveCrashAndBurn)
         delete s;
     }
 }
+
+#endif

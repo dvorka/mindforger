@@ -1,7 +1,7 @@
 /*
  note_editor_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -63,6 +63,12 @@ private:
     bool tabsAsSpaces;
     int tabWidth;
 
+    // find
+    QString lastFindString;
+    bool lastFindReverse;
+    bool lastCaseSensitive;
+    bool lastWholeWords;
+
     const StatusBarView* statusBar;
 
 public:
@@ -81,6 +87,14 @@ public:
     void removeSelectedText() { textCursor().removeSelectedText(); }
     void insertMarkdownText(const QString &text, bool newLine=true, int offset=0);
 
+    // drag & drop
+    void dropEvent(QDropEvent* event) override;
+    void dragMoveEvent(QDragMoveEvent* event) override;
+
+    // search
+    void findString(const QString s, bool reverse, bool casesens, bool words);
+    void findStringAgain();
+
     // associations
     QString getRelevantWords() const;
     void clearHitCounter() { hitCounter=0; }
@@ -94,13 +108,18 @@ private:
     void setEditorTabWidth(int tabWidth);
     void setEditorTabsAsSpacesPolicy(bool tabsAsSpaces);
     void setEditorFont(std::string fontName);
-    void performCompletion(const QString& completionPrefix);
+    const QString getCompletionPrefix();
+    bool performTextCompletion();
+    void performTextCompletion(const QString& completionPrefix);
+    void performLinkCompletion(const QString& completionPrefix);
     bool handledCompletedAndSelected(QKeyEvent* event);
     void populateModel(const QString& completionPrefix);
 private slots:
     void insertTab();
     void insertCompletion(const QString& completion, bool singleWord=false);
-    bool performCompletion();
+    void slotStartLinkCompletion();
+public slots:
+    void slotPerformLinkCompletion(const QString& completionPrefix, std::vector<std::string>* links);
 
     // line & line number
 public:
@@ -118,6 +137,10 @@ public:
     void setShowLineNumbers(bool show);
 public slots:
     void slotConfigurationUpdated();
+
+signals:
+    void signalDnDropUrl(QString);
+    void signalGetLinksForPattern(const QString&);
 };
 
 } // m8r namespace

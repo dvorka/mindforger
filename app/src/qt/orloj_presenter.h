@@ -1,7 +1,7 @@
 /*
  outline_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
 #include <QtWidgets>
 
 #include "orloj_view.h"
+#include "dashboard_presenter.h"
 #include "organizer_presenter.h"
 #include "tags_table_presenter.h"
 #include "recent_notes_table_presenter.h"
@@ -42,6 +43,7 @@
 
 namespace m8r {
 
+class DashboardPresenter;
 class OrganizerPresenter;
 class TagCloudPresenter;
 class NotePresenter;
@@ -50,6 +52,7 @@ class NoteEditPresenter;
 class OutlineHeaderViewPresenter;
 class OutlineHeaderEditPresenter;
 class OutlineViewPresenter;
+class OrlojView;
 
 enum OrlojPresenterFacets {
     FACET_NONE,                 // 0
@@ -59,12 +62,20 @@ enum OrlojPresenterFacets {
     FACET_EDIT_OUTLINE_HEADER,  // 4
     FACET_VIEW_NOTE,            // 5
     FACET_EDIT_NOTE,            // 6
-    FACET_FTS_RESULT,           // 7
-    FACET_FTS_VIEW_NOTE,        // 8
-    FACET_ORGANIZER,            // 9
-    FACET_TAG_CLOUD,            // 10
-    FACET_RECENT_NOTES,         // 11
-    FACET_NAVIGATOR             // 12
+    FACET_FTS_VIEW_NOTE,        // 7
+    FACET_ORGANIZER,            // 8
+    FACET_TAG_CLOUD,            // 9
+    FACET_RECENT_NOTES,         // 10
+    FACET_NAVIGATOR,            // 11
+    FACET_DASHBOARD             // 12
+};
+
+enum OrlojButtonRoles {
+    AUTOSAVE_ROLE,
+    DISCARD_ROLE,
+    EDIT_ROLE,
+    SAVE_ROLE,
+    INVALID_ROLE = -1
 };
 
 class OrlojPresenter : public QObject
@@ -79,10 +90,10 @@ private:
     OrlojView* view;
     Mind* mind;
 
+    DashboardPresenter* dashboardPresenter;
     OrganizerPresenter* organizerPresenter;
     TagsTablePresenter* tagCloudPresenter;
     OutlinesTablePresenter* outlinesTablePresenter;
-    NotesTablePresenter* notesTablePresenter;
     RecentNotesTablePresenter* recentNotesTablePresenter;
     OutlineViewPresenter* outlineViewPresenter;
     OutlineHeaderViewPresenter* outlineHeaderViewPresenter;
@@ -90,6 +101,8 @@ private:
     NoteViewPresenter* noteViewPresenter;
     NoteEditPresenter* noteEditPresenter;
     NavigatorPresenter* navigatorPresenter;
+
+    bool skipEditNoteCheck;
 
 public:
     OrlojPresenter(MainWindowPresenter* mainPresenter,
@@ -99,11 +112,11 @@ public:
     Mind* getMind() { return mind; }
 
     OrlojView* getView() const { return view; }
+    DashboardPresenter* getDashboard() const { return dashboardPresenter; }
     OrganizerPresenter* getOrganizer() const { return organizerPresenter; }
     NavigatorPresenter* getNavigator() const { return navigatorPresenter; }
-    MainWindowPresenter* getMainWindow() const { return mainPresenter; }
+    MainWindowPresenter* getMainPresenter() const { return mainPresenter; }
     OutlinesTablePresenter* getOutlinesTable() const { return outlinesTablePresenter; }
-    NotesTablePresenter* getNotesTable() const { return notesTablePresenter; }
     RecentNotesTablePresenter* getRecentNotesTable() const { return recentNotesTablePresenter; }
     OutlineViewPresenter* getOutlineView() const { return outlineViewPresenter; }
     OutlineHeaderViewPresenter* getOutlineHeaderView() const { return outlineHeaderViewPresenter; }
@@ -112,14 +125,20 @@ public:
     NoteEditPresenter* getNoteEdit() const { return noteEditPresenter; }
 
     bool isFacetActive(const OrlojPresenterFacets facet) const { return activeFacet==facet;}
-    bool isFacetActiveOutlineManagement() {
+    bool isFacetActiveOutlineOrNoteView() {
         if(isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
              ||
            isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
              ||
-           isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
-             ||
-           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+           isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    bool isFacetActiveOutlineOrNoteEdit() {
+        if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
              ||
            isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER))
         {
@@ -140,6 +159,7 @@ public:
      */
     void onFacetChange(const OrlojPresenterFacets targetFacet) const;
 
+    void showFacetDashboard();
     void showFacetOrganizer(const std::vector<Outline*>& outlines);
     void showFacetTagCloud();
     void showFacetOutlineList(const std::vector<Outline*>& outlines);
@@ -152,22 +172,32 @@ public:
     void showFacetNoteEdit(Note* note);
     void showFacetOutlineHeaderEdit(Outline* outline);
 
-    bool toggleCurrentFacetHoisting();
+    bool applyFacetHoisting();
 
     void fromOutlineHeaderEditBackToView(Outline* outline);
     void fromNoteEditBackToView(Note* note);
 
 public slots:
     void slotShowOutlines();
+    void slotShowSelectedOutline();
     void slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected);
     void slotShowOutlineHeader();
     void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
-    void slotShowNoteAsFtsResult(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotShowSelectedRecentNote();
     void slotShowRecentNote(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotShowSelectedTagRecallDialog();
     void slotShowTagRecallDialog(const QItemSelection& selected, const QItemSelection& deselected);
     void slotShowNavigator();
     void slotShowNoteNavigator(Note* note);
     void slotShowOutlineNavigator(Outline* outline);
+    void slotGetLinksForPattern(const QString& pattern);
+
+signals:
+    void signalLinksForPattern(const QString& completionPrefix, std::vector<std::string>* links);
+    void signalLinksForHeaderPattern(const QString& completionPrefix, std::vector<std::string>* links);
+
+private:
+    bool avoidDataLossOnNoteEdit();
 };
 
 } // m8r namespace

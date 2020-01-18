@@ -1,7 +1,7 @@
 /*
  main_window_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 
 namespace m8r {
 
+class OrlojView;
 class MainWindowPresenter;
 class MainToolbarView;
 class CliAndBreadcrumbsView;
@@ -56,7 +57,6 @@ private:
     QWidget* centralWidget;
     QVBoxLayout *centralLayout;
 
-    CliAndBreadcrumbsView* cliView;
     OrlojView* orlojView;
     MainToolbarView* toolBarView;
     StatusBarView* statusBarView;
@@ -71,7 +71,7 @@ public:
 
     QMenuBar* getMenuBar() const { return menuBar(); }
     MainToolbarView* getToolBar() const { return toolBarView; }
-    CliAndBreadcrumbsView* getCli() const { return cliView; }
+    CliAndBreadcrumbsView* getCli() const;
     OrlojView* getOrloj() const { return orlojView; }
     StatusBarView* getStatusBar() const { return statusBarView; }
 

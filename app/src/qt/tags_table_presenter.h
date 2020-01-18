@@ -1,7 +1,7 @@
 /*
  tags_table_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -37,6 +37,9 @@ class TagsTablePresenter : public QObject
     TagsTableModel* model;
 
 public:
+    static const int NO_ROW = -1;
+
+public:
     explicit TagsTablePresenter(TagsTableView* view, HtmlOutlineRepresentation* htmlRepresentation);
     TagsTablePresenter(const TagsTablePresenter&) = delete;
     TagsTablePresenter(const TagsTablePresenter&&) = delete;
@@ -48,6 +51,7 @@ public:
     TagsTableView* getView() const { return view; }
 
     void refresh(const std::map<const Tag*, int>& tags);
+    int getCurrentRow() const;
 };
 
 }

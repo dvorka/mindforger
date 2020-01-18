@@ -1,7 +1,7 @@
 /*
  lang-utils.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -26,5 +26,11 @@
 
 // ROUNDF(3.141592, 100) = 3.14
 #define ROUND_FLOAT(f, c) (((float)((int)((f) * (c))) / (c)))
+
+#if defined(__GNUC__) && __GNUC__ >= 7
+ #define MF_FALL_THROUGH __attribute__ ((fallthrough))
+#else
+ #define MF_FALL_THROUGH ((void)0)
+#endif /* __GNUC__ >= 7 */
 
 #endif // M8R_LANG_UTILS_H

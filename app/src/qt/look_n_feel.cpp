@@ -1,7 +1,7 @@
 /*
  look_n_feel.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -105,9 +105,8 @@ void LookAndFeels::setDarkTheme()
 
     // IMPROVE tooltips via palette does NOT work > CSS is used instead
     mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #008c00; border: 1px solid white; }");
-    menuStylesheet = QString("QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px;}");
-    //palette.setColor(QPalette::ToolTipBase, Qt::blue);
-    //palette.setColor(QPalette::ToolTipText, Qt::red);
+
+    menuStylesheet = QString("QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px; }");
 }
 
 /*
@@ -154,10 +153,11 @@ void LookAndFeels::setLightTheme()
     palette.setColor(QPalette::Highlight, QColor(237, 118, 77));
     palette.setColor(QPalette::HighlightedText, Qt::white);
 
-    mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #ED764D; border: 1px solid white; }");
-    menuStylesheet = QString("QMenu::separator { background: #ccc; height: 1px; margin-left: 10px; margin-right: 10px;}");
-
     mindforgerApplication->setPalette(palette);
+
+    mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #ED764D; border: 1px solid white; }");
+
+    menuStylesheet = QString("QMenu::separator { background: #ccc; height: 1px; margin-left: 10px; margin-right: 10px; }");
 }
 
 void LookAndFeels::setBlackTheme()
@@ -220,7 +220,8 @@ void LookAndFeels::setBlackTheme()
 
     // IMPROVE tooltips are set in two ways
     mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #000000; border: 1px solid white; }");
-    menuStylesheet = QString("QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px;}");
+
+    menuStylesheet = QString("QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px; }");
 }
 
 void LookAndFeels::setNativeTheme()

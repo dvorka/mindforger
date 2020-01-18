@@ -1,7 +1,7 @@
 /*
  fts_dialog.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -21,6 +21,10 @@
 
 #include <QtWidgets>
 
+#include "../notes_table_view.h"
+#include "../notes_table_presenter.h"
+
+#include "../../lib/src/model/resource_types.h"
 #include "../../lib/src/model/outline.h"
 
 namespace m8r {
@@ -32,13 +36,26 @@ class FtsDialog : public QDialog
 private:
     QLineEdit* lineEdit;
     QCheckBox* caseCheckBox;
+    QGroupBox* editorSearchModeChecks;
     QGroupBox* searchModeRadios;
+    QCheckBox* editorIgnoreCheck;
+    QCheckBox* editorWordCheck;
+    QCheckBox* editorReverseCheck;
     QRadioButton* exactRadio;
     QRadioButton* ignoreRadio;
     QRadioButton* regexRadio;
-    QPushButton* findButton;
+
+    QSplitter* resultSplit;
+    NotesTableView* resultListingView;
+    // IMPROVE move to FTS dialog presenter
+    NotesTablePresenter* resultListingPresenter;
+    QTextBrowser* resultPreview;
+
+    QPushButton* openButton;
+    QPushButton* searchButton;
     QPushButton* closeButton;
 
+    ResourceType scopeType;
     Outline* scope;
 
 protected:
@@ -55,21 +72,54 @@ public:
     FtsDialog &operator=(const FtsDialog&&) = delete;
     ~FtsDialog();
 
-    void clearScope() { scope = nullptr; }
-    void setScope(Outline* o) { scope = o; }
+    QPushButton* getSearchButton() const { return searchButton; }
+    QPushButton* getOpenButton() const { return openButton; }
+    NotesTableView* getResultListingView() const { return resultListingView; }
+    NotesTablePresenter* getResultListingPresenter() const { return resultListingPresenter; }
+    QTextBrowser* getResultPreview() const { return resultPreview; }
+
+    void setScope(ResourceType t, Outline* s);
+    void clearScope() {
+        setScope(ResourceType::REPOSITORY, nullptr);
+    }
+    ResourceType getScopeType() { return scopeType; }
     Outline* getScope() { return scope; }
 
     QString getSearchPattern() const { return lineEdit->text(); }
+    void setSearchPattern(const QString& searchPattern) { lineEdit->setText(searchPattern); }
+    bool isEditorCaseInsensitive() const { return editorIgnoreCheck->isChecked(); }
+    bool isEditorWords() const { return editorWordCheck->isChecked(); }
+    bool isEditorReverse() const { return editorReverseCheck->isChecked(); }
     bool isExact() const { return exactRadio->isChecked(); }
     bool isCaseInsensitive() const { return ignoreRadio->isChecked(); }
     bool isRegex() const { return regexRadio->isChecked(); }
-    QPushButton* getFindButton() const { return findButton; }
 
-    void show() { lineEdit->selectAll(); lineEdit->setFocus(); QDialog::show(); }
+    void show() {
+        lineEdit->selectAll();
+        lineEdit->setFocus();
+        QDialog::show();
+    }
+    void hideResult() {
+        resultSplit->setVisible(false);
+        setSizeSearchFacet();
+    }
+    void updateFacet();
+
+    void refreshResult(std::vector<Note*>* notes);
+    int getResultSize() const { return resultListingPresenter->getModel()->rowCount(); }
+
+private:
+    void setSizeSearchFacet();
+    void setSizeResultFacet();
+
+signals:
+    void signalNoteScopeSearch();
+
+public slots:
+    void searchAndAddPatternToHistory();
 
 private slots:
-    void enableFindButton(const QString &text);
-    void addExpressionToHistory();
+    void enableSearchButton(const QString &text);
 };
 
 }

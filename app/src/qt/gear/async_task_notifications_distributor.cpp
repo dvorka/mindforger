@@ -1,7 +1,7 @@
 /*
  async_task_notifications_distributor.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -101,11 +101,11 @@ void AsyncTaskNotificationsDistributor::run()
                         emit refreshLeaderboardByValue(associations);
                     } else if(mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
                         // think as you WRITE: detect inactivity AND refresh leadearboard for active word
-                        MF_DEBUG("AsyncDistributor: think as you WRITE (N) hits: " << mwp->getOrloj()->getNoteEdit()->getHitCounter() << endl);
+                        //MF_DEBUG("AsyncDistributor: think as you WRITE (N) hits: " << mwp->getOrloj()->getNoteEdit()->getHitCounter() << endl);
                         // if there is no activity, then show leaderboard
                         if(!mwp->getOrloj()->getNoteEdit()->getHitCounter()) {
                             QString words = mwp->getOrloj()->getNoteEdit()->getRelevantWords();
-                            MF_DEBUG("AsyncDistributor: think as you WRITE (N) words '" << words.toStdString() << "'" << endl);
+                            //MF_DEBUG("AsyncDistributor: think as you WRITE (N) words '" << words.toStdString() << "'" << endl);
                             if(words.size()) {
                                 // refresh leaderboard ONLY if it's different
                                 if(lastTayWNote!=mwp->getOrloj()->getNoteEdit()->getCurrentNote() || lastTayWords!=words) {
@@ -118,7 +118,7 @@ void AsyncTaskNotificationsDistributor::run()
                                     emit showStatusBarInfo("Associated Notes for word(s) '"+words+"'...");
                                     emit refreshLeaderboardByValue(associations);
                                 } else {
-                                    MF_DEBUG("AsyncDistributor: SKIPPING think as you WRITE (N) for words '" << words.toStdString() << "'" << endl);
+                                    //MF_DEBUG("AsyncDistributor: SKIPPING think as you WRITE (N) for words '" << words.toStdString() << "'" << endl);
                                 }
                             }
                         }
@@ -128,7 +128,7 @@ void AsyncTaskNotificationsDistributor::run()
                         // think as you WRITE: detect inactivity AND refresh leadearboard for word(s) under cursor
                         if(!mwp->getOrloj()->getOutlineHeaderEdit()->getHitCounter()) {
                             QString words = mwp->getOrloj()->getOutlineHeaderEdit()->getRelevantWords();
-                            MF_DEBUG("AsyncDistributor: think as you WRITE (O) hits: " << mwp->getOrloj()->getOutlineHeaderEdit()->getHitCounter() << " words '" << words.toStdString() << "'" << endl);
+                            //MF_DEBUG("AsyncDistributor: think as you WRITE (O) hits: " << mwp->getOrloj()->getOutlineHeaderEdit()->getHitCounter() << " words '" << words.toStdString() << "'" << endl);
                             if(words.size()) {
                                 // refresh leaderboard ONLY if it's different
                                 if(lastTayWOutline!=mwp->getOrloj()->getOutlineHeaderEdit()->getCurrentOutline() || lastTayWords!=words) {
@@ -141,7 +141,7 @@ void AsyncTaskNotificationsDistributor::run()
                                     emit showStatusBarInfo("Associated Notes for word(s) '"+words+"'...");
                                     emit refreshHeaderLeaderboardByValue(associations);
                                 } else {
-                                    MF_DEBUG("AsyncDistributor: SKIPPING think as you WRITE (O) for words '" << words.toStdString() << "'" << endl);
+                                    //MF_DEBUG("AsyncDistributor: SKIPPING think as you WRITE (O) for words '" << words.toStdString() << "'" << endl);
                                 }
                             }
                         }
@@ -159,12 +159,12 @@ void AsyncTaskNotificationsDistributor::run()
             if(Configuration::getInstance().getAaAlgorithm()==Configuration::AssociationAssessmentAlgorithm::BOW && tasks.size()) {
                 std::lock_guard<mutex> criticalSection{tasksMutex};
 
-                MF_DEBUG("AsyncDistributor: AWAKE wip[" << tasks.size() << "]" << endl);
+                //MF_DEBUG("AsyncDistributor: AWAKE wip[" << tasks.size() << "]" << endl);
                 vector<Task*> zombies{};
                 for(Task* t:tasks) {
                     // FYI future<> had to be check for f.valid() as get() in other thread destroys it
                     if(t->isReady()) {
-                        MF_DEBUG("AsyncDistributor: future FINISHED w/ " << boolalpha << t->isSuccessful() << endl);
+                        //MF_DEBUG("AsyncDistributor: future FINISHED w/ " << boolalpha << t->isSuccessful() << endl);
                         if(t->isSuccessful()) {
                             switch(t->getType()) {
                             case TaskType::DREAM_TO_THINK:
@@ -178,16 +178,16 @@ void AsyncTaskNotificationsDistributor::run()
 
                             zombies.push_back(t);
                             delete t;
-                            MF_DEBUG("AsyncDistributor: task DELETED" << endl);
+                            //MF_DEBUG("AsyncDistributor: task DELETED" << endl);
                         }
                     } else {
-                        MF_DEBUG("AsyncDistributor: future NOT FINISHED" << endl);
+                        //MF_DEBUG("AsyncDistributor: future NOT FINISHED" << endl);
                     }
                 }
 
                 if(zombies.size()) {
                     for(Task* t:zombies) {
-                        MF_DEBUG("AsyncDistributor: erasing ZOMBIE task " << t << endl);
+                        //MF_DEBUG("AsyncDistributor: erasing ZOMBIE task " << t << endl);
                         tasks.erase(std::remove(tasks.begin(), tasks.end(), t), tasks.end());
                     }
                 }

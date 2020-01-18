@@ -1,7 +1,7 @@
 /*
  note_edit_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -24,7 +24,8 @@
 #include "../../lib/src/model/note.h"
 
 #include "note_editor_view.h"
-#include "widgets/edit_name_and_buttons_panel.h"
+#include "widgets/edit_name_panel.h"
+#include "widgets/edit_buttons_panel.h"
 #include "status_bar_view.h"
 
 namespace m8r {
@@ -36,8 +37,9 @@ class NoteEditView : public QWidget
 private:
     Note* currentNote;
 
-    EditNameAndButtonsPanel* editNameAndButtonsPanel;
+    EditNamePanel* topNamePanel;
     NoteEditorView* noteEditor;
+    EditButtonsPanel* bottomButtonsPanel;
 
 public:
     explicit NoteEditView(QWidget* parent);
@@ -48,23 +50,25 @@ public:
     ~NoteEditView();
 
     void setNoteEditDialog(NoteEditDialog* noteEditDialog) {
-        editNameAndButtonsPanel->setNoteEditDialog(noteEditDialog);
+        bottomButtonsPanel->setNoteEditDialog(noteEditDialog);
     }
     void setNote(Note* note, std::string mdDescription) {
         currentNote = note;
-        editNameAndButtonsPanel->setNote(note);
+        topNamePanel->setNote(note);
+        bottomButtonsPanel->setNote(note);
         noteEditor->setPlainText(QString::fromStdString(mdDescription));
     }
     void setEditorShowLineNumbers(bool show) { noteEditor->setShowLineNumbers(show); }
     void setStatusBar(const StatusBarView* statusBar) { noteEditor->setStatusBar(statusBar); }
 
-    QString getName() const { return editNameAndButtonsPanel->getName(); }
+    QString getName() const { return topNamePanel->getName(); }
     QString getDescription() const { return noteEditor->toPlainText(); }
     bool isDescriptionEmpty() const { return noteEditor->toPlainText().isEmpty(); }
     QString getSelectedText() const { return noteEditor->getSelectedText(); }
     NoteEditorView* getNoteEditor() const { return noteEditor; }
+    EditButtonsPanel* getButtonsPanel() const { return bottomButtonsPanel; }
 
-    void giveFocusToEditor() { noteEditor->setFocus(); }
+    void giveEditorFocus() { noteEditor->setFocus(); }
 
 private slots:
     void slotOpenNotePropertiesEditor();

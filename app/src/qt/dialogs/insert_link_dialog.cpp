@@ -1,7 +1,7 @@
 /*
  insert_link_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ InsertLinkDialog::InsertLinkDialog(QWidget* parent)
     findDirectoryButton = new QPushButton{tr("Directory")};
 
     copyToRepoCheckBox = new QCheckBox{tr("copy link target to repository")};
-    copyToRepoCheckBox->setEnabled(false);
+    copyToRepoCheckBox->setEnabled(true);
 
     // IMPROVE disable/enable find button if text/path is valid: freedom vs validation
     insertButton = new QPushButton{tr("&Insert")};
@@ -98,7 +98,8 @@ void InsertLinkDialog::show(
         const Outline* outline,
         vector<Thing*>& os,
         vector<Note*>& ns,
-        const QString& selectedText)
+        const QString& selectedText,
+        const QString& link)
 {
     this->activeRepository = repository;
     this->currentOutline = outline;
@@ -107,6 +108,9 @@ void InsertLinkDialog::show(
     linkTextEdit->selectAll();
     linkTextEdit->setFocus();
     pathEdit->clear();
+    if(link.size()) {
+        pathEdit->setText(link);
+    }
 
     outlines = os;
     notes = ns;

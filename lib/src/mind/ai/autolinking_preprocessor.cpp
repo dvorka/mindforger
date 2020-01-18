@@ -1,7 +1,7 @@
 /*
  autolinking_preprocessor.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -22,44 +22,21 @@ namespace m8r {
 
 using namespace std;
 
-// see editor highligting regexps, test it at https://www.regextester.com
-const string AutolinkingPreprocessor::PATTERN_LINK = string{"\\[(:?[\\S\\s]+)\\]\\(\\S+\\)"};
-const string AutolinkingPreprocessor::PATTERN_CODE = string{"`[\\S\\s]+`"};
-const string AutolinkingPreprocessor::PATTERN_MATH = string{"\\$[\\S\\s]+\\$"};
-const string AutolinkingPreprocessor::PATTERN_HTTP = string{"https?://"};
+const string AutolinkingPreprocessor::CODE_BLOCK = string{"```"};
+const string AutolinkingPreprocessor::MATH_BLOCK = string{"$$"};
+const string AutolinkingPreprocessor::MF_URL_PROTOCOL = string{"mindforger://"};
+const string AutolinkingPreprocessor::MF_URL_HOST = string{"links.mindforger.com"};
+const string AutolinkingPreprocessor::MF_URL_PREFIX = AutolinkingPreprocessor::MF_URL_PROTOCOL + AutolinkingPreprocessor::MF_URL_HOST + "/";
+const string AutolinkingPreprocessor::FILE_URL_PROTOCOL = string{"file://"};
 
-AutolinkingPreprocessor::AutolinkingPreprocessor()
-    : linkRegex{PATTERN_LINK},
-      codeRegex{PATTERN_CODE},
-      mathRegex{PATTERN_MATH},
-      httpRegex{PATTERN_HTTP}
+AutolinkingPreprocessor::AutolinkingPreprocessor(Mind& mind)
+    : insensitive{true},
+      mind{mind}
 {
 }
 
 AutolinkingPreprocessor::~AutolinkingPreprocessor()
 {
-}
-
-bool AutolinkingPreprocessor::containsLinkCodeMath(const string* line)
-{
-    std::smatch matchedString;
-    if(std::regex_search(*line, matchedString, linkRegex)
-         ||
-       std::regex_search(*line, matchedString, codeRegex)
-         ||
-       std::regex_search(*line, matchedString, mathRegex)
-        ||
-       std::regex_search(*line, matchedString, httpRegex))
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool AutolinkingPreprocessor::aliasSizeComparator(const Thing* t1, const Thing* t2)
-{
-    return t1->getAutolinkingAlias().size() > t2->getAutolinkingAlias().size();
 }
 
 } // m8r namespace

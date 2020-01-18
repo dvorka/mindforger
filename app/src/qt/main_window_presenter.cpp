@@ -1,7 +1,7 @@
 /*
  main_window_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -38,17 +38,18 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // assemble presenters w/ UI
     statusBar = new StatusBarPresenter{view.getStatusBar(), mind};
-    mainMenu = new MainMenuPresenter{this};
+    mainMenu = new MainMenuPresenter{this}; view.getOrloj()->setMainMenu(mainMenu->getView());
     cli = new CliAndBreadcrumbsPresenter{this, view.getCli(), mind};
     orloj = new OrlojPresenter{this, view.getOrloj(), mind};
 
     // initialize components
-    view.getToolBar()->setVisible(config.isUiShowToolbar());
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOutlineDialog = new OutlineNewDialog{QString::fromStdString(config.getMemoryPath()), mind->getOntology(), &view};
     newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
     ftsDialog = new FtsDialog{&view};
+    ftsDialogPresenter = new FtsDialogPresenter(ftsDialog, mind, orloj);
     findOutlineByNameDialog = new FindOutlineByNameDialog{&view};
+    findThingByNameDialog = new FindOutlineByNameDialog{&view};
     findNoteByNameDialog = new FindNoteByNameDialog{&view};
     findOutlineByTagDialog = new FindOutlineByTagDialog{mind->remind().getOntology(), &view};
     findNoteByTagDialog = new FindNoteByTagDialog{mind->remind().getOntology(), &view};
@@ -66,14 +67,16 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 #ifdef MF_NER
     nerChooseTagsDialog = new NerChooseTagTypesDialog(&view);
     nerResultDialog = new NerResultDialog(&view);
-#endif    
+#endif
+    // show/hide widgets based on configuration
+    handleMindPreferences();
 
     // wire signals
     QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
     QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
-    QObject::connect(ftsDialog->getFindButton(), SIGNAL(clicked()), this, SLOT(handleFts()));
     QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
+    QObject::connect(findThingByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindThingByName()));
     QObject::connect(findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByName()));
     QObject::connect(findOutlineByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByTag()));
     QObject::connect(findOutlineByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
@@ -87,22 +90,30 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
     QObject::connect(exportOutlineToHtmlDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineHtmlExport()));
     QObject::connect(exportMindToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
+    QObject::connect(
+        orloj->getDashboard()->getView()->getNavigatorDashboardlet(), SIGNAL(clickToSwitchFacet()),
+        this, SLOT(doActionViewKnowledgeGraphNavigator())
+    );
+    QObject::connect(
+        orloj->getNoteEdit()->getView()->getNoteEditor(), SIGNAL(signalDnDropUrl(QString)),
+        this, SLOT(doActionFormatLink(QString))
+    );
+    QObject::connect(
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SIGNAL(signalDnDropUrl(QString)),
+        this, SLOT(doActionFormatLink(QString))
+    );
     // wire toolbar signals
     QObject::connect(view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()), this, SLOT(doActionOutlineOrNoteNew()));
     QObject::connect(view.getToolBar()->actionOpenRepository, SIGNAL(triggered()), this, SLOT(doActionMindLearnRepository()));
     QObject::connect(view.getToolBar()->actionOpenFile, SIGNAL(triggered()), this, SLOT(doActionMindLearnFile()));
+    QObject::connect(view.getToolBar()->actionViewDashboard, SIGNAL(triggered()), this, SLOT(doActionViewDashboard()));
     QObject::connect(view.getToolBar()->actionViewEisenhower, SIGNAL(triggered()), this, SLOT(doActionViewOrganizer()));
     QObject::connect(view.getToolBar()->actionViewOutlines, SIGNAL(triggered()), this, SLOT(doActionViewOutlines()));
     QObject::connect(view.getToolBar()->actionViewNavigator, SIGNAL(triggered()), this, SLOT(doActionViewKnowledgeGraphNavigator()));
     QObject::connect(view.getToolBar()->actionViewTags, SIGNAL(triggered()), this, SLOT(doActionViewTagCloud()));
     QObject::connect(view.getToolBar()->actionViewRecentNotes, SIGNAL(triggered()), this, SLOT(doActionViewRecentNotes()));
     QObject::connect(view.getToolBar()->actionFindFts, SIGNAL(triggered()), this, SLOT(doActionFts()));
-    QObject::connect(view.getToolBar()->actionFindObyName, SIGNAL(triggered()), this, SLOT(doActionFindOutlineByName()));
-    QObject::connect(view.getToolBar()->actionFindNbyName, SIGNAL(triggered()), this, SLOT(doActionFindNoteByName()));
-    QObject::connect(view.getToolBar()->actionFindObyTag, SIGNAL(triggered()), this, SLOT(doActionFindOutlineByTag()));
-    QObject::connect(view.getToolBar()->actionFindNbyTag, SIGNAL(triggered()), this, SLOT(doActionFindNoteByTag()));
     QObject::connect(view.getToolBar()->actionHomeOutline, SIGNAL(triggered()), this, SLOT(doActionViewHome()));
-    QObject::connect(view.getToolBar()->actionBackToPreviousNote, SIGNAL(triggered()), this, SLOT(doActionViewRecentNotes()));
     QObject::connect(view.getToolBar()->actionThink, SIGNAL(triggered()), this, SLOT(doActionMindToggleThink()));
     QObject::connect(view.getToolBar()->actionScope, SIGNAL(triggered()), this, SLOT(doActionMindTimeTagScope()));
     QObject::connect(view.getToolBar()->actionAdapt, SIGNAL(triggered()), this, SLOT(doActionMindPreferences()));
@@ -139,8 +150,10 @@ MainWindowPresenter::~MainWindowPresenter()
     if(mainMenu) delete mainMenu;
     if(statusBar) delete statusBar;
     if(newOutlineDialog) delete newOutlineDialog;
+    if(ftsDialogPresenter) delete ftsDialogPresenter;
     if(ftsDialog) delete ftsDialog;
     if(findOutlineByNameDialog) delete findOutlineByNameDialog;
+    if(findThingByNameDialog) delete findThingByNameDialog;
     if(findNoteByNameDialog) delete findNoteByNameDialog;
     if(findOutlineByTagDialog) delete findOutlineByTagDialog;
     if(configDialog) delete configDialog;
@@ -168,9 +181,23 @@ void MainWindowPresenter::showInitialView()
                     orloj->showFacetOutlineList(mind->getOutlines());
                 }
             } else if(config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER) {
-                if(!doActionViewHome()) {
-                    // fallback
-                    view.getCli()->setBreadcrumbPath("/outlines");
+                if(!string{START_TO_DASHBOARD}.compare(config.getStartupView())) {
+                    orloj->showFacetDashboard();
+                } else if(!string{START_TO_OUTLINES}.compare(config.getStartupView())) {
+                    orloj->showFacetOutlineList(mind->getOutlines());
+                } else if(!string{START_TO_TAGS}.compare(config.getStartupView())) {
+                    orloj->showFacetTagCloud();
+                } else if(!string{START_TO_RECENT}.compare(config.getStartupView())) {
+                    vector<Note*> notes{};
+                    orloj->showFacetRecentNotes(mind->getAllNotes(notes));
+                } else if(!string{START_TO_EISENHOWER_MATRIX}.compare(config.getStartupView())) {
+                    orloj->showFacetOrganizer(mind->getOutlines());
+                } else if(!string{START_TO_HOME_OUTLINE}.compare(config.getStartupView())) {
+                    if(!doActionViewHome()) {
+                        // fallback
+                        orloj->showFacetOutlineList(mind->getOutlines());
+                    }
+                } else {
                     orloj->showFacetOutlineList(mind->getOutlines());
                 }
             } else {
@@ -270,7 +297,22 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
     statusBar->showInfo(QString(tr("Hyperlink %1 clicked...")).arg(url.toString()));
     Outline* currentOutline = orloj->getOutlineView()->getCurrentOutline();
     if(url.toString().size()) {
-        if(url.toString().startsWith("file://")) {
+        if(url.toString().startsWith(QString::fromStdString(AutolinkingPreprocessor::MF_URL_PREFIX))) {
+            MF_DEBUG("  URL type   : MindForger" << endl);
+            findThingByNameDialog->setWindowTitle(tr("Autolinked Notebooks and Notes"));
+            findThingByNameDialog->getKeywordsCheckbox()->setChecked(false);
+            findThingByNameDialog->setSearchedString(
+                QString::fromStdString(url.toString().toStdString().substr(AutolinkingPreprocessor::MF_URL_PREFIX.size())));
+
+            vector<Thing*> allThings{};
+            vector<string>* thingsNames = new vector<string>{};
+            mind->getAllThings(allThings, thingsNames);
+
+            findThingByNameDialog->show(allThings, thingsNames, false, false);
+            return;
+        }
+
+        if(url.toString().startsWith(QString::fromStdString(AutolinkingPreprocessor::FILE_URL_PROTOCOL))) {
             string key{url.toString().toStdString()};
 #if defined(WIN32) || defined(WIN64)
             key.erase(0,8); // remove file prefix
@@ -553,43 +595,64 @@ void MainWindowPresenter::doActionExit()
 
 void MainWindowPresenter::doActionFts()
 {
-    if(orloj->isFacetActiveOutlineManagement()) {
-        ftsDialog->setWindowTitle(tr("Full-text Search in Notebook"));
-        ftsDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
+    doFts(QString{}, false);
+}
+
+void MainWindowPresenter::doFts(const QString& pattern, bool doSearch)
+{
+    if(pattern.size()) {
+        ftsDialog->setSearchPattern(pattern);
+    }
+
+    if(orloj->isFacetActiveOutlineOrNoteView()) {
+        ftsDialog->setWindowTitle(tr("Notebook Full-text Search"));
+        ftsDialog->setScope(
+            ResourceType::OUTLINE,
+            orloj->getOutlineView()->getCurrentOutline());
+    } else if(orloj->isFacetActiveOutlineOrNoteEdit()) {
+        ftsDialog->setWindowTitle(tr("Note Full-text Search"));
+        ftsDialog->setScope(
+            ResourceType::NOTE,
+            orloj->getOutlineView()->getCurrentOutline());
     } else {
         ftsDialog->setWindowTitle(tr("Full-text Search"));
         ftsDialog->clearScope();
     }
     ftsDialog->show();
+
+    if(doSearch) {
+        ftsDialogPresenter->doSearch();
+    }
 }
 
-void MainWindowPresenter::handleFts()
+void MainWindowPresenter::slotHandleFts()
 {
-    QString searchedString = ftsDialog->getSearchPattern();
     ftsDialog->hide();
-    executeFts(
-        searchedString.toStdString(),
-        ftsDialog->isExact()?FtsSearch::EXACT:(ftsDialog->isRegex()?FtsSearch::REGEXP:FtsSearch::IGNORE_CASE),
-        ftsDialog->getScope());
-}
 
-void MainWindowPresenter::executeFts(const string& pattern, const FtsSearch searchMode, Outline* scope) const
-{
-    vector<Note*>* result = mind->findNoteFts(pattern, searchMode, scope);
-
-    QString info = QString::number(result->size());
-    info += QString::fromUtf8(" result(s) found for '");
-    info += QString::fromStdString(pattern);
-    info += QString::fromUtf8("'");
-    view.getStatusBar()->showInfo(info);
-
-    if(result && result->size()) {
-        orloj->getNoteView()->setSearchPattern(pattern);
-        orloj->getNoteView()->setSearchIgnoreCase(searchMode==FtsSearch::IGNORE_CASE?true:false);
-
-        orloj->showFacetFtsResult(result);
-    } else {
-        QMessageBox::information(&view, tr("Full-text Search Result"), tr("No matching Notebook or Note found."));
+    QString searchedString = ftsDialog->getSearchPattern();
+    switch(ftsDialog->getScopeType()) {
+    case ResourceType::NOTE:
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            orloj->getNoteEdit()->getView()->getNoteEditor()->findString(
+                searchedString,
+                ftsDialog->isEditorReverse(),
+                ftsDialog->isEditorCaseInsensitive(),
+                ftsDialog->isEditorWords());
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->findString(
+                searchedString,
+                ftsDialog->isEditorReverse(),
+                ftsDialog->isEditorCaseInsensitive(),
+                ftsDialog->isEditorWords());
+        }
+        break;
+    default:
+        // repository or O FTS
+        if(ftsDialogPresenter->getSelectedNote()) {
+            orloj->showFacetOutline(ftsDialogPresenter->getSelectedNote()->getOutline());
+            orloj->showFacetNoteView(ftsDialogPresenter->getSelectedNote());
+            orloj->getNoteView()->getView()->getViever()->findText(searchedString);
+        }
     }
 }
 
@@ -611,6 +674,21 @@ void MainWindowPresenter::handleFindOutlineByName()
         statusBar->showInfo(QString(tr("Notebook "))+QString::fromStdString(findOutlineByNameDialog->getChoice()->getName()));
     } else {
         statusBar->showInfo(QString(tr("Notebook not found")+": ") += findOutlineByNameDialog->getSearchedString());
+    }
+}
+
+void MainWindowPresenter::handleFindThingByName()
+{
+    if(findThingByNameDialog->getChoice()) {
+        if(mind->remind().getOutline(findThingByNameDialog->getChoice()->getKey())) {
+            orloj->showFacetOutline((Outline*)findThingByNameDialog->getChoice());
+            statusBar->showInfo(QString(tr("Notebook "))+QString::fromStdString(findThingByNameDialog->getChoice()->getKey()));
+        } else {
+            orloj->showFacetNoteView((Note*)findThingByNameDialog->getChoice());
+            statusBar->showInfo(QString(tr("Note "))+QString::fromStdString(findThingByNameDialog->getChoice()->getKey()));
+        }
+    } else {
+        statusBar->showInfo(QString(tr("Thing not found")+": ") += findThingByNameDialog->getSearchedString());
     }
 }
 
@@ -638,7 +716,7 @@ void MainWindowPresenter::handleFindOutlineByTag()
 void MainWindowPresenter::doActionFindNoteByTag()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
-    if(orloj->isFacetActiveOutlineManagement()) {
+    if(orloj->isFacetActiveOutlineOrNoteView() || orloj->isFacetActiveOutlineOrNoteEdit()) {
         findNoteByTagDialog->setWindowTitle(tr("Find Note by Tags in Notebook"));
         findNoteByTagDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
         vector<Note*> allNotes(findNoteByTagDialog->getScope()->getNotes());
@@ -740,7 +818,7 @@ void MainWindowPresenter::handleRefactorNoteToOutline()
 void MainWindowPresenter::doActionFindNoteByName()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
-    if(orloj->isFacetActiveOutlineManagement()) {
+    if(orloj->isFacetActiveOutlineOrNoteView() || orloj->isFacetActiveOutlineOrNoteEdit()) {
         findNoteByNameDialog->setWindowTitle(tr("Find Note by Name in Notebook"));
         findNoteByNameDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
         vector<Note*> allNotes(findNoteByNameDialog->getScope()->getNotes());
@@ -933,6 +1011,13 @@ void MainWindowPresenter::doActionViewRecentNotes()
     vector<Note*> notes{};
     mind->getAllNotes(notes, true, true);
     orloj->showFacetRecentNotes(notes);
+}
+
+void MainWindowPresenter::doActionViewDashboard()
+{
+    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+        orloj->showFacetDashboard();
+    }
 }
 
 void MainWindowPresenter::doActionViewOrganizer()
@@ -1290,7 +1375,7 @@ void MainWindowPresenter::doActionFormatTable()
     }
 }
 
-void MainWindowPresenter::doActionFormatLink()
+void MainWindowPresenter::doActionFormatLink(QString link)
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> oss{mind->getOutlines()};
@@ -1307,12 +1392,25 @@ void MainWindowPresenter::doActionFormatLink()
         selectedText = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getSelectedText();
     }
 
+    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+        insertLinkDialog->getCopyCheckBox()->setEnabled(true);
+    } else {
+        insertLinkDialog->getCopyCheckBox()->setChecked(false);
+        insertLinkDialog->getCopyCheckBox()->setEnabled(false);
+    }
+
     insertLinkDialog->show(
         config.getActiveRepository(),
         orloj->getOutlineView()->getCurrentOutline(),
         os,
         ns,
-        selectedText);
+        selectedText,
+        link);
+}
+
+void MainWindowPresenter::doActionFormatLink()
+{
+    doActionFormatLink(QString{});
 }
 
 void MainWindowPresenter::insertMarkdownText(const QString& text, bool newline, int offset)
@@ -1324,6 +1422,45 @@ void MainWindowPresenter::insertMarkdownText(const QString& text, bool newline, 
     }
 }
 
+void MainWindowPresenter::copyLinkOrImageToRepository(const string& srcPath, QString& path)
+{
+    if(isDirectoryOrFileExists(srcPath.c_str())) {
+        QString pathPrefix{};
+        string oPath{};
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            oPath = orloj->getNoteEdit()->getCurrentNote()->getOutlineKey();
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            oPath = orloj->getOutlineHeaderEdit()->getCurrentOutline()->getKey();
+        }
+        if(stringEndsWith(oPath, ".md")) {
+            pathPrefix = QString::fromStdString(oPath.substr(0, oPath.length()-3));
+        } else {
+            pathPrefix = QString::fromStdString(oPath);
+        }
+        pathPrefix.append(".");
+
+        string d{}, f{};
+        pathToDirectoryAndFile(srcPath, d, f);
+        QString pathSuffix{QString::fromStdString(f)};
+
+        path = pathPrefix + pathSuffix;
+        while(isDirectoryOrFileExists(path.toStdString().c_str())) {
+            pathSuffix.prepend("_");
+            path = pathPrefix + pathSuffix;
+        }
+        copyFile(srcPath, path.toStdString());
+
+        d.clear();
+        f.clear();
+        pathToDirectoryAndFile(path.toStdString(), d, f);
+        path = QString::fromStdString(f);
+    } else {
+        // fallback: create link, but don't copy
+        path = insertLinkDialog->getPathText();
+        statusBar->showInfo(tr("Given path '%1' doesn't exist - target will not be copied, but link will be created").arg(path.toStdString().c_str()));
+    }
+}
+
 /*
  * See InsertLinkDialog for link creation hints
  */
@@ -1331,10 +1468,18 @@ void MainWindowPresenter::handleFormatLink()
 {
     insertLinkDialog->hide();
 
+    QString path{};
+    if(insertLinkDialog->isCopyToRepo()) {
+        copyLinkOrImageToRepository(insertLinkDialog->getPathText().toStdString(), path);
+    } else {
+        path = insertLinkDialog->getPathText();
+    }
+
+    // IMPROVE make this reusable method
     QString text{"["};
     text += insertLinkDialog->getLinkText();
     text += "](";
-    text += QString::fromStdString(insertLinkDialog->getPathText().toStdString());
+    text += path;
     text += ")";
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
@@ -1352,6 +1497,13 @@ void MainWindowPresenter::handleFormatLink()
 
 void MainWindowPresenter::doActionFormatImage()
 {
+    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+        insertImageDialog->getCopyCheckBox()->setEnabled(true);
+    } else {
+        insertImageDialog->getCopyCheckBox()->setChecked(false);
+        insertImageDialog->getCopyCheckBox()->setEnabled(false);
+    }
+
     insertImageDialog->show();
 }
 
@@ -1359,10 +1511,17 @@ void MainWindowPresenter::handleFormatImage()
 {
     insertImageDialog->hide();
 
+    QString path{};
+    if(insertImageDialog->isCopyToRepo()) {
+        copyLinkOrImageToRepository(insertImageDialog->getPathText().toStdString(), path);
+    } else {
+        path = insertImageDialog->getPathText();
+    }
+
     QString text{"!["};
     text += insertImageDialog->getAlternateText();
     text += "](";
-    text += insertImageDialog->getPathText();
+    text += path;
     text += ")";
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
@@ -1524,7 +1683,7 @@ void MainWindowPresenter::doActionOutlineClone()
 
 void MainWindowPresenter::doActionOutlineHome()
 {
-    if(orloj->isFacetActiveOutlineManagement()) {
+    if(orloj->isFacetActiveOutlineOrNoteView()) {
         const Tag* t = mind->remind().getOntology().findOrCreateTag(Tag::KeyMindForgerHome());
         Outline* o = orloj->getOutlineView()->getCurrentOutline();
         // if O has tag, then toggle (remove) it, else set the tag
@@ -1544,9 +1703,14 @@ void MainWindowPresenter::doActionOutlineHome()
 
 void MainWindowPresenter::doActionOutlineForget()
 {
-    if(orloj->isFacetActiveOutlineManagement()) {
+    if(orloj->isFacetActiveOutlineOrNoteView()) {
         QMessageBox::StandardButton choice;
-        choice = QMessageBox::question(&view, tr("Forget Notebook"), tr("Do you really want to forget current Notebook?"));
+        choice = QMessageBox::question(
+            &view,
+            tr("Forget Notebook"),
+            tr("Do you really want to forget '") +
+            QString::fromStdString(orloj->getOutlineView()->getCurrentOutline()->getName()) +
+            tr("' Notebook?"));
         if (choice == QMessageBox::Yes) {
             mind->outlineForget(orloj->getOutlineView()->getCurrentOutline()->getKey());
             orloj->slotShowOutlines();
@@ -1698,7 +1862,8 @@ void MainWindowPresenter::doActionNoteHoist()
          ||
        orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE))
     {
-        config.setUiHoistedMode(orloj->toggleCurrentFacetHoisting());
+        config.setUiHoistedMode(getMainMenu()->getView()->actionViewHoist->isChecked());
+        orloj->applyFacetHoisting();
     }
 }
 
@@ -1712,9 +1877,22 @@ void MainWindowPresenter::doActionNoteForget()
     ) {
         Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
         if(note) {
-            Outline* outline = mind->noteForget(note);
-            mind->remind().remember(outline);
-            orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+            QMessageBox msgBox{
+                QMessageBox::Question,
+                tr("Delete Note"),
+                tr("Do you really want to delete note '") +
+                QString::fromStdString(note->getName()) +
+                tr("' along with its child notes?")};
+            QPushButton* yes = msgBox.addButton("&Yes", QMessageBox::YesRole);
+            msgBox.addButton("&No", QMessageBox::NoRole);
+            msgBox.exec();
+
+            QAbstractButton* choosen = msgBox.clickedButton();
+            if(yes == choosen) {
+                Outline* outline = mind->noteForget(note);
+                mind->remind().remember(outline);
+                orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+            }
             return;
         }
     }
@@ -1879,6 +2057,11 @@ void MainWindowPresenter::doActionNoteLast()
     }
 }
 
+void MainWindowPresenter::doActionOutlineShow()
+{
+    orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+}
+
 void MainWindowPresenter::doActionNotePromote()
 {
     Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
@@ -1910,6 +2093,38 @@ void MainWindowPresenter::doActionNoteDemote()
         }
     } else {
         QMessageBox::critical(&view, tr("Demote Note"), tr("Please select a Note to be demoted."));
+    }
+}
+
+void MainWindowPresenter::doActionEditFind()
+{
+    doActionFts();
+}
+
+void MainWindowPresenter::doActionEditFindAgain()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->findStringAgain();
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->findStringAgain();
+    }
+}
+
+void MainWindowPresenter::doActionEditWordWrapToggle()
+{
+    NoteEditorView* editor{};
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        editor = orloj->getNoteEdit()->getView()->getNoteEditor();
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        editor = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor();
+    } else {
+        return;
+    }
+
+    if(editor->wordWrapMode() == QTextOption::NoWrap) {
+        editor->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    } else {
+        editor->setWordWrapMode(QTextOption::NoWrap);
     }
 }
 
@@ -1980,7 +2195,11 @@ void MainWindowPresenter::handleMindPreferences()
 
     view.getToolBar()->setVisible(config.isUiShowToolbar());
     view.getOrloj()->getNoteView()->setZoomFactor(config.getUiHtmlZoomFactor());
+    view.getOrloj()->getNoteView()->getEditPanel()->setVisible(!config.isUiExpertMode());
     view.getOrloj()->getOutlineHeaderView()->setZoomFactor(config.getUiHtmlZoomFactor());
+    view.getOrloj()->getOutlineHeaderView()->getEditPanel()->setVisible(!config.isUiExpertMode());
+    view.getOrloj()->getNoteEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
+    view.getOrloj()->getOutlineHeaderEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
 }
 
 void MainWindowPresenter::doActionHelpDocumentation()
@@ -2043,7 +2262,7 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
             "<br>Contact me at <a href='mailto:martin.dvorak@mindforger.com'>&lt;martin.dvorak@mindforger.com&gt;</a>"
             " or see <a href='https://www.mindforger.com'>www.mindforger.com</a> for more information."
             "<br>"
-            "<br>Copyright (C) 2016-2019 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/blob/master/CREDITS.md'>contributors</a>."
+            "<br>Copyright (C) 2016-2020 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/blob/master/CREDITS.md'>contributors</a>."
         });
 }
 

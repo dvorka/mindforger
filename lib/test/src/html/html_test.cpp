@@ -1,7 +1,7 @@
 /*
  markdown_benchmark.cpp     MindForger markdown test
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -137,11 +137,11 @@ TEST(HtmlTestCase, TaskList)
     string html{};
     // O header
     htmlRepresentation.to(mind.remind().getOutlines()[0]->getOutlineDescriptorAsNote(), &html);
-    cout << "= BEGIN HTML =" << endl << html << endl << "= END HTML =" << endl;
+    cout << "= BEGIN O HTML =" << endl << html << endl << "= END O HTML =" << endl;
     EXPECT_NE(std::string::npos, html.find("input"));
     // N
     html.clear();
     htmlRepresentation.to(mind.remind().getOutlines()[0]->getNotes()[0], &html);
-    cout << "= BEGIN HTML =" << endl << html << endl << "= END HTML =" << endl;
+    cout << "= BEGIN N HTML =" << endl << html << endl << "= END N HTML =" << endl;
     EXPECT_NE(std::string::npos, html.find("input"));
 }

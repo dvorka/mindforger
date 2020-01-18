@@ -1,7 +1,7 @@
 /*
  note_edit_highlight.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 
 namespace m8r {
 
+// TODO ...Highlighted
 class NoteEditHighlight : public QSyntaxHighlighter
 {
     Q_OBJECT
@@ -39,6 +40,7 @@ private:
         Link,
         Autolink,
         Codeblock,
+        Mathblock,
         UnorderedList,
         OrderedList,
 
@@ -66,7 +68,8 @@ private:
     QTextCharFormat strikethroughFormat;
     QTextCharFormat linkFormat;
     QTextCharFormat listFormat;
-    QTextCharFormat codeblockFormat;
+    QTextCharFormat codeBlockFormat;
+    QTextCharFormat mathBlockFormat;
 
     // HTML formats
     QTextCharFormat htmlTagFormat;

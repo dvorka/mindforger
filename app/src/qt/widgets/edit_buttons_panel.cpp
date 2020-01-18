@@ -1,7 +1,7 @@
 /*
- edit_name_and_buttons_panel.cpp     MindForger thinking notebook
+ edit_buttons_panel.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -16,19 +16,17 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "edit_name_and_buttons_panel.h"
+#include "edit_buttons_panel.h"
 
 namespace m8r {
 
 using namespace std;
 
-EditNameAndButtonsPanel::EditNameAndButtonsPanel(Mode mode, QWidget* parent)
+EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
     : QWidget(parent), mode(mode)
 {
     // widgets
-    label = new QLabel{tr("Name:"), this};
-    lineEdit = new QLineEdit{parent};
-    moreButton = new QPushButton{tr("More..."), this};
+    moreButton = new QPushButton{tr("Properties"), this};
     moreButton->setToolTip("Alt+Enter");
     rememberButton = new QPushButton{tr("Remember"), this};
     rememberButton->setToolTip("Alt+Left");
@@ -37,49 +35,46 @@ EditNameAndButtonsPanel::EditNameAndButtonsPanel(Mode mode, QWidget* parent)
 
     // assembly
     layout = new QHBoxLayout{this};
-    layout->addWidget(label);
-    layout->addWidget(lineEdit);
+    layout->addStretch(1);
+    layout->addWidget(cancelButton);
     layout->addWidget(moreButton);
     layout->addWidget(rememberButton);
-    layout->addWidget(cancelButton);
     setLayout(layout);
 
     // signals
-    if(mode==Mode::OUTLINE_MODE) {
+    if(mode==MfWidgetMode::OUTLINE_MODE) {
         QObject::connect(moreButton, SIGNAL(clicked()), this, SLOT(handleShowOutlineHeaderEditDialog()));
     } else {
         QObject::connect(moreButton, SIGNAL(clicked()), this, SLOT(handleShowNoteEditDialog()));
     }
 }
 
-EditNameAndButtonsPanel::~EditNameAndButtonsPanel()
+EditButtonsPanel::~EditButtonsPanel()
 {
-    delete label;
-    delete lineEdit;
     delete moreButton;
     delete rememberButton;
     delete cancelButton;
     delete layout;
 }
 
-void EditNameAndButtonsPanel::handleShowOutlineHeaderEditDialog()
+void EditButtonsPanel::handleShowOutlineHeaderEditDialog()
 {
     outlineHeaderEditDialog->show();
 }
 
-void EditNameAndButtonsPanel::handleCloseOutlineHeaderEditDialog()
+void EditButtonsPanel::handleCloseOutlineHeaderEditDialog()
 {
     outlineHeaderEditDialog->toOutline();
 }
 
-void EditNameAndButtonsPanel::handleShowNoteEditDialog()
+void EditButtonsPanel::handleShowNoteEditDialog()
 {
     noteEditDialog->show();
 }
 
-void EditNameAndButtonsPanel::handleCloseNoteEditDialog()
+void EditButtonsPanel::handleCloseNoteEditDialog()
 {
     noteEditDialog->toNote();
 }
 
-}
+} // m8r namespace

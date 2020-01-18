@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,9 +18,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # https://wiki.ubuntu.com/Releases
-# old: precise quantal saucy precise utopic vivid wily yakkety
-# current: trusty xenial artful bionic cosmic
-for DISTRO in cosmic
+# old: precise quantal saucy precise utopic vivid wily trusty (old GCC) yakkety artful cosmic
+# current: trusty xenial bionic disco eoan
+for DISTRO in disco eoan
 do
     sudo pbuilder --create ${DISTRO}
     rm -vf ~/pbuilder/${DISTRO}-base.tgz

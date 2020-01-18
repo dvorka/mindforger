@@ -1,7 +1,7 @@
 /*
  find_outline_by_name_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -95,7 +95,11 @@ FindOutlineByNameDialog::~FindOutlineByNameDialog()
     delete closeButton;
 }
 
-void FindOutlineByNameDialog::show(vector<Thing*>& ts, vector<string>* customizedNames, bool showScopeCheck)
+void FindOutlineByNameDialog::show(
+        vector<Thing*>& ts,
+        vector<string>* customizedNames,
+        bool showScopeCheck,
+        bool init)
 {
     choice = nullptr;
 
@@ -127,8 +131,14 @@ void FindOutlineByNameDialog::show(vector<Thing*>& ts, vector<string>* customize
     }
 
     findButton->setEnabled(things.size());
-    lineEdit->clear();
-    lineEdit->setFocus();
+
+    if(init) {
+        lineEdit->clear();
+        lineEdit->setFocus();
+    } else {
+        enableFindButton(lineEdit->text());
+    }
+
     QDialog::show();
 }
 

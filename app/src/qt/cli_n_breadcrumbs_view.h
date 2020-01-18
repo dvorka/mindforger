@@ -1,7 +1,7 @@
 /*
  cli_n_breadcrumbs_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -53,57 +53,31 @@ private:
     QLabel* breadcrumbsLabel;
     CliView* cli;
     QCompleter* cliCompleter;
-    QPushButton* goButton;
+    QStringList cliCompleterHistoryList;
+
+    bool zenMode;
 
 public:
-    static const QString CMD_EXIT;
-    static const QString CMD_HELP;
+    static const QString CMD_FTS;
     static const QString CMD_FIND_OUTLINE_BY_NAME;
+    static const QString CMD_LIST_OUTLINES;
 
 public:
-    explicit CliAndBreadcrumbsView(QWidget *parent);
+    explicit CliAndBreadcrumbsView(QWidget* parent, bool zenMode=true);
 
-    void updateCompleterModel(const QStringList *list=nullptr);
-    void forceInitialCompletion();
+    void addCompleterItem(const QString& item) {
+        cliCompleterHistoryList.insert(0, item);
+    }
+    void updateCompleterModel(const QStringList* list=nullptr);
+    void forceFtsHistoryCompletion();
     QString getFirstCompletion() const;
     void setBreadcrumbPath(const QString& path);
-    void setCommand(const char* command)
-    {
-        cli->setText(command);
-    }
-    const QString getCommand() const
-    {
-        return cli->text();
-    }
-    void show()
-    {
-        breadcrumbsLabel->show();
-        cli->show();
-        cliCompleter->complete();
-        goButton->show();
-    }
-    void hide()
-    {
-        breadcrumbsLabel->hide();
-        cli->hide();
-        goButton->hide();
-    }
-    void showBreadcrumb()
-    {
-        breadcrumbsLabel->show();
-        cli->hide();
-        goButton->hide();
-    }
-    void showCli(bool selectAll=true)
-    {
-        show();
-        cli->setFocus();
-        if(selectAll) {
-            cli->selectAll();
-        }
-
-        cliCompleter->complete();
-    }
+    void setCommand(const char* command);
+    const QString getCommand() const;
+    void show();
+    void hide();
+    void showBreadcrumb();
+    void showCli(bool selectAll=true);
 };
 
 }

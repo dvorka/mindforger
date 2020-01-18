@@ -1,7 +1,7 @@
 /*
  notes_table_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 
 namespace m8r {
 
-NotesTableView::NotesTableView(QWidget *parent)
+NotesTableView::NotesTableView(QWidget* parent)
     : QTableView(parent)
 {
     verticalHeader()->setVisible(false);
@@ -34,9 +34,45 @@ NotesTableView::NotesTableView(QWidget *parent)
     setTabKeyNavigation(false);
 }
 
+void NotesTableView::keyPressEvent(QKeyEvent* event)
+{
+    if(!(event->modifiers() & Qt::AltModifier)
+         &&
+       !(event->modifiers() & Qt::ControlModifier)
+         &&
+       !(event->modifiers() & Qt::ShiftModifier))
+    {
+        switch(event->key()) {
+        case Qt::Key_Return:
+        case Qt::Key_Right:
+            emit signalShowSelectedNote();
+            return;
+        case Qt::Key_Down:
+        case Qt::Key_Up:
+        case Qt::Key_Left:
+            QTableView::keyPressEvent(event);
+            return;
+        case Qt::Key_Escape:
+            emit signalEscape();
+        }
+
+        return;
+    }
+
+    QTableView::keyPressEvent(event);
+}
+
+void NotesTableView::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    Q_UNUSED(event);
+
+    // double click to O/N opens it
+    emit signalShowSelectedNote();
+}
+
 void NotesTableView::resizeEvent(QResizeEvent* event)
 {
-    UNUSED_ARG(event);
+    MF_DEBUG("NotesTableView::resizeEvent " << event << std::endl);
 
     if(horizontalHeader()->length() > 0) {
         // ensure that 1st column gets the remaining space from others

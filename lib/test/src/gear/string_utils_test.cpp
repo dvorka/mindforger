@@ -1,7 +1,7 @@
 /*
  string_utils_test.cpp     MindForger application test
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -102,7 +102,6 @@ TEST(StringGearTestCase, Trim)
     delete[] r;
 }
 
-
 TEST(StringGearTestCase, VectorToString)
 {
     vector<string*> v{};
@@ -111,4 +110,13 @@ TEST(StringGearTestCase, VectorToString)
     toString(v, s);
 
     ASSERT_EQ(0, s.size());
+}
+
+TEST(StringGearTestCase, StringTweaks)
+{
+    string s{"12345"};
+
+    s[0] = 'a';
+
+    ASSERT_STREQ("a2345", s.c_str());
 }

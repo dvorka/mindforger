@@ -1,7 +1,7 @@
 /*
  markdown_outline_representation.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -500,13 +500,7 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
 string* MarkdownOutlineRepresentation::toDescription(const Note* note, string* md, bool autolinking)
 {
     if(descriptionInterceptor && autolinking) {
-        vector<string*> autolinkedDescription{};
-        descriptionInterceptor->process(note->getDescription(), autolinkedDescription);
-        toString(autolinkedDescription, *md);
-
-        for(string* s:autolinkedDescription) {
-            delete s;
-        }
+        descriptionInterceptor->process(note->getDescription(), *md);
     } else {
         toString(note->getDescription(), *md);
     }
@@ -543,6 +537,5 @@ string* MarkdownOutlineRepresentation::toc(const Outline* outline, bool tags, bo
     }
     return md;
 }
-
 
 } // m8r namespace

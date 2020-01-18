@@ -1,7 +1,7 @@
 /*
  recent_notes_table_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -32,15 +32,23 @@ class RecentNotesTableView : public QTableView
     // if view is width < threshold columns, then shows simplified view w/o Mind-related columns
     static constexpr int SIMPLIFIED_VIEW_THRESHOLD_WIDTH = 75*2;
 
+    bool isDashboardlet;
+
 public:
-    explicit RecentNotesTableView(QWidget* parent);
+    explicit RecentNotesTableView(QWidget* parent, bool isDashboardlet=false);
     RecentNotesTableView(const RecentNotesTableView&) = delete;
     RecentNotesTableView(const RecentNotesTableView&&) = delete;
     RecentNotesTableView &operator=(const RecentNotesTableView&) = delete;
     RecentNotesTableView &operator=(const RecentNotesTableView&&) = delete;
     virtual ~RecentNotesTableView() override {}
 
+protected:
+    virtual void keyPressEvent(QKeyEvent* event) override;
+    virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
     virtual void resizeEvent(QResizeEvent* event) override;
+
+signals:
+    void signalShowSelectedRecentNote();
 };
 
 }

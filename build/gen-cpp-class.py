@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ import sys
 TEMPLATE_HEADER_FILE='''/*
  {}.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -65,7 +65,7 @@ public:
 TEMPLATE_CPP_FILE='''/*
  {}.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -103,6 +103,7 @@ if len(sys.argv) == 2:
     nameDash = arg.lower()
     nameMacro = arg.upper()
     with open(nameDash+".h", "w") as text_file:
+        # TODO f-string
         text_file.write(TEMPLATE_HEADER_FILE.format(
             nameDash,
             nameMacro,nameMacro,
@@ -111,6 +112,7 @@ if len(sys.argv) == 2:
             nameMacro))
 
     with open(nameDash+".cpp", "w") as text_file:
+        # TODO f-string
         text_file.write(TEMPLATE_CPP_FILE.format(
             nameDash,
             nameDash,

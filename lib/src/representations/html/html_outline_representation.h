@@ -1,7 +1,7 @@
 /*
  html_outline_representation.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -25,8 +25,11 @@
 #include "../../model/note.h"
 #include "../markdown/markdown_outline_representation.h"
 #include "../markdown/markdown_transcoder.h"
+#if defined  MF_MD_2_HTML_CMARK
 #include "../markdown/cmark_gfm_markdown_transcoder.h"
+#else
 #include "../markdown/discount_markdown_transcoder.h"
+#endif
 
 namespace m8r {
 

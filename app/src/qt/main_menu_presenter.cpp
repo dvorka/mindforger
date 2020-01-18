@@ -1,7 +1,7 @@
 /*
  main_menu_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 #endif
 
     // menu: recall
-    QObject::connect(view->actionFts, SIGNAL(triggered()), mwp, SLOT(doActionFts()));
+    QObject::connect(view->actionFindFts, SIGNAL(triggered()), mwp, SLOT(doActionFts()));
     QObject::connect(view->actionFindOutlineByName, SIGNAL(triggered()), mwp, SLOT(doActionFindOutlineByName()));
     QObject::connect(view->actionFindNoteByName, SIGNAL(triggered()), mwp, SLOT(doActionFindNoteByName()));
     QObject::connect(view->actionFindOutlineByTag, SIGNAL(triggered()), mwp, SLOT(doActionFindOutlineByTag()));
@@ -62,17 +62,15 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 #endif
 
     // menu: view
+    QObject::connect(view->actionViewDashboard, SIGNAL(triggered()), mwp, SLOT(doActionViewDashboard()));
     QObject::connect(view->actionViewHome, SIGNAL(triggered()), mwp, SLOT(doActionViewHome()));
     QObject::connect(view->actionViewOrganizer, SIGNAL(triggered()), mwp, SLOT(doActionViewOrganizer()));
     QObject::connect(view->actionViewOutlines, SIGNAL(triggered()), mwp, SLOT(doActionViewOutlines()));
     QObject::connect(view->actionViewTags, SIGNAL(triggered()), mwp, SLOT(doActionViewTagCloud()));
     QObject::connect(view->actionViewNavigator, SIGNAL(triggered()), mwp, SLOT(doActionViewKnowledgeGraphNavigator()));
-#ifdef DO_MF_DEBUG
     QObject::connect(view->actionViewCli, SIGNAL(triggered()), mwp, SLOT(doActionCli()));
-#else
-    QObject::connect(view, SIGNAL(showCli()), mwp, SLOT(doActionCli()));
-#endif
     QObject::connect(view->actionViewRecentNotes, SIGNAL(triggered()), mwp, SLOT(doActionViewRecentNotes()));
+    QObject::connect(view->actionViewHoist, SIGNAL(triggered()), mwp, SLOT(doActionNoteHoist()));
     QObject::connect(view->actionViewDistractionFree, SIGNAL(triggered()), mwp, SLOT(doActionViewDistractionFree()));
     QObject::connect(view->actionViewFullscreen, SIGNAL(triggered()), mwp, SLOT(doActionViewFullscreen()));
 
@@ -91,7 +89,6 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 
     // menu: Note
     QObject::connect(view->actionNoteNew, SIGNAL(triggered()), mwp, SLOT(doActionNoteNew()));
-    QObject::connect(view->actionNoteHoist, SIGNAL(triggered()), mwp, SLOT(doActionNoteHoist()));
     QObject::connect(view->actionNoteEdit, SIGNAL(triggered()), mwp, SLOT(doActionNoteEdit()));
     QObject::connect(view->actionNoteForget, SIGNAL(triggered()), mwp, SLOT(doActionNoteForget()));
     QObject::connect(view->actionNotePromote, SIGNAL(triggered()), mwp, SLOT(doActionNotePromote()));
@@ -105,7 +102,10 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionNoteClone, SIGNAL(triggered()), mwp, SLOT(doActionNoteClone()));
 
     // menu: edit
-    // no binding needed - it's already bound in the editor ~ menu is rather a documentation
+    QObject::connect(view->actionEditFind, SIGNAL(triggered()), mwp, SLOT(doActionEditFind()));
+    QObject::connect(view->actionEditFindNext, SIGNAL(triggered()), mwp, SLOT(doActionEditFindAgain()));
+    // no other bindings needed - it's already bound in the editor ~ menu is rather a documentation
+    QObject::connect(view->actionEditWordWrap, SIGNAL(triggered()), mwp, SLOT(doActionEditWordWrapToggle()));
 
     // menu: format
     QObject::connect(view->actionFormatBold, SIGNAL(triggered()), mwp, SLOT(doActionFormatBold()));
@@ -171,6 +171,11 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 MainMenuPresenter::~MainMenuPresenter()
 {
     // TODO deletes: actions
+}
+
+void MainMenuPresenter::showFacetDashboard()
+{
+    view->showFacetOutlineList(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
 }
 
 void MainMenuPresenter::showFacetOrganizer()

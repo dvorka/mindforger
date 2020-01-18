@@ -1,7 +1,7 @@
 /*
  qutils.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -24,7 +24,12 @@ namespace m8r {
 
 void initRandomizer()
 {
-    qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
+    qsrand(static_cast<uint>(QTime(0,0,0).secsTo(QTime::currentTime())));
+}
+
+QString stringFormatIntAsUs(int i)
+{
+    return QString::fromStdString(stringIntFormat(std::to_string(i)));
 }
 
 bool stringMatchByKeywords(const QString& keywords, const QString& s, bool caseSensitive)

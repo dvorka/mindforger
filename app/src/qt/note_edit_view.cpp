@@ -1,7 +1,7 @@
 /*
  note_edit_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -26,15 +26,17 @@ NoteEditView::NoteEditView(QWidget* parent)
     : QWidget(parent)
 {
     // widgets
-    editNameAndButtonsPanel = new EditNameAndButtonsPanel{EditNameAndButtonsPanel::Mode::NOTE_MODE, this};
+    topNamePanel = new EditNamePanel{MfWidgetMode::NOTE_MODE, this};
     noteEditor = new NoteEditorView{this};
+    bottomButtonsPanel = new EditButtonsPanel{MfWidgetMode::NOTE_MODE, this};
 
     // assembly
     QVBoxLayout* layout = new QVBoxLayout{this};
     // ensure that wont be extra space around member widgets
     layout->setContentsMargins(QMargins(0,0,0,0));
-    layout->addWidget(editNameAndButtonsPanel);
+    layout->addWidget(topNamePanel);
     layout->addWidget(noteEditor);
+    layout->addWidget(bottomButtonsPanel);
     setLayout(layout);
 
     // signals
@@ -51,10 +53,10 @@ NoteEditView::NoteEditView(QWidget* parent)
         QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_S)),
         this, SLOT(slotSaveNote()));
     QObject::connect(
-        editNameAndButtonsPanel->getRememberButton(), SIGNAL(clicked()),
+        bottomButtonsPanel->getRememberButton(), SIGNAL(clicked()),
         this, SLOT(slotSaveAndCloseEditor()));
     QObject::connect(
-        editNameAndButtonsPanel->getCancelButton(), SIGNAL(clicked()),
+        bottomButtonsPanel->getCancelButton(), SIGNAL(clicked()),
         this, SLOT(slotCloseEditor()));
 }
 
@@ -64,7 +66,7 @@ NoteEditView::~NoteEditView()
 
 void NoteEditView::slotOpenNotePropertiesEditor()
 {
-    editNameAndButtonsPanel->handleShowNoteEditDialog();
+    bottomButtonsPanel->handleShowNoteEditDialog();
 }
 
 void NoteEditView::slotSaveAndCloseEditor()

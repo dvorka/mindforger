@@ -1,7 +1,7 @@
 /*
  html_delegate.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,8 +23,12 @@ void HtmlDelegate::paint(
         const QStyleOptionViewItem& option,
         const QModelIndex& index) const
 {
-    // TODO v4 is deprecated since qt 5.7
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
+    QStyleOptionViewItem optionV4 = option;
+#else
+    // v4 is deprecated since qt 5.7
     QStyleOptionViewItemV4 optionV4 = option;
+#endif
     initStyleOption(&optionV4, index);
 
     QStyle *style = optionV4.widget? optionV4.widget->style() : QApplication::style();
@@ -53,8 +57,12 @@ QSize HtmlDelegate::sizeHint(
         const QStyleOptionViewItem& option,
         const QModelIndex& index) const
 {
-    // TODO v4 is deprecated since qt 5.7
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 7, 0))
+    QStyleOptionViewItem optionV4 = option;
+#else
+    // v4 is deprecated since qt 5.7
     QStyleOptionViewItemV4 optionV4 = option;
+#endif
     initStyleOption(&optionV4, index);
 
     QTextDocument doc;

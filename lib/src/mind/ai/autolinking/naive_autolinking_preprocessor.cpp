@@ -1,7 +1,7 @@
 /*
  naive_autolinking_preprocessor.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -18,14 +18,24 @@
 */
 #include "naive_autolinking_preprocessor.h"
 
+#ifndef MF_MD_2_HTML_CMARK
+
 namespace m8r {
 
 using namespace std;
 
+// see editor highligting regexps, test it at https://www.regextester.com
+const string NaiveAutolinkingPreprocessor::PATTERN_LINK = string{"\\[(:?[\\S\\s]+)\\]\\(\\S+\\)"};
+const string NaiveAutolinkingPreprocessor::PATTERN_CODE = string{"`[\\S\\s]+`"};
+const string NaiveAutolinkingPreprocessor::PATTERN_MATH = string{"\\$[\\S\\s]+\\$"};
+const string NaiveAutolinkingPreprocessor::PATTERN_HTTP = string{"https?://"};
+
 NaiveAutolinkingPreprocessor::NaiveAutolinkingPreprocessor(Mind& mind)
-    : AutolinkingPreprocessor{},
-      mind(mind),
-      things{}
+    : AutolinkingPreprocessor{mind},
+      linkRegex{PATTERN_LINK},
+      codeRegex{PATTERN_CODE},
+      mathRegex{PATTERN_MATH},
+      httpRegex{PATTERN_HTTP}
 {
 }
 
@@ -33,8 +43,32 @@ NaiveAutolinkingPreprocessor::~NaiveAutolinkingPreprocessor()
 {
 }
 
-void NaiveAutolinkingPreprocessor::updateIndices()
+bool NaiveAutolinkingPreprocessor::containsLinkCodeMath(const string* line)
 {
+    std::smatch matchedString;
+    if(std::regex_search(*line, matchedString, linkRegex)
+         ||
+       std::regex_search(*line, matchedString, codeRegex)
+         ||
+       std::regex_search(*line, matchedString, mathRegex)
+        ||
+       std::regex_search(*line, matchedString, httpRegex))
+    {
+        return true;
+    }
+
+    return false;
+}
+
+void NaiveAutolinkingPreprocessor::updateThingsIndex()
+{
+    // IMPROVE update indices only if an O/N is modified (except writing read timestamps)
+
+#ifdef DO_MF_DEBUG
+    MF_DEBUG("[Autolinking] Updating indices..." << endl);
+    auto begin = chrono::high_resolution_clock::now();
+#endif
+
     things.clear();
 
     // Os
@@ -50,55 +84,59 @@ void NaiveAutolinkingPreprocessor::updateIndices()
     // sort names from longest to shortest (to have best ~ longest matches)
     std::sort(notes.begin(), notes.end(), aliasSizeComparator);
     for(Thing* t:notes) things.push_back(t);
+
+#ifdef DO_MF_DEBUG
+    auto end = chrono::high_resolution_clock::now();
+    MF_DEBUG("  Indices updated in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
+#endif
 }
 
-void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, std::vector<std::string*>& amd)
+void NaiveAutolinkingPreprocessor::process(const vector<string*>& md, string &amd)
 {
-    MF_DEBUG("Autolinker:" << endl);
+    MF_DEBUG("[Autolinking] NAIVE" << endl);
 
-    bool insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
+    insensitive = Configuration::getInstance().isAutolinkingCaseInsensitive();
 
-    // IMPROVE consider synchronization ONLY in case that it's really needed
-    updateIndices();
+    // IMPROVE: inefficient ~ used as naive autolinker is for experiments only
+    updateThingsIndex();
+
+    std::vector<std::string*> amdl;
 
     // IMPROVE ORDER of Ns determines what will be found > have active O Ns in head, etc.
 
     if(md.size()) {
         bool inCodeBlock=false, inMathBlock=false;
-        static const string CODE_BLOCK{"```"};
-        static const string MATH_BLOCK{"$$"};
         for(string* l:md) {
             // every line is autolinked SEPARATELY
 
             string* nl = new string{};
 
             // skip code/math/... blocks
-            if(stringStartsWith(*l,CODE_BLOCK)) {
+            if(stringStartsWith(*l, CODE_BLOCK)) {
                 inCodeBlock = !inCodeBlock;                
 
                 nl->append(*l);
-                amd.push_back(nl);
+                amdl.push_back(nl);
                 continue;
-            } else if(stringStartsWith(*l,MATH_BLOCK)) {
+            } else if(stringStartsWith(*l, MATH_BLOCK)) {
                 inMathBlock= !inMathBlock;
 
                 nl->append(*l);
-                amd.push_back(nl);
+                amdl.push_back(nl);
                 continue;
             }
 
-            // IMPROVE before Aho-Corasic is available rather skip lines where
-            // either MD link or inline code presents to preserve syntax correctness.
+            // NAIVE skip lines where is either MD link or inline code presents
+            // to preserve syntax correctness (potential matches might be lost)
             if(containsLinkCodeMath(l)) {
-
                 nl->append(*l);
-                amd.push_back(nl);
+                amdl.push_back(nl);
                 continue;
             }
 
             if(l && l->size()) {
                 string w{*l}, chop{};
-                MF_DEBUG(">>" << w << ">>" << endl);
+                MF_DEBUG(">>" << w << "<<" << endl);
 
                 while(w.size()>0) {
                     // find match which is PREFIX of chopped line
@@ -107,7 +145,7 @@ void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, 
                     // IMPROVE loop to be changed to Aho-Corasic trie
 
                     // inject Os, then Ns
-                    for(Thing* t:things) {
+                    for(Thing* t:mind.autolink()->getThings()) {
                         size_t found;
                         bool match, insensitiveMatch;
                         string lowerAlias{};
@@ -191,12 +229,21 @@ void NaiveAutolinkingPreprocessor::process(const std::vector<std::string*>& md, 
                 }
 
                 MF_DEBUG("<<" << *nl << "<<" << endl);
-                amd.push_back(nl);
+                amdl.push_back(nl);
             } else {
-                amd.push_back(nl);
+                amdl.push_back(nl);
             }
         }
     }
+
+    toString(amdl, amd);
+}
+
+void NaiveAutolinkingPreprocessor::clear()
+{
+    things.clear();
+    MF_DEBUG("[Autolinking] indices CLEARed" << endl);
 }
 
 } // m8r namespace
+#endif // MF_MD_2_HTML_CMARK

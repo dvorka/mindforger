@@ -1,7 +1,7 @@
 /*
  html_outline_representation.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -269,12 +269,12 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
         header(*html, basePath, standalone);
 
         if(markdown->size() > 0) {
-            // ensure MD ends with new line, otherwise there would be missing characters in output HTML
-            if(markdown->at(markdown->size()-1) != '\n') {
-                markdown += '\n';
-            }
-
 #ifdef MF_NO_MD_2_HTML
+            // Discount: make sure that MD ends with new line, otherwise there would be missing characters in output HTML
+            //if(markdown->at(markdown->size()-1) != '\n') {
+            //    markdown->append("\n");
+            //}
+
             html->append("<pre>");
             html->append(*markdown);
             html->append("</pre>");

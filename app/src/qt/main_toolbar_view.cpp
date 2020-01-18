@@ -1,7 +1,7 @@
 /*
  main_toolbar_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,33 +23,78 @@ namespace m8r {
 MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
     : QToolBar{tr("Main Toolbar"), mainWindowView}, mainWindow{mainWindowView}
 {
+    // TOOLBAR: L&F driven toolbar icons - dark vs. light
 
-    actionNewOutlineOrNote = addAction(QIcon(":/icons/new.svg"), tr("New Notebook"));
+    actionFindFts = addAction(
+        QIcon(":/icons/find-fts.svg"),
+        "Full-text search");
+
+    cli = new CliAndBreadcrumbsView{this};
+    addWidget(cli);
+    cli->show();
+
     addSeparator();
-    actionOpenRepository = addAction(QIcon(":/icons/open-repository.svg"), tr("Open a directory with Markdowns or MindForger repository"));
-    actionOpenFile = addAction(QIcon(":/icons/open-file.svg"), tr("Open Markdown file"));
+
+    actionNewOutlineOrNote = addAction(
+        QIcon(":/icons/new.svg"),
+        tr("New Notebook"));
+
     addSeparator();
-    actionHomeOutline = addAction(QIcon(":/icons/home.svg"), "Open home Notebook");
-    actionBackToPreviousNote = addAction(QIcon(":/icons/back.svg"), "Back to Previous Note");
+
+    actionOpenRepository = addAction(
+        QIcon(":/icons/open-repository.svg"),
+        tr("Open a directory with Markdowns or MindForger repository"));
+    actionOpenFile = addAction(
+        QIcon(":/icons/open-file.svg"),
+        tr("Open Markdown file"));
+
     addSeparator();
-    actionViewEisenhower = addAction(QIcon(":/icons/view-eisenhower.svg"), tr("View Eisenhower Matrix"));
-    actionViewOutlines = addAction(QIcon(":/icons/view-outlines.svg"), tr("View Notebooks"));
-    actionViewNavigator = addAction(QIcon(":/icons/view-navigator.svg"), tr("View Knowledge Graph Navigator"));
-    actionViewTags = addAction(QIcon(":/icons/view-tags.svg"), tr("View Tags"));
-    actionViewRecentNotes = addAction(QIcon(":/icons/view-recent-notes.svg"), tr("View Recent Notes"));
+
+    actionHomeOutline = addAction(
+        QIcon(":/icons/home.svg"),
+        "Open home Notebook");
+
     addSeparator();
-    actionFindFts = addAction(QIcon(":/icons/find-fts.svg"), "Full-text search");
-    actionFindObyName = addAction(QIcon(":/icons/find-o-name.svg"), "Recall Notebook by Name");
-    actionFindNbyName = addAction(QIcon(":/icons/find-n-name.svg"), "Recall Note by Name");
-    actionFindObyTag = addAction(QIcon(":/icons/find-o-tag.svg"), "Recall Notebook by Tag");
-    actionFindNbyTag = addAction(QIcon(":/icons/find-n-tag.svg"), "Recall Note by Tag");
+
+    actionViewDashboard = addAction(
+        QIcon(":/icons/dashboard.svg"),
+        tr("View Dashboard"));
+    actionViewEisenhower = addAction(
+        QIcon(":/icons/view-eisenhower.svg"),
+        tr("View Eisenhower Matrix"));
+    actionViewOutlines = addAction(
+        QIcon(":/icons/view-outlines.svg"),
+        tr("View Notebooks"));
+    actionViewNavigator = addAction(
+        QIcon(":/icons/view-navigator.svg"),
+        tr("View Knowledge Graph Navigator"));
+    actionViewTags = addAction(
+        QIcon(":/icons/view-tags.svg"),
+        tr("View Tags"));
+    actionViewRecentNotes = addAction(
+        QIcon(":/icons/view-recent-notes.svg"),
+        tr("View Recent Notes"));
+
     addSeparator();
-    actionThink = addAction(QIcon(":/icons/think.svg"), "Think / Sleep");
+
+    actionThink = addAction(
+        QIcon(":/icons/think.svg"),
+        "Think / Sleep");
+
     addSeparator();
-    actionScope = addAction(QIcon(":/icons/scope.svg"), "Scope Mind");
-    actionAdapt = addAction(QIcon(":/icons/adapt.svg"), "Adapt");
+
+    actionScope = addAction(
+        QIcon(":/icons/scope.svg"),
+        "Scope Mind");
+    actionAdapt = addAction(
+        QIcon(":/icons/adapt.svg"),
+        "Adapt");
+
     addSeparator();
-    actionHelp = addAction(QIcon(":/icons/help.svg"), "Open Documentation");
+
+    actionHelp = addAction(
+        QIcon(":/icons/help.svg"),
+        "Open Documentation");
 }
 
 MainToolbarView::~MainToolbarView()

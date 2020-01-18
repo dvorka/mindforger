@@ -1,7 +1,7 @@
 /*
  tags_table_model.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ void TagsTableModel::removeAllRows()
 
     QStringList tableHeader;
     tableHeader
-        << tr("Tag")
+        << tr("Tags")
         << tr("Ts");
     // IMPROVE set tooltips: items w/ tooltips instead of just strings
     setHorizontalHeaderLabels(tableHeader);

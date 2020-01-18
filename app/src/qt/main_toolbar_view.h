@@ -1,7 +1,7 @@
 /*
  main_toolbar_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -22,10 +22,12 @@
 #include <QtWidgets>
 
 #include "main_window_view.h"
+#include "cli_n_breadcrumbs_presenter.h"
 
 namespace m8r {
 
 class MainWindowView;
+class CliAndBreadcrumbsView;
 
 class MainToolbarView : public QToolBar
 {
@@ -33,22 +35,20 @@ class MainToolbarView : public QToolBar
 
     MainWindowView* mainWindow;
 
+    CliAndBreadcrumbsView* cli;
+
 public:
     QAction* actionNewOutlineOrNote;
     QAction* actionOpenRepository;
     QAction* actionOpenFile;
-    QAction* actionViewEisenhower;
+    QAction* actionViewDashboard;
     QAction* actionViewOutlines;
+    QAction* actionViewEisenhower;
     QAction* actionViewNavigator;
     QAction* actionViewTags;
     QAction* actionViewRecentNotes;
     QAction* actionFindFts;
-    QAction* actionFindObyName;
-    QAction* actionFindNbyName;
-    QAction* actionFindObyTag;
-    QAction* actionFindNbyTag;
     QAction* actionHomeOutline;
-    QAction* actionBackToPreviousNote;
     QAction* actionThink;
     QAction* actionScope;
     QAction* actionAdapt;
@@ -61,6 +61,8 @@ public:
     MainToolbarView &operator=(const MainToolbarView&) = delete;
     MainToolbarView &operator=(const MainToolbarView&&) = delete;
     ~MainToolbarView();
+
+    CliAndBreadcrumbsView* getCli() const { return cli;}
 };
 
 }

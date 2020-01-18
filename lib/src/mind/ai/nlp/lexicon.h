@@ -1,7 +1,7 @@
 /*
  lexicon.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -131,11 +131,11 @@ public:
      */
     void recalculateWeights() {
         for(auto& e:m) {
-            e.second.weight =  1. - ((((float)e.second.frequency)/100.) / (((float)maxFrequency)/100.));
+            e.second.weight =  1.f - ((((float)e.second.frequency)/100.f) / (((float)maxFrequency)/100.f));
 
             // IMPROVE fixed constant is eight too big or small
             // ensure max(w)'s weigh to be > 0
-            if(!e.second.weight) e.second.weight = 0.01;
+            if(!e.second.weight) e.second.weight = 0.01f;
         }
     }
 

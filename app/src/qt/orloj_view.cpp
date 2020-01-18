@@ -1,7 +1,7 @@
 /*
  outline_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -25,8 +25,8 @@ using namespace std;
 OrlojView::OrlojView(QWidget* parent)
     : QSplitter(Qt::Horizontal, parent)
 {
-    // TODO to be implemented
-    //addWidget(new QTextEdit("Home: outlines (link), Notes (l), bytes (l), graphs, recent"), this);
+    dashboard = new DashboardView(this);
+    addWidget(dashboard);
 
     organizer = new OrganizerView(this);
     addWidget(organizer);
@@ -36,9 +36,6 @@ OrlojView::OrlojView(QWidget* parent)
 
     outlinesTable = new OutlinesTableView(this);
     addWidget(outlinesTable);
-
-    notesTable = new NotesTableView(this);
-    addWidget(notesTable);
 
     recentNotesTable = new RecentNotesTableView(this);
     addWidget(recentNotesTable);
@@ -91,6 +88,12 @@ void OrlojView::fiftyFifty()
     setSizes(sizes);
 }
 
+void OrlojView::showFacetDashboard()
+{
+    QSet<QWidget*> v; v << dashboard;
+    hideChildren(v);
+}
+
 void OrlojView::showFacetOrganizer()
 {
     QSet<QWidget*> v; v << organizer;
@@ -122,44 +125,48 @@ void OrlojView::showFacetRecentNotes()
     hideChildren(v);
 }
 
-void OrlojView::showFacetFtsResult()
-{
-    QSet<QWidget*> v; v << notesTable;
-    hideChildren(v);
-}
-
-void OrlojView::showFacetFtsResultDetail()
-{
-    QSet<QWidget*> v; v << notesTable << noteView;
-    hideChildren(v);
-}
-
 void OrlojView::showFacetOutlineHeaderView()
 {
-    QSet<QWidget*> v; v << outlineView << outlineHeaderView;
-    hideChildren(v);
-    outlineView->getOutlineTree()->clearSelection();
+    if(menuView->actionViewHoist->isChecked()) {
+        showFacetHoistedOutlineHeaderView();
+    } else {
+        QSet<QWidget*> v; v << outlineView << outlineHeaderView;
+        hideChildren(v);
+        outlineView->getOutlineTree()->clearSelection();
+    }
 }
 
 void OrlojView::showFacetOutlineHeaderEdit()
 {
-    QSet<QWidget*> v; v << outlineView << outlineHeaderEdit;
-    hideChildren(v);
-    outlineHeaderEdit->giveFocusToEditor();
+    if(menuView->actionViewHoist->isChecked()) {
+        showFacetHoistedOutlineHeaderEdit();
+    } else {
+        QSet<QWidget*> v; v << outlineView << outlineHeaderEdit;
+        hideChildren(v);
+        outlineHeaderEdit->giveEditorFocus();
+    }
 }
 
 void OrlojView::showFacetNoteView()
 {
-    QSet<QWidget*> v; v << outlineView << noteView;
-    hideChildren(v);
-    outlineView->getOutlineTree()->setFocus();
+    if(menuView->actionViewHoist->isChecked()) {
+        showFacetHoistedNoteView();
+    } else {
+        QSet<QWidget*> v; v << outlineView << noteView;
+        hideChildren(v);
+        outlineView->getOutlineTree()->setFocus();
+    }
 }
 
 void OrlojView::showFacetNoteEdit()
 {
-    QSet<QWidget*> v; v << outlineView << noteEdit;
-    hideChildren(v);
-    noteEdit->giveFocusToEditor();
+    if(menuView->actionViewHoist->isChecked()) {
+        showFacetHoistedNoteEdit();
+    } else {
+        QSet<QWidget*> v; v << outlineView << noteEdit;
+        hideChildren(v);
+        noteEdit->giveEditorFocus();
+    }
 }
 
 void OrlojView::showFacetNavigator()
@@ -184,49 +191,37 @@ void OrlojView::showFacetNavigatorNote()
  * Hoisting.
  */
 
-bool OrlojView::isHoistView()
+bool OrlojView::isHoisting() const
 {
-    if(!outlineView->isVisible()) {
-        if(outlineHeaderView->isVisible()) {
-            return true;
-        } else if(outlineHeaderEdit->isVisible()) {
-            return true;
-        } else if(noteView->isVisible()) {
-            return true;
-        } else if(noteEdit->isVisible()) {
-            return true;
-        }
-    }
-
-    return false;
+    return menuView->actionViewHoist->isChecked();
 }
 
 void OrlojView::showFacetHoistedOutlineHeaderView()
 {
     QSet<QWidget*> v; v << outlineHeaderView;
     hideChildren(v);
-    outlineHeaderView->setFocus();
+    outlineHeaderView->giveViewerFocus();
 }
 
 void OrlojView::showFacetHoistedOutlineHeaderEdit()
 {
     QSet<QWidget*> v; v << outlineHeaderEdit;
     hideChildren(v);
-    outlineHeaderEdit->giveFocusToEditor();
+    outlineHeaderEdit->giveEditorFocus();
 }
 
 void OrlojView::showFacetHoistedNoteView()
 {
     QSet<QWidget*> v; v << noteView;
     hideChildren(v);
-    noteView->setFocus();
+    noteView->giveViewerFocus();
 }
 
 void OrlojView::showFacetHoistedNoteEdit()
 {
     QSet<QWidget*> v; v << noteEdit;
     hideChildren(v);
-    noteEdit->giveFocusToEditor();
+    noteEdit->giveEditorFocus();
 }
 
 } // m8r namespace

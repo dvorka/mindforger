@@ -1,7 +1,7 @@
 /*
  outlines_table_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -37,6 +37,9 @@ class OutlinesTablePresenter : public QObject
     OutlinesTableModel* model;
 
 public:
+    static const int NO_ROW = -1;
+
+public:
     OutlinesTablePresenter(OutlinesTableView* view, HtmlOutlineRepresentation* htmlRepresentation);
     OutlinesTablePresenter(const OutlinesTablePresenter&) = delete;
     OutlinesTablePresenter(const OutlinesTablePresenter&&) = delete;
@@ -47,6 +50,7 @@ public:
     OutlinesTableView* getView() const { return view; }
 
     void refresh(const std::vector<Outline*>& outlines);
+    int getCurrentRow() const;
 };
 
 }

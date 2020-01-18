@@ -1,7 +1,6 @@
 # appveyor.yml     AppVeyor CI configuration file for MindForger
 #
-# Copyright (C) 2014-2019
-#
+# Copyright (C) 2016-2020
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-version: 1.49.{build}
+version: 1.50.{build}
 
 skip_commits:
   files:
@@ -42,7 +41,8 @@ cache:
  - C:\Program Files\googletest-distribution 
 
 install:
- - set QT_DIR=C:\Qt\5.9.7\msvc2017_64
+ - set QT_DIR=C:\Qt\5.9.8\msvc2017_64
+# - set QT_DIR=C:\Qt\5.9.7\msvc2017_64
  - set PATH=%PATH%;%QT_DIR%\bin
  - set M8R_HOME=%APPVEYOR_BUILD_FOLDER%
  - if not exist c:\cache mkdir c:\cache
@@ -60,7 +60,8 @@ build_script:
  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
  - cd "%M8R_HOME%" && qmake -r mindforger.pro && nmake
  - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime && "C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Q /DVcRedistPath=c:\cache\vcredist_x64.exe build\windows\installer\mindforger-setup.iss
- - if "%APPVEYOR_REPO_BRANCH%" equ "master" appveyor PushArtifact app\release\installer\mindforger-setup.exe
+# - if "%APPVEYOR_REPO_BRANCH%" equ "master" appveyor PushArtifact app\release\installer\mindforger-setup.exe
+ - appveyor PushArtifact app\release\installer\mindforger-setup.exe
 
 before_test:
  - pushd "%M8R_HOME%\lib\test" && qmake -r mindforger-lib-unit-tests.pro "CONFIG+=debug" "CONFIG+=mfdebug" "CONFIG+=mfunit" && nmake && popd

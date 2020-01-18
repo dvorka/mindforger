@@ -1,7 +1,7 @@
 /*
  note_view_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -41,19 +41,30 @@ NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
     this->view->setModel(this->model);
 
     this->markdownRepresentation
-        = orloj->getMainWindow()->getMarkdownRepresentation();
+        = orloj->getMainPresenter()->getMarkdownRepresentation();
     this->htmlRepresentation
-        = orloj->getMainWindow()->getHtmlRepresentation();
+        = orloj->getMainPresenter()->getHtmlRepresentation();
 
     this->currentNote = nullptr;
 
 #ifdef MF_QT_WEB_ENGINE
-    QObject::connect(view->getPage(), SIGNAL(signalLinkClicked(QUrl)), this, SLOT(slotLinkClicked(QUrl)));
+    QObject::connect(
+        view->getViever()->getPage(), SIGNAL(signalLinkClicked(QUrl)),
+        this, SLOT(slotLinkClicked(QUrl)));
 #else
-    QObject::connect(view, SIGNAL(linkClicked(QUrl)), this, SLOT(slotLinkClicked(QUrl)));
+    QObject::connect(
+        view->getViever(), SIGNAL(linkClicked(QUrl)),
+        this, SLOT(slotLinkClicked(QUrl)));
 #endif
-    QObject::connect(view, SIGNAL(signalMouseDoubleClickEvent()), this, SLOT(slotEditNote()));
-    QObject::connect(view, SIGNAL(signalFromViewNoteToOutlines()), orloj, SLOT(slotShowOutlines()));
+    QObject::connect(
+        view->getViever(), SIGNAL(signalMouseDoubleClickEvent()),
+        this, SLOT(slotEditNote()));
+    QObject::connect(
+        view, SIGNAL(signalOpenEditor()),
+        this, SLOT(slotEditNote()));
+    QObject::connect(
+        view->getViever(), SIGNAL(signalFromViewNoteToOutlines()),
+        orloj, SLOT(slotShowOutlines()));
 }
 
 NoteViewPresenter::~NoteViewPresenter()
@@ -68,27 +79,15 @@ void NoteViewPresenter::refresh(Note* note)
     note->makeRead();
     this->currentNote = note;
 
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_FTS_RESULT) || orloj->isFacetActive(OrlojPresenterFacets::FACET_FTS_VIEW_NOTE)) {
-        // FTS result HTML
-        html = "<html><body style='";
-        htmlRepresentation->fgBgTextColorStyle(html);
-        html += "'><pre>";
-        qHtml = QString::fromStdString(html);
-        markdownRepresentation->to(note, &html);
-        qHtml += QString::fromStdString(html);
-        qHtml += QString::fromStdString("</pre></body></html>");
+    // autolinking debug
+    // MF_DEBUG("H " << htmlRepresentation << endl);
+    // MF_DEBUG("N " << note << endl);
+    // MF_DEBUG("T " << html << endl);
+    // MF_DEBUG("A " << Configuration::getInstance().isAutolinking() << endl);
 
-        // highlight matches
-        QString highlighted = QString::fromStdString("<span style='background-color: red; color: white;'>");
-        // IMPROVE instead of searched expression that MAY differ in CASE, here should be original string found in the haystack
-        highlighted += searchExpression;
-        highlighted += QString::fromStdString("</span>");
-        qHtml.replace(searchExpression, highlighted, searchIgnoreCase?Qt::CaseInsensitive:Qt::CaseSensitive);
-    } else {
-        // HTML
-        htmlRepresentation->to(note, &html, Configuration::getInstance().isAutolinking());
-        qHtml= QString::fromStdString(html);
-    }
+    // HTML
+    htmlRepresentation->to(note, &html, Configuration::getInstance().isAutolinking());
+    qHtml= QString::fromStdString(html);
 
     view->setHtml(qHtml);
 
@@ -98,7 +97,7 @@ void NoteViewPresenter::refresh(Note* note)
 
 void NoteViewPresenter::slotLinkClicked(const QUrl& url)
 {
-    orloj->getMainWindow()->handleNoteViewLinkClicked(url);
+    orloj->getMainPresenter()->handleNoteViewLinkClicked(url);
 }
 
 void NoteViewPresenter::slotEditNote()

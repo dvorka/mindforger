@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="flat-find-fts.svg"
+   inkscape:version="0.92.4 (f8dce91, 2019-08-02)"
+   sodipodi:version="0.32"
+   id="svg1"
+   x="0"
+   y="0"
+   version="1.0"
+   _SVGFile__filename="oldscale/actions/14_zoom.svg"
+   width="60"
+   height="60">
+  <sodipodi:namedview
+     inkscape:current-layer="svg1"
+     inkscape:window-y="27"
+     inkscape:window-x="0"
+     inkscape:window-height="1016"
+     inkscape:window-width="1920"
+     inkscape:cy="25.616517"
+     inkscape:cx="35.880949"
+     inkscape:zoom="4.9560446"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     showgrid="false"
+     inkscape:window-maximized="1"
+     inkscape:pagecheckerboard="true" />
+  <defs
+     id="defs3">
+    <linearGradient
+       id="linearGradient1160">
+      <stop
+         style="stop-color: #000000;stop-opacity: 1.0;"
+         id="stop1161"
+         offset="0" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         id="stop1162"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient1160"
+       id="linearGradient1163" />
+  </defs>
+  <path
+     inkscape:connector-curvature="0"
+     id="path1187"
+     d="M 37.247074,37.763328 C 47.568345,55.832825 54.857982,59.577303 57.098922,57.358654 59.417709,55.042305 55.514604,47.87567 38.602847,36.34801 Z"
+     style="font-size:12px;fill:#888888;fill-opacity:1;fill-rule:evenodd;stroke:#888888;stroke-width:2.72985816;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+  <path
+     inkscape:connector-curvature="0"
+     id="path1174"
+     d="m 43.490375,24.244293 c 0,10.833216 -8.702515,19.625388 -19.425249,19.625388 -10.722726,0 -19.4252384,-8.792172 -19.4252384,-19.625388 0,-10.833215 8.7025124,-19.6253868 19.4252384,-19.6253878 10.722734,10e-7 19.425249,8.7921728 19.425249,19.6253878 z"
+     style="font-size:12px;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#888888;stroke-width:5.86813402;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+  <metadata
+     id="metadata11">
+    <RDF
+       id="RDF12">
+      <Work
+         about=""
+         id="Work13">
+        <title
+           id="title14">Part of the Flat Icon Collection (Thu Aug 26 14:38:01 2004)</title>
+        <description
+           id="description16" />
+        <subject
+           id="subject17">
+          <Bag
+             id="Bag18">
+            <li
+               id="li19" />
+          </Bag>
+        </subject>
+        <publisher
+           id="publisher20">
+          <Agent
+             about=""
+             id="Agent21">
+            <title
+               id="title22" />
+          </Agent>
+        </publisher>
+        <creator
+           id="creator23">
+          <Agent
+             about=""
+             id="Agent24">
+            <title
+               id="title25">Danny Allen</title>
+          </Agent>
+        </creator>
+        <rights
+           id="rights27">
+          <Agent
+             about=""
+             id="Agent28">
+            <title
+               id="title29">Danny Allen</title>
+          </Agent>
+        </rights>
+        <date
+           id="date31" />
+        <format
+           id="format32">image/svg+xml</format>
+        <type
+           id="type34"
+           resource="http://purl.org/dc/dcmitype/StillImage" />
+        <license
+           id="license35"
+           resource="http://creativecommons.org/licenses/LGPL/2.1/">
+          <date
+             id="date36" />
+        </license>
+        <language
+           id="language37">en</language>
+      </Work>
+    </RDF>
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

@@ -1,7 +1,7 @@
 /*
  mind.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -31,18 +31,17 @@
 #include "ontology/thing_class_rel_triple.h"
 #include "aspect/mind_scope_aspect.h"
 #include "../config/configuration.h"
+#include "../representations/representation_interceptor.h"
 #include "../representations/markdown/markdown_configuration_representation.h"
 #ifdef MF_NER
     #include "ai/nlp/named_entity_recognition.h"
 #endif
 
-#include "ai/autolinking/naive_autolinking_preprocessor.h"
-
 namespace m8r {
 
 class Ai;
 class KnowledgeGraph;
-class AutolinkingPreprocessor;
+class AutolinkingMind;
 
 constexpr auto NO_PARENT = 0xFFFF;
 
@@ -50,6 +49,22 @@ enum class FtsSearch {
     EXACT,
     IGNORE_CASE,
     REGEXP
+};
+
+struct MindStatistics {
+    Outline* mostReadOutline;
+    Outline* mostWrittenOutline;
+
+    Note* mostReadNote;
+    Note* mostWrittenNote;
+
+    const Tag* mostUsedTag;
+};
+
+enum class ThingNameSerialization {
+    NAME,
+    SCOPED_NAME,
+    LINK
 };
 
 /**
@@ -131,10 +146,12 @@ public:
 private:
     Configuration &config;
     Ontology ontology;
-    AutolinkingPreprocessor* autoInterceptor;
+    RepresentationInterceptor* autoInterceptor;
     HtmlOutlineRepresentation htmlRepresentation;
     MarkdownConfigurationRepresentation* mdConfigRepresentation;
     Memory memory;
+    AutolinkingMind* autolinking;
+    MindStatistics* stats;
 
     /**
      * Atomic mind state changes and asynchronous computations synchronization
@@ -278,12 +295,19 @@ public:
     void decActiveProcesses() { activeProcesses--; }
 
     /*
+     * Autolinking
+     */
+
+    void autolinkUpdate(const std::string& oldName, const std::string& newName) const;
+    bool autolinkFindLongestPrefixWord(std::string& s, std::string& r) const;
+
+    /*
      * Knowledge graph
      */
 
     KnowledgeGraph* getKnowledgeGraph() const { return knowledgeGraph; }
 
-    unsigned getTriplesCount() const { return triples.size(); }
+    size_t getTriplesCount() const { return triples.size(); }
 
 #ifdef MF_NER
 
@@ -327,7 +351,7 @@ public:
      * @brief Find outline by name - exact match.
      */
     std::unique_ptr<std::vector<Outline*>> findOutlineByNameFts(const std::string& pattern) const;
-    std::vector<Note*>* findNoteByNameFts(const std::string& pattern) const;
+    //std::vector<Note*>* findNoteByNameFts(const std::string& pattern) const;
     std::vector<Note*>* findNoteFts(
             const std::string& pattern,
             const FtsSearch mode = FtsSearch::EXACT,
@@ -430,11 +454,17 @@ public:
      * TYPES
      */
 
+    void getAllThings(
+            std::vector<Thing*>& things,
+            std::vector<std::string>* thingsNames=nullptr,
+            std::string* pattern=nullptr,
+            ThingNameSerialization as=ThingNameSerialization::SCOPED_NAME,
+            Outline* currentO=nullptr);
     // IMPROVE rename to getAllOs()
     const std::vector<Outline*>& getOutlines() const;
     std::vector<Outline*>* getOutlinesOfType(const OutlineType& type) const;
 
-    void getAllNotes(std::vector<Note*>& notes, bool sortByRead=false, bool addNoteForOutline=false) const;
+    std::vector<Note*>& getAllNotes(std::vector<Note*>& notes, bool sortByRead=false, bool addNoteForOutline=false) const;
     std::vector<Note*>* getNotesOfType(const NoteType& type) const;
     std::vector<Note*>* getNotesOfType(const NoteType& type, const Outline& outline) const;
 
@@ -589,11 +619,20 @@ public:
             std::string fromOutlineKey,
             uint16_t fromNoteId);
 
+    /**
+     * @brief Actions to perform on N rename.
+     */
+    void noteOnRename(const std::string& oldName, const std::string& newName);
+
     /*
      * DIAGNOSTICS
      */
 
-    // IMPROVE MemoryStatistics getStatistics();
+    /*
+     * STATISTICS
+     */
+
+    MindStatistics* getStatistics();
 
 private:
     /**

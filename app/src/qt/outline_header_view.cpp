@@ -1,7 +1,7 @@
 /*
  outline_header_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@ namespace m8r {
 
 using namespace std;
 
-OutlineHeaderView::OutlineHeaderView(QWidget *parent)
+OutlineHeaderViewerView::OutlineHeaderViewerView(QWidget *parent)
 #ifdef MF_QT_WEB_ENGINE
     : QWebEngineView(parent)
 #else
@@ -44,7 +44,7 @@ OutlineHeaderView::OutlineHeaderView(QWidget *parent)
 
 #ifdef MF_QT_WEB_ENGINE
 
-bool OutlineHeaderView::event(QEvent* event)
+bool OutlineHeaderViewerView::event(QEvent* event)
 {
     // INSTALL event filter to every child - child polished event is received 1+x for every child
     if (event->type() == QEvent::ChildPolished) {
@@ -58,7 +58,7 @@ bool OutlineHeaderView::event(QEvent* event)
     return QWebEngineView::event(event);
 }
 
-bool OutlineHeaderView::eventFilter(QObject *obj, QEvent *event)
+bool OutlineHeaderViewerView::eventFilter(QObject *obj, QEvent *event)
 {
     if(event->type() == QEvent::MouseButtonDblClick) {
         // double click to Note view opens Note editor
@@ -70,7 +70,18 @@ bool OutlineHeaderView::eventFilter(QObject *obj, QEvent *event)
     return QWebEngineView::eventFilter(obj, event);
 }
 
-void OutlineHeaderView::wheelEvent(QWheelEvent* event)
+void OutlineHeaderViewerView::keyPressEvent(QKeyEvent* event)
+{
+    if(event->modifiers() & Qt::AltModifier){
+        if(event->key()==Qt::Key_Left) {
+            emit signalFromViewOutlineHeaderToOutlines();
+        }
+    }
+
+    QWebEngineView::keyPressEvent(event);
+}
+
+void OutlineHeaderViewerView::wheelEvent(QWheelEvent* event)
 {
     if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
         if(!event->angleDelta().isNull()) {
@@ -90,14 +101,25 @@ void OutlineHeaderView::wheelEvent(QWheelEvent* event)
 
 #else
 
-void OutlineHeaderView::mouseDoubleClickEvent(QMouseEvent* event)
+void OutlineHeaderViewerView::mouseDoubleClickEvent(QMouseEvent* event)
 {
     Q_UNUSED(event);
 
     emit signalMouseDoubleClickEvent();
 }
 
-void OutlineHeaderView::wheelEvent(QWheelEvent* event)
+void OutlineHeaderViewerView::keyPressEvent(QKeyEvent* event)
+{
+    if(event->modifiers() & Qt::AltModifier){
+        if(event->key()==Qt::Key_Left) {
+            emit signalFromViewOutlineHeaderToOutlines();
+        }
+    }
+
+    QWebView::keyPressEvent(event);
+}
+
+void OutlineHeaderViewerView::wheelEvent(QWheelEvent* event)
 {
     if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
         if(!event->angleDelta().isNull()) {
@@ -115,5 +137,47 @@ void OutlineHeaderView::wheelEvent(QWheelEvent* event)
 }
 
 #endif
+
+OutlineHeaderView::OutlineHeaderView(QWidget* parent)
+    : QWidget(parent)
+{
+    // widgets
+    headerViewer = new OutlineHeaderViewerView{this};
+    view2EditPanel = new ViewToEditEditButtonsPanel{MfWidgetMode::OUTLINE_MODE, this};
+
+    // assembly
+    QVBoxLayout* layout = new QVBoxLayout{this};
+    // ensure that wont be extra space around member widgets
+    layout->setContentsMargins(QMargins(0,0,0,0));
+    layout->addWidget(headerViewer);
+    view2EditPanel->setFixedHeight(2*view2EditPanel->getEditButton()->height());
+    layout->addWidget(view2EditPanel);
+    setLayout(layout);
+
+    // signals
+    QObject::connect(
+        view2EditPanel->getEditButton(), SIGNAL(clicked()),
+        this, SLOT(slotOpenEditor()));
+}
+
+OutlineHeaderView::~OutlineHeaderView()
+{
+}
+
+void OutlineHeaderView::keyPressEvent(QKeyEvent* event)
+{
+    if(event->modifiers() & Qt::ControlModifier){
+        if(event->key()==Qt::Key_E) {
+            emit signalOpenEditor();
+        }
+    }
+
+    QWidget::keyPressEvent(event);
+}
+
+void OutlineHeaderView::slotOpenEditor()
+{
+    emit signalOpenEditor();
+}
 
 } // m8r namespace

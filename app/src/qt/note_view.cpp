@@ -1,7 +1,7 @@
 /*
  note_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@ namespace m8r {
 
 using namespace std;
 
-NoteView::NoteView(QWidget *parent)
+NoteViewerView::NoteViewerView(QWidget *parent)
 #ifdef MF_QT_WEB_ENGINE
     : QWebEngineView(parent)
 #else
@@ -44,7 +44,7 @@ NoteView::NoteView(QWidget *parent)
 
 #ifdef MF_QT_WEB_ENGINE
 
-bool NoteView::event(QEvent* event)
+bool NoteViewerView::event(QEvent* event)
 {
     // INSTALL event filter to every child - child polished event is received 1+x for every child
     if (event->type() == QEvent::ChildPolished) {
@@ -58,7 +58,7 @@ bool NoteView::event(QEvent* event)
     return QWebEngineView::event(event);
 }
 
-bool NoteView::eventFilter(QObject *obj, QEvent *event)
+bool NoteViewerView::eventFilter(QObject* obj, QEvent *event)
 {
     if(event->type() == QEvent::MouseButtonDblClick) {
         // double click to Note view opens Note editor
@@ -70,7 +70,7 @@ bool NoteView::eventFilter(QObject *obj, QEvent *event)
     return QWebEngineView::eventFilter(obj, event);
 }
 
-void NoteView::keyPressEvent(QKeyEvent* event)
+void NoteViewerView::keyPressEvent(QKeyEvent* event)
 {
     if(event->modifiers() & Qt::AltModifier){
         if(event->key()==Qt::Key_Left) {
@@ -81,7 +81,7 @@ void NoteView::keyPressEvent(QKeyEvent* event)
     QWebEngineView::keyPressEvent(event);
 }
 
-void NoteView::wheelEvent(QWheelEvent* event)
+void NoteViewerView::wheelEvent(QWheelEvent* event)
 {
     if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
         if(!event->angleDelta().isNull()) {
@@ -101,7 +101,7 @@ void NoteView::wheelEvent(QWheelEvent* event)
 
 #else
 
-void NoteView::mouseDoubleClickEvent(QMouseEvent* event)
+void NoteViewerView::mouseDoubleClickEvent(QMouseEvent* event)
 {
     Q_UNUSED(event);
 
@@ -109,7 +109,7 @@ void NoteView::mouseDoubleClickEvent(QMouseEvent* event)
     emit signalMouseDoubleClickEvent();
 }
 
-void NoteView::keyPressEvent(QKeyEvent* event)
+void NoteViewerView::keyPressEvent(QKeyEvent* event)
 {
     if(event->modifiers() & Qt::AltModifier){
         if(event->key()==Qt::Key_Left) {
@@ -120,7 +120,7 @@ void NoteView::keyPressEvent(QKeyEvent* event)
     QWebView::keyPressEvent(event);
 }
 
-void NoteView::wheelEvent(QWheelEvent* event)
+void NoteViewerView::wheelEvent(QWheelEvent* event)
 {
     if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
         if(!event->angleDelta().isNull()) {
@@ -138,5 +138,47 @@ void NoteView::wheelEvent(QWheelEvent* event)
 }
 
 #endif
+
+NoteView::NoteView(QWidget* parent)
+    : QWidget(parent)
+{
+    // widgets
+    noteViewer = new NoteViewerView{this};
+    view2EditPanel = new ViewToEditEditButtonsPanel{MfWidgetMode::NOTE_MODE, this};
+
+    // assembly
+    QVBoxLayout* layout = new QVBoxLayout{this};
+    // ensure that wont be extra space around member widgets
+    layout->setContentsMargins(QMargins(0,0,0,0));
+    layout->addWidget(noteViewer);
+    view2EditPanel->setFixedHeight(2*view2EditPanel->getEditButton()->height());
+    layout->addWidget(view2EditPanel);
+    setLayout(layout);
+
+    // signals
+    QObject::connect(
+        view2EditPanel->getEditButton(), SIGNAL(clicked()),
+        this, SLOT(slotOpenEditor()));
+}
+
+NoteView::~NoteView()
+{
+}
+
+void NoteView::keyPressEvent(QKeyEvent* event)
+{
+    if(event->modifiers() & Qt::ControlModifier){
+        if(event->key()==Qt::Key_E) {
+            emit signalOpenEditor();
+        }
+    }
+
+    QWidget::keyPressEvent(event);
+}
+
+void NoteView::slotOpenEditor()
+{
+    emit signalOpenEditor();
+}
 
 } // m8r namespace

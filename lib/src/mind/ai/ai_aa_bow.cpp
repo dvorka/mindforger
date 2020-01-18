@@ -1,7 +1,7 @@
 /*
  ai_aa_bow.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -89,7 +89,9 @@ bool AiAaBoW::learnMemorySync(thread* t)
     notes.clear();
     memory.getAllNotes(notes);
     // let N know it's indexed in AI
-    for(size_t i=0; i<notes.size(); i++) notes[i]->setAiAaMatrixIndex(i);
+    for(size_t i=0; i<notes.size(); i++) {
+        notes[i]->setAiAaMatrixIndex(static_cast<int>(i));
+    }
 
     // build lexicon and BoW
     lexicon.clear();
@@ -178,7 +180,7 @@ void AiAaBoW::calculateAaRow(size_t y)
     // calculate row and column that cross diagonal on [y][y]
 
     // check diagonal to find out whether the cross has been already calculated
-    if(aaMatrix[y][y] == 1.) {
+    if(aaMatrix[y][y] == 1.f) {
         return;
     }
 

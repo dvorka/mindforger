@@ -1,7 +1,7 @@
 /*
  mind_navigator.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -119,8 +119,10 @@ private:
 
     qreal initialEdgeLenght;
 
+    bool isDashboardlet;
+
 public:
-    NavigatorView(QWidget* parent);
+    NavigatorView(QWidget* parent, bool isDashboardlet=false);
     ~NavigatorView();
 
     qreal getInitialEdgeLenght() const { return initialEdgeLenght; }
@@ -151,6 +153,7 @@ protected:
 #ifndef QT_NO_WHEELEVENT
     void wheelEvent(QWheelEvent *event) override;
 #endif
+    void mousePressEvent(QMouseEvent* mouseEvent) override;
 
 private:
     void updateNavigatorView();
@@ -158,6 +161,7 @@ private:
 
 signals:
     void nodeSelectedSignal(NavigatorNode* selectedNode);
+    void clickToSwitchFacet();
 
 public slots:
     void shuffle();

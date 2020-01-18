@@ -1,7 +1,7 @@
 /*
  organizer_quadrant_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -36,6 +36,9 @@ class OrganizerQuadrantPresenter : public QObject
 {
     Q_OBJECT
 
+private:
+    static const int NO_ROW = -1;
+
     OrganizerQuadrantView* view;
     OrganizerQuadrantModel* model;
 
@@ -49,10 +52,12 @@ public:
     OrganizerQuadrantPresenter &operator=(const OrganizerQuadrantPresenter&&) = delete;
     ~OrganizerQuadrantPresenter();
 
+    int getCurrentRow() const;
     void refresh(const std::vector<Outline*>& os, bool urgency, bool importance);
     OrganizerQuadrantView* getView() const { return view; }
 
 public slots:
+    void slotShowSelectedOutline();
     void slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected);
 };
 

@@ -1,11 +1,25 @@
+2020-01-18  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+   * Released v1.50.0 - New dashboard view; complete fulltext search rewamp;
+     toolbar switch to flat icons theme; new menu items icons; images and attachments
+     can be added with drag&drop; images and icons can be automatically copied
+     to MindForger repository; added Notebook and Note completion on Ctrl-/;
+     persistent hoist mode; (not released: autolinking rewrite to cmark-gfm
+     for high performance, robust and extensible implementation.
+
 2019-03-09  Martin Dvorak  <martin.dvorak@mindforger.com>
 
    * Released v1.49.2 - Stabilization: fixed scrolling loop on Win,
      missing Win installer icon, panel maximization of FTS result page.
 
+2019-03-06  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+  * Released v1.49.1 - Stabilization: Ctrl-mouse wheel HTML preview zooming
+    removed on Windows as it caused MindForger to crash.
+
 2019-03-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-  * Released v1.49 - native Windows version, Discount replaced with cmark-gfm
+  * Released v1.49.0 - native Windows version, Discount replaced with cmark-gfm
     as HTML preview engine and fix of 100% CPU consumption in table views.
 
 2019-02-03  Martin Dvorak  <martin.dvorak@mindforger.com>
@@ -20,27 +34,27 @@
 
 2018-11-10  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-   * Released v1.48 - CSV export, autolinking preview, MathJax format
+   * Released v1.48.0 - CSV export, autolinking preview, MathJax format
      menu.
 
 2018-10-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-  * Released v1.47 - Knowledge graph navigator, regex-based FTS, HTML notebook
+  * Released v1.47.0 - Knowledge graph navigator, regex-based FTS, HTML notebook
     export, TWiki document import, recent notes (significant improvement),
     asynchronous associations calculation and Docker distro.
 
 2018-09-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-  * Released v1.46 - Normal terminology (nerd-style terminology can be enabled
+  * Released v1.46.0 - Normal terminology (nerd-style terminology can be enabled
     in the configuration) and toolbar.
 
 2018-07-10  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-  * Released v1.43 - Eisenhower matrix, tags view and recent notes view.
+  * Released v1.43.0 - Eisenhower matrix, tags view and recent notes view.
 
 2018-05-30  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-  * Released v1.42 - The first MindForger release.
+  * Released v1.42.0 - The first MindForger release.
 
 2018-01-07  Martin Dvorak  <martin.dvorak@mindforger.com>
 

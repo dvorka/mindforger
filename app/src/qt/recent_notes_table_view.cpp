@@ -1,7 +1,7 @@
 /*
  recent_notes_table_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -20,9 +20,11 @@
 
 namespace m8r {
 
-RecentNotesTableView::RecentNotesTableView(QWidget* parent)
+RecentNotesTableView::RecentNotesTableView(QWidget* parent, bool isDashboardlet)
     : QTableView(parent)
 {
+    this->isDashboardlet = isDashboardlet;
+
     verticalHeader()->setVisible(false);
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
@@ -31,6 +33,40 @@ RecentNotesTableView::RecentNotesTableView(QWidget* parent)
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
+}
+
+void RecentNotesTableView::keyPressEvent(QKeyEvent* event)
+{
+    if(!(event->modifiers() & Qt::AltModifier)
+         &&
+       !(event->modifiers() & Qt::ControlModifier)
+         &&
+       !(event->modifiers() & Qt::ShiftModifier))
+    {
+        switch(event->key()) {
+        case Qt::Key_Return:
+        case Qt::Key_Right:
+            emit signalShowSelectedRecentNote();
+            return;
+        case Qt::Key_Down:
+        case Qt::Key_Up:
+        case Qt::Key_Left:
+            QTableView::keyPressEvent(event);
+            return;
+        }
+
+        return;
+    }
+
+    QTableView::keyPressEvent(event);
+}
+
+void RecentNotesTableView::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    Q_UNUSED(event);
+
+    // double click to O/N opens it
+    emit signalShowSelectedRecentNote();
 }
 
 void RecentNotesTableView::resizeEvent(QResizeEvent* event)
@@ -45,20 +81,26 @@ void RecentNotesTableView::resizeEvent(QResizeEvent* event)
 
     // O
     int normalizedWidth = width()/fontMetrics().averageCharWidth();
-    if(normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH) {
+    if(normalizedWidth < SIMPLIFIED_VIEW_THRESHOLD_WIDTH || isDashboardlet) {
         this->setColumnHidden(1, true);
     } else {
         this->setColumnHidden(1, false);
         this->setColumnWidth(1, this->fontMetrics().averageCharWidth()*50);
     }
 
-    // rds/wrs
-    this->setColumnWidth(2, this->fontMetrics().averageCharWidth()*5);
-    this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*5);
+    if(isDashboardlet) {
+        this->setColumnHidden(2, true);
+        this->setColumnHidden(3, true);
+        this->setColumnHidden(4, true);
+    } else {
+        // rds/wrs
+        this->setColumnWidth(2, this->fontMetrics().averageCharWidth()*5);
+        this->setColumnWidth(3, this->fontMetrics().averageCharWidth()*5);
 
-    // pretty: rd/wr
-    this->setColumnWidth(4, this->fontMetrics().averageCharWidth()*12);
-    // pretty
+        // pretty rd
+        this->setColumnWidth(4, this->fontMetrics().averageCharWidth()*12);
+    }
+    // pretty wr
     this->setColumnWidth(5, this->fontMetrics().averageCharWidth()*12);
 
     QTableView::resizeEvent(event);

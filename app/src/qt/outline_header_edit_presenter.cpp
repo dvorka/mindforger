@@ -1,7 +1,7 @@
 /*
  outline_header_edit_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -87,6 +87,10 @@ void OutlineHeaderEditPresenter::slotSaveOutlineHeader()
         if(!view->getName().isEmpty()) {
             name.assign(view->getName().toStdString());
         }
+
+        // ensure autolinking indices are updated on O rename
+        mwp->getMind()->autolinkUpdate(currentOutline->getName(), view->getName().toStdString());
+
         currentOutline->setName(name);
 
         if(!view->isDescriptionEmpty()) {

@@ -1,6 +1,6 @@
 # mindforger-lib.pro     MindForger thinking notebook
 #
-# Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software ; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -99,7 +99,6 @@ SOURCES += \
     ./src/mind/memory_dwell.cpp \
     ./src/mind/memory.cpp \
     ./src/mind/mind.cpp \
-    ./src/mind/planner.cpp \
     ./src/mind/working_memory.cpp \
     ./src/config/configuration.cpp \
     ./src/install/installer.cpp \
@@ -135,10 +134,12 @@ SOURCES += \
     src/mind/associated_notes.cpp \
     src/mind/ai/autolinking_preprocessor.cpp \
     src/representations/csv/csv_outline_representation.cpp \
-    src/mind/ai/autolinking/aho_corasick_autolinking_preprocessor.cpp \
     src/mind/ai/autolinking/naive_autolinking_preprocessor.cpp \
     src/representations/markdown/discount_markdown_transcoder.cpp \
-    src/representations/markdown/cmark_gfm_markdown_transcoder.cpp
+    src/representations/markdown/cmark_gfm_markdown_transcoder.cpp \
+    src/mind/ai/autolinking/autolinking_mind.cpp \
+    src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.cpp \
+    src/mind/limbo.cpp
 
 mfner {
     SOURCES += \
@@ -188,7 +189,6 @@ HEADERS += \
     ./src/mind/memory_dwell.h \
     ./src/mind/memory.h \
     ./src/mind/mind.h \
-    ./src/mind/planner.h \
     ./src/mind/working_memory.h \
     ./src/mind/mind_listener.h \
     ./src/config/color.h \
@@ -252,13 +252,15 @@ HEADERS += \
     src/mind/ai/autolinking_preprocessor.h \
     src/representations/representation_interceptor.h \
     src/representations/csv/csv_outline_representation.h \
-    src/mind/ai/autolinking/aho_corasick_autolinking_preprocessor.h \
     src/mind/ai/autolinking/naive_autolinking_preprocessor.h \
     src/representations/markdown/markdown_transcoder.h \
     src/representations/markdown/discount_markdown_transcoder.h \
     src/representations/representation_type.h \
     src/config/config.h \
-    src/representations/markdown/cmark_gfm_markdown_transcoder.h
+    src/representations/markdown/cmark_gfm_markdown_transcoder.h \
+    src/mind/ai/autolinking/autolinking_mind.h \
+    src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h \
+    src/mind/limbo.h
 
 mfner {
     HEADERS += \

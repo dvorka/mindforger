@@ -1,7 +1,7 @@
 /*
  file_utils.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -95,7 +95,7 @@ int ungzip(const char* srcFile, const char* dstFile);
 void pathToDirectoryAndFile(const std::string& path, std::string& directory, std::string& file);
 void pathToLinuxDelimiters(const std::string& path, std::string& linuxPath);
 bool stringToLines(const std::string* text, std::vector<std::string*>& lines);
-bool fileToLines(const std::string* filename, std::vector<std::string*>& lines, unsigned long int& filesize);
+bool fileToLines(const std::string* filename, std::vector<std::string*>& lines, size_t& filesize);
 std::string* fileToString(const std::string& filename);
 void stringToFile(const std::string& filename, const std::string& content);
 time_t fileModificationTime(const std::string* filename);
@@ -106,7 +106,7 @@ bool isDirectoryOrFileExists(const char* path);
 bool isDirectory(const char* path);
 bool isFile(const char* path);
 bool isPathRelative(const std::string& path);
-char* makeTempDirectory(char* dirNamePefix);
+char* makeTempDirectory(char* dirNamePrefix);
 int removeDirectoryRecursively(const char* path);
 int copyDirectoryRecursively(const char* srcPath, const char* dstPath, bool extractGz=false);
 bool createDirectory(const std::string& path);

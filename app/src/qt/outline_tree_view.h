@@ -1,7 +1,7 @@
 /*
  outline_tree_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -80,10 +80,13 @@ public:
     OutlineTreeView &operator=(const OutlineTreeView&&) = delete;
 
     virtual void keyPressEvent(QKeyEvent* event) override;
+    virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
     virtual void resizeEvent(QResizeEvent* event) override;
     void refreshNotes(const QModelIndex& from, const QModelIndex& to) { dataChanged(from, to); }
 
 signals:
+    void signalOutlineShow();
+
     void signalFromOutlineTreeToOutlines();
 
     void signalSelectNextRow();

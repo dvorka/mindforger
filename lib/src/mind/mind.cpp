@@ -1,7 +1,7 @@
 /*
  mind.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -18,6 +18,13 @@
  */
 #include "mind.h"
 
+#ifdef MF_MD_2_HTML_CMARK
+  #include "ai/autolinking/autolinking_mind.h"
+  #include "ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h"
+# else
+  #include "ai/autolinking/naive_autolinking_preprocessor.h"
+#endif
+
 using namespace std;
 
 namespace m8r {
@@ -25,10 +32,19 @@ namespace m8r {
 Mind::Mind(Configuration &configuration)
     : config{configuration},
       ontology{},
+#if defined  MF_MD_2_HTML_CMARK
+      autoInterceptor(new CmarkAhoCorasickBlockAutolinkingPreprocessor{*this}),
+#else
       autoInterceptor(new NaiveAutolinkingPreprocessor{*this}),
+#endif
       htmlRepresentation{ontology, autoInterceptor},
       mdConfigRepresentation(new MarkdownConfigurationRepresentation{}),
       memory{configuration, ontology, htmlRepresentation},
+#ifdef MF_MD_2_HTML_CMARK
+      autolinking{new AutolinkingMind{*this}},
+#else
+      autolinking{nullptr}
+#endif
       exclusiveMind{},
       timeScopeAspect{},
       tagsScopeAspect{ontology},
@@ -44,6 +60,13 @@ Mind::Mind(Configuration &configuration)
     timeScopeAspect.setTimeScope(config.getTimeScope());
     tagsScopeAspect.setTags(config.getTagsScope());
     memory.setMindScope(&scopeAspect);
+
+    stats = new MindStatistics();
+    stats->mostReadOutline = nullptr;
+    stats->mostWrittenOutline = nullptr;
+    stats->mostReadNote = nullptr;
+    stats->mostWrittenNote = nullptr;
+    stats->mostUsedTag = nullptr;
 }
 
 Mind::~Mind()
@@ -52,6 +75,8 @@ Mind::~Mind()
     delete knowledgeGraph;
     delete mdConfigRepresentation;
     delete autoInterceptor;
+    delete autolinking;
+    delete stats;
 
     // - Memory destruct outlines
     // - allNotesCache Notes is just container referencing Memory's Outlines
@@ -70,6 +95,9 @@ bool Mind::learn()
         MF_DEBUG("Learning..." << endl);
         mindAmnesia();
         memory.learn();
+#ifdef MF_MD_2_HTML_CMARK
+        autolinking->reindex();
+#endif
         MF_DEBUG("Mind LEARNED " << memory.getOutlinesCount() << " Os" << endl);
         return true;
     } else {
@@ -225,7 +253,9 @@ bool Mind::mindAmnesia()
 
         // forget EVERYTHING
         memory.amnesia();
-
+#ifdef MF_MD_2_HTML_CMARK
+        autolinking->clear();
+#endif
         MF_DEBUG("Mind WITH amnesia" << endl);
         return true;
     } else {
@@ -235,7 +265,27 @@ bool Mind::mindAmnesia()
 }
 
 /*
- * REMEMBERING
+ * Autolinking
+ */
+
+void Mind::autolinkUpdate(const std::string& oldName, const std::string& newName) const
+{
+#ifdef MF_MD_2_HTML_CMARK
+    autolinking->update(oldName, newName);
+#endif
+}
+
+bool Mind::autolinkFindLongestPrefixWord(std::string& s, std::string& r) const
+{
+#ifdef MF_MD_2_HTML_CMARK
+    return autolinking->findLongestPrefixWord(s, r);
+#elif
+    return false;
+#endif
+}
+
+/*
+ * Remembering
  */
 
 const vector<Note*>& Mind::getMemoryDwell(int pageSize) const
@@ -250,12 +300,14 @@ size_t Mind::getMemoryDwellDepth() const
     return memoryDwell.size();
 }
 
+/*
 vector<Note*>* Mind::findNoteByNameFts(const string& pattern) const
 {
     UNUSED_ARG(pattern);
 
     return nullptr;
 }
+*/
 
 void Mind::getOutlineNames(vector<string>& names) const
 {
@@ -457,6 +509,96 @@ void Mind::findNotesByTags(const vector<const Tag*>& tags, vector<Note*>& result
     }
 }
 
+void Mind::getAllThings(
+    vector<Thing*>& things,
+    vector<string>* thingsNames,
+    string* pattern,
+    ThingNameSerialization as,
+    Outline* currentO)
+{
+    const vector<Outline*>& os = getOutlines();
+    for(Outline* o:os) {
+        if((pattern && stringStartsWith(o->getName(), *pattern))
+              ||
+            pattern==nullptr)
+        {
+            things.push_back(o);
+            if(thingsNames) {
+                string s{};
+                switch(as) {
+                case ThingNameSerialization::LINK:
+                    // IMPROVE make this Note's method
+                    {
+                        s += "[";
+                        s += o->getName();
+                        s += "](";
+                        string p = RepositoryIndexer::makePathRelative(
+                             config.getActiveRepository(),
+                             currentO?currentO->getKey():o->getKey(),
+                             o->getKey());
+                        pathToLinuxDelimiters(p, p);
+                        s += p;
+                        s += ")";
+                        break;
+                    }
+                case ThingNameSerialization::NAME:
+                case ThingNameSerialization::SCOPED_NAME:
+                default:
+                    s += o->getName();
+                    break;
+                }
+                thingsNames->push_back(s);
+            }
+        }
+    }
+    vector<Note*> ns{};
+    getAllNotes(ns);
+    for(Note* n:ns) {
+        if((pattern && stringStartsWith(n->getName(), *pattern))
+              ||
+            pattern==nullptr)
+        {
+            things.push_back(n);
+            if(thingsNames) {
+                string s{};
+                switch(as) {
+                case ThingNameSerialization::NAME:
+                    s += n->getName();
+                    break;
+                case ThingNameSerialization::LINK:
+                    // IMPROVE make this Note's method
+                    {
+                        s += "[";
+                        s += n->getName();
+                        s += " (";
+                        s += n->getOutline()->getName();
+                        s += ")](";
+                        string p = RepositoryIndexer::makePathRelative(
+                             config.getActiveRepository(),
+                             currentO?currentO->getKey():n->getOutline()->getKey(),
+                             n->getKey());
+                        pathToLinuxDelimiters(p, p);
+                        s += p;
+                        s += ")";
+                        break;
+                    }
+                case ThingNameSerialization::SCOPED_NAME:
+                default:
+                    {
+                        // IMPROVE make this Note's method: getScopedName()
+                        s += n->getName();
+                        s += " (";
+                        s += n->getOutline()->getName();
+                        s += ")";
+                        break;
+                    }
+                }
+                thingsNames->push_back(s);
+            }
+        }
+    }
+}
+
 const vector<Outline*>& Mind::getOutlines() const
 {
     // IMPROVE PERF use dirty flag to avoid result-rebuilt
@@ -482,7 +624,7 @@ vector<Outline*>* Mind::getOutlinesOfType(const OutlineType& type) const
     return nullptr;
 }
 
-void Mind::getAllNotes(std::vector<Note*>& notes, bool sortByRead, bool addNoteForOutline) const
+std::vector<Note*>& Mind::getAllNotes(std::vector<Note*>& notes, bool sortByRead, bool addNoteForOutline) const
 {
     return memory.getAllNotes(notes, sortByRead, addNoteForOutline);
 }
@@ -532,7 +674,7 @@ Taxonomy<Tag>& Mind::getTags()
     return ontology.getTags();
 }
 
-void Mind::getTagsCardinality(std::map<const Tag*,int>& tagsCardinality)
+void Mind::getTagsCardinality(map<const Tag*,int>& tagsCardinality)
 {
     if(ontology.getTags().size()) {
         for(const Tag* t:ontology.getTags().values()) {
@@ -894,16 +1036,81 @@ void Mind::noteDemote(Note* note, Outline::Patch* patch)
     }
 }
 
+void Mind::noteOnRename(const std::string& oldName, const std::string& newName)
+{
+    autolinking->update(oldName, newName);
+}
+
 void Mind::onRemembering()
 {
     allNotesCache.clear();
 }
 
-#ifdef MF_NER
+MindStatistics* Mind::getStatistics()
+{
+    // IMPROVE cache it until memory is dirty
+    const vector<Outline*>&os = memory.getOutlines();
+    if(os.size()) {
+        u_int32_t maxReads=0;
+        u_int32_t maxWrites=0;
+        for(Outline* o:os) {
+            if(o->getReads() > maxReads) {
+                maxReads = o->getReads();
+                stats->mostReadOutline = o;
+            }
+            if(o->getRevision() > maxWrites) {
+                maxWrites = o->getRevision();
+                stats->mostWrittenOutline = o;
+            }
+        }
+    } else {
+        stats->mostReadOutline = nullptr;
+        stats->mostWrittenOutline = nullptr;
+    }
+
+    vector<Note*> ns{};
+    memory.getAllNotes(ns);
+    if(ns.size()) {
+        u_int32_t maxReads=0;
+        u_int32_t maxWrites=0;
+        for(Note* n:ns) {
+            if(n->getReads() > maxReads) {
+                maxReads = n->getReads();
+                stats->mostReadNote = n;
+            }
+            if(n->getRevision() > maxWrites) {
+                maxWrites = n->getRevision();
+                stats->mostWrittenNote = n;
+            }
+        }
+    } else {
+        stats->mostReadNote = nullptr;
+        stats->mostWrittenNote = nullptr;
+    }
+
+    map<const Tag*,int> ts{};
+    getTagsCardinality(ts);
+    if(ts.size()) {
+        map<const Tag*,int>::iterator it{};
+        int maxCardinality = 0;
+        for(it = ts.begin(); it != ts.end(); it++) {
+            if(it->second > maxCardinality) {
+                stats->mostUsedTag = it->first;
+                maxCardinality = it->second;
+            }
+        }
+    } else {
+        stats->mostUsedTag = nullptr;
+    }
+
+    return stats;
+}
 
 /*
  * NER
  */
+
+#ifdef MF_NER
 
 bool Mind::isNerInitilized() const
 {

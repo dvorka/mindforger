@@ -1,7 +1,7 @@
 /*
  navigator_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -57,12 +57,12 @@ public:
     void cleanupBeforeHide() { view->cleanupBeforeHide(); }
 
 private slots:
-    void nodeSelectedSlot(NavigatorNode* node);
+    void slotNodeSelected(NavigatorNode* node);
 
 signals:
-    void thingSelectedSignal();
-    void outlineSelectedSignal(Outline* note);
-    void noteSelectedSignal(Note* note);
+    void signalThingSelected();
+    void signalOutlineSelected(Outline* note);
+    void signalNoteSelected(Note* note);
 };
 
 }

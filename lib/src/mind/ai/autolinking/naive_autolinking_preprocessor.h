@@ -1,7 +1,7 @@
 /*
  naive_autolinking_preprocessor.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -19,9 +19,12 @@
 #ifndef M8R_NAIVE_AUTOLINKING_PREPROCESSOR_H
 #define M8R_NAIVE_AUTOLINKING_PREPROCESSOR_H
 
+#ifndef MF_MD_2_HTML_CMARK
+
+#include <regex>
+#include <string>
+
 #include "../autolinking_preprocessor.h"
-#include "../../mind.h"
-#include "../../../representations/markdown/markdown_outline_representation.h"
 
 namespace m8r {
 
@@ -30,7 +33,18 @@ namespace m8r {
  */
 class NaiveAutolinkingPreprocessor : public AutolinkingPreprocessor
 {
-    Mind& mind;
+public:
+    static const std::string PATTERN_LINK;
+    static const std::string PATTERN_CODE;
+    static const std::string PATTERN_MATH;
+    static const std::string PATTERN_HTTP;
+
+private:
+    std::regex linkRegex;
+    std::regex codeRegex;
+    std::regex mathRegex;
+    std::regex httpRegex;
+
     std::vector<Thing*> things;
 
 public:
@@ -41,15 +55,15 @@ public:
     NaiveAutolinkingPreprocessor &operator=(const NaiveAutolinkingPreprocessor&&) = delete;
     virtual ~NaiveAutolinkingPreprocessor();
 
-    virtual void process(const std::vector<std::string*>& md, std::vector<std::string*>& amd) override;
+    virtual void process(const std::vector<std::string*>& md, std::string& amd) override;
+    void clear();
 
 private:
-
-    /**
-     * @brief Update N names/links indices.
-     */
-    void updateIndices();
+    bool containsLinkCodeMath(const std::string* line);
+    void updateThingsIndex();
+    std::vector<Thing*> getThings() { return things; }
 };
 
 }
+#endif // MF_MD_2_HTML_CMARK
 #endif // M8R_NAIVE_AUTOLINKING_PREPROCESSOR_H

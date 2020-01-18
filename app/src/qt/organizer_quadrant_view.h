@@ -1,7 +1,7 @@
 /*
  organizer_quadrant_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -36,6 +36,12 @@ public:
     OrganizerQuadrantView &operator=(const OrganizerQuadrantView&) = delete;
     OrganizerQuadrantView &operator=(const OrganizerQuadrantView&&) = delete;
     virtual ~OrganizerQuadrantView() {}
+
+    virtual void keyPressEvent(QKeyEvent* event) override;
+    virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
+
+signals:
+    void signalShowSelectedOutline();
 };
 
 }

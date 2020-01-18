@@ -12,7 +12,7 @@ BEGIN
         BLOCK "040904E4"
         {
             VALUE "CompanyName",        MINDFORGER_APP_COMPANY
-            VALUE "FileDescription",    MINDFORGER_APP_DESCIPTION
+            VALUE "FileDescription",    MINDFORGER_APP_DESCRIPTION
             VALUE "FileVersion",        MINDFORGER_VERSION_STRING
             VALUE "LegalCopyright",     MINDFORGER_APP_LEGAL
             VALUE "OriginalFilename",   MINDFORGER_APP_EXE

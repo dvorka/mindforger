@@ -1,7 +1,7 @@
 /*
  common_words_blacklist.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -20,9 +20,12 @@
 
 namespace m8r {
 
+using namespace std;
+
 CommonWordsBlacklist::CommonWordsBlacklist()
     : wordBlacklist{}
 {
+    MF_DEBUG("Common words blacklist:" << endl);
     wordBlacklist.addWord("the");
     wordBlacklist.addWord("of");
     wordBlacklist.addWord("and");

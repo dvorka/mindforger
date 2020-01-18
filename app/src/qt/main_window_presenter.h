@@ -1,7 +1,7 @@
 /*
  main_window_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@
 
 #include "dialogs/outline_new_dialog.h"
 #include "dialogs/note_new_dialog.h"
-#include "dialogs/fts_dialog.h"
+#include "dialogs/fts_dialog_presenter.h"
 #include "dialogs/find_outline_by_name_dialog.h"
 #include "dialogs/find_outline_by_tag_dialog.h"
 #include "dialogs/find_note_by_name_dialog.h"
@@ -66,6 +66,8 @@ class OrlojPresenter;
 class StatusBarPresenter;
 class AsyncTaskNotificationsDistributor;
 class NerMainWindowWorkerThread;
+class FtsDialog;
+class FtsDialogPresenter;
 
 /**
  * @brief MindForger main window Presenter.
@@ -110,7 +112,9 @@ private:
     OutlineNewDialog* newOutlineDialog;
     NoteNewDialog* newNoteDialog;
     FtsDialog* ftsDialog;
+    FtsDialogPresenter* ftsDialogPresenter;
     FindOutlineByNameDialog* findOutlineByNameDialog;
+    FindOutlineByNameDialog* findThingByNameDialog;
     FindNoteByNameDialog* findNoteByNameDialog;
     FindOutlineByTagDialog* findOutlineByTagDialog;
     FindNoteByTagDialog* findNoteByTagDialog;
@@ -138,6 +142,7 @@ public:
     MainWindowView& getView() const { return view; }
     const Configuration& getConfiguration() const { return config; }
     MarkdownOutlineRepresentation* getMarkdownRepresentation() const { return mdRepresentation; }
+    MarkdownConfigurationRepresentation* getConfigRepresentation() const { return mdConfigRepresentation; }
     HtmlOutlineRepresentation* getHtmlRepresentation() const { return htmlRepresentation; }
     AsyncTaskNotificationsDistributor* getDistributor() const { return distributor; }
 
@@ -186,9 +191,10 @@ public slots:
     void doActionExit();
     // recall
     void doActionFts();
-    void handleFts();
+    void doFts(const QString& pattern, bool doSearch=false);
     void doActionFindOutlineByName();
     void handleFindOutlineByName();
+    void handleFindThingByName();
     void doActionFindNoteByName();
     void handleFindNoteByName();
     void doActionFindOutlineByTag();
@@ -208,6 +214,7 @@ public slots:
     void handleFtsNerEntity();
 #endif
     // view
+    void doActionViewDashboard();
     void doActionViewOrganizer();
     void doActionViewTagCloud();
     bool doActionViewHome();
@@ -254,6 +261,7 @@ public slots:
     void doActionFormatCodeBlock();
     void doActionFormatMathBlock();
     void doActionFormatBlockquote();
+    void doActionFormatLink(QString link);
     void doActionFormatLink();
     void handleFormatLink();
     void doActionFormatImage();
@@ -276,6 +284,7 @@ public slots:
     void handleNoteNew();
     void doActionNoteHoist();
     void doActionOutlineOrNoteEdit();
+    void doActionOutlineShow();
     void doActionNoteEdit();
     void doActionNoteFirst();
     void doActionNoteUp();
@@ -288,6 +297,10 @@ public slots:
     void doActionRefactorNoteToOutline();
     void handleRefactorNoteToOutline();
     void doActionNoteForget();
+    // edit
+    void doActionEditFind();
+    void doActionEditFindAgain();
+    void doActionEditWordWrapToggle();
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();
@@ -298,10 +311,11 @@ public slots:
     void doActionHelpCheckForUpdates();
     void doActionHelpAboutMindForger();
 
-    void executeFts(const std::string& pattern, const FtsSearch searchMode, Outline* scope=nullptr) const;
+    void slotHandleFts();
 
 private:
     void insertMarkdownText(const QString& text, bool newline=false, int offset=0);
+    void copyLinkOrImageToRepository(const std::string& srcPath, QString& path);
 };
 
 }

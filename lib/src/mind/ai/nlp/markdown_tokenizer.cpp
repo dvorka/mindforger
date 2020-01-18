@@ -1,7 +1,7 @@
 /*
  markdown_tokenizer.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -27,9 +27,7 @@ MarkdownTokenizer::MarkdownTokenizer(Lexicon& lexicon, CommonWordsBlacklist& bla
 {
 }
 
-MarkdownTokenizer::~MarkdownTokenizer()
-{
-}
+MarkdownTokenizer::~MarkdownTokenizer() = default;
 
 void MarkdownTokenizer::tokenize(CharProvider& md, WordFrequencyList& wfl, bool useBlacklist, bool lowercase, bool stem)
 {
@@ -90,6 +88,8 @@ void MarkdownTokenizer::tokenize(CharProvider& md, WordFrequencyList& wfl, bool 
                 w += md.get();
                 break;
             }
+            // avoid compiler fall-through warning
+            MF_FALL_THROUGH;
         case '\n':
         case '\r':
         case ' ':

@@ -2,7 +2,7 @@
 #
 # MindForger knowledge management tool
 #
-# Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -201,14 +201,14 @@ then
     exit 1
 fi
 
-export ARG_BAZAAR_MSG="MindForger 1.49.2 release."
-export ARG_MAJOR_VERSION=1.49.
-export ARG_MINOR_VERSION=20 # minor version is incremented for every Ubuntu version
+export ARG_BAZAAR_MSG="MindForger 1.50.0 release."
+export ARG_MAJOR_VERSION=1.50.
+export ARG_MINOR_VERSION=0 # minor version is incremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
-# old: precise quantal saucy precise utopic vivid wily yakkety trusty (old GCC) artful
-# current: xenial bionic cosmic
-for UBUNTU_VERSION in xenial bionic cosmic
+# old: precise quantal saucy precise utopic vivid wily trusty (old GCC) yakkety artful cosmic
+# current: trusty xenial bionic disco eoan
+for UBUNTU_VERSION in trusty xenial bionic disco eoan
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"

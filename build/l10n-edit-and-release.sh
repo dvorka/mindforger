@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-pushd . && cd ../app/resources/qt/translations && linguist mindforger_en.ts && popd && lrelease ../app/app.pro
+#pushd . && cd ../app/resources/qt/translations && linguist mindforger_en.ts && popd && lrelease ../app/app.pro
+pushd . && cd ../app/resources/qt/translations && linguist mindforger_cs.ts && popd && lrelease ../app/app.pro
+# ... nerd is OOTB
 
 # eof

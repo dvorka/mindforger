@@ -1,7 +1,7 @@
 /*
  memory.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -40,6 +40,7 @@
 #include "../persistence/persistence.h"
 #include "../persistence/filesystem_persistence.h"
 #include "aspect/mind_scope_aspect.h"
+#include "limbo.h"
 
 namespace m8r {
 
@@ -69,6 +70,7 @@ private:
     TWikiOutlineRepresentation twikiRepresentation;
     CsvOutlineRepresentation csvRepresentation;
     MindScopeAspect* mindScope;
+    Limbo limbo;
 
     std::vector<Outline*> outlines;
     std::vector<Note*> notes;
@@ -192,7 +194,7 @@ public:
      * @param sortByRead        sort Ns using read timestamp
      * @param addNoteForOutline add also N for every O
      */
-    void getAllNotes(std::vector<Note*>& notes, bool sortByRead=false, bool addNoteForOutline=false) const;
+    std::vector<Note*>& getAllNotes(std::vector<Note*>& notes, bool sortByRead=false, bool addNoteForOutline=false) const;
 
     /*
      * UTILS

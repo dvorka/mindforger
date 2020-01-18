@@ -1,6 +1,7 @@
-/*                                                                                          planner.h     MindForger thinking notebook
+/*
+ limbo.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -9,23 +10,23 @@
 
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_PLANNER_H_
-#define M8R_PLANNER_H_
+#include "limbo.h"
 
 namespace m8r {
 
-class Planner {
-public:
-	Planner();
-	virtual ~Planner();
-};
+Limbo::Limbo(Configuration& configuration)
+    : config{configuration}
+{
+}
+
+Limbo::~Limbo()
+{
+}
 
 } // m8r namespace
-
-#endif /* M8R_PLANNER_H_ */

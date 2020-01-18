@@ -1,7 +1,7 @@
 /*
  navigator_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ NavigatorPresenter::NavigatorPresenter(NavigatorView* view, QObject* parent, Kno
       subgraph{knowledgeGraph->getNode(KnowledgeGraphNodeType::MIND), Configuration::getInstance().getNavigatorMaxNodes()}
 {
     // signals
-    QObject::connect(view, SIGNAL(nodeSelectedSignal(NavigatorNode*)), this, SLOT(nodeSelectedSlot(NavigatorNode*)));
+    QObject::connect(view, SIGNAL(nodeSelectedSignal(NavigatorNode*)), this, SLOT(slotNodeSelected(NavigatorNode*)));
 }
 
 NavigatorPresenter::~NavigatorPresenter()
@@ -68,19 +68,19 @@ void NavigatorPresenter::shuffle()
     view->shuffle();
 }
 
-void NavigatorPresenter::nodeSelectedSlot(NavigatorNode* node)
+void NavigatorPresenter::slotNodeSelected(NavigatorNode* node)
 {
     knowledgeGraph->getRelatedNodes(node->getKnowledgeGraphNode(), subgraph);
     view->refreshOnNextTimerTick(&subgraph);
     switch(node->getKnowledgeGraphNode()->getType()) {
     case KnowledgeGraphNodeType::OUTLINE:
-        emit outlineSelectedSignal(static_cast<Outline*>(node->getKnowledgeGraphNode()->getThing()));
+        emit signalOutlineSelected(static_cast<Outline*>(node->getKnowledgeGraphNode()->getThing()));
         break;
     case KnowledgeGraphNodeType::NOTE:
-        emit noteSelectedSignal(static_cast<Note*>(node->getKnowledgeGraphNode()->getThing()));
+        emit signalNoteSelected(static_cast<Note*>(node->getKnowledgeGraphNode()->getThing()));
         break;
     default:
-        emit thingSelectedSignal();
+        emit signalThingSelected();
         break;
     }
 }

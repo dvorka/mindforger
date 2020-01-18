@@ -1,7 +1,7 @@
 /*
  note_editor_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -28,7 +28,9 @@ inline bool caseInsensitiveLessThan(const QString &a, const QString &b)
 }
 
 NoteEditorView::NoteEditorView(QWidget* parent)
-    : QPlainTextEdit(parent), parent(parent), completedAndSelected(false)
+    : QPlainTextEdit(parent),
+      parent(parent),
+      completedAndSelected(false)
 {
     hitCounter = 0;
 
@@ -48,7 +50,8 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     model = new QStringListModel{this};
     completer = new QCompleter{this};
     completer->setWidget(this);
-    completer->setCompletionMode(QCompleter::PopupCompletion);
+    // must be in unfiltered mode to show links
+    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     completer->setModel(model);
     completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
@@ -60,7 +63,12 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     QObject::connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
     QObject::connect(completer, SIGNAL(activated(const QString&)), this, SLOT(insertCompletion(const QString&)));
     // shortcut signals
-    new QShortcut(QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Slash)), this, SLOT(performCompletion()));
+    new QShortcut(
+        QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_Slash)),
+        this, SLOT(slotStartLinkCompletion()));
+
+    // capabilities
+    setAcceptDrops(true);
 
     // show
     highlightCurrentLine();
@@ -94,7 +102,7 @@ void NoteEditorView::setEditorFont(std::string fontName)
 {
     QFont editorFont;
     QString qFontName = QString::fromStdString(fontName);
-    if (QString::compare(qFontName, "")==0) { // No font defined, set to default
+    if(QString::compare(qFontName, "")==0) { // No font defined, set to default
         editorFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
         Configuration::getInstance().setEditorFont(editorFont.toString().toUtf8().constData());
     } else {
@@ -112,6 +120,31 @@ void NoteEditorView::slotConfigurationUpdated()
     setEditorTabWidth(Configuration::getInstance().getUiEditorTabWidth());
     setEditorTabsAsSpacesPolicy(Configuration::getInstance().isUiEditorTabsAsSpaces());
     setEditorFont(Configuration::getInstance().getEditorFont());
+}
+
+/**
+  * Drag & drop
+  */
+
+void NoteEditorView::dropEvent(QDropEvent* event)
+{
+    if(event->mimeData()->hasUrls()
+         &&
+       event->mimeData()->hasFormat("text/plain")
+         &&
+       event->mimeData()->urls().size())
+    {
+        MF_DEBUG("D&D drop: '" << event->mimeData()->urls().first().url().trimmed().toStdString() << "'" << endl);
+        signalDnDropUrl(event->mimeData()->urls().first().url().replace("file://",""));
+    }
+
+    event->acceptProposedAction();
+}
+
+void NoteEditorView::dragMoveEvent(QDragMoveEvent* event)
+{
+    // needed to protect text cursor functionality after drop
+    event->acceptProposedAction();
 }
 
 /*
@@ -200,6 +233,14 @@ void NoteEditorView::keyPressEvent(QKeyEvent *event)
 {
     hitCounter++;
 
+    if(event->modifiers() & Qt::ControlModifier) {
+        switch (event->key()) {
+        case Qt::Key_F:
+            findStringAgain();
+            return; // exit to override default key binding
+        }
+    }
+
     // IMPROVE get configuration reference and editor mode setting - this must be fast
     if(Configuration::getInstance().getEditorKeyBinding()==Configuration::EditorKeyBindingMode::EMACS) {
         if(event->modifiers() & Qt::ControlModifier){
@@ -249,7 +290,7 @@ void NoteEditorView::keyPressEvent(QKeyEvent *event)
             if(blockCount() < Configuration::EDITOR_MAX_AUTOCOMPLETE_LINES) {
                 QChar k{event->key()};
                 if(k.isLetter()) {
-                    if(performCompletion()) {
+                    if(performTextCompletion()) {
                         event->ignore();
                     }
                 }
@@ -292,26 +333,37 @@ bool NoteEditorView::handledCompletedAndSelected(QKeyEvent *event)
     return true;
 }
 
-bool NoteEditorView::performCompletion()
+const QString NoteEditorView::getCompletionPrefix()
 {
     QTextCursor cursor = textCursor();
     cursor.select(QTextCursor::WordUnderCursor);
     const QString completionPrefix = cursor.selectedText();
     if(!completionPrefix.isEmpty() && completionPrefix.at(completionPrefix.length()-1).isLetter()) {
-        performCompletion(completionPrefix);
-        return true;
+        return completionPrefix;
     } else {
-        return false;
+        return QString{};
     }
 }
 
-void NoteEditorView::performCompletion(const QString& completionPrefix)
+bool NoteEditorView::performTextCompletion()
+{
+    const QString completionPrefix = getCompletionPrefix();
+    if(!completionPrefix.isEmpty()) {
+        performTextCompletion(completionPrefix);
+        return true;
+    }
+
+    return false;
+}
+
+void NoteEditorView::performTextCompletion(const QString& completionPrefix)
 {
     MF_DEBUG("Completing prefix: '" << completionPrefix.toStdString() << "'" << endl);
 
     // TODO model population is SLOW, don't do it after each hit, but e.g. when user does NOT write
     populateModel(completionPrefix);
 
+    completer->setCompletionMode(QCompleter::PopupCompletion);
     if(completionPrefix != completer->completionPrefix()) {
         completer->setCompletionPrefix(completionPrefix);
         completer->popup()->setCurrentIndex(completer->completionModel()->index(0, 0));
@@ -329,6 +381,47 @@ void NoteEditorView::performCompletion(const QString& completionPrefix)
     //}
 }
 
+void NoteEditorView::slotStartLinkCompletion()
+{
+    const QString completionPrefix = getCompletionPrefix();
+    if(!completionPrefix.isEmpty()) {
+        // ask mind (via Orloj) for links > editor gets signal whose handlings opens completion dialog
+        emit signalGetLinksForPattern(completionPrefix);
+    }
+}
+
+void NoteEditorView::slotPerformLinkCompletion(
+    const QString& completionPrefix,
+    vector<string>* links)
+{
+    MF_DEBUG("Completing prefix: '" << completionPrefix.toStdString() << "' w/ " << links->size() << " links" << endl);
+
+    if(!links->empty()) {
+        // populate model for links
+        QStringList linksAsStrings{};
+        for(string& s:*links) {
+            linksAsStrings.append(QString::fromStdString(s));
+        }
+        // IMPROVE sort links so that they are the most relevant
+        model->setStringList(linksAsStrings);
+        delete links;
+
+        // perform completion
+        int COMPLETER_POPUP_WIDTH=fontMetrics().averageCharWidth()*50;
+        completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+        completer->popup()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        completer->popup()->setMaximumWidth(COMPLETER_POPUP_WIDTH);
+        completer->popup()->setMinimumHeight(fontMetrics().height()*3);
+        if(completionPrefix != completer->completionPrefix()) {
+            completer->setCompletionPrefix(completionPrefix);
+            completer->popup()->setCurrentIndex(completer->completionModel()->index(0, 0));
+        }
+        QRect rect = cursorRect();
+        rect.setWidth(COMPLETER_POPUP_WIDTH);
+        completer->complete(rect);
+    }
+}
+
 void NoteEditorView::populateModel(const QString& completionPrefix)
 {
     QStringList strings = toPlainText().split(QRegExp{"\\W+"});
@@ -338,16 +431,26 @@ void NoteEditorView::populateModel(const QString& completionPrefix)
     model->setStringList(strings);
 }
 
-// TODO single word completion to be removed
 void NoteEditorView::insertCompletion(const QString& completion, bool singleWord)
 {
     QTextCursor cursor = textCursor();
-    int numberOfCharsToComplete
-        = completion.length() - completer->completionPrefix().length();
 
-    // TODO single word completion to be removed
-    int insertionPosition = cursor.position();
-    cursor.insertText(completion.right(numberOfCharsToComplete));
+    int insertionPosition;
+    if(completion.startsWith("[")) {
+        for(int i=0; i<completer->completionPrefix().length(); i++) {
+            cursor.deletePreviousChar();
+        }
+        // single word completion to be removed (not used, but migth be useful)
+        insertionPosition = cursor.position();
+        cursor.insertText(completion.right(completion.length()));
+    } else {
+        int numberOfCharsToComplete
+            = completion.length() - completer->completionPrefix().length();
+        // single word completion to be removed (not used, but migth be useful)
+        insertionPosition = cursor.position();
+        cursor.insertText(completion.right(numberOfCharsToComplete));
+    }
+
     if(singleWord) {
         cursor.setPosition(insertionPosition);
         cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
@@ -474,6 +577,54 @@ void NoteEditorView::lineNumberPanelPaintEvent(QPaintEvent* event)
         top = bottom;
         bottom = top + (int)blockBoundingRect(block).height();
         ++blockNumber;
+    }
+}
+
+/*
+ * Search
+ */
+
+void NoteEditorView::findString(const QString s, bool reverse, bool caseSensitive, bool wholeWords)
+{
+    lastFindString = s;
+    lastFindReverse = reverse;
+    lastCaseSensitive = caseSensitive;
+    lastWholeWords = wholeWords;
+
+    QTextDocument::FindFlags flag;
+    if(reverse) flag |= QTextDocument::FindBackward;
+    if(caseSensitive) flag |= QTextDocument::FindCaseSensitively;
+    if(wholeWords) flag |= QTextDocument::FindWholeWords;
+
+    QTextCursor cursor = this->textCursor();
+    QTextCursor cursorSaved = cursor;
+
+    if(!find(s, flag)) {
+        // nothing is found > jump to start/end
+        cursor.movePosition(reverse?QTextCursor::End:QTextCursor::Start);
+
+        // the cursor is set at the beginning/end of the document (if search is reverse or not),
+        // in the next "find", if the word is found, now you will change the cursor position
+        setTextCursor(cursor);
+
+        if(!find(s, flag)) {
+            QMessageBox::information(
+                        this,
+                        tr("Full-text Search Result"),
+                        tr("No matching text found."),
+                        QMessageBox::Ok,
+                        QMessageBox::Ok);
+
+            // set the cursor back to its initial position
+            setTextCursor(cursorSaved);
+        }
+    }
+}
+
+void NoteEditorView::findStringAgain()
+{
+    if(!lastFindString.isEmpty()) {
+        findString(lastFindString, lastFindReverse, lastCaseSensitive, lastWholeWords);
     }
 }
 

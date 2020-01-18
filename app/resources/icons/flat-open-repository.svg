@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg1"
+   x="0"
+   y="0"
+   version="1.0"
+   _SVGFile__filename="oldscale/filesystems/folder_grey_open.svg"
+   width="60"
+   height="60"
+   sodipodi:docname="flat-open-repository.svg"
+   inkscape:version="0.92.4 (f8dce91, 2019-08-02)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     id="namedview16"
+     showgrid="false"
+     inkscape:zoom="3.9333333"
+     inkscape:cx="-18.305085"
+     inkscape:cy="30"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <defs
+     id="defs3">
+    <linearGradient
+       id="linearGradient900">
+      <stop
+         style="stop-color: #000000;stop-opacity: 1.0;"
+         id="stop901"
+         offset="0" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         id="stop902"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient900"
+       id="linearGradient903" />
+    <linearGradient
+       xlink:href="#linearGradient900"
+       id="linearGradient904" />
+    <linearGradient
+       xlink:href="#linearGradient900"
+       id="linearGradient905" />
+    <linearGradient
+       xlink:href="#linearGradient900"
+       id="linearGradient906" />
+    <linearGradient
+       xlink:href="#linearGradient900"
+       id="linearGradient907" />
+  </defs>
+  <path
+     style="font-size:12px;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#888888;stroke-width:3.12499833;stroke-linejoin:round;stroke-opacity:1"
+     d="m 5.3564493,9.8634915 c -0.5105386,0 -0.9398312,0.4292925 -0.9398312,0.9398315 L 4.386301,51.488921 c 0,0.857407 0.6887626,1.546173 1.5461739,1.546173 H 42.10082 c 0.857407,0 2.527558,-1.247702 2.81736,-2.054648 l 9.915255,-27.608761 -11.194575,-0.550593 0.0081,-7.227659 c 9.65e-4,-0.857417 -0.688767,-1.546175 -1.546174,-1.546175 H 27.821449 v -3.243935 c 0,-0.510539 -0.429291,-0.9398315 -0.939832,-0.9398315 z"
+     id="path938"
+     transform="translate(0.29864,-1.477342)"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="sccsssccsscsss" />
+  <path
+     style="font-size:12;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#888888;stroke-width:3.1249995;stroke-linejoin:round;stroke-opacity:1"
+     d="M 17.754406,22.810815 C 16.896989,22.810815 15.958477,23.454888 15.650106,24.254932 L 5.0920535,51.647074 C 4.7836870,52.447110 5.2256919,53.091192 6.0831089,53.091192 L 42.255905,53.091192 C 43.113312,53.091192 44.051829,52.447110 44.360195,51.647074 L 54.918248,24.254932 C 55.226618,23.454888 54.784609,22.810815 53.927202,22.810815 L 17.754406,22.810815 z "
+     id="rect922"
+     transform="translate(0.298640,-1.477342)" />
+  <metadata
+     id="metadata15">
+    <RDF
+       id="RDF16">
+      <Work
+         about=""
+         id="Work17">
+        <title
+           id="title18">Part of the Flat Icon Collection (Thu Aug 26 14:40:13 2004)</title>
+        <description
+           id="description20" />
+        <subject
+           id="subject21">
+          <Bag
+             id="Bag22">
+            <li
+               id="li23" />
+          </Bag>
+        </subject>
+        <publisher
+           id="publisher24">
+          <Agent
+             about=""
+             id="Agent25">
+            <title
+               id="title26" />
+          </Agent>
+        </publisher>
+        <creator
+           id="creator27">
+          <Agent
+             about=""
+             id="Agent28">
+            <title
+               id="title29">Danny Allen</title>
+          </Agent>
+        </creator>
+        <rights
+           id="rights31">
+          <Agent
+             about=""
+             id="Agent32">
+            <title
+               id="title33">Danny Allen</title>
+          </Agent>
+        </rights>
+        <date
+           id="date35" />
+        <format
+           id="format36">image/svg+xml</format>
+        <type
+           id="type38"
+           resource="http://purl.org/dc/dcmitype/StillImage" />
+        <license
+           id="license39"
+           resource="http://creativecommons.org/licenses/LGPL/2.1/">
+          <date
+             id="date40" />
+        </license>
+        <language
+           id="language41">en</language>
+      </Work>
+    </RDF>
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

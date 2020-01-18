@@ -1,7 +1,7 @@
 /*
  tags_table_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -31,6 +31,43 @@ TagsTableView::TagsTableView(QWidget* parent)
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
+}
+
+void TagsTableView::keyPressEvent(QKeyEvent* event)
+{
+    if(!(event->modifiers() & Qt::AltModifier)
+         &&
+       !(event->modifiers() & Qt::ControlModifier)
+         &&
+       !(event->modifiers() & Qt::ShiftModifier))
+    {
+        switch(event->key()) {
+        case Qt::Key_Return:
+        case Qt::Key_Right:
+            emit signalShowDialogForTag();
+            return;
+        case Qt::Key_Down:
+            QTableView::keyPressEvent(event);
+            return;
+        case Qt::Key_Up:
+        // IMPROVE left to cancel selection
+        case Qt::Key_Left:
+            QTableView::keyPressEvent(event);
+            return;
+        }
+
+        return;
+    }
+
+    QTableView::keyPressEvent(event);
+}
+
+void TagsTableView::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    Q_UNUSED(event);
+
+    // double click to O opens it
+    emit signalShowDialogForTag();
 }
 
 void TagsTableView::resizeEvent(QResizeEvent* event)

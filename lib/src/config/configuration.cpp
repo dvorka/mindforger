@@ -1,7 +1,7 @@
 /*
  configuration.cpp     M8r configuration management
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 #include "config.h"
 
 #ifdef _WIN32
-#include <Shlobj.h>
+#include <ShlObj.h>
 #include <KnownFolders.h>
 #endif // _WIN32
 
@@ -30,15 +30,30 @@ namespace m8r {
 using namespace std;
 
 const string Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH = string{FILE_PATH_M8R_REPOSITORY};
+const string Configuration::DEFAULT_STARTUP_VIEW_NAME = string{DEFAULT_STARTUP_VIEW};
 const string Configuration::DEFAULT_UI_THEME_NAME = string{UI_DEFAULT_THEME};
 const string Configuration::DEFAULT_UI_HTML_CSS_THEME = string{UI_DEFAULT_HTML_CSS_THEME};
 const string Configuration::DEFAULT_EDITOR_FONT= string{UI_DEFAULT_EDITOR_FONT};
 const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
 
 Configuration::Configuration()
-    : installer(new Installer{})
+    : asyncMindThreshold{},
+      activeRepository{},
+      repositories{},
+      writeMetadata{},
+      saveReadsMetadata{},
+      autolinking{},
+      autolinkingColonSplit{},
+      autolinkingCaseInsensitive{},
+      md2HtmlOptions{},
+      distributorSleepInterval{},
+      markdownQuoteSections{},
+      uiNerdTargetAudience{},
+      uiHtmlZoom{},
+      uiFontPointSize{},
+      installer(new Installer{})
 {
-    char *home;
+    char* home;
     // default config file path: ~/.mindforger.md
 #ifdef _WIN32
     PWSTR wpath;
@@ -70,6 +85,7 @@ Configuration::Configuration()
 
 Configuration::~Configuration()
 {
+
     for(auto& r:repositories) {
         delete r.second;
     }
@@ -127,8 +143,10 @@ void Configuration::clear()
     uiEditorAutocomplete = true;
     uiEditorLineNumbers = true;
     uiEditorTabsAsSpaces = DEFAULT_EDITOR_TABS_AS_SPACES;
+    uiEditorAutosave = DEFAULT_EDITOR_AUTOSAVE;
     uiEditorTabWidth = DEFAULT_EDITOR_TAB_WIDTH;
     uiEditorKeyBinding = EditorKeyBindingMode::WINDOWS;
+    startupView.assign(DEFAULT_STARTUP_VIEW);
     uiThemeName.assign(UI_DEFAULT_THEME);
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
     uiHtmlZoom = DEFAULT_UI_HTML_ZOOM;
@@ -137,6 +155,7 @@ void Configuration::clear()
     uiNerdTargetAudience = DEFAULT_UI_NERD_MENU;
     navigatorMaxNodes = DEFAULT_NAVIGATOR_MAX_GRAPH_NODES;
     uiShowToolbar = DEFAULT_UI_SHOW_TOOLBAR;
+    uiExpertMode = DEFAULT_UI_EXPERT_MODE;
     uiDistractionFreeMode = false;
     uiHoistedMode = false;
 }
@@ -162,9 +181,9 @@ Repository* Configuration::getActiveRepository() const
 {
     if(activeRepository) {
         return activeRepository;
-    } else {
-        throw MindForgerException{"Active repository not set!"};
     }
+
+    throw MindForgerException{"Active repository not set!"};
 }
 
 std::map<const std::string,Repository*>& Configuration::getRepositories()
@@ -181,13 +200,18 @@ void Configuration::setActiveRepository(Repository* repository)
             memoryPath.clear();
             memoryPath += activeRepository->getDir();
 
+            // TODO limbo class
             limboPath.clear();
             limboPath += activeRepository->getDir();
 
-            if(repository->getType()==Repository::RepositoryType::MINDFORGER && repository->getMode()==Repository::RepositoryMode::REPOSITORY) {
+            if(repository->getType()==Repository::RepositoryType::MINDFORGER
+                 &&
+               repository->getMode()==Repository::RepositoryMode::REPOSITORY)
+            {
                 memoryPath+=FILE_PATH_SEPARATOR;
                 memoryPath+=FILE_PATH_MEMORY;
 
+                // TODO limbo class
                 limboPath+=FILE_PATH_SEPARATOR;
                 limboPath+=FILE_PATH_LIMBO;
             }
@@ -201,13 +225,13 @@ void Configuration::setActiveRepository(Repository* repository)
 
 bool Configuration::createEmptyMarkdownFile(const string& file)
 {
-    if(file.size() && file.find(FILE_PATH_SEPARATOR)==string::npos && RepositoryIndexer::fileHasMarkdownExtension(file)) {
+    if(!file.empty() && file.find(FILE_PATH_SEPARATOR)==string::npos && RepositoryIndexer::fileHasMarkdownExtension(file)) {
         // as it is filename w/o path I can try to create empty O in the current directory
         stringToFile(file, DEFAULT_NEW_OUTLINE);
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 void Configuration::findOrCreateDefaultRepository()

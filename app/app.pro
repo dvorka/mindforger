@@ -1,6 +1,6 @@
 # mindforger-app.pro     Qt project file for MindForger
 #
-# Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -180,7 +180,6 @@ HEADERS += \
     ./src/qt/dialogs/fts_dialog.h \
     ./src/qt/dialogs/find_outline_by_name_dialog.h \
     ./src/qt/dialogs/find_note_by_name_dialog.h \
-    ./src/qt/widgets/edit_name_and_buttons_panel.h \
     ./src/qt/dialogs/note_edit_dialog.h \
     ./src/qt/dialogs/configuration_dialog.h \
     ./src/qt/widgets/edit_tags_panel.h \
@@ -217,7 +216,16 @@ HEADERS += \
     src/qt/recent_notes_table_view.h \
     src/qt/navigator_presenter.h \
     src/qt/main_toolbar_view.h \
-    src/qt/dialogs/export_file_dialog.h
+    src/qt/dialogs/export_file_dialog.h \
+    src/qt/dashboard_view.h \
+    src/qt/dashboard_presenter.h \
+    src/qt/widgets/edit_buttons_panel.h \
+    src/qt/widgets/edit_name_panel.h \
+    src/qt/widgets/view_to_edit_buttons_panel.h \
+    src/qt/widgets/mf_widgets.h \
+    src/qt/outline_header_view_model.h \
+    src/qt/dialogs/fts_dialog_presenter.h \
+    src/qt/gear/apple_utils.h
 
 win32|macx|mfwebengine {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
@@ -278,7 +286,6 @@ SOURCES += \
     ./src/qt/dialogs/fts_dialog.cpp \
     ./src/qt/dialogs/find_outline_by_name_dialog.cpp \
     ./src/qt/dialogs/find_note_by_name_dialog.cpp \
-    ./src/qt/widgets/edit_name_and_buttons_panel.cpp \
     ./src/qt/dialogs/note_edit_dialog.cpp \
     ./src/qt/dialogs/configuration_dialog.cpp \
     ./src/qt/widgets/edit_tags_panel.cpp \
@@ -315,7 +322,15 @@ SOURCES += \
     src/qt/recent_notes_table_view.cpp \
     src/qt/navigator_presenter.cpp \
     src/qt/main_toolbar_view.cpp \
-    src/qt/dialogs/export_file_dialog.cpp
+    src/qt/dialogs/export_file_dialog.cpp \
+    src/qt/dashboard_view.cpp \
+    src/qt/dashboard_presenter.cpp \
+    src/qt/widgets/edit_buttons_panel.cpp \
+    src/qt/widgets/edit_name_panel.cpp \
+    src/qt/widgets/view_to_edit_buttons_panel.cpp \
+    src/qt/widgets/mf_widgets.cpp \
+    src/qt/outline_header_view_model.cpp \
+    src/qt/dialogs/fts_dialog_presenter.cpp
 
 win32|macx|mfwebengine {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp

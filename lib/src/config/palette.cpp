@@ -1,7 +1,7 @@
 /*
  palette.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -22,13 +22,9 @@ namespace m8r {
 
 using namespace std;
 
-Palette::Palette()
-{
-}
+Palette::Palette() = default;
 
-Palette::~Palette()
-{
-}
+Palette::~Palette() = default;
 
 void Palette::addBuiltInColors()
 {
@@ -62,13 +58,13 @@ const Color& Palette::findOrCreate(unsigned char r, unsigned char g, unsigned ch
     auto result = colorsMap.find(k);
     if(result!=colorsMap.end()) {
         return result->second;
-    } else {
-        Color* newColor = new Color{r,g,b};
-        colors.push_back(newColor);
-        colorsMap.insert(std::pair<unsigned long,const Color&>(newColor->asLong(), *newColor));
-        customColors.push_back(std::unique_ptr<Color>(newColor));
-        return *newColor;
     }
+
+    Color* newColor = new Color{r,g,b};
+    colors.push_back(newColor);
+    colorsMap.insert(std::pair<unsigned long,const Color&>(newColor->asLong(), *newColor));
+    customColors.push_back(std::unique_ptr<Color>(newColor));
+    return *newColor;
 }
 
 const Color& Palette::colorForName(const string& name) const

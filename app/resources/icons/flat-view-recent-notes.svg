@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="60"
+   width="60"
+   _SVGFile__filename="oldscale/actions/todo.svg"
+   version="1.0"
+   y="0"
+   x="0"
+   id="svg1"
+   sodipodi:version="0.32"
+   inkscape:version="0.92.4 (f8dce91, 2019-08-02)"
+   sodipodi:docname="flat-view-recent-notes.svg">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.5342875"
+     inkscape:cx="-15.157416"
+     inkscape:cy="19.560172"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:current-layer="svg1"
+     showgrid="false"
+     inkscape:window-maximized="1"
+     inkscape:pagecheckerboard="true" />
+  <defs
+     id="defs3">
+    <linearGradient
+       id="linearGradient1160">
+      <stop
+         style="stop-color: #000000;stop-opacity: 1.0;"
+         id="stop1161"
+         offset="0" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         id="stop1162"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient1160"
+       id="linearGradient1163" />
+  </defs>
+  <metadata
+     id="metadata18">
+    <RDF
+       id="RDF19">
+      <Work
+         about=""
+         id="Work20">
+        <title
+           id="title21">Part of the Flat Icon Collection (Thu Aug 26 14:38:01 2004)</title>
+        <description
+           id="description23" />
+        <subject
+           id="subject24">
+          <Bag
+             id="Bag25">
+            <li
+               id="li26" />
+          </Bag>
+        </subject>
+        <publisher
+           id="publisher27">
+          <Agent
+             about=""
+             id="Agent28">
+            <title
+               id="title29" />
+          </Agent>
+        </publisher>
+        <creator
+           id="creator30">
+          <Agent
+             about=""
+             id="Agent31">
+            <title
+               id="title32">Danny Allen</title>
+          </Agent>
+        </creator>
+        <rights
+           id="rights34">
+          <Agent
+             about=""
+             id="Agent35">
+            <title
+               id="title36">Danny Allen</title>
+          </Agent>
+        </rights>
+        <date
+           id="date38" />
+        <format
+           id="format39">image/svg+xml</format>
+        <type
+           id="type41"
+           resource="http://purl.org/dc/dcmitype/StillImage" />
+        <license
+           id="license42"
+           resource="http://creativecommons.org/licenses/LGPL/2.1/">
+          <date
+             id="date43" />
+        </license>
+        <language
+           id="language44">en</language>
+      </Work>
+    </RDF>
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     inkscape:connector-curvature="0"
+     id="path2093"
+     d="m 54.37786,30.000002 c 0,13.456578 -10.921285,24.377854 -24.377856,24.377854 -13.456578,0 -24.377858,-10.921276 -24.377858,-24.377854 0,-13.456578 10.92128,-24.3778565 24.377858,-24.3778565 13.456571,0 24.377856,10.9212785 24.377856,24.3778565 z"
+     style="font-size:12px;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#888888;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+  <path
+     inkscape:connector-curvature="0"
+     id="path2095"
+     d="m 54.37786,30.000002 c 0,13.456578 -10.921285,24.377854 -24.377856,24.377854 -13.456578,0 -24.377858,-10.921276 -24.377858,-24.377854 0,-13.456578 10.92128,-24.3778565 24.377858,-24.3778565 13.456571,0 24.377856,10.9212785 24.377856,24.3778565 z"
+     style="font-size:12px;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#888888;stroke-width:5.00000191;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+  <path
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cc"
+     id="path2097"
+     d="M 30.000017,29.745203 V 13.920396"
+     style="font-size:12px;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#888888;stroke-width:5.00000477;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+  <path
+     inkscape:connector-curvature="0"
+     id="path2099"
+     d="m 30.045081,30.27983 10.647291,6.147222"
+     style="font-size:12px;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#888888;stroke-width:5.00000763;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1" />
+  <path
+     inkscape:connector-curvature="0"
+     id="path2101"
+     d="m 32.208433,29.999987 c 0,1.219059 -0.989388,2.208439 -2.208449,2.208439 -1.219059,0 -2.208447,-0.98938 -2.208447,-2.208439 0,-1.219061 0.989388,-2.208448 2.208447,-2.208448 1.219061,0 2.208449,0.989387 2.208449,2.208448 z"
+     style="font-size:12px;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#888888;stroke-width:3.12499881;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+</svg>

@@ -1,7 +1,7 @@
 /*
  representation_interceptor.h     MindForger thinking notebook
 
- Copyright (C) 2016-2019 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ class RepresentationInterceptor
 public:
     virtual ~RepresentationInterceptor() {}
 
-    virtual void process(const std::vector<std::string*>& in, std::vector<std::string*>& out) = 0;
+    virtual void process(const std::vector<std::string*>& in, std::string& out) = 0;
 };
 
 }
