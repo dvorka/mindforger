@@ -104,6 +104,10 @@ win32{
       QMAKE_CXX = ccache g++
     }
     QMAKE_CXXFLAGS += -pedantic -std=c++11
+    # ensure valgrind line numbers
+    mfunits {
+      QMAKE_CXX += -g
+    }
 }
 
 SOURCES += \

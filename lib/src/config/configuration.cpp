@@ -37,7 +37,8 @@ const string Configuration::DEFAULT_EDITOR_FONT= string{UI_DEFAULT_EDITOR_FONT};
 const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
 
 Configuration::Configuration()
-    : installer(new Installer{})
+    : repositories{},
+      installer(new Installer{})
 {
     char* home;
     // default config file path: ~/.mindforger.md
@@ -71,6 +72,7 @@ Configuration::Configuration()
 
 Configuration::~Configuration()
 {
+
     for(auto& r:repositories) {
         delete r.second;
     }
