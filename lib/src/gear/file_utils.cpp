@@ -61,7 +61,7 @@ bool stringToLines(const string* text, vector<string*>& lines)
     return false;
 }
 
-bool fileToLines(const string* filename, vector<string*>& lines, unsigned long int &fileSize)
+bool fileToLines(const string* filename, vector<string*>& lines, size_t &fileSize)
 {
     ifstream infile(*filename);
     string line;
@@ -239,14 +239,14 @@ char* makeTempDirectory(char* dirNamePrefix)
     char  *tempPathBuffer = new char[MAX_PATH];
     UUID uuid;
     RPC_CSTR uuidStr;
-    DWORD c = GetTempPathA(MAX_PATH, tempPathBuffer);
+    GetTempPathA(MAX_PATH, tempPathBuffer);
     strcat(tempPathBuffer, FILE_PATH_SEPARATOR);
     if (strlen(tempPathBuffer) + strlen(dirNamePrefix) < MAX_PATH) {
         strcat(tempPathBuffer, dirNamePrefix);
         UuidCreate(&uuid);
         UuidToStringA(&uuid, &uuidStr);
-        if (strlen(tempPathBuffer) + strlen((char *)uuidStr) < MAX_PATH) {
-             strcat(tempPathBuffer, (char *)uuidStr);
+        if (strlen(tempPathBuffer) + strlen((char*)uuidStr) < MAX_PATH) {
+             strcat(tempPathBuffer, (char*)uuidStr);
              if (CreateDirectoryA(tempPathBuffer, nullptr)) {
                  ret = tempPathBuffer;
              }
@@ -499,13 +499,13 @@ int ungzip(const char* srcFile, const char* dstFile)
 
     FILE* srcFILE;
     FILE* dstFILE;
-    z_stream strm = {nullptr,0,0,nullptr,0,0,nullptr,0,0,0,0,0,0,0};
+    z_stream strm = {nullptr,0,0,nullptr,0,0,nullptr,nullptr,nullptr,nullptr,nullptr,0,0,0};
     unsigned char in[CHUNK];
     unsigned char out[CHUNK];
 
-    strm.zalloc = Z_NULL;
-    strm.zfree = Z_NULL;
-    strm.opaque = Z_NULL;
+    strm.zalloc = nullptr;
+    strm.zfree = nullptr;
+    strm.opaque = nullptr;
     strm.next_in = in;
     strm.avail_in = 0;
     GZIP_CALL_ZLIB (inflateInit2 (& strm, windowBits | ENABLE_ZLIB_GZIP));
@@ -524,12 +524,12 @@ int ungzip(const char* srcFile, const char* dstFile)
     GZIP_FAIL (! dstFILE, "open");
 
     while (1) {
-        int bytes_read;
+        size_t bytes_read;
         int zlib_status;
 
         bytes_read = fread (in, sizeof (char), sizeof (in), srcFILE);
         GZIP_FAIL (ferror (srcFILE), "read");
-        strm.avail_in = bytes_read;
+        strm.avail_in = static_cast<uInt>(bytes_read);
         strm.next_in = in;
         do {
             unsigned have;
@@ -657,7 +657,5 @@ char* getExecutablePath() {
 #endif
 
 }
-
-
 
 } // m8r namespace

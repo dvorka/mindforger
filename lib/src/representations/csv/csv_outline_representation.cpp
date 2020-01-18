@@ -51,7 +51,7 @@ void CsvOutlineRepresentation::to(const vector<Outline*>& os, const m8r::File& s
                     to(o, out);
                 }
             } catch (const std::ofstream::failure& e) {
-                cerr << "Error: unable to open/write file " << sourceFile.getName();
+                cerr << "Error: unable to open/write file " << sourceFile.getName() << " " << e.what();
             }
 
             out.close();

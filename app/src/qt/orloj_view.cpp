@@ -143,7 +143,7 @@ void OrlojView::showFacetOutlineHeaderEdit()
     } else {
         QSet<QWidget*> v; v << outlineView << outlineHeaderEdit;
         hideChildren(v);
-        outlineHeaderEdit->giveFocusToEditor();
+        outlineHeaderEdit->giveEditorFocus();
     }
 }
 
@@ -165,7 +165,7 @@ void OrlojView::showFacetNoteEdit()
     } else {
         QSet<QWidget*> v; v << outlineView << noteEdit;
         hideChildren(v);
-        noteEdit->giveFocusToEditor();
+        noteEdit->giveEditorFocus();
     }
 }
 
@@ -200,28 +200,28 @@ void OrlojView::showFacetHoistedOutlineHeaderView()
 {
     QSet<QWidget*> v; v << outlineHeaderView;
     hideChildren(v);
-    outlineHeaderView->setFocus();
+    outlineHeaderView->giveViewerFocus();
 }
 
 void OrlojView::showFacetHoistedOutlineHeaderEdit()
 {
     QSet<QWidget*> v; v << outlineHeaderEdit;
     hideChildren(v);
-    outlineHeaderEdit->giveFocusToEditor();
+    outlineHeaderEdit->giveEditorFocus();
 }
 
 void OrlojView::showFacetHoistedNoteView()
 {
     QSet<QWidget*> v; v << noteView;
     hideChildren(v);
-    noteView->setFocus();
+    noteView->giveViewerFocus();
 }
 
 void OrlojView::showFacetHoistedNoteEdit()
 {
     QSet<QWidget*> v; v << noteEdit;
     hideChildren(v);
-    noteEdit->giveFocusToEditor();
+    noteEdit->giveEditorFocus();
 }
 
 } // m8r namespace

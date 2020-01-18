@@ -67,7 +67,7 @@ public:
     NoteEditorView* getHeaderEditor() const { return noteEditor; }
     EditButtonsPanel* getButtonsPanel() const { return bottomButtonsPanel; }
 
-    void giveFocusToEditor() { noteEditor->setFocus(); }
+    void giveEditorFocus() { noteEditor->setFocus(); }
 
 private slots:
     void slotOpenOutlineHeaderPropertiesEditor();

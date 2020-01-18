@@ -1,8 +1,11 @@
-2020-01-05  Martin Dvorak  <martin.dvorak@mindforger.com>
+2020-01-18  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-   * Released v1.50.0 - Autolinking rewrite to cmark-gfm for high performance,
-     robust and extensible implementation; new dashboard view; complete
-     fulltext search rewrite; menu items icons.
+   * Released v1.50.0 - New dashboard view; complete fulltext search rewamp;
+     toolbar switch to flat icons theme; new menu items icons; images and attachments
+     can be added with drag&drop; images and icons can be automatically copied
+     to MindForger repository; added Notebook and Note completion on Ctrl-/;
+     persistent hoist mode; (not released: autolinking rewrite to cmark-gfm
+     for high performance, robust and extensible implementation.
 
 2019-03-09  Martin Dvorak  <martin.dvorak@mindforger.com>
 

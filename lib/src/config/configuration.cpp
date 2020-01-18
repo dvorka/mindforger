@@ -21,7 +21,7 @@
 #include "config.h"
 
 #ifdef _WIN32
-#include <Shlobj.h>
+#include <ShlObj.h>
 #include <KnownFolders.h>
 #endif // _WIN32
 

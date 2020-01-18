@@ -111,7 +111,7 @@ void FindOutlineByTagDialog::show(vector<Thing*>& outlines, vector<const Tag*>* 
                 }
             }
         }
-        ((QStringListModel*)listView->model())->setStringList(listViewStrings);
+        (static_cast<QStringListModel*>(listView->model()))->setStringList(listViewStrings);
     }
 
     findButton->setEnabled(things.size());
@@ -143,10 +143,10 @@ void FindOutlineByTagDialog::handleTagsChanged()
         for(Thing* e:things) {
             const std::vector<const Tag*>* thingTags;
             if(mode==ThingsMode::OUTLINES) {
-                Outline* o = (Outline*)e;
+                Outline* o = static_cast<Outline*>(e);
                 thingTags = o->getTags();
             } else {
-                Note* n = (Note*)e;
+                Note* n = static_cast<Note*>(e);
                 thingTags = n->getTags();
             }
 
@@ -182,7 +182,7 @@ void FindOutlineByTagDialog::handleTagsChanged()
 void FindOutlineByTagDialog::handleReturn()
 {
     if(findButton->isEnabled()) {
-        for(size_t row = 0; row<things.size(); row++) {
+        for(size_t row=0; row<things.size(); row++) {
             if(!listView->isRowHidden(row)) {
                 choice = things[row];
                 break;
