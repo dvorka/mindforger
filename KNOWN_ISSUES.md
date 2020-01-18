@@ -5,6 +5,8 @@ MindForger known issues - see also
 
 # 1.50.0
 
+* HTML preview blank when no internet connection Mathjax is enabled
+* CSV support does not scale and can block the application
 * Windows Server R2 2012: empty MF documentation repository in wrong location when MF is launched
   at the end of installation.
 * Windows: HTML preview zooming using Ctrl+mouse wheel not supported (use menu Mind/Preferences instead).
