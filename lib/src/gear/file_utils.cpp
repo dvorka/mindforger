@@ -48,7 +48,7 @@ void pathToLinuxDelimiters(const std::string& path, std::string& linuxPath)
 
 bool stringToLines(const string* text, vector<string*>& lines)
 {
-    if(text && text->size()) {
+    if(text && !text->empty()) {
         istringstream input{*text};
         string line;
         while(getline(input, line)) {
@@ -56,9 +56,9 @@ bool stringToLines(const string* text, vector<string*>& lines)
             lines.push_back(new string{line});
         }
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 bool fileToLines(const string* filename, vector<string*>& lines, unsigned long int &fileSize)
@@ -499,7 +499,7 @@ int ungzip(const char* srcFile, const char* dstFile)
 
     FILE* srcFILE;
     FILE* dstFILE;
-    z_stream strm = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    z_stream strm = {nullptr,0,0,nullptr,0,0,nullptr,0,0,0,0,0,0,0};
     unsigned char in[CHUNK];
     unsigned char out[CHUNK];
 

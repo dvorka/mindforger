@@ -42,9 +42,7 @@ Installer::Installer()
 #endif
 }
 
-Installer::~Installer()
-{
-}
+Installer::~Installer() = default;
 
 bool Installer::createEmptyMindForgerRepository(const string& directory)
 {

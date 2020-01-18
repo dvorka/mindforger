@@ -54,12 +54,12 @@ bool stringEndsWith(const string& s, const string& suffix)
 bool stringEndsWith(const char* s, const char* suffix)
 {
     if (!s || !suffix) {
-        return 0;
+        return false;
     }
     size_t sLng = strlen(s);
     size_t suffixLng = strlen(suffix);
     if (suffixLng >  sLng) {
-        return 0;
+        return false;
     }
     return strncmp(s + sLng - suffixLng, suffix, suffixLng) == 0;
 }
@@ -67,12 +67,12 @@ bool stringEndsWith(const char* s, const char* suffix)
 bool stringEndsWith(const string& s, const char* suffix)
 {
     if (!s.c_str() || !suffix) {
-        return 0;
+        return false;
     }
     size_t sLng = strlen(s.c_str());
     size_t suffixLng = strlen(suffix);
     if (suffixLng >  sLng) {
-        return 0;
+        return false;
     }
     return strncmp(s.c_str() + sLng - suffixLng, suffix, suffixLng) == 0;
 }
@@ -126,7 +126,7 @@ char** stringSplit(
 #ifdef _WIN32
         token = strtok_s(0, delim, &offset);
 #else
-        token = strtok_r(0, delim, &offset);
+        token = strtok_r(nullptr, delim, &offset);
 #endif
             // TODO implement auto increase result
             assert(i<=resultBaseSize);
@@ -147,7 +147,7 @@ char** stringSplit(
  */
 string normalizeToNcName(string name, char quoteChar) {
     string result = name;
-    if(result.size()) {
+    if(!result.empty()) {
         if(!isalnum(result[0], locale())) {
             result.insert(0, 1, '_');
         }
@@ -162,7 +162,7 @@ string normalizeToNcName(string name, char quoteChar) {
 
 void toString(const std::vector<std::string*>& ss, std::string& os)
 {
-    if(ss.size()) {
+    if(!ss.empty()) {
         for(std::string *s:ss) {
             os += *s;
             os += "\n";
