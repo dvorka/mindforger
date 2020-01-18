@@ -129,7 +129,7 @@ static inline std::string &stringTrim(std::string& s) {
 
 static inline std::string to_string(int x)
 {
-  int length = snprintf(NULL, 0, "%d", x);
+  size_t length = static_cast<size_t>(snprintf(nullptr, 0, "%d", x));
   char* buf = new char[length + 1];
   snprintf(buf, length + 1, "%d", x);
   std::string str(buf);
@@ -139,9 +139,9 @@ static inline std::string to_string(int x)
 
 static inline std::string to_stringl(time_t x)
 {
-  int length = snprintf(NULL, 0, "%ld", x);
+  size_t length = static_cast<size_t>(snprintf(nullptr, 0, "%d", static_cast<int>(x)));
   char* buf = new char[length + 1];
-  snprintf(buf, length + 1, "%ld", x);
+  snprintf(buf, length + 1, "%lld", x);
   std::string str(buf);
   delete[] buf;
   return str;
@@ -151,8 +151,8 @@ void toString(const std::vector<std::string*>& ss, std::string& os);
 
 static inline std::string stringIntFormat(std::string value, char thousandSep = ',')
 {
-    auto len = value.length();
-    auto dlen = 3;
+    unsigned long long len = value.length();
+    unsigned long long dlen = 3;
 
     while(len > dlen) {
         value.insert(len - dlen, 1, thousandSep);

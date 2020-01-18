@@ -97,7 +97,7 @@ public:
     void addChild(KnowledgeGraphNode* c) { if(count-- > 0) children.push_back(c); }
     std::vector<KnowledgeGraphNode*>& getParents() { return parents; }
     std::vector<KnowledgeGraphNode*>& getChildren() { return children; }
-    int size() { return 1 + parents.size() + children.size(); }
+    size_t size() { return 1 + parents.size() + children.size(); }
     void clear() {
         centralNode = nullptr;
         parents.clear();

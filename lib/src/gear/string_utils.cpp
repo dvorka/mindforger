@@ -101,16 +101,17 @@ char** stringSplit(
     UNUSED_ARG(resultIncSize);
 
     char **result;
-    result = new char*[resultBaseSize];
+    result = new char*[static_cast<unsigned int>(resultBaseSize)];
     const char delim[2] = { delimiter, 0};
 
     if(result) {
         size_t i  = 0;
-        char *offset{};
-        char *copy = strdup(s);
+        char* offset{};
 #ifdef _WIN32
+        char* copy = _strdup(s);
         char* token = strtok_s(copy, delim, &offset);
 #else
+        char* copy = strdup(s);
         char* token = strtok_r(copy, delim, &offset);
 #endif
         while(token) {
@@ -124,12 +125,12 @@ char** stringSplit(
             }
             i++;
 #ifdef _WIN32
-        token = strtok_s(0, delim, &offset);
+        token = strtok_s(nullptr, delim, &offset);
 #else
         token = strtok_r(0, delim, &offset);
 #endif
             // TODO implement auto increase result
-            assert(i<=resultBaseSize);
+            assert(i <= static_cast<size_t>(resultBaseSize));
         }
         result[i] = nullptr;
         free(copy);

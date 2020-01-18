@@ -24,7 +24,7 @@ namespace m8r {
 
 void initRandomizer()
 {
-    qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
+    qsrand(static_cast<uint>(QTime(0,0,0).secsTo(QTime::currentTime())));
 }
 
 QString stringFormatIntAsUs(int i)

@@ -39,7 +39,7 @@ bool TWikiOutlineRepresentation::outline(const m8r::File& sourceFile, const m8r:
 {
     // straightforward conversion: only sections are converted, the rest is kept intact
     MF_DEBUG("TWiki export of " << sourceFile.getName() << " to " << outlineFile.getName() << " ... " << endl);
-    unsigned long int fileSize = 0;
+    size_t fileSize = 0;
     lines.clear();
     if(fileToLines(&sourceFile.getName(), lines, fileSize)) {
         if(lines.size()) {

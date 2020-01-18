@@ -367,7 +367,7 @@ public:
     void incUiHtmlZoom() { if(uiHtmlZoom<500) uiHtmlZoom += 10; }
     void decUiHtmlZoom() { if(uiHtmlZoom>40) uiHtmlZoom-= 10; }
     float getUiHtmlZoomFactor() const {
-        return (float)uiHtmlZoom/100.;
+        return static_cast<float>(uiHtmlZoom)/100.f;
     }
     /**
      * @brief Set HTML zoom of Markdown viewer.

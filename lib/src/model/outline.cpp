@@ -510,7 +510,7 @@ void Outline::addNote(Note* note)
 void Outline::addNote(Note* note, int offset)
 {
     note->setOutline(this);
-    if((unsigned int)offset > notes.size()-1) {
+    if(static_cast<unsigned int>(offset) > notes.size()-1) {
         notes.push_back(note);
     } else {
         notes.insert(notes.begin()+offset, note);
@@ -617,7 +617,7 @@ void Outline::getAllNoteChildren(const Note* note, vector<Note*>* children, Outl
             auto offset = std::find(notes.begin(), notes.end(), note);
             if(offset != notes.end()) {
                 auto index = std::distance(notes.begin(), offset);
-                for(unsigned int i=index+1; i<notes.size(); i++) {
+                for(size_t i=index+1; i<notes.size(); i++) {
                     if(notes[i]->getDepth() > note->getDepth()) {
                         if(children) {
                             children->push_back(notes[i]);
@@ -651,7 +651,7 @@ void Outline::getNotePathToRoot(const size_t offset, std::vector<int>& parents)
     if(offset && offset<notes.size()) {
         int parentDepth = notes[offset]->getDepth()-1;
         if(parentDepth >= 0) {
-            for(int i=offset; i>=0; i--) {
+            for(size_t i=offset; i!=0; i--) {
                 if(notes[i]->getDepth() == parentDepth) {
                     parents.push_back(i);
                     if(!parentDepth) {
@@ -720,10 +720,10 @@ int Outline::getOffsetOfBelowNoteSibling(Note* note, int& offset)
 {
     offset = getNoteOffset(note);
     if(offset != Outline::NO_OFFSET) {
-        if((unsigned int)offset < notes.size()-1) {
+        if(static_cast<unsigned int>(offset) < notes.size()-1) {
             for(unsigned int o=offset+1; o<notes.size(); o++) {
                 if(notes[o]->getDepth() == note->getDepth()) {
-                    if((unsigned int)offset == o) {
+                    if(static_cast<unsigned int>(offset) == o) {
                         return NO_SIBLING;
                     } else {
                         return o;

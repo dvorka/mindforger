@@ -307,7 +307,7 @@ public:
 
     KnowledgeGraph* getKnowledgeGraph() const { return knowledgeGraph; }
 
-    unsigned getTriplesCount() const { return triples.size(); }
+    size_t getTriplesCount() const { return triples.size(); }
 
 #ifdef MF_NER
 
