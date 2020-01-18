@@ -39,7 +39,7 @@ const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
 Configuration::Configuration()
     : installer(new Installer{})
 {
-    char *home;
+    char* home;
     // default config file path: ~/.mindforger.md
 #ifdef _WIN32
     PWSTR wpath;
