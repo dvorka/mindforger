@@ -206,7 +206,7 @@ export ARG_MAJOR_VERSION=1.50.
 export ARG_MINOR_VERSION=0 # minor version is incremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
-# old: precise quantal saucy precise utopic vivid wily  trusty (old GCC) yakkety artful cosmic
+# old: precise quantal saucy precise utopic vivid wily trusty (old GCC) yakkety artful cosmic
 # current: trusty xenial bionic disco eoan
 for UBUNTU_VERSION in trusty xenial bionic disco eoan
 do
