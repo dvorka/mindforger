@@ -165,7 +165,7 @@ int dialogSaveOrCancel()
         "Do you want to save Note changes?"};
     QPushButton* discard = msgBox.addButton("&Discard changes", QMessageBox::DestructiveRole);
     QPushButton* autosave = msgBox.addButton("Do not ask && &autosave", QMessageBox::AcceptRole);
-    QPushButton* edit = msgBox.addButton("Continue &editation", QMessageBox::YesRole);
+    QPushButton* edit = msgBox.addButton("Continue &editing", QMessageBox::YesRole);
     QPushButton* save = msgBox.addButton("&Save", QMessageBox::ActionRole);
     msgBox.exec();
 
