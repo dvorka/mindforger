@@ -40,8 +40,9 @@ cache:
  - c:\cache
  - C:\Program Files\googletest-distribution 
 
+# check https://www.appveyor.com/docs/windows-images-software for updates
 install:
- - set QT_DIR=C:\Qt\5.9.8\msvc2017_64
+ - set QT_DIR=C:\Qt\5.9.9\msvc2017_64
 # - set QT_DIR=C:\Qt\5.9.7\msvc2017_64
  - set PATH=%PATH%;%QT_DIR%\bin
  - set M8R_HOME=%APPVEYOR_BUILD_FOLDER%
