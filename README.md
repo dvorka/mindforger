@@ -12,7 +12,7 @@
 Are you **drowning** in **information**, but **starving** for **knowledge**? Where do you keep your **private remarks** 
 like ideas, personal plans, gift tips, how-tos, dreams, business vision, finance strategy, auto 
 coaching notes? Loads of documents, sketches and remarks spread around the file system, cloud, 
-web and Post-it notes? Are you afraid of your knowledge **privacy**? Are you able to **find** then once you create them? 
+web and Post-it notes? Are you afraid of your knowledge **privacy**? Are you able to **find** them once you create them? 
 Do you know how are they mutually **related** when you read or write them? No?
 
 https://www.mindforger.com
