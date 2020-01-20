@@ -5,14 +5,14 @@
 [![Current release](https://img.shields.io/github/release/dvorka/mindforger.svg)](https://github.com/dvorka/mindforger/releases)
 [![GitHub issues](https://img.shields.io/github/issues/dvorka/mindforger.svg?maxAge=360)](https://github.com/dvorka/mindforger/issues)
 [![All releases downloads](https://img.shields.io/github/downloads/dvorka/mindforger/total.svg)](https://github.com/dvorka/mindforger/releases)
-[![AUR](https://img.shields.io/aur/license/yaourt.svg)](https://github.com/dvorka/mindforger/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/dvorka/mindforger?color=%23fe0000)](https://github.com/dvorka/mindforger/blob/master/LICENSE)
 <a href="https://twitter.com/intent/follow?screen_name=mindforger"><img src="https://img.shields.io/twitter/follow/mindforger.svg?style=social&logo=twitter" alt="follow on Twitter"></a>
 <!-- [![Documentation](https://img.shields.io/badge/project-documentation-blue.svg)](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md) -->
 
 Are you **drowning** in **information**, but **starving** for **knowledge**? Where do you keep your **private remarks** 
 like ideas, personal plans, gift tips, how-tos, dreams, business vision, finance strategy, auto 
 coaching notes? Loads of documents, sketches and remarks spread around the file system, cloud, 
-web and Post-it notes? Are you afraid of your knowledge **privacy**? Are you able to **find** then once you create them? 
+web and Post-it notes? Are you afraid of your knowledge **privacy**? Are you able to **find** them once you create them? 
 Do you know how are they mutually **related** when you read or write them? No?
 
 https://www.mindforger.com

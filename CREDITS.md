@@ -26,7 +26,7 @@ Big thanks to 3rd party FOSS content authors:
 * Danny Allen (primary [icon theme](https://store.kde.org/content/show.php?content=18317) store.kde.com - icons)
 * Krita (https://github.com/KDE/krita - menu icons)
 * Travis CI ([travis-ci.org](https://travis-ci.org/) - continous integration tests and builds infra - Ubuntu, macOS)
-* AppVeyor CI ([appveyor.com](https://www.appveyor.com/) - continous integration tests and builds infra - Windows
+* AppVeyor CI ([appveyor.com](https://www.appveyor.com/) - continous integration tests and builds infra - Windows)
 * Raimund Hocke ([SikuliX](http://sikulix.com/)- GUI automation testing)
 * Lewis Van Winkle ([GENANN](https://github.com/codeplea/genann) - minimal neural network - library)
 * Oleander Software ([Oleander stemming library](http://www.oleandersolutions.com/stemming/stemming.html) - stemmer - library)

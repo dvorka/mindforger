@@ -108,7 +108,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
     // check whether running in GUI (and not in text console tty)
-#if not defined(__APPLE__) && not defined (_WIN32)
+#if not defined(__APPLE__) && not defined(_WIN32)
     char* term = getenv(m8r::ENV_VAR_DISPLAY);
     if(!term || !strlen(term)) {
         cerr << endl
@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
 
     // stupid & ugly reused code as macOS requires to pass --disable-web-security parameter to QApplication
     // so that it allows loading of images by QWebEngine
-#if defined (__APPLE__) || defined(_WIN32)
+#if defined(__APPLE__) || defined(_WIN32)
     char ARG_DISABLE_WEB_SECURITY[] = "--disable-web-security";
     int newArgc = argc + 1 + 1;
     char** newArgv = new char*[static_cast<size_t>(newArgc)];
@@ -178,7 +178,7 @@ int main(int argc, char* argv[])
                 QCoreApplication::translate("main", "Load configuration from given <file>."),
                 QCoreApplication::translate("main", "file"));
         parser.addOption(configPathOption);
-#if defined (__APPLE__) || defined(_WIN32)
+#if defined(__APPLE__) || defined(_WIN32)
         QCommandLineOption macosDisableSecurityOption(QStringList() << "S" << "disable-web-security",
                 QCoreApplication::translate("main", "Disable WebEngine security to allow loading of images on macOS."));
         parser.addOption(macosDisableSecurityOption);
