@@ -105,13 +105,16 @@ using namespace std;
  * $ mindforger -C "FTS 'expr' SCOPE outline 'abc'"
  * $ mindforger -C "FTS 'expr' SCOPE note 'abc'.'efg'"
  */
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     // check whether running in GUI (and not in text console tty)
 #if not defined(__APPLE__) && not defined (_WIN32)
-    char *term = getenv(m8r::ENV_VAR_DISPLAY);
+    char* term = getenv(m8r::ENV_VAR_DISPLAY);
     if(!term || !strlen(term)) {
-        cerr << endl << QCoreApplication::translate("main", "MindForger CANNOT be run from text console - set DISPLAY environment variable or run MindForger from GUI.").toUtf8().constData()
+        cerr << endl
+             << QCoreApplication::translate(
+                    "main",
+                    "MindForger CANNOT be run from text console - set DISPLAY environment variable or run MindForger from GUI.").toUtf8().constData()
              << endl;
         exit(1);
     }
@@ -122,13 +125,27 @@ int main(int argc, char *argv[])
     // so that it allows loading of images by QWebEngine
 #if defined (__APPLE__) || defined(_WIN32)
     char ARG_DISABLE_WEB_SECURITY[] = "--disable-web-security";
-    int newArgc = argc+1+1;
-    char** newArgv = new char*[newArgc];
-    for(int i=0; i<argc; i++) {
-        newArgv[i] = argv[i];
+    int newArgc = argc + 1 + 1;
+    char** newArgv = new char*[static_cast<size_t>(newArgc)];
+    // IMPROVE new version of Chrome/QWebEngine may require --user-data-dir
+    // --disable-web-security must go first, other parameters next
+    newArgv[0] = argv[0];
+    newArgv[1] = ARG_DISABLE_WEB_SECURITY;
+    for(int i=2; i<newArgc-1; i++) {
+        newArgv[i] = argv[i-1];
     }
-    newArgv[argc] = ARG_DISABLE_WEB_SECURITY;
-    newArgv[argc+1] = nullptr;
+    newArgv[newArgc-1] = nullptr;
+
+#ifdef DO_MF_DEBUG
+    MF_DEBUG("argv: " << newArgc << endl);
+    for(int i=0; i<newArgc; i++) {
+        if(newArgv[i] == nullptr) {
+            MF_DEBUG("  " << i << " NULL" << endl);
+            break;
+        }
+        MF_DEBUG("  " << i << " " << newArgv[i] << endl);
+    }
+#endif
 
     QApplication mindforgerApplication(newArgc, newArgv);
 #else
@@ -161,7 +178,7 @@ int main(int argc, char *argv[])
                 QCoreApplication::translate("main", "Load configuration from given <file>."),
                 QCoreApplication::translate("main", "file"));
         parser.addOption(configPathOption);
-#ifdef __APPLE__
+#if defined (__APPLE__) || defined(_WIN32)
         QCommandLineOption macosDisableSecurityOption(QStringList() << "S" << "disable-web-security",
                 QCoreApplication::translate("main", "Disable WebEngine security to allow loading of images on macOS."));
         parser.addOption(macosDisableSecurityOption);
