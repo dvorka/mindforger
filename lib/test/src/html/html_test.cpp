@@ -137,11 +137,11 @@ TEST(HtmlTestCase, TaskList)
     string html{};
     // O header
     htmlRepresentation.to(mind.remind().getOutlines()[0]->getOutlineDescriptorAsNote(), &html);
-    cout << "= BEGIN HTML =" << endl << html << endl << "= END HTML =" << endl;
+    cout << "= BEGIN O HTML =" << endl << html << endl << "= END O HTML =" << endl;
     EXPECT_NE(std::string::npos, html.find("input"));
     // N
     html.clear();
     htmlRepresentation.to(mind.remind().getOutlines()[0]->getNotes()[0], &html);
-    cout << "= BEGIN HTML =" << endl << html << endl << "= END HTML =" << endl;
+    cout << "= BEGIN N HTML =" << endl << html << endl << "= END N HTML =" << endl;
     EXPECT_NE(std::string::npos, html.find("input"));
 }

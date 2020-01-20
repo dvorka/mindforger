@@ -76,6 +76,7 @@ Mind::~Mind()
     delete mdConfigRepresentation;
     delete autoInterceptor;
     delete autolinking;
+    delete stats;
 
     // - Memory destruct outlines
     // - allNotesCache Notes is just container referencing Memory's Outlines

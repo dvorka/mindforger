@@ -18,7 +18,7 @@
 */
 
 #include "cmark_gfm_markdown_transcoder.h"
-// cmark-gfm headers must NOT be included in header - Win builds fail
+// cmark-gfm headers must NOT be included in header (Win build fails otherwise)
 #ifdef MF_MD_2_HTML_CMARK
   #include <cmark-gfm.h>
   #include <cmark-gfm-core-extensions.h>
@@ -33,6 +33,12 @@ using namespace std;
 CmarkGfmMarkdownTranscoder::CmarkGfmMarkdownTranscoder() : config(Configuration::getInstance())
 {
     cmarkOptions = lastMfOptions = 0;
+
+#ifdef MF_MD_2_HTML_CMARK
+    cmark_gfm_core_extensions_ensure_registered();
+    // free extensions at application exit (cmark-gfm is not able to register/unregister more than once)
+    std::atexit(cmark_release_plugins);
+#endif
 }
 
 CmarkGfmMarkdownTranscoder::~CmarkGfmMarkdownTranscoder()
@@ -59,21 +65,20 @@ string* CmarkGfmMarkdownTranscoder::to(RepresentationType format, const string* 
             overflow=i>=CMARK_MAX_SECTION_DEPTH?i-CMARK_MAX_SECTION_DEPTH:0;
         }
 
-        //TODO VH: move to some general init code?
-        cmark_gfm_core_extensions_ensure_registered();
+        // TODO make this method which takes input and provides output: cmark_to_html()
         cmark_mem* mem = cmark_get_default_mem_allocator();
-        //TODO VH: use extensions per config
+        // TODO control which extensions to use in MindForger config
         cmark_llist* syntax_extensions = cmark_list_syntax_extensions(mem);
-        //TODO VH: parse options
+        // TODO parse options
         cmark_parser* parser = cmark_parser_new(CMARK_OPT_DEFAULT | CMARK_OPT_UNSAFE);
         for (cmark_llist* tmp = syntax_extensions; tmp; tmp = tmp->next) {
             cmark_parser_attach_syntax_extension(parser, (cmark_syntax_extension*)tmp->data);
         }
         cmark_parser_feed(parser, markdown->c_str()+overflow, markdown->size()-overflow);
 
-        cmark_node *doc = cmark_parser_finish(parser);
-        //cmark_node *doc = cmark_parse_document (markdown->c_str(), markdown->size(), CMARK_OPT_DEFAULT | CMARK_OPT_UNSAFE);
-        if (doc) {
+        //cmark_node* doc = cmark_parse_document (markdown->c_str(), markdown->size(), CMARK_OPT_DEFAULT | CMARK_OPT_UNSAFE);
+        cmark_node* doc = cmark_parser_finish(parser);
+        if(doc) {
             char *rendered_html = cmark_render_html_with_mem(doc, CMARK_OPT_DEFAULT | CMARK_OPT_UNSAFE, parser->syntax_extensions, mem);
             if (rendered_html) {
                 html->append(rendered_html);

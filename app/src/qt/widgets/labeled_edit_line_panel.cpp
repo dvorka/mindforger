@@ -23,7 +23,7 @@ namespace m8r {
 LabeledEditLinePanel::LabeledEditLinePanel(const QString& text, QWidget *parent)
     : QWidget(parent)
 {
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto* layout = new QVBoxLayout{this};
     layout->setContentsMargins(0,0,0,0);
     label = new QLabel{text, this};
     edit = new QLineEdit{this};
@@ -36,4 +36,4 @@ LabeledEditLinePanel::~LabeledEditLinePanel()
 {
 }
 
-}
+} // m8r namespace

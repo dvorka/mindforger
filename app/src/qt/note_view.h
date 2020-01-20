@@ -97,6 +97,12 @@ public:
     void setHtml(const QString& html, const QUrl& baseUrl = QUrl()) {
         noteViewer->setHtml(html, baseUrl);
     }
+    void giveViewerFocus() {
+        QMetaObject::invokeMethod(
+            noteViewer, "setFocus",
+            Qt::QueuedConnection
+            /*, Q_ARG(char*, text) */);
+    }
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;

@@ -40,8 +40,6 @@ UrgencyComboBox::UrgencyComboBox(QWidget *parent)
     }
 }
 
-UrgencyComboBox::~UrgencyComboBox()
-{
-}
+UrgencyComboBox::~UrgencyComboBox() = default;
 
 }

@@ -126,10 +126,11 @@ function releaseForParticularUbuntuVersion() {
     cd mindforger && cp -rvf ${MFSRC}/build/ubuntu/debian .
     createChangelog ./debian/changelog
 
-    # 4.1) build MF dependencies
+    echo "4.1) build MF dependencies"
+    rm -rvf deps/cmark-gfm/build
     cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . && cd ../../..
         
-    # 4.2) Qt: generate makefile using qmake
+    echo "4.2) Qt: generate makefile using qmake"
     echo -e "\n# qmake ######################################################"
     cd ..
     mv mindforger ${MF}
@@ -187,7 +188,7 @@ function releaseForParticularUbuntuVersion() {
     # recently added /ppa to fix the path and package rejections
     # MF PPA w/ 64b build only
     dput ppa:ultradvorka/productivity ${MFRELEASE}_source.changes
-    # HSTR PPA w/ 64b 32b and ARM builds
+    # SKIP: HSTR PPA w/ 64b 32b and ARM builds
     #dput ppa:ultradvorka/ppa ${MFRELEASE}_source.changes
 }
 
@@ -201,14 +202,14 @@ then
     exit 1
 fi
 
-export ARG_BAZAAR_MSG="MindForger 1.49.2 release."
-export ARG_MAJOR_VERSION=1.49.
-export ARG_MINOR_VERSION=20 # minor version is incremented for every Ubuntu version
+export ARG_BAZAAR_MSG="MindForger 1.50.0 release."
+export ARG_MAJOR_VERSION=1.50.
+export ARG_MINOR_VERSION=4 # minor version is incremented for every Ubuntu version
 
 # https://wiki.ubuntu.com/Releases
-# old: precise quantal saucy precise utopic vivid wily yakkety trusty (old GCC) artful
-# current: xenial bionic cosmic
-for UBUNTU_VERSION in xenial bionic cosmic
+# old: precise quantal saucy precise utopic vivid wily trusty (old GCC) yakkety artful cosmic
+# current: (trusty) xenial bionic disco eoan
+for UBUNTU_VERSION in xenial bionic disco eoan
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"

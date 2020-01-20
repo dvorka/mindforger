@@ -21,12 +21,8 @@
 
 namespace m8r {
 
-AssociationAssessmentModel::AssociationAssessmentModel()
-{
-}
+AssociationAssessmentModel::AssociationAssessmentModel() = default;
 
-AssociationAssessmentModel::~AssociationAssessmentModel()
-{
-}
+AssociationAssessmentModel::~AssociationAssessmentModel() = default;
 
 } // m8r namespace

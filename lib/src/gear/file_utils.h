@@ -106,7 +106,7 @@ bool isDirectoryOrFileExists(const char* path);
 bool isDirectory(const char* path);
 bool isFile(const char* path);
 bool isPathRelative(const std::string& path);
-char* makeTempDirectory(char* dirNamePefix);
+char* makeTempDirectory(char* dirNamePrefix);
 int removeDirectoryRecursively(const char* path);
 int copyDirectoryRecursively(const char* srcPath, const char* dstPath, bool extractGz=false);
 bool createDirectory(const std::string& path);

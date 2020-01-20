@@ -48,7 +48,7 @@ void pathToLinuxDelimiters(const std::string& path, std::string& linuxPath)
 
 bool stringToLines(const string* text, vector<string*>& lines)
 {
-    if(text && text->size()) {
+    if(text && !text->empty()) {
         istringstream input{*text};
         string line;
         while(getline(input, line)) {
@@ -56,9 +56,9 @@ bool stringToLines(const string* text, vector<string*>& lines)
             lines.push_back(new string{line});
         }
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 bool fileToLines(const string* filename, vector<string*>& lines, size_t &fileSize)

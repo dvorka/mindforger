@@ -46,7 +46,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &ConfigurationDialog::saveSlot);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout{this};
+    QVBoxLayout* mainLayout = new QVBoxLayout{this};
     mainLayout->addWidget(tabWidget);
     mainLayout->addWidget(buttonBox);
     setLayout(mainLayout);

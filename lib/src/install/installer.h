@@ -43,7 +43,7 @@ public:
     Installer(const Installer&&) = delete;
     Installer &operator=(const Installer&) = delete;
     Installer &operator=(const Installer&&) = delete;
-    ~Installer();
+    ~Installer() = default;
 
     /**
      * @brief Create empty MindForger repository.

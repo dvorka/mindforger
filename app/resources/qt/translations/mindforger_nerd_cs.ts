@@ -2,6 +2,183 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="cs_CZ">
 <context>
+    <name>m8r</name>
+    <message>
+        <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="34"/>
+        <source>Notebook tags:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="36"/>
+        <source>Notebooks:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="46"/>
+        <source>&amp;Open Notebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="50"/>
+        <source>&amp;Find Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="52"/>
+        <location filename="../../../src/qt/dialogs/rows_and_depth_dialog.cpp" line="50"/>
+        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="80"/>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="78"/>
+        <source>Find Notebook by Tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/note_edit_dialog.cpp" line="176"/>
+        <location filename="../../../src/qt/dialogs/outline_header_edit_dialog.cpp" line="201"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/note_edit_dialog.cpp" line="179"/>
+        <location filename="../../../src/qt/dialogs/outline_header_edit_dialog.cpp" line="207"/>
+        <source>Advanced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/note_edit_dialog.cpp" line="196"/>
+        <source>Edit Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/outline_header_edit_dialog.cpp" line="204"/>
+        <source>Preamble</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/outline_header_edit_dialog.cpp" line="224"/>
+        <source>Edit Notebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/rows_and_depth_dialog.cpp" line="30"/>
+        <source>Specify number of rows and depth to generate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/rows_and_depth_dialog.cpp" line="39"/>
+        <source>rows</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/rows_and_depth_dialog.cpp" line="44"/>
+        <source>depth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/rows_and_depth_dialog.cpp" line="47"/>
+        <source>&amp;Generate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/rows_and_depth_dialog.cpp" line="67"/>
+        <source>Format Generator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="29"/>
+        <source>show Notebooks/Notes modified or viewed in recent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="39"/>
+        <source>year(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="45"/>
+        <source>month(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="51"/>
+        <source>day(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="57"/>
+        <source>hour(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="63"/>
+        <source>minute(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="66"/>
+        <source>show Notebooks with the following tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="77"/>
+        <source>&amp;Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="103"/>
+        <source>Scope Mind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_toolbar_view.cpp" line="40"/>
+        <source>New Notebook</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_toolbar_view.cpp" line="46"/>
+        <source>Open a directory with Markdowns or MindForger repository</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_toolbar_view.cpp" line="49"/>
+        <source>Open Markdown file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_toolbar_view.cpp" line="61"/>
+        <source>View Dashboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_toolbar_view.cpp" line="64"/>
+        <source>View Eisenhower Matrix</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_toolbar_view.cpp" line="67"/>
+        <source>View Notebooks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_toolbar_view.cpp" line="70"/>
+        <source>View Knowledge Graph Navigator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_toolbar_view.cpp" line="73"/>
+        <source>View Tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_toolbar_view.cpp" line="76"/>
+        <source>View Recent Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>m8r::AssocLeaderboardModel</name>
     <message>
         <location filename="../../../src/qt/assoc_leaderboard_model.cpp" line="40"/>
@@ -385,39 +562,6 @@
     </message>
 </context>
 <context>
-    <name>m8r::FindOutlineByTagDialog</name>
-    <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="34"/>
-        <source>Notebook tags:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="36"/>
-        <source>Notebooks:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="46"/>
-        <source>&amp;Open Notebook</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="50"/>
-        <source>&amp;Find Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="52"/>
-        <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/find_outline_by_tag_dialog.cpp" line="78"/>
-        <source>Find Notebook by Tags</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>m8r::FtsDialog</name>
     <message>
         <location filename="../../../src/qt/dialogs/fts_dialog.cpp" line="32"/>
@@ -634,8 +778,9 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="305"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="356"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="312"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="363"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="366"/>
         <source>&amp;New</source>
         <translation type="unfinished">&amp;Nový</translation>
     </message>
@@ -670,7 +815,7 @@
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="93"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="326"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="333"/>
         <source>&amp;Forget</source>
         <translation type="unfinished">Zapomeň</translation>
     </message>
@@ -784,266 +929,266 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="246"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="252"/>
         <source>Toggle distraction free mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="249"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="255"/>
         <source>&amp;Fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="253"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="259"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="460"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="466"/>
         <source>&amp;Undo	Ctrl+Z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="461"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="467"/>
         <source>Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="463"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="469"/>
         <source>&amp;Redo	Ctrl+Shift+Z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="464"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="470"/>
         <source>Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="466"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="472"/>
         <source>Cu&amp;t	Ctrl+X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="467"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="473"/>
         <source>Cut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="469"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="475"/>
         <source>&amp;Copy	Ctrl+C</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="470"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="476"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="472"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="478"/>
         <source>&amp;Paste	Ctrl+V</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="473"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="479"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="309"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="312"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="364"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="478"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="316"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="319"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="371"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="488"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="495"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="506"/>
         <source>&amp;Bold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="496"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="507"/>
         <source>Format text as bold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="498"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="509"/>
         <source>&amp;Italic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="499"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="510"/>
         <source>Format text as italic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="501"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="512"/>
         <source>&amp;Code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="502"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="513"/>
         <source>Format text as inlined source code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="553"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="564"/>
         <source>&amp;Strikethrough</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="554"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="565"/>
         <source>Format text as strikethrough</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="556"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="567"/>
         <source>&amp;Keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="557"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="568"/>
         <source>Format text as keyboard input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="559"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="570"/>
         <source>Bulleted List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="560"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="571"/>
         <source>Format block as bulleted list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="562"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="573"/>
         <source>Numbered List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="563"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="574"/>
         <source>Format block as numbered list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="565"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="576"/>
         <source>Task List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="566"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="577"/>
         <source>Format block as task list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="574"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="585"/>
         <source>C&amp;ode Block</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="575"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="586"/>
         <source>Format text block as source code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="580"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="591"/>
         <source>Block &amp;Quote</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="581"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="592"/>
         <source>Format text block as blockquote</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="583"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="594"/>
         <source>&amp;Link</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="584"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="595"/>
         <source>Insert link to a document, image or file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="587"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="598"/>
         <source>Insert image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="592"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="603"/>
         <source>&amp;Horizontal ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="593"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="604"/>
         <source>Horizontal ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="493"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="504"/>
         <source>&amp;Format</source>
         <translation type="unfinished">&amp;Formát</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="306"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="313"/>
         <source>Create new Notebook to form new ideas, principles, combinations or applications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="314"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="321"/>
         <source>Edit current Notebook - you can also double click view to open the editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="419"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="426"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="320"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="409"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="327"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="416"/>
         <source>Copy the current Notebook as to Stencil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="324"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="331"/>
         <source>Make copy of the current Notebook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="327"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="334"/>
         <source>Forget Notebook and move it to Limbo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="303"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="310"/>
         <source>N&amp;otebook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="374"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="381"/>
         <source>&amp;Forget	Del</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="375"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="382"/>
         <source>Forget Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="403"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="410"/>
         <source>Refactor Note to another Notebook...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="413"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="420"/>
         <source>Make a copy of the Note to this or other Notebook...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="316"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="323"/>
         <source>Make &amp;Home</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1210,47 +1355,42 @@
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="244"/>
+        <source>Ho&amp;isting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="250"/>
         <source>D&amp;istraction Free</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="251"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="257"/>
         <source>Toggle fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="475"/>
-        <source>Complete Text	Alt+/</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="476"/>
-        <source>Complete word being written using other words in the current Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="317"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="324"/>
         <source>Toggle tag indicating whether to use the current Notebook as home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="319"/>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="408"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="326"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="415"/>
         <source>Make &amp;Stencil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="323"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="330"/>
         <source>C&amp;lone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="415"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="422"/>
         <source>E&amp;xport</source>
         <translation type="unfinished">E&amp;xport</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="336"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="343"/>
         <source>&amp;Import</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1310,487 +1450,502 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="276"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="283"/>
         <source>Str&amp;etch edges	e | mouse wheel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="277"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="284"/>
         <source>Stretch knowledge graph edges</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="279"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="286"/>
         <source>&amp;Sh&amp;rink edge	E | mouse wheel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="280"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="287"/>
         <source>Shring knowledge graph edges</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="282"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="289"/>
         <source>Zoom &amp;in	z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="283"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="290"/>
         <source>Zoom in knowledge graph</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="285"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="292"/>
         <source>Zoom &amp;out	Z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="286"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="293"/>
         <source>Zoom out knowledge graph</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="288"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="295"/>
         <source>&amp;Shuffle	Space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="289"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="296"/>
         <source>Shuffle knowledge graph</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="291"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="298"/>
         <source>Na&amp;vigator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="330"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="337"/>
         <source>&amp;HTML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="331"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="338"/>
         <source>Export Notebook to a file in HTML format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="337"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="344"/>
         <source>&amp;TWiki</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="338"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="345"/>
         <source>Import Notebook from an external TWiki file and restart MindForger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="357"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="368"/>
         <source>Create new Note to form new ideas, principles, combinations and applications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="359"/>
-        <source>&amp;Hoist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="361"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="248"/>
         <source>Hoist/de-hoist Note to focus on Note being viewed or edited</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="367"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="374"/>
         <source>&amp;Edit	Ctrl+E</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="369"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="376"/>
         <source>Edit current Note - you can also double click view to open the editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="371"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="378"/>
         <source>Remember	Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="372"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="379"/>
         <source>Save Note being edited</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="378"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="385"/>
         <source>Leave	⌘+Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="380"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="387"/>
         <source>Leave	Alt+Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="382"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="389"/>
         <source>Save leave editor of Note being changed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="384"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="391"/>
         <source>&amp;Promote	Ctrl+Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="385"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="392"/>
         <source>Promote Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="387"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="394"/>
         <source>&amp;Demote	Ctrl+Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="388"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="395"/>
         <source>Demote Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="390"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="397"/>
         <source>F&amp;irst	Ctrl+Shift+Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="391"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="398"/>
         <source>Move Note to be the first child of its parent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="393"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="400"/>
         <source>&amp;Up	Ctrl+Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="394"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="401"/>
         <source>Move Note up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="396"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="403"/>
         <source>Do&amp;wn	Ctrl+Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="397"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="404"/>
         <source>Move Note down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="399"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="406"/>
         <source>&amp;Last	Ctrl+Shift+Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="400"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="407"/>
         <source>Move Note to be the last child of its parent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="402"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="409"/>
         <source>&amp;Refactor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="405"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="412"/>
         <source>E&amp;xtract</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="406"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="413"/>
         <source>Create new Note from the text selected in the current Note...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="412"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="419"/>
         <source>&amp;Clone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="416"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="423"/>
         <source>Export Note to an external file in a supported format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="420"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="427"/>
         <source>Import Note from an external file in a supported format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="423"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="430"/>
         <source>&amp;Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="454"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="460"/>
         <source>Find	Ctrl+Shift+F</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="455"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="461"/>
         <source>Search Note text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="457"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="463"/>
         <source>Find Next	Ctrl+F</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="458"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="464"/>
         <source>Search Note text again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="504"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="481"/>
+        <source>Word Wrap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="483"/>
+        <source>Toggle word wrap mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="485"/>
+        <source>Complete Link	Ctrl+/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="486"/>
+        <source>Complete word being written by finding link to Notebook or Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="515"/>
         <source>&amp;Math</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="505"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="516"/>
         <source>Format text as math (MathJax)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="508"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="519"/>
         <source>MathJa&amp;x</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="509"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="520"/>
         <source>&amp;text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="512"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="523"/>
         <source>&amp;fraction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="514"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="525"/>
         <source>&amp;sum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="516"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="527"/>
         <source>s&amp;quare root</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="519"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="530"/>
         <source>&amp;integral</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="521"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="532"/>
         <source>integrals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="524"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="535"/>
         <source>&amp;alpha</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="526"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="537"/>
         <source>&amp;beta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="528"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="539"/>
         <source>&amp;Gama</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="530"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="541"/>
         <source>&amp;Delta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="533"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="544"/>
         <source>&amp;bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="535"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="546"/>
         <source>&amp;hat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="537"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="548"/>
         <source>&amp;dot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="539"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="550"/>
         <source>&amp;overrightarrow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="542"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="553"/>
         <source>&amp;cup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="544"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="555"/>
         <source>&amp;cap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="546"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="557"/>
         <source>&amp;empty set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="548"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="559"/>
         <source>&amp;in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="550"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="561"/>
         <source>&amp;not in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="568"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="579"/>
         <source>T&amp;able of Contents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="569"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="580"/>
         <source>Insert Notebook&apos;s table of contents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="571"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="582"/>
         <source>&amp;Timestamp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="572"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="583"/>
         <source>Insert current date and time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="577"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="588"/>
         <source>Math Block</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="578"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="589"/>
         <source>Format text block as math (MathJax)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="586"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="597"/>
         <source>Ima&amp;ge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="589"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="600"/>
         <source>Table</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="590"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="601"/>
         <source>Insert table...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="621"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="632"/>
         <source>&amp;Documentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="623"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="634"/>
         <source>Open MindForger documentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="625"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="636"/>
         <source>&amp;Web</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="626"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="637"/>
         <source>Open MindForger web</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="628"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="639"/>
         <source>&amp;Markdown tutorial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="629"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="640"/>
         <source>Open Markdown tutorial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="631"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="642"/>
         <source>MathJax cheatsheet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="632"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="643"/>
         <source>Open Markdown quick reference</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="634"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="645"/>
         <source>MathJax live preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="635"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="646"/>
         <source>Open Markdown live demo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="637"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="648"/>
         <source>Report &amp;Bug or Request Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="638"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="649"/>
         <source>Report bug or suggest an enhancement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="640"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="651"/>
         <source>&amp;Check for Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="641"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="652"/>
         <source>Check for MindForger updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="643"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="654"/>
         <source>&amp;About MindForger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="644"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="655"/>
         <source>About MindForger...</source>
         <translation type="unfinished">O aplikaci MindForger</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="646"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="657"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_menu_view.cpp" line="622"/>
+        <location filename="../../../src/qt/main_menu_view.cpp" line="633"/>
         <source>F1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1800,51 +1955,6 @@
     <message>
         <location filename="../../../src/qt/main_toolbar_view.cpp" line="24"/>
         <source>Main Toolbar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_toolbar_view.cpp" line="40"/>
-        <source>New Notebook</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_toolbar_view.cpp" line="46"/>
-        <source>Open a directory with Markdowns or MindForger repository</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_toolbar_view.cpp" line="49"/>
-        <source>Open Markdown file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_toolbar_view.cpp" line="61"/>
-        <source>View Dashboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_toolbar_view.cpp" line="64"/>
-        <source>View Eisenhower Matrix</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_toolbar_view.cpp" line="67"/>
-        <source>View Notebooks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_toolbar_view.cpp" line="70"/>
-        <source>View Knowledge Graph Navigator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_toolbar_view.cpp" line="73"/>
-        <source>View Tags</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/main_toolbar_view.cpp" line="76"/>
-        <source>View Recent Notes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1905,13 +2015,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1663"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1808"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1664"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1809"/>
         <source>New Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1663"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1664"/>
         <source>Failed to create new Note!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1958,8 +2068,8 @@
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="441"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1730"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1759"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1731"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1760"/>
         <source>Specified file path already exists!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2012,73 +2122,73 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1609"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1610"/>
         <source>Edit Notebook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1609"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1610"/>
         <source>Please open an Notebook to edit.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1676"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1679"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1677"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1680"/>
         <source>Clone Notebook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1676"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1677"/>
         <source>Failed to clone Notebook!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1679"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1680"/>
         <source>Please open and Notebook to be cloned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1695"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1696"/>
         <source>Notebook &apos;%1&apos; successfully marked as home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1699"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1700"/>
         <source>Make Notebook home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1699"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1700"/>
         <source>Notebook can be marked as home only when viewed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1710"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1711"/>
         <source>Do you really want to forget &apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1712"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1713"/>
         <source>&apos; Notebook?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1718"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1719"/>
         <source>Notebook can be forgotten only when viewed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1808"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1809"/>
         <source>Open and view a Notebook to create new Note.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1848"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1849"/>
         <source>Edit Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1848"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1849"/>
         <source>Please select a Note to edit in the Notebook.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2180,164 +2290,164 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1692"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1693"/>
         <source>Home tag toggled/removed - Notebook &apos;%1&apos; is no longer home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1709"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1718"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1710"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1719"/>
         <source>Forget Notebook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1730"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1747"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1759"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1731"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1748"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1760"/>
         <source>Export Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1747"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1748"/>
         <source>Unable to find Notebook to export!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1771"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1772"/>
         <source>Import TWiki File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1880"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1882"/>
         <source>Delete Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1881"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1883"/>
         <source>Do you really want to delete note &apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1883"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1885"/>
         <source>&apos; along with its child notes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1897"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1899"/>
         <source>Forget Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1897"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1899"/>
         <source>Please select a Note to forget.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1917"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1945"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1949"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1919"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1947"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1951"/>
         <source>Extract Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1917"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1919"/>
         <source>Please select a text to extract.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1945"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1947"/>
         <source>Failed to extract new Note!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1949"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1951"/>
         <source>Please select a Note, edit it and select a text to extract.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1967"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1970"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1969"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1972"/>
         <source>Clone Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1967"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1969"/>
         <source>Failed to clone Note!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1970"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1972"/>
         <source>Please select a Note to be cloned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1988"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1990"/>
         <source>Moved Note &apos;%1&apos; to be the first child</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1991"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2012"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2033"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2054"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1993"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2014"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2035"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2056"/>
         <source>Move Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="1991"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2012"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2033"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2054"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="1993"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2014"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2035"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2056"/>
         <source>Please select a Note to be moved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2009"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2011"/>
         <source>Moved up Note &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2030"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2032"/>
         <source>Moved down Note &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2051"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2053"/>
         <source>Moved Note &apos;%1&apos; to be the last child</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2073"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2075"/>
         <source>Promoted Note &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2076"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2078"/>
         <source>Promote Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2076"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2078"/>
         <source>Please select a Note to be promoted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2090"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2092"/>
         <source>Demoted Note &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2093"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2095"/>
         <source>Demote Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2093"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2095"/>
         <source>Please select a Note to be demoted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2225"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2245"/>
         <source>About MindForger</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2563,24 +2673,6 @@
     </message>
 </context>
 <context>
-    <name>m8r::NoteEditDialog</name>
-    <message>
-        <location filename="../../../src/qt/dialogs/note_edit_dialog.cpp" line="176"/>
-        <source>General</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/note_edit_dialog.cpp" line="179"/>
-        <source>Advanced</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/note_edit_dialog.cpp" line="196"/>
-        <source>Edit Note</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>m8r::NoteEditDialog::AdvancedTab</name>
     <message>
         <location filename="../../../src/qt/dialogs/note_edit_dialog.cpp" line="108"/>
@@ -2670,11 +2762,11 @@
     <name>m8r::NoteEditPresenter</name>
     <message>
         <location filename="../../../src/qt/note_edit_presenter.cpp" line="116"/>
-        <source>Note saved!</source>
+        <source>Note &apos;%1&apos; saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_edit_presenter.cpp" line="119"/>
+        <location filename="../../../src/qt/note_edit_presenter.cpp" line="118"/>
         <source>Attempt to save data from UI to Note, but no Note is set.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2682,12 +2774,12 @@
 <context>
     <name>m8r::NoteEditorView</name>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="546"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="613"/>
         <source>Full-text Search Result</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/note_editor_view.cpp" line="547"/>
+        <location filename="../../../src/qt/note_editor_view.cpp" line="614"/>
         <source>No matching text found.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2819,70 +2911,47 @@
 <context>
     <name>m8r::OrlojPresenter</name>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="323"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="336"/>
         <source>Selected Notebook not found!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="326"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="351"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="339"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="364"/>
         <source>No Notebook selected!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="399"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="412"/>
         <source>Selected Tag not found!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="402"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="430"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="415"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="443"/>
         <source>No Tag selected!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="463"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="476"/>
         <source>Note &apos;%1&apos;   %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="704"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="741"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="754"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="791"/>
         <source>Note </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="706"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="756"/>
         <source>Selected Notebook/Note not found!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="709"/>
-        <location filename="../../../src/qt/orloj_presenter.cpp" line="743"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="759"/>
+        <location filename="../../../src/qt/orloj_presenter.cpp" line="793"/>
         <source>No Note selected!</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>m8r::OutlineHeaderEditDialog</name>
-    <message>
-        <location filename="../../../src/qt/dialogs/outline_header_edit_dialog.cpp" line="201"/>
-        <source>General</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/outline_header_edit_dialog.cpp" line="204"/>
-        <source>Preamble</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/outline_header_edit_dialog.cpp" line="207"/>
-        <source>Advanced</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/outline_header_edit_dialog.cpp" line="224"/>
-        <source>Edit Notebook</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3211,36 +3280,6 @@
 <context>
     <name>m8r::RowsAndDepthDialog</name>
     <message>
-        <location filename="../../../src/qt/dialogs/rows_and_depth_dialog.cpp" line="30"/>
-        <source>Specify number of rows and depth to generate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/rows_and_depth_dialog.cpp" line="39"/>
-        <source>rows</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/rows_and_depth_dialog.cpp" line="44"/>
-        <source>depth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/rows_and_depth_dialog.cpp" line="47"/>
-        <source>&amp;Generate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/rows_and_depth_dialog.cpp" line="50"/>
-        <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/rows_and_depth_dialog.cpp" line="67"/>
-        <source>Format Generator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../src/qt/dialogs/rows_and_depth_dialog.cpp" line="79"/>
         <source>Bulleted List Generator</source>
         <translation type="unfinished"></translation>
@@ -3258,59 +3297,6 @@
     <message>
         <location filename="../../../src/qt/dialogs/rows_and_depth_dialog.cpp" line="88"/>
         <source>Block Quote Generator</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>m8r::ScopeDialog</name>
-    <message>
-        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="29"/>
-        <source>show Notebooks/Notes modified or viewed in recent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="39"/>
-        <source>year(s)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="45"/>
-        <source>month(s)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="51"/>
-        <source>day(s)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="57"/>
-        <source>hour(s)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="63"/>
-        <source>minute(s)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="66"/>
-        <source>show Notebooks with the following tags</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="77"/>
-        <source>&amp;Set</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="80"/>
-        <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../src/qt/dialogs/scope_dialog.cpp" line="103"/>
-        <source>Scope Mind</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

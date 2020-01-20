@@ -27,9 +27,7 @@ MarkdownTokenizer::MarkdownTokenizer(Lexicon& lexicon, CommonWordsBlacklist& bla
 {
 }
 
-MarkdownTokenizer::~MarkdownTokenizer()
-{
-}
+MarkdownTokenizer::~MarkdownTokenizer() = default;
 
 void MarkdownTokenizer::tokenize(CharProvider& md, WordFrequencyList& wfl, bool useBlacklist, bool lowercase, bool stem)
 {
