@@ -138,7 +138,6 @@ public:
     QAction* actionNoteDown;
     QAction* actionNoteLast;
     QAction* actionNoteRefactor;
-    QAction* actionNoteExtract;
     QAction* actionNoteStencil;
     QAction* actionNoteClone;
     QAction* actionNoteExport;
@@ -153,6 +152,7 @@ public:
     QAction* actionEditCopy;
     QAction* actionEditPaste;
     QAction* actionEditWordWrap;
+    QAction* actionEditExtract;
     QAction* actionEditComplete;
 
     // menu: Format

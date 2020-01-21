@@ -409,9 +409,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteRefactor = new QAction(QIcon(":/menu-icons/refactor.svg"), tr("&Refactor"), mainWindow);
     actionNoteRefactor->setStatusTip(tr("Refactor Note to another Notebook..."));
 
-    actionNoteExtract = new QAction(QIcon(":/menu-icons/cut.svg"), tr("E&xtract"), mainWindow);
-    actionNoteExtract->setStatusTip(tr("Create new Note from the text selected in the current Note..."));
-
     actionNoteStencil = new QAction(QIcon(":/menu-icons/stencil.svg"), tr("Make &Stencil"), mainWindow);
     actionNoteStencil->setStatusTip(tr("Copy the current Notebook as to Stencil"));
     actionNoteStencil->setEnabled(false);
@@ -443,7 +440,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNote->addAction(actionNoteLast);
     menuNote->addSeparator();
     menuNote->addAction(actionNoteRefactor);
-    menuNote->addAction(actionNoteExtract);
 #ifdef MF_WIP
     menuNote->addAction(actionNoteStencil);
 #endif
@@ -482,6 +478,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditWordWrap->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_W));
     actionEditWordWrap->setStatusTip(tr("Toggle word wrap mode"));
 
+    actionEditExtract = new QAction(QIcon(":/menu-icons/cut.svg"), tr("E&xtract"), mainWindow);
+    actionEditExtract->setStatusTip(tr("Create new Note from the text selected in the current Note..."));
+
     actionEditComplete = new QAction(QIcon(":/menu-icons/on.svg"), tr("Complete Link\tCtrl+/"), mainWindow);
     actionEditComplete->setStatusTip(tr("Complete word being written by finding link to Notebook or Note"));
 
@@ -497,7 +496,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuEdit->addAction(actionEditPaste);
     menuEdit->addSeparator();
     menuEdit->addAction(actionEditWordWrap);
+    menuEdit->addSeparator();
     menuEdit->addAction(actionEditComplete);
+    menuEdit->addAction(actionEditExtract);
     menuEdit->setEnabled(false);
 
     // menu: format

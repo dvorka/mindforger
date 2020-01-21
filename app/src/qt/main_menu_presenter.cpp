@@ -98,7 +98,6 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionNoteDown, SIGNAL(triggered()), mwp, SLOT(doActionNoteDown()));
     QObject::connect(view->actionNoteLast, SIGNAL(triggered()), mwp, SLOT(doActionNoteLast()));
     QObject::connect(view->actionNoteRefactor, SIGNAL(triggered()), mwp, SLOT(doActionRefactorNoteToOutline()));
-    QObject::connect(view->actionNoteExtract, SIGNAL(triggered()), mwp, SLOT(doActionNoteExtract()));
     QObject::connect(view->actionNoteClone, SIGNAL(triggered()), mwp, SLOT(doActionNoteClone()));
 
     // menu: edit
@@ -106,6 +105,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionEditFindNext, SIGNAL(triggered()), mwp, SLOT(doActionEditFindAgain()));
     // no other bindings needed - it's already bound in the editor ~ menu is rather a documentation
     QObject::connect(view->actionEditWordWrap, SIGNAL(triggered()), mwp, SLOT(doActionEditWordWrapToggle()));
+    QObject::connect(view->actionEditExtract, SIGNAL(triggered()), mwp, SLOT(doActionNoteExtract()));
 
     // menu: format
     QObject::connect(view->actionFormatBold, SIGNAL(triggered()), mwp, SLOT(doActionFormatBold()));
