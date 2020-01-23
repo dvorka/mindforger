@@ -54,4 +54,62 @@ echo "Add new .deb to PPA"
 # publish snapshot to local filesystem so that it can be uploaded - note release NAME
 #aptly publish snapshot mindforger-1.50.0-snapshot
 
+######################################################################
+
+# .deb to add
+export NEW_DEB="mindforger_1.50.0-1_amd64.deb"
+export OLD_VERSION="1.49.0"
+export NEW_VERSION="1.50.0"
+
+# check
+if [ -f "${NEW_DEB}" ]
+then
+    echo "Adding ${NEW_DEB} ..."
+else
+    echo "Package ${NEW_DEB} not found"
+    exit 1
+fi
+
+# backup
+export timestamp=`date +%Y-%m-%d--%H-%M-%S`
+tar zvcf ~/.aptly-${timestamp}.tgz ~/.aptly
+
+# gather current entities
+export MY_REPO=`aptly repo list --raw`
+export OLD_PUBLISH=`aptly publish list --raw | while read A B; do echo $B; done`
+export OLD_SNAPSHOT=`aptly snapshot list --raw`
+aptly repo show -with-packages ${MY_REPO}
+
+# prepare new entities
+export NEW_PUBLISH="${OLD_PUBLISH/${OLD_VERSION}/${NEW_VERSION}}"
+export NEW_SNAPSHOT="${OLD_SNAPSHOT/${OLD_VERSION}/${NEW_VERSION}}"
+
+echo -e "\nSummary:"
+echo "${NEW_DEB}"
+echo "${OLD_VERSION} > ${NEW_VERSION}"
+echo "${MY_REPO}"
+echo "${OLD_PUBLISH} > ${NEW_PUBLISH}"
+echo "${OLD_SNAPSHOT} > ${NEW_SNAPSHOT}"
+
+# drop: publish > snapshot
+echo "aptly publish drop ${OLD_PUBLISH}"
+echo "aptly snapshot drop ${OLD_SNAPSHOT}"
+# add .deb > snapshot > publish
+echo "aptly repo add ${MY_REPO} ${NEW_DEB}"
+echo "aptly snapshot create ${NEW_SNAPSHOT} from repo ${MY_REPO}"
+echo "aptly publish snapshot ${NEW_SNAPSHOT}"
+
+# exit for dry run
+exit 0
+
+# drop: publish > snapshot
+aptly publish drop ${OLD_PUBLISH}
+aptly snapshot drop ${OLD_SNAPSHOT}
+# add .deb > snapshot > publish
+aptly repo add ${MY_REPO} ${NEW_DEB}
+aptly snapshot create ${NEW_SNAPSHOT} from repo ${MY_REPO}
+aptly publish snapshot ${NEW_SNAPSHOT}
+
+aptly repo show -with-packages ${MY_REPO}
+
 # eof
