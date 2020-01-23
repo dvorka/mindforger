@@ -35,6 +35,7 @@ Install:
 * [Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#ubuntu-)
 * [Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#debian-)
 * [Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#fedora-)
+* [openSUSE](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#opensuse-)
 * [Arch Linux](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#arch-linux-)
 * [WSL](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#wsl-)
 

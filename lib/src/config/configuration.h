@@ -240,6 +240,8 @@ private:
     bool uiExpertMode;
     bool uiDistractionFreeMode; // fullscreen, no split, hidden toolbar + menu
     bool uiHoistedMode; // no split
+    std::string uiOutlinesTableSortColumn;
+    bool uiOutlinesTableSortAsc;
 
 private:
     Installer* installer;
