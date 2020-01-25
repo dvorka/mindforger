@@ -142,6 +142,7 @@ public:
      * @brief Note edit
      */
     void showFacetNoteEdit();
+    void showFacetNoteEditWithPreview();
 
     /**
      * @brief Knowledge graph navigator

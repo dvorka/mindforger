@@ -54,10 +54,10 @@
 #ifndef _WIN32
     #define MF_PRINT_STACKTRACE() \
         void *array[50]; size_t size = backtrace(array, 50); backtrace_symbols_fd(array, size, STDERR_FILENO)
-#endif //_WIN32
-#else //DO_MF_DEBUG
+#endif // _WIN32
+#else // DO_MF_DEBUG
     #define MF_DEBUG(x) do {;} while (0)
     #define MF_ASSERT_FUTURE_TIMESTAMPS(x1,x2,x3,x4,x5) do {;} while (0)
-#endif //DO_MF_DEBUG
+#endif // DO_MF_DEBUG
 
 #endif /* M8R_DEBUG_H_ */

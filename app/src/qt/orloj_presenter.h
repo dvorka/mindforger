@@ -55,19 +55,20 @@ class OutlineViewPresenter;
 class OrlojView;
 
 enum OrlojPresenterFacets {
-    FACET_NONE,                 // 0
-    FACET_LIST_OUTLINES,        // 1
-    FACET_VIEW_OUTLINE,         // 2
-    FACET_VIEW_OUTLINE_HEADER,  // 3
-    FACET_EDIT_OUTLINE_HEADER,  // 4
-    FACET_VIEW_NOTE,            // 5
-    FACET_EDIT_NOTE,            // 6
-    FACET_FTS_VIEW_NOTE,        // 7
-    FACET_ORGANIZER,            // 8
-    FACET_TAG_CLOUD,            // 9
-    FACET_RECENT_NOTES,         // 10
-    FACET_NAVIGATOR,            // 11
-    FACET_DASHBOARD             // 12
+    FACET_NONE,                   // 0
+    FACET_LIST_OUTLINES,          // 1
+    FACET_VIEW_OUTLINE,           // 2
+    FACET_VIEW_OUTLINE_HEADER,    // 3
+    FACET_EDIT_OUTLINE_HEADER,    // 4
+    FACET_VIEW_NOTE,              // 5
+    FACET_EDIT_NOTE,              // 6
+    FACET_FTS_VIEW_NOTE,          // 7
+    FACET_ORGANIZER,              // 8
+    FACET_TAG_CLOUD,              // 9
+    FACET_RECENT_NOTES,           // 10
+    FACET_NAVIGATOR,              // 11
+    FACET_DASHBOARD,              // 12
+    FACET_EDIT_NOTE_WITH_PREVIEW  // 13
 };
 
 enum OrlojButtonRoles {
@@ -174,6 +175,8 @@ public:
 
     bool applyFacetHoisting();
 
+    void hideLivePreview();
+
     void fromOutlineHeaderEditBackToView(Outline* outline);
     void fromNoteEditBackToView(Note* note);
 
@@ -191,6 +194,8 @@ public slots:
     void slotShowNoteNavigator(Note* note);
     void slotShowOutlineNavigator(Outline* outline);
     void slotGetLinksForPattern(const QString& pattern);
+    void slotShowLiveNotePreview();
+    void slotRefreshCurrentNotePreview();
 
 signals:
     void signalLinksForPattern(const QString& completionPrefix, std::vector<std::string>* links);

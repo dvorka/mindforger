@@ -169,6 +169,17 @@ void OrlojView::showFacetNoteEdit()
     }
 }
 
+void OrlojView::showFacetNoteEditWithPreview()
+{
+    if(menuView->actionViewHoist->isChecked()) {
+        showFacetHoistedNoteEdit();
+    } else {
+        QSet<QWidget*> v; v << noteView << noteEdit;
+        hideChildren(v);
+        noteEdit->giveEditorFocus();
+    }
+}
+
 void OrlojView::showFacetNavigator()
 {
     QSet<QWidget*> v; v << navigator;

@@ -301,6 +301,7 @@ public slots:
     void doActionEditFind();
     void doActionEditFindAgain();
     void doActionEditWordWrapToggle();
+    void doActionToggleLivePreview();
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();

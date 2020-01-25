@@ -2128,6 +2128,16 @@ void MainWindowPresenter::doActionEditWordWrapToggle()
     }
 }
 
+void MainWindowPresenter::doActionToggleLivePreview()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE_WITH_PREVIEW)) {
+        // TODO if header
+        orloj->hideLivePreview();
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->slotShowLiveNotePreview();
+    }
+}
+
 void MainWindowPresenter::doActionMindRemember()
 {
     mdConfigRepresentation->save(config);
@@ -2195,7 +2205,7 @@ void MainWindowPresenter::handleMindPreferences()
 
     view.getToolBar()->setVisible(config.isUiShowToolbar());
     view.getOrloj()->getNoteView()->setZoomFactor(config.getUiHtmlZoomFactor());
-    view.getOrloj()->getNoteView()->getEditPanel()->setVisible(!config.isUiExpertMode());
+    view.getOrloj()->getNoteView()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
     view.getOrloj()->getOutlineHeaderView()->setZoomFactor(config.getUiHtmlZoomFactor());
     view.getOrloj()->getOutlineHeaderView()->getEditPanel()->setVisible(!config.isUiExpertMode());
     view.getOrloj()->getNoteEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());

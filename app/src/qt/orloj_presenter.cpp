@@ -119,6 +119,9 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     QObject::connect(
         this, SIGNAL(signalLinksForHeaderPattern(const QString&, std::vector<std::string>*)),
         view->getOutlineHeaderEdit()->getHeaderEditor(), SLOT(slotPerformLinkCompletion(const QString&, std::vector<std::string>*)));
+    QObject::connect(
+        noteEditPresenter->getView()->getButtonsPanel(), SIGNAL(signalShowLivePreview()),
+        this, SLOT(slotShowLiveNotePreview()));
 
     /*
      * ... former click-to-view BEFORE switch to keyboard-only
@@ -793,6 +796,23 @@ void OrlojPresenter::slotShowRecentNote(const QItemSelection& selected, const QI
             mainPresenter->getStatusBar()->showInfo(QString(tr("No Note selected!")));
         }
     }
+}
+
+void OrlojPresenter::slotShowLiveNotePreview()
+{
+    view->showFacetNoteEditWithPreview();
+    setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE_WITH_PREVIEW);
+}
+
+void OrlojPresenter::hideLivePreview()
+{
+    // TODO header
+    view->showFacetNoteEdit();
+    setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
+}
+
+void OrlojPresenter::slotRefreshCurrentNotePreview() {
+    noteViewPresenter->refreshCurrent();
 }
 
 } // m8r namespace

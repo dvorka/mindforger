@@ -28,26 +28,22 @@ AsyncTaskNotificationsDistributor::AsyncTaskNotificationsDistributor(MainWindowP
     sleepInterval = Configuration::getInstance().getDistributorSleepInterval();
 
     QObject::connect(
-        this,
-        SIGNAL(statusBarShowStatistics()),
-        mwp->getStatusBar(),
-        SLOT(slotShowStatistics()));
+        this, SIGNAL(statusBarShowStatistics()),
+        mwp->getStatusBar(), SLOT(slotShowStatistics()));
     QObject::connect(
-        this,
-        SIGNAL(showStatusBarInfo(QString)),
-        mwp->getStatusBar(),
-        SLOT(slotShowInfo(QString)));
+        this, SIGNAL(showStatusBarInfo(QString)),
+        mwp->getStatusBar(), SLOT(slotShowInfo(QString)));
 
     QObject::connect(
-        this,
-        SIGNAL(refreshHeaderLeaderboardByValue(AssociatedNotes*)),
-        mwp->getOrloj()->getOutlineHeaderView(),
-        SLOT(slotRefreshHeaderLeaderboardByValue(AssociatedNotes*)));
+        this, SIGNAL(refreshHeaderLeaderboardByValue(AssociatedNotes*)),
+        mwp->getOrloj()->getOutlineHeaderView(), SLOT(slotRefreshHeaderLeaderboardByValue(AssociatedNotes*)));
     QObject::connect(
-        this,
-        SIGNAL(refreshLeaderboardByValue(AssociatedNotes*)),
-        mwp->getOrloj()->getNoteView(),
-        SLOT(slotRefreshLeaderboardByValue(AssociatedNotes*)));
+        this, SIGNAL(refreshLeaderboardByValue(AssociatedNotes*)),
+        mwp->getOrloj()->getNoteView(), SLOT(slotRefreshLeaderboardByValue(AssociatedNotes*)));
+
+    QObject::connect(
+        this, SIGNAL(signalRefreshCurrentNotePreview()),
+        mwp->getOrloj(), SLOT(slotRefreshCurrentNotePreview()));
 }
 
 AsyncTaskNotificationsDistributor::~AsyncTaskNotificationsDistributor()
@@ -67,6 +63,24 @@ void AsyncTaskNotificationsDistributor::run()
 
     while(true) {
         msleep(sleepInterval);
+
+#ifdef DO_MF_DEBUG
+        //MF_DEBUG("Refreshing HTML preview: " << mwp->getOrloj()->getNoteEdit()->getHitCounter() << endl);
+
+        // live preview refresh
+        if(mwp->getOrloj()->getNoteEdit()->getHitCounter()
+             &&
+           mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE_WITH_PREVIEW))
+        {
+            MF_DEBUG("Task distributor: refresh N preview");
+            emit signalRefreshCurrentNotePreview();
+
+            // hit counter can be cleared, because associations are not visible if live preview is active
+            mwp->getOrloj()->getNoteEdit()->clearHitCounter();
+        }
+        // TODO outline header preview
+#endif
+
         //MF_DEBUG("AsyncDistributor: wake up w/ associations need " << (int)mwp->getMind()->needForAssociations() << endl);
         if(mwp->getMind()->needForAssociations()
              ||

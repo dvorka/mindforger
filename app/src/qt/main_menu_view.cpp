@@ -474,6 +474,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditPaste = new QAction(QIcon(":/menu-icons/paste.svg"), tr("&Paste\tCtrl+V"), mainWindow);
     actionEditPaste->setStatusTip(tr("Paste"));
 
+    actionEditLivePreview = new QAction(QIcon(":/menu-icons/live-preview.svg"), tr("Toggle Live Preview"), mainWindow);
+    actionEditLivePreview->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_P));
+    actionEditLivePreview->setStatusTip(tr("Toggle live HTML preview"));
+
     actionEditWordWrap = new QAction(QIcon(":/menu-icons/word-wrap.svg"), tr("Word Wrap"), mainWindow);
     actionEditWordWrap->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_W));
     actionEditWordWrap->setStatusTip(tr("Toggle word wrap mode"));
@@ -495,6 +499,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuEdit->addAction(actionEditCopy);
     menuEdit->addAction(actionEditPaste);
     menuEdit->addSeparator();
+#ifdef DO_MF_DEBUG
+    menuEdit->addAction(actionEditLivePreview);
+#endif
     menuEdit->addAction(actionEditWordWrap);
     menuEdit->addSeparator();
     menuEdit->addAction(actionEditComplete);

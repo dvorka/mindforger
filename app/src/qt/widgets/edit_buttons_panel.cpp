@@ -26,6 +26,8 @@ EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
     : QWidget(parent), mode(mode)
 {
     // widgets
+    previewButton = new QPushButton{tr("Preview"), this};
+    previewButton->setToolTip("Ctrl+Shift+P");
     moreButton = new QPushButton{tr("Properties"), this};
     moreButton->setToolTip("Alt+Enter");
     rememberButton = new QPushButton{tr("Remember"), this};
@@ -37,11 +39,15 @@ EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
     layout = new QHBoxLayout{this};
     layout->addStretch(1);
     layout->addWidget(cancelButton);
+#ifdef DO_MF_DEBUG
+    layout->addWidget(previewButton);
+#endif
     layout->addWidget(moreButton);
     layout->addWidget(rememberButton);
     setLayout(layout);
 
     // signals
+    QObject::connect(previewButton, SIGNAL(clicked()), this, SLOT(handleShowLivePreview()));
     if(mode==MfWidgetMode::OUTLINE_MODE) {
         QObject::connect(moreButton, SIGNAL(clicked()), this, SLOT(handleShowOutlineHeaderEditDialog()));
     } else {
@@ -52,9 +58,15 @@ EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
 EditButtonsPanel::~EditButtonsPanel()
 {
     delete moreButton;
+    delete previewButton;
     delete rememberButton;
     delete cancelButton;
     delete layout;
+}
+
+void EditButtonsPanel::handleShowLivePreview()
+{
+    emit signalShowLivePreview();
 }
 
 void EditButtonsPanel::handleShowOutlineHeaderEditDialog()

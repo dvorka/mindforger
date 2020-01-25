@@ -73,6 +73,42 @@ NoteViewPresenter::~NoteViewPresenter()
     if(htmlRepresentation) delete htmlRepresentation;
 }
 
+void NoteViewPresenter::refreshCurrent()
+{
+    MF_DEBUG("Refreshing current N: " << this->currentNote->getName() << endl);
+
+    // N w/ current editor text w/o saving it
+    Note auxNote{currentNote->getType(), currentNote->getOutline()};
+    auxNote.setName(orloj->getNoteEdit()->getView()->getName().toStdString());
+
+    QString description = orloj->getNoteEdit()->getView()->getDescription();
+    string s{description.toStdString()};
+    vector<string*> d{};
+    orloj->getMainPresenter()->getMarkdownRepresentation()->description(&s, d);
+    auxNote.setDescription(d);
+
+    // refresh HTML view
+    htmlRepresentation->to(&auxNote, &html, Configuration::getInstance().isAutolinking());
+    qHtml= QString::fromStdString(html);
+    view->setHtml(qHtml);
+
+    // scroll to same pct view
+    QScrollBar* scrollbar = orloj->getNoteEdit()->getView()->getNoteEditor()->verticalScrollBar();
+    if(scrollbar) {
+        if(scrollbar->maximum()) {
+            double pct =
+                static_cast<double>(scrollbar->value())
+                    /
+                (static_cast<double>(scrollbar->maximum())/100.0);
+            // scroll
+            QWebFrame* webFrame=view->getViever()->page()->mainFrame();
+            webFrame->setScrollPosition(QPoint(
+                0,
+                static_cast<int>((webFrame->scrollBarMaximum(Qt::Orientation::Vertical)/100.0)*pct)));
+        }
+    }
+}
+
 // IMPROVE first decorate MD with HTML colors > then MD to HTML conversion
 void NoteViewPresenter::refresh(Note* note)
 {

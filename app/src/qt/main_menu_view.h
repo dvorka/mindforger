@@ -151,6 +151,7 @@ public:
     QAction* actionEditCut;
     QAction* actionEditCopy;
     QAction* actionEditPaste;
+    QAction* actionEditLivePreview;
     QAction* actionEditWordWrap;
     QAction* actionEditExtract;
     QAction* actionEditComplete;

@@ -35,6 +35,7 @@ private:
     MfWidgetMode mode;
 
     QHBoxLayout* layout;
+    QPushButton* previewButton;
     QPushButton* moreButton;
     QPushButton* rememberButton;
     QPushButton* cancelButton;
@@ -50,6 +51,10 @@ public:
     EditButtonsPanel &operator=(const EditButtonsPanel&&) = delete;
     ~EditButtonsPanel();
 
+signals:
+    void signalShowLivePreview();
+
+public:
 /*
  * NOTE mode
  */
@@ -72,6 +77,7 @@ public slots:
  * OUTLINE mode
  */
 
+public:
     void setOutlineHeaderEditDialog(OutlineHeaderEditDialog* dialog) {
         this->outlineHeaderEditDialog = dialog;
         // signals can be set after dialog instance is available
@@ -83,6 +89,7 @@ public slots:
     }
 
 public slots:
+    void handleShowLivePreview();
     void handleShowOutlineHeaderEditDialog();
     void handleCloseOutlineHeaderEditDialog();
 
