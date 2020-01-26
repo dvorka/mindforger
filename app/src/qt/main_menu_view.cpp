@@ -500,9 +500,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuEdit->addAction(actionEditCopy);
     menuEdit->addAction(actionEditPaste);
     menuEdit->addSeparator();
-#ifdef DO_MF_DEBUG
     menuEdit->addAction(actionEditLiveNotePreview);
-#endif
     menuEdit->addAction(actionEditWordWrap);
     menuEdit->addSeparator();
     menuEdit->addAction(actionEditComplete);

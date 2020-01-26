@@ -224,6 +224,7 @@ void MainWindowPresenter::showInitialView()
     // config > menu
     mainMenu->showFacetMindAutolink(config.isAutolinking());
     mainMenu->showFacetLiveNotePreview(config.isUiLiveNotePreview());
+    orloj->setAspect(config.isUiLiveNotePreview()?OrlojPresenterFacetAspect::ASPECT_LIVE_PREVIEW:OrlojPresenterFacetAspect::ASPECT_NONE);
 
     // move Mind to configured state
     if(config.getDesiredMindState()==Configuration::MindState::THINKING) {

@@ -39,9 +39,7 @@ EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
     layout = new QHBoxLayout{this};
     layout->addStretch(1);
     layout->addWidget(cancelButton);
-#ifdef DO_MF_DEBUG
     layout->addWidget(previewButton);
-#endif
     layout->addWidget(moreButton);
     layout->addWidget(rememberButton);
     setLayout(layout);

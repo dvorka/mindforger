@@ -64,9 +64,6 @@ void AsyncTaskNotificationsDistributor::run()
     while(true) {
         msleep(sleepInterval);
 
-#ifdef DO_MF_DEBUG
-        //MF_DEBUG("Refreshing HTML preview: " << mwp->getOrloj()->getNoteEdit()->getHitCounter() << endl);
-
         // live preview refresh
         if((mwp->getOrloj()->getNoteEdit()->getHitCounter() || mwp->getOrloj()->getOutlineHeaderEdit()->getHitCounter())
              &&
@@ -79,8 +76,6 @@ void AsyncTaskNotificationsDistributor::run()
             mwp->getOrloj()->getOutlineHeaderEdit()->clearHitCounter();
             mwp->getOrloj()->getNoteEdit()->clearHitCounter();
         }
-        // TODO outline header preview
-#endif
 
         //MF_DEBUG("AsyncDistributor: wake up w/ associations need " << (int)mwp->getMind()->needForAssociations() << endl);
         if(mwp->getMind()->needForAssociations()
