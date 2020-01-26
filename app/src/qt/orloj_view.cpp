@@ -141,8 +141,13 @@ void OrlojView::showFacetOutlineHeaderEdit()
     if(menuView->actionViewHoist->isChecked()) {
         showFacetHoistedOutlineHeaderEdit();
     } else {
-        QSet<QWidget*> v; v << outlineView << outlineHeaderEdit;
-        hideChildren(v);
+        if(menuView->actionEditLiveNotePreview->isChecked()) {
+            QSet<QWidget*> v; v << outlineHeaderView << outlineHeaderEdit;
+            hideChildren(v);
+        } else {
+            QSet<QWidget*> v; v << outlineView << outlineHeaderEdit;
+            hideChildren(v);
+        }
         outlineHeaderEdit->giveEditorFocus();
     }
 }
@@ -163,19 +168,14 @@ void OrlojView::showFacetNoteEdit()
     if(menuView->actionViewHoist->isChecked()) {
         showFacetHoistedNoteEdit();
     } else {
-        QSet<QWidget*> v; v << outlineView << noteEdit;
-        hideChildren(v);
-        noteEdit->giveEditorFocus();
-    }
-}
+        if(menuView->actionEditLiveNotePreview->isChecked()) {
+            QSet<QWidget*> v; v << noteView << noteEdit;
+            hideChildren(v);
+        } else {
+            QSet<QWidget*> v; v << outlineView << noteEdit;
+            hideChildren(v);
+        }
 
-void OrlojView::showFacetNoteEditWithPreview()
-{
-    if(menuView->actionViewHoist->isChecked()) {
-        showFacetHoistedNoteEdit();
-    } else {
-        QSet<QWidget*> v; v << noteView << noteEdit;
-        hideChildren(v);
         noteEdit->giveEditorFocus();
     }
 }

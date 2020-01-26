@@ -28,6 +28,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
                                OrlojView* view,
                                Mind* mind)
     : activeFacet{OrlojPresenterFacets::FACET_NONE},
+      config{Configuration::getInstance()},
       skipEditNoteCheck{false}
 {
     this->mainPresenter = mainPresenter;
@@ -121,7 +122,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         view->getOutlineHeaderEdit()->getHeaderEditor(), SLOT(slotPerformLinkCompletion(const QString&, std::vector<std::string>*)));
     QObject::connect(
         noteEditPresenter->getView()->getButtonsPanel(), SIGNAL(signalShowLivePreview()),
-        this, SLOT(slotShowLiveNotePreview()));
+        mainPresenter, SLOT(doActionToggleLiveNotePreview()));
 
     /*
      * ... former click-to-view BEFORE switch to keyboard-only
@@ -798,21 +799,22 @@ void OrlojPresenter::slotShowRecentNote(const QItemSelection& selected, const QI
     }
 }
 
-void OrlojPresenter::slotShowLiveNotePreview()
+void OrlojPresenter::refreshLiveNotePreview()
 {
-    view->showFacetNoteEditWithPreview();
-    setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE_WITH_PREVIEW);
-}
-
-void OrlojPresenter::hideLivePreview()
-{
-    // TODO header
-    view->showFacetNoteEdit();
-    setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
+    if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        view->showFacetNoteEdit();
+    } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        view->showFacetOutlineHeaderEdit();
+    }
 }
 
 void OrlojPresenter::slotRefreshCurrentNotePreview() {
-    noteViewPresenter->refreshCurrent();
+    MF_DEBUG("Slot to refresh live preview: " << getFacet() << endl);
+    if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        noteViewPresenter->refreshCurrent();
+    } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        outlineHeaderViewPresenter->refreshCurrent();
+    }
 }
 
 } // m8r namespace

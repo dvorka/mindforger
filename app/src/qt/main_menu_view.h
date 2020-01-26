@@ -151,7 +151,7 @@ public:
     QAction* actionEditCut;
     QAction* actionEditCopy;
     QAction* actionEditPaste;
-    QAction* actionEditLivePreview;
+    QAction* actionEditLiveNotePreview;
     QAction* actionEditWordWrap;
     QAction* actionEditExtract;
     QAction* actionEditComplete;
@@ -223,8 +223,9 @@ public:
     void showFacetMindThink();
     void showFacetMindSleep();
 
-    void showFacetMindAutolinkEnable();
-    void showFacetMindAutolinkDisable();
+    void showFacetMindAutolink(bool enabled);
+
+    void showFacetLiveNotePreview(bool enabled);
 
     void showFacetNavigator();
 

@@ -58,8 +58,42 @@ OutlineHeaderViewPresenter::OutlineHeaderViewPresenter(
         orloj, SLOT(slotShowOutlines()));
 }
 
-OutlineHeaderViewPresenter::~OutlineHeaderViewPresenter()
+void OutlineHeaderViewPresenter::refreshCurrent()
 {
+    MF_DEBUG("Refreshing O header HTML preview from editor: " << this->currentOutline->getName() << endl);
+
+    // O w/ current editor text w/o saving it
+    Outline auxOutline{*currentOutline};
+    auxOutline.setName(orloj->getOutlineHeaderEdit()->getView()->getName().toStdString());
+    QString description = orloj->getOutlineHeaderEdit()->getView()->getDescription();
+    string s{description.toStdString()};
+    vector<string*> d{};
+    orloj->getMainPresenter()->getMarkdownRepresentation()->description(&s, d);
+    auxOutline.setDescription(d);
+
+    // refresh HTML view (autolinking intentionally disabled)
+    htmlRepresentation->toHeader(&auxOutline, &html, false, false);
+    view->setHtml(QString::fromStdString(html));
+
+    // IMPROVE: share code between O header and N
+#if not defined(__APPLE__) && not defined(_WIN32)
+    // WebView: scroll to same pct view
+    QScrollBar* scrollbar = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->verticalScrollBar();
+    if(scrollbar) {
+        if(scrollbar->maximum()) {
+            double pct =
+                static_cast<double>(scrollbar->value())
+                    /
+                (static_cast<double>(scrollbar->maximum())/100.0);
+            // scroll
+            QWebFrame* webFrame=view->getViever()->page()->mainFrame();
+            webFrame->setScrollPosition(QPoint(
+                0,
+                static_cast<int>((webFrame->scrollBarMaximum(Qt::Orientation::Vertical)/100.0)*pct)));
+        }
+    }
+#endif
+    // TODO QWebEngineView: scrolling
 }
 
 void OutlineHeaderViewPresenter::refresh(Outline* outline)

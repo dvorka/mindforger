@@ -105,7 +105,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionEditFindNext, SIGNAL(triggered()), mwp, SLOT(doActionEditFindAgain()));
     // no other bindings needed - it's already bound in the editor ~ menu is rather a documentation
     QObject::connect(view->actionEditWordWrap, SIGNAL(triggered()), mwp, SLOT(doActionEditWordWrapToggle()));
-    QObject::connect(view->actionEditLivePreview, SIGNAL(triggered()), mwp, SLOT(doActionToggleLivePreview()));
+    QObject::connect(view->actionEditLiveNotePreview, SIGNAL(triggered()), mwp, SLOT(doActionToggleLiveNotePreview()));
     QObject::connect(view->actionEditExtract, SIGNAL(triggered()), mwp, SLOT(doActionNoteExtract()));
 
     // menu: format
@@ -213,13 +213,14 @@ void MainMenuPresenter::showFacetMindSleep()
     view->showFacetMindSleep();
 }
 
-void MainMenuPresenter::showFacetMindAutolinkEnable()
+void MainMenuPresenter::showFacetMindAutolink(bool enabled)
 {
-    view->showFacetMindAutolinkEnable();
+    view->showFacetMindAutolink(enabled);
 }
-void MainMenuPresenter::showFacetMindAutolinkDisable()
+
+void MainMenuPresenter::showFacetLiveNotePreview(bool enabled)
 {
-    view->showFacetMindAutolinkDisable();
+    view->showFacetLiveNotePreview(enabled);
 }
 
 void MainMenuPresenter::addRecentDirectoryOrFile(const QString& path)

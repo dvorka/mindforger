@@ -240,8 +240,8 @@ private:
     bool uiExpertMode;
     bool uiDistractionFreeMode; // fullscreen, no split, hidden toolbar + menu
     bool uiHoistedMode; // no split
-    std::string uiOutlinesTableSortColumn;
-    bool uiOutlinesTableSortAsc;
+    bool uiLiveNotePreview;
+    std::string uiOutlinesTableSortColumn; // one of: name-asc, modified-desc, ...
 
 private:
     Installer* installer;
@@ -412,7 +412,6 @@ public:
     void setUiEditorTabsAsSpaces(bool uiEditorTabsAsSpaces){ this->uiEditorTabsAsSpaces = uiEditorTabsAsSpaces; }
     bool isUiEditorAutosave() const { return uiEditorAutosave; }
     void setUiEditorAutosave(bool uiEditorAutosave){ this->uiEditorAutosave = uiEditorAutosave; }
-
     bool isUiShowToolbar() const { return uiShowToolbar; }
     void setUiShowToolbar(bool showToolbar){ this->uiShowToolbar = showToolbar; }
     bool isUiExpertMode() const { return uiExpertMode; }
@@ -421,6 +420,10 @@ public:
     void setUiDistractionFreeMode(bool distractionFreeMode){ this->uiDistractionFreeMode = distractionFreeMode; }
     bool isUiHoistedMode() const { return uiHoistedMode; }
     void setUiHoistedMode(bool hoisted){ this->uiHoistedMode = hoisted; }
+    bool isUiLiveNotePreview() const { return uiLiveNotePreview; }
+    void setUiLiveNotePreview(bool isPreview){ this->uiLiveNotePreview = isPreview; }
+    const std::string& getUiOutlinesTableSortColumn() const { return uiOutlinesTableSortColumn; }
+    void setUiOutlinesTableSortColumn(const std::string sortMode) { uiOutlinesTableSortColumn = sortMode; }
 };
 
 } // namespace

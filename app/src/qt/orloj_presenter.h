@@ -67,8 +67,13 @@ enum OrlojPresenterFacets {
     FACET_TAG_CLOUD,              // 9
     FACET_RECENT_NOTES,           // 10
     FACET_NAVIGATOR,              // 11
-    FACET_DASHBOARD,              // 12
-    FACET_EDIT_NOTE_WITH_PREVIEW  // 13
+    FACET_DASHBOARD               // 12
+};
+
+// aspect modifies facet
+enum OrlojPresenterFacetAspect {
+    ASPECT_NONE,
+    ASPECT_LIVE_PREVIEW
 };
 
 enum OrlojButtonRoles {
@@ -87,8 +92,10 @@ private:
     MainWindowPresenter* mainPresenter;
 
     OrlojPresenterFacets activeFacet;
+    OrlojPresenterFacetAspect activeAspect;
 
     OrlojView* view;
+    Configuration& config;
     Mind* mind;
 
     DashboardPresenter* dashboardPresenter;
@@ -106,7 +113,7 @@ private:
     bool skipEditNoteCheck;
 
 public:
-    OrlojPresenter(MainWindowPresenter* mainPresenter,
+    explicit OrlojPresenter(MainWindowPresenter* mainPresenter,
                    OrlojView* view,
                    Mind* mind);
 
@@ -155,6 +162,10 @@ public:
         activeFacet = facet;
     }
 
+    OrlojPresenterFacetAspect getAspect() const { return activeAspect; }
+    void setAspect(OrlojPresenterFacetAspect aspect) { activeAspect = aspect; }
+    bool isAspectActive(OrlojPresenterFacetAspect aspect) { return activeAspect == aspect; }
+
     /**
      * @brief This method is invoked whenever a facet is changed i.e. it allows to perform desired actions.
      */
@@ -175,7 +186,7 @@ public:
 
     bool applyFacetHoisting();
 
-    void hideLivePreview();
+    void refreshLiveNotePreview();
 
     void fromOutlineHeaderEditBackToView(Outline* outline);
     void fromNoteEditBackToView(Note* note);
@@ -194,7 +205,6 @@ public slots:
     void slotShowNoteNavigator(Note* note);
     void slotShowOutlineNavigator(Outline* outline);
     void slotGetLinksForPattern(const QString& pattern);
-    void slotShowLiveNotePreview();
     void slotRefreshCurrentNotePreview();
 
 signals:

@@ -221,11 +221,9 @@ void MainWindowPresenter::showInitialView()
 
     view.setFileOrDirectory(QString::fromStdString(config.getActiveRepository()->getPath()));
 
-    if(config.isAutolinking()) {
-        mainMenu->showFacetMindAutolinkEnable();
-    } else {
-        mainMenu->showFacetMindAutolinkDisable();
-    }
+    // config > menu
+    mainMenu->showFacetMindAutolink(config.isAutolinking());
+    mainMenu->showFacetLiveNotePreview(config.isUiLiveNotePreview());
 
     // move Mind to configured state
     if(config.getDesiredMindState()==Configuration::MindState::THINKING) {
@@ -506,13 +504,12 @@ void MainWindowPresenter::doActionMindToggleAutolink()
 {
     if(config.isAutolinking()) {
         config.setAutolinking(false);
-        mainMenu->showFacetMindAutolinkDisable();
     } else {
         config.setAutolinking(true);
-        mainMenu->showFacetMindAutolinkEnable();
     }
-
+    mainMenu->showFacetMindAutolink(config.isAutolinking());
     mdConfigRepresentation->save(config);
+
     // refresh view
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
          ||
@@ -523,6 +520,30 @@ void MainWindowPresenter::doActionMindToggleAutolink()
     {
         orloj->showFacetNoteView(orloj->getOutlineView()->getOutlineTree()->getCurrentNote());
     }
+}
+
+void MainWindowPresenter::doActionToggleLiveNotePreview()
+{
+    // toggle config
+    if(config.isUiLiveNotePreview()) {
+        config.setUiLiveNotePreview(false);
+    } else {
+        config.setUiLiveNotePreview(true);
+    }
+    mdConfigRepresentation->save(config);
+
+    // menu
+    mainMenu->showFacetLiveNotePreview(config.isUiLiveNotePreview());
+
+    // aspect
+    if(config.isUiLiveNotePreview()) {
+        orloj->setAspect(OrlojPresenterFacetAspect::ASPECT_LIVE_PREVIEW);
+    } else {
+        orloj->setAspect(OrlojPresenterFacetAspect::ASPECT_NONE);
+    }
+
+    // view
+    orloj->refreshLiveNotePreview();
 }
 
 void MainWindowPresenter::doActionMindLearnRepository()
@@ -2125,16 +2146,6 @@ void MainWindowPresenter::doActionEditWordWrapToggle()
         editor->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     } else {
         editor->setWordWrapMode(QTextOption::NoWrap);
-    }
-}
-
-void MainWindowPresenter::doActionToggleLivePreview()
-{
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE_WITH_PREVIEW)) {
-        // TODO if header
-        orloj->hideLivePreview();
-    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-        orloj->slotShowLiveNotePreview();
     }
 }
 

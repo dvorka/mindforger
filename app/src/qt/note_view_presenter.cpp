@@ -75,7 +75,7 @@ NoteViewPresenter::~NoteViewPresenter()
 
 void NoteViewPresenter::refreshCurrent()
 {
-    MF_DEBUG("Refreshing current N: " << this->currentNote->getName() << endl);
+    MF_DEBUG("Refreshing N HTML preview from editor: " << this->currentNote->getName() << endl);
 
     // N w/ current editor text w/o saving it
     Note auxNote{currentNote->getType(), currentNote->getOutline()};
@@ -89,10 +89,12 @@ void NoteViewPresenter::refreshCurrent()
 
     // refresh HTML view
     htmlRepresentation->to(&auxNote, &html, Configuration::getInstance().isAutolinking());
-    qHtml= QString::fromStdString(html);
+    qHtml = QString::fromStdString(html);
     view->setHtml(qHtml);
 
-    // scroll to same pct view
+    // IMPROVE: share code between O header and N
+#if not defined(__APPLE__) && not defined(_WIN32)
+    // WebView: scroll to same pct view
     QScrollBar* scrollbar = orloj->getNoteEdit()->getView()->getNoteEditor()->verticalScrollBar();
     if(scrollbar) {
         if(scrollbar->maximum()) {
@@ -107,6 +109,8 @@ void NoteViewPresenter::refreshCurrent()
                 static_cast<int>((webFrame->scrollBarMaximum(Qt::Orientation::Vertical)/100.0)*pct)));
         }
     }
+#endif
+    // TODO QWebEngineView: scrolling
 }
 
 // IMPROVE first decorate MD with HTML colors > then MD to HTML conversion
