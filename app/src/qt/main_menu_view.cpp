@@ -474,7 +474,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditPaste = new QAction(QIcon(":/menu-icons/paste.svg"), tr("&Paste\tCtrl+V"), mainWindow);
     actionEditPaste->setStatusTip(tr("Paste"));
 
-    actionEditLiveNotePreview = new QAction(QIcon(":/menu-icons/live-preview.svg"), tr("Toggle Live Preview"), mainWindow);
+    actionEditLiveNotePreview = new QAction(QIcon(":/menu-icons/preview.svg"), tr("Live Preview"), mainWindow);
     actionEditLiveNotePreview->setCheckable(true);
     actionEditLiveNotePreview->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_P));
     actionEditLiveNotePreview->setStatusTip(tr("Toggle live HTML preview"));
