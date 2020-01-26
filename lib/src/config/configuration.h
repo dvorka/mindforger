@@ -161,6 +161,7 @@ public:
     static const std::string DEFAULT_UI_THEME_NAME;
     static constexpr const bool DEFAULT_UI_SHOW_TOOLBAR = true;
     static constexpr const bool DEFAULT_UI_EXPERT_MODE = false;
+    static constexpr const bool DEFAULT_UI_LIVE_NOTE_PREVIEW = false;
     static constexpr const bool DEFAULT_UI_NERD_MENU = false;
     static const std::string DEFAULT_UI_HTML_CSS_THEME;
     static const int DEFAULT_UI_HTML_ZOOM = 100;

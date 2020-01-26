@@ -39,6 +39,7 @@ constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* Markdown CSS th
 constexpr const auto CONFIG_SETTING_UI_HTML_ZOOM_LABEL = "* Markdown HTML zoom: ";
 constexpr const auto CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL =  "* Show toolbar: ";
 constexpr const auto CONFIG_SETTING_UI_EXPERT_MODE_LABEL =  "* Hide expendable buttons: ";
+constexpr const auto CONFIG_SETTING_UI_LIVE_NOTE_PREVIEW_LABEL =  "* Live note preview: ";
 constexpr const auto CONFIG_SETTING_UI_NERD_MENU=  "* Nerd menu: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_FONT_LABEL =  "* Editor font: ";
@@ -177,6 +178,12 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                             c.setUiExpertMode(true);
                         } else {
                             c.setUiExpertMode(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_LIVE_NOTE_PREVIEW_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiLiveNotePreview(true);
+                        } else {
+                            c.setUiLiveNotePreview(false);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_NERD_MENU) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
@@ -424,6 +431,9 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: 25, 100, 300" << endl <<
          CONFIG_SETTING_UI_EXPERT_MODE_LABEL << (c?(c->isUiExpertMode()?"yes":"no"):(Configuration::DEFAULT_UI_EXPERT_MODE?"yes":"no")) << endl <<
          "    * Hide expendable buttons - experts use keyboard shortcuts as they are faster." << endl <<
+         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_LIVE_NOTE_PREVIEW_LABEL << (c?(c->isUiLiveNotePreview()?"yes":"no"):(Configuration::DEFAULT_UI_LIVE_NOTE_PREVIEW?"yes":"no")) << endl <<
+         "    * Show notebook/note HTML preview as you write Markdown." << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL<< (c?(c->isUiShowToolbar()?"yes":"no"):(Configuration::DEFAULT_UI_SHOW_TOOLBAR?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<

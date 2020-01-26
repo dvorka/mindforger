@@ -2216,9 +2216,13 @@ void MainWindowPresenter::handleMindPreferences()
 
     view.getToolBar()->setVisible(config.isUiShowToolbar());
     view.getOrloj()->getNoteView()->setZoomFactor(config.getUiHtmlZoomFactor());
-    view.getOrloj()->getNoteView()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
     view.getOrloj()->getOutlineHeaderView()->setZoomFactor(config.getUiHtmlZoomFactor());
+
+    view.getOrloj()->getNoteView()->getButtonsPanel()->setExpertMode(config.isUiExpertMode());
+    view.getOrloj()->getNoteView()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
+    view.getOrloj()->getOutlineHeaderView()->getEditPanel()->setExpertMode(config.isUiExpertMode());
     view.getOrloj()->getOutlineHeaderView()->getEditPanel()->setVisible(!config.isUiExpertMode());
+
     view.getOrloj()->getNoteEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
     view.getOrloj()->getOutlineHeaderEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
 }

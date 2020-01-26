@@ -127,6 +127,10 @@ void OrlojView::showFacetRecentNotes()
 
 void OrlojView::showFacetOutlineHeaderView()
 {
+    if(!outlineHeaderView->getEditPanel()->isExpertMode()) {
+        outlineHeaderView->getEditPanel()->setVisible(true);
+    }
+
     if(menuView->actionViewHoist->isChecked()) {
         showFacetHoistedOutlineHeaderView();
     } else {
@@ -142,6 +146,7 @@ void OrlojView::showFacetOutlineHeaderEdit()
         showFacetHoistedOutlineHeaderEdit();
     } else {
         if(menuView->actionEditLiveNotePreview->isChecked()) {
+            outlineHeaderView->getEditPanel()->setVisible(false);
             QSet<QWidget*> v; v << outlineHeaderView << outlineHeaderEdit;
             hideChildren(v);
         } else {
@@ -154,6 +159,10 @@ void OrlojView::showFacetOutlineHeaderEdit()
 
 void OrlojView::showFacetNoteView()
 {
+    if(!noteView->getButtonsPanel()->isExpertMode()) {
+        noteView->getButtonsPanel()->setVisible(true);
+    }
+
     if(menuView->actionViewHoist->isChecked()) {
         showFacetHoistedNoteView();
     } else {
@@ -169,6 +178,7 @@ void OrlojView::showFacetNoteEdit()
         showFacetHoistedNoteEdit();
     } else {
         if(menuView->actionEditLiveNotePreview->isChecked()) {
+            noteView->getButtonsPanel()->setVisible(false);
             QSet<QWidget*> v; v << noteView << noteEdit;
             hideChildren(v);
         } else {

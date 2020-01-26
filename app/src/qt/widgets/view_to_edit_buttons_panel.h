@@ -35,6 +35,9 @@ private:
     QHBoxLayout* layout;
     QPushButton* editButton;
 
+    // expert mode (no buttons) setting @ frontend
+    bool expertMode;
+
 public:
     explicit ViewToEditEditButtonsPanel(MfWidgetMode mode, QWidget* parent);
     ViewToEditEditButtonsPanel(const ViewToEditEditButtonsPanel&) = delete;
@@ -42,6 +45,9 @@ public:
     ViewToEditEditButtonsPanel &operator=(const ViewToEditEditButtonsPanel&) = delete;
     ViewToEditEditButtonsPanel &operator=(const ViewToEditEditButtonsPanel&&) = delete;
     ~ViewToEditEditButtonsPanel();
+
+    void setExpertMode(bool expertMode) { this->expertMode = expertMode; }
+    bool isExpertMode() const { return expertMode; }
 
 public:
     QPushButton* getEditButton() const { return editButton; }
