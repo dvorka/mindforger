@@ -153,6 +153,7 @@ public:
     QAction* actionEditPaste;
     QAction* actionEditLiveNotePreview;
     QAction* actionEditWordWrap;
+    QAction* actionEditNameDescFocusSwap;
     QAction* actionEditExtract;
     QAction* actionEditComplete;
 

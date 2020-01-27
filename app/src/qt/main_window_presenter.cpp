@@ -523,6 +523,23 @@ void MainWindowPresenter::doActionMindToggleAutolink()
     }
 }
 
+void MainWindowPresenter::doActionNameDescFocusSwap()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        if(orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->hasFocus()) {
+            orloj->getOutlineHeaderEdit()->getView()->focusName();
+        } else {
+            orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->setFocus();
+        }
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        if(orloj->getNoteEdit()->getView()->getNoteEditor()->hasFocus()) {
+            orloj->getNoteEdit()->getView()->focusName();
+        } else {
+            orloj->getNoteEdit()->getView()->getNoteEditor()->setFocus();
+        }
+    }
+}
+
 void MainWindowPresenter::doActionToggleLiveNotePreview()
 {
     // toggle config

@@ -453,7 +453,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: edit
 
-    actionEditFind = new QAction(QIcon(":/menu-icons/find.svg"), tr("Find\tCtrl+Shift+F"), mainWindow);
+    actionEditFind = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Find\tCtrl+Shift+F"), mainWindow);
     actionEditFind->setStatusTip(tr("Search Note text"));
 
     actionEditFindNext = new QAction(QIcon(":/menu-icons/find.svg"), tr("Find Next\tCtrl+F"), mainWindow);
@@ -474,14 +474,16 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditPaste = new QAction(QIcon(":/menu-icons/paste.svg"), tr("&Paste\tCtrl+V"), mainWindow);
     actionEditPaste->setStatusTip(tr("Paste"));
 
-    actionEditLiveNotePreview = new QAction(QIcon(":/menu-icons/preview.svg"), tr("Live Preview"), mainWindow);
+    actionEditLiveNotePreview = new QAction(QIcon(":/menu-icons/preview.svg"), tr("&Live Preview"), mainWindow);
     actionEditLiveNotePreview->setCheckable(true);
     actionEditLiveNotePreview->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_P));
     actionEditLiveNotePreview->setStatusTip(tr("Toggle live HTML preview"));
 
-    actionEditWordWrap = new QAction(QIcon(":/menu-icons/word-wrap.svg"), tr("Word Wrap"), mainWindow);
-    actionEditWordWrap->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_W));
+    actionEditWordWrap = new QAction(QIcon(":/menu-icons/word-wrap.svg"), tr("&Word Wrap"), mainWindow);
     actionEditWordWrap->setStatusTip(tr("Toggle word wrap mode"));
+
+    actionEditNameDescFocusSwap = new QAction(QIcon(":/menu-icons/up.svg"), tr("&Swap Name/Description Focus"), mainWindow);
+    actionEditNameDescFocusSwap->setStatusTip(tr("Swap focus of N title and description editors"));
 
     actionEditExtract = new QAction(QIcon(":/menu-icons/cut.svg"), tr("E&xtract"), mainWindow);
     actionEditExtract->setStatusTip(tr("Create new Note from the text selected in the current Note..."));
@@ -502,6 +504,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuEdit->addSeparator();
     menuEdit->addAction(actionEditLiveNotePreview);
     menuEdit->addAction(actionEditWordWrap);
+    menuEdit->addAction(actionEditNameDescFocusSwap);
     menuEdit->addSeparator();
     menuEdit->addAction(actionEditComplete);
     menuEdit->addAction(actionEditExtract);

@@ -302,6 +302,7 @@ public slots:
     void doActionEditFindAgain();
     void doActionEditWordWrapToggle();
     void doActionToggleLiveNotePreview();
+    void doActionNameDescFocusSwap();
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();
