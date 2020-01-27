@@ -58,7 +58,7 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     addRegex(Codeblock, "`[\\S\\s]+`");
     addRegex(Mathblock, "\\$[\\S\\s]+\\$");
     addRegex(UnorderedList, "^(:?    )*[\\*\\+\\-] ");
-    addRegex(OrderedList, "^(:?    )*\\d\\. ");
+    addRegex(OrderedList, "^(:?    )*\\d\\d?\\. ");
     // IMPROVE highlight tasks (red/green) that overwrite lists , BUT new regexps make highlighting slower - is it worth to highlight it?
 
     // formats

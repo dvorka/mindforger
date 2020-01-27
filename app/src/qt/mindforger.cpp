@@ -23,7 +23,7 @@
 #  include <getopt.h>
 #else
 #  include "../../deps/getopt/getopt.h"
-#endif //_WIN32
+#endif // _WIN32
 #include <QtWidgets>
 
 #include "../../lib/src/version.h"
