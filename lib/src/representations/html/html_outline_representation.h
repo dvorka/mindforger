@@ -78,13 +78,6 @@ private:
     MarkdownOutlineRepresentation markdownRepresentation;
     MarkdownTranscoder* markdownTranscoder;
 
-    /**
-     * @brief MindForger MD 2 other representation options.
-     *
-     * If MF options don't change, then it doesn't have to be recalculated.
-     */
-    unsigned int lastMfOptions;
-
 public:
     /**
      * @brief Html O representation.

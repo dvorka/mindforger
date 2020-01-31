@@ -30,7 +30,6 @@ HtmlOutlineRepresentation::HtmlOutlineRepresentation(
       lf{exportColors},
       markdownRepresentation(ontology, descriptionInterceptor)
 {
-    lastMfOptions = 0;
 #if defined  MF_MD_2_HTML_CMARK
     markdownTranscoder = new CmarkGfmMarkdownTranscoder{};
 #elif defined MF_MD_2_HTML_DISCOUNT
@@ -53,7 +52,6 @@ HtmlOutlineRepresentation::HtmlOutlineRepresentation(
         RepresentationInterceptor* descriptionInterceptor)
     : HtmlOutlineRepresentation{ontology, descriptionInterceptor}
 {
-    lastMfOptions = 0;
     this->lf = lf;
 }
 
@@ -173,7 +171,7 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
             html += "<script type=\"text/javascript\" src=\"";
             html += JS_LIB_MERMAILD_URL;
             html += "\"></script>";
-        } else if(lastMfOptions&MdToHtmlOption::DiagramSupport) {
+        } else {
             switch(config.getUiEnableDiagramsInMd()) {
             case Configuration::JavaScriptLibSupport::ONLINE:
                 html += "<script type=\"text/javascript\" src=\"";
