@@ -166,6 +166,15 @@ public:
     QAction* actionFormatCode;
     QAction* actionFormatCodeBlock;
     QMenu* submenuFormatMathJax;
+    QMenu* submenuFormatLists;
+    QMenu* submenuFormatBlocks;
+    QMenu* submenuFormatDiagrams;
+    QAction* actionFormatDiagramsFlow;
+    QAction* actionFormatDiagramsSequence;
+    QAction* actionFormatDiagramsClass;
+    QAction* actionFormatDiagramsState;
+    QAction* actionFormatDiagramsGantt;
+    QAction* actionFormatDiagramsPie;
     QAction* actionFormatMathFraction;
     QAction* actionFormatMathSum;
     QAction* actionFormatMathInt;
@@ -186,10 +195,12 @@ public:
     QAction* actionFormatMathNotin;
     QAction* actionFormatMathSqrt;
     QAction* actionFormatMathBlock;
+    QAction* actionFormatDiagramBlock;
     QAction* actionFormatBlockQuote;
     QAction* actionFormatListNumber;
     QAction* actionFormatListBullet;
     QAction* actionFormatListTask;
+    QAction* actionFormatListTaskItem;
     QAction* actionFormatLink;
     QAction* actionFormatImage;
     QAction* actionFormatTable;
@@ -202,8 +213,9 @@ public:
     QAction* actionHelpWeb;
 
     QAction* actionHelpMarkdown;
-    QAction* actionHelpMathJaxLivePreview;
-    QAction* actionHelpMathJaxQuickReference;
+    QAction* actionHelpMathLivePreview;
+    QAction* actionHelpMathQuickReference;
+    QAction* actionHelpDiagrams;
 
     QAction* actionHelpReportBug;
     QAction* actionHelpCheckForUpdates;

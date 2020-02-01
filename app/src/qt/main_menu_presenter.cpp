@@ -138,10 +138,18 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionFormatListBullet, SIGNAL(triggered()), mwp, SLOT(doActionFormatListBullet()));
     QObject::connect(view->actionFormatListNumber, SIGNAL(triggered()), mwp, SLOT(doActionFormatListNumber()));
     QObject::connect(view->actionFormatListTask, SIGNAL(triggered()), mwp, SLOT(doActionFormatListTask()));
+    QObject::connect(view->actionFormatListTaskItem, SIGNAL(triggered()), mwp, SLOT(doActionFormatListTaskItem()));
     QObject::connect(view->actionFormatToc, SIGNAL(triggered()), mwp, SLOT(doActionFormatToc()));
     QObject::connect(view->actionFormatTimestamp, SIGNAL(triggered()), mwp, SLOT(doActionFormatTimestamp()));
     QObject::connect(view->actionFormatCodeBlock, SIGNAL(triggered()), mwp, SLOT(doActionFormatCodeBlock()));
     QObject::connect(view->actionFormatMathBlock, SIGNAL(triggered()), mwp, SLOT(doActionFormatMathBlock()));
+    QObject::connect(view->actionFormatDiagramBlock, SIGNAL(triggered()), mwp, SLOT(doActionFormatDiagramBlock()));
+    QObject::connect(view->actionFormatDiagramsPie, SIGNAL(triggered()), mwp, SLOT(doActionFormatDiagramPie()));
+    QObject::connect(view->actionFormatDiagramsFlow, SIGNAL(triggered()), mwp, SLOT(doActionFormatDiagramFlow()));
+    QObject::connect(view->actionFormatDiagramsClass, SIGNAL(triggered()), mwp, SLOT(doActionFormatDiagramClass()));
+    QObject::connect(view->actionFormatDiagramsGantt, SIGNAL(triggered()), mwp, SLOT(doActionFormatDiagramGantt()));
+    QObject::connect(view->actionFormatDiagramsState, SIGNAL(triggered()), mwp, SLOT(doActionFormatDiagramState()));
+    QObject::connect(view->actionFormatDiagramsSequence, SIGNAL(triggered()), mwp, SLOT(doActionFormatDiagramSequence()));
     QObject::connect(view->actionFormatBlockQuote, SIGNAL(triggered()), mwp, SLOT(doActionFormatBlockquote()));
     QObject::connect(view->actionFormatLink, SIGNAL(triggered()), mwp, SLOT(doActionFormatLink()));
     QObject::connect(view->actionFormatImage, SIGNAL(triggered()), mwp, SLOT(doActionFormatImage()));
@@ -154,8 +162,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionHelpReportBug, SIGNAL(triggered()), mwp, SLOT(doActionHelpReportBug()));
     QObject::connect(view->actionHelpCheckForUpdates, SIGNAL(triggered()), mwp, SLOT(doActionHelpCheckForUpdates()));
     QObject::connect(view->actionHelpMarkdown, SIGNAL(triggered()), mwp, SLOT(doActionHelpMarkdown()));
-    QObject::connect(view->actionHelpMathJaxQuickReference, SIGNAL(triggered()), mwp, SLOT(doActionHelpMathJaxQuickReference()));
-    QObject::connect(view->actionHelpMathJaxLivePreview, SIGNAL(triggered()), mwp, SLOT(doActionHelpMathJaxLivePreview()));
+    QObject::connect(view->actionHelpMathQuickReference, SIGNAL(triggered()), mwp, SLOT(doActionHelpMathJaxQuickReference()));
+    QObject::connect(view->actionHelpMathLivePreview, SIGNAL(triggered()), mwp, SLOT(doActionHelpMathJaxLivePreview()));
+    QObject::connect(view->actionHelpDiagrams, SIGNAL(triggered()), mwp, SLOT(doActionHelpDiagrams()));
     QObject::connect(view->actionHelpAbout, SIGNAL(triggered()), mwp, SLOT(doActionHelpAboutMindForger()));
 
     switch(config.getDesiredMindState()) {

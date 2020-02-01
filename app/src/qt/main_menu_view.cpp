@@ -525,50 +525,119 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatMath = new QAction(tr("&Math"), mainWindow);
     actionFormatMath->setStatusTip(tr("Format text as math (MathJax)"));
 
+    // lists
+    submenuFormatLists = menuFormat->addMenu(tr("Lis&ts"));
+
+    actionFormatListBullet = new QAction(tr("&Bulleted List"), mainWindow);
+    actionFormatListBullet->setStatusTip(tr("Format block as bulleted list"));
+    submenuFormatLists->addAction(actionFormatListBullet);
+
+    actionFormatListNumber = new QAction(tr("&Numbered List"), mainWindow);
+    actionFormatListNumber->setStatusTip(tr("Format block as numbered list"));
+    submenuFormatLists->addAction(actionFormatListNumber);
+
+    actionFormatListTask = new QAction(tr("&Task List"), mainWindow);
+    actionFormatListTask->setStatusTip(tr("Format block as task list"));
+    submenuFormatLists->addAction(actionFormatListTask);
+
+    // TODO handling
+    actionFormatListTaskItem = new QAction(tr("Task List &Item"), mainWindow);
+    actionFormatListTaskItem->setStatusTip(tr("Format block as task list"));
+    submenuFormatLists->addAction(actionFormatListTaskItem);
+
+    // blocks
+    submenuFormatBlocks = menuFormat->addMenu(tr("Bl&ocks"));
+
+    actionFormatBlockQuote = new QAction(tr("Block &Quote"), mainWindow);
+    actionFormatBlockQuote->setStatusTip(tr("Format text block as blockquote"));
+    submenuFormatBlocks->addAction(actionFormatBlockQuote);
+
+    actionFormatCodeBlock = new QAction(tr("&Code Block"), mainWindow);
+    actionFormatCodeBlock->setStatusTip(tr("Format text block as source code"));
+    submenuFormatBlocks->addAction(actionFormatCodeBlock);
+
+    actionFormatMathBlock = new QAction(tr("&Math Block"), mainWindow);
+    actionFormatMathBlock->setStatusTip(tr("Format text block as math (MathJax)"));
+    submenuFormatBlocks->addAction(actionFormatMathBlock);
+
+    // TODO handling
+    actionFormatDiagramBlock = new QAction(tr("&Diagram Block"), mainWindow);
+    actionFormatDiagramBlock->setStatusTip(tr("Format code block as diagram (Mermaid)"));
+    submenuFormatBlocks->addAction(actionFormatDiagramBlock);
+
+    // diagrams
+    submenuFormatDiagrams = menuFormat->addMenu(tr("Diagrams")); // &
+
+    // TODO handling v v v
+
+    actionFormatDiagramsFlow = new QAction(tr("&Flowchart"), mainWindow);
+    actionFormatDiagramsFlow->setStatusTip(tr("Insert flowchart Mermaid diagram skeleton"));
+    submenuFormatDiagrams->addAction(actionFormatDiagramsFlow);
+
+    actionFormatDiagramsSequence = new QAction(tr("&Sequence Diagram"), mainWindow);
+    actionFormatDiagramsSequence->setStatusTip(tr("Insert sequence Mermaid diagram skeleton"));
+    submenuFormatDiagrams->addAction(actionFormatDiagramsSequence);
+
+    actionFormatDiagramsClass = new QAction(tr("&Class Diagram"), mainWindow);
+    actionFormatDiagramsClass->setStatusTip(tr("Insert class Mermaid diagram skeleton"));
+    submenuFormatDiagrams->addAction(actionFormatDiagramsClass);
+
+    actionFormatDiagramsState = new QAction(tr("St&ate Diagram"), mainWindow);
+    actionFormatDiagramsState->setStatusTip(tr("Insert state Mermaid diagram skeleton"));
+    submenuFormatDiagrams->addAction(actionFormatDiagramsState);
+
+    actionFormatDiagramsGantt = new QAction(tr("&Gantt Diagram"), mainWindow);
+    actionFormatDiagramsGantt->setStatusTip(tr("Insert Gantt Mermaid diagram skeleton"));
+    submenuFormatDiagrams->addAction(actionFormatDiagramsGantt);
+
+    actionFormatDiagramsPie = new QAction(tr("&Pie Diagram"), mainWindow);
+    actionFormatDiagramsPie->setStatusTip(tr("Insert pie Mermaid chart skeleton"));
+    submenuFormatDiagrams->addAction(actionFormatDiagramsPie);
+
     // MathJax
     submenuFormatMathJax = menuFormat->addMenu(tr("MathJa&x"));
-    actionFormatMathText= new QAction(tr("&text"), mainWindow);
+    actionFormatMathText = new QAction(tr("&text"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathText);
     submenuFormatMathJax->addSeparator();
     actionFormatMathFraction= new QAction(tr("&fraction"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathFraction);
-    actionFormatMathSum= new QAction(tr("&sum"), mainWindow);
+    actionFormatMathSum = new QAction(tr("&sum"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathSum);
-    actionFormatMathSqrt= new QAction(tr("s&quare root"), mainWindow);
+    actionFormatMathSqrt = new QAction(tr("s&quare root"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathSqrt);
     submenuFormatMathJax->addSeparator();
-    actionFormatMathInt= new QAction(tr("&integral"), mainWindow);
+    actionFormatMathInt = new QAction(tr("&integral"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathInt);
-    actionFormatMathIiint= new QAction(tr("integrals"), mainWindow);
+    actionFormatMathIiint = new QAction(tr("integrals"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathIiint);
     submenuFormatMathJax->addSeparator();
-    actionFormatMathAlpha= new QAction(tr("&alpha"), mainWindow);
+    actionFormatMathAlpha = new QAction(tr("&alpha"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathAlpha);
-    actionFormatMathBeta= new QAction(tr("&beta"), mainWindow);
+    actionFormatMathBeta = new QAction(tr("&beta"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathBeta);
-    actionFormatMathGama= new QAction(tr("&Gama"), mainWindow);
+    actionFormatMathGama = new QAction(tr("&Gama"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathGama);
-    actionFormatMathDelta= new QAction(tr("&Delta"), mainWindow);
+    actionFormatMathDelta = new QAction(tr("&Delta"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathDelta);
     submenuFormatMathJax->addSeparator();
-    actionFormatMathBar= new QAction(tr("&bar"), mainWindow);
+    actionFormatMathBar = new QAction(tr("&bar"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathBar);
-    actionFormatMathHat= new QAction(tr("&hat"), mainWindow);
+    actionFormatMathHat = new QAction(tr("&hat"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathHat);
-    actionFormatMathDot= new QAction(tr("&dot"), mainWindow);
+    actionFormatMathDot = new QAction(tr("&dot"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathDot);
-    actionFormatMathOverrightarrow= new QAction(tr("&overrightarrow"), mainWindow);
+    actionFormatMathOverrightarrow = new QAction(tr("&overrightarrow"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathOverrightarrow);
     submenuFormatMathJax->addSeparator();
-    actionFormatMathCup= new QAction(tr("&cup"), mainWindow);
+    actionFormatMathCup = new QAction(tr("&cup"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathCup);
-    actionFormatMathCap= new QAction(tr("&cap"), mainWindow);
+    actionFormatMathCap = new QAction(tr("&cap"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathCap);
-    actionFormatMathEmptyset= new QAction(tr("&empty set"), mainWindow);
+    actionFormatMathEmptyset = new QAction(tr("&empty set"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathEmptyset);
-    actionFormatMathIn= new QAction(tr("&in"), mainWindow);
+    actionFormatMathIn = new QAction(tr("&in"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathIn);
-    actionFormatMathNotin= new QAction(tr("&not in"), mainWindow);
+    actionFormatMathNotin = new QAction(tr("&not in"), mainWindow);
     submenuFormatMathJax->addAction(actionFormatMathNotin);
 
     actionFormatStrikethrough = new QAction(tr("&Strikethrough"), mainWindow);
@@ -577,29 +646,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatKeyboard = new QAction(tr("&Keyboard"), mainWindow);
     actionFormatKeyboard->setStatusTip(tr("Format text as keyboard input"));
 
-    actionFormatListBullet = new QAction(tr("Bulleted List"), mainWindow);
-    actionFormatListBullet->setStatusTip(tr("Format block as bulleted list"));
-
-    actionFormatListNumber = new QAction(tr("Numbered List"), mainWindow);
-    actionFormatListNumber->setStatusTip(tr("Format block as numbered list"));
-
-    actionFormatListTask = new QAction(tr("Task List"), mainWindow);
-    actionFormatListTask->setStatusTip(tr("Format block as task list"));
-
     actionFormatToc = new QAction(tr("T&able of Contents"), mainWindow);
     actionFormatToc ->setStatusTip(tr("Insert Notebook's table of contents"));
 
-    actionFormatTimestamp = new QAction(tr("&Timestamp"), mainWindow);
+    actionFormatTimestamp = new QAction(tr("Timestam&p"), mainWindow);
     actionFormatTimestamp ->setStatusTip(tr("Insert current date and time"));
-
-    actionFormatCodeBlock = new QAction(tr("C&ode Block"), mainWindow);
-    actionFormatCodeBlock->setStatusTip(tr("Format text block as source code"));
-
-    actionFormatMathBlock = new QAction(tr("Math Block"), mainWindow);
-    actionFormatMathBlock->setStatusTip(tr("Format text block as math (MathJax)"));
-
-    actionFormatBlockQuote = new QAction(tr("Block &Quote"), mainWindow);
-    actionFormatBlockQuote->setStatusTip(tr("Format text block as blockquote"));
 
     actionFormatLink = new QAction(tr("&Link"), mainWindow);
     actionFormatLink->setStatusTip(tr("Insert link to a document, image or file"));
@@ -607,7 +658,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatImage = new QAction(tr("Ima&ge"), mainWindow);
     actionFormatImage->setStatusTip(tr("Insert image"));
 
-    actionFormatTable = new QAction(tr("Table"), mainWindow);
+    actionFormatTable = new QAction(tr("Tabl&es"), mainWindow);
     actionFormatTable->setStatusTip(tr("Insert table..."));
 
     actionFormatHr = new QAction(tr("&Horizontal ruler"), mainWindow);
@@ -620,17 +671,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatStrikethrough);
     menuFormat->addAction(actionFormatKeyboard);
     menuFormat->addSeparator();
-    menuFormat->addAction(actionFormatListBullet);
-    menuFormat->addAction(actionFormatListNumber);
-    menuFormat->addAction(actionFormatListTask);
     menuFormat->addSeparator();
     menuFormat->addAction(actionFormatToc);
+    menuFormat->addMenu(submenuFormatLists);
+    menuFormat->addMenu(submenuFormatBlocks);
+    menuFormat->addMenu(submenuFormatDiagrams);
+    menuFormat->addAction(actionFormatTable);
     menuFormat->addMenu(submenuFormatMathJax);
     menuFormat->addAction(actionFormatTimestamp);
-    menuFormat->addAction(actionFormatCodeBlock);
-    menuFormat->addAction(actionFormatMathBlock);
-    menuFormat->addAction(actionFormatBlockQuote);
-    menuFormat->addAction(actionFormatTable);
     menuFormat->addAction(actionFormatHr);
     menuFormat->addSeparator();
     menuFormat->addAction(actionFormatLink);
@@ -649,11 +697,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionHelpMarkdown = new QAction(QIcon(":/menu-icons/document.svg"), tr("&Markdown tutorial"), mainWindow);
     actionHelpMarkdown->setStatusTip(tr("Open Markdown tutorial"));
 
-    actionHelpMathJaxQuickReference= new QAction(QIcon(":/menu-icons/document.svg"), tr("MathJax cheatsheet"), mainWindow);
-    actionHelpMathJaxQuickReference->setStatusTip(tr("Open Markdown quick reference"));
+    actionHelpMathQuickReference= new QAction(QIcon(":/menu-icons/document.svg"), tr("Math cheatsheet"), mainWindow);
+    actionHelpMathQuickReference->setStatusTip(tr("Open MathJax quick reference"));
 
-    actionHelpMathJaxLivePreview = new QAction(QIcon(":/menu-icons/document.svg"), tr("MathJax live preview"), mainWindow);
-    actionHelpMathJaxLivePreview->setStatusTip(tr("Open Markdown live demo"));
+    actionHelpMathLivePreview = new QAction(QIcon(":/menu-icons/document.svg"), tr("Math live preview"), mainWindow);
+    actionHelpMathLivePreview->setStatusTip(tr("Open MathJax live demo"));
+
+    actionHelpDiagrams = new QAction(QIcon(":/menu-icons/document.svg"), tr("Mermaid dia&grams documentation"), mainWindow);
+    actionHelpDiagrams->setStatusTip(tr("Open Mermaid diagrams documentation"));
 
     actionHelpReportBug = new QAction(QIcon(":/menu-icons/bug.svg"), tr("Report &Bug or Request Feature"), mainWindow);
     actionHelpReportBug->setStatusTip(tr("Report bug or suggest an enhancement"));
@@ -672,8 +723,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuHelp->addAction(actionHelpCheckForUpdates);
     menuHelp->addSeparator();
     menuHelp->addAction(actionHelpMarkdown);
-    menuHelp->addAction(actionHelpMathJaxQuickReference);
-    menuHelp->addAction(actionHelpMathJaxLivePreview);
+    menuHelp->addAction(actionHelpMathQuickReference);
+    menuHelp->addAction(actionHelpMathLivePreview);
+    menuHelp->addAction(actionHelpDiagrams);
     menuHelp->addSeparator();
     menuHelp->addAction(actionHelpAbout);
 }
