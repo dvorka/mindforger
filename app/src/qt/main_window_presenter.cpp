@@ -1383,7 +1383,12 @@ void MainWindowPresenter::doActionFormatTimestamp()
 void MainWindowPresenter::doActionFormatCodeBlock()
 {
     // IMPROVE ask for dialect
-    QString text{"\n```\n...\n```\n"};
+    QString text{
+        "\n"
+        "```\n"
+        "...\n"
+        "```\n"
+    };
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
         orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
@@ -1508,6 +1513,7 @@ void MainWindowPresenter::doActionFormatBlockquote()
 void MainWindowPresenter::doActionFormatTable()
 {
     // IMPROVE ask for number of items using dialog
+    // IMPROVE left/right alignment options
     int count=3;
     QString text{"\n . | . | .\n --- | --- | ---\n"};
     for(int i=1; i<=count; i++) {

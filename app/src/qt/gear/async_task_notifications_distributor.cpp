@@ -54,18 +54,23 @@ AsyncTaskNotificationsDistributor::~AsyncTaskNotificationsDistributor()
     tasks.clear();
 }
 
+// TODO refactor this function to multiple methods to make it more structured
 void AsyncTaskNotificationsDistributor::run()
 {
     // avoid re-calculation of TayW word learderboards if it's not needed
     QString lastTayWords{};
     Outline* lastTayWOutline{};
     Note* lastTayWNote{};
+    // avoid live preview flickering w/ longer refresh interval
+    long long livePreviewMultiplier{0};
 
     while(true) {
         msleep(sleepInterval);
 
         // live preview refresh
-        if((mwp->getOrloj()->getNoteEdit()->getHitCounter() || mwp->getOrloj()->getOutlineHeaderEdit()->getHitCounter())
+        if((++livePreviewMultiplier)%3==0
+             &&
+           (mwp->getOrloj()->getNoteEdit()->getHitCounter() || mwp->getOrloj()->getOutlineHeaderEdit()->getHitCounter())
              &&
            mwp->getOrloj()->isAspectActive(OrlojPresenterFacetAspect::ASPECT_LIVE_PREVIEW))
         {
