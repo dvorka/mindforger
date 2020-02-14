@@ -134,8 +134,8 @@ public:
 
     enum JavaScriptLibSupport {
         NO,         // 0
-        OFFLINE,    // 1
-        ONLINE      // 2
+        ONLINE,     // 2
+        OFFLINE     // 1
     };
 
     enum EditorKeyBindingMode {
