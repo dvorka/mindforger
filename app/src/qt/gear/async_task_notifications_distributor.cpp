@@ -82,13 +82,20 @@ void AsyncTaskNotificationsDistributor::run()
             mwp->getOrloj()->getNoteEdit()->clearHitCounter();
         }
 
-        //MF_DEBUG("AsyncDistributor: wake up w/ associations need " << (int)mwp->getMind()->needForAssociations() << endl);
+#ifdef MF_DEBUG_ASYNC_TASKS
+        MF_DEBUG("AsyncDistributor[" << datetimeNow() << "]: wake up w/ associations need " << (int)mwp->getMind()->needForAssociations() << endl);
+#endif
         if(mwp->getMind()->needForAssociations()
              ||
-           mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
-             ||
-           mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER))
+           (!Configuration::getInstance().isUiLiveNotePreview()
+              &&
+            (mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+              ||
+             mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER))))
         {
+#ifdef MF_DEBUG_ASYNC_TASKS
+            MF_DEBUG("AsyncDistributor: calculating associations..." << Configuration::getInstance().isUiLiveNotePreview() << endl);
+#endif
             mwp->getMind()->meditateAssociations();
 
             /*

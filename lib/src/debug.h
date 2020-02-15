@@ -24,15 +24,16 @@
 //   - command line: CONFIG += mfunits
 
 #ifdef DO_MF_DEBUG
-#include <chrono>
-#include <iostream>
-#ifndef _WIN32
-#  include <execinfo.h>
-#endif //_WIN32
+    #include <chrono>
+    #include <iostream>
+    #ifndef _WIN32
+        #include <execinfo.h>
+    #endif //_WIN32
     #define MF_DEBUG(x) do { std::cerr << x; } while (0)
 
-    // enable/disable verbose debug info of particular components
-    #define MF_DEBUG_HTML
+    // enable/disable verbose debug of particular components
+    //#define MF_DEBUG_HTML
+    #define MF_DEBUG_ASYNC_TASKS
     //#define MF_DEBUG_QRC
     //#define MF_DEBUG_L10N
 
