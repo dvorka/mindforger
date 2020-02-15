@@ -162,8 +162,8 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionHelpReportBug, SIGNAL(triggered()), mwp, SLOT(doActionHelpReportBug()));
     QObject::connect(view->actionHelpCheckForUpdates, SIGNAL(triggered()), mwp, SLOT(doActionHelpCheckForUpdates()));
     QObject::connect(view->actionHelpMarkdown, SIGNAL(triggered()), mwp, SLOT(doActionHelpMarkdown()));
-    QObject::connect(view->actionHelpMathQuickReference, SIGNAL(triggered()), mwp, SLOT(doActionHelpMathJaxQuickReference()));
-    QObject::connect(view->actionHelpMathLivePreview, SIGNAL(triggered()), mwp, SLOT(doActionHelpMathJaxLivePreview()));
+    QObject::connect(view->actionHelpMathQuickReference, SIGNAL(triggered()), mwp, SLOT(doActionHelpMathQuickReference()));
+    QObject::connect(view->actionHelpMathLivePreview, SIGNAL(triggered()), mwp, SLOT(doActionHelpMathLivePreview()));
     QObject::connect(view->actionHelpDiagrams, SIGNAL(triggered()), mwp, SLOT(doActionHelpDiagrams()));
     QObject::connect(view->actionHelpAbout, SIGNAL(triggered()), mwp, SLOT(doActionHelpAboutMindForger()));
 

@@ -101,16 +101,17 @@ public:
         const std::string* markdown,
         std::string* html,
         std::string* basePath=nullptr,
-        bool standalone=false);
+        bool standalone=false,
+        int yScrollTo=0);
 
     /**
      * @brief Export Outline to HTML.
      *
      * Outline is rendered to be shown in MF, standalone option indicates HTML export.
      */
-    std::string* to(const Outline* outline, std::string* html, bool standalone=false);
-    std::string* toHeader(Outline* outline, std::string* html, bool standalone=false, bool autolinking=false);
-    std::string* to(const Note* note, std::string* html, bool autolinking=false);
+    std::string* to(const Outline* outline, std::string* html, bool standalone=false, int yScrollTo=0);
+    std::string* toHeader(Outline* outline, std::string* html, bool standalone=false, bool autolinking=false, int yScrollTo=0);
+    std::string* to(const Note* note, std::string* html, bool autolinking=false, int yScrollTo=0);
 
     /**
      * @brief Append "color: 0x...; background-color: 0x...;"
@@ -124,7 +125,7 @@ public:
     MarkdownOutlineRepresentation& getMarkdownRepresentation() { return markdownRepresentation; }
 
 private:
-    void header(std::string& html, std::string* basePath, bool standalone);
+    void header(std::string& html, std::string* basePath, bool standalone, int yScrollTo);
     void footer(std::string& html);
 };
 

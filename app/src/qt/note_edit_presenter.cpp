@@ -119,4 +119,4 @@ void NoteEditPresenter::slotSaveNote()
     }
 }
 
-}
+} // namespace m8r

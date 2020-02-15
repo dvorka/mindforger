@@ -51,6 +51,20 @@ Configuration::Configuration()
       uiNerdTargetAudience{},
       uiHtmlZoom{},
       uiFontPointSize{},
+      uiShowBreadcrump{},
+      uiViewerShowMetadata{},
+      uiEditorTabWidth{},
+      uiEditorLineNumbers{},
+      uiEditorSyntaxHighlighting{},
+      uiEditorAutocomplete{},
+      navigatorMaxNodes{},
+      uiEditorTabsAsSpaces{},
+      uiEditorAutosave{},
+      uiShowToolbar{},
+      uiExpertMode{},
+      uiDistractionFreeMode{},
+      uiHoistedMode{},
+      uiLiveNotePreview{true},
       installer(new Installer{})
 {
     char* home;

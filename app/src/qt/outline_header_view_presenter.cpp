@@ -71,17 +71,31 @@ void OutlineHeaderViewPresenter::refreshCurrent()
     orloj->getMainPresenter()->getMarkdownRepresentation()->description(&s, d);
     auxOutline.setDescription(d);
 
-    // refresh HTML view (autolinking intentionally disabled)
-    htmlRepresentation->toHeader(&auxOutline, &html, false, false);
-    view->setHtml(QString::fromStdString(html));
-
-    // IMPROVE: share code between O header and N
-#if not defined(__APPLE__) && not defined(_WIN32)
-    // WebView: scroll to same pct view
+    double yScrollPct{0};
     QScrollBar* scrollbar = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->verticalScrollBar();
+#if defined(_WIN32) || defined(__APPLE__)
+    // WebEngine: scroll to same pct view
     if(scrollbar) {
         if(scrollbar->maximum()) {
-            double pct =
+            // scroll: QWebEngine API for scrolling is not available - JavaScript must be used instead (via signal)
+            yScrollPct =
+                static_cast<double>(scrollbar->value())
+                    /
+                (static_cast<double>(scrollbar->maximum())/100.0);
+        }
+    }
+#endif
+    MF_DEBUG("SCROLL offset: " << yScrollPct << endl);
+    // refresh HTML view (autolinking intentionally disabled)
+    htmlRepresentation->toHeader(&auxOutline, &html, false, false, static_cast<int>(yScrollPct));
+    view->setHtml(QString::fromStdString(html));
+
+    // IMPROVE share code between O header and N
+#if not defined(__APPLE__) && not defined(_WIN32)
+    // WebView: scroll to same pct view
+    if(scrollbar) {
+        if(scrollbar->maximum()) {
+            yScrollPct =
                 static_cast<double>(scrollbar->value())
                     /
                 (static_cast<double>(scrollbar->maximum())/100.0);
@@ -89,11 +103,10 @@ void OutlineHeaderViewPresenter::refreshCurrent()
             QWebFrame* webFrame=view->getViever()->page()->mainFrame();
             webFrame->setScrollPosition(QPoint(
                 0,
-                static_cast<int>((webFrame->scrollBarMaximum(Qt::Orientation::Vertical)/100.0)*pct)));
+                static_cast<int>((webFrame->scrollBarMaximum(Qt::Orientation::Vertical)/100.0)*yScrollPct)));
         }
     }
 #endif
-    // TODO QWebEngineView: scrolling
 }
 
 void OutlineHeaderViewPresenter::refresh(Outline* outline)

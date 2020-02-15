@@ -87,18 +87,32 @@ void NoteViewPresenter::refreshCurrent()
     orloj->getMainPresenter()->getMarkdownRepresentation()->description(&s, d);
     auxNote.setDescription(d);
 
-    // refresh HTML view
-    htmlRepresentation->to(&auxNote, &html, Configuration::getInstance().isAutolinking());
+    double yScrollPct{0};
+    QScrollBar* scrollbar = orloj->getNoteEdit()->getView()->getNoteEditor()->verticalScrollBar();
+#if defined(_WIN32) || defined(__APPLE__)
+    // WebEngine: scroll to same pct view
+    if(scrollbar) {
+        if(scrollbar->maximum()) {
+            // scroll: QWebEngine API for scrolling is not available - JavaScript must be used instead (via signal)
+            yScrollPct =
+                static_cast<double>(scrollbar->value())
+                    /
+                (static_cast<double>(scrollbar->maximum())/100.0);
+        }
+    }
+#endif
+
+    // refresh HTML view (autolinking intentionally disabled)
+    htmlRepresentation->to(&auxNote, &html, false, static_cast<int>(yScrollPct));
     qHtml = QString::fromStdString(html);
     view->setHtml(qHtml);
 
-    // IMPROVE: share code between O header and N
-#if not defined(__APPLE__) && not defined(_WIN32)
+    // IMPROVE share code between O header and N
+#if not defined(_WIN32) && not defined(__APPLE__)
     // WebView: scroll to same pct view
-    QScrollBar* scrollbar = orloj->getNoteEdit()->getView()->getNoteEditor()->verticalScrollBar();
     if(scrollbar) {
         if(scrollbar->maximum()) {
-            double pct =
+            yScrollPct =
                 static_cast<double>(scrollbar->value())
                     /
                 (static_cast<double>(scrollbar->maximum())/100.0);
@@ -106,11 +120,10 @@ void NoteViewPresenter::refreshCurrent()
             QWebFrame* webFrame=view->getViever()->page()->mainFrame();
             webFrame->setScrollPosition(QPoint(
                 0,
-                static_cast<int>((webFrame->scrollBarMaximum(Qt::Orientation::Vertical)/100.0)*pct)));
+                static_cast<int>((webFrame->scrollBarMaximum(Qt::Orientation::Vertical)/100.0)*yScrollPct)));
         }
     }
 #endif
-    // TODO QWebEngineView: scrolling
 }
 
 // IMPROVE first decorate MD with HTML colors > then MD to HTML conversion

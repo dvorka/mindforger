@@ -65,7 +65,7 @@ void AsyncTaskNotificationsDistributor::run()
     long long livePreviewMultiplier{0};
 
     while(true) {
-        msleep(sleepInterval);
+        msleep(static_cast<unsigned long>(sleepInterval));
 
         // live preview refresh
         if((++livePreviewMultiplier)%3==0
@@ -74,7 +74,7 @@ void AsyncTaskNotificationsDistributor::run()
              &&
            mwp->getOrloj()->isAspectActive(OrlojPresenterFacetAspect::ASPECT_LIVE_PREVIEW))
         {
-            MF_DEBUG("Task distributor: refresh N preview");
+            MF_DEBUG("Task distributor: refresh O or N preview");
             emit signalRefreshCurrentNotePreview();
 
             // hit counter can be cleared, because associations are not visible if live preview is active
