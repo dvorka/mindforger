@@ -206,6 +206,7 @@ public slots:
     void slotShowOutlineNavigator(Outline* outline);
     void slotGetLinksForPattern(const QString& pattern);
     void slotRefreshCurrentNotePreview();
+    void slotOutlinesTableSorted(int column);
 
 signals:
     void signalLinksForPattern(const QString& completionPrefix, std::vector<std::string>* links);

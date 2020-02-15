@@ -123,6 +123,10 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     QObject::connect(
         noteEditPresenter->getView()->getButtonsPanel(), SIGNAL(signalShowLivePreview()),
         mainPresenter, SLOT(doActionToggleLiveNotePreview()));
+    // intercept Os table column sorting
+    QObject::connect(
+        view->getOutlinesTable()->horizontalHeader(), SIGNAL(sectionClicked(int)),
+        this, SLOT(slotOutlinesTableSorted(int)));
 
     /*
      * ... former click-to-view BEFORE switch to keyboard-only
@@ -817,6 +821,15 @@ void OrlojPresenter::slotRefreshCurrentNotePreview() {
             outlineHeaderViewPresenter->refreshCurrent();
         }
     }
+}
+
+void OrlojPresenter::slotOutlinesTableSorted(int column) {
+    Qt::SortOrder descending
+        = view->getOutlinesTable()->horizontalHeader()->sortIndicatorOrder();
+    MF_DEBUG("Os table sorted: " << column << " descending: " << descending << endl);
+
+    // TODO store column and asc/desc to configuration
+    // TODO on Os table show/load use col and asc/desc to sort the column (OutlinesTablePresenter::refresh)
 }
 
 } // m8r namespace

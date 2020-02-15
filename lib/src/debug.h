@@ -33,7 +33,7 @@
 
     // enable/disable verbose debug of particular components
     //#define MF_DEBUG_HTML
-    #define MF_DEBUG_ASYNC_TASKS
+    //#define MF_DEBUG_ASYNC_TASKS
     //#define MF_DEBUG_QRC
     //#define MF_DEBUG_L10N
 
