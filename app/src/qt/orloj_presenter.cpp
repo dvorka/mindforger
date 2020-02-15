@@ -809,11 +809,13 @@ void OrlojPresenter::refreshLiveNotePreview()
 }
 
 void OrlojPresenter::slotRefreshCurrentNotePreview() {
-    MF_DEBUG("Slot to refresh live preview: " << getFacet() << endl);
-    if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-        noteViewPresenter->refreshCurrent();
-    } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-        outlineHeaderViewPresenter->refreshCurrent();
+    MF_DEBUG("Slot to refresh live preview: " << getFacet() << " hoist: " << config.isUiHoistedMode() << endl);
+    if(!config.isUiHoistedMode()) {
+        if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            noteViewPresenter->refreshCurrent();
+        } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            outlineHeaderViewPresenter->refreshCurrent();
+        }
     }
 }
 
