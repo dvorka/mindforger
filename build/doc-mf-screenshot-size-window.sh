@@ -21,10 +21,12 @@
 
 echo "IMPORTANT: before running this script make sure window is NOT maximized or half sized - use rectangle button that allows window resizing (using right-down corner)"
 
-wmctrl -r "MindForger - Thinking Notebook - 1.50.0 - /home/dvorka/mf" -e 0,0,0,1360,768
-#wmctrl -r "MindForger - Thinking Notebook - 1.50.0 - /home/dvorka/tmp/mf-copy" -e 0,0,0,1360,768
-#wmctrl -r "MindForger - Thinking Notebook - 1.XX.X - /home/dvorka/mf" -e 0,0,0,1360,768
-#wmctrl -r "MindForger - Thinking Notebook - 1.XX.X - /home/dvorka/demo" -e 0,0,0,1360,768
-#wmctrl -r "MindForger - Thinking Notebook - 1.XX.X - /home/dvorka/p/mindforger/git/mindforger-repository" -e 0,0,0,1360,768
+MF_VERSION="1.30.0"
+
+wmctrl -r "MindForger - Thinking Notebook - ${MF_VERSION} - /home/dvorka/mf" -e 0,0,0,1360,768
+#wmctrl -r "MindForger - Thinking Notebook - ${MF_VERSION} - /home/dvorka/tmp/mf-copy" -e 0,0,0,1360,768
+#wmctrl -r "MindForger - Thinking Notebook - ${MF_VERSION} - /home/dvorka/mf" -e 0,0,0,1360,768
+#wmctrl -r "MindForger - Thinking Notebook - ${MF_VERSION} - /home/dvorka/demo" -e 0,0,0,1360,768
+#wmctrl -r "MindForger - Thinking Notebook - ${MF_VERSION} - /home/dvorka/p/mindforger/git/mindforger-repository" -e 0,0,0,1360,768
 
 # eof
