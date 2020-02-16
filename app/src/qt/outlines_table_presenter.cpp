@@ -43,8 +43,10 @@ void OutlinesTablePresenter::refresh(const vector<Outline*>& outlines)
             model->addRow(outline);
         }
 
-        // IMPROVE create hidden column w/ long time used for sorting
-        view->sortByColumn(7, Qt::SortOrder::DescendingOrder);
+        view->sortByColumn(
+            Configuration::getInstance().getUiOsTableSortColumn(),
+            Configuration::getInstance().isUiOsTableSortOrder()?Qt::SortOrder::AscendingOrder:Qt::SortOrder::DescendingOrder
+        );
 
         this->view->setCurrentIndex(this->model->index(0, 0));
         this->view->setFocus();

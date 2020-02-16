@@ -1,3 +1,13 @@
+MindForger uses cmark-gfm for Markdown to HTML rendering and for exports
+of Markdown to other formats. Changes made to the source code:
+
+* ``` block generators modified so that there is not prefixed language
+  name in the produced HTML e.g. before change: class="language-bash"
+  after change class="bash"
+* fixed build of MSVC 2017
+
+-----
+
 Copyright (c) 2014, John MacFarlane
 
 All rights reserved.

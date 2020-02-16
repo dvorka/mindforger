@@ -256,10 +256,18 @@ public slots:
     void doActionFormatListBullet();
     void doActionFormatListNumber();
     void doActionFormatListTask();
+    void doActionFormatListTaskItem();
     void doActionFormatToc();
     void doActionFormatTimestamp();
     void doActionFormatCodeBlock();
-    void doActionFormatMathBlock();
+    void doActionFormatMathBlock();    
+    void doActionFormatDiagramBlock();
+    void doActionFormatDiagramPie();
+    void doActionFormatDiagramFlow();
+    void doActionFormatDiagramClass();
+    void doActionFormatDiagramState();
+    void doActionFormatDiagramGantt();
+    void doActionFormatDiagramSequence();
     void doActionFormatBlockquote();
     void doActionFormatLink(QString link);
     void doActionFormatLink();
@@ -301,12 +309,15 @@ public slots:
     void doActionEditFind();
     void doActionEditFindAgain();
     void doActionEditWordWrapToggle();
+    void doActionToggleLiveNotePreview();
+    void doActionNameDescFocusSwap();
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();
     void doActionHelpMarkdown();
-    void doActionHelpMathJaxLivePreview();
-    void doActionHelpMathJaxQuickReference();
+    void doActionHelpMathLivePreview();
+    void doActionHelpMathQuickReference();
+    void doActionHelpDiagrams();
     void doActionHelpReportBug();
     void doActionHelpCheckForUpdates();
     void doActionHelpAboutMindForger();
@@ -314,8 +325,11 @@ public slots:
     void slotHandleFts();
 
 private:
-    void insertMarkdownText(const QString& text, bool newline=false, int offset=0);
+    void injectMarkdownText(const QString& text, bool newline=false, int offset=0);
+    void injectDiagramBlock(const QString& diagramText);
     void copyLinkOrImageToRepository(const std::string& srcPath, QString& path);
+
+    void statusInfoPreviewFlickering();
 };
 
 }

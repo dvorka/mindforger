@@ -138,7 +138,6 @@ public:
     QAction* actionNoteDown;
     QAction* actionNoteLast;
     QAction* actionNoteRefactor;
-    QAction* actionNoteExtract;
     QAction* actionNoteStencil;
     QAction* actionNoteClone;
     QAction* actionNoteExport;
@@ -152,7 +151,10 @@ public:
     QAction* actionEditCut;
     QAction* actionEditCopy;
     QAction* actionEditPaste;
+    QAction* actionEditLiveNotePreview;
     QAction* actionEditWordWrap;
+    QAction* actionEditNameDescFocusSwap;
+    QAction* actionEditExtract;
     QAction* actionEditComplete;
 
     // menu: Format
@@ -164,6 +166,15 @@ public:
     QAction* actionFormatCode;
     QAction* actionFormatCodeBlock;
     QMenu* submenuFormatMathJax;
+    QMenu* submenuFormatLists;
+    QMenu* submenuFormatBlocks;
+    QMenu* submenuFormatDiagrams;
+    QAction* actionFormatDiagramsFlow;
+    QAction* actionFormatDiagramsSequence;
+    QAction* actionFormatDiagramsClass;
+    QAction* actionFormatDiagramsState;
+    QAction* actionFormatDiagramsGantt;
+    QAction* actionFormatDiagramsPie;
     QAction* actionFormatMathFraction;
     QAction* actionFormatMathSum;
     QAction* actionFormatMathInt;
@@ -184,10 +195,12 @@ public:
     QAction* actionFormatMathNotin;
     QAction* actionFormatMathSqrt;
     QAction* actionFormatMathBlock;
+    QAction* actionFormatDiagramBlock;
     QAction* actionFormatBlockQuote;
     QAction* actionFormatListNumber;
     QAction* actionFormatListBullet;
     QAction* actionFormatListTask;
+    QAction* actionFormatListTaskItem;
     QAction* actionFormatLink;
     QAction* actionFormatImage;
     QAction* actionFormatTable;
@@ -200,8 +213,9 @@ public:
     QAction* actionHelpWeb;
 
     QAction* actionHelpMarkdown;
-    QAction* actionHelpMathJaxLivePreview;
-    QAction* actionHelpMathJaxQuickReference;
+    QAction* actionHelpMathLivePreview;
+    QAction* actionHelpMathQuickReference;
+    QAction* actionHelpDiagrams;
 
     QAction* actionHelpReportBug;
     QAction* actionHelpCheckForUpdates;
@@ -222,8 +236,9 @@ public:
     void showFacetMindThink();
     void showFacetMindSleep();
 
-    void showFacetMindAutolinkEnable();
-    void showFacetMindAutolinkDisable();
+    void showFacetMindAutolink(bool enabled);
+
+    void showFacetLiveNotePreview(bool enabled);
 
     void showFacetNavigator();
 

@@ -55,19 +55,25 @@ class OutlineViewPresenter;
 class OrlojView;
 
 enum OrlojPresenterFacets {
-    FACET_NONE,                 // 0
-    FACET_LIST_OUTLINES,        // 1
-    FACET_VIEW_OUTLINE,         // 2
-    FACET_VIEW_OUTLINE_HEADER,  // 3
-    FACET_EDIT_OUTLINE_HEADER,  // 4
-    FACET_VIEW_NOTE,            // 5
-    FACET_EDIT_NOTE,            // 6
-    FACET_FTS_VIEW_NOTE,        // 7
-    FACET_ORGANIZER,            // 8
-    FACET_TAG_CLOUD,            // 9
-    FACET_RECENT_NOTES,         // 10
-    FACET_NAVIGATOR,            // 11
-    FACET_DASHBOARD             // 12
+    FACET_NONE,                   // 0
+    FACET_LIST_OUTLINES,          // 1
+    FACET_VIEW_OUTLINE,           // 2
+    FACET_VIEW_OUTLINE_HEADER,    // 3
+    FACET_EDIT_OUTLINE_HEADER,    // 4
+    FACET_VIEW_NOTE,              // 5
+    FACET_EDIT_NOTE,              // 6
+    FACET_FTS_VIEW_NOTE,          // 7
+    FACET_ORGANIZER,              // 8
+    FACET_TAG_CLOUD,              // 9
+    FACET_RECENT_NOTES,           // 10
+    FACET_NAVIGATOR,              // 11
+    FACET_DASHBOARD               // 12
+};
+
+// aspect modifies facet
+enum OrlojPresenterFacetAspect {
+    ASPECT_NONE,
+    ASPECT_LIVE_PREVIEW
 };
 
 enum OrlojButtonRoles {
@@ -86,8 +92,10 @@ private:
     MainWindowPresenter* mainPresenter;
 
     OrlojPresenterFacets activeFacet;
+    OrlojPresenterFacetAspect activeAspect;
 
     OrlojView* view;
+    Configuration& config;
     Mind* mind;
 
     DashboardPresenter* dashboardPresenter;
@@ -105,7 +113,7 @@ private:
     bool skipEditNoteCheck;
 
 public:
-    OrlojPresenter(MainWindowPresenter* mainPresenter,
+    explicit OrlojPresenter(MainWindowPresenter* mainPresenter,
                    OrlojView* view,
                    Mind* mind);
 
@@ -154,6 +162,10 @@ public:
         activeFacet = facet;
     }
 
+    OrlojPresenterFacetAspect getAspect() const { return activeAspect; }
+    void setAspect(OrlojPresenterFacetAspect aspect) { activeAspect = aspect; }
+    bool isAspectActive(OrlojPresenterFacetAspect aspect) { return activeAspect == aspect; }
+
     /**
      * @brief This method is invoked whenever a facet is changed i.e. it allows to perform desired actions.
      */
@@ -174,6 +186,8 @@ public:
 
     bool applyFacetHoisting();
 
+    void refreshLiveNotePreview();
+
     void fromOutlineHeaderEditBackToView(Outline* outline);
     void fromNoteEditBackToView(Note* note);
 
@@ -191,6 +205,8 @@ public slots:
     void slotShowNoteNavigator(Note* note);
     void slotShowOutlineNavigator(Outline* outline);
     void slotGetLinksForPattern(const QString& pattern);
+    void slotRefreshCurrentNotePreview();
+    void slotOutlinesTableSorted(int column);
 
 signals:
     void signalLinksForPattern(const QString& completionPrefix, std::vector<std::string>* links);

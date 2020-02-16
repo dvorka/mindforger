@@ -60,6 +60,7 @@ public:
     void setEditorShowLineNumbers(bool show) { noteEditor->setShowLineNumbers(show); }
     void setStatusBar(const StatusBarView* statusBar) { noteEditor->setStatusBar(statusBar); }
 
+    void focusName() { topNamePanel->focusName(); }
     QString getName() const { return topNamePanel->getName(); }
     QString getDescription() const { return noteEditor->toPlainText(); }
     bool isDescriptionEmpty() const { return noteEditor->toPlainText().isEmpty(); }

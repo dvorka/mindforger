@@ -64,9 +64,9 @@ void LookAndFeels::setDarkTheme()
     backgroundColor =  QString("#353535");
     highlightColor = QString("#008C00"); // RGB: 0, 140, 0
 
-    editorBackgroundColor = QString("#353535");
+    editorBackgroundColor = backgroundColor;
     editorLineNumbersForegroundColor = QString("#777777");
-    editorLineNumbersBackgroundColor = QString("#353535");
+    editorLineNumbersBackgroundColor = backgroundColor;
 
     editorBold.setRgb(0xFF,0xFF,0x00);
     editorBolder.setRgb(0xFF,0xFF,0x00);
@@ -104,9 +104,14 @@ void LookAndFeels::setDarkTheme()
     mindforgerApplication->setPalette(palette);
 
     // IMPROVE tooltips via palette does NOT work > CSS is used instead
-    mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #008c00; border: 1px solid white; }");
+    mindforgerApplication->setStyleSheet(
+        "QToolTip { color: #ffffff; background-color: #008c00; border: 1px solid white; }"
+    );
 
-    menuStylesheet = QString("QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px; }");
+    menuStylesheet = QString{
+        "QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px; }"
+        "QMenuBar::item:disabled { color: #555; }"
+        "QMenu::item:disabled { color: #555; background: "}+backgroundColor+QString{"; }"};
 }
 
 /*

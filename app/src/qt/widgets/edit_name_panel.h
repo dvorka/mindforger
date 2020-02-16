@@ -66,6 +66,7 @@ public:
     }
 
 public:
+    void focusName() { lineEdit->setFocus(); }
     QString getName() const { return lineEdit->text(); }
 };
 

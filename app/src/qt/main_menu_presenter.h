@@ -66,8 +66,9 @@ public:
     void showFacetMindThink();
     void showFacetMindSleep();
 
-    void showFacetMindAutolinkEnable();
-    void showFacetMindAutolinkDisable();
+    void showFacetMindAutolink(bool enabled);
+
+    void showFacetLiveNotePreview(bool enabled);
 
     void addRecentDirectoryOrFile(const QString& path);
 };

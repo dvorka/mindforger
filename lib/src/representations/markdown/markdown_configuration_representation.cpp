@@ -39,6 +39,9 @@ constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* Markdown CSS th
 constexpr const auto CONFIG_SETTING_UI_HTML_ZOOM_LABEL = "* Markdown HTML zoom: ";
 constexpr const auto CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL =  "* Show toolbar: ";
 constexpr const auto CONFIG_SETTING_UI_EXPERT_MODE_LABEL =  "* Hide expendable buttons: ";
+constexpr const auto CONFIG_SETTING_UI_LIVE_NOTE_PREVIEW_LABEL =  "* Live note preview: ";
+constexpr const auto CONFIG_SETTING_UI_OS_TABLE_SORT_COL_LABEL =  "* Outlines table sort column: ";
+constexpr const auto CONFIG_SETTING_UI_OS_TABLE_SORT_ORDER_LABEL =  "* Outlines table sort order: ";
 constexpr const auto CONFIG_SETTING_UI_NERD_MENU=  "* Nerd menu: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_FONT_LABEL =  "* Editor font: ";
@@ -177,6 +180,32 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                             c.setUiExpertMode(true);
                         } else {
                             c.setUiExpertMode(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_LIVE_NOTE_PREVIEW_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiLiveNotePreview(true);
+                        } else {
+                            c.setUiLiveNotePreview(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_OS_TABLE_SORT_COL_LABEL) != std::string::npos) {
+                        string t = line->substr(strlen(CONFIG_SETTING_UI_OS_TABLE_SORT_COL_LABEL));
+                        std::string::size_type st;
+                        int i;
+                        try {
+                          i = std::stoi (t,&st);
+                          if(i<0 || i>Configuration::DEFAULT_OS_TABLE_SORT_COLUMN) {
+                              i=Configuration::DEFAULT_OS_TABLE_SORT_COLUMN;
+                          }
+                        }
+                        catch(...) {
+                          i = Configuration::DEFAULT_OS_TABLE_SORT_COLUMN;
+                        }
+                        c.setUiOsTableSortColumn(i);
+                    } else if(line->find(CONFIG_SETTING_UI_OS_TABLE_SORT_ORDER_LABEL) != std::string::npos) {
+                        if(line->find(UI_OS_TABLE_SORT_ORDER_ASC) != std::string::npos) {
+                            c.setUiOsTableSortOrder(true);
+                        } else {
+                            c.setUiOsTableSortOrder(false);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_NERD_MENU) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
@@ -425,6 +454,15 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_UI_EXPERT_MODE_LABEL << (c?(c->isUiExpertMode()?"yes":"no"):(Configuration::DEFAULT_UI_EXPERT_MODE?"yes":"no")) << endl <<
          "    * Hide expendable buttons - experts use keyboard shortcuts as they are faster." << endl <<
          "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_LIVE_NOTE_PREVIEW_LABEL << (c?(c->isUiLiveNotePreview()?"yes":"no"):(Configuration::DEFAULT_UI_LIVE_NOTE_PREVIEW?"yes":"no")) << endl <<
+         "    * Show notebook/note HTML preview as you write Markdown." << endl <<
+         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_OS_TABLE_SORT_COL_LABEL << (c?c->getUiOsTableSortColumn():Configuration::DEFAULT_OS_TABLE_SORT_COLUMN) << endl <<
+         "    * Column (index) to be used for Notebooks table sorting - value between 0 and " << Configuration::DEFAULT_OS_TABLE_SORT_COLUMN << "." << endl <<
+         "    * Examples: 0, 5, 7" << endl <<
+         CONFIG_SETTING_UI_OS_TABLE_SORT_ORDER_LABEL << (c?(c->isUiOsTableSortOrder()?"ascending":"descending"):(Configuration::DEFAULT_OS_TABLE_SORT_ORDER?"ascending":"descending")) << endl <<
+         "    * Order of Notebooks table sorting." << endl <<
+         "    * Examples: ascending, descending" << endl <<
          CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL<< (c?(c->isUiShowToolbar()?"yes":"no"):(Configuration::DEFAULT_UI_SHOW_TOOLBAR?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_NERD_MENU << (c?(c->isUiNerdTargetAudience()?"yes":"no"):(Configuration::DEFAULT_UI_NERD_MENU?"yes":"no")) << endl <<
@@ -452,8 +490,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Enable online MathJax JavaScript library to show math expressions in HTML generated from Markdown." << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_MD_DIAGRAM_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableDiagramsInMd()):UI_JS_LIB_NO) << endl <<
-         "    * Enable online or offline Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
-         "    * Examples: online, offline, no" << endl <<
+         "    * Enable online Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
+         "    * Examples: online, no" << endl <<
          CONFIG_SETTING_NAVIGATOR_MAX_GRAPH_NODES_LABEL << (c?c->getNavigatorMaxNodes():Configuration::DEFAULT_NAVIGATOR_MAX_GRAPH_NODES) << endl <<
          "    * Maximum number of knowledge graph navigator nodes (performance vs. readability trade-off)." << endl <<
          "    * Examples: 150" << endl <<

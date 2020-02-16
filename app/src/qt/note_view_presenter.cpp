@@ -73,6 +73,59 @@ NoteViewPresenter::~NoteViewPresenter()
     if(htmlRepresentation) delete htmlRepresentation;
 }
 
+void NoteViewPresenter::refreshCurrent()
+{
+    MF_DEBUG("Refreshing N HTML preview from editor: " << this->currentNote->getName() << endl);
+
+    // N w/ current editor text w/o saving it
+    Note auxNote{currentNote->getType(), currentNote->getOutline()};
+    auxNote.setName(orloj->getNoteEdit()->getView()->getName().toStdString());
+
+    QString description = orloj->getNoteEdit()->getView()->getDescription();
+    string s{description.toStdString()};
+    vector<string*> d{};
+    orloj->getMainPresenter()->getMarkdownRepresentation()->description(&s, d);
+    auxNote.setDescription(d);
+
+    double yScrollPct{0};
+    QScrollBar* scrollbar = orloj->getNoteEdit()->getView()->getNoteEditor()->verticalScrollBar();
+#if defined(_WIN32) || defined(__APPLE__)
+    // WebEngine: scroll to same pct view
+    if(scrollbar) {
+        if(scrollbar->maximum()) {
+            // scroll: QWebEngine API for scrolling is not available - JavaScript must be used instead (via signal)
+            yScrollPct =
+                static_cast<double>(scrollbar->value())
+                    /
+                (static_cast<double>(scrollbar->maximum())/100.0);
+        }
+    }
+#endif
+
+    // refresh HTML view (autolinking intentionally disabled)
+    htmlRepresentation->to(&auxNote, &html, false, static_cast<int>(yScrollPct));
+    qHtml = QString::fromStdString(html);
+    view->setHtml(qHtml);
+
+    // IMPROVE share code between O header and N
+#if not defined(_WIN32) && not defined(__APPLE__)
+    // WebView: scroll to same pct view
+    if(scrollbar) {
+        if(scrollbar->maximum()) {
+            yScrollPct =
+                static_cast<double>(scrollbar->value())
+                    /
+                (static_cast<double>(scrollbar->maximum())/100.0);
+            // scroll
+            QWebFrame* webFrame=view->getViever()->page()->mainFrame();
+            webFrame->setScrollPosition(QPoint(
+                0,
+                static_cast<int>((webFrame->scrollBarMaximum(Qt::Orientation::Vertical)/100.0)*yScrollPct)));
+        }
+    }
+#endif
+}
+
 // IMPROVE first decorate MD with HTML colors > then MD to HTML conversion
 void NoteViewPresenter::refresh(Note* note)
 {

@@ -28,6 +28,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
                                OrlojView* view,
                                Mind* mind)
     : activeFacet{OrlojPresenterFacets::FACET_NONE},
+      config{Configuration::getInstance()},
       skipEditNoteCheck{false}
 {
     this->mainPresenter = mainPresenter;
@@ -52,7 +53,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
      * and widgets - it can show/hide what's needed and then pass control to children.
      */
 
-    // hit enter in Outlines to view Outline detail
+    // hit enter in Os to view O detail
     QObject::connect(
         view->getOutlinesTable(),
         SIGNAL(signalShowSelectedOutline()),
@@ -119,6 +120,13 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     QObject::connect(
         this, SIGNAL(signalLinksForHeaderPattern(const QString&, std::vector<std::string>*)),
         view->getOutlineHeaderEdit()->getHeaderEditor(), SLOT(slotPerformLinkCompletion(const QString&, std::vector<std::string>*)));
+    QObject::connect(
+        noteEditPresenter->getView()->getButtonsPanel(), SIGNAL(signalShowLivePreview()),
+        mainPresenter, SLOT(doActionToggleLiveNotePreview()));
+    // intercept Os table column sorting
+    QObject::connect(
+        view->getOutlinesTable()->horizontalHeader(), SIGNAL(sectionClicked(int)),
+        this, SLOT(slotOutlinesTableSorted(int)));
 
     /*
      * ... former click-to-view BEFORE switch to keyboard-only
@@ -793,6 +801,36 @@ void OrlojPresenter::slotShowRecentNote(const QItemSelection& selected, const QI
             mainPresenter->getStatusBar()->showInfo(QString(tr("No Note selected!")));
         }
     }
+}
+
+void OrlojPresenter::refreshLiveNotePreview()
+{
+    if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        view->showFacetNoteEdit();
+    } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        view->showFacetOutlineHeaderEdit();
+    }
+}
+
+void OrlojPresenter::slotRefreshCurrentNotePreview() {
+    MF_DEBUG("Slot to refresh live preview: " << getFacet() << " hoist: " << config.isUiHoistedMode() << endl);
+    if(!config.isUiHoistedMode()) {
+        if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            noteViewPresenter->refreshCurrent();
+        } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            outlineHeaderViewPresenter->refreshCurrent();
+        }
+    }
+}
+
+void OrlojPresenter::slotOutlinesTableSorted(int column) {
+    Qt::SortOrder order
+        = view->getOutlinesTable()->horizontalHeader()->sortIndicatorOrder();
+    MF_DEBUG("Os table sorted: " << column << " descending: " << order << endl);
+
+    config.setUiOsTableSortColumn(column);
+    config.setUiOsTableSortOrder(order==Qt::SortOrder::AscendingOrder?true:false);
+    mainPresenter->getConfigRepresentation()->save(config);
 }
 
 } // m8r namespace

@@ -221,11 +221,10 @@ void MainWindowPresenter::showInitialView()
 
     view.setFileOrDirectory(QString::fromStdString(config.getActiveRepository()->getPath()));
 
-    if(config.isAutolinking()) {
-        mainMenu->showFacetMindAutolinkEnable();
-    } else {
-        mainMenu->showFacetMindAutolinkDisable();
-    }
+    // config > menu
+    mainMenu->showFacetMindAutolink(config.isAutolinking());
+    mainMenu->showFacetLiveNotePreview(config.isUiLiveNotePreview());
+    orloj->setAspect(config.isUiLiveNotePreview()?OrlojPresenterFacetAspect::ASPECT_LIVE_PREVIEW:OrlojPresenterFacetAspect::ASPECT_NONE);
 
     // move Mind to configured state
     if(config.getDesiredMindState()==Configuration::MindState::THINKING) {
@@ -506,13 +505,12 @@ void MainWindowPresenter::doActionMindToggleAutolink()
 {
     if(config.isAutolinking()) {
         config.setAutolinking(false);
-        mainMenu->showFacetMindAutolinkDisable();
     } else {
         config.setAutolinking(true);
-        mainMenu->showFacetMindAutolinkEnable();
     }
-
+    mainMenu->showFacetMindAutolink(config.isAutolinking());
     mdConfigRepresentation->save(config);
+
     // refresh view
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
          ||
@@ -522,6 +520,51 @@ void MainWindowPresenter::doActionMindToggleAutolink()
     } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE))
     {
         orloj->showFacetNoteView(orloj->getOutlineView()->getOutlineTree()->getCurrentNote());
+    }
+}
+
+void MainWindowPresenter::doActionNameDescFocusSwap()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        if(orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->hasFocus()) {
+            orloj->getOutlineHeaderEdit()->getView()->focusName();
+        } else {
+            orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->setFocus();
+        }
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        if(orloj->getNoteEdit()->getView()->getNoteEditor()->hasFocus()) {
+            orloj->getNoteEdit()->getView()->focusName();
+        } else {
+            orloj->getNoteEdit()->getView()->getNoteEditor()->setFocus();
+        }
+    }
+}
+
+void MainWindowPresenter::doActionToggleLiveNotePreview()
+{
+    // toggle config
+    if(config.isUiLiveNotePreview()) {
+        config.setUiLiveNotePreview(false);
+    } else {
+        config.setUiLiveNotePreview(true);
+    }
+    mdConfigRepresentation->save(config);
+
+    // menu
+    mainMenu->showFacetLiveNotePreview(config.isUiLiveNotePreview());
+
+    // aspect
+    if(config.isUiLiveNotePreview()) {
+        orloj->setAspect(OrlojPresenterFacetAspect::ASPECT_LIVE_PREVIEW);
+    } else {
+        orloj->setAspect(OrlojPresenterFacetAspect::ASPECT_NONE);
+    }
+
+    // view
+    orloj->refreshLiveNotePreview();
+
+    if(config.isUiLiveNotePreview()) {
+        statusInfoPreviewFlickering();
     }
 }
 
@@ -1133,79 +1176,79 @@ void MainWindowPresenter::doActionFormatMath()
 
 void MainWindowPresenter::doActionFormatMathFrac()
 {
-    insertMarkdownText("\\frac{}{}", false, 6);
+    injectMarkdownText("\\frac{}{}", false, 6);
 }
 void MainWindowPresenter::doActionFormatMathSum()
 {
-    insertMarkdownText("\\sum_{i=0}^n", false, 12);
+    injectMarkdownText("\\sum_{i=0}^n", false, 12);
 }
 void MainWindowPresenter::doActionFormatMathInt()
 {
-    insertMarkdownText("\\int_{x}^{y}", false, 12);
+    injectMarkdownText("\\int_{x}^{y}", false, 12);
 }
 void MainWindowPresenter::doActionFormatMathIiint()
 {
-    insertMarkdownText("\\iiint", false, 3);
+    injectMarkdownText("\\iiint", false, 3);
 }
 void MainWindowPresenter::doActionFormatMathAlpha()
 {
-    insertMarkdownText("\\alpha", false, 6);
+    injectMarkdownText("\\alpha", false, 6);
 }
 void MainWindowPresenter::doActionFormatMathBeta()
 {
-    insertMarkdownText("\\beta", false, 5);
+    injectMarkdownText("\\beta", false, 5);
 }
 void MainWindowPresenter::doActionFormatMathDelta()
 {
-    insertMarkdownText("\\Delta", false, 6);
+    injectMarkdownText("\\Delta", false, 6);
 }
 void MainWindowPresenter::doActionFormatMathGama()
 {
-    insertMarkdownText("\\Gama", false, 5);
+    injectMarkdownText("\\Gama", false, 5);
 }
 void MainWindowPresenter::doActionFormatMathText()
 {
-    insertMarkdownText("\\text{}", false, 6);
+    injectMarkdownText("\\text{}", false, 6);
 }
 void MainWindowPresenter::doActionFormatMathBar()
 {
-    insertMarkdownText("\\bar", false, 4);
+    injectMarkdownText("\\bar", false, 4);
 }
 void MainWindowPresenter::doActionFormatMathHat()
 {
-    insertMarkdownText("\\hat", false, 4);
+    injectMarkdownText("\\hat", false, 4);
 }
 void MainWindowPresenter::doActionFormatMathDot()
 {
-    insertMarkdownText("\\dot", false, 4);
+    injectMarkdownText("\\dot", false, 4);
 }
 void MainWindowPresenter::doActionFormatMathOverrightarrow()
 {
-    insertMarkdownText("\\overrightarrow", false, 15);
+    injectMarkdownText("\\overrightarrow", false, 15);
 }
 void MainWindowPresenter::doActionFormatMathCup()
 {
-    insertMarkdownText("\\cup", false, 4);
+    injectMarkdownText("\\cup", false, 4);
 }
 void MainWindowPresenter::doActionFormatMathCap()
 {
-    insertMarkdownText("\\cap", false, 4);
+    injectMarkdownText("\\cap", false, 4);
 }
 void MainWindowPresenter::doActionFormatMathEmptyset()
 {
-    insertMarkdownText("\\emptyset", false, 9);
+    injectMarkdownText("\\emptyset", false, 9);
 }
 void MainWindowPresenter::doActionFormatMathIn()
 {
-    insertMarkdownText("\\in", false, 3);
+    injectMarkdownText("\\in", false, 3);
 }
 void MainWindowPresenter::doActionFormatMathNotin()
 {
-    insertMarkdownText("\\notin", false, 6);
+    injectMarkdownText("\\notin", false, 6);
 }
 void MainWindowPresenter::doActionFormatMathSqrt()
 {
-    insertMarkdownText("\\sqrt{}", false, 6);
+    injectMarkdownText("\\sqrt{}", false, 6);
 }
 
 void MainWindowPresenter::doActionFormatStrikethrough()
@@ -1301,6 +1344,17 @@ void MainWindowPresenter::doActionFormatListTask()
     rowsAndDepthDialog->show();
 }
 
+void MainWindowPresenter::doActionFormatListTaskItem()
+{
+    QString text{"[ ] "};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false, text.length());
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false, text.length());
+    }
+}
+
 void MainWindowPresenter::doActionFormatToc()
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
@@ -1333,7 +1387,12 @@ void MainWindowPresenter::doActionFormatTimestamp()
 void MainWindowPresenter::doActionFormatCodeBlock()
 {
     // IMPROVE ask for dialect
-    QString text{"\n```\n...\n```\n"};
+    QString text{
+        "\n"
+        "```\n"
+        "...\n"
+        "```\n"
+    };
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
         orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
@@ -1353,6 +1412,102 @@ void MainWindowPresenter::doActionFormatMathBlock()
     }
 }
 
+
+void MainWindowPresenter::injectDiagramBlock(const QString& diagramText)
+{
+    // QString text{"\n```mermaid\n...\n```\n"};
+    QString text{"\n<div class=\"mermaid\">\n"};
+    text += diagramText;
+    text += QString{"\n</div>\n"};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false, 1);
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false, 1);
+    }
+}
+
+
+void MainWindowPresenter::doActionFormatDiagramBlock()
+{
+    injectDiagramBlock(QString{"..."});
+}
+
+void MainWindowPresenter::doActionFormatDiagramPie()
+{
+    injectDiagramBlock(
+        QString{
+            "pie title Pets\n"
+            "    \"Dogs\" : 386\n"
+            "    \"Cats\" : 85\n"
+            "    \"Rats\" : 15"
+        }
+    );
+}
+
+void MainWindowPresenter::doActionFormatDiagramFlow()
+{
+    injectDiagramBlock(
+        QString{
+            "graph TD\n"
+            "a --> b\n"
+            "a --> c"
+        }
+    );
+}
+
+void MainWindowPresenter::doActionFormatDiagramClass()
+{
+    injectDiagramBlock(
+        QString{
+            "classDiagram\n"
+            "     class Animal\n"
+            "     Animal : +int age\n"
+            "     Animal : -String gender\n"
+            "     Animal: +isMammal()\n"
+            "     Animal: *mate()"
+        }
+    );
+}
+
+void MainWindowPresenter::doActionFormatDiagramGantt()
+{
+    injectDiagramBlock(
+        QString{
+            "gantt\n"
+            "        dateFormat  YYYY-MM-DD\n"
+            "        title GANTT diagram\n"
+            "        section A section\n"
+            "        Completed task            :done,    des1, 2014-01-06,2014-01-08\n"
+            "        Active task               :active,  des2, 2014-01-09, 3d\n"
+            "        Future task               :         des3, after des2, 5d\n"
+            "        section Critical tasks\n"
+            "        Completed task in the critical line :crit, done, 2014-01-06,24h\n"
+            "        Create tests for parser             :crit, active, 3d\n"
+            "        Future task in critical line        :crit, 5d\n"
+            "        Add to mermaid                      :1d"
+        }
+    );
+}
+
+void MainWindowPresenter::doActionFormatDiagramState()
+{
+    injectDiagramBlock(QString{"stateDiagram    \ns1"});
+}
+
+void MainWindowPresenter::doActionFormatDiagramSequence()
+{
+    injectDiagramBlock(
+         QString{
+            "sequenceDiagram\n"
+            "    participant John\n"
+            "    participant Alice\n"
+            "    Alice->>John: Hello John, how are you?\n"
+            "    John-->>Alice: Great!"
+         }
+    );
+}
+
 void MainWindowPresenter::doActionFormatBlockquote()
 {
     rowsAndDepthDialog->setPurpose(RowsAndDepthDialog::Purpose::BLOCKQUOTE);
@@ -1362,6 +1517,7 @@ void MainWindowPresenter::doActionFormatBlockquote()
 void MainWindowPresenter::doActionFormatTable()
 {
     // IMPROVE ask for number of items using dialog
+    // IMPROVE left/right alignment options
     int count=3;
     QString text{"\n . | . | .\n --- | --- | ---\n"};
     for(int i=1; i<=count; i++) {
@@ -1413,7 +1569,7 @@ void MainWindowPresenter::doActionFormatLink()
     doActionFormatLink(QString{});
 }
 
-void MainWindowPresenter::insertMarkdownText(const QString& text, bool newline, int offset)
+void MainWindowPresenter::injectMarkdownText(const QString& text, bool newline, int offset)
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
         orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, newline, offset);
@@ -1440,26 +1596,47 @@ void MainWindowPresenter::copyLinkOrImageToRepository(const string& srcPath, QSt
         pathPrefix.append(".");
 
         string d{}, f{};
+#if defined(_WIN32)
+        QString src{srcPath.c_str()};
+        pathToDirectoryAndFile(src.replace("/", "\\").toStdString(), d, f);
+        QString pathSuffix{QString::fromStdString(f)};
+        path = pathPrefix.replace("/", "\\") + pathSuffix;
+#else
         pathToDirectoryAndFile(srcPath, d, f);
         QString pathSuffix{QString::fromStdString(f)};
 
         path = pathPrefix + pathSuffix;
+#endif
+
         while(isDirectoryOrFileExists(path.toStdString().c_str())) {
             pathSuffix.prepend("_");
             path = pathPrefix + pathSuffix;
         }
+#if defined(_WIN32)
+        MF_DEBUG("Copying: " << src.toStdString() << " > " << path.toStdString() << endl);
+        copyFile(src.toStdString(), path.toStdString());
+#else
         copyFile(srcPath, path.toStdString());
+#endif
 
         d.clear();
         f.clear();
         pathToDirectoryAndFile(path.toStdString(), d, f);
         path = QString::fromStdString(f);
+
+        statusBar->showInfo(tr("File copied to repository path '%1'").arg(path.toStdString().c_str()));
     } else {
         // fallback: create link, but don't copy
         path = insertLinkDialog->getPathText();
         statusBar->showInfo(tr("Given path '%1' doesn't exist - target will not be copied, but link will be created").arg(path.toStdString().c_str()));
     }
 }
+
+void MainWindowPresenter::statusInfoPreviewFlickering()
+{
+    statusBar->showInfo(QString(tr("HTML Note preview flickering can be eliminated by disabling math and diagrams in Preferences menu")));
+}
+
 
 /*
  * See InsertLinkDialog for link creation hints
@@ -2195,9 +2372,13 @@ void MainWindowPresenter::handleMindPreferences()
 
     view.getToolBar()->setVisible(config.isUiShowToolbar());
     view.getOrloj()->getNoteView()->setZoomFactor(config.getUiHtmlZoomFactor());
-    view.getOrloj()->getNoteView()->getEditPanel()->setVisible(!config.isUiExpertMode());
     view.getOrloj()->getOutlineHeaderView()->setZoomFactor(config.getUiHtmlZoomFactor());
+
+    view.getOrloj()->getNoteView()->getButtonsPanel()->setExpertMode(config.isUiExpertMode());
+    view.getOrloj()->getNoteView()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
+    view.getOrloj()->getOutlineHeaderView()->getEditPanel()->setExpertMode(config.isUiExpertMode());
     view.getOrloj()->getOutlineHeaderView()->getEditPanel()->setVisible(!config.isUiExpertMode());
+
     view.getOrloj()->getNoteEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
     view.getOrloj()->getOutlineHeaderEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
 }
@@ -2217,12 +2398,17 @@ void MainWindowPresenter::doActionHelpMarkdown()
     QDesktopServices::openUrl(QUrl{"https://guides.github.com/features/mastering-markdown/"});
 }
 
-void MainWindowPresenter::doActionHelpMathJaxLivePreview()
+void MainWindowPresenter::doActionHelpDiagrams()
+{
+    QDesktopServices::openUrl(QUrl{"https://mermaid-js.github.io/mermaid/#/"});
+}
+
+void MainWindowPresenter::doActionHelpMathLivePreview()
 {
     QDesktopServices::openUrl(QUrl{"https://www.mathjax.org/#demo"});
 }
 
-void MainWindowPresenter::doActionHelpMathJaxQuickReference()
+void MainWindowPresenter::doActionHelpMathQuickReference()
 {
     QDesktopServices::openUrl(QUrl{"https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference"});
 }

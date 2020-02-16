@@ -29,6 +29,7 @@ namespace m8r {
 
 using namespace std;
 
+// non-primitive constants initializations
 const string Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH = string{FILE_PATH_M8R_REPOSITORY};
 const string Configuration::DEFAULT_STARTUP_VIEW_NAME = string{DEFAULT_STARTUP_VIEW};
 const string Configuration::DEFAULT_UI_THEME_NAME = string{UI_DEFAULT_THEME};
@@ -51,6 +52,22 @@ Configuration::Configuration()
       uiNerdTargetAudience{},
       uiHtmlZoom{},
       uiFontPointSize{},
+      uiShowBreadcrump{},
+      uiViewerShowMetadata{},
+      uiEditorTabWidth{},
+      uiEditorLineNumbers{},
+      uiEditorSyntaxHighlighting{},
+      uiEditorAutocomplete{},
+      navigatorMaxNodes{},
+      uiEditorTabsAsSpaces{},
+      uiEditorAutosave{},
+      uiShowToolbar{},
+      uiExpertMode{},
+      uiDistractionFreeMode{},
+      uiHoistedMode{},
+      uiLiveNotePreview{DEFAULT_UI_LIVE_NOTE_PREVIEW},
+      uiOsTableSortColumn{DEFAULT_OS_TABLE_SORT_COLUMN},
+      uiOsTableSortOrder{DEFAULT_OS_TABLE_SORT_ORDER},
       installer(new Installer{})
 {
     char* home;
@@ -158,6 +175,9 @@ void Configuration::clear()
     uiExpertMode = DEFAULT_UI_EXPERT_MODE;
     uiDistractionFreeMode = false;
     uiHoistedMode = false;
+    uiLiveNotePreview = DEFAULT_UI_LIVE_NOTE_PREVIEW;
+    uiOsTableSortColumn = DEFAULT_OS_TABLE_SORT_COLUMN;
+    uiOsTableSortOrder = DEFAULT_OS_TABLE_SORT_ORDER;
 }
 
 Repository* Configuration::addRepository(Repository* repository)

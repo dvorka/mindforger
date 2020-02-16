@@ -1,3 +1,8 @@
+2020-02-16  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v1.51.0 - Live HTML preview, (partially) fixed Mermed diagrams,
+      persistent Os table listing and various minor improvements and bug fixes.
+
 2020-01-18  Martin Dvorak  <martin.dvorak@mindforger.com>
 
    * Released v1.50.0 - New dashboard view; complete fulltext search rewamp;

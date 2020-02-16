@@ -39,7 +39,7 @@ OutlineHeaderViewerView::OutlineHeaderViewerView(QWidget *parent)
 #endif
 
     // zoom
-    setZoomFactor(Configuration::getInstance().getUiHtmlZoomFactor());
+    setZoomFactor(static_cast<qreal>(Configuration::getInstance().getUiHtmlZoomFactor()));
 }
 
 #ifdef MF_QT_WEB_ENGINE
@@ -90,7 +90,7 @@ void OutlineHeaderViewerView::wheelEvent(QWheelEvent* event)
             } else {
                 Configuration::getInstance().decUiHtmlZoom();
             }
-            setZoomFactor(Configuration::getInstance().getUiHtmlZoomFactor());
+            setZoomFactor(static_cast<qreal>(Configuration::getInstance().getUiHtmlZoomFactor()));
             event->accept();
             return;
         }

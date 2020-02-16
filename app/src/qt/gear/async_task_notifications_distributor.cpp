@@ -28,26 +28,22 @@ AsyncTaskNotificationsDistributor::AsyncTaskNotificationsDistributor(MainWindowP
     sleepInterval = Configuration::getInstance().getDistributorSleepInterval();
 
     QObject::connect(
-        this,
-        SIGNAL(statusBarShowStatistics()),
-        mwp->getStatusBar(),
-        SLOT(slotShowStatistics()));
+        this, SIGNAL(statusBarShowStatistics()),
+        mwp->getStatusBar(), SLOT(slotShowStatistics()));
     QObject::connect(
-        this,
-        SIGNAL(showStatusBarInfo(QString)),
-        mwp->getStatusBar(),
-        SLOT(slotShowInfo(QString)));
+        this, SIGNAL(showStatusBarInfo(QString)),
+        mwp->getStatusBar(), SLOT(slotShowInfo(QString)));
 
     QObject::connect(
-        this,
-        SIGNAL(refreshHeaderLeaderboardByValue(AssociatedNotes*)),
-        mwp->getOrloj()->getOutlineHeaderView(),
-        SLOT(slotRefreshHeaderLeaderboardByValue(AssociatedNotes*)));
+        this, SIGNAL(refreshHeaderLeaderboardByValue(AssociatedNotes*)),
+        mwp->getOrloj()->getOutlineHeaderView(), SLOT(slotRefreshHeaderLeaderboardByValue(AssociatedNotes*)));
     QObject::connect(
-        this,
-        SIGNAL(refreshLeaderboardByValue(AssociatedNotes*)),
-        mwp->getOrloj()->getNoteView(),
-        SLOT(slotRefreshLeaderboardByValue(AssociatedNotes*)));
+        this, SIGNAL(refreshLeaderboardByValue(AssociatedNotes*)),
+        mwp->getOrloj()->getNoteView(), SLOT(slotRefreshLeaderboardByValue(AssociatedNotes*)));
+
+    QObject::connect(
+        this, SIGNAL(signalRefreshCurrentNotePreview()),
+        mwp->getOrloj(), SLOT(slotRefreshCurrentNotePreview()));
 }
 
 AsyncTaskNotificationsDistributor::~AsyncTaskNotificationsDistributor()
@@ -58,22 +54,48 @@ AsyncTaskNotificationsDistributor::~AsyncTaskNotificationsDistributor()
     tasks.clear();
 }
 
+// TODO refactor this function to multiple methods to make it more structured
 void AsyncTaskNotificationsDistributor::run()
 {
     // avoid re-calculation of TayW word learderboards if it's not needed
     QString lastTayWords{};
     Outline* lastTayWOutline{};
     Note* lastTayWNote{};
+    // avoid live preview flickering w/ longer refresh interval
+    long long livePreviewMultiplier{0};
 
     while(true) {
-        msleep(sleepInterval);
-        //MF_DEBUG("AsyncDistributor: wake up w/ associations need " << (int)mwp->getMind()->needForAssociations() << endl);
+        msleep(static_cast<unsigned long>(sleepInterval));
+
+        // live preview refresh
+        if((++livePreviewMultiplier)%3==0
+             &&
+           (mwp->getOrloj()->getNoteEdit()->getHitCounter() || mwp->getOrloj()->getOutlineHeaderEdit()->getHitCounter())
+             &&
+           mwp->getOrloj()->isAspectActive(OrlojPresenterFacetAspect::ASPECT_LIVE_PREVIEW))
+        {
+            MF_DEBUG("Task distributor: refresh O or N preview");
+            emit signalRefreshCurrentNotePreview();
+
+            // hit counter can be cleared, because associations are not visible if live preview is active
+            mwp->getOrloj()->getOutlineHeaderEdit()->clearHitCounter();
+            mwp->getOrloj()->getNoteEdit()->clearHitCounter();
+        }
+
+#ifdef MF_DEBUG_ASYNC_TASKS
+        MF_DEBUG("AsyncDistributor[" << datetimeNow() << "]: wake up w/ associations need " << (int)mwp->getMind()->needForAssociations() << endl);
+#endif
         if(mwp->getMind()->needForAssociations()
              ||
-           mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
-             ||
-           mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER))
+           (!Configuration::getInstance().isUiLiveNotePreview()
+              &&
+            (mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+              ||
+             mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER))))
         {
+#ifdef MF_DEBUG_ASYNC_TASKS
+            MF_DEBUG("AsyncDistributor: calculating associations..." << Configuration::getInstance().isUiLiveNotePreview() << endl);
+#endif
             mwp->getMind()->meditateAssociations();
 
             /*

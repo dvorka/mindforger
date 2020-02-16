@@ -128,6 +128,13 @@ void NoteEditorView::slotConfigurationUpdated()
 
 void NoteEditorView::dropEvent(QDropEvent* event)
 {
+#if defined(__APPLE__) || defined(_WIN32)
+    if(event->mimeData()->text().size())
+    {
+        MF_DEBUG("D&D drop event: '" << event->mimeData()->text().toStdString() << "'" << endl);
+        signalDnDropUrl(event->mimeData()->text().replace("file:///",""));
+    }
+#else
     if(event->mimeData()->hasUrls()
          &&
        event->mimeData()->hasFormat("text/plain")
@@ -137,6 +144,7 @@ void NoteEditorView::dropEvent(QDropEvent* event)
         MF_DEBUG("D&D drop: '" << event->mimeData()->urls().first().url().trimmed().toStdString() << "'" << endl);
         signalDnDropUrl(event->mimeData()->urls().first().url().replace("file://",""));
     }
+#endif
 
     event->acceptProposedAction();
 }

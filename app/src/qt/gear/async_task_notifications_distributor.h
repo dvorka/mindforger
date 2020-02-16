@@ -43,9 +43,9 @@ class MainWindowPresenter;
  * Distributor is started from MainWindowPresenter where all MVP components are easily
  * accessible.
  *
- * Summary: distributor gets or pulls tasks, executes them (in its own thread i.e. it doesn't
- * black Qt main thread) and notifies result using signals to Qt frontend (which ensures
- * asynchronous dispatch).
+ * Summary: distributor gets or pulls tasks, executes them (in its own thread i.e. it
+ * doesn't block Qt main thread) and notifies result using signals to Qt frontend (which
+ * ensures asynchronous dispatch).
  */
 class AsyncTaskNotificationsDistributor : public QThread
 {
@@ -55,7 +55,7 @@ public:
 
     enum TaskType {
         DREAM_TO_THINK
-        // IMPROVE ,NOTE_ASSOCIATIONS
+        // IMPROVE NOTE_ASSOCIATIONS
     };
 
     /**
@@ -118,6 +118,7 @@ signals:
     void showStatusBarInfo(QString msg);
     void refreshHeaderLeaderboardByValue(AssociatedNotes* associations);
     void refreshLeaderboardByValue(AssociatedNotes* associations);
+    void signalRefreshCurrentNotePreview();
 
 public slots:
 

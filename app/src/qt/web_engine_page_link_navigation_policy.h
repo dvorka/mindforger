@@ -36,7 +36,7 @@ class WebEnginePageLinkNavigationPolicy : public QWebEnginePage
     Q_OBJECT
 
 public:
-    explicit WebEnginePageLinkNavigationPolicy(QObject* parent = 0);
+    explicit WebEnginePageLinkNavigationPolicy(QObject* parent = nullptr);
     WebEnginePageLinkNavigationPolicy(const WebEnginePageLinkNavigationPolicy&) = delete;
     WebEnginePageLinkNavigationPolicy(const WebEnginePageLinkNavigationPolicy&&) = delete;
     WebEnginePageLinkNavigationPolicy &operator=(const WebEnginePageLinkNavigationPolicy&) = delete;
@@ -45,14 +45,12 @@ public:
 
     bool acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool isMainFrame)
     {
-#ifdef DO_MF_DEBUG
-        MF_DEBUG("acceptNavigationRequest(" << url.toString().toStdString() << "," << type << "," << isMainFrame << ")" << std::endl);
-#else
+        //MF_DEBUG("acceptNavigationRequest(" << url.toString().toStdString() << "," << type << "," << isMainFrame << ")" << std::endl);
         UNUSED_ARG(type);
         UNUSED_ARG(isMainFrame);
-#endif
 
         if(type == QWebEnginePage::NavigationTypeLinkClicked) {
+            MF_DEBUG("acceptNavigationRequest() link CLICKED" << std::endl);
             emit signalLinkClicked(url);
             return false;
         } else {

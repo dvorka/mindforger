@@ -48,7 +48,7 @@
         <file alias="tag.svg">resources/menu-icons/light_tag.svg</file>
         <file alias="bug.svg">resources/menu-icons/light_tools-report-bug.svg</file>
         <file alias="fullscreen.svg">resources/menu-icons/light_view-fullscreen.svg</file>
-        <file alias="image.svg">resources/menu-icons/light_view-preview.svg</file>
+        <file alias="preview.svg">resources/menu-icons/light_view-preview.svg</file>
         <file alias="refresh.svg">resources/menu-icons/light_view-refresh.svg</file>
         <file alias="link.svg">resources/menu-icons/light_link.svg</file>
         <file alias="cut.svg">resources/menu-icons/light_edit-cut.svg</file>

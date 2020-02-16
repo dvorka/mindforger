@@ -195,7 +195,7 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     diagramSupportLabel = new QLabel(tr("Diagram support")+":", this),
     diagramSupportCombo = new QComboBox{this};
     diagramSupportCombo->addItem(QString{"disable"});
-    diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
+    // TODO: to be stabilized diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
     diagramSupportCombo->addItem(QString{"online JavaScript lib"});
 
     // assembly

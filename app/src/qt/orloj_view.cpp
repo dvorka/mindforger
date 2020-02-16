@@ -127,12 +127,17 @@ void OrlojView::showFacetRecentNotes()
 
 void OrlojView::showFacetOutlineHeaderView()
 {
+    if(!outlineHeaderView->getEditPanel()->isExpertMode()) {
+        outlineHeaderView->getEditPanel()->setVisible(true);
+    }
+
     if(menuView->actionViewHoist->isChecked()) {
         showFacetHoistedOutlineHeaderView();
     } else {
         QSet<QWidget*> v; v << outlineView << outlineHeaderView;
         hideChildren(v);
         outlineView->getOutlineTree()->clearSelection();
+        outlineView->getOutlineTree()->setFocus();
     }
 }
 
@@ -141,14 +146,24 @@ void OrlojView::showFacetOutlineHeaderEdit()
     if(menuView->actionViewHoist->isChecked()) {
         showFacetHoistedOutlineHeaderEdit();
     } else {
-        QSet<QWidget*> v; v << outlineView << outlineHeaderEdit;
-        hideChildren(v);
+        if(menuView->actionEditLiveNotePreview->isChecked()) {
+            outlineHeaderView->getEditPanel()->setVisible(false);
+            QSet<QWidget*> v; v << outlineHeaderView << outlineHeaderEdit;
+            hideChildren(v);
+        } else {
+            QSet<QWidget*> v; v << outlineView << outlineHeaderEdit;
+            hideChildren(v);
+        }
         outlineHeaderEdit->giveEditorFocus();
     }
 }
 
 void OrlojView::showFacetNoteView()
 {
+    if(!noteView->getButtonsPanel()->isExpertMode()) {
+        noteView->getButtonsPanel()->setVisible(true);
+    }
+
     if(menuView->actionViewHoist->isChecked()) {
         showFacetHoistedNoteView();
     } else {
@@ -163,8 +178,15 @@ void OrlojView::showFacetNoteEdit()
     if(menuView->actionViewHoist->isChecked()) {
         showFacetHoistedNoteEdit();
     } else {
-        QSet<QWidget*> v; v << outlineView << noteEdit;
-        hideChildren(v);
+        if(menuView->actionEditLiveNotePreview->isChecked()) {
+            noteView->getButtonsPanel()->setVisible(false);
+            QSet<QWidget*> v; v << noteView << noteEdit;
+            hideChildren(v);
+        } else {
+            QSet<QWidget*> v; v << outlineView << noteEdit;
+            hideChildren(v);
+        }
+
         noteEdit->giveEditorFocus();
     }
 }

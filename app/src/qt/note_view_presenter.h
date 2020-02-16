@@ -27,6 +27,10 @@
 #include "note_view.h"
 #include "note_view_model.h"
 
+#if not defined(__APPLE__) && not defined(_WIN32)
+#include <QWebFrame>
+#endif
+
 namespace m8r {
 
 class OrlojPresenter;
@@ -68,6 +72,7 @@ public:
     NoteView* getView() const { return view; }
     Note* getCurrentNote() { return currentNote; }
 
+    void refreshCurrent();
     void refresh(Note* note);
 
     void clearSearchExpression() { searchExpression.clear(); }
