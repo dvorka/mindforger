@@ -87,7 +87,11 @@ void NewFileDialog::show()
     fileNameEdit->setText(tr("name"));
     fileNameEdit->selectAll();
     fileNameEdit->setFocus();
+#if defined(_WIN32)
+    dirEdit->setText(homeDirectory.replace("/", "\\"));
+#else
     dirEdit->setText(homeDirectory);
+#endif
 
     refreshPath();
 
@@ -101,6 +105,9 @@ void NewFileDialog::refreshPath()
     if(directory.isEmpty()) {
         directory = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
     }
+#if defined(_WIN32)
+    directory = directory.replace("/", "\\");
+#endif
     if(!directory.endsWith(FILE_PATH_SEPARATOR)) {
         directory.append(FILE_PATH_SEPARATOR);
     }
@@ -132,7 +139,11 @@ void NewFileDialog::handleFindDirectory()
     if(fileDialog.exec()) {
         fileNames = fileDialog.selectedFiles();
         if(fileNames.size()==1) {
+#if defined(_WIN32)
+            dirEdit->setText(fileNames[0].replace("/", "\\"));
+#else
             dirEdit->setText(fileNames[0]);
+#endif
         } // else too many files
     } // else directory closed / nothing choosen
 }
