@@ -562,6 +562,10 @@ void MainWindowPresenter::doActionToggleLiveNotePreview()
 
     // view
     orloj->refreshLiveNotePreview();
+
+    if(config.isUiLiveNotePreview()) {
+        statusInfoPreviewFlickering();
+    }
 }
 
 void MainWindowPresenter::doActionMindLearnRepository()
@@ -1612,6 +1616,12 @@ void MainWindowPresenter::copyLinkOrImageToRepository(const string& srcPath, QSt
         statusBar->showInfo(tr("Given path '%1' doesn't exist - target will not be copied, but link will be created").arg(path.toStdString().c_str()));
     }
 }
+
+void MainWindowPresenter::statusInfoPreviewFlickering()
+{
+    statusBar->showInfo(QString(tr("HTML Note preview flickering can be eliminated by disabling math and diagrams in Preferences menu")));
+}
+
 
 /*
  * See InsertLinkDialog for link creation hints

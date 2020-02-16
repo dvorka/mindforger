@@ -328,6 +328,8 @@ private:
     void injectMarkdownText(const QString& text, bool newline=false, int offset=0);
     void injectDiagramBlock(const QString& diagramText);
     void copyLinkOrImageToRepository(const std::string& srcPath, QString& path);
+
+    void statusInfoPreviewFlickering();
 };
 
 }
