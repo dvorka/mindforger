@@ -137,6 +137,7 @@ void OrlojView::showFacetOutlineHeaderView()
         QSet<QWidget*> v; v << outlineView << outlineHeaderView;
         hideChildren(v);
         outlineView->getOutlineTree()->clearSelection();
+        outlineView->getOutlineTree()->setFocus();
     }
 }
 
