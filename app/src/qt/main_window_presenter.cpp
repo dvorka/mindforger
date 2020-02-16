@@ -1596,20 +1596,35 @@ void MainWindowPresenter::copyLinkOrImageToRepository(const string& srcPath, QSt
         pathPrefix.append(".");
 
         string d{}, f{};
+#if defined(_WIN32)
+        QString src{srcPath.c_str()};
+        pathToDirectoryAndFile(src.replace("/", "\\").toStdString(), d, f);
+        QString pathSuffix{QString::fromStdString(f)};
+        path = pathPrefix.replace("/", "\\") + pathSuffix;
+#else
         pathToDirectoryAndFile(srcPath, d, f);
         QString pathSuffix{QString::fromStdString(f)};
 
         path = pathPrefix + pathSuffix;
+#endif
+
         while(isDirectoryOrFileExists(path.toStdString().c_str())) {
             pathSuffix.prepend("_");
             path = pathPrefix + pathSuffix;
         }
+#if defined(_WIN32)
+        MF_DEBUG("Copying: " << src.toStdString() << " > " << path.toStdString() << endl);
+        copyFile(src.toStdString(), path.toStdString());
+#else
         copyFile(srcPath, path.toStdString());
+#endif
 
         d.clear();
         f.clear();
         pathToDirectoryAndFile(path.toStdString(), d, f);
         path = QString::fromStdString(f);
+
+        statusBar->showInfo(tr("File copied to repository path '%1'").arg(path.toStdString().c_str()));
     } else {
         // fallback: create link, but don't copy
         path = insertLinkDialog->getPathText();
