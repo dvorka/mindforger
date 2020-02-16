@@ -53,7 +53,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
      * and widgets - it can show/hide what's needed and then pass control to children.
      */
 
-    // hit enter in Outlines to view Outline detail
+    // hit enter in Os to view O detail
     QObject::connect(
         view->getOutlinesTable(),
         SIGNAL(signalShowSelectedOutline()),
@@ -824,12 +824,13 @@ void OrlojPresenter::slotRefreshCurrentNotePreview() {
 }
 
 void OrlojPresenter::slotOutlinesTableSorted(int column) {
-    Qt::SortOrder descending
+    Qt::SortOrder order
         = view->getOutlinesTable()->horizontalHeader()->sortIndicatorOrder();
-    MF_DEBUG("Os table sorted: " << column << " descending: " << descending << endl);
+    MF_DEBUG("Os table sorted: " << column << " descending: " << order << endl);
 
-    // TODO store column and asc/desc to configuration
-    // TODO on Os table show/load use col and asc/desc to sort the column (OutlinesTablePresenter::refresh)
+    config.setUiOsTableSortColumn(column);
+    config.setUiOsTableSortOrder(order==Qt::SortOrder::AscendingOrder?true:false);
+    mainPresenter->getConfigRepresentation()->save(config);
 }
 
 } // m8r namespace

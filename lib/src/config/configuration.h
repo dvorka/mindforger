@@ -180,7 +180,7 @@ public:
     static constexpr const bool DEFAULT_MD_MATH = false;
     static constexpr const bool DEFAULT_ALLOW_ONLINE_JS_LIBS = false;
     static constexpr const bool DEFAULT_NAVIGATOR_SHOW_LEGEND = false;
-    static constexpr const int DEFAULT_OS_TABLE_SORT_COLUMN = 5;
+    static constexpr const int DEFAULT_OS_TABLE_SORT_COLUMN = 7;
     static constexpr const bool DEFAULT_OS_TABLE_SORT_ORDER = false;
 
     static constexpr int EDITOR_MAX_AUTOCOMPLETE_LINES = 1000;

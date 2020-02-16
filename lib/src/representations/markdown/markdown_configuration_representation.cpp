@@ -193,7 +193,7 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         int i;
                         try {
                           i = std::stoi (t,&st);
-                          if(i<0 || i>5) {
+                          if(i<0 || i>Configuration::DEFAULT_OS_TABLE_SORT_COLUMN) {
                               i=Configuration::DEFAULT_OS_TABLE_SORT_COLUMN;
                           }
                         }
@@ -458,8 +458,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Show notebook/note HTML preview as you write Markdown." << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_OS_TABLE_SORT_COL_LABEL << (c?c->getUiOsTableSortColumn():Configuration::DEFAULT_OS_TABLE_SORT_COLUMN) << endl <<
-         "    * Column (index) to be used for Notebooks table sorting - value between 0 and 5." << endl <<
-         "    * Examples: 0, 5" << endl <<
+         "    * Column (index) to be used for Notebooks table sorting - value between 0 and " << Configuration::DEFAULT_OS_TABLE_SORT_COLUMN << "." << endl <<
+         "    * Examples: 0, 5, 7" << endl <<
          CONFIG_SETTING_UI_OS_TABLE_SORT_ORDER_LABEL << (c?(c->isUiOsTableSortOrder()?"ascending":"descending"):(Configuration::DEFAULT_OS_TABLE_SORT_ORDER?"ascending":"descending")) << endl <<
          "    * Order of Notebooks table sorting." << endl <<
          "    * Examples: ascending, descending" << endl <<
