@@ -64,7 +64,9 @@ Configuration::Configuration()
       uiExpertMode{},
       uiDistractionFreeMode{},
       uiHoistedMode{},
-      uiLiveNotePreview{true},
+      uiLiveNotePreview{DEFAULT_UI_LIVE_NOTE_PREVIEW},
+      uiOsTableSortColumn{DEFAULT_OS_TABLE_SORT_COLUMN},
+      uiOsTableSortOrder{DEFAULT_OS_TABLE_SORT_ORDER},
       installer(new Installer{})
 {
     char* home;
@@ -172,6 +174,9 @@ void Configuration::clear()
     uiExpertMode = DEFAULT_UI_EXPERT_MODE;
     uiDistractionFreeMode = false;
     uiHoistedMode = false;
+    uiLiveNotePreview = DEFAULT_UI_LIVE_NOTE_PREVIEW;
+    uiOsTableSortColumn = DEFAULT_OS_TABLE_SORT_COLUMN;
+    uiOsTableSortOrder = DEFAULT_OS_TABLE_SORT_ORDER;
 }
 
 Repository* Configuration::addRepository(Repository* repository)

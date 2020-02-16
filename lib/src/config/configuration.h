@@ -89,6 +89,9 @@ constexpr const auto UI_JS_LIB_ONLINE = "online";
 constexpr const auto UI_JS_LIB_OFFLINE = "offline";
 constexpr const auto UI_JS_LIB_NO = "no";
 
+constexpr const auto UI_OS_TABLE_SORT_ORDER_ASC = "ascending";
+constexpr const auto UI_OS_TABLE_SORT_ORDER_DESC = "descending";
+
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
 constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_FONT = "Monospace,10";
@@ -144,9 +147,9 @@ public:
         WINDOWS
     };
 
-    static constexpr int DEFAULT_ASYNC_MIND_THRESHOLD_BOW = 200;
-    static constexpr int DEFAULT_ASYNC_MIND_THRESHOLD_WEIGHTED_FTS = 10000;
-    static constexpr int DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL = 500;
+    static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_BOW = 200;
+    static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_WEIGHTED_FTS = 10000;
+    static constexpr const int DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL = 500;
 
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
     static const std::string DEFAULT_TIME_SCOPE;
@@ -164,10 +167,10 @@ public:
     static constexpr const bool DEFAULT_UI_LIVE_NOTE_PREVIEW = true;
     static constexpr const bool DEFAULT_UI_NERD_MENU = false;
     static const std::string DEFAULT_UI_HTML_CSS_THEME;
-    static const int DEFAULT_UI_HTML_ZOOM = 100;
+    static constexpr const int DEFAULT_UI_HTML_ZOOM = 100;
     static const std::string DEFAULT_EDITOR_FONT;
-    static constexpr int DEFAULT_EDITOR_TAB_WIDTH = 4;
-    static constexpr int DEFAULT_NAVIGATOR_MAX_GRAPH_NODES = 150;
+    static constexpr const int DEFAULT_EDITOR_TAB_WIDTH = 4;
+    static constexpr const int DEFAULT_NAVIGATOR_MAX_GRAPH_NODES = 150;
     static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOCOMPLETE = true;
     static constexpr const bool DEFAULT_EDITOR_TABS_AS_SPACES = true;
@@ -176,8 +179,9 @@ public:
     static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_MD_MATH = false;
     static constexpr const bool DEFAULT_ALLOW_ONLINE_JS_LIBS = false;
-
     static constexpr const bool DEFAULT_NAVIGATOR_SHOW_LEGEND = false;
+    static constexpr const int DEFAULT_OS_TABLE_SORT_COLUMN = 5;
+    static constexpr const bool DEFAULT_OS_TABLE_SORT_ORDER = false;
 
     static constexpr int EDITOR_MAX_AUTOCOMPLETE_LINES = 1000;
 
@@ -242,7 +246,8 @@ private:
     bool uiDistractionFreeMode; // fullscreen, no split, hidden toolbar + menu
     bool uiHoistedMode; // no split
     bool uiLiveNotePreview;
-    std::string uiOutlinesTableSortColumn; // one of: name-asc, modified-desc, ...
+    int uiOsTableSortColumn;
+    bool uiOsTableSortOrder; // true if ascending, else descending
 
 private:
     Installer* installer;
@@ -423,8 +428,10 @@ public:
     void setUiHoistedMode(bool hoisted){ this->uiHoistedMode = hoisted; }
     bool isUiLiveNotePreview() const { return uiLiveNotePreview; }
     void setUiLiveNotePreview(bool isPreview){ this->uiLiveNotePreview = isPreview; }
-    const std::string& getUiOutlinesTableSortColumn() const { return uiOutlinesTableSortColumn; }
-    void setUiOutlinesTableSortColumn(const std::string sortMode) { uiOutlinesTableSortColumn = sortMode; }
+    int getUiOsTableSortColumn() const { return uiOsTableSortColumn; }
+    void setUiOsTableSortColumn(const int column) { this->uiOsTableSortColumn = column; }
+    bool isUiOsTableSortOrder() const { return uiOsTableSortOrder; }
+    void setUiOsTableSortOrder(const bool ascending) { this->uiOsTableSortOrder = ascending; }
 };
 
 } // namespace

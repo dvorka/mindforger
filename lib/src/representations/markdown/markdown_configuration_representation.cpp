@@ -40,6 +40,8 @@ constexpr const auto CONFIG_SETTING_UI_HTML_ZOOM_LABEL = "* Markdown HTML zoom: 
 constexpr const auto CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL =  "* Show toolbar: ";
 constexpr const auto CONFIG_SETTING_UI_EXPERT_MODE_LABEL =  "* Hide expendable buttons: ";
 constexpr const auto CONFIG_SETTING_UI_LIVE_NOTE_PREVIEW_LABEL =  "* Live note preview: ";
+constexpr const auto CONFIG_SETTING_UI_OS_TABLE_SORT_COL_LABEL =  "* Outlines table sort column: ";
+constexpr const auto CONFIG_SETTING_UI_OS_TABLE_SORT_ORDER_LABEL =  "* Outlines table sort order: ";
 constexpr const auto CONFIG_SETTING_UI_NERD_MENU=  "* Nerd menu: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_FONT_LABEL =  "* Editor font: ";
@@ -184,6 +186,26 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                             c.setUiLiveNotePreview(true);
                         } else {
                             c.setUiLiveNotePreview(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_OS_TABLE_SORT_COL_LABEL) != std::string::npos) {
+                        string t = line->substr(strlen(CONFIG_SETTING_UI_OS_TABLE_SORT_COL_LABEL));
+                        std::string::size_type st;
+                        int i;
+                        try {
+                          i = std::stoi (t,&st);
+                          if(i<0 || i>5) {
+                              i=Configuration::DEFAULT_OS_TABLE_SORT_COLUMN;
+                          }
+                        }
+                        catch(...) {
+                          i = Configuration::DEFAULT_OS_TABLE_SORT_COLUMN;
+                        }
+                        c.setUiOsTableSortColumn(i);
+                    } else if(line->find(CONFIG_SETTING_UI_OS_TABLE_SORT_ORDER_LABEL) != std::string::npos) {
+                        if(line->find(UI_OS_TABLE_SORT_ORDER_ASC) != std::string::npos) {
+                            c.setUiOsTableSortOrder(true);
+                        } else {
+                            c.setUiOsTableSortOrder(false);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_NERD_MENU) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
@@ -435,6 +457,12 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_UI_LIVE_NOTE_PREVIEW_LABEL << (c?(c->isUiLiveNotePreview()?"yes":"no"):(Configuration::DEFAULT_UI_LIVE_NOTE_PREVIEW?"yes":"no")) << endl <<
          "    * Show notebook/note HTML preview as you write Markdown." << endl <<
          "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_OS_TABLE_SORT_COL_LABEL << (c?c->getUiOsTableSortColumn():Configuration::DEFAULT_OS_TABLE_SORT_COLUMN) << endl <<
+         "    * Column (index) to be used for Notebooks table sorting - value between 0 and 5." << endl <<
+         "    * Examples: 0, 5" << endl <<
+         CONFIG_SETTING_UI_OS_TABLE_SORT_ORDER_LABEL << (c?(c->isUiOsTableSortOrder()?"ascending":"descending"):(Configuration::DEFAULT_OS_TABLE_SORT_ORDER?"ascending":"descending")) << endl <<
+         "    * Order of Notebooks table sorting." << endl <<
+         "    * Examples: ascending, descending" << endl <<
          CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL<< (c?(c->isUiShowToolbar()?"yes":"no"):(Configuration::DEFAULT_UI_SHOW_TOOLBAR?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_NERD_MENU << (c?(c->isUiNerdTargetAudience()?"yes":"no"):(Configuration::DEFAULT_UI_NERD_MENU?"yes":"no")) << endl <<
