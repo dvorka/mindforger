@@ -566,8 +566,8 @@ void NoteEditorView::lineNumberPanelPaintEvent(QPaintEvent* event)
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
-    int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
-    int bottom = top + (int) blockBoundingRect(block).height();
+    int top = static_cast<int>(blockBoundingGeometry(block).translated(contentOffset()).top());
+    int bottom = top + static_cast<int>(blockBoundingRect(block).height());
 
     int currentLine = textCursor().blockNumber();
     while(block.isValid() && top <= event->rect().bottom()) {
@@ -583,7 +583,7 @@ void NoteEditorView::lineNumberPanelPaintEvent(QPaintEvent* event)
 
         block = block.next();
         top = bottom;
-        bottom = top + (int)blockBoundingRect(block).height();
+        bottom = top + static_cast<int>(blockBoundingRect(block).height());
         ++blockNumber;
     }
 }

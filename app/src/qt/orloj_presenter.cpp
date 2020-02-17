@@ -817,8 +817,14 @@ void OrlojPresenter::slotRefreshCurrentNotePreview() {
     if(!config.isUiHoistedMode()) {
         if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
             noteViewPresenter->refreshCurrent();
+#if defined(__APPLE__) || defined(_WIN32)
+            getNoteEdit()->getView()->getNoteEditor()->setFocus();
+#endif
         } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
             outlineHeaderViewPresenter->refreshCurrent();
+#if defined(__APPLE__) || defined(_WIN32)
+            getOutlineHeaderEdit()->getView()->getHeaderEditor()->setFocus();
+#endif
         }
     }
 }
