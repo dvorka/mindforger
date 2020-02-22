@@ -31,6 +31,7 @@
 #ifdef MF_MD_2_HTML_CMARK
 #include <cmark-gfm.h>
 
+#include "../../../src/gear/file_utils.h"
 #include "../../../src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h"
 
 using namespace std;
@@ -452,5 +453,41 @@ TEST(AutolinkingCmarkTestCase, BasicRepo)
     cout << "= BEGIN AUTO MD =" << endl << autolinkedMd << endl << "= END AUTO MD =" << endl;
 }
 
+/**
+ * @brief Unit test which autolinks copy of production MF repository
+ *
+ * Autolinking is performed if MF repo exists in predefined location.
+ */
+TEST(AutolinkingCmarkTestCase, Monster)
+{
+    string repositoryPath{"/tmp/mindforger-unit-test/monster-repository"};
+    if(m8r::isDirectoryOrFileExists(repositoryPath.c_str())) {
+        m8r::Configuration& config = m8r::Configuration::getInstance();
+        config.clear();
+        config.setConfigFilePath("/tmp/cfg-act-monster.md");
+        config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+        m8r::Mind mind(config);
+        mind.learn();
+        mind.think().get();
+        cout << endl << "Statistics:";
+        cout << endl << "  Outlines: " << mind.remind().getOutlinesCount();
+        cout << endl << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize();
+        ASSERT_LE(370, mind.remind().getOutlinesCount());
+        m8r::CmarkAhoCorasickBlockAutolinkingPreprocessor autolinker{mind};
+
+        cout << endl << endl << "Testing MONSTER autolinking:" << endl;
+        for(m8r::Outline*const& o:mind.remind().getOutlines()) {
+            for(m8r::Note*const& n:o->getNotes()) {
+                cout << "  " << n->getName() << endl;
+                string autolinkedMd{};
+                autolinker.process(n->getDescription(), autolinkedMd);
+                cout << "    DONE: " << autolinkedMd.size() << endl;
+            }
+        }
+    } else {
+        cout << "Skipping MONSTER autolinking: MF repository doesn't exist" << repositoryPath << endl;
+    }
+}
+
 #endif // MF_MD_2_HTML_CMARK
-#endif // WINDOWS
+#endif // !WINDOWS
