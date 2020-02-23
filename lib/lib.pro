@@ -69,6 +69,11 @@ win32{
     } else:!mfnocxx {
       QMAKE_CXX = ccache g++
     }
+
+    mfdebug|mfunits {
+      # debug info
+      QMAKE_CXXFLAGS += -g
+    }
     QMAKE_CXXFLAGS += -pedantic -std=c++11
 }
 

@@ -17,9 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
+export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
-#export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
+export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
 #export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
 
 # benchmarks
@@ -29,7 +29,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
 # tests
-export OPTION_TEST="AutolinkingCmarkTestCase.Monster"
+#export OPTION_TEST="AutolinkingCmarkTestCase.Monster"
 #export OPTION_TEST="AutolinkingCmarkTestCase.*"
 #export OPTION_TEST="AutolinkingCmarkTestCase.CmarkAstRowWalker"
 #export OPTION_TEST="AutolinkingCmarkTestCase.CmarkAstBlockTransformer"
@@ -128,8 +128,8 @@ then
     then
 	export M8R_VALGRIND="valgrind --vgdb=yes --vgdb-error=0 --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
     else
-	export M8R_VALGRIND="valgrind --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
-	#export M8R_VALGRIND="valgrind -v --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
+	#export M8R_VALGRIND="valgrind --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
+	export M8R_VALGRIND="valgrind -v --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
     fi
 else
     export M8R_VALGRIND=    
