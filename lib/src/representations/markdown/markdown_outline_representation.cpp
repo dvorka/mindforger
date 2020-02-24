@@ -492,7 +492,9 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
         md->append("\n");
     }
 
+    MF_DEBUG("BEFORE: " << md << endl);
     toDescription(note, md, autolinking);
+    MF_DEBUG("AFTER: " << md << endl);
 
     return md;
 }
@@ -500,7 +502,12 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
 string* MarkdownOutlineRepresentation::toDescription(const Note* note, string* md, bool autolinking)
 {
     if(descriptionInterceptor && autolinking) {
-        descriptionInterceptor->process(note->getDescription(), *md);
+        string amd{};
+        amd.reserve(1000);
+        descriptionInterceptor->process(note->getDescription(), amd);
+        if(md) {
+            md->append(amd);
+        }
     } else {
         toString(note->getDescription(), *md);
     }
