@@ -202,7 +202,9 @@ void Memory::remember(const std::string& outlineKey)
         o->checkAndFixProperties();
         persistence->save(o);
     } else {
-        throw MindForgerException{"Save: unable to find outline w/ given key"};
+        throw MindForgerException{
+            "Save: unable to find outline w/ given key (" + outlineKey + ") to save"
+        };
     }
 }
 

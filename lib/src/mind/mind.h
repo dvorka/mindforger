@@ -330,6 +330,21 @@ public:
     Memory& remind() { return memory; }
 
     /**
+     * @brief Remember new Outline and update mind (indices if needed).
+     */
+    void remember(Outline* outline);
+
+    /**
+     * @brief Remember existing Outline and update mind (indices if needed).
+     */
+    void remember(const std::string& outlineKey);
+
+    /**
+     * @brief Forget Outline and update mind (indices if needed).
+     */
+    void forget(Outline* outline);
+
+    /**
      * @brief Get ontology.
      */
     Ontology& getOntology() { return ontology; }

@@ -1823,7 +1823,7 @@ void MainWindowPresenter::handleNoteNew()
                 newNoteDialog->getProgress(),
                 newNoteDialog->getStencil());
     if(note) {
-        mind->remind().remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
+        mind->remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
 
         // insert new N and select it in the tree
         orloj->getOutlineView()->insertAndSelect(note);
@@ -2067,7 +2067,7 @@ void MainWindowPresenter::doActionNoteForget()
             QAbstractButton* choosen = msgBox.clickedButton();
             if(yes == choosen) {
                 Outline* outline = mind->noteForget(note);
-                mind->remind().remember(outline);
+                mind->remember(outline);
                 orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
             }
             return;
@@ -2116,7 +2116,7 @@ void MainWindowPresenter::doActionNoteExtract()
                 mdRepresentation->description(&t, description);
                 extractedNote->setDescription(description);
 
-                mind->remind().remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
+                mind->remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
                 // IMPROVE smarter refresh of outline tree (do less then overall load)
                 orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
                 orloj->showFacetNoteEdit(extractedNote);
