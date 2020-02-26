@@ -76,6 +76,7 @@ win32 {
       LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
     } else {
       # cmark-gfm
+      DEFINES += MF_MD_2_HTML_CMARK
 
       # cmark-gfm to be built by qmake to enable clean system build for Launchpad debuild
       libcmark-gfm.target = libcmark-gfm
