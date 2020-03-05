@@ -31,9 +31,17 @@ EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
     moreButton = new QPushButton{tr("Properties"), this};
     moreButton->setToolTip("Alt+Enter");
     rememberButton = new QPushButton{tr("Remember"), this};
+#ifdef __APPLE__
+    rememberButton->setToolTip("⌘+L");
+#else
     rememberButton->setToolTip("Alt+Left");
+#endif
     cancelButton = new QPushButton{tr("Cancel"), this};
+#ifdef __APPLE__
+    cancelButton->setToolTip("⌘+G");
+#else
     cancelButton->setToolTip("Ctrl+G");
+#endif
 
     // assembly
     layout = new QHBoxLayout{this};
