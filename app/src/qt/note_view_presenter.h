@@ -72,7 +72,7 @@ public:
     NoteView* getView() const { return view; }
     Note* getCurrentNote() { return currentNote; }
 
-    void refreshCurrent();
+    void refreshLivePreview();
     void refresh(Note* note);
 
     void clearSearchExpression() { searchExpression.clear(); }

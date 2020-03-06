@@ -73,7 +73,7 @@ NoteViewPresenter::~NoteViewPresenter()
     if(htmlRepresentation) delete htmlRepresentation;
 }
 
-void NoteViewPresenter::refreshCurrent()
+void NoteViewPresenter::refreshLivePreview()
 {
     MF_DEBUG("Refreshing N HTML preview from editor: " << this->currentNote->getName() << endl);
 

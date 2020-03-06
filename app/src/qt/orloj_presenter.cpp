@@ -463,6 +463,11 @@ void OrlojPresenter::showFacetNoteEdit(Note* note)
     view->showFacetNoteEdit();
     setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
     mainPresenter->getMainMenu()->showFacetNoteEdit();
+
+    // refresh live preview to ensure on/off autolinking, full O vs. header, ...
+    if(config.isUiLiveNotePreview()) {
+        noteViewPresenter->refreshLivePreview();
+    }
 }
 
 void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
@@ -475,6 +480,11 @@ void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
     view->showFacetOutlineHeaderEdit();
     setFacet(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER);
     mainPresenter->getMainMenu()->showFacetNoteEdit();
+
+    // refresh live preview to ensure on/off autolinking, full O vs. header, ...
+    if(config.isUiLiveNotePreview()) {
+        outlineHeaderViewPresenter->refreshLivePreview();
+    }
 }
 
 bool OrlojPresenter::applyFacetHoisting()
@@ -786,7 +796,7 @@ void OrlojPresenter::slotRefreshCurrentNotePreview()
     MF_DEBUG("Slot to refresh live preview: " << getFacet() << " hoist: " << config.isUiHoistedMode() << endl);
     if(!config.isUiHoistedMode()) {
         if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-            noteViewPresenter->refreshCurrent();
+            noteViewPresenter->refreshLivePreview();
 #if defined(__APPLE__) || defined(_WIN32)
             getNoteEdit()->getView()->getNoteEditor()->setFocus();
 #endif
