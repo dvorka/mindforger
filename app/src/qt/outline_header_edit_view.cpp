@@ -38,17 +38,23 @@ OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
     setLayout(layout);
 
     // signals
+#ifdef __APPLE__
     new QShortcut(
-        QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Left)),
+        QKeySequence(Qt::CTRL+Qt::Key_L),
         this, SLOT(slotSaveAndCloseEditor()));
+#else
     new QShortcut(
-        QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_G)),
+        QKeySequence(Qt::ALT+Qt::Key_Left),
+        this, SLOT(slotSaveAndCloseEditor()));
+#endif
+    new QShortcut(
+        QKeySequence(Qt::CTRL+Qt::Key_G),
         this, SLOT(slotCloseEditor()));
     new QShortcut(
-        QKeySequence(QKeySequence(Qt::ALT+Qt::Key_Return)),
+        QKeySequence(Qt::ALT+Qt::Key_Return),
         this, SLOT(slotOpenOutlineHeaderPropertiesEditor()));
     new QShortcut(
-        QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_S)),
+        QKeySequence(Qt::CTRL+Qt::Key_S),
         this, SLOT(slotSaveOutlineHeader()));
     QObject::connect(
         bottomButtonsPanel->getRememberButton(), SIGNAL(clicked()),
