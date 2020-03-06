@@ -192,6 +192,8 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
 
     mathSupportCheck = new QCheckBox{tr("math support"), this};
 
+    fullOPreviewCheck = new QCheckBox{tr("whole notebook preview"), this};
+
     diagramSupportLabel = new QLabel(tr("Diagram support")+":", this),
     diagramSupportCombo = new QComboBox{this};
     diagramSupportCombo->addItem(QString{"disable"});
@@ -208,6 +210,7 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     viewerLayout->addWidget(diagramSupportCombo);
     viewerLayout->addWidget(srcCodeHighlightSupportCheck);
     viewerLayout->addWidget(mathSupportCheck);
+    viewerLayout->addWidget(fullOPreviewCheck);
     viewerGroup->setLayout(viewerLayout);
 
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
@@ -224,6 +227,7 @@ ConfigurationDialog::ViewerTab::~ViewerTab()
     delete zoomSpin;
     delete srcCodeHighlightSupportCheck;
     delete mathSupportCheck;
+    delete fullOPreviewCheck;
     delete diagramSupportLabel;
     delete diagramSupportCombo;
 }
@@ -238,6 +242,7 @@ void ConfigurationDialog::ViewerTab::refresh()
     zoomSpin->setValue(config.getUiHtmlZoom());
     srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
     mathSupportCheck->setChecked(config.isUiEnableMathInMd());
+    fullOPreviewCheck->setChecked(config.isUiFullOPreview());
     diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
 }
 
@@ -247,6 +252,7 @@ void ConfigurationDialog::ViewerTab::save()
     config.setUiHtmlZoom(zoomSpin->value());
     config.setUiEnableSrcHighlightInMd(srcCodeHighlightSupportCheck->isChecked());
     config.setUiEnableMathInMd(mathSupportCheck->isChecked());
+    config.setUiFullOPreview(fullOPreviewCheck->isChecked());
     config.setUiEnableDiagramsInMd(static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex()));
 }
 

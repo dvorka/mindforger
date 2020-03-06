@@ -147,7 +147,7 @@ OutlineHeaderView::OutlineHeaderView(QWidget* parent)
 
     // assembly
     QVBoxLayout* layout = new QVBoxLayout{this};
-    // ensure that wont be extra space around member widgets
+    // ensure that will not be extra space around member widgets
     layout->setContentsMargins(QMargins(0,0,0,0));
     layout->addWidget(headerViewer);
     view2EditPanel->setFixedHeight(2*view2EditPanel->getEditButton()->height());

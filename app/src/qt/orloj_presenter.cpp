@@ -127,41 +127,10 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     QObject::connect(
         view->getOutlinesTable()->horizontalHeader(), SIGNAL(sectionClicked(int)),
         this, SLOT(slotOutlinesTableSorted(int)));
-
-    /*
-     * ... former click-to-view BEFORE switch to keyboard-only
-     */
-
-    /*
-    // click Outline in Outlines to view Outline detail
+    // toggle full O HTML preview
     QObject::connect(
-        view->getOutlinesTable()->selectionModel(),
-        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-        this,
-        SLOT(slotShowOutline(const QItemSelection&, const QItemSelection&)));
-    // click Tag in Tags to view Recall by Tag detail
-    QObject::connect(
-        view->getTagCloud()->selectionModel(),
-        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-        this,
-        SLOT(slotShowTagRecallDialog(const QItemSelection&, const QItemSelection&)));
-    QObject::connect(
-        view->getDashboard()->getTagsDashboardlet()->selectionModel(),
-        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-        this,
-        SLOT(slotShowTagRecallDialog(const QItemSelection&, const QItemSelection&)));
-    // click recent N/O in recent Os/Ns to view O/N detail
-    QObject::connect(
-        view->getRecentNotesTable()->selectionModel(),
-        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-        this,
-        SLOT(slotShowRecentNote(const QItemSelection&, const QItemSelection&)));
-    QObject::connect(
-        view->getDashboard()->getRecentDashboardlet()->selectionModel(),
-        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-        this,
-        SLOT(slotShowRecentNote(const QItemSelection&, const QItemSelection&)));
-    */
+        view->getOutlineHeaderView()->getEditPanel()->getFullOPreviewButton(), SIGNAL(clicked()),
+        this, SLOT(slotToggleFullOutlinePreview()));
 }
 
 int dialogSaveOrCancel()
@@ -812,7 +781,8 @@ void OrlojPresenter::refreshLiveNotePreview()
     }
 }
 
-void OrlojPresenter::slotRefreshCurrentNotePreview() {
+void OrlojPresenter::slotRefreshCurrentNotePreview()
+{
     MF_DEBUG("Slot to refresh live preview: " << getFacet() << " hoist: " << config.isUiHoistedMode() << endl);
     if(!config.isUiHoistedMode()) {
         if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
@@ -821,7 +791,7 @@ void OrlojPresenter::slotRefreshCurrentNotePreview() {
             getNoteEdit()->getView()->getNoteEditor()->setFocus();
 #endif
         } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-            outlineHeaderViewPresenter->refreshCurrent();
+            outlineHeaderViewPresenter->refreshLivePreview();
 #if defined(__APPLE__) || defined(_WIN32)
             getOutlineHeaderEdit()->getView()->getHeaderEditor()->setFocus();
 #endif
@@ -829,7 +799,8 @@ void OrlojPresenter::slotRefreshCurrentNotePreview() {
     }
 }
 
-void OrlojPresenter::slotOutlinesTableSorted(int column) {
+void OrlojPresenter::slotOutlinesTableSorted(int column)
+{
     Qt::SortOrder order
         = view->getOutlinesTable()->horizontalHeader()->sortIndicatorOrder();
     MF_DEBUG("Os table sorted: " << column << " descending: " << order << endl);
@@ -837,6 +808,15 @@ void OrlojPresenter::slotOutlinesTableSorted(int column) {
     config.setUiOsTableSortColumn(column);
     config.setUiOsTableSortOrder(order==Qt::SortOrder::AscendingOrder?true:false);
     mainPresenter->getConfigRepresentation()->save(config);
+}
+
+void OrlojPresenter::slotToggleFullOutlinePreview()
+{
+    config.setUiFullOPreview(!config.isUiFullOPreview());
+    mainPresenter->getConfigRepresentation()->save(config);
+
+    // refresh O header view
+    getOutlineHeaderView()->refreshCurrent();
 }
 
 } // m8r namespace

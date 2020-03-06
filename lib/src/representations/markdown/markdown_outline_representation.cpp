@@ -381,7 +381,14 @@ string* MarkdownOutlineRepresentation::to(const Outline* outline, string* md)
         if(notes.size()) {
             string noteMd{};
             for(Note *note:notes) {
-                to(note, &noteMd, outline->getFormat()==MarkdownDocument::Format::MINDFORGER);
+                md->append("\n");
+                to(
+                    note,
+                    &noteMd,
+                    outline->getFormat()==MarkdownDocument::Format::MINDFORGER,
+                    // full O rendering w/o autolinking (performance)
+                    false
+                );
                 md->append(noteMd);
                 noteMd.clear();
             }

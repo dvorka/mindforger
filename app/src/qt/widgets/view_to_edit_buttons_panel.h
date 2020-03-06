@@ -34,6 +34,7 @@ private:
 
     QHBoxLayout* layout;
     QPushButton* editButton;
+    QPushButton* toggleFullOPreviewButton;
 
     // expert mode (no buttons) setting @ frontend
     bool expertMode;
@@ -51,6 +52,7 @@ public:
 
 public:
     QPushButton* getEditButton() const { return editButton; }
+    QPushButton* getFullOPreviewButton() const { return toggleFullOPreviewButton; }
 };
 
 }

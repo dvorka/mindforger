@@ -102,16 +102,39 @@ public:
         std::string* html,
         std::string* basePath=nullptr,
         bool standalone=false,
-        int yScrollTo=0);
+        int yScrollTo=0
+    );
 
     /**
      * @brief Export Outline to HTML.
      *
      * Outline is rendered to be shown in MF, standalone option indicates HTML export.
+     *
+     * @param outline O whose HTML representation will be created.
+     * @param html Resulting HTML representation.
+     * @param standalone Is it O export?
+     * @param autolinking Inject (auto) links.
+     * @param whole Rendere whole O or just header.
+     * @param metadata Render (tags, timestamps, reads/writes) metadata.
+     *        No metadata (fast) rendering is used by live preview.
+     * @param yScrollTo Inject JavaScript which scrolls HTML to given % on page load.
+     * @return Pointer to O HTML representation.
      */
-    std::string* to(const Outline* outline, std::string* html, bool standalone=false, int yScrollTo=0);
-    std::string* toHeader(Outline* outline, std::string* html, bool standalone=false, bool autolinking=false, int yScrollTo=0);
-    std::string* to(const Note* note, std::string* html, bool autolinking=false, int yScrollTo=0);
+    std::string* to(
+        Outline* outline,
+        std::string* html,
+        bool standalone=false,
+        bool autolinking=false,
+        bool whole=false,
+        bool metadata=false,
+        int yScrollTo=0
+    );
+    std::string* to(
+        const Note* note,
+        std::string* html,
+        bool autolinking=false,
+        int yScrollTo=0
+    );
 
     /**
      * @brief Append "color: 0x...; background-color: 0x...;"
@@ -127,6 +150,8 @@ public:
 private:
     void header(std::string& html, std::string* basePath, bool standalone, int yScrollTo);
     void footer(std::string& html);
+
+    std::string* toNoMeta(const Outline* outline, std::string* html, bool standalone, int yScrollTo);
 };
 
 } // m8r namespace
