@@ -269,7 +269,7 @@ public slots:
     void doActionFormatDiagramGantt();
     void doActionFormatDiagramSequence();
     void doActionFormatBlockquote();
-    void doActionFormatLink(QString link);
+    void doActionFormatLinkOrImage(QString link);
     void doActionFormatLink();
     void handleFormatLink();
     void doActionFormatImage();

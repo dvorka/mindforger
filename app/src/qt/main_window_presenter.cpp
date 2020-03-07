@@ -96,11 +96,11 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     );
     QObject::connect(
         orloj->getNoteEdit()->getView()->getNoteEditor(), SIGNAL(signalDnDropUrl(QString)),
-        this, SLOT(doActionFormatLink(QString))
+        this, SLOT(doActionFormatLinkOrImage(QString))
     );
     QObject::connect(
         orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SIGNAL(signalDnDropUrl(QString)),
-        this, SLOT(doActionFormatLink(QString))
+        this, SLOT(doActionFormatLinkOrImage(QString))
     );
     // wire toolbar signals
     QObject::connect(view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()), this, SLOT(doActionOutlineOrNoteNew()));
@@ -1531,7 +1531,7 @@ void MainWindowPresenter::doActionFormatTable()
     }
 }
 
-void MainWindowPresenter::doActionFormatLink(QString link)
+void MainWindowPresenter::doActionFormatLinkOrImage(QString link)
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> oss{mind->getOutlines()};
@@ -1555,18 +1555,33 @@ void MainWindowPresenter::doActionFormatLink(QString link)
         insertLinkDialog->getCopyCheckBox()->setEnabled(false);
     }
 
-    insertLinkDialog->show(
-        config.getActiveRepository(),
-        orloj->getOutlineView()->getCurrentOutline(),
-        os,
-        ns,
-        selectedText,
-        link);
+    if(link.size() && (
+         link.endsWith(".png") ||
+         link.endsWith(".gif") ||
+         link.endsWith(".jpg") ||
+         link.endsWith(".jpeg") ||
+         link.endsWith(".PNG") ||
+         link.endsWith(".GIF") ||
+         link.endsWith(".JPG") ||
+         link.endsWith(".JPEG")))
+    {
+        insertImageDialog->show(
+            selectedText.size()?selectedText:QString{tr("image")},
+            link);
+    } else {
+        insertLinkDialog->show(
+            config.getActiveRepository(),
+            orloj->getOutlineView()->getCurrentOutline(),
+            os,
+            ns,
+            selectedText,
+            link);
+    }
 }
 
 void MainWindowPresenter::doActionFormatLink()
 {
-    doActionFormatLink(QString{});
+    doActionFormatLinkOrImage(QString{});
 }
 
 void MainWindowPresenter::injectMarkdownText(const QString& text, bool newline, int offset)

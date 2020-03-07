@@ -31,6 +31,7 @@ InsertImageDialog::InsertImageDialog(QWidget* parent)
 
     findFileButton = new QPushButton{tr("File")};
     copyToRepoCheckBox = new QCheckBox{tr("copy image to repository")};
+    copyToRepoCheckBox->setChecked(true);
     copyToRepoCheckBox->setEnabled(true);
 
     // IMPROVE disable/enable find button if text/path is valid: freedom vs validation
@@ -73,11 +74,22 @@ InsertImageDialog::~InsertImageDialog()
 {
 }
 
-void InsertImageDialog::show() {
+void InsertImageDialog::show()
+{
     alternateTextEdit->setText(tr("Image"));
     alternateTextEdit->selectAll();
     alternateTextEdit->setFocus();
     pathEdit->clear();
+
+    QDialog::show();
+}
+
+void InsertImageDialog::show(const QString& text, const QString& link)
+{
+    pathEdit->setText(link);
+    alternateTextEdit->setText(text);
+    alternateTextEdit->selectAll();
+    alternateTextEdit->setFocus();
 
     QDialog::show();
 }
