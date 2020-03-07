@@ -43,7 +43,7 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
 {
     // leave note view navigation
 #ifndef __APPLE__
-    if(event->modifiers() & Qt::AltModifier) s{
+    if(event->modifiers() & Qt::AltModifier) {
         if(event->key()==Qt::Key_Left) {
             emit signalFromOutlineTreeToOutlines();
         }
