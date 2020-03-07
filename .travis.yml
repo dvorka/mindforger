@@ -47,7 +47,7 @@ compiler:
   - gcc
 cache: ccache
 
-install: # install dependencies & build Google Test Framework
+before_install: # install dependencies & build Google Test Framework
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
