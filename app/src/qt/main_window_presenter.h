@@ -273,6 +273,7 @@ public slots:
     void doActionFormatLink();
     void handleFormatLink();
     void doActionFormatImage();
+    void injectImageLinkToEditor(const QString& path);
     void handleFormatImage();
     void doActionFormatTable();
     void doActionFormatHr();
@@ -310,6 +311,7 @@ public slots:
     void doActionEditFind();
     void doActionEditFindAgain();
     void doActionEditWordWrapToggle();
+    void doActionEditPasteImageData(QImage image);
     void doActionToggleLiveNotePreview();
     void doActionNameDescFocusSwap();
     // help

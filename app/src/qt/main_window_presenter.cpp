@@ -102,6 +102,14 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SIGNAL(signalDnDropUrl(QString)),
         this, SLOT(doActionFormatLinkOrImage(QString))
     );
+    QObject::connect(
+        orloj->getNoteEdit()->getView()->getNoteEditor(), SIGNAL(signalPasteImageData(QImage)),
+        this, SLOT(doActionEditPasteImageData(QImage))
+    );
+    QObject::connect(
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SIGNAL(signalPasteImageData(QImage)),
+        this, SLOT(doActionEditPasteImageData(QImage))
+    );
     // wire toolbar signals
     QObject::connect(view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()), this, SLOT(doActionOutlineOrNoteNew()));
     QObject::connect(view.getToolBar()->actionOpenRepository, SIGNAL(triggered()), this, SLOT(doActionMindLearnRepository()));
@@ -1536,7 +1544,7 @@ void MainWindowPresenter::doActionFormatLinkOrImage(QString link)
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> oss{mind->getOutlines()};
     mind->remind().sortByName(oss);
-    vector<Thing*> os{oss.begin(),oss.end()};
+    vector<Thing*> os{oss.begin(), oss.end()};
 
     vector<Note*> ns{};
     mind->getAllNotes(ns);
@@ -1603,7 +1611,7 @@ void MainWindowPresenter::copyLinkOrImageToRepository(const string& srcPath, QSt
         } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
             oPath = orloj->getOutlineHeaderEdit()->getCurrentOutline()->getKey();
         }
-        if(stringEndsWith(oPath, ".md")) {
+        if(stringEndsWith(oPath, FILE_EXTENSION_MD_MD)) {
             pathPrefix = QString::fromStdString(oPath.substr(0, oPath.length()-3));
         } else {
             pathPrefix = QString::fromStdString(oPath);
@@ -1647,11 +1655,42 @@ void MainWindowPresenter::copyLinkOrImageToRepository(const string& srcPath, QSt
     }
 }
 
+// IMPROVE optimize this function (QString, string, ...)
+// IMPROVE deduplicate this method and copy image/attachment code
+void MainWindowPresenter::doActionEditPasteImageData(QImage image)
+{
+    // save image object as file
+    string oPath{};
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        oPath = orloj->getNoteEdit()->getCurrentNote()->getOutlineKey();
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        oPath = orloj->getOutlineHeaderEdit()->getCurrentOutline()->getKey();
+    }
+    QString pathPrefix{};
+    if(stringEndsWith(oPath, FILE_EXTENSION_MD_MD)) {
+        pathPrefix = QString::fromStdString(oPath.substr(0, oPath.length()-3));
+    } else {
+        pathPrefix = QString::fromStdString(oPath);
+    }
+    pathPrefix.append(".");
+    QString pathSuffix{"image.png"};
+    QString path = pathPrefix + pathSuffix;
+    while(isDirectoryOrFileExists(path.toStdString().c_str())) {
+        pathSuffix.prepend("_");
+        path = pathPrefix + pathSuffix;
+    }
+
+    statusBar->showInfo(tr("Saving pasted image data to file: '%1'").arg(path.toStdString().c_str()));
+    image.save(path);
+
+    // inject link to file to O
+    injectImageLinkToEditor(path);
+}
+
 void MainWindowPresenter::statusInfoPreviewFlickering()
 {
     statusBar->showInfo(QString(tr("HTML Note preview flickering can be eliminated by disabling math and diagrams in Preferences menu")));
 }
-
 
 /*
  * See InsertLinkDialog for link creation hints
@@ -1699,17 +1738,8 @@ void MainWindowPresenter::doActionFormatImage()
     insertImageDialog->show();
 }
 
-void MainWindowPresenter::handleFormatImage()
+void MainWindowPresenter::injectImageLinkToEditor(const QString& path)
 {
-    insertImageDialog->hide();
-
-    QString path{};
-    if(insertImageDialog->isCopyToRepo()) {
-        copyLinkOrImageToRepository(insertImageDialog->getPathText().toStdString(), path);
-    } else {
-        path = insertImageDialog->getPathText();
-    }
-
     QString text{"!["};
     text += insertImageDialog->getAlternateText();
     text += "](";
@@ -1721,6 +1751,20 @@ void MainWindowPresenter::handleFormatImage()
     } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
         orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false);
     }
+}
+
+void MainWindowPresenter::handleFormatImage()
+{
+    insertImageDialog->hide();
+
+    QString path{};
+    if(insertImageDialog->isCopyToRepo()) {
+        copyLinkOrImageToRepository(insertImageDialog->getPathText().toStdString(), path);
+    } else {
+        path = insertImageDialog->getPathText();
+    }
+
+    injectImageLinkToEditor(path);
 }
 
 void MainWindowPresenter::doActionFormatHr()

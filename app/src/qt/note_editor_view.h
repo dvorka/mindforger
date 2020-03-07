@@ -140,6 +140,7 @@ public slots:
 
 signals:
     void signalDnDropUrl(QString);
+    void signalPasteImageData(QImage);
     void signalGetLinksForPattern(const QString&);
 };
 
