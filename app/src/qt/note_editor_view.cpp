@@ -237,15 +237,34 @@ QString NoteEditorView::getRelevantWords() const
  * Autocomplete
  */
 
-void NoteEditorView::keyPressEvent(QKeyEvent *event)
+void NoteEditorView::keyPressEvent(QKeyEvent* event)
 {
     hitCounter++;
 
+    // TODO Linux paste
+
     if(event->modifiers() & Qt::ControlModifier) {
         switch (event->key()) {
-        case Qt::Key_F:
+        case Qt::Key_V: {
+            // TODO make this private function
+            QClipboard* clip = QApplication::clipboard();
+            const QMimeData* mime = clip->mimeData();
+            if(mime->hasImage()) {
+                MF_DEBUG("PASTE: image - has URLs?" << mime->hasUrls() << endl);
+                QImage image = qvariant_cast<QImage>(mime->imageData());
+                // TODO signal w/ QImage to presenter
+                // TODO mainWindowPresenter saves image to path constructed in copyImageOrLink()
+                // TODO resulting path is injected to the markdown source
+                // TODO v this goes away
+                image.save("/Users/dvorka/mf-img.png");
+                return;
+            }
+            break;
+        }
+        case Qt::Key_F: {
             findStringAgain();
             return; // exit to override default key binding
+        }
         }
     }
 
