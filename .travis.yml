@@ -17,8 +17,9 @@
 #
 # CI monitoring:
 #
-# - https://travis-ci.org/dvorka/mindforger/requests
 # - https://travis-ci.org/dvorka/mindforger
+# - https://travis-ci.org/dvorka/mindforger/builds
+# - https://travis-ci.org/dvorka/mindforger/requests
 #
 # For more Travis CI details check:
 #
@@ -45,15 +46,6 @@ language: cpp
 compiler:
   - gcc
 cache: ccache
-
-before_install:
-  - |
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
-    then
-      sudo apt-get update -qq
-      sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
-      sudo apt-get update -qq
-    fi
 
 install: # install dependencies & build Google Test Framework
   - |
