@@ -47,7 +47,12 @@ packageMindForger() {
 # main #########################################################################
 
 # build MindForger in Qt to get qt.io kits, CLI must be configured to avoid brew Qt
-#buildMindForger
+
+export SCRIPT_HOME=`pwd`
+buildMindForger
+cd ${SCRIPT_HOME}
 packageMindForger
+
+cp -vf ../../app/mindforger.dmg .
 
 # eof

@@ -28,21 +28,25 @@ EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
     // widgets
     previewButton = new QPushButton{tr("Preview"), this};
 #ifdef __APPLE__
-        previewButton->setToolTip("⌘+Shift+P");
+        previewButton->setToolTip("⇧⌘P");
 #else
     previewButton->setToolTip("Ctrl+Shift+P");
 #endif
     moreButton = new QPushButton{tr("Properties"), this};
+#ifdef __APPLE__
+    moreButton->setToolTip("⌥↩");
+#else
     moreButton->setToolTip("Alt+Enter");
+#endif
     rememberButton = new QPushButton{tr("Remember"), this};
 #ifdef __APPLE__
-    rememberButton->setToolTip("⌘+L");
+    rememberButton->setToolTip("⌘L");
 #else
     rememberButton->setToolTip("Alt+Left");
 #endif
     cancelButton = new QPushButton{tr("Cancel"), this};
 #ifdef __APPLE__
-    cancelButton->setToolTip("⌘+G");
+    cancelButton->setToolTip("⌘G");
 #else
     cancelButton->setToolTip("Ctrl+G");
 #endif
