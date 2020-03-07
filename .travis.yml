@@ -18,6 +18,7 @@
 # CI monitoring:
 #
 # - https://travis-ci.org/dvorka/mindforger/requests
+# - https://travis-ci.org/dvorka/mindforger
 #
 # For more Travis CI details check:
 #
@@ -50,8 +51,6 @@ before_install:
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
       sudo apt-get update -qq
-      "export DISPLAY=:99.0"
-      "sh -e /etc/init.d/xvfb start"  
       sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
       sudo apt-get update -qq
     fi
