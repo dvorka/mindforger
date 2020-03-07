@@ -121,6 +121,9 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         this, SIGNAL(signalLinksForHeaderPattern(const QString&, std::vector<std::string>*)),
         view->getOutlineHeaderEdit()->getHeaderEditor(), SLOT(slotPerformLinkCompletion(const QString&, std::vector<std::string>*)));
     QObject::connect(
+        outlineHeaderEditPresenter->getView()->getButtonsPanel(), SIGNAL(signalShowLivePreview()),
+        mainPresenter, SLOT(doActionToggleLiveNotePreview()));
+    QObject::connect(
         noteEditPresenter->getView()->getButtonsPanel(), SIGNAL(signalShowLivePreview()),
         mainPresenter, SLOT(doActionToggleLiveNotePreview()));
     // intercept Os table column sorting

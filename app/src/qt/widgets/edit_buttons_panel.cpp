@@ -28,7 +28,7 @@ EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
     // widgets
     previewButton = new QPushButton{tr("Preview"), this};
 #ifdef __APPLE__
-        previewButton->setToolTip("⌘+Shift+P");
+    previewButton->setToolTip("⌘+Shift+P");
 #else
     previewButton->setToolTip("Ctrl+Shift+P");
 #endif

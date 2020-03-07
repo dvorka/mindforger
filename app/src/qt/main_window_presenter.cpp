@@ -550,6 +550,8 @@ void MainWindowPresenter::doActionNameDescFocusSwap()
 
 void MainWindowPresenter::doActionToggleLiveNotePreview()
 {
+    MF_DEBUG("Toggling live N preview" << endl);
+
     // toggle config
     if(config.isUiLiveNotePreview()) {
         config.setUiLiveNotePreview(false);
