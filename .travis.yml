@@ -15,10 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-# For more details on Travis CI check:
+# CI monitoring:
+#
+# - https://travis-ci.org/dvorka/mindforger/requests
+#
+# For more Travis CI details check:
 #
 # - https://travis-ci.org
 # - https://docs.travis-ci.com/user/languages/cpp/
+# - https://config.travis-ci.com/explore
+#   Travis CI YAML validation
 #
 # Examples:
 #
@@ -30,7 +36,6 @@
 # eval "${MATRIX_EVAL}"
 #
 
-sudo: required
 os:
   - linux
 dist: bionic
@@ -41,7 +46,8 @@ compiler:
 cache: ccache
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
       sudo apt-get update -qq
       "export DISPLAY=:99.0"
@@ -51,7 +57,8 @@ before_install:
     fi
 
 install: # install dependencies & build Google Test Framework
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
       sudo apt-get install -qq qtbase5-dev libqt5webkit5-dev
       sudo apt-get install -qq qt5-default qttools5-dev-tools
@@ -66,20 +73,22 @@ install: # install dependencies & build Google Test Framework
     fi
 
 script: # make lib unit tests > run lib unit tests > make MF > install MF
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
       cd "${M8RHOME}"
       cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . && cd ../../..
       "cd deps/discount && ./configure.sh && make ; cd ../.."
       "echo \"M8RDEBUG: g++ compiler is set to: ${CXX}\""  
       cd lib/test # UNIT tests
-      qmake -r CONFIG+=mfnocxx CONFIG+=mfunits QMAKE_CXX=${CXX} mindforger-lib-unit-tests.pro
+      #qmake -r CONFIG+=mfnocxx CONFIG+=mfunits QMAKE_CXX=${CXX} mindforger-lib-unit-tests.pro
+      qmake -r CONFIG+=mfunits mindforger-lib-unit-tests.pro
       make
       cd src && export M8R_GIT_PATH="${M8RHOME}" && ./mindforger-lib-unit-tests > /tmp/mindforger-unit-tests.log 2>&1 # ; true
       cd ../../..
       cat /tmp/mindforger-unit-tests.log
       #qmake -r CONFIG+=mfnocxx QMAKE_CXX=${CXX} mindforger.pro
-      qmake -r CONFIG+=mfnocxx QMAKE_CXX=${CXX} mindforger.pro
+      qmake -r mindforger.pro
       make
       sudo make install
     fi
