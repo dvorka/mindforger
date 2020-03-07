@@ -92,7 +92,7 @@ constexpr const auto UI_JS_LIB_NO = "no";
 constexpr const auto UI_OS_TABLE_SORT_ORDER_ASC = "ascending";
 constexpr const auto UI_OS_TABLE_SORT_ORDER_DESC = "descending";
 
-constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
+constexpr const auto UI_DEFAULT_THEME = UI_THEME_DARK;
 constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_FONT = "Monospace,10";
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
