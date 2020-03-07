@@ -304,6 +304,7 @@ public slots:
     void doActionNoteExtract();
     void doActionRefactorNoteToOutline();
     void handleRefactorNoteToOutline();
+    void doActionNoteLeave();
     void doActionNoteForget();
     // edit
     void doActionEditFind();

@@ -69,7 +69,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         SIGNAL(signalFindOutlineByName()),
         mainPresenter,
         SLOT(doActionFindOutlineByName()));
-    // click Outline tree to view Note
+    // click O tree to view Note
     QObject::connect(
         view->getOutlineView()->getOutlineTree()->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),

@@ -72,13 +72,8 @@ bool NoteViewerView::eventFilter(QObject* obj, QEvent *event)
 
 void NoteViewerView::keyPressEvent(QKeyEvent* event)
 {
-#ifdef __APPLE__
-    if(event->modifiers() & Qt::ControlModifier){
-        if(event->key()==Qt::Key_L) {
-#else
     if(event->modifiers() & Qt::AltModifier){
         if(event->key()==Qt::Key_Left) {
-#endif
             emit signalFromViewNoteToOutlines();
         }
     }

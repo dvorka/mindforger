@@ -27,7 +27,11 @@ ViewToEditEditButtonsPanel::ViewToEditEditButtonsPanel(MfWidgetMode mode, QWidge
 {
     // widgets
     editButton = new QPushButton{tr("Edit"), this};
+#ifdef __APPLE__
+    editButton->setToolTip("⌘+E");
+#else
     editButton->setToolTip("Ctrl+E");
+#endif
 
     if(MfWidgetMode::OUTLINE_MODE == mode) {
         toggleFullOPreviewButton = new QPushButton{tr("Toggle Full Preview"), this};

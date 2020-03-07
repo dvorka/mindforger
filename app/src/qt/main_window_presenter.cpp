@@ -2059,6 +2059,11 @@ void MainWindowPresenter::doActionNoteHoist()
     }
 }
 
+void MainWindowPresenter::doActionNoteLeave()
+{
+    orloj->slotShowOutlines();
+}
+
 void MainWindowPresenter::doActionNoteForget()
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
