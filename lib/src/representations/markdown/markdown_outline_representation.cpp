@@ -376,12 +376,12 @@ string* MarkdownOutlineRepresentation::to(const Outline* outline, string* md)
 {
     toPreamble(outline, md);
     toHeader(outline, md);
+    // no longer needed: md->append("\n");
     if(outline) {
         const vector<Note*>& notes=outline->getNotes();
         if(notes.size()) {
             string noteMd{};
-            for(Note *note:notes) {
-                md->append("\n");
+            for(Note* note:notes) {
                 to(
                     note,
                     &noteMd,
