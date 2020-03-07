@@ -52,6 +52,7 @@ export SCRIPT_HOME=`pwd`
 buildMindForger
 cd ${SCRIPT_HOME}
 packageMindForger
+cd ${SCRIPT_HOME}
 
 cp -vf ../../app/mindforger.dmg .
 
