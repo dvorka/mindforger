@@ -55,7 +55,10 @@ before_install: # install dependencies & build Google Test Framework
       sudo apt-get install -qq qt5-default qttools5-dev-tools
       sudo apt-get install -qq ccache
       sudo apt-get install -qq libgtest-dev
-      "export M8RHOME=`pwd`"
+      echo `pwd`
+      echo `pwd`
+      echo `pwd`
+      export M8RHOME=`pwd`
       cd /usr/src/gtest  # Google Test Framework
       sudo apt-get install -qq cmake
       sudo cmake .
@@ -64,10 +67,12 @@ before_install: # install dependencies & build Google Test Framework
     fi
 
 script: # make lib unit tests > run lib unit tests > make MF > install MF
+  - cd ~
   - echo `pwd`
   - echo `pwd`
   - echo `pwd`
   - ls
+  - cd mindforger
   - |
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
