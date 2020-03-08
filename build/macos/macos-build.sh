@@ -20,7 +20,7 @@
 # make project w/ QtWebEngine instead QtWebKit
 
 buildMindForger() {
-    echo "IMPORTANT: build mindforger/deps/discount before running this script!"
+    echo "IMPORTANT: build MindForger deps (like cmark-gfm) before running this script!"
 
     echo "Clean..."
     rm -vrf ../../app/mindforger.app ../../app/mindforger.dmg

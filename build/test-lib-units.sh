@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
+export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
 #export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
 #export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
@@ -154,8 +154,7 @@ export BUILD_DIR=${SCRIPT_DIR}/../lib/test
 if [ ${OPTION_RECOMPILE} ]
 then
     # cleanup
-    cd ${BUILD_DIR} && cd ../../deps && make clean && rm *.a
-    cd ${BUILD_DIR} && cd .. && make clean && rm *.a
+    cd ${BUILD_DIR} && cd ../../ && make clean && rm *.a
     cd ${BUILD_DIR} && cd ./src && make clean
     # recursive qmake and recompilation - IMPORTANT: mfunits ensures MF_DEBUG is enabled in library src
     cd ${BUILD_DIR} && make clean && qmake -r mindforger-lib-unit-tests.pro CONFIG+=mfunits && make -j${M8R_CPU_CORES}

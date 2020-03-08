@@ -12,19 +12,19 @@ Big thanks to 3rd party FOSS content authors:
 * Qt Company ([Qt](https://www.qt.io/) - lib and code)
 * Christian Loose ([CuteMarkEd](https://cloose.github.io/CuteMarkEd/) - inspiration and code)
 * GitHub ([CMark GFM](https://github.com/github/cmark-gfm) - Markdown rendering - library)
-* David Parsons ([Discount](http://www.pell.portland.or.us/~orc/Code/discount/) - Markdown rendering - library)
 * NetBSD Foundation (strptime - Windows port - lib)
 * Toni Ronkko (dirent - Windows port - lib)
 * Microsoft (getopt - Windows port - lib)
 * Jordan Russell ([jrsoftware.org](http://jrsoftware.org) - Windows installer framework)
 * Davis E. King ([MITIE](https://github.com/mit-nlp/MITIE) - AI/NLP library and tools for information extraction - library)
 * Jean-loup Gailly, Mark Adler ([Zlib](https://sourceforge.net/projects/gnuwin32/) - library)
+* David Parsons ([Discount](http://www.pell.portland.or.us/~orc/Code/discount/) - Markdown rendering - library used in the past)
 * Google ([Google C++ unit testing framework](https://github.com/google/googletest))
 * Knut Sveidqvist ([Mermaid.js](https://mermaidjs.github.io/) - diagrams and flowcharts rendering in HTML)
 * AMS and SIAM ([MathJax.js](https://www.mathjax.org/) - math rendering in HTML)
 * Ivan Sagalaev ([Highlight.js](https://highlightjs.org/) - source code syntax highlighting)
 * Danny Allen (primary [icon theme](https://store.kde.org/content/show.php?content=18317) store.kde.com - icons)
-* Krita (https://github.com/KDE/krita - menu icons)
+* Krita (https://github.com/KDE/krita - menu icons - remixed)
 * Travis CI ([travis-ci.org](https://travis-ci.org/) - continous integration tests and builds infra - Ubuntu, macOS)
 * AppVeyor CI ([appveyor.com](https://www.appveyor.com/) - continous integration tests and builds infra - Windows)
 * Raimund Hocke ([SikuliX](http://sikulix.com/)- GUI automation testing)
@@ -41,13 +41,15 @@ See [licenses](./licenses) folder for 3rd party content licensing details.
 Acknowledgements to researchers:
 
 * Karel Moulik (long term vision and ideas, consultations)
-* Gekaremi (comprehensive AI/NLP research, ideas and suggestions)
 * Tomas Sieger (MindForger applications ideas, consultations)
+* Gekaremi (comprehensive AI/NLP research, ideas and suggestions)
 
-Acknowledgements to reviewers and testers:
+Acknowledgements to reviewers, testers and supporters:
 
-* Tomas 'Floex' Dvorak (review, testing)
+* Ivan Kudibal (review, adoption and project support)
 * Stefan Pacinda (review, testing)
+* Petr Kozelka (MacBook borrowing, consultations)
+* Tomas 'Floex' Dvorak (review, testing)
 * Honza Odstrcil (feedback)
 
 Special thanks to:
@@ -55,4 +57,3 @@ Special thanks to:
 * Bjarne Stroustrup (C++ - for inspiring visions and being the authority behind C++ language)
 * Linus Torvalds (Linux and Git - for being inspiration and strong opinions)
 * Richard Stallman (GNU and GNU GPL - for passionate software freedom activism)
-

@@ -1,3 +1,9 @@
+2020-03-08  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v1.52.0 - Production quality Autolinking (cmark-gfm and Trie based),
+      macOS improvements (keyboard shortcuts, drag & drop, key characters, ...),
+      discount (MD to HTML processor) removal.
+
 2020-02-16  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v1.51.0 - Live HTML preview, (partially) fixed Mermed diagrams,

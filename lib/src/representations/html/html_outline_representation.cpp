@@ -32,8 +32,6 @@ HtmlOutlineRepresentation::HtmlOutlineRepresentation(
 {
 #if defined  MF_MD_2_HTML_CMARK
     markdownTranscoder = new CmarkGfmMarkdownTranscoder{};
-#elif defined MF_MD_2_HTML_DISCOUNT
-    markdownTranscoder = new DiscountMarkdownTranscoder{};
 #else
     markdownTranscoder = nullptr;
 #endif
@@ -268,17 +266,11 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
         html->append(*markdown);
         footer(*html);
     } else {
-        // create HTML body using Discount first
         html->clear();
         header(*html, basePath, standalone, yScrollTo);
 
         if(markdown->size() > 0) {
 #ifdef MF_NO_MD_2_HTML
-            // Discount: make sure that MD ends with new line, otherwise there would be missing characters in output HTML
-            //if(markdown->at(markdown->size()-1) != '\n') {
-            //    markdown->append("\n");
-            //}
-
             html->append("<pre>");
             html->append(*markdown);
             html->append("</pre>");
@@ -333,7 +325,7 @@ string* HtmlOutlineRepresentation::to(
 
         // table
         htmlHeader =
-                "<body>" // body tag is later replaced in Discount generated HTML > must be present in the header
+                "<body>" // body tag is later replaced in generated HTML > must be present in the header
                 "<table style='width: 100%; border-collapse: collapse; border: none;'>"
                 "<tr style='border-collapse: collapse; border: none;'>"
                 "<td style='border-collapse: collapse; border: none;'>"

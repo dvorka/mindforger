@@ -20,8 +20,7 @@
 # QMake build options:
 #   qmake CONFIG+=mfwebengine       ... build project w/ Qt WebEngine instead of Qt WebKit
 #   qmake CONFIG+=mfner             ... build project w/ NER and link dlib/MITIE
-#   qmake CONFIG+=mfnomd2html       ... build project w/o Markdown 2 HTML library (Discount, cmark-gfm)
-#   qmake CONFIG+=mfmd2htmldiscount ... build project w/ Markdown 2 HTML library Discount instead of cmark-gfm
+#   qmake CONFIG+=mfnomd2html       ... build project w/o Markdown 2 HTML library (cmark-gfm)
 #   qmake CONFIG+=mfnocxx           ... do NOT define CXX i.e. g++
 #   qmake CONFIG+=mfnoccache        ... do NOT use ccache to build the project
 #   qmake CONFIG+=mfdebug           ... show debug messages + include WIP code
@@ -31,10 +30,9 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS = deps lib app
+SUBDIRS = lib app
 
 # build dependencies
-lib.depends = deps
 app.depends = lib
 
 # ########################################

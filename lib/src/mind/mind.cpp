@@ -21,7 +21,7 @@
 #ifdef MF_MD_2_HTML_CMARK
   #include "ai/autolinking/autolinking_mind.h"
   #include "ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h"
-# else
+#else
   #include "ai/autolinking/naive_autolinking_preprocessor.h"
 #endif
 

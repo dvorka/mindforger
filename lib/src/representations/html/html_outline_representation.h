@@ -27,8 +27,6 @@
 #include "../markdown/markdown_transcoder.h"
 #if defined  MF_MD_2_HTML_CMARK
 #include "../markdown/cmark_gfm_markdown_transcoder.h"
-#else
-#include "../markdown/discount_markdown_transcoder.h"
 #endif
 
 namespace m8r {
@@ -61,8 +59,6 @@ public:
 
 /**
  * @brief HTML Outline representation.
- *
- * Discount-based HTML Outline representation.
  */
 class HtmlOutlineRepresentation
 {
