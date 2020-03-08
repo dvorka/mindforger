@@ -32,7 +32,7 @@ git submodule update
 sudo apt-get install build-essential zlib1g-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache
 
 # deps build
-cd  ${SCRIPT_HOME}/deps/cmark-gfm
+cd  ${SCRIPT_HOME}/../../deps/cmark-gfm
 mkdir build && cd build
 cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF ..
 cmake --build .
