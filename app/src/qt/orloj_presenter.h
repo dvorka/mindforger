@@ -208,6 +208,7 @@ public slots:
     void slotRefreshCurrentNotePreview();
     void slotOutlinesTableSorted(int column);
     void slotToggleFullOutlinePreview();
+    void slotEditStartLinkCompletion();
 
 signals:
     void signalLinksForPattern(const QString& completionPrefix, std::vector<std::string>* links);

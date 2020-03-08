@@ -107,6 +107,12 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     QObject::connect(
         navigatorPresenter, SIGNAL(signalThingSelected()),
         this, SLOT(slotShowNavigator()));
+    // N editor
+#ifdef __APPLE__
+    QObject::connect(
+        mainPresenter->getMainMenu()->getView()->actionEditComplete, SIGNAL(triggered()),
+        this, SLOT(slotEditStartLinkCompletion()));
+#endif
     // editor getting data from the backend
     QObject::connect(
         view->getNoteEdit()->getNoteEditor(), SIGNAL(signalGetLinksForPattern(const QString&)),
@@ -791,6 +797,15 @@ void OrlojPresenter::refreshLiveNotePreview()
         view->showFacetNoteEdit();
     } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
         view->showFacetOutlineHeaderEdit();
+    }
+}
+
+void OrlojPresenter::slotEditStartLinkCompletion()
+{
+    if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        view->getNoteEdit()->getNoteEditor()->slotStartLinkCompletion();
+    } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        view->getOutlineHeaderEdit()->getHeaderEditor()->slotStartLinkCompletion();
     }
 }
 

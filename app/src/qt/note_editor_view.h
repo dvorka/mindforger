@@ -117,8 +117,8 @@ private:
 private slots:
     void insertTab();
     void insertCompletion(const QString& completion, bool singleWord=false);
-    void slotStartLinkCompletion();
 public slots:
+    void slotStartLinkCompletion();
     void slotPerformLinkCompletion(const QString& completionPrefix, std::vector<std::string>* links);
 
     // line & line number
