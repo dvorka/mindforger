@@ -499,9 +499,9 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
         md->append("\n");
     }
 
-    MF_DEBUG("BEFORE: " << md << endl);
+    MF_DEBUG("= BEFORE autolinking =============================" << endl << md << endl);
     toDescription(note, md, autolinking);
-    MF_DEBUG("AFTER: " << md << endl);
+    MF_DEBUG("= AFTER autolinking ==============================" << endl << md << endl);
 
     return md;
 }

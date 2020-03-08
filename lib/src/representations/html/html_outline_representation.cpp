@@ -319,7 +319,6 @@ string* HtmlOutlineRepresentation::to(
         return toNoMeta(outline, html, standalone, yScrollTo);
     }
 
-
     if(!config.isUiHtmlTheme()) {
         header(*html, nullptr, standalone, 0);
         string markdown{"# "};
@@ -421,14 +420,18 @@ string* HtmlOutlineRepresentation::to(
         string outlineMd{};
         string path, file;
         pathToDirectoryAndFile(outline->getKey(), path, file);
-        // Oheader
+
+        // O header
         if(autolinking) {
             markdownRepresentation.toDescription(
-                        outline->getOutlineDescriptorAsNote(),
-                        &outlineMd,
-                        autolinking);
+                outline->getOutlineDescriptorAsNote(),
+                &outlineMd,
+                autolinking
+            );
         } else {
-            outlineMd.append(outline->getOutlineDescriptorAsNote()->getDescriptionAsString());
+            outlineMd.append(
+                outline->getOutlineDescriptorAsNote()->getDescriptionAsString()
+            );
         }
         // Ns
         if(whole) {
@@ -460,6 +463,8 @@ string* HtmlOutlineRepresentation::to(
     }
 
 #ifdef MF_DEBUG_HTML
+    // debug MD
+    MF_DEBUG("=== BEGIN HEADER MD ===" << endl << *html << endl << "=== END HEADER MD ===" << endl);
     // debug generated HTML
     MF_DEBUG("=== BEGIN HEADER HTML ===" << endl << *html << endl << "=== END HEADER HTML ===" << endl);
 #endif

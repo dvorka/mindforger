@@ -60,11 +60,13 @@ OutlineHeaderViewPresenter::OutlineHeaderViewPresenter(
 
 void OutlineHeaderViewPresenter::refreshLivePreview()
 {
-    MF_DEBUG("Refreshing O header HTML preview from editor: " << this->currentOutline->getName() << endl);
+    MF_DEBUG("Refreshing O header HTML preview from editor: " << currentOutline->getName() << endl);
 
     // O w/ current editor text w/o saving it
     Outline auxOutline{*currentOutline};
+    auxOutline.setKey(currentOutline->getKey());
     auxOutline.setName(orloj->getOutlineHeaderEdit()->getView()->getName().toStdString());
+
     QString description = orloj->getOutlineHeaderEdit()->getView()->getDescription();
     string s{description.toStdString()};
     vector<string*> d{};
@@ -85,8 +87,8 @@ void OutlineHeaderViewPresenter::refreshLivePreview()
         }
     }
 #endif
-    MF_DEBUG("SCROLL offset: " << yScrollPct << endl);
-    // refresh HTML view (autolinking intentionally disabled)
+
+    // refresh O header HTML view (autolinking intentionally disabled)
     htmlRepresentation->to(
         &auxOutline,
         &html,
