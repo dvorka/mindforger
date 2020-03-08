@@ -100,7 +100,7 @@ echo "aptly snapshot create ${NEW_SNAPSHOT} from repo ${MY_REPO}"
 echo "aptly publish snapshot ${NEW_SNAPSHOT}"
 
 # exit for dry run
-exit 0
+#exit 0
 
 # drop: publish > snapshot
 aptly publish drop ${OLD_PUBLISH}
