@@ -63,6 +63,9 @@ win32 {
 
 # Markdown to HTML: cmark-gfm (or nothing)
 !mfnomd2html {
+  # cmark-gfm
+  DEFINES += MF_MD_2_HTML_CMARK
+
   win32 {
     CONFIG(release, debug|release) {
       LIBS += -L$$PWD/../deps/cmark-gfm/build/src/Release -lcmark-gfm_static
@@ -72,9 +75,6 @@ win32 {
       LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions/Debug -lcmark-gfm-extensions_static
     }
   } else {
-    # cmark-gfm
-    DEFINES += MF_MD_2_HTML_CMARK
-
     # cmark-gfm to be built by qmake to enable clean system build for Launchpad debuild
     libcmark-gfm.target = libcmark-gfm
     libcmark-gfm.commands = cd -L$$PWD/../deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .

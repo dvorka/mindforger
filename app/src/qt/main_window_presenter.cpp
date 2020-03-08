@@ -1751,7 +1751,13 @@ void MainWindowPresenter::injectImageLinkToEditor(
         text += insertImageDialog->getAlternateText();
     }
     text += "](";
+#ifdef _WIN32
+    // image links are processed by HTML browser > \s must be replaced with /s
+    // (attachments use \s as the path is used by OS tools)
+    text +=  QString{path}.replace("\\", "/");
+#else
     text += path;
+#endif
     text += ")";
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
