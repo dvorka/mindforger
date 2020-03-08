@@ -76,7 +76,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // think ... toggle mental processes ~ enable associations/similarity/search based suggestions on searching/reading/writing notes
     actionMindAutolink = new QAction(QIcon(":/menu-icons/link.svg"), tr("&Autolink"), mainWindow);
-#ifdef DO_MF_DEBUG
+#ifdef MF_MD_2_HTML_CMARK
     actionMindAutolink->setCheckable(true);
     actionMindAutolink->setStatusTip(tr("Automatically inject links to relevant Notebooks and Notes when browsing HTML preview"));
     actionMindAutolink->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
@@ -279,11 +279,18 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewFullscreen);
 
     // menu: navigator
-
+#ifdef __APPLE__
+    actionNavigatorEdgesStretch = new QAction(tr("Str&etch edges"), mainWindow);
+#else
     actionNavigatorEdgesStretch = new QAction(tr("Str&etch edges\te | mouse wheel"), mainWindow);
+#endif
     actionNavigatorEdgesStretch->setStatusTip(tr("Stretch knowledge graph edges"));
 
+#ifdef __APPLE__
+    actionNavigatorEdgesShrink= new QAction(tr("&Sh&rink edge"), mainWindow);
+#else
     actionNavigatorEdgesShrink= new QAction(tr("&Sh&rink edge\tE | mouse wheel"), mainWindow);
+#endif
     actionNavigatorEdgesShrink->setStatusTip(tr("Shring knowledge graph edges"));
 
     actionNavigatorZoomIn = new QAction(tr("Zoom &in\tz"), mainWindow);
@@ -378,11 +385,15 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteSave = new QAction(QIcon(":/menu-icons/save.svg"), tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
     actionNoteSave->setStatusTip(tr("Save Note being edited"));
 
+#ifdef __APPLE__
+    actionNoteForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Forget\tCtrl+D"), mainWindow);
+#else
     actionNoteForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Forget\tDel"), mainWindow); // Delete is handled elsewhere and I don't want menu to handle it
+#endif
     actionNoteForget->setStatusTip(tr("Forget Note"));
 
 #ifdef __APPLE__
-    actionNoteClose = new QAction(QIcon(":/menu-icons/save.svg"), tr("Leave\t⌘+Left"), mainWindow); // Alt+Left is handled elsewhere and I don't want menu to handle it
+    actionNoteClose = new QAction(QIcon(":/menu-icons/save.svg"), tr("Save and Leave\tCtrl+L"), mainWindow);
 #else
     actionNoteClose = new QAction(QIcon(":/menu-icons/save.svg"), tr("Leave\tAlt+Left"), mainWindow); // Alt+Left is handled elsewhere and I don't want menu to handle it
 #endif

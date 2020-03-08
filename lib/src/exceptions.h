@@ -19,22 +19,57 @@
 #ifndef M8R_EXCEPTIONS_H
 #define M8R_EXCEPTIONS_H
 
+#include <exception>
+#include <string>
+
 namespace m8r {
 
 class MindForgerException : public std::exception
 {
-public:
-    explicit MindForgerException(const char* message) throw()
-        : message(message) {}
-    ~MindForgerException() throw() {
-        // IMPROVE deleted by parent > remove the following line (unit test)
-        if(message) delete message;
-    }
-
-    const char *what() const throw() { return message; }
-
 private:
-    const char *message;
+    const std::string message;
+
+public:
+    explicit MindForgerException(const std::string& message) throw()
+        : message(message) {}
+
+    const char* what() const throw() { return message.c_str(); }
+};
+
+/**
+ * @brief MindForger user exception.
+ *
+ * User exception is caused by user configuration errors and can be fixed by users.
+ * This needs a very clear explanation of what the user did wrong and how to fix it.
+ */
+class MindForgerUserException : public MindForgerException
+{
+    explicit MindForgerUserException(const std::string& message) throw()
+        : MindForgerException(message) {}
+};
+
+/**
+ * @brief MindForger runtime exception.
+ *
+ * Runtime exception is caused by the system configuration/system state error and
+ * can be handled by a fallback or user action.
+ */
+class MindForgerRuntimeException : public MindForgerException
+{
+    explicit MindForgerRuntimeException(const std::string& message) throw()
+        : MindForgerException(message) {}
+};
+
+/**
+ * @brief MindForger error.
+ *
+ * Errors should not happen and can only be fixed by programmers ~ is an implementation
+ * error. MindForger error should *never* be caught.
+ */
+class MindForgerError: public MindForgerException
+{
+    explicit MindForgerError(const std::string& message) throw()
+        : MindForgerException(message) {}
 };
 
 }

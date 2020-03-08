@@ -226,7 +226,10 @@ void LookAndFeels::setBlackTheme()
     // IMPROVE tooltips are set in two ways
     mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #000000; border: 1px solid white; }");
 
-    menuStylesheet = QString("QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px; }");
+    menuStylesheet = QString{
+        "QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px; }"
+        "QMenuBar::item:disabled { color: #555; }"
+        "QMenu::item:disabled { color: #555; background: "}+backgroundColor+QString{"; }"};
 }
 
 void LookAndFeels::setNativeTheme()

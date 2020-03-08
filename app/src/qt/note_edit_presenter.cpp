@@ -112,7 +112,7 @@ void NoteEditPresenter::slotSaveNote()
         currentNote->makeModified();
 
         // remember
-        mwp->getMind()->remind().remember(currentNote->getOutlineKey());
+        mwp->getMind()->remember(currentNote->getOutlineKey());
         mwp->getStatusBar()->showInfo(tr("Note '%1' saved").arg(QString::fromStdString(currentNote->getName())));
     } else {
         mwp->getStatusBar()->showError(tr("Attempt to save data from UI to Note, but no Note is set."));

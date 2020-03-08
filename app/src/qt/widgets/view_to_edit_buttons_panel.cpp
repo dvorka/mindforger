@@ -27,13 +27,22 @@ ViewToEditEditButtonsPanel::ViewToEditEditButtonsPanel(MfWidgetMode mode, QWidge
 {
     // widgets
     editButton = new QPushButton{tr("Edit"), this};
+#ifdef __APPLE__
+    editButton->setToolTip("⌘+E");
+#else
     editButton->setToolTip("Ctrl+E");
-
-    // TODO Show whole Notebook OR Show Notebook description (toggle buttons)
+#endif
 
     // assembly
     layout = new QHBoxLayout{this};
     layout->addStretch(1);
+    if(MfWidgetMode::OUTLINE_MODE == mode) {
+        toggleFullOPreviewButton = new QPushButton{tr("Toggle Full Preview"), this};
+        toggleFullOPreviewButton->setToolTip(tr(
+            "Toggle full Notebook preview (only header is shown by default)"));
+
+        layout->addWidget(toggleFullOPreviewButton);
+    }
     layout->addWidget(editButton);
     setLayout(layout);
 }

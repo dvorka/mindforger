@@ -42,11 +42,13 @@ OutlineTreeView::OutlineTreeView(QWidget* parent)
 void OutlineTreeView::keyPressEvent(QKeyEvent* event)
 {
     // leave note view navigation
-    if(event->modifiers() & Qt::AltModifier){
+#ifndef __APPLE__
+    if(event->modifiers() & Qt::AltModifier) {
         if(event->key()==Qt::Key_Left) {
-            signalFromOutlineTreeToOutlines();
+            emit signalFromOutlineTreeToOutlines();
         }
     } else {
+#endif
         // up/down/promote/demote note tree changes
         if(event->modifiers() & Qt::ControlModifier){
             if(event->modifiers() & Qt::ShiftModifier) {
@@ -73,17 +75,17 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
                 case Qt::Key_Right:
                     emit signalChangeDemote();
                     break;
+#else
+                case Qt::Key_L:
+                    emit signalFromOutlineTreeToOutlines();
+                    break;
+                case Qt::Key_D:
+                    emit signalForget();
+                    break;
 #endif
                 case Qt::Key_E:
                     emit signalOutlineOrNoteEdit();
                     break;
-
-                //case Qt::Key_F:
-                //    emit signalChangeFirst();
-                //    break;
-                //case Qt::Key_L:
-                //    emit signalChangeLast();
-                //    break;
                 }
             }
         } else {
@@ -102,15 +104,19 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
             case Qt::Key_Right:
                 emit signalEdit();
                 break;
+#ifndef __APPLE__
             case Qt::Key_Delete:
                 emit signalForget();
                 break;
+#endif
             case Qt::Key_Left:
                 signalFromOutlineTreeToOutlines();
                 break;
             }
         }
+#ifndef __APPLE__
     }
+#endif
 
     QWidget::keyPressEvent(event);
 }

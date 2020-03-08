@@ -50,6 +50,7 @@ constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL =  "* Editor au
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL =  "* Editor TAB width: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TABS_AS_SPACES_LABEL =  "* Editor insert SPACEs for TAB: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOSAVE_LABEL =  "* Editor autosave on close: ";
+constexpr const auto CONFIG_SETTING_UI_FULL_O_PREVIEW_LABEL =  "* Full Outline preview: ";
 constexpr const auto CONFIG_SETTING_NAVIGATOR_MAX_GRAPH_NODES_LABEL = "* Navigator max knowledge graph nodes: ";
 constexpr const auto CONFIG_SETTING_MD_HIGHLIGHT_LABEL = "* Enable source code syntax highlighting support in Markdown: ";
 constexpr const auto CONFIG_SETTING_MD_MATH_LABEL = "* Enable math support in Markdown: ";
@@ -224,6 +225,12 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                             c.setUiEditorAutosave(true);
                         } else {
                             c.setUiEditorAutosave(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_FULL_O_PREVIEW_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiFullOPreview(true);
+                        } else {
+                            c.setUiFullOPreview(false);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL) != std::string::npos) {
                         if(line->find(UI_EDITOR_KEY_BINDING_EMACS) != std::string::npos) {
@@ -470,6 +477,9 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_UI_EDITOR_TABS_AS_SPACES_LABEL << (c?(c->isUiEditorTabsAsSpaces()?"yes":"no"):(Configuration::DEFAULT_EDITOR_TABS_AS_SPACES?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_AUTOSAVE_LABEL << (c?(c->isUiEditorAutosave()?"yes":"no"):(Configuration::DEFAULT_EDITOR_AUTOSAVE?"yes":"no")) << endl <<
+         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_FULL_O_PREVIEW_LABEL << (c?(c->isUiFullOPreview()?"yes":"no"):(Configuration::DEFAULT_FULL_O_PREVIEW?"yes":"no")) << endl <<
+         "    * Show whole Notebook preview (yes) or Notebook header only (no)." << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL << (c?c->getEditorKeyBindingAsString():Configuration::editorKeyBindingToString(Configuration::EditorKeyBindingMode::WINDOWS)) << endl <<
          "    * Examples: emacs, vim, windows" << endl <<

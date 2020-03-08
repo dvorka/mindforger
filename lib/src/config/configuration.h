@@ -92,7 +92,7 @@ constexpr const auto UI_JS_LIB_NO = "no";
 constexpr const auto UI_OS_TABLE_SORT_ORDER_ASC = "ascending";
 constexpr const auto UI_OS_TABLE_SORT_ORDER_DESC = "descending";
 
-constexpr const auto UI_DEFAULT_THEME = UI_THEME_LIGHT;
+constexpr const auto UI_DEFAULT_THEME = UI_THEME_DARK;
 constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_FONT = "Monospace,10";
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
@@ -175,6 +175,7 @@ public:
     static constexpr const bool DEFAULT_EDITOR_AUTOCOMPLETE = true;
     static constexpr const bool DEFAULT_EDITOR_TABS_AS_SPACES = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOSAVE = false;
+    static constexpr const bool DEFAULT_FULL_O_PREVIEW = false;
     static constexpr const bool DEFAULT_MD_QUOTE_SECTIONS = true;
     static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_MD_MATH = false;
@@ -241,6 +242,7 @@ private:
     int navigatorMaxNodes;
     bool uiEditorTabsAsSpaces;
     bool uiEditorAutosave;
+    bool uiFullOPreview;
     bool uiShowToolbar;
     bool uiExpertMode;
     bool uiDistractionFreeMode; // fullscreen, no split, hidden toolbar + menu
@@ -418,6 +420,8 @@ public:
     void setUiEditorTabsAsSpaces(bool uiEditorTabsAsSpaces){ this->uiEditorTabsAsSpaces = uiEditorTabsAsSpaces; }
     bool isUiEditorAutosave() const { return uiEditorAutosave; }
     void setUiEditorAutosave(bool uiEditorAutosave){ this->uiEditorAutosave = uiEditorAutosave; }
+    bool isUiFullOPreview() const { return uiFullOPreview; }
+    void setUiFullOPreview(bool fullPreview){ this->uiFullOPreview = fullPreview; }
     bool isUiShowToolbar() const { return uiShowToolbar; }
     void setUiShowToolbar(bool showToolbar){ this->uiShowToolbar = showToolbar; }
     bool isUiExpertMode() const { return uiExpertMode; }

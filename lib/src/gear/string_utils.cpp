@@ -164,7 +164,7 @@ string normalizeToNcName(string name, char quoteChar) {
 void toString(const std::vector<std::string*>& ss, std::string& os)
 {
     if(!ss.empty()) {
-        for(std::string *s:ss) {
+        for(std::string* s:ss) {
             os += *s;
             os += "\n";
         }

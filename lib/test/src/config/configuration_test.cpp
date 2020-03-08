@@ -101,7 +101,7 @@ TEST(ConfigurationTestCase, SaveDefaultConfig)
 
     // asserts
     string* asString = m8r::fileToString(file.getName());
-    EXPECT_NE(std::string::npos, asString->find("Theme: light"));
+    EXPECT_NE(std::string::npos, asString->find("Theme: dark"));
     EXPECT_NE(std::string::npos, asString->find("Time scope: 0y0m0d0h0m"));
     EXPECT_NE(std::string::npos, asString->find("Editor syntax highlighting: yes"));
     EXPECT_NE(std::string::npos, asString->find("Save reads metadata: yes"));

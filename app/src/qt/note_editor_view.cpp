@@ -237,15 +237,30 @@ QString NoteEditorView::getRelevantWords() const
  * Autocomplete
  */
 
-void NoteEditorView::keyPressEvent(QKeyEvent *event)
+void NoteEditorView::keyPressEvent(QKeyEvent* event)
 {
     hitCounter++;
 
+    // TODO Linux paste
+
     if(event->modifiers() & Qt::ControlModifier) {
         switch (event->key()) {
-        case Qt::Key_F:
+        case Qt::Key_V: {
+            // TODO make this private function
+            QClipboard* clip = QApplication::clipboard();
+            const QMimeData* mime = clip->mimeData();
+            if(mime->hasImage()) {
+                MF_DEBUG("Image PASTED to editor" << endl);
+                QImage image = qvariant_cast<QImage>(mime->imageData());
+                emit signalPasteImageData(image);
+                return;
+            }
+            break;
+        }
+        case Qt::Key_F: {
             findStringAgain();
             return; // exit to override default key binding
+        }
         }
     }
 

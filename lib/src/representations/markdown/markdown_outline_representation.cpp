@@ -376,12 +376,19 @@ string* MarkdownOutlineRepresentation::to(const Outline* outline, string* md)
 {
     toPreamble(outline, md);
     toHeader(outline, md);
+    // no longer needed: md->append("\n");
     if(outline) {
         const vector<Note*>& notes=outline->getNotes();
         if(notes.size()) {
             string noteMd{};
-            for(Note *note:notes) {
-                to(note, &noteMd, outline->getFormat()==MarkdownDocument::Format::MINDFORGER);
+            for(Note* note:notes) {
+                to(
+                    note,
+                    &noteMd,
+                    outline->getFormat()==MarkdownDocument::Format::MINDFORGER,
+                    // full O rendering w/o autolinking (performance)
+                    false
+                );
                 md->append(noteMd);
                 noteMd.clear();
             }
@@ -492,7 +499,9 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
         md->append("\n");
     }
 
+    MF_DEBUG("= BEFORE autolinking =============================" << endl << md << endl);
     toDescription(note, md, autolinking);
+    MF_DEBUG("= AFTER autolinking ==============================" << endl << md << endl);
 
     return md;
 }
@@ -500,7 +509,12 @@ string* MarkdownOutlineRepresentation::to(const Note* note, string* md, bool inc
 string* MarkdownOutlineRepresentation::toDescription(const Note* note, string* md, bool autolinking)
 {
     if(descriptionInterceptor && autolinking) {
-        descriptionInterceptor->process(note->getDescription(), *md);
+        string amd{};
+        amd.reserve(1000);
+        descriptionInterceptor->process(note->getDescription(), amd);
+        if(md) {
+            md->append(amd);
+        }
     } else {
         toString(note->getDescription(), *md);
     }

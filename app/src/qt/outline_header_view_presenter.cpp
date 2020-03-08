@@ -58,13 +58,15 @@ OutlineHeaderViewPresenter::OutlineHeaderViewPresenter(
         orloj, SLOT(slotShowOutlines()));
 }
 
-void OutlineHeaderViewPresenter::refreshCurrent()
+void OutlineHeaderViewPresenter::refreshLivePreview()
 {
-    MF_DEBUG("Refreshing O header HTML preview from editor: " << this->currentOutline->getName() << endl);
+    MF_DEBUG("Refreshing O header HTML preview from editor: " << currentOutline->getName() << endl);
 
     // O w/ current editor text w/o saving it
     Outline auxOutline{*currentOutline};
+    auxOutline.setKey(currentOutline->getKey());
     auxOutline.setName(orloj->getOutlineHeaderEdit()->getView()->getName().toStdString());
+
     QString description = orloj->getOutlineHeaderEdit()->getView()->getDescription();
     string s{description.toStdString()};
     vector<string*> d{};
@@ -85,9 +87,17 @@ void OutlineHeaderViewPresenter::refreshCurrent()
         }
     }
 #endif
-    MF_DEBUG("SCROLL offset: " << yScrollPct << endl);
-    // refresh HTML view (autolinking intentionally disabled)
-    htmlRepresentation->toHeader(&auxOutline, &html, false, false, static_cast<int>(yScrollPct));
+
+    // refresh O header HTML view (autolinking intentionally disabled)
+    htmlRepresentation->to(
+        &auxOutline,
+        &html,
+        false,
+        false,
+        false,
+        true,
+        static_cast<int>(yScrollPct)
+    );
     view->setHtml(QString::fromStdString(html));
 
     // IMPROVE share code between O header and N
@@ -113,17 +123,16 @@ void OutlineHeaderViewPresenter::refresh(Outline* outline)
 {
     currentOutline = outline;
 
-    if(Configuration::getInstance().isUiHoistedMode()) {
-        // TODO inject TOC
-        // TODO full O rendering doesn't support autolinking (consider performance)
-        htmlRepresentation->to(outline, &html);
-    } else {
-        htmlRepresentation->toHeader(
-            outline,
-            &html,
-            false,
-            Configuration::getInstance().isAutolinking());
-    }
+    // IMPROVE consider TOC injection
+    htmlRepresentation->to(
+        outline,
+        &html,
+        false,
+        Configuration::getInstance().isAutolinking(),
+        Configuration::getInstance().isUiFullOPreview(),
+        true
+    );
+
     view->setHtml(QString::fromStdString(html));
 
     // leaderboard

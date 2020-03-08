@@ -20,7 +20,7 @@
 # make project w/ QtWebEngine instead QtWebKit
 
 buildMindForger() {
-    echo "IMPORTANT: build mindforger/deps/discount before running this script!"
+    echo "IMPORTANT: build MindForger deps (like cmark-gfm) before running this script!"
 
     echo "Clean..."
     rm -vrf ../../app/mindforger.app ../../app/mindforger.dmg
@@ -47,7 +47,13 @@ packageMindForger() {
 # main #########################################################################
 
 # build MindForger in Qt to get qt.io kits, CLI must be configured to avoid brew Qt
-#buildMindForger
+
+export SCRIPT_HOME=`pwd`
+buildMindForger
+cd ${SCRIPT_HOME}
 packageMindForger
+cd ${SCRIPT_HOME}
+
+cp -vf ../../app/mindforger.dmg .
 
 # eof

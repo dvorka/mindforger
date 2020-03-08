@@ -49,6 +49,7 @@ public:
     ~InsertImageDialog();
 
     void show();
+    void show(const QString& text, const QString& link);
     QPushButton* getInsertButton() const { return insertButton; }
     QString getAlternateText() { return alternateTextEdit->text(); }
     QString getPathText() { return pathEdit->text(); }

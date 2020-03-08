@@ -32,8 +32,6 @@ NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
     // IMPORTANT: pre-allocate string using reserve() to ensure good append performance
     html = string{};
     html.reserve(10000);
-    qHtml = QString();
-    qHtml.reserve(10000);
 
     this->view = view;
     this->orloj = orloj;
@@ -73,7 +71,7 @@ NoteViewPresenter::~NoteViewPresenter()
     if(htmlRepresentation) delete htmlRepresentation;
 }
 
-void NoteViewPresenter::refreshCurrent()
+void NoteViewPresenter::refreshLivePreview()
 {
     MF_DEBUG("Refreshing N HTML preview from editor: " << this->currentNote->getName() << endl);
 
@@ -102,10 +100,14 @@ void NoteViewPresenter::refreshCurrent()
     }
 #endif
 
-    // refresh HTML view (autolinking intentionally disabled)
-    htmlRepresentation->to(&auxNote, &html, false, static_cast<int>(yScrollPct));
-    qHtml = QString::fromStdString(html);
-    view->setHtml(qHtml);
+    // refresh N HTML view (autolinking intentionally disabled)
+    htmlRepresentation->to(
+        &auxNote,
+        &html,
+        false,
+        static_cast<int>(yScrollPct)
+    );
+    view->setHtml(QString::fromStdString(html));
 
     // IMPROVE share code between O header and N
 #if not defined(_WIN32) && not defined(__APPLE__)
@@ -132,17 +134,9 @@ void NoteViewPresenter::refresh(Note* note)
     note->makeRead();
     this->currentNote = note;
 
-    // autolinking debug
-    // MF_DEBUG("H " << htmlRepresentation << endl);
-    // MF_DEBUG("N " << note << endl);
-    // MF_DEBUG("T " << html << endl);
-    // MF_DEBUG("A " << Configuration::getInstance().isAutolinking() << endl);
-
     // HTML
     htmlRepresentation->to(note, &html, Configuration::getInstance().isAutolinking());
-    qHtml= QString::fromStdString(html);
-
-    view->setHtml(qHtml);
+    view->setHtml(QString::fromStdString(html));
 
     // leaderboard
     mind->associate();

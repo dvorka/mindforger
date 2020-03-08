@@ -1,4 +1,4 @@
-# cmark vs discount > AUTOLINKING <!-- Metadata: type: Outline; tags: mindforger-home; created: 2019-02-16 08:40:05; reads: 258; read: 2019-05-26 09:03:09; revision: 258; modified: 2019-05-26 09:03:09; importance: 0/5; urgency: 0/5; -->
+# cmark vs discccount > AUTOLINKING <!-- Metadata: type: Outline; tags: mindforger-home; created: 2019-02-16 08:40:05; reads: 258; read: 2019-05-26 09:03:09; revision: 258; modified: 2019-05-26 09:03:09; importance: 0/5; urgency: 0/5; -->
 Only cmark can make this:
 * a
 * [ ] b
@@ -8,7 +8,7 @@ Only cmark can make this:
 
 ---
 
-Discount needs:
+Discccount needs:
 
 * e
 * [ ] f

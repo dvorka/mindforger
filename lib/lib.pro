@@ -28,17 +28,11 @@ CONFIG -= qt
 mfnomd2html {
   DEFINES += MF_NO_MD_2_HTML
 } else {
-  mfmd2htmldiscount {
-    DEFINES += MF_MD_2_HTML_DISCOUNT
-    INCLUDEPATH += $$PWD/../deps/discount
-    DEPENDPATH += $$PWD/../deps/discount
-  } else {
-    DEFINES += MF_MD_2_HTML_CMARK CMARK_GFM_STATIC_DEFINE CMARK_GFM_EXTENSIONS_STATIC_DEFINE
-    INCLUDEPATH += $$PWD/../deps/cmark-gfm/src
-    INCLUDEPATH += $$PWD/../deps/cmark-gfm/extensions
-    INCLUDEPATH += $$PWD/../deps/cmark-gfm/build/src
-    INCLUDEPATH += $$PWD/../deps/cmark-gfm/build/extensions
-  }
+  DEFINES += MF_MD_2_HTML_CMARK CMARK_GFM_STATIC_DEFINE CMARK_GFM_EXTENSIONS_STATIC_DEFINE
+  INCLUDEPATH += $$PWD/../deps/cmark-gfm/src
+  INCLUDEPATH += $$PWD/../deps/cmark-gfm/extensions
+  INCLUDEPATH += $$PWD/../deps/cmark-gfm/build/src
+  INCLUDEPATH += $$PWD/../deps/cmark-gfm/build/extensions
 }
 
 # Zlib on Windows
@@ -68,6 +62,11 @@ win32{
       QMAKE_CXX = g++
     } else:!mfnocxx {
       QMAKE_CXX = ccache g++
+    }
+
+    mfdebug|mfunits {
+      # debug info
+      QMAKE_CXXFLAGS += -g
     }
     QMAKE_CXXFLAGS += -pedantic -std=c++11
 }
@@ -135,7 +134,6 @@ SOURCES += \
     src/mind/ai/autolinking_preprocessor.cpp \
     src/representations/csv/csv_outline_representation.cpp \
     src/mind/ai/autolinking/naive_autolinking_preprocessor.cpp \
-    src/representations/markdown/discount_markdown_transcoder.cpp \
     src/representations/markdown/cmark_gfm_markdown_transcoder.cpp \
     src/mind/ai/autolinking/autolinking_mind.cpp \
     src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.cpp \
@@ -254,7 +252,6 @@ HEADERS += \
     src/representations/csv/csv_outline_representation.h \
     src/mind/ai/autolinking/naive_autolinking_preprocessor.h \
     src/representations/markdown/markdown_transcoder.h \
-    src/representations/markdown/discount_markdown_transcoder.h \
     src/representations/representation_type.h \
     src/config/config.h \
     src/representations/markdown/cmark_gfm_markdown_transcoder.h \

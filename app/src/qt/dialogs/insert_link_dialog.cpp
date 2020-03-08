@@ -37,6 +37,7 @@ InsertLinkDialog::InsertLinkDialog(QWidget* parent)
     findDirectoryButton = new QPushButton{tr("Directory")};
 
     copyToRepoCheckBox = new QCheckBox{tr("copy link target to repository")};
+    copyToRepoCheckBox->setChecked(true);
     copyToRepoCheckBox->setEnabled(true);
 
     // IMPROVE disable/enable find button if text/path is valid: freedom vs validation

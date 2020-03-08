@@ -202,8 +202,8 @@ then
     exit 1
 fi
 
-export ARG_MAJOR_VERSION=1.51.
-export ARG_MINOR_VERSION=4 # minor version is incremented for every Ubuntu version
+export ARG_MAJOR_VERSION=1.52.
+export ARG_MINOR_VERSION=0 # minor version is incremented for every Ubuntu version
 export ARG_BAZAAR_MSG="MindForger ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} release."
 
 # https://wiki.ubuntu.com/Releases

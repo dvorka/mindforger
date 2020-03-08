@@ -21,7 +21,7 @@
 #ifdef MF_MD_2_HTML_CMARK
   #include "ai/autolinking/autolinking_mind.h"
   #include "ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h"
-# else
+#else
   #include "ai/autolinking/naive_autolinking_preprocessor.h"
 #endif
 
@@ -287,6 +287,47 @@ bool Mind::autolinkFindLongestPrefixWord(std::string& s, std::string& r) const
 /*
  * Remembering
  */
+
+
+void Mind::remember(const std::string& outlineKey)
+{
+    memory.remember(outlineKey);
+
+    // TODO onRemembering()
+
+#ifdef MF_MD_2_HTML_CMARK
+    if(config.isAutolinking()) {
+        autolinking->reindex();
+    }
+#endif
+}
+
+void Mind::remember(Outline* outline)
+{
+    memory.remember(outline);
+
+    // TODO onRemembering()
+
+#ifdef MF_MD_2_HTML_CMARK
+    if(config.isAutolinking()) {
+        autolinking->reindex();
+    }
+#endif
+}
+
+void Mind::forget(Outline* outline)
+{
+    memory.forget(outline);
+
+    // TODO onRemembering()
+
+#ifdef MF_MD_2_HTML_CMARK
+    if(config.isAutolinking()) {
+        autolinking->reindex();
+    }
+#endif
+}
+
 
 const vector<Note*>& Mind::getMemoryDwell(int pageSize) const
 {
@@ -832,7 +873,7 @@ string Mind::outlineNew(
             outline->addNote(note);
         }
 
-        memory.remember(outline);
+        remember(outline);
         onRemembering();
     } else {
         throw MindForgerException("Unable to create new Outline!");
@@ -858,7 +899,7 @@ Outline* Mind::learnOutlineTWiki(const string& twikiFile)
             o->addTag(memory.getOntology().findOrCreateTag("twiki"));
             o->addTag(memory.getOntology().findOrCreateTag("import"));
 
-            memory.remember(o);
+            remember(o);
             onRemembering();
             return o;
         } else {
@@ -891,7 +932,7 @@ bool Mind::outlineForget(string outlineKey)
     if(o) {
         deleteWatermark++;
 
-        memory.forget(o);
+        forget(o);
         auto k = memory.createLimboKey(&o->getName());
         o->setKey(k);
         moveFile(outlineKey, k);

@@ -159,12 +159,12 @@ $$I = \int \rho R^{2} dV$$
 
 And note that you can backslash-escape any punctuation characters
 which you wish to be displayed literally, ex.: \`foo\`, \*bar\*, etc.
-# Discount MD2HTML bugs <!-- Metadata: type: Note; tags: problem,important; created: 2018-03-21 08:22:45; reads: 13; read: 2018-03-21 09:23:08; revision: 10; modified: 2018-03-21 09:23:08; -->
+# Discccount MD2HTML bugs <!-- Metadata: type: Note; tags: problem,important; created: 2018-03-21 08:22:45; reads: 13; read: 2018-03-21 09:23:08; revision: 10; modified: 2018-03-21 09:23:08; -->
 This example format:
 
 * change tables to GitHub format
 
-Discount bugs summary:
+Discccount bugs summary:
 
 * multiline code block using ``` is rendered on single line (bug),
   it can render correctly only indented code blocks.

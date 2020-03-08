@@ -54,9 +54,13 @@ public:
     OutlineHeaderViewPresenter &operator=(const OutlineHeaderViewPresenter&&) = delete;
     ~OutlineHeaderViewPresenter() = default;
 
-    void refreshCurrent();
-    void refresh(Outline* outline);
+    /**
+     * @brief Refresh live preview.
+     */
+    void refreshLivePreview();
 
+    void refresh(Outline* outline);
+    void refreshCurrent() { refresh(currentOutline); }
 
 public slots:
     void slotLinkClicked(const QUrl& url);

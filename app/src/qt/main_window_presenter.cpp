@@ -96,11 +96,19 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     );
     QObject::connect(
         orloj->getNoteEdit()->getView()->getNoteEditor(), SIGNAL(signalDnDropUrl(QString)),
-        this, SLOT(doActionFormatLink(QString))
+        this, SLOT(doActionFormatLinkOrImage(QString))
     );
     QObject::connect(
         orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SIGNAL(signalDnDropUrl(QString)),
-        this, SLOT(doActionFormatLink(QString))
+        this, SLOT(doActionFormatLinkOrImage(QString))
+    );
+    QObject::connect(
+        orloj->getNoteEdit()->getView()->getNoteEditor(), SIGNAL(signalPasteImageData(QImage)),
+        this, SLOT(doActionEditPasteImageData(QImage))
+    );
+    QObject::connect(
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SIGNAL(signalPasteImageData(QImage)),
+        this, SLOT(doActionEditPasteImageData(QImage))
     );
     // wire toolbar signals
     QObject::connect(view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()), this, SLOT(doActionOutlineOrNoteNew()));
@@ -542,6 +550,8 @@ void MainWindowPresenter::doActionNameDescFocusSwap()
 
 void MainWindowPresenter::doActionToggleLiveNotePreview()
 {
+    MF_DEBUG("Toggling live N preview" << endl);
+
     // toggle config
     if(config.isUiLiveNotePreview()) {
         config.setUiLiveNotePreview(false);
@@ -1531,12 +1541,12 @@ void MainWindowPresenter::doActionFormatTable()
     }
 }
 
-void MainWindowPresenter::doActionFormatLink(QString link)
+void MainWindowPresenter::doActionFormatLinkOrImage(QString link)
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> oss{mind->getOutlines()};
     mind->remind().sortByName(oss);
-    vector<Thing*> os{oss.begin(),oss.end()};
+    vector<Thing*> os{oss.begin(), oss.end()};
 
     vector<Note*> ns{};
     mind->getAllNotes(ns);
@@ -1555,18 +1565,33 @@ void MainWindowPresenter::doActionFormatLink(QString link)
         insertLinkDialog->getCopyCheckBox()->setEnabled(false);
     }
 
-    insertLinkDialog->show(
-        config.getActiveRepository(),
-        orloj->getOutlineView()->getCurrentOutline(),
-        os,
-        ns,
-        selectedText,
-        link);
+    if(link.size() && (
+         link.endsWith(".png") ||
+         link.endsWith(".gif") ||
+         link.endsWith(".jpg") ||
+         link.endsWith(".jpeg") ||
+         link.endsWith(".PNG") ||
+         link.endsWith(".GIF") ||
+         link.endsWith(".JPG") ||
+         link.endsWith(".JPEG")))
+    {
+        insertImageDialog->show(
+            selectedText.size()?selectedText:QString{tr("image")},
+            link);
+    } else {
+        insertLinkDialog->show(
+            config.getActiveRepository(),
+            orloj->getOutlineView()->getCurrentOutline(),
+            os,
+            ns,
+            selectedText,
+            link);
+    }
 }
 
 void MainWindowPresenter::doActionFormatLink()
 {
-    doActionFormatLink(QString{});
+    doActionFormatLinkOrImage(QString{});
 }
 
 void MainWindowPresenter::injectMarkdownText(const QString& text, bool newline, int offset)
@@ -1588,7 +1613,7 @@ void MainWindowPresenter::copyLinkOrImageToRepository(const string& srcPath, QSt
         } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
             oPath = orloj->getOutlineHeaderEdit()->getCurrentOutline()->getKey();
         }
-        if(stringEndsWith(oPath, ".md")) {
+        if(stringEndsWith(oPath, FILE_EXTENSION_MD_MD)) {
             pathPrefix = QString::fromStdString(oPath.substr(0, oPath.length()-3));
         } else {
             pathPrefix = QString::fromStdString(oPath);
@@ -1632,11 +1657,42 @@ void MainWindowPresenter::copyLinkOrImageToRepository(const string& srcPath, QSt
     }
 }
 
+// IMPROVE optimize this function (QString, string, ...)
+// IMPROVE deduplicate this method and copy image/attachment code
+void MainWindowPresenter::doActionEditPasteImageData(QImage image)
+{
+    // save image object as file
+    string oPath{};
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        oPath = orloj->getNoteEdit()->getCurrentNote()->getOutlineKey();
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        oPath = orloj->getOutlineHeaderEdit()->getCurrentOutline()->getKey();
+    }
+    QString pathPrefix{};
+    if(stringEndsWith(oPath, FILE_EXTENSION_MD_MD)) {
+        pathPrefix = QString::fromStdString(oPath.substr(0, oPath.length()-3));
+    } else {
+        pathPrefix = QString::fromStdString(oPath);
+    }
+    pathPrefix.append(".");
+    QString pathSuffix{"image.png"};
+    QString path = pathPrefix + pathSuffix;
+    while(isDirectoryOrFileExists(path.toStdString().c_str())) {
+        pathSuffix.prepend("_");
+        path = pathPrefix + pathSuffix;
+    }
+
+    statusBar->showInfo(tr("Saving pasted image data to file: '%1'").arg(path.toStdString().c_str()));
+    image.save(path);
+
+    // inject link to file to O
+    injectImageLinkToEditor(path, QString{"image"});
+}
+
 void MainWindowPresenter::statusInfoPreviewFlickering()
 {
     statusBar->showInfo(QString(tr("HTML Note preview flickering can be eliminated by disabling math and diagrams in Preferences menu")));
 }
-
 
 /*
  * See InsertLinkDialog for link creation hints
@@ -1684,6 +1740,33 @@ void MainWindowPresenter::doActionFormatImage()
     insertImageDialog->show();
 }
 
+void MainWindowPresenter::injectImageLinkToEditor(
+        const QString& path,
+        const QString& alternateText)
+{
+    QString text{"!["};
+    if(alternateText.size()) {
+        text += alternateText;
+    } else {
+        text += insertImageDialog->getAlternateText();
+    }
+    text += "](";
+#ifdef _WIN32
+    // image links are processed by HTML browser > \s must be replaced with /s
+    // (attachments use \s as the path is used by OS tools)
+    text +=  QString{path}.replace("\\", "/");
+#else
+    text += path;
+#endif
+    text += ")";
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false, 2);
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false);
+    }
+}
+
 void MainWindowPresenter::handleFormatImage()
 {
     insertImageDialog->hide();
@@ -1695,17 +1778,7 @@ void MainWindowPresenter::handleFormatImage()
         path = insertImageDialog->getPathText();
     }
 
-    QString text{"!["};
-    text += insertImageDialog->getAlternateText();
-    text += "](";
-    text += path;
-    text += ")";
-
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false, 2);
-    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false);
-    }
+    injectImageLinkToEditor(path, QString{});
 }
 
 void MainWindowPresenter::doActionFormatHr()
@@ -1823,7 +1896,7 @@ void MainWindowPresenter::handleNoteNew()
                 newNoteDialog->getProgress(),
                 newNoteDialog->getStencil());
     if(note) {
-        mind->remind().remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
+        mind->remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
 
         // insert new N and select it in the tree
         orloj->getOutlineView()->insertAndSelect(note);
@@ -2044,6 +2117,11 @@ void MainWindowPresenter::doActionNoteHoist()
     }
 }
 
+void MainWindowPresenter::doActionNoteLeave()
+{
+    orloj->slotShowOutlines();
+}
+
 void MainWindowPresenter::doActionNoteForget()
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
@@ -2067,7 +2145,7 @@ void MainWindowPresenter::doActionNoteForget()
             QAbstractButton* choosen = msgBox.clickedButton();
             if(yes == choosen) {
                 Outline* outline = mind->noteForget(note);
-                mind->remind().remember(outline);
+                mind->remember(outline);
                 orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
             }
             return;
@@ -2116,7 +2194,7 @@ void MainWindowPresenter::doActionNoteExtract()
                 mdRepresentation->description(&t, description);
                 extractedNote->setDescription(description);
 
-                mind->remind().remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
+                mind->remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
                 // IMPROVE smarter refresh of outline tree (do less then overall load)
                 orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
                 orloj->showFacetNoteEdit(extractedNote);

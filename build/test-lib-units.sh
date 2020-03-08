@@ -29,6 +29,7 @@ export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to d
 #export OPTION_TEST="MarkdownParserBenchmark.ParserMeta"
 
 # tests
+#export OPTION_TEST="AutolinkingCmarkTestCase.Monster"
 #export OPTION_TEST="AutolinkingCmarkTestCase.*"
 #export OPTION_TEST="AutolinkingCmarkTestCase.CmarkAstRowWalker"
 #export OPTION_TEST="AutolinkingCmarkTestCase.CmarkAstBlockTransformer"
@@ -51,7 +52,7 @@ export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to d
 #export OPTION_TEST="AiNlpTestCase.Stemmer"
 #export OPTION_TEST="HtmlTestCase.*"
 #export OPTION_TEST="HtmlTestCase.Outline"
-export OPTION_TEST="HtmlTestCase.TaskList"
+#export OPTION_TEST="HtmlTestCase.TaskList"
 #export OPTION_TEST="HtmlTestCase.NoteLinks"
 #export OPTION_TEST="MarkdownParserTestCase.*"
 #export OPTION_TEST="MarkdownParserTestCase.Bug622Loop64kLinesOverflow"
@@ -95,7 +96,7 @@ export OPTION_TEST="HtmlTestCase.TaskList"
 #export OPTION_TEST="DateTimeGearTestCase.*"
 #export OPTION_TEST="DateTimeGearTestCase.Immutability"
 #export OPTION_TEST="ConfigurationTestCase.*"
-#export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
+export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
 #export OPTION_TEST="ConfigurationTestCase.SaveAndLoad"
 #export OPTION_TEST="ConfigurationTestCase.FromConstructor"
 #export OPTION_TEST="ConfigurationTestCase.FromEnvironment"
@@ -127,8 +128,8 @@ then
     then
 	export M8R_VALGRIND="valgrind --vgdb=yes --vgdb-error=0 --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
     else
-	export M8R_VALGRIND="valgrind --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
-	#export M8R_VALGRIND="valgrind -v --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
+	#export M8R_VALGRIND="valgrind --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
+	export M8R_VALGRIND="valgrind -v --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
     fi
 else
     export M8R_VALGRIND=    
@@ -153,8 +154,7 @@ export BUILD_DIR=${SCRIPT_DIR}/../lib/test
 if [ ${OPTION_RECOMPILE} ]
 then
     # cleanup
-    cd ${BUILD_DIR} && cd ../../deps && make clean && rm *.a
-    cd ${BUILD_DIR} && cd .. && make clean && rm *.a
+    cd ${BUILD_DIR} && cd ../../ && make clean && rm *.a
     cd ${BUILD_DIR} && cd ./src && make clean
     # recursive qmake and recompilation - IMPORTANT: mfunits ensures MF_DEBUG is enabled in library src
     cd ${BUILD_DIR} && make clean && qmake -r mindforger-lib-unit-tests.pro CONFIG+=mfunits && make -j${M8R_CPU_CORES}

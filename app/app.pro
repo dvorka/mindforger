@@ -61,31 +61,29 @@ win32 {
     LIBS += -L$$OUT_PWD/../lib -lmindforger
 }
 
-# Markdown to HTML: Discount if mfmd2htmldiscount and not Windows otherwise cmark-gfm
+# Markdown to HTML: cmark-gfm (or nothing)
 !mfnomd2html {
+  # cmark-gfm
+  DEFINES += MF_MD_2_HTML_CMARK
+
   win32 {
     CONFIG(release, debug|release) {
-        LIBS += -L$$PWD/../deps/cmark-gfm/build/src/Release -lcmark-gfm_static
-        LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions/Release -lcmark-gfm-extensions_static
+      LIBS += -L$$PWD/../deps/cmark-gfm/build/src/Release -lcmark-gfm_static
+      LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions/Release -lcmark-gfm-extensions_static
     } else:CONFIG(debug, debug|release) {
-        LIBS += -L$$PWD/../deps/cmark-gfm/build/src/Debug -lcmark-gfm_static
-        LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions/Debug -lcmark-gfm-extensions_static
+      LIBS += -L$$PWD/../deps/cmark-gfm/build/src/Debug -lcmark-gfm_static
+      LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions/Debug -lcmark-gfm-extensions_static
     }
-  } else:mfmd2htmldiscount {
-      # MF must link against ldiscount.a (built in ../deps/discount) - NOT lmarkdown
-      LIBS += -L$$OUT_PWD/../deps/discount -ldiscount
-    } else {
-      # cmark-gfm
+  } else {
+    # cmark-gfm to be built by qmake to enable clean system build for Launchpad debuild
+    libcmark-gfm.target = libcmark-gfm
+    libcmark-gfm.commands = cd -L$$PWD/../deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
+    libcmark-gfm_clean.commands = cd -L$$PWD/../deps/cmark-gfm rm -rvf build
+    QT_EXTRA_TARGETS += libcmark-gfm
 
-      # cmark-gfm to be built by qmake to enable clean system build for Launchpad debuild
-      libcmark-gfm.target = libcmark-gfm
-      libcmark-gfm.commands = cd -L$$PWD/../deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
-      libcmark-gfm_clean.commands = cd -L$$PWD/../deps/cmark-gfm rm -rvf build
-      QT_EXTRA_TARGETS += libcmark-gfm
-
-      LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions
-      LIBS += -L$$PWD/../deps/cmark-gfm/build/src -lcmark-gfm
-    }
+    LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions
+    LIBS += -L$$PWD/../deps/cmark-gfm/build/src -lcmark-gfm
+  }
 }
 
 # NER library

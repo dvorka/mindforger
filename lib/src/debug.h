@@ -36,6 +36,7 @@
     //#define MF_DEBUG_ASYNC_TASKS
     //#define MF_DEBUG_QRC
     //#define MF_DEBUG_L10N
+    //#define MF_DEBUG_AUTOLINKING
 
     // show WIP features
     #define MF_WIP

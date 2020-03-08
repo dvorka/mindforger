@@ -17,15 +17,13 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS = deps lib src
+SUBDIRS = lib src
 
 # where to find the sub projects - give the folders
-deps.subdir = ../../deps
 lib.subdir  = ../../lib
 src.subdir  = ./src
 
 # build dependencies
-lib.depends = deps
 src.depends = lib
 
 # eof

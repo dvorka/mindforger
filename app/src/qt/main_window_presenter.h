@@ -269,10 +269,11 @@ public slots:
     void doActionFormatDiagramGantt();
     void doActionFormatDiagramSequence();
     void doActionFormatBlockquote();
-    void doActionFormatLink(QString link);
+    void doActionFormatLinkOrImage(QString link);
     void doActionFormatLink();
     void handleFormatLink();
     void doActionFormatImage();
+    void injectImageLinkToEditor(const QString& path, const QString& alternateText);
     void handleFormatImage();
     void doActionFormatTable();
     void doActionFormatHr();
@@ -304,11 +305,13 @@ public slots:
     void doActionNoteExtract();
     void doActionRefactorNoteToOutline();
     void handleRefactorNoteToOutline();
+    void doActionNoteLeave();
     void doActionNoteForget();
     // edit
     void doActionEditFind();
     void doActionEditFindAgain();
     void doActionEditWordWrapToggle();
+    void doActionEditPasteImageData(QImage image);
     void doActionToggleLiveNotePreview();
     void doActionNameDescFocusSwap();
     // help

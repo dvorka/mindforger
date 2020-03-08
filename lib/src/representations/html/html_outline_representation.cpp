@@ -32,8 +32,6 @@ HtmlOutlineRepresentation::HtmlOutlineRepresentation(
 {
 #if defined  MF_MD_2_HTML_CMARK
     markdownTranscoder = new CmarkGfmMarkdownTranscoder{};
-#elif defined MF_MD_2_HTML_DISCOUNT
-    markdownTranscoder = new DiscountMarkdownTranscoder{};
 #else
     markdownTranscoder = nullptr;
 #endif
@@ -268,17 +266,11 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
         html->append(*markdown);
         footer(*html);
     } else {
-        // create HTML body using Discount first
         html->clear();
         header(*html, basePath, standalone, yScrollTo);
 
         if(markdown->size() > 0) {
 #ifdef MF_NO_MD_2_HTML
-            // Discount: make sure that MD ends with new line, otherwise there would be missing characters in output HTML
-            //if(markdown->at(markdown->size()-1) != '\n') {
-            //    markdown->append("\n");
-            //}
-
             html->append("<pre>");
             html->append(*markdown);
             html->append("</pre>");
@@ -297,17 +289,28 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
     return html;
 }
 
-string* HtmlOutlineRepresentation::to(const Outline* outline, string* html, bool standalone, int yScrollTo)
+string* HtmlOutlineRepresentation::toNoMeta(const Outline* outline, string* html, bool standalone, int yScrollTo)
 {
     // IMPROVE markdown can be processed by Mind to be enriched with various links and relationships
-    string* markdown = markdownRepresentation.to(outline);    
+    string* markdown = markdownRepresentation.to(outline);
     to(markdown, html, nullptr, standalone, yScrollTo);
     delete markdown;
     return html;
 }
 
-string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html, bool standalone, bool autolinking, int yScrollTo)
+string* HtmlOutlineRepresentation::to(
+        Outline* outline,
+        std::string* html,
+        bool standalone,
+        bool autolinking,
+        bool whole,
+        bool metadata,
+        int yScrollTo)
 {
+    if(!metadata) {
+        return toNoMeta(outline, html, standalone, yScrollTo);
+    }
+
     if(!config.isUiHtmlTheme()) {
         header(*html, nullptr, standalone, 0);
         string markdown{"# "};
@@ -322,7 +325,7 @@ string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html, bool
 
         // table
         htmlHeader =
-                "<body>" // body tag is later replaced in Discount generated HTML > must be present in the header
+                "<body>" // body tag is later replaced in generated HTML > must be present in the header
                 "<table style='width: 100%; border-collapse: collapse; border: none;'>"
                 "<tr style='border-collapse: collapse; border: none;'>"
                 "<td style='border-collapse: collapse; border: none;'>"
@@ -409,14 +412,40 @@ string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html, bool
         string outlineMd{};
         string path, file;
         pathToDirectoryAndFile(outline->getKey(), path, file);
+
+        // O header
         if(autolinking) {
             markdownRepresentation.toDescription(
-                        outline->getOutlineDescriptorAsNote(),
-                        &outlineMd,
-                        autolinking);
+                outline->getOutlineDescriptorAsNote(),
+                &outlineMd,
+                autolinking
+            );
         } else {
-            outlineMd.append(outline->getOutlineDescriptorAsNote()->getDescriptionAsString());
+            outlineMd.append(
+                outline->getOutlineDescriptorAsNote()->getDescriptionAsString()
+            );
         }
+        // Ns
+        if(whole) {
+            const vector<Note*>& notes=outline->getNotes();
+            if(notes.size()) {
+                string noteMd{};
+                for(Note* note:notes) {
+                    outlineMd.append("\n");
+                    // TODO MD representation to render also tags as HTML injected code (under section)
+                    markdownRepresentation.to(
+                        note,
+                        &noteMd,
+                        outline->getFormat()==MarkdownDocument::Format::MINDFORGER,
+                        autolinking
+                    );
+                    outlineMd.append(noteMd);
+                    noteMd.clear();
+                }
+            }
+        }
+
+        // MD 2 HTML
         to(&outlineMd, html, &path, false, yScrollTo);
         // inject custom HTML header
         html->replace(
@@ -426,6 +455,8 @@ string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html, bool
     }
 
 #ifdef MF_DEBUG_HTML
+    // debug MD
+    MF_DEBUG("=== BEGIN HEADER MD ===" << endl << *html << endl << "=== END HEADER MD ===" << endl);
     // debug generated HTML
     MF_DEBUG("=== BEGIN HEADER HTML ===" << endl << *html << endl << "=== END HEADER HTML ===" << endl);
 #endif
@@ -433,7 +464,11 @@ string* HtmlOutlineRepresentation::toHeader(Outline* outline, string* html, bool
     return html;
 }
 
-string* HtmlOutlineRepresentation::to(const Note* note, string* html, bool autolinking, int yScrollTo)
+string* HtmlOutlineRepresentation::to(
+    const Note* note,
+    string* html,
+    bool autolinking,
+    int yScrollTo)
 {
     string* markdown = new string{};
     markdown->reserve(MarkdownOutlineRepresentation::AVG_NOTE_SIZE);

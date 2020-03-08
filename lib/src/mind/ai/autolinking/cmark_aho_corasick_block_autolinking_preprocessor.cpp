@@ -119,8 +119,7 @@ cmark_node* injectAstTxtNode(
     return txtNode;
 }
 
-void injectThingsLinks(
-        cmark_node* srcNode, Mind& mind)
+void injectThingsLinks(cmark_node* srcNode, Mind& mind)
 {
     // copy w to t as it will be chopped word/match by word/match from head to tail
     string txt{cmark_node_get_literal(srcNode)};
@@ -139,9 +138,12 @@ void injectThingsLinks(
         while(preSize < txt.size()) {
             // check $$ to detect begin/end of math (MathJax) section to ignore it
             if(txt.size()>=2 && '$'==txt.at(0) && '$'==txt.at(1)) {
-                MF_DEBUG("MATH matched");
+                MF_DEBUG("MATH matched" << endl);
                 // TODO toggle math
                 preSize+=2;
+                if(txt.size()==2) {
+                    break;
+                }
             }
 
             if(CmarkAhoCorasickBlockAutolinkingPreprocessor::TRAILING_CHARS.find(txt.at(preSize)) != string::npos) {
@@ -304,7 +306,8 @@ void CmarkAhoCorasickBlockAutolinkingPreprocessor::process(
         cmark_node* document = cmark_parse_document(
             mdsc,
             strlen(mdsc),
-            CMARK_OPT_DEFAULT);
+            CMARK_OPT_DEFAULT
+        );
 
         cmark_iter* astWalker = cmark_iter_new(document);
 
@@ -337,7 +340,8 @@ void CmarkAhoCorasickBlockAutolinkingPreprocessor::process(
         char* cmm = cmark_render_commonmark(document, 0, 0);
         if(cmm) {
             amd.assign(cmm);
-            delete cmm;
+            // TODO valgrind delete cmm;
+            free(cmm);
             amd.pop_back();
         } else {
             amd.clear();
