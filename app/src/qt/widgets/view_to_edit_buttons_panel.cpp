@@ -33,16 +33,16 @@ ViewToEditEditButtonsPanel::ViewToEditEditButtonsPanel(MfWidgetMode mode, QWidge
     editButton->setToolTip("Ctrl+E");
 #endif
 
+    // assembly
+    layout = new QHBoxLayout{this};
+    layout->addStretch(1);
     if(MfWidgetMode::OUTLINE_MODE == mode) {
         toggleFullOPreviewButton = new QPushButton{tr("Toggle Full Preview"), this};
         toggleFullOPreviewButton->setToolTip(tr(
             "Toggle full Notebook preview (only header is shown by default)"));
-    }
 
-    // assembly
-    layout = new QHBoxLayout{this};
-    layout->addStretch(1);
-    layout->addWidget(toggleFullOPreviewButton);
+        layout->addWidget(toggleFullOPreviewButton);
+    }
     layout->addWidget(editButton);
     setLayout(layout);
 }
