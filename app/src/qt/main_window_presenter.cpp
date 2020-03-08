@@ -1686,7 +1686,7 @@ void MainWindowPresenter::doActionEditPasteImageData(QImage image)
     image.save(path);
 
     // inject link to file to O
-    injectImageLinkToEditor(path);
+    injectImageLinkToEditor(path, QString{"image"});
 }
 
 void MainWindowPresenter::statusInfoPreviewFlickering()
@@ -1740,10 +1740,16 @@ void MainWindowPresenter::doActionFormatImage()
     insertImageDialog->show();
 }
 
-void MainWindowPresenter::injectImageLinkToEditor(const QString& path)
+void MainWindowPresenter::injectImageLinkToEditor(
+        const QString& path,
+        const QString& alternateText)
 {
     QString text{"!["};
-    text += insertImageDialog->getAlternateText();
+    if(alternateText.size()) {
+        text += alternateText;
+    } else {
+        text += insertImageDialog->getAlternateText();
+    }
     text += "](";
     text += path;
     text += ")";
@@ -1766,7 +1772,7 @@ void MainWindowPresenter::handleFormatImage()
         path = insertImageDialog->getPathText();
     }
 
-    injectImageLinkToEditor(path);
+    injectImageLinkToEditor(path, QString{});
 }
 
 void MainWindowPresenter::doActionFormatHr()

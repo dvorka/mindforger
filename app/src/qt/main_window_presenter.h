@@ -273,7 +273,7 @@ public slots:
     void doActionFormatLink();
     void handleFormatLink();
     void doActionFormatImage();
-    void injectImageLinkToEditor(const QString& path);
+    void injectImageLinkToEditor(const QString& path, const QString& alternateText);
     void handleFormatImage();
     void doActionFormatTable();
     void doActionFormatHr();
