@@ -984,11 +984,11 @@ Note* Mind::noteNew(
     }
 }
 
-Note* Mind::noteClone(const string& outlineKey, const Note* newNote)
+Note* Mind::noteClone(const string& outlineKey, const Note* newNote, const bool deep)
 {
     Outline* o = memory.getOutline(outlineKey);
     if(o) {
-        return o->cloneNote(newNote);
+        return o->cloneNote(newNote, deep);
     } else {
         throw MindForgerException("Outline for given key not found!");
     }

@@ -24,6 +24,7 @@
 
 #include "../../model/outline.h"
 #include "../../gear/file_utils.h"
+#include "../../gear/string_utils.h"
 
 namespace m8r {
 

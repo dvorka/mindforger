@@ -132,6 +132,26 @@ bool RepositoryIndexer::fileHasMarkdownExtension(const std::string& filename)
     return false;
 }
 
+bool RepositoryIndexer::fileHasPdfExtension(const std::string& filename)
+{
+    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
+    if(stringEndsWith(filename, FILE_EXTENSION_PDF)) {
+        return true;
+    }
+
+    return false;
+}
+
+bool RepositoryIndexer::fileHasTextExtension(const std::string& filename)
+{
+    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
+    if(stringEndsWith(filename, FILE_EXTENSION_TXT)) {
+        return true;
+    }
+
+    return false;
+}
+
 void RepositoryIndexer::updateIndexMemory(const string& directory)
 {
     if(repository->getMode() == Repository::RepositoryMode::REPOSITORY) {
@@ -141,7 +161,7 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
             const struct dirent *entry;
             if((entry = readdir(dir))) {
                 string path;
-                string *ppath;
+                string* ppath;
                 do {
                     if(entry->d_type == DT_DIR) {
                         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
@@ -162,6 +182,10 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
                         allFiles.insert(ppath);
                         if(fileHasMarkdownExtension(*ppath)) {
                             markdowns.insert(ppath);
+                        } else if(fileHasPdfExtension(*ppath)) {
+                            pdfs.insert(ppath);
+                        } else if(fileHasTextExtension(*ppath)) {
+                            texts.insert(ppath);
                         }
                     }
                 } while ((entry = readdir(dir)) != 0);
@@ -208,6 +232,14 @@ void RepositoryIndexer::updateIndexStencils(const string& directory, set<const s
 
 const set<const string*> RepositoryIndexer::getMarkdownFiles() const {
     return markdowns;
+}
+
+const set<const string*> RepositoryIndexer::getPdfFiles() const {
+    return pdfs;
+}
+
+const set<const string*> RepositoryIndexer::getTextFiles() const {
+    return texts;
 }
 
 const set<const string*> RepositoryIndexer::getAllOutlineFileNames() const {

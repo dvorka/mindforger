@@ -312,9 +312,24 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNavigator->addAction(actionNavigatorShuffle);
     menuNavigator->setEnabled(false);
 
+    // menu: knowledge
+
+#ifdef MF_WIP
+    menuKnowledge = qMenuBar->addMenu(tr("&Knowledge"));
+
+    actionKnowledgeWikipedia = new QAction(QIcon(":/menu-icons/link.svg"), tr("&Wikipedia"), mainWindow);
+    actionKnowledgeWikipedia->setStatusTip(tr("Find marked text on Wikipedia or open Wikipedia search"));
+
+    actionKnowledgeArxiv= new QAction(QIcon(":/menu-icons/link.svg"), tr("&arXiv"), mainWindow);
+    actionKnowledgeArxiv->setStatusTip(tr("Find marked text on arXiv or get article by ID"));
+
+    menuKnowledge->addAction(actionKnowledgeWikipedia);
+    menuKnowledge->addAction(actionKnowledgeArxiv);
+#endif
+
     // menu: Outline
 
-    menuOutline = qMenuBar->addMenu(tr("N&otebook"));
+    menuOutline = qMenuBar->addMenu(tr("Note&book"));
 
     actionOutlineNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
     actionOutlineNew->setStatusTip(tr("Create new Notebook to form new ideas, principles, combinations or applications"));

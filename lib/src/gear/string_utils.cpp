@@ -171,4 +171,13 @@ void toString(const std::vector<std::string*>& ss, std::string& os)
     }
 }
 
+void replaceAll(const std::string& old_s, const std::string& new_s, std::string& s)
+{
+    size_t from = 0;
+    while((from = s.find(old_s, from)) != std::string::npos) {
+             s.replace(from, old_s.length(), new_s);
+             from += new_s.length();
+    }
+}
+
 } /* namespace */

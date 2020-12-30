@@ -51,7 +51,7 @@ private:
     PreambleTab* preambleTab;
     AdvancedTab* advancedTab;
 
-    QDialogButtonBox *buttonBox;
+    QDialogButtonBox* buttonBox;
 
 public:
     explicit OutlineNewDialog(

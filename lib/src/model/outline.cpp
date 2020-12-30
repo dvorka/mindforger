@@ -464,7 +464,7 @@ void Outline::resetClonedNote(Note* n)
     n->completeProperties(n->getModified());
 }
 
-Note* Outline::cloneNote(const Note* clonedNote)
+Note* Outline::cloneNote(const Note* clonedNote, const bool deep)
 {
     int offset = getNoteOffset(clonedNote);
     if(offset != -1) {
@@ -473,12 +473,13 @@ Note* Outline::cloneNote(const Note* clonedNote)
         vector<Note*> children{};
         getAllNoteChildren(clonedNote, &children);
         offset += 1+children.size();
-        if(children.size()) {
+        if(deep && children.size()) {
             if((unsigned int)offset < notes.size()) {
+                int o = offset;
                 for(Note* n:children) {
                     newNote = new Note(*n);
                     resetClonedNote(newNote);
-                    addNote(newNote, offset);
+                    addNote(newNote, o++);
                 }
             } else {
                 for(Note* n:children) {

@@ -2211,7 +2211,14 @@ void MainWindowPresenter::doActionNoteClone()
 {
     Note* n = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
     if(n) {
-        Note* clonedNote = mind->noteClone(orloj->getOutlineView()->getCurrentOutline()->getKey(), n);
+        QMessageBox::StandardButton choice;
+        choice = QMessageBox::question(
+            &view,
+            tr("Clone Note"),
+            tr("Do you want to clone Note '") + QString::fromStdString(n->getName()) + tr("' including its child notes?'?"));
+        bool deep = choice == QMessageBox::Yes;
+
+        Note* clonedNote = mind->noteClone(orloj->getOutlineView()->getCurrentOutline()->getKey(), n, deep);
         if(clonedNote) {
             mind->remind().remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
             // IMPROVE smarter refresh of outline tree (do less then overall load)

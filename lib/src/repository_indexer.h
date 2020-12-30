@@ -22,8 +22,8 @@
 #include "config/config.h"
 #include <sys/types.h>
 #ifndef _WIN32
-#  include <unistd.h>
-#endif //_WIN32
+    #include <unistd.h>
+#endif /* _WIN32 */
 
 #include <cstdio>
 #include <cstring>
@@ -69,7 +69,16 @@ public:
     /**
      * @brief Does file has one of supported Markdown extensions?
      */
+
+    // TODO instead of hard-coded extensions use MIME types to support/work
+    //      support and work with (new) extensions dynamically
+    // TODO extensions as content type parsers could be registered dynamically
+    //      just by name specification
     static bool fileHasMarkdownExtension(const std::string& filename);
+    // TODO PDF extension >> make it MIME
+    static bool fileHasPdfExtension(const std::string& filename);
+    // text extension >> make it MIME
+    static bool fileHasTextExtension(const std::string& filename);
 
 private:
     Repository* repository;
@@ -85,6 +94,15 @@ private:
     std::set<const std::string*> markdowns;
     std::set<const std::string*> outlineStencils;
     std::set<const std::string*> noteStencils;
+
+    /*
+     * DIKW: information artifacts
+     */
+
+    // PDFs
+    std::set<const std::string*> pdfs;
+    // TXTs
+    std::set<const std::string*> texts;
 
 public:
     explicit RepositoryIndexer();
@@ -112,6 +130,8 @@ public:
     Repository* getRepository() const { return repository; }
 
     const std::set<const std::string*> getMarkdownFiles() const;
+    const std::set<const std::string*> getPdfFiles() const;
+    const std::set<const std::string*> getTextFiles() const;
     const std::set<const std::string*> getAllOutlineFileNames() const;
     const std::set<const std::string*> getOutlineStencilsFileNames() const;
     const std::set<const std::string*> getNoteStencilsFileNames() const;

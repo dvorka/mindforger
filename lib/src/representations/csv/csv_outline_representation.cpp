@@ -53,8 +53,10 @@ void CsvOutlineRepresentation::to(const vector<Outline*>& os, const m8r::File& s
             } catch (const std::ofstream::failure& e) {
                 cerr << "Error: unable to open/write file " << sourceFile.getName() << " " << e.what();
             }
-
+            out.flush();
             out.close();
+
+            MF_DEBUG("FINISHED export of MIND to CSV " << sourceFile.getName() << endl);
         }
     } else {
         cerr << "Error: target file name is empty";
@@ -73,9 +75,9 @@ void CsvOutlineRepresentation::toHeader(std::ofstream& out)
 
 void CsvOutlineRepresentation::to(const Outline* o, ofstream& out)
 {
-    string s{};
+    MF_DEBUG("\n  " << o->getName());
 
-    MF_DEBUG("  " << o->getName() << endl);
+    string s{};
 
     // O
     out << o->getKey() << ",";
@@ -98,6 +100,7 @@ void CsvOutlineRepresentation::to(const Outline* o, ofstream& out)
     const vector<Note*>& ns = o->getNotes();
     int offset = 1;
     for(Note* n:ns) {
+        MF_DEBUG("    " << n->getName());
         out << n->getKey() << ",";
         out << "n,";
         s.clear(); quoteValue(n->getName(), s);
@@ -111,9 +114,13 @@ void CsvOutlineRepresentation::to(const Outline* o, ofstream& out)
         out << n->getCreated() << ",";
         out << n->getModified() << ",";
         out << n->getRead() << ",";
+        MF_DEBUG(" B ");
         s.clear(); quoteValue(n->getDescriptionAsString(" "), s);
+        MF_DEBUG(" F ");
         out << s;
         out << "\n";
+        MF_DEBUG(" ... DONE" << endl);
+        out.flush();
     }
 }
 
@@ -123,10 +130,7 @@ void CsvOutlineRepresentation::quoteValue(const std::string& is, std::string& os
         os.append(" ");
         os.append(is);
 
-        //os.append(is);
-        while(os.find("\"") != std::string::npos) {
-          os.replace(os.find("\""),1,"\"\"");
-        }
+        replaceAll("\"", "\"\"", os);
 
         os[0] = '\"';
         os.append("\"");

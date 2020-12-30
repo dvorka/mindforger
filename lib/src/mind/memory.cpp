@@ -89,6 +89,28 @@ void Memory::learn()
             }
         }
 
+#ifdef MF_WIP
+        MF_DEBUG(endl << "PDF files:");
+        for(const string* pdfFile:repositoryIndexer.getPdfFiles()) {
+            MF_DEBUG(endl << "  '" << *pdfFile << "'");
+
+            string INFO_DESCRIPTOR_EXT{".M1ndF0rg3r.md"};
+            string INFO_DESCRIPTOR_SEPARATOR{"--- m1ndf0rg3r ---"}; // TODO followed by path
+
+            // lookup/generate PDF descriptors
+            string pdfDescriptorPath{*pdfFile};
+            pdfDescriptorPath.append(INFO_DESCRIPTOR_EXT);
+
+            string descriptorTitle{};
+            string descriptorDescription{};
+        }
+
+        MF_DEBUG(endl << "TXT files:");
+        for(const string* textFile:repositoryIndexer.getTextFiles()) {
+            MF_DEBUG(endl << "  '" << *textFile << "'");
+        }
+#endif
+
         MF_DEBUG(endl << "Outline stencils:");
         for(const string* file:repositoryIndexer.getOutlineStencilsFileNames()) {
             Stencil* stencil = new Stencil{*file, ResourceType::OUTLINE};

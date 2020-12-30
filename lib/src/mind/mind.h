@@ -559,10 +559,10 @@ public:
     /**
      * @brief Clone Note.
      *
-     * Cloned Note is stored down from original note on the same level of depth.
-     * If Note has children, then they are cloned as well.
+     * Cloned Note is stored below the original note on the same level of depth.
+     * If Note has children and deep option is used, then they are cloned as well.
      */
-    Note* noteClone(const std::string& outlineKey, const Note* newNote);
+    Note* noteClone(const std::string& outlineKey, const Note* newNote, const bool deep=true);
 
     /**
      * @brief Refactor Note to an Outline.

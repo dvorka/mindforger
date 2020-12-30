@@ -49,6 +49,7 @@ public:
     QMenu* menuFind;
     QMenu* menuView;
     QMenu* menuNavigator;
+    QMenu* menuKnowledge;
     QMenu* menuOutline;
     QMenu* menuNote;
     QMenu* menuEdit;
@@ -111,6 +112,10 @@ public:
     QAction* actionNavigatorEdgesStretch;
     QAction* actionNavigatorEdgesShrink;
     QAction* actionNavigatorShuffle;
+
+    // menu: Knowledge
+    QAction* actionKnowledgeWikipedia;
+    QAction* actionKnowledgeArxiv;
 
     // menu: Outline
     QAction* actionOutlineNew;

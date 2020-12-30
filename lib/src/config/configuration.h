@@ -63,6 +63,10 @@ constexpr const auto FILE_EXTENSION_MD_MARKDOWN = ".markdown";
 constexpr const auto FILE_EXTENSION_MD_MDOWN = ".mdown";
 constexpr const auto FILE_EXTENSION_MD_MKDN = ".mkdn";
 
+constexpr const auto FILE_EXTENSION_PDF = ".pdf";
+
+constexpr const auto FILE_EXTENSION_TXT = ".txt";
+
 constexpr const auto UI_THEME_DARK = "dark";
 constexpr const auto UI_THEME_LIGHT = "light";
 constexpr const auto UI_THEME_BLACK = "black";

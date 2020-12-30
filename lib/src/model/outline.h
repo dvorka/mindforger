@@ -226,7 +226,7 @@ public:
      *
      * New Note is stored as cloned Note's sibling (below).
      */
-    Note* cloneNote(const Note* clonedNote);
+    Note* cloneNote(const Note* clonedNote, const bool deep=true);
     void addNote(Note*, int offset);
     void addNotes(std::vector<Note*>&, int offset);
     Note* getNoteByName(const std::string& noteName) const;

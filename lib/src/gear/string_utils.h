@@ -163,6 +163,8 @@ static inline std::string stringIntFormat(std::string value, char thousandSep = 
     return value;
 }
 
+void replaceAll(const std::string& old_s, const std::string& new_s, std::string& s);
+
 } /* namespace*/
 
 #endif /* M8R_STRING_UTILS_H_ */
