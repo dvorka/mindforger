@@ -79,6 +79,8 @@ private:
     QColor editorLink;
     QColor editorCodeblock;
     QColor editorList;
+    QColor editorTaskDone;
+    QColor editorTaskWip;
     QColor editorHtmlTag;
     QColor editorHtmlEntity;
     QColor editorHtmlAttrName;
@@ -142,6 +144,8 @@ public:
     QColor& getEditorStrikethrough() { return editorStrikethrough; }
     QColor& getEditorLink() { return editorLink; }
     QColor& getEditorList() { return editorList; }
+    QColor& getEditorTaskDone() { return editorTaskDone; }
+    QColor& getEditorTaskWip() { return editorTaskWip; }
     QColor& getEditorCodeblock() { return editorCodeblock; }
     QColor& getEditorHtmlTag() { return editorHtmlTag; }
     QColor& getEditorHtmlEntity() { return editorHtmlEntity; }

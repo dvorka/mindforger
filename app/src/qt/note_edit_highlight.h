@@ -42,6 +42,8 @@ private:
         Codeblock,
         Mathblock,
         UnorderedList,
+        TaskDoneItem,
+        TaskWipItem,
         OrderedList,
 
         HtmlTag,
@@ -68,6 +70,8 @@ private:
     QTextCharFormat strikethroughFormat;
     QTextCharFormat linkFormat;
     QTextCharFormat listFormat;
+    QTextCharFormat taskDoneFormat;
+    QTextCharFormat taskWipFormat;
     QTextCharFormat codeBlockFormat;
     QTextCharFormat mathBlockFormat;
 

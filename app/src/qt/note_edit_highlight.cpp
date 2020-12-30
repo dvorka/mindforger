@@ -59,6 +59,8 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     addRegex(Mathblock, "\\$[\\S\\s]+\\$");
     addRegex(UnorderedList, "^(:?    )*[\\*\\+\\-] ");
     addRegex(OrderedList, "^(:?    )*\\d\\d?\\. ");
+    addRegex(TaskDoneItem, "^(:?    )*[\\*\\+\\-] \\[x\\]");
+    addRegex(TaskWipItem, "^(:?    )*[\\*\\+\\-] \\[ \\]");
     // IMPROVE highlight tasks (red/green) that overwrite lists , BUT new regexps make highlighting slower - is it worth to highlight it?
 
     // formats
@@ -72,12 +74,16 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     strikethroughFormat.setForeground(lookAndFeels.getEditorStrikethrough());
     linkFormat.setForeground(lookAndFeels.getEditorLink());
     listFormat.setForeground(lookAndFeels.getEditorList());
+    taskDoneFormat.setForeground(lookAndFeels.getEditorTaskDone());
+    taskWipFormat.setForeground(lookAndFeels.getEditorTaskWip());
     codeBlockFormat.setForeground(lookAndFeels.getEditorCodeblock());
     mathBlockFormat.setForeground(lookAndFeels.getEditorCodeblock());
 
 #if QT_VERSION > QT_VERSION_CHECK(5, 5, 0)
     bolderFormat.setFontWeight(QFont::ExtraBold);
     listFormat.setFontWeight(QFont::ExtraBold);
+    taskDoneFormat.setFontWeight(QFont::ExtraBold);
+    taskWipFormat.setFontWeight(QFont::ExtraBold);
 #else
     bolderFormat.setFontWeight(QFont::Black);
     listFormat.setFontWeight(QFont::Black);
@@ -186,6 +192,12 @@ void NoteEditHighlight::highlightPatterns(const QString& text)
                 break;
             case OrderedList:
                 setFormat(index, length, listFormat);
+                break;
+            case TaskDoneItem:
+                setFormat(index, length, taskDoneFormat);
+                break;
+            case TaskWipItem:
+                setFormat(index, length, taskWipFormat);
                 break;
             case HtmlTag:
                 setFormat(index, length, htmlTagFormat);
