@@ -32,12 +32,15 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     editorTab = new EditorTab{this};
     navigatorTab = new NavigatorTab{this};
     mindTab = new MindTab{this};
+    eisenhowerTab = new EisenhowerTab{this};
 
     tabWidget->addTab(appTab, tr("Application"));
     tabWidget->addTab(viewerTab, tr("Viewer"));
     tabWidget->addTab(editorTab, tr("Editor"));
     tabWidget->addTab(navigatorTab, tr("Navigator"));
     tabWidget->addTab(mindTab, tr("Mind"));
+    tabWidget->addTab(eisenhowerTab, tr("Eisenhower matrix"));
+
 
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
@@ -454,6 +457,102 @@ void ConfigurationDialog::NavigatorTab::refresh()
 void ConfigurationDialog::NavigatorTab::save()
 {
     config.setNavigatorMaxNodes(maxNodesSpin->value());
+}
+
+/*
+ * Eisenhower matrix tab
+ */
+
+ConfigurationDialog::EisenhowerTab::EisenhowerTab(QWidget* parent)
+    : QWidget(parent), config(Configuration::getInstance())
+{
+    doSometimePanel = new QuadrantPanel("Do sometime quadrant", this);
+    doSoonPanel = new QuadrantPanel("Do soon quadrant", this);
+    doPlanPanel = new QuadrantPanel("Plane dedicated time quadrant", this);
+    doFirstPanel = new QuadrantPanel("Do first quadrant", this);
+
+    // assembly
+    QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(doSometimePanel);
+    boxesLayout->addWidget(doSoonPanel);
+    boxesLayout->addWidget(doPlanPanel);
+    boxesLayout->addWidget(doFirstPanel);
+    boxesLayout->addStretch();
+    setLayout(boxesLayout);
+}
+
+ConfigurationDialog::EisenhowerTab::~EisenhowerTab()
+{
+    delete doSometimePanel;
+    delete doSoonPanel;
+    delete doPlanPanel;
+    delete doFirstPanel;
+}
+
+void ConfigurationDialog::EisenhowerTab::refresh()
+{
+    // TODO saveReadsMetadataCheck->setChecked(config.isSaveReadsMetadata());
+    // TODO distributorSleepIntervalSpin->setValue(config.getDistributorSleepInterval());
+}
+
+void ConfigurationDialog::EisenhowerTab::save()
+{
+    // TODO config.setSaveReadsMetadata(saveReadsMetadataCheck->isChecked());
+    // TODO config.setDistributorSleepInterval(distributorSleepIntervalSpin->value());
+}
+
+/*
+ * Eisenhower matrix quadrant panel
+ */
+
+ConfigurationDialog::EisenhowerTab::QuadrantPanel::QuadrantPanel(const char* title, QWidget* parent)
+    : QGroupBox{tr(title), parent}
+{
+    check = new QCheckBox(tr("use tag filtered matrix (not importance/urgency)"), parent);
+
+    label = new QLabel(tr("Tag and filter:"));
+    tag = new QLineEdit(this);
+    filter = this->createFilterCombo();
+
+    check->setChecked(false);
+    this->setCustomEnabled(false);
+
+    // assembly
+    QVBoxLayout* pLayout = new QVBoxLayout{parent};
+    pLayout->addWidget(check);
+
+    pLayout->addWidget(label);
+    QHBoxLayout* hLayout = new QHBoxLayout{parent};
+    hLayout->addWidget(tag);
+    hLayout->addWidget(filter);
+    pLayout->addLayout(hLayout);
+
+    this->setLayout(pLayout);
+
+    // signals
+    QObject::connect(
+        check, &QCheckBox::clicked,
+        this, &ConfigurationDialog::EisenhowerTab::QuadrantPanel::handleCheck
+    );
+}
+
+QComboBox* ConfigurationDialog::EisenhowerTab::QuadrantPanel::createFilterCombo()
+{
+    QComboBox* combo = new QComboBox(this);
+    combo->addItem("notebooks");
+    combo->addItem("notes");
+    return combo;
+}
+
+void ConfigurationDialog::EisenhowerTab::QuadrantPanel::setCustomEnabled(const bool enable)
+{
+    tag->setEnabled(enable);
+    filter->setEnabled(enable);
+}
+
+void ConfigurationDialog::EisenhowerTab::QuadrantPanel::handleCheck()
+{
+    setCustomEnabled(check->isChecked());
 }
 
 } // m8r namespace

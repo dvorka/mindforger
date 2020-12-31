@@ -30,6 +30,7 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
      * HTML inlined in MD - goes first so that formatting can be rewritten by MD
      */
 
+    // IMPROVE consider making HTML highlighting optional (config)
     addRegex(HtmlTag, "<[!?]?\\w+(?:/>)?", false);
     addRegex(HtmlTag, "(?:</\\w+)?[?]?>");
     addRegex(HtmlEntity, "&(:?#\\d+|\\w+);");
@@ -61,7 +62,6 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     addRegex(OrderedList, "^(:?    )*\\d\\d?\\. ");
     addRegex(TaskDoneItem, "^(:?    )*[\\*\\+\\-] \\[x\\]");
     addRegex(TaskWipItem, "^(:?    )*[\\*\\+\\-] \\[ \\]");
-    // IMPROVE highlight tasks (red/green) that overwrite lists , BUT new regexps make highlighting slower - is it worth to highlight it?
 
     // formats
     boldFormat.setForeground(lookAndFeels.getEditorBold());
