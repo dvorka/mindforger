@@ -25,10 +25,10 @@ OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent)
 {
     verticalHeader()->setVisible(false);
 
-    // BEFARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    // BEWARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
-    // IMPORTANT this must b in constructors - causes CPU high consuption loop if in paintEvent()!
+    // IMPORTANT this must be in constructors - causes CPU high consuption loop if in paintEvent()!
     horizontalHeader()->setStretchLastSection(true);
 
     // IMPROVE sorting breaks width (redraw method to be overriden)

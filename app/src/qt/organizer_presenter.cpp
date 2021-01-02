@@ -26,6 +26,7 @@ OrganizerPresenter::OrganizerPresenter(OrganizerView* view, OrlojPresenter* orlo
 {
     this->view = view;
 
+    // TODO Notes/Notebooks tagged with "tag"
     doFirstPresenter = new OrganizerQuadrantPresenter(view->getDoFirst(), orloj, tr("Do first"));
     doSoonPresenter = new OrganizerQuadrantPresenter(view->getDoSoon(), orloj, tr("Do soon"));
     doSometimePresenter = new OrganizerQuadrantPresenter(view->getDoSometime(), orloj, tr("Do sometime"));

@@ -28,9 +28,9 @@ namespace m8r {
 /**
  * @brief Eisenhower matrix aka organizer view.
  *
- * Do soon     | Do first
- * ------------+---------------------
- * Do sometime | Plan dedicated time
+ *  Do soon     | Do first
+ * -------------+---------------------
+ *  Do sometime | Plan dedicated time
  */
 class OrganizerView : public QSplitter
 {

@@ -508,9 +508,9 @@ void ConfigurationDialog::EisenhowerTab::save()
 ConfigurationDialog::EisenhowerTab::QuadrantPanel::QuadrantPanel(const char* title, QWidget* parent)
     : QGroupBox{tr(title), parent}
 {
-    check = new QCheckBox(tr("use tag filtered matrix (not importance/urgency)"), parent);
+    check = new QCheckBox(tr("filter Notes/Notebooks by tag"), parent);
 
-    label = new QLabel(tr("Tag and filter:"));
+    label = new QLabel(tr("Tag:"));
     tag = new QLineEdit(this);
     filter = this->createFilterCombo();
 
