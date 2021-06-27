@@ -1,7 +1,7 @@
 /*
  ontology.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -66,6 +66,7 @@ Ontology::Ontology()
     tagTaxonomy.add(Tag::KeyPersonal(), new Tag{Tag::KeyPersonal(), &tagTaxonomy, Color::MF_GREEN()});
     tagTaxonomy.add(Tag::KeyProblem(), new Tag{Tag::KeyProblem(), &tagTaxonomy, Color::MF_BLACK()});
     tagTaxonomy.add(Tag::KeyTodo(), new Tag{Tag::KeyTodo(), &tagTaxonomy, Color::MF_YELLOW()});
+    tagTaxonomy.add(Tag::KeyDone(), new Tag{Tag::KeyDone(), &tagTaxonomy, Color::MF_GREEN()});
     // knowledge type
     tagTaxonomy.add(Tag::KeyWhat(), new Tag{Tag::KeyWhat(), &tagTaxonomy, Color::MF_TURQUOISE()});
     tagTaxonomy.add(Tag::KeyHow(), new Tag{Tag::KeyHow(), &tagTaxonomy, Color::MF_TURQUOISE()});

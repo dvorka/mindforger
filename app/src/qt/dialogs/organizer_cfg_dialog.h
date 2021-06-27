@@ -1,5 +1,5 @@
 /*
- find_outline_by_tag.h     MindForger thinking notebook
+ organizer_cfg_dialog.h     MindForger thinking notebook
 
  Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8RUI_FIND_OUTLINE_BY_TAG_DIALOG_H
-#define M8RUI_FIND_OUTLINE_BY_TAG_DIALOG_H
+#ifndef M8RUI_ORGANIZER_CFG_DIALOG_H
+#define M8RUI_ORGANIZER_CFG_DIALOG_H
 
 #include <vector>
 
@@ -31,16 +31,13 @@
 
 namespace m8r {
 
-class FindOutlineByTagDialog : public QDialog
+class OrganizerConfigDialog : public QDialog
 {
     Q_OBJECT
 
 private:
     Ontology& ontology;
 
-    QListView* listView;
-    QStringList listViewStrings;
-    QStringListModel listViewModel;
     QPushButton* closeButton;
 
     Thing* choice;
@@ -53,39 +50,26 @@ protected:
     };
 
     ThingsMode mode;
-    QGroupBox* outlinesGroup;
     EditTagsPanel* editTagsGroup;
-    QPushButton* switchOutlineNoteDialogsButton;
     QPushButton* findButton;
 
 public:
-    explicit FindOutlineByTagDialog(Ontology& ontology, QWidget* parent);
-    FindOutlineByTagDialog(const FindOutlineByTagDialog&) = delete;
-    FindOutlineByTagDialog(const FindOutlineByTagDialog&&) = delete;
-    FindOutlineByTagDialog &operator=(const FindOutlineByTagDialog&) = delete;
-    FindOutlineByTagDialog &operator=(const FindOutlineByTagDialog&&) = delete;
-    ~FindOutlineByTagDialog();
+    explicit OrganizerConfigDialog(Ontology& ontology, QWidget* parent);
+    OrganizerConfigDialog(const OrganizerConfigDialog&) = delete;
+    OrganizerConfigDialog(const OrganizerConfigDialog&&) = delete;
+    OrganizerConfigDialog &operator=(const OrganizerConfigDialog&) = delete;
+    OrganizerConfigDialog &operator=(const OrganizerConfigDialog&&) = delete;
+    ~OrganizerConfigDialog();
 
     QPushButton* getFindButton() const { return findButton; }
-    QPushButton* getSwitchButton() const { return switchOutlineNoteDialogsButton; }
     void getChosenTags(std::vector<const Tag*>* tags);
     Thing* getChoice() const { return choice; }
 
-    void show(
-        std::vector<Thing*>& outlines,
-        std::vector<const Tag*>* tags=nullptr,
-        std::vector<std::string>* customizedNames=nullptr);
+    void show(std::vector<const Tag*>* tags=nullptr);
 
 signals:
     void searchFinished();
-    void switchDialogs(bool toFindNotesDialog);
-
-private slots:
-    void handleTagsChanged();
-    void handleChoice();
-    void handleReturn();
-    void switchDialogsSlot() { emit switchDialogs(mode==ThingsMode::OUTLINES); }
 };
 
 }
-#endif // M8RUI_FIND_OUTLINE_BY_TAG_DIALOG_H
+#endif // M8RUI_ORGANIZER_CFG_DIALOG_H

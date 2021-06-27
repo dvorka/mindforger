@@ -1,7 +1,7 @@
 /*
  main_menu_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -77,6 +77,17 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     // menu: navigator
     // IMPROVE complete edge shrinking & zooming (skipped as shortcut/mouse wheel is the much more reasonable)
     QObject::connect(view->actionNavigatorShuffle, SIGNAL(triggered()), mwp, SLOT(doActionNavigatorShuffle()));
+
+
+    // menu: Knowledge
+    QObject::connect(view->actionKnowledgeWikipedia, SIGNAL(triggered()), mwp, SLOT(doActionKnowledgeWikipedia()));
+    QObject::connect(view->actionKnowledgeArxiv, SIGNAL(triggered()), mwp, SLOT(doActionKnowledgeArxiv()));
+
+    // menu: Organizer
+    QObject::connect(view->actionOrganizerNew, SIGNAL(triggered()), mwp, SLOT(doActionOrganizerNew()));
+    QObject::connect(view->actionOrganizerEdit, SIGNAL(triggered()), mwp, SLOT(doActionOrganizerEdit()));
+    QObject::connect(view->actionOrganizerClone, SIGNAL(triggered()), mwp, SLOT(doActionOrganizerClone()));
+    QObject::connect(view->actionOrganizerForget, SIGNAL(triggered()), mwp, SLOT(doActionOrganizerForget()));
 
     // menu: Outline
     QObject::connect(view->actionOutlineNew, SIGNAL(triggered()), mwp, SLOT(doActionOutlineNew()));

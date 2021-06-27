@@ -1,7 +1,7 @@
 /*
  repository_indexer.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -39,8 +39,11 @@ void RepositoryIndexer::clear()
     }
     allFiles.clear();
 
-    // markdowns strings were cleared as a part of allFiles strings
+    // markdowns (strings were cleared as a part of allFiles strings)
     markdowns.clear();
+    // txt/PDF/...
+    texts.clear();
+    pdfs.clear();
 
     for(const string* s:outlineStencils) {
         delete s;

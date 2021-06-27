@@ -1,7 +1,7 @@
 /*
  memory.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -94,6 +94,7 @@ void Memory::learn()
         for(const string* pdfFile:repositoryIndexer.getPdfFiles()) {
             MF_DEBUG(endl << "  '" << *pdfFile << "'");
 
+            /*
             string INFO_DESCRIPTOR_EXT{".M1ndF0rg3r.md"};
             string INFO_DESCRIPTOR_SEPARATOR{"--- m1ndf0rg3r ---"}; // TODO followed by path
 
@@ -103,6 +104,7 @@ void Memory::learn()
 
             string descriptorTitle{};
             string descriptorDescription{};
+            */
         }
 
         MF_DEBUG(endl << "TXT files:");

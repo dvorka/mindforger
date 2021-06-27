@@ -1,7 +1,7 @@
 /*
  mind.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License

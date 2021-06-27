@@ -1,7 +1,7 @@
 /*
  main_menu.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -48,8 +48,9 @@ public:
     QMenu* menuMind;
     QMenu* menuFind;
     QMenu* menuView;
-    QMenu* menuNavigator;
     QMenu* menuKnowledge;
+    QMenu* menuOrganizer;
+    QMenu* menuNavigator;
     QMenu* menuOutline;
     QMenu* menuNote;
     QMenu* menuEdit;
@@ -106,6 +107,16 @@ public:
     QAction* actionViewDistractionFree;
     QAction* actionViewFullscreen;
 
+    // menu: Knowledge
+    QAction* actionKnowledgeWikipedia;
+    QAction* actionKnowledgeArxiv;
+
+    // menu: Organizer
+    QAction* actionOrganizerNew;
+    QAction* actionOrganizerEdit;
+    QAction* actionOrganizerForget;
+    QAction* actionOrganizerClone;
+
     // menu: Navigator
     QAction* actionNavigatorZoomIn;
     QAction* actionNavigatorZoomOut;
@@ -113,16 +124,13 @@ public:
     QAction* actionNavigatorEdgesShrink;
     QAction* actionNavigatorShuffle;
 
-    // menu: Knowledge
-    QAction* actionKnowledgeWikipedia;
-    QAction* actionKnowledgeArxiv;
-
     // menu: Outline
     QAction* actionOutlineNew;
     QAction* actionOutlineEdit;
     QAction* actionOutlineHome;
     QAction* actionOutlineStencil;
     QAction* actionOutlineClone;
+    QAction* actionOutlineArtExamine;
     QAction* actionOutlineForget;
     QMenu* submenuOutlineExport;
     QAction* actionOutlineHtmlExport;

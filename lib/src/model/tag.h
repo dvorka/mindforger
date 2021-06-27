@@ -1,7 +1,7 @@
 /*
  tag.h     MindForger application entry point
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -68,6 +68,10 @@ public:
     static const std::string& KeyTodo() {
         static const std::string KEY_TODO = std::string{"todo"};
         return KEY_TODO;
+    }
+    static const std::string& KeyDone() {
+        static const std::string KEY_DONE = std::string{"done"};
+        return KEY_DONE;
     }
     static const std::string& KeyPersonal() {
         static const std::string KEY_PERSONAL = std::string{"personal"};

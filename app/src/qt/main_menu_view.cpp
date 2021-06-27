@@ -1,7 +1,7 @@
 /*
  main_menu_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -278,6 +278,46 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
     menuView->addAction(actionViewFullscreen);
 
+    // menu: knowledge
+
+#ifdef MF_WIP
+    menuKnowledge = qMenuBar->addMenu(tr("&Know"));
+
+    actionKnowledgeWikipedia = new QAction(QIcon(":/menu-icons/link.svg"), tr("&Wikipedia"), mainWindow);
+    actionKnowledgeWikipedia->setStatusTip(tr("Find marked text on Wikipedia or open Wikipedia search"));
+
+    actionKnowledgeArxiv = new QAction(QIcon(":/menu-icons/link.svg"), tr("&arXiv"), mainWindow);
+    actionKnowledgeArxiv->setStatusTip(tr("Find marked text on arXiv or get article by ID"));
+
+    menuKnowledge->addAction(actionKnowledgeWikipedia);
+    menuKnowledge->addAction(actionKnowledgeArxiv);
+#endif
+
+    // menu: organizer
+    menuOrganizer = qMenuBar->addMenu(tr("O&rganizer"));
+
+    actionOrganizerNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
+    actionOrganizerNew->setStatusTip(tr("Create new Organizer to prioritize your knowledge in Eisenhower Matrix style"));
+
+#ifdef __APPLE__
+    actionOrganizerEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
+#else
+    actionOrganizerEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
+#endif
+    actionOrganizerEdit ->setStatusTip(tr("Edit current Organizer - you can also double click view to open the editor"));
+
+    actionOrganizerClone = new QAction(QIcon(":/menu-icons/copy.svg"), tr("C&lone"), mainWindow);
+    actionOrganizerClone->setStatusTip(tr("Make copy of the current Organizer"));
+
+    actionOrganizerForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Forget"), mainWindow);
+    actionOrganizerForget->setStatusTip(tr("Forget Organizer and move it to Limbo"));
+
+    menuOrganizer->addAction(actionOrganizerNew);
+    menuOrganizer->addAction(actionOrganizerEdit);
+    menuOrganizer->addAction(actionOrganizerForget);
+    menuOrganizer->addSeparator();
+    menuOrganizer->addAction(actionOrganizerClone);
+
     // menu: navigator
 #ifdef __APPLE__
     actionNavigatorEdgesStretch = new QAction(tr("Str&etch edges"), mainWindow);
@@ -312,21 +352,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNavigator->addAction(actionNavigatorShuffle);
     menuNavigator->setEnabled(false);
 
-    // menu: knowledge
-
-#ifdef MF_WIP
-    menuKnowledge = qMenuBar->addMenu(tr("&Knowledge"));
-
-    actionKnowledgeWikipedia = new QAction(QIcon(":/menu-icons/link.svg"), tr("&Wikipedia"), mainWindow);
-    actionKnowledgeWikipedia->setStatusTip(tr("Find marked text on Wikipedia or open Wikipedia search"));
-
-    actionKnowledgeArxiv= new QAction(QIcon(":/menu-icons/link.svg"), tr("&arXiv"), mainWindow);
-    actionKnowledgeArxiv->setStatusTip(tr("Find marked text on arXiv or get article by ID"));
-
-    menuKnowledge->addAction(actionKnowledgeWikipedia);
-    menuKnowledge->addAction(actionKnowledgeArxiv);
-#endif
-
     // menu: Outline
 
     menuOutline = qMenuBar->addMenu(tr("Note&book"));
@@ -352,6 +377,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineClone = new QAction(QIcon(":/menu-icons/copy.svg"), tr("C&lone"), mainWindow);
     actionOutlineClone->setStatusTip(tr("Make copy of the current Notebook"));
 
+    actionOutlineArtExamine= new QAction(QIcon(":/menu-icons/on.svg"), tr("E&xamine"), mainWindow);
+    actionOutlineArtExamine->setStatusTip(tr("Turn Notebook to deck of flashcard and start active recall testing..."));
+
     actionOutlineForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Forget"), mainWindow);
     actionOutlineForget->setStatusTip(tr("Forget Notebook and move it to Limbo"));
 
@@ -376,6 +404,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuOutline->addAction(actionOutlineStencil);
 #endif
     menuOutline->addAction(actionOutlineClone);   
+    menuOutline->addSeparator();
+#ifdef MF_WIP
+    menuOutline->addAction(actionOutlineArtExamine);
+#endif
     menuOutline->addSeparator();
     menuOutline->addMenu(submenuOutlineImport);
     menuOutline->addMenu(submenuOutlineExport);

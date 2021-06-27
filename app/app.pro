@@ -1,6 +1,6 @@
 # mindforger-app.pro     Qt project file for MindForger
 #
-# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -201,6 +201,7 @@ HEADERS += \
     ./src/qt/dialogs/rows_and_depth_dialog.h \
     ./src/qt/dialogs/new_file_dialog.h \
     ./src/qt/dialogs/new_repository_dialog.h \
+    src/qt/dialogs/organizer_cfg_dialog.h \
     src/qt/organizer_view.h \
     src/qt/organizer_presenter.h \
     src/qt/organizer_quadrant_model.h \
@@ -307,6 +308,7 @@ SOURCES += \
     ./src/qt/dialogs/rows_and_depth_dialog.cpp \
     ./src/qt/dialogs/new_file_dialog.cpp \
     ./src/qt/dialogs/new_repository_dialog.cpp \
+    src/qt/dialogs/organizer_cfg_dialog.cpp \
     src/qt/organizer_view.cpp \
     src/qt/organizer_presenter.cpp \
     src/qt/organizer_quadrant_model.cpp \

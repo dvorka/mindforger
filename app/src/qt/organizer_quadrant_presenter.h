@@ -1,7 +1,7 @@
 /*
  organizer_quadrant_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -21,10 +21,13 @@
 
 #include <QtWidgets>
 
+#include <vector>
+
 #include "organizer_quadrant_view.h"
 #include "organizer_quadrant_model.h"
 #include "orloj_presenter.h"
 #include "html_delegate.h"
+#include "dialogs/organizer_cfg_dialog.h"
 
 #include "../../lib/src/model/outline.h"
 
@@ -44,6 +47,8 @@ private:
 
     OrlojPresenter* orloj;
 
+    OrganizerConfigDialog *configDialog;
+
 public:
     explicit OrganizerQuadrantPresenter(OrganizerQuadrantView* view, OrlojPresenter* orloj, QString title);
     OrganizerQuadrantPresenter(const OrganizerQuadrantPresenter&) = delete;
@@ -59,6 +64,7 @@ public:
 public slots:
     void slotShowSelectedOutline();
     void slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotHeaderClicked(int section);
 };
 
 }

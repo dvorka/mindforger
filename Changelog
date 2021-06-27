@@ -1,3 +1,7 @@
+WIP: 2021-08-01  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v1.53.0 - Eisenhower Matrices on tags, Voronoy treemaps prototype.
+
 2020-03-08  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v1.52.0 - Production quality Autolinking (cmark-gfm and Trie based),

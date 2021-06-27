@@ -1,7 +1,7 @@
 /*
  main_window_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -224,6 +224,14 @@ public slots:
     void doActionCli();
     void doActionViewDistractionFree();
     void doActionViewFullscreen();
+    // knowledge
+    void doActionKnowledgeArxiv();
+    void doActionKnowledgeWikipedia();
+    // organizer
+    void doActionOrganizerNew();
+    void doActionOrganizerEdit();
+    void doActionOrganizerClone();
+    void doActionOrganizerForget();
     // navigator
     void doActionNavigatorShuffle();
     // format

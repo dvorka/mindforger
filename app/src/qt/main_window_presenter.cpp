@@ -1,7 +1,7 @@
 /*
  main_window_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -2215,7 +2215,9 @@ void MainWindowPresenter::doActionNoteClone()
         choice = QMessageBox::question(
             &view,
             tr("Clone Note"),
-            tr("Do you want to clone Note '") + QString::fromStdString(n->getName()) + tr("' including its child notes?'?"));
+            tr("Do you want to clone Note '") + QString::fromStdString(n->getName()) + tr("' including its child notes?'?"),
+            QMessageBox::StandardButton::Yes | QMessageBox::StandardButton::No | QMessageBox::StandardButton::Cancel
+        );
         bool deep = choice == QMessageBox::Yes;
 
         Note* clonedNote = mind->noteClone(orloj->getOutlineView()->getCurrentOutline()->getKey(), n, deep);
@@ -2468,6 +2470,36 @@ void MainWindowPresenter::handleMindPreferences()
     view.getOrloj()->getOutlineHeaderEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
 }
 
+void MainWindowPresenter::doActionKnowledgeWikipedia()
+{
+    QDesktopServices::openUrl(QUrl{"https://en.wikipedia.org/"});
+}
+
+void MainWindowPresenter::doActionKnowledgeArxiv()
+{
+    QDesktopServices::openUrl(QUrl{"https://arxiv.org/search/cs"});
+}
+
+void MainWindowPresenter::doActionOrganizerNew()
+{
+    MF_DEBUG("NEW organizer");
+}
+
+void MainWindowPresenter::doActionOrganizerEdit()
+{
+    MF_DEBUG("EDIT organizer");
+}
+
+void MainWindowPresenter::doActionOrganizerClone()
+{
+    MF_DEBUG("CLONE organizer");
+}
+
+void MainWindowPresenter::doActionOrganizerForget()
+{
+    MF_DEBUG("FORGET organizer");
+}
+
 void MainWindowPresenter::doActionHelpDocumentation()
 {
     QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md"});
@@ -2533,7 +2565,7 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
             "<br>Contact me at <a href='mailto:martin.dvorak@mindforger.com'>&lt;martin.dvorak@mindforger.com&gt;</a>"
             " or see <a href='https://www.mindforger.com'>www.mindforger.com</a> for more information."
             "<br>"
-            "<br>Copyright (C) 2016-2020 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/blob/master/CREDITS.md'>contributors</a>."
+            "<br>Copyright (C) 2016-2021 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/blob/master/CREDITS.md'>contributors</a>."
         });
 }
 

@@ -1,7 +1,7 @@
 /*
  organizer_quadrant_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
 
 namespace m8r {
 
+using namespace std;
+
 OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
         OrganizerQuadrantView* view,
         OrlojPresenter* orloj,
@@ -31,6 +33,8 @@ OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
 
     this->orloj = orloj;
 
+    this->configDialog = new OrganizerConfigDialog(orloj->getMind()->getOntology(), this->view);
+
     // ensure HTML cells rendering
     HtmlDelegate* delegate = new HtmlDelegate();
     this->view->setItemDelegate(delegate);
@@ -40,8 +44,11 @@ OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
         view,
         SIGNAL(signalShowSelectedOutline()),
         this,
-        SLOT(slotShowSelectedOutline()));
-
+        SLOT(slotShowSelectedOutline()));    
+    QObject::connect(
+        this->view->horizontalHeader(), SIGNAL(sectionClicked(int)),
+        this, SLOT(slotHeaderClicked(int))
+    );
     /* click O to open O
     QObject::connect(
         view->selectionModel(),
@@ -102,6 +109,15 @@ void OrganizerQuadrantPresenter::slotShowOutline(const QItemSelection& selected,
 
         orloj->showFacetOutline(outline);
     } // else do nothing
+}
+
+
+void OrganizerQuadrantPresenter::slotHeaderClicked(int section)
+{
+    Q_UNUSED(section);
+
+    vector<const Tag*>* tags = new vector<const Tag*>{};
+    configDialog->show(tags);
 }
 
 void OrganizerQuadrantPresenter::refresh(const std::vector<Outline*>& os, bool urgency, bool importance)
