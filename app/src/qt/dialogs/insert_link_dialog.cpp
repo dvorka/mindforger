@@ -62,10 +62,6 @@ InsertLinkDialog::InsertLinkDialog(QWidget* parent)
 
     // assembly
     QVBoxLayout* mainLayout = new QVBoxLayout{};
-    mainLayout->addWidget(linkTextLabel);
-    mainLayout->addWidget(linkTextEdit);
-    mainLayout->addWidget(pathLabel);
-    mainLayout->addWidget(pathEdit);
     QHBoxLayout* srcButtonLayout = new QHBoxLayout{};
     srcButtonLayout->addWidget(findOutlineButton);
     srcButtonLayout->addWidget(findNoteButton);
@@ -73,6 +69,10 @@ InsertLinkDialog::InsertLinkDialog(QWidget* parent)
     srcButtonLayout->addWidget(findDirectoryButton);
     srcButtonLayout->addStretch();
     mainLayout->addLayout(srcButtonLayout);
+    mainLayout->addWidget(linkTextLabel);
+    mainLayout->addWidget(linkTextEdit);
+    mainLayout->addWidget(pathLabel);
+    mainLayout->addWidget(pathEdit);
     mainLayout->addWidget(copyToRepoCheckBox);
 
     QHBoxLayout* buttonLayout = new QHBoxLayout{};
@@ -107,7 +107,7 @@ void InsertLinkDialog::show(
 
     linkTextEdit->setText(selectedText.size()?selectedText:tr("link"));
     linkTextEdit->selectAll();
-    linkTextEdit->setFocus();
+    findOutlineButton->setFocus();
     pathEdit->clear();
     if(link.size()) {
         pathEdit->setText(link);
