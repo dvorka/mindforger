@@ -95,7 +95,7 @@ public:
     // menu: View
     QAction* actionViewDashboard;
     QAction* actionViewHome;
-    QAction* actionViewOrganizer;
+    QAction* actionViewOrganizers;
     QAction* actionViewOutlines;
     QAction* actionViewTags;
     QAction* actionViewNavigator;
@@ -242,6 +242,7 @@ public:
     MainMenuView &operator=(const MainMenuView&&) = delete;
     virtual ~MainMenuView();
 
+    void showFacetOrganizerList(bool repositoryMode=true);
     void showFacetOutlineList(bool repositoryMode=true);
     void showFacetOutlineView(bool repositoryMode=true);
     void showFacetNoteEdit(bool repositoryMode=true);

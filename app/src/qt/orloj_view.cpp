@@ -28,6 +28,9 @@ OrlojView::OrlojView(QWidget* parent)
     dashboard = new DashboardView(this);
     addWidget(dashboard);
 
+    organizersTable = new OrganizersTableView(this);
+    addWidget(organizersTable);
+
     organizer = new OrganizerView(this);
     addWidget(organizer);
 
@@ -91,6 +94,12 @@ void OrlojView::fiftyFifty()
 void OrlojView::showFacetDashboard()
 {
     QSet<QWidget*> v; v << dashboard;
+    hideChildren(v);
+}
+
+void OrlojView::showFacetOrganizers()
+{
+    QSet<QWidget*> v; v << organizersTable;
     hideChildren(v);
 }
 

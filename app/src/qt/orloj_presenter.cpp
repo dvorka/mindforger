@@ -208,6 +208,22 @@ void OrlojPresenter::showFacetDashboard() {
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
+void OrlojPresenter::showFacetOrganizerList(const vector<Outline*>& outlines)
+{
+    setFacet(OrlojPresenterFacets::FACET_LIST_ORGANIZERS);
+
+    // TODO to be rewritten
+
+    MF_DEBUG("SHOW LIST TO BE IMPLEMENTED");
+    showFacetOrganizer(outlines);
+
+    // IMPROVE reload ONLY if dirty, otherwise just show
+    //    organizersTablePresenter->refresh(outlines);
+    //    view->showFacetOrganizerList();
+    //    mainPresenter->getMainMenu()->showFacetOutlineList();
+    //    mainPresenter->getStatusBar()->showMindStatistics();
+}
+
 void OrlojPresenter::showFacetOrganizer(const vector<Outline*>& outlines)
 {
     setFacet(OrlojPresenterFacets::FACET_ORGANIZER);

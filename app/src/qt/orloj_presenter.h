@@ -28,6 +28,7 @@
 
 #include "orloj_view.h"
 #include "dashboard_presenter.h"
+#include "organizers_table_presenter.h"
 #include "organizer_presenter.h"
 #include "tags_table_presenter.h"
 #include "recent_notes_table_presenter.h"
@@ -44,6 +45,7 @@
 namespace m8r {
 
 class DashboardPresenter;
+class OrganizersTablePresenter;
 class OrganizerPresenter;
 class TagCloudPresenter;
 class NotePresenter;
@@ -67,7 +69,8 @@ enum OrlojPresenterFacets {
     FACET_TAG_CLOUD,              // 9
     FACET_RECENT_NOTES,           // 10
     FACET_NAVIGATOR,              // 11
-    FACET_DASHBOARD               // 12
+    FACET_DASHBOARD,              // 12
+    FACET_LIST_ORGANIZERS         // 13
 };
 
 // aspect modifies facet
@@ -99,6 +102,7 @@ private:
     Mind* mind;
 
     DashboardPresenter* dashboardPresenter;
+    OrganizersTablePresenter* organizersTablePresenter;
     OrganizerPresenter* organizerPresenter;
     TagsTablePresenter* tagCloudPresenter;
     OutlinesTablePresenter* outlinesTablePresenter;
@@ -172,6 +176,7 @@ public:
     void onFacetChange(const OrlojPresenterFacets targetFacet) const;
 
     void showFacetDashboard();
+    void showFacetOrganizerList(const std::vector<Outline*>& outlines);
     void showFacetOrganizer(const std::vector<Outline*>& outlines);
     void showFacetTagCloud();
     void showFacetOutlineList(const std::vector<Outline*>& outlines);

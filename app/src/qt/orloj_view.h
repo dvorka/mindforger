@@ -22,6 +22,7 @@
 #include <QtWidgets>
 
 #include "dashboard_view.h"
+#include "organizers_table_view.h"
 #include "organizer_view.h"
 #include "tags_table_view.h"
 #include "outlines_table_view.h"
@@ -59,6 +60,7 @@ class OrlojView : public QSplitter
 
 private:
     DashboardView* dashboard;
+    OrganizersTableView* organizersTable;
     OrganizerView* organizer;
     TagsTableView* tagCloud;
     OutlinesTableView* outlinesTable;
@@ -97,6 +99,11 @@ public:
      * @brief Dashboard
      */
     void showFacetDashboard();
+
+    /**
+     * @brief List of Organizers
+     */
+    void showFacetOrganizers();
 
     /**
      * @brief Organizer

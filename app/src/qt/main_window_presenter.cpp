@@ -1073,6 +1073,13 @@ void MainWindowPresenter::doActionViewDashboard()
     }
 }
 
+void MainWindowPresenter::doActionViewOrganizers()
+{
+    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+        orloj->showFacetOrganizerList(mind->getOutlines());
+    }
+}
+
 void MainWindowPresenter::doActionViewOrganizer()
 {
     if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {

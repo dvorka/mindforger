@@ -215,6 +215,7 @@ public slots:
 #endif
     // view
     void doActionViewDashboard();
+    void doActionViewOrganizers();
     void doActionViewOrganizer();
     void doActionViewTagCloud();
     bool doActionViewHome();

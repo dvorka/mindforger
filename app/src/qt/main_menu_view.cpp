@@ -200,9 +200,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
     actionViewHome->setStatusTip(tr("Open Home Notebook..."));
 
-    actionViewOrganizer = new QAction(QIcon(":/menu-icons/cross.svg"), tr("&Eisenhower Matrix"), mainWindow);
-    actionViewOrganizer->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
-    actionViewOrganizer->setStatusTip(tr("Open Eisenhower matrix..."));
+    actionViewOrganizers = new QAction(QIcon(":/menu-icons/cross.svg"), tr("Organiz&ers"), mainWindow);
+    actionViewOrganizers->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
+    actionViewOrganizers->setStatusTip(tr("Open Eisenhower matrix style organizers..."));
 
     actionViewOutlines = new QAction(QIcon(":/menu-icons/list-text.svg"), tr("N&otebooks"), mainWindow);
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
@@ -259,7 +259,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView = qMenuBar->addMenu(tr("&View"));
     menuView->addAction(actionViewDashboard);
     menuView->addAction(actionViewHome);
-    menuView->addAction(actionViewOrganizer);
+    menuView->addAction(actionViewOrganizers);
     menuView->addAction(actionViewOutlines);
     menuView->addAction(actionViewTags);
     menuView->addAction(actionViewNavigator);
@@ -293,31 +293,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuKnowledge->addAction(actionKnowledgeArxiv);
 #endif
 
-    // menu: organizer
-    menuOrganizer = qMenuBar->addMenu(tr("O&rganizer"));
-
-    actionOrganizerNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
-    actionOrganizerNew->setStatusTip(tr("Create new Organizer to prioritize your knowledge in Eisenhower Matrix style"));
-
-#ifdef __APPLE__
-    actionOrganizerEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
-#else
-    actionOrganizerEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
-#endif
-    actionOrganizerEdit ->setStatusTip(tr("Edit current Organizer - you can also double click view to open the editor"));
-
-    actionOrganizerClone = new QAction(QIcon(":/menu-icons/copy.svg"), tr("C&lone"), mainWindow);
-    actionOrganizerClone->setStatusTip(tr("Make copy of the current Organizer"));
-
-    actionOrganizerForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Forget"), mainWindow);
-    actionOrganizerForget->setStatusTip(tr("Forget Organizer and move it to Limbo"));
-
-    menuOrganizer->addAction(actionOrganizerNew);
-    menuOrganizer->addAction(actionOrganizerEdit);
-    menuOrganizer->addAction(actionOrganizerForget);
-    menuOrganizer->addSeparator();
-    menuOrganizer->addAction(actionOrganizerClone);
-
     // menu: navigator
 #ifdef __APPLE__
     actionNavigatorEdgesStretch = new QAction(tr("Str&etch edges"), mainWindow);
@@ -342,7 +317,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNavigatorShuffle = new QAction(tr("&Shuffle\tSpace"), mainWindow);
     actionNavigatorShuffle->setStatusTip(tr("Shuffle knowledge graph"));
 
-    menuNavigator = qMenuBar->addMenu(tr("Na&vigator"));
+    menuNavigator = qMenuBar->addMenu(tr("Na&vigate"));
     menuNavigator->addAction(actionNavigatorEdgesStretch);
     menuNavigator->addAction(actionNavigatorEdgesShrink);
     menuNavigator->addSeparator();
@@ -351,6 +326,31 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNavigator->addSeparator();
     menuNavigator->addAction(actionNavigatorShuffle);
     menuNavigator->setEnabled(false);
+
+    // menu: organizer
+    menuOrganizer = qMenuBar->addMenu(tr("O&rganizer"));
+
+    actionOrganizerNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
+    actionOrganizerNew->setStatusTip(tr("Create new Organizer to prioritize your knowledge in Eisenhower Matrix style"));
+
+#ifdef __APPLE__
+    actionOrganizerEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
+#else
+    actionOrganizerEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
+#endif
+    actionOrganizerEdit ->setStatusTip(tr("Edit current Organizer - you can also double click view to open the editor"));
+
+    actionOrganizerClone = new QAction(QIcon(":/menu-icons/copy.svg"), tr("C&lone"), mainWindow);
+    actionOrganizerClone->setStatusTip(tr("Make copy of the current Organizer"));
+
+    actionOrganizerForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Forget"), mainWindow);
+    actionOrganizerForget->setStatusTip(tr("Forget Organizer and move it to Limbo"));
+
+    menuOrganizer->addAction(actionOrganizerNew);
+    menuOrganizer->addAction(actionOrganizerEdit);
+    menuOrganizer->addAction(actionOrganizerForget);
+    menuOrganizer->addSeparator();
+    menuOrganizer->addAction(actionOrganizerClone);
 
     // menu: Outline
 
@@ -815,15 +815,21 @@ void MainMenuView::showAllMenuItems()
     menuView->setEnabled(true);
     actionViewDashboard->setEnabled(true);
     actionViewHome->setEnabled(true);
-    actionViewOrganizer->setEnabled(true);
+    actionViewOrganizers->setEnabled(true);
     actionViewOutlines->setEnabled(true);
     actionViewTags->setEnabled(true);
     actionViewNavigator->setEnabled(true);
     actionViewLimbo->setEnabled(true);
     actionViewRecentNotes->setEnabled(true);
 
+    menuOrganizer->setEnabled(true);
+    actionOrganizerNew->setEnabled(true);
+    actionOrganizerEdit->setEnabled(true);
+    actionOrganizerClone->setEnabled(true);
+    actionOrganizerForget->setEnabled(true);
+
     menuNavigator->setEnabled(true);
-    actionViewOrganizer->setEnabled(true);
+    actionViewOrganizers->setEnabled(true);
     actionOutlineEdit->setEnabled(true);
     actionOutlineClone->setEnabled(true);
     actionOutlineHome->setEnabled(true);
@@ -852,14 +858,49 @@ void MainMenuView::showAllMenuItems()
     mainWindow->getToolBar()->setEnabled(true);
 }
 
-void MainMenuView::showFacetOutlineList(bool repositoryMode)
+void MainMenuView::showFacetOrganizerList(bool repositoryMode)
 {
     showAllMenuItems();
+
+    actionOrganizerEdit->setEnabled(false);
+    actionOrganizerClone->setEnabled(false);
+    actionOrganizerForget->setEnabled(false);
 
     actionOutlineEdit->setEnabled(false);
     actionOutlineClone->setEnabled(false);
     actionOutlineHome->setEnabled(false);
     actionOutlineForget->setEnabled(false);
+
+    menuNavigator->setEnabled(false);
+    menuEdit->setEnabled(false);
+    menuFormat->setEnabled(false);
+    menuNote->setEnabled(false);
+    submenuOutlineExport->setEnabled(false);
+
+    if(!repositoryMode) {
+        menuView->setEnabled(false);
+        menuOutline->setEnabled(false);
+        menuEdit->setEnabled(false);
+        menuFormat->setEnabled(false);
+
+        actionFindOutlineByName->setEnabled(false);
+        actionFindOutlineByTag->setEnabled(false);
+    }
+}
+
+void MainMenuView::showFacetOutlineList(bool repositoryMode)
+{
+    showAllMenuItems();
+
+    actionOrganizerEdit->setEnabled(false);
+    actionOrganizerClone->setEnabled(false);
+    actionOrganizerForget->setEnabled(false);
+
+    actionOutlineEdit->setEnabled(false);
+    actionOutlineClone->setEnabled(false);
+    actionOutlineHome->setEnabled(false);
+    actionOutlineForget->setEnabled(false);
+
     menuNavigator->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
@@ -882,6 +923,7 @@ void MainMenuView::showFacetOutlineView(bool repositoryMode)
     showAllMenuItems();
 
     menuNavigator->setEnabled(false);
+    menuOrganizer->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
 
@@ -903,6 +945,12 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
     menuMind->setEnabled(false);
     actionExit->setEnabled(false);
 
+    menuOrganizer->setEnabled(false);
+    actionOrganizerNew->setEnabled(false);
+    actionOrganizerEdit->setEnabled(false);
+    actionOrganizerClone->setEnabled(false);
+    actionOrganizerForget->setEnabled(false);
+
     menuFind->setEnabled(false);
     actionFindOutlineByName->setEnabled(false);
     actionFindOutlineByTag->setEnabled(false);
@@ -912,7 +960,7 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
     menuView->setEnabled(false);
     actionViewDashboard->setEnabled(false);
     actionViewHome->setEnabled(false);
-    actionViewOrganizer->setEnabled(false);
+    actionViewOrganizers->setEnabled(false);
     actionViewOutlines->setEnabled(false);
     actionViewTags->setEnabled(false);
     actionViewNavigator->setEnabled(false);
@@ -920,7 +968,7 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
     actionViewRecentNotes->setEnabled(false);
 
     menuNavigator->setEnabled(false);
-    actionViewOrganizer->setEnabled(false);
+    actionViewOrganizers->setEnabled(false);
     actionOutlineEdit->setEnabled(false);
     actionOutlineClone->setEnabled(false);
     actionOutlineHome->setEnabled(false);

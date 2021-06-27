@@ -207,6 +207,9 @@ HEADERS += \
     src/qt/organizer_quadrant_model.h \
     src/qt/organizer_quadrant_presenter.h \
     src/qt/organizer_quadrant_view.h \
+    src/qt/organizers_table_model.h \
+    src/qt/organizers_table_presenter.h \
+    src/qt/organizers_table_view.h \
     src/qt/tags_table_model.h \
     src/qt/tags_table_presenter.h \
     src/qt/tags_table_view.h \
@@ -314,6 +317,9 @@ SOURCES += \
     src/qt/organizer_quadrant_model.cpp \
     src/qt/organizer_quadrant_presenter.cpp \
     src/qt/organizer_quadrant_view.cpp \
+    src/qt/organizers_table_model.cpp \
+    src/qt/organizers_table_presenter.cpp \
+    src/qt/organizers_table_view.cpp \
     src/qt/tags_table_model.cpp \
     src/qt/tags_table_presenter.cpp \
     src/qt/tags_table_view.cpp \

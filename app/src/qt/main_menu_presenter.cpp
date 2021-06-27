@@ -64,7 +64,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     // menu: view
     QObject::connect(view->actionViewDashboard, SIGNAL(triggered()), mwp, SLOT(doActionViewDashboard()));
     QObject::connect(view->actionViewHome, SIGNAL(triggered()), mwp, SLOT(doActionViewHome()));
-    QObject::connect(view->actionViewOrganizer, SIGNAL(triggered()), mwp, SLOT(doActionViewOrganizer()));
+    QObject::connect(view->actionViewOrganizers, SIGNAL(triggered()), mwp, SLOT(doActionViewOrganizers()));
     QObject::connect(view->actionViewOutlines, SIGNAL(triggered()), mwp, SLOT(doActionViewOutlines()));
     QObject::connect(view->actionViewTags, SIGNAL(triggered()), mwp, SLOT(doActionViewTagCloud()));
     QObject::connect(view->actionViewNavigator, SIGNAL(triggered()), mwp, SLOT(doActionViewKnowledgeGraphNavigator()));
@@ -199,6 +199,11 @@ MainMenuPresenter::~MainMenuPresenter()
 void MainMenuPresenter::showFacetDashboard()
 {
     view->showFacetOutlineList(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
+}
+
+void MainMenuPresenter::showFacetOrganizerList()
+{
+    view->showFacetOrganizerList(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
 }
 
 void MainMenuPresenter::showFacetOrganizer()
