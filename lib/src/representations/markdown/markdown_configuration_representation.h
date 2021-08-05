@@ -25,6 +25,7 @@
 
 #include "markdown_document.h"
 #include "../../config/configuration.h"
+#include "../../model/organizer.h"
 
 namespace m8r {
 
@@ -35,7 +36,7 @@ class MarkdownAstNodeSection;
  * @brief Markdown configuration representation.
  */
 /* Method:
- *   Markdown (instance representing MD file)
+ *   Markdown (instance which represents MD file)
  *     FILENAME -lexer->  LINES
  *     LINES    -lexer->  LEXEMS @ LEXER CTX
  *     LEXEMS   -parser-> AST @ PARSER CTX
@@ -75,7 +76,9 @@ public:
 
 private:
     void configuration(std::vector<MarkdownAstNodeSection*>* ast, Configuration& c);
-    void configuration(std::string* title, std::vector<std::string*>* body, Configuration& c);
+    void configurationSection(std::string* title, std::vector<std::string*>* body, Configuration& c);
+    void configurationSectionOrganizers(std::vector<std::string*>* body, Configuration& c);
+    Organizer* configurationSectionOrganizerAdd(Organizer* o, Configuration& c);
     std::string& to(Configuration* c, std::string& md);
     void save(const File* file, Configuration* c);
 };

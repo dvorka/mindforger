@@ -124,6 +124,12 @@ void Configuration::clear()
     }
     repositories.clear();
 
+    // organizers
+    for(auto& o:organizers) {
+        delete o;
+    }
+    organizers.clear();
+
     // lib
     mindState = MindState::SLEEPING;
     writeMetadata = true;
@@ -287,6 +293,11 @@ const char* Configuration::getEditorFromEnv()
 {
     char* editor = getenv(ENV_VAR_M8R_EDITOR);  // this is not leak (static reusable array)
     return editor;
+}
+
+void Configuration::addOrganizer(Organizer* organizer)
+{
+    this->organizers.push_back(organizer);
 }
 
 } // m8r namespace

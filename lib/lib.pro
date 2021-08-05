@@ -108,6 +108,7 @@ SOURCES += \
     ./src/config/time_scope.cpp \
     ./src/model/link.cpp \
     ./src/config/palette.cpp \
+    src/model/organizer.cpp \
     src/representations/markdown/markdown_document.cpp \
     src/representations/html/html_document.cpp \
     src/mind/ai/ai.cpp \
@@ -202,6 +203,7 @@ HEADERS += \
     ./src/config/time_scope.h \
     ./src/model/link.h \
     ./src/config/palette.h \
+    src/model/organizer.h \
     src/representations/markdown/markdown_document.h \
     src/representations/html/html_document.h \
     src/version.h \

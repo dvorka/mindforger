@@ -32,6 +32,7 @@
 #include "../gear/file_utils.h"
 #include "../exceptions.h"
 #include "../model/tag.h"
+#include "../model/organizer.h"
 #include "../install/installer.h"
 #include "../representations/markdown/markdown_transcoder.h"
 
@@ -151,6 +152,17 @@ public:
         WINDOWS
     };
 
+    enum SortOrganizerBy {
+        URGENCY,
+        IMPORTANCE,
+    };
+
+    enum FilterOrganizerBy {
+        OUTLINES,
+        NOTES,
+        OUTLINES_NOTES
+    };
+
     static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_BOW = 200;
     static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_WEIGHTED_FTS = 10000;
     static constexpr const int DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL = 500;
@@ -254,6 +266,9 @@ private:
     bool uiLiveNotePreview;
     int uiOsTableSortColumn;
     bool uiOsTableSortOrder; // true if ascending, else descending
+
+    // organizers
+    std::vector<Organizer*> organizers;
 
 private:
     Installer* installer;
@@ -440,6 +455,13 @@ public:
     void setUiOsTableSortColumn(const int column) { this->uiOsTableSortColumn = column; }
     bool isUiOsTableSortOrder() const { return uiOsTableSortOrder; }
     void setUiOsTableSortOrder(const bool ascending) { this->uiOsTableSortOrder = ascending; }
+
+    /*
+     * organizers
+     */
+    void clearOrganizers() { this->organizers.clear(); }
+    void addOrganizer(Organizer* organizer);
+    std::vector<Organizer*> getOrganizers() const { return this->organizers; }
 };
 
 } // namespace

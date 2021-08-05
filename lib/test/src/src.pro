@@ -114,6 +114,7 @@ SOURCES += \
     ./mind/mind_test.cpp \
     ./mind/note_test.cpp \
     ./mindforger_lib_unit_tests.cpp \
+    ./mind/organizer_test.cpp \
     ./mind/outline_test.cpp \
     ./test_gear.cpp \
     ./config/configuration_test.cpp \

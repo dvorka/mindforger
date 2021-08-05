@@ -19,7 +19,7 @@
 
 export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
-export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
+#export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
 #export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
 
 # benchmarks
@@ -96,7 +96,7 @@ export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to d
 #export OPTION_TEST="DateTimeGearTestCase.*"
 #export OPTION_TEST="DateTimeGearTestCase.Immutability"
 #export OPTION_TEST="ConfigurationTestCase.*"
-export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
+#export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
 #export OPTION_TEST="ConfigurationTestCase.SaveAndLoad"
 #export OPTION_TEST="ConfigurationTestCase.FromConstructor"
 #export OPTION_TEST="ConfigurationTestCase.FromEnvironment"
@@ -104,8 +104,10 @@ export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
 #export OPTION_TEST="MarkdownParserTestCase.Bug37Notrailing"
 #export OPTION_TEST="MarkdownParserBugsTestCase.*"
 #export OPTION_TEST="OutlineTestCase.CloneOutline"
-#export OPTION_TEST="StringGearTestCase.Split"
 #export OPTION_TEST="OutlineTestCase.DirectOutlineNoteChildren"
+#export OPTION_TEST="StringGearTestCase.Split"
+#export OPTION_TEST="OrganizerTestCase.ParseSaveAndLoad"
+#export OPTION_TEST="OrganizerTestCase.NoOrganizerParseSaveAndLoad"
 
 # environment - to be specified in .bashrc or elsewhere:
 #   export M8R_CPU_CORES=7
