@@ -2225,19 +2225,21 @@ void MainWindowPresenter::doActionNoteClone()
             tr("Do you want to clone Note '") + QString::fromStdString(n->getName()) + tr("' including its child notes?'?"),
             QMessageBox::StandardButton::Yes | QMessageBox::StandardButton::No | QMessageBox::StandardButton::Cancel
         );
-        bool deep = choice == QMessageBox::Yes;
 
-        Note* clonedNote = mind->noteClone(orloj->getOutlineView()->getCurrentOutline()->getKey(), n, deep);
-        if(clonedNote) {
-            mind->remind().remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
-            // IMPROVE smarter refresh of outline tree (do less then overall load)
-            orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
-            // select Note in the tree
-            QModelIndex idx
-                = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(n->getOutline()->getNoteOffset(clonedNote), 0);
-            orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
-        } else {
-            QMessageBox::critical(&view, tr("Clone Note"), tr("Failed to clone Note!"));
+        if(QMessageBox::StandardButton::Cancel != choice) {
+            bool deep = choice == QMessageBox::Yes;
+            Note* clonedNote = mind->noteClone(orloj->getOutlineView()->getCurrentOutline()->getKey(), n, deep);
+            if(clonedNote) {
+                mind->remind().remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
+                // IMPROVE smarter refresh of outline tree (do less then overall load)
+                orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+                // select Note in the tree
+                QModelIndex idx
+                    = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(n->getOutline()->getNoteOffset(clonedNote), 0);
+                orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
+            } else {
+                QMessageBox::critical(&view, tr("Clone Note"), tr("Failed to clone Note!"));
+            }
         }
     } else {
         QMessageBox::critical(&view, tr("Clone Note"), tr("Please select a Note to be cloned."));

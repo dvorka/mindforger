@@ -380,7 +380,7 @@ void MarkdownConfigurationRepresentation::configurationSection(string* title, ve
                             if(r) {
                                 c.setActiveRepository(c.addRepository(r));
                             } else {
-                                cerr << "Unable to construct active repository for non-existing configured path: '" << p << "'" << endl;
+                                cerr << "Unable to construct active repository for non-existent configured path: '" << p << "'" << endl;
                             }
                         } else {
                             cerr << "Unable to construct configured active repository as path is empty" << endl;
@@ -392,10 +392,10 @@ void MarkdownConfigurationRepresentation::configurationSection(string* title, ve
                             if(r) {
                                 c.addRepository(r);
                             } else {
-                                cerr << "Unable to construct repository for non-existing configured path: '" << p << "'" << endl;
+                                cerr << "Unable to construct repository for non-existent configured path: '" << p << "'" << endl;
                             }
                         } else {
-                            cerr << "Unable to construct a configured repository as path is empty" << endl;
+                            cerr << "Unable to construct configured repository as path is empty" << endl;
                         }
                     }
                 }
@@ -419,7 +419,7 @@ void MarkdownConfigurationRepresentation::configurationSection(string* title, ve
  * * Upper left tag: UL TAG
  * * Sort by: importance
  * * Filter by: outlines and notes
- * * Outline scope: GLOBAL
+ * * Outline scope:
  * ...
  * Organizer name: MY O ORGANIZER
  * * Upper right tag: UR TAG
