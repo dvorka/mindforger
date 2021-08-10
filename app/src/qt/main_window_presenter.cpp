@@ -203,7 +203,7 @@ void MainWindowPresenter::showInitialView()
                     vector<Note*> notes{};
                     orloj->showFacetRecentNotes(mind->getAllNotes(notes));
                 } else if(!string{START_TO_EISENHOWER_MATRIX}.compare(config.getStartupView())) {
-                    orloj->showFacetOrganizer(mind->getOutlines());
+                    orloj->showFacetOrganizer(nullptr, mind->getOutlines());
                 } else if(!string{START_TO_HOME_OUTLINE}.compare(config.getStartupView())) {
                     if(!doActionViewHome()) {
                         // fallback
@@ -1087,7 +1087,7 @@ void MainWindowPresenter::doActionViewOrganizers()
 void MainWindowPresenter::doActionViewOrganizer()
 {
     if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-        orloj->showFacetOrganizer(mind->getOutlines());
+        orloj->showFacetOrganizer(nullptr, mind->getOutlines());
     }
 }
 

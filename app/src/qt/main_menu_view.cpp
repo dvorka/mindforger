@@ -279,7 +279,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewFullscreen);
 
     // menu: knowledge
-
 #ifdef MF_WIP
     menuKnowledge = qMenuBar->addMenu(tr("&Know"));
 

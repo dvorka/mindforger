@@ -44,7 +44,7 @@ void OrganizersTableView::keyPressEvent(QKeyEvent* event)
         switch(event->key()) {
         case Qt::Key_Return:
         case Qt::Key_Right:
-            emit signalShowDialogForOrganizer();
+            emit signalShowSelectedOrganizer();
             return;
         case Qt::Key_Down:
             QTableView::keyPressEvent(event);
@@ -67,7 +67,7 @@ void OrganizersTableView::mouseDoubleClickEvent(QMouseEvent* event)
     Q_UNUSED(event);
 
     // double click to O opens it
-    emit signalShowDialogForOrganizer();
+    emit signalShowSelectedOrganizer();
 }
 
 void OrganizersTableView::resizeEvent(QResizeEvent* event)

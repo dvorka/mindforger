@@ -54,6 +54,12 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
      * and widgets - it can show/hide what's needed and then pass control to children.
      */
 
+    // hit enter in organizers to view organizer detail
+    QObject::connect(
+        view->getOrganizersTable(),
+        SIGNAL(signalShowSelectedOrganizer()),
+        this,
+        SLOT(slotShowSelectedOrganizer()));
     // hit enter in Os to view O detail
     QObject::connect(
         view->getOutlinesTable(),
@@ -217,15 +223,12 @@ void OrlojPresenter::showFacetOrganizerList(const vector<Organizer*>& organizers
     view->showFacetOrganizers();
     mainPresenter->getMainMenu()->showFacetOrganizerList();
     mainPresenter->getStatusBar()->showMindStatistics();
-
-    // TODO to be removed - fallback to Eisenhower matrix ~ 1 organizer
-    // showFacetOrganizer(outlines);
 }
 
-void OrlojPresenter::showFacetOrganizer(const vector<Outline*>& outlines)
+void OrlojPresenter::showFacetOrganizer(Organizer* organizer, const vector<Outline*>& outlines)
 {
     setFacet(OrlojPresenterFacets::FACET_ORGANIZER);
-    organizerPresenter->refresh(outlines);
+    organizerPresenter->refresh(organizer, outlines);
     view->showFacetOrganizer();
     mainPresenter->getMainMenu()->showFacetOrganizer();
     mainPresenter->getStatusBar()->showMindStatistics();
@@ -280,6 +283,34 @@ void OrlojPresenter::showFacetOutlineList(const vector<Outline*>& outlines)
 void OrlojPresenter::slotShowOutlines()
 {
     showFacetOutlineList(mind->getOutlines());
+}
+
+void OrlojPresenter::slotShowSelectedOrganizer()
+{
+    if(activeFacet!=OrlojPresenterFacets::FACET_VIEW_OUTLINE
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_TAG_CLOUD
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_NAVIGATOR
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_RECENT_NOTES
+      )
+    {
+        int row = organizersTablePresenter->getCurrentRow();
+        if(row != OrganizersTablePresenter::NO_ROW) {
+            QStandardItem* item;
+            item = outlinesTablePresenter->getModel()->item(row);
+            // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
+            if(item) {
+                Organizer* organizer = item->data(Qt::UserRole + 1).value<Organizer*>();
+                showFacetOrganizer(organizer, mind->getOutlines());
+                return;
+            } else {
+                mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Organizer not found!")));
+            }
+        }
+        mainPresenter->getStatusBar()->showInfo(QString(tr("No Organizer selected!")));
+    }
 }
 
 void OrlojPresenter::showFacetOutline(Outline* outline)

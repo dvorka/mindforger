@@ -47,7 +47,7 @@ private:
 
     OrlojPresenter* orloj;
 
-    OrganizerConfigDialog *configDialog;
+    OrganizerConfigDialog* configDialog;
 
 public:
     explicit OrganizerQuadrantPresenter(OrganizerQuadrantView* view, OrlojPresenter* orloj, QString title);

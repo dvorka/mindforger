@@ -43,7 +43,7 @@ void Trie::destroy(Node* n)
 
 void Trie::addWord(const string& s)
 {
-    MF_DEBUG("trie.add(" << s << ")" << endl);
+    //MF_DEBUG("trie.add(" << s << ")" << endl);
     if(s.size()) {
         Node* current = root;
 

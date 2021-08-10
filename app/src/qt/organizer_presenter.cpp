@@ -37,7 +37,7 @@ OrganizerPresenter::~OrganizerPresenter()
 {
 }
 
-void OrganizerPresenter::refresh(const vector<Outline*>& os)
+void OrganizerPresenter::refresh(Organizer* organizer, const vector<Outline*>& os)
 {
     vector<Outline*> doFirstOs;
     vector<Outline*> doSoonOs;
@@ -45,19 +45,22 @@ void OrganizerPresenter::refresh(const vector<Outline*>& os)
     vector<Outline*> planDedicatedTimeOs;
 
     if(os.size()) {
-        for(Outline* o:os) {
-            if(o->getUrgency()>2) {
-                if(o->getImportance()>2) {
-                    doFirstOs.push_back(o);
+        // fill quadrants based on organizer
+        if(!organizer || organizer->getKey()==Organizer::KEY_EISENHOWER_MATRIX) {
+            for(Outline* o:os) {
+                if(o->getUrgency()>2) {
+                    if(o->getImportance()>2) {
+                        doFirstOs.push_back(o);
+                    } else {
+                        doSoonOs.push_back(o);
+                    }
                 } else {
-                    doSoonOs.push_back(o);
-                }
-            } else {
-                if(o->getImportance()>2) {
-                    planDedicatedTimeOs.push_back(o);
-                } else {
-                    if(o->getImportance()>0) {
-                        doSometimeOs.push_back(o);
+                    if(o->getImportance()>2) {
+                        planDedicatedTimeOs.push_back(o);
+                    } else {
+                        if(o->getImportance()>0) {
+                            doSometimeOs.push_back(o);
+                        }
                     }
                 }
             }

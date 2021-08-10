@@ -42,7 +42,8 @@ public:
     virtual void resizeEvent(QResizeEvent* event) override;
 
 signals:
-    void signalShowDialogForOrganizer();
+    void signalShowSelectedOrganizer();
+    // TODO remove: void signalShowDialogForOrganizer();
 };
 
 }

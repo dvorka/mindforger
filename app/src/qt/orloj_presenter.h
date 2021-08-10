@@ -177,7 +177,7 @@ public:
 
     void showFacetDashboard();
     void showFacetOrganizerList(const std::vector<Organizer*>& organizers);
-    void showFacetOrganizer(const std::vector<Outline*>& outlines);
+    void showFacetOrganizer(Organizer* organizer, const std::vector<Outline*>& outlines);
     void showFacetTagCloud();
     void showFacetOutlineList(const std::vector<Outline*>& outlines);
     void showFacetRecentNotes(const std::vector<Note*>& notes);
@@ -197,6 +197,7 @@ public:
     void fromNoteEditBackToView(Note* note);
 
 public slots:
+    void slotShowSelectedOrganizer();
     void slotShowOutlines();
     void slotShowSelectedOutline();
     void slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected);

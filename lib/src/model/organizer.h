@@ -49,12 +49,24 @@ public:
     static constexpr const auto CONFIG_VALUE_FILTER_BY_N = "notes";
     static constexpr const auto CONFIG_VALUE_FILTER_BY_O_N = "outlines and notes";
 
+    static constexpr const auto KEY_EISENHOWER_MATRIX = "/m1ndf0rg3r/organizers/eisenhower-matrix";
+
     static std::string createOrganizerKey(
         const std::set<std::string>& keys,
         const std::string& directory,
         const std::string& id,
         const std::string& separator
     );
+
+    static Organizer* createEisenhowMatrixOrganizer() {
+        Organizer* emO = new Organizer("Eisenhower Matrix");
+        emO->setKey(Organizer::KEY_EISENHOWER_MATRIX);
+        emO->setUpperRightTag("important & urgent");
+        emO->setLowerRightTag("important");
+        emO->setUpperLeftTag("urgent");
+        emO->setLowerLeftTag(".");
+        return emO;
+    };
 
 public:
     // upper right quandrant tag

@@ -444,9 +444,9 @@ void MarkdownConfigurationRepresentation::configurationSectionOrganizers(
     // in configuration singleton (no need to introduce new object - it's simply configuration and the source is irrelevant.
     // Extra configuration to be loaded/saved on detection of the repository/file.
 
+    set<string> keys{};
     if(body) {
         Organizer* o = nullptr;
-        set<string> keys{};
         for(string* line:*body) {
             if(line) {
                 if(line && line->find(CONFIG_SETTING_ORG_NAME) != std::string::npos) {
@@ -496,19 +496,14 @@ void MarkdownConfigurationRepresentation::configurationSectionOrganizers(
 
         // add (valid) organizer
         o = configurationSectionOrganizerAdd(o, keys, c);
-
-        // TODO remove FOO organizer
-        MF_DEBUG("ADDING FOO ORGANIZER...");
-        Organizer* fooO = new Organizer("Eisenhower Matrix");
-        // TODO constant
-        string fooKey{"/m1ndf0rg3r/organizers/eisenhower-matrix"};
-        fooO->setKey(fooKey);
-        fooO->setUpperRightTag("tag");
-        fooO->setLowerRightTag("tag");
-        fooO->setUpperLeftTag("tag");
-        fooO->setLowerLeftTag("tag");
-        configurationSectionOrganizerAdd(fooO, keys, c);
     }
+
+    // ensure presence of Eisenhower Matrix organizer
+    configurationSectionOrganizerAdd(
+         Organizer::createEisenhowMatrixOrganizer(),
+         keys,
+         c
+    );
 }
 
 Organizer* MarkdownConfigurationRepresentation::configurationSectionOrganizerAdd(
