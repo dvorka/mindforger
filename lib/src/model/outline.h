@@ -160,7 +160,7 @@ public:
      */
     bool isVirgin() const;
 
-    const std::string& getKey() const;
+    virtual const std::string& getKey() const;
     void setKey(const std::string key);
     MarkdownDocument::Format getFormat() const { return format; }
     void setFormat(MarkdownDocument::Format format) { this->format = format; }

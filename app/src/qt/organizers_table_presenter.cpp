@@ -39,16 +39,16 @@ OrganizersTablePresenter::~OrganizersTablePresenter()
 {
 }
 
-void OrganizersTablePresenter::refresh(const map<const Tag*, int>& tags)
+void OrganizersTablePresenter::refresh(const vector<Organizer*>& organizers)
 {
     model->removeAllRows();
-    if(tags.size()) {
-        for(const auto& t:tags) {
-            model->addRow(t.first, t.second);
+    if(organizers.size()) {
+        for(const auto& o:organizers) {
+            model->addRow(o);
         }
     }
 
-    view->sortByColumn(1, Qt::SortOrder::DescendingOrder);
+    view->sortByColumn(0, Qt::SortOrder::DescendingOrder);
 
     this->view->setCurrentIndex(this->model->index(0, 0));
     this->view->setFocus();

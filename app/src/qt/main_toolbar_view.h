@@ -43,7 +43,11 @@ public:
     QAction* actionOpenFile;
     QAction* actionViewDashboard;
     QAction* actionViewOutlines;
+#ifdef OLD_EISENHOWER
     QAction* actionViewEisenhower;
+#else
+    QAction* actionViewOrganizers;
+#endif
     QAction* actionViewNavigator;
     QAction* actionViewTags;
     QAction* actionViewRecentNotes;

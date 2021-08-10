@@ -60,6 +60,7 @@ constexpr const auto CONFIG_SETTING_SAVE_READS_METADATA_LABEL = "* Save reads me
 
 // organizers
 constexpr const auto CONFIG_SETTING_ORG_NAME = "Organizer name: ";
+constexpr const auto CONFIG_SETTING_ORG_KEY= "* Key: ";
 constexpr const auto CONFIG_SETTING_ORG_TAG_UR = "* Upper right tag: ";
 constexpr const auto CONFIG_SETTING_ORG_TAG_LR = "* Lower right tag: ";
 constexpr const auto CONFIG_SETTING_ORG_TAG_LL = "* Lower left tag: ";
@@ -438,18 +439,26 @@ void MarkdownConfigurationRepresentation::configurationSection(string* title, ve
 void MarkdownConfigurationRepresentation::configurationSectionOrganizers(
     vector<string*>* body, Configuration& c
 ) {
+    // TODO organizers configuration is repository specific - introduce markdown_repository_config_representation.h/.cpp
+    // and use it to store extras like organizers, bookmarks, outline tree, etc. Repository representation to be injected
+    // in configuration singleton (no need to introduce new object - it's simply configuration and the source is irrelevant.
+    // Extra configuration to be loaded/saved on detection of the repository/file.
+
     if(body) {
         Organizer* o = nullptr;
+        set<string> keys{};
         for(string* line:*body) {
             if(line) {
                 if(line && line->find(CONFIG_SETTING_ORG_NAME) != std::string::npos) {
-                    o = configurationSectionOrganizerAdd(o, c);
+                    o = configurationSectionOrganizerAdd(o, keys, c);
 
                     // new organizer
                     string name{line->substr(strlen(CONFIG_SETTING_ORG_NAME))};
                     if(name.length()) {
                         o = new Organizer(name);
                     }
+                } else if(o && line->find(CONFIG_SETTING_ORG_KEY) != std::string::npos) {
+                    o->setKey(line->substr(strlen(CONFIG_SETTING_ORG_KEY)));
                 } else if(o && line->find(CONFIG_SETTING_ORG_TAG_UR) != std::string::npos) {
                     o->tagUrQuadrant = line->substr(strlen(CONFIG_SETTING_ORG_TAG_UR));
                 } else if(o && line->find(CONFIG_SETTING_ORG_TAG_LR) != std::string::npos) {
@@ -486,29 +495,62 @@ void MarkdownConfigurationRepresentation::configurationSectionOrganizers(
         }
 
         // add (valid) organizer
-        o = configurationSectionOrganizerAdd(o, c);
+        o = configurationSectionOrganizerAdd(o, keys, c);
+
+        // TODO remove FOO organizer
+        MF_DEBUG("ADDING FOO ORGANIZER...");
+        Organizer* fooO = new Organizer("Eisenhower Matrix");
+        // TODO constant
+        string fooKey{"/m1ndf0rg3r/organizers/eisenhower-matrix"};
+        fooO->setKey(fooKey);
+        fooO->setUpperRightTag("tag");
+        fooO->setLowerRightTag("tag");
+        fooO->setUpperLeftTag("tag");
+        fooO->setLowerLeftTag("tag");
+        configurationSectionOrganizerAdd(fooO, keys, c);
     }
 }
 
 Organizer* MarkdownConfigurationRepresentation::configurationSectionOrganizerAdd(
     Organizer* o,
+    set<string>& keys,
     Configuration& c
 ) {
     if(o) {
         // validate organizer integrity
+        if(o->getKey().empty()) {
+            o->setKey(
+                Organizer::createOrganizerKey(
+                    keys,
+                    c.getMemoryPath(),
+                    Thing::getNextKey(),
+                    FILE_PATH_SEPARATOR
+                )
+            );
+        }
+        set<string>::iterator it = keys.find(o->getKey());
+        if(it != keys.end()) {
+            cerr << "Error: skipping '" << o->getName() << "' organizer as another organizer "
+                 << "with key '" << o->getKey() << "' is already defined" << endl;
+            delete o;
+            return nullptr;
+        } // else OK - key not defined yet
+
         if(
             !o->tagUrQuadrant.length()
             || !o->tagLrQuadrant.length()
             || !o->tagLlQuadrant.length()
             || !o->tagUlQuadrant.length()
         ) {
-            // organizer must have tags for all quadrants defined
-            o = nullptr;
+            cerr << "Error: skipping '" << o->getName() << "' organizer as it does not define tags for all quandrants" << endl;
+            delete o;
+            return nullptr;
         }
 
         // persist
         if(o) {
             c.addOrganizer(o);
+            keys.insert(o->getKey());
         }
     }
 
@@ -546,6 +588,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
             for(Organizer* o:c->getOrganizers()) {
                 oss
                 << CONFIG_SETTING_ORG_NAME << o->getName() << endl
+                << CONFIG_SETTING_ORG_KEY << o->getKey() << endl
                 << CONFIG_SETTING_ORG_TAG_UR << o->getUpperRightTag() << endl
                 << CONFIG_SETTING_ORG_TAG_LR << o->getLowerRightTag() << endl
                 << CONFIG_SETTING_ORG_TAG_LL << o->getLowerLeftTag() << endl

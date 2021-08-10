@@ -83,6 +83,7 @@ public:
 
     DashboardView* getDashboard() const { return dashboard; }
     OrganizerView* getOrganizer() const { return organizer; }
+    OrganizersTableView* getOrganizersTable() const { return organizersTable; }
     TagsTableView* getTagCloud() const { return tagCloud; }
     OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
     RecentNotesTableView* getRecentNotesTable() const { return recentNotesTable; }

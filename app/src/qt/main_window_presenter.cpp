@@ -115,7 +115,11 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(view.getToolBar()->actionOpenRepository, SIGNAL(triggered()), this, SLOT(doActionMindLearnRepository()));
     QObject::connect(view.getToolBar()->actionOpenFile, SIGNAL(triggered()), this, SLOT(doActionMindLearnFile()));
     QObject::connect(view.getToolBar()->actionViewDashboard, SIGNAL(triggered()), this, SLOT(doActionViewDashboard()));
+#ifdef ONE_ORGANIZER
     QObject::connect(view.getToolBar()->actionViewEisenhower, SIGNAL(triggered()), this, SLOT(doActionViewOrganizer()));
+#else
+    QObject::connect(view.getToolBar()->actionViewOrganizers, SIGNAL(triggered()), this, SLOT(doActionViewOrganizers()));
+#endif
     QObject::connect(view.getToolBar()->actionViewOutlines, SIGNAL(triggered()), this, SLOT(doActionViewOutlines()));
     QObject::connect(view.getToolBar()->actionViewNavigator, SIGNAL(triggered()), this, SLOT(doActionViewKnowledgeGraphNavigator()));
     QObject::connect(view.getToolBar()->actionViewTags, SIGNAL(triggered()), this, SLOT(doActionViewTagCloud()));
@@ -1076,7 +1080,7 @@ void MainWindowPresenter::doActionViewDashboard()
 void MainWindowPresenter::doActionViewOrganizers()
 {
     if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-        orloj->showFacetOrganizerList(mind->getOutlines());
+        orloj->showFacetOrganizerList(config.getOrganizers());
     }
 }
 

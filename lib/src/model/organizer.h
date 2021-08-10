@@ -49,6 +49,13 @@ public:
     static constexpr const auto CONFIG_VALUE_FILTER_BY_N = "notes";
     static constexpr const auto CONFIG_VALUE_FILTER_BY_O_N = "outlines and notes";
 
+    static std::string createOrganizerKey(
+        const std::set<std::string>& keys,
+        const std::string& directory,
+        const std::string& id,
+        const std::string& separator
+    );
+
 public:
     // upper right quandrant tag
     std::string tagUrQuadrant;
@@ -74,6 +81,8 @@ public:
     Organizer &operator=(const Organizer&) = delete;
     Organizer &operator=(const Organizer&&) = delete;
     ~Organizer();
+
+    void setKey(const std::string& key) { this->key = key; }
 
     std::string& getUpperRightTag() { return this->tagUrQuadrant; }
     std::string& getLowerRightTag() { return this->tagLrQuadrant; }

@@ -45,6 +45,9 @@ class Thing
 private:
     static long sequence;
 
+public:
+    static std::string getNextKey() { return std::to_string(++sequence); }
+
 protected:
     /**
      * @brief Thing identifier.
@@ -83,6 +86,13 @@ public:
     Thing &operator=(const Thing&&) = delete;
     virtual ~Thing();
 
+    /**
+     * @brief Get think key.
+     *
+     * Key might be set on get.
+     *
+     * @return unique thing identifier.
+     */
     virtual const std::string& getKey() { return key; }
 
     const std::string& getName() const { return name; }

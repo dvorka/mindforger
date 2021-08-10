@@ -25,7 +25,7 @@ using namespace std;
 OrganizersTableModel::OrganizersTableModel(QObject* parent, HtmlOutlineRepresentation* htmlRepresentation)
     : QStandardItemModel(parent), htmlRepresentation(htmlRepresentation)
 {
-    setColumnCount(2);
+    setColumnCount(1);
     setRowCount(0);
 }
 
@@ -39,32 +39,22 @@ void OrganizersTableModel::removeAllRows()
 
     QStringList tableHeader;
     tableHeader
-        << tr("Organizers")
-        << tr("Ts");
+        << tr("Organizers");
     // IMPROVE set tooltips: items w/ tooltips instead of just strings
     setHorizontalHeaderLabels(tableHeader);
 }
 
-void OrganizersTableModel::addRow(const Tag* tag, int cardinality)
+void OrganizersTableModel::addRow(const Organizer* organizer)
 {
     QList<QStandardItem*> items;
     QStandardItem* item;
 
     // tag name
-    string html{}, tooltip{};
-    tooltip = tag->getName();
-    vector<const Tag*> tags;
-    tags.push_back(tag);
-    htmlRepresentation->tagsToHtml(&tags, html);
-    item = new QStandardItem(QString::fromStdString(html));
+    string tooltip{organizer->getName()};
+    item = new QStandardItem(QString::fromStdString(organizer->getName()));
     item->setToolTip(QString::fromStdString(tooltip));
     // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
-    item->setData(QVariant::fromValue(tag));
-    items += item;
-
-    // cardinality
-    item = new QStandardItem();
-    item->setData(QVariant::fromValue((int)(cardinality)), Qt::DisplayRole);
+    item->setData(QVariant::fromValue(organizer));
     items += item;
 
     appendRow(items);

@@ -37,6 +37,7 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
 
     this->dashboardPresenter = new DashboardPresenter(view->getDashboard(), this);
     this->organizerPresenter = new OrganizerPresenter(view->getOrganizer(), this);
+    this->organizersTablePresenter = new OrganizersTablePresenter(view->getOrganizersTable(), mainPresenter->getHtmlRepresentation());
     this->tagCloudPresenter = new TagsTablePresenter(view->getTagCloud(), mainPresenter->getHtmlRepresentation());
     this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
     this->recentNotesTablePresenter = new RecentNotesTablePresenter(view->getRecentNotesTable(), mainPresenter->getHtmlRepresentation());
@@ -208,20 +209,17 @@ void OrlojPresenter::showFacetDashboard() {
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
-void OrlojPresenter::showFacetOrganizerList(const vector<Outline*>& outlines)
+void OrlojPresenter::showFacetOrganizerList(const vector<Organizer*>& organizers)
 {
     setFacet(OrlojPresenterFacets::FACET_LIST_ORGANIZERS);
-
-    // TODO to be rewritten
-
-    MF_DEBUG("SHOW LIST TO BE IMPLEMENTED");
-    showFacetOrganizer(outlines);
-
     // IMPROVE reload ONLY if dirty, otherwise just show
-    //    organizersTablePresenter->refresh(outlines);
-    //    view->showFacetOrganizerList();
-    //    mainPresenter->getMainMenu()->showFacetOutlineList();
-    //    mainPresenter->getStatusBar()->showMindStatistics();
+    organizersTablePresenter->refresh(organizers);
+    view->showFacetOrganizers();
+    mainPresenter->getMainMenu()->showFacetOutlineList();
+    mainPresenter->getStatusBar()->showMindStatistics();
+
+    // TODO to be removed - fallback to Eisenhower matrix ~ 1 organizer
+    // showFacetOrganizer(outlines);
 }
 
 void OrlojPresenter::showFacetOrganizer(const vector<Outline*>& outlines)

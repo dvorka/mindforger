@@ -50,7 +50,7 @@ public:
     OrganizersTableModel* getModel() const { return model; }
     OrganizersTableView* getView() const { return view; }
 
-    void refresh(const std::map<const Tag*, int>& tags);
+    void refresh(const std::vector<Organizer*>& organizers);
     int getCurrentRow() const;
 };
 

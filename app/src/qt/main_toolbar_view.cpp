@@ -59,9 +59,15 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
     actionViewDashboard = addAction(
         QIcon(":/icons/dashboard.svg"),
         tr("View Dashboard"));
+#ifdef ONE_ORGANIZER
     actionViewEisenhower = addAction(
         QIcon(":/icons/view-eisenhower.svg"),
         tr("View Eisenhower Matrix"));
+#else
+    actionViewOrganizers = addAction(
+        QIcon(":/icons/view-eisenhower.svg"),
+        tr("View Eisenhower Matrices"));
+#endif
     actionViewOutlines = addAction(
         QIcon(":/icons/view-outlines.svg"),
         tr("View Notebooks"));

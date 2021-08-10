@@ -22,6 +22,19 @@ using namespace std;
 
 namespace m8r {
 
+std::string Organizer::createOrganizerKey(
+    const set<string>& keys,
+    const string& directory,
+    const string& id,
+    const string& separator
+) {
+    string key = directory + separator + "m1ndf0rg3r" + separator + "organizer" + separator + id;
+    do {
+        key += "_";
+    } while(keys.find(key) != keys.end());
+    return key;
+}
+
 Organizer::Organizer(const std::string& name):
     sortBy{Organizer::SortBy::IMPORTANCE},
     filterBy{Organizer::FilterBy::OUTLINES_NOTES}

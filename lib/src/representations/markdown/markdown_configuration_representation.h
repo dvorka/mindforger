@@ -19,6 +19,7 @@
 #ifndef M8R_MARKDOWN_CONFIGURATION_REPRESENTATION_H
 #define M8R_MARKDOWN_CONFIGURATION_REPRESENTATION_H
 
+#include <set>
 #include <string>
 #include <vector>
 #include <iostream>
@@ -78,7 +79,7 @@ private:
     void configuration(std::vector<MarkdownAstNodeSection*>* ast, Configuration& c);
     void configurationSection(std::string* title, std::vector<std::string*>* body, Configuration& c);
     void configurationSectionOrganizers(std::vector<std::string*>* body, Configuration& c);
-    Organizer* configurationSectionOrganizerAdd(Organizer* o, Configuration& c);
+    Organizer* configurationSectionOrganizerAdd(Organizer* o, std::set<std::string>& keys, Configuration& c);
     std::string& to(Configuration* c, std::string& md);
     void save(const File* file, Configuration* c);
 };
