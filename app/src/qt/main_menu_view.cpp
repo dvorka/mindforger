@@ -866,21 +866,16 @@ void MainMenuView::showFacetOrganizerList(bool repositoryMode)
     actionOrganizerClone->setEnabled(false);
     actionOrganizerForget->setEnabled(false);
 
-    actionOutlineEdit->setEnabled(false);
-    actionOutlineClone->setEnabled(false);
-    actionOutlineHome->setEnabled(false);
-    actionOutlineForget->setEnabled(false);
-
+    menuKnowledge->setEnabled(false);
     menuNavigator->setEnabled(false);
+    menuOutline->setEnabled(false);
+    menuNote->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
-    menuNote->setEnabled(false);
     submenuOutlineExport->setEnabled(false);
 
     if(!repositoryMode) {
         menuView->setEnabled(false);
-        menuOutline->setEnabled(false);
-        menuEdit->setEnabled(false);
         menuFormat->setEnabled(false);
 
         actionFindOutlineByName->setEnabled(false);
@@ -892,16 +887,13 @@ void MainMenuView::showFacetOutlineList(bool repositoryMode)
 {
     showAllMenuItems();
 
-    actionOrganizerEdit->setEnabled(false);
-    actionOrganizerClone->setEnabled(false);
-    actionOrganizerForget->setEnabled(false);
-
     actionOutlineEdit->setEnabled(false);
     actionOutlineClone->setEnabled(false);
     actionOutlineHome->setEnabled(false);
     actionOutlineForget->setEnabled(false);
 
     menuNavigator->setEnabled(false);
+    menuOrganizer->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
     menuNote->setEnabled(false);

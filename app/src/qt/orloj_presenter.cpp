@@ -215,7 +215,7 @@ void OrlojPresenter::showFacetOrganizerList(const vector<Organizer*>& organizers
     // IMPROVE reload ONLY if dirty, otherwise just show
     organizersTablePresenter->refresh(organizers);
     view->showFacetOrganizers();
-    mainPresenter->getMainMenu()->showFacetOutlineList();
+    mainPresenter->getMainMenu()->showFacetOrganizerList();
     mainPresenter->getStatusBar()->showMindStatistics();
 
     // TODO to be removed - fallback to Eisenhower matrix ~ 1 organizer
