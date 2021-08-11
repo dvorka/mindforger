@@ -208,8 +208,7 @@ void MainMenuPresenter::showFacetOrganizerList()
 
 void MainMenuPresenter::showFacetOrganizer()
 {
-    // TODO outline > organizer
-    view->showFacetOutlineView(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
+    view->showFacetOrganizerView(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
 }
 
 void MainMenuPresenter::showFacetNavigator()

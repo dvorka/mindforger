@@ -243,6 +243,7 @@ public:
     virtual ~MainMenuView();
 
     void showFacetOrganizerList(bool repositoryMode=true);
+    void showFacetOrganizerView(bool repositoryMode=true);
     void showFacetOutlineList(bool repositoryMode=true);
     void showFacetOutlineView(bool repositoryMode=true);
     void showFacetNoteEdit(bool repositoryMode=true);

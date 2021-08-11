@@ -202,6 +202,7 @@ HEADERS += \
     ./src/qt/dialogs/new_file_dialog.h \
     ./src/qt/dialogs/new_repository_dialog.h \
     src/qt/dialogs/organizer_cfg_dialog.h \
+    src/qt/dialogs/organizer_new_dialog.h \
     src/qt/organizer_view.h \
     src/qt/organizer_presenter.h \
     src/qt/organizer_quadrant_model.h \
@@ -312,6 +313,7 @@ SOURCES += \
     ./src/qt/dialogs/new_file_dialog.cpp \
     ./src/qt/dialogs/new_repository_dialog.cpp \
     src/qt/dialogs/organizer_cfg_dialog.cpp \
+    src/qt/dialogs/organizer_new_dialog.cpp \
     src/qt/organizer_view.cpp \
     src/qt/organizer_presenter.cpp \
     src/qt/organizer_quadrant_model.cpp \

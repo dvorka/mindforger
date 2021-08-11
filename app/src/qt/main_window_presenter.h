@@ -35,6 +35,7 @@
 #include "orloj_presenter.h"
 #include "status_bar_presenter.h"
 
+#include "dialogs/organizer_new_dialog.h"
 #include "dialogs/outline_new_dialog.h"
 #include "dialogs/note_new_dialog.h"
 #include "dialogs/fts_dialog_presenter.h"
@@ -109,6 +110,7 @@ private:
     StatusBarPresenter* statusBar;
 
     ScopeDialog* scopeDialog;
+    OrganizerNewDialog* newOrganizerDialog;
     OutlineNewDialog* newOutlineDialog;
     NoteNewDialog* newNoteDialog;
     FtsDialog* ftsDialog;

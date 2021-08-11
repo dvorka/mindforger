@@ -44,6 +44,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // initialize components
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
+    newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
     newOutlineDialog = new OutlineNewDialog{QString::fromStdString(config.getMemoryPath()), mind->getOntology(), &view};
     newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
     ftsDialog = new FtsDialog{&view};
@@ -2495,21 +2496,24 @@ void MainWindowPresenter::doActionKnowledgeArxiv()
 
 void MainWindowPresenter::doActionOrganizerNew()
 {
-    MF_DEBUG("NEW organizer");
+    newOrganizerDialog->show();
 }
 
 void MainWindowPresenter::doActionOrganizerEdit()
 {
+    // TODO
     MF_DEBUG("EDIT organizer");
 }
 
 void MainWindowPresenter::doActionOrganizerClone()
 {
+    // TODO
     MF_DEBUG("CLONE organizer");
 }
 
 void MainWindowPresenter::doActionOrganizerForget()
 {
+    // TODO
     MF_DEBUG("FORGET organizer");
 }
 

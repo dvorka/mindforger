@@ -882,6 +882,27 @@ void MainMenuView::showFacetOrganizerList(bool repositoryMode)
     }
 }
 
+void MainMenuView::showFacetOrganizerView(bool repositoryMode)
+{
+    showAllMenuItems();
+
+    menuKnowledge->setEnabled(false);
+    menuNavigator->setEnabled(false);
+    menuOutline->setEnabled(false);
+    menuNote->setEnabled(false);
+    menuEdit->setEnabled(false);
+    menuFormat->setEnabled(false);
+    submenuOutlineExport->setEnabled(false);
+
+    if(!repositoryMode) {
+        menuView->setEnabled(false);
+        menuFormat->setEnabled(false);
+
+        actionFindOutlineByName->setEnabled(false);
+        actionFindOutlineByTag->setEnabled(false);
+    }
+}
+
 void MainMenuView::showFacetOutlineList(bool repositoryMode)
 {
     showAllMenuItems();
