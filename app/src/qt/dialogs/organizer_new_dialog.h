@@ -31,6 +31,16 @@
 
 namespace m8r {
 
+/**
+ * @brief Create new organizer.
+ *
+ * Implementation plan:
+ *
+ * 1. tags only (filter: outlines; no sorting)
+ * 2. tags only (filter: outlines, notes, o+n; no sorting)
+ * 3. tags + scope (scope disables non-meaningful actions)
+ * 4. sorting
+ */
 class OrganizerNewDialog : public QDialog
 {
     Q_OBJECT
@@ -54,6 +64,11 @@ protected:
     EditTagsPanel* lowerRighTags;
     EditTagsPanel* upperLeftTags;
     EditTagsPanel* lowerLeftTags;
+    QLabel* sortByLabel;
+    QComboBox* sortByCombo;
+    QLabel* filterByLabel;
+    QComboBox* filterByCombo;
+
     QPushButton* findButton;
 
 public:

@@ -49,6 +49,19 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     findButton->setDefault(true);
     findButton->setEnabled(false);
 
+    sortByLabel = new QLabel(tr("Sort by")+":", this);
+    sortByCombo = new QComboBox{this};
+    sortByCombo->addItem(tr("importance"));
+    sortByCombo->addItem(tr("urgency"));
+
+    filterByLabel = new QLabel(tr("Filter by")+":", this);
+    filterByCombo = new QComboBox{this};
+    filterByCombo->addItem(tr("notebooks"), Organizer::CONFIG_VALUE_FILTER_BY_O);
+    filterByCombo->addItem(tr("notes"), Organizer::CONFIG_VALUE_FILTER_BY_O);
+    filterByCombo->addItem(tr("notebooks and notes"), Organizer::CONFIG_VALUE_FILTER_BY_O_N);
+
+    // TODO notebook scope: choose notebook + show notebook ID in non-editable field
+
     closeButton = new QPushButton{tr("&Cancel")};
 
     // signals
@@ -56,11 +69,17 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     // TODO QObject::connect(findButton, SIGNAL(clicked()), this, SLOT(handleChoice()));
 
     // assembly
-    QVBoxLayout* mainLayout = new QVBoxLayout{};
-    mainLayout->addWidget(upperRighTags);
-    mainLayout->addWidget(lowerRighTags);
-    mainLayout->addWidget(lowerLeftTags);
-    mainLayout->addWidget(upperLeftTags);
+    QVBoxLayout* mainLayout = new QVBoxLayout{this};
+
+    QHBoxLayout* h = new QHBoxLayout{this};
+    QVBoxLayout* l = new QVBoxLayout{this};
+    l->addWidget(upperRighTags);
+    l->addWidget(lowerRighTags);
+    QVBoxLayout* r = new QVBoxLayout{this};
+    r->addWidget(upperLeftTags);
+    r->addWidget(lowerLeftTags);
+    h->addLayout(r);
+    h->addLayout(l);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
@@ -68,6 +87,11 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     buttonLayout->addWidget(findButton);
     buttonLayout->addStretch();
 
+    mainLayout->addLayout(h);
+    mainLayout->addWidget(sortByLabel);
+    mainLayout->addWidget(sortByCombo);
+    mainLayout->addWidget(filterByLabel);
+    mainLayout->addWidget(filterByCombo);
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
 
@@ -80,8 +104,6 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     setWindowTitle(tr("New Organizer"));
     // make dialog big enough (FTS dialog based size)
     resize(fontMetrics().averageCharWidth()*90, fontMetrics().height()*35);
-    // TODO height is set to make sure listview gets enough lines
-    // TODO remove resize(fontMetrics().averageCharWidth()*55, fontMetrics().height()*30);
     setModal(true);
 }
 

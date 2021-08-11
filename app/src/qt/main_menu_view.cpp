@@ -327,7 +327,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNavigator->setEnabled(false);
 
     // menu: organizer
-    menuOrganizer = qMenuBar->addMenu(tr("O&rganizer"));
+    menuOrganizer = qMenuBar->addMenu(tr("&Organizer"));
 
     actionOrganizerNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
     actionOrganizerNew->setStatusTip(tr("Create new Organizer to prioritize your knowledge in Eisenhower Matrix style"));
