@@ -29,27 +29,27 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     mode = ThingsMode::OUTLINES;
 
     // widgets
-    upperRighTags = new EditTagsPanel{ontology, this};
-    upperRighTags->refreshOntologyTags();
-    upperRighTags->setTitle(tr("Upper right quadrant tags:"));
+    upperLeftTags = new EditTagsPanel{ontology, this};
+    upperLeftTags->refreshOntologyTags();
+    upperLeftTags->setTitle(tr("Upper left quadrant tags:"));
 
-    lowerRighTags = new EditTagsPanel{ontology, this};
-    lowerRighTags->refreshOntologyTags();
-    lowerRighTags->setTitle(tr("Lower right quadrant tags:"));
+    upperRightTags = new EditTagsPanel{ontology, this};
+    upperRightTags->refreshOntologyTags();
+    upperRightTags->setTitle(tr("Upper right quadrant tags:"));
 
     lowerLeftTags = new EditTagsPanel{ontology, this};
     lowerLeftTags->refreshOntologyTags();
     lowerLeftTags->setTitle(tr("Lower left quadrant tags:"));
 
-    upperLeftTags = new EditTagsPanel{ontology, this};
-    upperLeftTags->refreshOntologyTags();
-    upperLeftTags->setTitle(tr("Upper left quadrant tags:"));
+    lowerRightTags = new EditTagsPanel{ontology, this};
+    lowerRightTags->refreshOntologyTags();
+    lowerRightTags->setTitle(tr("Lower right quadrant tags:"));
 
-    findButton = new QPushButton{tr("&Create")};
-    findButton->setDefault(true);
-    findButton->setEnabled(false);
+    createButton = new QPushButton{tr("&Create")};
+    createButton->setDefault(true);
+    createButton->setEnabled(true);
 
-    sortByLabel = new QLabel(tr("Sort by")+":", this);
+    sortByLabel = new QLabel(tr("Sort Notebooks by")+":", this);
     sortByCombo = new QComboBox{this};
     sortByCombo->addItem(tr("importance"));
     sortByCombo->addItem(tr("urgency"));
@@ -64,17 +64,13 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
 
     closeButton = new QPushButton{tr("&Cancel")};
 
-    // signals
-    QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
-    // TODO QObject::connect(findButton, SIGNAL(clicked()), this, SLOT(handleChoice()));
-
     // assembly
     QVBoxLayout* mainLayout = new QVBoxLayout{this};
 
     QHBoxLayout* h = new QHBoxLayout{this};
     QVBoxLayout* l = new QVBoxLayout{this};
-    l->addWidget(upperRighTags);
-    l->addWidget(lowerRighTags);
+    l->addWidget(upperRightTags);
+    l->addWidget(lowerRightTags);
     QVBoxLayout* r = new QVBoxLayout{this};
     r->addWidget(upperLeftTags);
     r->addWidget(lowerLeftTags);
@@ -84,7 +80,7 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     QHBoxLayout *buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
     buttonLayout->addWidget(closeButton);
-    buttonLayout->addWidget(findButton);
+    buttonLayout->addWidget(createButton);
     buttonLayout->addStretch();
 
     mainLayout->addLayout(h);
@@ -95,10 +91,13 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
 
-    // signals
+    upperLeftTags->getLineEdit()->setFocus();
 
-    // TODO redefine signals
+    // signals
+    QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    QObject::connect(createButton, SIGNAL(clicked()), this, SLOT(handleCreate()));
     // TODO QObject::connect(upperRighTags, SIGNAL(signalTagSelectionChanged()), this, SLOT(handleTagsChanged()));
+    // TODO on n/on/o selection disable drop down w/ sorting by importance
 
     // dialog    
     setWindowTitle(tr("New Organizer"));
@@ -109,7 +108,7 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
 
 OrganizerNewDialog::~OrganizerNewDialog()
 {
-    delete findButton;
+    delete createButton;
     delete closeButton;
 }
 
@@ -118,25 +117,27 @@ void OrganizerNewDialog::show(vector<const Tag*>* tags)
     choice = nullptr;
     // tags are changed > need to be refreshed
     // IMPROVE dirty flag to avoid refresh that is not needed
-    upperRighTags->refreshOntologyTags();
-    lowerRighTags->refreshOntologyTags();
+    upperRightTags->refreshOntologyTags();
+    lowerRightTags->refreshOntologyTags();
     lowerLeftTags->refreshOntologyTags();
     upperLeftTags->refreshOntologyTags();
 
     things.clear();
 
-    findButton->setEnabled(things.size());
-    upperRighTags->clearTagList();
-    lowerRighTags->clearTagList();
+    // disabling button w/o explaining why would not be UX bug
+    createButton->setEnabled(true);
+
+    upperRightTags->clearTagList();
+    lowerRightTags->clearTagList();
     lowerLeftTags->clearTagList();
     upperLeftTags->clearTagList();
     if(tags) {
         for(const Tag* tag:*tags) {
-            upperRighTags->getLineEdit()->setText(QString::fromStdString(tag->getName()));
-            upperRighTags->slotAddTag();
+            upperRightTags->getLineEdit()->setText(QString::fromStdString(tag->getName()));
+            upperRightTags->slotAddTag();
 
-            lowerRighTags->getLineEdit()->setText(QString::fromStdString(tag->getName()));
-            lowerRighTags->slotAddTag();
+            lowerRightTags->getLineEdit()->setText(QString::fromStdString(tag->getName()));
+            lowerRightTags->slotAddTag();
 
             lowerLeftTags->getLineEdit()->setText(QString::fromStdString(tag->getName()));
             lowerLeftTags->slotAddTag();
@@ -145,21 +146,33 @@ void OrganizerNewDialog::show(vector<const Tag*>* tags)
             upperLeftTags->slotAddTag();
         }
     }
-    upperRighTags->getLineEdit()->clear();
-    lowerRighTags->getLineEdit()->clear();
+    upperRightTags->getLineEdit()->clear();
+    lowerRightTags->getLineEdit()->clear();
     lowerLeftTags->getLineEdit()->clear();
     upperLeftTags->getLineEdit()->clear();
 
-    upperRighTags->getLineEdit()->setFocus();
+    upperLeftTags->getLineEdit()->setFocus();
 
     QDialog::show();
 }
 
-void OrganizerNewDialog::getChosenTags(std::vector<const Tag*>* tags)
+void OrganizerNewDialog::handleCreate()
 {
-    // TODO return all quadrant tags
-    //const vector<const Tag*>& ts = editTagsGroup->getTags();
-    //*tags = ts;
+    // VALIDATION of dialog data
+    if(
+        !upperRightTags->getTagCount()
+        || !upperLeftTags->getTagCount()
+        || !lowerRightTags->getTagCount()
+        || !lowerLeftTags->getTagCount()
+    ) {
+        QMessageBox::critical(
+            this,
+            tr("New Organizer Error"),
+            tr("At least one tag must be selected for every quadrant.")
+        );
+    } else {
+        emit createFinished();
+    }
 }
 
 } // m8r namespace

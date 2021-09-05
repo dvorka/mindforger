@@ -50,6 +50,7 @@ private:
 
     QPushButton* closeButton;
 
+    // TODO remove
     Thing* choice;
     std::vector<Thing*> things;
 
@@ -60,8 +61,8 @@ protected:
     };
 
     ThingsMode mode;
-    EditTagsPanel* upperRighTags;
-    EditTagsPanel* lowerRighTags;
+    EditTagsPanel* upperRightTags;
+    EditTagsPanel* lowerRightTags;
     EditTagsPanel* upperLeftTags;
     EditTagsPanel* lowerLeftTags;
     QLabel* sortByLabel;
@@ -69,7 +70,7 @@ protected:
     QLabel* filterByLabel;
     QComboBox* filterByCombo;
 
-    QPushButton* findButton;
+    QPushButton* createButton;
 
 public:
     explicit OrganizerNewDialog(Ontology& ontology, QWidget* parent);
@@ -79,14 +80,32 @@ public:
     OrganizerNewDialog &operator=(const OrganizerNewDialog&&) = delete;
     ~OrganizerNewDialog();
 
-    QPushButton* getFindButton() const { return findButton; }
-    void getChosenTags(std::vector<const Tag*>* tags);
+    QPushButton* getFindButton() const { return createButton; }
+
+    const std::vector<const Tag*>& getUpperLeftChosenTags() const
+    {
+        return upperLeftTags->getTags();
+    }
+    const std::vector<const Tag*>&  getUpperRightChosenTags() const
+    {
+        return upperRightTags->getTags();
+    }
+    const std::vector<const Tag*>&  getLowerLeftChosenTags() const
+    {
+        return lowerLeftTags->getTags();
+    }
+    const std::vector<const Tag*>&  getLowerRightChosenTags() const
+    {
+        return lowerRightTags->getTags();
+    }
     Thing* getChoice() const { return choice; }
 
     void show(std::vector<const Tag*>* tags=nullptr);
 
 signals:
-    void searchFinished();
+    void createFinished();
+private slots:
+    void handleCreate();
 };
 
 }

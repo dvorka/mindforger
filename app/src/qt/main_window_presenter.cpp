@@ -83,6 +83,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(findOutlineByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
     QObject::connect(findNoteByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByTag()));
     QObject::connect(findNoteByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
+    QObject::connect(newOrganizerDialog, SIGNAL(createFinished()), this, SLOT(handleCreateOrganizer()));
     QObject::connect(refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
     QObject::connect(insertImageDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatImage()));
     QObject::connect(insertLinkDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatLink()));
@@ -2497,6 +2498,28 @@ void MainWindowPresenter::doActionKnowledgeArxiv()
 void MainWindowPresenter::doActionOrganizerNew()
 {
     newOrganizerDialog->show();
+}
+
+void MainWindowPresenter::handleCreateOrganizer()
+{
+    MF_DEBUG("CREATE organizer");
+
+    // TODO add NAME to organizer
+    // filter to support > 1 tags w/ AND semantics
+
+    // TODO add entry to organizers
+//    Organizer* o = new Organizer("TODO name");
+//    o->setUpperLeftTag(newOrganizerDialog->getUpperLeftChosenTags());
+//    o->setUpperRightTag(newOrganizerDialog->getUpperRightChosenTags());
+//    o->setLowerLeftTag(newOrganizerDialog->getLowerLeftChosenTags());
+//    o->setLowerRightTag(newOrganizerDialog->getLowerRightChosenTags());
+
+    // TODO sort
+    // TODO filter
+
+    // TODO save organizers configuration
+
+    newOrganizerDialog->hide();
 }
 
 void MainWindowPresenter::doActionOrganizerEdit()

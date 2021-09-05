@@ -81,6 +81,9 @@ public:
         lineEdit->setFocus();
         lineEdit->selectAll();
     }
+    int getTagCount() const {
+        return listView->model()->rowCount();
+    }
 
 signals:
     void signalTagSelectionChanged();

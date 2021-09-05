@@ -73,12 +73,14 @@ class FtsDialogPresenter;
 /**
  * @brief MindForger main window Presenter.
  *
+ * Main window presenter:
+ *   * Provides index of all UI presenters.
+ *   * Hosts cross component signals definitions.
+ *   * Implements core UI application logic for other presenters and views.
+ *
  * This class is used to demonstrate MindForger's MVP frontend architecture
  * and code conventions.
  *
- * Main window presenter:
- *   * Implements core UI application logic for other presenters and views.
- *   * Provides index of all UI presenters.
  */
 class MainWindowPresenter : public QObject
 {
@@ -232,6 +234,7 @@ public slots:
     void doActionKnowledgeWikipedia();
     // organizer
     void doActionOrganizerNew();
+    void handleCreateOrganizer();
     void doActionOrganizerEdit();
     void doActionOrganizerClone();
     void doActionOrganizerForget();
