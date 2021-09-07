@@ -28,6 +28,27 @@
 
 using namespace std;
 
+TEST(OrganizerTestCase, SerializeAndSplitTags)
+{
+    // GIVEN
+    string given_string_tags{"aaa,,bbb,,ccc"};
+    m8r::Organizer o{"Test organizer"};
+
+    // WHEN
+    std::vector<std::string> tags_as_vector = m8r::Organizer::tagsFromString(given_string_tags);
+    cout << endl << "Tags vector[" << tags_as_vector.size() << "]";
+    for(auto t:tags_as_vector) {
+        cout << endl << "  '" << t << "'";
+    }
+    string tags_as_string = m8r::Organizer::tagsToString(tags_as_vector);
+    cout << endl << "Tags serialization: '" << tags_as_string << "'" << endl;
+
+    // THEN
+    EXPECT_GT(tags_as_vector.size(), 0);
+    EXPECT_EQ(given_string_tags, tags_as_string);
+
+}
+
 TEST(OrganizerTestCase, ParseSaveAndLoad)
 {
     // GIVEN
@@ -95,11 +116,14 @@ TEST(OrganizerTestCase, ParseSaveAndLoad)
 
     // THEN: assert configuration from loaded file
     ASSERT_TRUE(loaded);
-    EXPECT_EQ(2, c.getOrganizers().size());
-    EXPECT_EQ("ur1", c.getOrganizers()[0]->getUpperRightTag());
-    EXPECT_EQ("lr1", c.getOrganizers()[0]->getLowerRightTag());
-    EXPECT_EQ("ll1", c.getOrganizers()[0]->getLowerLeftTag());
-    EXPECT_EQ("ul1", c.getOrganizers()[0]->getUpperLeftTag());
+    EXPECT_EQ(2+1, c.getOrganizers().size());  // 2x custom + 1x default
+    cout << "Organizer[0]: " << c.getOrganizers()[0]->getName() << endl;
+    cout << "Organizer[1]: " << c.getOrganizers()[1]->getName() << endl;
+    cout << "Organizer[2]: " << c.getOrganizers()[2]->getName() << endl;
+    EXPECT_EQ("ur1", c.getOrganizers()[0]->getUpperRightTags()[0]);
+    EXPECT_EQ("lr1", c.getOrganizers()[0]->getLowerRightTags()[0]);
+    EXPECT_EQ("ll1", c.getOrganizers()[0]->getLowerLeftTags()[0]);
+    EXPECT_EQ("ul1", c.getOrganizers()[0]->getUpperLeftTags()[0]);
     EXPECT_EQ(m8r::Organizer::FilterBy::NOTES, c.getOrganizers()[0]->filterBy);
     EXPECT_EQ(m8r::Organizer::SortBy::IMPORTANCE, c.getOrganizers()[0]->sortBy);
     EXPECT_EQ("", c.getOrganizers()[0]->scopeOutlineId);
@@ -159,5 +183,6 @@ TEST(OrganizerTestCase, NoOrganizerParseSaveAndLoad)
 
     // THEN: assert configuration from loaded file
     ASSERT_TRUE(loaded);
-    EXPECT_EQ(0, c.getOrganizers().size());
+    EXPECT_EQ(1, c.getOrganizers().size());
+    cout << "Organizer[0]: " << c.getOrganizers()[0]->getName() << endl;
 }

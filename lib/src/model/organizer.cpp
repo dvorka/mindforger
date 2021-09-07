@@ -69,10 +69,10 @@ string Organizer::getFilterByAsStr() {
 }
 
 bool Organizer::isValid() const {
-    if(!this->tagUrQuadrant.length()
-       || !this->tagLrQuadrant.length()
-       || !this->tagLlQuadrant.length()
-       || !this->tagUlQuadrant.length()
+    if(!this->tagsUrQuadrant.size()
+       || !this->tagsLrQuadrant.size()
+       || !this->tagsLlQuadrant.size()
+       || !this->tagsUlQuadrant.size()
     ) {
         return false;
     }

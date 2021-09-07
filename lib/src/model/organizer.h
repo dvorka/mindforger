@@ -61,22 +61,56 @@ public:
     static Organizer* createEisenhowMatrixOrganizer() {
         Organizer* emO = new Organizer("Eisenhower Matrix");
         emO->setKey(Organizer::KEY_EISENHOWER_MATRIX);
+
         emO->setUpperRightTag("important & urgent");
         emO->setLowerRightTag("important");
         emO->setUpperLeftTag("urgent");
         emO->setLowerLeftTag(".");
+
         return emO;
     };
 
+    static constexpr const auto ESC_TAG_DELIMITER = ",,";
+
+    // save tags as strings (w/ escaped delimiter ,, ~ ,)
+    static std::string tagsToString(std::vector<std::string>& tags) {
+        std::string s{};
+        for(std::string t:tags) {
+            s.append(t);
+            s.append(ESC_TAG_DELIMITER);
+        }
+        if(s.length()) {
+            s = s.substr(0, s.length()-2);
+        }
+        return s;
+    }
+
+    // parse tags from escaped string
+    static std::vector<std::string> tagsFromString(std::string& s) {
+        std::vector<std::string> tags{};
+
+        if(s.size()) {
+            size_t last = 0;
+            size_t next = 0;
+            while ((next = s.find(ESC_TAG_DELIMITER, last)) != std::string::npos) {
+                tags.push_back(s.substr(last, next-last));
+                last = next + 2;
+            }
+            tags.push_back(s.substr(last));
+        }
+
+        return tags;
+    }
+
 public:
     // upper right quandrant tag
-    std::string tagUrQuadrant;
+    std::vector<std::string> tagsUrQuadrant;
     // lower right quandrant tag
-    std::string tagLrQuadrant;
+    std::vector<std::string> tagsLrQuadrant;
     // lower left quandrant tag
-    std::string tagLlQuadrant;
+    std::vector<std::string> tagsLlQuadrant;
     // upper left quandrant tag
-    std::string tagUlQuadrant;
+    std::vector<std::string> tagsUlQuadrant;
 
     // values: importance, urgency; default: importance
     int sortBy;
@@ -96,15 +130,40 @@ public:
 
     void setKey(const std::string& key) { this->key = key; }
 
-    std::string& getUpperRightTag() { return this->tagUrQuadrant; }
-    std::string& getLowerRightTag() { return this->tagLrQuadrant; }
-    std::string& getLowerLeftTag() { return this->tagLlQuadrant; }
-    std::string& getUpperLeftTag() { return this->tagUlQuadrant; }
+    std::vector<std::string>& getUpperRightTags() { return this->tagsUrQuadrant; }
+    std::vector<std::string>& getLowerRightTags() { return this->tagsLrQuadrant; }
+    std::vector<std::string>& getLowerLeftTags() { return this->tagsLlQuadrant; }
+    std::vector<std::string>& getUpperLeftTags() { return this->tagsUlQuadrant; }
 
-    void setUpperRightTag(std::string tag) { this->tagUrQuadrant = tag; }
-    void setLowerRightTag(std::string tag) { this->tagLrQuadrant = tag; }
-    void setLowerLeftTag(std::string tag) { this->tagLlQuadrant = tag; }
-    void setUpperLeftTag(std::string tag) { this->tagUlQuadrant = tag; }
+    void setUpperRightTag(const std::string tag) {
+        this->tagsUrQuadrant.clear();
+        this->tagsUrQuadrant.push_back(tag);
+    }
+    void setLowerRightTag(const std::string tag) {
+        this->tagsLrQuadrant.clear();
+        this->tagsLrQuadrant.push_back(tag);
+    }
+    void setLowerLeftTag(const std::string tag) {
+        this->tagsLlQuadrant.clear();
+        this->tagsLlQuadrant.push_back(tag);
+    }
+    void setUpperLeftTag(const std::string tag) {
+        this->tagsUlQuadrant.clear();
+        this->tagsUlQuadrant.push_back(tag);
+    }
+
+    void setUpperRightTags(std::vector<std::string> tags) {
+        this->tagsUrQuadrant = tags;
+    }
+    void setLowerRightTags(std::vector<std::string> tags) {
+        this->tagsLrQuadrant = tags;
+    }
+    void setLowerLeftTags(std::vector<std::string> tags) {
+        this->tagsLlQuadrant = tags;
+    }
+    void setUpperLeftTags(std::vector<std::string> tags) {
+        this->tagsUlQuadrant = tags;
+    }
 
     int getSortBy() const { return this->sortBy; }
     const std::string getSortByAsStr();

@@ -106,8 +106,10 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="OutlineTestCase.CloneOutline"
 #export OPTION_TEST="OutlineTestCase.DirectOutlineNoteChildren"
 #export OPTION_TEST="StringGearTestCase.Split"
+#export OPTION_TEST="OrganizerTestCase.*"
+#export OPTION_TEST="OrganizerTestCase.SerializeAndSplitTags"
 #export OPTION_TEST="OrganizerTestCase.ParseSaveAndLoad"
-#export OPTION_TEST="OrganizerTestCase.NoOrganizerParseSaveAndLoad"
+export OPTION_TEST="OrganizerTestCase.NoOrganizerParseSaveAndLoad"
 
 # environment - to be specified in .bashrc or elsewhere:
 #   export M8R_CPU_CORES=7

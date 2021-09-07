@@ -2508,16 +2508,17 @@ void MainWindowPresenter::handleCreateOrganizer()
     // filter to support > 1 tags w/ AND semantics
 
     // TODO add entry to organizers
-//    Organizer* o = new Organizer("TODO name");
-//    o->setUpperLeftTag(newOrganizerDialog->getUpperLeftChosenTags());
-//    o->setUpperRightTag(newOrganizerDialog->getUpperRightChosenTags());
-//    o->setLowerLeftTag(newOrganizerDialog->getLowerLeftChosenTags());
-//    o->setLowerRightTag(newOrganizerDialog->getLowerRightChosenTags());
+    Organizer* o = new Organizer("TODO name");
+    o->setUpperLeftTag(newOrganizerDialog->getUpperLeftChosenTags());
+    o->setUpperRightTag(newOrganizerDialog->getUpperRightChosenTags());
+    o->setLowerLeftTag(newOrganizerDialog->getLowerLeftChosenTags());
+    o->setLowerRightTag(newOrganizerDialog->getLowerRightChosenTags());
 
     // TODO sort
     // TODO filter
 
     // TODO save organizers configuration
+    config.addOrganizer(o);
 
     newOrganizerDialog->hide();
 }

@@ -447,6 +447,7 @@ void MarkdownConfigurationRepresentation::configurationSectionOrganizers(
     set<string> keys{};
     if(body) {
         Organizer* o = nullptr;
+        string tags{};
         for(string* line:*body) {
             if(line) {
                 if(line && line->find(CONFIG_SETTING_ORG_NAME) != std::string::npos) {
@@ -460,13 +461,17 @@ void MarkdownConfigurationRepresentation::configurationSectionOrganizers(
                 } else if(o && line->find(CONFIG_SETTING_ORG_KEY) != std::string::npos) {
                     o->setKey(line->substr(strlen(CONFIG_SETTING_ORG_KEY)));
                 } else if(o && line->find(CONFIG_SETTING_ORG_TAG_UR) != std::string::npos) {
-                    o->tagUrQuadrant = line->substr(strlen(CONFIG_SETTING_ORG_TAG_UR));
+                    tags = line->substr(strlen(CONFIG_SETTING_ORG_TAG_UR));
+                    o->tagsUrQuadrant = Organizer::tagsFromString(tags);
                 } else if(o && line->find(CONFIG_SETTING_ORG_TAG_LR) != std::string::npos) {
-                    o->tagLrQuadrant = line->substr(strlen(CONFIG_SETTING_ORG_TAG_LR));
+                    tags = line->substr(strlen(CONFIG_SETTING_ORG_TAG_LR));
+                    o->tagsLrQuadrant = Organizer::tagsFromString(tags);
                 } else if(o && line->find(CONFIG_SETTING_ORG_TAG_LL) != std::string::npos) {
-                    o->tagLlQuadrant = line->substr(strlen(CONFIG_SETTING_ORG_TAG_LL));
+                    tags = line->substr(strlen(CONFIG_SETTING_ORG_TAG_LL));
+                    o->tagsLlQuadrant = Organizer::tagsFromString(tags);
                 } else if(o && line->find(CONFIG_SETTING_ORG_TAG_UL) != std::string::npos) {
-                    o->tagUlQuadrant = line->substr(strlen(CONFIG_SETTING_ORG_TAG_UL));
+                    tags = line->substr(strlen(CONFIG_SETTING_ORG_TAG_UL));
+                    o->tagsUlQuadrant = Organizer::tagsFromString(tags);
                 } else if(o && line->find(CONFIG_SETTING_ORG_SORT_BY) != std::string::npos) {
                     string sortBy{line->substr(strlen(CONFIG_SETTING_ORG_SORT_BY))};
                     if(Organizer::CONFIG_VALUE_SORT_BY_I == sortBy) {
@@ -532,10 +537,10 @@ Organizer* MarkdownConfigurationRepresentation::configurationSectionOrganizerAdd
         } // else OK - key not defined yet
 
         if(
-            !o->tagUrQuadrant.length()
-            || !o->tagLrQuadrant.length()
-            || !o->tagLlQuadrant.length()
-            || !o->tagUlQuadrant.length()
+            !o->tagsUrQuadrant.size()
+            || !o->tagsLrQuadrant.size()
+            || !o->tagsLlQuadrant.size()
+            || !o->tagsUlQuadrant.size()
         ) {
             cerr << "Error: skipping '" << o->getName() << "' organizer as it does not define tags for all quandrants" << endl;
             delete o;
@@ -584,10 +589,10 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
                 oss
                 << CONFIG_SETTING_ORG_NAME << o->getName() << endl
                 << CONFIG_SETTING_ORG_KEY << o->getKey() << endl
-                << CONFIG_SETTING_ORG_TAG_UR << o->getUpperRightTag() << endl
-                << CONFIG_SETTING_ORG_TAG_LR << o->getLowerRightTag() << endl
-                << CONFIG_SETTING_ORG_TAG_LL << o->getLowerLeftTag() << endl
-                << CONFIG_SETTING_ORG_TAG_UL << o->getUpperLeftTag() << endl
+                << CONFIG_SETTING_ORG_TAG_UR << Organizer::tagsToString(o->getUpperRightTags()) << endl
+                << CONFIG_SETTING_ORG_TAG_LR << Organizer::tagsToString(o->getLowerRightTags()) << endl
+                << CONFIG_SETTING_ORG_TAG_LL << Organizer::tagsToString(o->getLowerLeftTags()) << endl
+                << CONFIG_SETTING_ORG_TAG_UL << Organizer::tagsToString(o->getUpperLeftTags()) << endl
                 << CONFIG_SETTING_ORG_SORT_BY << o->getSortByAsStr() << endl
                 << CONFIG_SETTING_ORG_FILTER_BY << o->getFilterByAsStr() << endl
                 << CONFIG_SETTING_ORG_SCOPE << o->getOutlineScope() << endl
