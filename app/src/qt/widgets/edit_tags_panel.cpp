@@ -112,6 +112,16 @@ const std::vector<const Tag*>& EditTagsPanel::getTags()
     return tags;
 }
 
+vector<string>& EditTagsPanel::getTagsAsStrings(vector<string>& tags) const {
+    if(listViewStrings.size()) {
+        for(const QString& s:listViewStrings) {
+            tags.push_back(s.toStdString());
+        }
+    }
+    return tags;
+}
+
+
 void EditTagsPanel::setTags(const std::vector<const Tag*>& tags)
 {
     clearTagList();

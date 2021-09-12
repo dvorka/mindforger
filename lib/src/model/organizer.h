@@ -152,26 +152,32 @@ public:
         this->tagsUlQuadrant.push_back(tag);
     }
 
-    void setUpperRightTags(std::vector<std::string> tags) {
+    void setUpperRightTags(const std::vector<std::string> tags) {
         this->tagsUrQuadrant = tags;
     }
-    void setLowerRightTags(std::vector<std::string> tags) {
+    void setLowerRightTags(const std::vector<std::string> tags) {
         this->tagsLrQuadrant = tags;
     }
-    void setLowerLeftTags(std::vector<std::string> tags) {
+    void setLowerLeftTags(const std::vector<std::string> tags) {
         this->tagsLlQuadrant = tags;
     }
-    void setUpperLeftTags(std::vector<std::string> tags) {
+    void setUpperLeftTags(const std::vector<std::string> tags) {
         this->tagsUlQuadrant = tags;
     }
 
     int getSortBy() const { return this->sortBy; }
     const std::string getSortByAsStr();
+    void setSortBy(int sortBy) { this->sortBy = sortBy; }
+
     int getFilterBy() const { return this->filterBy; }
     std::string getFilterByAsStr();
+    void setFilterBy(int filterBy) { this->filterBy = filterBy; }
 
-    std::string getOutlineScope() {
+    std::string getOutlineScope() const {
         return this->scopeOutlineId.length() ? this->scopeOutlineId : "";
+    }
+    void setOutlineScope(std::string outlineId) {
+        this->scopeOutlineId = outlineId;
     }
 
     bool isValid() const;

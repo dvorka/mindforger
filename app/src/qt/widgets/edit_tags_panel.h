@@ -76,6 +76,7 @@ public:
     void refreshOntologyTags();
     void refresh(const std::vector<const Tag*>* noteTags);
     const std::vector<const Tag*>& getTags();
+    std::vector<std::string>& getTagsAsStrings(std::vector<std::string>& tags) const;
     void setTags(const std::vector<const Tag*>& tags);
     void setFocusAddingTag() {
         lineEdit->setFocus();

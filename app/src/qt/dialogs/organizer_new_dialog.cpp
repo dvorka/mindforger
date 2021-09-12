@@ -29,6 +29,9 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     mode = ThingsMode::OUTLINES;
 
     // widgets
+    nameLabel = new QLabel(tr("Name")+":", this);
+    nameEdit = new QLineEdit(tr("Organizer"), this);
+
     upperLeftTags = new EditTagsPanel{ontology, this};
     upperLeftTags->refreshOntologyTags();
     upperLeftTags->setTitle(tr("Upper left quadrant tags:"));
@@ -56,8 +59,8 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
 
     filterByLabel = new QLabel(tr("Filter by")+":", this);
     filterByCombo = new QComboBox{this};
-    filterByCombo->addItem(tr("notebooks"), Organizer::CONFIG_VALUE_FILTER_BY_O);
     filterByCombo->addItem(tr("notes"), Organizer::CONFIG_VALUE_FILTER_BY_O);
+    filterByCombo->addItem(tr("notebooks"), Organizer::CONFIG_VALUE_FILTER_BY_O);
     filterByCombo->addItem(tr("notebooks and notes"), Organizer::CONFIG_VALUE_FILTER_BY_O_N);
 
     // TODO notebook scope: choose notebook + show notebook ID in non-editable field
@@ -83,6 +86,8 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     buttonLayout->addWidget(createButton);
     buttonLayout->addStretch();
 
+    mainLayout->addWidget(nameLabel);
+    mainLayout->addWidget(nameEdit);
     mainLayout->addLayout(h);
     mainLayout->addWidget(sortByLabel);
     mainLayout->addWidget(sortByCombo);
@@ -90,8 +95,6 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     mainLayout->addWidget(filterByCombo);
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
-
-    upperLeftTags->getLineEdit()->setFocus();
 
     // signals
     QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
@@ -114,7 +117,8 @@ OrganizerNewDialog::~OrganizerNewDialog()
 
 void OrganizerNewDialog::show(vector<const Tag*>* tags)
 {
-    choice = nullptr;
+    nameEdit->clear();
+
     // tags are changed > need to be refreshed
     // IMPROVE dirty flag to avoid refresh that is not needed
     upperRightTags->refreshOntologyTags();
@@ -151,7 +155,9 @@ void OrganizerNewDialog::show(vector<const Tag*>* tags)
     lowerLeftTags->getLineEdit()->clear();
     upperLeftTags->getLineEdit()->clear();
 
-    upperLeftTags->getLineEdit()->setFocus();
+    nameEdit->setFocus();
+    nameEdit->setText(tr("Organizer"));
+    nameEdit->selectAll();
 
     QDialog::show();
 }
@@ -159,7 +165,13 @@ void OrganizerNewDialog::show(vector<const Tag*>* tags)
 void OrganizerNewDialog::handleCreate()
 {
     // VALIDATION of dialog data
-    if(
+    if(!nameEdit->text().size()) {
+        QMessageBox::critical(
+            this,
+            tr("New Organizer Error"),
+            tr("Organizer must have non-empty name.")
+        );
+    } else if(
         !upperRightTags->getTagCount()
         || !upperLeftTags->getTagCount()
         || !lowerRightTags->getTagCount()

@@ -50,8 +50,6 @@ private:
 
     QPushButton* closeButton;
 
-    // TODO remove
-    Thing* choice;
     std::vector<Thing*> things;
 
 protected:
@@ -61,6 +59,8 @@ protected:
     };
 
     ThingsMode mode;
+    QLabel* nameLabel;
+    QLineEdit* nameEdit;
     EditTagsPanel* upperRightTags;
     EditTagsPanel* lowerRightTags;
     EditTagsPanel* upperLeftTags;
@@ -82,23 +82,33 @@ public:
 
     QPushButton* getFindButton() const { return createButton; }
 
-    const std::vector<const Tag*>& getUpperLeftChosenTags() const
+    QString getOrganizerName() const { return nameEdit->text(); }
+    std::vector<std::string>& getUpperLeftChosenTags(std::vector<std::string>& tags) const
     {
-        return upperLeftTags->getTags();
+        return upperLeftTags->getTagsAsStrings(tags);
     }
-    const std::vector<const Tag*>&  getUpperRightChosenTags() const
+    std::vector<std::string>& getUpperRightChosenTags(std::vector<std::string>& tags) const
     {
-        return upperRightTags->getTags();
+        return upperRightTags->getTagsAsStrings(tags);
     }
-    const std::vector<const Tag*>&  getLowerLeftChosenTags() const
+    std::vector<std::string>& getLowerLeftChosenTags(std::vector<std::string>& tags) const
     {
-        return lowerLeftTags->getTags();
+        return lowerLeftTags->getTagsAsStrings(tags);
     }
-    const std::vector<const Tag*>&  getLowerRightChosenTags() const
+    std::vector<std::string>& getLowerRightChosenTags(std::vector<std::string>& tags) const
     {
-        return lowerRightTags->getTags();
+        return lowerRightTags->getTagsAsStrings(tags);
     }
-    Thing* getChoice() const { return choice; }
+    int getFilterBy() const {
+        return this->filterByCombo->currentData().toInt();
+    }
+    int getSortBy() const {
+        return this->sortByCombo->currentData().toInt();
+    }
+    std::string getOutlineScope() const {
+        // TODO to be implemented
+        return "";
+    }
 
     void show(std::vector<const Tag*>* tags=nullptr);
 

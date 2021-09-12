@@ -2502,25 +2502,46 @@ void MainWindowPresenter::doActionOrganizerNew()
 
 void MainWindowPresenter::handleCreateOrganizer()
 {
-    MF_DEBUG("CREATE organizer");
+    MF_DEBUG("Creating organizer...");
+    Organizer* o = new Organizer(
+        newOrganizerDialog->getOrganizerName().toStdString()
+    );
+    // tags
+    o->setUpperLeftTags(
+        newOrganizerDialog->getUpperLeftChosenTags(
+            o->tagsUlQuadrant
+        )
+    );
+    o->setUpperRightTags(
+        newOrganizerDialog->getUpperRightChosenTags(
+            o->tagsUrQuadrant
+        )
+    );
+    o->setLowerLeftTags(
+        newOrganizerDialog->getLowerLeftChosenTags(
+            o->tagsLlQuadrant
+        )
+    );
+    o->setLowerRightTags(
+        newOrganizerDialog->getLowerRightChosenTags(
+            o->tagsLrQuadrant
+        )
+    );
+    // filter
+    o->setFilterBy(newOrganizerDialog->getFilterBy());
+    // sort
+    o->setSortBy(newOrganizerDialog->getSortBy());
+    // scope
+    o->setOutlineScope(newOrganizerDialog->getOutlineScope());
 
-    // TODO add NAME to organizer
-    // filter to support > 1 tags w/ AND semantics
-
-    // TODO add entry to organizers
-    Organizer* o = new Organizer("TODO name");
-    o->setUpperLeftTag(newOrganizerDialog->getUpperLeftChosenTags());
-    o->setUpperRightTag(newOrganizerDialog->getUpperRightChosenTags());
-    o->setLowerLeftTag(newOrganizerDialog->getLowerLeftChosenTags());
-    o->setLowerRightTag(newOrganizerDialog->getLowerRightChosenTags());
-
-    // TODO sort
-    // TODO filter
-
-    // TODO save organizers configuration
+    // add organizer & save configuration
     config.addOrganizer(o);
+    getConfigRepresentation()->save(config);
 
     newOrganizerDialog->hide();
+
+    // refresh organizer table view
+    orloj->showFacetOrganizerList(config.getOrganizers());
 }
 
 void MainWindowPresenter::doActionOrganizerEdit()
