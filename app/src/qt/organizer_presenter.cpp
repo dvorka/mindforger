@@ -37,17 +37,47 @@ OrganizerPresenter::~OrganizerPresenter()
 {
 }
 
-void OrganizerPresenter::refresh(Organizer* organizer, const vector<Outline*>& os)
+void OrganizerPresenter::refresh(const Organizer* organizer, const vector<Outline*>& os)
 {
+    MF_DEBUG("Rendering organizer: " << organizer->getName() << "..." << endl);
+
+    // upper right
     vector<Outline*> doFirstOs;
+    // lower right
     vector<Outline*> doSoonOs;
+    // upper left
     vector<Outline*> doSometimeOs;
+    // lower left
     vector<Outline*> planDedicatedTimeOs;
 
     if(os.size()) {
         // fill quadrants based on organizer
         if(!organizer || organizer->getKey()==Organizer::KEY_EISENHOWER_MATRIX) {
+            // organizer type: Eisenhower matrix
             for(Outline* o:os) {
+                if(o->getUrgency()>2) {
+                    if(o->getImportance()>2) {
+                        doFirstOs.push_back(o);
+                    } else {
+                        doSoonOs.push_back(o);
+                    }
+                } else {
+                    if(o->getImportance()>2) {
+                        planDedicatedTimeOs.push_back(o);
+                    } else {
+                        if(o->getImportance()>0) {
+                            doSometimeOs.push_back(o);
+                        }
+                    }
+                }
+            }
+        } else {
+            // organizer type: custom
+            for(Outline* o:os) {
+                organizer->getSortBy()
+
+                o->hasTag()
+
                 if(o->getUrgency()>2) {
                     if(o->getImportance()>2) {
                         doFirstOs.push_back(o);

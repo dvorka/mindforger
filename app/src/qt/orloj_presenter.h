@@ -177,7 +177,7 @@ public:
 
     void showFacetDashboard();
     void showFacetOrganizerList(const std::vector<Organizer*>& organizers);
-    void showFacetOrganizer(Organizer* organizer, const std::vector<Outline*>& outlines);
+    void showFacetOrganizer(const Organizer* organizer, const std::vector<Outline*>& outlines);
     void showFacetTagCloud();
     void showFacetOutlineList(const std::vector<Outline*>& outlines);
     void showFacetRecentNotes(const std::vector<Note*>& notes);

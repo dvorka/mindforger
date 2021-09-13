@@ -18,6 +18,7 @@
 */
 #include "organizers_table_model.h"
 
+
 namespace m8r {
 
 using namespace std;
@@ -49,11 +50,8 @@ void OrganizersTableModel::addRow(const Organizer* organizer)
     QList<QStandardItem*> items;
     QStandardItem* item;
 
-    // tag name
-    string tooltip{organizer->getName()};
     item = new QStandardItem(QString::fromStdString(organizer->getName()));
-    item->setToolTip(QString::fromStdString(tooltip));
-    // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
+    item->setToolTip(QString::fromStdString(organizer->getName()));
     item->setData(QVariant::fromValue(organizer));
     items += item;
 

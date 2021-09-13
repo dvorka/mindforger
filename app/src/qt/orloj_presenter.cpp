@@ -225,7 +225,7 @@ void OrlojPresenter::showFacetOrganizerList(const vector<Organizer*>& organizers
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
-void OrlojPresenter::showFacetOrganizer(Organizer* organizer, const vector<Outline*>& outlines)
+void OrlojPresenter::showFacetOrganizer(const Organizer* organizer, const vector<Outline*>& outlines)
 {
     setFacet(OrlojPresenterFacets::FACET_ORGANIZER);
     organizerPresenter->refresh(organizer, outlines);
@@ -298,12 +298,16 @@ void OrlojPresenter::slotShowSelectedOrganizer()
     {
         int row = organizersTablePresenter->getCurrentRow();
         if(row != OrganizersTablePresenter::NO_ROW) {
-            QStandardItem* item;
-            item = outlinesTablePresenter->getModel()->item(row);
+            QStandardItem* item{organizersTablePresenter->getModel()->item(row)};
             // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
             if(item) {
-                Organizer* organizer = item->data(Qt::UserRole + 1).value<Organizer*>();
+                const Organizer* organizer = item->data(Qt::UserRole + 1).value<const Organizer*>();
+                MF_DEBUG("Organizer selected by Orloj: data(user)=" << organizer << endl);
+
                 showFacetOrganizer(organizer, mind->getOutlines());
+                mainPresenter->getStatusBar()->showInfo(
+                    QString("%1%2%3").arg(tr("Organizer '")).arg(organizer->getName().c_str()).arg("'...")
+                );
                 return;
             } else {
                 mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Organizer not found!")));

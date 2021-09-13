@@ -102,6 +102,11 @@ public:
         return tags;
     }
 
+    // determine whether organizer matches Tag filter
+    static bool matches(std::vector<std::string>& outlineTags, std::vector<std::string>& filterTags) {
+        // TODO sort vectors > check if included
+    }
+
 public:
     // upper right quandrant tag
     std::vector<std::string> tagsUrQuadrant;
@@ -180,7 +185,7 @@ public:
         this->scopeOutlineId = outlineId;
     }
 
-    bool isValid() const;
+    bool isValid() const;    
 };
 
 }

@@ -1089,7 +1089,7 @@ void MainWindowPresenter::doActionViewOrganizers()
 void MainWindowPresenter::doActionViewOrganizer()
 {
     if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-        orloj->showFacetOrganizer(nullptr, mind->getOutlines());
+        orloj->slotShowSelectedOrganizer();
     }
 }
 

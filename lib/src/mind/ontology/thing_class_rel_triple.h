@@ -93,7 +93,7 @@ public:
      *
      * @return unique thing identifier.
      */
-    virtual const std::string& getKey() { return key; }
+    virtual const std::string& getKey() const { return key; }
 
     const std::string& getName() const { return name; }
     virtual void setName(const std::string& name) { this->name = name; autolinkName();}

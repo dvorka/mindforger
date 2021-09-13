@@ -70,6 +70,7 @@ void RecentNotesTableModel::addRow(const Note* n)
     htmlRepresentation->tagsToHtml(n->getTags(), html);
     // IMPROVE make showing of type  configurable
     htmlRepresentation->noteTypeToHtml(n->getType(), html);
+
     // item
     item = new QStandardItem(QString::fromStdString(html));
     item->setToolTip(QString::fromStdString(tooltip));
