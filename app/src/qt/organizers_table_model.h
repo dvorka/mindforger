@@ -40,7 +40,7 @@ public:
     ~OrganizersTableModel();
 
     void removeAllRows();
-    void addRow(const Organizer* organizer);
+    void addRow(Organizer* organizer);
 };
 
 }

@@ -37,18 +37,18 @@ OrganizerPresenter::~OrganizerPresenter()
 {
 }
 
-void OrganizerPresenter::refresh(const Organizer* organizer, const vector<Outline*>& os)
+void OrganizerPresenter::refresh(Organizer* organizer, const vector<Outline*>& os)
 {
     MF_DEBUG("Rendering organizer: " << organizer->getName() << "..." << endl);
 
-    // upper right
-    vector<Outline*> doFirstOs;
-    // lower right
-    vector<Outline*> doSoonOs;
-    // upper left
-    vector<Outline*> doSometimeOs;
-    // lower left
-    vector<Outline*> planDedicatedTimeOs;
+    // upper right / do first
+    vector<Outline*> upperRightOs;
+    // upper left / do soon
+    vector<Outline*> upperLeftOs;
+    // lower right / plan dedicated time
+    vector<Outline*> lowerRightOs;
+    // lower left / do sometimes
+    vector<Outline*> lowerLeftOs;
 
     if(os.size()) {
         // fill quadrants based on organizer
@@ -57,16 +57,16 @@ void OrganizerPresenter::refresh(const Organizer* organizer, const vector<Outlin
             for(Outline* o:os) {
                 if(o->getUrgency()>2) {
                     if(o->getImportance()>2) {
-                        doFirstOs.push_back(o);
+                        upperRightOs.push_back(o);
                     } else {
-                        doSoonOs.push_back(o);
+                        upperLeftOs.push_back(o);
                     }
                 } else {
                     if(o->getImportance()>2) {
-                        planDedicatedTimeOs.push_back(o);
+                        lowerRightOs.push_back(o);
                     } else {
                         if(o->getImportance()>0) {
-                            doSometimeOs.push_back(o);
+                            lowerLeftOs.push_back(o);
                         }
                     }
                 }
@@ -74,33 +74,26 @@ void OrganizerPresenter::refresh(const Organizer* organizer, const vector<Outlin
         } else {
             // organizer type: custom
             for(Outline* o:os) {
-                organizer->getSortBy()
-
-                o->hasTag()
-
-                if(o->getUrgency()>2) {
-                    if(o->getImportance()>2) {
-                        doFirstOs.push_back(o);
-                    } else {
-                        doSoonOs.push_back(o);
-                    }
-                } else {
-                    if(o->getImportance()>2) {
-                        planDedicatedTimeOs.push_back(o);
-                    } else {
-                        if(o->getImportance()>0) {
-                            doSometimeOs.push_back(o);
-                        }
-                    }
+                if(o->hasTagStrings(organizer->getUpperRightTags())) {
+                    upperRightOs.push_back(o);
+                }
+                if(o->hasTagStrings(organizer->getLowerRightTags())) {
+                    lowerRightOs.push_back(o);
+                }
+                if(o->hasTagStrings(organizer->getUpperLeftTags())) {
+                    upperLeftOs.push_back(o);
+                }
+                if(o->hasTagStrings(organizer->getLowerLeftTags())) {
+                    lowerLeftOs.push_back(o);
                 }
             }
         }
     }
 
-    doFirstPresenter->refresh(doFirstOs, true, true);
-    doSoonPresenter->refresh(doSoonOs, true, false);
-    doSometimePresenter->refresh(doSometimeOs, false, false);
-    planDedicatedTimePresenter->refresh(planDedicatedTimeOs, false, true);
+    doFirstPresenter->refresh(upperRightOs, true, true);
+    doSoonPresenter->refresh(upperLeftOs, true, false);
+    doSometimePresenter->refresh(lowerLeftOs, false, false);
+    planDedicatedTimePresenter->refresh(lowerRightOs, false, true);
 
     view->getDoFirst()->setFocus();
 }

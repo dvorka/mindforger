@@ -45,7 +45,7 @@ void OrganizersTableModel::removeAllRows()
     setHorizontalHeaderLabels(tableHeader);
 }
 
-void OrganizersTableModel::addRow(const Organizer* organizer)
+void OrganizersTableModel::addRow(Organizer* organizer)
 {
     QList<QStandardItem*> items;
     QStandardItem* item;

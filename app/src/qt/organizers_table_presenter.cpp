@@ -43,7 +43,7 @@ void OrganizersTablePresenter::refresh(const vector<Organizer*>& organizers)
 {
     model->removeAllRows();
     if(organizers.size()) {
-        for(const auto& o:organizers) {
+        for(auto& o:organizers) {
             model->addRow(o);
         }
     }

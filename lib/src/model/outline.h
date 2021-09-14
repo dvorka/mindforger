@@ -190,6 +190,22 @@ public:
             return true;
         }
     }
+    bool hasTagStrings(std::vector<std::string>& filterTags) {
+        if(tags.size() > 1) {
+            unsigned int matches{0};
+            for(std::string ft: filterTags) {
+                for(const Tag* t: tags) {
+                    if(t->equals(ft)) {
+                        ++matches;
+                    }
+                }
+            }
+            return matches == filterTags.size();
+        } else if(tags.size()==1 && filterTags.size()==1) {
+            return tags[0]->equals(filterTags[0]);
+        }
+        return false;
+    }
     time_t getModified() const;
     void makeModified();
     void setModified();

@@ -225,7 +225,7 @@ void OrlojPresenter::showFacetOrganizerList(const vector<Organizer*>& organizers
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
-void OrlojPresenter::showFacetOrganizer(const Organizer* organizer, const vector<Outline*>& outlines)
+void OrlojPresenter::showFacetOrganizer(Organizer* organizer, const vector<Outline*>& outlines)
 {
     setFacet(OrlojPresenterFacets::FACET_ORGANIZER);
     organizerPresenter->refresh(organizer, outlines);
@@ -301,7 +301,7 @@ void OrlojPresenter::slotShowSelectedOrganizer()
             QStandardItem* item{organizersTablePresenter->getModel()->item(row)};
             // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
             if(item) {
-                const Organizer* organizer = item->data(Qt::UserRole + 1).value<const Organizer*>();
+                Organizer* organizer = item->data(Qt::UserRole + 1).value<Organizer*>();
                 MF_DEBUG("Organizer selected by Orloj: data(user)=" << organizer << endl);
 
                 showFacetOrganizer(organizer, mind->getOutlines());

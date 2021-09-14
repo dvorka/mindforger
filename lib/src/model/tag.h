@@ -124,6 +124,10 @@ public:
     Tag &operator=(const Tag&&) = delete;
     virtual ~Tag();
 
+    bool equals(std::string& s) const {
+        return this->name == s;
+    }
+
     const Color& getColor() const { return color; }
 };
 
