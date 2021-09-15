@@ -73,14 +73,24 @@ public:
     static constexpr const auto ESC_TAG_DELIMITER = ",,";
 
     // save tags as strings (w/ escaped delimiter ,, ~ ,)
-    static std::string tagsToString(std::vector<std::string>& tags) {
+    static std::string tagsToString(std::vector<std::string>& tags, bool escape=true) {
         std::string s{};
+
+        std::string escapeString{};
+        int escapeLength{2};
+        if(escape) {
+            escapeString.assign(ESC_TAG_DELIMITER);
+        } else {
+            escapeString.assign(" ,");
+        }
+
+
         for(std::string t:tags) {
             s.append(t);
             s.append(ESC_TAG_DELIMITER);
         }
         if(s.length()) {
-            s = s.substr(0, s.length()-2);
+            s = s.substr(0, s.length()-escapeLength);
         }
         return s;
     }

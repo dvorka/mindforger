@@ -39,10 +39,7 @@ void OrganizerQuadrantModel::removeAllRows()
 {
     QStandardItemModel::clear();
 
-    QStringList tableHeader;
-    tableHeader << title;
-    // IMPROVE set tooltips: items w/ tooltips instead of just strings
-    setHorizontalHeaderLabels(tableHeader);
+    setTitle(title);
 }
 
 void OrganizerQuadrantModel::addRow(Outline* outline, bool urgency, bool importance)

@@ -50,6 +50,8 @@ void OrganizerPresenter::refresh(Organizer* organizer, const vector<Outline*>& o
     // lower left / do sometimes
     vector<Outline*> lowerLeftOs;
 
+    QString title{};
+
     if(os.size()) {
         // fill quadrants based on organizer
         if(!organizer || organizer->getKey()==Organizer::KEY_EISENHOWER_MATRIX) {
@@ -71,6 +73,17 @@ void OrganizerPresenter::refresh(Organizer* organizer, const vector<Outline*>& o
                     }
                 }
             }
+
+            // set quadrant titles
+            title = tr("Do first");
+            doFirstPresenter->setTitle(title);
+            title = tr("Do soon");
+            doSoonPresenter->setTitle(title);
+            title = tr("Plan dedicated time");
+            planDedicatedTimePresenter->setTitle(title);
+            title = tr("Do sometimes");
+            doSometimePresenter->setTitle(title);
+
         } else {
             // organizer type: custom
             for(Outline* o:os) {
@@ -87,6 +100,16 @@ void OrganizerPresenter::refresh(Organizer* organizer, const vector<Outline*>& o
                     lowerLeftOs.push_back(o);
                 }
             }
+
+            // set quadrant titles
+            title = QString::fromStdString(Organizer::tagsToString(organizer->getUpperRightTags()));
+            doFirstPresenter->setTitle(title);
+            title = QString::fromStdString(Organizer::tagsToString(organizer->getUpperLeftTags()));
+            doSoonPresenter->setTitle(title);
+            title = QString::fromStdString(Organizer::tagsToString(organizer->getLowerRightTags()));
+            planDedicatedTimePresenter->setTitle(title);
+            title = QString::fromStdString(Organizer::tagsToString(organizer->getLowerLeftTags()));
+            doSometimePresenter->setTitle(title);
         }
     }
 

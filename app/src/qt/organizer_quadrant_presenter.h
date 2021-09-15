@@ -57,6 +57,8 @@ public:
     OrganizerQuadrantPresenter &operator=(const OrganizerQuadrantPresenter&&) = delete;
     ~OrganizerQuadrantPresenter();
 
+    void setTitle(QString& title) { model->setTitle(title); }
+
     int getCurrentRow() const;
     void refresh(const std::vector<Outline*>& os, bool urgency, bool importance);
     OrganizerQuadrantView* getView() const { return view; }

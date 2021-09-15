@@ -42,8 +42,14 @@ public:
     OrganizerQuadrantModel &operator=(const OrganizerQuadrantModel&&) = delete;
     ~OrganizerQuadrantModel();
 
-    void removeAllRows();
+    void setTitle(QString& title) {
+        this->title = title;
+        QStringList tableHeader = {this->title};
+        setHorizontalHeaderLabels(tableHeader);
+    }
+
     void addRow(Outline* outline, bool urgency=false, bool importance=false);
+    void removeAllRows();
 };
 
 }
