@@ -37,7 +37,6 @@ class ConfigurationDialog : public QDialog
     class EditorTab;
     class NavigatorTab;
     class MindTab;
-    class EisenhowerTab;
 
 private:
     QTabWidget* tabWidget;
@@ -46,7 +45,6 @@ private:
     EditorTab* editorTab;
     NavigatorTab* navigatorTab;
     MindTab* mindTab;
-    EisenhowerTab* eisenhowerTab;
 
     QDialogButtonBox *buttonBox;
 
@@ -207,55 +205,6 @@ public:
 
 private slots:
     void getFont();
-};
-
-/**
- * @brief Eisenhower matrix tab.
- */
-class ConfigurationDialog::EisenhowerTab : public QWidget
-{
-    Q_OBJECT
-
-    class QuadrantPanel;
-
-private:
-    Configuration& config;
-
-    QuadrantPanel* doSometimePanel;
-    QuadrantPanel* doPlanPanel;
-    QuadrantPanel* doSoonPanel;
-    QuadrantPanel* doFirstPanel;
-
-public:
-    explicit EisenhowerTab(QWidget* parent);
-    ~EisenhowerTab();
-
-    // there and back is handled by Dialog's access to this class & Config singleton
-    void refresh();
-    void save();
-
-};
-
-class ConfigurationDialog::EisenhowerTab::QuadrantPanel : public QGroupBox
-{
-    Q_OBJECT
-
-private:
-
-    QCheckBox* check;
-    QLabel* label;
-    QLineEdit* tag;
-    QComboBox* filter;
-
-public:
-    explicit QuadrantPanel(const char* title, QWidget* parent);
-    virtual ~QuadrantPanel() {};
-
-private:
-    QComboBox* createFilterCombo();
-    void setCustomEnabled(const bool enable);
-private slots:
-    void handleCheck();
 };
 
 }
