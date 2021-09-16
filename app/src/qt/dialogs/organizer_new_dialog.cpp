@@ -52,6 +52,7 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     oScopeEdit = new QLineEdit("", this);
     oScopeEdit->setDisabled(true);
     findOutlineButton = new QPushButton{tr("Notebook")};
+    clearOutlineButton = new QPushButton{tr("Clear")};
 
     createButton = new QPushButton{tr("&Create")};
     createButton->setDefault(true);
@@ -83,7 +84,7 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     h->addLayout(r);
     h->addLayout(l);
 
-    QHBoxLayout *buttonLayout = new QHBoxLayout{};
+    QHBoxLayout* buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
     buttonLayout->addWidget(closeButton);
     buttonLayout->addWidget(createButton);
@@ -93,8 +94,13 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     mainLayout->addWidget(nameEdit);
     mainLayout->addLayout(h);
     mainLayout->addWidget(oScopeLabel);
-    mainLayout->addWidget(oScopeEdit);
-    mainLayout->addWidget(findOutlineButton);
+
+    QHBoxLayout *oScopeLayout = new QHBoxLayout{};
+    oScopeLayout->addWidget(oScopeEdit);
+    oScopeLayout->addWidget(findOutlineButton);
+    oScopeLayout->addWidget(clearOutlineButton);
+    mainLayout->addLayout(oScopeLayout);
+
     mainLayout->addWidget(sortByLabel);
     mainLayout->addWidget(sortByCombo);
     mainLayout->addWidget(filterByLabel);
@@ -110,6 +116,7 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
     QObject::connect(createButton, SIGNAL(clicked()), this, SLOT(handleCreate()));
     QObject::connect(findOutlineButton, SIGNAL(clicked()), this, SLOT(handleFindOutline()));
+    QObject::connect(clearOutlineButton, SIGNAL(clicked()), this, SLOT(handleClearOutline()));
     QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineChoice()));
     // TODO QObject::connect(upperRighTags, SIGNAL(signalTagSelectionChanged()), this, SLOT(handleTagsChanged()));
     // TODO on n/on/o selection disable drop down w/ sorting by importance
@@ -171,6 +178,7 @@ void OrganizerNewDialog::show(
     upperLeftTags->getLineEdit()->clear();
 
     oScopeEdit->clear();
+    oScopeOutline = nullptr;
 
     nameEdit->setFocus();
     nameEdit->setText(tr("Organizer"));
@@ -221,9 +229,15 @@ void OrganizerNewDialog::handleFindOutline()
 void OrganizerNewDialog::handleFindOutlineChoice()
 {
     if(findOutlineByNameDialog->getChoice()) {
-        Outline* choice = static_cast<Outline*>(findOutlineByNameDialog->getChoice());
-        oScopeEdit->setText(QString::fromStdString(choice->getName()));
+        this->oScopeOutline = static_cast<Outline*>(findOutlineByNameDialog->getChoice());
+        oScopeEdit->setText(QString::fromStdString(this->oScopeOutline->getName()));
     }
+}
+
+void OrganizerNewDialog::handleClearOutline()
+{
+    this->oScopeOutline = nullptr;
+    oScopeEdit->clear();
 }
 
 } // m8r namespace

@@ -54,6 +54,8 @@ private:
 
     std::vector<Outline*> outlines;
 
+    Outline* oScopeOutline;
+
 protected:
     enum ThingsMode {
         OUTLINES,
@@ -73,6 +75,7 @@ protected:
     QLabel* oScopeLabel;
     QLineEdit* oScopeEdit;
     QPushButton* findOutlineButton;
+    QPushButton* clearOutlineButton;
     QLabel* sortByLabel;
     QComboBox* sortByCombo;
     QLabel* filterByLabel;
@@ -131,6 +134,7 @@ signals:
 private slots:
     void handleFindOutline();
     void handleFindOutlineChoice();
+    void handleClearOutline();
 
     void handleCreate();
 };
