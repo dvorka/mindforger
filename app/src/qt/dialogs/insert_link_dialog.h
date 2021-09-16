@@ -65,12 +65,13 @@ public:
     ~InsertLinkDialog();
 
     void show(
-            const Repository* repository,
-            const Outline* outline,
-            std::vector<Thing*>& outlines,
-            std::vector<Note*>& notes,
-            const QString& selectedText,
-            const QString& link);
+        const Repository* repository,
+        const Outline* outline,
+        std::vector<Thing*>& outlines,
+        std::vector<Note*>& notes,
+        const QString& selectedText,
+        const QString& link
+    );
     QPushButton* getInsertButton() const { return insertButton; }
     QString getLinkText() const { return linkTextEdit->text(); }
     QString getPathText() const { return pathEdit->text(); }

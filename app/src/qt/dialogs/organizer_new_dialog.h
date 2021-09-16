@@ -29,6 +29,8 @@
 
 #include "../widgets/edit_tags_panel.h"
 
+#include "find_outline_by_name_dialog.h"
+
 namespace m8r {
 
 /**
@@ -50,7 +52,7 @@ private:
 
     QPushButton* closeButton;
 
-    std::vector<Thing*> things;
+    std::vector<Outline*> outlines;
 
 protected:
     enum ThingsMode {
@@ -59,12 +61,18 @@ protected:
     };
 
     ThingsMode mode;
+
+    FindOutlineByNameDialog* findOutlineByNameDialog;
+
     QLabel* nameLabel;
     QLineEdit* nameEdit;
     EditTagsPanel* upperRightTags;
     EditTagsPanel* lowerRightTags;
     EditTagsPanel* upperLeftTags;
     EditTagsPanel* lowerLeftTags;
+    QLabel* oScopeLabel;
+    QLineEdit* oScopeEdit;
+    QPushButton* findOutlineButton;
     QLabel* sortByLabel;
     QComboBox* sortByCombo;
     QLabel* filterByLabel;
@@ -73,7 +81,10 @@ protected:
     QPushButton* createButton;
 
 public:
-    explicit OrganizerNewDialog(Ontology& ontology, QWidget* parent);
+    explicit OrganizerNewDialog(
+        Ontology& ontology,
+        QWidget* parent
+    );
     OrganizerNewDialog(const OrganizerNewDialog&) = delete;
     OrganizerNewDialog(const OrganizerNewDialog&&) = delete;
     OrganizerNewDialog &operator=(const OrganizerNewDialog&) = delete;
@@ -106,15 +117,21 @@ public:
         return this->sortByCombo->currentData().toInt();
     }
     std::string getOutlineScope() const {
-        // TODO to be implemented
-        return "";
+        return oScopeEdit->text().toStdString();
     }
 
-    void show(std::vector<const Tag*>* tags=nullptr);
+    void show(
+        const std::vector<Outline*>& outlines,
+        const std::vector<const Tag*>* tags=nullptr
+    );
 
 signals:
     void createFinished();
+
 private slots:
+    void handleFindOutline();
+    void handleFindOutlineChoice();
+
     void handleCreate();
 };
 

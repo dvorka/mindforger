@@ -2497,7 +2497,7 @@ void MainWindowPresenter::doActionKnowledgeArxiv()
 
 void MainWindowPresenter::doActionOrganizerNew()
 {
-    newOrganizerDialog->show();
+    newOrganizerDialog->show(mind->getOutlines());
 }
 
 void MainWindowPresenter::handleCreateOrganizer()

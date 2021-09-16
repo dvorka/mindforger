@@ -90,7 +90,8 @@ public:
             std::vector<Thing*>& outlines,
             std::vector<std::string>* customizedNames=nullptr,
             bool showScopeCheck=false,
-            bool init=true);
+            bool init=true
+    );
 
 signals:
     void searchFinished();

@@ -24,7 +24,7 @@ namespace m8r {
 using namespace std;
 
 OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
-    : QDialog{parent}, ontology(ontology)
+    : QDialog{parent}, ontology{ontology}
 {
     mode = ThingsMode::OUTLINES;
 
@@ -34,19 +34,24 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
 
     upperLeftTags = new EditTagsPanel{ontology, this};
     upperLeftTags->refreshOntologyTags();
-    upperLeftTags->setTitle(tr("Upper left quadrant tags:"));
+    upperLeftTags->setTitle(tr("Upper left quadrant tags")+":");
 
     upperRightTags = new EditTagsPanel{ontology, this};
     upperRightTags->refreshOntologyTags();
-    upperRightTags->setTitle(tr("Upper right quadrant tags:"));
+    upperRightTags->setTitle(tr("Upper right quadrant tags")+":");
 
     lowerLeftTags = new EditTagsPanel{ontology, this};
     lowerLeftTags->refreshOntologyTags();
-    lowerLeftTags->setTitle(tr("Lower left quadrant tags:"));
+    lowerLeftTags->setTitle(tr("Lower left quadrant tags")+":");
 
     lowerRightTags = new EditTagsPanel{ontology, this};
     lowerRightTags->refreshOntologyTags();
-    lowerRightTags->setTitle(tr("Lower right quadrant tags:"));
+    lowerRightTags->setTitle(tr("Lower right quadrant tags")+":");
+
+    oScopeLabel = new QLabel(tr("Notebook scope")+":", this);
+    oScopeEdit = new QLineEdit("", this);
+    oScopeEdit->setDisabled(true);
+    findOutlineButton = new QPushButton{tr("Notebook")};
 
     createButton = new QPushButton{tr("&Create")};
     createButton->setDefault(true);
@@ -62,8 +67,6 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     filterByCombo->addItem(tr("notes"), Organizer::CONFIG_VALUE_FILTER_BY_O);
     filterByCombo->addItem(tr("notebooks"), Organizer::CONFIG_VALUE_FILTER_BY_O);
     filterByCombo->addItem(tr("notebooks and notes"), Organizer::CONFIG_VALUE_FILTER_BY_O_N);
-
-    // TODO notebook scope: choose notebook + show notebook ID in non-editable field
 
     closeButton = new QPushButton{tr("&Cancel")};
 
@@ -89,6 +92,9 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     mainLayout->addWidget(nameLabel);
     mainLayout->addWidget(nameEdit);
     mainLayout->addLayout(h);
+    mainLayout->addWidget(oScopeLabel);
+    mainLayout->addWidget(oScopeEdit);
+    mainLayout->addWidget(findOutlineButton);
     mainLayout->addWidget(sortByLabel);
     mainLayout->addWidget(sortByCombo);
     mainLayout->addWidget(filterByLabel);
@@ -96,9 +102,15 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
 
+    // dialogs
+    findOutlineByNameDialog = new FindOutlineByNameDialog{this};
+    findOutlineByNameDialog->setWindowTitle(tr("Find Notebook as Scope"));
+
     // signals
     QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
     QObject::connect(createButton, SIGNAL(clicked()), this, SLOT(handleCreate()));
+    QObject::connect(findOutlineButton, SIGNAL(clicked()), this, SLOT(handleFindOutline()));
+    QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineChoice()));
     // TODO QObject::connect(upperRighTags, SIGNAL(signalTagSelectionChanged()), this, SLOT(handleTagsChanged()));
     // TODO on n/on/o selection disable drop down w/ sorting by importance
 
@@ -115,8 +127,13 @@ OrganizerNewDialog::~OrganizerNewDialog()
     delete closeButton;
 }
 
-void OrganizerNewDialog::show(vector<const Tag*>* tags)
-{
+void OrganizerNewDialog::show(
+    const std::vector<Outline*>& outlines,
+    const std::vector<const Tag*>* tags
+) {
+    // TODO set tags
+    this->outlines = outlines;
+
     nameEdit->clear();
 
     // tags are changed > need to be refreshed
@@ -125,8 +142,6 @@ void OrganizerNewDialog::show(vector<const Tag*>* tags)
     lowerRightTags->refreshOntologyTags();
     lowerLeftTags->refreshOntologyTags();
     upperLeftTags->refreshOntologyTags();
-
-    things.clear();
 
     // disabling button w/o explaining why would not be UX bug
     createButton->setEnabled(true);
@@ -154,6 +169,8 @@ void OrganizerNewDialog::show(vector<const Tag*>* tags)
     lowerRightTags->getLineEdit()->clear();
     lowerLeftTags->getLineEdit()->clear();
     upperLeftTags->getLineEdit()->clear();
+
+    oScopeEdit->clear();
 
     nameEdit->setFocus();
     nameEdit->setText(tr("Organizer"));
@@ -184,6 +201,28 @@ void OrganizerNewDialog::handleCreate()
         );
     } else {
         emit createFinished();
+    }
+}
+
+/*
+ * O lookup
+ */
+
+void OrganizerNewDialog::handleFindOutline()
+{
+    vector<Thing*> ts{};
+    for(Outline* o:this->outlines) {
+        ts.push_back(o);
+    }
+    findOutlineByNameDialog->show(ts);
+    findOutlineByNameDialog->exec();
+}
+
+void OrganizerNewDialog::handleFindOutlineChoice()
+{
+    if(findOutlineByNameDialog->getChoice()) {
+        Outline* choice = static_cast<Outline*>(findOutlineByNameDialog->getChoice());
+        oScopeEdit->setText(QString::fromStdString(choice->getName()));
     }
 }
 
