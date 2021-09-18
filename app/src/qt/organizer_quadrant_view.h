@@ -41,7 +41,7 @@ public:
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 signals:
-    void signalShowSelectedOutline();
+    void signalShowSelectedNote();
 };
 
 }

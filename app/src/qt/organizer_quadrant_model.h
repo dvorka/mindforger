@@ -48,7 +48,7 @@ public:
         setHorizontalHeaderLabels(tableHeader);
     }
 
-    void addRow(Outline* outline, bool urgency=false, bool importance=false);
+    void addRow(Note* note, bool urgency=false, bool importance=false);
     void removeAllRows();
 };
 

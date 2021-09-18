@@ -42,9 +42,9 @@ OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
     // hit ENTER to open selected O
     QObject::connect(
         view,
-        SIGNAL(signalShowSelectedOutline()),
+        SIGNAL(signalShowSelectedNote()),
         this,
-        SLOT(slotShowSelectedOutline()));    
+        SLOT(slotShowSelectedNote()));
     QObject::connect(
         this->view->horizontalHeader(), SIGNAL(sectionClicked(int)),
         this, SLOT(slotHeaderClicked(int))
@@ -71,19 +71,19 @@ int OrganizerQuadrantPresenter::getCurrentRow() const
     return NO_ROW;
 }
 
-void OrganizerQuadrantPresenter::slotShowSelectedOutline()
+void OrganizerQuadrantPresenter::slotShowSelectedNote()
 {
     int row = getCurrentRow();
     if(row != NO_ROW) {
         QStandardItem* item = model->item(row);
         if(item) {
             // IMPROVE make my role constant
-            Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
+            Note* note = item->data(Qt::UserRole + 1).value<Note*>();
 
-            outline->incReads();
-            outline->makeDirty();
+            note->incReads();
+            note->makeDirty();
 
-            orloj->showFacetOutline(outline);
+            orloj->showFacetNoteView(note);
         } else {
             orloj->getMainPresenter()->getStatusBar()->showInfo(QString(tr("Selected Notebook not found!")));
         }
@@ -92,7 +92,7 @@ void OrganizerQuadrantPresenter::slotShowSelectedOutline()
     }
 }
 
-void OrganizerQuadrantPresenter::slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected)
+void OrganizerQuadrantPresenter::slotShowNote(const QItemSelection& selected, const QItemSelection& deselected)
 {
     Q_UNUSED(deselected);
 
@@ -102,12 +102,12 @@ void OrganizerQuadrantPresenter::slotShowOutline(const QItemSelection& selected,
         QStandardItem* item
             = model->itemFromIndex(index);
         // IMPROVE make my role constant
-        Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
+        Note* note = item->data(Qt::UserRole + 1).value<Note*>();
 
-        outline->incReads();
-        outline->makeDirty();
+        note->incReads();
+        note->makeDirty();
 
-        orloj->showFacetOutline(outline);
+        orloj->showFacetNoteView(note);
     } // else do nothing
 }
 
@@ -120,13 +120,13 @@ void OrganizerQuadrantPresenter::slotHeaderClicked(int section)
     configDialog->show(tags);
 }
 
-void OrganizerQuadrantPresenter::refresh(const std::vector<Outline*>& os, bool urgency, bool importance)
+void OrganizerQuadrantPresenter::refresh(const std::vector<Note*>& ts, bool urgency, bool importance)
 {
     model->removeAllRows();
-    if(os.size()) {
+    if(ts.size()) {
         view->setVisible(true);
-        for(auto& o:os) {
-            model->addRow(o, urgency, importance);
+        for(auto& t:ts) {
+            model->addRow(t, urgency, importance);
         }
 
         this->view->setCurrentIndex(this->model->index(0, 0));

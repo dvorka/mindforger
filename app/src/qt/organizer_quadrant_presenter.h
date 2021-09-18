@@ -60,12 +60,12 @@ public:
     void setTitle(QString& title) { model->setTitle(title); }
 
     int getCurrentRow() const;
-    void refresh(const std::vector<Outline*>& os, bool urgency, bool importance);
+    void refresh(const std::vector<Note*>& os, bool urgency, bool importance);
     OrganizerQuadrantView* getView() const { return view; }
 
 public slots:
-    void slotShowSelectedOutline();
-    void slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotShowSelectedNote();
+    void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
     void slotHeaderClicked(int section);
 };
 

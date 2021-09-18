@@ -144,6 +144,9 @@ public:
             return true;
         }
     }
+    bool hasTagStrings(std::vector<std::string>& filterTags) {
+        return Tag::hasTagStrings(this->tags, filterTags);
+    }
     void addName(const std::string& s);
     const NoteType* getType() const;
     void setType(const NoteType* type);

@@ -120,7 +120,7 @@ public:
         return this->sortByCombo->currentData().toInt();
     }
     std::string getOutlineScope() const {
-        return oScopeEdit->text().toStdString();
+        return oScopeOutline->getKey();
     }
 
     void show(

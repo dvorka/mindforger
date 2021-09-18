@@ -65,8 +65,8 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
 
     filterByLabel = new QLabel(tr("Filter by")+":", this);
     filterByCombo = new QComboBox{this};
-    filterByCombo->addItem(tr("notes"), Organizer::CONFIG_VALUE_FILTER_BY_O);
     filterByCombo->addItem(tr("notebooks"), Organizer::CONFIG_VALUE_FILTER_BY_O);
+    filterByCombo->addItem(tr("notes"), Organizer::CONFIG_VALUE_FILTER_BY_N);
     filterByCombo->addItem(tr("notebooks and notes"), Organizer::CONFIG_VALUE_FILTER_BY_O_N);
 
     closeButton = new QPushButton{tr("&Cancel")};
@@ -231,6 +231,11 @@ void OrganizerNewDialog::handleFindOutlineChoice()
     if(findOutlineByNameDialog->getChoice()) {
         this->oScopeOutline = static_cast<Outline*>(findOutlineByNameDialog->getChoice());
         oScopeEdit->setText(QString::fromStdString(this->oScopeOutline->getName()));
+
+        // reconfigure dialog controls
+        sortByCombo->setEnabled(false);
+        filterByCombo->setCurrentText(Organizer::CONFIG_VALUE_FILTER_BY_N);
+        filterByCombo->setEnabled(false);
     }
 }
 
@@ -238,6 +243,10 @@ void OrganizerNewDialog::handleClearOutline()
 {
     this->oScopeOutline = nullptr;
     oScopeEdit->clear();
+
+    // reconfigure dialog controls
+    sortByCombo->setEnabled(true);
+    filterByCombo->setEnabled(true);
 }
 
 } // m8r namespace

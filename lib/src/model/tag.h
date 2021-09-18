@@ -116,6 +116,26 @@ public:
         return KEY_PROBLEM;
     }
 
+    static bool hasTagStrings(
+        const std::vector<const Tag*>& thingTags,
+        std::vector<std::string>& filterTags
+    ) {
+        if(thingTags.size() > 1) {
+            unsigned int matches{0};
+            for(std::string ft: filterTags) {
+                for(const Tag* t: thingTags) {
+                    if(t->equals(ft)) {
+                        ++matches;
+                    }
+                }
+            }
+            return matches == filterTags.size();
+        } else if(thingTags.size()==1 && filterTags.size()==1) {
+            return thingTags[0]->equals(filterTags[0]);
+        }
+        return false;
+    }
+
     Tag() = delete;
     explicit Tag(const std::string& name, Clazz* isA, const Color& color);
     Tag(const Tag&) = delete;

@@ -225,10 +225,19 @@ void OrlojPresenter::showFacetOrganizerList(const vector<Organizer*>& organizers
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
-void OrlojPresenter::showFacetOrganizer(Organizer* organizer, const vector<Outline*>& outlines)
-{
+void OrlojPresenter::showFacetOrganizer(
+    Organizer* organizer,
+    const vector<Note*>& outlinesAndNotes,
+    const vector<Outline*>& outlines,
+    const vector<Note*>& notes
+) {
     setFacet(OrlojPresenterFacets::FACET_ORGANIZER);
-    organizerPresenter->refresh(organizer, outlines);
+    organizerPresenter->refresh(
+        organizer,
+        outlinesAndNotes,
+        outlines,
+        notes
+    );
     view->showFacetOrganizer();
     mainPresenter->getMainMenu()->showFacetOrganizer();
     mainPresenter->getStatusBar()->showMindStatistics();
@@ -287,6 +296,9 @@ void OrlojPresenter::slotShowOutlines()
 
 void OrlojPresenter::slotShowSelectedOrganizer()
 {
+    static vector<Note*> organizerOutlinesAndNotes{};
+    static vector<Note*> organizerNotes{};
+
     if(activeFacet!=OrlojPresenterFacets::FACET_VIEW_OUTLINE
          &&
        activeFacet!=OrlojPresenterFacets::FACET_TAG_CLOUD
@@ -304,7 +316,14 @@ void OrlojPresenter::slotShowSelectedOrganizer()
                 Organizer* organizer = item->data(Qt::UserRole + 1).value<Organizer*>();
                 MF_DEBUG("Organizer selected by Orloj: data(user)=" << organizer << endl);
 
-                showFacetOrganizer(organizer, mind->getOutlines());
+                organizerOutlinesAndNotes.clear();
+                organizerNotes.clear();
+                showFacetOrganizer(
+                    organizer,
+                    mind->getAllNotes(organizerOutlinesAndNotes, true, true),
+                    mind->getOutlines(),
+                    mind->getAllNotes(organizerNotes, true, false)
+                );
                 mainPresenter->getStatusBar()->showInfo(
                     QString("%1%2%3").arg(tr("Organizer '")).arg(organizer->getName().c_str()).arg("'...")
                 );

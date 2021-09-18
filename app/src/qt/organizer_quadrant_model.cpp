@@ -42,15 +42,15 @@ void OrganizerQuadrantModel::removeAllRows()
     setTitle(title);
 }
 
-void OrganizerQuadrantModel::addRow(Outline* outline, bool urgency, bool importance)
+void OrganizerQuadrantModel::addRow(Note* note, bool urgency, bool importance)
 {
     QList<QStandardItem*> items;
     QStandardItem* item;
 
     // IMPROVE consider moving this to HTML representation
-    string h{outline->getName().c_str()};
+    string h{note->getName().c_str()};
 
-    htmlRepresentation->tagsToHtml(outline->getTags(), h);
+    htmlRepresentation->tagsToHtml(note->getTags(), h);
 
     h += "<span style='color: ";
     h += Color::DARK_GRAY().asHtml();
@@ -59,32 +59,48 @@ void OrganizerQuadrantModel::addRow(Outline* outline, bool urgency, bool importa
     QString html{};
     html += QString::fromStdString(h);
 
-    if(urgency) {
-        if(outline->getUrgency()) {
-            html += " ";
-            for(int i=1; i<=outline->getUrgency(); i++) {
-                html += QChar(0x25D5); // timer clock
-                //html += QChar(0x29D7); // sand clocks - not in fonts on macOS and Fedora
+    if(Outline::isOutlineDescriptorNote(note->getType())) {
+        // if N represents O, use O mode w/ importance and urgency
+        Outline* outline=note->getOutline();
+
+        if(urgency) {
+            if(outline->getUrgency()) {
+                html += " ";
+                for(int i=1; i<=outline->getUrgency(); i++) {
+                    html += QChar(0x25D5); // timer clock
+                    //html += QChar(0x29D7); // sand clocks - not in fonts on macOS and Fedora
+                }
             }
         }
-    }
-    if(importance) {
-        if(outline->getImportance()) {
-            html += " ";
-            for(int i=1; i<=outline->getImportance(); i++) {
-                html += QChar(9733);
+        if(importance) {
+            if(outline->getImportance()) {
+                html += " ";
+                for(int i=1; i<=outline->getImportance(); i++) {
+                    html += QChar(9733);
+                }
             }
         }
+
+        html += " </span>";
+
+        // item
+        item = new QStandardItem(html);
+        item->setToolTip(html);
+        // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
+        item->setData(QVariant::fromValue(note));
+        items += item;
+    } else {
+        // N
+        // TODO consider adding N tags and/or type
+        html += " </span>";
+
+        // item
+        item = new QStandardItem(html);
+        item->setToolTip(html);
+        // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
+        item->setData(QVariant::fromValue(note));
+        items += item;
     }
-
-    html += " </span>";
-
-    // item
-    item = new QStandardItem(html);
-    item->setToolTip(html);
-    // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
-    item->setData(QVariant::fromValue(outline));
-    items += item;
 
     appendRow(items);
 }

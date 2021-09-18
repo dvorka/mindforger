@@ -181,6 +181,8 @@ void MainWindowPresenter::showInitialView()
 {
     MF_DEBUG("Initial view to show " << mind->getOutlines().size() << " Os (scope is applied if active)" << endl);
 
+    static vector<Note*> emptyVector{};
+
     // UI
     if(mind->getOutlines().size()) {
         if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
@@ -205,7 +207,12 @@ void MainWindowPresenter::showInitialView()
                     vector<Note*> notes{};
                     orloj->showFacetRecentNotes(mind->getAllNotes(notes));
                 } else if(!string{START_TO_EISENHOWER_MATRIX}.compare(config.getStartupView())) {
-                    orloj->showFacetOrganizer(nullptr, mind->getOutlines());
+                    orloj->showFacetOrganizer(
+                         nullptr,
+                         emptyVector,
+                         mind->getOutlines(),
+                         emptyVector
+                    );
                 } else if(!string{START_TO_HOME_OUTLINE}.compare(config.getStartupView())) {
                     if(!doActionViewHome()) {
                         // fallback

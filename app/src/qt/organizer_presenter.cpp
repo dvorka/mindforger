@@ -37,20 +37,24 @@ OrganizerPresenter::~OrganizerPresenter()
 {
 }
 
-void OrganizerPresenter::refresh(Organizer* organizer, const vector<Outline*>& os)
-{
+void OrganizerPresenter::refresh(
+    Organizer* organizer,
+    const vector<Note*>& ons,
+    const vector<Outline*>& os,
+    const vector<Note*>& ns
+) {
     MF_DEBUG("Rendering organizer: " << organizer->getName() << "..." << endl);
 
-    // upper right / do first
-    vector<Outline*> upperRightOs;
-    // upper left / do soon
-    vector<Outline*> upperLeftOs;
-    // lower right / plan dedicated time
-    vector<Outline*> lowerRightOs;
-    // lower left / do sometimes
-    vector<Outline*> lowerLeftOs;
-
     QString title{};
+
+    // upper right / do first
+    vector<Note*> upperRightNs;
+    // upper left / do soon
+    vector<Note*> upperLeftNs;
+    // lower right / plan dedicated time
+    vector<Note*> lowerRightNs;
+    // lower left / do sometimes
+    vector<Note*> lowerLeftNs;
 
     if(os.size()) {
         // fill quadrants based on organizer
@@ -59,16 +63,16 @@ void OrganizerPresenter::refresh(Organizer* organizer, const vector<Outline*>& o
             for(Outline* o:os) {
                 if(o->getUrgency()>2) {
                     if(o->getImportance()>2) {
-                        upperRightOs.push_back(o);
+                        upperRightNs.push_back(o->getOutlineDescriptorAsNote());
                     } else {
-                        upperLeftOs.push_back(o);
+                        upperLeftNs.push_back(o->getOutlineDescriptorAsNote());
                     }
                 } else {
                     if(o->getImportance()>2) {
-                        lowerRightOs.push_back(o);
+                        lowerRightNs.push_back(o->getOutlineDescriptorAsNote());
                     } else {
                         if(o->getImportance()>0) {
-                            lowerLeftOs.push_back(o);
+                            lowerLeftNs.push_back(o->getOutlineDescriptorAsNote());
                         }
                     }
                 }
@@ -84,20 +88,57 @@ void OrganizerPresenter::refresh(Organizer* organizer, const vector<Outline*>& o
             title = tr("Do sometimes");
             doSometimePresenter->setTitle(title);
 
+            doFirstPresenter->refresh(upperRightNs, true, true);
+            doSoonPresenter->refresh(upperLeftNs, true, false);
+            doSometimePresenter->refresh(lowerLeftNs, false, false);
+            planDedicatedTimePresenter->refresh(lowerRightNs, false, true);
         } else {
             // organizer type: custom
-            for(Outline* o:os) {
-                if(o->hasTagStrings(organizer->getUpperRightTags())) {
-                    upperRightOs.push_back(o);
+
+            if(Organizer::FilterBy::NOTES == organizer->getFilterBy()) {
+                for(Note* n:ns) {
+                    if(n->hasTagStrings(organizer->getUpperRightTags())) {
+                        upperRightNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getLowerRightTags())) {
+                        lowerRightNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getUpperLeftTags())) {
+                        upperLeftNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getLowerLeftTags())) {
+                        lowerLeftNs.push_back(n);
+                    }
                 }
-                if(o->hasTagStrings(organizer->getLowerRightTags())) {
-                    lowerRightOs.push_back(o);
+            } else if(Organizer::FilterBy::OUTLINES == organizer->getFilterBy()) {
+                for(Outline* o:os) {
+                    if(o->hasTagStrings(organizer->getUpperRightTags())) {
+                        upperRightNs.push_back(o->getOutlineDescriptorAsNote());
+                    }
+                    if(o->hasTagStrings(organizer->getLowerRightTags())) {
+                        lowerRightNs.push_back(o->getOutlineDescriptorAsNote());
+                    }
+                    if(o->hasTagStrings(organizer->getUpperLeftTags())) {
+                        upperLeftNs.push_back(o->getOutlineDescriptorAsNote());
+                    }
+                    if(o->hasTagStrings(organizer->getLowerLeftTags())) {
+                        lowerLeftNs.push_back(o->getOutlineDescriptorAsNote());
+                    }
                 }
-                if(o->hasTagStrings(organizer->getUpperLeftTags())) {
-                    upperLeftOs.push_back(o);
-                }
-                if(o->hasTagStrings(organizer->getLowerLeftTags())) {
-                    lowerLeftOs.push_back(o);
+            } else if(Organizer::FilterBy::OUTLINES_NOTES == organizer->getFilterBy()) {
+                for(Note* n:ons) {
+                    if(n->hasTagStrings(organizer->getUpperRightTags())) {
+                        upperRightNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getLowerRightTags())) {
+                        lowerRightNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getUpperLeftTags())) {
+                        upperLeftNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getLowerLeftTags())) {
+                        lowerLeftNs.push_back(n);
+                    }
                 }
             }
 
@@ -110,13 +151,13 @@ void OrganizerPresenter::refresh(Organizer* organizer, const vector<Outline*>& o
             planDedicatedTimePresenter->setTitle(title);
             title = QString::fromStdString(Organizer::tagsToString(organizer->getLowerLeftTags()));
             doSometimePresenter->setTitle(title);
+
+            doFirstPresenter->refresh(upperRightNs, true, true);
+            doSoonPresenter->refresh(upperLeftNs, true, false);
+            doSometimePresenter->refresh(lowerLeftNs, false, false);
+            planDedicatedTimePresenter->refresh(lowerRightNs, false, true);
         }
     }
-
-    doFirstPresenter->refresh(upperRightOs, true, true);
-    doSoonPresenter->refresh(upperLeftOs, true, false);
-    doSometimePresenter->refresh(lowerLeftOs, false, false);
-    planDedicatedTimePresenter->refresh(lowerRightOs, false, true);
 
     view->getDoFirst()->setFocus();
 }

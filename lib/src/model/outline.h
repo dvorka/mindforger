@@ -191,20 +191,7 @@ public:
         }
     }
     bool hasTagStrings(std::vector<std::string>& filterTags) {
-        if(tags.size() > 1) {
-            unsigned int matches{0};
-            for(std::string ft: filterTags) {
-                for(const Tag* t: tags) {
-                    if(t->equals(ft)) {
-                        ++matches;
-                    }
-                }
-            }
-            return matches == filterTags.size();
-        } else if(tags.size()==1 && filterTags.size()==1) {
-            return tags[0]->equals(filterTags[0]);
-        }
-        return false;
+        return Tag::hasTagStrings(this->tags, filterTags);
     }
     time_t getModified() const;
     void makeModified();
@@ -304,7 +291,12 @@ public:
     void moveNoteToLast(Note* note, Outline::Patch* patch=nullptr);
 
     Note* getOutlineDescriptorAsNote();
-    const NoteType* getOutlineDescriptorNoteType() const { return &NOTE_4_OUTLINE_TYPE; }
+    const NoteType* getOutlineDescriptorNoteType() const {
+        return &NOTE_4_OUTLINE_TYPE;
+    }
+    static bool isOutlineDescriptorNote(const NoteType* noteType) {
+        return noteType && noteType == &Outline::NOTE_4_OUTLINE_TYPE;
+    }
 
     bool isDirty() const { return dirty; }
     void makeDirty() { dirty = true; }

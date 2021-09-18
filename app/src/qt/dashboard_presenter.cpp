@@ -112,12 +112,12 @@ void DashboardPresenter::refresh(
             "</center></body></html>"
     ));
 
-    vector<Outline*> doFirstOs;
+    vector<Note*> doFirstOs;
     if(os.size()) {
         for(Outline* o:os) {
             if(o->getUrgency()>2) {
                 if(o->getImportance()>2) {
-                    doFirstOs.push_back(o);
+                    doFirstOs.push_back(o->getOutlineDescriptorAsNote());
                 }
             }
         }

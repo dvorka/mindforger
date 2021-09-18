@@ -50,7 +50,12 @@ public:
     OrganizerPresenter &operator=(const OrganizerPresenter&&) = delete;
     ~OrganizerPresenter();
 
-    void refresh(Organizer* organizer, const std::vector<Outline*>& os);
+    void refresh(
+        Organizer* organizer,
+        const std::vector<Note*>& ons,
+        const std::vector<Outline*>& os,
+        const std::vector<Note*>& ns
+    );
 };
 
 }

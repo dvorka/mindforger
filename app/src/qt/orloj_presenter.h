@@ -118,8 +118,9 @@ private:
 
 public:
     explicit OrlojPresenter(MainWindowPresenter* mainPresenter,
-                   OrlojView* view,
-                   Mind* mind);
+        OrlojView* view,
+        Mind* mind
+    );
 
     Mind* getMind() { return mind; }
 
@@ -177,7 +178,12 @@ public:
 
     void showFacetDashboard();
     void showFacetOrganizerList(const std::vector<Organizer*>& organizers);
-    void showFacetOrganizer(Organizer* organizer, const std::vector<Outline*>& outlines);
+    void showFacetOrganizer(
+            Organizer* organizer,
+            const std::vector<Note*>& outlinesAndNotes,
+            const std::vector<Outline*>& outlines,
+            const std::vector<Note*>& notes
+    );
     void showFacetTagCloud();
     void showFacetOutlineList(const std::vector<Outline*>& outlines);
     void showFacetRecentNotes(const std::vector<Note*>& notes);
