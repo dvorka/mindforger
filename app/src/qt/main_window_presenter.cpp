@@ -2509,11 +2509,29 @@ void MainWindowPresenter::doActionOrganizerNew()
 
 void MainWindowPresenter::handleCreateOrganizer()
 {
-    MF_DEBUG("Creating organizer...");
-    Organizer* o = new Organizer(
-        newOrganizerDialog->getOrganizerName().toStdString()
-    );
+    static vector<Note*> organizerOutlinesAndNotes{};
+    organizerOutlinesAndNotes.clear();
+    static vector<Note*> organizerNotes{};
+    organizerNotes.clear();
+
+    Organizer* o{nullptr};
+    if(newOrganizerDialog->getOrganizerToEdit()) {
+        MF_DEBUG("Updating organizer...");
+        o = newOrganizerDialog->getOrganizerToEdit();
+        o->setName(newOrganizerDialog->getOrganizerName().toStdString());
+    } else {
+        MF_DEBUG("Creating organizer...");
+        o = new Organizer(
+            newOrganizerDialog->getOrganizerName().toStdString()
+        );
+    }
+
     // tags
+    o->tagsUlQuadrant.clear();
+    o->tagsLlQuadrant.clear();
+    o->tagsUrQuadrant.clear();
+    o->tagsLrQuadrant.clear();
+
     o->setUpperLeftTags(
         newOrganizerDialog->getUpperLeftChosenTags(
             o->tagsUlQuadrant
@@ -2542,31 +2560,89 @@ void MainWindowPresenter::handleCreateOrganizer()
     o->setOutlineScope(newOrganizerDialog->getOutlineScope());
 
     // add organizer & save configuration
-    config.addOrganizer(o);
+    if(!newOrganizerDialog->getOrganizerToEdit()) {
+        config.addOrganizer(o);
+    }
     getConfigRepresentation()->save(config);
 
     newOrganizerDialog->hide();
 
     // refresh organizer table view
-    orloj->showFacetOrganizerList(config.getOrganizers());
+    if(!newOrganizerDialog->getOrganizerToEdit()) {
+        orloj->showFacetOrganizerList(config.getOrganizers());
+    } else {
+        orloj->showFacetOrganizer(
+            o,
+            mind->getAllNotes(organizerOutlinesAndNotes, true, true),
+            mind->getOutlines(),
+            mind->getAllNotes(organizerNotes, true, false)
+        );
+    }
 }
 
 void MainWindowPresenter::doActionOrganizerEdit()
 {
-    // TODO
-    MF_DEBUG("EDIT organizer");
+    // no need to check view - this action is available only when organizer is opened
+    Organizer* o = orloj->getOrganizer()->getOrganizer();
+
+    // Eisenhower matrix organizer cannot be edited
+    if(o->getKey() == Organizer::KEY_EISENHOWER_MATRIX) {
+        QMessageBox::critical(
+            orloj->getOrganizer()->getView(),
+            tr("Organizer Update Error"),
+            tr("Eisenhower Matrix organizer is built-in and cannot be edited - please create or update a custom organizer.")
+        );
+        return;
+    }
+
+    // lazy lookup of O scope - ensures that if O is deleted, it will be detected
+    Outline* oScopeOutline{nullptr};
+    if(o->getOutlineScope().size()) {
+        oScopeOutline=mind->remind().getOutline(o->getOutlineScope());
+    }
+    newOrganizerDialog->show(mind->getOutlines(), nullptr, o, oScopeOutline);
 }
 
 void MainWindowPresenter::doActionOrganizerClone()
 {
-    // TODO
+    // no need to check view - this action is available only when organizer is opened
     MF_DEBUG("CLONE organizer");
+    Organizer* o = orloj->getOrganizer()->getOrganizer();
+
+    // Eisenhower matrix organizer cannot be cloned
+    if(o->getKey() == Organizer::KEY_EISENHOWER_MATRIX) {
+        QMessageBox::critical(
+            orloj->getOrganizer()->getView(),
+            tr("Organizer Clone Error"),
+            tr("Eisenhower Matrix organizer is built-in and cannot be cloned - please create or update a custom organizer.")
+        );
+        return;
+    }
+
+    Organizer* oClone = new Organizer{*o};
+    o->setName(o->getName()+" Clone");
+
+    config.addOrganizer(oClone);
+    getConfigRepresentation()->save(config);
 }
 
 void MainWindowPresenter::doActionOrganizerForget()
 {
-    // TODO
-    MF_DEBUG("FORGET organizer");
+    MF_DEBUG("REMOVE organizer");
+    // no need to check view - this action is available only when organizer is opened
+    Organizer* o = orloj->getOrganizer()->getOrganizer();
+
+    if(o->getKey() != Organizer::KEY_EISENHOWER_MATRIX) {
+        config.removeOrganizer(o);
+        getConfigRepresentation()->save(config);
+        orloj->showFacetOrganizerList(config.getOrganizers());
+    } else {
+        QMessageBox::critical(
+            &view,
+            tr("Delete Organizer"),
+            tr("Eisenhower Matrix is built-in and cannot be deleted - only custom organizers can.")
+        );
+    }
 }
 
 void MainWindowPresenter::doActionHelpDocumentation()

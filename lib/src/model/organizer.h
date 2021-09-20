@@ -81,7 +81,7 @@ public:
         if(escape) {
             escapeString.assign(ESC_TAG_DELIMITER);
         } else {
-            escapeString.assign(" ,");
+            escapeString.assign(", ");
         }
 
 
@@ -94,19 +94,40 @@ public:
         }
         return s;
     }
+    // IMPROVE: consolidate ^v methods (iterator parameter, vector version removal)
+    static std::string tagsToString(std::set<std::string>& tags, bool escape=true) {
+        std::string s{};
+
+        std::string escapeString{};
+        int escapeLength{2};
+        if(escape) {
+            escapeString.assign(ESC_TAG_DELIMITER);
+        } else {
+            escapeString.assign(", ");
+        }
+
+        for(std::string t:tags) {
+            s.append(t);
+            s.append(escapeString);
+        }
+        if(s.length()) {
+            s = s.substr(0, s.length()-escapeLength);
+        }
+        return s;
+    }
 
     // parse tags from escaped string
-    static std::vector<std::string> tagsFromString(std::string& s) {
-        std::vector<std::string> tags{};
+    static std::set<std::string> tagsFromString(std::string& s) {
+        std::set<std::string> tags{};
 
         if(s.size()) {
             size_t last = 0;
             size_t next = 0;
             while ((next = s.find(ESC_TAG_DELIMITER, last)) != std::string::npos) {
-                tags.push_back(s.substr(last, next-last));
+                tags.insert(s.substr(last, next-last));
                 last = next + 2;
             }
-            tags.push_back(s.substr(last));
+            tags.insert(s.substr(last));
         }
 
         return tags;
@@ -114,13 +135,13 @@ public:
 
 public:
     // upper right quandrant tag
-    std::vector<std::string> tagsUrQuadrant;
+    std::set<std::string> tagsUrQuadrant;
     // lower right quandrant tag
-    std::vector<std::string> tagsLrQuadrant;
+    std::set<std::string> tagsLrQuadrant;
     // lower left quandrant tag
-    std::vector<std::string> tagsLlQuadrant;
+    std::set<std::string> tagsLlQuadrant;
     // upper left quandrant tag
-    std::vector<std::string> tagsUlQuadrant;
+    std::set<std::string> tagsUlQuadrant;
 
     // values: importance, urgency; default: importance
     int sortBy;
@@ -132,7 +153,7 @@ public:
 
 public:
     explicit Organizer(const std::string& name);
-    Organizer(const Organizer&) = delete;
+    explicit Organizer(const Organizer&);
     Organizer(const Organizer&&) = delete;
     Organizer &operator=(const Organizer&) = delete;
     Organizer &operator=(const Organizer&&) = delete;
@@ -140,38 +161,50 @@ public:
 
     void setKey(const std::string& key) { this->key = key; }
 
-    std::vector<std::string>& getUpperRightTags() { return tagsUrQuadrant; }
-    std::vector<std::string>& getLowerRightTags() { return this->tagsLrQuadrant; }
-    std::vector<std::string>& getLowerLeftTags() { return this->tagsLlQuadrant; }
-    std::vector<std::string>& getUpperLeftTags() { return this->tagsUlQuadrant; }
+    std::set<std::string>& getUpperRightTags() {
+        return tagsUrQuadrant;
+    }
+    std::set<std::string>& getLowerRightTags() {
+        return this->tagsLrQuadrant;
+    }
+    std::set<std::string>& getLowerLeftTags() {
+        return this->tagsLlQuadrant;
+    }
+    std::set<std::string>& getUpperLeftTags() {
+        return this->tagsUlQuadrant;
+    }
 
     void setUpperRightTag(const std::string tag) {
         this->tagsUrQuadrant.clear();
-        this->tagsUrQuadrant.push_back(tag);
+        this->tagsUrQuadrant.insert(tag);
     }
     void setLowerRightTag(const std::string tag) {
         this->tagsLrQuadrant.clear();
-        this->tagsLrQuadrant.push_back(tag);
+        this->tagsLrQuadrant.insert(tag);
     }
     void setLowerLeftTag(const std::string tag) {
         this->tagsLlQuadrant.clear();
-        this->tagsLlQuadrant.push_back(tag);
+        this->tagsLlQuadrant.insert(tag);
     }
     void setUpperLeftTag(const std::string tag) {
         this->tagsUlQuadrant.clear();
-        this->tagsUlQuadrant.push_back(tag);
+        this->tagsUlQuadrant.insert(tag);
     }
 
-    void setUpperRightTags(const std::vector<std::string> tags) {
+    void setUpperRightTags(const std::set<std::string> tags) {
+        this->tagsUrQuadrant.clear();
         this->tagsUrQuadrant = tags;
     }
-    void setLowerRightTags(const std::vector<std::string> tags) {
+    void setLowerRightTags(const std::set<std::string> tags) {
+        this->tagsLrQuadrant.clear();
         this->tagsLrQuadrant = tags;
     }
-    void setLowerLeftTags(const std::vector<std::string> tags) {
+    void setLowerLeftTags(const std::set<std::string> tags) {
+        this->tagsLlQuadrant.clear();
         this->tagsLlQuadrant = tags;
     }
-    void setUpperLeftTags(const std::vector<std::string> tags) {
+    void setUpperLeftTags(const std::set<std::string> tags) {
+        this->tagsUlQuadrant.clear();
         this->tagsUlQuadrant = tags;
     }
 
@@ -185,6 +218,9 @@ public:
 
     std::string getOutlineScope() const {
         return this->scopeOutlineId.length() ? this->scopeOutlineId : "";
+    }
+    void clearOutlineScope() {
+        this->scopeOutlineId.clear();
     }
     void setOutlineScope(std::string outlineId) {
         this->scopeOutlineId = outlineId;

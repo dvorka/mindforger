@@ -33,8 +33,6 @@ OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
 
     this->orloj = orloj;
 
-    this->configDialog = new OrganizerConfigDialog(orloj->getMind()->getOntology(), this->view);
-
     // ensure HTML cells rendering
     HtmlDelegate* delegate = new HtmlDelegate();
     this->view->setItemDelegate(delegate);
@@ -116,8 +114,8 @@ void OrganizerQuadrantPresenter::slotHeaderClicked(int section)
 {
     Q_UNUSED(section);
 
-    vector<const Tag*>* tags = new vector<const Tag*>{};
-    configDialog->show(tags);
+    MF_DEBUG("Organizer quadrant presenter: O/N table header clicked..." << endl);
+    orloj->getMainPresenter()->doActionOrganizerEdit();
 }
 
 void OrganizerQuadrantPresenter::refresh(const std::vector<Note*>& ts, bool urgency, bool importance)

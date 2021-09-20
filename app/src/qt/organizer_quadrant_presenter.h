@@ -27,7 +27,6 @@
 #include "organizer_quadrant_model.h"
 #include "orloj_presenter.h"
 #include "html_delegate.h"
-#include "dialogs/organizer_cfg_dialog.h"
 
 #include "../../lib/src/model/outline.h"
 
@@ -46,8 +45,6 @@ private:
     OrganizerQuadrantModel* model;
 
     OrlojPresenter* orloj;
-
-    OrganizerConfigDialog* configDialog;
 
 public:
     explicit OrganizerQuadrantPresenter(OrganizerQuadrantView* view, OrlojPresenter* orloj, QString title);

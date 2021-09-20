@@ -300,4 +300,16 @@ void Configuration::addOrganizer(Organizer* organizer)
     this->organizers.push_back(organizer);
 }
 
+void Configuration::removeOrganizer(Organizer* organizer)
+{
+    this->organizers.erase(
+        std::remove(
+            this->organizers.begin(),
+            this->organizers.end(),
+            organizer
+        ),
+        this->organizers.end()
+    );
+}
+
 } // m8r namespace

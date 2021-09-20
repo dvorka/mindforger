@@ -461,6 +461,7 @@ public:
      */
     void clearOrganizers() { this->organizers.clear(); }
     void addOrganizer(Organizer* organizer);
+    void removeOrganizer(Organizer* organizer);
     std::vector<Organizer*> getOrganizers() const { return this->organizers; }
 };
 

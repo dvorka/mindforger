@@ -112,6 +112,7 @@ const std::vector<const Tag*>& EditTagsPanel::getTags()
     return tags;
 }
 
+
 vector<string>& EditTagsPanel::getTagsAsStrings(vector<string>& tags) const {
     if(listViewStrings.size()) {
         for(const QString& s:listViewStrings) {
@@ -121,12 +122,40 @@ vector<string>& EditTagsPanel::getTagsAsStrings(vector<string>& tags) const {
     return tags;
 }
 
+set<string>& EditTagsPanel::getTagsAsStringSet(set<string>& tagSet) const {
+    if(listViewStrings.size()) {
+        for(const QString& s:listViewStrings) {
+            tagSet.insert(s.toStdString());
+        }
+    }
+    return tagSet;
+}
 
 void EditTagsPanel::setTags(const std::vector<const Tag*>& tags)
 {
     clearTagList();
     for(const Tag* t:tags) {
         lineEdit->setText(QString::fromStdString(t->getName()));
+        slotAddTag();
+    }
+    lineEdit->clear();
+}
+
+void EditTagsPanel::setTagsAsStrings(const std::vector<string>& tagsStrings)
+{
+    clearTagList();
+    for(string s:tagsStrings) {
+        lineEdit->setText(QString::fromStdString(s));
+        slotAddTag();
+    }
+    lineEdit->clear();
+}
+
+void EditTagsPanel::setTagsAsStrings(const std::set<string>& tagsStrings)
+{
+    clearTagList();
+    for(string s:tagsStrings) {
+        lineEdit->setText(QString::fromStdString(s));
         slotAddTag();
     }
     lineEdit->clear();

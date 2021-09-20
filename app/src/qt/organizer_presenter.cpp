@@ -44,20 +44,22 @@ void OrganizerPresenter::refresh(
     const vector<Note*>& ns
 ) {
     MF_DEBUG("Rendering organizer: " << organizer->getName() << "..." << endl);
+    MF_DEBUG("  filter (notes==" << Organizer::FilterBy::NOTES << "): " << organizer->getFilterBy() << endl);
+
+    this->organizer = organizer;
 
     QString title{};
 
     // upper right / do first
-    vector<Note*> upperRightNs;
+    vector<Note*> upperRightNs{};
     // upper left / do soon
-    vector<Note*> upperLeftNs;
+    vector<Note*> upperLeftNs{};
     // lower right / plan dedicated time
-    vector<Note*> lowerRightNs;
+    vector<Note*> lowerRightNs{};
     // lower left / do sometimes
-    vector<Note*> lowerLeftNs;
+    vector<Note*> lowerLeftNs{};
 
     if(os.size()) {
-        // fill quadrants based on organizer
         if(!organizer || organizer->getKey()==Organizer::KEY_EISENHOWER_MATRIX) {
             // organizer type: Eisenhower matrix
             for(Outline* o:os) {
@@ -94,9 +96,22 @@ void OrganizerPresenter::refresh(
             planDedicatedTimePresenter->refresh(lowerRightNs, false, true);
         } else {
             // organizer type: custom
-
             if(Organizer::FilterBy::NOTES == organizer->getFilterBy()) {
-                for(Note* n:ns) {
+                Outline* scopeOrganizer{nullptr};
+
+                if(organizer->getOutlineScope().size()) {
+                    for(auto* o:os) {
+                        if(o->getKey() == organizer->getOutlineScope()) {
+                            scopeOrganizer = o;
+                            break;
+                        }
+                    }
+                }
+
+                // scoped vs. all
+                const vector<Note*>& notes{scopeOrganizer?scopeOrganizer->getNotes():ns};
+
+                for(Note* n:notes) {
                     if(n->hasTagStrings(organizer->getUpperRightTags())) {
                         upperRightNs.push_back(n);
                     }
@@ -143,13 +158,13 @@ void OrganizerPresenter::refresh(
             }
 
             // set quadrant titles
-            title = QString::fromStdString(Organizer::tagsToString(organizer->getUpperRightTags()));
+            title = QString::fromStdString(Organizer::tagsToString(organizer->getUpperRightTags(), false));
             doFirstPresenter->setTitle(title);
-            title = QString::fromStdString(Organizer::tagsToString(organizer->getUpperLeftTags()));
+            title = QString::fromStdString(Organizer::tagsToString(organizer->getUpperLeftTags(), false));
             doSoonPresenter->setTitle(title);
-            title = QString::fromStdString(Organizer::tagsToString(organizer->getLowerRightTags()));
+            title = QString::fromStdString(Organizer::tagsToString(organizer->getLowerRightTags(), false));
             planDedicatedTimePresenter->setTitle(title);
-            title = QString::fromStdString(Organizer::tagsToString(organizer->getLowerLeftTags()));
+            title = QString::fromStdString(Organizer::tagsToString(organizer->getLowerLeftTags(), false));
             doSometimePresenter->setTitle(title);
 
             doFirstPresenter->refresh(upperRightNs, true, true);

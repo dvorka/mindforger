@@ -147,6 +147,10 @@ public:
     bool hasTagStrings(std::vector<std::string>& filterTags) {
         return Tag::hasTagStrings(this->tags, filterTags);
     }
+    // IMPROVE: consolidate ^v methods (iterator parameter, vector version removal)
+    bool hasTagStrings(std::set<std::string>& filterTags) {
+        return Tag::hasTagStrings(this->tags, filterTags);
+    }
     void addName(const std::string& s);
     const NoteType* getType() const;
     void setType(const NoteType* type);

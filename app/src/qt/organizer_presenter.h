@@ -42,6 +42,8 @@ class OrganizerPresenter : public QObject
     OrganizerQuadrantPresenter* doSometimePresenter;
     OrganizerQuadrantPresenter* planDedicatedTimePresenter;
 
+    Organizer* organizer;
+
 public:
     explicit OrganizerPresenter(OrganizerView* view, OrlojPresenter* orloj);
     OrganizerPresenter(const OrganizerPresenter&) = delete;
@@ -56,6 +58,10 @@ public:
         const std::vector<Outline*>& os,
         const std::vector<Note*>& ns
     );
+
+    OrganizerView* getView() const { return this->view; }
+
+    Organizer* getOrganizer() const { return this->organizer; }
 };
 
 }

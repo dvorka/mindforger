@@ -24,7 +24,7 @@ namespace m8r {
 using namespace std;
 
 OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
-    : QDialog{parent}, ontology{ontology}
+    : QDialog{parent}, ontology{ontology}, oScopeOutline{nullptr}, organizerToEdit{nullptr}
 {
     mode = ThingsMode::OUTLINES;
 
@@ -60,14 +60,14 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
 
     sortByLabel = new QLabel(tr("Sort Notebooks by")+":", this);
     sortByCombo = new QComboBox{this};
-    sortByCombo->addItem(tr("importance"));
-    sortByCombo->addItem(tr("urgency"));
+    sortByCombo->addItem(tr("importance"), Organizer::SortBy::IMPORTANCE);
+    sortByCombo->addItem(tr("urgency"), Organizer::SortBy::URGENCY);
 
     filterByLabel = new QLabel(tr("Filter by")+":", this);
     filterByCombo = new QComboBox{this};
-    filterByCombo->addItem(tr("notebooks"), Organizer::CONFIG_VALUE_FILTER_BY_O);
-    filterByCombo->addItem(tr("notes"), Organizer::CONFIG_VALUE_FILTER_BY_N);
-    filterByCombo->addItem(tr("notebooks and notes"), Organizer::CONFIG_VALUE_FILTER_BY_O_N);
+    filterByCombo->addItem(tr("notebooks"), Organizer::FilterBy::OUTLINES);
+    filterByCombo->addItem(tr("notes"), Organizer::FilterBy::NOTES);
+    filterByCombo->addItem(tr("notebooks and notes"), Organizer::FilterBy::OUTLINES_NOTES);
 
     closeButton = new QPushButton{tr("&Cancel")};
 
@@ -118,8 +118,6 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     QObject::connect(findOutlineButton, SIGNAL(clicked()), this, SLOT(handleFindOutline()));
     QObject::connect(clearOutlineButton, SIGNAL(clicked()), this, SLOT(handleClearOutline()));
     QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineChoice()));
-    // TODO QObject::connect(upperRighTags, SIGNAL(signalTagSelectionChanged()), this, SLOT(handleTagsChanged()));
-    // TODO on n/on/o selection disable drop down w/ sorting by importance
 
     // dialog    
     setWindowTitle(tr("New Organizer"));
@@ -136,10 +134,18 @@ OrganizerNewDialog::~OrganizerNewDialog()
 
 void OrganizerNewDialog::show(
     const std::vector<Outline*>& outlines,
-    const std::vector<const Tag*>* tags
+    const std::vector<const Tag*>* tags,
+    Organizer* organizerToEdit,
+    Outline* oScopeOutline
 ) {
-    // TODO set tags
     this->outlines = outlines;
+    this->organizerToEdit = organizerToEdit;
+
+    if(!organizerToEdit) {
+        createButton->setText(tr("Create"));
+    } else {
+        createButton->setText(tr("Update"));
+    }
 
     nameEdit->clear();
 
@@ -177,12 +183,49 @@ void OrganizerNewDialog::show(
     lowerLeftTags->getLineEdit()->clear();
     upperLeftTags->getLineEdit()->clear();
 
-    oScopeEdit->clear();
-    oScopeOutline = nullptr;
-
     nameEdit->setFocus();
-    nameEdit->setText(tr("Organizer"));
-    nameEdit->selectAll();
+    if(organizerToEdit) {
+        setWindowTitle(tr("Edit Organizer"));
+
+        nameEdit->setText(QString::fromStdString(organizerToEdit->getName()));
+
+        upperRightTags->setTagsAsStrings(organizerToEdit->getUpperRightTags());
+        upperLeftTags->setTagsAsStrings(organizerToEdit->getUpperLeftTags());
+        lowerRightTags->setTagsAsStrings(organizerToEdit->getLowerRightTags());
+        lowerLeftTags->setTagsAsStrings(organizerToEdit->getLowerLeftTags());
+
+        if(organizerToEdit->getOutlineScope().size()) {
+            if(oScopeOutline) {
+                this->oScopeOutline = oScopeOutline;
+                oScopeEdit->setText(QString::fromStdString(oScopeOutline->getName()));
+            } else {
+                organizerToEdit->clearOutlineScope();
+            }
+        }
+
+        sortByCombo->setCurrentText(QString::fromStdString(organizerToEdit->getSortByAsStr()));
+
+        if(oScopeOutline) {
+            sortByCombo->setEnabled(false);
+            filterByCombo->setCurrentText(Organizer::CONFIG_VALUE_FILTER_BY_N);
+            filterByCombo->setEnabled(false);
+        } else {
+            sortByCombo->setEnabled(true);
+            filterByCombo->setEnabled(true);
+            filterByCombo->setCurrentText(QString::fromStdString(organizerToEdit->getFilterByAsStr()));
+        }
+    } else {
+        setWindowTitle(tr("New Organizer"));
+
+        nameEdit->setText(tr("Organizer"));
+        nameEdit->selectAll();
+
+        oScopeEdit->clear();
+        oScopeOutline = nullptr;
+
+        filterByCombo->setEnabled(true);
+        sortByCombo->setEnabled(true);
+    }
 
     QDialog::show();
 }

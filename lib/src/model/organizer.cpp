@@ -42,6 +42,21 @@ Organizer::Organizer(const std::string& name):
     this->name = name;
 }
 
+Organizer::Organizer(const Organizer& o):
+    Thing{o.getName()},
+    sortBy{o.getSortBy()},
+    filterBy{o.getFilterBy()}
+{
+    this->name = o.name;
+
+    this->tagsUrQuadrant = o.tagsUrQuadrant;
+    this->tagsUlQuadrant = o.tagsUlQuadrant;
+    this->tagsLrQuadrant = o.tagsLlQuadrant;
+    this->tagsLlQuadrant = o.tagsLlQuadrant;
+
+    this->scopeOutlineId = o.scopeOutlineId;
+}
+
 Organizer::~Organizer()
 {
 }

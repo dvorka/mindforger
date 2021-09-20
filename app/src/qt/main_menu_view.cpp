@@ -342,8 +342,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOrganizerClone = new QAction(QIcon(":/menu-icons/copy.svg"), tr("C&lone"), mainWindow);
     actionOrganizerClone->setStatusTip(tr("Make copy of the current Organizer"));
 
-    actionOrganizerForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Forget"), mainWindow);
-    actionOrganizerForget->setStatusTip(tr("Forget Organizer and move it to Limbo"));
+    actionOrganizerForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Delete"), mainWindow);
+    actionOrganizerForget->setStatusTip(tr("Delete Organizer without undo"));
 
     menuOrganizer->addAction(actionOrganizerNew);
     menuOrganizer->addAction(actionOrganizerEdit);

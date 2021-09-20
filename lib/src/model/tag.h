@@ -135,6 +135,26 @@ public:
         }
         return false;
     }
+    // IMPROVE: consolidate ^v methods (iterator parameter, vector version removal)
+    static bool hasTagStrings(
+        const std::vector<const Tag*>& thingTags,
+        std::set<std::string>& filterTags
+    ) {
+        if(thingTags.size() > 1) {
+            unsigned int matches{0};
+            for(std::string ft: filterTags) {
+                for(const Tag* t: thingTags) {
+                    if(t->equals(ft)) {
+                        ++matches;
+                    }
+                }
+            }
+            return matches == filterTags.size();
+        } else if(thingTags.size()==1 && filterTags.size()==1) {
+            return thingTags[0]->equals(*filterTags.begin());
+        }
+        return false;
+    }
 
     Tag() = delete;
     explicit Tag(const std::string& name, Clazz* isA, const Color& color);
@@ -144,7 +164,7 @@ public:
     Tag &operator=(const Tag&&) = delete;
     virtual ~Tag();
 
-    bool equals(std::string& s) const {
+    bool equals(const std::string& s) const {
         return this->name == s;
     }
 

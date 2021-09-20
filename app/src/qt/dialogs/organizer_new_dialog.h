@@ -55,6 +55,7 @@ private:
     std::vector<Outline*> outlines;
 
     Outline* oScopeOutline;
+    Organizer* organizerToEdit;
 
 protected:
     enum ThingsMode {
@@ -97,23 +98,19 @@ public:
     QPushButton* getFindButton() const { return createButton; }
 
     QString getOrganizerName() const { return nameEdit->text(); }
-    std::vector<std::string>& getUpperLeftChosenTags(std::vector<std::string>& tags) const
-    {
-        return upperLeftTags->getTagsAsStrings(tags);
+    std::set<std::string>& getUpperLeftChosenTags(std::set<std::string>& tags) const {
+        return upperLeftTags->getTagsAsStringSet(tags);
     }
-    std::vector<std::string>& getUpperRightChosenTags(std::vector<std::string>& tags) const
-    {
-        return upperRightTags->getTagsAsStrings(tags);
+    std::set<std::string>& getUpperRightChosenTags(std::set<std::string>& tags) const {
+        return upperRightTags->getTagsAsStringSet(tags);
     }
-    std::vector<std::string>& getLowerLeftChosenTags(std::vector<std::string>& tags) const
-    {
-        return lowerLeftTags->getTagsAsStrings(tags);
+    std::set<std::string>& getLowerLeftChosenTags(std::set<std::string>& tags) const {
+        return lowerLeftTags->getTagsAsStringSet(tags);
     }
-    std::vector<std::string>& getLowerRightChosenTags(std::vector<std::string>& tags) const
-    {
-        return lowerRightTags->getTagsAsStrings(tags);
+    std::set<std::string>& getLowerRightChosenTags(std::set<std::string>& tags) const {
+        return lowerRightTags->getTagsAsStringSet(tags);
     }
-    int getFilterBy() const {
+    int getFilterBy() const {        
         return this->filterByCombo->currentData().toInt();
     }
     int getSortBy() const {
@@ -123,9 +120,15 @@ public:
         return oScopeOutline->getKey();
     }
 
+    Organizer* getOrganizerToEdit() const {
+        return this->organizerToEdit;
+    }
+
     void show(
         const std::vector<Outline*>& outlines,
-        const std::vector<const Tag*>* tags=nullptr
+        const std::vector<const Tag*>* tags=nullptr,
+        Organizer* organizerToEdit=nullptr,
+        Outline* oScopeOutline=nullptr
     );
 
 signals:

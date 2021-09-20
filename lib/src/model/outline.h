@@ -193,6 +193,9 @@ public:
     bool hasTagStrings(std::vector<std::string>& filterTags) {
         return Tag::hasTagStrings(this->tags, filterTags);
     }
+    bool hasTagStrings(std::set<std::string>& filterTags) {
+        return Tag::hasTagStrings(this->tags, filterTags);
+    }
     time_t getModified() const;
     void makeModified();
     void setModified();

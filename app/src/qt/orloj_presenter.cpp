@@ -240,7 +240,7 @@ void OrlojPresenter::showFacetOrganizer(
     );
     view->showFacetOrganizer();
     mainPresenter->getMainMenu()->showFacetOrganizer();
-    mainPresenter->getStatusBar()->showMindStatistics();
+    mainPresenter->getStatusBar()->showInfo(tr("Organizer: ")+QString::fromStdString(organizer->getName()));
 }
 
 void OrlojPresenter::showFacetKnowledgeGraphNavigator()
@@ -325,7 +325,7 @@ void OrlojPresenter::slotShowSelectedOrganizer()
                     mind->getAllNotes(organizerNotes, true, false)
                 );
                 mainPresenter->getStatusBar()->showInfo(
-                    QString("%1%2%3").arg(tr("Organizer '")).arg(organizer->getName().c_str()).arg("'...")
+                    QString("%1%2%3").arg(tr("Organizer: '")).arg(organizer->getName().c_str()).arg("'")
                 );
                 return;
             } else {
