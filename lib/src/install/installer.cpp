@@ -54,33 +54,33 @@ bool Installer::createEmptyMindForgerRepository(const string& directory)
         string path{};
         path += directory;
         path += FILE_PATH_SEPARATOR;
-        path += FILE_PATH_MEMORY;
+        path += DIRNAME_MEMORY;
         createDirectory(path);
 
         path.assign(directory);
         path += FILE_PATH_SEPARATOR;
-        path += FILE_PATH_MIND;
+        path += DIRNAME_MIND;
         createDirectory(path);
 
         path.assign(directory);
         path += FILE_PATH_SEPARATOR;
-        path += FILE_PATH_LIMBO;
+        path += DIRNAME_LIMBO;
         createDirectory(path);
 
         path.assign(directory);
         path += FILE_PATH_SEPARATOR;
-        path += FILE_PATH_STENCILS;
+        path += DIRNAME_STENCILS;
         createDirectory(path);
 
         path += FILE_PATH_SEPARATOR;
-        path += FILE_PATH_OUTLINES;
+        path += DIRNAME_OUTLINES;
         createDirectory(path);
 
         path.assign(directory);
         path += FILE_PATH_SEPARATOR;
-        path += FILE_PATH_STENCILS;
+        path += DIRNAME_STENCILS;
         path += FILE_PATH_SEPARATOR;
-        path += FILE_PATH_NOTES;
+        path += DIRNAME_NOTES;
         createDirectory(path);
 
         return true;
@@ -96,10 +96,10 @@ bool Installer::initMindForgerRepository(bool copyDoc, bool copyStencils, const 
             if(copyDoc) {
                 string srcPath{filePathDefaultSystemRepository};
                 srcPath += FILE_PATH_SEPARATOR;
-                srcPath += FILE_PATH_MEMORY;
+                srcPath += DIRNAME_MEMORY;
                 string dstPath{dstRepository};
                 dstPath += FILE_PATH_SEPARATOR;
-                dstPath += FILE_PATH_MEMORY;
+                dstPath += DIRNAME_MEMORY;
                 if(isDirectoryOrFileExists(srcPath.c_str())) {
                     copyDirectoryRecursively(srcPath.c_str(), dstPath.c_str(), true);
                 } else {
@@ -112,10 +112,10 @@ bool Installer::initMindForgerRepository(bool copyDoc, bool copyStencils, const 
             if(copyStencils) {
                 string srcPath{filePathDefaultSystemRepository};
                 srcPath += FILE_PATH_SEPARATOR;
-                srcPath += FILE_PATH_STENCILS;
+                srcPath += DIRNAME_STENCILS;
                 string dstPath{dstRepository};
                 dstPath += FILE_PATH_SEPARATOR;
-                dstPath += FILE_PATH_STENCILS;
+                dstPath += DIRNAME_STENCILS;
                 if(isDirectoryOrFileExists(srcPath.c_str())) {
                     copyDirectoryRecursively(srcPath.c_str(), dstPath.c_str(), true);
                 } else {

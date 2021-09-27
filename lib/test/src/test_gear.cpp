@@ -24,6 +24,72 @@ namespace m8r {
 
 using namespace std;
 
+TestSandbox::TestSandbox(string configFileName, bool repository)
+    : testHomePath{}, configPath{}, repositoryPath{}
+{
+    if(repository) {
+        this->createRepository(configFileName);
+    } else {
+        this->create(configFileName);
+    }
+}
+
+string TestSandbox::create(string configFileName)
+{
+    this->testHomePath = m8r::createTestHome(m8r::getSystemTempPath());
+    if(!configFileName.size()) {
+        configFileName.assign(".mindforger.md");
+    }
+
+    this->configFileName = configFileName;
+    this->configPath = testHomePath + FILE_PATH_SEPARATOR + configFileName;
+    this->repositoryPath = testHomePath;
+
+    isRepository = false;
+
+    return repositoryPath;
+}
+
+string TestSandbox::createRepository(string configFileName)
+{
+    this->create(configFileName);
+
+    // create MindForger repository skeleton
+    this->repositoryPath = this->repositoryPath + FILE_PATH_SEPARATOR + DIRNAME_M8R_REPOSITORY;
+    createDirectory(this->repositoryPath);
+
+    string dir{};
+    for(auto d:{DIRNAME_MEMORY, DIRNAME_MIND, DIRNAME_LIMBO}) {
+        dir.assign(this->repositoryPath + FILE_PATH_SEPARATOR + d);
+        createDirectory(dir);
+    }
+
+    isRepository = true;
+
+    return repositoryPath;
+}
+
+
+string TestSandbox::addMdFile(string fileName, string content)
+{
+    string mdFilePath{repositoryPath+FILE_PATH_SEPARATOR};
+    if(isRepository) {
+        mdFilePath += DIRNAME_MEMORY;
+        mdFilePath += FILE_PATH_SEPARATOR;
+    }
+    mdFilePath += fileName;
+
+    std::ofstream out(mdFilePath);
+    if(content.size()) {
+        out << content;
+    } else {
+        out << "# Just a Test" << endl << "Greetings from John Doe!" << endl;
+    }
+    out.close();
+
+    return mdFilePath;
+}
+
 void printOutlineNotes(Outline* o)
 {
     if(o) {
@@ -225,16 +291,31 @@ void printAst(const vector<MarkdownAstNodeSection*>* ast)
     cout << endl << "End of AST";
 }
 
-string platformSpecificPath(const char *path) {
-    string s{path};
-#ifdef _WIN32
-    std::replace(s.begin(), s.end(), '/', FILE_PATH_SEPARATOR_CHAR);
-    bool absolute = s.find_first_of(FILE_PATH_SEPARATOR_CHAR) == 0;
-    if (absolute) {
-        s.insert(0, "c:");
+string createTestHome(string& tmpPath)
+{
+    string tempPath{tmpPath};
+    if(!tmpPath.size()) {
+        tempPath.assign("/tmp");
     }
-#endif
-    return s;
+
+    string mfTestPath{tmpPath};
+    mfTestPath += FILE_PATH_SEPARATOR;
+    mfTestPath += "mindforger-tests";
+    if(!isDirectory(mfTestPath.c_str())) {
+        createDirectory(mfTestPath.c_str());
+    }
+
+    string homePath{mfTestPath};
+    string homeBaseName{"home"};
+    string safeHomePath = FilesystemPersistence::getUniqueDirOrFileName(
+        homePath,
+        &homeBaseName,
+        ""
+    );
+    createDirectory(safeHomePath);
+
+    return safeHomePath;
 }
+
 
 } // m8r namespace

@@ -27,6 +27,7 @@
 
 #include "repository.h"
 #include "time_scope.h"
+#include "./repository_configuration.h"
 #include "../repository_indexer.h"
 #include "../gear/lang_utils.h"
 #include "../gear/file_utils.h"
@@ -49,12 +50,12 @@ constexpr const auto DIRNAME_M8R_REPOSITORY = "mindforger-repository";
 constexpr const auto FILE_PATH_M8R_REPOSITORY = "~/mindforger-repository";
 
 constexpr const auto FILENAME_M8R_CONFIGURATION = ".mindforger.md";
-constexpr const auto FILE_PATH_MEMORY = "memory";
-constexpr const auto FILE_PATH_MIND = "mind";
-constexpr const auto FILE_PATH_LIMBO = "limbo";
-constexpr const auto FILE_PATH_STENCILS = "stencils";
-constexpr const auto FILE_PATH_OUTLINES = "notebooks";
-constexpr const auto FILE_PATH_NOTES = "notes";
+constexpr const auto DIRNAME_MEMORY = "memory";
+constexpr const auto DIRNAME_MIND = "mind";
+constexpr const auto DIRNAME_LIMBO = "limbo";
+constexpr const auto DIRNAME_STENCILS = "stencils";
+constexpr const auto DIRNAME_OUTLINES = "notebooks";
+constexpr const auto DIRNAME_NOTES = "notes";
 
 constexpr const auto FILE_EXTENSION_HTML = ".html";
 constexpr const auto FILE_EXTENSION_CSV= ".csv";
@@ -65,6 +66,7 @@ constexpr const auto FILE_EXTENSION_MD_MDOWN = ".mdown";
 constexpr const auto FILE_EXTENSION_MD_MKDN = ".mkdn";
 
 constexpr const auto FILE_EXTENSION_PDF = ".pdf";
+constexpr const auto FILE_EXTENSION_PDF_UPPER = ".PDF";
 
 constexpr const auto FILE_EXTENSION_TXT = ".txt";
 
@@ -116,15 +118,20 @@ class Installer;
  *
  * MindForger configuration file is stored in ~/.mindforger.md by default.
  *
- * This class is singleton. The reason to make it singleton is that it's used
- * through lib and GUI instances. Therefore passing of the configuration instance
- * to (almost) each and every application's component would be inefficient i.e. worse
- * than the use of singleton pattern.
+ * This class is singleton. The reason to make it singleton is that it is
+ * used through lib and GUI instances. Therefore passing of the configuration
+ * instance to (almost) each and every application's component would be
+ * inefficient i.e. worse than the use of singleton pattern.
  */
 class Configuration {
+private:
+    static RepositoryConfiguration* getDummyRepositoryConfiguration() {
+        static RepositoryConfiguration* DUMMY_REPOSITORY_CONFIG = new RepositoryConfiguration{};
+        return DUMMY_REPOSITORY_CONFIG;
+    }
+
 public:
-    static Configuration& getInstance()
-    {
+    static Configuration& getInstance() {
         static Configuration SINGLETON{};
         return SINGLETON;
     }
@@ -225,6 +232,9 @@ private:
     std::string memoryPath;
     std::string limboPath;
 
+    // repository configuration (when in repository mode)
+    RepositoryConfiguration* repositoryConfiguration;
+
     // lib configuration
     bool writeMetadata; // write metadata to MD - enabled in case of MINDFORGER_REPO only by default (can be disabled for all repository types)
     bool saveReadsMetadata; // persist count of Outline and Note reads (requires write to disc on every O/N view)
@@ -290,7 +300,10 @@ public:
     unsigned int getAsyncMindThreshold() const { return asyncMindThreshold; }
 
     std::string& getConfigFilePath() { return configFilePath; }
-    void setConfigFilePath(const std::string customConfigFilePath) { configFilePath = customConfigFilePath; }
+    void setConfigFilePath(const std::string customConfigFilePath) {
+        configFilePath = customConfigFilePath;
+    }
+
     const std::string& getMemoryPath() const { return memoryPath; }
     const std::string& getLimboPath() const { return limboPath; }
     const char* getRepositoryPathFromEnv();
@@ -321,6 +334,29 @@ public:
     void setActiveRepository(Repository* activeRepository);
     bool isActiveRepository() const { return activeRepository!=nullptr; }
     Repository* getActiveRepository() const;
+
+    /*
+     * repository configuration
+     */
+
+    bool hasRepositoryConfiguration() const;
+    RepositoryConfiguration& initRepositoryConfiguration();
+    void clearRepositoryConfiguration();
+    std::string getRepositoryConfigFilePath() const;
+    /**
+     * @brief Get repository configuration.
+     *
+     * This method always returns reference to repository configuration
+     * reference - even if there is no repository i.g. in case of single
+     * file editation or Markdown documents directory indexation. In such
+     * case, dummy configuration instance is returned to ensure runtime
+     * robustness.
+     *
+     * @return repository configuration reference.
+     */
+    RepositoryConfiguration& getRepositoryConfiguration() const {
+        return *this->repositoryConfiguration;
+    }
 
     /*
      * lib
@@ -456,13 +492,6 @@ public:
     bool isUiOsTableSortOrder() const { return uiOsTableSortOrder; }
     void setUiOsTableSortOrder(const bool ascending) { this->uiOsTableSortOrder = ascending; }
 
-    /*
-     * organizers
-     */
-    void clearOrganizers() { this->organizers.clear(); }
-    void addOrganizer(Organizer* organizer);
-    void removeOrganizer(Organizer* organizer);
-    std::vector<Organizer*> getOrganizers() const { return this->organizers; }
 };
 
 } // namespace

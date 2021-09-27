@@ -106,7 +106,7 @@ public:
 
 #ifdef DO_MF_DEBUG
     void print() const {
-        MF_DEBUG(std::endl << "Repo - Path: '" << path << "' Dir: '" << dir << "' file: '" << file << "' type: " << type << ", mode: " << mode << ", RD_ONLY: " << readOnly << std::endl);
+        MF_DEBUG("Repo - Path: '" << path << "' Dir: '" << dir << "' file: '" << file << "' type: " << type << ", mode: " << mode << ", RD_ONLY: " << readOnly << std::endl);
     }
 #endif
 

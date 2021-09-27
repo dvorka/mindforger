@@ -306,8 +306,6 @@ void Mind::remember(Outline* outline)
 {
     memory.remember(outline);
 
-    // TODO onRemembering()
-
 #ifdef MF_MD_2_HTML_CMARK
     if(config.isAutolinking()) {
         autolinking->reindex();

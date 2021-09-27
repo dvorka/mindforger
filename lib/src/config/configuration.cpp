@@ -41,6 +41,7 @@ Configuration::Configuration()
     : asyncMindThreshold{},
       activeRepository{},
       repositories{},
+      repositoryConfiguration{getDummyRepositoryConfiguration()},
       writeMetadata{},
       saveReadsMetadata{},
       autolinking{},
@@ -113,6 +114,9 @@ Configuration::~Configuration()
         delete installer;
         installer = nullptr;
     }
+
+    clearRepositoryConfiguration();
+    repositoryConfiguration = nullptr;
 }
 
 void Configuration::clear()
@@ -124,11 +128,7 @@ void Configuration::clear()
     }
     repositories.clear();
 
-    // organizers
-    for(auto& o:organizers) {
-        delete o;
-    }
-    organizers.clear();
+    clearRepositoryConfiguration();
 
     // lib
     mindState = MindState::SLEEPING;
@@ -187,6 +187,27 @@ void Configuration::clear()
     uiOsTableSortOrder = DEFAULT_OS_TABLE_SORT_ORDER;
 }
 
+bool Configuration::hasRepositoryConfiguration() const {
+    return this->repositoryConfiguration == getDummyRepositoryConfiguration();
+}
+
+RepositoryConfiguration& Configuration::initRepositoryConfiguration() {
+    clearRepositoryConfiguration();
+    this-> repositoryConfiguration = new RepositoryConfiguration{};
+    return *repositoryConfiguration;
+}
+
+void Configuration::clearRepositoryConfiguration() {
+    if(repositoryConfiguration
+       && repositoryConfiguration != getDummyRepositoryConfiguration()
+    ) {
+        delete repositoryConfiguration;
+    } else {
+        getDummyRepositoryConfiguration()->clear();
+    }
+    repositoryConfiguration = getDummyRepositoryConfiguration();
+}
+
 Repository* Configuration::addRepository(Repository* repository)
 {
     Repository* clash;
@@ -236,11 +257,11 @@ void Configuration::setActiveRepository(Repository* repository)
                repository->getMode()==Repository::RepositoryMode::REPOSITORY)
             {
                 memoryPath+=FILE_PATH_SEPARATOR;
-                memoryPath+=FILE_PATH_MEMORY;
+                memoryPath+=DIRNAME_MEMORY;
 
                 // TODO limbo class
                 limboPath+=FILE_PATH_SEPARATOR;
-                limboPath+=FILE_PATH_LIMBO;
+                limboPath+=DIRNAME_LIMBO;
             }
         } else {
             throw MindForgerException{"Active repository must be one of repositories known to Configuration!"};
@@ -283,6 +304,21 @@ void Configuration::findOrCreateDefaultRepository()
     }
 }
 
+string Configuration::getRepositoryConfigFilePath() const {
+    if(hasRepositoryConfiguration()
+        && activeRepository
+        && activeRepository->getType() == Repository::RepositoryType::MINDFORGER
+        && activeRepository->getMode() == Repository::RepositoryMode::REPOSITORY
+    ) {
+        std::string path{activeRepository->getPath()};
+        path += FILE_PATH_SEPARATOR;
+        path += FILENAME_M8R_REPOSITORY_CONFIGURATION;
+        return path;
+    }
+
+    return "";
+}
+
 const char* Configuration::getRepositoryPathFromEnv()
 {
     char* repository = getenv(ENV_VAR_M8R_REPOSITORY);  // this is not leak (static reusable array)
@@ -293,23 +329,6 @@ const char* Configuration::getEditorFromEnv()
 {
     char* editor = getenv(ENV_VAR_M8R_EDITOR);  // this is not leak (static reusable array)
     return editor;
-}
-
-void Configuration::addOrganizer(Organizer* organizer)
-{
-    this->organizers.push_back(organizer);
-}
-
-void Configuration::removeOrganizer(Organizer* organizer)
-{
-    this->organizers.erase(
-        std::remove(
-            this->organizers.begin(),
-            this->organizers.end(),
-            organizer
-        ),
-        this->organizers.end()
-    );
 }
 
 } // m8r namespace

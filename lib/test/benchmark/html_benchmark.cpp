@@ -46,7 +46,7 @@ TEST(HtmlBenchmark, DISABLED_Outline)
     config.setConfigFilePath("/tmp/cfg-hb-o.md");
     config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
     m8r::Mind mind(config);
-    m8r::DummyHtmlColors dummyColors{};
+    m8r::HtmlColorsMock dummyColors{};
     m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(),dummyColors,nullptr};
     m8r::MarkdownOutlineRepresentation markdownRepresentation(mind.remind().getOntology(),nullptr);
     mind.think();

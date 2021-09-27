@@ -24,6 +24,27 @@ using namespace std;
 
 namespace m8r {
 
+string FilesystemPersistence::getUniqueDirOrFileName(
+    const string& directory,
+    const string* text,
+    const string& extension
+) {
+    string filename = normalizeToNcName(*text, '-');
+    string fullname{};
+    struct stat buffer{};
+
+    for(int discriminator=0; (fullname.size()?!stat(fullname.c_str(),&buffer):true); discriminator++) {
+        fullname =
+            directory +
+            FILE_PATH_SEPARATOR +
+            filename +
+            (discriminator?"-"+std::to_string(discriminator):"") +
+            extension;
+    }
+
+    return fullname;
+}
+
 FilesystemPersistence::FilesystemPersistence(MarkdownOutlineRepresentation& mdRepresentation, HtmlOutlineRepresentation& htmlRepresentation)
     : mdRepresentation(mdRepresentation), htmlRepresentation(htmlRepresentation)
 {
@@ -48,22 +69,13 @@ void FilesystemPersistence::load(Stencil* stencil)
 }
 
 string FilesystemPersistence::createFileName(
-        const string& directory,
-        const string* text,
-        const string& extension
-){
-    string filename = normalizeToNcName(*text, '-');
-    string fullname;
-    struct stat buffer;
-    for(int discriminator=0; (fullname.size()?!stat(fullname.c_str(),&buffer):true); discriminator++) {
-        fullname =
-                directory +
-                FILE_PATH_SEPARATOR +
-                filename +
-                (discriminator?"-"+std::to_string(discriminator):"") +
-                extension;
-    }
-    return fullname;
+    const string& directory,
+    const string* text,
+    const string& extension
+) {
+    return FilesystemPersistence::getUniqueDirOrFileName(
+        directory, text, extension
+    );
 }
 
 void FilesystemPersistence::save(Outline* outline)

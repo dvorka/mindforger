@@ -46,6 +46,23 @@ void pathToLinuxDelimiters(const std::string& path, std::string& linuxPath)
     }
 }
 
+string platformSpecificPath(const char* path) {
+    string s{path};
+#ifdef _WIN32
+    std::replace(s.begin(), s.end(), '/', FILE_PATH_SEPARATOR_CHAR);
+    bool absolute = s.find_first_of(FILE_PATH_SEPARATOR_CHAR) == 0;
+    if (absolute) {
+        s.insert(0, "c:");
+    }
+#endif
+    return s;
+}
+
+string& getSystemTempPath() {
+    static std::string systemTemp{SYSTEM_TEMP_DIRECTORY};
+    return systemTemp;
+}
+
 bool stringToLines(const string* text, vector<string*>& lines)
 {
     if(text && !text->empty()) {

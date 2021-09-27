@@ -94,6 +94,8 @@ int ungzip(const char* srcFile, const char* dstFile);
 
 void pathToDirectoryAndFile(const std::string& path, std::string& directory, std::string& file);
 void pathToLinuxDelimiters(const std::string& path, std::string& linuxPath);
+std::string platformSpecificPath(const char* path);
+std::string& getSystemTempPath();
 bool stringToLines(const std::string* text, std::vector<std::string*>& lines);
 bool fileToLines(const std::string* filename, std::vector<std::string*>& lines, size_t& filesize);
 std::string* fileToString(const std::string& filename);

@@ -116,7 +116,7 @@ public:
         return s;
     }
 
-    // parse tags from escaped string
+    // parse tag strings from escaped string
     static std::set<std::string> tagsFromString(std::string& s) {
         std::set<std::string> tags{};
 

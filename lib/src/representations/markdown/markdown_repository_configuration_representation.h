@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_MARKDOWN_CONFIGURATION_REPRESENTATION_H
-#define M8R_MARKDOWN_CONFIGURATION_REPRESENTATION_H
+#ifndef M8R_MARKDOWN_REPOSITORY_CONFIGURATION_REPRESENTATION_H
+#define M8R_MARKDOWN_REPOSITORY_CONFIGURATION_REPRESENTATION_H
 
 #include <set>
 #include <string>
@@ -25,8 +25,8 @@
 #include <iostream>
 
 #include "markdown_document.h"
-#include "markdown_repository_configuration_representation.h"
 #include "../../config/configuration.h"
+#include "../../model/organizer.h"
 
 namespace m8r {
 
@@ -34,7 +34,10 @@ class Configuration;
 class MarkdownAstNodeSection;
 
 /**
- * @brief Markdown configuration representation.
+ * @brief Markdown repository configuration representation.
+ *
+ * Markdown repository configuration hosts repository specific settings
+ * like organizers or outline tree.
  */
 /* Method:
  *   Markdown (instance which represents MD file)
@@ -47,40 +50,42 @@ class MarkdownAstNodeSection;
  *     from(AST) --> OUTLINE
  *       AST.getString(LEXEM) --> name, description, line, ...
  */
-class MarkdownConfigurationRepresentation
+class MarkdownRepositoryConfigurationRepresentation
 {
     static constexpr int AVG_SECTION_SIZE = 300;
     static constexpr int AVG_CONFIGURATION_SIZE = 2*AVG_SECTION_SIZE;
 
 public:
-    explicit MarkdownConfigurationRepresentation();
-    MarkdownConfigurationRepresentation(const MarkdownConfigurationRepresentation&) = delete;
-    MarkdownConfigurationRepresentation(const MarkdownConfigurationRepresentation&&) = delete;
-    MarkdownConfigurationRepresentation &operator=(const MarkdownConfigurationRepresentation&) = delete;
-    MarkdownConfigurationRepresentation &operator=(const MarkdownConfigurationRepresentation&&) = delete;
-    ~MarkdownConfigurationRepresentation();
+    explicit MarkdownRepositoryConfigurationRepresentation();
+    MarkdownRepositoryConfigurationRepresentation(const MarkdownRepositoryConfigurationRepresentation&) = delete;
+    MarkdownRepositoryConfigurationRepresentation(const MarkdownRepositoryConfigurationRepresentation&&) = delete;
+    MarkdownRepositoryConfigurationRepresentation &operator=(const MarkdownRepositoryConfigurationRepresentation&) = delete;
+    MarkdownRepositoryConfigurationRepresentation &operator=(const MarkdownRepositoryConfigurationRepresentation&&) = delete;
+    ~MarkdownRepositoryConfigurationRepresentation();
 
     std::string* to(Configuration& c);
 
     /**
-     * @brief Load configuration from file and return true on success (file exists), otherwise return false.
+     * @brief Load repository configuration from file and return true on success (file exists), otherwise return false.
      */
     bool load(Configuration& c);
     /**
-     * @brief Save configuration to file.
+     * @brief Save repository configuration to file.
      */
     void save(Configuration& c) { save(nullptr, &c); }
     /**
-     * @brief Save initial configuration file.
+     * @brief Save initial repository configuration file.
      */
     void save(const File& file) { save(&file, nullptr); }
 
 private:
-    void configuration(std::vector<MarkdownAstNodeSection*>* ast, Configuration& c);
-    void configurationSection(std::string* title, std::vector<std::string*>* body, Configuration& c);
+    void repositoryConfiguration(std::vector<MarkdownAstNodeSection*>* ast, Configuration& c);
+    void repositoryConfigurationSection(std::string* title, std::vector<std::string*>* body, Configuration& c);
+    void repositoryConfigurationSectionOrganizers(std::vector<std::string*>* body, Configuration& c);
+    Organizer* repositoryConfigurationSectionOrganizerAdd(Organizer* o, std::set<std::string>& keys, Configuration& c);
     std::string& to(Configuration* c, std::string& md);
     void save(const File* file, Configuration* c);
 };
 
 }
-#endif // M8R_MARKDOWN_CONFIGURATION_REPRESENTATION_H
+#endif // M8R_MARKDOWN_REPOSITORY_CONFIGURATION_REPRESENTATION_H

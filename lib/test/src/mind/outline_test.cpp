@@ -91,14 +91,15 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
     // IMPROVE constructor call is WRONG > complete parameters
     string name{"MIND's stencil Outline"};
     mind.outlineNew(
-                &name,
-                mind.getOntology().findOrCreateOutlineType(m8r::OutlineType::KeyOutline()),
-                1,
-                2,
-                55,
-                &tags,
-                nullptr,
-                stencil);
+        &name,
+        mind.getOntology().findOrCreateOutlineType(m8r::OutlineType::KeyOutline()),
+        1,
+        2,
+        55,
+        &tags,
+        nullptr,
+        stencil
+    );
 
     // create stencil MANUALLY (stencil file does NOT have to exist)
     unique_ptr<m8r::Stencil> outlineStencil{
@@ -110,14 +111,15 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
     tags.clear();
     tags.push_back(mind.getOntology().findOrCreateTag(m8r::Tag::KeyImportant()));
     mind.outlineNew(
-                &name,
-                mind.getOntology().findOrCreateOutlineType(m8r::OutlineType::KeyGrow()),
-                3,
-                5,
-                66,
-                &tags,
-                nullptr,
-                outlineStencil.get());
+        &name,
+        mind.getOntology().findOrCreateOutlineType(m8r::OutlineType::KeyGrow()),
+        3,
+        5,
+        66,
+        &tags,
+        nullptr,
+        outlineStencil.get()
+    );
 
     // asserts
     EXPECT_EQ(2, mind.remind().getOutlinesCount());

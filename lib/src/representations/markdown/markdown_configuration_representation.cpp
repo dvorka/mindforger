@@ -23,7 +23,6 @@ namespace m8r {
 
 constexpr const auto CONFIG_SECTION_APP = "Application";
 constexpr const auto CONFIG_SECTION_MIND = "Mind";
-constexpr const auto CONFIG_SECTION_ORGANIZERS = "Organizers";
 constexpr const auto CONFIG_SECTION_REPOSITORIES= "Repositories";
 
 // mind
@@ -57,17 +56,6 @@ constexpr const auto CONFIG_SETTING_MD_HIGHLIGHT_LABEL = "* Enable source code s
 constexpr const auto CONFIG_SETTING_MD_MATH_LABEL = "* Enable math support in Markdown: ";
 constexpr const auto CONFIG_SETTING_MD_DIAGRAM_LABEL = "* Enable diagram support in Markdown: ";
 constexpr const auto CONFIG_SETTING_SAVE_READS_METADATA_LABEL = "* Save reads metadata: ";
-
-// organizers
-constexpr const auto CONFIG_SETTING_ORG_NAME = "Organizer name: ";
-constexpr const auto CONFIG_SETTING_ORG_KEY= "* Key: ";
-constexpr const auto CONFIG_SETTING_ORG_TAG_UR = "* Upper right tag: ";
-constexpr const auto CONFIG_SETTING_ORG_TAG_LR = "* Lower right tag: ";
-constexpr const auto CONFIG_SETTING_ORG_TAG_LL = "* Lower left tag: ";
-constexpr const auto CONFIG_SETTING_ORG_TAG_UL = "* Upper left tag: ";
-constexpr const auto CONFIG_SETTING_ORG_FILTER_BY = "* Filter by: ";
-constexpr const auto CONFIG_SETTING_ORG_SORT_BY = "* Sort by: ";
-constexpr const auto CONFIG_SETTING_ORG_SCOPE = "* Outline scope: ";
 
 // repositories
 constexpr const auto CONFIG_SETTING_ACTIVE_REPOSITORY_LABEL = "* Active repository: ";
@@ -140,11 +128,7 @@ void MarkdownConfigurationRepresentation::configuration(vector<MarkdownAstNodeSe
 void MarkdownConfigurationRepresentation::configurationSection(string* title, vector<string*>* body, Configuration& c)
 {
     if(title && body && title->size() && body->size()) {
-        if(!title->compare(CONFIG_SECTION_ORGANIZERS)) {
-            MF_DEBUG("PARSING configuration section: Organizers" << endl);
-            configurationSectionOrganizers(body, c);
-        }
-        else if(!title->compare(CONFIG_SECTION_APP)) {
+        if(!title->compare(CONFIG_SECTION_APP)) {
             MF_DEBUG("PARSING configuration section: Application" << endl);
             for(string* line: *body) {
                 if(line && line->size() && line->at(0)=='*') {
@@ -405,158 +389,6 @@ void MarkdownConfigurationRepresentation::configurationSection(string* title, ve
     }
 }
 
-/**
- * @brief Parse organizer(s) from MD section.
- *
- * MD section syntax is designed so that it can be included either
- * in .mindforger.md or in another configuration file.
- *
- * @example
- * # Organizers
- * Organizer name: MY GLOBAL ORGANIZER
- * * Upper right tag: UR TAG
- * * Lower right tag: LR TAG
- * * Lower left tag: LL TAG
- * * Upper left tag: UL TAG
- * * Sort by: importance
- * * Filter by: outlines and notes
- * * Outline scope:
- * ...
- * Organizer name: MY O ORGANIZER
- * * Upper right tag: UR TAG
- * * Lower right tag: LR TAG
- * * Lower left tag: LL TAG
- * * Upper left tag: UL TAG
- * * Sort by: urgency
- * * Filter by: notes
- * * Outline scope: /home/dvorka/mf/memory/target-outline.md
- *
- * MD section is split using organizer name row(s).
- *
- * @param note
- * @return
- */
-void MarkdownConfigurationRepresentation::configurationSectionOrganizers(
-    vector<string*>* body, Configuration& c
-) {
-    // TODO organizers configuration is repository specific - introduce markdown_repository_config_representation.h/.cpp
-    // and use it to store extras like organizers, bookmarks, outline tree, etc. Repository representation to be injected
-    // in configuration singleton (no need to introduce new object - it's simply configuration and the source is irrelevant.
-    // Extra configuration to be loaded/saved on detection of the repository/file.
-
-    set<string> keys{};
-    if(body) {
-        Organizer* o = nullptr;
-        string tags{};
-        for(string* line:*body) {
-            if(line) {
-                if(line && line->find(CONFIG_SETTING_ORG_NAME) != std::string::npos) {
-                    o = configurationSectionOrganizerAdd(o, keys, c);
-
-                    // new organizer
-                    string name{line->substr(strlen(CONFIG_SETTING_ORG_NAME))};
-                    if(name.length()) {
-                        o = new Organizer(name);
-                    }
-                } else if(o && line->find(CONFIG_SETTING_ORG_KEY) != std::string::npos) {
-                    o->setKey(line->substr(strlen(CONFIG_SETTING_ORG_KEY)));
-                } else if(o && line->find(CONFIG_SETTING_ORG_TAG_UR) != std::string::npos) {
-                    tags = line->substr(strlen(CONFIG_SETTING_ORG_TAG_UR));
-                    o->tagsUrQuadrant = Organizer::tagsFromString(tags);
-                } else if(o && line->find(CONFIG_SETTING_ORG_TAG_LR) != std::string::npos) {
-                    tags = line->substr(strlen(CONFIG_SETTING_ORG_TAG_LR));
-                    o->tagsLrQuadrant = Organizer::tagsFromString(tags);
-                } else if(o && line->find(CONFIG_SETTING_ORG_TAG_LL) != std::string::npos) {
-                    tags = line->substr(strlen(CONFIG_SETTING_ORG_TAG_LL));
-                    o->tagsLlQuadrant = Organizer::tagsFromString(tags);
-                } else if(o && line->find(CONFIG_SETTING_ORG_TAG_UL) != std::string::npos) {
-                    tags = line->substr(strlen(CONFIG_SETTING_ORG_TAG_UL));
-                    o->tagsUlQuadrant = Organizer::tagsFromString(tags);
-                } else if(o && line->find(CONFIG_SETTING_ORG_SORT_BY) != std::string::npos) {
-                    string sortBy{line->substr(strlen(CONFIG_SETTING_ORG_SORT_BY))};
-                    if(Organizer::CONFIG_VALUE_SORT_BY_I == sortBy) {
-                        o->sortBy = Organizer::SortBy::IMPORTANCE;
-                    } else if(Organizer::CONFIG_VALUE_SORT_BY_U == sortBy) {
-                        o->sortBy = Organizer::SortBy::URGENCY;
-                    } else {
-                        o->sortBy = Organizer::SortBy::IMPORTANCE;
-                    }
-                } else if(o && line->find(CONFIG_SETTING_ORG_FILTER_BY) != std::string::npos) {
-                    string filterBy{line->substr(strlen(CONFIG_SETTING_ORG_FILTER_BY))};
-                    if(Organizer::CONFIG_VALUE_FILTER_BY_O == filterBy) {
-                        o->filterBy = Organizer::FilterBy::OUTLINES;
-                    } else if(Organizer::CONFIG_VALUE_FILTER_BY_N == filterBy) {
-                        o->filterBy = Organizer::FilterBy::NOTES;
-                    } else if(Organizer::CONFIG_VALUE_FILTER_BY_O_N == filterBy) {
-                        o->filterBy = Organizer::FilterBy::OUTLINES_NOTES;
-                    } else {
-                        o->filterBy = Organizer::FilterBy::OUTLINES_NOTES;
-                    }
-                } else if(o && line->find(CONFIG_SETTING_ORG_SCOPE) != std::string::npos) {
-                    // validity of O ID will be checked (and fixed) on organizer load
-                    o->scopeOutlineId = line->substr(strlen(CONFIG_SETTING_ORG_SCOPE));
-                }
-            }
-        }
-
-        // add (valid) organizer
-        o = configurationSectionOrganizerAdd(o, keys, c);
-    }
-
-    // ensure presence of Eisenhower Matrix organizer
-    configurationSectionOrganizerAdd(
-         Organizer::createEisenhowMatrixOrganizer(),
-         keys,
-         c
-    );
-}
-
-Organizer* MarkdownConfigurationRepresentation::configurationSectionOrganizerAdd(
-    Organizer* o,
-    set<string>& keys,
-    Configuration& c
-) {
-    if(o) {
-        // validate organizer integrity
-        if(o->getKey().empty()) {
-            o->setKey(
-                Organizer::createOrganizerKey(
-                    keys,
-                    c.getMemoryPath(),
-                    Thing::getNextKey(),
-                    FILE_PATH_SEPARATOR
-                )
-            );
-        }
-        set<string>::iterator it = keys.find(o->getKey());
-        if(it != keys.end()) {
-            cerr << "Error: skipping '" << o->getName() << "' organizer as another organizer "
-                 << "with key '" << o->getKey() << "' is already defined" << endl;
-            delete o;
-            return nullptr;
-        } // else OK - key not defined yet
-
-        if(
-            !o->tagsUrQuadrant.size()
-            || !o->tagsLrQuadrant.size()
-            || !o->tagsLlQuadrant.size()
-            || !o->tagsUlQuadrant.size()
-        ) {
-            cerr << "Error: skipping '" << o->getName() << "' organizer as it does not define tags for all quandrants" << endl;
-            delete o;
-            return nullptr;
-        }
-
-        // persist
-        if(o) {
-            c.addOrganizer(o);
-            keys.insert(o->getKey());
-        }
-    }
-
-    return o;
-}
-
 string* MarkdownConfigurationRepresentation::to(Configuration& c)
 {
     string* md = new string{};
@@ -567,7 +399,6 @@ string* MarkdownConfigurationRepresentation::to(Configuration& c)
 string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
 {
     stringstream s{};
-    string os{};
     string timeScopeAsString{}, tagsScopeAsString{}, mindStateAsString{"sleep"};
     if(c) {
         // time
@@ -582,26 +413,6 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
         }
         // mind state
         if(c->getDesiredMindState()==Configuration::MindState::THINKING) mindStateAsString= "think";
-        // organizers
-        stringstream oss{};
-        if(c->getOrganizers().size()) {
-            for(Organizer* o:c->getOrganizers()) {
-                oss
-                << CONFIG_SETTING_ORG_NAME << o->getName() << endl
-                << CONFIG_SETTING_ORG_KEY << o->getKey() << endl
-                << CONFIG_SETTING_ORG_TAG_UR << Organizer::tagsToString(o->getUpperRightTags()) << endl
-                << CONFIG_SETTING_ORG_TAG_LR << Organizer::tagsToString(o->getLowerRightTags()) << endl
-                << CONFIG_SETTING_ORG_TAG_LL << Organizer::tagsToString(o->getLowerLeftTags()) << endl
-                << CONFIG_SETTING_ORG_TAG_UL << Organizer::tagsToString(o->getUpperLeftTags()) << endl
-                << CONFIG_SETTING_ORG_SORT_BY << o->getSortByAsStr() << endl
-                << CONFIG_SETTING_ORG_FILTER_BY << o->getFilterByAsStr() << endl
-                << CONFIG_SETTING_ORG_SCOPE << o->getOutlineScope() << endl
-                << endl;
-            }
-        } else {
-            oss << endl;
-        }
-        os=oss.str();
     } else {
         timeScopeAsString.assign(Configuration::DEFAULT_TIME_SCOPE);
     }
@@ -696,9 +507,6 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: 150" << endl <<
          endl <<
 
-         "# " << CONFIG_SECTION_ORGANIZERS << endl <<
-         os <<
-
          "# " << CONFIG_SECTION_REPOSITORIES << endl <<
          "If MindForger detects MindForger repository structure, then the directory is" << endl <<
          "threated as knowledge base, else it's used as a Markdown directory (e.g. metadata"  << endl <<
@@ -730,6 +538,14 @@ bool MarkdownConfigurationRepresentation::load(Configuration& c)
         md.from();
         vector<MarkdownAstNodeSection*>* ast = md.moveAst();
         configuration(ast, c);
+
+        // repository configuration path is available only if MF in repository mode
+        if(c.getRepositoryConfigFilePath().size()) {
+            MF_DEBUG("Loading repository configuration from " << c.getRepositoryConfigFilePath() << endl);
+            MarkdownRepositoryConfigurationRepresentation repositorCfgMd{};
+            repositorCfgMd.load(c);
+        }
+
         return true;
     } else {
         return false;
@@ -746,11 +562,20 @@ void MarkdownConfigurationRepresentation::save(const File* file, Configuration* 
         std::ofstream out(c->getConfigFilePath());
         out << md;
         out.close();
-    } else {
-        MF_DEBUG("Saving configuration to File " << file->getName() << endl);
+
+        // repository configuration path is available only if MF in repository mode
+        if(c->getRepositoryConfigFilePath().size()) {
+            MF_DEBUG("Saving repository configuration to " << c->getRepositoryConfigFilePath() << endl);
+            MarkdownRepositoryConfigurationRepresentation repositorCfgMd{};
+            repositorCfgMd.save(*c);
+        }
+    } else if(file) {
+        MF_DEBUG("Saving configuration to FILE " << file->getName() << endl);
         std::ofstream out(file->getName());
         out << md;
         out.close();
+    } else {
+        MF_DEBUG("WARNING: configuration NOT saved - neither configuration object nor file name available" << endl);
     }
 }
 

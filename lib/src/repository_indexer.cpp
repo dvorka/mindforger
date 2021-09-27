@@ -41,8 +41,9 @@ void RepositoryIndexer::clear()
 
     // markdowns (strings were cleared as a part of allFiles strings)
     markdowns.clear();
-    // txt/PDF/...
+    // txt
     texts.clear();
+    // PDFs
     pdfs.clear();
 
     for(const string* s:outlineStencils) {
@@ -75,19 +76,19 @@ void RepositoryIndexer::index(Repository* repository)
            repository->getMode() == Repository::RepositoryMode::REPOSITORY
         ) {
             memoryDirectory += FILE_PATH_SEPARATOR;
-            memoryDirectory += FILE_PATH_MEMORY;
+            memoryDirectory += DIRNAME_MEMORY;
 
             outlineStencilsDirectory.assign(repository->getDir());
             outlineStencilsDirectory += FILE_PATH_SEPARATOR;
-            outlineStencilsDirectory += FILE_PATH_STENCILS;
+            outlineStencilsDirectory += DIRNAME_STENCILS;
             outlineStencilsDirectory += FILE_PATH_SEPARATOR;
-            outlineStencilsDirectory += FILE_PATH_OUTLINES;
+            outlineStencilsDirectory += DIRNAME_OUTLINES;
 
             noteStencilsDirectory.assign(repository->getDir());
             noteStencilsDirectory += FILE_PATH_SEPARATOR;
-            noteStencilsDirectory += FILE_PATH_STENCILS;
+            noteStencilsDirectory += DIRNAME_STENCILS;
             noteStencilsDirectory += FILE_PATH_SEPARATOR;
-            noteStencilsDirectory += FILE_PATH_NOTES;
+            noteStencilsDirectory += DIRNAME_NOTES;
         } else {
             outlineStencilsDirectory.clear();
             noteStencilsDirectory.clear();
@@ -106,8 +107,7 @@ void RepositoryIndexer::updateIndex() {
     updateIndexMemory(memoryDirectory);
 
     if(repository->getType() == Repository::RepositoryType::MINDFORGER
-         &&
-       repository->getMode() == Repository::RepositoryMode::REPOSITORY
+       && repository->getMode() == Repository::RepositoryMode::REPOSITORY
     ) {
         updateIndexStencils(outlineStencilsDirectory, outlineStencils);
         updateIndexStencils(noteStencilsDirectory, noteStencils);
@@ -122,13 +122,11 @@ void RepositoryIndexer::updateIndex() {
 bool RepositoryIndexer::fileHasMarkdownExtension(const std::string& filename)
 {
     // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
-    if(stringEndsWith(filename, FILE_EXTENSION_MD_MD)) {
-        return true;
-    } else if(stringEndsWith(filename, FILE_EXTENSION_MD_MARKDOWN)) {
-        return true;
-    } else if(stringEndsWith(filename, FILE_EXTENSION_MD_MDOWN)) {
-        return true;
-    } else if(stringEndsWith(filename, FILE_EXTENSION_MD_MKDN)) {
+    if(stringEndsWith(filename, FILE_EXTENSION_MD_MD)
+       || stringEndsWith(filename, FILE_EXTENSION_MD_MARKDOWN)
+       || stringEndsWith(filename, FILE_EXTENSION_MD_MDOWN)
+       || stringEndsWith(filename, FILE_EXTENSION_MD_MKDN)
+    ) {
         return true;
     }
 
@@ -138,7 +136,9 @@ bool RepositoryIndexer::fileHasMarkdownExtension(const std::string& filename)
 bool RepositoryIndexer::fileHasPdfExtension(const std::string& filename)
 {
     // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
-    if(stringEndsWith(filename, FILE_EXTENSION_PDF)) {
+    if(stringEndsWith(filename, FILE_EXTENSION_PDF)
+       || stringEndsWith(filename, FILE_EXTENSION_PDF_UPPER)
+    ) {
         return true;
     }
 
@@ -274,7 +274,7 @@ bool RepositoryIndexer::isMindForgerRepository(const string& directory)
     string path{};
     path += directory;
     path += FILE_PATH_SEPARATOR;
-    path += FILE_PATH_MEMORY;
+    path += DIRNAME_MEMORY;
     if(!isDirectoryOrFileExists(path.c_str())) {
         return false;
     }
@@ -334,7 +334,7 @@ std::string RepositoryIndexer::makePathRelative(
     if(repository->getMode() == Repository::RepositoryMode::REPOSITORY) {
         if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
             memoryPath+=FILE_PATH_SEPARATOR;
-            memoryPath+=FILE_PATH_MEMORY;
+            memoryPath+=DIRNAME_MEMORY;
             memoryPath+=FILE_PATH_SEPARATOR;
         }
         if(stringStartsWith(dstAbsolutePath, memoryPath)) {
@@ -394,7 +394,7 @@ std::string RepositoryIndexer::makePathRelative(
                 string memoryPath{repository->getDir()};
                 if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
                     memoryPath+=FILE_PATH_SEPARATOR;
-                    memoryPath+=FILE_PATH_MEMORY;
+                    memoryPath+=DIRNAME_MEMORY;
                     memoryPath+=FILE_PATH_SEPARATOR;
                 }
                 string s{srcAbsoluteFile};

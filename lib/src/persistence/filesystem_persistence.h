@@ -36,6 +36,14 @@ private:
     HtmlOutlineRepresentation& htmlRepresentation;
 
 public:
+
+    static std::string getUniqueDirOrFileName(
+        const std::string& directory,
+        const std::string* text,
+        const std::string& extension
+    );
+
+public:
     FilesystemPersistence(MarkdownOutlineRepresentation& mdRepresentation, HtmlOutlineRepresentation& htmlRepresentation);
     FilesystemPersistence(const FilesystemPersistence&) = delete;
     FilesystemPersistence(const FilesystemPersistence&&) = delete;
@@ -47,9 +55,10 @@ public:
      * @brief Create filename that doesn't clash with existing files.
      */
     virtual std::string createFileName(
-            const std::string& directory,
-            const std::string* text,
-            const std::string& extension);
+        const std::string& directory,
+        const std::string* text,
+        const std::string& extension
+    );
     /**
      * @brief Load stencil content
      * @param stencil   concept of the stencil to be set

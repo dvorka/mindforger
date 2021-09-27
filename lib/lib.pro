@@ -108,6 +108,7 @@ SOURCES += \
     ./src/config/time_scope.cpp \
     ./src/model/link.cpp \
     ./src/config/palette.cpp \
+    src/config/repository_configuration.cpp \
     src/model/organizer.cpp \
     src/representations/markdown/markdown_document.cpp \
     src/representations/html/html_document.cpp \
@@ -130,6 +131,7 @@ SOURCES += \
     src/mind/aspect/tag_scope_aspect.cpp \
     src/mind/aspect/mind_scope_aspect.cpp \
     src/mind/knowledge_graph.cpp \
+    src/representations/markdown/markdown_repository_configuration_representation.cpp \
     src/representations/twiki/twiki_outline_representation.cpp \
     src/mind/associated_notes.cpp \
     src/mind/ai/autolinking_preprocessor.cpp \
@@ -203,9 +205,11 @@ HEADERS += \
     ./src/config/time_scope.h \
     ./src/model/link.h \
     ./src/config/palette.h \
+    src/config/repository_configuration.h \
     src/model/organizer.h \
     src/representations/markdown/markdown_document.h \
     src/representations/html/html_document.h \
+    src/representations/markdown/markdown_repository_configuration_representation.h \
     src/version.h \
     src/mind/ai/ai.h \
     src/mind/ai/nlp/markdown_tokenizer.h \
