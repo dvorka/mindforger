@@ -188,13 +188,18 @@ void Configuration::clear()
 }
 
 bool Configuration::hasRepositoryConfiguration() const {
-    return this->repositoryConfiguration == getDummyRepositoryConfiguration();
+    return this->repositoryConfiguration != getDummyRepositoryConfiguration();
 }
 
-RepositoryConfiguration& Configuration::initRepositoryConfiguration() {
+RepositoryConfiguration& Configuration::initRepositoryConfiguration(
+    Organizer* defaultOrganizer
+) {
     clearRepositoryConfiguration();
-    this-> repositoryConfiguration = new RepositoryConfiguration{};
-    return *repositoryConfiguration;
+    this->repositoryConfiguration = new RepositoryConfiguration{};
+    if(defaultOrganizer) {
+        this->repositoryConfiguration->addOrganizer(defaultOrganizer);
+    }
+    return *this->repositoryConfiguration;
 }
 
 void Configuration::clearRepositoryConfiguration() {
@@ -262,6 +267,9 @@ void Configuration::setActiveRepository(Repository* repository)
                 // TODO limbo class
                 limboPath+=FILE_PATH_SEPARATOR;
                 limboPath+=DIRNAME_LIMBO;
+
+                // repository configuration: initialize + Eisenhower Matrix organizer presents OOTB
+                initRepositoryConfiguration(Organizer::createEisenhowMatrixOrganizer());
             }
         } else {
             throw MindForgerException{"Active repository must be one of repositories known to Configuration!"};

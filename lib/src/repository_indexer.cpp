@@ -293,7 +293,7 @@ Repository* RepositoryIndexer::getRepositoryForPath(const string& p)
             if(isMindForgerRepository(path)) {
                 return new Repository(path);
             } else {
-                Repository* r = new Repository(path, Repository::RepositoryType::MARKDOWN);
+                Repository* r = new Repository{path, Repository::RepositoryType::MARKDOWN};
 
                 string p{path};
                 p += FILE_PATH_SEPARATOR;

@@ -340,7 +340,7 @@ public:
      */
 
     bool hasRepositoryConfiguration() const;
-    RepositoryConfiguration& initRepositoryConfiguration();
+    RepositoryConfiguration& initRepositoryConfiguration(Organizer* defaultOrganizer);
     void clearRepositoryConfiguration();
     std::string getRepositoryConfigFilePath() const;
     /**

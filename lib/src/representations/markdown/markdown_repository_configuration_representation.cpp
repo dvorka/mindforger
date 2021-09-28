@@ -51,7 +51,7 @@ MarkdownRepositoryConfigurationRepresentation::~MarkdownRepositoryConfigurationR
  */
 void MarkdownRepositoryConfigurationRepresentation::repositoryConfiguration(vector<MarkdownAstNodeSection*>* ast, Configuration& c)
 {
-    c.clear();
+    c.getRepositoryConfiguration().clear();
 
     if(ast) {
         size_t off = 0;
@@ -200,13 +200,6 @@ void MarkdownRepositoryConfigurationRepresentation::repositoryConfigurationSecti
         // add (valid) organizer
         o = repositoryConfigurationSectionOrganizerAdd(o, keys, c);
     }
-
-    // ensure presence of Eisenhower Matrix organizer
-    repositoryConfigurationSectionOrganizerAdd(
-         Organizer::createEisenhowMatrixOrganizer(),
-         keys,
-         c
-    );
 }
 
 Organizer* MarkdownRepositoryConfigurationRepresentation::repositoryConfigurationSectionOrganizerAdd(
@@ -294,7 +287,7 @@ string& MarkdownRepositoryConfigurationRepresentation::to(Configuration* c, stri
     s <<
          "# MindForger Repository Configuration" << endl <<
          endl <<
-         "This is MindForger repository configuration file (Markdown hosted DSL)." << endl <<
+         "This is MindForger **repository** configuration file (Markdown hosted DSL)." << endl <<
          "See documentation for configuration options details." << endl <<
          endl <<
 
@@ -312,8 +305,8 @@ string& MarkdownRepositoryConfigurationRepresentation::to(Configuration* c, stri
 
 bool MarkdownRepositoryConfigurationRepresentation::load(Configuration& c)
 {
-    MF_DEBUG("Loading repository configuration from " << c.getConfigFilePath() << endl);
-    string file{c.getConfigFilePath().c_str()};
+    MF_DEBUG("Loading repository configuration from " << c.getRepositoryConfigFilePath() << endl);
+    string file{c.getRepositoryConfigFilePath().c_str()};
     if(isFile(file.c_str())) {
         MarkdownDocument md{&file};
         md.from();
@@ -331,8 +324,8 @@ void MarkdownRepositoryConfigurationRepresentation::save(const File* file, Confi
     to(c,md);
 
     if(c) {
-        MF_DEBUG("Saving repository configuration to file " << c->getConfigFilePath() << endl);
-        std::ofstream out(c->getConfigFilePath());
+        MF_DEBUG("Saving repository configuration to file " << c->getRepositoryConfigFilePath() << endl);
+        std::ofstream out(c->getRepositoryConfigFilePath());
         out << md;
         out.close();
     } else {

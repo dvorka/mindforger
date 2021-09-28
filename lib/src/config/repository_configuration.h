@@ -48,7 +48,6 @@ constexpr const auto FILENAME_M8R_REPOSITORY_CONFIGURATION = "repository-configu
 class RepositoryConfiguration {
 
 private:
-
     // organizers
     std::vector<Organizer*> organizers;
 

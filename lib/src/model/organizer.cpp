@@ -22,6 +22,18 @@ using namespace std;
 
 namespace m8r {
 
+Organizer* Organizer::createEisenhowMatrixOrganizer() {
+    Organizer* eisenhowerMatrixOrganizer = new Organizer("Eisenhower Matrix");
+    eisenhowerMatrixOrganizer->setKey(Organizer::KEY_EISENHOWER_MATRIX);
+
+    eisenhowerMatrixOrganizer->setUpperRightTag("important & urgent");
+    eisenhowerMatrixOrganizer->setLowerRightTag("important");
+    eisenhowerMatrixOrganizer->setUpperLeftTag("urgent");
+    eisenhowerMatrixOrganizer->setLowerLeftTag(".");
+
+    return eisenhowerMatrixOrganizer;
+}
+
 std::string Organizer::createOrganizerKey(
     const set<string>& keys,
     const string& directory,

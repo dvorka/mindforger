@@ -18,6 +18,7 @@
 */
 
 #include "../../../src/representations/markdown/markdown_configuration_representation.h"
+#include "../../../src/config/repository_configuration.h"
 
 #include <gtest/gtest.h>
 #include "../test_gear.h"
@@ -113,7 +114,7 @@ TEST(ConfigurationTestCase, SaveDefaultConfig)
 TEST(ConfigurationTestCase, SaveAndLoad)
 {
     // GIVEN
-    m8r::TestSandbox box{""};
+    m8r::TestSandbox box{"", true};
     string mdFilename{"custom-repository-single-file.md"};
     string mdFilePath{box.addMdFile(mdFilename)};
     cout <<
@@ -122,6 +123,9 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     "  MF cfg :" << box.configPath << endl <<
     "  MD file:" << mdFilePath << endl
     ;
+    string expectedRepositoryConfigurationPath{box.repositoryPath};
+    expectedRepositoryConfigurationPath += FILE_PATH_SEPARATOR;
+    expectedRepositoryConfigurationPath += m8r::FILENAME_M8R_REPOSITORY_CONFIGURATION;
 
     string timeScopeAsString{};
     m8r::MarkdownConfigurationRepresentation configRepresentation{};
@@ -150,18 +154,17 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     c.setSaveReadsMetadata(false);
     c.setUiEditorEnableSyntaxHighlighting(false);
     m8r::Repository* r = new m8r::Repository{
-        box.testHomePath,
-        m8r::Repository::RepositoryType::MARKDOWN,
-        m8r::Repository::RepositoryMode::FILE,
+        box.repositoryPath,
+        m8r::Repository::RepositoryType::MINDFORGER,
+        m8r::Repository::RepositoryMode::REPOSITORY,
         mdFilename
     };
     c.setActiveRepository(c.addRepository(r));
 
-    m8r::RepositoryConfiguration& rc{c.initRepositoryConfiguration()};
-    string oName{"Repository configuration test organizer"};
+    // ADD custom organizer (will be deleted by repository configuration destructor)
+    string oName{"Custom repository configuration test organizer"};
     m8r::Organizer* o = new m8r::Organizer{oName};
-    // organizer will be deleted by destructor
-    rc.addOrganizer(o);
+    c.getRepositoryConfiguration().addOrganizer(o);
 
     configRepresentation.save(c);
 
@@ -171,18 +174,22 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     EXPECT_NE(std::string::npos, asString.get()->find("Time scope: 1y2m33d4h55m"));
     EXPECT_NE(std::string::npos, asString.get()->find("Editor syntax highlighting: no"));
     EXPECT_NE(std::string::npos, asString.get()->find("Save reads metadata: no"));
-    EXPECT_NE(std::string::npos, asString.get()->find(string("Active repository: ") + mdFilePath));
-    EXPECT_NE(std::string::npos, asString.get()->find(string("Repository: ") + mdFilePath));
+    EXPECT_NE(std::string::npos, asString.get()->find(string("Active repository: ") + box.repositoryPath));
+    EXPECT_NE(std::string::npos, asString.get()->find(string("Repository: ") + box.repositoryPath));
     // r deleted by configuration destructor
-    EXPECT_FALSE(c.hasRepositoryConfiguration());
-    EXPECT_EQ("", c.getRepositoryConfigFilePath());
-    EXPECT_EQ(0, c.getRepositoryConfiguration().getOrganizers().size());
+    EXPECT_TRUE(c.hasRepositoryConfiguration());
+    EXPECT_EQ(expectedRepositoryConfigurationPath, c.getRepositoryConfigFilePath());
+    EXPECT_EQ(2, c.getRepositoryConfiguration().getOrganizers().size());
 
     /*
      * LOAD
      */
 
     c.setConfigFilePath(box.configPath);
+    cout << "Test: loading configuration from:" << endl <<
+            "  '" << c.getConfigFilePath() << "' (config)" << endl <<
+            "  '" << box.configPath << "' (expected)" << endl
+    ;
 
     bool loaded = configRepresentation.load(c);
 
@@ -195,19 +202,19 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     EXPECT_FALSE(c.isUiEditorEnableSyntaxHighlighting());
 
     EXPECT_GE(c.getRepositories().size(), 1);
-    EXPECT_NE(c.getRepositories().end(), c.getRepositories().find(mdFilePath));
-    c.getRepositories().find(mdFilePath)->second->print();
-    EXPECT_EQ(mdFilePath, c.getRepositories().find(mdFilePath)->second->getPath());
-    EXPECT_EQ(box.repositoryPath, c.getRepositories().find(mdFilePath)->second->getDir());
-    EXPECT_EQ(mdFilename, c.getRepositories().find(mdFilePath)->second->getFile());
-    EXPECT_EQ(m8r::Repository::RepositoryMode::FILE, c.getRepositories().find(mdFilePath)->second->getMode());
+    EXPECT_NE(c.getRepositories().end(), c.getRepositories().find(box.repositoryPath));
+    c.getRepositories().find(box.repositoryPath)->second->print();
+    EXPECT_EQ(box.repositoryPath, c.getRepositories().find(box.repositoryPath)->second->getPath());
+    EXPECT_EQ(box.repositoryPath, c.getRepositories().find(box.repositoryPath)->second->getDir());
+    EXPECT_EQ("", c.getRepositories().find(box.repositoryPath)->second->getFile());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::REPOSITORY, c.getRepositories().find(box.repositoryPath)->second->getMode());
 
     EXPECT_NE(nullptr, c.getActiveRepository());
     c.getActiveRepository()->print();
-    EXPECT_EQ(mdFilePath, c.getActiveRepository()->getPath());
+    EXPECT_EQ(box.repositoryPath, c.getActiveRepository()->getPath());
     EXPECT_EQ(box.repositoryPath, c.getActiveRepository()->getDir());
-    EXPECT_EQ(mdFilename, c.getActiveRepository()->getFile());
-    EXPECT_EQ(m8r::Repository::RepositoryMode::FILE, c.getActiveRepository()->getMode());
+    EXPECT_EQ("", c.getActiveRepository()->getFile());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::REPOSITORY, c.getActiveRepository()->getMode());
     // r deleted by configuration destructor
 
     // configuration cleanup

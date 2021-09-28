@@ -58,17 +58,7 @@ public:
         const std::string& separator
     );
 
-    static Organizer* createEisenhowMatrixOrganizer() {
-        Organizer* emO = new Organizer("Eisenhower Matrix");
-        emO->setKey(Organizer::KEY_EISENHOWER_MATRIX);
-
-        emO->setUpperRightTag("important & urgent");
-        emO->setLowerRightTag("important");
-        emO->setUpperLeftTag("urgent");
-        emO->setLowerLeftTag(".");
-
-        return emO;
-    };
+    static Organizer* createEisenhowMatrixOrganizer();
 
     static constexpr const auto ESC_TAG_DELIMITER = ",,";
 

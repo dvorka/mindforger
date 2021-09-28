@@ -51,32 +51,30 @@ TEST(OrganizerTestCase, SerializeAndSplitTags)
 
 TEST(OrganizerTestCase, ParseSaveAndLoad)
 {
-    // FAIL test - must be rewritten to repository specific configuration
-    throw "TO BE REWRITTEN";
-
     // GIVEN
     string const outlineScope{"/home/mindforger/mf/memory/outline.md"};
-    string cfgFile{m8r::platformSpecificPath("/tmp/.mindforger-organizer.md")};
-    string repositoryDir{ m8r::platformSpecificPath("/tmp")};
-    string repositoryFilename{"custom-repository-organizer-single-file.md"};
-    string repositoryPath{repositoryDir};
-    string repositoryCfgFile{m8r::platformSpecificPath("/tmp")};
-    repositoryPath += FILE_PATH_SEPARATOR;
-    repositoryPath += repositoryFilename;
-    std::ofstream out(repositoryPath);
-    out << "# Just a Test" << endl;
-    out.close();
+    // organizers available in MARKDOWN REPOSITORY mode only
+    m8r::TestSandbox box{"", true};
+    string mdFilename{"custom-repository-organizer-single-file.md"};
+    string mdFilePath{box.addMdFile(mdFilename)};
+    cout <<
+    "Test directories:" << endl <<
+    "  home   :" << box.testHomePath << endl <<
+    "  MF cfg :" << box.configPath << endl <<
+    "  MD file:" << mdFilePath << endl
+    ;
+
     string timeScopeAsString{};
     m8r::MarkdownConfigurationRepresentation configRepresentation{};
     m8r::Configuration& c = m8r::Configuration::getInstance();
 
     // WHEN: save configuration file WITH organizers
-    c.setConfigFilePath(cfgFile);
+    c.setConfigFilePath(box.configPath);
     m8r::Repository* r = new m8r::Repository{
-        repositoryDir,
-        m8r::Repository::RepositoryType::MARKDOWN,
-        m8r::Repository::RepositoryMode::FILE,
-       repositoryFilename
+        box.repositoryPath,
+        m8r::Repository::RepositoryType::MINDFORGER,
+        m8r::Repository::RepositoryMode::REPOSITORY,
+        mdFilename
     };
     c.setActiveRepository(c.addRepository(r));
     // organizers
@@ -102,7 +100,9 @@ TEST(OrganizerTestCase, ParseSaveAndLoad)
     configRepresentation.save(c);
 
     // THEN: assert serialized configuration
-    string* asString = m8r::fileToString(c.getConfigFilePath());
+    cout << "Test step: loading repository configuration from: " << c.getRepositoryConfigFilePath() << endl;
+    ASSERT_TRUE(c.getRepositoryConfigFilePath().size());
+    string* asString = m8r::fileToString(c.getRepositoryConfigFilePath());
     EXPECT_NE(std::string::npos, asString->find("Upper right tag: ur1"));
     EXPECT_NE(std::string::npos, asString->find("Lower right tag: lr1"));
     EXPECT_NE(std::string::npos, asString->find("Lower left tag: ll1"));
@@ -113,7 +113,11 @@ TEST(OrganizerTestCase, ParseSaveAndLoad)
     delete asString;
 
     // GIVEN load previously saved configuration
-    c.setConfigFilePath(cfgFile);
+    c.setConfigFilePath(box.configPath);
+    cout << "Test step: loading configuration from:" << endl <<
+            "  '" << c.getConfigFilePath() << "' (config)" << endl <<
+            "  '" << box.configPath << "' (expected)" << endl
+    ;
 
     // WHEN: load previously saved configuration
     bool loaded = configRepresentation.load(c);
@@ -124,17 +128,17 @@ TEST(OrganizerTestCase, ParseSaveAndLoad)
     cout << "Organizer[0]: " << c.getRepositoryConfiguration().getOrganizers()[0]->getName() << endl;
     cout << "Organizer[1]: " << c.getRepositoryConfiguration().getOrganizers()[1]->getName() << endl;
     cout << "Organizer[2]: " << c.getRepositoryConfiguration().getOrganizers()[2]->getName() << endl;
-    EXPECT_EQ("ur1", *c.getRepositoryConfiguration().getOrganizers()[0]->getUpperRightTags().begin());
-    EXPECT_EQ("lr1", *c.getRepositoryConfiguration().getOrganizers()[0]->getLowerRightTags().begin());
-    EXPECT_EQ("ll1", *c.getRepositoryConfiguration().getOrganizers()[0]->getLowerLeftTags().begin());
-    EXPECT_EQ("ul1", *c.getRepositoryConfiguration().getOrganizers()[0]->getUpperLeftTags().begin());
-    EXPECT_EQ(m8r::Organizer::FilterBy::NOTES, c.getRepositoryConfiguration().getOrganizers()[0]->filterBy);
-    EXPECT_EQ(m8r::Organizer::SortBy::IMPORTANCE, c.getRepositoryConfiguration().getOrganizers()[0]->sortBy);
-    EXPECT_EQ("", c.getRepositoryConfiguration().getOrganizers()[0]->scopeOutlineId);
+    EXPECT_EQ("ur1", *c.getRepositoryConfiguration().getOrganizers()[1]->getUpperRightTags().begin());
+    EXPECT_EQ("lr1", *c.getRepositoryConfiguration().getOrganizers()[1]->getLowerRightTags().begin());
+    EXPECT_EQ("ll1", *c.getRepositoryConfiguration().getOrganizers()[1]->getLowerLeftTags().begin());
+    EXPECT_EQ("ul1", *c.getRepositoryConfiguration().getOrganizers()[1]->getUpperLeftTags().begin());
+    EXPECT_EQ(m8r::Organizer::FilterBy::NOTES, c.getRepositoryConfiguration().getOrganizers()[1]->filterBy);
+    EXPECT_EQ(m8r::Organizer::SortBy::IMPORTANCE, c.getRepositoryConfiguration().getOrganizers()[1]->sortBy);
+    EXPECT_EQ("", c.getRepositoryConfiguration().getOrganizers()[1]->scopeOutlineId);
 
-    EXPECT_EQ(m8r::Organizer::FilterBy::OUTLINES_NOTES, c.getRepositoryConfiguration().getOrganizers()[1]->filterBy);
-    EXPECT_EQ(m8r::Organizer::SortBy::URGENCY, c.getRepositoryConfiguration().getOrganizers()[1]->sortBy);
-    EXPECT_EQ(outlineScope, c.getRepositoryConfiguration().getOrganizers()[1]->scopeOutlineId);
+    EXPECT_EQ(m8r::Organizer::FilterBy::OUTLINES_NOTES, c.getRepositoryConfiguration().getOrganizers()[2]->filterBy);
+    EXPECT_EQ(m8r::Organizer::SortBy::URGENCY, c.getRepositoryConfiguration().getOrganizers()[2]->sortBy);
+    EXPECT_EQ(outlineScope, c.getRepositoryConfiguration().getOrganizers()[2]->scopeOutlineId);
 }
 
 TEST(OrganizerTestCase, NoMindForgerRepositoryNoOrganizer)
@@ -220,6 +224,11 @@ TEST(OrganizerTestCase, DefaultOrganizerParseSaveAndLoad)
     configRepresentation.save(c);
 
     // THEN: assert serialized configuration
+    cout <<
+    "Configuration saved:" << endl <<
+    "  Config           : " << c.getConfigFilePath() << endl <<
+    "  Repository config: " << c.getRepositoryConfigFilePath() << endl
+    ;
     string* asString = m8r::fileToString(c.getConfigFilePath());
     EXPECT_EQ(std::string::npos, asString->find("Upper right tag: ur"));
     EXPECT_EQ(std::string::npos, asString->find("Lower right tag: lr"));
