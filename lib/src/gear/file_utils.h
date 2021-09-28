@@ -21,7 +21,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include "../config/config.h"
+#include "../definitions.h"
 
 #include <zlib.h>
 #if defined(MSDOS) || defined(OS2) || defined(_WIN32) || defined(__CYGWIN__)

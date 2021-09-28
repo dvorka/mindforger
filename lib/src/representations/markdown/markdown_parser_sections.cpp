@@ -18,7 +18,7 @@
  */
 
 #include "markdown_parser_sections.h"
-#include "../../config/config.h"
+#include "../../definitions.h"
 
 const char *DEFAULT_NAME= "A thing";
 const char *DEFAULT_MARKDOWN_NAME= "Outline";

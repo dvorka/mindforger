@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <string>
 
-#include "../config/config.h"
+#include "../definitions.h"
 #include "outline.h"
 #include "note_type.h"
 #include "tag.h"

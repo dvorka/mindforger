@@ -22,7 +22,7 @@
 #include <string>
 #include <iostream>
 
-#include "../config/config.h"
+#include "../definitions.h"
 #include "../config/configuration.h"
 #include "../gear/file_utils.h"
 #include "../exceptions.h"

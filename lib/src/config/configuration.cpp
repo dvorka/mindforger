@@ -18,7 +18,6 @@
  */
 
 #include "configuration.h"
-#include "config.h"
 
 #ifdef _WIN32
 #include <ShlObj.h>

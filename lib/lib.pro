@@ -196,7 +196,7 @@ HEADERS += \
     ./src/config/configuration.h \
     ./src/install/installer.h \
     ./src/config/repository.h \
-    ./src/config/config.h \
+    ./src/definitions.h \
     ./src/mind/ontology/thing_class_rel_triple.h \
     ./src/mind/ontology/taxonomy.h \
     ./src/mind/aspect/aspect.h \
@@ -259,7 +259,7 @@ HEADERS += \
     src/mind/ai/autolinking/naive_autolinking_preprocessor.h \
     src/representations/markdown/markdown_transcoder.h \
     src/representations/representation_type.h \
-    src/config/config.h \
+    src/definitions.h \
     src/representations/markdown/cmark_gfm_markdown_transcoder.h \
     src/mind/ai/autolinking/autolinking_mind.h \
     src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h \

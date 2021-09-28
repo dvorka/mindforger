@@ -1,5 +1,5 @@
 /*
- configuration.h     M8r config
+ definitions.h     MindForger type, include, ... definitions
 
  Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 

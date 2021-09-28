@@ -18,7 +18,6 @@
  */
 
 #include "repository_configuration.h"
-#include "config.h"
 
 namespace m8r {
 

@@ -29,7 +29,7 @@
 #include <locale>
 #include <vector>
 
-#include "../config/config.h"
+#include "../definitions.h"
 #include "lang_utils.h"
 
 namespace m8r {

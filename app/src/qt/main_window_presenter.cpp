@@ -1089,7 +1089,7 @@ void MainWindowPresenter::doActionViewDashboard()
 void MainWindowPresenter::doActionViewOrganizers()
 {
     if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-        orloj->showFacetOrganizerList(config.getOrganizers());
+        orloj->showFacetOrganizerList(config.getRepositoryConfiguration().getOrganizers());
     }
 }
 
@@ -2561,7 +2561,7 @@ void MainWindowPresenter::handleCreateOrganizer()
 
     // add organizer & save configuration
     if(!newOrganizerDialog->getOrganizerToEdit()) {
-        config.addOrganizer(o);
+        config.getRepositoryConfiguration().addOrganizer(o);
     }
     getConfigRepresentation()->save(config);
 
@@ -2569,7 +2569,7 @@ void MainWindowPresenter::handleCreateOrganizer()
 
     // refresh organizer table view
     if(!newOrganizerDialog->getOrganizerToEdit()) {
-        orloj->showFacetOrganizerList(config.getOrganizers());
+        orloj->showFacetOrganizerList(config.getRepositoryConfiguration().getOrganizers());
     } else {
         orloj->showFacetOrganizer(
             o,
@@ -2606,7 +2606,6 @@ void MainWindowPresenter::doActionOrganizerEdit()
 void MainWindowPresenter::doActionOrganizerClone()
 {
     // no need to check view - this action is available only when organizer is opened
-    MF_DEBUG("CLONE organizer");
     Organizer* o = orloj->getOrganizer()->getOrganizer();
 
     // Eisenhower matrix organizer cannot be cloned
@@ -2622,20 +2621,19 @@ void MainWindowPresenter::doActionOrganizerClone()
     Organizer* oClone = new Organizer{*o};
     o->setName(o->getName()+" Clone");
 
-    config.addOrganizer(oClone);
+    config.getRepositoryConfiguration().addOrganizer(oClone);
     getConfigRepresentation()->save(config);
 }
 
 void MainWindowPresenter::doActionOrganizerForget()
 {
-    MF_DEBUG("REMOVE organizer");
     // no need to check view - this action is available only when organizer is opened
     Organizer* o = orloj->getOrganizer()->getOrganizer();
 
     if(o->getKey() != Organizer::KEY_EISENHOWER_MATRIX) {
-        config.removeOrganizer(o);
+        config.getRepositoryConfiguration().removeOrganizer(o);
         getConfigRepresentation()->save(config);
-        orloj->showFacetOrganizerList(config.getOrganizers());
+        orloj->showFacetOrganizerList(config.getRepositoryConfiguration().getOrganizers());
     } else {
         QMessageBox::critical(
             &view,
@@ -2647,42 +2645,58 @@ void MainWindowPresenter::doActionOrganizerForget()
 
 void MainWindowPresenter::doActionHelpDocumentation()
 {
-    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md"});
+    QDesktopServices::openUrl(
+        QUrl{"https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpWeb()
 {
-    QDesktopServices::openUrl(QUrl{"http://www.mindforger.com"});
+    QDesktopServices::openUrl(
+        QUrl{"http://www.mindforger.com"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpMarkdown()
 {
-    QDesktopServices::openUrl(QUrl{"https://guides.github.com/features/mastering-markdown/"});
+    QDesktopServices::openUrl(
+        QUrl{"https://guides.github.com/features/mastering-markdown/"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpDiagrams()
 {
-    QDesktopServices::openUrl(QUrl{"https://mermaid-js.github.io/mermaid/#/"});
+    QDesktopServices::openUrl(
+        QUrl{"https://mermaid-js.github.io/mermaid/#/"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpMathLivePreview()
 {
-    QDesktopServices::openUrl(QUrl{"https://www.mathjax.org/#demo"});
+    QDesktopServices::openUrl(
+        QUrl{"https://www.mathjax.org/#demo"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpMathQuickReference()
 {
-    QDesktopServices::openUrl(QUrl{"https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference"});
+    QDesktopServices::openUrl(
+        QUrl{"https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpReportBug()
 {
-    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger/issues"});
+    QDesktopServices::openUrl(
+        QUrl{"https://github.com/dvorka/mindforger/issues"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpCheckForUpdates()
 {
-    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger/releases"});
+    QDesktopServices::openUrl(
+        QUrl{"https://github.com/dvorka/mindforger/releases"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpAboutMindForger()

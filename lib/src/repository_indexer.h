@@ -19,7 +19,7 @@
 #ifndef M8R_REPOSITORY_INDEXER_H_
 #define M8R_REPOSITORY_INDEXER_H_
 
-#include "config/config.h"
+#include "definitions.h"
 #include <sys/types.h>
 #ifndef _WIN32
     #include <unistd.h>
