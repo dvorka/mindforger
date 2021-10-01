@@ -81,7 +81,7 @@ bool FilesystemInformationSource::indexToMemory(Repository& repository)
         outlinePathInMemory.assign(memoryInformationSourceIndexPath);
         outlinePathInMemory += FILE_PATH_SEPARATOR;
         outlinePathInMemory += relativeDocLibPath;
-        outlinePathInMemory += FILE_EXTENSION_MD_MD;
+        outlinePathInMemory += File::EXTENSION_MD_MD;
         MF_DEBUG("      " << outlinePathInMemory << endl);
 
         pathToDirectoryAndFile(outlinePathInMemory, outlineDir, outlineFilename);
@@ -126,7 +126,7 @@ void FilesystemInformationSource::indexDirectoryToMemory(
                     ppath->append(FILE_PATH_SEPARATOR);
                     ppath->append(entry->d_name);
 
-                    if(RepositoryIndexer::fileHasPdfExtension(*ppath)) {
+                    if(File::fileHasPdfExtension(*ppath)) {
                         pdfs.insert(ppath);
                     }
                 }

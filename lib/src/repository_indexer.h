@@ -67,19 +67,6 @@ public:
             const std::string& dstAbsolutePath,
             const bool dstIsFile=true);
 
-    /**
-     * @brief Does file has one of supported Markdown extensions?
-     */
-    static bool fileHasMarkdownExtension(const std::string& filename);
-    // PDF extension >> TODO make it MIME
-    static bool fileHasPdfExtension(const std::string& filename);
-    // text extension >> TODO make it MIME
-    static bool fileHasTextExtension(const std::string& filename);
-    // TODO instead of hard-coded extensions use MIME types to support/work
-    //      support and work with (new) extensions dynamically
-    // TODO extensions as content type parsers could be registered dynamically
-    //      just by name specification
-
 private:
     Repository* repository;
 

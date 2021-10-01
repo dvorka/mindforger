@@ -74,6 +74,41 @@ namespace m8r {
 
 struct File
 {
+    static const std::string EXTENSION_HTML;
+    static const std::string EXTENSION_CSV;
+
+    static const std::string EXTENSION_MD_MD;
+    static const std::string EXTENSION_MD_MARKDOWN;
+    static const std::string EXTENSION_MD_MDOWN;
+    static const std::string EXTENSION_MD_MKDN;
+
+    static const std::string EXTENSION_PDF;
+    static const std::string EXTENSION_PDF_UPPER;
+
+    static const std::string EXTENSION_TXT;
+
+    /**
+     * @brief Does file has one of supported Markdown extensions?
+     */
+    static bool fileHasMarkdownExtension(const std::string& filename);
+    // TODO: PDF extension >> make it MIME
+
+    /**
+     * @brief Does file has one of supported PDF extensions?
+     */
+    static bool fileHasPdfExtension(const std::string& filename);
+    // TODO: text extension >> make it MIME
+
+    /**
+     * @brief Does file has one of supported text file extensions?
+     */
+    static bool fileHasTextExtension(const std::string& filename);
+    // TODO instead of hard-coded extensions use MIME types to support/work
+    //      support and work with (new) extensions dynamically
+    // TODO extensions as content type parsers could be registered dynamically
+    //      just by name specification
+
+public:
     const std::string name;
 
     File(const std::string& name)

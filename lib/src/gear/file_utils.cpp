@@ -22,6 +22,59 @@ using namespace std;
 
 namespace m8r {
 
+const std::string File::EXTENSION_HTML = ".html";
+const std::string File::EXTENSION_CSV= ".csv";
+
+const std::string File::EXTENSION_MD_MD = ".md";
+const std::string File::EXTENSION_MD_MARKDOWN = ".markdown";
+const std::string File::EXTENSION_MD_MDOWN = ".mdown";
+const std::string File::EXTENSION_MD_MKDN = ".mkdn";
+
+const std::string File::EXTENSION_PDF = ".pdf";
+const std::string File::EXTENSION_PDF_UPPER = ".PDF";
+
+const std::string File::EXTENSION_TXT = ".txt";
+
+bool File::fileHasMarkdownExtension(const std::string& filename)
+{
+    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
+    if(stringEndsWith(filename, File::EXTENSION_MD_MD)
+       || stringEndsWith(filename, File::EXTENSION_MD_MARKDOWN)
+       || stringEndsWith(filename, File::EXTENSION_MD_MDOWN)
+       || stringEndsWith(filename, File::EXTENSION_MD_MKDN)
+    ) {
+        return true;
+    }
+
+    return false;
+}
+
+bool File::fileHasPdfExtension(const std::string& filename)
+{
+    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
+    if(stringEndsWith(filename, File::EXTENSION_PDF)
+       || stringEndsWith(filename, File::EXTENSION_PDF_UPPER)
+    ) {
+        return true;
+    }
+
+    return false;
+}
+
+bool File::fileHasTextExtension(const std::string& filename)
+{
+    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
+    if(stringEndsWith(filename, File::EXTENSION_TXT)) {
+        return true;
+    }
+
+    return false;
+}
+
+/*
+ * Utility functions
+ */
+
 void pathToDirectoryAndFile(const std::string& path, std::string& directory, std::string& file)
 {
     if(!path.empty()) {

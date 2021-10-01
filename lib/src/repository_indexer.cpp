@@ -22,42 +22,6 @@ using namespace std;
 
 namespace m8r {
 
-bool RepositoryIndexer::fileHasMarkdownExtension(const std::string& filename)
-{
-    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
-    if(stringEndsWith(filename, FILE_EXTENSION_MD_MD)
-       || stringEndsWith(filename, FILE_EXTENSION_MD_MARKDOWN)
-       || stringEndsWith(filename, FILE_EXTENSION_MD_MDOWN)
-       || stringEndsWith(filename, FILE_EXTENSION_MD_MKDN)
-    ) {
-        return true;
-    }
-
-    return false;
-}
-
-bool RepositoryIndexer::fileHasPdfExtension(const std::string& filename)
-{
-    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
-    if(stringEndsWith(filename, FILE_EXTENSION_PDF)
-       || stringEndsWith(filename, FILE_EXTENSION_PDF_UPPER)
-    ) {
-        return true;
-    }
-
-    return false;
-}
-
-bool RepositoryIndexer::fileHasTextExtension(const std::string& filename)
-{
-    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
-    if(stringEndsWith(filename, FILE_EXTENSION_TXT)) {
-        return true;
-    }
-
-    return false;
-}
-
 RepositoryIndexer::RepositoryIndexer()
     : repository(nullptr)
 {}
@@ -183,11 +147,11 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
                         ppath->append(entry->d_name);
 
                         allFiles.insert(ppath);
-                        if(fileHasMarkdownExtension(*ppath)) {
+                        if(File::fileHasMarkdownExtension(*ppath)) {
                             markdowns.insert(ppath);
-                        } else if(fileHasPdfExtension(*ppath)) {
+                        } else if(File::fileHasPdfExtension(*ppath)) {
                             pdfs.insert(ppath);
-                        } else if(fileHasTextExtension(*ppath)) {
+                        } else if(File::fileHasTextExtension(*ppath)) {
                             texts.insert(ppath);
                         }
                     }
@@ -202,7 +166,7 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
             path->append(FILE_PATH_SEPARATOR);
             path->append(repository->getFile());
             allFiles.insert(path);
-            if(fileHasMarkdownExtension(*path)) {
+            if(File::fileHasMarkdownExtension(*path)) {
                 markdowns.insert(path);
             }
         }
@@ -223,7 +187,7 @@ void RepositoryIndexer::updateIndexStencils(const string& directory, set<const s
                     path = new string{directory};
                     path->append(FILE_PATH_SEPARATOR);
                     path->append(entry->d_name);
-                    if(fileHasMarkdownExtension(*path)) {
+                    if(File::fileHasMarkdownExtension(*path)) {
                         stencils.insert(path);
                     }
                 }

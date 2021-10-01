@@ -57,19 +57,6 @@ constexpr const auto DIRNAME_STENCILS = "stencils";
 constexpr const auto DIRNAME_OUTLINES = "notebooks";
 constexpr const auto DIRNAME_NOTES = "notes";
 
-constexpr const auto FILE_EXTENSION_HTML = ".html";
-constexpr const auto FILE_EXTENSION_CSV= ".csv";
-
-constexpr const auto FILE_EXTENSION_MD_MD = ".md";
-constexpr const auto FILE_EXTENSION_MD_MARKDOWN = ".markdown";
-constexpr const auto FILE_EXTENSION_MD_MDOWN = ".mdown";
-constexpr const auto FILE_EXTENSION_MD_MKDN = ".mkdn";
-
-constexpr const auto FILE_EXTENSION_PDF = ".pdf";
-constexpr const auto FILE_EXTENSION_PDF_UPPER = ".PDF";
-
-constexpr const auto FILE_EXTENSION_TXT = ".txt";
-
 constexpr const auto UI_THEME_DARK = "dark";
 constexpr const auto UI_THEME_LIGHT = "light";
 constexpr const auto UI_THEME_BLACK = "black";
