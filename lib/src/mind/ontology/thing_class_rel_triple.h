@@ -96,7 +96,7 @@ public:
     virtual const std::string& getKey() const { return key; }
 
     const std::string& getName() const { return name; }
-    virtual void setName(const std::string& name) { this->name = name; autolinkName();}
+    virtual void setName(const std::string& name) { this->name = name; autolinkName(); }
     const std::string& getAutolinkingName() const { return autolinkingName; }
     const std::string& getAutolinkingAbbr() const { return autolinkingAbbr; }
     const std::string& getAutolinkingAlias() const { return autolinkingAlias; }

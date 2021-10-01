@@ -483,4 +483,8 @@ void Note::makeDirty()
     if(outline) outline->makeDirty();
 }
 
+bool Note::isReadOnly() const {
+    return outline->isReadOnly();
+}
+
 } // m8r namespace

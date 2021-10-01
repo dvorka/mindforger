@@ -178,6 +178,8 @@ public:
 
     void makeDirty();
 
+    bool isReadOnly() const;
+
     int getAiAaMatrixIndex() const { return aiAaMatrixIndex; }
     void setAiAaMatrixIndex(int i) { aiAaMatrixIndex = i; }
 };

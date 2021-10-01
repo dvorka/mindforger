@@ -109,6 +109,9 @@ SOURCES += \
     ./src/model/link.cpp \
     ./src/config/palette.cpp \
     src/config/repository_configuration.cpp \
+    src/mind/dikw/dikw_pyramid.cpp \
+    src/mind/dikw/filesystem_information.cpp \
+    src/mind/dikw/information.cpp \
     src/model/organizer.cpp \
     src/representations/markdown/markdown_document.cpp \
     src/representations/html/html_document.cpp \
@@ -131,6 +134,7 @@ SOURCES += \
     src/mind/aspect/tag_scope_aspect.cpp \
     src/mind/aspect/mind_scope_aspect.cpp \
     src/mind/knowledge_graph.cpp \
+    src/representations/markdown/markdown_document_representation.cpp \
     src/representations/markdown/markdown_repository_configuration_representation.cpp \
     src/representations/twiki/twiki_outline_representation.cpp \
     src/mind/associated_notes.cpp \
@@ -206,9 +210,13 @@ HEADERS += \
     ./src/model/link.h \
     ./src/config/palette.h \
     src/config/repository_configuration.h \
+    src/mind/dikw/dikw_pyramid.h \
+    src/mind/dikw/filesystem_information.h \
+    src/mind/dikw/information.h \
     src/model/organizer.h \
     src/representations/markdown/markdown_document.h \
     src/representations/html/html_document.h \
+    src/representations/markdown/markdown_document_representation.h \
     src/representations/markdown/markdown_repository_configuration_representation.h \
     src/version.h \
     src/mind/ai/ai.h \

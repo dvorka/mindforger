@@ -21,7 +21,7 @@
 # - to run all tests: uncomment OPTION_RUN_ALL_TESTS
 # - to run single test: comment OPTION_RUN_ALL_TESTS and uncomment OPTION_TEST with test ID
 
-export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
+#export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
 #export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
 #export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
@@ -114,7 +114,8 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="OrganizerTestCase.SerializeAndSplitTags"
 #export OPTION_TEST="OrganizerTestCase.NoMindForgerRepositoryNoOrganizer"
 #export OPTION_TEST="OrganizerTestCase.DefaultOrganizerParseSaveAndLoad"
-export OPTION_TEST="OrganizerTestCase.ParseSaveAndLoad"
+#export OPTION_TEST="OrganizerTestCase.ParseSaveAndLoad"
+export OPTION_TEST="FilesystemInformationTestCase.IndexPdfs"
 
 # environment - to be specified in .bashrc or elsewhere:
 #   export M8R_CPU_CORES=7

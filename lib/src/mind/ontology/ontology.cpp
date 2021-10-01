@@ -83,6 +83,7 @@ Ontology::Ontology()
     this->defaultOutlineType = new OutlineType{OutlineType::KeyOutline(), &outlineTypeTaxonomy, Color::MF_GRAY()};;
     outlineTypeTaxonomy.add(OutlineType::KeyOutline(), defaultOutlineType);
     outlineTypeTaxonomy.add(OutlineType::KeyGrow(), new OutlineType(OutlineType::KeyGrow(), &outlineTypeTaxonomy, Color::MF_GRAY()));
+    outlineTypeTaxonomy.add(OutlineType::KeyPdf(), new OutlineType(OutlineType::KeyPdf(), &outlineTypeTaxonomy, Color::MF_GRAY()));
 
     // taxonomy: note types
     noteTypeTaxonomy.setName(KEY_TAXONOMY_NOTE_TYPES);

@@ -122,6 +122,12 @@ private:
      */
     bool dirty;
 
+
+    /**
+     * @brief Outline is READ ONLY i.e. it cannot be modified.
+     */
+    bool readOnly;
+
     /**
      * @brief Time scope to use for filtering (selective forgetting) of O's Ns.
      */
@@ -304,6 +310,9 @@ public:
     bool isDirty() const { return dirty; }
     void makeDirty() { dirty = true; }
     void clearDirty() { dirty = false; }
+
+    bool isReadOnly() const { return readOnly; }
+    void setReadOnly(bool readOnly) { this->readOnly = readOnly; }
 
     /*
      * Links

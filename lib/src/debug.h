@@ -19,9 +19,9 @@
 #ifndef M8R_DEBUG_H_
 #define M8R_DEBUG_H_
 
-// DO_MF_DEBUG to be enabled in qmake (either .pro or CLI):
+// DO_MF_DEBUG to be enabled in qmake (either .pro or CLI or QtCreator build command):
 //   - configuration: DEFINES = DO_MF_DEBUG
-//   - command line: CONFIG += mfunits
+//   - command line: CONFIG+=mfunits
 
 #ifdef DO_MF_DEBUG
     #include <chrono>

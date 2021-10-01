@@ -38,6 +38,10 @@ public:
         static const std::string KEY_GROW = std::string{"Goal"};
         return KEY_GROW;
     }
+    static const std::string& KeyPdf() {
+        static const std::string KEY_PDF = std::string{"PDF"};
+        return KEY_PDF;
+    }
 
     OutlineType() = delete;
     explicit OutlineType(const std::string& name, Clazz* isA, const Color& color);

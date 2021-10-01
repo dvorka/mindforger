@@ -22,8 +22,6 @@
 #include <string>
 #include <cstdio>
 
-#include "../../debug.h"
-
 #include "markdown_document.h"
 #include "markdown_ast_node.h"
 #include "../../model/outline.h"
@@ -53,12 +51,10 @@ namespace m8r {
 class MarkdownOutlineRepresentation : public OutlineRepresentation
 {
 public:
-
     static constexpr int AVG_NOTE_SIZE = 500;
     static constexpr int AVG_OUTLINE_SIZE = 3*AVG_NOTE_SIZE;
 
 private:
-
     // tags, outline types and note types are dynamic (not fixed)
     Ontology& ontology;
 

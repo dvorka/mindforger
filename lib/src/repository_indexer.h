@@ -20,10 +20,11 @@
 #define M8R_REPOSITORY_INDEXER_H_
 
 #include "definitions.h"
+
 #include <sys/types.h>
 #ifndef _WIN32
     #include <unistd.h>
-#endif /* _WIN32 */
+#endif
 
 #include <cstdio>
 #include <cstring>
@@ -69,16 +70,15 @@ public:
     /**
      * @brief Does file has one of supported Markdown extensions?
      */
-
+    static bool fileHasMarkdownExtension(const std::string& filename);
+    // PDF extension >> TODO make it MIME
+    static bool fileHasPdfExtension(const std::string& filename);
+    // text extension >> TODO make it MIME
+    static bool fileHasTextExtension(const std::string& filename);
     // TODO instead of hard-coded extensions use MIME types to support/work
     //      support and work with (new) extensions dynamically
     // TODO extensions as content type parsers could be registered dynamically
     //      just by name specification
-    static bool fileHasMarkdownExtension(const std::string& filename);
-    // TODO PDF extension >> make it MIME
-    static bool fileHasPdfExtension(const std::string& filename);
-    // text extension >> make it MIME
-    static bool fileHasTextExtension(const std::string& filename);
 
 private:
     Repository* repository;
@@ -112,6 +112,16 @@ public:
     RepositoryIndexer& operator=(const RepositoryIndexer&&) = delete;
     virtual ~RepositoryIndexer();
 
+    Repository* getRepository() const { return repository; }
+
+    const std::set<const std::string*> getMarkdownFiles() const;
+    const std::set<const std::string*> getPdfFiles() const;
+    const std::set<const std::string*> getTextFiles() const;
+    const std::set<const std::string*> getAllOutlineFileNames() const;
+    const std::set<const std::string*> getOutlineStencilsFileNames() const;
+    const std::set<const std::string*> getNoteStencilsFileNames() const;
+    char* getTagsFromPath();
+
     /**
      * @brief Index new repository - any type, any modes.
      */
@@ -126,16 +136,6 @@ public:
      * @brief Clear all fields.
      */
     void clear();
-
-    Repository* getRepository() const { return repository; }
-
-    const std::set<const std::string*> getMarkdownFiles() const;
-    const std::set<const std::string*> getPdfFiles() const;
-    const std::set<const std::string*> getTextFiles() const;
-    const std::set<const std::string*> getAllOutlineFileNames() const;
-    const std::set<const std::string*> getOutlineStencilsFileNames() const;
-    const std::set<const std::string*> getNoteStencilsFileNames() const;
-    char* getTagsFromPath();
 
 private:
     void updateIndexMemory(const std::string& directory);

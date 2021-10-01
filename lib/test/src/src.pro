@@ -127,7 +127,8 @@ SOURCES += \
     ./gear/file_utils_test.cpp \
     ./gear/trie_test.cpp \
     ./ai/autolinking_test.cpp \
-    ./ai/autolinking_cmark_test.cpp
+    ./ai/autolinking_cmark_test.cpp \
+    ./mind/filesystem_information_test.cpp
 
 HEADERS += \
     ./test_gear.h

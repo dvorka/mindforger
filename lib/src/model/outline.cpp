@@ -38,6 +38,7 @@ Outline::Outline(const OutlineType* type)
     bytesize = 0;
     flags = 0;
     dirty = false;
+    readOnly = false;
 
     outlineDescriptorAsNote = new Note(&NOTE_4_OUTLINE_TYPE, this);
 }

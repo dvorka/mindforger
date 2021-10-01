@@ -117,7 +117,7 @@ Outline* MarkdownOutlineRepresentation::outline(const File& file)
 
 Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>* ast)
 {
-    Outline *outline = new Outline{ontology.getDefaultOutlineType()};
+    Outline* outline = new Outline{ontology.getDefaultOutlineType()};
     if(ast) {
         size_t off = 0;
         if(ast->size()) {

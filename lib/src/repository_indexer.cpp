@@ -22,6 +22,42 @@ using namespace std;
 
 namespace m8r {
 
+bool RepositoryIndexer::fileHasMarkdownExtension(const std::string& filename)
+{
+    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
+    if(stringEndsWith(filename, FILE_EXTENSION_MD_MD)
+       || stringEndsWith(filename, FILE_EXTENSION_MD_MARKDOWN)
+       || stringEndsWith(filename, FILE_EXTENSION_MD_MDOWN)
+       || stringEndsWith(filename, FILE_EXTENSION_MD_MKDN)
+    ) {
+        return true;
+    }
+
+    return false;
+}
+
+bool RepositoryIndexer::fileHasPdfExtension(const std::string& filename)
+{
+    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
+    if(stringEndsWith(filename, FILE_EXTENSION_PDF)
+       || stringEndsWith(filename, FILE_EXTENSION_PDF_UPPER)
+    ) {
+        return true;
+    }
+
+    return false;
+}
+
+bool RepositoryIndexer::fileHasTextExtension(const std::string& filename)
+{
+    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
+    if(stringEndsWith(filename, FILE_EXTENSION_TXT)) {
+        return true;
+    }
+
+    return false;
+}
+
 RepositoryIndexer::RepositoryIndexer()
     : repository(nullptr)
 {}
@@ -119,47 +155,11 @@ void RepositoryIndexer::updateIndex() {
 #endif
 }
 
-bool RepositoryIndexer::fileHasMarkdownExtension(const std::string& filename)
-{
-    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
-    if(stringEndsWith(filename, FILE_EXTENSION_MD_MD)
-       || stringEndsWith(filename, FILE_EXTENSION_MD_MARKDOWN)
-       || stringEndsWith(filename, FILE_EXTENSION_MD_MDOWN)
-       || stringEndsWith(filename, FILE_EXTENSION_MD_MKDN)
-    ) {
-        return true;
-    }
-
-    return false;
-}
-
-bool RepositoryIndexer::fileHasPdfExtension(const std::string& filename)
-{
-    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
-    if(stringEndsWith(filename, FILE_EXTENSION_PDF)
-       || stringEndsWith(filename, FILE_EXTENSION_PDF_UPPER)
-    ) {
-        return true;
-    }
-
-    return false;
-}
-
-bool RepositoryIndexer::fileHasTextExtension(const std::string& filename)
-{
-    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
-    if(stringEndsWith(filename, FILE_EXTENSION_TXT)) {
-        return true;
-    }
-
-    return false;
-}
-
 void RepositoryIndexer::updateIndexMemory(const string& directory)
 {
     if(repository->getMode() == Repository::RepositoryMode::REPOSITORY) {
         MF_DEBUG(endl << "INDEXING memory DIR: " << directory);
-        DIR *dir;
+        DIR* dir;
         if((dir = opendir(directory.c_str()))) {
             const struct dirent *entry;
             if((entry = readdir(dir))) {
