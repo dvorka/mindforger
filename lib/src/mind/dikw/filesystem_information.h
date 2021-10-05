@@ -31,8 +31,26 @@ namespace m8r {
 class FilesystemInformationSource : InformationSource
 {
 private:
-    // PDFs
+    // TXT
+    std::set<const std::string*> txts;
+    // PDF
     std::set<const std::string*> pdfs;
+    // HTML
+    std::set<const std::string*> htmls;
+
+    // MS Office Word
+    std::set<const std::string*> msOfficeWords;
+    // MS Office Powerpoint
+    std::set<const std::string*> msOfficePowerpoint;
+    // MS Office Excel
+    std::set<const std::string*> msOfficeExcel;
+
+    // Open Office Word
+    std::set<const std::string*> openOfficeWords;
+    // Open Office Powerpoint
+    std::set<const std::string*> openOfficePowerpoint;
+    // Open Office Excel
+    std::set<const std::string*> openOfficeExcel;
 
     FilesystemPersistence& persistence;
     MarkdownDocumentRepresentation& mdDocumentRepresentation;

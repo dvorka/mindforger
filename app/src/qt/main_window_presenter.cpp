@@ -62,9 +62,19 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     newRepositoryDialog = new NewRepositoryDialog(&view);
     newFileDialog = new NewFileDialog(&view);
     exportOutlineToHtmlDialog
-       = new ExportFileDialog(tr("Export Notebook to HTML"),tr("Export"),QString::fromStdString(FILE_EXTENSION_HTML),&view);
+       = new ExportFileDialog(
+             tr("Export Notebook to HTML"),
+             tr("Export"),
+             QString::fromStdString(File::EXTENSION_HTML),
+             &view
+    );
     exportMindToCsvDialog
-       = new ExportFileDialog(tr("Export Mind to CSV"),tr("Export"),QString::fromStdString(FILE_EXTENSION_CSV),&view);
+       = new ExportFileDialog(
+             tr("Export Mind to CSV"),
+             tr("Export"),
+             QString::fromStdString(File::EXTENSION_CSV),
+             &view
+    );
 #ifdef MF_NER
     nerChooseTagsDialog = new NerChooseTagTypesDialog(&view);
     nerResultDialog = new NerResultDialog(&view);
@@ -1633,7 +1643,7 @@ void MainWindowPresenter::copyLinkOrImageToRepository(const string& srcPath, QSt
         } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
             oPath = orloj->getOutlineHeaderEdit()->getCurrentOutline()->getKey();
         }
-        if(stringEndsWith(oPath, FILE_EXTENSION_MD_MD)) {
+        if(stringEndsWith(oPath, File::EXTENSION_MD_MD)) {
             pathPrefix = QString::fromStdString(oPath.substr(0, oPath.length()-3));
         } else {
             pathPrefix = QString::fromStdString(oPath);
@@ -1689,7 +1699,7 @@ void MainWindowPresenter::doActionEditPasteImageData(QImage image)
         oPath = orloj->getOutlineHeaderEdit()->getCurrentOutline()->getKey();
     }
     QString pathPrefix{};
-    if(stringEndsWith(oPath, FILE_EXTENSION_MD_MD)) {
+    if(stringEndsWith(oPath, File::EXTENSION_MD_MD)) {
         pathPrefix = QString::fromStdString(oPath.substr(0, oPath.length()-3));
     } else {
         pathPrefix = QString::fromStdString(oPath);

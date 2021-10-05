@@ -49,6 +49,7 @@ public:
     QMenu* menuFind;
     QMenu* menuView;
     QMenu* menuKnowledge;
+    QMenu* menuLibrary;
     QMenu* menuOrganizer;
     QMenu* menuNavigator;
     QMenu* menuOutline;
@@ -110,6 +111,10 @@ public:
     // menu: Knowledge
     QAction* actionKnowledgeWikipedia;
     QAction* actionKnowledgeArxiv;
+
+    // menu: Library
+    QAction* actionLibraryAdd;
+    QAction* actionLibraryDeprecate;
 
     // menu: Organizer
     QAction* actionOrganizerNew;

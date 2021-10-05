@@ -26,7 +26,7 @@ NewFileDialog::NewFileDialog(QWidget* parent)
     homeDirectory = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
 
     setWindowTitle(tr("Create New Markdown File"));
-    extension = QString::fromStdString(FILE_EXTENSION_MD_MD);
+    extension = QString::fromStdString(File::EXTENSION_MD_MD);
 
     // widgets
     fileNameLabel = new QLabel{tr("Markdown name:")};

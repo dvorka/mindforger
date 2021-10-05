@@ -292,6 +292,20 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuKnowledge->addAction(actionKnowledgeArxiv);
 #endif
 
+    // menu: library
+#ifdef MF_WIP
+    menuLibrary = qMenuBar->addMenu(tr("L&ibrary"));
+
+    actionLibraryAdd = new QAction(QIcon(":/menu-icons/new.svg"), tr("&Add library resource with document(s)"), mainWindow);
+    actionLibraryAdd->setStatusTip(tr("Add directory, URL or other resource to library..."));
+
+    actionLibraryDeprecate = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Deprecate library resource"), mainWindow);
+    actionLibraryDeprecate->setStatusTip(tr("Move documents of a library resource to limbo..."));
+
+    menuLibrary->addAction(actionLibraryAdd);
+    menuLibrary->addAction(actionLibraryDeprecate);
+#endif
+
     // menu: navigator
 #ifdef __APPLE__
     actionNavigatorEdgesStretch = new QAction(tr("Str&etch edges"), mainWindow);

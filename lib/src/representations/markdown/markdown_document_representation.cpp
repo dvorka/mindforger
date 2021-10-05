@@ -51,7 +51,7 @@ Outline* MarkdownDocumentRepresentation::to(
     }
 
     o->addTag(ontology.findOrCreateTag("pdf"));
-    o->addTag(ontology.findOrCreateTag("document"));
+    o->addTag(ontology.findOrCreateTag("library-document"));
 
     o->addDescriptionLine(new string{
         "Notebook for document: [" + documentPath + "](" + documentPath + ")"

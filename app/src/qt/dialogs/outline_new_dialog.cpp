@@ -170,10 +170,13 @@ OutlineNewDialog::AdvancedTab::~AdvancedTab()
 void OutlineNewDialog::AdvancedTab::refreshPath(const QString& name)
 {
     fileLine->setText(
-        memoryDirPath+
-        FILE_PATH_SEPARATOR+
-        QString::fromStdString(normalizeToNcName(name.toStdString(),'-'))+
-        FILE_EXTENSION_MD_MD);
+        memoryDirPath
+        + FILE_PATH_SEPARATOR
+        + QString::fromStdString(
+            normalizeToNcName(name.toStdString(),'-')
+            + File::EXTENSION_MD_MD
+        )
+    );
 }
 
 /*
