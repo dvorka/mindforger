@@ -117,7 +117,7 @@ public:
         return this->sortByCombo->currentData().toInt();
     }
     std::string getOutlineScope() const {
-        return oScopeOutline->getKey();
+        return oScopeOutline?oScopeOutline->getKey():"";
     }
 
     Organizer* getOrganizerToEdit() const {

@@ -24,7 +24,10 @@ namespace m8r {
 using namespace std;
 
 OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
-    : QDialog{parent}, ontology{ontology}, oScopeOutline{nullptr}, organizerToEdit{nullptr}
+    : QDialog{parent},
+      ontology{ontology},
+      oScopeOutline{nullptr},
+      organizerToEdit{nullptr}
 {
     mode = ThingsMode::OUTLINES;
 

@@ -48,7 +48,9 @@ public:
     QMenu* menuMind;
     QMenu* menuFind;
     QMenu* menuView;
+#ifdef MF_WIP_KNOW
     QMenu* menuKnowledge;
+#endif
     QMenu* menuLibrary;
     QMenu* menuOrganizer;
     QMenu* menuNavigator;

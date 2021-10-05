@@ -279,7 +279,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewFullscreen);
 
     // menu: knowledge
-#ifdef MF_WIP
+#ifdef MF_WIP_KNOW
     menuKnowledge = qMenuBar->addMenu(tr("&Know"));
 
     actionKnowledgeWikipedia = new QAction(QIcon(":/menu-icons/link.svg"), tr("&Wikipedia"), mainWindow);
@@ -290,20 +290,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     menuKnowledge->addAction(actionKnowledgeWikipedia);
     menuKnowledge->addAction(actionKnowledgeArxiv);
-#endif
-
-    // menu: library
-#ifdef MF_WIP
-    menuLibrary = qMenuBar->addMenu(tr("L&ibrary"));
-
-    actionLibraryAdd = new QAction(QIcon(":/menu-icons/new.svg"), tr("&Add library resource with document(s)"), mainWindow);
-    actionLibraryAdd->setStatusTip(tr("Add directory, URL or other resource to library..."));
-
-    actionLibraryDeprecate = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Deprecate library resource"), mainWindow);
-    actionLibraryDeprecate->setStatusTip(tr("Move documents of a library resource to limbo..."));
-
-    menuLibrary->addAction(actionLibraryAdd);
-    menuLibrary->addAction(actionLibraryDeprecate);
 #endif
 
     // menu: navigator
@@ -339,6 +325,20 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNavigator->addSeparator();
     menuNavigator->addAction(actionNavigatorShuffle);
     menuNavigator->setEnabled(false);
+
+    // menu: library
+#ifdef MF_WIP
+    menuLibrary = qMenuBar->addMenu(tr("L&ibrary"));
+
+    actionLibraryAdd = new QAction(QIcon(":/menu-icons/new.svg"), tr("&Add library"), mainWindow);
+    actionLibraryAdd->setStatusTip(tr("Add directory with documents, URL or other resource to library..."));
+
+    actionLibraryDeprecate = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Deprecate library"), mainWindow);
+    actionLibraryDeprecate->setStatusTip(tr("Move a library resource with documents to limbo..."));
+
+    menuLibrary->addAction(actionLibraryAdd);
+    menuLibrary->addAction(actionLibraryDeprecate);
+#endif
 
     // menu: organizer
     menuOrganizer = qMenuBar->addMenu(tr("&Organizer"));
@@ -879,7 +879,9 @@ void MainMenuView::showFacetOrganizerList(bool repositoryMode)
     actionOrganizerClone->setEnabled(false);
     actionOrganizerForget->setEnabled(false);
 
+#ifdef MF_WIP_KNOW
     menuKnowledge->setEnabled(false);
+#endif
     menuNavigator->setEnabled(false);
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
@@ -900,7 +902,9 @@ void MainMenuView::showFacetOrganizerView(bool repositoryMode)
 {
     showAllMenuItems();
 
+#ifdef MF_WIP_KNOW
     menuKnowledge->setEnabled(false);
+#endif
     menuNavigator->setEnabled(false);
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
