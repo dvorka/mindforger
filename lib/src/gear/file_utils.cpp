@@ -71,6 +71,30 @@ bool File::fileHasTextExtension(const std::string& filename)
     return false;
 }
 
+FilesystemPath::FilesystemPath(const std::string& path)
+    : path{path}
+{
+}
+
+FilesystemPath::FilesystemPath(File& file)
+    : path{file.getName()}
+{
+}
+
+FilesystemPath::FilesystemPath(const char* path)
+{
+    if(path) {
+        this->path = string{path};
+    } else {
+        this->path.clear();
+    }
+}
+
+
+FilesystemPath::~FilesystemPath()
+{
+}
+
 /*
  * Utility functions
  */

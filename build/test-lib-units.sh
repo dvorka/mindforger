@@ -44,6 +44,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="FtsTestCase.*"
 #export OPTION_TEST="TrieTestCase.*"
 #export OPTION_TEST="TrieTestCase.AddAndRemove"
+#export OPTION_TEST="FileGearTestCase.FilesystemPath"
 #export OPTION_TEST="FileGearTestCase.DeepCopy"
 #export OPTION_TEST="FileGearTestCase.DeepProductionCopy"
 #export OPTION_TEST="FileGearTestCase.DeepCopyToExisting"
@@ -95,7 +96,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="NoteTestCase.RefactorNote"
 #export OPTION_TEST="NoteTestCase.DirectNoteChildren"
 #export OPTION_TEST="MindTestCase.LearnAndRememberMindForgerRepository"
-#export OPTION_TEST="MindTestCase.LearnAmnesiaLearn"
+export OPTION_TEST="MindTestCase.LearnAmnesiaLearn"
 #export OPTION_TEST="MindTestCase.CommonWordsBlacklist"
 #export OPTION_TEST="DateTimeGearTestCase.*"
 #export OPTION_TEST="DateTimeGearTestCase.Immutability"
@@ -115,7 +116,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="OrganizerTestCase.NoMindForgerRepositoryNoOrganizer"
 #export OPTION_TEST="OrganizerTestCase.DefaultOrganizerParseSaveAndLoad"
 #export OPTION_TEST="OrganizerTestCase.ParseSaveAndLoad"
-export OPTION_TEST="FilesystemInformationTestCase.IndexPdfs"
+#export OPTION_TEST="FilesystemInformationTestCase.IndexPdfs"
 
 # environment - to be specified in .bashrc or elsewhere:
 #   export M8R_CPU_CORES=7

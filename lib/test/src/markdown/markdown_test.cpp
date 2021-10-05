@@ -38,7 +38,7 @@
 #include "../../../src/mind/ai/autolinking_preprocessor.h"
 #include "../../../src/persistence/filesystem_persistence.h"
 
-#include "../test_gear.h"
+#include "../test_utils.h"
 
 using namespace std;
 using namespace m8r;

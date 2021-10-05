@@ -19,7 +19,7 @@
 
 #include <gtest/gtest.h>
 
-#include "../test_gear.h"
+#include "../test_utils.h"
 #include "../../../src/mind/dikw/filesystem_information.h"
 
 #include "../../src/debug.h"

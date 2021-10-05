@@ -27,7 +27,7 @@
 #include "../../../src/representations/markdown/markdown_outline_representation.h"
 #include "../../../src/mind/ai/autolinking/naive_autolinking_preprocessor.h"
 
-#include "../test_gear.h"
+#include "../test_utils.h"
 
 #include <gtest/gtest.h>
 

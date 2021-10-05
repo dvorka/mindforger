@@ -32,7 +32,7 @@
 #include "../../../src/mind/mind.h"
 #include "../../../src/install/installer.h"
 
-#include "../test_gear.h"
+#include "../test_utils.h"
 
 using namespace std;
 

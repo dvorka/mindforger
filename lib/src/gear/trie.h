@@ -76,8 +76,8 @@ public:
     explicit Trie();
     Trie(const Trie&) = delete;
     Trie(const Trie&&) = delete;
-    Trie &operator=(const Trie&) = delete;
-    Trie &operator=(const Trie&&) = delete;
+    Trie& operator=(const Trie&) = delete;
+    Trie& operator=(const Trie&&) = delete;
     ~Trie();
 
     bool empty() const { return root->children().empty(); }

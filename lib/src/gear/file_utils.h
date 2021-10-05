@@ -119,6 +119,52 @@ public:
     const std::string& getName() const noexcept { return name; }
 };
 
+/**
+ * @brief The filesystem path class.
+ *
+ * Implementation of filesystem path for C++ 11-.
+ *
+ * @see https://en.cppreference.com/w/cpp/filesystem/path
+ */
+class FilesystemPath
+{
+private:
+    std::string path;
+
+public:
+    explicit FilesystemPath(const std::string& path);
+    explicit FilesystemPath(const char* path);
+    explicit FilesystemPath(File& file);
+    FilesystemPath(const FilesystemPath& other) {
+        this->path = other.path;
+    }
+    FilesystemPath(const FilesystemPath&& other) {
+        this->path = other.path;
+    }
+    FilesystemPath& operator=(const FilesystemPath& other) {
+        this->path = other.path;
+        return *this;
+    }
+    FilesystemPath& operator=(const FilesystemPath&& other) {
+        this->path = other.path;
+        return *this;
+    }
+    ~FilesystemPath();
+
+    FilesystemPath& operator/(const std::string& fileOrDirName) {
+        if(fileOrDirName.size()) {
+            this->path += FILE_PATH_SEPARATOR;
+            this->path += fileOrDirName;
+        }
+        return *this;
+    }
+
+    std::string asString() const { return path; }
+    const char* asCStr() const { return path.c_str(); }
+    void clear() { this->path.clear(); }
+
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif

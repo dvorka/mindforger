@@ -26,7 +26,7 @@
 #endif //_WIN32
 #include <gtest/gtest.h>
 
-#include "../src/test_gear.h"
+#include "../src/test_utils.h"
 #include "../../src/representations/html/html_outline_representation.h"
 #include "../../src/mind/mind.h"
 #include "../../src/persistence/filesystem_persistence.h"

@@ -22,7 +22,7 @@
 #include <string>
 #include <string.h>
 
-#include "../test_gear.h"
+#include "../test_utils.h"
 
 #include <gtest/gtest.h>
 

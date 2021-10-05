@@ -208,7 +208,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     m8r::Mind mind(config);
     m8r::Memory& memory = mind.remind();
 
-    EXPECT_EQ(2, memory.getOntology().getOutlineTypes().size());
+    EXPECT_EQ(3, memory.getOntology().getOutlineTypes().size());
     EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
     EXPECT_EQ(14, memory.getOntology().getTags().size());
 
@@ -222,7 +222,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(3, memory.getOutlines().size());
     EXPECT_EQ(3, memory.getOutlinesCount());
     EXPECT_EQ(8, memory.getNotesCount());
-    EXPECT_EQ(2, memory.getOntology().getOutlineTypes().size());
+    EXPECT_EQ(3, memory.getOntology().getOutlineTypes().size());
     EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
     EXPECT_EQ(17, memory.getOntology().getTags().size());
 
@@ -234,7 +234,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(0, memory.getOutlines().size());
     EXPECT_EQ(0, memory.getOutlinesCount());
     EXPECT_EQ(0, memory.getNotesCount());
-    EXPECT_EQ(2, memory.getOntology().getOutlineTypes().size());
+    EXPECT_EQ(3, memory.getOntology().getOutlineTypes().size());
     EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
     // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
     EXPECT_EQ(17, memory.getOntology().getTags().size());
@@ -293,7 +293,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(4, memory.getNotesCount());
     EXPECT_EQ(0, memory.getStencils(m8r::ResourceType::OUTLINE).size());
     EXPECT_EQ(0, memory.getStencils(m8r::ResourceType::NOTE).size());
-    EXPECT_EQ(2, memory.getOntology().getOutlineTypes().size());
+    EXPECT_EQ(3, memory.getOntology().getOutlineTypes().size());
     EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
     // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
     EXPECT_EQ(17, memory.getOntology().getTags().size());

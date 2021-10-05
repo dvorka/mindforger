@@ -23,7 +23,7 @@
 #include "../../../src/mind/mind.h"
 #include "../../../src/gear/file_utils.h"
 
-#include "../test_gear.h"
+#include "../test_utils.h"
 
 using namespace std;
 

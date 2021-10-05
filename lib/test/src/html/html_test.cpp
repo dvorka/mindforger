@@ -27,7 +27,7 @@
 
 #include <gtest/gtest.h>
 
-#include "../test_gear.h"
+#include "../test_utils.h"
 #include "representations/html/html_outline_representation.h"
 #include "mind/mind.h"
 #include "persistence/filesystem_persistence.h"

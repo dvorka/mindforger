@@ -17,7 +17,7 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "test_gear.h"
+#include "test_utils.h"
 #include "../../src/gear/file_utils.h"
 
 namespace m8r {

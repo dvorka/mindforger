@@ -24,6 +24,18 @@
 
 using namespace std;
 
+TEST(FileGearTestCase, FilesystemPath)
+{
+    // GIVEN
+    m8r::FilesystemPath basePath("/a/b");
+
+    // WHEN
+    m8r::FilesystemPath path = basePath / "c";
+
+    // THEN
+    ASSERT_EQ("/a/b/c", path.asString());
+}
+
 TEST(FileGearTestCase, DeepCopy)
 {
     string srcRepositoryDir{"/tmp/mf-file-gear-repository-SRC"};
