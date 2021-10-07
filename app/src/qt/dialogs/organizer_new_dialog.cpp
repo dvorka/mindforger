@@ -87,7 +87,7 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     h->addLayout(r);
     h->addLayout(l);
 
-    QHBoxLayout* buttonLayout = new QHBoxLayout{};
+    QHBoxLayout* buttonLayout = new QHBoxLayout{this};
     buttonLayout->addStretch(1);
     buttonLayout->addWidget(closeButton);
     buttonLayout->addWidget(createButton);
@@ -98,7 +98,7 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     mainLayout->addLayout(h);
     mainLayout->addWidget(oScopeLabel);
 
-    QHBoxLayout *oScopeLayout = new QHBoxLayout{};
+    QHBoxLayout* oScopeLayout = new QHBoxLayout{this};
     oScopeLayout->addWidget(oScopeEdit);
     oScopeLayout->addWidget(findOutlineButton);
     oScopeLayout->addWidget(clearOutlineButton);

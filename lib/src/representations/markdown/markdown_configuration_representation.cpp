@@ -64,6 +64,7 @@ constexpr const auto CONFIG_SETTING_REPOSITORY_LABEL = "* Repository: ";
 using namespace std;
 
 MarkdownConfigurationRepresentation::MarkdownConfigurationRepresentation()
+    : mdRepositoryCfgRepresentation{}
 {    
 }
 
@@ -125,8 +126,11 @@ void MarkdownConfigurationRepresentation::configuration(vector<MarkdownAstNodeSe
 /*
  * Parse a section of the Configuration.
  */
-void MarkdownConfigurationRepresentation::configurationSection(string* title, vector<string*>* body, Configuration& c)
-{
+void MarkdownConfigurationRepresentation::configurationSection(
+    string* title,
+    vector<string*>* body,
+    Configuration& c
+) {
     if(title && body && title->size() && body->size()) {
         if(!title->compare(CONFIG_SECTION_APP)) {
             MF_DEBUG("PARSING configuration section: Application" << endl);
@@ -363,7 +367,10 @@ void MarkdownConfigurationRepresentation::configurationSection(string* title, ve
                         if(p.size()) {
                             Repository* r = RepositoryIndexer::getRepositoryForPath(p);
                             if(r) {
-                                c.setActiveRepository(c.addRepository(r));
+                                MF_DEBUG("  Setting ACTIVE repository: " << r->getPath() << endl);
+                                c.setActiveRepository(
+                                    c.addRepository(r), this->mdRepositoryCfgRepresentation
+                                );
                             } else {
                                 cerr << "Unable to construct active repository for non-existent configured path: '" << p << "'" << endl;
                             }
@@ -539,13 +546,6 @@ bool MarkdownConfigurationRepresentation::load(Configuration& c)
         vector<MarkdownAstNodeSection*>* ast = md.moveAst();
         configuration(ast, c);
 
-        // repository configuration path is available only if MF in repository mode
-        if(c.getRepositoryConfigFilePath().size()) {
-            MF_DEBUG("Loading repository configuration from " << c.getRepositoryConfigFilePath() << endl);
-            MarkdownRepositoryConfigurationRepresentation repositorCfgMd{};
-            repositorCfgMd.load(c);
-        }
-
         return true;
     } else {
         return false;
@@ -554,6 +554,22 @@ bool MarkdownConfigurationRepresentation::load(Configuration& c)
 
 void MarkdownConfigurationRepresentation::save(const File* file, Configuration* c)
 {
+#ifdef DO_MF_DEBUG
+    if(c) {
+        MF_DEBUG(
+            "Saving configuration as MD:" << endl <<
+            "  path: '" << c->getConfigFilePath() << "'" << endl <<
+            "  repo: " << boolalpha << c->hasRepositoryConfiguration() << endl <<
+            "  repo path: " << c->getRepositoryConfigFilePath() << "'" << endl
+        );
+        if(c->hasRepositoryConfiguration()) {
+            MF_DEBUG(
+                "  os: " << c->getRepositoryConfiguration().getOrganizers().size() << endl
+            );
+        }
+    }
+#endif
+
     string md{};
     to(c,md);
 
@@ -564,7 +580,7 @@ void MarkdownConfigurationRepresentation::save(const File* file, Configuration* 
         out.close();
 
         // repository configuration path is available only if MF in repository mode
-        if(c->getRepositoryConfigFilePath().size()) {
+        if(c->hasRepositoryConfiguration()) {
             MF_DEBUG("Saving repository configuration to " << c->getRepositoryConfigFilePath() << endl);
             MarkdownRepositoryConfigurationRepresentation repositorCfgMd{};
             repositorCfgMd.save(*c);
@@ -575,7 +591,7 @@ void MarkdownConfigurationRepresentation::save(const File* file, Configuration* 
         out << md;
         out.close();
     } else {
-        MF_DEBUG("WARNING: configuration NOT saved - neither configuration object nor file name available" << endl);
+        MF_DEBUG("WARNING: configuration NOT saved - either configuration instance and/ro file name is not available" << endl);
     }
 }
 

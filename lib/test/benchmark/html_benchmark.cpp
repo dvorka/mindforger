@@ -41,10 +41,14 @@ TEST(HtmlBenchmark, DISABLED_Outline)
     string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
     fileName.insert(0, getMindforgerGitHomePath());
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-hb-o.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind(config);
     m8r::HtmlColorsMock dummyColors{};
     m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(),dummyColors,nullptr};

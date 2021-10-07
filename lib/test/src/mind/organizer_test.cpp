@@ -66,6 +66,7 @@ TEST(OrganizerTestCase, ParseSaveAndLoad)
 
     string timeScopeAsString{};
     m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& c = m8r::Configuration::getInstance();
 
     // WHEN: save configuration file WITH organizers
@@ -76,7 +77,7 @@ TEST(OrganizerTestCase, ParseSaveAndLoad)
         m8r::Repository::RepositoryMode::REPOSITORY,
         mdFilename
     };
-    c.setActiveRepository(c.addRepository(r));
+    c.setActiveRepository(c.addRepository(r), repositoryConfigRepresentation);
     // organizers
     m8r::Organizer* o = new m8r::Organizer("My GLOBAL organizer on IMPORTANCE and NOTES");
     o->setUpperRightTag("ur1");
@@ -97,10 +98,14 @@ TEST(OrganizerTestCase, ParseSaveAndLoad)
     o->scopeOutlineId = outlineScope;
     c.getRepositoryConfiguration().addOrganizer(o);
 
+    cout << "Test step: SAVE CONFIGURATION" << endl;
     configRepresentation.save(c);
 
     // THEN: assert serialized configuration
-    cout << "Test step: loading repository configuration from: " << c.getRepositoryConfigFilePath() << endl;
+    cout << "Test step: LOADING REPOSITORY CONFIGURATION from: '"
+         << c.getRepositoryConfigFilePath()
+         << "'"
+         << endl;
     ASSERT_TRUE(c.getRepositoryConfigFilePath().size());
     string* asString = m8r::fileToString(c.getRepositoryConfigFilePath());
     EXPECT_NE(std::string::npos, asString->find("Upper right tag: ur1"));
@@ -156,6 +161,7 @@ TEST(OrganizerTestCase, NoMindForgerRepositoryNoOrganizer)
 
     string timeScopeAsString{};
     m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& c = m8r::Configuration::getInstance();
 
     // WHEN: save configuration file WITH organizers AND there is NO repository (config)
@@ -166,7 +172,7 @@ TEST(OrganizerTestCase, NoMindForgerRepositoryNoOrganizer)
         m8r::Repository::RepositoryMode::FILE,
         box.configFileName
     };
-    c.setActiveRepository(c.addRepository(r));
+    c.setActiveRepository(c.addRepository(r), repositoryConfigRepresentation);
     // NO organizers
     c.getRepositoryConfiguration().clearOrganizers();
 
@@ -195,7 +201,7 @@ TEST(OrganizerTestCase, NoMindForgerRepositoryNoOrganizer)
 TEST(OrganizerTestCase, DefaultOrganizerParseSaveAndLoad)
 {
     // GIVEN
-    m8r::TestSandbox box{".mindforger-default-organizer.md", true};
+    m8r::TestSandbox box{".mindforger-default-organizer.md", false};
     string mdFilename{"custom-repository-no-organizer-single-file-repo.md"};
     string mdFilePath{box.addMdFile(mdFilename)};
     cout <<
@@ -205,8 +211,8 @@ TEST(OrganizerTestCase, DefaultOrganizerParseSaveAndLoad)
     "  MD file:" << mdFilePath << endl
     ;
 
-    string timeScopeAsString{};
     m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& c = m8r::Configuration::getInstance();
 
     // WHEN: save configuration file WITH organizers
@@ -217,8 +223,8 @@ TEST(OrganizerTestCase, DefaultOrganizerParseSaveAndLoad)
         m8r::Repository::RepositoryMode::REPOSITORY,
         box.configFileName
     };
-    c.setActiveRepository(c.addRepository(r));
-    // NO organizers
+    c.setActiveRepository(c.addRepository(r), repositoryConfigRepresentation);
+    // NO organizers (even Eisenhower Matrix organizer not present)
     c.getRepositoryConfiguration().clearOrganizers();
 
     configRepresentation.save(c);
@@ -226,9 +232,10 @@ TEST(OrganizerTestCase, DefaultOrganizerParseSaveAndLoad)
     // THEN: assert serialized configuration
     cout <<
     "Configuration saved:" << endl <<
-    "  Config           : " << c.getConfigFilePath() << endl <<
-    "  Repository config: " << c.getRepositoryConfigFilePath() << endl
+    "  Config           : '" << c.getConfigFilePath() << "'" << endl <<
+    "  Repository config: '" << c.getRepositoryConfigFilePath() << "'" << endl
     ;
+    // THEN: ensure organizer configuration no longer presents in global configuration
     string* asString = m8r::fileToString(c.getConfigFilePath());
     EXPECT_EQ(std::string::npos, asString->find("Upper right tag: ur"));
     EXPECT_EQ(std::string::npos, asString->find("Lower right tag: lr"));
@@ -238,6 +245,11 @@ TEST(OrganizerTestCase, DefaultOrganizerParseSaveAndLoad)
     EXPECT_EQ(std::string::npos, asString->find("Filter by: notes"));
     EXPECT_EQ(std::string::npos, asString->find("Outline scope: "));
     delete asString;
+    ASSERT_FALSE(c.hasRepositoryConfiguration());
+    ASSERT_FALSE(c.hasRepositoryConfiguration());
+    ASSERT_EQ(0, c.getRepositoryConfiguration().getOrganizers().size());
+
+    cout << "-------------------------------------------------" << endl;
 
     // GIVEN load previously saved configuration
     c.setConfigFilePath(box.configPath);
@@ -247,9 +259,7 @@ TEST(OrganizerTestCase, DefaultOrganizerParseSaveAndLoad)
 
     // THEN: assert configuration from loaded file
     ASSERT_TRUE(loaded);
-    ASSERT_TRUE(c.hasRepositoryConfiguration());
-    ASSERT_EQ(1, c.getRepositoryConfiguration().getOrganizers().size());
-    cout
-    << "Organizer[0]: " << c.getRepositoryConfiguration().getOrganizers()[0]->getName()
-    << endl;
+    // MARKDOWN/REPOSITORY does NOT have repository configuration (ony MINDFORGER/REPOSITORY has)
+    ASSERT_FALSE(c.hasRepositoryConfiguration());
+    ASSERT_EQ(0, c.getRepositoryConfiguration().getOrganizers().size());
 }

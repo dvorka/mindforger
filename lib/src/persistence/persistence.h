@@ -29,7 +29,7 @@ namespace m8r {
  */
 class Persistence {
 public:
-    virtual ~Persistence() {}
+    virtual ~Persistence();
 
     virtual std::string createFileName(
             const std::string& directory,

@@ -113,6 +113,8 @@ SOURCES += \
     src/mind/dikw/filesystem_information.cpp \
     src/mind/dikw/information.cpp \
     src/model/organizer.cpp \
+    src/persistence/configuration_persistence.cpp \
+    src/persistence/persistence.cpp \
     src/representations/markdown/markdown_document.cpp \
     src/representations/html/html_document.cpp \
     src/mind/ai/ai.cpp \
@@ -214,6 +216,7 @@ HEADERS += \
     src/mind/dikw/filesystem_information.h \
     src/mind/dikw/information.h \
     src/model/organizer.h \
+    src/persistence/configuration_persistence.h \
     src/representations/markdown/markdown_document.h \
     src/representations/html/html_document.h \
     src/representations/markdown/markdown_document_representation.h \

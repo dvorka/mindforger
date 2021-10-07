@@ -1,5 +1,5 @@
 /*
- main.cpp     MindForger thinking notebook
+ mindforger.cpp     Main file of MindForger thinking notebook code base.
 
  Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -28,6 +28,7 @@
 
 #include "../../lib/src/version.h"
 #include "../../lib/src/representations/markdown/markdown_configuration_representation.h"
+#include "../../lib/src/representations/markdown/markdown_repository_configuration_representation.h"
 
 #include "gear/qutils.h"
 #include "i18nl10n.h"
@@ -169,7 +170,13 @@ int main(int argc, char* argv[])
         QCommandLineParser parser;
         // process command line as parameters/options are present
         parser.setApplicationDescription("Thinking notebook.");
-        parser.addPositionalArgument("[<directory>|<file>]", QCoreApplication::translate("main", "MindForger repository or directory/file with Markdown(s) to open"));
+        parser.addPositionalArgument(
+            "[<directory>|<file>]",
+            QCoreApplication::translate(
+                 "main",
+                 "MindForger repository or directory/file with Markdown(s) to open"
+            )
+        );
         QCommandLineOption themeOption(QStringList() << "t" << "theme",
                 QCoreApplication::translate("main", "Use 'dark', 'light' or other GUI <theme>."),
                 QCoreApplication::translate("main", "theme"));
@@ -198,7 +205,11 @@ int main(int argc, char* argv[])
             useRepository.assign(arguments[0].toStdString());
         } else if(arguments.size()>1) {
             // TODO i18n
-            cerr << "Error: Too many arguments (" << dec << arguments.size() << ") - at most one directory or file can be specified" << endl;
+            cerr << "Error: Too many arguments ("
+                 << dec
+                 << arguments.size()
+                 << ") - at most one directory or file can be specified"
+                 << endl;
             return 1;
         }
 
@@ -219,6 +230,11 @@ int main(int argc, char* argv[])
         config.setConfigFilePath(configurationFilePath.toStdString());
     }
     if(!mdConfigRepresentation.load(config)) {
+        MF_DEBUG(
+            "MindForger is unable to load MD configuration from: " <<
+            config.getConfigFilePath() << endl
+        );
+
         mdConfigRepresentation.save(m8r::File{config.getConfigFilePath()});
     }
 
@@ -227,16 +243,23 @@ int main(int argc, char* argv[])
 
     m8r::initRandomizer();
 
+    m8r::MarkdownRepositoryConfigurationRepresentation mdRepositoryCfgRepresentation{};
     if(!useRepository.empty()) {
         m8r::Repository* r = m8r::RepositoryIndexer::getRepositoryForPath(useRepository);
         if(r) {
-            config.setActiveRepository(config.addRepository(r));
+            config.setActiveRepository(
+                config.addRepository(r), mdRepositoryCfgRepresentation
+            );
         } else {
             if(config.createEmptyMarkdownFile(useRepository)) {
                 r = m8r::RepositoryIndexer::getRepositoryForPath(useRepository);
-                config.setActiveRepository(config.addRepository(r));
+                config.setActiveRepository(config.addRepository(r), mdRepositoryCfgRepresentation);
             } else {
-                cerr << QCoreApplication::translate("main", "Error: Unable to find given repository/file to open - open MindForger without parameters and create it from menu Mind/New: '").toUtf8().constData()
+                cerr << QCoreApplication::translate(
+                            "main",
+                            "Error: Unable to find given repository/file to open - open MindForger "
+                            "without parameters and create it from menu Mind/New: '"
+                        ).toUtf8().constData()
                      << useRepository
                      << "'"
                      << endl;
@@ -244,7 +267,7 @@ int main(int argc, char* argv[])
             }
         }
     } else {
-        config.findOrCreateDefaultRepository();
+        config.findOrCreateDefaultRepository(mdRepositoryCfgRepresentation);
     }
 
     // choose L&F
@@ -257,7 +280,8 @@ int main(int argc, char* argv[])
         } else {
             cerr << QCoreApplication::translate("main", "Ignoring unknown GUI theme: '").toUtf8().constData()
                  << themeOptionValue.toUtf8().constData()
-                 << "'\n";
+                 << "'"
+                 << endl;
             lookAndFeels.setTheme(QString::fromStdString(config.getUiThemeName()));
         }
     } else {

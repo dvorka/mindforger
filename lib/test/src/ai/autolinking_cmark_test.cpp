@@ -372,10 +372,11 @@ TEST(AutolinkingCmarkTestCase, NanoRepo)
     // autolink 1 file with 1 section
     string repositoryPath{"/lib/test/resources/autolinking-nano-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-act-anr.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)), repositoryConfigRepresentation);
     m8r::Mind mind(config);
     mind.learn();
     mind.think().get();
@@ -405,10 +406,11 @@ TEST(AutolinkingCmarkTestCase, MicroRepo)
     // autolink 1 file with 1 section
     string repositoryPath{"/lib/test/resources/autolinking-micro-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-act-anr.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)), repositoryConfigRepresentation);
     m8r::Mind mind(config);
     mind.learn();
     mind.think().get();
@@ -433,10 +435,11 @@ TEST(AutolinkingCmarkTestCase, BasicRepo)
 {
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-act-br.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)), repositoryConfigRepresentation);
     m8r::Mind mind(config);
     mind.learn();
     mind.think().get();
@@ -462,10 +465,11 @@ TEST(AutolinkingCmarkTestCase, Monster)
 {
     string repositoryPath{"/tmp/mindforger-unit-test/monster-repository"};
     if(m8r::isDirectoryOrFileExists(repositoryPath.c_str())) {
+        m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
         m8r::Configuration& config = m8r::Configuration::getInstance();
         config.clear();
         config.setConfigFilePath("/tmp/cfg-act-monster.md");
-        config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+        config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)), repositoryConfigRepresentation);
         m8r::Mind mind(config);
         mind.learn();
         mind.think().get();

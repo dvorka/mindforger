@@ -34,6 +34,7 @@
 #include "../exceptions.h"
 #include "../model/tag.h"
 #include "../model/organizer.h"
+#include "../persistence/configuration_persistence.h"
 #include "../install/installer.h"
 #include "../representations/markdown/markdown_transcoder.h"
 
@@ -95,6 +96,7 @@ constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 constexpr const auto DEFAULT_NEW_OUTLINE = "# New Markdown File\n\nThis is a new Markdown file created by MindForger.\n\n#Section 1\nThe first section.\n\n";
 
 class Installer;
+class RepositoryConfigurationPersistence;
 
 /**
  * @brief MindForger configuration.
@@ -310,7 +312,7 @@ public:
      * 3) if environment variable MINDFORGER_REPOSITORY is set, then use it, else 4)
      * 4) if repository exist in default location ~/mindforger-repository, then use it, else start W/O repository
      */
-    void findOrCreateDefaultRepository();
+    void findOrCreateDefaultRepository(RepositoryConfigurationPersistence& persistence);
     Repository* addRepository(Repository* repository);
     std::map<const std::string, Repository*>& getRepositories();
     /**
@@ -318,7 +320,7 @@ public:
      *
      * Note that activeRepository parameter must be one of the known repositories.
      */
-    void setActiveRepository(Repository* activeRepository);
+    void setActiveRepository(Repository* activeRepository, RepositoryConfigurationPersistence& persistence);
     bool isActiveRepository() const { return activeRepository!=nullptr; }
     Repository* getActiveRepository() const;
 

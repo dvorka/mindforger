@@ -23,6 +23,7 @@
 #include "../../lib/src/mind/ai/autolinking_preprocessor.h"
 #include "../../lib/src/representations/html/html_outline_representation.h"
 #include "../../lib/src/representations/markdown/markdown_configuration_representation.h"
+#include "../../lib/src/representations/markdown/markdown_repository_configuration_representation.h"
 
 #include "main_window_view.h"
 #include "main_menu_presenter.h"
@@ -105,6 +106,7 @@ private:
     MarkdownOutlineRepresentation* mdRepresentation;
     HtmlOutlineRepresentation* htmlRepresentation;
     MarkdownConfigurationRepresentation* mdConfigRepresentation;
+    MarkdownRepositoryConfigurationRepresentation* mdRepositoryConfigRepresentation;
 
     MainMenuPresenter* mainMenu;
     CliAndBreadcrumbsPresenter* cli;

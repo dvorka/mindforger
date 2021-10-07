@@ -45,10 +45,14 @@ TEST(OutlineTestCase, NewAndDeleteOutline) {
     string oContent{"# Test Outline\n\nOutline text.\n\n## Note 1\nNote 1 text.\n"};
     m8r::stringToFile(oFile,oContent);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-otc-nado.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind{config};
     mind.learn();
     mind.think().get();
@@ -73,10 +77,14 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
     string stencilContent{"# Stencil Test Outline\n\nOutline text.\n\n## Stencil Note 1\nNote 1 text.\n\n##Stencil Note 2\nNote 2 text.\n"};
     m8r::stringToFile(stencilFile,stencilContent);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-otc-nofs.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.learn();
@@ -167,10 +175,14 @@ TEST(OutlineTestCase, CloneOutline) {
         "\n"};
     m8r::stringToFile(oFile,oContent);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-otc-co.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.learn();
@@ -234,10 +246,14 @@ TEST(OutlineTestCase, DirectOutlineNoteChildren) {
         "\n"};
     m8r::stringToFile(oFile,oContent);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-otc-ocn.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.learn();

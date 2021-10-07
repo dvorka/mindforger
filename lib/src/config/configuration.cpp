@@ -243,8 +243,10 @@ std::map<const std::string,Repository*>& Configuration::getRepositories()
     return repositories;
 }
 
-void Configuration::setActiveRepository(Repository* repository)
-{
+void Configuration::setActiveRepository(
+    Repository* repository,
+    RepositoryConfigurationPersistence& persistence
+) {
     if(repository) {
         if(repositories.find(repository->getPath()) != repositories.end()) {
             activeRepository = repository;
@@ -267,14 +269,18 @@ void Configuration::setActiveRepository(Repository* repository)
                 limboPath+=FILE_PATH_SEPARATOR;
                 limboPath+=DIRNAME_LIMBO;
 
-                // repository configuration: initialize + Eisenhower Matrix organizer presents OOTB
-                initRepositoryConfiguration(Organizer::createEisenhowMatrixOrganizer());
+                // setting ACTIVE repository means that repository SPECIFIC configuration must be loaded
+                this->initRepositoryConfiguration(Organizer::createEisenhowMatrixOrganizer());
+                persistence.load(*this);
+            } else {
+                this->clearRepositoryConfiguration();
             }
         } else {
-            throw MindForgerException{"Active repository must be one of repositories known to Configuration!"};
+            throw MindForgerException{"Active repository must be one of repositories known to the configuration!"};
         }
     } else {
         activeRepository = nullptr;
+        clearRepositoryConfiguration();
     }
 }
 
@@ -292,7 +298,7 @@ bool Configuration::createEmptyMarkdownFile(const string& file)
     return false;
 }
 
-void Configuration::findOrCreateDefaultRepository()
+void Configuration::findOrCreateDefaultRepository(RepositoryConfigurationPersistence& persistence)
 {
     if(!activeRepository || activeRepository->getDir().empty()) {
         string defaultRepositoryPath{userDocPath};
@@ -300,25 +306,30 @@ void Configuration::findOrCreateDefaultRepository()
         defaultRepositoryPath += DIRNAME_M8R_REPOSITORY;
         MF_DEBUG("Checking for default repository existence: " << defaultRepositoryPath << endl);
         if(isDirectoryOrFileExists(defaultRepositoryPath.c_str())) {
-            setActiveRepository(addRepository(RepositoryIndexer::getRepositoryForPath(defaultRepositoryPath)));
+            setActiveRepository(
+                addRepository(RepositoryIndexer::getRepositoryForPath(defaultRepositoryPath)),
+                persistence
+            );
         } else {
             // create default repository w/ default content using Installer class
-            MF_DEBUG("  Creating a default MF repository in " << defaultRepositoryPath << endl);
+            MF_DEBUG("  Creating default MF repository in " << defaultRepositoryPath << endl);
             if(installer->createEmptyMindForgerRepository(defaultRepositoryPath)) {
                 installer->initMindForgerRepository(true, true, defaultRepositoryPath.c_str());
             }
             if(!activeRepository) {
-                setActiveRepository(addRepository(new Repository(defaultRepositoryPath)));
+                setActiveRepository(
+                    addRepository(new Repository(defaultRepositoryPath)),
+                    persistence
+                );
             }
         }
     }
 }
 
 string Configuration::getRepositoryConfigFilePath() const {
-    if(hasRepositoryConfiguration()
-        && activeRepository
-        && activeRepository->getType() == Repository::RepositoryType::MINDFORGER
-        && activeRepository->getMode() == Repository::RepositoryMode::REPOSITORY
+    if(activeRepository
+       && activeRepository->getType() == Repository::RepositoryType::MINDFORGER
+       && activeRepository->getMode() == Repository::RepositoryMode::REPOSITORY
     ) {
         std::string path{activeRepository->getPath()};
         path += FILE_PATH_SEPARATOR;

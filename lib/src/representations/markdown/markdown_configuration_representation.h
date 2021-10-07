@@ -23,10 +23,12 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <iomanip>
 
 #include "markdown_document.h"
 #include "markdown_repository_configuration_representation.h"
 #include "../../config/configuration.h"
+#include "../../persistence/configuration_persistence.h"
 
 namespace m8r {
 
@@ -47,10 +49,13 @@ class MarkdownAstNodeSection;
  *     from(AST) --> OUTLINE
  *       AST.getString(LEXEM) --> name, description, line, ...
  */
-class MarkdownConfigurationRepresentation
+class MarkdownConfigurationRepresentation : public ConfigurationPersistence
 {
+private:
     static constexpr int AVG_SECTION_SIZE = 300;
     static constexpr int AVG_CONFIGURATION_SIZE = 2*AVG_SECTION_SIZE;
+
+    MarkdownRepositoryConfigurationRepresentation mdRepositoryCfgRepresentation;
 
 public:
     explicit MarkdownConfigurationRepresentation();
@@ -58,18 +63,18 @@ public:
     MarkdownConfigurationRepresentation(const MarkdownConfigurationRepresentation&&) = delete;
     MarkdownConfigurationRepresentation &operator=(const MarkdownConfigurationRepresentation&) = delete;
     MarkdownConfigurationRepresentation &operator=(const MarkdownConfigurationRepresentation&&) = delete;
-    ~MarkdownConfigurationRepresentation();
+    virtual ~MarkdownConfigurationRepresentation();
 
     std::string* to(Configuration& c);
 
     /**
      * @brief Load configuration from file and return true on success (file exists), otherwise return false.
      */
-    bool load(Configuration& c);
+    virtual bool load(Configuration& c);
     /**
      * @brief Save configuration to file.
      */
-    void save(Configuration& c) { save(nullptr, &c); }
+    virtual void save(Configuration& c) { save(nullptr, &c); }
     /**
      * @brief Save initial configuration file.
      */

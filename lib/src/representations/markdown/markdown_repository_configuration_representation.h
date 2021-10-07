@@ -27,6 +27,7 @@
 #include "markdown_document.h"
 #include "../../config/configuration.h"
 #include "../../model/organizer.h"
+#include "../../persistence/configuration_persistence.h"
 
 namespace m8r {
 
@@ -50,7 +51,7 @@ class MarkdownAstNodeSection;
  *     from(AST) --> OUTLINE
  *       AST.getString(LEXEM) --> name, description, line, ...
  */
-class MarkdownRepositoryConfigurationRepresentation
+class MarkdownRepositoryConfigurationRepresentation : public RepositoryConfigurationPersistence
 {
     static constexpr int AVG_SECTION_SIZE = 300;
     static constexpr int AVG_CONFIGURATION_SIZE = 2*AVG_SECTION_SIZE;
@@ -61,18 +62,18 @@ public:
     MarkdownRepositoryConfigurationRepresentation(const MarkdownRepositoryConfigurationRepresentation&&) = delete;
     MarkdownRepositoryConfigurationRepresentation &operator=(const MarkdownRepositoryConfigurationRepresentation&) = delete;
     MarkdownRepositoryConfigurationRepresentation &operator=(const MarkdownRepositoryConfigurationRepresentation&&) = delete;
-    ~MarkdownRepositoryConfigurationRepresentation();
+    virtual ~MarkdownRepositoryConfigurationRepresentation();
 
     std::string* to(Configuration& c);
 
     /**
      * @brief Load repository configuration from file and return true on success (file exists), otherwise return false.
      */
-    bool load(Configuration& c);
+    virtual bool load(Configuration& c);
     /**
      * @brief Save repository configuration to file.
      */
-    void save(Configuration& c) { save(nullptr, &c); }
+    virtual void save(Configuration& c) { save(nullptr, &c); }
     /**
      * @brief Save initial repository configuration file.
      */

@@ -144,10 +144,14 @@ TEST(MindTestCase, LearnAndRememberMindForgerRepository) {
     to += "/memory/outline.md";
     m8r::copyFile(from,to);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance(); config.clear();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mtc-larmfr.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     cout << "Loading repository: " << config.getActiveRepository()->getPath() << endl;
 
     m8r::Mind mind(config);
@@ -198,10 +202,13 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
         false);
 
     // 1/3 learn
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mtc-lal.md");
-    config.setActiveRepository(config.addRepository(repository));
+    config.setActiveRepository(
+        config.addRepository(repository), repositoryConfigRepresentation
+    );
     cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getDir();
     cout << endl << "Repositories[" << config.getRepositories().size() << "]:";
 
@@ -283,7 +290,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
         m8r::Repository::RepositoryMode::REPOSITORY,
         "",
         false);
-    config.setActiveRepository(config.addRepository(repository));
+    config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
     mind.learn();
     mind.think().get();
 

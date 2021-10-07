@@ -141,10 +141,11 @@ TEST(RepositoryIndexerTestCase, MindForgerRepository)
     EXPECT_EQ(0, repositoryIndexer.getOutlineStencilsFileNames().size());
 
     // test that metadata ARE written
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath(m8r::platformSpecificPath("/tmp/cfg-ritc-mfr.md"));
-    config.setActiveRepository(config.addRepository(repository));
+    config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
     m8r::Mind mind(config);
     mind.learn();
     mind.think().get();
@@ -237,10 +238,11 @@ TEST(RepositoryIndexerTestCase, MarkdownRepository)
     EXPECT_EQ(0, repositoryIndexer.getOutlineStencilsFileNames().size());
 
     // test that metadata ARE written
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath(m8r::platformSpecificPath("/tmp/cfg-ritc-mr.md"));
-    config.setActiveRepository(config.addRepository(repository));
+    config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
     m8r::Mind mind(config);
     mind.learn();
     mind.think().get();
@@ -312,10 +314,11 @@ TEST(RepositoryIndexerTestCase, MindForgerFile)
     EXPECT_EQ(0, repositoryIndexer.getOutlineStencilsFileNames().size());
 
     // test that metadata ARE written
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath(m8r::platformSpecificPath("/tmp/cfg-ritc-mff.md"));
-    config.setActiveRepository(config.addRepository(repository));
+    config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
     m8r::Mind mind(config);
     mind.learn();
     mind.think().get();
@@ -393,10 +396,11 @@ TEST(RepositoryIndexerTestCase, MarkdownFile)
     EXPECT_EQ(0, repositoryIndexer.getOutlineStencilsFileNames().size());
 
     // test that metadata ARE written
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath(m8r::platformSpecificPath("/tmp/cfg-ritc-mf.md"));
-    config.setActiveRepository(config.addRepository(repository));
+    config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
     m8r::Mind mind(config);
     mind.learn();
     mind.think().get();

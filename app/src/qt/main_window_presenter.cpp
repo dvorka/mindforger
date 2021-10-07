@@ -35,6 +35,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         = &htmlRepresentation->getMarkdownRepresentation();
     this->mdConfigRepresentation
         = new MarkdownConfigurationRepresentation{};
+    this->mdRepositoryConfigRepresentation
+        = new MarkdownRepositoryConfigurationRepresentation{};
 
     // assemble presenters w/ UI
     statusBar = new StatusBarPresenter{view.getStatusBar(), mind};
@@ -185,6 +187,8 @@ MainWindowPresenter::~MainWindowPresenter()
     if(insertImageDialog) delete insertImageDialog;
 
     // TODO deletes
+    delete this->mdConfigRepresentation;
+    delete this->mdRepositoryConfigRepresentation;
 }
 
 void MainWindowPresenter::showInitialView()
@@ -650,7 +654,9 @@ void MainWindowPresenter::doActionMindRelearn(QString path)
 {
     Repository* r = RepositoryIndexer::getRepositoryForPath(path.toStdString());
     if(r) {
-        config.setActiveRepository(config.addRepository(r));
+        config.setActiveRepository(
+            config.addRepository(r), *this->mdRepositoryConfigRepresentation
+        );
         // remember new repository
         mdConfigRepresentation->save(config);
         // learn and show
@@ -2641,9 +2647,17 @@ void MainWindowPresenter::doActionOrganizerForget()
     Organizer* o = orloj->getOrganizer()->getOrganizer();
 
     if(o->getKey() != Organizer::KEY_EISENHOWER_MATRIX) {
-        config.getRepositoryConfiguration().removeOrganizer(o);
-        getConfigRepresentation()->save(config);
-        orloj->showFacetOrganizerList(config.getRepositoryConfiguration().getOrganizers());
+        QMessageBox::StandardButton choice;
+        choice = QMessageBox::question(
+            &view,
+            tr("Forget Organizer"),
+            tr("Do you really want to forget '") + QString::fromStdString(o->getName()) + tr("' Organizer?")
+        );
+        if (choice == QMessageBox::Yes) {
+            config.getRepositoryConfiguration().removeOrganizer(o);
+            getConfigRepresentation()->save(config);
+            orloj->showFacetOrganizerList(config.getRepositoryConfiguration().getOrganizers());
+        } // else do nothing
     } else {
         QMessageBox::critical(
             &view,

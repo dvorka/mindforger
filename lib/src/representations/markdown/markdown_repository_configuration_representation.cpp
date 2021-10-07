@@ -149,12 +149,15 @@ void MarkdownRepositoryConfigurationRepresentation::repositoryConfigurationSecti
         for(string* line:*body) {
             if(line) {
                 if(line && line->find(CONFIG_SETTING_ORG_NAME) != std::string::npos) {
+                    // add PREVIOUS Organizer (if available) so that it's not rewritten
                     o = repositoryConfigurationSectionOrganizerAdd(o, keys, c);
 
                     // new organizer
                     string name{line->substr(strlen(CONFIG_SETTING_ORG_NAME))};
                     if(name.length()) {
                         o = new Organizer(name);
+                    } else {
+                        o = new Organizer("Custom Organizer");
                     }
                 } else if(o && line->find(CONFIG_SETTING_ORG_KEY) != std::string::npos) {
                     o->setKey(line->substr(strlen(CONFIG_SETTING_ORG_KEY)));
@@ -305,13 +308,14 @@ string& MarkdownRepositoryConfigurationRepresentation::to(Configuration* c, stri
 
 bool MarkdownRepositoryConfigurationRepresentation::load(Configuration& c)
 {
-    MF_DEBUG("Loading repository configuration from " << c.getRepositoryConfigFilePath() << endl);
+    MF_DEBUG("Loading repository configuration from: '" << c.getRepositoryConfigFilePath() << "'" << endl);
     string file{c.getRepositoryConfigFilePath().c_str()};
     if(isFile(file.c_str())) {
         MarkdownDocument md{&file};
         md.from();
         vector<MarkdownAstNodeSection*>* ast = md.moveAst();
         repositoryConfiguration(ast, c);
+        MF_DEBUG("  Loaded " << c.getRepositoryConfiguration().getOrganizers().size() << " Organizer(s)" << endl);
         return true;
     } else {
         return false;

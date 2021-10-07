@@ -32,10 +32,14 @@ TEST(ConfigurationTestCase, FromConstructor)
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-ctc-fc.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)),
+        repositoryConfigRepresentation
+    );
 
     cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getDir();
     cout << endl << "Repositories[" << config.getRepositories().size() << "]:";
@@ -61,13 +65,16 @@ TEST(ConfigurationTestCase, FromEnvironment)
     putenv(envVar);
     cout << "Setting env:" << endl << "  " << envVar << endl;
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-ctc-fe.md");
 
     config.setActiveRepository(
         config.addRepository(
-            m8r::RepositoryIndexer::getRepositoryForPath(config.getRepositoryPathFromEnv())));
+            m8r::RepositoryIndexer::getRepositoryForPath(config.getRepositoryPathFromEnv())),
+        repositoryConfigRepresentation
+    );
 
     if(config.getActiveRepository()) {
         cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getDir();
@@ -129,6 +136,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
 
     string timeScopeAsString{};
     m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& c = m8r::Configuration::getInstance();
 
     string backupFile = c.getConfigFilePath();
@@ -159,7 +167,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
         m8r::Repository::RepositoryMode::REPOSITORY,
         mdFilename
     };
-    c.setActiveRepository(c.addRepository(r));
+    c.setActiveRepository(c.addRepository(r), repositoryConfigRepresentation);
 
     // ADD custom organizer (will be deleted by repository configuration destructor)
     string oName{"Custom repository configuration test organizer"};
@@ -224,8 +232,8 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     c.setSaveReadsMetadata(backupReadsMetadata);
     c.setUiEditorEnableSyntaxHighlighting(backupNotebookButton);
     if(backupActiveRepository) {
-        c.setActiveRepository(c.addRepository(backupActiveRepository));
+        c.setActiveRepository(c.addRepository(backupActiveRepository), repositoryConfigRepresentation);
     } else {
-        c.setActiveRepository(nullptr);
+        c.setActiveRepository(nullptr, repositoryConfigRepresentation);
     }
 }

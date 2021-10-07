@@ -88,6 +88,9 @@ public:
     QAction* actionFindNoteByName;
     QAction* actionFindOutlineByTag;
     QAction* actionFindNoteByTag;
+#ifdef MF_WIP
+    QAction* actionFindDocByName;
+#endif
 #ifdef MF_NER
     QAction* actionFindNerPersons;
     QAction* actionFindNerLocations;

@@ -162,6 +162,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
     actionFindNoteByTag->setStatusTip(tr("Find Note by tags"));
 
+#ifdef MF_WIP
+    actionFindDocByName = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Library &Doc by Name"), mainWindow);
+    actionFindDocByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
+    actionFindDocByName->setStatusTip(tr("Find Document by name"));
+
+#endif
+
 #ifdef MF_NER
     actionFindNerPersons = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall &Persons"), mainWindow);
     actionFindNerPersons->setStatusTip(tr("Find persons using Named-entity recognition (NER)"));
@@ -182,6 +189,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFind->addAction(actionFindNoteByName);
     menuFind->addAction(actionFindOutlineByTag);
     menuFind->addAction(actionFindNoteByTag);    
+#ifdef MF_WIP
+    menuFind->addAction(actionFindDocByName);
+#endif
 #ifdef MF_NER
     menuFind->addSeparator();
     menuFind->addAction(actionFindNerPersons);
@@ -193,7 +203,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: view
 
     actionViewDashboard = new QAction(QIcon(":/menu-icons/dashboard.svg"), tr("&Dashboard"), mainWindow);
-    actionViewDashboard->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
     actionViewDashboard->setStatusTip(tr("Open Dashboard..."));
 
     actionViewHome = new QAction(QIcon(":/menu-icons/home.svg"), tr("&Home Notebook"), mainWindow);
@@ -328,7 +337,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: library
 #ifdef MF_WIP
-    menuLibrary = qMenuBar->addMenu(tr("L&ibrary"));
+    menuLibrary = qMenuBar->addMenu(tr("Libr&ary"));
 
     actionLibraryAdd = new QAction(QIcon(":/menu-icons/new.svg"), tr("&Add library"), mainWindow);
     actionLibraryAdd->setStatusTip(tr("Add directory with documents, URL or other resource to library..."));
