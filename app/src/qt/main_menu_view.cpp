@@ -217,6 +217,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
     actionViewOutlines->setStatusTip(tr("Show list of Notebooks..."));
 
+    actionViewLibraryDocs = new QAction(QIcon(":/menu-icons/copy.svg"), tr("&Library Documents"), mainWindow);
+    actionViewLibraryDocs->setStatusTip(tr("List Library documents..."));
+    actionViewLibraryDocs->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_L));
+
     actionViewTags = new QAction(QIcon(":/menu-icons/tag.svg"), tr("&Tags"), mainWindow);
     actionViewTags->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_G));
     actionViewTags->setStatusTip(tr("Open Tag cloud..."));
@@ -244,9 +248,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewStencils->setStatusTip(tr("List Notebook and Note stencils..."));
     actionViewStencils->setEnabled(false);
 
-    actionViewLimbo = new QAction(QIcon(":/menu-icons/limbo.svg"), tr("&Limbo"), mainWindow);
+    actionViewLimbo = new QAction(QIcon(":/menu-icons/limbo.svg"), tr("Li&mbo"), mainWindow);
     actionViewLimbo->setStatusTip(tr("List forgotten Notebooks and Notes..."));
-    actionViewLimbo->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_L));
     actionViewLimbo->setEnabled(false);
     // TODO same handler as Help/Documentation - open dir w/ limbo files
 
@@ -270,6 +273,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewHome);
     menuView->addAction(actionViewOrganizers);
     menuView->addAction(actionViewOutlines);
+#ifdef MF_WIP
+    menuView->addAction(actionViewLibraryDocs);
+#endif
     menuView->addAction(actionViewTags);
     menuView->addAction(actionViewNavigator);
     menuView->addAction(actionViewCli);

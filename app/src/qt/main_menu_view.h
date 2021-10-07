@@ -103,6 +103,7 @@ public:
     QAction* actionViewHome;
     QAction* actionViewOrganizers;
     QAction* actionViewOutlines;
+    QAction* actionViewLibraryDocs;
     QAction* actionViewTags;
     QAction* actionViewNavigator;
     QAction* actionViewDwell;
