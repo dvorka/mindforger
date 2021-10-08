@@ -76,9 +76,9 @@ public:
     MarkdownOutlineRepresentation &operator=(const MarkdownOutlineRepresentation&&) = delete;
     virtual ~MarkdownOutlineRepresentation();
 
-    virtual Outline* outline(const File& file) override;
+    virtual Outline* outline(const filesystem::File& file) override;
     virtual Outline* header(const std::string* md);
-    virtual Note* note(const File& file);
+    virtual Note* note(const filesystem::File& file);
     virtual Note* note(const std::string* md);
 
     virtual void description(const std::string* md, std::vector<std::string*>& description);

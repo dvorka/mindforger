@@ -19,6 +19,9 @@
 
 #include "markdown_configuration_representation.h"
 
+using namespace std;
+using namespace m8r::filesystem;
+
 namespace m8r {
 
 constexpr const auto CONFIG_SECTION_APP = "Application";
@@ -60,8 +63,6 @@ constexpr const auto CONFIG_SETTING_SAVE_READS_METADATA_LABEL = "* Save reads me
 // repositories
 constexpr const auto CONFIG_SETTING_ACTIVE_REPOSITORY_LABEL = "* Active repository: ";
 constexpr const auto CONFIG_SETTING_REPOSITORY_LABEL = "* Repository: ";
-
-using namespace std;
 
 MarkdownConfigurationRepresentation::MarkdownConfigurationRepresentation()
     : mdRepositoryCfgRepresentation{}

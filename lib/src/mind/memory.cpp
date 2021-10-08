@@ -21,6 +21,8 @@
 #include "../gear/string_utils.h"
 
 using namespace std;
+using namespace m8r::filesystem;
+
 
 namespace m8r {
 

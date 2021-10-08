@@ -18,6 +18,8 @@
 */
 #include "new_file_dialog.h"
 
+using namespace m8r::filesystem;
+
 namespace m8r {
 
 NewFileDialog::NewFileDialog(QWidget* parent)

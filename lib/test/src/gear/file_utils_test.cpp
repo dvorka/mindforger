@@ -27,13 +27,26 @@ using namespace std;
 TEST(FileGearTestCase, FilesystemPath)
 {
     // GIVEN
-    m8r::FilesystemPath basePath("/a/b");
+    m8r::filesystem::Path basePath{"/a/b"};
 
     // WHEN
-    m8r::FilesystemPath path = basePath / "c";
+    m8r::filesystem::Path path = basePath / "c";
 
     // THEN
-    ASSERT_EQ("/a/b/c", path.asString());
+    ASSERT_EQ("/a/b/c", path.toString());
+}
+
+using namespace m8r::filesystem;
+
+TEST(FileGearTestCase, FilesystemPathUsage)
+{
+    // base path
+    cout << Path{"/a/b"}
+         << endl;
+
+    // assembled path
+    cout << Path{"/a/b"} / "c" / "d"
+         << endl;
 }
 
 TEST(FileGearTestCase, DeepCopy)

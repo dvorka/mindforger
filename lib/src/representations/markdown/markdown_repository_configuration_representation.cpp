@@ -19,6 +19,9 @@
 
 #include "markdown_repository_configuration_representation.h"
 
+using namespace std;
+using namespace m8r::filesystem;
+
 namespace m8r {
 
 constexpr const auto CONFIG_SECTION_ORGANIZERS = "Organizers";

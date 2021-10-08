@@ -46,7 +46,7 @@ public:
     CsvOutlineRepresentation &operator=(const CsvOutlineRepresentation&&) = delete;
     virtual ~CsvOutlineRepresentation();
 
-    void to(const std::vector<Outline*>&, const m8r::File& sourceFile);
+    void to(const std::vector<Outline*>&, const filesystem::File& sourceFile);
 
     void toHeader(std::ofstream& out);
     void to(const Outline* o, std::ofstream& out);

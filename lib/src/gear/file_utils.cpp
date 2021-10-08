@@ -22,6 +22,15 @@ using namespace std;
 
 namespace m8r {
 
+/**
+ * @brief << operator ensuring autocast to std::string (must be defined as function).
+ */
+std::ostream& operator<<(std::ostream& out, const filesystem::Path& p) {
+   return out << p.toString();
+}
+
+namespace filesystem {
+
 const std::string File::EXTENSION_HTML = ".html";
 const std::string File::EXTENSION_CSV= ".csv";
 
@@ -71,17 +80,17 @@ bool File::fileHasTextExtension(const std::string& filename)
     return false;
 }
 
-FilesystemPath::FilesystemPath(const std::string& path)
+Path::Path(const std::string& path)
     : path{path}
 {
 }
 
-FilesystemPath::FilesystemPath(File& file)
+Path::Path(File& file)
     : path{file.getName()}
 {
 }
 
-FilesystemPath::FilesystemPath(const char* path)
+Path::Path(const char* path)
 {
     if(path) {
         this->path = string{path};
@@ -91,9 +100,11 @@ FilesystemPath::FilesystemPath(const char* path)
 }
 
 
-FilesystemPath::~FilesystemPath()
+Path::~Path()
 {
 }
+
+} // namespace: filesystem
 
 /*
  * Utility functions

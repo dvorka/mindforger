@@ -19,6 +19,7 @@
 #include "repository_indexer.h"
 
 using namespace std;
+using namespace m8r::filesystem;
 
 namespace m8r {
 

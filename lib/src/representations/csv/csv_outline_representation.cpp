@@ -18,9 +18,10 @@
 */
 #include "csv_outline_representation.h"
 
-namespace m8r {
-
 using namespace std;
+using namespace m8r::filesystem;
+
+namespace m8r {
 
 CsvOutlineRepresentation::CsvOutlineRepresentation()
 {
@@ -36,7 +37,7 @@ CsvOutlineRepresentation::~CsvOutlineRepresentation()
  * O is serialized as N descriptor, only shared fields are serialized to avoid sparse
  * lines
  */
-void CsvOutlineRepresentation::to(const vector<Outline*>& os, const m8r::File& sourceFile)
+void CsvOutlineRepresentation::to(const vector<Outline*>& os, const File& sourceFile)
 {
     MF_DEBUG("Exporting MIND to CSV " << sourceFile.getName() << endl);
 

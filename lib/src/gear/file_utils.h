@@ -72,98 +72,123 @@ constexpr const auto SYSTEM_TEMP_DIRECTORY = "/tmp";
 
 namespace m8r {
 
-struct File
-{
-    static const std::string EXTENSION_HTML;
-    static const std::string EXTENSION_CSV;
+namespace filesystem {
 
-    static const std::string EXTENSION_MD_MD;
-    static const std::string EXTENSION_MD_MARKDOWN;
-    static const std::string EXTENSION_MD_MDOWN;
-    static const std::string EXTENSION_MD_MKDN;
-
-    static const std::string EXTENSION_PDF;
-    static const std::string EXTENSION_PDF_UPPER;
-
-    static const std::string EXTENSION_TXT;
-
-    /**
-     * @brief Does file has one of supported Markdown extensions?
-     */
-    static bool fileHasMarkdownExtension(const std::string& filename);
-    // TODO: PDF extension >> make it MIME
-
-    /**
-     * @brief Does file has one of supported PDF extensions?
-     */
-    static bool fileHasPdfExtension(const std::string& filename);
-    // TODO: text extension >> make it MIME
-
-    /**
-     * @brief Does file has one of supported text file extensions?
-     */
-    static bool fileHasTextExtension(const std::string& filename);
-    // TODO instead of hard-coded extensions use MIME types to support/work
-    //      support and work with (new) extensions dynamically
-    // TODO extensions as content type parsers could be registered dynamically
-    //      just by name specification
-
-public:
-    const std::string name;
-
-    File(const std::string& name)
-        : name(name)
+    struct File
     {
-    }
+        static const std::string EXTENSION_HTML;
+        static const std::string EXTENSION_CSV;
 
-    const std::string& getName() const noexcept { return name; }
-};
+        static const std::string EXTENSION_MD_MD;
+        static const std::string EXTENSION_MD_MARKDOWN;
+        static const std::string EXTENSION_MD_MDOWN;
+        static const std::string EXTENSION_MD_MKDN;
 
-/**
- * @brief The filesystem path class.
- *
- * Implementation of filesystem path for C++ 11-.
- *
- * @see https://en.cppreference.com/w/cpp/filesystem/path
- */
-class FilesystemPath
-{
-private:
-    std::string path;
+        static const std::string EXTENSION_PDF;
+        static const std::string EXTENSION_PDF_UPPER;
 
-public:
-    explicit FilesystemPath(const std::string& path);
-    explicit FilesystemPath(const char* path);
-    explicit FilesystemPath(File& file);
-    FilesystemPath(const FilesystemPath& other) {
-        this->path = other.path;
-    }
-    FilesystemPath(const FilesystemPath&& other) {
-        this->path = other.path;
-    }
-    FilesystemPath& operator=(const FilesystemPath& other) {
-        this->path = other.path;
-        return *this;
-    }
-    FilesystemPath& operator=(const FilesystemPath&& other) {
-        this->path = other.path;
-        return *this;
-    }
-    ~FilesystemPath();
+        static const std::string EXTENSION_TXT;
 
-    FilesystemPath& operator/(const std::string& fileOrDirName) {
-        if(fileOrDirName.size()) {
-            this->path += FILE_PATH_SEPARATOR;
-            this->path += fileOrDirName;
+        /**
+         * @brief Does file has one of supported Markdown extensions?
+         */
+        static bool fileHasMarkdownExtension(const std::string& filename);
+        // TODO: PDF extension >> make it MIME
+
+        /**
+         * @brief Does file has one of supported PDF extensions?
+         */
+        static bool fileHasPdfExtension(const std::string& filename);
+        // TODO: text extension >> make it MIME
+
+        /**
+         * @brief Does file has one of supported text file extensions?
+         */
+        static bool fileHasTextExtension(const std::string& filename);
+        // TODO instead of hard-coded extensions use MIME types to support/work
+        //      support and work with (new) extensions dynamically
+        // TODO extensions as content type parsers could be registered dynamically
+        //      just by name specification
+
+    public:
+        const std::string name;
+
+        File(const std::string& name)
+            : name(name)
+        {
         }
-        return *this;
-    }
 
-    std::string asString() const { return path; }
-    const char* asCStr() const { return path.c_str(); }
-    void clear() { this->path.clear(); }
+        const std::string& getName() const noexcept { return name; }
+    };
 
-};
+    /**
+     * @brief The filesystem path class.
+     *
+     * Implementation of filesystem path for C++ 11-.
+     *
+     * @see https://en.cppreference.com/w/cpp/filesystem/path
+     */
+    class Path
+    {
+    private:
+        std::string path;
+
+    public:
+        explicit Path(const std::string& path);
+        explicit Path(const char* path);
+        explicit Path(File& file);
+        Path(const Path& other) {
+            this->path = other.path;
+        }
+        Path(const Path&& other) {
+            this->path = other.path;
+        }
+        Path& operator=(const Path& other) {
+            this->path = other.path;
+            return *this;
+        }
+        Path& operator=(const Path&& other) {
+            this->path = other.path;
+            return *this;
+        }
+        ~Path();
+
+        Path& operator /(const std::string& fileOrDirName) {
+            if(fileOrDirName.size()) {
+                this->path += FILE_PATH_SEPARATOR;
+                this->path += fileOrDirName;
+            }
+            return *this;
+        }
+
+        /**
+         * @brief Operator of cast to std::string.
+         */
+        operator std::string() const {
+            return path;
+        }
+
+        /**
+         * @brief Return path as std::string.
+         * @return Path as std::string.
+         */
+        std::string toString() const { return path; }
+        /**
+         * @brief Return path as C string.
+         * @return Path as C string.
+         */
+        const char* toCString() const { return path.c_str(); }
+
+        void clear() { this->path.clear(); }
+
+    };
+
+    /**
+     * @brief << operator ensuring autocast to std::string (must be defined as function).
+     */
+    std::ostream& operator<<(std::ostream& out, const Path& p);
+
+} // namespace: filesystem
 
 #ifdef __cplusplus
 extern "C" {

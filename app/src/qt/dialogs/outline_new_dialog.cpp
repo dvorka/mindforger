@@ -19,6 +19,7 @@
 #include "outline_new_dialog.h"
 
 using namespace std;
+using namespace m8r::filesystem;
 
 namespace m8r {
 

@@ -77,7 +77,7 @@ public:
     /**
      * @brief Save initial repository configuration file.
      */
-    void save(const File& file) { save(&file, nullptr); }
+    void save(const filesystem::File& file) { save(&file, nullptr); }
 
 private:
     void repositoryConfiguration(std::vector<MarkdownAstNodeSection*>* ast, Configuration& c);
@@ -85,7 +85,7 @@ private:
     void repositoryConfigurationSectionOrganizers(std::vector<std::string*>* body, Configuration& c);
     Organizer* repositoryConfigurationSectionOrganizerAdd(Organizer* o, std::set<std::string>& keys, Configuration& c);
     std::string& to(Configuration* c, std::string& md);
-    void save(const File* file, Configuration* c);
+    void save(const filesystem::File* file, Configuration* c);
 };
 
 }

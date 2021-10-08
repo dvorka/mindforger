@@ -78,13 +78,13 @@ public:
     /**
      * @brief Save initial configuration file.
      */
-    void save(const File& file) { save(&file, nullptr); }
+    void save(const filesystem::File& file) { save(&file, nullptr); }
 
 private:
     void configuration(std::vector<MarkdownAstNodeSection*>* ast, Configuration& c);
     void configurationSection(std::string* title, std::vector<std::string*>* body, Configuration& c);
     std::string& to(Configuration* c, std::string& md);
-    void save(const File* file, Configuration* c);
+    void save(const filesystem::File* file, Configuration* c);
 };
 
 }

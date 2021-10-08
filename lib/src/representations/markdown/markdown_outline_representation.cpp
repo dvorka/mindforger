@@ -23,6 +23,7 @@
 namespace m8r {
 
 using namespace std;
+using namespace m8r::filesystem;
 
 MarkdownOutlineRepresentation::MarkdownOutlineRepresentation(Ontology& ontology, RepresentationInterceptor* descriptionInterceptor)
     : ontology(ontology),

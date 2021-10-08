@@ -27,6 +27,7 @@
 namespace m8r {
 
 using namespace std;
+using namespace m8r::filesystem;
 
 // non-primitive constants initializations
 const string Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH = string{FILE_PATH_M8R_REPOSITORY};

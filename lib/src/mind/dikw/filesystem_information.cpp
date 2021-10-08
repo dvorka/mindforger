@@ -19,6 +19,7 @@
 #include "filesystem_information.h"
 
 using namespace std;
+using namespace m8r::filesystem;
 
 namespace m8r {
 

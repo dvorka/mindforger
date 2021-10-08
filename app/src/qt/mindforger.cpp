@@ -37,6 +37,7 @@
 #include "look_n_feel.h"
 
 using namespace std;
+using namespace m8r::filesystem;
 
 /**
  * @brief MindForger command line interface.
@@ -235,7 +236,7 @@ int main(int argc, char* argv[])
             config.getConfigFilePath() << endl
         );
 
-        mdConfigRepresentation.save(m8r::File{config.getConfigFilePath()});
+        mdConfigRepresentation.save(File{config.getConfigFilePath()});
     }
 
     // l10n is initalized after conf so that it can be configured by MF

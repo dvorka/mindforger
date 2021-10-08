@@ -40,7 +40,7 @@ public:
     TWikiOutlineRepresentation &operator=(const TWikiOutlineRepresentation&&) = delete;
     virtual ~TWikiOutlineRepresentation();
 
-    bool outline(const m8r::File& file, const m8r::File& outlineFile);
+    bool outline(const filesystem::File& file, const filesystem::File& outlineFile);
 };
 
 }

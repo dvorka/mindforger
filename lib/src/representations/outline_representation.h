@@ -35,7 +35,7 @@ public:
     OutlineRepresentation &operator=(const OutlineRepresentation&&) = delete;
     virtual ~OutlineRepresentation();
 
-    virtual Outline* outline(const m8r::File& file) = 0;
+    virtual Outline* outline(const m8r::filesystem::File& file) = 0;
 };
 
 } // m8r namespace
