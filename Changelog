@@ -1,12 +1,8 @@
-NEXT: ?  Martin Dvorak  <martin.dvorak@mindforger.com>
-
-    * Plan: - Voronoy treemaps prototype.
-
 WIP: 2021-10-30  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v1.53.0 - custom Eisenhower Matrices on tags, repository specific
-      configuration, lazy (PDF) documents indexation, various minor improvements
-      and bug fixes (note cloning, Markdown syntax highlighting, etc.).
+      configuration, lazy (PDF) documents indexation preview, various minor
+      improvements and bug fixes (note cloning, Markdown syntax highlighting, etc.).
 
 2020-03-08  Martin Dvorak  <martin.dvorak@mindforger.com>
 
