@@ -25,11 +25,11 @@ namespace m8r {
 
 FilesystemInformationSource::FilesystemInformationSource(
     string& sourcePath,
-    FilesystemPersistence& persistence,
+    Mind& mind,
     MarkdownDocumentRepresentation& mdDocumentRepresentation
 )
     : InformationSource{SourceType::FILESYSTEM, sourcePath},
-      persistence{persistence},
+      mind{mind},
       mdDocumentRepresentation{mdDocumentRepresentation}
 {
 }
@@ -38,24 +38,24 @@ FilesystemInformationSource::~FilesystemInformationSource()
 {
 }
 
-bool FilesystemInformationSource::indexToMemory(Repository& repository)
+FilesystemInformationSource::ErrorCode FilesystemInformationSource::indexToMemory(Repository& repository)
 {
     if(!isDirectory(locator.c_str())) {
         MF_DEBUG("Error: filesystem information resource cannot be indexed to memory as its locator path '" << locator << "' does not exist");
-        return false;
+        return FilesystemInformationSource::ErrorCode::INVALID_LOCATOR;
     }
 
     if(repository.getType() != Repository::RepositoryType::MINDFORGER
        || repository.getMode() != Repository::RepositoryMode::REPOSITORY
     ) {
         MF_DEBUG("Error: filesystem information resource cannot be indexed as active directory is not of MINDFORGER/REPOSITORY type");
-        return false;
+        return FilesystemInformationSource::ErrorCode::NOT_MINDFORGER_REPOSITORY;
     }
 
     string memoryPath{repository.getDir()+FILE_PATH_SEPARATOR+DIRNAME_MEMORY};
     if(!isDirectory(memoryPath.c_str())) {
         MF_DEBUG("Error: filesystem information resource cannot be indexed to memory path '" << memoryPath << "' as this directory does not exist");
-        return false;
+        return FilesystemInformationSource::ErrorCode::INVALID_MEMORY_PATH;
     }
 
     string memoryLibIndexPath{memoryPath};
@@ -88,15 +88,19 @@ bool FilesystemInformationSource::indexToMemory(Repository& repository)
         pathToDirectoryAndFile(outlinePathInMemory, outlineDir, outlineFilename);
         if(outlineDir.size()) {
             // TODO create directory including parent directories
+            MF_DEBUG("      TO BE IMPLEMENTED - create directory including parent directories: " << outlinePathInMemory << endl);
+            if(isDirectory(outlineDir.c_str())) {
+                return ErrorCode::LIBRARY_ALREADY_EXISTS;
+            }
             createDirectory(outlineDir);
         }
 
-        persistence.save(
-            mdDocumentRepresentation.to(*f, outlinePathInMemory)
-        );
+        Outline* o=mdDocumentRepresentation.to(*f, outlinePathInMemory);
+
+        mind.outlineNew(o);
     }
 
-    return true;
+    return ErrorCode::SUCCESS;
 }
 
 void FilesystemInformationSource::indexDirectoryToMemory(

@@ -84,6 +84,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionKnowledgeArxiv, SIGNAL(triggered()), mwp, SLOT(doActionKnowledgeArxiv()));
 #endif
 
+    // menu: Library
+    QObject::connect(view->actionLibraryAdd, SIGNAL(triggered()), mwp, SLOT(doActionLibraryNew()));
+
     // menu: Organizer
     QObject::connect(view->actionOrganizerNew, SIGNAL(triggered()), mwp, SLOT(doActionOrganizerNew()));
     QObject::connect(view->actionOrganizerEdit, SIGNAL(triggered()), mwp, SLOT(doActionOrganizerEdit()));

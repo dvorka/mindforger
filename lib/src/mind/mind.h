@@ -519,7 +519,10 @@ public:
             const int8_t progress = 0,
             const std::vector<const Tag*>* tags = nullptr,
             const std::vector<std::string*>* preamble = nullptr,
-            Stencil* outlineStencil = nullptr);
+            Stencil* outlineStencil = nullptr
+    );
+    std::string outlineNew(Outline* outline);
+
 
     /**
      * @brief Import O from a TWiki file.

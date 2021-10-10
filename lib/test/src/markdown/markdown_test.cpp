@@ -455,7 +455,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPreamble)
     unique_ptr<string> fileName
             = unique_ptr<string>(new string{"/lib/test/resources/apiary-repository/memory/01. Simplest API.md"});
     fileName.get()->insert(0, getMindforgerGitHomePath());
-    File file{*fileName.get()};
+    m8r::filesystem::File file{*fileName.get()};
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
@@ -538,7 +538,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPostDeclaredSection)
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
-    File file{filePath};
+    m8r::filesystem::File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
@@ -610,7 +610,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationTrailingHashesSection)
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
-    File file{filePath};
+    m8r::filesystem::File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
@@ -693,7 +693,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationEmptyFirstLine)
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
-    File file{filePath};
+    m8r::filesystem::File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
@@ -737,7 +737,7 @@ TEST(MarkdownParserTestCase, FileSystemPersistence)
     m8r::FilesystemPersistence persistence{mdr, htmlr};
 
     unique_ptr<string> text = unique_ptr<string>(new string{"abc"});
-    cout << persistence.createFileName(string("/tmp"), text.get(), File::EXTENSION_MD_MD);
+    cout << persistence.createFileName(string("/tmp"), text.get(), m8r::filesystem::File::EXTENSION_MD_MD);
 }
 
 TEST(MarkdownParserBugsTestCase, EmptyNameSkipsEof)
@@ -808,7 +808,7 @@ TEST(MarkdownParserTestCase, TimeScope)
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
-    File file{filePath};
+    m8r::filesystem::File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
@@ -862,7 +862,7 @@ TEST(MarkdownParserTestCase, Deadline)
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
-    File file{filePath};
+    m8r::filesystem::File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
@@ -919,7 +919,7 @@ TEST(MarkdownParserTestCase, Links)
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
-    File file{filePath};
+    m8r::filesystem::File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
     // asserts

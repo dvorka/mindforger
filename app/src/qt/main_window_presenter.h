@@ -21,6 +21,7 @@
 
 #include "../../lib/src/mind/mind.h"
 #include "../../lib/src/mind/ai/autolinking_preprocessor.h"
+#include "../../lib/src/mind/dikw/filesystem_information.h"
 #include "../../lib/src/representations/html/html_outline_representation.h"
 #include "../../lib/src/representations/markdown/markdown_configuration_representation.h"
 #include "../../lib/src/representations/markdown/markdown_repository_configuration_representation.h"
@@ -36,6 +37,7 @@
 #include "orloj_presenter.h"
 #include "status_bar_presenter.h"
 
+#include "dialogs/add_library_dialog.h"
 #include "dialogs/organizer_new_dialog.h"
 #include "dialogs/outline_new_dialog.h"
 #include "dialogs/note_new_dialog.h"
@@ -107,12 +109,14 @@ private:
     HtmlOutlineRepresentation* htmlRepresentation;
     MarkdownConfigurationRepresentation* mdConfigRepresentation;
     MarkdownRepositoryConfigurationRepresentation* mdRepositoryConfigRepresentation;
+    MarkdownDocumentRepresentation* mdDocumentRepresentation;
 
     MainMenuPresenter* mainMenu;
     CliAndBreadcrumbsPresenter* cli;
     OrlojPresenter* orloj;
     StatusBarPresenter* statusBar;
 
+    AddLibraryDialog* newLibraryDialog;
     ScopeDialog* scopeDialog;
     OrganizerNewDialog* newOrganizerDialog;
     OutlineNewDialog* newOutlineDialog;
@@ -234,6 +238,9 @@ public slots:
     // knowledge
     void doActionKnowledgeArxiv();
     void doActionKnowledgeWikipedia();
+    // library
+    void doActionLibraryNew();
+    void handleNewLibrary();
     // organizer
     void doActionOrganizerNew();
     void handleCreateOrganizer();

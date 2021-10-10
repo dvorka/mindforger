@@ -102,7 +102,7 @@ TEST(ConfigurationTestCase, FromEnvironment)
 
 TEST(ConfigurationTestCase, SaveDefaultConfig)
 {
-    m8r::File file{"/tmp/.mindforger.md.default"};
+    m8r::filesystem::File file{"/tmp/.mindforger.md.default"};
     m8r::MarkdownConfigurationRepresentation configRepresentation{};
 
     configRepresentation.save(file);

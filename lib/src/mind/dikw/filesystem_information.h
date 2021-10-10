@@ -23,13 +23,22 @@
 #include "../../config/configuration.h"
 #include "../../gear/file_utils.h"
 #include "../../gear/string_utils.h"
-#include "../../persistence/filesystem_persistence.h"
+#include "../../mind/mind.h"
 #include "../../representations/markdown/markdown_document_representation.h"
 
 namespace m8r {
 
 class FilesystemInformationSource : InformationSource
 {
+public:
+    enum ErrorCode {
+        SUCCESS,
+        NOT_MINDFORGER_REPOSITORY,
+        INVALID_LOCATOR,
+        INVALID_MEMORY_PATH,
+        LIBRARY_ALREADY_EXISTS
+    };
+
 private:
     // TXT
     std::set<const std::string*> txts;
@@ -52,13 +61,13 @@ private:
     // Open Office Excel
     std::set<const std::string*> openOfficeExcel;
 
-    FilesystemPersistence& persistence;
+    Mind& mind;
     MarkdownDocumentRepresentation& mdDocumentRepresentation;
 
 public:
     explicit FilesystemInformationSource(
        std::string& sourcePath,
-       FilesystemPersistence& persistence,
+       Mind& mind,
        MarkdownDocumentRepresentation& mdDocumentRepresentation
     );
     FilesystemInformationSource(const FilesystemInformationSource&) = delete;
@@ -87,7 +96,7 @@ public:
      *
      * @return true if source was successfully indexed, false otherwise.
      */
-    bool indexToMemory(Repository& repository);
+    ErrorCode indexToMemory(Repository& repository);
 
     std::set<const std::string*> getPdfs() const { return this->pdfs; }
 

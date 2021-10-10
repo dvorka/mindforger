@@ -350,6 +350,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionLibraryDeprecate = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Deprecate library"), mainWindow);
     actionLibraryDeprecate->setStatusTip(tr("Move a library resource with documents to limbo..."));
+    actionLibraryDeprecate->setDisabled(true);
 
     menuLibrary->addAction(actionLibraryAdd);
     menuLibrary->addAction(actionLibraryDeprecate);
@@ -850,6 +851,11 @@ void MainMenuView::showAllMenuItems()
     actionViewLimbo->setEnabled(true);
     actionViewRecentNotes->setEnabled(true);
 
+    menuLibrary->setEnabled(true);
+    actionLibraryAdd->setEnabled(true);
+    // TODO to be implemented
+    actionLibraryDeprecate->setEnabled(false);
+
     menuOrganizer->setEnabled(true);
     actionOrganizerNew->setEnabled(true);
     actionOrganizerEdit->setEnabled(true);
@@ -968,6 +974,7 @@ void MainMenuView::showFacetOutlineView(bool repositoryMode)
     showAllMenuItems();
 
     menuNavigator->setEnabled(false);
+    menuLibrary->setEnabled(false);
     menuOrganizer->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
@@ -990,6 +997,7 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
     menuMind->setEnabled(false);
     actionExit->setEnabled(false);
 
+    menuLibrary->setEnabled(false);
     menuOrganizer->setEnabled(false);
     actionOrganizerNew->setEnabled(false);
     actionOrganizerEdit->setEnabled(false);

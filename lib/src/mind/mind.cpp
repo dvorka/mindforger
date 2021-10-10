@@ -880,6 +880,17 @@ string Mind::outlineNew(
     return outline?outline->getKey():nullptr;
 }
 
+string Mind::outlineNew(Outline* outline)
+{
+    if(outline) {
+        remember(outline);
+        onRemembering();
+    }
+
+    return outline?outline->getKey():nullptr;
+}
+
+
 Outline* Mind::learnOutlineTWiki(const string& twikiFile)
 {
     string directory{}, file{};

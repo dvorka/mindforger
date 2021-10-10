@@ -22,14 +22,14 @@ using namespace std;
 
 namespace m8r {
 
+namespace filesystem {
+
 /**
  * @brief << operator ensuring autocast to std::string (must be defined as function).
  */
 std::ostream& operator<<(std::ostream& out, const filesystem::Path& p) {
    return out << p.toString();
 }
-
-namespace filesystem {
 
 const std::string File::EXTENSION_HTML = ".html";
 const std::string File::EXTENSION_CSV= ".csv";

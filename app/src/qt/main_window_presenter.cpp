@@ -38,6 +38,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         = new MarkdownConfigurationRepresentation{};
     this->mdRepositoryConfigRepresentation
         = new MarkdownRepositoryConfigurationRepresentation{};
+    this->mdDocumentRepresentation
+        = new MarkdownDocumentRepresentation{mind->getOntology()};
 
     // assemble presenters w/ UI
     statusBar = new StatusBarPresenter{view.getStatusBar(), mind};
@@ -46,6 +48,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     orloj = new OrlojPresenter{this, view.getOrloj(), mind};
 
     // initialize components
+    newLibraryDialog = new AddLibraryDialog{&view};
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
     newOutlineDialog = new OutlineNewDialog{QString::fromStdString(config.getMemoryPath()), mind->getOntology(), &view};
@@ -86,6 +89,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     handleMindPreferences();
 
     // wire signals
+    QObject::connect(newLibraryDialog->getCreateButton(), SIGNAL(clicked()), this, SLOT(handleNewLibrary()));
     QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
     QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
@@ -186,10 +190,12 @@ MainWindowPresenter::~MainWindowPresenter()
     if(configDialog) delete configDialog;
     //if(findNoteByNameDialog) delete findNoteByNameDialog;
     if(insertImageDialog) delete insertImageDialog;
+    if(newLibraryDialog) delete newLibraryDialog;
 
     // TODO deletes
     delete this->mdConfigRepresentation;
     delete this->mdRepositoryConfigRepresentation;
+    delete this->mdDocumentRepresentation;
 }
 
 void MainWindowPresenter::showInitialView()
@@ -2517,6 +2523,64 @@ void MainWindowPresenter::doActionKnowledgeWikipedia()
 void MainWindowPresenter::doActionKnowledgeArxiv()
 {
     QDesktopServices::openUrl(QUrl{"https://arxiv.org/search/cs"});
+}
+
+void MainWindowPresenter::doActionLibraryNew()
+{
+    newLibraryDialog->show();
+}
+
+void MainWindowPresenter::handleNewLibrary()
+{
+    // check that filesystem path exists
+    string uri{newLibraryDialog->getLibraryUriText().toStdString()};
+    if(!isDirectory(uri.c_str())) {
+        QMessageBox::critical(
+            &view,
+            tr("Add Library Error"),
+            tr("Library directory doesn't exist!")
+        );
+        return;
+    }
+
+    // TODO check that it's new path (SAFE library update is different operation)
+
+    newLibraryDialog->hide();
+
+    // TODO add library to repository configuration
+
+    // TODO index library documents
+    FilesystemInformationSource informationSource{
+        uri,
+        *orloj->getMind(),
+        *mdDocumentRepresentation,
+    };
+
+    FilesystemInformationSource::ErrorCode code = informationSource.indexToMemory(
+        *config.getActiveRepository()
+    );
+    if(FilesystemInformationSource::ErrorCode::LIBRARY_ALREADY_EXISTS == code) {
+        QMessageBox::critical(
+            &view,
+            tr("Add Library Error"),
+            tr("Library already indexed - use update action to reindex documents.")
+        );
+        return;
+    }
+    if(FilesystemInformationSource::ErrorCode::SUCCESS != code) {
+        QMessageBox::critical(
+            &view,
+            tr("Add Library Error"),
+            tr("Unable to index documents on library path - either memory directory "
+               "doesn't exist or not in MindForger repository mode."
+            )
+        );
+        return;
+    }
+
+    // TODO Library menu enabled in case of MF/repository only
+
+    MF_DEBUG("New Library: " << uri << " has been added to MindForger" << endl);
 }
 
 void MainWindowPresenter::doActionOrganizerNew()

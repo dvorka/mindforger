@@ -35,25 +35,35 @@ TEST(FilesystemInformationTestCase, IndexPdfs) {
     string mdFilePath{box.addMdFile(mdFilename)};
 
     m8r::Ontology ontology{};
-    m8r::MarkdownOutlineRepresentation mdor{ontology, nullptr};
-    m8r::HtmlOutlineRepresentation htmlr{ontology, nullptr};
-    m8r::FilesystemPersistence persistence{mdor, htmlr};
     m8r::MarkdownDocumentRepresentation mddr{ontology};
 
-    m8r::Repository r{
-        box.repositoryPath,
-        m8r::Repository::RepositoryType::MINDFORGER,
-        m8r::Repository::RepositoryMode::REPOSITORY,
-        mdFilename
-    };
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance(); config.clear();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mtc-larmfr.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(box.repositoryPath)),
+        repositoryConfigRepresentation
+    );
+    cout << "Loading repository: " << config.getActiveRepository()->getPath() << endl;
+
+    m8r::Mind mind(config);
+    mind.learn();
+    ASSERT_EQ(m8r::Configuration::MindState::SLEEPING, config.getMindState());
+    mind.think().get();
+    ASSERT_EQ(m8r::Configuration::MindState::THINKING, config.getMindState());
+    cout << "Statistics:" << endl
+    << "  Outlines: " << mind.remind().getOutlinesCount() << endl
+    << "  Bytes   : " << mind.remind().getOutlineMarkdownsSize() << endl;
+    ASSERT_LE(1, mind.remind().getOutlinesCount());
 
     // WHEN
     m8r::FilesystemInformationSource is{
         pdfsLibraryPath,
-        persistence,
+        mind,
         mddr
     };
-    is.indexToMemory(r);
+    is.indexToMemory(*config.getActiveRepository());
 
     // THEN
     cout << "Indexed PDFs:" << endl;

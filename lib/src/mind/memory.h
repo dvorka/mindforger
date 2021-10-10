@@ -203,6 +203,7 @@ public:
     void sortByName(std::vector<Outline*>& sorted) const;
     void sortByRead(std::vector<Note*>& sorted) const;
     RepositoryIndexer& getRepositoryIndexer() { return repositoryIndexer; }
+    Persistence& getPersistence() const { return *persistence; }
 
 private:
     const OutlineType* toOutlineType(const MarkdownAstSectionMetadata&);
