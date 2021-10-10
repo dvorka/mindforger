@@ -166,7 +166,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFindDocByName = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Library &Doc by Name"), mainWindow);
     actionFindDocByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
     actionFindDocByName->setStatusTip(tr("Find Document by name"));
-
 #endif
 
 #ifdef MF_NER
@@ -342,7 +341,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNavigator->setEnabled(false);
 
     // menu: library
-#ifdef MF_WIP
     menuLibrary = qMenuBar->addMenu(tr("Libr&ary"));
 
     actionLibraryAdd = new QAction(QIcon(":/menu-icons/new.svg"), tr("&Add library"), mainWindow);
@@ -353,6 +351,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionLibraryDeprecate->setDisabled(true);
 
     menuLibrary->addAction(actionLibraryAdd);
+#ifdef MF_WIP
     menuLibrary->addAction(actionLibraryDeprecate);
 #endif
 
