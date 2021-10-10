@@ -330,7 +330,7 @@ bool createDirectory(const string& path) {
 #endif
 
     if(e) {
-        cerr << "Failed to create directory '" << path << "' with error " << e;
+        cerr << "Failed to create directory '" << path << "' with error: '" << e << "'" << endl;
         return false;
     } else {
         return true;

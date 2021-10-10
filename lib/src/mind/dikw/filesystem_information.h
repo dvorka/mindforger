@@ -43,7 +43,7 @@ private:
     // TXT
     std::set<const std::string*> txts;
     // PDF
-    std::set<const std::string*> pdfs;
+    std::set<const std::string*> pdfs_paths;
     // HTML
     std::set<const std::string*> htmls;
 
@@ -98,7 +98,7 @@ public:
      */
     ErrorCode indexToMemory(Repository& repository);
 
-    std::set<const std::string*> getPdfs() const { return this->pdfs; }
+    std::set<const std::string*> getPdfs() const { return this->pdfs_paths; }
 
 private:
     void indexDirectoryToMemory(const std::string& directory, const std::string& memoryPath);

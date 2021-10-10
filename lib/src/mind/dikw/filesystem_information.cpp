@@ -40,6 +40,8 @@ FilesystemInformationSource::~FilesystemInformationSource()
 
 FilesystemInformationSource::ErrorCode FilesystemInformationSource::indexToMemory(Repository& repository)
 {
+    MF_DEBUG("Indexing LIBRARY documents to memory:" << endl);
+
     if(!isDirectory(locator.c_str())) {
         MF_DEBUG("Error: filesystem information resource cannot be indexed to memory as its locator path '" << locator << "' does not exist");
         return FilesystemInformationSource::ErrorCode::INVALID_LOCATOR;
@@ -61,12 +63,19 @@ FilesystemInformationSource::ErrorCode FilesystemInformationSource::indexToMemor
     string memoryLibIndexPath{memoryPath};
     memoryLibIndexPath += FILE_PATH_SEPARATOR;
     memoryLibIndexPath += FilesystemInformationSource::DIR_MEMORY_M1ndF0rg3rL1br8ry;
-    createDirectory(memoryLibIndexPath);
+    if(!isDirectory(memoryLibIndexPath.c_str())) {
+        createDirectory(memoryLibIndexPath);
+    }
 
     string memoryInformationSourceIndexPath{memoryLibIndexPath};
     memoryInformationSourceIndexPath += FILE_PATH_SEPARATOR;
     memoryInformationSourceIndexPath += normalizeToNcName(this->locator, '_');
-    createDirectory(memoryInformationSourceIndexPath);
+    MF_DEBUG("  Library path in memory: " << memoryInformationSourceIndexPath << endl);
+    if(isDirectory(memoryInformationSourceIndexPath.c_str())) {
+        return ErrorCode::LIBRARY_ALREADY_EXISTS;
+    } else {
+        createDirectory(memoryInformationSourceIndexPath);
+    }
 
     indexDirectoryToMemory(locator, memoryPath);
 
@@ -74,9 +83,9 @@ FilesystemInformationSource::ErrorCode FilesystemInformationSource::indexToMemor
     string relativeDocLibPath{};
     string outlineDir{};
     string outlineFilename{};
-    for(auto f:this->pdfs) {
-        MF_DEBUG("  " << *f << endl);
-        relativeDocLibPath.assign(f->substr(locator.size()+1));
+    for(auto pdf_path:this->pdfs_paths) {
+        MF_DEBUG("  " << *pdf_path << endl);
+        relativeDocLibPath.assign(pdf_path->substr(locator.size()+1));
         MF_DEBUG("    " << relativeDocLibPath << endl);
 
         outlinePathInMemory.assign(memoryInformationSourceIndexPath);
@@ -89,13 +98,10 @@ FilesystemInformationSource::ErrorCode FilesystemInformationSource::indexToMemor
         if(outlineDir.size()) {
             // TODO create directory including parent directories
             MF_DEBUG("      TO BE IMPLEMENTED - create directory including parent directories: " << outlinePathInMemory << endl);
-            if(isDirectory(outlineDir.c_str())) {
-                return ErrorCode::LIBRARY_ALREADY_EXISTS;
-            }
             createDirectory(outlineDir);
         }
 
-        Outline* o=mdDocumentRepresentation.to(*f, outlinePathInMemory);
+        Outline* o=mdDocumentRepresentation.to(*pdf_path, outlinePathInMemory);
 
         mind.outlineNew(o);
     }
@@ -132,7 +138,7 @@ void FilesystemInformationSource::indexDirectoryToMemory(
                     ppath->append(entry->d_name);
 
                     if(File::fileHasPdfExtension(*ppath)) {
-                        pdfs.insert(ppath);
+                        pdfs_paths.insert(ppath);
                     }
                 }
             } while ((entry = readdir(dir)) != 0);

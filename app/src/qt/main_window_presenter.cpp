@@ -2581,6 +2581,9 @@ void MainWindowPresenter::handleNewLibrary()
     // TODO Library menu enabled in case of MF/repository only
 
     MF_DEBUG("New Library: " << uri << " has been added to MindForger" << endl);
+
+    // show Os view
+    orloj->showFacetOutlineList(mind->getOutlines());
 }
 
 void MainWindowPresenter::doActionOrganizerNew()

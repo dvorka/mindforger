@@ -77,7 +77,11 @@ Outline* MarkdownDocumentRepresentation::to(
     );
     o->addDescriptionLine(new string{""});
 
-    o->makeModified();
+    // set O modification time identical to the document
+    o->setCreated(fileModificationTime(&documentPath));
+    o->setModified(o->getCreated());
+    o->setModifiedPretty();
+
     o->checkAndFixProperties();
 
     return o;
