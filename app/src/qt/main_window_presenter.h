@@ -136,7 +136,7 @@ private:
     NewRepositoryDialog* newRepositoryDialog;
     NewFileDialog* newFileDialog;
     ExportFileDialog* exportOutlineToHtmlDialog;
-    ExportFileDialog* exportMindToCsvDialog;
+    ExportFileDialog* exportMemoryToCsvDialog;
     NerChooseTagTypesDialog *nerChooseTagsDialog;
     NerResultDialog* nerResultDialog;
 

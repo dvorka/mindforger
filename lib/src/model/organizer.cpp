@@ -49,7 +49,8 @@ std::string Organizer::createOrganizerKey(
 
 Organizer::Organizer(const std::string& name):
     sortBy{Organizer::SortBy::IMPORTANCE},
-    filterBy{Organizer::FilterBy::OUTLINES_NOTES}
+    filterBy{Organizer::FilterBy::OUTLINES_NOTES},
+    modified{datetimeNow()}
 {
     this->name = name;
 }
@@ -57,7 +58,8 @@ Organizer::Organizer(const std::string& name):
 Organizer::Organizer(const Organizer& o):
     Thing{o.getName()},
     sortBy{o.getSortBy()},
-    filterBy{o.getFilterBy()}
+    filterBy{o.getFilterBy()},
+    modified{o.modified}
 {
     this->name = o.name;
 
@@ -105,6 +107,11 @@ bool Organizer::isValid() const {
     }
 
     return true;
+}
+
+void Organizer::makeModified()
+{
+    this->modified = datetimeNow();
 }
 
 } // m8r namespace

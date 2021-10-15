@@ -256,9 +256,9 @@ void Memory::exportToHtml(Outline* outline, const string& fileName)
     persistence->saveAsHtml(outline, fileName);
 }
 
-void Memory::exportToCsv(const string&  fileName)
+void Memory::exportToCsv(const string& fileName, ProgressCallbackCtx* callbackCtx)
 {
-    csvRepresentation.to(outlines, fileName);
+    csvRepresentation.to(outlines, fileName, callbackCtx);
 }
 
 void Memory::forget(Outline* outline)
@@ -315,24 +315,31 @@ const vector<Outline*>& Memory::getOutlines() const
     return outlines;
 }
 
-bool compareOutlineNames(const Outline* o1, const Outline* o2)
+void Memory::sortByName(vector<Outline*>& os)
 {
-    return o1->getName().compare(o2->getName()) < 0;
+    std::sort(
+        os.begin(),
+        os.end(),
+        [](const Outline* o1, const Outline* o2) { return o1->getName().compare(o2->getName()) < 0; }
+    );
 }
 
-void Memory::sortByName(vector<Outline*>& os) const
+void Memory::sortByRead(vector<Outline*>& ns)
 {
-    std::sort(os.begin(), os.end(), compareOutlineNames);
+    std::sort(
+        ns.begin(),
+        ns.end(),
+        [](Outline* a, Outline* b) { return a->getRead() > b->getRead(); }
+    );
 }
 
-bool compareNoteReads(const Note* n1, const Note* n2)
+void Memory::sortByRead(vector<Note*>& ns)
 {
-    return n1->getRead() > n2->getRead();
-}
-
-void Memory::sortByRead(vector<Note*>& ns) const
-{
-    std::sort(ns.begin(), ns.end(), compareNoteReads);
+    std::sort(
+        ns.begin(),
+        ns.end(),
+        [](const Note* n1, const Note* n2){ return n1->getRead() > n2->getRead(); }
+    );
 }
 
 string Memory::createOutlineKey(const string* name)

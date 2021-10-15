@@ -26,7 +26,7 @@ namespace m8r {
 const NoteType Outline::NOTE_4_OUTLINE_TYPE{"Outline", nullptr, Color::RED()};
 
 Outline::Outline(const OutlineType* type)
-    : Thing{},
+    : ThingInTime{},
       memoryLocation(OutlineMemoryLocation::NORMAL),
       format(MarkdownDocument::Format::MINDFORGER),
       type(type),
@@ -77,7 +77,7 @@ void Outline::resetClonedOutline(Outline* o)
 }
 
 Outline::Outline(const Outline& o)
-    : Thing{},
+    : ThingInTime{},
       memoryLocation(OutlineMemoryLocation::NORMAL), format(o.format), type(o.type)
 {
     key.clear();
@@ -246,16 +246,6 @@ void Outline::notifyChange(Note* note)
     note->incRevision();
 }
 
-time_t Outline::getCreated() const
-{
-    return created;
-}
-
-void Outline::setCreated(time_t created)
-{
-    this->created = created;
-}
-
 void Outline::setImportance(int8_t importance)
 {
     this->importance = importance;
@@ -306,26 +296,11 @@ void Outline::setTag(const Tag* tag)
     tags.push_back(tag);
 }
 
-time_t Outline::getModified() const
-{
-    return modified;
-}
-
 void Outline::makeModified()
 {
     setModified();
     setModifiedPretty();
     incRevision();
-}
-
-void Outline::setModified()
-{
-    this->modified = datetimeNow();
-}
-
-void Outline::setModified(time_t modified)
-{
-    this->modified = modified;
 }
 
 const string& Outline::getModifiedPretty() const

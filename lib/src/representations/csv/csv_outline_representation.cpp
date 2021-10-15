@@ -37,9 +37,12 @@ CsvOutlineRepresentation::~CsvOutlineRepresentation()
  * O is serialized as N descriptor, only shared fields are serialized to avoid sparse
  * lines
  */
-void CsvOutlineRepresentation::to(const vector<Outline*>& os, const File& sourceFile)
-{
-    MF_DEBUG("Exporting MIND to CSV " << sourceFile.getName() << endl);
+bool CsvOutlineRepresentation::to(
+    const vector<Outline*>& os,
+    const File& sourceFile,
+    ProgressCallbackCtx* callbackCtx
+) {
+    MF_DEBUG("Exporting Memory to CSV " << sourceFile.getName() << " ..." << endl);
 
     if(sourceFile.getName().size()) {
         if(os.size()) {
@@ -47,21 +50,35 @@ void CsvOutlineRepresentation::to(const vector<Outline*>& os, const File& source
             try {
                 out.open(sourceFile.getName());
 
+                float exported{0.0};
                 toHeader(out);
                 for(Outline* o:os) {
+                    MF_DEBUG("  Exporting O: " << o->getName() << " / " << o->getKey() << endl);
                     to(o, out);
+
+                    if(callbackCtx) {
+                        callbackCtx->updateProgress(++exported/(float)os.size());
+                    }
                 }
-            } catch (const std::ofstream::failure& e) {
+            } catch(const std::ofstream::failure& e) {
                 cerr << "Error: unable to open/write file " << sourceFile.getName() << " " << e.what();
+                try {
+                    out.close();
+                } catch(const std::ofstream::failure& e) {}
+
+                return false;
             }
             out.flush();
             out.close();
 
             MF_DEBUG("FINISHED export of MIND to CSV " << sourceFile.getName() << endl);
+            return true;
         }
     } else {
         cerr << "Error: target file name is empty";
     }
+
+    return false;
 }
 
 void CsvOutlineRepresentation::toHeader(std::ofstream& out)

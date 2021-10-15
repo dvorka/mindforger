@@ -23,7 +23,7 @@ using namespace std;
 namespace m8r {
 
 Note::Note(const NoteType* type, Outline* outline)
-    : Thing{},
+    : ThingInTime{},
       outline(outline),
       type(type)
 {
@@ -36,7 +36,7 @@ Note::Note(const NoteType* type, Outline* outline)
 }
 
 Note::Note(const Note& n)
-    : Thing{},
+    : ThingInTime{},
       outline(nullptr),
       type(n.type)
 {
@@ -104,16 +104,6 @@ string Note::getMangledName() const
     return result;
 }
 
-time_t Note::getCreated() const
-{
-    return created;
-}
-
-void Note::setCreated(time_t created)
-{
-    this->created = created;
-}
-
 time_t Note::getDeadline() const
 {
     return deadline;
@@ -134,11 +124,6 @@ void Note::setDepth(u_int16_t depth)
     this->depth = depth;
 }
 
-time_t Note::getModified() const
-{
-    return modified;
-}
-
 void Note::makeModified()
 {
     setModified();
@@ -150,14 +135,13 @@ void Note::makeModified()
 
 void Note::setModified()
 {
-    this->modified = datetimeNow();
+    ThingInTime::setModified();
 }
 
 void Note::setModified(time_t modified)
 {
-    MF_ASSERT_FUTURE_TIMESTAMPS(created, read, modified, outline->getKey() << "# " << name, name);
+    ThingInTime::setModified(modified);
 
-    this->modified = modified;
     setModifiedPretty();
 }
 

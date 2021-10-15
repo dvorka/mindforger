@@ -109,6 +109,7 @@ SOURCES += \
     ./src/model/link.cpp \
     ./src/config/palette.cpp \
     src/config/repository_configuration.cpp \
+    src/gear/async_utils.cpp \
     src/mind/dikw/dikw_pyramid.cpp \
     src/mind/dikw/filesystem_information.cpp \
     src/mind/dikw/information.cpp \
@@ -212,6 +213,7 @@ HEADERS += \
     ./src/model/link.h \
     ./src/config/palette.h \
     src/config/repository_configuration.h \
+    src/gear/async_utils.h \
     src/mind/dikw/dikw_pyramid.h \
     src/mind/dikw/filesystem_information.h \
     src/mind/dikw/information.h \

@@ -52,7 +52,7 @@ enum class OutlineMemoryLocation {
  * 3/5 urgency
  * 10% progress
  */
-class Outline : public Thing
+class Outline : public ThingInTime
 {
 public:
     static const int NO_OFFSET = -1;
@@ -92,11 +92,8 @@ private:
     const OutlineType* type;
     std::vector<std::string*> description;
 
-    time_t created;
-    time_t modified;
     std::string modifiedPretty;
     u_int32_t revision;
-    time_t read;
     u_int32_t reads;
 
     int8_t importance;
@@ -179,8 +176,6 @@ public:
     void addDescriptionLine(std::string *);
     void setDescription(const std::vector<std::string*>& description);
     void clearDescription();
-    time_t getCreated() const;
-    void setCreated(time_t created);
     int8_t getImportance() const;
     void setImportance(int8_t importance);
     const Tag* getPrimaryTag() const;
@@ -202,10 +197,7 @@ public:
     bool hasTagStrings(std::set<std::string>& filterTags) {
         return Tag::hasTagStrings(this->tags, filterTags);
     }
-    time_t getModified() const;
     void makeModified();
-    void setModified();
-    void setModified(time_t modified);
     const std::string& getModifiedPretty() const;
     void setModifiedPretty();
     void setModifiedPretty(const std::string& modifiedPretty);

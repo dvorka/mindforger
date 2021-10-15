@@ -87,10 +87,10 @@ public:
     Thing* getChoice() const { return choice; }
 
     void show(
-            std::vector<Thing*>& outlines,
-            std::vector<std::string>* customizedNames=nullptr,
-            bool showScopeCheck=false,
-            bool init=true
+        std::vector<Thing*>& outlines,
+        std::vector<std::string>* customizedNames=nullptr,
+        bool showScopeCheck=false,
+        bool init=true
     );
 
 signals:

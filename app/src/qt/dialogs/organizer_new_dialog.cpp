@@ -242,20 +242,24 @@ void OrganizerNewDialog::handleCreate()
             tr("New Organizer Error"),
             tr("Organizer must have non-empty name.")
         );
-    } else if(
-        !upperRightTags->getTagCount()
-        || !upperLeftTags->getTagCount()
-        || !lowerRightTags->getTagCount()
-        || !lowerLeftTags->getTagCount()
-    ) {
-        QMessageBox::critical(
-            this,
-            tr("New Organizer Error"),
-            tr("At least one tag must be selected for every quadrant.")
-        );
-    } else {
-        emit createFinished();
+        return;
     }
+
+    // if tag is not specified, replace it with "no tag" represented by .
+    if(!upperRightTags->getTagCount()) {
+        upperRightTags->setTagsAsStrings(set<string>{"."});
+    }
+    if(!upperLeftTags->getTagCount()) {
+        upperLeftTags->setTagsAsStrings(set<string>{"."});
+    }
+    if(!lowerRightTags->getTagCount()) {
+        lowerRightTags->setTagsAsStrings(set<string>{"."});
+    }
+    if(!lowerLeftTags->getTagCount()) {
+        lowerLeftTags->setTagsAsStrings(set<string>{"."});
+    }
+
+    emit createFinished();
 }
 
 /*

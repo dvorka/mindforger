@@ -48,6 +48,8 @@ void OrganizerPresenter::refresh(
 
     this->organizer = organizer;
 
+    organizer->makeModified();
+
     QString title{};
 
     // upper right / do first
@@ -166,6 +168,11 @@ void OrganizerPresenter::refresh(
             planDedicatedTimePresenter->setTitle(title);
             title = QString::fromStdString(Organizer::tagsToString(organizer->getLowerLeftTags(), false));
             doSometimePresenter->setTitle(title);
+
+            Memory::sortByRead(upperRightNs);
+            Memory::sortByRead(upperLeftNs);
+            Memory::sortByRead(lowerLeftNs);
+            Memory::sortByRead(lowerRightNs);
 
             doFirstPresenter->refresh(upperRightNs, true, true);
             doSoonPresenter->refresh(upperLeftNs, true, false);

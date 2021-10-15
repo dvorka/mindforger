@@ -41,14 +41,28 @@ OrganizersTablePresenter::~OrganizersTablePresenter()
 
 void OrganizersTablePresenter::refresh(const vector<Organizer*>& organizers)
 {
+    vector<Organizer*> sortedOrganizers{organizers};
+    std::sort(
+        sortedOrganizers.begin(),
+        sortedOrganizers.end(),
+        [](Organizer* a, Organizer* b){ return a->modified > b->modified; }
+    );
+
+#ifdef DO_MF_DEBUG
+    MF_DEBUG("Refreshing organizers table:");
+    for(Organizer* so:sortedOrganizers) {
+        MF_DEBUG("  [" << so->getModified() << "]  " << so->getName() << endl);
+    }
+#endif
+
     model->removeAllRows();
-    if(organizers.size()) {
-        for(auto& o:organizers) {
+    if(sortedOrganizers.size()) {
+        for(auto& o:sortedOrganizers) {
             model->addRow(o);
         }
     }
 
-    view->sortByColumn(0, Qt::SortOrder::DescendingOrder);
+    // SORTED on insert: view->sortByColumn(0, Qt::SortOrder::DescendingOrder);
 
     this->view->setCurrentIndex(this->model->index(0, 0));
     this->view->setFocus();

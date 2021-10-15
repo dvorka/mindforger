@@ -41,4 +41,5 @@ void timetToQDate(const time_t t, QDate& qdate);
 void qdateToTm(const QDate& qdate, struct tm& t);
 
 } // m8r namespace
+
 #endif // M8R_QUTILS_H

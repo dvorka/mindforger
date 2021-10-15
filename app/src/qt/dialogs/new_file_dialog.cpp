@@ -31,7 +31,7 @@ NewFileDialog::NewFileDialog(QWidget* parent)
     extension = QString::fromStdString(File::EXTENSION_MD_MD);
 
     // widgets
-    fileNameLabel = new QLabel{tr("Markdown name:")};
+    fileNameLabel = new QLabel{tr("File name:")};
     fileNameEdit = new QLineEdit{};
     dirLabel = new QLabel{tr("Target directory:")};
     dirEdit = new QLineEdit{};

@@ -74,9 +74,9 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
              QString::fromStdString(File::EXTENSION_HTML),
              &view
     );
-    exportMindToCsvDialog
+    exportMemoryToCsvDialog
        = new ExportFileDialog(
-             tr("Export Mind to CSV"),
+             tr("Export Memory to CSV"),
              tr("Export"),
              QString::fromStdString(File::EXTENSION_CSV),
              &view
@@ -108,7 +108,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
     QObject::connect(exportOutlineToHtmlDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineHtmlExport()));
-    QObject::connect(exportMindToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
+    QObject::connect(exportMemoryToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
     QObject::connect(
         orloj->getDashboard()->getView()->getNavigatorDashboardlet(), SIGNAL(clickToSwitchFacet()),
         this, SLOT(doActionViewKnowledgeGraphNavigator())
@@ -749,7 +749,7 @@ void MainWindowPresenter::doActionFindOutlineByName()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> os{mind->getOutlines()};
-    mind->remind().sortByName(os);
+    mind->remind().sortByRead(os);
     vector<Thing*> es{os.begin(),os.end()};
 
     findOutlineByNameDialog->show(es);
@@ -911,12 +911,14 @@ void MainWindowPresenter::doActionFindNoteByName()
         findNoteByNameDialog->setWindowTitle(tr("Find Note by Name in Notebook"));
         findNoteByNameDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
         vector<Note*> allNotes(findNoteByNameDialog->getScope()->getNotes());
+        mind->remind().sortByRead(allNotes);
         findNoteByNameDialog->show(allNotes);
     } else {
         findNoteByNameDialog->setWindowTitle(tr("Find Note by Name"));
         findNoteByNameDialog->clearScope();
         vector<Note*> allNotes{};
         mind->getAllNotes(allNotes);
+        mind->remind().sortByRead(allNotes);
         findNoteByNameDialog->show(allNotes);
     }
 }
@@ -2044,7 +2046,7 @@ void MainWindowPresenter::handleOutlineHtmlExport()
 
 void MainWindowPresenter::doActionMindCsvExport()
 {
-    exportMindToCsvDialog->show();
+    exportMemoryToCsvDialog->show();
 }
 
 void MainWindowPresenter::handleMindCsvExport()
@@ -2052,7 +2054,17 @@ void MainWindowPresenter::handleMindCsvExport()
     if(isDirectoryOrFileExists(newFileDialog->getFilePath().toStdString().c_str())) {
         QMessageBox::critical(&view, tr("Export Error"), tr("Specified file path already exists!"));
     } else {
-        mind->remind().exportToCsv(exportMindToCsvDialog->getFilePath().toStdString());
+        StatusBarProgressCallbackCtx callbackCtx{statusBar};
+        mind->remind().exportToCsv(
+            exportMemoryToCsvDialog->getFilePath().toStdString(),
+            &callbackCtx
+            //[](float progress){ cout << "Export progress: " << progress << endl; }
+        );
+        statusBar->showInfo(
+            "Export to CSV file '"
+            + exportMemoryToCsvDialog->getFilePath().toStdString()
+            + "' successfully finished"
+        );
     }
 }
 

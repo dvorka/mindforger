@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 
+#include "../gear/datetime_utils.h"
 #include "../mind/ontology/thing_class_rel_triple.h"
 
 namespace m8r {
@@ -141,13 +142,27 @@ public:
     // O or global scope (null)
     std::string scopeOutlineId;
 
+    /*
+     * transient fields
+     */
+
+    time_t modified;
+
 public:
     explicit Organizer(const std::string& name);
-    explicit Organizer(const Organizer&);
+    explicit Organizer(const Organizer& o);
     Organizer(const Organizer&&) = delete;
-    Organizer &operator=(const Organizer&) = delete;
-    Organizer &operator=(const Organizer&&) = delete;
+    Organizer& operator=(const Organizer&) = delete;
+    Organizer& operator=(const Organizer&&) = delete;
     ~Organizer();
+
+    bool operator<(const Organizer& other) const {
+        return modified < other.modified;
+    }
+
+    bool operator<(Organizer* other) const {
+        return modified < other->modified;
+    }
 
     void setKey(const std::string& key) { this->key = key; }
 
@@ -216,7 +231,10 @@ public:
         this->scopeOutlineId = outlineId;
     }
 
-    bool isValid() const;    
+    bool isValid() const;
+
+    time_t getModified() const { return this->modified; }
+    void makeModified();
 };
 
 }

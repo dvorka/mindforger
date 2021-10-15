@@ -1,5 +1,5 @@
 /*
- export_file_dialog.cpp     MindForger thinking notebook
+ async_utils.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,26 +16,25 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "export_file_dialog.h"
+#include "async_utils.h"
 
 namespace m8r {
 
-ExportFileDialog::ExportFileDialog(
-    QString title,
-    QString button,
-    QString extension,
-    QWidget* parent
-)
-    : NewFileDialog{parent}
+ProgressCallbackCtx::ProgressCallbackCtx()
 {
-    setWindowTitle(title);
-
-    this->extension = extension;
-    this->newButton->setText(button);
 }
 
-ExportFileDialog::~ExportFileDialog()
+ProgressCallbackCtx::~ProgressCallbackCtx()
 {
+}
+
+int ProgressCallbackCtx::normalizeProgressToPercent(float progress)
+{
+    if(progress > 1.0) {
+        progress /= 100.0;
+    }
+
+    return (int)(trunc(progress * 100.0));
 }
 
 } // m8r namespace

@@ -65,6 +65,57 @@ void Thing::autolinkName()
 }
 
 /*
+ * Thing in time
+ */
+
+ThingInTime::ThingInTime()
+    : Thing{}
+{
+}
+
+ThingInTime::ThingInTime(const std::string name)
+    : Thing{name}
+{
+}
+
+ThingInTime::~ThingInTime()
+{
+}
+
+time_t ThingInTime::getCreated() const
+{
+    return created;
+}
+
+void ThingInTime::setCreated()
+{
+    this->modified = datetimeNow();
+}
+
+void ThingInTime::setCreated(time_t created)
+{
+    this->created = created;
+}
+
+time_t ThingInTime::getModified() const
+{
+    return modified;
+}
+
+void ThingInTime::setModified()
+{
+    this->modified = datetimeNow();
+}
+
+void ThingInTime::setModified(time_t modified)
+{
+    MF_ASSERT_FUTURE_TIMESTAMPS(created, read, modified, this->getKey() << "# " << name, name);
+
+    this->modified = modified;
+}
+
+
+/*
  * Class
  */
 

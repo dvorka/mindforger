@@ -24,6 +24,7 @@
 
 #include "../debug.h"
 #include "../exceptions.h"
+#include "../gear/async_utils.h"
 #include "../mind/ontology/ontology.h"
 #include "../config/configuration.h"
 #include "../repository_indexer.h"
@@ -46,6 +47,11 @@ namespace m8r {
 
 class Memory
 {
+public:
+    static void sortByName(std::vector<Outline*>& sorted);
+    static void sortByRead(std::vector<Outline*>& ns);
+    static void sortByRead(std::vector<Note*>& sorted);
+
 private:
     /**
      * @brief Indicates whether Mind learned a repository.
@@ -139,9 +145,12 @@ public:
     void exportToHtml(Outline* outline, const std::string& fileName);
 
     /**
-     * @brief Export Mind to CSV.
+     * @brief Export memory to CSV.
      */
-    void exportToCsv(const std::string& fileName);
+    void exportToCsv(
+        const std::string& fileName,
+        ProgressCallbackCtx* callbackCtx = nullptr
+    );
 
     /**
      * @brief Forget Outline.
@@ -200,8 +209,6 @@ public:
      * UTILS
      */
 
-    void sortByName(std::vector<Outline*>& sorted) const;
-    void sortByRead(std::vector<Note*>& sorted) const;
     RepositoryIndexer& getRepositoryIndexer() { return repositoryIndexer; }
     Persistence& getPersistence() const { return *persistence; }
 

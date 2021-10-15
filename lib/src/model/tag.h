@@ -160,8 +160,8 @@ public:
     explicit Tag(const std::string& name, Clazz* isA, const Color& color);
     Tag(const Tag&) = delete;
     Tag(const Tag&&) = delete;
-    Tag &operator=(const Tag&) = delete;
-    Tag &operator=(const Tag&&) = delete;
+    Tag& operator=(const Tag&) = delete;
+    Tag& operator=(const Tag&&) = delete;
     virtual ~Tag();
 
     bool equals(const std::string& s) const {

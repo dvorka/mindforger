@@ -33,8 +33,8 @@ public:
     explicit ExportFileDialog(QString title, QString button, QString extension, QWidget* parent);
     ExportFileDialog(const ExportFileDialog&) = delete;
     ExportFileDialog(const ExportFileDialog&&) = delete;
-    ExportFileDialog &operator=(const ExportFileDialog&) = delete;
-    ExportFileDialog &operator=(const ExportFileDialog&&) = delete;
+    ExportFileDialog& operator=(const ExportFileDialog&) = delete;
+    ExportFileDialog& operator=(const ExportFileDialog&&) = delete;
     ~ExportFileDialog();
 };
 

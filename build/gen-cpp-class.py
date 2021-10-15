@@ -53,8 +53,8 @@ public:
     explicit {}();
     {}(const {}&) = delete;
     {}(const {}&&) = delete;
-    {} &operator=(const {}&) = delete;
-    {} &operator=(const {}&&) = delete;
+    {}& operator=(const {}&) = delete;
+    {}& operator=(const {}&&) = delete;
     ~{}();
 }};
 

@@ -29,9 +29,11 @@ class NewFileDialog : public QDialog
 {
     Q_OBJECT
 
-private:
+protected:
+    QString extension;
     QString homeDirectory;
 
+protected:
     QLabel* fileNameLabel;
     QLineEdit* fileNameEdit;
     QLabel* dirLabel;
@@ -41,23 +43,21 @@ private:
 
     QPushButton* findDirectoryButton;
 
+    QPushButton* newButton;
     QPushButton* closeButton;
 
-protected:
-    QString extension;
-    QPushButton* newButton;
 
 public:
     explicit NewFileDialog(QWidget* parent);
     NewFileDialog(const NewFileDialog&) = delete;
     NewFileDialog(const NewFileDialog&&) = delete;
-    NewFileDialog &operator=(const NewFileDialog&) = delete;
-    NewFileDialog &operator=(const NewFileDialog&&) = delete;
+    NewFileDialog& operator=(const NewFileDialog&) = delete;
+    NewFileDialog& operator=(const NewFileDialog&&) = delete;
     ~NewFileDialog();
 
     void show();
     QPushButton* getNewButton() const { return newButton; }
-    QString getFilePath() const { return pathEdit->text(); } // file path
+    QString getFilePath() const { return pathEdit->text(); }
 
 private slots:
     void refreshPath();

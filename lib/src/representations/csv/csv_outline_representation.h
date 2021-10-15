@@ -23,18 +23,19 @@
 #include <vector>
 
 #include "../../model/outline.h"
+#include "../../gear/async_utils.h"
 #include "../../gear/file_utils.h"
 #include "../../gear/string_utils.h"
 
 namespace m8r {
 
 /**
- * @brief The primary CSV purpose is to be ML bridge.
+ * @brief The primary CSV purpose is to be bridge to machine learning world.
  *
  * CSV format is therefore designed to make loading of CSVs as datasets to ML frameworks.
  * No library is used to make things simple - also parsing is not needed, just serialization.
  *
- * Spec: https://tools.ietf.org/html/rfc4180
+ * @see https://tools.ietf.org/html/rfc4180
  */
 class CsvOutlineRepresentation
 {
@@ -42,14 +43,19 @@ public:
     explicit CsvOutlineRepresentation();
     CsvOutlineRepresentation(const CsvOutlineRepresentation&) = delete;
     CsvOutlineRepresentation(const CsvOutlineRepresentation&&) = delete;
-    CsvOutlineRepresentation &operator=(const CsvOutlineRepresentation&) = delete;
-    CsvOutlineRepresentation &operator=(const CsvOutlineRepresentation&&) = delete;
+    CsvOutlineRepresentation& operator=(const CsvOutlineRepresentation&) = delete;
+    CsvOutlineRepresentation& operator=(const CsvOutlineRepresentation&&) = delete;
     virtual ~CsvOutlineRepresentation();
 
-    void to(const std::vector<Outline*>&, const filesystem::File& sourceFile);
+    bool to(
+        const std::vector<Outline*>& os,
+        const filesystem::File& sourceFile,
+        ProgressCallbackCtx* callbackCtx = nullptr
+    );
 
     void toHeader(std::ofstream& out);
     void to(const Outline* o, std::ofstream& out);
+
 private:
     void quoteValue(const std::string& is, std::string& os);
 

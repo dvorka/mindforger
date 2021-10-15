@@ -119,4 +119,26 @@ void StatusBarPresenter::showMindStatistics()
     view->showInfo(status);
 }
 
+/*
+ * progress callback
+ */
+
+StatusBarProgressCallbackCtx::StatusBarProgressCallbackCtx(StatusBarPresenter* presenter)
+    : presenter{presenter}
+{
+}
+
+StatusBarProgressCallbackCtx::~StatusBarProgressCallbackCtx()
+{
+}
+
+void StatusBarProgressCallbackCtx::updateProgress(float progress)
+{
+    this->presenter->showInfo(
+        QString("Progress %1 %").arg(this->normalizeProgressToPercent(progress)).toStdString()
+    );
+
+    QApplication::processEvents();
+}
+
 } // namespace

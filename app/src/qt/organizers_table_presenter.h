@@ -22,6 +22,7 @@
 #include <QtWidgets>
 
 #include "../../lib/src/representations/html/html_outline_representation.h"
+#include "../../lib/src/debug.h"
 
 #include "organizers_table_view.h"
 #include "organizers_table_model.h"
@@ -55,4 +56,4 @@ public:
 };
 
 }
-#endif // M8RUI_TAGS_TABLE_PRESENTER_H
+#endif // M8RUI_ORGANIZERS_TABLE_PRESENTER_H
