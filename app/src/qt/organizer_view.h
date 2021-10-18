@@ -26,11 +26,24 @@
 namespace m8r {
 
 /**
- * @brief Eisenhower matrix aka organizer view.
+ * @brief Eisenhower matrix (on tags).
  *
+ * Eisenhower matrix:
+ *
+ * ```
  *  Do soon     | Do first
  * -------------+---------------------
  *  Do sometime | Plan dedicated time
+ * ```
+ *
+ * Eisenhower matrix on **tags**:
+ *
+ * ```
+ *  tag-1 | tag-2
+ * -------+-------
+ *  tag-3 | tag-4
+ * ```
+ *
  */
 class OrganizerView : public QSplitter
 {

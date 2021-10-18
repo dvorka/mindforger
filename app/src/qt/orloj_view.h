@@ -48,11 +48,12 @@ class OutlineHeaderEditView;
  * Orloj provides 0 horizontal frames that are shown/hidden
  * based on the desired view:
  *
- * 1: home, organizer, outlines, navigator, fts/... note search result
- * 2: outline tree, outline hoist
- * 3: note view, outline edit
- * 4: note edit
+ * 1. home, organizer, outlines, navigator, fts/... note search result
+ * 2. outline tree, outline hoist
+ * 3. note view, outline edit
+ * 4. note edit
  * ...
+ *
  */
 class OrlojView : public QSplitter
 {

@@ -6,7 +6,6 @@ MindForger known issues - see also
 # 1.53.0
 
 * Autolinking can break MathJax code blocks/text integrity in Markdown text.
-* CSV support does not scale and can block the application
 * Windows Server R2 2012: empty MF documentation repository in wrong location when MF is launched
   at the end of installation.
 * Notebook HTML export doesn't export local images: links to filesystem are kept intact, images

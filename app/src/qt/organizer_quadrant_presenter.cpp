@@ -47,13 +47,6 @@ OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
         this->view->horizontalHeader(), SIGNAL(sectionClicked(int)),
         this, SLOT(slotHeaderClicked(int))
     );
-    /* click O to open O
-    QObject::connect(
-        view->selectionModel(),
-        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-        this,
-        SLOT(slotShowOutline(const QItemSelection&, const QItemSelection&)));
-    */
 }
 
 OrganizerQuadrantPresenter::~OrganizerQuadrantPresenter()

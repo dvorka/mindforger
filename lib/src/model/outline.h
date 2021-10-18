@@ -43,14 +43,14 @@ enum class OutlineMemoryLocation {
 /**
  * @brief Outline - a set of thoughts.
  *
- * "IMPORTANT" (extensible labels)
- * "GROW" (extensible type)
- * outline "Example"
- * LIMBO (fixed memory location: MEMORY/WORKING/LIMBO)
- *   w/
- * 2/5 importance
- * 3/5 urgency
- * 10% progress
+ * * "IMPORTANT" (extensible tags)
+ * * "GROW" (extensible type)
+ * * outline type "Example"
+ * * LIMBO (fixed memory location: MEMORY/WORKING/LIMBO)
+ * * 2/5 importance
+ * * 3/5 urgency
+ * * 10% progress
+ *
  */
 class Outline : public ThingInTime
 {
@@ -59,14 +59,14 @@ public:
     static const int NO_SIBLING = -1;
     static const u_int16_t MAX_NOTE_DEPTH = 100;
 
-private:
-    static constexpr int FLAG_MASK_POST_DECLARED_SECTION = 1;
-    static constexpr int FLAG_MASK_TRAILING_HASHES_SECTION = 1<<1;
-
     /**
      * @brief Auxiliary Note type that is used to represent Outline's name and description, e.g. in FTS.
      */
     static const NoteType NOTE_4_OUTLINE_TYPE;
+
+private:
+    static constexpr int FLAG_MASK_POST_DECLARED_SECTION = 1;
+    static constexpr int FLAG_MASK_TRAILING_HASHES_SECTION = 1<<1;
 
 public:
     struct Patch;

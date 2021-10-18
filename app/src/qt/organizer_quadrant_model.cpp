@@ -50,6 +50,10 @@ void OrganizerQuadrantModel::addRow(Note* note, bool urgency, bool importance)
     // IMPROVE consider moving this to HTML representation
     string h{note->getName().c_str()};
 
+    if(note->getType() != &Outline::NOTE_4_OUTLINE_TYPE) {
+        h += " (" + note->getOutline()->getName() + ") ";
+    }
+
     htmlRepresentation->tagsToHtml(note->getTags(), h);
 
     h += "<span style='color: ";
