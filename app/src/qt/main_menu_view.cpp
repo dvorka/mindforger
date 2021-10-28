@@ -355,6 +355,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuLibrary->addAction(actionLibraryDeprecate);
 #endif
 
+    // menu: flashcards
+    menuFlashcards = qMenuBar->addMenu(tr("Flash&cards"));
+
     // menu: organizer
     menuOrganizer = qMenuBar->addMenu(tr("&Organizer"));
 

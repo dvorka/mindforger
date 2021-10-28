@@ -24,7 +24,7 @@
 
 import sys
 
-TEMPLATE_HEADER_FILE='''/*
+TEMPLATE_HEADER_FILE = """/*
  {}.h     MindForger thinking notebook
 
  Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
@@ -60,9 +60,9 @@ public:
 
 }}
 #endif // M8R_{}_H
-'''
+"""
 
-TEMPLATE_CPP_FILE='''/*
+TEMPLATE_CPP_FILE = """/*
  {}.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
@@ -93,31 +93,45 @@ namespace m8r {{
 }}
 
 }} // m8r namespace
-'''
+"""
 
 #####################################################################
 
 if len(sys.argv) == 2:
     arg = sys.argv[1]
-    nameCamel = arg.replace("_","")
+    nameCamel = arg.replace("_", "")
     nameDash = arg.lower()
     nameMacro = arg.upper()
-    with open(nameDash+".h", "w") as text_file:
+    with open(nameDash + ".h", "w") as text_file:
         # TODO f-string
-        text_file.write(TEMPLATE_HEADER_FILE.format(
-            nameDash,
-            nameMacro,nameMacro,
-            nameCamel,
-            nameCamel,nameCamel,nameCamel,nameCamel,nameCamel,nameCamel,nameCamel,nameCamel,nameCamel,nameCamel,
-            nameMacro))
+        text_file.write(
+            TEMPLATE_HEADER_FILE.format(
+                nameDash,
+                nameMacro,
+                nameMacro,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameMacro,
+            )
+        )
 
-    with open(nameDash+".cpp", "w") as text_file:
+    with open(nameDash + ".cpp", "w") as text_file:
         # TODO f-string
-        text_file.write(TEMPLATE_CPP_FILE.format(
-            nameDash,
-            nameDash,
-            nameCamel,nameCamel,nameCamel,nameCamel))
+        text_file.write(
+            TEMPLATE_CPP_FILE.format(
+                nameDash, nameDash, nameCamel, nameCamel, nameCamel, nameCamel
+            )
+        )
 else:
-    print "\nUsage: gen-cpp-file.py Note_Edit\n"
+    print("\nUsage: gen-cpp-file.py Note_Edit\n")
 
 # EOF

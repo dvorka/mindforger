@@ -73,8 +73,9 @@ void HtmlOutlineRepresentation::outlineTypeToHtml(const OutlineType* outlineType
     }
 }
 
-void HtmlOutlineRepresentation::noteTypeToHtml(const NoteType* noteType,string& html)
-{
+void HtmlOutlineRepresentation::noteTypeToHtml(
+    const NoteType* noteType, string& html
+) {
     if(noteType) {
         html += "&nbsp;&nbsp;<span style='color: ";
         html += noteType->getColor().asHtml();
@@ -89,6 +90,18 @@ void HtmlOutlineRepresentation::noteTypeToHtml(const NoteType* noteType,string& 
 
         html += " </span>";
     }
+}
+
+void HtmlOutlineRepresentation::organizerTypeToHtml(
+    const Organizer* organizer, string& html
+) {
+    html += "&nbsp;&nbsp;<span style='color: ";
+    html += Color::RED().asHtml();
+    html += "; font-style: italic;'> ";
+    html += organizer->getOrganizerTypeAsStr();
+    html += " ";
+    html += "&#9670;"; // composition
+    html += " </span>";
 }
 
 void HtmlOutlineRepresentation::tagsToHtml(const vector<const Tag*>* tags, string& html)

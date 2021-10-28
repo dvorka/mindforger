@@ -28,14 +28,14 @@
 namespace m8r {
 
 /**
- * @brief Organizer - Eisenhower Matrix style Outlines and Notes sorter.
+ * @brief Organizer - Outlines and Notes sorter.
  */
 class Organizer : public Thing
 {
 public:
-    enum SortBy {
-        IMPORTANCE,
-        URGENCY
+    enum OrganizerType {
+        EISENHOWER_MATRIX,
+        KANBAN,
     };
 
     enum FilterBy {
@@ -44,22 +44,20 @@ public:
         NOTES
     };
 
-    static constexpr const auto CONFIG_VALUE_SORT_BY_I = "importance";
-    static constexpr const auto CONFIG_VALUE_SORT_BY_U = "urgency";
     static constexpr const auto CONFIG_VALUE_FILTER_BY_O = "outlines";
     static constexpr const auto CONFIG_VALUE_FILTER_BY_N = "notes";
     static constexpr const auto CONFIG_VALUE_FILTER_BY_O_N = "outlines and notes";
 
-    static constexpr const auto KEY_EISENHOWER_MATRIX = "/m1ndf0rg3r/organizers/eisenhower-matrix";
+    static const std::string TYPE_STR_KANBAN;
+    static const std::string TYPE_STR_EISENHOWER_MATRIX;
 
     static std::string createOrganizerKey(
         const std::set<std::string>& keys,
         const std::string& directory,
         const std::string& id,
-        const std::string& separator
+        const std::string& separator,
+        const std::string& type = "organizer"
     );
-
-    static Organizer* createEisenhowMatrixOrganizer();
 
     static constexpr const auto ESC_TAG_DELIMITER = ",,";
 
@@ -74,7 +72,6 @@ public:
         } else {
             escapeString.assign(", ");
         }
-
 
         for(std::string t:tags) {
             s.append(t);
@@ -114,7 +111,7 @@ public:
         if(s.size()) {
             size_t last = 0;
             size_t next = 0;
-            while ((next = s.find(ESC_TAG_DELIMITER, last)) != std::string::npos) {
+            while((next = s.find(ESC_TAG_DELIMITER, last)) != std::string::npos) {
                 tags.insert(s.substr(last, next-last));
                 last = next + 2;
             }
@@ -125,21 +122,21 @@ public:
     }
 
 public:
-    // upper right quandrant tag
+    OrganizerType organizerType;
+
+    // EM: upper right quandrant tag / Kanban: 1st column (clockwise, 1st clock quarter)
     std::set<std::string> tagsUrQuadrant;
-    // lower right quandrant tag
+    // lower right quandrant tag / Kanban: 2nd column
     std::set<std::string> tagsLrQuadrant;
-    // lower left quandrant tag
+    // lower left quandrant tag / Kanban: 3rd column
     std::set<std::string> tagsLlQuadrant;
-    // upper left quandrant tag
+    // upper left quandrant tag / Kanban: 4th column
     std::set<std::string> tagsUlQuadrant;
 
-    // values: importance, urgency; default: importance
-    int sortBy;
     // values: O, N, O+N; default O+N (show both O and N)
     int filterBy;
 
-    // O or global scope (null)
+    // O or global scope ("")
     std::string scopeOutlineId;
 
     /*
@@ -149,12 +146,21 @@ public:
     time_t modified;
 
 public:
-    explicit Organizer(const std::string& name);
+    explicit Organizer(const std::string& name, OrganizerType organizerType);
     explicit Organizer(const Organizer& o);
     Organizer(const Organizer&&) = delete;
     Organizer& operator=(const Organizer&) = delete;
     Organizer& operator=(const Organizer&&) = delete;
     ~Organizer();
+
+    OrganizerType getOrganizerType() const { return organizerType; }
+    const std::string& getOrganizerTypeAsStr() const {
+        if(OrganizerType::KANBAN == this->organizerType) {
+            return TYPE_STR_KANBAN;
+        } else {
+            return TYPE_STR_EISENHOWER_MATRIX;
+        }
+    }
 
     bool operator<(const Organizer& other) const {
         return modified < other.modified;
@@ -212,10 +218,6 @@ public:
         this->tagsUlQuadrant.clear();
         this->tagsUlQuadrant = tags;
     }
-
-    int getSortBy() const { return this->sortBy; }
-    const std::string getSortByAsStr();
-    void setSortBy(int sortBy) { this->sortBy = sortBy; }
 
     int getFilterBy() const { return this->filterBy; }
     std::string getFilterByAsStr();

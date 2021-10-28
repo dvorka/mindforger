@@ -1,5 +1,5 @@
 /*
- outline_view.h     MindForger thinking notebook
+ orloj_view.h     MindForger thinking notebook
 
  Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -24,6 +24,7 @@
 #include "dashboard_view.h"
 #include "organizers_table_view.h"
 #include "organizer_view.h"
+#include "kanban_view.h"
 #include "tags_table_view.h"
 #include "outlines_table_view.h"
 #include "notes_table_view.h"
@@ -63,6 +64,7 @@ private:
     DashboardView* dashboard;
     OrganizersTableView* organizersTable;
     OrganizerView* organizer;
+    KanbanView* kanban;
     TagsTableView* tagCloud;
     OutlinesTableView* outlinesTable;
     RecentNotesTableView* recentNotesTable;
@@ -85,6 +87,7 @@ public:
     DashboardView* getDashboard() const { return dashboard; }
     OrganizerView* getOrganizer() const { return organizer; }
     OrganizersTableView* getOrganizersTable() const { return organizersTable; }
+    KanbanView* getKanban() const { return kanban; }
     TagsTableView* getTagCloud() const { return tagCloud; }
     OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
     RecentNotesTableView* getRecentNotesTable() const { return recentNotesTable; }
@@ -111,6 +114,11 @@ public:
      * @brief Organizer
      */
     void showFacetOrganizer();
+
+    /**
+     * @brief Kanban
+     */
+    void showFacetKanban();
 
     /**
      * @brief Tag cloud

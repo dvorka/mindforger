@@ -50,8 +50,26 @@ void OrganizersTableModel::addRow(Organizer* organizer)
     QList<QStandardItem*> items;
     QStandardItem* item;
 
-    item = new QStandardItem(QString::fromStdString(organizer->getName()));
-    item->setToolTip(QString::fromStdString(organizer->getName()));
+    // row as HTML
+    string html{}, tooltip{};
+    html.reserve(500);
+    tooltip.reserve(500);
+
+    if(organizer->getName().size()) {
+        tooltip = organizer->getName();
+        html = tooltip;
+    } else {
+        tooltip = "";
+        // IMPROVE parse out file name
+        string dir{};
+        pathToDirectoryAndFile(tooltip, dir, html);
+    }
+    htmlRepresentation->organizerTypeToHtml(organizer, html);
+
+    // item
+    item = new QStandardItem(QString::fromStdString(html));
+    item->setToolTip(QString::fromStdString(tooltip));
+    // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
     item->setData(QVariant::fromValue(organizer));
     items += item;
 

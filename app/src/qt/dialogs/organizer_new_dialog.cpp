@@ -35,6 +35,11 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     nameLabel = new QLabel(tr("Name")+":", this);
     nameEdit = new QLineEdit(tr("Organizer"), this);
 
+    typeLabel = new QLabel(tr("Type")+":", this);
+    typeCombo = new QComboBox{this};
+    typeCombo->addItem(tr("Eisenhower Matrix"), Organizer::OrganizerType::EISENHOWER_MATRIX);
+    typeCombo->addItem(tr("Kanban"), Organizer::OrganizerType::KANBAN);
+
     upperLeftTags = new EditTagsPanel{ontology, this};
     upperLeftTags->refreshOntologyTags();
     upperLeftTags->setTitle(tr("Upper left quadrant tags")+":");
@@ -63,8 +68,8 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
 
     sortByLabel = new QLabel(tr("Sort Notebooks by")+":", this);
     sortByCombo = new QComboBox{this};
-    sortByCombo->addItem(tr("importance"), Organizer::SortBy::IMPORTANCE);
-    sortByCombo->addItem(tr("urgency"), Organizer::SortBy::URGENCY);
+    sortByCombo->addItem(tr("importance"), EisenhowerMatrix::SortBy::IMPORTANCE);
+    sortByCombo->addItem(tr("urgency"), EisenhowerMatrix::SortBy::URGENCY);
 
     filterByLabel = new QLabel(tr("Filter by")+":", this);
     filterByCombo = new QComboBox{this};
@@ -95,6 +100,8 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
 
     mainLayout->addWidget(nameLabel);
     mainLayout->addWidget(nameEdit);
+    mainLayout->addWidget(typeLabel);
+    mainLayout->addWidget(typeCombo);
     mainLayout->addLayout(h);
     mainLayout->addWidget(oScopeLabel);
 
@@ -206,7 +213,14 @@ void OrganizerNewDialog::show(
             }
         }
 
-        sortByCombo->setCurrentText(QString::fromStdString(organizerToEdit->getSortByAsStr()));
+        if(Organizer::OrganizerType::EISENHOWER_MATRIX == organizerToEdit->getOrganizerType()) {
+            sortByCombo->setCurrentText(
+                QString::fromStdString(
+                dynamic_cast<EisenhowerMatrix*>(organizerToEdit)->getSortByAsStr()
+                )
+            );
+        }
+
 
         if(oScopeOutline) {
             sortByCombo->setEnabled(false);

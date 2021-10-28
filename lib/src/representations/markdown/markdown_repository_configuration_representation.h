@@ -26,7 +26,8 @@
 
 #include "markdown_document.h"
 #include "../../config/configuration.h"
-#include "../../model/organizer.h"
+#include "../../model/eisenhower_matrix.h"
+#include "../../model/kanban.h"
 #include "../../persistence/configuration_persistence.h"
 
 namespace m8r {

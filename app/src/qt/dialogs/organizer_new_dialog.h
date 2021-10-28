@@ -26,22 +26,15 @@
 #include "../../lib/src/mind/ontology/thing_class_rel_triple.h"
 #include "../../lib/src/mind/ontology/ontology.h"
 #include "../../lib/src/model/outline.h"
+#include "../../lib/src/model/eisenhower_matrix.h"
 
 #include "../widgets/edit_tags_panel.h"
-
 #include "find_outline_by_name_dialog.h"
 
 namespace m8r {
 
 /**
- * @brief Create new organizer.
- *
- * Implementation plan:
- *
- * 1. tags only (filter: outlines; no sorting)
- * 2. tags only (filter: outlines, notes, o+n; no sorting)
- * 3. tags + scope (scope disables non-meaningful actions)
- * 4. sorting
+ * @brief Dialog to create new organizer or edit an existing one.
  */
 class OrganizerNewDialog : public QDialog
 {
@@ -69,6 +62,8 @@ protected:
 
     QLabel* nameLabel;
     QLineEdit* nameEdit;
+    QLabel* typeLabel;
+    QComboBox* typeCombo;
     EditTagsPanel* upperRightTags;
     EditTagsPanel* lowerRightTags;
     EditTagsPanel* upperLeftTags;
@@ -98,6 +93,9 @@ public:
     QPushButton* getFindButton() const { return createButton; }
 
     QString getOrganizerName() const { return nameEdit->text(); }
+    int getOrganizerType() const {
+        return this->typeCombo->currentData().toInt();
+    }
     std::set<std::string>& getUpperLeftChosenTags(std::set<std::string>& tags) const {
         return upperLeftTags->getTagsAsStringSet(tags);
     }

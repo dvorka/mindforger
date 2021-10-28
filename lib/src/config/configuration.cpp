@@ -271,7 +271,7 @@ void Configuration::setActiveRepository(
                 limboPath+=DIRNAME_LIMBO;
 
                 // setting ACTIVE repository means that repository SPECIFIC configuration must be loaded
-                this->initRepositoryConfiguration(Organizer::createEisenhowMatrixOrganizer());
+                this->initRepositoryConfiguration(EisenhowerMatrix::createEisenhowMatrixOrganizer());
                 persistence.load(*this);
             } else {
                 this->clearRepositoryConfiguration();

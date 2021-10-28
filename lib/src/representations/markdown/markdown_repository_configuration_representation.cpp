@@ -28,7 +28,8 @@ constexpr const auto CONFIG_SECTION_ORGANIZERS = "Organizers";
 
 // organizers
 constexpr const auto CONFIG_SETTING_ORG_NAME = "Organizer name: ";
-constexpr const auto CONFIG_SETTING_ORG_KEY= "* Key: ";
+constexpr const auto CONFIG_SETTING_ORG_KEY = "* Key: ";
+constexpr const auto CONFIG_SETTING_ORG_TYPE = "* Type: ";
 constexpr const auto CONFIG_SETTING_ORG_TAG_UR = "* Upper right tag: ";
 constexpr const auto CONFIG_SETTING_ORG_TAG_LR = "* Lower right tag: ";
 constexpr const auto CONFIG_SETTING_ORG_TAG_LL = "* Lower left tag: ";
@@ -148,22 +149,30 @@ void MarkdownRepositoryConfigurationRepresentation::repositoryConfigurationSecti
     set<string> keys{};
     if(body) {
         Organizer* o = nullptr;
+        string name{};
+        string key{};
         string tags{};
         for(string* line:*body) {
             if(line) {
                 if(line && line->find(CONFIG_SETTING_ORG_NAME) != std::string::npos) {
                     // add PREVIOUS Organizer (if available) so that it's not rewritten
-                    o = repositoryConfigurationSectionOrganizerAdd(o, keys, c);
+                    repositoryConfigurationSectionOrganizerAdd(o, keys, c);
 
-                    // new organizer
-                    string name{line->substr(strlen(CONFIG_SETTING_ORG_NAME))};
-                    if(name.length()) {
-                        o = new Organizer(name);
-                    } else {
-                        o = new Organizer("Custom Organizer");
+                    name = line->substr(strlen(CONFIG_SETTING_ORG_NAME));
+
+                    o = new EisenhowerMatrix(name);
+
+                    key.clear();
+                } else if(o && line->find(CONFIG_SETTING_ORG_TYPE) != std::string::npos) {
+                    if(Organizer::TYPE_STR_KANBAN == line->substr(strlen(CONFIG_SETTING_ORG_TYPE))) {
+                        delete o;
+                        o = new Kanban(name);
+                    }
+                    if(key.length()) {
+                        o->setKey(key);
                     }
                 } else if(o && line->find(CONFIG_SETTING_ORG_KEY) != std::string::npos) {
-                    o->setKey(line->substr(strlen(CONFIG_SETTING_ORG_KEY)));
+                    key = line->substr(strlen(CONFIG_SETTING_ORG_KEY));
                 } else if(o && line->find(CONFIG_SETTING_ORG_TAG_UR) != std::string::npos) {
                     tags = line->substr(strlen(CONFIG_SETTING_ORG_TAG_UR));
                     o->tagsUrQuadrant = Organizer::tagsFromString(tags);
@@ -178,12 +187,15 @@ void MarkdownRepositoryConfigurationRepresentation::repositoryConfigurationSecti
                     o->tagsUlQuadrant = Organizer::tagsFromString(tags);
                 } else if(o && line->find(CONFIG_SETTING_ORG_SORT_BY) != std::string::npos) {
                     string sortBy{line->substr(strlen(CONFIG_SETTING_ORG_SORT_BY))};
-                    if(Organizer::CONFIG_VALUE_SORT_BY_I == sortBy) {
-                        o->sortBy = Organizer::SortBy::IMPORTANCE;
-                    } else if(Organizer::CONFIG_VALUE_SORT_BY_U == sortBy) {
-                        o->sortBy = Organizer::SortBy::URGENCY;
-                    } else {
-                        o->sortBy = Organizer::SortBy::IMPORTANCE;
+                    if(sortBy.length() && Organizer::OrganizerType::EISENHOWER_MATRIX == o->getOrganizerType()) {
+                        EisenhowerMatrix* em = dynamic_cast<EisenhowerMatrix*>(o);
+                        if(EisenhowerMatrix::CONFIG_VALUE_SORT_BY_I == sortBy) {
+                            em->sortBy = EisenhowerMatrix::SortBy::IMPORTANCE;
+                        } else if(EisenhowerMatrix::CONFIG_VALUE_SORT_BY_U == sortBy) {
+                            em->sortBy = EisenhowerMatrix::SortBy::URGENCY;
+                        } else {
+                            em->sortBy = EisenhowerMatrix::SortBy::IMPORTANCE;
+                        }
                     }
                 } else if(o && line->find(CONFIG_SETTING_ORG_FILTER_BY) != std::string::npos) {
                     string filterBy{line->substr(strlen(CONFIG_SETTING_ORG_FILTER_BY))};
@@ -274,11 +286,18 @@ string& MarkdownRepositoryConfigurationRepresentation::to(Configuration* c, stri
                 oss
                 << CONFIG_SETTING_ORG_NAME << o->getName() << endl
                 << CONFIG_SETTING_ORG_KEY << o->getKey() << endl
+                << CONFIG_SETTING_ORG_TYPE << o->getOrganizerTypeAsStr() << endl
                 << CONFIG_SETTING_ORG_TAG_UR << Organizer::tagsToString(o->getUpperRightTags()) << endl
                 << CONFIG_SETTING_ORG_TAG_LR << Organizer::tagsToString(o->getLowerRightTags()) << endl
                 << CONFIG_SETTING_ORG_TAG_LL << Organizer::tagsToString(o->getLowerLeftTags()) << endl
-                << CONFIG_SETTING_ORG_TAG_UL << Organizer::tagsToString(o->getUpperLeftTags()) << endl
-                << CONFIG_SETTING_ORG_SORT_BY << o->getSortByAsStr() << endl
+                << CONFIG_SETTING_ORG_TAG_UL << Organizer::tagsToString(o->getUpperLeftTags()) << endl;
+                if(Organizer::OrganizerType::EISENHOWER_MATRIX == o->getOrganizerType()) {
+                    oss
+                    << CONFIG_SETTING_ORG_SORT_BY
+                    << dynamic_cast<EisenhowerMatrix*>(o)->getSortByAsStr()
+                    << endl;
+                }
+                oss
                 << CONFIG_SETTING_ORG_FILTER_BY << o->getFilterByAsStr() << endl
                 << CONFIG_SETTING_ORG_SCOPE << o->getOutlineScope() << endl
                 << endl;

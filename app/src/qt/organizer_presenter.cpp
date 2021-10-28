@@ -26,11 +26,18 @@ OrganizerPresenter::OrganizerPresenter(OrganizerView* view, OrlojPresenter* orlo
 {
     this->view = view;
 
-    // TODO Notes/Notebooks tagged with "tag"
-    doFirstPresenter = new OrganizerQuadrantPresenter(view->getDoFirst(), orloj, tr("Do first"));
-    doSoonPresenter = new OrganizerQuadrantPresenter(view->getDoSoon(), orloj, tr("Do soon"));
-    doSometimePresenter = new OrganizerQuadrantPresenter(view->getDoSometime(), orloj, tr("Do sometime"));
-    planDedicatedTimePresenter = new OrganizerQuadrantPresenter(view->getPlanDedicatedTime(), orloj, tr("Plan dedicated time"));
+    doFirstPresenter = new OrganizerQuadrantPresenter(
+        view->getDoFirst(), orloj, tr("Do first")
+    );
+    doSoonPresenter = new OrganizerQuadrantPresenter(
+        view->getDoSoon(), orloj, tr("Do soon")
+    );
+    doSometimePresenter = new OrganizerQuadrantPresenter(
+        view->getDoSometime(), orloj, tr("Do sometime")
+    );
+    planDedicatedTimePresenter = new OrganizerQuadrantPresenter(
+        view->getPlanDedicatedTime(), orloj, tr("Plan dedicated time")
+    );
 }
 
 OrganizerPresenter::~OrganizerPresenter()
@@ -48,6 +55,13 @@ void OrganizerPresenter::refresh(
 
     this->organizer = organizer;
 
+
+
+
+    // TODO this code must go to lib/
+    // TODO - unit test to be created
+    // app/ to just call the library
+
     organizer->makeModified();
 
     QString title{};
@@ -62,7 +76,7 @@ void OrganizerPresenter::refresh(
     vector<Note*> lowerLeftNs{};
 
     if(os.size()) {
-        if(!organizer || organizer->getKey()==Organizer::KEY_EISENHOWER_MATRIX) {
+        if(!organizer || organizer->getKey()==EisenhowerMatrix::KEY_EISENHOWER_MATRIX) {
             // organizer type: Eisenhower matrix
             for(Outline* o:os) {
                 if(o->getUrgency()>2) {

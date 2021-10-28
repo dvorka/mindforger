@@ -28,6 +28,7 @@
 #include "../../lib/src/model/outline_type.h"
 #include "../../lib/src/model/note_type.h"
 #include "../../lib/src/model/organizer.h"
+#include "../../lib/src/model/kanban.h"
 
 /*
  * Registration of custom Qt types allowing to use them in QVariant and Qt's widget models:

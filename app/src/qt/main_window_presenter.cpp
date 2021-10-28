@@ -2617,9 +2617,15 @@ void MainWindowPresenter::handleCreateOrganizer()
         o->setName(newOrganizerDialog->getOrganizerName().toStdString());
     } else {
         MF_DEBUG("Creating organizer...");
-        o = new Organizer(
-            newOrganizerDialog->getOrganizerName().toStdString()
-        );
+        if(Organizer::OrganizerType::EISENHOWER_MATRIX == newOrganizerDialog->getOrganizerType()) {
+            o = new EisenhowerMatrix(
+                newOrganizerDialog->getOrganizerName().toStdString()
+            );
+        } else {
+            o = new Kanban(
+                newOrganizerDialog->getOrganizerName().toStdString()
+            );
+        }
     }
 
     // tags
@@ -2651,7 +2657,9 @@ void MainWindowPresenter::handleCreateOrganizer()
     // filter
     o->setFilterBy(newOrganizerDialog->getFilterBy());
     // sort
-    o->setSortBy(newOrganizerDialog->getSortBy());
+    if(Organizer::OrganizerType::EISENHOWER_MATRIX == newOrganizerDialog->getOrganizerType()) {
+        dynamic_cast<EisenhowerMatrix*>(o)->setSortBy(newOrganizerDialog->getSortBy());
+    }
     // scope
     o->setOutlineScope(newOrganizerDialog->getOutlineScope());
 
@@ -2682,7 +2690,7 @@ void MainWindowPresenter::doActionOrganizerEdit()
     Organizer* o = orloj->getOrganizer()->getOrganizer();
 
     // Eisenhower matrix organizer cannot be edited
-    if(o->getKey() == Organizer::KEY_EISENHOWER_MATRIX) {
+    if(o->getKey() == EisenhowerMatrix::KEY_EISENHOWER_MATRIX) {
         QMessageBox::critical(
             orloj->getOrganizer()->getView(),
             tr("Organizer Update Error"),
@@ -2705,7 +2713,7 @@ void MainWindowPresenter::doActionOrganizerClone()
     Organizer* o = orloj->getOrganizer()->getOrganizer();
 
     // Eisenhower matrix organizer cannot be cloned
-    if(o->getKey() == Organizer::KEY_EISENHOWER_MATRIX) {
+    if(o->getKey() == EisenhowerMatrix::KEY_EISENHOWER_MATRIX) {
         QMessageBox::critical(
             orloj->getOrganizer()->getView(),
             tr("Organizer Clone Error"),
@@ -2726,7 +2734,7 @@ void MainWindowPresenter::doActionOrganizerForget()
     // no need to check view - this action is available only when organizer is opened
     Organizer* o = orloj->getOrganizer()->getOrganizer();
 
-    if(o->getKey() != Organizer::KEY_EISENHOWER_MATRIX) {
+    if(o->getKey() != EisenhowerMatrix::KEY_EISENHOWER_MATRIX) {
         QMessageBox::StandardButton choice;
         choice = QMessageBox::question(
             &view,

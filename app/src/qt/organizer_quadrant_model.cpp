@@ -22,8 +22,13 @@ namespace m8r {
 
 using namespace std;
 
-OrganizerQuadrantModel::OrganizerQuadrantModel(QString& title, QObject* parent, HtmlOutlineRepresentation* htmlRepresentation)
-    : QStandardItemModel(parent), htmlRepresentation(htmlRepresentation)
+OrganizerQuadrantModel::OrganizerQuadrantModel(
+    QString& title,
+    QObject* parent,
+    HtmlOutlineRepresentation* htmlRepresentation
+)
+    : QStandardItemModel(parent),
+      htmlRepresentation(htmlRepresentation)
 {
     setColumnCount(1);
     setRowCount(0);

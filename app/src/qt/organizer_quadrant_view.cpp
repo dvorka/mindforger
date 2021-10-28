@@ -20,8 +20,9 @@
 
 namespace m8r {
 
-OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent)
-    : QTableView(parent)
+OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent, ViewType viewType)
+    : QTableView(parent),
+      viewType{viewType}
 {
     verticalHeader()->setVisible(false);
 
@@ -73,7 +74,11 @@ void OrganizerQuadrantView::mouseDoubleClickEvent(QMouseEvent* event)
     Q_UNUSED(event);
 
     // double click to O/N opens it
-    emit signalShowSelectedNote();
+    if(ViewType::ORGANIZER == this->viewType) {
+        emit signalShowSelectedNote();
+    }
+
+    emit signalShowSelectedKanbanNote();
 }
 
 } // m8r namespace

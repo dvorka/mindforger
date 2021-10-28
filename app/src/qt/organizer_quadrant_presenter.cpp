@@ -25,8 +25,8 @@ using namespace std;
 OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
         OrganizerQuadrantView* view,
         OrlojPresenter* orloj,
-        QString title)
-{
+        QString title
+) {
     this->view = view;
     this->model = new OrganizerQuadrantModel(title, this, orloj->getMainPresenter()->getHtmlRepresentation());
     this->view->setModel(this->model);

@@ -32,6 +32,7 @@ class OrganizersTableModel : public QStandardItemModel
 
 public:
     HtmlOutlineRepresentation* htmlRepresentation;
+
     explicit OrganizersTableModel(QObject* parent, HtmlOutlineRepresentation* htmlRepresentation);
     OrganizersTableModel(const OrganizersTableModel&) = delete;
     OrganizersTableModel(const OrganizersTableModel&&) = delete;

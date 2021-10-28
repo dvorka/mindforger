@@ -19,9 +19,9 @@
 #ifndef M8RUI_ORGANIZER_QUADRANT_VIEW_H
 #define M8RUI_ORGANIZER_QUADRANT_VIEW_H
 
-#include <QtWidgets>
-
 #include "../../../lib/src/debug.h"
+
+#include <QtWidgets>
 
 namespace m8r {
 
@@ -30,17 +30,27 @@ class OrganizerQuadrantView : public QTableView
     Q_OBJECT
 
 public:
-    explicit OrganizerQuadrantView(QWidget* parent);
+    enum ViewType {
+        ORGANIZER,
+        KANBAN
+    };
+
+private:
+    ViewType viewType;
+
+public:
+    explicit OrganizerQuadrantView(QWidget* parent, ViewType viewType = ViewType::ORGANIZER);
     OrganizerQuadrantView(const OrganizerQuadrantView&) = delete;
     OrganizerQuadrantView(const OrganizerQuadrantView&&) = delete;
-    OrganizerQuadrantView &operator=(const OrganizerQuadrantView&) = delete;
-    OrganizerQuadrantView &operator=(const OrganizerQuadrantView&&) = delete;
+    OrganizerQuadrantView& operator=(const OrganizerQuadrantView&) = delete;
+    OrganizerQuadrantView& operator=(const OrganizerQuadrantView&&) = delete;
     virtual ~OrganizerQuadrantView() {}
 
     virtual void keyPressEvent(QKeyEvent* event) override;
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 signals:
+    void signalShowSelectedKanbanNote();
     void signalShowSelectedNote();
 };
 

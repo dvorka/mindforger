@@ -46,6 +46,13 @@ public:
 class HtmlExportColorsRepresentation : public HtmlColorsRepresentation
 {
 public:
+
+    static void organizerTypeToHtml(
+        const Organizer* organizer,
+        std::string& html
+    );
+
+public:
     explicit HtmlExportColorsRepresentation() {}
     HtmlExportColorsRepresentation(const HtmlExportColorsRepresentation&) = delete;
     HtmlExportColorsRepresentation(const HtmlExportColorsRepresentation&&) = delete;
@@ -138,6 +145,7 @@ public:
     void fgBgTextColorStyle(std::string& html);
     void outlineTypeToHtml(const OutlineType* outlineType, std::string& html);
     void noteTypeToHtml(const NoteType* noteType, std::string& html);
+    void organizerTypeToHtml(const Organizer* organizer, std::string& html);
     void tagsToHtml(const std::vector<const Tag*>* tags, std::string& html);
     void outlineMetadataToHtml(const Outline* outline, std::string& html);
 

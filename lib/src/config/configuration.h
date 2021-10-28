@@ -33,7 +33,7 @@
 #include "../gear/file_utils.h"
 #include "../exceptions.h"
 #include "../model/tag.h"
-#include "../model/organizer.h"
+#include "../model/eisenhower_matrix.h"
 #include "../persistence/configuration_persistence.h"
 #include "../install/installer.h"
 #include "../representations/markdown/markdown_transcoder.h"
@@ -160,7 +160,7 @@ public:
     };
 
     static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_BOW = 200;
-    static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_WEIGHTED_FTS = 10000;
+    static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_WEIGHTED_FTS = 20000;
     static constexpr const int DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL = 500;
 
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;

@@ -51,9 +51,10 @@ public:
 #ifdef MF_WIP_KNOW
     QMenu* menuKnowledge;
 #endif
-    QMenu* menuLibrary;
-    QMenu* menuOrganizer;
     QMenu* menuNavigator;
+    QMenu* menuLibrary;
+    QMenu* menuFlashcards;
+    QMenu* menuOrganizer;
     QMenu* menuOutline;
     QMenu* menuNote;
     QMenu* menuEdit;

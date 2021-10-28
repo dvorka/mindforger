@@ -1,10 +1,10 @@
-WIP: 2021-10-30  Martin Dvorak  <martin.dvorak@mindforger.com>
+WIP: 2021-11-30  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v1.53.0 - custom Eisenhower Matrices on tags, repository specific
-      configuration, lazy (PDF) documents indexation preview, various minor
-      improvements (CSV export progress bar, ...) and bug fixes (note cloning,
-      Markdown syntax highlighting, ...), Doxygen source code documentation
-      generator.
+    * Released v1.53.0 - custom Eisenhower Matrices on tags, Kanban style organizer,
+      repository specific configuration, lazy (PDF) documents indexation preview,
+      various minor improvements (CSV export progress bar, ...) and bug fixes
+      (note cloning, Markdown syntax highlighting, ...), Doxygen source code
+      documentation generator.
 
 2020-03-08  Martin Dvorak  <martin.dvorak@mindforger.com>
 

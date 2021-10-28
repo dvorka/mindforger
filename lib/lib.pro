@@ -113,6 +113,8 @@ SOURCES += \
     src/mind/dikw/dikw_pyramid.cpp \
     src/mind/dikw/filesystem_information.cpp \
     src/mind/dikw/information.cpp \
+    src/model/eisenhower_matrix.cpp \
+    src/model/kanban.cpp \
     src/model/organizer.cpp \
     src/persistence/configuration_persistence.cpp \
     src/persistence/persistence.cpp \
@@ -217,6 +219,8 @@ HEADERS += \
     src/mind/dikw/dikw_pyramid.h \
     src/mind/dikw/filesystem_information.h \
     src/mind/dikw/information.h \
+    src/model/eisenhower_matrix.h \
+    src/model/kanban.h \
     src/model/organizer.h \
     src/persistence/configuration_persistence.h \
     src/representations/markdown/markdown_document.h \
