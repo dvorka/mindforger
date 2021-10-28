@@ -5,7 +5,8 @@ See documentation for configuration options details.
 
 # Organizers
 Organizer name: Eisenhower Matrix
-* Key: /m1ndf0rg3r/organizers/eisenhower-matrix
+* Key: 5319
+* Type: Eisenhower Matrix
 * Upper right tag: important & urgent
 * Lower right tag: important
 * Lower left tag: .

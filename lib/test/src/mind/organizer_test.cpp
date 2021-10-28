@@ -23,7 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "../test_utils.h"
-#include "../../../src/model/organizer.h"
+#include "../../../src/model/eisenhower_matrix.h"
 #include "../../../src/representations/markdown/markdown_configuration_representation.h"
 
 using namespace std;
@@ -32,7 +32,7 @@ TEST(OrganizerTestCase, SerializeAndSplitTags)
 {
     // GIVEN
     string given_string_tags{"aaa,,bbb,,ccc"};
-    m8r::Organizer o{"Test organizer"};
+    m8r::EisenhowerMatrix o{"Test organizer"};
 
     // WHEN
     std::set<std::string> tags_as_vector = m8r::Organizer::tagsFromString(given_string_tags);
@@ -79,21 +79,21 @@ TEST(OrganizerTestCase, ParseSaveAndLoad)
     };
     c.setActiveRepository(c.addRepository(r), repositoryConfigRepresentation);
     // organizers
-    m8r::Organizer* o = new m8r::Organizer("My GLOBAL organizer on IMPORTANCE and NOTES");
+    m8r::EisenhowerMatrix* o = new m8r::EisenhowerMatrix("My GLOBAL organizer on IMPORTANCE and NOTES");
     o->setUpperRightTag("ur1");
     o->setLowerRightTag("lr1");
     o->setLowerLeftTag("ll1");
     o->setUpperLeftTag("ul1");
-    o->sortBy = m8r::Organizer::SortBy::IMPORTANCE;
+    o->sortBy = m8r::EisenhowerMatrix::SortBy::IMPORTANCE;
     o->filterBy = m8r::Organizer::FilterBy::NOTES;
     o->scopeOutlineId.clear(); // global scope
     c.getRepositoryConfiguration().addOrganizer(o);
-    o = new m8r::Organizer("My organizer on URGENCY and OUTLINES+NOTES");
+    o = new m8r::EisenhowerMatrix("My organizer on URGENCY and OUTLINES+NOTES");
     o->setUpperRightTag("ur2");
     o->setLowerRightTag("lr2");
     o->setLowerLeftTag("ll2");
     o->setUpperLeftTag("ul2");
-    o->sortBy = m8r::Organizer::SortBy::URGENCY;
+    o->sortBy = m8r::EisenhowerMatrix::SortBy::URGENCY;
     o->filterBy = m8r::Organizer::FilterBy::OUTLINES_NOTES;
     o->scopeOutlineId = outlineScope;
     c.getRepositoryConfiguration().addOrganizer(o);
@@ -138,11 +138,11 @@ TEST(OrganizerTestCase, ParseSaveAndLoad)
     EXPECT_EQ("ll1", *c.getRepositoryConfiguration().getOrganizers()[1]->getLowerLeftTags().begin());
     EXPECT_EQ("ul1", *c.getRepositoryConfiguration().getOrganizers()[1]->getUpperLeftTags().begin());
     EXPECT_EQ(m8r::Organizer::FilterBy::NOTES, c.getRepositoryConfiguration().getOrganizers()[1]->filterBy);
-    EXPECT_EQ(m8r::Organizer::SortBy::IMPORTANCE, c.getRepositoryConfiguration().getOrganizers()[1]->sortBy);
+    EXPECT_EQ(m8r::EisenhowerMatrix::SortBy::IMPORTANCE, dynamic_cast<m8r::EisenhowerMatrix*>(c.getRepositoryConfiguration().getOrganizers()[1])->sortBy);
     EXPECT_EQ("", c.getRepositoryConfiguration().getOrganizers()[1]->scopeOutlineId);
 
     EXPECT_EQ(m8r::Organizer::FilterBy::OUTLINES_NOTES, c.getRepositoryConfiguration().getOrganizers()[2]->filterBy);
-    EXPECT_EQ(m8r::Organizer::SortBy::URGENCY, c.getRepositoryConfiguration().getOrganizers()[2]->sortBy);
+    EXPECT_EQ(m8r::EisenhowerMatrix::SortBy::URGENCY, dynamic_cast<m8r::EisenhowerMatrix*>(c.getRepositoryConfiguration().getOrganizers()[2])->sortBy);
     EXPECT_EQ(outlineScope, c.getRepositoryConfiguration().getOrganizers()[2]->scopeOutlineId);
 }
 

@@ -171,7 +171,7 @@ TEST(ConfigurationTestCase, SaveAndLoad)
 
     // ADD custom organizer (will be deleted by repository configuration destructor)
     string oName{"Custom repository configuration test organizer"};
-    m8r::Organizer* o = new m8r::Organizer{oName};
+    m8r::EisenhowerMatrix* o = new m8r::EisenhowerMatrix{oName};
     c.getRepositoryConfiguration().addOrganizer(o);
 
     configRepresentation.save(c);
