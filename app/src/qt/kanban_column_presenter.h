@@ -21,14 +21,23 @@
 
 #include <QtWidgets>
 
-#include "organizer_quadrant_presenter.h"
+#include "orloj_presenter.h"
+#include "kanban_column_model.h"
 #include "kanban_column_view.h"
 
 namespace m8r {
 
-class KanbanColumnPresenter : public OrganizerQuadrantPresenter
+class KanbanColumnPresenter : public QObject
 {
     Q_OBJECT
+
+private:
+    static const int NO_ROW = -1;
+
+    KanbanColumnView* view;
+    KanbanColumnModel* model;
+
+    OrlojPresenter* orloj;
 
 public:
     explicit KanbanColumnPresenter(
@@ -41,6 +50,17 @@ public:
     KanbanColumnPresenter& operator=(const KanbanColumnPresenter&) = delete;
     KanbanColumnPresenter& operator=(const KanbanColumnPresenter&&) = delete;
     ~KanbanColumnPresenter();
+
+    void setTitle(QString& title) { model->setTitle(title); }
+
+    int getCurrentRow() const;
+    void refresh(const std::vector<Note*>& os, bool urgency, bool importance);
+    OrganizerQuadrantView* getView() const { return view; }
+
+public slots:
+    void slotShowSelectedNote();
+    void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotHeaderClicked(int section);
 };
 
 }

@@ -36,8 +36,9 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     this->mind = mind;
 
     this->dashboardPresenter = new DashboardPresenter(view->getDashboard(), this);
-    this->organizerPresenter = new OrganizerPresenter(view->getOrganizer(), this);
     this->organizersTablePresenter = new OrganizersTablePresenter(view->getOrganizersTable(), mainPresenter->getHtmlRepresentation());
+    this->organizerPresenter = new OrganizerPresenter(view->getOrganizer(), this);
+    this->kanbanPresenter = new KanbanPresenter(view->getKanban(), this);
     this->tagCloudPresenter = new TagsTablePresenter(view->getTagCloud(), mainPresenter->getHtmlRepresentation());
     this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
     this->recentNotesTablePresenter = new RecentNotesTablePresenter(view->getRecentNotesTable(), mainPresenter->getHtmlRepresentation());
@@ -225,7 +226,7 @@ void OrlojPresenter::showFacetOrganizerList(const vector<Organizer*>& organizers
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
-void OrlojPresenter::showFacetOrganizer(
+void OrlojPresenter::showFacetEisenhowerMatrix(
     Organizer* organizer,
     const vector<Note*>& outlinesAndNotes,
     const vector<Outline*>& outlines,
@@ -240,7 +241,30 @@ void OrlojPresenter::showFacetOrganizer(
     );
     view->showFacetOrganizer();
     mainPresenter->getMainMenu()->showFacetOrganizer();
-    mainPresenter->getStatusBar()->showInfo(tr("Organizer: ")+QString::fromStdString(organizer->getName()));
+    mainPresenter->getStatusBar()->showInfo(tr("Eisenhower Matrix: ")+QString::fromStdString(
+        organizer->getName())
+    );
+}
+
+void OrlojPresenter::showFacetKanban(
+    Kanban* kanban,
+    const vector<Note*>& outlinesAndNotes,
+    const vector<Outline*>& outlines,
+    const vector<Note*>& notes
+) {
+    setFacet(OrlojPresenterFacets::FACET_KANBAN);
+    kanbanPresenter->refresh(
+        kanban,
+        outlinesAndNotes,
+        outlines,
+        notes
+    );
+    view->showFacetKanban();
+    // Kanban shares menu facet with Eisenhower Matrix as both are organizers
+    mainPresenter->getMainMenu()->showFacetOrganizer();
+    mainPresenter->getStatusBar()->showInfo(
+        tr("Kanban: ")+QString::fromStdString(kanban->getName())
+    );
 }
 
 void OrlojPresenter::showFacetKnowledgeGraphNavigator()
@@ -318,12 +342,22 @@ void OrlojPresenter::slotShowSelectedOrganizer()
 
                 organizerOutlinesAndNotes.clear();
                 organizerNotes.clear();
-                showFacetOrganizer(
-                    organizer,
-                    mind->getAllNotes(organizerOutlinesAndNotes, true, true),
-                    mind->getOutlines(),
-                    mind->getAllNotes(organizerNotes, true, false)
-                );
+                if(Organizer::OrganizerType::KANBAN == organizer->getOrganizerType()) {
+                    showFacetKanban(
+                        dynamic_cast<Kanban*>(organizer),
+                        mind->getAllNotes(organizerOutlinesAndNotes, true, true),
+                        mind->getOutlines(),
+                        mind->getAllNotes(organizerNotes, true, false)
+                    );
+                } else {
+                    // Eisnehower Matrix as fallback
+                    showFacetEisenhowerMatrix(
+                        dynamic_cast<EisenhowerMatrix*>(organizer),
+                        mind->getAllNotes(organizerOutlinesAndNotes, true, true),
+                        mind->getOutlines(),
+                        mind->getAllNotes(organizerNotes, true, false)
+                    );
+                }
                 mainPresenter->getStatusBar()->showInfo(
                     QString("%1%2%3").arg(tr("Organizer: '")).arg(organizer->getName().c_str()).arg("'")
                 );

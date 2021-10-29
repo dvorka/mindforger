@@ -80,7 +80,9 @@ public:
     std::set<std::string>& getTagsAsStringSet(std::set<std::string>& tagSet) const;
     void setTags(const std::vector<const Tag*>& tags);
     void setTagsAsStrings(const std::vector<std::string>& tagsStrings);
-    void setTagsAsStrings(const std::set<std::string>& tagsStrings);
+    void setTagsAsStrings(
+        const std::set<std::string>& tagsStrings
+    );
     void setFocusAddingTag() {
         lineEdit->setFocus();
         lineEdit->selectAll();

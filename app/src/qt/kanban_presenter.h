@@ -28,6 +28,8 @@
 
 namespace m8r {
 
+class KanbanColumnPresenter;
+
 class KanbanPresenter : public QObject
 {
     Q_OBJECT
@@ -56,7 +58,7 @@ public:
 
     KanbanView* getView() const { return this->view; }
 
-    Kanban* getOrganizer() const { return this->kanban; }
+    Kanban* getKanban() const { return this->kanban; }
 };
 
 }

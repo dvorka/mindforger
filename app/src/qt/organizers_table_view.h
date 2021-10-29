@@ -43,7 +43,6 @@ public:
 
 signals:
     void signalShowSelectedOrganizer();
-    // TODO remove: void signalShowDialogForOrganizer();
 };
 
 }

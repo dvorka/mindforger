@@ -20,17 +20,117 @@
 
 namespace m8r {
 
+using namespace std;
+
 KanbanColumnPresenter::KanbanColumnPresenter(
     KanbanColumnView* view,
     OrlojPresenter* orloj,
     QString title
-)
-    : OrganizerQuadrantPresenter{view, orloj, title}
-{
+) {
+    this->view = view;
+    this->model = new KanbanColumnModel(
+        title, this, orloj->getMainPresenter()->getHtmlRepresentation()
+    );
+    this->view->setModel(this->model);
+
+    this->orloj = orloj;
+
+    // ensure HTML cells rendering
+    HtmlDelegate* delegate = new HtmlDelegate();
+    this->view->setItemDelegate(delegate);
+
+    // hit ENTER to open selected O
+    QObject::connect(
+        view,
+        SIGNAL(signalShowSelectedNote()),
+        this,
+        SLOT(slotShowSelectedNote()));
+    QObject::connect(
+        this->view->horizontalHeader(), SIGNAL(sectionClicked(int)),
+        this, SLOT(slotHeaderClicked(int))
+    );
 }
 
 KanbanColumnPresenter::~KanbanColumnPresenter()
 {
+}
+
+int KanbanColumnPresenter::getCurrentRow() const
+{
+    QModelIndexList indexes = view->selectionModel()->selection().indexes();
+    for(int i=0; i<indexes.count(); i++) {
+        return indexes.at(i).row();
+    }
+    return NO_ROW;
+}
+
+void KanbanColumnPresenter::slotShowSelectedNote()
+{
+    int row = getCurrentRow();
+    if(row != NO_ROW) {
+        QStandardItem* item = model->item(row);
+        if(item) {
+            // IMPROVE make my role constant
+            Note* note = item->data(Qt::UserRole + 1).value<Note*>();
+
+            note->incReads();
+            note->makeDirty();
+
+            orloj->showFacetNoteView(note);
+        } else {
+            orloj->getMainPresenter()->getStatusBar()->showInfo(
+                QString(tr("Selected Notebook not found!"))
+            );
+        }
+    } else {
+        orloj->getMainPresenter()->getStatusBar()->showInfo(
+            QString(tr("No Notebook selected!"))
+        );
+    }
+}
+
+void KanbanColumnPresenter::slotShowNote(
+    const QItemSelection& selected, const QItemSelection& deselected
+) {
+    Q_UNUSED(deselected);
+
+    QModelIndexList indices = selected.indexes();
+    if(indices.size()) {
+        const QModelIndex& index = indices.at(0);
+        QStandardItem* item
+            = model->itemFromIndex(index);
+        // IMPROVE make my role constant
+        Note* note = item->data(Qt::UserRole + 1).value<Note*>();
+
+        note->incReads();
+        note->makeDirty();
+
+        orloj->showFacetNoteView(note);
+    } // else do nothing
+}
+
+
+void KanbanColumnPresenter::slotHeaderClicked(int section)
+{
+    Q_UNUSED(section);
+
+    MF_DEBUG("Kanban quadrant presenter: O/N table header clicked..." << endl);
+    orloj->getMainPresenter()->doActionOrganizerEdit();
+}
+
+void KanbanColumnPresenter::refresh(
+    const std::vector<Note*>& ts, bool urgency, bool importance
+) {
+    model->removeAllRows();
+    if(ts.size()) {
+        view->setVisible(true);
+        for(auto& t:ts) {
+            model->addRow(t, urgency, importance);
+        }
+
+        this->view->setCurrentIndex(this->model->index(0, 0));
+        this->view->setFocus();
+    }
 }
 
 } // m8r namespace

@@ -48,8 +48,8 @@ public:
     explicit OrganizerPresenter(OrganizerView* view, OrlojPresenter* orloj);
     OrganizerPresenter(const OrganizerPresenter&) = delete;
     OrganizerPresenter(const OrganizerPresenter&&) = delete;
-    OrganizerPresenter &operator=(const OrganizerPresenter&) = delete;
-    OrganizerPresenter &operator=(const OrganizerPresenter&&) = delete;
+    OrganizerPresenter& operator=(const OrganizerPresenter&) = delete;
+    OrganizerPresenter& operator=(const OrganizerPresenter&&) = delete;
     ~OrganizerPresenter();
 
     void refresh(

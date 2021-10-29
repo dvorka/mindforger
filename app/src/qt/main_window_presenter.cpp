@@ -228,7 +228,7 @@ void MainWindowPresenter::showInitialView()
                     vector<Note*> notes{};
                     orloj->showFacetRecentNotes(mind->getAllNotes(notes));
                 } else if(!string{START_TO_EISENHOWER_MATRIX}.compare(config.getStartupView())) {
-                    orloj->showFacetOrganizer(
+                    orloj->showFacetEisenhowerMatrix(
                          nullptr,
                          emptyVector,
                          mind->getOutlines(),
@@ -2621,10 +2621,12 @@ void MainWindowPresenter::handleCreateOrganizer()
             o = new EisenhowerMatrix(
                 newOrganizerDialog->getOrganizerName().toStdString()
             );
+            o->setKey(EisenhowerMatrix::createEisenhowerMatrixKey());
         } else {
             o = new Kanban(
                 newOrganizerDialog->getOrganizerName().toStdString()
             );
+            o->setKey(Kanban::createKanbanKey());
         }
     }
 
@@ -2675,19 +2677,33 @@ void MainWindowPresenter::handleCreateOrganizer()
     if(!newOrganizerDialog->getOrganizerToEdit()) {
         orloj->showFacetOrganizerList(config.getRepositoryConfiguration().getOrganizers());
     } else {
-        orloj->showFacetOrganizer(
-            o,
-            mind->getAllNotes(organizerOutlinesAndNotes, true, true),
-            mind->getOutlines(),
-            mind->getAllNotes(organizerNotes, true, false)
-        );
+        if(Organizer::OrganizerType::KANBAN == newOrganizerDialog->getOrganizerToEdit()->getOrganizerType()) {
+            orloj->showFacetKanban(
+                dynamic_cast<Kanban*>(o),
+                mind->getAllNotes(organizerOutlinesAndNotes, true, true),
+                mind->getOutlines(),
+                mind->getAllNotes(organizerNotes, true, false)
+            );
+        } else {
+            orloj->showFacetEisenhowerMatrix(
+                o,
+                mind->getAllNotes(organizerOutlinesAndNotes, true, true),
+                mind->getOutlines(),
+                mind->getAllNotes(organizerNotes, true, false)
+            );
+        }
     }
 }
 
 void MainWindowPresenter::doActionOrganizerEdit()
 {
     // no need to check view - this action is available only when organizer is opened
-    Organizer* o = orloj->getOrganizer()->getOrganizer();
+    Organizer* o{nullptr};
+    if(OrlojPresenterFacets::FACET_KANBAN == orloj->getFacet()) {
+        o = orloj->getKanban()->getKanban();
+    } else {
+        o = orloj->getOrganizer()->getOrganizer();
+    }
 
     // Eisenhower matrix organizer cannot be edited
     if(o->getKey() == EisenhowerMatrix::KEY_EISENHOWER_MATRIX) {

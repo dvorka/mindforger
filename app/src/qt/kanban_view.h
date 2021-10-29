@@ -31,7 +31,14 @@ namespace m8r {
  * @brief Kanban view on tags.
  *
  * Kanban view with 2 to 4 columns and drag & drop allowing to move Os/Ns between columns.
+ * New / edit organizer dialog shared with Eisenhower Matrix on tags. If tag is ".", then
+ * the column is not shown in the view thus user can use from none up to four columns.
  *
+ * ```
+ * -------+-------+-------+-------
+ *  tag-1 | tag-2 | tag-1 | tag-2
+ * -------+-------+-------+-------
+ * ```
  */
 class KanbanView : public QSplitter
 {

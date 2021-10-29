@@ -199,10 +199,22 @@ void OrganizerNewDialog::show(
 
         nameEdit->setText(QString::fromStdString(organizerToEdit->getName()));
 
-        upperRightTags->setTagsAsStrings(organizerToEdit->getUpperRightTags());
-        upperLeftTags->setTagsAsStrings(organizerToEdit->getUpperLeftTags());
-        lowerRightTags->setTagsAsStrings(organizerToEdit->getLowerRightTags());
-        lowerLeftTags->setTagsAsStrings(organizerToEdit->getLowerLeftTags());
+        typeCombo->setCurrentText(
+            QString::fromStdString(organizerToEdit->getOrganizerTypeAsStr())
+        );
+
+        upperRightTags->setTagsAsStrings(
+            organizerToEdit->getUpperRightTags()
+        );
+        upperLeftTags->setTagsAsStrings(
+            organizerToEdit->getUpperLeftTags()
+        );
+        lowerRightTags->setTagsAsStrings(
+            organizerToEdit->getLowerRightTags()
+        );
+        lowerLeftTags->setTagsAsStrings(
+            organizerToEdit->getLowerLeftTags()
+        );
 
         if(organizerToEdit->getOutlineScope().size()) {
             if(oScopeOutline) {
@@ -216,7 +228,7 @@ void OrganizerNewDialog::show(
         if(Organizer::OrganizerType::EISENHOWER_MATRIX == organizerToEdit->getOrganizerType()) {
             sortByCombo->setCurrentText(
                 QString::fromStdString(
-                dynamic_cast<EisenhowerMatrix*>(organizerToEdit)->getSortByAsStr()
+                    dynamic_cast<EisenhowerMatrix*>(organizerToEdit)->getSortByAsStr()
                 )
             );
         }
@@ -257,20 +269,6 @@ void OrganizerNewDialog::handleCreate()
             tr("Organizer must have non-empty name.")
         );
         return;
-    }
-
-    // if tag is not specified, replace it with "no tag" represented by .
-    if(!upperRightTags->getTagCount()) {
-        upperRightTags->setTagsAsStrings(set<string>{"."});
-    }
-    if(!upperLeftTags->getTagCount()) {
-        upperLeftTags->setTagsAsStrings(set<string>{"."});
-    }
-    if(!lowerRightTags->getTagCount()) {
-        lowerRightTags->setTagsAsStrings(set<string>{"."});
-    }
-    if(!lowerLeftTags->getTagCount()) {
-        lowerLeftTags->setTagsAsStrings(set<string>{"."});
     }
 
     emit createFinished();

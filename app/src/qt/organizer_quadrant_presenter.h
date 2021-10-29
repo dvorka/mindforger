@@ -47,7 +47,11 @@ private:
     OrlojPresenter* orloj;
 
 public:
-    explicit OrganizerQuadrantPresenter(OrganizerQuadrantView* view, OrlojPresenter* orloj, QString title);
+    explicit OrganizerQuadrantPresenter(
+        OrganizerQuadrantView* view,
+        OrlojPresenter* orloj,
+        QString title
+    );
     OrganizerQuadrantPresenter(const OrganizerQuadrantPresenter&) = delete;
     OrganizerQuadrantPresenter(const OrganizerQuadrantPresenter&&) = delete;
     OrganizerQuadrantPresenter &operator=(const OrganizerQuadrantPresenter&) = delete;
