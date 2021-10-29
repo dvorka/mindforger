@@ -39,6 +39,8 @@ public:
 
     static constexpr const auto KEY_EISENHOWER_MATRIX = "/m1ndf0rg3r/organizers/eisenhower-matrix";
 
+    static std::string createEisenhowerMatrixKey();
+
     static EisenhowerMatrix* createEisenhowMatrixOrganizer();
 
 public:

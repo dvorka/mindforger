@@ -245,17 +245,6 @@ Organizer* MarkdownRepositoryConfigurationRepresentation::repositoryConfiguratio
             return nullptr;
         } // else OK - key not defined yet
 
-        if(
-            !o->tagsUrQuadrant.size()
-            || !o->tagsLrQuadrant.size()
-            || !o->tagsLlQuadrant.size()
-            || !o->tagsUlQuadrant.size()
-        ) {
-            cerr << "Error: skipping '" << o->getName() << "' organizer as it does not define tags for all quandrants" << endl;
-            delete o;
-            return nullptr;
-        }
-
         // persist
         if(o && c.hasRepositoryConfiguration()) {
             c.getRepositoryConfiguration().addOrganizer(o);

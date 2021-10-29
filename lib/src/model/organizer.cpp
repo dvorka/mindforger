@@ -36,9 +36,9 @@ std::string Organizer::createOrganizerKey(
             + "m1ndf0rg3r" + separator
             + type + separator
             + id;
-    do {
+    while(keys.find(key) != keys.end()) {
         key += "_";
-    } while(keys.find(key) != keys.end());
+    }
     return key;
 }
 

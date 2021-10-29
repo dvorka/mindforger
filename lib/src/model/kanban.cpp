@@ -22,14 +22,9 @@ using namespace std;
 
 namespace m8r {
 
-std::string Kanban::createKanbanKey(
-    const set<string>& keys,
-    const string& directory,
-    const string& id,
-    const string& separator
-) {
+string Kanban::createKanbanKey() {
     return Organizer::createOrganizerKey(
-        keys, directory, id, separator, "kanban"
+        set<string>{}, "repository", Thing::getNextKey(), "/", "kanban"
     );
 }
 

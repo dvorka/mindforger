@@ -34,13 +34,7 @@ namespace m8r {
 class Kanban : public Organizer
 {
 public:
-
-    static std::string createKanbanKey(
-        const std::set<std::string>& keys,
-        const std::string& directory,
-        const std::string& id,
-        const std::string& separator
-    );
+    static std::string createKanbanKey();
 
 public:
     explicit Kanban(const std::string& name);

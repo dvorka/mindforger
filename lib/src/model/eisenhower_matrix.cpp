@@ -22,6 +22,12 @@ using namespace std;
 
 namespace m8r {
 
+string EisenhowerMatrix::createEisenhowerMatrixKey() {
+    return Organizer::createOrganizerKey(
+        set<string>{}, "repository", Thing::getNextKey(), "/", "eisehnower-matrix"
+    );
+}
+
 EisenhowerMatrix::EisenhowerMatrix(const std::string& name)
     : Organizer{name, Organizer::OrganizerType::EISENHOWER_MATRIX},
       sortBy{EisenhowerMatrix::SortBy::IMPORTANCE}

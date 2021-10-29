@@ -120,6 +120,9 @@ public:
         const std::vector<const Tag*>& thingTags,
         std::vector<std::string>& filterTags
     ) {
+        if(!filterTags.size()) {
+            return false;
+        }
         if(thingTags.size() > 1) {
             unsigned int matches{0};
             for(std::string ft: filterTags) {
@@ -140,6 +143,9 @@ public:
         const std::vector<const Tag*>& thingTags,
         std::set<std::string>& filterTags
     ) {
+        if(!filterTags.size()) {
+            return false;
+        }
         if(thingTags.size() > 1) {
             unsigned int matches{0};
             for(std::string ft: filterTags) {
