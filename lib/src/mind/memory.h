@@ -47,11 +47,6 @@ namespace m8r {
 
 class Memory
 {
-public:
-    static void sortByName(std::vector<Outline*>& sorted);
-    static void sortByRead(std::vector<Outline*>& ns);
-    static void sortByRead(std::vector<Note*>& sorted);
-
 private:
     /**
      * @brief Indicates whether Mind learned a repository.

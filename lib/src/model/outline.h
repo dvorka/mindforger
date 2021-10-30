@@ -25,6 +25,7 @@
 #include "../mind/ontology/thing_class_rel_triple.h"
 #include "note.h"
 #include "outline_type.h"
+#include "kanban.h"
 #include "../representations/markdown/markdown_document.h"
 #include "../gear/datetime_utils.h"
 
@@ -63,6 +64,35 @@ public:
      * @brief Auxiliary Note type that is used to represent Outline's name and description, e.g. in FTS.
      */
     static const NoteType NOTE_4_OUTLINE_TYPE;
+
+    static void sortByName(std::vector<Outline*>& sorted);
+    static void sortByRead(std::vector<Outline*>& ns);
+    static void sortByRead(std::vector<Note*>& sorted);
+
+    /*
+     * Organizer
+     */
+    static void organizeToEisenhowerMatrix(
+        Organizer* organizer,
+        const std::vector<Note*>& ons,
+        const std::vector<Outline*>& os,
+        const std::vector<Note*>& ns,
+        std::vector<Note*>& upperLeftNs,
+        std::vector<Note*>& upperRightNs,
+        std::vector<Note*>& lowerLeftNs,
+        std::vector<Note*>& lowerRightNs
+    );
+
+    static void organizeToKanbanColumns(
+        Kanban* kanban,
+        const std::vector<Note*>& ons,
+        const std::vector<Outline*>& os,
+        const std::vector<Note*>& ns,
+        std::vector<Note*>& column0,
+        std::vector<Note*>& column1,
+        std::vector<Note*>& column2,
+        std::vector<Note*>& column3
+    );
 
 private:
     static constexpr int FLAG_MASK_POST_DECLARED_SECTION = 1;

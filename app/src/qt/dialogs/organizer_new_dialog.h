@@ -40,6 +40,16 @@ class OrganizerNewDialog : public QDialog
 {
     Q_OBJECT
 
+    static const std::string TITLE_UPPER_LEFT_EM;
+    static const std::string TITLE_UPPER_RIGHT_EM;
+    static const std::string TITLE_LOWER_LEFT_EM;
+    static const std::string TITLE_LOWER_RIGHT_EM;
+
+    static const std::string TITLE_UPPER_LEFT_KANBAN;
+    static const std::string TITLE_UPPER_RIGHT_KANBAN;
+    static const std::string TITLE_LOWER_LEFT_KANBAN;
+    static const std::string TITLE_LOWER_RIGHT_KANBAN;
+
 private:
     Ontology& ontology;
 
@@ -129,6 +139,10 @@ public:
         Outline* oScopeOutline=nullptr
     );
 
+private:
+    void toEisenhowerMatrixMode();
+    void toKanbanMode();
+
 signals:
     void createFinished();
 
@@ -136,6 +150,7 @@ private slots:
     void handleFindOutline();
     void handleFindOutlineChoice();
     void handleClearOutline();
+    void handleChangeTypeCombo(const QString& text);
 
     void handleCreate();
 };

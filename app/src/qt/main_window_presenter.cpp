@@ -749,7 +749,7 @@ void MainWindowPresenter::doActionFindOutlineByName()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> os{mind->getOutlines()};
-    mind->remind().sortByRead(os);
+    Outline::sortByRead(os);
     vector<Thing*> es{os.begin(),os.end()};
 
     findOutlineByNameDialog->show(es);
@@ -785,7 +785,7 @@ void MainWindowPresenter::doActionFindOutlineByTag()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> os{mind->getOutlines()};
-    mind->remind().sortByName(os);
+    Outline::sortByName(os);
     vector<Thing*> outlines{os.begin(),os.end()};
 
     findOutlineByTagDialog->show(outlines);
@@ -847,7 +847,7 @@ void MainWindowPresenter::doSwitchFindByTagDialog(bool toFindNotesByTag)
         findNoteByTagDialog->getChosenTags(tags);
 
         vector<Outline*> os{mind->getOutlines()};
-        mind->remind().sortByName(os);
+        Outline::sortByName(os);
         vector<Thing*> outlines{os.begin(),os.end()};
         findOutlineByTagDialog->show(outlines, tags);
     }
@@ -877,7 +877,7 @@ void MainWindowPresenter::doActionRefactorNoteToOutline()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> os{mind->getOutlines()};
-    mind->remind().sortByName(os);
+    Outline::sortByName(os);
     vector<Thing*> es{os.begin(),os.end()};
 
     refactorNoteToOutlineDialog->show(es);
@@ -911,14 +911,14 @@ void MainWindowPresenter::doActionFindNoteByName()
         findNoteByNameDialog->setWindowTitle(tr("Find Note by Name in Notebook"));
         findNoteByNameDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
         vector<Note*> allNotes(findNoteByNameDialog->getScope()->getNotes());
-        mind->remind().sortByRead(allNotes);
+        Outline::sortByRead(allNotes);
         findNoteByNameDialog->show(allNotes);
     } else {
         findNoteByNameDialog->setWindowTitle(tr("Find Note by Name"));
         findNoteByNameDialog->clearScope();
         vector<Note*> allNotes{};
         mind->getAllNotes(allNotes);
-        mind->remind().sortByRead(allNotes);
+        Outline::sortByRead(allNotes);
         findNoteByNameDialog->show(allNotes);
     }
 }
@@ -1590,7 +1590,7 @@ void MainWindowPresenter::doActionFormatLinkOrImage(QString link)
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> oss{mind->getOutlines()};
-    mind->remind().sortByName(oss);
+    Outline::sortByName(oss);
     vector<Thing*> os{oss.begin(), oss.end()};
 
     vector<Note*> ns{};

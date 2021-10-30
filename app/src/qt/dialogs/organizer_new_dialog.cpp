@@ -23,6 +23,16 @@ namespace m8r {
 
 using namespace std;
 
+const string OrganizerNewDialog::TITLE_UPPER_LEFT_EM = string{"Upper left quadrant tags"};
+const string OrganizerNewDialog::TITLE_UPPER_RIGHT_EM = string{"Upper right quadrant tags"};
+const string OrganizerNewDialog::TITLE_LOWER_LEFT_EM = string{"Lower left quadrant tags"};
+const string OrganizerNewDialog::TITLE_LOWER_RIGHT_EM = string{"Lower right quadrant tags"};
+
+const string OrganizerNewDialog::TITLE_UPPER_LEFT_KANBAN = string{"The first column"};
+const string OrganizerNewDialog::TITLE_UPPER_RIGHT_KANBAN = string{"The second column"};
+const string OrganizerNewDialog::TITLE_LOWER_LEFT_KANBAN = string{"The third column"};
+const string OrganizerNewDialog::TITLE_LOWER_RIGHT_KANBAN = string{"The fourth column"};
+
 OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     : QDialog{parent},
       ontology{ontology},
@@ -35,26 +45,26 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     nameLabel = new QLabel(tr("Name")+":", this);
     nameEdit = new QLineEdit(tr("Organizer"), this);
 
-    typeLabel = new QLabel(tr("Type")+":", this);
+    typeLabel = new QLabel(tr("View as")+":", this);
     typeCombo = new QComboBox{this};
     typeCombo->addItem(tr("Eisenhower Matrix"), Organizer::OrganizerType::EISENHOWER_MATRIX);
     typeCombo->addItem(tr("Kanban"), Organizer::OrganizerType::KANBAN);
 
     upperLeftTags = new EditTagsPanel{ontology, this};
     upperLeftTags->refreshOntologyTags();
-    upperLeftTags->setTitle(tr("Upper left quadrant tags")+":");
+    upperLeftTags->setTitle(tr(TITLE_UPPER_LEFT_EM.c_str())+":");
 
     upperRightTags = new EditTagsPanel{ontology, this};
     upperRightTags->refreshOntologyTags();
-    upperRightTags->setTitle(tr("Upper right quadrant tags")+":");
+    upperRightTags->setTitle(tr(TITLE_UPPER_RIGHT_EM.c_str())+":");
 
     lowerLeftTags = new EditTagsPanel{ontology, this};
     lowerLeftTags->refreshOntologyTags();
-    lowerLeftTags->setTitle(tr("Lower left quadrant tags")+":");
+    lowerLeftTags->setTitle(tr(TITLE_LOWER_LEFT_EM.c_str())+":");
 
     lowerRightTags = new EditTagsPanel{ontology, this};
     lowerRightTags->refreshOntologyTags();
-    lowerRightTags->setTitle(tr("Lower right quadrant tags")+":");
+    lowerRightTags->setTitle(tr(TITLE_LOWER_RIGHT_EM.c_str())+":");
 
     oScopeLabel = new QLabel(tr("Notebook scope")+":", this);
     oScopeEdit = new QLineEdit("", this);
@@ -125,9 +135,22 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     // signals
     QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
     QObject::connect(createButton, SIGNAL(clicked()), this, SLOT(handleCreate()));
-    QObject::connect(findOutlineButton, SIGNAL(clicked()), this, SLOT(handleFindOutline()));
-    QObject::connect(clearOutlineButton, SIGNAL(clicked()), this, SLOT(handleClearOutline()));
-    QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineChoice()));
+    QObject::connect(
+        findOutlineButton, SIGNAL(clicked()),
+        this, SLOT(handleFindOutline())
+    );
+    QObject::connect(
+        clearOutlineButton, SIGNAL(clicked()),
+        this, SLOT(handleClearOutline())
+    );
+    QObject::connect(
+        findOutlineByNameDialog, SIGNAL(searchFinished()),
+        this, SLOT(handleFindOutlineChoice())
+    );
+    QObject::connect(
+        typeCombo, SIGNAL(currentIndexChanged(const QString&)),
+        this, SLOT(handleChangeTypeCombo(const QString&))
+    );
 
     // dialog    
     setWindowTitle(tr("New Organizer"));
@@ -202,6 +225,12 @@ void OrganizerNewDialog::show(
         typeCombo->setCurrentText(
             QString::fromStdString(organizerToEdit->getOrganizerTypeAsStr())
         );
+
+        if(Organizer::OrganizerType::EISENHOWER_MATRIX == organizerToEdit->getOrganizerType()) {
+            toEisenhowerMatrixMode();
+        } else {
+            toKanbanMode();
+        }
 
         upperRightTags->setTagsAsStrings(
             organizerToEdit->getUpperRightTags()
@@ -298,6 +327,35 @@ void OrganizerNewDialog::handleFindOutlineChoice()
         sortByCombo->setEnabled(false);
         filterByCombo->setCurrentText(Organizer::CONFIG_VALUE_FILTER_BY_N);
         filterByCombo->setEnabled(false);
+    }
+}
+
+void OrganizerNewDialog::toEisenhowerMatrixMode()
+{
+    this->upperLeftTags->setTitle(tr(TITLE_UPPER_LEFT_EM.c_str())+":");
+    this->lowerLeftTags->setTitle(tr(TITLE_LOWER_LEFT_EM.c_str())+":");
+    this->upperRightTags->setTitle(tr(TITLE_UPPER_RIGHT_EM.c_str())+":");
+    this->lowerRightTags->setTitle(tr(TITLE_LOWER_RIGHT_EM.c_str())+":");
+
+    this->sortByCombo->setEnabled(true);
+}
+
+void OrganizerNewDialog::toKanbanMode()
+{
+    this->upperLeftTags->setTitle(tr(TITLE_UPPER_LEFT_KANBAN.c_str())+":");
+    this->lowerLeftTags->setTitle(tr(TITLE_LOWER_LEFT_KANBAN.c_str())+":");
+    this->upperRightTags->setTitle(tr(TITLE_UPPER_RIGHT_KANBAN.c_str())+":");
+    this->lowerRightTags->setTitle(tr(TITLE_LOWER_RIGHT_KANBAN.c_str())+":");
+
+    this->sortByCombo->setEnabled(false);
+}
+
+void OrganizerNewDialog::handleChangeTypeCombo(const QString& text) {
+    MF_DEBUG("New organizer type changed: " << text.toStdString());
+    if(text.toStdString() == Organizer::TYPE_STR_KANBAN) {
+        toKanbanMode();
+    } else {
+        toEisenhowerMatrixMode();
     }
 }
 

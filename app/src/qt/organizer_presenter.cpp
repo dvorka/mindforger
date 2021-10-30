@@ -51,20 +51,8 @@ void OrganizerPresenter::refresh(
     const vector<Note*>& ns
 ) {
     MF_DEBUG("Rendering organizer: " << organizer->getName() << "..." << endl);
-    MF_DEBUG("  filter (notes==" << Organizer::FilterBy::NOTES << "): " << organizer->getFilterBy() << endl);
 
     this->organizer = organizer;
-
-
-
-
-    // TODO this code must go to lib/
-    // TODO - unit test to be created
-    // app/ to just call the library
-
-    organizer->makeModified();
-
-    QString title{};
 
     // upper right / do first
     vector<Note*> upperRightNs{};
@@ -75,125 +63,37 @@ void OrganizerPresenter::refresh(
     // lower left / do sometimes
     vector<Note*> lowerLeftNs{};
 
-    if(os.size()) {
-        if(!organizer || organizer->getKey()==EisenhowerMatrix::KEY_EISENHOWER_MATRIX) {
-            // organizer type: Eisenhower matrix
-            for(Outline* o:os) {
-                if(o->getUrgency()>2) {
-                    if(o->getImportance()>2) {
-                        upperRightNs.push_back(o->getOutlineDescriptorAsNote());
-                    } else {
-                        upperLeftNs.push_back(o->getOutlineDescriptorAsNote());
-                    }
-                } else {
-                    if(o->getImportance()>2) {
-                        lowerRightNs.push_back(o->getOutlineDescriptorAsNote());
-                    } else {
-                        if(o->getImportance()>0) {
-                            lowerLeftNs.push_back(o->getOutlineDescriptorAsNote());
-                        }
-                    }
-                }
-            }
+    Outline::organizeToEisenhowerMatrix(
+        this->organizer, ons, os, ns, upperLeftNs, upperRightNs, lowerLeftNs, lowerRightNs
+    );
 
-            // set quadrant titles
-            title = tr("Do first");
-            doFirstPresenter->setTitle(title);
-            title = tr("Do soon");
-            doSoonPresenter->setTitle(title);
-            title = tr("Plan dedicated time");
-            planDedicatedTimePresenter->setTitle(title);
-            title = tr("Do sometimes");
-            doSometimePresenter->setTitle(title);
+    // set quadrant titles
+    QString title{};
+    if(!organizer || organizer->getKey()==EisenhowerMatrix::KEY_EISENHOWER_MATRIX) {
+        title = tr("Do first");
+        doFirstPresenter->setTitle(title);
+        title = tr("Do soon");
+        doSoonPresenter->setTitle(title);
+        title = tr("Plan dedicated time");
+        planDedicatedTimePresenter->setTitle(title);
+        title = tr("Do sometimes");
+        doSometimePresenter->setTitle(title);
 
-            doFirstPresenter->refresh(upperRightNs, true, true);
-            doSoonPresenter->refresh(upperLeftNs, true, false);
-            doSometimePresenter->refresh(lowerLeftNs, false, false);
-            planDedicatedTimePresenter->refresh(lowerRightNs, false, true);
-        } else {
-            // organizer type: custom
-            if(Organizer::FilterBy::NOTES == organizer->getFilterBy()) {
-                Outline* scopeOrganizer{nullptr};
-
-                if(organizer->getOutlineScope().size()) {
-                    for(auto* o:os) {
-                        if(o->getKey() == organizer->getOutlineScope()) {
-                            scopeOrganizer = o;
-                            break;
-                        }
-                    }
-                }
-
-                // scoped vs. all
-                const vector<Note*>& notes{scopeOrganizer?scopeOrganizer->getNotes():ns};
-
-                for(Note* n:notes) {
-                    if(n->hasTagStrings(organizer->getUpperRightTags())) {
-                        upperRightNs.push_back(n);
-                    }
-                    if(n->hasTagStrings(organizer->getLowerRightTags())) {
-                        lowerRightNs.push_back(n);
-                    }
-                    if(n->hasTagStrings(organizer->getUpperLeftTags())) {
-                        upperLeftNs.push_back(n);
-                    }
-                    if(n->hasTagStrings(organizer->getLowerLeftTags())) {
-                        lowerLeftNs.push_back(n);
-                    }
-                }
-            } else if(Organizer::FilterBy::OUTLINES == organizer->getFilterBy()) {
-                for(Outline* o:os) {
-                    if(o->hasTagStrings(organizer->getUpperRightTags())) {
-                        upperRightNs.push_back(o->getOutlineDescriptorAsNote());
-                    }
-                    if(o->hasTagStrings(organizer->getLowerRightTags())) {
-                        lowerRightNs.push_back(o->getOutlineDescriptorAsNote());
-                    }
-                    if(o->hasTagStrings(organizer->getUpperLeftTags())) {
-                        upperLeftNs.push_back(o->getOutlineDescriptorAsNote());
-                    }
-                    if(o->hasTagStrings(organizer->getLowerLeftTags())) {
-                        lowerLeftNs.push_back(o->getOutlineDescriptorAsNote());
-                    }
-                }
-            } else if(Organizer::FilterBy::OUTLINES_NOTES == organizer->getFilterBy()) {
-                for(Note* n:ons) {
-                    if(n->hasTagStrings(organizer->getUpperRightTags())) {
-                        upperRightNs.push_back(n);
-                    }
-                    if(n->hasTagStrings(organizer->getLowerRightTags())) {
-                        lowerRightNs.push_back(n);
-                    }
-                    if(n->hasTagStrings(organizer->getUpperLeftTags())) {
-                        upperLeftNs.push_back(n);
-                    }
-                    if(n->hasTagStrings(organizer->getLowerLeftTags())) {
-                        lowerLeftNs.push_back(n);
-                    }
-                }
-            }
-
-            // set quadrant titles
-            title = QString::fromStdString(Organizer::tagsToString(organizer->getUpperRightTags(), false));
-            doFirstPresenter->setTitle(title);
-            title = QString::fromStdString(Organizer::tagsToString(organizer->getUpperLeftTags(), false));
-            doSoonPresenter->setTitle(title);
-            title = QString::fromStdString(Organizer::tagsToString(organizer->getLowerRightTags(), false));
-            planDedicatedTimePresenter->setTitle(title);
-            title = QString::fromStdString(Organizer::tagsToString(organizer->getLowerLeftTags(), false));
-            doSometimePresenter->setTitle(title);
-
-            Memory::sortByRead(upperRightNs);
-            Memory::sortByRead(upperLeftNs);
-            Memory::sortByRead(lowerLeftNs);
-            Memory::sortByRead(lowerRightNs);
-
-            doFirstPresenter->refresh(upperRightNs, true, true);
-            doSoonPresenter->refresh(upperLeftNs, true, false);
-            doSometimePresenter->refresh(lowerLeftNs, false, false);
-            planDedicatedTimePresenter->refresh(lowerRightNs, false, true);
-        }
+    } else {
+        title = QString::fromStdString(Organizer::tagsToString(organizer->getUpperRightTags(), false));
+        doFirstPresenter->setTitle(title);
+        title = QString::fromStdString(Organizer::tagsToString(organizer->getUpperLeftTags(), false));
+        doSoonPresenter->setTitle(title);
+        title = QString::fromStdString(Organizer::tagsToString(organizer->getLowerRightTags(), false));
+        planDedicatedTimePresenter->setTitle(title);
+        title = QString::fromStdString(Organizer::tagsToString(organizer->getLowerLeftTags(), false));
+        doSometimePresenter->setTitle(title);
     }
+
+    doFirstPresenter->refresh(upperRightNs, true, true);
+    doSoonPresenter->refresh(upperLeftNs, true, false);
+    doSometimePresenter->refresh(lowerLeftNs, false, false);
+    planDedicatedTimePresenter->refresh(lowerRightNs, false, true);
 
     view->getDoFirst()->setFocus();
 }

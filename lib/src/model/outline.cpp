@@ -25,6 +25,33 @@ namespace m8r {
 // IMPROVE this type is not bound to any parent Clazz in Ontology
 const NoteType Outline::NOTE_4_OUTLINE_TYPE{"Outline", nullptr, Color::RED()};
 
+void Outline::sortByName(vector<Outline*>& os)
+{
+    std::sort(
+        os.begin(),
+        os.end(),
+        [](const Outline* o1, const Outline* o2) { return o1->getName().compare(o2->getName()) < 0; }
+    );
+}
+
+void Outline::sortByRead(vector<Outline*>& ns)
+{
+    std::sort(
+        ns.begin(),
+        ns.end(),
+        [](Outline* a, Outline* b) { return a->getRead() > b->getRead(); }
+    );
+}
+
+void Outline::sortByRead(vector<Note*>& ns)
+{
+    std::sort(
+        ns.begin(),
+        ns.end(),
+        [](const Note* n1, const Note* n2){ return n1->getRead() > n2->getRead(); }
+    );
+}
+
 Outline::Outline(const OutlineType* type)
     : ThingInTime{},
       memoryLocation(OutlineMemoryLocation::NORMAL),
@@ -1044,6 +1071,191 @@ void Outline::addLink(Link* link)
 {
     if(link) {
         links.push_back(link);
+    }
+}
+
+void Outline::organizeToEisenhowerMatrix(
+    Organizer* organizer,
+    const vector<Note*>& ons,
+    const vector<Outline*>& os,
+    const vector<Note*>& ns,
+    vector<Note*>& upperLeftNs,
+    vector<Note*>& upperRightNs,
+    vector<Note*>& lowerLeftNs,
+    vector<Note*>& lowerRightNs
+) {
+    organizer->makeModified();
+
+    if(os.size()) {
+        if(!organizer || organizer->getKey()==EisenhowerMatrix::KEY_EISENHOWER_MATRIX) {
+            // organizer type: Eisenhower matrix
+            for(Outline* o:os) {
+                if(o->getUrgency()>2) {
+                    if(o->getImportance()>2) {
+                        upperRightNs.push_back(o->getOutlineDescriptorAsNote());
+                    } else {
+                        upperLeftNs.push_back(o->getOutlineDescriptorAsNote());
+                    }
+                } else {
+                    if(o->getImportance()>2) {
+                        lowerRightNs.push_back(o->getOutlineDescriptorAsNote());
+                    } else {
+                        if(o->getImportance()>0) {
+                            lowerLeftNs.push_back(o->getOutlineDescriptorAsNote());
+                        }
+                    }
+                }
+            }
+        } else {
+            // organizer type: custom
+            if(Organizer::FilterBy::NOTES == organizer->getFilterBy()) {
+                Outline* scopeOrganizer{nullptr};
+
+                if(organizer->getOutlineScope().size()) {
+                    for(auto* o:os) {
+                        if(o->getKey() == organizer->getOutlineScope()) {
+                            scopeOrganizer = o;
+                            break;
+                        }
+                    }
+                }
+
+                // scoped vs. all
+                const vector<Note*>& notes{scopeOrganizer?scopeOrganizer->getNotes():ns};
+
+                for(Note* n:notes) {
+                    if(n->hasTagStrings(organizer->getUpperRightTags())) {
+                        upperRightNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getLowerRightTags())) {
+                        lowerRightNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getUpperLeftTags())) {
+                        upperLeftNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getLowerLeftTags())) {
+                        lowerLeftNs.push_back(n);
+                    }
+                }
+            } else if(Organizer::FilterBy::OUTLINES == organizer->getFilterBy()) {
+                for(Outline* o:os) {
+                    if(o->hasTagStrings(organizer->getUpperRightTags())) {
+                        upperRightNs.push_back(o->getOutlineDescriptorAsNote());
+                    }
+                    if(o->hasTagStrings(organizer->getLowerRightTags())) {
+                        lowerRightNs.push_back(o->getOutlineDescriptorAsNote());
+                    }
+                    if(o->hasTagStrings(organizer->getUpperLeftTags())) {
+                        upperLeftNs.push_back(o->getOutlineDescriptorAsNote());
+                    }
+                    if(o->hasTagStrings(organizer->getLowerLeftTags())) {
+                        lowerLeftNs.push_back(o->getOutlineDescriptorAsNote());
+                    }
+                }
+            } else if(Organizer::FilterBy::OUTLINES_NOTES == organizer->getFilterBy()) {
+                for(Note* n:ons) {
+                    if(n->hasTagStrings(organizer->getUpperRightTags())) {
+                        upperRightNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getLowerRightTags())) {
+                        lowerRightNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getUpperLeftTags())) {
+                        upperLeftNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getLowerLeftTags())) {
+                        lowerLeftNs.push_back(n);
+                    }
+                }
+            }
+
+            Outline::sortByRead(upperRightNs);
+            Outline::sortByRead(upperLeftNs);
+            Outline::sortByRead(lowerLeftNs);
+            Outline::sortByRead(lowerRightNs);
+        }
+    }
+}
+
+void Outline::organizeToKanbanColumns(
+    Kanban* kanban,
+    const vector<Note*>& ons,
+    const vector<Outline*>& os,
+    const vector<Note*>& ns,
+    vector<Note*>& upperLeftNs,
+    vector<Note*>& upperRightNs,
+    vector<Note*>& lowerLeftNs,
+    vector<Note*>& lowerRightNs
+) {
+    kanban->makeModified();
+
+    if(os.size()) {
+        // organizer type: custom
+        if(Organizer::FilterBy::NOTES == kanban->getFilterBy()) {
+            Outline* scopeKanban{nullptr};
+
+            if(kanban->getOutlineScope().size()) {
+                for(auto* o:os) {
+                    if(o->getKey() == kanban->getOutlineScope()) {
+                        scopeKanban= o;
+                        break;
+                    }
+                }
+            }
+
+            // scoped vs. all
+            const vector<Note*>& notes{scopeKanban?scopeKanban->getNotes():ns};
+
+            for(Note* n:notes) {
+                if(n->hasTagStrings(kanban->getUpperRightTags())) {
+                    upperRightNs.push_back(n);
+                }
+                if(n->hasTagStrings(kanban->getLowerRightTags())) {
+                    lowerRightNs.push_back(n);
+                }
+                if(n->hasTagStrings(kanban->getUpperLeftTags())) {
+                    upperLeftNs.push_back(n);
+                }
+                if(n->hasTagStrings(kanban->getLowerLeftTags())) {
+                    lowerLeftNs.push_back(n);
+                }
+            }
+        } else if(Organizer::FilterBy::OUTLINES == kanban->getFilterBy()) {
+            for(Outline* o:os) {
+                if(o->hasTagStrings(kanban->getUpperRightTags())) {
+                    upperRightNs.push_back(o->getOutlineDescriptorAsNote());
+                }
+                if(o->hasTagStrings(kanban->getLowerRightTags())) {
+                    lowerRightNs.push_back(o->getOutlineDescriptorAsNote());
+                }
+                if(o->hasTagStrings(kanban->getUpperLeftTags())) {
+                    upperLeftNs.push_back(o->getOutlineDescriptorAsNote());
+                }
+                if(o->hasTagStrings(kanban->getLowerLeftTags())) {
+                    lowerLeftNs.push_back(o->getOutlineDescriptorAsNote());
+                }
+            }
+        } else if(Organizer::FilterBy::OUTLINES_NOTES == kanban->getFilterBy()) {
+            for(Note* n:ons) {
+                if(n->hasTagStrings(kanban->getUpperRightTags())) {
+                    upperRightNs.push_back(n);
+                }
+                if(n->hasTagStrings(kanban->getLowerRightTags())) {
+                    lowerRightNs.push_back(n);
+                }
+                if(n->hasTagStrings(kanban->getUpperLeftTags())) {
+                    upperLeftNs.push_back(n);
+                }
+                if(n->hasTagStrings(kanban->getLowerLeftTags())) {
+                    lowerLeftNs.push_back(n);
+                }
+            }
+        }
+
+        sortByRead(upperLeftNs);
+        sortByRead(upperRightNs);
+        sortByRead(lowerLeftNs);
+        sortByRead(lowerRightNs);
     }
 }
 

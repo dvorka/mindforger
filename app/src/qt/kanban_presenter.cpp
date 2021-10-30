@@ -45,114 +45,34 @@ void KanbanPresenter::refresh(
     const vector<Outline*>& os,
     const vector<Note*>& ns
 ) {
-    MF_DEBUG("Rendering organizer: " << kanban->getName() << "..." << endl);
-    MF_DEBUG("  filter (notes==" << Organizer::FilterBy::NOTES << "): " << kanban->getFilterBy() << endl);
+    MF_DEBUG("Rendering Kanban: " << kanban->getName() << "..." << endl);
 
     this->kanban = kanban;
 
-
-
-
-    // TODO this code must go to lib/
-    // TODO - unit test to be created
-    // app/ to just call the library
-
-    kanban->makeModified();
-
-    QString title{};
-
-    // upper right / do first
-    vector<Note*> upperRightNs{};
-    // upper left / do soon
     vector<Note*> upperLeftNs{};
-    // lower right / plan dedicated time
-    vector<Note*> lowerRightNs{};
-    // lower left / do sometimes
+    vector<Note*> upperRightNs{};
     vector<Note*> lowerLeftNs{};
+    vector<Note*> lowerRightNs{};
 
-    if(os.size()) {
-        // organizer type: custom
-        if(Organizer::FilterBy::NOTES == kanban->getFilterBy()) {
-            Outline* scopeKanban{nullptr};
+    Outline::organizeToKanbanColumns(
+        this->kanban, ons, os, ns, upperLeftNs, upperRightNs, lowerLeftNs, lowerRightNs
+    );
 
-            if(kanban->getOutlineScope().size()) {
-                for(auto* o:os) {
-                    if(o->getKey() == kanban->getOutlineScope()) {
-                        scopeKanban= o;
-                        break;
-                    }
-                }
-            }
+    // set quadrant titles
+    QString title{};
+    title = QString::fromStdString(Organizer::tagsToString(kanban->getUpperLeftTags(), false));
+    columns[0]->setTitle(title);
+    title = QString::fromStdString(Organizer::tagsToString(kanban->getUpperRightTags(), false));
+    columns[1]->setTitle(title);
+    title = QString::fromStdString(Organizer::tagsToString(kanban->getLowerLeftTags(), false));
+    columns[2]->setTitle(title);
+    title = QString::fromStdString(Organizer::tagsToString(kanban->getLowerRightTags(), false));
+    columns[3]->setTitle(title);
 
-            // scoped vs. all
-            const vector<Note*>& notes{scopeKanban?scopeKanban->getNotes():ns};
-
-            for(Note* n:notes) {
-                if(n->hasTagStrings(kanban->getUpperRightTags())) {
-                    upperRightNs.push_back(n);
-                }
-                if(n->hasTagStrings(kanban->getLowerRightTags())) {
-                    lowerRightNs.push_back(n);
-                }
-                if(n->hasTagStrings(kanban->getUpperLeftTags())) {
-                    upperLeftNs.push_back(n);
-                }
-                if(n->hasTagStrings(kanban->getLowerLeftTags())) {
-                    lowerLeftNs.push_back(n);
-                }
-            }
-        } else if(Organizer::FilterBy::OUTLINES == kanban->getFilterBy()) {
-            for(Outline* o:os) {
-                if(o->hasTagStrings(kanban->getUpperRightTags())) {
-                    upperRightNs.push_back(o->getOutlineDescriptorAsNote());
-                }
-                if(o->hasTagStrings(kanban->getLowerRightTags())) {
-                    lowerRightNs.push_back(o->getOutlineDescriptorAsNote());
-                }
-                if(o->hasTagStrings(kanban->getUpperLeftTags())) {
-                    upperLeftNs.push_back(o->getOutlineDescriptorAsNote());
-                }
-                if(o->hasTagStrings(kanban->getLowerLeftTags())) {
-                    lowerLeftNs.push_back(o->getOutlineDescriptorAsNote());
-                }
-            }
-        } else if(Organizer::FilterBy::OUTLINES_NOTES == kanban->getFilterBy()) {
-            for(Note* n:ons) {
-                if(n->hasTagStrings(kanban->getUpperRightTags())) {
-                    upperRightNs.push_back(n);
-                }
-                if(n->hasTagStrings(kanban->getLowerRightTags())) {
-                    lowerRightNs.push_back(n);
-                }
-                if(n->hasTagStrings(kanban->getUpperLeftTags())) {
-                    upperLeftNs.push_back(n);
-                }
-                if(n->hasTagStrings(kanban->getLowerLeftTags())) {
-                    lowerLeftNs.push_back(n);
-                }
-            }
-        }
-
-        // set quadrant titles
-        title = QString::fromStdString(Organizer::tagsToString(kanban->getUpperRightTags(), false));
-        columns[0]->setTitle(title);
-        title = QString::fromStdString(Organizer::tagsToString(kanban->getUpperLeftTags(), false));
-        columns[1]->setTitle(title);
-        title = QString::fromStdString(Organizer::tagsToString(kanban->getLowerRightTags(), false));
-        columns[2]->setTitle(title);
-        title = QString::fromStdString(Organizer::tagsToString(kanban->getLowerLeftTags(), false));
-        columns[3]->setTitle(title);
-
-        Memory::sortByRead(upperRightNs);
-        Memory::sortByRead(upperLeftNs);
-        Memory::sortByRead(lowerLeftNs);
-        Memory::sortByRead(lowerRightNs);
-
-        columns[0]->refresh(upperRightNs, true, true);
-        columns[1]->refresh(upperLeftNs, true, false);
-        columns[2]->refresh(lowerLeftNs, false, false);
-        columns[3]->refresh(lowerRightNs, false, true);
-    }
+    columns[0]->refresh(upperLeftNs, true, false);
+    columns[1]->refresh(upperRightNs, true, true);
+    columns[2]->refresh(lowerLeftNs, false, false);
+    columns[3]->refresh(lowerRightNs, false, true);
 
     view->getColumn(0)->setFocus();
 }

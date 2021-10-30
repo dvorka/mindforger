@@ -315,33 +315,6 @@ const vector<Outline*>& Memory::getOutlines() const
     return outlines;
 }
 
-void Memory::sortByName(vector<Outline*>& os)
-{
-    std::sort(
-        os.begin(),
-        os.end(),
-        [](const Outline* o1, const Outline* o2) { return o1->getName().compare(o2->getName()) < 0; }
-    );
-}
-
-void Memory::sortByRead(vector<Outline*>& ns)
-{
-    std::sort(
-        ns.begin(),
-        ns.end(),
-        [](Outline* a, Outline* b) { return a->getRead() > b->getRead(); }
-    );
-}
-
-void Memory::sortByRead(vector<Note*>& ns)
-{
-    std::sort(
-        ns.begin(),
-        ns.end(),
-        [](const Note* n1, const Note* n2){ return n1->getRead() > n2->getRead(); }
-    );
-}
-
 string Memory::createOutlineKey(const string* name)
 {
     return persistence->createFileName(config.getMemoryPath(), name, File::EXTENSION_MD_MD);
@@ -387,7 +360,7 @@ std::vector<Note*>& Memory::getAllNotes(vector<Note*>& notes, bool doSortByRead,
     }
 
     if(doSortByRead) {
-        sortByRead(notes);
+        Outline::sortByRead(notes);
     }
 
     return notes;
