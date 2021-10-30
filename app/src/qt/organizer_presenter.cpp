@@ -27,16 +27,16 @@ OrganizerPresenter::OrganizerPresenter(OrganizerView* view, OrlojPresenter* orlo
     this->view = view;
 
     doFirstPresenter = new OrganizerQuadrantPresenter(
-        view->getDoFirst(), orloj, tr("Do first")
+        view->getDoFirst(), orloj, tr(TITLE_DO_FIRST)
     );
     doSoonPresenter = new OrganizerQuadrantPresenter(
-        view->getDoSoon(), orloj, tr("Do soon")
+        view->getDoSoon(), orloj, tr(TITLE_DO_SOON)
     );
     doSometimePresenter = new OrganizerQuadrantPresenter(
-        view->getDoSometime(), orloj, tr("Do sometime")
+        view->getDoSometime(), orloj, tr(TITLE_DO_SOMETIMES)
     );
     planDedicatedTimePresenter = new OrganizerQuadrantPresenter(
-        view->getPlanDedicatedTime(), orloj, tr("Plan dedicated time")
+        view->getPlanDedicatedTime(), orloj, tr(TITLE_PLAN_DEDICATED_TIME)
     );
 }
 
@@ -70,23 +70,31 @@ void OrganizerPresenter::refresh(
     // set quadrant titles
     QString title{};
     if(!organizer || organizer->getKey()==EisenhowerMatrix::KEY_EISENHOWER_MATRIX) {
-        title = tr("Do first");
+        title = tr(TITLE_DO_FIRST);
         doFirstPresenter->setTitle(title);
-        title = tr("Do soon");
+        title = tr(TITLE_DO_SOON);
         doSoonPresenter->setTitle(title);
-        title = tr("Plan dedicated time");
+        title = tr(TITLE_PLAN_DEDICATED_TIME);
         planDedicatedTimePresenter->setTitle(title);
-        title = tr("Do sometimes");
+        title = tr(TITLE_DO_SOMETIMES);
         doSometimePresenter->setTitle(title);
 
     } else {
-        title = QString::fromStdString(Organizer::tagsToString(organizer->getUpperRightTags(), false));
+        title = QString::fromStdString(
+            Organizer::tagsToString(organizer->getUpperRightTags(), false)
+        );
         doFirstPresenter->setTitle(title);
-        title = QString::fromStdString(Organizer::tagsToString(organizer->getUpperLeftTags(), false));
+        title = QString::fromStdString(
+            Organizer::tagsToString(organizer->getUpperLeftTags(), false)
+        );
         doSoonPresenter->setTitle(title);
-        title = QString::fromStdString(Organizer::tagsToString(organizer->getLowerRightTags(), false));
+        title = QString::fromStdString(
+            Organizer::tagsToString(organizer->getLowerRightTags(), false)
+        );
         planDedicatedTimePresenter->setTitle(title);
-        title = QString::fromStdString(Organizer::tagsToString(organizer->getLowerLeftTags(), false));
+        title = QString::fromStdString(
+            Organizer::tagsToString(organizer->getLowerLeftTags(), false)
+        );
         doSometimePresenter->setTitle(title);
     }
 

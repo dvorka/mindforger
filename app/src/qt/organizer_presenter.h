@@ -35,6 +35,11 @@ class OrganizerPresenter : public QObject
 {
     Q_OBJECT
 
+    static constexpr const auto TITLE_DO_FIRST = "Do First (Urgent and Important)";
+    static constexpr const auto TITLE_DO_SOON = "Do Soon (Urgent)";
+    static constexpr const auto TITLE_PLAN_DEDICATED_TIME = "Plan Dedicated Time (Important)";
+    static constexpr const auto TITLE_DO_SOMETIMES= "Do Soon (Urgent)";
+
     OrganizerView* view;
 
     OrganizerQuadrantPresenter* doFirstPresenter;

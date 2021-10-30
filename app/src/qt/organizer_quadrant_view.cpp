@@ -20,6 +20,8 @@
 
 namespace m8r {
 
+using namespace std;
+
 OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent, ViewType viewType)
     : QTableView(parent),
       viewType{viewType}
@@ -38,6 +40,14 @@ OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent, ViewType viewType)
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
+
+#ifdef WIP_DRAG_N_DROP
+    // drag & drop (https://doc.qt.io/qt-5/dnd.html)
+    setDragDropMode(QAbstractItemView::InternalMove);
+    setDragEnabled(true);
+    setAcceptDrops(true);
+    setDropIndicatorShown(true);
+#endif
 }
 
 void OrganizerQuadrantView::keyPressEvent(QKeyEvent* event)
@@ -80,5 +90,49 @@ void OrganizerQuadrantView::mouseDoubleClickEvent(QMouseEvent* event)
 
     emit signalShowSelectedKanbanNote();
 }
+
+#ifdef WIP_DRAG_N_DROP
+
+/*
+ * Drag & drop.
+ */
+
+void OrganizerQuadrantView::dragEnterEvent(QDragEnterEvent* event)
+{
+    MF_DEBUG("DRAG EVENT: " << event << endl);
+    MF_DEBUG("DRAG EVENT: " << event->mimeData() << endl);
+
+    event->acceptProposedAction();
+
+    //if (event->mimeData()->hasFormat("text/plain")) {
+    //    event->acceptProposedAction();
+    //}
+}
+
+void OrganizerQuadrantView::dropEvent(QDropEvent* event)
+{
+    MF_DEBUG("DROP EVENT: " << event << endl);
+    MF_DEBUG("DROP EVENT MIME: " << event->mimeData() << endl);
+    MF_DEBUG("DROP EVENT formats: " << event->mimeData()->formats()[0].toStdString() << endl);
+    MF_DEBUG("DROP EVENT text: " << event->mimeData()->text().toStdString() << endl);
+
+    // TODO decode: "application/x-qabstractitemmodeldatalist"
+    QByteArray encoded = event->mimeData()->data(
+        event->mimeData()->formats()[0].toStdString().c_str()
+    );
+    QDataStream stream(&encoded, QIODevice::ReadOnly);
+    while (!stream.atEnd()) {
+        int row, col;
+        QMap<int,  QVariant> roleDataMap;
+
+        stream >> row >> col >> roleDataMap;
+        MF_DEBUG("  row: " << row << " col: " << col << endl);
+        //MF_DEBUG("    data: " << roleDataMap.value(Qt::UserRole+1).toString().toStdString() << endl);
+    }
+
+    MF_DEBUG("DROP EVENT done: " << event << endl);
+    event->acceptProposedAction();
+}
+#endif
 
 } // m8r namespace

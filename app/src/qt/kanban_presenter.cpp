@@ -74,6 +74,31 @@ void KanbanPresenter::refresh(
     columns[2]->refresh(lowerLeftNs, false, false);
     columns[3]->refresh(lowerRightNs, false, true);
 
+    // if at least one column with a tag exists,
+    // then show only columns with tags,
+    // else show all EMPTY columns
+    for(auto c:columns) {
+        c->getView()->setVisible(true);
+    }
+    if(upperLeftNs.size()
+       || upperRightNs.size()
+       || lowerLeftNs.size()
+       || lowerRightNs.size())
+    {
+        if(!upperLeftNs.size()) {
+            columns[0]->getView()->setVisible(false);
+        }
+        if(!upperRightNs.size()) {
+            columns[1]->getView()->setVisible(false);
+        }
+        if(!lowerLeftNs.size()) {
+            columns[2]->getView()->setVisible(false);
+        }
+        if(!lowerRightNs.size()) {
+            columns[3]->getView()->setVisible(false);
+        }
+    }
+
     view->getColumn(0)->setFocus();
 }
 

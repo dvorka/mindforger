@@ -23,16 +23,6 @@ namespace m8r {
 
 using namespace std;
 
-const string OrganizerNewDialog::TITLE_UPPER_LEFT_EM = string{"Upper left quadrant tags"};
-const string OrganizerNewDialog::TITLE_UPPER_RIGHT_EM = string{"Upper right quadrant tags"};
-const string OrganizerNewDialog::TITLE_LOWER_LEFT_EM = string{"Lower left quadrant tags"};
-const string OrganizerNewDialog::TITLE_LOWER_RIGHT_EM = string{"Lower right quadrant tags"};
-
-const string OrganizerNewDialog::TITLE_UPPER_LEFT_KANBAN = string{"The first column"};
-const string OrganizerNewDialog::TITLE_UPPER_RIGHT_KANBAN = string{"The second column"};
-const string OrganizerNewDialog::TITLE_LOWER_LEFT_KANBAN = string{"The third column"};
-const string OrganizerNewDialog::TITLE_LOWER_RIGHT_KANBAN = string{"The fourth column"};
-
 OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     : QDialog{parent},
       ontology{ontology},
@@ -52,19 +42,19 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
 
     upperLeftTags = new EditTagsPanel{ontology, this};
     upperLeftTags->refreshOntologyTags();
-    upperLeftTags->setTitle(tr(TITLE_UPPER_LEFT_EM.c_str())+":");
+    upperLeftTags->setTitle(tr(TITLE_UPPER_LEFT_EM)+":");
 
     upperRightTags = new EditTagsPanel{ontology, this};
     upperRightTags->refreshOntologyTags();
-    upperRightTags->setTitle(tr(TITLE_UPPER_RIGHT_EM.c_str())+":");
+    upperRightTags->setTitle(tr(TITLE_UPPER_RIGHT_EM)+":");
 
     lowerLeftTags = new EditTagsPanel{ontology, this};
     lowerLeftTags->refreshOntologyTags();
-    lowerLeftTags->setTitle(tr(TITLE_LOWER_LEFT_EM.c_str())+":");
+    lowerLeftTags->setTitle(tr(TITLE_LOWER_LEFT_EM)+":");
 
     lowerRightTags = new EditTagsPanel{ontology, this};
     lowerRightTags->refreshOntologyTags();
-    lowerRightTags->setTitle(tr(TITLE_LOWER_RIGHT_EM.c_str())+":");
+    lowerRightTags->setTitle(tr(TITLE_LOWER_RIGHT_EM)+":");
 
     oScopeLabel = new QLabel(tr("Notebook scope")+":", this);
     oScopeEdit = new QLineEdit("", this);
@@ -225,6 +215,8 @@ void OrganizerNewDialog::show(
         typeCombo->setCurrentText(
             QString::fromStdString(organizerToEdit->getOrganizerTypeAsStr())
         );
+        // organizer type change disabled (IMPROVEMENT to support his operation)
+        typeCombo->setEnabled(false);
 
         if(Organizer::OrganizerType::EISENHOWER_MATRIX == organizerToEdit->getOrganizerType()) {
             toEisenhowerMatrixMode();
@@ -262,7 +254,6 @@ void OrganizerNewDialog::show(
             );
         }
 
-
         if(oScopeOutline) {
             sortByCombo->setEnabled(false);
             filterByCombo->setCurrentText(Organizer::CONFIG_VALUE_FILTER_BY_N);
@@ -277,6 +268,8 @@ void OrganizerNewDialog::show(
 
         nameEdit->setText(tr("Organizer"));
         nameEdit->selectAll();
+
+        typeCombo->setEnabled(true);
 
         oScopeEdit->clear();
         oScopeOutline = nullptr;
@@ -332,20 +325,20 @@ void OrganizerNewDialog::handleFindOutlineChoice()
 
 void OrganizerNewDialog::toEisenhowerMatrixMode()
 {
-    this->upperLeftTags->setTitle(tr(TITLE_UPPER_LEFT_EM.c_str())+":");
-    this->lowerLeftTags->setTitle(tr(TITLE_LOWER_LEFT_EM.c_str())+":");
-    this->upperRightTags->setTitle(tr(TITLE_UPPER_RIGHT_EM.c_str())+":");
-    this->lowerRightTags->setTitle(tr(TITLE_LOWER_RIGHT_EM.c_str())+":");
+    this->upperLeftTags->setTitle(tr(TITLE_UPPER_LEFT_EM)+":");
+    this->lowerLeftTags->setTitle(tr(TITLE_LOWER_LEFT_EM)+":");
+    this->upperRightTags->setTitle(tr(TITLE_UPPER_RIGHT_EM)+":");
+    this->lowerRightTags->setTitle(tr(TITLE_LOWER_RIGHT_EM)+":");
 
     this->sortByCombo->setEnabled(true);
 }
 
 void OrganizerNewDialog::toKanbanMode()
 {
-    this->upperLeftTags->setTitle(tr(TITLE_UPPER_LEFT_KANBAN.c_str())+":");
-    this->lowerLeftTags->setTitle(tr(TITLE_LOWER_LEFT_KANBAN.c_str())+":");
-    this->upperRightTags->setTitle(tr(TITLE_UPPER_RIGHT_KANBAN.c_str())+":");
-    this->lowerRightTags->setTitle(tr(TITLE_LOWER_RIGHT_KANBAN.c_str())+":");
+    this->upperLeftTags->setTitle(tr(TITLE_UPPER_LEFT_KANBAN)+":");
+    this->lowerLeftTags->setTitle(tr(TITLE_LOWER_LEFT_KANBAN)+":");
+    this->upperRightTags->setTitle(tr(TITLE_UPPER_RIGHT_KANBAN)+":");
+    this->lowerRightTags->setTitle(tr(TITLE_LOWER_RIGHT_KANBAN)+":");
 
     this->sortByCombo->setEnabled(false);
 }

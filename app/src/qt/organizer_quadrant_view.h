@@ -49,6 +49,21 @@ public:
     virtual void keyPressEvent(QKeyEvent* event) override;
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
 
+private:
+#ifdef WIP_DRAG_N_DROP
+    void dragEnterEvent(QDragEnterEvent* event) override;
+    void dropEvent(QDropEvent* event) override;
+
+    Qt::DropActions supportedDropActions() const
+    {
+        return Qt::MoveAction;
+    }
+    Qt::DropActions supportedDragActions() const
+    {
+        return Qt::MoveAction;
+    }
+#endif
+
 signals:
     void signalShowSelectedKanbanNote();
     void signalShowSelectedNote();

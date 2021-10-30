@@ -40,15 +40,15 @@ class OrganizerNewDialog : public QDialog
 {
     Q_OBJECT
 
-    static const std::string TITLE_UPPER_LEFT_EM;
-    static const std::string TITLE_UPPER_RIGHT_EM;
-    static const std::string TITLE_LOWER_LEFT_EM;
-    static const std::string TITLE_LOWER_RIGHT_EM;
+    static constexpr const auto TITLE_UPPER_LEFT_EM = "Upper left quadrant tags";
+    static constexpr const auto TITLE_UPPER_RIGHT_EM = "Upper right quadrant tags";
+    static constexpr const auto TITLE_LOWER_LEFT_EM = "Lower left quadrant tags";
+    static constexpr const auto TITLE_LOWER_RIGHT_EM = "Lower right quadrant tags";
 
-    static const std::string TITLE_UPPER_LEFT_KANBAN;
-    static const std::string TITLE_UPPER_RIGHT_KANBAN;
-    static const std::string TITLE_LOWER_LEFT_KANBAN;
-    static const std::string TITLE_LOWER_RIGHT_KANBAN;
+    static constexpr const auto TITLE_UPPER_LEFT_KANBAN = "The first column";
+    static constexpr const auto TITLE_UPPER_RIGHT_KANBAN = "The second column";
+    static constexpr const auto TITLE_LOWER_LEFT_KANBAN = "The third column";
+    static constexpr const auto TITLE_LOWER_RIGHT_KANBAN = "The fourth column";
 
 private:
     Ontology& ontology;
