@@ -52,17 +52,24 @@ OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent, ViewType viewType)
 
 void OrganizerQuadrantView::keyPressEvent(QKeyEvent* event)
 {
+    switch(event->key()) {
+    case Qt::Key_Backtab:
+        emit signalFocusToLastVisibleQuadrant();
+        return;
+    }
+
     if(!(event->modifiers() & Qt::AltModifier)
-         &&
-       !(event->modifiers() & Qt::ControlModifier)
-         &&
-       !(event->modifiers() & Qt::ShiftModifier))
-    {
+       && !(event->modifiers() & Qt::ControlModifier)
+       && !(event->modifiers() & Qt::ShiftModifier)
+    ) {
         switch(event->key()) {
         case Qt::Key_Return:
         case Qt::Key_Right:
             emit signalShowSelectedNote();
             return;
+        case Qt::Key_Tab:
+            emit signalFocusToNextVisibleQuadrant();
+            break;
         case Qt::Key_Down:
             QTableView::keyPressEvent(event);
             return;
@@ -86,15 +93,17 @@ void OrganizerQuadrantView::mouseDoubleClickEvent(QMouseEvent* event)
     // double click to O/N opens it
     if(ViewType::ORGANIZER == this->viewType) {
         emit signalShowSelectedNote();
+    } else if(ViewType::KANBAN == this->viewType) {
+        emit signalShowSelectedKanbanNote();
     }
-
-    emit signalShowSelectedKanbanNote();
 }
 
 #ifdef WIP_DRAG_N_DROP
 
 /*
  * Drag & drop.
+ *
+ * https://www.youtube.com/watch?v=dcrSTeVaW5Y
  */
 
 void OrganizerQuadrantView::dragEnterEvent(QDragEnterEvent* event)

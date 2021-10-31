@@ -41,10 +41,17 @@ KanbanColumnPresenter::KanbanColumnPresenter(
 
     // hit ENTER to open selected O
     QObject::connect(
-        view,
-        SIGNAL(signalShowSelectedNote()),
-        this,
-        SLOT(slotShowSelectedNote()));
+        view, SIGNAL(signalShowSelectedNote()),
+        this, SLOT(slotShowSelectedNote()));
+    QObject::connect(
+        view, SIGNAL(signalShowSelectedKanbanNote()),
+        this, SLOT(slotShowSelectedNote()));
+    QObject::connect(
+        view, SIGNAL(signalFocusToNextVisibleQuadrant()),
+        this, SLOT(slotFocusToNextVisibleQuadrant()));
+    QObject::connect(
+        view, SIGNAL(signalFocusToLastVisibleQuadrant()),
+        this, SLOT(slotFocusToLastVisibleQuadrant()));
     QObject::connect(
         this->view->horizontalHeader(), SIGNAL(sectionClicked(int)),
         this, SLOT(slotHeaderClicked(int))
@@ -116,6 +123,17 @@ void KanbanColumnPresenter::slotHeaderClicked(int section)
 
     MF_DEBUG("Kanban quadrant presenter: O/N table header clicked..." << endl);
     orloj->getMainPresenter()->doActionOrganizerEdit();
+}
+
+void KanbanColumnPresenter::slotFocusToNextVisibleQuadrant()
+{
+    MF_DEBUG("Kanban column presenter: SLOT" << endl);
+    orloj->getMainPresenter()->doActionOrganizerFocusToNextVisibleQuadrant();
+}
+
+void KanbanColumnPresenter::slotFocusToLastVisibleQuadrant()
+{
+    orloj->getMainPresenter()->doActionOrganizerFocusToLastVisibleQuadrant();
 }
 
 void KanbanColumnPresenter::refresh(

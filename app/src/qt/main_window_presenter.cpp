@@ -2745,6 +2745,24 @@ void MainWindowPresenter::doActionOrganizerClone()
     getConfigRepresentation()->save(config);
 }
 
+void MainWindowPresenter::doActionOrganizerFocusToNextVisibleQuadrant()
+{
+    if(OrlojPresenterFacets::FACET_KANBAN == orloj->getFacet()) {
+        orloj->getKanban()->focusToNextVisibleColumn();
+    } else {
+        orloj->getOrganizer()->focusToNextVisibleColumn();
+    }
+}
+
+void MainWindowPresenter::doActionOrganizerFocusToLastVisibleQuadrant()
+{
+    if(OrlojPresenterFacets::FACET_KANBAN == orloj->getFacet()) {
+        orloj->getKanban()->focusToLastVisibleColumn();
+    } else {
+        orloj->getOrganizer()->focusToLastVisibleColumn();
+    }
+}
+
 void MainWindowPresenter::doActionOrganizerForget()
 {
     // no need to check view - this action is available only when organizer is opened

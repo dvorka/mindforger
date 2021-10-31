@@ -246,6 +246,8 @@ public slots:
     void handleCreateOrganizer();
     void doActionOrganizerEdit();
     void doActionOrganizerClone();
+    void doActionOrganizerFocusToNextVisibleQuadrant();
+    void doActionOrganizerFocusToLastVisibleQuadrant();
     void doActionOrganizerForget();
     // navigator
     void doActionNavigatorShuffle();

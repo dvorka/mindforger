@@ -65,8 +65,10 @@ private:
 #endif
 
 signals:
-    void signalShowSelectedKanbanNote();
     void signalShowSelectedNote();
+    void signalShowSelectedKanbanNote();
+    void signalFocusToNextVisibleQuadrant();
+    void signalFocusToLastVisibleQuadrant();
 };
 
 }

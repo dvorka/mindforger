@@ -38,6 +38,13 @@ OrganizerPresenter::OrganizerPresenter(OrganizerView* view, OrlojPresenter* orlo
     planDedicatedTimePresenter = new OrganizerQuadrantPresenter(
         view->getPlanDedicatedTime(), orloj, tr(TITLE_PLAN_DEDICATED_TIME)
     );
+
+    orderedQuadrants = vector<OrganizerQuadrantPresenter*>{
+        doSoonPresenter,
+        doFirstPresenter,
+        doSometimePresenter,
+        planDedicatedTimePresenter
+    };
 }
 
 OrganizerPresenter::~OrganizerPresenter()
@@ -104,6 +111,28 @@ void OrganizerPresenter::refresh(
     planDedicatedTimePresenter->refresh(lowerRightNs, false, true);
 
     view->getDoFirst()->setFocus();
+}
+
+void OrganizerPresenter::focusToNextVisibleColumn()
+{
+    for(unsigned i=0; i<orderedQuadrants.size(); i++) {
+        if(orderedQuadrants[i]->getView()->hasFocus()) {
+            int next = (i+1)%orderedQuadrants.size();
+            orderedQuadrants[next]->getView()->setFocus();
+            return;
+        }
+    }
+ }
+
+void OrganizerPresenter::focusToLastVisibleColumn()
+{
+    for(unsigned i=0; i<orderedQuadrants.size(); i++) {
+        if(orderedQuadrants[i]->getView()->hasFocus()) {
+            int next = (i-1)%orderedQuadrants.size();
+            orderedQuadrants[next]->getView()->setFocus();
+            return;
+        }
+    }
 }
 
 } // m8r namespace

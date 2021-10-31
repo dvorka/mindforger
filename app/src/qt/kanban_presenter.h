@@ -49,6 +49,9 @@ public:
     KanbanPresenter& operator=(const KanbanPresenter&&) = delete;
     ~KanbanPresenter();
 
+    KanbanView* getView() const { return this->view; }
+    Kanban* getKanban() const { return this->kanban; }
+
     void refresh(
         Kanban* kanban,
         const std::vector<Note*>& ons,
@@ -56,9 +59,10 @@ public:
         const std::vector<Note*>& ns
     );
 
-    KanbanView* getView() const { return this->view; }
+    void getVisibleColumns(std::vector<KanbanColumnPresenter*>& visible);
 
-    Kanban* getKanban() const { return this->kanban; }
+    void focusToNextVisibleColumn();
+    void focusToLastVisibleColumn();
 };
 
 }

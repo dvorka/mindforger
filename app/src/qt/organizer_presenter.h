@@ -47,6 +47,8 @@ class OrganizerPresenter : public QObject
     OrganizerQuadrantPresenter* doSometimePresenter;
     OrganizerQuadrantPresenter* planDedicatedTimePresenter;
 
+    std::vector<OrganizerQuadrantPresenter*> orderedQuadrants;
+
     Organizer* organizer;
 
 public:
@@ -57,6 +59,9 @@ public:
     OrganizerPresenter& operator=(const OrganizerPresenter&&) = delete;
     ~OrganizerPresenter();
 
+    OrganizerView* getView() const { return this->view; }
+    Organizer* getOrganizer() const { return this->organizer; }
+
     void refresh(
         Organizer* organizer,
         const std::vector<Note*>& ons,
@@ -64,9 +69,8 @@ public:
         const std::vector<Note*>& ns
     );
 
-    OrganizerView* getView() const { return this->view; }
-
-    Organizer* getOrganizer() const { return this->organizer; }
+    void focusToNextVisibleColumn();
+    void focusToLastVisibleColumn();
 };
 
 }

@@ -102,4 +102,41 @@ void KanbanPresenter::refresh(
     view->getColumn(0)->setFocus();
 }
 
+void KanbanPresenter::getVisibleColumns(vector<KanbanColumnPresenter*>& visible)
+{
+    for(auto c:columns) {
+        if(c->getView()->isVisible()) {
+            visible.push_back(c);
+        }
+    }
+}
+
+void KanbanPresenter::focusToNextVisibleColumn()
+{
+    vector<KanbanColumnPresenter*> visible{};
+    this->getVisibleColumns(visible);
+
+    for(unsigned i=0; i<visible.size(); i++) {
+        if(visible[i]->getView()->hasFocus()) {
+            int next = (i+1)%visible.size();
+            visible[next]->getView()->setFocus();
+            return;
+        }
+    }
+}
+
+void KanbanPresenter::focusToLastVisibleColumn()
+{
+    vector<KanbanColumnPresenter*> visible{};
+    this->getVisibleColumns(visible);
+
+    for(unsigned i=0; i<visible.size(); i++) {
+        if(visible[i]->getView()->hasFocus()) {
+            int next = (i-1)%visible.size();
+            visible[next]->getView()->setFocus();
+            return;
+        }
+    }
+}
+
 } // m8r namespace

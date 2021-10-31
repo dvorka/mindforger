@@ -68,6 +68,9 @@ public slots:
     void slotShowSelectedNote();
     void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
     void slotHeaderClicked(int section);
+
+    void slotFocusToNextVisibleQuadrant();
+    void slotFocusToLastVisibleQuadrant();
 };
 
 }

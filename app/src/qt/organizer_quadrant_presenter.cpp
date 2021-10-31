@@ -28,7 +28,9 @@ OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
         QString title
 ) {
     this->view = view;
-    this->model = new OrganizerQuadrantModel(title, this, orloj->getMainPresenter()->getHtmlRepresentation());
+    this->model = new OrganizerQuadrantModel(
+        title, this, orloj->getMainPresenter()->getHtmlRepresentation()
+    );
     this->view->setModel(this->model);
 
     this->orloj = orloj;
@@ -39,10 +41,14 @@ OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
 
     // hit ENTER to open selected O
     QObject::connect(
-        view,
-        SIGNAL(signalShowSelectedNote()),
-        this,
-        SLOT(slotShowSelectedNote()));
+        view, SIGNAL(signalShowSelectedNote()),
+        this, SLOT(slotShowSelectedNote()));
+    QObject::connect(
+        view, SIGNAL(signalFocusToNextVisibleQuadrant()),
+        this, SLOT(slotFocusToNextVisibleQuadrant()));
+    QObject::connect(
+        view, SIGNAL(signalFocusToLastVisibleQuadrant()),
+        this, SLOT(slotFocusToLastVisibleQuadrant()));
     QObject::connect(
         this->view->horizontalHeader(), SIGNAL(sectionClicked(int)),
         this, SLOT(slotHeaderClicked(int))
@@ -109,6 +115,17 @@ void OrganizerQuadrantPresenter::slotHeaderClicked(int section)
 
     MF_DEBUG("Organizer quadrant presenter: O/N table header clicked..." << endl);
     orloj->getMainPresenter()->doActionOrganizerEdit();
+}
+
+void OrganizerQuadrantPresenter::slotFocusToNextVisibleQuadrant()
+{
+    MF_DEBUG("Organizer quadrant presenter: SLOT" << endl);
+    orloj->getMainPresenter()->doActionOrganizerFocusToNextVisibleQuadrant();
+}
+
+void OrganizerQuadrantPresenter::slotFocusToLastVisibleQuadrant()
+{
+    orloj->getMainPresenter()->doActionOrganizerFocusToLastVisibleQuadrant();
 }
 
 void OrganizerQuadrantPresenter::refresh(const std::vector<Note*>& ts, bool urgency, bool importance)
