@@ -283,7 +283,7 @@ int8_t Outline::getImportance() const
     return importance;
 }
 
-const string& Outline::getKey() const
+string& Outline::getKey()
 {
     return key;
 }

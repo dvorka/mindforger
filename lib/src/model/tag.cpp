@@ -31,4 +31,23 @@ Tag::~Tag()
 {
 }
 
+/*
+ * Tags.
+ */
+
+Tags::Tags()
+    : tags{}
+{
+}
+
+Tags::Tags(std::vector<const Tag*> ts)
+    : tags{ts}
+{
+
+}
+
+Tags::~Tags()
+{
+}
+
 } // namespace m8r

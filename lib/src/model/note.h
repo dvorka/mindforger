@@ -93,7 +93,7 @@ public:
     void completeProperties(const time_t outlineModificationTime);
     void checkAndFixProperties();
 
-    virtual const std::string& getKey() override;
+    virtual std::string& getKey() override;
 
     /**
      * @brief Return GitHub compatible mangled name to ensure compatiblity between GitHub and MindForger # links.
@@ -111,7 +111,7 @@ public:
     const std::string& getModifiedPretty() const;
     void setModifiedPretty();
     void setModifiedPretty(const std::string& modifiedPretty);
-    const std::string& getOutlineKey() const;
+    std::string& getOutlineKey() const;
     u_int8_t getProgress() const;
     void setProgress(u_int8_t progress);
     time_t getRead() const;

@@ -25,14 +25,13 @@
 #include <iostream>
 
 #include "markdown_document.h"
-#include "../../config/configuration.h"
 #include "../../model/eisenhower_matrix.h"
 #include "../../model/kanban.h"
+#include "../../mind/ontology/ontology.h"
 #include "../../persistence/configuration_persistence.h"
 
 namespace m8r {
 
-class Configuration;
 class MarkdownAstNodeSection;
 
 /**
@@ -61,8 +60,8 @@ public:
     explicit MarkdownRepositoryConfigurationRepresentation();
     MarkdownRepositoryConfigurationRepresentation(const MarkdownRepositoryConfigurationRepresentation&) = delete;
     MarkdownRepositoryConfigurationRepresentation(const MarkdownRepositoryConfigurationRepresentation&&) = delete;
-    MarkdownRepositoryConfigurationRepresentation &operator=(const MarkdownRepositoryConfigurationRepresentation&) = delete;
-    MarkdownRepositoryConfigurationRepresentation &operator=(const MarkdownRepositoryConfigurationRepresentation&&) = delete;
+    MarkdownRepositoryConfigurationRepresentation& operator =(const MarkdownRepositoryConfigurationRepresentation&) = delete;
+    MarkdownRepositoryConfigurationRepresentation& operator =(const MarkdownRepositoryConfigurationRepresentation&&) = delete;
     virtual ~MarkdownRepositoryConfigurationRepresentation();
 
     std::string* to(Configuration& c);

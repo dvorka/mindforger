@@ -59,79 +59,17 @@ public:
         const std::string& type = "organizer"
     );
 
-    static constexpr const auto ESC_TAG_DELIMITER = ",,";
-
-    // save tags as strings (w/ escaped delimiter ,, ~ ,)
-    static std::string tagsToString(std::vector<std::string>& tags, bool escape=true) {
-        std::string s{};
-
-        std::string escapeString{};
-        int escapeLength{2};
-        if(escape) {
-            escapeString.assign(ESC_TAG_DELIMITER);
-        } else {
-            escapeString.assign(", ");
-        }
-
-        for(std::string t:tags) {
-            s.append(t);
-            s.append(ESC_TAG_DELIMITER);
-        }
-        if(s.length()) {
-            s = s.substr(0, s.length()-escapeLength);
-        }
-        return s;
-    }
-    // IMPROVE: consolidate ^v methods (iterator parameter, vector version removal)
-    static std::string tagsToString(std::set<std::string>& tags, bool escape=true) {
-        std::string s{};
-
-        std::string escapeString{};
-        int escapeLength{2};
-        if(escape) {
-            escapeString.assign(ESC_TAG_DELIMITER);
-        } else {
-            escapeString.assign(", ");
-        }
-
-        for(std::string t:tags) {
-            s.append(t);
-            s.append(escapeString);
-        }
-        if(s.length()) {
-            s = s.substr(0, s.length()-escapeLength);
-        }
-        return s;
-    }
-
-    // parse tag strings from escaped string
-    static std::set<std::string> tagsFromString(std::string& s) {
-        std::set<std::string> tags{};
-
-        if(s.size()) {
-            size_t last = 0;
-            size_t next = 0;
-            while((next = s.find(ESC_TAG_DELIMITER, last)) != std::string::npos) {
-                tags.insert(s.substr(last, next-last));
-                last = next + 2;
-            }
-            tags.insert(s.substr(last));
-        }
-
-        return tags;
-    }
-
 public:
     OrganizerType organizerType;
 
-    // EM: upper right quandrant tag / Kanban: 1st column (clockwise, 1st clock quarter)
-    std::set<std::string> tagsUrQuadrant;
-    // lower right quandrant tag / Kanban: 2nd column
-    std::set<std::string> tagsLrQuadrant;
-    // lower left quandrant tag / Kanban: 3rd column
-    std::set<std::string> tagsLlQuadrant;
-    // upper left quandrant tag / Kanban: 4th column
+    // EM: upper left quandrant tag / Kanban: 1st column
     std::set<std::string> tagsUlQuadrant;
+    // EM: upper right quandrant tag / Kanban: 2nd column
+    std::set<std::string> tagsUrQuadrant;
+    // EM: lower left quandrant tag / Kanban: 3rd column
+    std::set<std::string> tagsLlQuadrant;
+    // EM: lower right quandrant tag / Kanban: 4th column
+    std::set<std::string> tagsLrQuadrant;
 
     // values: O, N, O+N; default O+N (show both O and N)
     int filterBy;

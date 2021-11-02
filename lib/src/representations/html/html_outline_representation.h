@@ -56,8 +56,8 @@ public:
     explicit HtmlExportColorsRepresentation() {}
     HtmlExportColorsRepresentation(const HtmlExportColorsRepresentation&) = delete;
     HtmlExportColorsRepresentation(const HtmlExportColorsRepresentation&&) = delete;
-    HtmlExportColorsRepresentation &operator=(const HtmlExportColorsRepresentation&) = delete;
-    HtmlExportColorsRepresentation &operator=(const HtmlExportColorsRepresentation&&) = delete;
+    HtmlExportColorsRepresentation& operator =(const HtmlExportColorsRepresentation&) = delete;
+    HtmlExportColorsRepresentation& operator =(const HtmlExportColorsRepresentation&&) = delete;
     virtual ~HtmlExportColorsRepresentation() {}
 
     virtual std::string& getHtmlTextColor() { static std::string TEXT_COLOR = std::string{"#000000"}; return TEXT_COLOR; }
@@ -155,7 +155,7 @@ private:
     void header(std::string& html, std::string* basePath, bool standalone, int yScrollTo);
     void footer(std::string& html);
 
-    std::string* toNoMeta(const Outline* outline, std::string* html, bool standalone, int yScrollTo);
+    std::string* toNoMeta(Outline* outline, std::string* html, bool standalone, int yScrollTo);
 };
 
 } // m8r namespace

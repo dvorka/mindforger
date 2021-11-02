@@ -20,6 +20,7 @@
 #define M8RUI_KANBAN_PRESENTER_H
 
 #include "../../lib/src/model/kanban.h"
+#include "../../lib/src/mind/ontology/ontology.h"
 
 #include <QtWidgets>
 
@@ -41,6 +42,8 @@ class KanbanPresenter : public QObject
 
     Kanban* kanban;
 
+    OrlojPresenter* orloj;
+
 public:
     explicit KanbanPresenter(KanbanView* view, OrlojPresenter* orloj);
     KanbanPresenter(const KanbanPresenter&) = delete;
@@ -52,6 +55,8 @@ public:
     KanbanView* getView() const { return this->view; }
     Kanban* getKanban() const { return this->kanban; }
 
+    std::vector<const Tag*> getTagsForColumn(int columnNumber);
+
     void refresh(
         Kanban* kanban,
         const std::vector<Note*>& ons,
@@ -60,9 +65,16 @@ public:
     );
 
     void getVisibleColumns(std::vector<KanbanColumnPresenter*>& visible);
+    KanbanColumnPresenter* getNextVisibleColumn();
+    KanbanColumnPresenter* getLastVisibleColumn();
 
     void focusToNextVisibleColumn();
     void focusToLastVisibleColumn();
+
+    bool moveToNextVisibleColumn(Note* n);
+    bool moveToLastVisibleColumn(Note* n);
+private:
+    bool moveToVisibleColumn(Note* n, int nextLast);
 };
 
 }

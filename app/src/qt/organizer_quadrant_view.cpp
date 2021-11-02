@@ -52,10 +52,13 @@ OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent, ViewType viewType)
 
 void OrganizerQuadrantView::keyPressEvent(QKeyEvent* event)
 {
-    switch(event->key()) {
-    case Qt::Key_Backtab:
-        emit signalFocusToLastVisibleQuadrant();
-        return;
+    if((event->modifiers() & Qt::ControlModifier)) {
+        switch(event->key()) {
+        case Qt::Key_Right:
+            MF_DEBUG("EMIT ctrl-right");
+            emit signalMoveNoteToNextQuadrant();
+            return;
+        }
     }
 
     if(!(event->modifiers() & Qt::AltModifier)
@@ -70,6 +73,9 @@ void OrganizerQuadrantView::keyPressEvent(QKeyEvent* event)
         case Qt::Key_Tab:
             emit signalFocusToNextVisibleQuadrant();
             break;
+        case Qt::Key_Backtab:
+            emit signalFocusToLastVisibleQuadrant();
+            return;
         case Qt::Key_Down:
             QTableView::keyPressEvent(event);
             return;

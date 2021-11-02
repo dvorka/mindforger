@@ -91,7 +91,7 @@ void CsvOutlineRepresentation::toHeader(std::ofstream& out)
     out << "id,type,title,offset,depth,reads,writes,created,modified,read,description\n";
 }
 
-void CsvOutlineRepresentation::to(const Outline* o, ofstream& out)
+void CsvOutlineRepresentation::to(Outline* o, ofstream& out)
 {
     MF_DEBUG("\n  " << o->getName());
 

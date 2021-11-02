@@ -43,8 +43,8 @@ public:
     explicit CsvOutlineRepresentation();
     CsvOutlineRepresentation(const CsvOutlineRepresentation&) = delete;
     CsvOutlineRepresentation(const CsvOutlineRepresentation&&) = delete;
-    CsvOutlineRepresentation& operator=(const CsvOutlineRepresentation&) = delete;
-    CsvOutlineRepresentation& operator=(const CsvOutlineRepresentation&&) = delete;
+    CsvOutlineRepresentation& operator =(const CsvOutlineRepresentation&) = delete;
+    CsvOutlineRepresentation& operator =(const CsvOutlineRepresentation&&) = delete;
     virtual ~CsvOutlineRepresentation();
 
     bool to(
@@ -54,7 +54,7 @@ public:
     );
 
     void toHeader(std::ofstream& out);
-    void to(const Outline* o, std::ofstream& out);
+    void to(Outline* o, std::ofstream& out);
 
 private:
     void quoteValue(const std::string& is, std::string& os);

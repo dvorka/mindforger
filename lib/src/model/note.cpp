@@ -242,7 +242,7 @@ const vector<const Tag*>* Note::getTags() const
 
 void Note::addTag(const Tag* tag)
 {
-    if(tag) {
+    if(tag && !this->hasTag(tag)) {
         tags.push_back(tag);
     }
 }
@@ -335,7 +335,7 @@ void Note::setOutline(Outline* outline)
     this->outline = outline;
 }
 
-const string& Note::getOutlineKey() const
+string& Note::getOutlineKey() const
 {
     if(outline) {
         return outline->getKey();
@@ -435,7 +435,7 @@ void Note::checkAndFixProperties()
     MF_ASSERT_FUTURE_TIMESTAMPS(created, read, modified, outline->getKey() << " # " << name, name);
 }
 
-const string& Note::getKey()
+string& Note::getKey()
 {
     key.clear();
     key.append(outline->getKey());

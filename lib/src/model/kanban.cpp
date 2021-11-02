@@ -22,27 +22,65 @@ using namespace std;
 
 namespace m8r {
 
-string Kanban::createKanbanKey() {
+string Kanban::createKanbanKey()
+{
     return Organizer::createOrganizerKey(
         set<string>{}, "repository", Thing::getNextKey(), "/", "kanban"
     );
 }
 
-Kanban::Kanban(const std::string& name):
-    Organizer{name, Organizer::OrganizerType::KANBAN}
+Kanban::Kanban(const std::string& name)
+    : Organizer{name, Organizer::OrganizerType::KANBAN},
+      columnTags{}
 {
     if(!this->name.length()) {
         this->name = "Kanban";
     }
+
+    initColumnTags();
 }
 
-Kanban::Kanban(const Kanban& k):
-    Organizer{k}
+Kanban::Kanban(const Kanban& k)
+    : Organizer{dynamic_cast<const Organizer&>(k)},
+      columnTags{}
 {
+    initColumnTags();
 }
 
 Kanban::~Kanban()
 {
+}
+
+set<string>& Kanban::getStringTagsForColumn(unsigned column)
+{
+    static set<string> empty{};
+
+    if(column < columnTags.size()) {
+        return columnTags[column];
+    } else {
+        // out of range fallback
+        return empty;
+    }
+}
+
+vector<const Tag*> Kanban::getTagsForColumn(unsigned column, Ontology& ontology)
+{
+    set<string> stringTags{this->getStringTagsForColumn(column)};
+
+    vector<const Tag*> r{};
+    for(auto stringTag:stringTags) {
+        r.push_back(ontology.findOrCreateTag(stringTag));
+    }
+
+    return r;
+}
+
+void Kanban::initColumnTags()
+{
+    columnTags.push_back(this->tagsUlQuadrant);
+    columnTags.push_back(this->tagsUrQuadrant);
+    columnTags.push_back(this->tagsLlQuadrant);
+    columnTags.push_back(this->tagsLrQuadrant);
 }
 
 } // m8r namespace

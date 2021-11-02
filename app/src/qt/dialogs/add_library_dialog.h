@@ -21,9 +21,10 @@ add_library_dialog.h     MindForger thinking notebook
 
 #include <vector>
 
-#include <QtWidgets>
-
 #include "../../lib/src/model/outline.h"
+#include "../../lib/src/config/repository.h"
+
+#include <QtWidgets>
 
 namespace m8r {
 

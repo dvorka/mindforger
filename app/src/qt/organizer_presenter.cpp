@@ -88,19 +88,19 @@ void OrganizerPresenter::refresh(
 
     } else {
         title = QString::fromStdString(
-            Organizer::tagsToString(organizer->getUpperRightTags(), false)
+            Tags::tagsToString(organizer->getUpperRightTags(), false)
         );
         doFirstPresenter->setTitle(title);
         title = QString::fromStdString(
-            Organizer::tagsToString(organizer->getUpperLeftTags(), false)
+            Tags::tagsToString(organizer->getUpperLeftTags(), false)
         );
         doSoonPresenter->setTitle(title);
         title = QString::fromStdString(
-            Organizer::tagsToString(organizer->getLowerRightTags(), false)
+            Tags::tagsToString(organizer->getLowerRightTags(), false)
         );
         planDedicatedTimePresenter->setTitle(title);
         title = QString::fromStdString(
-            Organizer::tagsToString(organizer->getLowerLeftTags(), false)
+            Tags::tagsToString(organizer->getLowerLeftTags(), false)
         );
         doSometimePresenter->setTitle(title);
     }

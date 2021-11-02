@@ -21,6 +21,7 @@
 
 #include "../../lib/src/debug.h"
 #include "../../lib/src/model/note.h"
+#include "../../lib/src/config/configuration.h"
 
 #include "note_view_model.h"
 #include "widgets/mf_widgets.h"

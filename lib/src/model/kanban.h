@@ -25,6 +25,7 @@
 #include "organizer.h"
 #include "../gear/datetime_utils.h"
 #include "../mind/ontology/thing_class_rel_triple.h"
+#include "../mind/ontology/ontology.h"
 
 namespace m8r {
 
@@ -36,13 +37,22 @@ class Kanban : public Organizer
 public:
     static std::string createKanbanKey();
 
+private:
+    std::vector<std::set<std::string>> columnTags;
+
 public:
     explicit Kanban(const std::string& name);
     explicit Kanban(const Kanban& k);
     Kanban(const Kanban&&) = delete;
-    Kanban& operator=(const Kanban&) = delete;
-    Kanban& operator=(const Kanban&&) = delete;
+    Kanban& operator =(const Kanban&) = delete;
+    Kanban& operator =(const Kanban&&) = delete;
     ~Kanban();
+
+    std::set<std::string>& getStringTagsForColumn(unsigned column);
+    std::vector<const Tag*> getTagsForColumn(unsigned column, Ontology& ontology);
+
+private:
+    void initColumnTags();
 };
 
 }

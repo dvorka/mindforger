@@ -23,8 +23,8 @@ if len(sys.argv) > 1:
     c = sys.argv[1]
     print '{}(const {}&) = delete;'.format(c,c)
     print '{}(const {}&&) = delete;'.format(c,c)
-    print '{}& operator=(const {}&) = delete;'.format(c,c)
-    print '{}& operator=(const {}&&) = delete;'.format(c,c)
+    print '{}& operator =(const {}&) = delete;'.format(c,c)
+    print '{}& operator =(const {}&&) = delete;'.format(c,c)
 else:
     print 'Error: provide class name as program argument'
 

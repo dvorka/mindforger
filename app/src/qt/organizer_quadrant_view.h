@@ -67,8 +67,11 @@ private:
 signals:
     void signalShowSelectedNote();
     void signalShowSelectedKanbanNote();
+
     void signalFocusToNextVisibleQuadrant();
     void signalFocusToLastVisibleQuadrant();
+
+    void signalMoveNoteToNextQuadrant();
 };
 
 }

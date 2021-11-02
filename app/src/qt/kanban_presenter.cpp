@@ -23,9 +23,9 @@ namespace m8r {
 using namespace std;
 
 KanbanPresenter::KanbanPresenter(KanbanView* view, OrlojPresenter* orloj)
+    : view{view},
+      orloj{orloj}
 {
-    this->view = view;
-
     for(int column=0; column<4; column++) {
         this->columns.push_back(
             new KanbanColumnPresenter(
@@ -37,6 +37,19 @@ KanbanPresenter::KanbanPresenter(KanbanView* view, OrlojPresenter* orloj)
 
 KanbanPresenter::~KanbanPresenter()
 {
+}
+
+vector<const Tag*> KanbanPresenter::getTagsForColumn(int columnNumber)
+{
+    static vector<const Tag*> empty{};
+
+    if(this->kanban) {
+        return kanban->getTagsForColumn(
+            columnNumber, orloj->getMind()->getOntology()
+        );
+    }
+
+    return empty;
 }
 
 void KanbanPresenter::refresh(
@@ -60,13 +73,21 @@ void KanbanPresenter::refresh(
 
     // set quadrant titles
     QString title{};
-    title = QString::fromStdString(Organizer::tagsToString(kanban->getUpperLeftTags(), false));
+    title = QString::fromStdString(
+        Tags::tagsToString(kanban->getUpperLeftTags(), false)
+    );
     columns[0]->setTitle(title);
-    title = QString::fromStdString(Organizer::tagsToString(kanban->getUpperRightTags(), false));
+    title = QString::fromStdString(
+        Tags::tagsToString(kanban->getUpperRightTags(), false)
+    );
     columns[1]->setTitle(title);
-    title = QString::fromStdString(Organizer::tagsToString(kanban->getLowerLeftTags(), false));
+    title = QString::fromStdString(
+        Tags::tagsToString(kanban->getLowerLeftTags(), false)
+    );
     columns[2]->setTitle(title);
-    title = QString::fromStdString(Organizer::tagsToString(kanban->getLowerRightTags(), false));
+    title = QString::fromStdString(
+        Tags::tagsToString(kanban->getLowerRightTags(), false)
+    );
     columns[3]->setTitle(title);
 
     columns[0]->refresh(upperLeftNs, true, false);
@@ -74,9 +95,9 @@ void KanbanPresenter::refresh(
     columns[2]->refresh(lowerLeftNs, false, false);
     columns[3]->refresh(lowerRightNs, false, true);
 
-    // if at least one column with a tag exists,
-    // then show only columns with tags,
-    // else show all EMPTY columns
+    // IF at least one column with a tag exists,
+    // THEN show only columns with tags,
+    // ELSE show all EMPTY columns
     for(auto c:columns) {
         c->getView()->setVisible(true);
     }
@@ -111,32 +132,80 @@ void KanbanPresenter::getVisibleColumns(vector<KanbanColumnPresenter*>& visible)
     }
 }
 
-void KanbanPresenter::focusToNextVisibleColumn()
+KanbanColumnPresenter* KanbanPresenter::getNextVisibleColumn()
 {
     vector<KanbanColumnPresenter*> visible{};
     this->getVisibleColumns(visible);
 
     for(unsigned i=0; i<visible.size(); i++) {
         if(visible[i]->getView()->hasFocus()) {
-            int next = (i+1)%visible.size();
-            visible[next]->getView()->setFocus();
-            return;
+            return visible[(i+1)%visible.size()];
         }
+    }
+
+    return nullptr;
+}
+
+KanbanColumnPresenter* KanbanPresenter::getLastVisibleColumn()
+{
+    vector<KanbanColumnPresenter*> visible{};
+    this->getVisibleColumns(visible);
+
+    for(unsigned i=0; i<visible.size(); i++) {
+        if(visible[i]->getView()->hasFocus()) {
+            return visible[(i-1)%visible.size()];
+        }
+    }
+
+    return nullptr;
+}
+
+void KanbanPresenter::focusToNextVisibleColumn()
+{
+    if(KanbanColumnPresenter* next=this->getNextVisibleColumn()) {
+        next->getView()->setFocus();
     }
 }
 
 void KanbanPresenter::focusToLastVisibleColumn()
 {
+    if(KanbanColumnPresenter* last=this->getLastVisibleColumn()) {
+        last->getView()->setFocus();
+    }
+}
+
+bool KanbanPresenter::moveToVisibleColumn(Note* n, int nextLast)
+{
     vector<KanbanColumnPresenter*> visible{};
     this->getVisibleColumns(visible);
+    if(visible.size()>1 && n->getTags()->size()) {
+        for(unsigned i=0; i<visible.size(); i++) {
+            if(visible[i]->getView()->hasFocus()) {
+                Tags tags{*n->getTags()};
+                vector<const Tag*> currentColumnTags = this->getTagsForColumn(i);
+                tags.removeTags(currentColumnTags);
+                vector<const Tag*> nextColumnTags = this->getTagsForColumn((i+nextLast)%visible.size());
+                tags.addTags(nextColumnTags);
 
-    for(unsigned i=0; i<visible.size(); i++) {
-        if(visible[i]->getView()->hasFocus()) {
-            int next = (i-1)%visible.size();
-            visible[next]->getView()->setFocus();
-            return;
+                n->setTags(tags.getTagsPtr());
+
+                // caller to perform refresh
+                return true;
+            }
         }
     }
+
+    return false;
+}
+
+bool KanbanPresenter::moveToNextVisibleColumn(Note* n)
+{
+    return this->moveToVisibleColumn(n, 1);
+}
+
+bool KanbanPresenter::moveToLastVisibleColumn(Note* n)
+{
+    return this->moveToVisibleColumn(n, -1);
 }
 
 } // m8r namespace

@@ -74,12 +74,13 @@ class FtsDialog;
 class FtsDialogPresenter;
 
 /**
- * @brief MindForger main window Presenter.
+ * @brief MindForger main window presenter.
  *
  * Main window presenter:
- *   * Provides index of all UI presenters.
- *   * Hosts cross component signals definitions.
- *   * Implements core UI application logic for other presenters and views.
+ *
+ * * Provides index of all UI presenters.
+ * * Hosts cross component signals definitions.
+ * * Implements core UI application logic for other presenters and views.
  *
  * This class is used to demonstrate MindForger's MVP frontend architecture
  * and code conventions.
@@ -144,8 +145,8 @@ public:
     explicit MainWindowPresenter(MainWindowView& view);
     MainWindowPresenter(const MainWindowPresenter&) = delete;
     MainWindowPresenter(const MainWindowPresenter&&) = delete;
-    MainWindowPresenter &operator=(const MainWindowPresenter&) = delete;
-    MainWindowPresenter &operator=(const MainWindowPresenter&&) = delete;
+    MainWindowPresenter& operator =(const MainWindowPresenter&) = delete;
+    MainWindowPresenter& operator =(const MainWindowPresenter&&) = delete;
     ~MainWindowPresenter();
 
     // this presenter view

@@ -138,7 +138,7 @@ enum class ThingNameSerialization {
  *   Notes.
  * - ...
  */
-class Mind
+class Mind : public OntologyProvider
 {
 public:
     static constexpr int ALL_ENTRIES = -1;
@@ -347,7 +347,7 @@ public:
     /**
      * @brief Get ontology.
      */
-    Ontology& getOntology() { return ontology; }
+    virtual Ontology& getOntology() { return ontology; }
 
     /**
      * @brief Get memory dwell.

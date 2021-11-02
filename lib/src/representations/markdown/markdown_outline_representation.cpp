@@ -253,7 +253,7 @@ Note* MarkdownOutlineRepresentation::note(const File& file)
     return n;
 }
 
-string* MarkdownOutlineRepresentation::toHeader(const Outline* outline)
+string* MarkdownOutlineRepresentation::toHeader(Outline* outline)
 {
     string* md = new string{};
     if(outline) {
@@ -277,7 +277,7 @@ string* MarkdownOutlineRepresentation::toPreamble(const Outline* outline, string
     return md;
 }
 
-void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
+void MarkdownOutlineRepresentation::toHeader(Outline* outline, string* md)
 {
     if(outline) {
         if(outline->getNotes().size()) {
@@ -366,14 +366,14 @@ void MarkdownOutlineRepresentation::description(const std::string* md, std::vect
     }
 }
 
-string* MarkdownOutlineRepresentation::to(const Outline* outline)
+string* MarkdownOutlineRepresentation::to(Outline* outline)
 {
     string* md = new string{};
     md->reserve(AVG_OUTLINE_SIZE);
     return to(outline, md);
 }
 
-string* MarkdownOutlineRepresentation::to(const Outline* outline, string* md)
+string* MarkdownOutlineRepresentation::to(Outline* outline, string* md)
 {
     toPreamble(outline, md);
     toHeader(outline, md);

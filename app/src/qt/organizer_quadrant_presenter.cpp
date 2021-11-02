@@ -50,6 +50,9 @@ OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
         view, SIGNAL(signalFocusToLastVisibleQuadrant()),
         this, SLOT(slotFocusToLastVisibleQuadrant()));
     QObject::connect(
+        view, SIGNAL(signalMoveNoteToNextQuadrant()),
+        this, SLOT(slotMoveNoteToNextQuadrant()));
+    QObject::connect(
         this->view->horizontalHeader(), SIGNAL(sectionClicked(int)),
         this, SLOT(slotHeaderClicked(int))
     );
@@ -119,13 +122,17 @@ void OrganizerQuadrantPresenter::slotHeaderClicked(int section)
 
 void OrganizerQuadrantPresenter::slotFocusToNextVisibleQuadrant()
 {
-    MF_DEBUG("Organizer quadrant presenter: SLOT" << endl);
     orloj->getMainPresenter()->doActionOrganizerFocusToNextVisibleQuadrant();
 }
 
 void OrganizerQuadrantPresenter::slotFocusToLastVisibleQuadrant()
 {
     orloj->getMainPresenter()->doActionOrganizerFocusToLastVisibleQuadrant();
+}
+
+void OrganizerQuadrantPresenter::slotMoveNoteToNextQuadrant()
+{
+    MF_DEBUG("Organizer quadrant presenter: move N SLOT" << endl);
 }
 
 void OrganizerQuadrantPresenter::refresh(const std::vector<Note*>& ts, bool urgency, bool importance)

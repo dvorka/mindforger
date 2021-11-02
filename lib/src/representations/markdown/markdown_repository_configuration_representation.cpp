@@ -175,16 +175,16 @@ void MarkdownRepositoryConfigurationRepresentation::repositoryConfigurationSecti
                     key = line->substr(strlen(CONFIG_SETTING_ORG_KEY));
                 } else if(o && line->find(CONFIG_SETTING_ORG_TAG_UR) != std::string::npos) {
                     tags = line->substr(strlen(CONFIG_SETTING_ORG_TAG_UR));
-                    o->tagsUrQuadrant = Organizer::tagsFromString(tags);
+                    o->tagsUrQuadrant = Tags::tagsFromString(tags);
                 } else if(o && line->find(CONFIG_SETTING_ORG_TAG_LR) != std::string::npos) {
                     tags = line->substr(strlen(CONFIG_SETTING_ORG_TAG_LR));
-                    o->tagsLrQuadrant = Organizer::tagsFromString(tags);
+                    o->tagsLrQuadrant = Tags::tagsFromString(tags);
                 } else if(o && line->find(CONFIG_SETTING_ORG_TAG_LL) != std::string::npos) {
                     tags = line->substr(strlen(CONFIG_SETTING_ORG_TAG_LL));
-                    o->tagsLlQuadrant = Organizer::tagsFromString(tags);
+                    o->tagsLlQuadrant = Tags::tagsFromString(tags);
                 } else if(o && line->find(CONFIG_SETTING_ORG_TAG_UL) != std::string::npos) {
                     tags = line->substr(strlen(CONFIG_SETTING_ORG_TAG_UL));
-                    o->tagsUlQuadrant = Organizer::tagsFromString(tags);
+                    o->tagsUlQuadrant = Tags::tagsFromString(tags);
                 } else if(o && line->find(CONFIG_SETTING_ORG_SORT_BY) != std::string::npos) {
                     string sortBy{line->substr(strlen(CONFIG_SETTING_ORG_SORT_BY))};
                     if(sortBy.length() && Organizer::OrganizerType::EISENHOWER_MATRIX == o->getOrganizerType()) {
@@ -276,10 +276,10 @@ string& MarkdownRepositoryConfigurationRepresentation::to(Configuration* c, stri
                 << CONFIG_SETTING_ORG_NAME << o->getName() << endl
                 << CONFIG_SETTING_ORG_KEY << o->getKey() << endl
                 << CONFIG_SETTING_ORG_TYPE << o->getOrganizerTypeAsStr() << endl
-                << CONFIG_SETTING_ORG_TAG_UR << Organizer::tagsToString(o->getUpperRightTags()) << endl
-                << CONFIG_SETTING_ORG_TAG_LR << Organizer::tagsToString(o->getLowerRightTags()) << endl
-                << CONFIG_SETTING_ORG_TAG_LL << Organizer::tagsToString(o->getLowerLeftTags()) << endl
-                << CONFIG_SETTING_ORG_TAG_UL << Organizer::tagsToString(o->getUpperLeftTags()) << endl;
+                << CONFIG_SETTING_ORG_TAG_UR << Tags::tagsToString(o->getUpperRightTags()) << endl
+                << CONFIG_SETTING_ORG_TAG_LR << Tags::tagsToString(o->getLowerRightTags()) << endl
+                << CONFIG_SETTING_ORG_TAG_LL << Tags::tagsToString(o->getLowerLeftTags()) << endl
+                << CONFIG_SETTING_ORG_TAG_UL << Tags::tagsToString(o->getUpperLeftTags()) << endl;
                 if(Organizer::OrganizerType::EISENHOWER_MATRIX == o->getOrganizerType()) {
                     oss
                     << CONFIG_SETTING_ORG_SORT_BY

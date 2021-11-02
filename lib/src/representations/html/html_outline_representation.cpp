@@ -302,7 +302,7 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
     return html;
 }
 
-string* HtmlOutlineRepresentation::toNoMeta(const Outline* outline, string* html, bool standalone, int yScrollTo)
+string* HtmlOutlineRepresentation::toNoMeta(Outline* outline, string* html, bool standalone, int yScrollTo)
 {
     // IMPROVE markdown can be processed by Mind to be enriched with various links and relationships
     string* markdown = markdownRepresentation.to(outline);

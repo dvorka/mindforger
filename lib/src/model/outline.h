@@ -25,6 +25,7 @@
 #include "../mind/ontology/thing_class_rel_triple.h"
 #include "note.h"
 #include "outline_type.h"
+#include "eisenhower_matrix.h"
 #include "kanban.h"
 #include "../representations/markdown/markdown_document.h"
 #include "../gear/datetime_utils.h"
@@ -193,7 +194,7 @@ public:
      */
     bool isVirgin() const;
 
-    virtual const std::string& getKey() const;
+    virtual std::string& getKey();
     void setKey(const std::string key);
     MarkdownDocument::Format getFormat() const { return format; }
     void setFormat(MarkdownDocument::Format format) { this->format = format; }

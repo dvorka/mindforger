@@ -71,6 +71,8 @@ public slots:
 
     void slotFocusToNextVisibleQuadrant();
     void slotFocusToLastVisibleQuadrant();
+
+    void slotMoveNoteToNextQuadrant();
 };
 
 }

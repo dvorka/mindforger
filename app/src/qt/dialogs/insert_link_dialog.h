@@ -21,6 +21,9 @@
 
 #include <vector>
 
+#include "../../lib/src/repository_indexer.h"
+#include "../../lib/src/config/repository.h"
+
 #include <QtWidgets>
 
 #include "find_outline_by_name_dialog.h"
@@ -34,7 +37,7 @@ class InsertLinkDialog : public QDialog
 
 private:
     const Repository* activeRepository;
-    const Outline* currentOutline;
+    Outline* currentOutline;
     std::vector<Thing*> outlines;
     std::vector<Note*> notes;
 
@@ -60,13 +63,13 @@ public:
     explicit InsertLinkDialog(QWidget* parent);
     InsertLinkDialog(const InsertLinkDialog&) = delete;
     InsertLinkDialog(const InsertLinkDialog&&) = delete;
-    InsertLinkDialog &operator=(const InsertLinkDialog&) = delete;
-    InsertLinkDialog &operator=(const InsertLinkDialog&&) = delete;
+    InsertLinkDialog& operator =(const InsertLinkDialog&) = delete;
+    InsertLinkDialog& operator =(const InsertLinkDialog&&) = delete;
     ~InsertLinkDialog();
 
     void show(
         const Repository* repository,
-        const Outline* outline,
+        Outline* outline,
         std::vector<Thing*>& outlines,
         std::vector<Note*>& notes,
         const QString& selectedText,

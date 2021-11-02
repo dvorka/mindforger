@@ -96,7 +96,7 @@ InsertLinkDialog::~InsertLinkDialog()
 
 void InsertLinkDialog::show(
         const Repository* repository,
-        const Outline* outline,
+        Outline* outline,
         vector<Thing*>& os,
         vector<Note*>& ns,
         const QString& selectedText,
@@ -128,10 +128,14 @@ void InsertLinkDialog::handleFindOutline()
 void InsertLinkDialog::handleFindOutlineChoice()
 {
     if(findOutlineByNameDialog->getChoice()) {
-        Outline* choice = static_cast<Outline*>(findOutlineByNameDialog->getChoice());
+        Outline* choice = static_cast<Outline*>(
+            findOutlineByNameDialog->getChoice()
+        );
         linkTextEdit->setText(QString::fromStdString(choice->getName()));
 
-        string p = RepositoryIndexer::makePathRelative(activeRepository, currentOutline->getKey(), choice->getKey());
+        string p = RepositoryIndexer::makePathRelative(
+            activeRepository, currentOutline->getKey(), choice->getKey()
+        );
         pathToLinuxDelimiters(p, p);
         pathEdit->setText(QString::fromStdString(p));
     }
@@ -154,7 +158,9 @@ void InsertLinkDialog::handleFindNoteChoice()
         dstPath += choice->getOutline()->getKey();
         dstPath += "#";
         dstPath += choice->getMangledName();
-        string p = RepositoryIndexer::makePathRelative(activeRepository, currentOutline->getKey(), dstPath);
+        string p = RepositoryIndexer::makePathRelative(
+            activeRepository, currentOutline->getKey(), dstPath
+        );
         pathEdit->setText(QString::fromStdString(p));
     }
 }

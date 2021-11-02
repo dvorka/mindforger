@@ -2623,9 +2623,7 @@ void MainWindowPresenter::handleCreateOrganizer()
             );
             o->setKey(EisenhowerMatrix::createEisenhowerMatrixKey());
         } else {
-            o = new Kanban(
-                newOrganizerDialog->getOrganizerName().toStdString()
-            );
+            o = new Kanban(newOrganizerDialog->getOrganizerName().toStdString());
             o->setKey(Kanban::createKanbanKey());
         }
     }

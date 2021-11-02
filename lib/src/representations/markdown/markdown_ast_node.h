@@ -22,6 +22,7 @@
 #include <string>
 
 #include "../../model/link.h"
+#include "../../config/time_scope.h"
 #include "markdown_note_metadata.h"
 
 namespace m8r {

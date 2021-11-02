@@ -83,10 +83,10 @@ public:
 
     virtual void description(const std::string* md, std::vector<std::string*>& description);
 
-    virtual std::string* to(const Outline* outline);
-    virtual std::string* to(const Outline* outline, std::string* md);
+    virtual std::string* to(Outline* outline);
+    virtual std::string* to(Outline* outline, std::string* md);
     virtual std::string* toPreamble(const Outline* outline, std::string* md);
-    virtual std::string* toHeader(const Outline* outline);
+    virtual std::string* toHeader(Outline* outline);
     virtual std::string* to(const Note* note);
     virtual std::string* to(const Note* note, std::string* md, bool includeMetadata=true, bool autolinking=false);
     virtual std::string* toDescription(const Note* note, std::string* md, bool autolinking=false);
@@ -104,7 +104,7 @@ public:
 private:
     Outline* outline(std::vector<MarkdownAstNodeSection*>* ast);
     Note* note(std::vector<MarkdownAstNodeSection*>* ast, const size_t astindex=0, Outline* outline=nullptr);
-    void toHeader(const Outline* outline, std::string* md);
+    void toHeader(Outline* outline, std::string* md);
     std::string to(const std::vector<Link*>& links);
 };
 
