@@ -18,6 +18,8 @@
 */
 #include "main_window_presenter.h"
 
+#include "kanban_column_presenter.h"
+
 using namespace std;
 using namespace m8r::filesystem;
 
@@ -2748,16 +2750,114 @@ void MainWindowPresenter::doActionOrganizerFocusToNextVisibleQuadrant()
     if(OrlojPresenterFacets::FACET_KANBAN == orloj->getFacet()) {
         orloj->getKanban()->focusToNextVisibleColumn();
     } else {
-        orloj->getOrganizer()->focusToNextVisibleColumn();
+        orloj->getOrganizer()->focusToNextVisibleQuadrant();
     }
 }
 
-void MainWindowPresenter::doActionOrganizerFocusToLastVisibleQuadrant()
+void MainWindowPresenter::doActionOrganizerFocusToPreviousVisibleQuadrant()
 {
     if(OrlojPresenterFacets::FACET_KANBAN == orloj->getFacet()) {
-        orloj->getKanban()->focusToLastVisibleColumn();
+        orloj->getKanban()->focusToPreviousVisibleColumn();
     } else {
-        orloj->getOrganizer()->focusToLastVisibleColumn();
+        orloj->getOrganizer()->focusToPreviousVisibleQuadrant();
+    }
+}
+
+void doActionOrganizerMoveNoteCommon(
+    Note* note,
+    OrganizerQuadrantPresenter* presenter,
+    OrlojPresenter* orloj
+) {
+    static vector<Note*> organizerOutlinesAndNotes{};
+    static vector<Note*> organizerNotes{};
+
+    if(presenter) {
+        // persist modified N
+        orloj->getMind()->remember(note->getOutlineKey());
+
+        // refresh view
+        organizerOutlinesAndNotes.clear();
+        organizerNotes.clear();
+        orloj->getOrganizer()->refresh(
+            orloj->getKanban()->getKanban(),
+            orloj->getMind()->getAllNotes(organizerOutlinesAndNotes, true, true),
+            orloj->getMind()->getOutlines(),
+            orloj->getMind()->getAllNotes(organizerNotes, true, false),
+            false
+        );
+
+        // give target N column focus
+        presenter->getView()->setFocus();
+    }
+}
+
+void doActionKanbanMoveNoteCommon(
+    Note* note,
+    KanbanColumnPresenter* presenter,
+    OrlojPresenter* orloj
+) {
+    static vector<Note*> organizerOutlinesAndNotes{};
+    static vector<Note*> organizerNotes{};
+
+    if(presenter) {
+        // persist modified N
+        orloj->getMind()->remember(note->getOutlineKey());
+
+        // refresh view
+        organizerOutlinesAndNotes.clear();
+        organizerNotes.clear();
+        orloj->getKanban()->refresh(
+            orloj->getKanban()->getKanban(),
+            orloj->getMind()->getAllNotes(organizerOutlinesAndNotes, true, true),
+            orloj->getMind()->getOutlines(),
+            orloj->getMind()->getAllNotes(organizerNotes, true, false),
+            false
+        );
+
+        // give target N column focus
+        presenter->getView()->setFocus();
+    }
+}
+
+void MainWindowPresenter::doActionOrganizerMoveNoteToNextVisibleQuadrant(Note* note)
+{
+    if(OrlojPresenterFacets::FACET_KANBAN == orloj->getFacet()) {
+        doActionKanbanMoveNoteCommon(
+            note,
+            orloj->getKanban()->moveToNextVisibleColumn(note),
+            orloj
+        );
+    } else {
+        if(!EisenhowerMatrix::isEisenhowMatrixOrganizer(orloj->getOrganizer()->getOrganizer())) {
+            doActionOrganizerMoveNoteCommon(
+                note,
+                orloj->getOrganizer()->moveToNextVisibleQuadrant(note),
+                orloj
+            );
+        } else {
+            statusBar->showError("Notebooks/notes cannot be moved around quadrants of Eisenhower Matrix");
+        }
+    }
+}
+
+void MainWindowPresenter::doActionOrganizerMoveNoteToPreviousVisibleQuadrant(Note* note)
+{
+    if(OrlojPresenterFacets::FACET_KANBAN == orloj->getFacet()) {
+        doActionKanbanMoveNoteCommon(
+            note,
+            orloj->getKanban()->moveToPreviousVisibleColumn(note),
+            orloj
+        );
+    } else {
+        if(!EisenhowerMatrix::isEisenhowMatrixOrganizer(orloj->getOrganizer()->getOrganizer())) {
+            doActionOrganizerMoveNoteCommon(
+                note,
+                orloj->getOrganizer()->moveToPreviousVisibleQuadrant(note),
+                orloj
+            );
+        } else {
+            statusBar->showError("Notebooks/notes cannot be moved around quadrants of Eisenhower Matrix");
+        }
     }
 }
 

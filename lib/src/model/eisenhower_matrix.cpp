@@ -75,4 +75,12 @@ EisenhowerMatrix* EisenhowerMatrix::createEisenhowMatrixOrganizer() {
     return eisenhowerMatrixOrganizer;
 }
 
+bool EisenhowerMatrix::isEisenhowMatrixOrganizer(Organizer* o)
+{
+    if(o && o->getKey() == KEY_EISENHOWER_MATRIX) {
+        return true;
+    }
+    return false;
+}
+
 } // m8r namespace

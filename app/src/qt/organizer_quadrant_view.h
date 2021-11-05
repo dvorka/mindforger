@@ -69,9 +69,10 @@ signals:
     void signalShowSelectedKanbanNote();
 
     void signalFocusToNextVisibleQuadrant();
-    void signalFocusToLastVisibleQuadrant();
+    void signalFocusToPreviousVisibleQuadrant();
 
     void signalMoveNoteToNextQuadrant();
+    void signalMoveNoteToPreviousQuadrant();
 };
 
 }

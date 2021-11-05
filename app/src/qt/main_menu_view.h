@@ -126,8 +126,12 @@ public:
     // menu: Organizer
     QAction* actionOrganizerNew;
     QAction* actionOrganizerEdit;
-    QAction* actionOrganizerForget;
     QAction* actionOrganizerClone;
+    QAction* actionOrganizerForget;
+    QAction* actionOrganizerFocusPrevious;
+    QAction* actionOrganizerFocusNext;
+    QAction* actionOrganizerMovePrevious;
+    QAction* actionOrganizerMoveNext;
 
     // menu: Navigator
     QAction* actionNavigatorZoomIn;

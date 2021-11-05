@@ -30,7 +30,11 @@ class KanbanColumnModel : public OrganizerQuadrantModel
     Q_OBJECT
 
 public:
-    explicit KanbanColumnModel(QString& title, QObject* parent, HtmlOutlineRepresentation* htmlRepresentation);
+    explicit KanbanColumnModel(
+        QString& title,
+        QObject* parent,
+        HtmlOutlineRepresentation* htmlRepresentation
+    );
     KanbanColumnModel(const KanbanColumnModel&) = delete;
     KanbanColumnModel(const KanbanColumnModel&&) = delete;
     KanbanColumnModel& operator=(const KanbanColumnModel&) = delete;

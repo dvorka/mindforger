@@ -377,11 +377,28 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOrganizerForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Delete"), mainWindow);
     actionOrganizerForget->setStatusTip(tr("Delete Organizer without undo"));
 
+    actionOrganizerMovePrevious = new QAction(QIcon(":/menu-icons/left.svg"), tr("Move Notebook/Note to &Previous Column/Quadrant\tCtrl+Left"), mainWindow); // handled from Outline tree
+    actionOrganizerMovePrevious->setStatusTip(tr("Move Notebook/Note to previous column or quadrant..."));
+
+    actionOrganizerMoveNext = new QAction(QIcon(":/menu-icons/right.svg"), tr("Move Notebook/Note to Ne&xt Column/Quadrant\tCtrl+Right"), mainWindow);
+    actionOrganizerMoveNext->setStatusTip(tr("Move Notebook/Note to next column or quadrant..."));
+
+    actionOrganizerFocusPrevious = new QAction(QIcon(":/menu-icons/left.svg"), tr("Focus to Previous Column/Quadrant\tShift+Tab"), mainWindow); // handled from Outline tree
+    actionOrganizerFocusPrevious->setStatusTip(tr("Move focus to previous column or quandrant..."));
+
+    actionOrganizerFocusNext = new QAction(QIcon(":/menu-icons/right.svg"), tr("Focus to Next Column/Quadrant\tTab"), mainWindow);
+    actionOrganizerFocusNext->setStatusTip(tr("Move focus to next column or quandrant..."));
+
     menuOrganizer->addAction(actionOrganizerNew);
     menuOrganizer->addAction(actionOrganizerEdit);
+    menuOrganizer->addAction(actionOrganizerClone);
     menuOrganizer->addAction(actionOrganizerForget);
     menuOrganizer->addSeparator();
-    menuOrganizer->addAction(actionOrganizerClone);
+    menuOrganizer->addAction(actionOrganizerFocusPrevious);
+    menuOrganizer->addAction(actionOrganizerFocusNext);
+    menuOrganizer->addSeparator();
+    menuOrganizer->addAction(actionOrganizerMovePrevious);
+    menuOrganizer->addAction(actionOrganizerMoveNext);
 
     // menu: Outline
 
@@ -863,6 +880,10 @@ void MainMenuView::showAllMenuItems()
     actionOrganizerEdit->setEnabled(true);
     actionOrganizerClone->setEnabled(true);
     actionOrganizerForget->setEnabled(true);
+    actionOrganizerFocusPrevious->setEnabled(true);
+    actionOrganizerFocusNext->setEnabled(true);
+    actionOrganizerMovePrevious->setEnabled(true);
+    actionOrganizerMoveNext->setEnabled(true);
 
     menuNavigator->setEnabled(true);
     actionViewOrganizers->setEnabled(true);
@@ -901,6 +922,10 @@ void MainMenuView::showFacetOrganizerList(bool repositoryMode)
     actionOrganizerEdit->setEnabled(false);
     actionOrganizerClone->setEnabled(false);
     actionOrganizerForget->setEnabled(false);
+    actionOrganizerFocusPrevious->setEnabled(false);
+    actionOrganizerFocusNext->setEnabled(false);
+    actionOrganizerMovePrevious->setEnabled(false);
+    actionOrganizerMoveNext->setEnabled(false);
 
 #ifdef MF_WIP_KNOW
     menuKnowledge->setEnabled(false);
@@ -1005,6 +1030,10 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
     actionOrganizerEdit->setEnabled(false);
     actionOrganizerClone->setEnabled(false);
     actionOrganizerForget->setEnabled(false);
+    actionOrganizerFocusPrevious->setEnabled(false);
+    actionOrganizerFocusNext->setEnabled(false);
+    actionOrganizerMovePrevious->setEnabled(false);
+    actionOrganizerMoveNext->setEnabled(false);
 
     menuFind->setEnabled(false);
     actionFindOutlineByName->setEnabled(false);

@@ -23,9 +23,9 @@ namespace m8r {
 using namespace std;
 
 OrganizerPresenter::OrganizerPresenter(OrganizerView* view, OrlojPresenter* orloj)
+    : view{view},
+      orloj{orloj}
 {
-    this->view = view;
-
     doFirstPresenter = new OrganizerQuadrantPresenter(
         view->getDoFirst(), orloj, tr(TITLE_DO_FIRST)
     );
@@ -51,11 +51,25 @@ OrganizerPresenter::~OrganizerPresenter()
 {
 }
 
+vector<const Tag*> OrganizerPresenter::getTagsForQuadrant(int columnNumber)
+{
+    static vector<const Tag*> empty{};
+
+    if(this->organizer) {
+        return organizer->getTagsForQuadrant(
+            columnNumber, orloj->getMind()->getOntology()
+        );
+    }
+
+    return empty;
+}
+
 void OrganizerPresenter::refresh(
     Organizer* organizer,
     const vector<Note*>& ons,
     const vector<Outline*>& os,
-    const vector<Note*>& ns
+    const vector<Note*>& ns,
+    bool setFocus
 ) {
     MF_DEBUG("Rendering organizer: " << organizer->getName() << "..." << endl);
 
@@ -85,7 +99,6 @@ void OrganizerPresenter::refresh(
         planDedicatedTimePresenter->setTitle(title);
         title = tr(TITLE_DO_SOMETIMES);
         doSometimePresenter->setTitle(title);
-
     } else {
         title = QString::fromStdString(
             Tags::tagsToString(organizer->getUpperRightTags(), false)
@@ -110,10 +123,12 @@ void OrganizerPresenter::refresh(
     doSometimePresenter->refresh(lowerLeftNs, false, false);
     planDedicatedTimePresenter->refresh(lowerRightNs, false, true);
 
-    view->getDoFirst()->setFocus();
+    if(setFocus) {
+        view->getDoFirst()->setFocus();
+    }
 }
 
-void OrganizerPresenter::focusToNextVisibleColumn()
+void OrganizerPresenter::focusToNextVisibleQuadrant()
 {
     for(unsigned i=0; i<orderedQuadrants.size(); i++) {
         if(orderedQuadrants[i]->getView()->hasFocus()) {
@@ -124,7 +139,7 @@ void OrganizerPresenter::focusToNextVisibleColumn()
     }
  }
 
-void OrganizerPresenter::focusToLastVisibleColumn()
+void OrganizerPresenter::focusToPreviousVisibleQuadrant()
 {
     for(unsigned i=0; i<orderedQuadrants.size(); i++) {
         if(orderedQuadrants[i]->getView()->hasFocus()) {
@@ -133,6 +148,48 @@ void OrganizerPresenter::focusToLastVisibleColumn()
             return;
         }
     }
+}
+
+OrganizerQuadrantPresenter* OrganizerPresenter::moveToVisibleQuadrant(Note *n, int nextPrevious)
+{
+    if(n->getTags()->size()) {
+        for(unsigned i=0; i<orderedQuadrants.size(); i++) {
+            if(orderedQuadrants[i]->getView()->hasFocus()) {
+                int currentColumnsOffset = i;
+                int nextColumnsOffset = (currentColumnsOffset+nextPrevious)%orderedQuadrants.size();
+                MF_DEBUG("Moving N from quadrant "  << currentColumnsOffset << " to " << nextColumnsOffset << endl);
+
+                Tags tags{*n->getTags()};
+                vector<const Tag*> currentColumnTags = this->getTagsForQuadrant(
+                    currentColumnsOffset
+                );
+                tags.removeTags(currentColumnTags);
+                vector<const Tag*> nextColumnTags = this->getTagsForQuadrant(
+                    nextColumnsOffset
+                );
+                tags.addTags(nextColumnTags);
+
+                n->setTags(tags.getTagsPtr());
+
+                // caller to persist N and refresh of source and target view columns
+                n->makeModified();
+
+                return orderedQuadrants[nextColumnsOffset];
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+OrganizerQuadrantPresenter* OrganizerPresenter::moveToNextVisibleQuadrant(Note* n)
+{
+    return this->moveToVisibleQuadrant(n, 1);
+}
+
+OrganizerQuadrantPresenter* OrganizerPresenter::moveToPreviousVisibleQuadrant(Note* n)
+{
+    return this->moveToVisibleQuadrant(n, -1);
 }
 
 } // m8r namespace

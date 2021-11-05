@@ -24,6 +24,7 @@
 
 #include "../gear/datetime_utils.h"
 #include "../mind/ontology/thing_class_rel_triple.h"
+#include "../mind/ontology/ontology.h"
 
 namespace m8r {
 
@@ -58,6 +59,9 @@ public:
         const std::string& separator,
         const std::string& type = "organizer"
     );
+
+private:
+    std::vector<std::reference_wrapper<std::set<std::string>>> quadrantTags;
 
 public:
     OrganizerType organizerType;
@@ -107,6 +111,9 @@ public:
     bool operator<(Organizer* other) const {
         return modified < other->modified;
     }
+
+    std::set<std::string>& getStringTagsForQuadrant(unsigned column);
+    std::vector<const Tag*> getTagsForQuadrant(unsigned column, Ontology& ontology);
 
     void setKey(const std::string& key) { this->key = key; }
 
@@ -175,6 +182,10 @@ public:
 
     time_t getModified() const { return this->modified; }
     void makeModified();
+
+private:
+    void initQuadrantTags();
+
 };
 
 }

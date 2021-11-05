@@ -38,7 +38,8 @@ public:
     static std::string createKanbanKey();
 
 private:
-    std::vector<std::set<std::string>> columnTags;
+    // TODO migrate column tags to Organizer's qudrant tags (remove this field)
+    std::vector<std::reference_wrapper<std::set<std::string>>> columnTags;
 
 public:
     explicit Kanban(const std::string& name);

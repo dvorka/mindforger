@@ -35,9 +35,6 @@ KanbanView::KanbanView(int columnsCount, QWidget* parent)
 
         columns.push_back(k);
     }
-
-    // TODO to be stretched
-    // setStretchFactor(0, 1);
 }
 
 KanbanView::~KanbanView()

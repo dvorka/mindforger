@@ -51,6 +51,14 @@ Kanban::~Kanban()
 {
 }
 
+void Kanban::initColumnTags()
+{
+    columnTags.push_back(this->tagsUlQuadrant);
+    columnTags.push_back(this->tagsUrQuadrant);
+    columnTags.push_back(this->tagsLlQuadrant);
+    columnTags.push_back(this->tagsLrQuadrant);
+}
+
 set<string>& Kanban::getStringTagsForColumn(unsigned column)
 {
     static set<string> empty{};
@@ -58,7 +66,7 @@ set<string>& Kanban::getStringTagsForColumn(unsigned column)
     if(column < columnTags.size()) {
         return columnTags[column];
     } else {
-        // out of range fallback
+        // out of range column fallback
         return empty;
     }
 }
@@ -73,14 +81,6 @@ vector<const Tag*> Kanban::getTagsForColumn(unsigned column, Ontology& ontology)
     }
 
     return r;
-}
-
-void Kanban::initColumnTags()
-{
-    columnTags.push_back(this->tagsUlQuadrant);
-    columnTags.push_back(this->tagsUrQuadrant);
-    columnTags.push_back(this->tagsLlQuadrant);
-    columnTags.push_back(this->tagsLrQuadrant);
 }
 
 } // m8r namespace

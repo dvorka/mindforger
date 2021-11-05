@@ -54,8 +54,10 @@ public:
     void setTitle(QString& title) { model->setTitle(title); }
 
     int getCurrentRow() const;
+    Note* getSelectedNote();
     void refresh(const std::vector<Note*>& os, bool urgency, bool importance);
     OrganizerQuadrantView* getView() const { return view; }
+
 
 public slots:
     void slotShowSelectedNote();
@@ -63,7 +65,10 @@ public slots:
     void slotHeaderClicked(int section);
 
     void slotFocusToNextVisibleQuadrant();
-    void slotFocusToLastVisibleQuadrant();
+    void slotFocusToPreviousVisibleQuadrant();
+
+    void slotMoveNoteToNextQuadrant();
+    void slotMoveNoteToPreviousQuadrant();
 };
 
 }

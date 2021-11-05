@@ -42,6 +42,7 @@ public:
     static std::string createEisenhowerMatrixKey();
 
     static EisenhowerMatrix* createEisenhowMatrixOrganizer();
+    static bool isEisenhowMatrixOrganizer(Organizer* o);
 
 public:
     // values: importance, urgency; default: importance

@@ -42,19 +42,21 @@ std::string Organizer::createOrganizerKey(
     return key;
 }
 
-Organizer::Organizer(const std::string& name, OrganizerType organizerType):
-    organizerType{organizerType},
-    filterBy{Organizer::FilterBy::OUTLINES_NOTES},
-    modified{datetimeNow()}
+Organizer::Organizer(const std::string& name, OrganizerType organizerType)
+    : quadrantTags{},
+      organizerType{organizerType},
+      filterBy{Organizer::FilterBy::OUTLINES_NOTES},
+      modified{datetimeNow()}
 {
     this->name = name;
 }
 
-Organizer::Organizer(const Organizer& o):
-    Thing{o.getName()},
-    organizerType{o.organizerType},
-    filterBy{o.getFilterBy()},
-    modified{o.modified}
+Organizer::Organizer(const Organizer& o)
+    : Thing{o.getName()},
+      quadrantTags{},
+      organizerType{o.organizerType},
+      filterBy{o.getFilterBy()},
+      modified{o.modified}
 {    
     this->tagsUrQuadrant = o.tagsUrQuadrant;
     this->tagsUlQuadrant = o.tagsUlQuadrant;
@@ -66,6 +68,38 @@ Organizer::Organizer(const Organizer& o):
 
 Organizer::~Organizer()
 {
+}
+
+void Organizer::initQuadrantTags()
+{
+    quadrantTags.push_back(this->tagsUlQuadrant);
+    quadrantTags.push_back(this->tagsUrQuadrant);
+    quadrantTags.push_back(this->tagsLlQuadrant);
+    quadrantTags.push_back(this->tagsLrQuadrant);
+}
+
+set<string>& Organizer::getStringTagsForQuadrant(unsigned column)
+{
+    static set<string> empty{};
+
+    if(column < quadrantTags.size()) {
+        return quadrantTags[column];
+    } else {
+        // out of range fallback
+        return empty;
+    }
+}
+
+vector<const Tag*> Organizer::getTagsForQuadrant(unsigned column, Ontology& ontology)
+{
+    set<string> stringTags{this->getStringTagsForQuadrant(column)};
+
+    vector<const Tag*> r{};
+    for(auto stringTag:stringTags) {
+        r.push_back(ontology.findOrCreateTag(stringTag));
+    }
+
+    return r;
 }
 
 string Organizer::getFilterByAsStr() {

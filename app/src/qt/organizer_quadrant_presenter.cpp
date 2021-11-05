@@ -47,11 +47,14 @@ OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
         view, SIGNAL(signalFocusToNextVisibleQuadrant()),
         this, SLOT(slotFocusToNextVisibleQuadrant()));
     QObject::connect(
-        view, SIGNAL(signalFocusToLastVisibleQuadrant()),
-        this, SLOT(slotFocusToLastVisibleQuadrant()));
+        view, SIGNAL(signalFocusToPreviousVisibleQuadrant()),
+        this, SLOT(slotFocusToPreviousVisibleQuadrant()));
     QObject::connect(
         view, SIGNAL(signalMoveNoteToNextQuadrant()),
         this, SLOT(slotMoveNoteToNextQuadrant()));
+    QObject::connect(
+        view, SIGNAL(signalMoveNoteToPreviousQuadrant()),
+        this, SLOT(slotMoveNoteToPreviousQuadrant()));
     QObject::connect(
         this->view->horizontalHeader(), SIGNAL(sectionClicked(int)),
         this, SLOT(slotHeaderClicked(int))
@@ -71,24 +74,36 @@ int OrganizerQuadrantPresenter::getCurrentRow() const
     return NO_ROW;
 }
 
-void OrganizerQuadrantPresenter::slotShowSelectedNote()
+Note* OrganizerQuadrantPresenter::getSelectedNote()
 {
     int row = getCurrentRow();
     if(row != NO_ROW) {
         QStandardItem* item = model->item(row);
         if(item) {
             // IMPROVE make my role constant
-            Note* note = item->data(Qt::UserRole + 1).value<Note*>();
-
-            note->incReads();
-            note->makeDirty();
-
-            orloj->showFacetNoteView(note);
+            return item->data(Qt::UserRole + 1).value<Note*>();
         } else {
-            orloj->getMainPresenter()->getStatusBar()->showInfo(QString(tr("Selected Notebook not found!")));
+            orloj->getMainPresenter()->getStatusBar()->showInfo(
+                QString(tr("Selected Notebook/Note not found!"))
+            );
         }
     } else {
-        orloj->getMainPresenter()->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
+        orloj->getMainPresenter()->getStatusBar()->showInfo(
+            QString(tr("No Notebook selected!"))
+        );
+    }
+
+    return nullptr;
+}
+
+void OrganizerQuadrantPresenter::slotShowSelectedNote()
+{
+    Note* note = this->getSelectedNote();
+    if(note != nullptr) {
+        note->incReads();
+        note->makeDirty();
+
+        orloj->showFacetNoteView(note);
     }
 }
 
@@ -125,14 +140,27 @@ void OrganizerQuadrantPresenter::slotFocusToNextVisibleQuadrant()
     orloj->getMainPresenter()->doActionOrganizerFocusToNextVisibleQuadrant();
 }
 
-void OrganizerQuadrantPresenter::slotFocusToLastVisibleQuadrant()
+void OrganizerQuadrantPresenter::slotFocusToPreviousVisibleQuadrant()
 {
-    orloj->getMainPresenter()->doActionOrganizerFocusToLastVisibleQuadrant();
+    orloj->getMainPresenter()->doActionOrganizerFocusToPreviousVisibleQuadrant();
 }
 
 void OrganizerQuadrantPresenter::slotMoveNoteToNextQuadrant()
 {
-    MF_DEBUG("Organizer quadrant presenter: move N SLOT" << endl);
+    MF_DEBUG("Organizer quadrant presenter: move N 2 next SLOT" << endl);
+    Note* note = this->getSelectedNote();
+    if(note != nullptr) {
+        orloj->getMainPresenter()->doActionOrganizerMoveNoteToNextVisibleQuadrant(note);
+    }
+}
+
+void OrganizerQuadrantPresenter::slotMoveNoteToPreviousQuadrant()
+{
+    MF_DEBUG("Organizer quadrant presenter: move N 2 previous SLOT" << endl);
+    Note* note = this->getSelectedNote();
+    if(note != nullptr) {
+        orloj->getMainPresenter()->doActionOrganizerMoveNoteToPreviousVisibleQuadrant(note);
+    }
 }
 
 void OrganizerQuadrantPresenter::refresh(const std::vector<Note*>& ts, bool urgency, bool importance)

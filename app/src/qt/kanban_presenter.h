@@ -31,6 +31,28 @@ namespace m8r {
 
 class KanbanColumnPresenter;
 
+/**
+ * @brief Kanban view presenter.
+ *
+ * Code structure (Model/View/Presenter + signals/slots):
+ *
+ * - KanbanPresenter
+ *   -> Kanban (lib)
+ *   -> KanbanView
+ *      -> KanbanColumnView
+ *   -> KanbanColumnPresenter[]
+ *      ->>> SLOTS >>> MainWindowPresenter (app wide orchestration)
+ *      -> KanbanColumnView
+ *         <<<- SIGNALS
+ *      -> KanbanColumnModel
+ *
+ * Remarks:
+ *
+ * - View sends signals to Model
+ * - Kanban is specific as it does not need model
+ * - Kanban is specific as it inheriths column view from quadrant view
+ *
+ */
 class KanbanPresenter : public QObject
 {
     Q_OBJECT
@@ -61,20 +83,49 @@ public:
         Kanban* kanban,
         const std::vector<Note*>& ons,
         const std::vector<Outline*>& os,
-        const std::vector<Note*>& ns
+        const std::vector<Note*>& ns,
+        bool setFocus = true
     );
 
-    void getVisibleColumns(std::vector<KanbanColumnPresenter*>& visible);
+    void getVisibleColumns(std::vector<KanbanColumnPresenter*>& visible, std::vector<int>& offsets);
     KanbanColumnPresenter* getNextVisibleColumn();
-    KanbanColumnPresenter* getLastVisibleColumn();
+    KanbanColumnPresenter* getPreviousVisibleColumn();
 
-    void focusToNextVisibleColumn();
-    void focusToLastVisibleColumn();
+    /**
+     * @brief Give focus to next visible column.
+     *
+     * @returns presenter with focus or `nullptr` if no focus given.
+     */
+    KanbanColumnPresenter* focusToNextVisibleColumn();
+    /**
+     * @brief Give focus to previous visible column.
+     *
+     * @returns presenter with focus or `nullptr` if no focus given.
+     */
+    KanbanColumnPresenter* focusToPreviousVisibleColumn();
 
-    bool moveToNextVisibleColumn(Note* n);
-    bool moveToLastVisibleColumn(Note* n);
+    /**
+     * @brief Move Note to the next visible Kanban column.
+     *
+     * Caller is responsible for refreshing column views.
+     *
+     * @param n     Note to be moved.
+     * @return `true` if Note was moved, `false` otherwise.
+     */
+    KanbanColumnPresenter* moveToNextVisibleColumn(Note* n);
+    /**
+     * @brief Move Note to the previous visible Kanban column.
+     *
+     * Caller is responsible for refreshing column views.
+     *
+     * @param n     Note to be moved.
+     * @return `true` if Note was moved, `false` otherwise.
+     */
+    KanbanColumnPresenter* moveToPreviousVisibleColumn(Note* n);
+
 private:
-    bool moveToVisibleColumn(Note* n, int nextLast);
+    KanbanColumnPresenter* moveToVisibleColumn(Note* n, int nextPrevious);
+
 };
 
 }

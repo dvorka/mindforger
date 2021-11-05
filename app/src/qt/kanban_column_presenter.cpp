@@ -50,8 +50,14 @@ KanbanColumnPresenter::KanbanColumnPresenter(
         view, SIGNAL(signalFocusToNextVisibleQuadrant()),
         this, SLOT(slotFocusToNextVisibleQuadrant()));
     QObject::connect(
-        view, SIGNAL(signalFocusToLastVisibleQuadrant()),
-        this, SLOT(slotFocusToLastVisibleQuadrant()));
+        view, SIGNAL(signalFocusToPreviousVisibleQuadrant()),
+        this, SLOT(slotFocusToPreviousVisibleQuadrant()));
+    QObject::connect(
+        view, SIGNAL(signalMoveNoteToNextQuadrant()),
+        this, SLOT(slotMoveNoteToNextQuadrant()));
+    QObject::connect(
+        view, SIGNAL(signalMoveNoteToPreviousQuadrant()),
+        this, SLOT(slotMoveNoteToPreviousQuadrant()));
     QObject::connect(
         this->view->horizontalHeader(), SIGNAL(sectionClicked(int)),
         this, SLOT(slotHeaderClicked(int))
@@ -71,28 +77,36 @@ int KanbanColumnPresenter::getCurrentRow() const
     return NO_ROW;
 }
 
-void KanbanColumnPresenter::slotShowSelectedNote()
+Note* KanbanColumnPresenter::getSelectedNote()
 {
     int row = getCurrentRow();
     if(row != NO_ROW) {
         QStandardItem* item = model->item(row);
         if(item) {
             // IMPROVE make my role constant
-            Note* note = item->data(Qt::UserRole + 1).value<Note*>();
-
-            note->incReads();
-            note->makeDirty();
-
-            orloj->showFacetNoteView(note);
+            return item->data(Qt::UserRole + 1).value<Note*>();
         } else {
             orloj->getMainPresenter()->getStatusBar()->showInfo(
-                QString(tr("Selected Notebook not found!"))
+                QString(tr("Selected Notebook/Note not found!"))
             );
         }
     } else {
         orloj->getMainPresenter()->getStatusBar()->showInfo(
             QString(tr("No Notebook selected!"))
         );
+    }
+
+    return nullptr;
+}
+
+void KanbanColumnPresenter::slotShowSelectedNote()
+{
+    Note* note = this->getSelectedNote();
+    if(note != nullptr) {
+        note->incReads();
+        note->makeDirty();
+
+        orloj->showFacetNoteView(note);
     }
 }
 
@@ -131,9 +145,27 @@ void KanbanColumnPresenter::slotFocusToNextVisibleQuadrant()
     orloj->getMainPresenter()->doActionOrganizerFocusToNextVisibleQuadrant();
 }
 
-void KanbanColumnPresenter::slotFocusToLastVisibleQuadrant()
+void KanbanColumnPresenter::slotFocusToPreviousVisibleQuadrant()
 {
-    orloj->getMainPresenter()->doActionOrganizerFocusToLastVisibleQuadrant();
+    orloj->getMainPresenter()->doActionOrganizerFocusToPreviousVisibleQuadrant();
+}
+
+void KanbanColumnPresenter::slotMoveNoteToNextQuadrant()
+{
+    MF_DEBUG("Kanban column presenter: move N 2 next SLOT" << endl);
+    Note* note = this->getSelectedNote();
+    if(note != nullptr) {
+        orloj->getMainPresenter()->doActionOrganizerMoveNoteToNextVisibleQuadrant(note);
+    }
+}
+
+void KanbanColumnPresenter::slotMoveNoteToPreviousQuadrant()
+{
+    MF_DEBUG("Kanban column presenter: move N 2 previous SLOT" << endl);
+    Note* note = this->getSelectedNote();
+    if(note != nullptr) {
+        orloj->getMainPresenter()->doActionOrganizerMoveNoteToPreviousVisibleQuadrant(note);
+    }
 }
 
 void KanbanColumnPresenter::refresh(

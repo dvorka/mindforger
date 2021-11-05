@@ -51,6 +51,8 @@ class OrganizerPresenter : public QObject
 
     Organizer* organizer;
 
+    OrlojPresenter* orloj;
+
 public:
     explicit OrganizerPresenter(OrganizerView* view, OrlojPresenter* orloj);
     OrganizerPresenter(const OrganizerPresenter&) = delete;
@@ -62,15 +64,41 @@ public:
     OrganizerView* getView() const { return this->view; }
     Organizer* getOrganizer() const { return this->organizer; }
 
+    std::vector<const Tag*> getTagsForQuadrant(int columnNumber);
+
     void refresh(
         Organizer* organizer,
         const std::vector<Note*>& ons,
         const std::vector<Outline*>& os,
-        const std::vector<Note*>& ns
+        const std::vector<Note*>& ns,
+        bool setFocus = true
     );
 
-    void focusToNextVisibleColumn();
-    void focusToLastVisibleColumn();
+    void focusToNextVisibleQuadrant();
+    void focusToPreviousVisibleQuadrant();
+
+    /**
+     * @brief Move Note to the next visible Eisenhower Matrix quadrant.
+     *
+     * Caller is responsible for refreshing column views.
+     *
+     * @param n     Note to be moved.
+     * @return `true` if Note was moved, `false` otherwise.
+     */
+    OrganizerQuadrantPresenter* moveToNextVisibleQuadrant(Note* n);
+    /**
+     * @brief Move Note to the previous visible Eisenhower Matrix quadrant.
+     *
+     * Caller is responsible for refreshing column views.
+     *
+     * @param n     Note to be moved.
+     * @return `true` if Note was moved, `false` otherwise.
+     */
+    OrganizerQuadrantPresenter* moveToPreviousVisibleQuadrant(Note* n);
+
+private:
+    OrganizerQuadrantPresenter* moveToVisibleQuadrant(Note* n, int nextPrevious);
+
 };
 
 }

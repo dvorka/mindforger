@@ -56,7 +56,8 @@ void KanbanPresenter::refresh(
     Kanban* kanban,
     const vector<Note*>& ons,
     const vector<Outline*>& os,
-    const vector<Note*>& ns
+    const vector<Note*>& ns,
+    bool setFocus
 ) {
     MF_DEBUG("Rendering Kanban: " << kanban->getName() << "..." << endl);
 
@@ -96,7 +97,7 @@ void KanbanPresenter::refresh(
     columns[3]->refresh(lowerRightNs, false, true);
 
     // IF at least one column with a tag exists,
-    // THEN show only columns with tags,
+    // THEN show only column(s) with tags,
     // ELSE show all EMPTY columns
     for(auto c:columns) {
         c->getView()->setVisible(true);
@@ -106,28 +107,45 @@ void KanbanPresenter::refresh(
        || lowerLeftNs.size()
        || lowerRightNs.size())
     {
+        vector<KanbanColumnPresenter*> visibleColumns{};
+
         if(!upperLeftNs.size()) {
             columns[0]->getView()->setVisible(false);
+        } else {
+            visibleColumns.push_back(columns[0]);
         }
         if(!upperRightNs.size()) {
             columns[1]->getView()->setVisible(false);
+        } else {
+            visibleColumns.push_back(columns[1]);
         }
         if(!lowerLeftNs.size()) {
             columns[2]->getView()->setVisible(false);
+        } else {
+            visibleColumns.push_back(columns[2]);
         }
         if(!lowerRightNs.size()) {
             columns[3]->getView()->setVisible(false);
+        } else {
+            visibleColumns.push_back(columns[3]);
+        }
+
+        if(setFocus && visibleColumns.size()) {
+            visibleColumns[0]->getView()->setFocus();
+        }
+    } else {
+        if(setFocus) {
+            columns[0]->getView()->setFocus();
         }
     }
-
-    view->getColumn(0)->setFocus();
 }
 
-void KanbanPresenter::getVisibleColumns(vector<KanbanColumnPresenter*>& visible)
+void KanbanPresenter::getVisibleColumns(vector<KanbanColumnPresenter*>& visible, vector<int>& offsets)
 {
-    for(auto c:columns) {
-        if(c->getView()->isVisible()) {
-            visible.push_back(c);
+    for(unsigned c=0; c<columns.size(); c++) {
+        if(columns[c]->getView()->isVisible()) {
+            visible.push_back(columns[c]);
+            offsets.push_back(c);
         }
     }
 }
@@ -135,7 +153,8 @@ void KanbanPresenter::getVisibleColumns(vector<KanbanColumnPresenter*>& visible)
 KanbanColumnPresenter* KanbanPresenter::getNextVisibleColumn()
 {
     vector<KanbanColumnPresenter*> visible{};
-    this->getVisibleColumns(visible);
+    vector<int> offsets{};
+    this->getVisibleColumns(visible, offsets);
 
     for(unsigned i=0; i<visible.size(); i++) {
         if(visible[i]->getView()->hasFocus()) {
@@ -146,10 +165,11 @@ KanbanColumnPresenter* KanbanPresenter::getNextVisibleColumn()
     return nullptr;
 }
 
-KanbanColumnPresenter* KanbanPresenter::getLastVisibleColumn()
+KanbanColumnPresenter* KanbanPresenter::getPreviousVisibleColumn()
 {
     vector<KanbanColumnPresenter*> visible{};
-    this->getVisibleColumns(visible);
+    vector<int> offsets{};
+    this->getVisibleColumns(visible, offsets);
 
     for(unsigned i=0; i<visible.size(); i++) {
         if(visible[i]->getView()->hasFocus()) {
@@ -160,50 +180,65 @@ KanbanColumnPresenter* KanbanPresenter::getLastVisibleColumn()
     return nullptr;
 }
 
-void KanbanPresenter::focusToNextVisibleColumn()
+KanbanColumnPresenter* KanbanPresenter::focusToNextVisibleColumn()
 {
     if(KanbanColumnPresenter* next=this->getNextVisibleColumn()) {
         next->getView()->setFocus();
+        return next;
     }
+    return nullptr;
 }
 
-void KanbanPresenter::focusToLastVisibleColumn()
+KanbanColumnPresenter* KanbanPresenter::focusToPreviousVisibleColumn()
 {
-    if(KanbanColumnPresenter* last=this->getLastVisibleColumn()) {
-        last->getView()->setFocus();
+    if(KanbanColumnPresenter* previous=this->getPreviousVisibleColumn()) {
+        previous->getView()->setFocus();
+        return previous;
     }
+    return nullptr;
 }
 
-bool KanbanPresenter::moveToVisibleColumn(Note* n, int nextLast)
+KanbanColumnPresenter* KanbanPresenter::moveToVisibleColumn(Note* n, int nextPrevious)
 {
     vector<KanbanColumnPresenter*> visible{};
-    this->getVisibleColumns(visible);
+    vector<int> columnsOffsets{};
+    this->getVisibleColumns(visible, columnsOffsets);
     if(visible.size()>1 && n->getTags()->size()) {
         for(unsigned i=0; i<visible.size(); i++) {
             if(visible[i]->getView()->hasFocus()) {
+                int currentColumnsOffset = columnsOffsets[i];
+                int nextColumnsOffset = (currentColumnsOffset+nextPrevious)%columns.size();
+                MF_DEBUG("Moving N from column "  << currentColumnsOffset << " to " << nextColumnsOffset << endl);
+
                 Tags tags{*n->getTags()};
-                vector<const Tag*> currentColumnTags = this->getTagsForColumn(i);
+                vector<const Tag*> currentColumnTags = this->getTagsForColumn(
+                    currentColumnsOffset
+                );
                 tags.removeTags(currentColumnTags);
-                vector<const Tag*> nextColumnTags = this->getTagsForColumn((i+nextLast)%visible.size());
+                vector<const Tag*> nextColumnTags = this->getTagsForColumn(
+                    nextColumnsOffset
+                );
                 tags.addTags(nextColumnTags);
 
                 n->setTags(tags.getTagsPtr());
 
-                // caller to perform refresh
-                return true;
+                // caller to persist N and refresh of source and target view columns
+                n->makeModified();
+
+                return columns[nextColumnsOffset];
             }
         }
     }
 
-    return false;
+    return nullptr;
 }
 
-bool KanbanPresenter::moveToNextVisibleColumn(Note* n)
+KanbanColumnPresenter* KanbanPresenter::moveToNextVisibleColumn(Note* n)
 {
     return this->moveToVisibleColumn(n, 1);
 }
 
-bool KanbanPresenter::moveToLastVisibleColumn(Note* n)
+KanbanColumnPresenter* KanbanPresenter::moveToPreviousVisibleColumn(Note* n)
 {
     return this->moveToVisibleColumn(n, -1);
 }
