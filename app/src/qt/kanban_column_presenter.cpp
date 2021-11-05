@@ -152,7 +152,7 @@ void KanbanColumnPresenter::slotFocusToPreviousVisibleQuadrant()
 
 void KanbanColumnPresenter::slotMoveNoteToNextQuadrant()
 {
-    MF_DEBUG("Kanban column presenter: move N 2 next SLOT" << endl);
+    MF_DEBUG("Kanban column presenter: move N to next SLOT" << endl);
     Note* note = this->getSelectedNote();
     if(note != nullptr) {
         orloj->getMainPresenter()->doActionOrganizerMoveNoteToNextVisibleQuadrant(note);
@@ -161,7 +161,7 @@ void KanbanColumnPresenter::slotMoveNoteToNextQuadrant()
 
 void KanbanColumnPresenter::slotMoveNoteToPreviousQuadrant()
 {
-    MF_DEBUG("Kanban column presenter: move N 2 previous SLOT" << endl);
+    MF_DEBUG("Kanban column presenter: move N to previous SLOT" << endl);
     Note* note = this->getSelectedNote();
     if(note != nullptr) {
         orloj->getMainPresenter()->doActionOrganizerMoveNoteToPreviousVisibleQuadrant(note);

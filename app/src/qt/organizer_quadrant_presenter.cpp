@@ -147,7 +147,7 @@ void OrganizerQuadrantPresenter::slotFocusToPreviousVisibleQuadrant()
 
 void OrganizerQuadrantPresenter::slotMoveNoteToNextQuadrant()
 {
-    MF_DEBUG("Organizer quadrant presenter: move N 2 next SLOT" << endl);
+    MF_DEBUG("Organizer quadrant presenter: move N to next SLOT" << endl);
     Note* note = this->getSelectedNote();
     if(note != nullptr) {
         orloj->getMainPresenter()->doActionOrganizerMoveNoteToNextVisibleQuadrant(note);
@@ -156,7 +156,7 @@ void OrganizerQuadrantPresenter::slotMoveNoteToNextQuadrant()
 
 void OrganizerQuadrantPresenter::slotMoveNoteToPreviousQuadrant()
 {
-    MF_DEBUG("Organizer quadrant presenter: move N 2 previous SLOT" << endl);
+    MF_DEBUG("Organizer quadrant presenter: move N to previous SLOT" << endl);
     Note* note = this->getSelectedNote();
     if(note != nullptr) {
         orloj->getMainPresenter()->doActionOrganizerMoveNoteToPreviousVisibleQuadrant(note);

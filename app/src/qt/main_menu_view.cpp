@@ -342,7 +342,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: library
     menuLibrary = qMenuBar->addMenu(tr("Libr&ary"));
-    menuFlashcards->setDisabled(true);
 
     actionLibraryAdd = new QAction(QIcon(":/menu-icons/new.svg"), tr("&Add library"), mainWindow);
     actionLibraryAdd->setStatusTip(tr("Add directory with documents, URL or other resource to library..."));
@@ -933,6 +932,7 @@ void MainMenuView::showFacetOrganizerList(bool repositoryMode)
     menuKnowledge->setEnabled(false);
 #endif
     menuNavigator->setEnabled(false);
+    menuLibrary->setEnabled(false);
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
     menuEdit->setEnabled(false);
@@ -956,6 +956,7 @@ void MainMenuView::showFacetOrganizerView(bool repositoryMode)
     menuKnowledge->setEnabled(false);
 #endif
     menuNavigator->setEnabled(false);
+    menuLibrary->setEnabled(false);
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
     menuEdit->setEnabled(false);

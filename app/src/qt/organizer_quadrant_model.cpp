@@ -68,7 +68,7 @@ void OrganizerQuadrantModel::addRow(Note* note, bool urgency, bool importance)
     QString html{};
     html += QString::fromStdString(h);
 
-    if(Outline::isOutlineDescriptorNote(note->getType())) {
+    if(Outline::isOutlineDescriptorNoteType(note->getType())) {
         // if N represents O, use O mode w/ importance and urgency
         Outline* outline=note->getOutline();
 

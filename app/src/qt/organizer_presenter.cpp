@@ -191,7 +191,11 @@ OrganizerQuadrantPresenter* OrganizerPresenter::moveToVisibleQuadrant(Note *n, i
                 }
 #endif
 
-                n->setTags(tags.getTagsPtr());
+                if(Outline::isOutlineDescriptorNote(n)) {
+                    n->getOutline()->setTags(tags.getTagsPtr());
+                } else {
+                    n->setTags(tags.getTagsPtr());
+                }
 
                 // caller to persist N and refresh of source and target view columns
                 n->makeModified();

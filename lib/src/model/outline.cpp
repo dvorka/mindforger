@@ -25,6 +25,13 @@ namespace m8r {
 // IMPROVE this type is not bound to any parent Clazz in Ontology
 const NoteType Outline::NOTE_4_OUTLINE_TYPE{"Outline", nullptr, Color::RED()};
 
+bool Outline::isOutlineDescriptorNoteType(const NoteType* noteType) {
+    return noteType && noteType == &Outline::NOTE_4_OUTLINE_TYPE;
+}
+bool Outline::isOutlineDescriptorNote(const Note* note) {
+    return note && note->getType() && note->getType() == &Outline::NOTE_4_OUTLINE_TYPE;
+}
+
 void Outline::sortByName(vector<Outline*>& os)
 {
     std::sort(
@@ -1058,6 +1065,9 @@ Note* Outline::getOutlineDescriptorAsNote()
 {
     outlineDescriptorAsNote->setName(name);
     outlineDescriptorAsNote->setDescription(description);
+
+    outlineDescriptorAsNote->setTags(&tags);
+
     outlineDescriptorAsNote->setCreated(created);
     outlineDescriptorAsNote->setModified(modified);
     outlineDescriptorAsNote->setRead(read);

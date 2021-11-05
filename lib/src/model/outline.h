@@ -66,13 +66,17 @@ public:
      */
     static const NoteType NOTE_4_OUTLINE_TYPE;
 
+    static bool isOutlineDescriptorNoteType(const NoteType* noteType);
+    static bool isOutlineDescriptorNote(const Note* note);
+
     static void sortByName(std::vector<Outline*>& sorted);
     static void sortByRead(std::vector<Outline*>& ns);
     static void sortByRead(std::vector<Note*>& sorted);
 
     /*
-     * Organizer
+     * Organizers: Eisenhower Matrix and Kanban
      */
+
     static void organizeToEisenhowerMatrix(
         Organizer* organizer,
         const std::vector<Note*>& ons,
@@ -166,8 +170,8 @@ public:
     explicit Outline(const OutlineType* type);
     explicit Outline(const Outline&);
     Outline(const Outline&&) = delete;
-    Outline& operator=(const Outline&) = delete;
-    Outline& operator=(const Outline&&) = delete;
+    Outline& operator =(const Outline&) = delete;
+    Outline& operator =(const Outline&&) = delete;
     virtual ~Outline();
 
     /**
@@ -325,9 +329,6 @@ public:
     Note* getOutlineDescriptorAsNote();
     const NoteType* getOutlineDescriptorNoteType() const {
         return &NOTE_4_OUTLINE_TYPE;
-    }
-    static bool isOutlineDescriptorNote(const NoteType* noteType) {
-        return noteType && noteType == &Outline::NOTE_4_OUTLINE_TYPE;
     }
 
     bool isDirty() const { return dirty; }

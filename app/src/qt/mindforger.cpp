@@ -1,5 +1,5 @@
 /*
- mindforger.cpp     Main file of MindForger thinking notebook code base.
+ mindforger.cpp     Main file of MindForger code base.
 
  Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
