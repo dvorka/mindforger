@@ -258,7 +258,7 @@ public:
     ~Tags();
 
     std::vector<const Tag*> getTags() const { return tags; }
-    const std::vector<const Tag*>* getTagsPtr() const { return &tags; }
+    std::vector<const Tag*>* getTagsPtr() { return &tags; }
 
     bool hasTag(const Tag* tag) const {
         if(std::find(tags.begin(), tags.end(), tag) == tags.end()) {

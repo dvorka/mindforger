@@ -342,6 +342,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: library
     menuLibrary = qMenuBar->addMenu(tr("Libr&ary"));
+    menuFlashcards->setDisabled(true);
 
     actionLibraryAdd = new QAction(QIcon(":/menu-icons/new.svg"), tr("&Add library"), mainWindow);
     actionLibraryAdd->setStatusTip(tr("Add directory with documents, URL or other resource to library..."));
@@ -357,6 +358,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: flashcards
     menuFlashcards = qMenuBar->addMenu(tr("Flash&cards"));
+    menuFlashcards->setDisabled(true);
 
     // menu: organizer
     menuOrganizer = qMenuBar->addMenu(tr("&Organizer"));

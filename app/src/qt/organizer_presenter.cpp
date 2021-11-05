@@ -157,7 +157,22 @@ OrganizerQuadrantPresenter* OrganizerPresenter::moveToVisibleQuadrant(Note *n, i
             if(orderedQuadrants[i]->getView()->hasFocus()) {
                 int currentColumnsOffset = i;
                 int nextColumnsOffset = (currentColumnsOffset+nextPrevious)%orderedQuadrants.size();
+
+#ifdef DO_MF_DEBUG
                 MF_DEBUG("Moving N from quadrant "  << currentColumnsOffset << " to " << nextColumnsOffset << endl);
+                MF_DEBUG("Note tags:\n");
+                for(auto nt:*n->getTags()) {
+                    MF_DEBUG("  " << nt->getName() << endl);
+                }
+                MF_DEBUG("Current column tags:\n");
+                for(auto nt:this->getTagsForQuadrant(currentColumnsOffset)) {
+                    MF_DEBUG("  " << nt->getName() << endl);
+                }
+                MF_DEBUG("Next column tags:\n");
+                for(auto nt:this->getTagsForQuadrant(nextColumnsOffset)) {
+                    MF_DEBUG("  " << nt->getName() << endl);
+                }
+#endif
 
                 Tags tags{*n->getTags()};
                 vector<const Tag*> currentColumnTags = this->getTagsForQuadrant(
@@ -168,6 +183,13 @@ OrganizerQuadrantPresenter* OrganizerPresenter::moveToVisibleQuadrant(Note *n, i
                     nextColumnsOffset
                 );
                 tags.addTags(nextColumnTags);
+
+#ifdef DO_MF_DEBUG
+                MF_DEBUG("NEW Note tags:\n");
+                for(auto nt:*tags.getTagsPtr()) {
+                    MF_DEBUG("  " << nt->getName() << endl);
+                }
+#endif
 
                 n->setTags(tags.getTagsPtr());
 

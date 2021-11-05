@@ -243,7 +243,7 @@ const vector<const Tag*>* Note::getTags() const
 void Note::addTag(const Tag* tag)
 {
     if(tag && !this->hasTag(tag)) {
-        tags.push_back(tag);
+        this->tags.push_back(tag);
     }
 }
 

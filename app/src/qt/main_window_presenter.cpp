@@ -2779,7 +2779,7 @@ void doActionOrganizerMoveNoteCommon(
         organizerOutlinesAndNotes.clear();
         organizerNotes.clear();
         orloj->getOrganizer()->refresh(
-            orloj->getKanban()->getKanban(),
+            orloj->getOrganizer()->getOrganizer(),
             orloj->getMind()->getAllNotes(organizerOutlinesAndNotes, true, true),
             orloj->getMind()->getOutlines(),
             orloj->getMind()->getAllNotes(organizerNotes, true, false),

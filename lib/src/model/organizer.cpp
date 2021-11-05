@@ -43,12 +43,13 @@ std::string Organizer::createOrganizerKey(
 }
 
 Organizer::Organizer(const std::string& name, OrganizerType organizerType)
-    : quadrantTags{},
+    : Thing{name},
+      quadrantTags{},
       organizerType{organizerType},
       filterBy{Organizer::FilterBy::OUTLINES_NOTES},
       modified{datetimeNow()}
 {
-    this->name = name;
+    initQuadrantTags();
 }
 
 Organizer::Organizer(const Organizer& o)
@@ -64,6 +65,8 @@ Organizer::Organizer(const Organizer& o)
     this->tagsLlQuadrant = o.tagsLlQuadrant;
 
     this->scopeOutlineId = o.scopeOutlineId;
+
+    initQuadrantTags();
 }
 
 Organizer::~Organizer()
