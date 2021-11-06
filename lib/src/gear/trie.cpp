@@ -142,7 +142,7 @@ bool Trie::findLongestPrefixWord(const string& s, string& r) const
     if(root->children().empty()) {
         return false;
     } else {
-        int longestWordSize{};
+        size_t longestWordSize{};
 
         Node* current = root;
         if(current != nullptr) {
