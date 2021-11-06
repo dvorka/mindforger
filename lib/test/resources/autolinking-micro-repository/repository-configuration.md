@@ -12,7 +12,7 @@ Organizer name: Eisenhower Matrix
 * Lower left tag: .
 * Upper left tag: urgent
 * Sort by: importance
-* Filter by: outlines and notes
+* Filter by: notebooks and notes
 * Outline scope: 
 
 

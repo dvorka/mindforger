@@ -35,12 +35,12 @@ TEST(OrganizerTestCase, SerializeAndSplitTags)
     m8r::EisenhowerMatrix o{"Test organizer"};
 
     // WHEN
-    std::set<std::string> tags_as_vector = m8r::Organizer::tagsFromString(given_string_tags);
+    std::set<std::string> tags_as_vector = m8r::Tags::tagsFromString(given_string_tags);
     cout << endl << "Tags vector[" << tags_as_vector.size() << "]";
     for(auto t:tags_as_vector) {
         cout << endl << "  '" << t << "'";
     }
-    string tags_as_string = m8r::Organizer::tagsToString(tags_as_vector);
+    string tags_as_string = m8r::Tags::tagsToString(tags_as_vector);
     cout << endl << "Tags serialization: '" << tags_as_string << "'" << endl;
 
     // THEN
