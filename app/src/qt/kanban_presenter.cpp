@@ -102,29 +102,29 @@ void KanbanPresenter::refresh(
     for(auto c:columns) {
         c->getView()->setVisible(true);
     }
-    if(upperLeftNs.size()
-       || upperRightNs.size()
-       || lowerLeftNs.size()
-       || lowerRightNs.size())
+    if(kanban->getUpperLeftTags().size()
+       || kanban->getUpperRightTags().size()
+       || kanban->getLowerLeftTags().size()
+       || kanban->getLowerRightTags().size())
     {
         vector<KanbanColumnPresenter*> visibleColumns{};
 
-        if(!upperLeftNs.size()) {
+        if(!kanban->getUpperLeftTags().size()) {
             columns[0]->getView()->setVisible(false);
         } else {
             visibleColumns.push_back(columns[0]);
         }
-        if(!upperRightNs.size()) {
+        if(!kanban->getUpperRightTags().size()) {
             columns[1]->getView()->setVisible(false);
         } else {
             visibleColumns.push_back(columns[1]);
         }
-        if(!lowerLeftNs.size()) {
+        if(!kanban->getLowerLeftTags().size()) {
             columns[2]->getView()->setVisible(false);
         } else {
             visibleColumns.push_back(columns[2]);
         }
-        if(!lowerRightNs.size()) {
+        if(!kanban->getLowerRightTags().size()) {
             columns[3]->getView()->setVisible(false);
         } else {
             visibleColumns.push_back(columns[3]);
