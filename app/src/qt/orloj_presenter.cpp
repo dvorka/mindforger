@@ -361,6 +361,9 @@ void OrlojPresenter::slotShowSelectedOrganizer()
                 mainPresenter->getStatusBar()->showInfo(
                     QString("%1%2%3").arg(tr("Organizer: '")).arg(organizer->getName().c_str()).arg("'")
                 );
+
+                mainPresenter->sortAndSaveOrganizersConfig();
+
                 return;
             } else {
                 mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Organizer not found!")));

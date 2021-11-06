@@ -161,16 +161,19 @@ void OrganizerNewDialog::show(
     Organizer* organizerToEdit,
     Outline* oScopeOutline
 ) {
-    this->outlines = outlines;
-    this->organizerToEdit = organizerToEdit;
-
     if(!organizerToEdit) {
         createButton->setText(tr("Create"));
     } else {
         createButton->setText(tr("Update"));
     }
 
+    this->outlines = outlines;
+    this->organizerToEdit = organizerToEdit;
+
     nameEdit->clear();
+
+    // disabling button w/o explaining why would not be UX bug
+    createButton->setEnabled(true);
 
     // tags are changed > need to be refreshed
     // IMPROVE dirty flag to avoid refresh that is not needed
@@ -178,9 +181,6 @@ void OrganizerNewDialog::show(
     lowerRightTags->refreshOntologyTags();
     lowerLeftTags->refreshOntologyTags();
     upperLeftTags->refreshOntologyTags();
-
-    // disabling button w/o explaining why would not be UX bug
-    createButton->setEnabled(true);
 
     upperRightTags->clearTagList();
     lowerRightTags->clearTagList();
@@ -206,7 +206,6 @@ void OrganizerNewDialog::show(
     lowerLeftTags->getLineEdit()->clear();
     upperLeftTags->getLineEdit()->clear();
 
-    nameEdit->setFocus();
     if(organizerToEdit) {
         setWindowTitle(tr("Edit Organizer"));
 
@@ -220,6 +219,12 @@ void OrganizerNewDialog::show(
 
         if(Organizer::OrganizerType::EISENHOWER_MATRIX == organizerToEdit->getOrganizerType()) {
             toEisenhowerMatrixMode();
+
+            sortByCombo->setCurrentText(
+                QString::fromStdString(
+                    static_cast<EisenhowerMatrix*>(organizerToEdit)->getSortByAsStr()
+                )
+            );
         } else {
             toKanbanMode();
         }
@@ -237,29 +242,21 @@ void OrganizerNewDialog::show(
             organizerToEdit->getLowerLeftTags()
         );
 
-        if(organizerToEdit->getOutlineScope().size()) {
-            if(oScopeOutline) {
-                this->oScopeOutline = oScopeOutline;
-                oScopeEdit->setText(QString::fromStdString(oScopeOutline->getName()));
-            } else {
-                organizerToEdit->clearOutlineScope();
-            }
-        }
-
-        if(Organizer::OrganizerType::EISENHOWER_MATRIX == organizerToEdit->getOrganizerType()) {
-            sortByCombo->setCurrentText(
-                QString::fromStdString(
-                    dynamic_cast<EisenhowerMatrix*>(organizerToEdit)->getSortByAsStr()
-                )
-            );
-        }
-
+        MF_DEBUG("Organizer " << organizerToEdit->getName() << " edit: " << organizerToEdit->getFilterBy() << endl);
+        MF_DEBUG("Organizer edit: " << organizerToEdit->getFilterByAsStr() << endl);
         if(oScopeOutline) {
+            this->oScopeOutline = oScopeOutline;
+            oScopeEdit->setText(QString::fromStdString(oScopeOutline->getName()));
+
             sortByCombo->setEnabled(false);
-            filterByCombo->setCurrentText(Organizer::CONFIG_VALUE_FILTER_BY_N);
+
+            filterByCombo->setCurrentText(QString::fromStdString(Organizer::CONFIG_VALUE_FILTER_BY_N));
             filterByCombo->setEnabled(false);
         } else {
+            oScopeEdit->clear();
+
             sortByCombo->setEnabled(true);
+
             filterByCombo->setEnabled(true);
             filterByCombo->setCurrentText(QString::fromStdString(organizerToEdit->getFilterByAsStr()));
         }
@@ -277,6 +274,8 @@ void OrganizerNewDialog::show(
         filterByCombo->setEnabled(true);
         sortByCombo->setEnabled(true);
     }
+
+    nameEdit->setFocus();
 
     QDialog::show();
 }
@@ -344,7 +343,7 @@ void OrganizerNewDialog::toKanbanMode()
 }
 
 void OrganizerNewDialog::handleChangeTypeCombo(const QString& text) {
-    MF_DEBUG("New organizer type changed: " << text.toStdString());
+    MF_DEBUG("New organizer type changed: " << text.toStdString() << endl);
     if(text.toStdString() == Organizer::TYPE_STR_KANBAN) {
         toKanbanMode();
     } else {

@@ -19,6 +19,7 @@
 #ifndef M8RUI_KANBAN_PRESENTER_H
 #define M8RUI_KANBAN_PRESENTER_H
 
+#include "../../lib/src/gear/math_utils.h"
 #include "../../lib/src/model/kanban.h"
 #include "../../lib/src/mind/ontology/ontology.h"
 

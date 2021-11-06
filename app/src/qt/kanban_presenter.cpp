@@ -171,9 +171,11 @@ KanbanColumnPresenter* KanbanPresenter::getPreviousVisibleColumn()
     vector<int> offsets{};
     this->getVisibleColumns(visible, offsets);
 
-    for(unsigned i=0; i<visible.size(); i++) {
+    for(int i=0; ((unsigned)i)<visible.size(); i++) {
         if(visible[i]->getView()->hasFocus()) {
-            return visible[(i-1)%visible.size()];
+            int previousIdx = pythonModulo(i-1, visible.size());
+            MF_DEBUG("Kanban: previous visible " << visible.size() << " column " << i << " >> " << previousIdx << endl);
+            return visible[previousIdx];
         }
     }
 
@@ -207,7 +209,17 @@ KanbanColumnPresenter* KanbanPresenter::moveToVisibleColumn(Note* n, int nextPre
         for(unsigned i=0; i<visible.size(); i++) {
             if(visible[i]->getView()->hasFocus()) {
                 int currentColumnsOffset = columnsOffsets[i];
+                // next
+                KanbanColumnPresenter* nextVisibleColumnPresenter =
+                        nextPrevious > 0
+                        ? this->getNextVisibleColumn()
+                        : this->getPreviousVisibleColumn();
                 int nextColumnsOffset = (currentColumnsOffset+nextPrevious)%columns.size();
+                for(unsigned c=0; c<visible.size(); c++) {
+                    if(nextVisibleColumnPresenter == visible[c]) {
+                        nextColumnsOffset = columnsOffsets[c];
+                    }
+                }
                 MF_DEBUG("Moving N from column "  << currentColumnsOffset << " to " << nextColumnsOffset << endl);
 
                 Tags tags{*n->getTags()};

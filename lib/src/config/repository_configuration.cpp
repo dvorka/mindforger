@@ -61,4 +61,13 @@ void RepositoryConfiguration::removeOrganizer(Organizer* organizer)
     delete organizer;
 }
 
+void RepositoryConfiguration::sortOrganizers()
+{
+    std::sort(
+        organizers.begin(),
+        organizers.end(),
+        [](Organizer* a, Organizer* b){ return a->modified > b->modified; }
+    );
+}
+
 } // m8r namespace

@@ -45,9 +45,9 @@ public:
         NOTES
     };
 
-    static constexpr const auto CONFIG_VALUE_FILTER_BY_O = "outlines";
+    static constexpr const auto CONFIG_VALUE_FILTER_BY_O = "notebooks";
     static constexpr const auto CONFIG_VALUE_FILTER_BY_N = "notes";
-    static constexpr const auto CONFIG_VALUE_FILTER_BY_O_N = "outlines and notes";
+    static constexpr const auto CONFIG_VALUE_FILTER_BY_O_N = "notebooks and notes";
 
     static const std::string TYPE_STR_KANBAN;
     static const std::string TYPE_STR_EISENHOWER_MATRIX;

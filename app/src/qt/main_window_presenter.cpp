@@ -1113,6 +1113,14 @@ void MainWindowPresenter::doActionViewDashboard()
     }
 }
 
+void MainWindowPresenter::sortAndSaveOrganizersConfig()
+{
+    if(config.hasRepositoryConfiguration()) {
+        config.getRepositoryConfiguration().sortOrganizers();
+        getConfigRepresentation()->save(config);
+    }
+}
+
 void MainWindowPresenter::doActionViewOrganizers()
 {
     if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
@@ -2667,9 +2675,9 @@ void MainWindowPresenter::handleCreateOrganizer()
 
     // add organizer & save configuration
     if(!newOrganizerDialog->getOrganizerToEdit()) {
-        config.getRepositoryConfiguration().addOrganizer(o);
+        config.getRepositoryConfiguration().addOrganizer(o);        
     }
-    getConfigRepresentation()->save(config);
+    sortAndSaveOrganizersConfig();
 
     newOrganizerDialog->hide();
 
@@ -2679,7 +2687,7 @@ void MainWindowPresenter::handleCreateOrganizer()
     } else {
         if(Organizer::OrganizerType::KANBAN == newOrganizerDialog->getOrganizerToEdit()->getOrganizerType()) {
             orloj->showFacetKanban(
-                dynamic_cast<Kanban*>(o),
+                static_cast<Kanban*>(o),
                 mind->getAllNotes(organizerOutlinesAndNotes, true, true),
                 mind->getOutlines(),
                 mind->getAllNotes(organizerNotes, true, false)
@@ -2715,10 +2723,15 @@ void MainWindowPresenter::doActionOrganizerEdit()
         return;
     }
 
-    // lazy lookup of O scope - ensures that if O is deleted, it will be detected
+    // lazy lookup of O scope
     Outline* oScopeOutline{nullptr};
     if(o->getOutlineScope().size()) {
         oScopeOutline=mind->remind().getOutline(o->getOutlineScope());
+        // ensures that if O is deleted, it will be detected
+        if(!oScopeOutline) {
+            o->clearOutlineScope();
+            mdConfigRepresentation->save(config);
+        }
     }
     newOrganizerDialog->show(mind->getOutlines(), nullptr, o, oScopeOutline);
 }

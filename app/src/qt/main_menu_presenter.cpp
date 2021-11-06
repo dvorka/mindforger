@@ -88,19 +88,47 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionLibraryAdd, SIGNAL(triggered()), mwp, SLOT(doActionLibraryNew()));
 
     // menu: Organizer
-    QObject::connect(view->actionOrganizerNew, SIGNAL(triggered()), mwp, SLOT(doActionOrganizerNew()));
-    QObject::connect(view->actionOrganizerEdit, SIGNAL(triggered()), mwp, SLOT(doActionOrganizerEdit()));
-    QObject::connect(view->actionOrganizerClone, SIGNAL(triggered()), mwp, SLOT(doActionOrganizerClone()));
-    QObject::connect(view->actionOrganizerForget, SIGNAL(triggered()), mwp, SLOT(doActionOrganizerForget()));
+    QObject::connect(
+        view->actionOrganizerNew, SIGNAL(triggered()),
+        mwp, SLOT(doActionOrganizerNew()));
+    QObject::connect(
+        view->actionOrganizerEdit, SIGNAL(triggered()),
+        mwp, SLOT(doActionOrganizerEdit()));
+    QObject::connect(
+        view->actionOrganizerClone, SIGNAL(triggered()),
+        mwp, SLOT(doActionOrganizerClone()));
+    QObject::connect(
+        view->actionOrganizerForget, SIGNAL(triggered()),
+        mwp, SLOT(doActionOrganizerForget()));
+    QObject::connect(
+        view->actionOrganizerFocusPrevious, SIGNAL(triggered()),
+        mwp, SLOT(doActionOrganizerFocusToPreviousVisibleQuadrant()));
+    QObject::connect(
+        view->actionOrganizerFocusNext, SIGNAL(triggered()),
+        mwp, SLOT(doActionOrganizerFocusToNextVisibleQuadrant()));
 
     // menu: Outline
-    QObject::connect(view->actionOutlineNew, SIGNAL(triggered()), mwp, SLOT(doActionOutlineNew()));
-    QObject::connect(view->actionOutlineEdit, SIGNAL(triggered()), mwp, SLOT(doActionOutlineEdit()));
-    QObject::connect(view->actionOutlineForget, SIGNAL(triggered()), mwp, SLOT(doActionOutlineForget()));
-    QObject::connect(view->actionOutlineHome, SIGNAL(triggered()), mwp, SLOT(doActionOutlineHome()));
-    QObject::connect(view->actionOutlineClone, SIGNAL(triggered()), mwp, SLOT(doActionOutlineClone()));
-    QObject::connect(view->actionOutlineHtmlExport, SIGNAL(triggered()), mwp, SLOT(doActionOutlineHtmlExport()));
-    QObject::connect(view->actionOutlineTWikiImport, SIGNAL(triggered()), mwp, SLOT(doActionOutlineTWikiImport()));
+    QObject::connect(
+        view->actionOutlineNew, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineNew()));
+    QObject::connect(
+        view->actionOutlineEdit, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineEdit()));
+    QObject::connect(
+        view->actionOutlineForget, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineForget()));
+    QObject::connect(
+        view->actionOutlineHome, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineHome()));
+    QObject::connect(
+        view->actionOutlineClone, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineClone()));
+    QObject::connect(
+        view->actionOutlineHtmlExport, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineHtmlExport()));
+    QObject::connect(
+        view->actionOutlineTWikiImport, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineTWikiImport()));
 
     // menu: Note
     QObject::connect(view->actionNoteNew, SIGNAL(triggered()), mwp, SLOT(doActionNoteNew()));

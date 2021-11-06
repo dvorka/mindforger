@@ -226,6 +226,7 @@ public slots:
 #endif
     // view
     void doActionViewDashboard();
+    void sortAndSaveOrganizersConfig();
     void doActionViewOrganizers();
     void doActionViewOrganizer();
     void doActionViewTagCloud();
