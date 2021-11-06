@@ -86,6 +86,9 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
                 case Qt::Key_E:
                     emit signalOutlineOrNoteEdit();
                     break;
+                case Qt::Key_X:
+                    emit signalOutlineOrNoteExternalEdit();
+                    break;
                 }
             }
         } else {

@@ -100,6 +100,7 @@ signals:
     void signalChangeLast();
 
     void signalOutlineOrNoteEdit(); // O or N edit
+    void signalOutlineOrNoteExternalEdit(); // O or N edit
     void signalEdit(); // N edit
     void signalForget();
 };

@@ -134,7 +134,8 @@ void pathToLinuxDelimiters(const std::string& path, std::string& linuxPath)
     }
 }
 
-string platformSpecificPath(const char* path) {
+string platformSpecificPath(const char* path)
+{
     string s{path};
 #ifdef _WIN32
     std::replace(s.begin(), s.end(), '/', FILE_PATH_SEPARATOR_CHAR);
@@ -146,9 +147,36 @@ string platformSpecificPath(const char* path) {
     return s;
 }
 
-string& getSystemTempPath() {
+string& getSystemTempPath()
+{
     static std::string systemTemp{SYSTEM_TEMP_DIRECTORY};
     return systemTemp;
+}
+
+string getNewTempFilePath(const string& extension)
+{
+#ifdef MD_UNUSED_CODE
+    // low risc of file name clash in temp directory:
+    string path{std::tmpnam(nullptr)};
+#endif
+
+    // safe(r) in current directory
+    string fileTemplate{
+        getSystemTempPath()
+        + FILE_PATH_SEPARATOR
+        + "mindforger-XXXXXX"
+    };
+    char* cpath = strcpy(new char[fileTemplate.length() + 1], fileTemplate.c_str());
+    int fd;
+    if((fd = mkstemp(cpath)) == -1) {
+        return "";
+    }
+    close(fd);
+    string path{cpath + extension};
+    delete[] cpath;
+
+    MF_DEBUG("Temp file path: '" << path << "'" << endl);
+    return path;
 }
 
 bool stringToLines(const string* text, vector<string*>& lines)

@@ -19,6 +19,7 @@
 #ifndef M8R_FILE_UTILS_H_
 #define M8R_FILE_UTILS_H_
 
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "../definitions.h"
@@ -202,6 +203,7 @@ void pathToDirectoryAndFile(const std::string& path, std::string& directory, std
 void pathToLinuxDelimiters(const std::string& path, std::string& linuxPath);
 std::string platformSpecificPath(const char* path);
 std::string& getSystemTempPath();
+std::string getNewTempFilePath(const std::string& extension);
 bool stringToLines(const std::string* text, std::vector<std::string*>& lines);
 bool fileToLines(const std::string* filename, std::vector<std::string*>& lines, size_t& filesize);
 std::string* fileToString(const std::string& filename);
