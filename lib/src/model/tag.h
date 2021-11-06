@@ -162,6 +162,27 @@ public:
         return false;
     }
 
+    /**
+     * @brief escape tag represented as string prior persistence.
+     *
+     * All forbidden characters (like ,) are replaced with -.
+     *
+     * @param stringTag     tag represented as string.
+     * @return escaped string.
+     */
+    static std::string escape(std::string& stringTag) {
+        std::string::value_type forbidden{','}, safe{'-'};
+        std::size_t found = stringTag.find(forbidden);
+        if (found != std::string::npos) {
+            std::replace_if(
+                std::begin(stringTag),
+                std::end(stringTag),
+                [&forbidden](std::string::value_type v) { return v==forbidden; },
+                safe);
+        }
+        return stringTag;
+    }
+
     Tag() = delete;
     explicit Tag(const std::string& name, Clazz* isA, const Color& color);
     Tag(const Tag&) = delete;

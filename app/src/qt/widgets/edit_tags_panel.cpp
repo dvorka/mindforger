@@ -165,7 +165,11 @@ void EditTagsPanel::slotAddTag()
 {
     if(!lineEdit->text().isEmpty()) {
         if(!listViewStrings.contains(lineEdit->text())) {
-            listViewStrings << lineEdit->text();
+            // escape Tag as , character is forbidden
+            string rawTag{lineEdit->text().toStdString()};
+            QString escapedTag = QString::fromStdString(Tag::escape(rawTag));
+            lineEdit->setText(escapedTag);
+            listViewStrings << escapedTag;
             ((QStringListModel*)listView->model())->setStringList(listViewStrings);
             emit signalTagSelectionChanged();
         }
