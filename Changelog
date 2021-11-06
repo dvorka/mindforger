@@ -1,10 +1,10 @@
 WIP: 2021-11-30  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v1.53.0 - custom Eisenhower Matrices on tags, Kanban style organizer,
-      repository specific configuration, lazy (PDF) documents indexation preview,
+    * Released v1.53.0 - custom Eisenhower Matrix on tags, Kanban style organizer
+      on tags, repository specific configuration, lazy (PDF) documents indexation POC,
       various minor improvements (CSV export progress bar, ...) and bug fixes
-      (note cloning, Markdown syntax highlighting, ...), Doxygen source code
-      documentation generator.
+      (Note cloning, Markdown syntax highlighting, tags escaping,  ...),
+      Doxygen source code documentation generator.
 
 2020-03-08  Martin Dvorak  <martin.dvorak@mindforger.com>
 
@@ -44,7 +44,7 @@ WIP: 2021-11-30  Martin Dvorak  <martin.dvorak@mindforger.com>
 2019-02-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 
    * Released v1.48.3 - Stabilization: partial fix of 100% CPU consumption in
-     table views on Ubuntu 18.04
+     table views on Ubuntu 18.04.
 
 2018-11-13  Martin Dvorak  <martin.dvorak@mindforger.com>
 
@@ -53,8 +53,7 @@ WIP: 2021-11-30  Martin Dvorak  <martin.dvorak@mindforger.com>
 
 2018-11-10  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-   * Released v1.48.0 - CSV export, autolinking preview, MathJax format
-     menu.
+   * Released v1.48.0 - CSV export, autolinking preview, MathJax format menu.
 
 2018-10-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 
@@ -73,7 +72,7 @@ WIP: 2021-11-30  Martin Dvorak  <martin.dvorak@mindforger.com>
 
 2018-05-30  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-  * Released v1.42.0 - The first MindForger release.
+  * Released v1.42.0 - The first MindForger release on the day of my 42nd birthday.
 
 2018-01-07  Martin Dvorak  <martin.dvorak@mindforger.com>
 
