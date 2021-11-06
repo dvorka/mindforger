@@ -163,13 +163,14 @@ void OrganizerQuadrantPresenter::slotMoveNoteToPreviousQuadrant()
     }
 }
 
-void OrganizerQuadrantPresenter::refresh(const std::vector<Note*>& ts, bool urgency, bool importance)
-{
+void OrganizerQuadrantPresenter::refresh(
+        const std::vector<Note*>& ts, bool urgency, bool importance, bool showOutline
+) {
     model->removeAllRows();
     if(ts.size()) {
         view->setVisible(true);
         for(auto& t:ts) {
-            model->addRow(t, urgency, importance);
+            model->addRow(t, urgency, importance, showOutline);
         }
 
         this->view->setCurrentIndex(this->model->index(0, 0));

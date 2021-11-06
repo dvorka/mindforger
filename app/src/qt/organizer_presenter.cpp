@@ -118,10 +118,10 @@ void OrganizerPresenter::refresh(
         doSometimePresenter->setTitle(title);
     }
 
-    doFirstPresenter->refresh(upperRightNs, true, true);
-    doSoonPresenter->refresh(upperLeftNs, true, false);
-    doSometimePresenter->refresh(lowerLeftNs, false, false);
-    planDedicatedTimePresenter->refresh(lowerRightNs, false, true);
+    doFirstPresenter->refresh(upperRightNs, true, true, organizer->getOutlineScope().size());
+    doSoonPresenter->refresh(upperLeftNs, true, false, organizer->getOutlineScope().size());
+    doSometimePresenter->refresh(lowerLeftNs, false, false, organizer->getOutlineScope().size());
+    planDedicatedTimePresenter->refresh(lowerRightNs, false, true, organizer->getOutlineScope().size());
 
     if(setFocus) {
         view->getDoFirst()->setFocus();

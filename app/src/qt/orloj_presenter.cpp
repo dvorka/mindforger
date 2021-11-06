@@ -340,6 +340,13 @@ void OrlojPresenter::slotShowSelectedOrganizer()
                 Organizer* organizer = item->data(Qt::UserRole + 1).value<Organizer*>();
                 MF_DEBUG("Organizer selected by Orloj: data(user)=" << organizer << endl);
 
+                // ensure O scope validity
+                if(organizer->getOutlineScope().size()) {
+                    if(!mind->remind().getOutline(organizer->getOutlineScope())) {
+                        organizer->clearOutlineScope();
+                    }
+                }
+
                 organizerOutlinesAndNotes.clear();
                 organizerNotes.clear();
                 if(Organizer::OrganizerType::KANBAN == organizer->getOrganizerType()) {
@@ -358,8 +365,17 @@ void OrlojPresenter::slotShowSelectedOrganizer()
                         mind->getAllNotes(organizerNotes, true, false)
                     );
                 }
+                string statusNotebookScope{
+                    organizer->getOutlineScope().size()
+                    ?" scope: '"+mind->remind().getOutline(organizer->getOutlineScope())->getName()+"'"
+                    :""
+                };
                 mainPresenter->getStatusBar()->showInfo(
-                    QString("%1%2%3").arg(tr("Organizer: '")).arg(organizer->getName().c_str()).arg("'")
+                    QString("%1%2%3%4")
+                        .arg(tr("Organizer: '"))
+                        .arg(organizer->getName().c_str())
+                        .arg("'")
+                        .arg(statusNotebookScope.c_str())
                 );
 
                 mainPresenter->sortAndSaveOrganizersConfig();

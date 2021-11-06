@@ -2165,6 +2165,47 @@ void MainWindowPresenter::doActionNoteEdit()
 #endif
 }
 
+void MainWindowPresenter::doActionNoteExternalEdit()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+    ) {
+        Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+        if(note) {
+            // check whether external editor is configured & open preferences if not
+
+            // export Note to file in temp directory
+
+            // prepare dialog message with command which will be run (file path)
+
+            // open modal dialog to block MindForger usage
+
+            // run external editor
+
+            // paste text to Note
+
+            // close modal dialog
+
+
+
+            int i;
+             printf ("Checking if processor is available...");
+             if (system(NULL)) puts ("Ok");
+               else exit (EXIT_FAILURE);
+             printf ("Executing command DIR...\n");
+             i=system ("emacs");
+             printf ("The value returned was: %d.\n",i);
+
+            return;
+        }
+    }
+
+    QMessageBox::critical(&view, tr("Edit Note"), tr("Please select a Note to edit in the Notebook."));
+}
+
 void MainWindowPresenter::doActionNoteHoist()
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)

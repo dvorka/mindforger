@@ -91,10 +91,10 @@ void KanbanPresenter::refresh(
     );
     columns[3]->setTitle(title);
 
-    columns[0]->refresh(upperLeftNs, true, false);
-    columns[1]->refresh(upperRightNs, true, true);
-    columns[2]->refresh(lowerLeftNs, false, false);
-    columns[3]->refresh(lowerRightNs, false, true);
+    columns[0]->refresh(upperLeftNs, true, false, !kanban->getOutlineScope().size());
+    columns[1]->refresh(upperRightNs, true, true, !kanban->getOutlineScope().size());
+    columns[2]->refresh(lowerLeftNs, false, false, !kanban->getOutlineScope().size());
+    columns[3]->refresh(lowerRightNs, false, true, !kanban->getOutlineScope().size());
 
     // IF at least one column with a tag exists,
     // THEN show only column(s) with tags,

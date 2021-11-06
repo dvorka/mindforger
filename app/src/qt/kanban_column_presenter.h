@@ -55,7 +55,12 @@ public:
 
     int getCurrentRow() const;
     Note* getSelectedNote();
-    void refresh(const std::vector<Note*>& os, bool urgency, bool importance);
+    void refresh(
+        const std::vector<Note*>& os,
+        bool urgency,
+        bool importance,
+        bool showOutline
+    );
     OrganizerQuadrantView* getView() const { return view; }
 
 

@@ -65,11 +65,11 @@ public:
     DashboardView* getView() { return view; }
 
     void refresh(
-            const std::vector<Outline*>& os,
-            const std::vector<Note*>& ns,
-            const std::map<const Tag*,int>& ts,
-            int bytes,
-            MindStatistics* stats
+        const std::vector<Outline*>& os,
+        const std::vector<Note*>& ns,
+        const std::map<const Tag*,int>& ts,
+        int bytes,
+        MindStatistics* stats
     );
 
     RecentNotesTablePresenter* getRecentNotesPresenter() { return recentDashboardletPresenter; }

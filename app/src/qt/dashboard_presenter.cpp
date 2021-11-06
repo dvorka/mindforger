@@ -122,7 +122,7 @@ void DashboardPresenter::refresh(
             }
         }
     }
-    doFirstDashboardletPresenter->refresh(doFirstOs, true, true);
+    doFirstDashboardletPresenter->refresh(doFirstOs, true, true, true);
 
     outlinesDashboardletPresenter->refresh(os);
     recentDashboardletPresenter->refresh(ns);

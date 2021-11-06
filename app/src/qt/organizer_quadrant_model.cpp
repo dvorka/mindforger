@@ -47,18 +47,17 @@ void OrganizerQuadrantModel::removeAllRows()
     setTitle(title);
 }
 
-void OrganizerQuadrantModel::addRow(Note* note, bool urgency, bool importance)
-{
+void OrganizerQuadrantModel::addRow(
+    Note* note, bool urgency, bool importance, bool showOutline
+) {
     QList<QStandardItem*> items;
     QStandardItem* item;
 
     // IMPROVE consider moving this to HTML representation
     string h{note->getName().c_str()};
-
-    if(note->getType() != &Outline::NOTE_4_OUTLINE_TYPE) {
+    if(showOutline && note->getType() != &Outline::NOTE_4_OUTLINE_TYPE) {
         h += " (" + note->getOutline()->getName() + ") ";
     }
-
     htmlRepresentation->tagsToHtml(note->getTags(), h);
 
     h += "<span style='color: ";

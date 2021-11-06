@@ -324,6 +324,7 @@ public slots:
     void doActionOutlineOrNoteEdit();
     void doActionOutlineShow();
     void doActionNoteEdit();
+    void doActionNoteExternalEdit();
     void doActionNoteFirst();
     void doActionNoteUp();
     void doActionNotePromote();

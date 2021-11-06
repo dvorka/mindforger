@@ -478,6 +478,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
     actionNoteEdit ->setStatusTip(tr("Edit current Note - you can also double click view to open the editor"));
 
+    actionNoteExternalEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("E&xternal Editor Edit\tCtrl+X"), mainWindow);
+    actionNoteExternalEdit ->setStatusTip(tr("Edit current Note in an external editor - use Preferences to configure the editor"));
+
     actionNoteSave = new QAction(QIcon(":/menu-icons/save.svg"), tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
     actionNoteSave->setStatusTip(tr("Save Note being edited"));
 
@@ -534,6 +537,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNote = qMenuBar->addMenu(tr("&Note"));
     menuNote->addAction(actionNoteNew);
     menuNote->addAction(actionNoteEdit);
+    menuNote->addAction(actionNoteExternalEdit);
     menuNote->addAction(actionNoteSave);
     menuNote->addAction(actionNoteClose);
     menuNote->addAction(actionNoteForget);

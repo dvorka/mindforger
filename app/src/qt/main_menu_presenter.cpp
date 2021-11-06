@@ -131,18 +131,45 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         mwp, SLOT(doActionOutlineTWikiImport()));
 
     // menu: Note
-    QObject::connect(view->actionNoteNew, SIGNAL(triggered()), mwp, SLOT(doActionNoteNew()));
-    QObject::connect(view->actionNoteEdit, SIGNAL(triggered()), mwp, SLOT(doActionNoteEdit()));
-    QObject::connect(view->actionNoteClose, SIGNAL(triggered()), mwp, SLOT(doActionNoteLeave()));
-    QObject::connect(view->actionNoteForget, SIGNAL(triggered()), mwp, SLOT(doActionNoteForget()));
-    QObject::connect(view->actionNotePromote, SIGNAL(triggered()), mwp, SLOT(doActionNotePromote()));
-    QObject::connect(view->actionNoteDemote, SIGNAL(triggered()), mwp, SLOT(doActionNoteDemote()));
-    QObject::connect(view->actionNoteFirst, SIGNAL(triggered()), mwp, SLOT(doActionNoteFirst()));
-    QObject::connect(view->actionNoteUp, SIGNAL(triggered()), mwp, SLOT(doActionNoteUp()));
-    QObject::connect(view->actionNoteDown, SIGNAL(triggered()), mwp, SLOT(doActionNoteDown()));
-    QObject::connect(view->actionNoteLast, SIGNAL(triggered()), mwp, SLOT(doActionNoteLast()));
-    QObject::connect(view->actionNoteRefactor, SIGNAL(triggered()), mwp, SLOT(doActionRefactorNoteToOutline()));
-    QObject::connect(view->actionNoteClone, SIGNAL(triggered()), mwp, SLOT(doActionNoteClone()));
+    QObject::connect(
+        view->actionNoteNew, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteNew()));
+    QObject::connect(
+        view->actionNoteEdit, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteEdit()));
+    QObject::connect(
+        view->actionNoteExternalEdit, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteExternalEdit()));
+    QObject::connect(
+        view->actionNoteClose, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteLeave()));
+    QObject::connect(
+        view->actionNoteForget, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteForget()));
+    QObject::connect(
+        view->actionNotePromote, SIGNAL(triggered()),
+        mwp, SLOT(doActionNotePromote()));
+    QObject::connect(
+        view->actionNoteDemote, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteDemote()));
+    QObject::connect(
+        view->actionNoteFirst, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteFirst()));
+    QObject::connect(
+        view->actionNoteUp, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteUp()));
+    QObject::connect(
+        view->actionNoteDown, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteDown()));
+    QObject::connect(
+        view->actionNoteLast, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteLast()));
+    QObject::connect(
+        view->actionNoteRefactor, SIGNAL(triggered()),
+        mwp, SLOT(doActionRefactorNoteToOutline()));
+    QObject::connect(
+        view->actionNoteClone, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteClone()));
 
     // menu: edit
     QObject::connect(view->actionEditFind, SIGNAL(triggered()), mwp, SLOT(doActionEditFind()));

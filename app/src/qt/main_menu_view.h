@@ -157,6 +157,7 @@ public:
     QAction* actionNoteNew;
     QAction* actionViewHoist;
     QAction* actionNoteEdit;
+    QAction* actionNoteExternalEdit;
     QAction* actionNoteSave;
     QAction* actionNoteClose;
     QAction* actionNoteForget;
