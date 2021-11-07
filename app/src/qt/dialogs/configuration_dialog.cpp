@@ -285,6 +285,9 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     editorTabWidthCombo->addItem(QString{"4"});
     editorTabWidthCombo->addItem(QString{"8"});
 
+    externalEditorCmdLabel = new QLabel(tr("External editor command")+":", this);
+    externalEditorCmdEdit = new QLineEdit("", this);
+
     // assembly
     QVBoxLayout* editorLayout = new QVBoxLayout{this};
     editorLayout->addWidget(editorKeyBindingLabel);
@@ -293,6 +296,8 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     editorLayout->addWidget(editorFontButton);
     editorLayout->addWidget(editorTabWidthLabel);
     editorLayout->addWidget(editorTabWidthCombo);
+    editorLayout->addWidget(externalEditorCmdLabel);
+    editorLayout->addWidget(externalEditorCmdEdit);
     editorLayout->addWidget(editorTabsAsSpacesCheck);
     editorLayout->addWidget(editorMdSyntaxHighlightCheck);
     editorLayout->addWidget(editorAutocompleteCheck);
@@ -317,6 +322,8 @@ ConfigurationDialog::EditorTab::~EditorTab()
     delete editorAutocompleteCheck;
     delete editorTabWidthLabel;
     delete editorTabWidthCombo;
+    delete externalEditorCmdLabel;
+    delete externalEditorCmdEdit;
     //delete editorQuoteSectionsCheck;
     delete editorTabsAsSpacesCheck;
 }
@@ -334,6 +341,7 @@ void ConfigurationDialog::EditorTab::refresh()
     editorMdSyntaxHighlightCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
     editorAutocompleteCheck->setChecked(config.isUiEditorEnableAutocomplete());
     editorTabWidthCombo->setCurrentIndex(editorTabWidthCombo->findText(QString::number(config.getUiEditorTabWidth())));
+    externalEditorCmdEdit->clear();
     //editorQuoteSectionsCheck->setChecked(config.isMarkdownQuoteSections());
     editorTabsAsSpacesCheck->setChecked(config.isUiEditorTabsAsSpaces());
     editorAutosaveCheck->setChecked(config.isUiEditorAutosave());
@@ -346,6 +354,7 @@ void ConfigurationDialog::EditorTab::save()
     config.setUiEditorEnableSyntaxHighlighting(editorMdSyntaxHighlightCheck->isChecked());
     config.setUiEditorEnableAutocomplete(editorAutocompleteCheck->isChecked());
     config.setUiEditorTabWidth(editorTabWidthCombo->itemText(editorTabWidthCombo->currentIndex()).toInt());
+    config.setExternalEditorCmd(externalEditorCmdEdit->text().toStdString());
     //config.setMarkdownQuoteSections(editorQuoteSectionsCheck->isChecked());
     config.setUiEditorTabsAsSpaces(editorTabsAsSpacesCheck->isChecked());
     config.setUiEditorAutosave(editorAutosaveCheck->isChecked());

@@ -160,6 +160,15 @@ string getNewTempFilePath(const string& extension)
     string path{std::tmpnam(nullptr)};
 #endif
 
+#ifdef _WIN32
+    // TODO Windows
+    // https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/mktemp-s-wmktemp-s?redirectedfrom=MSDN&view=msvc-160
+    // https://stackoverflow.com/questions/6036227/mkstemp-implementation-for-win32
+    // https://stackoverflow.com/questions/24873919/function-in-windows-that-behaves-similarly-to-mkstempchar-template
+
+    throw "New temp file name creation not implemented";
+
+#else
     // safe(r) in current directory
     string fileTemplate{
         getSystemTempPath()
@@ -177,6 +186,7 @@ string getNewTempFilePath(const string& extension)
 
     MF_DEBUG("Temp file path: '" << path << "'" << endl);
     return path;
+#endif
 }
 
 bool stringToLines(const string* text, vector<string*>& lines)

@@ -244,6 +244,7 @@ private:
     std::string uiThemeName;
     std::string uiHtmlCssPath; // use a CSS (size>0) or render raw MD (size==0)
     int uiHtmlZoom;
+    std::string externalEditorCmd;
     EditorKeyBindingMode uiEditorKeyBinding;
     std::string editorFont;
     int uiFontPointSize;
@@ -376,6 +377,12 @@ public:
     /*
      * GUI
      */
+
+    bool isExternalEditorCmd() const { return externalEditorCmd.size(); }
+    std::string getExternalEditorCmd() const { return externalEditorCmd; }
+    void setExternalEditorCmd(std::string externalEditorCmd) {
+        this->externalEditorCmd = externalEditorCmd;
+    }
 
     EditorKeyBindingMode getEditorKeyBinding() const { return uiEditorKeyBinding; }
     static const char* editorKeyBindingToString(EditorKeyBindingMode keyBinding) {

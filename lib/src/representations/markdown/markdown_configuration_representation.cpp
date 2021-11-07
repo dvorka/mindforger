@@ -53,6 +53,7 @@ constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL =  "* Editor au
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL =  "* Editor TAB width: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TABS_AS_SPACES_LABEL =  "* Editor insert SPACEs for TAB: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOSAVE_LABEL =  "* Editor autosave on close: ";
+constexpr const auto CONFIG_SETTING_EXTERNAL_EDITOR_CMD_LABEL =  "* External editor command: ";
 constexpr const auto CONFIG_SETTING_UI_FULL_O_PREVIEW_LABEL =  "* Full Outline preview: ";
 constexpr const auto CONFIG_SETTING_NAVIGATOR_MAX_GRAPH_NODES_LABEL = "* Navigator max knowledge graph nodes: ";
 constexpr const auto CONFIG_SETTING_MD_HIGHLIGHT_LABEL = "* Enable source code syntax highlighting support in Markdown: ";
@@ -231,6 +232,9 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         } else {
                             c.setUiEditorAutosave(false);
                         }
+                    } else if(line->find(CONFIG_SETTING_EXTERNAL_EDITOR_CMD_LABEL) != std::string::npos) {
+                        string p = line->substr(strlen(CONFIG_SETTING_EXTERNAL_EDITOR_CMD_LABEL));
+                        c.setExternalEditorCmd(p);
                     } else if(line->find(CONFIG_SETTING_UI_FULL_O_PREVIEW_LABEL) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
                             c.setUiFullOPreview(true);
@@ -486,9 +490,12 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_AUTOSAVE_LABEL << (c?(c->isUiEditorAutosave()?"yes":"no"):(Configuration::DEFAULT_EDITOR_AUTOSAVE?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
-         CONFIG_SETTING_UI_FULL_O_PREVIEW_LABEL << (c?(c->isUiFullOPreview()?"yes":"no"):(Configuration::DEFAULT_FULL_O_PREVIEW?"yes":"no")) << endl <<
-         "    * Show whole Notebook preview (yes) or Notebook header only (no)." << endl <<
+         CONFIG_SETTING_UI_EDITOR_AUTOSAVE_LABEL << (c?(c->isUiEditorAutosave()?"yes":"no"):(Configuration::DEFAULT_EDITOR_AUTOSAVE?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_EXTERNAL_EDITOR_CMD_LABEL << c->getExternalEditorCmd() << endl <<
+         "    * Command to run external Markdown editor. Filename with Markdown is appended at the end." << endl <<
+         "    * Example: emacs -nw" << endl <<
+         "    * Example: vi" << endl <<
          CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL << (c?c->getEditorKeyBindingAsString():Configuration::editorKeyBindingToString(Configuration::EditorKeyBindingMode::WINDOWS)) << endl <<
          "    * Examples: emacs, vim, windows" << endl <<
          CONFIG_SETTING_UI_EDITOR_FONT_LABEL << (c?c->getEditorFont():Configuration::DEFAULT_EDITOR_FONT) << endl <<

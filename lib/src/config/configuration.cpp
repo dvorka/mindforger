@@ -52,6 +52,7 @@ Configuration::Configuration()
       markdownQuoteSections{},
       uiNerdTargetAudience{},
       uiHtmlZoom{},
+      externalEditorCmd{},
       uiFontPointSize{},
       uiShowBreadcrump{},
       uiViewerShowMetadata{},
@@ -174,6 +175,7 @@ void Configuration::clear()
     uiThemeName.assign(UI_DEFAULT_THEME);
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
     uiHtmlZoom = DEFAULT_UI_HTML_ZOOM;
+    externalEditorCmd = "";
     uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
     uiEnableDiagramsInMd = JavaScriptLibSupport::NO;
     uiNerdTargetAudience = DEFAULT_UI_NERD_MENU;

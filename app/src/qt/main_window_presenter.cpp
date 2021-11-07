@@ -2176,6 +2176,18 @@ void MainWindowPresenter::doActionNoteExternalEdit()
         Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
         if(note) {
             // check whether external editor is configured & open preferences if not
+            if(!config.isExternalEditorCmd()) {
+                QMessageBox::critical(
+                    &view,
+                    tr("Edit Note with External Editor Error"),
+                    tr("External editor command is not configured in preferences.")
+                );
+
+                // let user to configure external editor
+                configDialog->show();
+
+                return;
+            }
 
             // export Note to file in temp directory
             string tempFilePath{getNewTempFilePath(File::EXTENSION_MD_MD)};
@@ -2198,7 +2210,7 @@ void MainWindowPresenter::doActionNoteExternalEdit()
                 statusBar->showError(errorMessage);
                 QMessageBox::critical(
                     &view,
-                    tr("Edit Note with External Editor"),
+                    tr("Edit Note with External Editor Error"),
                     tr(errorMessage.c_str())
                 );
                 return;
@@ -2935,8 +2947,14 @@ void MainWindowPresenter::doActionOrganizerMoveNoteToPreviousVisibleQuadrant(Not
 
 void MainWindowPresenter::doActionOrganizerForget()
 {
+    Organizer* o{nullptr};
+
     // no need to check view - this action is available only when organizer is opened
-    Organizer* o = orloj->getOrganizer()->getOrganizer();
+    if(OrlojPresenterFacets::FACET_KANBAN == orloj->getFacet()) {
+        o = orloj->getKanban()->getKanban();
+    } else {
+        o = orloj->getOrganizer()->getOrganizer();
+    }
 
     if(o->getKey() != EisenhowerMatrix::KEY_EISENHOWER_MATRIX) {
         QMessageBox::StandardButton choice;

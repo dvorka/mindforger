@@ -190,6 +190,8 @@ private:
     QCheckBox* editorAutosaveCheck;
     QLabel* editorTabWidthLabel;
     QComboBox* editorTabWidthCombo;
+    QLabel* externalEditorCmdLabel;
+    QLineEdit* externalEditorCmdEdit;
     // TODO QCheckBox* editorQuoteSectionsCheck;
     QCheckBox* editorTabsAsSpacesCheck;
 
