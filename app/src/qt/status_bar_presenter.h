@@ -58,6 +58,8 @@ public:
     void showError(const std::string& message) { showError(QString::fromStdString(message)); }
     void showError(const QString& message);
 
+    void clear() { showInfo(""); }
+
     const StatusBarView* getView() const { return view; }
 
 public slots:

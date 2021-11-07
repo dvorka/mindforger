@@ -3,8 +3,9 @@ WIP: 2021-11-30  Martin Dvorak  <martin.dvorak@mindforger.com>
     * Released v1.53.0 - custom Eisenhower Matrix on tags, Kanban style organizer
       on tags, repository specific configuration, lazy (PDF) documents indexation POC,
       various minor improvements (CSV export progress bar, ...) and bug fixes
-      (Note cloning, Markdown syntax highlighting, tags escaping,  ...),
-      Doxygen source code documentation generator.
+      (Note cloning, Markdown lists  syntax highlighting, tags escaping,  ...),
+      edit Note in external editor (or tool), Doxygen source code documentation
+      generator.
 
 2020-03-08  Martin Dvorak  <martin.dvorak@mindforger.com>
 

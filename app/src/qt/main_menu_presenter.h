@@ -55,6 +55,10 @@ public:
 
     MainMenuView* getView() { return view; }
 
+    MainWindowPresenter* getMainWindowPresenter() {
+        return getMainWindowPresenter();
+    }
+
     void showFacetDashboard();
     void showFacetOrganizerList();
     void showFacetOrganizer();

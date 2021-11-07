@@ -341,7 +341,7 @@ void ConfigurationDialog::EditorTab::refresh()
     editorMdSyntaxHighlightCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
     editorAutocompleteCheck->setChecked(config.isUiEditorEnableAutocomplete());
     editorTabWidthCombo->setCurrentIndex(editorTabWidthCombo->findText(QString::number(config.getUiEditorTabWidth())));
-    externalEditorCmdEdit->clear();
+    externalEditorCmdEdit->setText(QString::fromStdString(config.getExternalEditorCmd()));
     //editorQuoteSectionsCheck->setChecked(config.isMarkdownQuoteSections());
     editorTabsAsSpacesCheck->setChecked(config.isUiEditorTabsAsSpaces());
     editorAutosaveCheck->setChecked(config.isUiEditorAutosave());

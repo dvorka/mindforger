@@ -2180,7 +2180,7 @@ void MainWindowPresenter::doActionNoteExternalEdit()
                 QMessageBox::critical(
                     &view,
                     tr("Edit Note with External Editor Error"),
-                    tr("External editor command is not configured in preferences.")
+                    tr("External editor command is not configured in preferences (Editor tab).")
                 );
 
                 // let user to configure external editor
@@ -2198,13 +2198,38 @@ void MainWindowPresenter::doActionNoteExternalEdit()
             stringToFile(tempFilePath, noteStrMd);
 
             // prepare dialog message with command which will be run (file path)
+            string cmd{config.getExternalEditorCmd() + " " + tempFilePath};
 
             // open modal dialog to block MindForger usage
+#ifdef MF_MODAL_DIALOG_DOES_NOT_WORK
+            // PROBLEM: blocking
+            QMessageBox::information(
+                &view,
+                tr("Edit Note with External Editor"),
+                tr("Running command: '%1'").arg(cmd.c_str()),
+                QMessageBox::NoButton
+            );
+
+            // PROBLEM: black background ~ dialog not rendered
+            QDialog* dialog = new AddLibraryDialog(&view);
+            Qt::WindowFlags flags = dialog->windowFlags();
+            dialog->setWindowFlags(flags | Qt::Tool);
+            dialog->show();
+            // force processing of all events and refresh
+            QCoreApplication::processEvents();
+#endif
+            this->statusBar->showInfo(
+                tr(
+                    "Running command: '%1'. Close external editor to return "
+                    "control back to MindForger."
+                ).arg(cmd.c_str())
+            );
 
             // run external editor
             if(!system(NULL)) {
                 string errorMessage{
-                    "Error: unable to run external editor as C++ command processor is not available"
+                    "Error: unable to run external editor as C++ command processor "
+                    "is not available"
                 };
                 MF_DEBUG(errorMessage);
                 statusBar->showError(errorMessage);
@@ -2216,14 +2241,45 @@ void MainWindowPresenter::doActionNoteExternalEdit()
                 return;
             }
 
-            string cmd{"emacs " + tempFilePath};
             MF_DEBUG("Running external editor: '" << cmd << "'" << endl);
-            int statusCode = system(cmd.c_str());
+#ifdef DO_MF_DEBUG
+            int statusCode =
+# endif
+            system(cmd.c_str());
+#ifdef DO_MF_DEBUG
             MF_DEBUG("External editor finished with status: " << statusCode << endl);
+# endif
 
-            // paste text to Note
+            // paste text BACK to Note
+            if(isFile(tempFilePath.c_str())) {
+                vector<string*> description{};
+                size_t fileSize{};
+                fileToLines(&tempFilePath, description, fileSize);
+
+                // kill the first line if title
+                if(description.size()
+                   && description[0]
+                   && description[0]->size() > 2
+                   && description[0]->at(0) == '#'
+                   && description[0]->at(1) == ' '
+                ) {
+                    delete description[0];
+                    description.erase(description.begin());
+                }
+
+                // update note
+                if(description.size()) {
+                    note->setDescription(description);
+                } else {
+                    note->clearDescription();
+                }
+            }
+
+            // update view
+            this->orloj->showFacetNoteView(note);
 
             // close modal dialog
+            statusBar->clear();
 
             return;
         }
