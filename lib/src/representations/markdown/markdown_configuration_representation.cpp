@@ -492,7 +492,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_AUTOSAVE_LABEL << (c?(c->isUiEditorAutosave()?"yes":"no"):(Configuration::DEFAULT_EDITOR_AUTOSAVE?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
-         CONFIG_SETTING_EXTERNAL_EDITOR_CMD_LABEL << c->getExternalEditorCmd() << endl <<
+         CONFIG_SETTING_EXTERNAL_EDITOR_CMD_LABEL << (c?c->getExternalEditorCmd():"") << endl <<
          "    * Command to run external Markdown editor. Filename with Markdown is appended at the end." << endl <<
          "    * Example: emacs -nw" << endl <<
          "    * Example: vi" << endl <<

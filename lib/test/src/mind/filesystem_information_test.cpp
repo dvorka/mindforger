@@ -26,13 +26,22 @@
 
 using namespace std;
 
+extern char* getMindforgerGitHomePath();
+
+/**
+ * @brief Test PDFs indexation to library.
+ */
 TEST(FilesystemInformationTestCase, IndexPdfs) {
     // GIVEN
-    // TODO mock PDFs repository w/ empty files having various extensions
-    string pdfsLibraryPath{"/home/dvorka/mf/library"};
+    // mock PDFs repository w/ empty files having various extensions
+    string pdfsLibraryPath{
+        string{getMindforgerGitHomePath()}
+        + "/lib/test/resources/pdfs-library"
+    };
     m8r::TestSandbox box{"", true};
     string mdFilename{"filesystem-information-pdf-indexation.md"};
     string mdFilePath{box.addMdFile(mdFilename)};
+    cout << "PDFs library path: " << pdfsLibraryPath << endl;
 
     m8r::Ontology ontology{};
     m8r::MarkdownDocumentRepresentation mddr{ontology};

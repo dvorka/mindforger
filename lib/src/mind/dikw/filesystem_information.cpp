@@ -95,7 +95,7 @@ FilesystemInformationSource::ErrorCode FilesystemInformationSource::indexToMemor
         MF_DEBUG("      " << outlinePathInMemory << endl);
 
         pathToDirectoryAndFile(outlinePathInMemory, outlineDir, outlineFilename);
-        if(outlineDir.size()) {
+        if(outlineDir.size() && !isDirectory(outlineDir.c_str())) {
             // TODO create directory including parent directories
             MF_DEBUG("      TO BE IMPLEMENTED - create directory including parent directories: " << outlinePathInMemory << endl);
             createDirectory(outlineDir);
