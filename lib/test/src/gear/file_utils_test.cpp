@@ -27,13 +27,22 @@ using namespace std;
 TEST(FileGearTestCase, FilesystemPath)
 {
     // GIVEN
-    m8r::filesystem::Path basePath{"/a/b"};
+    string strBasePath{FILE_PATH_SEPARATOR};
+    strBasePath.append("a");
+    strBasePath.append(FILE_PATH_SEPARATOR);
+    strBasePath.append("b");
+
+    string expectedPath{strBasePath};
+    expectedPath.append(FILE_PATH_SEPARATOR);
+    expectedPath.append("c");
+
+    m8r::filesystem::Path basePath{strBasePath};
 
     // WHEN
     m8r::filesystem::Path path = basePath / "c";
 
     // THEN
-    ASSERT_EQ("/a/b/c", path.toString());
+    ASSERT_EQ(expectedPath, path.toString());
 }
 
 using namespace m8r::filesystem;

@@ -201,16 +201,20 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: view
 
-    actionViewDashboard = new QAction(QIcon(":/menu-icons/dashboard.svg"), tr("&Dashboard"), mainWindow);
+    actionViewDashboard = new QAction(QIcon(":/menu-icons/dashboard.svg"), tr("Dashboard"), mainWindow);
     actionViewDashboard->setStatusTip(tr("Open Dashboard..."));
 
     actionViewHome = new QAction(QIcon(":/menu-icons/home.svg"), tr("&Home Notebook"), mainWindow);
     actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
     actionViewHome->setStatusTip(tr("Open Home Notebook..."));
 
+    actionViewDecks = new QAction(QIcon(":/menu-icons/tag.svg"), tr("Flashcard &Decks"), mainWindow);
+    actionViewDecks->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
+    actionViewDecks->setStatusTip(tr("Show list of flashcard decks..."));
+
     actionViewOrganizers = new QAction(QIcon(":/menu-icons/cross.svg"), tr("Organiz&ers"), mainWindow);
     actionViewOrganizers->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
-    actionViewOrganizers->setStatusTip(tr("Open Eisenhower matrix style organizers..."));
+    actionViewOrganizers->setStatusTip(tr("Open Eisenhower matrix and Kanban organizers..."));
 
     actionViewOutlines = new QAction(QIcon(":/menu-icons/list-text.svg"), tr("N&otebooks"), mainWindow);
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
@@ -268,8 +272,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewFullscreen->setStatusTip(tr("Toggle fullscreen"));
 
     menuView = qMenuBar->addMenu(tr("&View"));
+#ifdef MF_WIP
     menuView->addAction(actionViewDashboard);
+#endif
     menuView->addAction(actionViewHome);
+#ifdef MF_WIP
+    menuView->addAction(actionViewDecks);
+#endif
     menuView->addAction(actionViewOrganizers);
     menuView->addAction(actionViewOutlines);
 #ifdef MF_WIP

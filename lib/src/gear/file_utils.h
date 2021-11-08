@@ -144,17 +144,17 @@ namespace filesystem {
         Path(const Path&& other) {
             this->path = other.path;
         }
-        Path& operator=(const Path& other) {
+        Path& operator =(const Path& other) {
             this->path = other.path;
             return *this;
         }
-        Path& operator=(const Path&& other) {
+        Path& operator =(const Path&& other) {
             this->path = other.path;
             return *this;
         }
         ~Path();
 
-        Path& operator/(const std::string& fileOrDirName) {
+        Path& operator /(const std::string& fileOrDirName) {
             if(fileOrDirName.size()) {
                 this->path += FILE_PATH_SEPARATOR;
                 this->path += fileOrDirName;

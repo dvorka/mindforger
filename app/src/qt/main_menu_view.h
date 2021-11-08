@@ -102,6 +102,7 @@ public:
     // menu: View
     QAction* actionViewDashboard;
     QAction* actionViewHome;
+    QAction* actionViewDecks;
     QAction* actionViewOrganizers;
     QAction* actionViewOutlines;
     QAction* actionViewLibraryDocs;
