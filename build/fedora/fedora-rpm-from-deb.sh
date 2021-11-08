@@ -24,7 +24,7 @@
 
 # This script must be run w/ ROOT priviledges (alien)
 
-export MFVERSION="1.52.0"
+export MFVERSION="1.53.0"
 export MFPRJNAME="mindforger-${MFVERSION}"
 export AMD64NAME="mindforger_${MFVERSION}-1_amd64"
 export I386NAME="mindforger_${MFVERSION}-1_i386"

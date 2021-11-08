@@ -57,9 +57,9 @@ echo "Add new .deb to PPA"
 ######################################################################
 
 # .deb to add
-export NEW_DEB="mindforger_1.52.0-1_amd64.deb"
-export OLD_VERSION="1.51.0"
-export NEW_VERSION="1.52.0"
+export NEW_DEB="mindforger_1.53.0-1_amd64.deb"
+export OLD_VERSION="1.52.0"
+export NEW_VERSION="1.53.0"
 
 # check
 if [ -f "${NEW_DEB}" ]
