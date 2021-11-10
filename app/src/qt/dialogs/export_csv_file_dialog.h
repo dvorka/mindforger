@@ -1,5 +1,5 @@
 /*
- new_file_dialog.h     MindForger thinking notebook
+ export_csv_file_dialog.h     MindForger thinking notebook
 
  Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,8 +16,8 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8RUI_NEW_FILE_DIALOG_H
-#define M8RUI_NEW_FILE_DIALOG_H
+#ifndef M8RUI_EXPORT_CSV_FILE_DIALOG_H
+#define M8RUI_EXPORT_CSV_FILE_DIALOG_H
 
 #include <QtWidgets>
 
@@ -25,9 +25,11 @@
 
 namespace m8r {
 
-class NewFileDialog : public QDialog
+class ExportCsvFileDialog : public QDialog
 {
     Q_OBJECT
+
+    static constexpr const int DEFAULT_OHE_CARDINALITY = 3;
 
 protected:
     QString extension;
@@ -43,26 +45,34 @@ protected:
 
     QPushButton* findDirectoryButton;
 
-    QPushButton* newButton;
+    QLabel* oheTagsLabel;
+    QCheckBox* oheTagsCheck;
+    QLabel* oheTagsCardinalityLabel;
+    QSpinBox* oheTagsCardinalitySpin;
+
+    QPushButton* exportButton;
     QPushButton* closeButton;
 
 
 public:
-    explicit NewFileDialog(QWidget* parent);
-    NewFileDialog(const NewFileDialog&) = delete;
-    NewFileDialog(const NewFileDialog&&) = delete;
-    NewFileDialog& operator =(const NewFileDialog&) = delete;
-    NewFileDialog& operator =(const NewFileDialog&&) = delete;
-    ~NewFileDialog();
+    explicit ExportCsvFileDialog(QString title, QString button, QString extension, QWidget* parent);
+    ExportCsvFileDialog(const ExportCsvFileDialog&) = delete;
+    ExportCsvFileDialog(const ExportCsvFileDialog&&) = delete;
+    ExportCsvFileDialog& operator =(const ExportCsvFileDialog&) = delete;
+    ExportCsvFileDialog& operator =(const ExportCsvFileDialog&&) = delete;
+    ~ExportCsvFileDialog();
 
     void show();
-    QPushButton* getNewButton() const { return newButton; }
+    QPushButton* getNewButton() const { return exportButton; }
     QString getFilePath() const { return pathEdit->text(); }
+    bool isOheTags() const { return oheTagsCheck->isChecked(); }
+    int getOheTagsCardinality() const { return oheTagsCardinalitySpin->value(); }
 
 private slots:
+    void enableDisableOheCardinality(bool enable);
     void refreshPath();
     void handleFindDirectory();
 };
 
 }
-#endif // M8RUI_NEW_FILE_DIALOG_H
+#endif // M8RUI_EXPORT_CSV_FILE_DIALOG_H

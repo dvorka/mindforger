@@ -144,6 +144,8 @@ public:
      */
     void exportToCsv(
         const std::string& fileName,
+        std::map<const Tag*,int>& tagsCardinality,
+        int oheTagEncodingCardinality,
         ProgressCallbackCtx* callbackCtx = nullptr
     );
 

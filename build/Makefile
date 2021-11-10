@@ -16,16 +16,25 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-default: test-lib-units
+.DEFAULT_GOAL := help
 
 help:
-	@echo "MindForger builder help:"
+	@echo "MindForger maker help:"
+	@echo "l10n                     update and release localization strings"
 	@echo "test-lib                 compile and run lib/ unit tests"
 	@echo "test-app                 compile and run app/ integration tests"
+	@echo "statistic                show source code statistic"
 	@echo "doc                      generate Doxygen documentation"
+
+l10n:
+	./l10n-update-strings.sh
+	./l10n-edit-and-release.sh
 
 test-lib:
 	./test-lib-units.sh
+
+statistic:
+	./statistic.sh
 
 doc:
 	cd doxygen && doxygen ./mindforger.cfg

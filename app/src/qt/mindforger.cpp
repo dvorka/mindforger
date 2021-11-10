@@ -41,12 +41,12 @@ using namespace m8r::filesystem;
 
 /**
  * @brief MindForger command line interface.
- */
-
-/* MindForger command line interface description.
+ *
+ * MindForger command line interface description.
  *
  * GUI:
  *
+ * ```
  * $ mindforger
  *   ... lookup repository as follows
  *     1. configured in ~/.mindforger,
@@ -61,11 +61,15 @@ using namespace m8r::filesystem;
  *   ... Markdown-based MindForger DSL file
  * $ mindforger ~/books/marathon-training/07-lsd.md
  *   ... Markdown file
- *
+ * ```
+ */
+
+/*
  *
  *
  * Options proposal:
  *
+ * ```
  * $ mindforger --theme dark
  *   -t
  * $ mindforger --config forget=25%
@@ -81,11 +85,12 @@ using namespace m8r::filesystem;
  *   -V
  * $ mindforger --help
  *   -h
- *
+ * ```
  *
  *
  * Terminal CLI commands proposal:
  *
+ * ```
  * $ mindforger --command LIST outlines
  * $ mindforger -C LIST outlines
  *
@@ -106,6 +111,14 @@ using namespace m8r::filesystem;
  * $ mindforger -C "FTS 'expr'"
  * $ mindforger -C "FTS 'expr' SCOPE outline 'abc'"
  * $ mindforger -C "FTS 'expr' SCOPE note 'abc'.'efg'"
+ * ```
+ *
+ *
+ * MindForger documentation is generated with DoXygen's JavaDoc style.
+ *
+ * @see https://www.doxygen.nl/manual/markdown.html
+ * @see https://www.doxygen.nl/manual/docblocks.html#docexamples
+ *
  */
 int main(int argc, char* argv[])
 {
@@ -116,7 +129,10 @@ int main(int argc, char* argv[])
         cerr << endl
              << QCoreApplication::translate(
                     "main",
-                    "MindForger CANNOT be run from text console - set DISPLAY environment variable or run MindForger from GUI.").toUtf8().constData()
+                    "MindForger CANNOT be run from text console "
+                    "- set DISPLAY environment variable or run "
+                    "MindForger from GUI."
+                ).toUtf8().constData()
              << endl;
         exit(1);
     }
@@ -179,11 +195,15 @@ int main(int argc, char* argv[])
             )
         );
         QCommandLineOption themeOption(QStringList() << "t" << "theme",
-                QCoreApplication::translate("main", "Use 'dark', 'light' or other GUI <theme>."),
+                QCoreApplication::translate(
+                    "main", "Use 'dark', 'light' or other GUI <theme>."
+                ),
                 QCoreApplication::translate("main", "theme"));
         parser.addOption(themeOption);
         QCommandLineOption configPathOption(QStringList() << "c" << "config-file-path",
-                QCoreApplication::translate("main", "Load configuration from given <file>."),
+                QCoreApplication::translate(
+                    "main", "Load configuration from given <file>."
+                ),
                 QCoreApplication::translate("main", "file"));
         parser.addOption(configPathOption);
 #if defined(__APPLE__) || defined(_WIN32)
@@ -258,8 +278,9 @@ int main(int argc, char* argv[])
             } else {
                 cerr << QCoreApplication::translate(
                             "main",
-                            "Error: Unable to find given repository/file to open - open MindForger "
-                            "without parameters and create it from menu Mind/New: '"
+                            "Error: Unable to find given repository/file "
+                            "to open - open MindForger without parameters "
+                            "and create it from menu Mind/New: '"
                         ).toUtf8().constData()
                      << useRepository
                      << "'"
@@ -279,7 +300,9 @@ int main(int argc, char* argv[])
         if(lookAndFeels.isThemeNameValid(themeOptionValue)) {
             lookAndFeels.setTheme(themeOptionValue);
         } else {
-            cerr << QCoreApplication::translate("main", "Ignoring unknown GUI theme: '").toUtf8().constData()
+            cerr << QCoreApplication::translate(
+                        "main", "Ignoring unknown GUI theme: '"
+                    ).toUtf8().constData()
                  << themeOptionValue.toUtf8().constData()
                  << "'"
                  << endl;

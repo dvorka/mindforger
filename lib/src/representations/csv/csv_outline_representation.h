@@ -39,6 +39,9 @@ namespace m8r {
  */
 class CsvOutlineRepresentation
 {
+private:
+    static const std::string DELIMITER_CSV_HEADER;
+
 public:
     explicit CsvOutlineRepresentation();
     CsvOutlineRepresentation(const CsvOutlineRepresentation&) = delete;
@@ -47,14 +50,28 @@ public:
     CsvOutlineRepresentation& operator =(const CsvOutlineRepresentation&&) = delete;
     virtual ~CsvOutlineRepresentation();
 
+    /**
+     * @brief Serialize given Outlines to CSV.
+     *
+     * @param os                            Outlines to be serialized.
+     * @param tagsCardinality               map with Tags cardinality.
+     * @param sourceFile                    file where to write CSV.
+     * @param oheTagEncodingCardinality     save tags with cardinality equal
+     *                                      or higher to given number (0 or bigger),
+     *                                      -1 no OHE.
+     * @param callbackCtx                   callback instance to report progress.
+     * @return                              `true` on success.
+     */
     bool to(
         const std::vector<Outline*>& os,
+        const std::map<const Tag*,int>& tagsCardinality,
         const filesystem::File& sourceFile,
+        int oheTagEncodingCardinality,
         ProgressCallbackCtx* callbackCtx = nullptr
     );
 
-    void toHeader(std::ofstream& out);
-    void to(Outline* o, std::ofstream& out);
+    void toHeader(std::ofstream& out, std::vector<std::string>& extraColumns);
+    void to(Outline* o, std::vector<const Tag*> oheTags, std::ofstream& out);
 
 private:
     void quoteValue(const std::string& is, std::string& os);

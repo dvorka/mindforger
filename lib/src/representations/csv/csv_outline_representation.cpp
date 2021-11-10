@@ -23,6 +23,8 @@ using namespace m8r::filesystem;
 
 namespace m8r {
 
+const std::string CsvOutlineRepresentation::DELIMITER_CSV_HEADER = string{","};
+
 CsvOutlineRepresentation::CsvOutlineRepresentation()
 {
 }
@@ -34,34 +36,56 @@ CsvOutlineRepresentation::~CsvOutlineRepresentation()
 /**
  * @brief Serialize O to CSV in "Recent view" style
  *
- * O is serialized as N descriptor, only shared fields are serialized to avoid sparse
- * lines
+ * O is serialized as N descriptor, only O/N shared fields are serialized
+ * to avoid sparse lines.
  */
 bool CsvOutlineRepresentation::to(
     const vector<Outline*>& os,
+    const map<const Tag*,int>& tagsCardinality,
     const File& sourceFile,
+    int oheTagEncodingCardinality,
     ProgressCallbackCtx* callbackCtx
 ) {
-    MF_DEBUG("Exporting Memory to CSV " << sourceFile.getName() << " ..." << endl);
+    MF_DEBUG("Exporting Memory to CSV "
+        << sourceFile.getName()
+        << " with OHE " << oheTagEncodingCardinality << " ..."
+        << endl
+    );
 
     if(sourceFile.getName().size()) {
         if(os.size()) {
+            // prepare top tags: filter out entries w/ low cardinality
+            vector<const Tag*> oheTags{};
+            if(oheTagEncodingCardinality > -1) {
+                for(auto t:tagsCardinality) {
+                    if(t.second >= oheTagEncodingCardinality) {
+                        oheTags.push_back(t.first);
+                    }
+                }
+            }
+            vector<string> escapedOheTags{};
+            for(auto t:oheTags) {
+                escapedOheTags.push_back(normalizeToNcName(t->getName(), '_'));
+            }
+
             std::ofstream out{};
             try {
                 out.open(sourceFile.getName());
 
                 float exported{0.0};
-                toHeader(out);
+                toHeader(out, escapedOheTags);
                 for(Outline* o:os) {
                     MF_DEBUG("  Exporting O: " << o->getName() << " / " << o->getKey() << endl);
-                    to(o, out);
+                    to(o, oheTags, out);
 
                     if(callbackCtx) {
                         callbackCtx->updateProgress(++exported/(float)os.size());
                     }
                 }
             } catch(const std::ofstream::failure& e) {
-                cerr << "Error: unable to open/write file " << sourceFile.getName() << " " << e.what();
+                cerr << "Error: unable to open/write file "
+                     << sourceFile.getName()
+                     << " " << e.what();
                 try {
                     out.close();
                 } catch(const std::ofstream::failure& e) {}
@@ -81,18 +105,45 @@ bool CsvOutlineRepresentation::to(
     return false;
 }
 
-void CsvOutlineRepresentation::toHeader(std::ofstream& out)
+void CsvOutlineRepresentation::toHeader(std::ofstream& out, vector<string>& extraColumns)
 {
+
     // O/N CSV line
     // id,     type, title, offset, depth, reads, writes, created, modified, read, description
     // string, o/n,  int,   int,    int,   int,   int,    long,    long,     long, string
 
-    // TODO tags|tags
-    out << "id,type,title,offset,depth,reads,writes,created,modified,read,description\n";
+    string header{};
+
+    string columns[] = {
+        "id",
+        "type",
+        "title",
+        "offset",
+        "depth",
+        "reads",
+        "writes",
+        "created",
+        "modified",
+        "read",
+        "description"
+    };
+    for(auto c:columns) {
+        header += c;
+        header += DELIMITER_CSV_HEADER;
+    }
+    for(auto c:extraColumns) {
+        header += c;
+        header += DELIMITER_CSV_HEADER;
+    }
+    header.pop_back();
+    header += "\n";
+
+    out << header;
 }
 
-void CsvOutlineRepresentation::to(Outline* o, ofstream& out)
-{
+void CsvOutlineRepresentation::to(
+    Outline* o, vector<const Tag*> oheTags, ofstream& out
+) {
     MF_DEBUG("\n  " << o->getName());
 
     string s{};
@@ -112,6 +163,15 @@ void CsvOutlineRepresentation::to(Outline* o, ofstream& out)
     out << o->getRead() << ",";
     s.clear(); quoteValue(o->getDescriptionAsString(" "), s);
     out << s;
+
+    for(auto t:oheTags) {
+        if(o->hasTag(t)) {
+            out << ",1";
+        } else {
+            out << ",0";
+        }
+    }
+
     out << "\n";
 
     // Ns
@@ -136,6 +196,15 @@ void CsvOutlineRepresentation::to(Outline* o, ofstream& out)
         s.clear(); quoteValue(n->getDescriptionAsString(" "), s);
         MF_DEBUG(" F ");
         out << s;
+
+        for(auto t:oheTags) {
+            if(n->hasTag(t)) {
+                out << ",1";
+            } else {
+                out << ",0";
+            }
+        }
+
         out << "\n";
         MF_DEBUG(" ... DONE" << endl);
         out.flush();

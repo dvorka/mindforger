@@ -202,6 +202,7 @@ HEADERS += \
     ./src/qt/dialogs/new_file_dialog.h \
     ./src/qt/dialogs/new_repository_dialog.h \
     src/qt/dialogs/add_library_dialog.h \
+    src/qt/dialogs/export_csv_file_dialog.h \
     src/qt/dialogs/organizer_new_dialog.h \
     src/qt/kanban_column_model.h \
     src/qt/kanban_column_presenter.h \
@@ -318,6 +319,7 @@ SOURCES += \
     ./src/qt/dialogs/new_file_dialog.cpp \
     ./src/qt/dialogs/new_repository_dialog.cpp \
     src/qt/dialogs/add_library_dialog.cpp \
+    src/qt/dialogs/export_csv_file_dialog.cpp \
     src/qt/dialogs/organizer_new_dialog.cpp \
     src/qt/kanban_column_model.cpp \
     src/qt/kanban_column_presenter.cpp \

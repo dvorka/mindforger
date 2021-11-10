@@ -54,6 +54,7 @@
 #include "dialogs/rows_and_depth_dialog.h"
 #include "dialogs/new_repository_dialog.h"
 #include "dialogs/new_file_dialog.h"
+#include "dialogs/export_csv_file_dialog.h"
 #include "dialogs/export_file_dialog.h"
 #include "dialogs/ner_choose_tag_types_dialog.h"
 #include "dialogs/ner_result_dialog.h"
@@ -137,7 +138,7 @@ private:
     NewRepositoryDialog* newRepositoryDialog;
     NewFileDialog* newFileDialog;
     ExportFileDialog* exportOutlineToHtmlDialog;
-    ExportFileDialog* exportMemoryToCsvDialog;
+    ExportCsvFileDialog* exportMemoryToCsvDialog;
     NerChooseTagTypesDialog *nerChooseTagsDialog;
     NerResultDialog* nerResultDialog;
 

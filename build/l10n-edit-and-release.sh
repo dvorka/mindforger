@@ -17,8 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#pushd . && cd ../app/resources/qt/translations && linguist mindforger_en.ts && popd && lrelease ../app/app.pro
-pushd . && cd ../app/resources/qt/translations && linguist mindforger_cs.ts && popd && lrelease ../app/app.pro
+pushd . && cd ../app/resources/qt/translations && linguist mindforger_en.ts && popd && lrelease ../app/app.pro
+#pushd . && cd ../app/resources/qt/translations && linguist mindforger_cs.ts && popd && lrelease ../app/app.pro
 # ... nerd is OOTB
 
 # eof

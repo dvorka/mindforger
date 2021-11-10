@@ -77,7 +77,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
              &view
     );
     exportMemoryToCsvDialog
-       = new ExportFileDialog(
+       = new ExportCsvFileDialog(
              tr("Export Memory to CSV"),
              tr("Export"),
              QString::fromStdString(File::EXTENSION_CSV),
@@ -2062,11 +2062,21 @@ void MainWindowPresenter::doActionMindCsvExport()
 void MainWindowPresenter::handleMindCsvExport()
 {
     if(isDirectoryOrFileExists(newFileDialog->getFilePath().toStdString().c_str())) {
-        QMessageBox::critical(&view, tr("Export Error"), tr("Specified file path already exists!"));
+        QMessageBox::critical(
+            &view,
+            tr("Export Error"),
+            tr("Specified file path already exists!")
+        );
     } else {
         StatusBarProgressCallbackCtx callbackCtx{statusBar};
+        map<const Tag*,int> tagsCardinality{};
+        mind->getTagsCardinality(tagsCardinality);
         mind->remind().exportToCsv(
             exportMemoryToCsvDialog->getFilePath().toStdString(),
+            tagsCardinality,
+            exportMemoryToCsvDialog->isOheTags()
+            ?exportMemoryToCsvDialog->getOheTagsCardinality()
+            :-1,
             &callbackCtx
             //[](float progress){ cout << "Export progress: " << progress << endl; }
         );

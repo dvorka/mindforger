@@ -256,9 +256,19 @@ void Memory::exportToHtml(Outline* outline, const string& fileName)
     persistence->saveAsHtml(outline, fileName);
 }
 
-void Memory::exportToCsv(const string& fileName, ProgressCallbackCtx* callbackCtx)
+void Memory::exportToCsv(
+        const string& fileName,
+        map<const Tag*,int>& tagsCardinality,
+        int oheTagEncodingCardinality,
+        ProgressCallbackCtx* callbackCtx)
 {
-    csvRepresentation.to(outlines, fileName, callbackCtx);
+    csvRepresentation.to(
+        outlines,
+        tagsCardinality,
+        fileName,
+        oheTagEncodingCardinality,
+        callbackCtx
+    );
 }
 
 void Memory::forget(Outline* outline)
