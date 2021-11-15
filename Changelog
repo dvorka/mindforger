@@ -4,8 +4,9 @@ WIP: 2021-11-30  Martin Dvorak  <martin.dvorak@mindforger.com>
       on tags, repository specific configuration, lazy (PDF) documents indexation POC,
       various minor improvements (CSV export progress bar, ...) and bug fixes
       (Note cloning, Markdown lists  syntax highlighting, tags escaping,  ...),
-      edit Note in external editor (or tool), Doxygen source code documentation
-      generator.
+      edit Note in external editor (or tool), CSV export with one-hot-encoded tags,
+      configuration of custom CSS file for HTML viewer,
+      Doxygen source code documentation generator.
 
 2020-03-08  Martin Dvorak  <martin.dvorak@mindforger.com>
 

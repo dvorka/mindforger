@@ -167,8 +167,9 @@ void InsertLinkDialog::handleFindNoteChoice()
 
 void InsertLinkDialog::handleFindFile()
 {
-    QString homeDirectory
-        = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+    QString homeDirectory = QStandardPaths::locate(
+        QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory
+    );
 
     QFileDialog fileDialog{this};
     fileDialog.setWindowTitle(tr("Choose File"));
@@ -187,8 +188,9 @@ void InsertLinkDialog::handleFindFile()
 
 void InsertLinkDialog::handleFindDirectory()
 {
-    QString homeDirectory
-        = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+    QString homeDirectory = QStandardPaths::locate(
+        QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory
+    );
 
     QFileDialog fileDialog{this};
     fileDialog.setWindowTitle(tr("Choose Directory"));

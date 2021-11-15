@@ -175,15 +175,6 @@ void ConfigurationDialog::AppTab::save()
 ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
-    QGroupBox* viewerGroup = new QGroupBox{tr("HTML Viewer"), this};
-
-    htmlCssThemeLabel = new QLabel(tr("Viewer theme CSS")+":", this);
-    htmlCssThemeCombo = new QComboBox{this};
-    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT});
-    // htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT_COMPACT});
-    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_DARK});
-    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_RAW});
-
     zoomLabel = new QLabel(tr("HTML zoom (100 is 100%, Ctrl + mouse wheel)")+":", this);
     zoomSpin = new QSpinBox(this);
     zoomSpin->setMinimum(25);
@@ -201,10 +192,28 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     // TODO: to be stabilized diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
     diagramSupportCombo->addItem(QString{"online JavaScript lib"});
 
+    htmlCssThemeLabel = new QLabel(tr("Viewer theme CSS")+":", this);
+    htmlCssThemeCombo = new QComboBox{this};
+    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT});
+    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_DARK});
+    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_RAW});
+    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_CUSTOM});
+    htmlCssLineEdit = new QLineEdit(this);
+    htmlCssLineEdit->setDisabled(true);
+    htmlCssFindFileButton = new QPushButton(tr("Find Custom CSS"));
+
+    // signals
+    QObject::connect(
+        htmlCssFindFileButton, SIGNAL(clicked()),
+        this, SLOT(slotFindCssFile()));
+    QObject::connect(
+        htmlCssThemeCombo, SIGNAL(currentIndexChanged(int)),
+        this, SLOT(slotCssChoiceChanged(int)));
+
+
     // assembly
+    QGroupBox* viewerGroup = new QGroupBox{tr("HTML Viewer"), this};
     QVBoxLayout* viewerLayout = new QVBoxLayout{this};
-    viewerLayout->addWidget(htmlCssThemeLabel);
-    viewerLayout->addWidget(htmlCssThemeCombo);
     viewerLayout->addWidget(zoomLabel);
     viewerLayout->addWidget(zoomSpin);
     viewerLayout->addWidget(diagramSupportLabel);
@@ -214,8 +223,17 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     viewerLayout->addWidget(fullOPreviewCheck);
     viewerGroup->setLayout(viewerLayout);
 
+    QGroupBox* viewerCssGroup = new QGroupBox{tr("HTML Viewer CSS"), this};
+    QVBoxLayout* viewerCssLayout = new QVBoxLayout{this};
+    viewerCssLayout->addWidget(htmlCssThemeLabel);
+    viewerCssLayout->addWidget(htmlCssThemeCombo);
+    viewerCssLayout->addWidget(htmlCssLineEdit);
+    viewerCssLayout->addWidget(htmlCssFindFileButton);
+    viewerCssGroup->setLayout(viewerCssLayout);
+
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
     boxesLayout->addWidget(viewerGroup);
+    boxesLayout->addWidget(viewerCssGroup);
     boxesLayout->addStretch();
     setLayout(boxesLayout);
 }
@@ -238,6 +256,9 @@ void ConfigurationDialog::ViewerTab::refresh()
     int i = htmlCssThemeCombo->findText(QString::fromStdString(config.getUiHtmlCssPath()));
     if(i>=0) {
         htmlCssThemeCombo->setCurrentIndex(i);
+    } else {
+        htmlCssThemeCombo->setCurrentText(QString{UI_HTML_THEME_CSS_CUSTOM});
+        htmlCssLineEdit->setText(config.getUiHtmlCssPath());
     }
 
     zoomSpin->setValue(config.getUiHtmlZoom());
@@ -249,12 +270,58 @@ void ConfigurationDialog::ViewerTab::refresh()
 
 void ConfigurationDialog::ViewerTab::save()
 {
-    config.setUiHtmlCssPath(htmlCssThemeCombo->itemText(htmlCssThemeCombo->currentIndex()).toStdString());
+    string css{UI_HTML_THEME_CSS_LIGHT};
+    if(string{UI_HTML_THEME_CSS_CUSTOM}
+       == htmlCssThemeCombo->itemText(htmlCssThemeCombo->currentIndex()).toStdString()
+    ) {
+        if(htmlCssLineEdit->text().size()) {
+            css = htmlCssLineEdit->text().toStdString();
+        } // else default CSS
+    } else {
+        css = htmlCssThemeCombo->itemText(htmlCssThemeCombo->currentIndex()).toStdString();
+    }
+    config.setUiHtmlCssPath(css);
+
     config.setUiHtmlZoom(zoomSpin->value());
     config.setUiEnableSrcHighlightInMd(srcCodeHighlightSupportCheck->isChecked());
     config.setUiEnableMathInMd(mathSupportCheck->isChecked());
     config.setUiFullOPreview(fullOPreviewCheck->isChecked());
-    config.setUiEnableDiagramsInMd(static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex()));
+    config.setUiEnableDiagramsInMd(
+        static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex())
+    );
+}
+
+void ConfigurationDialog::ViewerTab::slotFindCssFile()
+{
+    QString homeDirectory = QStandardPaths::locate(
+        QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory
+    );
+
+    QFileDialog fileDialog{this};
+    fileDialog.setWindowTitle(tr("Choose CSS File"));
+    fileDialog.setFileMode(QFileDialog::ExistingFile);
+    fileDialog.setDirectory(homeDirectory);
+    fileDialog.setViewMode(QFileDialog::Detail);
+
+    QStringList fileNames{};
+    if(fileDialog.exec()) {
+        fileNames = fileDialog.selectedFiles();
+        if(fileNames.size()==1) {
+            htmlCssLineEdit->setText(fileNames[0]);
+            htmlCssThemeCombo->setCurrentText(QString{UI_HTML_THEME_CSS_CUSTOM});
+            return;
+        } // else too many files
+    } // else directory closed / nothing choosen
+
+    // set default CSS
+    htmlCssThemeCombo->setCurrentText(QString{UI_HTML_THEME_CSS_LIGHT});
+}
+
+void ConfigurationDialog::ViewerTab::slotCssChoiceChanged(int index)
+{
+    if(string{UI_HTML_THEME_CSS_CUSTOM} == htmlCssThemeCombo->itemText(index).toStdString()) {
+        this->slotFindCssFile();
+    }
 }
 
 /*

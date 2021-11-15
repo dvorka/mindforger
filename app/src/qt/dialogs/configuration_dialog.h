@@ -154,6 +154,9 @@ private:
 
     QLabel* htmlCssThemeLabel;
     QComboBox* htmlCssThemeCombo;
+    QLineEdit* htmlCssLineEdit;
+    QPushButton* htmlCssFindFileButton;
+
     QLabel* zoomLabel;
     QSpinBox* zoomSpin;
     QCheckBox* mathSupportCheck;
@@ -169,6 +172,10 @@ public:
     // there and back is handled by Dialog's access to this class & Config singleton
     void refresh();
     void save();
+
+private slots:
+    void slotFindCssFile();
+    void slotCssChoiceChanged(int index);
 };
 
 /**

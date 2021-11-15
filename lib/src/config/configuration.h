@@ -75,6 +75,7 @@ constexpr const auto UI_HTML_THEME_CSS_LIGHT = "qrc:/html-css/light.css";
 constexpr const auto UI_HTML_THEME_CSS_LIGHT_COMPACT = "qrc:/html-css/light-compact.css";
 constexpr const auto UI_HTML_THEME_CSS_DARK = "qrc:/html-css/dark.css";
 constexpr const auto UI_HTML_THEME_CSS_RAW = "raw";
+constexpr const auto UI_HTML_THEME_CSS_CUSTOM = "custom";
 
 constexpr const auto UI_EDITOR_KEY_BINDING_EMACS = "emacs";
 constexpr const auto UI_EDITOR_KEY_BINDING_VIM = "vim";
@@ -422,7 +423,11 @@ public:
         return uiHtmlCssPath.size()?uiHtmlCssPath.c_str():UI_HTML_THEME_CSS_RAW;
     }
     void setUiHtmlCssPath(const std::string path) {
-        if(!path.compare(UI_HTML_THEME_CSS_RAW)) uiHtmlCssPath.clear(); else uiHtmlCssPath = path;
+        if(!path.compare(UI_HTML_THEME_CSS_RAW)) {
+            uiHtmlCssPath.clear();
+        } else {
+            uiHtmlCssPath = path;
+        }
     }
     int getUiHtmlZoom() const { return uiHtmlZoom; }
     void incUiHtmlZoom() { if(uiHtmlZoom<500) uiHtmlZoom += 10; }
