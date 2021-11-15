@@ -200,7 +200,7 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_CUSTOM});
     htmlCssLineEdit = new QLineEdit(this);
     htmlCssLineEdit->setDisabled(true);
-    htmlCssFindFileButton = new QPushButton(tr("Find Custom CSS"));
+    htmlCssFindFileButton = new QPushButton(tr("Find Custom CSS File"));
 
     // signals
     QObject::connect(
