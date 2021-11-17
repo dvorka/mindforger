@@ -183,8 +183,8 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     srcCodeHighlightSupportCheck = new QCheckBox{tr("source code syntax highlighting support"), this};
 
     mathSupportCheck = new QCheckBox{tr("math support"), this};
-
     fullOPreviewCheck = new QCheckBox{tr("whole notebook preview"), this};
+    doubleClickViewerToEditCheck = new QCheckBox{tr("double click view to edit"), this};
 
     diagramSupportLabel = new QLabel(tr("Diagram support")+":", this),
     diagramSupportCombo = new QComboBox{this};
@@ -221,6 +221,7 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     viewerLayout->addWidget(srcCodeHighlightSupportCheck);
     viewerLayout->addWidget(mathSupportCheck);
     viewerLayout->addWidget(fullOPreviewCheck);
+    viewerLayout->addWidget(doubleClickViewerToEditCheck);
     viewerGroup->setLayout(viewerLayout);
 
     QGroupBox* viewerCssGroup = new QGroupBox{tr("HTML Viewer CSS"), this};
@@ -249,6 +250,7 @@ ConfigurationDialog::ViewerTab::~ViewerTab()
     delete fullOPreviewCheck;
     delete diagramSupportLabel;
     delete diagramSupportCombo;
+    delete doubleClickViewerToEditCheck;
 }
 
 void ConfigurationDialog::ViewerTab::refresh()
@@ -266,6 +268,7 @@ void ConfigurationDialog::ViewerTab::refresh()
     mathSupportCheck->setChecked(config.isUiEnableMathInMd());
     fullOPreviewCheck->setChecked(config.isUiFullOPreview());
     diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
+    doubleClickViewerToEditCheck->setChecked(config.isUiDoubleClickNoteViewToEdit());
 }
 
 void ConfigurationDialog::ViewerTab::save()
@@ -289,6 +292,7 @@ void ConfigurationDialog::ViewerTab::save()
     config.setUiEnableDiagramsInMd(
         static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex())
     );
+    config.setUiDoubleClickNoteViewToEdit(doubleClickViewerToEditCheck->isChecked());
 }
 
 void ConfigurationDialog::ViewerTab::slotFindCssFile()

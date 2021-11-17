@@ -161,6 +161,7 @@ private:
     QSpinBox* zoomSpin;
     QCheckBox* mathSupportCheck;
     QCheckBox* fullOPreviewCheck;
+    QCheckBox* doubleClickViewerToEditCheck;
     QLabel* diagramSupportLabel;
     QComboBox* diagramSupportCombo;
     QCheckBox* srcCodeHighlightSupportCheck;

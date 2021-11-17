@@ -146,7 +146,9 @@ void OutlineHeaderViewPresenter::slotLinkClicked(const QUrl& url)
 
 void OutlineHeaderViewPresenter::slotEditOutlineHeader()
 {
-    orloj->showFacetOutlineHeaderEdit(currentOutline);
+    if(orloj->getMainPresenter()->getConfiguration().isUiDoubleClickNoteViewToEdit()) {
+        orloj->showFacetOutlineHeaderEdit(currentOutline);
+    }
 }
 
 void OutlineHeaderViewPresenter::slotRefreshHeaderLeaderboardByValue(AssociatedNotes* associations)
