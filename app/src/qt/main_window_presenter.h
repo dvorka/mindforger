@@ -357,6 +357,7 @@ public slots:
     void doActionHelpAboutMindForger();
 
     void slotHandleFts();
+    void slotMainToolbarVisibilityChanged(bool visibility);
 
 private:
     void injectMarkdownText(const QString& text, bool newline=false, int offset=0);
