@@ -45,6 +45,7 @@ constexpr const auto CONFIG_SETTING_UI_EXPERT_MODE_LABEL =  "* Hide expendable b
 constexpr const auto CONFIG_SETTING_UI_LIVE_NOTE_PREVIEW_LABEL =  "* Live note preview: ";
 constexpr const auto CONFIG_SETTING_UI_OS_TABLE_SORT_COL_LABEL =  "* Outlines table sort column: ";
 constexpr const auto CONFIG_SETTING_UI_OS_TABLE_SORT_ORDER_LABEL =  "* Outlines table sort order: ";
+constexpr const auto CONFIG_SETTING_UI_CLICK_NOTE_VIEW_TO_EDIT_LABEL =  "* Enable double click note view to edit: ";
 constexpr const auto CONFIG_SETTING_UI_NERD_MENU=  "* Nerd menu: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_FONT_LABEL =  "* Editor font: ";
@@ -231,6 +232,12 @@ void MarkdownConfigurationRepresentation::configurationSection(
                             c.setUiEditorAutosave(true);
                         } else {
                             c.setUiEditorAutosave(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_CLICK_NOTE_VIEW_TO_EDIT_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiDoubleClickNoteViewToEdit(true);
+                        } else {
+                            c.setUiDoubleClickNoteViewToEdit(false);
                         }
                     } else if(line->find(CONFIG_SETTING_EXTERNAL_EDITOR_CMD_LABEL) != std::string::npos) {
                         string p = line->substr(strlen(CONFIG_SETTING_EXTERNAL_EDITOR_CMD_LABEL));
@@ -490,7 +497,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_AUTOSAVE_LABEL << (c?(c->isUiEditorAutosave()?"yes":"no"):(Configuration::DEFAULT_EDITOR_AUTOSAVE?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
-         CONFIG_SETTING_UI_EDITOR_AUTOSAVE_LABEL << (c?(c->isUiEditorAutosave()?"yes":"no"):(Configuration::DEFAULT_EDITOR_AUTOSAVE?"yes":"no")) << endl <<
+         CONFIG_SETTING_UI_CLICK_NOTE_VIEW_TO_EDIT_LABEL << (c?(c->isUiDoubleClickNoteViewToEdit()?"yes":"no"):(Configuration::DEFAULT_CLICK_NOTE_VIEW_TO_EDIT?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_EXTERNAL_EDITOR_CMD_LABEL << (c?c->getExternalEditorCmd():"") << endl <<
          "    * Command to run external Markdown editor. Filename with Markdown is appended at the end." << endl <<

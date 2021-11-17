@@ -196,6 +196,7 @@ public:
     static constexpr const bool DEFAULT_NAVIGATOR_SHOW_LEGEND = false;
     static constexpr const int DEFAULT_OS_TABLE_SORT_COLUMN = 7;
     static constexpr const bool DEFAULT_OS_TABLE_SORT_ORDER = false;
+    static constexpr const bool DEFAULT_CLICK_NOTE_VIEW_TO_EDIT = true;
 
     static constexpr int EDITOR_MAX_AUTOCOMPLETE_LINES = 1000;
 
@@ -267,6 +268,7 @@ private:
     bool uiLiveNotePreview;
     int uiOsTableSortColumn;
     bool uiOsTableSortOrder; // true if ascending, else descending
+    bool uiDoubleClickNoteViewToEdit;
 
     // organizers
     std::vector<Organizer*> organizers;
@@ -492,6 +494,8 @@ public:
     void setUiOsTableSortColumn(const int column) { this->uiOsTableSortColumn = column; }
     bool isUiOsTableSortOrder() const { return uiOsTableSortOrder; }
     void setUiOsTableSortOrder(const bool ascending) { this->uiOsTableSortOrder = ascending; }
+    bool isUiDoubleClickNoteViewToEdit() const { return this->uiDoubleClickNoteViewToEdit; }
+    void setUiDoubleClickNoteViewToEdit(bool enable) { this->uiDoubleClickNoteViewToEdit = enable; }
 
 };
 

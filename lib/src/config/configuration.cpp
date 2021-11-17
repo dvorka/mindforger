@@ -71,6 +71,7 @@ Configuration::Configuration()
       uiLiveNotePreview{DEFAULT_UI_LIVE_NOTE_PREVIEW},
       uiOsTableSortColumn{DEFAULT_OS_TABLE_SORT_COLUMN},
       uiOsTableSortOrder{DEFAULT_OS_TABLE_SORT_ORDER},
+      uiDoubleClickNoteViewToEdit{DEFAULT_CLICK_NOTE_VIEW_TO_EDIT},
       installer(new Installer{})
 {
     char* home;
@@ -187,6 +188,7 @@ void Configuration::clear()
     uiLiveNotePreview = DEFAULT_UI_LIVE_NOTE_PREVIEW;
     uiOsTableSortColumn = DEFAULT_OS_TABLE_SORT_COLUMN;
     uiOsTableSortOrder = DEFAULT_OS_TABLE_SORT_ORDER;
+    uiDoubleClickNoteViewToEdit = DEFAULT_CLICK_NOTE_VIEW_TO_EDIT;
 }
 
 bool Configuration::hasRepositoryConfiguration() const {
