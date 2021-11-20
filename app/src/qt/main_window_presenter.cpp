@@ -2263,13 +2263,11 @@ void MainWindowPresenter::doActionNoteExternalEdit()
             }
 
             MF_DEBUG("Running external editor: '" << cmd << "'" << endl);
-#ifdef DO_MF_DEBUG
-            int statusCode =
-# endif
-            system(cmd.c_str());
-#ifdef DO_MF_DEBUG
+            int statusCode = system(cmd.c_str());
             MF_DEBUG("External editor finished with status: " << statusCode << endl);
-# endif
+            if(statusCode) {
+                cerr << "External editor failed with status: " << statusCode << endl;
+            }
 
             // paste text BACK to Note
             if(isFile(tempFilePath.c_str())) {
