@@ -149,7 +149,9 @@ void NoteViewPresenter::slotLinkClicked(const QUrl& url)
 
 void NoteViewPresenter::slotEditNote()
 {    
-    orloj->showFacetNoteEdit(this->currentNote);
+    if(orloj->getMainPresenter()->getConfiguration().isUiDoubleClickNoteViewToEdit()) {
+        orloj->showFacetNoteEdit(this->currentNote);
+    }
 }
 
 void NoteViewPresenter::slotRefreshLeaderboardByValue(AssociatedNotes* associations)

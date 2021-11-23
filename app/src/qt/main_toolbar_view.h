@@ -58,6 +58,9 @@ public:
     QAction* actionAdapt;
     QAction* actionHelp;
 
+
+    void hideEvent(QHideEvent *) override;
+
 public:
     explicit MainToolbarView(MainWindowView* mainWindowView);
     MainToolbarView(const MainToolbarView&) = delete;
@@ -67,6 +70,9 @@ public:
     ~MainToolbarView();
 
     CliAndBreadcrumbsView* getCli() const { return cli;}
+
+signals:
+    void signalMainToolbarVisibilityChanged(bool visibility);
 };
 
 }

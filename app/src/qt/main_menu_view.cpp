@@ -350,6 +350,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNavigator->setEnabled(false);
 
     // menu: library
+#ifdef MF_WIP
     menuLibrary = qMenuBar->addMenu(tr("Libr&ary"));
 
     actionLibraryAdd = new QAction(QIcon(":/menu-icons/new.svg"), tr("&Add library"), mainWindow);
@@ -360,13 +361,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionLibraryDeprecate->setDisabled(true);
 
     menuLibrary->addAction(actionLibraryAdd);
-#ifdef MF_WIP
-    menuLibrary->addAction(actionLibraryDeprecate);
+    // menuLibrary->addAction(actionLibraryDeprecate);
 #endif
 
     // menu: flashcards
+#ifdef MF_WIP
     menuFlashcards = qMenuBar->addMenu(tr("Flash&cards"));
     menuFlashcards->setDisabled(true);
+#endif
 
     // menu: organizer
     menuOrganizer = qMenuBar->addMenu(tr("&Organizer"));
@@ -884,10 +886,17 @@ void MainMenuView::showAllMenuItems()
     actionViewLimbo->setEnabled(true);
     actionViewRecentNotes->setEnabled(true);
 
+#ifdef MF_WIP
     menuLibrary->setEnabled(true);
+
     actionLibraryAdd->setEnabled(true);
     // TODO to be implemented
     actionLibraryDeprecate->setEnabled(false);
+#endif
+
+#ifdef MF_WIP
+    menuFlashcards->setEnabled(true);
+#endif
 
     menuOrganizer->setEnabled(true);
     actionOrganizerNew->setEnabled(true);
@@ -924,8 +933,6 @@ void MainMenuView::showAllMenuItems()
 
     menuHelp->setEnabled(true);
 
-    actionFindOutlineByName->setEnabled(true);
-
     mainWindow->getToolBar()->setEnabled(true);
 }
 
@@ -945,7 +952,9 @@ void MainMenuView::showFacetOrganizerList(bool repositoryMode)
     menuKnowledge->setEnabled(false);
 #endif
     menuNavigator->setEnabled(false);
+#ifdef MF_WIP
     menuLibrary->setEnabled(false);
+#endif
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
     menuEdit->setEnabled(false);
@@ -969,7 +978,9 @@ void MainMenuView::showFacetOrganizerView(bool repositoryMode)
     menuKnowledge->setEnabled(false);
 #endif
     menuNavigator->setEnabled(false);
+#ifdef MF_WIP
     menuLibrary->setEnabled(false);
+#endif
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
     menuEdit->setEnabled(false);
@@ -1017,7 +1028,9 @@ void MainMenuView::showFacetOutlineView(bool repositoryMode)
     showAllMenuItems();
 
     menuNavigator->setEnabled(false);
+#ifdef MF_WIP
     menuLibrary->setEnabled(false);
+#endif
     menuOrganizer->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
@@ -1040,7 +1053,9 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
     menuMind->setEnabled(false);
     actionExit->setEnabled(false);
 
+#ifdef MF_WIP
     menuLibrary->setEnabled(false);
+#endif
     menuOrganizer->setEnabled(false);
     actionOrganizerNew->setEnabled(false);
     actionOrganizerEdit->setEnabled(false);

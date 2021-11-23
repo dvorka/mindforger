@@ -151,6 +151,10 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(view.getToolBar()->actionScope, SIGNAL(triggered()), this, SLOT(doActionMindTimeTagScope()));
     QObject::connect(view.getToolBar()->actionAdapt, SIGNAL(triggered()), this, SLOT(doActionMindPreferences()));
     QObject::connect(view.getToolBar()->actionHelp, SIGNAL(triggered()), this, SLOT(doActionHelpDocumentation()));
+    QObject::connect(
+        view.getToolBar(), SIGNAL(signalMainToolbarVisibilityChanged(bool)),
+        this, SLOT(slotMainToolbarVisibilityChanged(bool)));
+
 
 #ifdef MF_NER
     QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleFindNerEntities()));
@@ -745,6 +749,13 @@ void MainWindowPresenter::slotHandleFts()
             orloj->getNoteView()->getView()->getViever()->findText(searchedString);
         }
     }
+}
+
+void MainWindowPresenter::slotMainToolbarVisibilityChanged(bool visibility)
+{
+    MF_DEBUG("Main toolbar visibility changed: " << boolalpha << visibility << endl);
+    this->config.setUiShowToolbar(visibility);
+    mdConfigRepresentation->save(config);
 }
 
 void MainWindowPresenter::doActionFindOutlineByName()
@@ -2252,13 +2263,11 @@ void MainWindowPresenter::doActionNoteExternalEdit()
             }
 
             MF_DEBUG("Running external editor: '" << cmd << "'" << endl);
-#ifdef DO_MF_DEBUG
-            int statusCode =
-# endif
-            system(cmd.c_str());
-#ifdef DO_MF_DEBUG
+            int statusCode = system(cmd.c_str());
             MF_DEBUG("External editor finished with status: " << statusCode << endl);
-# endif
+            if(statusCode) {
+                cerr << "External editor failed with status: " << statusCode << endl;
+            }
 
             // paste text BACK to Note
             if(isFile(tempFilePath.c_str())) {

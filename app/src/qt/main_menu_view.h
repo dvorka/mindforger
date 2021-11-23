@@ -52,8 +52,10 @@ public:
     QMenu* menuKnowledge;
 #endif
     QMenu* menuNavigator;
+#ifdef MF_WIP
     QMenu* menuLibrary;
     QMenu* menuFlashcards;
+#endif
     QMenu* menuOrganizer;
     QMenu* menuOutline;
     QMenu* menuNote;

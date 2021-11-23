@@ -107,4 +107,10 @@ MainToolbarView::~MainToolbarView()
 {
 }
 
+void MainToolbarView::hideEvent(QHideEvent *)
+{
+    emit signalMainToolbarVisibilityChanged(false);
+}
+
+
 } // m8r namespace
