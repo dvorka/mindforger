@@ -203,13 +203,13 @@ then
 fi
 
 export ARG_MAJOR_VERSION=1.52.
-export ARG_MINOR_VERSION=0 # minor version is incremented for every Ubuntu version
+export ARG_MINOR_VERSION=7 # minor version is incremented for every Ubuntu version
 export ARG_BAZAAR_MSG="MindForger ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} release."
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily trusty (old GCC) yakkety artful cosmic
-# current: (trusty) xenial bionic disco eoan
-for UBUNTU_VERSION in xenial bionic disco eoan
+# current: (trusty) xenial bionic (cosmic disco) eoan | focal (groovy) hirsute impish
+for UBUNTU_VERSION in groovy
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
