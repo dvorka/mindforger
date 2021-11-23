@@ -208,8 +208,8 @@ export ARG_BAZAAR_MSG="MindForger ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} relea
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily trusty (old GCC) yakkety artful cosmic
-# current: (trusty) xenial bionic (cosmic disco) eoan | focal (groovy) hirsute impish
-for UBUNTU_VERSION in groovy
+# current: (trusty) xenial bionic (cosmic disco eoan) focal (groovy) hirsute impish
+for UBUNTU_VERSION in xenial bionic focal hirsute impish
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
