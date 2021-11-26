@@ -1,8 +1,8 @@
 ---
 name: New feature or enhancement
-about: Propose a new MindForger enhancement or feature
+about: Propose a new MindForger enhancement or feature.
 title: "[Feature/Enhancement] "
-labels: ':octocat: enhancement, :rescue_worker_helmet: triage'
+labels: ":octocat: enhancement, :rescue_worker_helmet: triage"
 assignees: dvorka
 
 ---
