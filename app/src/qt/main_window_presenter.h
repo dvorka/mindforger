@@ -54,6 +54,7 @@
 #include "dialogs/rows_and_depth_dialog.h"
 #include "dialogs/new_repository_dialog.h"
 #include "dialogs/new_file_dialog.h"
+#include "dialogs/terminal_dialog.h"
 #include "dialogs/export_csv_file_dialog.h"
 #include "dialogs/export_file_dialog.h"
 #include "dialogs/ner_choose_tag_types_dialog.h"
@@ -132,6 +133,7 @@ private:
     FindNoteByTagDialog* findNoteByTagDialog;
     RefactorNoteToOutlineDialog* refactorNoteToOutlineDialog;
     ConfigurationDialog* configDialog;
+    TerminalDialog* terminalDialog;
     InsertImageDialog* insertImageDialog;
     InsertLinkDialog* insertLinkDialog;
     RowsAndDepthDialog* rowsAndDepthDialog;
@@ -196,6 +198,7 @@ public slots:
     void handleMindScope();
     void doActionMindPreferences();
     void handleMindPreferences();
+    void doActionMindTerminal();
     void doActionMindRemember();
     void doActionMindSnapshot();
     void doActionMindCsvExport();

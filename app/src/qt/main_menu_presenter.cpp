@@ -27,23 +27,65 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     this->mainWindowPresenter = mwp;
 
     // menu: mind
-    QObject::connect(view->actionMindNewRepository, SIGNAL(triggered()), mwp, SLOT(doActionMindNewRepository()));
-    QObject::connect(view->actionMindNewFile, SIGNAL(triggered()), mwp, SLOT(doActionMindNewFile()));
-    QObject::connect(view->actionMindThink, SIGNAL(triggered()), mwp, SLOT(doActionMindToggleThink()));
-    QObject::connect(view->actionMindAutolink, SIGNAL(triggered()), mwp, SLOT(doActionMindToggleAutolink()));
-    QObject::connect(view->actionMindLearnRepository, SIGNAL(triggered()), mwp, SLOT(doActionMindLearnRepository()));
-    QObject::connect(view->actionMindLearnFile, SIGNAL(triggered()), mwp, SLOT(doActionMindLearnFile()));
+    QObject::connect(
+        view->actionMindNewRepository, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindNewRepository())
+    );
+    QObject::connect(
+        view->actionMindNewFile, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindNewFile())
+    );
+    QObject::connect(
+        view->actionMindThink, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindToggleThink())
+    );
+    QObject::connect(
+        view->actionMindAutolink, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindToggleAutolink())
+    );
+    QObject::connect(
+        view->actionMindLearnRepository, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindLearnRepository())
+    );
+    QObject::connect(
+        view->actionMindLearnFile, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindLearnFile())
+    );
     for(auto& r:config.getRepositories()) {
         view->submenuMindRelearn->addFile(QString::fromStdString(r.first));
     }
-    QObject::connect(view->submenuMindRelearn, SIGNAL(recentFileTriggered(QString)), mwp, SLOT(doActionMindRelearn(QString)));
-    QObject::connect(view->actionMindScope, SIGNAL(triggered()), mwp, SLOT(doActionMindTimeTagScope()));
-    QObject::connect(view->actionMindRemember, SIGNAL(triggered()), mwp, SLOT(doActionMindRemember()));
-    // TODO QObject::connect(view->actionMindForget, SIGNAL(triggered()), mwp, SLOT(doActionMindForgetting()));
-    QObject::connect(view->actionMindPreferences, SIGNAL(triggered()), mwp, SLOT(doActionMindPreferences()));
-    QObject::connect(view->actionMindSnapshot, SIGNAL(triggered()), mwp, SLOT(doActionMindSnapshot()));
-    QObject::connect(view->actionMindExportCsv, SIGNAL(triggered()), mwp, SLOT(doActionMindCsvExport()));
-    QObject::connect(view->actionExit, SIGNAL(triggered()), mwp, SLOT(doActionExit()));
+    QObject::connect(
+        view->submenuMindRelearn, SIGNAL(recentFileTriggered(QString)),
+        mwp, SLOT(doActionMindRelearn(QString))
+    );
+    QObject::connect(
+        view->actionMindScope, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindTimeTagScope())
+    );
+    QObject::connect(
+        view->actionMindRemember, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindRemember())
+    );
+    QObject::connect(
+        view->actionMindPreferences, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindPreferences())
+    );
+    QObject::connect(
+        view->actionMindTerminal, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindTerminal())
+    );
+    QObject::connect(
+        view->actionMindSnapshot, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindSnapshot())
+    );
+    QObject::connect(
+        view->actionMindExportCsv, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindCsvExport())
+    );
+    QObject::connect(
+        view->actionExit, SIGNAL(triggered()),
+        mwp, SLOT(doActionExit())
+    );
 #ifdef DO_MF_DEBUG
     QObject::connect(view->actionMindHack, SIGNAL(triggered()), mwp, SLOT(doActionMindHack()));
 #endif

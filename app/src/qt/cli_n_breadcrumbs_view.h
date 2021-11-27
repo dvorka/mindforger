@@ -34,6 +34,7 @@ class CliView : public QLineEdit
 
 private:
     CliAndBreadcrumbsView* cliAndBreadcrumps;
+
 public:
     explicit CliView(CliAndBreadcrumbsView* cliAndBreadcrumps, QWidget* parent);
     void keyPressEvent(QKeyEvent* event) override;
@@ -46,6 +47,7 @@ class CliAndBreadcrumbsView : public QWidget
     Q_OBJECT
 
     friend class CliAndBreadcrumbsPresenter;
+
 private:
     static const QStringList DEFAULT_CMDS;
 

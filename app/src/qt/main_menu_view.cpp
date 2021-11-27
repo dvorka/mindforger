@@ -108,6 +108,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
     actionMindPreferences->setStatusTip(tr("Adapt Mind by setting your preferences..."));
 
+    actionMindTerminal = new QAction(QIcon(":/menu-icons/cli.svg"), tr("Term&inal"), mainWindow);
+    actionMindTerminal->setStatusTip(tr("Run simple command line from current MindForger repository..."));
+
     submenuMindExport = menuMind->addMenu(QIcon(":/menu-icons/export.svg"), "&Export");
     actionMindExportCsv = new QAction(tr("&CSV"), mainWindow);
     actionMindExportCsv->setStatusTip(tr("Export all Notebooks/Markdown files as a single CSV file"));
@@ -130,9 +133,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addAction(actionMindPreferences);
 #ifdef MF_WIP
     menuMind->addAction(actionMindForget);
-#endif
     menuMind->addSeparator();
+#endif
     menuMind->addMenu(submenuMindExport);
+    menuMind->addSeparator();
+    menuMind->addAction(actionMindTerminal);
     menuMind->addSeparator();
     menuMind->addAction(actionExit);
 #ifdef DO_MF_DEBUG

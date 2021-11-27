@@ -81,6 +81,7 @@ public:
     QAction* actionMindForget;
     QAction* actionMindSnapshot;
     QAction* actionMindPreferences;
+    QAction* actionMindTerminal;
     QMenu* submenuMindExport;
     QAction* actionMindExportCsv;
     QAction* actionExit;

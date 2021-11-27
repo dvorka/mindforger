@@ -64,6 +64,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     findNoteByTagDialog = new FindNoteByTagDialog{mind->remind().getOntology(), &view};
     refactorNoteToOutlineDialog = new RefactorNoteToOutlineDialog{&view};
     configDialog = new ConfigurationDialog{&view};
+    terminalDialog = new TerminalDialog{&view};
     insertImageDialog = new InsertImageDialog{&view};
     insertLinkDialog = new InsertLinkDialog{&view};
     rowsAndDepthDialog = new RowsAndDepthDialog(&view);
@@ -2681,6 +2682,11 @@ void MainWindowPresenter::handleMindPreferences()
 
     view.getOrloj()->getNoteEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
     view.getOrloj()->getOutlineHeaderEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
+}
+
+void MainWindowPresenter::doActionMindTerminal()
+{
+    terminalDialog->show();
 }
 
 void MainWindowPresenter::doActionKnowledgeWikipedia()

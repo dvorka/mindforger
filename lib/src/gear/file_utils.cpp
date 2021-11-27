@@ -110,6 +110,13 @@ Path::~Path()
  * Utility functions
  */
 
+string getCwd() {
+    char* cwd_c = get_current_dir_name();
+    std::string cwd{cwd_c};
+    free(cwd_c);
+    return cwd;
+}
+
 void pathToDirectoryAndFile(const std::string& path, std::string& directory, std::string& file)
 {
     if(!path.empty()) {
@@ -457,10 +464,6 @@ int removeDirectoryRecursively(const char* path)
    return r;
 }
 
-
-
-
-
 #ifdef GZIP_DEFLATE_VIA_ZIP_LIBRARY
 
 void unzip(const char* srcFile, const char* dstFile)
@@ -606,7 +609,7 @@ extern "C" {
    message and exits the program. Zlib's error statuses are all less
    than zero. */
 
-#define GZIP_CALL_ZLIB(x) {                                                  \
+#define GZIP_CALL_ZLIB(x) {                                             \
         int status;                                                     \
         status = x;                                                     \
         if (status < 0) {                                               \
@@ -619,12 +622,12 @@ extern "C" {
 
 /* if "test" is true, print an error message and halt execution. */
 
-#define GZIP_FAIL(test,message) {                             \
+#define GZIP_FAIL(test,message) {                        \
         if (test) {                                      \
             inflateEnd (& strm);                         \
             fprintf (stderr, "%s:%d: " message           \
                      " file '%s' failed: %s\n",          \
-                     __FILE__, __LINE__, srcFile,      \
+                     __FILE__, __LINE__, srcFile,        \
                      strerror (errno));                  \
             exit (EXIT_FAILURE);                         \
         }                                                \

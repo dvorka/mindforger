@@ -55,9 +55,10 @@ private:
 
 public:
     explicit OutlineNewDialog(
-            const QString& memoryDirPath,
-            Ontology& ontology,
-            QWidget* parent);
+        const QString& memoryDirPath,
+        Ontology& ontology,
+        QWidget* parent
+    );
     OutlineNewDialog(const OutlineNewDialog&) = delete;
     OutlineNewDialog(const OutlineNewDialog&&) = delete;
     OutlineNewDialog &operator=(const OutlineNewDialog&) = delete;

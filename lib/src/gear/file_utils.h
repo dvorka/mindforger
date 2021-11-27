@@ -199,6 +199,7 @@ int ungzip(const char* srcFile, const char* dstFile);
 }
 #endif
 
+std::string getCwd();
 void pathToDirectoryAndFile(const std::string& path, std::string& directory, std::string& file);
 void pathToLinuxDelimiters(const std::string& path, std::string& linuxPath);
 std::string platformSpecificPath(const char* path);

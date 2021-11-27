@@ -24,9 +24,14 @@ MINDFORGER_RELEASE_DIR := $(MINDFORGER_RELEASE_BASE_DIR)/$(MINDFORGER_VERSION)-m
 
 MF_MAKER_WORKING_DIR := $(MINDFORGER_RELEASE_BASE_DIR)/maker-at-work
 
+# class name like My_Class_Name used by C++ class generators
+CLASS_NAME := "New_Class"
+
 help:
 	@echo "MindForger maker help:"
 	@echo "clean         clean build artifacts"
+	@echo "gen-lib-class generate lib C++ class skeleton for CLASS_NAME=My_Class"
+	@echo "gen-ui-class  generate UI C++ class skeleton CLASS_NAME=My_Class"
 	@echo "build         build MindForger executable"
 	@echo "l10n          update and release localization strings"
 	@echo "test-lib      compile and run lib/ unit tests"
@@ -43,6 +48,15 @@ clean:
 	rm -vf ../lib/test/src/mindforger-lib-unit-tests
 	cd .. && make clean
 	cd ../lib/test && make clean
+
+gen-lib-class:
+	@echo "Generating lib C++ class for name: $(CLASS_NAME)"
+	./gen-cpp-class.py $(CLASS_NAME)
+
+gen-ui-class:
+	@echo "Generating UI C++ class for name: $(CLASS_NAME)"
+	./gen-cpp-ui-class.py $(CLASS_NAME)
+
 
 build: clean
 	cd .. && qmake -r mindforger.pro && make -j 7
