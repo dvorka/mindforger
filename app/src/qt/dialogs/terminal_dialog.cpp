@@ -27,17 +27,26 @@ TerminalDialog::TerminalDialog(QWidget* parent)
 {
     cmdEdit = new MyLineEdit(this, this);
 
-    completerCommands.clear();
-    completerCommands << QString::fromStdString("pwd");
-    completerCommands << QString::fromStdString("git add .");
-    completerCommands << QString::fromStdString("push origin HEAD");
-    completerCommands << QString::fromStdString(
-        "git add . && git commit -m 'Updates.' && git push origin HEAD"
-    );
-    completerCommands << QString::fromStdString("exit");
-    cmdCompleter = new QCompleter(completerCommands, this);
+    cmdCompleter = new QCompleter(new QStandardItemModel(cmdEdit), this);
     cmdCompleter->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
     cmdCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    QStandardItemModel* cmdCompleterModel =
+        dynamic_cast<QStandardItemModel*>(cmdCompleter->model());
+    if(cmdCompleterModel) {
+        completerCommands.clear();
+        completerCommands << QString::fromStdString("pwd");
+        completerCommands << QString::fromStdString("git add .");
+        completerCommands << QString::fromStdString("push origin HEAD");
+        completerCommands << QString::fromStdString(
+            "git add . && git commit -m 'Updates.' && git push origin HEAD"
+        );
+        completerCommands << QString::fromStdString("exit");
+
+        for(auto c:completerCommands) {
+            cmdCompleterModel->appendRow(new QStandardItem(c));
+        }
+    }
+
     cmdEdit->setCompleter(cmdCompleter);
 
     terminalWindow = new QTextEdit(this);
@@ -100,6 +109,16 @@ void TerminalDialog::runCommand()
             );
 
             string cmd{cmdEdit->text().toStdString()};
+
+            // add command to completer
+            QStandardItemModel* completerModel
+                = dynamic_cast<QStandardItemModel*>(cmdCompleter->model());
+            if(!completerModel) {
+                completerModel = new QStandardItemModel();
+            }
+            completerModel->insertRow(
+                0, new QStandardItem(cmdEdit->text())
+            );
 
             // run command
             if(!system(NULL)) {
@@ -174,6 +193,10 @@ void TerminalDialog::runCommand()
                     QString::fromStdString(getPrompt())
                 );
             }
+
+            // scroll down by moving cursor to the end AND ensuring it's visible
+            terminalWindow->moveCursor(QTextCursor::End);
+            terminalWindow->ensureCursorVisible();
         }
     }
 
