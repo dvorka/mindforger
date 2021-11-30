@@ -40,6 +40,13 @@ TerminalDialog::TerminalDialog(QWidget* parent)
         completerCommands << QString::fromStdString(
             "git add . && git commit -m 'Updates.' && git push origin HEAD"
         );
+        completerCommands << QString::fromStdString(
+            "cd ~/mf && git add . && git commit -m 'Updates.' && git push origin HEAD"
+        );
+        completerCommands << QString::fromStdString("echo $MIDFORGER_REPOSITORY");
+        completerCommands << QString::fromStdString("mindforger --help");
+        completerCommands << QString::fromStdString("clear");
+        completerCommands << QString::fromStdString("cls");
         completerCommands << QString::fromStdString("exit");
 
         for(auto c:completerCommands) {
