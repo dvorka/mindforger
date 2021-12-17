@@ -1,4 +1,4 @@
-# Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # MindForger thinking notebook
 #
