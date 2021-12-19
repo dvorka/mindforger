@@ -205,6 +205,11 @@ MainWindowPresenter::~MainWindowPresenter()
     delete this->mdDocumentRepresentation;
 }
 
+/**
+ * @brief Initial view assembly.
+ *
+ * This method builds initial view on MindForger boot.
+ */
 void MainWindowPresenter::showInitialView()
 {
     MF_DEBUG("Initial view to show " << mind->getOutlines().size() << " Os (scope is applied if active)" << endl);
@@ -295,7 +300,7 @@ void MainWindowPresenter::showInitialView()
     }
 }
 
-/* Link handling hints
+/* Link handling hints.
  *
  * PROBLEM:
  *

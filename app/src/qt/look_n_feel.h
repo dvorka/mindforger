@@ -86,6 +86,7 @@ private:
     QColor editorHtmlAttrName;
     QColor editorHtmlAttrValue;
     QColor editorHtmlComment;
+    QColor editorError;
 
     // HTML
     QString htmlTextColor;
@@ -152,6 +153,7 @@ public:
     QColor& getEditorHtmlAttrName() { return editorHtmlAttrName; }
     QColor& getEditorHtmlAttrValue() { return editorHtmlAttrValue; }
     QColor& getEditorHtmlComment() { return editorHtmlComment; }
+    QColor& getEditorError() { return editorError; }
 
     // HTML
     virtual std::string& getHtmlTextColor();

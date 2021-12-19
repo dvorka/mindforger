@@ -312,6 +312,37 @@ int main(int argc, char* argv[])
         lookAndFeels.setTheme(QString::fromStdString(config.getUiThemeName()));
     }
 
+    // spell check
+    MF_DEBUG("Spell check" << endl);
+    DictionaryManager::instance().addProviders();
+    MF_DEBUG("  Available language dictionaries:" << endl);
+    QStringList languages = DictionaryManager::instance().availableDictionaries();
+    languages.sort();
+    foreach(auto l, languages) {
+        MF_DEBUG("    '" << l.toStdString() << "'" << endl);
+    }
+    // set the default dictionary language
+    if(languages.size()) {
+        QString defaultLanguage = languages[0];
+        DictionaryManager::instance().setDefaultLanguage(defaultLanguage);
+        MF_DEBUG("  Spell check language set to: '" << defaultLanguage.toStdString() << "'" << endl);
+
+        // TODO set
+        // config.setUiEditorSpellCheckDefaultLanguage();
+        // config.setUiEditorSpellCheckLanguages();
+    }
+    else {
+        MF_DEBUG("  No spell check dictionaries available!" << endl);
+        // disable spellcheck
+        if(config.isUiEditorSpellCheckLive()) {
+            config.setUiEditorSpellCheckLive(false);
+            // TODO clear
+            // config.clearUiEditorSpellCheckDefaultLanguage();
+            // config.clearUiEditorSpellCheckLanguages();
+            // mdConfigRepresentation->save(config);
+        }
+    }
+
     // initialize and start UI
     m8r::MainWindowView mainWindowView(lookAndFeels);
     m8r::MainWindowPresenter mainWindowPresenter(mainWindowView);

@@ -23,7 +23,7 @@
 
 #include "../../lib/src/gear/lang_utils.h"
 
-#include "note_edit_highlight.h"
+#include "note_edit_highlighter.h"
 #include "widgets/line_number_panel.h"
 #include "status_bar_view.h"
 
@@ -48,7 +48,7 @@ private:
 
     // usability
     bool enableSyntaxHighlighting;
-    NoteEditHighlight* highlighter;
+    NoteEditHighlighter* highlighter;
     bool showLineNumbers;
     LineNumberPanel* lineNumberPanel;
 
@@ -90,6 +90,9 @@ public:
     // drag & drop
     void dropEvent(QDropEvent* event) override;
     void dragMoveEvent(QDragMoveEvent* event) override;
+
+    // spell check
+    void enableSpellCheck(bool enable) { this->highlighter->setEnabled(enable); }
 
     // search
     void findString(const QString s, bool reverse, bool casesens, bool words);

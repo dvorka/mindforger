@@ -107,9 +107,40 @@ win32 {
     LIBS += -lRpcrt4 -lOle32
 }
 
+# spellcheck
+macx {
+    HEADERS += ./src/qt/spelling/dictionary_provider_nsspellchecker.h
+
+    OBJECTIVE_SOURCES += src/qt/spelling/dictionary_provider_nsspellchecker.mm
+} else:win32 {
+    include(./deps/hunspell/hunspell.pri)
+
+    HEADERS += \
+      ./src/qt/spelling/dictionary_provider_hunspell.h \
+      ./src/qt/spelling/dictionary_provider_voikko.h
+
+    SOURCES += \
+      ./src/qt/spelling/dictionary_provider_hunspell.cpp \
+      ./src/qt/spelling/dictionary_provider_voikko.cpp
+
+} else:unix {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += hunspell
+
+    HEADERS += \
+      ./src/qt/spelling/dictionary_provider_hunspell.h \
+      ./src/qt/spelling/dictionary_provider_voikko.h
+
+    SOURCES += \
+      ./src/qt/spelling/dictionary_provider_hunspell.cpp \
+      ./src/qt/spelling/dictionary_provider_voikko.cpp
+}
+INCLUDEPATH += ./src/qt/spelling
+
 # development environment remarks:
-# - Beast 64b:   GCC 5.4.0, Qt 5.5.1
-# - S7    64b:   GCC 4.8.5, Qt 5.2.1
+# - Mind  64b: GCC 7.5.0, Qt 5.9.5
+# - Beast 64b: GCC 5.4.0, Qt 5.5.1
+# - S7    64b: GCC 4.8.5, Qt 5.2.1
 # - Win10 64b: MSVC 2017, Qt 5.12.0
 #
 # - GCC: -std=c++0x ~ -std=c++11
@@ -162,7 +193,7 @@ HEADERS += \
     ./src/qt/note_edit_presenter.h \
     ./src/qt/look_n_feel.h \
     ./src/qt/html_delegate.h \
-    ./src/qt/note_edit_highlight.h \
+    ./src/qt/note_edit_highlighter.h \
     ./src/qt/gear/qutils.h \
     ./src/qt/i18nl10n.h \
     ./src/qt/outline_view_presenter.h \
@@ -218,6 +249,11 @@ HEADERS += \
     src/qt/organizers_table_model.h \
     src/qt/organizers_table_presenter.h \
     src/qt/organizers_table_view.h \
+    src/qt/spelling/abstract_dictionary.h \
+    src/qt/spelling/abstract_dictionary_provider.h \
+    src/qt/spelling/dictionary_manager.h \
+    src/qt/spelling/dictionary_ref.h \
+    src/qt/spelling/spell_checker.h \
     src/qt/tags_table_model.h \
     src/qt/tags_table_presenter.h \
     src/qt/tags_table_view.h \
@@ -280,7 +316,7 @@ SOURCES += \
     ./src/qt/note_edit_presenter.cpp \
     ./src/qt/look_n_feel.cpp \
     ./src/qt/html_delegate.cpp \
-    ./src/qt/note_edit_highlight.cpp \
+    ./src/qt/note_edit_highlighter.cpp \
     ./src/qt/gear/qutils.cpp \
     ./src/qt/i18nl10n.cpp \
     ./src/qt/outline_view_presenter.cpp \
@@ -336,6 +372,8 @@ SOURCES += \
     src/qt/organizers_table_model.cpp \
     src/qt/organizers_table_presenter.cpp \
     src/qt/organizers_table_view.cpp \
+    src/qt/spelling/dictionary_manager.cpp \
+    src/qt/spelling/spell_checker.cpp \
     src/qt/tags_table_model.cpp \
     src/qt/tags_table_presenter.cpp \
     src/qt/tags_table_view.cpp \

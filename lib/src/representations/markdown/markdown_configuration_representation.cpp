@@ -50,6 +50,7 @@ constexpr const auto CONFIG_SETTING_UI_NERD_MENU=  "* Nerd menu: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_FONT_LABEL =  "* Editor font: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL =  "* Editor syntax highlighting: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_SPELLCHECK_LIVE_LABEL =  "* Editor live spell check: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL =  "* Editor autocomplete: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL =  "* Editor TAB width: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TABS_AS_SPACES_LABEL =  "* Editor insert SPACEs for TAB: ";
@@ -287,6 +288,12 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         } else {
                             c.setUiEditorEnableSyntaxHighlighting(false);
                         }
+                    } else if(line->find(CONFIG_SETTING_UI_EDITOR_SPELLCHECK_LIVE_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiEditorSpellCheckLive(true);
+                        } else {
+                            c.setUiEditorSpellCheckLive(false);
+                        }
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
                             c.setUiEditorEnableAutocomplete(true);
@@ -507,6 +514,9 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: emacs, vim, windows" << endl <<
          CONFIG_SETTING_UI_EDITOR_FONT_LABEL << (c?c->getEditorFont():Configuration::DEFAULT_EDITOR_FONT) << endl <<
          "    * Examples: " << Configuration::DEFAULT_EDITOR_FONT << endl <<
+         CONFIG_SETTING_UI_EDITOR_SPELLCHECK_LIVE_LABEL << (c?(c->isUiEditorSpellCheckLive()?"yes":"no"):(Configuration::DEFAULT_SPELLCHECK_LIVE?"yes":"no")) << endl <<
+         "    * Enable live spell check in Notebook and Note description editor." << endl <<
+         "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL << (c?(c->isUiEditorEnableSyntaxHighlighting()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SYNTAX_HIGHLIGHT?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL << (c?(c->isUiEditorEnableAutocomplete()?"yes":"no"):(Configuration::DEFAULT_EDITOR_AUTOCOMPLETE?"yes":"no")) << endl <<

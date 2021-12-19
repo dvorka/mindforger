@@ -190,6 +190,7 @@ public:
     static constexpr const bool DEFAULT_EDITOR_AUTOSAVE = false;
     static constexpr const bool DEFAULT_FULL_O_PREVIEW = false;
     static constexpr const bool DEFAULT_MD_QUOTE_SECTIONS = true;
+    static constexpr const bool DEFAULT_SPELLCHECK_LIVE = true;
     static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_MD_MATH = false;
     static constexpr const bool DEFAULT_ALLOW_ONLINE_JS_LIBS = false;
@@ -255,6 +256,7 @@ private:
     int uiEditorTabWidth;
     bool uiEditorLineNumbers; // show line numbers
     bool uiEditorSyntaxHighlighting; // toggle syntax highlighting
+    bool uiEditorSpellCheckLive;
     bool uiEditorAutocomplete; // toggle autocompletion
     JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
     int navigatorMaxNodes;
@@ -414,6 +416,8 @@ public:
     void setUiEditorShowLineNumbers(bool show) { uiEditorLineNumbers = show; }
     bool isUiEditorEnableSyntaxHighlighting() const { return uiEditorSyntaxHighlighting; }
     void setUiEditorEnableSyntaxHighlighting(bool enable) { uiEditorSyntaxHighlighting = enable; }
+    bool isUiEditorSpellCheckLive() const { return uiEditorSpellCheckLive; }
+    void setUiEditorSpellCheckLive(bool enable) { uiEditorSpellCheckLive = enable; }
     bool isUiEditorEnableAutocomplete() const { return uiEditorAutocomplete; }
     void setUiEditorEnableAutocomplete(bool enable) { uiEditorAutocomplete = enable; }
     int getUiEditorTabWidth() const { return uiEditorTabWidth; }

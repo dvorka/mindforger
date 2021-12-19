@@ -346,10 +346,11 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     QObject::connect(editorFontButton, &QPushButton::clicked, this, &ConfigurationDialog::EditorTab::getFont);
 
     editorMdSyntaxHighlightCheck = new QCheckBox(tr("Markdown syntax highlighting"), this);
+    editorSpellCheckLive = new QCheckBox(tr("live spell check"), this);
     editorAutocompleteCheck = new QCheckBox(tr("autocomplete"), this);
     //editorQuoteSectionsCheck = new QCheckBox(tr("quote sections (# in description)"), this);
     editorTabsAsSpacesCheck = new QCheckBox(tr("TABs as SPACEs"), this);
-    editorAutosaveCheck = new QCheckBox(tr("autosave on Note editor close"), this);
+    editorAutosaveCheck = new QCheckBox(tr("autosave Note on editor close"), this);
 
     editorTabWidthLabel = new QLabel(tr("TAB width")+":", this);
     editorTabWidthCombo = new QComboBox(this);
@@ -361,18 +362,19 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
 
     // assembly
     QVBoxLayout* editorLayout = new QVBoxLayout{this};
-    editorLayout->addWidget(editorKeyBindingLabel);
-    editorLayout->addWidget(editorKeyBindingCombo);
+    editorLayout->addWidget(editorTabsAsSpacesCheck);
+    editorLayout->addWidget(editorSpellCheckLive);
+    editorLayout->addWidget(editorMdSyntaxHighlightCheck);
+    editorLayout->addWidget(editorAutocompleteCheck);
+    editorLayout->addWidget(editorAutosaveCheck);
     editorLayout->addWidget(editorFontLabel);
     editorLayout->addWidget(editorFontButton);
     editorLayout->addWidget(editorTabWidthLabel);
     editorLayout->addWidget(editorTabWidthCombo);
+    editorLayout->addWidget(editorKeyBindingLabel);
+    editorLayout->addWidget(editorKeyBindingCombo);
     editorLayout->addWidget(externalEditorCmdLabel);
     editorLayout->addWidget(externalEditorCmdEdit);
-    editorLayout->addWidget(editorTabsAsSpacesCheck);
-    editorLayout->addWidget(editorMdSyntaxHighlightCheck);
-    editorLayout->addWidget(editorAutocompleteCheck);
-    editorLayout->addWidget(editorAutosaveCheck);
     //editorLayout->addWidget(editorQuoteSectionsCheck);
     QGroupBox* editorGroup = new QGroupBox{tr("Markdown Editor"), this};
     editorGroup->setLayout(editorLayout);
@@ -389,6 +391,7 @@ ConfigurationDialog::EditorTab::~EditorTab()
     delete editorKeyBindingCombo;
     delete editorFontLabel;
     delete editorFontButton;
+    delete editorSpellCheckLive;
     delete editorMdSyntaxHighlightCheck;
     delete editorAutocompleteCheck;
     delete editorTabWidthLabel;
@@ -409,6 +412,7 @@ void ConfigurationDialog::EditorTab::refresh()
     editorFont.fromString(QString::fromStdString(config.getEditorFont()));
     editorFontButton->setText(editorFont.family());
 
+    editorSpellCheckLive->setChecked(config.isUiEditorSpellCheckLive());
     editorMdSyntaxHighlightCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
     editorAutocompleteCheck->setChecked(config.isUiEditorEnableAutocomplete());
     editorTabWidthCombo->setCurrentIndex(editorTabWidthCombo->findText(QString::number(config.getUiEditorTabWidth())));
@@ -422,6 +426,7 @@ void ConfigurationDialog::EditorTab::save()
 {
     config.setEditorKeyBindingByString(editorKeyBindingCombo->itemText(editorKeyBindingCombo->currentIndex()).toStdString());
     config.setEditorFont(editorFont.family().append(",").append(QString::number(editorFont.pointSize())).toStdString());
+    config.setUiEditorSpellCheckLive(editorSpellCheckLive->isChecked());
     config.setUiEditorEnableSyntaxHighlighting(editorMdSyntaxHighlightCheck->isChecked());
     config.setUiEditorEnableAutocomplete(editorAutocompleteCheck->isChecked());
     config.setUiEditorTabWidth(editorTabWidthCombo->itemText(editorTabWidthCombo->currentIndex()).toInt());

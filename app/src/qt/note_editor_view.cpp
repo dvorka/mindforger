@@ -38,7 +38,7 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     setEditorTabWidth(Configuration::getInstance().getUiEditorTabWidth());
 
     // widgets
-    highlighter = new NoteEditHighlight{document()};
+    highlighter = new NoteEditHighlighter{this};
     enableSyntaxHighlighting = Configuration::getInstance().isUiEditorEnableSyntaxHighlighting();
     tabsAsSpaces = Configuration::getInstance().isUiEditorTabsAsSpaces();
     tabWidth = Configuration::getInstance().getUiEditorTabWidth();
@@ -200,7 +200,11 @@ void NoteEditorView::insertMarkdownText(const QString &text, bool newLine, int o
         cursor.movePosition(QTextCursor::Down);
     }
     cursor.insertText(text);
-    cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, text.length()-offset);
+    cursor.movePosition(
+        QTextCursor::Left,
+        QTextCursor::MoveAnchor,
+        text.length()-offset
+    );
     setTextCursor(cursor);
 
     setFocus();

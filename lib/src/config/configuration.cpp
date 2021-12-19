@@ -59,6 +59,7 @@ Configuration::Configuration()
       uiEditorTabWidth{},
       uiEditorLineNumbers{},
       uiEditorSyntaxHighlighting{},
+      uiEditorSpellCheckLive{},
       uiEditorAutocomplete{},
       navigatorMaxNodes{},
       uiEditorTabsAsSpaces{},
@@ -166,6 +167,7 @@ void Configuration::clear()
     uiNerdTargetAudience = false;
     uiViewerShowMetadata = true;
     uiEditorSyntaxHighlighting = true;
+    uiEditorSpellCheckLive = DEFAULT_SPELLCHECK_LIVE;
     uiEditorAutocomplete = true;
     uiEditorLineNumbers = true;
     uiEditorTabsAsSpaces = DEFAULT_EDITOR_TABS_AS_SPACES;

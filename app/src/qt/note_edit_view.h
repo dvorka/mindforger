@@ -56,6 +56,8 @@ public:
         currentNote = note;
         topNamePanel->setNote(note);
         bottomButtonsPanel->setNote(note);
+        // TODO configuration
+        noteEditor->enableSpellCheck(true);
         noteEditor->setPlainText(QString::fromStdString(mdDescription));
     }
     void setEditorShowLineNumbers(bool show) { noteEditor->setShowLineNumbers(show); }
