@@ -428,7 +428,7 @@ void ConfigurationDialog::EditorTab::refresh()
 
     editorFont.fromString(QString::fromStdString(config.getEditorFont()));
     editorFontButton->setText(editorFont.family());
-
+    
     editorSpellCheckLive->setChecked(config.isUiEditorLiveSpellCheck());
     if(editorSpellCheckLive->isEnabled()
        && editorSpellCheckLanguageCombo->count()

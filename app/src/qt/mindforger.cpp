@@ -313,35 +313,52 @@ int main(int argc, char* argv[])
     }
 
     // spell check
-    MF_DEBUG("Spell check" << endl);
-    DictionaryManager::instance().addProviders();
-    MF_DEBUG("  Available language dictionaries:" << endl);
-    QStringList languages = DictionaryManager::instance().availableDictionaries();
-    languages.sort();
-    foreach(auto l, languages) {
-        MF_DEBUG("    '" << l.toStdString() << "'" << endl);
-    }
-    // set the default dictionary language
-    if(languages.size()) {
-        QString defaultLanguage = languages[0];
-        DictionaryManager::instance().setDefaultLanguage(defaultLanguage);
-        MF_DEBUG("  Spell check language set to: '" << defaultLanguage.toStdString() << "'" << endl);
+    MF_DEBUG("Spell check:" << endl);
+    if(config.isUiEditorLiveSpellCheck()) {
+        DictionaryManager::instance().addProviders();
+        MF_DEBUG("  Available language dictionaries:" << endl);
+        QStringList languages = DictionaryManager::instance().availableDictionaries();
+        // set the default dictionary language
+        if(languages.size()) {
+            languages.sort();
 
-        // TODO set
-        // config.setUiEditorSpellCheckDefaultLanguage();
-        // config.setUiEditorSpellCheckLanguages();
-    }
-    else {
-        MF_DEBUG("  No spell check dictionaries available!" << endl);
-        // disable spellcheck
-        if(config.isUiEditorSpellCheckLive()) {
-            config.setUiEditorSpellCheckLive(false);
-            // TODO clear
-            // config.clearUiEditorSpellCheckDefaultLanguage();
-            // config.clearUiEditorSpellCheckLanguages();
-            // mdConfigRepresentation->save(config);
+            // set language based on configuration
+            string defaultLanguage = config.getUiEditorSpellCheckDefaultLanguage();
+            bool isDefaultLangAvailable{false};
+            foreach(auto l, languages) {
+                config.addUiEditorSpellCheckLanguage(l.toStdString());
+                MF_DEBUG("    '" << l.toStdString() << "'");
+                if(l.toStdString() == defaultLanguage) {
+                   isDefaultLangAvailable = true;
+                   MF_DEBUG(" (default)");
+                }
+                MF_DEBUG(endl);
+            }
+            if(!isDefaultLangAvailable) {
+                defaultLanguage.assign(languages[0].toStdString());
+                MF_DEBUG("  Setting FALLBACK language to : " << defaultLanguage << endl);
+            }
+            DictionaryManager::instance().setDefaultLanguage(
+                QString::fromStdString(defaultLanguage)
+            );
+            MF_DEBUG("  Spell check language set to: '" << defaultLanguage << "'" << endl);
+
+            // TODO set
+            // config.setUiEditorSpellCheckLanguages();
+            // config.setUiEditorSpellCheckDefaultLanguage();
+        } else {
+            MF_DEBUG("  No spell check dictionaries available!" << endl);
+            // disable spell check (lang, langs and live spell check)
+            if(config.isUiEditorLiveSpellCheck()) {
+                config.clearUiEditorSpellCheckLanguages();
+            }
         }
+        // mdConfigRepresentation->save(config);
+    } else {
+        MF_DEBUG("  Spell check is DISABLED in configuration");
+        config.clearUiEditorSpellCheckLanguages();
     }
+
 
     // initialize and start UI
     m8r::MainWindowView mainWindowView(lookAndFeels);

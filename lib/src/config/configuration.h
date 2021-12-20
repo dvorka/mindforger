@@ -256,7 +256,10 @@ private:
     int uiEditorTabWidth;
     bool uiEditorLineNumbers; // show line numbers
     bool uiEditorSyntaxHighlighting; // toggle syntax highlighting
-    bool uiEditorSpellCheckLive;
+    bool uiEditorLiveSpellCheck;
+    std::string uiEditorSpellCheckLanguage;
+    // transient: available languages loaded in runtime from environment and not persisted
+    std::vector<std::string> uiEditorSpellCheckLanguages;
     bool uiEditorAutocomplete; // toggle autocompletion
     JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
     int navigatorMaxNodes;
@@ -416,8 +419,34 @@ public:
     void setUiEditorShowLineNumbers(bool show) { uiEditorLineNumbers = show; }
     bool isUiEditorEnableSyntaxHighlighting() const { return uiEditorSyntaxHighlighting; }
     void setUiEditorEnableSyntaxHighlighting(bool enable) { uiEditorSyntaxHighlighting = enable; }
-    bool isUiEditorSpellCheckLive() const { return uiEditorSpellCheckLive; }
-    void setUiEditorSpellCheckLive(bool enable) { uiEditorSpellCheckLive = enable; }
+    bool isUiEditorLiveSpellCheck() const { return uiEditorLiveSpellCheck; }
+    void setUiEditorLiveSpellCheck(bool enable) { uiEditorLiveSpellCheck= enable; }
+    std::string getUiEditorSpellCheckDefaultLanguage() const {
+        return uiEditorSpellCheckLanguage;
+    }    
+    void setUiEditorSpellCheckDefaultLanguage(std::string lang) {
+        uiEditorSpellCheckLanguage = lang;
+    }
+    void clearUiEditorSpellCheckDefaultLanguage() {
+        uiEditorSpellCheckLanguage.clear();
+    }
+    std::vector<std::string> getUiEditorSpellCheckLanguages() const {
+        return uiEditorSpellCheckLanguages;
+    }
+    void setUiEditorSpellCheckLanguages(std::vector<std::string>& langs) {
+        clearUiEditorSpellCheckLanguages();
+        for(auto lang: langs) {
+            uiEditorSpellCheckLanguages.push_back(lang);
+        }
+    }
+    void addUiEditorSpellCheckLanguage(std::string lang) {
+        return uiEditorSpellCheckLanguages.push_back(lang);
+    }
+    void clearUiEditorSpellCheckLanguages() {
+        uiEditorSpellCheckLanguages.clear();
+        clearUiEditorSpellCheckDefaultLanguage();
+        setUiEditorLiveSpellCheck(false);
+    }
     bool isUiEditorEnableAutocomplete() const { return uiEditorAutocomplete; }
     void setUiEditorEnableAutocomplete(bool enable) { uiEditorAutocomplete = enable; }
     int getUiEditorTabWidth() const { return uiEditorTabWidth; }
