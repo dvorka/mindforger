@@ -127,7 +127,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 #endif
 
     // menu: Library
+#ifdef MF_WIP
     QObject::connect(view->actionLibraryAdd, SIGNAL(triggered()), mwp, SLOT(doActionLibraryNew()));
+#endif
 
     // menu: Organizer
     QObject::connect(
