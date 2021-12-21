@@ -27,6 +27,7 @@
 #include <QtWidgets>
 
 #include "../../lib/src/version.h"
+#include "../../lib/src/gear/file_utils.h"
 #include "../../lib/src/representations/markdown/markdown_configuration_representation.h"
 #include "../../lib/src/representations/markdown/markdown_repository_configuration_representation.h"
 
@@ -315,9 +316,23 @@ int main(int argc, char* argv[])
     // spell check
     MF_DEBUG("Spell check:" << endl);
     if(config.isUiEditorLiveSpellCheck()) {
+        // prepare dirs for custom dictionaries
+        string dictionariesPath{m8r::getSystemMindForgerConfigPath()};
+        dictionariesPath += FILE_PATH_SEPARATOR;
+        dictionariesPath += "dictionaries";
+        QDir qDictionaryDir(QString::fromStdString(dictionariesPath));
+        if (!qDictionaryDir.exists()) {
+            qDictionaryDir.mkpath(qDictionaryDir.path());
+        }
+        DictionaryManager::setPath(QString::fromStdString(dictionariesPath));
+        QStringList dictdirs{};
+        dictdirs.append(DictionaryManager::path());
+        // IMPROVE consider adding other dicts dirs: MF repository, user documents dir, ...
+
+        // load available standard dictionaries
         DictionaryManager::instance().addProviders();
-        MF_DEBUG("  Available language dictionaries:" << endl);
         QStringList languages = DictionaryManager::instance().availableDictionaries();
+        MF_DEBUG("  Available language dictionaries:" << endl);
         // set the default dictionary language
         if(languages.size()) {
             languages.sort();
@@ -342,10 +357,7 @@ int main(int argc, char* argv[])
                 QString::fromStdString(defaultLanguage)
             );
             MF_DEBUG("  Spell check language set to: '" << defaultLanguage << "'" << endl);
-
-            // TODO set
-            // config.setUiEditorSpellCheckLanguages();
-            // config.setUiEditorSpellCheckDefaultLanguage();
+            config.setUiEditorSpellCheckDefaultLanguage(defaultLanguage);
         } else {
             MF_DEBUG("  No spell check dictionaries available!" << endl);
             // disable spell check (lang, langs and live spell check)
@@ -358,7 +370,6 @@ int main(int argc, char* argv[])
         MF_DEBUG("  Spell check is DISABLED in configuration");
         config.clearUiEditorSpellCheckLanguages();
     }
-
 
     // initialize and start UI
     m8r::MainWindowView mainWindowView(lookAndFeels);

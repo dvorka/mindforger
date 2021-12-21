@@ -1,6 +1,7 @@
 /***********************************************************************
  *
  * Copyright (C) 2009, 2010, 2011, 2012, 2013 Graeme Gott <graeme@gottcode.org>
+ * Copyright (C) 2021-2022 Martin Dvorak <martin.dvorak@mindforger.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -271,6 +272,10 @@ void DictionaryManager::setPersonal(const QStringList& words)
 	// Update and store personal dictionary
 	m_personal = personal;
 	QFile file(m_path + "/personal");
+    MF_DEBUG(
+        "  Spell check UPDATING personal dictionary from: "
+        << m_path.toStdString() << file.fileName().toStdString() << std::endl
+    );
 	if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
 		QTextStream stream(&file);
 		stream.setCodec("UTF-8");
@@ -296,7 +301,11 @@ DictionaryManager::DictionaryManager()
 
 	// Load personal dictionary
 	QFile file(m_path + "/personal");
-	if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    MF_DEBUG(
+        "  Spell check LOADING personal dictionary: "
+        << m_path.toStdString() << file.fileName().toStdString() << std::endl
+    );
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		QTextStream stream(&file);
 		stream.setCodec("UTF-8");
 		while (!stream.atEnd()) {

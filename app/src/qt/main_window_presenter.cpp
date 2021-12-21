@@ -2424,6 +2424,21 @@ void MainWindowPresenter::doActionNoteExtract()
     }
 }
 
+void MainWindowPresenter::doActionSpellCheck()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+    ) {
+        if(config.isUiEditorLiveSpellCheck()) {
+            NoteEditorView* editor = orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)
+                ? orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()
+                : orloj->getNoteEdit()->getView()->getNoteEditor();
+            editor->checkDocumentSpelling();
+        }
+    }
+}
+
 void MainWindowPresenter::doActionNoteClone()
 {
     Note* n = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();

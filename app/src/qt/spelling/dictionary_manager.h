@@ -29,6 +29,8 @@ class DictionaryRef;
 #include <QObject>
 #include <QStringList>
 
+#include "../../../../lib/src/debug.h"
+
 class DictionaryManager : public QObject
 {
 	Q_OBJECT

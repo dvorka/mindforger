@@ -190,6 +190,7 @@ public:
     QAction* actionEditNameDescFocusSwap;
     QAction* actionEditExtract;
     QAction* actionEditComplete;
+    QAction* actionEditSpellCheck;
 
     // menu: Format
     QAction* actionFormatBold;

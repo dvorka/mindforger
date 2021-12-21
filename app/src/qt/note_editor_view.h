@@ -26,6 +26,7 @@
 #include "note_edit_highlighter.h"
 #include "widgets/line_number_panel.h"
 #include "status_bar_view.h"
+#include "spelling/spell_checker.h"
 
 namespace m8r {
 
@@ -63,6 +64,15 @@ private:
     bool tabsAsSpaces;
     int tabWidth;
 
+    // spell check
+    bool mouseButtonDown;
+    QTextCursor cursorForWord;
+    QString wordUnderMouse;
+    QList<QAction*> spellingActions;
+    DictionaryRef spellCheckDictionary;
+    QAction* addWordToDictionaryAction;
+    QAction* checkSpellingAction;
+
     // find
     QString lastFindString;
     bool lastFindReverse;
@@ -93,6 +103,7 @@ public:
 
     // spell check
     void enableSpellCheck(bool enable) { this->highlighter->setEnabled(enable); }
+    void checkDocumentSpelling();
 
     // search
     void findString(const QString s, bool reverse, bool casesens, bool words);
@@ -107,6 +118,7 @@ public:
 protected:
     void mousePressEvent(QMouseEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;
+    bool eventFilter(QObject* watched, QEvent* event) override;
 private:
     void setEditorTabWidth(int tabWidth);
     void setEditorTabsAsSpacesPolicy(bool tabsAsSpaces);
@@ -140,6 +152,8 @@ public:
     void setShowLineNumbers(bool show);
 public slots:
     void slotConfigurationUpdated();
+protected slots:
+    void suggestSpelling(QAction* action);
 
 signals:
     void signalDnDropUrl(QString);

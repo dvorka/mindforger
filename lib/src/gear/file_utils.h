@@ -199,11 +199,35 @@ int ungzip(const char* srcFile, const char* dstFile);
 }
 #endif
 
+/**
+ * @brief Get current working directory path.
+ * @return CWD path.
+ */
 std::string getCwd();
+/**
+ * @brief Get OS specific system temp directory path.
+ * @return temp directory path.
+ */
+std::string& getSystemTempPath();
+/**
+ * @brief Get user home directory path.
+ * @return home path.
+ */
+std::string getHomeDirectoryPath();
+/**
+ * @brief Get OS specific application configuration directory path.
+ * @return app config path.
+ */
+std::string getSystemAppsConfigPath();
+/**
+ * @brief Get OS specific MindForger configuration directory path.
+ * @return MindForger config path.
+ */
+std::string getSystemMindForgerConfigPath();
+
 void pathToDirectoryAndFile(const std::string& path, std::string& directory, std::string& file);
 void pathToLinuxDelimiters(const std::string& path, std::string& linuxPath);
 std::string platformSpecificPath(const char* path);
-std::string& getSystemTempPath();
 std::string getNewTempFilePath(const std::string& extension);
 bool stringToLines(const std::string* text, std::vector<std::string*>& lines);
 bool fileToLines(const std::string* filename, std::vector<std::string*>& lines, size_t& filesize);

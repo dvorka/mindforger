@@ -77,33 +77,29 @@ Configuration::Configuration()
       uiDoubleClickNoteViewToEdit{DEFAULT_CLICK_NOTE_VIEW_TO_EDIT},
       installer(new Installer{})
 {
-    char* home;
     // default config file path: ~/.mindforger.md
+
+    userHomePath = getHomeDirectoryPath();
+
+    configFilePath.assign(userHomePath);
+    configFilePath += FILE_PATH_SEPARATOR;
+    configFilePath += FILENAME_M8R_CONFIGURATION;
+
 #ifdef _WIN32
     PWSTR wpath;
     size_t num;
 
     SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &wpath);
-    char *docPath = new char[MAX_PATH];
+    char* docPath = new char[MAX_PATH];
     wcstombs_s(&num, docPath, MAX_PATH, wpath, MAX_PATH);
     CoTaskMemFree(wpath);
-    userDocPath =  string{docPath};
-    delete [] docPath;
+    userDocPath = string{docPath};
 
-    SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &wpath);
-    home = new char[MAX_PATH];
-    wcstombs_s(&num, home, MAX_PATH, wpath, MAX_PATH);
-    CoTaskMemFree(wpath);
-    userHomePath = string{home};
-    delete [] home;
+    delete [] docPath;
 #else
-    home = getenv(ENV_VAR_HOME);
-    userHomePath = string{home};
-    userDocPath = string{home};
+    userDocPath = string{userHomePath};
 #endif //_WIN32
-    configFilePath.assign(userHomePath);
-    configFilePath += FILE_PATH_SEPARATOR;
-    configFilePath += FILENAME_M8R_CONFIGURATION;
+
     clear();
 }
 

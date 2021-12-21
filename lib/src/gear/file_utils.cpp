@@ -160,6 +160,69 @@ string& getSystemTempPath()
     return systemTemp;
 }
 
+string getHomeDirectoryPath()
+{
+    string homePath{};
+
+    char* home{};
+#ifdef _WIN32
+    PWSTR wpath;
+    size_t num;
+
+    SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &wpath);
+    home = new char[MAX_PATH];
+    wcstombs_s(&num, home, MAX_PATH, wpath, MAX_PATH);
+    CoTaskMemFree(wpath);
+    homePath = string{home};
+
+    delete [] home;
+#else
+    home = getenv("HOME");
+    homePath = string{home};
+#endif //_WIN32
+
+    return homePath;
+}
+
+string getSystemAppsConfigPath()
+{
+    string appsConfigPath{};
+#ifdef _WIN32
+    // user documents path to be used as OS specific applications config directory
+    PWSTR wpath;
+    size_t num;
+
+    SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &wpath);
+    char* docPath = new char[MAX_PATH];
+    wcstombs_s(&num, docPath, MAX_PATH, wpath, MAX_PATH);
+    CoTaskMemFree(wpath);
+    string userDocPath{docPath};
+
+    delete [] docPath;
+
+    appsConfigPath = userDocPath;
+#else
+    // ~/.local used on Linux/Unix systems
+    appsConfigPath = getHomeDirectoryPath();
+    appsConfigPath += FILE_PATH_SEPARATOR;
+    appsConfigPath += ".local";
+    appsConfigPath += FILE_PATH_SEPARATOR;
+    appsConfigPath += "share";
+#endif
+
+    return appsConfigPath;
+}
+
+string getSystemMindForgerConfigPath()
+{
+    string mfConfigPath{getSystemAppsConfigPath()};
+
+    mfConfigPath += FILE_PATH_SEPARATOR;
+    mfConfigPath += "MindForger";
+
+    return mfConfigPath;
+}
+
 string getNewTempFilePath(const string& extension)
 {
 #ifdef MD_UNUSED_CODE

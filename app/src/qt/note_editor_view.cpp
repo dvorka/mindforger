@@ -30,12 +30,20 @@ inline bool caseInsensitiveLessThan(const QString &a, const QString &b)
 NoteEditorView::NoteEditorView(QWidget* parent)
     : QPlainTextEdit(parent),
       parent(parent),
-      completedAndSelected(false)
+      completedAndSelected(false),
+      spellCheckDictionary{DictionaryManager::instance().requestDictionary()}
 {
     hitCounter = 0;
 
     setEditorFont(Configuration::getInstance().getEditorFont());
     setEditorTabWidth(Configuration::getInstance().getUiEditorTabWidth());
+
+    // spell check
+    mouseButtonDown = false;
+    addWordToDictionaryAction = new QAction(tr("Add word to dictionary"), this);
+    checkSpellingAction = new QAction(tr("Check spelling..."), this);
+    this->installEventFilter(this);
+    this->viewport()->installEventFilter(this);
 
     // widgets
     highlighter = new NoteEditHighlighter{this};
@@ -652,6 +660,186 @@ void NoteEditorView::findStringAgain()
 {
     if(!lastFindString.isEmpty()) {
         findString(lastFindString, lastFindReverse, lastCaseSensitive, lastWholeWords);
+    }
+}
+
+/*
+ * Spell check
+ */
+
+void NoteEditorView::checkDocumentSpelling()
+{
+    SpellChecker::checkDocument(this, highlighter, spellCheckDictionary);
+}
+
+void NoteEditorView::suggestSpelling(QAction* action)
+{
+    // IMPROVE ghostwriter relict
+    NoteEditorView* d = this;
+
+    if (action == d->addWordToDictionaryAction) {
+        this->setTextCursor(d->cursorForWord);
+        spellCheckDictionary.addToPersonal(d->wordUnderMouse);
+        d->highlighter->rehighlight();
+    } else if (action == d->checkSpellingAction) {
+        this->setTextCursor(d->cursorForWord);
+        SpellChecker::checkDocument(this, d->highlighter, spellCheckDictionary);
+    } else if (d->spellingActions.contains(action)) {
+        d->cursorForWord.insertText(action->data().toString());
+    }
+}
+
+bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
+{
+    // IMPROVE ghostwriter relict
+    NoteEditorView* d = this;
+
+    if (event->type() == QEvent::MouseButtonPress) {
+        d->mouseButtonDown = true;
+    } else if (event->type() == QEvent::MouseButtonRelease) {
+        d->mouseButtonDown = false;
+    } else if (event->type() == QEvent::MouseButtonDblClick) {
+        d->mouseButtonDown = true;
+    }
+
+    if(event->type() != QEvent::ContextMenu
+       || !Configuration::getInstance().isUiEditorLiveSpellCheck()
+       || this->isReadOnly()
+    ) {
+        return QPlainTextEdit::eventFilter(watched, event);
+    } else {
+        // check spelling of text block under mouse
+        QContextMenuEvent *contextEvent = static_cast<QContextMenuEvent *>(event);
+
+        // if the context menu event was triggered by pressing the menu key,
+        // use the current text cursor rather than the event position to get
+        // a cursor position, since the event position is the mouse position
+        // rather than the text cursor position
+        if (QContextMenuEvent::Keyboard == contextEvent->reason()) {
+            d->cursorForWord = this->textCursor();
+        }
+        // else process as mouse event
+        else {
+            d->cursorForWord = cursorForPosition(contextEvent->pos());
+        }
+
+        QTextCharFormat::UnderlineStyle spellingErrorUnderlineStyle =
+            (QTextCharFormat::UnderlineStyle)
+            QApplication::style()->styleHint
+            (
+                QStyle::SH_SpellCheckUnderlineStyle
+            );
+
+        // get the formatting for the cursor position under the mouse,
+        // and see if it has the spell check error underline style
+        bool wordHasSpellingError = false;
+        int blockPosition = d->cursorForWord.positionInBlock();
+        QVector<QTextLayout::FormatRange> formatList =
+            d->cursorForWord.block().layout()->formats();
+        int mispelledWordStartPos = 0;
+        int mispelledWordLength = 0;
+
+        for (int i = 0; i < formatList.length(); i++) {
+            QTextLayout::FormatRange formatRange = formatList[i];
+
+            if
+            (
+                (blockPosition >= formatRange.start)
+                && (blockPosition <= (formatRange.start + formatRange.length))
+                && (formatRange.format.underlineStyle() == spellingErrorUnderlineStyle)
+            ) {
+                mispelledWordStartPos = formatRange.start;
+                mispelledWordLength = formatRange.length;
+                wordHasSpellingError = true;
+                break;
+            }
+        }
+
+        // the word under the mouse is spelled correctly, so use the default
+        // processing for the context menu and return
+        if (!wordHasSpellingError) {
+            return QPlainTextEdit::eventFilter(watched, event);
+        }
+
+        // select the misspelled word
+        d->cursorForWord.movePosition
+        (
+            QTextCursor::PreviousCharacter,
+            QTextCursor::MoveAnchor,
+            blockPosition - mispelledWordStartPos
+        );
+        d->cursorForWord.movePosition
+        (
+            QTextCursor::NextCharacter,
+            QTextCursor::KeepAnchor,
+            mispelledWordLength
+        );
+
+        d->wordUnderMouse = d->cursorForWord.selectedText();
+        QStringList suggestions = spellCheckDictionary.suggestions(d->wordUnderMouse);
+        QMenu* popupMenu = createStandardContextMenu();
+        QAction* firstAction = popupMenu->actions().first();
+
+        d->spellingActions.clear();
+
+        if (!suggestions.empty()) {
+            for (int i = 0; i < suggestions.size(); i++) {
+                QAction* suggestionAction = new QAction(suggestions[i], this);
+
+                // need the following line because KDE Plasma 5 will insert a hidden
+                // ampersand into the menu text as a keyboard accelerator;
+                // go off of the data in the QAction rather than the text to avoid this
+                suggestionAction->setData(suggestions[i]);
+
+                d->spellingActions.append(suggestionAction);
+                popupMenu->insertAction(firstAction, suggestionAction);
+            }
+        } else {
+            QAction* noSuggestionsAction =
+                new QAction(tr("No spelling suggestions found"), this);
+            noSuggestionsAction->setEnabled(false);
+            d->spellingActions.append(noSuggestionsAction);
+            popupMenu->insertAction(firstAction, noSuggestionsAction);
+        }
+
+        popupMenu->insertSeparator(firstAction);
+        popupMenu->insertAction(firstAction, d->addWordToDictionaryAction);
+        popupMenu->insertSeparator(firstAction);
+        popupMenu->insertAction(firstAction, d->checkSpellingAction);
+        popupMenu->insertSeparator(firstAction);
+
+        // show menu
+        QObject::connect(
+            popupMenu, SIGNAL(triggered(QAction*)),
+            this, SLOT(suggestSpelling(QAction*))
+        );
+
+        QPoint menuPos;
+
+        // if event was triggered by a key press, use the text cursor
+        // coordinates to display the popup menu.
+        if (QContextMenuEvent::Keyboard == contextEvent->reason()) {
+            QRect cr = this->cursorRect();
+            menuPos.setX(cr.x());
+            menuPos.setY(cr.y() + (cr.height() / 2));
+            menuPos = viewport()->mapToGlobal(menuPos);
+        }
+        // else use the mouse coordinates from the context menu event.
+        else {
+            menuPos = viewport()->mapToGlobal(contextEvent->pos());
+        }
+
+        popupMenu->exec(menuPos);
+
+        delete popupMenu;
+
+        for (int i = 0; i < d->spellingActions.size(); i++) {
+            delete d->spellingActions[i];
+        }
+
+        d->spellingActions.clear();
+
+        return true;
     }
 }
 
