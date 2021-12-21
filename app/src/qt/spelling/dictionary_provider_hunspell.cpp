@@ -2,6 +2,7 @@
  *
  * Copyright (C) 2009, 2010, 2011, 2012, 2013 Graeme Gott <graeme@gottcode.org>
  * Copyright (C) 2014-2020 wereturtle
+ * Copyright (C) 2021-2022 Martin Dvorak <martin.dvorak@mindforger.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -222,10 +223,18 @@ QStringRef DictionaryHunspell::check(const QString& string, int start_at) const
                 // Replace any fancy single quotes with a "normal" single quote.
                 word.replace(QChar(0x2019), QLatin1Char('\''));
 
+#ifdef MF_DEPRECATED_HUNSPELL_API
+                // deprecated Hunspell API
                 if (!m_dictionary->spell(m_codec->fromUnicode(word).constData()))
                 {
                     return check;
                 }
+#else
+                // new Hunspell API
+                if (!m_dictionary->spell(m_codec->fromUnicode(word).toStdString())) {
+                    return check;
+                }
+#endif
             }
 
             index = -1;
@@ -251,6 +260,7 @@ QStringList DictionaryHunspell::suggestions(const QString& word) const
     // Replace any fancy single quotes with a "normal" single quote.
 	check.replace(QChar(0x2019), QLatin1Char('\''));
 
+#ifdef MF_DEPRECATED_HUNSPELL_API
 	char** suggestions = 0;
 	int count = m_dictionary->suggest(&suggestions, m_codec->fromUnicode(check).constData());
 	if (suggestions != 0) {
@@ -258,8 +268,19 @@ QStringList DictionaryHunspell::suggestions(const QString& word) const
             QString word = m_codec->toUnicode(suggestions[i]);
 			result.append(word);
 		}
+
 		m_dictionary->free_list(&suggestions, count);
 	}
+#else
+    std::vector<std::string> suggestions = m_dictionary->suggest(m_codec->fromUnicode(check).toStdString());
+    if (suggestions.size()) {
+        for(std::string suggestion: suggestions) {
+            QString word = m_codec->toUnicode(suggestion.c_str());
+            result.append(word);
+        }
+    }
+#endif
+
 	return result;
 }
 
