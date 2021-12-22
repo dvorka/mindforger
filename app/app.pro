@@ -113,7 +113,7 @@ macx {
 
     OBJECTIVE_SOURCES += src/qt/spelling/dictionary_provider_nsspellchecker.mm
 } else:win32 {
-    include(./deps/hunspell/hunspell.pri)
+    include(../deps/hunspell/hunspell.pri)
 
     HEADERS += \
       ./src/qt/spelling/dictionary_provider_hunspell.h \

@@ -33,9 +33,9 @@
 #include <QTextCodec>
 
 #ifdef _WIN32
-#include "3rdparty/hunspell/hunspell.hxx"
+  #include "../../../deps/hunspell/hunspell.hxx"
 #else
-#include <hunspell.hxx>
+  #include <hunspell.hxx>
 #endif
 
 //-----------------------------------------------------------------------------
@@ -74,8 +74,8 @@ private:
 //-----------------------------------------------------------------------------
 
 DictionaryHunspell::DictionaryHunspell(const QString& language) :
-	m_dictionary(0),
-	m_codec(0)
+    m_dictionary(nullptr),
+    m_codec(nullptr)
 {
 	// Find dictionary files
     QString aff = QFileInfo("dict:" + language + ".aff").canonicalFilePath();
@@ -102,7 +102,7 @@ DictionaryHunspell::DictionaryHunspell(const QString& language) :
 	m_codec = QTextCodec::codecForName(m_dictionary->get_dic_encoding());
 	if (!m_codec) {
 		delete m_dictionary;
-		m_dictionary = 0;
+        m_dictionary = nullptr;
 	}
 }
 
@@ -223,7 +223,7 @@ QStringRef DictionaryHunspell::check(const QString& string, int start_at) const
                 // Replace any fancy single quotes with a "normal" single quote.
                 word.replace(QChar(0x2019), QLatin1Char('\''));
 
-#ifdef MF_DEPRECATED_HUNSPELL_API
+#if defined(_WIN32) || defined(MF_DEPRECATED_HUNSPELL_API)
                 // deprecated Hunspell API
                 if (!m_dictionary->spell(m_codec->fromUnicode(word).constData()))
                 {
@@ -260,10 +260,10 @@ QStringList DictionaryHunspell::suggestions(const QString& word) const
     // Replace any fancy single quotes with a "normal" single quote.
 	check.replace(QChar(0x2019), QLatin1Char('\''));
 
-#ifdef MF_DEPRECATED_HUNSPELL_API
-	char** suggestions = 0;
+#if defined(_WIN32) || defined(MF_DEPRECATED_HUNSPELL_API)
+    char** suggestions = nullptr;
 	int count = m_dictionary->suggest(&suggestions, m_codec->fromUnicode(check).constData());
-	if (suggestions != 0) {
+    if (suggestions != nullptr) {
 		for (int i = 0; i < count; ++i) {
             QString word = m_codec->toUnicode(suggestions[i]);
 			result.append(word);
@@ -355,9 +355,12 @@ QStringList DictionaryProviderHunspell::availableDictionaries() const
 	QStringList result;
 	QStringList locations = QDir::searchPaths("dict");
 	QListIterator<QString> i(locations);
+    std::cerr << "  Dictionary search path directories ("
+              << locations.size()
+              << "): " << std::endl;
 	while (i.hasNext()) {
 		QDir dir(i.next());
-
+        std::cout << "    " << dir.path().toStdString() << std::endl;
 		QStringList dic_files = dir.entryList(QStringList() << "*.dic*", QDir::Files, QDir::Name | QDir::IgnoreCase);
 		dic_files.replaceInStrings(QRegExp("\\.dic.*"), "");
 		QStringList aff_files = dir.entryList(QStringList() << "*.aff*", QDir::Files);

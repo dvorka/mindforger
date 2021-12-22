@@ -63,7 +63,15 @@ public:
             return this->columns[index];
         }
 
-        throw "Kanban view column index is out of range: " + std::to_string(this->columnsCount);
+        std::string errorMessage{
+            "Kanban view column index "
+            + std::to_string(index)
+            + " is out of range: "
+            + std::to_string(this->columnsCount)
+        };
+        std::cerr << errorMessage << std::endl;
+
+        throw errorMessage;
     }
 };
 
