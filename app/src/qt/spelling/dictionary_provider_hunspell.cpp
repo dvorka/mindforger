@@ -355,12 +355,12 @@ QStringList DictionaryProviderHunspell::availableDictionaries() const
 	QStringList result;
 	QStringList locations = QDir::searchPaths("dict");
 	QListIterator<QString> i(locations);
-    std::cerr << "  Dictionary search path directories ("
-              << locations.size()
-              << "): " << std::endl;
+    // std::cout << "  Dictionary search path directories ("
+    //          << locations.size()
+    //          << "): " << std::endl;
 	while (i.hasNext()) {
 		QDir dir(i.next());
-        std::cout << "    " << dir.path().toStdString() << std::endl;
+        // std::cout << "    " << dir.path().toStdString() << std::endl;
 		QStringList dic_files = dir.entryList(QStringList() << "*.dic*", QDir::Files, QDir::Name | QDir::IgnoreCase);
 		dic_files.replaceInStrings(QRegExp("\\.dic.*"), "");
 		QStringList aff_files = dir.entryList(QStringList() << "*.aff*", QDir::Files);

@@ -19,6 +19,8 @@
 #ifndef M8RUI_KANBAN_VIEW_H
 #define M8RUI_KANBAN_VIEW_H
 
+#include <iostream>
+
 #include <vector>
 
 #include <QtWidgets>
