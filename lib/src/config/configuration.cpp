@@ -20,14 +20,14 @@
 #include "configuration.h"
 
 #ifdef _WIN32
-#include <ShlObj.h>
-#include <KnownFolders.h>
+  #include <ShlObj.h>
+  #include <KnownFolders.h>
 #endif // _WIN32
-
-namespace m8r {
 
 using namespace std;
 using namespace m8r::filesystem;
+
+namespace m8r {
 
 // non-primitive constants initializations
 const string Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH = string{FILE_PATH_M8R_REPOSITORY};

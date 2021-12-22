@@ -152,9 +152,9 @@ void DictionaryManager::addProviders()
 	bool has_voikko = false;
 
 	foreach (AbstractDictionaryProvider* provider, m_providers) {
-		if (dynamic_cast<DictionaryProviderHunspell*>(provider) != NULL) {
+        if (dynamic_cast<DictionaryProviderHunspell*>(provider) != nullptr) {
 			has_hunspell = true;
-		} else if (dynamic_cast<DictionaryProviderVoikko*>(provider) != NULL) {
+        } else if (dynamic_cast<DictionaryProviderVoikko*>(provider) != nullptr) {
 			has_voikko = true;
 		}
 	}
@@ -336,7 +336,7 @@ void DictionaryManager::addProvider(AbstractDictionaryProvider* provider)
 		m_providers.append(provider);
 	} else {
 		delete provider;
-		provider = 0;
+        provider = nullptr;
 	}
 }
 
@@ -345,14 +345,14 @@ void DictionaryManager::addProvider(AbstractDictionaryProvider* provider)
 AbstractDictionary** DictionaryManager::requestDictionaryData(const QString& language)
 {
 	if (!m_dictionaries.contains(language)) {
-		AbstractDictionary* dictionary = 0;
+        AbstractDictionary* dictionary = nullptr;
 		foreach (AbstractDictionaryProvider* provider, m_providers) {
 			dictionary = provider->requestDictionary(language);
 			if (dictionary && dictionary->isValid()) {
 				break;
 			} else {
 				delete dictionary;
-				dictionary = 0;
+                dictionary = nullptr;
 			}
 		}
 

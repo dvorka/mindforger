@@ -20,9 +20,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #ifndef _WIN32
-#  include <getopt.h>
+  #include <getopt.h>
 #else
-#  include "../../deps/getopt/getopt.h"
+  #include "../../deps/getopt/getopt.h"
 #endif // _WIN32
 #include <QtWidgets>
 
@@ -315,6 +315,13 @@ int main(int argc, char* argv[])
 
     // spell check
     MF_DEBUG("Spell check:" << endl);
+
+    // TODO dictionary lookup must be ALWAYS performed regardless
+    // spell check is enabled or not
+    MF_DEBUG("  TODO dictionary lookup" << endl);
+    // TODO register search paths in dict manager under "dicts": DictionaryHunspell
+    MF_DEBUG("  TODO dictionary lookup PATHS" << endl);
+    MF_DEBUG("  TODO if langs empty, then show LINK in preference to doc how to setup Hunspell" << endl);
     if(config.isUiEditorLiveSpellCheck()) {
         // prepare dirs for custom dictionaries
         string dictionariesPath{m8r::getSystemMindForgerConfigPath()};
