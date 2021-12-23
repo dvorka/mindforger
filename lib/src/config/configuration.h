@@ -75,6 +75,8 @@ constexpr const auto UI_HTML_THEME_CSS_LIGHT = "qrc:/html-css/light.css";
 constexpr const auto UI_HTML_THEME_CSS_LIGHT_COMPACT = "qrc:/html-css/light-compact.css";
 constexpr const auto UI_HTML_THEME_CSS_DARK = "qrc:/html-css/dark.css";
 constexpr const auto UI_HTML_THEME_CSS_RAW = "raw";
+constexpr const auto UI_HTML_THEME_CSS_GITHUB_LIGHT = "qrc:/html-css/github-markdown-light.css";
+constexpr const auto UI_HTML_THEME_CSS_GITHUB_DARK= "qrc:/html-css/github-markdown-dark.css";
 constexpr const auto UI_HTML_THEME_CSS_CUSTOM = "custom";
 
 constexpr const auto UI_EDITOR_KEY_BINDING_EMACS = "emacs";

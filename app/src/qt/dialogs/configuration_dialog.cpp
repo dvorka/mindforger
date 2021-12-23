@@ -197,6 +197,8 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT});
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_DARK});
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_RAW});
+    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_GITHUB_LIGHT});
+    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_GITHUB_DARK});
     htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_CUSTOM});
     htmlCssLineEdit = new QLineEdit(this);
     htmlCssLineEdit->setDisabled(true);
