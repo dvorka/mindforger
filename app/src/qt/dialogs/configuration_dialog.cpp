@@ -345,7 +345,16 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     editorFontButton = new QPushButton(QFontDatabase::systemFont(QFontDatabase::FixedFont).family());
     QObject::connect(editorFontButton, &QPushButton::clicked, this, &ConfigurationDialog::EditorTab::getFont);
 
-
+    editorSpellCheckHelp = new QLabel(
+        tr("Spell check dictionaries configuration <a href='"
+           "https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#spell-check-"
+           "'>documentation</a>"
+        ),
+        this
+    );
+    editorSpellCheckHelp->setTextFormat(Qt::RichText);
+    editorSpellCheckHelp->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    editorSpellCheckHelp->setOpenExternalLinks(true);
     editorSpellCheckLive = new QCheckBox(tr("live spell check"), this);
     editorSpellCheckLanguageCombo = new QComboBox{this};
     editorSpellCheckLanguageCombo->clear();
@@ -380,6 +389,7 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     editorLayout->addWidget(editorTabsAsSpacesCheck);
     editorLayout->addWidget(editorSpellCheckLive);
     editorLayout->addWidget(editorSpellCheckLanguageCombo);
+    editorLayout->addWidget(editorSpellCheckHelp);
     editorLayout->addWidget(editorMdSyntaxHighlightCheck);
     editorLayout->addWidget(editorAutocompleteCheck);
     editorLayout->addWidget(editorAutosaveCheck);
