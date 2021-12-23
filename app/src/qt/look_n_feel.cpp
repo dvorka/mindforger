@@ -83,6 +83,7 @@ void LookAndFeels::setDarkTheme()
     editorHtmlAttrName.setRgb(0xFF,0x00,0xFF);
     editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
     editorHtmlComment.setRgb(0x66,0x66,0x66);
+    editorError.setRgb(0xFF,0x00,0x00);
 
     cliTextColor = Qt::green;
 
@@ -147,6 +148,7 @@ void LookAndFeels::setLightTheme()
     editorHtmlAttrName.setRgb(0x00,0x00,0xFF);
     editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
     editorHtmlComment.setRgb(0xAA,0xAA,0xAA);
+    editorError.setRgb(0xFF,0x00,0x00);
 
     cliTextColor = Qt::black;
 
@@ -190,6 +192,7 @@ void LookAndFeels::setBlackTheme()
     editorHtmlAttrName.setRgb(0xFF,0x00,0xFF);
     editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
     editorHtmlComment.setRgb(0x66,0x66,0x66);
+    editorError.setRgb(0xFF,0x00,0x00);
 
     cliTextColor = QColor(0x99,0xb1,0xff);
 

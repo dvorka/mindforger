@@ -194,6 +194,9 @@ private:
     QLabel* editorFontLabel;
     QPushButton* editorFontButton;
     QCheckBox* editorMdSyntaxHighlightCheck;
+    QCheckBox* editorSpellCheckLive;
+    QComboBox* editorSpellCheckLanguageCombo;
+    QLabel* editorSpellCheckHelp;
     QCheckBox* editorAutocompleteCheck;
     QCheckBox* editorAutosaveCheck;
     QLabel* editorTabWidthLabel;

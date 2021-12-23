@@ -348,6 +348,7 @@ public slots:
     void doActionEditPasteImageData(QImage image);
     void doActionToggleLiveNotePreview();
     void doActionNameDescFocusSwap();
+    void doActionSpellCheck();
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();

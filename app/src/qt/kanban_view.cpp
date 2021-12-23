@@ -21,11 +21,13 @@
 namespace m8r {
 
 KanbanView::KanbanView(int columnsCount, QWidget* parent)
-    : QSplitter{Qt::Horizontal,parent},
-    columns{}
+    : QSplitter{Qt::Horizontal, parent},
+      columnsCount{columnsCount},
+      columns{}
 {
-    if(columnsCount < 0 || columnsCount> 4) {
-        throw "Kanban view column index is out of range: " + std::to_string(this->columnsCount);
+    if(columnsCount < 0 || columnsCount > 4) {
+        throw "Kanban view column count " + std::to_string(this->columnsCount)
+            + " is not supported (it can be between 0 and 5)";
     }
 
     for(int i=0; i<columnsCount; i++) {

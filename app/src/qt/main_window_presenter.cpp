@@ -205,6 +205,11 @@ MainWindowPresenter::~MainWindowPresenter()
     delete this->mdDocumentRepresentation;
 }
 
+/**
+ * @brief Initial view assembly.
+ *
+ * This method builds initial view on MindForger boot.
+ */
 void MainWindowPresenter::showInitialView()
 {
     MF_DEBUG("Initial view to show " << mind->getOutlines().size() << " Os (scope is applied if active)" << endl);
@@ -295,7 +300,7 @@ void MainWindowPresenter::showInitialView()
     }
 }
 
-/* Link handling hints
+/* Link handling hints.
  *
  * PROBLEM:
  *
@@ -2416,6 +2421,21 @@ void MainWindowPresenter::doActionNoteExtract()
         }
     } else {
         QMessageBox::critical(&view, tr("Extract Note"), tr("Please select a Note, edit it and select a text to extract."));
+    }
+}
+
+void MainWindowPresenter::doActionSpellCheck()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+    ) {
+        if(config.isUiEditorLiveSpellCheck()) {
+            NoteEditorView* editor = orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)
+                ? orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()
+                : orloj->getNoteEdit()->getView()->getNoteEditor();
+            editor->checkDocumentSpelling();
+        }
     }
 }
 

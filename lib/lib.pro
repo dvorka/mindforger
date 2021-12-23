@@ -1,6 +1,6 @@
 # mindforger-lib.pro     MindForger thinking notebook
 #
-# Copyright (C) 2016-2021 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software ; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -149,8 +149,12 @@ SOURCES += \
     src/mind/ai/autolinking/naive_autolinking_preprocessor.cpp \
     src/representations/markdown/cmark_gfm_markdown_transcoder.cpp \
     src/mind/ai/autolinking/autolinking_mind.cpp \
-    src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.cpp \
     src/mind/limbo.cpp
+
+!mfnomd2html {
+    SOURCES += \
+    src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.cpp
+}
 
 mfner {
     SOURCES += \
@@ -215,11 +219,11 @@ HEADERS += \
     ./src/config/time_scope.h \
     ./src/model/link.h \
     ./src/config/palette.h \
-    src/config/repository_configuration.h \
-    src/gear/async_utils.h \
-    src/gear/math_utils.h \
-    src/mind/dikw/dikw_pyramid.h \
-    src/mind/dikw/filesystem_information.h \
+    ./src/config/repository_configuration.h \
+    ./src/gear/async_utils.h \
+    ./src/gear/math_utils.h \
+    ./src/mind/dikw/dikw_pyramid.h \
+    ./src/mind/dikw/filesystem_information.h \
     src/mind/dikw/information.h \
     src/model/eisenhower_matrix.h \
     src/model/kanban.h \
@@ -281,8 +285,12 @@ HEADERS += \
     src/definitions.h \
     src/representations/markdown/cmark_gfm_markdown_transcoder.h \
     src/mind/ai/autolinking/autolinking_mind.h \
-    src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h \
     src/mind/limbo.h
+
+!mfnomd2html {
+    SOURCES += \
+    src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h
+}
 
 mfner {
     HEADERS += \

@@ -618,6 +618,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditComplete = new QAction(QIcon(":/menu-icons/on.svg"), tr("Complete Link\tCtrl+/"), mainWindow);
     actionEditComplete->setStatusTip(tr("Complete word being written by finding link to Notebook or Note"));
 
+    actionEditSpellCheck = new QAction(QIcon(":/menu-icons/paste.svg"), tr("Sp&ell Check"), mainWindow);
+    actionEditSpellCheck->setStatusTip(tr("Spell check Notebook or Note description"));
+
     menuEdit = qMenuBar->addMenu(tr("&Edit"));
     menuEdit->addAction(actionEditFind);
     menuEdit->addAction(actionEditFindNext);
@@ -635,6 +638,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuEdit->addSeparator();
     menuEdit->addAction(actionEditComplete);
     menuEdit->addAction(actionEditExtract);
+    menuEdit->addSeparator();
+    menuEdit->addAction(actionEditSpellCheck);
     menuEdit->setEnabled(false);
 
     // menu: format

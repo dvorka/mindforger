@@ -22,11 +22,12 @@
 #include <string>
 #include <vector>
 
+#include "../../config/configuration.h"
 #include "../../model/note.h"
 #include "../markdown/markdown_outline_representation.h"
 #include "../markdown/markdown_transcoder.h"
 #if defined  MF_MD_2_HTML_CMARK
-#include "../markdown/cmark_gfm_markdown_transcoder.h"
+  #include "../markdown/cmark_gfm_markdown_transcoder.h"
 #endif
 
 namespace m8r {

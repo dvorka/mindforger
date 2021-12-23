@@ -345,11 +345,36 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     editorFontButton = new QPushButton(QFontDatabase::systemFont(QFontDatabase::FixedFont).family());
     QObject::connect(editorFontButton, &QPushButton::clicked, this, &ConfigurationDialog::EditorTab::getFont);
 
+    editorSpellCheckHelp = new QLabel(
+        tr("Spell check dictionaries configuration <a href='"
+           "https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#spell-check-"
+           "'>documentation</a>"
+        ),
+        this
+    );
+    editorSpellCheckHelp->setTextFormat(Qt::RichText);
+    editorSpellCheckHelp->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    editorSpellCheckHelp->setOpenExternalLinks(true);
+    editorSpellCheckLive = new QCheckBox(tr("live spell check"), this);
+    editorSpellCheckLanguageCombo = new QComboBox{this};
+    editorSpellCheckLanguageCombo->clear();
+    std::vector<std::string> langs = config.getUiEditorSpellCheckLanguages();
+    if(langs.size()) {
+        for(auto l: langs) {
+            editorSpellCheckLanguageCombo->addItem(QString::fromStdString(l));
+        }
+        editorSpellCheckLive->setChecked(config.isUiEditorLiveSpellCheck());
+    } else {
+        editorSpellCheckLive->setEnabled(false);
+        editorSpellCheckLive->setDisabled(true);
+        editorSpellCheckLanguageCombo->setDisabled(true);
+    }
+
     editorMdSyntaxHighlightCheck = new QCheckBox(tr("Markdown syntax highlighting"), this);
     editorAutocompleteCheck = new QCheckBox(tr("autocomplete"), this);
     //editorQuoteSectionsCheck = new QCheckBox(tr("quote sections (# in description)"), this);
     editorTabsAsSpacesCheck = new QCheckBox(tr("TABs as SPACEs"), this);
-    editorAutosaveCheck = new QCheckBox(tr("autosave on Note editor close"), this);
+    editorAutosaveCheck = new QCheckBox(tr("autosave Note on editor close"), this);
 
     editorTabWidthLabel = new QLabel(tr("TAB width")+":", this);
     editorTabWidthCombo = new QComboBox(this);
@@ -361,18 +386,21 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
 
     // assembly
     QVBoxLayout* editorLayout = new QVBoxLayout{this};
-    editorLayout->addWidget(editorKeyBindingLabel);
-    editorLayout->addWidget(editorKeyBindingCombo);
+    editorLayout->addWidget(editorTabsAsSpacesCheck);
+    editorLayout->addWidget(editorSpellCheckLive);
+    editorLayout->addWidget(editorSpellCheckLanguageCombo);
+    editorLayout->addWidget(editorSpellCheckHelp);
+    editorLayout->addWidget(editorMdSyntaxHighlightCheck);
+    editorLayout->addWidget(editorAutocompleteCheck);
+    editorLayout->addWidget(editorAutosaveCheck);
     editorLayout->addWidget(editorFontLabel);
     editorLayout->addWidget(editorFontButton);
     editorLayout->addWidget(editorTabWidthLabel);
     editorLayout->addWidget(editorTabWidthCombo);
+    editorLayout->addWidget(editorKeyBindingLabel);
+    editorLayout->addWidget(editorKeyBindingCombo);
     editorLayout->addWidget(externalEditorCmdLabel);
     editorLayout->addWidget(externalEditorCmdEdit);
-    editorLayout->addWidget(editorTabsAsSpacesCheck);
-    editorLayout->addWidget(editorMdSyntaxHighlightCheck);
-    editorLayout->addWidget(editorAutocompleteCheck);
-    editorLayout->addWidget(editorAutosaveCheck);
     //editorLayout->addWidget(editorQuoteSectionsCheck);
     QGroupBox* editorGroup = new QGroupBox{tr("Markdown Editor"), this};
     editorGroup->setLayout(editorLayout);
@@ -389,6 +417,8 @@ ConfigurationDialog::EditorTab::~EditorTab()
     delete editorKeyBindingCombo;
     delete editorFontLabel;
     delete editorFontButton;
+    delete editorSpellCheckLive;
+    delete editorSpellCheckLanguageCombo;
     delete editorMdSyntaxHighlightCheck;
     delete editorAutocompleteCheck;
     delete editorTabWidthLabel;
@@ -409,9 +439,27 @@ void ConfigurationDialog::EditorTab::refresh()
     editorFont.fromString(QString::fromStdString(config.getEditorFont()));
     editorFontButton->setText(editorFont.family());
 
+    editorSpellCheckLive->setChecked(config.isUiEditorLiveSpellCheck());
+    if(editorSpellCheckLive->isEnabled()
+       && editorSpellCheckLanguageCombo->count()
+    ) {
+        if(config.getUiEditorSpellCheckDefaultLanguage().size()) {
+            editorSpellCheckLanguageCombo->setCurrentIndex(
+               editorSpellCheckLanguageCombo->findText(
+                   QString::fromStdString(config.getUiEditorSpellCheckDefaultLanguage())
+               )
+            );
+        } else {
+            editorSpellCheckLanguageCombo->setCurrentIndex(0);
+        }
+    }
     editorMdSyntaxHighlightCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
     editorAutocompleteCheck->setChecked(config.isUiEditorEnableAutocomplete());
-    editorTabWidthCombo->setCurrentIndex(editorTabWidthCombo->findText(QString::number(config.getUiEditorTabWidth())));
+    editorTabWidthCombo->setCurrentIndex(
+        editorTabWidthCombo->findText(
+            QString::number(config.getUiEditorTabWidth())
+        )
+    );
     externalEditorCmdEdit->setText(QString::fromStdString(config.getExternalEditorCmd()));
     //editorQuoteSectionsCheck->setChecked(config.isMarkdownQuoteSections());
     editorTabsAsSpacesCheck->setChecked(config.isUiEditorTabsAsSpaces());
@@ -422,6 +470,14 @@ void ConfigurationDialog::EditorTab::save()
 {
     config.setEditorKeyBindingByString(editorKeyBindingCombo->itemText(editorKeyBindingCombo->currentIndex()).toStdString());
     config.setEditorFont(editorFont.family().append(",").append(QString::number(editorFont.pointSize())).toStdString());
+    config.setUiEditorLiveSpellCheck(editorSpellCheckLive->isChecked());
+    if(editorSpellCheckLanguageCombo->isEnabled() && editorSpellCheckLanguageCombo->count()) {
+        config.setUiEditorSpellCheckDefaultLanguage(
+            editorSpellCheckLanguageCombo->itemText(editorTabWidthCombo->currentIndex()).toStdString()
+        );
+    } else {
+        config.clearUiEditorSpellCheckDefaultLanguage();
+    }
     config.setUiEditorEnableSyntaxHighlighting(editorMdSyntaxHighlightCheck->isChecked());
     config.setUiEditorEnableAutocomplete(editorAutocompleteCheck->isChecked());
     config.setUiEditorTabWidth(editorTabWidthCombo->itemText(editorTabWidthCombo->currentIndex()).toInt());

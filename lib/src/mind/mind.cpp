@@ -43,7 +43,7 @@ Mind::Mind(Configuration &configuration)
 #ifdef MF_MD_2_HTML_CMARK
       autolinking{new AutolinkingMind{*this}},
 #else
-      autolinking{nullptr}
+      autolinking{nullptr},
 #endif
       exclusiveMind{},
       timeScopeAspect{},
@@ -279,7 +279,7 @@ bool Mind::autolinkFindLongestPrefixWord(std::string& s, std::string& r) const
 {
 #ifdef MF_MD_2_HTML_CMARK
     return autolinking->findLongestPrefixWord(s, r);
-#elif
+#else
     return false;
 #endif
 }
@@ -1088,7 +1088,9 @@ void Mind::noteDemote(Note* note, Outline::Patch* patch)
 
 void Mind::noteOnRename(const std::string& oldName, const std::string& newName)
 {
+#ifdef MF_MD_2_HTML_CMARK
     autolinking->update(oldName, newName);
+#endif
 }
 
 void Mind::onRemembering()

@@ -33,8 +33,9 @@
   #include <direct.h>
 #else
   #include <dirent.h>
-  #include <sys/dir.h>
   #include <unistd.h>
+  // do NOT include legacy <sys/dir.h>
+  // #include <sys/dir.h>
 #endif // _WIN32
 
 #endif // M8R_CONFIG_H

@@ -82,17 +82,17 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     // assembly
     QVBoxLayout* mainLayout = new QVBoxLayout{this};
 
-    QHBoxLayout* h = new QHBoxLayout{this};
-    QVBoxLayout* l = new QVBoxLayout{this};
+    QHBoxLayout* h = new QHBoxLayout{};
+    QVBoxLayout* l = new QVBoxLayout{};
     l->addWidget(upperRightTags);
     l->addWidget(lowerRightTags);
-    QVBoxLayout* r = new QVBoxLayout{this};
+    QVBoxLayout* r = new QVBoxLayout{};
     r->addWidget(upperLeftTags);
     r->addWidget(lowerLeftTags);
     h->addLayout(r);
     h->addLayout(l);
 
-    QHBoxLayout* buttonLayout = new QHBoxLayout{this};
+    QHBoxLayout* buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
     buttonLayout->addWidget(closeButton);
     buttonLayout->addWidget(createButton);
@@ -105,7 +105,7 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     mainLayout->addLayout(h);
     mainLayout->addWidget(oScopeLabel);
 
-    QHBoxLayout* oScopeLayout = new QHBoxLayout{this};
+    QHBoxLayout* oScopeLayout = new QHBoxLayout{};
     oScopeLayout->addWidget(oScopeEdit);
     oScopeLayout->addWidget(findOutlineButton);
     oScopeLayout->addWidget(clearOutlineButton);

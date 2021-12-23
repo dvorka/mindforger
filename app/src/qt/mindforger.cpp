@@ -20,13 +20,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #ifndef _WIN32
-#  include <getopt.h>
+  #include <getopt.h>
 #else
-#  include "../../deps/getopt/getopt.h"
+  #include "../../deps/getopt/getopt.h"
 #endif // _WIN32
 #include <QtWidgets>
 
 #include "../../lib/src/version.h"
+#include "../../lib/src/gear/file_utils.h"
 #include "../../lib/src/representations/markdown/markdown_configuration_representation.h"
 #include "../../lib/src/representations/markdown/markdown_repository_configuration_representation.h"
 
@@ -259,7 +260,7 @@ int main(int argc, char* argv[])
         mdConfigRepresentation.save(File{config.getConfigFilePath()});
     }
 
-    // l10n is initalized after conf so that it can be configured by MF
+    // l10n is initalized after configuration to be configurable by MF
     m8r::l10n(mindforgerApplication);
 
     m8r::initRandomizer();
@@ -292,7 +293,7 @@ int main(int argc, char* argv[])
         config.findOrCreateDefaultRepository(mdRepositoryCfgRepresentation);
     }
 
-    // choose L&F
+    // L&F
     m8r::LookAndFeels& lookAndFeels = m8r::LookAndFeels::getInstance();
     lookAndFeels.init(&mindforgerApplication);
     lookAndFeels.setFontPointSize(config.getUiFontPointSize());
@@ -311,6 +312,99 @@ int main(int argc, char* argv[])
     } else {
         lookAndFeels.setTheme(QString::fromStdString(config.getUiThemeName()));
     }
+
+    // spell check
+    MF_DEBUG("Spell check:" << endl);
+    // prepare dir(s) for CUSTOM dictionaries
+    string customDictionaryPath{m8r::getSystemMindForgerConfigPath()};
+    customDictionaryPath += FILE_PATH_SEPARATOR;
+    customDictionaryPath += "dictionaries";
+    QDir qDictionaryDir{QString::fromStdString(customDictionaryPath)};
+    if (!qDictionaryDir.exists()) {
+        qDictionaryDir.mkpath(qDictionaryDir.path());
+    }
+    DictionaryManager::setPath(QString::fromStdString(customDictionaryPath));
+#ifdef _WIN32
+    // Hunspell is not installed+configured on Win - set dirs for dictionary lookup
+    vector<string> searchDirPaths{};
+    string searchDirPath{};
+    // search custom dictionaries dir
+    searchDirPaths.push_back(DictionaryManager::path().toStdString());
+    // search home dir
+    searchDirPath.assign(m8r::getHomeDirectoryPath());
+    searchDirPath += FILE_PATH_SEPARATOR;
+    searchDirPath += "dictionaries";
+    searchDirPaths.push_back(searchDirPath);
+    // search application settings
+    searchDirPath.assign(m8r::getHomeDirectoryPath());
+    searchDirPath += FILE_PATH_SEPARATOR;
+    searchDirPath += "AppData";
+    searchDirPath += FILE_PATH_SEPARATOR;
+    searchDirPath += "local";
+    searchDirPath += FILE_PATH_SEPARATOR;
+    searchDirPath += "dictionaries";
+    searchDirPaths.push_back(searchDirPath);
+    // search local settings
+    searchDirPath.assign(m8r::getHomeDirectoryPath());
+    searchDirPath += FILE_PATH_SEPARATOR;
+    searchDirPath += "Local Settings";
+    searchDirPath += FILE_PATH_SEPARATOR;
+    searchDirPath += "dictionaries";
+    searchDirPaths.push_back(searchDirPath);
+    // search paths assembly
+    QStringList spellCheckDictionaryDirs{};
+    MF_DEBUG("  Adding dirs to search path:" << endl);
+    for(auto d:searchDirPaths) {
+        MF_DEBUG("    " << d << endl);
+        qDictionaryDir = QDir{QString::fromStdString(searchDirPath)};
+        if(qDictionaryDir.exists()) {
+            MF_DEBUG("      ADDED" << endl);
+            spellCheckDictionaryDirs.append(qDictionaryDir.path());
+        }
+    }
+    // register paths under "dict" alias
+    QDir::setSearchPaths("dict", spellCheckDictionaryDirs);
+#else
+    // use "hunspell -D" to determine dictionary search paths on Linux systems
+#endif
+    // MF must search for dictionaries REGARDLESS spell check is enabled or not
+    // so that it can be enabled later OR dictionaries how to can be provided
+    DictionaryManager::instance().addProviders();
+    // ^ load available standard dictionaries
+    QStringList languages = DictionaryManager::instance().availableDictionaries();
+    MF_DEBUG("  Available language dictionaries:" << endl);
+    // set the default dictionary language
+    if(languages.size()) {
+        languages.sort();
+        // set language based on configuration
+        string defaultLanguage = config.getUiEditorSpellCheckDefaultLanguage();
+        bool isDefaultLangAvailable{false};
+        foreach(auto l, languages) {
+            config.addUiEditorSpellCheckLanguage(l.toStdString());
+            MF_DEBUG("    '" << l.toStdString() << "'");
+            if(l.toStdString() == defaultLanguage) {
+               isDefaultLangAvailable = true;
+               MF_DEBUG(" (default)");
+            }
+            MF_DEBUG(endl);
+        }
+        if(!isDefaultLangAvailable) {
+            defaultLanguage.assign(languages[0].toStdString());
+            MF_DEBUG("  Setting FALLBACK language to : " << defaultLanguage << endl);
+        }
+        DictionaryManager::instance().setDefaultLanguage(
+            QString::fromStdString(defaultLanguage)
+        );
+        MF_DEBUG("  Spell check language set to: '" << defaultLanguage << "'" << endl);
+        config.setUiEditorSpellCheckDefaultLanguage(defaultLanguage);
+    } else {
+        MF_DEBUG("  No spell check dictionaries available!" << endl);
+        // disable spell check (lang, langs and live spell check)
+        if(config.isUiEditorLiveSpellCheck()) {
+            config.clearUiEditorSpellCheckLanguages();
+        }
+    }
+    // mdConfigRepresentation->save(config);
 
     // initialize and start UI
     m8r::MainWindowView mainWindowView(lookAndFeels);

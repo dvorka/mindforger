@@ -18,6 +18,11 @@
  */
 #include "file_utils.h"
 
+#ifdef _WIN32
+  #include <ShlObj.h>
+  #include <KnownFolders.h>
+#endif // _WIN32
+
 using namespace std;
 
 namespace m8r {
@@ -111,9 +116,15 @@ Path::~Path()
  */
 
 string getCwd() {
+#ifdef _WIN32
+    char* cwd_c = _getcwd(nullptr, 0);
+    std::string cwd{cwd_c};
+    std::free(cwd_c) ;
+#else
     char* cwd_c = get_current_dir_name();
     std::string cwd{cwd_c};
     free(cwd_c);
+#endif
     return cwd;
 }
 
@@ -160,6 +171,69 @@ string& getSystemTempPath()
     return systemTemp;
 }
 
+string getHomeDirectoryPath()
+{
+    string homePath{};
+
+    char* home{};
+#ifdef _WIN32
+    PWSTR wpath;
+    size_t num;
+
+    SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &wpath);
+    home = new char[MAX_PATH];
+    wcstombs_s(&num, home, MAX_PATH, wpath, MAX_PATH);
+    CoTaskMemFree(wpath);
+    homePath = string{home};
+
+    delete [] home;
+#else
+    home = getenv("HOME");
+    homePath = string{home};
+#endif //_WIN32
+
+    return homePath;
+}
+
+string getSystemAppsConfigPath()
+{
+    string appsConfigPath{};
+#ifdef _WIN32
+    // user documents path to be used as OS specific applications config directory
+    PWSTR wpath;
+    size_t num;
+
+    SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &wpath);
+    char* docPath = new char[MAX_PATH];
+    wcstombs_s(&num, docPath, MAX_PATH, wpath, MAX_PATH);
+    CoTaskMemFree(wpath);
+    string userDocPath{docPath};
+
+    delete [] docPath;
+
+    appsConfigPath = userDocPath;
+#else
+    // ~/.local used on Linux/Unix systems
+    appsConfigPath = getHomeDirectoryPath();
+    appsConfigPath += FILE_PATH_SEPARATOR;
+    appsConfigPath += ".local";
+    appsConfigPath += FILE_PATH_SEPARATOR;
+    appsConfigPath += "share";
+#endif
+
+    return appsConfigPath;
+}
+
+string getSystemMindForgerConfigPath()
+{
+    string mfConfigPath{getSystemAppsConfigPath()};
+
+    mfConfigPath += FILE_PATH_SEPARATOR;
+    mfConfigPath += "MindForger";
+
+    return mfConfigPath;
+}
+
 string getNewTempFilePath(const string& extension)
 {
 #ifdef MD_UNUSED_CODE
@@ -167,20 +241,27 @@ string getNewTempFilePath(const string& extension)
     string path{std::tmpnam(nullptr)};
 #endif
 
-#ifdef _WIN32
-    // TODO Windows
-    // https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/mktemp-s-wmktemp-s?redirectedfrom=MSDN&view=msvc-160
-    // https://stackoverflow.com/questions/6036227/mkstemp-implementation-for-win32
-    // https://stackoverflow.com/questions/24873919/function-in-windows-that-behaves-similarly-to-mkstempchar-template
+    string templatePrefix{"mindforger-"};
 
-    throw "New temp file name creation not implemented";
+#ifdef _WIN32
+    char tmpPath[MAX_PATH];
+    char tmpFile[MAX_PATH];
+    // get system temp directory path
+    GetTempPathA(MAX_PATH, tmpPath);
+    // GetTempFileNameA() actually creates the file
+    UINT retVal = GetTempFileNameA(tmpPath, templatePrefix.c_str(), 0, tmpFile);
+    if(retVal) {
+        DeleteFileA(tmpFile);
+    }
+    // add extension to ensure association and uniqueness
+    string path{tmpFile + extension};
 
 #else
     // safe(r) in current directory
     string fileTemplate{
         getSystemTempPath()
         + FILE_PATH_SEPARATOR
-        + "mindforger-XXXXXX"
+        + templatePrefix + "XXXXXX"
     };
     char* cpath = strcpy(new char[fileTemplate.length() + 1], fileTemplate.c_str());
     int fd;
@@ -190,10 +271,9 @@ string getNewTempFilePath(const string& extension)
     close(fd);
     string path{cpath + extension};
     delete[] cpath;
-
+#endif
     MF_DEBUG("Temp file path: '" << path << "'" << endl);
     return path;
-#endif
 }
 
 bool stringToLines(const string* text, vector<string*>& lines)

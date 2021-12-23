@@ -127,7 +127,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 #endif
 
     // menu: Library
+#ifdef MF_WIP
     QObject::connect(view->actionLibraryAdd, SIGNAL(triggered()), mwp, SLOT(doActionLibraryNew()));
+#endif
 
     // menu: Organizer
     QObject::connect(
@@ -221,6 +223,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionEditNameDescFocusSwap, SIGNAL(triggered()), mwp, SLOT(doActionNameDescFocusSwap()));
     QObject::connect(view->actionEditLiveNotePreview, SIGNAL(triggered()), mwp, SLOT(doActionToggleLiveNotePreview()));
     QObject::connect(view->actionEditExtract, SIGNAL(triggered()), mwp, SLOT(doActionNoteExtract()));
+    QObject::connect(view->actionEditSpellCheck, SIGNAL(triggered()), mwp, SLOT(doActionSpellCheck()));
 
     // menu: format
     QObject::connect(view->actionFormatBold, SIGNAL(triggered()), mwp, SLOT(doActionFormatBold()));
