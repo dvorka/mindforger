@@ -8,5 +8,5 @@
 #define MINDFORGER_APP_AUTHOR "Martin Dvorak"
 #define MINDFORGER_APP_URL "https://www.mindforger.com"
 #define MINDFORGER_APP_COMPANY   MINDFORGER_APP_NAME
-#define MINDFORGER_APP_LEGAL "\xA9 2016-2021 Martin Dvorak. All Rights Reserved"
+#define MINDFORGER_APP_LEGAL "\xA9 2016-2022 Martin Dvorak. All Rights Reserved"
 #define MINDFORGER_APP_EXE "mindforger.exe" 
