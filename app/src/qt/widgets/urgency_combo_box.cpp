@@ -30,15 +30,9 @@ UrgencyComboBox::UrgencyComboBox(QWidget *parent)
         for(int j=1; j<=5; j++) {
             // unicode U260x table: https://www.unicode.org/charts/PDF/U2600.pdf
             if(j<=i) {
-                s += QChar(0x2666); // diamond
-                //s += QChar(0x2713); // check
-                //s += QChar(0x25D5); // timer clock
-                //s += QChar(0x29D7); // sand clocks - not in fonts on macOS and Fedora
+                s += QChar(U_CODE_URGENCY_ON);
             } else {
-                s += QChar(0x2662); // diamond
-                //s += QChar(0x2717); // cross check
-                //s += QChar(0x25F4); // timer clocks - unreadable on Win
-                //s += QChar(0x29D6); // sand clocks
+                s += QChar(U_CODE_URGENCY_OFF);
             }
         }
         addItem(s, QVariant::fromValue<int>(i));

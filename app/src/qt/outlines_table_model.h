@@ -24,6 +24,7 @@
 #include <QtWidgets>
 
 #include "model_meta_definitions.h"
+#include "../../lib/src/representations/unicode.h"
 #include "../../lib/src/representations/html/html_outline_representation.h"
 
 namespace m8r {

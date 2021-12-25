@@ -19,6 +19,8 @@
 #ifndef M8RUI_URGENCY_COMBO_BOX_H
 #define M8RUI_URGENCY_COMBO_BOX_H
 
+#include "../../lib/src/representations/unicode.h"
+
 #include <QtWidgets>
 
 namespace m8r {
