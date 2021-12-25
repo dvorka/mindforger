@@ -25,7 +25,6 @@ using namespace std;
 NoteEditHighlighter::NoteEditHighlighter(QPlainTextEdit* noteEditorView)
     : QSyntaxHighlighter(noteEditorView->document()),
       lookAndFeels(LookAndFeels::getInstance()),
-      isSpellCheckEnabled{true},
       spellCheckDictionary{DictionaryManager::instance().requestDictionary()},
       isTypingPaused{false},
       noteEditorView{noteEditorView},
@@ -140,7 +139,7 @@ void NoteEditHighlighter::highlightBlock(const QString& text)
             highlightMultilineHtmlComments(text);
 
             // spell check
-            if(this->isSpellCheckEnabled) {
+            if(Configuration::getInstance().isUiEditorLiveSpellCheck()) {
                 this->spellCheck(text);
             }
         }

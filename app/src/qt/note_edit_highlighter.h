@@ -64,7 +64,6 @@ private:
     LookAndFeels& lookAndFeels;
 
     // spell check
-    bool isSpellCheckEnabled;
     DictionaryRef spellCheckDictionary;
     bool isTypingPaused;
     QPlainTextEdit* noteEditorView;
@@ -103,8 +102,6 @@ public:
 
     void setEnabled(bool enable) { enabled = enable; }
     bool isEnabled() const { return enabled; }
-
-    void enableSpellCheck(bool enable) { this->isSpellCheckEnabled = enable; }
 
 protected:
     // implementation of the abstract method that performs highlighting

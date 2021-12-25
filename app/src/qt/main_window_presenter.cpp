@@ -2702,6 +2702,9 @@ void MainWindowPresenter::handleMindPreferences()
 
     view.getOrloj()->getNoteEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
     view.getOrloj()->getOutlineHeaderEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
+
+    // IMPROVE: highlighter should NOT reference lib configuration to honor MVP, spell check
+    // setting to be pushed to highlighter from here
 }
 
 void MainWindowPresenter::doActionMindTerminal()

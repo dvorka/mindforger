@@ -144,10 +144,8 @@ void NoteEditorView::dropEvent(QDropEvent* event)
     }
 #else
     if(event->mimeData()->hasUrls()
-         &&
-       event->mimeData()->hasFormat("text/plain")
-         &&
-       event->mimeData()->urls().size())
+       && event->mimeData()->hasFormat("text/plain")
+       && event->mimeData()->urls().size())
     {
         MF_DEBUG("D&D drop: '" << event->mimeData()->urls().first().url().trimmed().toStdString() << "'" << endl);
         signalDnDropUrl(event->mimeData()->urls().first().url().replace("file://",""));
@@ -694,7 +692,7 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
     // IMPROVE ghostwriter relict
     NoteEditorView* d = this;
 
-    if (event->type() == QEvent::MouseButtonPress) {
+    if(event->type() == QEvent::MouseButtonPress) {
         d->mouseButtonDown = true;
     } else if (event->type() == QEvent::MouseButtonRelease) {
         d->mouseButtonDown = false;
@@ -709,13 +707,13 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
         return QPlainTextEdit::eventFilter(watched, event);
     } else {
         // check spelling of text block under mouse
-        QContextMenuEvent *contextEvent = static_cast<QContextMenuEvent *>(event);
+        QContextMenuEvent* contextEvent = static_cast<QContextMenuEvent *>(event);
 
         // if the context menu event was triggered by pressing the menu key,
         // use the current text cursor rather than the event position to get
         // a cursor position, since the event position is the mouse position
         // rather than the text cursor position
-        if (QContextMenuEvent::Keyboard == contextEvent->reason()) {
+        if(QContextMenuEvent::Keyboard == contextEvent->reason()) {
             d->cursorForWord = this->textCursor();
         }
         // else process as mouse event
@@ -724,9 +722,7 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
         }
 
         QTextCharFormat::UnderlineStyle spellingErrorUnderlineStyle =
-            (QTextCharFormat::UnderlineStyle)
-            QApplication::style()->styleHint
-            (
+            (QTextCharFormat::UnderlineStyle)QApplication::style()->styleHint(
                 QStyle::SH_SpellCheckUnderlineStyle
             );
 
@@ -742,11 +738,9 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
         for (int i = 0; i < formatList.length(); i++) {
             QTextLayout::FormatRange formatRange = formatList[i];
 
-            if
-            (
-                (blockPosition >= formatRange.start)
-                && (blockPosition <= (formatRange.start + formatRange.length))
-                && (formatRange.format.underlineStyle() == spellingErrorUnderlineStyle)
+            if((blockPosition >= formatRange.start)
+               && (blockPosition <= (formatRange.start + formatRange.length))
+               && (formatRange.format.underlineStyle() == spellingErrorUnderlineStyle)
             ) {
                 mispelledWordStartPos = formatRange.start;
                 mispelledWordLength = formatRange.length;
@@ -757,19 +751,17 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
 
         // the word under the mouse is spelled correctly, so use the default
         // processing for the context menu and return
-        if (!wordHasSpellingError) {
+        if(!wordHasSpellingError) {
             return QPlainTextEdit::eventFilter(watched, event);
         }
 
         // select the misspelled word
-        d->cursorForWord.movePosition
-        (
+        d->cursorForWord.movePosition(
             QTextCursor::PreviousCharacter,
             QTextCursor::MoveAnchor,
             blockPosition - mispelledWordStartPos
         );
-        d->cursorForWord.movePosition
-        (
+        d->cursorForWord.movePosition(
             QTextCursor::NextCharacter,
             QTextCursor::KeepAnchor,
             mispelledWordLength
@@ -782,7 +774,7 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
 
         d->spellingActions.clear();
 
-        if (!suggestions.empty()) {
+        if(!suggestions.empty()) {
             for (int i = 0; i < suggestions.size(); i++) {
                 QAction* suggestionAction = new QAction(suggestions[i], this);
 
@@ -795,8 +787,7 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
                 popupMenu->insertAction(firstAction, suggestionAction);
             }
         } else {
-            QAction* noSuggestionsAction =
-                new QAction(tr("No spelling suggestions found"), this);
+            QAction* noSuggestionsAction = new QAction(tr("No spelling suggestions found"), this);
             noSuggestionsAction->setEnabled(false);
             d->spellingActions.append(noSuggestionsAction);
             popupMenu->insertAction(firstAction, noSuggestionsAction);
@@ -818,7 +809,7 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
 
         // if event was triggered by a key press, use the text cursor
         // coordinates to display the popup menu.
-        if (QContextMenuEvent::Keyboard == contextEvent->reason()) {
+        if(QContextMenuEvent::Keyboard == contextEvent->reason()) {
             QRect cr = this->cursorRect();
             menuPos.setX(cr.x());
             menuPos.setY(cr.y() + (cr.height() / 2));
@@ -833,7 +824,7 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
 
         delete popupMenu;
 
-        for (int i = 0; i < d->spellingActions.size(); i++) {
+        for(int i = 0; i < d->spellingActions.size(); i++) {
             delete d->spellingActions[i];
         }
 
