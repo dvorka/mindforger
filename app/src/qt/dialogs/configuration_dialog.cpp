@@ -210,7 +210,6 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
         htmlCssThemeCombo, SIGNAL(currentIndexChanged(int)),
         this, SLOT(slotCssChoiceChanged(int)));
 
-
     // assembly
     QGroupBox* viewerGroup = new QGroupBox{tr("HTML Viewer"), this};
     QVBoxLayout* viewerLayout = new QVBoxLayout{this};
@@ -258,6 +257,7 @@ void ConfigurationDialog::ViewerTab::refresh()
     int i = htmlCssThemeCombo->findText(QString::fromStdString(config.getUiHtmlCssPath()));
     if(i>=0) {
         htmlCssThemeCombo->setCurrentIndex(i);
+        htmlCssLineEdit->clear();
     } else {
         htmlCssThemeCombo->setCurrentText(QString{UI_HTML_THEME_CSS_CUSTOM});
         htmlCssLineEdit->setText(config.getUiHtmlCssPath());
@@ -323,7 +323,9 @@ void ConfigurationDialog::ViewerTab::slotFindCssFile()
 
 void ConfigurationDialog::ViewerTab::slotCssChoiceChanged(int index)
 {
-    if(string{UI_HTML_THEME_CSS_CUSTOM} == htmlCssThemeCombo->itemText(index).toStdString()) {
+    if(string{UI_HTML_THEME_CSS_CUSTOM} == htmlCssThemeCombo->itemText(index).toStdString()
+       && !htmlCssLineEdit->text().size()
+    ) {
         this->slotFindCssFile();
     }
 }

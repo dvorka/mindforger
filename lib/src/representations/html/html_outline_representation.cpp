@@ -30,7 +30,7 @@ HtmlOutlineRepresentation::HtmlOutlineRepresentation(
       lf{exportColors},
       markdownRepresentation(ontology, descriptionInterceptor)
 {
-#if defined  MF_MD_2_HTML_CMARK
+#if defined MF_MD_2_HTML_CMARK
     markdownTranscoder = new CmarkGfmMarkdownTranscoder{};
 #else
     markdownTranscoder = nullptr;
