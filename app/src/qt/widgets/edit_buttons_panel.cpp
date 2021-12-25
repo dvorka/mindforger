@@ -53,7 +53,6 @@ EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
 
     // assembly
     layout = new QHBoxLayout{this};
-    layout->addStretch(1);
     layout->addWidget(cancelButton);
     layout->addWidget(moreButton);
     layout->addWidget(previewButton);

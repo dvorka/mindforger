@@ -63,6 +63,9 @@ OrlojView::OrlojView(QWidget* parent)
 
     noteEdit = new NoteEditView{this};
     addWidget(noteEdit);
+
+    // DEBUG: orloj layout assembly
+    //setStyleSheet("border: 1px solid red;");
 }
 
 void OrlojView::hideChildren(const QSet<QWidget*>& visibleChildren)

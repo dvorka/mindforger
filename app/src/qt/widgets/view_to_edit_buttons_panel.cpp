@@ -23,10 +23,11 @@ namespace m8r {
 using namespace std;
 
 ViewToEditEditButtonsPanel::ViewToEditEditButtonsPanel(MfWidgetMode mode, QWidget* parent)
-    : QWidget(parent), mode(mode)
+    : QWidget(parent),
+      mode(mode)
 {
     // widgets
-    editButton = new QPushButton{tr("Edit"), this};
+    editButton = new QPushButton{tr("&Edit"), this};
 #ifdef __APPLE__
     editButton->setToolTip("⌘+E");
 #else
@@ -35,11 +36,10 @@ ViewToEditEditButtonsPanel::ViewToEditEditButtonsPanel(MfWidgetMode mode, QWidge
 
     // assembly
     layout = new QHBoxLayout{this};
-    layout->addStretch(1);
     if(MfWidgetMode::OUTLINE_MODE == mode) {
-        toggleFullOPreviewButton = new QPushButton{tr("Toggle Full Preview"), this};
+        toggleFullOPreviewButton = new QPushButton{tr("Full &Preview"), this};
         toggleFullOPreviewButton->setToolTip(tr(
-            "Toggle full Notebook preview (only header is shown by default)"));
+            "Show whole Notebook preview or Notebook header preview"));
 
         layout->addWidget(toggleFullOPreviewButton);
     }

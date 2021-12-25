@@ -157,7 +157,8 @@ OutlineHeaderView::OutlineHeaderView(QWidget* parent)
     // signals
     QObject::connect(
         view2EditPanel->getEditButton(), SIGNAL(clicked()),
-        this, SLOT(slotOpenEditor()));
+        this, SLOT(slotOpenEditor())
+    );
 }
 
 OutlineHeaderView::~OutlineHeaderView()
