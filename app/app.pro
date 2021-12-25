@@ -18,14 +18,26 @@
 TARGET = mindforger
 TEMPLATE = app
 
-QT += widgets
+message("Qt version: $$QT_VERSION")
 
-mfner {
-  DEFINES += MF_NER
-}
+QT += widgets
 
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
+}
+
+# Hunspell spell check
+# - Windows and Ubuntu Xenial requires deprecated Hunspell API
+# - Ubuntu Bionic uses new Hunspell API
+# Execute distribution detection on Linux/Unix only:
+unix:UBUNTU_DISTRO_VERSION = $$system(cat /etc/issue | while read D V X; do echo "${D} ${V}"; done | rev | cut -c 3- | rev)
+equals(UBUNTU_DISTRO_VERSION, "Ubuntu 16.04") {
+  message("Forcing legacy Hunspell API for OS: $$UBUNTU_DISTRO_VERSION")
+  DEFINES += MF_DEPRECATED_HUNSPELL_API
+}
+
+mfner {
+  DEFINES += MF_NER
 }
 
 # webkit is supposed to be OBSOLETED by webengine, but webengine is disabled

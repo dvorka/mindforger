@@ -475,7 +475,9 @@ void ConfigurationDialog::EditorTab::save()
     config.setUiEditorLiveSpellCheck(editorSpellCheckLive->isChecked());
     if(editorSpellCheckLanguageCombo->isEnabled() && editorSpellCheckLanguageCombo->count()) {
         config.setUiEditorSpellCheckDefaultLanguage(
-            editorSpellCheckLanguageCombo->itemText(editorTabWidthCombo->currentIndex()).toStdString()
+            editorSpellCheckLanguageCombo->itemText(
+                editorSpellCheckLanguageCombo->currentIndex()
+            ).toStdString()
         );
     } else {
         config.clearUiEditorSpellCheckDefaultLanguage();

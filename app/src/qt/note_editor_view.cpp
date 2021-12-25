@@ -724,8 +724,17 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
         // and see if it has the spell check error underline style
         bool wordHasSpellingError = false;
         int blockPosition = this->cursorForWord.positionInBlock();
+#if (QT_VERSION <= QT_VERSION_CHECK(5, 5, 1))
+        QList<QTextLayout::FormatRange> formatTrueList =
+            this->cursorForWord.block().layout()->additionalFormats();
+        QVector<QTextLayout::FormatRange> formatList{};
+        for(auto i:formatTrueList) {
+            formatList.append(i);
+        }
+#else
         QVector<QTextLayout::FormatRange> formatList =
             this->cursorForWord.block().layout()->formats();
+#endif
         int mispelledWordStartPos = 0;
         int mispelledWordLength = 0;
 
