@@ -43,10 +43,13 @@ TerminalDialog::TerminalDialog(QWidget* parent)
         completerCommands << QString::fromStdString(
             "cd ~/mf && git add . && git commit -m 'Updates.' && git push origin HEAD"
         );
-        completerCommands << QString::fromStdString("echo $MIDFORGER_REPOSITORY");
+        completerCommands << QString::fromStdString("echo ${MIDFORGER_REPOSITORY}");
         completerCommands << QString::fromStdString("mindforger --help");
-        completerCommands << QString::fromStdString("clear");
+#ifdef _WIN32
         completerCommands << QString::fromStdString("cls");
+#else
+        completerCommands << QString::fromStdString("clear");
+#endif
         completerCommands << QString::fromStdString("exit");
 
         for(auto c:completerCommands) {
