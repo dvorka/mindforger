@@ -833,21 +833,21 @@ TEST(MarkdownParserTestCase, TimeScope)
 
 TEST(MarkdownParserTestCase, Deadline)
 {
-    string repositoryPath{"/tmp"};
+    string repositoryPath{getSystemTempPath()};
     string fileName{"md-parser-deadline.md"};
-    string content;
-    string filePath{repositoryPath+"/"+fileName};
-
-    content.assign(
-                "# Outline Name\n"
-                "O text.\n"
-                "\n"
-                "## First Section  <!-- Metadata: deadline: 2010-11-12 13:14:15; -->\n"
-                "N1 text.\n"
-                "\n"
-                "## Second Section\n"
-                "N2 text.\n"
-                "\n");
+    string filePath{repositoryPath+FILE_PATH_SEPARATOR+fileName};
+    string deadlineDateStr{"2010-11-12 13:14:15"};
+    string content{
+        "# Outline Name\n"
+        "O text.\n"
+        "\n"
+        "## First Section  <!-- Metadata: deadline: "+deadlineDateStr+"; -->\n"
+        "N1 text.\n"
+        "\n"
+        "## Second Section\n"
+        "N2 text.\n"
+        "\n"
+    };
     m8r::stringToFile(filePath, content);
 
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
@@ -856,7 +856,7 @@ TEST(MarkdownParserTestCase, Deadline)
     m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
-    config.setConfigFilePath("/tmp/cfg-mptc-d.md");
+    config.setConfigFilePath(getSystemTempPath()+FILE_PATH_SEPARATOR+"cfg-mptc-d.md");
     config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
     m8r::Ontology ontology{};
 
@@ -869,20 +869,28 @@ TEST(MarkdownParserTestCase, Deadline)
     EXPECT_NE(nullptr, o);
     EXPECT_EQ(2, o->getNotesCount());
 
-    cout << endl << "Deadline: " << o->getNotes()[0]->getDeadline();
+    cout << endl
+         << "Deadline: " << endl
+         << "  input      : " << deadlineDateStr << endl
+         << "  loaded to O: " << o->getNotes()[0]->getDeadline() << endl;
 #ifdef _WIN32
     tm deadLineDate = { 15,14,13,12,10,110, 0, 0, 0 };
 #else
     tm deadLineDate = { 15,14,13,12,10,110, 0, 0, 0, 0, 0 };
 #endif // _WIN32
     time_t deadLine = mktime(&deadLineDate);
+    cout << endl
+         << "time_t deadline: " << endl
+         << "  input      : " << deadLine << endl
+         << "  loaded to O: " << o->getNotes()[0]->getDeadline() << endl;
     EXPECT_EQ(deadLine, o->getNotes()[0]->getDeadline());
 
     // serialize
     string* serialized = mdr.to(o);
-    cout << endl << "- SERIALIZED ---";
-    cout << endl << *serialized;
-    EXPECT_NE(std::string::npos, serialized->find("deadline: 2010-11-12 13:14:15"));
+    cout << endl
+         << "Deadline O serialized to file:" << endl
+         << *serialized << endl;
+    EXPECT_NE(std::string::npos, serialized->find("deadline: "+deadlineDateStr));
 
     delete serialized;
     delete o;

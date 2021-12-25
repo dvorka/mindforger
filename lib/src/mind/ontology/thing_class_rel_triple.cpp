@@ -69,7 +69,10 @@ void Thing::autolinkName()
  */
 
 ThingInTime::ThingInTime()
-    : Thing{}
+    : Thing{},
+      created{},
+      read{},
+      modified{}
 {
 }
 

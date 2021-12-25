@@ -31,10 +31,6 @@
 
 namespace m8r {
 
-/*
- * Dialog
- */
-
 class NoteEditDialog : public QDialog
 {
     Q_OBJECT

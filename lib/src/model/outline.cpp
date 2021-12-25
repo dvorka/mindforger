@@ -62,19 +62,26 @@ void Outline::sortByRead(vector<Note*>& ns)
 Outline::Outline(const OutlineType* type)
     : ThingInTime{},
       memoryLocation(OutlineMemoryLocation::NORMAL),
+      flags{},
       format(MarkdownDocument::Format::MINDFORGER),
-      type(type),
+      preamble{},
+      tags{},
+      links{},
+      type{type},
+      description{},
+      modifiedPretty{},
+      revision{},
+      reads{},
+      importance{},
+      urgency{},
+      progress{},
+      notes{},
+      outlineDescriptorAsNote{new Note(&NOTE_4_OUTLINE_TYPE, this)},
+      bytesize{},
+      dirty{false},
+      readOnly{false},
       timeScope{}
 {
-    created = modified = read = 0;
-    reads = revision = 0;
-    importance = urgency = progress = 0;
-    bytesize = 0;
-    flags = 0;
-    dirty = false;
-    readOnly = false;
-
-    outlineDescriptorAsNote = new Note(&NOTE_4_OUTLINE_TYPE, this);
 }
 
 Outline::~Outline() {
@@ -112,7 +119,26 @@ void Outline::resetClonedOutline(Outline* o)
 
 Outline::Outline(const Outline& o)
     : ThingInTime{},
-      memoryLocation(OutlineMemoryLocation::NORMAL), format(o.format), type(o.type)
+      memoryLocation(OutlineMemoryLocation::NORMAL),
+      flags{},
+      format(o.format),
+      preamble{},
+      tags{},
+      links{},
+      type{o.type},
+      description{},
+      modifiedPretty{},
+      revision{},
+      reads{},
+      importance{},
+      urgency{},
+      progress{},
+      notes{},
+      outlineDescriptorAsNote{},
+      bytesize{},
+      dirty{},
+      readOnly{},
+      timeScope{}
 {
     key.clear();
 

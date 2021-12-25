@@ -47,6 +47,7 @@ NoteEditDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
 
     deadlineCheck = new QCheckBox{tr("Deadline")+":", this};
     deadlineEdit = new QDateEdit{QDate::currentDate(), this};
+    deadlineEdit->setToolTip(tr("Deadline format: mm/dd/yy"));
 
     parentRelLabel = new QLabel{tr("Parent-child Relationship")+":", this};
     parentRelCombo = new QComboBox(this);
@@ -57,7 +58,10 @@ NoteEditDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     editTagsGroup = new EditTagsPanel{ontology, this};
 
     // signals
-    QObject::connect(deadlineCheck, SIGNAL(stateChanged(int)), this, SLOT(handleDeadlineCheck(int)));
+    QObject::connect(
+        deadlineCheck, SIGNAL(stateChanged(int)),
+        this, SLOT(handleDeadlineCheck(int))
+    );
 
     // assembly
     QVBoxLayout* basicLayout = new QVBoxLayout{this};
@@ -221,7 +225,7 @@ void NoteEditDialog::show()
             generalTab->deadlineEdit->setEnabled(true);
 
             QDate date{};
-            timetToQDate(currentNote->getDeadline(),date);
+            timetToQDate(currentNote->getDeadline(), date);
             generalTab->deadlineEdit->setDate(date);
         } else {
             generalTab->deadlineCheck->setChecked(false);
@@ -254,9 +258,31 @@ void NoteEditDialog::toNote()
         currentNote->setProgress(generalTab->progressSpin->value());
         if(generalTab->deadlineCheck->isChecked()) {
 #ifdef _WIN32
-            tm date {0,0,0,0,0,0,0,0,0};
+            tm date {
+                0, // sec
+                0, // min
+                0, // hour
+                0, // month day
+                0, // month
+                0, // year - 1900
+                0, // day of week
+                0, // days in year
+                0  // is DST
+            };
 #else
-            tm date {0,0,0,0,0,0,0,0,0,0,0}; // missing initializer required by older GCC versions (4.8.5 and older)
+            tm date {
+                0, // sec
+                0, // min
+                0, // hour
+                0, // month day
+                0, // month (0 - 11)
+                0, // year - 1900
+                0, // day of week
+                0, // days in year
+                0, // is DST
+                0, // seconds - UTC
+                0  // TZ abbreviation
+            }; // missing initializer required by older GCC versions (4.8.5 and older)
 #endif //_WIN32
             qdateToTm(generalTab->deadlineEdit->dateTime().date(), date);
             currentNote->setDeadline(datetimeSeconds(&date));

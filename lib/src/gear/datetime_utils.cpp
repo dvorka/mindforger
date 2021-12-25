@@ -40,14 +40,41 @@ struct tm* datetimeFrom(const char* s, struct tm* datetime)
 /**
  * @brief Convert datetime to character string.
  * @param result    char[50] or bigger is expected for result serialization.
+ * @returns pointer to C-string with string date representation result or nullptr on error.
  */
 char* datetimeTo(const struct tm* datetime, char* result)
 {
+    if(!datetime) {
+        return nullptr;
+    }
+
     if(datetime->tm_isdst) {
 #ifndef _WIN32
-        tm c {0,0,0,0,0,0,0,0,0,0,0}; // missing initializer required by older GCC versions 4.8.5 and older
+        tm c {
+            0, // sec
+            0, // min
+            0, // hour
+            0, // month day
+            0, // month (0 - 11)
+            0, // year - 1900
+            0, // day of week
+            0, // days in year
+            0, // is DST
+            0, // seconds - UTC
+            0  // TZ abbreviation
+        }; // missing initializer required by older GCC versions 4.8.5 and older
 #else
-        tm c {0,0,0,0,0,0,0,0,0};
+        tm c {
+            0, // sec
+            0, // min
+            0, // hour
+            0, // month day
+            0, // month
+            0, // year - 1900
+            0, // day of week
+            0, // days in year
+            0  // is DST
+        };
 #endif
         memcpy(&c, datetime, sizeof(c));
         if(c.tm_hour) {
@@ -67,14 +94,17 @@ char* datetimeTo(const struct tm* datetime, char* result)
     } else {
         strftime(result, sizeof(result)*100, "%Y-%m-%d %H:%M:%S", datetime);
     }
+
     return result;
 }
 
 std::string datetimeToString(const time_t ts)
 {
     char to[50];
-    datetimeTo(localtime(&ts), to);
-    return string{to};
+    if(datetimeTo(localtime(&ts), to)) {
+        return string{to};
+    }
+    return "";
 }
 
 time_t datetimeSeconds(struct tm* datetime)

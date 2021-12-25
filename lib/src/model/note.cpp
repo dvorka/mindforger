@@ -25,20 +25,24 @@ namespace m8r {
 Note::Note(const NoteType* type, Outline* outline)
     : ThingInTime{},
       outline(outline),
-      type(type)
+      flags{},
+      depth{},
+      tags{},
+      links{},
+      type{type},
+      description{},
+      modifiedPretty{},
+      revision{},
+      readPretty{},
+      reads{},
+      progress{},
+      deadline{},
+      aiAaMatrixIndex{}
 {
-    depth = 0;
-    created = modified = read = deadline = 0;
-    reads = revision = 0;
-    progress = 0;
-    flags = 0;
-    aiAaMatrixIndex = -1;
 }
 
 Note::Note(const Note& n)
-    : ThingInTime{},
-      outline(nullptr),
-      type(n.type)
+    : Note{n.type, nullptr}
 {
     name = n.name;
     autolinkName();

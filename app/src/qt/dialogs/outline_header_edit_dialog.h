@@ -33,10 +33,6 @@
 
 namespace m8r {
 
-/*
- * Dialog
- */
-
 class OutlineHeaderEditDialog : public QDialog
 {
     Q_OBJECT

@@ -25,9 +25,9 @@
 #   qmake CONFIG+=mfnocxx           ... do NOT define CXX i.e. g++
 #   qmake CONFIG+=mfnoccache        ... do NOT use ccache to build the project
 #   qmake CONFIG+=mfdebug           ... show debug messages + include WIP code
-#   qmake CONFIG+=mfunits           ... options to run unit tests
+#   qmake CONFIG+=mfunits           ... option to run unit tests
 #
-# DEPRECATED builds will be removed in the next major release.
+# Warning: DEPRECATED build options will be removed in the next major release.
 #
 #########################################################################
 
