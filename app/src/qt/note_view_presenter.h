@@ -28,7 +28,7 @@
 #include "note_view_model.h"
 
 #if not defined(__APPLE__) && not defined(_WIN32)
-#include <QWebFrame>
+  #include <QWebFrame>
 #endif
 
 namespace m8r {

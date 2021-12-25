@@ -510,7 +510,7 @@ Note* Outline::cloneNote(const Note* clonedNote, const bool deep)
         getAllNoteChildren(clonedNote, &children);
         offset += 1+children.size();
         if(deep && children.size()) {
-            if((unsigned int)offset < notes.size()) {
+            if(static_cast<unsigned int>(offset) < notes.size()) {
                 int o = offset;
                 for(Note* n:children) {
                     newNote = new Note(*n);
@@ -590,7 +590,7 @@ int Outline::getNoteOffset(const Note* note) const
         if(notes.size()==1) {
             return 0;
         } else {
-            // IMPROVE this is SLOW O(n) - consider keeping order of note within it as a field
+            // IMPROVE this is SLOW O(n) - consider keeping order of N within it as a field
             auto it = std::find(notes.begin(), notes.end(), note);
             if(it != notes.end()) {
                 return std::distance(notes.begin(), it);

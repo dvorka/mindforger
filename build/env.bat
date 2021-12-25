@@ -25,7 +25,8 @@ set "MF_BASE=%~dp0%.."
 :: call MSVC 2017 Development Environment Setup
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
 :: call Qt Development Environment Setup
-call "C:\software\Qt\5.12.0\msvc2017_64\bin\qtenv2.bat"
+:: call "C:\software\Qt\5.12.0\msvc2017_64\bin\qtenv2.bat"
+call "C:\Qt\5.12.1\msvc2017_64\bin\qtenv2.bat"
 :: set PATH to cmake and zlib 
 set "PATH=%PATH%;c:\Program Files\CMake\bin;%MF_BASE%\deps\zlib-win\lib"
 :: set path to Inno Setup 5 script compiler

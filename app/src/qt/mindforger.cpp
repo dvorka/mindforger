@@ -340,7 +340,7 @@ int main(int argc, char* argv[])
     searchDirPath += FILE_PATH_SEPARATOR;
     searchDirPath += "AppData";
     searchDirPath += FILE_PATH_SEPARATOR;
-    searchDirPath += "local";
+    searchDirPath += "Local";
     searchDirPath += FILE_PATH_SEPARATOR;
     searchDirPath += "dictionaries";
     searchDirPaths.push_back(searchDirPath);

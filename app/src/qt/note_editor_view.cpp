@@ -672,32 +672,26 @@ void NoteEditorView::checkDocumentSpelling()
 
 void NoteEditorView::suggestSpelling(QAction* action)
 {
-    // IMPROVE ghostwriter relict
-    NoteEditorView* d = this;
-
-    if (action == d->addWordToDictionaryAction) {
-        this->setTextCursor(d->cursorForWord);
-        spellCheckDictionary.addToPersonal(d->wordUnderMouse);
-        d->highlighter->rehighlight();
-    } else if (action == d->checkSpellingAction) {
-        this->setTextCursor(d->cursorForWord);
-        SpellChecker::checkDocument(this, d->highlighter, spellCheckDictionary);
-    } else if (d->spellingActions.contains(action)) {
-        d->cursorForWord.insertText(action->data().toString());
+    if (action == this->addWordToDictionaryAction) {
+        this->setTextCursor(this->cursorForWord);
+        spellCheckDictionary.addToPersonal(this->wordUnderMouse);
+        this->highlighter->rehighlight();
+    } else if (action == this->checkSpellingAction) {
+        this->setTextCursor(this->cursorForWord);
+        SpellChecker::checkDocument(this, this->highlighter, spellCheckDictionary);
+    } else if (this->spellingActions.contains(action)) {
+        this->cursorForWord.insertText(action->data().toString());
     }
 }
 
 bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
 {
-    // IMPROVE ghostwriter relict
-    NoteEditorView* d = this;
-
-    if(event->type() == QEvent::MouseButtonPress) {
-        d->mouseButtonDown = true;
+    if (event->type() == QEvent::MouseButtonPress) {
+        this->mouseButtonDown = true;
     } else if (event->type() == QEvent::MouseButtonRelease) {
-        d->mouseButtonDown = false;
+        this->mouseButtonDown = false;
     } else if (event->type() == QEvent::MouseButtonDblClick) {
-        d->mouseButtonDown = true;
+        this->mouseButtonDown = true;
     }
 
     if(event->type() != QEvent::ContextMenu
@@ -713,25 +707,25 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
         // use the current text cursor rather than the event position to get
         // a cursor position, since the event position is the mouse position
         // rather than the text cursor position
-        if(QContextMenuEvent::Keyboard == contextEvent->reason()) {
-            d->cursorForWord = this->textCursor();
+        if (QContextMenuEvent::Keyboard == contextEvent->reason()) {
+            this->cursorForWord = this->textCursor();
         }
         // else process as mouse event
         else {
-            d->cursorForWord = cursorForPosition(contextEvent->pos());
+            this->cursorForWord = cursorForPosition(contextEvent->pos());
         }
 
         QTextCharFormat::UnderlineStyle spellingErrorUnderlineStyle =
-            (QTextCharFormat::UnderlineStyle)QApplication::style()->styleHint(
-                QStyle::SH_SpellCheckUnderlineStyle
+            static_cast<QTextCharFormat::UnderlineStyle>(
+                QApplication::style()->styleHint(QStyle::SH_SpellCheckUnderlineStyle)
             );
 
         // get the formatting for the cursor position under the mouse,
         // and see if it has the spell check error underline style
         bool wordHasSpellingError = false;
-        int blockPosition = d->cursorForWord.positionInBlock();
+        int blockPosition = this->cursorForWord.positionInBlock();
         QVector<QTextLayout::FormatRange> formatList =
-            d->cursorForWord.block().layout()->formats();
+            this->cursorForWord.block().layout()->formats();
         int mispelledWordStartPos = 0;
         int mispelledWordLength = 0;
 
@@ -756,23 +750,25 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
         }
 
         // select the misspelled word
-        d->cursorForWord.movePosition(
+        this->cursorForWord.movePosition
+        (
             QTextCursor::PreviousCharacter,
             QTextCursor::MoveAnchor,
             blockPosition - mispelledWordStartPos
         );
-        d->cursorForWord.movePosition(
+        this->cursorForWord.movePosition
+        (
             QTextCursor::NextCharacter,
             QTextCursor::KeepAnchor,
             mispelledWordLength
         );
 
-        d->wordUnderMouse = d->cursorForWord.selectedText();
-        QStringList suggestions = spellCheckDictionary.suggestions(d->wordUnderMouse);
+        this->wordUnderMouse = this->cursorForWord.selectedText();
+        QStringList suggestions = spellCheckDictionary.suggestions(this->wordUnderMouse);
         QMenu* popupMenu = createStandardContextMenu();
         QAction* firstAction = popupMenu->actions().first();
 
-        d->spellingActions.clear();
+        this->spellingActions.clear();
 
         if(!suggestions.empty()) {
             for (int i = 0; i < suggestions.size(); i++) {
@@ -783,20 +779,20 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
                 // go off of the data in the QAction rather than the text to avoid this
                 suggestionAction->setData(suggestions[i]);
 
-                d->spellingActions.append(suggestionAction);
+                this->spellingActions.append(suggestionAction);
                 popupMenu->insertAction(firstAction, suggestionAction);
             }
         } else {
             QAction* noSuggestionsAction = new QAction(tr("No spelling suggestions found"), this);
             noSuggestionsAction->setEnabled(false);
-            d->spellingActions.append(noSuggestionsAction);
+            this->spellingActions.append(noSuggestionsAction);
             popupMenu->insertAction(firstAction, noSuggestionsAction);
         }
 
         popupMenu->insertSeparator(firstAction);
-        popupMenu->insertAction(firstAction, d->addWordToDictionaryAction);
+        popupMenu->insertAction(firstAction, this->addWordToDictionaryAction);
         popupMenu->insertSeparator(firstAction);
-        popupMenu->insertAction(firstAction, d->checkSpellingAction);
+        popupMenu->insertAction(firstAction, this->checkSpellingAction);
         popupMenu->insertSeparator(firstAction);
 
         // show menu
@@ -824,11 +820,11 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
 
         delete popupMenu;
 
-        for(int i = 0; i < d->spellingActions.size(); i++) {
-            delete d->spellingActions[i];
+        for (int i = 0; i < this->spellingActions.size(); i++) {
+            delete this->spellingActions[i];
         }
 
-        d->spellingActions.clear();
+        this->spellingActions.clear();
 
         return true;
     }

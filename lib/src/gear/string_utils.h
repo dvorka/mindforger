@@ -141,7 +141,16 @@ static inline std::string to_stringl(time_t x)
 {
   size_t length = static_cast<size_t>(snprintf(nullptr, 0, "%d", static_cast<int>(x)));
   char* buf = new char[length + 1];
-  snprintf(buf, length + 1, "%ld", x);
+  snprintf(
+      buf,
+      length + 1,
+#ifdef _WIN32
+      "%lld",
+#else
+      "%ld",
+#endif
+      x
+    );
   std::string str(buf);
   delete[] buf;
   return str;

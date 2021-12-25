@@ -87,9 +87,7 @@ char* datetimeTo(const struct tm* datetime, char* result)
 #else
             localtime_s(&c, &backOneHour);
 #endif
-
         }
-
         strftime(result, sizeof(result)*100, "%Y-%m-%d %H:%M:%S", &c);
     } else {
         strftime(result, sizeof(result)*100, "%Y-%m-%d %H:%M:%S", datetime);
