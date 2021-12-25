@@ -32,7 +32,7 @@ OutlineNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
 {
     QGroupBox* basicGroup = new QGroupBox{tr("Basic"), this};
 
-    nameLabel = new QLabel(tr("Name")+":", this),
+    nameLabel = new QLabel(tr("Name")+":", this);
     nameEdit = new QLineEdit(tr("Notebook"), this);
 
     typeLabel = new QLabel(tr("Type")+":", this);
@@ -253,17 +253,26 @@ QString OutlineNewDialog::getPreamble() const
 
 const OutlineType* OutlineNewDialog::getOutlineType() const
 {
-    return (const OutlineType*)(generalTab->getTypeCombo()->itemData(generalTab->getTypeCombo()->currentIndex(), Qt::UserRole).value<const OutlineType*>());
+    return static_cast<const OutlineType*>(generalTab->getTypeCombo()->itemData(
+        generalTab->getTypeCombo()->currentIndex(),
+        Qt::UserRole
+    ).value<const OutlineType*>());
 }
 
 int8_t OutlineNewDialog::getImportance() const
 {
-    return (int8_t)(generalTab->getImportanceCombo()->itemData(generalTab->getImportanceCombo()->currentIndex(), Qt::UserRole).value<int>());
+    return static_cast<int8_t>(generalTab->getImportanceCombo()->itemData(
+        generalTab->getImportanceCombo()->currentIndex(),
+        Qt::UserRole
+    ).value<int>());
 }
 
 int8_t OutlineNewDialog::getUrgency() const
 {
-    return (int8_t)(generalTab->getUrgencyCombo()->itemData(generalTab->getUrgencyCombo()->currentIndex(), Qt::UserRole).value<int>());
+    return static_cast<int8_t>(generalTab->getUrgencyCombo()->itemData(
+        generalTab->getUrgencyCombo()->currentIndex(),
+        Qt::UserRole).value<int>()
+    );
 }
 
 int OutlineNewDialog::getProgress() const

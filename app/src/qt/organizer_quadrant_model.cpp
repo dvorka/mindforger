@@ -75,8 +75,7 @@ void OrganizerQuadrantModel::addRow(
             if(outline->getUrgency()) {
                 html += " ";
                 for(int i=1; i<=outline->getUrgency(); i++) {
-                    html += QChar(0x25D5); // timer clock
-                    //html += QChar(0x29D7); // sand clocks - not in fonts on macOS and Fedora
+                    html += QChar(0x2666); // timer clock
                 }
             }
         }

@@ -508,7 +508,7 @@ Note* Outline::cloneNote(const Note* clonedNote, const bool deep)
 
         vector<Note*> children{};
         getAllNoteChildren(clonedNote, &children);
-        offset += 1+children.size();
+        offset += 1 + static_cast<int>(children.size());
         if(deep && children.size()) {
             if(static_cast<unsigned int>(offset) < notes.size()) {
                 int o = offset;

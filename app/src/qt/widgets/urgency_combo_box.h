@@ -36,7 +36,7 @@ public:
     ~UrgencyComboBox();
 
     int8_t getValue() {
-        return itemData(currentIndex(), Qt::UserRole).value<int>();
+        return static_cast<int8_t>(itemData(currentIndex(), Qt::UserRole).value<int>());
     }
 };
 

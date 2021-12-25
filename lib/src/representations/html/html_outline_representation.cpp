@@ -392,14 +392,12 @@ string* HtmlOutlineRepresentation::to(
                     if(outline->getUrgency()>i) {
                         htmlHeader +=
                                 "<td style='border-collapse: collapse; border: none;'>"
-                                "&#x25D5;"
-                                //"&#x29D7;" // sand clocks
+                                "&#x2666;"
                                 "</td>";
                     } else {
                         htmlHeader +=
                                 "<td style='border-collapse: collapse; border: none;'>"
-                                "&#x25F4;"
-                                //"&#x29D6;" // sand clocks
+                                "&#x2662;"
                                 "</td>";
                     }
                 }

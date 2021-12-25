@@ -214,7 +214,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewHome->setStatusTip(tr("Open Home Notebook..."));
 
     actionViewDecks = new QAction(QIcon(":/menu-icons/tag.svg"), tr("Flashcard &Decks"), mainWindow);
-    actionViewDecks->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_E));
+    actionViewDecks->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
     actionViewDecks->setStatusTip(tr("Show list of flashcard decks..."));
 
     actionViewOrganizers = new QAction(QIcon(":/menu-icons/cross.svg"), tr("Organiz&ers"), mainWindow);
