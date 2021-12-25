@@ -110,7 +110,7 @@ void NoteViewPresenter::refreshLivePreview()
     view->setHtml(QString::fromStdString(html));
 
     // IMPROVE share code between O header and N
-#if not defined(_WIN32) && not defined(__APPLE__)
+#if !defined(_WIN32) && !defined(__APPLE__)
     // WebView: scroll to same pct view
     if(scrollbar) {
         if(scrollbar->maximum()) {

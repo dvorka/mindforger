@@ -124,7 +124,7 @@ using namespace m8r::filesystem;
 int main(int argc, char* argv[])
 {
     // check whether running in GUI (and not in text console tty)
-#if not defined(__APPLE__) && not defined(_WIN32)
+#if !defined(__APPLE__) && !defined(_WIN32)
     char* term = getenv(m8r::ENV_VAR_DISPLAY);
     if(!term || !strlen(term)) {
         cerr << endl
