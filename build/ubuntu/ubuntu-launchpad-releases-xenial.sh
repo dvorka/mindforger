@@ -103,13 +103,6 @@ function releaseForParticularUbuntuVersion() {
     export MFSRC=/home/dvorka/p/mindforger/git/mindforger
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
     export MFBUILD=mindforger-${NOW}
-
-    # DO_MF_DEBUG is disabled by default now
-    #if ! grep -q "//#define DO_MF_DEBUG" "${MFSRC}/lib/src/debug.h"
-    #then
-    #	echo "This script must NOT be run if debug code is enabled - disable DO_MF_DEBUG first"
-    #	exit 1
-    #fi
     
     # 1) clean up
     echo -e "\n# Cleanup ####################################################"
@@ -139,7 +132,7 @@ function releaseForParticularUbuntuVersion() {
     # qt5-default package: Debian control file does NOT allow virtual packages
     # like this qt5-default. Instead debian/rules file exports env var w/ Qt choice
     # .pro file is also extended to have 'make install' target
-    qmake -r mindforger.pro
+    qmake -r mindforger.pro CONFIG+=mfoldhunspell
     
     # 5) add new version to LOCAL Bazaar
     echo -e "\n# bazaar add & commit  #######################################"
@@ -176,12 +169,15 @@ function releaseForParticularUbuntuVersion() {
     cp -rvf ~/pbuilder/*.tgz ${PBUILDFOLDER}
     # END
     pbuilder-dist ${UBUNTUVERSION} build ${MFRELEASE}.dsc
+
+    if [[ "${DRY_RUN}" = "true" ]]
+    then
+	echo -e "\nDRY RUN finished - exiting WITHOUT upload to Lanuchpad\n"
+	exit 0
+    fi
     
     # 8) upload to Launchpad: push Bazaar and put changes
     echo -e "\n# bzr push .deb to Launchpad #################################"
-
-    echo -e "SKIPPED FOR NOW"
-    exit 0
     
     # from buildarea/ to ./dist
     cd ../${MF}
@@ -206,8 +202,10 @@ then
     exit 1
 fi
 
+export DRY_RUN="true"
+
 export ARG_MAJOR_VERSION=1.53.
-export ARG_MINOR_VERSION=3 # minor version is incremented for every Ubuntu version
+export ARG_MINOR_VERSION=5 # minor version is incremented for every Ubuntu version
 export ARG_BAZAAR_MSG="MindForger ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} release."
 
 # https://wiki.ubuntu.com/Releases
