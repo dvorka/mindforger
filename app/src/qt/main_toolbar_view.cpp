@@ -56,9 +56,11 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
 
     addSeparator();
 
+#ifdef MF_DEPRECATED
     actionViewDashboard = addAction(
         QIcon(":/icons/dashboard.svg"),
         tr("View Dashboard"));
+#endif
 #ifdef ONE_ORGANIZER
     actionViewEisenhower = addAction(
         QIcon(":/icons/view-eisenhower.svg"),
