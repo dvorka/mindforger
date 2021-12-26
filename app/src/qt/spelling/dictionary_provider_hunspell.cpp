@@ -300,7 +300,7 @@ void DictionaryHunspell::addToPersonal(const QString& word)
 void DictionaryHunspell::addToSession(const QStringList& words)
 {
 	foreach (const QString& word, words) {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(MF_DEPRECATED_HUNSPELL_API)
 		m_dictionary->add(m_codec->fromUnicode(word).constData());
 #else
 		m_dictionary->add(m_codec->fromUnicode(word).toStdString());
@@ -313,7 +313,7 @@ void DictionaryHunspell::addToSession(const QStringList& words)
 void DictionaryHunspell::removeFromSession(const QStringList& words)
 {
 	foreach (const QString& word, words) {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(MF_DEPRECATED_HUNSPELL_API)
 		m_dictionary->remove(m_codec->fromUnicode(word).constData());
 #else
 		m_dictionary->remove(m_codec->fromUnicode(word).toStdString());

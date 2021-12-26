@@ -1,5 +1,5 @@
 /*
- importance_combo_box.cpp     MindForger thinking notebook
+ unicode.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,30 +16,16 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "importance_combo_box.h"
+#include "unicode.h"
 
 namespace m8r {
 
-ImportanceComboBox::ImportanceComboBox(QWidget *parent)
-    : QComboBox{parent}
-{
-    addItem("");
-    QString s{};
-    for(int i=1; i<=5; i++) {
-        s.clear();
-        for(int j=1; j<=5; j++) {
-            if(j<=i) {
-                s += QChar(U_CODE_IMPORTANCE_ON);
-            } else {
-                s += QChar(U_CODE_IMPORTANCE_OFF);
-            }
-        }
-        addItem(s, QVariant::fromValue<int>(i));
-    }
-}
-
-ImportanceComboBox::~ImportanceComboBox()
+Unicode::Unicode()
 {
 }
 
+Unicode::~Unicode()
+{
 }
+
+} // m8r namespace

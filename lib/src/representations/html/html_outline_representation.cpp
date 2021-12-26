@@ -30,7 +30,7 @@ HtmlOutlineRepresentation::HtmlOutlineRepresentation(
       lf{exportColors},
       markdownRepresentation(ontology, descriptionInterceptor)
 {
-#if defined  MF_MD_2_HTML_CMARK
+#if defined MF_MD_2_HTML_CMARK
     markdownTranscoder = new CmarkGfmMarkdownTranscoder{};
 #else
     markdownTranscoder = nullptr;
@@ -142,9 +142,9 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
     if(!config.isUiHtmlTheme()) {
         // RAW THEME
         html.assign(
-                    "<!DOCTYPE html>\n"
-                    "<html>"
-                    "<body style='");
+            "<!DOCTYPE html>\n"
+            "<html>"
+            "<body style='");
         fgBgTextColorStyle(html);
         html += "'><pre>";
     } else {
@@ -172,7 +172,6 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
 #ifdef DO_MF_DEBUG
         //html += "\n";
 #endif
-
 
         // DIAGRAMS: mermaid.js
         // - CDN: https://cdnjs.com/libraries/mermaid
@@ -370,9 +369,9 @@ string* HtmlOutlineRepresentation::to(
                 for(int i=0; i<=4; i++) {
                     htmlHeader += "<td style='border-collapse: collapse; border: none;'>";
                     if(outline->getImportance()>i) {
-                        htmlHeader += "&#9733;";
+                        htmlHeader += "&#"+std::to_string(U_CODE_IMPORTANCE_ON)+";";
                     } else {
-                        htmlHeader += "&#9734;";
+                        htmlHeader += "&#"+std::to_string(U_CODE_IMPORTANCE_OFF)+";";
                     }
                     htmlHeader += "</td>";
                 }
@@ -380,7 +379,7 @@ string* HtmlOutlineRepresentation::to(
                 for(int i=0; i<5; i++) {
                     htmlHeader +=
                             "<td style='border-collapse: collapse; border: none;'>"
-                            "&#9734;"
+                            "&#"+std::to_string(U_CODE_IMPORTANCE_OFF)+";"
                             "</td>";
                 }
             }
@@ -392,12 +391,12 @@ string* HtmlOutlineRepresentation::to(
                     if(outline->getUrgency()>i) {
                         htmlHeader +=
                                 "<td style='border-collapse: collapse; border: none;'>"
-                                "&#x2666;"
+                                "&#"+std::to_string(U_CODE_URGENCY_ON)+";"
                                 "</td>";
                     } else {
                         htmlHeader +=
                                 "<td style='border-collapse: collapse; border: none;'>"
-                                "&#x2662;"
+                                "&#"+std::to_string(U_CODE_URGENCY_OFF)+";"
                                 "</td>";
                     }
                 }
@@ -405,7 +404,7 @@ string* HtmlOutlineRepresentation::to(
                 for(int i=0; i<5; i++) {
                     htmlHeader +=
                             "<td style='border-collapse: collapse; border: none;'>"
-                            "&#x29D6;"
+                            "&#"+std::to_string(U_CODE_URGENCY_OFF)+";"
                             "</td>";
                 }
             }

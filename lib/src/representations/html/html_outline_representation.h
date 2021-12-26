@@ -24,6 +24,7 @@
 
 #include "../../config/configuration.h"
 #include "../../model/note.h"
+#include "../unicode.h"
 #include "../markdown/markdown_outline_representation.h"
 #include "../markdown/markdown_transcoder.h"
 #if defined  MF_MD_2_HTML_CMARK

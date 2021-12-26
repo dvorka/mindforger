@@ -143,7 +143,7 @@ SpellChecker::SpellChecker(QPlainTextEdit* document, QSyntaxHighlighter* spellin
 	// Create widgets
     m_context = new QTextEdit(this);
 	m_context->setReadOnly(true);
-#if (QT_VERSION_MAJOR == 5) && (QT_VERSION_MINOR < 10)
+#if (QT_VERSION <= QT_VERSION_CHECK(5, 10, 0))
     m_context->setTabStopWidth(50);
 #else
     m_context->setTabStopDistance(50);

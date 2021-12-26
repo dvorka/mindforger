@@ -21,6 +21,8 @@
 
 #include <QtWidgets>
 
+#include "../../lib/src/representations/unicode.h"
+
 namespace m8r {
 
 class ImportanceComboBox : public QComboBox

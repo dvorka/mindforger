@@ -75,7 +75,7 @@ void OrganizerQuadrantModel::addRow(
             if(outline->getUrgency()) {
                 html += " ";
                 for(int i=1; i<=outline->getUrgency(); i++) {
-                    html += QChar(0x2666); // timer clock
+                    html += QChar(U_CODE_URGENCY_ON);
                 }
             }
         }
@@ -83,7 +83,7 @@ void OrganizerQuadrantModel::addRow(
             if(outline->getImportance()) {
                 html += " ";
                 for(int i=1; i<=outline->getImportance(); i++) {
-                    html += QChar(9733);
+                    html += QChar(U_CODE_IMPORTANCE_ON);
                 }
             }
         }

@@ -86,9 +86,9 @@ void OutlinesTableModel::addRow(Outline* outline)
     if(outline->getImportance() > 0) {
         for(int i=0; i<=4; i++) {
             if(outline->getImportance()>i) {
-                s += QChar(9733);
+                s += QChar(U_CODE_IMPORTANCE_ON);
             } else {
-                s += QChar(9734);
+                s += QChar(U_CODE_IMPORTANCE_OFF);
             }
         }
     }
@@ -101,15 +101,9 @@ void OutlinesTableModel::addRow(Outline* outline)
     if(outline->getUrgency()>0) {
         for(int i=0; i<=4; i++) {
             if(outline->getUrgency()>i) {
-                s += QChar(0x2666); // diamond
-                //s += QChar(0x2713); // check
-                //s += QChar(0x25D5); // timer clock
-                //s += QChar(0x29D7); // sand clocks - not in fonts on macOS and Fedora
+                s += QChar(U_CODE_URGENCY_ON);
             } else {
-                s += QChar(0x2662); // diamond
-                //s += QChar(0x2717); // cross check
-                //s += QChar(0x25F4); // timer clocks - unreadable on Win
-                //s += QChar(0x29D6); // sand clocks
+                s += QChar(U_CODE_URGENCY_OFF);
             }
         }
     }

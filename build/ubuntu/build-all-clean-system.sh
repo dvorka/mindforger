@@ -29,7 +29,7 @@ git submodule init
 git submodule update
 
 # deps install
-sudo apt-get install build-essential zlib1g-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache
+sudo apt-get install build-essential zlib1g-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache
 
 # deps build
 cd  ${SCRIPT_HOME}/../../deps/cmark-gfm

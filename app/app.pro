@@ -18,14 +18,27 @@
 TARGET = mindforger
 TEMPLATE = app
 
-QT += widgets
+message("Qt version: $$QT_VERSION")
 
-mfner {
-  DEFINES += MF_NER
-}
+QT += widgets
 
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
+}
+
+# Hunspell spell check:
+# - Windows and Ubuntu Xenial require DEPRECATED Hunspell API
+# - Ubuntu Bionic and newer distros use NEW Hunspell API
+# Distro is detected on Unix/Linux only:
+unix:UBUNTU_DISTRO_VERSION = $$system(cat /etc/issue | while read D V X; do echo "${D} ${V}"; done | rev | cut -c 3- | rev)
+message("Unix version: $$UBUNTU_DISTRO_VERSION")
+win32|mfoldhunspell|equals(UBUNTU_DISTRO_VERSION, "Ubuntu 16.04")|equals(UBUNTU_DISTRO_VERSION, "Ubuntu 16.") {
+  message("Forcing legacy Hunspell API for OS: $$UBUNTU_DISTRO_VERSION")
+  DEFINES += MF_DEPRECATED_HUNSPELL_API
+}
+
+mfner {
+  DEFINES += MF_NER
 }
 
 # webkit is supposed to be OBSOLETED by webengine, but webengine is disabled
@@ -124,8 +137,12 @@ macx {
       ./src/qt/spelling/dictionary_provider_voikko.cpp
 
 } else:unix {
-    CONFIG += link_pkgconfig
-    PKGCONFIG += hunspell
+    # pkgconfig-based configuration does not work @ Ubuntu distribution build
+    #  CONFIG += link_pkgconfig
+    #  PKGCONFIG += hunspell
+    # hardcoded paths are unfortunately more robust:
+    INCLUDEPATH += /usr/include/hunspell
+    LIBS += -lhunspell
 
     HEADERS += \
       ./src/qt/spelling/dictionary_provider_hunspell.h \
@@ -459,5 +476,11 @@ win32 {
     # icon and exe detail information
     RC_FILE = $$PWD/resources/windows/mindforger.rc
 }
+
+# ########################################
+# Diagnostics
+# ########################################
+
+message(MindForger build DEFINES: $$DEFINES)
 
 # eof

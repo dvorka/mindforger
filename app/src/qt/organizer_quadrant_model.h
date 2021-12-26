@@ -19,6 +19,7 @@
 #ifndef M8RUI_ORGANIZER_QUADRANT_MODEL_H
 #define M8RUI_ORGANIZER_QUADRANT_MODEL_H
 
+#include "../../lib/src/representations/unicode.h"
 #include "../../lib/src/representations/html/html_outline_representation.h"
 
 #include <QtWidgets>
