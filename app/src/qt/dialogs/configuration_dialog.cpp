@@ -92,20 +92,25 @@ void ConfigurationDialog::saveSlot()
 ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
-    themeLabel = new QLabel(tr("UI theme (requires restart)")+":", this),
+    themeLabel = new QLabel(tr("UI theme (requires restart)")+":", this);
     themeCombo = new QComboBox{this};
     themeCombo->addItem(QString{UI_THEME_LIGHT});
     themeCombo->addItem(QString{UI_THEME_DARK});
     themeCombo->addItem(QString{UI_THEME_BLACK});
     themeCombo->addItem(QString{UI_THEME_NATIVE});
 
-    startupLabel = new QLabel(tr("Start to view")+":", this),
+    startupLabel = new QLabel(tr("Start to view")+":", this);
     startupCombo = new QComboBox{this};
+#ifdef MF_DEPRECATED
     startupCombo->addItem(QString{START_TO_DASHBOARD});
+#endif
     startupCombo->addItem(QString{START_TO_OUTLINES});
     startupCombo->addItem(QString{START_TO_TAGS});
     startupCombo->addItem(QString{START_TO_RECENT});
+#ifdef MF_BUG
+    // must be fixed as it currently crashes
     startupCombo->addItem(QString{START_TO_EISENHOWER_MATRIX});
+#endif
     startupCombo->addItem(QString{START_TO_HOME_OUTLINE});
 
     showToolbarCheck = new QCheckBox(tr("show toolbar"), this);
@@ -186,7 +191,7 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     fullOPreviewCheck = new QCheckBox{tr("whole notebook preview"), this};
     doubleClickViewerToEditCheck = new QCheckBox{tr("double click view to edit"), this};
 
-    diagramSupportLabel = new QLabel(tr("Diagram support")+":", this),
+    diagramSupportLabel = new QLabel(tr("Diagram support")+":", this);
     diagramSupportCombo = new QComboBox{this};
     diagramSupportCombo->addItem(QString{"disable"});
     // TODO: to be stabilized diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
