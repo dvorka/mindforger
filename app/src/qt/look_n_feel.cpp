@@ -152,6 +152,9 @@ void LookAndFeels::setLightTheme()
 
     cliTextColor = Qt::black;
 
+#ifdef _WIN32
+    mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+#endif
     mindforgerApplication->setStyle(QStyleFactory::create("fusion"));
 
     // Ubuntu orange:
@@ -196,6 +199,10 @@ void LookAndFeels::setBlackTheme()
 
     cliTextColor = QColor(0x99,0xb1,0xff);
 
+#ifdef _WIN32
+    mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+#endif
+
     /* The valid keys can be retrieved using the keys() function. Typically they include
      * "windows" and "fusion". Depending on the platform, "windowsxp", "windowsvista" and
      * "macintosh" may be available. Note that keys are case insensitive
@@ -238,7 +245,11 @@ void LookAndFeels::setBlackTheme()
 }
 
 void LookAndFeels::setNativeTheme()
-{}
+{
+#ifdef _WIN32
+    mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+#endif
+}
 
 bool LookAndFeels::isThemeNative() const
 {
