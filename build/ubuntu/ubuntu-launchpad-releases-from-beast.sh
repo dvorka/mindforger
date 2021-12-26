@@ -168,11 +168,11 @@ function releaseForParticularUbuntuVersion() {
     mkdir -p ${PBUILDFOLDER}
     cp -rvf ~/pbuilder/*.tgz ${PBUILDFOLDER}
     # END
-    pbuilder-dist ${UBUNTUVERSION} build ${MFRELEASE}.dsc
+    pbuilder-dist ${UBUNTUVERSION} build ${MFRELEASE}.dsc -j6
 
     if [[ "${DRY_RUN}" = "true" ]]
     then
-	echo -e "\nDRY RUN finished - exiting WITHOUT upload to Lanuchpad\n"
+	echo -e "\n${UBUNTUVERSION} DRY RUN finished - exiting WITHOUT upload to Launchpad\n"
 	exit 0
     fi
     
@@ -196,24 +196,25 @@ function releaseForParticularUbuntuVersion() {
 # # Main #
 # ############################################################################
 
+echo "This script is expected to run from Beast Ubuntu 16.04 machine"
 if [ -e "../../.git" ]
 then
     echo "This script must NOT be run from Git repository - run it e.g. from ~/p/mindforger/launchpad instead"
     exit 1
 fi
 
-export DRY_RUN="true"
-
 export ARG_MAJOR_VERSION=1.53.
 export ARG_MINOR_VERSION=5 # minor version is incremented for every Ubuntu version
 export ARG_BAZAAR_MSG="MindForger ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} release."
+
+export DRY_RUN="true"
 
 # https://wiki.ubuntu.com/Releases
 # obsolete: precise quantal saucy precise utopic vivid wily yakkety artful cosmic
 # current : (trusty) xenial bionic (cosmic disco eoan) focal (groovy) hirsute impish
 # xenial bionic focal hirsute impish
 # WIP: trusty xenial bionic focal hirsute impish
-for UBUNTU_VERSION in xenial
+for UBUNTU_VERSION in bionic
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
