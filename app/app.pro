@@ -32,7 +32,7 @@ mfdebug|mfunits {
 # Distro is detected on Unix/Linux only:
 unix:UBUNTU_DISTRO_VERSION = $$system(cat /etc/issue | while read D V X; do echo "${D} ${V}"; done | rev | cut -c 3- | rev)
 message("Unix version: $$UBUNTU_DISTRO_VERSION")
-win32|mfoldhunspell|equals(UBUNTU_DISTRO_VERSION, "Ubuntu 16.04")|equals(UBUNTU_DISTRO_VERSION, "Ubuntu 16.") {
+win32|mfoldhunspell|equals(UBUNTU_DISTRO_VERSION, "Ubuntu 16.04")|equals(UBUNTU_DISTRO_VERSION, "Ubuntu 16.")|equals(UBUNTU_DISTRO_VERSION, "Debian GNU/Lin") {
   message("Forcing legacy Hunspell API for OS: $$UBUNTU_DISTRO_VERSION")
   DEFINES += MF_DEPRECATED_HUNSPELL_API
 }
