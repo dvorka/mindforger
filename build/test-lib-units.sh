@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,9 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+# Usage:
+# - to run all tests: uncomment OPTION_RUN_ALL_TESTS
+# - to run single test: comment OPTION_RUN_ALL_TESTS and uncomment OPTION_TEST with test ID
+
 export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
-export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
+#export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
 #export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
 
 # benchmarks
@@ -40,6 +44,7 @@ export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to d
 #export OPTION_TEST="FtsTestCase.*"
 #export OPTION_TEST="TrieTestCase.*"
 #export OPTION_TEST="TrieTestCase.AddAndRemove"
+#export OPTION_TEST="FileGearTestCase.FilesystemPath"
 #export OPTION_TEST="FileGearTestCase.DeepCopy"
 #export OPTION_TEST="FileGearTestCase.DeepProductionCopy"
 #export OPTION_TEST="FileGearTestCase.DeepCopyToExisting"
@@ -58,7 +63,7 @@ export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to d
 #export OPTION_TEST="MarkdownParserTestCase.Bug622Loop64kLinesOverflow"
 #export OPTION_TEST="MarkdownParserTestCase.Links"
 #export OPTION_TEST="MarkdownParserTestCase.TimeScope"
-#export OPTION_TEST="MarkdownParserTestCase.Deadline"
+export OPTION_TEST="MarkdownParserTestCase.Deadline"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSections"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsPreamble"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsNoMetadata"
@@ -96,16 +101,22 @@ export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to d
 #export OPTION_TEST="DateTimeGearTestCase.*"
 #export OPTION_TEST="DateTimeGearTestCase.Immutability"
 #export OPTION_TEST="ConfigurationTestCase.*"
-export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
-#export OPTION_TEST="ConfigurationTestCase.SaveAndLoad"
+#export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
 #export OPTION_TEST="ConfigurationTestCase.FromConstructor"
 #export OPTION_TEST="ConfigurationTestCase.FromEnvironment"
 #export OPTION_TEST="ConfigurationTestCase.Save*"
 #export OPTION_TEST="MarkdownParserTestCase.Bug37Notrailing"
 #export OPTION_TEST="MarkdownParserBugsTestCase.*"
 #export OPTION_TEST="OutlineTestCase.CloneOutline"
-#export OPTION_TEST="StringGearTestCase.Split"
 #export OPTION_TEST="OutlineTestCase.DirectOutlineNoteChildren"
+#export OPTION_TEST="StringGearTestCase.Split"
+#export OPTION_TEST="FilesystemInformationTestCase.IndexPdfs"
+#export OPTION_TEST="OrganizerTestCase.*"
+#export OPTION_TEST="OrganizerTestCase.SerializeAndSplitTags"
+#export OPTION_TEST="OrganizerTestCase.NoMindForgerRepositoryNoOrganizer"
+#export OPTION_TEST="OrganizerTestCase.DefaultOrganizerParseSaveAndLoad"
+#export OPTION_TEST="OrganizerTestCase.ParseSaveAndLoad"
+#export OPTION_TEST="ConfigurationTestCase.SaveAndLoad"
 
 # environment - to be specified in .bashrc or elsewhere:
 #   export M8R_CPU_CORES=7

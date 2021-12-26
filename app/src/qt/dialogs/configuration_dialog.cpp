@@ -1,7 +1,7 @@
 /*
  configuration_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     tabWidget->addTab(editorTab, tr("Editor"));
     tabWidget->addTab(navigatorTab, tr("Navigator"));
     tabWidget->addTab(mindTab, tr("Mind"));
+
 
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
@@ -91,20 +92,25 @@ void ConfigurationDialog::saveSlot()
 ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
-    themeLabel = new QLabel(tr("UI theme (requires restart)")+":", this),
+    themeLabel = new QLabel(tr("UI theme (requires restart)")+":", this);
     themeCombo = new QComboBox{this};
     themeCombo->addItem(QString{UI_THEME_LIGHT});
     themeCombo->addItem(QString{UI_THEME_DARK});
     themeCombo->addItem(QString{UI_THEME_BLACK});
     themeCombo->addItem(QString{UI_THEME_NATIVE});
 
-    startupLabel = new QLabel(tr("Start to view")+":", this),
+    startupLabel = new QLabel(tr("Start to view")+":", this);
     startupCombo = new QComboBox{this};
+#ifdef MF_DEPRECATED
     startupCombo->addItem(QString{START_TO_DASHBOARD});
+#endif
     startupCombo->addItem(QString{START_TO_OUTLINES});
     startupCombo->addItem(QString{START_TO_TAGS});
     startupCombo->addItem(QString{START_TO_RECENT});
+#ifdef MF_BUG
+    // must be fixed as it currently crashes
     startupCombo->addItem(QString{START_TO_EISENHOWER_MATRIX});
+#endif
     startupCombo->addItem(QString{START_TO_HOME_OUTLINE});
 
     showToolbarCheck = new QCheckBox(tr("show toolbar"), this);
@@ -174,15 +180,6 @@ void ConfigurationDialog::AppTab::save()
 ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
-    QGroupBox* viewerGroup = new QGroupBox{tr("HTML Viewer"), this};
-
-    htmlCssThemeLabel = new QLabel(tr("Viewer theme CSS")+":", this);
-    htmlCssThemeCombo = new QComboBox{this};
-    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT});
-    // htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT_COMPACT});
-    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_DARK});
-    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_RAW});
-
     zoomLabel = new QLabel(tr("HTML zoom (100 is 100%, Ctrl + mouse wheel)")+":", this);
     zoomSpin = new QSpinBox(this);
     zoomSpin->setMinimum(25);
@@ -191,19 +188,36 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     srcCodeHighlightSupportCheck = new QCheckBox{tr("source code syntax highlighting support"), this};
 
     mathSupportCheck = new QCheckBox{tr("math support"), this};
-
     fullOPreviewCheck = new QCheckBox{tr("whole notebook preview"), this};
+    doubleClickViewerToEditCheck = new QCheckBox{tr("double click view to edit"), this};
 
-    diagramSupportLabel = new QLabel(tr("Diagram support")+":", this),
+    diagramSupportLabel = new QLabel(tr("Diagram support")+":", this);
     diagramSupportCombo = new QComboBox{this};
     diagramSupportCombo->addItem(QString{"disable"});
     // TODO: to be stabilized diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
     diagramSupportCombo->addItem(QString{"online JavaScript lib"});
 
+    htmlCssThemeLabel = new QLabel(tr("Viewer theme CSS")+":", this);
+    htmlCssThemeCombo = new QComboBox{this};
+    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_LIGHT});
+    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_DARK});
+    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_RAW});
+    htmlCssThemeCombo->addItem(QString{UI_HTML_THEME_CSS_CUSTOM});
+    htmlCssLineEdit = new QLineEdit(this);
+    htmlCssLineEdit->setDisabled(true);
+    htmlCssFindFileButton = new QPushButton(tr("Find Custom CSS File"));
+
+    // signals
+    QObject::connect(
+        htmlCssFindFileButton, SIGNAL(clicked()),
+        this, SLOT(slotFindCssFile()));
+    QObject::connect(
+        htmlCssThemeCombo, SIGNAL(currentIndexChanged(int)),
+        this, SLOT(slotCssChoiceChanged(int)));
+
     // assembly
+    QGroupBox* viewerGroup = new QGroupBox{tr("HTML Viewer"), this};
     QVBoxLayout* viewerLayout = new QVBoxLayout{this};
-    viewerLayout->addWidget(htmlCssThemeLabel);
-    viewerLayout->addWidget(htmlCssThemeCombo);
     viewerLayout->addWidget(zoomLabel);
     viewerLayout->addWidget(zoomSpin);
     viewerLayout->addWidget(diagramSupportLabel);
@@ -211,10 +225,20 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     viewerLayout->addWidget(srcCodeHighlightSupportCheck);
     viewerLayout->addWidget(mathSupportCheck);
     viewerLayout->addWidget(fullOPreviewCheck);
+    viewerLayout->addWidget(doubleClickViewerToEditCheck);
     viewerGroup->setLayout(viewerLayout);
+
+    QGroupBox* viewerCssGroup = new QGroupBox{tr("HTML Viewer CSS"), this};
+    QVBoxLayout* viewerCssLayout = new QVBoxLayout{this};
+    viewerCssLayout->addWidget(htmlCssThemeLabel);
+    viewerCssLayout->addWidget(htmlCssThemeCombo);
+    viewerCssLayout->addWidget(htmlCssLineEdit);
+    viewerCssLayout->addWidget(htmlCssFindFileButton);
+    viewerCssGroup->setLayout(viewerCssLayout);
 
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
     boxesLayout->addWidget(viewerGroup);
+    boxesLayout->addWidget(viewerCssGroup);
     boxesLayout->addStretch();
     setLayout(boxesLayout);
 }
@@ -230,6 +254,7 @@ ConfigurationDialog::ViewerTab::~ViewerTab()
     delete fullOPreviewCheck;
     delete diagramSupportLabel;
     delete diagramSupportCombo;
+    delete doubleClickViewerToEditCheck;
 }
 
 void ConfigurationDialog::ViewerTab::refresh()
@@ -237,6 +262,10 @@ void ConfigurationDialog::ViewerTab::refresh()
     int i = htmlCssThemeCombo->findText(QString::fromStdString(config.getUiHtmlCssPath()));
     if(i>=0) {
         htmlCssThemeCombo->setCurrentIndex(i);
+        htmlCssLineEdit->clear();
+    } else {
+        htmlCssThemeCombo->setCurrentText(QString{UI_HTML_THEME_CSS_CUSTOM});
+        htmlCssLineEdit->setText(config.getUiHtmlCssPath());
     }
 
     zoomSpin->setValue(config.getUiHtmlZoom());
@@ -244,16 +273,66 @@ void ConfigurationDialog::ViewerTab::refresh()
     mathSupportCheck->setChecked(config.isUiEnableMathInMd());
     fullOPreviewCheck->setChecked(config.isUiFullOPreview());
     diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
+    doubleClickViewerToEditCheck->setChecked(config.isUiDoubleClickNoteViewToEdit());
 }
 
 void ConfigurationDialog::ViewerTab::save()
 {
-    config.setUiHtmlCssPath(htmlCssThemeCombo->itemText(htmlCssThemeCombo->currentIndex()).toStdString());
+    string css{UI_HTML_THEME_CSS_LIGHT};
+    if(string{UI_HTML_THEME_CSS_CUSTOM}
+       == htmlCssThemeCombo->itemText(htmlCssThemeCombo->currentIndex()).toStdString()
+    ) {
+        if(htmlCssLineEdit->text().size()) {
+            css = htmlCssLineEdit->text().toStdString();
+        } // else default CSS
+    } else {
+        css = htmlCssThemeCombo->itemText(htmlCssThemeCombo->currentIndex()).toStdString();
+    }
+    config.setUiHtmlCssPath(css);
+
     config.setUiHtmlZoom(zoomSpin->value());
     config.setUiEnableSrcHighlightInMd(srcCodeHighlightSupportCheck->isChecked());
     config.setUiEnableMathInMd(mathSupportCheck->isChecked());
     config.setUiFullOPreview(fullOPreviewCheck->isChecked());
-    config.setUiEnableDiagramsInMd(static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex()));
+    config.setUiEnableDiagramsInMd(
+        static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex())
+    );
+    config.setUiDoubleClickNoteViewToEdit(doubleClickViewerToEditCheck->isChecked());
+}
+
+void ConfigurationDialog::ViewerTab::slotFindCssFile()
+{
+    QString homeDirectory = QStandardPaths::locate(
+        QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory
+    );
+
+    QFileDialog fileDialog{this};
+    fileDialog.setWindowTitle(tr("Choose CSS File"));
+    fileDialog.setFileMode(QFileDialog::ExistingFile);
+    fileDialog.setDirectory(homeDirectory);
+    fileDialog.setViewMode(QFileDialog::Detail);
+
+    QStringList fileNames{};
+    if(fileDialog.exec()) {
+        fileNames = fileDialog.selectedFiles();
+        if(fileNames.size()==1) {
+            htmlCssLineEdit->setText(fileNames[0]);
+            htmlCssThemeCombo->setCurrentText(QString{UI_HTML_THEME_CSS_CUSTOM});
+            return;
+        } // else too many files
+    } // else directory closed / nothing choosen
+
+    // set default CSS
+    htmlCssThemeCombo->setCurrentText(QString{UI_HTML_THEME_CSS_LIGHT});
+}
+
+void ConfigurationDialog::ViewerTab::slotCssChoiceChanged(int index)
+{
+    if(string{UI_HTML_THEME_CSS_CUSTOM} == htmlCssThemeCombo->itemText(index).toStdString()
+       && !htmlCssLineEdit->text().size()
+    ) {
+        this->slotFindCssFile();
+    }
 }
 
 /*
@@ -273,29 +352,62 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     editorFontButton = new QPushButton(QFontDatabase::systemFont(QFontDatabase::FixedFont).family());
     QObject::connect(editorFontButton, &QPushButton::clicked, this, &ConfigurationDialog::EditorTab::getFont);
 
+    editorSpellCheckHelp = new QLabel(
+        tr("Spell check dictionaries configuration <a href='"
+           "https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#spell-check-"
+           "'>documentation</a>"
+        ),
+        this
+    );
+    editorSpellCheckHelp->setTextFormat(Qt::RichText);
+    editorSpellCheckHelp->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    editorSpellCheckHelp->setOpenExternalLinks(true);
+    editorSpellCheckLive = new QCheckBox(tr("live spell check"), this);
+    editorSpellCheckLanguageCombo = new QComboBox{this};
+    editorSpellCheckLanguageCombo->clear();
+    std::vector<std::string> langs = config.getUiEditorSpellCheckLanguages();
+    if(langs.size()) {
+        for(auto l: langs) {
+            editorSpellCheckLanguageCombo->addItem(QString::fromStdString(l));
+        }
+        editorSpellCheckLive->setChecked(config.isUiEditorLiveSpellCheck());
+    } else {
+        editorSpellCheckLive->setEnabled(false);
+        editorSpellCheckLive->setDisabled(true);
+        editorSpellCheckLanguageCombo->setDisabled(true);
+    }
+
     editorMdSyntaxHighlightCheck = new QCheckBox(tr("Markdown syntax highlighting"), this);
     editorAutocompleteCheck = new QCheckBox(tr("autocomplete"), this);
     //editorQuoteSectionsCheck = new QCheckBox(tr("quote sections (# in description)"), this);
     editorTabsAsSpacesCheck = new QCheckBox(tr("TABs as SPACEs"), this);
-    editorAutosaveCheck = new QCheckBox(tr("autosave on Note editor close"), this);
+    editorAutosaveCheck = new QCheckBox(tr("autosave Note on editor close"), this);
 
     editorTabWidthLabel = new QLabel(tr("TAB width")+":", this);
     editorTabWidthCombo = new QComboBox(this);
     editorTabWidthCombo->addItem(QString{"4"});
     editorTabWidthCombo->addItem(QString{"8"});
 
+    externalEditorCmdLabel = new QLabel(tr("External editor command")+":", this);
+    externalEditorCmdEdit = new QLineEdit("", this);
+
     // assembly
     QVBoxLayout* editorLayout = new QVBoxLayout{this};
-    editorLayout->addWidget(editorKeyBindingLabel);
-    editorLayout->addWidget(editorKeyBindingCombo);
+    editorLayout->addWidget(editorTabsAsSpacesCheck);
+    editorLayout->addWidget(editorSpellCheckLive);
+    editorLayout->addWidget(editorSpellCheckLanguageCombo);
+    editorLayout->addWidget(editorSpellCheckHelp);
+    editorLayout->addWidget(editorMdSyntaxHighlightCheck);
+    editorLayout->addWidget(editorAutocompleteCheck);
+    editorLayout->addWidget(editorAutosaveCheck);
     editorLayout->addWidget(editorFontLabel);
     editorLayout->addWidget(editorFontButton);
     editorLayout->addWidget(editorTabWidthLabel);
     editorLayout->addWidget(editorTabWidthCombo);
-    editorLayout->addWidget(editorTabsAsSpacesCheck);
-    editorLayout->addWidget(editorMdSyntaxHighlightCheck);
-    editorLayout->addWidget(editorAutocompleteCheck);
-    editorLayout->addWidget(editorAutosaveCheck);
+    editorLayout->addWidget(editorKeyBindingLabel);
+    editorLayout->addWidget(editorKeyBindingCombo);
+    editorLayout->addWidget(externalEditorCmdLabel);
+    editorLayout->addWidget(externalEditorCmdEdit);
     //editorLayout->addWidget(editorQuoteSectionsCheck);
     QGroupBox* editorGroup = new QGroupBox{tr("Markdown Editor"), this};
     editorGroup->setLayout(editorLayout);
@@ -312,10 +424,14 @@ ConfigurationDialog::EditorTab::~EditorTab()
     delete editorKeyBindingCombo;
     delete editorFontLabel;
     delete editorFontButton;
+    delete editorSpellCheckLive;
+    delete editorSpellCheckLanguageCombo;
     delete editorMdSyntaxHighlightCheck;
     delete editorAutocompleteCheck;
     delete editorTabWidthLabel;
     delete editorTabWidthCombo;
+    delete externalEditorCmdLabel;
+    delete externalEditorCmdEdit;
     //delete editorQuoteSectionsCheck;
     delete editorTabsAsSpacesCheck;
 }
@@ -330,9 +446,28 @@ void ConfigurationDialog::EditorTab::refresh()
     editorFont.fromString(QString::fromStdString(config.getEditorFont()));
     editorFontButton->setText(editorFont.family());
 
+    editorSpellCheckLive->setChecked(config.isUiEditorLiveSpellCheck());
+    if(editorSpellCheckLive->isEnabled()
+       && editorSpellCheckLanguageCombo->count()
+    ) {
+        if(config.getUiEditorSpellCheckDefaultLanguage().size()) {
+            editorSpellCheckLanguageCombo->setCurrentIndex(
+               editorSpellCheckLanguageCombo->findText(
+                   QString::fromStdString(config.getUiEditorSpellCheckDefaultLanguage())
+               )
+            );
+        } else {
+            editorSpellCheckLanguageCombo->setCurrentIndex(0);
+        }
+    }
     editorMdSyntaxHighlightCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
     editorAutocompleteCheck->setChecked(config.isUiEditorEnableAutocomplete());
-    editorTabWidthCombo->setCurrentIndex(editorTabWidthCombo->findText(QString::number(config.getUiEditorTabWidth())));
+    editorTabWidthCombo->setCurrentIndex(
+        editorTabWidthCombo->findText(
+            QString::number(config.getUiEditorTabWidth())
+        )
+    );
+    externalEditorCmdEdit->setText(QString::fromStdString(config.getExternalEditorCmd()));
     //editorQuoteSectionsCheck->setChecked(config.isMarkdownQuoteSections());
     editorTabsAsSpacesCheck->setChecked(config.isUiEditorTabsAsSpaces());
     editorAutosaveCheck->setChecked(config.isUiEditorAutosave());
@@ -342,9 +477,20 @@ void ConfigurationDialog::EditorTab::save()
 {
     config.setEditorKeyBindingByString(editorKeyBindingCombo->itemText(editorKeyBindingCombo->currentIndex()).toStdString());
     config.setEditorFont(editorFont.family().append(",").append(QString::number(editorFont.pointSize())).toStdString());
+    config.setUiEditorLiveSpellCheck(editorSpellCheckLive->isChecked());
+    if(editorSpellCheckLanguageCombo->isEnabled() && editorSpellCheckLanguageCombo->count()) {
+        config.setUiEditorSpellCheckDefaultLanguage(
+            editorSpellCheckLanguageCombo->itemText(
+                editorSpellCheckLanguageCombo->currentIndex()
+            ).toStdString()
+        );
+    } else {
+        config.clearUiEditorSpellCheckDefaultLanguage();
+    }
     config.setUiEditorEnableSyntaxHighlighting(editorMdSyntaxHighlightCheck->isChecked());
     config.setUiEditorEnableAutocomplete(editorAutocompleteCheck->isChecked());
     config.setUiEditorTabWidth(editorTabWidthCombo->itemText(editorTabWidthCombo->currentIndex()).toInt());
+    config.setExternalEditorCmd(externalEditorCmdEdit->text().toStdString());
     //config.setMarkdownQuoteSections(editorQuoteSectionsCheck->isChecked());
     config.setUiEditorTabsAsSpaces(editorTabsAsSpacesCheck->isChecked());
     config.setUiEditorAutosave(editorAutosaveCheck->isChecked());

@@ -1,7 +1,7 @@
 /*
  outline_header_edit_dialog.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -32,10 +32,6 @@
 #include "../widgets/urgency_combo_box.h"
 
 namespace m8r {
-
-/*
- * Dialog
- */
 
 class OutlineHeaderEditDialog : public QDialog
 {

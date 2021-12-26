@@ -1,7 +1,7 @@
 /*
  filesystem_persistence.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -36,6 +36,14 @@ private:
     HtmlOutlineRepresentation& htmlRepresentation;
 
 public:
+
+    static std::string getUniqueDirOrFileName(
+        const std::string& directory,
+        const std::string* text,
+        const std::string& extension
+    );
+
+public:
     FilesystemPersistence(MarkdownOutlineRepresentation& mdRepresentation, HtmlOutlineRepresentation& htmlRepresentation);
     FilesystemPersistence(const FilesystemPersistence&) = delete;
     FilesystemPersistence(const FilesystemPersistence&&) = delete;
@@ -47,9 +55,10 @@ public:
      * @brief Create filename that doesn't clash with existing files.
      */
     virtual std::string createFileName(
-            const std::string& directory,
-            const std::string* text,
-            const std::string& extension);
+        const std::string& directory,
+        const std::string* text,
+        const std::string& extension
+    );
     /**
      * @brief Load stencil content
      * @param stencil   concept of the stencil to be set

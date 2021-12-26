@@ -1,7 +1,7 @@
 /*
  dashboard_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -112,17 +112,17 @@ void DashboardPresenter::refresh(
             "</center></body></html>"
     ));
 
-    vector<Outline*> doFirstOs;
+    vector<Note*> doFirstOs;
     if(os.size()) {
         for(Outline* o:os) {
             if(o->getUrgency()>2) {
                 if(o->getImportance()>2) {
-                    doFirstOs.push_back(o);
+                    doFirstOs.push_back(o->getOutlineDescriptorAsNote());
                 }
             }
         }
     }
-    doFirstDashboardletPresenter->refresh(doFirstOs, true, true);
+    doFirstDashboardletPresenter->refresh(doFirstOs, true, true, true);
 
     outlinesDashboardletPresenter->refresh(os);
     recentDashboardletPresenter->refresh(ns);

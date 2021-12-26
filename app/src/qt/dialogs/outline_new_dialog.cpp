@@ -1,7 +1,7 @@
 /*
  outline_new_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -19,6 +19,7 @@
 #include "outline_new_dialog.h"
 
 using namespace std;
+using namespace m8r::filesystem;
 
 namespace m8r {
 
@@ -31,7 +32,7 @@ OutlineNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
 {
     QGroupBox* basicGroup = new QGroupBox{tr("Basic"), this};
 
-    nameLabel = new QLabel(tr("Name")+":", this),
+    nameLabel = new QLabel(tr("Name")+":", this);
     nameEdit = new QLineEdit(tr("Notebook"), this);
 
     typeLabel = new QLabel(tr("Type")+":", this);
@@ -170,10 +171,13 @@ OutlineNewDialog::AdvancedTab::~AdvancedTab()
 void OutlineNewDialog::AdvancedTab::refreshPath(const QString& name)
 {
     fileLine->setText(
-        memoryDirPath+
-        FILE_PATH_SEPARATOR+
-        QString::fromStdString(normalizeToNcName(name.toStdString(),'-'))+
-        FILE_EXTENSION_MD_MD);
+        memoryDirPath
+        + FILE_PATH_SEPARATOR
+        + QString::fromStdString(
+            normalizeToNcName(name.toStdString(),'-')
+            + File::EXTENSION_MD_MD
+        )
+    );
 }
 
 /*
@@ -249,17 +253,26 @@ QString OutlineNewDialog::getPreamble() const
 
 const OutlineType* OutlineNewDialog::getOutlineType() const
 {
-    return (const OutlineType*)(generalTab->getTypeCombo()->itemData(generalTab->getTypeCombo()->currentIndex(), Qt::UserRole).value<const OutlineType*>());
+    return static_cast<const OutlineType*>(generalTab->getTypeCombo()->itemData(
+        generalTab->getTypeCombo()->currentIndex(),
+        Qt::UserRole
+    ).value<const OutlineType*>());
 }
 
 int8_t OutlineNewDialog::getImportance() const
 {
-    return (int8_t)(generalTab->getImportanceCombo()->itemData(generalTab->getImportanceCombo()->currentIndex(), Qt::UserRole).value<int>());
+    return static_cast<int8_t>(generalTab->getImportanceCombo()->itemData(
+        generalTab->getImportanceCombo()->currentIndex(),
+        Qt::UserRole
+    ).value<int>());
 }
 
 int8_t OutlineNewDialog::getUrgency() const
 {
-    return (int8_t)(generalTab->getUrgencyCombo()->itemData(generalTab->getUrgencyCombo()->currentIndex(), Qt::UserRole).value<int>());
+    return static_cast<int8_t>(generalTab->getUrgencyCombo()->itemData(
+        generalTab->getUrgencyCombo()->currentIndex(),
+        Qt::UserRole).value<int>()
+    );
 }
 
 int OutlineNewDialog::getProgress() const

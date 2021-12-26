@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -88,12 +88,12 @@ BLACKLIST = {
     'mindforger/lib/src/3rdparty/hoedown/buffer.h',
     'mindforger/lib/src/3rdparty/hoedown/version.c',
     'mindforger/lib/src/3rdparty/hoedown/escape.c',
-    'mindforger/licenses/hoedown-license.txt'
+    'mindforger/licenses/hoedown-license.txt',
 }
 
-COPYRIGHT_CPP = 'Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>'
-COPYRIGHT_PYTHON = '# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>'
-COPYRIGHT_XML = '<!-- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com> -->'
+COPYRIGHT_CPP = 'Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>'
+COPYRIGHT_PYTHON = '# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>'
+COPYRIGHT_XML = '<!-- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com> -->'
 
 ESC_LIGHT_RED = ''
 ESC_LIGHT_GREEN = ''
@@ -102,9 +102,7 @@ ESC_WHITE = ''
 ESC_NO_COLOR = ''
 
 class CodestyleEnforcer:
-    '''
-    Main class - finds all files and validate them
-    '''
+    """Main class - finds all files and validate them."""
 
     def __init__(self, gitRepositoryRootDir):
         print 'MindForger Codestyle Checker'

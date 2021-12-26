@@ -1,7 +1,7 @@
 /*
  note_test.cpp     MindForger test
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
 #include "../../../src/mind/mind.h"
 #include "../../../src/install/installer.h"
 
-#include "../test_gear.h"
+#include "../test_utils.h"
 
 using namespace std;
 
@@ -62,10 +62,14 @@ TEST(NoteTestCase, AddNewStencilNoteToOutline) {
     string oContent{"# Test Outline\n\nOutline text.\n\n## Note 1\nNote 1 text.\n\n##Note 2\nNote 2 text.\n"};
     m8r::stringToFile(oFile,oContent);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath( m8r::platformSpecificPath("/tmp/cfg-ntc-ansnto.md"));
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.learn();
@@ -160,10 +164,14 @@ TEST(NoteTestCase, PromoteDemoteUpDown) {
         "\n"};
     m8r::stringToFile(oFile,oContent);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath( m8r::platformSpecificPath("/tmp/cfg-ntc-pdud.md"));
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.learn();
@@ -324,10 +332,14 @@ TEST(NoteTestCase, DeepUpDownFirstLastClone) {
         "\n"};
     m8r::stringToFile(oFile,oContent);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-ntc-dudflc.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.learn();
@@ -757,10 +769,14 @@ TEST(NoteTestCase, RefactorNote) {
         "\n"};
     m8r::stringToFile(tFile,tContent);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-ntc-rn.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind{config};
     mind.learn();
     mind.think().get();
@@ -822,10 +838,14 @@ TEST(NoteTestCase, MangleNoteName) {
         "\n"};
     m8r::stringToFile(oFile,oContent);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-ntc-mnn.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.learn();
@@ -883,10 +903,14 @@ TEST(NoteTestCase, DirectNoteChildren) {
         "\n"};
     m8r::stringToFile(oFile,oContent);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-ntc-ncn.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.learn();

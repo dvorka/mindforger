@@ -1,7 +1,7 @@
 /*
- configuration.h     M8r config
+ definitions.h     MindForger type, include, ... definitions
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -33,8 +33,9 @@
   #include <direct.h>
 #else
   #include <dirent.h>
-  #include <sys/dir.h>
   #include <unistd.h>
+  // do NOT include legacy <sys/dir.h>
+  // #include <sys/dir.h>
 #endif // _WIN32
 
 #endif // M8R_CONFIG_H

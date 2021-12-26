@@ -1,7 +1,7 @@
 /*
  twiki_outline_representation.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -18,9 +18,10 @@
 */
 #include "twiki_outline_representation.h"
 
-namespace m8r {
-
 using namespace std;
+using namespace m8r::filesystem;
+
+namespace m8r {
 
 TWikiOutlineRepresentation::TWikiOutlineRepresentation(
         MarkdownOutlineRepresentation& markdownRepresentation,
@@ -35,7 +36,7 @@ TWikiOutlineRepresentation::~TWikiOutlineRepresentation()
 {
 }
 
-bool TWikiOutlineRepresentation::outline(const m8r::File& sourceFile, const m8r::File& outlineFile)
+bool TWikiOutlineRepresentation::outline(const File& sourceFile, const File& outlineFile)
 {
     // straightforward conversion: only sections are converted, the rest is kept intact
     MF_DEBUG("TWiki export of " << sourceFile.getName() << " to " << outlineFile.getName() << " ... " << endl);

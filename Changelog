@@ -1,3 +1,15 @@
+2021-12-26  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v1.53.0 - custom Eisenhower Matrix on tags, Kanban style organizer
+      on tags, repository specific configuration, lazy (PDF) documents indexation POC,
+      edit Note in external editor/WYSIWYG (or tool), CSV export with one-hot-encoded
+      tags, terminal allowing to run commands from MindForger, configuration of custom
+      CSS file for HTML viewer, hunspell-based spell check, cmark-gfm upgrade
+      to the latest version (0.29.0.gfm.2), various minor improvements (CSV export
+      progress bar, configurable click view to edit, ...) and bug fixes (Note cloning,
+      Markdown lists syntax highlighting, tags escaping,  ...), Doxygen source code
+      documentation generator.
+
 2020-03-08  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v1.52.0 - Production quality Autolinking (cmark-gfm and Trie based),
@@ -11,12 +23,12 @@
 
 2020-01-18  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-   * Released v1.50.0 - New dashboard view; complete fulltext search rewamp;
+   * Released v1.50.0 - New dashboard view, complete fulltext search rewamp,
      toolbar switch to flat icons theme; new menu items icons; images and attachments
-     can be added with drag&drop; images and icons can be automatically copied
-     to MindForger repository; added Notebook and Note completion on Ctrl-/;
-     persistent hoist mode; (not released: autolinking rewrite to cmark-gfm
-     for high performance, robust and extensible implementation.
+     can be added with drag&drop, images and icons can be automatically copied
+     to MindForger repository, added Notebook and Note completion on Ctrl-/,
+     persistent hoist mode, (not released: autolinking rewrite to cmark-gfm
+     for high performance, robust and extensible implementation).
 
 2019-03-09  Martin Dvorak  <martin.dvorak@mindforger.com>
 
@@ -36,7 +48,7 @@
 2019-02-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 
    * Released v1.48.3 - Stabilization: partial fix of 100% CPU consumption in
-     table views on Ubuntu 18.04
+     table views on Ubuntu 18.04.
 
 2018-11-13  Martin Dvorak  <martin.dvorak@mindforger.com>
 
@@ -45,8 +57,7 @@
 
 2018-11-10  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-   * Released v1.48.0 - CSV export, autolinking preview, MathJax format
-     menu.
+   * Released v1.48.0 - CSV export, autolinking preview, MathJax format menu.
 
 2018-10-03  Martin Dvorak  <martin.dvorak@mindforger.com>
 
@@ -65,7 +76,7 @@
 
 2018-05-30  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-  * Released v1.42.0 - The first MindForger release.
+  * Released v1.42.0 - The first MindForger release on the day of my 42nd birthday.
 
 2018-01-07  Martin Dvorak  <martin.dvorak@mindforger.com>
 

@@ -1,7 +1,7 @@
 /*
  knowledge_graph.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -110,7 +110,9 @@ KnowledgeGraphNode* KnowledgeGraph::getNode(Note* n)
 {
     KnowledgeGraphNode* k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
     k->setThing(n);
-    k->setCardinality(n->getOutline()->getDirectNoteChildrenCount(n));
+    k->setCardinality(
+        static_cast<unsigned int>(n->getOutline()->getDirectNoteChildrenCount(n))
+    );
 
     return k;
 }
@@ -168,7 +170,9 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
                 // TODO: reuse and delete - map<Thing*,Node*>
                 k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
                 k->setThing(n);
-                k->setCardinality(n->getOutline()->getDirectNoteChildrenCount(n));
+                k->setCardinality(
+                    static_cast<unsigned int>(n->getOutline()->getDirectNoteChildrenCount(n))
+                );
                 subgraph.addChild(k);
             }
         }
@@ -220,7 +224,9 @@ void KnowledgeGraph::getRelatedNodes(KnowledgeGraphNode* centralNode, KnowledgeS
             // TODO: reuse and delete - map<Thing*,Node*>
             k = new KnowledgeGraphNode{KnowledgeGraphNodeType::NOTE, n->getName(), notesColor};
             k->setThing(n);
-            k->setCardinality(n->getOutline()->getDirectNoteChildrenCount(n));
+            k->setCardinality(
+                static_cast<unsigned int>(n->getOutline()->getDirectNoteChildrenCount(n))
+            );
             subgraph.addChild(k);
         }
 

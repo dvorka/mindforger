@@ -1,7 +1,7 @@
 /*
  configuration_test.cpp     MindForger configuration test
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -18,9 +18,10 @@
 */
 
 #include "../../../src/representations/markdown/markdown_configuration_representation.h"
+#include "../../../src/config/repository_configuration.h"
 
 #include <gtest/gtest.h>
-#include "../test_gear.h"
+#include "../test_utils.h"
 
 extern char* getMindforgerGitHomePath();
 
@@ -31,10 +32,14 @@ TEST(ConfigurationTestCase, FromConstructor)
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-ctc-fc.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)),
+        repositoryConfigRepresentation
+    );
 
     cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getDir();
     cout << endl << "Repositories[" << config.getRepositories().size() << "]:";
@@ -60,13 +65,16 @@ TEST(ConfigurationTestCase, FromEnvironment)
     putenv(envVar);
     cout << "Setting env:" << endl << "  " << envVar << endl;
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-ctc-fe.md");
 
     config.setActiveRepository(
         config.addRepository(
-            m8r::RepositoryIndexer::getRepositoryForPath(config.getRepositoryPathFromEnv())));
+            m8r::RepositoryIndexer::getRepositoryForPath(config.getRepositoryPathFromEnv())),
+        repositoryConfigRepresentation
+    );
 
     if(config.getActiveRepository()) {
         cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getDir();
@@ -94,7 +102,7 @@ TEST(ConfigurationTestCase, FromEnvironment)
 
 TEST(ConfigurationTestCase, SaveDefaultConfig)
 {
-    m8r::File file{"/tmp/.mindforger.md.default"};
+    m8r::filesystem::File file{"/tmp/.mindforger.md.default"};
     m8r::MarkdownConfigurationRepresentation configRepresentation{};
 
     configRepresentation.save(file);
@@ -112,16 +120,23 @@ TEST(ConfigurationTestCase, SaveDefaultConfig)
 
 TEST(ConfigurationTestCase, SaveAndLoad)
 {
-    string file{m8r::platformSpecificPath("/tmp/.mindforger.md")};
-    string repositoryDir{ m8r::platformSpecificPath("/tmp")};
-    string repositoryFilename{"custom-repository-single-file.md"};
-    string repositoryPath{repositoryDir};
-    repositoryPath+= FILE_PATH_SEPARATOR; repositoryPath+=repositoryFilename;
-    std::ofstream out(repositoryPath);
-    out << "# Just a Test" << endl;
-    out.close();
+    // GIVEN
+    m8r::TestSandbox box{"", true};
+    string mdFilename{"custom-repository-single-file.md"};
+    string mdFilePath{box.addMdFile(mdFilename)};
+    cout <<
+    "Test directories:" << endl <<
+    "  home   :" << box.testHomePath << endl <<
+    "  MF cfg :" << box.configPath << endl <<
+    "  MD file:" << mdFilePath << endl
+    ;
+    string expectedRepositoryConfigurationPath{box.repositoryPath};
+    expectedRepositoryConfigurationPath += FILE_PATH_SEPARATOR;
+    expectedRepositoryConfigurationPath += m8r::FILENAME_M8R_REPOSITORY_CONFIGURATION;
+
     string timeScopeAsString{};
     m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& c = m8r::Configuration::getInstance();
 
     string backupFile = c.getConfigFilePath();
@@ -137,41 +152,52 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     }
 
     /*
-     * SAVE
+     * SAVE: mode ~ single MD file edit
      */
 
-    c.setConfigFilePath(file);
+    c.setConfigFilePath(box.configPath);
     c.setUiThemeName("CRAZYCOLORS");
     m8r::TimeScope ts{1,2,33,4,55};
     c.setTimeScope(ts);
     c.setSaveReadsMetadata(false);
     c.setUiEditorEnableSyntaxHighlighting(false);
     m8r::Repository* r = new m8r::Repository{
-        repositoryDir,
-        m8r::Repository::RepositoryType::MARKDOWN,
-        m8r::Repository::RepositoryMode::FILE,
-       repositoryFilename
+        box.repositoryPath,
+        m8r::Repository::RepositoryType::MINDFORGER,
+        m8r::Repository::RepositoryMode::REPOSITORY,
+        mdFilename
     };
-    c.setActiveRepository(c.addRepository(r));
+    c.setActiveRepository(c.addRepository(r), repositoryConfigRepresentation);
+
+    // ADD custom organizer (will be deleted by repository configuration destructor)
+    string oName{"Custom repository configuration test organizer"};
+    m8r::EisenhowerMatrix* o = new m8r::EisenhowerMatrix{oName};
+    c.getRepositoryConfiguration().addOrganizer(o);
 
     configRepresentation.save(c);
 
     // asserts
-    string* asString = m8r::fileToString(c.getConfigFilePath());
-    EXPECT_NE(std::string::npos, asString->find("Theme: CRAZYCOLORS"));
-    EXPECT_NE(std::string::npos, asString->find("Time scope: 1y2m33d4h55m"));
-    EXPECT_NE(std::string::npos, asString->find("Editor syntax highlighting: no"));
-    EXPECT_NE(std::string::npos, asString->find("Save reads metadata: no"));
-    EXPECT_NE(std::string::npos, asString->find(string("Active repository: ") + m8r::platformSpecificPath("/tmp/custom-repository-single-file.md")));
-    EXPECT_NE(std::string::npos, asString->find(string("Repository: ") + m8r::platformSpecificPath("/tmp/custom-repository-single-file.md")));
-    delete asString;
+    std::unique_ptr<string> asString{m8r::fileToString(c.getConfigFilePath())};
+    EXPECT_NE(std::string::npos, asString.get()->find("Theme: CRAZYCOLORS"));
+    EXPECT_NE(std::string::npos, asString.get()->find("Time scope: 1y2m33d4h55m"));
+    EXPECT_NE(std::string::npos, asString.get()->find("Editor syntax highlighting: no"));
+    EXPECT_NE(std::string::npos, asString.get()->find("Save reads metadata: no"));
+    EXPECT_NE(std::string::npos, asString.get()->find(string("Active repository: ") + box.repositoryPath));
+    EXPECT_NE(std::string::npos, asString.get()->find(string("Repository: ") + box.repositoryPath));
     // r deleted by configuration destructor
+    EXPECT_TRUE(c.hasRepositoryConfiguration());
+    EXPECT_EQ(expectedRepositoryConfigurationPath, c.getRepositoryConfigFilePath());
+    EXPECT_EQ(2, c.getRepositoryConfiguration().getOrganizers().size());
 
     /*
      * LOAD
      */
 
-    c.setConfigFilePath(file);
+    c.setConfigFilePath(box.configPath);
+    cout << "Test: loading configuration from:" << endl <<
+            "  '" << c.getConfigFilePath() << "' (config)" << endl <<
+            "  '" << box.configPath << "' (expected)" << endl
+    ;
 
     bool loaded = configRepresentation.load(c);
 
@@ -184,19 +210,19 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     EXPECT_FALSE(c.isUiEditorEnableSyntaxHighlighting());
 
     EXPECT_GE(c.getRepositories().size(), 1);
-    EXPECT_NE(c.getRepositories().end(), c.getRepositories().find(repositoryPath));
-    c.getRepositories().find(repositoryPath)->second->print();
-    EXPECT_EQ(repositoryPath, c.getRepositories().find(repositoryPath)->second->getPath());
-    EXPECT_EQ(repositoryDir, c.getRepositories().find(repositoryPath)->second->getDir());
-    EXPECT_EQ(repositoryFilename, c.getRepositories().find(repositoryPath)->second->getFile());
-    EXPECT_EQ(m8r::Repository::RepositoryMode::FILE, c.getRepositories().find(repositoryPath)->second->getMode());
+    EXPECT_NE(c.getRepositories().end(), c.getRepositories().find(box.repositoryPath));
+    c.getRepositories().find(box.repositoryPath)->second->print();
+    EXPECT_EQ(box.repositoryPath, c.getRepositories().find(box.repositoryPath)->second->getPath());
+    EXPECT_EQ(box.repositoryPath, c.getRepositories().find(box.repositoryPath)->second->getDir());
+    EXPECT_EQ("", c.getRepositories().find(box.repositoryPath)->second->getFile());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::REPOSITORY, c.getRepositories().find(box.repositoryPath)->second->getMode());
 
     EXPECT_NE(nullptr, c.getActiveRepository());
     c.getActiveRepository()->print();
-    EXPECT_EQ(repositoryPath, c.getActiveRepository()->getPath());
-    EXPECT_EQ(repositoryDir, c.getActiveRepository()->getDir());
-    EXPECT_EQ(repositoryFilename, c.getActiveRepository()->getFile());
-    EXPECT_EQ(m8r::Repository::RepositoryMode::FILE, c.getActiveRepository()->getMode());
+    EXPECT_EQ(box.repositoryPath, c.getActiveRepository()->getPath());
+    EXPECT_EQ(box.repositoryPath, c.getActiveRepository()->getDir());
+    EXPECT_EQ("", c.getActiveRepository()->getFile());
+    EXPECT_EQ(m8r::Repository::RepositoryMode::REPOSITORY, c.getActiveRepository()->getMode());
     // r deleted by configuration destructor
 
     // configuration cleanup
@@ -206,8 +232,8 @@ TEST(ConfigurationTestCase, SaveAndLoad)
     c.setSaveReadsMetadata(backupReadsMetadata);
     c.setUiEditorEnableSyntaxHighlighting(backupNotebookButton);
     if(backupActiveRepository) {
-        c.setActiveRepository(c.addRepository(backupActiveRepository));
+        c.setActiveRepository(c.addRepository(backupActiveRepository), repositoryConfigRepresentation);
     } else {
-        c.setActiveRepository(nullptr);
+        c.setActiveRepository(nullptr, repositoryConfigRepresentation);
     }
 }

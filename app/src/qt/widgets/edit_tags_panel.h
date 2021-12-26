@@ -1,7 +1,7 @@
 /*
  edit_tags_panel.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -76,10 +76,19 @@ public:
     void refreshOntologyTags();
     void refresh(const std::vector<const Tag*>* noteTags);
     const std::vector<const Tag*>& getTags();
+    std::vector<std::string>& getTagsAsStrings(std::vector<std::string>& tags) const;
+    std::set<std::string>& getTagsAsStringSet(std::set<std::string>& tagSet) const;
     void setTags(const std::vector<const Tag*>& tags);
+    void setTagsAsStrings(const std::vector<std::string>& tagsStrings);
+    void setTagsAsStrings(
+        const std::set<std::string>& tagsStrings
+    );
     void setFocusAddingTag() {
         lineEdit->setFocus();
         lineEdit->selectAll();
+    }
+    int getTagCount() const {
+        return listView->model()->rowCount();
     }
 
 signals:

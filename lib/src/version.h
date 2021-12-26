@@ -1,7 +1,7 @@
 /*
  version.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,16 +23,13 @@
 
 namespace m8r {
 
-// constexpr char const* MINDFORGER_VERSION = "18.1.5 alpha";
-// C++ character const/constexpr concatenation patterns via templates are crazy > using C-style define
-
 // versionning scheme: https://semver.org/
 #include "app_info.h"
 
 #ifdef DO_MF_DEBUG
-#define MINDFORGER_NIGHTLY " (" __DATE__ " " __TIME__ ")"
+  #define MINDFORGER_NIGHTLY " (" __DATE__ " " __TIME__ ")"
 #else
-#define MINDFORGER_NIGHTLY ""
+  #define MINDFORGER_NIGHTLY ""
 #endif
 
 #define MINDFORGER_VERSION MINDFORGER_VERSION_MAJOR "." MINDFORGER_VERSION_MINOR "." MINDFORGER_VERSION_REVISION MINDFORGER_NIGHTLY

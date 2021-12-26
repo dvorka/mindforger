@@ -1,7 +1,7 @@
 /*
  outline_tree_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -85,6 +85,9 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
 #endif
                 case Qt::Key_E:
                     emit signalOutlineOrNoteEdit();
+                    break;
+                case Qt::Key_X:
+                    emit signalOutlineOrNoteExternalEdit();
                     break;
                 }
             }

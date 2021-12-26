@@ -1,7 +1,7 @@
 /*
  importance_combo_box.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
 #define M8RUI_IMPORTANCE_COMBO_BOX_H
 
 #include <QtWidgets>
+
+#include "../../lib/src/representations/unicode.h"
 
 namespace m8r {
 

@@ -1,7 +1,7 @@
 /*
  importance_combo_box.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -29,9 +29,9 @@ ImportanceComboBox::ImportanceComboBox(QWidget *parent)
         s.clear();
         for(int j=1; j<=5; j++) {
             if(j<=i) {
-                s += QChar(9733);
+                s += QChar(U_CODE_IMPORTANCE_ON);
             } else {
-                s += QChar(9734);
+                s += QChar(U_CODE_IMPORTANCE_OFF);
             }
         }
         addItem(s, QVariant::fromValue<int>(i));

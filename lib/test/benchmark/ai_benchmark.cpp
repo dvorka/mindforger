@@ -1,7 +1,7 @@
 /*
  ai_benchmark.cpp     MindForger markdown test
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -53,10 +53,11 @@ TEST(AiBenchmark, DISABLED_AaMatrix)
 {
     string repositoryPath{"/lib/test/resources/benchmark-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-aib-am.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)), repositoryConfigRepresentation);
     m8r::Mind mind(config);
     mind.think();
     cout << "Statistics:" << endl

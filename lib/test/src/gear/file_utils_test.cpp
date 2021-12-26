@@ -1,7 +1,7 @@
 /*
  file_utils_test.cpp     MindForger application test
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,6 +23,40 @@
 #include "../../../src/install/installer.h"
 
 using namespace std;
+
+TEST(FileGearTestCase, FilesystemPath)
+{
+    // GIVEN
+    string strBasePath{FILE_PATH_SEPARATOR};
+    strBasePath.append("a");
+    strBasePath.append(FILE_PATH_SEPARATOR);
+    strBasePath.append("b");
+
+    string expectedPath{strBasePath};
+    expectedPath.append(FILE_PATH_SEPARATOR);
+    expectedPath.append("c");
+
+    m8r::filesystem::Path basePath{strBasePath};
+
+    // WHEN
+    m8r::filesystem::Path path = basePath / "c";
+
+    // THEN
+    ASSERT_EQ(expectedPath, path.toString());
+}
+
+using namespace m8r::filesystem;
+
+TEST(FileGearTestCase, FilesystemPathUsage)
+{
+    // base path
+    cout << Path{"/a/b"}
+         << endl;
+
+    // assembled path
+    cout << Path{"/a/b"} / "c" / "d"
+         << endl;
+}
 
 TEST(FileGearTestCase, DeepCopy)
 {

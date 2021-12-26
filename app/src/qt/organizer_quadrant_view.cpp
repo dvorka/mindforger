@@ -1,7 +1,7 @@
 /*
  organizer_quadrant_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -20,15 +20,18 @@
 
 namespace m8r {
 
-OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent)
-    : QTableView(parent)
+using namespace std;
+
+OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent, ViewType viewType)
+    : QTableView(parent),
+      viewType{viewType}
 {
     verticalHeader()->setVisible(false);
 
-    // BEFARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    // BEWARE this kills performance: verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader()->setDefaultSectionSize(fontMetrics().height()*1.5);
-    // IMPORTANT this must b in constructors - causes CPU high consuption loop if in paintEvent()!
+    // IMPORTANT this must be in constructors - causes CPU high consuption loop if in paintEvent()!
     horizontalHeader()->setStretchLastSection(true);
 
     // IMPROVE sorting breaks width (redraw method to be overriden)
@@ -37,20 +40,45 @@ OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent)
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
+
+#ifdef WIP_DRAG_N_DROP
+    // drag & drop (https://doc.qt.io/qt-5/dnd.html)
+    setDragDropMode(QAbstractItemView::InternalMove);
+    setDragEnabled(true);
+    setAcceptDrops(true);
+    setDropIndicatorShown(true);
+#endif
 }
 
 void OrganizerQuadrantView::keyPressEvent(QKeyEvent* event)
 {
+    if((event->modifiers() & Qt::ControlModifier)) {
+        switch(event->key()) {
+        case Qt::Key_Right:
+            MF_DEBUG("Organizer EMIT ctrl-right" << endl);
+            emit signalMoveNoteToNextQuadrant();
+            return;
+        case Qt::Key_Left:
+            MF_DEBUG("Organizer EMIT ctrl-left" << endl);
+            emit signalMoveNoteToPreviousQuadrant();
+            return;
+        }
+    }
+
     if(!(event->modifiers() & Qt::AltModifier)
-         &&
-       !(event->modifiers() & Qt::ControlModifier)
-         &&
-       !(event->modifiers() & Qt::ShiftModifier))
-    {
+       && !(event->modifiers() & Qt::ControlModifier)
+       && !(event->modifiers() & Qt::ShiftModifier)
+    ) {
         switch(event->key()) {
         case Qt::Key_Return:
         case Qt::Key_Right:
-            emit signalShowSelectedOutline();
+            emit signalShowSelectedNote();
+            return;
+        case Qt::Key_Tab:
+            emit signalFocusToNextVisibleQuadrant();
+            break;
+        case Qt::Key_Backtab:
+            emit signalFocusToPreviousVisibleQuadrant();
             return;
         case Qt::Key_Down:
             QTableView::keyPressEvent(event);
@@ -73,7 +101,57 @@ void OrganizerQuadrantView::mouseDoubleClickEvent(QMouseEvent* event)
     Q_UNUSED(event);
 
     // double click to O/N opens it
-    emit signalShowSelectedOutline();
+    if(ViewType::ORGANIZER == this->viewType) {
+        emit signalShowSelectedNote();
+    } else if(ViewType::KANBAN == this->viewType) {
+        emit signalShowSelectedKanbanNote();
+    }
 }
+
+#ifdef WIP_DRAG_N_DROP
+
+/*
+ * Drag & drop.
+ *
+ * https://www.youtube.com/watch?v=dcrSTeVaW5Y
+ */
+
+void OrganizerQuadrantView::dragEnterEvent(QDragEnterEvent* event)
+{
+    MF_DEBUG("DRAG EVENT: " << event << endl);
+    MF_DEBUG("DRAG EVENT: " << event->mimeData() << endl);
+
+    event->acceptProposedAction();
+
+    //if (event->mimeData()->hasFormat("text/plain")) {
+    //    event->acceptProposedAction();
+    //}
+}
+
+void OrganizerQuadrantView::dropEvent(QDropEvent* event)
+{
+    MF_DEBUG("DROP EVENT: " << event << endl);
+    MF_DEBUG("DROP EVENT MIME: " << event->mimeData() << endl);
+    MF_DEBUG("DROP EVENT formats: " << event->mimeData()->formats()[0].toStdString() << endl);
+    MF_DEBUG("DROP EVENT text: " << event->mimeData()->text().toStdString() << endl);
+
+    // TODO decode: "application/x-qabstractitemmodeldatalist"
+    QByteArray encoded = event->mimeData()->data(
+        event->mimeData()->formats()[0].toStdString().c_str()
+    );
+    QDataStream stream(&encoded, QIODevice::ReadOnly);
+    while (!stream.atEnd()) {
+        int row, col;
+        QMap<int,  QVariant> roleDataMap;
+
+        stream >> row >> col >> roleDataMap;
+        MF_DEBUG("  row: " << row << " col: " << col << endl);
+        //MF_DEBUG("    data: " << roleDataMap.value(Qt::UserRole+1).toString().toStdString() << endl);
+    }
+
+    MF_DEBUG("DROP EVENT done: " << event << endl);
+    event->acceptProposedAction();
+}
+#endif
 
 } // m8r namespace

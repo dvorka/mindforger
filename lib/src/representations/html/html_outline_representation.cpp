@@ -1,7 +1,7 @@
 /*
  html_outline_representation.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ HtmlOutlineRepresentation::HtmlOutlineRepresentation(
       lf{exportColors},
       markdownRepresentation(ontology, descriptionInterceptor)
 {
-#if defined  MF_MD_2_HTML_CMARK
+#if defined MF_MD_2_HTML_CMARK
     markdownTranscoder = new CmarkGfmMarkdownTranscoder{};
 #else
     markdownTranscoder = nullptr;
@@ -73,8 +73,9 @@ void HtmlOutlineRepresentation::outlineTypeToHtml(const OutlineType* outlineType
     }
 }
 
-void HtmlOutlineRepresentation::noteTypeToHtml(const NoteType* noteType,string& html)
-{
+void HtmlOutlineRepresentation::noteTypeToHtml(
+    const NoteType* noteType, string& html
+) {
     if(noteType) {
         html += "&nbsp;&nbsp;<span style='color: ";
         html += noteType->getColor().asHtml();
@@ -89,6 +90,18 @@ void HtmlOutlineRepresentation::noteTypeToHtml(const NoteType* noteType,string& 
 
         html += " </span>";
     }
+}
+
+void HtmlOutlineRepresentation::organizerTypeToHtml(
+    const Organizer* organizer, string& html
+) {
+    html += "&nbsp;&nbsp;<span style='color: ";
+    html += Color::RED().asHtml();
+    html += "; font-style: italic;'> ";
+    html += organizer->getOrganizerTypeAsStr();
+    html += " ";
+    html += "&#9670;"; // composition
+    html += " </span>";
 }
 
 void HtmlOutlineRepresentation::tagsToHtml(const vector<const Tag*>* tags, string& html)
@@ -129,9 +142,9 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
     if(!config.isUiHtmlTheme()) {
         // RAW THEME
         html.assign(
-                    "<!DOCTYPE html>\n"
-                    "<html>"
-                    "<body style='");
+            "<!DOCTYPE html>\n"
+            "<html>"
+            "<body style='");
         fgBgTextColorStyle(html);
         html += "'><pre>";
     } else {
@@ -159,7 +172,6 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
 #ifdef DO_MF_DEBUG
         //html += "\n";
 #endif
-
 
         // DIAGRAMS: mermaid.js
         // - CDN: https://cdnjs.com/libraries/mermaid
@@ -289,7 +301,7 @@ string* HtmlOutlineRepresentation::to(const string* markdown, string* html, stri
     return html;
 }
 
-string* HtmlOutlineRepresentation::toNoMeta(const Outline* outline, string* html, bool standalone, int yScrollTo)
+string* HtmlOutlineRepresentation::toNoMeta(Outline* outline, string* html, bool standalone, int yScrollTo)
 {
     // IMPROVE markdown can be processed by Mind to be enriched with various links and relationships
     string* markdown = markdownRepresentation.to(outline);
@@ -357,9 +369,9 @@ string* HtmlOutlineRepresentation::to(
                 for(int i=0; i<=4; i++) {
                     htmlHeader += "<td style='border-collapse: collapse; border: none;'>";
                     if(outline->getImportance()>i) {
-                        htmlHeader += "&#9733;";
+                        htmlHeader += "&#"+std::to_string(U_CODE_IMPORTANCE_ON)+";";
                     } else {
-                        htmlHeader += "&#9734;";
+                        htmlHeader += "&#"+std::to_string(U_CODE_IMPORTANCE_OFF)+";";
                     }
                     htmlHeader += "</td>";
                 }
@@ -367,7 +379,7 @@ string* HtmlOutlineRepresentation::to(
                 for(int i=0; i<5; i++) {
                     htmlHeader +=
                             "<td style='border-collapse: collapse; border: none;'>"
-                            "&#9734;"
+                            "&#"+std::to_string(U_CODE_IMPORTANCE_OFF)+";"
                             "</td>";
                 }
             }
@@ -379,14 +391,12 @@ string* HtmlOutlineRepresentation::to(
                     if(outline->getUrgency()>i) {
                         htmlHeader +=
                                 "<td style='border-collapse: collapse; border: none;'>"
-                                "&#x25D5;"
-                                //"&#x29D7;" // sand clocks
+                                "&#"+std::to_string(U_CODE_URGENCY_ON)+";"
                                 "</td>";
                     } else {
                         htmlHeader +=
                                 "<td style='border-collapse: collapse; border: none;'>"
-                                "&#x25F4;"
-                                //"&#x29D6;" // sand clocks
+                                "&#"+std::to_string(U_CODE_URGENCY_OFF)+";"
                                 "</td>";
                     }
                 }
@@ -394,7 +404,7 @@ string* HtmlOutlineRepresentation::to(
                 for(int i=0; i<5; i++) {
                     htmlHeader +=
                             "<td style='border-collapse: collapse; border: none;'>"
-                            "&#x29D6;"
+                            "&#"+std::to_string(U_CODE_URGENCY_OFF)+";"
                             "</td>";
                 }
             }

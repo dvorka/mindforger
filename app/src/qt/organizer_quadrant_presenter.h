@@ -1,7 +1,7 @@
 /*
  organizer_quadrant_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
 #define M8RUI_ORGANIZER_QUADRANT_PRESENTER_H
 
 #include <QtWidgets>
+
+#include <vector>
 
 #include "organizer_quadrant_view.h"
 #include "organizer_quadrant_model.h"
@@ -45,20 +47,34 @@ private:
     OrlojPresenter* orloj;
 
 public:
-    explicit OrganizerQuadrantPresenter(OrganizerQuadrantView* view, OrlojPresenter* orloj, QString title);
+    explicit OrganizerQuadrantPresenter(
+        OrganizerQuadrantView* view,
+        OrlojPresenter* orloj,
+        QString title
+    );
     OrganizerQuadrantPresenter(const OrganizerQuadrantPresenter&) = delete;
     OrganizerQuadrantPresenter(const OrganizerQuadrantPresenter&&) = delete;
-    OrganizerQuadrantPresenter &operator=(const OrganizerQuadrantPresenter&) = delete;
-    OrganizerQuadrantPresenter &operator=(const OrganizerQuadrantPresenter&&) = delete;
+    OrganizerQuadrantPresenter& operator =(const OrganizerQuadrantPresenter&) = delete;
+    OrganizerQuadrantPresenter& operator =(const OrganizerQuadrantPresenter&&) = delete;
     ~OrganizerQuadrantPresenter();
 
+    void setTitle(QString& title) { model->setTitle(title); }
+
     int getCurrentRow() const;
-    void refresh(const std::vector<Outline*>& os, bool urgency, bool importance);
+    Note* getSelectedNote();
+    void refresh(const std::vector<Note*>& os, bool urgency, bool importance, bool showOutline);
     OrganizerQuadrantView* getView() const { return view; }
 
 public slots:
-    void slotShowSelectedOutline();
-    void slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotShowSelectedNote();
+    void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
+    void slotHeaderClicked(int section);
+
+    void slotFocusToNextVisibleQuadrant();
+    void slotFocusToPreviousVisibleQuadrant();
+
+    void slotMoveNoteToNextQuadrant();
+    void slotMoveNoteToPreviousQuadrant();
 };
 
 }

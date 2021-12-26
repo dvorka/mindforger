@@ -1,7 +1,7 @@
 /*
  string-utils.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -168,6 +168,15 @@ void toString(const std::vector<std::string*>& ss, std::string& os)
             os += *s;
             os += "\n";
         }
+    }
+}
+
+void replaceAll(const std::string& old_s, const std::string& new_s, std::string& s)
+{
+    size_t from = 0;
+    while((from = s.find(old_s, from)) != std::string::npos) {
+             s.replace(from, old_s.length(), new_s);
+             from += new_s.length();
     }
 }
 

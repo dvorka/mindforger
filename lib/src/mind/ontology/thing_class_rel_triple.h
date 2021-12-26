@@ -1,7 +1,7 @@
 /*
  thing_class_rel_triple.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -22,8 +22,10 @@
 #include <string>
 #include <set>
 
+#include "../../debug.h"
 #include "../../config/color.h"
 #include "../../gear/string_utils.h"
+#include "../../gear/datetime_utils.h"
 
 /*
  * Thing, Class, Relationship, RelationshipType and Triple
@@ -44,6 +46,9 @@ class Thing
 {
 private:
     static long sequence;
+
+public:
+    static std::string getNextKey() { return std::to_string(++sequence); }
 
 protected:
     /**
@@ -79,14 +84,21 @@ public:
     explicit Thing(const std::string name);
     Thing(const Thing&) = delete;
     Thing(const Thing&&) = delete;
-    Thing &operator=(const Thing&) = delete;
-    Thing &operator=(const Thing&&) = delete;
+    Thing& operator=(const Thing&) = delete;
+    Thing& operator=(const Thing&&) = delete;
     virtual ~Thing();
 
-    virtual const std::string& getKey() { return key; }
+    /**
+     * @brief Get think key.
+     *
+     * Key might be set on get.
+     *
+     * @return unique thing identifier.
+     */
+    virtual std::string& getKey() { return key; }
 
     const std::string& getName() const { return name; }
-    virtual void setName(const std::string& name) { this->name = name; autolinkName();}
+    virtual void setName(const std::string& name) { this->name = name; autolinkName(); }
     const std::string& getAutolinkingName() const { return autolinkingName; }
     const std::string& getAutolinkingAbbr() const { return autolinkingAbbr; }
     const std::string& getAutolinkingAlias() const { return autolinkingAlias; }
@@ -96,6 +108,34 @@ public:
 
 protected:
     void autolinkName();
+};
+
+/**
+ * @brief Thing which exists in time.
+ */
+class ThingInTime : public Thing {
+protected:
+    time_t created;
+    time_t read;
+    time_t modified;
+
+public:
+    explicit ThingInTime();
+    explicit ThingInTime(const std::string name);
+    ThingInTime(const ThingInTime&) = delete;
+    ThingInTime(const ThingInTime&&) = delete;
+    ThingInTime& operator=(const ThingInTime&) = delete;
+    ThingInTime& operator=(const ThingInTime&&) = delete;
+    virtual ~ThingInTime();
+
+    virtual time_t getCreated() const;
+    virtual void setCreated();
+    virtual void setCreated(time_t created);
+
+    virtual time_t getModified() const;
+    virtual void setModified();
+    virtual void setModified(time_t modified);
+
 };
 
 /**

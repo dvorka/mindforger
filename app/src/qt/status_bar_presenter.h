@@ -1,7 +1,7 @@
 /*
  status_bar_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -19,6 +19,7 @@
 #ifndef M8RUI_STATUS_BAR_PRESENTER_H
 #define M8RUI_STATUS_BAR_PRESENTER_H
 
+#include "../../lib/src/gear/async_utils.h"
 #include "../../lib/src/mind/mind.h"
 
 #include <QtWidgets>
@@ -57,11 +58,40 @@ public:
     void showError(const std::string& message) { showError(QString::fromStdString(message)); }
     void showError(const QString& message);
 
+    void clear() { showInfo(""); }
+
     const StatusBarView* getView() const { return view; }
 
 public slots:
     void slotShowInfo(QString message) { showInfo(message); }
     void slotShowStatistics() { showMindStatistics(); }
+};
+
+/*
+ * This class instance is supposed to be used in progress reporting to ensure responsibe
+ * (non-frozen) UI. The method should be passed as callback which shows a long
+ * running operation progress on the progress bar and does manual Qt event
+ * processing on the main application thread:
+ *
+ *   QCoreApplication::processEvents();
+ *
+ * @see https://doc.qt.io/archives/qq/qq27-responsive-guis.html
+ */
+class StatusBarProgressCallbackCtx : public ProgressCallbackCtx
+{
+private:
+    StatusBarPresenter* presenter;
+
+public:
+    explicit StatusBarProgressCallbackCtx(StatusBarPresenter* presenter);
+    StatusBarProgressCallbackCtx(const ProgressCallbackCtx&) = delete;
+    StatusBarProgressCallbackCtx(const ProgressCallbackCtx&&) = delete;
+    StatusBarProgressCallbackCtx& operator=(const ProgressCallbackCtx&) = delete;
+    StatusBarProgressCallbackCtx& operator=(const ProgressCallbackCtx&&) = delete;
+    virtual ~StatusBarProgressCallbackCtx();
+
+    virtual void updateProgress(float progress);
+
 };
 
 }

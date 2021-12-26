@@ -1,7 +1,7 @@
 /*
  main_menu.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -48,7 +48,15 @@ public:
     QMenu* menuMind;
     QMenu* menuFind;
     QMenu* menuView;
+#ifdef MF_WIP_KNOW
+    QMenu* menuKnowledge;
+#endif
     QMenu* menuNavigator;
+#ifdef MF_WIP
+    QMenu* menuLibrary;
+    QMenu* menuFlashcards;
+#endif
+    QMenu* menuOrganizer;
     QMenu* menuOutline;
     QMenu* menuNote;
     QMenu* menuEdit;
@@ -73,6 +81,7 @@ public:
     QAction* actionMindForget;
     QAction* actionMindSnapshot;
     QAction* actionMindPreferences;
+    QAction* actionMindTerminal;
     QMenu* submenuMindExport;
     QAction* actionMindExportCsv;
     QAction* actionExit;
@@ -83,6 +92,9 @@ public:
     QAction* actionFindNoteByName;
     QAction* actionFindOutlineByTag;
     QAction* actionFindNoteByTag;
+#ifdef MF_WIP
+    QAction* actionFindDocByName;
+#endif
 #ifdef MF_NER
     QAction* actionFindNerPersons;
     QAction* actionFindNerLocations;
@@ -93,8 +105,10 @@ public:
     // menu: View
     QAction* actionViewDashboard;
     QAction* actionViewHome;
-    QAction* actionViewOrganizer;
+    QAction* actionViewDecks;
+    QAction* actionViewOrganizers;
     QAction* actionViewOutlines;
+    QAction* actionViewLibraryDocs;
     QAction* actionViewTags;
     QAction* actionViewNavigator;
     QAction* actionViewDwell;
@@ -104,6 +118,24 @@ public:
     QAction* actionViewLimbo;
     QAction* actionViewDistractionFree;
     QAction* actionViewFullscreen;
+
+    // menu: Knowledge
+    QAction* actionKnowledgeWikipedia;
+    QAction* actionKnowledgeArxiv;
+
+    // menu: Library
+    QAction* actionLibraryAdd;
+    QAction* actionLibraryDeprecate;
+
+    // menu: Organizer
+    QAction* actionOrganizerNew;
+    QAction* actionOrganizerEdit;
+    QAction* actionOrganizerClone;
+    QAction* actionOrganizerForget;
+    QAction* actionOrganizerFocusPrevious;
+    QAction* actionOrganizerFocusNext;
+    QAction* actionOrganizerMovePrevious;
+    QAction* actionOrganizerMoveNext;
 
     // menu: Navigator
     QAction* actionNavigatorZoomIn;
@@ -118,6 +150,7 @@ public:
     QAction* actionOutlineHome;
     QAction* actionOutlineStencil;
     QAction* actionOutlineClone;
+    QAction* actionOutlineArtExamine;
     QAction* actionOutlineForget;
     QMenu* submenuOutlineExport;
     QAction* actionOutlineHtmlExport;
@@ -128,6 +161,7 @@ public:
     QAction* actionNoteNew;
     QAction* actionViewHoist;
     QAction* actionNoteEdit;
+    QAction* actionNoteExternalEdit;
     QAction* actionNoteSave;
     QAction* actionNoteClose;
     QAction* actionNoteForget;
@@ -156,6 +190,7 @@ public:
     QAction* actionEditNameDescFocusSwap;
     QAction* actionEditExtract;
     QAction* actionEditComplete;
+    QAction* actionEditSpellCheck;
 
     // menu: Format
     QAction* actionFormatBold;
@@ -229,6 +264,8 @@ public:
     MainMenuView &operator=(const MainMenuView&&) = delete;
     virtual ~MainMenuView();
 
+    void showFacetOrganizerList(bool repositoryMode=true);
+    void showFacetOrganizerView(bool repositoryMode=true);
     void showFacetOutlineList(bool repositoryMode=true);
     void showFacetOutlineView(bool repositoryMode=true);
     void showFacetNoteEdit(bool repositoryMode=true);

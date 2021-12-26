@@ -1,7 +1,7 @@
 /*
  trie.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ void Trie::destroy(Node* n)
 
 void Trie::addWord(const string& s)
 {
-    MF_DEBUG("trie.add(" << s << ")" << endl);
+    //MF_DEBUG("trie.add(" << s << ")" << endl);
     if(s.size()) {
         Node* current = root;
 
@@ -142,7 +142,7 @@ bool Trie::findLongestPrefixWord(const string& s, string& r) const
     if(root->children().empty()) {
         return false;
     } else {
-        int longestWordSize{};
+        size_t longestWordSize{};
 
         Node* current = root;
         if(current != nullptr) {

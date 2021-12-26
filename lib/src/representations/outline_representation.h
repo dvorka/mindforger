@@ -1,7 +1,7 @@
 /*
  outline_representation.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public:
     OutlineRepresentation &operator=(const OutlineRepresentation&&) = delete;
     virtual ~OutlineRepresentation();
 
-    virtual Outline* outline(const m8r::File& file) = 0;
+    virtual Outline* outline(const m8r::filesystem::File& file) = 0;
 };
 
 } // m8r namespace

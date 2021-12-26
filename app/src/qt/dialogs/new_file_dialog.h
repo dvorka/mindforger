@@ -1,7 +1,7 @@
 /*
  new_file_dialog.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -29,9 +29,11 @@ class NewFileDialog : public QDialog
 {
     Q_OBJECT
 
-private:
+protected:
+    QString extension;
     QString homeDirectory;
 
+protected:
     QLabel* fileNameLabel;
     QLineEdit* fileNameEdit;
     QLabel* dirLabel;
@@ -41,23 +43,21 @@ private:
 
     QPushButton* findDirectoryButton;
 
+    QPushButton* newButton;
     QPushButton* closeButton;
 
-protected:
-    QString extension;
-    QPushButton* newButton;
 
 public:
     explicit NewFileDialog(QWidget* parent);
     NewFileDialog(const NewFileDialog&) = delete;
     NewFileDialog(const NewFileDialog&&) = delete;
-    NewFileDialog &operator=(const NewFileDialog&) = delete;
-    NewFileDialog &operator=(const NewFileDialog&&) = delete;
+    NewFileDialog& operator =(const NewFileDialog&) = delete;
+    NewFileDialog& operator =(const NewFileDialog&&) = delete;
     ~NewFileDialog();
 
     void show();
     QPushButton* getNewButton() const { return newButton; }
-    QString getFilePath() const { return pathEdit->text(); } // file path
+    QString getFilePath() const { return pathEdit->text(); }
 
 private slots:
     void refreshPath();

@@ -1,7 +1,7 @@
 /*
  trie.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -76,8 +76,8 @@ public:
     explicit Trie();
     Trie(const Trie&) = delete;
     Trie(const Trie&&) = delete;
-    Trie &operator=(const Trie&) = delete;
-    Trie &operator=(const Trie&&) = delete;
+    Trie& operator=(const Trie&) = delete;
+    Trie& operator=(const Trie&&) = delete;
     ~Trie();
 
     bool empty() const { return root->children().empty(); }

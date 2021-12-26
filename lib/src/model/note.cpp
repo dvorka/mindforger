@@ -1,7 +1,7 @@
 /*
  note.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,22 +23,26 @@ using namespace std;
 namespace m8r {
 
 Note::Note(const NoteType* type, Outline* outline)
-    : Thing{},
+    : ThingInTime{},
       outline(outline),
-      type(type)
+      flags{},
+      depth{},
+      tags{},
+      links{},
+      type{type},
+      description{},
+      modifiedPretty{},
+      revision{},
+      readPretty{},
+      reads{},
+      progress{},
+      deadline{},
+      aiAaMatrixIndex{}
 {
-    depth = 0;
-    created = modified = read = deadline = 0;
-    reads = revision = 0;
-    progress = 0;
-    flags = 0;
-    aiAaMatrixIndex = -1;
 }
 
 Note::Note(const Note& n)
-    : Thing{},
-      outline(nullptr),
-      type(n.type)
+    : Note{n.type, nullptr}
 {
     name = n.name;
     autolinkName();
@@ -104,16 +108,6 @@ string Note::getMangledName() const
     return result;
 }
 
-time_t Note::getCreated() const
-{
-    return created;
-}
-
-void Note::setCreated(time_t created)
-{
-    this->created = created;
-}
-
 time_t Note::getDeadline() const
 {
     return deadline;
@@ -134,11 +128,6 @@ void Note::setDepth(u_int16_t depth)
     this->depth = depth;
 }
 
-time_t Note::getModified() const
-{
-    return modified;
-}
-
 void Note::makeModified()
 {
     setModified();
@@ -150,14 +139,13 @@ void Note::makeModified()
 
 void Note::setModified()
 {
-    this->modified = datetimeNow();
+    ThingInTime::setModified();
 }
 
 void Note::setModified(time_t modified)
 {
-    MF_ASSERT_FUTURE_TIMESTAMPS(created, read, modified, outline->getKey() << "# " << name, name);
+    ThingInTime::setModified(modified);
 
-    this->modified = modified;
     setModifiedPretty();
 }
 
@@ -258,8 +246,8 @@ const vector<const Tag*>* Note::getTags() const
 
 void Note::addTag(const Tag* tag)
 {
-    if(tag) {
-        tags.push_back(tag);
+    if(tag && !this->hasTag(tag)) {
+        this->tags.push_back(tag);
     }
 }
 
@@ -351,7 +339,7 @@ void Note::setOutline(Outline* outline)
     this->outline = outline;
 }
 
-const string& Note::getOutlineKey() const
+string& Note::getOutlineKey() const
 {
     if(outline) {
         return outline->getKey();
@@ -451,7 +439,7 @@ void Note::checkAndFixProperties()
     MF_ASSERT_FUTURE_TIMESTAMPS(created, read, modified, outline->getKey() << " # " << name, name);
 }
 
-const string& Note::getKey()
+string& Note::getKey()
 {
     key.clear();
     key.append(outline->getKey());
@@ -481,6 +469,10 @@ void Note::promote()
 void Note::makeDirty()
 {
     if(outline) outline->makeDirty();
+}
+
+bool Note::isReadOnly() const {
+    return outline->isReadOnly();
 }
 
 } // m8r namespace

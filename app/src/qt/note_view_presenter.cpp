@@ -1,7 +1,7 @@
 /*
  note_view_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -110,7 +110,7 @@ void NoteViewPresenter::refreshLivePreview()
     view->setHtml(QString::fromStdString(html));
 
     // IMPROVE share code between O header and N
-#if not defined(_WIN32) && not defined(__APPLE__)
+#if !defined(_WIN32) && !defined(__APPLE__)
     // WebView: scroll to same pct view
     if(scrollbar) {
         if(scrollbar->maximum()) {
@@ -149,7 +149,9 @@ void NoteViewPresenter::slotLinkClicked(const QUrl& url)
 
 void NoteViewPresenter::slotEditNote()
 {    
-    orloj->showFacetNoteEdit(this->currentNote);
+    if(orloj->getMainPresenter()->getConfiguration().isUiDoubleClickNoteViewToEdit()) {
+        orloj->showFacetNoteEdit(this->currentNote);
+    }
 }
 
 void NoteViewPresenter::slotRefreshLeaderboardByValue(AssociatedNotes* associations)

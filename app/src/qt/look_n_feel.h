@@ -1,7 +1,7 @@
 /*
  look_n_feel.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -79,11 +79,14 @@ private:
     QColor editorLink;
     QColor editorCodeblock;
     QColor editorList;
+    QColor editorTaskDone;
+    QColor editorTaskWip;
     QColor editorHtmlTag;
     QColor editorHtmlEntity;
     QColor editorHtmlAttrName;
     QColor editorHtmlAttrValue;
     QColor editorHtmlComment;
+    QColor editorError;
 
     // HTML
     QString htmlTextColor;
@@ -142,12 +145,15 @@ public:
     QColor& getEditorStrikethrough() { return editorStrikethrough; }
     QColor& getEditorLink() { return editorLink; }
     QColor& getEditorList() { return editorList; }
+    QColor& getEditorTaskDone() { return editorTaskDone; }
+    QColor& getEditorTaskWip() { return editorTaskWip; }
     QColor& getEditorCodeblock() { return editorCodeblock; }
     QColor& getEditorHtmlTag() { return editorHtmlTag; }
     QColor& getEditorHtmlEntity() { return editorHtmlEntity; }
     QColor& getEditorHtmlAttrName() { return editorHtmlAttrName; }
     QColor& getEditorHtmlAttrValue() { return editorHtmlAttrValue; }
     QColor& getEditorHtmlComment() { return editorHtmlComment; }
+    QColor& getEditorError() { return editorError; }
 
     // HTML
     virtual std::string& getHtmlTextColor();

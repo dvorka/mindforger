@@ -1,7 +1,7 @@
 /*
  note_edit_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -56,6 +56,8 @@ public:
         currentNote = note;
         topNamePanel->setNote(note);
         bottomButtonsPanel->setNote(note);
+        // TODO configuration
+        noteEditor->enableSpellCheck(true);
         noteEditor->setPlainText(QString::fromStdString(mdDescription));
     }
     void setEditorShowLineNumbers(bool show) { noteEditor->setShowLineNumbers(show); }

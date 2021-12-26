@@ -1,4 +1,4 @@
-A portion of MindForger code has been inspired by/reused CuteMarkEd:
+A portion of MindForger code has been inspired by/reused from CuteMarkEd:
 
 License CuteMarkEd
 

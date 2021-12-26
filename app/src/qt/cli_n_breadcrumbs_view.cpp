@@ -1,7 +1,7 @@
 /*
  cli_n_breadcrumbs_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -24,9 +24,10 @@ CliView::CliView(CliAndBreadcrumbsView* cliAndBreadcrumps, QWidget* parent)
     : QLineEdit(parent)
 {
     this->cliAndBreadcrumps = cliAndBreadcrumps;
-    QPalette *palette = new QPalette();
+    QPalette* palette = new QPalette();
     palette->setColor(QPalette::Text, LookAndFeels::getInstance().getCliTextColor());
     setPalette(*palette);
+    setToolTip("Run command: type . for available commands, type search string for FTS, Alt-x to activate.");
 }
 
 void CliView::keyPressEvent(QKeyEvent* event)

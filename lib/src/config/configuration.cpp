@@ -1,7 +1,7 @@
 /*
  configuration.cpp     M8r configuration management
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -18,16 +18,16 @@
  */
 
 #include "configuration.h"
-#include "config.h"
 
 #ifdef _WIN32
-#include <ShlObj.h>
-#include <KnownFolders.h>
+  #include <ShlObj.h>
+  #include <KnownFolders.h>
 #endif // _WIN32
 
-namespace m8r {
-
 using namespace std;
+using namespace m8r::filesystem;
+
+namespace m8r {
 
 // non-primitive constants initializations
 const string Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH = string{FILE_PATH_M8R_REPOSITORY};
@@ -41,6 +41,7 @@ Configuration::Configuration()
     : asyncMindThreshold{},
       activeRepository{},
       repositories{},
+      repositoryConfiguration{getDummyRepositoryConfiguration()},
       writeMetadata{},
       saveReadsMetadata{},
       autolinking{},
@@ -51,12 +52,16 @@ Configuration::Configuration()
       markdownQuoteSections{},
       uiNerdTargetAudience{},
       uiHtmlZoom{},
+      externalEditorCmd{},
       uiFontPointSize{},
       uiShowBreadcrump{},
       uiViewerShowMetadata{},
       uiEditorTabWidth{},
       uiEditorLineNumbers{},
       uiEditorSyntaxHighlighting{},
+      uiEditorLiveSpellCheck{},
+      uiEditorSpellCheckLanguage{},
+      uiEditorSpellCheckLanguages{},
       uiEditorAutocomplete{},
       navigatorMaxNodes{},
       uiEditorTabsAsSpaces{},
@@ -69,35 +74,32 @@ Configuration::Configuration()
       uiLiveNotePreview{DEFAULT_UI_LIVE_NOTE_PREVIEW},
       uiOsTableSortColumn{DEFAULT_OS_TABLE_SORT_COLUMN},
       uiOsTableSortOrder{DEFAULT_OS_TABLE_SORT_ORDER},
+      uiDoubleClickNoteViewToEdit{DEFAULT_CLICK_NOTE_VIEW_TO_EDIT},
       installer(new Installer{})
 {
-    char* home;
     // default config file path: ~/.mindforger.md
+
+    userHomePath = getHomeDirectoryPath();
+
+    configFilePath.assign(userHomePath);
+    configFilePath += FILE_PATH_SEPARATOR;
+    configFilePath += FILENAME_M8R_CONFIGURATION;
+
 #ifdef _WIN32
     PWSTR wpath;
     size_t num;
 
     SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &wpath);
-    char *docPath = new char[MAX_PATH];
+    char* docPath = new char[MAX_PATH];
     wcstombs_s(&num, docPath, MAX_PATH, wpath, MAX_PATH);
     CoTaskMemFree(wpath);
-    userDocPath =  string{docPath};
-    delete [] docPath;
+    userDocPath = string{docPath};
 
-    SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &wpath);
-    home = new char[MAX_PATH];
-    wcstombs_s(&num, home, MAX_PATH, wpath, MAX_PATH);
-    CoTaskMemFree(wpath);
-    userHomePath = string{home};
-    delete [] home;
+    delete [] docPath;
 #else
-    home = getenv(ENV_VAR_HOME);
-    userHomePath = string{home};
-    userDocPath = string{home};
+    userDocPath = string{userHomePath};
 #endif //_WIN32
-    configFilePath.assign(userHomePath);
-    configFilePath += FILE_PATH_SEPARATOR;
-    configFilePath += FILENAME_M8R_CONFIGURATION;
+
     clear();
 }
 
@@ -113,6 +115,9 @@ Configuration::~Configuration()
         delete installer;
         installer = nullptr;
     }
+
+    clearRepositoryConfiguration();
+    repositoryConfiguration = nullptr;
 }
 
 void Configuration::clear()
@@ -123,6 +128,8 @@ void Configuration::clear()
         delete r.second;
     }
     repositories.clear();
+
+    clearRepositoryConfiguration();
 
     // lib
     mindState = MindState::SLEEPING;
@@ -158,6 +165,7 @@ void Configuration::clear()
     uiNerdTargetAudience = false;
     uiViewerShowMetadata = true;
     uiEditorSyntaxHighlighting = true;
+    uiEditorLiveSpellCheck = DEFAULT_SPELLCHECK_LIVE;
     uiEditorAutocomplete = true;
     uiEditorLineNumbers = true;
     uiEditorTabsAsSpaces = DEFAULT_EDITOR_TABS_AS_SPACES;
@@ -168,6 +176,7 @@ void Configuration::clear()
     uiThemeName.assign(UI_DEFAULT_THEME);
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
     uiHtmlZoom = DEFAULT_UI_HTML_ZOOM;
+    externalEditorCmd = "";
     uiFontPointSize = UI_DEFAULT_FONT_POINT_SIZE;
     uiEnableDiagramsInMd = JavaScriptLibSupport::NO;
     uiNerdTargetAudience = DEFAULT_UI_NERD_MENU;
@@ -179,6 +188,33 @@ void Configuration::clear()
     uiLiveNotePreview = DEFAULT_UI_LIVE_NOTE_PREVIEW;
     uiOsTableSortColumn = DEFAULT_OS_TABLE_SORT_COLUMN;
     uiOsTableSortOrder = DEFAULT_OS_TABLE_SORT_ORDER;
+    uiDoubleClickNoteViewToEdit = DEFAULT_CLICK_NOTE_VIEW_TO_EDIT;
+}
+
+bool Configuration::hasRepositoryConfiguration() const {
+    return this->repositoryConfiguration != getDummyRepositoryConfiguration();
+}
+
+RepositoryConfiguration& Configuration::initRepositoryConfiguration(
+    Organizer* defaultOrganizer
+) {
+    clearRepositoryConfiguration();
+    this->repositoryConfiguration = new RepositoryConfiguration{};
+    if(defaultOrganizer) {
+        this->repositoryConfiguration->addOrganizer(defaultOrganizer);
+    }
+    return *this->repositoryConfiguration;
+}
+
+void Configuration::clearRepositoryConfiguration() {
+    if(repositoryConfiguration
+       && repositoryConfiguration != getDummyRepositoryConfiguration()
+    ) {
+        delete repositoryConfiguration;
+    } else {
+        getDummyRepositoryConfiguration()->clear();
+    }
+    repositoryConfiguration = getDummyRepositoryConfiguration();
 }
 
 Repository* Configuration::addRepository(Repository* repository)
@@ -212,8 +248,10 @@ std::map<const std::string,Repository*>& Configuration::getRepositories()
     return repositories;
 }
 
-void Configuration::setActiveRepository(Repository* repository)
-{
+void Configuration::setActiveRepository(
+    Repository* repository,
+    RepositoryConfigurationPersistence& persistence
+) {
     if(repository) {
         if(repositories.find(repository->getPath()) != repositories.end()) {
             activeRepository = repository;
@@ -230,23 +268,33 @@ void Configuration::setActiveRepository(Repository* repository)
                repository->getMode()==Repository::RepositoryMode::REPOSITORY)
             {
                 memoryPath+=FILE_PATH_SEPARATOR;
-                memoryPath+=FILE_PATH_MEMORY;
+                memoryPath+=DIRNAME_MEMORY;
 
                 // TODO limbo class
                 limboPath+=FILE_PATH_SEPARATOR;
-                limboPath+=FILE_PATH_LIMBO;
+                limboPath+=DIRNAME_LIMBO;
+
+                // setting ACTIVE repository means that repository SPECIFIC configuration must be loaded
+                this->initRepositoryConfiguration(EisenhowerMatrix::createEisenhowMatrixOrganizer());
+                persistence.load(*this);
+            } else {
+                this->clearRepositoryConfiguration();
             }
         } else {
-            throw MindForgerException{"Active repository must be one of repositories known to Configuration!"};
+            throw MindForgerException{"Active repository must be one of repositories known to the configuration!"};
         }
     } else {
         activeRepository = nullptr;
+        clearRepositoryConfiguration();
     }
 }
 
 bool Configuration::createEmptyMarkdownFile(const string& file)
 {
-    if(!file.empty() && file.find(FILE_PATH_SEPARATOR)==string::npos && RepositoryIndexer::fileHasMarkdownExtension(file)) {
+    if(!file.empty()
+       && file.find(FILE_PATH_SEPARATOR)==string::npos
+       && File::fileHasMarkdownExtension(file)
+    ) {
         // as it is filename w/o path I can try to create empty O in the current directory
         stringToFile(file, DEFAULT_NEW_OUTLINE);
         return true;
@@ -255,7 +303,7 @@ bool Configuration::createEmptyMarkdownFile(const string& file)
     return false;
 }
 
-void Configuration::findOrCreateDefaultRepository()
+void Configuration::findOrCreateDefaultRepository(RepositoryConfigurationPersistence& persistence)
 {
     if(!activeRepository || activeRepository->getDir().empty()) {
         string defaultRepositoryPath{userDocPath};
@@ -263,18 +311,38 @@ void Configuration::findOrCreateDefaultRepository()
         defaultRepositoryPath += DIRNAME_M8R_REPOSITORY;
         MF_DEBUG("Checking for default repository existence: " << defaultRepositoryPath << endl);
         if(isDirectoryOrFileExists(defaultRepositoryPath.c_str())) {
-            setActiveRepository(addRepository(RepositoryIndexer::getRepositoryForPath(defaultRepositoryPath)));
+            setActiveRepository(
+                addRepository(RepositoryIndexer::getRepositoryForPath(defaultRepositoryPath)),
+                persistence
+            );
         } else {
             // create default repository w/ default content using Installer class
-            MF_DEBUG("  Creating a default MF repository in " << defaultRepositoryPath << endl);
+            MF_DEBUG("  Creating default MF repository in " << defaultRepositoryPath << endl);
             if(installer->createEmptyMindForgerRepository(defaultRepositoryPath)) {
                 installer->initMindForgerRepository(true, true, defaultRepositoryPath.c_str());
             }
             if(!activeRepository) {
-                setActiveRepository(addRepository(new Repository(defaultRepositoryPath)));
+                setActiveRepository(
+                    addRepository(new Repository(defaultRepositoryPath)),
+                    persistence
+                );
             }
         }
     }
+}
+
+string Configuration::getRepositoryConfigFilePath() const {
+    if(activeRepository
+       && activeRepository->getType() == Repository::RepositoryType::MINDFORGER
+       && activeRepository->getMode() == Repository::RepositoryMode::REPOSITORY
+    ) {
+        std::string path{activeRepository->getPath()};
+        path += FILE_PATH_SEPARATOR;
+        path += FILENAME_M8R_REPOSITORY_CONFIGURATION;
+        return path;
+    }
+
+    return "";
 }
 
 const char* Configuration::getRepositoryPathFromEnv()

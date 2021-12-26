@@ -1,7 +1,7 @@
 /*
  markdown_benchmark.cpp     MindForger markdown test
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 #endif //_WIN32
 #include <gtest/gtest.h>
 
-#include "../src/test_gear.h"
+#include "../src/test_utils.h"
 #include "../../src/representations/html/html_outline_representation.h"
 #include "../../src/mind/mind.h"
 #include "../../src/persistence/filesystem_persistence.h"
@@ -41,12 +41,16 @@ TEST(HtmlBenchmark, DISABLED_Outline)
     string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
     fileName.insert(0, getMindforgerGitHomePath());
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-hb-o.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind(config);
-    m8r::DummyHtmlColors dummyColors{};
+    m8r::HtmlColorsMock dummyColors{};
     m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(),dummyColors,nullptr};
     m8r::MarkdownOutlineRepresentation markdownRepresentation(mind.remind().getOntology(),nullptr);
     mind.think();

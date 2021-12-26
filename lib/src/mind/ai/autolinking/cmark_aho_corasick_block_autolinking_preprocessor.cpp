@@ -1,7 +1,7 @@
 /*
  cmark_aho_corasick_block_autolinking_preprocessor.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -81,10 +81,10 @@ using namespace std;
  */
 
 cmark_node* injectAstLinkNode(
-        cmark_node* srcNode,
-        cmark_node* node,
-        string& text)
-{
+    cmark_node* srcNode,
+    cmark_node* node,
+    string& text
+) {
     cmark_node* linkNode{cmark_node_new(CMARK_NODE_LINK)};
     cmark_node* txtNode{};
 
@@ -103,11 +103,13 @@ cmark_node* injectAstLinkNode(
 }
 
 cmark_node* injectAstTxtNode(
-        cmark_node* srcNode,
-        cmark_node* node,
-        string& text)
-{
+    cmark_node* srcNode,
+    cmark_node* node,
+    string& text
+) {
     cmark_node* txtNode{cmark_node_new(CMARK_NODE_TEXT)};
+
+    MF_DEBUG("       Inject TXT: >>>" << text << "<<<" << endl);
 
     cmark_node_set_literal(txtNode, text.c_str());
     if(node) {
@@ -116,6 +118,8 @@ cmark_node* injectAstTxtNode(
         cmark_node_insert_before(srcNode, txtNode);
     }
     text.clear();
+
+    MF_DEBUG("         TXT node: >>>" << txtNode << "<<<" << endl);
     return txtNode;
 }
 
@@ -177,9 +181,8 @@ void injectThingsLinks(cmark_node* srcNode, Mind& mind)
             char tChar{txt.size()==pre.size()?' ':txt.at(pre.size())};
             MF_DEBUG("    Match's trailing char: '" << tChar << "'" << endl);
             if(CmarkAhoCorasickBlockAutolinkingPreprocessor::TRAILING_CHARS.find(tChar) != string::npos
-                 ||
-               txt.size() == pre.size()) {
-
+               || txt.size() == pre.size()
+            ) {
                 // AST: add text node w/ content preceding link
                 // IMPROVE make this method
                 if(at.size()) {
@@ -278,9 +281,9 @@ CmarkAhoCorasickBlockAutolinkingPreprocessor::~CmarkAhoCorasickBlockAutolinkingP
 }
 
 void CmarkAhoCorasickBlockAutolinkingPreprocessor::process(
-        const vector<string*>& md,
-        string& amd)
-{
+    const vector<string*>& md,
+    string& amd
+) {
 #ifdef MF_MD_2_HTML_CMARK
 
 #ifdef DO_MF_DEBUG
@@ -353,7 +356,7 @@ void CmarkAhoCorasickBlockAutolinkingPreprocessor::process(
     }
 
 #ifdef DO_MF_DEBUG
-    MF_DEBUG("[Autolinking] output:" << endl << ">>>" << amd << "<<<" << endl);
+    MF_DEBUG("[Autolinking] output:" << endl << "  >>>" << amd << "<<<" << endl);
 
     auto end = chrono::high_resolution_clock::now();
     MF_DEBUG("[Autolinking] MD autolinked in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);

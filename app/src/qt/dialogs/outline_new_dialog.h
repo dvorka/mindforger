@@ -1,7 +1,7 @@
 /*
  outline_new_dialog.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -51,13 +51,14 @@ private:
     PreambleTab* preambleTab;
     AdvancedTab* advancedTab;
 
-    QDialogButtonBox *buttonBox;
+    QDialogButtonBox* buttonBox;
 
 public:
     explicit OutlineNewDialog(
-            const QString& memoryDirPath,
-            Ontology& ontology,
-            QWidget* parent);
+        const QString& memoryDirPath,
+        Ontology& ontology,
+        QWidget* parent
+    );
     OutlineNewDialog(const OutlineNewDialog&) = delete;
     OutlineNewDialog(const OutlineNewDialog&&) = delete;
     OutlineNewDialog &operator=(const OutlineNewDialog&) = delete;

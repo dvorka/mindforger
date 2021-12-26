@@ -1,7 +1,7 @@
 /*
  string-utils.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@
 #include <locale>
 #include <vector>
 
-#include "../config/config.h"
+#include "../definitions.h"
 #include "lang_utils.h"
 
 namespace m8r {
@@ -141,7 +141,16 @@ static inline std::string to_stringl(time_t x)
 {
   size_t length = static_cast<size_t>(snprintf(nullptr, 0, "%d", static_cast<int>(x)));
   char* buf = new char[length + 1];
-  snprintf(buf, length + 1, "%ld", x);
+  snprintf(
+      buf,
+      length + 1,
+#ifdef _WIN32
+      "%lld",
+#else
+      "%ld",
+#endif
+      x
+    );
   std::string str(buf);
   delete[] buf;
   return str;
@@ -162,6 +171,8 @@ static inline std::string stringIntFormat(std::string value, char thousandSep = 
 
     return value;
 }
+
+void replaceAll(const std::string& old_s, const std::string& new_s, std::string& s);
 
 } /* namespace*/
 

@@ -1,7 +1,7 @@
 /*
  cli_n_breadcrumbs_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@ class CliView : public QLineEdit
 
 private:
     CliAndBreadcrumbsView* cliAndBreadcrumps;
+
 public:
     explicit CliView(CliAndBreadcrumbsView* cliAndBreadcrumps, QWidget* parent);
     void keyPressEvent(QKeyEvent* event) override;
@@ -46,6 +47,7 @@ class CliAndBreadcrumbsView : public QWidget
     Q_OBJECT
 
     friend class CliAndBreadcrumbsPresenter;
+
 private:
     static const QStringList DEFAULT_CMDS;
 

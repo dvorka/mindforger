@@ -1,7 +1,7 @@
 /*
  main_window_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -18,7 +18,10 @@
 */
 #include "main_window_presenter.h"
 
+#include "kanban_column_presenter.h"
+
 using namespace std;
+using namespace m8r::filesystem;
 
 namespace m8r {
 
@@ -35,6 +38,10 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         = &htmlRepresentation->getMarkdownRepresentation();
     this->mdConfigRepresentation
         = new MarkdownConfigurationRepresentation{};
+    this->mdRepositoryConfigRepresentation
+        = new MarkdownRepositoryConfigurationRepresentation{};
+    this->mdDocumentRepresentation
+        = new MarkdownDocumentRepresentation{mind->getOntology()};
 
     // assemble presenters w/ UI
     statusBar = new StatusBarPresenter{view.getStatusBar(), mind};
@@ -43,7 +50,9 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     orloj = new OrlojPresenter{this, view.getOrloj(), mind};
 
     // initialize components
+    newLibraryDialog = new AddLibraryDialog{&view};
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
+    newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
     newOutlineDialog = new OutlineNewDialog{QString::fromStdString(config.getMemoryPath()), mind->getOntology(), &view};
     newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
     ftsDialog = new FtsDialog{&view};
@@ -55,15 +64,26 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     findNoteByTagDialog = new FindNoteByTagDialog{mind->remind().getOntology(), &view};
     refactorNoteToOutlineDialog = new RefactorNoteToOutlineDialog{&view};
     configDialog = new ConfigurationDialog{&view};
+    terminalDialog = new TerminalDialog{&view};
     insertImageDialog = new InsertImageDialog{&view};
     insertLinkDialog = new InsertLinkDialog{&view};
     rowsAndDepthDialog = new RowsAndDepthDialog(&view);
     newRepositoryDialog = new NewRepositoryDialog(&view);
     newFileDialog = new NewFileDialog(&view);
     exportOutlineToHtmlDialog
-       = new ExportFileDialog(tr("Export Notebook to HTML"),tr("Export"),QString::fromStdString(FILE_EXTENSION_HTML),&view);
-    exportMindToCsvDialog
-       = new ExportFileDialog(tr("Export Mind to CSV"),tr("Export"),QString::fromStdString(FILE_EXTENSION_CSV),&view);
+       = new ExportFileDialog(
+             tr("Export Notebook to HTML"),
+             tr("Export"),
+             QString::fromStdString(File::EXTENSION_HTML),
+             &view
+    );
+    exportMemoryToCsvDialog
+       = new ExportCsvFileDialog(
+             tr("Export Memory to CSV"),
+             tr("Export"),
+             QString::fromStdString(File::EXTENSION_CSV),
+             &view
+    );
 #ifdef MF_NER
     nerChooseTagsDialog = new NerChooseTagTypesDialog(&view);
     nerResultDialog = new NerResultDialog(&view);
@@ -72,6 +92,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     handleMindPreferences();
 
     // wire signals
+    QObject::connect(newLibraryDialog->getCreateButton(), SIGNAL(clicked()), this, SLOT(handleNewLibrary()));
     QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
     QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
     QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
@@ -82,6 +103,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(findOutlineByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
     QObject::connect(findNoteByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByTag()));
     QObject::connect(findNoteByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
+    QObject::connect(newOrganizerDialog, SIGNAL(createFinished()), this, SLOT(handleCreateOrganizer()));
     QObject::connect(refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
     QObject::connect(insertImageDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatImage()));
     QObject::connect(insertLinkDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatLink()));
@@ -89,7 +111,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
     QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
     QObject::connect(exportOutlineToHtmlDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineHtmlExport()));
-    QObject::connect(exportMindToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
+    QObject::connect(exportMemoryToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
     QObject::connect(
         orloj->getDashboard()->getView()->getNavigatorDashboardlet(), SIGNAL(clickToSwitchFacet()),
         this, SLOT(doActionViewKnowledgeGraphNavigator())
@@ -114,8 +136,14 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()), this, SLOT(doActionOutlineOrNoteNew()));
     QObject::connect(view.getToolBar()->actionOpenRepository, SIGNAL(triggered()), this, SLOT(doActionMindLearnRepository()));
     QObject::connect(view.getToolBar()->actionOpenFile, SIGNAL(triggered()), this, SLOT(doActionMindLearnFile()));
+#ifdef MF_DEPRECATED
     QObject::connect(view.getToolBar()->actionViewDashboard, SIGNAL(triggered()), this, SLOT(doActionViewDashboard()));
+#endif
+#ifdef ONE_ORGANIZER
     QObject::connect(view.getToolBar()->actionViewEisenhower, SIGNAL(triggered()), this, SLOT(doActionViewOrganizer()));
+#else
+    QObject::connect(view.getToolBar()->actionViewOrganizers, SIGNAL(triggered()), this, SLOT(doActionViewOrganizers()));
+#endif
     QObject::connect(view.getToolBar()->actionViewOutlines, SIGNAL(triggered()), this, SLOT(doActionViewOutlines()));
     QObject::connect(view.getToolBar()->actionViewNavigator, SIGNAL(triggered()), this, SLOT(doActionViewKnowledgeGraphNavigator()));
     QObject::connect(view.getToolBar()->actionViewTags, SIGNAL(triggered()), this, SLOT(doActionViewTagCloud()));
@@ -126,6 +154,10 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(view.getToolBar()->actionScope, SIGNAL(triggered()), this, SLOT(doActionMindTimeTagScope()));
     QObject::connect(view.getToolBar()->actionAdapt, SIGNAL(triggered()), this, SLOT(doActionMindPreferences()));
     QObject::connect(view.getToolBar()->actionHelp, SIGNAL(triggered()), this, SLOT(doActionHelpDocumentation()));
+    QObject::connect(
+        view.getToolBar(), SIGNAL(signalMainToolbarVisibilityChanged(bool)),
+        this, SLOT(slotMainToolbarVisibilityChanged(bool)));
+
 
 #ifdef MF_NER
     QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleFindNerEntities()));
@@ -167,13 +199,24 @@ MainWindowPresenter::~MainWindowPresenter()
     if(configDialog) delete configDialog;
     //if(findNoteByNameDialog) delete findNoteByNameDialog;
     if(insertImageDialog) delete insertImageDialog;
+    if(newLibraryDialog) delete newLibraryDialog;
 
     // TODO deletes
+    delete this->mdConfigRepresentation;
+    delete this->mdRepositoryConfigRepresentation;
+    delete this->mdDocumentRepresentation;
 }
 
+/**
+ * @brief Initial view assembly.
+ *
+ * This method builds initial view on MindForger boot.
+ */
 void MainWindowPresenter::showInitialView()
 {
     MF_DEBUG("Initial view to show " << mind->getOutlines().size() << " Os (scope is applied if active)" << endl);
+
+    static vector<Note*> emptyVector{};
 
     // UI
     if(mind->getOutlines().size()) {
@@ -199,7 +242,12 @@ void MainWindowPresenter::showInitialView()
                     vector<Note*> notes{};
                     orloj->showFacetRecentNotes(mind->getAllNotes(notes));
                 } else if(!string{START_TO_EISENHOWER_MATRIX}.compare(config.getStartupView())) {
-                    orloj->showFacetOrganizer(mind->getOutlines());
+                    orloj->showFacetEisenhowerMatrix(
+                         nullptr,
+                         emptyVector,
+                         mind->getOutlines(),
+                         emptyVector
+                    );
                 } else if(!string{START_TO_HOME_OUTLINE}.compare(config.getStartupView())) {
                     if(!doActionViewHome()) {
                         // fallback
@@ -254,7 +302,7 @@ void MainWindowPresenter::showInitialView()
     }
 }
 
-/* Link handling hints
+/* Link handling hints.
  *
  * PROBLEM:
  *
@@ -627,7 +675,9 @@ void MainWindowPresenter::doActionMindRelearn(QString path)
 {
     Repository* r = RepositoryIndexer::getRepositoryForPath(path.toStdString());
     if(r) {
-        config.setActiveRepository(config.addRepository(r));
+        config.setActiveRepository(
+            config.addRepository(r), *this->mdRepositoryConfigRepresentation
+        );
         // remember new repository
         mdConfigRepresentation->save(config);
         // learn and show
@@ -709,11 +759,18 @@ void MainWindowPresenter::slotHandleFts()
     }
 }
 
+void MainWindowPresenter::slotMainToolbarVisibilityChanged(bool visibility)
+{
+    MF_DEBUG("Main toolbar visibility changed: " << boolalpha << visibility << endl);
+    this->config.setUiShowToolbar(visibility);
+    mdConfigRepresentation->save(config);
+}
+
 void MainWindowPresenter::doActionFindOutlineByName()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> os{mind->getOutlines()};
-    mind->remind().sortByName(os);
+    Outline::sortByRead(os);
     vector<Thing*> es{os.begin(),os.end()};
 
     findOutlineByNameDialog->show(es);
@@ -749,7 +806,7 @@ void MainWindowPresenter::doActionFindOutlineByTag()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> os{mind->getOutlines()};
-    mind->remind().sortByName(os);
+    Outline::sortByName(os);
     vector<Thing*> outlines{os.begin(),os.end()};
 
     findOutlineByTagDialog->show(outlines);
@@ -811,7 +868,7 @@ void MainWindowPresenter::doSwitchFindByTagDialog(bool toFindNotesByTag)
         findNoteByTagDialog->getChosenTags(tags);
 
         vector<Outline*> os{mind->getOutlines()};
-        mind->remind().sortByName(os);
+        Outline::sortByName(os);
         vector<Thing*> outlines{os.begin(),os.end()};
         findOutlineByTagDialog->show(outlines, tags);
     }
@@ -841,7 +898,7 @@ void MainWindowPresenter::doActionRefactorNoteToOutline()
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> os{mind->getOutlines()};
-    mind->remind().sortByName(os);
+    Outline::sortByName(os);
     vector<Thing*> es{os.begin(),os.end()};
 
     refactorNoteToOutlineDialog->show(es);
@@ -875,12 +932,14 @@ void MainWindowPresenter::doActionFindNoteByName()
         findNoteByNameDialog->setWindowTitle(tr("Find Note by Name in Notebook"));
         findNoteByNameDialog->setScope(orloj->getOutlineView()->getCurrentOutline());
         vector<Note*> allNotes(findNoteByNameDialog->getScope()->getNotes());
+        Outline::sortByRead(allNotes);
         findNoteByNameDialog->show(allNotes);
     } else {
         findNoteByNameDialog->setWindowTitle(tr("Find Note by Name"));
         findNoteByNameDialog->clearScope();
         vector<Note*> allNotes{};
         mind->getAllNotes(allNotes);
+        Outline::sortByRead(allNotes);
         findNoteByNameDialog->show(allNotes);
     }
 }
@@ -1073,10 +1132,25 @@ void MainWindowPresenter::doActionViewDashboard()
     }
 }
 
+void MainWindowPresenter::sortAndSaveOrganizersConfig()
+{
+    if(config.hasRepositoryConfiguration()) {
+        config.getRepositoryConfiguration().sortOrganizers();
+        getConfigRepresentation()->save(config);
+    }
+}
+
+void MainWindowPresenter::doActionViewOrganizers()
+{
+    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
+        orloj->showFacetOrganizerList(config.getRepositoryConfiguration().getOrganizers());
+    }
+}
+
 void MainWindowPresenter::doActionViewOrganizer()
 {
     if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-        orloj->showFacetOrganizer(mind->getOutlines());
+        orloj->slotShowSelectedOrganizer();
     }
 }
 
@@ -1385,7 +1459,7 @@ void MainWindowPresenter::doActionFormatToc()
 // IMPROVE: consolidate methods which just insert a (semi)static string
 void MainWindowPresenter::doActionFormatTimestamp()
 {
-    QString text = QString::fromStdString(datetimeToString(datetimeNow()));
+    QString text{QString::fromStdString(datetimeToString(datetimeNow()))};
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
         orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false, text.size());
@@ -1545,7 +1619,7 @@ void MainWindowPresenter::doActionFormatLinkOrImage(QString link)
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> oss{mind->getOutlines()};
-    mind->remind().sortByName(oss);
+    Outline::sortByName(oss);
     vector<Thing*> os{oss.begin(), oss.end()};
 
     vector<Note*> ns{};
@@ -1613,7 +1687,7 @@ void MainWindowPresenter::copyLinkOrImageToRepository(const string& srcPath, QSt
         } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
             oPath = orloj->getOutlineHeaderEdit()->getCurrentOutline()->getKey();
         }
-        if(stringEndsWith(oPath, FILE_EXTENSION_MD_MD)) {
+        if(stringEndsWith(oPath, File::EXTENSION_MD_MD)) {
             pathPrefix = QString::fromStdString(oPath.substr(0, oPath.length()-3));
         } else {
             pathPrefix = QString::fromStdString(oPath);
@@ -1669,7 +1743,7 @@ void MainWindowPresenter::doActionEditPasteImageData(QImage image)
         oPath = orloj->getOutlineHeaderEdit()->getCurrentOutline()->getKey();
     }
     QString pathPrefix{};
-    if(stringEndsWith(oPath, FILE_EXTENSION_MD_MD)) {
+    if(stringEndsWith(oPath, File::EXTENSION_MD_MD)) {
         pathPrefix = QString::fromStdString(oPath.substr(0, oPath.length()-3));
     } else {
         pathPrefix = QString::fromStdString(oPath);
@@ -2001,15 +2075,35 @@ void MainWindowPresenter::handleOutlineHtmlExport()
 
 void MainWindowPresenter::doActionMindCsvExport()
 {
-    exportMindToCsvDialog->show();
+    exportMemoryToCsvDialog->show();
 }
 
 void MainWindowPresenter::handleMindCsvExport()
 {
     if(isDirectoryOrFileExists(newFileDialog->getFilePath().toStdString().c_str())) {
-        QMessageBox::critical(&view, tr("Export Error"), tr("Specified file path already exists!"));
+        QMessageBox::critical(
+            &view,
+            tr("Export Error"),
+            tr("Specified file path already exists!")
+        );
     } else {
-        mind->remind().exportToCsv(exportMindToCsvDialog->getFilePath().toStdString());
+        StatusBarProgressCallbackCtx callbackCtx{statusBar};
+        map<const Tag*,int> tagsCardinality{};
+        mind->getTagsCardinality(tagsCardinality);
+        mind->remind().exportToCsv(
+            exportMemoryToCsvDialog->getFilePath().toStdString(),
+            tagsCardinality,
+            exportMemoryToCsvDialog->isOheTags()
+            ?exportMemoryToCsvDialog->getOheTagsCardinality()
+            :-1,
+            &callbackCtx
+            //[](float progress){ cout << "Export progress: " << progress << endl; }
+        );
+        statusBar->showInfo(
+            "Export to CSV file '"
+            + exportMemoryToCsvDialog->getFilePath().toStdString()
+            + "' successfully finished"
+        );
     }
 }
 
@@ -2098,6 +2192,131 @@ void MainWindowPresenter::doActionNoteEdit()
 #else
     QMessageBox::critical(&view, tr("Edit Note"), tr("Please select a Note to edit in the Notebook."));
 #endif
+}
+
+void MainWindowPresenter::doActionNoteExternalEdit()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+    ) {
+        Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+        if(note) {
+            // check whether external editor is configured & open preferences if not
+            if(!config.isExternalEditorCmd()) {
+                QMessageBox::critical(
+                    &view,
+                    tr("Edit Note with External Editor Error"),
+                    tr("External editor command is not configured in preferences (Editor tab).")
+                );
+
+                // let user to configure external editor
+                configDialog->show();
+
+                return;
+            }
+
+            // export Note to file in temp directory
+            string tempFilePath{getNewTempFilePath(File::EXTENSION_MD_MD)};
+            string noteStrMd{
+                "# " + note->getName() + "\n"
+                + note->getDescriptionAsString()
+            };
+            stringToFile(tempFilePath, noteStrMd);
+
+            // prepare dialog message with command which will be run (file path)
+            string cmd{config.getExternalEditorCmd() + " " + tempFilePath};
+
+            // open modal dialog to block MindForger usage
+#ifdef MF_MODAL_DIALOG_DOES_NOT_WORK
+            // PROBLEM: blocking
+            QMessageBox::information(
+                &view,
+                tr("Edit Note with External Editor"),
+                tr("Running command: '%1'").arg(cmd.c_str()),
+                QMessageBox::NoButton
+            );
+
+            // PROBLEM: black background ~ dialog not rendered
+            QDialog* dialog = new AddLibraryDialog(&view);
+            Qt::WindowFlags flags = dialog->windowFlags();
+            dialog->setWindowFlags(flags | Qt::Tool);
+            dialog->show();
+            // force processing of all events and refresh
+            QCoreApplication::processEvents();
+#endif
+            this->statusBar->showInfo(
+                tr(
+                    "Running command: '%1'. Close external editor to return "
+                    "control back to MindForger."
+                ).arg(cmd.c_str())
+            );
+
+            // run external editor
+            if(!system(NULL)) {
+                string errorMessage{
+                    "Error: unable to run external editor as C++ command processor "
+                    "is not available"
+                };
+                MF_DEBUG(errorMessage);
+                statusBar->showError(errorMessage);
+                QMessageBox::critical(
+                    &view,
+                    tr("Edit Note with External Editor Error"),
+                    tr(errorMessage.c_str())
+                );
+                return;
+            }
+
+            MF_DEBUG("Running external editor: '" << cmd << "'" << endl);
+            int statusCode = system(cmd.c_str());
+            MF_DEBUG("External editor finished with status: " << statusCode << endl);
+            if(statusCode) {
+                cerr << "External editor failed with status: " << statusCode << endl;
+            }
+
+            // paste text BACK to Note
+            if(isFile(tempFilePath.c_str())) {
+                vector<string*> description{};
+                size_t fileSize{};
+                fileToLines(&tempFilePath, description, fileSize);
+
+                // kill the first line if title
+                if(description.size()
+                   && description[0]
+                   && description[0]->size() > 2
+                   && description[0]->at(0) == '#'
+                   && description[0]->at(1) == ' '
+                ) {
+                    delete description[0];
+                    description.erase(description.begin());
+                }
+
+                // update note
+                if(description.size()) {
+                    note->setDescription(description);
+                } else {
+                    note->clearDescription();
+                }
+            }
+
+            // update view
+            this->orloj->showFacetNoteView(note);
+
+            // close modal dialog
+            statusBar->clear();
+
+            return;
+        }
+    }
+
+    QMessageBox::critical(
+        &view,
+        tr("Edit Note with External Editor"),
+        tr("Please select a Note to edit in the Notebook.")
+    );
 }
 
 void MainWindowPresenter::doActionNoteHoist()
@@ -2207,21 +2426,47 @@ void MainWindowPresenter::doActionNoteExtract()
     }
 }
 
+void MainWindowPresenter::doActionSpellCheck()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)
+         ||
+       orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+    ) {
+        if(config.isUiEditorLiveSpellCheck()) {
+            NoteEditorView* editor = orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)
+                ? orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()
+                : orloj->getNoteEdit()->getView()->getNoteEditor();
+            editor->checkDocumentSpelling();
+        }
+    }
+}
+
 void MainWindowPresenter::doActionNoteClone()
 {
     Note* n = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
     if(n) {
-        Note* clonedNote = mind->noteClone(orloj->getOutlineView()->getCurrentOutline()->getKey(), n);
-        if(clonedNote) {
-            mind->remind().remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
-            // IMPROVE smarter refresh of outline tree (do less then overall load)
-            orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
-            // select Note in the tree
-            QModelIndex idx
-                = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(n->getOutline()->getNoteOffset(clonedNote), 0);
-            orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
-        } else {
-            QMessageBox::critical(&view, tr("Clone Note"), tr("Failed to clone Note!"));
+        QMessageBox::StandardButton choice;
+        choice = QMessageBox::question(
+            &view,
+            tr("Clone Note"),
+            tr("Do you want to clone Note '") + QString::fromStdString(n->getName()) + tr("' including its child notes?'?"),
+            QMessageBox::StandardButton::Yes | QMessageBox::StandardButton::No | QMessageBox::StandardButton::Cancel
+        );
+
+        if(QMessageBox::StandardButton::Cancel != choice) {
+            bool deep = choice == QMessageBox::Yes;
+            Note* clonedNote = mind->noteClone(orloj->getOutlineView()->getCurrentOutline()->getKey(), n, deep);
+            if(clonedNote) {
+                mind->remind().remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
+                // IMPROVE smarter refresh of outline tree (do less then overall load)
+                orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+                // select Note in the tree
+                QModelIndex idx
+                    = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(n->getOutline()->getNoteOffset(clonedNote), 0);
+                orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
+            } else {
+                QMessageBox::critical(&view, tr("Clone Note"), tr("Failed to clone Note!"));
+            }
         }
     } else {
         QMessageBox::critical(&view, tr("Clone Note"), tr("Please select a Note to be cloned."));
@@ -2459,46 +2704,439 @@ void MainWindowPresenter::handleMindPreferences()
 
     view.getOrloj()->getNoteEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
     view.getOrloj()->getOutlineHeaderEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
+
+    // IMPROVE: highlighter should NOT reference lib configuration to honor MVP, spell check
+    // setting to be pushed to highlighter from here
+}
+
+void MainWindowPresenter::doActionMindTerminal()
+{
+    terminalDialog->show();
+}
+
+void MainWindowPresenter::doActionKnowledgeWikipedia()
+{
+    QDesktopServices::openUrl(QUrl{"https://en.wikipedia.org/"});
+}
+
+void MainWindowPresenter::doActionKnowledgeArxiv()
+{
+    QDesktopServices::openUrl(QUrl{"https://arxiv.org/search/cs"});
+}
+
+void MainWindowPresenter::doActionLibraryNew()
+{
+    newLibraryDialog->show();
+}
+
+void MainWindowPresenter::handleNewLibrary()
+{
+    // check that filesystem path exists
+    string uri{newLibraryDialog->getLibraryUriText().toStdString()};
+    if(!isDirectory(uri.c_str())) {
+        QMessageBox::critical(
+            &view,
+            tr("Add Library Error"),
+            tr("Library directory doesn't exist!")
+        );
+        return;
+    }
+
+    // TODO check that it's new path (SAFE library update is different operation)
+
+    newLibraryDialog->hide();
+
+    // TODO add library to repository configuration
+
+    // TODO index library documents
+    FilesystemInformationSource informationSource{
+        uri,
+        *orloj->getMind(),
+        *mdDocumentRepresentation,
+    };
+
+    FilesystemInformationSource::ErrorCode code = informationSource.indexToMemory(
+        *config.getActiveRepository()
+    );
+    if(FilesystemInformationSource::ErrorCode::LIBRARY_ALREADY_EXISTS == code) {
+        QMessageBox::critical(
+            &view,
+            tr("Add Library Error"),
+            tr("Library already indexed - use update action to reindex documents.")
+        );
+        return;
+    }
+    if(FilesystemInformationSource::ErrorCode::SUCCESS != code) {
+        QMessageBox::critical(
+            &view,
+            tr("Add Library Error"),
+            tr("Unable to index documents on library path - either memory directory "
+               "doesn't exist or not in MindForger repository mode."
+            )
+        );
+        return;
+    }
+
+    // TODO Library menu enabled in case of MF/repository only
+
+    MF_DEBUG("New Library: " << uri << " has been added to MindForger" << endl);
+
+    // show Os view
+    orloj->showFacetOutlineList(mind->getOutlines());
+}
+
+void MainWindowPresenter::doActionOrganizerNew()
+{
+    newOrganizerDialog->show(mind->getOutlines());
+}
+
+void MainWindowPresenter::handleCreateOrganizer()
+{
+    static vector<Note*> organizerOutlinesAndNotes{};
+    organizerOutlinesAndNotes.clear();
+    static vector<Note*> organizerNotes{};
+    organizerNotes.clear();
+
+    Organizer* o{nullptr};
+    if(newOrganizerDialog->getOrganizerToEdit()) {
+        MF_DEBUG("Updating organizer...");
+        o = newOrganizerDialog->getOrganizerToEdit();
+        o->setName(newOrganizerDialog->getOrganizerName().toStdString());
+    } else {
+        MF_DEBUG("Creating organizer...");
+        if(Organizer::OrganizerType::EISENHOWER_MATRIX == newOrganizerDialog->getOrganizerType()) {
+            o = new EisenhowerMatrix(
+                newOrganizerDialog->getOrganizerName().toStdString()
+            );
+            o->setKey(EisenhowerMatrix::createEisenhowerMatrixKey());
+        } else {
+            o = new Kanban(newOrganizerDialog->getOrganizerName().toStdString());
+            o->setKey(Kanban::createKanbanKey());
+        }
+    }
+
+    // tags
+    o->tagsUlQuadrant.clear();
+    o->tagsLlQuadrant.clear();
+    o->tagsUrQuadrant.clear();
+    o->tagsLrQuadrant.clear();
+
+    o->setUpperLeftTags(
+        newOrganizerDialog->getUpperLeftChosenTags(
+            o->tagsUlQuadrant
+        )
+    );
+    o->setUpperRightTags(
+        newOrganizerDialog->getUpperRightChosenTags(
+            o->tagsUrQuadrant
+        )
+    );
+    o->setLowerLeftTags(
+        newOrganizerDialog->getLowerLeftChosenTags(
+            o->tagsLlQuadrant
+        )
+    );
+    o->setLowerRightTags(
+        newOrganizerDialog->getLowerRightChosenTags(
+            o->tagsLrQuadrant
+        )
+    );
+    // filter
+    o->setFilterBy(newOrganizerDialog->getFilterBy());
+    // sort
+    if(Organizer::OrganizerType::EISENHOWER_MATRIX == newOrganizerDialog->getOrganizerType()) {
+        dynamic_cast<EisenhowerMatrix*>(o)->setSortBy(newOrganizerDialog->getSortBy());
+    }
+    // scope
+    o->setOutlineScope(newOrganizerDialog->getOutlineScope());
+
+    // add organizer & save configuration
+    if(!newOrganizerDialog->getOrganizerToEdit()) {
+        config.getRepositoryConfiguration().addOrganizer(o);        
+    }
+    sortAndSaveOrganizersConfig();
+
+    newOrganizerDialog->hide();
+
+    // refresh organizer table view
+    if(!newOrganizerDialog->getOrganizerToEdit()) {
+        orloj->showFacetOrganizerList(config.getRepositoryConfiguration().getOrganizers());
+    } else {
+        if(Organizer::OrganizerType::KANBAN == newOrganizerDialog->getOrganizerToEdit()->getOrganizerType()) {
+            orloj->showFacetKanban(
+                static_cast<Kanban*>(o),
+                mind->getAllNotes(organizerOutlinesAndNotes, true, true),
+                mind->getOutlines(),
+                mind->getAllNotes(organizerNotes, true, false)
+            );
+        } else {
+            orloj->showFacetEisenhowerMatrix(
+                o,
+                mind->getAllNotes(organizerOutlinesAndNotes, true, true),
+                mind->getOutlines(),
+                mind->getAllNotes(organizerNotes, true, false)
+            );
+        }
+    }
+}
+
+void MainWindowPresenter::doActionOrganizerEdit()
+{
+    // no need to check view - this action is available only when organizer is opened
+    Organizer* o{nullptr};
+    if(OrlojPresenterFacets::FACET_KANBAN == orloj->getFacet()) {
+        o = orloj->getKanban()->getKanban();
+    } else {
+        o = orloj->getOrganizer()->getOrganizer();
+    }
+
+    // Eisenhower matrix organizer cannot be edited
+    if(o->getKey() == EisenhowerMatrix::KEY_EISENHOWER_MATRIX) {
+        QMessageBox::critical(
+            orloj->getOrganizer()->getView(),
+            tr("Organizer Update Error"),
+            tr("Eisenhower Matrix organizer is built-in and cannot be edited - please create or update a custom organizer.")
+        );
+        return;
+    }
+
+    // lazy lookup of O scope
+    Outline* oScopeOutline{nullptr};
+    if(o->getOutlineScope().size()) {
+        oScopeOutline=mind->remind().getOutline(o->getOutlineScope());
+        // ensures that if O is deleted, it will be detected
+        if(!oScopeOutline) {
+            o->clearOutlineScope();
+            mdConfigRepresentation->save(config);
+        }
+    }
+    newOrganizerDialog->show(mind->getOutlines(), nullptr, o, oScopeOutline);
+}
+
+void MainWindowPresenter::doActionOrganizerClone()
+{
+    // no need to check view - this action is available only when organizer is opened
+    Organizer* o = orloj->getOrganizer()->getOrganizer();
+
+    // Eisenhower matrix organizer cannot be cloned
+    if(o->getKey() == EisenhowerMatrix::KEY_EISENHOWER_MATRIX) {
+        QMessageBox::critical(
+            orloj->getOrganizer()->getView(),
+            tr("Organizer Clone Error"),
+            tr("Eisenhower Matrix organizer is built-in and cannot be cloned - please create or update a custom organizer.")
+        );
+        return;
+    }
+
+    Organizer* oClone = new Organizer{*o};
+    o->setName(o->getName()+" Clone");
+
+    config.getRepositoryConfiguration().addOrganizer(oClone);
+    getConfigRepresentation()->save(config);
+}
+
+void MainWindowPresenter::doActionOrganizerFocusToNextVisibleQuadrant()
+{
+    if(OrlojPresenterFacets::FACET_KANBAN == orloj->getFacet()) {
+        orloj->getKanban()->focusToNextVisibleColumn();
+    } else {
+        orloj->getOrganizer()->focusToNextVisibleQuadrant();
+    }
+}
+
+void MainWindowPresenter::doActionOrganizerFocusToPreviousVisibleQuadrant()
+{
+    if(OrlojPresenterFacets::FACET_KANBAN == orloj->getFacet()) {
+        orloj->getKanban()->focusToPreviousVisibleColumn();
+    } else {
+        orloj->getOrganizer()->focusToPreviousVisibleQuadrant();
+    }
+}
+
+void doActionOrganizerMoveNoteCommon(
+    Note* note,
+    OrganizerQuadrantPresenter* presenter,
+    OrlojPresenter* orloj
+) {
+    static vector<Note*> organizerOutlinesAndNotes{};
+    static vector<Note*> organizerNotes{};
+
+    if(presenter) {
+        // persist modified N
+        orloj->getMind()->remember(note->getOutlineKey());
+
+        // refresh view
+        organizerOutlinesAndNotes.clear();
+        organizerNotes.clear();
+        orloj->getOrganizer()->refresh(
+            orloj->getOrganizer()->getOrganizer(),
+            orloj->getMind()->getAllNotes(organizerOutlinesAndNotes, true, true),
+            orloj->getMind()->getOutlines(),
+            orloj->getMind()->getAllNotes(organizerNotes, true, false),
+            false
+        );
+
+        // give target N column focus
+        presenter->getView()->setFocus();
+    }
+}
+
+void doActionKanbanMoveNoteCommon(
+    Note* note,
+    KanbanColumnPresenter* presenter,
+    OrlojPresenter* orloj
+) {
+    static vector<Note*> organizerOutlinesAndNotes{};
+    static vector<Note*> organizerNotes{};
+
+    if(presenter) {
+        // persist modified N
+        orloj->getMind()->remember(note->getOutlineKey());
+
+        // refresh view
+        organizerOutlinesAndNotes.clear();
+        organizerNotes.clear();
+        orloj->getKanban()->refresh(
+            orloj->getKanban()->getKanban(),
+            orloj->getMind()->getAllNotes(organizerOutlinesAndNotes, true, true),
+            orloj->getMind()->getOutlines(),
+            orloj->getMind()->getAllNotes(organizerNotes, true, false),
+            false
+        );
+
+        // give target N column focus
+        presenter->getView()->setFocus();
+    }
+}
+
+void MainWindowPresenter::doActionOrganizerMoveNoteToNextVisibleQuadrant(Note* note)
+{
+    if(OrlojPresenterFacets::FACET_KANBAN == orloj->getFacet()) {
+        doActionKanbanMoveNoteCommon(
+            note,
+            orloj->getKanban()->moveToNextVisibleColumn(note),
+            orloj
+        );
+    } else {
+        if(!EisenhowerMatrix::isEisenhowMatrixOrganizer(orloj->getOrganizer()->getOrganizer())) {
+            doActionOrganizerMoveNoteCommon(
+                note,
+                orloj->getOrganizer()->moveToNextVisibleQuadrant(note),
+                orloj
+            );
+        } else {
+            statusBar->showError("Notebooks/notes cannot be moved around quadrants of Eisenhower Matrix");
+        }
+    }
+}
+
+void MainWindowPresenter::doActionOrganizerMoveNoteToPreviousVisibleQuadrant(Note* note)
+{
+    if(OrlojPresenterFacets::FACET_KANBAN == orloj->getFacet()) {
+        doActionKanbanMoveNoteCommon(
+            note,
+            orloj->getKanban()->moveToPreviousVisibleColumn(note),
+            orloj
+        );
+    } else {
+        if(!EisenhowerMatrix::isEisenhowMatrixOrganizer(orloj->getOrganizer()->getOrganizer())) {
+            doActionOrganizerMoveNoteCommon(
+                note,
+                orloj->getOrganizer()->moveToPreviousVisibleQuadrant(note),
+                orloj
+            );
+        } else {
+            statusBar->showError("Notebooks/notes cannot be moved around quadrants of Eisenhower Matrix");
+        }
+    }
+}
+
+void MainWindowPresenter::doActionOrganizerForget()
+{
+    Organizer* o{nullptr};
+
+    // no need to check view - this action is available only when organizer is opened
+    if(OrlojPresenterFacets::FACET_KANBAN == orloj->getFacet()) {
+        o = orloj->getKanban()->getKanban();
+    } else {
+        o = orloj->getOrganizer()->getOrganizer();
+    }
+
+    if(o->getKey() != EisenhowerMatrix::KEY_EISENHOWER_MATRIX) {
+        QMessageBox::StandardButton choice;
+        choice = QMessageBox::question(
+            &view,
+            tr("Forget Organizer"),
+            tr("Do you really want to forget '") + QString::fromStdString(o->getName()) + tr("' Organizer?")
+        );
+        if (choice == QMessageBox::Yes) {
+            config.getRepositoryConfiguration().removeOrganizer(o);
+            getConfigRepresentation()->save(config);
+            orloj->showFacetOrganizerList(config.getRepositoryConfiguration().getOrganizers());
+        } // else do nothing
+    } else {
+        QMessageBox::critical(
+            &view,
+            tr("Delete Organizer"),
+            tr("Eisenhower Matrix is built-in and cannot be deleted - only custom organizers can.")
+        );
+    }
 }
 
 void MainWindowPresenter::doActionHelpDocumentation()
 {
-    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md"});
+    QDesktopServices::openUrl(
+        QUrl{"https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpWeb()
 {
-    QDesktopServices::openUrl(QUrl{"http://www.mindforger.com"});
+    QDesktopServices::openUrl(
+        QUrl{"http://www.mindforger.com"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpMarkdown()
 {
-    QDesktopServices::openUrl(QUrl{"https://guides.github.com/features/mastering-markdown/"});
+    QDesktopServices::openUrl(
+        QUrl{"https://guides.github.com/features/mastering-markdown/"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpDiagrams()
 {
-    QDesktopServices::openUrl(QUrl{"https://mermaid-js.github.io/mermaid/#/"});
+    QDesktopServices::openUrl(
+        QUrl{"https://mermaid-js.github.io/mermaid/#/"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpMathLivePreview()
 {
-    QDesktopServices::openUrl(QUrl{"https://www.mathjax.org/#demo"});
+    QDesktopServices::openUrl(
+        QUrl{"https://www.mathjax.org/#demo"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpMathQuickReference()
 {
-    QDesktopServices::openUrl(QUrl{"https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference"});
+    QDesktopServices::openUrl(
+        QUrl{"https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpReportBug()
 {
-    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger/issues"});
+    QDesktopServices::openUrl(
+        QUrl{"https://github.com/dvorka/mindforger/issues"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpCheckForUpdates()
 {
-    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger/releases"});
+    QDesktopServices::openUrl(
+        QUrl{"https://github.com/dvorka/mindforger/releases"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpAboutMindForger()
@@ -2526,7 +3164,7 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
             "<br>Contact me at <a href='mailto:martin.dvorak@mindforger.com'>&lt;martin.dvorak@mindforger.com&gt;</a>"
             " or see <a href='https://www.mindforger.com'>www.mindforger.com</a> for more information."
             "<br>"
-            "<br>Copyright (C) 2016-2020 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/blob/master/CREDITS.md'>contributors</a>."
+            "<br>Copyright (C) 2016-2022 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/blob/master/CREDITS.md'>contributors</a>."
         });
 }
 

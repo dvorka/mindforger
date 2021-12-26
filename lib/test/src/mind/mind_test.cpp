@@ -1,7 +1,7 @@
 /*
  mind_test.cpp     MindForger mind test
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -144,10 +144,14 @@ TEST(MindTestCase, LearnAndRememberMindForgerRepository) {
     to += "/memory/outline.md";
     m8r::copyFile(from,to);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance(); config.clear();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mtc-larmfr.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     cout << "Loading repository: " << config.getActiveRepository()->getPath() << endl;
 
     m8r::Mind mind(config);
@@ -198,19 +202,22 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
         false);
 
     // 1/3 learn
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mtc-lal.md");
-    config.setActiveRepository(config.addRepository(repository));
+    config.setActiveRepository(
+        config.addRepository(repository), repositoryConfigRepresentation
+    );
     cout << endl << "Active repository:" << endl << "  " << config.getActiveRepository()->getDir();
     cout << endl << "Repositories[" << config.getRepositories().size() << "]:";
 
     m8r::Mind mind(config);
     m8r::Memory& memory = mind.remind();
 
-    EXPECT_EQ(2, memory.getOntology().getOutlineTypes().size());
+    EXPECT_EQ(3, memory.getOntology().getOutlineTypes().size());
     EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
-    EXPECT_EQ(13, memory.getOntology().getTags().size());
+    EXPECT_EQ(14, memory.getOntology().getTags().size());
 
     mind.learn();
     mind.think().get();
@@ -222,9 +229,9 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(3, memory.getOutlines().size());
     EXPECT_EQ(3, memory.getOutlinesCount());
     EXPECT_EQ(8, memory.getNotesCount());
-    EXPECT_EQ(2, memory.getOntology().getOutlineTypes().size());
+    EXPECT_EQ(3, memory.getOntology().getOutlineTypes().size());
     EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
-    EXPECT_EQ(16, memory.getOntology().getTags().size());
+    EXPECT_EQ(17, memory.getOntology().getTags().size());
 
     // 2/3 amnesia - assert mind and memory cleaned (+Valgrind memory check)
     mind.amnesia();
@@ -234,9 +241,10 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(0, memory.getOutlines().size());
     EXPECT_EQ(0, memory.getOutlinesCount());
     EXPECT_EQ(0, memory.getNotesCount());
-    EXPECT_EQ(2, memory.getOntology().getOutlineTypes().size());
+    EXPECT_EQ(3, memory.getOntology().getOutlineTypes().size());
     EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
-    EXPECT_EQ(16, memory.getOntology().getTags().size()); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
+    // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
+    EXPECT_EQ(17, memory.getOntology().getTags().size());
 
     // 3/3 learn - MARKDOWN repository (not MINDFORGER repository as above)
     repositoryPath.assign("/tmp/mf-unit-amnesia");
@@ -282,7 +290,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
         m8r::Repository::RepositoryMode::REPOSITORY,
         "",
         false);
-    config.setActiveRepository(config.addRepository(repository));
+    config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
     mind.learn();
     mind.think().get();
 
@@ -292,9 +300,10 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(4, memory.getNotesCount());
     EXPECT_EQ(0, memory.getStencils(m8r::ResourceType::OUTLINE).size());
     EXPECT_EQ(0, memory.getStencils(m8r::ResourceType::NOTE).size());
-    EXPECT_EQ(2, memory.getOntology().getOutlineTypes().size());
+    EXPECT_EQ(3, memory.getOntology().getOutlineTypes().size());
     EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
-    EXPECT_EQ(16, memory.getOntology().getTags().size()); // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
+    // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
+    EXPECT_EQ(17, memory.getOntology().getTags().size());
 }
 
 TEST(MindTestCase, CommonWordsBlacklist) {

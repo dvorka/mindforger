@@ -1,6 +1,6 @@
 # mindforger.pro     Qt project file for MindForger
 #
-# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,13 +18,17 @@
 #########################################################################
 #
 # QMake build options:
+#
 #   qmake CONFIG+=mfwebengine       ... build project w/ Qt WebEngine instead of Qt WebKit
-#   qmake CONFIG+=mfner             ... build project w/ NER and link dlib/MITIE
+#   qmake CONFIG+=mfoldhunspell     ... force use of DEPRECATED Hunspell API
 #   qmake CONFIG+=mfnomd2html       ... build project w/o Markdown 2 HTML library (cmark-gfm)
 #   qmake CONFIG+=mfnocxx           ... do NOT define CXX i.e. g++
 #   qmake CONFIG+=mfnoccache        ... do NOT use ccache to build the project
 #   qmake CONFIG+=mfdebug           ... show debug messages + include WIP code
-#   qmake CONFIG+=mfunits           ... options to run unit tests
+#   qmake CONFIG+=mfunits           ... option to run unit tests
+#   qmake CONFIG+=mfner             ... DEPRECATED: build project w/ NER and link dlib/MITIE
+#
+# Warning: DEPRECATED build options will be removed in the next major release.
 #
 #########################################################################
 
@@ -43,20 +47,20 @@ app.depends = lib
 #IMPORTANT: binfile MUST be specified in app/app.pro (project next to/that builds binary)
 
 docfiles.files += doc/*
-docfiles.path = /usr/share/doc/mindforger/
+docfiles.path = $$PREFIX/share/doc/mindforger/
 INSTALLS += docfiles
 
 manfiles.files += man/*
-manfiles.path = /usr/share/man/man1/
+manfiles.path = $$PREFIX/share/man/man1/
 INSTALLS += manfiles
 
 iconfiles.files += app/resources/icons/*
-iconfiles.path = /usr/share/icons/mindforger/
+iconfiles.path = $$PREFIX/share/icons/mindforger/
 INSTALLS += iconfiles
 
 # experiment w/ file
 shortcutfiles.files += app/resources/gnome-shell/mindforger.desktop
-shortcutfiles.path = /usr/share/applications/
+shortcutfiles.path = $$PREFIX/share/applications/
 INSTALLS += shortcutfiles
 
 # eof

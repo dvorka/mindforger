@@ -1,7 +1,7 @@
 /*
  outline_test.cpp     MindForger test
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -45,10 +45,14 @@ TEST(OutlineTestCase, NewAndDeleteOutline) {
     string oContent{"# Test Outline\n\nOutline text.\n\n## Note 1\nNote 1 text.\n"};
     m8r::stringToFile(oFile,oContent);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-otc-nado.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind{config};
     mind.learn();
     mind.think().get();
@@ -73,10 +77,14 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
     string stencilContent{"# Stencil Test Outline\n\nOutline text.\n\n## Stencil Note 1\nNote 1 text.\n\n##Stencil Note 2\nNote 2 text.\n"};
     m8r::stringToFile(stencilFile,stencilContent);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-otc-nofs.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.learn();
@@ -91,14 +99,15 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
     // IMPROVE constructor call is WRONG > complete parameters
     string name{"MIND's stencil Outline"};
     mind.outlineNew(
-                &name,
-                mind.getOntology().findOrCreateOutlineType(m8r::OutlineType::KeyOutline()),
-                1,
-                2,
-                55,
-                &tags,
-                nullptr,
-                stencil);
+        &name,
+        mind.getOntology().findOrCreateOutlineType(m8r::OutlineType::KeyOutline()),
+        1,
+        2,
+        55,
+        &tags,
+        nullptr,
+        stencil
+    );
 
     // create stencil MANUALLY (stencil file does NOT have to exist)
     unique_ptr<m8r::Stencil> outlineStencil{
@@ -110,14 +119,15 @@ TEST(OutlineTestCase, NewOutlineFromStencil) {
     tags.clear();
     tags.push_back(mind.getOntology().findOrCreateTag(m8r::Tag::KeyImportant()));
     mind.outlineNew(
-                &name,
-                mind.getOntology().findOrCreateOutlineType(m8r::OutlineType::KeyGrow()),
-                3,
-                5,
-                66,
-                &tags,
-                nullptr,
-                outlineStencil.get());
+        &name,
+        mind.getOntology().findOrCreateOutlineType(m8r::OutlineType::KeyGrow()),
+        3,
+        5,
+        66,
+        &tags,
+        nullptr,
+        outlineStencil.get()
+    );
 
     // asserts
     EXPECT_EQ(2, mind.remind().getOutlinesCount());
@@ -165,10 +175,14 @@ TEST(OutlineTestCase, CloneOutline) {
         "\n"};
     m8r::stringToFile(oFile,oContent);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-otc-co.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.learn();
@@ -232,10 +246,14 @@ TEST(OutlineTestCase, DirectOutlineNoteChildren) {
         "\n"};
     m8r::stringToFile(oFile,oContent);
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-otc-ocn.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
     m8r::Mind mind{config};
     m8r::Memory& memory = mind.remind();
     mind.learn();

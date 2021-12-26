@@ -1,7 +1,7 @@
 /*
- outline_view.cpp     MindForger thinking notebook
+ orloj_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -28,8 +28,14 @@ OrlojView::OrlojView(QWidget* parent)
     dashboard = new DashboardView(this);
     addWidget(dashboard);
 
+    organizersTable = new OrganizersTableView(this);
+    addWidget(organizersTable);
+
     organizer = new OrganizerView(this);
     addWidget(organizer);
+
+    kanban = new KanbanView(4, this);
+    addWidget(kanban);
 
     tagCloud = new TagsTableView(this);
     addWidget(tagCloud);
@@ -57,6 +63,9 @@ OrlojView::OrlojView(QWidget* parent)
 
     noteEdit = new NoteEditView{this};
     addWidget(noteEdit);
+
+    // DEBUG: orloj layout assembly
+    //setStyleSheet("border: 1px solid red;");
 }
 
 void OrlojView::hideChildren(const QSet<QWidget*>& visibleChildren)
@@ -94,9 +103,21 @@ void OrlojView::showFacetDashboard()
     hideChildren(v);
 }
 
+void OrlojView::showFacetOrganizers()
+{
+    QSet<QWidget*> v; v << organizersTable;
+    hideChildren(v);
+}
+
 void OrlojView::showFacetOrganizer()
 {
     QSet<QWidget*> v; v << organizer;
+    hideChildren(v);
+}
+
+void OrlojView::showFacetKanban()
+{
+    QSet<QWidget*> v; v << kanban;
     hideChildren(v);
 }
 

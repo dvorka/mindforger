@@ -1,7 +1,7 @@
 /*
  memory.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -21,6 +21,8 @@
 #include "../gear/string_utils.h"
 
 using namespace std;
+using namespace m8r::filesystem;
+
 
 namespace m8r {
 
@@ -88,6 +90,30 @@ void Memory::learn()
                 outlinesMap.insert(map<string,Outline*>::value_type(outline->getKey(), outline));
             }
         }
+
+#ifdef MF_WIP
+        MF_DEBUG(endl << "PDF files:");
+        for(const string* pdfFile:repositoryIndexer.getPdfFiles()) {
+            MF_DEBUG(endl << "  '" << *pdfFile << "'");
+
+            /*
+            string INFO_DESCRIPTOR_EXT{".M1ndF0rg3r.md"};
+            string INFO_DESCRIPTOR_SEPARATOR{"--- m1ndf0rg3r ---"}; // TODO followed by path
+
+            // lookup/generate PDF descriptors
+            string pdfDescriptorPath{*pdfFile};
+            pdfDescriptorPath.append(INFO_DESCRIPTOR_EXT);
+
+            string descriptorTitle{};
+            string descriptorDescription{};
+            */
+        }
+
+        MF_DEBUG(endl << "TXT files:");
+        for(const string* textFile:repositoryIndexer.getTextFiles()) {
+            MF_DEBUG(endl << "  '" << *textFile << "'");
+        }
+#endif
 
         MF_DEBUG(endl << "Outline stencils:");
         for(const string* file:repositoryIndexer.getOutlineStencilsFileNames()) {
@@ -230,9 +256,19 @@ void Memory::exportToHtml(Outline* outline, const string& fileName)
     persistence->saveAsHtml(outline, fileName);
 }
 
-void Memory::exportToCsv(const string&  fileName)
+void Memory::exportToCsv(
+        const string& fileName,
+        map<const Tag*,int>& tagsCardinality,
+        int oheTagEncodingCardinality,
+        ProgressCallbackCtx* callbackCtx)
 {
-    csvRepresentation.to(outlines, fileName);
+    csvRepresentation.to(
+        outlines,
+        tagsCardinality,
+        fileName,
+        oheTagEncodingCardinality,
+        callbackCtx
+    );
 }
 
 void Memory::forget(Outline* outline)
@@ -289,34 +325,14 @@ const vector<Outline*>& Memory::getOutlines() const
     return outlines;
 }
 
-bool compareOutlineNames(const Outline* o1, const Outline* o2)
-{
-    return o1->getName().compare(o2->getName()) < 0;
-}
-
-void Memory::sortByName(vector<Outline*>& os) const
-{
-    std::sort(os.begin(), os.end(), compareOutlineNames);
-}
-
-bool compareNoteReads(const Note* n1, const Note* n2)
-{
-    return n1->getRead() > n2->getRead();
-}
-
-void Memory::sortByRead(vector<Note*>& ns) const
-{
-    std::sort(ns.begin(), ns.end(), compareNoteReads);
-}
-
 string Memory::createOutlineKey(const string* name)
 {
-    return persistence->createFileName(config.getMemoryPath(), name, string(FILE_EXTENSION_MD_MD));
+    return persistence->createFileName(config.getMemoryPath(), name, File::EXTENSION_MD_MD);
 }
 
 string Memory::createLimboKey(const string* name)
 {
-    return persistence->createFileName(config.getLimboPath(), name, string(FILE_EXTENSION_MD_MD));
+    return persistence->createFileName(config.getLimboPath(), name, File::EXTENSION_MD_MD);
 }
 
 Outline* Memory::getOutline(const string& key)
@@ -354,7 +370,7 @@ std::vector<Note*>& Memory::getAllNotes(vector<Note*>& notes, bool doSortByRead,
     }
 
     if(doSortByRead) {
-        sortByRead(notes);
+        Outline::sortByRead(notes);
     }
 
     return notes;

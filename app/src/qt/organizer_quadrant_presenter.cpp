@@ -1,7 +1,7 @@
 /*
  organizer_quadrant_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -20,13 +20,17 @@
 
 namespace m8r {
 
+using namespace std;
+
 OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
         OrganizerQuadrantView* view,
         OrlojPresenter* orloj,
-        QString title)
-{
+        QString title
+) {
     this->view = view;
-    this->model = new OrganizerQuadrantModel(title, this, orloj->getMainPresenter()->getHtmlRepresentation());
+    this->model = new OrganizerQuadrantModel(
+        title, this, orloj->getMainPresenter()->getHtmlRepresentation()
+    );
     this->view->setModel(this->model);
 
     this->orloj = orloj;
@@ -37,18 +41,24 @@ OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
 
     // hit ENTER to open selected O
     QObject::connect(
-        view,
-        SIGNAL(signalShowSelectedOutline()),
-        this,
-        SLOT(slotShowSelectedOutline()));
-
-    /* click O to open O
+        view, SIGNAL(signalShowSelectedNote()),
+        this, SLOT(slotShowSelectedNote()));
     QObject::connect(
-        view->selectionModel(),
-        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-        this,
-        SLOT(slotShowOutline(const QItemSelection&, const QItemSelection&)));
-    */
+        view, SIGNAL(signalFocusToNextVisibleQuadrant()),
+        this, SLOT(slotFocusToNextVisibleQuadrant()));
+    QObject::connect(
+        view, SIGNAL(signalFocusToPreviousVisibleQuadrant()),
+        this, SLOT(slotFocusToPreviousVisibleQuadrant()));
+    QObject::connect(
+        view, SIGNAL(signalMoveNoteToNextQuadrant()),
+        this, SLOT(slotMoveNoteToNextQuadrant()));
+    QObject::connect(
+        view, SIGNAL(signalMoveNoteToPreviousQuadrant()),
+        this, SLOT(slotMoveNoteToPreviousQuadrant()));
+    QObject::connect(
+        this->view->horizontalHeader(), SIGNAL(sectionClicked(int)),
+        this, SLOT(slotHeaderClicked(int))
+    );
 }
 
 OrganizerQuadrantPresenter::~OrganizerQuadrantPresenter()
@@ -64,28 +74,40 @@ int OrganizerQuadrantPresenter::getCurrentRow() const
     return NO_ROW;
 }
 
-void OrganizerQuadrantPresenter::slotShowSelectedOutline()
+Note* OrganizerQuadrantPresenter::getSelectedNote()
 {
     int row = getCurrentRow();
     if(row != NO_ROW) {
         QStandardItem* item = model->item(row);
         if(item) {
             // IMPROVE make my role constant
-            Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
-
-            outline->incReads();
-            outline->makeDirty();
-
-            orloj->showFacetOutline(outline);
+            return item->data(Qt::UserRole + 1).value<Note*>();
         } else {
-            orloj->getMainPresenter()->getStatusBar()->showInfo(QString(tr("Selected Notebook not found!")));
+            orloj->getMainPresenter()->getStatusBar()->showInfo(
+                QString(tr("Selected Notebook/Note not found!"))
+            );
         }
     } else {
-        orloj->getMainPresenter()->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
+        orloj->getMainPresenter()->getStatusBar()->showInfo(
+            QString(tr("No Notebook selected!"))
+        );
+    }
+
+    return nullptr;
+}
+
+void OrganizerQuadrantPresenter::slotShowSelectedNote()
+{
+    Note* note = this->getSelectedNote();
+    if(note != nullptr) {
+        note->incReads();
+        note->makeDirty();
+
+        orloj->showFacetNoteView(note);
     }
 }
 
-void OrganizerQuadrantPresenter::slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected)
+void OrganizerQuadrantPresenter::slotShowNote(const QItemSelection& selected, const QItemSelection& deselected)
 {
     Q_UNUSED(deselected);
 
@@ -95,22 +117,60 @@ void OrganizerQuadrantPresenter::slotShowOutline(const QItemSelection& selected,
         QStandardItem* item
             = model->itemFromIndex(index);
         // IMPROVE make my role constant
-        Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
+        Note* note = item->data(Qt::UserRole + 1).value<Note*>();
 
-        outline->incReads();
-        outline->makeDirty();
+        note->incReads();
+        note->makeDirty();
 
-        orloj->showFacetOutline(outline);
+        orloj->showFacetNoteView(note);
     } // else do nothing
 }
 
-void OrganizerQuadrantPresenter::refresh(const std::vector<Outline*>& os, bool urgency, bool importance)
+
+void OrganizerQuadrantPresenter::slotHeaderClicked(int section)
 {
+    Q_UNUSED(section);
+
+    MF_DEBUG("Organizer quadrant presenter: O/N table header clicked..." << endl);
+    orloj->getMainPresenter()->doActionOrganizerEdit();
+}
+
+void OrganizerQuadrantPresenter::slotFocusToNextVisibleQuadrant()
+{
+    orloj->getMainPresenter()->doActionOrganizerFocusToNextVisibleQuadrant();
+}
+
+void OrganizerQuadrantPresenter::slotFocusToPreviousVisibleQuadrant()
+{
+    orloj->getMainPresenter()->doActionOrganizerFocusToPreviousVisibleQuadrant();
+}
+
+void OrganizerQuadrantPresenter::slotMoveNoteToNextQuadrant()
+{
+    MF_DEBUG("Organizer quadrant presenter: move N to next SLOT" << endl);
+    Note* note = this->getSelectedNote();
+    if(note != nullptr) {
+        orloj->getMainPresenter()->doActionOrganizerMoveNoteToNextVisibleQuadrant(note);
+    }
+}
+
+void OrganizerQuadrantPresenter::slotMoveNoteToPreviousQuadrant()
+{
+    MF_DEBUG("Organizer quadrant presenter: move N to previous SLOT" << endl);
+    Note* note = this->getSelectedNote();
+    if(note != nullptr) {
+        orloj->getMainPresenter()->doActionOrganizerMoveNoteToPreviousVisibleQuadrant(note);
+    }
+}
+
+void OrganizerQuadrantPresenter::refresh(
+        const std::vector<Note*>& ts, bool urgency, bool importance, bool showOutline
+) {
     model->removeAllRows();
-    if(os.size()) {
+    if(ts.size()) {
         view->setVisible(true);
-        for(auto& o:os) {
-            model->addRow(o, urgency, importance);
+        for(auto& t:ts) {
+            model->addRow(t, urgency, importance, showOutline);
         }
 
         this->view->setCurrentIndex(this->model->index(0, 0));

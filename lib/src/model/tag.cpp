@@ -1,7 +1,7 @@
 /*
  tag.cpp     MindForger application entry point
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -28,6 +28,25 @@ Tag::Tag(const string& name, Clazz* isA, const Color& color)
 }
 
 Tag::~Tag()
+{
+}
+
+/*
+ * Tags.
+ */
+
+Tags::Tags()
+    : tags{}
+{
+}
+
+Tags::Tags(std::vector<const Tag*> ts)
+    : tags{ts}
+{
+
+}
+
+Tags::~Tags()
 {
 }
 

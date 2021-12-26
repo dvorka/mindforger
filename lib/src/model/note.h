@@ -1,7 +1,7 @@
 /*
  note.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <string>
 
-#include "../config/config.h"
+#include "../definitions.h"
 #include "outline.h"
 #include "note_type.h"
 #include "tag.h"
@@ -44,7 +44,7 @@ class Outline;
  * 10% progress
  * 12/24 deadline
  */
-class Note : public Thing
+class Note : public ThingInTime
 {
 private:
     static constexpr int FLAG_MASK_POST_DECLARED_SECTION = 1;
@@ -66,11 +66,8 @@ private:
     const NoteType* type;
     std::vector<std::string*> description;
 
-    time_t created;
-    time_t modified;
     std::string modifiedPretty;
     u_int32_t revision;
-    time_t read;
     std::string readPretty;
     u_int32_t reads;
 
@@ -96,7 +93,7 @@ public:
     void completeProperties(const time_t outlineModificationTime);
     void checkAndFixProperties();
 
-    virtual const std::string& getKey();
+    virtual std::string& getKey() override;
 
     /**
      * @brief Return GitHub compatible mangled name to ensure compatiblity between GitHub and MindForger # links.
@@ -104,20 +101,17 @@ public:
      * See also https://github.com/dvorka/trainer/blob/master/markdow/section-links-mangling.md
      */
     std::string getMangledName() const;
-    time_t getCreated() const;
-    void setCreated(time_t created);
     time_t getDeadline() const;
     void setDeadline(time_t deadline);
     u_int16_t getDepth() const;
     void setDepth(u_int16_t depth);
-    time_t getModified() const;
+    virtual void setModified() override;
+    virtual void setModified(time_t modified) override;
     void makeModified();
-    void setModified();
-    void setModified(time_t modified);
     const std::string& getModifiedPretty() const;
     void setModifiedPretty();
     void setModifiedPretty(const std::string& modifiedPretty);
-    const std::string& getOutlineKey() const;
+    std::string& getOutlineKey() const;
     u_int8_t getProgress() const;
     void setProgress(u_int8_t progress);
     time_t getRead() const;
@@ -143,6 +137,13 @@ public:
         } else {
             return true;
         }
+    }
+    bool hasTagStrings(std::vector<std::string>& filterTags) {
+        return Tag::hasTagStrings(this->tags, filterTags);
+    }
+    // IMPROVE: consolidate ^v methods (iterator parameter, vector version removal)
+    bool hasTagStrings(std::set<std::string>& filterTags) {
+        return Tag::hasTagStrings(this->tags, filterTags);
     }
     void addName(const std::string& s);
     const NoteType* getType() const;
@@ -170,6 +171,8 @@ public:
     bool isTrailingHashesSection() const { return flags & FLAG_MASK_TRAILING_HASHES_SECTION; }
 
     void makeDirty();
+
+    bool isReadOnly() const;
 
     int getAiAaMatrixIndex() const { return aiAaMatrixIndex; }
     void setAiAaMatrixIndex(int i) { aiAaMatrixIndex = i; }

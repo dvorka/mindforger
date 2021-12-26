@@ -1,7 +1,7 @@
 /*
  look_n_feel.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -72,15 +72,18 @@ void LookAndFeels::setDarkTheme()
     editorBolder.setRgb(0xFF,0xFF,0x00);
     editorItalic.setRgb(0x00,0xAA,0x00);
     editorItalicer.setRgb(0x00,0xAA,0x00);
-    editorStrikethrough.setRgb(0x00,0x00,0x00);
+    editorStrikethrough.setRgb(0x88,0x88,0x88);
     editorLink.setRgb(0x00,0xFF,0xFF);
     editorList.setRgb(0x00,0x99,0x00);
+    editorTaskDone.setRgb(0x00,0x99,0x00);
+    editorTaskWip.setRgb(0x99,0x00,0x00);
     editorCodeblock.setRgb(0x99,0x99,0x99);
     editorHtmlTag.setRgb(0xAA,0x00,0xAA);
     editorHtmlEntity.setRgb(0xAA,0x00,0xAA);
     editorHtmlAttrName.setRgb(0xFF,0x00,0xFF);
     editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
     editorHtmlComment.setRgb(0x66,0x66,0x66);
+    editorError.setRgb(0xFF,0x00,0x00);
 
     cliTextColor = Qt::green;
 
@@ -145,9 +148,13 @@ void LookAndFeels::setLightTheme()
     editorHtmlAttrName.setRgb(0x00,0x00,0xFF);
     editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
     editorHtmlComment.setRgb(0xAA,0xAA,0xAA);
+    editorError.setRgb(0xFF,0x00,0x00);
 
     cliTextColor = Qt::black;
 
+#ifdef _WIN32
+    mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+#endif
     mindforgerApplication->setStyle(QStyleFactory::create("fusion"));
 
     // Ubuntu orange:
@@ -179,7 +186,7 @@ void LookAndFeels::setBlackTheme()
     editorBolder.setRgb(0xFF,0xFF,0x00);
     editorItalic.setRgb(0x00,0xAA,0x00);
     editorItalicer.setRgb(0x00,0xAA,0x00);
-    editorStrikethrough.setRgb(0x00,0x00,0x00);
+    editorStrikethrough.setRgb(0x88,0x88,0x88);
     editorLink.setRgb(0x00,0xFF,0xFF);
     editorList.setRgb(0x00,0x99,0x00);
     editorCodeblock.setRgb(0x99,0x99,0x99);
@@ -188,8 +195,13 @@ void LookAndFeels::setBlackTheme()
     editorHtmlAttrName.setRgb(0xFF,0x00,0xFF);
     editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
     editorHtmlComment.setRgb(0x66,0x66,0x66);
+    editorError.setRgb(0xFF,0x00,0x00);
 
     cliTextColor = QColor(0x99,0xb1,0xff);
+
+#ifdef _WIN32
+    mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+#endif
 
     /* The valid keys can be retrieved using the keys() function. Typically they include
      * "windows" and "fusion". Depending on the platform, "windowsxp", "windowsvista" and
@@ -233,7 +245,11 @@ void LookAndFeels::setBlackTheme()
 }
 
 void LookAndFeels::setNativeTheme()
-{}
+{
+#ifdef _WIN32
+    mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+#endif
+}
 
 bool LookAndFeels::isThemeNative() const
 {

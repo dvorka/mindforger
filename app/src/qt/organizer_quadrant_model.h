@@ -1,7 +1,7 @@
 /*
  organizer_quadrant_model.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -19,10 +19,12 @@
 #ifndef M8RUI_ORGANIZER_QUADRANT_MODEL_H
 #define M8RUI_ORGANIZER_QUADRANT_MODEL_H
 
+#include "../../lib/src/representations/unicode.h"
+#include "../../lib/src/representations/html/html_outline_representation.h"
+
 #include <QtWidgets>
 
 #include "model_meta_definitions.h"
-#include "../../lib/src/representations/html/html_outline_representation.h"
 
 namespace m8r {
 
@@ -35,15 +37,25 @@ class OrganizerQuadrantModel : public QStandardItemModel
     HtmlOutlineRepresentation* htmlRepresentation;
 
 public:
-    explicit OrganizerQuadrantModel(QString& title, QObject* parent, HtmlOutlineRepresentation* htmlRepresentation);
+    explicit OrganizerQuadrantModel(
+        QString& title,
+        QObject* parent,
+        HtmlOutlineRepresentation* htmlRepresentation
+    );
     OrganizerQuadrantModel(const OrganizerQuadrantModel&) = delete;
     OrganizerQuadrantModel(const OrganizerQuadrantModel&&) = delete;
-    OrganizerQuadrantModel &operator=(const OrganizerQuadrantModel&) = delete;
-    OrganizerQuadrantModel &operator=(const OrganizerQuadrantModel&&) = delete;
+    OrganizerQuadrantModel& operator =(const OrganizerQuadrantModel&) = delete;
+    OrganizerQuadrantModel& operator =(const OrganizerQuadrantModel&&) = delete;
     ~OrganizerQuadrantModel();
 
+    void setTitle(QString& title) {
+        this->title = title;
+        QStringList tableHeader = {this->title};
+        setHorizontalHeaderLabels(tableHeader);
+    }
+
+    void addRow(Note* note, bool urgency=false, bool importance=false, bool showOutline=true);
     void removeAllRows();
-    void addRow(Outline* outline, bool urgency=false, bool importance=false);
 };
 
 }

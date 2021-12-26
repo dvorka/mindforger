@@ -1,7 +1,7 @@
 /*
  html_outline_representation.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -22,11 +22,13 @@
 #include <string>
 #include <vector>
 
+#include "../../config/configuration.h"
 #include "../../model/note.h"
+#include "../unicode.h"
 #include "../markdown/markdown_outline_representation.h"
 #include "../markdown/markdown_transcoder.h"
 #if defined  MF_MD_2_HTML_CMARK
-#include "../markdown/cmark_gfm_markdown_transcoder.h"
+  #include "../markdown/cmark_gfm_markdown_transcoder.h"
 #endif
 
 namespace m8r {
@@ -46,11 +48,18 @@ public:
 class HtmlExportColorsRepresentation : public HtmlColorsRepresentation
 {
 public:
+
+    static void organizerTypeToHtml(
+        const Organizer* organizer,
+        std::string& html
+    );
+
+public:
     explicit HtmlExportColorsRepresentation() {}
     HtmlExportColorsRepresentation(const HtmlExportColorsRepresentation&) = delete;
     HtmlExportColorsRepresentation(const HtmlExportColorsRepresentation&&) = delete;
-    HtmlExportColorsRepresentation &operator=(const HtmlExportColorsRepresentation&) = delete;
-    HtmlExportColorsRepresentation &operator=(const HtmlExportColorsRepresentation&&) = delete;
+    HtmlExportColorsRepresentation& operator =(const HtmlExportColorsRepresentation&) = delete;
+    HtmlExportColorsRepresentation& operator =(const HtmlExportColorsRepresentation&&) = delete;
     virtual ~HtmlExportColorsRepresentation() {}
 
     virtual std::string& getHtmlTextColor() { static std::string TEXT_COLOR = std::string{"#000000"}; return TEXT_COLOR; }
@@ -138,6 +147,7 @@ public:
     void fgBgTextColorStyle(std::string& html);
     void outlineTypeToHtml(const OutlineType* outlineType, std::string& html);
     void noteTypeToHtml(const NoteType* noteType, std::string& html);
+    void organizerTypeToHtml(const Organizer* organizer, std::string& html);
     void tagsToHtml(const std::vector<const Tag*>* tags, std::string& html);
     void outlineMetadataToHtml(const Outline* outline, std::string& html);
 
@@ -147,7 +157,7 @@ private:
     void header(std::string& html, std::string* basePath, bool standalone, int yScrollTo);
     void footer(std::string& html);
 
-    std::string* toNoMeta(const Outline* outline, std::string* html, bool standalone, int yScrollTo);
+    std::string* toNoMeta(Outline* outline, std::string* html, bool standalone, int yScrollTo);
 };
 
 } // m8r namespace

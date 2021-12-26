@@ -1,7 +1,7 @@
 /*
  nlp_test.cpp     MindForger application test
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -173,10 +173,11 @@ TEST(AiNlpTestCase, Tokenizer)
 {
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-antc-t.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)), repositoryConfigRepresentation);
     m8r::Mind mind(config);
     mind.learn();
     mind.think().get();
@@ -207,10 +208,11 @@ TEST(AiNlpTestCase, DISABLED_AaRepositoryBow)
 {
     string repositoryPath{"/lib/test/resources/universe-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-antc-r.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)), repositoryConfigRepresentation);
     config.setAaAlgorithm(m8r::Configuration::AssociationAssessmentAlgorithm::BOW);
 
     m8r::Mind mind(config);
@@ -250,10 +252,11 @@ TEST(AiNlpTestCase, DISABLED_AaUniverseBow)
 {
     string repositoryPath{"/lib/test/resources/aa-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-antc-aub.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)), repositoryConfigRepresentation);
     config.setAaAlgorithm(m8r::Configuration::AssociationAssessmentAlgorithm::BOW);
 
     m8r::Mind mind(config);

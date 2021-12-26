@@ -1,7 +1,7 @@
 /*
  qutils.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -54,13 +54,19 @@ bool stringMatchByKeywords(const QString& keywords, const QString& s, bool caseS
 void timetToQDate(const time_t t, QDate& qdate)
 {
     tm dd = *localtime(&t);
-    qdate.setDate(dd.tm_year, dd.tm_mon, dd.tm_mday);
+    // see struct_tm.h::tm documentation
+    qdate.setDate(
+        dd.tm_year + 1900,
+        dd.tm_mon + 1,
+        dd.tm_mday
+    );
 }
 
 void qdateToTm(const QDate& qdate, struct tm& t)
 {
-    t.tm_year = qdate.year();
-    t.tm_mon = qdate.month();
+    // see struct_tm.h::tm documentation
+    t.tm_year = qdate.year() - 1900;
+    t.tm_mon = qdate.month() - 1;
     t.tm_mday = qdate.day();
 }
 

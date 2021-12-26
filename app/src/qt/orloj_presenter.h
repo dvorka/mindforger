@@ -1,7 +1,7 @@
 /*
  outline_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -28,7 +28,9 @@
 
 #include "orloj_view.h"
 #include "dashboard_presenter.h"
+#include "organizers_table_presenter.h"
 #include "organizer_presenter.h"
+#include "kanban_presenter.h"
 #include "tags_table_presenter.h"
 #include "recent_notes_table_presenter.h"
 #include "main_window_presenter.h"
@@ -44,7 +46,9 @@
 namespace m8r {
 
 class DashboardPresenter;
+class OrganizersTablePresenter;
 class OrganizerPresenter;
+class KanbanPresenter;
 class TagCloudPresenter;
 class NotePresenter;
 class NoteViewPresenter;
@@ -67,7 +71,9 @@ enum OrlojPresenterFacets {
     FACET_TAG_CLOUD,              // 9
     FACET_RECENT_NOTES,           // 10
     FACET_NAVIGATOR,              // 11
-    FACET_DASHBOARD               // 12
+    FACET_DASHBOARD,              // 12
+    FACET_LIST_ORGANIZERS,        // 13
+    FACET_KANBAN                  // 14
 };
 
 // aspect modifies facet
@@ -84,6 +90,9 @@ enum OrlojButtonRoles {
     INVALID_ROLE = -1
 };
 
+/**
+ * @brief Orloj presenter handles signals from around MindForger to show desired views.
+ */
 class OrlojPresenter : public QObject
 {
     Q_OBJECT
@@ -99,7 +108,9 @@ private:
     Mind* mind;
 
     DashboardPresenter* dashboardPresenter;
+    OrganizersTablePresenter* organizersTablePresenter;
     OrganizerPresenter* organizerPresenter;
+    KanbanPresenter* kanbanPresenter;
     TagsTablePresenter* tagCloudPresenter;
     OutlinesTablePresenter* outlinesTablePresenter;
     RecentNotesTablePresenter* recentNotesTablePresenter;
@@ -114,14 +125,16 @@ private:
 
 public:
     explicit OrlojPresenter(MainWindowPresenter* mainPresenter,
-                   OrlojView* view,
-                   Mind* mind);
+        OrlojView* view,
+        Mind* mind
+    );
 
     Mind* getMind() { return mind; }
 
     OrlojView* getView() const { return view; }
     DashboardPresenter* getDashboard() const { return dashboardPresenter; }
     OrganizerPresenter* getOrganizer() const { return organizerPresenter; }
+    KanbanPresenter* getKanban() const { return kanbanPresenter; }
     NavigatorPresenter* getNavigator() const { return navigatorPresenter; }
     MainWindowPresenter* getMainPresenter() const { return mainPresenter; }
     OutlinesTablePresenter* getOutlinesTable() const { return outlinesTablePresenter; }
@@ -172,7 +185,19 @@ public:
     void onFacetChange(const OrlojPresenterFacets targetFacet) const;
 
     void showFacetDashboard();
-    void showFacetOrganizer(const std::vector<Outline*>& outlines);
+    void showFacetOrganizerList(const std::vector<Organizer*>& organizers);
+    void showFacetEisenhowerMatrix(
+            Organizer* organizer,
+            const std::vector<Note*>& outlinesAndNotes,
+            const std::vector<Outline*>& outlines,
+            const std::vector<Note*>& notes
+    );
+    void showFacetKanban(
+            Kanban* kanban,
+            const std::vector<Note*>& outlinesAndNotes,
+            const std::vector<Outline*>& outlines,
+            const std::vector<Note*>& notes
+    );
     void showFacetTagCloud();
     void showFacetOutlineList(const std::vector<Outline*>& outlines);
     void showFacetRecentNotes(const std::vector<Note*>& notes);
@@ -192,6 +217,7 @@ public:
     void fromNoteEditBackToView(Note* note);
 
 public slots:
+    void slotShowSelectedOrganizer();
     void slotShowOutlines();
     void slotShowSelectedOutline();
     void slotShowOutline(const QItemSelection& selected, const QItemSelection& deselected);

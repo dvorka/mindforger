@@ -1,7 +1,7 @@
 /*
  outline_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -36,7 +36,9 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     this->mind = mind;
 
     this->dashboardPresenter = new DashboardPresenter(view->getDashboard(), this);
+    this->organizersTablePresenter = new OrganizersTablePresenter(view->getOrganizersTable(), mainPresenter->getHtmlRepresentation());
     this->organizerPresenter = new OrganizerPresenter(view->getOrganizer(), this);
+    this->kanbanPresenter = new KanbanPresenter(view->getKanban(), this);
     this->tagCloudPresenter = new TagsTablePresenter(view->getTagCloud(), mainPresenter->getHtmlRepresentation());
     this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
     this->recentNotesTablePresenter = new RecentNotesTablePresenter(view->getRecentNotesTable(), mainPresenter->getHtmlRepresentation());
@@ -53,6 +55,12 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
      * and widgets - it can show/hide what's needed and then pass control to children.
      */
 
+    // hit enter in organizers to view organizer detail
+    QObject::connect(
+        view->getOrganizersTable(),
+        SIGNAL(signalShowSelectedOrganizer()),
+        this,
+        SLOT(slotShowSelectedOrganizer()));
     // hit enter in Os to view O detail
     QObject::connect(
         view->getOutlinesTable(),
@@ -208,13 +216,55 @@ void OrlojPresenter::showFacetDashboard() {
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
-void OrlojPresenter::showFacetOrganizer(const vector<Outline*>& outlines)
+void OrlojPresenter::showFacetOrganizerList(const vector<Organizer*>& organizers)
 {
+    setFacet(OrlojPresenterFacets::FACET_LIST_ORGANIZERS);
+    // IMPROVE reload ONLY if dirty, otherwise just show
+    organizersTablePresenter->refresh(organizers);
+    view->showFacetOrganizers();
+    mainPresenter->getMainMenu()->showFacetOrganizerList();
+    mainPresenter->getStatusBar()->showMindStatistics();
+}
+
+void OrlojPresenter::showFacetEisenhowerMatrix(
+    Organizer* organizer,
+    const vector<Note*>& outlinesAndNotes,
+    const vector<Outline*>& outlines,
+    const vector<Note*>& notes
+) {
     setFacet(OrlojPresenterFacets::FACET_ORGANIZER);
-    organizerPresenter->refresh(outlines);
+    organizerPresenter->refresh(
+        organizer,
+        outlinesAndNotes,
+        outlines,
+        notes
+    );
     view->showFacetOrganizer();
     mainPresenter->getMainMenu()->showFacetOrganizer();
-    mainPresenter->getStatusBar()->showMindStatistics();
+    mainPresenter->getStatusBar()->showInfo(tr("Eisenhower Matrix: ")+QString::fromStdString(
+        organizer->getName())
+    );
+}
+
+void OrlojPresenter::showFacetKanban(
+    Kanban* kanban,
+    const vector<Note*>& outlinesAndNotes,
+    const vector<Outline*>& outlines,
+    const vector<Note*>& notes
+) {
+    setFacet(OrlojPresenterFacets::FACET_KANBAN);
+    kanbanPresenter->refresh(
+        kanban,
+        outlinesAndNotes,
+        outlines,
+        notes
+    );
+    view->showFacetKanban();
+    // Kanban shares menu facet with Eisenhower Matrix as both are organizers
+    mainPresenter->getMainMenu()->showFacetOrganizer();
+    mainPresenter->getStatusBar()->showInfo(
+        tr("Kanban: ")+QString::fromStdString(kanban->getName())
+    );
 }
 
 void OrlojPresenter::showFacetKnowledgeGraphNavigator()
@@ -266,6 +316,77 @@ void OrlojPresenter::showFacetOutlineList(const vector<Outline*>& outlines)
 void OrlojPresenter::slotShowOutlines()
 {
     showFacetOutlineList(mind->getOutlines());
+}
+
+void OrlojPresenter::slotShowSelectedOrganizer()
+{
+    static vector<Note*> organizerOutlinesAndNotes{};
+    static vector<Note*> organizerNotes{};
+
+    if(activeFacet!=OrlojPresenterFacets::FACET_VIEW_OUTLINE
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_TAG_CLOUD
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_NAVIGATOR
+         &&
+       activeFacet!=OrlojPresenterFacets::FACET_RECENT_NOTES
+      )
+    {
+        int row = organizersTablePresenter->getCurrentRow();
+        if(row != OrganizersTablePresenter::NO_ROW) {
+            QStandardItem* item{organizersTablePresenter->getModel()->item(row)};
+            // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
+            if(item) {
+                Organizer* organizer = item->data(Qt::UserRole + 1).value<Organizer*>();
+                MF_DEBUG("Organizer selected by Orloj: data(user)=" << organizer << endl);
+
+                // ensure O scope validity
+                if(organizer->getOutlineScope().size()) {
+                    if(!mind->remind().getOutline(organizer->getOutlineScope())) {
+                        organizer->clearOutlineScope();
+                    }
+                }
+
+                organizerOutlinesAndNotes.clear();
+                organizerNotes.clear();
+                if(Organizer::OrganizerType::KANBAN == organizer->getOrganizerType()) {
+                    showFacetKanban(
+                        dynamic_cast<Kanban*>(organizer),
+                        mind->getAllNotes(organizerOutlinesAndNotes, true, true),
+                        mind->getOutlines(),
+                        mind->getAllNotes(organizerNotes, true, false)
+                    );
+                } else {
+                    // Eisnehower Matrix as fallback
+                    showFacetEisenhowerMatrix(
+                        dynamic_cast<EisenhowerMatrix*>(organizer),
+                        mind->getAllNotes(organizerOutlinesAndNotes, true, true),
+                        mind->getOutlines(),
+                        mind->getAllNotes(organizerNotes, true, false)
+                    );
+                }
+                string statusNotebookScope{
+                    organizer->getOutlineScope().size()
+                    ?" scope: '"+mind->remind().getOutline(organizer->getOutlineScope())->getName()+"'"
+                    :""
+                };
+                mainPresenter->getStatusBar()->showInfo(
+                    QString("%1%2%3%4")
+                        .arg(tr("Organizer: '"))
+                        .arg(organizer->getName().c_str())
+                        .arg("'")
+                        .arg(statusNotebookScope.c_str())
+                );
+
+                mainPresenter->sortAndSaveOrganizersConfig();
+
+                return;
+            } else {
+                mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Organizer not found!")));
+            }
+        }
+        mainPresenter->getStatusBar()->showInfo(QString(tr("No Organizer selected!")));
+    }
 }
 
 void OrlojPresenter::showFacetOutline(Outline* outline)

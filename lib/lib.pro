@@ -1,6 +1,6 @@
 # mindforger-lib.pro     MindForger thinking notebook
 #
-# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software ; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -108,6 +108,17 @@ SOURCES += \
     ./src/config/time_scope.cpp \
     ./src/model/link.cpp \
     ./src/config/palette.cpp \
+    src/config/repository_configuration.cpp \
+    src/gear/async_utils.cpp \
+    src/gear/math_utils.cpp \
+    src/mind/dikw/dikw_pyramid.cpp \
+    src/mind/dikw/filesystem_information.cpp \
+    src/mind/dikw/information.cpp \
+    src/model/eisenhower_matrix.cpp \
+    src/model/kanban.cpp \
+    src/model/organizer.cpp \
+    src/persistence/configuration_persistence.cpp \
+    src/persistence/persistence.cpp \
     src/representations/markdown/markdown_document.cpp \
     src/representations/html/html_document.cpp \
     src/mind/ai/ai.cpp \
@@ -129,6 +140,8 @@ SOURCES += \
     src/mind/aspect/tag_scope_aspect.cpp \
     src/mind/aspect/mind_scope_aspect.cpp \
     src/mind/knowledge_graph.cpp \
+    src/representations/markdown/markdown_document_representation.cpp \
+    src/representations/markdown/markdown_repository_configuration_representation.cpp \
     src/representations/twiki/twiki_outline_representation.cpp \
     src/mind/associated_notes.cpp \
     src/mind/ai/autolinking_preprocessor.cpp \
@@ -136,8 +149,13 @@ SOURCES += \
     src/mind/ai/autolinking/naive_autolinking_preprocessor.cpp \
     src/representations/markdown/cmark_gfm_markdown_transcoder.cpp \
     src/mind/ai/autolinking/autolinking_mind.cpp \
-    src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.cpp \
-    src/mind/limbo.cpp
+    src/mind/limbo.cpp \
+    src/representations/unicode.cpp
+
+!mfnomd2html {
+    SOURCES += \
+    src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.cpp
+}
 
 mfner {
     SOURCES += \
@@ -193,7 +211,7 @@ HEADERS += \
     ./src/config/configuration.h \
     ./src/install/installer.h \
     ./src/config/repository.h \
-    ./src/config/config.h \
+    ./src/definitions.h \
     ./src/mind/ontology/thing_class_rel_triple.h \
     ./src/mind/ontology/taxonomy.h \
     ./src/mind/aspect/aspect.h \
@@ -202,8 +220,21 @@ HEADERS += \
     ./src/config/time_scope.h \
     ./src/model/link.h \
     ./src/config/palette.h \
+    ./src/config/repository_configuration.h \
+    ./src/gear/async_utils.h \
+    ./src/gear/math_utils.h \
+    ./src/mind/dikw/dikw_pyramid.h \
+    ./src/mind/dikw/filesystem_information.h \
+    src/mind/dikw/information.h \
+    src/model/eisenhower_matrix.h \
+    src/model/kanban.h \
+    src/model/organizer.h \
+    src/persistence/configuration_persistence.h \
     src/representations/markdown/markdown_document.h \
     src/representations/html/html_document.h \
+    src/representations/markdown/markdown_document_representation.h \
+    src/representations/markdown/markdown_repository_configuration_representation.h \
+    src/representations/unicode.h \
     src/version.h \
     src/mind/ai/ai.h \
     src/mind/ai/nlp/markdown_tokenizer.h \
@@ -253,11 +284,15 @@ HEADERS += \
     src/mind/ai/autolinking/naive_autolinking_preprocessor.h \
     src/representations/markdown/markdown_transcoder.h \
     src/representations/representation_type.h \
-    src/config/config.h \
+    src/definitions.h \
     src/representations/markdown/cmark_gfm_markdown_transcoder.h \
     src/mind/ai/autolinking/autolinking_mind.h \
-    src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h \
     src/mind/limbo.h
+
+!mfnomd2html {
+    SOURCES += \
+    src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h
+}
 
 mfner {
     HEADERS += \

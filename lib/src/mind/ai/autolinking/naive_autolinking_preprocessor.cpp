@@ -1,7 +1,7 @@
 /*
  naive_autolinking_preprocessor.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -58,6 +58,11 @@ bool NaiveAutolinkingPreprocessor::containsLinkCodeMath(const string* line)
     }
 
     return false;
+}
+
+static bool aliasSizeComparator(const Thing* t1, const Thing* t2)
+{
+    return t1->getAutolinkingAlias().size() > t2->getAutolinkingAlias().size();
 }
 
 void NaiveAutolinkingPreprocessor::updateThingsIndex()
@@ -145,7 +150,7 @@ void NaiveAutolinkingPreprocessor::process(const vector<string*>& md, string &am
                     // IMPROVE loop to be changed to Aho-Corasic trie
 
                     // inject Os, then Ns
-                    for(Thing* t:mind.autolink()->getThings()) {
+                    for(Thing* t:things) {
                         size_t found;
                         bool match, insensitiveMatch;
                         string lowerAlias{};

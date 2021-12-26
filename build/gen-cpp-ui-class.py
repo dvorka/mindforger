@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,10 +24,10 @@
 
 import sys
 
-TEMPLATE_HEADER_FILE='''/*
+TEMPLATE_HEADER_FILE = """/*
  {}.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -57,19 +57,19 @@ public:
     explicit {}(QWidget* parent);
     {}(const {}&) = delete;
     {}(const {}&&) = delete;
-    {} &operator=(const {}&) = delete;
-    {} &operator=(const {}&&) = delete;
+    {}& operator =(const {}&) = delete;
+    {}& operator =(const {}&&) = delete;
     ~{}();
 }};
 
 }}
 #endif // M8RUI_{}_H
-'''
+"""
 
-TEMPLATE_CPP_FILE='''/*
+TEMPLATE_CPP_FILE = """/*
  {}.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -97,31 +97,43 @@ namespace m8r {{
 }}
 
 }} // m8r namespace
-'''
+"""
 
 #####################################################################
 
 if len(sys.argv) == 2:
     arg = sys.argv[1]
-    nameCamel = arg.replace("_","")
+    nameCamel = arg.replace("_", "")
     nameDash = arg.lower()
     nameMacro = arg.upper()
-    with open(nameDash+".h", "w") as text_file:
-        text_file.write(TEMPLATE_HEADER_FILE.format(
-            nameDash,
-            nameMacro,nameMacro,
-            nameCamel,
-            nameCamel,nameCamel,nameCamel,nameCamel,nameCamel,nameCamel,nameCamel,nameCamel,nameCamel,nameCamel,
-            nameMacro))
+    with open(nameDash + ".h", "w") as text_file:
+        text_file.write(
+            TEMPLATE_HEADER_FILE.format(
+                nameDash,
+                nameMacro,
+                nameMacro,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameCamel,
+                nameMacro,
+            )
+        )
 
-    with open(nameDash+".cpp", "w") as text_file:
-        text_file.write(TEMPLATE_CPP_FILE.format(
-            nameDash,
-            nameDash,
-            nameCamel,nameCamel,nameCamel,nameCamel))
+    with open(nameDash + ".cpp", "w") as text_file:
+        text_file.write(
+            TEMPLATE_CPP_FILE.format(
+                nameDash, nameDash, nameCamel, nameCamel, nameCamel, nameCamel
+            )
+        )
 else:
-    print "\nUsage: gen-cpp-file.py Note_Edit\n"
-
-
+    print("\nUsage: gen-cpp-file.py Note_Edit\n")
 
 # EOF

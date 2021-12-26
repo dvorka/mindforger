@@ -1,7 +1,7 @@
 /*
  edit_buttons_panel.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -53,7 +53,6 @@ EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
 
     // assembly
     layout = new QHBoxLayout{this};
-    layout->addStretch(1);
     layout->addWidget(cancelButton);
     layout->addWidget(moreButton);
     layout->addWidget(previewButton);

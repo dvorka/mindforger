@@ -1,7 +1,7 @@
 /*
  memory.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
 
 #include "../debug.h"
 #include "../exceptions.h"
+#include "../gear/async_utils.h"
 #include "../mind/ontology/ontology.h"
 #include "../config/configuration.h"
 #include "../repository_indexer.h"
@@ -139,9 +140,14 @@ public:
     void exportToHtml(Outline* outline, const std::string& fileName);
 
     /**
-     * @brief Export Mind to CSV.
+     * @brief Export memory to CSV.
      */
-    void exportToCsv(const std::string& fileName);
+    void exportToCsv(
+        const std::string& fileName,
+        std::map<const Tag*,int>& tagsCardinality,
+        int oheTagEncodingCardinality,
+        ProgressCallbackCtx* callbackCtx = nullptr
+    );
 
     /**
      * @brief Forget Outline.
@@ -200,9 +206,8 @@ public:
      * UTILS
      */
 
-    void sortByName(std::vector<Outline*>& sorted) const;
-    void sortByRead(std::vector<Note*>& sorted) const;
     RepositoryIndexer& getRepositoryIndexer() { return repositoryIndexer; }
+    Persistence& getPersistence() const { return *persistence; }
 
 private:
     const OutlineType* toOutlineType(const MarkdownAstSectionMetadata&);

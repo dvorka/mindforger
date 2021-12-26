@@ -1,7 +1,7 @@
 /*
  urgency_combo_box.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 */
 #ifndef M8RUI_URGENCY_COMBO_BOX_H
 #define M8RUI_URGENCY_COMBO_BOX_H
+
+#include "../../lib/src/representations/unicode.h"
 
 #include <QtWidgets>
 
@@ -36,7 +38,7 @@ public:
     ~UrgencyComboBox();
 
     int8_t getValue() {
-        return itemData(currentIndex(), Qt::UserRole).value<int>();
+        return static_cast<int8_t>(itemData(currentIndex(), Qt::UserRole).value<int>());
     }
 };
 

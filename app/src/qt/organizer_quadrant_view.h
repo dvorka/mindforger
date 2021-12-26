@@ -1,7 +1,7 @@
 /*
  organizer_quadrant_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -19,9 +19,9 @@
 #ifndef M8RUI_ORGANIZER_QUADRANT_VIEW_H
 #define M8RUI_ORGANIZER_QUADRANT_VIEW_H
 
-#include <QtWidgets>
-
 #include "../../../lib/src/debug.h"
+
+#include <QtWidgets>
 
 namespace m8r {
 
@@ -30,18 +30,49 @@ class OrganizerQuadrantView : public QTableView
     Q_OBJECT
 
 public:
-    explicit OrganizerQuadrantView(QWidget* parent);
+    enum ViewType {
+        ORGANIZER,
+        KANBAN
+    };
+
+private:
+    ViewType viewType;
+
+public:
+    explicit OrganizerQuadrantView(QWidget* parent, ViewType viewType = ViewType::ORGANIZER);
     OrganizerQuadrantView(const OrganizerQuadrantView&) = delete;
     OrganizerQuadrantView(const OrganizerQuadrantView&&) = delete;
-    OrganizerQuadrantView &operator=(const OrganizerQuadrantView&) = delete;
-    OrganizerQuadrantView &operator=(const OrganizerQuadrantView&&) = delete;
+    OrganizerQuadrantView& operator=(const OrganizerQuadrantView&) = delete;
+    OrganizerQuadrantView& operator=(const OrganizerQuadrantView&&) = delete;
     virtual ~OrganizerQuadrantView() {}
 
     virtual void keyPressEvent(QKeyEvent* event) override;
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
 
+private:
+#ifdef WIP_DRAG_N_DROP
+    void dragEnterEvent(QDragEnterEvent* event) override;
+    void dropEvent(QDropEvent* event) override;
+
+    Qt::DropActions supportedDropActions() const
+    {
+        return Qt::MoveAction;
+    }
+    Qt::DropActions supportedDragActions() const
+    {
+        return Qt::MoveAction;
+    }
+#endif
+
 signals:
-    void signalShowSelectedOutline();
+    void signalShowSelectedNote();
+    void signalShowSelectedKanbanNote();
+
+    void signalFocusToNextVisibleQuadrant();
+    void signalFocusToPreviousVisibleQuadrant();
+
+    void signalMoveNoteToNextQuadrant();
+    void signalMoveNoteToPreviousQuadrant();
 };
 
 }

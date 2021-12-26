@@ -1,7 +1,7 @@
 /*
- note_edit_highlight.h     MindForger thinking notebook
+ note_edit_highlighter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -16,20 +16,25 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "note_edit_highlight.h"
+#include "note_edit_highlighter.h"
 
 namespace m8r {
 
 using namespace std;
 
-NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
-    : QSyntaxHighlighter(parent),
-      lookAndFeels(LookAndFeels::getInstance())
+NoteEditHighlighter::NoteEditHighlighter(QPlainTextEdit* noteEditorView)
+    : QSyntaxHighlighter(noteEditorView->document()),
+      lookAndFeels(LookAndFeels::getInstance()),
+      spellCheckDictionary{DictionaryManager::instance().requestDictionary()},
+      isTypingPaused{false},
+      noteEditorView{noteEditorView},
+      noteEditorDocument{noteEditorView->document()}
 {
     /*
      * HTML inlined in MD - goes first so that formatting can be rewritten by MD
      */
 
+    // IMPROVE consider making HTML highlighting optional (config)
     addRegex(HtmlTag, "<[!?]?\\w+(?:/>)?", false);
     addRegex(HtmlTag, "(?:</\\w+)?[?]?>");
     addRegex(HtmlEntity, "&(:?#\\d+|\\w+);");
@@ -59,7 +64,8 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     addRegex(Mathblock, "\\$[\\S\\s]+\\$");
     addRegex(UnorderedList, "^(:?    )*[\\*\\+\\-] ");
     addRegex(OrderedList, "^(:?    )*\\d\\d?\\. ");
-    // IMPROVE highlight tasks (red/green) that overwrite lists , BUT new regexps make highlighting slower - is it worth to highlight it?
+    addRegex(TaskDoneItem, "^(:?    )*[\\*\\+\\-] \\[x\\]");
+    addRegex(TaskWipItem, "^(:?    )*[\\*\\+\\-] \\[ \\]");
 
     // formats
     boldFormat.setForeground(lookAndFeels.getEditorBold());
@@ -72,19 +78,23 @@ NoteEditHighlight::NoteEditHighlight(QTextDocument* parent)
     strikethroughFormat.setForeground(lookAndFeels.getEditorStrikethrough());
     linkFormat.setForeground(lookAndFeels.getEditorLink());
     listFormat.setForeground(lookAndFeels.getEditorList());
+    taskDoneFormat.setForeground(lookAndFeels.getEditorTaskDone());
+    taskWipFormat.setForeground(lookAndFeels.getEditorTaskWip());
     codeBlockFormat.setForeground(lookAndFeels.getEditorCodeblock());
     mathBlockFormat.setForeground(lookAndFeels.getEditorCodeblock());
 
 #if QT_VERSION > QT_VERSION_CHECK(5, 5, 0)
     bolderFormat.setFontWeight(QFont::ExtraBold);
     listFormat.setFontWeight(QFont::ExtraBold);
+    taskDoneFormat.setFontWeight(QFont::ExtraBold);
+    taskWipFormat.setFontWeight(QFont::ExtraBold);
 #else
     bolderFormat.setFontWeight(QFont::Black);
     listFormat.setFontWeight(QFont::Black);
 #endif
 }
 
-NoteEditHighlight::~NoteEditHighlight()
+NoteEditHighlighter::~NoteEditHighlighter()
 {
     for(auto& p:typeAndRegex) {
         delete p;
@@ -99,7 +109,7 @@ NoteEditHighlight::~NoteEditHighlight()
  *
  * Add Qt's Perl compatible regexp - see QRegExp or https://perlmaven.com/regex-cheat-sheet
  */
-void NoteEditHighlight::addRegex(Type type, const QString &pattern, bool minimal)
+void NoteEditHighlighter::addRegex(Type type, const QString &pattern, bool minimal)
 {
     QRegExp* regex = new QRegExp{pattern};
     regex->setPatternSyntax(QRegExp::RegExp2);
@@ -115,7 +125,7 @@ void NoteEditHighlight::addRegex(Type type, const QString &pattern, bool minimal
  * Multi-line highlighting is solved by maintaining a state as the
  * whole document is being highlighted.
  */
-void NoteEditHighlight::highlightBlock(const QString& text)
+void NoteEditHighlighter::highlightBlock(const QString& text)
 {
     if(enabled) {
         // clear format of the text
@@ -127,6 +137,11 @@ void NoteEditHighlight::highlightBlock(const QString& text)
             if(text.size()) highlightPatterns(text);
             // eventually overwrite certain formatting with *multiline(s)* like MD code or HTML comments
             highlightMultilineHtmlComments(text);
+
+            // spell check
+            if(Configuration::getInstance().isUiEditorLiveSpellCheck()) {
+                this->spellCheck(text);
+            }
         }
     }
 }
@@ -136,7 +151,7 @@ void NoteEditHighlight::highlightBlock(const QString& text)
  * it. Then it assigns a format to every detected token using
  * setFormat(offset,length) function.
  */
-void NoteEditHighlight::highlightPatterns(const QString& text)
+void NoteEditHighlighter::highlightPatterns(const QString& text)
 {
     // iterate all regexps - ORDER matters as latter regexps may OVERWRITE format of
     // earlier regexps, e.g. consider bold rewritten by multiline code or bold rewriting
@@ -187,6 +202,12 @@ void NoteEditHighlight::highlightPatterns(const QString& text)
             case OrderedList:
                 setFormat(index, length, listFormat);
                 break;
+            case TaskDoneItem:
+                setFormat(index, length, taskDoneFormat);
+                break;
+            case TaskWipItem:
+                setFormat(index, length, taskWipFormat);
+                break;
             case HtmlTag:
                 setFormat(index, length, htmlTagFormat);
                 break;
@@ -218,7 +239,7 @@ void NoteEditHighlight::highlightPatterns(const QString& text)
 /**
  * @brief Highlight MD multiline code and return true if the line has been formatted.
  */
-bool NoteEditHighlight::highlightMultilineMdCode(const QString &text)
+bool NoteEditHighlighter::highlightMultilineMdCode(const QString &text)
 {
     static const QString TOKEN("```");
 
@@ -248,7 +269,7 @@ bool NoteEditHighlight::highlightMultilineMdCode(const QString &text)
     }
 }
 
-void NoteEditHighlight::highlightMultilineHtmlComments(const QString &text)
+void NoteEditHighlighter::highlightMultilineHtmlComments(const QString &text)
 {
     static const QString BEGIN_TOKEN("<!--");
     static const QString END_TOKEN("-->");
@@ -271,6 +292,46 @@ void NoteEditHighlight::highlightMultilineHtmlComments(const QString &text)
         if(end < start) {
             setFormat(start, text.length(), htmlCommentFormat);
             setCurrentBlockState(currentBlockState() | InComment);
+        }
+    }
+}
+
+void NoteEditHighlighter::spellCheck(const QString& text)
+{
+    if(text.size()) {
+        // IMPROVE ghostwriter heretage
+        NoteEditHighlighter* q = this;
+
+        int cursorPosition = this->noteEditorView->textCursor().position();
+        QTextBlock cursorPosBlock = this->noteEditorDocument->findBlock(cursorPosition);
+        int cursorPosInBlock = -1;
+
+        if (q->currentBlock() == cursorPosBlock) {
+            cursorPosInBlock = cursorPosition - cursorPosBlock.position();
+        }
+
+        QStringRef misspelledWord = spellCheckDictionary.check(text, 0);
+
+        while(!misspelledWord.isNull()) {
+            int startIndex = misspelledWord.position();
+            int length = misspelledWord.length();
+
+            if(isTypingPaused || (cursorPosInBlock != (startIndex + length))) {
+                QTextCharFormat spellingErrorFormat = q->format(startIndex);
+                spellingErrorFormat.setUnderlineColor(lookAndFeels.getEditorError());
+                spellingErrorFormat.setUnderlineStyle (
+                    static_cast<QTextCharFormat::UnderlineStyle>(
+                        QApplication::style()->styleHint(
+                            QStyle::SH_SpellCheckUnderlineStyle
+                        )
+                    )
+                );
+
+                q->setFormat(startIndex, length, spellingErrorFormat);
+            }
+
+            startIndex += length;
+            misspelledWord = spellCheckDictionary.check(text, startIndex);
         }
     }
 }

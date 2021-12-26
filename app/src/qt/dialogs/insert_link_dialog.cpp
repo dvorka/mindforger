@@ -1,7 +1,7 @@
 /*
  insert_link_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -62,10 +62,6 @@ InsertLinkDialog::InsertLinkDialog(QWidget* parent)
 
     // assembly
     QVBoxLayout* mainLayout = new QVBoxLayout{};
-    mainLayout->addWidget(linkTextLabel);
-    mainLayout->addWidget(linkTextEdit);
-    mainLayout->addWidget(pathLabel);
-    mainLayout->addWidget(pathEdit);
     QHBoxLayout* srcButtonLayout = new QHBoxLayout{};
     srcButtonLayout->addWidget(findOutlineButton);
     srcButtonLayout->addWidget(findNoteButton);
@@ -73,6 +69,10 @@ InsertLinkDialog::InsertLinkDialog(QWidget* parent)
     srcButtonLayout->addWidget(findDirectoryButton);
     srcButtonLayout->addStretch();
     mainLayout->addLayout(srcButtonLayout);
+    mainLayout->addWidget(linkTextLabel);
+    mainLayout->addWidget(linkTextEdit);
+    mainLayout->addWidget(pathLabel);
+    mainLayout->addWidget(pathEdit);
     mainLayout->addWidget(copyToRepoCheckBox);
 
     QHBoxLayout* buttonLayout = new QHBoxLayout{};
@@ -96,7 +96,7 @@ InsertLinkDialog::~InsertLinkDialog()
 
 void InsertLinkDialog::show(
         const Repository* repository,
-        const Outline* outline,
+        Outline* outline,
         vector<Thing*>& os,
         vector<Note*>& ns,
         const QString& selectedText,
@@ -107,7 +107,7 @@ void InsertLinkDialog::show(
 
     linkTextEdit->setText(selectedText.size()?selectedText:tr("link"));
     linkTextEdit->selectAll();
-    linkTextEdit->setFocus();
+    findOutlineButton->setFocus();
     pathEdit->clear();
     if(link.size()) {
         pathEdit->setText(link);
@@ -128,10 +128,14 @@ void InsertLinkDialog::handleFindOutline()
 void InsertLinkDialog::handleFindOutlineChoice()
 {
     if(findOutlineByNameDialog->getChoice()) {
-        Outline* choice = static_cast<Outline*>(findOutlineByNameDialog->getChoice());
+        Outline* choice = static_cast<Outline*>(
+            findOutlineByNameDialog->getChoice()
+        );
         linkTextEdit->setText(QString::fromStdString(choice->getName()));
 
-        string p = RepositoryIndexer::makePathRelative(activeRepository, currentOutline->getKey(), choice->getKey());
+        string p = RepositoryIndexer::makePathRelative(
+            activeRepository, currentOutline->getKey(), choice->getKey()
+        );
         pathToLinuxDelimiters(p, p);
         pathEdit->setText(QString::fromStdString(p));
     }
@@ -154,15 +158,18 @@ void InsertLinkDialog::handleFindNoteChoice()
         dstPath += choice->getOutline()->getKey();
         dstPath += "#";
         dstPath += choice->getMangledName();
-        string p = RepositoryIndexer::makePathRelative(activeRepository, currentOutline->getKey(), dstPath);
+        string p = RepositoryIndexer::makePathRelative(
+            activeRepository, currentOutline->getKey(), dstPath
+        );
         pathEdit->setText(QString::fromStdString(p));
     }
 }
 
 void InsertLinkDialog::handleFindFile()
 {
-    QString homeDirectory
-        = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+    QString homeDirectory = QStandardPaths::locate(
+        QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory
+    );
 
     QFileDialog fileDialog{this};
     fileDialog.setWindowTitle(tr("Choose File"));
@@ -181,8 +188,9 @@ void InsertLinkDialog::handleFindFile()
 
 void InsertLinkDialog::handleFindDirectory()
 {
-    QString homeDirectory
-        = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+    QString homeDirectory = QStandardPaths::locate(
+        QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory
+    );
 
     QFileDialog fileDialog{this};
     fileDialog.setWindowTitle(tr("Choose Directory"));

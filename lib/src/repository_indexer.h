@@ -1,7 +1,7 @@
 /*
  repository_indexer.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -19,11 +19,12 @@
 #ifndef M8R_REPOSITORY_INDEXER_H_
 #define M8R_REPOSITORY_INDEXER_H_
 
-#include "config/config.h"
+#include "definitions.h"
+
 #include <sys/types.h>
 #ifndef _WIN32
-#  include <unistd.h>
-#endif //_WIN32
+    #include <unistd.h>
+#endif
 
 #include <cstdio>
 #include <cstring>
@@ -66,11 +67,6 @@ public:
             const std::string& dstAbsolutePath,
             const bool dstIsFile=true);
 
-    /**
-     * @brief Does file has one of supported Markdown extensions?
-     */
-    static bool fileHasMarkdownExtension(const std::string& filename);
-
 private:
     Repository* repository;
 
@@ -86,6 +82,15 @@ private:
     std::set<const std::string*> outlineStencils;
     std::set<const std::string*> noteStencils;
 
+    /*
+     * DIKW: information artifacts
+     */
+
+    // PDFs
+    std::set<const std::string*> pdfs;
+    // TXTs
+    std::set<const std::string*> texts;
+
 public:
     explicit RepositoryIndexer();
     RepositoryIndexer(const RepositoryIndexer&) = delete;
@@ -93,6 +98,16 @@ public:
     RepositoryIndexer& operator=(const RepositoryIndexer&) = delete;
     RepositoryIndexer& operator=(const RepositoryIndexer&&) = delete;
     virtual ~RepositoryIndexer();
+
+    Repository* getRepository() const { return repository; }
+
+    const std::set<const std::string*> getMarkdownFiles() const;
+    const std::set<const std::string*> getPdfFiles() const;
+    const std::set<const std::string*> getTextFiles() const;
+    const std::set<const std::string*> getAllOutlineFileNames() const;
+    const std::set<const std::string*> getOutlineStencilsFileNames() const;
+    const std::set<const std::string*> getNoteStencilsFileNames() const;
+    char* getTagsFromPath();
 
     /**
      * @brief Index new repository - any type, any modes.
@@ -108,14 +123,6 @@ public:
      * @brief Clear all fields.
      */
     void clear();
-
-    Repository* getRepository() const { return repository; }
-
-    const std::set<const std::string*> getMarkdownFiles() const;
-    const std::set<const std::string*> getAllOutlineFileNames() const;
-    const std::set<const std::string*> getOutlineStencilsFileNames() const;
-    const std::set<const std::string*> getNoteStencilsFileNames() const;
-    char* getTagsFromPath();
 
 private:
     void updateIndexMemory(const std::string& directory);

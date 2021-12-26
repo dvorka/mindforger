@@ -1,7 +1,7 @@
 /*
  main_window_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -21,8 +21,10 @@
 
 #include "../../lib/src/mind/mind.h"
 #include "../../lib/src/mind/ai/autolinking_preprocessor.h"
+#include "../../lib/src/mind/dikw/filesystem_information.h"
 #include "../../lib/src/representations/html/html_outline_representation.h"
 #include "../../lib/src/representations/markdown/markdown_configuration_representation.h"
+#include "../../lib/src/representations/markdown/markdown_repository_configuration_representation.h"
 
 #include "main_window_view.h"
 #include "main_menu_presenter.h"
@@ -35,6 +37,8 @@
 #include "orloj_presenter.h"
 #include "status_bar_presenter.h"
 
+#include "dialogs/add_library_dialog.h"
+#include "dialogs/organizer_new_dialog.h"
 #include "dialogs/outline_new_dialog.h"
 #include "dialogs/note_new_dialog.h"
 #include "dialogs/fts_dialog_presenter.h"
@@ -50,6 +54,8 @@
 #include "dialogs/rows_and_depth_dialog.h"
 #include "dialogs/new_repository_dialog.h"
 #include "dialogs/new_file_dialog.h"
+#include "dialogs/terminal_dialog.h"
+#include "dialogs/export_csv_file_dialog.h"
 #include "dialogs/export_file_dialog.h"
 #include "dialogs/ner_choose_tag_types_dialog.h"
 #include "dialogs/ner_result_dialog.h"
@@ -70,14 +76,17 @@ class FtsDialog;
 class FtsDialogPresenter;
 
 /**
- * @brief MindForger main window Presenter.
+ * @brief MindForger main window presenter.
+ *
+ * Main window presenter:
+ *
+ * * Provides index of all UI presenters.
+ * * Hosts cross component signals definitions.
+ * * Implements core UI application logic for other presenters and views.
  *
  * This class is used to demonstrate MindForger's MVP frontend architecture
  * and code conventions.
  *
- * Main window presenter:
- *   * Implements core UI application logic for other presenters and views.
- *   * Provides index of all UI presenters.
  */
 class MainWindowPresenter : public QObject
 {
@@ -102,13 +111,17 @@ private:
     MarkdownOutlineRepresentation* mdRepresentation;
     HtmlOutlineRepresentation* htmlRepresentation;
     MarkdownConfigurationRepresentation* mdConfigRepresentation;
+    MarkdownRepositoryConfigurationRepresentation* mdRepositoryConfigRepresentation;
+    MarkdownDocumentRepresentation* mdDocumentRepresentation;
 
     MainMenuPresenter* mainMenu;
     CliAndBreadcrumbsPresenter* cli;
     OrlojPresenter* orloj;
     StatusBarPresenter* statusBar;
 
+    AddLibraryDialog* newLibraryDialog;
     ScopeDialog* scopeDialog;
+    OrganizerNewDialog* newOrganizerDialog;
     OutlineNewDialog* newOutlineDialog;
     NoteNewDialog* newNoteDialog;
     FtsDialog* ftsDialog;
@@ -120,13 +133,14 @@ private:
     FindNoteByTagDialog* findNoteByTagDialog;
     RefactorNoteToOutlineDialog* refactorNoteToOutlineDialog;
     ConfigurationDialog* configDialog;
+    TerminalDialog* terminalDialog;
     InsertImageDialog* insertImageDialog;
     InsertLinkDialog* insertLinkDialog;
     RowsAndDepthDialog* rowsAndDepthDialog;
     NewRepositoryDialog* newRepositoryDialog;
     NewFileDialog* newFileDialog;
     ExportFileDialog* exportOutlineToHtmlDialog;
-    ExportFileDialog* exportMindToCsvDialog;
+    ExportCsvFileDialog* exportMemoryToCsvDialog;
     NerChooseTagTypesDialog *nerChooseTagsDialog;
     NerResultDialog* nerResultDialog;
 
@@ -134,8 +148,8 @@ public:
     explicit MainWindowPresenter(MainWindowView& view);
     MainWindowPresenter(const MainWindowPresenter&) = delete;
     MainWindowPresenter(const MainWindowPresenter&&) = delete;
-    MainWindowPresenter &operator=(const MainWindowPresenter&) = delete;
-    MainWindowPresenter &operator=(const MainWindowPresenter&&) = delete;
+    MainWindowPresenter& operator =(const MainWindowPresenter&) = delete;
+    MainWindowPresenter& operator =(const MainWindowPresenter&&) = delete;
     ~MainWindowPresenter();
 
     // this presenter view
@@ -184,6 +198,7 @@ public slots:
     void handleMindScope();
     void doActionMindPreferences();
     void handleMindPreferences();
+    void doActionMindTerminal();
     void doActionMindRemember();
     void doActionMindSnapshot();
     void doActionMindCsvExport();
@@ -215,6 +230,8 @@ public slots:
 #endif
     // view
     void doActionViewDashboard();
+    void sortAndSaveOrganizersConfig();
+    void doActionViewOrganizers();
     void doActionViewOrganizer();
     void doActionViewTagCloud();
     bool doActionViewHome();
@@ -224,6 +241,22 @@ public slots:
     void doActionCli();
     void doActionViewDistractionFree();
     void doActionViewFullscreen();
+    // knowledge
+    void doActionKnowledgeArxiv();
+    void doActionKnowledgeWikipedia();
+    // library
+    void doActionLibraryNew();
+    void handleNewLibrary();
+    // organizer
+    void doActionOrganizerNew();
+    void handleCreateOrganizer();
+    void doActionOrganizerEdit();
+    void doActionOrganizerClone();
+    void doActionOrganizerFocusToNextVisibleQuadrant();
+    void doActionOrganizerFocusToPreviousVisibleQuadrant();
+    void doActionOrganizerMoveNoteToNextVisibleQuadrant(Note* note);
+    void doActionOrganizerMoveNoteToPreviousVisibleQuadrant(Note* note);
+    void doActionOrganizerForget();
     // navigator
     void doActionNavigatorShuffle();
     // format
@@ -295,6 +328,7 @@ public slots:
     void doActionOutlineOrNoteEdit();
     void doActionOutlineShow();
     void doActionNoteEdit();
+    void doActionNoteExternalEdit();
     void doActionNoteFirst();
     void doActionNoteUp();
     void doActionNotePromote();
@@ -314,6 +348,7 @@ public slots:
     void doActionEditPasteImageData(QImage image);
     void doActionToggleLiveNotePreview();
     void doActionNameDescFocusSwap();
+    void doActionSpellCheck();
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();
@@ -326,6 +361,7 @@ public slots:
     void doActionHelpAboutMindForger();
 
     void slotHandleFts();
+    void slotMainToolbarVisibilityChanged(bool visibility);
 
 private:
     void injectMarkdownText(const QString& text, bool newline=false, int offset=0);

@@ -1,7 +1,7 @@
 /*
  organizer_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -26,11 +26,24 @@
 namespace m8r {
 
 /**
- * @brief Eisenhower matrix aka organizer view.
+ * @brief Eisenhower matrix (on tags).
  *
- * Do soon     | Do first
- * ------------+---------------------
- * Do sometime | Plan dedicated time
+ * Eisenhower matrix:
+ *
+ * ```
+ *  Do soon     | Do first
+ * -------------+---------------------
+ *  Do sometime | Plan dedicated time
+ * ```
+ *
+ * Eisenhower matrix on **tags**:
+ *
+ * ```
+ *  tag-1 | tag-2
+ * -------+-------
+ *  tag-3 | tag-4
+ * ```
+ *
  */
 class OrganizerView : public QSplitter
 {

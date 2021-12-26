@@ -1,6 +1,6 @@
 # appveyor.yml     AppVeyor CI configuration file for MindForger
 #
-# Copyright (C) 2016-2020
+# Copyright (C) 2016-2022
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-version: 1.52.{build}
+version: 1.53.{build}
 
 skip_commits:
   files:

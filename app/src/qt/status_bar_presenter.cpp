@@ -1,7 +1,7 @@
 /*
  status_bar_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -117,6 +117,28 @@ void StatusBarPresenter::showMindStatistics()
 #endif
 
     view->showInfo(status);
+}
+
+/*
+ * progress callback
+ */
+
+StatusBarProgressCallbackCtx::StatusBarProgressCallbackCtx(StatusBarPresenter* presenter)
+    : presenter{presenter}
+{
+}
+
+StatusBarProgressCallbackCtx::~StatusBarProgressCallbackCtx()
+{
+}
+
+void StatusBarProgressCallbackCtx::updateProgress(float progress)
+{
+    this->presenter->showInfo(
+        QString("Progress %1 %").arg(this->normalizeProgressToPercent(progress)).toStdString()
+    );
+
+    QApplication::processEvents();
 }
 
 } // namespace

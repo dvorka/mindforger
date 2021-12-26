@@ -1,7 +1,7 @@
 /*
  insert_link_dialog.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -21,6 +21,9 @@
 
 #include <vector>
 
+#include "../../lib/src/repository_indexer.h"
+#include "../../lib/src/config/repository.h"
+
 #include <QtWidgets>
 
 #include "find_outline_by_name_dialog.h"
@@ -34,7 +37,7 @@ class InsertLinkDialog : public QDialog
 
 private:
     const Repository* activeRepository;
-    const Outline* currentOutline;
+    Outline* currentOutline;
     std::vector<Thing*> outlines;
     std::vector<Note*> notes;
 
@@ -60,17 +63,18 @@ public:
     explicit InsertLinkDialog(QWidget* parent);
     InsertLinkDialog(const InsertLinkDialog&) = delete;
     InsertLinkDialog(const InsertLinkDialog&&) = delete;
-    InsertLinkDialog &operator=(const InsertLinkDialog&) = delete;
-    InsertLinkDialog &operator=(const InsertLinkDialog&&) = delete;
+    InsertLinkDialog& operator =(const InsertLinkDialog&) = delete;
+    InsertLinkDialog& operator =(const InsertLinkDialog&&) = delete;
     ~InsertLinkDialog();
 
     void show(
-            const Repository* repository,
-            const Outline* outline,
-            std::vector<Thing*>& outlines,
-            std::vector<Note*>& notes,
-            const QString& selectedText,
-            const QString& link);
+        const Repository* repository,
+        Outline* outline,
+        std::vector<Thing*>& outlines,
+        std::vector<Note*>& notes,
+        const QString& selectedText,
+        const QString& link
+    );
     QPushButton* getInsertButton() const { return insertButton; }
     QString getLinkText() const { return linkTextEdit->text(); }
     QString getPathText() const { return pathEdit->text(); }

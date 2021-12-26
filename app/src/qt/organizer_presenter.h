@@ -1,7 +1,7 @@
 /*
  organizer_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -35,6 +35,11 @@ class OrganizerPresenter : public QObject
 {
     Q_OBJECT
 
+    static constexpr const auto TITLE_DO_FIRST = "Do First (Urgent and Important)";
+    static constexpr const auto TITLE_DO_SOON = "Do Soon (Urgent)";
+    static constexpr const auto TITLE_PLAN_DEDICATED_TIME = "Plan Dedicated Time (Important)";
+    static constexpr const auto TITLE_DO_SOMETIMES= "Do Soon (Urgent)";
+
     OrganizerView* view;
 
     OrganizerQuadrantPresenter* doFirstPresenter;
@@ -42,15 +47,58 @@ class OrganizerPresenter : public QObject
     OrganizerQuadrantPresenter* doSometimePresenter;
     OrganizerQuadrantPresenter* planDedicatedTimePresenter;
 
+    std::vector<OrganizerQuadrantPresenter*> orderedQuadrants;
+
+    Organizer* organizer;
+
+    OrlojPresenter* orloj;
+
 public:
     explicit OrganizerPresenter(OrganizerView* view, OrlojPresenter* orloj);
     OrganizerPresenter(const OrganizerPresenter&) = delete;
     OrganizerPresenter(const OrganizerPresenter&&) = delete;
-    OrganizerPresenter &operator=(const OrganizerPresenter&) = delete;
-    OrganizerPresenter &operator=(const OrganizerPresenter&&) = delete;
+    OrganizerPresenter& operator=(const OrganizerPresenter&) = delete;
+    OrganizerPresenter& operator=(const OrganizerPresenter&&) = delete;
     ~OrganizerPresenter();
 
-    void refresh(const std::vector<Outline*>& os);
+    OrganizerView* getView() const { return this->view; }
+    Organizer* getOrganizer() const { return this->organizer; }
+
+    std::vector<const Tag*> getTagsForQuadrant(int columnNumber);
+
+    void refresh(
+        Organizer* organizer,
+        const std::vector<Note*>& ons,
+        const std::vector<Outline*>& os,
+        const std::vector<Note*>& ns,
+        bool setFocus = true
+    );
+
+    void focusToNextVisibleQuadrant();
+    void focusToPreviousVisibleQuadrant();
+
+    /**
+     * @brief Move Note to the next visible Eisenhower Matrix quadrant.
+     *
+     * Caller is responsible for refreshing column views.
+     *
+     * @param n     Note to be moved.
+     * @return `true` if Note was moved, `false` otherwise.
+     */
+    OrganizerQuadrantPresenter* moveToNextVisibleQuadrant(Note* n);
+    /**
+     * @brief Move Note to the previous visible Eisenhower Matrix quadrant.
+     *
+     * Caller is responsible for refreshing column views.
+     *
+     * @param n     Note to be moved.
+     * @return `true` if Note was moved, `false` otherwise.
+     */
+    OrganizerQuadrantPresenter* moveToPreviousVisibleQuadrant(Note* n);
+
+private:
+    OrganizerQuadrantPresenter* moveToVisibleQuadrant(Note* n, int nextPrevious);
+
 };
 
 }

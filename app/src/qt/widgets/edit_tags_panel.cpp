@@ -1,7 +1,7 @@
 /*
  edit_tags_panel.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -112,6 +112,25 @@ const std::vector<const Tag*>& EditTagsPanel::getTags()
     return tags;
 }
 
+
+vector<string>& EditTagsPanel::getTagsAsStrings(vector<string>& tags) const {
+    if(listViewStrings.size()) {
+        for(const QString& s:listViewStrings) {
+            tags.push_back(s.toStdString());
+        }
+    }
+    return tags;
+}
+
+set<string>& EditTagsPanel::getTagsAsStringSet(set<string>& tagSet) const {
+    if(listViewStrings.size()) {
+        for(const QString& s:listViewStrings) {
+            tagSet.insert(s.toStdString());
+        }
+    }
+    return tagSet;
+}
+
 void EditTagsPanel::setTags(const std::vector<const Tag*>& tags)
 {
     clearTagList();
@@ -122,11 +141,35 @@ void EditTagsPanel::setTags(const std::vector<const Tag*>& tags)
     lineEdit->clear();
 }
 
+void EditTagsPanel::setTagsAsStrings(const std::vector<string>& tagsStrings)
+{
+    clearTagList();
+    for(string s:tagsStrings) {
+        lineEdit->setText(QString::fromStdString(s));
+        slotAddTag();
+    }
+    lineEdit->clear();
+}
+
+void EditTagsPanel::setTagsAsStrings(const std::set<string>& tagsStrings)
+{
+    clearTagList();
+    for(string s:tagsStrings) {
+        lineEdit->setText(QString::fromStdString(s));
+        slotAddTag();
+    }
+    lineEdit->clear();
+}
+
 void EditTagsPanel::slotAddTag()
 {
     if(!lineEdit->text().isEmpty()) {
         if(!listViewStrings.contains(lineEdit->text())) {
-            listViewStrings << lineEdit->text();
+            // escape Tag as , character is forbidden
+            string rawTag{lineEdit->text().toStdString()};
+            QString escapedTag = QString::fromStdString(Tag::escape(rawTag));
+            lineEdit->setText(escapedTag);
+            listViewStrings << escapedTag;
             ((QStringListModel*)listView->model())->setStringList(listViewStrings);
             emit signalTagSelectionChanged();
         }

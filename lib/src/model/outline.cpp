@@ -1,7 +1,7 @@
 /*
  outline.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -25,21 +25,63 @@ namespace m8r {
 // IMPROVE this type is not bound to any parent Clazz in Ontology
 const NoteType Outline::NOTE_4_OUTLINE_TYPE{"Outline", nullptr, Color::RED()};
 
+bool Outline::isOutlineDescriptorNoteType(const NoteType* noteType) {
+    return noteType && noteType == &Outline::NOTE_4_OUTLINE_TYPE;
+}
+bool Outline::isOutlineDescriptorNote(const Note* note) {
+    return note && note->getType() && note->getType() == &Outline::NOTE_4_OUTLINE_TYPE;
+}
+
+void Outline::sortByName(vector<Outline*>& os)
+{
+    std::sort(
+        os.begin(),
+        os.end(),
+        [](const Outline* o1, const Outline* o2) { return o1->getName().compare(o2->getName()) < 0; }
+    );
+}
+
+void Outline::sortByRead(vector<Outline*>& ns)
+{
+    std::sort(
+        ns.begin(),
+        ns.end(),
+        [](Outline* a, Outline* b) { return a->getRead() > b->getRead(); }
+    );
+}
+
+void Outline::sortByRead(vector<Note*>& ns)
+{
+    std::sort(
+        ns.begin(),
+        ns.end(),
+        [](const Note* n1, const Note* n2){ return n1->getRead() > n2->getRead(); }
+    );
+}
+
 Outline::Outline(const OutlineType* type)
-    : Thing{},
+    : ThingInTime{},
       memoryLocation(OutlineMemoryLocation::NORMAL),
+      flags{},
       format(MarkdownDocument::Format::MINDFORGER),
-      type(type),
+      preamble{},
+      tags{},
+      links{},
+      type{type},
+      description{},
+      modifiedPretty{},
+      revision{},
+      reads{},
+      importance{},
+      urgency{},
+      progress{},
+      notes{},
+      outlineDescriptorAsNote{new Note(&NOTE_4_OUTLINE_TYPE, this)},
+      bytesize{},
+      dirty{false},
+      readOnly{false},
       timeScope{}
 {
-    created = modified = read = 0;
-    reads = revision = 0;
-    importance = urgency = progress = 0;
-    bytesize = 0;
-    flags = 0;
-    dirty = false;
-
-    outlineDescriptorAsNote = new Note(&NOTE_4_OUTLINE_TYPE, this);
 }
 
 Outline::~Outline() {
@@ -76,8 +118,27 @@ void Outline::resetClonedOutline(Outline* o)
 }
 
 Outline::Outline(const Outline& o)
-    : Thing{},
-      memoryLocation(OutlineMemoryLocation::NORMAL), format(o.format), type(o.type)
+    : ThingInTime{},
+      memoryLocation(OutlineMemoryLocation::NORMAL),
+      flags{},
+      format(o.format),
+      preamble{},
+      tags{},
+      links{},
+      type{o.type},
+      description{},
+      modifiedPretty{},
+      revision{},
+      reads{},
+      importance{},
+      urgency{},
+      progress{},
+      notes{},
+      outlineDescriptorAsNote{},
+      bytesize{},
+      dirty{},
+      readOnly{},
+      timeScope{}
 {
     key.clear();
 
@@ -245,16 +306,6 @@ void Outline::notifyChange(Note* note)
     note->incRevision();
 }
 
-time_t Outline::getCreated() const
-{
-    return created;
-}
-
-void Outline::setCreated(time_t created)
-{
-    this->created = created;
-}
-
 void Outline::setImportance(int8_t importance)
 {
     this->importance = importance;
@@ -265,7 +316,7 @@ int8_t Outline::getImportance() const
     return importance;
 }
 
-const string& Outline::getKey() const
+string& Outline::getKey()
 {
     return key;
 }
@@ -305,26 +356,11 @@ void Outline::setTag(const Tag* tag)
     tags.push_back(tag);
 }
 
-time_t Outline::getModified() const
-{
-    return modified;
-}
-
 void Outline::makeModified()
 {
     setModified();
     setModifiedPretty();
     incRevision();
-}
-
-void Outline::setModified()
-{
-    this->modified = datetimeNow();
-}
-
-void Outline::setModified(time_t modified)
-{
-    this->modified = modified;
 }
 
 const string& Outline::getModifiedPretty() const
@@ -464,7 +500,7 @@ void Outline::resetClonedNote(Note* n)
     n->completeProperties(n->getModified());
 }
 
-Note* Outline::cloneNote(const Note* clonedNote)
+Note* Outline::cloneNote(const Note* clonedNote, const bool deep)
 {
     int offset = getNoteOffset(clonedNote);
     if(offset != -1) {
@@ -472,13 +508,14 @@ Note* Outline::cloneNote(const Note* clonedNote)
 
         vector<Note*> children{};
         getAllNoteChildren(clonedNote, &children);
-        offset += 1+children.size();
-        if(children.size()) {
-            if((unsigned int)offset < notes.size()) {
+        offset += 1 + static_cast<int>(children.size());
+        if(deep && children.size()) {
+            if(static_cast<unsigned int>(offset) < notes.size()) {
+                int o = offset;
                 for(Note* n:children) {
                     newNote = new Note(*n);
                     resetClonedNote(newNote);
-                    addNote(newNote, offset);
+                    addNote(newNote, o++);
                 }
             } else {
                 for(Note* n:children) {
@@ -553,7 +590,7 @@ int Outline::getNoteOffset(const Note* note) const
         if(notes.size()==1) {
             return 0;
         } else {
-            // IMPROVE this is SLOW O(n) - consider keeping order of note within it as a field
+            // IMPROVE this is SLOW O(n) - consider keeping order of N within it as a field
             auto it = std::find(notes.begin(), notes.end(), note);
             if(it != notes.end()) {
                 return std::distance(notes.begin(), it);
@@ -1054,6 +1091,9 @@ Note* Outline::getOutlineDescriptorAsNote()
 {
     outlineDescriptorAsNote->setName(name);
     outlineDescriptorAsNote->setDescription(description);
+
+    outlineDescriptorAsNote->setTags(&tags);
+
     outlineDescriptorAsNote->setCreated(created);
     outlineDescriptorAsNote->setModified(modified);
     outlineDescriptorAsNote->setRead(read);
@@ -1067,6 +1107,191 @@ void Outline::addLink(Link* link)
 {
     if(link) {
         links.push_back(link);
+    }
+}
+
+void Outline::organizeToEisenhowerMatrix(
+    Organizer* organizer,
+    const vector<Note*>& ons,
+    const vector<Outline*>& os,
+    const vector<Note*>& ns,
+    vector<Note*>& upperLeftNs,
+    vector<Note*>& upperRightNs,
+    vector<Note*>& lowerLeftNs,
+    vector<Note*>& lowerRightNs
+) {
+    organizer->makeModified();
+
+    if(os.size()) {
+        if(!organizer || organizer->getKey()==EisenhowerMatrix::KEY_EISENHOWER_MATRIX) {
+            // organizer type: Eisenhower matrix
+            for(Outline* o:os) {
+                if(o->getUrgency()>2) {
+                    if(o->getImportance()>2) {
+                        upperRightNs.push_back(o->getOutlineDescriptorAsNote());
+                    } else {
+                        upperLeftNs.push_back(o->getOutlineDescriptorAsNote());
+                    }
+                } else {
+                    if(o->getImportance()>2) {
+                        lowerRightNs.push_back(o->getOutlineDescriptorAsNote());
+                    } else {
+                        if(o->getImportance()>0) {
+                            lowerLeftNs.push_back(o->getOutlineDescriptorAsNote());
+                        }
+                    }
+                }
+            }
+        } else {
+            // organizer type: custom
+            if(Organizer::FilterBy::NOTES == organizer->getFilterBy()) {
+                Outline* scopeOrganizer{nullptr};
+
+                if(organizer->getOutlineScope().size()) {
+                    for(auto* o:os) {
+                        if(o->getKey() == organizer->getOutlineScope()) {
+                            scopeOrganizer = o;
+                            break;
+                        }
+                    }
+                }
+
+                // scoped vs. all
+                const vector<Note*>& notes{scopeOrganizer?scopeOrganizer->getNotes():ns};
+
+                for(Note* n:notes) {
+                    if(n->hasTagStrings(organizer->getUpperRightTags())) {
+                        upperRightNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getLowerRightTags())) {
+                        lowerRightNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getUpperLeftTags())) {
+                        upperLeftNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getLowerLeftTags())) {
+                        lowerLeftNs.push_back(n);
+                    }
+                }
+            } else if(Organizer::FilterBy::OUTLINES == organizer->getFilterBy()) {
+                for(Outline* o:os) {
+                    if(o->hasTagStrings(organizer->getUpperRightTags())) {
+                        upperRightNs.push_back(o->getOutlineDescriptorAsNote());
+                    }
+                    if(o->hasTagStrings(organizer->getLowerRightTags())) {
+                        lowerRightNs.push_back(o->getOutlineDescriptorAsNote());
+                    }
+                    if(o->hasTagStrings(organizer->getUpperLeftTags())) {
+                        upperLeftNs.push_back(o->getOutlineDescriptorAsNote());
+                    }
+                    if(o->hasTagStrings(organizer->getLowerLeftTags())) {
+                        lowerLeftNs.push_back(o->getOutlineDescriptorAsNote());
+                    }
+                }
+            } else if(Organizer::FilterBy::OUTLINES_NOTES == organizer->getFilterBy()) {
+                for(Note* n:ons) {
+                    if(n->hasTagStrings(organizer->getUpperRightTags())) {
+                        upperRightNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getLowerRightTags())) {
+                        lowerRightNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getUpperLeftTags())) {
+                        upperLeftNs.push_back(n);
+                    }
+                    if(n->hasTagStrings(organizer->getLowerLeftTags())) {
+                        lowerLeftNs.push_back(n);
+                    }
+                }
+            }
+
+            Outline::sortByRead(upperRightNs);
+            Outline::sortByRead(upperLeftNs);
+            Outline::sortByRead(lowerLeftNs);
+            Outline::sortByRead(lowerRightNs);
+        }
+    }
+}
+
+void Outline::organizeToKanbanColumns(
+    Kanban* kanban,
+    const vector<Note*>& ons,
+    const vector<Outline*>& os,
+    const vector<Note*>& ns,
+    vector<Note*>& upperLeftNs,
+    vector<Note*>& upperRightNs,
+    vector<Note*>& lowerLeftNs,
+    vector<Note*>& lowerRightNs
+) {
+    kanban->makeModified();
+
+    if(os.size()) {
+        // organizer type: custom
+        if(Organizer::FilterBy::NOTES == kanban->getFilterBy()) {
+            Outline* scopeKanban{nullptr};
+
+            if(kanban->getOutlineScope().size()) {
+                for(auto* o:os) {
+                    if(o->getKey() == kanban->getOutlineScope()) {
+                        scopeKanban= o;
+                        break;
+                    }
+                }
+            }
+
+            // scoped vs. all
+            const vector<Note*>& notes{scopeKanban?scopeKanban->getNotes():ns};
+
+            for(Note* n:notes) {
+                if(n->hasTagStrings(kanban->getUpperRightTags())) {
+                    upperRightNs.push_back(n);
+                }
+                if(n->hasTagStrings(kanban->getLowerRightTags())) {
+                    lowerRightNs.push_back(n);
+                }
+                if(n->hasTagStrings(kanban->getUpperLeftTags())) {
+                    upperLeftNs.push_back(n);
+                }
+                if(n->hasTagStrings(kanban->getLowerLeftTags())) {
+                    lowerLeftNs.push_back(n);
+                }
+            }
+        } else if(Organizer::FilterBy::OUTLINES == kanban->getFilterBy()) {
+            for(Outline* o:os) {
+                if(o->hasTagStrings(kanban->getUpperRightTags())) {
+                    upperRightNs.push_back(o->getOutlineDescriptorAsNote());
+                }
+                if(o->hasTagStrings(kanban->getLowerRightTags())) {
+                    lowerRightNs.push_back(o->getOutlineDescriptorAsNote());
+                }
+                if(o->hasTagStrings(kanban->getUpperLeftTags())) {
+                    upperLeftNs.push_back(o->getOutlineDescriptorAsNote());
+                }
+                if(o->hasTagStrings(kanban->getLowerLeftTags())) {
+                    lowerLeftNs.push_back(o->getOutlineDescriptorAsNote());
+                }
+            }
+        } else if(Organizer::FilterBy::OUTLINES_NOTES == kanban->getFilterBy()) {
+            for(Note* n:ons) {
+                if(n->hasTagStrings(kanban->getUpperRightTags())) {
+                    upperRightNs.push_back(n);
+                }
+                if(n->hasTagStrings(kanban->getLowerRightTags())) {
+                    lowerRightNs.push_back(n);
+                }
+                if(n->hasTagStrings(kanban->getUpperLeftTags())) {
+                    upperLeftNs.push_back(n);
+                }
+                if(n->hasTagStrings(kanban->getLowerLeftTags())) {
+                    lowerLeftNs.push_back(n);
+                }
+            }
+        }
+
+        sortByRead(upperLeftNs);
+        sortByRead(upperRightNs);
+        sortByRead(lowerLeftNs);
+        sortByRead(lowerRightNs);
     }
 }
 

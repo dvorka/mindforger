@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@ if len(sys.argv) > 1:
     c = sys.argv[1]
     print '{}(const {}&) = delete;'.format(c,c)
     print '{}(const {}&&) = delete;'.format(c,c)
-    print '{} &operator=(const {}&) = delete;'.format(c,c)
-    print '{} &operator=(const {}&&) = delete;'.format(c,c)
+    print '{}& operator =(const {}&) = delete;'.format(c,c)
+    print '{}& operator =(const {}&&) = delete;'.format(c,c)
 else:
     print 'Error: provide class name as program argument'
 

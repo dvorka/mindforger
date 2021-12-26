@@ -1,7 +1,7 @@
 /*
  note_editor_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,9 +23,10 @@
 
 #include "../../lib/src/gear/lang_utils.h"
 
-#include "note_edit_highlight.h"
+#include "note_edit_highlighter.h"
 #include "widgets/line_number_panel.h"
 #include "status_bar_view.h"
+#include "spelling/spell_checker.h"
 
 namespace m8r {
 
@@ -48,7 +49,7 @@ private:
 
     // usability
     bool enableSyntaxHighlighting;
-    NoteEditHighlight* highlighter;
+    NoteEditHighlighter* highlighter;
     bool showLineNumbers;
     LineNumberPanel* lineNumberPanel;
 
@@ -62,6 +63,15 @@ private:
 
     bool tabsAsSpaces;
     int tabWidth;
+
+    // spell check
+    bool mouseButtonDown;
+    QTextCursor cursorForWord;
+    QString wordUnderMouse;
+    QList<QAction*> spellingActions;
+    DictionaryRef spellCheckDictionary;
+    QAction* addWordToDictionaryAction;
+    QAction* checkSpellingAction;
 
     // find
     QString lastFindString;
@@ -91,6 +101,10 @@ public:
     void dropEvent(QDropEvent* event) override;
     void dragMoveEvent(QDragMoveEvent* event) override;
 
+    // spell check
+    void enableSpellCheck(bool enable) { this->highlighter->setEnabled(enable); }
+    void checkDocumentSpelling();
+
     // search
     void findString(const QString s, bool reverse, bool casesens, bool words);
     void findStringAgain();
@@ -104,6 +118,7 @@ public:
 protected:
     void mousePressEvent(QMouseEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;
+    bool eventFilter(QObject* watched, QEvent* event) override;
 private:
     void setEditorTabWidth(int tabWidth);
     void setEditorTabsAsSpacesPolicy(bool tabsAsSpaces);
@@ -137,6 +152,8 @@ public:
     void setShowLineNumbers(bool show);
 public slots:
     void slotConfigurationUpdated();
+protected slots:
+    void suggestSpelling(QAction* action);
 
 signals:
     void signalDnDropUrl(QString);

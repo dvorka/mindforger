@@ -1,7 +1,7 @@
 /*
  thing.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -63,6 +63,60 @@ void Thing::autolinkName()
         autolinkingAbbr.clear();
     }
 }
+
+/*
+ * Thing in time
+ */
+
+ThingInTime::ThingInTime()
+    : Thing{},
+      created{},
+      read{},
+      modified{}
+{
+}
+
+ThingInTime::ThingInTime(const std::string name)
+    : Thing{name}
+{
+}
+
+ThingInTime::~ThingInTime()
+{
+}
+
+time_t ThingInTime::getCreated() const
+{
+    return created;
+}
+
+void ThingInTime::setCreated()
+{
+    this->modified = datetimeNow();
+}
+
+void ThingInTime::setCreated(time_t created)
+{
+    this->created = created;
+}
+
+time_t ThingInTime::getModified() const
+{
+    return modified;
+}
+
+void ThingInTime::setModified()
+{
+    this->modified = datetimeNow();
+}
+
+void ThingInTime::setModified(time_t modified)
+{
+    MF_ASSERT_FUTURE_TIMESTAMPS(created, read, modified, this->getKey() << "# " << name, name);
+
+    this->modified = modified;
+}
+
 
 /*
  * Class

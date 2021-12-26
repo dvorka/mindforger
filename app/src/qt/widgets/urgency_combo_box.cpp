@@ -1,7 +1,7 @@
 /*
  urgency_combo_box.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -28,12 +28,11 @@ UrgencyComboBox::UrgencyComboBox(QWidget *parent)
     for(int i=1; i<=5; i++) {
         s.clear();
         for(int j=1; j<=5; j++) {
+            // unicode U260x table: https://www.unicode.org/charts/PDF/U2600.pdf
             if(j<=i) {
-                s += QChar(0x25D5); // timer clock
-                //s += QChar(0x29D7); // sand clocks - not in fonts on macOS and Fedora
+                s += QChar(U_CODE_URGENCY_ON);
             } else {
-                s += QChar(0x25F4); // timer clocks
-                //s += QChar(0x29D6); // sand clocks
+                s += QChar(U_CODE_URGENCY_OFF);
             }
         }
         addItem(s, QVariant::fromValue<int>(i));

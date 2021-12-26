@@ -1,6 +1,6 @@
 # mindforger-app.pro     Qt project file for MindForger
 #
-# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,14 +18,27 @@
 TARGET = mindforger
 TEMPLATE = app
 
-QT += widgets
+message("Qt version: $$QT_VERSION")
 
-mfner {
-  DEFINES += MF_NER
-}
+QT += widgets
 
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
+}
+
+# Hunspell spell check:
+# - Windows and Ubuntu Xenial require DEPRECATED Hunspell API
+# - Ubuntu Bionic and newer distros use NEW Hunspell API
+# Distro is detected on Unix/Linux only:
+unix:UBUNTU_DISTRO_VERSION = $$system(cat /etc/issue | while read D V X; do echo "${D} ${V}"; done | rev | cut -c 3- | rev)
+message("Unix version: $$UBUNTU_DISTRO_VERSION")
+win32|mfoldhunspell|equals(UBUNTU_DISTRO_VERSION, "Ubuntu 16.04")|equals(UBUNTU_DISTRO_VERSION, "Ubuntu 16.")|equals(UBUNTU_DISTRO_VERSION, "Debian GNU/Lin") {
+  message("Forcing legacy Hunspell API for OS: $$UBUNTU_DISTRO_VERSION")
+  DEFINES += MF_DEPRECATED_HUNSPELL_API
+}
+
+mfner {
+  DEFINES += MF_NER
 }
 
 # webkit is supposed to be OBSOLETED by webengine, but webengine is disabled
@@ -107,9 +120,44 @@ win32 {
     LIBS += -lRpcrt4 -lOle32
 }
 
+# spellcheck
+macx {
+    HEADERS += ./src/qt/spelling/dictionary_provider_nsspellchecker.h
+
+    OBJECTIVE_SOURCES += src/qt/spelling/dictionary_provider_nsspellchecker.mm
+} else:win32 {
+    include(../deps/hunspell/hunspell.pri)
+
+    HEADERS += \
+      ./src/qt/spelling/dictionary_provider_hunspell.h \
+      ./src/qt/spelling/dictionary_provider_voikko.h
+
+    SOURCES += \
+      ./src/qt/spelling/dictionary_provider_hunspell.cpp \
+      ./src/qt/spelling/dictionary_provider_voikko.cpp
+
+} else:unix {
+    # pkgconfig-based configuration does not work @ Ubuntu distribution build
+    #  CONFIG += link_pkgconfig
+    #  PKGCONFIG += hunspell
+    # hardcoded paths are unfortunately more robust:
+    INCLUDEPATH += /usr/include/hunspell
+    LIBS += -lhunspell
+
+    HEADERS += \
+      ./src/qt/spelling/dictionary_provider_hunspell.h \
+      ./src/qt/spelling/dictionary_provider_voikko.h
+
+    SOURCES += \
+      ./src/qt/spelling/dictionary_provider_hunspell.cpp \
+      ./src/qt/spelling/dictionary_provider_voikko.cpp
+}
+INCLUDEPATH += ./src/qt/spelling
+
 # development environment remarks:
-# - Beast 64b:   GCC 5.4.0, Qt 5.5.1
-# - S7    64b:   GCC 4.8.5, Qt 5.2.1
+# - Mind  64b: GCC 7.5.0, Qt 5.9.5
+# - Beast 64b: GCC 5.4.0, Qt 5.5.1
+# - S7    64b: GCC 4.8.5, Qt 5.2.1
 # - Win10 64b: MSVC 2017, Qt 5.12.0
 #
 # - GCC: -std=c++0x ~ -std=c++11
@@ -162,7 +210,7 @@ HEADERS += \
     ./src/qt/note_edit_presenter.h \
     ./src/qt/look_n_feel.h \
     ./src/qt/html_delegate.h \
-    ./src/qt/note_edit_highlight.h \
+    ./src/qt/note_edit_highlighter.h \
     ./src/qt/gear/qutils.h \
     ./src/qt/i18nl10n.h \
     ./src/qt/outline_view_presenter.h \
@@ -201,11 +249,28 @@ HEADERS += \
     ./src/qt/dialogs/rows_and_depth_dialog.h \
     ./src/qt/dialogs/new_file_dialog.h \
     ./src/qt/dialogs/new_repository_dialog.h \
+    src/qt/dialogs/add_library_dialog.h \
+    src/qt/dialogs/export_csv_file_dialog.h \
+    src/qt/dialogs/organizer_new_dialog.h \
+    src/qt/dialogs/terminal_dialog.h \
+    src/qt/kanban_column_model.h \
+    src/qt/kanban_column_presenter.h \
+    src/qt/kanban_column_view.h \
+    src/qt/kanban_presenter.h \
+    src/qt/kanban_view.h \
     src/qt/organizer_view.h \
     src/qt/organizer_presenter.h \
     src/qt/organizer_quadrant_model.h \
     src/qt/organizer_quadrant_presenter.h \
     src/qt/organizer_quadrant_view.h \
+    src/qt/organizers_table_model.h \
+    src/qt/organizers_table_presenter.h \
+    src/qt/organizers_table_view.h \
+    src/qt/spelling/abstract_dictionary.h \
+    src/qt/spelling/abstract_dictionary_provider.h \
+    src/qt/spelling/dictionary_manager.h \
+    src/qt/spelling/dictionary_ref.h \
+    src/qt/spelling/spell_checker.h \
     src/qt/tags_table_model.h \
     src/qt/tags_table_presenter.h \
     src/qt/tags_table_view.h \
@@ -268,7 +333,7 @@ SOURCES += \
     ./src/qt/note_edit_presenter.cpp \
     ./src/qt/look_n_feel.cpp \
     ./src/qt/html_delegate.cpp \
-    ./src/qt/note_edit_highlight.cpp \
+    ./src/qt/note_edit_highlighter.cpp \
     ./src/qt/gear/qutils.cpp \
     ./src/qt/i18nl10n.cpp \
     ./src/qt/outline_view_presenter.cpp \
@@ -307,11 +372,25 @@ SOURCES += \
     ./src/qt/dialogs/rows_and_depth_dialog.cpp \
     ./src/qt/dialogs/new_file_dialog.cpp \
     ./src/qt/dialogs/new_repository_dialog.cpp \
+    src/qt/dialogs/add_library_dialog.cpp \
+    src/qt/dialogs/export_csv_file_dialog.cpp \
+    src/qt/dialogs/organizer_new_dialog.cpp \
+    src/qt/dialogs/terminal_dialog.cpp \
+    src/qt/kanban_column_model.cpp \
+    src/qt/kanban_column_presenter.cpp \
+    src/qt/kanban_column_view.cpp \
+    src/qt/kanban_presenter.cpp \
+    src/qt/kanban_view.cpp \
     src/qt/organizer_view.cpp \
     src/qt/organizer_presenter.cpp \
     src/qt/organizer_quadrant_model.cpp \
     src/qt/organizer_quadrant_presenter.cpp \
     src/qt/organizer_quadrant_view.cpp \
+    src/qt/organizers_table_model.cpp \
+    src/qt/organizers_table_presenter.cpp \
+    src/qt/organizers_table_view.cpp \
+    src/qt/spelling/dictionary_manager.cpp \
+    src/qt/spelling/spell_checker.cpp \
     src/qt/tags_table_model.cpp \
     src/qt/tags_table_presenter.cpp \
     src/qt/tags_table_view.cpp \
@@ -370,7 +449,7 @@ RESOURCES += \
 # See http://doc.qt.io/qt-5/qmake-advanced-usage.html
 
 binfile.files += mindforger
-binfile.path = /usr/bin/
+binfile.path = $$PREFIX/bin/
 INSTALLS += binfile
 
 # ########################################
@@ -397,5 +476,11 @@ win32 {
     # icon and exe detail information
     RC_FILE = $$PWD/resources/windows/mindforger.rc
 }
+
+# ########################################
+# Diagnostics
+# ########################################
+
+message(MindForger build DEFINES: $$DEFINES)
 
 # eof

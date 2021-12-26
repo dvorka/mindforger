@@ -1,7 +1,7 @@
 /*
  notes_table_model.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -86,9 +86,9 @@ void OutlinesTableModel::addRow(Outline* outline)
     if(outline->getImportance() > 0) {
         for(int i=0; i<=4; i++) {
             if(outline->getImportance()>i) {
-                s += QChar(9733);
+                s += QChar(U_CODE_IMPORTANCE_ON);
             } else {
-                s += QChar(9734);
+                s += QChar(U_CODE_IMPORTANCE_OFF);
             }
         }
     }
@@ -101,11 +101,9 @@ void OutlinesTableModel::addRow(Outline* outline)
     if(outline->getUrgency()>0) {
         for(int i=0; i<=4; i++) {
             if(outline->getUrgency()>i) {
-                s += QChar(0x25D5); // timer clock
-                //s += QChar(0x29D7); // sand clocks - not in fonts on macOS and Fedora
+                s += QChar(U_CODE_URGENCY_ON);
             } else {
-                s += QChar(0x25F4); // timer clocks
-                //s += QChar(0x29D6); // sand clocks
+                s += QChar(U_CODE_URGENCY_OFF);
             }
         }
     }

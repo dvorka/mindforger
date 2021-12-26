@@ -1,7 +1,7 @@
 /*
  mind.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -138,7 +138,7 @@ enum class ThingNameSerialization {
  *   Notes.
  * - ...
  */
-class Mind
+class Mind : public OntologyProvider
 {
 public:
     static constexpr int ALL_ENTRIES = -1;
@@ -347,7 +347,7 @@ public:
     /**
      * @brief Get ontology.
      */
-    Ontology& getOntology() { return ontology; }
+    virtual Ontology& getOntology() { return ontology; }
 
     /**
      * @brief Get memory dwell.
@@ -519,7 +519,10 @@ public:
             const int8_t progress = 0,
             const std::vector<const Tag*>* tags = nullptr,
             const std::vector<std::string*>* preamble = nullptr,
-            Stencil* outlineStencil = nullptr);
+            Stencil* outlineStencil = nullptr
+    );
+    std::string outlineNew(Outline* outline);
+
 
     /**
      * @brief Import O from a TWiki file.
@@ -559,10 +562,10 @@ public:
     /**
      * @brief Clone Note.
      *
-     * Cloned Note is stored down from original note on the same level of depth.
-     * If Note has children, then they are cloned as well.
+     * Cloned Note is stored below the original note on the same level of depth.
+     * If Note has children and deep option is used, then they are cloned as well.
      */
-    Note* noteClone(const std::string& outlineKey, const Note* newNote);
+    Note* noteClone(const std::string& outlineKey, const Note* newNote, const bool deep=true);
 
     /**
      * @brief Refactor Note to an Outline.

@@ -1,7 +1,7 @@
 /*
  file_utils.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -19,9 +19,10 @@
 #ifndef M8R_FILE_UTILS_H_
 #define M8R_FILE_UTILS_H_
 
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include "../config/config.h"
+#include "../definitions.h"
 
 #include <zlib.h>
 #if defined(MSDOS) || defined(OS2) || defined(_WIN32) || defined(__CYGWIN__)
@@ -72,17 +73,123 @@ constexpr const auto SYSTEM_TEMP_DIRECTORY = "/tmp";
 
 namespace m8r {
 
-struct File
-{
-    const std::string name;
+namespace filesystem {
 
-    File(const std::string& name)
-        : name(name)
+    struct File
     {
-    }
+        static const std::string EXTENSION_HTML;
+        static const std::string EXTENSION_CSV;
 
-    const std::string& getName() const noexcept { return name; }
-};
+        static const std::string EXTENSION_MD_MD;
+        static const std::string EXTENSION_MD_MARKDOWN;
+        static const std::string EXTENSION_MD_MDOWN;
+        static const std::string EXTENSION_MD_MKDN;
+
+        static const std::string EXTENSION_PDF;
+        static const std::string EXTENSION_PDF_UPPER;
+
+        static const std::string EXTENSION_TXT;
+
+        /**
+         * @brief Does file has one of supported Markdown extensions?
+         */
+        static bool fileHasMarkdownExtension(const std::string& filename);
+        // TODO: PDF extension >> make it MIME
+
+        /**
+         * @brief Does file has one of supported PDF extensions?
+         */
+        static bool fileHasPdfExtension(const std::string& filename);
+        // TODO: text extension >> make it MIME
+
+        /**
+         * @brief Does file has one of supported text file extensions?
+         */
+        static bool fileHasTextExtension(const std::string& filename);
+        // TODO instead of hard-coded extensions use MIME types to support/work
+        //      support and work with (new) extensions dynamically
+        // TODO extensions as content type parsers could be registered dynamically
+        //      just by name specification
+
+    public:
+        const std::string name;
+
+        File(const std::string& name)
+            : name(name)
+        {
+        }
+
+        const std::string& getName() const noexcept { return name; }
+    };
+
+    /**
+     * @brief The filesystem path class.
+     *
+     * Implementation of filesystem path for C++ 11-.
+     *
+     * @see https://en.cppreference.com/w/cpp/filesystem/path
+     */
+    class Path
+    {
+    private:
+        std::string path;
+
+    public:
+        explicit Path(const std::string& path);
+        explicit Path(const char* path);
+        explicit Path(File& file);
+        Path(const Path& other) {
+            this->path = other.path;
+        }
+        Path(const Path&& other) {
+            this->path = other.path;
+        }
+        Path& operator =(const Path& other) {
+            this->path = other.path;
+            return *this;
+        }
+        Path& operator =(const Path&& other) {
+            this->path = other.path;
+            return *this;
+        }
+        ~Path();
+
+        Path& operator /(const std::string& fileOrDirName) {
+            if(fileOrDirName.size()) {
+                this->path += FILE_PATH_SEPARATOR;
+                this->path += fileOrDirName;
+            }
+            return *this;
+        }
+
+        /**
+         * @brief Operator of cast to std::string.
+         */
+        operator std::string() const {
+            return path;
+        }
+
+        /**
+         * @brief Return path as std::string.
+         * @return Path as std::string.
+         */
+        std::string toString() const { return path; }
+        /**
+         * @brief Return path as C string.
+         * @return Path as C string.
+         */
+        const char* toCString() const { return path.c_str(); }
+
+        void clear() { this->path.clear(); }
+
+    };
+
+    /**
+     * @brief << operator ensuring autocast to std::string (must be defined as function).
+     */
+    std::ostream& operator<<(std::ostream& out, const Path& p);
+
+} // namespace: filesystem
 
 #ifdef __cplusplus
 extern "C" {
@@ -92,8 +199,36 @@ int ungzip(const char* srcFile, const char* dstFile);
 }
 #endif
 
+/**
+ * @brief Get current working directory path.
+ * @return CWD path.
+ */
+std::string getCwd();
+/**
+ * @brief Get OS specific system temp directory path.
+ * @return temp directory path.
+ */
+std::string& getSystemTempPath();
+/**
+ * @brief Get user home directory path.
+ * @return home path.
+ */
+std::string getHomeDirectoryPath();
+/**
+ * @brief Get OS specific application configuration directory path.
+ * @return app config path.
+ */
+std::string getSystemAppsConfigPath();
+/**
+ * @brief Get OS specific MindForger configuration directory path.
+ * @return MindForger config path.
+ */
+std::string getSystemMindForgerConfigPath();
+
 void pathToDirectoryAndFile(const std::string& path, std::string& directory, std::string& file);
 void pathToLinuxDelimiters(const std::string& path, std::string& linuxPath);
+std::string platformSpecificPath(const char* path);
+std::string getNewTempFilePath(const std::string& extension);
 bool stringToLines(const std::string* text, std::vector<std::string*>& lines);
 bool fileToLines(const std::string* filename, std::vector<std::string*>& lines, size_t& filesize);
 std::string* fileToString(const std::string& filename);

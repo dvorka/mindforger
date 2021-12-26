@@ -1,6 +1,6 @@
 # mindforger-lib-unit-tests.pro     MindForger thinking notebook
 #
-# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software ; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -114,8 +114,9 @@ SOURCES += \
     ./mind/mind_test.cpp \
     ./mind/note_test.cpp \
     ./mindforger_lib_unit_tests.cpp \
+    ./mind/organizer_test.cpp \
     ./mind/outline_test.cpp \
-    ./test_gear.cpp \
+    ./test_utils.cpp \
     ./config/configuration_test.cpp \
     ../benchmark/markdown_benchmark.cpp \
     ../benchmark/html_benchmark.cpp \
@@ -126,7 +127,8 @@ SOURCES += \
     ./gear/file_utils_test.cpp \
     ./gear/trie_test.cpp \
     ./ai/autolinking_test.cpp \
-    ./ai/autolinking_cmark_test.cpp
+    ./ai/autolinking_cmark_test.cpp \
+    ./mind/filesystem_information_test.cpp
 
 HEADERS += \
     ./test_gear.h

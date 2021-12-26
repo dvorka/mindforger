@@ -1,7 +1,7 @@
 /*
  ontology.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@
 #include "thing_class_rel_triple.h"
 #include "taxonomy.h"
 
-#include "../../config/configuration.h"
 #include "../../config/palette.h"
 #include "../../model/tag.h"
 #include "../../model/outline_type.h"
@@ -34,13 +33,11 @@
 
 namespace m8r {
 
-class Configuration;
-
 /**
  * @brief Mind ontology.
  *
- * This class is a rationalization of the comprehensive academic ontology theory to
- * a reasonable extend that suits MindForger needs.
+ * This class is a rationalization of the comprehensive academic ontology theory
+ * to a reasonable extend that suits MindForger needs.
  *
  * An ontology is a formal naming and definition of the types, properties,
  * and interrelationships of the entities that exist in a particular domain.
@@ -180,8 +177,8 @@ public:
     explicit Ontology();
     Ontology(const Ontology&) = delete;
     Ontology(const Ontology&&) = delete;
-    Ontology &operator=(const Ontology&) = delete;
-    Ontology &operator=(const Ontology&&) = delete;
+    Ontology& operator =(const Ontology&) = delete;
+    Ontology& operator =(const Ontology&&) = delete;
     virtual ~Ontology();
 
     void load();
@@ -207,6 +204,10 @@ public:
     const NoteType* findOrCreateNoteType(const std::string& key);
     const NoteType* getDefaultNoteType() const { return defaultNoteType; }
     Taxonomy<NoteType>& getNoteTypes() { return noteTypeTaxonomy; }
+};
+
+class OntologyProvider {
+    virtual Ontology& getOntology() = 0;
 };
 
 } // m8r namespace

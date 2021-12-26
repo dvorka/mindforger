@@ -1,7 +1,7 @@
 /*
  main_toolbar_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -56,12 +56,20 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
 
     addSeparator();
 
+#ifdef MF_DEPRECATED
     actionViewDashboard = addAction(
         QIcon(":/icons/dashboard.svg"),
         tr("View Dashboard"));
+#endif
+#ifdef ONE_ORGANIZER
     actionViewEisenhower = addAction(
         QIcon(":/icons/view-eisenhower.svg"),
         tr("View Eisenhower Matrix"));
+#else
+    actionViewOrganizers = addAction(
+        QIcon(":/icons/view-eisenhower.svg"),
+        tr("View Eisenhower Matrices"));
+#endif
     actionViewOutlines = addAction(
         QIcon(":/icons/view-outlines.svg"),
         tr("View Notebooks"));
@@ -100,5 +108,11 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
 MainToolbarView::~MainToolbarView()
 {
 }
+
+void MainToolbarView::hideEvent(QHideEvent *)
+{
+    emit signalMainToolbarVisibilityChanged(false);
+}
+
 
 } // m8r namespace

@@ -1,7 +1,7 @@
 /*
- note_edit_highlight.h     MindForger thinking notebook
+ note_edit_highlighter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -16,17 +16,18 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_NOTE_EDIT_HIGHLIGHT_H
-#define M8R_NOTE_EDIT_HIGHLIGHT_H
+#ifndef M8R_NOTE_EDIT_HIGHLIGHTER_H
+#define M8R_NOTE_EDIT_HIGHLIGHTER_H
 
 #include <QtWidgets>
 
 #include "look_n_feel.h"
+#include "spelling/dictionary_ref.h"
+#include "spelling/dictionary_manager.h"
 
 namespace m8r {
 
-// TODO ...Highlighted
-class NoteEditHighlight : public QSyntaxHighlighter
+class NoteEditHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
 
@@ -42,6 +43,8 @@ private:
         Codeblock,
         Mathblock,
         UnorderedList,
+        TaskDoneItem,
+        TaskWipItem,
         OrderedList,
 
         HtmlTag,
@@ -60,6 +63,12 @@ private:
 
     LookAndFeels& lookAndFeels;
 
+    // spell check
+    DictionaryRef spellCheckDictionary;
+    bool isTypingPaused;
+    QPlainTextEdit* noteEditorView;
+    QTextDocument* noteEditorDocument;
+
     // Markdown formats
     QTextCharFormat boldFormat;
     QTextCharFormat bolderFormat;
@@ -68,6 +77,8 @@ private:
     QTextCharFormat strikethroughFormat;
     QTextCharFormat linkFormat;
     QTextCharFormat listFormat;
+    QTextCharFormat taskDoneFormat;
+    QTextCharFormat taskWipFormat;
     QTextCharFormat codeBlockFormat;
     QTextCharFormat mathBlockFormat;
 
@@ -82,12 +93,12 @@ private:
     std::vector<std::pair<Type,QRegExp*>*> typeAndRegex;
 
 public:
-    explicit NoteEditHighlight(QTextDocument* parent);
-    NoteEditHighlight(const NoteEditHighlight&) = delete;
-    NoteEditHighlight(const NoteEditHighlight&&) = delete;
-    NoteEditHighlight &operator=(const NoteEditHighlight&) = delete;
-    NoteEditHighlight &operator=(const NoteEditHighlight&&) = delete;
-    ~NoteEditHighlight();
+    explicit NoteEditHighlighter(QPlainTextEdit* noteEditorView);
+    NoteEditHighlighter(const NoteEditHighlighter&) = delete;
+    NoteEditHighlighter(const NoteEditHighlighter&&) = delete;
+    NoteEditHighlighter &operator=(const NoteEditHighlighter&) = delete;
+    NoteEditHighlighter &operator=(const NoteEditHighlighter&&) = delete;
+    ~NoteEditHighlighter();
 
     void setEnabled(bool enable) { enabled = enable; }
     bool isEnabled() const { return enabled; }
@@ -101,8 +112,10 @@ private:
     void highlightPatterns(const QString& text);
     bool highlightMultilineMdCode(const QString& text);
     void highlightMultilineHtmlComments(const QString& text);
+
+    void spellCheck(const QString& text);
 };
 
 }
 
-#endif // M8R_NOTE_EDIT_HIGHLIGHT_H
+#endif // M8R_NOTE_EDIT_HIGHLIGHTER_H

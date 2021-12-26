@@ -1,7 +1,7 @@
 /*
  main_menu_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -27,23 +27,65 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     this->mainWindowPresenter = mwp;
 
     // menu: mind
-    QObject::connect(view->actionMindNewRepository, SIGNAL(triggered()), mwp, SLOT(doActionMindNewRepository()));
-    QObject::connect(view->actionMindNewFile, SIGNAL(triggered()), mwp, SLOT(doActionMindNewFile()));
-    QObject::connect(view->actionMindThink, SIGNAL(triggered()), mwp, SLOT(doActionMindToggleThink()));
-    QObject::connect(view->actionMindAutolink, SIGNAL(triggered()), mwp, SLOT(doActionMindToggleAutolink()));
-    QObject::connect(view->actionMindLearnRepository, SIGNAL(triggered()), mwp, SLOT(doActionMindLearnRepository()));
-    QObject::connect(view->actionMindLearnFile, SIGNAL(triggered()), mwp, SLOT(doActionMindLearnFile()));
+    QObject::connect(
+        view->actionMindNewRepository, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindNewRepository())
+    );
+    QObject::connect(
+        view->actionMindNewFile, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindNewFile())
+    );
+    QObject::connect(
+        view->actionMindThink, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindToggleThink())
+    );
+    QObject::connect(
+        view->actionMindAutolink, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindToggleAutolink())
+    );
+    QObject::connect(
+        view->actionMindLearnRepository, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindLearnRepository())
+    );
+    QObject::connect(
+        view->actionMindLearnFile, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindLearnFile())
+    );
     for(auto& r:config.getRepositories()) {
         view->submenuMindRelearn->addFile(QString::fromStdString(r.first));
     }
-    QObject::connect(view->submenuMindRelearn, SIGNAL(recentFileTriggered(QString)), mwp, SLOT(doActionMindRelearn(QString)));
-    QObject::connect(view->actionMindScope, SIGNAL(triggered()), mwp, SLOT(doActionMindTimeTagScope()));
-    QObject::connect(view->actionMindRemember, SIGNAL(triggered()), mwp, SLOT(doActionMindRemember()));
-    // TODO QObject::connect(view->actionMindForget, SIGNAL(triggered()), mwp, SLOT(doActionMindForgetting()));
-    QObject::connect(view->actionMindPreferences, SIGNAL(triggered()), mwp, SLOT(doActionMindPreferences()));
-    QObject::connect(view->actionMindSnapshot, SIGNAL(triggered()), mwp, SLOT(doActionMindSnapshot()));
-    QObject::connect(view->actionMindExportCsv, SIGNAL(triggered()), mwp, SLOT(doActionMindCsvExport()));
-    QObject::connect(view->actionExit, SIGNAL(triggered()), mwp, SLOT(doActionExit()));
+    QObject::connect(
+        view->submenuMindRelearn, SIGNAL(recentFileTriggered(QString)),
+        mwp, SLOT(doActionMindRelearn(QString))
+    );
+    QObject::connect(
+        view->actionMindScope, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindTimeTagScope())
+    );
+    QObject::connect(
+        view->actionMindRemember, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindRemember())
+    );
+    QObject::connect(
+        view->actionMindPreferences, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindPreferences())
+    );
+    QObject::connect(
+        view->actionMindTerminal, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindTerminal())
+    );
+    QObject::connect(
+        view->actionMindSnapshot, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindSnapshot())
+    );
+    QObject::connect(
+        view->actionMindExportCsv, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindCsvExport())
+    );
+    QObject::connect(
+        view->actionExit, SIGNAL(triggered()),
+        mwp, SLOT(doActionExit())
+    );
 #ifdef DO_MF_DEBUG
     QObject::connect(view->actionMindHack, SIGNAL(triggered()), mwp, SLOT(doActionMindHack()));
 #endif
@@ -64,7 +106,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     // menu: view
     QObject::connect(view->actionViewDashboard, SIGNAL(triggered()), mwp, SLOT(doActionViewDashboard()));
     QObject::connect(view->actionViewHome, SIGNAL(triggered()), mwp, SLOT(doActionViewHome()));
-    QObject::connect(view->actionViewOrganizer, SIGNAL(triggered()), mwp, SLOT(doActionViewOrganizer()));
+    QObject::connect(view->actionViewOrganizers, SIGNAL(triggered()), mwp, SLOT(doActionViewOrganizers()));
     QObject::connect(view->actionViewOutlines, SIGNAL(triggered()), mwp, SLOT(doActionViewOutlines()));
     QObject::connect(view->actionViewTags, SIGNAL(triggered()), mwp, SLOT(doActionViewTagCloud()));
     QObject::connect(view->actionViewNavigator, SIGNAL(triggered()), mwp, SLOT(doActionViewKnowledgeGraphNavigator()));
@@ -78,28 +120,100 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     // IMPROVE complete edge shrinking & zooming (skipped as shortcut/mouse wheel is the much more reasonable)
     QObject::connect(view->actionNavigatorShuffle, SIGNAL(triggered()), mwp, SLOT(doActionNavigatorShuffle()));
 
+    // menu: Knowledge
+#ifdef MF_WIP_KNOW
+    QObject::connect(view->actionKnowledgeWikipedia, SIGNAL(triggered()), mwp, SLOT(doActionKnowledgeWikipedia()));
+    QObject::connect(view->actionKnowledgeArxiv, SIGNAL(triggered()), mwp, SLOT(doActionKnowledgeArxiv()));
+#endif
+
+    // menu: Library
+#ifdef MF_WIP
+    QObject::connect(view->actionLibraryAdd, SIGNAL(triggered()), mwp, SLOT(doActionLibraryNew()));
+#endif
+
+    // menu: Organizer
+    QObject::connect(
+        view->actionOrganizerNew, SIGNAL(triggered()),
+        mwp, SLOT(doActionOrganizerNew()));
+    QObject::connect(
+        view->actionOrganizerEdit, SIGNAL(triggered()),
+        mwp, SLOT(doActionOrganizerEdit()));
+    QObject::connect(
+        view->actionOrganizerClone, SIGNAL(triggered()),
+        mwp, SLOT(doActionOrganizerClone()));
+    QObject::connect(
+        view->actionOrganizerForget, SIGNAL(triggered()),
+        mwp, SLOT(doActionOrganizerForget()));
+    QObject::connect(
+        view->actionOrganizerFocusPrevious, SIGNAL(triggered()),
+        mwp, SLOT(doActionOrganizerFocusToPreviousVisibleQuadrant()));
+    QObject::connect(
+        view->actionOrganizerFocusNext, SIGNAL(triggered()),
+        mwp, SLOT(doActionOrganizerFocusToNextVisibleQuadrant()));
+
     // menu: Outline
-    QObject::connect(view->actionOutlineNew, SIGNAL(triggered()), mwp, SLOT(doActionOutlineNew()));
-    QObject::connect(view->actionOutlineEdit, SIGNAL(triggered()), mwp, SLOT(doActionOutlineEdit()));
-    QObject::connect(view->actionOutlineForget, SIGNAL(triggered()), mwp, SLOT(doActionOutlineForget()));
-    QObject::connect(view->actionOutlineHome, SIGNAL(triggered()), mwp, SLOT(doActionOutlineHome()));
-    QObject::connect(view->actionOutlineClone, SIGNAL(triggered()), mwp, SLOT(doActionOutlineClone()));
-    QObject::connect(view->actionOutlineHtmlExport, SIGNAL(triggered()), mwp, SLOT(doActionOutlineHtmlExport()));
-    QObject::connect(view->actionOutlineTWikiImport, SIGNAL(triggered()), mwp, SLOT(doActionOutlineTWikiImport()));
+    QObject::connect(
+        view->actionOutlineNew, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineNew()));
+    QObject::connect(
+        view->actionOutlineEdit, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineEdit()));
+    QObject::connect(
+        view->actionOutlineForget, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineForget()));
+    QObject::connect(
+        view->actionOutlineHome, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineHome()));
+    QObject::connect(
+        view->actionOutlineClone, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineClone()));
+    QObject::connect(
+        view->actionOutlineHtmlExport, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineHtmlExport()));
+    QObject::connect(
+        view->actionOutlineTWikiImport, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineTWikiImport()));
 
     // menu: Note
-    QObject::connect(view->actionNoteNew, SIGNAL(triggered()), mwp, SLOT(doActionNoteNew()));
-    QObject::connect(view->actionNoteEdit, SIGNAL(triggered()), mwp, SLOT(doActionNoteEdit()));
-    QObject::connect(view->actionNoteClose, SIGNAL(triggered()), mwp, SLOT(doActionNoteLeave()));
-    QObject::connect(view->actionNoteForget, SIGNAL(triggered()), mwp, SLOT(doActionNoteForget()));
-    QObject::connect(view->actionNotePromote, SIGNAL(triggered()), mwp, SLOT(doActionNotePromote()));
-    QObject::connect(view->actionNoteDemote, SIGNAL(triggered()), mwp, SLOT(doActionNoteDemote()));
-    QObject::connect(view->actionNoteFirst, SIGNAL(triggered()), mwp, SLOT(doActionNoteFirst()));
-    QObject::connect(view->actionNoteUp, SIGNAL(triggered()), mwp, SLOT(doActionNoteUp()));
-    QObject::connect(view->actionNoteDown, SIGNAL(triggered()), mwp, SLOT(doActionNoteDown()));
-    QObject::connect(view->actionNoteLast, SIGNAL(triggered()), mwp, SLOT(doActionNoteLast()));
-    QObject::connect(view->actionNoteRefactor, SIGNAL(triggered()), mwp, SLOT(doActionRefactorNoteToOutline()));
-    QObject::connect(view->actionNoteClone, SIGNAL(triggered()), mwp, SLOT(doActionNoteClone()));
+    QObject::connect(
+        view->actionNoteNew, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteNew()));
+    QObject::connect(
+        view->actionNoteEdit, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteEdit()));
+    QObject::connect(
+        view->actionNoteExternalEdit, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteExternalEdit()));
+    QObject::connect(
+        view->actionNoteClose, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteLeave()));
+    QObject::connect(
+        view->actionNoteForget, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteForget()));
+    QObject::connect(
+        view->actionNotePromote, SIGNAL(triggered()),
+        mwp, SLOT(doActionNotePromote()));
+    QObject::connect(
+        view->actionNoteDemote, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteDemote()));
+    QObject::connect(
+        view->actionNoteFirst, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteFirst()));
+    QObject::connect(
+        view->actionNoteUp, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteUp()));
+    QObject::connect(
+        view->actionNoteDown, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteDown()));
+    QObject::connect(
+        view->actionNoteLast, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteLast()));
+    QObject::connect(
+        view->actionNoteRefactor, SIGNAL(triggered()),
+        mwp, SLOT(doActionRefactorNoteToOutline()));
+    QObject::connect(
+        view->actionNoteClone, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteClone()));
 
     // menu: edit
     QObject::connect(view->actionEditFind, SIGNAL(triggered()), mwp, SLOT(doActionEditFind()));
@@ -109,6 +223,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionEditNameDescFocusSwap, SIGNAL(triggered()), mwp, SLOT(doActionNameDescFocusSwap()));
     QObject::connect(view->actionEditLiveNotePreview, SIGNAL(triggered()), mwp, SLOT(doActionToggleLiveNotePreview()));
     QObject::connect(view->actionEditExtract, SIGNAL(triggered()), mwp, SLOT(doActionNoteExtract()));
+    QObject::connect(view->actionEditSpellCheck, SIGNAL(triggered()), mwp, SLOT(doActionSpellCheck()));
 
     // menu: format
     QObject::connect(view->actionFormatBold, SIGNAL(triggered()), mwp, SLOT(doActionFormatBold()));
@@ -190,9 +305,14 @@ void MainMenuPresenter::showFacetDashboard()
     view->showFacetOutlineList(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
 }
 
+void MainMenuPresenter::showFacetOrganizerList()
+{
+    view->showFacetOrganizerList(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
+}
+
 void MainMenuPresenter::showFacetOrganizer()
 {
-    view->showFacetOutlineList(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
+    view->showFacetOrganizerView(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
 }
 
 void MainMenuPresenter::showFacetNavigator()

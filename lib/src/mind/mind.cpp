@@ -1,7 +1,7 @@
 /*
  mind.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ Mind::Mind(Configuration &configuration)
 #ifdef MF_MD_2_HTML_CMARK
       autolinking{new AutolinkingMind{*this}},
 #else
-      autolinking{nullptr}
+      autolinking{nullptr},
 #endif
       exclusiveMind{},
       timeScopeAspect{},
@@ -279,7 +279,7 @@ bool Mind::autolinkFindLongestPrefixWord(std::string& s, std::string& r) const
 {
 #ifdef MF_MD_2_HTML_CMARK
     return autolinking->findLongestPrefixWord(s, r);
-#elif
+#else
     return false;
 #endif
 }
@@ -305,8 +305,6 @@ void Mind::remember(const std::string& outlineKey)
 void Mind::remember(Outline* outline)
 {
     memory.remember(outline);
-
-    // TODO onRemembering()
 
 #ifdef MF_MD_2_HTML_CMARK
     if(config.isAutolinking()) {
@@ -665,7 +663,7 @@ vector<Outline*>* Mind::getOutlinesOfType(const OutlineType& type) const
     return nullptr;
 }
 
-std::vector<Note*>& Mind::getAllNotes(std::vector<Note*>& notes, bool sortByRead, bool addNoteForOutline) const
+std::vector<Note*>& Mind::getAllNotes(vector<Note*>& notes, bool sortByRead, bool addNoteForOutline) const
 {
     return memory.getAllNotes(notes, sortByRead, addNoteForOutline);
 }
@@ -882,6 +880,17 @@ string Mind::outlineNew(
     return outline?outline->getKey():nullptr;
 }
 
+string Mind::outlineNew(Outline* outline)
+{
+    if(outline) {
+        remember(outline);
+        onRemembering();
+    }
+
+    return outline?outline->getKey():nullptr;
+}
+
+
 Outline* Mind::learnOutlineTWiki(const string& twikiFile)
 {
     string directory{}, file{};
@@ -984,11 +993,11 @@ Note* Mind::noteNew(
     }
 }
 
-Note* Mind::noteClone(const string& outlineKey, const Note* newNote)
+Note* Mind::noteClone(const string& outlineKey, const Note* newNote, const bool deep)
 {
     Outline* o = memory.getOutline(outlineKey);
     if(o) {
-        return o->cloneNote(newNote);
+        return o->cloneNote(newNote, deep);
     } else {
         throw MindForgerException("Outline for given key not found!");
     }
@@ -1079,7 +1088,9 @@ void Mind::noteDemote(Note* note, Outline::Patch* patch)
 
 void Mind::noteOnRename(const std::string& oldName, const std::string& newName)
 {
+#ifdef MF_MD_2_HTML_CMARK
     autolinking->update(oldName, newName);
+#endif
 }
 
 void Mind::onRemembering()

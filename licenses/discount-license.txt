@@ -1,4 +1,4 @@
-MindForger uses Discount as Markdown to HTML conversion library.
+MindForger used Discount as Markdown to HTML conversion library.
 
 ->Copyright (C) 2007 David Loren Parsons.  
 All rights reserved.<-

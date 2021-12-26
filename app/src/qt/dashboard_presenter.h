@@ -1,7 +1,7 @@
 /*
  dashboard_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -65,11 +65,11 @@ public:
     DashboardView* getView() { return view; }
 
     void refresh(
-            const std::vector<Outline*>& os,
-            const std::vector<Note*>& ns,
-            const std::map<const Tag*,int>& ts,
-            int bytes,
-            MindStatistics* stats
+        const std::vector<Outline*>& os,
+        const std::vector<Note*>& ns,
+        const std::map<const Tag*,int>& ts,
+        int bytes,
+        MindStatistics* stats
     );
 
     RecentNotesTablePresenter* getRecentNotesPresenter() { return recentDashboardletPresenter; }

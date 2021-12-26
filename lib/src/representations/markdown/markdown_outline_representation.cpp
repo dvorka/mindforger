@@ -1,7 +1,7 @@
 /*
  markdown_outline_representation.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 namespace m8r {
 
 using namespace std;
+using namespace m8r::filesystem;
 
 MarkdownOutlineRepresentation::MarkdownOutlineRepresentation(Ontology& ontology, RepresentationInterceptor* descriptionInterceptor)
     : ontology(ontology),
@@ -117,7 +118,7 @@ Outline* MarkdownOutlineRepresentation::outline(const File& file)
 
 Outline* MarkdownOutlineRepresentation::outline(vector<MarkdownAstNodeSection*>* ast)
 {
-    Outline *outline = new Outline{ontology.getDefaultOutlineType()};
+    Outline* outline = new Outline{ontology.getDefaultOutlineType()};
     if(ast) {
         size_t off = 0;
         if(ast->size()) {
@@ -252,7 +253,7 @@ Note* MarkdownOutlineRepresentation::note(const File& file)
     return n;
 }
 
-string* MarkdownOutlineRepresentation::toHeader(const Outline* outline)
+string* MarkdownOutlineRepresentation::toHeader(Outline* outline)
 {
     string* md = new string{};
     if(outline) {
@@ -276,7 +277,7 @@ string* MarkdownOutlineRepresentation::toPreamble(const Outline* outline, string
     return md;
 }
 
-void MarkdownOutlineRepresentation::toHeader(const Outline* outline, string* md)
+void MarkdownOutlineRepresentation::toHeader(Outline* outline, string* md)
 {
     if(outline) {
         if(outline->getNotes().size()) {
@@ -365,14 +366,14 @@ void MarkdownOutlineRepresentation::description(const std::string* md, std::vect
     }
 }
 
-string* MarkdownOutlineRepresentation::to(const Outline* outline)
+string* MarkdownOutlineRepresentation::to(Outline* outline)
 {
     string* md = new string{};
     md->reserve(AVG_OUTLINE_SIZE);
     return to(outline, md);
 }
 
-string* MarkdownOutlineRepresentation::to(const Outline* outline, string* md)
+string* MarkdownOutlineRepresentation::to(Outline* outline, string* md)
 {
     toPreamble(outline, md);
     toHeader(outline, md);

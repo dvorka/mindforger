@@ -2,7 +2,7 @@
 #
 # MindForger knowledge management tool
 #
-# Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -103,13 +103,6 @@ function releaseForParticularUbuntuVersion() {
     export MFSRC=/home/dvorka/p/mindforger/git/mindforger
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
     export MFBUILD=mindforger-${NOW}
-
-    # DO_MF_DEBUG is disabled by default now
-    #if ! grep -q "//#define DO_MF_DEBUG" "${MFSRC}/lib/src/debug.h"
-    #then
-    #	echo "This script must NOT be run if debug code is enabled - disable DO_MF_DEBUG first"
-    #	exit 1
-    #fi
     
     # 1) clean up
     echo -e "\n# Cleanup ####################################################"
@@ -138,8 +131,8 @@ function releaseForParticularUbuntuVersion() {
     # qt version MUST be specified as it CANNOT be configured by installing
     # qt5-default package: Debian control file does NOT allow virtual packages
     # like this qt5-default. Instead debian/rules file exports env var w/ Qt choice
-    #   .pro file is also extended to have 'make install' target
-    qmake -r mindforger.pro
+    # .pro file is also extended to have 'make install' target
+    qmake -r mindforger.pro CONFIG+=mfoldhunspell
     
     # 5) add new version to LOCAL Bazaar
     echo -e "\n# bazaar add & commit  #######################################"
@@ -175,10 +168,17 @@ function releaseForParticularUbuntuVersion() {
     mkdir -p ${PBUILDFOLDER}
     cp -rvf ~/pbuilder/*.tgz ${PBUILDFOLDER}
     # END
-    pbuilder-dist ${UBUNTUVERSION} build ${MFRELEASE}.dsc
+    pbuilder-dist ${UBUNTUVERSION} build ${MFRELEASE}.dsc -j6
+
+    if [[ "${DRY_RUN}" = "true" ]]
+    then
+	echo -e "\n${UBUNTUVERSION} DRY RUN finished - exiting WITHOUT upload to Launchpad\n"
+	exit 0
+    fi
     
     # 8) upload to Launchpad: push Bazaar and put changes
     echo -e "\n# bzr push .deb to Launchpad #################################"
+    
     # from buildarea/ to ./dist
     cd ../${MF}
     echo "Before bzr push: " `pwd`
@@ -196,20 +196,24 @@ function releaseForParticularUbuntuVersion() {
 # # Main #
 # ############################################################################
 
+echo "This script is expected to run from Beast Ubuntu 16.04 machine"
 if [ -e "../../.git" ]
 then
     echo "This script must NOT be run from Git repository - run it e.g. from ~/p/mindforger/launchpad instead"
     exit 1
 fi
 
-export ARG_MAJOR_VERSION=1.52.
-export ARG_MINOR_VERSION=0 # minor version is incremented for every Ubuntu version
+export ARG_MAJOR_VERSION=1.53.
+export ARG_MINOR_VERSION=7 # minor version is incremented for every Ubuntu version
 export ARG_BAZAAR_MSG="MindForger ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} release."
 
+# export DRY_RUN="true"
+
 # https://wiki.ubuntu.com/Releases
-# old: precise quantal saucy precise utopic vivid wily trusty (old GCC) yakkety artful cosmic
-# current: (trusty) xenial bionic disco eoan
-for UBUNTU_VERSION in xenial bionic disco eoan
+# obsolete: precise quantal saucy utopic vivid wily yakkety artful cosmic disco eoan groovy
+# current : trusty xenial bionic focal hirsute impish
+# 1.53.x  : (trusty: compilation fail) xenial bionic focal hirsute impish
+for UBUNTU_VERSION in focal hirsute impish
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"

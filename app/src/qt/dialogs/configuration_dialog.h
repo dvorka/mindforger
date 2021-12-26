@@ -1,7 +1,7 @@
 /*
  configuration_dialog.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -154,10 +154,14 @@ private:
 
     QLabel* htmlCssThemeLabel;
     QComboBox* htmlCssThemeCombo;
+    QLineEdit* htmlCssLineEdit;
+    QPushButton* htmlCssFindFileButton;
+
     QLabel* zoomLabel;
     QSpinBox* zoomSpin;
     QCheckBox* mathSupportCheck;
     QCheckBox* fullOPreviewCheck;
+    QCheckBox* doubleClickViewerToEditCheck;
     QLabel* diagramSupportLabel;
     QComboBox* diagramSupportCombo;
     QCheckBox* srcCodeHighlightSupportCheck;
@@ -169,6 +173,10 @@ public:
     // there and back is handled by Dialog's access to this class & Config singleton
     void refresh();
     void save();
+
+private slots:
+    void slotFindCssFile();
+    void slotCssChoiceChanged(int index);
 };
 
 /**
@@ -186,10 +194,15 @@ private:
     QLabel* editorFontLabel;
     QPushButton* editorFontButton;
     QCheckBox* editorMdSyntaxHighlightCheck;
+    QCheckBox* editorSpellCheckLive;
+    QComboBox* editorSpellCheckLanguageCombo;
+    QLabel* editorSpellCheckHelp;
     QCheckBox* editorAutocompleteCheck;
     QCheckBox* editorAutosaveCheck;
     QLabel* editorTabWidthLabel;
     QComboBox* editorTabWidthCombo;
+    QLabel* externalEditorCmdLabel;
+    QLineEdit* externalEditorCmdEdit;
     // TODO QCheckBox* editorQuoteSectionsCheck;
     QCheckBox* editorTabsAsSpacesCheck;
 

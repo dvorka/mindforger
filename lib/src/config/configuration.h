@@ -1,7 +1,7 @@
 /*
  configuration.h     M8r configuration management
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -27,11 +27,14 @@
 
 #include "repository.h"
 #include "time_scope.h"
+#include "./repository_configuration.h"
 #include "../repository_indexer.h"
 #include "../gear/lang_utils.h"
 #include "../gear/file_utils.h"
 #include "../exceptions.h"
 #include "../model/tag.h"
+#include "../model/eisenhower_matrix.h"
+#include "../persistence/configuration_persistence.h"
 #include "../install/installer.h"
 #include "../representations/markdown/markdown_transcoder.h"
 
@@ -48,20 +51,12 @@ constexpr const auto DIRNAME_M8R_REPOSITORY = "mindforger-repository";
 constexpr const auto FILE_PATH_M8R_REPOSITORY = "~/mindforger-repository";
 
 constexpr const auto FILENAME_M8R_CONFIGURATION = ".mindforger.md";
-constexpr const auto FILE_PATH_MEMORY = "memory";
-constexpr const auto FILE_PATH_MIND = "mind";
-constexpr const auto FILE_PATH_LIMBO = "limbo";
-constexpr const auto FILE_PATH_STENCILS = "stencils";
-constexpr const auto FILE_PATH_OUTLINES = "notebooks";
-constexpr const auto FILE_PATH_NOTES = "notes";
-
-constexpr const auto FILE_EXTENSION_HTML = ".html";
-constexpr const auto FILE_EXTENSION_CSV= ".csv";
-
-constexpr const auto FILE_EXTENSION_MD_MD = ".md";
-constexpr const auto FILE_EXTENSION_MD_MARKDOWN = ".markdown";
-constexpr const auto FILE_EXTENSION_MD_MDOWN = ".mdown";
-constexpr const auto FILE_EXTENSION_MD_MKDN = ".mkdn";
+constexpr const auto DIRNAME_MEMORY = "memory";
+constexpr const auto DIRNAME_MIND = "mind";
+constexpr const auto DIRNAME_LIMBO = "limbo";
+constexpr const auto DIRNAME_STENCILS = "stencils";
+constexpr const auto DIRNAME_OUTLINES = "notebooks";
+constexpr const auto DIRNAME_NOTES = "notes";
 
 constexpr const auto UI_THEME_DARK = "dark";
 constexpr const auto UI_THEME_LIGHT = "light";
@@ -80,6 +75,7 @@ constexpr const auto UI_HTML_THEME_CSS_LIGHT = "qrc:/html-css/light.css";
 constexpr const auto UI_HTML_THEME_CSS_LIGHT_COMPACT = "qrc:/html-css/light-compact.css";
 constexpr const auto UI_HTML_THEME_CSS_DARK = "qrc:/html-css/dark.css";
 constexpr const auto UI_HTML_THEME_CSS_RAW = "raw";
+constexpr const auto UI_HTML_THEME_CSS_CUSTOM = "custom";
 
 constexpr const auto UI_EDITOR_KEY_BINDING_EMACS = "emacs";
 constexpr const auto UI_EDITOR_KEY_BINDING_VIM = "vim";
@@ -101,6 +97,7 @@ constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 constexpr const auto DEFAULT_NEW_OUTLINE = "# New Markdown File\n\nThis is a new Markdown file created by MindForger.\n\n#Section 1\nThe first section.\n\n";
 
 class Installer;
+class RepositoryConfigurationPersistence;
 
 /**
  * @brief MindForger configuration.
@@ -111,15 +108,20 @@ class Installer;
  *
  * MindForger configuration file is stored in ~/.mindforger.md by default.
  *
- * This class is singleton. The reason to make it singleton is that it's used
- * through lib and GUI instances. Therefore passing of the configuration instance
- * to (almost) each and every application's component would be inefficient i.e. worse
- * than the use of singleton pattern.
+ * This class is singleton. The reason to make it singleton is that it is
+ * used through lib and GUI instances. Therefore passing of the configuration
+ * instance to (almost) each and every application's component would be
+ * inefficient i.e. worse than the use of singleton pattern.
  */
 class Configuration {
+private:
+    static RepositoryConfiguration* getDummyRepositoryConfiguration() {
+        static RepositoryConfiguration* DUMMY_REPOSITORY_CONFIG = new RepositoryConfiguration{};
+        return DUMMY_REPOSITORY_CONFIG;
+    }
+
 public:
-    static Configuration& getInstance()
-    {
+    static Configuration& getInstance() {
         static Configuration SINGLETON{};
         return SINGLETON;
     }
@@ -147,8 +149,19 @@ public:
         WINDOWS
     };
 
+    enum SortOrganizerBy {
+        URGENCY,
+        IMPORTANCE,
+    };
+
+    enum FilterOrganizerBy {
+        OUTLINES,
+        NOTES,
+        OUTLINES_NOTES
+    };
+
     static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_BOW = 200;
-    static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_WEIGHTED_FTS = 10000;
+    static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_WEIGHTED_FTS = 20000;
     static constexpr const int DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL = 500;
 
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
@@ -177,12 +190,14 @@ public:
     static constexpr const bool DEFAULT_EDITOR_AUTOSAVE = false;
     static constexpr const bool DEFAULT_FULL_O_PREVIEW = false;
     static constexpr const bool DEFAULT_MD_QUOTE_SECTIONS = true;
+    static constexpr const bool DEFAULT_SPELLCHECK_LIVE = true;
     static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_MD_MATH = false;
     static constexpr const bool DEFAULT_ALLOW_ONLINE_JS_LIBS = false;
     static constexpr const bool DEFAULT_NAVIGATOR_SHOW_LEGEND = false;
     static constexpr const int DEFAULT_OS_TABLE_SORT_COLUMN = 7;
     static constexpr const bool DEFAULT_OS_TABLE_SORT_ORDER = false;
+    static constexpr const bool DEFAULT_CLICK_NOTE_VIEW_TO_EDIT = true;
 
     static constexpr int EDITOR_MAX_AUTOCOMPLETE_LINES = 1000;
 
@@ -198,7 +213,7 @@ private:
     unsigned int asyncMindThreshold;
 
     std::string userHomePath;
-    // Some platforms, e.g. Windows, distinquishes user home and user documents
+    // some platforms, e.g. Windows, distinquishes user home and user documents
     std::string userDocPath;
     std::string configFilePath;
 
@@ -208,6 +223,9 @@ private:
     // active repository memory, limbo, ... paths (efficiency)
     std::string memoryPath;
     std::string limboPath;
+
+    // repository configuration (when in repository mode)
+    RepositoryConfiguration* repositoryConfiguration;
 
     // lib configuration
     bool writeMetadata; // write metadata to MD - enabled in case of MINDFORGER_REPO only by default (can be disabled for all repository types)
@@ -229,6 +247,7 @@ private:
     std::string uiThemeName;
     std::string uiHtmlCssPath; // use a CSS (size>0) or render raw MD (size==0)
     int uiHtmlZoom;
+    std::string externalEditorCmd;
     EditorKeyBindingMode uiEditorKeyBinding;
     std::string editorFont;
     int uiFontPointSize;
@@ -237,6 +256,10 @@ private:
     int uiEditorTabWidth;
     bool uiEditorLineNumbers; // show line numbers
     bool uiEditorSyntaxHighlighting; // toggle syntax highlighting
+    bool uiEditorLiveSpellCheck;
+    std::string uiEditorSpellCheckLanguage;
+    // transient: available languages loaded in runtime from environment and not persisted
+    std::vector<std::string> uiEditorSpellCheckLanguages;
     bool uiEditorAutocomplete; // toggle autocompletion
     JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
     int navigatorMaxNodes;
@@ -250,6 +273,10 @@ private:
     bool uiLiveNotePreview;
     int uiOsTableSortColumn;
     bool uiOsTableSortOrder; // true if ascending, else descending
+    bool uiDoubleClickNoteViewToEdit;
+
+    // organizers
+    std::vector<Organizer*> organizers;
 
 private:
     Installer* installer;
@@ -271,7 +298,10 @@ public:
     unsigned int getAsyncMindThreshold() const { return asyncMindThreshold; }
 
     std::string& getConfigFilePath() { return configFilePath; }
-    void setConfigFilePath(const std::string customConfigFilePath) { configFilePath = customConfigFilePath; }
+    void setConfigFilePath(const std::string customConfigFilePath) {
+        configFilePath = customConfigFilePath;
+    }
+
     const std::string& getMemoryPath() const { return memoryPath; }
     const std::string& getLimboPath() const { return limboPath; }
     const char* getRepositoryPathFromEnv();
@@ -291,7 +321,7 @@ public:
      * 3) if environment variable MINDFORGER_REPOSITORY is set, then use it, else 4)
      * 4) if repository exist in default location ~/mindforger-repository, then use it, else start W/O repository
      */
-    void findOrCreateDefaultRepository();
+    void findOrCreateDefaultRepository(RepositoryConfigurationPersistence& persistence);
     Repository* addRepository(Repository* repository);
     std::map<const std::string, Repository*>& getRepositories();
     /**
@@ -299,9 +329,32 @@ public:
      *
      * Note that activeRepository parameter must be one of the known repositories.
      */
-    void setActiveRepository(Repository* activeRepository);
+    void setActiveRepository(Repository* activeRepository, RepositoryConfigurationPersistence& persistence);
     bool isActiveRepository() const { return activeRepository!=nullptr; }
     Repository* getActiveRepository() const;
+
+    /*
+     * repository configuration
+     */
+
+    bool hasRepositoryConfiguration() const;
+    RepositoryConfiguration& initRepositoryConfiguration(Organizer* defaultOrganizer);
+    void clearRepositoryConfiguration();
+    std::string getRepositoryConfigFilePath() const;
+    /**
+     * @brief Get repository configuration.
+     *
+     * This method always returns reference to repository configuration
+     * reference - even if there is no repository i.g. in case of single
+     * file editation or Markdown documents directory indexation. In such
+     * case, dummy configuration instance is returned to ensure runtime
+     * robustness.
+     *
+     * @return repository configuration reference.
+     */
+    RepositoryConfiguration& getRepositoryConfiguration() const {
+        return *this->repositoryConfiguration;
+    }
 
     /*
      * lib
@@ -333,6 +386,12 @@ public:
      * GUI
      */
 
+    bool isExternalEditorCmd() const { return externalEditorCmd.size(); }
+    std::string getExternalEditorCmd() const { return externalEditorCmd; }
+    void setExternalEditorCmd(std::string externalEditorCmd) {
+        this->externalEditorCmd = externalEditorCmd;
+    }
+
     EditorKeyBindingMode getEditorKeyBinding() const { return uiEditorKeyBinding; }
     static const char* editorKeyBindingToString(EditorKeyBindingMode keyBinding) {
         if(keyBinding==EditorKeyBindingMode::EMACS) return UI_EDITOR_KEY_BINDING_EMACS; else
@@ -360,6 +419,34 @@ public:
     void setUiEditorShowLineNumbers(bool show) { uiEditorLineNumbers = show; }
     bool isUiEditorEnableSyntaxHighlighting() const { return uiEditorSyntaxHighlighting; }
     void setUiEditorEnableSyntaxHighlighting(bool enable) { uiEditorSyntaxHighlighting = enable; }
+    bool isUiEditorLiveSpellCheck() const { return uiEditorLiveSpellCheck; }
+    void setUiEditorLiveSpellCheck(bool enable) { uiEditorLiveSpellCheck= enable; }
+    std::string getUiEditorSpellCheckDefaultLanguage() const {
+        return uiEditorSpellCheckLanguage;
+    }    
+    void setUiEditorSpellCheckDefaultLanguage(std::string lang) {
+        uiEditorSpellCheckLanguage = lang;
+    }
+    void clearUiEditorSpellCheckDefaultLanguage() {
+        uiEditorSpellCheckLanguage.clear();
+    }
+    std::vector<std::string> getUiEditorSpellCheckLanguages() const {
+        return uiEditorSpellCheckLanguages;
+    }
+    void setUiEditorSpellCheckLanguages(std::vector<std::string>& langs) {
+        clearUiEditorSpellCheckLanguages();
+        for(auto lang: langs) {
+            uiEditorSpellCheckLanguages.push_back(lang);
+        }
+    }
+    void addUiEditorSpellCheckLanguage(std::string lang) {
+        return uiEditorSpellCheckLanguages.push_back(lang);
+    }
+    void clearUiEditorSpellCheckLanguages() {
+        uiEditorSpellCheckLanguages.clear();
+        clearUiEditorSpellCheckDefaultLanguage();
+        setUiEditorLiveSpellCheck(false);
+    }
     bool isUiEditorEnableAutocomplete() const { return uiEditorAutocomplete; }
     void setUiEditorEnableAutocomplete(bool enable) { uiEditorAutocomplete = enable; }
     int getUiEditorTabWidth() const { return uiEditorTabWidth; }
@@ -371,7 +458,11 @@ public:
         return uiHtmlCssPath.size()?uiHtmlCssPath.c_str():UI_HTML_THEME_CSS_RAW;
     }
     void setUiHtmlCssPath(const std::string path) {
-        if(!path.compare(UI_HTML_THEME_CSS_RAW)) uiHtmlCssPath.clear(); else uiHtmlCssPath = path;
+        if(!path.compare(UI_HTML_THEME_CSS_RAW)) {
+            uiHtmlCssPath.clear();
+        } else {
+            uiHtmlCssPath = path;
+        }
     }
     int getUiHtmlZoom() const { return uiHtmlZoom; }
     void incUiHtmlZoom() { if(uiHtmlZoom<500) uiHtmlZoom += 10; }
@@ -436,6 +527,9 @@ public:
     void setUiOsTableSortColumn(const int column) { this->uiOsTableSortColumn = column; }
     bool isUiOsTableSortOrder() const { return uiOsTableSortOrder; }
     void setUiOsTableSortOrder(const bool ascending) { this->uiOsTableSortOrder = ascending; }
+    bool isUiDoubleClickNoteViewToEdit() const { return this->uiDoubleClickNoteViewToEdit; }
+    void setUiDoubleClickNoteViewToEdit(bool enable) { this->uiDoubleClickNoteViewToEdit = enable; }
+
 };
 
 } // namespace

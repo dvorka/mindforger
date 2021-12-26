@@ -1,7 +1,7 @@
 /*
  debug.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -19,9 +19,9 @@
 #ifndef M8R_DEBUG_H_
 #define M8R_DEBUG_H_
 
-// DO_MF_DEBUG to be enabled in qmake (either .pro or CLI):
+// DO_MF_DEBUG to be enabled in qmake (either .pro or CLI or QtCreator build command):
 //   - configuration: DEFINES = DO_MF_DEBUG
-//   - command line: CONFIG += mfunits
+//   - command line: CONFIG+=mfunits
 
 #ifdef DO_MF_DEBUG
     #include <chrono>

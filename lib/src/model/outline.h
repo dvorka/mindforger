@@ -1,7 +1,7 @@
 /*
  outline.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@
 #include "../mind/ontology/thing_class_rel_triple.h"
 #include "note.h"
 #include "outline_type.h"
+#include "eisenhower_matrix.h"
+#include "kanban.h"
 #include "../representations/markdown/markdown_document.h"
 #include "../gear/datetime_utils.h"
 
@@ -43,30 +45,63 @@ enum class OutlineMemoryLocation {
 /**
  * @brief Outline - a set of thoughts.
  *
- * "IMPORTANT" (extensible labels)
- * "GROW" (extensible type)
- * outline "Example"
- * LIMBO (fixed memory location: MEMORY/WORKING/LIMBO)
- *   w/
- * 2/5 importance
- * 3/5 urgency
- * 10% progress
+ * * "IMPORTANT" (extensible tags)
+ * * "GROW" (extensible type)
+ * * outline type "Example"
+ * * LIMBO (fixed memory location: MEMORY/WORKING/LIMBO)
+ * * 2/5 importance
+ * * 3/5 urgency
+ * * 10% progress
+ *
  */
-class Outline : public Thing
+class Outline : public ThingInTime
 {
 public:
     static const int NO_OFFSET = -1;
     static const int NO_SIBLING = -1;
     static const u_int16_t MAX_NOTE_DEPTH = 100;
 
-private:
-    static constexpr int FLAG_MASK_POST_DECLARED_SECTION = 1;
-    static constexpr int FLAG_MASK_TRAILING_HASHES_SECTION = 1<<1;
-
     /**
      * @brief Auxiliary Note type that is used to represent Outline's name and description, e.g. in FTS.
      */
     static const NoteType NOTE_4_OUTLINE_TYPE;
+
+    static bool isOutlineDescriptorNoteType(const NoteType* noteType);
+    static bool isOutlineDescriptorNote(const Note* note);
+
+    static void sortByName(std::vector<Outline*>& sorted);
+    static void sortByRead(std::vector<Outline*>& ns);
+    static void sortByRead(std::vector<Note*>& sorted);
+
+    /*
+     * Organizers: Eisenhower Matrix and Kanban
+     */
+
+    static void organizeToEisenhowerMatrix(
+        Organizer* organizer,
+        const std::vector<Note*>& ons,
+        const std::vector<Outline*>& os,
+        const std::vector<Note*>& ns,
+        std::vector<Note*>& upperLeftNs,
+        std::vector<Note*>& upperRightNs,
+        std::vector<Note*>& lowerLeftNs,
+        std::vector<Note*>& lowerRightNs
+    );
+
+    static void organizeToKanbanColumns(
+        Kanban* kanban,
+        const std::vector<Note*>& ons,
+        const std::vector<Outline*>& os,
+        const std::vector<Note*>& ns,
+        std::vector<Note*>& column0,
+        std::vector<Note*>& column1,
+        std::vector<Note*>& column2,
+        std::vector<Note*>& column3
+    );
+
+private:
+    static constexpr int FLAG_MASK_POST_DECLARED_SECTION = 1;
+    static constexpr int FLAG_MASK_TRAILING_HASHES_SECTION = 1<<1;
 
 public:
     struct Patch;
@@ -92,11 +127,8 @@ private:
     const OutlineType* type;
     std::vector<std::string*> description;
 
-    time_t created;
-    time_t modified;
     std::string modifiedPretty;
     u_int32_t revision;
-    time_t read;
     u_int32_t reads;
 
     int8_t importance;
@@ -122,6 +154,12 @@ private:
      */
     bool dirty;
 
+
+    /**
+     * @brief Outline is READ ONLY i.e. it cannot be modified.
+     */
+    bool readOnly;
+
     /**
      * @brief Time scope to use for filtering (selective forgetting) of O's Ns.
      */
@@ -132,8 +170,8 @@ public:
     explicit Outline(const OutlineType* type);
     explicit Outline(const Outline&);
     Outline(const Outline&&) = delete;
-    Outline& operator=(const Outline&) = delete;
-    Outline& operator=(const Outline&&) = delete;
+    Outline& operator =(const Outline&) = delete;
+    Outline& operator =(const Outline&&) = delete;
     virtual ~Outline();
 
     /**
@@ -160,7 +198,7 @@ public:
      */
     bool isVirgin() const;
 
-    const std::string& getKey() const;
+    virtual std::string& getKey();
     void setKey(const std::string key);
     MarkdownDocument::Format getFormat() const { return format; }
     void setFormat(MarkdownDocument::Format format) { this->format = format; }
@@ -173,8 +211,6 @@ public:
     void addDescriptionLine(std::string *);
     void setDescription(const std::vector<std::string*>& description);
     void clearDescription();
-    time_t getCreated() const;
-    void setCreated(time_t created);
     int8_t getImportance() const;
     void setImportance(int8_t importance);
     const Tag* getPrimaryTag() const;
@@ -190,10 +226,13 @@ public:
             return true;
         }
     }
-    time_t getModified() const;
+    bool hasTagStrings(std::vector<std::string>& filterTags) {
+        return Tag::hasTagStrings(this->tags, filterTags);
+    }
+    bool hasTagStrings(std::set<std::string>& filterTags) {
+        return Tag::hasTagStrings(this->tags, filterTags);
+    }
     void makeModified();
-    void setModified();
-    void setModified(time_t modified);
     const std::string& getModifiedPretty() const;
     void setModifiedPretty();
     void setModifiedPretty(const std::string& modifiedPretty);
@@ -226,7 +265,7 @@ public:
      *
      * New Note is stored as cloned Note's sibling (below).
      */
-    Note* cloneNote(const Note* clonedNote);
+    Note* cloneNote(const Note* clonedNote, const bool deep=true);
     void addNote(Note*, int offset);
     void addNotes(std::vector<Note*>&, int offset);
     Note* getNoteByName(const std::string& noteName) const;
@@ -288,11 +327,16 @@ public:
     void moveNoteToLast(Note* note, Outline::Patch* patch=nullptr);
 
     Note* getOutlineDescriptorAsNote();
-    const NoteType* getOutlineDescriptorNoteType() const { return &NOTE_4_OUTLINE_TYPE; }
+    const NoteType* getOutlineDescriptorNoteType() const {
+        return &NOTE_4_OUTLINE_TYPE;
+    }
 
     bool isDirty() const { return dirty; }
     void makeDirty() { dirty = true; }
     void clearDirty() { dirty = false; }
+
+    bool isReadOnly() const { return readOnly; }
+    void setReadOnly(bool readOnly) { this->readOnly = readOnly; }
 
     /*
      * Links

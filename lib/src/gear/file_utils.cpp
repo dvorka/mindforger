@@ -1,7 +1,7 @@
 /*
  file_utils.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -18,9 +18,115 @@
  */
 #include "file_utils.h"
 
+#ifdef _WIN32
+  #include <ShlObj.h>
+  #include <KnownFolders.h>
+#endif // _WIN32
+
 using namespace std;
 
 namespace m8r {
+
+namespace filesystem {
+
+/**
+ * @brief << operator ensuring autocast to std::string (must be defined as function).
+ */
+std::ostream& operator<<(std::ostream& out, const filesystem::Path& p) {
+   return out << p.toString();
+}
+
+const std::string File::EXTENSION_HTML = ".html";
+const std::string File::EXTENSION_CSV= ".csv";
+
+const std::string File::EXTENSION_MD_MD = ".md";
+const std::string File::EXTENSION_MD_MARKDOWN = ".markdown";
+const std::string File::EXTENSION_MD_MDOWN = ".mdown";
+const std::string File::EXTENSION_MD_MKDN = ".mkdn";
+
+const std::string File::EXTENSION_PDF = ".pdf";
+const std::string File::EXTENSION_PDF_UPPER = ".PDF";
+
+const std::string File::EXTENSION_TXT = ".txt";
+
+bool File::fileHasMarkdownExtension(const std::string& filename)
+{
+    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
+    if(stringEndsWith(filename, File::EXTENSION_MD_MD)
+       || stringEndsWith(filename, File::EXTENSION_MD_MARKDOWN)
+       || stringEndsWith(filename, File::EXTENSION_MD_MDOWN)
+       || stringEndsWith(filename, File::EXTENSION_MD_MKDN)
+    ) {
+        return true;
+    }
+
+    return false;
+}
+
+bool File::fileHasPdfExtension(const std::string& filename)
+{
+    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
+    if(stringEndsWith(filename, File::EXTENSION_PDF)
+       || stringEndsWith(filename, File::EXTENSION_PDF_UPPER)
+    ) {
+        return true;
+    }
+
+    return false;
+}
+
+bool File::fileHasTextExtension(const std::string& filename)
+{
+    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
+    if(stringEndsWith(filename, File::EXTENSION_TXT)) {
+        return true;
+    }
+
+    return false;
+}
+
+Path::Path(const std::string& path)
+    : path{path}
+{
+}
+
+Path::Path(File& file)
+    : path{file.getName()}
+{
+}
+
+Path::Path(const char* path)
+{
+    if(path) {
+        this->path = string{path};
+    } else {
+        this->path.clear();
+    }
+}
+
+
+Path::~Path()
+{
+}
+
+} // namespace: filesystem
+
+/*
+ * Utility functions
+ */
+
+string getCwd() {
+#ifdef _WIN32
+    char* cwd_c = _getcwd(nullptr, 0);
+    std::string cwd{cwd_c};
+    std::free(cwd_c) ;
+#else
+    char* cwd_c = get_current_dir_name();
+    std::string cwd{cwd_c};
+    free(cwd_c);
+#endif
+    return cwd;
+}
 
 void pathToDirectoryAndFile(const std::string& path, std::string& directory, std::string& file)
 {
@@ -44,6 +150,130 @@ void pathToLinuxDelimiters(const std::string& path, std::string& linuxPath)
         linuxPath.assign(path);
         std::replace(linuxPath.begin(), linuxPath.end(), '\\', '/');
     }
+}
+
+string platformSpecificPath(const char* path)
+{
+    string s{path};
+#ifdef _WIN32
+    std::replace(s.begin(), s.end(), '/', FILE_PATH_SEPARATOR_CHAR);
+    bool absolute = s.find_first_of(FILE_PATH_SEPARATOR_CHAR) == 0;
+    if (absolute) {
+        s.insert(0, "c:");
+    }
+#endif
+    return s;
+}
+
+string& getSystemTempPath()
+{
+    static std::string systemTemp{SYSTEM_TEMP_DIRECTORY};
+    return systemTemp;
+}
+
+string getHomeDirectoryPath()
+{
+    string homePath{};
+
+    char* home{};
+#ifdef _WIN32
+    PWSTR wpath;
+    size_t num;
+
+    SHGetKnownFolderPath(FOLDERID_Profile, 0, nullptr, &wpath);
+    home = new char[MAX_PATH];
+    wcstombs_s(&num, home, MAX_PATH, wpath, MAX_PATH);
+    CoTaskMemFree(wpath);
+    homePath = string{home};
+
+    delete [] home;
+#else
+    home = getenv("HOME");
+    homePath = string{home};
+#endif //_WIN32
+
+    return homePath;
+}
+
+string getSystemAppsConfigPath()
+{
+    string appsConfigPath{};
+#ifdef _WIN32
+    // user documents path to be used as OS specific applications config directory
+    PWSTR wpath;
+    size_t num;
+
+    SHGetKnownFolderPath(FOLDERID_Documents, 0, nullptr, &wpath);
+    char* docPath = new char[MAX_PATH];
+    wcstombs_s(&num, docPath, MAX_PATH, wpath, MAX_PATH);
+    CoTaskMemFree(wpath);
+    string userDocPath{docPath};
+
+    delete [] docPath;
+
+    appsConfigPath = userDocPath;
+#else
+    // ~/.local used on Linux/Unix systems
+    appsConfigPath = getHomeDirectoryPath();
+    appsConfigPath += FILE_PATH_SEPARATOR;
+    appsConfigPath += ".local";
+    appsConfigPath += FILE_PATH_SEPARATOR;
+    appsConfigPath += "share";
+#endif
+
+    return appsConfigPath;
+}
+
+string getSystemMindForgerConfigPath()
+{
+    string mfConfigPath{getSystemAppsConfigPath()};
+
+    mfConfigPath += FILE_PATH_SEPARATOR;
+    mfConfigPath += "MindForger";
+
+    return mfConfigPath;
+}
+
+string getNewTempFilePath(const string& extension)
+{
+#ifdef MD_UNUSED_CODE
+    // low risc of file name clash in temp directory:
+    string path{std::tmpnam(nullptr)};
+#endif
+
+    string templatePrefix{"mindforger-"};
+
+#ifdef _WIN32
+    char tmpPath[MAX_PATH];
+    char tmpFile[MAX_PATH];
+    // get system temp directory path
+    GetTempPathA(MAX_PATH, tmpPath);
+    // GetTempFileNameA() actually creates the file
+    UINT retVal = GetTempFileNameA(tmpPath, templatePrefix.c_str(), 0, tmpFile);
+    if(retVal) {
+        DeleteFileA(tmpFile);
+    }
+    // add extension to ensure association and uniqueness
+    string path{tmpFile + extension};
+
+#else
+    // safe(r) in current directory
+    string fileTemplate{
+        getSystemTempPath()
+        + FILE_PATH_SEPARATOR
+        + templatePrefix + "XXXXXX"
+    };
+    char* cpath = strcpy(new char[fileTemplate.length() + 1], fileTemplate.c_str());
+    int fd;
+    if((fd = mkstemp(cpath)) == -1) {
+        return "";
+    }
+    close(fd);
+    string path{cpath + extension};
+    delete[] cpath;
+#endif
+    MF_DEBUG("Temp file path: '" << path << "'" << endl);
+    return path;
 }
 
 bool stringToLines(const string* text, vector<string*>& lines)
@@ -225,7 +455,7 @@ bool createDirectory(const string& path) {
 #endif
 
     if(e) {
-        cerr << "Failed to create directory '" << path << "' with error " << e;
+        cerr << "Failed to create directory '" << path << "' with error: '" << e << "'" << endl;
         return false;
     } else {
         return true;
@@ -313,10 +543,6 @@ int removeDirectoryRecursively(const char* path)
 
    return r;
 }
-
-
-
-
 
 #ifdef GZIP_DEFLATE_VIA_ZIP_LIBRARY
 
@@ -463,7 +689,7 @@ extern "C" {
    message and exits the program. Zlib's error statuses are all less
    than zero. */
 
-#define GZIP_CALL_ZLIB(x) {                                                  \
+#define GZIP_CALL_ZLIB(x) {                                             \
         int status;                                                     \
         status = x;                                                     \
         if (status < 0) {                                               \
@@ -476,12 +702,12 @@ extern "C" {
 
 /* if "test" is true, print an error message and halt execution. */
 
-#define GZIP_FAIL(test,message) {                             \
+#define GZIP_FAIL(test,message) {                        \
         if (test) {                                      \
             inflateEnd (& strm);                         \
             fprintf (stderr, "%s:%d: " message           \
                      " file '%s' failed: %s\n",          \
-                     __FILE__, __LINE__, srcFile,      \
+                     __FILE__, __LINE__, srcFile,        \
                      strerror (errno));                  \
             exit (EXIT_FAILURE);                         \
         }                                                \

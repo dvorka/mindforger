@@ -1,7 +1,7 @@
 /*
  outline_tree_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -47,7 +47,12 @@ OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, MainWindowPres
     QObject::connect(view, SIGNAL(signalChangeDown()), mwp, SLOT(doActionNoteDown()));
     QObject::connect(view, SIGNAL(signalChangeLast()), mwp, SLOT(doActionNoteLast()));
 
-    QObject::connect(view, SIGNAL(signalOutlineOrNoteEdit()), mwp, SLOT(doActionOutlineOrNoteEdit()));
+    QObject::connect(
+        view, SIGNAL(signalOutlineOrNoteEdit()),
+        mwp, SLOT(doActionOutlineOrNoteEdit()));
+    QObject::connect(
+        view, SIGNAL(signalOutlineOrNoteExternalEdit()),
+        mwp, SLOT(doActionNoteExternalEdit()));
     QObject::connect(view, SIGNAL(signalEdit()), mwp, SLOT(doActionNoteEdit()));
     QObject::connect(view, SIGNAL(signalForget()), mwp, SLOT(doActionNoteForget()));
 }

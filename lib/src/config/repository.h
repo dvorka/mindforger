@@ -1,7 +1,7 @@
 /*
  repository.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -106,7 +106,7 @@ public:
 
 #ifdef DO_MF_DEBUG
     void print() const {
-        MF_DEBUG(std::endl << "Repo - Path: '" << path << "' Dir: '" << dir << "' file: '" << file << "' type: " << type << ", mode: " << mode << ", RD_ONLY: " << readOnly << std::endl);
+        MF_DEBUG("Repo - Path: '" << path << "' Dir: '" << dir << "' file: '" << file << "' type: " << type << ", mode: " << mode << ", RD_ONLY: " << readOnly << std::endl);
     }
 #endif
 

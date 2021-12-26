@@ -1,7 +1,7 @@
 /*
  markdown_test.cpp     MindForger markdown test
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@
 #include "../../../src/mind/ai/autolinking_preprocessor.h"
 #include "../../../src/persistence/filesystem_persistence.h"
 
-#include "../test_gear.h"
+#include "../test_utils.h"
 
 using namespace std;
 using namespace m8r;
@@ -389,10 +389,14 @@ TEST(MarkdownParserTestCase, MarkdownRepresentation)
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-mr.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)),
+        repositoryConfigRepresentation
+    );
 
     m8r::Ontology ontology{};
 
@@ -436,10 +440,14 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPreamble)
 {
     string repositoryPath{"/lib/test/resources/apiary-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-mrp.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)),
+        repositoryConfigRepresentation
+    );
     m8r::Ontology ontology{};
 
     // parse
@@ -447,7 +455,7 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPreamble)
     unique_ptr<string> fileName
             = unique_ptr<string>(new string{"/lib/test/resources/apiary-repository/memory/01. Simplest API.md"});
     fileName.get()->insert(0, getMindforgerGitHomePath());
-    File file{*fileName.get()};
+    m8r::filesystem::File file{*fileName.get()};
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
@@ -521,15 +529,16 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationPostDeclaredSection)
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     repository->setMode(m8r::Repository::RepositoryMode::FILE);
     repository->setFile(fileName);
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-mrpdc.md");
-    config.setActiveRepository(config.addRepository(repository));
+    config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
     m8r::Ontology ontology{};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
-    File file{filePath};
+    m8r::filesystem::File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
@@ -592,15 +601,16 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationTrailingHashesSection)
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     repository->setMode(m8r::Repository::RepositoryMode::FILE);
     repository->setFile(fileName);
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-mrthc.md");
-    config.setActiveRepository(config.addRepository(repository));
+    config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
     m8r::Ontology ontology{};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
-    File file{filePath};
+    m8r::filesystem::File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
@@ -674,15 +684,16 @@ TEST(MarkdownParserTestCase, MarkdownRepresentationEmptyFirstLine)
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     repository->setMode(m8r::Repository::RepositoryMode::FILE);
     repository->setFile(fileName);
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-mrefl.md");
-    config.setActiveRepository(config.addRepository(repository));
+    config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
     m8r::Ontology ontology{};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
-    File file{filePath};
+    m8r::filesystem::File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
@@ -712,17 +723,21 @@ TEST(MarkdownParserTestCase, FileSystemPersistence)
     string repositoryPath{"/lib/test/resources/basic-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-fsp.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)),
+        repositoryConfigRepresentation
+    );
     m8r::Ontology ontology{};
     m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
     m8r::HtmlOutlineRepresentation htmlr{ontology, nullptr};
     m8r::FilesystemPersistence persistence{mdr, htmlr};
 
     unique_ptr<string> text = unique_ptr<string>(new string{"abc"});
-    cout << persistence.createFileName(string("/tmp"), text.get(), string(FILE_EXTENSION_MD_MD));
+    cout << persistence.createFileName(string("/tmp"), text.get(), m8r::filesystem::File::EXTENSION_MD_MD);
 }
 
 TEST(MarkdownParserBugsTestCase, EmptyNameSkipsEof)
@@ -730,10 +745,14 @@ TEST(MarkdownParserBugsTestCase, EmptyNameSkipsEof)
     string repositoryPath{"/lib/test/resources/bugs-repository"};
     repositoryPath.insert(0, getMindforgerGitHomePath());
 
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-ense.md");
-    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)));
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)),
+        repositoryConfigRepresentation
+    );
     m8r::Ontology ontology{};
 
     m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
@@ -780,15 +799,16 @@ TEST(MarkdownParserTestCase, TimeScope)
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     repository->setMode(m8r::Repository::RepositoryMode::FILE);
     repository->setFile(fileName);
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-ts.md");
-    config.setActiveRepository(config.addRepository(repository));
+    config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
     m8r::Ontology ontology{};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
-    File file{filePath};
+    m8r::filesystem::File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
@@ -813,55 +833,64 @@ TEST(MarkdownParserTestCase, TimeScope)
 
 TEST(MarkdownParserTestCase, Deadline)
 {
-    string repositoryPath{"/tmp"};
+    string repositoryPath{getSystemTempPath()};
     string fileName{"md-parser-deadline.md"};
-    string content;
-    string filePath{repositoryPath+"/"+fileName};
-
-    content.assign(
-                "# Outline Name\n"
-                "O text.\n"
-                "\n"
-                "## First Section  <!-- Metadata: deadline: 2010-11-12 13:14:15; -->\n"
-                "N1 text.\n"
-                "\n"
-                "## Second Section\n"
-                "N2 text.\n"
-                "\n");
+    string filePath{repositoryPath+FILE_PATH_SEPARATOR+fileName};
+    string deadlineDateStr{"2010-11-12 13:14:15"};
+    string content{
+        "# Outline Name\n"
+        "O text.\n"
+        "\n"
+        "## First Section  <!-- Metadata: deadline: "+deadlineDateStr+"; -->\n"
+        "N1 text.\n"
+        "\n"
+        "## Second Section\n"
+        "N2 text.\n"
+        "\n"
+    };
     m8r::stringToFile(filePath, content);
 
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     repository->setMode(m8r::Repository::RepositoryMode::FILE);
     repository->setFile(fileName);
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
-    config.setConfigFilePath("/tmp/cfg-mptc-d.md");
-    config.setActiveRepository(config.addRepository(repository));
+    config.setConfigFilePath(getSystemTempPath()+FILE_PATH_SEPARATOR+"cfg-mptc-d.md");
+    config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
     m8r::Ontology ontology{};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
-    File file{filePath};
+    m8r::filesystem::File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
     // asserts
     EXPECT_NE(nullptr, o);
     EXPECT_EQ(2, o->getNotesCount());
 
-    cout << endl << "Deadline: " << o->getNotes()[0]->getDeadline();
+    cout << endl
+         << "Deadline: " << endl
+         << "  input      : " << deadlineDateStr << endl
+         << "  loaded to O: " << o->getNotes()[0]->getDeadline() << endl;
 #ifdef _WIN32
     tm deadLineDate = { 15,14,13,12,10,110, 0, 0, 0 };
 #else
     tm deadLineDate = { 15,14,13,12,10,110, 0, 0, 0, 0, 0 };
 #endif // _WIN32
     time_t deadLine = mktime(&deadLineDate);
+    cout << endl
+         << "time_t deadline: " << endl
+         << "  input      : " << deadLine << endl
+         << "  loaded to O: " << o->getNotes()[0]->getDeadline() << endl;
     EXPECT_EQ(deadLine, o->getNotes()[0]->getDeadline());
 
     // serialize
     string* serialized = mdr.to(o);
-    cout << endl << "- SERIALIZED ---";
-    cout << endl << *serialized;
-    EXPECT_NE(std::string::npos, serialized->find("deadline: 2010-11-12 13:14:15"));
+    cout << endl
+         << "Deadline O serialized to file:" << endl
+         << *serialized << endl;
+    EXPECT_NE(std::string::npos, serialized->find("deadline: "+deadlineDateStr));
 
     delete serialized;
     delete o;
@@ -889,15 +918,16 @@ TEST(MarkdownParserTestCase, Links)
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
     repository->setMode(m8r::Repository::RepositoryMode::FILE);
     repository->setFile(fileName);
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
     config.clear();
     config.setConfigFilePath("/tmp/cfg-mptc-l.md");
-    config.setActiveRepository(config.addRepository(repository));
+    config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
     m8r::Ontology ontology{};
 
     // parse
     m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
-    File file{filePath};
+    m8r::filesystem::File file{filePath};
     m8r::Outline* o = mdr.outline(file);
 
     // asserts

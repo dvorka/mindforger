@@ -1,7 +1,7 @@
 /*
  repository_indexer.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -19,6 +19,7 @@
 #include "repository_indexer.h"
 
 using namespace std;
+using namespace m8r::filesystem;
 
 namespace m8r {
 
@@ -39,8 +40,12 @@ void RepositoryIndexer::clear()
     }
     allFiles.clear();
 
-    // markdowns strings were cleared as a part of allFiles strings
+    // markdowns (strings were cleared as a part of allFiles strings)
     markdowns.clear();
+    // txt
+    texts.clear();
+    // PDFs
+    pdfs.clear();
 
     for(const string* s:outlineStencils) {
         delete s;
@@ -72,19 +77,19 @@ void RepositoryIndexer::index(Repository* repository)
            repository->getMode() == Repository::RepositoryMode::REPOSITORY
         ) {
             memoryDirectory += FILE_PATH_SEPARATOR;
-            memoryDirectory += FILE_PATH_MEMORY;
+            memoryDirectory += DIRNAME_MEMORY;
 
             outlineStencilsDirectory.assign(repository->getDir());
             outlineStencilsDirectory += FILE_PATH_SEPARATOR;
-            outlineStencilsDirectory += FILE_PATH_STENCILS;
+            outlineStencilsDirectory += DIRNAME_STENCILS;
             outlineStencilsDirectory += FILE_PATH_SEPARATOR;
-            outlineStencilsDirectory += FILE_PATH_OUTLINES;
+            outlineStencilsDirectory += DIRNAME_OUTLINES;
 
             noteStencilsDirectory.assign(repository->getDir());
             noteStencilsDirectory += FILE_PATH_SEPARATOR;
-            noteStencilsDirectory += FILE_PATH_STENCILS;
+            noteStencilsDirectory += DIRNAME_STENCILS;
             noteStencilsDirectory += FILE_PATH_SEPARATOR;
-            noteStencilsDirectory += FILE_PATH_NOTES;
+            noteStencilsDirectory += DIRNAME_NOTES;
         } else {
             outlineStencilsDirectory.clear();
             noteStencilsDirectory.clear();
@@ -103,8 +108,7 @@ void RepositoryIndexer::updateIndex() {
     updateIndexMemory(memoryDirectory);
 
     if(repository->getType() == Repository::RepositoryType::MINDFORGER
-         &&
-       repository->getMode() == Repository::RepositoryMode::REPOSITORY
+       && repository->getMode() == Repository::RepositoryMode::REPOSITORY
     ) {
         updateIndexStencils(outlineStencilsDirectory, outlineStencils);
         updateIndexStencils(noteStencilsDirectory, noteStencils);
@@ -116,32 +120,16 @@ void RepositoryIndexer::updateIndex() {
 #endif
 }
 
-bool RepositoryIndexer::fileHasMarkdownExtension(const std::string& filename)
-{
-    // IMPROVE make this faster (check individual characters, unfold stringEndsWith(), ...)
-    if(stringEndsWith(filename, FILE_EXTENSION_MD_MD)) {
-        return true;
-    } else if(stringEndsWith(filename, FILE_EXTENSION_MD_MARKDOWN)) {
-        return true;
-    } else if(stringEndsWith(filename, FILE_EXTENSION_MD_MDOWN)) {
-        return true;
-    } else if(stringEndsWith(filename, FILE_EXTENSION_MD_MKDN)) {
-        return true;
-    }
-
-    return false;
-}
-
 void RepositoryIndexer::updateIndexMemory(const string& directory)
 {
     if(repository->getMode() == Repository::RepositoryMode::REPOSITORY) {
         MF_DEBUG(endl << "INDEXING memory DIR: " << directory);
-        DIR *dir;
+        DIR* dir;
         if((dir = opendir(directory.c_str()))) {
             const struct dirent *entry;
             if((entry = readdir(dir))) {
                 string path;
-                string *ppath;
+                string* ppath;
                 do {
                     if(entry->d_type == DT_DIR) {
                         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
@@ -160,8 +148,12 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
                         ppath->append(entry->d_name);
 
                         allFiles.insert(ppath);
-                        if(fileHasMarkdownExtension(*ppath)) {
+                        if(File::fileHasMarkdownExtension(*ppath)) {
                             markdowns.insert(ppath);
+                        } else if(File::fileHasPdfExtension(*ppath)) {
+                            pdfs.insert(ppath);
+                        } else if(File::fileHasTextExtension(*ppath)) {
+                            texts.insert(ppath);
                         }
                     }
                 } while ((entry = readdir(dir)) != 0);
@@ -175,7 +167,7 @@ void RepositoryIndexer::updateIndexMemory(const string& directory)
             path->append(FILE_PATH_SEPARATOR);
             path->append(repository->getFile());
             allFiles.insert(path);
-            if(fileHasMarkdownExtension(*path)) {
+            if(File::fileHasMarkdownExtension(*path)) {
                 markdowns.insert(path);
             }
         }
@@ -196,7 +188,7 @@ void RepositoryIndexer::updateIndexStencils(const string& directory, set<const s
                     path = new string{directory};
                     path->append(FILE_PATH_SEPARATOR);
                     path->append(entry->d_name);
-                    if(fileHasMarkdownExtension(*path)) {
+                    if(File::fileHasMarkdownExtension(*path)) {
                         stencils.insert(path);
                     }
                 }
@@ -208,6 +200,14 @@ void RepositoryIndexer::updateIndexStencils(const string& directory, set<const s
 
 const set<const string*> RepositoryIndexer::getMarkdownFiles() const {
     return markdowns;
+}
+
+const set<const string*> RepositoryIndexer::getPdfFiles() const {
+    return pdfs;
+}
+
+const set<const string*> RepositoryIndexer::getTextFiles() const {
+    return texts;
 }
 
 const set<const string*> RepositoryIndexer::getAllOutlineFileNames() const {
@@ -239,7 +239,7 @@ bool RepositoryIndexer::isMindForgerRepository(const string& directory)
     string path{};
     path += directory;
     path += FILE_PATH_SEPARATOR;
-    path += FILE_PATH_MEMORY;
+    path += DIRNAME_MEMORY;
     if(!isDirectoryOrFileExists(path.c_str())) {
         return false;
     }
@@ -258,7 +258,7 @@ Repository* RepositoryIndexer::getRepositoryForPath(const string& p)
             if(isMindForgerRepository(path)) {
                 return new Repository(path);
             } else {
-                Repository* r = new Repository(path, Repository::RepositoryType::MARKDOWN);
+                Repository* r = new Repository{path, Repository::RepositoryType::MARKDOWN};
 
                 string p{path};
                 p += FILE_PATH_SEPARATOR;
@@ -299,7 +299,7 @@ std::string RepositoryIndexer::makePathRelative(
     if(repository->getMode() == Repository::RepositoryMode::REPOSITORY) {
         if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
             memoryPath+=FILE_PATH_SEPARATOR;
-            memoryPath+=FILE_PATH_MEMORY;
+            memoryPath+=DIRNAME_MEMORY;
             memoryPath+=FILE_PATH_SEPARATOR;
         }
         if(stringStartsWith(dstAbsolutePath, memoryPath)) {
@@ -359,7 +359,7 @@ std::string RepositoryIndexer::makePathRelative(
                 string memoryPath{repository->getDir()};
                 if(repository->getType() == Repository::RepositoryType::MINDFORGER) {
                     memoryPath+=FILE_PATH_SEPARATOR;
-                    memoryPath+=FILE_PATH_MEMORY;
+                    memoryPath+=DIRNAME_MEMORY;
                     memoryPath+=FILE_PATH_SEPARATOR;
                 }
                 string s{srcAbsoluteFile};

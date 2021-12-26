@@ -1,7 +1,7 @@
 /*
  outline_header_view_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -101,7 +101,7 @@ void OutlineHeaderViewPresenter::refreshLivePreview()
     view->setHtml(QString::fromStdString(html));
 
     // IMPROVE share code between O header and N
-#if not defined(__APPLE__) && not defined(_WIN32)
+#if !defined(__APPLE__) && !defined(_WIN32)
     // WebView: scroll to same pct view
     if(scrollbar) {
         if(scrollbar->maximum()) {
@@ -146,7 +146,9 @@ void OutlineHeaderViewPresenter::slotLinkClicked(const QUrl& url)
 
 void OutlineHeaderViewPresenter::slotEditOutlineHeader()
 {
-    orloj->showFacetOutlineHeaderEdit(currentOutline);
+    if(orloj->getMainPresenter()->getConfiguration().isUiDoubleClickNoteViewToEdit()) {
+        orloj->showFacetOutlineHeaderEdit(currentOutline);
+    }
 }
 
 void OutlineHeaderViewPresenter::slotRefreshHeaderLeaderboardByValue(AssociatedNotes* associations)

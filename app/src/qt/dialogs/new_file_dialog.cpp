@@ -1,7 +1,7 @@
 /*
  new_file_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 */
 #include "new_file_dialog.h"
 
+using namespace m8r::filesystem;
+
 namespace m8r {
 
 NewFileDialog::NewFileDialog(QWidget* parent)
@@ -26,10 +28,10 @@ NewFileDialog::NewFileDialog(QWidget* parent)
     homeDirectory = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
 
     setWindowTitle(tr("Create New Markdown File"));
-    extension = QString::fromStdString(FILE_EXTENSION_MD_MD);
+    extension = QString::fromStdString(File::EXTENSION_MD_MD);
 
     // widgets
-    fileNameLabel = new QLabel{tr("Markdown name:")};
+    fileNameLabel = new QLabel{tr("File name:")};
     fileNameEdit = new QLineEdit{};
     dirLabel = new QLabel{tr("Target directory:")};
     dirEdit = new QLineEdit{};

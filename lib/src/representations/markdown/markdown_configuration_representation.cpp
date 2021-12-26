@@ -1,7 +1,7 @@
 /*
  markdown_configuration_representation.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -18,6 +18,9 @@
 */
 
 #include "markdown_configuration_representation.h"
+
+using namespace std;
+using namespace m8r::filesystem;
 
 namespace m8r {
 
@@ -42,14 +45,18 @@ constexpr const auto CONFIG_SETTING_UI_EXPERT_MODE_LABEL =  "* Hide expendable b
 constexpr const auto CONFIG_SETTING_UI_LIVE_NOTE_PREVIEW_LABEL =  "* Live note preview: ";
 constexpr const auto CONFIG_SETTING_UI_OS_TABLE_SORT_COL_LABEL =  "* Outlines table sort column: ";
 constexpr const auto CONFIG_SETTING_UI_OS_TABLE_SORT_ORDER_LABEL =  "* Outlines table sort order: ";
+constexpr const auto CONFIG_SETTING_UI_CLICK_NOTE_VIEW_TO_EDIT_LABEL =  "* Enable double click note view to edit: ";
 constexpr const auto CONFIG_SETTING_UI_NERD_MENU=  "* Nerd menu: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL =  "* Editor key binding: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_FONT_LABEL =  "* Editor font: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL =  "* Editor syntax highlighting: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_LIVE_SPELLCHECK_LABEL =  "* Live editor spell check: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_SPELLCHECK_LANG_LABEL =  "* Spell check language: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL =  "* Editor autocomplete: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL =  "* Editor TAB width: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TABS_AS_SPACES_LABEL =  "* Editor insert SPACEs for TAB: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOSAVE_LABEL =  "* Editor autosave on close: ";
+constexpr const auto CONFIG_SETTING_EXTERNAL_EDITOR_CMD_LABEL =  "* External editor command: ";
 constexpr const auto CONFIG_SETTING_UI_FULL_O_PREVIEW_LABEL =  "* Full Outline preview: ";
 constexpr const auto CONFIG_SETTING_NAVIGATOR_MAX_GRAPH_NODES_LABEL = "* Navigator max knowledge graph nodes: ";
 constexpr const auto CONFIG_SETTING_MD_HIGHLIGHT_LABEL = "* Enable source code syntax highlighting support in Markdown: ";
@@ -61,9 +68,8 @@ constexpr const auto CONFIG_SETTING_SAVE_READS_METADATA_LABEL = "* Save reads me
 constexpr const auto CONFIG_SETTING_ACTIVE_REPOSITORY_LABEL = "* Active repository: ";
 constexpr const auto CONFIG_SETTING_REPOSITORY_LABEL = "* Repository: ";
 
-using namespace std;
-
 MarkdownConfigurationRepresentation::MarkdownConfigurationRepresentation()
+    : mdRepositoryCfgRepresentation{}
 {    
 }
 
@@ -103,7 +109,7 @@ void MarkdownConfigurationRepresentation::configuration(vector<MarkdownAstNodeSe
             for(size_t i = off; i < ast->size(); i++) {
                 vector<string*>* sectionBody;
                 sectionBody = ast->at(i)->moveBody();
-                configuration(ast->at(i)->getText(), sectionBody, c);
+                configurationSection(ast->at(i)->getText(), sectionBody, c);
 
                 for(string* l:*sectionBody) {
                     delete l;
@@ -125,11 +131,14 @@ void MarkdownConfigurationRepresentation::configuration(vector<MarkdownAstNodeSe
 /*
  * Parse a section of the Configuration.
  */
-void MarkdownConfigurationRepresentation::configuration(string* title, vector<string*>* body, Configuration& c)
-{
+void MarkdownConfigurationRepresentation::configurationSection(
+    string* title,
+    vector<string*>* body,
+    Configuration& c
+) {
     if(title && body && title->size() && body->size()) {
         if(!title->compare(CONFIG_SECTION_APP)) {
-            MF_DEBUG("PARSING configuration section App" << endl);
+            MF_DEBUG("PARSING configuration section: Application" << endl);
             for(string* line: *body) {
                 if(line && line->size() && line->at(0)=='*') {
                     if(line->find(CONFIG_SETTING_SAVE_READS_METADATA_LABEL) != std::string::npos) {
@@ -226,6 +235,15 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         } else {
                             c.setUiEditorAutosave(false);
                         }
+                    } else if(line->find(CONFIG_SETTING_UI_CLICK_NOTE_VIEW_TO_EDIT_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiDoubleClickNoteViewToEdit(true);
+                        } else {
+                            c.setUiDoubleClickNoteViewToEdit(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_EXTERNAL_EDITOR_CMD_LABEL) != std::string::npos) {
+                        string p = line->substr(strlen(CONFIG_SETTING_EXTERNAL_EDITOR_CMD_LABEL));
+                        c.setExternalEditorCmd(p);
                     } else if(line->find(CONFIG_SETTING_UI_FULL_O_PREVIEW_LABEL) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
                             c.setUiFullOPreview(true);
@@ -271,6 +289,15 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         } else {
                             c.setUiEditorEnableSyntaxHighlighting(false);
                         }
+                    } else if(line->find(CONFIG_SETTING_UI_EDITOR_LIVE_SPELLCHECK_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiEditorLiveSpellCheck(true);
+                        } else {
+                            c.setUiEditorLiveSpellCheck(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_EDITOR_SPELLCHECK_LANG_LABEL) != std::string::npos) {
+                        string p = line->substr(strlen(CONFIG_SETTING_UI_EDITOR_SPELLCHECK_LANG_LABEL));
+                        c.setUiEditorSpellCheckDefaultLanguage(p);
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
                             c.setUiEditorEnableAutocomplete(true);
@@ -288,7 +315,7 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         std::string::size_type st;
                         int i;
                         try {
-                          i = std::stoi (t,&st);
+                          i = std::stoi(t,&st);
                         }
                         catch(...) {
                           i = Configuration::DEFAULT_NAVIGATOR_MAX_GRAPH_NODES;
@@ -301,7 +328,7 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                 }
             }
         } else if(!title->compare(CONFIG_SECTION_MIND)) {
-            MF_DEBUG("PARSING configuration section Mind" << endl);
+            MF_DEBUG("PARSING configuration section: Mind" << endl);
             for(string* line: *body) {
                 if(line && line->size() && line->at(0)=='*') {
                     if(line->find(CONFIG_SETTING_MIND_TIME_SCOPE_LABEL) != std::string::npos) {
@@ -355,7 +382,7 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                 }
             }
         } else if(!title->compare(CONFIG_SECTION_REPOSITORIES)) {
-            MF_DEBUG("PARSING configuration section Repositories" << endl);
+            MF_DEBUG("PARSING configuration section: Repositories" << endl);
             for(string* line: *body) {
                 if(line && line->size() && line->at(0)=='*') {
                     if(line->find(CONFIG_SETTING_ACTIVE_REPOSITORY_LABEL) != std::string::npos) {
@@ -363,9 +390,12 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                         if(p.size()) {
                             Repository* r = RepositoryIndexer::getRepositoryForPath(p);
                             if(r) {
-                                c.setActiveRepository(c.addRepository(r));
+                                MF_DEBUG("  Setting ACTIVE repository: " << r->getPath() << endl);
+                                c.setActiveRepository(
+                                    c.addRepository(r), this->mdRepositoryCfgRepresentation
+                                );
                             } else {
-                                cerr << "Unable to construct active repository for non-existing configured path: '" << p << "'" << endl;
+                                cerr << "Unable to construct active repository for non-existent configured path: '" << p << "'" << endl;
                             }
                         } else {
                             cerr << "Unable to construct configured active repository as path is empty" << endl;
@@ -377,10 +407,10 @@ void MarkdownConfigurationRepresentation::configuration(string* title, vector<st
                             if(r) {
                                 c.addRepository(r);
                             } else {
-                                cerr << "Unable to construct repository for non-existing configured path: '" << p << "'" << endl;
+                                cerr << "Unable to construct repository for non-existent configured path: '" << p << "'" << endl;
                             }
                         } else {
-                            cerr << "Unable to construct a configured repository as path is empty" << endl;
+                            cerr << "Unable to construct configured repository as path is empty" << endl;
                         }
                     }
                 }
@@ -445,7 +475,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "Application settings:" << endl <<
          endl <<
          CONFIG_SETTING_STARTUP_VIEW_LABEL << (c?c->getStartupView():Configuration::DEFAULT_STARTUP_VIEW_NAME) << endl <<
-         "    * Examples: dashboard, outlines, tags, recent, home, Eisenhower" << endl <<
+         "    * Examples: outlines, tags, recent, home" << endl <<
          CONFIG_SETTING_UI_THEME_LABEL << (c?c->getUiThemeName():Configuration::DEFAULT_UI_THEME_NAME) << endl <<
          "    * Examples: dark, light, native" << endl <<
          CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL << (c?c->getUiHtmlCssPath():Configuration::DEFAULT_UI_HTML_CSS_THEME) << endl <<
@@ -478,13 +508,22 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_AUTOSAVE_LABEL << (c?(c->isUiEditorAutosave()?"yes":"no"):(Configuration::DEFAULT_EDITOR_AUTOSAVE?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
-         CONFIG_SETTING_UI_FULL_O_PREVIEW_LABEL << (c?(c->isUiFullOPreview()?"yes":"no"):(Configuration::DEFAULT_FULL_O_PREVIEW?"yes":"no")) << endl <<
-         "    * Show whole Notebook preview (yes) or Notebook header only (no)." << endl <<
+         CONFIG_SETTING_UI_CLICK_NOTE_VIEW_TO_EDIT_LABEL << (c?(c->isUiDoubleClickNoteViewToEdit()?"yes":"no"):(Configuration::DEFAULT_CLICK_NOTE_VIEW_TO_EDIT?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_EXTERNAL_EDITOR_CMD_LABEL << (c?c->getExternalEditorCmd():"") << endl <<
+         "    * Command to run external Markdown editor. Filename with Markdown is appended at the end." << endl <<
+         "    * Example: emacs -nw" << endl <<
+         "    * Example: vi" << endl <<
          CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL << (c?c->getEditorKeyBindingAsString():Configuration::editorKeyBindingToString(Configuration::EditorKeyBindingMode::WINDOWS)) << endl <<
          "    * Examples: emacs, vim, windows" << endl <<
          CONFIG_SETTING_UI_EDITOR_FONT_LABEL << (c?c->getEditorFont():Configuration::DEFAULT_EDITOR_FONT) << endl <<
          "    * Examples: " << Configuration::DEFAULT_EDITOR_FONT << endl <<
+         CONFIG_SETTING_UI_EDITOR_LIVE_SPELLCHECK_LABEL << (c?(c->isUiEditorLiveSpellCheck()?"yes":"no"):(Configuration::DEFAULT_SPELLCHECK_LIVE?"yes":"no")) << endl <<
+         "    * Enable live spell check in Notebook and Note description editor." << endl <<
+         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_EDITOR_SPELLCHECK_LANG_LABEL<< (c?c->getUiEditorSpellCheckDefaultLanguage():"") << endl <<
+         "    * Set prefered spell check language in Notebook and Note description editor." << endl <<
+         "    * Examples: en_US" << endl <<
          CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL << (c?(c->isUiEditorEnableSyntaxHighlighting()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SYNTAX_HIGHLIGHT?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL << (c?(c->isUiEditorEnableAutocomplete()?"yes":"no"):(Configuration::DEFAULT_EDITOR_AUTOCOMPLETE?"yes":"no")) << endl <<
@@ -514,7 +553,6 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          endl <<
          CONFIG_SETTING_ACTIVE_REPOSITORY_LABEL << (c&&c->getActiveRepository()?c->getActiveRepository()->getPath():Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH) <<
          endl;
-
     if(c) {
         for(auto& r:c->getRepositories()) {
             s << CONFIG_SETTING_REPOSITORY_LABEL << r.first << endl;
@@ -538,6 +576,7 @@ bool MarkdownConfigurationRepresentation::load(Configuration& c)
         md.from();
         vector<MarkdownAstNodeSection*>* ast = md.moveAst();
         configuration(ast, c);
+
         return true;
     } else {
         return false;
@@ -546,6 +585,22 @@ bool MarkdownConfigurationRepresentation::load(Configuration& c)
 
 void MarkdownConfigurationRepresentation::save(const File* file, Configuration* c)
 {
+#ifdef DO_MF_DEBUG
+    if(c) {
+        MF_DEBUG(
+            "Saving configuration as MD:" << endl <<
+            "  path: '" << c->getConfigFilePath() << "'" << endl <<
+            "  repo: " << boolalpha << c->hasRepositoryConfiguration() << endl <<
+            "  repo path: " << c->getRepositoryConfigFilePath() << "'" << endl
+        );
+        if(c->hasRepositoryConfiguration()) {
+            MF_DEBUG(
+                "  os: " << c->getRepositoryConfiguration().getOrganizers().size() << endl
+            );
+        }
+    }
+#endif
+
     string md{};
     to(c,md);
 
@@ -554,11 +609,20 @@ void MarkdownConfigurationRepresentation::save(const File* file, Configuration* 
         std::ofstream out(c->getConfigFilePath());
         out << md;
         out.close();
-    } else {
-        MF_DEBUG("Saving configuration to File " << file->getName() << endl);
+
+        // repository configuration path is available only if MF in repository mode
+        if(c->hasRepositoryConfiguration()) {
+            MF_DEBUG("Saving repository configuration to " << c->getRepositoryConfigFilePath() << endl);
+            MarkdownRepositoryConfigurationRepresentation repositorCfgMd{};
+            repositorCfgMd.save(*c);
+        }
+    } else if(file) {
+        MF_DEBUG("Saving configuration to FILE " << file->getName() << endl);
         std::ofstream out(file->getName());
         out << md;
         out.close();
+    } else {
+        MF_DEBUG("WARNING: configuration NOT saved - either configuration instance and/ro file name is not available" << endl);
     }
 }
 

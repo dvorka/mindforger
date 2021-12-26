@@ -1,7 +1,7 @@
 /*
- main.cpp     MindForger thinking notebook
+ mindforger.cpp     Main file of MindForger code base.
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -20,14 +20,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #ifndef _WIN32
-#  include <getopt.h>
+  #include <getopt.h>
 #else
-#  include "../../deps/getopt/getopt.h"
+  #include "../../deps/getopt/getopt.h"
 #endif // _WIN32
 #include <QtWidgets>
 
 #include "../../lib/src/version.h"
+#include "../../lib/src/gear/file_utils.h"
 #include "../../lib/src/representations/markdown/markdown_configuration_representation.h"
+#include "../../lib/src/representations/markdown/markdown_repository_configuration_representation.h"
 
 #include "gear/qutils.h"
 #include "i18nl10n.h"
@@ -36,15 +38,16 @@
 #include "look_n_feel.h"
 
 using namespace std;
+using namespace m8r::filesystem;
 
 /**
  * @brief MindForger command line interface.
- */
-
-/* MindForger command line interface description.
+ *
+ * MindForger command line interface description.
  *
  * GUI:
  *
+ * ```
  * $ mindforger
  *   ... lookup repository as follows
  *     1. configured in ~/.mindforger,
@@ -59,11 +62,15 @@ using namespace std;
  *   ... Markdown-based MindForger DSL file
  * $ mindforger ~/books/marathon-training/07-lsd.md
  *   ... Markdown file
- *
+ * ```
+ */
+
+/*
  *
  *
  * Options proposal:
  *
+ * ```
  * $ mindforger --theme dark
  *   -t
  * $ mindforger --config forget=25%
@@ -79,11 +86,12 @@ using namespace std;
  *   -V
  * $ mindforger --help
  *   -h
- *
+ * ```
  *
  *
  * Terminal CLI commands proposal:
  *
+ * ```
  * $ mindforger --command LIST outlines
  * $ mindforger -C LIST outlines
  *
@@ -104,17 +112,28 @@ using namespace std;
  * $ mindforger -C "FTS 'expr'"
  * $ mindforger -C "FTS 'expr' SCOPE outline 'abc'"
  * $ mindforger -C "FTS 'expr' SCOPE note 'abc'.'efg'"
+ * ```
+ *
+ *
+ * MindForger documentation is generated with DoXygen's JavaDoc style.
+ *
+ * @see https://www.doxygen.nl/manual/markdown.html
+ * @see https://www.doxygen.nl/manual/docblocks.html#docexamples
+ *
  */
 int main(int argc, char* argv[])
 {
     // check whether running in GUI (and not in text console tty)
-#if not defined(__APPLE__) && not defined(_WIN32)
+#if !defined(__APPLE__) && !defined(_WIN32)
     char* term = getenv(m8r::ENV_VAR_DISPLAY);
     if(!term || !strlen(term)) {
         cerr << endl
              << QCoreApplication::translate(
                     "main",
-                    "MindForger CANNOT be run from text console - set DISPLAY environment variable or run MindForger from GUI.").toUtf8().constData()
+                    "MindForger CANNOT be run from text console "
+                    "- set DISPLAY environment variable or run "
+                    "MindForger from GUI."
+                ).toUtf8().constData()
              << endl;
         exit(1);
     }
@@ -169,13 +188,23 @@ int main(int argc, char* argv[])
         QCommandLineParser parser;
         // process command line as parameters/options are present
         parser.setApplicationDescription("Thinking notebook.");
-        parser.addPositionalArgument("[<directory>|<file>]", QCoreApplication::translate("main", "MindForger repository or directory/file with Markdown(s) to open"));
+        parser.addPositionalArgument(
+            "[<directory>|<file>]",
+            QCoreApplication::translate(
+                 "main",
+                 "MindForger repository or directory/file with Markdown(s) to open"
+            )
+        );
         QCommandLineOption themeOption(QStringList() << "t" << "theme",
-                QCoreApplication::translate("main", "Use 'dark', 'light' or other GUI <theme>."),
+                QCoreApplication::translate(
+                    "main", "Use 'dark', 'light' or other GUI <theme>."
+                ),
                 QCoreApplication::translate("main", "theme"));
         parser.addOption(themeOption);
         QCommandLineOption configPathOption(QStringList() << "c" << "config-file-path",
-                QCoreApplication::translate("main", "Load configuration from given <file>."),
+                QCoreApplication::translate(
+                    "main", "Load configuration from given <file>."
+                ),
                 QCoreApplication::translate("main", "file"));
         parser.addOption(configPathOption);
 #if defined(__APPLE__) || defined(_WIN32)
@@ -198,7 +227,11 @@ int main(int argc, char* argv[])
             useRepository.assign(arguments[0].toStdString());
         } else if(arguments.size()>1) {
             // TODO i18n
-            cerr << "Error: Too many arguments (" << dec << arguments.size() << ") - at most one directory or file can be specified" << endl;
+            cerr << "Error: Too many arguments ("
+                 << dec
+                 << arguments.size()
+                 << ") - at most one directory or file can be specified"
+                 << endl;
             return 1;
         }
 
@@ -219,24 +252,37 @@ int main(int argc, char* argv[])
         config.setConfigFilePath(configurationFilePath.toStdString());
     }
     if(!mdConfigRepresentation.load(config)) {
-        mdConfigRepresentation.save(m8r::File{config.getConfigFilePath()});
+        MF_DEBUG(
+            "MindForger is unable to load MD configuration from: " <<
+            config.getConfigFilePath() << endl
+        );
+
+        mdConfigRepresentation.save(File{config.getConfigFilePath()});
     }
 
-    // l10n is initalized after conf so that it can be configured by MF
+    // l10n is initalized after configuration to be configurable by MF
     m8r::l10n(mindforgerApplication);
 
     m8r::initRandomizer();
 
+    m8r::MarkdownRepositoryConfigurationRepresentation mdRepositoryCfgRepresentation{};
     if(!useRepository.empty()) {
         m8r::Repository* r = m8r::RepositoryIndexer::getRepositoryForPath(useRepository);
         if(r) {
-            config.setActiveRepository(config.addRepository(r));
+            config.setActiveRepository(
+                config.addRepository(r), mdRepositoryCfgRepresentation
+            );
         } else {
             if(config.createEmptyMarkdownFile(useRepository)) {
                 r = m8r::RepositoryIndexer::getRepositoryForPath(useRepository);
-                config.setActiveRepository(config.addRepository(r));
+                config.setActiveRepository(config.addRepository(r), mdRepositoryCfgRepresentation);
             } else {
-                cerr << QCoreApplication::translate("main", "Error: Unable to find given repository/file to open - open MindForger without parameters and create it from menu Mind/New: '").toUtf8().constData()
+                cerr << QCoreApplication::translate(
+                            "main",
+                            "Error: Unable to find given repository/file "
+                            "to open - open MindForger without parameters "
+                            "and create it from menu Mind/New: '"
+                        ).toUtf8().constData()
                      << useRepository
                      << "'"
                      << endl;
@@ -244,10 +290,10 @@ int main(int argc, char* argv[])
             }
         }
     } else {
-        config.findOrCreateDefaultRepository();
+        config.findOrCreateDefaultRepository(mdRepositoryCfgRepresentation);
     }
 
-    // choose L&F
+    // L&F
     m8r::LookAndFeels& lookAndFeels = m8r::LookAndFeels::getInstance();
     lookAndFeels.init(&mindforgerApplication);
     lookAndFeels.setFontPointSize(config.getUiFontPointSize());
@@ -255,14 +301,110 @@ int main(int argc, char* argv[])
         if(lookAndFeels.isThemeNameValid(themeOptionValue)) {
             lookAndFeels.setTheme(themeOptionValue);
         } else {
-            cerr << QCoreApplication::translate("main", "Ignoring unknown GUI theme: '").toUtf8().constData()
+            cerr << QCoreApplication::translate(
+                        "main", "Ignoring unknown GUI theme: '"
+                    ).toUtf8().constData()
                  << themeOptionValue.toUtf8().constData()
-                 << "'\n";
+                 << "'"
+                 << endl;
             lookAndFeels.setTheme(QString::fromStdString(config.getUiThemeName()));
         }
     } else {
         lookAndFeels.setTheme(QString::fromStdString(config.getUiThemeName()));
     }
+
+    // spell check
+    MF_DEBUG("Spell check:" << endl);
+    // prepare dir(s) for CUSTOM dictionaries
+    string customDictionaryPath{m8r::getSystemMindForgerConfigPath()};
+    customDictionaryPath += FILE_PATH_SEPARATOR;
+    customDictionaryPath += "dictionaries";
+    QDir qDictionaryDir{QString::fromStdString(customDictionaryPath)};
+    if (!qDictionaryDir.exists()) {
+        qDictionaryDir.mkpath(qDictionaryDir.path());
+    }
+    DictionaryManager::setPath(QString::fromStdString(customDictionaryPath));
+#ifdef _WIN32
+    // Hunspell is not installed+configured on Win - set dirs for dictionary lookup
+    vector<string> searchDirPaths{};
+    string searchDirPath{};
+    // search custom dictionaries dir
+    searchDirPaths.push_back(DictionaryManager::path().toStdString());
+    // search home dir
+    searchDirPath.assign(m8r::getHomeDirectoryPath());
+    searchDirPath += FILE_PATH_SEPARATOR;
+    searchDirPath += "dictionaries";
+    searchDirPaths.push_back(searchDirPath);
+    // search application settings
+    searchDirPath.assign(m8r::getHomeDirectoryPath());
+    searchDirPath += FILE_PATH_SEPARATOR;
+    searchDirPath += "AppData";
+    searchDirPath += FILE_PATH_SEPARATOR;
+    searchDirPath += "Local";
+    searchDirPath += FILE_PATH_SEPARATOR;
+    searchDirPath += "dictionaries";
+    searchDirPaths.push_back(searchDirPath);
+    // search local settings
+    searchDirPath.assign(m8r::getHomeDirectoryPath());
+    searchDirPath += FILE_PATH_SEPARATOR;
+    searchDirPath += "Local Settings";
+    searchDirPath += FILE_PATH_SEPARATOR;
+    searchDirPath += "dictionaries";
+    searchDirPaths.push_back(searchDirPath);
+    // search paths assembly
+    QStringList spellCheckDictionaryDirs{};
+    MF_DEBUG("  Adding dirs to search path:" << endl);
+    for(auto d:searchDirPaths) {
+        MF_DEBUG("    " << d << endl);
+        qDictionaryDir = QDir{QString::fromStdString(searchDirPath)};
+        if(qDictionaryDir.exists()) {
+            MF_DEBUG("      ADDED" << endl);
+            spellCheckDictionaryDirs.append(qDictionaryDir.path());
+        }
+    }
+    // register paths under "dict" alias
+    QDir::setSearchPaths("dict", spellCheckDictionaryDirs);
+#else
+    // use "hunspell -D" to determine dictionary search paths on Linux systems
+#endif
+    // MF must search for dictionaries REGARDLESS spell check is enabled or not
+    // so that it can be enabled later OR dictionaries how to can be provided
+    DictionaryManager::instance().addProviders();
+    // ^ load available standard dictionaries
+    QStringList languages = DictionaryManager::instance().availableDictionaries();
+    MF_DEBUG("  Available language dictionaries:" << endl);
+    // set the default dictionary language
+    if(languages.size()) {
+        languages.sort();
+        // set language based on configuration
+        string defaultLanguage = config.getUiEditorSpellCheckDefaultLanguage();
+        bool isDefaultLangAvailable{false};
+        foreach(auto l, languages) {
+            config.addUiEditorSpellCheckLanguage(l.toStdString());
+            MF_DEBUG("    '" << l.toStdString() << "'");
+            if(l.toStdString() == defaultLanguage) {
+               isDefaultLangAvailable = true;
+               MF_DEBUG(" (default)");
+            }
+            MF_DEBUG(endl);
+        }
+        if(!isDefaultLangAvailable) {
+            defaultLanguage.assign(languages[0].toStdString());
+            MF_DEBUG("  Setting FALLBACK language to : " << defaultLanguage << endl);
+        }
+        DictionaryManager::instance().setDefaultLanguage(
+            QString::fromStdString(defaultLanguage)
+        );
+        MF_DEBUG("  Spell check language set to: '" << defaultLanguage << "'" << endl);
+        config.setUiEditorSpellCheckDefaultLanguage(defaultLanguage);
+    } else {
+        MF_DEBUG("  No spell check dictionaries available!" << endl);
+        // disable spell check (lang, langs and live spell check)
+        if(config.isUiEditorLiveSpellCheck()) {
+            config.clearUiEditorSpellCheckLanguages();
+        }
+    }
+    // mdConfigRepresentation->save(config);
 
     // initialize and start UI
     m8r::MainWindowView mainWindowView(lookAndFeels);

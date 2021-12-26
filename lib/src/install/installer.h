@@ -1,7 +1,7 @@
 /*
  installer.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 #include <string>
 #include <iostream>
 
-#include "../config/config.h"
+#include "../definitions.h"
 #include "../config/configuration.h"
 #include "../gear/file_utils.h"
 #include "../exceptions.h"

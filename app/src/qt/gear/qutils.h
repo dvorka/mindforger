@@ -1,7 +1,7 @@
 /*
  qutils.h     MindForger thinking notebook
 
- Copyright (C) 2016-2020 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -41,4 +41,5 @@ void timetToQDate(const time_t t, QDate& qdate);
 void qdateToTm(const QDate& qdate, struct tm& t);
 
 } // m8r namespace
+
 #endif // M8R_QUTILS_H
