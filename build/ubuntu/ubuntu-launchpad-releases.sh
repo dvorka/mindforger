@@ -138,7 +138,7 @@ function releaseForParticularUbuntuVersion() {
     # qt version MUST be specified as it CANNOT be configured by installing
     # qt5-default package: Debian control file does NOT allow virtual packages
     # like this qt5-default. Instead debian/rules file exports env var w/ Qt choice
-    #   .pro file is also extended to have 'make install' target
+    # .pro file is also extended to have 'make install' target
     qmake -r mindforger.pro
     
     # 5) add new version to LOCAL Bazaar
@@ -179,6 +179,10 @@ function releaseForParticularUbuntuVersion() {
     
     # 8) upload to Launchpad: push Bazaar and put changes
     echo -e "\n# bzr push .deb to Launchpad #################################"
+
+    echo -e "SKIPPED FOR NOW"
+    exit 0
+    
     # from buildarea/ to ./dist
     cd ../${MF}
     echo "Before bzr push: " `pwd`
@@ -203,13 +207,15 @@ then
 fi
 
 export ARG_MAJOR_VERSION=1.53.
-export ARG_MINOR_VERSION=0 # minor version is incremented for every Ubuntu version
+export ARG_MINOR_VERSION=3 # minor version is incremented for every Ubuntu version
 export ARG_BAZAAR_MSG="MindForger ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} release."
 
 # https://wiki.ubuntu.com/Releases
-# old: precise quantal saucy precise utopic vivid wily trusty (old GCC) yakkety artful cosmic
-# current: (trusty) xenial bionic disco eoan
-for UBUNTU_VERSION in xenial bionic disco eoan
+# obsolete: precise quantal saucy precise utopic vivid wily yakkety artful cosmic
+# current : (trusty) xenial bionic (cosmic disco eoan) focal (groovy) hirsute impish
+# xenial bionic focal hirsute impish
+# WIP: trusty xenial bionic focal hirsute impish
+for UBUNTU_VERSION in xenial
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
