@@ -7,7 +7,7 @@ assignees: dvorka
 
 ---
 
-**Enhacement / feature description:**
+**Enhancement / feature description:**
 
 ...
 
