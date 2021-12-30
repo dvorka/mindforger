@@ -120,6 +120,10 @@ string getCwd() {
     char* cwd_c = _getcwd(nullptr, 0);
     std::string cwd{cwd_c};
     std::free(cwd_c) ;
+#elif defined(__APPLE__)
+    char* cwd_c = getcwd(NULL, 0);
+    std::string cwd{cwd_c};
+    free(cwd_c);
 #else
     char* cwd_c = get_current_dir_name();
     std::string cwd{cwd_c};

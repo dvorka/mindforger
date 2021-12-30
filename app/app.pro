@@ -29,14 +29,27 @@ mfdebug|mfunits {
 # Hunspell spell check:
 # - Windows and Ubuntu Xenial require DEPRECATED Hunspell API
 # - Ubuntu Bionic and newer distros use NEW Hunspell API
+# - macOS doesn't care as it uses different provider
 # Distro is detected on Unix/Linux only:
-unix:UBUNTU_DISTRO_VERSION = $$system(cat /etc/issue | while read D V X; do echo "${D} ${V}"; done | rev | cut -c 3- | rev)
-message("Unix version: $$UBUNTU_DISTRO_VERSION")
-win32|mfoldhunspell|equals(UBUNTU_DISTRO_VERSION, "Ubuntu 16.04")|equals(UBUNTU_DISTRO_VERSION, "Ubuntu 16.")|equals(UBUNTU_DISTRO_VERSION, "Debian GNU/Lin") {
-  message("Forcing legacy Hunspell API for OS: $$UBUNTU_DISTRO_VERSION")
+unix {
+  !macx {
+    OS_DISTRO_VERSION = $$system(cat /etc/issue | while read D V X; do echo "${D} ${V}"; done | rev | cut -c 3- | rev)
+  } else {
+    OS_DISTRO_VERSION = "macOS"
+  }
+} else {
+  OS_DISTRO_VERSION = "Windows"
+}
+message("OS version: $$OS_DISTRO_VERSION")
+
+mfoldhunspell | equals(OS_DISTRO_VERSION, "Windows") | equals(OS_DISTRO_VERSION, "Ubuntu 16.04") | equals(OS_DISTRO_VERSION, "Ubuntu 16.") | equals(OS_DISTRO_VERSION, "Debian GNU/Lin") {
+  message("Forcing LEGACY Hunspell API for OS: $$OS_DISTRO_VERSION")
   DEFINES += MF_DEPRECATED_HUNSPELL_API
+} else {
+  message("Using NEW Hunspell API for OS: $$OS_DISTRO_VERSION")
 }
 
+# Named Entity Recognition
 mfner {
   DEFINES += MF_NER
 }
@@ -125,6 +138,9 @@ macx {
     HEADERS += ./src/qt/spelling/dictionary_provider_nsspellchecker.h
 
     OBJECTIVE_SOURCES += src/qt/spelling/dictionary_provider_nsspellchecker.mm
+
+    LIBS += -framework AppKit
+    LIBS += -framework Foundation
 } else:win32 {
     include(../deps/hunspell/hunspell.pri)
 
@@ -137,10 +153,11 @@ macx {
       ./src/qt/spelling/dictionary_provider_voikko.cpp
 
 } else:unix {
-    # pkgconfig-based configuration does not work @ Ubuntu distribution build
+    # pkgconfig-based configuration does not work @ Ubuntu
     #  CONFIG += link_pkgconfig
     #  PKGCONFIG += hunspell
-    # hardcoded paths are unfortunately more robust:
+
+    # hardcoded paths are (unfortunately) more robust:
     INCLUDEPATH += /usr/include/hunspell
     LIBS += -lhunspell
 
