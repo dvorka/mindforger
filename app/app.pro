@@ -79,11 +79,12 @@ DEPENDPATH += $$PWD/../lib/src
 
 # -L where to look for library, -l link the library
 
+# MindForger lib
 win32 {
     CONFIG(release, debug|release): LIBS += -L$$PWD/../lib/release -lmindforger
     else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/debug -lmindforger
 } else {
-    #linux, macos
+    # Linux and macOS
     LIBS += -L$$OUT_PWD/../lib -lmindforger
 }
 
