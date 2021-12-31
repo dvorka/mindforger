@@ -23,5 +23,4 @@ jobs:
         run: make -j 4
 
       - name: Deploy
-        # run: bash deploy_mac.sh ./release
-	run: pwd
+        run: pwd
