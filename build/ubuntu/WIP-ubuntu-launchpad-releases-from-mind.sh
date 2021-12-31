@@ -56,8 +56,6 @@ function checkoutMindforger {
     # prune MindForger project files: tests, *.o/... build files, ...
     echo -e "\n# CLEANUP development and build artifacts ###################"
     rm -vrf ./.git ./.qmake.stash ./app/mindforger ./build ./app/test ./lib/test
-    # TODO purge: rm -vrf ./deps/cmark-gfm/.github
-    # TODO purge: rm -vrf ./deps/mitie
     rm -vrf ./deps/cmark-gfm/.github
     rm -vrf ./deps/mitie
     rm -vrf ./lib/.qmake.stash ./lib/lib.pro.user ./lib/src/mindforger-lib-unit-tests
