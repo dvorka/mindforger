@@ -1,0 +1,28 @@
+name: MindForger macOS build
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Install Qt 5 + ccache
+        run: brew install qt@5 ccache
+
+      - name: Force link Qt
+        run: brew link qt@5 --force
+
+      - name: Run QMake
+        run: qmake -r mindforger.pro
+
+      - name: Run Make
+        run: make -j 4
+
+      - name: Deploy
+        # run: bash deploy_mac.sh ./release
+	run: echo "MindForger .dmg build step"
+	run: pwd
