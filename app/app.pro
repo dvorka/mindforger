@@ -1,4 +1,4 @@
-# mindforger-app.pro     Qt project file for MindForger
+# app.pro     Qt project file for MindForger Qt-based frontend
 #
 # Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 #
@@ -29,14 +29,27 @@ mfdebug|mfunits {
 # Hunspell spell check:
 # - Windows and Ubuntu Xenial require DEPRECATED Hunspell API
 # - Ubuntu Bionic and newer distros use NEW Hunspell API
+# - macOS doesn't care as it uses different provider
 # Distro is detected on Unix/Linux only:
-unix:UBUNTU_DISTRO_VERSION = $$system(cat /etc/issue | while read D V X; do echo "${D} ${V}"; done | rev | cut -c 3- | rev)
-message("Unix version: $$UBUNTU_DISTRO_VERSION")
-win32|mfoldhunspell|equals(UBUNTU_DISTRO_VERSION, "Ubuntu 16.04")|equals(UBUNTU_DISTRO_VERSION, "Ubuntu 16.")|equals(UBUNTU_DISTRO_VERSION, "Debian GNU/Lin") {
-  message("Forcing legacy Hunspell API for OS: $$UBUNTU_DISTRO_VERSION")
+unix {
+  !macx {
+    OS_DISTRO_VERSION = $$system(cat /etc/issue | while read D V X; do echo "${D} ${V}"; done | rev | cut -c 3- | rev)
+  } else {
+    OS_DISTRO_VERSION = "macOS"
+  }
+} else {
+  OS_DISTRO_VERSION = "Windows"
+}
+message("OS version: $$OS_DISTRO_VERSION")
+
+mfoldhunspell | equals(OS_DISTRO_VERSION, "Windows") | equals(OS_DISTRO_VERSION, "Ubuntu 16.04") | equals(OS_DISTRO_VERSION, "Ubuntu 16.") | equals(OS_DISTRO_VERSION, "Debian GNU/Lin") {
+  message("Forcing LEGACY Hunspell API for OS: $$OS_DISTRO_VERSION")
   DEFINES += MF_DEPRECATED_HUNSPELL_API
+} else {
+  message("Using NEW Hunspell API for OS: $$OS_DISTRO_VERSION")
 }
 
+# Named Entity Recognition
 mfner {
   DEFINES += MF_NER
 }
@@ -44,8 +57,8 @@ mfner {
 # webkit is supposed to be OBSOLETED by webengine, but webengine is disabled
 # on Linux since Qt 5.9 due to its tragic performance > conditional compilation
 # seems to be the only way:
-#   - webkit on Linux
-#   - webengine on Windows and macOS
+# - webkit on Linux
+# - webengine on Windows and macOS
 win32|macx|mfwebengine {
     DEFINES += MF_QT_WEB_ENGINE
     QT += webengine
@@ -57,20 +70,21 @@ win32|macx|mfwebengine {
 }
 
 # Dependencies:
-#  - INCLUDEPATH is used during compilation to find included header files.
-#  - DEPENDPATH is used to resolve dependencies between header and source
-#    files, e.g. which source files need to be recompiled when certain header
-#    file changes.
+# - INCLUDEPATH is used during compilation to find included header files.
+# - DEPENDPATH is used to resolve dependencies between header and source
+#   files, e.g. which source files need to be recompiled when certain header
+#   file changes.
 INCLUDEPATH += $$PWD/../lib/src
 DEPENDPATH += $$PWD/../lib/src
 
 # -L where to look for library, -l link the library
 
+# MindForger lib
 win32 {
     CONFIG(release, debug|release): LIBS += -L$$PWD/../lib/release -lmindforger
     else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/debug -lmindforger
 } else {
-    #linux, macos
+    # Linux and macOS
     LIBS += -L$$OUT_PWD/../lib -lmindforger
 }
 
@@ -80,6 +94,7 @@ win32 {
   DEFINES += MF_MD_2_HTML_CMARK
 
   win32 {
+    message("cmark-gfm @ Windows: ensure that cmark-gfm was built BEFORE qmake build MANUALLY...")
     CONFIG(release, debug|release) {
       LIBS += -L$$PWD/../deps/cmark-gfm/build/src/Release -lcmark-gfm_static
       LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions/Release -lcmark-gfm-extensions_static
@@ -89,6 +104,7 @@ win32 {
     }
   } else {
     # cmark-gfm to be built by qmake to enable clean system build for Launchpad debuild
+    message("cmark-gfm @ Linux/macOS: cmark-gfm will be built as a part of qmake build AUTOMATICALLY...")
     libcmark-gfm.target = libcmark-gfm
     libcmark-gfm.commands = cd -L$$PWD/../deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
     libcmark-gfm_clean.commands = cd -L$$PWD/../deps/cmark-gfm rm -rvf build
@@ -125,6 +141,9 @@ macx {
     HEADERS += ./src/qt/spelling/dictionary_provider_nsspellchecker.h
 
     OBJECTIVE_SOURCES += src/qt/spelling/dictionary_provider_nsspellchecker.mm
+
+    LIBS += -framework AppKit
+    LIBS += -framework Foundation
 } else:win32 {
     include(../deps/hunspell/hunspell.pri)
 
@@ -137,10 +156,11 @@ macx {
       ./src/qt/spelling/dictionary_provider_voikko.cpp
 
 } else:unix {
-    # pkgconfig-based configuration does not work @ Ubuntu distribution build
+    # pkgconfig-based configuration does not work @ Ubuntu
     #  CONFIG += link_pkgconfig
     #  PKGCONFIG += hunspell
-    # hardcoded paths are unfortunately more robust:
+
+    # hardcoded paths are (unfortunately) more robust:
     INCLUDEPATH += /usr/include/hunspell
     LIBS += -lhunspell
 

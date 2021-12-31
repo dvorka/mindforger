@@ -36,7 +36,7 @@ function createTarball() {
   mkdir work
   cd work
   cp -vrf ../${MF} .
-  tar zcf ../${MF}.tgz ${MF}
+  tar zcf ../${MF}_tarball.tgz ${MF}
   cd ../${MF}
 }
 
@@ -52,7 +52,12 @@ function buildGitHubTarball() {
     export MFFULLVERSION=${MFVERSION}-1    # mantainer upload
     export MF=mindforger_${MFVERSION}
     export MFRELEASE=mindforger-${MFFULLVERSION}
-    export MFSRC="/home/dvorka/p/mindforger/git/mindforger"
+    if [[ -d "/home/dvorka" ]]
+    then
+        export MFSRC="/home/dvorka/p/mindforger/git/mindforger"
+    else
+	export MFSRC="/Users/dvorka/p/mindforger/git/mindforger"
+    fi
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
     export MFBUILD=mindforger-${NOW}
     export UBUNTUVERSION=unstable
@@ -77,9 +82,13 @@ function buildGitHubTarball() {
     # 1.2) prune MindForger project source: tests, *.o/... build files, ...
     echo -e "\n# MF project cleanup ########################################"
     rm -vrf ./.git ./app/mindforger ./build ./app/test ./lib/test
+    rm -rvf ./lib.pro.user ./lib/src/mindforger-lib-unit-tests
+    rm -rvf ./app/mindforger.app
+    rm -rvf ./deps/cmark-gfm/.github ./deps/cmark-gfm/build
+    rm -rvf ./deps/mitie
     rm -vf ./mindforger.pro.user ./mindforger.pro.user.macos ./mindforger.pro.user.ubuntu
-    find . -type f \( -name "*moc_*.cpp" -or -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
-        
+    find . -type f \( -name "*moc_*.cpp" -or -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf ${F}; done
+    find . -type f \( -name "*.dmg" -or -name "*.stash" \) | while read F; do rm -vf ${F}; done
     # 1.4) create tar archive
     createTarball
 }

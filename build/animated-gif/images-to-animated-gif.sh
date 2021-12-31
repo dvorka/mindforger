@@ -1,5 +1,5 @@
 #!/bin/bash
 
-convert -delay 100 -loop 0 *.png animated.gif
+convert -delay 400 -loop 0 *.png *.jpeg animated.gif
 
 # eof
