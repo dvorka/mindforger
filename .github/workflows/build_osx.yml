@@ -24,5 +24,4 @@ jobs:
 
       - name: Deploy
         # run: bash deploy_mac.sh ./release
-	run: echo "MindForger .dmg build step"
-	run: pwd
+	run: echo "MindForger .dmg build step: $(pwd)"
