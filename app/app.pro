@@ -1,4 +1,4 @@
-# mindforger-app.pro     Qt project file for MindForger
+# app.pro     Qt project file for MindForger Qt-based frontend
 #
 # Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
 #
@@ -57,8 +57,8 @@ mfner {
 # webkit is supposed to be OBSOLETED by webengine, but webengine is disabled
 # on Linux since Qt 5.9 due to its tragic performance > conditional compilation
 # seems to be the only way:
-#   - webkit on Linux
-#   - webengine on Windows and macOS
+# - webkit on Linux
+# - webengine on Windows and macOS
 win32|macx|mfwebengine {
     DEFINES += MF_QT_WEB_ENGINE
     QT += webengine
@@ -70,10 +70,10 @@ win32|macx|mfwebengine {
 }
 
 # Dependencies:
-#  - INCLUDEPATH is used during compilation to find included header files.
-#  - DEPENDPATH is used to resolve dependencies between header and source
-#    files, e.g. which source files need to be recompiled when certain header
-#    file changes.
+# - INCLUDEPATH is used during compilation to find included header files.
+# - DEPENDPATH is used to resolve dependencies between header and source
+#   files, e.g. which source files need to be recompiled when certain header
+#   file changes.
 INCLUDEPATH += $$PWD/../lib/src
 DEPENDPATH += $$PWD/../lib/src
 
@@ -94,6 +94,7 @@ win32 {
   DEFINES += MF_MD_2_HTML_CMARK
 
   win32 {
+    message("cmark-gfm @ Windows: ensure that cmark-gfm was built BEFORE qmake build MANUALLY...")
     CONFIG(release, debug|release) {
       LIBS += -L$$PWD/../deps/cmark-gfm/build/src/Release -lcmark-gfm_static
       LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions/Release -lcmark-gfm-extensions_static
@@ -103,6 +104,7 @@ win32 {
     }
   } else {
     # cmark-gfm to be built by qmake to enable clean system build for Launchpad debuild
+    message("cmark-gfm @ Linux/macOS: cmark-gfm will be built as a part of qmake build AUTOMATICALLY...")
     libcmark-gfm.target = libcmark-gfm
     libcmark-gfm.commands = cd -L$$PWD/../deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
     libcmark-gfm_clean.commands = cd -L$$PWD/../deps/cmark-gfm rm -rvf build

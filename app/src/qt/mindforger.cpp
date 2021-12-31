@@ -23,7 +23,7 @@
   #include <getopt.h>
 #else
   #include "../../deps/getopt/getopt.h"
-#endif // _WIN32
+#endif
 #include <QtWidgets>
 
 #include "../../lib/src/version.h"
@@ -119,7 +119,6 @@ using namespace m8r::filesystem;
  *
  * @see https://www.doxygen.nl/manual/markdown.html
  * @see https://www.doxygen.nl/manual/docblocks.html#docexamples
- *
  */
 int main(int argc, char* argv[])
 {
@@ -389,7 +388,17 @@ int main(int argc, char* argv[])
             MF_DEBUG(endl);
         }
         if(!isDefaultLangAvailable) {
-            defaultLanguage.assign(languages[0].toStdString());
+            // try to set English > US English > fallback to the first available language
+            string commonLangs[] = {"en", "en_US", "en_GB", languages[0].toStdString()};
+            for(auto cl:commonLangs) {
+                if(languages.contains("en")) {
+                    defaultLanguage.assign("en");
+                    break;
+                }
+            }
+            if(!defaultLanguage.size()) {
+                defaultLanguage.assign(languages[0].toStdString());
+            }
             MF_DEBUG("  Setting FALLBACK language to : " << defaultLanguage << endl);
         }
         DictionaryManager::instance().setDefaultLanguage(

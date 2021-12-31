@@ -22,13 +22,14 @@
 rm -vf "${MF_MACOS_BUILD_DIR}/mindforger.dmg"
 
 function packageMindForger {
-    echo "Package MindForger as .dmg ..."
+    echo "Packaging MindForger as Disk iMaGe mindforger.dmg ..."
     # in order to link QWebEngine correctly, macdeployqt must be run as follows:
     #   macdeployqt <TARGET>.app -executable=<TARGET>.app/Contents/MacOS/<TARGET>
     # and non-brew (qt.io) macdeployqt MUST be used (specify path and/or put macdeployqt to path):
     cd "${MF_MACOS_BUILD_DIR}" && ${MACDEPLOY} mindforger.app -executable=mindforger.app/Contents/MacOS/mindforger -dmg -always-overwrite
 
     echo "Find .dmg package in app/mindforger.dmg and app/mindforger.app/..."
+    ls -l ../../mindforger.dmg
 }
 
 packageMindForger
