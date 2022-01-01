@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # MindForger thinking notebook
 #
@@ -29,7 +29,7 @@ function packageMindForger {
     cd "${MF_MACOS_BUILD_DIR}" && ${MACDEPLOY} mindforger.app -executable=mindforger.app/Contents/MacOS/mindforger -dmg -always-overwrite
 
     export DMG_TIMESTAMP=`date +%Y%m%d.%H%M%S`
-    export DMG_FILENAME="mindforger-1.53.0-${DMG_TIMESTAMP}.dmg"
+    export DMG_FILENAME="mindforger-1.53.0-${DMG_TIMESTAMP}-intel.dmg"
     
     echo "Find .dmg package in $(pwd)/${DMG_FILENAME} ..."
     mv -v "mindforger.dmg" "${DMG_FILENAME}"
