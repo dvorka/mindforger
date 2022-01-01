@@ -25,6 +25,7 @@
 #   qmake CONFIG+=mfnocxx           ... do NOT define CXX i.e. g++
 #   qmake CONFIG+=mfnoccache        ... do NOT use ccache to build the project
 #   qmake CONFIG+=mfdebug           ... show debug messages + include WIP code
+#   qmake CONFIG+=mfci              ... CI build (AppVeyor, ...) w/ build info @ window title
 #   qmake CONFIG+=mfunits           ... option to run unit tests
 #   qmake CONFIG+=mfner             ... DEPRECATED: build project w/ NER and link dlib/MITIE
 #

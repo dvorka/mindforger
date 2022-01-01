@@ -25,11 +25,12 @@ SCRIPT_HOME="$(pwd)"
 export SCRIPT_HOME
 
 # cmark-gfm
-./cmark-gfm-build.sh
-cd "${SCRIPT_HOME}" || exit 1
+echo "cmark-gfm is built by qmake (no need for pre-build)"
+# ./cmark-gfm-build.sh
 
 # MindForger
-cd ../..
+cd "${SCRIPT_HOME}/../.." || exit 1
+rm -rvf ${MF_MACOS_BUILD_DIR}/*.dmg ${MF_MACOS_BUILD_DIR}/mindforger ${MF_MACOS_BUILD_DIR}/mindforger.app
 make clean
 qmake -r mindforger.pro
 make -j 7

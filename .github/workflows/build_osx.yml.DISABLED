@@ -17,7 +17,7 @@ jobs:
         run: brew link qt@5 --force
 
       - name: Run QMake
-        run: qmake -r mindforger.pro
+        run: qmake -r "CONFIG+=mfci" mindforger.pro 
 
       - name: Run Make
         run: make -j 4

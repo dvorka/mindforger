@@ -144,7 +144,8 @@ void Configuration::clear()
 
     // Markdown 2 HTML options
     md2HtmlOptions = 0
-        | MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js - enabled by default
+        // DISABLED highlighting and extensions support is consequence of HTML preview flickering when =-v is enabled
+        //| MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js - disabled by default
         //| MdToHtmlOption::MathSupport // math expressions support via mathjax.js - disabled by default
         //| MdToHtmlOption::DiagramSupport; // diagram support via mermaid.js - disabled by default
         ;

@@ -23,11 +23,13 @@
 
 namespace m8r {
 
-// versionning scheme: https://semver.org/
+// semantic versionning scheme: https://semver.org/
 #include "app_info.h"
 
 #ifdef DO_MF_DEBUG
   #define MINDFORGER_NIGHTLY " (" __DATE__ " " __TIME__ ")"
+#elif DO_MF_CI
+  #define MINDFORGER_NIGHTLY " (CI " __DATE__ " " __TIME__ ")"
 #else
   #define MINDFORGER_NIGHTLY ""
 #endif
