@@ -26,6 +26,10 @@ mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
 }
 
+mfci {
+  DEFINES += DO_MF_CI
+}
+
 # Hunspell spell check:
 # - Windows and Ubuntu Xenial require DEPRECATED Hunspell API
 # - Ubuntu Bionic and newer distros use NEW Hunspell API

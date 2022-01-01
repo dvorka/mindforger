@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # MindForger thinking notebook
 #
@@ -19,17 +19,21 @@
 
 . ./env.sh
 
-rm -vf "${MF_MACOS_BUILD_DIR}/mindforger.dmg"
+rm -vf ${MF_MACOS_BUILD_DIR}/*.dmg
 
 function packageMindForger {
-    echo "Packaging MindForger as Disk iMaGe mindforger.dmg ..."
+    echo "Packaging MindForger as Disk iMaGe .dmg ..."
     # in order to link QWebEngine correctly, macdeployqt must be run as follows:
     #   macdeployqt <TARGET>.app -executable=<TARGET>.app/Contents/MacOS/<TARGET>
     # and non-brew (qt.io) macdeployqt MUST be used (specify path and/or put macdeployqt to path):
     cd "${MF_MACOS_BUILD_DIR}" && ${MACDEPLOY} mindforger.app -executable=mindforger.app/Contents/MacOS/mindforger -dmg -always-overwrite
 
-    echo "Find .dmg package in app/mindforger.dmg and app/mindforger.app/..."
-    ls -l ../../mindforger.dmg
+    export DMG_TIMESTAMP=`date +%Y%m%d.%H%M%S`
+    export DMG_FILENAME="mindforger-1.53.0-${DMG_TIMESTAMP}-intel.dmg"
+    
+    echo "Find .dmg package in $(pwd)/${DMG_FILENAME} ..."
+    mv -v "mindforger.dmg" "${DMG_FILENAME}"
+    ls -l *.dmg
 }
 
 packageMindForger

@@ -25,7 +25,7 @@ export PATH="/Users/dvorka/Qt/${QT_VERSION}/clang_64/bin":${PATH}
 # when built using QtCreator
 # export MF_MACOS_BUILD_DIR="/Users/dvorka/p/mindforger/git/build-mindforger-Desktop_Qt_5_9_9_clang_64bit-Debug/app"
 # when built using .sh scripts
-export MF_MACOS_BUILD_DIR="../../app"
+export MF_MACOS_BUILD_DIR="/Users/dvorka/p/mindforger/git/mindforger/app"
 
 # export MACDEPLOY="macdeployqt"
 export MACDEPLOY="/Users/dvorka/Qt/${QT_VERSION}/clang_64/bin/macdeployqt"
