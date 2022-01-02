@@ -65,7 +65,6 @@ private:
     RepositoryIndexer repositoryIndexer;
     Configuration& config;
     Ontology& ontology;
-    HtmlOutlineRepresentation& htmlRepresentation;
     MarkdownOutlineRepresentation& mdRepresentation;
     Persistence* persistence;
     TWikiOutlineRepresentation twikiRepresentation;

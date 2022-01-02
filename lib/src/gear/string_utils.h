@@ -118,13 +118,29 @@ static inline std::string &stringLeftTrim(std::string& s) {
         s.begin(),
         std::find_if(s.begin(),
         s.end(),
+#ifdef __APPLE__
+        [](int c) {return !std::isspace(c);})
+#else
         std::not1(std::ptr_fun<int, int>(isspace)))
+#endif
     );
     return s;
 }
 
 static inline std::string &stringRightTrim(std::string& s) {
-    s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(isspace))).base(), s.end());
+    s.erase(
+        std::find_if(
+            s.rbegin(),
+            s.rend(),
+#ifdef __APPLE__
+            [](int c) {return !std::isspace(c);}
+        ).base(),
+#else
+            std::not1(std::ptr_fun<int, int>(isspace))
+        ).base(),
+#endif
+        s.end()
+    );
     return s;
 }
 

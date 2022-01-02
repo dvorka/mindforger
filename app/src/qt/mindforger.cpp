@@ -418,9 +418,17 @@ int main(int argc, char* argv[])
     // initialize and start UI
     m8r::MainWindowView mainWindowView(lookAndFeels);
     m8r::MainWindowPresenter mainWindowPresenter(mainWindowView);
+#ifdef __APPLE__
+    mindforgerApplication.font().setPointSize(config.getUiFontPointSize());
+    // ugly & stupid shown() > shownMaximized() to workaround start w/ window wider than screen on macOS
+    mainWindowView.show();
+    mainWindowPresenter.showInitialView();
+    mainWindowView.showMaximized();
+#else
     mainWindowView.showMaximized();
     mindforgerApplication.font().setPointSize(config.getUiFontPointSize());
     mainWindowPresenter.showInitialView();
+#endif
 
     // run application
     return mindforgerApplication.exec();

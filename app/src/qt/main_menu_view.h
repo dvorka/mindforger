@@ -254,6 +254,7 @@ public:
 
     QAction* actionHelpReportBug;
     QAction* actionHelpCheckForUpdates;
+    QAction* actionHelpAboutQt;
     QAction* actionHelpAbout;
 
 public:

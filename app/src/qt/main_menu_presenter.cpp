@@ -281,6 +281,10 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionHelpMathQuickReference, SIGNAL(triggered()), mwp, SLOT(doActionHelpMathQuickReference()));
     QObject::connect(view->actionHelpMathLivePreview, SIGNAL(triggered()), mwp, SLOT(doActionHelpMathLivePreview()));
     QObject::connect(view->actionHelpDiagrams, SIGNAL(triggered()), mwp, SLOT(doActionHelpDiagrams()));
+    QObject::connect(
+        view->actionHelpAboutQt, SIGNAL(triggered()),
+        LookAndFeels::getInstance().getQApplication(), SLOT(aboutQt())
+    );
     QObject::connect(view->actionHelpAbout, SIGNAL(triggered()), mwp, SLOT(doActionHelpAboutMindForger()));
 
     switch(config.getDesiredMindState()) {

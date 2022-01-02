@@ -17,8 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-export QT_VERSION="5.9.9"
+export MINDFORGER_VERSION="1.54.0"
+
+# export QT_VERSION="5.9.9"
 # export QT_VERSION="5.11.0"
+export QT_VERSION="5.15.2"
+
 
 export PATH="/Users/dvorka/Qt/${QT_VERSION}/clang_64/bin":${PATH}
 

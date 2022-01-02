@@ -32,12 +32,11 @@ Memory::Memory(
         HtmlOutlineRepresentation& htmlRepresentation)
     : config{configuration},
       ontology{ontology},
-      htmlRepresentation{htmlRepresentation},
       mdRepresentation{htmlRepresentation.getMarkdownRepresentation()},
       persistence(new FilesystemPersistence{mdRepresentation, htmlRepresentation}),
       twikiRepresentation{mdRepresentation, persistence},
       csvRepresentation{},
-      limbo{configuration}
+      limbo{}
 {
     cache = true;
     mindScope = nullptr;

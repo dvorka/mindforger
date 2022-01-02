@@ -844,6 +844,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionHelpCheckForUpdates = new QAction(QIcon(":/menu-icons/download.svg"), tr("&Check for Updates"), mainWindow);
     actionHelpCheckForUpdates->setStatusTip(tr("Check for MindForger updates"));
 
+    actionHelpAboutQt = new QAction(QIcon(":/menu-icons/write.svg"), tr("&About Qt"), mainWindow);
+    actionHelpAboutQt->setStatusTip(tr("About Qt..."));
+
     actionHelpAbout = new QAction(QIcon(":/menu-icons/write.svg"), tr("&About MindForger"), mainWindow);
     actionHelpAbout->setStatusTip(tr("About MindForger..."));
 
@@ -858,7 +861,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuHelp->addAction(actionHelpMathQuickReference);
     menuHelp->addAction(actionHelpMathLivePreview);
     menuHelp->addAction(actionHelpDiagrams);
+#ifdef __APPLE__
     menuHelp->addSeparator();
+#endif
+    menuHelp->addAction(actionHelpAboutQt);
     menuHelp->addAction(actionHelpAbout);
 }
 

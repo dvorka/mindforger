@@ -1,3 +1,8 @@
+2022-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v1.54.0 - macOS fix release: Qt upgraded from 5.9.9 to 1.15.2,
+      added and fixed short cuts (Kanban items move between columns).
+
 2021-12-26  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v1.53.0 - custom Eisenhower Matrix on tags, Kanban style organizer

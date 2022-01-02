@@ -161,6 +161,9 @@ public:
 
     // CLI
     const QColor& getCliTextColor() const { return cliTextColor; }
+
+    // bean
+    QApplication* getQApplication() const { return mindforgerApplication; }
 };
 
 }

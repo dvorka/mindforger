@@ -20,8 +20,7 @@
 
 namespace m8r {
 
-Limbo::Limbo(Configuration& configuration)
-    : config{configuration}
+Limbo::Limbo()
 {
 }
 
