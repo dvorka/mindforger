@@ -11,7 +11,7 @@ assignees: dvorka
 
 ...
 
-**Expected behavior:**
+**Expected behaviour:**
 
 ...
 

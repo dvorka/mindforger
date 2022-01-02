@@ -24,9 +24,8 @@ echo "Running CLEAN MindForger build..."
 SCRIPT_HOME="$(pwd)"
 export SCRIPT_HOME
 
-# cmark-gfm
-echo "cmark-gfm is built by qmake (no need for pre-build)"
-# ./cmark-gfm-build.sh
+# dependency: cmark-gfm
+./cmark-gfm-build.sh
 
 # MindForger
 cd "${SCRIPT_HOME}/../.." || exit 1
