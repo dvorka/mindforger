@@ -112,7 +112,7 @@ win32 {
     libcmark-gfm.target = libcmark-gfm
     libcmark-gfm.commands = cd -L$$PWD/../deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
     libcmark-gfm_clean.commands = cd -L$$PWD/../deps/cmark-gfm rm -rvf build
-    QT_EXTRA_TARGETS += libcmark-gfm
+    QMAKE_EXTRA_TARGETS += libcmark-gfm
 
     LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions
     LIBS += -L$$PWD/../deps/cmark-gfm/build/src -lcmark-gfm
@@ -506,5 +506,6 @@ win32 {
 # ########################################
 
 message(MindForger build DEFINES: $$DEFINES)
+message(MindForger build QMAKE_EXTRA_TARGETS: $$QMAKE_EXTRA_TARGETS)
 
 # eof
