@@ -56,6 +56,10 @@ Tarball:
 
 * [download tarball](https://github.com/dvorka/mindforger/releases)
 
+Nightly builds:
+
+* [Windows nightly](https://ci.appveyor.com/project/dvorka/mindforger/build/artifacts)
+
 ## Documentation
 Read:
 
