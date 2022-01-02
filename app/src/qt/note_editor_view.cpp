@@ -98,7 +98,12 @@ void NoteEditorView::setEditorTabWidth(int tabWidth)
     // tab width: 4 or 8
     QFontMetrics metrics(f);
     this->tabWidth = tabWidth;
+
+#if QT_VERSION > QT_VERSION_CHECK(5, 10, 0)
+    setTabStopDistance(tabWidth * metrics.horizontalAdvance(' '));
+#else
     setTabStopWidth(tabWidth * metrics.width(' '));
+#endif
 }
 
 void NoteEditorView::setEditorTabsAsSpacesPolicy(bool tabsAsSpaces)

@@ -1,7 +1,7 @@
 2022-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v1.54.0 - macOS fix release: Qt upgraded from 5.9.9 to 1.15.2,
-      added and fixed short cuts (Kanban items move between columns).
+      ... and bug fixes (x-axis screen overflow after start on macOS).
 
 2021-12-26  Martin Dvorak  <martin.dvorak@mindforger.com>
 
