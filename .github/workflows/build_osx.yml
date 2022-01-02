@@ -16,7 +16,7 @@ jobs:
       - name: Force link Qt
         run: brew link qt@5 --force
 
-      - name: Build dependency: cmark-gfm
+      - name: Build dependency - cmark-gfm
         run: cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
 
       - name: Run QMake
