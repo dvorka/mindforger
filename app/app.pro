@@ -108,7 +108,7 @@ win32 {
     }
   } else {
     # cmark-gfm to be built by qmake to enable clean system build for Launchpad debuild
-    message("cmark-gfm @ Linux/macOS: cmark-gfm will be built as a part of qmake build AUTOMATICALLY...")
+    message("cmark-gfm @ Linux/macOS: ensure that cmark-gfm was built BEFORE qmake build MANUALLY...")
     libcmark-gfm.target = libcmark-gfm
     libcmark-gfm.commands = cd -L$$PWD/../deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
     libcmark-gfm_clean.commands = cd -L$$PWD/../deps/cmark-gfm rm -rvf build
