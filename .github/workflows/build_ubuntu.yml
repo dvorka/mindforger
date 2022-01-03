@@ -16,8 +16,8 @@ jobs:
       - name: Build dependency - cmark-gfm
         run: cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
 
-      - name: Build lib and run unit tests
-        run: cd build && ./test-lib-units.sh
+      - name: TODO Build lib and run unit tests using Google Test Framework
+        run: pwd # cd build && M8R_CPU_CORES=4 M8R_GIT_PATH=`pwd`/.. ./test-lib-units.sh
 
       - name: Run QMake to build application
         run: pwd ; qmake -r "CONFIG+=mfci" mindforger.pro 
@@ -25,7 +25,7 @@ jobs:
       - name: Run Make to build application
         run: make -j 4
 
-      - name: TODO Build tarball
+      - name: Build tarball
         run: mkdir -v ../work-tarball && cp -vf build/tarball/tarball-build.sh ../work-tarball && cd ../work-tarball && ./tarball-build.sh ci
 
       - name: Archive push build artifacts
