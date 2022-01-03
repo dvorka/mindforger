@@ -16,6 +16,9 @@ jobs:
       - name: Build dependency - cmark-gfm
         run: cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
 
+      - name: TODO Build test dependency - Google Test Framework
+        run: sudo apt-get install -y libgtest-dev
+
       - name: TODO Build lib and run unit tests using Google Test Framework
         run: pwd # cd build && M8R_CPU_CORES=4 M8R_GIT_PATH=`pwd`/.. ./test-lib-units.sh
 
@@ -32,4 +35,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: tarball-ci-build
-          path: ../work-tarball/*.tgz
+          path: /home/runner/work/mindforger/work-tarball/*.tgz
