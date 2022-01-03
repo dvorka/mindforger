@@ -861,7 +861,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuHelp->addAction(actionHelpMathQuickReference);
     menuHelp->addAction(actionHelpMathLivePreview);
     menuHelp->addAction(actionHelpDiagrams);
-#ifdef __APPLE__
+#ifndef __APPLE__
     menuHelp->addSeparator();
 #endif
     menuHelp->addAction(actionHelpAboutQt);
