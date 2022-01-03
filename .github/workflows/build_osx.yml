@@ -1,4 +1,4 @@
-name: MindForger macOS build
+name: macOS build
 
 on: [push]
 
