@@ -66,6 +66,7 @@ function buildGitHubTarball {
 	if [[ "${MFCIBUILD}" = "ci" ]]
         then
             echo "  CI tarball build"
+	    export MFSRC="/home/runner/work/mindforger/mindforger"
 	else
             echo "  macOS tarball build"
 	    export MFSRC="/Users/dvorka/p/mindforger/git/mindforger"
@@ -113,6 +114,6 @@ function buildGitHubTarball {
 export ARG_VERSION="1.54.0"
 export ARG_BAZAAR_MSG="MindForger ${ARG_VERSION} release."
 
-buildGitHubTarball ${ARG_VERSION} ${ARG_BAZAAR_MSG} ${1}
+buildGitHubTarball "${ARG_VERSION}" "${ARG_BAZAAR_MSG}" ${1}
 
 # eof
