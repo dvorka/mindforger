@@ -58,7 +58,7 @@ Tarball:
 
 Nightly builds:
 
-* [Windows nightly](https://ci.appveyor.com/project/dvorka/mindforger/build/artifacts)
+* [Windows installer nightly](https://ci.appveyor.com/project/dvorka/mindforger/build/artifacts)
 
 ## Documentation
 Read:
