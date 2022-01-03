@@ -164,6 +164,7 @@ export BUILD_DIR=${SCRIPT_DIR}/../lib/test
 #  - use -v only if you want a lot of info (might be too much)
 if [ ${OPTION_RECOMPILE} ]
 then
+    cd ${BUILD_DIR} && qmake -r mindforger-lib-unit-tests.pro CONFIG+=mfunits
     # cleanup
     cd ${BUILD_DIR} && cd ../../ && make clean && rm *.a
     cd ${BUILD_DIR} && cd ./src && make clean
