@@ -26,7 +26,7 @@ jobs:
         run: make -j 4
 
       - name: Build Disk iMaGe
-        run: cd build/macos && ./dmg-package-build.sh
+        run: cd build/macos && ./dmg-package-build.sh ci
 
       - name: Archive push build artifacts
         uses: actions/upload-artifact@v2
