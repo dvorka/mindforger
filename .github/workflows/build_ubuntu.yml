@@ -16,11 +16,11 @@ jobs:
       - name: Build dependency - cmark-gfm
         run: cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
 
-      - name: TODO Build test dependency - Google Test Framework
+      - name: Build test dependency - Google Test Framework
         run: sudo apt-get install -y libgtest-dev && cd /usr/src/gtest && sudo cmake . && sudo make && sudo mv -v libg* /usr/lib
 
-      - name: TODO Build lib and run unit tests using Google Test Framework
-        run: pwd # cd build && M8R_CPU_CORES=4 M8R_GIT_PATH=`pwd`/.. ./test-lib-units.sh
+      - name: Build lib and run unit tests using Google Test Framework
+        run: cd build && M8R_CPU_CORES=4 M8R_GIT_PATH=`pwd`/.. ./test-lib-units.sh
 
       - name: Run QMake to build application
         run: pwd ; qmake -r "CONFIG+=mfci" mindforger.pro 

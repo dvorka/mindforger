@@ -36,11 +36,12 @@ function createTarball {
   mkdir work
   cd work
   cp -vrf ../${MF} .
-  tar zcf ../${MF}_tarball.tgz ${MF}
+  TARBALL_PATH="../${MF}_tarball.tgz"
+  tar zcf ${TARBALL_PATH} ${MF}
   if [[ "${1}" = "ci" ]]
   then
       pwd
-      mv -v *tarball.tgz .. 
+      mv -v ${TARBALL_PATH} ../..
   fi
 
   cd ../${MF}

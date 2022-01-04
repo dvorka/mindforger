@@ -258,6 +258,11 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
 
     // TODO Linux paste
 
+    MF_DEBUG(
+        "Editor keyPressEvent handler:" << endl <<
+        "  Key binding: " << Configuration::getInstance().getEditorKeyBinding() << endl
+    );
+
     if(event->modifiers() & Qt::ControlModifier) {
         switch (event->key()) {
         case Qt::Key_V: {
