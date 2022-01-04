@@ -37,6 +37,12 @@ function createTarball {
   cd work
   cp -vrf ../${MF} .
   tar zcf ../${MF}_tarball.tgz ${MF}
+  if [[ "${1}" = "ci" ]]
+  then
+      pwd
+      mv -v *tarball.tgz .. 
+  fi
+
   cd ../${MF}
 }
 
@@ -104,7 +110,7 @@ function buildGitHubTarball {
     find . -type f \( -name "*moc_*.cpp" -or -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf ${F}; done
     find . -type f \( -name "*.dmg" -or -name "*.stash" \) | while read F; do rm -vf ${F}; done
     # 1.4) create tar archive
-    createTarball
+    createTarball ${MFCIBUILD}
 }
 
 # ############################################################################
