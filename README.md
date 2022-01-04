@@ -1,13 +1,14 @@
 # Thinking Notebook & Markdown Editor
 
 [![Appveyor CI for Win](https://ci.appveyor.com/api/projects/status/iemop280po84od66?svg=true)](https://ci.appveyor.com/project/dvorka/mindforger)
+[![GitHub Actions CI for macOS](https://github.com/dvorka/mindforger/actions/workflows/build_osx.yml/badge.svg)](https://github.com/dvorka/mindforger/actions)
+[![GitHub Actions CI for Ubuntu](https://github.com/dvorka/mindforger/actions/workflows/build_ubuntu.yml/badge.svg)](https://github.com/dvorka/mindforger/actions)
 [![Current release](https://img.shields.io/github/release/dvorka/mindforger.svg)](https://github.com/dvorka/mindforger/releases)
 [![GitHub issues](https://img.shields.io/github/issues/dvorka/mindforger.svg?maxAge=360)](https://github.com/dvorka/mindforger/issues)
 [![All releases downloads](https://img.shields.io/github/downloads/dvorka/mindforger/total.svg)](https://github.com/dvorka/mindforger/releases)
 [![License](https://img.shields.io/github/license/dvorka/mindforger?color=%23fe0000)](https://github.com/dvorka/mindforger/blob/master/LICENSE)
 <a href="https://twitter.com/intent/follow?screen_name=mindforger"><img src="https://img.shields.io/twitter/follow/mindforger.svg?style=social&logo=twitter" alt="follow on Twitter"></a>
 <!-- [![Documentation](https://img.shields.io/badge/project-documentation-blue.svg)](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md) -->
-<!-- [![GitHub Actions CI for macOS](https://github.com/dvorka/mindforger/actions/workflows/build_osx.yml/badge.svg)](https://github.com/dvorka/mindforger/actions) -->
 
 Are you **drowning** in **information**, but **starving** for **knowledge**? Where do you keep your **private remarks** 
 like ideas, personal plans, gift tips, how-tos, dreams, business vision, finance strategy, auto 
@@ -58,7 +59,8 @@ Tarball:
 
 Nightly builds:
 
-* [Windows nightly](https://ci.appveyor.com/project/dvorka/mindforger/build/artifacts)
+* [Windows installer nightly](https://ci.appveyor.com/project/dvorka/mindforger/build/artifacts)
+* [macOS .dmg nightly](https://github.com/dvorka/mindforger/actions)
 
 ## Documentation
 Read:
