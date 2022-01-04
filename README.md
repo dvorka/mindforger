@@ -31,8 +31,8 @@ MindForger is actually more than an editor or IDE - it's human mind inspired per
 ## Installation
 Install:
 
-* [Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#windows-)
 * [macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#macos-)
+* [Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#windows-)
 * [Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#ubuntu-)
 * [Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#debian-)
 * [Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#fedora-)
@@ -42,8 +42,8 @@ Install:
 
 Build:
 
-* [build on Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-windows-)
 * [build on macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-macos-)
+* [build on Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-windows-)
 * [build on Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-ubuntu-)
 * [build on Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-debian-)
 * [build on Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-fedora-)
@@ -59,8 +59,9 @@ Tarball:
 
 Nightly builds:
 
-* [Windows installer nightly](https://ci.appveyor.com/project/dvorka/mindforger/build/artifacts)
 * [macOS .dmg nightly](https://github.com/dvorka/mindforger/actions)
+* [Windows installer nightly](https://ci.appveyor.com/project/dvorka/mindforger/build/artifacts)
+* [tarball nightly](https://github.com/dvorka/mindforger/actions/workflows/build_ubuntu.yml)
 
 ## Documentation
 Read:
