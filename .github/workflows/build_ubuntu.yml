@@ -20,7 +20,7 @@ jobs:
         run: sudo apt-get install -y libgtest-dev && cd /usr/src/gtest && sudo cmake . && sudo make && sudo mv -v libg* /usr/lib
 
       - name: Build lib and run unit tests using Google Test Framework
-        run: M8R_GIT_PATH=`pwd` && cd build && M8R_CPU_CORES=4 ./test-lib-units.sh
+        run: export M8R_GIT_PATH=`pwd` && cd build && M8R_CPU_CORES=4 ./test-lib-units.sh
 
       - name: Run QMake to build application
         run: pwd ; qmake -r "CONFIG+=mfci" mindforger.pro 
