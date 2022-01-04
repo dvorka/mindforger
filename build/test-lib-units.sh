@@ -21,7 +21,7 @@
 # - to run all tests: uncomment OPTION_RUN_ALL_TESTS
 # - to run single test: comment OPTION_RUN_ALL_TESTS and uncomment OPTION_TEST with test ID
 
-export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
+#export OPTION_RUN_ALL_TESTS=yes # comment this line to run OPTION_TEST only
 export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
 #export OPTION_RUN_VALGRIND=yes # run test(s) w/ Valgrind (comment this line to disable)
 #export OPTION_RUN_GDB=yes # run test(s) w/ GDB (comment this line to disable)
@@ -63,7 +63,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="MarkdownParserTestCase.Bug622Loop64kLinesOverflow"
 #export OPTION_TEST="MarkdownParserTestCase.Links"
 #export OPTION_TEST="MarkdownParserTestCase.TimeScope"
-export OPTION_TEST="MarkdownParserTestCase.Deadline"
+#export OPTION_TEST="MarkdownParserTestCase.Deadline"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSections"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsPreamble"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsNoMetadata"
@@ -83,7 +83,7 @@ export OPTION_TEST="MarkdownParserTestCase.Deadline"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownRepresentationPreamble"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownRepresentationSectionTrailingHashes"
 #export OPTION_TEST="RepositoryIndexerTestCase.*"
-#export OPTION_TEST="RepositoryIndexerTestCase.RepositoryTypeDetection"
+export OPTION_TEST="RepositoryIndexerTestCase.RepositoryTypeDetection"
 #export OPTION_TEST="RepositoryIndexerTestCase.MarkdownRepository"
 #export OPTION_TEST="RepositoryIndexerTestCase.MindForgerRepository"
 #export OPTION_TEST="RepositoryIndexerTestCase.MindForgerFile"
