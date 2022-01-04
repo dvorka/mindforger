@@ -2,6 +2,7 @@
 
 [![Appveyor CI for Win](https://ci.appveyor.com/api/projects/status/iemop280po84od66?svg=true)](https://ci.appveyor.com/project/dvorka/mindforger)
 [![GitHub Actions CI for macOS](https://github.com/dvorka/mindforger/actions/workflows/build_osx.yml/badge.svg)](https://github.com/dvorka/mindforger/actions)
+[![GitHub Actions CI for Ubuntu](https://github.com/dvorka/mindforger/actions/workflows/build_ubuntu.yml/badge.svg)](https://github.com/dvorka/mindforger/actions)
 [![Current release](https://img.shields.io/github/release/dvorka/mindforger.svg)](https://github.com/dvorka/mindforger/releases)
 [![GitHub issues](https://img.shields.io/github/issues/dvorka/mindforger.svg?maxAge=360)](https://github.com/dvorka/mindforger/issues)
 [![All releases downloads](https://img.shields.io/github/downloads/dvorka/mindforger/total.svg)](https://github.com/dvorka/mindforger/releases)
