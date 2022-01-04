@@ -29,7 +29,13 @@ EditTagsPanel::EditTagsPanel(
 {
     // widgets
     lineEdit = new MyLineEdit{this, parent};
-    lineEdit->setToolTip(tr("Hit Ctrl+Enter to add tag"));
+    lineEdit->setToolTip(
+#ifdef __APPLE__
+        tr("Hit ⌘↩ to add tag")
+#else
+        tr("Hit Ctrl+Enter to add tag")
+#endif
+);
     completer = new QCompleter{completerStrings, this};
     completer->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
     completer->setCaseSensitivity(Qt::CaseInsensitive);

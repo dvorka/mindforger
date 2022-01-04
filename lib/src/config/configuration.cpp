@@ -172,7 +172,11 @@ void Configuration::clear()
     uiEditorTabsAsSpaces = DEFAULT_EDITOR_TABS_AS_SPACES;
     uiEditorAutosave = DEFAULT_EDITOR_AUTOSAVE;
     uiEditorTabWidth = DEFAULT_EDITOR_TAB_WIDTH;
+#ifdef _WIN32
     uiEditorKeyBinding = EditorKeyBindingMode::WINDOWS;
+#else
+    uiEditorKeyBinding = EditorKeyBindingMode::EMACS;
+#endif
     startupView.assign(DEFAULT_STARTUP_VIEW);
     uiThemeName.assign(UI_DEFAULT_THEME);
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);

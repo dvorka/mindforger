@@ -395,7 +395,8 @@ public:
     EditorKeyBindingMode getEditorKeyBinding() const { return uiEditorKeyBinding; }
     static const char* editorKeyBindingToString(EditorKeyBindingMode keyBinding) {
         if(keyBinding==EditorKeyBindingMode::EMACS) return UI_EDITOR_KEY_BINDING_EMACS; else
-            if(keyBinding==EditorKeyBindingMode::WINDOWS) return UI_EDITOR_KEY_BINDING_WIN; else return UI_EDITOR_KEY_BINDING_VIM;
+            if(keyBinding==EditorKeyBindingMode::WINDOWS) return UI_EDITOR_KEY_BINDING_WIN; else
+                return UI_EDITOR_KEY_BINDING_VIM;
     }
     const char* getEditorKeyBindingAsString() const {
         return editorKeyBindingToString(uiEditorKeyBinding);

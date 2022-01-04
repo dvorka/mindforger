@@ -423,6 +423,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionOutlineNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
     actionOutlineNew->setStatusTip(tr("Create new Notebook to form new ideas, principles, combinations or applications"));
+#ifdef __APPLE__
+    actionOutlineNew->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));
+#endif
+
 
 #ifdef __APPLE__
     actionOutlineEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
@@ -647,12 +651,21 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionFormatBold = new QAction(tr("&Bold"), mainWindow);
     actionFormatBold->setStatusTip(tr("Format text as bold"));
+#ifdef __APPLE__
+    actionFormatBold->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));
+#endif
 
     actionFormatItalic = new QAction(tr("&Italic"), mainWindow);
     actionFormatItalic->setStatusTip(tr("Format text as italic"));
+#ifdef __APPLE__
+    actionFormatItalic->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_I));
+#endif
 
     actionFormatCode = new QAction(tr("&Code"), mainWindow);
     actionFormatCode->setStatusTip(tr("Format text as inlined source code"));
+#ifdef __APPLE__
+    actionFormatCode->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
+#endif
 
     actionFormatMath = new QAction(tr("&Math"), mainWindow);
     actionFormatMath->setStatusTip(tr("Format text as math (MathJax)"));
@@ -786,9 +799,15 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionFormatLink = new QAction(tr("&Link"), mainWindow);
     actionFormatLink->setStatusTip(tr("Insert link to a document, image or file"));
+#ifdef __APPLE__
+    actionFormatLink->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_K));
+#endif
 
     actionFormatImage = new QAction(tr("Ima&ge"), mainWindow);
     actionFormatImage->setStatusTip(tr("Insert image"));
+#ifdef __APPLE__
+    actionFormatImage->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_M));
+#endif
 
     actionFormatTable = new QAction(tr("Tabl&es"), mainWindow);
     actionFormatTable->setStatusTip(tr("Insert table..."));

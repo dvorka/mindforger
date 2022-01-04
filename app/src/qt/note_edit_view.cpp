@@ -60,6 +60,9 @@ NoteEditView::NoteEditView(QWidget* parent)
         this, SLOT(slotSaveNote()));
     QObject::connect(
         bottomButtonsPanel->getRememberButton(), SIGNAL(clicked()),
+        this, SLOT(slotSaveNote()));
+    QObject::connect(
+        bottomButtonsPanel->getRememberAndLeaveButton(), SIGNAL(clicked()),
         this, SLOT(slotSaveAndCloseEditor()));
     QObject::connect(
         bottomButtonsPanel->getCancelButton(), SIGNAL(clicked()),

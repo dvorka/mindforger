@@ -38,12 +38,21 @@ EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
 #else
     moreButton->setToolTip("Alt+Enter");
 #endif
+
     rememberButton = new QPushButton{tr("Remember"), this};
 #ifdef __APPLE__
-    rememberButton->setToolTip("⌘L");
+    rememberButton->setToolTip("⌘S");
 #else
-    rememberButton->setToolTip("Alt+Left");
+    rememberButton->setToolTip("Ctrl+S");
 #endif
+
+    rememberAndLeaveButton = new QPushButton{tr("Remember and Leave"), this};
+#ifdef __APPLE__
+    rememberAndLeaveButton->setToolTip("⌘L");
+#else
+    rememberAndLeaveButton->setToolTip("Alt+Left");
+#endif
+
     cancelButton = new QPushButton{tr("Cancel"), this};
 #ifdef __APPLE__
     cancelButton->setToolTip("⌘G");
@@ -57,6 +66,7 @@ EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
     layout->addWidget(moreButton);
     layout->addWidget(previewButton);
     layout->addWidget(rememberButton);
+    layout->addWidget(rememberAndLeaveButton);
     setLayout(layout);
 
     // signals
@@ -73,6 +83,7 @@ EditButtonsPanel::~EditButtonsPanel()
     delete moreButton;
     delete previewButton;
     delete rememberButton;
+    delete rememberAndLeaveButton;
     delete cancelButton;
     delete layout;
 }

@@ -38,6 +38,7 @@ private:
     QPushButton* previewButton;
     QPushButton* moreButton;
     QPushButton* rememberButton;
+    QPushButton* rememberAndLeaveButton;
     QPushButton* cancelButton;
 
     OutlineHeaderEditDialog* outlineHeaderEditDialog;
@@ -95,6 +96,7 @@ public slots:
 
 public:
     QPushButton* getRememberButton() const { return rememberButton; }
+    QPushButton* getRememberAndLeaveButton() const { return rememberAndLeaveButton; }
     QPushButton* getCancelButton() const { return cancelButton; }
 
 };

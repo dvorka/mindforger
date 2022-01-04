@@ -55,9 +55,12 @@ OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
         this, SLOT(slotOpenOutlineHeaderPropertiesEditor()));
     new QShortcut(
         QKeySequence(Qt::CTRL+Qt::Key_S),
-        this, SLOT(slotSaveOutlineHeader()));
+        this, SLOT(slotSaveOutlineHeader()));    
     QObject::connect(
         bottomButtonsPanel->getRememberButton(), SIGNAL(clicked()),
+        this, SLOT(slotSaveNote()));
+    QObject::connect(
+        bottomButtonsPanel->getRememberAndLeaveButton(), SIGNAL(clicked()),
         this, SLOT(slotSaveAndCloseEditor()));
     QObject::connect(
         bottomButtonsPanel->getCancelButton(), SIGNAL(clicked()),
