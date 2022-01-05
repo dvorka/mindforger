@@ -318,7 +318,7 @@ void NavigatorView::timerEvent(QTimerEvent *event)
 
     bool itemsMoved = false;
     foreach(NavigatorNode *node, nodes) {
-        if(node->advance()) {
+        if(node->moved()) {
             itemsMoved = true;
         }
     }

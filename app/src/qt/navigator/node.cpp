@@ -198,13 +198,13 @@ void NavigatorNode::calculateForces()
 	newPos.setX(qMin(qMax(newPos.x(), sceneRect.left() + 10), sceneRect.right() - 10));
 	newPos.setY(qMin(qMax(newPos.y(), sceneRect.top() + 10), sceneRect.bottom() - 10));
 
-    // newPos contains new node position which will be applied on advance() invocation
+    // newPos contains new node position which will be applied on moved() (previously advance()) invocation
 }
 
 /**
  * @brief Apply new position calculated by calculateForces()
  */
-bool NavigatorNode::advance()
+bool NavigatorNode::moved()
 {
     if (newPos == pos()) {
 		return false;
@@ -215,7 +215,7 @@ bool NavigatorNode::advance()
 	return true;
 }
 
-// IMPORTANT boundingRect MUST be sect correctly, otherwise this node rendering is CLIPPED (text or shape)
+// IMPORTANT boundingRect MUST be sec correctly, otherwise this node rendering is CLIPPED (text or shape)
 QRectF NavigatorNode::boundingRect() const
 {
     qreal adjust = 2; // spacing + type rect
