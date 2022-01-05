@@ -49,7 +49,7 @@ OutlineHeaderViewPresenter::OutlineHeaderViewPresenter(
 #endif
     QObject::connect(
         view->getViever(), SIGNAL(signalMouseDoubleClickEvent()),
-        this, SLOT(slotEditOutlineHeader()));
+        this, SLOT(slotEditOutlineHeaderDoubleClick()));
     QObject::connect(
         view, SIGNAL(signalOpenEditor()),
         this, SLOT(slotEditOutlineHeader()));
@@ -146,8 +146,13 @@ void OutlineHeaderViewPresenter::slotLinkClicked(const QUrl& url)
 
 void OutlineHeaderViewPresenter::slotEditOutlineHeader()
 {
+    orloj->showFacetOutlineHeaderEdit(currentOutline);
+}
+
+void OutlineHeaderViewPresenter::slotEditOutlineHeaderDoubleClick()
+{
     if(orloj->getMainPresenter()->getConfiguration().isUiDoubleClickNoteViewToEdit()) {
-        orloj->showFacetOutlineHeaderEdit(currentOutline);
+        slotEditOutlineHeader();
     }
 }
 

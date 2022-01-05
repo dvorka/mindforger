@@ -56,7 +56,7 @@ NoteViewPresenter::NoteViewPresenter(NoteView* view, OrlojPresenter* orloj)
 #endif
     QObject::connect(
         view->getViever(), SIGNAL(signalMouseDoubleClickEvent()),
-        this, SLOT(slotEditNote()));
+        this, SLOT(slotEditNoteDoubleClick()));
     QObject::connect(
         view, SIGNAL(signalOpenEditor()),
         this, SLOT(slotEditNote()));
@@ -149,8 +149,13 @@ void NoteViewPresenter::slotLinkClicked(const QUrl& url)
 
 void NoteViewPresenter::slotEditNote()
 {    
+    orloj->showFacetNoteEdit(this->currentNote);
+}
+
+void NoteViewPresenter::slotEditNoteDoubleClick()
+{
     if(orloj->getMainPresenter()->getConfiguration().isUiDoubleClickNoteViewToEdit()) {
-        orloj->showFacetNoteEdit(this->currentNote);
+        slotEditNote();
     }
 }
 

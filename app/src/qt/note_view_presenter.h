@@ -83,6 +83,7 @@ public:
 public slots:
     void slotLinkClicked(const QUrl& url);
     void slotEditNote();
+    void slotEditNoteDoubleClick();
     void slotRefreshLeaderboardByValue(AssociatedNotes* associations);
 };
 

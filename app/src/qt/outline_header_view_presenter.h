@@ -65,6 +65,7 @@ public:
 public slots:
     void slotLinkClicked(const QUrl& url);
     void slotEditOutlineHeader();
+    void slotEditOutlineHeaderDoubleClick();
     void slotRefreshHeaderLeaderboardByValue(AssociatedNotes* associations);
 };
 
