@@ -420,7 +420,7 @@
     <message>
         <location filename="../../../src/qt/widgets/edit_buttons_panel.cpp" line="49"/>
         <source>Remember and Leave</source>
-        <translation type="unfinished">Save and Leave</translation>
+        <translation type="unfinished">Save &amp;&amp; Leave</translation>
     </message>
     <message>
         <location filename="../../../src/qt/widgets/edit_buttons_panel.cpp" line="56"/>
