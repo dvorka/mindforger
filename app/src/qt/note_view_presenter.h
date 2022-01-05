@@ -27,7 +27,7 @@
 #include "note_view.h"
 #include "note_view_model.h"
 
-#if !defined(__APPLE__) && !defined(_WIN32)
+#if !defined(__APPLE__) && !defined(_WIN32) && !defined(MF_QT_WEB_ENGINE)
   #include <QWebFrame>
 #endif
 

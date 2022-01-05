@@ -101,7 +101,7 @@ void OutlineHeaderViewPresenter::refreshLivePreview()
     view->setHtml(QString::fromStdString(html));
 
     // IMPROVE share code between O header and N
-#if !defined(__APPLE__) && !defined(_WIN32)
+#if !defined(__APPLE__) && !defined(_WIN32) && !defined(MF_QT_WEB_ENGINE)
     // WebView: scroll to same pct view
     if(scrollbar) {
         if(scrollbar->maximum()) {
