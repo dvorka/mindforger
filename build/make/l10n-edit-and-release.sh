@@ -17,13 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-if [ ! -e "../.git" ]
-then
-  echo "This script MUST be run from Git repository - run it e.g. from ${MINDFORGER_GIT}/build instead"
-  exit 1
-else
-  export timestamp=`date +%Y-%m-%d--%H-%M-%S`
-  cd ../.. && tar zvcf mindforger-${timestamp}.tgz mindforger
-fi
+pushd . && cd ../../app/resources/qt/translations && linguist mindforger_en.ts && popd && lrelease ../../app/app.pro
+#pushd . && cd ../../app/resources/qt/translations && linguist mindforger_cs.ts && popd && lrelease ../../app/app.pro
+# ... nerd is OOTB
 
 # eof

@@ -151,7 +151,7 @@ else
 fi
 
 export SCRIPT_DIR=`pwd`
-export BUILD_DIR=${SCRIPT_DIR}/../lib/test
+export BUILD_DIR=${SCRIPT_DIR}/../../lib/test
 
 
 # Compile source w/ debug code enabled and various test libs linked to get test-ready binary

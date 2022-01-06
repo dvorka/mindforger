@@ -156,7 +156,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(view.getToolBar()->actionHelp, SIGNAL(triggered()), this, SLOT(doActionHelpDocumentation()));
     QObject::connect(
         view.getToolBar(), SIGNAL(signalMainToolbarVisibilityChanged(bool)),
-        this, SLOT(slotMainToolbarVisibilityChanged(bool)));
+        this, SLOT(slotMainToolbarVisibilityChanged(bool))
+    );
 
 
 #ifdef MF_NER

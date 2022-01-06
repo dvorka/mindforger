@@ -30,8 +30,8 @@ CLASS_NAME := "New_Class"
 help:
 	@echo "MindForger maker help:"
 	@echo "clean         clean build artifacts"
-	@echo "gen-lib-class generate lib C++ class skeleton for CLASS_NAME=My_Class"
-	@echo "gen-ui-class  generate UI C++ class skeleton CLASS_NAME=My_Class"
+	@echo "gen-lib-class generate lib C++ class skeleton: CLASS_NAME=My_Class"
+	@echo "gen-ui-class  generate UI C++ class skeleton: CLASS_NAME=My_Class"
 	@echo "build         build MindForger executable"
 	@echo "l10n          update and release localization strings"
 	@echo "test-lib      compile and run lib/ unit tests"
@@ -39,6 +39,7 @@ help:
 	@echo "dist-all      build all distributions"
 	@echo "dist-tarball  build tarball distribution"
 	@echo "dist-deb      build Debian distribution"
+	@echo "dist-dmg      build macOS Disk iMaGe .dmg package"
 	@echo "statistic     show source code statistic"
 	@echo "doc           generate Doxygen documentation"
 
@@ -51,11 +52,11 @@ clean:
 
 gen-lib-class:
 	@echo "Generating lib C++ class for name: $(CLASS_NAME)"
-	./gen-cpp-class.py $(CLASS_NAME)
+	./make/gen-cpp-class.py $(CLASS_NAME)
 
 gen-ui-class:
 	@echo "Generating UI C++ class for name: $(CLASS_NAME)"
-	./gen-cpp-ui-class.py $(CLASS_NAME)
+	./make/gen-cpp-ui-class.py $(CLASS_NAME)
 
 
 build: clean
@@ -69,11 +70,12 @@ install-local-dvorka: build ../app/mindforger
 	~/bin/MIND --version
 
 l10n:
+	cd make
 	./l10n-update-strings.sh
 	./l10n-edit-and-release.sh
 
 test-lib: clean
-	./test-lib-units.sh
+	cd make && ./test-lib-units.sh
 
 dist-work-clean:
 	rm -rvf $(MF_MAKER_WORKING_DIR)
@@ -100,6 +102,10 @@ dist-rpm:
 	# TODO to be implemented
 	exit 1
 
+dist-dmg:
+	@echo "Building .dmg package..."
+	cd macos && ./mindforger-build.sh && ./dmg-package-build.sh
+
 dist-all-clean:
 	rm -rvf $(MINDFORGER_RELEASE_DIR)
 
@@ -107,7 +113,7 @@ dist-all: dist-all-clean $(MINDFORGER_RELEASE_DIR) dist-tarball dist-deb
 	@echo "Building all $(MINDFORGER_VERSION) distributions"
 
 statistic:
-	./statistic.sh
+	cd make && ./statistic.sh
 
 doc:
 	cd doxygen && doxygen ./mindforger.cfg

@@ -17,6 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-cd ../app && lupdate -no-obsolete app.pro
+if [ ! -e "../../.git" ]
+then
+  echo "This script MUST be run from Git repository - run it e.g. from ${MINDFORGER_GIT}/build instead"
+  exit 1
+else
+  export timestamp=`date +%Y-%m-%d--%H-%M-%S`
+  cd ../../.. && tar zvcf mindforger-${timestamp}.tgz mindforger
+fi
 
 # eof

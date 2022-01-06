@@ -326,7 +326,7 @@ if len(sys.argv)>1:
             print helpString.format()
             quit()
 
-cwd = os.path.join(os.getcwd(),'../..')
+cwd = os.path.join(os.getcwd(),'../../..')
 enforcer = CodestyleEnforcer(cwd)
 enforcer.loadFiles()
 if OPTION_FIX_TRAILING_SPACES:

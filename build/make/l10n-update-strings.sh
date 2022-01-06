@@ -17,18 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-# Gprof:
-# 1. build project w/
-#   QMAKE_CXXFLAGS_DEBUG *= -pg
-#   QMAKE_LFLAGS_DEBUG *= -pg
-# 2. run mindforger - it will generate gmon.out
-# 3. load gmon.out to analyse it
-
-# This script does 2nd and 3rd step
-
-export OPENREPO="~/tmp/EMPTY"
-
-cd ../app && rm -vf gmon.out && ./mindforger ${OPENREPO} && gprof ./mindforger gmon.out > GPROF-ANALYSIS.txt && less GPROF-ANALYSIS.txt
+cd ../.. && lupdate mindforger.pro && cd build
 
 # eof
-
