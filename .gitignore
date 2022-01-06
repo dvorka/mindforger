@@ -16,3 +16,5 @@ TEST_LOG*.*
 *.sln
 *.bak
 compile_commands.json
+.qmake.stash
+.DS_Store
