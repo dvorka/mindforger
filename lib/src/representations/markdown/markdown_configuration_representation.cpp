@@ -253,10 +253,8 @@ void MarkdownConfigurationRepresentation::configurationSection(
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL) != std::string::npos) {
                         if(line->find(UI_EDITOR_KEY_BINDING_EMACS) != std::string::npos) {
                             c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::EMACS);
-                        } else if(line->find(UI_EDITOR_KEY_BINDING_WIN) != std::string::npos) {
-                            c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::WINDOWS);
                         } else {
-                            c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::VIM);
+                            c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::WINDOWS);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_FONT_LABEL) != std::string::npos) {
                         string t = line->substr(strlen(CONFIG_SETTING_UI_EDITOR_FONT_LABEL));

@@ -145,7 +145,6 @@ public:
 
     enum EditorKeyBindingMode {
         EMACS,
-        VIM,
         WINDOWS
     };
 
@@ -403,9 +402,11 @@ public:
     }
     void setEditorKeyBinding(EditorKeyBindingMode keyBinding) { this->uiEditorKeyBinding=keyBinding; }
     void setEditorKeyBindingByString(const std::string& binding) {
-        if(!binding.compare(UI_EDITOR_KEY_BINDING_WIN)) uiEditorKeyBinding=EditorKeyBindingMode::WINDOWS;
-        else if (!binding.compare(UI_EDITOR_KEY_BINDING_VIM)) uiEditorKeyBinding=EditorKeyBindingMode::VIM;
-        else uiEditorKeyBinding=EditorKeyBindingMode::EMACS;
+        if(!binding.compare(UI_EDITOR_KEY_BINDING_EMACS)) {
+            uiEditorKeyBinding=EditorKeyBindingMode::EMACS;
+        } else {
+            uiEditorKeyBinding=EditorKeyBindingMode::WINDOWS;
+        }
     }
     void setEditorFont(std::string font) { this->editorFont = font; }
     std::string getEditorFont() { return this->editorFont; }
