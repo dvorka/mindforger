@@ -29,19 +29,20 @@ CLASS_NAME := "New_Class"
 
 help:
 	@echo "MindForger maker help:"
-	@echo "clean         clean build artifacts"
-	@echo "gen-lib-class generate lib C++ class skeleton: CLASS_NAME=My_Class"
-	@echo "gen-ui-class  generate UI C++ class skeleton: CLASS_NAME=My_Class"
-	@echo "build         build MindForger executable"
-	@echo "l10n          update and release localization strings"
-	@echo "test-lib      compile and run lib/ unit tests"
-	@echo "test-app      compile and run app/ integration tests"
-	@echo "dist-all      build all distributions"
-	@echo "dist-tarball  build tarball distribution"
-	@echo "dist-deb      build Debian distribution"
-	@echo "dist-dmg      build macOS Disk iMaGe .dmg package"
-	@echo "statistic     show source code statistic"
-	@echo "doc           generate Doxygen documentation"
+	@echo "clean           clean build artifacts"
+	@echo "git-subs-update update git submodules"
+	@echo "gen-lib-class   generate lib C++ class skeleton: CLASS_NAME=My_Class"
+	@echo "gen-ui-class    generate UI C++ class skeleton: CLASS_NAME=My_Class"
+	@echo "build           build MindForger executable"
+	@echo "l10n            update and release localization strings"
+	@echo "test-lib        compile and run lib/ unit tests"
+	@echo "test-app        compile and run app/ integration tests"
+	@echo "dist-all        build all distributions"
+	@echo "dist-tarball    build tarball distribution"
+	@echo "dist-deb        build Debian distribution"
+	@echo "dist-dmg        build macOS Disk iMaGe .dmg package"
+	@echo "statistic       show source code statistic"
+	@echo "doc             generate Doxygen documentation"
 
 clean:
 	rm -vf ../app/mindforger
@@ -49,6 +50,9 @@ clean:
 	rm -vf ../lib/test/src/mindforger-lib-unit-tests
 	cd .. && make clean
 	cd ../lib/test && make clean
+
+git-subs-update:
+	cd .. && git submodule update --init --recursive
 
 gen-lib-class:
 	@echo "Generating lib C++ class for name: $(CLASS_NAME)"
