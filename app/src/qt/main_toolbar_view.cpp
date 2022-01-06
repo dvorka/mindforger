@@ -109,9 +109,9 @@ MainToolbarView::~MainToolbarView()
 {
 }
 
-void MainToolbarView::hideEvent(QHideEvent *)
+void MainToolbarView::hideEvent(QHideEvent*)
 {
-    emit signalMainToolbarVisibilityChanged(false);
+    emit signalMainToolbarVisibilityChanged(this->isVisible());
 }
 
 

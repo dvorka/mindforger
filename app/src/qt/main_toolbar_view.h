@@ -60,7 +60,6 @@ public:
     QAction* actionAdapt;
     QAction* actionHelp;
 
-
     void hideEvent(QHideEvent *) override;
 
 public:
