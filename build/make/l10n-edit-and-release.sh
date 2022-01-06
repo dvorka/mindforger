@@ -17,8 +17,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+# Hints:
+# - nerd English is OOTB ~ strings in the source code
+# - en ... user friendly English translation 
+# - cs ... user friendly Czech translation 
+
+MF_LANG="en"
+
+if [[ "${1}" ]]
+then
+    MF_LANG="${1}"
+fi
+
+echo "Running Qt Linquist for language: ${MF_LANG} (options: en, cs)"
+
 pushd . && cd ../../app/resources/qt/translations && linguist mindforger_en.ts && popd && lrelease ../../app/app.pro
-#pushd . && cd ../../app/resources/qt/translations && linguist mindforger_cs.ts && popd && lrelease ../../app/app.pro
-# ... nerd is OOTB
 
 # eof

@@ -18,7 +18,7 @@
 
 .DEFAULT_GOAL := help
 
-MINDFORGER_VERSION := 1.53.0
+MINDFORGER_VERSION := 1.54.0
 MINDFORGER_RELEASE_BASE_DIR := /home/dvorka/p/mindforger/release
 MINDFORGER_RELEASE_DIR := $(MINDFORGER_RELEASE_BASE_DIR)/$(MINDFORGER_VERSION)-maker
 
@@ -26,23 +26,26 @@ MF_MAKER_WORKING_DIR := $(MINDFORGER_RELEASE_BASE_DIR)/maker-at-work
 
 # class name like My_Class_Name used by C++ class generators
 CLASS_NAME := "New_Class"
+# l10n language: en, cs
+MF_LANG := "en"
 
 help:
 	@echo "MindForger maker help:"
-	@echo "clean           clean build artifacts"
-	@echo "git-subs-update update git submodules"
-	@echo "gen-lib-class   generate lib C++ class skeleton: CLASS_NAME=My_Class"
-	@echo "gen-ui-class    generate UI C++ class skeleton: CLASS_NAME=My_Class"
-	@echo "build           build MindForger executable"
-	@echo "l10n            update and release localization strings"
-	@echo "test-lib        compile and run lib/ unit tests"
-	@echo "test-app        compile and run app/ integration tests"
-	@echo "dist-all        build all distributions"
-	@echo "dist-tarball    build tarball distribution"
-	@echo "dist-deb        build Debian distribution"
-	@echo "dist-dmg        build macOS Disk iMaGe .dmg package"
-	@echo "statistic       show source code statistic"
-	@echo "doc             generate Doxygen documentation"
+	@echo "git-subs-update   update git submodules"
+	@echo "gen-lib-class     generate lib C++ class skeleton: CLASS_NAME=My_Class"
+	@echo "gen-ui-class      generate UI C++ class skeleton: CLASS_NAME=My_Class"
+	@echo "clean             clean build artifacts"
+	@echo "build             build MindForger binary"
+	@echo "l10n              update and release localization strings: MF_LANG=en"
+	@echo "test-lib          compile and run lib/ unit tests"
+	@echo "test-app          compile and run app/ integration tests"
+	@echo "dist-all          build all distributions"
+	@echo "dist-tarball      build tarball distribution"
+	@echo "dist-deb          build Debian distribution"
+	@echo "dist-dmg          build macOS Disk iMaGe .dmg package"
+	@echo "statistic         show source code statistic"
+	@echo "doc               generate Doxygen documentation"
+	@echo "dev-install-local compile and install binary to ~/bin as MIND"
 
 clean:
 	rm -vf ../app/mindforger
@@ -68,15 +71,10 @@ build: clean
 	@echo "If build succeeded then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
-install-local-dvorka: build ../app/mindforger
-	cp -vf ../app/mindforger ~/bin
-	mv -vf ~/bin/mindforger ~/bin/MIND
-	~/bin/MIND --version
-
 l10n:
 	cd make
 	./l10n-update-strings.sh
-	./l10n-edit-and-release.sh
+	./l10n-edit-and-release.sh $(MF_LANG)
 
 test-lib: clean
 	cd make && ./test-lib-units.sh
@@ -121,3 +119,12 @@ statistic:
 
 doc:
 	cd doxygen && doxygen ./mindforger.cfg
+
+# private development targets
+
+dvorka-install-local: build ../app/mindforger
+	cp -vf ../app/mindforger ~/bin
+	mv -vf ~/bin/mindforger ~/bin/MIND
+	~/bin/MIND --version
+
+# eof
