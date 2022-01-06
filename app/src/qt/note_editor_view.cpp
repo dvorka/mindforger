@@ -291,6 +291,19 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
             case Qt::Key_A:
                 moveCursor(QTextCursor::StartOfLine);
                 return; // exit to override default key binding
+            case Qt::Key_Y:
+                this->paste();
+                return; // exit to override default key binding
+            case Qt::Key_W:
+                this->cut();
+                return; // exit to override default key binding
+            }
+        }
+        if(event->modifiers() & Qt::AltModifier){
+            switch (event->key()) {
+            case Qt::Key_W:
+                this->copy();
+                return; // exit to override default key binding
             }
         }
     }

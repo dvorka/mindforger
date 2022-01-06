@@ -437,7 +437,7 @@ public:
     }
     void setUiEditorSpellCheckLanguages(std::vector<std::string>& langs) {
         clearUiEditorSpellCheckLanguages();
-        for(auto lang: langs) {
+        for(std::string lang: langs) {
             uiEditorSpellCheckLanguages.push_back(lang);
         }
     }
