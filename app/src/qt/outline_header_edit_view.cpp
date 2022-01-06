@@ -58,7 +58,7 @@ OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
         this, SLOT(slotSaveOutlineHeader()));    
     QObject::connect(
         bottomButtonsPanel->getRememberButton(), SIGNAL(clicked()),
-        this, SLOT(slotSaveNote()));
+        this, SLOT(slotSaveOutlineHeader()));
     QObject::connect(
         bottomButtonsPanel->getRememberAndLeaveButton(), SIGNAL(clicked()),
         this, SLOT(slotSaveAndCloseEditor()));
