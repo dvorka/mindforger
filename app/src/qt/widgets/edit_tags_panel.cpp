@@ -35,7 +35,7 @@ EditTagsPanel::EditTagsPanel(
 #else
         tr("Hit Ctrl+Enter to add tag")
 #endif
-);
+    );
     completer = new QCompleter{completerStrings, this};
     completer->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
@@ -46,6 +46,14 @@ EditTagsPanel::EditTagsPanel(
     // disable ability to edit list items
     listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     addButton = new QPushButton{tr("Add"), this};
+    addButton->setToolTip(
+#ifdef __APPLE__
+        tr("Hit ⌘↩ to add tag")
+#else
+        tr("Hit Ctrl+Enter to add tag")
+#endif
+    );
+
     removeButton = new QPushButton{tr("Remove"), this};
 
     // assembly
