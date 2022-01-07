@@ -1,4 +1,8 @@
 # Fedora RPM build
+Prerequisites:
+```
+sudo dnf install alien
+```
 
 Builder:
 
@@ -6,7 +10,7 @@ Builder:
 
 Builder:
 
-* Fedora 28 VM @ VirtualBox @ Beast
+* Fedora 28 VM @ VirtualBox @ beast
 
 Build steps:
 
