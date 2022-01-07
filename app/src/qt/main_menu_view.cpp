@@ -108,9 +108,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
     actionMindPreferences->setStatusTip(tr("Adapt Mind by setting your preferences..."));
 
-    actionMindTerminal = new QAction(QIcon(":/menu-icons/cli.svg"), tr("Term&inal"), mainWindow);
-    actionMindTerminal->setStatusTip(tr("Run simple command line from current MindForger repository..."));
-
     submenuMindExport = menuMind->addMenu(QIcon(":/menu-icons/export.svg"), "&Export");
     actionMindExportCsv = new QAction(tr("&CSV"), mainWindow);
     actionMindExportCsv->setStatusTip(tr("Export all Notebooks/Markdown files as a single CSV file"));
@@ -136,8 +133,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addSeparator();
 #endif
     menuMind->addMenu(submenuMindExport);
-    menuMind->addSeparator();
-    menuMind->addAction(actionMindTerminal);
     menuMind->addSeparator();
     menuMind->addAction(actionExit);
 #ifdef DO_MF_DEBUG
@@ -245,6 +240,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
     actionViewCli->setStatusTip(tr("Activate command line interface..."));
 
+    actionViewTerminal = new QAction(QIcon(":/menu-icons/cli.svg"), tr("Terminal"), mainWindow);
+    actionViewTerminal->setStatusTip(tr("Run simple command line from current MindForger repository..."));
+    actionViewTerminal->setShortcut(QKeySequence(Qt::ALT+Qt::Key_S));
+
     actionViewRecentNotes = new QAction(QIcon(":/menu-icons/open-recent.svg"), tr("&Recent Notes"), mainWindow);
     actionViewRecentNotes->setStatusTip(tr("View recently modified Notes..."));
     actionViewRecentNotes->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_R));
@@ -292,6 +291,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewTags);
     menuView->addAction(actionViewNavigator);
     menuView->addAction(actionViewCli);
+    menuView->addAction(actionViewTerminal);
 #ifdef MF_WIP
     menuView->addAction(actionViewStencils);
     menuView->addAction(actionViewDwell);

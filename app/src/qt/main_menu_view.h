@@ -81,7 +81,6 @@ public:
     QAction* actionMindForget;
     QAction* actionMindSnapshot;
     QAction* actionMindPreferences;
-    QAction* actionMindTerminal;
     QMenu* submenuMindExport;
     QAction* actionMindExportCsv;
     QAction* actionExit;
@@ -114,6 +113,7 @@ public:
     QAction* actionViewDwell;
     QAction* actionViewStencils;
     QAction* actionViewCli;
+    QAction* actionViewTerminal;
     QAction* actionViewRecentNotes;
     QAction* actionViewLimbo;
     QAction* actionViewDistractionFree;

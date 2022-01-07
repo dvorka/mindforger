@@ -2710,7 +2710,7 @@ void MainWindowPresenter::handleMindPreferences()
     // setting to be pushed to highlighter from here
 }
 
-void MainWindowPresenter::doActionMindTerminal()
+void MainWindowPresenter::doActionViewTerminal()
 {
     terminalDialog->show();
 }

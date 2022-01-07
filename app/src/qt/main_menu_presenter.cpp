@@ -71,8 +71,8 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         mwp, SLOT(doActionMindPreferences())
     );
     QObject::connect(
-        view->actionMindTerminal, SIGNAL(triggered()),
-        mwp, SLOT(doActionMindTerminal())
+        view->actionViewTerminal, SIGNAL(triggered()),
+        mwp, SLOT(doActionViewTerminal())
     );
     QObject::connect(
         view->actionMindSnapshot, SIGNAL(triggered()),

@@ -198,7 +198,6 @@ public slots:
     void handleMindScope();
     void doActionMindPreferences();
     void handleMindPreferences();
-    void doActionMindTerminal();
     void doActionMindRemember();
     void doActionMindSnapshot();
     void doActionMindCsvExport();
@@ -215,7 +214,7 @@ public slots:
     void doActionFindOutlineByTag();
     void handleFindOutlineByTag();
     void doActionFindNoteByTag();
-    void doTriggerFindNoteByTag(const Tag* tag);
+    void doTriggerFindNoteByTag(const m8r::Tag* tag);
     void doSwitchFindByTagDialog(bool toFindNotesByTag);
     void handleFindNoteByTag();
 #ifdef MF_NER
@@ -239,6 +238,7 @@ public slots:
     void doActionViewRecentNotes();
     void doActionViewKnowledgeGraphNavigator();
     void doActionCli();
+    void doActionViewTerminal();
     void doActionViewDistractionFree();
     void doActionViewFullscreen();
     // knowledge
