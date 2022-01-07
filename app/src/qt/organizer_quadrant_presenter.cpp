@@ -173,7 +173,6 @@ void OrganizerQuadrantPresenter::refresh(
             model->addRow(t, urgency, importance, showOutline);
         }
 
-        this->view->setCurrentIndex(this->model->index(0, 0));
         this->view->setFocus();
     }
 }

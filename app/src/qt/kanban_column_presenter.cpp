@@ -178,9 +178,14 @@ void KanbanColumnPresenter::refresh(
             model->addRow(t, urgency, importance, showOutline);
         }
 
-        this->view->setCurrentIndex(this->model->index(0, 0));
         this->view->setFocus();
     }
 }
+
+void KanbanColumnPresenter::focusAndSelectRow()
+{
+    this->view->setCurrentIndex(this->model->index(0, 0));
+}
+
 
 } // m8r namespace

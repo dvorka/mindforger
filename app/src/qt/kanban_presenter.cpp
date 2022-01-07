@@ -131,7 +131,7 @@ void KanbanPresenter::refresh(
         }
 
         if(setFocus && visibleColumns.size()) {
-            visibleColumns[0]->getView()->setFocus();
+            visibleColumns[visibleColumns.size()-1]->focusAndSelectRow();
         }
     } else {
         if(setFocus) {
@@ -158,6 +158,7 @@ KanbanColumnPresenter* KanbanPresenter::getNextVisibleColumn()
 
     for(unsigned i=0; i<visible.size(); i++) {
         if(visible[i]->getView()->hasFocus()) {
+            visible[i]->getView()->clearSelection();
             return visible[(i+1)%visible.size()];
         }
     }
@@ -173,6 +174,7 @@ KanbanColumnPresenter* KanbanPresenter::getPreviousVisibleColumn()
 
     for(int i=0; ((unsigned)i)<visible.size(); i++) {
         if(visible[i]->getView()->hasFocus()) {
+            visible[i]->getView()->clearSelection();
             int previousIdx = pythonModulo(i-1, visible.size());
             MF_DEBUG("Kanban: previous visible " << visible.size() << " column " << i << " >> " << previousIdx << endl);
             return visible[previousIdx];
@@ -182,10 +184,21 @@ KanbanColumnPresenter* KanbanPresenter::getPreviousVisibleColumn()
     return nullptr;
 }
 
+void KanbanPresenter::focusAndSelectPreviouslySelectedRow(
+    OrganizerQuadrantView* view
+) {
+    view->setFocus();
+    view->setCurrentIndex(
+        view->model()->index(
+            view->currentIndex().row(), 0
+        )
+    );
+}
+
 KanbanColumnPresenter* KanbanPresenter::focusToNextVisibleColumn()
 {
     if(KanbanColumnPresenter* next=this->getNextVisibleColumn()) {
-        next->getView()->setFocus();
+        focusAndSelectPreviouslySelectedRow(next->getView());
         return next;
     }
     return nullptr;
@@ -194,7 +207,7 @@ KanbanColumnPresenter* KanbanPresenter::focusToNextVisibleColumn()
 KanbanColumnPresenter* KanbanPresenter::focusToPreviousVisibleColumn()
 {
     if(KanbanColumnPresenter* previous=this->getPreviousVisibleColumn()) {
-        previous->getView()->setFocus();
+        focusAndSelectPreviouslySelectedRow(previous->getView());
         return previous;
     }
     return nullptr;
@@ -240,6 +253,8 @@ KanbanColumnPresenter* KanbanPresenter::moveToVisibleColumn(Note* n, int nextPre
 
                 // caller to persist N and refresh of source and target view columns
                 n->makeModified();
+
+                focusAndSelectPreviouslySelectedRow(columns[nextColumnsOffset]->getView());
 
                 return columns[nextColumnsOffset];
             }

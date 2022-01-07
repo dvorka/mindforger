@@ -2979,6 +2979,9 @@ void doActionOrganizerMoveNoteCommon(
 
         // give target N column focus
         presenter->getView()->setFocus();
+        presenter->getView()->setCurrentIndex(
+            presenter->getView()->model()->index(0, 0)
+        );
     }
 }
 
@@ -3007,6 +3010,9 @@ void doActionKanbanMoveNoteCommon(
 
         // give target N column focus
         presenter->getView()->setFocus();
+        presenter->getView()->setCurrentIndex(
+            presenter->getView()->model()->index(0, 0)
+        );
     }
 }
 

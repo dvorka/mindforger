@@ -60,6 +60,7 @@ public:
 
     void setTitle(QString& title) { model->setTitle(title); }
 
+    OrganizerQuadrantModel* getModel() { return model; }
     int getCurrentRow() const;
     Note* getSelectedNote();
     void refresh(const std::vector<Note*>& os, bool urgency, bool importance, bool showOutline);

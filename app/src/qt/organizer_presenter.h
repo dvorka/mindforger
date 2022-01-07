@@ -74,6 +74,7 @@ public:
         bool setFocus = true
     );
 
+    void focusAndSelectPreviouslySelectedRow(OrganizerQuadrantView* view);
     void focusToNextVisibleQuadrant();
     void focusToPreviousVisibleQuadrant();
 

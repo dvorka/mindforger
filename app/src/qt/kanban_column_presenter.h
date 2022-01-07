@@ -55,6 +55,7 @@ public:
 
     int getCurrentRow() const;
     Note* getSelectedNote();
+    void focusAndSelectRow();
     void refresh(
         const std::vector<Note*>& os,
         bool urgency,
