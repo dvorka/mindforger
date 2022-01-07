@@ -4,7 +4,9 @@
       main window is not wider than screen on boot, view/edit bottom buttons
       work even if double-click 2 edit is disabled, toolbar is not hidden on
       window minimization, platform-driven default editor key binding, Vim keybinding
-      removal, items can be moved around columns with shortcuts.
+      removal, Kanban/EM selection model and moves rewrite (at most one row selected,
+      items can be moved around columns with shortcuts. Emacs editor keybinding enhs,
+      shorts for note refactoring.
 
 2021-12-26  Martin Dvorak  <martin.dvorak@mindforger.com>
 

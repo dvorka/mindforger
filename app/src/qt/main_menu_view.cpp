@@ -572,7 +572,15 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteLast = new QAction(QIcon(":/menu-icons/bottom.svg"), tr("&Last\tCtrl+Shift+Down"), mainWindow);
     actionNoteLast->setStatusTip(tr("Move Note to be the last child of its parent"));
 
-    actionNoteRefactor = new QAction(QIcon(":/menu-icons/refactor.svg"), tr("&Refactor"), mainWindow);
+    actionNoteRefactor = new QAction(
+        QIcon(":/menu-icons/refactor.svg"),
+#ifdef __APPLE__
+        tr("Refactor\tCtrl+R"),
+#else
+        tr("&Refactor"),
+#endif
+        mainWindow
+    );
     actionNoteRefactor->setStatusTip(tr("Refactor Note to another Notebook..."));
 
     actionNoteStencil = new QAction(QIcon(":/menu-icons/stencil.svg"), tr("Make &Stencil"), mainWindow);
