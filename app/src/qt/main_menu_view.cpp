@@ -394,16 +394,52 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOrganizerForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Delete"), mainWindow);
     actionOrganizerForget->setStatusTip(tr("Delete Organizer without undo"));
 
-    actionOrganizerMovePrevious = new QAction(QIcon(":/menu-icons/left.svg"), tr("Move Notebook/Note to &Previous Column/Quadrant\tCtrl+Left"), mainWindow); // handled from Outline tree
+    actionOrganizerMovePrevious = new QAction(
+        QIcon(":/menu-icons/left.svg"),
+#ifdef __APPLE__
+        // IMPROVE: ugly & stupid shortcut spacing - make it signal w/ quadrant with focus detection
+        tr("Move Notebook/Note to Previous Column/Quadrant       ⌘["),
+#else
+        tr("Move Notebook/Note to &Previous Column/Quadrant\tCtrl+Left"),
+#endif
+        mainWindow
+    );
     actionOrganizerMovePrevious->setStatusTip(tr("Move Notebook/Note to previous column or quadrant..."));
 
-    actionOrganizerMoveNext = new QAction(QIcon(":/menu-icons/right.svg"), tr("Move Notebook/Note to Ne&xt Column/Quadrant\tCtrl+Right"), mainWindow);
+    actionOrganizerMoveNext = new QAction(
+        QIcon(":/menu-icons/right.svg"),
+#ifdef __APPLE__
+         // IMPROVE: ugly & stupid shortcut spacing - make it signal w/ quadrant with focus detection
+        tr("Move Notebook/Note to Next Column/Quadrant              ⌘]"),
+#else
+        tr("Move Notebook/Note to Ne&xt Column/Quadrant\tCtrl+Right"),
+#endif
+        mainWindow
+    );
     actionOrganizerMoveNext->setStatusTip(tr("Move Notebook/Note to next column or quadrant..."));
 
-    actionOrganizerFocusPrevious = new QAction(QIcon(":/menu-icons/left.svg"), tr("Focus to Previous Column/Quadrant\tShift+Tab"), mainWindow); // handled from Outline tree
+    actionOrganizerFocusPrevious = new QAction(QIcon(
+       ":/menu-icons/left.svg"),
+#ifdef __APPLE__
+       // IMPROVE: ugly & stupid shortcut spacing - make it signal w/ quadrant with focus detection
+       tr("Focus to Previous Column/Quadrant                              ⇧⇥"),
+#else
+        tr("Move Notebook/Note to &Previous Column/Quadrant\tCtrl+Left"),
+#endif
+       mainWindow
+   );
     actionOrganizerFocusPrevious->setStatusTip(tr("Move focus to previous column or quandrant..."));
 
-    actionOrganizerFocusNext = new QAction(QIcon(":/menu-icons/right.svg"), tr("Focus to Next Column/Quadrant\tTab"), mainWindow);
+    actionOrganizerFocusNext = new QAction(
+        QIcon(":/menu-icons/right.svg"),
+#ifdef __APPLE__
+        // IMPROVE: ugly & stupid shortcut spacing - make it signal w/ quadrant with focus detection
+        tr("Focus to Next Column/Quadrant                                        ⇥"),
+#else
+        tr("Move Notebook/Note to Ne&xt Column/Quadrant\tCtrl+Right"),
+#endif
+        mainWindow
+    );
     actionOrganizerFocusNext->setStatusTip(tr("Move focus to next column or quandrant..."));
 
     menuOrganizer->addAction(actionOrganizerNew);

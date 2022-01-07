@@ -1,12 +1,14 @@
 2022-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v1.54.0 - macOS fix release: Qt upgraded from 5.9.9 to 1.15.2,
-      main window is not bigger than screen on boot, view/edit bottom buttons
-      work even if double-click 2 edit is disabled.
+    * Released v1.54.0 - macOS fix release: Qt upgraded from 5.9.9 to 5.15.2 (macOS only),
+      main window is not wider than screen on boot, view/edit bottom buttons
+      work even if double-click 2 edit is disabled, toolbar is not hidden on
+      window minimization, platform-driven default editor key binding, Vim keybinding
+      removal, items can be moved around columns with shortcuts.
 
 2021-12-26  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v1.53.0 - custom Eisenhower Matrix on tags, Kanban style organizer
+    * Released v1.53.0 - Custom Eisenhower Matrix on tags, Kanban style organizer
       on tags, repository specific configuration, lazy (PDF) documents indexation POC,
       edit Note in external editor/WYSIWYG (or tool), CSV export with one-hot-encoded
       tags, terminal allowing to run commands from MindForger, configuration of custom
