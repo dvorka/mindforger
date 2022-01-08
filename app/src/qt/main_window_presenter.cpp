@@ -2029,14 +2029,29 @@ void MainWindowPresenter::doActionOutlineHome()
 void MainWindowPresenter::doActionOutlineForget()
 {
     if(orloj->isFacetActiveOutlineOrNoteView()) {
-        QMessageBox::StandardButton choice;
-        choice = QMessageBox::question(
-            &view,
+        QMessageBox msgBox{
+            QMessageBox::Question,
             tr("Forget Notebook"),
-            tr("Do you really want to forget '") +
+            tr("Do you really want to deprecate '") +
             QString::fromStdString(orloj->getOutlineView()->getCurrentOutline()->getName()) +
-            tr("' Notebook?"));
-        if (choice == QMessageBox::Yes) {
+            tr("' Notebook?")
+        };
+        QPushButton* yes = msgBox.addButton("&Yes", QMessageBox::YesRole);
+#ifdef __APPLE__
+        yes->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
+        yes->setToolTip("⌘Y");
+
+        QPushButton* no =
+#endif
+        msgBox.addButton("&No", QMessageBox::NoRole);
+#ifdef __APPLE__
+        no->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+        no->setToolTip("⌘N");
+#endif
+        msgBox.exec();
+
+        QAbstractButton* choosen = msgBox.clickedButton();
+        if(yes == choosen) {
             mind->outlineForget(orloj->getOutlineView()->getCurrentOutline()->getKey());
             orloj->slotShowOutlines();
         } // else do nothing
@@ -2357,7 +2372,8 @@ void MainWindowPresenter::doActionNoteForget()
                 tr("Delete Note"),
                 tr("Do you really want to delete note '") +
                 QString::fromStdString(note->getName()) +
-                tr("' along with its child notes?")};
+                tr("' along with its child notes?")
+            };
             QPushButton* yes = msgBox.addButton("&Yes", QMessageBox::YesRole);
 #ifdef __APPLE__
             yes->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
