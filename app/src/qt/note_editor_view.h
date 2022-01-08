@@ -36,7 +36,15 @@ class LineNumberPanel;
  * @brief Note editor view.
  *
  * Editor is one of the key MindForger components - editor is where thinking notebook can
- * make difference: auto completion, associations, efficient editation and decent performance.
+ * make difference:
+ *
+ * - auto completion (link compoletion)
+ * - associations (think as you write)
+ * - efficient and editation
+ *   - indent / create list item
+ * - decent performance
+ *
+ * @see https://doc.qt.io/qt-5/qplaintextedit.html
  */
 class NoteEditorView : public QPlainTextEdit
 {

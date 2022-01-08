@@ -249,20 +249,29 @@ QString NoteEditorView::getRelevantWords() const
 }
 
 /*
- * Autocomplete
+ * Autocomplete and smart editor.
  */
+
+bool containsSpace(QString s)
+{
+    for(int i = 0; i<s.length(); i++) {
+        if(s.at(i).isSpace()) {
+            return true;
+        }
+    }
+    return false;
+}
 
 void NoteEditorView::keyPressEvent(QKeyEvent* event)
 {
     hitCounter++;
-
-    // TODO Linux paste
 
     MF_DEBUG(
         "Editor keyPressEvent handler:" << endl <<
         "  Key binding: " << Configuration::getInstance().getEditorKeyBinding() << endl
     );
 
+    // ctrl
     if(event->modifiers() & Qt::ControlModifier) {
         switch (event->key()) {
         case Qt::Key_V: {
@@ -270,20 +279,20 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
             QClipboard* clip = QApplication::clipboard();
             const QMimeData* mime = clip->mimeData();
             if(mime->hasImage()) {
-                MF_DEBUG("Image PASTED to editor" << endl);
+                MF_DEBUG("Editor: image PASTED" << endl);
                 QImage image = qvariant_cast<QImage>(mime->imageData());
                 emit signalPasteImageData(image);
                 return;
             }
             break;
         }
-        case Qt::Key_F: {
+        case Qt::Key_F:
             findStringAgain();
             return; // exit to override default key binding
         }
-        }
     }
 
+    // Emacs key binding
     // IMPROVE get configuration reference and editor mode setting - this must be fast
     if(Configuration::getInstance().getEditorKeyBinding()==Configuration::EditorKeyBindingMode::EMACS) {
         if(event->modifiers() & Qt::ControlModifier){
@@ -295,6 +304,7 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
                 this->paste();
                 return; // exit to override default key binding
             case Qt::Key_W:
+                MF_DEBUG("Editor: Emacs CUT word" << endl);
                 this->cut();
                 return; // exit to override default key binding
             }
@@ -304,10 +314,35 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
             case Qt::Key_W:
                 this->copy();
                 return; // exit to override default key binding
+            case Qt::Key_D: {
+                MF_DEBUG("Editor: Emacs delete until END of WORD ..." << endl);
+                QTextCursor cursor = textCursor();
+                cursor.clearSelection();
+                while(
+                    cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor)
+                    && !containsSpace(cursor.selectedText())
+                ) {
+                    MF_DEBUG("Editor: Emacs delete word '" << cursor.selectedText().toStdString() << "'" << endl);
+                }
+                if(cursor.selectedText().size()
+                   && cursor.selectedText().at(cursor.selectedText().size()-1).isSpace()
+                ) {
+                    cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor);
+                }
+                if(cursor.selectedText().size()) {
+                    MF_DEBUG("Editor: Emacs delete word DELETING '" << cursor.selectedText().toStdString() << "'" << endl);
+                    this->copy();
+                    cursor.removeSelectedText();
+                    return; // exit to override default key binding
+                }
+                MF_DEBUG("Editor: Emacs delete word DONE" << endl);
+                }
+                break; // no string deleted - propagate handling
             }
         }
     }
 
+    // completer from the current N text
     if(completedAndSelected && handledCompletedAndSelected(event)) {
         return;
     } else {

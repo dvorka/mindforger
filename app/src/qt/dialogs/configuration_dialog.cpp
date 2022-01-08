@@ -345,7 +345,6 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     editorKeyBindingLabel = new QLabel(tr("Editor key binding")+":", this);
     editorKeyBindingCombo = new QComboBox{this};
     editorKeyBindingCombo->addItem("emacs");
-    editorKeyBindingCombo->addItem("vim");
     editorKeyBindingCombo->addItem("windows");
 
     editorFontLabel = new QLabel(tr("Editor font")+":", this);
@@ -475,7 +474,11 @@ void ConfigurationDialog::EditorTab::refresh()
 
 void ConfigurationDialog::EditorTab::save()
 {
-    config.setEditorKeyBindingByString(editorKeyBindingCombo->itemText(editorKeyBindingCombo->currentIndex()).toStdString());
+    config.setEditorKeyBindingByString(
+        editorKeyBindingCombo->itemText(
+            editorKeyBindingCombo->currentIndex()
+        ).toStdString()
+    );
     config.setEditorFont(editorFont.family().append(",").append(QString::number(editorFont.pointSize())).toStdString());
     config.setUiEditorLiveSpellCheck(editorSpellCheckLive->isChecked());
     if(editorSpellCheckLanguageCombo->isEnabled() && editorSpellCheckLanguageCombo->count()) {
