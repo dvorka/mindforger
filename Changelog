@@ -5,8 +5,8 @@
       work even if double-click 2 edit is disabled, toolbar is not hidden on
       window minimization, platform-driven default editor key binding, Vim keybinding
       removal, Kanban/EM selection model and moves rewrite (at most one row selected,
-      items can be moved around columns with shortcuts. Emacs editor keybinding enhs,
-      shorts for note refactoring.
+      items can be moved around columns with shortcuts. Emacs editor keybinding
+      enhancements(^-y, alt-w, ^-w, alt-d, ...), shortcuts for N refactoring.
 
 2021-12-26  Martin Dvorak  <martin.dvorak@mindforger.com>
 

@@ -20,6 +20,20 @@
 # Debian releases: https://www.debian.org/releases/
 #   6/7/8/9/10: squeeze wheezy jessie stretch buster
 
+# aptly abstractions hierarchy:
+#
+# - repository
+#   - packages
+#     - snapshots
+#
+# method:
+#
+# - backup ~/.aptly
+# - ...
+# - print PPA content summary
+# - print WHAT to UPLOAD to web and WHERE
+#
+
 echo "See 'MindForger Release Guide#Debian and my PPA' notebook for detailed steps description..."
 
 # list aptly repositories

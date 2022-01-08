@@ -22,7 +22,10 @@
 # This script is available from http://www.mindforger.com/fedora/fedora-rpm-from-deb.sh
 # to be easily available in VMs
 
-# This script must be run w/ ROOT priviledges (alien)
+echo "==============================================================="
+echo "IMPORTANT: this script must be run with ROOT priviedges (alien)"
+echo "Who I'm? `whoami`"
+echo "==============================================================="
 
 export MFVERSION="1.54.0"
 export MFPRJNAME="mindforger-${MFVERSION}"

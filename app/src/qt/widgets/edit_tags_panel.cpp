@@ -45,7 +45,7 @@ EditTagsPanel::EditTagsPanel(
     listView->setModel(&listViewModel);
     // disable ability to edit list items
     listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    addButton = new QPushButton{tr("Add"), this};
+    addButton = new QPushButton{tr("Create New"), this};
     addButton->setToolTip(
 #ifdef __APPLE__
         tr("Hit ⌘↩ to add tag")
@@ -113,6 +113,7 @@ void EditTagsPanel::refresh(const vector<const Tag*>* noteTags)
         }
     }
     ((QStringListModel*)listView->model())->setStringList(listViewStrings);
+    addButton->setText(tr("Create New"));
 }
 
 const std::vector<const Tag*>& EditTagsPanel::getTags()
@@ -173,6 +174,18 @@ void EditTagsPanel::setTagsAsStrings(const std::set<string>& tagsStrings)
         slotAddTag();
     }
     lineEdit->clear();
+}
+
+void EditTagsPanel::customLineEditKeyPressEvent(QKeyEvent* event)
+{
+    UNUSED_ARG(event);
+    if(!lineEdit->text().isEmpty()
+       && completerStrings.contains(lineEdit->text())
+    ) {
+        addButton->setText(tr("Add Existing"));
+    } else {
+        addButton->setText(tr("Create New"));
+    }
 }
 
 void EditTagsPanel::slotAddTag()

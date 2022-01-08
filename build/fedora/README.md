@@ -15,7 +15,7 @@ Builder:
 Build steps:
 
 * .deb upload from any Ubuntu to web
-* .deb download to VM
+* .deb download to VM (wget http://...deb)
 * script from this directory used to run
   alien and build .rpm from .deb
 * optional compilation of MindForger on VM

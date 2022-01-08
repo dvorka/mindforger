@@ -51,7 +51,11 @@ OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
         QKeySequence(Qt::CTRL+Qt::Key_G),
         this, SLOT(slotCloseEditor()));
     new QShortcut(
+#if __APPLE__
+        QKeySequence(Qt::CTRL+Qt::Key_Return),
+#else
         QKeySequence(Qt::ALT+Qt::Key_Return),
+#endif
         this, SLOT(slotOpenOutlineHeaderPropertiesEditor()));
     new QShortcut(
         QKeySequence(Qt::CTRL+Qt::Key_S),

@@ -34,7 +34,10 @@ class EditTagsPanel : public QGroupBox
     private:
         EditTagsPanel* tagsPanel;
     public:
-        explicit MyLineEdit(EditTagsPanel* tagsPanel, QWidget* parent) : QLineEdit(parent), tagsPanel(tagsPanel) {}
+        explicit MyLineEdit(EditTagsPanel* tagsPanel, QWidget* parent)
+            : QLineEdit(parent), tagsPanel(tagsPanel)
+        {}
+
         virtual void keyPressEvent(QKeyEvent* event) override {
             if(event->modifiers() & Qt::ControlModifier){
                 switch(event->key()) {
@@ -44,6 +47,9 @@ class EditTagsPanel : public QGroupBox
                 }
             }
             QLineEdit::keyPressEvent(event);
+
+            // notify about key pressed
+            tagsPanel->customLineEditKeyPressEvent(event);
         }
     };
 
@@ -90,6 +96,11 @@ public:
     int getTagCount() const {
         return listView->model()->rowCount();
     }
+
+    /**
+     *  @brief Callback used to notify tag panel about key press event in tag name edit line.
+     */
+    void customLineEditKeyPressEvent(QKeyEvent* event);
 
 signals:
     void signalTagSelectionChanged();
