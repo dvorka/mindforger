@@ -2359,7 +2359,17 @@ void MainWindowPresenter::doActionNoteForget()
                 QString::fromStdString(note->getName()) +
                 tr("' along with its child notes?")};
             QPushButton* yes = msgBox.addButton("&Yes", QMessageBox::YesRole);
+#ifdef __APPLE__
+            yes->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
+            yes->setToolTip("⌘Y");
+
+            QPushButton* no =
+#endif
             msgBox.addButton("&No", QMessageBox::NoRole);
+#ifdef __APPLE__
+            no->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+            no->setToolTip("⌘N");
+#endif
             msgBox.exec();
 
             QAbstractButton* choosen = msgBox.clickedButton();
