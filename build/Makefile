@@ -44,6 +44,7 @@ help:
 	@echo "dist-deb          build Debian distribution"
 	@echo "dist-rpm          build .rpm package on Fedora"
 	@echo "dist-dmg          build macOS Disk iMaGe .dmg package"
+	@echo "dist-debian-ppa   add .deb to aptly PPA"
 	@echo "statistic         show source code statistic"
 	@echo "doc               generate Doxygen documentation"
 	@echo "dev-install-local compile and install binary to ~/bin as MIND"
@@ -101,7 +102,7 @@ dist-deb: dist-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR)
 
 dist-rpm:
 	@echo "IMPORTANT: this target MUST be run on Fedora!"
-	cd build/fedora && ./fedora-distro-setup.sh
+	cd fedora && ./fedora-distro-setup.sh
 	@echo "Building .rpm package..."
 	cp -vf ./fedora-rpm-from-deb.sh ~/alien && cd ~/alien && sudo ./fedora-rpm-from-deb.sh $(MINDFORGER_VERSION)
 	@echo "Find .rpm in ~/alien directory"
@@ -109,6 +110,9 @@ dist-rpm:
 dist-dmg:
 	@echo "Building .dmg package..."
 	cd macos && ./mindforger-build.sh && ./dmg-package-build.sh
+
+dist-debian-ppa:
+	cd debian && ./debian-aptly-add-deb.sh
 
 dist-all-clean:
 	rm -rvf $(MINDFORGER_RELEASE_DIR)

@@ -17,113 +17,86 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+# This scripts list content of the local aptly repository.
+#
 # Debian releases: https://www.debian.org/releases/
-#   6/7/8/9/10: squeeze wheezy jessie stretch buster
-
+# - 6/7/8/9/10: squeeze wheezy jessie stretch buster bullseye
+#
 # aptly abstractions hierarchy:
 #
 # - repository
 #   - packages
-#     - snapshots
+# ^ snapshots
+#   ^ publish
 #
-# method:
-#
-# - backup ~/.aptly
-# - ...
-# - print PPA content summary
-# - print WHAT to UPLOAD to web and WHERE
-#
+# See 'MindForger Release Guide#Debian and my PPA' notebook for detailed steps description...
 
-echo "See 'MindForger Release Guide#Debian and my PPA' notebook for detailed steps description..."
+# .deb package to be added
+export NEW_VERSION_NAME="1.53.0"
+export NEW_RELEASE_NAME="mindforger_${NEW_VERSION_NAME}"
+export NEW_DEB_NAME="${NEW_RELEASE_NAME}-1_amd64.deb"
+# Debian release ~ aptly publish
+export MY_DEBIAN_RELEASE="stretch"
+# export MY_DEBIAN_RELEASE="bullseye"
 
-# list aptly repositories
-#aptly repo list
+export MY_APTLY_PATH="/home/dvorka/.aptly"
+export MY_APTLY_UPLOAD_PATH="${MY_APTLY_PATH}/public"
+export MY_APTLY_VERSION="$(aptly version)"
+# PPA REPOSITORY name (aptly can manage multiple - this identifier)
+export MY_APTLY_REPO_NAME="$(aptly repo list --raw)"
+# PPA repository SNAPSHOT is entity which is published
+export MY_APTLY_SNAPSHOT_NAME="$(aptly snapshot list --raw)"
+# PUBLISH of repository snapshot is stored to ~/.aptly/public so that it can be uploaded
+export MY_APTLY_PUBLISH="$(aptly publish list)"
+export MY_APTLY_PUBLISH_NAME="$(aptly publish list --raw | while read A B; do echo ${B}; done)"
 
-# show repository basic info
-#aptly repo show mindforger-com-ppa
+echo "Local aptly repository overview:"
+echo "  ${MY_APTLY_VERSION}"
+echo "  aptly repository path: ${MY_APTLY_PATH}"
+echo "  aptly config path    : ${MY_APTLY_PATH}.config"
+echo "Package:"
+echo "  release              : ${NEW_RELEASE_NAME}"
+echo "  .deb                 : ${NEW_DEB_NAME}"
+echo "${MY_APTLY_PATH} overview:"
+echo "  repository           : ${MY_APTLY_REPO_NAME}"
+echo "  publish              : ${MY_APTLY_PUBLISH_NAME}"
+echo "  snapshot             : ${MY_APTLY_SNAPSHOT_NAME}"
+echo -e "  packages             :\n"
+aptly repo show -with-packages "${MY_APTLY_REPO_NAME}"
+# echo -e "\n${MY_APTLY_UPLOAD_PATH} to be UPLOADED to www.mindforger.com/debian:"
+# cd ${MY_APTLY_PATH}/public && tree
 
-# show repo content w/ packages
-#aptly repo show -with-packages mindforger-com-ppa
+# next steps:
+# - BACKUP ~/.aptly with timestamp
+# - add PACKAGE to repository
+# - create SNAPSHOT
+# - create PUBLISH
 
-# show snapshots
-#aptly snapshot list 
+export MY_NEXT_RELEASE_SNAPSHOT_NAME="${NEW_RELEASE_NAME-snapshot}"
 
-# show published snapshots
-#aptly publish list 
+# checks
 
-echo "Add new .deb to PPA"
-
-# delete published snapshot(s) ONLY if needed
-#aptly publish drop stretch
-
-# delete snapshot(s) ONLY if needed - publish must be deleted first!
-#aptly snapshot drop mindforger-1.10.0-snapshot
-
-# add .deb to repository
-#aptly repo add mindforger-com-ppa mindforger_1.20.1-1_amd64.deb
-
-# create snapshot in the time of release - note release NAME 
-#aptly snapshot create mindforger-1.20.0-snapshot from repo mindforger-com-ppa
-
-# publish snapshot to local filesystem so that it can be uploaded - note release NAME
-#aptly publish snapshot mindforger-1.20.0-snapshot
-
-######################################################################
-
-# .deb to add
-export NEW_DEB="mindforger_1.54.0-1_amd64.deb"
-export OLD_VERSION="1.52.0"
-export NEW_VERSION="1.54.0"
-
-# check
-if [ -f "${NEW_DEB}" ]
+if [[ ! -f "${NEW_DEB_NAME}" ]]
 then
-    echo "Adding ${NEW_DEB} ..."
-else
-    echo "Package ${NEW_DEB} not found"
+    echo "Error: File with package to be released not found: ${NEW_DEB_NAME}"
     exit 1
 fi
 
 # backup
 export timestamp=`date +%Y-%m-%d--%H-%M-%S`
 tar zvcf ~/.aptly-${timestamp}.tgz ~/.aptly
+echo "Backup DONE"
 
-# gather current entities
-export MY_REPO=`aptly repo list --raw`
-export OLD_PUBLISH=`aptly publish list --raw | while read A B; do echo $B; done`
-export OLD_SNAPSHOT=`aptly snapshot list --raw`
-aptly repo show -with-packages ${MY_REPO}
+# drop
+aptly publish drop ${MY_APTLY_PUBLISH_NAME}
+aptly snapshot drop ${MY_APTLY_SNAPSHOT_NAME}
+# add
+export MY_APTLY_SNAPSHOT_NAME="${NEW_RELEASE_NAME}"
+aptly repo add ${MY_APTLY_REPO_NAME} ${NEW_DEB_NAME}
+aptly snapshot create ${MY_APTLY_SNAPSHOT_NAME} from repo ${MY_APTLY_REPO_NAME}
+aptly publish snapshot ${MY_APTLY_SNAPSHOT_NAME}
 
-# prepare new entities
-export NEW_PUBLISH="${OLD_PUBLISH/${OLD_VERSION}/${NEW_VERSION}}"
-export NEW_SNAPSHOT="${OLD_SNAPSHOT/${OLD_VERSION}/${NEW_VERSION}}"
-
-echo -e "\nSummary:"
-echo "${NEW_DEB}"
-echo "${OLD_VERSION} > ${NEW_VERSION}"
-echo "${MY_REPO}"
-echo "${OLD_PUBLISH} > ${NEW_PUBLISH}"
-echo "${OLD_SNAPSHOT} > ${NEW_SNAPSHOT}"
-
-# drop: publish > snapshot
-echo "aptly publish drop ${OLD_PUBLISH}"
-echo "aptly snapshot drop ${OLD_SNAPSHOT}"
-# add .deb > snapshot > publish
-echo "aptly repo add ${MY_REPO} ${NEW_DEB}"
-echo "aptly snapshot create ${NEW_SNAPSHOT} from repo ${MY_REPO}"
-echo "aptly publish snapshot ${NEW_SNAPSHOT}"
-
-# exit for dry run
-#exit 0
-
-# drop: publish > snapshot
-aptly publish drop ${OLD_PUBLISH}
-aptly snapshot drop ${OLD_SNAPSHOT}
-# add .deb > snapshot > publish
-aptly repo add ${MY_REPO} ${NEW_DEB}
-aptly snapshot create ${NEW_SNAPSHOT} from repo ${MY_REPO}
-aptly publish snapshot ${NEW_SNAPSHOT}
-
-aptly repo show -with-packages ${MY_REPO}
+# upload
+echo -e "\n${MY_APTLY_UPLOAD_PATH} to be UPLOADED to www.mindforger.com/debian:"
 
 # eof
