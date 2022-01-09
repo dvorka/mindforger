@@ -113,7 +113,7 @@ void OutlineHeaderEditPresenter::slotSaveOutlineHeader()
 
         // remember
         mwp->getMind()->remember(currentOutline->getKey());
-        mwp->getStatusBar()->showInfo(tr("Notebook saved!"));
+        mwp->getStatusBar()->showInfo(tr("Notebook '%1' successfully saved").arg(QString::fromStdString(currentOutline->getName())));
     } else {
         mwp->getStatusBar()->showError(tr("Attempt to save data from UI to Notebook, but no Notebook is set."));
     }
