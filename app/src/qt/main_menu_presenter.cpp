@@ -229,6 +229,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionFormatBold, SIGNAL(triggered()), mwp, SLOT(doActionFormatBold()));
     QObject::connect(view->actionFormatItalic, SIGNAL(triggered()), mwp, SLOT(doActionFormatItalic()));
     QObject::connect(view->actionFormatCode, SIGNAL(triggered()), mwp, SLOT(doActionFormatCode()));
+    QObject::connect(view->actionFormatComment, SIGNAL(triggered()), mwp, SLOT(doActionFormatComment()));
     QObject::connect(view->actionFormatMath, SIGNAL(triggered()), mwp, SLOT(doActionFormatMath()));
     QObject::connect(view->actionFormatMathFraction, SIGNAL(triggered()), mwp, SLOT(doActionFormatMathFrac()));
     QObject::connect(view->actionFormatMathSum, SIGNAL(triggered()), mwp, SLOT(doActionFormatMathSum()));

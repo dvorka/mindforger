@@ -263,6 +263,7 @@ public slots:
     void doActionFormatBold();
     void doActionFormatItalic();
     void doActionFormatCode();
+    void doActionFormatComment();
     void doActionFormatMath();
     void doActionFormatMathFrac();
     void doActionFormatMathSum();

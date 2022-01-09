@@ -34,7 +34,7 @@ EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
 #endif
     moreButton = new QPushButton{tr("Properties"), this};
 #ifdef __APPLE__
-    moreButton->setToolTip("⌥↩");
+    moreButton->setToolTip("⌘↩");
 #else
     moreButton->setToolTip("Alt+Enter");
 #endif

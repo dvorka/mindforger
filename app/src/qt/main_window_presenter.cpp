@@ -1251,6 +1251,17 @@ void MainWindowPresenter::doActionFormatCode()
     }
 }
 
+void MainWindowPresenter::doActionFormatComment()
+{
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        // note 3 x - which ensures that comment will work also in Pandoc, for comprehensive MD comments discussion check:
+        //   https://stackoverflow.com/questions/4823468/comments-in-markdown
+        orloj->getNoteEdit()->getView()->getNoteEditor()->wrapSelectedText("<!--- ", " -->");
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->wrapSelectedText("<!--- ", " -->");
+    }
+}
+
 void MainWindowPresenter::doActionFormatMath()
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {

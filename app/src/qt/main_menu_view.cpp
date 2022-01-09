@@ -143,7 +143,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: recall
 
     actionFindFts = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Full-text Search"), mainWindow);
+#ifdef __APPLE__
+    actionFindFts->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
+#else
     actionFindFts->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
+#endif
     actionFindFts->setStatusTip(tr("Note full-text search"));
 
     actionFindOutlineByName = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Note&book by Name"), mainWindow);
@@ -714,6 +718,12 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatMath = new QAction(tr("&Math"), mainWindow);
     actionFormatMath->setStatusTip(tr("Format text as math (MathJax)"));
 
+    actionFormatKeyboard = new QAction(tr("&Keyboard"), mainWindow);
+    actionFormatKeyboard->setStatusTip(tr("Format text as keyboard input"));
+
+    actionFormatComment= new QAction(tr("Comment"), mainWindow);
+    actionFormatComment->setStatusTip(tr("Add comment to hide text in rendered HTML"));
+
     // lists
     submenuFormatLists = menuFormat->addMenu(tr("Lis&ts"));
 
@@ -832,9 +842,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatStrikethrough = new QAction(tr("&Strikethrough"), mainWindow);
     actionFormatStrikethrough->setStatusTip(tr("Format text as strikethrough"));
 
-    actionFormatKeyboard = new QAction(tr("&Keyboard"), mainWindow);
-    actionFormatKeyboard->setStatusTip(tr("Format text as keyboard input"));
-
     actionFormatToc = new QAction(tr("T&able of Contents"), mainWindow);
     actionFormatToc ->setStatusTip(tr("Insert Notebook's table of contents"));
 
@@ -865,7 +872,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatMath);
     menuFormat->addAction(actionFormatStrikethrough);
     menuFormat->addAction(actionFormatKeyboard);
-    menuFormat->addSeparator();
+    menuFormat->addAction(actionFormatComment);
     menuFormat->addSeparator();
     menuFormat->addAction(actionFormatToc);
     menuFormat->addMenu(submenuFormatLists);
