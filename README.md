@@ -67,6 +67,8 @@ Nightly builds:
 * [Windows installer nightly](https://ci.appveyor.com/project/dvorka/mindforger/build/artifacts)
 * [tarball nightly](https://github.com/dvorka/mindforger/actions/workflows/build_ubuntu.yml)
 
+Check also [packages](https://pkgs.org/search/?q=mindforger) for Linux and Unix.
+
 ## Documentation
 Read:
 
