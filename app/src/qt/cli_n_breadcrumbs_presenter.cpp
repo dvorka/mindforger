@@ -59,7 +59,7 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                     QStringList outlineNamesCompletion = QStringList();
                     if(outlineNames.size()) {
                         QString qs;
-                        for(const string s:outlineNames) {
+                        for(const string& s:outlineNames) {
                             qs.clear();
                             // TODO commands are constants
                             qs += CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME;

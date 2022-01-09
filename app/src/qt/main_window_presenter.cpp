@@ -1180,6 +1180,7 @@ void MainWindowPresenter::doActionViewOutlines()
     if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
         view.getCli()->setBreadcrumbPath("/notebooks");
         cli->executeListOutlines();
+        view.getOrloj()->getOutlinesTable()->setFocus();
     }
 }
 

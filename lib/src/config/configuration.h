@@ -88,7 +88,11 @@ constexpr const auto UI_JS_LIB_NO = "no";
 constexpr const auto UI_OS_TABLE_SORT_ORDER_ASC = "ascending";
 constexpr const auto UI_OS_TABLE_SORT_ORDER_DESC = "descending";
 
+#ifdef __APPLE__
+constexpr const auto UI_DEFAULT_THEME = UI_THEME_NATIVE;
+#else
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_DARK;
+#endif
 constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_FONT = "Monospace,10";
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;

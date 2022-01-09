@@ -34,7 +34,7 @@ make clean
 qmake -r mindforger.pro
 make -j 7
 
-echo "Binary can be found in GIT/mindforger/app/mindforger.app/Contents/MacOS"
+echo "Binary can be found in mindforger/app/mindforger.app/Contents/MacOS"
 cd "${SCRIPT_HOME}" || exit 1
 
 # eof

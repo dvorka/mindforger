@@ -1,6 +1,7 @@
 2022-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v1.54.0 - macOS fix release: Qt upgraded from 5.9.9 to 5.15.2 (macOS only),
+      native L&F theme used by default,
       main window is not wider than screen on boot, view/edit bottom buttons
       work even if double-click 2 edit is disabled, toolbar is not hidden on
       window minimization, platform-driven default editor key binding, Vim keybinding
