@@ -27,13 +27,23 @@ echo "IMPORTANT: this script must be run with ROOT priviedges (alien)"
 echo "Who I'm? `whoami`"
 echo "==============================================================="
 
-export MFVERSION="1.54.0"
+# IMPORTANT: this script must be run as root
+
+if [[ -z "${1}" ]]
+then
+    export MFVERSION="1.54.0"
+else
+    export MFVERSION="${1}"
+fi
+
 export MFPRJNAME="mindforger-${MFVERSION}"
 export AMD64NAME="mindforger_${MFVERSION}-1_amd64"
 export I386NAME="mindforger_${MFVERSION}-1_i386"
 export NOARCHNAME="mindforger_${MFVERSION}-1_noarch"
 
-# IMPORTANT: this script must be run as root
+echo "  MF version: ${MFVERSION}"
+echo "  Build dir : ${MF_MACOS_BUILD_DIR}"
+echo "  macdeploy : ${MACDEPLOY}"
 
 # cleanup
 rm -rvf ${MFPRJNAME} *.rpm

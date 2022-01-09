@@ -30,7 +30,7 @@ sudo dnf install -y mc emacs git tig
 # source code
 mkdir -vp ~/p/mindforger/git
 mkdir -vp ~/p/mindforger/alien
-cd git/mindforger && git clone https://github.com/dvorka/mindforger.git && git submodule init --with-update
+# cd git/mindforger && git clone https://github.com/dvorka/mindforger.git && git submodule init --with-update
 
 # save .deb in alien/ directory
 # .deb download (GitHub): Releases/

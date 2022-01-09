@@ -42,6 +42,7 @@ help:
 	@echo "dist-all          build all distributions"
 	@echo "dist-tarball      build tarball distribution"
 	@echo "dist-deb          build Debian distribution"
+	@echo "dist-rpm          build .rpm package on Fedora"
 	@echo "dist-dmg          build macOS Disk iMaGe .dmg package"
 	@echo "statistic         show source code statistic"
 	@echo "doc               generate Doxygen documentation"
@@ -99,10 +100,11 @@ dist-deb: dist-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR)
 	cp -vf $(MF_MAKER_WORKING_DIR)/`cd $(MF_MAKER_WORKING_DIR) && ls -d mindforger*`/mindforger_$(MINDFORGER_VERSION)-1_amd64.deb $(MINDFORGER_RELEASE_DIR)
 
 dist-rpm:
-	@echo "Building RPM distribution..."
-	@echo "VIRTUAL MACHINE with RedHat must be running!"
-	# TODO to be implemented
-	exit 1
+	@echo "IMPORTANT: this target MUST be run on Fedora!"
+	cd build/fedora && ./fedora-distro-setup.sh
+	@echo "Building .rpm package..."
+	cp -vf ./fedora-rpm-from-deb.sh ~/alien && cd ~/alien && sudo ./fedora-rpm-from-deb.sh $(MINDFORGER_VERSION)
+	@echo "Find .rpm in ~/alien directory"
 
 dist-dmg:
 	@echo "Building .dmg package..."
