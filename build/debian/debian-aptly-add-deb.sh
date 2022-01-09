@@ -92,6 +92,7 @@ aptly publish drop ${MY_APTLY_PUBLISH_NAME}
 aptly snapshot drop ${MY_APTLY_SNAPSHOT_NAME}
 # add
 export MY_APTLY_SNAPSHOT_NAME="${NEW_RELEASE_NAME}"
+aptly repo edit -distribution="${MY_DEBIAN_RELEASE}" "${MY_APTLY_REPO_NAME}"
 aptly repo add ${MY_APTLY_REPO_NAME} ${NEW_DEB_NAME}
 aptly snapshot create ${MY_APTLY_SNAPSHOT_NAME} from repo ${MY_APTLY_REPO_NAME}
 aptly publish snapshot ${MY_APTLY_SNAPSHOT_NAME}
