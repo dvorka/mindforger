@@ -60,7 +60,21 @@ public:
     QAction* actionAdapt;
     QAction* actionHelp;
 
-    void hideEvent(QHideEvent *) override;
+    // IMPORTANT: hide event hidden as it was causing undesired configuration
+    // changes and toolbar hiding on Qt's spontaneous hide/show events. Citation
+    // from Qt doc:
+    //
+    // "Note: A widget receives spontaneous show and hide events when its mapping
+    // status is changed by the window system, e.g. a spontaneous hide event when
+    // the user minimizes the window, and a spontaneous show event when the window
+    // is restored again. After receiving a spontaneous hide event, a widget is
+    // still considered visible in the sense of isVisible()."
+    //
+    // Even use of this->isVisible() within the event didn't fixed the problem.
+    //
+    // @see https://github.com/dvorka/mindforger/issues/1437
+    //
+    // void hideEvent(QHideEvent *) override;
 
 public:
     explicit MainToolbarView(MainWindowView* mainWindowView);

@@ -54,7 +54,7 @@ EditTagsPanel::EditTagsPanel(
 #endif
     );
 
-    removeButton = new QPushButton{tr("Remove"), this};
+    removeButton = new QPushButton{tr("Remove Tag"), this};
 
     // assembly
     QWidget* w = new QWidget(this);
@@ -113,7 +113,7 @@ void EditTagsPanel::refresh(const vector<const Tag*>* noteTags)
         }
     }
     ((QStringListModel*)listView->model())->setStringList(listViewStrings);
-    addButton->setText(tr("Create New"));
+    addButton->setText(tr("Create New Tag"));
 }
 
 const std::vector<const Tag*>& EditTagsPanel::getTags()
@@ -182,9 +182,9 @@ void EditTagsPanel::customLineEditKeyPressEvent(QKeyEvent* event)
     if(!lineEdit->text().isEmpty()
        && completerStrings.contains(lineEdit->text())
     ) {
-        addButton->setText(tr("Add Existing"));
+        addButton->setText(tr("Add Existing Tag"));
     } else {
-        addButton->setText(tr("Create New"));
+        addButton->setText(tr("Create New Tag"));
     }
 }
 
