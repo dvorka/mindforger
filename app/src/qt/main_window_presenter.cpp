@@ -1958,7 +1958,6 @@ void MainWindowPresenter::handleNoteNew()
             offset++;
         }
         // else position is ABOVE
-
     }
 
     MF_DEBUG("New N: current N offset: " << offset << endl);
@@ -1973,21 +1972,20 @@ void MainWindowPresenter::handleNoteNew()
 
     string name = newNoteDialog->getNoteName().toStdString();
     Note* note = mind->noteNew(
-                orloj->getOutlineView()->getCurrentOutline()->getKey(),
-                // IMPROVE get parent note number from selection (if selected)
-                offset,
-                &name,
-                newNoteDialog->getNoteType(),
-                depth,
-                &newNoteDialog->getTags(),
-                newNoteDialog->getProgress(),
-                newNoteDialog->getStencil());
+        orloj->getOutlineView()->getCurrentOutline()->getKey(),
+        // IMPROVE get parent note number from selection (if selected)
+        offset,
+        &name,
+        newNoteDialog->getNoteType(),
+        depth,
+        &newNoteDialog->getTags(),
+        newNoteDialog->getProgress(),
+        newNoteDialog->getStencil());
     if(note) {
         mind->remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
 
         // insert new N and select it in the tree
         orloj->getOutlineView()->insertAndSelect(note);
-
 
         // IMPROVE smarter refresh of outline tree (do less than overall load)
         //orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
@@ -2172,11 +2170,11 @@ void MainWindowPresenter::doActionNoteNew()
        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
          ||
        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE))
-       // IMPROVE if note is edited, show warning that note must be saved
     {
         newNoteDialog->show(
-                    QString::fromStdString(orloj->getOutlineView()->getCurrentOutline()->getKey()),
-                    mind->remind().getStencils(ResourceType::NOTE));
+            QString::fromStdString(orloj->getOutlineView()->getCurrentOutline()->getKey()),
+            mind->remind().getStencils(ResourceType::NOTE)
+        );
     } else {
         QMessageBox::critical(&view, tr("New Note"), tr("Open and view a Notebook to create new Note."));
     }

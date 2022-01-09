@@ -598,6 +598,9 @@ void OrlojPresenter::showFacetNoteEdit(Note* note)
     if(config.isUiLiveNotePreview()) {
         noteViewPresenter->refreshLivePreview();
     }
+
+    // ensure that editor gets focus (might be stole by live preview)
+    view->getNoteEdit()->giveEditorFocus();
 }
 
 void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
