@@ -122,7 +122,7 @@ doc:
 
 # private development targets
 
-dvorka-install-local: build ../app/mindforger
+dev-install-local: build ../app/mindforger
 	cp -vf ../app/mindforger ~/bin
 	mv -vf ~/bin/mindforger ~/bin/MIND
 	~/bin/MIND --version
