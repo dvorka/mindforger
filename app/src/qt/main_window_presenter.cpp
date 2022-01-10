@@ -2334,6 +2334,9 @@ void MainWindowPresenter::doActionNoteExternalEdit()
             // close modal dialog
             statusBar->clear();
 
+            // save updated N
+            mind->remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
+
             return;
         }
     }
