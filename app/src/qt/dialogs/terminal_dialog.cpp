@@ -89,6 +89,7 @@ void TerminalDialog::show()
     cmdEdit->clear();
     cmdEdit->setFocus();
 
+    setModal(true);
     QDialog::show();
 }
 
