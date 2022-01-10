@@ -51,6 +51,7 @@ TerminalDialog::TerminalDialog(QWidget* parent)
         completerCommands << QString::fromStdString("clear");
 #endif
         completerCommands << QString::fromStdString("exit");
+        completerCommands << QString::fromStdString("quit");
 
         for(auto c:completerCommands) {
             cmdCompleterModel->appendRow(new QStandardItem(c));
