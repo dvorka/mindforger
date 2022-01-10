@@ -25,7 +25,11 @@ namespace m8r {
 
 enum MfWidgetMode {
     OUTLINE_MODE,
-    NOTE_MODE
+    NOTE_MODE,
+    FIND_MODE,
+    ADD_MODE,
+    CREATE_MODE,
+    EDIT_MODE
 };
 
 }

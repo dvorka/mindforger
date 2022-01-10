@@ -52,7 +52,7 @@ OutlineNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     stencilLabel = new QLabel(tr("Stencil")+":", this);
     stencilCombo = new QComboBox(this);
 
-    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup = new EditTagsPanel{MfWidgetMode::CREATE_MODE, ontology, this};
     editTagsGroup->refreshOntologyTags();
 
     // assembly

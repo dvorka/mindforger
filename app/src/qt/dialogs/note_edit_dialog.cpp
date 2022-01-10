@@ -55,7 +55,7 @@ NoteEditDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     parentRelCombo->addItem(tr("Aggregation")+" "+QChar(9671));
     parentRelCombo->addItem(tr("Is-a")+" "+QChar(9651));
 
-    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup = new EditTagsPanel{MfWidgetMode::EDIT_MODE, ontology, this};
 
     // signals
     QObject::connect(

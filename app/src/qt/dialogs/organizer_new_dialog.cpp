@@ -40,19 +40,19 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
     typeCombo->addItem(tr("Eisenhower Matrix"), Organizer::OrganizerType::EISENHOWER_MATRIX);
     typeCombo->addItem(tr("Kanban"), Organizer::OrganizerType::KANBAN);
 
-    upperLeftTags = new EditTagsPanel{ontology, this};
+    upperLeftTags = new EditTagsPanel{MfWidgetMode::FIND_MODE, ontology, this};
     upperLeftTags->refreshOntologyTags();
     upperLeftTags->setTitle(tr(TITLE_UPPER_LEFT_EM)+":");
 
-    upperRightTags = new EditTagsPanel{ontology, this};
+    upperRightTags = new EditTagsPanel{MfWidgetMode::FIND_MODE, ontology, this};
     upperRightTags->refreshOntologyTags();
     upperRightTags->setTitle(tr(TITLE_UPPER_RIGHT_EM)+":");
 
-    lowerLeftTags = new EditTagsPanel{ontology, this};
+    lowerLeftTags = new EditTagsPanel{MfWidgetMode::FIND_MODE, ontology, this};
     lowerLeftTags->refreshOntologyTags();
     lowerLeftTags->setTitle(tr(TITLE_LOWER_LEFT_EM)+":");
 
-    lowerRightTags = new EditTagsPanel{ontology, this};
+    lowerRightTags = new EditTagsPanel{MfWidgetMode::FIND_MODE, ontology, this};
     lowerRightTags->refreshOntologyTags();
     lowerRightTags->setTitle(tr(TITLE_LOWER_RIGHT_EM)+":");
 
@@ -138,8 +138,8 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
         this, SLOT(handleFindOutlineChoice())
     );
     QObject::connect(
-        typeCombo, SIGNAL(currentIndexChanged(const QString&)),
-        this, SLOT(handleChangeTypeCombo(const QString&))
+        typeCombo, SIGNAL(currentIndexChanged(QString)),
+        this, SLOT(handleChangeTypeCombo(QString))
     );
 
     // dialog    

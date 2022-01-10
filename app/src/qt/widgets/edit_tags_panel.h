@@ -22,6 +22,7 @@
 #include <QtWidgets>
 
 #include "../../lib/src/mind/ontology/ontology.h"
+#include "mf_widgets.h"
 
 namespace m8r {
 
@@ -54,6 +55,8 @@ class EditTagsPanel : public QGroupBox
     };
 
 private:
+    MfWidgetMode mode;
+
     Ontology& ontology;
     std::vector<const Tag*> tags;
 
@@ -70,7 +73,7 @@ private:
     QStringList listViewStrings;
 
 public:
-    explicit EditTagsPanel(Ontology& ontology, QWidget* parent);
+    explicit EditTagsPanel(MfWidgetMode mode, Ontology& ontology, QWidget* parent);
     EditTagsPanel(const EditTagsPanel&) = delete;
     EditTagsPanel(const EditTagsPanel&&) = delete;
     EditTagsPanel &operator=(const EditTagsPanel&) = delete;

@@ -51,7 +51,7 @@ OutlineHeaderEditDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *par
     progressSpin->setMinimum(0);
     progressSpin->setMaximum(100);
 
-    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup = new EditTagsPanel{MfWidgetMode::EDIT_MODE, ontology, this};
 
     // assembly
     QVBoxLayout* basicLayout = new QVBoxLayout{this};

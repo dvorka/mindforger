@@ -35,7 +35,7 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     nameEdit = new QLineEdit(tr("Note"), this);
 
     // moving edit tags to this position changes TAB ORDER ~ it's selected as 2nd field
-    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup = new EditTagsPanel{MfWidgetMode::CREATE_MODE, ontology, this};
     editTagsGroup->refreshOntologyTags();
 
     positionLabel = new QLabel(tr("Position")+":", this);

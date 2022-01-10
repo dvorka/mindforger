@@ -66,7 +66,7 @@ ScopeDialog::ScopeDialog(Ontology& ontology, QWidget *parent)
     enableTagsScopeCheck = new QCheckBox{tr("show Notebooks with the following tags")+":", this};
     enableTagsScopeCheck->setChecked(false);
 
-    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup = new EditTagsPanel{MfWidgetMode::FIND_MODE, ontology, this};
     editTagsGroup->refreshOntologyTags();
     editTagsGroup->setTitle("");
     // workaround to force hiding of group's title when it's empty

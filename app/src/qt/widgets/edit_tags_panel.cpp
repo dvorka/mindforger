@@ -23,9 +23,12 @@ namespace m8r {
 using namespace std;
 
 EditTagsPanel::EditTagsPanel(
+        MfWidgetMode mode,
         Ontology& ontology,
-        QWidget *parent)
-    : QGroupBox(tr("Tags"), parent), ontology(ontology)
+        QWidget* parent)
+    : QGroupBox(tr("Tags"), parent),
+      mode{mode},
+      ontology(ontology)
 {
     // widgets
     lineEdit = new MyLineEdit{this, parent};
@@ -45,7 +48,10 @@ EditTagsPanel::EditTagsPanel(
     listView->setModel(&listViewModel);
     // disable ability to edit list items
     listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    addButton = new QPushButton{tr("Create New"), this};
+    addButton = new QPushButton{
+        mode == MfWidgetMode::FIND_MODE?tr("Add Filter Tag"):tr("Create New Tag"),
+        this
+    };
     addButton->setToolTip(
 #ifdef __APPLE__
         tr("Hit ⌘↩ to add tag")
@@ -113,7 +119,9 @@ void EditTagsPanel::refresh(const vector<const Tag*>* noteTags)
         }
     }
     ((QStringListModel*)listView->model())->setStringList(listViewStrings);
-    addButton->setText(tr("Create New Tag"));
+    addButton->setText(
+        mode == MfWidgetMode::FIND_MODE?tr("Add Filter Tag"):tr("Create New Tag")
+    );
 }
 
 const std::vector<const Tag*>& EditTagsPanel::getTags()
@@ -182,9 +190,17 @@ void EditTagsPanel::customLineEditKeyPressEvent(QKeyEvent* event)
     if(!lineEdit->text().isEmpty()
        && completerStrings.contains(lineEdit->text())
     ) {
-        addButton->setText(tr("Add Existing Tag"));
+        addButton->setText(
+            mode == MfWidgetMode::FIND_MODE?tr("Add Filter Tag"):tr("Add Existing Tag")
+        );
     } else {
-        addButton->setText(tr("Create New Tag"));
+        if(mode == MfWidgetMode::FIND_MODE) {
+            addButton->setText(
+                lineEdit->text().isEmpty()?tr("Add Filter Tag"):tr("Unknown Tag")
+            );
+        } else {
+            addButton->setText(tr("Create New Tag"));
+        }
     }
 }
 
