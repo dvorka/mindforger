@@ -1911,7 +1911,7 @@ void MainWindowPresenter::handleOutlineNew()
         delete preambleText;
     }
 
-    mind->outlineNew(
+    string outlineKey = mind->outlineNew(
         &name,
         newOutlineDialog->getOutlineType(),
         newOutlineDialog->getImportance(),
@@ -1926,6 +1926,13 @@ void MainWindowPresenter::handleOutlineNew()
         orloj->getOutlinesTable()->refresh(mind->getOutlines());
     }
     // else Outlines are refreshed on facet change
+
+    // open newly create outline
+    Outline* o = mind->remind().getOutline(outlineKey);
+    if(o) {
+        orloj->showFacetOutline(o);
+        statusBar->showInfo(QString(tr("Notebook "))+QString::fromStdString(o->getName()));
+    }
 }
 
 void MainWindowPresenter::doActionOutlineEdit()
