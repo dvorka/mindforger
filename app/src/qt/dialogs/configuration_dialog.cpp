@@ -95,10 +95,18 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     themeLabel = new QLabel(tr("UI theme (requires restart)")+":", this);
     themeCombo = new QComboBox{this};
     themeCombo->addItem(QString{UI_THEME_LIGHT});
+#ifndef __APPLE__
+    themeCombo->addItem(QString{UI_THEME_LIGHT_WITH_FIXED_FONT});
+#endif
     themeCombo->addItem(QString{UI_THEME_DARK});
     themeCombo->addItem(QString{UI_THEME_BLACK});
+#ifndef __APPLE__
+    themeCombo->addItem(QString{UI_THEME_BLACK_WITH_FIXED_FONT});
+#endif
     themeCombo->addItem(QString{UI_THEME_NATIVE});
+#ifndef __APPLE__
     themeCombo->addItem(QString{UI_THEME_NATIVE_WITH_FIXED_FONT});
+#endif
 
     startupLabel = new QLabel(tr("Start to view")+":", this);
     startupCombo = new QComboBox{this};
@@ -331,6 +339,7 @@ void ConfigurationDialog::ViewerTab::slotCssChoiceChanged(int index)
 {
     if(string{UI_HTML_THEME_CSS_CUSTOM} == htmlCssThemeCombo->itemText(index).toStdString()
        && !htmlCssLineEdit->text().size()
+       && isVisible()
     ) {
         this->slotFindCssFile();
     }

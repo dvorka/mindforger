@@ -178,10 +178,12 @@ void LookAndFeels::setLightTheme(bool fixedFont)
 
     cliTextColor = Qt::black;
 
-#ifdef _WIN32
+#ifndef __APPLE__
     if(fixedFont) {
         mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     }
+#else
+    Q_UNUSED(fixedFont);
 #endif
     mindforgerApplication->setStyle(QStyleFactory::create("fusion"));
 
@@ -227,10 +229,12 @@ void LookAndFeels::setBlackTheme(bool fixedFont)
 
     cliTextColor = QColor(0x99,0xb1,0xff);
 
-#ifdef _WIN32
+#ifndef __APPLE__
     if(fixedFont) {
         mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     }
+#else
+    Q_UNUSED(fixedFont);
 #endif
 
     /* The valid keys can be retrieved using the keys() function. Typically they include
@@ -278,6 +282,7 @@ void LookAndFeels::setBlackTheme(bool fixedFont)
 void LookAndFeels::setNativeTheme(bool fixedFont)
 {
 #if defined(__APPLE__)
+    Q_UNUSED(fixedFont);
     #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         // new(er) Qt versions detect light/dark themes, however, it does NOT set style correctly in case of dark theme:
         // - Big Sur 11.6 + Qt 5.15.2
@@ -310,7 +315,7 @@ void LookAndFeels::setNativeTheme(bool fixedFont)
         }
 
     #endif
-#elif defined(_WIN32)
+#else
     if(fixedFont) {
         mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     }
@@ -335,7 +340,9 @@ std::string& LookAndFeels::getHtmlTextColor()
             return light;
         }
     } else {
-        if(config.getUiThemeName() == UI_THEME_LIGHT) {
+        if(config.getUiThemeName() == UI_THEME_LIGHT
+           || config.getUiThemeName() == UI_THEME_LIGHT_WITH_FIXED_FONT
+        ) {
             // light RAW theme
             return dark;
         } else {
@@ -358,7 +365,9 @@ std::string& LookAndFeels::getHtmlBackgroundColor()
             return dark;
         }
     } else {
-        if(config.getUiThemeName() == UI_THEME_LIGHT) {
+        if(config.getUiThemeName() == UI_THEME_LIGHT
+           || config.getUiThemeName() == UI_THEME_LIGHT_WITH_FIXED_FONT
+        ) {
             // light RAW theme
             return light;
         } else {
