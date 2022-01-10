@@ -98,6 +98,7 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     themeCombo->addItem(QString{UI_THEME_DARK});
     themeCombo->addItem(QString{UI_THEME_BLACK});
     themeCombo->addItem(QString{UI_THEME_NATIVE});
+    themeCombo->addItem(QString{UI_THEME_NATIVE_WITH_FIXED_FONT});
 
     startupLabel = new QLabel(tr("Start to view")+":", this);
     startupCombo = new QComboBox{this};

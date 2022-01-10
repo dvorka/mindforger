@@ -43,6 +43,7 @@ public:
     }
 private:
     explicit LookAndFeels();
+    virtual ~LookAndFeels();
 
 private:
     /**
@@ -111,15 +112,15 @@ public:
      * theme suitable for comfortable knowledge reading and
      * navigation.
      */
-    void setLightTheme();
+    void setLightTheme(bool fixedFont=false);
 
     /* Extra (custom) theme(s)...
      */
-    void setBlackTheme();
+    void setBlackTheme(bool fixedFont=false);
 
     /* Set operating system native theme.
      */
-    void setNativeTheme();
+    void setNativeTheme(bool fixedFont=false);
 
     void init(QApplication* mindforgerApplication);
     bool isThemeNative() const;

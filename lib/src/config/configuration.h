@@ -60,8 +60,11 @@ constexpr const auto DIRNAME_NOTES = "notes";
 
 constexpr const auto UI_THEME_DARK = "dark";
 constexpr const auto UI_THEME_LIGHT = "light";
+constexpr const auto UI_THEME_LIGHT_WITH_FIXED_FONT = "light with fixed font";
 constexpr const auto UI_THEME_BLACK = "black";
+constexpr const auto UI_THEME_BLACK_WITH_FIXED_FONT = "black with fixed font";
 constexpr const auto UI_THEME_NATIVE = "native";
+constexpr const auto UI_THEME_NATIVE_WITH_FIXED_FONT = "native with fixed font";
 
 constexpr const auto START_TO_DASHBOARD = "dashboard";
 constexpr const auto START_TO_OUTLINES = "outlines";
