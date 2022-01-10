@@ -44,6 +44,8 @@ bool LookAndFeels::isThemeNameValid(const QString& themeName) const
 
 void LookAndFeels::setTheme(const QString& themeName)
 {
+    MF_DEBUG("Setting MindForger Qt theme: " << themeName.toStdString() << endl);
+
     if(UI_THEME_LIGHT == themeName.toStdString()) {
         setLightTheme();
     } else if(UI_THEME_DARK == themeName.toStdString()) {
@@ -241,12 +243,46 @@ void LookAndFeels::setBlackTheme()
     menuStylesheet = QString{
         "QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px; }"
         "QMenuBar::item:disabled { color: #555; }"
-        "QMenu::item:disabled { color: #555; background: "}+backgroundColor+QString{"; }"};
+        "QMenu::item:disabled { color: #555; background: "}+backgroundColor+QString{"; }"
+    };
 }
 
 void LookAndFeels::setNativeTheme()
 {
-#ifdef _WIN32
+#if defined(__APPLE__)
+    #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        // new(er) Qt versions detect light/dark themes, however, it does NOT set style correctly in case of dark theme:
+        // - Big Sur 11.6 + Qt 5.15.2
+        //   - bug: wrong QtTextEditor font - black, but should be white
+        //   - bug: CLI font - black, but should be green - root cause: MF changes palette to set green text > skip @ macOS
+
+        // system theme detection (quess) make sense ONLY in case of NATIVE theme (window color driven by OS)
+        MF_DEBUG("  OS theme (light/dark ~ #ececec/#323232): " << QPalette().color(QPalette::ColorRole::Window).name().toStdString() << endl);
+        if(QPalette().color(QPalette::ColorRole::Window).name().toStdString() == "#323232") {
+            MF_DEBUG("    macOS dark mode detected - PATCHING MindForger editor pallette" << endl);
+
+            // IMPROVE editor active line background fill (none @ macOS): NoteEditorView::highlightCurrentLine()
+
+            editorBold.setRgb(0xFF,0xFF,0x00);
+            editorBolder.setRgb(0xFF,0xFF,0x00);
+            editorItalic.setRgb(0x00,0xAA,0x00);
+            editorItalicer.setRgb(0x00,0xAA,0x00);
+            editorStrikethrough.setRgb(0x88,0x88,0x88);
+            editorLink.setRgb(0x00,0xFF,0xFF);
+            editorList.setRgb(0x00,0x99,0x00);
+            editorTaskDone.setRgb(0x00,0x99,0x00);
+            editorTaskWip.setRgb(0x99,0x00,0x00);
+            editorCodeblock.setRgb(0x99,0x99,0x99);
+            editorHtmlTag.setRgb(0xAA,0x00,0xAA);
+            editorHtmlEntity.setRgb(0xAA,0x00,0xAA);
+            editorHtmlAttrName.setRgb(0xFF,0x00,0xFF);
+            editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
+            editorHtmlComment.setRgb(0x66,0x66,0x66);
+            editorError.setRgb(0xFF,0x00,0x00);
+        }
+
+    #endif
+#elif defined(_WIN32)
     mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 #endif
 }

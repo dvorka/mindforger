@@ -568,6 +568,7 @@ void NoteEditorView::insertTab()
 
 void NoteEditorView::highlightCurrentLine()
 {
+#if !defined(__APPLE__)
     QList<QTextEdit::ExtraSelection> extraSelections;
     if(!isReadOnly()) {
         QTextEdit::ExtraSelection selection;
@@ -588,6 +589,7 @@ void NoteEditorView::highlightCurrentLine()
         }
     }
     setExtraSelections(extraSelections);
+#endif
 }
 
 /*

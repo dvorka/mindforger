@@ -24,9 +24,13 @@ CliView::CliView(CliAndBreadcrumbsView* cliAndBreadcrumps, QWidget* parent)
     : QLineEdit(parent)
 {
     this->cliAndBreadcrumps = cliAndBreadcrumps;
+#if !defined(__APPLE__)
+    // changing pallette @ macOS w/ dark model @ Qt 5.15.x+ causes edit line to be unreadable
+
     QPalette* palette = new QPalette();
     palette->setColor(QPalette::Text, LookAndFeels::getInstance().getCliTextColor());
     setPalette(*palette);
+#endif
     setToolTip("Run command: type . for available commands, type search string for FTS, Alt-x to activate.");
 }
 

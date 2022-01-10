@@ -85,6 +85,8 @@ void TerminalDialog::show()
     // $
     //   ^ cursor
 
+    cmdEdit->clear();
+
     QDialog::show();
 }
 
@@ -211,6 +213,7 @@ void TerminalDialog::runCommand()
     }
 
     cmdEdit->clear();
+    MF_DEBUG("Terminal prompt cleared: " << cmdEdit->text().toStdString() << endl);
 }
 
 } // m8r namespace

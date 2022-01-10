@@ -43,15 +43,17 @@ class TerminalDialog : public QDialog
         TerminalDialog* terminalDialog;
     public:
         explicit MyLineEdit(TerminalDialog* terminalDialog, QWidget* parent)
-            : QLineEdit(parent), terminalDialog(terminalDialog)
+            : QLineEdit(parent),
+              terminalDialog(terminalDialog)
         {}
         virtual void keyPressEvent(QKeyEvent* event) override {
             switch(event->key()) {
-            case Qt::Key_Return: // Qt::Key_Enter is keypad Enter
-                terminalDialog->runCommand();
-                break;
+                case Qt::Key_Return: // Qt::Key_Enter is keypad Enter
+                    terminalDialog->runCommand();
+                    break;
             }
-            QLineEdit::keyPressEvent(event);
+
+            QLineEdit::keyPressEvent(event);; // continue event dispatch (completer needs to get the event)
         }
     };
 
