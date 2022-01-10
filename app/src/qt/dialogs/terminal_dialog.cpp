@@ -28,7 +28,7 @@ TerminalDialog::TerminalDialog(QWidget* parent)
     cmdEdit = new MyLineEdit(this, this);
 
     cmdCompleter = new QCompleter(new QStandardItemModel(cmdEdit), this);
-    cmdCompleter->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
+    cmdCompleter->setCompletionMode(QCompleter::CompletionMode::InlineCompletion);
     cmdCompleter->setCaseSensitivity(Qt::CaseInsensitive);
     QStandardItemModel* cmdCompleterModel =
         dynamic_cast<QStandardItemModel*>(cmdCompleter->model());
@@ -86,6 +86,7 @@ void TerminalDialog::show()
     //   ^ cursor
 
     cmdEdit->clear();
+    cmdEdit->setFocus();
 
     QDialog::show();
 }

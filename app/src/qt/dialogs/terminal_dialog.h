@@ -50,7 +50,8 @@ class TerminalDialog : public QDialog
             switch(event->key()) {
                 case Qt::Key_Return: // Qt::Key_Enter is keypad Enter
                     terminalDialog->runCommand();
-                    break;
+                    setFocus();
+                    return;
             }
 
             QLineEdit::keyPressEvent(event);; // continue event dispatch (completer needs to get the event)
