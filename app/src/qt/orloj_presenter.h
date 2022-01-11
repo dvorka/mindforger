@@ -216,6 +216,8 @@ public:
     void fromOutlineHeaderEditBackToView(Outline* outline);
     void fromNoteEditBackToView(Note* note);
 
+    bool avoidDataLossOnLinkClick();
+
 public slots:
     void slotShowSelectedOrganizer();
     void slotShowOutlines();

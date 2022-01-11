@@ -395,6 +395,9 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
                     if(o) {
                         Note* n = o->getNoteByMangledName(mangledNoteName);
                         if(n) {
+                            if(orloj->avoidDataLossOnLinkClick()) {
+                                return;
+                            }
                             orloj->showFacetNoteView(n);
                             return;
                         }
@@ -413,9 +416,15 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
                     if(o) {
                         Note* n = o->getNoteByMangledName(mangledNoteName);
                         if(n) {
+                            if(orloj->avoidDataLossOnLinkClick()) {
+                                return;
+                            }
                             orloj->showFacetNoteView(n);
                             return;
                         } else {
+                            if(orloj->avoidDataLossOnLinkClick()) {
+                                return;
+                            }
                             // fallback to Notebook for hyperlink found
                             orloj->showFacetOutline(o);
                             return;
@@ -429,6 +438,9 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
                 MF_DEBUG("  O lookup using path: " << key << std::endl);
                 Outline* o=orloj->getMind()->remind().getOutline(key);
                 if(o) {
+                    if(orloj->avoidDataLossOnLinkClick()) {
+                        return;
+                    }
                     orloj->showFacetOutline(o);
                     return;
                 } // else fallback to open using desktop services
@@ -440,6 +452,9 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
                 MF_DEBUG("FAILED to open hyperlink: " << url.toString().toStdString() << std::endl);
             }
         } else {
+            if(orloj->avoidDataLossOnLinkClick()) {
+                return;
+            }
             // launch URL in browser
             QDesktopServices::openUrl(url);
         }

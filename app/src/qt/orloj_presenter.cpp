@@ -80,9 +80,9 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     // click O tree to view Note
     QObject::connect(
         view->getOutlineView()->getOutlineTree()->selectionModel(),
-        SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+        SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
         this,
-        SLOT(slotShowNote(const QItemSelection&, const QItemSelection&)));
+        SLOT(slotShowNote(QItemSelection, QItemSelection)));
     // hit ENTER in recent Os/Ns to view O/N detail
     QObject::connect(
         view->getRecentNotesTable(),
@@ -123,17 +123,17 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
 #endif
     // editor getting data from the backend
     QObject::connect(
-        view->getNoteEdit()->getNoteEditor(), SIGNAL(signalGetLinksForPattern(const QString&)),
-        this, SLOT(slotGetLinksForPattern(const QString&)));
+        view->getNoteEdit()->getNoteEditor(), SIGNAL(signalGetLinksForPattern(QString)),
+        this, SLOT(slotGetLinksForPattern(QString)));
     QObject::connect(
-        this, SIGNAL(signalLinksForPattern(const QString&, std::vector<std::string>*)),
-        view->getNoteEdit()->getNoteEditor(), SLOT(slotPerformLinkCompletion(const QString&, std::vector<std::string>*)));
+        this, SIGNAL(signalLinksForPattern(QString, std::vector<std::string>*)),
+        view->getNoteEdit()->getNoteEditor(), SLOT(slotPerformLinkCompletion(QString, std::vector<std::string>*)));
     QObject::connect(
-        view->getOutlineHeaderEdit()->getHeaderEditor(), SIGNAL(signalGetLinksForPattern(const QString&)),
-        this, SLOT(slotGetLinksForPattern(const QString&)));
+        view->getOutlineHeaderEdit()->getHeaderEditor(), SIGNAL(signalGetLinksForPattern(QString)),
+        this, SLOT(slotGetLinksForPattern(QString)));
     QObject::connect(
-        this, SIGNAL(signalLinksForHeaderPattern(const QString&, std::vector<std::string>*)),
-        view->getOutlineHeaderEdit()->getHeaderEditor(), SLOT(slotPerformLinkCompletion(const QString&, std::vector<std::string>*)));
+        this, SIGNAL(signalLinksForHeaderPattern(QString, std::vector<std::string>*)),
+        view->getOutlineHeaderEdit()->getHeaderEditor(), SLOT(slotPerformLinkCompletion(QString, std::vector<std::string>*)));
     QObject::connect(
         outlineHeaderEditPresenter->getView()->getButtonsPanel(), SIGNAL(signalShowLivePreview()),
         mainPresenter, SLOT(doActionToggleLiveNotePreview()));
@@ -148,6 +148,10 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
     QObject::connect(
         view->getOutlineHeaderView()->getEditPanel()->getFullOPreviewButton(), SIGNAL(clicked()),
         this, SLOT(slotToggleFullOutlinePreview()));
+    // show O header @ N
+    QObject::connect(
+        view->getNoteView()->getButtonsPanel()->getShowOutlineHeaderButton(), SIGNAL(clicked()),
+        this, SLOT(slotShowOutlineHeader()));
 }
 
 int dialogSaveOrCancel()
@@ -155,12 +159,43 @@ int dialogSaveOrCancel()
     // l10n by moving this dialog either to Qt class OR view class
     QMessageBox msgBox{
         QMessageBox::Question,
-        "Save Note",
-        "Do you want to save Note changes?"};
-    QPushButton* discard = msgBox.addButton("&Discard changes", QMessageBox::DestructiveRole);
-    QPushButton* autosave = msgBox.addButton("Do not ask && &autosave", QMessageBox::AcceptRole);
-    QPushButton* edit = msgBox.addButton("Continue &editing", QMessageBox::YesRole);
-    QPushButton* save = msgBox.addButton("&Save", QMessageBox::ActionRole);
+        QObject::tr("Save Note"),
+        QObject::tr("Do you want to save changes?")
+    };
+
+    QPushButton* discard = msgBox.addButton(
+#ifdef __APPLE__
+        QObject::tr("Discard changes"),
+#else
+        QObject::tr("&Discard changes"),
+#endif
+        QMessageBox::DestructiveRole
+    );
+    QPushButton* autosave = msgBox.addButton(
+#ifdef __APPLE__
+        QObject::tr("Autosave"),
+#else
+        QObject::tr("Autosave"),
+#endif
+        QMessageBox::AcceptRole
+    );
+    autosave->setToolTip(QObject::tr("Do not ask & autosave"));
+    QPushButton* edit = msgBox.addButton(
+#ifdef __APPLE__
+        QObject::tr("Continue editing"),
+#else
+        QObject::tr("Continue &editing"),
+#endif
+        QMessageBox::YesRole
+    );
+    QPushButton* save = msgBox.addButton(
+#ifdef __APPLE__
+        QObject::tr("Save"),
+#else
+        QObject::tr("&Save"),
+#endif
+        QMessageBox::ActionRole
+    );
     msgBox.exec();
 
     QAbstractButton* choosen = msgBox.clickedButton();
@@ -674,6 +709,11 @@ void OrlojPresenter::fromNoteEditBackToView(Note* note)
     outlineViewPresenter->refresh(note);
 
     showFacetNoteView();
+}
+
+bool OrlojPresenter::avoidDataLossOnLinkClick()
+{
+    return this->avoidDataLossOnNoteEdit();
 }
 
 bool OrlojPresenter::avoidDataLossOnNoteEdit()

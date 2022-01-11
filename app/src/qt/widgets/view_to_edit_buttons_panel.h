@@ -33,6 +33,7 @@ private:
     MfWidgetMode mode;
 
     QHBoxLayout* layout;
+    QPushButton* showOutlineHeaderButton;
     QPushButton* editButton;
     QPushButton* toggleFullOPreviewButton;
 
@@ -51,6 +52,7 @@ public:
     bool isExpertMode() const { return expertMode; }
 
 public:
+    QPushButton* getShowOutlineHeaderButton() const { return showOutlineHeaderButton; }
     QPushButton* getEditButton() const { return editButton; }
     QPushButton* getFullOPreviewButton() const { return toggleFullOPreviewButton; }
 };

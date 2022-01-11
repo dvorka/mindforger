@@ -105,9 +105,10 @@ void CliAndBreadcrumbsPresenter::executeCommand()
             if(!outlines || !outlines->size()) {
                 // IMPROVE memory leak if outlines && !outlines->size()
                 QString firstCompletion = view->getFirstCompletion();
-                if(!firstCompletion.isNull()) {
+                if(firstCompletion.size()) {
                     name = view->getFirstCompletion().toStdString().substr(
-                        CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME.size());
+                        CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME.size()
+                    );
                     outlines = mind->findOutlineByNameFts(name);
                 }
             }

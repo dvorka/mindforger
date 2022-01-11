@@ -170,7 +170,7 @@ QString CliAndBreadcrumbsView::getFirstCompletion() const
     if(cliCompleter->completionCount()) {
         return cliCompleter->currentCompletion();
     } else {
-        return QString::null;
+        return QString();
     }
 }
 
