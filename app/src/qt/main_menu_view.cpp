@@ -246,7 +246,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionViewTerminal = new QAction(QIcon(":/menu-icons/cli.svg"), tr("Terminal"), mainWindow);
     actionViewTerminal->setStatusTip(tr("Run simple command line from current MindForger repository..."));
-    actionViewTerminal->setShortcut(QKeySequence(Qt::ALT+Qt::Key_S));
 
     actionViewRecentNotes = new QAction(QIcon(":/menu-icons/open-recent.svg"), tr("&Recent Notes"), mainWindow);
     actionViewRecentNotes->setStatusTip(tr("View recently modified Notes..."));
