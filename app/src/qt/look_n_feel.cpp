@@ -273,10 +273,12 @@ void LookAndFeels::setBlackTheme(bool fixedFont)
     mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #000000; border: 1px solid white; }");
 
     menuStylesheet = QString{
-        "QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px; }"
-        "QMenuBar::item:disabled { color: #555; }"
-        "QMenu::item:disabled { color: #555; background: "}+backgroundColor+QString{"; }"
-    };
+            "QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px; }"
+            "QMenuBar::item:disabled { color: #555; }"
+            "QMenu::item:disabled { color: #555; background: "
+        }
+        + backgroundColor
+        + QString{"; }"};
 }
 
 void LookAndFeels::setNativeTheme(bool fixedFont)
@@ -319,6 +321,12 @@ void LookAndFeels::setNativeTheme(bool fixedFont)
     if(fixedFont) {
         mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     }
+#endif
+
+#ifdef _WIN32
+    // white native L&F selected row is light blue and white @ light blue is NOT readable
+    palette.setColor(QPalette::HighlightedText, Qt::black);
+    mindforgerApplication->setPalette(palette);
 #endif
 }
 
