@@ -620,6 +620,11 @@ void OrlojPresenter::showFacetNoteView(Note* note)
 
 void OrlojPresenter::showFacetNoteEdit(Note* note)
 {
+    if(activeFacet == OrlojPresenterFacets::FACET_EDIT_NOTE) {
+        MF_DEBUG("Facet will NOT be changed to FACET_EDIT_NOTE as N is being already edited" << endl);
+        return;
+    }
+
     if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
         outlineViewPresenter->refresh(note->getOutline());
     }
@@ -640,6 +645,14 @@ void OrlojPresenter::showFacetNoteEdit(Note* note)
 
 void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
 {
+    if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
+        MF_DEBUG(
+            "Facet will NOT be changed to FACET_EDIT_OUTLINE_HEADER as "
+            "header is being already edited" << endl
+        );
+        return;
+    }
+
     if(activeFacet == OrlojPresenterFacets::FACET_NAVIGATOR) {
         outlineViewPresenter->refresh(outline);
     }
