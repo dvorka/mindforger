@@ -139,7 +139,8 @@ int main(int argc, char* argv[])
     // default terminal macOS environment: TERM=xterm-256color DISPLAY=
 #endif
 
-    // stupid & ugly reused code as macOS requires to pass --disable-web-security parameter to QApplication
+    // stupid & ugly reused code as macOS requires to pass
+    //   --disable-web-security parameter to QApplication
     // so that it allows loading of images by QWebEngine
 #if defined(__APPLE__) || defined(_WIN32)
     char ARG_DISABLE_WEB_SECURITY[] = "--disable-web-security";
@@ -420,7 +421,8 @@ int main(int argc, char* argv[])
     m8r::MainWindowPresenter mainWindowPresenter(mainWindowView);
 #ifdef __APPLE__
     mindforgerApplication.font().setPointSize(config.getUiFontPointSize());
-    // ugly & stupid shown() > shownMaximized() to workaround start w/ window wider than screen on macOS
+    // ugly & stupid shown() > shownMaximized() to workaround start w/ window wider
+    // than screen on macOS
     mainWindowView.show();
     mainWindowPresenter.showInitialView();
     mainWindowView.showMaximized();

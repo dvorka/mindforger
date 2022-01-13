@@ -244,10 +244,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
     actionViewCli->setStatusTip(tr("Activate command line interface..."));
 
-    actionViewTerminal = new QAction(QIcon(":/menu-icons/cli.svg"), tr("Terminal"), mainWindow);
+    actionViewTerminal = new QAction(QIcon(":/menu-icons/terminal.svg"), tr("Ter&minal"), mainWindow);
     actionViewTerminal->setStatusTip(tr("Run simple command line from current MindForger repository..."));
 
-    actionViewRecentNotes = new QAction(QIcon(":/menu-icons/open-recent.svg"), tr("&Recent Notes"), mainWindow);
+    actionViewRecentNotes = new QAction(
+        QIcon(":/menu-icons/open-recent.svg"),
+        tr("&Recent Notes"),
+        mainWindow
+    );
     actionViewRecentNotes->setStatusTip(tr("View recently modified Notes..."));
     actionViewRecentNotes->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_R));
 
@@ -537,7 +541,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
     actionNoteEdit ->setStatusTip(tr("Edit current Note - you can also double click view to open the editor"));
 
-    actionNoteExternalEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("E&xternal Editor Edit\tCtrl+X"), mainWindow);
+    actionNoteExternalEdit = new QAction(QIcon(":/menu-icons/edit_external.svg"), tr("E&xternal Editor Edit\tCtrl+X"), mainWindow);
     actionNoteExternalEdit ->setStatusTip(tr("Edit current Note in an external editor - use Preferences to configure the editor"));
 
     actionNoteSave = new QAction(QIcon(":/menu-icons/save.svg"), tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
@@ -586,7 +590,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     );
     actionNoteRefactor->setStatusTip(tr("Refactor Note to another Notebook..."));
 
-    actionNoteStencil = new QAction(QIcon(":/menu-icons/stencil.svg"), tr("Make &Stencil"), mainWindow);
+    actionNoteStencil = new QAction(
+        QIcon(":/menu-icons/stencil.svg"),
+        tr("Make &Stencil"),
+        mainWindow
+    );
     actionNoteStencil->setStatusTip(tr("Copy the current Notebook as to Stencil"));
     actionNoteStencil->setEnabled(false);
 
@@ -913,7 +921,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionHelpCheckForUpdates = new QAction(QIcon(":/menu-icons/download.svg"), tr("&Check for Updates"), mainWindow);
     actionHelpCheckForUpdates->setStatusTip(tr("Check for MindForger updates"));
 
-    actionHelpAboutQt = new QAction(QIcon(":/menu-icons/write.svg"), tr("&About Qt"), mainWindow);
+    actionHelpAboutQt = new QAction(QIcon(":/menu-icons/about_qt.svg"), tr("&About Qt"), mainWindow);
     actionHelpAboutQt->setStatusTip(tr("About Qt..."));
 
     actionHelpAbout = new QAction(QIcon(":/menu-icons/write.svg"), tr("&About MindForger"), mainWindow);

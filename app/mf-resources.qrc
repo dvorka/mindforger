@@ -83,7 +83,10 @@
         <file alias="pin.svg">resources/menu-icons/light_krita_tool_reference_images.svg</file>
         <file alias="document.svg">resources/menu-icons/light_folder-documents.svg</file>
         <file alias="folder.svg">resources/menu-icons/light_folder.svg</file>
-        <file alias="cli.svg">resources/menu-icons/light_drive-harddisk.svg</file>
         <file alias="word-wrap.svg">resources/menu-icons/light_word_wrap.svg</file>
+        <file alias="terminal.svg">resources/menu-icons/light_terminal.svg</file>
+        <file alias="about_qt.svg">resources/menu-icons/light_about_qt.svg</file>
+        <file alias="cli.svg">resources/menu-icons/light_cli.svg</file>
+        <file alias="edit_external.svg">resources/menu-icons/light_edit_external.svg</file>
     </qresource>
 </RCC>
