@@ -285,7 +285,17 @@ void NavigatorView::timerEvent(QTimerEvent *event)
             navigatorScene->addItem(n);
             e = new NavigatorEdge(selectedNode, n);
             navigatorScene->addItem(e);
-            n->setPos(qrand()%w/2, qrand()%h/2);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+            n->setPos(
+                QRandomGenerator::global()->generate() % w/2,
+                QRandomGenerator::global()->generate() % h/2
+            );
+#else
+            n->setPos(
+                qrand() % w/2,
+                qrand() % h/2
+            );
+#endif
         }
 
         std::vector<KnowledgeGraphNode*>& parents = subgraph->getParents();
@@ -296,7 +306,17 @@ void NavigatorView::timerEvent(QTimerEvent *event)
             navigatorScene->addItem(n);
             e = new NavigatorEdge(n, selectedNode);
             navigatorScene->addItem(e);
-            n->setPos(qrand()%w/2, qrand()%h/2);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+            n->setPos(
+                QRandomGenerator::global()->generate() % w/2,
+                QRandomGenerator::global()->generate() % h/2
+            );
+#else
+            n->setPos(
+                qrand() % w/2,
+                qrand() % h/2
+            );
+#endif
         }
 
         subgraph = nullptr;
@@ -375,7 +395,22 @@ void NavigatorView::shuffle()
 {
     foreach (QGraphicsItem *item, navigatorScene->items()) {
         if (qgraphicsitem_cast<NavigatorNode *>(item))
-			item->setPos(-150 + qrand() % 300, -150 + qrand() % 300);
+            item->setPos(
+                -150
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+                + QRandomGenerator::global()
+#else
+                + qrand()
+#endif
+                % 300,
+                -150
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+                + QRandomGenerator::global()
+#else
+                + qrand()
+#endif
+                % 300
+            );
 	}
 }
 
