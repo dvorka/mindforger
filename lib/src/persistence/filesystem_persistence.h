@@ -64,6 +64,12 @@ public:
      * @param stencil   concept of the stencil to be set
      */
     virtual void load(Stencil* stencil);
+    /**
+     * @brief Check whether Outline file is writeable or read-only.
+     * @param outline   Outline to be written.
+     * @return `false` if read-only, else `true`.
+     */
+    bool isWriteable(const std::string& outlineKey);
     virtual void save(Outline* outline);
     virtual void saveAsHtml(Outline* o, const std::string& fileName);
 };

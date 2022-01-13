@@ -629,18 +629,20 @@ void OrlojPresenter::showFacetNoteEdit(Note* note)
         outlineViewPresenter->refresh(note->getOutline());
     }
 
-    noteEditPresenter->setNote(note);
-    view->showFacetNoteEdit();
-    setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
-    mainPresenter->getMainMenu()->showFacetNoteEdit();
+    if(mainPresenter->withWriteableOutline(note->getOutline()->getKey())) {
+        noteEditPresenter->setNote(note);
+        view->showFacetNoteEdit();
+        setFacet(OrlojPresenterFacets::FACET_EDIT_NOTE);
+        mainPresenter->getMainMenu()->showFacetNoteEdit();
 
-    // refresh live preview to ensure on/off autolinking, full O vs. header, ...
-    if(config.isUiLiveNotePreview()) {
-        noteViewPresenter->refreshLivePreview();
+        // refresh live preview to ensure on/off autolinking, full O vs. header, ...
+        if(config.isUiLiveNotePreview()) {
+            noteViewPresenter->refreshLivePreview();
+        }
+
+        // ensure that editor gets focus (might be stole by live preview)
+        view->getNoteEdit()->giveEditorFocus();
     }
-
-    // ensure that editor gets focus (might be stole by live preview)
-    view->getNoteEdit()->giveEditorFocus();
 }
 
 void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
@@ -657,14 +659,16 @@ void OrlojPresenter::showFacetOutlineHeaderEdit(Outline* outline)
         outlineViewPresenter->refresh(outline);
     }
 
-    outlineHeaderEditPresenter->setOutline(outline);
-    view->showFacetOutlineHeaderEdit();
-    setFacet(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER);
-    mainPresenter->getMainMenu()->showFacetNoteEdit();
+    if(mainPresenter->withWriteableOutline(outline->getKey())) {
+        outlineHeaderEditPresenter->setOutline(outline);
+        view->showFacetOutlineHeaderEdit();
+        setFacet(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER);
+        mainPresenter->getMainMenu()->showFacetNoteEdit();
 
-    // refresh live preview to ensure on/off autolinking, full O vs. header, ...
-    if(config.isUiLiveNotePreview()) {
-        outlineHeaderViewPresenter->refreshLivePreview();
+        // refresh live preview to ensure on/off autolinking, full O vs. header, ...
+        if(config.isUiLiveNotePreview()) {
+            outlineHeaderViewPresenter->refreshLivePreview();
+        }
     }
 }
 

@@ -36,6 +36,7 @@ public:
             const std::string* text,
             const std::string& extension) = 0;
     virtual void load(Stencil* stencil) = 0;
+    virtual bool isWriteable(const std::string& outlineKey) = 0;
     virtual void save(Outline* outline) = 0;    
     virtual void saveAsHtml(Outline* outline, const std::string& fileName) = 0;
 };

@@ -219,6 +219,11 @@ Note* Memory::createNote(Stencil* stencil)
     }
 }
 
+bool Memory::canRemember(const std::string& outlineKey)
+{
+    return persistence->isWriteable(outlineKey);
+}
+
 void Memory::remember(const std::string& outlineKey)
 {
     Outline* o;

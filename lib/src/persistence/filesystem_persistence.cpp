@@ -78,13 +78,34 @@ string FilesystemPersistence::createFileName(
     );
 }
 
+bool FilesystemPersistence::isWriteable(const std::string& outlineKey)
+{
+    MF_DEBUG("Checking writeability of O: " << outlineKey << endl);
+    if(!outlineKey.size()) {
+        MF_DEBUG("  O key is empty" << endl);
+        return false;
+    }
+    std::ofstream out(outlineKey);
+    if(!out.is_open()) {
+        MF_DEBUG("  O is RD_ONLY" << endl);
+        return false;
+    }
+    MF_DEBUG("  O opened: " << boolalpha << out.is_open() << endl);
+    out.close();
+    return true;
+}
+
 void FilesystemPersistence::save(Outline* outline)
 {
     string* text = mdRepresentation.to(outline);
     if(text!=nullptr) {
+        MF_DEBUG("Saving O: " << outline->getKey() << endl);
         std::ofstream out(outline->getKey());
+        MF_DEBUG("  O opened: " << boolalpha << out.is_open() << endl);
         out << *text;
+        MF_DEBUG("  O written: " << &out << endl);
         out.close();
+        MF_DEBUG("O saved: " << &out << endl);
         delete text;
 
         outline->clearDirty();

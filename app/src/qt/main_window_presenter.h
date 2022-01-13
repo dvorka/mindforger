@@ -176,7 +176,13 @@ public:
     void handleNoteViewLinkClicked(const QUrl& url);
 
     // NER
-    NerMainWindowWorkerThread* startNerWorkerThread(Mind* m, OrlojPresenter* o, int f, std::vector<NerNamedEntity>* r, QDialog* d);
+    NerMainWindowWorkerThread* startNerWorkerThread(
+        Mind* m,
+        OrlojPresenter* o,
+        int f,
+        std::vector<NerNamedEntity>* r,
+        QDialog* d
+    );
 
 public slots:
     // mind
@@ -324,6 +330,7 @@ public slots:
     void doActionOutlineTWikiImport();
     // Note
     void doActionNoteNew();
+    bool withWriteableOutline(const std::string& outlineKey);
     void handleNoteNew();
     void doActionNoteHoist();
     void doActionOutlineOrNoteEdit();

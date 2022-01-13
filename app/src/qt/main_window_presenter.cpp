@@ -1906,7 +1906,7 @@ void MainWindowPresenter::doActionOutlineOrNoteNew()
        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
          ||
        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE))
-    {
+    {        
         doActionNoteNew();
     } else {
         doActionOutlineNew();
@@ -1962,11 +1962,31 @@ void MainWindowPresenter::doActionOutlineEdit()
     ) {
         Outline* o = orloj->getOutlineView()->getCurrentOutline();
         if(o) {
-            orloj->showFacetOutlineHeaderEdit(o);
+            if(withWriteableOutline(o->getKey())) {
+                orloj->showFacetOutlineHeaderEdit(o);
+            }
             return;
         }
     }
     QMessageBox::critical(&view, tr("Edit Notebook"), tr("Please open an Notebook to edit."));
+}
+
+/**
+ * @brief Show error dialog if Outline is not writeable.
+ * @param outlineKey    key of the Outline whose writability should be checked
+ * @return `true` if Outline is writeabl, else show dialog and return `false`
+ */
+bool MainWindowPresenter::withWriteableOutline(const std::string& outlineKey)
+{
+    if(!mind->remind().canRemember(outlineKey)) {
+        QMessageBox::critical(
+            &view,
+            tr("🔒 Notebook Write Error"),
+            QString{tr("Notebook file is read-only and cannot be written:\n'%1' ")}.arg(outlineKey.c_str())
+        );
+        return false;
+    }
+    return true;
 }
 
 void MainWindowPresenter::handleNoteNew()
@@ -2004,18 +2024,21 @@ void MainWindowPresenter::handleNoteNew()
         newNoteDialog->getProgress(),
         newNoteDialog->getStencil());
     if(note) {
-        mind->remember(orloj->getOutlineView()->getCurrentOutline()->getKey());
+        auto oKey = orloj->getOutlineView()->getCurrentOutline()->getKey();
+        if(withWriteableOutline(oKey)) {
+            mind->remember(oKey);
 
-        // insert new N and select it in the tree
-        orloj->getOutlineView()->insertAndSelect(note);
+            // insert new N and select it in the tree
+            orloj->getOutlineView()->insertAndSelect(note);
 
-        // IMPROVE smarter refresh of outline tree (do less than overall load)
-        //orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+            // IMPROVE smarter refresh of outline tree (do less than overall load)
+            //orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
 
-        if(newNoteDialog->isOpenInEditor()) {
-            orloj->showFacetNoteEdit(note);
-        } else {
-            orloj->showFacetNoteView(note);
+            if(newNoteDialog->isOpenInEditor()) {
+                orloj->showFacetNoteEdit(note);
+            } else {
+                orloj->showFacetNoteView(note);
+            }
         }
     } else {
         QMessageBox::critical(&view, tr("New Note"), tr("Failed to create new Note!"));
@@ -2043,14 +2066,16 @@ void MainWindowPresenter::doActionOutlineHome()
     if(orloj->isFacetActiveOutlineOrNoteView()) {
         const Tag* t = mind->remind().getOntology().findOrCreateTag(Tag::KeyMindForgerHome());
         Outline* o = orloj->getOutlineView()->getCurrentOutline();
-        // if O has tag, then toggle (remove) it, else set the tag
-        if(o->hasTag(t)) {
-            o->removeTag(t);
-            mind->remind().remember(o->getKey());
-            statusBar->showInfo(tr("Home tag toggled/removed - Notebook '%1' is no longer home").arg(o->getName().c_str()));
-        } else {
-            if(mind->setOutlineUniqueTag(t, o->getKey())) {
-                statusBar->showInfo(tr("Notebook '%1' successfully marked as home").arg(o->getName().c_str()));
+        if(withWriteableOutline(o->getKey())) {
+            // if O has tag, then toggle (remove) it, else set the tag
+            if(o->hasTag(t)) {
+                o->removeTag(t);
+                mind->remind().remember(o->getKey());
+                statusBar->showInfo(tr("Home tag toggled/removed - Notebook '%1' is no longer home").arg(o->getName().c_str()));
+            } else {
+                if(mind->setOutlineUniqueTag(t, o->getKey())) {
+                    statusBar->showInfo(tr("Notebook '%1' successfully marked as home").arg(o->getName().c_str()));
+                }
             }
         }
     } else {
@@ -2060,7 +2085,9 @@ void MainWindowPresenter::doActionOutlineHome()
 
 void MainWindowPresenter::doActionOutlineForget()
 {
-    if(orloj->isFacetActiveOutlineOrNoteView()) {
+    if(orloj->isFacetActiveOutlineOrNoteView()
+       && withWriteableOutline(orloj->getOutlineView()->getCurrentOutline()->getKey())
+    ) {
         QMessageBox msgBox{
             QMessageBox::Question,
             tr("Forget Notebook"),
@@ -2193,10 +2220,13 @@ void MainWindowPresenter::doActionNoteNew()
          ||
        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE))
     {
-        newNoteDialog->show(
-            QString::fromStdString(orloj->getOutlineView()->getCurrentOutline()->getKey()),
-            mind->remind().getStencils(ResourceType::NOTE)
-        );
+        Outline* o = orloj->getOutlineView()->getCurrentOutline();
+        if(withWriteableOutline(o->getKey())) {
+            newNoteDialog->show(
+                QString::fromStdString(o->getKey()),
+                mind->remind().getStencils(ResourceType::NOTE)
+            );
+        }
     } else {
         QMessageBox::critical(&view, tr("New Note"), tr("Open and view a Notebook to create new Note."));
     }
@@ -2212,7 +2242,9 @@ void MainWindowPresenter::doActionOutlineOrNoteEdit()
     ) {
         Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
         if(note) {
-            orloj->showFacetNoteEdit(note);
+            if(withWriteableOutline(note->getOutline()->getKey())) {
+                orloj->showFacetNoteEdit(note);
+            }
             return;
         }
     }
@@ -2230,7 +2262,9 @@ void MainWindowPresenter::doActionNoteEdit()
     ) {
         Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
         if(note) {
-            orloj->showFacetNoteEdit(note);
+            if(withWriteableOutline(note->getOutline()->getKey())) {
+                orloj->showFacetNoteEdit(note);
+            }
             return;
         }
     }
@@ -2506,7 +2540,7 @@ void MainWindowPresenter::doActionSpellCheck()
 void MainWindowPresenter::doActionNoteClone()
 {
     Note* n = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
-    if(n) {
+    if(n && withWriteableOutline(n->getOutline()->getKey())) {
         QMessageBox::StandardButton choice;
         choice = QMessageBox::question(
             &view,
@@ -2538,7 +2572,7 @@ void MainWindowPresenter::doActionNoteClone()
 void MainWindowPresenter::doActionNoteFirst()
 {
     Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
-    if(note) {
+    if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteFirst(note, &patch);
@@ -2559,7 +2593,7 @@ void MainWindowPresenter::doActionNoteFirst()
 void MainWindowPresenter::doActionNoteUp()
 {
     Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
-    if(note) {
+    if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteUp(note, &patch);
@@ -2580,7 +2614,7 @@ void MainWindowPresenter::doActionNoteUp()
 void MainWindowPresenter::doActionNoteDown()
 {
     Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
-    if(note) {
+    if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteDown(note, &patch);
@@ -2601,7 +2635,7 @@ void MainWindowPresenter::doActionNoteDown()
 void MainWindowPresenter::doActionNoteLast()
 {
     Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
-    if(note) {
+    if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteLast(note, &patch);
@@ -2627,7 +2661,7 @@ void MainWindowPresenter::doActionOutlineShow()
 void MainWindowPresenter::doActionNotePromote()
 {
     Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
-    if(note) {
+    if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->notePromote(note, &patch);
@@ -2644,7 +2678,7 @@ void MainWindowPresenter::doActionNotePromote()
 void MainWindowPresenter::doActionNoteDemote()
 {
     Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
-    if(note) {
+    if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteDemote(note, &patch);

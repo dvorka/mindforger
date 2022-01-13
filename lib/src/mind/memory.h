@@ -84,15 +84,19 @@ private:
 
 public:
     explicit Memory(
-            Configuration& configuration,
-            Ontology& ontology,
-            HtmlOutlineRepresentation& htmlRepresentation);
+        Configuration& configuration,
+        Ontology& ontology,
+        HtmlOutlineRepresentation& htmlRepresentation
+    );
     Memory(const Memory&) = delete;
     Memory(const Memory&&) = delete;
     Memory& operator=(const Memory&) = delete;
     Memory& operator=(const Memory&&) = delete;
     virtual ~Memory();
 
+    /**
+     * @brief Set time and/or tag Mind scope.
+     */
     void setMindScope(MindScopeAspect* mindScopeAspect) { mindScope = mindScopeAspect; }
 
     /**
@@ -122,6 +126,11 @@ public:
      * @brief Create Note from stencil, but don't learn it yet.
      */
     Note* createNote(Stencil* stencil);
+
+    /**
+     * @brief Verify whether Outline can be remembered (written).
+     */
+    bool canRemember(const std::string& outlineKey);
 
     /**
      * @brief Remember known Outline by saving it.
