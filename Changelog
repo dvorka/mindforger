@@ -1,13 +1,13 @@
 2022-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v1.54.0 - macOS fix release: Qt upgraded from 5.9.9 to 5.15.2 (macOS only),
-      native L&F theme used by default,
+      native L&F theme used by default, fixes which avoid loss of data (RD_ONLY, click link, ...),
       main window is not wider than screen on boot, view/edit bottom buttons
       work even if double-click 2 edit is disabled, toolbar is not hidden on
       window minimization, platform-driven default editor key binding, Vim keybinding
-      removal, Kanban/EM selection model and moves rewrite (at most one row selected,
+      removal, Kanban/EM selection model and moves rewritten (at most one row selected,
       items can be moved around columns with shortcuts. Emacs editor keybinding
-      enhancements(^-y, alt-w, ^-w, alt-d, ...), shortcuts for N refactoring.
+      enhancements(^-y, alt-w, ^-w, alt-d, ...), shortcuts for N refactoring and more.
 
 2021-12-26  Martin Dvorak  <martin.dvorak@mindforger.com>
 

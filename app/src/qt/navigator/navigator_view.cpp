@@ -398,14 +398,14 @@ void NavigatorView::shuffle()
             item->setPos(
                 -150
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-                + QRandomGenerator::global()
+                + QRandomGenerator::global()->generate()
 #else
                 + qrand()
 #endif
                 % 300,
                 -150
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-                + QRandomGenerator::global()
+                + QRandomGenerator::global()->generate()
 #else
                 + qrand()
 #endif
