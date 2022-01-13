@@ -46,7 +46,8 @@ help:
 	@echo "dist-dmg          build macOS Disk iMaGe .dmg package"
 	@echo "dist-debian-ppa   add .deb to aptly PPA"
 	@echo "statistic         show source code statistic"
-	@echo "doc               generate Doxygen documentation"
+	@echo "doc               mindforger-documentation to mindforger.wiki"
+	@echo "api-reference     generate Doxygen documentation"
 	@echo "dev-install-local compile and install binary to ~/bin as MIND"
 
 clean:
@@ -124,6 +125,10 @@ statistic:
 	cd make && ./statistic.sh
 
 doc:
+	cd doc && ./mf-doc-to-wiki.py
+	exit 1
+
+api-reference:
 	cd doxygen && doxygen ./mindforger.cfg
 
 # private development targets
