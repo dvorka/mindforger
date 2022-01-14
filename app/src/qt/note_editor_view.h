@@ -35,13 +35,14 @@ class LineNumberPanel;
 /**
  * @brief Note editor view.
  *
- * Editor is one of the key MindForger components - editor is where thinking notebook can
- * make difference:
+ * Editor is one of the key MindForger components - editor is where thinking notebook
+ * can make difference:
  *
  * - auto completion (link compoletion)
  * - associations (think as you write)
- * - efficient and editation
+ * - smart editation
  *   - indent / create list item
+ *   - Markdown constructs completion
  * - decent performance
  *
  * @see https://doc.qt.io/qt-5/qplaintextedit.html

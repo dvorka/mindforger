@@ -47,8 +47,8 @@ Note* MarkdownOutlineRepresentation::note(vector<MarkdownAstNodeSection*>* ast, 
         s = ast->at(i)->getMetadata().getType();
         if(s) {
             // IMPROVE consider string normalization to make parsing more robust
-            //std::transform(s.begin(), s.end(), s.begin(), ::tolower);
-            //s[0] = toupper(s[0])
+            // std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+            // s[0] = toupper(s[0])
             if((noteType = ontology.getNoteTypes().get(*s)) == nullptr) {
                 noteType = ontology.getDefaultNoteType();
             }
@@ -348,16 +348,28 @@ void MarkdownOutlineRepresentation::description(const std::string* md, std::vect
         static const char SECTION = '#';
         static const char CB = '`';
         for(string line; std::getline(is, line); ) {
-            // stupid and ugly hack: TAB all lines starting with # to ensure correct sections separation
-            // (user creates such line when edits N description)
+            // Escaping:
+            // - TAB all lines starting with # to ensure correct sections separation
+            //   (user creates such line when edits N description which is MD section
+            //   and it would appear as section on O reload)
             if(line.size()>=3 && line[0]==CB && line[1]==CB && line[2]==CB) {
                 codeblock = !codeblock;
             }
             if(line.size() && line.at(0)==SECTION && !codeblock) {
-                line.insert(0, " ");
+                // ESCAPE # using code fence
+                line.insert(0, "    ");
+                // ESCAPE # using HTML entity
+                //line.insert(0, "&#35;");
             }
 
             // TODO add quoting of multiline sections that use === and ---
+
+            // TODO detect opened ``` and automatically close it otherwise it will make
+            // rest of the document code section - including the sections
+
+            // TODO escape undesired --- and === section i.e. when user creates
+            // them my mistake and there is NOT empty line before row with ---
+            // as it would create new section which would apper on relad
 
             description.push_back(new string{line});
         }

@@ -18,6 +18,9 @@
 */
 #include "note_editor_view.h"
 
+// experimental SMART EDITOR
+#define MF_SMART_EDITOR
+
 namespace m8r {
 
 using namespace std;
@@ -66,14 +69,30 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     completer->setWrapAround(true);
 
     // signals
-    QObject::connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberPanelWidth(int)));
-    QObject::connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberPanel(QRect,int)));
-    QObject::connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
-    QObject::connect(completer, SIGNAL(activated(const QString&)), this, SLOT(insertCompletion(const QString&)));
+    // line numbers
+    QObject::connect(
+        this, SIGNAL(blockCountChanged(int)),
+        this, SLOT(updateLineNumberPanelWidth(int))
+    );
+    QObject::connect(
+        this, SIGNAL(updateRequest(QRect,int)),
+        this, SLOT(updateLineNumberPanel(QRect,int))
+    );
+    // current line highlight
+    QObject::connect(
+        this, SIGNAL(cursorPositionChanged()),
+        this, SLOT(highlightCurrentLine())
+    );
+    // completion
+    QObject::connect(
+        completer, SIGNAL(activated(QString)),
+        this, SLOT(insertCompletion(QString))
+    );
     // shortcut signals
     new QShortcut(
         QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_Slash)),
-        this, SLOT(slotStartLinkCompletion()));
+        this, SLOT(slotStartLinkCompletion())
+    );
 
     // capabilities
     setAcceptDrops(true);
@@ -249,7 +268,7 @@ QString NoteEditorView::getRelevantWords() const
 }
 
 /*
- * Autocomplete and smart editor.
+ * Autocomplete.
  */
 
 bool containsSpace(QString s)
@@ -270,6 +289,36 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
         "Editor keyPressEvent handler:" << endl <<
         "  Key binding: " << Configuration::getInstance().getEditorKeyBinding() << endl
     );
+
+    // SMART EDITOR: character pairs completion (no modifiers)
+#ifdef MF_SMART_EDITOR
+    switch (event->key()) {
+    case Qt::Key_BraceLeft:
+        textCursor().insertText("{}");
+        moveCursor(QTextCursor::PreviousCharacter);
+        return;
+    case Qt::Key_BracketLeft:
+        textCursor().insertText("[]");
+        moveCursor(QTextCursor::PreviousCharacter);
+        return;
+    case Qt::Key_Asterisk:
+        textCursor().insertText("**");
+        moveCursor(QTextCursor::PreviousCharacter);
+        return;
+    case Qt::Key_Underscore:
+        textCursor().insertText("__");
+        moveCursor(QTextCursor::PreviousCharacter);
+        return;
+    case Qt::Key_QuoteDbl:
+        textCursor().insertText("\"\"");
+        moveCursor(QTextCursor::PreviousCharacter);
+        return;
+    case Qt::Key_Apostrophe:
+        textCursor().insertText("''");
+        moveCursor(QTextCursor::PreviousCharacter);
+        return;
+    }
+#endif
 
     // ctrl
     if(event->modifiers() & Qt::ControlModifier) {
@@ -429,7 +478,9 @@ const QString NoteEditorView::getCompletionPrefix()
     QTextCursor cursor = textCursor();
     cursor.select(QTextCursor::WordUnderCursor);
     const QString completionPrefix = cursor.selectedText();
-    if(!completionPrefix.isEmpty() && completionPrefix.at(completionPrefix.length()-1).isLetter()) {
+    if(!completionPrefix.isEmpty()
+       && completionPrefix.at(completionPrefix.length()-1).isLetter()
+      ) {
         return completionPrefix;
     } else {
         return QString{};
@@ -461,15 +512,17 @@ void NoteEditorView::performTextCompletion(const QString& completionPrefix)
     }
 
     // do NOT complete inline - it completes what user doesn't know and is bothering
-    //if(completer->completionCount() == 1) {
-    //    insertCompletion(completer->currentCompletion(), true);
-    //} else {
-        QRect rect = cursorRect();
-        rect.setWidth(
-            completer->popup()->sizeHintForColumn(0) +
-            completer->popup()->verticalScrollBar()->sizeHint().width());
-        completer->complete(rect);
-    //}
+#ifdef MF_DO_INLINE_COMPLETION
+    if(completer->completionCount() == 1) {
+       insertCompletion(completer->currentCompletion(), true);
+    } else {
+# endif
+    QRect rect = cursorRect();
+    rect.setWidth(
+        completer->popup()->sizeHintForColumn(0) +
+        completer->popup()->verticalScrollBar()->sizeHint().width()
+    );
+    completer->complete(rect);
 }
 
 void NoteEditorView::slotStartLinkCompletion()
@@ -516,9 +569,18 @@ void NoteEditorView::slotPerformLinkCompletion(
 void NoteEditorView::populateModel(const QString& completionPrefix)
 {
     QStringList strings = toPlainText().split(QRegExp{"\\W+"});
+
     strings.removeAll(completionPrefix);
     strings.removeDuplicates();
-    qSort(strings.begin(), strings.end(), caseInsensitiveLessThan);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    std::sort(
+# else
+    qSort(
+#endif
+        strings.begin(),
+        strings.end(),
+        caseInsensitiveLessThan
+    );
     model->setStringList(strings);
 }
 
@@ -702,11 +764,12 @@ void NoteEditorView::findString(const QString s, bool reverse, bool caseSensitiv
 
         if(!find(s, flag)) {
             QMessageBox::information(
-                        this,
-                        tr("Full-text Search Result"),
-                        tr("No matching text found."),
-                        QMessageBox::Ok,
-                        QMessageBox::Ok);
+                this,
+                tr("Full-text Search Result"),
+                tr("No matching text found."),
+                QMessageBox::Ok,
+                QMessageBox::Ok
+            );
 
             // set the cursor back to its initial position
             setTextCursor(cursorSaved);
