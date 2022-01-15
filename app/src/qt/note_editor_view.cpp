@@ -30,6 +30,22 @@ inline bool caseInsensitiveLessThan(const QString &a, const QString &b)
     return a.compare(b, Qt::CaseInsensitive) < 0;
 }
 
+/**
+ * @brief Note editor.
+ *
+ * Features:
+ *
+ * - autocompletion of words from the current Note
+ * - autocompletion of links to Notebooks and Notes
+ * - Markdown syntax highlighting
+ *
+ * Potential improvements:
+ *
+ * - smart(er) editor:
+ *   - numbered and buletted list completion
+ *   - indented block completion
+ *   - pair characters "'([{ completion (pairing)
+ */
 NoteEditorView::NoteEditorView(QWidget* parent)
     : QPlainTextEdit(parent),
       parent(parent),
@@ -246,7 +262,8 @@ void NoteEditorView::insertMarkdownText(const QString &text, bool newLine, int o
 
 QString NoteEditorView::getRelevantWords() const
 {
-    // IMPROVE get whole line and cut word on which is curser and it before/after siblings: return textCursor().block().text(); ...
+    // IMPROVE get whole line and cut word on which is curser and it
+    //   before/after siblings: return textCursor().block().text(); ...
     QString result{};
     if(textCursor().block().text().size()) {
         QString t = textCursor().block().text();
@@ -281,42 +298,81 @@ bool containsSpace(QString s)
     return false;
 }
 
+bool smartEditCompleteSpaceLine(QString& lineStr, QTextCursor textCursor)
+{
+    if(lineStr.startsWith(" ")) {
+        // count the number of spaces: delete line if spaces only, indent otherwise
+        for(int i=0; i<lineStr.size(); i++) {
+            if(lineStr[i] != ' ') {
+                string s{"\n"};
+                for(int is=0; is<i; is++) {
+                    s+=" ";
+                }
+                textCursor.insertText(s.c_str());
+                return true;
+            }
+        }
+        textCursor.select(QTextCursor::BlockUnderCursor);
+        textCursor.removeSelectedText();
+        textCursor.insertText("\n");
+        return true;
+    }
+    return false;
+}
+
 void NoteEditorView::keyPressEvent(QKeyEvent* event)
 {
     hitCounter++;
 
     MF_DEBUG(
         "Editor keyPressEvent handler:" << endl <<
-        "  Key binding: " << Configuration::getInstance().getEditorKeyBinding() << endl
+        "  Key binding: " << Configuration::getInstance().getEditorKeyBinding() << endl <<
+        "  Key        : " << event->key() << endl
     );
 
     // SMART EDITOR: character pairs completion (no modifiers)
 #ifdef MF_SMART_EDITOR
     switch (event->key()) {
-    case Qt::Key_BraceLeft:
-        textCursor().insertText("{}");
-        moveCursor(QTextCursor::PreviousCharacter);
-        return;
-    case Qt::Key_BracketLeft:
-        textCursor().insertText("[]");
-        moveCursor(QTextCursor::PreviousCharacter);
-        return;
-    case Qt::Key_Asterisk:
-        textCursor().insertText("**");
-        moveCursor(QTextCursor::PreviousCharacter);
-        return;
-    case Qt::Key_Underscore:
-        textCursor().insertText("__");
-        moveCursor(QTextCursor::PreviousCharacter);
-        return;
-    case Qt::Key_QuoteDbl:
-        textCursor().insertText("\"\"");
-        moveCursor(QTextCursor::PreviousCharacter);
-        return;
-    case Qt::Key_Apostrophe:
-        textCursor().insertText("''");
-        moveCursor(QTextCursor::PreviousCharacter);
-        return;
+        case Qt::Key_ParenLeft:
+            textCursor().insertText("()");
+            moveCursor(QTextCursor::PreviousCharacter);
+            return;
+        case Qt::Key_BraceLeft:
+            textCursor().insertText("{}");
+            moveCursor(QTextCursor::PreviousCharacter);
+            return;
+        case Qt::Key_BracketLeft:
+            textCursor().insertText("[]");
+            moveCursor(QTextCursor::PreviousCharacter);
+            return;
+        case Qt::Key_Less:
+            textCursor().insertText("<>");
+            moveCursor(QTextCursor::PreviousCharacter);
+            return;
+        /* SKIPPED: does not help when creating bulleted lists
+        case Qt::Key_Asterisk:
+            textCursor().insertText("**");
+            moveCursor(QTextCursor::PreviousCharacter);
+            return;
+        */
+        case Qt::Key_Underscore:
+            textCursor().insertText("__");
+            moveCursor(QTextCursor::PreviousCharacter);
+            return;
+        case Qt::Key_QuoteDbl:
+            textCursor().insertText("\"\"");
+            moveCursor(QTextCursor::PreviousCharacter);
+            return;
+        case Qt::Key_QuoteLeft:
+            textCursor().insertText("``");
+            moveCursor(QTextCursor::PreviousCharacter);
+            return;
+        /* SKIPPED: does not help when writing: don't doesn't hasn't ..
+        case Qt::Key_Apostrophe:
+            textCursor().insertText("''");
+            moveCursor(QTextCursor::PreviousCharacter);
+            return;
+        */
     }
 #endif
 
@@ -414,10 +470,35 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
     } else {
         switch(event->key()) {
             case Qt::Key_Tab:
-            if(tabsAsSpaces) {
-                insertTab();
-                return;
-            }
+                if(tabsAsSpaces) {
+                    insertTab();
+                    return;
+                }
+            break;
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+                MF_DEBUG(
+                   "SMART EDITOR: current line '"
+                    << textCursor().block().text().toStdString()
+                    << "'"
+                    << endl
+                );
+                const QTextBlock block = textCursor().block();
+                if(block.isValid() && block.layout()) {
+                    QString lineStr{textCursor().block().text()};
+                    // indented block / code fence autocomplete
+                    if(smartEditCompleteSpaceLine(lineStr, textCursor())) {
+                        return;
+                    // numbered list autocomplete
+                    } else if(lineStr.startsWith("1. ")) {
+                        textCursor().insertText("\n   ");
+                        return;
+                    // bulletted list autocomplete
+                    } else if(lineStr.startsWith("* ") || lineStr.startsWith("- ")) {
+                        textCursor().insertText("\n  ");
+                        return;
+                    }
+                }
             break;
         }
     }
