@@ -379,17 +379,34 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
     // ctrl
     if(event->modifiers() & Qt::ControlModifier) {
         switch (event->key()) {
-        case Qt::Key_V: {
-            // TODO make this private function
-            QClipboard* clip = QApplication::clipboard();
-            const QMimeData* mime = clip->mimeData();
-            if(mime->hasImage()) {
-                MF_DEBUG("Editor: image PASTED" << endl);
-                QImage image = qvariant_cast<QImage>(mime->imageData());
-                emit signalPasteImageData(image);
-                return;
-            }
-            break;
+#ifdef MF_WIP
+            case Qt::Key_Tab:
+                if(textCursor().hasSelection()) {
+                    // TODO move all lines in the selection
+                } else {
+                    const QTextBlock block = textCursor().block();
+                    if(block.isValid() && block.layout()) {
+                        QString lineStr{block.text()};
+                        if(lineStr.startsWith(" ")) {
+                            moveCursor(QTextCursor::StartOfLine);
+                            textCursor().deleteChar();
+                            return;
+                        }
+                    }
+                }
+                break;
+#endif
+            case Qt::Key_V: {
+                // TODO make this private function
+                QClipboard* clip = QApplication::clipboard();
+                const QMimeData* mime = clip->mimeData();
+                if(mime->hasImage()) {
+                    MF_DEBUG("Editor: image PASTED" << endl);
+                    QImage image = qvariant_cast<QImage>(mime->imageData());
+                    emit signalPasteImageData(image);
+                    return;
+                }
+                break;
         }
         case Qt::Key_F:
             findStringAgain();
@@ -485,7 +502,7 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
                 );
                 const QTextBlock block = textCursor().block();
                 if(block.isValid() && block.layout()) {
-                    QString lineStr{textCursor().block().text()};
+                    QString lineStr{block.text()};
                     // indented block / code fence autocomplete
                     if(smartEditCompleteSpaceLine(lineStr, textCursor())) {
                         return;
