@@ -406,7 +406,7 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
                 emit signalCloseEditorWithEsc();
                 break;
             case Qt::Key_Tab:
-                if(smartEditor.isTabsAsSpaces()) {
+                if(smartEditor.isPolicyTabsAsSpaces()) {
                     if(smartEditor.moveRightOnTab()) {
                         return;
                     }
@@ -414,7 +414,9 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
                 break;
             case Qt::Key_Enter:
             case Qt::Key_Return:
-                if(smartEditor.completeListAndFenceBlocks(event)) {
+                if(smartEditor.eraseSpacesLine(event)) {
+                    return;
+                } else if(smartEditor.completeListAndFenceBlocks(event)) {
                     return;
                 }
                 break;
@@ -537,7 +539,9 @@ void NoteEditorView::slotPerformLinkCompletion(
     const QString& completionPrefix,
     vector<string>* links)
 {
-    MF_DEBUG("Completing prefix: '" << completionPrefix.toStdString() << "' w/ " << links->size() << " links" << endl);
+    MF_DEBUG("Completing prefix: '"
+        << completionPrefix.toStdString() << "' w/ " << links->size() << " links" << endl
+    );
 
     if(!links->empty()) {
         // populate model for links

@@ -33,6 +33,18 @@ NoteSmartEditor::~NoteSmartEditor()
 {
 }
 
+bool NoteSmartEditor::isLineSpacesOnly(const QString& line)
+{
+    if(line.size()) {
+        int i;
+        for(i=0; i<line.size() && line[i]==' '; i++) ;
+        if(i == line.size()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool NoteSmartEditor::isLineStartsWithTabSpaces(const QString& line)
 {
     if(line.size()) {
@@ -54,6 +66,18 @@ void NoteSmartEditor::insertTab()
         completion.append("    ");
     }
     textEdit.textCursor().insertText(completion);
+}
+
+void NoteSmartEditor::removeLine()
+{
+    QTextCursor cursor = textEdit.textCursor();
+
+    cursor.movePosition(QTextCursor::StartOfLine);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+    cursor.select(QTextCursor::LineUnderCursor);
+    cursor.removeSelectedText();
+
+    textEdit.setTextCursor(cursor);
 }
 
 bool NoteSmartEditor::fillLineWithSpacesOnEnter(QString& lineStr)
@@ -198,12 +222,28 @@ bool NoteSmartEditor::completePairChairs(QKeyEvent* event) {
     return false;
 }
 
+
+bool NoteSmartEditor::eraseSpacesLine(QKeyEvent* event)
+{
+    UNUSED_ARG(event);
+
+    const QTextBlock block = textEdit.textCursor().block();
+    if(block.isValid() && block.layout()) {
+        if(isLineSpacesOnly(block.text())) {
+            removeLine();
+            return true;
+        }
+    }
+    return false;
+}
+
+
 bool NoteSmartEditor::completeListAndFenceBlocks(QKeyEvent* event)
 {
+    UNUSED_ARG(event);
+
     MF_DEBUG(
-       "SMART EDITOR: current line '"
-        << textEdit.textCursor().block().text().toStdString()
-        << "'"
+       "SMART EDITOR: current line '" << textEdit.textCursor().block().text().toStdString() << "'"
         << endl
     );
 

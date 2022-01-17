@@ -48,19 +48,43 @@ public:
     void setTabWidth(int tabWidth) { this->tabWidth = tabWidth; }
     int getTabWidth() const { return tabWidth; }
     void setTabsAsSpaces(int tabsAsSpaces) { this->tabsAsSpaces = tabsAsSpaces; }
-    bool isTabsAsSpaces() const { return tabsAsSpaces; }
+    bool isPolicyTabsAsSpaces() const { return tabsAsSpaces; }
 
+    /**
+     * @brief Is line made only by spaces?
+     */
+    bool isLineSpacesOnly(const QString& line);
+    /**
+     * @brief Does line starts with at lest TAB width spaces?
+     */
     bool isLineStartsWithTabSpaces(const QString& line);
     void insertTab();
+    void removeLine();
     bool fillLineWithSpacesOnEnter(QString& lineStr);
 
     bool moveSelectionLeftOnBackTab();
     bool moveLineLeftOnBackTab();
 
+    /**
+     * @brief Move block of text behind cursor right (by TAB spaces) on TAB.
+     */
     bool moveRightOnTab();
+    /**
+     * @brief Move selected block of text (possible multiple lines) right (by TAB spaces) on TAB.
+     */
     bool moveSelectionRightOnTab();
 
+    /**
+     * @brief Complete {[" characters and indicate completion.
+     */
     bool completePairChairs(QKeyEvent* event);
+    /**
+     * @brief Erase line made by spaces (e.g. on ENTER) and indicate action.
+     */
+    bool eraseSpacesLine(QKeyEvent* event);
+    /**
+     * @brief Complete bulletted/numbered list or code fence and indicate completion.
+     */
     bool completeListAndFenceBlocks(QKeyEvent* event);
 };
 
