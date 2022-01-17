@@ -95,7 +95,9 @@ void EditButtonsPanel::handleShowLivePreview()
 
 void EditButtonsPanel::handleShowOutlineHeaderEditDialog()
 {
-    outlineHeaderEditDialog->show();
+    outlineHeaderEditDialog->show(
+        Configuration::getInstance().getActiveRepository()->getType()
+    );
 }
 
 void EditButtonsPanel::handleCloseOutlineHeaderEditDialog()
@@ -105,7 +107,9 @@ void EditButtonsPanel::handleCloseOutlineHeaderEditDialog()
 
 void EditButtonsPanel::handleShowNoteEditDialog()
 {
-    noteEditDialog->show();
+    noteEditDialog->show(
+        Configuration::getInstance().getActiveRepository()->getType()
+    );
 }
 
 void EditButtonsPanel::handleCloseNoteEditDialog()

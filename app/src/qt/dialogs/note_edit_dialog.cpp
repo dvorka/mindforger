@@ -206,7 +206,7 @@ NoteEditDialog::~NoteEditDialog()
 {
 }
 
-void NoteEditDialog::show()
+void NoteEditDialog::show(Repository::RepositoryType repositoryType)
 {
     if(currentNote) {
         // RDWR
@@ -244,6 +244,12 @@ void NoteEditDialog::show()
     }
 
     generalTab->editTagsGroup->setFocusAddingTag();
+
+    bool visibility =
+        Repository::RepositoryType::MINDFORGER == repositoryType
+        ? true
+        : false;
+    tabWidget->setTabVisible(0, visibility);
 
     QDialog::show();
 }

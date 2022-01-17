@@ -233,7 +233,7 @@ OutlineHeaderEditDialog::~OutlineHeaderEditDialog()
     if(advancedTab) delete advancedTab;
 }
 
-void OutlineHeaderEditDialog::show()
+void OutlineHeaderEditDialog::show(Repository::RepositoryType repositoryType)
 {
     if(currentOutline) {
         // RDWR
@@ -262,6 +262,12 @@ void OutlineHeaderEditDialog::show()
     }
 
     generalTab->editTagsGroup->setFocusAddingTag();
+
+    bool visibility =
+        Repository::RepositoryType::MINDFORGER == repositoryType
+        ? true
+        : false;
+    tabWidget->setTabVisible(0, visibility);
 
     QDialog::show();
 }

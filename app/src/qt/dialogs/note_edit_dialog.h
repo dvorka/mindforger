@@ -23,6 +23,7 @@
 
 #include "../../lib/src/mind/ontology/ontology_vocabulary.h"
 #include "../../lib/src/mind/ontology/ontology.h"
+#include "../../lib/src/config/repository.h"
 
 #include "../model_meta_definitions.h"
 #include "../widgets/edit_tags_panel.h"
@@ -59,7 +60,7 @@ public:
     void setNote(Note* note) { currentNote = note; }
     void toNote();
 
-    void show();
+    void show(Repository::RepositoryType repositoryType);
 
 signals:
     void acceptedSignal();

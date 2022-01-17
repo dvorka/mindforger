@@ -117,11 +117,24 @@ void OutlineNewDialog::GeneralTab::clean()
 
 void OutlineNewDialog::GeneralTab::showFacet(Repository::RepositoryType repositoryType)
 {
-    if(Repository::RepositoryType::MINDFORGER == repositoryType) {
-        editTagsGroup->setVisible(true);
-    } else {
-        editTagsGroup->setVisible(false);
-    }
+    bool visibility =
+        Repository::RepositoryType::MINDFORGER == repositoryType
+        ? true
+        : false;
+
+    editTagsGroup->setVisible(visibility);
+    progressLabel->setVisible(visibility);
+    progressSpin->setVisible(visibility);
+    stencilLabel->setVisible(visibility);
+    stencilCombo->setVisible(visibility);
+    typeLabel->setVisible(visibility);
+    typeCombo->setVisible(visibility);
+    importanceLabel->setVisible(visibility);
+    importanceCombo->setVisible(visibility);
+    urgencyLabel->setVisible(visibility);
+    urgencyCombo->setVisible(visibility);
+    progressLabel->setVisible(visibility);
+    progressSpin->setVisible(visibility);
 }
 
 /*
