@@ -92,7 +92,7 @@ void ConfigurationDialog::saveSlot()
 ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
-    themeLabel = new QLabel(tr("UI theme (requires restart)")+":", this);
+    themeLabel = new QLabel(tr("UI theme (<font color='#ff0000'>requires restart</font>)")+":", this);
     themeCombo = new QComboBox{this};
     themeCombo->addItem(QString{UI_THEME_LIGHT});
 #ifndef __APPLE__
@@ -108,7 +108,7 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     themeCombo->addItem(QString{UI_THEME_NATIVE_WITH_FIXED_FONT});
 #endif
 
-    startupLabel = new QLabel(tr("Start to view")+":", this);
+    startupLabel = new QLabel(tr("Show the following view on application start")+":", this);
     startupCombo = new QComboBox{this};
 #ifdef MF_DEPRECATED
     startupCombo->addItem(QString{START_TO_DASHBOARD});
@@ -198,7 +198,7 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
 
     mathSupportCheck = new QCheckBox{tr("math support"), this};
     fullOPreviewCheck = new QCheckBox{tr("whole notebook preview"), this};
-    doubleClickViewerToEditCheck = new QCheckBox{tr("double click view to edit"), this};
+    doubleClickViewerToEditCheck = new QCheckBox{tr("double click HTML preview to edit"), this};
 
     diagramSupportLabel = new QLabel(tr("Diagram support")+":", this);
     diagramSupportCombo = new QComboBox{this};
