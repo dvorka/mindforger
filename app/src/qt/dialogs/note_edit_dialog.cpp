@@ -249,7 +249,11 @@ void NoteEditDialog::show(Repository::RepositoryType repositoryType)
         Repository::RepositoryType::MINDFORGER == repositoryType
         ? true
         : false;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     tabWidget->setTabVisible(0, visibility);
+#else
+    tabWidget->setTabEnabled(0, visibility);
+#endif
 
     QDialog::show();
 }
