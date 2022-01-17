@@ -77,6 +77,22 @@ NoteEditView::~NoteEditView()
 {
 }
 
+void NoteEditView::keyPressEvent(QKeyEvent* event)
+{
+    MF_DEBUG(
+        "Note edit view key even handler:" << endl <<
+        "  Key        : " << event->key() << endl
+    );
+
+    if(event->modifiers() & Qt::ShiftModifier) {
+        switch (event->key()) {
+            case Qt::Key_Tab:
+            MF_DEBUG("Shift-TAB pressed" << endl);
+            return;
+        }
+    }
+}
+
 void NoteEditView::slotOpenNotePropertiesEditor()
 {
     bottomButtonsPanel->handleShowNoteEditDialog();

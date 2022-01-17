@@ -1199,7 +1199,6 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
     if(!repositoryMode) {
         menuView->setEnabled(false);
         menuOutline->setEnabled(false);
-        menuEdit->setEnabled(false);
 
         actionFindOutlineByName->setEnabled(false);
         actionFindOutlineByTag->setEnabled(false);

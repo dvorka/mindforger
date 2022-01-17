@@ -18,9 +18,6 @@
 */
 #include "note_editor_view.h"
 
-// experimental SMART EDITOR
-#define MF_SMART_EDITOR
-
 namespace m8r {
 
 using namespace std;
@@ -48,8 +45,9 @@ inline bool caseInsensitiveLessThan(const QString &a, const QString &b)
  */
 NoteEditorView::NoteEditorView(QWidget* parent)
     : QPlainTextEdit(parent),
-      parent(parent),
-      completedAndSelected(false),
+      parent{parent},
+      smartEditor{*this},
+      completedAndSelected{false},
       spellCheckDictionary{DictionaryManager::instance().requestDictionary()}
 {
     hitCounter = 0;
@@ -67,8 +65,6 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     // widgets
     highlighter = new NoteEditHighlighter{this};
     enableSyntaxHighlighting = Configuration::getInstance().isUiEditorEnableSyntaxHighlighting();
-    tabsAsSpaces = Configuration::getInstance().isUiEditorTabsAsSpaces();
-    tabWidth = Configuration::getInstance().getUiEditorTabWidth();
     highlighter->setEnabled(enableSyntaxHighlighting);
     // line numbers
     lineNumberPanel = new LineNumberPanel{this};
@@ -132,7 +128,7 @@ void NoteEditorView::setEditorTabWidth(int tabWidth)
 {
     // tab width: 4 or 8
     QFontMetrics metrics(f);
-    this->tabWidth = tabWidth;
+    smartEditor.setTabWidth(tabWidth);
 
 #if QT_VERSION > QT_VERSION_CHECK(5, 10, 0)
     setTabStopDistance(tabWidth * metrics.horizontalAdvance(' '));
@@ -143,7 +139,7 @@ void NoteEditorView::setEditorTabWidth(int tabWidth)
 
 void NoteEditorView::setEditorTabsAsSpacesPolicy(bool tabsAsSpaces)
 {
-    this->tabsAsSpaces = tabsAsSpaces;
+    smartEditor.setTabsAsSpaces(tabsAsSpaces);
 }
 
 void NoteEditorView::setEditorFont(std::string fontName)
@@ -205,7 +201,7 @@ void NoteEditorView::dragMoveEvent(QDragMoveEvent* event)
  * Formatting
  */
 
-void NoteEditorView::wrapSelectedText(const QString &tag, const QString &endTag)
+void NoteEditorView::wrapSelectedText(const QString& tag, const QString& endTag)
 {
     QTextCursor cursor = textCursor();
     QTextDocument *doc = document();
@@ -235,7 +231,7 @@ void NoteEditorView::wrapSelectedText(const QString &tag, const QString &endTag)
     setFocus();
 }
 
-void NoteEditorView::insertMarkdownText(const QString &text, bool newLine, int offset)
+void NoteEditorView::insertMarkdownText(const QString& text, bool newLine, int offset)
 {
     QTextCursor cursor = textCursor();
     if(cursor.hasSelection()) {
@@ -298,28 +294,6 @@ bool containsSpace(QString s)
     return false;
 }
 
-bool smartEditCompleteSpaceLine(QString& lineStr, QTextCursor textCursor)
-{
-    if(lineStr.startsWith(" ")) {
-        // count the number of spaces: delete line if spaces only, indent otherwise
-        for(int i=0; i<lineStr.size(); i++) {
-            if(lineStr[i] != ' ') {
-                string s{"\n"};
-                for(int is=0; is<i; is++) {
-                    s+=" ";
-                }
-                textCursor.insertText(s.c_str());
-                return true;
-            }
-        }
-        textCursor.select(QTextCursor::BlockUnderCursor);
-        textCursor.removeSelectedText();
-        textCursor.insertText("\n");
-        return true;
-    }
-    return false;
-}
-
 void NoteEditorView::keyPressEvent(QKeyEvent* event)
 {
     hitCounter++;
@@ -330,72 +304,13 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
         "  Key        : " << event->key() << endl
     );
 
-    // SMART EDITOR: character pairs completion (no modifiers)
-#ifdef MF_SMART_EDITOR
-    switch (event->key()) {
-        case Qt::Key_ParenLeft:
-            textCursor().insertText("()");
-            moveCursor(QTextCursor::PreviousCharacter);
-            return;
-        case Qt::Key_BraceLeft:
-            textCursor().insertText("{}");
-            moveCursor(QTextCursor::PreviousCharacter);
-            return;
-        case Qt::Key_BracketLeft:
-            textCursor().insertText("[]");
-            moveCursor(QTextCursor::PreviousCharacter);
-            return;
-        case Qt::Key_Less:
-            textCursor().insertText("<>");
-            moveCursor(QTextCursor::PreviousCharacter);
-            return;
-        /* SKIPPED: does not help when creating bulleted lists
-        case Qt::Key_Asterisk:
-            textCursor().insertText("**");
-            moveCursor(QTextCursor::PreviousCharacter);
-            return;
-        */
-        case Qt::Key_Underscore:
-            textCursor().insertText("__");
-            moveCursor(QTextCursor::PreviousCharacter);
-            return;
-        case Qt::Key_QuoteDbl:
-            textCursor().insertText("\"\"");
-            moveCursor(QTextCursor::PreviousCharacter);
-            return;
-        case Qt::Key_QuoteLeft:
-            textCursor().insertText("``");
-            moveCursor(QTextCursor::PreviousCharacter);
-            return;
-        /* SKIPPED: does not help when writing: don't doesn't hasn't ..
-        case Qt::Key_Apostrophe:
-            textCursor().insertText("''");
-            moveCursor(QTextCursor::PreviousCharacter);
-            return;
-        */
+    if(smartEditor.completePairChairs(event)) {
+        return;
     }
-#endif
 
     // ctrl
     if(event->modifiers() & Qt::ControlModifier) {
         switch (event->key()) {
-#ifdef MF_WIP
-            case Qt::Key_Tab:
-                if(textCursor().hasSelection()) {
-                    // TODO move all lines in the selection
-                } else {
-                    const QTextBlock block = textCursor().block();
-                    if(block.isValid() && block.layout()) {
-                        QString lineStr{block.text()};
-                        if(lineStr.startsWith(" ")) {
-                            moveCursor(QTextCursor::StartOfLine);
-                            textCursor().deleteChar();
-                            return;
-                        }
-                    }
-                }
-                break;
-#endif
             case Qt::Key_V: {
                 // TODO make this private function
                 QClipboard* clip = QApplication::clipboard();
@@ -486,37 +401,23 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
         }
     } else {
         switch(event->key()) {
+            case Qt::Key_Escape:
+                // completer menu not visible - exit editor ~ Cancel
+                emit signalCloseEditorWithEsc();
+                break;
             case Qt::Key_Tab:
-                if(tabsAsSpaces) {
-                    insertTab();
-                    return;
-                }
-            break;
-            case Qt::Key_Enter:
-            case Qt::Key_Return:
-                MF_DEBUG(
-                   "SMART EDITOR: current line '"
-                    << textCursor().block().text().toStdString()
-                    << "'"
-                    << endl
-                );
-                const QTextBlock block = textCursor().block();
-                if(block.isValid() && block.layout()) {
-                    QString lineStr{block.text()};
-                    // indented block / code fence autocomplete
-                    if(smartEditCompleteSpaceLine(lineStr, textCursor())) {
-                        return;
-                    // numbered list autocomplete
-                    } else if(lineStr.startsWith("1. ")) {
-                        textCursor().insertText("\n   ");
-                        return;
-                    // bulletted list autocomplete
-                    } else if(lineStr.startsWith("* ") || lineStr.startsWith("- ")) {
-                        textCursor().insertText("\n  ");
+                if(smartEditor.isTabsAsSpaces()) {
+                    if(smartEditor.moveRightOnTab()) {
                         return;
                     }
                 }
-            break;
+                break;
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+                if(smartEditor.completeListAndFenceBlocks(event)) {
+                    return;
+                }
+                break;
         }
     }
 
@@ -708,18 +609,6 @@ void NoteEditorView::insertCompletion(const QString& completion, bool singleWord
         completedAndSelected = true;
     }
     setTextCursor(cursor);
-}
-
-void NoteEditorView::insertTab()
-{
-    QString completion{};
-    if(tabWidth == 8) {
-        completion.append("        ");
-    } else {
-        completion.append("    ");
-    }
-    QTextCursor cursor = textCursor();
-    cursor.insertText(completion);
 }
 
 /*
@@ -980,14 +869,12 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
         }
 
         // select the misspelled word
-        this->cursorForWord.movePosition
-        (
+        this->cursorForWord.movePosition (
             QTextCursor::PreviousCharacter,
             QTextCursor::MoveAnchor,
             blockPosition - mispelledWordStartPos
         );
-        this->cursorForWord.movePosition
-        (
+        this->cursorForWord.movePosition (
             QTextCursor::NextCharacter,
             QTextCursor::KeepAnchor,
             mispelledWordLength

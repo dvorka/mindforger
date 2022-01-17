@@ -216,14 +216,28 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         mwp, SLOT(doActionNoteClone()));
 
     // menu: edit
-    QObject::connect(view->actionEditFind, SIGNAL(triggered()), mwp, SLOT(doActionEditFind()));
-    QObject::connect(view->actionEditFindNext, SIGNAL(triggered()), mwp, SLOT(doActionEditFindAgain()));
+    QObject::connect(
+        view->actionEditFind, SIGNAL(triggered()),
+        mwp, SLOT(doActionEditFind()));
+    QObject::connect(
+        view->actionEditFindNext, SIGNAL(triggered()),
+        mwp, SLOT(doActionEditFindAgain()));
     // no other bindings needed - it's already bound in the editor ~ menu is rather a documentation
-    QObject::connect(view->actionEditWordWrap, SIGNAL(triggered()), mwp, SLOT(doActionEditWordWrapToggle()));
-    QObject::connect(view->actionEditNameDescFocusSwap, SIGNAL(triggered()), mwp, SLOT(doActionNameDescFocusSwap()));
-    QObject::connect(view->actionEditLiveNotePreview, SIGNAL(triggered()), mwp, SLOT(doActionToggleLiveNotePreview()));
-    QObject::connect(view->actionEditExtract, SIGNAL(triggered()), mwp, SLOT(doActionNoteExtract()));
-    QObject::connect(view->actionEditSpellCheck, SIGNAL(triggered()), mwp, SLOT(doActionSpellCheck()));
+    QObject::connect(
+        view->actionEditWordWrap, SIGNAL(triggered()),
+        mwp, SLOT(doActionEditWordWrapToggle()));
+    QObject::connect(
+        view->actionEditNameDescFocusSwap, SIGNAL(triggered()),
+        mwp, SLOT(doActionNameDescFocusSwap()));
+    QObject::connect(
+        view->actionEditLiveNotePreview, SIGNAL(triggered()),
+        mwp, SLOT(doActionToggleLiveNotePreview()));
+    QObject::connect(
+        view->actionEditExtract, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteExtract()));
+    QObject::connect(
+        view->actionEditSpellCheck, SIGNAL(triggered()),
+        mwp, SLOT(doActionSpellCheck()));
 
     // menu: format
     QObject::connect(view->actionFormatBold, SIGNAL(triggered()), mwp, SLOT(doActionFormatBold()));

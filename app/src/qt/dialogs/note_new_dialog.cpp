@@ -102,6 +102,15 @@ void NoteNewDialog::GeneralTab::clean()
     editTagsGroup->clearTagList();
 }
 
+void NoteNewDialog::GeneralTab::showFacet(Repository::RepositoryType repositoryType)
+{
+    if(Repository::RepositoryType::MINDFORGER == repositoryType) {
+        editTagsGroup->setVisible(true);
+    } else {
+        editTagsGroup->setVisible(false);
+    }
+}
+
 /*
  * Advanced tab.
  */
@@ -215,8 +224,11 @@ int NoteNewDialog::getProgress() const
     return generalTab->getProgressSpin()->value();
 }
 
-void NoteNewDialog::show(const QString& path, vector<Stencil*>& stencils)
-{
+void NoteNewDialog::show(
+    const QString& path,
+    vector<Stencil*>& stencils,
+    Repository::RepositoryType repositoryType
+) {
     // try to remember previous stencil
     QString selectedStencil = generalTab->getStencilCombo()->currentText();
 
@@ -239,6 +251,10 @@ void NoteNewDialog::show(const QString& path, vector<Stencil*>& stencils)
     }
 
     advancedTab->refreshLocation(path);
+
+    // widgets visibility: Markdown vs. MindForger (repository) mode
+    generalTab->showFacet(repositoryType);
+
     QDialog::show();
 }
 

@@ -26,6 +26,7 @@
 #include "../../lib/src/mind/ontology/ontology_vocabulary.h"
 #include "../../lib/src/mind/ontology/ontology.h"
 #include "../../lib/src/model/stencil.h"
+#include "../../lib/src/config/repository.h"
 
 #include "../model_meta_definitions.h"
 #include "../widgets/edit_tags_panel.h"
@@ -68,7 +69,11 @@ public:
     bool isPositionAbove() const { return !isPositionBelow(); }
     bool isOpenInEditor() const;
 
-    void show(const QString& path, std::vector<Stencil*>& stencils);
+    void show(
+        const QString& path,
+        std::vector<Stencil*>& stencils,
+        Repository::RepositoryType repositoryType
+    );
 };
 
 /**
@@ -112,6 +117,8 @@ public:
     bool isOpenInEditor() const { return viewEditCombo->currentIndex()==0; }
 
     void clean();
+
+    void showFacet(Repository::RepositoryType repositoryType);
 };
 
 /**

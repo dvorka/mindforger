@@ -23,6 +23,7 @@
 
 #include "../../lib/src/gear/lang_utils.h"
 
+#include "note_smart_editor.h"
 #include "note_edit_highlighter.h"
 #include "widgets/line_number_panel.h"
 #include "status_bar_view.h"
@@ -66,12 +67,10 @@ private:
     int hitCounter;
 
     // autocomplete
+    NoteSmartEditor smartEditor;
     bool completedAndSelected;
     QCompleter* completer;
     QStringListModel* model;
-
-    bool tabsAsSpaces;
-    int tabWidth;
 
     // spell check
     bool mouseButtonDown;
@@ -125,8 +124,8 @@ public:
 
     // autocomplete
 protected:
-    void mousePressEvent(QMouseEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
+    virtual void mousePressEvent(QMouseEvent* event) override;
+    virtual void keyPressEvent(QKeyEvent* event) override;
     bool eventFilter(QObject* watched, QEvent* event) override;
 private:
     void setEditorTabWidth(int tabWidth);
@@ -139,7 +138,7 @@ private:
     bool handledCompletedAndSelected(QKeyEvent* event);
     void populateModel(const QString& completionPrefix);
 private slots:
-    void insertTab();
+    void insertTab() { smartEditor.insertTab(); }
     void insertCompletion(const QString& completion, bool singleWord=false);
 public slots:
     void slotStartLinkCompletion();
@@ -165,6 +164,8 @@ protected slots:
     void suggestSpelling(QAction* action);
 
 signals:
+    void signalCloseEditorWithEsc();
+
     void signalDnDropUrl(QString);
     void signalPasteImageData(QImage);
     void signalGetLinksForPattern(const QString&);

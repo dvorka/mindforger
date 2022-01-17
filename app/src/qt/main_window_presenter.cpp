@@ -1896,7 +1896,10 @@ void MainWindowPresenter::doActionFormatHr()
 
 void MainWindowPresenter::doActionOutlineNew()
 {
-    newOutlineDialog->show(mind->remind().getStencils(ResourceType::OUTLINE));
+    newOutlineDialog->show(
+        mind->remind().getStencils(ResourceType::OUTLINE),
+        Configuration::getInstance().getActiveRepository()->getType()
+    );
 }
 
 void MainWindowPresenter::doActionOutlineOrNoteNew()
@@ -2224,7 +2227,8 @@ void MainWindowPresenter::doActionNoteNew()
         if(withWriteableOutline(o->getKey())) {
             newNoteDialog->show(
                 QString::fromStdString(o->getKey()),
-                mind->remind().getStencils(ResourceType::NOTE)
+                mind->remind().getStencils(ResourceType::NOTE),
+                config.getActiveRepository()->getType()
             );
         }
     } else {

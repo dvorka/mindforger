@@ -115,6 +115,15 @@ void OutlineNewDialog::GeneralTab::clean()
     editTagsGroup->clearTagList();
 }
 
+void OutlineNewDialog::GeneralTab::showFacet(Repository::RepositoryType repositoryType)
+{
+    if(Repository::RepositoryType::MINDFORGER == repositoryType) {
+        editTagsGroup->setVisible(true);
+    } else {
+        editTagsGroup->setVisible(false);
+    }
+}
+
 /*
  * Preamble tab
  */
@@ -285,8 +294,10 @@ const std::vector<const Tag*>& OutlineNewDialog::getTags() const
     return generalTab->getTags();
 }
 
-void OutlineNewDialog::show(vector<Stencil*>& stencils)
-{
+void OutlineNewDialog::show(
+    vector<Stencil*>& stencils,
+    Repository::RepositoryType repositoryType
+) {
     generalTab->clean();
 
     // IMPROVE reload stencils only if dirty
@@ -302,6 +313,10 @@ void OutlineNewDialog::show(vector<Stencil*>& stencils)
     }
 
     refreshPath(generalTab->getNameEdit()->text());
+
+    // widgets visibility: Markdown vs. MindForger (repository) mode
+    generalTab->showFacet(repositoryType);
+
     QDialog::show();
 }
 
