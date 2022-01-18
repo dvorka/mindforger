@@ -163,7 +163,7 @@ bool NoteSmartEditor::moveSelectionRightOnTab()
 #endif
 }
 
-bool NoteSmartEditor::completePairChairs(QKeyEvent* event) {
+bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
 #ifdef MF_SMART_EDITOR
     switch (event->key()) {
         case Qt::Key_ParenLeft:

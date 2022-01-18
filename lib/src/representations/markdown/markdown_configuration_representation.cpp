@@ -53,6 +53,7 @@ constexpr const auto CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL =  "* Edito
 constexpr const auto CONFIG_SETTING_UI_EDITOR_LIVE_SPELLCHECK_LABEL =  "* Live editor spell check: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_SPELLCHECK_LANG_LABEL =  "* Spell check language: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL =  "* Editor autocomplete: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_SMART_EDITOR_LABEL =  "* Smart editor: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL =  "* Editor TAB width: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TABS_AS_SPACES_LABEL =  "* Editor insert SPACEs for TAB: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOSAVE_LABEL =  "* Editor autosave on close: ";
@@ -302,6 +303,12 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         } else {
                             c.setUiEditorEnableAutocomplete(false);
                         }
+                    } else if(line->find(CONFIG_SETTING_UI_EDITOR_SMART_EDITOR_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiEditorEnableSmartEditor(true);
+                        } else {
+                            c.setUiEditorEnableSmartEditor(false);
+                        }
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL) != std::string::npos) {
                         if(line->find("8") != std::string::npos) {
                             c.setUiEditorTabWidth(8);
@@ -525,6 +532,10 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL << (c?(c->isUiEditorEnableSyntaxHighlighting()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SYNTAX_HIGHLIGHT?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL << (c?(c->isUiEditorEnableAutocomplete()?"yes":"no"):(Configuration::DEFAULT_EDITOR_AUTOCOMPLETE?"yes":"no")) << endl <<
+         "    * Enable text autocomplete." << endl <<
+         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_EDITOR_SMART_EDITOR_LABEL << (c?(c->isUiEditorEnableSmartEditor()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SMART_EDITOR?"yes":"no")) << endl <<
+         "    * Enable numbered and buletted list, blocks and [({`_ autocomplete." << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL << (c?c->getUiEditorTabWidth():Configuration::DEFAULT_EDITOR_TAB_WIDTH) << endl <<
          "    * Examples: 4, 8" << endl <<

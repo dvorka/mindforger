@@ -304,7 +304,9 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
         "  Key        : " << event->key() << endl
     );
 
-    if(smartEditor.completePairChairs(event)) {
+    if(Configuration::getInstance().isUiEditorEnableSmartEditor()
+       && smartEditor.completePairChars(event)
+    ) {
         return;
     }
 
@@ -406,7 +408,9 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
                 emit signalCloseEditorWithEsc();
                 break;
             case Qt::Key_Tab:
-                if(smartEditor.isPolicyTabsAsSpaces()) {
+                if(Configuration::getInstance().isUiEditorEnableSmartEditor()
+                   && smartEditor.isPolicyTabsAsSpaces()
+                ) {
                     if(smartEditor.moveRightOnTab()) {
                         return;
                     }
@@ -414,10 +418,12 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
                 break;
             case Qt::Key_Enter:
             case Qt::Key_Return:
-                if(smartEditor.eraseSpacesLine(event)) {
-                    return;
-                } else if(smartEditor.completeListAndFenceBlocks(event)) {
-                    return;
+                if(Configuration::getInstance().isUiEditorEnableSmartEditor()) {
+                    if(smartEditor.eraseSpacesLine(event)) {
+                        return;
+                    } else if(smartEditor.completeListAndFenceBlocks(event)) {
+                        return;
+                    }
                 }
                 break;
         }
@@ -425,7 +431,7 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
 
     QPlainTextEdit::keyPressEvent(event);
 
-    // completion: letter must be handled~inserted first - now it's time to autocomplete
+    // completion: letter must be handled ~ inserted first - now it's time to autocomplete
     if(Configuration::getInstance().isUiEditorEnableAutocomplete()) {
         if(!completer->popup()->isVisible()) {
             if(blockCount() < Configuration::EDITOR_MAX_AUTOCOMPLETE_LINES) {

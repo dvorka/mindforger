@@ -77,7 +77,7 @@ public:
     /**
      * @brief Complete {[" characters and indicate completion.
      */
-    bool completePairChairs(QKeyEvent* event);
+    bool completePairChars(QKeyEvent* event);
     /**
      * @brief Erase line made by spaces (e.g. on ENTER) and indicate action.
      */

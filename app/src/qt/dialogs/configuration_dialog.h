@@ -35,6 +35,7 @@ class ConfigurationDialog : public QDialog
     class AppTab;
     class ViewerTab;
     class EditorTab;
+    class MarkdownTab;
     class NavigatorTab;
     class MindTab;
 
@@ -43,6 +44,7 @@ private:
     AppTab* appTab;
     ViewerTab* viewerTab;
     EditorTab* editorTab;
+    MarkdownTab* markdownTab;
     NavigatorTab* navigatorTab;
     MindTab* mindTab;
 
@@ -193,11 +195,9 @@ private:
     QComboBox* editorKeyBindingCombo;
     QLabel* editorFontLabel;
     QPushButton* editorFontButton;
-    QCheckBox* editorMdSyntaxHighlightCheck;
     QCheckBox* editorSpellCheckLive;
     QComboBox* editorSpellCheckLanguageCombo;
     QLabel* editorSpellCheckHelp;
-    QCheckBox* editorAutocompleteCheck;
     QCheckBox* editorAutosaveCheck;
     QLabel* editorTabWidthLabel;
     QComboBox* editorTabWidthCombo;
@@ -218,6 +218,29 @@ public:
 
 private slots:
     void getFont();
+};
+
+/**
+ * @brief Markdown tab.
+ */
+class ConfigurationDialog::MarkdownTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    Configuration& config;
+
+    QCheckBox* editorMdSyntaxHighlightCheck;
+    QCheckBox* editorAutocompleteCheck;
+    QCheckBox* editorSmartEditorCheck;
+
+public:
+    explicit MarkdownTab(QWidget* parent);
+    ~MarkdownTab();
+
+    // there and back is handled by Dialog's access to this class & Config singleton
+    void refresh();
+    void save();
 };
 
 }

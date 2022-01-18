@@ -30,12 +30,14 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     appTab = new AppTab{this};
     viewerTab = new ViewerTab{this};
     editorTab = new EditorTab{this};
+    markdownTab = new MarkdownTab{this};
     navigatorTab = new NavigatorTab{this};
     mindTab = new MindTab{this};
 
     tabWidget->addTab(appTab, tr("Application"));
     tabWidget->addTab(viewerTab, tr("Viewer"));
     tabWidget->addTab(editorTab, tr("Editor"));
+    tabWidget->addTab(markdownTab, tr("Markdown"));
     tabWidget->addTab(navigatorTab, tr("Navigator"));
     tabWidget->addTab(mindTab, tr("Mind"));
 
@@ -68,6 +70,7 @@ void ConfigurationDialog::show()
     appTab->refresh();
     viewerTab->refresh();
     editorTab->refresh();
+    markdownTab->refresh();
     navigatorTab->refresh();
     mindTab->refresh();
 
@@ -79,6 +82,7 @@ void ConfigurationDialog::saveSlot()
     appTab->save();
     viewerTab->save();
     editorTab->save();
+    markdownTab->save();
     navigatorTab->save();
     mindTab->save();
 
@@ -123,6 +127,7 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     startupCombo->addItem(QString{START_TO_HOME_OUTLINE});
 
     showToolbarCheck = new QCheckBox(tr("show toolbar"), this);
+    showToolbarCheck->setChecked(true);
     uiExpertModeCheck = new QCheckBox(tr("I don't need buttons - I know all keyboard shortcuts!"), this);
     nerdMenuCheck = new QCheckBox(tr("nerd menu (requires restart)"), this);
 
@@ -386,8 +391,6 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
         editorSpellCheckLanguageCombo->setDisabled(true);
     }
 
-    editorMdSyntaxHighlightCheck = new QCheckBox(tr("Markdown syntax highlighting"), this);
-    editorAutocompleteCheck = new QCheckBox(tr("autocomplete"), this);
     //editorQuoteSectionsCheck = new QCheckBox(tr("quote sections (# in description)"), this);
     editorTabsAsSpacesCheck = new QCheckBox(tr("TABs as SPACEs"), this);
     editorAutosaveCheck = new QCheckBox(tr("autosave Note on editor close"), this);
@@ -406,8 +409,6 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     editorLayout->addWidget(editorSpellCheckLive);
     editorLayout->addWidget(editorSpellCheckLanguageCombo);
     editorLayout->addWidget(editorSpellCheckHelp);
-    editorLayout->addWidget(editorMdSyntaxHighlightCheck);
-    editorLayout->addWidget(editorAutocompleteCheck);
     editorLayout->addWidget(editorAutosaveCheck);
     editorLayout->addWidget(editorFontLabel);
     editorLayout->addWidget(editorFontButton);
@@ -418,7 +419,7 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     editorLayout->addWidget(externalEditorCmdLabel);
     editorLayout->addWidget(externalEditorCmdEdit);
     //editorLayout->addWidget(editorQuoteSectionsCheck);
-    QGroupBox* editorGroup = new QGroupBox{tr("Markdown Editor"), this};
+    QGroupBox* editorGroup = new QGroupBox{tr("Editor"), this};
     editorGroup->setLayout(editorLayout);
 
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
@@ -435,8 +436,6 @@ ConfigurationDialog::EditorTab::~EditorTab()
     delete editorFontButton;
     delete editorSpellCheckLive;
     delete editorSpellCheckLanguageCombo;
-    delete editorMdSyntaxHighlightCheck;
-    delete editorAutocompleteCheck;
     delete editorTabWidthLabel;
     delete editorTabWidthCombo;
     delete externalEditorCmdLabel;
@@ -469,8 +468,6 @@ void ConfigurationDialog::EditorTab::refresh()
             editorSpellCheckLanguageCombo->setCurrentIndex(0);
         }
     }
-    editorMdSyntaxHighlightCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
-    editorAutocompleteCheck->setChecked(config.isUiEditorEnableAutocomplete());
     editorTabWidthCombo->setCurrentIndex(
         editorTabWidthCombo->findText(
             QString::number(config.getUiEditorTabWidth())
@@ -500,8 +497,6 @@ void ConfigurationDialog::EditorTab::save()
     } else {
         config.clearUiEditorSpellCheckDefaultLanguage();
     }
-    config.setUiEditorEnableSyntaxHighlighting(editorMdSyntaxHighlightCheck->isChecked());
-    config.setUiEditorEnableAutocomplete(editorAutocompleteCheck->isChecked());
     config.setUiEditorTabWidth(editorTabWidthCombo->itemText(editorTabWidthCombo->currentIndex()).toInt());
     config.setExternalEditorCmd(externalEditorCmdEdit->text().toStdString());
     //config.setMarkdownQuoteSections(editorQuoteSectionsCheck->isChecked());
@@ -519,6 +514,63 @@ void ConfigurationDialog::EditorTab::getFont()
     if(ok) {
          editorFontButton->setText(editorFont.family());
     }
+}
+
+/*
+ * Markdown tab
+ */
+
+ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
+    : QWidget(parent),
+      config(Configuration::getInstance())
+{
+    editorMdSyntaxHighlightCheck = new QCheckBox(
+        tr("Markdown syntax highlighting"),
+        this
+    );
+    editorAutocompleteCheck = new QCheckBox(
+        tr("autocomplete text"),
+        this
+    );
+    editorSmartEditorCheck = new QCheckBox(
+        tr("autocomplete lists, blocks and {([`_ characters"),
+        this
+    );
+    editorSmartEditorCheck->setChecked(true);
+
+    // assembly
+    QVBoxLayout* editorLayout = new QVBoxLayout{this};
+    editorLayout->addWidget(editorMdSyntaxHighlightCheck);
+    editorLayout->addWidget(editorAutocompleteCheck);
+    editorLayout->addWidget(editorSmartEditorCheck);
+    QGroupBox* editorGroup = new QGroupBox{tr("Markdown"), this};
+    editorGroup->setLayout(editorLayout);
+
+    QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(editorGroup);
+    boxesLayout->addStretch();
+    setLayout(boxesLayout);
+}
+
+ConfigurationDialog::MarkdownTab::~MarkdownTab()
+{
+    delete editorMdSyntaxHighlightCheck;
+    delete editorAutocompleteCheck;
+    delete editorSmartEditorCheck;
+}
+
+void ConfigurationDialog::MarkdownTab::refresh()
+{
+    editorMdSyntaxHighlightCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
+    editorAutocompleteCheck->setChecked(config.isUiEditorEnableAutocomplete());
+    editorSmartEditorCheck->setChecked(config.isUiEditorEnableSmartEditor());
+}
+
+void ConfigurationDialog::MarkdownTab::save()
+{
+    config.setUiEditorEnableSyntaxHighlighting(editorMdSyntaxHighlightCheck->isChecked());
+    config.setUiEditorEnableAutocomplete(editorAutocompleteCheck->isChecked());
+    config.setUiEditorEnableSmartEditor(editorSmartEditorCheck->isChecked());
 }
 
 /*

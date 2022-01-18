@@ -92,7 +92,7 @@ constexpr const auto UI_OS_TABLE_SORT_ORDER_ASC = "ascending";
 constexpr const auto UI_OS_TABLE_SORT_ORDER_DESC = "descending";
 
 #ifdef __APPLE__
-constexpr const auto UI_DEFAULT_THEME = UI_THEME_NATIVE;
+constexpr const auto UI_DEFAULT_THEME = UI_THEME_DARK;
 #else
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_DARK;
 #endif
@@ -192,6 +192,7 @@ public:
     static constexpr const int DEFAULT_NAVIGATOR_MAX_GRAPH_NODES = 150;
     static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOCOMPLETE = true;
+    static constexpr const bool DEFAULT_EDITOR_SMART_EDITOR = true;
     static constexpr const bool DEFAULT_EDITOR_TABS_AS_SPACES = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOSAVE = false;
     static constexpr const bool DEFAULT_FULL_O_PREVIEW = false;
@@ -266,7 +267,8 @@ private:
     std::string uiEditorSpellCheckLanguage;
     // transient: available languages loaded in runtime from environment and not persisted
     std::vector<std::string> uiEditorSpellCheckLanguages;
-    bool uiEditorAutocomplete; // toggle autocompletion
+    bool uiEditorAutocomplete; // toggle text autocomplete
+    bool uiEditorSmartEditor; // toggle smart editor: lists, blocks and {[(`_
     JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
     int navigatorMaxNodes;
     bool uiEditorTabsAsSpaces;
@@ -458,6 +460,8 @@ public:
     }
     bool isUiEditorEnableAutocomplete() const { return uiEditorAutocomplete; }
     void setUiEditorEnableAutocomplete(bool enable) { uiEditorAutocomplete = enable; }
+    bool isUiEditorEnableSmartEditor() const { return uiEditorSmartEditor; }
+    void setUiEditorEnableSmartEditor(bool enable) { uiEditorSmartEditor = enable; }
     int getUiEditorTabWidth() const { return uiEditorTabWidth; }
     void setUiEditorTabWidth(int tabWidth) { uiEditorTabWidth = tabWidth; }
     int getRecentNotesUiLimit() const { return 150; }
