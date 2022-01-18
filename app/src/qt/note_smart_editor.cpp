@@ -82,7 +82,9 @@ void NoteSmartEditor::removeLine()
 
 bool NoteSmartEditor::fillLineWithSpacesOnEnter(QString& lineStr)
 {
-    if(lineStr.startsWith(" ")) {
+    // fill only if cursor not at the beginning of line
+    MF_DEBUG("Smart editor: cursor position @ fill " << textEdit.textCursor().positionInBlock() << endl);
+    if(textEdit.textCursor().positionInBlock() && lineStr.startsWith(" ")) {
         // count the number of spaces: delete line if spaces only, indent otherwise
         for(int i=0; i<lineStr.size(); i++) {
             if(lineStr[i] != ' ') {
