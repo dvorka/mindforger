@@ -165,6 +165,17 @@ bool NoteSmartEditor::moveSelectionRightOnTab()
 #endif
 }
 
+bool NoteSmartEditor::isLineCountOfPairCharsOdd(string c)
+{
+    UNUSED_ARG(c);
+
+    // TODO insert if EOLine
+    // TODO insert if next chart is space
+    // TODO insert if even number of pair chars (else just one char ~ normal dispatch)
+
+    return false;
+}
+
 bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
 #ifdef MF_SMART_EDITOR
     switch (event->key()) {

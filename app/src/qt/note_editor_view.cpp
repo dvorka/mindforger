@@ -402,11 +402,34 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
                 break;
         }
     } else {
-        switch(event->key()) {
-            case Qt::Key_Escape:
+        switch(event->key()) {        
+            case Qt::Key_Escape: {
                 // completer menu not visible - exit editor ~ Cancel
-                emit signalCloseEditorWithEsc();
+                QMessageBox msgBox{
+                    QMessageBox::Question,
+                    tr("Exit Editor"),
+                    tr("Do you really want to exit editor without saving?")
+                };
+                QPushButton* yes = msgBox.addButton("&Yes", QMessageBox::YesRole);
+#ifdef __APPLE__
+                yes->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
+                yes->setToolTip("⌘Y");
+
+                QPushButton* no =
+#endif
+                msgBox.addButton("&No", QMessageBox::NoRole);
+#ifdef __APPLE__
+                no->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+                no->setToolTip("⌘N");
+#endif
+                msgBox.exec();
+
+                QAbstractButton* choosen = msgBox.clickedButton();
+                if(yes == choosen) {
+                    emit signalCloseEditorWithEsc();
+                } // else do nothing
                 break;
+            }
             case Qt::Key_Tab:
                 if(Configuration::getInstance().isUiEditorEnableSmartEditor()
                    && smartEditor.isPolicyTabsAsSpaces()

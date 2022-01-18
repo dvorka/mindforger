@@ -71,6 +71,10 @@ NoteEditView::NoteEditView(QWidget* parent)
     QObject::connect(
         bottomButtonsPanel->getCancelButton(), SIGNAL(clicked()),
         this, SLOT(slotCloseEditor()));
+
+    QObject::connect(
+        noteEditor, SIGNAL(signalCloseEditorWithEsc()),
+        this, SLOT(slotCloseEditor()));
 }
 
 NoteEditView::~NoteEditView()

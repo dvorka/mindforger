@@ -65,6 +65,8 @@ public:
     bool moveSelectionLeftOnBackTab();
     bool moveLineLeftOnBackTab();
 
+    bool isLineCountOfPairCharsOdd(std::string c);
+
     /**
      * @brief Move block of text behind cursor right (by TAB spaces) on TAB.
      */

@@ -69,6 +69,10 @@ OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
     QObject::connect(
         bottomButtonsPanel->getCancelButton(), SIGNAL(clicked()),
         this, SLOT(slotCloseEditor()));
+
+    QObject::connect(
+        noteEditor, SIGNAL(signalCloseEditorWithEsc()),
+        this, SLOT(slotCloseEditor()));
 }
 
 OutlineHeaderEditView::~OutlineHeaderEditView()

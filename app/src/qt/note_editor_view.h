@@ -93,8 +93,8 @@ public:
     explicit NoteEditorView(QWidget* parent);
     NoteEditorView(const NoteEditorView&) = delete;
     NoteEditorView(const NoteEditorView&&) = delete;
-    NoteEditorView &operator=(const NoteEditorView&) = delete;
-    NoteEditorView &operator=(const NoteEditorView&&) = delete;
+    NoteEditorView& operator =(const NoteEditorView&) = delete;
+    NoteEditorView& operator =(const NoteEditorView&&) = delete;
 
     void setStatusBar(const StatusBarView* sb) { this->statusBar = sb; }
 
