@@ -163,6 +163,7 @@ bool NoteSmartEditor::moveSelectionRightOnTab()
     MF_DEBUG("Editor: move selection RIGHT not implemented" << endl);
     throw "Not implemented";
 #endif
+    return false;
 }
 
 bool NoteSmartEditor::isLineCountOfPairCharsOdd(string c)
