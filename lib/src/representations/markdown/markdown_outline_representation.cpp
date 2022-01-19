@@ -344,9 +344,12 @@ void MarkdownOutlineRepresentation::description(const std::string* md, std::vect
 {
     if(md) {
         istringstream is(*md);
+
         bool codeblock=false;
+        int codeblockBackticksCount = 0;
         static const char SECTION = '#';
         static const char CB = '`';
+
         for(string line; std::getline(is, line); ) {
             // Escaping:
             // - TAB all lines starting with # to ensure correct sections separation
@@ -354,24 +357,31 @@ void MarkdownOutlineRepresentation::description(const std::string* md, std::vect
             //   and it would appear as section on O reload)
             if(line.size()>=3 && line[0]==CB && line[1]==CB && line[2]==CB) {
                 codeblock = !codeblock;
+                // detect opened ``` and automatically close it otherwise it will make
+                // rest of the document code section - including the sections
+                codeblockBackticksCount++;
             }
             if(line.size() && line.at(0)==SECTION && !codeblock) {
                 // ESCAPE # using code fence
                 line.insert(0, "    ");
-                // ESCAPE # using HTML entity
+                // ESCAPE # using HTML entity (configurable)
                 //line.insert(0, "&#35;");
             }
 
             // TODO add quoting of multiline sections that use === and ---
-
-            // TODO detect opened ``` and automatically close it otherwise it will make
-            // rest of the document code section - including the sections
-
             // TODO escape undesired --- and === section i.e. when user creates
             // them my mistake and there is NOT empty line before row with ---
             // as it would create new section which would apper on relad
 
             description.push_back(new string{line});
+        }
+        MF_DEBUG(
+            "MD representation: unbounded code fence count=" << codeblockBackticksCount
+            << " ~ " << (codeblockBackticksCount%2) << endl
+        );
+        if(codeblockBackticksCount > 0 && codeblockBackticksCount%2 == 1) {
+            // close opened ``` to avoid unbounded code fence as described ^
+            description.push_back(new string("```"));
         }
     } else {
         description.clear();
