@@ -343,13 +343,15 @@ void MarkdownOutlineRepresentation::toHeader(Outline* outline, string* md)
 void MarkdownOutlineRepresentation::description(const std::string* md, std::vector<std::string*>& description)
 {
     if(md) {
-        istringstream is(*md);
-
-        bool codeblock=false;
+        bool lastLineEmpty = false;
+        bool codeblock = false;
         int codeblockBackticksCount = 0;
         static const char SECTION = '#';
         static const char CB = '`';
+        static const char CM = '-';
+        static const char CE = '=';
 
+        istringstream is(*md);
         for(string line; std::getline(is, line); ) {
             // Escaping:
             // - TAB all lines starting with # to ensure correct sections separation
@@ -368,10 +370,18 @@ void MarkdownOutlineRepresentation::description(const std::string* md, std::vect
                 //line.insert(0, "&#35;");
             }
 
-            // TODO add quoting of multiline sections that use === and ---
-            // TODO escape undesired --- and === section i.e. when user creates
+            // escape undesired --- and === section i.e. when user creates
             // them my mistake and there is NOT empty line before row with ---
             // as it would create new section which would apper on relad
+            if(!lastLineEmpty
+               && line.size()>=3
+               && ((line[0]==CM && line[1]==CM && line[2]==CM)
+                   || (line[0]==CE && line[1]==CE && line[2]==CE)
+                  )
+            ) {
+                description.push_back(new string{""});
+            }
+            lastLineEmpty = !line.size();
 
             description.push_back(new string{line});
         }
