@@ -389,9 +389,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOrganizerNew->setStatusTip(tr("Create new Organizer to prioritize your knowledge in Eisenhower Matrix style"));
 
 #ifdef __APPLE__
-    actionOrganizerEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
+    actionOrganizerEdit = new QAction(
+        QIcon(":/menu-icons/edit.svg"),
+        // stupid & ugly shortcut w/o effect
+        tr("&Edit                                                                                     ⌘↩"),
+        mainWindow
+    );
 #else
-    actionOrganizerEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
+    actionOrganizerEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit       Alt-Enter"), mainWindow);
 #endif
     actionOrganizerEdit ->setStatusTip(tr("Edit current Organizer - you can also double click view to open the editor"));
 

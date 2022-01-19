@@ -73,6 +73,8 @@ signals:
 
     void signalMoveNoteToNextQuadrant();
     void signalMoveNoteToPreviousQuadrant();
+
+    void signalOpenOrganizerPreferences();
 };
 
 }

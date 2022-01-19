@@ -59,6 +59,10 @@ OrganizerQuadrantPresenter::OrganizerQuadrantPresenter(
         this->view->horizontalHeader(), SIGNAL(sectionClicked(int)),
         this, SLOT(slotHeaderClicked(int))
     );
+    QObject::connect(
+        view, SIGNAL(signalOpenOrganizerPreferences()),
+        this, SLOT(slotOrganizerEdit())
+    );
 }
 
 OrganizerQuadrantPresenter::~OrganizerQuadrantPresenter()
@@ -126,13 +130,17 @@ void OrganizerQuadrantPresenter::slotShowNote(const QItemSelection& selected, co
     } // else do nothing
 }
 
+void OrganizerQuadrantPresenter::slotOrganizerEdit()
+{
+    MF_DEBUG("Organizer quadrant presenter: O/N table header clicked..." << endl);
+    orloj->getMainPresenter()->doActionOrganizerEdit();
+}
 
 void OrganizerQuadrantPresenter::slotHeaderClicked(int section)
 {
     Q_UNUSED(section);
 
-    MF_DEBUG("Organizer quadrant presenter: O/N table header clicked..." << endl);
-    orloj->getMainPresenter()->doActionOrganizerEdit();
+    this->slotOrganizerEdit();
 }
 
 void OrganizerQuadrantPresenter::slotFocusToNextVisibleQuadrant()

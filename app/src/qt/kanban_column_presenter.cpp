@@ -62,6 +62,11 @@ KanbanColumnPresenter::KanbanColumnPresenter(
         this->view->horizontalHeader(), SIGNAL(sectionClicked(int)),
         this, SLOT(slotHeaderClicked(int))
     );
+
+    QObject::connect(
+        view, SIGNAL(signalOpenOrganizerPreferences()),
+        this, SLOT(slotOrganizerEdit())
+    );
 }
 
 KanbanColumnPresenter::~KanbanColumnPresenter()
@@ -130,13 +135,17 @@ void KanbanColumnPresenter::slotShowNote(
     } // else do nothing
 }
 
+void KanbanColumnPresenter::slotOrganizerEdit()
+{
+    MF_DEBUG("Kanban column presenter: O/N table header clicked..." << endl);
+    orloj->getMainPresenter()->doActionOrganizerEdit();
+}
 
 void KanbanColumnPresenter::slotHeaderClicked(int section)
 {
     Q_UNUSED(section);
 
-    MF_DEBUG("Kanban quadrant presenter: O/N table header clicked..." << endl);
-    orloj->getMainPresenter()->doActionOrganizerEdit();
+    this->slotOrganizerEdit();
 }
 
 void KanbanColumnPresenter::slotFocusToNextVisibleQuadrant()

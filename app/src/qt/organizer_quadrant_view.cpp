@@ -57,6 +57,12 @@ void OrganizerQuadrantView::keyPressEvent(QKeyEvent* event)
         MF_DEBUG("  ctrl" << endl);
         switch(event->key()) {
 #ifdef __APPLE__
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+            MF_DEBUG("    alt-ENTER" << endl);
+            emit signalOpenOrganizerPreferences();
+            return;
+
         case Qt::Key_BracketRight:
 #else
         case Qt::Key_Right:
@@ -74,6 +80,19 @@ void OrganizerQuadrantView::keyPressEvent(QKeyEvent* event)
             return;
         }
     }
+
+#ifndef __APPLE__
+    if(event->modifiers() & Qt::AltModifier) {
+        MF_DEBUG("  alt" << endl);
+        switch(event->key()) {
+            case Qt::Key_Return:
+            case Qt::Key_Enter:
+                MF_DEBUG("    alt-ENTER" << endl);
+                emit signalOpenOrganizerPreferences();
+                return;
+            }
+    }
+#endif
 
     if(!(event->modifiers() & Qt::AltModifier)
        && !(event->modifiers() & Qt::ControlModifier)
