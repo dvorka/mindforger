@@ -442,7 +442,7 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
             case Qt::Key_Enter:
             case Qt::Key_Return:
                 if(Configuration::getInstance().isUiEditorEnableSmartEditor()) {
-                    if(smartEditor.eraseSpacesLine(event)) {
+                    if(smartEditor.eraseSpacesLine()) {
                         return;
                     } else if(smartEditor.completeListAndFenceBlocks(event)) {
                         return;

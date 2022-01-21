@@ -58,6 +58,8 @@ public:
      * @brief Does line starts with at lest TAB width spaces?
      */
     bool isLineStartsWithTabSpaces(const QString& line);
+    QString getNextChar();
+    QString getLastChar();
     void insertTab();
     void removeLine();
     bool fillLineWithSpacesOnEnter(QString& lineStr);
@@ -66,6 +68,8 @@ public:
     bool moveLineLeftOnBackTab();
 
     bool isLineCountOfPairCharsOdd(std::string c);
+
+    bool getCurrentLineText(QString& text);
 
     /**
      * @brief Move block of text behind cursor right (by TAB spaces) on TAB.
@@ -83,7 +87,7 @@ public:
     /**
      * @brief Erase line made by spaces (e.g. on ENTER) and indicate action.
      */
-    bool eraseSpacesLine(QKeyEvent* event);
+    bool eraseSpacesLine();
     /**
      * @brief Complete bulletted/numbered list or code fence and indicate completion.
      */

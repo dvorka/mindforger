@@ -57,6 +57,37 @@ bool NoteSmartEditor::isLineStartsWithTabSpaces(const QString& line)
     return false;
 }
 
+QString NoteSmartEditor::getNextChar()
+{
+    QString nextChar{};
+
+    QTextCursor cursor = textEdit.textCursor();
+    if(cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor)) {
+        nextChar = cursor.selectedText();
+        cursor.clearSelection();
+    }
+    textEdit.setTextCursor(cursor);
+
+    return nextChar;
+}
+
+QString NoteSmartEditor::getLastChar()
+{
+    QString lastChar{};
+
+    QTextCursor cursor = textEdit.textCursor();
+    if(cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor)) {
+        lastChar = cursor.selectedText();
+        cursor.clearSelection();
+        cursor.movePosition(QTextCursor::NextCharacter);
+    }
+    textEdit.setTextCursor(cursor);
+
+    MF_DEBUG("Smart editor last char: '" << lastChar.toStdString() << "'" << endl);
+
+    return lastChar;
+}
+
 void NoteSmartEditor::insertTab()
 {
     QString completion{};
@@ -123,11 +154,10 @@ bool NoteSmartEditor::moveLineLeftOnBackTab()
 {
     MF_DEBUG("Editor: backtab WITHOUT selection" << endl);
 
-    const QTextBlock block = textEdit.textCursor().block();
-    if(block.isValid() && block.layout()) {
-        QString lineStr{block.text()};
+    QString lineStr{};
+    if(getCurrentLineText(lineStr)) {
         if(isLineStartsWithTabSpaces(lineStr)) {
-            // if there is more spaces than tab width, delete one tab
+            // if there are more spaces than tab width, delete one tab
            textEdit.moveCursor(QTextCursor::StartOfLine);
            for(int i=0; i<this->tabWidth; i++) {
                textEdit.moveCursor(QTextCursor::Right, QTextCursor::KeepAnchor);
@@ -135,7 +165,7 @@ bool NoteSmartEditor::moveLineLeftOnBackTab()
            textEdit.textCursor().removeSelectedText();
            return true;
         } else {
-            // if there is less spaces than tab width, delete one space
+            // if there are less spaces than tab width, delete one space
             if(lineStr.startsWith(" ")) {
                 textEdit.moveCursor(QTextCursor::StartOfLine);
                 textEdit.textCursor().deleteChar();
@@ -166,7 +196,8 @@ bool NoteSmartEditor::moveSelectionRightOnTab()
     return false;
 }
 
-bool NoteSmartEditor::isLineCountOfPairCharsOdd(string c)
+/*
+bool NoteSmartEditor::isOddCountOfCharsOnCurrentLine(string c)
 {
     UNUSED_ARG(c);
 
@@ -176,6 +207,7 @@ bool NoteSmartEditor::isLineCountOfPairCharsOdd(string c)
 
     return false;
 }
+*/
 
 bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
 #ifdef MF_SMART_EDITOR
@@ -206,15 +238,29 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
             textEdit.textCursor().insertText("__");
             textEdit.moveCursor(QTextCursor::PreviousCharacter);
             return true;
+        case Qt::Key_AsciiTilde:
+            textEdit.textCursor().insertText("~~");
+            textEdit.moveCursor(QTextCursor::PreviousCharacter);
+            return true;
         case Qt::Key_QuoteDbl:
             textEdit.textCursor().insertText("\"\"");
             textEdit.moveCursor(QTextCursor::PreviousCharacter);
             return true;
         case Qt::Key_QuoteLeft:
-            textEdit.textCursor().insertText("``");
-            textEdit.moveCursor(QTextCursor::PreviousCharacter);
+            if(!textEdit.textCursor().positionInBlock()) {
+                textEdit.textCursor().insertText("```");
+                textEdit.moveCursor(QTextCursor::EndOfLine);
+            } else {
+                // TODO if odd number of `, then close it
+                if(getLastChar().toStdString() == " ") {
+                    textEdit.textCursor().insertText("``");
+                    textEdit.moveCursor(QTextCursor::PreviousCharacter);
+                } else {
+                    return false;
+                }
+            }
             return true;
-        /* SKIPPED: does not help when writing: don't doesn't hasn't ..
+        /* SKIPPED: does not help when writing: don't doesn't hasn't .. >> detect previous/next non-spaces as ^ and re-enable
         case Qt::Key_Apostrophe:
             textEdit.textCursor().insertText("''");
             textEdit.moveCursor(QTextCursor::PreviousCharacter);
@@ -236,14 +282,21 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
     return false;
 }
 
-
-bool NoteSmartEditor::eraseSpacesLine(QKeyEvent* event)
+bool NoteSmartEditor::getCurrentLineText(QString& text)
 {
-    UNUSED_ARG(event);
-
     const QTextBlock block = textEdit.textCursor().block();
     if(block.isValid() && block.layout()) {
-        if(isLineSpacesOnly(block.text())) {
+        text = block.text();
+        return true;
+    }
+    return false;
+}
+
+bool NoteSmartEditor::eraseSpacesLine()
+{
+    QString line{};
+    if(getCurrentLineText(line)) {
+        if(isLineSpacesOnly(line)) {
             removeLine();
             return true;
         }
