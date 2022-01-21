@@ -232,14 +232,14 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     // assembly
     QGroupBox* viewerGroup = new QGroupBox{tr("HTML Viewer"), this};
     QVBoxLayout* viewerLayout = new QVBoxLayout{this};
+    viewerLayout->addWidget(doubleClickViewerToEditCheck);
+    viewerLayout->addWidget(fullOPreviewCheck);
+    viewerLayout->addWidget(srcCodeHighlightSupportCheck);
+    viewerLayout->addWidget(mathSupportCheck);
     viewerLayout->addWidget(zoomLabel);
     viewerLayout->addWidget(zoomSpin);
     viewerLayout->addWidget(diagramSupportLabel);
     viewerLayout->addWidget(diagramSupportCombo);
-    viewerLayout->addWidget(srcCodeHighlightSupportCheck);
-    viewerLayout->addWidget(mathSupportCheck);
-    viewerLayout->addWidget(fullOPreviewCheck);
-    viewerLayout->addWidget(doubleClickViewerToEditCheck);
     viewerGroup->setLayout(viewerLayout);
 
     QGroupBox* viewerCssGroup = new QGroupBox{tr("HTML Viewer CSS"), this};
@@ -367,9 +367,9 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     QObject::connect(editorFontButton, &QPushButton::clicked, this, &ConfigurationDialog::EditorTab::getFont);
 
     editorSpellCheckHelp = new QLabel(
-        tr("Spell check dictionaries configuration <a href='"
+        tr("Spell check dictionaries <a href='"
            "https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#spell-check-"
-           "'>documentation</a>"
+           "'>configuration documentation</a>"
         ),
         this
     );
@@ -405,19 +405,19 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
 
     // assembly
     QVBoxLayout* editorLayout = new QVBoxLayout{this};
-    editorLayout->addWidget(editorTabsAsSpacesCheck);
     editorLayout->addWidget(editorSpellCheckLive);
     editorLayout->addWidget(editorSpellCheckLanguageCombo);
     editorLayout->addWidget(editorSpellCheckHelp);
-    editorLayout->addWidget(editorAutosaveCheck);
-    editorLayout->addWidget(editorFontLabel);
-    editorLayout->addWidget(editorFontButton);
+    editorLayout->addWidget(editorTabsAsSpacesCheck);
     editorLayout->addWidget(editorTabWidthLabel);
     editorLayout->addWidget(editorTabWidthCombo);
+    editorLayout->addWidget(editorFontLabel);
+    editorLayout->addWidget(editorFontButton);
     editorLayout->addWidget(editorKeyBindingLabel);
     editorLayout->addWidget(editorKeyBindingCombo);
     editorLayout->addWidget(externalEditorCmdLabel);
     editorLayout->addWidget(externalEditorCmdEdit);
+    editorLayout->addWidget(editorAutosaveCheck);
     //editorLayout->addWidget(editorQuoteSectionsCheck);
     QGroupBox* editorGroup = new QGroupBox{tr("Editor"), this};
     editorGroup->setLayout(editorLayout);
@@ -525,7 +525,7 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
       config(Configuration::getInstance())
 {
     editorMdSyntaxHighlightCheck = new QCheckBox(
-        tr("Markdown syntax highlighting"),
+        tr("syntax highlighting"),
         this
     );
     editorAutocompleteCheck = new QCheckBox(

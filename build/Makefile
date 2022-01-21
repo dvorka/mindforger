@@ -135,7 +135,7 @@ api-reference:
 
 dev-install-local: build ../app/mindforger
 	cp -vf ../app/mindforger ~/bin
-	mv -vf ~/bin/mindforger ~/bin/MIND
-	~/bin/MIND --version
+	mv -vf ~/bin/mindforger ~/bin/mind
+	~/bin/mind --version
 
 # eof
