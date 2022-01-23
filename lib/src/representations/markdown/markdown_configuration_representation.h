@@ -49,6 +49,19 @@ class MarkdownAstNodeSection;
  *     from(AST) --> OUTLINE
  *       AST.getString(LEXEM) --> name, description, line, ...
  */
+/*
+ * IMPROVE:
+ *
+ * - rewrite this class from source code to *object config representation*
+ * - declare supported configuration item types:
+ *   - boolean, int, float, enum
+ * - configuration item to have metadata like section where it belongs
+ * - instead of copy/pasting or writing code over and over again,
+ *   introduce API to describe configuration - list of sections/items/...,
+ * - ^ will avoid copy/paste errors, will make code short
+ * - ^ will be Markdown-based configuration component which can be externalized
+ *
+ */
 class MarkdownConfigurationRepresentation : public ConfigurationPersistence
 {
 private:

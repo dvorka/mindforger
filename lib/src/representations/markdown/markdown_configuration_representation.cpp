@@ -90,17 +90,12 @@ void MarkdownConfigurationRepresentation::configuration(vector<MarkdownAstNodeSe
     if(ast) {
         size_t off = 0;
         if(ast->size()) {
-            MarkdownAstNodeSection* astNode = ast->at(off);
-
             // skip configuration's preamble (if present)
-            if(astNode->isPreambleSection()) {
+            if(ast->at(off)->isPreambleSection()) {
                 if(ast->size()>1) {
-                    astNode = ast->at(++off);
-                } else {
-                    astNode = nullptr;
+                    ++off;
                 }
             }
-
             // 1st section contains just description (post declared/trailing hashes are ignored as they are not needed on save)
         }
 

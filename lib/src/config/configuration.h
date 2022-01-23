@@ -120,6 +120,14 @@ class RepositoryConfigurationPersistence;
  * instance to (almost) each and every application's component would be
  * inefficient i.e. worse than the use of singleton pattern.
  */
+/*
+ * IMPROVE:
+ *
+ * - polish class description ^ - this is objec representation, MD config is MD representation
+ * - pen & paper: where are defined constants
+ * - code review: polish config item names (UI, editor, runtime) - shorter and more consistent
+ *
+ */
 class Configuration {
 private:
     static RepositoryConfiguration* getDummyRepositoryConfiguration() {
