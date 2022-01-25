@@ -166,9 +166,9 @@ protected slots:
 signals:
     void signalCloseEditorWithEsc();
 
-    void signalDnDropUrl(QString);
-    void signalPasteImageData(QImage);
-    void signalGetLinksForPattern(const QString&);
+    void signalDnDropUrl(QString url);
+    void signalPasteImageData(QImage image);
+    void signalGetLinksForPattern(const QString& pattern);
 };
 
 } // m8r namespace

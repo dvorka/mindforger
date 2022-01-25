@@ -510,5 +510,6 @@ win32 {
 
 message(DEFINES of app.pro build: $$DEFINES)
 message(QMAKE_EXTRA_TARGETS of app.pro build: $$QMAKE_EXTRA_TARGETS)
+message(QT of app.pro build: $$QT)
 
 # eof

@@ -29,12 +29,20 @@ namespace m8r {
 // SMART EDITOR is experimental feature
 #define MF_SMART_EDITOR
 
+/**
+ * @brief Smart Markdown editor.
+ *
+ * Smart Markdown editor aims to make editation of Markdown documents
+ * simpler by code completion, indentation and cursor navigation.
+ */
 class NoteSmartEditor
 {
 private:
     QPlainTextEdit& textEdit;
 
+    // configuration: tab width (updated on every editor refresh)
     int tabWidth;
+    // configuration: convert tabs to spaces (updated on every editor refresh)
     bool tabsAsSpaces;
 
 public:
@@ -45,10 +53,26 @@ public:
     NoteSmartEditor& operator =(const NoteSmartEditor&&) = delete;
     ~NoteSmartEditor();
 
+    /*
+     * Configuration
+     */
+
     void setTabWidth(int tabWidth) { this->tabWidth = tabWidth; }
     int getTabWidth() const { return tabWidth; }
-    void setTabsAsSpaces(int tabsAsSpaces) { this->tabsAsSpaces = tabsAsSpaces; }
+    void setPolicyTabsAsSpaces(int tabsAsSpaces) { this->tabsAsSpaces = tabsAsSpaces; }
     bool isPolicyTabsAsSpaces() const { return tabsAsSpaces; }
+
+    /*
+     * Tests
+     */
+
+    bool isAtTheBeginningOfLine() {
+        return textEdit.textCursor().atBlockStart();
+    }
+
+    bool isAtTheEndOfLine() {
+        return textEdit.textCursor().atBlockEnd();
+    }
 
     /**
      * @brief Is line made only by spaces?
@@ -58,40 +82,83 @@ public:
      * @brief Does line starts with at lest TAB width spaces?
      */
     bool isLineStartsWithTabSpaces(const QString& line);
-    QString getNextChar();
-    QString getLastChar();
-    void insertTab();
-    void removeLine();
-    bool fillLineWithSpacesOnEnter(QString& lineStr);
+    /**
+     * @brief Does line has ODD number of given character occurences?
+     */
+    bool isLineHasOddCharCount(const std::string c);
 
-    bool moveSelectionLeftOnBackTab();
-    bool moveLineLeftOnBackTab();
+    /**
+     * @brief Is the count of given characters on the current line odd?
+     */
+    bool isLineCountOfGivenCharOdd(std::string c);
 
-    bool isLineCountOfPairCharsOdd(std::string c);
+    /*
+     * Getters
+     */
 
+    /**
+     * @brief Get current line text and indicate whether current line is valid.
+     */
     bool getCurrentLineText(QString& text);
 
     /**
-     * @brief Move block of text behind cursor right (by TAB spaces) on TAB.
+     * @brief Get next character - on the right from cursor - on the current line.
      */
-    bool moveRightOnTab();
+    QString getNextChar();
     /**
-     * @brief Move selected block of text (possible multiple lines) right (by TAB spaces) on TAB.
+     * @brief Get previous character - on the left from cursor - on the current line.
      */
-    bool moveSelectionRightOnTab();
+    QString getLastChar();
+
+    /*
+     * Actions
+     */
 
     /**
      * @brief Complete {[" characters and indicate completion.
      */
     bool completePairChars(QKeyEvent* event);
     /**
-     * @brief Erase line made by spaces (e.g. on ENTER) and indicate action.
-     */
-    bool eraseSpacesLine();
-    /**
      * @brief Complete bulletted/numbered list or code fence and indicate completion.
      */
     bool completeListAndFenceBlocks(QKeyEvent* event);
+
+    /**
+     * @brief Complete current line with NEW line pre-filled with spaces (if desired).
+     */
+    bool completeLineWithSpaces(QString& currentLine);
+
+    /**
+     * @brief Insert tab at current cursor position.
+     */
+    void insertTab();
+
+    /**
+     * @brief Move block of text on current line behind cursor right by TAB spaces (on TAB).
+     */
+    bool moveLineRightByTab();
+    /**
+     * @brief Move selected block of text (possible multiple lines) right by TAB spaces (on TAB).
+     */
+    bool moveSelectedLinesRightByTab();
+
+    /**
+     * @brief Move current line to left by TAB spaces (on BACK TAB).
+     */
+    bool moveLineLeftByTab();
+    /**
+     * @brief Move selected lines to left by TAB spaces (on BACK TAB).
+     */
+    bool moveSelectedLinesLeftByTab();
+
+    /**
+     * @brief Remove current line.
+     */
+    void currentLineRemove();
+    /**
+     * @brief Remove current line if made by spaces (e.g. on ENTER) and indicate action.
+     */
+    bool currentLineRemoveIfSpacesOnly();
 };
 
 }

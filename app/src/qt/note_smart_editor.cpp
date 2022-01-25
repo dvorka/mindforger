@@ -99,7 +99,7 @@ void NoteSmartEditor::insertTab()
     textEdit.textCursor().insertText(completion);
 }
 
-void NoteSmartEditor::removeLine()
+void NoteSmartEditor::currentLineRemove()
 {
     QTextCursor cursor = textEdit.textCursor();
 
@@ -111,14 +111,14 @@ void NoteSmartEditor::removeLine()
     textEdit.setTextCursor(cursor);
 }
 
-bool NoteSmartEditor::fillLineWithSpacesOnEnter(QString& lineStr)
+bool NoteSmartEditor::completeLineWithSpaces(QString& line)
 {
     // fill only if cursor not at the beginning of line
     MF_DEBUG("Smart editor: cursor position @ fill " << textEdit.textCursor().positionInBlock() << endl);
-    if(textEdit.textCursor().positionInBlock() && lineStr.startsWith(" ")) {
+    if(textEdit.textCursor().positionInBlock() && line.startsWith(" ")) {
         // count the number of spaces: delete line if spaces only, indent otherwise
-        for(int i=0; i<lineStr.size(); i++) {
-            if(lineStr[i] != ' ') {
+        for(int i=0; i<line.size(); i++) {
+            if(line[i] != ' ') {
                 string s{"\n"};
                 for(int is=0; is<i; is++) {
                     s+=" ";
@@ -135,7 +135,7 @@ bool NoteSmartEditor::fillLineWithSpacesOnEnter(QString& lineStr)
     return false;
 }
 
-bool NoteSmartEditor::moveSelectionLeftOnBackTab()
+bool NoteSmartEditor::moveSelectedLinesLeftByTab()
 {
     MF_DEBUG("Editor: backtab WITH selection" << endl);
 
@@ -150,7 +150,7 @@ bool NoteSmartEditor::moveSelectionLeftOnBackTab()
     return false;
 }
 
-bool NoteSmartEditor::moveLineLeftOnBackTab()
+bool NoteSmartEditor::moveLineLeftByTab()
 {
     MF_DEBUG("Editor: backtab WITHOUT selection" << endl);
 
@@ -176,10 +176,10 @@ bool NoteSmartEditor::moveLineLeftOnBackTab()
     return false;
 }
 
-bool NoteSmartEditor::moveRightOnTab()
+bool NoteSmartEditor::moveLineRightByTab()
 {
     if(textEdit.textCursor().hasSelection()) {
-        return moveSelectionRightOnTab();
+        return moveSelectedLinesRightByTab();
     } else {
         insertTab();
         return true;
@@ -187,27 +187,27 @@ bool NoteSmartEditor::moveRightOnTab()
     return false;
 }
 
-bool NoteSmartEditor::moveSelectionRightOnTab()
+bool NoteSmartEditor::moveSelectedLinesRightByTab()
 {
 #ifdef MF_WIP
     MF_DEBUG("Editor: move selection RIGHT not implemented" << endl);
     throw "Not implemented";
 #endif
+
     return false;
 }
 
-/*
-bool NoteSmartEditor::isOddCountOfCharsOnCurrentLine(string c)
+bool NoteSmartEditor::isLineCountOfGivenCharOdd(string c)
 {
     UNUSED_ARG(c);
 
-    // TODO insert if EOLine
-    // TODO insert if next chart is space
-    // TODO insert if even number of pair chars (else just one char ~ normal dispatch)
+#ifdef MF_WIP
+    MF_DEBUG("Editor: odd chars counter TBD" << endl);
+    throw "Not implemented";
+#endif
 
     return false;
 }
-*/
 
 bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
 #ifdef MF_SMART_EDITOR
@@ -229,6 +229,7 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
             textEdit.moveCursor(QTextCursor::PreviousCharacter);
             return true;
         /* SKIPPED: does not help when creating bulleted lists
+           TODO re-enable, detect beginning of line and create list, ** otherwise
         case Qt::Key_Asterisk:
             textEdit.textCursor().insertText("**");
             textEdit.moveCursor(QTextCursor::PreviousCharacter);
@@ -247,20 +248,23 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
             textEdit.moveCursor(QTextCursor::PreviousCharacter);
             return true;
         case Qt::Key_QuoteLeft:
-            if(!textEdit.textCursor().positionInBlock()) {
+            // if at the beginning of current line
+            if(isAtTheBeginningOfLine()) {
                 textEdit.textCursor().insertText("```");
                 textEdit.moveCursor(QTextCursor::EndOfLine);
             } else {
-                // TODO if odd number of `, then close it
+                // if previous char is space and user wants to start new block
                 if(getLastChar().toStdString() == " ") {
                     textEdit.textCursor().insertText("``");
                     textEdit.moveCursor(QTextCursor::PreviousCharacter);
                 } else {
+                    // normal handling will insert `
                     return false;
                 }
             }
             return true;
         /* SKIPPED: does not help when writing: don't doesn't hasn't .. >> detect previous/next non-spaces as ^ and re-enable
+           TODO fix according to `  which will make it useful
         case Qt::Key_Apostrophe:
             textEdit.textCursor().insertText("''");
             textEdit.moveCursor(QTextCursor::PreviousCharacter);
@@ -268,11 +272,11 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
         */
         case Qt::Key_Backtab:
             if(textEdit.textCursor().hasSelection()) {
-                if(moveSelectionLeftOnBackTab()) {
+                if(moveSelectedLinesLeftByTab()) {
                     return true;
                 }
             } else {
-                if(moveLineLeftOnBackTab()) {
+                if(moveLineLeftByTab()) {
                     return true;
                 }
             }
@@ -292,12 +296,12 @@ bool NoteSmartEditor::getCurrentLineText(QString& text)
     return false;
 }
 
-bool NoteSmartEditor::eraseSpacesLine()
+bool NoteSmartEditor::currentLineRemoveIfSpacesOnly()
 {
     QString line{};
     if(getCurrentLineText(line)) {
         if(isLineSpacesOnly(line)) {
-            removeLine();
+            currentLineRemove();
             return true;
         }
     }
@@ -319,7 +323,7 @@ bool NoteSmartEditor::completeListAndFenceBlocks(QKeyEvent* event)
     if(block.isValid() && block.layout()) {
         QString lineStr{block.text()};
         // indented block / code fence autocomplete
-        if(fillLineWithSpacesOnEnter(lineStr)) {
+        if(completeLineWithSpaces(lineStr)) {
             return true;
         // numbered list autocomplete
         } else if(lineStr.startsWith("1. ")) {

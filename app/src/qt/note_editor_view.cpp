@@ -139,7 +139,7 @@ void NoteEditorView::setEditorTabWidth(int tabWidth)
 
 void NoteEditorView::setEditorTabsAsSpacesPolicy(bool tabsAsSpaces)
 {
-    smartEditor.setTabsAsSpaces(tabsAsSpaces);
+    smartEditor.setPolicyTabsAsSpaces(tabsAsSpaces);
 }
 
 void NoteEditorView::setEditorFont(std::string fontName)
@@ -172,11 +172,15 @@ void NoteEditorView::slotConfigurationUpdated()
 
 void NoteEditorView::dropEvent(QDropEvent* event)
 {
-#if defined(__APPLE__) || defined(_WIN32)
-    if(event->mimeData()->text().size())
-    {
+#if defined(__APPLE__)
+    if(event->mimeData()->text().size()) {
         MF_DEBUG("D&D drop event: '" << event->mimeData()->text().toStdString() << "'" << endl);
-        signalDnDropUrl(event->mimeData()->text().replace("file:///",""));
+        emit signalDnDropUrl(event->mimeData()->text().replace("file://",""));
+    }
+#elif defined(_WIN32)
+    if(event->mimeData()->text().size()) {
+        MF_DEBUG("D&D drop event: '" << event->mimeData()->text().toStdString() << "'" << endl);
+        emit signalDnDropUrl(event->mimeData()->text().replace("file:///",""));
     }
 #else
     if(event->mimeData()->hasUrls()
@@ -184,7 +188,7 @@ void NoteEditorView::dropEvent(QDropEvent* event)
        && event->mimeData()->urls().size())
     {
         MF_DEBUG("D&D drop: '" << event->mimeData()->urls().first().url().trimmed().toStdString() << "'" << endl);
-        signalDnDropUrl(event->mimeData()->urls().first().url().replace("file://",""));
+        emit signalDnDropUrl(event->mimeData()->urls().first().url().replace("file://",""));
     }
 #endif
 
@@ -314,7 +318,6 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
     if(event->modifiers() & Qt::ControlModifier) {
         switch (event->key()) {
             case Qt::Key_V: {
-                // TODO make this private function
                 QClipboard* clip = QApplication::clipboard();
                 const QMimeData* mime = clip->mimeData();
                 if(mime->hasImage()) {
@@ -434,7 +437,7 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
                 if(Configuration::getInstance().isUiEditorEnableSmartEditor()
                    && smartEditor.isPolicyTabsAsSpaces()
                 ) {
-                    if(smartEditor.moveRightOnTab()) {
+                    if(smartEditor.moveLineRightByTab()) {
                         return;
                     }
                 }
@@ -442,7 +445,7 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
             case Qt::Key_Enter:
             case Qt::Key_Return:
                 if(Configuration::getInstance().isUiEditorEnableSmartEditor()) {
-                    if(smartEditor.eraseSpacesLine()) {
+                    if(smartEditor.currentLineRemoveIfSpacesOnly()) {
                         return;
                     } else if(smartEditor.completeListAndFenceBlocks(event)) {
                         return;
