@@ -3124,14 +3124,20 @@ void MainWindowPresenter::doActionOrganizerMoveNoteToNextVisibleQuadrant(Note* n
             orloj
         );
     } else {
-        if(!EisenhowerMatrix::isEisenhowMatrixOrganizer(orloj->getOrganizer()->getOrganizer())) {
+        if(!EisenhowerMatrix::isEisenhowMatrixOrganizer(
+                orloj->getOrganizer()->getOrganizer()
+           )
+         ) {
             doActionOrganizerMoveNoteCommon(
                 note,
                 orloj->getOrganizer()->moveToNextVisibleQuadrant(note),
                 orloj
             );
         } else {
-            statusBar->showError("Notebooks/notes cannot be moved around quadrants of Eisenhower Matrix");
+            statusBar->showError(
+                "Notebooks/notes cannot be moved around quadrants of "
+                "Eisenhower Matrix"
+            );
         }
     }
 }

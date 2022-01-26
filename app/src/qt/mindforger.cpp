@@ -35,11 +35,9 @@ using namespace std;
 using namespace m8r::filesystem;
 
 /**
- * @brief MindForger command line interface.
+ * @brief main MindForger function and command line interface.
  *
- * MindForger command line interface description.
- *
- * GUI:
+ * MindForger command line interface description:
  *
  * ```
  * $ mindforger
@@ -60,8 +58,6 @@ using namespace m8r::filesystem;
  */
 
 /*
- *
- *
  * Options proposal:
  *
  * ```
@@ -81,7 +77,6 @@ using namespace m8r::filesystem;
  * $ mindforger --help
  *   -h
  * ```
- *
  *
  * Terminal CLI commands proposal:
  *
@@ -108,7 +103,6 @@ using namespace m8r::filesystem;
  * $ mindforger -C "FTS 'expr' SCOPE note 'abc'.'efg'"
  * ```
  *
- *
  * MindForger documentation is generated with DoXygen's JavaDoc style.
  *
  * @see https://www.doxygen.nl/manual/markdown.html
@@ -133,13 +127,15 @@ int main(int argc, char* argv[])
     // default terminal macOS environment: TERM=xterm-256color DISPLAY=
 #endif
 
-    // stupid & ugly code as QWebEngine @ macOS requires extra parameter(s) to
+    // Stupid & ugly: QWebEngine @ macOS requires extra parameter(s) to
     // allow access to local files (like images) to QApplication (security).
+    // Parameter differ Qt version to Qt version as diffent versions
+    // bundle different Chromium versions.
     //
     // Qt 5.9.9
     //  --disable-web-security           ... same origin
     //
-    // Qt 5.15.2 ~ Chrome 83
+    // Qt 5.15.2 ~ Chrome 83 ~ I did NOT find params to enable filesystem access
     //  --user-data-dir=<HOME>           ... user data dir
     //  --disable-web-security           ... same origin
     //  --disable-site-isolation-trials
@@ -156,7 +152,7 @@ int main(int argc, char* argv[])
     // Debugging:
     //
     // - DEBUG_WEBENGINE_SECURITY_QT_5_15
-#define DEBUG_WEBENGINE_SECURITY_QT_5_15
+//#define DEBUG_WEBENGINE_SECURITY_QT_5_15
     //
     // Resources:
     // - https://doc.qt.io/qt-5/qtwebengine-index.html
