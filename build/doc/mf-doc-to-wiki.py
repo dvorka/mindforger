@@ -52,14 +52,18 @@ def md_to_wiki_file(md_file_path: str, wiki_file_path: str):
     ]
     for b in blocked_list:
         if b in md_file_path:
-            print("    SKIP")
+            shutil.copy(
+                src=md_file_path,
+                dst=wiki_file_path,
+            )
+            print("    COPY")
             return
 
     with open(md_file_path, 'r') as md_in:
         data = md_in.read().splitlines(True)
     with open(wiki_file_path, 'w') as wiki_out:
         wiki_out.writelines(data[1:])
-    print("    OK")
+    print("    CONVERT")
 
 
 def doc_to_wiki(
