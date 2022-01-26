@@ -52,6 +52,7 @@ def md_to_wiki_file(md_file_path: str, wiki_file_path: str):
     ]
     for b in blocked_list:
         if b in md_file_path:
+            # TODO replace all FILE.md links to FILE (.md is used for src refs in Wiki)
             shutil.copy(
                 src=md_file_path,
                 dst=wiki_file_path,
@@ -61,6 +62,10 @@ def md_to_wiki_file(md_file_path: str, wiki_file_path: str):
 
     with open(md_file_path, 'r') as md_in:
         data = md_in.read().splitlines(True)
+
+    # additional conversion
+    # TODO replace all FILE.md links to FILE (.md is used for source references in Wiki)
+
     with open(wiki_file_path, 'w') as wiki_out:
         wiki_out.writelines(data[1:])
     print("    CONVERT")
