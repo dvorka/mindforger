@@ -46,29 +46,28 @@ def gather_documentation_file_paths(doc_mf_repo_path) -> Tuple[List, List, str]:
 def md_to_wiki_file(md_file_path: str, wiki_file_path: str):
     print(f"  {md_file_path} -> {wiki_file_path}")
 
+    is_blacklisted: bool = False
     blocked_list: list = [
         "_Footer.md",
         "_Sidebar.md",
     ]
     for b in blocked_list:
         if b in md_file_path:
-            # TODO replace all FILE.md links to FILE (.md is used for src refs in Wiki)
-            shutil.copy(
-                src=md_file_path,
-                dst=wiki_file_path,
-            )
-            print("    COPY")
-            return
+            is_blacklisted = True
 
     with open(md_file_path, 'r') as md_in:
         data = md_in.read().splitlines(True)
 
-    # additional conversion
-    # TODO replace all FILE.md links to FILE (.md is used for source references in Wiki)
+    # replace all FILE.md links to FILE (.md is used for source references in Wiki)
+    for i, _ in enumerate(data):
+        if data[i] and ".md)" in data[i]:
+            data[i] = data[i].replace(".md)", ")")
 
     with open(wiki_file_path, 'w') as wiki_out:
-        wiki_out.writelines(data[1:])
-    print("    CONVERT")
+        wiki_out.writelines(
+            data[1:] if not is_blacklisted else data
+        )
+    print("    CONVERT" if not is_blacklisted else "    COPY")
 
 
 def doc_to_wiki(
