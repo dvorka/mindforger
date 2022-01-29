@@ -46,6 +46,14 @@ class EditTagsPanel : public QGroupBox
                     tagsPanel->slotAddTag();
                     break;
                 }
+            } else {
+                if(!text().size()) {
+                    switch(event->key()) {
+                    case Qt::Key_Down:
+                        tagsPanel->setFocusTagList();
+                        break;
+                    }
+                }
             }
             QLineEdit::keyPressEvent(event);
 
@@ -95,6 +103,9 @@ public:
     void setFocusAddingTag() {
         lineEdit->setFocus();
         lineEdit->selectAll();
+    }
+    void setFocusTagList() {
+        listView->setFocus();
     }
     int getTagCount() const {
         return listView->model()->rowCount();

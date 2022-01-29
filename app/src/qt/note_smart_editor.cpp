@@ -65,6 +65,7 @@ QString NoteSmartEditor::getNextChar()
     if(cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor)) {
         nextChar = cursor.selectedText();
         cursor.clearSelection();
+        cursor.movePosition(QTextCursor::PreviousCharacter);
     }
     textEdit.setTextCursor(cursor);
 
@@ -247,15 +248,30 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
             textEdit.textCursor().insertText("\"\"");
             textEdit.moveCursor(QTextCursor::PreviousCharacter);
             return true;
-        case Qt::Key_QuoteLeft:
+        case Qt::Key_QuoteLeft: {
+            QString line{};
+            getCurrentLineText(line);
+
             // if at the beginning of current line
-            if(isAtTheBeginningOfLine()) {
+            if(isAtTheBeginningOfLine() && !line.size()) {
                 textEdit.textCursor().insertText("```");
                 textEdit.moveCursor(QTextCursor::EndOfLine);
             } else {
                 // if previous char is space and user wants to start new block
-                if(getLastChar().toStdString() == " ") {
-                    textEdit.textCursor().insertText("``");
+                QString lastChar = getLastChar();
+                QString nextChar = getNextChar();
+                if(lastChar.size() && lastChar[0] == " ") {
+                    MF_DEBUG("NEXT: '" << nextChar.toStdString()
+                         << "' size=" << nextChar.size()
+                         << " non-whitespace=" << boolalpha << (nextChar[0] != " ")
+                         << endl
+                    );
+                    if(nextChar.size() && nextChar[0] != " ") {
+                        textEdit.textCursor().insertText("`");
+                        textEdit.moveCursor(QTextCursor::NextCharacter);
+                    } else {
+                        textEdit.textCursor().insertText("``");
+                    }
                     textEdit.moveCursor(QTextCursor::PreviousCharacter);
                 } else {
                     // normal handling will insert `
@@ -263,6 +279,7 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
                 }
             }
             return true;
+        }
         /* SKIPPED: does not help when writing: don't doesn't hasn't .. >> detect previous/next non-spaces as ^ and re-enable
            TODO fix according to `  which will make it useful
         case Qt::Key_Apostrophe:
@@ -326,11 +343,17 @@ bool NoteSmartEditor::completeListAndFenceBlocks(QKeyEvent* event)
         if(completeLineWithSpaces(lineStr)) {
             return true;
         // numbered list autocomplete
-        } else if(lineStr.startsWith("1. ")) {
+        } else if(lineStr.startsWith("1. ")
+            // do NOT indent when <BOL>|* abc and user hits ENTER
+            && !textEdit.textCursor().atBlockStart()
+        ) {
             textEdit.textCursor().insertText("\n   ");
             return true;
         // bulletted list autocomplete
-        } else if(lineStr.startsWith("* ") || lineStr.startsWith("- ")) {
+        } else if((lineStr.startsWith("* ") || lineStr.startsWith("- "))
+          // do NOT indent when <BOL>|* abc and user hits ENTER
+          && !textEdit.textCursor().atBlockStart()
+        ) {
             textEdit.textCursor().insertText("\n  ");
             return true;
         }
