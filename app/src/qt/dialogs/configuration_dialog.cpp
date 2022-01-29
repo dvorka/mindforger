@@ -56,7 +56,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
 
     // dialog
     setWindowTitle(tr("Adapt"));
-    resize(fontMetrics().averageCharWidth()*65, 0);
+    resize(fontMetrics().averageCharWidth()*75, 0);
     setModal(true);
 }
 

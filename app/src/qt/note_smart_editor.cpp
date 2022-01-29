@@ -162,9 +162,7 @@ bool NoteSmartEditor::moveLineLeftByTab()
            textEdit.moveCursor(QTextCursor::StartOfLine);
            for(int i=0; i<this->tabWidth; i++) {
                textEdit.textCursor().deleteChar();
-               // TODO textEdit.moveCursor(QTextCursor::Right, QTextCursor::KeepAnchor);
            }
-           // TODO textEdit.textCursor().removeSelectedText();
            return true;
         } else {
             // if there are less spaces than tab width, delete one space
