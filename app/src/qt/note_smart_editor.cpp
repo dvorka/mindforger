@@ -161,9 +161,10 @@ bool NoteSmartEditor::moveLineLeftByTab()
             // if there are more spaces than tab width, delete one tab
            textEdit.moveCursor(QTextCursor::StartOfLine);
            for(int i=0; i<this->tabWidth; i++) {
-               textEdit.moveCursor(QTextCursor::Right, QTextCursor::KeepAnchor);
+               textEdit.textCursor().deleteChar();
+               // TODO textEdit.moveCursor(QTextCursor::Right, QTextCursor::KeepAnchor);
            }
-           textEdit.textCursor().removeSelectedText();
+           // TODO textEdit.textCursor().removeSelectedText();
            return true;
         } else {
             // if there are less spaces than tab width, delete one space
@@ -212,6 +213,8 @@ bool NoteSmartEditor::isLineCountOfGivenCharOdd(string c)
 
 bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
 #ifdef MF_SMART_EDITOR
+    QString line{};
+
     switch (event->key()) {
         case Qt::Key_ParenLeft:
             textEdit.textCursor().insertText("()");
@@ -222,8 +225,13 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
             textEdit.moveCursor(QTextCursor::PreviousCharacter);
             return true;
         case Qt::Key_BracketLeft:
-            textEdit.textCursor().insertText("[]");
-            textEdit.moveCursor(QTextCursor::PreviousCharacter);
+            getCurrentLineText(line);
+            if(line.startsWith("- ") || line.startsWith("* ") || line.startsWith("1. ")) {
+                textEdit.textCursor().insertText("[ ] ");
+            } else {
+                textEdit.textCursor().insertText("[]");
+                textEdit.moveCursor(QTextCursor::PreviousCharacter);
+            }
             return true;
         case Qt::Key_Less:
             textEdit.textCursor().insertText("<>");
@@ -249,9 +257,7 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
             textEdit.moveCursor(QTextCursor::PreviousCharacter);
             return true;
         case Qt::Key_QuoteLeft: {
-            QString line{};
             getCurrentLineText(line);
-
             // if at the beginning of current line
             if(isAtTheBeginningOfLine() && !line.size()) {
                 textEdit.textCursor().insertText("```");
