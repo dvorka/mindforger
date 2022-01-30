@@ -30,36 +30,21 @@ class EditTagsPanel : public QGroupBox
 {
     Q_OBJECT
 
-    class MyLineEdit : public QLineEdit
+    class TagLineEdit : public QLineEdit
     {
     private:
         EditTagsPanel* tagsPanel;
     public:
-        explicit MyLineEdit(EditTagsPanel* tagsPanel, QWidget* parent)
-            : QLineEdit(parent), tagsPanel(tagsPanel)
-        {}
+        explicit TagLineEdit(EditTagsPanel* tagsPanel, QWidget* parent);
+        virtual void keyPressEvent(QKeyEvent* event) override;
+    };
 
-        virtual void keyPressEvent(QKeyEvent* event) override {
-            if(event->modifiers() & Qt::ControlModifier){
-                switch(event->key()) {
-                case Qt::Key_Return: // Qt::Key_Enter is keypad Enter
-                    tagsPanel->slotAddTag();
-                    break;
-                }
-            } else {
-                if(!text().size()) {
-                    switch(event->key()) {
-                    case Qt::Key_Down:
-                        tagsPanel->setFocusTagList();
-                        break;
-                    }
-                }
-            }
-            QLineEdit::keyPressEvent(event);
-
-            // notify about key pressed
-            tagsPanel->customLineEditKeyPressEvent(event);
-        }
+    class TagsListView : public QListView {
+    private:
+        EditTagsPanel* tagsPanel;
+    public:
+        explicit TagsListView(EditTagsPanel* tagsPanel, QWidget* parent);
+        virtual void keyPressEvent(QKeyEvent* event) override;
     };
 
 private:
@@ -70,7 +55,7 @@ private:
 
     QVBoxLayout* layout;
 
-    MyLineEdit* lineEdit;
+    TagLineEdit* lineEdit;
     QCompleter* completer;
     QListView* listView;
     QPushButton* addButton;

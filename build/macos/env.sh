@@ -19,9 +19,12 @@
 
 export MINDFORGER_VERSION="1.54.0"
 
-# export QT_VERSION="5.9.9"
+# aligned with Ubuntu 18.4
+export QT_VERSION="5.9.9"
+# MindForger 1.52.0 released for macOS Qt version
 # export QT_VERSION="5.11.0"
-export QT_VERSION="5.15.2"
+# BUG: unable to set security - images are NOT loaded with Qt 5.15.2
+# export QT_VERSION="5.15.2"  
 
 
 export PATH="/Users/dvorka/Qt/${QT_VERSION}/clang_64/bin":${PATH}

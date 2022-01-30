@@ -22,6 +22,58 @@ namespace m8r {
 
 using namespace std;
 
+EditTagsPanel::TagLineEdit::TagLineEdit(EditTagsPanel* tagsPanel, QWidget* parent)
+    : QLineEdit(parent), tagsPanel(tagsPanel)
+{}
+
+void EditTagsPanel::TagLineEdit::keyPressEvent(QKeyEvent* event)
+{
+    if(event->modifiers() & Qt::ControlModifier){
+        switch(event->key()) {
+        case Qt::Key_Return: // Qt::Key_Enter is keypad Enter
+            tagsPanel->slotAddTag();
+            break;
+        }
+    } else {
+        if(!text().size()) {
+            switch(event->key()) {
+            case Qt::Key_Down:
+                tagsPanel->setFocusTagList();
+                break;
+            }
+        }
+    }
+    QLineEdit::keyPressEvent(event);
+
+    // notify about key pressed
+    tagsPanel->customLineEditKeyPressEvent(event);
+}
+
+EditTagsPanel::TagsListView::TagsListView(EditTagsPanel* tagsPanel, QWidget* parent)
+    : QListView(parent),
+      tagsPanel{tagsPanel}
+{}
+
+void EditTagsPanel::TagsListView::keyPressEvent(QKeyEvent* event)
+{
+    if(event->modifiers() & Qt::ControlModifier){
+        switch(event->key()) {
+        case Qt::Key_D:
+            MF_DEBUG("Edit tags: Cmd-D" << endl);
+            tagsPanel->slotRemoveTag();
+            break;
+        }
+    } else {
+        switch(event->key()) {
+        case Qt::Key_Delete:
+            MF_DEBUG("Edit tags: DEL" << endl);
+            tagsPanel->slotRemoveTag();
+            break;
+        }
+    }
+    QListView::keyPressEvent(event);
+}
+
 EditTagsPanel::EditTagsPanel(
         MfWidgetMode mode,
         Ontology& ontology,
@@ -31,7 +83,7 @@ EditTagsPanel::EditTagsPanel(
       ontology(ontology)
 {
     // widgets
-    lineEdit = new MyLineEdit{this, parent};
+    lineEdit = new TagLineEdit{this, this};
     lineEdit->setToolTip(
 #ifdef __APPLE__
         tr("Hit ⌘↩ to add tag")
@@ -43,7 +95,7 @@ EditTagsPanel::EditTagsPanel(
     completer->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     lineEdit->setCompleter(completer);
-    listView = new QListView{this};
+    listView = new TagsListView{this, this};
     // list view model must be set - use of this type of mode enable the use of string lists controlling its content
     listView->setModel(&listViewModel);
     // disable ability to edit list items
