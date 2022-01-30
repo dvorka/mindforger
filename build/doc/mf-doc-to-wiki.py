@@ -25,9 +25,7 @@ from typing import Tuple
 
 
 def gather_documentation_file_paths(doc_mf_repo_path) -> Tuple[List, List, str]:
-    memory_path: str = os.path.join(
-        doc_mf_repo_path, "memory"
-    )
+    memory_path: str = os.path.join(doc_mf_repo_path, "memory")
     if not os.path.isdir(memory_path):
         raise ValueError(
             f"mindforger-documentation path is not MindForger repository - memory path"
@@ -47,33 +45,39 @@ def md_to_wiki_file(md_file_path: str, wiki_file_path: str):
     print(f"  {md_file_path} -> {wiki_file_path}")
 
     is_blacklisted: bool = False
+
     blocked_list: list = [
-        "_Footer.md",
         "_Sidebar.md",
     ]
     for b in blocked_list:
         if b in md_file_path:
             is_blacklisted = True
 
-    with open(md_file_path, 'r') as md_in:
+    with open(md_file_path, "r") as md_in:
         data = md_in.read().splitlines(True)
 
-    # replace all FILE.md links to FILE (.md is used for source references in Wiki)
     for i, _ in enumerate(data):
-        if data[i] and ".md)" in data[i]:
-            data[i] = data[i].replace(".md)", ")")
+        if data[i]:
+            # replace all FILE.md links to FILE (.md is used for source refs in Wiki)
+            if ".md)" in data[i]:
+                data[i] = data[i].replace(".md)", ")")
+            # replace all FILE.md#l links to FILE (.md is used for source refs in Wiki)
+            elif ".md#" in data[i] and "http" not in data[i]:
+                data[i] = data[i].replace(".md#", "#")
+            # strip MindForger section metadata
+            elif (
+                data[i].startswith("#")
+                and "<!-- Metadata:" in data[i]
+                and "-->" in data[i]
+            ):
+                data[i] = data[i][0 : data[i].index(" <!-- Metadata:")] + "\n"
 
-    with open(wiki_file_path, 'w') as wiki_out:
-        wiki_out.writelines(
-            data[1:] if not is_blacklisted else data
-        )
+    with open(wiki_file_path, "w") as wiki_out:
+        wiki_out.writelines(data[1:] if not is_blacklisted else data)
     print("    CONVERT" if not is_blacklisted else "    COPY")
 
 
-def doc_to_wiki(
-    doc_mf_repo_path: str,
-    wiki_repo_path: str
-):
+def doc_to_wiki(doc_mf_repo_path: str, wiki_repo_path: str):
     if not os.path.isdir(doc_mf_repo_path):
         raise ValueError(
             f"Invalid path to private mindforger-documentation GitHub repository: "
@@ -87,7 +91,7 @@ def doc_to_wiki(
     (
         md_paths_to_convert,
         image_paths,
-        doc_mf_repo_memory_path
+        doc_mf_repo_memory_path,
     ) = gather_documentation_file_paths(doc_mf_repo_path)
 
     paths_to_copy: list = image_paths.copy()
@@ -96,10 +100,7 @@ def doc_to_wiki(
     for md_path in md_paths_to_convert:
         md_to_wiki_file(
             md_file_path=md_path,
-            wiki_file_path=md_path.replace(
-                doc_mf_repo_memory_path,
-                wiki_repo_path
-            ),
+            wiki_file_path=md_path.replace(doc_mf_repo_memory_path, wiki_repo_path),
         )
 
     print(f"Copying {len(paths_to_copy)} files:")
@@ -107,10 +108,7 @@ def doc_to_wiki(
         print(f"  {p}")
         shutil.copy(
             src=p,
-            dst=p.replace(
-                doc_mf_repo_memory_path,
-                wiki_repo_path
-            ),
+            dst=p.replace(doc_mf_repo_memory_path, wiki_repo_path),
         )
 
 
@@ -118,13 +116,9 @@ if __name__ == "__main__":
     print("Converting mindforger-documentation to mindforger.wiki:")
     home_path = os.path.expanduser("~")
     _doc_mf_repo_path = os.path.join(
-        home_path,
-        "p/mindforger/git/mindforger-documentation"
+        home_path, "p/mindforger/git/mindforger-documentation"
     )
-    _wiki_repo_path = os.path.join(
-        home_path,
-        "p/mindforger/git/mindforger.wiki"
-    )
+    _wiki_repo_path = os.path.join(home_path, "p/mindforger/git/mindforger.wiki")
     print(f"  from: {_doc_mf_repo_path}")
     print(f"  to  : {_wiki_repo_path}")
 
