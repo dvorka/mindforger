@@ -222,15 +222,22 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
             textEdit.textCursor().insertText("{}");
             textEdit.moveCursor(QTextCursor::PreviousCharacter);
             return true;
-        case Qt::Key_BracketLeft:
+        case Qt::Key_BracketLeft: {
             getCurrentLineText(line);
-            if(line.startsWith("- ") || line.startsWith("* ") || line.startsWith("1. ")) {
+            QString simplifiedLine = chopLeadingSpaces(line);
+            MF_DEBUG("Smart: list completion - simplified: '"
+                << simplifiedLine.toStdString()
+                << "'"
+                << endl
+            );
+            if(simplifiedLine.startsWith("- ") || simplifiedLine.startsWith("* ") || simplifiedLine.startsWith("1. ")) {
                 textEdit.textCursor().insertText("[ ] ");
             } else {
                 textEdit.textCursor().insertText("[]");
                 textEdit.moveCursor(QTextCursor::PreviousCharacter);
             }
             return true;
+        }
         case Qt::Key_Less:
             textEdit.textCursor().insertText("<>");
             textEdit.moveCursor(QTextCursor::PreviousCharacter);
@@ -315,6 +322,24 @@ bool NoteSmartEditor::getCurrentLineText(QString& text)
         return true;
     }
     return false;
+}
+
+QString NoteSmartEditor::chopLeadingSpaces(const QString text)
+{
+    if(text.size()) {
+        int leadingSpaces{0};
+        while(text.size()-1 >= leadingSpaces && text.at(leadingSpaces) == ' ') {
+            ++leadingSpaces;
+        }
+
+        if(leadingSpaces) {
+            QString result{text};
+            result.remove(0, leadingSpaces);
+
+            return result;
+        }
+    }
+    return text;
 }
 
 bool NoteSmartEditor::currentLineRemoveIfSpacesOnly()

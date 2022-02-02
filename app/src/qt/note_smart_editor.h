@@ -102,6 +102,11 @@ public:
     bool getCurrentLineText(QString& text);
 
     /**
+     * @brief Removing leading spaces.
+     */
+    QString chopLeadingSpaces(const QString text);
+
+    /**
      * @brief Get next character - on the right from cursor - on the current line.
      */
     QString getNextChar();
