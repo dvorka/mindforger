@@ -75,9 +75,7 @@ build: clean
 	ls -al ../app/mindforger
 
 l10n:
-	cd make
-	./l10n-update-strings.sh
-	./l10n-edit-and-release.sh $(MF_LANG)
+	cd make && ./l10n-update-strings.sh && ./l10n-edit-and-release.sh $(MF_LANG)
 
 test-lib: clean
 	cd make && ./test-lib-units.sh
