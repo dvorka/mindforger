@@ -751,6 +751,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatListTask->setStatusTip(tr("Format block as task list"));
     submenuFormatLists->addAction(actionFormatListTask);
 
+    submenuFormatLists->addSeparator();
+
     // TODO handling
     actionFormatListTaskItem = new QAction(tr("Task List &Item"), mainWindow);
     actionFormatListTaskItem->setStatusTip(tr("Format block as task list"));

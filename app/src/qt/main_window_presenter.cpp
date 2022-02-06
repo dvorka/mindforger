@@ -1432,9 +1432,9 @@ void MainWindowPresenter::handleRowsAndDepth()
     }
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text);
+        orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(text, false);
     } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text);
+        orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->insertMarkdownText(text, false);
     }
 }
 

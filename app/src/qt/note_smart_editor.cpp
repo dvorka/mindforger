@@ -230,9 +230,20 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
                 << "'"
                 << endl
             );
-            if(simplifiedLine.startsWith("- ") || simplifiedLine.startsWith("* ") || simplifiedLine.startsWith("1. ")) {
+            if((simplifiedLine.size() == 2
+                && (simplifiedLine.startsWith("- ") || simplifiedLine.startsWith("* "))
+               )
+               ||
+               ( simplifiedLine.size() == 3 && simplifiedLine.startsWith("1. "))
+            ) {
                 textEdit.textCursor().insertText("[ ] ");
             } else {
+                QString nextChar = getNextChar();
+                // do NOT complete if next char is non-whitespace
+                if(nextChar.size() && nextChar[0] != " ") {
+                    break;
+                }
+                // else DO complete
                 textEdit.textCursor().insertText("[]");
                 textEdit.moveCursor(QTextCursor::PreviousCharacter);
             }
@@ -277,7 +288,7 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
                          << " non-whitespace=" << boolalpha << (nextChar[0] != " ")
                          << endl
                     );
-                    if(nextChar.size() && nextChar[0] != " ") {
+                    if(nextChar.size() && nextChar[0] != " " && !isAtTheEndOfLine()) {
                         textEdit.textCursor().insertText("`");
                         textEdit.moveCursor(QTextCursor::NextCharacter);
                     } else {
