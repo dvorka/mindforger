@@ -89,14 +89,17 @@ QString NoteSmartEditor::getLastChar()
     return lastChar;
 }
 
+string NoteSmartEditor::getTabAsSpaces()
+{
+    if(this->tabWidth == 8) {
+        return "        ";
+    }
+    return "    ";
+}
+
 void NoteSmartEditor::insertTab()
 {
-    QString completion{};
-    if(this->tabWidth == 8) {
-        completion.append("        ");
-    } else {
-        completion.append("    ");
-    }
+    QString completion{getTabAsSpaces().c_str()};
     textEdit.textCursor().insertText(completion);
 }
 
@@ -133,21 +136,6 @@ bool NoteSmartEditor::completeLineWithSpaces(QString& line)
         textEdit.textCursor().insertText("\n");
         return true;
     }
-    return false;
-}
-
-bool NoteSmartEditor::moveSelectedLinesLeftByTab()
-{
-    MF_DEBUG("Editor: backtab WITH selection" << endl);
-
-#ifdef MF_WIP
-    // TODO move all lines in the selection
-    throw "Not implemented";
-
-    // process selection IF every line starts with empty character - helper function
-    //    remove by size of tab OR by one if smaller
-#endif
-
     return false;
 }
 
@@ -189,10 +177,141 @@ bool NoteSmartEditor::moveLineRightByTab()
 
 bool NoteSmartEditor::moveSelectedLinesRightByTab()
 {
-#ifdef MF_WIP
-    MF_DEBUG("Editor: move selection RIGHT not implemented" << endl);
-    throw "Not implemented";
-#endif
+    QString selection{textEdit.textCursor().selectedText()};
+    MF_DEBUG("SMART EDITOR: move selected block RIGHT on TAB by 1 SPACE - selection:"
+        << endl
+        << "'" << selection.toStdString() << "'"
+        << endl
+    );
+
+    if(selection.size()) {
+        QStringList qlines = selection.split(QRegExp(QChar(U_CODE_PARAGRAPH_NL)));
+
+        // MOVE: prepend SPACE and assemble the text
+        QString updatedSelection{};
+        MF_DEBUG("SMART EDITOR: qstring lines[" << qlines.size() << "]" << endl);
+        for(int i=0; i<qlines.size(); i++) {
+            MF_DEBUG("  '" << qlines[i].toStdString() << "'" << endl);
+            // prepend SPACE
+            updatedSelection.append(' ');
+            // prepend TAB
+            //updatedSelection.append(QString::fromStdString(this->getTabAsSpaces()));
+            updatedSelection += qlines[i];
+            if(qlines.size() > i+1) {
+                updatedSelection += QChar(U_CODE_PARAGRAPH_NL);
+            }
+        }
+
+        // replace selection (see move selection RIGH comments for how and why)
+        MF_DEBUG("SMART EDITOR: selection MOVED right on TAB by 1 SPACE:"
+            << endl
+            << "'" << updatedSelection.toStdString() << "'"
+            << endl
+        );
+
+        textEdit.textCursor().clearSelection();
+        int anchorPos = textEdit.textCursor().anchor();
+        textEdit.textCursor().insertText(updatedSelection);
+
+        QTextCursor cursor = textEdit.textCursor();
+        int insertedTextPos = cursor.position();
+        cursor.setPosition(
+            anchorPos,
+            QTextCursor::MoveAnchor
+        );
+        cursor.setPosition(
+            insertedTextPos,
+            QTextCursor::KeepAnchor
+        );
+        // apply cursor changes ~ make selection VISIBLE
+        textEdit.setTextCursor(cursor);
+
+        return true;
+    }
+
+    return false;
+}
+
+bool NoteSmartEditor::moveSelectedLinesLeftByTab()
+{
+    QString selection{textEdit.textCursor().selectedText()};
+    MF_DEBUG("SMART EDITOR: move selected block LEFT on TAB by 1 SPACE - selection:"
+        << endl
+        << "'" << selection.toStdString() << "'"
+        << endl
+    );
+
+    if(selection.size()) {
+        QStringList qlines = selection.split(QRegExp(QChar(U_CODE_PARAGRAPH_NL)));
+
+        // MOVE selected text left by removing leading SPACE from every row
+        QString updatedSelection{};
+        MF_DEBUG("SMART EDITOR: qstring lines[" << qlines.size() << "]" << endl);
+        for(int i=0; i<qlines.size(); i++) {
+            MF_DEBUG("  > '" << qlines[i].toStdString() << "'" << endl);
+
+            if(qlines[i].size() && qlines[i][0] == ' ') {
+                // remove the first space
+                QString updatedLine{qlines[i].remove(0, 1)};
+                updatedSelection += updatedLine;
+                if(qlines.size() > i+1) {
+                    updatedSelection += QChar(U_CODE_PARAGRAPH_NL);
+                }
+            } else {
+                MF_DEBUG("  > not ' ' prefixed line > LEAVING" << endl);
+                return false;
+            }
+        }
+
+        // replace selection
+        MF_DEBUG("SMART EDITOR: selection MOVED left on TAB by 1 SPACE:"
+            << endl
+            << "'" << updatedSelection.toStdString() << "'"
+            << endl
+        );
+
+        textEdit.textCursor().clearSelection();
+        int anchorPos = textEdit.textCursor().anchor();
+        MF_DEBUG("SMART EDITOR - insert text before:" << endl
+            << "  anchor=" << anchorPos << endl
+            << "  cursor=" << textEdit.textCursor().position() << endl
+        );
+        textEdit.textCursor().insertText(updatedSelection);
+
+        // SELECT text:
+        //   From QPlainTextEdit doc: If you want to set a selection in QPlainTextEdit
+        // just create one on a QTextCursor object and then make that cursor
+        // the VISIBLE cursor using setCursor().
+        QTextCursor cursor = textEdit.textCursor();
+        int insertedTextPos = cursor.position();
+        MF_DEBUG("SMART EDITOR - insert text after, select text BEFORE:" << endl
+            << "  anchorVar=" << anchorPos << endl
+            << "  anchor=" << cursor.anchor() << endl
+            << "  cursor=" << cursor.position() << endl
+            << "  inserted=" << insertedTextPos << endl
+        );
+        cursor.setPosition(
+            anchorPos,
+            QTextCursor::MoveAnchor
+        );
+        cursor.setPosition(
+            insertedTextPos,
+            QTextCursor::KeepAnchor
+        );
+        MF_DEBUG("SMART EDITOR - selecting text AFTER INSERT:" << endl
+             << "  hasSelection=" << boolalpha << cursor.hasSelection() << endl
+             << "  selectionStart=" << cursor.selectionStart() << endl
+             << "  selectionEnd=" << cursor.selectionEnd() << endl
+             << "  inserted=" << insertedTextPos << endl
+             << "  anchorVar=" << anchorPos << endl
+             << "  anchor=" << cursor.anchor() << endl
+             << "  cursor=" << cursor.position() << endl
+        );
+        // apply cursor changes ~ make selection VISIBLE
+        textEdit.setTextCursor(cursor);
+
+        return true;
+    }
 
     return false;
 }

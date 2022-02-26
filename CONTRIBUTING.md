@@ -27,7 +27,7 @@ code.
 * Commit messages must provide concise change description.
 * Reference issues and pull requests related to the commit.
 * Close bugs with issue references in commit messages.
-* Limit commit message length to 72 characters, but only if reasonable.
+* If possible, limit commit message length to 72 characters.
 # Styleguide: C++
 Code style:
   

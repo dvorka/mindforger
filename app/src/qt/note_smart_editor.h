@@ -21,6 +21,9 @@
 
 #include "../../lib/src/debug.h"
 #include "../../lib/src/config/configuration.h"
+#include "../../lib/src/gear/string_utils.h"
+
+#include "../../lib/src/representations/unicode.h"
 
 #include <QtWidgets>
 
@@ -134,6 +137,11 @@ public:
     bool completeLineWithSpaces(QString& currentLine);
 
     /**
+     * @brief Get TAB as string made of spaces.
+     */
+    std::string getTabAsSpaces();
+
+    /**
      * @brief Insert tab at current cursor position.
      */
     void insertTab();
@@ -152,7 +160,8 @@ public:
      */
     bool moveLineLeftByTab();
     /**
-     * @brief Move selected lines to left by TAB spaces (on BACK TAB).
+     * @brief Move selected lines to left by 1 space (on BACK TAB) as it's more practical than
+     * move text left by TAB spaces.
      */
     bool moveSelectedLinesLeftByTab();
 
