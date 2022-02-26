@@ -236,10 +236,10 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     viewerLayout->addWidget(fullOPreviewCheck);
     viewerLayout->addWidget(srcCodeHighlightSupportCheck);
     viewerLayout->addWidget(mathSupportCheck);
-    viewerLayout->addWidget(zoomLabel);
-    viewerLayout->addWidget(zoomSpin);
     viewerLayout->addWidget(diagramSupportLabel);
     viewerLayout->addWidget(diagramSupportCombo);
+    viewerLayout->addWidget(zoomLabel);
+    viewerLayout->addWidget(zoomSpin);
     viewerGroup->setLayout(viewerLayout);
 
     QGroupBox* viewerCssGroup = new QGroupBox{tr("HTML Viewer CSS"), this};
