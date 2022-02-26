@@ -71,13 +71,17 @@ gen-ui-class:
 
 build: clean
 	cd .. && qmake -r mindforger.pro && make -j 7
-	@echo "If build succeeded then MindForger executable can be found in:\n  app/mindforger"
+	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
+	ls -al ../app/mindforger
+
+build-ci: clean
+	@echo "MindForger CI build..."
+	cd .. && qmake CONFIG+=mfci -r mindforger.pro && make -j 7
+	@echo "If CI build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
 l10n:
-	cd make
-	./l10n-update-strings.sh
-	./l10n-edit-and-release.sh $(MF_LANG)
+	cd make && ./l10n-update-strings.sh && ./l10n-edit-and-release.sh $(MF_LANG)
 
 test-lib: clean
 	cd make && ./test-lib-units.sh
@@ -132,7 +136,7 @@ api-reference:
 
 # private development targets
 
-dev-install-local: build ../app/mindforger
+dev-install-local: build-ci ../app/mindforger
 	cp -vf ../app/mindforger ~/bin
 	mv -vf ~/bin/mindforger ~/bin/mind
 	~/bin/mind --version
