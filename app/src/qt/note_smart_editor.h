@@ -139,6 +139,12 @@ public:
     void insertTab();
 
     /**
+     * @brief Do not add TAB blindly, but add spaces to the current position so that
+     * their number is multiplication of TAB from the beginning of the line.
+     */
+    void smartInsertTab();
+
+    /**
      * @brief Move block of text on current line behind cursor right by TAB spaces (on TAB).
      */
     bool moveLineRightByTab();

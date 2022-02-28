@@ -100,6 +100,28 @@ void NoteSmartEditor::insertTab()
     textEdit.textCursor().insertText(completion);
 }
 
+void NoteSmartEditor::smartInsertTab()
+{
+    if(textEdit.textCursor().block().isValid()) {
+        int fraction =
+            (textEdit.textCursor().position() - textEdit.textCursor().block().position())
+            %
+            this->tabWidth;
+        if(!fraction) {
+            this->insertTab();
+        } else {
+            fraction = this->tabWidth - fraction;
+            QString completion{};
+            for(int i=0; i<fraction; i++) {
+                completion += ' ';
+            }
+            textEdit.textCursor().insertText(completion);
+        }
+    } else {
+        insertTab();
+    }
+}
+
 void NoteSmartEditor::currentLineRemove()
 {
     QTextCursor cursor = textEdit.textCursor();
@@ -181,7 +203,7 @@ bool NoteSmartEditor::moveLineRightByTab()
     if(textEdit.textCursor().hasSelection()) {
         return moveSelectedLinesRightByTab();
     } else {
-        insertTab();
+        smartInsertTab();
         return true;
     }
     return false;
