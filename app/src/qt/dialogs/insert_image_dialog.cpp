@@ -97,7 +97,11 @@ void InsertImageDialog::show(const QString& text, const QString& link)
 void InsertImageDialog::handleFindFile()
 {
     QString homeDirectory
-        = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+        = QStandardPaths::locate(
+            QStandardPaths::HomeLocation,
+            QString(),
+            QStandardPaths::LocateDirectory
+        );
 
     QFileDialog fileDialog{this};
     fileDialog.setWindowTitle(tr("Choose File with Image"));

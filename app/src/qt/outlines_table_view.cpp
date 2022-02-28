@@ -42,6 +42,7 @@ OutlinesTableView::OutlinesTableView(QWidget *parent, bool isDashboardlet)
 
 void OutlinesTableView::keyPressEvent(QKeyEvent* event)
 {
+    MF_DEBUG("OutlinesTableView::keyPressEvent " << event->key() << endl);
     if(!(event->modifiers() & Qt::AltModifier)
          &&
        !(event->modifiers() & Qt::ControlModifier)
@@ -57,8 +58,16 @@ void OutlinesTableView::keyPressEvent(QKeyEvent* event)
             QTableView::keyPressEvent(event);
             return;
         case Qt::Key_Up:
-        // IMPROVE left to cancel selection
+            QTableView::keyPressEvent(event);
+            return;
+        case Qt::Key_PageDown:
+            MF_DEBUG("  OutlinesTableView::keyPressEvent PAGE_DOWN" << endl);
+            return;
+        case Qt::Key_PageUp:
+            MF_DEBUG("  OutlinesTableView::keyPressEvent PAGE_UP" << endl);
+            return;
         case Qt::Key_Left:
+            // IMPROVE left to cancel selection
             QTableView::keyPressEvent(event);
             return;
         }
