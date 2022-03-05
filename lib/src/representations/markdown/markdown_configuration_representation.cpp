@@ -54,6 +54,7 @@ constexpr const auto CONFIG_SETTING_UI_EDITOR_LIVE_SPELLCHECK_LABEL =  "* Live e
 constexpr const auto CONFIG_SETTING_UI_EDITOR_SPELLCHECK_LANG_LABEL =  "* Spell check language: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL =  "* Editor autocomplete: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_SMART_EDITOR_LABEL =  "* Smart editor: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_SPACE_SECTION_ESCAPING_LABEL =  "* Space-based # in section escaping: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL =  "* Editor TAB width: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TABS_AS_SPACES_LABEL =  "* Editor insert SPACEs for TAB: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOSAVE_LABEL =  "* Editor autosave on close: ";
@@ -304,6 +305,12 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         } else {
                             c.setUiEditorEnableSmartEditor(false);
                         }
+                    } else if(line->find(CONFIG_SETTING_UI_EDITOR_SPACE_SECTION_ESCAPING_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiEditorSpaceSectionEscaping(true);
+                        } else {
+                            c.setUiEditorSpaceSectionEscaping(false);
+                        }
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL) != std::string::npos) {
                         if(line->find("8") != std::string::npos) {
                             c.setUiEditorTabWidth(8);
@@ -531,6 +538,9 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_SMART_EDITOR_LABEL << (c?(c->isUiEditorEnableSmartEditor()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SMART_EDITOR?"yes":"no")) << endl <<
          "    * Enable numbered and buletted list, blocks and [({`_ autocomplete." << endl <<
+         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_EDITOR_SPACE_SECTION_ESCAPING_LABEL << (c?(c->isUiEditorSpaceSectionEscaping()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SPACE_SECTION_ESCAPING?"yes":"no")) << endl <<
+         "    * Enable SPACE-based # in section espacing (HTML entity used when disabled)." << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL << (c?c->getUiEditorTabWidth():Configuration::DEFAULT_EDITOR_TAB_WIDTH) << endl <<
          "    * Examples: 4, 8" << endl <<

@@ -64,6 +64,7 @@ Configuration::Configuration()
       uiEditorSpellCheckLanguages{},
       uiEditorAutocomplete{DEFAULT_EDITOR_AUTOCOMPLETE},
       uiEditorSmartEditor{DEFAULT_EDITOR_SMART_EDITOR},
+      uiEditorSpaceSectionEscaping{DEFAULT_EDITOR_SPACE_SECTION_ESCAPING},
       navigatorMaxNodes{},
       uiEditorTabsAsSpaces{},
       uiEditorAutosave{DEFAULT_EDITOR_AUTOSAVE},
@@ -174,6 +175,7 @@ void Configuration::clear()
     uiEditorAutosave = DEFAULT_EDITOR_AUTOSAVE;
     uiEditorTabWidth = DEFAULT_EDITOR_TAB_WIDTH;
     uiEditorSmartEditor = DEFAULT_EDITOR_SMART_EDITOR;
+    uiEditorSpaceSectionEscaping = DEFAULT_EDITOR_SPACE_SECTION_ESCAPING;
 #ifdef _WIN32
     uiEditorKeyBinding = EditorKeyBindingMode::WINDOWS;
 #else

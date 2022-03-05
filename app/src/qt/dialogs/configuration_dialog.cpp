@@ -41,7 +41,6 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     tabWidget->addTab(navigatorTab, tr("Navigator"));
     tabWidget->addTab(mindTab, tr("Mind"));
 
-
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
     // signals
@@ -537,17 +536,33 @@ ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
         this
     );
     editorSmartEditorCheck->setChecked(true);
+    editorMdSectionEscapingCheck = new QCheckBox(
+        tr("SPACE-based # in section escaping (HTML otherwise)"),
+        this
+    );
+    editorMdSectionEscapingCheck->setChecked(true);
 
     // assembly
-    QVBoxLayout* editorLayout = new QVBoxLayout{this};
-    editorLayout->addWidget(editorMdSyntaxHighlightCheck);
-    editorLayout->addWidget(editorAutocompleteCheck);
-    editorLayout->addWidget(editorSmartEditorCheck);
-    QGroupBox* editorGroup = new QGroupBox{tr("Markdown"), this};
-    editorGroup->setLayout(editorLayout);
+    QVBoxLayout* renderingLayout = new QVBoxLayout{this};
+    renderingLayout->addWidget(editorMdSyntaxHighlightCheck);
+    QGroupBox* renderingGroup = new QGroupBox{tr("Rendering"), this};
+    renderingGroup->setLayout(renderingLayout);
+
+    QVBoxLayout* autocompleteLayout = new QVBoxLayout{this};
+    autocompleteLayout->addWidget(editorAutocompleteCheck);
+    autocompleteLayout->addWidget(editorSmartEditorCheck);
+    QGroupBox* editorGroup = new QGroupBox{tr("Autocompletion"), this};
+    editorGroup->setLayout(autocompleteLayout);
+
+    QVBoxLayout* escapingLayout = new QVBoxLayout{this};
+    escapingLayout->addWidget(editorMdSectionEscapingCheck);
+    QGroupBox* escapingGroup = new QGroupBox{tr("Escaping"), this};
+    escapingGroup->setLayout(escapingLayout);
 
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(renderingGroup);
     boxesLayout->addWidget(editorGroup);
+    boxesLayout->addWidget(escapingGroup);
     boxesLayout->addStretch();
     setLayout(boxesLayout);
 }
@@ -564,6 +579,7 @@ void ConfigurationDialog::MarkdownTab::refresh()
     editorMdSyntaxHighlightCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
     editorAutocompleteCheck->setChecked(config.isUiEditorEnableAutocomplete());
     editorSmartEditorCheck->setChecked(config.isUiEditorEnableSmartEditor());
+    editorMdSectionEscapingCheck->setChecked(config.isUiEditorSpaceSectionEscaping());
 }
 
 void ConfigurationDialog::MarkdownTab::save()
@@ -571,6 +587,7 @@ void ConfigurationDialog::MarkdownTab::save()
     config.setUiEditorEnableSyntaxHighlighting(editorMdSyntaxHighlightCheck->isChecked());
     config.setUiEditorEnableAutocomplete(editorAutocompleteCheck->isChecked());
     config.setUiEditorEnableSmartEditor(editorSmartEditorCheck->isChecked());
+    config.setUiEditorSpaceSectionEscaping(editorMdSectionEscapingCheck->isChecked());
 }
 
 /*

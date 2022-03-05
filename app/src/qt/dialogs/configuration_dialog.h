@@ -233,6 +233,7 @@ private:
     QCheckBox* editorMdSyntaxHighlightCheck;
     QCheckBox* editorAutocompleteCheck;
     QCheckBox* editorSmartEditorCheck;
+    QCheckBox* editorMdSectionEscapingCheck;
 
 public:
     explicit MarkdownTab(QWidget* parent);

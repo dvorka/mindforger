@@ -201,6 +201,7 @@ public:
     static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOCOMPLETE = true;
     static constexpr const bool DEFAULT_EDITOR_SMART_EDITOR = true;
+    static constexpr const bool DEFAULT_EDITOR_SPACE_SECTION_ESCAPING = true;
     static constexpr const bool DEFAULT_EDITOR_TABS_AS_SPACES = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOSAVE = false;
     static constexpr const bool DEFAULT_FULL_O_PREVIEW = false;
@@ -277,6 +278,7 @@ private:
     std::vector<std::string> uiEditorSpellCheckLanguages;
     bool uiEditorAutocomplete; // toggle text autocomplete
     bool uiEditorSmartEditor; // toggle smart editor: lists, blocks and {[(`_
+    bool uiEditorSpaceSectionEscaping; // escape # in section with spaces (enabled), or HTML (disabled)
     JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
     int navigatorMaxNodes;
     bool uiEditorTabsAsSpaces;
@@ -470,6 +472,8 @@ public:
     void setUiEditorEnableAutocomplete(bool enable) { uiEditorAutocomplete = enable; }
     bool isUiEditorEnableSmartEditor() const { return uiEditorSmartEditor; }
     void setUiEditorEnableSmartEditor(bool enable) { uiEditorSmartEditor = enable; }
+    bool isUiEditorSpaceSectionEscaping() const { return uiEditorSpaceSectionEscaping; }
+    void setUiEditorSpaceSectionEscaping(bool enableSpaces) { uiEditorSpaceSectionEscaping = enableSpaces; }
     int getUiEditorTabWidth() const { return uiEditorTabWidth; }
     void setUiEditorTabWidth(int tabWidth) { uiEditorTabWidth = tabWidth; }
     int getRecentNotesUiLimit() const { return 150; }

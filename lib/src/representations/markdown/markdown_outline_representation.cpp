@@ -25,9 +25,11 @@ namespace m8r {
 using namespace std;
 using namespace m8r::filesystem;
 
-MarkdownOutlineRepresentation::MarkdownOutlineRepresentation(Ontology& ontology, RepresentationInterceptor* descriptionInterceptor)
-    : ontology(ontology),
-      descriptionInterceptor(descriptionInterceptor)
+MarkdownOutlineRepresentation::MarkdownOutlineRepresentation(
+    Ontology& ontology,
+    RepresentationInterceptor* descriptionInterceptor
+) : ontology(ontology),
+    descriptionInterceptor(descriptionInterceptor)
 {
 }
 
@@ -364,10 +366,13 @@ void MarkdownOutlineRepresentation::description(const std::string* md, std::vect
                 codeblockBackticksCount++;
             }
             if(line.size() && line.at(0)==SECTION && !codeblock) {
-                // ESCAPE # using code fence
-                line.insert(0, "    ");
-                // ESCAPE # using HTML entity (configurable)
-                //line.insert(0, "&#35;");
+                if(Configuration::getInstance().isUiEditorSpaceSectionEscaping()) {
+                    // ESCAPE # using code fence
+                    line.insert(0, "    ");
+                } else {
+                    // ESCAPE # using HTML entity
+                    line.insert(0, "&#35;");
+                }
             }
 
             // escape undesired --- and === section i.e. when user creates
