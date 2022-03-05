@@ -292,6 +292,7 @@ HEADERS += \
     src/qt/organizers_table_model.h \
     src/qt/organizers_table_presenter.h \
     src/qt/organizers_table_view.h \
+    src/qt/qt_commons.h \
     src/qt/spelling/abstract_dictionary.h \
     src/qt/spelling/abstract_dictionary_provider.h \
     src/qt/spelling/dictionary_manager.h \
