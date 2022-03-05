@@ -60,12 +60,54 @@ void OutlinesTableView::keyPressEvent(QKeyEvent* event)
         case Qt::Key_Up:
             QTableView::keyPressEvent(event);
             return;
-        case Qt::Key_PageDown:
-            MF_DEBUG("  OutlinesTableView::keyPressEvent PAGE_DOWN" << endl);
+        case Qt::Key_Home:
+            MF_DEBUG("  OutlinesTableView::keyPressEvent HOME" << endl);
+            if(this->model()->rowCount() > 0) {
+                this->selectRow(0);
+            }
             return;
-        case Qt::Key_PageUp:
+        case Qt::Key_End:
+            MF_DEBUG("  OutlinesTableView::keyPressEvent END" << endl);
+            if(this->model()->rowCount() > 0) {
+                this->selectRow(this->model()->rowCount()-1);
+            }
+            return;
+        case Qt::Key_PageUp: {
             MF_DEBUG("  OutlinesTableView::keyPressEvent PAGE_UP" << endl);
+            // get currently selected row
+            QModelIndexList indices = selectionModel()->selection().indexes();
+            // no indexes > no row > no selection
+            for(int i=0; i<indices.count(); i++) {
+                // calculate row to select (based on the number of rows)
+                int currentRow = indices.at(i).row();
+                int newRow{currentRow - PG_UP_DOWN_STEP_SIZE};
+                if(newRow < 0) {
+                    newRow = 0;
+                }
+                // select row
+                this->selectRow(newRow);
+            }
+            // no row selected
             return;
+        }
+        case Qt::Key_PageDown: {
+            MF_DEBUG("  OutlinesTableView::keyPressEvent PAGE_DOWN" << endl);
+            // get currently selected row
+            QModelIndexList indices = selectionModel()->selection().indexes();
+            // no indexes > no row > no selection
+            for(int i=0; i<indices.count(); i++) {
+                // calculate row to select (based on the number of rows)
+                int currentRow = indices.at(i).row();
+                int newRow{currentRow + PG_UP_DOWN_STEP_SIZE};
+                if(newRow > this->model()->rowCount()-1) {
+                    newRow = this->model()->rowCount()-1;
+                }
+                // select row
+                this->selectRow(newRow);
+            }
+            // no row selected
+            return;
+            }
         case Qt::Key_Left:
             // IMPROVE left to cancel selection
             QTableView::keyPressEvent(event);

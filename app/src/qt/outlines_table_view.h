@@ -39,6 +39,8 @@ private:
 
 public:
     static const int COLUMN_COUNT = 7;
+    static const int PG_UP_DOWN_STEP_SIZE = 21;
+
 public:
     explicit OutlinesTableView(QWidget* parent, bool isDashboardlet=false);
     OutlinesTableView(const OutlinesTableView&) = delete;
