@@ -381,7 +381,7 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
             } else {
                 QString nextChar = getNextChar();
                 // do NOT complete if next char is non-whitespace
-                if(nextChar.size() && nextChar[0] != " ") {
+                if(nextChar.size() && nextChar[0] != ' ') {
                     break;
                 }
                 // else DO complete
@@ -423,13 +423,13 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
                 // if previous char is space and user wants to start new block
                 QString lastChar = getLastChar();
                 QString nextChar = getNextChar();
-                if(lastChar.size() && lastChar[0] == " ") {
+                if(lastChar.size() && lastChar[0] == ' ') {
                     MF_DEBUG("NEXT: '" << nextChar.toStdString()
                          << "' size=" << nextChar.size()
-                         << " non-whitespace=" << boolalpha << (nextChar[0] != " ")
+                         << " non-whitespace=" << boolalpha << (nextChar[0] != ' ')
                          << endl
                     );
-                    if(nextChar.size() && nextChar[0] != " " && !isAtTheEndOfLine()) {
+                    if(nextChar.size() && nextChar[0] != ' ' && !isAtTheEndOfLine()) {
                         textEdit.textCursor().insertText("`");
                         textEdit.moveCursor(QTextCursor::NextCharacter);
                     } else {
