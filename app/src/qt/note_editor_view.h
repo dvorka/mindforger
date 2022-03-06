@@ -19,9 +19,9 @@
 #ifndef M8RUI_NOTE_EDITOR_VIEW_H
 #define M8RUI_NOTE_EDITOR_VIEW_H
 
-#include <QtWidgets>
-
 #include "../../lib/src/gear/lang_utils.h"
+
+#include <QtWidgets>
 
 #include "note_smart_editor.h"
 #include "note_edit_highlighter.h"

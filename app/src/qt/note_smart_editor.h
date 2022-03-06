@@ -22,7 +22,6 @@
 #include "../../lib/src/debug.h"
 #include "../../lib/src/config/configuration.h"
 #include "../../lib/src/gear/string_utils.h"
-
 #include "../../lib/src/representations/unicode.h"
 
 #include <QtWidgets>
