@@ -153,7 +153,10 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(view.getToolBar()->actionThink, SIGNAL(triggered()), this, SLOT(doActionMindToggleThink()));
     QObject::connect(view.getToolBar()->actionScope, SIGNAL(triggered()), this, SLOT(doActionMindTimeTagScope()));
     QObject::connect(view.getToolBar()->actionAdapt, SIGNAL(triggered()), this, SLOT(doActionMindPreferences()));
-    QObject::connect(view.getToolBar()->actionHelp, SIGNAL(triggered()), this, SLOT(doActionHelpDocumentation()));
+    QObject::connect(
+        view.getToolBar()->actionHelp, SIGNAL(triggered()),
+        this, SLOT(doActionHelpDocumentation())
+    );
     QObject::connect(
         view.getToolBar(), SIGNAL(signalMainToolbarVisibilityChanged(bool)),
         this, SLOT(slotMainToolbarVisibilityChanged(bool))
@@ -1857,9 +1860,10 @@ void MainWindowPresenter::injectImageLinkToEditor(
 #ifdef _WIN32
     // image links are processed by HTML browser > \s must be replaced with /s
     // (attachments use \s as the path is used by OS tools)
-    text +=  QString{path}.replace("\\", "/");
-#endif
+    text +=  QString{path}.replace("\\", "/").replace(" ","%20");
+#else
     text += QString{path}.replace(" ","%20");
+#endif
     text += ")";
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {

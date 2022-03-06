@@ -169,7 +169,7 @@ public:
     Ontology& getOntology() { return ontology; }
 
     /**
-     * @brief Get the number of outlines.
+     * @brief Get the number of Outlines.
      */
     unsigned getOutlinesCount() const;
 
@@ -179,7 +179,7 @@ public:
     unsigned int getOutlineMarkdownsSize() const;
 
     /**
-     * @brief Get the number of notes of all outlines.
+     * @brief Get the number of notes of all Outlines.
      */
     unsigned getNotesCount() const;
 
