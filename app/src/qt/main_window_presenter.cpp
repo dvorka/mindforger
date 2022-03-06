@@ -1815,11 +1815,7 @@ void MainWindowPresenter::handleFormatLink()
     QString text{"["};
     text += insertLinkDialog->getLinkText();
     text += "](";
-#ifdef __APPLE__
     text += QString{path}.replace(" ","%20");
-#else
-    text += path;
-#endif
     text += ")";
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
@@ -1862,11 +1858,8 @@ void MainWindowPresenter::injectImageLinkToEditor(
     // image links are processed by HTML browser > \s must be replaced with /s
     // (attachments use \s as the path is used by OS tools)
     text +=  QString{path}.replace("\\", "/");
-#elif __APPLE__
-    text += QString{path}.replace(" ","%20");
-#else
-    text += path;
 #endif
+    text += QString{path}.replace(" ","%20");
     text += ")";
 
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
