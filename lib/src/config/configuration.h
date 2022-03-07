@@ -131,8 +131,8 @@ class RepositoryConfigurationPersistence;
 class Configuration {
 private:
     static RepositoryConfiguration* getDummyRepositoryConfiguration() {
-        static RepositoryConfiguration* DUMMY_REPOSITORY_CONFIG = new RepositoryConfiguration{};
-        return DUMMY_REPOSITORY_CONFIG;
+        static RepositoryConfiguration DUMMY_REPOSITORY_CONFIG{};
+        return &DUMMY_REPOSITORY_CONFIG;
     }
 
 public:

@@ -36,6 +36,35 @@ FilesystemInformationSource::FilesystemInformationSource(
 
 FilesystemInformationSource::~FilesystemInformationSource()
 {
+    for(auto p:this->txts) {
+        delete p;
+    }
+    for(auto p:this->pdfs_paths) {
+        delete p;
+    }
+    for(auto p:this->htmls) {
+        delete p;
+    }
+
+    for(auto p:this->msOfficeWords) {
+        delete p;
+    }
+    for(auto p:this->msOfficeExcel) {
+        delete p;
+    }
+    for(auto p:this->msOfficePowerpoint) {
+        delete p;
+    }
+
+    for(auto p:this->openOfficeWords) {
+        delete p;
+    }
+    for(auto p:this->openOfficeExcel) {
+        delete p;
+    }
+    for(auto p:this->openOfficePowerpoint) {
+        delete p;
+    }
 }
 
 FilesystemInformationSource::ErrorCode FilesystemInformationSource::indexToMemory(Repository& repository)
@@ -139,6 +168,9 @@ void FilesystemInformationSource::indexDirectoryToMemory(
 
                     if(File::fileHasPdfExtension(*ppath)) {
                         pdfs_paths.insert(ppath);
+                    } else {
+                        delete ppath;
+                        ppath = nullptr;
                     }
                 }
             } while ((entry = readdir(dir)) != 0);
