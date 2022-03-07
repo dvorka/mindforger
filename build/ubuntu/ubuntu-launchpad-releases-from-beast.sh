@@ -212,8 +212,9 @@ export ARG_BAZAAR_MSG="MindForger ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} relea
 # https://wiki.ubuntu.com/Releases
 # obsolete: precise quantal saucy utopic vivid wily yakkety artful cosmic disco eoan groovy
 # current : trusty xenial bionic focal hirsute impish
-# 1.54.x  : (trusty: compilation fail) xenial bionic focal hirsute impish
-for UBUNTU_VERSION in focal hirsute impish
+# 1.53.x  : (trusty: compilation fail) xenial bionic focal hirsute impish
+# 1.54.x  : xenial bionic focal impish
+for UBUNTU_VERSION in xenial bionic focal impish
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
