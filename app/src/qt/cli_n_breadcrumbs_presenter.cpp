@@ -59,7 +59,7 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                     QStringList outlineNamesCompletion = QStringList();
                     if(outlineNames.size()) {
                         QString qs;
-                        for(const string s:outlineNames) {
+                        for(const string& s:outlineNames) {
                             qs.clear();
                             // TODO commands are constants
                             qs += CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME;
@@ -105,9 +105,10 @@ void CliAndBreadcrumbsPresenter::executeCommand()
             if(!outlines || !outlines->size()) {
                 // IMPROVE memory leak if outlines && !outlines->size()
                 QString firstCompletion = view->getFirstCompletion();
-                if(firstCompletion != QString::null) {
+                if(firstCompletion.size()) {
                     name = view->getFirstCompletion().toStdString().substr(
-                        CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME.size());
+                        CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME.size()
+                    );
                     outlines = mind->findOutlineByNameFts(name);
                 }
             }

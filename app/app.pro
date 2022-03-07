@@ -18,6 +18,7 @@
 TARGET = mindforger
 TEMPLATE = app
 
+message("= MindForger QMake configuration ==========================")
 message("Qt version: $$QT_VERSION")
 
 QT += widgets
@@ -47,10 +48,10 @@ unix {
 message("OS version: $$OS_DISTRO_VERSION")
 
 mfoldhunspell | equals(OS_DISTRO_VERSION, "Windows") | equals(OS_DISTRO_VERSION, "Ubuntu 16.04") | equals(OS_DISTRO_VERSION, "Ubuntu 16.") | equals(OS_DISTRO_VERSION, "Debian GNU/Lin") {
-  message("Forcing LEGACY Hunspell API for OS: $$OS_DISTRO_VERSION")
+  message("Hunspell: forcing LEGACY API on OS: $$OS_DISTRO_VERSION")
   DEFINES += MF_DEPRECATED_HUNSPELL_API
 } else {
-  message("Using NEW Hunspell API for OS: $$OS_DISTRO_VERSION")
+  message("Hunspell: configuring use of NEW API on OS: $$OS_DISTRO_VERSION")
 }
 
 # Named Entity Recognition
@@ -98,7 +99,7 @@ win32 {
   DEFINES += MF_MD_2_HTML_CMARK
 
   win32 {
-    message("cmark-gfm @ Windows: ensure that cmark-gfm was built BEFORE qmake build MANUALLY...")
+    message("cmark-gfm: ensure that cmark-gfm was MANUALLY built BEFORE qmake run on Windows")
     CONFIG(release, debug|release) {
       LIBS += -L$$PWD/../deps/cmark-gfm/build/src/Release -lcmark-gfm_static
       LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions/Release -lcmark-gfm-extensions_static
@@ -107,8 +108,8 @@ win32 {
       LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions/Debug -lcmark-gfm-extensions_static
     }
   } else {
+    message("cmark-gfm: ensure that cmark-gfm was MANUALLY built BEFORE qmake run on Linux/macOS")
     # cmark-gfm to be built by qmake to enable clean system build for Launchpad debuild
-    message("cmark-gfm @ Linux/macOS: cmark-gfm will be built as a part of qmake build AUTOMATICALLY...")
     libcmark-gfm.target = libcmark-gfm
     libcmark-gfm.commands = cd -L$$PWD/../deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
     libcmark-gfm_clean.commands = cd -L$$PWD/../deps/cmark-gfm rm -rvf build
@@ -282,6 +283,7 @@ HEADERS += \
     src/qt/kanban_column_view.h \
     src/qt/kanban_presenter.h \
     src/qt/kanban_view.h \
+    src/qt/note_smart_editor.h \
     src/qt/organizer_view.h \
     src/qt/organizer_presenter.h \
     src/qt/organizer_quadrant_model.h \
@@ -290,6 +292,7 @@ HEADERS += \
     src/qt/organizers_table_model.h \
     src/qt/organizers_table_presenter.h \
     src/qt/organizers_table_view.h \
+    src/qt/qt_commons.h \
     src/qt/spelling/abstract_dictionary.h \
     src/qt/spelling/abstract_dictionary_provider.h \
     src/qt/spelling/dictionary_manager.h \
@@ -405,6 +408,7 @@ SOURCES += \
     src/qt/kanban_column_view.cpp \
     src/qt/kanban_presenter.cpp \
     src/qt/kanban_view.cpp \
+    src/qt/note_smart_editor.cpp \
     src/qt/organizer_view.cpp \
     src/qt/organizer_presenter.cpp \
     src/qt/organizer_quadrant_model.cpp \
@@ -505,7 +509,8 @@ win32 {
 # Diagnostics
 # ########################################
 
-message(MindForger build DEFINES: $$DEFINES)
-message(MindForger build QMAKE_EXTRA_TARGETS: $$QMAKE_EXTRA_TARGETS)
+message(DEFINES of app.pro build: $$DEFINES)
+message(QMAKE_EXTRA_TARGETS of app.pro build: $$QMAKE_EXTRA_TARGETS)
+message(QT of app.pro build: $$QT)
 
 # eof

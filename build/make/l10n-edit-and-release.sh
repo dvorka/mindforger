@@ -17,13 +17,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-if [ ! -e "../.git" ]
+# Hints:
+# - nerd English is OOTB ~ strings in the source code
+# - en ... user friendly English translation 
+# - cs ... user friendly Czech translation 
+
+MF_LANG="en"
+
+if [[ "${1}" ]]
 then
-  echo "This script MUST be run from Git repository - run it e.g. from ${MINDFORGER_GIT}/build instead"
-  exit 1
-else
-  export timestamp=`date +%Y-%m-%d--%H-%M-%S`
-  cd ../.. && tar zvcf mindforger-${timestamp}.tgz mindforger
+    MF_LANG="${1}"
 fi
+
+echo "Running Qt Linquist for language: ${MF_LANG} (options: en, cs)"
+
+pushd . && cd ../../app/resources/qt/translations && linguist mindforger_en.ts && popd && lrelease ../../app/app.pro
 
 # eof

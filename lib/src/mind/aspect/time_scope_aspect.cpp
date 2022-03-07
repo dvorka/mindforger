@@ -36,7 +36,11 @@ string TimeScopeAspect::getTimeScopeAsString()
 {
     string result{};
     timeScope.toString(result);
+#ifdef __APPLE__
+    return result;
+#else
     return std::move(result);
+#endif
 }
 
 } // m8r namespace

@@ -55,6 +55,7 @@ public:
 
     int getCurrentRow() const;
     Note* getSelectedNote();
+    void focusAndSelectRow();
     void refresh(
         const std::vector<Note*>& os,
         bool urgency,
@@ -68,6 +69,8 @@ public slots:
     void slotShowSelectedNote();
     void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
     void slotHeaderClicked(int section);
+
+    void slotOrganizerEdit();
 
     void slotFocusToNextVisibleQuadrant();
     void slotFocusToPreviousVisibleQuadrant();

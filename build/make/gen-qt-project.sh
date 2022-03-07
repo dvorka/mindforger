@@ -27,13 +27,13 @@ cat ./gen-qt-project.prefix
 
 
 echo -n "HEADERS +="
-cd ../../lib/src && find . -name "*.h" | while read F
+cd ../../../lib/src && find . -name "*.h" | while read F
 do
     # ./lib/src/mind/memory_dwell.h \
     echo "        ./lib/src/${F#$RMPREFIX} \\"
 done
 cd $H
-cd ../../src && find . -name "*.h" | while read F
+cd ../../../src && find . -name "*.h" | while read F
 do
     # ./lib/src/mind/memory_dwell.cpp \
     echo "        ./src/${F#$RMPREFIX} \\"
@@ -44,13 +44,13 @@ echo
 
 cd $H
 echo -n "SOURCES +="
-cd ../../lib/src && find . -name "*.cpp" | while read F
+cd ../../../lib/src && find . -name "*.cpp" | while read F
 do
     # ./lib/src/mind/memory_dwell.h \
     echo "        ./lib/src/${F#$RMPREFIX} \\"
 done
 cd $H
-cd ../../src && find . -name "*.cpp" | while read F
+cd ../../../src && find . -name "*.cpp" | while read F
 do
     # ./lib/src/mind/memory_dwell.cpp \
     echo "        ./src/${F#$RMPREFIX} \\"

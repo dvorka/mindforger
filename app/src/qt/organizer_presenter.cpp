@@ -124,17 +124,47 @@ void OrganizerPresenter::refresh(
     planDedicatedTimePresenter->refresh(lowerRightNs, false, true, organizer->getOutlineScope().size());
 
     if(setFocus) {
-        view->getDoFirst()->setFocus();
+        for(auto quadrantPresenter: this->orderedQuadrants) {
+            if(quadrantPresenter->getModel()->rowCount() > 0) {
+                quadrantPresenter->getView()->setFocus();
+                quadrantPresenter->getView()->setCurrentIndex(
+                    quadrantPresenter->getModel()->index(0, 0)
+                );
+                break;
+            }
+        }
     }
+}
+
+void OrganizerPresenter::focusAndSelectPreviouslySelectedRow(
+    OrganizerQuadrantView* view
+) {
+    view->setFocus();
+    view->setCurrentIndex(
+        view->model()->index(
+            view->currentIndex().row(), 0
+        )
+    );
 }
 
 void OrganizerPresenter::focusToNextVisibleQuadrant()
 {
     for(unsigned i=0; i<orderedQuadrants.size(); i++) {
         if(orderedQuadrants[i]->getView()->hasFocus()) {
-            int next = (i+1)%orderedQuadrants.size();
-            orderedQuadrants[next]->getView()->setFocus();
-            return;
+            if(orderedQuadrants[i]->getView()->hasFocus()) {
+                // find next VISIBLE quadrant (stop @ same i.e. <=> 1 quadrant visible)
+                unsigned v=i;
+                do {
+                    int next = (v+1)%orderedQuadrants.size();
+                    if(orderedQuadrants[next]->getModel()->rowCount() > 0) {
+                        orderedQuadrants[i]->getView()->clearSelection();
+                        focusAndSelectPreviouslySelectedRow(orderedQuadrants[next]->getView());
+                        return;
+                    }
+                    v++;
+                } while(orderedQuadrants[i] != orderedQuadrants[v]);
+                // ^ there is only 1 quadrant > focus can stay where it is
+            }
         }
     }
  }
@@ -143,9 +173,18 @@ void OrganizerPresenter::focusToPreviousVisibleQuadrant()
 {
     for(unsigned i=0; i<orderedQuadrants.size(); i++) {
         if(orderedQuadrants[i]->getView()->hasFocus()) {
-            int next = (i-1)%orderedQuadrants.size();
-            orderedQuadrants[next]->getView()->setFocus();
-            return;
+            // find previous VISIBLE quadrant (stop @ same i.e. <=> 1 quadrant visible)
+            unsigned v=i;
+            do {
+                int next = (v-1)%orderedQuadrants.size();
+                if(orderedQuadrants[next]->getModel()->rowCount() > 0) {
+                    orderedQuadrants[i]->getView()->clearSelection();
+                    focusAndSelectPreviouslySelectedRow(orderedQuadrants[next]->getView());
+                    return;
+                }
+                v--;
+            } while(orderedQuadrants[i] != orderedQuadrants[v]);
+            // ^ there is only 1 quadrant > focus can stay where it is
         }
     }
 }

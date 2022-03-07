@@ -55,7 +55,7 @@ NoteEditDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     parentRelCombo->addItem(tr("Aggregation")+" "+QChar(9671));
     parentRelCombo->addItem(tr("Is-a")+" "+QChar(9651));
 
-    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup = new EditTagsPanel{MfWidgetMode::EDIT_MODE, ontology, this};
 
     // signals
     QObject::connect(
@@ -206,7 +206,7 @@ NoteEditDialog::~NoteEditDialog()
 {
 }
 
-void NoteEditDialog::show()
+void NoteEditDialog::show(Repository::RepositoryType repositoryType)
 {
     if(currentNote) {
         // RDWR
@@ -244,6 +244,16 @@ void NoteEditDialog::show()
     }
 
     generalTab->editTagsGroup->setFocusAddingTag();
+
+    bool visibility =
+        Repository::RepositoryType::MINDFORGER == repositoryType
+        ? true
+        : false;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    tabWidget->setTabVisible(0, visibility);
+#else
+    tabWidget->setTabEnabled(0, visibility);
+#endif
 
     QDialog::show();
 }

@@ -139,6 +139,18 @@ char** stringSplit(
     return result;
 }
 
+vector<string> stringSplit(const string s, const string regexDelimiter)
+{
+    regex regexz(regexDelimiter);
+    vector<string> list(
+        sregex_token_iterator(
+            s.begin(), s.end(), regexz, -1
+        ),
+       sregex_token_iterator()
+    );
+    return list;
+}
+
 /**
  * @brief Normalize a string to NCName.
  *

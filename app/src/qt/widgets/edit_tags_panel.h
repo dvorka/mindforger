@@ -22,6 +22,7 @@
 #include <QtWidgets>
 
 #include "../../lib/src/mind/ontology/ontology.h"
+#include "mf_widgets.h"
 
 namespace m8r {
 
@@ -29,31 +30,32 @@ class EditTagsPanel : public QGroupBox
 {
     Q_OBJECT
 
-    class MyLineEdit : public QLineEdit
+    class TagLineEdit : public QLineEdit
     {
     private:
         EditTagsPanel* tagsPanel;
     public:
-        explicit MyLineEdit(EditTagsPanel* tagsPanel, QWidget* parent) : QLineEdit(parent), tagsPanel(tagsPanel) {}
-        virtual void keyPressEvent(QKeyEvent* event) override {
-            if(event->modifiers() & Qt::ControlModifier){
-                switch(event->key()) {
-                case Qt::Key_Return: // Qt::Key_Enter is keypad Enter
-                    tagsPanel->slotAddTag();
-                    break;
-                }
-            }
-            QLineEdit::keyPressEvent(event);
-        }
+        explicit TagLineEdit(EditTagsPanel* tagsPanel, QWidget* parent);
+        virtual void keyPressEvent(QKeyEvent* event) override;
+    };
+
+    class TagsListView : public QListView {
+    private:
+        EditTagsPanel* tagsPanel;
+    public:
+        explicit TagsListView(EditTagsPanel* tagsPanel, QWidget* parent);
+        virtual void keyPressEvent(QKeyEvent* event) override;
     };
 
 private:
+    MfWidgetMode mode;
+
     Ontology& ontology;
     std::vector<const Tag*> tags;
 
     QVBoxLayout* layout;
 
-    MyLineEdit* lineEdit;
+    TagLineEdit* lineEdit;
     QCompleter* completer;
     QListView* listView;
     QPushButton* addButton;
@@ -64,7 +66,7 @@ private:
     QStringList listViewStrings;
 
 public:
-    explicit EditTagsPanel(Ontology& ontology, QWidget* parent);
+    explicit EditTagsPanel(MfWidgetMode mode, Ontology& ontology, QWidget* parent);
     EditTagsPanel(const EditTagsPanel&) = delete;
     EditTagsPanel(const EditTagsPanel&&) = delete;
     EditTagsPanel &operator=(const EditTagsPanel&) = delete;
@@ -87,9 +89,17 @@ public:
         lineEdit->setFocus();
         lineEdit->selectAll();
     }
+    void setFocusTagList() {
+        listView->setFocus();
+    }
     int getTagCount() const {
         return listView->model()->rowCount();
     }
+
+    /**
+     *  @brief Callback used to notify tag panel about key press event in tag name edit line.
+     */
+    void customLineEditKeyPressEvent(QKeyEvent* event);
 
 signals:
     void signalTagSelectionChanged();

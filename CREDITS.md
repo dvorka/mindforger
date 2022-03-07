@@ -37,6 +37,7 @@ Big thanks to 3rd party FOSS content authors:
 * Apiary ([API blueprints](https://apiary.io/) - test data)
 * Mark Summerfield ([Advanced Qt Programming](http://www.qtrac.eu/aqpbook.html) book examples - code snippets)
 * Andres Mejia (Aho-Corasick algorithm implementation - code snippets)
+* SQLite ([main file blessing](https://github.com/sqlite/sqlite/blob/master/src/main.c) - inspiration)
 
 See [licenses](./licenses) folder for 3rd party content licensing details.
 

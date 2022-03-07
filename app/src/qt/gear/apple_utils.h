@@ -86,6 +86,13 @@
  * &#8676;         ⇤     Shift Tab, Tab Left, Back-tab
  * &#9250;         ␢      Space, Blank
  * &#9251;         **␣**  Space, Blank
+ *
+ * Platform headers:
+ * /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/
+ *   System/Library/Frameworks/
+ *     Foundation.framework/
+ *       Headers/
+ *         NSUserDefaults.h ... settings
  */
 namespace m8r {
 

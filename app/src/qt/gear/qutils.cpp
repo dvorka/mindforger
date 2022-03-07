@@ -24,7 +24,10 @@ namespace m8r {
 
 void initRandomizer()
 {
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     qsrand(static_cast<uint>(QTime(0,0,0).secsTo(QTime::currentTime())));
+#endif
+// else new versions of Qt have QRandomGenerator already seeded
 }
 
 QString stringFormatIntAsUs(int i)

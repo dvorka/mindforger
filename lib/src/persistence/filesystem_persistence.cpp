@@ -78,13 +78,35 @@ string FilesystemPersistence::createFileName(
     );
 }
 
+bool FilesystemPersistence::isWriteable(const string& outlineKey)
+{
+    MF_DEBUG("Checking writeability of O: " << outlineKey << endl);
+    if(!outlineKey.size()) {
+        MF_DEBUG("  O key is empty" << endl);
+        return false;
+    }
+    // APPEND mode ensures that content of the file will NOT be erased on open + close
+    ofstream out(outlineKey, ofstream::out | ofstream::app);
+    if(!out.is_open()) {
+        MF_DEBUG("  O is RD_ONLY" << endl);
+        return false;
+    }
+    MF_DEBUG("  O opened: " << boolalpha << out.is_open() << endl);
+    out.close();
+    return true;
+}
+
 void FilesystemPersistence::save(Outline* outline)
 {
     string* text = mdRepresentation.to(outline);
     if(text!=nullptr) {
-        std::ofstream out(outline->getKey());
+        MF_DEBUG("Saving O: " << outline->getKey() << endl);
+        ofstream out(outline->getKey());
+        MF_DEBUG("  O opened: " << boolalpha << out.is_open() << endl);
         out << *text;
+        MF_DEBUG("  O written: " << &out << endl);
         out.close();
+        MF_DEBUG("O saved: " << &out << endl);
         delete text;
 
         outline->clearDirty();
@@ -102,7 +124,7 @@ void FilesystemPersistence::saveAsHtml(Outline* outline, const string& fileName)
         true,
         false
     );
-    std::ofstream out(fileName);
+    ofstream out(fileName);
     out << *text;
     out.close();
     delete text;

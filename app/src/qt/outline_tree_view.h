@@ -19,10 +19,12 @@
 #ifndef M8RUI_OUTLINE_TREE_VIEW_H
 #define M8RUI_OUTLINE_TREE_VIEW_H
 
-#include <QtWidgets>
-
 #include "../../lib/src/gear/lang_utils.h"
 #include "../lib/src/debug.h"
+
+#include <QtWidgets>
+
+#include "qt_commons.h"
 
 namespace m8r {
 

@@ -52,15 +52,13 @@ namespace m8r {
 class Limbo
 {
 private:
-    Configuration& config;
-
     std::vector<Outline*> limboOutlines;
 
     std::string osLimboDirPath;
     std::string nsLimboFilePath;
 
 public:
-    explicit Limbo(Configuration& configuration);
+    explicit Limbo();
     Limbo(const Limbo&) = delete;
     Limbo(const Limbo&&) = delete;
     Limbo &operator=(const Limbo&) = delete;

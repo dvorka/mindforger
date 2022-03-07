@@ -81,7 +81,6 @@ public:
     QAction* actionMindForget;
     QAction* actionMindSnapshot;
     QAction* actionMindPreferences;
-    QAction* actionMindTerminal;
     QMenu* submenuMindExport;
     QAction* actionMindExportCsv;
     QAction* actionExit;
@@ -114,6 +113,7 @@ public:
     QAction* actionViewDwell;
     QAction* actionViewStencils;
     QAction* actionViewCli;
+    QAction* actionViewTerminal;
     QAction* actionViewRecentNotes;
     QAction* actionViewLimbo;
     QAction* actionViewDistractionFree;
@@ -197,6 +197,7 @@ public:
     QAction* actionFormatItalic;
     QAction* actionFormatStrikethrough;
     QAction* actionFormatKeyboard;
+    QAction* actionFormatComment;
     QAction* actionFormatMath;
     QAction* actionFormatCode;
     QAction* actionFormatCodeBlock;
@@ -254,6 +255,7 @@ public:
 
     QAction* actionHelpReportBug;
     QAction* actionHelpCheckForUpdates;
+    QAction* actionHelpAboutQt;
     QAction* actionHelpAbout;
 
 public:

@@ -25,7 +25,25 @@ using namespace std;
 LookAndFeels::LookAndFeels()
     : config(Configuration::getInstance())
 {
-    themeNames << UI_THEME_DARK << UI_THEME_LIGHT << UI_THEME_BLACK << UI_THEME_NATIVE;
+    themeNames
+        << UI_THEME_DARK
+        << UI_THEME_LIGHT
+#ifndef __APPLE__
+       << UI_THEME_LIGHT_WITH_FIXED_FONT
+#endif
+        << UI_THEME_BLACK
+#ifndef __APPLE__
+       << UI_THEME_BLACK_WITH_FIXED_FONT
+#endif
+        << UI_THEME_NATIVE
+#ifndef __APPLE__
+        << UI_THEME_NATIVE_WITH_FIXED_FONT
+#endif
+        ;
+}
+
+LookAndFeels::~LookAndFeels()
+{
 }
 
 void LookAndFeels::init(QApplication* mindforgerApplication)
@@ -44,14 +62,22 @@ bool LookAndFeels::isThemeNameValid(const QString& themeName) const
 
 void LookAndFeels::setTheme(const QString& themeName)
 {
+    MF_DEBUG("Setting MindForger Qt theme: " << themeName.toStdString() << endl);
+
     if(UI_THEME_LIGHT == themeName.toStdString()) {
-        setLightTheme();
+        setLightTheme(false);
+    } else if(UI_THEME_LIGHT_WITH_FIXED_FONT == themeName.toStdString()) {
+        setLightTheme(true);
     } else if(UI_THEME_DARK == themeName.toStdString()) {
         setDarkTheme();
     } else if(UI_THEME_BLACK == themeName.toStdString()) {
-        setBlackTheme();
+        setBlackTheme(false);
+    } else if(UI_THEME_BLACK_WITH_FIXED_FONT == themeName.toStdString()) {
+        setBlackTheme(true);
+    } else if(UI_THEME_NATIVE_WITH_FIXED_FONT == themeName.toStdString()) {
+        setNativeTheme(true);
     } else if(UI_THEME_NATIVE == themeName.toStdString()) {
-        setNativeTheme();
+        setNativeTheme(false);
     }
 }
 
@@ -120,7 +146,7 @@ void LookAndFeels::setDarkTheme()
 /*
  * Built-in light theme definition.
  */
-void LookAndFeels::setLightTheme()
+void LookAndFeels::setLightTheme(bool fixedFont)
 {
     textColor = QString("#000");
     backgroundColor = QString("#FFF");
@@ -152,8 +178,12 @@ void LookAndFeels::setLightTheme()
 
     cliTextColor = Qt::black;
 
-#ifdef _WIN32
-    mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+#ifndef __APPLE__
+    if(fixedFont) {
+        mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+    }
+#else
+    Q_UNUSED(fixedFont);
 #endif
     mindforgerApplication->setStyle(QStyleFactory::create("fusion"));
 
@@ -172,7 +202,7 @@ void LookAndFeels::setLightTheme()
     menuStylesheet = QString("QMenu::separator { background: #ccc; height: 1px; margin-left: 10px; margin-right: 10px; }");
 }
 
-void LookAndFeels::setBlackTheme()
+void LookAndFeels::setBlackTheme(bool fixedFont)
 {
     textColor = QString("#FFF");
     backgroundColor = QString("#000");
@@ -199,8 +229,12 @@ void LookAndFeels::setBlackTheme()
 
     cliTextColor = QColor(0x99,0xb1,0xff);
 
-#ifdef _WIN32
-    mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+#ifndef __APPLE__
+    if(fixedFont) {
+        mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+    }
+#else
+    Q_UNUSED(fixedFont);
 #endif
 
     /* The valid keys can be retrieved using the keys() function. Typically they include
@@ -239,15 +273,60 @@ void LookAndFeels::setBlackTheme()
     mindforgerApplication->setStyleSheet("QToolTip { color: #ffffff; background-color: #000000; border: 1px solid white; }");
 
     menuStylesheet = QString{
-        "QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px; }"
-        "QMenuBar::item:disabled { color: #555; }"
-        "QMenu::item:disabled { color: #555; background: "}+backgroundColor+QString{"; }"};
+            "QMenu::separator { background: #444; height: 1px; margin-left: 10px; margin-right: 10px; }"
+            "QMenuBar::item:disabled { color: #555; }"
+            "QMenu::item:disabled { color: #555; background: "
+        }
+        + backgroundColor
+        + QString{"; }"};
 }
 
-void LookAndFeels::setNativeTheme()
+void LookAndFeels::setNativeTheme(bool fixedFont)
 {
+#if defined(__APPLE__)
+    Q_UNUSED(fixedFont);
+    #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        // new(er) Qt versions detect light/dark themes, however, it does NOT set style correctly in case of dark theme:
+        // - Big Sur 11.6 + Qt 5.15.2
+        //   - bug: wrong QtTextEditor font - black, but should be white
+        //   - bug: CLI font - black, but should be green - root cause: MF changes palette to set green text > skip @ macOS
+
+        // system theme detection (quess) make sense ONLY in case of NATIVE theme (window color driven by OS)
+        MF_DEBUG("  OS theme (light/dark ~ #ececec/#323232): " << QPalette().color(QPalette::ColorRole::Window).name().toStdString() << endl);
+        if(QPalette().color(QPalette::ColorRole::Window).name().toStdString() == "#323232") {
+            MF_DEBUG("    macOS dark mode detected - PATCHING MindForger editor pallette" << endl);
+
+            // IMPROVE editor active line background fill (none @ macOS): NoteEditorView::highlightCurrentLine()
+
+            editorBold.setRgb(0xFF,0xFF,0x00);
+            editorBolder.setRgb(0xFF,0xFF,0x00);
+            editorItalic.setRgb(0x00,0xAA,0x00);
+            editorItalicer.setRgb(0x00,0xAA,0x00);
+            editorStrikethrough.setRgb(0x88,0x88,0x88);
+            editorLink.setRgb(0x00,0xFF,0xFF);
+            editorList.setRgb(0x00,0x99,0x00);
+            editorTaskDone.setRgb(0x00,0x99,0x00);
+            editorTaskWip.setRgb(0x99,0x00,0x00);
+            editorCodeblock.setRgb(0x99,0x99,0x99);
+            editorHtmlTag.setRgb(0xAA,0x00,0xAA);
+            editorHtmlEntity.setRgb(0xAA,0x00,0xAA);
+            editorHtmlAttrName.setRgb(0xFF,0x00,0xFF);
+            editorHtmlAttrValue.setRgb(0x88,0x88,0x88);
+            editorHtmlComment.setRgb(0x66,0x66,0x66);
+            editorError.setRgb(0xFF,0x00,0x00);
+        }
+
+    #endif
+#else
+    if(fixedFont) {
+        mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+    }
+#endif
+
 #ifdef _WIN32
-    mindforgerApplication->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+    // white native L&F selected row is light blue and white @ light blue is NOT readable
+    palette.setColor(QPalette::HighlightedText, Qt::black);
+    mindforgerApplication->setPalette(palette);
 #endif
 }
 
@@ -269,7 +348,9 @@ std::string& LookAndFeels::getHtmlTextColor()
             return light;
         }
     } else {
-        if(config.getUiThemeName() == UI_THEME_LIGHT) {
+        if(config.getUiThemeName() == UI_THEME_LIGHT
+           || config.getUiThemeName() == UI_THEME_LIGHT_WITH_FIXED_FONT
+        ) {
             // light RAW theme
             return dark;
         } else {
@@ -292,7 +373,9 @@ std::string& LookAndFeels::getHtmlBackgroundColor()
             return dark;
         }
     } else {
-        if(config.getUiThemeName() == UI_THEME_LIGHT) {
+        if(config.getUiThemeName() == UI_THEME_LIGHT
+           || config.getUiThemeName() == UI_THEME_LIGHT_WITH_FIXED_FONT
+        ) {
             // light RAW theme
             return light;
         } else {

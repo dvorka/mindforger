@@ -22,25 +22,97 @@ namespace m8r {
 
 using namespace std;
 
+EditTagsPanel::TagLineEdit::TagLineEdit(EditTagsPanel* tagsPanel, QWidget* parent)
+    : QLineEdit(parent), tagsPanel(tagsPanel)
+{}
+
+void EditTagsPanel::TagLineEdit::keyPressEvent(QKeyEvent* event)
+{
+    if(event->modifiers() & Qt::ControlModifier){
+        switch(event->key()) {
+        case Qt::Key_Return: // Qt::Key_Enter is keypad Enter
+            tagsPanel->slotAddTag();
+            break;
+        }
+    } else {
+        if(!text().size()) {
+            switch(event->key()) {
+            case Qt::Key_Down:
+                tagsPanel->setFocusTagList();
+                break;
+            }
+        }
+    }
+    QLineEdit::keyPressEvent(event);
+
+    // notify about key pressed
+    tagsPanel->customLineEditKeyPressEvent(event);
+}
+
+EditTagsPanel::TagsListView::TagsListView(EditTagsPanel* tagsPanel, QWidget* parent)
+    : QListView(parent),
+      tagsPanel{tagsPanel}
+{}
+
+void EditTagsPanel::TagsListView::keyPressEvent(QKeyEvent* event)
+{
+    if(event->modifiers() & Qt::ControlModifier){
+        switch(event->key()) {
+        case Qt::Key_D:
+            MF_DEBUG("Edit tags: Cmd-D" << endl);
+            tagsPanel->slotRemoveTag();
+            break;
+        }
+    } else {
+        switch(event->key()) {
+        case Qt::Key_Delete:
+            MF_DEBUG("Edit tags: DEL" << endl);
+            tagsPanel->slotRemoveTag();
+            break;
+        }
+    }
+    QListView::keyPressEvent(event);
+}
+
 EditTagsPanel::EditTagsPanel(
+        MfWidgetMode mode,
         Ontology& ontology,
-        QWidget *parent)
-    : QGroupBox(tr("Tags"), parent), ontology(ontology)
+        QWidget* parent)
+    : QGroupBox(tr("Tags"), parent),
+      mode{mode},
+      ontology(ontology)
 {
     // widgets
-    lineEdit = new MyLineEdit{this, parent};
-    lineEdit->setToolTip(tr("Hit Ctrl+Enter to add tag"));
+    lineEdit = new TagLineEdit{this, this};
+    lineEdit->setToolTip(
+#ifdef __APPLE__
+        tr("Hit ⌘↩ to add tag")
+#else
+        tr("Hit Ctrl+Enter to add tag")
+#endif
+    );
     completer = new QCompleter{completerStrings, this};
     completer->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     lineEdit->setCompleter(completer);
-    listView = new QListView{this};
+    listView = new TagsListView{this, this};
     // list view model must be set - use of this type of mode enable the use of string lists controlling its content
     listView->setModel(&listViewModel);
     // disable ability to edit list items
     listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    addButton = new QPushButton{tr("Add"), this};
-    removeButton = new QPushButton{tr("Remove"), this};
+    addButton = new QPushButton{
+        mode == MfWidgetMode::FIND_MODE?tr("Add Filter Tag"):tr("Create New Tag"),
+        this
+    };
+    addButton->setToolTip(
+#ifdef __APPLE__
+        tr("Hit ⌘↩ to add tag")
+#else
+        tr("Hit Ctrl+Enter to add tag")
+#endif
+    );
+
+    removeButton = new QPushButton{tr("Remove Tag"), this};
 
     // assembly
     QWidget* w = new QWidget(this);
@@ -99,6 +171,9 @@ void EditTagsPanel::refresh(const vector<const Tag*>* noteTags)
         }
     }
     ((QStringListModel*)listView->model())->setStringList(listViewStrings);
+    addButton->setText(
+        mode == MfWidgetMode::FIND_MODE?tr("Add Filter Tag"):tr("Create New Tag")
+    );
 }
 
 const std::vector<const Tag*>& EditTagsPanel::getTags()
@@ -159,6 +234,26 @@ void EditTagsPanel::setTagsAsStrings(const std::set<string>& tagsStrings)
         slotAddTag();
     }
     lineEdit->clear();
+}
+
+void EditTagsPanel::customLineEditKeyPressEvent(QKeyEvent* event)
+{
+    UNUSED_ARG(event);
+    if(!lineEdit->text().isEmpty()
+       && completerStrings.contains(lineEdit->text())
+    ) {
+        addButton->setText(
+            mode == MfWidgetMode::FIND_MODE?tr("Add Filter Tag"):tr("Add Existing Tag")
+        );
+    } else {
+        if(mode == MfWidgetMode::FIND_MODE) {
+            addButton->setText(
+                lineEdit->text().isEmpty()?tr("Add Filter Tag"):tr("Unknown Tag")
+            );
+        } else {
+            addButton->setText(tr("Create New Tag"));
+        }
+    }
 }
 
 void EditTagsPanel::slotAddTag()

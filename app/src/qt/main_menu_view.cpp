@@ -108,9 +108,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindPreferences->setShortcuts(QKeySequence::Preferences);
     actionMindPreferences->setStatusTip(tr("Adapt Mind by setting your preferences..."));
 
-    actionMindTerminal = new QAction(QIcon(":/menu-icons/cli.svg"), tr("Term&inal"), mainWindow);
-    actionMindTerminal->setStatusTip(tr("Run simple command line from current MindForger repository..."));
-
     submenuMindExport = menuMind->addMenu(QIcon(":/menu-icons/export.svg"), "&Export");
     actionMindExportCsv = new QAction(tr("&CSV"), mainWindow);
     actionMindExportCsv->setStatusTip(tr("Export all Notebooks/Markdown files as a single CSV file"));
@@ -137,8 +134,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
     menuMind->addMenu(submenuMindExport);
     menuMind->addSeparator();
-    menuMind->addAction(actionMindTerminal);
-    menuMind->addSeparator();
     menuMind->addAction(actionExit);
 #ifdef DO_MF_DEBUG
     menuMind->addSeparator();
@@ -148,7 +143,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // menu: recall
 
     actionFindFts = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Full-text Search"), mainWindow);
+#ifdef __APPLE__
+    actionFindFts->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
+#else
     actionFindFts->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
+#endif
     actionFindFts->setStatusTip(tr("Note full-text search"));
 
     actionFindOutlineByName = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Note&book by Name"), mainWindow);
@@ -245,7 +244,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
     actionViewCli->setStatusTip(tr("Activate command line interface..."));
 
-    actionViewRecentNotes = new QAction(QIcon(":/menu-icons/open-recent.svg"), tr("&Recent Notes"), mainWindow);
+    actionViewTerminal = new QAction(QIcon(":/menu-icons/terminal.svg"), tr("Ter&minal"), mainWindow);
+    actionViewTerminal->setStatusTip(tr("Run simple command line from current MindForger repository..."));
+
+    actionViewRecentNotes = new QAction(
+        QIcon(":/menu-icons/open-recent.svg"),
+        tr("&Recent Notes"),
+        mainWindow
+    );
     actionViewRecentNotes->setStatusTip(tr("View recently modified Notes..."));
     actionViewRecentNotes->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_R));
 
@@ -292,6 +298,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewTags);
     menuView->addAction(actionViewNavigator);
     menuView->addAction(actionViewCli);
+    menuView->addAction(actionViewTerminal);
 #ifdef MF_WIP
     menuView->addAction(actionViewStencils);
     menuView->addAction(actionViewDwell);
@@ -382,9 +389,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOrganizerNew->setStatusTip(tr("Create new Organizer to prioritize your knowledge in Eisenhower Matrix style"));
 
 #ifdef __APPLE__
-    actionOrganizerEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
+    actionOrganizerEdit = new QAction(
+        QIcon(":/menu-icons/edit.svg"),
+        // stupid & ugly shortcut w/o effect
+        tr("&Edit                                                                                     ⌘↩"),
+        mainWindow
+    );
 #else
-    actionOrganizerEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
+    actionOrganizerEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit       Alt-Enter"), mainWindow);
 #endif
     actionOrganizerEdit ->setStatusTip(tr("Edit current Organizer - you can also double click view to open the editor"));
 
@@ -394,16 +406,52 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOrganizerForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Delete"), mainWindow);
     actionOrganizerForget->setStatusTip(tr("Delete Organizer without undo"));
 
-    actionOrganizerMovePrevious = new QAction(QIcon(":/menu-icons/left.svg"), tr("Move Notebook/Note to &Previous Column/Quadrant\tCtrl+Left"), mainWindow); // handled from Outline tree
+    actionOrganizerMovePrevious = new QAction(
+        QIcon(":/menu-icons/left.svg"),
+#ifdef __APPLE__
+        // IMPROVE: ugly & stupid shortcut spacing - make it signal w/ quadrant with focus detection
+        tr("Move Notebook/Note to Previous Column/Quadrant       ⌘["),
+#else
+        tr("Move Notebook/Note to &Previous Column/Quadrant\tCtrl+Left"),
+#endif
+        mainWindow
+    );
     actionOrganizerMovePrevious->setStatusTip(tr("Move Notebook/Note to previous column or quadrant..."));
 
-    actionOrganizerMoveNext = new QAction(QIcon(":/menu-icons/right.svg"), tr("Move Notebook/Note to Ne&xt Column/Quadrant\tCtrl+Right"), mainWindow);
+    actionOrganizerMoveNext = new QAction(
+        QIcon(":/menu-icons/right.svg"),
+#ifdef __APPLE__
+         // IMPROVE: ugly & stupid shortcut spacing - make it signal w/ quadrant with focus detection
+        tr("Move Notebook/Note to Next Column/Quadrant              ⌘]"),
+#else
+        tr("Move Notebook/Note to Ne&xt Column/Quadrant\tCtrl+Right"),
+#endif
+        mainWindow
+    );
     actionOrganizerMoveNext->setStatusTip(tr("Move Notebook/Note to next column or quadrant..."));
 
-    actionOrganizerFocusPrevious = new QAction(QIcon(":/menu-icons/left.svg"), tr("Focus to Previous Column/Quadrant\tShift+Tab"), mainWindow); // handled from Outline tree
+    actionOrganizerFocusPrevious = new QAction(QIcon(
+       ":/menu-icons/left.svg"),
+#ifdef __APPLE__
+       // IMPROVE: ugly & stupid shortcut spacing - make it signal w/ quadrant with focus detection
+       tr("Focus to Previous Column/Quadrant                              ⇧⇥"),
+#else
+        tr("Move Notebook/Note to &Previous Column/Quadrant\tCtrl+Left"),
+#endif
+       mainWindow
+   );
     actionOrganizerFocusPrevious->setStatusTip(tr("Move focus to previous column or quandrant..."));
 
-    actionOrganizerFocusNext = new QAction(QIcon(":/menu-icons/right.svg"), tr("Focus to Next Column/Quadrant\tTab"), mainWindow);
+    actionOrganizerFocusNext = new QAction(
+        QIcon(":/menu-icons/right.svg"),
+#ifdef __APPLE__
+        // IMPROVE: ugly & stupid shortcut spacing - make it signal w/ quadrant with focus detection
+        tr("Focus to Next Column/Quadrant                                        ⇥"),
+#else
+        tr("Move Notebook/Note to Ne&xt Column/Quadrant\tCtrl+Right"),
+#endif
+        mainWindow
+    );
     actionOrganizerFocusNext->setStatusTip(tr("Move focus to next column or quandrant..."));
 
     menuOrganizer->addAction(actionOrganizerNew);
@@ -423,6 +471,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionOutlineNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
     actionOutlineNew->setStatusTip(tr("Create new Notebook to form new ideas, principles, combinations or applications"));
+#ifdef __APPLE__
+    actionOutlineNew->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));
+#endif
+
 
 #ifdef __APPLE__
     actionOutlineEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("&Edit"), mainWindow);
@@ -494,7 +546,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
     actionNoteEdit ->setStatusTip(tr("Edit current Note - you can also double click view to open the editor"));
 
-    actionNoteExternalEdit = new QAction(QIcon(":/menu-icons/edit.svg"), tr("E&xternal Editor Edit\tCtrl+X"), mainWindow);
+    actionNoteExternalEdit = new QAction(QIcon(":/menu-icons/edit_external.svg"), tr("E&xternal Editor Edit\tCtrl+X"), mainWindow);
     actionNoteExternalEdit ->setStatusTip(tr("Edit current Note in an external editor - use Preferences to configure the editor"));
 
     actionNoteSave = new QAction(QIcon(":/menu-icons/save.svg"), tr("Remember\tCtrl+S"), mainWindow); // Ctrl+S is handled elsewhere and I don't want menu to handle it
@@ -532,10 +584,22 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteLast = new QAction(QIcon(":/menu-icons/bottom.svg"), tr("&Last\tCtrl+Shift+Down"), mainWindow);
     actionNoteLast->setStatusTip(tr("Move Note to be the last child of its parent"));
 
-    actionNoteRefactor = new QAction(QIcon(":/menu-icons/refactor.svg"), tr("&Refactor"), mainWindow);
+    actionNoteRefactor = new QAction(
+        QIcon(":/menu-icons/refactor.svg"),
+#ifdef __APPLE__
+        tr("Refactor\tCtrl+R"),
+#else
+        tr("&Refactor"),
+#endif
+        mainWindow
+    );
     actionNoteRefactor->setStatusTip(tr("Refactor Note to another Notebook..."));
 
-    actionNoteStencil = new QAction(QIcon(":/menu-icons/stencil.svg"), tr("Make &Stencil"), mainWindow);
+    actionNoteStencil = new QAction(
+        QIcon(":/menu-icons/stencil.svg"),
+        tr("Make &Stencil"),
+        mainWindow
+    );
     actionNoteStencil->setStatusTip(tr("Copy the current Notebook as to Stencil"));
     actionNoteStencil->setEnabled(false);
 
@@ -647,15 +711,30 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionFormatBold = new QAction(tr("&Bold"), mainWindow);
     actionFormatBold->setStatusTip(tr("Format text as bold"));
+#ifdef __APPLE__
+    actionFormatBold->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_B));
+#endif
 
     actionFormatItalic = new QAction(tr("&Italic"), mainWindow);
     actionFormatItalic->setStatusTip(tr("Format text as italic"));
+#ifdef __APPLE__
+    actionFormatItalic->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_I));
+#endif
 
     actionFormatCode = new QAction(tr("&Code"), mainWindow);
     actionFormatCode->setStatusTip(tr("Format text as inlined source code"));
+#ifdef __APPLE__
+    actionFormatCode->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
+#endif
 
     actionFormatMath = new QAction(tr("&Math"), mainWindow);
     actionFormatMath->setStatusTip(tr("Format text as math (MathJax)"));
+
+    actionFormatKeyboard = new QAction(tr("&Keyboard"), mainWindow);
+    actionFormatKeyboard->setStatusTip(tr("Format text as keyboard input"));
+
+    actionFormatComment= new QAction(tr("Comment"), mainWindow);
+    actionFormatComment->setStatusTip(tr("Add comment to hide text in rendered HTML"));
 
     // lists
     submenuFormatLists = menuFormat->addMenu(tr("Lis&ts"));
@@ -671,6 +750,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatListTask = new QAction(tr("&Task List"), mainWindow);
     actionFormatListTask->setStatusTip(tr("Format block as task list"));
     submenuFormatLists->addAction(actionFormatListTask);
+
+    submenuFormatLists->addSeparator();
 
     // TODO handling
     actionFormatListTaskItem = new QAction(tr("Task List &Item"), mainWindow);
@@ -775,9 +856,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatStrikethrough = new QAction(tr("&Strikethrough"), mainWindow);
     actionFormatStrikethrough->setStatusTip(tr("Format text as strikethrough"));
 
-    actionFormatKeyboard = new QAction(tr("&Keyboard"), mainWindow);
-    actionFormatKeyboard->setStatusTip(tr("Format text as keyboard input"));
-
     actionFormatToc = new QAction(tr("T&able of Contents"), mainWindow);
     actionFormatToc ->setStatusTip(tr("Insert Notebook's table of contents"));
 
@@ -786,9 +864,15 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionFormatLink = new QAction(tr("&Link"), mainWindow);
     actionFormatLink->setStatusTip(tr("Insert link to a document, image or file"));
+#ifdef __APPLE__
+    actionFormatLink->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_K));
+#endif
 
     actionFormatImage = new QAction(tr("Ima&ge"), mainWindow);
     actionFormatImage->setStatusTip(tr("Insert image"));
+#ifdef __APPLE__
+    actionFormatImage->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_M));
+#endif
 
     actionFormatTable = new QAction(tr("Tabl&es"), mainWindow);
     actionFormatTable->setStatusTip(tr("Insert table..."));
@@ -802,7 +886,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatMath);
     menuFormat->addAction(actionFormatStrikethrough);
     menuFormat->addAction(actionFormatKeyboard);
-    menuFormat->addSeparator();
+    menuFormat->addAction(actionFormatComment);
     menuFormat->addSeparator();
     menuFormat->addAction(actionFormatToc);
     menuFormat->addMenu(submenuFormatLists);
@@ -844,6 +928,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionHelpCheckForUpdates = new QAction(QIcon(":/menu-icons/download.svg"), tr("&Check for Updates"), mainWindow);
     actionHelpCheckForUpdates->setStatusTip(tr("Check for MindForger updates"));
 
+    actionHelpAboutQt = new QAction(QIcon(":/menu-icons/about_qt.svg"), tr("&About Qt"), mainWindow);
+    actionHelpAboutQt->setStatusTip(tr("About Qt..."));
+
     actionHelpAbout = new QAction(QIcon(":/menu-icons/write.svg"), tr("&About MindForger"), mainWindow);
     actionHelpAbout->setStatusTip(tr("About MindForger..."));
 
@@ -858,7 +945,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuHelp->addAction(actionHelpMathQuickReference);
     menuHelp->addAction(actionHelpMathLivePreview);
     menuHelp->addAction(actionHelpDiagrams);
+#ifndef __APPLE__
     menuHelp->addSeparator();
+#endif
+    menuHelp->addAction(actionHelpAboutQt);
     menuHelp->addAction(actionHelpAbout);
 }
 
@@ -1116,7 +1206,6 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
     if(!repositoryMode) {
         menuView->setEnabled(false);
         menuOutline->setEnabled(false);
-        menuEdit->setEnabled(false);
 
         actionFindOutlineByName->setEnabled(false);
         actionFindOutlineByTag->setEnabled(false);

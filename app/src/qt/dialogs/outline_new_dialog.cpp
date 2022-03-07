@@ -52,7 +52,7 @@ OutlineNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     stencilLabel = new QLabel(tr("Stencil")+":", this);
     stencilCombo = new QComboBox(this);
 
-    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup = new EditTagsPanel{MfWidgetMode::CREATE_MODE, ontology, this};
     editTagsGroup->refreshOntologyTags();
 
     // assembly
@@ -113,6 +113,28 @@ void OutlineNewDialog::GeneralTab::clean()
     nameEdit->setFocus();
     stencilCombo->clear();
     editTagsGroup->clearTagList();
+}
+
+void OutlineNewDialog::GeneralTab::showFacet(Repository::RepositoryType repositoryType)
+{
+    bool visibility =
+        Repository::RepositoryType::MINDFORGER == repositoryType
+        ? true
+        : false;
+
+    editTagsGroup->setVisible(visibility);
+    progressLabel->setVisible(visibility);
+    progressSpin->setVisible(visibility);
+    stencilLabel->setVisible(visibility);
+    stencilCombo->setVisible(visibility);
+    typeLabel->setVisible(visibility);
+    typeCombo->setVisible(visibility);
+    importanceLabel->setVisible(visibility);
+    importanceCombo->setVisible(visibility);
+    urgencyLabel->setVisible(visibility);
+    urgencyCombo->setVisible(visibility);
+    progressLabel->setVisible(visibility);
+    progressSpin->setVisible(visibility);
 }
 
 /*
@@ -285,8 +307,10 @@ const std::vector<const Tag*>& OutlineNewDialog::getTags() const
     return generalTab->getTags();
 }
 
-void OutlineNewDialog::show(vector<Stencil*>& stencils)
-{
+void OutlineNewDialog::show(
+    vector<Stencil*>& stencils,
+    Repository::RepositoryType repositoryType
+) {
     generalTab->clean();
 
     // IMPROVE reload stencils only if dirty
@@ -302,6 +326,10 @@ void OutlineNewDialog::show(vector<Stencil*>& stencils)
     }
 
     refreshPath(generalTab->getNameEdit()->text());
+
+    // widgets visibility: Markdown vs. MindForger (repository) mode
+    generalTab->showFacet(repositoryType);
+
     QDialog::show();
 }
 

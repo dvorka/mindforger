@@ -23,6 +23,7 @@
 
 #include "../../lib/src/mind/ontology/ontology_vocabulary.h"
 #include "../../lib/src/mind/ontology/ontology.h"
+#include "../../lib/src/config/repository.h"
 
 #include "../model_meta_definitions.h"
 #include "../gear/qutils.h"
@@ -64,7 +65,7 @@ public:
     void setOutline(Outline* outline) { currentOutline = outline; }
     void toOutline();
 
-    void show();
+    void show(Repository::RepositoryType repositoryType);
 
 signals:
     void acceptedSignal();

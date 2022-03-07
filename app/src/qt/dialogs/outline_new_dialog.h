@@ -24,6 +24,7 @@
 #include "../../lib/src/mind/ontology/ontology.h"
 #include "../../lib/src/model/stencil.h"
 #include "../../lib/src/gear/string_utils.h"
+#include "../../lib/src/config/repository.h"
 
 #include "../model_meta_definitions.h"
 #include "../widgets/edit_tags_panel.h"
@@ -74,7 +75,10 @@ public:
     int getProgress() const;
     const std::vector<const Tag*>& getTags() const;
 
-    void show(std::vector<Stencil*>& stencils);
+    void show(
+        std::vector<Stencil*>& stencils,
+        Repository::RepositoryType repositoryType
+    );
 
 private slots:
     void refreshPath(const QString &);
@@ -116,6 +120,8 @@ public:
     QComboBox* getStencilCombo() const { return stencilCombo; }
     QSpinBox* getProgressSpin() const { return progressSpin; }
     const std::vector<const Tag*>& getTags() { return editTagsGroup->getTags(); }
+
+    void showFacet(Repository::RepositoryType repositoryType);
 
     void clean();
 };

@@ -19,9 +19,11 @@
 #ifndef M8RUI_TAGS_TABLE_VIEW_H
 #define M8RUI_TAGS_TABLE_VIEW_H
 
+#include "../../../lib/src/debug.h"
+
 #include <QtWidgets>
 
-#include "../../../lib/src/debug.h"
+#include "qt_commons.h"
 
 namespace m8r {
 

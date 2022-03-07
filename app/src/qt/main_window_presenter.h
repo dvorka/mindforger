@@ -176,7 +176,13 @@ public:
     void handleNoteViewLinkClicked(const QUrl& url);
 
     // NER
-    NerMainWindowWorkerThread* startNerWorkerThread(Mind* m, OrlojPresenter* o, int f, std::vector<NerNamedEntity>* r, QDialog* d);
+    NerMainWindowWorkerThread* startNerWorkerThread(
+        Mind* m,
+        OrlojPresenter* o,
+        int f,
+        std::vector<NerNamedEntity>* r,
+        QDialog* d
+    );
 
 public slots:
     // mind
@@ -198,7 +204,6 @@ public slots:
     void handleMindScope();
     void doActionMindPreferences();
     void handleMindPreferences();
-    void doActionMindTerminal();
     void doActionMindRemember();
     void doActionMindSnapshot();
     void doActionMindCsvExport();
@@ -215,7 +220,7 @@ public slots:
     void doActionFindOutlineByTag();
     void handleFindOutlineByTag();
     void doActionFindNoteByTag();
-    void doTriggerFindNoteByTag(const Tag* tag);
+    void doTriggerFindNoteByTag(const m8r::Tag* tag);
     void doSwitchFindByTagDialog(bool toFindNotesByTag);
     void handleFindNoteByTag();
 #ifdef MF_NER
@@ -239,6 +244,7 @@ public slots:
     void doActionViewRecentNotes();
     void doActionViewKnowledgeGraphNavigator();
     void doActionCli();
+    void doActionViewTerminal();
     void doActionViewDistractionFree();
     void doActionViewFullscreen();
     // knowledge
@@ -263,6 +269,7 @@ public slots:
     void doActionFormatBold();
     void doActionFormatItalic();
     void doActionFormatCode();
+    void doActionFormatComment();
     void doActionFormatMath();
     void doActionFormatMathFrac();
     void doActionFormatMathSum();
@@ -323,6 +330,7 @@ public slots:
     void doActionOutlineTWikiImport();
     // Note
     void doActionNoteNew();
+    bool withWriteableOutline(const std::string& outlineKey);
     void handleNoteNew();
     void doActionNoteHoist();
     void doActionOutlineOrNoteEdit();

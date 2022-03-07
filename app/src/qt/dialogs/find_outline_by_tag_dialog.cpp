@@ -29,7 +29,7 @@ FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *pare
     mode = ThingsMode::OUTLINES;
 
     // widgets
-    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup = new EditTagsPanel{MfWidgetMode::FIND_MODE, ontology, this};
     editTagsGroup->refreshOntologyTags();
     editTagsGroup->setTitle(tr("Notebook tags:"));
 

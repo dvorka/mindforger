@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # MindForger thinking notebook
 #
@@ -17,8 +17,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+export MINDFORGER_VERSION="1.54.0"
+
+# aligned with Ubuntu 18.4
 export QT_VERSION="5.9.9"
+# MindForger 1.52.0 released for macOS Qt version
 # export QT_VERSION="5.11.0"
+# BUG: unable to set security - images are NOT loaded with Qt 5.15.2
+# export QT_VERSION="5.15.2"  
+
 
 export PATH="/Users/dvorka/Qt/${QT_VERSION}/clang_64/bin":${PATH}
 

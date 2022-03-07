@@ -92,6 +92,8 @@ public:
     KanbanColumnPresenter* getNextVisibleColumn();
     KanbanColumnPresenter* getPreviousVisibleColumn();
 
+    void focusAndSelectPreviouslySelectedRow(OrganizerQuadrantView* view);
+
     /**
      * @brief Give focus to next visible column.
      *

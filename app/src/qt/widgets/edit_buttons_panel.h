@@ -19,6 +19,8 @@
 #ifndef M8R_EDIT_BUTTONS_PANEL_H
 #define M8R_EDIT_BUTTONS_PANEL_H
 
+#include "../../lib/src/config/configuration.h"
+
 #include <QtWidgets>
 
 #include "mf_widgets.h"
@@ -38,6 +40,7 @@ private:
     QPushButton* previewButton;
     QPushButton* moreButton;
     QPushButton* rememberButton;
+    QPushButton* rememberAndLeaveButton;
     QPushButton* cancelButton;
 
     OutlineHeaderEditDialog* outlineHeaderEditDialog;
@@ -95,8 +98,8 @@ public slots:
 
 public:
     QPushButton* getRememberButton() const { return rememberButton; }
+    QPushButton* getRememberAndLeaveButton() const { return rememberAndLeaveButton; }
     QPushButton* getCancelButton() const { return cancelButton; }
-
 };
 
 }

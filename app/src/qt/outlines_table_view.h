@@ -25,6 +25,8 @@
 
 #include <QtWidgets>
 
+#include "qt_commons.h"
+
 namespace m8r {
 
 class OutlinesTableView : public QTableView
@@ -39,6 +41,7 @@ private:
 
 public:
     static const int COLUMN_COUNT = 7;
+
 public:
     explicit OutlinesTableView(QWidget* parent, bool isDashboardlet=false);
     OutlinesTableView(const OutlinesTableView&) = delete;
@@ -49,6 +52,7 @@ public:
 
     int getColumnCount() { return COLUMN_COUNT; }
 
+protected:
     virtual void keyPressEvent(QKeyEvent* event) override;
     virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
     virtual void resizeEvent(QResizeEvent* event) override;

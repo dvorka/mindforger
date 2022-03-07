@@ -83,6 +83,7 @@ public:
     OrlojView(const OrlojView&&) = delete;
     OrlojView &operator=(const OrlojView&) = delete;
     OrlojView &operator=(const OrlojView&&) = delete;
+    virtual ~OrlojView() {};
 
     DashboardView* getDashboard() const { return dashboard; }
     OrganizerView* getOrganizer() const { return organizer; }

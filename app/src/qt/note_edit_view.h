@@ -49,6 +49,8 @@ public:
     NoteEditView &operator=(const NoteEditView&&) = delete;
     ~NoteEditView();
 
+    virtual void keyPressEvent(QKeyEvent* event) override;
+
     void setNoteEditDialog(NoteEditDialog* noteEditDialog) {
         bottomButtonsPanel->setNoteEditDialog(noteEditDialog);
     }

@@ -32,12 +32,11 @@ Memory::Memory(
         HtmlOutlineRepresentation& htmlRepresentation)
     : config{configuration},
       ontology{ontology},
-      htmlRepresentation{htmlRepresentation},
       mdRepresentation{htmlRepresentation.getMarkdownRepresentation()},
       persistence(new FilesystemPersistence{mdRepresentation, htmlRepresentation}),
       twikiRepresentation{mdRepresentation, persistence},
       csvRepresentation{},
-      limbo{configuration}
+      limbo{}
 {
     cache = true;
     mindScope = nullptr;
@@ -218,6 +217,11 @@ Note* Memory::createNote(Stencil* stencil)
     } else {
         return nullptr;
     }
+}
+
+bool Memory::canRemember(const std::string& outlineKey)
+{
+    return persistence->isWriteable(outlineKey);
 }
 
 void Memory::remember(const std::string& outlineKey)

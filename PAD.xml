@@ -34,10 +34,10 @@
 	</Company_Info>
 	<Program_Info>
 		<Program_Name>MindForger</Program_Name>
-		<Program_Version>1.52.0</Program_Version>
-		<Program_Release_Month>03</Program_Release_Month>
+		<Program_Version>1.54.0</Program_Version>
+		<Program_Release_Month>01</Program_Release_Month>
 		<Program_Release_Day>08</Program_Release_Day>
-		<Program_Release_Year>2020</Program_Release_Year>
+		<Program_Release_Year>2022</Program_Release_Year>
 		<Program_Cost_Dollars />
 		<Program_Cost_Other_Code />
 		<Program_Cost_Other />
@@ -78,9 +78,9 @@
 	</Program_Descriptions>
 	<Web_Info>
 		<Application_URLs>
-			<Application_Info_URL>http://www.mindforger.com/</Application_Info_URL>
-			<Application_Order_URL>http://www.mindforger.com/</Application_Order_URL>
-			<Application_Screenshot_URL>http://www.mindforger.com/github/github-thinking-notebook.png</Application_Screenshot_URL>
+			<Application_Info_URL>https://www.mindforger.com/</Application_Info_URL>
+			<Application_Order_URL>https://www.mindforger.com/</Application_Order_URL>
+			<Application_Screenshot_URL>https://www.mindforger.com/github/github-thinking-notebook.png</Application_Screenshot_URL>
 			<Application_Icon_URL>https://github.com/dvorka/mindforger/raw/master/app/resources/icons/mindforger128x128.png</Application_Icon_URL>
 			<Application_XML_File_URL>https://github.com/dvorka/mindforger/raw/master/PAD.xml</Application_XML_File_URL>
 		</Application_URLs>

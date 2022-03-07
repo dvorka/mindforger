@@ -28,7 +28,7 @@ TerminalDialog::TerminalDialog(QWidget* parent)
     cmdEdit = new MyLineEdit(this, this);
 
     cmdCompleter = new QCompleter(new QStandardItemModel(cmdEdit), this);
-    cmdCompleter->setCompletionMode(QCompleter::CompletionMode::UnfilteredPopupCompletion);
+    cmdCompleter->setCompletionMode(QCompleter::CompletionMode::InlineCompletion);
     cmdCompleter->setCaseSensitivity(Qt::CaseInsensitive);
     QStandardItemModel* cmdCompleterModel =
         dynamic_cast<QStandardItemModel*>(cmdCompleter->model());
@@ -51,6 +51,7 @@ TerminalDialog::TerminalDialog(QWidget* parent)
         completerCommands << QString::fromStdString("clear");
 #endif
         completerCommands << QString::fromStdString("exit");
+        completerCommands << QString::fromStdString("quit");
 
         for(auto c:completerCommands) {
             cmdCompleterModel->appendRow(new QStandardItem(c));
@@ -85,6 +86,10 @@ void TerminalDialog::show()
     // $
     //   ^ cursor
 
+    cmdEdit->clear();
+    cmdEdit->setFocus();
+
+    setModal(true);
     QDialog::show();
 }
 
@@ -211,6 +216,7 @@ void TerminalDialog::runCommand()
     }
 
     cmdEdit->clear();
+    MF_DEBUG("Terminal prompt cleared: " << cmdEdit->text().toStdString() << endl);
 }
 
 } // m8r namespace

@@ -18,7 +18,7 @@
 
 .DEFAULT_GOAL := help
 
-MINDFORGER_VERSION := 1.53.0
+MINDFORGER_VERSION := 1.54.0
 MINDFORGER_RELEASE_BASE_DIR := /home/dvorka/p/mindforger/release
 MINDFORGER_RELEASE_DIR := $(MINDFORGER_RELEASE_BASE_DIR)/$(MINDFORGER_VERSION)-maker
 
@@ -26,21 +26,29 @@ MF_MAKER_WORKING_DIR := $(MINDFORGER_RELEASE_BASE_DIR)/maker-at-work
 
 # class name like My_Class_Name used by C++ class generators
 CLASS_NAME := "New_Class"
+# l10n language: en, cs
+MF_LANG := "en"
 
 help:
 	@echo "MindForger maker help:"
-	@echo "clean         clean build artifacts"
-	@echo "gen-lib-class generate lib C++ class skeleton for CLASS_NAME=My_Class"
-	@echo "gen-ui-class  generate UI C++ class skeleton CLASS_NAME=My_Class"
-	@echo "build         build MindForger executable"
-	@echo "l10n          update and release localization strings"
-	@echo "test-lib      compile and run lib/ unit tests"
-	@echo "test-app      compile and run app/ integration tests"
-	@echo "dist-all      build all distributions"
-	@echo "dist-tarball  build tarball distribution"
-	@echo "dist-deb      build Debian distribution"
-	@echo "statistic     show source code statistic"
-	@echo "doc           generate Doxygen documentation"
+	@echo "git-subs-update   update git submodules"
+	@echo "gen-lib-class     generate lib C++ class skeleton: CLASS_NAME=My_Class"
+	@echo "gen-ui-class      generate UI C++ class skeleton: CLASS_NAME=My_Class"
+	@echo "clean             clean build artifacts"
+	@echo "build             build MindForger binary"
+	@echo "l10n              update and release localization strings: MF_LANG=en"
+	@echo "test-lib          compile and run lib/ unit tests"
+	@echo "test-app          compile and run app/ integration tests"
+	@echo "dist-all          build all distributions"
+	@echo "dist-tarball      build tarball distribution"
+	@echo "dist-deb          build Debian distribution"
+	@echo "dist-rpm          build .rpm package on Fedora"
+	@echo "dist-dmg          build macOS Disk iMaGe .dmg package"
+	@echo "dist-debian-ppa   add .deb to aptly PPA"
+	@echo "statistic         show source code statistic"
+	@echo "doc-to-wiki       mindforger-documentation to mindforger.wiki"
+	@echo "api-reference     generate Doxygen documentation"
+	@echo "dev-install-local compile and install binary to ~/bin as MIND"
 
 clean:
 	rm -vf ../app/mindforger
@@ -49,31 +57,34 @@ clean:
 	cd .. && make clean
 	cd ../lib/test && make clean
 
+git-subs-update:
+	cd .. && git submodule update --init --recursive
+
 gen-lib-class:
 	@echo "Generating lib C++ class for name: $(CLASS_NAME)"
-	./gen-cpp-class.py $(CLASS_NAME)
+	./make/gen-cpp-class.py $(CLASS_NAME)
 
 gen-ui-class:
 	@echo "Generating UI C++ class for name: $(CLASS_NAME)"
-	./gen-cpp-ui-class.py $(CLASS_NAME)
+	./make/gen-cpp-ui-class.py $(CLASS_NAME)
 
 
 build: clean
 	cd .. && qmake -r mindforger.pro && make -j 7
-	@echo "If build succeeded then MindForger executable can be found in:\n  app/mindforger"
+	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
-install-local-dvorka: build ../app/mindforger
-	cp -vf ../app/mindforger ~/bin
-	mv -vf ~/bin/mindforger ~/bin/MIND
-	~/bin/MIND --version
+build-ci: clean
+	@echo "MindForger CI build..."
+	cd .. && qmake CONFIG+=mfci -r mindforger.pro && make -j 7
+	@echo "If CI build succeeded, then MindForger executable can be found in:\n  app/mindforger"
+	ls -al ../app/mindforger
 
 l10n:
-	./l10n-update-strings.sh
-	./l10n-edit-and-release.sh
+	cd make && ./l10n-update-strings.sh && ./l10n-edit-and-release.sh $(MF_LANG)
 
 test-lib: clean
-	./test-lib-units.sh
+	cd make && ./test-lib-units.sh
 
 dist-work-clean:
 	rm -rvf $(MF_MAKER_WORKING_DIR)
@@ -95,10 +106,18 @@ dist-deb: dist-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR)
 	cp -vf $(MF_MAKER_WORKING_DIR)/`cd $(MF_MAKER_WORKING_DIR) && ls -d mindforger*`/mindforger_$(MINDFORGER_VERSION)-1_amd64.deb $(MINDFORGER_RELEASE_DIR)
 
 dist-rpm:
-	@echo "Building RPM distribution..."
-	@echo "VIRTUAL MACHINE with RedHat must be running!"
-	# TODO to be implemented
-	exit 1
+	@echo "IMPORTANT: this target MUST be run on Fedora!"
+	cd fedora && ./fedora-distro-setup.sh
+	@echo "Building .rpm package..."
+	cp -vf ./fedora-rpm-from-deb.sh ~/alien && cd ~/alien && sudo ./fedora-rpm-from-deb.sh $(MINDFORGER_VERSION)
+	@echo "Find .rpm in ~/alien directory"
+
+dist-dmg:
+	@echo "Building .dmg package..."
+	cd macos && ./mindforger-build.sh && ./dmg-package-build.sh
+
+dist-debian-ppa:
+	cd debian && ./debian-aptly-add-deb.sh
 
 dist-all-clean:
 	rm -rvf $(MINDFORGER_RELEASE_DIR)
@@ -107,7 +126,19 @@ dist-all: dist-all-clean $(MINDFORGER_RELEASE_DIR) dist-tarball dist-deb
 	@echo "Building all $(MINDFORGER_VERSION) distributions"
 
 statistic:
-	./statistic.sh
+	cd make && ./statistic.sh
 
-doc:
+doc-to-wiki:
+	cd doc && ./mf-doc-to-wiki.py
+
+api-reference:
 	cd doxygen && doxygen ./mindforger.cfg
+
+# private development targets
+
+dev-install-local: build-ci ../app/mindforger
+	cp -vf ../app/mindforger ~/bin
+	mv -vf ~/bin/mindforger ~/bin/mind
+	~/bin/mind --version
+
+# eof

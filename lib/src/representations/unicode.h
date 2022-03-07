@@ -41,6 +41,12 @@ constexpr const auto U_CODE_IMPORTANCE_OFF = 0x2606;
     // 0x2606 ... star (empty)
     // 0x00B7 ... middle dot
 
+constexpr const auto U_CODE_PARAGRAPH_NL = 0x2029;
+    // 0x2029 ... used by Qt as paragraph delimiter
+    //   From Qt selectedText() documentation: If the selection obtained from
+    // an editor spans a line break, the text will contain a Unicode U+2029 paragraph
+    // separator character instead of a newline \n character.
+
 /**
  * @brief The Unicode.
  *

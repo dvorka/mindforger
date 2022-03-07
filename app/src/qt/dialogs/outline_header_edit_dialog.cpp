@@ -51,7 +51,7 @@ OutlineHeaderEditDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *par
     progressSpin->setMinimum(0);
     progressSpin->setMaximum(100);
 
-    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup = new EditTagsPanel{MfWidgetMode::EDIT_MODE, ontology, this};
 
     // assembly
     QVBoxLayout* basicLayout = new QVBoxLayout{this};
@@ -233,7 +233,7 @@ OutlineHeaderEditDialog::~OutlineHeaderEditDialog()
     if(advancedTab) delete advancedTab;
 }
 
-void OutlineHeaderEditDialog::show()
+void OutlineHeaderEditDialog::show(Repository::RepositoryType repositoryType)
 {
     if(currentOutline) {
         // RDWR
@@ -262,6 +262,16 @@ void OutlineHeaderEditDialog::show()
     }
 
     generalTab->editTagsGroup->setFocusAddingTag();
+
+    bool visibility =
+        Repository::RepositoryType::MINDFORGER == repositoryType
+        ? true
+        : false;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    tabWidget->setTabVisible(0, visibility);
+#else
+    tabWidget->setTabEnabled(0, visibility);
+#endif
 
     QDialog::show();
 }

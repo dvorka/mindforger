@@ -71,8 +71,8 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         mwp, SLOT(doActionMindPreferences())
     );
     QObject::connect(
-        view->actionMindTerminal, SIGNAL(triggered()),
-        mwp, SLOT(doActionMindTerminal())
+        view->actionViewTerminal, SIGNAL(triggered()),
+        mwp, SLOT(doActionViewTerminal())
     );
     QObject::connect(
         view->actionMindSnapshot, SIGNAL(triggered()),
@@ -216,19 +216,34 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         mwp, SLOT(doActionNoteClone()));
 
     // menu: edit
-    QObject::connect(view->actionEditFind, SIGNAL(triggered()), mwp, SLOT(doActionEditFind()));
-    QObject::connect(view->actionEditFindNext, SIGNAL(triggered()), mwp, SLOT(doActionEditFindAgain()));
+    QObject::connect(
+        view->actionEditFind, SIGNAL(triggered()),
+        mwp, SLOT(doActionEditFind()));
+    QObject::connect(
+        view->actionEditFindNext, SIGNAL(triggered()),
+        mwp, SLOT(doActionEditFindAgain()));
     // no other bindings needed - it's already bound in the editor ~ menu is rather a documentation
-    QObject::connect(view->actionEditWordWrap, SIGNAL(triggered()), mwp, SLOT(doActionEditWordWrapToggle()));
-    QObject::connect(view->actionEditNameDescFocusSwap, SIGNAL(triggered()), mwp, SLOT(doActionNameDescFocusSwap()));
-    QObject::connect(view->actionEditLiveNotePreview, SIGNAL(triggered()), mwp, SLOT(doActionToggleLiveNotePreview()));
-    QObject::connect(view->actionEditExtract, SIGNAL(triggered()), mwp, SLOT(doActionNoteExtract()));
-    QObject::connect(view->actionEditSpellCheck, SIGNAL(triggered()), mwp, SLOT(doActionSpellCheck()));
+    QObject::connect(
+        view->actionEditWordWrap, SIGNAL(triggered()),
+        mwp, SLOT(doActionEditWordWrapToggle()));
+    QObject::connect(
+        view->actionEditNameDescFocusSwap, SIGNAL(triggered()),
+        mwp, SLOT(doActionNameDescFocusSwap()));
+    QObject::connect(
+        view->actionEditLiveNotePreview, SIGNAL(triggered()),
+        mwp, SLOT(doActionToggleLiveNotePreview()));
+    QObject::connect(
+        view->actionEditExtract, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteExtract()));
+    QObject::connect(
+        view->actionEditSpellCheck, SIGNAL(triggered()),
+        mwp, SLOT(doActionSpellCheck()));
 
     // menu: format
     QObject::connect(view->actionFormatBold, SIGNAL(triggered()), mwp, SLOT(doActionFormatBold()));
     QObject::connect(view->actionFormatItalic, SIGNAL(triggered()), mwp, SLOT(doActionFormatItalic()));
     QObject::connect(view->actionFormatCode, SIGNAL(triggered()), mwp, SLOT(doActionFormatCode()));
+    QObject::connect(view->actionFormatComment, SIGNAL(triggered()), mwp, SLOT(doActionFormatComment()));
     QObject::connect(view->actionFormatMath, SIGNAL(triggered()), mwp, SLOT(doActionFormatMath()));
     QObject::connect(view->actionFormatMathFraction, SIGNAL(triggered()), mwp, SLOT(doActionFormatMathFrac()));
     QObject::connect(view->actionFormatMathSum, SIGNAL(triggered()), mwp, SLOT(doActionFormatMathSum()));
@@ -281,6 +296,10 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionHelpMathQuickReference, SIGNAL(triggered()), mwp, SLOT(doActionHelpMathQuickReference()));
     QObject::connect(view->actionHelpMathLivePreview, SIGNAL(triggered()), mwp, SLOT(doActionHelpMathLivePreview()));
     QObject::connect(view->actionHelpDiagrams, SIGNAL(triggered()), mwp, SLOT(doActionHelpDiagrams()));
+    QObject::connect(
+        view->actionHelpAboutQt, SIGNAL(triggered()),
+        LookAndFeels::getInstance().getQApplication(), SLOT(aboutQt())
+    );
     QObject::connect(view->actionHelpAbout, SIGNAL(triggered()), mwp, SLOT(doActionHelpAboutMindForger()));
 
     switch(config.getDesiredMindState()) {

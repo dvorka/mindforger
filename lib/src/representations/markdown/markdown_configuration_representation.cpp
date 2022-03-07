@@ -53,6 +53,8 @@ constexpr const auto CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL =  "* Edito
 constexpr const auto CONFIG_SETTING_UI_EDITOR_LIVE_SPELLCHECK_LABEL =  "* Live editor spell check: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_SPELLCHECK_LANG_LABEL =  "* Spell check language: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL =  "* Editor autocomplete: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_SMART_EDITOR_LABEL =  "* Smart editor: ";
+constexpr const auto CONFIG_SETTING_UI_EDITOR_SPACE_SECTION_ESCAPING_LABEL =  "* Space-based # in section escaping: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL =  "* Editor TAB width: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_TABS_AS_SPACES_LABEL =  "* Editor insert SPACEs for TAB: ";
 constexpr const auto CONFIG_SETTING_UI_EDITOR_AUTOSAVE_LABEL =  "* Editor autosave on close: ";
@@ -89,17 +91,12 @@ void MarkdownConfigurationRepresentation::configuration(vector<MarkdownAstNodeSe
     if(ast) {
         size_t off = 0;
         if(ast->size()) {
-            MarkdownAstNodeSection* astNode = ast->at(off);
-
             // skip configuration's preamble (if present)
-            if(astNode->isPreambleSection()) {
+            if(ast->at(off)->isPreambleSection()) {
                 if(ast->size()>1) {
-                    astNode = ast->at(++off);
-                } else {
-                    astNode = nullptr;
+                    ++off;
                 }
             }
-
             // 1st section contains just description (post declared/trailing hashes are ignored as they are not needed on save)
         }
 
@@ -253,10 +250,8 @@ void MarkdownConfigurationRepresentation::configurationSection(
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_KEY_BINDING_LABEL) != std::string::npos) {
                         if(line->find(UI_EDITOR_KEY_BINDING_EMACS) != std::string::npos) {
                             c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::EMACS);
-                        } else if(line->find(UI_EDITOR_KEY_BINDING_WIN) != std::string::npos) {
-                            c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::WINDOWS);
                         } else {
-                            c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::VIM);
+                            c.setEditorKeyBinding(Configuration::EditorKeyBindingMode::WINDOWS);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_FONT_LABEL) != std::string::npos) {
                         string t = line->substr(strlen(CONFIG_SETTING_UI_EDITOR_FONT_LABEL));
@@ -303,6 +298,18 @@ void MarkdownConfigurationRepresentation::configurationSection(
                             c.setUiEditorEnableAutocomplete(true);
                         } else {
                             c.setUiEditorEnableAutocomplete(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_EDITOR_SMART_EDITOR_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiEditorEnableSmartEditor(true);
+                        } else {
+                            c.setUiEditorEnableSmartEditor(false);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_EDITOR_SPACE_SECTION_ESCAPING_LABEL) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setUiEditorSpaceSectionEscaping(true);
+                        } else {
+                            c.setUiEditorSpaceSectionEscaping(false);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL) != std::string::npos) {
                         if(line->find("8") != std::string::npos) {
@@ -527,6 +534,13 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_UI_EDITOR_SYNTAX_HIGHLIGHT_LABEL << (c?(c->isUiEditorEnableSyntaxHighlighting()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SYNTAX_HIGHLIGHT?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_AUTOCOMPLETE_LABEL << (c?(c->isUiEditorEnableAutocomplete()?"yes":"no"):(Configuration::DEFAULT_EDITOR_AUTOCOMPLETE?"yes":"no")) << endl <<
+         "    * Enable text autocomplete." << endl <<
+         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_EDITOR_SMART_EDITOR_LABEL << (c?(c->isUiEditorEnableSmartEditor()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SMART_EDITOR?"yes":"no")) << endl <<
+         "    * Enable numbered and buletted list, blocks and [({`_ autocomplete." << endl <<
+         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_UI_EDITOR_SPACE_SECTION_ESCAPING_LABEL << (c?(c->isUiEditorSpaceSectionEscaping()?"yes":"no"):(Configuration::DEFAULT_EDITOR_SPACE_SECTION_ESCAPING?"yes":"no")) << endl <<
+         "    * Enable SPACE-based # in section espacing (HTML entity used when disabled)." << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_UI_EDITOR_TAB_WIDTH_LABEL << (c?c->getUiEditorTabWidth():Configuration::DEFAULT_EDITOR_TAB_WIDTH) << endl <<
          "    * Examples: 4, 8" << endl <<

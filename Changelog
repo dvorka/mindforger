@@ -1,34 +1,58 @@
+2022-03-07  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v1.54.0 - macOS fix release: Qt downgraded from 5.9.9 (security)
+      (macOS only), native L&F theme used by default, fixes which avoid loss of
+      data (RD_ONLY file detection, preview links click, ...), macOS menu
+      shortcuts (new Notebook, Note refactoring, ...), polished MindForger logo
+      and menu icons, main window is not wider than screen on boot, view/edit
+      bottom buttons work even if double-click 2 edit is disabled, toolbar is
+      not hidden on window minimization, platform-driven default editor key
+      binding fixes, Vim keybinding removal, Kanban/EM selection model and
+      moves rewritten (at most one row selected, items can be moved around
+      columns with shortcuts), home/end/page up/page down navigation in recent,
+      notebooks and note tree listings. Note editor: Emacs editor keybinding
+      enhancements (^-y, alt-w, ^-w, alt-d, ...), new buletted/numbered lists
+      and code fences auto indentation on Enter, pair characters ({[" auto
+      completion. Non-repository (MD file mode) fixes: Edit menu availability.
+    * See also https://github.com/dvorka/mindforger/milestone/69?closed=1.
+
 2021-12-26  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v1.53.0 - custom Eisenhower Matrix on tags, Kanban style organizer
-      on tags, repository specific configuration, lazy (PDF) documents indexation POC,
-      edit Note in external editor/WYSIWYG (or tool), CSV export with one-hot-encoded
-      tags, terminal allowing to run commands from MindForger, configuration of custom
-      CSS file for HTML viewer, hunspell-based spell check, cmark-gfm upgrade
-      to the latest version (0.29.0.gfm.2), various minor improvements (CSV export
-      progress bar, configurable click view to edit, ...) and bug fixes (Note cloning,
-      Markdown lists syntax highlighting, tags escaping,  ...), Doxygen source code
-      documentation generator.
+    * Released v1.53.0 - Custom Eisenhower Matrix on tags, Kanban style
+      organizer on tags, repository specific configuration, lazy (PDF) documents
+      indexation POC, edit Note in external editor/WYSIWYG (or tool), CSV export
+      with one-hot-encoded tags, terminal allowing to run commands from
+      MindForger, configuration of custom CSS file for HTML viewer,
+      hunspell-based spell check, cmark-gfm upgrade to the latest version
+      (0.29.0.gfm.2), various minor improvements (CSV export progress bar,
+      configurable click view to edit, ...) and bug fixes (Note cloning,
+      Markdown lists syntax highlighting, tags escaping,  ...), Doxygen source
+      code documentation generator.
+    * See also https://github.com/dvorka/mindforger/milestone/68?closed=1.
 
 2020-03-08  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v1.52.0 - Production quality Autolinking (cmark-gfm and Trie based),
-      macOS improvements (keyboard shortcuts, drag & drop, key characters, ...),
-      discount (MD to HTML processor) removal.
+    * Released v1.52.0 - Production quality Autolinking (cmark-gfm and Trie
+      based), macOS improvements (keyboard shortcuts, drag & drop, key
+      characters, ...), discount (MD to HTML processor) removal.
+    * See also https://github.com/dvorka/mindforger/milestone/59?closed=1.
 
 2020-02-16  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v1.51.0 - Live HTML preview, (partially) fixed Mermed diagrams,
       persistent Os table listing and various minor improvements and bug fixes.
+    * See also https://github.com/dvorka/mindforger/milestone/60?closed=1.
 
 2020-01-18  Martin Dvorak  <martin.dvorak@mindforger.com>
 
    * Released v1.50.0 - New dashboard view, complete fulltext search rewamp,
-     toolbar switch to flat icons theme; new menu items icons; images and attachments
-     can be added with drag&drop, images and icons can be automatically copied
-     to MindForger repository, added Notebook and Note completion on Ctrl-/,
-     persistent hoist mode, (not released: autolinking rewrite to cmark-gfm
-     for high performance, robust and extensible implementation).
+     toolbar switch to flat icons theme; new menu items icons; images and
+     attachments can be added with drag&drop, images and icons can be
+     automatically copied to MindForger repository, added Notebook and Note
+     completion on Ctrl-/, persistent hoist mode, (not released: autolinking
+     rewrite to cmark-gfm for high performance, robust and extensible
+     implementation).
+    * See also https://github.com/dvorka/mindforger/milestone/44?closed=1.
 
 2019-03-09  Martin Dvorak  <martin.dvorak@mindforger.com>
 

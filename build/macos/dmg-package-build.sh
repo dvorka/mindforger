@@ -19,23 +19,32 @@
 
 . ./env.sh
 
-rm -vf ${MF_MACOS_BUILD_DIR}/*.dmg
+echo "Packaging MindForger as Disk iMaGe..."
 
-function packageMindForger {
-    echo "Packaging MindForger as Disk iMaGe .dmg ..."
-    # in order to link QWebEngine correctly, macdeployqt must be run as follows:
-    #   macdeployqt <TARGET>.app -executable=<TARGET>.app/Contents/MacOS/<TARGET>
-    # and non-brew (qt.io) macdeployqt MUST be used (specify path and/or put macdeployqt to path):
-    cd "${MF_MACOS_BUILD_DIR}" && ${MACDEPLOY} mindforger.app -executable=mindforger.app/Contents/MacOS/mindforger -dmg -always-overwrite
+export DMG_TIMESTAMP=`date +%Y%m%d.%H%M%S`
+export DMG_FILENAME="mindforger-${MINDFORGER_VERSION}-${DMG_TIMESTAMP}-intel.dmg"
 
-    export DMG_TIMESTAMP=`date +%Y%m%d.%H%M%S`
-    export DMG_FILENAME="mindforger-1.53.0-${DMG_TIMESTAMP}-intel.dmg"
-    
-    echo "Find .dmg package in $(pwd)/${DMG_FILENAME} ..."
-    mv -v "mindforger.dmg" "${DMG_FILENAME}"
-    ls -l *.dmg
-}
+if [[ "${1}" = "ci" ]]
+then
+    echo "  CI .dmg build"
+    which macdeployqt
+    export DMG_FILENAME="ci-${DMG_FILENAME}"
+    export MACDEPLOY="macdeployqt"
+    export MF_MACOS_BUILD_DIR="/Users/runner/work/mindforger/mindforger/app"
+else
+    echo "  CLI .dmg build"
+    rm -vf ${MF_MACOS_BUILD_DIR}/*.dmg
+fi
+echo "  Build dir: ${MF_MACOS_BUILD_DIR}"
+echo "  macdeploy: ${MACDEPLOY}"
 
-packageMindForger
+# in order to link QWebEngine correctly, macdeployqt must be run as follows:
+#   macdeployqt <TARGET>.app -executable=<TARGET>.app/Contents/MacOS/<TARGET>
+# and non-brew (qt.io) macdeployqt MUST be used (specify path and/or put macdeployqt to path):
+cd "${MF_MACOS_BUILD_DIR}" && ${MACDEPLOY} mindforger.app -executable=mindforger.app/Contents/MacOS/mindforger -dmg -always-overwrite
+
+echo "DONE: find .dmg package in $(pwd)/${DMG_FILENAME}"
+mv -v "mindforger.dmg" "${DMG_FILENAME}"
+ls -l *.dmg
 
 # eof

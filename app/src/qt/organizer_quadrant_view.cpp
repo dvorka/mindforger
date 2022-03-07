@@ -52,18 +52,47 @@ OrganizerQuadrantView::OrganizerQuadrantView(QWidget* parent, ViewType viewType)
 
 void OrganizerQuadrantView::keyPressEvent(QKeyEvent* event)
 {
+    MF_DEBUG("Organizer quadrant view key..." << endl);
     if((event->modifiers() & Qt::ControlModifier)) {
+        MF_DEBUG("  ctrl" << endl);
         switch(event->key()) {
+#ifdef __APPLE__
+        case Qt::Key_Return:
+        case Qt::Key_Enter:
+            MF_DEBUG("    alt-ENTER" << endl);
+            emit signalOpenOrganizerPreferences();
+            return;
+
+        case Qt::Key_BracketRight:
+#else
         case Qt::Key_Right:
-            MF_DEBUG("Organizer EMIT ctrl-right" << endl);
+#endif
+            MF_DEBUG("Organizer quadrant EMIT ctrl-right" << endl);
             emit signalMoveNoteToNextQuadrant();
             return;
+#ifdef __APPLE__
+        case Qt::Key_BracketLeft:
+#else
         case Qt::Key_Left:
-            MF_DEBUG("Organizer EMIT ctrl-left" << endl);
+#endif
+            MF_DEBUG("Organizer quadrant EMIT ctrl-left" << endl);
             emit signalMoveNoteToPreviousQuadrant();
             return;
         }
     }
+
+#ifndef __APPLE__
+    if(event->modifiers() & Qt::AltModifier) {
+        MF_DEBUG("  alt" << endl);
+        switch(event->key()) {
+            case Qt::Key_Return:
+            case Qt::Key_Enter:
+                MF_DEBUG("    alt-ENTER" << endl);
+                emit signalOpenOrganizerPreferences();
+                return;
+            }
+    }
+#endif
 
     if(!(event->modifiers() & Qt::AltModifier)
        && !(event->modifiers() & Qt::ControlModifier)

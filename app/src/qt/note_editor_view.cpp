@@ -27,10 +27,27 @@ inline bool caseInsensitiveLessThan(const QString &a, const QString &b)
     return a.compare(b, Qt::CaseInsensitive) < 0;
 }
 
+/**
+ * @brief Note editor.
+ *
+ * Features:
+ *
+ * - autocompletion of words from the current Note
+ * - autocompletion of links to Notebooks and Notes
+ * - Markdown syntax highlighting
+ *
+ * Potential improvements:
+ *
+ * - smart(er) editor:
+ *   - numbered and buletted list completion
+ *   - indented block completion
+ *   - pair characters "'([{ completion (pairing)
+ */
 NoteEditorView::NoteEditorView(QWidget* parent)
     : QPlainTextEdit(parent),
-      parent(parent),
-      completedAndSelected(false),
+      parent{parent},
+      smartEditor{*this},
+      completedAndSelected{false},
       spellCheckDictionary{DictionaryManager::instance().requestDictionary()}
 {
     hitCounter = 0;
@@ -48,8 +65,6 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     // widgets
     highlighter = new NoteEditHighlighter{this};
     enableSyntaxHighlighting = Configuration::getInstance().isUiEditorEnableSyntaxHighlighting();
-    tabsAsSpaces = Configuration::getInstance().isUiEditorTabsAsSpaces();
-    tabWidth = Configuration::getInstance().getUiEditorTabWidth();
     highlighter->setEnabled(enableSyntaxHighlighting);
     // line numbers
     lineNumberPanel = new LineNumberPanel{this};
@@ -66,14 +81,30 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     completer->setWrapAround(true);
 
     // signals
-    QObject::connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberPanelWidth(int)));
-    QObject::connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberPanel(QRect,int)));
-    QObject::connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
-    QObject::connect(completer, SIGNAL(activated(const QString&)), this, SLOT(insertCompletion(const QString&)));
+    // line numbers
+    QObject::connect(
+        this, SIGNAL(blockCountChanged(int)),
+        this, SLOT(updateLineNumberPanelWidth(int))
+    );
+    QObject::connect(
+        this, SIGNAL(updateRequest(QRect,int)),
+        this, SLOT(updateLineNumberPanel(QRect,int))
+    );
+    // current line highlight
+    QObject::connect(
+        this, SIGNAL(cursorPositionChanged()),
+        this, SLOT(highlightCurrentLine())
+    );
+    // completion
+    QObject::connect(
+        completer, SIGNAL(activated(QString)),
+        this, SLOT(insertCompletion(QString))
+    );
     // shortcut signals
     new QShortcut(
         QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_Slash)),
-        this, SLOT(slotStartLinkCompletion()));
+        this, SLOT(slotStartLinkCompletion())
+    );
 
     // capabilities
     setAcceptDrops(true);
@@ -97,13 +128,18 @@ void NoteEditorView::setEditorTabWidth(int tabWidth)
 {
     // tab width: 4 or 8
     QFontMetrics metrics(f);
-    this->tabWidth = tabWidth;
+    smartEditor.setTabWidth(tabWidth);
+
+#if QT_VERSION > QT_VERSION_CHECK(5, 10, 0)
+    setTabStopDistance(tabWidth * metrics.horizontalAdvance(' '));
+#else
     setTabStopWidth(tabWidth * metrics.width(' '));
+#endif
 }
 
 void NoteEditorView::setEditorTabsAsSpacesPolicy(bool tabsAsSpaces)
 {
-    this->tabsAsSpaces = tabsAsSpaces;
+    smartEditor.setPolicyTabsAsSpaces(tabsAsSpaces);
 }
 
 void NoteEditorView::setEditorFont(std::string fontName)
@@ -136,11 +172,15 @@ void NoteEditorView::slotConfigurationUpdated()
 
 void NoteEditorView::dropEvent(QDropEvent* event)
 {
-#if defined(__APPLE__) || defined(_WIN32)
-    if(event->mimeData()->text().size())
-    {
+#if defined(__APPLE__)
+    if(event->mimeData()->text().size()) {
         MF_DEBUG("D&D drop event: '" << event->mimeData()->text().toStdString() << "'" << endl);
-        signalDnDropUrl(event->mimeData()->text().replace("file:///",""));
+        emit signalDnDropUrl(event->mimeData()->text().replace("file://",""));
+    }
+#elif defined(_WIN32)
+    if(event->mimeData()->text().size()) {
+        MF_DEBUG("D&D drop event: '" << event->mimeData()->text().toStdString() << "'" << endl);
+        emit signalDnDropUrl(event->mimeData()->text().replace("file:///",""));
     }
 #else
     if(event->mimeData()->hasUrls()
@@ -148,7 +188,7 @@ void NoteEditorView::dropEvent(QDropEvent* event)
        && event->mimeData()->urls().size())
     {
         MF_DEBUG("D&D drop: '" << event->mimeData()->urls().first().url().trimmed().toStdString() << "'" << endl);
-        signalDnDropUrl(event->mimeData()->urls().first().url().replace("file://",""));
+        emit signalDnDropUrl(event->mimeData()->urls().first().url().replace("file://",""));
     }
 #endif
 
@@ -165,7 +205,7 @@ void NoteEditorView::dragMoveEvent(QDragMoveEvent* event)
  * Formatting
  */
 
-void NoteEditorView::wrapSelectedText(const QString &tag, const QString &endTag)
+void NoteEditorView::wrapSelectedText(const QString& tag, const QString& endTag)
 {
     QTextCursor cursor = textCursor();
     QTextDocument *doc = document();
@@ -195,7 +235,7 @@ void NoteEditorView::wrapSelectedText(const QString &tag, const QString &endTag)
     setFocus();
 }
 
-void NoteEditorView::insertMarkdownText(const QString &text, bool newLine, int offset)
+void NoteEditorView::insertMarkdownText(const QString& text, bool newLine, int offset)
 {
     QTextCursor cursor = textCursor();
     if(cursor.hasSelection()) {
@@ -222,7 +262,8 @@ void NoteEditorView::insertMarkdownText(const QString &text, bool newLine, int o
 
 QString NoteEditorView::getRelevantWords() const
 {
-    // IMPROVE get whole line and cut word on which is curser and it before/after siblings: return textCursor().block().text(); ...
+    // IMPROVE get whole line and cut word on which is curser and it
+    //   before/after siblings: return textCursor().block().text(); ...
     QString result{};
     if(textCursor().block().text().size()) {
         QString t = textCursor().block().text();
@@ -244,36 +285,56 @@ QString NoteEditorView::getRelevantWords() const
 }
 
 /*
- * Autocomplete
+ * Autocomplete.
  */
+
+bool containsSpace(QString s)
+{
+    for(int i = 0; i<s.length(); i++) {
+        if(s.at(i).isSpace()) {
+            return true;
+        }
+    }
+    return false;
+}
 
 void NoteEditorView::keyPressEvent(QKeyEvent* event)
 {
     hitCounter++;
 
-    // TODO Linux paste
+    MF_DEBUG(
+        "Editor keyPressEvent handler:" << endl <<
+        "  Key binding: " << Configuration::getInstance().getEditorKeyBinding() << endl <<
+        "  Key        : " << event->key() << endl
+    );
 
+    if(Configuration::getInstance().isUiEditorEnableSmartEditor()
+       && smartEditor.completePairChars(event)
+    ) {
+        return;
+    }
+
+    // ctrl
     if(event->modifiers() & Qt::ControlModifier) {
         switch (event->key()) {
-        case Qt::Key_V: {
-            // TODO make this private function
-            QClipboard* clip = QApplication::clipboard();
-            const QMimeData* mime = clip->mimeData();
-            if(mime->hasImage()) {
-                MF_DEBUG("Image PASTED to editor" << endl);
-                QImage image = qvariant_cast<QImage>(mime->imageData());
-                emit signalPasteImageData(image);
-                return;
-            }
-            break;
+            case Qt::Key_V: {
+                QClipboard* clip = QApplication::clipboard();
+                const QMimeData* mime = clip->mimeData();
+                if(mime->hasImage()) {
+                    MF_DEBUG("Editor: image PASTED" << endl);
+                    QImage image = qvariant_cast<QImage>(mime->imageData());
+                    emit signalPasteImageData(image);
+                    return;
+                }
+                break;
         }
-        case Qt::Key_F: {
+        case Qt::Key_F:
             findStringAgain();
             return; // exit to override default key binding
         }
-        }
     }
 
+    // Emacs key binding
     // IMPROVE get configuration reference and editor mode setting - this must be fast
     if(Configuration::getInstance().getEditorKeyBinding()==Configuration::EditorKeyBindingMode::EMACS) {
         if(event->modifiers() & Qt::ControlModifier){
@@ -281,10 +342,49 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
             case Qt::Key_A:
                 moveCursor(QTextCursor::StartOfLine);
                 return; // exit to override default key binding
+            case Qt::Key_Y:
+                this->paste();
+                return; // exit to override default key binding
+            case Qt::Key_W:
+                MF_DEBUG("Editor: Emacs CUT word" << endl);
+                this->cut();
+                return; // exit to override default key binding
+            }
+        }
+        if(event->modifiers() & Qt::AltModifier){
+            switch (event->key()) {
+            case Qt::Key_W:
+                this->copy();
+                return; // exit to override default key binding
+            case Qt::Key_D: {
+                MF_DEBUG("Editor: Emacs delete until END of WORD ..." << endl);
+                QTextCursor cursor = textCursor();
+                cursor.clearSelection();
+                while(
+                    cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor)
+                    && !containsSpace(cursor.selectedText())
+                ) {
+                    MF_DEBUG("Editor: Emacs delete word '" << cursor.selectedText().toStdString() << "'" << endl);
+                }
+                if(cursor.selectedText().size()
+                   && cursor.selectedText().at(cursor.selectedText().size()-1).isSpace()
+                ) {
+                    cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor);
+                }
+                if(cursor.selectedText().size()) {
+                    MF_DEBUG("Editor: Emacs delete word DELETING '" << cursor.selectedText().toStdString() << "'" << endl);
+                    this->copy();
+                    cursor.removeSelectedText();
+                    return; // exit to override default key binding
+                }
+                MF_DEBUG("Editor: Emacs delete word DONE" << endl);
+                }
+                break; // no string deleted - propagate handling
             }
         }
     }
 
+    // completer from the current N text
     if(completedAndSelected && handledCompletedAndSelected(event)) {
         return;
     } else {
@@ -305,19 +405,59 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
                 break;
         }
     } else {
-        switch(event->key()) {
-            case Qt::Key_Tab:
-            if(tabsAsSpaces) {
-                insertTab();
-                return;
+        switch(event->key()) {        
+            case Qt::Key_Escape: {
+                // completer menu not visible - exit editor ~ Cancel
+                QMessageBox msgBox{
+                    QMessageBox::Question,
+                    tr("Exit Editor"),
+                    tr("Do you really want to exit editor without saving?")
+                };
+                QPushButton* yes = msgBox.addButton("&Yes", QMessageBox::YesRole);
+#ifdef __APPLE__
+                yes->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
+                yes->setToolTip("⌘Y");
+
+                QPushButton* no =
+#endif
+                msgBox.addButton("&No", QMessageBox::NoRole);
+#ifdef __APPLE__
+                no->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+                no->setToolTip("⌘N");
+#endif
+                msgBox.exec();
+
+                QAbstractButton* choosen = msgBox.clickedButton();
+                if(yes == choosen) {
+                    emit signalCloseEditorWithEsc();
+                } // else do nothing
+                break;
             }
-            break;
+            case Qt::Key_Tab:
+                if(Configuration::getInstance().isUiEditorEnableSmartEditor()
+                   && smartEditor.isPolicyTabsAsSpaces()
+                ) {
+                    if(smartEditor.moveLineRightByTab()) {
+                        return;
+                    }
+                }
+                break;
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+                if(Configuration::getInstance().isUiEditorEnableSmartEditor()) {
+                    if(smartEditor.currentLineRemoveIfSpacesOnly()) {
+                        return;
+                    } else if(smartEditor.completeListAndFenceBlocks(event)) {
+                        return;
+                    }
+                }
+                break;
         }
     }
 
     QPlainTextEdit::keyPressEvent(event);
 
-    // completion: letter must be handled~inserted first - now it's time to autocomplete
+    // completion: letter must be handled ~ inserted first - now it's time to autocomplete
     if(Configuration::getInstance().isUiEditorEnableAutocomplete()) {
         if(!completer->popup()->isVisible()) {
             if(blockCount() < Configuration::EDITOR_MAX_AUTOCOMPLETE_LINES) {
@@ -371,7 +511,9 @@ const QString NoteEditorView::getCompletionPrefix()
     QTextCursor cursor = textCursor();
     cursor.select(QTextCursor::WordUnderCursor);
     const QString completionPrefix = cursor.selectedText();
-    if(!completionPrefix.isEmpty() && completionPrefix.at(completionPrefix.length()-1).isLetter()) {
+    if(!completionPrefix.isEmpty()
+       && completionPrefix.at(completionPrefix.length()-1).isLetter()
+      ) {
         return completionPrefix;
     } else {
         return QString{};
@@ -403,15 +545,17 @@ void NoteEditorView::performTextCompletion(const QString& completionPrefix)
     }
 
     // do NOT complete inline - it completes what user doesn't know and is bothering
-    //if(completer->completionCount() == 1) {
-    //    insertCompletion(completer->currentCompletion(), true);
-    //} else {
-        QRect rect = cursorRect();
-        rect.setWidth(
-            completer->popup()->sizeHintForColumn(0) +
-            completer->popup()->verticalScrollBar()->sizeHint().width());
-        completer->complete(rect);
-    //}
+#ifdef MF_DO_INLINE_COMPLETION
+    if(completer->completionCount() == 1) {
+       insertCompletion(completer->currentCompletion(), true);
+    } else {
+# endif
+    QRect rect = cursorRect();
+    rect.setWidth(
+        completer->popup()->sizeHintForColumn(0) +
+        completer->popup()->verticalScrollBar()->sizeHint().width()
+    );
+    completer->complete(rect);
 }
 
 void NoteEditorView::slotStartLinkCompletion()
@@ -427,7 +571,9 @@ void NoteEditorView::slotPerformLinkCompletion(
     const QString& completionPrefix,
     vector<string>* links)
 {
-    MF_DEBUG("Completing prefix: '" << completionPrefix.toStdString() << "' w/ " << links->size() << " links" << endl);
+    MF_DEBUG("Completing prefix: '"
+        << completionPrefix.toStdString() << "' w/ " << links->size() << " links" << endl
+    );
 
     if(!links->empty()) {
         // populate model for links
@@ -458,9 +604,18 @@ void NoteEditorView::slotPerformLinkCompletion(
 void NoteEditorView::populateModel(const QString& completionPrefix)
 {
     QStringList strings = toPlainText().split(QRegExp{"\\W+"});
+
     strings.removeAll(completionPrefix);
     strings.removeDuplicates();
-    qSort(strings.begin(), strings.end(), caseInsensitiveLessThan);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    std::sort(
+# else
+    qSort(
+#endif
+        strings.begin(),
+        strings.end(),
+        caseInsensitiveLessThan
+    );
     model->setStringList(strings);
 }
 
@@ -492,24 +647,13 @@ void NoteEditorView::insertCompletion(const QString& completion, bool singleWord
     setTextCursor(cursor);
 }
 
-void NoteEditorView::insertTab()
-{
-    QString completion{};
-    if(tabWidth == 8) {
-        completion.append("        ");
-    } else {
-        completion.append("    ");
-    }
-    QTextCursor cursor = textCursor();
-    cursor.insertText(completion);
-}
-
 /*
  * L&F
  */
 
 void NoteEditorView::highlightCurrentLine()
 {
+#if !defined(__APPLE__)
     QList<QTextEdit::ExtraSelection> extraSelections;
     if(!isReadOnly()) {
         QTextEdit::ExtraSelection selection;
@@ -530,6 +674,7 @@ void NoteEditorView::highlightCurrentLine()
         }
     }
     setExtraSelections(extraSelections);
+#endif
 }
 
 /*
@@ -642,11 +787,12 @@ void NoteEditorView::findString(const QString s, bool reverse, bool caseSensitiv
 
         if(!find(s, flag)) {
             QMessageBox::information(
-                        this,
-                        tr("Full-text Search Result"),
-                        tr("No matching text found."),
-                        QMessageBox::Ok,
-                        QMessageBox::Ok);
+                this,
+                tr("Full-text Search Result"),
+                tr("No matching text found."),
+                QMessageBox::Ok,
+                QMessageBox::Ok
+            );
 
             // set the cursor back to its initial position
             setTextCursor(cursorSaved);
@@ -759,14 +905,12 @@ bool NoteEditorView::eventFilter(QObject* watched, QEvent* event)
         }
 
         // select the misspelled word
-        this->cursorForWord.movePosition
-        (
+        this->cursorForWord.movePosition (
             QTextCursor::PreviousCharacter,
             QTextCursor::MoveAnchor,
             blockPosition - mispelledWordStartPos
         );
-        this->cursorForWord.movePosition
-        (
+        this->cursorForWord.movePosition (
             QTextCursor::NextCharacter,
             QTextCursor::KeepAnchor,
             mispelledWordLength

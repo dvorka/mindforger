@@ -30,15 +30,16 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     appTab = new AppTab{this};
     viewerTab = new ViewerTab{this};
     editorTab = new EditorTab{this};
+    markdownTab = new MarkdownTab{this};
     navigatorTab = new NavigatorTab{this};
     mindTab = new MindTab{this};
 
     tabWidget->addTab(appTab, tr("Application"));
     tabWidget->addTab(viewerTab, tr("Viewer"));
     tabWidget->addTab(editorTab, tr("Editor"));
+    tabWidget->addTab(markdownTab, tr("Markdown"));
     tabWidget->addTab(navigatorTab, tr("Navigator"));
     tabWidget->addTab(mindTab, tr("Mind"));
-
 
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
@@ -54,7 +55,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
 
     // dialog
     setWindowTitle(tr("Adapt"));
-    resize(fontMetrics().averageCharWidth()*65, 0);
+    resize(fontMetrics().averageCharWidth()*75, 0);
     setModal(true);
 }
 
@@ -68,6 +69,7 @@ void ConfigurationDialog::show()
     appTab->refresh();
     viewerTab->refresh();
     editorTab->refresh();
+    markdownTab->refresh();
     navigatorTab->refresh();
     mindTab->refresh();
 
@@ -79,6 +81,7 @@ void ConfigurationDialog::saveSlot()
     appTab->save();
     viewerTab->save();
     editorTab->save();
+    markdownTab->save();
     navigatorTab->save();
     mindTab->save();
 
@@ -92,14 +95,23 @@ void ConfigurationDialog::saveSlot()
 ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
-    themeLabel = new QLabel(tr("UI theme (requires restart)")+":", this);
+    themeLabel = new QLabel(tr("UI theme (<font color='#ff0000'>requires restart</font>)")+":", this);
     themeCombo = new QComboBox{this};
     themeCombo->addItem(QString{UI_THEME_LIGHT});
+#ifndef __APPLE__
+    themeCombo->addItem(QString{UI_THEME_LIGHT_WITH_FIXED_FONT});
+#endif
     themeCombo->addItem(QString{UI_THEME_DARK});
     themeCombo->addItem(QString{UI_THEME_BLACK});
+#ifndef __APPLE__
+    themeCombo->addItem(QString{UI_THEME_BLACK_WITH_FIXED_FONT});
+#endif
     themeCombo->addItem(QString{UI_THEME_NATIVE});
+#ifndef __APPLE__
+    themeCombo->addItem(QString{UI_THEME_NATIVE_WITH_FIXED_FONT});
+#endif
 
-    startupLabel = new QLabel(tr("Start to view")+":", this);
+    startupLabel = new QLabel(tr("Show the following view on application start")+":", this);
     startupCombo = new QComboBox{this};
 #ifdef MF_DEPRECATED
     startupCombo->addItem(QString{START_TO_DASHBOARD});
@@ -114,6 +126,7 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     startupCombo->addItem(QString{START_TO_HOME_OUTLINE});
 
     showToolbarCheck = new QCheckBox(tr("show toolbar"), this);
+    showToolbarCheck->setChecked(true);
     uiExpertModeCheck = new QCheckBox(tr("I don't need buttons - I know all keyboard shortcuts!"), this);
     nerdMenuCheck = new QCheckBox(tr("nerd menu (requires restart)"), this);
 
@@ -189,7 +202,7 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
 
     mathSupportCheck = new QCheckBox{tr("math support"), this};
     fullOPreviewCheck = new QCheckBox{tr("whole notebook preview"), this};
-    doubleClickViewerToEditCheck = new QCheckBox{tr("double click view to edit"), this};
+    doubleClickViewerToEditCheck = new QCheckBox{tr("double click HTML preview to edit"), this};
 
     diagramSupportLabel = new QLabel(tr("Diagram support")+":", this);
     diagramSupportCombo = new QComboBox{this};
@@ -218,14 +231,14 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     // assembly
     QGroupBox* viewerGroup = new QGroupBox{tr("HTML Viewer"), this};
     QVBoxLayout* viewerLayout = new QVBoxLayout{this};
-    viewerLayout->addWidget(zoomLabel);
-    viewerLayout->addWidget(zoomSpin);
-    viewerLayout->addWidget(diagramSupportLabel);
-    viewerLayout->addWidget(diagramSupportCombo);
+    viewerLayout->addWidget(doubleClickViewerToEditCheck);
+    viewerLayout->addWidget(fullOPreviewCheck);
     viewerLayout->addWidget(srcCodeHighlightSupportCheck);
     viewerLayout->addWidget(mathSupportCheck);
-    viewerLayout->addWidget(fullOPreviewCheck);
-    viewerLayout->addWidget(doubleClickViewerToEditCheck);
+    viewerLayout->addWidget(diagramSupportLabel);
+    viewerLayout->addWidget(diagramSupportCombo);
+    viewerLayout->addWidget(zoomLabel);
+    viewerLayout->addWidget(zoomSpin);
     viewerGroup->setLayout(viewerLayout);
 
     QGroupBox* viewerCssGroup = new QGroupBox{tr("HTML Viewer CSS"), this};
@@ -330,6 +343,7 @@ void ConfigurationDialog::ViewerTab::slotCssChoiceChanged(int index)
 {
     if(string{UI_HTML_THEME_CSS_CUSTOM} == htmlCssThemeCombo->itemText(index).toStdString()
        && !htmlCssLineEdit->text().size()
+       && isVisible()
     ) {
         this->slotFindCssFile();
     }
@@ -345,7 +359,6 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     editorKeyBindingLabel = new QLabel(tr("Editor key binding")+":", this);
     editorKeyBindingCombo = new QComboBox{this};
     editorKeyBindingCombo->addItem("emacs");
-    editorKeyBindingCombo->addItem("vim");
     editorKeyBindingCombo->addItem("windows");
 
     editorFontLabel = new QLabel(tr("Editor font")+":", this);
@@ -353,9 +366,9 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
     QObject::connect(editorFontButton, &QPushButton::clicked, this, &ConfigurationDialog::EditorTab::getFont);
 
     editorSpellCheckHelp = new QLabel(
-        tr("Spell check dictionaries configuration <a href='"
+        tr("Spell check dictionaries <a href='"
            "https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#spell-check-"
-           "'>documentation</a>"
+           "'>configuration documentation</a>"
         ),
         this
     );
@@ -377,8 +390,6 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
         editorSpellCheckLanguageCombo->setDisabled(true);
     }
 
-    editorMdSyntaxHighlightCheck = new QCheckBox(tr("Markdown syntax highlighting"), this);
-    editorAutocompleteCheck = new QCheckBox(tr("autocomplete"), this);
     //editorQuoteSectionsCheck = new QCheckBox(tr("quote sections (# in description)"), this);
     editorTabsAsSpacesCheck = new QCheckBox(tr("TABs as SPACEs"), this);
     editorAutosaveCheck = new QCheckBox(tr("autosave Note on editor close"), this);
@@ -393,23 +404,21 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
 
     // assembly
     QVBoxLayout* editorLayout = new QVBoxLayout{this};
-    editorLayout->addWidget(editorTabsAsSpacesCheck);
     editorLayout->addWidget(editorSpellCheckLive);
     editorLayout->addWidget(editorSpellCheckLanguageCombo);
     editorLayout->addWidget(editorSpellCheckHelp);
-    editorLayout->addWidget(editorMdSyntaxHighlightCheck);
-    editorLayout->addWidget(editorAutocompleteCheck);
-    editorLayout->addWidget(editorAutosaveCheck);
-    editorLayout->addWidget(editorFontLabel);
-    editorLayout->addWidget(editorFontButton);
+    editorLayout->addWidget(editorTabsAsSpacesCheck);
     editorLayout->addWidget(editorTabWidthLabel);
     editorLayout->addWidget(editorTabWidthCombo);
+    editorLayout->addWidget(editorFontLabel);
+    editorLayout->addWidget(editorFontButton);
     editorLayout->addWidget(editorKeyBindingLabel);
     editorLayout->addWidget(editorKeyBindingCombo);
     editorLayout->addWidget(externalEditorCmdLabel);
     editorLayout->addWidget(externalEditorCmdEdit);
+    editorLayout->addWidget(editorAutosaveCheck);
     //editorLayout->addWidget(editorQuoteSectionsCheck);
-    QGroupBox* editorGroup = new QGroupBox{tr("Markdown Editor"), this};
+    QGroupBox* editorGroup = new QGroupBox{tr("Editor"), this};
     editorGroup->setLayout(editorLayout);
 
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
@@ -426,8 +435,6 @@ ConfigurationDialog::EditorTab::~EditorTab()
     delete editorFontButton;
     delete editorSpellCheckLive;
     delete editorSpellCheckLanguageCombo;
-    delete editorMdSyntaxHighlightCheck;
-    delete editorAutocompleteCheck;
     delete editorTabWidthLabel;
     delete editorTabWidthCombo;
     delete externalEditorCmdLabel;
@@ -460,8 +467,6 @@ void ConfigurationDialog::EditorTab::refresh()
             editorSpellCheckLanguageCombo->setCurrentIndex(0);
         }
     }
-    editorMdSyntaxHighlightCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
-    editorAutocompleteCheck->setChecked(config.isUiEditorEnableAutocomplete());
     editorTabWidthCombo->setCurrentIndex(
         editorTabWidthCombo->findText(
             QString::number(config.getUiEditorTabWidth())
@@ -475,7 +480,11 @@ void ConfigurationDialog::EditorTab::refresh()
 
 void ConfigurationDialog::EditorTab::save()
 {
-    config.setEditorKeyBindingByString(editorKeyBindingCombo->itemText(editorKeyBindingCombo->currentIndex()).toStdString());
+    config.setEditorKeyBindingByString(
+        editorKeyBindingCombo->itemText(
+            editorKeyBindingCombo->currentIndex()
+        ).toStdString()
+    );
     config.setEditorFont(editorFont.family().append(",").append(QString::number(editorFont.pointSize())).toStdString());
     config.setUiEditorLiveSpellCheck(editorSpellCheckLive->isChecked());
     if(editorSpellCheckLanguageCombo->isEnabled() && editorSpellCheckLanguageCombo->count()) {
@@ -487,8 +496,6 @@ void ConfigurationDialog::EditorTab::save()
     } else {
         config.clearUiEditorSpellCheckDefaultLanguage();
     }
-    config.setUiEditorEnableSyntaxHighlighting(editorMdSyntaxHighlightCheck->isChecked());
-    config.setUiEditorEnableAutocomplete(editorAutocompleteCheck->isChecked());
     config.setUiEditorTabWidth(editorTabWidthCombo->itemText(editorTabWidthCombo->currentIndex()).toInt());
     config.setExternalEditorCmd(externalEditorCmdEdit->text().toStdString());
     //config.setMarkdownQuoteSections(editorQuoteSectionsCheck->isChecked());
@@ -506,6 +513,81 @@ void ConfigurationDialog::EditorTab::getFont()
     if(ok) {
          editorFontButton->setText(editorFont.family());
     }
+}
+
+/*
+ * Markdown tab
+ */
+
+ConfigurationDialog::MarkdownTab::MarkdownTab(QWidget *parent)
+    : QWidget(parent),
+      config(Configuration::getInstance())
+{
+    editorMdSyntaxHighlightCheck = new QCheckBox(
+        tr("syntax highlighting"),
+        this
+    );
+    editorAutocompleteCheck = new QCheckBox(
+        tr("autocomplete text"),
+        this
+    );
+    editorSmartEditorCheck = new QCheckBox(
+        tr("autocomplete lists, blocks and {([`_ characters"),
+        this
+    );
+    editorSmartEditorCheck->setChecked(true);
+    editorMdSectionEscapingCheck = new QCheckBox(
+        tr("SPACE-based # in section escaping (HTML otherwise)"),
+        this
+    );
+    editorMdSectionEscapingCheck->setChecked(true);
+
+    // assembly
+    QVBoxLayout* renderingLayout = new QVBoxLayout{this};
+    renderingLayout->addWidget(editorMdSyntaxHighlightCheck);
+    QGroupBox* renderingGroup = new QGroupBox{tr("Rendering"), this};
+    renderingGroup->setLayout(renderingLayout);
+
+    QVBoxLayout* autocompleteLayout = new QVBoxLayout{this};
+    autocompleteLayout->addWidget(editorAutocompleteCheck);
+    autocompleteLayout->addWidget(editorSmartEditorCheck);
+    QGroupBox* editorGroup = new QGroupBox{tr("Autocompletion"), this};
+    editorGroup->setLayout(autocompleteLayout);
+
+    QVBoxLayout* escapingLayout = new QVBoxLayout{this};
+    escapingLayout->addWidget(editorMdSectionEscapingCheck);
+    QGroupBox* escapingGroup = new QGroupBox{tr("Escaping"), this};
+    escapingGroup->setLayout(escapingLayout);
+
+    QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(renderingGroup);
+    boxesLayout->addWidget(editorGroup);
+    boxesLayout->addWidget(escapingGroup);
+    boxesLayout->addStretch();
+    setLayout(boxesLayout);
+}
+
+ConfigurationDialog::MarkdownTab::~MarkdownTab()
+{
+    delete editorMdSyntaxHighlightCheck;
+    delete editorAutocompleteCheck;
+    delete editorSmartEditorCheck;
+}
+
+void ConfigurationDialog::MarkdownTab::refresh()
+{
+    editorMdSyntaxHighlightCheck->setChecked(config.isUiEditorEnableSyntaxHighlighting());
+    editorAutocompleteCheck->setChecked(config.isUiEditorEnableAutocomplete());
+    editorSmartEditorCheck->setChecked(config.isUiEditorEnableSmartEditor());
+    editorMdSectionEscapingCheck->setChecked(config.isUiEditorSpaceSectionEscaping());
+}
+
+void ConfigurationDialog::MarkdownTab::save()
+{
+    config.setUiEditorEnableSyntaxHighlighting(editorMdSyntaxHighlightCheck->isChecked());
+    config.setUiEditorEnableAutocomplete(editorAutocompleteCheck->isChecked());
+    config.setUiEditorEnableSmartEditor(editorSmartEditorCheck->isChecked());
+    config.setUiEditorSpaceSectionEscaping(editorMdSectionEscapingCheck->isChecked());
 }
 
 /*

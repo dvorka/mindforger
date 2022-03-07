@@ -35,7 +35,7 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     nameEdit = new QLineEdit(tr("Note"), this);
 
     // moving edit tags to this position changes TAB ORDER ~ it's selected as 2nd field
-    editTagsGroup = new EditTagsPanel{ontology, this};
+    editTagsGroup = new EditTagsPanel{MfWidgetMode::CREATE_MODE, ontology, this};
     editTagsGroup->refreshOntologyTags();
 
     positionLabel = new QLabel(tr("Position")+":", this);
@@ -100,6 +100,22 @@ void NoteNewDialog::GeneralTab::clean()
     nameEdit->setFocus();
     stencilCombo->clear();
     editTagsGroup->clearTagList();
+}
+
+void NoteNewDialog::GeneralTab::showFacet(Repository::RepositoryType repositoryType)
+{
+    bool visibility =
+        Repository::RepositoryType::MINDFORGER == repositoryType
+        ? true
+        : false;
+
+    editTagsGroup->setVisible(visibility);
+    progressLabel->setVisible(visibility);
+    progressSpin->setVisible(visibility);
+    stencilLabel->setVisible(visibility);
+    stencilCombo->setVisible(visibility);
+    typeLabel->setVisible(visibility);
+    typeCombo->setVisible(visibility);
 }
 
 /*
@@ -215,8 +231,11 @@ int NoteNewDialog::getProgress() const
     return generalTab->getProgressSpin()->value();
 }
 
-void NoteNewDialog::show(const QString& path, vector<Stencil*>& stencils)
-{
+void NoteNewDialog::show(
+    const QString& path,
+    vector<Stencil*>& stencils,
+    Repository::RepositoryType repositoryType
+) {
     // try to remember previous stencil
     QString selectedStencil = generalTab->getStencilCombo()->currentText();
 
@@ -239,6 +258,10 @@ void NoteNewDialog::show(const QString& path, vector<Stencil*>& stencils)
     }
 
     advancedTab->refreshLocation(path);
+
+    // widgets visibility: Markdown vs. MindForger (repository) mode
+    generalTab->showFacet(repositoryType);
+
     QDialog::show();
 }
 

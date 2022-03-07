@@ -60,6 +60,7 @@ public:
 
     void setTitle(QString& title) { model->setTitle(title); }
 
+    OrganizerQuadrantModel* getModel() { return model; }
     int getCurrentRow() const;
     Note* getSelectedNote();
     void refresh(const std::vector<Note*>& os, bool urgency, bool importance, bool showOutline);
@@ -69,6 +70,8 @@ public slots:
     void slotShowSelectedNote();
     void slotShowNote(const QItemSelection& selected, const QItemSelection& deselected);
     void slotHeaderClicked(int section);
+
+    void slotOrganizerEdit();
 
     void slotFocusToNextVisibleQuadrant();
     void slotFocusToPreviousVisibleQuadrant();

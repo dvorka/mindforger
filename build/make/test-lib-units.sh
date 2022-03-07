@@ -63,7 +63,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="MarkdownParserTestCase.Bug622Loop64kLinesOverflow"
 #export OPTION_TEST="MarkdownParserTestCase.Links"
 #export OPTION_TEST="MarkdownParserTestCase.TimeScope"
-export OPTION_TEST="MarkdownParserTestCase.Deadline"
+#export OPTION_TEST="MarkdownParserTestCase.Deadline"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSections"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsPreamble"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsNoMetadata"
@@ -83,7 +83,7 @@ export OPTION_TEST="MarkdownParserTestCase.Deadline"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownRepresentationPreamble"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownRepresentationSectionTrailingHashes"
 #export OPTION_TEST="RepositoryIndexerTestCase.*"
-#export OPTION_TEST="RepositoryIndexerTestCase.RepositoryTypeDetection"
+export OPTION_TEST="RepositoryIndexerTestCase.RepositoryTypeDetection"
 #export OPTION_TEST="RepositoryIndexerTestCase.MarkdownRepository"
 #export OPTION_TEST="RepositoryIndexerTestCase.MindForgerRepository"
 #export OPTION_TEST="RepositoryIndexerTestCase.MindForgerFile"
@@ -151,7 +151,7 @@ else
 fi
 
 export SCRIPT_DIR=`pwd`
-export BUILD_DIR=${SCRIPT_DIR}/../lib/test
+export BUILD_DIR=${SCRIPT_DIR}/../../lib/test
 
 
 # Compile source w/ debug code enabled and various test libs linked to get test-ready binary
@@ -164,6 +164,7 @@ export BUILD_DIR=${SCRIPT_DIR}/../lib/test
 #  - use -v only if you want a lot of info (might be too much)
 if [ ${OPTION_RECOMPILE} ]
 then
+    cd ${BUILD_DIR} && qmake -r mindforger-lib-unit-tests.pro CONFIG+=mfunits
     # cleanup
     cd ${BUILD_DIR} && cd ../../ && make clean && rm *.a
     cd ${BUILD_DIR} && cd ./src && make clean

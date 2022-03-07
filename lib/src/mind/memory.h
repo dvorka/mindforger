@@ -65,7 +65,6 @@ private:
     RepositoryIndexer repositoryIndexer;
     Configuration& config;
     Ontology& ontology;
-    HtmlOutlineRepresentation& htmlRepresentation;
     MarkdownOutlineRepresentation& mdRepresentation;
     Persistence* persistence;
     TWikiOutlineRepresentation twikiRepresentation;
@@ -85,15 +84,19 @@ private:
 
 public:
     explicit Memory(
-            Configuration& configuration,
-            Ontology& ontology,
-            HtmlOutlineRepresentation& htmlRepresentation);
+        Configuration& configuration,
+        Ontology& ontology,
+        HtmlOutlineRepresentation& htmlRepresentation
+    );
     Memory(const Memory&) = delete;
     Memory(const Memory&&) = delete;
     Memory& operator=(const Memory&) = delete;
     Memory& operator=(const Memory&&) = delete;
     virtual ~Memory();
 
+    /**
+     * @brief Set time and/or tag Mind scope.
+     */
     void setMindScope(MindScopeAspect* mindScopeAspect) { mindScope = mindScopeAspect; }
 
     /**
@@ -123,6 +126,11 @@ public:
      * @brief Create Note from stencil, but don't learn it yet.
      */
     Note* createNote(Stencil* stencil);
+
+    /**
+     * @brief Verify whether Outline can be remembered (written).
+     */
+    bool canRemember(const std::string& outlineKey);
 
     /**
      * @brief Remember known Outline by saving it.
@@ -161,7 +169,7 @@ public:
     Ontology& getOntology() { return ontology; }
 
     /**
-     * @brief Get the number of outlines.
+     * @brief Get the number of Outlines.
      */
     unsigned getOutlinesCount() const;
 
@@ -171,7 +179,7 @@ public:
     unsigned int getOutlineMarkdownsSize() const;
 
     /**
-     * @brief Get the number of notes of all outlines.
+     * @brief Get the number of notes of all Outlines.
      */
     unsigned getNotesCount() const;
 

@@ -118,7 +118,7 @@ class NavigatorNode : public QGraphicsItem
     int type() const override { return Type; }
 
 	void calculateForces();
-	bool advance();
+    bool moved();
 
     QRectF boundingRect() const override;
     QPainterPath shape() const override;

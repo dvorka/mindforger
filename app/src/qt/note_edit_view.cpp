@@ -53,21 +53,48 @@ NoteEditView::NoteEditView(QWidget* parent)
         QKeySequence(Qt::CTRL+Qt::Key_G),
         this, SLOT(slotCloseEditor()));
     new QShortcut(
+#if __APPLE__
+        QKeySequence(Qt::CTRL+Qt::Key_Return),
+#else
         QKeySequence(Qt::ALT+Qt::Key_Return),
+#endif
         this, SLOT(slotOpenNotePropertiesEditor()));
     new QShortcut(
         QKeySequence(Qt::CTRL+Qt::Key_S),
         this, SLOT(slotSaveNote()));
     QObject::connect(
         bottomButtonsPanel->getRememberButton(), SIGNAL(clicked()),
+        this, SLOT(slotSaveNote()));
+    QObject::connect(
+        bottomButtonsPanel->getRememberAndLeaveButton(), SIGNAL(clicked()),
         this, SLOT(slotSaveAndCloseEditor()));
     QObject::connect(
         bottomButtonsPanel->getCancelButton(), SIGNAL(clicked()),
+        this, SLOT(slotCloseEditor()));
+
+    QObject::connect(
+        noteEditor, SIGNAL(signalCloseEditorWithEsc()),
         this, SLOT(slotCloseEditor()));
 }
 
 NoteEditView::~NoteEditView()
 {
+}
+
+void NoteEditView::keyPressEvent(QKeyEvent* event)
+{
+    MF_DEBUG(
+        "Note edit view key even handler:" << endl <<
+        "  Key        : " << event->key() << endl
+    );
+
+    if(event->modifiers() & Qt::ShiftModifier) {
+        switch (event->key()) {
+            case Qt::Key_Tab:
+            MF_DEBUG("Shift-TAB pressed" << endl);
+            return;
+        }
+    }
 }
 
 void NoteEditView::slotOpenNotePropertiesEditor()

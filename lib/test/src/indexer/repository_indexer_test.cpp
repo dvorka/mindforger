@@ -35,7 +35,7 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
 {
     string repositoryPath, directoryName, fileName;
 
-    // MF repository
+    cout << "MF repository" << endl;
     repositoryPath.assign(FILE_PATH_SEPARATOR + m8r::platformSpecificPath("lib/test/resources/basic-repository"));
     repositoryPath.insert(0, getMindforgerGitHomePath());
     m8r::Repository* r = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
@@ -45,8 +45,9 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     EXPECT_EQ(repositoryPath, r->getDir());
     EXPECT_TRUE(r->getFile().empty());
     delete r;
+    cout << "OK: MF repository" << endl;
 
-    // MD repository
+    cout << "Markdown repository" << endl;
     repositoryPath.assign(FILE_PATH_SEPARATOR + m8r::platformSpecificPath("lib/test/resources/basic-repository/memory"));
     repositoryPath.insert(0, getMindforgerGitHomePath());
     r = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
@@ -56,8 +57,10 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     EXPECT_EQ(repositoryPath, r->getDir());
     EXPECT_TRUE(r->getFile().empty());
     delete r;
+    cout << "OK: Markdown repository" << endl;
 
     // MF file
+    cout << "MF file" << endl;
     repositoryPath.assign(FILE_PATH_SEPARATOR + m8r::platformSpecificPath("lib/test/resources/basic-repository/memory/flat-metadata.md"));
     repositoryPath.insert(0, getMindforgerGitHomePath());
     directoryName.assign(FILE_PATH_SEPARATOR + m8r::platformSpecificPath("lib/test/resources/basic-repository/memory"));
@@ -70,8 +73,9 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     EXPECT_EQ(directoryName, r->getDir());
     EXPECT_EQ(fileName, r->getFile());
     delete r;
+    cout << "OK: MF file" << endl;
 
-    // MD file
+    cout << "Markdown file" << endl;
     repositoryPath.assign(FILE_PATH_SEPARATOR + m8r::platformSpecificPath("lib/test/resources/basic-repository/memory/no-metadata.md"));
     repositoryPath.insert(0, getMindforgerGitHomePath());
     directoryName.assign(FILE_PATH_SEPARATOR + m8r::platformSpecificPath("lib/test/resources/basic-repository/memory"));
@@ -85,6 +89,7 @@ TEST(RepositoryIndexerTestCase, RepositoryTypeDetection)
     EXPECT_EQ(directoryName, r->getDir());
     EXPECT_EQ(fileName, r->getFile());
     delete r;
+    cout << "OK: Markdown file" << endl;
 }
 
 TEST(RepositoryIndexerTestCase, MindForgerRepository)

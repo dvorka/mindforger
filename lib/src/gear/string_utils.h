@@ -19,14 +19,15 @@
 #ifndef M8R_STRING_UTILS_H_
 #define M8R_STRING_UTILS_H_
 
-#include <cstring>
 #include <cctype>
+#include <cstring>
 
-#include <iostream>
-#include <stdexcept>
 #include <algorithm>
 #include <functional>
+#include <iostream>
 #include <locale>
+#include <regex>
+#include <stdexcept>
 #include <vector>
 
 #include "../definitions.h"
@@ -46,6 +47,7 @@ bool stringEndsWith(const std::string& s, const char* suffix);
 bool stringEndsWith(const std::string& s, const std::string& suffix);
 char** stringSplit(const char* s, const char delimiter);
 char** stringSplit(const char* s, const char delimiter, u_int16_t resultBaseSize, u_int16_t resultIncSize);
+std::vector<std::string> stringSplit(const std::string s, const std::string regexDelimiter);
 
 /**
  * @brief Normalizes a string to NCName.
@@ -118,13 +120,29 @@ static inline std::string &stringLeftTrim(std::string& s) {
         s.begin(),
         std::find_if(s.begin(),
         s.end(),
+#ifdef __APPLE__
+        [](int c) {return !std::isspace(c);})
+#else
         std::not1(std::ptr_fun<int, int>(isspace)))
+#endif
     );
     return s;
 }
 
 static inline std::string &stringRightTrim(std::string& s) {
-    s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(isspace))).base(), s.end());
+    s.erase(
+        std::find_if(
+            s.rbegin(),
+            s.rend(),
+#ifdef __APPLE__
+            [](int c) {return !std::isspace(c);}
+        ).base(),
+#else
+            std::not1(std::ptr_fun<int, int>(isspace))
+        ).base(),
+#endif
+        s.end()
+    );
     return s;
 }
 

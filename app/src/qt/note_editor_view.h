@@ -19,10 +19,11 @@
 #ifndef M8RUI_NOTE_EDITOR_VIEW_H
 #define M8RUI_NOTE_EDITOR_VIEW_H
 
-#include <QtWidgets>
-
 #include "../../lib/src/gear/lang_utils.h"
 
+#include <QtWidgets>
+
+#include "note_smart_editor.h"
 #include "note_edit_highlighter.h"
 #include "widgets/line_number_panel.h"
 #include "status_bar_view.h"
@@ -35,8 +36,17 @@ class LineNumberPanel;
 /**
  * @brief Note editor view.
  *
- * Editor is one of the key MindForger components - editor is where thinking notebook can
- * make difference: auto completion, associations, efficient editation and decent performance.
+ * Editor is one of the key MindForger components - editor is where thinking notebook
+ * can make difference:
+ *
+ * - auto completion (link compoletion)
+ * - associations (think as you write)
+ * - smart editation
+ *   - indent / create list item
+ *   - Markdown constructs completion
+ * - decent performance
+ *
+ * @see https://doc.qt.io/qt-5/qplaintextedit.html
  */
 class NoteEditorView : public QPlainTextEdit
 {
@@ -57,12 +67,10 @@ private:
     int hitCounter;
 
     // autocomplete
+    NoteSmartEditor smartEditor;
     bool completedAndSelected;
     QCompleter* completer;
     QStringListModel* model;
-
-    bool tabsAsSpaces;
-    int tabWidth;
 
     // spell check
     bool mouseButtonDown;
@@ -85,8 +93,8 @@ public:
     explicit NoteEditorView(QWidget* parent);
     NoteEditorView(const NoteEditorView&) = delete;
     NoteEditorView(const NoteEditorView&&) = delete;
-    NoteEditorView &operator=(const NoteEditorView&) = delete;
-    NoteEditorView &operator=(const NoteEditorView&&) = delete;
+    NoteEditorView& operator =(const NoteEditorView&) = delete;
+    NoteEditorView& operator =(const NoteEditorView&&) = delete;
 
     void setStatusBar(const StatusBarView* sb) { this->statusBar = sb; }
 
@@ -116,8 +124,8 @@ public:
 
     // autocomplete
 protected:
-    void mousePressEvent(QMouseEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
+    virtual void mousePressEvent(QMouseEvent* event) override;
+    virtual void keyPressEvent(QKeyEvent* event) override;
     bool eventFilter(QObject* watched, QEvent* event) override;
 private:
     void setEditorTabWidth(int tabWidth);
@@ -130,7 +138,7 @@ private:
     bool handledCompletedAndSelected(QKeyEvent* event);
     void populateModel(const QString& completionPrefix);
 private slots:
-    void insertTab();
+    void insertTab() { smartEditor.insertTab(); }
     void insertCompletion(const QString& completion, bool singleWord=false);
 public slots:
     void slotStartLinkCompletion();
@@ -156,9 +164,11 @@ protected slots:
     void suggestSpelling(QAction* action);
 
 signals:
-    void signalDnDropUrl(QString);
-    void signalPasteImageData(QImage);
-    void signalGetLinksForPattern(const QString&);
+    void signalCloseEditorWithEsc();
+
+    void signalDnDropUrl(QString url);
+    void signalPasteImageData(QImage image);
+    void signalGetLinksForPattern(const QString& pattern);
 };
 
 } // m8r namespace

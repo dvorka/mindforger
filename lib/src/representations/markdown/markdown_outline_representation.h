@@ -24,6 +24,7 @@
 
 #include "markdown_document.h"
 #include "markdown_ast_node.h"
+#include "../../config/configuration.h"
 #include "../../model/outline.h"
 #include "../../mind/ontology/ontology.h"
 #include "../outline_representation.h"
@@ -69,7 +70,8 @@ public:
      */
     explicit MarkdownOutlineRepresentation(
         Ontology& ontology,
-        RepresentationInterceptor* descriptionInterceptor);
+        RepresentationInterceptor* descriptionInterceptor
+    );
     MarkdownOutlineRepresentation(const MarkdownOutlineRepresentation&) = delete;
     MarkdownOutlineRepresentation(const MarkdownOutlineRepresentation&&) = delete;
     MarkdownOutlineRepresentation &operator=(const MarkdownOutlineRepresentation&) = delete;

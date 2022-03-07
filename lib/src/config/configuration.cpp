@@ -44,31 +44,33 @@ Configuration::Configuration()
       repositoryConfiguration{getDummyRepositoryConfiguration()},
       writeMetadata{},
       saveReadsMetadata{},
-      autolinking{},
+      autolinking{DEFAULT_AUTOLINKING},
       autolinkingColonSplit{},
       autolinkingCaseInsensitive{},
       md2HtmlOptions{},
-      distributorSleepInterval{},
+      distributorSleepInterval{DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL},
       markdownQuoteSections{},
-      uiNerdTargetAudience{},
+      uiNerdTargetAudience{DEFAULT_UI_NERD_MENU},
       uiHtmlZoom{},
       externalEditorCmd{},
       uiFontPointSize{},
       uiShowBreadcrump{},
       uiViewerShowMetadata{},
-      uiEditorTabWidth{},
+      uiEditorTabWidth{DEFAULT_EDITOR_TAB_WIDTH},
       uiEditorLineNumbers{},
-      uiEditorSyntaxHighlighting{},
-      uiEditorLiveSpellCheck{},
+      uiEditorSyntaxHighlighting{DEFAULT_EDITOR_SYNTAX_HIGHLIGHT},
+      uiEditorLiveSpellCheck{DEFAULT_SPELLCHECK_LIVE},
       uiEditorSpellCheckLanguage{},
       uiEditorSpellCheckLanguages{},
-      uiEditorAutocomplete{},
+      uiEditorAutocomplete{DEFAULT_EDITOR_AUTOCOMPLETE},
+      uiEditorSmartEditor{DEFAULT_EDITOR_SMART_EDITOR},
+      uiEditorSpaceSectionEscaping{DEFAULT_EDITOR_SPACE_SECTION_ESCAPING},
       navigatorMaxNodes{},
       uiEditorTabsAsSpaces{},
       uiEditorAutosave{DEFAULT_EDITOR_AUTOSAVE},
       uiFullOPreview{DEFAULT_FULL_O_PREVIEW},
-      uiShowToolbar{},
-      uiExpertMode{},
+      uiShowToolbar{DEFAULT_UI_SHOW_TOOLBAR},
+      uiExpertMode{DEFAULT_UI_EXPERT_MODE},
       uiDistractionFreeMode{},
       uiHoistedMode{},
       uiLiveNotePreview{DEFAULT_UI_LIVE_NOTE_PREVIEW},
@@ -172,7 +174,13 @@ void Configuration::clear()
     uiEditorTabsAsSpaces = DEFAULT_EDITOR_TABS_AS_SPACES;
     uiEditorAutosave = DEFAULT_EDITOR_AUTOSAVE;
     uiEditorTabWidth = DEFAULT_EDITOR_TAB_WIDTH;
+    uiEditorSmartEditor = DEFAULT_EDITOR_SMART_EDITOR;
+    uiEditorSpaceSectionEscaping = DEFAULT_EDITOR_SPACE_SECTION_ESCAPING;
+#ifdef _WIN32
     uiEditorKeyBinding = EditorKeyBindingMode::WINDOWS;
+#else
+    uiEditorKeyBinding = EditorKeyBindingMode::EMACS;
+#endif
     startupView.assign(DEFAULT_STARTUP_VIEW);
     uiThemeName.assign(UI_DEFAULT_THEME);
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);

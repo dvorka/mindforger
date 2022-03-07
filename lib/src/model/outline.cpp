@@ -606,7 +606,7 @@ void Outline::getDirectNoteChildren(vector<Note*>& directChildren)
         // child depth is initialized to a big nuber
         //  +
         // any non-monotonous non-growing depth is detected as direct child
-        u_int16_t minDepth = static_cast<u_int16_t>(2 << 15);
+        u_int16_t minDepth = static_cast<u_int16_t>(1 << 15);
         for(Note* n:notes) {
             if(minDepth >= n->getDepth()) {
                 directChildren.push_back(n);
@@ -626,7 +626,7 @@ void Outline::getDirectNoteChildren(const Note* note, std::vector<Note*>& direct
             // child depth is initialized to a big nuber
             //  +
             // any non-monotonous non-growing depth is detected as direct child
-            u_int16_t minDepth = static_cast<u_int16_t>(2 << 15);
+            u_int16_t minDepth = static_cast<u_int16_t>(1 << 15);
             for(Note* n:allNoteChildren) {
                 if(minDepth >= n->getDepth()) {
                     directChildren.push_back(n);

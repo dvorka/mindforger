@@ -60,8 +60,11 @@ constexpr const auto DIRNAME_NOTES = "notes";
 
 constexpr const auto UI_THEME_DARK = "dark";
 constexpr const auto UI_THEME_LIGHT = "light";
+constexpr const auto UI_THEME_LIGHT_WITH_FIXED_FONT = "light with fixed font";
 constexpr const auto UI_THEME_BLACK = "black";
+constexpr const auto UI_THEME_BLACK_WITH_FIXED_FONT = "black with fixed font";
 constexpr const auto UI_THEME_NATIVE = "native";
+constexpr const auto UI_THEME_NATIVE_WITH_FIXED_FONT = "native with fixed font";
 
 constexpr const auto START_TO_DASHBOARD = "dashboard";
 constexpr const auto START_TO_OUTLINES = "outlines";
@@ -88,7 +91,11 @@ constexpr const auto UI_JS_LIB_NO = "no";
 constexpr const auto UI_OS_TABLE_SORT_ORDER_ASC = "ascending";
 constexpr const auto UI_OS_TABLE_SORT_ORDER_DESC = "descending";
 
+#ifdef __APPLE__
 constexpr const auto UI_DEFAULT_THEME = UI_THEME_DARK;
+#else
+constexpr const auto UI_DEFAULT_THEME = UI_THEME_DARK;
+#endif
 constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_FONT = "Monospace,10";
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
@@ -113,11 +120,19 @@ class RepositoryConfigurationPersistence;
  * instance to (almost) each and every application's component would be
  * inefficient i.e. worse than the use of singleton pattern.
  */
+/*
+ * IMPROVE:
+ *
+ * - polish class description ^ - this is objec representation, MD config is MD representation
+ * - pen & paper: where are defined constants
+ * - code review: polish config item names (UI, editor, runtime) - shorter and more consistent
+ *
+ */
 class Configuration {
 private:
     static RepositoryConfiguration* getDummyRepositoryConfiguration() {
-        static RepositoryConfiguration* DUMMY_REPOSITORY_CONFIG = new RepositoryConfiguration{};
-        return DUMMY_REPOSITORY_CONFIG;
+        static RepositoryConfiguration DUMMY_REPOSITORY_CONFIG{};
+        return &DUMMY_REPOSITORY_CONFIG;
     }
 
 public:
@@ -145,7 +160,6 @@ public:
 
     enum EditorKeyBindingMode {
         EMACS,
-        VIM,
         WINDOWS
     };
 
@@ -186,6 +200,8 @@ public:
     static constexpr const int DEFAULT_NAVIGATOR_MAX_GRAPH_NODES = 150;
     static constexpr const bool DEFAULT_EDITOR_SYNTAX_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOCOMPLETE = true;
+    static constexpr const bool DEFAULT_EDITOR_SMART_EDITOR = true;
+    static constexpr const bool DEFAULT_EDITOR_SPACE_SECTION_ESCAPING = true;
     static constexpr const bool DEFAULT_EDITOR_TABS_AS_SPACES = true;
     static constexpr const bool DEFAULT_EDITOR_AUTOSAVE = false;
     static constexpr const bool DEFAULT_FULL_O_PREVIEW = false;
@@ -260,7 +276,9 @@ private:
     std::string uiEditorSpellCheckLanguage;
     // transient: available languages loaded in runtime from environment and not persisted
     std::vector<std::string> uiEditorSpellCheckLanguages;
-    bool uiEditorAutocomplete; // toggle autocompletion
+    bool uiEditorAutocomplete; // toggle text autocomplete
+    bool uiEditorSmartEditor; // toggle smart editor: lists, blocks and {[(`_
+    bool uiEditorSpaceSectionEscaping; // escape # in section with spaces (enabled), or HTML (disabled)
     JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
     int navigatorMaxNodes;
     bool uiEditorTabsAsSpaces;
@@ -395,16 +413,19 @@ public:
     EditorKeyBindingMode getEditorKeyBinding() const { return uiEditorKeyBinding; }
     static const char* editorKeyBindingToString(EditorKeyBindingMode keyBinding) {
         if(keyBinding==EditorKeyBindingMode::EMACS) return UI_EDITOR_KEY_BINDING_EMACS; else
-            if(keyBinding==EditorKeyBindingMode::WINDOWS) return UI_EDITOR_KEY_BINDING_WIN; else return UI_EDITOR_KEY_BINDING_VIM;
+            if(keyBinding==EditorKeyBindingMode::WINDOWS) return UI_EDITOR_KEY_BINDING_WIN; else
+                return UI_EDITOR_KEY_BINDING_VIM;
     }
     const char* getEditorKeyBindingAsString() const {
         return editorKeyBindingToString(uiEditorKeyBinding);
     }
     void setEditorKeyBinding(EditorKeyBindingMode keyBinding) { this->uiEditorKeyBinding=keyBinding; }
     void setEditorKeyBindingByString(const std::string& binding) {
-        if(!binding.compare(UI_EDITOR_KEY_BINDING_WIN)) uiEditorKeyBinding=EditorKeyBindingMode::WINDOWS;
-        else if (!binding.compare(UI_EDITOR_KEY_BINDING_VIM)) uiEditorKeyBinding=EditorKeyBindingMode::VIM;
-        else uiEditorKeyBinding=EditorKeyBindingMode::EMACS;
+        if(!binding.compare(UI_EDITOR_KEY_BINDING_EMACS)) {
+            uiEditorKeyBinding=EditorKeyBindingMode::EMACS;
+        } else {
+            uiEditorKeyBinding=EditorKeyBindingMode::WINDOWS;
+        }
     }
     void setEditorFont(std::string font) { this->editorFont = font; }
     std::string getEditorFont() { return this->editorFont; }
@@ -435,7 +456,7 @@ public:
     }
     void setUiEditorSpellCheckLanguages(std::vector<std::string>& langs) {
         clearUiEditorSpellCheckLanguages();
-        for(auto lang: langs) {
+        for(std::string lang: langs) {
             uiEditorSpellCheckLanguages.push_back(lang);
         }
     }
@@ -449,6 +470,10 @@ public:
     }
     bool isUiEditorEnableAutocomplete() const { return uiEditorAutocomplete; }
     void setUiEditorEnableAutocomplete(bool enable) { uiEditorAutocomplete = enable; }
+    bool isUiEditorEnableSmartEditor() const { return uiEditorSmartEditor; }
+    void setUiEditorEnableSmartEditor(bool enable) { uiEditorSmartEditor = enable; }
+    bool isUiEditorSpaceSectionEscaping() const { return uiEditorSpaceSectionEscaping; }
+    void setUiEditorSpaceSectionEscaping(bool enableSpaces) { uiEditorSpaceSectionEscaping = enableSpaces; }
     int getUiEditorTabWidth() const { return uiEditorTabWidth; }
     void setUiEditorTabWidth(int tabWidth) { uiEditorTabWidth = tabWidth; }
     int getRecentNotesUiLimit() const { return 150; }

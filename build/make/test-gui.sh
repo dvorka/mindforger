@@ -26,7 +26,7 @@
 export OPTION_TESTS="open-exit.sikuli"
 export OPTION_TEST=open-exit.sikuli 
 
-export M8R_TEST_APP_DIR="`pwd`/../app/test/qt"
+export M8R_TEST_APP_DIR="`pwd`/../../app/test/qt"
 export M8R_TEST_REPOSITORY="${HOME}/tmp/small-repository"
 
 # environment - to be specified in .bashrc or elsewhere:
@@ -82,7 +82,7 @@ fi
 #  - use -v only if you want a lot of info (might be too much)
 if [ ${OPTION_RECOMPILE} ]
 then
-    cd ../test/qt && make clean && qmake -qt5 mindforger-gui-tests.pro && make -j${M8R_CPU_CORES}
+    cd ../../test/qt && make clean && qmake -qt5 mindforger-gui-tests.pro && make -j${M8R_CPU_CORES}
 fi
 
 # Run MindForger to create a SikuliX script and exit

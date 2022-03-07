@@ -31,12 +31,19 @@ fi
 # # Create upstream tarball #
 # ############################################################################
 
-function createTarball() {
+function createTarball {
   cd ..
   mkdir work
   cd work
   cp -vrf ../${MF} .
-  tar zcf ../${MF}_tarball.tgz ${MF}
+  TARBALL_PATH="../${MF}_tarball.tgz"
+  tar zcf ${TARBALL_PATH} ${MF}
+  if [[ "${1}" = "ci" ]]
+  then
+      pwd
+      mv -v ${TARBALL_PATH} ../..
+  fi
+
   cd ../${MF}
 }
 
@@ -44,19 +51,33 @@ function createTarball() {
 # # Build source and binary deb packages #
 # ############################################################################
 
-function buildGitHubTarball() {
+function buildGitHubTarball {
     export SCRIPTHOME=`pwd`
     export MFVERSION=$1
     export MFBZRMSG=$2
+    export MFCIBUILD=$3
     #export MFFULLVERSION=${MFVERSION}-1.0 # NMU upload
     export MFFULLVERSION=${MFVERSION}-1    # mantainer upload
-    export MF=mindforger_${MFVERSION}
+    if [[ "${MFCIBUILD}" = "ci" ]]
+    then
+        export MF=mindforger_${MFVERSION}
+    else
+        export MF=ci_mindforger_${MFVERSION}
+    fi
     export MFRELEASE=mindforger-${MFFULLVERSION}
     if [[ -d "/home/dvorka" ]]
     then
+        echo "  Linux tarball build"
         export MFSRC="/home/dvorka/p/mindforger/git/mindforger"
     else
-	export MFSRC="/Users/dvorka/p/mindforger/git/mindforger"
+	if [[ "${MFCIBUILD}" = "ci" ]]
+        then
+            echo "  CI tarball build"
+	    export MFSRC="/home/runner/work/mindforger/mindforger"
+	else
+            echo "  macOS tarball build"
+	    export MFSRC="/Users/dvorka/p/mindforger/git/mindforger"
+	fi
     fi
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
     export MFBUILD=mindforger-${NOW}
@@ -90,16 +111,16 @@ function buildGitHubTarball() {
     find . -type f \( -name "*moc_*.cpp" -or -name "*.a" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf ${F}; done
     find . -type f \( -name "*.dmg" -or -name "*.stash" \) | while read F; do rm -vf ${F}; done
     # 1.4) create tar archive
-    createTarball
+    createTarball ${MFCIBUILD}
 }
 
 # ############################################################################
 # # Main #
 # ############################################################################
 
-export ARG_VERSION="1.53.0"
+export ARG_VERSION="1.54.0"
 export ARG_BAZAAR_MSG="MindForger ${ARG_VERSION} release."
 
-buildGitHubTarball ${ARG_VERSION} ${ARG_BAZAAR_MSG}
+buildGitHubTarball "${ARG_VERSION}" "${ARG_BAZAAR_MSG}" ${1}
 
 # eof
