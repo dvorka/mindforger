@@ -1,4 +1,4 @@
-2022-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
+2022-03-07  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v1.54.0 - macOS fix release: Qt downgraded from 5.9.9 (security)
       (macOS only), native L&F theme used by default, fixes which avoid loss of
