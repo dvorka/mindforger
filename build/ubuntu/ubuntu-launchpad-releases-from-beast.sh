@@ -203,8 +203,8 @@ then
     exit 1
 fi
 
-export ARG_MAJOR_VERSION=1.53.
-export ARG_MINOR_VERSION=7 # minor version is incremented for every Ubuntu version
+export ARG_MAJOR_VERSION=1.54.
+export ARG_MINOR_VERSION=1 # minor version is incremented for every Ubuntu version
 export ARG_BAZAAR_MSG="MindForger ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} release."
 
 # export DRY_RUN="true"
@@ -212,7 +212,7 @@ export ARG_BAZAAR_MSG="MindForger ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} relea
 # https://wiki.ubuntu.com/Releases
 # obsolete: precise quantal saucy utopic vivid wily yakkety artful cosmic disco eoan groovy
 # current : trusty xenial bionic focal hirsute impish
-# 1.53.x  : (trusty: compilation fail) xenial bionic focal hirsute impish
+# 1.54.x  : (trusty: compilation fail) xenial bionic focal hirsute impish
 for UBUNTU_VERSION in focal hirsute impish
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
