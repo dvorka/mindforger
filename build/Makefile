@@ -90,18 +90,20 @@ dist-work-clean:
 	rm -rvf $(MF_MAKER_WORKING_DIR)
 
 $(MF_MAKER_WORKING_DIR):
-	mkdir -v $(MF_MAKER_WORKING_DIR)
+	mkdir -vp $(MF_MAKER_WORKING_DIR)
 
 $(MINDFORGER_RELEASE_DIR):
 	mkdir -v $(MINDFORGER_RELEASE_DIR) || echo "$(MINDFORGER_RELEASE_DIR) already exists"
 
 dist-tarball: dist-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR)
 	@echo "Building TARBALL distribution..."
+	mkdir -vp $(MF_MAKER_WORKING_DIR)
 	cp -vf ./tarball/tarball-build.sh $(MF_MAKER_WORKING_DIR) && cd $(MF_MAKER_WORKING_DIR) && ./tarball-build.sh
 	cp -vf $(MF_MAKER_WORKING_DIR)/`cd $(MF_MAKER_WORKING_DIR) && ls -d mindforger*`/mindforger_$(MINDFORGER_VERSION)_tarball.tgz $(MINDFORGER_RELEASE_DIR)
 
 dist-deb: dist-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR)
 	@echo "Building DEB distribution..."
+	mkdir -vp $(MF_MAKER_WORKING_DIR)
 	cp -vf ./debian/debian-make-deb.sh $(MF_MAKER_WORKING_DIR) && cd $(MF_MAKER_WORKING_DIR) && ./debian-make-deb.sh
 	cp -vf $(MF_MAKER_WORKING_DIR)/`cd $(MF_MAKER_WORKING_DIR) && ls -d mindforger*`/mindforger_$(MINDFORGER_VERSION)-1_amd64.deb $(MINDFORGER_RELEASE_DIR)
 
