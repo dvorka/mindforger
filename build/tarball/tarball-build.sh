@@ -58,11 +58,12 @@ function buildGitHubTarball {
     export MFCIBUILD=$3
     #export MFFULLVERSION=${MFVERSION}-1.0 # NMU upload
     export MFFULLVERSION=${MFVERSION}-1    # mantainer upload
-    if [[ "${MFCIBUILD}" = "ci" ]]
+
+    if [[ "${MFCIBUILD}" == "ci" ]]
     then
-        export MF=mindforger_${MFVERSION}
-    else
         export MF=ci_mindforger_${MFVERSION}
+    else
+        export MF=mindforger_${MFVERSION}
     fi
     export MFRELEASE=mindforger-${MFFULLVERSION}
     if [[ -d "/home/dvorka" ]]
@@ -70,7 +71,7 @@ function buildGitHubTarball {
         echo "  Linux tarball build"
         export MFSRC="/home/dvorka/p/mindforger/git/mindforger"
     else
-	if [[ "${MFCIBUILD}" = "ci" ]]
+	if [[ "${MFCIBUILD}" == "ci" ]]
         then
             echo "  CI tarball build"
 	    export MFSRC="/home/runner/work/mindforger/mindforger"
