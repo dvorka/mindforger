@@ -401,10 +401,18 @@ bool NoteSmartEditor::completePairChars(QKeyEvent* event) {
             textEdit.moveCursor(QTextCursor::PreviousCharacter);
             return true;
         */
-        case Qt::Key_Underscore:
-            textEdit.textCursor().insertText("__");
-            textEdit.moveCursor(QTextCursor::PreviousCharacter);
-            return true;
+        case Qt::Key_Underscore: {
+            // complete __ only if cursor is preceded by SPACE
+            QString lastChar = getLastChar();
+            if(isAtTheBeginningOfLine()
+               || (lastChar.size() && lastChar[0] == ' ')
+            ) {
+                textEdit.textCursor().insertText("__");
+                textEdit.moveCursor(QTextCursor::PreviousCharacter);
+                return true;
+            }
+            return false;
+        }
         case Qt::Key_AsciiTilde:
             textEdit.textCursor().insertText("~~");
             textEdit.moveCursor(QTextCursor::PreviousCharacter);
