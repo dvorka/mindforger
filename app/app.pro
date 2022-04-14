@@ -231,7 +231,6 @@ HEADERS += \
     ./src/qt/note_view_model.h \
     ./src/qt/note_view_presenter.h \
     ./src/qt/note_view.h \
-    ./src/qt/note_edit_model.h \
     ./src/qt/note_edit_presenter.h \
     ./src/qt/look_n_feel.h \
     ./src/qt/html_delegate.h \
@@ -356,7 +355,6 @@ SOURCES += \
     ./src/qt/note_view_model.cpp \
     ./src/qt/note_view_presenter.cpp \
     ./src/qt/note_view.cpp \
-    ./src/qt/note_edit_model.cpp \
     ./src/qt/note_edit_presenter.cpp \
     ./src/qt/look_n_feel.cpp \
     ./src/qt/html_delegate.cpp \

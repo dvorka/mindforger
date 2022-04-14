@@ -78,7 +78,8 @@ using namespace m8r::filesystem;
  *   -h
  * ```
  *
- * Terminal CLI commands proposal:
+ * Terminal CLI commands proposal
+ * (Docker inspiration > switch entity and action):
  *
  * ```
  * $ mindforger --command LIST outlines

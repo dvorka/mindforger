@@ -24,12 +24,13 @@ using namespace std;
 
 namespace m8r {
 
-OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
-                               OrlojView* view,
-                               Mind* mind)
-    : activeFacet{OrlojPresenterFacets::FACET_NONE},
-      config{Configuration::getInstance()},
-      skipEditNoteCheck{false}
+OrlojPresenter::OrlojPresenter(
+    MainWindowPresenter* mainPresenter,
+    OrlojView* view,
+    Mind* mind
+) : activeFacet{OrlojPresenterFacets::FACET_NONE},
+    config{Configuration::getInstance()},
+    skipEditNoteCheck{false}
 {
     this->mainPresenter = mainPresenter;
     this->view = view;
