@@ -18,3 +18,6 @@ TEST_LOG*.*
 compile_commands.json
 .qmake.stash
 .DS_Store
+deps/cmark-gfm
+deps/mitie
+deps/cmark-gfm
