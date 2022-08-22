@@ -464,7 +464,8 @@ TRANSLATIONS = \
     ./resources/qt/translations/mindforger_nerd_en.ts \
     ./resources/qt/translations/mindforger_nerd_cs.ts \
     ./resources/qt/translations/mindforger_en.ts \
-    ./resources/qt/translations/mindforger_cs.ts
+    ./resources/qt/translations/mindforger_cs.ts \
+    ./resources/qt/translations/mindforger_zh_cn.ts
 
 RESOURCES += \
     ./mf-resources.qrc
