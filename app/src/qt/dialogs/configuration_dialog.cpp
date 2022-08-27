@@ -367,7 +367,7 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
 
     editorSpellCheckHelp = new QLabel(
         tr("Spell check dictionaries <a href='"
-           "https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#spell-check-"
+           "https://github.com/dvorka/mindforger/wiki/Installation#spell-check"
            "'>configuration documentation</a>"
         ),
         this
