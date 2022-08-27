@@ -6,7 +6,7 @@
 [![Current release](https://img.shields.io/github/release/dvorka/mindforger.svg)](https://github.com/dvorka/mindforger/releases)
 [![GitHub issues](https://img.shields.io/github/issues/dvorka/mindforger.svg?maxAge=360)](https://github.com/dvorka/mindforger/issues)
 [![All releases downloads](https://img.shields.io/github/downloads/dvorka/mindforger/total.svg)](https://github.com/dvorka/mindforger/releases)
-[![License](https://img.shields.io/github/license/dvorka/mindforger?color=%23fe0000)](https://github.com/dvorka/mindforger/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/dvorka/mindforger?color=%23ff0000)](https://github.com/dvorka/mindforger/blob/master/LICENSE)
 <a href="https://twitter.com/intent/follow?screen_name=mindforger"><img src="https://img.shields.io/twitter/follow/mindforger.svg?style=social&logo=twitter" alt="follow on Twitter"></a>
 <!-- [![Documentation](https://img.shields.io/badge/project-documentation-blue.svg)](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md) -->
 
@@ -31,31 +31,31 @@ MindForger is actually more than an editor or IDE - it's human mind inspired per
 ## Installation
 Install:
 
-* [macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#macos-)
-* [Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#windows-)
-* [Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#ubuntu-)
-* [Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#debian-)
-* [Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#fedora-)
-* [FreeBSD](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#freebsd-)
-* [Arch Linux](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#arch-linux-)
-* [NixOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#nixos-)
-* [openSUSE](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#opensuse-)
-* [WSL](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#wsl-)
+* [macOS](https://github.com/dvorka/mindforger/wiki/Installation#macos)
+* [Windows](https://github.com/dvorka/mindforger/wiki/Installation#windows)
+* [Ubuntu](https://github.com/dvorka/mindforger/wiki/Installation#ubuntu)
+* [Debian](https://github.com/dvorka/mindforger/wiki/Installation#windows)
+* [Fedora](https://github.com/dvorka/mindforger/wiki/Installation#fedora)
+* [FreeBSD](https://github.com/dvorka/mindforger/wiki/Installation#freebsd)
+* [Arch Linux](https://github.com/dvorka/mindforger/wiki/Installation#arch-linux)
+* [NixOS](https://github.com/dvorka/mindforger/wiki/Installation#nixos)
+* [openSUSE](https://github.com/dvorka/mindforger/wiki/Installation#opensuse)
+* [WSL](https://github.com/dvorka/mindforger/wiki/Installation#wsl)
 
 Build:
 
-* [build on macOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-macos-)
-* [build on Windows](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-windows-)
-* [build on Ubuntu](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-ubuntu-)
-* [build on Debian](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-debian-)
-* [build on Fedora](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-fedora-)
-* [build on Gentoo](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-gentoo-)
-* [build on NixOS](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-nixos-)
-* [build on WSL](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-wsl-)
+* [build on macOS](https://github.com/dvorka/mindforger/wiki/Installation#build-on-macos)
+* [build on Windows](https://github.com/dvorka/mindforger/wiki/Installation#build-on-windows)
+* [build on Ubuntu](https://github.com/dvorka/mindforger/wiki/Installation#build-on-ubuntu)
+* [build on Debian](https://github.com/dvorka/mindforger/wiki/Installation#build-on-debian)
+* [build on Fedora](https://github.com/dvorka/mindforger/wiki/Installation#build-on-fedora)
+* [build on Gentoo](https://github.com/dvorka/mindforger/wiki/Installation#build-on-gentoo)
+* [build on NixOS](https://github.com/dvorka/mindforger/wiki/Installation#build-on-nixos)
+* [build on WSL](https://github.com/dvorka/mindforger/wiki/Installation#build-on-wsl)
 
 Docker:
 
-* [build and run container](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-and-run-in-container-)
+* [build and run container](https://github.com/dvorka/mindforger/wiki/Installation#build-and-run-in-container)
 
 Tarball:
 
@@ -72,12 +72,12 @@ Check also [packages](https://pkgs.org/search/?q=mindforger) for Linux and Unix.
 ## Documentation
 Read:
 
-* [Why MindForger?](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/why-mindforger.md)
-* [Installation](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md) 
-* [User documentation](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/user-documentation.md) 
-* [Developer documentation](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/developer-documentation.md)
-* [Project history](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/history.md)
-* [FAQ](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/faq.md)
+* [Why MindForger?](https://github.com/dvorka/mindforger/wiki/Getting-started#why-mindforger)
+* [Installation](https://github.com/dvorka/mindforger/wiki/Installation)
+* [User documentation](https://github.com/dvorka/mindforger/wiki/User-documentation)
+* [Developer documentation](https://github.com/dvorka/mindforger/wiki/Developer-documentation)
+* [Project history](https://github.com/dvorka/mindforger/wiki/History)
+* [FAQs](https://github.com/dvorka/mindforger/wiki/FAQs)
 
 Check `man mindforger`
 
