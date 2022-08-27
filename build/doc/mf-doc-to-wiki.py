@@ -116,9 +116,19 @@ if __name__ == "__main__":
     print("Converting mindforger-documentation to mindforger.wiki:")
     home_path = os.path.expanduser("~")
     _doc_mf_repo_path = os.path.join(
-        home_path, "p/mindforger/git/mindforger-documentation"
+        home_path,
+        "p",
+        "mindforger",
+        "git",
+        "mindforger-documentation",
     )
-    _wiki_repo_path = os.path.join(home_path, "p/mindforger/git/mindforger.wiki")
+    _wiki_repo_path = os.path.join(
+        home_path,
+        "p",
+        "mindforger",
+        "git",
+        "mindforger.wiki",
+    )
     print(f"  from: {_doc_mf_repo_path}")
     print(f"  to  : {_wiki_repo_path}")
 

@@ -5,6 +5,8 @@ Makefile.*
 Release/
 Debug/
 .vs/
+.idea/
+.venv/
 *.o
 *.a
 *.*~
