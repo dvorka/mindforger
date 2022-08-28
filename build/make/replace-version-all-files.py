@@ -83,9 +83,10 @@ def replace_files(
 
 if __name__ == "__main__":
     old_major_version = "1"
-    old_minor_version = "53"
+    old_minor_version = "54"
+
     new_major_version = "1"
-    new_minor_version = "54"
+    new_minor_version = "55"
 
     # common files replacement
     replace_files(
