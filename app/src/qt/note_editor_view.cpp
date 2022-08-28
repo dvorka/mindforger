@@ -411,7 +411,9 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
                 QMessageBox msgBox{
                     QMessageBox::Question,
                     tr("Exit Editor"),
-                    tr("Do you really want to exit editor without saving?")
+                    tr("Do you really want to exit editor without saving?"),
+                    {},
+                    parent
                 };
                 QPushButton* yes = msgBox.addButton("&Yes", QMessageBox::YesRole);
 #ifdef __APPLE__

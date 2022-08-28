@@ -154,13 +154,15 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         this, SLOT(slotShowOutlineHeader()));
 }
 
-int dialogSaveOrCancel()
+int dialogSaveOrCancel(QWidget* view)
 {
     // l10n by moving this dialog either to Qt class OR view class
     QMessageBox msgBox{
         QMessageBox::Question,
         QObject::tr("Save Note"),
-        QObject::tr("Do you want to save changes?")
+        QObject::tr("Do you want to save changes?"),
+        {},
+        view
     };
 
     QPushButton* discard = msgBox.addButton(
@@ -750,7 +752,7 @@ bool OrlojPresenter::avoidDataLossOnNoteEdit()
             if(Configuration::getInstance().isUiEditorAutosave()) {
                 decision = OrlojButtonRoles::SAVE_ROLE;
             } else {
-                decision = dialogSaveOrCancel();
+                decision = dialogSaveOrCancel(view);
             }
 
             switch(decision) {
@@ -774,7 +776,7 @@ bool OrlojPresenter::avoidDataLossOnNoteEdit()
                 return true;
             }
         } else if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
-            int decision = dialogSaveOrCancel();
+            int decision = dialogSaveOrCancel(view);
             switch(decision) {
             case OrlojButtonRoles::DISCARD_ROLE:
                 // do nothing
