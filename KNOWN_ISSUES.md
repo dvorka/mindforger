@@ -1,7 +1,16 @@
 # Known Issues
 
-MindForger known issues - see also 
-[GitHub issues](https://github.com/dvorka/mindforger/issues?q=is%3Aopen+is%3Aissue+label%3A%22bug+%3Alady_beetle%3A%22).
+MindForger known issues - see [GitHub issues](https://github.com/dvorka/mindforger/issues?q=is%3Aopen+is%3Aissue+label%3A%22bug+%3Alady_beetle%3A%22)
+for the complete list of bugs.
+
+# 1.55.0
+
+* Autolinking can break MathJax code blocks/text integrity in Markdown text.
+* Windows Server R2 2012: empty MF documentation repository in wrong location when MF is launched
+  at the end of installation.
+* Notebook HTML export doesn't export local images: links to filesystem are kept intact, images
+  are not copied.
+* Frontend memleaks.
 
 # 1.54.0
 
