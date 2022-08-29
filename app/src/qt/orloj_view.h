@@ -77,6 +77,9 @@ private:
     MainMenuView* menuView;
     NavigatorView* navigator;
 
+    int leftPanelIndex = -1;
+    int savedLeftPanelSize = 0;
+
 public:
     explicit OrlojView(QWidget* parent);
     OrlojView(const OrlojView&) = delete;
@@ -182,13 +185,7 @@ private:
     /**
      * @brief Hide all children except listed ones.
      */
-    void hideChildren(const QSet<QWidget*>& visibleChildren);
-
-    /**
-     * @brief Application window may be resized - this method to be called
-     * on resize/regularly.
-     */
-    void fiftyFifty();
+    void hideChildren(const QList<QWidget*>& visibleChildren);
 };
 
 }

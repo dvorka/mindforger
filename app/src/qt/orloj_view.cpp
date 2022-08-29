@@ -17,6 +17,7 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "orloj_view.h"
+#include <vector>
 
 namespace m8r {
 
@@ -68,24 +69,27 @@ OrlojView::OrlojView(QWidget* parent)
     //setStyleSheet("border: 1px solid red;");
 }
 
-void OrlojView::hideChildren(const QSet<QWidget*>& visibleChildren)
+void OrlojView::hideChildren(const QList<QWidget*>& visibleChildren)
 {
-    // IMPROVE this method to be called on app window resize only
-    fiftyFifty();
+    // save layout
+    if (leftPanelIndex != -1)
+        savedLeftPanelSize = sizes()[leftPanelIndex];
+
+    // restore layout
+    auto sizes = QList<int>::fromStdList(std::list<int>(count(), width() / 2)); // 50%/50%
+    if (visibleChildren.size() == 2) {
+        leftPanelIndex = indexOf(visibleChildren[0]);
+        if (savedLeftPanelSize) {
+            sizes[leftPanelIndex] = savedLeftPanelSize;
+            sizes[indexOf(visibleChildren[1])] = width() - handleWidth() - savedLeftPanelSize;
+        }
+    } else {
+        leftPanelIndex = -1;
+    }
+    setSizes(sizes);
 
     for(int i{}; i<count(); i++)
         widget(i)->setVisible(visibleChildren.contains(widget(i)));
-}
-
-void OrlojView::fiftyFifty()
-{
-    // 50%/50%
-    int half = size().width()/2;
-    QList<int> sizes{};
-    for(int i{}; i<count(); i++) {
-        sizes << half;
-    }
-    setSizes(sizes);
 }
 
 void OrlojView::showFacetDashboard()
