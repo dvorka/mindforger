@@ -73,17 +73,8 @@ void OrlojView::hideChildren(const QSet<QWidget*>& visibleChildren)
     // IMPROVE this method to be called on app window resize only
     fiftyFifty();
 
-    for(int i{}; i<count(); i++) {
-        if(visibleChildren.contains(widget(i))) {
-            if(widget(i)->isHidden()) {
-                widget(i)->show();
-            }
-        } else {
-            if(widget(i)->isVisible()) {
-                widget(i)->hide();
-            }
-        }
-    }
+    for(int i{}; i<count(); i++)
+        widget(i)->setVisible(visibleChildren.contains(widget(i)));
 }
 
 void OrlojView::fiftyFifty()
@@ -99,51 +90,42 @@ void OrlojView::fiftyFifty()
 
 void OrlojView::showFacetDashboard()
 {
-    QSet<QWidget*> v; v << dashboard;
-    hideChildren(v);
+    hideChildren({dashboard});
 }
 
 void OrlojView::showFacetOrganizers()
 {
-    QSet<QWidget*> v; v << organizersTable;
-    hideChildren(v);
+    hideChildren({ organizersTable });
 }
 
 void OrlojView::showFacetOrganizer()
 {
-    QSet<QWidget*> v; v << organizer;
-    hideChildren(v);
+    hideChildren({ organizer });
 }
 
 void OrlojView::showFacetKanban()
 {
-    QSet<QWidget*> v; v << kanban;
-    hideChildren(v);
+    hideChildren({ kanban });
 }
 
 void OrlojView::showFacetTagCloud()
 {
-    QSet<QWidget*> v; v << tagCloud;
-    hideChildren(v);
+    hideChildren({ tagCloud });
 }
 
 void OrlojView::showFacetOutlines()
 {
-    QSet<QWidget*> v; v << outlinesTable;
-    hideChildren(v);
+    hideChildren({ outlinesTable });
 }
 
 void OrlojView::showFacetOutlinesDetail()
 {
-    QSet<QWidget*> v; v << outlinesTable << outlineView;
-
-    hideChildren(v);
+    hideChildren({ outlinesTable, outlineView });
 }
 
 void OrlojView::showFacetRecentNotes()
 {
-    QSet<QWidget*> v; v << recentNotesTable;
-    hideChildren(v);
+    hideChildren({ recentNotesTable });
 }
 
 void OrlojView::showFacetOutlineHeaderView()
@@ -155,8 +137,7 @@ void OrlojView::showFacetOutlineHeaderView()
     if(menuView->actionViewHoist->isChecked()) {
         showFacetHoistedOutlineHeaderView();
     } else {
-        QSet<QWidget*> v; v << outlineView << outlineHeaderView;
-        hideChildren(v);
+        hideChildren({ outlineView, outlineHeaderView });
         outlineView->getOutlineTree()->clearSelection();
         outlineView->getOutlineTree()->setFocus();
     }
@@ -169,11 +150,9 @@ void OrlojView::showFacetOutlineHeaderEdit()
     } else {
         if(menuView->actionEditLiveNotePreview->isChecked()) {
             outlineHeaderView->getEditPanel()->setVisible(false);
-            QSet<QWidget*> v; v << outlineHeaderView << outlineHeaderEdit;
-            hideChildren(v);
+            hideChildren({ outlineHeaderView, outlineHeaderEdit });
         } else {
-            QSet<QWidget*> v; v << outlineView << outlineHeaderEdit;
-            hideChildren(v);
+            hideChildren({ outlineView, outlineHeaderEdit });
         }
         outlineHeaderEdit->giveEditorFocus();
     }
@@ -188,8 +167,7 @@ void OrlojView::showFacetNoteView()
     if(menuView->actionViewHoist->isChecked()) {
         showFacetHoistedNoteView();
     } else {
-        QSet<QWidget*> v; v << outlineView << noteView;
-        hideChildren(v);
+        hideChildren({ outlineView, noteView });
         outlineView->getOutlineTree()->setFocus();
     }
 }
@@ -201,11 +179,9 @@ void OrlojView::showFacetNoteEdit()
     } else {
         if(menuView->actionEditLiveNotePreview->isChecked()) {
             noteView->getButtonsPanel()->setVisible(false);
-            QSet<QWidget*> v; v << noteView << noteEdit;
-            hideChildren(v);
+            hideChildren({ noteView, noteEdit });
         } else {
-            QSet<QWidget*> v; v << outlineView << noteEdit;
-            hideChildren(v);
+            hideChildren({ outlineView, noteEdit });
         }
 
         noteEdit->giveEditorFocus();
@@ -214,20 +190,17 @@ void OrlojView::showFacetNoteEdit()
 
 void OrlojView::showFacetNavigator()
 {
-    QSet<QWidget*> v; v << navigator;
-    hideChildren(v);
+    hideChildren({ navigator });
 }
 
 void OrlojView::showFacetNavigatorOutline()
 {
-    QSet<QWidget*> v; v << navigator << outlineHeaderView;
-    hideChildren(v);
+    hideChildren({ navigator, outlineHeaderView });
 }
 
 void OrlojView::showFacetNavigatorNote()
 {
-    QSet<QWidget*> v; v << navigator << noteView;
-    hideChildren(v);
+    hideChildren({ navigator, noteView });
 }
 
 /*
@@ -241,29 +214,25 @@ bool OrlojView::isHoisting() const
 
 void OrlojView::showFacetHoistedOutlineHeaderView()
 {
-    QSet<QWidget*> v; v << outlineHeaderView;
-    hideChildren(v);
+    hideChildren({ outlineHeaderView });
     outlineHeaderView->giveViewerFocus();
 }
 
 void OrlojView::showFacetHoistedOutlineHeaderEdit()
 {
-    QSet<QWidget*> v; v << outlineHeaderEdit;
-    hideChildren(v);
+    hideChildren({ outlineHeaderEdit });
     outlineHeaderEdit->giveEditorFocus();
 }
 
 void OrlojView::showFacetHoistedNoteView()
 {
-    QSet<QWidget*> v; v << noteView;
-    hideChildren(v);
+    hideChildren({ noteView });
     noteView->giveViewerFocus();
 }
 
 void OrlojView::showFacetHoistedNoteEdit()
 {
-    QSet<QWidget*> v; v << noteEdit;
-    hideChildren(v);
+    hideChildren({ noteEdit });
     noteEdit->giveEditorFocus();
 }
 
