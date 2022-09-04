@@ -2467,9 +2467,11 @@ void MainWindowPresenter::doActionNoteForget()
 
             QAbstractButton* choosen = msgBox.clickedButton();
             if(yes == choosen) {
+                // TODO getNearNote() getPreviousNote() getNextNote()
                 Outline* outline = mind->noteForget(note);
                 mind->remember(outline);
                 orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+                // TODO if nearNote then select nearNote
             }
             return;
         }
