@@ -32,7 +32,7 @@ SEMANTIC_VERSION_FILES = [
     "../../build/fedora/fedora-rpm-from-deb.sh",
     # ^ export MFVERSION="1.53.0"
     "../../PAD.xml",
-    # ^                 <Program_Version>1.54.0</Program_Version>
+    # ^ <Program_Version>1.54.0</Program_Version>
     "../../build/Makefile",
     # ^ MINDFORGER_VERSION := 1.54.0
     "../../build/macos/env.sh",
@@ -46,7 +46,9 @@ SEMANTIC_VERSION_FILES = [
 MINOR_VERSION_FILES = [
     "../../lib/src/app_info.h",
     # ^ #define MINDFORGER_VERSION_DWORD 1,54,0,2
+    # ^ #define MINDFORGER_VERSION_MINOR "55"
 ]
+
 
 def replace_version(
         file_path: str,
@@ -63,11 +65,12 @@ def replace_version(
             updated_data = data.replace(old_version, new_version)
 
             with open(file_path, 'w') as file:
-                data = file.write(updated_data)
+                file.write(updated_data)
 
             return
 
     raise FileNotFoundError(f"File {file_path} not found!")
+
 
 def replace_files(
         file_paths: list,
@@ -81,12 +84,13 @@ def replace_files(
             new_version=new_version,
         )
 
+
 if __name__ == "__main__":
     old_major_version = "1"
-    old_minor_version = "54"
+    old_minor_version = "55"
 
     new_major_version = "1"
-    new_minor_version = "55"
+    new_minor_version = "56"
 
     # common files replacement
     replace_files(
@@ -102,4 +106,9 @@ if __name__ == "__main__":
         new_version=f"{new_major_version},{new_minor_version},0",        
     )
 
-# eof
+    # special files replacement
+    replace_version(
+        file_path=MINOR_VERSION_FILES[0],
+        old_version=f"\"{old_minor_version}\"",
+        new_version=f"\"{new_minor_version}\"",
+    )
