@@ -2467,11 +2467,34 @@ void MainWindowPresenter::doActionNoteForget()
 
             QAbstractButton* choosen = msgBox.clickedButton();
             if(yes == choosen) {
-                // TODO getNearNote() getPreviousNote() getNextNote()
+                // delete selected row & SELECT and adjacent row:
+                //   - row is always deleted INCLUDING children
+                //   - adjacent row must be identified BEFORE deleting the row
+                // consider the following scenarios:
+                //   - N is the first row in O
+                //     > row 0 w/ chidlren will be deleted and new row 0
+                //       will be selected AFTER the delete (if any N remains in O)
+                //   - there are Ns above row to be deleted
+                //     > simplest scenario - N above N to be deleted will be selected
+                //   - N is the last N in O, it has children and it is deleted including children
+                //     > no row is selected in this case
+
+                Note* adjacentNote = nullptr;
+                if(orloj->getOutlineView()->getOutlineTree()->getModel()->rowCount() > 1) {
+                    adjacentNote = orloj->getOutlineView()->getOutlineTree()->getAdjacentNote();
+                }
+
                 Outline* outline = mind->noteForget(note);
                 mind->remember(outline);
                 orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
-                // TODO if nearNote then select nearNote
+
+                if(orloj->getOutlineView()->getOutlineTree()->getModel()->rowCount()) {
+                    if(adjacentNote) {
+                        orloj->getOutlineView()->selectRowByNote(adjacentNote);
+                    } else {
+                        orloj->getOutlineView()->getOutlineTree()->selectRow(0);
+                    }
+                }
             }
             return;
         }

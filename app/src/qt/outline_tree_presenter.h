@@ -59,6 +59,7 @@ public:
 
     void refresh(Outline* outline, Outline::Patch* patch=nullptr);
     void refresh(Note* note);
+    void selectRow(int row);
     void insertAndSelect(Note* note);
 
     void clearSelection();
@@ -67,6 +68,7 @@ public:
 
     int getCurrentRow() const;
     Note* getCurrentNote() const;
+    Note* getAdjacentNote() const;
 
     ~OutlineTreePresenter();
 
