@@ -204,17 +204,18 @@ then
 fi
 
 export ARG_MAJOR_VERSION=1.54.
-export ARG_MINOR_VERSION=1 # minor version is incremented for every Ubuntu version
+export ARG_MINOR_VERSION=6 # minor version is incremented for every Ubuntu version
 export ARG_BAZAAR_MSG="MindForger ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} release."
 
 # export DRY_RUN="true"
 
 # https://wiki.ubuntu.com/Releases
-# obsolete: precise quantal saucy utopic vivid wily yakkety artful cosmic disco eoan groovy
-# current : trusty xenial bionic focal hirsute impish
-# 1.53.x  : (trusty: compilation fail) xenial bionic focal hirsute impish
-# 1.54.x  : xenial bionic focal impish
-for UBUNTU_VERSION in xenial bionic focal impish
+# obsolete: precise quantal saucy utopic vivid wily yakkety artful cosmic disco eoan groovy hirsute impish
+# current   : trusty xenial bionic focal jammy kinetic
+# 1.53.x    : (trusty: compilation fail) xenial bionic focal hirsute impish
+# 1.54.x '22: xenial bionic focal impish focal
+# 1.54.x '23: jammy kinetic
+for UBUNTU_VERSION in kinetic
 do
     echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
