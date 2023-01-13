@@ -1,6 +1,6 @@
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 # Run MindForger image:
 #   $ xhost +local:root && docker run -it --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" mindforger:latest mindforger
 
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 MAINTAINER "Martin Dvorak" <martin.dvorak@mindforger.com>
 
