@@ -50,6 +50,7 @@ Configuration::Configuration()
       md2HtmlOptions{},
       distributorSleepInterval{DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL},
       markdownQuoteSections{},
+      recentIncludeOs{DEFAULT_RECENT_INCLUDE_OS},
       uiNerdTargetAudience{DEFAULT_UI_NERD_MENU},
       uiHtmlZoom{},
       externalEditorCmd{},
@@ -143,6 +144,7 @@ void Configuration::clear()
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
     tagsScope.clear();
     markdownQuoteSections = DEFAULT_MD_QUOTE_SECTIONS;
+    recentIncludeOs = DEFAULT_RECENT_INCLUDE_OS;
 
     // Markdown 2 HTML options
     md2HtmlOptions = 0

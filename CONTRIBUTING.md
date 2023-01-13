@@ -19,15 +19,21 @@ with MindForger development will be **highly appreciated**!
     * Write a document, block post; create YouTube video, ...
 
 Don't hesitate to contact [me](mailto:martin.dvorak@mindforger.com).
+
+
 # Code of Conduct
 This project and everyone participating in it is governed by the 
 [MindForger Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold this
 code.
+
+
 # Styleguide: Git Commit Messages
 * Commit messages must provide concise change description.
 * Reference issues and pull requests related to the commit.
 * Close bugs with issue references in commit messages.
 * If possible, limit commit message length to 72 characters.
+
+
 # Styleguide: C++
 Code style:
   
@@ -39,7 +45,9 @@ Code style:
 * Use `{}` with constructor having 0/1 parameter, () otherwise.
 * `CamelCase` class names (no underscores).
 * Lines to have at most 88 columns.
-* See `/lib/src` source code for as code style reference.
+* 4 spaces indentation.
+* Python's black like formatting.
+* Use `/lib/src` source code as code style reference.
 
 Example of class `{}` style:
 
@@ -78,7 +86,7 @@ bool MyClass::myFunction(const QString& myArg)
 }
 ```
 
-Example of how to format code to keep it under 88 columns:
+Example of how to format code to keep it under 88 columns (Python's black style):
 
 ```cpp
 void MainWindowPresenter::doActionOrganizerMoveNoteToNextVisibleQuadrant(Note* note)
@@ -109,8 +117,68 @@ void MainWindowPresenter::doActionOrganizerMoveNoteToNextVisibleQuadrant(Note* n
         }
     }
 }
-
 ```
+
+
+# Styleguide: C++ comments
+Comments should be used to explain tricky and/or
+important code only. Don't use comments to explain
+obvious things as comments might diverge from the
+actual code (e.g. after code refactoring) and may
+cause confusion. Make comments brief, consistent
+and concise
+
+Code style:
+
+```cpp
+/**
+ * @brief Brief class description.
+ *
+ * Detailed class description which may include
+ * `examples` of use, _ASCII diagrams_ or **bullet lists**.
+ * Do ~~not~~ worry.
+ *
+ * Code block:
+ *
+ *     int codeBlockExampleVariable;
+ *
+ * @see Text (as sentence) or URL.
+ * @see [The link text](http://example.com/)
+ * @see [The link text](#MyOtherClass)
+ */
+class MyClass
+{
+
+    int field; // brief field description in the lower case
+
+public:
+
+...
+
+    /**
+     * @brief Brief method description.
+     *
+     * Detailed method description which may include
+     * examples of use, ASCII diagrams or bullet/numbered
+     * lists like:
+     *
+     * 1. The first item.
+     * 2. The second item with the reference of `field`.
+     * 3. The third item.
+     *
+     * @param myParam Parameter documentation as sentence(s).
+     * @return Return value description as sentence(s).
+     *
+     * @see [The link text](#MyOtherClass)
+     */
+    void myMethod(int myParam) { ... }
+
+...
+
+}
+```
+
+
 # Styleguide: Qt
 
 * MindForger uses MVP pattern (see `main_window_presenter.h/.cpp`)

@@ -206,6 +206,7 @@ public:
     static constexpr const bool DEFAULT_EDITOR_AUTOSAVE = false;
     static constexpr const bool DEFAULT_FULL_O_PREVIEW = false;
     static constexpr const bool DEFAULT_MD_QUOTE_SECTIONS = true;
+    static constexpr const bool DEFAULT_RECENT_INCLUDE_OS= false;
     static constexpr const bool DEFAULT_SPELLCHECK_LIVE = true;
     static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_MD_MATH = false;
@@ -256,6 +257,7 @@ private:
     AssociationAssessmentAlgorithm aaAlgorithm;
     int distributorSleepInterval;
     bool markdownQuoteSections;
+    bool recentIncludeOs; // subjectively it's better show visited/editor Ns only as user can always easily get to O description + automatically added Os are increasing entropy of the recent view too much
 
     // GUI configuration
     bool uiNerdTargetAudience;
@@ -399,6 +401,8 @@ public:
     void setDistributorSleepInterval(int sleepInterval) { distributorSleepInterval = sleepInterval; }
     bool isMarkdownQuoteSections() const { return markdownQuoteSections; }
     void setMarkdownQuoteSections(bool markdownQuoteSections) { this->markdownQuoteSections = markdownQuoteSections; }
+    bool isRecentIncludeOs() const { return recentIncludeOs; }
+    void setRecentIncludeOs(bool recentIncludeOs) { this->recentIncludeOs = recentIncludeOs; }
 
     /*
      * GUI

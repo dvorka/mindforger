@@ -1140,7 +1140,7 @@ void MainWindowPresenter::handleFtsNerEntity()
 void MainWindowPresenter::doActionViewRecentNotes()
 {
     vector<Note*> notes{};
-    mind->getAllNotes(notes, true, true);
+    mind->getAllNotes(notes, true, config.isRecentIncludeOs());
     orloj->showFacetRecentNotes(notes);
 }
 
