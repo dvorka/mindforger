@@ -257,7 +257,14 @@ private:
     AssociationAssessmentAlgorithm aaAlgorithm;
     int distributorSleepInterval;
     bool markdownQuoteSections;
-    bool recentIncludeOs; // subjectively it's better show visited/editor Ns only as user can always easily get to O description + automatically added Os are increasing entropy of the recent view too much
+    /**
+     * @brief Do include Outlines in the recent view or not.
+     *
+     * Subjectively it's better to show visited/editor Ns only as user
+     * can always easily get to O description + automatically added
+     * Os are increasing entropy of the recent view too much.
+     */
+    bool recentIncludeOs;
 
     // GUI configuration
     bool uiNerdTargetAudience;
