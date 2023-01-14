@@ -297,7 +297,9 @@ public slots:
     void doActionFormatListNumber();
     void doActionFormatListTask();
     void doActionFormatListTaskItem();
-    void doActionFormatToc();
+    void doActionFormatToc(bool withTags);
+    void doActionFormatTocWithTags();
+    void doActionFormatTocWithoutTags();
     void doActionFormatTimestamp();
     void doActionFormatCodeBlock();
     void doActionFormatMathBlock();    
@@ -357,6 +359,13 @@ public slots:
     void doActionToggleLiveNotePreview();
     void doActionNameDescFocusSwap();
     void doActionSpellCheck();
+    // tools
+    void doActionToolsWikipedia();
+    void doActionToolsArxiv();
+    void doActionToolsChatGpt();
+    void doActionToolsDuckDuckGo();
+    void doActionToolsPandoc();
+    void doActionToolsDocusaurus();
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();

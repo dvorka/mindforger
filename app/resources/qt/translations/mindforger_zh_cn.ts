@@ -2930,7 +2930,7 @@
         <translation type="unfinished">Deprecate Notebook</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3186"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3211"/>
         <source>Do you really want to forget &apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3036,194 +3036,194 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2477"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2502"/>
         <source>Forget Note</source>
         <translation type="unfinished">Delete Note</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2477"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2502"/>
         <source>Please select a Note to forget.</source>
         <translation type="unfinished">Please select a Note to delete.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2497"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2525"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2529"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2522"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2550"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2554"/>
         <source>Extract Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2497"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2522"/>
         <source>Please select a text to extract.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2525"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2550"/>
         <source>Failed to extract new Note!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2529"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2554"/>
         <source>Please select a Note, edit it and select a text to extract.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2555"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2572"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2576"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2580"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2597"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2601"/>
         <source>Clone Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2556"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2581"/>
         <source>Do you want to clone Note &apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2556"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2581"/>
         <source>&apos; including its child notes?&apos;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2572"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2597"/>
         <source>Failed to clone Note!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2576"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2601"/>
         <source>Please select a Note to be cloned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2594"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2619"/>
         <source>Moved Note &apos;%1&apos; to be the first child</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2597"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2618"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2639"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2660"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2622"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2643"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2664"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2685"/>
         <source>Move Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2597"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2618"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2639"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2660"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2622"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2643"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2664"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2685"/>
         <source>Please select a Note to be moved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2615"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2640"/>
         <source>Moved up Note &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2636"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2661"/>
         <source>Moved down Note &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2657"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2682"/>
         <source>Moved Note &apos;%1&apos; to be the last child</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2679"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2704"/>
         <source>Promoted Note &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2682"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2707"/>
         <source>Promote Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2682"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2707"/>
         <source>Please select a Note to be promoted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2696"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2721"/>
         <source>Demoted Note &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2699"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2724"/>
         <source>Demote Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2699"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2724"/>
         <source>Please select a Note to be demoted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2843"/>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2868"/>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2876"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2893"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2901"/>
         <source>Add Library Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2844"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2869"/>
         <source>Library directory doesn&apos;t exist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2869"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2894"/>
         <source>Library already indexed - use update action to reindex documents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="2877"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="2902"/>
         <source>Unable to index documents on library path - either memory directory doesn&apos;t exist or not in MindForger repository mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3001"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3026"/>
         <source>Organizer Update Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3002"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3027"/>
         <source>Eisenhower Matrix organizer is built-in and cannot be edited - please create or update a custom organizer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3029"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3054"/>
         <source>Organizer Clone Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3030"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3055"/>
         <source>Eisenhower Matrix organizer is built-in and cannot be cloned - please create or update a custom organizer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3185"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3210"/>
         <source>Forget Organizer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3186"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3211"/>
         <source>&apos; Organizer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3196"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3221"/>
         <source>Delete Organizer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3197"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3222"/>
         <source>Eisenhower Matrix is built-in and cannot be deleted - only custom organizers can.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../src/qt/main_window_presenter.cpp" line="3263"/>
+        <location filename="../../../src/qt/main_window_presenter.cpp" line="3288"/>
         <source>About MindForger</source>
         <translation type="unfinished"></translation>
     </message>

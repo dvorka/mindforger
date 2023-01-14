@@ -351,7 +351,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNavigatorShuffle = new QAction(tr("&Shuffle\tSpace"), mainWindow);
     actionNavigatorShuffle->setStatusTip(tr("Shuffle knowledge graph"));
 
-    menuNavigator = qMenuBar->addMenu(tr("Na&vigate"));
+    menuNavigator = qMenuBar->addMenu(tr("N&avigate"));
     menuNavigator->addAction(actionNavigatorEdgesStretch);
     menuNavigator->addAction(actionNavigatorEdgesShrink);
     menuNavigator->addSeparator();
@@ -856,8 +856,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatStrikethrough = new QAction(tr("&Strikethrough"), mainWindow);
     actionFormatStrikethrough->setStatusTip(tr("Format text as strikethrough"));
 
-    actionFormatToc = new QAction(tr("T&able of Contents"), mainWindow);
-    actionFormatToc ->setStatusTip(tr("Insert Notebook's table of contents"));
+    // toc
+    submenuFormatToc = menuFormat->addMenu(tr("T&able of Contents"));
+    actionFormatTocWithoutTags = new QAction(tr("With&out tags"), mainWindow);
+    actionFormatTocWithoutTags ->setStatusTip(tr("Insert Notebook's table of contents without tags"));
+    submenuFormatToc->addAction(actionFormatTocWithoutTags);
+    actionFormatTocWithTags = new QAction(tr("&With tags"), mainWindow);
+    actionFormatTocWithTags ->setStatusTip(tr("Insert Notebook's table of contents with tags"));
+    submenuFormatToc->addAction(actionFormatTocWithTags);
 
     actionFormatTimestamp = new QAction(tr("Timestam&p"), mainWindow);
     actionFormatTimestamp ->setStatusTip(tr("Insert current date and time"));
@@ -888,7 +894,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatKeyboard);
     menuFormat->addAction(actionFormatComment);
     menuFormat->addSeparator();
-    menuFormat->addAction(actionFormatToc);
+    menuFormat->addMenu(submenuFormatToc);
     menuFormat->addMenu(submenuFormatLists);
     menuFormat->addMenu(submenuFormatBlocks);
     menuFormat->addMenu(submenuFormatDiagrams);
@@ -900,6 +906,36 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatLink);
     menuFormat->addAction(actionFormatImage);
     menuFormat->setEnabled(false);
+
+    // menu: tools
+
+#ifdef MF_WIP
+    menuTools = qMenuBar->addMenu(tr("&Tools"));
+
+    actionToolsWikipedia = new QAction(QIcon(":/menu-icons/link.svg"), tr("&Wikipedia"), mainWindow);
+    actionToolsWikipedia->setStatusTip(tr("Open Wikipadia and find entry of the selected entity..."));
+    menuTools->addAction(actionToolsWikipedia);
+
+    actionToolsArxiv = new QAction(QIcon(":/menu-icons/link.svg"), tr("&arXiv"), mainWindow);
+    actionToolsArxiv->setStatusTip(tr("Open arXiv and find papers related to the selected entity..."));
+    menuTools->addAction(actionToolsArxiv);
+
+    actionToolsChatGpt = new QAction(QIcon(":/menu-icons/link.svg"), tr("&ChatGPT: Explain ... in simple terms."), mainWindow);
+    actionToolsChatGpt->setStatusTip(tr("Let ChatGPT to explain the selected entry..."));
+    menuTools->addAction(actionToolsChatGpt);
+
+    actionToolsDuckDuckGo = new QAction(QIcon(":/menu-icons/link.svg"), tr("&DuckDuckGo"), mainWindow);
+    actionToolsDuckDuckGo->setStatusTip(tr("Open DuckDuckGo and search web for the selected entity..."));
+    menuTools->addAction(actionToolsDuckDuckGo);
+
+    actionToolsPandoc = new QAction(QIcon(":/menu-icons/link.svg"), tr("&Pandoc"), mainWindow);
+    actionToolsPandoc ->setStatusTip(tr("Use Pandoc to convert MindForger's Markdown documents..."));
+    menuTools->addAction(actionToolsPandoc);
+
+    actionToolsDocusaurus = new QAction(QIcon(":/menu-icons/link.svg"), tr("D&ocusaurus"), mainWindow);
+    actionToolsDocusaurus->setStatusTip(tr("Build your web with MindForger's Markdown documents and Docusaurus..."));
+    menuTools->addAction(actionToolsDocusaurus);
+#endif
 
     // menu: help
 

@@ -29,8 +29,10 @@ CLASS_NAME := "New_Class"
 # l10n language: en, cs
 MF_LANG := "en"
 
+
+.PHONY: help
 help:
-	@echo "MindForger maker help:"
+	@echo "MindForger tooling help:"
 	@echo "git-subs-update   update git submodules"
 	@echo "gen-lib-class     generate lib C++ class skeleton: CLASS_NAME=My_Class"
 	@echo "gen-ui-class      generate UI C++ class skeleton: CLASS_NAME=My_Class"
@@ -50,6 +52,8 @@ help:
 	@echo "api-reference     generate Doxygen documentation"
 	@echo "dev-install-local compile and install binary to ~/bin as MIND"
 
+
+.PHONY: clean
 clean:
 	rm -vf ../app/mindforger
 	rm -vf ../lib/libmindforger.a
@@ -57,22 +61,30 @@ clean:
 	cd .. && make clean
 	cd ../lib/test && make clean
 
+
+.PHONY: git-subs-update
 git-subs-update:
 	cd .. && git submodule update --init --recursive
 
+
+.PHONY: gen-lib-class
 gen-lib-class:
 	@echo "Generating lib C++ class for name: $(CLASS_NAME)"
 	./make/gen-cpp-class.py $(CLASS_NAME)
 
+
+.PHONY: gen-ui-class
 gen-ui-class:
 	@echo "Generating UI C++ class for name: $(CLASS_NAME)"
 	./make/gen-cpp-ui-class.py $(CLASS_NAME)
 
 
+.PHONY: build
 build: clean
 	cd .. && qmake -r mindforger.pro && make -j 7
 	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
+
 
 build-ci: clean
 	@echo "MindForger CI build..."
@@ -80,20 +92,28 @@ build-ci: clean
 	@echo "If CI build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
+
+.PHONY: l10n
 l10n:
 	cd make && ./l10n-update-strings.sh && ./l10n-edit-and-release.sh $(MF_LANG)
+
 
 test-lib: clean
 	cd make && ./test-lib-units.sh
 
+
+.PHONY: dist-work-clean
 dist-work-clean:
 	rm -rvf $(MF_MAKER_WORKING_DIR)
+
 
 $(MF_MAKER_WORKING_DIR):
 	mkdir -vp $(MF_MAKER_WORKING_DIR)
 
+
 $(MINDFORGER_RELEASE_DIR):
 	mkdir -v $(MINDFORGER_RELEASE_DIR) || echo "$(MINDFORGER_RELEASE_DIR) already exists"
+
 
 dist-tarball: dist-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR)
 	@echo "Building TARBALL distribution..."
@@ -101,12 +121,15 @@ dist-tarball: dist-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR)
 	cp -vf ./tarball/tarball-build.sh $(MF_MAKER_WORKING_DIR) && cd $(MF_MAKER_WORKING_DIR) && ./tarball-build.sh
 	cp -vf $(MF_MAKER_WORKING_DIR)/`cd $(MF_MAKER_WORKING_DIR) && ls -d mindforger*`/mindforger_$(MINDFORGER_VERSION)_tarball.tgz $(MINDFORGER_RELEASE_DIR)
 
+
 dist-deb: dist-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR)
 	@echo "Building DEB distribution..."
 	mkdir -vp $(MF_MAKER_WORKING_DIR)
 	cp -vf ./debian/debian-make-deb.sh $(MF_MAKER_WORKING_DIR) && cd $(MF_MAKER_WORKING_DIR) && ./debian-make-deb.sh
 	cp -vf $(MF_MAKER_WORKING_DIR)/`cd $(MF_MAKER_WORKING_DIR) && ls -d mindforger*`/mindforger_$(MINDFORGER_VERSION)-1_amd64.deb $(MINDFORGER_RELEASE_DIR)
 
+
+.PHONY: dist-rpm
 dist-rpm:
 	@echo "IMPORTANT: this target MUST be run on Fedora!"
 	cd fedora && ./fedora-distro-setup.sh
@@ -114,29 +137,41 @@ dist-rpm:
 	cp -vf ./fedora-rpm-from-deb.sh ~/alien && cd ~/alien && sudo ./fedora-rpm-from-deb.sh $(MINDFORGER_VERSION)
 	@echo "Find .rpm in ~/alien directory"
 
+
+.PHONY: dist-dmg
 dist-dmg:
 	@echo "Building .dmg package..."
 	cd macos && ./mindforger-build.sh && ./dmg-package-build.sh
 
+
+.PHONY: dist-debian-ppa
 dist-debian-ppa:
 	cd debian && ./debian-aptly-add-deb.sh
 
+
+.PHONY: dist-all-clean
 dist-all-clean:
 	rm -rvf $(MINDFORGER_RELEASE_DIR)
+
 
 dist-all: dist-all-clean $(MINDFORGER_RELEASE_DIR) dist-tarball dist-deb
 	@echo "Building all $(MINDFORGER_VERSION) distributions"
 
+
+.PHONY: statistic
 statistic:
 	cd make && ./statistic.sh
 
+
+.PHONY: doc-to-wiki
 doc-to-wiki:
 	cd doc && ./mf-doc-to-wiki.py
 
+
+.PHONY: api-reference
 api-reference:
 	cd doxygen && doxygen ./mindforger.cfg
 
-# private development targets
 
 dev-install-local: build-ci ../app/mindforger
 	cp -vf ../app/mindforger ~/bin

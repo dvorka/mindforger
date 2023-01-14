@@ -61,6 +61,9 @@ public:
     QMenu* menuNote;
     QMenu* menuEdit;
     QMenu* menuFormat;
+#ifdef MF_WIP
+    QMenu* menuTools;
+#endif
     QMenu* menuHelp;
 
 #ifdef DO_MF_DEBUG
@@ -202,6 +205,9 @@ public:
     QAction* actionFormatCode;
     QAction* actionFormatCodeBlock;
     QMenu* submenuFormatMathJax;
+    QMenu* submenuFormatToc;
+    QAction* actionFormatTocWithoutTags;
+    QAction* actionFormatTocWithTags;
     QMenu* submenuFormatLists;
     QMenu* submenuFormatBlocks;
     QMenu* submenuFormatDiagrams;
@@ -241,8 +247,15 @@ public:
     QAction* actionFormatImage;
     QAction* actionFormatTable;
     QAction* actionFormatHr;
-    QAction* actionFormatToc;
     QAction* actionFormatTimestamp;
+
+    // menu: Tools
+    QAction* actionToolsWikipedia;
+    QAction* actionToolsArxiv;
+    QAction* actionToolsChatGpt;
+    QAction* actionToolsDuckDuckGo;
+    QAction* actionToolsPandoc;
+    QAction* actionToolsDocusaurus;
 
     // menu: Help
     QAction* actionHelpDocumentation;

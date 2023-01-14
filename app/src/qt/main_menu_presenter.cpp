@@ -270,7 +270,8 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionFormatListNumber, SIGNAL(triggered()), mwp, SLOT(doActionFormatListNumber()));
     QObject::connect(view->actionFormatListTask, SIGNAL(triggered()), mwp, SLOT(doActionFormatListTask()));
     QObject::connect(view->actionFormatListTaskItem, SIGNAL(triggered()), mwp, SLOT(doActionFormatListTaskItem()));
-    QObject::connect(view->actionFormatToc, SIGNAL(triggered()), mwp, SLOT(doActionFormatToc()));
+    QObject::connect(view->actionFormatTocWithoutTags, SIGNAL(triggered()), mwp, SLOT(doActionFormatTocWithoutTags()));
+    QObject::connect(view->actionFormatTocWithTags, SIGNAL(triggered()), mwp, SLOT(doActionFormatTocWithTags()));
     QObject::connect(view->actionFormatTimestamp, SIGNAL(triggered()), mwp, SLOT(doActionFormatTimestamp()));
     QObject::connect(view->actionFormatCodeBlock, SIGNAL(triggered()), mwp, SLOT(doActionFormatCodeBlock()));
     QObject::connect(view->actionFormatMathBlock, SIGNAL(triggered()), mwp, SLOT(doActionFormatMathBlock()));
@@ -286,6 +287,14 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionFormatImage, SIGNAL(triggered()), mwp, SLOT(doActionFormatImage()));
     QObject::connect(view->actionFormatTable, SIGNAL(triggered()), mwp, SLOT(doActionFormatTable()));
     QObject::connect(view->actionFormatHr, SIGNAL(triggered()), mwp, SLOT(doActionFormatHr()));
+
+    // menu: tools
+    QObject::connect(view->actionToolsArxiv, SIGNAL(triggered()), mwp, SLOT(doActionToolsArxiv()));
+    QObject::connect(view->actionToolsPandoc, SIGNAL(triggered()), mwp, SLOT(doActionToolsPandoc()));
+    QObject::connect(view->actionToolsChatGpt, SIGNAL(triggered()), mwp, SLOT(doActionToolsChatGpt()));
+    QObject::connect(view->actionToolsWikipedia, SIGNAL(triggered()), mwp, SLOT(doActionToolsWikipedia()));
+    QObject::connect(view->actionToolsDocusaurus, SIGNAL(triggered()), mwp, SLOT(doActionToolsDocusaurus()));
+    QObject::connect(view->actionToolsDuckDuckGo, SIGNAL(triggered()), mwp, SLOT(doActionToolsDucDuckGo()));
 
     // menu: help
     QObject::connect(view->actionHelpDocumentation, SIGNAL(triggered()), mwp, SLOT(doActionHelpDocumentation()));

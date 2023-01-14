@@ -1470,12 +1470,12 @@ void MainWindowPresenter::doActionFormatListTaskItem()
     }
 }
 
-void MainWindowPresenter::doActionFormatToc()
+void MainWindowPresenter::doActionFormatToc(bool withTags)
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
             || orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER))
     {
-        string* text = mdRepresentation->toc(orloj->getOutlineView()->getCurrentOutline());
+        string* text = mdRepresentation->toc(orloj->getOutlineView()->getCurrentOutline(), withTags);
 
         if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
             orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(QString::fromStdString(*text));
@@ -1485,6 +1485,16 @@ void MainWindowPresenter::doActionFormatToc()
 
         delete text;
     }
+}
+
+void MainWindowPresenter::doActionFormatTocWithTags()
+{
+    this->doActionFormatToc(true);
+}
+
+void MainWindowPresenter::doActionFormatTocWithoutTags()
+{
+    this->doActionFormatToc(false);
 }
 
 // IMPROVE: consolidate methods which just insert a (semi)static string
@@ -3222,6 +3232,48 @@ void MainWindowPresenter::doActionOrganizerForget()
             tr("Eisenhower Matrix is built-in and cannot be deleted - only custom organizers can.")
         );
     }
+}
+
+void MainWindowPresenter::doActionToolsWikipedia()
+{
+    QDesktopServices::openUrl(
+        QUrl{"https://wikipedia.org"}
+    );
+}
+
+void MainWindowPresenter::doActionToolsArxiv()
+{
+    QDesktopServices::openUrl(
+        QUrl{"https://arxiv.org/multi?group=grp_math&%2Ffind=Search"}
+    );
+}
+
+void MainWindowPresenter::doActionToolsDuckDuckGo()
+{
+    QDesktopServices::openUrl(
+        QUrl{"https://duckduckgo.com/"}
+    );
+}
+
+void MainWindowPresenter::doActionToolsDocusaurus()
+{
+    QDesktopServices::openUrl(
+        QUrl{"https://docusaurus.io/docs/installation"}
+    );
+}
+
+void MainWindowPresenter::doActionToolsPandoc()
+{
+    QDesktopServices::openUrl(
+        QUrl{"https://pandoc.org/installing.html"}
+    );
+}
+
+void MainWindowPresenter::doActionToolsChatGpt()
+{
+    QDesktopServices::openUrl(
+        QUrl{"https://chat.openai.com/chat"}
+    );
 }
 
 void MainWindowPresenter::doActionHelpDocumentation()
