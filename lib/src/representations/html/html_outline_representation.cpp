@@ -144,6 +144,7 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
         html.assign(
             "<!DOCTYPE html>\n"
             "<html>"
+            "<head><meta charset=\"UTF-8\"></head>"
             "<body style='");
         fgBgTextColorStyle(html);
         html += "'><pre>";
@@ -152,7 +153,9 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
         html.assign(
             "<!DOCTYPE html>\n"
             "<html>"
-            "<head>");
+            "<head>"
+            "<meta charset=\"UTF-8\">"
+        );
 #ifdef DO_MF_DEBUG
         html += "\n";
 #endif
