@@ -1,7 +1,8 @@
 2023-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v1.55.0 - delete of a Note in the outline view keeps selected
-      an adjacent Note, improved page up/page down navigation in table widgets.
+      an adjacent Note, improved page up/page down navigation in table widgets,
+      Tools menu, charset added to HTML head.
 
 2022-03-07  Martin Dvorak  <martin.dvorak@mindforger.com>
 

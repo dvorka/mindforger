@@ -23,14 +23,14 @@ import os
 
 SEMANTIC_VERSION_FILES = [
     "../../build/debian/debian-aptly-add-deb.sh",
-    # ^ export NEW_DEB="mindforger_1.53.0-1_amd64.deb"
-    # ^ export NEW_VERSION="1.53.0"
+    # ^ export NEW_DEB="mindforger_1.54.0-1_amd64.deb"
+    # ^ export NEW_VERSION="1.54.0"
     "../../build/debian/debian-make-deb.sh",
-    # ^ export ARG_VERSION="1.53.0"
+    # ^ export ARG_VERSION="1.54.0"
     "../../build/debian/debian/changelog",
-    # ^ mindforger (1.53.0-1) unstable; urgency=low
+    # ^ mindforger (1.54.0-1) unstable; urgency=low
     "../../build/fedora/fedora-rpm-from-deb.sh",
-    # ^ export MFVERSION="1.53.0"
+    # ^ export MFVERSION="1.54.0"
     "../../PAD.xml",
     # ^ <Program_Version>1.54.0</Program_Version>
     "../../build/Makefile",
@@ -45,7 +45,7 @@ SEMANTIC_VERSION_FILES = [
 
 MINOR_VERSION_FILES = [
     "../../lib/src/app_info.h",
-    # ^ #define MINDFORGER_VERSION_DWORD 1,54,0,2
+    # ^ #define MINDFORGER_VERSION_DWORD 1,55,0,2
     # ^ #define MINDFORGER_VERSION_MINOR "55"
 ]
 

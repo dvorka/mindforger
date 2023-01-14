@@ -95,7 +95,7 @@ function createTarball {
   cp -vf ../${MF}.tgz ../${MF}.orig.tar.gz
   cd ../${MF}
 
-  echo -e "\nMindForger TARBALL archives created using work/:\n  mindforger_1.53.4.orig.tar.gz\n  mindforger_1.53.4.tgz"
+  echo -e "\nMindForger TARBALL archives created using work/:\n  mindforger_1.55.4.orig.tar.gz\n  mindforger_1.55.4.tgz"
 }
 
 # ############################################################################
@@ -242,7 +242,7 @@ function releaseForParticularUbuntuVersion {
     #   - DEBUG: /var/cache/pbuilder/base.tgz ... last build's distro of Ubuntu
     #   - DEBUG: ~/pbuilder                   ... Ubuntu distro snapshots ^
     # DRY RUN
-    #   cd /home/dvorka/p/mindforger/launchpad/mindforger-2021-12-26--09-17-35/build-area && export PBUILDFOLDER=/tmp/mindforger-pbuilder-tmp && rm -rvf ${PBUILDFOLDER} ; mkdir -p ${PBUILDFOLDER} ; cp -rvf ~/pbuilder/*.tgz ${PBUILDFOLDER} ; pbuilder-dist xenial build mindforger_1.53.4-0ubuntu1.dsc
+    #   cd /home/dvorka/p/mindforger/launchpad/mindforger-2021-12-26--09-17-35/build-area && export PBUILDFOLDER=/tmp/mindforger-pbuilder-tmp && rm -rvf ${PBUILDFOLDER} ; mkdir -p ${PBUILDFOLDER} ; cp -rvf ~/pbuilder/*.tgz ${PBUILDFOLDER} ; pbuilder-dist xenial build mindforger_1.55.4-0ubuntu1.dsc
     # SHARP run:
     cd ../build-area
     # CLEAN build directory for pbuilder in tmp/
@@ -296,7 +296,7 @@ then
     exit 1
 fi
 
-export ARG_MAJOR_VERSION=1.53.
+export ARG_MAJOR_VERSION=1.55.
 export ARG_MINOR_VERSION=4 # minor version is incremented for every Ubuntu version
 export ARG_BAZAAR_MSG="MindForger ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} release."
 
