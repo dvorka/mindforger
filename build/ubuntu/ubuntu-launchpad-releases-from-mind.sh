@@ -28,10 +28,60 @@
 #   Debian formal doc:
 #     https://www.debian.org/doc/debian-policy/
 #
+# Tips:
+# - run the script from Emacs shell to easily analyze script output
+# - set OPT_* for PUSH and RELEASE to false to get .deb for any Ubuntu
+#   version locally
+#
 
-# ############################################################################
-# # Checkout MindForger from bazaar, copy over new sources, clean result #
-# ############################################################################
+# ########################################################################
+# # Configuration
+# ########################################################################
+
+# Ubuntu version:
+# - https://wiki.ubuntu.com/Releases
+# - obsolete:
+#     precise quantal saucy precise utopic vivid wily yakkety artful cosmic
+# - current :
+#     (trusty) xenial bionic (cosmic disco eoan) focal (groovy) (hirsute) (impish) jammy kinetic
+# - command (Bash tuple of distro names):
+#     trusty xenial bionic focal jammy kinetic
+UBUNTU_VERSIONS=(focal)
+
+# environment variables
+export MAJOR_VERSION=1
+export MINOR_VERSION=55
+export PATCH_VERSION=1 # patch version is incremented for every Ubuntu build @ Launchpad
+export MF_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" # semantic version
+export RM_CMD="rm -vrf "
+export CP_CMD="cp -vrf "
+
+# shell variables
+OPT_VERBOSE="v"
+OPT_DO_PUSH="false" # "true" to upload src to bazaar
+OPT_DO_RELEASE="false" # "true" to dpush binary .deb to Launchpad and TRIGGER release
+
+# ########################################################################
+# # Helpers
+# ########################################################################
+
+function echoStep {
+    echo -e "\n# ${1} ###################################################"
+}
+
+function echoStepDone {
+    echo -e "\n# DONE: ${1} #############################################"
+    pwd
+}
+
+function debugExit {
+    echo "EXITING SCRIPT: intentional development script exit"
+    exit 1    
+}
+
+# ########################################################################
+# # Checkout MindForger from bazaar, copy over new sources, clean result
+# ########################################################################
 
 function checkoutMindforger {
     # use `bzr` to manually check and work with Bazaar repository:
@@ -46,19 +96,19 @@ function checkoutMindforger {
     # delete OLD files from Bazaar directory
     cd mindforger
     mv .bzr ..
-    rm -rvf app build deps lib man LICENSE *.md
+    rm -rf$OPT_VERBOSE} app build deps lib man LICENSE *.md
     mv ../.bzr .
 
     # copy NEW project files to Bazaar directory
     echo -e "\n# copy over new MindForger files ############################"
-    cp -rvf ${MFSRC}/* ${MFSRC}/*.*  .
+    cp -rf$OPT_VERBOSE} ${MFSRC}/* ${MFSRC}/*.*  .
 
     # prune MindForger project files: tests, *.o/... build files, ...
     echo -e "\n# CLEANUP development and build artifacts ###################"
-    rm -vrf ./.git ./.qmake.stash ./app/mindforger ./build ./app/test ./lib/test
-    rm -vrf ./deps/cmark-gfm/.github
-    rm -vrf ./deps/mitie
-    rm -vrf ./lib/.qmake.stash ./lib/lib.pro.user ./lib/src/mindforger-lib-unit-tests
+    rm -rf$OPT_VERBOSE} ./.git ./.qmake.stash ./app/mindforger ./build ./app/test ./lib/test
+    rm -rf$OPT_VERBOSE} ./lib/.qmake.stash ./lib/lib.pro.user ./lib/src/mindforger-lib-unit-tests
+    rm -rf$OPT_VERBOSE} ./deps/cmark-gfm/.github
+    rm -rf$OPT_VERBOSE} ./deps/mitie
     # IMPROVE: static libraries lib*.a are NOT deleted to keep cmark-gfm dependency libs
     find . -type f \( -name "*moc_*.cpp" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
     
@@ -66,40 +116,48 @@ function checkoutMindforger {
 }
 
 # ############################################################################
-# # Create updated changelog #
+# # Create updated changelog
 # ############################################################################
 
 function createChangelog {
   export MYTS=`date "+%a, %d %b %Y %H:%M:%S"`
   echo "Changelog timestamp: ${MYTS}"
-  echo "mindforger (${MFFULLVERSION}) ${UBUNTUVERSION}; urgency=low" > $1
+  echo "mindforger (${MFFULLVERSION}) ${UBUNTU_VERSION}; urgency=low" > $1
   echo " " >> $1
   echo "  * ${MFBZRMSG}" >> $1
   echo " " >> $1
   echo " -- Martin Dvorak (Dvorka) <martin.dvorak@mindforger.com>  ${MYTS} +0100" >> $1
-  echo "" >> $1
+  # additional new line removed as it's not in HSTR
+  #echo "" >> $1
 }
 
 # ############################################################################
-# # Create upstream tarball in work/ #
+# # Create upstream tarball in work/
 # ############################################################################
 
 function createTarball {
-  cd ..
-  mkdir work
-  cd work
-  cp -vrf ../${MF} .
-  rm -rvf ${MF}/.bzr
-  tar zcf ../${MF}.tgz ${MF}
-  # .orig.tar.gz is required Debian convention
-  cp -vf ../${MF}.tgz ../${MF}.orig.tar.gz
-  cd ../${MF}
+    echoStep "Create TARBALL ${MF}"
+    # .orig.tar.gz is required Debian convention
+    TARBALL_FILE="${MF}.orig.tar.gz"
+    
+    cd ..
+    mkdir work
+    cd work
+    cp -rf${OPT_VERBOSE} ../${MF} .
+    # remove bazaar control files
+    rm -rf${OPT_VERBOSE} ${MF}/.bzr
+    # create archives
+    tar zcf ../${MF}.tgz ${MF}
+    cp -fv ../${MF}.tgz ../${TARBALL_FILE}
+    # change back to the directory which was zipped as tarball
+    cd ../${MF}
 
-  echo -e "\nMindForger TARBALL archives created using work/:\n  mindforger_1.55.4.orig.tar.gz\n  mindforger_1.55.4.tgz"
+    echoStepDone "TARBALL archive created in $(pwd)/..:"
+    ls -l ../*.gz
 }
 
 # ############################################################################
-# # Patch qmake location (if needed) #
+# # Patch qmake location (if needed)
 # ############################################################################
 
 function patchQmakePathInMakefile {
@@ -118,8 +176,10 @@ function patchQmakePathInMakefile {
 }
 
 # ############################################################################
-# # Release for *ONE* particular Ubuntu version #
+# # Release for *ONE* particular Ubuntu version
 # ############################################################################
+# - this is the main() function of this script
+# - step by step it releases MindForger for one particular Ubuntu version
 
 function releaseForParticularUbuntuVersion {
     export SCRIPTHOME=`pwd`
@@ -134,38 +194,46 @@ function releaseForParticularUbuntuVersion {
     export MFBUILD=mindforger-${NOW}
     
     # 1) clean up
-    echo -e "\n# Cleanup ####################################################"
+    echoStep "Cleanup"
     rm -rvf *.*~ ./debian
     
-    # 2) checkout MindForger from Launchpad's bazaar to work directory (will be needed to build SOURCE .deb package)
-    echo -e "\n# Checkout MindForger from Launchpad's Bazaar ################"
+    # 2) checkout MindForger from Launchpad's bazaar to work directory
+    #    (will be needed to build SOURCE .deb package)
+    echoStep "Checkout MF from LaunchPad bazaar"
     mkdir ${MFBUILD}
     cd ${MFBUILD}
     checkoutMindforger ${MF} ${MFSRC}
 
     # 3) update Debian control files (changelog, descriptor, ...) in bzr clone
-    echo -e "\n# Building deb ###############################################"
+    echoStep "Create Debian control files"
     cd mindforger && cp -rvf ${MFSRC}/build/ubuntu/debian .
     createChangelog ./debian/changelog
+    echo "Changelog:"
+    cat ./debian/changelog
 
-    # 4) prepare MindForger dependencies/libraries
-    echo -e "\n---------------------------------------------------------------"
-    echo "4.1) build MF dependencies/libs: cmark-gfm, ..."
-    rm -rvf deps/cmark-gfm/build
+    # 4) build MF dependencies
+    echoStep "Build MindForger library dependencies: cmark-gfm"
+    rm -rf${OPT_VERBOSE} deps/cmark-gfm/build
     cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . && cd ../../..
-        
-    echo -e "\n---------------------------------------------------------------"
-    echo "4.2) Qt: generate Makefiles using qmake"
+    echoStepDone "cmark-gfm build"
+    # cmark-gfm static library:
+    ls -l deps/cmark-gfm/build/src/libcmark-gfm.a
+    if [[ $? -eq 0 ]] ; then echo "  SUCCESSFULL"; else echo "  FAILED"; exit 1; fi
+    
+    # 5) generate MF Makefiles using qmake
+    echoStep "Generate Makefiles using qmake"
     cd ..
     mv mindforger ${MF}
     cd ${MF}
-    # qt version MUST be specified as it CANNOT be configured by installing
+    # Qt version MUST be specified as it CANNOT be configured by installing
     # qt5-default package: Debian control file does NOT allow virtual packages
-    # like this qt5-default. Instead debian/rules file exports env var w/ Qt choice
+    # like this qt5-default.
+    # Instead debian/rules file exports env var w/ Qt choice
     # .pro file is also extended to have 'make install' target
     qmake -r mindforger.pro
-    # PATCH optionally patch source files e.g. different Ubuntu distro specific paths
-    echo "  PATCH files prior TARBALL in '`pwd`'"
+    
+    # 6) optionally PATCH source files e.g. different Ubuntu distro specific paths
+    echoStep "Patch Makefiles - fix Qt paths for Ubuntu versions"
     #if [[ "xenial" = "${UBUNTUVERSION}" ]]
     #then
 	patchQmakePathInMakefile "Makefile"
@@ -173,35 +241,32 @@ function releaseForParticularUbuntuVersion {
 	patchQmakePathInMakefile "lib/Makefile"
 	patchQmakePathInMakefile "lib/src/Makefile"
     #fi
-    
-    # xxx LATER
-    # xxx LATER
-    # xxx LATER
-    # 5) add new version to LOCAL Bazaar
-    #echo -e "\n# bazaar add & commit  #######################################"
-    #bzr add .
-    # IMPORTANT: commit UPLOADs branch to server
-    #bzr commit -m "Update for ${MF} at ${NOW}."
 
-    # 5) create tarball ~ .tgz archive w/ source and required Debian cfg files
+    # 7) create tarball ~ .tgz archive w/ source and required Debian cfg files
     echo -e "\n---------------------------------------------------------------"
     echo -e "5.1) create TARBALL: prepare files to work/ directory"
     createTarball
     
-    # start GPG agent if it's NOT running
-    echo -e "\n---------------------------------------------------------------"
-    echo -e "5.2) GPG agent: start agent process if it is NOT running"
+    # 8) start GPG agent if it's NOT running
+    echoStep "Start GPG agent process (if it is NOT running)"
     if [ -e "${HOME}/.gnupg/S.gpg-agent" ]
     then
 	echo "OK: GPG agent running."
     else
 	gpg-agent --daemon
     fi    
-    
-    # 6) build SOURCE .deb package
-    echo -e "\n# source & binary .deb packages  ######################################"
-    echo -e "\n---------------------------------------------------------------"
-    echo -e "6.1) build SIGNED SOURCE .deb package on HOST system (not FAKEROOT build) using sources prepared by TARBALL in work/ directory"
+
+    # 9) add new version to LOCAL Bazaar branch (which will be used for .deb build)
+    echoStep "add & commit ${MF} prepared files to the current bazaar branch"
+    bzr add .
+    # IMPORTANT: commit UPLOADs branch to server
+    # https://code.launchpad.net/~ultradvorka/+junk/mindforger
+    #   ^ browse changes/code and pushes @ Launchpad
+    bzr commit -m "Update for ${MF} at ${NOW}."
+
+    # 10) build SOURCE .deb package (copy sources, add control files and .tgz it to get .deb package)
+    echoStep "Build SIGNED SOURCE .deb package from bzr branch"
+    echo "  Building .deb package on HOST system (not FAKEROOT build) using sources prepared by TARBALL in bazaar work/ directory:"
     pwd
     # Build of SOURCE .deb package
     #   - build is made using Makefile(s) generated by qmake ABOVE
@@ -217,22 +282,25 @@ function releaseForParticularUbuntuVersion {
     #   -b  ... build BINARY package (SOURCE package otherwise w/ -S)
     #   -i  ... ignore build-in deps conflicts
     # doc and man:
+    #   http://doc.bazaar.canonical.com/plugins/en/builddeb-plugin.html
     #   http://manpages.ubuntu.com/manpages/xenial/en/man1/dpkg-buildpackage.1.html
     #   http://manpages.ubuntu.com/manpages/xenial/en/man1/debuild.1.html
     #   man debuild
     # build SIGNED source .deb package:
-    bzr builddeb --source
-    # verify build result
+    bzr builddeb --verbose --source
+    # verify build result and EXIT on failure
     build_status=$?
-    echo -e "SOURCE .deb package build on HOST system (buildarea/mindforger_<major>.<minor>.<patch>.orig.tar.gz):"
-    [ $build_status -eq 0 ] && echo "  SUCCESSFULL" || exit 1
+    echo -e "DONE: SOURCE .deb package build on HOST system (buildarea/mindforger_<major>.<minor>.<patch>.orig.tar.gz):"
+    if [[ $build_status -eq 0 ]] ; then echo "  SUCCESSFULL"; else echo "  FAILED"; exit 1; fi
     
-    # 7) build BINARY .deb from source deb on CLEAN system - no deps installed
-    echo -e "\n# CLEAN SYSTEM MindForger build by pbuilder @ FAKEROOT #########"
-    echo -e "5.4) build SIGNED BINARY .deb package on FAKEROOT system using sources prepared by SOURCE .deb build"
+    # 11) build BINARY .deb from source .deb on CLEAN system - no deps installed
+    echoStep "Build SIGNED BINARY .deb package from source .deb (created in previous step) on CLEAN system (FAKEROOT mounted) - this is actual deps installation, compilation and link of the executable to create .deb file with the binary, HOWEVER, the binar .deb is NOT uploaded, this steps is made just to verify that the build will NOT fail on Launchpad (for the build is used just signed .dsc file)"
     # Build is made using Makefile(s) generated by qmake above:
+    #   - build is made using GPG signed .dsc file which pbuild-dist takes as a parameter
+    #     - .dsc files was created in the previous steps for .deb files
     #   - build-area/ directory created by SOURCE `bzr buildeb` in the previous step
     #     is used to build MindForger using `pbuilder-dist` on fakeroot system
+    #   - OUTPUT of the pbuild-dist is stored in /tmp/mindforger-pbuilder-tmp/<ubuntu version name>_result
     #   - IMPORTANT: pbuilder's caches in /var and /home MUST be on same physical drive
     #     as build-area/
     #   - WARNING: mindforger/Makefile contains path to qmake which was determined
@@ -241,9 +309,6 @@ function releaseForParticularUbuntuVersion {
     #   - DEBUG: /var/cache/pbuilder          ... last build's artifacts
     #   - DEBUG: /var/cache/pbuilder/base.tgz ... last build's distro of Ubuntu
     #   - DEBUG: ~/pbuilder                   ... Ubuntu distro snapshots ^
-    # DRY RUN
-    #   cd /home/dvorka/p/mindforger/launchpad/mindforger-2021-12-26--09-17-35/build-area && export PBUILDFOLDER=/tmp/mindforger-pbuilder-tmp && rm -rvf ${PBUILDFOLDER} ; mkdir -p ${PBUILDFOLDER} ; cp -rvf ~/pbuilder/*.tgz ${PBUILDFOLDER} ; pbuilder-dist xenial build mindforger_1.55.4-0ubuntu1.dsc
-    # SHARP run:
     cd ../build-area
     # CLEAN build directory for pbuilder in tmp/
     export PBUILDFOLDER=/tmp/mindforger-pbuilder-tmp
@@ -255,40 +320,38 @@ function releaseForParticularUbuntuVersion {
     echo "  Running 'pbuilder-dist ${UBUNTUVERSION} build ${MFRELEASE}.dsc' in '`pwd`'"
     echo "    - mindfoger_<major>.<minor>.<patch>-0ubuntu1.dsc ... control descriptor according to which is build made"
     echo "    - mindfoger_<major>.<minor>.<patch>.orig.tar.gz  ... TARBALL w/ Debian control files used to build .deb"
+    # pbuild-dist help: https://wiki.ubuntu.com/PbuilderHowto
     pbuilder-dist ${UBUNTUVERSION} build ${MFRELEASE}.dsc
     # VERIFY pbuilder-dist build result
     build_status=$?
-    echo -e "BINARY .deb package build on FAKEROOT system (${PBUILDFOLDER}):"
-    [ $build_status -eq 0 ] && echo "  SUCCESSFULL" || exit 1
-        
-    # 8) upload updated sources to Launchpad: push Bazaar and put changes
-    echo -e "\n# bzr push .deb to Launchpad ###################################"    
-    # from buildarea/ to ./dist
-    cd ../${MF}
-    echo "Before bzr push: " `pwd`
+    echo -e "DONE: BINARY .deb package build on FAKEROOT system, result stored to ${PBUILDFOLDER}/${UBUNTUVERSION}_result:"
+    if [[ $build_status -eq 0 ]] ; then echo "  SUCCESSFULL"; else echo "  FAILED"; exit 1; fi
 
-    # TODO commit in bzr first
-    
-    echo -e "SKIPPED FOR NOW"
-    echo -e "SKIPPED FOR NOW"
-    echo -e "SKIPPED FOR NOW"
-    exit 0
-    exit 0
-    exit 0
-    
-    bzr push lp:~ultradvorka/+junk/mindforger
-    cd ..
-    echo "Before dput push: " `pwd`
-    # recently added /ppa to fix the path and package rejections
-    # MF PPA w/ 64b build only
-    dput ppa:ultradvorka/productivity ${MFRELEASE}_source.changes
-    # SKIP: HSTR PPA w/ 64b 32b and ARM builds
-    #dput ppa:ultradvorka/ppa ${MFRELEASE}_source.changes
+    if [[ ${OPT_DO_PUSH} == "true" ]]
+    then
+       # 12) push updated sources to Launchpad bazaar server
+       echoStep "Push updated sources to Launchpad bazaar"
+       cd ../${MF}
+       echo "Invoking bzr push in: $(pwd)"
+       bzr push lp:~ultradvorka/+junk/mindforger
+
+       if [[ ${OPT_DO_RELEASE} == "true" ]]
+       then       
+	   cd ..
+	   echo "Invoking dput in: $(pwd)"
+	   ls -l ${MFRELEASE}_source.changes
+	   # recently added /ppa to fix the path and package rejections
+	   # MF PPA w/ 64b build only
+	   dput ppa:ultradvorka/productivity ${MFRELEASE}_source.changes
+	   # SKIP: MF PPA w/ 64b 32b and ARM builds
+	   #dput ppa:ultradvorka/ppa ${MFRELEASE}_source.changes
+       fi
+    fi
 }
 
-# ############################################################################
-# # Main #
-# ############################################################################
+#############################################################################
+# Main
+#############################################################################
 
 if [ -e "../../.git" ]
 then
@@ -296,20 +359,15 @@ then
     exit 1
 fi
 
-export ARG_MAJOR_VERSION=1.55.
-export ARG_MINOR_VERSION=4 # minor version is incremented for every Ubuntu version
-export ARG_BAZAAR_MSG="MindForger ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} release."
+export BAZAAR_MSG="MindForger ${MF_VERSION} release."
 
-# https://wiki.ubuntu.com/Releases
-# obsolete: precise quantal saucy precise utopic vivid wily yakkety artful cosmic
-# current : (trusty) xenial bionic (cosmic disco eoan) focal (groovy) hirsute impish
-# xenial bionic focal hirsute impish
-# WIP: trusty xenial bionic focal hirsute impish
-for UBUNTU_VERSION in bionic
+for UBUNTU_VERSION in ${UBUNTU_VERSIONS}
 do
-    echo "Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
-    releaseForParticularUbuntuVersion ${UBUNTU_VERSION} ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} "${ARG_BAZAAR_MSG}"
-    ARG_MINOR_VERSION=`expr $ARG_MINOR_VERSION + 1`
+    echo -e "\n###################################################"
+    echo "# Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
+    echo "###################################################"
+    releaseForParticularUbuntuVersion ${UBUNTU_VERSION} "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" "${BAZAAR_MSG}"
+    MINOR_VERSION=`expr $MINOR_VERSION + 1`
 done
 
 # eof

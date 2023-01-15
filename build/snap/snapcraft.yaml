@@ -1,0 +1,42 @@
+# snapcraft.yaml     snap builder configuration
+#
+# MindForger knowledge management tool
+#
+# Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# https://docs.snapcraft.io/build-snaps/your-first-snap
+#
+
+name: mindforger
+version: '0.55.0'
+base: core18 # build core on Ubuntu 18.04 LTS
+version: git
+grade: stable
+summary: Markdown Editor and Thinking Notebook
+description: |
+  MindForger is open, free, well performing Markdown editor which respects
+  your privacy and enables security. MindForger is actually more than
+  an editor or IDE - it's human mind inspired personal knowledge management tool.
+confinement: devmode
+# confinement: classic
+
+apps:
+  mindforger:
+    command: desktop-launch bin/mindforger
+    plugs:
+    - home
+
+...
