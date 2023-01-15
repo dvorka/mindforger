@@ -23,7 +23,9 @@ namespace m8r {
 
 using namespace std;
 
-OrganizersTableModel::OrganizersTableModel(QObject* parent, HtmlOutlineRepresentation* htmlRepresentation)
+OrganizersTableModel::OrganizersTableModel(
+    QObject* parent, HtmlOutlineRepresentation* htmlRepresentation
+)
     : QStandardItemModel(parent), htmlRepresentation(htmlRepresentation)
 {
     setColumnCount(1);

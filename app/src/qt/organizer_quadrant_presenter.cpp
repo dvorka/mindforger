@@ -111,8 +111,9 @@ void OrganizerQuadrantPresenter::slotShowSelectedNote()
     }
 }
 
-void OrganizerQuadrantPresenter::slotShowNote(const QItemSelection& selected, const QItemSelection& deselected)
-{
+void OrganizerQuadrantPresenter::slotShowNote(
+        const QItemSelection& selected, const QItemSelection& deselected
+) {
     Q_UNUSED(deselected);
 
     QModelIndexList indices = selected.indexes();

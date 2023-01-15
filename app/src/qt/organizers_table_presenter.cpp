@@ -22,8 +22,9 @@ namespace m8r {
 
 using namespace std;
 
-OrganizersTablePresenter::OrganizersTablePresenter(OrganizersTableView* view, HtmlOutlineRepresentation* htmlRepresentation)
-{
+OrganizersTablePresenter::OrganizersTablePresenter(
+    OrganizersTableView* view, HtmlOutlineRepresentation* htmlRepresentation
+) {
     this->view = view;
     this->model = new OrganizersTableModel(this, htmlRepresentation);
     this->view->setModel(this->model);

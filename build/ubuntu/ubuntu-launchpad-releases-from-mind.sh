@@ -56,10 +56,12 @@ export MF_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" # semanti
 export RM_CMD="rm -vrf "
 export CP_CMD="cp -vrf "
 
+export OPT_VERBOSE="v"
+export OPT_DO_PUSH="false" # "true" to upload src to bazaar
+export OPT_DO_RELEASE="false" # "true" to dpush binary .deb to Launchpad and TRIGGER release
+
 # shell variables
-OPT_VERBOSE="v"
-OPT_DO_PUSH="false" # "true" to upload src to bazaar
-OPT_DO_RELEASE="false" # "true" to dpush binary .deb to Launchpad and TRIGGER release
+# ...
 
 # ########################################################################
 # # Helpers

@@ -93,7 +93,8 @@ void OrganizerQuadrantModel::addRow(
         // item
         item = new QStandardItem(html);
         item->setToolTip(html);
-        // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
+        // TODO under which ROLE this is > I should declare CUSTOM role
+        //   (user+1 as constant)
         item->setData(QVariant::fromValue(note));
         items += item;
     } else {
@@ -104,7 +105,8 @@ void OrganizerQuadrantModel::addRow(
         // item
         item = new QStandardItem(html);
         item->setToolTip(html);
-        // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
+        // TODO under which ROLE this is > I should declare CUSTOM role
+        //   (user+1 as constant)
         item->setData(QVariant::fromValue(note));
         items += item;
     }

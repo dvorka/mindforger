@@ -41,7 +41,9 @@ public:
     static const int NO_ROW = -1;
 
 public:
-    explicit OrganizersTablePresenter(OrganizersTableView* view, HtmlOutlineRepresentation* htmlRepresentation);
+    explicit OrganizersTablePresenter(
+        OrganizersTableView* view, HtmlOutlineRepresentation* htmlRepresentation
+    );
     OrganizersTablePresenter(const OrganizersTablePresenter&) = delete;
     OrganizersTablePresenter(const OrganizersTablePresenter&&) = delete;
     OrganizersTablePresenter &operator=(const OrganizersTablePresenter&) = delete;

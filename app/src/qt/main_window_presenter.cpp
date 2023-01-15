@@ -1161,8 +1161,12 @@ void MainWindowPresenter::sortAndSaveOrganizersConfig()
 
 void MainWindowPresenter::doActionViewOrganizers()
 {
-    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-        orloj->showFacetOrganizerList(config.getRepositoryConfiguration().getOrganizers());
+    if(config.getActiveRepository()->getMode()
+       == Repository::RepositoryMode::REPOSITORY
+    ) {
+        orloj->showFacetOrganizerList(
+            config.getRepositoryConfiguration().getOrganizers()
+        );
     }
 }
 

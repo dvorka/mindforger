@@ -64,7 +64,9 @@ const string EisenhowerMatrix::getSortByAsStr() {
 }
 
 EisenhowerMatrix* EisenhowerMatrix::createEisenhowMatrixOrganizer() {
-    EisenhowerMatrix* eisenhowerMatrixOrganizer = new EisenhowerMatrix("Eisenhower Matrix");
+    EisenhowerMatrix* eisenhowerMatrixOrganizer = new EisenhowerMatrix(
+        "Eisenhower Matrix"
+    );
     eisenhowerMatrixOrganizer->setKey(EisenhowerMatrix::KEY_EISENHOWER_MATRIX);
 
     eisenhowerMatrixOrganizer->setUpperRightTag("important & urgent");

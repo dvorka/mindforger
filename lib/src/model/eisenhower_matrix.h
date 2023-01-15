@@ -37,7 +37,8 @@ public:
     static constexpr const auto CONFIG_VALUE_SORT_BY_I = "importance";
     static constexpr const auto CONFIG_VALUE_SORT_BY_U = "urgency";
 
-    static constexpr const auto KEY_EISENHOWER_MATRIX = "/m1ndf0rg3r/organizers/eisenhower-matrix";
+    static constexpr const auto KEY_EISENHOWER_MATRIX =
+        "/m1ndf0rg3r/organizers/eisenhower-matrix";
 
     static std::string createEisenhowerMatrixKey();
 

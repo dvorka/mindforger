@@ -45,6 +45,7 @@ Code style:
 * Use `{}` with constructor having 0/1 parameter, () otherwise.
 * `CamelCase` class names (no underscores).
 * Lines to have at most 88 columns.
+  - Guide in Qt Creator: `Tools` > `Options` > `Text editor` > `Display` > `Display right margin at column` = 88
 * 4 spaces indentation.
 * Python's black like formatting.
 * Use `/lib/src` source code as code style reference.

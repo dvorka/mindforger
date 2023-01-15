@@ -53,8 +53,9 @@ MarkdownRepositoryConfigurationRepresentation::~MarkdownRepositoryConfigurationR
  * as ROBUST as possible ~ handle eventual user typos and incorrect
  * formatting.
  */
-void MarkdownRepositoryConfigurationRepresentation::repositoryConfiguration(vector<MarkdownAstNodeSection*>* ast, Configuration& c)
-{
+void MarkdownRepositoryConfigurationRepresentation::repositoryConfiguration(
+    vector<MarkdownAstNodeSection*>* ast, Configuration& c
+) {
     c.getRepositoryConfiguration().clear();
 
     if(ast) {
@@ -239,7 +240,8 @@ Organizer* MarkdownRepositoryConfigurationRepresentation::repositoryConfiguratio
         }
         set<string>::iterator it = keys.find(o->getKey());
         if(it != keys.end()) {
-            cerr << "Error: skipping '" << o->getName() << "' organizer as another organizer "
+            cerr << "Error: skipping '" << o->getName()
+                 << "' organizer as another organizer "
                  << "with key '" << o->getKey() << "' is already defined" << endl;
             delete o;
             return nullptr;
