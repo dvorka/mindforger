@@ -28,16 +28,17 @@ MF_MAKER_WORKING_DIR := $(MINDFORGER_RELEASE_BASE_DIR)/maker-at-work
 CLASS_NAME := "New_Class"
 # l10n language: en, cs
 MF_LANG := "en"
-
+# Ubuntu distro: trusty xenial bionic focal jammy kinetic
+DISTRO := "bionic"
 
 .PHONY: help
 help:
-	@echo "MindForger tooling help:"
+	@echo "MindForger Swiss knife help:"
 	@echo "git-subs-update   update git submodules"
 	@echo "gen-lib-class     generate lib C++ class skeleton: CLASS_NAME=My_Class"
 	@echo "gen-ui-class      generate UI C++ class skeleton: CLASS_NAME=My_Class"
 	@echo "clean             clean build artifacts"
-	@echo "build             build MindForger binary"
+	@echo "build             build MindForger application binary"
 	@echo "l10n              update and release localization strings: MF_LANG=en"
 	@echo "test-lib          compile and run lib/ unit tests"
 	@echo "test-app          compile and run app/ integration tests"
@@ -47,6 +48,8 @@ help:
 	@echo "dist-rpm          build .rpm package on Fedora"
 	@echo "dist-dmg          build macOS Disk iMaGe .dmg package"
 	@echo "dist-debian-ppa   add .deb to aptly PPA"
+	@echo "dist-ubuntu-deb   locally build .deb for any Ubuntu version:"
+	@echo "                  DISTRO=focal"
 	@echo "statistic         show source code statistic"
 	@echo "doc-to-wiki       mindforger-documentation to mindforger.wiki"
 	@echo "api-reference     generate Doxygen documentation"
@@ -147,6 +150,15 @@ dist-dmg:
 .PHONY: dist-debian-ppa
 dist-debian-ppa:
 	cd debian && ./debian-aptly-add-deb.sh
+
+
+.PHONY: dist-ubuntu-deb
+dist-ubuntu-deb:
+	@echo "Building Ubuntu $(DISTRO) .deb ..."
+	@echo "Copying latest version of .sh script to launchpad/ ..."
+	@echo "Running .sh script ..."
+	@echo "Copying .deb from build area to the current directory ..."
+	false
 
 
 .PHONY: dist-all-clean
