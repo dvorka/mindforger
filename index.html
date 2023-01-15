@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html>
+    <title>MindForger - Thinking Notebook and Markdown Editor</title>
+    <!-- https://validator.w3.org https://tinypng.com/ -->
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
+    <meta name="DC.title" content="MindForger"/>
+    <meta name="DC.creator" content="Martin.Dvorak@mindforger.com"/>
+    <meta name="DC.description" content="Thinking notebook and Markdown editor web site home page."/>
+
+    <meta name="Author" content="Martin.Dvorak@mindforger.com"/>
+    <meta name="Keywords" content="Markdown, notebook, editor, AI, ML, IDE, machine learning, ML, outliner, semantic web, coaching, GROW, SMART" lang="en"/>
+    <meta name="Description" content="Thinking notebook and Markdown editor web site home page" lang="en"/>
+    <meta name="Robots" content="index,FOLLOW"/>
+    <meta name="resource-type" content="document"/>
+    <meta http-equiv="Cache-Control" content="public"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" type="text/css" href="./css/w3.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/stylesheet.css"/>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+    <link rel="alternate" type="application/atom+xml" title="MindForger Blog" href="http://blog.mindforger.com//atom.xml"/>
+
+    <!-- parallax -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif;}
+    body, html {
+	height: 100%;
+	color: #000;
+	line-height: 1.8;
+    }
+
+    /* Create a Parallax Effect */
+    .bgimg-1 {
+	background-attachment: fixed;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+    }
+
+    /* First image: Pinta/Adjustments/Brightness/-50 */
+    .bgimg-1 {
+	background-image: url('./images/parallax/1-title-screen.jpg');
+	min-height: 100%;
+    }
+    
+    .w3-wide {letter-spacing: 10px;}
+    .w3-hover-opacity {cursor: pointer;}
+
+    /* Turn off parallax scrolling for tablets and phones */
+    @media only screen and (max-device-width: 1024px) {
+	.bgimg-1 {
+	    background-attachment: scroll;
+        }
+    }
+    </style>
+<body>
+  
+<!-- Top Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-white" id="myNavbar">
+    <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <!-- https://www.w3schools.com/icons/fontawesome_icons_webapp.asp -->
+    <a href="#download" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-download"></i> Download</a>
+    <a href="#home" class="w3-bar-item w3-button">🇺🇦&nbsp;MindForger</a>
+    <a href="#contribute" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-keyboard-o"></i> Contribute</a>
+    <a href="#community" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-user"></i> Community</a>
+    <a href="#features" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-th"></i> Features</a>
+    <a href="#vision" class="w3-bar-item w3-button w3-hide-small w3-right"><i class="fa fa-eye"></i> Vision</a>
+  </div>
+
+  <!-- Navbar on small screens -->
+  <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium">
+    <a href="#vision" class="w3-bar-item w3-button" onclick="toggleFunction()">Vision</a>
+    <a href="#features" class="w3-bar-item w3-button" onclick="toggleFunction()">Features</a>
+    <a href="#community" class="w3-bar-item w3-button" onclick="toggleFunction()">Community</a>
+    <a href="#contribute" class="w3-bar-item w3-button" onclick="toggleFunction()">Contribute</a>
+    <a href="#download" class="w3-bar-item w3-button" onclick="toggleFunction()">Download</a>
+  </div>
+</div>
+
+<!-- First Parallax Image with Logo Text -->
+<div class="bgimg-1 w3-display-container DISABLED_w3-opacity-min" id="home">
+  <a href="https://github.com/dvorka/mindforger" target="_blank"><img style="position: absolute; top: 30px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+  <div class="w3-display-middle" style="white-space:nowrap;">
+    <center>
+      <span id="mfPagetTitle" class="w3-center w3-padding-large w3-white w3-xxxlarge w3-wide w3-animate-opacity mfPagetTitle">
+	&nbsp;Thinking Notebook&nbsp;<br/>
+	&nbsp;&amp;&nbsp;<br/>
+	&nbsp;Markdown Editor&nbsp;
+      </span>
+    </center>
+  </div>
+</div>
+
+
+<div class="w3-row w3-center w3-black w3-padding-16">
+  <div class="w3-section">
+    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Vision</span><br>
+  </div>
+</div>
+
+
+<!-- Container: Vision -->
+<div class="w3-content w3-container w3-padding-64" id="vision">
+
+   <div class="w3-container w3-center" style="margin-bottom: 30px;">
+      Are you <b>drowning</b> in <b>information</b>, but <b>starving</b> for <b>knowledge</b>?
+      <br/><br/>
+
+      Where do you
+      keep your <b>private remarks</b> like ideas, personal plans, exam preparation notes, gift tips,
+      how-tos, dreams, business visions, finance strategies, meeting minutes and auto
+      coaching notes? Loads of documents, sketches and remarks spread
+      around the file system, cloud, web and Post-it notes? Are you afraid of your knowledge <b>privacy</b>? Are you able to
+      <b>find</b> particular remarks once you create them? Do you know how are the remarks
+      mutually <b>related</b> when you browse, read or write them? No?
+   </div>
+   
+   <!-- screenshots -->
+   <div class="w3-content" style="max-width:1200px">
+     <img class="mySlidesVision" src="images/screenshots/tayr.png" style="width:100%">
+     <img class="mySlidesVision" src="images/screenshots/knowledge-graph-navigator-light.png" style="width:100%">
+     <img class="mySlidesVision" src="images/screenshots/markdown-images.png" style="width:100%">
+     <img class="mySlidesVision" src="images/screenshots/hoisting.png" style="width:100%">
+     <img class="mySlidesVision" src="images/screenshots/i18n.png" style="width:100%">
+     <img class="mySlidesVision" src="images/screenshots/tayw.png" style="width:100%">
+
+     <div class="w3-row-padding w3-section">
+       <div class="w3-col s2 mfSlideThumbnail">
+	 <img class="visionChoice w3-opacity" src="images/screenshots/tayr.png" style="width:100%" onclick="currentDivVision(1)">
+	 Think as you read
+       </div>
+       <div class="w3-col s2 mfSlideThumbnail">
+	 <img class="visionChoice w3-opacity" src="images/screenshots/knowledge-graph-navigator-light.png" style="width:100%" onclick="currentDivVision(2)">
+	 Knowledge graph
+       </div>
+       <div class="w3-col s2 mfSlideThumbnail">
+	 <img class="visionChoice w3-opacity" src="images/screenshots/markdown-images.png" style="width:100%" onclick="currentDivVision(3)">
+	 Markdown with preview
+       </div>
+       <div class="w3-col s2 mfSlideThumbnail">
+	 <img class="visionChoice w3-opacity" src="images/screenshots/hoisting.png" style="width:100%" onclick="currentDivVision(4)">
+	 Hoisting
+       </div>
+       <div class="w3-col s2 mfSlideThumbnail">
+	 <img class="visionChoice w3-opacity" src="images/screenshots/i18n.png" style="width:100%" onclick="currentDivVision(5)">
+	 I18n
+       </div>
+       <div class="w3-col s2 mfSlideThumbnail">
+	 <img class="visionChoice w3-opacity" src="images/screenshots/tayw.png" style="width:100%" onclick="currentDivVision(6)">
+	 Think as you write
+       </div>
+     </div>
+   </div>
+   <script>
+   var slideIndexVision = 1;
+   showDivsVision(slideIndexVision);
+
+   function plusDivsVision(n) {
+     showDivsVision(slideIndexVision += n);
+   }
+
+   function currentDivVision(n) {
+     showDivsVision(slideIndexVision = n);
+   }
+
+   function showDivsVision(n) {
+     var i;
+     var x = document.getElementsByClassName("mySlidesVision");
+     var dots = document.getElementsByClassName("visionChoice");
+     if (n > x.length) {slideIndexVision = 1}
+     if (n < 1) {slideIndexVision = x.length}
+     for (i = 0; i < x.length; i++) {
+	x[i].style.display = "none";
+     }
+     for (i = 0; i < dots.length; i++) {
+	dots[i].className = dots[i].className.replace(" w3-opacity-off", "");
+     }
+     x[slideIndexVision-1].style.display = "block";
+     dots[slideIndexVision-1].className += " w3-opacity-off";
+   }
+   </script>
+
+   
+   <div class="w3-container w3-center" style="margin-top: 30px; margin-bottom: 30px;">
+     <b>MindForger</b> is
+     <a class="mf-link" href="#human-mind">human mind</a> inspired
+     <a class="mf-link" href="#personal">personal</a>
+     <a class="mf-link" href="#knowledge">knowledge</a>
+     <a class="mf-link" href="#management">management</a>
+     <a class="mf-link" href="#tool">tool</a>:     
+   </div>
+
+
+   <div class="group">
+     <div class="left">
+       <div class="mfGroupLeftText">Human&nbsp;Mind</div>
+     </div>
+     <div class="right" id="human-mind">
+       MindForger aims to mimic human mind - <b>learning</b>, <b>recalling</b>, <b>recognition</b>,
+       <b>associations</b>, <b>forgetting</b> - in order
+       to achieve <b>synergy</b> with your mind to make your searching,
+       reading and writing more productive.
+     </div>
+   </div>
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Personal</div>
+     </div>
+     <div class="right" id="personal">
+       MindForger ensures that you <b>own</b> your <b>personal</b> data.
+       It respects <b>privacy</b> and enables <b>security</b> of your knowledge.
+     </div>
+   </div>
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Knowledge</div>
+     </div>
+     <div class="right" id="knowledge">
+       MindForger seeks <b>knowledge</b> hidden in your remarks
+       to enable its <b>mining</b>.
+     </div>
+   </div>
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Management</div>
+     </div>
+     <div class="right" id="management">
+       MindForger starts where editors and search
+       engines end. It thinks as you search, browse, read and write. Once you <b>find</b>
+       a remark, MindForger brings its associations. As you <b>browse</b> notes and <b>read</b>
+       them it looks up related relevant knowledge in your notebooks.
+       If you <b>edit</b> a remark, MindForger brings associations as you <b>write</b>.
+       It reminds you about existing content related to the text being written.
+     </div>
+   </div>
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Tool</div>
+     </div>
+     <div class="right" id="tool">
+       MindForger is a <b>desktop</b> application for Linux.
+     </div>
+   </div>   
+</div>
+
+
+<div class="w3-row w3-center w3-black w3-padding-16">
+  <div class="w3-section">
+    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Features</span><br>
+  </div>
+</div>
+
+
+<!-- Container: Features -->
+<div class="w3-content w3-container w3-padding-64" id="features">
+
+   <!-- screenshots -->
+   <div class="w3-content" style="max-width:1200px">
+     <img class="mySlidesFeatures" src="images/screenshots/multiple-documents.png" style="width:100%">
+     <img class="mySlidesFeatures" src="images/screenshots/refactoring.png" style="width:100%">
+     <img class="mySlidesFeatures" src="images/screenshots/stencils.png" style="width:100%">
+     <img class="mySlidesFeatures" src="images/screenshots/knowledge-graph-navigator-tags.png" style="width:100%">
+     <img class="mySlidesFeatures" src="images/screenshots/math.png" style="width:100%">
+     <img class="mySlidesFeatures" src="images/screenshots/recent.png" style="width:100%">
+
+     <div class="w3-row-padding w3-section">
+       <div class="w3-col s2 mfSlideThumbnail">
+	 <img class="featuresChoice w3-opacity" src="images/screenshots/multiple-documents.png" style="width:100%" onclick="currentDivFeatures(1)">
+	 Multiple documents
+       </div>
+       <div class="w3-col s2 mfSlideThumbnail">
+	 <img class="featuresChoice w3-opacity" src="images/screenshots/refactoring.png" style="width:100%" onclick="currentDivFeatures(2)">
+	 Refactoring
+       </div>
+       <div class="w3-col s2 mfSlideThumbnail">
+	 <img class="featuresChoice w3-opacity" src="images/screenshots/stencils.png" style="width:100%" onclick="currentDivFeatures(3)">
+	 Stencils
+       </div>
+       <div class="w3-col s2 mfSlideThumbnail">
+	 <img class="featuresChoice w3-opacity" src="images/screenshots/knowledge-graph-navigator-tags.png" style="width:100%" onclick="currentDivFeatures(4)">
+	 Tag navigator
+       </div>
+       <div class="w3-col s2 mfSlideThumbnail">
+	 <img class="featuresChoice w3-opacity" src="images/screenshots/math.png" style="width:100%" onclick="currentDivFeatures(5)">
+	 Math
+       </div>
+       <div class="w3-col s2 mfSlideThumbnail">
+	 <img class="featuresChoice w3-opacity" src="images/screenshots/recent.png" style="width:100%" onclick="currentDivFeatures(6)">
+	 Recent notes
+       </div>
+     </div>
+   </div>
+   <script>
+   var slideIndexFeatures = 1;
+   showDivsFeatures(slideIndexFeatures);
+
+   function plusDivsFeatures(n) {
+     showDivsFeatures(slideIndexFeatures += n);
+   }
+
+   function currentDivFeatures(n) {
+     showDivsFeatures(slideIndexFeatures = n);
+   }
+
+   function showDivsFeatures(n) {
+     var i;
+     var x = document.getElementsByClassName("mySlidesFeatures");
+     var dots = document.getElementsByClassName("featuresChoice");
+     if (n > x.length) {slideIndexFeatures = 1}
+     if (n < 1) {slideIndexFeatures = x.length}
+     for (i = 0; i < x.length; i++) {
+	x[i].style.display = "none";
+     }
+     for (i = 0; i < dots.length; i++) {
+	dots[i].className = dots[i].className.replace(" w3-opacity-off", "");
+     }
+     x[slideIndexFeatures-1].style.display = "block";
+     dots[slideIndexFeatures-1].className += " w3-opacity-off";
+   }
+   </script>
+
+  
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Refactoring</div>
+     </div>
+     <div class="right" id="refactoring">
+       MindForger provides IDE-style features for notes - they can be easily <b>cloned</b>,
+       <b>promoted</b>, <b>demoted</b>, <b>moved</b>, <b>extracted</b>, <b>refactored</b>
+       within one or across different Markdown files. MindForger connects conventional <a class="mf-link" target="_blank" href="http://outliners.scripting.com/">outline editor</a>
+       features with <a class="mf-link" target="_blank" href="https://en.wikipedia.org/wiki/Machine_learning">emerging technologies</a> to make you more productive.
+     </div>
+   </div>
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Stencils</div>
+     </div>
+     <div class="right" id="stencils">
+	 MindForger brings a basic set of <b>stencils</b> for quick creation of various notebook
+	 types - ranging from (regular) meeting minutes, software analysis and design documents to <b>S.M.A.R.T.E.R.</b> goals
+	 and <b>GROW model</b> templates.
+	 You can easily add your own notebook/note stencils to boost your (organization) performance.
+     </div>
+   </div>
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Analytics</div>
+     </div>
+     <div class="right" id="analytics">
+	 MindForger provides and will provide even more <b>metrics</b> and <b>integrity checks</b>.
+	 In addition your repository with Markdown (text based) files can be easily
+	 analyzed with variety of <a class="mf-link" target="_blank" href="http://www.predictiveanalyticstoday.com/top-free-software-for-text-analysis-text-mining-text-analytics/">tools
+	 for text analysis, mining and analytics</a>.
+     </div>
+   </div>
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Synchronization</div>
+     </div>
+     <div class="right" id="synchronization">
+	 Your data can be easily synchronized <b>among</b> all <b>your devices</b> (workstations,
+	 laptops, tablets, mobile phones) in a variety of ways. Use SCM (own Git, private <a class="mf-link" target="_blank" href="https://github.com/">GitHub</a> or
+	 <a class="mf-link" target="_blank" href="https://bitbucket.org">BitBucket</a> repo) and/or cloud drive (with custom encryption) you trust.
+     </div>
+   </div>
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Sharing</div>
+     </div>
+     <div class="right" id="sharing">
+	 If you need to securely <b>share</b> MindForger repository or Markdown file with
+	 somebody else (colleague, friend, customer), then simply use a secure protocol
+	 (like SSH) and/or remote private SCM repository (like Git) which enables <b>cooperation</b>.
+     </div>
+   </div>
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Backup</div>
+     </div>
+     <div class="right" id="backup">
+        You can easily create compressed <b>archive</b> with your data and store it as backup.
+        If you are fine with a remote private CMS repository or cloud drive,
+	then MindForger repository can be backed up incrementally in more than one location.
+     </div>
+   </div>
+</div>
+
+   
+<div class="w3-row w3-center w3-black w3-padding-16" id="floss">
+  <div class="w3-section">
+    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">FLOSS</span><br>
+  </div>
+</div>
+
+<!-- Container: FLOSS -->
+<div class="w3-content w3-container w3-padding-64">
+  
+  <!-- screenshots -->
+   <div class="w3-content" style="max-width:1200px">
+     <img class="mySlidesFloss" src="images/screenshots/eisenhower-matrix.png" style="width:100%">
+     <img class="mySlidesFloss" src="images/screenshots/grow-model.png" style="width:100%">
+     <img class="mySlidesFloss" src="images/screenshots/task-lists.png" style="width:100%">
+     <img class="mySlidesFloss" src="images/screenshots/dashboard.png" style="width:100%">
+     <img class="mySlidesFloss" src="images/screenshots/fts.png" style="width:100%">
+
+     <div class="w3-row-padding w3-section">
+      <div class="w3-col s4 mfSlideThumbnail">
+	      <img class="flossChoice w3-opacity" src="images/screenshots/eisenhower-matrix.png" style="width:100%" onclick="currentDivFloss(1)">
+	      Eisenhower matrix
+      </div>
+      <div class="w3-col s4 mfSlideThumbnail">
+	      <img class="flossChoice w3-opacity" src="images/screenshots/grow-model.png" style="width:100%" onclick="currentDivFloss(2)">
+	      G.R.O.W. model
+      </div>
+      <div class="w3-col s4 mfSlideThumbnail">
+	      <img class="flossChoice w3-opacity" src="images/screenshots/task-lists.png" style="width:100%" onclick="currentDivFloss(3)">
+	      Markdown with preview
+      </div>
+      <!-- size of images and aspect ratio to be fixed
+      <div class="w3-col s2 mfSlideThumbnail">
+        <img class="flossChoice w3-opacity" src="images/screenshots/dashboard.png" style="width:100%" onclick="currentDivFloss(4)">
+        Dashboard
+      </div>
+      <div class="w3-col s2 mfSlideThumbnail">
+        <img class="flossChoice w3-opacity" src="images/screenshots/fts.png" style="width:100%" onclick="currentDivFloss(5)">
+        Full-text search
+      </div -->
+    </div>
+   </div>
+   <script>
+   var slideIndexFloss = 1;
+   showDivsFloss(slideIndexFloss);
+
+   function plusDivsFloss(n) {
+     showDivsFloss(slideIndexFloss += n);
+   }
+
+   function currentDivFloss(n) {
+     showDivsFloss(slideIndexFloss = n);
+   }
+
+   function showDivsFloss(n) {
+     var i;
+     var x = document.getElementsByClassName("mySlidesFloss");
+     var dots = document.getElementsByClassName("flossChoice");
+     if (n > x.length) {slideIndexFloss = 1}
+     if (n < 1) {slideIndexFloss = x.length}
+     for (i = 0; i < x.length; i++) {
+	x[i].style.display = "none";
+     }
+     for (i = 0; i < dots.length; i++) {
+	dots[i].className = dots[i].className.replace(" w3-opacity-off", "");
+     }
+     x[slideIndexFloss-1].style.display = "block";
+     dots[slideIndexFloss-1].className += " w3-opacity-off";
+   }
+   </script>
+
+
+   <div class="w3-container w3-center" style="margin-top: 30px; margin-bottom: 30px;">
+     <b>MindForger</b> is
+     <a class="mf-link" href="#open-source">open</a>,
+     <a class="mf-link" href="#free">free</a>,
+     <a class="mf-link" href="#performance">well performing</a>
+     <a class="mf-link" href="#markdown-ide">Markdown editor</a><!-- TODO notebook > think as you read/write -->
+     which respects your
+     <a class="mf-link" href="#privacy">privacy</a> and enables
+     <a class="mf-link" href="#security">security</a>:
+   </div>
+
+
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Open</div>
+     </div>
+     <div class="right" id="open-source">
+       	 MindForger is <b>open source</b> software (<a href="https://en.wikipedia.org/wiki/Free_and_open-source_software" target="_blank" class="mf-link">FOSS</a>) - anybody
+	 can download, review and audit <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger">its source code</a>. MindForger also uses <b>open formats</b> -
+	 remarks are written in <a class="mf-link" target="_blank" href="https://daringfireball.net/projects/markdown/">Markdown</a>.
+	 Therefore you can edit them with any text
+	 or Markdown (
+	 <a class="mf-link" target="_blank" href="https://remarkableapp.github.io/">Remarkable</a>,
+	 <a class="mf-link" target="_blank" href="https://cloose.github.io/CuteMarkEd/">CuteMarkEd</a>,
+	 <a class="mf-link" target="_blank" href="https://n457.github.io/Uncolored/">UnColored</a>) editor.
+     </div>
+   </div>
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Free</div>
+     </div>
+     <div class="right" id="free">
+       Free software is primarily a matter of liberty, not price.
+       You are free to do what you want with your copy of a free software
+       regardless of how much is paid to obtain the program.
+       MindForger is licensed under
+       <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger/blob/master/LICENSE">free software license</a> +
+       you <b>don’t pay</b> for downloading and using MindForger.       
+     </div>
+   </div>
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Performance</div>
+     </div>
+     <div class="right" id="performance">
+	 Even initial MindForger implementation is able to work with relatively big Markdown files
+	 and repositories - <b>1000s</b> of sections and <b>100s</b> of files are parsed and indexed instantly and
+	 can be searched, viewed and edited without any problem.
+     </div>
+   </div>
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Privacy</div>
+     </div>
+     <div class="right" id="privacy">
+	 MindForger stores your data locally on your machine. It does
+	 <b>not upload anything anywhere</b>. Neither your data nor anonymized digest is uploaded to the Internet
+	 (cloud, server or service).
+     </div>
+   </div>
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Security</div>
+     </div>
+     <div class="right" id="security">
+	 MindForger repository can be easily <b>encrypted</b> using any tool by you e.g. <a class="mf-link" target="_blank" href="http://ecryptfs.org">ecryptfs</a>.
+     </div>
+   </div>
+
+
+</div>
+
+
+<div class="w3-row w3-center w3-black w3-padding-16">
+  <div class="w3-section">
+    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Community</span><br>
+  </div>
+</div>
+
+
+<!-- Container -->
+<div class="w3-content w3-container w3-padding-16" id="community">
+   <div id="community" class="w3-container w3-center w3-margin-top">
+     <br>
+     <b>Follow</b>
+     @mindforger on
+     <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger on GitHub">GitHub</a>,
+     <a href="https://twitter.com/mindforger" target="_blank" title="@mindforger on Twitter">Twitter</a>,
+     <!--
+     <a href="https://www.instagram.com/mindforger" target="_blank" title="@mindforger on Instagram">Instagram</a>, 
+     -->
+     <a href="https://groups.google.com/forum/#!forum/mindforger" target="_blank" title="@mindforger on Google Groups">Google Groups</a>, 
+     <a href="http://www.facebook.com/pages/MindForger/172099806154112" target="_blank" title="MindForger on Facebook">Facebook</a>
+     and
+     <a href="https://www.youtube.com/user/MindForgerChannel" target="_blank" title="MindForger on YouTube">YouTube</a>.
+   </div>
+</div>
+
+<div class="w3-content w3-container w3-padding-16">
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Getting Started</div>
+     </div>
+     <div class="right" id="open-source">
+       <iframe width="280" height="158" src="https://www.youtube.com/embed/PlW2e1X3O-I" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>       
+     </div>
+   </div>
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">First Steps</div>
+     </div>
+     <div class="right" id="open-source">
+       <iframe width="280" height="158" src="https://www.youtube.com/embed/UR49y3uNurs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>       
+     </div>
+   </div>
+</div>
+
+<div class="w3-row w3-center w3-black w3-padding-16">
+  <div class="w3-section">
+    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Content</span><br>
+  </div>
+</div>
+
+<!-- Container: Content -->
+<div class="w3-content w3-container w3-padding-16" id="contribute">
+  <div class="w3-container w3-center" style="margin-bottom: 30px; width: 80%; margin-left: 10%">
+     <br/>
+     If you want to try MindForger as Markdown editor/IDE, then
+     check examples below. Simply <b>clone</b> Git repository and <b>open</b> it from its root 
+     directory using MindForger:
+
+     <div style="font-size: x-small; margin-bottom: 30px;">
+     <br/><br/>
+     <b>JavaScript Algorithms</b><br/>
+     <code>git clone https://github.com/trekhleb/javascript-algorithms.git && cd javascript-algorithms && mindforger .</code>
+
+     <br/>
+     <b>ProGit</b><br/>
+     <code>git clone https://github.com/progit/progit && cd progit/en && mindforger .</code>
+     
+     <br/>
+     <b>Pure Bash Bible</b><br/>
+     <code>git clone https://github.com/dylanaraps/pure-bash-bible.git && cd pure-bash-bible && mindforger .</code>
+     </div>
+
+     Check <a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md#markdown-content-and-examples-" target="_blank">documentation</a> for more Markdown content examples.
+   </div>
+</div>
+
+
+<div class="w3-row w3-center w3-black w3-padding-16">
+  <div class="w3-section">
+    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Contribute</span><br>
+  </div>
+</div>
+
+
+<!-- Container: Contribute -->
+<div class="w3-content w3-container w3-padding-64" id="contribute">
+   <div class="w3-container w3-center" style="margin-bottom: 30px; width: 80%; margin-left: 10%">
+     Current <b>MindForger</b> implementation is just an initial imperfect sketch of much broader
+     <b>vision</b>. It's purpose is to <b>demonstrate</b> viability of thinking notebook idea and to <b>show</b>
+     possible research directions.
+   </div>
+
+
+   <!-- div class="w3-container w3-center" style="margin-top: 45px; margin-bottom: 0px;">
+     <iframe width="550" height="400" src="https://prezi.com/view/pMJ7bmdpTYDBi7nMKFdU/embed" webkitallowfullscreen="1" mozallowfullscreen="1" allowfullscreen="1"></iframe>
+   </div -->
+
+
+   <div id="contribute" class="w3-container w3-center" style="margin-top: 30px; margin-bottom: 30px; width: 50%; margin-left: 25%">
+       Feel free to <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger on GitHub" class="mf-link"><b>contribute</b></a>!
+       Don't hesitate to contact <a href="mailto:martin.dvorak@mindforger.com" class="mf-link">me</a>.
+   </div>
+
+   
+   <div class="group" style="margin-top: 10px;">
+     <div class="left">
+       <div class="mfGroupLeftText">Contribute</div>
+     </div>
+     <div class="right" style="text-align: left;">
+       <ul>
+	 <li><b>Bugs and suggestions</b> ... <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger on GitHub" class="mf-link">submit</a> bugs, issues, ideas and enhancements.
+	 <li><b>Translations</b> ... translate MindForger to your language.
+	 <li><b>Platform support</b> ... port MindForger to your favorite OS or distribution.
+	 <li><b>Code</b> ... <a href="https://github.com/dvorka/mindforger" target="_blank" title="@mindforger on GitHub" class="mf-link">submit pull request</a> or patch with implementation of a feature you missed.
+	 <li><b>Research</b> ... consider making your AI/ML, NLP, data mining, ... research on top of (your) documents indexed to MindForger ontology.
+	 <li><b>Integration</b> ... how-to or code enabling integration with your (favorite) project.
+	 <li><b>Enhancements</b> ... submit performance, efficiency and/or productivity enhancements.
+	 <li><b>Documentation</b> ... write a document, blog post or tweet, create YouTube video, ...
+       </ul>     
+     </div>
+   </div>
+</div>
+
+<div class="w3-row w3-center w3-black w3-padding-16">
+  <div class="w3-section">
+    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Releases</span><br>
+  </div>
+</div>
+
+<!-- Container: Releases -->
+<div class="w3-content w3-container w3-padding-16" id="contribute">
+   <div class="w3-container w3-center" style="width: 80%; margin-left: 10%">
+     <br/>
+     
+     MindForger releases:<br/>
+     <br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.54.0" target="_blank">Smart(er) editor and improved macOS version (1.54.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.53.0" target="_blank">Spell check, Kanban and Eisenhower Matrix on tags (1.53.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.52.0" target="_blank">Autolinking (1.52.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.51.0" target="_blank">Live preview (1.51.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.50.0" target="_blank">Dashboard, Link Completion, Image Drag&amp;Drop, FTS (1.50.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.49.0" target="_blank">Microsoft Windows and GitHub Flavored Markdown (1.49.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.48.0" target="_blank">CSV export and MathJax Menu (1.48.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.47.0" target="_blank">Knowledge Graph Navigator (1.47.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.46.0" target="_blank">Standard Terminology and Toolbar (1.46.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.43.0" target="_blank">Eisenhower Matrix, Tags View and Recent Notes (1.43.0)</a><br/>
+     <a href="https://github.com/dvorka/mindforger/releases/tag/1.42.0" target="_blank">Initial Release (1.42.0)</a><br/>
+     <br/>
+     <a href="https://raw.githubusercontent.com/dvorka/mindforger/master/Changelog">(changelog)</a>
+
+     <br/>     
+   </div>
+</div>
+
+<div class="w3-row w3-center w3-black w3-padding-16">
+  <div class="w3-section">
+    <img src="./images/mind-forger.png" style="margin-right: 5px; width: 57px; height: 57px;"/><span class="w3-xlarge">Download</span><br>
+  </div>
+</div>
+
+<!-- Container: Download -->
+<div class="w3-container w3-padding-64" id="download">
+   <div class="mfDownloadGroup">
+     <div class="mfDownloadLeft">
+       <div class="mfGroupLeftText">Install:</div>
+     </div>
+     <div class="mfDownloadRight">
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#windows-" target="_blank" class="mf-download-link">Windows</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#ubuntu-" target="_blank" class="mf-download-link">Ubuntu</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#debian-" target="_blank" class="mf-download-link">Debian</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#fedora-" target="_blank" class="mf-download-link">Fedora</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#arch-linux-" target="_blank" class="mf-download-link">Arch&nbsp;Linux</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#macos-" target="_blank" class="mf-download-link">macOS</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#wsl-" target="_blank" class="mf-download-link">Windows WSL</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#docker-" target="_blank" class="mf-download-link">Docker</a></div>
+     </div>
+   </div>
+   <div class="mfDownloadGroup">
+     <div class="mfDownloadLeft">
+       <div class="mfGroupLeftText">Download:</div>
+     </div>
+     <div class="mfDownloadRight">
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.exe</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.deb</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.rpm</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.dmg</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger/releases" target="_blank" class="mf-download-link">.tar.gz</a></div>
+     </div>
+   </div>
+   <div class="mfDownloadGroup">
+     <div class="mfDownloadLeft">
+       <div class="mfGroupLeftText">Build:</div>
+     </div>
+     <div class="mfDownloadRight">
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-windows-" target="_blank" class="mf-download-link">Windows</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-ubuntu-" target="_blank" class="mf-download-link">Ubuntu</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-debian-" target="_blank" class="mf-download-link">Debian</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-fedora-" target="_blank" class="mf-download-link">Fedora</a></div>      
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-macos-" target="_blank" class="mf-download-link">macOS</a></div>
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#build-on-wsl-" target="_blank" class="mf-download-link">Windows WSL</a></div>
+     </div>
+   </div>  
+   <div class="mfDownloadGroup">
+     <div class="mfDownloadLeft">
+       <div class="mfGroupLeftText">Source:</div>
+     </div>
+     <div class="mfDownloadRight">
+      <div class="mf-download-button"><a href="https://github.com/dvorka/mindforger" target="_blank" class="mf-download-link">GitHub</a></div>
+     </div>
+   </div>  
+</div>
+
+
+<!-- Footer -->
+<footer class="w3-center w3-black w3-padding-64">
+   <div class="w3-container w3-center w3-margin" style="padding-top: 20px;">
+     Created with passion for my personal pleasure.<br/>
+     Released on the day of my <a class="mf-link" target="_blank" href="https://en.wikipedia.org/wiki/42_(number)#The_Hitchhiker's_Guide_to_the_Galaxy">42nd</a> birthday to
+     confirm <a class="mf-link" target="_blank" href="https://www.youtube.com/watch?v=aboZctrHfK8">answer</a>
+     to the Ultimate Question of life, the Universe, and Everything.<br/>
+     <a class="mf-link" target="_blank" href="http://me.mindforger.com">Martin&nbsp;Dvorak</a> and <a class="mf-link" target="_blank" href="https://github.com/dvorka/mindforger/blob/master/CREDITS.md">contributors</a><br/>
+     2018-2023
+   </div>  
+</footer>
+ 
+<script>
+// Modal Image Gallery
+function onClick(element) {
+  document.getElementById("img01").src = element.src;
+  document.getElementById("modal01").style.display = "block";
+  var captionText = document.getElementById("caption");
+  captionText.innerHTML = element.alt;
+}
+
+// Used to toggle the menu on small screens when clicking on the menu button
+function toggleFunction() {
+    var x = document.getElementById("navDemo");
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+    } else {
+        x.className = x.className.replace(" w3-show", "");
+    }
+}
+</script>
+
+</body>
+</html>

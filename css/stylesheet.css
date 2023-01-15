@@ -1,0 +1,111 @@
+/* MindForger web CSS */
+
+/* download */
+ 
+.mf-download-button {    
+    background-color: #000;
+    color: #FFF;
+    margin: 10px;
+    padding: 10px;
+    float: left;
+}
+.mf-download-button:hover {
+    background-color: #4CAF50;
+    color: #FFF;
+    margin: 10px;
+    padding: 10px;
+    float: left;
+}
+a.mf-download-link {
+    margin: 10px;
+    padding: 10px;
+    color: #FFF;
+}
+
+/* W3C shools slideshow https://www.w3schools.com/howto/howto_js_slideshow.asp */
+/* Fading animation */
+
+.fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+}
+
+@keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+}
+
+/* responsive tables: download */
+
+.mfDownloadGroup {
+    content:"";
+    display: table;
+    clear: both;
+    
+    width: 90%;
+    margin-left: 5%;
+}
+.mfDownloadLeft {
+    float: left;
+    width: 25%;
+}
+.mfDownloadRight {
+    float: right;
+    width: 75%;
+}
+
+/* responsive tables: features */
+
+.left {
+    float: left;
+    width: 50%;
+}
+.right {
+    float: right;
+    width: 50%;
+}
+.group {
+    content:"";
+    display: table;
+    clear: both;
+    
+    width: 90%;
+    margin-left: 5%;
+}
+
+.mfSlideThumbnail {
+    font-size: smaller;
+    color: #888;	      
+}
+
+.mfGroupLeftText {
+    font-size: x-large;
+    margin: 10px;    
+}
+
+@media screen and (max-width: 600px) {
+    .left, 
+    .right,
+    .mfDownloadLeft,
+    .mfDownloadRight {
+        float: none;
+        width: auto;
+    }
+
+    .w3-xxxlarge {
+	font-size: 20px!important;
+    }
+
+    .mfSlideThumbnail {
+	display: none;
+    }
+}
+
+/* eof */
