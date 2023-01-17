@@ -19,8 +19,8 @@
 
 # https://wiki.ubuntu.com/Releases
 # old: precise quantal saucy precise utopic vivid wily trusty (old GCC) yakkety artful cosmic
-# current: trusty xenial bionic disco eoan
-for DISTRO in disco eoan
+# current: trusty xenial bionic disco eoan jammy kinetic
+for DISTRO in jammy kinetic
 do
     sudo pbuilder --create ${DISTRO}
     rm -vf ~/pbuilder/${DISTRO}-base.tgz
