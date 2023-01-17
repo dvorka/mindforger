@@ -44,6 +44,10 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         mwp, SLOT(doActionMindToggleAutolink())
     );
     QObject::connect(
+        view->actionMindLearnDirectory, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindLearnRepository())
+    );
+    QObject::connect(
         view->actionMindLearnRepository, SIGNAL(triggered()),
         mwp, SLOT(doActionMindLearnRepository())
     );

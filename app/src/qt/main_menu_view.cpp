@@ -36,27 +36,46 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindHack->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_Z));
 #endif
 
-    // new/devise... new MD repository
+    // new/devise... new Workspaces (MD repository)
     submenuMindNew = menuMind->addMenu(QIcon(":/menu-icons/new.svg"), "&New");
-    actionMindNewRepository = new QAction(tr("MindForger &Repository"), mainWindow);
-    actionMindNewRepository->setStatusTip(tr("Create a brand new MindForger repository..."));
+    actionMindNewRepository = new QAction(tr("&Workspace"), mainWindow);
+    actionMindNewRepository->setStatusTip(
+        tr("Create a brand new MindForger workspace...")
+    );
     submenuMindNew->addAction(actionMindNewRepository);
     actionMindNewFile = new QAction(tr("Markdown &File"), mainWindow);
     actionMindNewFile->setStatusTip(tr("Create a brand new Markdown file..."));
     submenuMindNew->addAction(actionMindNewFile);
 
-    // learn... from a repository, Markdown or TXT file
+    // learn... from a workspace, Markdown or TXT file
     submenuMindLearn = menuMind->addMenu(QIcon(":/menu-icons/open.svg"), tr("&Learn"));
-    actionMindLearnRepository = new QAction(tr("&Directory with Markdowns or MindForger Repository"), mainWindow);
-    actionMindLearnRepository->setStatusTip(tr("Learn knowledge by loading a MindForger repository or a directory with Markdown files..."));
+    actionMindLearnRepository = new QAction(
+        tr("&Workspace"), mainWindow
+    );
+    actionMindLearnRepository->setStatusTip(
+        tr("Learn knowledge by loading a MindForger workspace...")
+    );
     submenuMindLearn->addAction(actionMindLearnRepository);
+    actionMindLearnDirectory = new QAction(
+        tr("&Directory with Markdowns"), mainWindow
+    );
+    actionMindLearnDirectory->setStatusTip(
+        tr("Learn knowledge by loading a directory with Markdown files...")
+    );
+    submenuMindLearn->addAction(actionMindLearnDirectory);
     actionMindLearnFile = new QAction(tr("Markdown &File"), mainWindow);
-    actionMindLearnFile->setStatusTip(tr("Learn knowledge by loading a Markdown or MindForger file..."));
+    actionMindLearnFile->setStatusTip(
+        tr("Learn knowledge by loading a Markdown file...")
+    );
     submenuMindLearn->addAction(actionMindLearnFile);
 
     // re-learn/remind ... recent repositories and files
     submenuMindRelearn = new RecentFilesMenu(tr("&Remind"), mainWindow);
-    submenuMindRelearn->setStatusTip(tr("Re-learn recently opened MindForger repositories, Markdown repositories or files"));
+    submenuMindRelearn->setStatusTip(
+        tr(
+            "Re-learn recently opened MindForger workspaces, "
+            "Markdown directories or files")
+        );
     submenuMindRelearn->setEnabled(false);
 
     // remember... by flushing caches, saving unsaved Ns, saving Os/Ns with changed read metadata, ...
@@ -99,7 +118,12 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     //actionMindDream->setStatusTip(tr("Tidy up, clean, re-infer, check and optimize Memory which is otherwise done on your inactivity"));
 
     actionMindSnapshot = new QAction(QIcon(":/menu-icons/pin.svg"), tr("Retain"), mainWindow);
-    actionMindSnapshot->setStatusTip(tr("Create backup archive of the current repository and store it in home directory"));
+    actionMindSnapshot->setStatusTip(
+        tr(
+            "Create backup archive of the current workspace and "
+            "store it in home directory"
+        )
+    );
     actionMindSnapshot->setEnabled(false);
 
     // TODO submenu: printer, HTML, PDF
@@ -244,8 +268,12 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
     actionViewCli->setStatusTip(tr("Activate command line interface..."));
 
-    actionViewTerminal = new QAction(QIcon(":/menu-icons/terminal.svg"), tr("Ter&minal"), mainWindow);
-    actionViewTerminal->setStatusTip(tr("Run simple command line from current MindForger repository..."));
+    actionViewTerminal = new QAction(
+        QIcon(":/menu-icons/terminal.svg"), tr("Ter&minal"), mainWindow
+    );
+    actionViewTerminal->setStatusTip(
+        tr("Run simple command line from current MindForger workspace...")
+    );
 
     actionViewRecentNotes = new QAction(
         QIcon(":/menu-icons/open-recent.svg"),

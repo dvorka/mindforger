@@ -43,7 +43,7 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
 
     actionOpenRepository = addAction(
         QIcon(":/icons/open-repository.svg"),
-        tr("Open a directory with Markdowns or MindForger repository"));
+        tr("Open directory with Markdowns or Workspace"));
     actionOpenFile = addAction(
         QIcon(":/icons/open-file.svg"),
         tr("Open Markdown file"));

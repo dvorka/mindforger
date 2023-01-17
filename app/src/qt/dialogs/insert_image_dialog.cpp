@@ -30,7 +30,7 @@ InsertImageDialog::InsertImageDialog(QWidget* parent)
     pathEdit = new QLineEdit{};
 
     findFileButton = new QPushButton{tr("File")};
-    copyToRepoCheckBox = new QCheckBox{tr("copy image to repository")};
+    copyToRepoCheckBox = new QCheckBox{tr("copy image to workspace")};
     copyToRepoCheckBox->setChecked(true);
     copyToRepoCheckBox->setEnabled(true);
 

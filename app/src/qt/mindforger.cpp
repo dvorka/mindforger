@@ -257,7 +257,7 @@ int main(int argc, char* argv[])
             "[<directory>|<file>]",
             QCoreApplication::translate(
                  "main",
-                 "MindForger repository or directory/file with Markdown(s) to open"
+                 "MindForger workspace or directory/file with Markdown(s) to open"
             )
         );
         QCommandLineOption themeOption(QStringList() << "t" << "theme",
@@ -367,7 +367,9 @@ int main(int argc, char* argv[])
 
     m8r::MarkdownRepositoryConfigurationRepresentation mdRepositoryCfgRepresentation{};
     if(!useRepository.empty()) {
-        m8r::Repository* r = m8r::RepositoryIndexer::getRepositoryForPath(useRepository);
+        m8r::Repository* r = m8r::RepositoryIndexer::getRepositoryForPath(
+            useRepository
+        );
         if(r) {
             config.setActiveRepository(
                 config.addRepository(r), mdRepositoryCfgRepresentation
@@ -375,11 +377,13 @@ int main(int argc, char* argv[])
         } else {
             if(config.createEmptyMarkdownFile(useRepository)) {
                 r = m8r::RepositoryIndexer::getRepositoryForPath(useRepository);
-                config.setActiveRepository(config.addRepository(r), mdRepositoryCfgRepresentation);
+                config.setActiveRepository(
+                    config.addRepository(r), mdRepositoryCfgRepresentation
+                );
             } else {
                 cerr << QCoreApplication::translate(
                             "main",
-                            "Error: Unable to find given repository/file "
+                            "Error: Unable to find given workspace/file "
                             "to open - open MindForger without parameters "
                             "and create it from menu Mind/New: '"
                         ).toUtf8().constData()

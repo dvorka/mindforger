@@ -74,6 +74,7 @@ public:
     QAction* actionMindNewRepository;
     QAction* actionMindNewFile;
     QMenu* submenuMindLearn;
+    QAction* actionMindLearnDirectory;
     QAction* actionMindLearnRepository;
     QAction* actionMindLearnFile;
     RecentFilesMenu* submenuMindRelearn;

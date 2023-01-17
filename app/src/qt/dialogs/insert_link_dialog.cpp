@@ -36,7 +36,7 @@ InsertLinkDialog::InsertLinkDialog(QWidget* parent)
     findFileButton = new QPushButton{tr("File")};
     findDirectoryButton = new QPushButton{tr("Directory")};
 
-    copyToRepoCheckBox = new QCheckBox{tr("copy link target to repository")};
+    copyToRepoCheckBox = new QCheckBox{tr("copy link target to workspace")};
     copyToRepoCheckBox->setChecked(true);
     copyToRepoCheckBox->setEnabled(true);
 

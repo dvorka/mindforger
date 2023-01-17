@@ -133,8 +133,14 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         this, SLOT(doActionEditPasteImageData(QImage))
     );
     // wire toolbar signals
-    QObject::connect(view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()), this, SLOT(doActionOutlineOrNoteNew()));
-    QObject::connect(view.getToolBar()->actionOpenRepository, SIGNAL(triggered()), this, SLOT(doActionMindLearnRepository()));
+    QObject::connect(
+        view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()),
+        this, SLOT(doActionOutlineOrNoteNew())
+    );
+    QObject::connect(
+        view.getToolBar()->actionOpenRepository, SIGNAL(triggered()),
+        this, SLOT(doActionMindLearnRepository())
+    );
     QObject::connect(view.getToolBar()->actionOpenFile, SIGNAL(triggered()), this, SLOT(doActionMindLearnFile()));
 #ifdef MF_DEPRECATED
     QObject::connect(view.getToolBar()->actionViewDashboard, SIGNAL(triggered()), this, SLOT(doActionViewDashboard()));
@@ -279,12 +285,18 @@ void MainWindowPresenter::showInitialView()
         orloj->showFacetOutlineList(mind->getOutlines());
     }
 
-    view.setFileOrDirectory(QString::fromStdString(config.getActiveRepository()->getPath()));
+    view.setFileOrDirectory(
+        QString::fromStdString(config.getActiveRepository()->getPath())
+    );
 
     // config > menu
     mainMenu->showFacetMindAutolink(config.isAutolinking());
     mainMenu->showFacetLiveNotePreview(config.isUiLiveNotePreview());
-    orloj->setAspect(config.isUiLiveNotePreview()?OrlojPresenterFacetAspect::ASPECT_LIVE_PREVIEW:OrlojPresenterFacetAspect::ASPECT_NONE);
+    orloj->setAspect(
+        config.isUiLiveNotePreview()
+        ?OrlojPresenterFacetAspect::ASPECT_LIVE_PREVIEW
+        :OrlojPresenterFacetAspect::ASPECT_NONE
+    );
 
     // move Mind to configured state
     if(config.getDesiredMindState()==Configuration::MindState::THINKING) {
@@ -293,7 +305,12 @@ void MainWindowPresenter::showInitialView()
         if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
             if(!f.get()) {
                 mainMenu->showFacetMindSleep();
-                statusBar->showError(tr("Cannot think - either Mind already dreaming or repository too big"));
+                statusBar->showError(
+                    tr(
+                        "Cannot think - either Mind already dreaming or "
+                        "workspace too big"
+                    )
+                );
             }
             statusBar->showMindStatistics();
         } else {
@@ -479,14 +496,26 @@ void MainWindowPresenter::doActionMindNewRepository()
 void MainWindowPresenter::handleMindNewRepository()
 {
     // if directory exists, then fail
-    if(isDirectoryOrFileExists(newRepositoryDialog->getRepositoryPath().toStdString().c_str())) {
-        QMessageBox::critical(&view, tr("New Repository Error"), tr("Specified repository path already exists!"));
+    if(isDirectoryOrFileExists(
+        newRepositoryDialog->getRepositoryPath().toStdString().c_str())
+    ) {
+        QMessageBox::critical(
+            &view,
+            tr("New Workspace Error"),
+            tr("Specified workspace path already exists!")
+        );
         return;
     }
 
     // create repository
-    if(!config.getInstaller()->createEmptyMindForgerRepository(newRepositoryDialog->getRepositoryPath().toStdString())) {
-        QMessageBox::critical(&view, tr("New Repository Error"), tr("Failed to create empty repository!"));
+    if(!config.getInstaller()->createEmptyMindForgerRepository(
+        newRepositoryDialog->getRepositoryPath().toStdString())
+    ) {
+        QMessageBox::critical(
+            &view,
+            tr("New Workspace Error"),
+            tr("Failed to create empty workspace!")
+        );
         return;
     }
 
@@ -496,7 +525,12 @@ void MainWindowPresenter::handleMindNewRepository()
         newRepositoryDialog->isCopyStencils(),
         newRepositoryDialog->getRepositoryPath().toStdString().c_str()
     )) {
-        statusBar->showError(tr("ERROR: repository created, but attempt to copy documentation and/or stencils failed"));
+        statusBar->showError(
+            tr(
+                "ERROR: workspace created, but attempt to copy documentation "
+                "and/or stencils failed"
+            )
+        );
     }
 
     // open new repository
@@ -648,13 +682,18 @@ void MainWindowPresenter::doActionToggleLiveNotePreview()
 void MainWindowPresenter::doActionMindLearnRepository()
 {
     QString homeDirectory
-        = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+        = QStandardPaths::locate(
+            QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory
+        );
 
     QFileDialog learnDialog{&view};
-    learnDialog.setWindowTitle(tr("Learn Directory or MindForger Repository"));
-    // learnDialog.setFileMode(QFileDialog::Directory|QFileDialog::ExistingFiles); not supported, therefore
+    learnDialog.setWindowTitle(tr("Learn Directory or MindForger Workspace"));
+    // learnDialog.setFileMode(QFileDialog::Directory|QFileDialog::ExistingFiles);
+    //   not supported, therefore
     // >
-    // ASK user: directory/repository or file (choice) > open dialog configured as required
+    // ASK user: directory/repository or file (choice)
+    // >
+    // open dialog configured as required
     learnDialog.setFileMode(QFileDialog::Directory);
     learnDialog.setDirectory(homeDirectory);
     learnDialog.setViewMode(QFileDialog::Detail);
@@ -706,7 +745,7 @@ void MainWindowPresenter::doActionMindRelearn(QString path)
         QMessageBox::critical(
             &view,
             tr("Learn"),
-            tr("This is neither valid MindForger/Markdown repository nor file."));
+            tr("This is neither valid MindForger/Markdown workspace nor file."));
     }
 }
 
@@ -1769,7 +1808,9 @@ void MainWindowPresenter::copyLinkOrImageToRepository(const string& srcPath, QSt
         pathToDirectoryAndFile(path.toStdString(), d, f);
         path = QString::fromStdString(f);
 
-        statusBar->showInfo(tr("File copied to repository path '%1'").arg(path.toStdString().c_str()));
+        statusBar->showInfo(
+            tr("File copied to workspace path '%1'").arg(path.toStdString().c_str())
+        );
     } else {
         // fallback: create link, but don't copy
         path = insertLinkDialog->getPathText();
@@ -2914,7 +2955,7 @@ void MainWindowPresenter::handleNewLibrary()
             &view,
             tr("Add Library Error"),
             tr("Unable to index documents on library path - either memory directory "
-               "doesn't exist or not in MindForger repository mode."
+               "doesn't exist or not in MindForger workspace mode."
             )
         );
         return;
@@ -3282,9 +3323,7 @@ void MainWindowPresenter::doActionToolsChatGpt()
 
 void MainWindowPresenter::doActionHelpDocumentation()
 {
-    QDesktopServices::openUrl(
-        QUrl{"https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md"}
-    );
+    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger/wiki"});
 }
 
 void MainWindowPresenter::doActionHelpWeb()

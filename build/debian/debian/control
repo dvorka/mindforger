@@ -13,5 +13,5 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Thinking notebook and Markdown IDE.
  Search, browse, view and edit your Markdown files. Get as much
- as possible from knowledge in your remarks.
+ as possible from the knowledge in your remarks.
 Tag: implemented-in::c++, interface::graphical, role::program

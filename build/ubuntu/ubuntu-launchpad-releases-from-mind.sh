@@ -46,7 +46,13 @@
 #     (trusty) xenial bionic (cosmic disco eoan) focal (groovy) (hirsute) (impish) jammy kinetic
 # - command (Bash tuple of distro names):
 #     trusty xenial bionic focal jammy kinetic
-UBUNTU_VERSIONS=(focal)
+
+if [[ ${#} == 1 ]]
+then
+    export UBUNTU_VERSIONS=(${1})
+else
+    export UBUNTU_VERSIONS=(focal)
+fi
 
 # environment variables
 export MAJOR_VERSION=1
@@ -57,8 +63,16 @@ export RM_CMD="rm -vrf "
 export CP_CMD="cp -vrf "
 
 export OPT_VERBOSE="v"
-export OPT_DO_PUSH="false" # "true" to upload src to bazaar
-export OPT_DO_RELEASE="false" # "true" to dpush binary .deb to Launchpad and TRIGGER release
+if [[ ${#} == 1 ]]
+then
+    export OPT_DO_PUSH="false" # "true" to upload src to bazaar
+    export OPT_DO_RELEASE="false" # "true" to dpush binary .deb to Launchpad and TRIGGER release
+else
+    export OPT_DO_PUSH="false" # "true" to upload src to bazaar
+    export OPT_DO_RELEASE="false" # "true" to dpush binary .deb to Launchpad and TRIGGER release
+    #export OPT_DO_PUSH="true" # "true" to upload src to bazaar
+    #export OPT_DO_RELEASE="true" # "true" to dpush binary .deb to Launchpad and TRIGGER release
+fi
 
 # shell variables
 # ...
