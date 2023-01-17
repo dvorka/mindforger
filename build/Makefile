@@ -101,6 +101,10 @@ l10n:
 	cd make && ./l10n-update-strings.sh && ./l10n-edit-and-release.sh $(MF_LANG)
 
 
+.PHONY: ver-find
+ver-find:
+	cd .. && git grep "1\.55"
+
 test-lib: clean
 	cd make && ./test-lib-units.sh
 
