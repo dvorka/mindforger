@@ -57,7 +57,7 @@ fi
 # environment variables
 export MAJOR_VERSION=1
 export MINOR_VERSION=55
-export PATCH_VERSION=1 # patch version is incremented for every Ubuntu build @ Launchpad
+export PATCH_VERSION=2 # patch version is incremented for every Ubuntu build @ Launchpad
 export MF_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" # semantic version
 export RM_CMD="rm -vrf "
 export CP_CMD="cp -vrf "
@@ -112,19 +112,19 @@ function checkoutMindforger {
     # delete OLD files from Bazaar directory
     cd mindforger
     mv .bzr ..
-    rm -rf$OPT_VERBOSE} app build deps lib man LICENSE *.md
+    rm -rf${OPT_VERBOSE} app build deps lib man LICENSE *.md
     mv ../.bzr .
 
     # copy NEW project files to Bazaar directory
     echo -e "\n# copy over new MindForger files ############################"
-    cp -rf$OPT_VERBOSE} ${MFSRC}/* ${MFSRC}/*.*  .
+    cp -rf${OPT_VERBOSE} ${MFSRC}/* ${MFSRC}/*.*  .
 
     # prune MindForger project files: tests, *.o/... build files, ...
     echo -e "\n# CLEANUP development and build artifacts ###################"
-    rm -rf$OPT_VERBOSE} ./.git ./.qmake.stash ./app/mindforger ./build ./app/test ./lib/test
-    rm -rf$OPT_VERBOSE} ./lib/.qmake.stash ./lib/lib.pro.user ./lib/src/mindforger-lib-unit-tests
-    rm -rf$OPT_VERBOSE} ./deps/cmark-gfm/.github
-    rm -rf$OPT_VERBOSE} ./deps/mitie
+    rm -rf${OPT_VERBOSE} ./.git ./.qmake.stash ./app/mindforger ./build ./app/test ./lib/test
+    rm -rf${OPT_VERBOSE} ./lib/.qmake.stash ./lib/lib.pro.user ./lib/src/mindforger-lib-unit-tests
+    rm -rf${OPT_VERBOSE} ./deps/cmark-gfm/.github
+    rm -rf${OPT_VERBOSE} ./deps/mitie
     # IMPROVE: static libraries lib*.a are NOT deleted to keep cmark-gfm dependency libs
     find . -type f \( -name "*moc_*.cpp" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
     
