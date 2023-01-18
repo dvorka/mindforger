@@ -19,6 +19,10 @@
 #
 #########################################################################
 #
+# Goal - CREATE UBUNTU PACKAGE at:
+#
+# https://launchpad.net/~ultradvorka/+archive/ubuntu/productivity/+packages
+#
 # This script:
 #   > checkouts MF from LaunchPad's bazaar
 #     > copies latest sources to bazaar
@@ -40,7 +44,9 @@
 # - set OPT_* for PUSH and RELEASE to false to get .deb for any Ubuntu
 #   version locally
 #
-# GPG key configuration (GNU Privacy Guard @ PGP pretty good privacy):
+# GPG key configuration:
+#  - GNU Privacy Guard @ PGP pretty good privacy
+#  - identifies the person on LaunchPad
 # 1. generate
 #      OR
 #    copy the key from another machine
@@ -95,7 +101,7 @@ fi
 # environment variables
 export MAJOR_VERSION=1
 export MINOR_VERSION=55
-export PATCH_VERSION=2 # patch version is incremented for every Ubuntu build @ Launchpad
+export PATCH_VERSION=5 # patch version is incremented for every Ubuntu build @ Launchpad
 export MF_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" # semantic version
 export RM_CMD="rm -vrf "
 export CP_CMD="cp -vrf "
@@ -106,10 +112,10 @@ then
     export OPT_DO_PUSH="false" # "true" to upload src to bazaar
     export OPT_DO_RELEASE="false" # "true" to dpush binary .deb to Launchpad and TRIGGER release
 else
-    export OPT_DO_PUSH="false" # "true" to upload src to bazaar
-    export OPT_DO_RELEASE="false" # "true" to dpush binary .deb to Launchpad and TRIGGER release
-    #export OPT_DO_PUSH="true" # "true" to upload src to bazaar
-    #export OPT_DO_RELEASE="true" # "true" to dpush binary .deb to Launchpad and TRIGGER release
+    #export OPT_DO_PUSH="false" # "true" to upload src to bazaar
+    #export OPT_DO_RELEASE="false" # "true" to dpush binary .deb to Launchpad and TRIGGER release
+    export OPT_DO_PUSH="true" # "true" to upload src to bazaar
+    export OPT_DO_RELEASE="true" # "true" to dpush binary .deb to Launchpad and TRIGGER release
 fi
 
 # shell variables
