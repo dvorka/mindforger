@@ -16,22 +16,60 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-# This script builds: upstream tarball > source deb > binary deb
+#
+#########################################################################
+#
+# This script:
+#   > checkouts MF from LaunchPad's bazaar
+#     > copies latest sources to bazaar
+#   > builds upstream tarball
+#     ~ checks that local build is OK
+#   > builds source .deb
+#     ~ checks that .deb build for target Ubuntu distro is OK
+#     > signs its .dsc descriptor using PGP
+#   > builds binary .deb
+#     ~ checks that .deb build for target Ubuntu distro is OK
+#   > uploads signed .dsc to LaunchPad using dput
+# IMPORTANT: for ^ upload .deb builds are NOT needed, only signed .dsc 
+#
+# Tips:
+# - run the script from Emacs shell to easily review and analyze
+#   the script output
+# - make sure PGP and .ssh keys are trusted and registered
+#   on Launchpad
+# - set OPT_* for PUSH and RELEASE to false to get .deb for any Ubuntu
+#   version locally
+#
+# GPG key configuration (GNU Privacy Guard @ PGP pretty good privacy):
+# 1. generate
+#      OR
+#    copy the key from another machine
+# 2. LOCAL: trust the key
+#    ~/.gnupg
+#    gpg --list-keys
+#      ^ key is SUFFIX of pub key, last 16 characters
+#    gpg --edit-key <Key>
+#    gpg --edit-key B72E4F7F24AF591D  # ...
+#      ^ starts a tool with shell, write command:
+#    > trust
+# 3. Launchpad: upload and register the key at
+#    https://launchpad.net/~ultradvorka/+editpgpkeys
+#
+# SSH key configuration:
+# 1. Launchpad: upload and register the key 
+#    https://launchpad.net/~ultradvorka/+editsshkeys
+#    ~/.ssh/id_rsa.pub
 #
 # See:
 #   Beginners guide:
 #     http://packaging.ubuntu.com/html/packaging-new-software.html
+#   PGP
+#     https://unix.stackexchange.com/questions/188668/how-does-gpg-agent-work
 #   Debian maintainers guide:
 #     https://www.debian.org/doc/manuals/maint-guide/index.en.html
 #     https://www.debian.org/doc/manuals/debmake-doc/index.en.html
 #   Debian formal doc:
 #     https://www.debian.org/doc/debian-policy/
-#
-# Tips:
-# - run the script from Emacs shell to easily analyze script output
-# - set OPT_* for PUSH and RELEASE to false to get .deb for any Ubuntu
-#   version locally
 #
 
 # ########################################################################
@@ -264,6 +302,10 @@ function releaseForParticularUbuntuVersion {
     createTarball
     
     # 8) start GPG agent if it's NOT running
+    #   gpg-agent is a program that runs in the background (a daemon) and stores
+    # GPG secret keys in memory. When a GPG process needs the key, it contacts
+    # the running gpg-agent program through a socket and requests the key.
+    #
     echoStep "Start GPG agent process (if it is NOT running)"
     if [ -e "${HOME}/.gnupg/S.gpg-agent" ]
     then
