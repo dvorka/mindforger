@@ -124,35 +124,74 @@ OrlojPresenter::OrlojPresenter(
 #endif
     // editor getting data from the backend
     QObject::connect(
-        view->getNoteEdit()->getNoteEditor(), SIGNAL(signalGetLinksForPattern(QString)),
-        this, SLOT(slotGetLinksForPattern(QString)));
+        view->getNoteEdit()->getNoteEditor(),
+            SIGNAL(signalGetLinksForPattern(QString)),
+        this,
+            SLOT(slotGetLinksForPattern(QString)));
     QObject::connect(
-        this, SIGNAL(signalLinksForPattern(QString, std::vector<std::string>*)),
-        view->getNoteEdit()->getNoteEditor(), SLOT(slotPerformLinkCompletion(QString, std::vector<std::string>*)));
+        this,
+            SIGNAL(signalLinksForPattern(QString, std::vector<std::string>*)),
+        view->getNoteEdit()->getNoteEditor(),
+            SLOT(slotPerformLinkCompletion(QString, std::vector<std::string>*)));
     QObject::connect(
-        view->getOutlineHeaderEdit()->getHeaderEditor(), SIGNAL(signalGetLinksForPattern(QString)),
-        this, SLOT(slotGetLinksForPattern(QString)));
+        view->getOutlineHeaderEdit()->getHeaderEditor(),
+            SIGNAL(signalGetLinksForPattern(QString)),
+        this,
+            SLOT(slotGetLinksForPattern(QString)));
     QObject::connect(
-        this, SIGNAL(signalLinksForHeaderPattern(QString, std::vector<std::string>*)),
-        view->getOutlineHeaderEdit()->getHeaderEditor(), SLOT(slotPerformLinkCompletion(QString, std::vector<std::string>*)));
+        this,
+            SIGNAL(signalLinksForHeaderPattern(QString, std::vector<std::string>*)),
+        view->getOutlineHeaderEdit()->getHeaderEditor(),
+            SLOT(slotPerformLinkCompletion(QString, std::vector<std::string>*)));
     QObject::connect(
-        outlineHeaderEditPresenter->getView()->getButtonsPanel(), SIGNAL(signalShowLivePreview()),
-        mainPresenter, SLOT(doActionToggleLiveNotePreview()));
+        outlineHeaderEditPresenter->getView()->getButtonsPanel(),
+            SIGNAL(signalShowLivePreview()),
+        mainPresenter,
+            SLOT(doActionToggleLiveNotePreview()));
     QObject::connect(
-        noteEditPresenter->getView()->getButtonsPanel(), SIGNAL(signalShowLivePreview()),
-        mainPresenter, SLOT(doActionToggleLiveNotePreview()));
+        noteEditPresenter->getView()->getButtonsPanel(),
+            SIGNAL(signalShowLivePreview()),
+        mainPresenter,
+            SLOT(doActionToggleLiveNotePreview()));
     // intercept Os table column sorting
     QObject::connect(
-        view->getOutlinesTable()->horizontalHeader(), SIGNAL(sectionClicked(int)),
-        this, SLOT(slotOutlinesTableSorted(int)));
+        view->getOutlinesTable()->horizontalHeader(),
+            SIGNAL(sectionClicked(int)),
+        this,
+            SLOT(slotOutlinesTableSorted(int)));
     // toggle full O HTML preview
     QObject::connect(
-        view->getOutlineHeaderView()->getEditPanel()->getFullOPreviewButton(), SIGNAL(clicked()),
-        this, SLOT(slotToggleFullOutlinePreview()));
+        view->getOutlineHeaderView()->getEditPanel()->getFullOPreviewButton(),
+            SIGNAL(clicked()),
+        this,
+            SLOT(slotToggleFullOutlinePreview()));
+    // ^ and v @ O header/N view panel
+    QObject::connect(
+        view->getOutlineHeaderView()->getEditPanel()->getNextNoteButton(),
+            SIGNAL(clicked()),
+        outlineViewPresenter->getOutlineTree(),
+            SLOT(slotSelectPreviousRow()));
+    QObject::connect(
+        view->getOutlineHeaderView()->getEditPanel()->getLastNoteButton(),
+            SIGNAL(clicked()),
+        outlineViewPresenter->getOutlineTree(),
+            SLOT(slotSelectNextRow()));
+    QObject::connect(
+        view->getNoteView()->getButtonsPanel()->getNextNoteButton(),
+            SIGNAL(clicked()),
+        outlineViewPresenter->getOutlineTree(),
+            SLOT(slotSelectPreviousRow()));
+    QObject::connect(
+        view->getNoteView()->getButtonsPanel()->getLastNoteButton(),
+            SIGNAL(clicked()),
+        outlineViewPresenter->getOutlineTree(),
+            SLOT(slotSelectNextRow()));
     // show O header @ N
     QObject::connect(
-        view->getNoteView()->getButtonsPanel()->getShowOutlineHeaderButton(), SIGNAL(clicked()),
-        this, SLOT(slotShowOutlineHeader()));
+        view->getNoteView()->getButtonsPanel()->getShowOutlineHeaderButton(),
+            SIGNAL(clicked()),
+        this,
+            SLOT(slotShowOutlineHeader()));
 }
 
 int dialogSaveOrCancel()

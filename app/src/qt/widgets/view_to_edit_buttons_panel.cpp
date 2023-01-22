@@ -22,8 +22,9 @@ namespace m8r {
 
 using namespace std;
 
-ViewToEditEditButtonsPanel::ViewToEditEditButtonsPanel(MfWidgetMode mode, QWidget* parent)
-    : QWidget(parent),
+ViewToEditEditButtonsPanel::ViewToEditEditButtonsPanel(
+    MfWidgetMode mode, QWidget* parent
+) : QWidget(parent),
       mode(mode)
 {
     layout = new QHBoxLayout{this};
@@ -51,7 +52,8 @@ ViewToEditEditButtonsPanel::ViewToEditEditButtonsPanel(MfWidgetMode mode, QWidge
 
     if(MfWidgetMode::OUTLINE_MODE == mode) {
 #ifdef __APPLE__
-        toggleFullOPreviewButton = new QPushButton{tr("Full / Header Notebook Preview"), this};
+        toggleFullOPreviewButton = new QPushButton{
+            tr("Full / Header Notebook Preview"), this};
         // IMPROVE editButton->setToolTip("⌘+P");
 #else
         toggleFullOPreviewButton = new QPushButton{tr("Whole Notebook &Preview"), this};
@@ -62,6 +64,12 @@ ViewToEditEditButtonsPanel::ViewToEditEditButtonsPanel(MfWidgetMode mode, QWidge
 
         layout->addWidget(toggleFullOPreviewButton);
     }
+
+    lastNoteButton = new QPushButton{"↓", this};
+    layout->addWidget(lastNoteButton);
+    nextNoteButton = new QPushButton{"↑", this};
+    layout->addWidget(nextNoteButton);
+
     layout->addWidget(editButton);
 
     setLayout(layout);

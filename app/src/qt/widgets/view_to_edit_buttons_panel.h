@@ -36,6 +36,8 @@ private:
     QPushButton* showOutlineHeaderButton;
     QPushButton* editButton;
     QPushButton* toggleFullOPreviewButton;
+    QPushButton* nextNoteButton;
+    QPushButton* lastNoteButton;
 
     // expert mode (no buttons) setting @ frontend
     bool expertMode;
@@ -55,6 +57,8 @@ public:
     QPushButton* getShowOutlineHeaderButton() const { return showOutlineHeaderButton; }
     QPushButton* getEditButton() const { return editButton; }
     QPushButton* getFullOPreviewButton() const { return toggleFullOPreviewButton; }
+    QPushButton* getNextNoteButton() const { return nextNoteButton; }
+    QPushButton* getLastNoteButton() const { return lastNoteButton; }
 };
 
 }

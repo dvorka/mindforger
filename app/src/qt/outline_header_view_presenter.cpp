@@ -156,8 +156,9 @@ void OutlineHeaderViewPresenter::slotEditOutlineHeaderDoubleClick()
     }
 }
 
-void OutlineHeaderViewPresenter::slotRefreshHeaderLeaderboardByValue(AssociatedNotes* associations)
-{
+void OutlineHeaderViewPresenter::slotRefreshHeaderLeaderboardByValue(
+    AssociatedNotes* associations
+) {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
          ||
        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)

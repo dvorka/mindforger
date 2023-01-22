@@ -22,8 +22,9 @@ namespace m8r {
 
 using namespace std;
 
-OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, MainWindowPresenter* mwp, QObject* parent)
-    : QObject(parent)
+OutlineTreePresenter::OutlineTreePresenter(
+    OutlineTreeView* view, MainWindowPresenter* mwp, QObject* parent
+) : QObject(parent)
 {
     this->view = view;
     this->model = new OutlineTreeModel{view, mwp->getHtmlRepresentation()};
