@@ -358,7 +358,7 @@ bool MarkdownRepositoryConfigurationRepresentation::load(Configuration& c)
                 "Organizers: ADDING missing "
                 << Organizer::TYPE_STR_EISENHOWER_MATRIX << endl);
             c.getRepositoryConfiguration().addOrganizer(
-                EisenhowerMatrix::createEisenhowMatrixOrganizer());
+                EisenhowerMatrix::createEisenhowerMatrixOrganizer());
             this->save(c);
         }
 

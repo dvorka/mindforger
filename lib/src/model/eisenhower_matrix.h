@@ -42,7 +42,7 @@ public:
 
     static std::string createEisenhowerMatrixKey();
 
-    static EisenhowerMatrix* createEisenhowMatrixOrganizer();
+    static EisenhowerMatrix* createEisenhowerMatrixOrganizer();
     static bool isEisenhowMatrixOrganizer(Organizer* o);
 
 public:

@@ -63,7 +63,7 @@ const string EisenhowerMatrix::getSortByAsStr() {
     }
 }
 
-EisenhowerMatrix* EisenhowerMatrix::createEisenhowMatrixOrganizer() {
+EisenhowerMatrix* EisenhowerMatrix::createEisenhowerMatrixOrganizer() {
     EisenhowerMatrix* eisenhowerMatrixOrganizer = new EisenhowerMatrix(
         "Eisenhower Matrix"
     );
