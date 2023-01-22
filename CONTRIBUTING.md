@@ -96,8 +96,7 @@ void MainWindowPresenter::doActionOrganizerMoveNoteToNextVisibleQuadrant(Note* n
         doActionKanbanMoveNoteCommon(
             note,
             orloj->getKanban()->moveToNextVisibleColumn(note),
-            orloj
-        );
+            orloj);
     } else {
         if(!EisenhowerMatrix::isEisenhowMatrixOrganizer(
                 orloj->getOrganizer()->getOrganizer()
@@ -108,13 +107,11 @@ void MainWindowPresenter::doActionOrganizerMoveNoteToNextVisibleQuadrant(Note* n
             doActionOrganizerMoveNoteCommon(
                 note,
                 orloj->getOrganizer()->moveToNextVisibleQuadrant(note),
-                orloj
-            );
+                orloj);
         } else {
             statusBar->showError(
                 "Notebooks/notes cannot be moved around quadrants of "
-                "Eisenhower Matrix"
-            );
+                "Eisenhower Matrix");
         }
     }
 }

@@ -32,7 +32,7 @@
 # See 'MindForger Release Guide#Debian and my PPA' notebook for detailed steps description...
 
 # .deb package to be added
-export NEW_VERSION_NAME="1.55.0"
+export NEW_VERSION_NAME="1.55.1"
 export NEW_RELEASE_NAME="mindforger_${NEW_VERSION_NAME}"
 export NEW_DEB_NAME="${NEW_RELEASE_NAME}-1_amd64.deb"
 # Debian release ~ aptly publish

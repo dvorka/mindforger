@@ -23,7 +23,7 @@ using namespace std;
 namespace m8r {
 
 const string Organizer::TYPE_STR_KANBAN = string{"Kanban"};
-const string Organizer::TYPE_STR_EISENHOWER_MATRIX= string{"Eisenhower Matrix"};
+const string Organizer::TYPE_STR_EISENHOWER_MATRIX = string{"Eisenhower Matrix"};
 
 std::string Organizer::createOrganizerKey(
     const set<string>& keys,

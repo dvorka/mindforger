@@ -174,24 +174,29 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
     actionFindFts->setStatusTip(tr("Note full-text search"));
 
-    actionFindOutlineByName = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Note&book by Name"), mainWindow);
+    actionFindOutlineByName = new QAction(
+        QIcon(":/menu-icons/find.svg"), tr("Recall Note&book by Name"), mainWindow);
     actionFindOutlineByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_B));
     actionFindOutlineByName->setStatusTip(tr("Find Notebook by name"));
 
-    actionFindNoteByName = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall &Note by Name"), mainWindow);
+    actionFindNoteByName = new QAction(
+        QIcon(":/menu-icons/find.svg"), tr("Recall &Note by Name"), mainWindow);
     actionFindNoteByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_N));
     actionFindNoteByName->setStatusTip(tr("Find Note by name"));
 
-    actionFindOutlineByTag = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Notebook by Ta&gs"), mainWindow);
+    actionFindOutlineByTag = new QAction(
+        QIcon(":/menu-icons/find.svg"), tr("Recall Notebook by Ta&gs"), mainWindow);
     actionFindOutlineByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_X));
     actionFindOutlineByTag->setStatusTip(tr("Find Notebook by tags"));
 
-    actionFindNoteByTag = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Note by &Tags"), mainWindow);
-    actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
+    actionFindNoteByTag = new QAction(
+        QIcon(":/menu-icons/find.svg"), tr("Recall Note by T&ags"), mainWindow);
+    actionFindNoteByTag->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
     actionFindNoteByTag->setStatusTip(tr("Find Note by tags"));
 
 #ifdef MF_WIP
-    actionFindDocByName = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Library &Doc by Name"), mainWindow);
+    actionFindDocByName = new QAction(
+        QIcon(":/menu-icons/find.svg"), tr("Recall Library &Doc by Name"), mainWindow);
     actionFindDocByName->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_D));
     actionFindDocByName->setStatusTip(tr("Find Document by name"));
 #endif
@@ -283,30 +288,35 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewRecentNotes->setStatusTip(tr("View recently modified Notes..."));
     actionViewRecentNotes->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_R));
 
-    actionViewStencils = new QAction(QIcon(":/menu-icons/stencil.svg"), tr("&Stencils"), mainWindow);
+    actionViewStencils = new QAction(
+        QIcon(":/menu-icons/stencil.svg"), tr("&Stencils"), mainWindow);
     // Outline/Note marked w/ tag stencil is MOVED among stencils (NOT indexed/searched/...)
     //  + Stencil view allows making a stencil outline again
     //  + Note stencils are notes in a given Outline
     actionViewStencils->setStatusTip(tr("List Notebook and Note stencils..."));
     actionViewStencils->setEnabled(false);
 
-    actionViewLimbo = new QAction(QIcon(":/menu-icons/limbo.svg"), tr("Li&mbo"), mainWindow);
+    actionViewLimbo = new QAction(
+        QIcon(":/menu-icons/limbo.svg"), tr("Li&mbo"), mainWindow);
     actionViewLimbo->setStatusTip(tr("List forgotten Notebooks and Notes..."));
-    actionViewLimbo->setEnabled(false);
-    // TODO same handler as Help/Documentation - open dir w/ limbo files
+    actionViewLimbo->setEnabled(true);
 
-    actionViewHoist = new QAction(QIcon(":/menu-icons/hoisting.svg"), tr("Ho&isting"), mainWindow);
+    actionViewHoist = new QAction(
+        QIcon(":/menu-icons/hoisting.svg"), tr("Ho&isting"), mainWindow);
     actionViewHoist->setCheckable(true);
     actionViewHoist->setChecked(false);
     actionViewHoist->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_I));
-    actionViewHoist->setStatusTip(tr("Hoist/de-hoist Note to focus on Note being viewed or edited"));
+    actionViewHoist->setStatusTip(
+        tr("Hoist/de-hoist Note to focus on Note being viewed or edited"));
 
-    actionViewDistractionFree = new QAction(QIcon(":/menu-icons/off.svg"), tr("D&istraction Free"), mainWindow);
+    actionViewDistractionFree = new QAction(
+        QIcon(":/menu-icons/off.svg"), tr("D&istraction Free"), mainWindow);
     actionViewDistractionFree->setShortcut(QKeySequence(Qt::Key_F5));
     actionViewDistractionFree->setStatusTip(tr("Toggle distraction free mode"));
     actionViewDistractionFree->setEnabled(false);
 
-    actionViewFullscreen = new QAction(QIcon(":/menu-icons/fullscreen.svg"), tr("&Fullscreen"), mainWindow);
+    actionViewFullscreen = new QAction(
+        QIcon(":/menu-icons/fullscreen.svg"), tr("&Fullscreen"), mainWindow);
     actionViewFullscreen->setShortcut(QKeySequence(Qt::Key_F11));
     actionViewFullscreen->setStatusTip(tr("Toggle fullscreen"));
 
@@ -330,8 +340,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #ifdef MF_WIP
     menuView->addAction(actionViewStencils);
     menuView->addAction(actionViewDwell);
-    menuView->addAction(actionViewLimbo);
 #endif
+    menuView->addAction(actionViewLimbo);
     menuView->addSeparator();
     menuView->addAction(actionViewRecentNotes);
     menuView->addSeparator();
@@ -940,34 +950,55 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #ifdef MF_WIP
     menuTools = qMenuBar->addMenu(tr("&Tools"));
 
-    actionToolsWikipedia = new QAction(QIcon(":/menu-icons/link.svg"), tr("&Wikipedia"), mainWindow);
-    actionToolsWikipedia->setStatusTip(tr("Open Wikipadia and find entry of the selected entity..."));
+    actionToolsWikipedia = new QAction(
+        QIcon(":/menu-icons/link.svg"), tr("&Wikipedia"), mainWindow);
+    actionToolsWikipedia->setStatusTip(
+        tr("Open Wikipadia and find entry of the selected entity..."));
     menuTools->addAction(actionToolsWikipedia);
 
-    actionToolsArxiv = new QAction(QIcon(":/menu-icons/link.svg"), tr("&arXiv"), mainWindow);
-    actionToolsArxiv->setStatusTip(tr("Open arXiv and find papers related to the selected entity..."));
+    actionToolsArxiv = new QAction(
+        QIcon(":/menu-icons/link.svg"), tr("&arXiv"), mainWindow);
+    actionToolsArxiv->setStatusTip(tr(
+        "Open arXiv and find papers related to the selected entity..."));
     menuTools->addAction(actionToolsArxiv);
 
-    actionToolsChatGpt = new QAction(QIcon(":/menu-icons/link.svg"), tr("&ChatGPT: Explain ... in simple terms."), mainWindow);
-    actionToolsChatGpt->setStatusTip(tr("Let ChatGPT to explain the selected entry..."));
+    actionToolsChatGpt = new QAction(
+        QIcon(":/menu-icons/link.svg"),
+        tr("&ChatGPT: Explain ... in simple terms."),
+        mainWindow);
+    actionToolsChatGpt->setStatusTip(
+        tr("Let ChatGPT to explain the selected entry..."));
     menuTools->addAction(actionToolsChatGpt);
 
-    actionToolsDuckDuckGo = new QAction(QIcon(":/menu-icons/link.svg"), tr("&DuckDuckGo"), mainWindow);
-    actionToolsDuckDuckGo->setStatusTip(tr("Open DuckDuckGo and search web for the selected entity..."));
+    actionToolsGramarly= new QAction(
+        QIcon(":/menu-icons/link.svg"), tr("&Gramarly"), mainWindow);
+    actionToolsGramarly->setStatusTip(tr(
+        "Use Gramarly to check to grammar..."));
+    menuTools->addAction(actionToolsGramarly);
+
+    actionToolsDuckDuckGo = new QAction(
+        QIcon(":/menu-icons/link.svg"), tr("&DuckDuckGo"), mainWindow);
+    actionToolsDuckDuckGo->setStatusTip(
+        tr("Open DuckDuckGo and search web for the selected entity..."));
     menuTools->addAction(actionToolsDuckDuckGo);
 
-    actionToolsPandoc = new QAction(QIcon(":/menu-icons/link.svg"), tr("&Pandoc"), mainWindow);
-    actionToolsPandoc ->setStatusTip(tr("Use Pandoc to convert MindForger's Markdown documents..."));
+    actionToolsPandoc = new QAction(
+        QIcon(":/menu-icons/link.svg"), tr("&Pandoc"), mainWindow);
+    actionToolsPandoc ->setStatusTip(
+        tr("Use Pandoc to convert MindForger's Markdown documents..."));
     menuTools->addAction(actionToolsPandoc);
 
-    actionToolsDocusaurus = new QAction(QIcon(":/menu-icons/link.svg"), tr("D&ocusaurus"), mainWindow);
-    actionToolsDocusaurus->setStatusTip(tr("Build your web with MindForger's Markdown documents and Docusaurus..."));
+    actionToolsDocusaurus = new QAction(
+        QIcon(":/menu-icons/link.svg"), tr("D&ocusaurus"), mainWindow);
+    actionToolsDocusaurus->setStatusTip(
+        tr("Build your web with MindForger's Markdown documents and Docusaurus..."));
     menuTools->addAction(actionToolsDocusaurus);
 #endif
 
     // menu: help
 
-    actionHelpDocumentation = new QAction(QIcon(":/menu-icons/help.svg"), tr("&Documentation"), mainWindow);
+    actionHelpDocumentation = new QAction(
+        QIcon(":/menu-icons/help.svg"), tr("&Documentation"), mainWindow);
     actionHelpDocumentation->setShortcut(tr("F1"));
     actionHelpDocumentation->setStatusTip(tr("Open MindForger documentation"));
 

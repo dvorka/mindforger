@@ -245,6 +245,7 @@ public slots:
     void doActionViewKnowledgeGraphNavigator();
     void doActionCli();
     void doActionViewTerminal();
+    void doActionViewLimbo();
     void doActionViewDistractionFree();
     void doActionViewFullscreen();
     // knowledge

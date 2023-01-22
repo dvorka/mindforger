@@ -79,6 +79,10 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         mwp, SLOT(doActionViewTerminal())
     );
     QObject::connect(
+        view->actionViewLimbo, SIGNAL(triggered()),
+        mwp, SLOT(doActionViewLimbo())
+    );
+    QObject::connect(
         view->actionMindSnapshot, SIGNAL(triggered()),
         mwp, SLOT(doActionMindSnapshot())
     );

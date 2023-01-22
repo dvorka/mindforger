@@ -18,7 +18,7 @@
 
 .DEFAULT_GOAL := help
 
-MINDFORGER_VERSION := 1.55.0
+MINDFORGER_VERSION := 1.55.1
 MINDFORGER_RELEASE_BASE_DIR := /home/dvorka/p/mindforger/release
 MINDFORGER_RELEASE_DIR := $(MINDFORGER_RELEASE_BASE_DIR)/$(MINDFORGER_VERSION)-maker
 
@@ -104,6 +104,7 @@ l10n:
 .PHONY: ver-find
 ver-find:
 	cd .. && git grep "1\.55"
+
 
 test-lib: clean
 	cd make && ./test-lib-units.sh

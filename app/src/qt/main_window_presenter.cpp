@@ -45,7 +45,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // assemble presenters w/ UI
     statusBar = new StatusBarPresenter{view.getStatusBar(), mind};
-    mainMenu = new MainMenuPresenter{this}; view.getOrloj()->setMainMenu(mainMenu->getView());
+    mainMenu = new MainMenuPresenter{
+        this}; view.getOrloj()->setMainMenu(mainMenu->getView());
     cli = new CliAndBreadcrumbsPresenter{this, view.getCli(), mind};
     orloj = new OrlojPresenter{this, view.getOrloj(), mind};
 
@@ -53,14 +54,16 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     newLibraryDialog = new AddLibraryDialog{&view};
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
-    newOutlineDialog = new OutlineNewDialog{QString::fromStdString(config.getMemoryPath()), mind->getOntology(), &view};
+    newOutlineDialog = new OutlineNewDialog{
+        QString::fromStdString(config.getMemoryPath()), mind->getOntology(), &view};
     newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
     ftsDialog = new FtsDialog{&view};
     ftsDialogPresenter = new FtsDialogPresenter(ftsDialog, mind, orloj);
     findOutlineByNameDialog = new FindOutlineByNameDialog{&view};
     findThingByNameDialog = new FindOutlineByNameDialog{&view};
     findNoteByNameDialog = new FindNoteByNameDialog{&view};
-    findOutlineByTagDialog = new FindOutlineByTagDialog{mind->remind().getOntology(), &view};
+    findOutlineByTagDialog = new FindOutlineByTagDialog{
+        mind->remind().getOntology(), &view};
     findNoteByTagDialog = new FindNoteByTagDialog{mind->remind().getOntology(), &view};
     refactorNoteToOutlineDialog = new RefactorNoteToOutlineDialog{&view};
     configDialog = new ConfigurationDialog{&view};
@@ -92,26 +95,46 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     handleMindPreferences();
 
     // wire signals
-    QObject::connect(newLibraryDialog->getCreateButton(), SIGNAL(clicked()), this, SLOT(handleNewLibrary()));
-    QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
-    QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
-    QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
-    QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
-    QObject::connect(findThingByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindThingByName()));
-    QObject::connect(findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByName()));
-    QObject::connect(findOutlineByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByTag()));
-    QObject::connect(findOutlineByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
-    QObject::connect(findNoteByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByTag()));
-    QObject::connect(findNoteByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
-    QObject::connect(newOrganizerDialog, SIGNAL(createFinished()), this, SLOT(handleCreateOrganizer()));
-    QObject::connect(refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
-    QObject::connect(insertImageDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatImage()));
-    QObject::connect(insertLinkDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatLink()));
-    QObject::connect(rowsAndDepthDialog->getGenerateButton(), SIGNAL(clicked()), this, SLOT(handleRowsAndDepth()));
-    QObject::connect(newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
-    QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
-    QObject::connect(exportOutlineToHtmlDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineHtmlExport()));
-    QObject::connect(exportMemoryToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
+    QObject::connect(
+        newLibraryDialog->getCreateButton(), SIGNAL(clicked()), this, SLOT(handleNewLibrary()));
+    QObject::connect(
+        scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
+    QObject::connect(
+        newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
+    QObject::connect(
+        newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
+    QObject::connect(
+        findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
+    QObject::connect(
+        findThingByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindThingByName()));
+    QObject::connect(
+        findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByName()));
+    QObject::connect(
+        findOutlineByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByTag()));
+    QObject::connect(
+        findOutlineByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
+    QObject::connect(
+        findNoteByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByTag()));
+    QObject::connect(
+        findNoteByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
+    QObject::connect(
+        newOrganizerDialog, SIGNAL(createFinished()), this, SLOT(handleCreateOrganizer()));
+    QObject::connect(
+        refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
+    QObject::connect(
+        insertImageDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatImage()));
+    QObject::connect(
+        insertLinkDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatLink()));
+    QObject::connect(
+        rowsAndDepthDialog->getGenerateButton(), SIGNAL(clicked()), this, SLOT(handleRowsAndDepth()));
+    QObject::connect(
+        newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
+    QObject::connect(
+        newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
+    QObject::connect(
+        exportOutlineToHtmlDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineHtmlExport()));
+    QObject::connect(
+        exportMemoryToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
     QObject::connect(
         orloj->getDashboard()->getView()->getNavigatorDashboardlet(), SIGNAL(clickToSwitchFacet()),
         this, SLOT(doActionViewKnowledgeGraphNavigator())
@@ -3263,21 +3286,49 @@ void MainWindowPresenter::doActionOrganizerForget()
         choice = QMessageBox::question(
             &view,
             tr("Forget Organizer"),
-            tr("Do you really want to forget '") + QString::fromStdString(o->getName()) + tr("' Organizer?")
+            tr("Do you really want to forget '")
+                + QString::fromStdString(o->getName()) + tr("' Organizer?")
         );
         if (choice == QMessageBox::Yes) {
             config.getRepositoryConfiguration().removeOrganizer(o);
             getConfigRepresentation()->save(config);
-            orloj->showFacetOrganizerList(config.getRepositoryConfiguration().getOrganizers());
+            orloj->showFacetOrganizerList(
+                config.getRepositoryConfiguration().getOrganizers());
         } // else do nothing
     } else {
         QMessageBox::critical(
             &view,
             tr("Delete Organizer"),
-            tr("Eisenhower Matrix is built-in and cannot be deleted - only custom organizers can.")
+            tr(
+                "Eisenhower Matrix is built-in and cannot be deleted - only custom "
+                "organizers can.")
         );
     }
 }
+
+
+void MainWindowPresenter::doActionViewLimbo()
+{
+    if(config.getActiveRepository()->getMode()
+           ==Repository::RepositoryMode::REPOSITORY
+       && config.getActiveRepository()->getType()
+           ==Repository::RepositoryType::MINDFORGER
+    ) {
+        QString path{"file://"};
+        path.append(config.getLimboPath().c_str());
+        QDesktopServices::openUrl(QUrl{path});
+    } else {
+        QMessageBox::information(
+            &view,
+            tr("View Limbo"),
+            tr(
+                "Limbo directory with deleted Notebooks is available in "
+                "the MindForger workspace, not if a Markdown is edited or a directory "
+                "with markdowns is opened.")
+        );
+    }
+}
+
 
 void MainWindowPresenter::doActionToolsWikipedia()
 {
@@ -3357,7 +3408,9 @@ void MainWindowPresenter::doActionHelpMathLivePreview()
 void MainWindowPresenter::doActionHelpMathQuickReference()
 {
     QDesktopServices::openUrl(
-        QUrl{"https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference"}
+        QUrl{
+            "https://math.meta.stackexchange.com/questions/5020"
+            "/mathjax-basic-tutorial-and-quick-reference"}
     );
 }
 

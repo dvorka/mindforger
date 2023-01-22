@@ -103,6 +103,7 @@ private:
     Configuration& config;
 
     QLabel* themeLabel;
+    QLabel* menuLabel;
     QComboBox* themeCombo;
 
     QLabel* startupLabel;

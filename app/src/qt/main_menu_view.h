@@ -254,6 +254,7 @@ public:
     QAction* actionToolsWikipedia;
     QAction* actionToolsArxiv;
     QAction* actionToolsChatGpt;
+    QAction* actionToolsGramarly;
     QAction* actionToolsDuckDuckGo;
     QAction* actionToolsPandoc;
     QAction* actionToolsDocusaurus;

@@ -44,9 +44,12 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
     // signals
-    QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &ConfigurationDialog::saveSlot);
+    QObject::connect(
+        buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    QObject::connect(
+        buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    QObject::connect(
+        buttonBox, &QDialogButtonBox::accepted, this, &ConfigurationDialog::saveSlot);
 
     QVBoxLayout* mainLayout = new QVBoxLayout{this};
     mainLayout->addWidget(tabWidget);
@@ -95,7 +98,10 @@ void ConfigurationDialog::saveSlot()
 ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
-    themeLabel = new QLabel(tr("UI theme (<font color='#ff0000'>requires restart</font>)")+":", this);
+    themeLabel = new QLabel(
+        tr("UI theme (<font color='#ff0000'>requires restart</font>)")+":", this);
+    menuLabel = new QLabel(
+        tr("Menu (<font color='#ff0000'>requires restart</font>)")+":", this);
     themeCombo = new QComboBox{this};
     themeCombo->addItem(QString{UI_THEME_LIGHT});
 #ifndef __APPLE__
@@ -127,8 +133,9 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
 
     showToolbarCheck = new QCheckBox(tr("show toolbar"), this);
     showToolbarCheck->setChecked(true);
-    uiExpertModeCheck = new QCheckBox(tr("I don't need buttons - I know all keyboard shortcuts!"), this);
-    nerdMenuCheck = new QCheckBox(tr("nerd menu (requires restart)"), this);
+    uiExpertModeCheck = new QCheckBox(
+        tr("I don't need buttons - I know all keyboard shortcuts!"), this);
+    nerdMenuCheck = new QCheckBox(tr("nerd terminology"), this);
 
     // assembly
     QVBoxLayout* startupLayout = new QVBoxLayout{this};
@@ -140,15 +147,21 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     QVBoxLayout* appearanceLayout = new QVBoxLayout{this};
     appearanceLayout->addWidget(themeLabel);
     appearanceLayout->addWidget(themeCombo);
-    appearanceLayout->addWidget(showToolbarCheck);
-    appearanceLayout->addWidget(uiExpertModeCheck);
+    appearanceLayout->addWidget(menuLabel);
     appearanceLayout->addWidget(nerdMenuCheck);
     QGroupBox* appearanceGroup = new QGroupBox{tr("Appearance"), this};
     appearanceGroup->setLayout(appearanceLayout);
 
+    QVBoxLayout* controlsLayout = new QVBoxLayout{this};
+    controlsLayout->addWidget(showToolbarCheck);
+    controlsLayout->addWidget(uiExpertModeCheck);
+    QGroupBox* controlsGroup = new QGroupBox{tr("Controls"), this};
+    controlsGroup->setLayout(controlsLayout);
+
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
     boxesLayout->addWidget(startupGroup);
     boxesLayout->addWidget(appearanceGroup);
+    boxesLayout->addWidget(controlsGroup);
     boxesLayout->addStretch();
     setLayout(boxesLayout);
 }
@@ -198,11 +211,13 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     zoomSpin->setMinimum(25);
     zoomSpin->setMaximum(500);
 
-    srcCodeHighlightSupportCheck = new QCheckBox{tr("source code syntax highlighting support"), this};
+    srcCodeHighlightSupportCheck = new QCheckBox{
+        tr("source code syntax highlighting support"), this};
 
     mathSupportCheck = new QCheckBox{tr("math support"), this};
     fullOPreviewCheck = new QCheckBox{tr("whole notebook preview"), this};
-    doubleClickViewerToEditCheck = new QCheckBox{tr("double click HTML preview to edit"), this};
+    doubleClickViewerToEditCheck = new QCheckBox{
+        tr("double click HTML preview to edit"), this};
 
     diagramSupportLabel = new QLabel(tr("Diagram support")+":", this);
     diagramSupportCombo = new QComboBox{this};
