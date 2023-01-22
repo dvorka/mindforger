@@ -1,9 +1,10 @@
-2023-01-22  Martin Dvorak  <martin.dvorak@mindforger.com>
+2023-01-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v1.55.1 - Limbo added to the application menu View/Limbo,
       polished Preferences (Appearance refactored to Controls; restart requirement
       highlighted), missing OOTB Eisenhower Matrix is automatically added back
-      to the list of Organizers.
+      to the list of Organizers, up/down button in O/N preview mode to move around
+      O's Ns while presenting a N.
 
 2023-01-15  Martin Dvorak  <martin.dvorak@mindforger.com>
 
