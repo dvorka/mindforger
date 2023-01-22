@@ -49,6 +49,7 @@ help:
 	@echo "dist-dmg          build macOS Disk iMaGe .dmg package"
 	@echo "dist-debian-ppa   add .deb to aptly PPA"
 	@echo "dist-ubuntu-deb   locally build .deb for any Ubuntu version:"
+	@echo "dist-snap         build snap distro for snapcraft.io"
 	@echo "                  DISTRO=focal"
 	@echo "statistic         show source code statistic"
 	@echo "doc-to-wiki       mindforger-documentation to mindforger.wiki"
@@ -164,6 +165,14 @@ dist-ubuntu-deb:
 	@echo "Running .sh script ..."
 	@echo "Copying .deb from build area to the current directory ..."
 	false
+
+
+.PHONY: dist-snap
+dist-snap:
+	@echo "Building Snap ..."
+	echo "cd .. && make clean && cd build"
+	echo "cp -vf snap/snapcraft.yaml .. && cd .. && snapcraft clean && snapcraft --debug"
+	cp -vf snap/snapcraft.yaml .. && cd .. && snapcraft --debug
 
 
 .PHONY: dist-all-clean

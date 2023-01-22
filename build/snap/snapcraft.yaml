@@ -1,26 +1,74 @@
 name: mindforger
 base: core18 # the base snap is the execution environment for this snap: core18 (18.04), core20 (20.04)
-version: '1.55.0' # just for humans, typically '1.2+git' or '1.3.2'
+version: '1.55.1' # just for humans, typically '1.2+git' or '1.3.2'
 summary: Thinking notebook and Markdown editor
 description: |
-  Get as much as possible from your remarks.
+   Search, browse, view and edit your Markdown files. Get as much
+   as possible from the knowledge in your remarks.
 
 grade: devel # must be 'stable' to release into candidate/stable channels: devel, stable
 confinement: devmode # use 'strict' once you have the right plugs and slots: strict, devmode, classic
+architectures:
+  - build-on: amd64
+
+parts:
+  mindforger:
+    plugin: qmake
+    source: .  # snapcraft.yaml is copied to project root to simplify the build // might be GH .git URL
+    qt-version: qt5
+    build-packages:
+      - libx11-xcb1  # fixes could not find or load the Qt platform plugin "xcb" in ""
+      - zlib1g-dev
+      - ccache
+      - libhunspell-dev
+      - build-essential
+      - qtbase5-dev
+      - qt5-qmake
+      - libqt5webkit5-dev  # WebKit is used @ Linux, WebEngine @ macOS/Win
+    stage-packages:  # suggested by snapcraft --v
+      - libx11-xcb1  # TODO fixes could not find or load the Qt platform plugin "xcb" in ""
+      - libbrotli1  
+      - libdouble-conversion1
+      - libfreetype6
+      - libgl1
+      - libglvnd0
+      - libglx0
+      - libgraphite2-3
+      - libgstreamer-plugins-base1.0-0
+      - libgstreamer1.0-0
+      - libharfbuzz0b
+      - libhunspell-1.6-0
+      - libhyphen0
+      - libicu60
+      - libjpeg-turbo8
+      - liborc-0.4-0
+      - libpng16-16
+      - libqt5core5a
+      - libqt5gui5
+      - libqt5network5
+      - libqt5positioning5
+      - libqt5printsupport5
+      - libqt5qml5
+      - libqt5quick5
+      - libqt5sensors5
+      - libqt5webchannel5
+      - libqt5webkit5
+      - libqt5widgets5
+      - libwebp6
+      - libwoff1
+      - libx11-6
+      - libxau6
+      - libxcb1
+      - libxdmcp6
+      - libxml2
+      - libxslt1.1
+    options:
+      - -r
+      - "CONFIG+=mfdebug"
 
 apps:
   mindforger:
-    common-id: com.mindforger
-    command: mindforger
-    plugs:
-      home
-      network
-
-parts:
-  application:
-    plugin: qmake  # see 'snapcraft plugins'
-    source: ../../..
-    build-packages:
-	- qtbase5-dev
-	- libqt5webkit5-dev
-	- libhunspell-dev
+    command: bin/mindforger
+    environment:
+      QT_QPA_PLATFORM_PLUGIN_PATH: /usr/lib/x86_64-linux-gnu/qt5/plugins/platforms  # fixes xcb failure
+    plugs: [home, network]
