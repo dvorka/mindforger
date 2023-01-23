@@ -26,8 +26,9 @@ parts:
       - qtbase5-dev
       - qt5-qmake
       - libqt5webkit5-dev  # WebKit is used @ Linux, WebEngine @ macOS/Win
+      - ttf-ubuntu-font-family  # w/o fonts there are no menus/text in UI
+      - libvoikko-dev  # reported as missing in the start-up log
     stage-packages:  # suggested by snapcraft build
-      - libx11-xcb1  # TODO fixes could not find or load the Qt platform plugin "xcb" in ""
       - libbrotli1
       - libdouble-conversion1
       - libfreetype6
@@ -71,8 +72,12 @@ apps:
   mindforger:
     command: bin/mindforger
     environment:
-      LD_LIBRARY_PATH: /usr/lib/x86_64-linux-gnu:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins/platforms  # add path to dir w/ libqxcb.so
       QT_DEBUG_PLUGINS: 1
+      # # Qt's xcb plugin (X11 vs. Wayland) configuration
+      LD_LIBRARY_PATH: /usr/lib/x86_64-linux-gnu:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins/platforms  # add path to dir w/ libqxcb.so
       QT_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins
-      QT_QPA_PLATFORM_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins  # Qt's plugins dir to fix xcb failure
+      QT_QPA_PLATFORM_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins
+      # font configuration
+      FONTCONFIG_PATH: ${SNAP}/etc/fonts/conf.d
+      FONTCONFIG_FILE: ${SNAP}/etc/fonts/fonts.conf
     plugs: [home, network]
