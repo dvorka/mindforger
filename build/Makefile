@@ -97,6 +97,9 @@ build-ci: clean
 	ls -al ../app/mindforger
 
 
+# TODO build-cmark-gfm
+
+
 .PHONY: l10n
 l10n:
 	cd make && ./l10n-update-strings.sh && ./l10n-edit-and-release.sh $(MF_LANG)
@@ -170,8 +173,13 @@ dist-ubuntu-deb:
 .PHONY: dist-snap
 dist-snap:
 	@echo "Building Snap ..."
-	echo "cd .. && make clean && cd build"
-	echo "cp -vf snap/snapcraft.yaml .. && cd .. && snapcraft clean && snapcraft --debug"
+	cd .. && make clean && cd build
+	cp -vf snap/snapcraft.yaml .. && cd .. && snapcraft clean && snapcraft --debug
+
+
+.PHONY: dist-wip
+dist-snap-wip:  # debug Snap build w/o clean up, but w/ incremental build
+	@echo "Building Snap ..."
 	cp -vf snap/snapcraft.yaml .. && cd .. && snapcraft --debug
 
 
