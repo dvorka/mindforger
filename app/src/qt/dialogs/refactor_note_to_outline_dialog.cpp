@@ -26,7 +26,7 @@ RefactorNoteToOutlineDialog::RefactorNoteToOutlineDialog(QWidget *parent)
     findButton->setText(tr("Refactor"));
 
     // dialog
-    setWindowTitle(tr("Refactor Note to Notebook"));
+    setWindowTitle(tr("Move Note to Notebook"));
 }
 
 RefactorNoteToOutlineDialog::~RefactorNoteToOutlineDialog()

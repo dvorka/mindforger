@@ -26,7 +26,14 @@ AddLibraryDialog::AddLibraryDialog(QWidget* parent)
     : QDialog(parent)
 {
     // widgets
-    findLibrarySourceLabel = new QLabel{tr("Choose and find library source:"), parent};
+    findLibrarySourceLabel = new QLabel{
+        tr(
+            "Choose a directory (library) of PDF files to be indexed. MindForger\n"
+            "will create new notebook for every library file. Such notebook can be\n"
+            "used to easily open the library file and create library file related\n"
+            "notes and annotatioons.\n\n"
+            "Choose new library source:"),
+        parent};
     findDirectoryButton = new QPushButton{tr("Directory")};
 
     libraryNameLabel = new QLabel{tr("Library name:"), parent};
@@ -44,8 +51,12 @@ AddLibraryDialog::AddLibraryDialog(QWidget* parent)
     closeButton = new QPushButton{tr("&Cancel")};
 
     // signals
-    QObject::connect(findDirectoryButton, SIGNAL(clicked()), this, SLOT(handleFindDirectory()));
-    QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    QObject::connect(
+        findDirectoryButton, SIGNAL(clicked()),
+        this, SLOT(handleFindDirectory()));
+    QObject::connect(
+        closeButton, SIGNAL(clicked()),
+        this, SLOT(close()));
 
     // assembly
     QVBoxLayout* mainLayout = new QVBoxLayout{};
@@ -87,7 +98,10 @@ void AddLibraryDialog::show()
 void AddLibraryDialog::handleFindDirectory()
 {
     QString homeDirectory
-        = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+        = QStandardPaths::locate(
+            QStandardPaths::HomeLocation,
+            QString(),
+            QStandardPaths::LocateDirectory);
 
     QFileDialog fileDialog{this};
     fileDialog.setWindowTitle(tr("Choose Directory"));

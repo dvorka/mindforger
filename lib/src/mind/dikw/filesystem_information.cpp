@@ -67,25 +67,32 @@ FilesystemInformationSource::~FilesystemInformationSource()
     }
 }
 
-FilesystemInformationSource::ErrorCode FilesystemInformationSource::indexToMemory(Repository& repository)
-{
+FilesystemInformationSource::ErrorCode FilesystemInformationSource::indexToMemory(
+    Repository& repository
+) {
     MF_DEBUG("Indexing LIBRARY documents to memory:" << endl);
 
     if(!isDirectory(locator.c_str())) {
-        MF_DEBUG("Error: filesystem information resource cannot be indexed to memory as its locator path '" << locator << "' does not exist");
+        MF_DEBUG(
+            "Error: filesystem information resource cannot be indexed to memory "
+            "as its locator path '" << locator << "' does not exist");
         return FilesystemInformationSource::ErrorCode::INVALID_LOCATOR;
     }
 
     if(repository.getType() != Repository::RepositoryType::MINDFORGER
        || repository.getMode() != Repository::RepositoryMode::REPOSITORY
     ) {
-        MF_DEBUG("Error: filesystem information resource cannot be indexed as active directory is not of MINDFORGER/REPOSITORY type");
+        MF_DEBUG(
+            "Error: filesystem information resource cannot be indexed as "
+            "active directory is not of MINDFORGER/REPOSITORY type");
         return FilesystemInformationSource::ErrorCode::NOT_MINDFORGER_REPOSITORY;
     }
 
     string memoryPath{repository.getDir()+FILE_PATH_SEPARATOR+DIRNAME_MEMORY};
     if(!isDirectory(memoryPath.c_str())) {
-        MF_DEBUG("Error: filesystem information resource cannot be indexed to memory path '" << memoryPath << "' as this directory does not exist");
+        MF_DEBUG(
+            "Error: filesystem information resource cannot be indexed to "
+            "memory path '" << memoryPath << "' as this directory does not exist");
         return FilesystemInformationSource::ErrorCode::INVALID_MEMORY_PATH;
     }
 
@@ -142,7 +149,10 @@ void FilesystemInformationSource::indexDirectoryToMemory(
     const string& directory,
     const string& memoryPath
 ) {
-    MF_DEBUG(endl << "INDEXING information source DIR: '" << directory << "' to memory DIR: '" << memoryPath << "'");
+    MF_DEBUG(
+        endl <<
+        "INDEXING information source DIR: '" <<
+        directory << "' to memory DIR: '" << memoryPath << "'");
     DIR* dir;
     if((dir = opendir(directory.c_str()))) {
         const struct dirent *entry;
@@ -154,14 +164,16 @@ void FilesystemInformationSource::indexDirectoryToMemory(
                     if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
                         continue;
                     }
-                    MF_DEBUG(endl << "DIVE> " << directory.c_str() << "//" << entry->d_name);
+                    MF_DEBUG(
+                        endl << "DIVE> " << directory.c_str() << "//" << entry->d_name);
                     path.assign(directory);
                     path += FILE_PATH_SEPARATOR;
                     path += entry->d_name;
 
                     indexDirectoryToMemory(path, memoryPath);
                 } else {
-                    MF_DEBUG(endl << "  FILE: " << directory.c_str() << "//" << entry->d_name);
+                    MF_DEBUG(
+                        endl << "  FILE: " << directory.c_str() << "//" << entry->d_name);
                     ppath = new string{directory};
                     ppath->append(FILE_PATH_SEPARATOR);
                     ppath->append(entry->d_name);

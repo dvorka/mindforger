@@ -96,7 +96,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // wire signals
     QObject::connect(
-        newLibraryDialog->getCreateButton(), SIGNAL(clicked()), this, SLOT(handleNewLibrary()));
+        newLibraryDialog->getCreateButton(), SIGNAL(clicked()),
+        this, SLOT(handleNewLibrary()));
     QObject::connect(
         scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
     QObject::connect(

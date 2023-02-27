@@ -45,14 +45,14 @@ InsertImageDialog::InsertImageDialog(QWidget* parent)
 
     // assembly
     QVBoxLayout* mainLayout = new QVBoxLayout{};
-    mainLayout->addWidget(alternateTextLabel);
-    mainLayout->addWidget(alternateTextEdit);
-    mainLayout->addWidget(pathLabel);
-    mainLayout->addWidget(pathEdit);
     QHBoxLayout* srcButtonLayout = new QHBoxLayout{};
     srcButtonLayout->addWidget(findFileButton);
     srcButtonLayout->addStretch();
     mainLayout->addLayout(srcButtonLayout);
+    mainLayout->addWidget(alternateTextLabel);
+    mainLayout->addWidget(alternateTextEdit);
+    mainLayout->addWidget(pathLabel);
+    mainLayout->addWidget(pathEdit);
     mainLayout->addWidget(copyToRepoCheckBox);
 
     QHBoxLayout* buttonLayout = new QHBoxLayout{};
@@ -77,8 +77,7 @@ InsertImageDialog::~InsertImageDialog()
 void InsertImageDialog::show()
 {
     alternateTextEdit->setText(tr("Image"));
-    alternateTextEdit->selectAll();
-    alternateTextEdit->setFocus();
+    findFileButton->setFocus();
     pathEdit->clear();
 
     QDialog::show();

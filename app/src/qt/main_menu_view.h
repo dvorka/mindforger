@@ -129,6 +129,7 @@ public:
 
     // menu: Library
     QAction* actionLibraryAdd;
+    QAction* actionLibrarySync;
     QAction* actionLibraryDeprecate;
 
     // menu: Organizer

@@ -34,12 +34,11 @@ DISTRO := "bionic"
 .PHONY: help
 help:
 	@echo "MindForger Swiss knife help:"
-	@echo "git-subs-update   update git submodules"
-	@echo "gen-lib-class     generate lib C++ class skeleton: CLASS_NAME=My_Class"
-	@echo "gen-ui-class      generate UI C++ class skeleton: CLASS_NAME=My_Class"
 	@echo "clean             clean build artifacts"
 	@echo "build             build MindForger application binary"
 	@echo "l10n              update and release localization strings: MF_LANG=en"
+	@echo "gen-lib-class     generate lib C++ class skeleton: CLASS_NAME=My_Class"
+	@echo "gen-ui-class      generate UI C++ class skeleton: CLASS_NAME=My_Class"
 	@echo "test-lib          compile and run lib/ unit tests"
 	@echo "test-app          compile and run app/ integration tests"
 	@echo "dist-all          build all distributions"
@@ -51,9 +50,10 @@ help:
 	@echo "dist-ubuntu-deb   locally build .deb for any Ubuntu version:"
 	@echo "dist-snap         build snap distro for snapcraft.io"
 	@echo "                  DISTRO=focal"
-	@echo "statistic         show source code statistic"
 	@echo "doc-to-wiki       mindforger-documentation to mindforger.wiki"
 	@echo "api-reference     generate Doxygen documentation"
+	@echo "statistic         show source code statistic"
+	@echo "git-subs-update   update git submodules"
 	@echo "dev-install-local compile and install binary to ~/bin as MIND"
 
 

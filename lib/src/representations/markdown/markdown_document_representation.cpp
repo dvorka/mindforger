@@ -53,15 +53,15 @@ Outline* MarkdownDocumentRepresentation::to(
     o->addTag(ontology.findOrCreateTag("pdf"));
     o->addTag(ontology.findOrCreateTag("library-document"));
 
-    o->addDescriptionLine(new string{
-        "Notebook for document: [" + documentPath + "](" + documentPath + ")"
-        }
-    );
+    o->addDescriptionLine(
+        new string{
+            "This is a notebook for the document: "
+            "[" + documentPath + "](" + documentPath + ")"});
     o->addDescriptionLine(new string{""});
     o->addDescriptionLine(new string{"---"});
     o->addDescriptionLine(new string{""});
     o->addDescriptionLine(new string{
-        "This notebook represents document from above in MindForger. "
+        "This notebook represents the document from above in MindForger. "
         "Notebook was created automatically on indexation of a library "
         "and may contain document text (if available) to enable full-text "
         "search, associations and content mining. You can add notes with "

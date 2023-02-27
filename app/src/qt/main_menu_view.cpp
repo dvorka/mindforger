@@ -401,17 +401,33 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: library
 #ifdef MF_WIP
-    menuLibrary = qMenuBar->addMenu(tr("Libr&ary"));
+    menuLibrary = qMenuBar->addMenu(tr("Lib&rary"));
 
-    actionLibraryAdd = new QAction(QIcon(":/menu-icons/new.svg"), tr("&Add library"), mainWindow);
-    actionLibraryAdd->setStatusTip(tr("Add directory with documents, URL or other resource to library..."));
+    actionLibraryAdd = new QAction(
+        QIcon(":/menu-icons/new.svg"), tr("&New library"), mainWindow);
+    actionLibraryAdd->setStatusTip(
+        tr("Add directory with documents, URL or other library resource..."));
 
-    actionLibraryDeprecate = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Deprecate library"), mainWindow);
-    actionLibraryDeprecate->setStatusTip(tr("Move a library resource with documents to limbo..."));
+    // choose library > determine library src directory > re-index src directory
+    // show side-by-side comparison: ONLY in src / ACTION <.del> / ONLY in MF
+    // - includes synchronization in one on another direction
+    // - decisions executed AFTER user clicks DO IT button (not while editing dialog)
+    actionLibrarySync= new QAction(
+        QIcon(":/menu-icons/new.svg"), tr("&Synchronize library"), mainWindow);
+    actionLibrarySync->setStatusTip(
+        tr(
+            "Synchronize library source with MindForger notebook(s) which represent"
+            "library resources..."));
+
+    actionLibraryDeprecate = new QAction(
+        QIcon(":/menu-icons/delete.svg"), tr("&Deprecate library"), mainWindow);
+    actionLibraryDeprecate->setStatusTip(tr(
+        "Move a library resource with documents to limbo..."));
     actionLibraryDeprecate->setDisabled(true);
 
     menuLibrary->addAction(actionLibraryAdd);
-    // menuLibrary->addAction(actionLibraryDeprecate);
+    menuLibrary->addAction(actionLibrarySync);
+    menuLibrary->addAction(actionLibraryDeprecate);
 #endif
 
     // menu: flashcards
@@ -610,28 +626,35 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteDemote = new QAction(QIcon(":/menu-icons/right.svg"), tr("&Demote\tCtrl+Right"), mainWindow);
     actionNoteDemote->setStatusTip(tr("Demote Note"));
 
-    actionNoteFirst = new QAction(QIcon(":/menu-icons/top.svg"), tr("F&irst\tCtrl+Shift+Up"), mainWindow);
-    actionNoteFirst->setStatusTip(tr("Move Note to be the first child of its parent"));
+    actionNoteFirst = new QAction(
+        QIcon(":/menu-icons/top.svg"), tr("Move to F&irst\tCtrl+Shift+Up"),
+        mainWindow);
+    actionNoteFirst->setStatusTip(tr("Move the Note to be the first child of its parent"));
 
-    actionNoteUp = new QAction(QIcon(":/menu-icons/up.svg"), tr("&Up\tCtrl+Up"), mainWindow);
-    actionNoteUp->setStatusTip(tr("Move Note up"));
+    actionNoteUp = new QAction(
+        QIcon(":/menu-icons/up.svg"), tr("Move &Up\tCtrl+Up"), mainWindow);
+    actionNoteUp->setStatusTip(tr("Move the Note up"));
 
-    actionNoteDown = new QAction(QIcon(":/menu-icons/down.svg"), tr("Do&wn\tCtrl+Down"), mainWindow);
-    actionNoteDown->setStatusTip(tr("Move Note down"));
+    actionNoteDown = new QAction(
+        QIcon(":/menu-icons/down.svg"), tr("Move Do&wn\tCtrl+Down"), mainWindow);
+    actionNoteDown->setStatusTip(tr("Move the Note down"));
 
-    actionNoteLast = new QAction(QIcon(":/menu-icons/bottom.svg"), tr("&Last\tCtrl+Shift+Down"), mainWindow);
-    actionNoteLast->setStatusTip(tr("Move Note to be the last child of its parent"));
+    actionNoteLast = new QAction(
+        QIcon(":/menu-icons/bottom.svg"),
+        tr("Move to &Last\tCtrl+Shift+Down"),
+        mainWindow);
+    actionNoteLast->setStatusTip(tr("Move the Note to be the last child of its parent"));
 
     actionNoteRefactor = new QAction(
         QIcon(":/menu-icons/refactor.svg"),
 #ifdef __APPLE__
-        tr("Refactor\tCtrl+R"),
+        tr("Move to Notebook\tCtrl+R"),
 #else
-        tr("&Refactor"),
+        tr("&Move to Notebook"),
 #endif
         mainWindow
     );
-    actionNoteRefactor->setStatusTip(tr("Refactor Note to another Notebook..."));
+    actionNoteRefactor->setStatusTip(tr("Move the current Note to another Notebook..."));
 
     actionNoteStencil = new QAction(
         QIcon(":/menu-icons/stencil.svg"),
@@ -668,11 +691,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNote->addAction(actionNoteDown);
     menuNote->addAction(actionNoteLast);
     menuNote->addSeparator();
+    menuNote->addAction(actionNoteClone);
     menuNote->addAction(actionNoteRefactor);
 #ifdef MF_WIP
     menuNote->addAction(actionNoteStencil);
 #endif
-    menuNote->addAction(actionNoteClone);
 #ifdef MF_WIP
     menuNote->addSeparator();
     menuNote->addAction(actionNoteExport);
