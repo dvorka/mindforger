@@ -141,6 +141,7 @@ private slots:
     void insertTab() { smartEditor.insertTab(); }
     void insertCompletion(const QString& completion, bool singleWord=false);
 public slots:
+    void slotStartRunTool();
     void slotStartLinkCompletion();
     void slotPerformLinkCompletion(const QString& completionPrefix, std::vector<std::string>* links);
 
@@ -168,6 +169,7 @@ signals:
 
     void signalDnDropUrl(QString url);
     void signalPasteImageData(QImage image);
+    void signalOpenRunToolDialog(QString& phrase);
     void signalGetLinksForPattern(const QString& pattern);
 };
 

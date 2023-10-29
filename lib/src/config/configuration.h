@@ -23,7 +23,6 @@
 #include <string>
 #include <cstdlib>
 #include <cstdio>
-#include <vector>
 
 #include "repository.h"
 #include "time_scope.h"
@@ -99,6 +98,20 @@ constexpr const auto UI_DEFAULT_THEME = UI_THEME_DARK;
 constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_FONT = "Monospace,10";
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
+
+constexpr const auto TOOL_PHRASE = "<<PHRASE>>";
+
+constexpr const auto TOOL_ARXIV = "arXiv";
+constexpr const auto TOOL_DUCKDUCKGO = "DuckDuckGo";
+constexpr const auto TOOL_DEEPL = "DeepL web";
+constexpr const auto TOOL_GH_PROJECTS = "GitHub projects";
+constexpr const auto TOOL_GH_TOPICS = "GitHub topics";
+constexpr const auto TOOL_GOOGLE_BARD = "Google Bard";
+constexpr const auto TOOL_GOOGLE_SEARCH = "Google Search";
+constexpr const auto TOOL_H2O_GPT_WEB = "h2oGPT web";
+constexpr const auto TOOL_H2O_GPT_API = "h2oGPT API";
+constexpr const auto TOOL_CHAT_GPT_WEB = "OpenAI chatGPT web";
+constexpr const auto TOOL_WIKIPEDIA = "Wikipedia";
 
 // improve platform/language specific
 constexpr const auto DEFAULT_NEW_OUTLINE = "# New Markdown File\n\nThis is a new Markdown file created by MindForger.\n\n#Section 1\nThe first section.\n\n";

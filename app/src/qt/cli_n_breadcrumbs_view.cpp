@@ -55,6 +55,8 @@ const QString CliAndBreadcrumbsView::CMD_FTS = ".fts ";
 const QString CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME = ".find outline by name ";
 const QString CliAndBreadcrumbsView::CMD_LIST_OUTLINES = ".list outlines";
 
+const QString CliAndBreadcrumbsView::CMD_TOOL= ".tool";
+
 // TODO migrate all commands to constants
 const QStringList CliAndBreadcrumbsView::DEFAULT_CMDS = QStringList()
         /*
@@ -90,6 +92,8 @@ const QStringList CliAndBreadcrumbsView::DEFAULT_CMDS = QStringList()
         << CMD_FTS
         << CMD_LIST_OUTLINES
         << CMD_FIND_OUTLINE_BY_NAME
+
+        << CMD_TOOL
         ;
 
 
@@ -124,11 +128,14 @@ CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent, bool zenMode)
 void appendToStandardModel(const QStringList& list, QStandardItemModel* completerModel) {
     for(const auto& i:list) {
         QStandardItem* item = new QStandardItem(i);
-        if(i.startsWith(".")) {
-            item->setIcon(QIcon(":/menu-icons/cli.svg"));
-        } else {
-            item->setIcon(QIcon(":/menu-icons/find.svg"));
-        }
+
+        // TODO icons are not shown on certain platforms (Linux/x86)
+//        if(i.startsWith(".")) {
+//            item->setIcon(QIcon(":/menu-icons/cli.svg"));
+//        } else {
+//            item->setIcon(QIcon(":/menu-icons/find.svg"));
+//        }
+
         // IMPROVE item->setToolTip("tool tip");
         completerModel->appendRow(item);
     }

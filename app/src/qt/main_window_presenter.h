@@ -38,6 +38,7 @@
 #include "status_bar_presenter.h"
 
 #include "dialogs/add_library_dialog.h"
+#include "dialogs/run_tool_dialog.h"
 #include "dialogs/organizer_new_dialog.h"
 #include "dialogs/outline_new_dialog.h"
 #include "dialogs/note_new_dialog.h"
@@ -120,6 +121,7 @@ private:
     StatusBarPresenter* statusBar;
 
     AddLibraryDialog* newLibraryDialog;
+    RunToolDialog* runToolDialog;
     ScopeDialog* scopeDialog;
     OrganizerNewDialog* newOrganizerDialog;
     OutlineNewDialog* newOutlineDialog;
@@ -248,9 +250,6 @@ public slots:
     void doActionViewLimbo();
     void doActionViewDistractionFree();
     void doActionViewFullscreen();
-    // knowledge
-    void doActionKnowledgeArxiv();
-    void doActionKnowledgeWikipedia();
     // library
     void doActionLibraryNew();
     void handleNewLibrary();
@@ -357,6 +356,8 @@ public slots:
     void doActionEditFindAgain();
     void doActionEditWordWrapToggle();
     void doActionEditPasteImageData(QImage image);
+    void doActionOpenRunToolDialog(QString& phrase);
+    void handleRunTool();
     void doActionToggleLiveNotePreview();
     void doActionNameDescFocusSwap();
     void doActionSpellCheck();

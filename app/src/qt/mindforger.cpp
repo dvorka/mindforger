@@ -41,13 +41,15 @@ using namespace m8r::filesystem;
  *
  * ```
  * $ mindforger
- *   ... lookup repository as follows
- *     1. configured in ~/.mindforger,
+ *   ... looks up repository as follows
+ *     1. repository configured in ~/.mindforger,
  *     2. specified by environment variable MINDFORGER_REPOSITORY,
- *     3. check existence of MindForger repository in default location i.e. ~/mindforger-repository
- *     4. create new MindForger repository in default location i.e. ~/mindforger-repository
+ *     3. checks existence of MindForger repository in default location
+ *        i.e. ~/mindforger-repository
+ *     4. creates new MindForger repository in default location
+ *        i.e. ~/mindforger-repository
  * $ mindforger ~/my-mf-repository
- *   ... MindForger repository
+ *   ... start MindForger with given repository
  * $ mindforger ~/books/marathon-training
  *   ... directory structure w/ Markdowns
  * $ mindforger ~/my-mf-repository/memory/plans.md

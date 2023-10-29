@@ -351,20 +351,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
     menuView->addAction(actionViewFullscreen);
 
-    // menu: knowledge
-#ifdef MF_WIP_KNOW
-    menuKnowledge = qMenuBar->addMenu(tr("&Know"));
-
-    actionKnowledgeWikipedia = new QAction(QIcon(":/menu-icons/link.svg"), tr("&Wikipedia"), mainWindow);
-    actionKnowledgeWikipedia->setStatusTip(tr("Find marked text on Wikipedia or open Wikipedia search"));
-
-    actionKnowledgeArxiv = new QAction(QIcon(":/menu-icons/link.svg"), tr("&arXiv"), mainWindow);
-    actionKnowledgeArxiv->setStatusTip(tr("Find marked text on arXiv or get article by ID"));
-
-    menuKnowledge->addAction(actionKnowledgeWikipedia);
-    menuKnowledge->addAction(actionKnowledgeArxiv);
-#endif
-
     // menu: navigator
 #ifdef __APPLE__
     actionNavigatorEdgesStretch = new QAction(tr("Str&etch edges"), mainWindow);
@@ -740,7 +726,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditExtract = new QAction(QIcon(":/menu-icons/cut.svg"), tr("E&xtract"), mainWindow);
     actionEditExtract->setStatusTip(tr("Create new Note from the text selected in the current Note..."));
 
-    actionEditComplete = new QAction(QIcon(":/menu-icons/on.svg"), tr("Complete Link\tCtrl+/"), mainWindow);
+    actionEditRunTool = new QAction(QIcon(":/menu-icons/on.svg"), tr("Find Knowledge\tCtrl+/"), mainWindow);
+    actionEditRunTool->setStatusTip(tr("Run an external tool to find, explain, process text under the cursor"));
+
+    actionEditComplete = new QAction(QIcon(":/menu-icons/link.svg"), tr("Complete Link\tCtrl+L"), mainWindow);
     actionEditComplete->setStatusTip(tr("Complete word being written by finding link to Notebook or Note"));
 
     actionEditSpellCheck = new QAction(QIcon(":/menu-icons/paste.svg"), tr("Sp&ell Check"), mainWindow);
@@ -761,6 +750,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuEdit->addAction(actionEditWordWrap);
     menuEdit->addAction(actionEditNameDescFocusSwap);
     menuEdit->addSeparator();
+    menuEdit->addAction(actionEditRunTool);
     menuEdit->addAction(actionEditComplete);
     menuEdit->addAction(actionEditExtract);
     menuEdit->addSeparator();
@@ -968,9 +958,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatImage);
     menuFormat->setEnabled(false);
 
-    // menu: tools
 
 #ifdef MF_WIP
+    // menu: tools
+
+    /*
     menuTools = qMenuBar->addMenu(tr("&Tools"));
 
     actionToolsWikipedia = new QAction(
@@ -1016,6 +1008,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionToolsDocusaurus->setStatusTip(
         tr("Build your web with MindForger's Markdown documents and Docusaurus..."));
     menuTools->addAction(actionToolsDocusaurus);
+    */
 #endif
 
     // menu: help
@@ -1166,9 +1159,6 @@ void MainMenuView::showFacetOrganizerList(bool repositoryMode)
     actionOrganizerMovePrevious->setEnabled(false);
     actionOrganizerMoveNext->setEnabled(false);
 
-#ifdef MF_WIP_KNOW
-    menuKnowledge->setEnabled(false);
-#endif
     menuNavigator->setEnabled(false);
 #ifdef MF_WIP
     menuLibrary->setEnabled(false);
@@ -1192,9 +1182,6 @@ void MainMenuView::showFacetOrganizerView(bool repositoryMode)
 {
     showAllMenuItems();
 
-#ifdef MF_WIP_KNOW
-    menuKnowledge->setEnabled(false);
-#endif
     menuNavigator->setEnabled(false);
 #ifdef MF_WIP
     menuLibrary->setEnabled(false);

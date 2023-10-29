@@ -194,6 +194,7 @@ public:
     QAction* actionEditWordWrap;
     QAction* actionEditNameDescFocusSwap;
     QAction* actionEditExtract;
+    QAction* actionEditRunTool;
     QAction* actionEditComplete;
     QAction* actionEditSpellCheck;
 

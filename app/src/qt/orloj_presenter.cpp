@@ -125,6 +125,11 @@ OrlojPresenter::OrlojPresenter(
     // editor getting data from the backend
     QObject::connect(
         view->getNoteEdit()->getNoteEditor(),
+            SIGNAL(signalOpenRunToolDialog(QString&)),
+        mainPresenter,
+            SLOT(doActionOpenRunToolDialog(QString&)));
+    QObject::connect(
+        view->getNoteEdit()->getNoteEditor(),
             SIGNAL(signalGetLinksForPattern(QString)),
         this,
             SLOT(slotGetLinksForPattern(QString)));
@@ -133,6 +138,11 @@ OrlojPresenter::OrlojPresenter(
             SIGNAL(signalLinksForPattern(QString, std::vector<std::string>*)),
         view->getNoteEdit()->getNoteEditor(),
             SLOT(slotPerformLinkCompletion(QString, std::vector<std::string>*)));
+    QObject::connect(
+        view->getOutlineHeaderEdit()->getHeaderEditor(),
+            SIGNAL(signalOpenRunToolDialog(QString&)),
+        mainPresenter,
+            SLOT(doActionOpenRunToolDialog(QString&)));
     QObject::connect(
         view->getOutlineHeaderEdit()->getHeaderEditor(),
             SIGNAL(signalGetLinksForPattern(QString)),
@@ -896,6 +906,12 @@ void OrlojPresenter::slotShowOutlineNavigator(Outline* outline)
         // timestamps are updated by O header view
         showFacetOutline(outline);
     }
+}
+
+void OrlojPresenter::slotOpenRunToolDialog(const QString& pattern)
+{
+    MF_DEBUG("Slot to RUN TOOL: " << pattern.toStdString() << endl);
+    // TODO this->mainPresenter->getInsertLinkDialog()->show();
 }
 
 /**

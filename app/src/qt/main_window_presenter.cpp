@@ -52,6 +52,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // initialize components
     newLibraryDialog = new AddLibraryDialog{&view};
+    runToolDialog = new RunToolDialog{&view};
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
     newOutlineDialog = new OutlineNewDialog{
@@ -95,6 +96,9 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     handleMindPreferences();
 
     // wire signals
+    QObject::connect(
+        runToolDialog->getRunButton(), SIGNAL(clicked()),
+        this, SLOT(handleRunTool()));
     QObject::connect(
         newLibraryDialog->getCreateButton(), SIGNAL(clicked()),
         this, SLOT(handleNewLibrary()));
@@ -1874,9 +1878,64 @@ void MainWindowPresenter::doActionEditPasteImageData(QImage image)
     injectImageLinkToEditor(path, QString{"image"});
 }
 
+void MainWindowPresenter::doActionOpenRunToolDialog(QString& phrase)
+{
+    MF_DEBUG("SIGNAL handled: open run tool dialog...");
+    this->runToolDialog->setPhraseText(phrase);
+    QString templateText = this->runToolDialog->getTemplateTextForToolName(
+        this->runToolDialog->getSelectedTool());
+    if(templateText.length() == 0) {
+        return;
+    }
+    this->runToolDialog->setTemplateText(templateText);
+
+    this->runToolDialog->show();
+}
+
+void MainWindowPresenter::handleRunTool()
+{
+    this->runToolDialog->hide();
+
+    string selectedTool{
+        this->runToolDialog->getSelectedTool().toStdString()
+    };
+
+    QString phrase=this->runToolDialog->getPhraseText();
+    if(phrase.length() == 0) {
+        QMessageBox msgBox{
+            QMessageBox::Critical,
+            QObject::tr("Empty Phrase"),
+            QObject::tr("Phrase to search/explain/process is empty.")
+        };
+        msgBox.exec();
+        return;
+    }
+
+    // get & check template text validity
+    QString templateText = this->runToolDialog->getTemplateText();
+
+    // phrase replace @ template > get command, if invalid, then fallback
+    QString command = templateText.replace(
+        QString{TOOL_PHRASE}, phrase
+    );
+
+    // RUN tool
+    if(selectedTool == TOOL_H2O_GPT_API) {
+        // TODO: sniff HTTP traffic and use HTTP client/JSon to talk to the service
+        MF_DEBUG("H2O GPT API not implemented yet");
+        return;
+    }
+
+    QDesktopServices::openUrl(QUrl{command});
+}
+
 void MainWindowPresenter::statusInfoPreviewFlickering()
 {
-    statusBar->showInfo(QString(tr("HTML Note preview flickering can be eliminated by disabling math and diagrams in Preferences menu")));
+    statusBar->showInfo(
+        QString(
+            tr(
+                "HTML Note preview flickering can be eliminated by disabling math "
+                "and diagrams in Preferences menu")));
 }
 
 /*
@@ -2920,16 +2979,6 @@ void MainWindowPresenter::handleMindPreferences()
 void MainWindowPresenter::doActionViewTerminal()
 {
     terminalDialog->show();
-}
-
-void MainWindowPresenter::doActionKnowledgeWikipedia()
-{
-    QDesktopServices::openUrl(QUrl{"https://en.wikipedia.org/"});
-}
-
-void MainWindowPresenter::doActionKnowledgeArxiv()
-{
-    QDesktopServices::openUrl(QUrl{"https://arxiv.org/search/cs"});
 }
 
 void MainWindowPresenter::doActionLibraryNew()

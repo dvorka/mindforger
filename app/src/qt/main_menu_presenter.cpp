@@ -128,12 +128,6 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     // IMPROVE complete edge shrinking & zooming (skipped as shortcut/mouse wheel is the much more reasonable)
     QObject::connect(view->actionNavigatorShuffle, SIGNAL(triggered()), mwp, SLOT(doActionNavigatorShuffle()));
 
-    // menu: Knowledge
-#ifdef MF_WIP_KNOW
-    QObject::connect(view->actionKnowledgeWikipedia, SIGNAL(triggered()), mwp, SLOT(doActionKnowledgeWikipedia()));
-    QObject::connect(view->actionKnowledgeArxiv, SIGNAL(triggered()), mwp, SLOT(doActionKnowledgeArxiv()));
-#endif
-
     // menu: Library
 #ifdef MF_WIP
     QObject::connect(view->actionLibraryAdd, SIGNAL(triggered()), mwp, SLOT(doActionLibraryNew()));

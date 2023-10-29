@@ -64,6 +64,8 @@ public:
     static const QString CMD_FIND_OUTLINE_BY_NAME;
     static const QString CMD_LIST_OUTLINES;
 
+    static const QString CMD_TOOL;
+
 public:
     explicit CliAndBreadcrumbsView(QWidget* parent, bool zenMode=true);
 

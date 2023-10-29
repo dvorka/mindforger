@@ -47,9 +47,19 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
 
     QString command = view->getCommand();
     if(command.size()) {
-        if(command.startsWith(CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME)) {
-            QString prefix(QString::fromStdString(
-                 command.toStdString().substr(CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME.size()-1)));
+        if(command.startsWith(CliAndBreadcrumbsView::CMD_TOOL)) {
+            QString prefix(
+                QString::fromStdString(
+                    command.toStdString().substr(
+                        CliAndBreadcrumbsView::CMD_TOOL.size()-1)));
+            QString phrase{"PHRASE"};
+            mainPresenter->doActionOpenRunToolDialog(phrase);
+            view->setCommand("");
+        } else if(command.startsWith(CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME)) {
+            QString prefix(
+                QString::fromStdString(
+                    command.toStdString().substr(
+                        CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME.size()-1)));
             if(prefix.size()) {
                 mainPresenter->getStatusBar()->showInfo(prefix);
                 if(prefix.size()==1) {

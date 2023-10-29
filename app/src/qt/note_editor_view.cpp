@@ -103,6 +103,10 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     // shortcut signals
     new QShortcut(
         QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_Slash)),
+        this, SLOT(slotStartRunTool())
+    );
+    new QShortcut(
+        QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_L)),
         this, SLOT(slotStartLinkCompletion())
     );
 
@@ -556,6 +560,41 @@ void NoteEditorView::performTextCompletion(const QString& completionPrefix)
         completer->popup()->verticalScrollBar()->sizeHint().width()
     );
     completer->complete(rect);
+}
+
+void NoteEditorView::slotStartRunTool()
+{
+    QString phrase{};
+
+    // get PHRASE: selection > the word under the cursor
+    QString selection{textCursor().selectedText()};
+    if(selection.size()) {
+        phrase = selection;
+    } else {
+        // TODO get word under cursor OR get selected text
+        MF_DEBUG(
+            "Run tool: getting the phrase under the cursor..." << endl);
+        phrase = getCompletionPrefix();
+        MF_DEBUG(
+            "Run tool: phrase under the cursor '" << phrase.toStdString()
+            << "'" << endl);
+    }
+
+    if(!phrase.isEmpty()) {
+    MF_DEBUG(
+        "Run tool: sending signal to open the dialog..." << endl);
+        emit signalOpenRunToolDialog(phrase);
+    } else {
+        QMessageBox msgBox{
+            QMessageBox::Critical,
+            QObject::tr("Empty Phrase"),
+            QObject::tr(
+                "Phrase to search/explain/process is empty - either make a text "
+                "selection or move cursor to a word/phrase."
+            )
+        };
+        msgBox.exec();
+    }
 }
 
 void NoteEditorView::slotStartLinkCompletion()
