@@ -114,25 +114,25 @@ QString RunToolDialog::getTemplateTextForToolName(QString selectedTool) const
     } else if(selectedTool == TOOL_DEEPL) {
         return QString{"https://www.deepl.com/en/translator"};
     } else if(selectedTool == TOOL_DUCKDUCKGO) {
-        QString templateText{"https://www.duckduckgo.com/q="};
+        QString templateText{"https://www.duckduckgo.com/?q="};
         templateText.append(TOOL_PHRASE);
         return templateText;
     } else if(selectedTool == TOOL_GH_TOPICS) {
         // TODO fix search URL
-        QString templateText{"https://www.github.com/q="};
+        QString templateText{"https://www.github.com/search?q="};
         templateText.append(TOOL_PHRASE);
         return templateText;
     } else if(selectedTool == TOOL_GH_PROJECTS) {
         // TODO fix search URL
-        QString templateText{"https://www.github.com/q="};
+        QString templateText{"https://www.github.com/search?q="};
         templateText.append(TOOL_PHRASE);
         return templateText;
     } else if(selectedTool == TOOL_CHAT_GPT_WEB) {
         return QString{"https://chat.openai.com/"};
     } else if(selectedTool == TOOL_GOOGLE_BARD) {
-        return QString{"https://bard.google.com/"};
+        return QString{"https://bard.google.com/chat"};
     } else if(selectedTool == TOOL_GOOGLE_SEARCH) {
-        QString temlateText{"https://www.google.com/q="};
+        QString temlateText{"https://www.google.com/search?q="};
         temlateText.append(TOOL_PHRASE);
         return temlateText;
     } else if(selectedTool == TOOL_H2O_GPT_API) {
@@ -142,7 +142,7 @@ QString RunToolDialog::getTemplateTextForToolName(QString selectedTool) const
         return QString{"https://gpt.h2o.ai/"};
     } else if(selectedTool == TOOL_WIKIPEDIA) {
         // TODO: URL
-        QString temlateText{"https://www.wikipedia.org/q="};
+        QString temlateText{"https://en.wikipedia.org/w/index.php?search="};
         temlateText.append(TOOL_PHRASE);
         return temlateText;
     }
