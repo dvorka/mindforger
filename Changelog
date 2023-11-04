@@ -4,7 +4,8 @@
       polished Preferences (Appearance refactored to Controls; restart requirement
       highlighted), missing OOTB Eisenhower Matrix is automatically added back
       to the list of Organizers, up/down button in O/N preview mode to move around
-      O's Ns while presenting a N.
+      O's Ns while presenting a N. Tools allowing to get more information about
+      the word under cursor from Wikipedia, arXiv, LLM chats or web search engines.
 
 2023-01-15  Martin Dvorak  <martin.dvorak@mindforger.com>
 
