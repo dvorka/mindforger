@@ -75,7 +75,7 @@ gen-ui-class:
 
 .PHONY: devenv-debian
 devenv-debian:
-	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools ccache cmake
+	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools ccache cmake debhelper
 
 build: clean
 	cd .. && qmake -r mindforger.pro && make -j 7
