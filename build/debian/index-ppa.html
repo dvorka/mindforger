@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MindForger Debian "DISTRO" PPA repository</title>
+  </head>
+  <body>
+    <h1>MindForger Debian "DISTRO" PPA repository</h1>
+
+    <p>This is Personal Package Archive (PPA)
+       for <a href="https://www.mindforger.com/">MindForger</a>.
+    </p>    
+    <p>To install programs from this PPA add new repository
+       to <code>/etc/apt/sources.list</code> as follows:</p>
+    </p>    
+
+    <pre>
+      echo "deb http://www.mindforger.com/debian-ppa/DISTRO DISTRO main" | sudo tee /etc/apt/sources.list.d/mindforger.list      
+    </pre>
+
+    <p>... and import key that is used to sign the release:</p>
+
+    <pre>
+      $ wget -qO - http://www.mindforger.com/gpgpubkey.txt | sudo apt-key add -
+    </pre>
+
+    <p>After that you can install MindForger as any other software package:</p>
+
+    <pre>
+      $ sudo apt update
+      $ sudo apt install mindforger
+    </pre>
+    
+  </body>
+</html>
