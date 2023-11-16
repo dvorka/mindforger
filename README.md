@@ -34,7 +34,7 @@ Install:
 * [macOS](https://github.com/dvorka/mindforger/wiki/Installation#macos)
 * [Windows](https://github.com/dvorka/mindforger/wiki/Installation#windows)
 * [Ubuntu](https://github.com/dvorka/mindforger/wiki/Installation#ubuntu)
-* [Debian](https://github.com/dvorka/mindforger/wiki/Installation#windows)
+* [Debian](https://github.com/dvorka/mindforger/wiki/Installation#debian)
 * [Fedora](https://github.com/dvorka/mindforger/wiki/Installation#fedora)
 * [FreeBSD](https://github.com/dvorka/mindforger/wiki/Installation#freebsd)
 * [Arch Linux](https://github.com/dvorka/mindforger/wiki/Installation#arch-linux)
