@@ -111,6 +111,8 @@ SOURCES += \
     src/config/repository_configuration.cpp \
     src/gear/async_utils.cpp \
     src/gear/math_utils.cpp \
+    src/mind/ai/llm/mock_wingman.cpp \
+    src/mind/ai/llm/wingman.cpp \
     src/mind/dikw/dikw_pyramid.cpp \
     src/mind/dikw/filesystem_information.cpp \
     src/mind/dikw/information.cpp \
@@ -225,6 +227,8 @@ HEADERS += \
     ./src/gear/math_utils.h \
     ./src/mind/dikw/dikw_pyramid.h \
     ./src/mind/dikw/filesystem_information.h \
+    src/mind/ai/llm/mock_wingman.h \
+    src/mind/ai/llm/wingman.h \
     src/mind/dikw/information.h \
     src/model/eisenhower_matrix.h \
     src/model/kanban.h \
