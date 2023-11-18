@@ -52,8 +52,8 @@ public:
     QMenu* menuKnowledge;
 #endif
     QMenu* menuNavigator;
-#ifdef MF_WIP
     QMenu* menuLibrary;
+#ifdef MF_WIP
     QMenu* menuFlashcards;
 #endif
     QMenu* menuOrganizer;

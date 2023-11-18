@@ -232,7 +232,6 @@ public slots:
     void slotShowNavigator();
     void slotShowNoteNavigator(Note* note);
     void slotShowOutlineNavigator(Outline* outline);
-    void slotOpenRunToolDialog(const QString& pattern);
     void slotGetLinksForPattern(const QString& pattern);
     void slotRefreshCurrentNotePreview();
     void slotOutlinesTableSorted(int column);

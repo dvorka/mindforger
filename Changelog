@@ -6,6 +6,9 @@
       to the list of Organizers, up/down button in O/N preview mode to move around
       O's Ns while presenting a N. Tools allowing to get more information about
       the word under cursor from Wikipedia, arXiv, LLM chats or web search engines.
+      Libraries - ability to index external PDF files and generate Notebooks
+      which represent them in MindForger (update and removal of the library
+      supported as well.
 
 2023-01-15  Martin Dvorak  <martin.dvorak@mindforger.com>
 

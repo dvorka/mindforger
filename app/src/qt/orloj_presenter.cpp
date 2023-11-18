@@ -908,12 +908,6 @@ void OrlojPresenter::slotShowOutlineNavigator(Outline* outline)
     }
 }
 
-void OrlojPresenter::slotOpenRunToolDialog(const QString& pattern)
-{
-    MF_DEBUG("Slot to RUN TOOL: " << pattern.toStdString() << endl);
-    // TODO this->mainPresenter->getInsertLinkDialog()->show();
-}
-
 /**
  * @brief Return MD links for given O/N name prefix (pattern).
  *
