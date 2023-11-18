@@ -23,6 +23,93 @@ using namespace m8r::filesystem;
 
 namespace m8r {
 
+constexpr const auto META_SRC_PATH_PREFIX = "Source directory: ";
+
+std::vector<FilesystemInformationSource*> FilesystemInformationSource::findInformationSources(
+    Configuration &config,
+    Mind& mind,
+    MarkdownDocumentRepresentation& mdDocumentRepresentation
+) {
+    vector<FilesystemInformationSource*> infoSrc;
+
+    if(config.getActiveRepository()->getType() != Repository::RepositoryType::MINDFORGER
+       || config.getActiveRepository()->getMode() != Repository::RepositoryMode::REPOSITORY
+    ) {
+        MF_DEBUG(
+            "Error: filesystem information resource cannot be indexed as "
+            "active directory is not of MINDFORGER/REPOSITORY type");
+        return infoSrc;
+    }
+
+    string libraryPath{
+        config.getMemoryPath()+FILE_PATH_SEPARATOR+DIR_MEMORY_M1ndF0rg3rL1br8ry
+    };
+    if(!isDirectory(libraryPath.c_str())) {
+        MF_DEBUG(
+            "Error: memory's library path '" << libraryPath << "' does not exist");
+        return infoSrc;
+    }
+
+    MF_DEBUG(
+        endl <<
+        "SEARCHING existing information sources in memory's library path: '" <<
+        libraryPath << "'");
+    DIR* dir;
+    if((dir = opendir(libraryPath.c_str()))) {
+        const struct dirent *entry;
+        if((entry = readdir(dir))) {
+            string path;
+            do {
+                if(entry->d_type == DT_DIR) {
+                    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+                        continue;
+                    }
+                    MF_DEBUG(
+                        endl << "LIBRARY SOURCE> " << libraryPath.c_str() << "/" << entry->d_name);
+                    path.assign(libraryPath);
+                    path += FILE_PATH_SEPARATOR;
+                    path += entry->d_name;
+
+                    string metaPath{
+                        path+FILE_PATH_SEPARATOR+FILE_META_M1ndF0rg3rL1br8ryM3t8
+                    };
+                    MF_DEBUG(endl << "  Metadata file path: '" << metaPath << "'");
+                    if(!isFile(metaPath.c_str())) {
+                        continue;
+                    }
+
+                    vector<string*> metaLines{};
+                    size_t fileSize{};
+                    fileToLines(&metaPath, metaLines, fileSize);
+
+                    if(metaLines.size() >= 2 && metaLines[2]) {
+                        string* line=metaLines[2];
+                        string libSrcPath = line->substr(strlen(META_SRC_PATH_PREFIX));
+                        MF_DEBUG(
+                            endl << "    Library source dir: '" << libSrcPath << "'");
+
+                        if(!isDirectory(libSrcPath.c_str())) {
+                            continue;
+                        }
+
+                        MF_DEBUG(endl << "      VALID");
+                        FilesystemInformationSource* src = new FilesystemInformationSource{
+                            libSrcPath,
+                            mind,
+                            mdDocumentRepresentation,
+                        };
+                        src->setMfPath(path);
+                        infoSrc.push_back(src);
+                    }
+                }
+            } while ((entry = readdir(dir)) != 0);
+            closedir(dir);
+        }
+    }
+
+    return infoSrc;
+}
+
 FilesystemInformationSource::FilesystemInformationSource(
     string& sourcePath,
     Mind& mind,
@@ -30,7 +117,8 @@ FilesystemInformationSource::FilesystemInformationSource(
 )
     : InformationSource{SourceType::FILESYSTEM, sourcePath},
       mind{mind},
-      mdDocumentRepresentation{mdDocumentRepresentation}
+      mdDocumentRepresentation{mdDocumentRepresentation},
+      mfPath{}
 {
 }
 
@@ -68,7 +156,7 @@ FilesystemInformationSource::~FilesystemInformationSource()
 }
 
 FilesystemInformationSource::ErrorCode FilesystemInformationSource::indexToMemory(
-    Repository& repository
+    Repository& repository, bool synchronize
 ) {
     MF_DEBUG("Indexing LIBRARY documents to memory:" << endl);
 
@@ -107,7 +195,7 @@ FilesystemInformationSource::ErrorCode FilesystemInformationSource::indexToMemor
     memoryInformationSourceIndexPath += FILE_PATH_SEPARATOR;
     memoryInformationSourceIndexPath += normalizeToNcName(this->locator, '_');
     MF_DEBUG("  Library path in memory: " << memoryInformationSourceIndexPath << endl);
-    if(isDirectory(memoryInformationSourceIndexPath.c_str())) {
+    if(!synchronize && isDirectory(memoryInformationSourceIndexPath.c_str())) {
         return ErrorCode::LIBRARY_ALREADY_EXISTS;
     } else {
         createDirectory(memoryInformationSourceIndexPath);
@@ -132,15 +220,24 @@ FilesystemInformationSource::ErrorCode FilesystemInformationSource::indexToMemor
 
         pathToDirectoryAndFile(outlinePathInMemory, outlineDir, outlineFilename);
         if(outlineDir.size() && !isDirectory(outlineDir.c_str())) {
-            // TODO create directory including parent directories
-            MF_DEBUG("      TO BE IMPLEMENTED - create directory including parent directories: " << outlinePathInMemory << endl);
-            createDirectory(outlineDir);
+            MF_DEBUG("      creating dir including parent dirs: " << outlinePathInMemory << endl);
+            createDirectories(outlineDir);
         }
 
-        Outline* o=mdDocumentRepresentation.to(*pdf_path, outlinePathInMemory);
-
-        mind.outlineNew(o);
+        if(!isFile(outlinePathInMemory.c_str())) {
+            Outline* o=mdDocumentRepresentation.to(*pdf_path, outlinePathInMemory);
+            mind.outlineNew(o);
+        } else {
+            MF_DEBUG("      SKIPPING creation of O as it already EXISTS");
+        }
     }
+
+    string metaPath{
+        memoryInformationSourceIndexPath
+        + FILE_PATH_SEPARATOR
+        + FILE_META_M1ndF0rg3rL1br8ryM3t8
+    };
+    saveMetadata(metaPath, locator);
 
     return ErrorCode::SUCCESS;
 }
@@ -189,6 +286,18 @@ void FilesystemInformationSource::indexDirectoryToMemory(
             closedir(dir);
         }
     }
+}
+
+void FilesystemInformationSource::saveMetadata(
+    string& metaPath,
+    string& librarySrcPath
+) {
+    std::ofstream out(metaPath);
+    out << "# MindForger Library Metadata" << endl
+    << "Library name: My library" << endl
+    << META_SRC_PATH_PREFIX << librarySrcPath << endl;
+    out.close();
+
 }
 
 } // m8r namespace

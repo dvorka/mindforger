@@ -38,6 +38,8 @@
 #include "status_bar_presenter.h"
 
 #include "dialogs/add_library_dialog.h"
+#include "dialogs/sync_library_dialog.h"
+#include "dialogs/rm_library_dialog.h"
 #include "dialogs/run_tool_dialog.h"
 #include "dialogs/organizer_new_dialog.h"
 #include "dialogs/outline_new_dialog.h"
@@ -121,6 +123,8 @@ private:
     StatusBarPresenter* statusBar;
 
     AddLibraryDialog* newLibraryDialog;
+    SyncLibraryDialog* syncLibraryDialog;
+    RemoveLibraryDialog* rmLibraryDialog;
     RunToolDialog* runToolDialog;
     ScopeDialog* scopeDialog;
     OrganizerNewDialog* newOrganizerDialog;
@@ -253,6 +257,10 @@ public slots:
     // library
     void doActionLibraryNew();
     void handleNewLibrary();
+    void doActionLibrarySync();
+    void handleSyncLibrary();
+    void doActionLibraryRm();
+    void handleRmLibrary();
     // organizer
     void doActionOrganizerNew();
     void handleCreateOrganizer();

@@ -22,7 +22,10 @@ using namespace std;
 
 namespace m8r {
 
-const std::string InformationSource::DIR_MEMORY_M1ndF0rg3rL1br8ry = string{"M1ndF0rg3r-L1br8ry"};
+const std::string InformationSource::DIR_MEMORY_M1ndF0rg3rL1br8ry
+    = string{"M1ndF0rg3r-L1br8ry"};
+const std::string InformationSource::FILE_META_M1ndF0rg3rL1br8ryM3t8
+    = string{"M1ndF0rg3r-L1br8ry-M3t8"};
 
 InformationSource::InformationSource(SourceType type, std::string locator)
     : type{type},

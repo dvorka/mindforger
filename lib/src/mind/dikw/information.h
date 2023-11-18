@@ -27,6 +27,7 @@ class InformationSource
 {
 public:
     static const std::string DIR_MEMORY_M1ndF0rg3rL1br8ry;
+    static const std::string FILE_META_M1ndF0rg3rL1br8ryM3t8;
 
     enum SourceType {
         FILESYSTEM,

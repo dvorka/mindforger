@@ -386,35 +386,34 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNavigator->setEnabled(false);
 
     // menu: library
-#ifdef MF_WIP
     menuLibrary = qMenuBar->addMenu(tr("Lib&rary"));
 
     actionLibraryAdd = new QAction(
         QIcon(":/menu-icons/new.svg"), tr("&New library"), mainWindow);
     actionLibraryAdd->setStatusTip(
-        tr("Add directory with documents, URL or other library resource..."));
+        tr("Add path to the directory with documents (PDF, txt, HTML)..."));
 
     // choose library > determine library src directory > re-index src directory
     // show side-by-side comparison: ONLY in src / ACTION <.del> / ONLY in MF
     // - includes synchronization in one on another direction
     // - decisions executed AFTER user clicks DO IT button (not while editing dialog)
     actionLibrarySync= new QAction(
-        QIcon(":/menu-icons/new.svg"), tr("&Synchronize library"), mainWindow);
+        QIcon(":/menu-icons/new.svg"),
+        tr("&Update library"),
+        mainWindow);
     actionLibrarySync->setStatusTip(
         tr(
-            "Synchronize library source with MindForger notebook(s) which represent"
+            "Synchronize library source directory with MindForger notebook(s) which represent"
             "library resources..."));
 
     actionLibraryDeprecate = new QAction(
-        QIcon(":/menu-icons/delete.svg"), tr("&Deprecate library"), mainWindow);
+        QIcon(":/menu-icons/delete.svg"), tr("&Delete library"), mainWindow);
     actionLibraryDeprecate->setStatusTip(tr(
-        "Move a library resource with documents to limbo..."));
-    actionLibraryDeprecate->setDisabled(true);
+        "Delete all Notebooks representing the library resources..."));
 
     menuLibrary->addAction(actionLibraryAdd);
     menuLibrary->addAction(actionLibrarySync);
     menuLibrary->addAction(actionLibraryDeprecate);
-#endif
 
     // menu: flashcards
 #ifdef MF_WIP
@@ -1099,10 +1098,8 @@ void MainMenuView::showAllMenuItems()
 
 #ifdef MF_WIP
     menuLibrary->setEnabled(true);
-
     actionLibraryAdd->setEnabled(true);
-    // TODO to be implemented
-    actionLibraryDeprecate->setEnabled(false);
+    actionLibraryDeprecate->setEnabled(true);
 #endif
 
 #ifdef MF_WIP

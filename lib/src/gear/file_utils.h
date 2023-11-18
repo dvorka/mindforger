@@ -247,11 +247,17 @@ int copyDirectoryRecursively(const char* srcPath, const char* dstPath, bool extr
 bool createDirectory(const std::string& path);
 
 /**
+ * @brief Create directory including (non-existent) parent directories.
+ */
+bool createDirectories(const std::string& path);
+
+/**
  * @brief Get path to the the executable on macOS or windows. Othewise returns nullptr.
  *
  * Method is not reentrant - it returns pointer to the static buffer.
  */
 char* getExecutablePath();
+
 } // m8r namespace
 
 #endif /* M8R_FILE_UTILS_H_ */

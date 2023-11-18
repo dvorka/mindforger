@@ -44,8 +44,6 @@ private:
     std::vector<Note*> notes;
 
     QLabel* findLibrarySourceLabel;
-    QLabel* libraryNameLabel;
-    QLineEdit* libraryNameEdit;
     QLabel* uriLabel;
     QLineEdit* uriEdit;
 
@@ -68,7 +66,6 @@ public:
     void show();
 
     QPushButton* getCreateButton() const { return createButton; }
-    QString getLibraryNameText() const { return libraryNameEdit->text(); }
     QString getLibraryUriText() const { return uriEdit->text(); }
     bool isIndexPdf() const { return pdfCheckBox->isChecked(); }
 

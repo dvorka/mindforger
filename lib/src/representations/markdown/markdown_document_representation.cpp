@@ -61,18 +61,19 @@ Outline* MarkdownDocumentRepresentation::to(
     o->addDescriptionLine(new string{"---"});
     o->addDescriptionLine(new string{""});
     o->addDescriptionLine(new string{
-        "This notebook represents the document from above in MindForger. "
-        "Notebook was created automatically on indexation of a library "
+        "This notebook represents above document in MindForger. This Notebook "
+        "was created automatically on indexation of a library "
         "and may contain document text (if available) to enable full-text "
-        "search, associations and content mining. You can add notes with "
-        "your remarks, thoughts and ideas to this notebook as usually."
+        "search, associations and content mining."});
+    o->addDescriptionLine(new string{""});
+    o->addDescriptionLine(new string{
+        "Add notes with your remarks, thoughts and ideas to this notebook."
         }
     );
     o->addDescriptionLine(new string{""});
     o->addDescriptionLine(new string{
-        "Please do not edit the first row of this description with "
-        "document path to ensure that the notebook stays interlinked "
-        "with the document."
+        "Please **DO NOT EDIT** the first row of this description with "
+        "the document path - notebook must stay interlinked with the document."
         }
     );
     o->addDescriptionLine(new string{""});

@@ -52,6 +52,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // initialize components
     newLibraryDialog = new AddLibraryDialog{&view};
+    syncLibraryDialog = new SyncLibraryDialog{&view};
+    rmLibraryDialog = new RemoveLibraryDialog(&view);
     runToolDialog = new RunToolDialog{&view};
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
@@ -102,6 +104,12 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(
         newLibraryDialog->getCreateButton(), SIGNAL(clicked()),
         this, SLOT(handleNewLibrary()));
+    QObject::connect(
+        syncLibraryDialog->getSyncButton(), SIGNAL(clicked()),
+        this, SLOT(handleSyncLibrary()));
+    QObject::connect(
+        rmLibraryDialog->getRemoveButton(), SIGNAL(clicked()),
+        this, SLOT(handleRmLibrary()));
     QObject::connect(
         scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
     QObject::connect(
@@ -2999,13 +3007,9 @@ void MainWindowPresenter::handleNewLibrary()
         return;
     }
 
-    // TODO check that it's new path (SAFE library update is different operation)
-
     newLibraryDialog->hide();
 
-    // TODO add library to repository configuration
-
-    // TODO index library documents
+    // index library documents
     FilesystemInformationSource informationSource{
         uri,
         *orloj->getMind(),
@@ -3019,7 +3023,7 @@ void MainWindowPresenter::handleNewLibrary()
         QMessageBox::critical(
             &view,
             tr("Add Library Error"),
-            tr("Library already indexed - use update action to reindex documents.")
+            tr("Library already indexed - use 'Update library' action to synchronize documents.")
         );
         return;
     }
@@ -3040,6 +3044,121 @@ void MainWindowPresenter::handleNewLibrary()
 
     // show Os view
     orloj->showFacetOutlineList(mind->getOutlines());
+}
+
+void MainWindowPresenter::doActionLibrarySync()
+{
+    syncLibraryDialog->reset();
+
+    // determine existing library dirs
+    vector<FilesystemInformationSource*> srcs
+        = FilesystemInformationSource::findInformationSources(
+            config,
+            *orloj->getMind(),
+            *mdDocumentRepresentation);
+
+    if(srcs.size()) {
+        for(FilesystemInformationSource* src:srcs) {
+            syncLibraryDialog->addLibraryToSync(src->getPath());
+
+            delete src;
+        }
+
+        syncLibraryDialog->show();
+    } else {
+        QMessageBox::information(
+            &view,
+            tr("Library synchronization"),
+            tr("There are no libraries - nothing to synchronize.")
+        );
+    }
+}
+
+void MainWindowPresenter::handleSyncLibrary()
+{
+    syncLibraryDialog->hide();
+
+    string librarySrcDir
+        = syncLibraryDialog->getLibraryPathsCombo()->currentText().toStdString();
+
+    FilesystemInformationSource informationSource{
+        librarySrcDir,
+        *orloj->getMind(),
+        *mdDocumentRepresentation,
+    };
+
+    informationSource.indexToMemory(*config.getActiveRepository(), true);
+
+    rmLibraryDialog->reset();
+}
+
+
+void MainWindowPresenter::doActionLibraryRm()
+{
+    rmLibraryDialog->reset();
+
+    // determine existing library dirs
+    vector<FilesystemInformationSource*> srcs
+        = FilesystemInformationSource::findInformationSources(
+            config,
+            *orloj->getMind(),
+            *mdDocumentRepresentation);
+
+    if(srcs.size()) {
+        for(FilesystemInformationSource* src:srcs) {
+            rmLibraryDialog->addLibraryToRemove(src);
+        }
+
+        rmLibraryDialog->show();
+    } else {
+        QMessageBox::information(
+            &view,
+            tr("Library deletion"),
+            tr("There are no libraries - nothing to delete.")
+        );
+    }
+}
+
+void MainWindowPresenter::handleRmLibrary()
+{
+    rmLibraryDialog->hide();
+
+    string librarySrcDir
+        = rmLibraryDialog->getLibraryPathsCombo()->currentText().toStdString();
+
+    // confirm removal of MF directory
+    QMessageBox msgBox{
+        QMessageBox::Question,
+        tr("Delete Library"),
+        tr("Do you really want to delete Notebooks which represent the library documents?")
+    };
+    QPushButton* yes = msgBox.addButton("&Yes", QMessageBox::YesRole);
+#ifdef __APPLE__
+    yes->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
+    yes->setToolTip("⌘Y");
+
+    QPushButton* no =
+#endif
+    msgBox.addButton("&No", QMessageBox::NoRole);
+#ifdef __APPLE__
+    no->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+    no->setToolTip("⌘N");
+#endif
+    msgBox.exec();
+
+    QAbstractButton* choosen = msgBox.clickedButton();
+    if(yes == choosen) {
+        // purge library directory
+        string mfLibraryPath{rmLibraryDialog->getLibraryMfPathForLocator(librarySrcDir)};
+        removeDirectoryRecursively(mfLibraryPath.c_str());
+
+        // reload the whole workspace
+        doActionMindRelearn(
+            QString::fromStdString(config.getActiveRepository()->getPath())
+        );
+    }
+
+    rmLibraryDialog->reset();
 }
 
 void MainWindowPresenter::doActionOrganizerNew()

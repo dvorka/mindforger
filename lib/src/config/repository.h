@@ -35,9 +35,9 @@ public:
     /**
      * @brief Repository type.
      *
-     * MindForger repository is a directory with sub-directories enabling advanced
-     * knowledge organization and memory/ directory with Outlines written in Markdown-based
-     * DSL (metadata enriched) format.
+     * MindForger repository is a directory with sub-directories enabling
+     * knowledge organization and memory/ directory with Outlines written
+     * in Markdown-based DSL (metadata enriched) format.
      *
      * Markdown repository is any directory structure containing Markdown files.
      */

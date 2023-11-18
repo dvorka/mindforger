@@ -31,13 +31,11 @@ AddLibraryDialog::AddLibraryDialog(QWidget* parent)
             "Choose a directory (library) of PDF files to be indexed. MindForger\n"
             "will create new notebook for every library file. Such notebook can be\n"
             "used to easily open the library file and create library file related\n"
-            "notes and annotatioons.\n\n"
+            "notes.\n\n"
             "Choose new library source:"),
         parent};
     findDirectoryButton = new QPushButton{tr("Directory")};
 
-    libraryNameLabel = new QLabel{tr("Library name:"), parent};
-    libraryNameEdit = new QLineEdit{parent};
     uriLabel = new QLabel{tr("Library source path:"), parent};
     uriEdit = new QLineEdit{parent};
 
@@ -65,8 +63,6 @@ AddLibraryDialog::AddLibraryDialog(QWidget* parent)
     srcButtonLayout->addWidget(findDirectoryButton);
     srcButtonLayout->addStretch();
     mainLayout->addLayout(srcButtonLayout);
-    mainLayout->addWidget(libraryNameLabel);
-    mainLayout->addWidget(libraryNameEdit);
     mainLayout->addWidget(uriLabel);
     mainLayout->addWidget(uriEdit);
     mainLayout->addWidget(pdfCheckBox);
@@ -88,6 +84,13 @@ AddLibraryDialog::AddLibraryDialog(QWidget* parent)
 
 AddLibraryDialog::~AddLibraryDialog()
 {
+    delete findLibrarySourceLabel;
+    delete uriLabel;
+    delete uriEdit;
+    delete findDirectoryButton;
+    delete pdfCheckBox;
+    delete createButton;
+    delete closeButton;
 }
 
 void AddLibraryDialog::show()

@@ -451,7 +451,8 @@ bool isPathRelative(const string& path)
     }
 }
 
-bool createDirectory(const string& path) {
+bool createDirectory(const string& path)
+{
 #ifdef _WIN32
     int e = _mkdir(path.c_str());
 #else
@@ -463,6 +464,46 @@ bool createDirectory(const string& path) {
         return false;
     } else {
         return true;
+    }
+}
+
+bool createDirectories(const string& path)
+{
+#if defined(_WIN32)
+    int ret = _mkdir(path.c_str());
+#else
+    mode_t mode = 0755;
+    int ret = mkdir(path.c_str(), mode);
+#endif
+    if (ret == 0)
+        return true;
+
+    switch (errno) {
+    case ENOENT:
+        // parent didn't exist, try to create it
+        {
+            size_t pos = path.find_last_of('/');
+            if (pos == std::string::npos)
+#if defined(_WIN32)
+                pos = path.find_last_of('\\');
+            if (pos == std::string::npos)
+#endif
+                return false;
+            if (!createDirectories( path.substr(0, pos) ))
+                return false;
+        }
+        // now, try to create again
+#if defined(_WIN32)
+        return 0 == _mkdir(path.c_str());
+#else
+        return 0 == mkdir(path.c_str(), mode);
+#endif
+
+    case EEXIST:
+        return isDirectory(path.c_str());
+
+    default:
+        return false;
     }
 }
 

@@ -123,8 +123,8 @@ class RepositoryConfigurationPersistence;
  * @brief MindForger configuration.
  *
  * Configuration file (Markdown-based DSL) maintained by this class contains
- * location of repositories, active repository and user preferences (for GUI
- * and library).
+ * location of repositories, active repository and user preferences
+ * (for GUIand library).
  *
  * MindForger configuration file is stored in ~/.mindforger.md by default.
  *

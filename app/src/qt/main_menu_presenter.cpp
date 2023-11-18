@@ -129,9 +129,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionNavigatorShuffle, SIGNAL(triggered()), mwp, SLOT(doActionNavigatorShuffle()));
 
     // menu: Library
-#ifdef MF_WIP
     QObject::connect(view->actionLibraryAdd, SIGNAL(triggered()), mwp, SLOT(doActionLibraryNew()));
-#endif
+    QObject::connect(view->actionLibrarySync, SIGNAL(triggered()), mwp, SLOT(doActionLibrarySync()));
+    QObject::connect(view->actionLibraryDeprecate, SIGNAL(triggered()), mwp, SLOT(doActionLibraryRm()));
 
     // menu: Organizer
     QObject::connect(

@@ -64,7 +64,23 @@ private:
     Mind& mind;
     MarkdownDocumentRepresentation& mdDocumentRepresentation;
 
+    std::string mfPath;
+
 public:
+    /**
+     * @brief Find information sources in given directory.
+     *
+     * List sub-directories of given directory and check whether the sub-directory
+     * has metadata file describing ainformation source (library). For every such
+     * directory create FilesystemInformationSource instance and return vector
+     * of such instances.
+     */
+    static std::vector<FilesystemInformationSource*> findInformationSources(
+        Configuration &config,
+        Mind& mind,
+        MarkdownDocumentRepresentation& mdDocumentRepresentation
+    );
+
     explicit FilesystemInformationSource(
        std::string& sourcePath,
        Mind& mind,
@@ -79,15 +95,16 @@ public:
     /**
      * @brief Index this information source to memory.
      *
-     * Scan given filesystem directory, find know files
-     * and convert them to Os/Ns/Ts/... in memory so that
-     * the information might be used.
+     * Scan given filesystem directory, find documents with known extensions
+     * and convert them to Os/Ns/Ts/... in memory so that the information
+     * might be used.
      *
      * For instance index given filesystem information by creating Markdown
-     * descriptor in $MINDFORGER_REPOSITORY/memory for each file
-     * found in given information source.
+     * descriptor in $MINDFORGER_REPOSITORY/memory for each document found in given
+     * information source.
      *
      * Orphan detection and management:
+     *
      * - list of library's Os in memory is scanned before documents indexation
      * - if a document does NOT have valid path to document, then it is TAGGED
      *   with `orphan` tag
@@ -96,12 +113,18 @@ public:
      *
      * @return true if source was successfully indexed, false otherwise.
      */
-    ErrorCode indexToMemory(Repository& repository);
+    ErrorCode indexToMemory(Repository& repository, bool synchronize = false);
 
     std::set<const std::string*> getPdfs() const { return this->pdfs_paths; }
+    std::string getPath() const {return this->locator; }
+    void setMfPath(std::string mfPath) { this->mfPath = mfPath; }
+    std::string getMfPath() {return mfPath; }
+
+    void saveMetadata(std::string& metaPath, std::string& librarySrcPath);
 
 private:
-    void indexDirectoryToMemory(const std::string& directory, const std::string& memoryPath);
+    void indexDirectoryToMemory(
+        const std::string& directory, const std::string& memoryPath);
 };
 
 }
