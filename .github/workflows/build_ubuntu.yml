@@ -17,7 +17,7 @@ jobs:
         run: cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
 
       - name: Build test dependency - Google Test Framework
-        run: sudo apt-get install -y libgtest-dev && cd /usr/src/gtest && sudo cmake . && sudo make && sudo mv -v libg* /usr/lib
+        run: sudo apt-get install -y libgtest-dev && cd /usr/src/gtest && sudo cmake . && sudo make && sudo mv -v lib/libg* /usr/lib
 
       - name: Build lib and run unit tests using Google Test Framework
         run: export M8R_GIT_PATH=`pwd` && cd build/make && M8R_CPU_CORES=4 ./test-lib-units.sh
