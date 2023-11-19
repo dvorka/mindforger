@@ -30,27 +30,38 @@ LeftToolbarView::LeftToolbarView(MainWindowView* mainWindowView)
 
     actionLeftToolbarWikipedia = addAction(
         QIcon(":/icons/wikipedia.png"),
-        "Open Wikipedia and find entry related to the current context... (Alt-2)");
+        "Open Wikipedia and find entries related to the current context... (Alt-2)");
 
     actionLeftToolbarStackOverflow = addAction(
         QIcon(":/icons/stackoverflow.png"),
-        "Open StackOverflow and find entry related to the current context... (Alt-3)");
+        "Open StackOverflow and find entries related to the current context... (Alt-3)");
 
     actionLeftToolbarH2oGpt= addAction(
         QIcon(":/icons/h2oai.png"),
-        "Open h2oGPT and chat about entry related to the current context... (Alt-4)");
+        "Open h2oGPT and chat about the current context... (Alt-4)");
 
     actionLeftToolbarDuckDuckGo = addAction(
         QIcon(":/icons/duckduckgo.png"),
-        "Open DuckDuckGo and find entry related to the current context... (Alt-5)");
+        "Open DuckDuckGo and find entries related to the current context... (Alt-5)");
 
-    // TODO "Open DuckDuckGo and search web for the selected entity..."
+    actionLeftToolbarGitHub = addAction(
+        QIcon(":/icons/github.png"),
+        "Open GitHub and find entries related to the current context... (Alt-6)");
+
+    actionLeftToolbarBard = addAction(
+        QIcon(":/icons/bard.png"),
+        "Open Bard and chat about the current context... (Alt-7)");
+
+    actionLeftToolbarPython = addAction(
+        QIcon(":/icons/python.png"),
+        "Open Python documentation and find entries related to the current context... (Alt-8)");
+
+    actionLeftToolbarCpp = addAction(
+        QIcon(":/icons/cpp.png"),
+        "Open C++ documentation and find entries related to the current context... (Alt-9)");
 
     // TODO "Let chatGPT to explaine in simple terms..."
-    // TODO "Use Gramarly to check to grammar..."
-    // TODO "Use Pandoc to convert MindForger's Markdown documents..."
-    // TODO "Build your web with MindForger's Markdown documents and Docusaurus..."
-
+    // TODO "Use Gramarly to check to grammar..." > bard/chatGPT can check grammar
 }
 
 LeftToolbarView::~LeftToolbarView()

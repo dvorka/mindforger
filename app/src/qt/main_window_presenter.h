@@ -376,6 +376,10 @@ public slots:
     void doActionStackOverflowToolbar();
     void doActionH2oGptToolbar();
     void doActionDuckDuckGoToolbar();
+    void doActionGitHubToolbar();
+    void doActionBardToolbar();
+    void doActionPythonToolbar();
+    void doActionCppToolbar();
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();

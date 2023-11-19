@@ -23,6 +23,10 @@
         <file alias="stackoverflow.png">resources/icons/stackoverflow.png</file>
         <file alias="duckduckgo.png">resources/icons/duckduckgo.png</file>
         <file alias="h2oai.png">resources/icons/h2oai.png</file>
+        <file alias="github.png">resources/icons/github.png</file>
+        <file alias="bard.png">resources/icons/bard.png</file>
+        <file alias="python.png">resources/icons/python.png</file>
+        <file alias="cpp.png">resources/icons/cpp.png</file>
     </qresource>
     <qresource prefix="/translations">
         <file alias="mindforger_cs_CZ.qm">resources/qt/translations/mindforger_cs.qm</file>

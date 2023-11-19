@@ -211,6 +211,38 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         view.getLeftToolBar()->actionLeftToolbarDuckDuckGo, SIGNAL(triggered()),
         this, SLOT(doActionDuckDuckGoToolbar())
     );
+    QObject::connect(
+        new QShortcut(QKeySequence("Alt+6"), view.getOrloj()), SIGNAL(activated()),
+        this, SLOT(doActionGitHubToolbar())
+    );
+    QObject::connect(
+        view.getLeftToolBar()->actionLeftToolbarGitHub, SIGNAL(triggered()),
+        this, SLOT(doActionGitHubToolbar())
+    );
+    QObject::connect(
+        new QShortcut(QKeySequence("Alt+7"), view.getOrloj()), SIGNAL(activated()),
+        this, SLOT(doActionBardToolbar())
+    );
+    QObject::connect(
+        view.getLeftToolBar()->actionLeftToolbarBard, SIGNAL(triggered()),
+        this, SLOT(doActionBardToolbar())
+    );
+    QObject::connect(
+        new QShortcut(QKeySequence("Alt+8"), view.getOrloj()), SIGNAL(activated()),
+        this, SLOT(doActionPythonToolbar())
+    );
+    QObject::connect(
+        view.getLeftToolBar()->actionLeftToolbarPython, SIGNAL(triggered()),
+        this, SLOT(doActionPythonToolbar())
+    );
+    QObject::connect(
+        new QShortcut(QKeySequence("Alt+9"), view.getOrloj()), SIGNAL(activated()),
+        this, SLOT(doActionCppToolbar())
+    );
+    QObject::connect(
+        view.getLeftToolBar()->actionLeftToolbarCpp, SIGNAL(triggered()),
+        this, SLOT(doActionCppToolbar())
+    );
     // wire TOP toolbar signals
     QObject::connect(
         view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()),
@@ -2118,6 +2150,26 @@ void MainWindowPresenter::doActionH2oGptToolbar()
 void MainWindowPresenter::doActionDuckDuckGoToolbar()
 {
     handleLeftToolbarAction(TOOL_DUCKDUCKGO);
+}
+
+void MainWindowPresenter::doActionGitHubToolbar()
+{
+    handleLeftToolbarAction(TOOL_GH_REPOS);
+}
+
+void MainWindowPresenter::doActionBardToolbar()
+{
+    handleLeftToolbarAction(TOOL_GOOGLE_BARD);
+}
+
+void MainWindowPresenter::doActionPythonToolbar()
+{
+    handleLeftToolbarAction(TOOL_DOC_PYTHON);
+}
+
+void MainWindowPresenter::doActionCppToolbar()
+{
+    handleLeftToolbarAction(TOOL_DOC_CPP);
 }
 
 void MainWindowPresenter::handleLeftToolbarAction(string selectedTool)
