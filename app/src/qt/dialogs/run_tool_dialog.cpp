@@ -105,7 +105,7 @@ void RunToolDialog::show()
     QDialog::show();
 }
 
-QString RunToolDialog::getTemplateTextForToolName(QString selectedTool) const
+QString RunToolDialog::getTemplateTextForToolName(string selectedTool) const
 {
     if(selectedTool == TOOL_ARXIV) {
         QString templateText{"https://arxiv.org/search/?query="};
@@ -113,6 +113,10 @@ QString RunToolDialog::getTemplateTextForToolName(QString selectedTool) const
         return templateText;
     } else if(selectedTool == TOOL_DEEPL) {
         return QString{"https://www.deepl.com/en/translator"};
+    } else if(selectedTool == TOOL_STACK_OVERFLOW) {
+        QString templateText{"https://stackoverflow.com/search?q="};
+        templateText.append(TOOL_PHRASE);
+        return templateText;
     } else if(selectedTool == TOOL_DUCKDUCKGO) {
         QString templateText{"https://www.duckduckgo.com/?q="};
         templateText.append(TOOL_PHRASE);
@@ -148,7 +152,7 @@ QString RunToolDialog::getTemplateTextForToolName(QString selectedTool) const
     }
 
     string msg{
-        "Tool '" + selectedTool.toStdString() + "' to search/explain/process "
+        "Tool '" + selectedTool + "' to search/explain/process "
         "the phrase is not supported."};
     QMessageBox msgBox{
         QMessageBox::Critical,
@@ -162,7 +166,7 @@ QString RunToolDialog::getTemplateTextForToolName(QString selectedTool) const
 void RunToolDialog::handleChangeToolCombo(const QString& text) {
     MF_DEBUG("Tool changed: " << text.toStdString() << endl);
 
-    this->templateEdit->setText(getTemplateTextForToolName(text));
+    this->templateEdit->setText(getTemplateTextForToolName(text.toStdString()));
 }
 
 } // m8r namespace

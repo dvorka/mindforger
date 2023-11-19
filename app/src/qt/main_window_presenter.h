@@ -369,13 +369,13 @@ public slots:
     void doActionToggleLiveNotePreview();
     void doActionNameDescFocusSwap();
     void doActionSpellCheck();
-    // tools
-    void doActionToolsWikipedia();
-    void doActionToolsArxiv();
-    void doActionToolsChatGpt();
-    void doActionToolsDuckDuckGo();
-    void doActionToolsPandoc();
-    void doActionToolsDocusaurus();
+    // tools toolbar
+    void handleLeftToolbarAction(std::string selectedTool);
+    void doActionArxivToolbar();
+    void doActionWikipediaToolbar();
+    void doActionStackOverflowToolbar();
+    void doActionH2oGptToolbar();
+    void doActionDuckDuckGoToolbar();
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();

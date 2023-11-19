@@ -122,6 +122,9 @@ public:
     void clearHitCounter() { hitCounter=0; }
     int getHitCounter() const { return hitCounter; }
 
+    // tools
+    QString getToolPhrase();
+
     // autocomplete
 protected:
     virtual void mousePressEvent(QMouseEvent* event) override;

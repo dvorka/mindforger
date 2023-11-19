@@ -252,15 +252,6 @@ public:
     QAction* actionFormatHr;
     QAction* actionFormatTimestamp;
 
-    // menu: Tools
-    QAction* actionToolsWikipedia;
-    QAction* actionToolsArxiv;
-    QAction* actionToolsChatGpt;
-    QAction* actionToolsGramarly;
-    QAction* actionToolsDuckDuckGo;
-    QAction* actionToolsPandoc;
-    QAction* actionToolsDocusaurus;
-
     // menu: Help
     QAction* actionHelpDocumentation;
     QAction* actionHelpWeb;

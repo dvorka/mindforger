@@ -285,6 +285,7 @@ HEADERS += \
     src/qt/kanban_column_view.h \
     src/qt/kanban_presenter.h \
     src/qt/kanban_view.h \
+    src/qt/left_toolbar_view.h \
     src/qt/note_smart_editor.h \
     src/qt/organizer_view.h \
     src/qt/organizer_presenter.h \
@@ -412,6 +413,7 @@ SOURCES += \
     src/qt/kanban_column_view.cpp \
     src/qt/kanban_presenter.cpp \
     src/qt/kanban_view.cpp \
+    src/qt/left_toolbar_view.cpp \
     src/qt/note_smart_editor.cpp \
     src/qt/organizer_view.cpp \
     src/qt/organizer_presenter.cpp \

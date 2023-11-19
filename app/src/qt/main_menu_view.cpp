@@ -957,59 +957,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addAction(actionFormatImage);
     menuFormat->setEnabled(false);
 
-
-#ifdef MF_WIP
-    // menu: tools
-
-    /*
-    menuTools = qMenuBar->addMenu(tr("&Tools"));
-
-    actionToolsWikipedia = new QAction(
-        QIcon(":/menu-icons/link.svg"), tr("&Wikipedia"), mainWindow);
-    actionToolsWikipedia->setStatusTip(
-        tr("Open Wikipadia and find entry of the selected entity..."));
-    menuTools->addAction(actionToolsWikipedia);
-
-    actionToolsArxiv = new QAction(
-        QIcon(":/menu-icons/link.svg"), tr("&arXiv"), mainWindow);
-    actionToolsArxiv->setStatusTip(tr(
-        "Open arXiv and find papers related to the selected entity..."));
-    menuTools->addAction(actionToolsArxiv);
-
-    actionToolsChatGpt = new QAction(
-        QIcon(":/menu-icons/link.svg"),
-        tr("&ChatGPT: Explain ... in simple terms."),
-        mainWindow);
-    actionToolsChatGpt->setStatusTip(
-        tr("Let ChatGPT to explain the selected entry..."));
-    menuTools->addAction(actionToolsChatGpt);
-
-    actionToolsGramarly= new QAction(
-        QIcon(":/menu-icons/link.svg"), tr("&Gramarly"), mainWindow);
-    actionToolsGramarly->setStatusTip(tr(
-        "Use Gramarly to check to grammar..."));
-    menuTools->addAction(actionToolsGramarly);
-
-    actionToolsDuckDuckGo = new QAction(
-        QIcon(":/menu-icons/link.svg"), tr("&DuckDuckGo"), mainWindow);
-    actionToolsDuckDuckGo->setStatusTip(
-        tr("Open DuckDuckGo and search web for the selected entity..."));
-    menuTools->addAction(actionToolsDuckDuckGo);
-
-    actionToolsPandoc = new QAction(
-        QIcon(":/menu-icons/link.svg"), tr("&Pandoc"), mainWindow);
-    actionToolsPandoc ->setStatusTip(
-        tr("Use Pandoc to convert MindForger's Markdown documents..."));
-    menuTools->addAction(actionToolsPandoc);
-
-    actionToolsDocusaurus = new QAction(
-        QIcon(":/menu-icons/link.svg"), tr("D&ocusaurus"), mainWindow);
-    actionToolsDocusaurus->setStatusTip(
-        tr("Build your web with MindForger's Markdown documents and Docusaurus..."));
-    menuTools->addAction(actionToolsDocusaurus);
-    */
-#endif
-
     // menu: help
 
     actionHelpDocumentation = new QAction(

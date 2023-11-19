@@ -45,13 +45,16 @@ NoteEditView::NoteEditView(QWidget* parent)
         QKeySequence(Qt::CTRL+Qt::Key_L),
         this, SLOT(slotSaveAndCloseEditor()));
 #else
+    // TODO leak?
     new QShortcut(
         QKeySequence(Qt::ALT+Qt::Key_Left),
         this, SLOT(slotSaveAndCloseEditor()));
 #endif
+    // TODO leak?
     new QShortcut(
         QKeySequence(Qt::CTRL+Qt::Key_G),
         this, SLOT(slotCloseEditor()));
+    // TODO leak?
     new QShortcut(
 #if __APPLE__
         QKeySequence(Qt::CTRL+Qt::Key_Return),
@@ -59,6 +62,7 @@ NoteEditView::NoteEditView(QWidget* parent)
         QKeySequence(Qt::ALT+Qt::Key_Return),
 #endif
         this, SLOT(slotOpenNotePropertiesEditor()));
+    // TODO leak?
     new QShortcut(
         QKeySequence(Qt::CTRL+Qt::Key_S),
         this, SLOT(slotSaveNote()));

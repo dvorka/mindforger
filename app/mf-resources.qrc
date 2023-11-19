@@ -18,6 +18,11 @@
         <file alias="think.svg">resources/icons/flat-think.svg</file>
         <file alias="adapt.svg">resources/icons/flat-adapt.svg</file>
         <file alias="help.svg">resources/icons/flat-help.svg</file>
+        <file alias="arxiv.png">resources/icons/arxiv.png</file>
+        <file alias="wikipedia.png">resources/icons/wikipedia.png</file>
+        <file alias="stackoverflow.png">resources/icons/stackoverflow.png</file>
+        <file alias="duckduckgo.png">resources/icons/duckduckgo.png</file>
+        <file alias="h2oai.png">resources/icons/h2oai.png</file>
     </qresource>
     <qresource prefix="/translations">
         <file alias="mindforger_cs_CZ.qm">resources/qt/translations/mindforger_cs.qm</file>

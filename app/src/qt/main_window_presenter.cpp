@@ -18,6 +18,8 @@
 */
 #include "main_window_presenter.h"
 
+#include <QShortcut>
+
 #include "kanban_column_presenter.h"
 
 using namespace std;
@@ -168,7 +170,48 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SIGNAL(signalPasteImageData(QImage)),
         this, SLOT(doActionEditPasteImageData(QImage))
     );
-    // wire toolbar signals
+    // wire LEFT toolbar signals
+    QObject::connect(
+        new QShortcut(QKeySequence("Alt+1"), view.getOrloj()), SIGNAL(activated()),
+        this, SLOT(doActionArxivToolbar())
+    );
+    QObject::connect(
+        view.getLeftToolBar()->actionLeftToolbarArxiv, SIGNAL(triggered()),
+        this, SLOT(doActionArxivToolbar())
+    );
+    QObject::connect(
+        new QShortcut(QKeySequence("Alt+2"), view.getOrloj()), SIGNAL(activated()),
+        this, SLOT(doActionWikipediaToolbar())
+    );
+    QObject::connect(
+        view.getLeftToolBar()->actionLeftToolbarWikipedia, SIGNAL(triggered()),
+        this, SLOT(doActionWikipediaToolbar())
+    );
+    QObject::connect(
+        new QShortcut(QKeySequence("Alt+3"), view.getOrloj()), SIGNAL(activated()),
+        this, SLOT(doActionStackOverflowToolbar())
+    );
+    QObject::connect(
+        view.getLeftToolBar()->actionLeftToolbarStackOverflow, SIGNAL(triggered()),
+        this, SLOT(doActionStackOverflowToolbar())
+    );
+    QObject::connect(
+        new QShortcut(QKeySequence("Alt+4"), view.getOrloj()), SIGNAL(activated()),
+        this, SLOT(doActionH2oGptToolbar())
+    );
+    QObject::connect(
+        view.getLeftToolBar()->actionLeftToolbarH2oGpt, SIGNAL(triggered()),
+        this, SLOT(doActionH2oGptToolbar())
+    );
+    QObject::connect(
+        new QShortcut(QKeySequence("Alt+5"), view.getOrloj()), SIGNAL(activated()),
+        this, SLOT(doActionDuckDuckGoToolbar())
+    );
+    QObject::connect(
+        view.getLeftToolBar()->actionLeftToolbarDuckDuckGo, SIGNAL(triggered()),
+        this, SLOT(doActionDuckDuckGoToolbar())
+    );
+    // wire TOP toolbar signals
     QObject::connect(
         view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()),
         this, SLOT(doActionOutlineOrNoteNew())
@@ -1891,7 +1934,7 @@ void MainWindowPresenter::doActionOpenRunToolDialog(QString& phrase)
     MF_DEBUG("SIGNAL handled: open run tool dialog...");
     this->runToolDialog->setPhraseText(phrase);
     QString templateText = this->runToolDialog->getTemplateTextForToolName(
-        this->runToolDialog->getSelectedTool());
+        this->runToolDialog->getSelectedTool().toStdString());
     if(templateText.length() == 0) {
         return;
     }
@@ -2050,6 +2093,101 @@ void MainWindowPresenter::doActionOutlineNew()
         mind->remind().getStencils(ResourceType::OUTLINE),
         Configuration::getInstance().getActiveRepository()->getType()
     );
+}
+
+void MainWindowPresenter::doActionArxivToolbar()
+{
+    handleLeftToolbarAction(TOOL_ARXIV);
+}
+
+void MainWindowPresenter::doActionWikipediaToolbar()
+{
+    handleLeftToolbarAction(TOOL_WIKIPEDIA);
+}
+
+void MainWindowPresenter::doActionStackOverflowToolbar()
+{
+    handleLeftToolbarAction(TOOL_STACK_OVERFLOW);
+}
+
+void MainWindowPresenter::doActionH2oGptToolbar()
+{
+    handleLeftToolbarAction(TOOL_H2O_GPT_WEB);
+}
+
+void MainWindowPresenter::doActionDuckDuckGoToolbar()
+{
+    handleLeftToolbarAction(TOOL_DUCKDUCKGO);
+}
+
+void MainWindowPresenter::handleLeftToolbarAction(string selectedTool)
+{
+    // get PHRASE from the active context:
+    // - N editor: get word under cursor OR selected text
+    // - N tree: get N name
+    // - O tree: get O name
+    // - ...
+    QString phrase;
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        phrase = orloj->getNoteEdit()->getView()->getNoteEditor()->getToolPhrase();
+    } else if(
+        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+        || orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+    ) {
+        Outline* o = orloj->getOutlineView()->getCurrentOutline();
+        if(o) {
+              phrase = QString::fromStdString(o->getName());
+        }
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
+        Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+        if(note) {
+            phrase = QString::fromStdString(note->getName());
+        }
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        phrase = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getToolPhrase();
+    }
+    else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_LIST_OUTLINES)) {
+        int row = orloj->getOutlinesTable()->getCurrentRow();
+        if(row != OutlinesTablePresenter::NO_ROW) {
+            QStandardItem* item
+                = orloj->getOutlinesTable()->getModel()->item(row);
+            if(item) {
+                Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
+                phrase = QString::fromStdString(outline->getName());
+            }
+        }
+    }
+
+    if(phrase.length() == 0) {
+        QMessageBox msgBox{
+            QMessageBox::Critical,
+            QObject::tr("Empty Phrase"),
+            QObject::tr("Phrase to search/explain/process is empty.")
+        };
+        msgBox.exec();
+        return;
+    }
+
+    // use phrase to RUN the tool
+    QString templateText
+        = this->runToolDialog->getTemplateTextForToolName(selectedTool);
+    MF_DEBUG(
+        "Run tool: "
+        << phrase.toStdString() << " -> "
+        << templateText.toStdString() << " -> "
+        << selectedTool << endl
+    );
+
+    // phrase replace @ template > get command, if invalid, then fallback
+    QString command = templateText.replace(QString{TOOL_PHRASE}, phrase);
+    MF_DEBUG("Run tool: command '" << command.toStdString() << "'" << endl);
+    if(selectedTool == TOOL_H2O_GPT_API) {
+        // TODO: sniff HTTP traffic and use HTTP client/JSon to talk to the service
+        MF_DEBUG("H2O GPT API not implemented yet");
+        return;
+    }
+
+    QDesktopServices::openUrl(QUrl{command});
 }
 
 void MainWindowPresenter::doActionOutlineOrNoteNew()
@@ -3496,49 +3634,6 @@ void MainWindowPresenter::doActionViewLimbo()
                 "with markdowns is opened.")
         );
     }
-}
-
-
-void MainWindowPresenter::doActionToolsWikipedia()
-{
-    QDesktopServices::openUrl(
-        QUrl{"https://wikipedia.org"}
-    );
-}
-
-void MainWindowPresenter::doActionToolsArxiv()
-{
-    QDesktopServices::openUrl(
-        QUrl{"https://arxiv.org/multi?group=grp_math&%2Ffind=Search"}
-    );
-}
-
-void MainWindowPresenter::doActionToolsDuckDuckGo()
-{
-    QDesktopServices::openUrl(
-        QUrl{"https://duckduckgo.com/"}
-    );
-}
-
-void MainWindowPresenter::doActionToolsDocusaurus()
-{
-    QDesktopServices::openUrl(
-        QUrl{"https://docusaurus.io/docs/installation"}
-    );
-}
-
-void MainWindowPresenter::doActionToolsPandoc()
-{
-    QDesktopServices::openUrl(
-        QUrl{"https://pandoc.org/installing.html"}
-    );
-}
-
-void MainWindowPresenter::doActionToolsChatGpt()
-{
-    QDesktopServices::openUrl(
-        QUrl{"https://chat.openai.com/chat"}
-    );
 }
 
 void MainWindowPresenter::doActionHelpDocumentation()

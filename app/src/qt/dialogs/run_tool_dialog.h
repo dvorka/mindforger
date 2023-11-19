@@ -53,7 +53,7 @@ public:
 
     void show();
 
-    QString getTemplateTextForToolName(QString selectedTool) const;
+    QString getTemplateTextForToolName(std::string selectedTool) const;
 
     QPushButton* getRunButton() const { return runButton; }
     QString getSelectedTool() const {

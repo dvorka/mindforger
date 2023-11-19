@@ -290,14 +290,6 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionFormatTable, SIGNAL(triggered()), mwp, SLOT(doActionFormatTable()));
     QObject::connect(view->actionFormatHr, SIGNAL(triggered()), mwp, SLOT(doActionFormatHr()));
 
-    // menu: tools
-    QObject::connect(view->actionToolsArxiv, SIGNAL(triggered()), mwp, SLOT(doActionToolsArxiv()));
-    QObject::connect(view->actionToolsPandoc, SIGNAL(triggered()), mwp, SLOT(doActionToolsPandoc()));
-    QObject::connect(view->actionToolsChatGpt, SIGNAL(triggered()), mwp, SLOT(doActionToolsChatGpt()));
-    QObject::connect(view->actionToolsWikipedia, SIGNAL(triggered()), mwp, SLOT(doActionToolsWikipedia()));
-    QObject::connect(view->actionToolsDocusaurus, SIGNAL(triggered()), mwp, SLOT(doActionToolsDocusaurus()));
-    QObject::connect(view->actionToolsDuckDuckGo, SIGNAL(triggered()), mwp, SLOT(doActionToolsDucDuckGo()));
-
     // menu: help
     QObject::connect(view->actionHelpDocumentation, SIGNAL(triggered()), mwp, SLOT(doActionHelpDocumentation()));
     QObject::connect(view->actionHelpWeb, SIGNAL(triggered()), mwp, SLOT(doActionHelpWeb()));

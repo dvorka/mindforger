@@ -104,6 +104,7 @@ constexpr const auto TOOL_PHRASE = "<<PHRASE>>";
 constexpr const auto TOOL_ARXIV = "arXiv";
 constexpr const auto TOOL_DUCKDUCKGO = "DuckDuckGo";
 constexpr const auto TOOL_DEEPL = "DeepL web";
+constexpr const auto TOOL_STACK_OVERFLOW = "StackOverflow";
 constexpr const auto TOOL_GH_PROJECTS = "GitHub projects";
 constexpr const auto TOOL_GH_TOPICS = "GitHub topics";
 constexpr const auto TOOL_GOOGLE_BARD = "Google Bard";

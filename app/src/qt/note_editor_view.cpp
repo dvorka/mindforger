@@ -562,7 +562,14 @@ void NoteEditorView::performTextCompletion(const QString& completionPrefix)
     completer->complete(rect);
 }
 
-void NoteEditorView::slotStartRunTool()
+/**
+ * @brief Get phrase to be used by a tool (arXiv, GPT, Wikipedia, ...)
+ *
+ * Either return selected text or word under the cursor.
+ *
+ * @return phrase text
+ */
+QString NoteEditorView::getToolPhrase()
 {
     QString phrase{};
 
@@ -571,7 +578,6 @@ void NoteEditorView::slotStartRunTool()
     if(selection.size()) {
         phrase = selection;
     } else {
-        // TODO get word under cursor OR get selected text
         MF_DEBUG(
             "Run tool: getting the phrase under the cursor..." << endl);
         phrase = getCompletionPrefix();
@@ -579,6 +585,14 @@ void NoteEditorView::slotStartRunTool()
             "Run tool: phrase under the cursor '" << phrase.toStdString()
             << "'" << endl);
     }
+
+    return phrase;
+}
+
+
+void NoteEditorView::slotStartRunTool()
+{
+    QString phrase = getToolPhrase();
 
     if(!phrase.isEmpty()) {
     MF_DEBUG(
