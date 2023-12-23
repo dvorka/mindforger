@@ -45,6 +45,7 @@ Mind::Mind(Configuration &configuration)
 #else
       autolinking{nullptr},
 #endif
+      outlinesMap{},
       exclusiveMind{},
       timeScopeAspect{},
       tagsScopeAspect{ontology},
@@ -77,6 +78,10 @@ Mind::~Mind()
     delete autoInterceptor;
     delete autolinking;
     delete stats;
+
+    if(this->outlinesMap) {
+        delete this->outlinesMap;
+    }
 
     // - Memory destruct outlines
     // - allNotesCache Notes is just container referencing Memory's Outlines
@@ -354,6 +359,15 @@ void Mind::getOutlineNames(vector<string>& names) const
     vector<Outline*> outlines = memory.getOutlines();
     for(Outline* outline:outlines) {
         names.push_back(outline->getName());
+    }
+}
+
+void Mind::getOutlineKeys(vector<string>& keys) const
+{
+    // IMPROVE PERF cache vector (stack member) until and evict on memory modification
+    vector<Outline*> outlines = memory.getOutlines();
+    for(Outline* outline:outlines) {
+        keys.push_back(outline->getKey());
     }
 }
 
@@ -950,16 +964,203 @@ bool Mind::outlineForget(string outlineKey)
     return false;
 }
 
+string Mind::outlineMapKey2Relative(const string& outlineKey) const
+{
+    string relativeKey{
+        outlineKey.substr(config.getMemoryPath().size() +1)
+    };
+    MF_DEBUG("  " << relativeKey << endl);
+
+    return relativeKey;
+}
+
+string Mind::outlineMapKey2Absolute(const string& outlineKey) const
+{
+    string resolvedKey{
+        config.getMemoryPath() 
+        + FILE_PATH_SEPARATOR 
+        + outlineKey
+    };
+    MF_DEBUG("  " << resolvedKey << endl);
+
+    return resolvedKey;
+}
+
+Outline* Mind::outlinesMapNew(string outlineKey)
+{
+    MF_DEBUG("Creating Os map:" << endl);
+    Outline* newOutlinesMap = new Outline{
+        memory.getOntology().getDefaultOutlineType()};
+
+    for(Outline* o:getOutlines()) {
+        Note* n = o->getOutlineDescriptorAsNote();
+        newOutlinesMap->addNote(n);
+
+        // relative key will be valid even if repository is moved to a different path
+        Link* link = new Link{
+            LINK_NAME_ASSOCIATED_OUTLINE, 
+            this->outlineMapKey2Relative(o->getKey())
+        };
+        n->addLink(link);
+    }
+
+    newOutlinesMap->setName("Notebooks Map");
+    newOutlinesMap->setKey(outlineKey);
+    newOutlinesMap->sortNotesByRead();
+
+    newOutlinesMap->completeProperties(datetimeNow());
+
+    return newOutlinesMap;
+}
+
+/**
+ * Synchronize Outlines map parameter with mind's Outlines.
+ */
+void Mind::outlinesMapSynchronize(Outline* outlinesMap)
+{
+    vector<Note*> osToRemove{};
+
+    // ensure that map contains only valid Os
+    //   - remove from map: map O NOT in runtime O
+    //   - add at the top of map: runtime Os NOT in mapOs
+    MF_DEBUG("Map O links validity check:");
+    vector<string> mapOsKeys{};
+    for(Note* n:outlinesMap->getNotes()) {
+        if(n->getLinks().size() > 0 
+            && n->getLinks().at(0)->getUrl().size() > 0
+        ) {
+            string oKey{n->getLinks().at(0)->getUrl()};
+            if(findOutlineByKey(oKey)) {
+                // valid O in MF & map
+                MF_DEBUG(
+                    "  VALID  : " << n->getName() << endl <<
+                    "           " << oKey << endl
+                );
+                mapOsKeys.push_back(oKey);
+            } else {
+                MF_DEBUG("  INVALID (no O for link): " << n->getName() << endl);
+                osToRemove.push_back(n);
+            }
+        } else {
+            MF_DEBUG("  INVALID (missing link): " << n->getName() << endl);
+            osToRemove.push_back(n);
+        }
+    }
+    MF_DEBUG("DONE O links validity check" << endl);
+
+    if(osToRemove.size()) {
+        MF_DEBUG("Removing Ns with INVALID O key:" << endl);    
+        for(auto oToRemove:osToRemove) {
+            MF_DEBUG("  " << oToRemove->getName() << endl);
+            delete oToRemove;
+            outlinesMap->removeNote(oToRemove);
+        }
+        osToRemove.clear();
+    }
+
+    // find mind keys which are NOT in map > prepend them to map
+    vector<Outline*> osToAdd{};
+    MF_DEBUG("Finding mind keys to be ADDED to map:" << endl);
+    for(auto mindO: getOutlines()) {
+        if(find(mapOsKeys.begin(), mapOsKeys.end(), mindO->getKey()) == mapOsKeys.end()) {
+            MF_DEBUG("  " << mindO->getKey() << endl);
+            osToAdd.push_back(mindO);
+        }
+    }
+    MF_DEBUG("ADDING mind keys to map:" << endl);
+    for(auto o:osToAdd) {
+        MF_DEBUG("  " << o->getKey() << endl);
+        // clone O's descriptor to get N which might be deleted later
+        Note* n = new Note(*o->getOutlineDescriptorAsNote());
+        outlinesMap->addNote(n , 0);
+    }
+}
+
+Outline* Mind::outlinesMapLearn(string outlineKey)
+{
+    MF_DEBUG("Learning Os map from " << outlineKey << endl);
+    Outline* outlinesMap = memory.learnOutlinesMap(outlineKey);
+
+    vector<Note*> osToRemove{};
+
+    // normalization: set Ns types to O + resolve O links to absolute
+    MF_DEBUG("Setting map's Ns type O" << endl);
+    for(auto n:outlinesMap->getNotes()) {
+        MF_DEBUG(
+            "  Setting " << n->getName() 
+            << " with " << n->getLinks().size() << " link(s)"
+            << " to O" << endl
+        );
+        n->setType(&Outline::NOTE_4_OUTLINE_TYPE);
+
+        if(n->getLinks().size() > 0 
+            && n->getLinks().at(0)->getUrl().size() > 0
+        ) {
+            // IMPROVE find link w/ name LINK_NAME_ASSOCIATED_OUTLINE (in case there would be >1 link)
+            string relativeLink{
+                this->outlineMapKey2Absolute(n->getLinks().at(0)->getUrl())
+            };
+
+            // N key is generated based on O key > keep link in "Outline" link
+            n->clearLinks();
+            n->addLink(new Link(LINK_NAME_ASSOCIATED_OUTLINE, relativeLink));
+        } else {
+            MF_DEBUG("  SKIPPING N w/o link: " << n->getName() << endl);
+            osToRemove.push_back(n);
+        }
+    }
+
+    if(osToRemove.size()) {
+        MF_DEBUG("Removing Ns with MISSING relative O key:" << endl);    
+        for(auto oToRemove:osToRemove) {
+            MF_DEBUG("  " << oToRemove->getName() << endl);
+            delete oToRemove;
+            outlinesMap->removeNote(oToRemove);
+        }
+        osToRemove.clear();
+    }
+
+    // synchronize map's Os with mind's Os
+    outlinesMapSynchronize(outlinesMap);
+
+    return outlinesMap;
+}
+
+Outline* Mind::outlinesMapGet()
+{
+    if(this->outlinesMap) {
+        // ensure consistency between mind's and map's Os
+        outlinesMapSynchronize(this->outlinesMap);
+
+        return this->outlinesMap;
+    }
+
+    string outlinesMapPath{config.getOutlinesMapPath()};
+
+    if(isFile(outlinesMapPath.c_str())) {
+        // load existing Os map
+        this->outlinesMap = outlinesMapLearn(outlinesMapPath);
+    } else {
+        // create new Os map
+        this->outlinesMap = outlinesMapNew(outlinesMapPath);
+
+        remind().getPersistence().save(this->outlinesMap);
+    }
+
+    return this->outlinesMap;
+}
+
+
 Note* Mind::noteNew(
-        const std::string& outlineKey,
-        const uint16_t offset,
-        // IMPROVE pass name by reference
-        const std::string* name,
-        const NoteType* noteType,
-        u_int16_t depth,
-        const std::vector<const Tag*>* tags,
-        const int8_t progress,
-        Stencil* noteStencil)
+    const std::string& outlineKey,
+    const uint16_t offset,
+    // IMPROVE pass name by reference
+    const std::string* name,
+    const NoteType* noteType,
+    u_int16_t depth,
+    const std::vector<const Tag*>* tags,
+    const int8_t progress,
+    Stencil* noteStencil)
 {
     Outline* o = memory.getOutline(outlineKey);
     if(o) {
@@ -1190,6 +1391,20 @@ unique_ptr<vector<Outline*>> Mind::findOutlineByNameFts(const string& pattern) c
         }
     }
     return result;
+}
+
+bool Mind::findOutlineByKey(const string& key) const
+{
+    if(key.size()) {
+        vector<Outline*> outlines = memory.getOutlines();
+        for(Outline* outline:outlines) {
+            if(key.compare(outline->getKey()) == 0) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 } /* namespace */

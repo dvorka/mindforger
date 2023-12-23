@@ -60,6 +60,8 @@ private:
     bool zenMode;
 
 public:
+    static const QString CMD_HELP;
+
     static const QString CMD_FTS;
     static const QString CMD_FIND_OUTLINE_BY_NAME;
     static const QString CMD_LIST_OUTLINES;

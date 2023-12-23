@@ -1,16 +1,16 @@
-2023-12-??  Martin Dvorak  <martin.dvorak@mindforger.com>
+2024-01-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v1.55.1 - Limbo added to the application menu View/Limbo,
+    * Released v2.0.0 - Limbo added to the application menu View/Limbo,
       polished Preferences (Appearance refactored to Controls; restart requirement
       highlighted), missing OOTB Eisenhower Matrix is automatically added back
       to the list of Organizers, up/down button in O/N preview mode to move around
-      O's Ns while presenting a N. Tools allowing to get more information about
-      the word under cursor from Wikipedia, arXiv, LLM chats or web search engines.
+      O's Ns while presenting a N.
       Libraries - ability to index external PDF files and generate Notebooks
       which represent them in MindForger (update and removal of the library
       supported as well. New left side toolbar which runs various tools
       (like Wikipedia, arXiv, StackOverflow, ...) on phrase which is the current
-      context (Notebook or Note name, selected text or text under the cursor, ...).
+      context (Notebook or Note name, selected text or text under the cursor, ...)
+      in order to get more information about the phrase.
 
 2023-01-15  Martin Dvorak  <martin.dvorak@mindforger.com>
 

@@ -952,6 +952,63 @@ TEST(MarkdownParserTestCase, Links)
     delete o;
 }
 
+// Repro for BUG: https://github.com/dvorka/mindforger/issues/1518
+TEST(MarkdownParserTestCase, DISABLED_LinksWithParenthesis)
+{
+    string repositoryPath{"/tmp"};
+    string fileName{"md-parser-links-parenthesis.md"};
+    string content;
+    string filePath{repositoryPath+"/"+fileName};
+
+    content.assign(
+                "# Outline Name <!-- Metadata: links: [root link](./a b(c)d.pdf); -->\n"
+                "O text.\n"
+                "\n"
+//                "## First Section <!-- Metadata: links: [first link](./a/b/c/Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf),[second link](./x/y/z/Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf); -->\n"
+//                "N1 text.\n"
+                "\n"
+                "## Second Section\n"
+                "N2 text.\n"
+                "\n");
+    m8r::stringToFile(filePath, content);
+
+    m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    repository->setMode(m8r::Repository::RepositoryMode::FILE);
+    repository->setFile(fileName);
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mptc-l.md");
+    config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
+    m8r::Ontology ontology{};
+
+    // parse
+    m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
+    m8r::filesystem::File file{filePath};
+    m8r::Outline* o = mdr.outline(file);
+
+    // asserts
+    EXPECT_NE(nullptr, o);
+    EXPECT_EQ(2, o->getNotesCount());
+
+    cout << endl << "O links: " << o->getLinksCount();
+    EXPECT_EQ(1, o->getLinksCount());
+
+    cout << endl << "N links: " << o->getNotes()[0]->getLinksCount();
+    EXPECT_EQ(2, o->getNotes()[0]->getLinksCount());
+
+    // serialize
+    string* serialized = mdr.to(o);
+    cout << endl << "- SERIALIZED ---";
+    cout << endl << *serialized;
+    EXPECT_NE(std::string::npos, serialized->find("[root link](./Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf)"));
+    EXPECT_NE(std::string::npos, serialized->find("[first link](./Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf)"));
+    EXPECT_NE(std::string::npos, serialized->find("[second link](./Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf)"));
+
+    delete serialized;
+    delete o;
+}
+
 TEST(MarkdownParserTestCase, Bug622Loop64kLinesOverflow)
 {
     string fileName{"/lib/test/resources/bugs-repository/memory/bug-622-70k-lines.md"};

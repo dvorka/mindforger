@@ -39,7 +39,7 @@ Code style:
   
 * Use `.h` extension for header files.
 * Use `.cpp` extension for class files.
-* Use `lower_case_with_unserscores` source code file names.
+* Use `lower_case_with_underscores` source code file names.
 * Spaces, no tabs.
 * No trailing whitespaces.
 * Use `{}` with constructor having 0/1 parameter, () otherwise.

@@ -43,6 +43,9 @@ OrlojView::OrlojView(QWidget* parent)
     outlinesTable = new OutlinesTableView(this);
     addWidget(outlinesTable);
 
+    outlinesMap = new OutlinesMapView(this);
+    addWidget(outlinesMap);
+
     recentNotesTable = new RecentNotesTableView(this);
     addWidget(recentNotesTable);
 
@@ -130,6 +133,12 @@ void OrlojView::showFacetTagCloud()
 void OrlojView::showFacetOutlines()
 {
     QSet<QWidget*> v; v << outlinesTable;
+    hideChildren(v);
+}
+
+void OrlojView::showFacetOutlinesMap()
+{
+    QSet<QWidget*> v; v << outlinesMap;
     hideChildren(v);
 }
 

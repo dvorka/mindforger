@@ -270,7 +270,11 @@ void Configuration::setActiveRepository(
             memoryPath.clear();
             memoryPath += activeRepository->getDir();
 
-            // TODO limbo class
+            mindPath.clear();
+            mindPath += activeRepository->getDir();
+
+            outlinesMapPath.clear();
+
             limboPath.clear();
             limboPath += activeRepository->getDir();
 
@@ -281,7 +285,13 @@ void Configuration::setActiveRepository(
                 memoryPath+=FILE_PATH_SEPARATOR;
                 memoryPath+=DIRNAME_MEMORY;
 
-                // TODO limbo class
+                mindPath+=FILE_PATH_SEPARATOR;
+                mindPath+=DIRNAME_MIND;
+
+                outlinesMapPath+=mindPath;
+                outlinesMapPath+=FILE_PATH_SEPARATOR;
+                outlinesMapPath+=FILENAME_OUTLINES_MAP;
+
                 limboPath+=FILE_PATH_SEPARATOR;
                 limboPath+=DIRNAME_LIMBO;
 

@@ -1,5 +1,5 @@
 /*
- outline_tree_model.cpp     MindForger thinking notebook
+ outlines_map_model.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,7 +16,7 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "outline_tree_model.h"
+#include "outlines_map_model.h"
 
 #include <iostream>
 
@@ -26,20 +26,20 @@ using namespace std;
 
 namespace m8r {
 
-OutlineTreeModel::OutlineTreeModel(QObject *parent, HtmlOutlineRepresentation* htmlRepresentation)
+OutlinesMapModel::OutlinesMapModel(QObject *parent, HtmlOutlineRepresentation* htmlRepresentation)
     : QStandardItemModel(parent), htmlRepresentation(htmlRepresentation)
 {
     setColumnCount(5);
     setRowCount(0);
 }
 
-void OutlineTreeModel::removeAllRows()
+void OutlinesMapModel::removeAllRows()
 {
     QStandardItemModel::clear();
 
     QStringList tableHeader;
     tableHeader
-            << tr("Notebook Outline") // tree of Notes is in fact Notebook's outline
+            << tr("Notebooks Tree") // tree of Notebooks ~ mind map of Notebooks
             << tr("Done")
             << tr("Rs")
             << tr("Ws")
@@ -47,7 +47,7 @@ void OutlineTreeModel::removeAllRows()
     setHorizontalHeaderLabels(tableHeader);
 }
 
-void OutlineTreeModel::createNameText(string& html, Note* note)
+void OutlinesMapModel::createNameText(string& html, Note* note)
 {
     for(auto depth=0; depth<note->getDepth(); depth++) {
         html += "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -59,7 +59,7 @@ void OutlineTreeModel::createNameText(string& html, Note* note)
     htmlRepresentation->noteTypeToHtml(note->getType(), html);
 }
 
-void OutlineTreeModel::createRowFor(Note* note, QList<QStandardItem*>& rowItems)
+void OutlinesMapModel::createRowFor(Note* note, QList<QStandardItem*>& rowItems)
 {
     // name
     string name{};
@@ -88,14 +88,14 @@ void OutlineTreeModel::createRowFor(Note* note, QList<QStandardItem*>& rowItems)
 }
 
 
-void OutlineTreeModel::addNote(Note* note)
+void OutlinesMapModel::addNote(Note* note)
 {
     QList<QStandardItem*> items;
     createRowFor(note, items);
     appendRow(items);
 }
 
-int OutlineTreeModel::insertNote(Note* note)
+int OutlinesMapModel::insertNote(Note* note)
 {
     if(note) {
         QList<QStandardItem*> items;
@@ -108,7 +108,7 @@ int OutlineTreeModel::insertNote(Note* note)
     }
 }
 
-int OutlineTreeModel::getRowByNote(const Note* note)
+int OutlinesMapModel::getRowByNote(const Note* note)
 {
     for(int row = 0; row<rowCount(); row++) {
         if(item(row)->data().value<Note*>() == note) {
@@ -118,7 +118,7 @@ int OutlineTreeModel::getRowByNote(const Note* note)
     return NO_INDEX;
 }
 
-void OutlineTreeModel::refresh(Note* note, int row, bool set)
+void OutlinesMapModel::refresh(Note* note, int row, bool set)
 {
     if(row > NO_INDEX) {
         if(set) {
@@ -153,7 +153,7 @@ void OutlineTreeModel::refresh(Note* note, int row, bool set)
     }
 }
 
-void OutlineTreeModel::refresh(Note* note, QModelIndexList selection)
+void OutlinesMapModel::refresh(Note* note, QModelIndexList selection)
 {
     int row = NO_INDEX;
 

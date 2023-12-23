@@ -42,6 +42,7 @@ OrlojPresenter::OrlojPresenter(
     this->kanbanPresenter = new KanbanPresenter(view->getKanban(), this);
     this->tagCloudPresenter = new TagsTablePresenter(view->getTagCloud(), mainPresenter->getHtmlRepresentation());
     this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
+    this->outlinesMapPresenter = new OutlinesMapPresenter(view->getOutlinesMap(), mainPresenter, this);
     this->recentNotesTablePresenter = new RecentNotesTablePresenter(view->getRecentNotesTable(), mainPresenter->getHtmlRepresentation());
     this->outlineViewPresenter = new OutlineViewPresenter(view->getOutlineView(), this);
     this->outlineHeaderViewPresenter = new OutlineHeaderViewPresenter(view->getOutlineHeaderView(), this);
@@ -394,6 +395,15 @@ void OrlojPresenter::showFacetOutlineList(const vector<Outline*>& outlines)
     // IMPROVE reload ONLY if dirty, otherwise just show
     outlinesTablePresenter->refresh(outlines);
     view->showFacetOutlines();
+    mainPresenter->getMainMenu()->showFacetOutlineList();
+    mainPresenter->getStatusBar()->showMindStatistics();
+}
+
+void OrlojPresenter::showFacetOutlinesMap(Outline* outlinesMap)
+{
+    setFacet(OrlojPresenterFacets::FACET_MAP_OUTLINES);
+    outlinesMapPresenter->refresh(outlinesMap);
+    view->showFacetOutlinesMap();
     mainPresenter->getMainMenu()->showFacetOutlineList();
     mainPresenter->getStatusBar()->showMindStatistics();
 }

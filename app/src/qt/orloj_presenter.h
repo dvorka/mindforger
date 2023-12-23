@@ -35,6 +35,7 @@
 #include "recent_notes_table_presenter.h"
 #include "main_window_presenter.h"
 #include "outlines_table_presenter.h"
+#include "outlines_map_presenter.h"
 #include "notes_table_presenter.h"
 #include "outline_view_presenter.h"
 #include "outline_header_view_presenter.h"
@@ -56,6 +57,7 @@ class NoteEditPresenter;
 class OutlineHeaderViewPresenter;
 class OutlineHeaderEditPresenter;
 class OutlineViewPresenter;
+class OutlinesMapPresenter;
 class OrlojView;
 
 enum OrlojPresenterFacets {
@@ -73,7 +75,8 @@ enum OrlojPresenterFacets {
     FACET_NAVIGATOR,              // 11
     FACET_DASHBOARD,              // 12
     FACET_LIST_ORGANIZERS,        // 13
-    FACET_KANBAN                  // 14
+    FACET_KANBAN,                 // 14
+    FACET_MAP_OUTLINES            // 15
 };
 
 // aspect modifies facet
@@ -113,6 +116,7 @@ private:
     KanbanPresenter* kanbanPresenter;
     TagsTablePresenter* tagCloudPresenter;
     OutlinesTablePresenter* outlinesTablePresenter;
+    OutlinesMapPresenter* outlinesMapPresenter;
     RecentNotesTablePresenter* recentNotesTablePresenter;
     OutlineViewPresenter* outlineViewPresenter;
     OutlineHeaderViewPresenter* outlineHeaderViewPresenter;
@@ -138,6 +142,7 @@ public:
     NavigatorPresenter* getNavigator() const { return navigatorPresenter; }
     MainWindowPresenter* getMainPresenter() const { return mainPresenter; }
     OutlinesTablePresenter* getOutlinesTable() const { return outlinesTablePresenter; }
+    OutlinesMapPresenter* getOutlinesMap() const { return outlinesMapPresenter; }
     RecentNotesTablePresenter* getRecentNotesTable() const { return recentNotesTablePresenter; }
     OutlineViewPresenter* getOutlineView() const { return outlineViewPresenter; }
     OutlineHeaderViewPresenter* getOutlineHeaderView() const { return outlineHeaderViewPresenter; }
@@ -200,6 +205,7 @@ public:
     );
     void showFacetTagCloud();
     void showFacetOutlineList(const std::vector<Outline*>& outlines);
+    void showFacetOutlinesMap(Outline* outlinesMap);
     void showFacetRecentNotes(const std::vector<Note*>& notes);
     void showFacetKnowledgeGraphNavigator();
     void showFacetFtsResult(std::vector<Note*>* result);

@@ -35,7 +35,11 @@ DISTRO := "bionic"
 help:
 	@echo "MindForger Swiss knife help:"
 	@echo "clean             clean build artifacts"
-	@echo "build             build MindForger application binary"
+	@echo "build             production build MindForger application binary"
+	@echo "build-dev         development build of MindForger application binary"
+	@echo "build-ci          CI build MindForger application binary"
+	@echo "run               run production MindForger"
+	@echo "run-dev           run development MindForger"
 	@echo "l10n              update and release localization strings: MF_LANG=en"
 	@echo "gen-lib-class     generate lib C++ class skeleton: CLASS_NAME=My_Class"
 	@echo "gen-ui-class      generate UI C++ class skeleton: CLASS_NAME=My_Class"
@@ -83,11 +87,31 @@ gen-ui-class:
 	./make/gen-cpp-ui-class.py $(CLASS_NAME)
 
 
-.PHONY: build
-build: clean
-	cd .. && qmake -r mindforger.pro && make -j 7
+#
+# build
+#
+
+
+../app/mindforger:
+	@echo "Building PRODUCTION MindForger executable..."
+	cd .. && qmake -r mindforger.pro && make -j 7 ; cd ..
 	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
+
+
+build: ../app/mindforger
+	ls -al ../app/mindforger
+
+
+.PHONY: build-dev
+build-dev:
+	@echo "Building DEV MindForger executable..."
+	cd .. && qmake -r mindforger.pro DEFINES+=DO_MF_DEBUG && make -j 7 ; cd ..
+	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
+	ls -al ../app/mindforger
+
+
+# TODO: build-dev-clang
 
 
 build-ci: clean
@@ -97,7 +121,39 @@ build-ci: clean
 	ls -al ../app/mindforger
 
 
-# TODO build-cmark-gfm
+#
+# build
+#
+
+
+run: ../app/mindforger
+	cd ../app && pwd && ./mindforger
+
+
+run-dev: build-dev
+	cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/library-trainer
+
+
+#
+# install
+#
+
+
+install: clean ../app/mindforger
+	cp -vf ../app/mindforger ~/bin
+	mv -vf ~/bin/mindforger ~/bin/mind
+	~/bin/mind --version
+
+
+install-dev-local: clean build-dev
+	cp -vf ../app/mindforger ~/bin
+	mv -vf ~/bin/mindforger ~/bin/mind
+	~/bin/mind --version
+
+
+#
+# tools
+#
 
 
 .PHONY: l10n
@@ -205,11 +261,5 @@ doc-to-wiki:
 .PHONY: api-reference
 api-reference:
 	cd doxygen && doxygen ./mindforger.cfg
-
-
-dev-install-local: build-ci ../app/mindforger
-	cp -vf ../app/mindforger ~/bin
-	mv -vf ~/bin/mindforger ~/bin/mind
-	~/bin/mind --version
 
 # eof

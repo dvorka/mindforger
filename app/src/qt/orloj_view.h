@@ -27,6 +27,7 @@
 #include "kanban_view.h"
 #include "tags_table_view.h"
 #include "outlines_table_view.h"
+#include "outlines_map_view.h"
 #include "notes_table_view.h"
 #include "recent_notes_table_view.h"
 #include "outline_view_splitter.h"
@@ -67,6 +68,7 @@ private:
     KanbanView* kanban;
     TagsTableView* tagCloud;
     OutlinesTableView* outlinesTable;
+    OutlinesMapView* outlinesMap;
     RecentNotesTableView* recentNotesTable;
     OutlineViewSplitter* outlineView;
     OutlineHeaderView* outlineHeaderView;
@@ -91,6 +93,7 @@ public:
     KanbanView* getKanban() const { return kanban; }
     TagsTableView* getTagCloud() const { return tagCloud; }
     OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
+    OutlinesMapView* getOutlinesMap() const { return outlinesMap; }
     RecentNotesTableView* getRecentNotesTable() const { return recentNotesTable; }
     OutlineViewSplitter* getOutlineView() const { return outlineView; }
     OutlineHeaderView* getOutlineHeaderView() const { return outlineHeaderView; }
@@ -130,6 +133,11 @@ public:
      * @brief List of Outlines
      */
     void showFacetOutlines();
+
+    /**
+     * @brief Tree of Outlines
+     */
+    void showFacetOutlinesMap();
 
     /**
      * @brief Outline detail: name and tree of Notes

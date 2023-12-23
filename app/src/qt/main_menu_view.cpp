@@ -98,7 +98,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #ifdef MF_MD_2_HTML_CMARK
     actionMindAutolink->setCheckable(true);
     actionMindAutolink->setStatusTip(tr("Automatically inject links to relevant Notebooks and Notes when browsing HTML preview"));
-    actionMindAutolink->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_A));
+    actionMindAutolink->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_L));
 #else
     actionMindAutolink->setVisible(false);
 #endif
@@ -253,9 +253,15 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
     actionViewOutlines->setStatusTip(tr("Show list of Notebooks..."));
 
+#ifdef MF_WIP
+    actionViewOutlinesMap = new QAction(QIcon(":/menu-icons/dashboard.svg"), tr("Note&books Tree"), mainWindow);
+    actionViewOutlinesMap->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
+    actionViewOutlinesMap->setStatusTip(tr("Show tree of Notebooks..."));
+#endif
+
     actionViewLibraryDocs = new QAction(QIcon(":/menu-icons/copy.svg"), tr("&Library Documents"), mainWindow);
     actionViewLibraryDocs->setStatusTip(tr("List Library documents..."));
-    actionViewLibraryDocs->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_L));
+    //actionViewLibraryDocs->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_<REPLACE>));
 
     actionViewTags = new QAction(QIcon(":/menu-icons/tag.svg"), tr("&Tags"), mainWindow);
     actionViewTags->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_G));
@@ -331,6 +337,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewOrganizers);
     menuView->addAction(actionViewOutlines);
 #ifdef MF_WIP
+    menuView->addAction(actionViewOutlinesMap);
     menuView->addAction(actionViewLibraryDocs);
 #endif
     menuView->addAction(actionViewTags);
@@ -398,7 +405,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // - includes synchronization in one on another direction
     // - decisions executed AFTER user clicks DO IT button (not while editing dialog)
     actionLibrarySync= new QAction(
-        QIcon(":/menu-icons/new.svg"),
+        QIcon(":/menu-icons/edit.svg"),
         tr("&Update library"),
         mainWindow);
     actionLibrarySync->setStatusTip(

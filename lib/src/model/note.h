@@ -160,6 +160,10 @@ public:
 
     void addLink(Link* link);
     const std::vector<Link*>& getLinks() const { return links; }
+    void clearLinks() { 
+        for(auto l:links) { delete l; }
+        links.clear(); 
+    }
     size_t getLinksCount() const { return links.size(); }
 
     void promote();

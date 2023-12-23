@@ -50,6 +50,7 @@ constexpr const auto DIRNAME_M8R_REPOSITORY = "mindforger-repository";
 constexpr const auto FILE_PATH_M8R_REPOSITORY = "~/mindforger-repository";
 
 constexpr const auto FILENAME_M8R_CONFIGURATION = ".mindforger.md";
+constexpr const auto FILENAME_OUTLINES_MAP = "outlines-map.md";
 constexpr const auto DIRNAME_MEMORY = "memory";
 constexpr const auto DIRNAME_MIND = "mind";
 constexpr const auto DIRNAME_LIMBO = "limbo";
@@ -255,6 +256,8 @@ private:
 
     // active repository memory, limbo, ... paths (efficiency)
     std::string memoryPath;
+    std::string mindPath;
+    std::string outlinesMapPath;
     std::string limboPath;
 
     // repository configuration (when in repository mode)
@@ -346,6 +349,8 @@ public:
     }
 
     const std::string& getMemoryPath() const { return memoryPath; }
+    const std::string& getMindPath() const { return mindPath; }
+    const std::string& getOutlinesMapPath() const { return outlinesMapPath; }
     const std::string& getLimboPath() const { return limboPath; }
     const char* getRepositoryPathFromEnv();
     /**

@@ -54,13 +54,17 @@ mfoldhunspell | equals(OS_DISTRO_VERSION, "Windows") | equals(OS_DISTRO_VERSION,
   message("Hunspell: configuring use of NEW API on OS: $$OS_DISTRO_VERSION")
 }
 
+mfllamacpp {
+    DEFINES += MF_LLAMA_CPP
+}
+
 # Named Entity Recognition
 mfner {
   DEFINES += MF_NER
 }
 
 # webkit is supposed to be OBSOLETED by webengine, but webengine is disabled
-# on Linux since Qt 5.9 due to its tragic performance > conditional compilation
+# on Linux since Qt 5.9 due to its tragic performance -> conditional compilation
 # seems to be the only way:
 # - webkit on Linux
 # - webengine on Windows and macOS
@@ -68,7 +72,6 @@ win32|macx|mfwebengine {
     DEFINES += MF_QT_WEB_ENGINE
     QT += webengine
     QT += webenginewidgets
-
 } else {
     QT += webkit
     QT += webkitwidgets
@@ -187,7 +190,12 @@ INCLUDEPATH += ./src/qt/spelling
 #
 # - GCC: -std=c++0x ~ -std=c++11
 #
-# compiler options (qmake CONFIG+=mfnoccache ...)
+# compiler and compiler options:
+#   - https://doc.qt.io/qt-6/qmake-variable-reference.html#qmake-cxx
+#   - QMAKE_CXX       ... compiler
+#   - QMAKE_CXXFLAGS  ... compiler options
+#   - compilation options ~ DEFINEs (qmake CONFIG+=mfnoccache ...)
+#
 win32{
     QMAKE_CXXFLAGS += /MP
 } else {
@@ -295,6 +303,9 @@ HEADERS += \
     src/qt/organizers_table_model.h \
     src/qt/organizers_table_presenter.h \
     src/qt/organizers_table_view.h \
+    src/qt/outlines_map_model.h \
+    src/qt/outlines_map_presenter.h \
+    src/qt/outlines_map_view.h \
     src/qt/qt_commons.h \
     src/qt/spelling/abstract_dictionary.h \
     src/qt/spelling/abstract_dictionary_provider.h \
@@ -423,6 +434,9 @@ SOURCES += \
     src/qt/organizers_table_model.cpp \
     src/qt/organizers_table_presenter.cpp \
     src/qt/organizers_table_view.cpp \
+    src/qt/outlines_map_model.cpp \
+    src/qt/outlines_map_presenter.cpp \
+    src/qt/outlines_map_view.cpp \
     src/qt/spelling/dictionary_manager.cpp \
     src/qt/spelling/spell_checker.cpp \
     src/qt/tags_table_model.cpp \

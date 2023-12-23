@@ -23,6 +23,7 @@
 #include <memory>
 #include <mutex>
 #include <regex>
+#include <vector>
 
 #include "memory.h"
 #include "knowledge_graph.h"
@@ -44,6 +45,8 @@ class KnowledgeGraph;
 class AutolinkingMind;
 
 constexpr auto NO_PARENT = 0xFFFF;
+// const in constexpr ensures const value
+constexpr const auto LINK_NAME_ASSOCIATED_OUTLINE = "TargetOutline";
 
 enum class FtsSearch {
     EXACT,
@@ -152,6 +155,19 @@ private:
     Memory memory;
     AutolinkingMind* autolinking;
     MindStatistics* stats;
+
+    /**
+     * Outline map is an Outline used to organize Outlines into the tree.
+     * Notes in the Outline map:
+     * 
+     * - has exactly one link which points to the Outline they represent
+     * - Outline link is *relative* on the filesystem and absolute (resolved) in runtime
+     */
+    Outline* outlinesMap;
+
+    std::string outlineMapKey2Relative(const std::string& outlineKey) const;
+    std::string outlineMapKey2Absolute(const std::string& outlineKey) const;
+    void outlinesMapSynchronize(Outline* outlinesMap);
 
     /**
      * Atomic mind state changes and asynchronous computations synchronization
@@ -367,6 +383,7 @@ public:
      */
     std::unique_ptr<std::vector<Outline*>> findOutlineByNameFts(const std::string& pattern) const;
     //std::vector<Note*>* findNoteByNameFts(const std::string& pattern) const;
+    bool findOutlineByKey(const std::string& key) const;
     std::vector<Note*>* findNoteFts(
             const std::string& pattern,
             const FtsSearch mode = FtsSearch::EXACT,
@@ -374,7 +391,8 @@ public:
     // TODO findFts() - search also outline name and description
     //   >> temporary note of Outline type (never saved), cannot be created by user
     void getOutlineNames(std::vector<std::string>& names) const;
-
+    void getOutlineKeys(std::vector<std::string>& keys) const;
+    
     /*
      * SCOPING
      */
@@ -540,6 +558,23 @@ public:
      * Note that Outline is note deleted as object instance - it's kept in Limbo container.
      */
     bool outlineForget(std::string outlineKey);
+
+    /*
+     * OUTLINE MAP (TREE)
+     */
+
+    /**
+     * @brief Create new O map (tree).
+     */
+    Outline* outlinesMapNew(std::string outlineKey);
+    /**
+     * @brief Load Os map (tree).
+     */
+    Outline* outlinesMapLearn(std::string outlineKey);
+    /**
+     * @brief Load or create Os map (tree).
+     */
+    Outline* outlinesMapGet();
 
     /*
      * NOTE MGMT

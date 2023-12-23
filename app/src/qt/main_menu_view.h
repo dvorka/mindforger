@@ -111,6 +111,9 @@ public:
     QAction* actionViewDecks;
     QAction* actionViewOrganizers;
     QAction* actionViewOutlines;
+#ifdef MF_WIP
+    QAction* actionViewOutlinesMap;
+#endif
     QAction* actionViewLibraryDocs;
     QAction* actionViewTags;
     QAction* actionViewNavigator;

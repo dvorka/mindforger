@@ -41,7 +41,7 @@ win32 {
  DEPENDPATH += $$PWD/../deps/zlib-win/include
 }
 
-# NER library
+# DEPRECATED: Mitie (NER library)
 mfner {
     DEFINES += MF_NER
     INCLUDEPATH += $$PWD/../deps/mitie/mitielib/include
@@ -68,6 +68,8 @@ win32{
       # debug info
       QMAKE_CXXFLAGS += -g
     }
+
+    # -O3 ... can be specified by this variable (overrides -O1 -O2)
     QMAKE_CXXFLAGS += -pedantic -std=c++11
 }
 
@@ -159,6 +161,7 @@ SOURCES += \
     src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.cpp
 }
 
+# DEPRECATED: Mitie (NER library)
 mfner {
     SOURCES += \
     src/mind/ai/nlp/named_entity_recognition.cpp \
@@ -298,6 +301,7 @@ HEADERS += \
     src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h
 }
 
+# DEPRECATED: Mitie (NER library)
 mfner {
     HEADERS += \
     src/mind/ai/nlp/named_entity_recognition.h \

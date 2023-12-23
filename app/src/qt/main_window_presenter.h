@@ -247,6 +247,7 @@ public slots:
     void doActionViewTagCloud();
     bool doActionViewHome();
     void doActionViewOutlines();
+    void doActionViewOutlinesMap();
     void doActionViewRecentNotes();
     void doActionViewKnowledgeGraphNavigator();
     void doActionCli();

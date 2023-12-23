@@ -27,11 +27,15 @@ CliView::CliView(CliAndBreadcrumbsView* cliAndBreadcrumps, QWidget* parent)
 #if !defined(__APPLE__)
     // changing pallette @ macOS w/ dark model @ Qt 5.15.x+ causes edit line to be unreadable
 
+    // TODO leak
     QPalette* palette = new QPalette();
-    palette->setColor(QPalette::Text, LookAndFeels::getInstance().getCliTextColor());
+    palette->setColor(
+        QPalette::Text, 
+        QColor(125, 125, 125));
+        // TODO LookAndFeels::getInstance().getCliTextColor());
     setPalette(*palette);
 #endif
-    setToolTip("Run command: type . for available commands, type search string for FTS, Alt-x to activate.");
+    setToolTip("Run a command: Alt-x to activate, type > for available commands, type search string for FTS.");
 }
 
 void CliView::keyPressEvent(QKeyEvent* event)
@@ -48,19 +52,26 @@ void CliView::keyPressEvent(QKeyEvent* event)
 }
 
 /*
- * CliAndBreadcrumbsView
+ * CLI and breadcrumbs view.
  */
 
-const QString CliAndBreadcrumbsView::CMD_FTS = ".fts ";
-const QString CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME = ".find outline by name ";
-const QString CliAndBreadcrumbsView::CMD_LIST_OUTLINES = ".list outlines";
+const QString CliAndBreadcrumbsView::CMD_HELP
+    = "?";
 
-const QString CliAndBreadcrumbsView::CMD_TOOL= ".tool";
+const QString CliAndBreadcrumbsView::CMD_FTS
+    = "> fts ";
+const QString CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME
+    = "> find outline by name ";
+const QString CliAndBreadcrumbsView::CMD_LIST_OUTLINES
+    = "> list outlines";
+
+const QString CliAndBreadcrumbsView::CMD_TOOL
+    = "> tool";
 
 // TODO migrate all commands to constants
 const QStringList CliAndBreadcrumbsView::DEFAULT_CMDS = QStringList()
-        /*
         << CMD_HELP
+        /*
         << CMD_EXIT
         // home tools
         //<< "home"
@@ -120,6 +131,7 @@ CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent, bool zenMode)
     cliCompleter->setCaseSensitivity(Qt::CaseSensitivity::CaseInsensitive);
     cliCompleter->setCompletionMode(QCompleter::PopupCompletion);
     cli->setCompleter(cliCompleter);
+    cli->setText("Use \"? ...\" to chat (Alt-x), \"> ...\" for commands (Ctrl-/), or type a phrase to search.");
     layout->addWidget(cli);
 
     showBreadcrumb();
@@ -227,6 +239,18 @@ void CliAndBreadcrumbsView::showBreadcrumb()
 
 void CliAndBreadcrumbsView::showCli(bool selectAll)
 {
+    // clear help if it presents
+    if(cli->text().startsWith("Use ")) {
+        cli->setText("");
+
+        // TODO leak?
+        QPalette* palette = new QPalette();
+        palette->setColor(
+            QPalette::Text, 
+            LookAndFeels::getInstance().getCliTextColor());
+        setPalette(*palette);
+    }
+
     show();
     cli->setFocus();
     if(selectAll) {

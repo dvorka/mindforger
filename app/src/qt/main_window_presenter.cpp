@@ -171,6 +171,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         this, SLOT(doActionEditPasteImageData(QImage))
     );
     // wire LEFT toolbar signals
+    /*     
     QObject::connect(
         new QShortcut(QKeySequence("Alt+1"), view.getOrloj()), SIGNAL(activated()),
         this, SLOT(doActionArxivToolbar())
@@ -239,10 +240,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         new QShortcut(QKeySequence("Alt+9"), view.getOrloj()), SIGNAL(activated()),
         this, SLOT(doActionCppToolbar())
     );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarCpp, SIGNAL(triggered()),
-        this, SLOT(doActionCppToolbar())
-    );
+    */    
     // wire TOP toolbar signals
     QObject::connect(
         view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()),
@@ -595,7 +593,7 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
 #ifdef DO_MF_DEBUG
 void MainWindowPresenter::doActionMindHack()
 {
-    MF_DEBUG("[MindHack] Current facet: " << orloj->getFacet() << endl);
+    MF_DEBUG("MindHack" << endl);
 }
 #endif
 
@@ -1342,7 +1340,9 @@ bool MainWindowPresenter::doActionViewHome()
         orloj->showFacetOutline(homeOutline.at(0));
         return true;
     } else {
-        statusBar->showInfo(tr("Home Notebook is not defined!"));
+        statusBar->showInfo(
+            tr("Home Notebook not set - use menu 'Notebooks/Make Home'")
+        );
         return false;
     }
 }
@@ -1353,6 +1353,19 @@ void MainWindowPresenter::doActionViewOutlines()
         view.getCli()->setBreadcrumbPath("/notebooks");
         cli->executeListOutlines();
         view.getOrloj()->getOutlinesTable()->setFocus();
+    }
+}
+
+
+void MainWindowPresenter::doActionViewOutlinesMap()
+{
+    if(config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
+         &&
+       config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY)
+    {
+        orloj->showFacetOutlinesMap(
+            mind->outlinesMapGet()
+        );
     }
 }
 

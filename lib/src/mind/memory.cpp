@@ -210,6 +210,11 @@ bool Memory::learnOutlineTWiki(const string& twikiFileName, const string& outlin
     return twikiRepresentation.outline(File{twikiFileName}, File{outlineFileName});
 }
 
+Outline* Memory::learnOutlinesMap(const string& filePath)
+{
+    return mdRepresentation.outline(File{filePath});
+}
+
 Note* Memory::createNote(Stencil* stencil)
 {
     if(stencil && ResourceType::NOTE==stencil->getType()) {

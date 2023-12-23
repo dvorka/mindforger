@@ -259,6 +259,7 @@ public:
     const std::vector<Note*>& getNotes() const;
     size_t getNotesCount() const;
     void setNotes(const std::vector<Note*>& notes);
+    void sortNotesByRead();
     void addNote(Note*);    
     /**
      * @brief Clone Note including its children.

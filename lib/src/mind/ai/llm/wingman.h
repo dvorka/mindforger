@@ -79,8 +79,30 @@ public:
     void fix_source(std::string source);
     void fix_bug(std::string bug);
     void create_plan(std::string plan);
-    
+};
 
+
+/**
+ * llama.cpp wingman implementation.
+ *
+ * LLM models to use:
+ *
+ * - llama 7B
+ *   - llama-2-7b.Q4_0.gguf
+ * - Zephir 7B
+ *   - ...
+ * - Mistral 7B
+ *   - ...
+ *
+ * Plan:
+ *
+ * TODO: first implement unit tests for the wingman UCs as it is in the lib/
+ * TODO: then integrate wingman to UI
+ *   - if GPT not available in RUNTIME, then hide/disable menu items
+ */
+class WingmanLlamaCpp: Wingman
+{
+public:
 };
 
 }

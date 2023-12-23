@@ -393,6 +393,11 @@ void Outline::setNotes(const vector<Note*>& notes)
     this->notes = notes;
 }
 
+void Outline::sortNotesByRead()
+{
+    Outline::sortByRead(this->notes);
+}
+
 int8_t Outline::getProgress() const
 {
     return progress;
@@ -504,7 +509,7 @@ Note* Outline::cloneNote(const Note* clonedNote, const bool deep)
 {
     int offset = getNoteOffset(clonedNote);
     if(offset != -1) {
-        Note* newNote;
+        Note* newNote{};
 
         vector<Note*> children{};
         getAllNoteChildren(clonedNote, &children);

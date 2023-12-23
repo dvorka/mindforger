@@ -118,6 +118,11 @@ public:
     Outline* createOutline(Stencil* stencil);
 
     /**
+     * @brief Learn Outlines map (tree).
+     */
+    Outline* learnOutlinesMap(const std::string& fileNamePath);
+
+    /**
      * @brief Convert TWiki file to MD file (O not instantiated).
      */
     bool learnOutlineTWiki(const std::string& twikiFileName, const std::string& outlineFileName);

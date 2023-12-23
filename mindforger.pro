@@ -17,6 +17,10 @@
 
 #########################################################################
 #
+# QMake example:
+#
+#   qmake -project project.pro CONFIG+=mysetting1 CONFIG+=mysetting2
+#
 # QMake build options:
 #
 #   qmake CONFIG+=mfwebengine       ... build project w/ Qt WebEngine instead of Qt WebKit
@@ -27,6 +31,7 @@
 #   qmake CONFIG+=mfdebug           ... show debug messages + include WIP code
 #   qmake CONFIG+=mfci              ... CI build (AppVeyor, ...) w/ build info @ window title
 #   qmake CONFIG+=mfunits           ... option to run unit tests
+#   qmake CONFIG+=mfllamacpp        ... EXPERIMENTAL option to enable wingman @ llama.cpp
 #   qmake CONFIG+=mfner             ... DEPRECATED: build project w/ NER and link dlib/MITIE
 #
 # Warning: DEPRECATED build options will be removed in the next major release.

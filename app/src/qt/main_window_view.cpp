@@ -24,7 +24,16 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
     : QMainWindow(nullptr), // main window has no parent - it is destroyed by main MF class
       lookAndFeel(lookAndFeel)
 {
-    windowTitleSkeleton = "MindForger - "+tr("Thinking Notebook")+" - "+MINDFORGER_VERSION;
+#ifdef MF_LLAMA_CPP
+  #define MINDFORGER_GPT " GPT"
+#else
+  #define MINDFORGER_GPT ""
+#endif
+    windowTitleSkeleton
+        = "MindForger" MINDFORGER_GPT " - "
+          +tr("Thinking Notebook")+" - "
+          +MINDFORGER_VERSION;
+
     setWindowTitle(windowTitleSkeleton);
 
     toolBarView = new MainToolbarView{this};
@@ -32,7 +41,7 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
     addToolBar(Qt::TopToolBarArea, toolBarView);
 
     leftToolBarView = new LeftToolbarView{this};
-    addToolBar(Qt::LeftToolBarArea, leftToolBarView);
+    // addToolBar(Qt::LeftToolBarArea, leftToolBarView);
 
     centralWidget = new QWidget(this);
 
