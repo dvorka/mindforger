@@ -93,6 +93,7 @@ public:
     KanbanView* getKanban() const { return kanban; }
     TagsTableView* getTagCloud() const { return tagCloud; }
     OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
+    OutlinesMapView* getOutlinesMapTable() const { return outlinesMap; }
     OutlinesMapView* getOutlinesMap() const { return outlinesMap; }
     RecentNotesTableView* getRecentNotesTable() const { return recentNotesTable; }
     OutlineViewSplitter* getOutlineView() const { return outlineView; }

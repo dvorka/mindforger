@@ -44,10 +44,6 @@ OutlinesMapPresenter::OutlinesMapPresenter(
         this, SLOT(slotSelectPreviousRow()));
 
     QObject::connect(
-        view, SIGNAL(signalOutlineShow()),
-        mwp, SLOT(doActionOutlineShow()));
-
-    QObject::connect(
         view, SIGNAL(signalChangePromote()),
         mwp, SLOT(doActionNotePromote()));
     QObject::connect(
@@ -66,6 +62,11 @@ OutlinesMapPresenter::OutlinesMapPresenter(
         view, SIGNAL(signalChangeLast()),
         mwp, SLOT(doActionNoteLast()));
 
+    // TODO signals to be re-written and re-wired
+    /*
+    QObject::connect(
+        view, SIGNAL(signalOutlineShow()),
+        mwp, SLOT(doActionOutlineShow()));
     QObject::connect(
         view, SIGNAL(signalOutlineOrNoteEdit()),
         mwp, SLOT(doActionOutlineOrNoteEdit()));
@@ -78,6 +79,7 @@ OutlinesMapPresenter::OutlinesMapPresenter(
     QObject::connect(
         view, SIGNAL(signalForget()),
         mwp, SLOT(doActionNoteForget()));
+    */
 }
 
 OutlinesMapPresenter::~OutlinesMapPresenter()

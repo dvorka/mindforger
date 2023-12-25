@@ -131,7 +131,7 @@ CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent, bool zenMode)
     cliCompleter->setCaseSensitivity(Qt::CaseSensitivity::CaseInsensitive);
     cliCompleter->setCompletionMode(QCompleter::PopupCompletion);
     cli->setCompleter(cliCompleter);
-    cli->setText("Use \"? ...\" to chat (Alt-x), \"> ...\" for commands (Ctrl-/), or type a phrase to search.");
+    cli->setText("Enter a prompt - \"? .\" for help, \"/ .\" to chat (Alt-x), \"> .\" run command (Ctrl-/), or type a phrase to find.");
     layout->addWidget(cli);
 
     showBreadcrumb();

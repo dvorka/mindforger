@@ -953,6 +953,7 @@ TEST(MarkdownParserTestCase, Links)
 }
 
 // Repro for BUG: https://github.com/dvorka/mindforger/issues/1518
+// - metadata link with "," is not parsed
 TEST(MarkdownParserTestCase, DISABLED_LinksWithParenthesis)
 {
     string repositoryPath{"/tmp"};
@@ -961,15 +962,15 @@ TEST(MarkdownParserTestCase, DISABLED_LinksWithParenthesis)
     string filePath{repositoryPath+"/"+fileName};
 
     content.assign(
-                "# Outline Name <!-- Metadata: links: [root link](./a b(c)d.pdf); -->\n"
-                "O text.\n"
-                "\n"
-//                "## First Section <!-- Metadata: links: [first link](./a/b/c/Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf),[second link](./x/y/z/Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf); -->\n"
-//                "N1 text.\n"
-                "\n"
-                "## Second Section\n"
-                "N2 text.\n"
-                "\n");
+        "# Outline Name <!-- Metadata: links: [root link](./a,b.pdf); -->\n"
+        "O text.\n"
+        "\n"
+        "## First Section <!-- Metadata: links: [first link](./a/b/c/Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf),[second link](./x/y/z/Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf); -->\n"
+        "N1 text.\n"
+        "\n"
+        "## Second Section\n"
+        "N2 text.\n"
+        "\n");
     m8r::stringToFile(filePath, content);
 
     m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);

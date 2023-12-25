@@ -123,6 +123,7 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     startupCombo->addItem(QString{START_TO_DASHBOARD});
 #endif
     startupCombo->addItem(QString{START_TO_OUTLINES});
+    startupCombo->addItem(QString{START_TO_OUTLINES_TREE});
     startupCombo->addItem(QString{START_TO_TAGS});
     startupCombo->addItem(QString{START_TO_RECENT});
 #ifdef MF_BUG

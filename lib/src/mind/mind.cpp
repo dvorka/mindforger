@@ -996,12 +996,18 @@ Outline* Mind::outlinesMapNew(string outlineKey)
         Note* n = o->getOutlineDescriptorAsNote();
         newOutlinesMap->addNote(n);
 
-        // relative key will be valid even if repository is moved to a different path
-        Link* link = new Link{
-            LINK_NAME_ASSOCIATED_OUTLINE, 
-            this->outlineMapKey2Relative(o->getKey())
-        };
-        n->addLink(link);
+        n->addLink(
+            new Link{
+                LINK_NAME_OUTLINE_KEY,
+                o->getKey()
+            }
+        );
+        n->addLink(
+            new Link{
+                LINK_NAME_OUTLINE_PATH,
+                Mind::outlineMapKey2Relative(o->getKey())
+            }
+        );
     }
 
     newOutlinesMap->setName("Notebooks Map");
@@ -1013,9 +1019,6 @@ Outline* Mind::outlinesMapNew(string outlineKey)
     return newOutlinesMap;
 }
 
-/**
- * Synchronize Outlines map parameter with mind's Outlines.
- */
 void Mind::outlinesMapSynchronize(Outline* outlinesMap)
 {
     vector<Note*> osToRemove{};
@@ -1026,10 +1029,9 @@ void Mind::outlinesMapSynchronize(Outline* outlinesMap)
     MF_DEBUG("Map O links validity check:");
     vector<string> mapOsKeys{};
     for(Note* n:outlinesMap->getNotes()) {
-        if(n->getLinks().size() > 0 
-            && n->getLinks().at(0)->getUrl().size() > 0
-        ) {
-            string oKey{n->getLinks().at(0)->getUrl()};
+        Link* oLink = n->getLinkByName(LINK_NAME_OUTLINE_KEY);
+        if(oLink) {
+            string oKey{oLink->getUrl()};
             if(findOutlineByKey(oKey)) {
                 // valid O in MF & map
                 MF_DEBUG(
@@ -1064,7 +1066,16 @@ void Mind::outlinesMapSynchronize(Outline* outlinesMap)
     for(auto mindO: getOutlines()) {
         if(find(mapOsKeys.begin(), mapOsKeys.end(), mindO->getKey()) == mapOsKeys.end()) {
             MF_DEBUG("  " << mindO->getKey() << endl);
-            osToAdd.push_back(mindO);
+
+            // TODO skip keys w/ "," ~ https://github.com/dvorka/mindforger/issues/1518 workaround
+            // TODO remove this code once #1518 is fixed
+            if(find(mindO->getKey().begin(), mindO->getKey().end(), ',') == mindO->getKey().end()) {
+                osToAdd.push_back(mindO);
+            } else {
+                MF_DEBUG("    SKIPPING key w/ ','" << endl);
+                continue;
+            }
+
         }
     }
     MF_DEBUG("ADDING mind keys to map:" << endl);
@@ -1072,6 +1083,21 @@ void Mind::outlinesMapSynchronize(Outline* outlinesMap)
         MF_DEBUG("  " << o->getKey() << endl);
         // clone O's descriptor to get N which might be deleted later
         Note* n = new Note(*o->getOutlineDescriptorAsNote());
+
+        n->clearLinks();
+        n->addLink(
+            new Link{
+                LINK_NAME_OUTLINE_KEY,
+                o->getKey()
+            }
+        );
+        n->addLink(
+            new Link{
+                LINK_NAME_OUTLINE_PATH,
+                Mind::outlineMapKey2Relative(o->getKey())
+            }
+        );
+
         outlinesMap->addNote(n , 0);
     }
 }
@@ -1087,23 +1113,29 @@ Outline* Mind::outlinesMapLearn(string outlineKey)
     MF_DEBUG("Setting map's Ns type O" << endl);
     for(auto n:outlinesMap->getNotes()) {
         MF_DEBUG(
-            "  Setting " << n->getName() 
-            << " with " << n->getLinks().size() << " link(s)"
+            "  Setting '" << n->getName()
+            << "' with " << n->getLinks().size() << " link(s)"
             << " to O" << endl
         );
         n->setType(&Outline::NOTE_4_OUTLINE_TYPE);
 
-        if(n->getLinks().size() > 0 
-            && n->getLinks().at(0)->getUrl().size() > 0
-        ) {
-            // IMPROVE find link w/ name LINK_NAME_ASSOCIATED_OUTLINE (in case there would be >1 link)
-            string relativeLink{
-                this->outlineMapKey2Absolute(n->getLinks().at(0)->getUrl())
-            };
+        Link* oMemPathLink = n->getLinkByName(LINK_NAME_OUTLINE_PATH);
+        if(oMemPathLink && oMemPathLink->getUrl().size() > 0) {
+            string oMemPath{oMemPathLink->getUrl()};
 
-            // N key is generated based on O key > keep link in "Outline" link
             n->clearLinks();
-            n->addLink(new Link(LINK_NAME_ASSOCIATED_OUTLINE, relativeLink));
+            n->addLink(
+                new Link{
+                    LINK_NAME_OUTLINE_KEY,
+                    Mind::outlineMapKey2Absolute(oMemPath)
+                }
+            );
+            n->addLink(
+                new Link{
+                    LINK_NAME_OUTLINE_PATH,
+                    oMemPath
+                }
+            );
         } else {
             MF_DEBUG("  SKIPPING N w/o link: " << n->getName() << endl);
             osToRemove.push_back(n);
@@ -1144,12 +1176,18 @@ Outline* Mind::outlinesMapGet()
         // create new Os map
         this->outlinesMap = outlinesMapNew(outlinesMapPath);
 
-        remind().getPersistence().save(this->outlinesMap);
+        outlinesMapRemember();
     }
 
     return this->outlinesMap;
 }
 
+Outline* Mind::outlinesMapRemember()
+{
+    if(this->outlinesMap) {
+        remind().getPersistence().save(this->outlinesMap);
+    }
+}
 
 Note* Mind::noteNew(
     const std::string& outlineKey,

@@ -90,17 +90,22 @@ public:
  * - llama 7B
  *   - llama-2-7b.Q4_0.gguf
  * - Zephir 7B
- *   - ...
+ *   - ?.gguf
  * - Mistral 7B
- *   - ...
+ *   - ?.gguf
  *
  * Plan:
  *
  * TODO: first implement unit tests for the wingman UCs as it is in the lib/
- * TODO: then integrate wingman to UI
- *   - if GPT not available in RUNTIME, then hide/disable menu items
+ * TODO: then integrate wingman to UI (if GPT not available in RUNTIME, then hide/disable menu items)
+ *
  */
 class WingmanLlamaCpp: Wingman
+{
+public:
+};
+
+class WingmanOpenAiChatGpt: Wingman
 {
 public:
 };

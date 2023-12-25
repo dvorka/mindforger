@@ -111,10 +111,10 @@ public:
     QAction* actionViewDecks;
     QAction* actionViewOrganizers;
     QAction* actionViewOutlines;
-#ifdef MF_WIP
     QAction* actionViewOutlinesMap;
-#endif
+#ifdef MF_WIP
     QAction* actionViewLibraryDocs;
+#endif
     QAction* actionViewTags;
     QAction* actionViewNavigator;
     QAction* actionViewDwell;
@@ -160,6 +160,12 @@ public:
     QAction* actionOutlineClone;
     QAction* actionOutlineArtExamine;
     QAction* actionOutlineForget;
+    QAction* actionOutlinePromote;
+    QAction* actionOutlineDemote;
+    QAction* actionOutlineFirst;
+    QAction* actionOutlineUp;
+    QAction* actionOutlineDown;
+    QAction* actionOutlineLast;
     QMenu* submenuOutlineExport;
     QAction* actionOutlineHtmlExport;
     QMenu* submenuOutlineImport;
@@ -269,6 +275,8 @@ public:
     QAction* actionHelpAboutQt;
     QAction* actionHelpAbout;
 
+    void showModeAwareFacet(bool repositoryMode, bool mfMode);
+
 public:
     MainMenuView(MainWindowView& mainWindow);
     MainMenuView(const MainMenuView&) = delete;
@@ -277,11 +285,12 @@ public:
     MainMenuView &operator=(const MainMenuView&&) = delete;
     virtual ~MainMenuView();
 
-    void showFacetOrganizerList(bool repositoryMode=true);
-    void showFacetOrganizerView(bool repositoryMode=true);
-    void showFacetOutlineList(bool repositoryMode=true);
-    void showFacetOutlineView(bool repositoryMode=true);
-    void showFacetNoteEdit(bool repositoryMode=true);
+    void showFacetOrganizerList(bool repositoryMode=true, bool mfMode=true);
+    void showFacetOrganizerView(bool repositoryMode=true, bool mfMode=true);
+    void showFacetOutlinesMap(bool repositoryMode=true, bool mfMode=true);
+    void showFacetOutlineList(bool repositoryMode=true, bool mfMode=true);
+    void showFacetOutlineView(bool repositoryMode=true, bool mfMode=true);
+    void showFacetNoteEdit(bool repositoryMode=true, bool mfMode=true);
 
     void showFacetMindThink();
     void showFacetMindSleep();

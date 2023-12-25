@@ -39,29 +39,38 @@ class OrlojPresenter;
  *
  * Outlines map ~ tree of Outlines is in fact ~ mind map of Outlines
  */
+//
+// MVP assembly: View / Model / Presenter:
+//
+//   view <- new View
+//     presenter <- new Presenter(view) + new Model(view)
+//       model <- presenter.model
+//
+// Integration:
+//
+//   orlojView <- new View()
+//   orlojPresenter <- presenter
+//
+// Materialization / view:
+//
+//   menu ... MainMenuView::actionViewOutlinesMap
+//     -> <signal> @ MainMenuPresenter
+//       -> <handler> MainWindowPresenter::doActionViewOutlinesMap()
+//          ... generate virtual O from Os headers
+//         -> OrlojPresenter::showFacetOutlinesMap( virtualO )
+//
+// Signals:
+//
+//   - emit: OutlinesMapView
+//       ... OK ~ view is the source of signals
+//   - wire: OutlinesMapPresenter
+//       ... OK ~ this is where code belongs & it's presenter's role in MVP
+//   - slot: MainWindowPresenter
+//       ... OK ~ this is where are presenters are instantiated
+//
 class OutlinesMapPresenter : public QObject
 {
     Q_OBJECT
-
-    // Assembly ... view / model / presenter:
-    //
-    //   view <- new View
-    //     presenter <- new Presenter(view) w/ new Model(view)
-    //       model <- presenter.model
-    //
-    // Integration:
-    //
-    //   orlojView <- new View()
-    //   orlojPresenter <- presenter
-    //
-    // Materialization / view:
-    //
-    //   menu ... MainMenuView::actionViewOutlinesMap
-    //     -> <signal> @ MainMenuPresenter
-    //       -> <handler> MainWindowPresenter::doActionViewOutlinesMap()
-    //          ... generate virtual O from Os headers
-    //         -> OrlojPresenter::showFacetOutlinesMap( virtualO )
-    //
 
 public:
     static const int NO_ROW = -1;

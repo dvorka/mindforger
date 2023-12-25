@@ -220,7 +220,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFind->addAction(actionFindOutlineByName);
     menuFind->addAction(actionFindNoteByName);
     menuFind->addAction(actionFindOutlineByTag);
-    menuFind->addAction(actionFindNoteByTag);    
+    menuFind->addAction(actionFindNoteByTag);
 #ifdef MF_WIP
     menuFind->addAction(actionFindDocByName);
 #endif
@@ -253,15 +253,15 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
     actionViewOutlines->setStatusTip(tr("Show list of Notebooks..."));
 
-#ifdef MF_WIP
     actionViewOutlinesMap = new QAction(QIcon(":/menu-icons/dashboard.svg"), tr("Note&books Tree"), mainWindow);
     actionViewOutlinesMap->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
     actionViewOutlinesMap->setStatusTip(tr("Show tree of Notebooks..."));
-#endif
 
+#ifdef MF_WIP
     actionViewLibraryDocs = new QAction(QIcon(":/menu-icons/copy.svg"), tr("&Library Documents"), mainWindow);
     actionViewLibraryDocs->setStatusTip(tr("List Library documents..."));
     //actionViewLibraryDocs->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_<REPLACE>));
+#endif
 
     actionViewTags = new QAction(QIcon(":/menu-icons/tag.svg"), tr("&Tags"), mainWindow);
     actionViewTags->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_G));
@@ -335,9 +335,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewDecks);
 #endif
     menuView->addAction(actionViewOrganizers);
+    menuView->addAction(actionViewOutlinesMap);
     menuView->addAction(actionViewOutlines);
 #ifdef MF_WIP
-    menuView->addAction(actionViewOutlinesMap);
     menuView->addAction(actionViewLibraryDocs);
 #endif
     menuView->addAction(actionViewTags);
@@ -537,7 +537,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineStencil->setStatusTip(tr("Copy the current Notebook as to Stencil"));
     actionOutlineStencil->setEnabled(false);
 
-    actionOutlineClone = new QAction(QIcon(":/menu-icons/copy.svg"), tr("C&lone"), mainWindow);
+    actionOutlineClone = new QAction(QIcon(":/menu-icons/copy.svg"), tr("&Clone"), mainWindow);
     actionOutlineClone->setStatusTip(tr("Make copy of the current Notebook"));
 
     actionOutlineArtExamine= new QAction(QIcon(":/menu-icons/on.svg"), tr("E&xamine"), mainWindow);
@@ -545,6 +545,29 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     actionOutlineForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Forget"), mainWindow);
     actionOutlineForget->setStatusTip(tr("Forget Notebook and move it to Limbo"));
+
+    actionOutlinePromote = new QAction(QIcon(":/menu-icons/left.svg"), tr("&Promote"), mainWindow);
+    actionOutlinePromote->setStatusTip(tr("Promote Notebook"));
+
+    actionOutlineDemote = new QAction(QIcon(":/menu-icons/right.svg"), tr("De&mote"), mainWindow);
+    actionOutlineDemote->setStatusTip(tr("Demote Notebook"));
+
+    actionOutlineFirst = new QAction(
+        QIcon(":/menu-icons/top.svg"), tr("Move to &First"),
+        mainWindow);
+    actionOutlineFirst->setStatusTip(tr("Move the Notebook to be the first child of its parent"));
+
+    actionOutlineUp = new QAction(
+        QIcon(":/menu-icons/up.svg"), tr("Move &Up"), mainWindow);
+    actionOutlineUp->setStatusTip(tr("Move the Notebook up"));
+
+    actionOutlineDown = new QAction(
+        QIcon(":/menu-icons/down.svg"), tr("Move Do&wn"), mainWindow);
+    actionOutlineDown->setStatusTip(tr("Move the Notebook down"));
+
+    actionOutlineLast = new QAction(
+        QIcon(":/menu-icons/bottom.svg"), tr("Move to &Last"), mainWindow);
+    actionOutlineLast->setStatusTip(tr("Move the Notebook to be the last child of its parent"));
 
     submenuOutlineExport = menuOutline->addMenu(QIcon(":/menu-icons/export.svg"), "E&xport");
     actionOutlineHtmlExport = new QAction(tr("&HTML"), mainWindow);
@@ -562,11 +585,19 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuOutline->addAction(actionOutlineEdit);
     menuOutline->addAction(actionOutlineForget);
     menuOutline->addSeparator();
+    menuOutline->addAction(actionOutlinePromote);
+    menuOutline->addAction(actionOutlineDemote);
+    menuOutline->addSeparator();
+    menuOutline->addAction(actionOutlineFirst);
+    menuOutline->addAction(actionOutlineUp);
+    menuOutline->addAction(actionOutlineDown);
+    menuOutline->addAction(actionOutlineLast);
+    menuOutline->addSeparator();
     menuOutline->addAction(actionOutlineHome);
 #ifdef MF_WIP
     menuOutline->addAction(actionOutlineStencil);
 #endif
-    menuOutline->addAction(actionOutlineClone);   
+    menuOutline->addAction(actionOutlineClone);
     menuOutline->addSeparator();
 #ifdef MF_WIP
     menuOutline->addAction(actionOutlineArtExamine);
@@ -1031,6 +1062,7 @@ void MainMenuView::showAllMenuItems()
 {
     menuMind->setEnabled(true);
     // autolink: leave as is - it's not that simple as it's status, not just action
+    actionMindScope->setEnabled(true);
     actionExit->setEnabled(true);
 
     menuFind->setEnabled(true);
@@ -1039,22 +1071,28 @@ void MainMenuView::showAllMenuItems()
     actionFindOutlineByTag->setEnabled(true);
     actionFindNoteByName->setEnabled(true);
     actionFindNoteByTag->setEnabled(true);
+#ifdef MF_WIP
+    actionFindDocByName->setEnabled(true);
+#endif
 
     menuView->setEnabled(true);
     actionViewDashboard->setEnabled(true);
     actionViewHome->setEnabled(true);
     actionViewOrganizers->setEnabled(true);
+    actionViewOutlinesMap->setEnabled(true);
     actionViewOutlines->setEnabled(true);
     actionViewTags->setEnabled(true);
     actionViewNavigator->setEnabled(true);
+#ifdef MF_WIP
+    actionViewLibraryDocs->setEnabled(true);
+    actionViewDecks->setEnabled(true);
+#endif
     actionViewLimbo->setEnabled(true);
     actionViewRecentNotes->setEnabled(true);
 
-#ifdef MF_WIP
     menuLibrary->setEnabled(true);
     actionLibraryAdd->setEnabled(true);
     actionLibraryDeprecate->setEnabled(true);
-#endif
 
 #ifdef MF_WIP
     menuFlashcards->setEnabled(true);
@@ -1078,6 +1116,20 @@ void MainMenuView::showAllMenuItems()
     actionOutlineForget->setEnabled(true);
 
     menuOutline->setEnabled(true);
+    actionOutlineEdit->setEnabled(true);
+    actionOutlineClone->setEnabled(true);
+    actionOutlineHome->setEnabled(true);
+    actionOutlineForget->setEnabled(true);
+    actionOutlineUp->setEnabled(true);
+    actionOutlineDown->setEnabled(true);
+    actionOutlineFirst->setEnabled(true);
+    actionOutlineLast->setEnabled(true);
+    actionOutlinePromote->setEnabled(true);
+    actionOutlineDemote->setEnabled(true);
+        actionOutlineHome->setEnabled(true);
+#ifdef MF_WIP
+    actionOutlineArtExamine->setEnabled(true);
+#endif
     submenuOutlineExport->setEnabled(true);
 
     menuNote->setEnabled(true);
@@ -1098,7 +1150,56 @@ void MainMenuView::showAllMenuItems()
     mainWindow->getToolBar()->setEnabled(true);
 }
 
-void MainMenuView::showFacetOrganizerList(bool repositoryMode)
+void MainMenuView::showModeAwareFacet(bool repositoryMode, bool mfMode)
+{
+   if(!repositoryMode) {
+        menuView->setEnabled(false);
+        menuLibrary->setEnabled(false);
+        menuOutline->setEnabled(false);
+        menuEdit->setEnabled(false);
+        menuFormat->setEnabled(false);
+
+        actionMindScope->setEnabled(false);
+
+        actionFindOutlineByName->setEnabled(false);
+        actionFindOutlineByTag->setEnabled(false);
+    }
+    if(!mfMode) {
+        menuLibrary->setEnabled(false);
+#ifdef MF_WIP
+        menuFlashcards->setEnabled(false);
+#endif
+
+        actionMindScope->setEnabled(false);
+
+        actionViewHome->setEnabled(false);
+        actionViewOrganizers->setEnabled(false);
+        actionViewOutlinesMap->setEnabled(false);
+#ifdef MF_WIP
+        actionViewLibraryDocs->setEnabled(false);
+#endif
+        actionViewTags->setEnabled(false);
+        actionViewLimbo->setEnabled(false);
+#ifdef MF_WIP
+        actionViewDashboard->setEnabled(false);
+        actionViewDecks->setEnabled(false);
+#endif
+
+        actionFindOutlineByTag->setEnabled(false);
+        actionFindNoteByTag->setEnabled(false);
+#ifdef MF_WIP
+        actionFindDocByName->setEnabled(false);
+#endif
+
+        actionOutlineHome->setEnabled(false);
+#ifdef MF_WIP
+        actionOutlineArtExamine->setEnabled(false);
+#endif
+    }
+}
+
+
+void MainMenuView::showFacetOrganizerList(bool repositoryMode, bool mfMode)
 {
     showAllMenuItems();
 
@@ -1111,25 +1212,17 @@ void MainMenuView::showFacetOrganizerList(bool repositoryMode)
     actionOrganizerMoveNext->setEnabled(false);
 
     menuNavigator->setEnabled(false);
-#ifdef MF_WIP
     menuLibrary->setEnabled(false);
-#endif
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
     submenuOutlineExport->setEnabled(false);
 
-    if(!repositoryMode) {
-        menuView->setEnabled(false);
-        menuFormat->setEnabled(false);
-
-        actionFindOutlineByName->setEnabled(false);
-        actionFindOutlineByTag->setEnabled(false);
-    }
+    showModeAwareFacet(repositoryMode, mfMode);
 }
 
-void MainMenuView::showFacetOrganizerView(bool repositoryMode)
+void MainMenuView::showFacetOrganizerView(bool repositoryMode, bool mfMode)
 {
     showAllMenuItems();
 
@@ -1143,23 +1236,37 @@ void MainMenuView::showFacetOrganizerView(bool repositoryMode)
     menuFormat->setEnabled(false);
     submenuOutlineExport->setEnabled(false);
 
-    if(!repositoryMode) {
-        menuView->setEnabled(false);
-        menuFormat->setEnabled(false);
-
-        actionFindOutlineByName->setEnabled(false);
-        actionFindOutlineByTag->setEnabled(false);
-    }
+    showModeAwareFacet(repositoryMode, mfMode);
 }
 
-void MainMenuView::showFacetOutlineList(bool repositoryMode)
+void MainMenuView::showFacetOutlineList(bool repositoryMode, bool mfMode)
 {
     showAllMenuItems();
+
+    menuNavigator->setEnabled(false);
+    menuOrganizer->setEnabled(false);
+    menuEdit->setEnabled(false);
+    menuFormat->setEnabled(false);
+    menuNote->setEnabled(false);
+    submenuOutlineExport->setEnabled(false);
 
     actionOutlineEdit->setEnabled(false);
     actionOutlineClone->setEnabled(false);
     actionOutlineHome->setEnabled(false);
     actionOutlineForget->setEnabled(false);
+    actionOutlineUp->setEnabled(false);
+    actionOutlineDown->setEnabled(false);
+    actionOutlineFirst->setEnabled(false);
+    actionOutlineLast->setEnabled(false);
+    actionOutlinePromote->setEnabled(false);
+    actionOutlineDemote->setEnabled(false);
+
+    showModeAwareFacet(repositoryMode, mfMode);
+}
+
+void MainMenuView::showFacetOutlinesMap(bool repositoryMode, bool mfMode)
+{
+    showAllMenuItems();
 
     menuNavigator->setEnabled(false);
     menuOrganizer->setEnabled(false);
@@ -1168,18 +1275,10 @@ void MainMenuView::showFacetOutlineList(bool repositoryMode)
     menuNote->setEnabled(false);
     submenuOutlineExport->setEnabled(false);
 
-    if(!repositoryMode) {
-        menuView->setEnabled(false);
-        menuOutline->setEnabled(false);
-        menuEdit->setEnabled(false);
-        menuFormat->setEnabled(false);
-
-        actionFindOutlineByName->setEnabled(false);
-        actionFindOutlineByTag->setEnabled(false);
-    }
+    showModeAwareFacet(repositoryMode, mfMode);
 }
 
-void MainMenuView::showFacetOutlineView(bool repositoryMode)
+void MainMenuView::showFacetOutlineView(bool repositoryMode, bool mfMode)
 {
     showAllMenuItems();
 
@@ -1191,18 +1290,17 @@ void MainMenuView::showFacetOutlineView(bool repositoryMode)
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
 
-    if(!repositoryMode) {
-        menuView->setEnabled(false);
-        menuOutline->setEnabled(false);
-        menuEdit->setEnabled(false);
-        menuFormat->setEnabled(false);
+    actionOutlineUp->setEnabled(false);
+    actionOutlineDown->setEnabled(false);
+    actionOutlineFirst->setEnabled(false);
+    actionOutlineLast->setEnabled(false);
+    actionOutlinePromote->setEnabled(false);
+    actionOutlineDemote->setEnabled(false);
 
-        actionFindOutlineByName->setEnabled(false);
-        actionFindOutlineByTag->setEnabled(false);
-    }
+    showModeAwareFacet(repositoryMode, mfMode);
 }
 
-void MainMenuView::showFacetNoteEdit(bool repositoryMode)
+void MainMenuView::showFacetNoteEdit(bool repositoryMode, bool mfMode)
 {
     showAllMenuItems();
 
@@ -1259,13 +1357,7 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode)
 
     mainWindow->getToolBar()->setEnabled(false);
 
-    if(!repositoryMode) {
-        menuView->setEnabled(false);
-        menuOutline->setEnabled(false);
-
-        actionFindOutlineByName->setEnabled(false);
-        actionFindOutlineByTag->setEnabled(false);
-    }
+    showModeAwareFacet(repositoryMode, mfMode);
 }
 
 void MainMenuView::showFacetMindThink()

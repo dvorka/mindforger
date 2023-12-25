@@ -348,6 +348,7 @@ public slots:
     void doActionOutlineShow();
     void doActionNoteEdit();
     void doActionNoteExternalEdit();
+    void selectNoteInOutlineTree(Note* note, Outline::Patch& patch, bool onUp);
     void doActionNoteFirst();
     void doActionNoteUp();
     void doActionNotePromote();

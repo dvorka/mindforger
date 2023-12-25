@@ -60,6 +60,7 @@ public:
     void showFacetOrganizer();
     void showFacetNavigator();
 
+    void showFacetOutlinesMap();
     void showFacetOutlineList();
     void showFacetOutlineView();
     void showFacetNoteEdit();

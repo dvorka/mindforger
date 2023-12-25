@@ -153,7 +153,8 @@ void OutlinesMapView::keyPressEvent(QKeyEvent* event)
                 }
             case Qt::Key_Return:
             case Qt::Key_Right:
-                emit signalEdit();
+                MF_DEBUG("  OutlinesMapView: SIGNAL show O ->" << std::endl);
+                emit signalMapShowSelectedOutline();
                 break;
 #ifndef __APPLE__
             case Qt::Key_Delete:
@@ -161,6 +162,7 @@ void OutlinesMapView::keyPressEvent(QKeyEvent* event)
                 break;
 #endif
             case Qt::Key_Left:
+                // TODO this can be signal that I already have for openning Os list
                 signalFromOutlinesMapToOutlines();
                 break;
             }
@@ -177,7 +179,7 @@ void OutlinesMapView::mouseDoubleClickEvent(QMouseEvent* event)
     Q_UNUSED(event);
 
     // double click to N opens it
-    emit signalEdit();
+    emit signalMapShowSelectedOutline();
 }
 
 void OutlinesMapView::resizeEvent(QResizeEvent* event)

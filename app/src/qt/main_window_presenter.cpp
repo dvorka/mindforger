@@ -171,7 +171,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         this, SLOT(doActionEditPasteImageData(QImage))
     );
     // wire LEFT toolbar signals
-    /*     
+    /*
     QObject::connect(
         new QShortcut(QKeySequence("Alt+1"), view.getOrloj()), SIGNAL(activated()),
         this, SLOT(doActionArxivToolbar())
@@ -240,7 +240,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         new QShortcut(QKeySequence("Alt+9"), view.getOrloj()), SIGNAL(activated()),
         this, SLOT(doActionCppToolbar())
     );
-    */    
+    */
     // wire TOP toolbar signals
     QObject::connect(
         view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()),
@@ -355,6 +355,8 @@ void MainWindowPresenter::showInitialView()
                     orloj->showFacetDashboard();
                 } else if(!string{START_TO_OUTLINES}.compare(config.getStartupView())) {
                     orloj->showFacetOutlineList(mind->getOutlines());
+                } else if(!string{START_TO_OUTLINES_TREE}.compare(config.getStartupView())) {
+                    orloj->showFacetOutlinesMap(mind->outlinesMapGet());
                 } else if(!string{START_TO_TAGS}.compare(config.getStartupView())) {
                     orloj->showFacetTagCloud();
                 } else if(!string{START_TO_RECENT}.compare(config.getStartupView())) {
@@ -1010,7 +1012,7 @@ void MainWindowPresenter::doActionFindNoteByTag()
 void MainWindowPresenter::doTriggerFindNoteByTag(const Tag* tag)
 {
     findNoteByTagDialog->setWindowTitle(tr("Find Note by Tags"));
-    findNoteByTagDialog->clearScope();    
+    findNoteByTagDialog->clearScope();
     vector<Note*> allNotes{};
     mind->getAllNotes(allNotes);
     vector<const Tag*> tags{};
@@ -1356,16 +1358,13 @@ void MainWindowPresenter::doActionViewOutlines()
     }
 }
 
-
 void MainWindowPresenter::doActionViewOutlinesMap()
 {
     if(config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
          &&
        config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY)
     {
-        orloj->showFacetOutlinesMap(
-            mind->outlinesMapGet()
-        );
+        orloj->showFacetOutlinesMap(mind->outlinesMapGet());
     }
 }
 
@@ -2262,7 +2261,7 @@ void MainWindowPresenter::doActionOutlineOrNoteNew()
        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
          ||
        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE))
-    {        
+    {
         doActionNoteNew();
     } else {
         doActionOutlineNew();
@@ -2346,7 +2345,7 @@ bool MainWindowPresenter::withWriteableOutline(const std::string& outlineKey)
 }
 
 void MainWindowPresenter::handleNoteNew()
-{    
+{
     int offset
         = orloj->getOutlineView()->getOutlineTree()->getCurrentRow();
     if(offset == OutlineTreePresenter::NO_ROW) {
@@ -2951,20 +2950,63 @@ void MainWindowPresenter::doActionNoteClone()
     }
 }
 
+void MainWindowPresenter::doActionOutlineShow()
+{
+    orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+}
+
+void MainWindowPresenter::selectNoteInOutlineTree(Note* note, Outline::Patch& patch, bool onUp)
+{
+    QModelIndex idx;
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        QModelIndex idx;
+        if(onUp) {
+            idx = orloj->getOutlinesMap()->getModel()->index(patch.start, 0);
+        } else {
+            idx = orloj->getOutlinesMap()->getModel()->index(note->getOutline()->getNoteOffset(note), 0);
+        }
+
+        orloj->getOutlinesMap()->getView()->setCurrentIndex(idx);
+    } else {
+        QModelIndex idx;
+        if(onUp) {
+            idx = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(patch.start, 0);
+        } else {
+            idx = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(note->getOutline()->getNoteOffset(note), 0);
+        }
+        orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
+    }
+}
+
 void MainWindowPresenter::doActionNoteFirst()
 {
-    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    Note* note{};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        note = orloj->getOutlinesMap()->getCurrentNote();
+    } else {
+        note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    }
+
     if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteFirst(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
-            mind->remind().remember(note->getOutline());
-            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                mind->outlinesMapRemember();
+            } else {
+                mind->remind().remember(note->getOutline());
+            }
+
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                orloj->getOutlinesMap()->refresh(note->getOutline(), &patch);
+            } else {
+                orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            }
+
             // select Note in the tree
-            QModelIndex idx
-                = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(patch.start, 0);
-            orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
+            this->selectNoteInOutlineTree(note, patch, true);
             statusBar->showInfo(QString(tr("Moved Note '%1' to be the first child")).arg(note->getName().c_str()));
         }
     } else {
@@ -2974,18 +3016,33 @@ void MainWindowPresenter::doActionNoteFirst()
 
 void MainWindowPresenter::doActionNoteUp()
 {
-    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    Note* note{};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        note = orloj->getOutlinesMap()->getCurrentNote();
+    } else {
+        note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    }
+
     if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteUp(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
-            mind->remind().remember(note->getOutline());
-            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                mind->outlinesMapRemember();
+            } else {
+                mind->remind().remember(note->getOutline());
+            }
+
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                orloj->getOutlinesMap()->refresh(note->getOutline(), &patch);
+            } else {
+                orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            }
+
             // select Note in the tree
-            QModelIndex idx
-                = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(patch.start, 0);
-            orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
+            this->selectNoteInOutlineTree(note, patch, true);
             statusBar->showInfo(QString(tr("Moved up Note '%1'")).arg(note->getName().c_str()));
         }
     } else {
@@ -2995,18 +3052,33 @@ void MainWindowPresenter::doActionNoteUp()
 
 void MainWindowPresenter::doActionNoteDown()
 {
-    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    Note* note{};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        note = orloj->getOutlinesMap()->getCurrentNote();
+    } else {
+        note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    }
+
     if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteDown(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
-            mind->remind().remember(note->getOutline());
-            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                mind->outlinesMapRemember();
+            } else {
+                mind->remind().remember(note->getOutline());
+            }
+
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                orloj->getOutlinesMap()->refresh(note->getOutline(), &patch);
+            } else {
+                orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            }
+
             // select Note in the tree
-            QModelIndex idx
-                = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(note->getOutline()->getNoteOffset(note), 0);
-            orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
+            this->selectNoteInOutlineTree(note, patch, false);
             statusBar->showInfo(QString(tr("Moved down Note '%1'").arg(note->getName().c_str())));
         }
     } else {
@@ -3016,18 +3088,33 @@ void MainWindowPresenter::doActionNoteDown()
 
 void MainWindowPresenter::doActionNoteLast()
 {
-    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    Note* note{};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        note = orloj->getOutlinesMap()->getCurrentNote();
+    } else {
+        note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    }
+
     if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteLast(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
-            mind->remind().remember(note->getOutline());
-            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                mind->outlinesMapRemember();
+            } else {
+                mind->remind().remember(note->getOutline());
+            }
+
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                orloj->getOutlinesMap()->refresh(note->getOutline(), &patch);
+            } else {
+                orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            }
+
             // select Note in the tree
-            QModelIndex idx
-                = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(note->getOutline()->getNoteOffset(note), 0);
-            orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
+            this->selectNoteInOutlineTree(note, patch, false);
             statusBar->showInfo(QString(tr("Moved Note '%1' to be the last child")).arg(note->getName().c_str()));
         }
     } else {
@@ -3035,21 +3122,33 @@ void MainWindowPresenter::doActionNoteLast()
     }
 }
 
-void MainWindowPresenter::doActionOutlineShow()
-{
-    orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
-}
-
 void MainWindowPresenter::doActionNotePromote()
 {
-    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    Note* note{};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        note = orloj->getOutlinesMap()->getCurrentNote();
+    } else {
+        note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    }
+
     if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->notePromote(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
-            mind->remind().remember(note->getOutline());
-            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                mind->outlinesMapRemember();
+            } else {
+                mind->remind().remember(note->getOutline());
+            }
+
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                orloj->getOutlinesMap()->refresh(note->getOutline(), &patch);
+            } else {
+                orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            }
+
             statusBar->showInfo(QString(tr("Promoted Note '%1'")).arg(note->getName().c_str()));
         }
     } else {
@@ -3059,14 +3158,31 @@ void MainWindowPresenter::doActionNotePromote()
 
 void MainWindowPresenter::doActionNoteDemote()
 {
-    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    Note* note{};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        note = orloj->getOutlinesMap()->getCurrentNote();
+    } else {
+        note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    }
+
     if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteDemote(note, &patch);
-        mind->remind().remember(note->getOutline());
-        orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                mind->outlinesMapRemember();
+            } else {
+                mind->remind().remember(note->getOutline());
+            }
+
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                orloj->getOutlinesMap()->refresh(note->getOutline(), &patch);
+            } else {
+                orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            }
+
             statusBar->showInfo(QString(tr("Demoted Note '%1'")).arg(note->getName().c_str()));
         }
     } else {
@@ -3431,7 +3547,7 @@ void MainWindowPresenter::handleCreateOrganizer()
 
     // add organizer & save configuration
     if(!newOrganizerDialog->getOrganizerToEdit()) {
-        config.getRepositoryConfiguration().addOrganizer(o);        
+        config.getRepositoryConfiguration().addOrganizer(o);
     }
     sortAndSaveOrganizersConfig();
 

@@ -171,6 +171,24 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         view->actionOutlineClone, SIGNAL(triggered()),
         mwp, SLOT(doActionOutlineClone()));
     QObject::connect(
+        view->actionOutlinePromote, SIGNAL(triggered()),
+        mwp, SLOT(doActionNotePromote()));
+    QObject::connect(
+        view->actionOutlineDemote, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteDemote()));
+    QObject::connect(
+        view->actionOutlineFirst, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteFirst()));
+    QObject::connect(
+        view->actionOutlineUp, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteUp()));
+    QObject::connect(
+        view->actionOutlineDown, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteDown()));
+    QObject::connect(
+        view->actionOutlineLast, SIGNAL(triggered()),
+        mwp, SLOT(doActionNoteLast()));
+    QObject::connect(
         view->actionOutlineHtmlExport, SIGNAL(triggered()),
         mwp, SLOT(doActionOutlineHtmlExport()));
     QObject::connect(
@@ -325,17 +343,26 @@ MainMenuPresenter::~MainMenuPresenter()
 
 void MainMenuPresenter::showFacetDashboard()
 {
-    view->showFacetOutlineList(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
+    view->showFacetOutlineList(
+        config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY,
+        config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
+    );
 }
 
 void MainMenuPresenter::showFacetOrganizerList()
 {
-    view->showFacetOrganizerList(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
+    view->showFacetOrganizerList(
+        config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY,
+        config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
+    );
 }
 
 void MainMenuPresenter::showFacetOrganizer()
 {
-    view->showFacetOrganizerView(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
+    view->showFacetOrganizerView(
+        config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY,
+        config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
+    );
 }
 
 void MainMenuPresenter::showFacetNavigator()
@@ -343,19 +370,36 @@ void MainMenuPresenter::showFacetNavigator()
     view->showFacetNavigator();
 }
 
+void MainMenuPresenter::showFacetOutlinesMap()
+{
+    view->showFacetOutlinesMap(
+        config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY,
+        config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
+    );
+}
+
 void MainMenuPresenter::showFacetOutlineList()
 {
-    view->showFacetOutlineList(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
+    view->showFacetOutlineList(
+        config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY,
+        config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
+    );
 }
 
 void MainMenuPresenter::showFacetOutlineView()
 {
-    view->showFacetOutlineView(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
+    view->showFacetOutlineView(
+        config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY,
+        config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
+    );
 }
 
 void MainMenuPresenter::showFacetNoteEdit()
 {
-    view->showFacetNoteEdit(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY);
+    view->showFacetNoteEdit(
+        config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY,
+        config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
+    );
 }
 
 void MainMenuPresenter::showFacetMindThink()

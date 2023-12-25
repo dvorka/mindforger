@@ -127,11 +127,16 @@ build-ci: clean
 
 
 run: ../app/mindforger
-	cd ../app && pwd && ./mindforger
+	# cd ../app && pwd && ./mindforger
+	cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/library-trainer
+	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/computer-hw.md
+	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/bug-copy-image
 
 
 run-dev: build-dev
 	cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/library-trainer
+	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/computer-hw.md
+	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/bug-copy-image
 
 
 #

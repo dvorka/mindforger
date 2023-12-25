@@ -106,7 +106,7 @@ signals:
 
     void signalOutlineOrNoteEdit(); // O or N edit
     void signalOutlineOrNoteExternalEdit(); // O or N edit
-    void signalEdit(); // N edit
+    void signalMapShowSelectedOutline();
     void signalForget();
 };
 

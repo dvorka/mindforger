@@ -75,6 +75,11 @@ OrlojPresenter::OrlojPresenter(
         this,
         SLOT(slotShowSelectedOutline()));
     QObject::connect(
+        view->getOutlinesMapTable(),
+        SIGNAL(signalMapShowSelectedOutline()),
+        this,
+        SLOT(slotMapShowSelectedOutline()));
+    QObject::connect(
         view->getOutlinesTable(),
         SIGNAL(signalFindOutlineByName()),
         mainPresenter,
@@ -404,8 +409,18 @@ void OrlojPresenter::showFacetOutlinesMap(Outline* outlinesMap)
     setFacet(OrlojPresenterFacets::FACET_MAP_OUTLINES);
     outlinesMapPresenter->refresh(outlinesMap);
     view->showFacetOutlinesMap();
-    mainPresenter->getMainMenu()->showFacetOutlineList();
+    mainPresenter->getMainMenu()->showFacetOutlinesMap();
     mainPresenter->getStatusBar()->showMindStatistics();
+
+    // give focus to the component
+    auto componentView = view->getOutlinesMapTable();
+    componentView->setFocus();
+    // give focus to the first row in the view
+    if(componentView->model()->rowCount() > 0) {
+        componentView->setCurrentIndex(
+            componentView->model()->index(0, 0)
+        );
+    }
 }
 
 void OrlojPresenter::slotShowOutlines()
@@ -503,6 +518,40 @@ void OrlojPresenter::showFacetOutline(Outline* outline)
     mainPresenter->getMainMenu()->showFacetOutlineView();
 
     mainPresenter->getStatusBar()->showInfo(QString("Notebook '%1'   %2").arg(outline->getName().c_str()).arg(outline->getKey().c_str()));
+}
+
+void OrlojPresenter::slotMapShowSelectedOutline()
+{
+    MF_DEBUG("  -> signal HANDLER @ OrlojPresenter: show O " << activeFacet << std::endl);
+    if(activeFacet == OrlojPresenterFacets::FACET_MAP_OUTLINES){
+        int row = outlinesMapPresenter->getCurrentRow();
+        MF_DEBUG("  current row: " << row << std::endl);
+        if(row != OutlinesTablePresenter::NO_ROW) {
+            QStandardItem* item = outlinesMapPresenter->getModel()->item(row);
+            MF_DEBUG("    Item: " << item << std::endl);
+            if(item) {
+                Note* noteForOutline = item->data(Qt::UserRole + 1).value<Note*>();
+                MF_DEBUG("    N for O: " << noteForOutline << endl);
+                if(noteForOutline
+                   && noteForOutline->getLinks().size() > 0
+                   && noteForOutline->getLinks().at(0)->getUrl().size() > 0
+                ) {
+                    MF_DEBUG("    Getting O: " << noteForOutline->getLinks().at(0)->getUrl() << endl);
+                    Outline* outline = mind->remind().getOutline(noteForOutline->getLinks().at(0)->getUrl());
+                    if(outline) {
+                        showFacetOutline(outline);
+                        return;
+                    } else {
+                        mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Notebook not found!")));
+                    }
+                }
+                return;
+            } else {
+                mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Notebook not found!")));
+            }
+        }
+        mainPresenter->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
+    }
 }
 
 void OrlojPresenter::slotShowSelectedOutline()
