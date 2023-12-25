@@ -28,6 +28,8 @@ namespace m8r {
 
 #ifdef DO_MF_DEBUG
   #define MINDFORGER_NIGHTLY " (" __DATE__ " " __TIME__ ")"
+#elif DO_MF_RC
+  #define MINDFORGER_NIGHTLY " (RC " __DATE__ " " __TIME__ ")"
 #elif DO_MF_CI
   #define MINDFORGER_NIGHTLY " (CI " __DATE__ " " __TIME__ ")"
 #else

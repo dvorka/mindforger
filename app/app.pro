@@ -31,6 +31,10 @@ mfci {
   DEFINES += DO_MF_CI
 }
 
+mfrc {
+  DEFINES += DO_MF_RC
+}
+
 # Hunspell spell check:
 # - Windows and Ubuntu Xenial require DEPRECATED Hunspell API
 # - Ubuntu Bionic and newer distros use NEW Hunspell API
@@ -133,7 +137,7 @@ mfner {
 win32 {
     INCLUDEPATH += $$PWD/../deps/zlib-win/include
     DEPENDPATH += $$PWD/../deps/zlib-win/include
-    
+
     CONFIG(release, debug|release): LIBS += -L$$PWD/../deps/zlib-win/lib/ -lzlibwapi
     else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../deps/zlib-win/lib/ -lzlibwapi
 } else {

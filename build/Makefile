@@ -114,7 +114,16 @@ build-dev:
 # TODO: build-dev-clang
 
 
-build-ci: clean
+.PHONY: build-rc
+build-rc:
+	@echo "MindForger RC build..."
+	cd .. && qmake CONFIG+=mfrc -r mindforger.pro && make -j 7
+	@echo "If RC build succeeded, then MindForger executable can be found in:\n  app/mindforger"
+	ls -al ../app/mindforger
+
+
+.PHONY: build-ci
+build-ci:
 	@echo "MindForger CI build..."
 	cd .. && qmake CONFIG+=mfci -r mindforger.pro && make -j 7
 	@echo "If CI build succeeded, then MindForger executable can be found in:\n  app/mindforger"
@@ -131,6 +140,14 @@ run: ../app/mindforger
 	cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/library-trainer
 	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/computer-hw.md
 	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/bug-copy-image
+
+
+run-rc: build-rc
+	cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/library-trainer
+
+
+run-ci: build-ci
+	cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/library-trainer
 
 
 run-dev: build-dev
@@ -150,7 +167,7 @@ install: clean ../app/mindforger
 	~/bin/mind --version
 
 
-install-dev-local: clean build-dev
+install-dev-local: clean build-rc
 	cp -vf ../app/mindforger ~/bin
 	mv -vf ~/bin/mindforger ~/bin/mind
 	~/bin/mind --version

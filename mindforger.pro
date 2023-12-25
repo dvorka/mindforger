@@ -30,6 +30,7 @@
 #   qmake CONFIG+=mfnoccache        ... do NOT use ccache to build the project
 #   qmake CONFIG+=mfdebug           ... show debug messages + include WIP code
 #   qmake CONFIG+=mfci              ... CI build (AppVeyor, ...) w/ build info @ window title
+#   qmake CONFIG+=mfrc              ... RC build w/ build info @ window title
 #   qmake CONFIG+=mfunits           ... option to run unit tests
 #   qmake CONFIG+=mfllamacpp        ... EXPERIMENTAL option to enable wingman @ llama.cpp
 #   qmake CONFIG+=mfner             ... DEPRECATED: build project w/ NER and link dlib/MITIE
