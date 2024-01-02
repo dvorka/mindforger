@@ -1,7 +1,7 @@
 /*
  cmark_gfm_markdown_transcoder.h     MindForger thinking notebook
 
- Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ namespace m8r {
 enum class CmarkGfmOption
 {
     // TODO VH: complete this
-    
+
 };
 
 /**

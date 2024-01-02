@@ -1,7 +1,7 @@
 /*
  ai_aa_bow.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -147,7 +147,7 @@ shared_future<bool> AiAaBoW::getAssociatedNotes(const Note* note, vector<pair<No
         promise<bool> p{};
         p.set_value(true);
         return shared_future<bool>(p.get_future());
-    } else {        
+    } else {
         MF_DEBUG("AA.BoW: ASYNC leaderboard calculation for '" << note->getName() << "'" << endl);
         if(leaderboardWip.find(note) != leaderboardWip.end()) {
             // calculation WIP & future OWNER will update what needs to be updated -> intentionally NOT sharing futures

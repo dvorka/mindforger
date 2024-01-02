@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -91,9 +91,9 @@ BLACKLIST = {
     'mindforger/licenses/hoedown-license.txt',
 }
 
-COPYRIGHT_CPP = 'Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>'
-COPYRIGHT_PYTHON = '# Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>'
-COPYRIGHT_XML = '<!-- Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com> -->'
+COPYRIGHT_CPP = 'Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>'
+COPYRIGHT_PYTHON = '# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>'
+COPYRIGHT_XML = '<!-- Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com> -->'
 
 ESC_LIGHT_RED = ''
 ESC_LIGHT_GREEN = ''
@@ -127,7 +127,7 @@ class CodestyleEnforcer:
     def validate(self):
         self.validateFiles()
         self.showReport()
-                            
+
     def validateFiles(self):
        sys.stdout.write('Checking H/CPP source files')
        for f in self.cppFiles.keys():
@@ -151,9 +151,9 @@ class CodestyleEnforcer:
        #for f in self.pythonFiles.keys():
        #    self.pythonFiles[f].validate(self.report)
        #print ''
-       
+
     def showReport(self):
-       reportEntries = 0 
+       reportEntries = 0
        if len(self.report) == 0:
            print '\nMindForger Code Style Checker finished:'
            print '{}  [INFO] successfuly checked with no issues{}'.format(ESC_LIGHT_GREEN, ESC_NO_COLOR)
@@ -174,7 +174,7 @@ class CodestyleEnforcer:
                        else:
                            print "{}{}:{}".format(OPTION_FILE_AS_URIS,entry.filename,problem[1])
                            print '{}{}{}'.format(ESC_LIGHT_RED, problem[0], ESC_NO_COLOR)
-                   elif problem[0].startswith('  [WARNING]'): 
+                   elif problem[0].startswith('  [WARNING]'):
                        if OPTION_GCC:
                            print "{}{}:{}:1 {}{}{}".format(
                                OPTION_FILE_AS_URIS,
@@ -209,14 +209,14 @@ class ReportEntry:
     def addWarning(self, problem, filename, line):
         sys.stdout.write(ESC_YELLOW)
         sys.stdout.write('.')
-        sys.stdout.write(ESC_NO_COLOR); 
+        sys.stdout.write(ESC_NO_COLOR);
         sys.stdout.flush()
         self.addProblem(problem, filename, line);
 
     def addError(self, problem, filename, line):
         sys.stdout.write(ESC_LIGHT_RED)
         sys.stdout.write('.')
-        sys.stdout.write(ESC_NO_COLOR); 
+        sys.stdout.write(ESC_NO_COLOR);
         sys.stdout.flush()
         self.addProblem(problem, filename, line);
 
@@ -308,7 +308,7 @@ class PythonFile:
 
 #############################################################################################
 
-if len(sys.argv)>1: 
+if len(sys.argv)>1:
     for a in sys.argv:
         if '--color' == a or '-c' == a:
             ESC_LIGHT_RED="[1;31m"

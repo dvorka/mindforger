@@ -3,7 +3,7 @@ Upstream-Name: mindforger
 Source: https://github.com/dvorka/mindforger
 
 Files: debian/*
-Copyright: 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+Copyright: 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 License: GPL-2+
  MindForger is licensed under GNU GPL version 2 or any later version.
  .

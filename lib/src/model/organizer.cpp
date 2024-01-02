@@ -1,7 +1,7 @@
 /*
  organizer.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ Organizer::Organizer(const Organizer& o)
       organizerType{o.organizerType},
       filterBy{o.getFilterBy()},
       modified{o.modified}
-{    
+{
     this->tagsUrQuadrant = o.tagsUrQuadrant;
     this->tagsUlQuadrant = o.tagsUlQuadrant;
     this->tagsLrQuadrant = o.tagsLlQuadrant;

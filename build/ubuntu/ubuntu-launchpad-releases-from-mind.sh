@@ -2,7 +2,7 @@
 #
 # MindForger knowledge management tool
 #
-# Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@
 #   > builds binary .deb
 #     ~ checks that .deb build for target Ubuntu distro is OK
 #   > uploads signed .dsc to LaunchPad using dput
-# IMPORTANT: for ^ upload .deb builds are NOT needed, only signed .dsc 
+# IMPORTANT: for ^ upload .deb builds are NOT needed, only signed .dsc
 #
 # Tips:
 # - run the script from Emacs shell to easily review and analyze
@@ -62,7 +62,7 @@
 #    https://launchpad.net/~ultradvorka/+editpgpkeys
 #
 # SSH key configuration:
-# 1. Launchpad: upload and register the key 
+# 1. Launchpad: upload and register the key
 #    https://launchpad.net/~ultradvorka/+editsshkeys
 #    ~/.ssh/id_rsa.pub
 #
@@ -136,7 +136,7 @@ function echoStepDone {
 
 function debugExit {
     echo "EXITING SCRIPT: intentional development script exit"
-    exit 1    
+    exit 1
 }
 
 # ########################################################################
@@ -146,9 +146,9 @@ function debugExit {
 function checkoutMindforger {
     # use `bzr` to manually check and work with Bazaar repository:
     #   - bzr        ... get help
-    #   - bzr status 
+    #   - bzr status
     #   - bzr commit ... commints and PUSHES changes to server
-    
+
     export MFSRC=$2
     # create new branch: bzr init && bzr push lp:~ultradvorka/+junk/mindforger
     bzr checkout lp:~ultradvorka/+junk/mindforger
@@ -171,7 +171,7 @@ function checkoutMindforger {
     rm -rf${OPT_VERBOSE} ./deps/mitie
     # IMPROVE: static libraries lib*.a are NOT deleted to keep cmark-gfm dependency libs
     find . -type f \( -name "*moc_*.cpp" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
-    
+
     cd ..
 }
 
@@ -199,7 +199,7 @@ function createTarball {
     echoStep "Create TARBALL ${MF}"
     # .orig.tar.gz is required Debian convention
     TARBALL_FILE="${MF}.orig.tar.gz"
-    
+
     cd ..
     mkdir work
     cd work
@@ -252,11 +252,11 @@ function releaseForParticularUbuntuVersion {
     export MFSRC=/home/dvorka/p/mindforger/git/mindforger
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
     export MFBUILD=mindforger-${NOW}
-    
+
     # 1) clean up
     echoStep "Cleanup"
     rm -rvf *.*~ ./debian
-    
+
     # 2) checkout MindForger from Launchpad's bazaar to work directory
     #    (will be needed to build SOURCE .deb package)
     echoStep "Checkout MF from LaunchPad bazaar"
@@ -279,7 +279,7 @@ function releaseForParticularUbuntuVersion {
     # cmark-gfm static library:
     ls -l deps/cmark-gfm/build/src/libcmark-gfm.a
     if [[ $? -eq 0 ]] ; then echo "  SUCCESSFULL"; else echo "  FAILED"; exit 1; fi
-    
+
     # 5) generate MF Makefiles using qmake
     echoStep "Generate Makefiles using qmake"
     cd ..
@@ -291,7 +291,7 @@ function releaseForParticularUbuntuVersion {
     # Instead debian/rules file exports env var w/ Qt choice
     # .pro file is also extended to have 'make install' target
     qmake -r mindforger.pro
-    
+
     # 6) optionally PATCH source files e.g. different Ubuntu distro specific paths
     echoStep "Patch Makefiles - fix Qt paths for Ubuntu versions"
     #if [[ "xenial" = "${UBUNTUVERSION}" ]]
@@ -306,7 +306,7 @@ function releaseForParticularUbuntuVersion {
     echo -e "\n---------------------------------------------------------------"
     echo -e "5.1) create TARBALL: prepare files to work/ directory"
     createTarball
-    
+
     # 8) start GPG agent if it's NOT running
     #   gpg-agent is a program that runs in the background (a daemon) and stores
     # GPG secret keys in memory. When a GPG process needs the key, it contacts
@@ -318,7 +318,7 @@ function releaseForParticularUbuntuVersion {
 	echo "OK: GPG agent running."
     else
 	gpg-agent --daemon
-    fi    
+    fi
 
     # 9) add new version to LOCAL Bazaar branch (which will be used for .deb build)
     echoStep "add & commit ${MF} prepared files to the current bazaar branch"
@@ -356,7 +356,7 @@ function releaseForParticularUbuntuVersion {
     build_status=$?
     echo -e "DONE: SOURCE .deb package build on HOST system (buildarea/mindforger_<major>.<minor>.<patch>.orig.tar.gz):"
     if [[ $build_status -eq 0 ]] ; then echo "  SUCCESSFULL"; else echo "  FAILED"; exit 1; fi
-    
+
     # 11) build BINARY .deb from source .deb on CLEAN system to dry run build @ Launchpad
     echoStep "Build SIGNED BINARY .deb package from source .deb (created in previous step) on CLEAN system (FAKEROOT mounted) - this is actual deps installation, compilation and link of the executable to create .deb file with the binary, HOWEVER, the binar .deb is NOT uploaded, this steps is made just to verify that the build will NOT fail on Launchpad (for the build is used just signed .dsc file)"
     # Build is made using Makefile(s) generated by qmake above:
@@ -400,7 +400,7 @@ function releaseForParticularUbuntuVersion {
        bzr push lp:~ultradvorka/+junk/mindforger
 
        if [[ ${OPT_DO_RELEASE} == "true" ]]
-       then       
+       then
 	   cd ..
 	   echo "Invoking dput in: $(pwd)"
 	   ls -l ${MFRELEASE}_source.changes

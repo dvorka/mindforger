@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,8 +19,8 @@
 
 # Hints:
 # - nerd English is OOTB ~ strings in the source code
-# - en ... user friendly English translation 
-# - cs ... user friendly Czech translation 
+# - en ... user friendly English translation
+# - cs ... user friendly Czech translation
 
 MF_LANG="en"
 

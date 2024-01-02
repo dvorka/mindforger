@@ -1,7 +1,7 @@
 /*
  note_editor_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -409,7 +409,7 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
                 break;
         }
     } else {
-        switch(event->key()) {        
+        switch(event->key()) {
             case Qt::Key_Escape: {
                 // completer menu not visible - exit editor ~ Cancel
                 QMessageBox msgBox{

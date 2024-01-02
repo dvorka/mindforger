@@ -1,7 +1,7 @@
 /*
  palette.h     MindForger thinking notebook
 
- Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -22,9 +22,9 @@
   Comments gray #777
   Help green #008C00
   Hover dark gray #36393D
-  MR blue #356AA0  
+  MR blue #356AA0
 
- Web 2.0 colors:  
+ Web 2.0 colors:
   Shiny silver [#EEEEEE]
   Reddit white [#FFFFFF]
   Magnolia Mag.nolia [#F9F7ED]
@@ -46,7 +46,7 @@
   Basecamp Green [#6BBA70]
   Mozilla Blue [#3F4C6B]
   Digg Blue [#356AA0]
-  Last.fm Crimson [#D01F3C] 
+  Last.fm Crimson [#D01F3C]
 */
 #ifndef M8RUI_PALETTE_H
 #define M8RUI_PALETTE_H

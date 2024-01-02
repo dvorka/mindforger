@@ -1,7 +1,7 @@
 /*
  recent_notes_table_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ namespace m8r {
 using namespace std;
 
 RecentNotesTablePresenter::RecentNotesTablePresenter(RecentNotesTableView* view, HtmlOutlineRepresentation* htmlRepresentation)
-{       
+{
     this->view = view;
     this->model = new RecentNotesTableModel(this, htmlRepresentation);
     this->view->setModel(this->model);
@@ -46,7 +46,7 @@ void RecentNotesTablePresenter::refresh(const vector<Note*>& notes)
         int uiLimit = Configuration::getInstance().getRecentNotesUiLimit();
         for(Note* n:notes) {
             if(uiLimit) uiLimit--; else break;
-            model->addRow(n);            
+            model->addRow(n);
         }
     }
 

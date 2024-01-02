@@ -1,7 +1,7 @@
 /*
  named_entity_recognition.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -86,7 +86,7 @@ vector<string> NamedEntityRecognition::tokenizeFile(const string& filename)
     std::vector<string> tokens;
     string token;
 
-    // Read the tokens out of the file one at a time and store into tokens.    
+    // Read the tokens out of the file one at a time and store into tokens.
     while(tok(token)) {
         tokens.push_back(token);
     }

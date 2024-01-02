@@ -1,7 +1,7 @@
 /*
  naive_autolinking_preprocessor.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -118,7 +118,7 @@ void NaiveAutolinkingPreprocessor::process(const vector<string*>& md, string &am
 
             // skip code/math/... blocks
             if(stringStartsWith(*l, CODE_BLOCK)) {
-                inCodeBlock = !inCodeBlock;                
+                inCodeBlock = !inCodeBlock;
 
                 nl->append(*l);
                 amdl.push_back(nl);

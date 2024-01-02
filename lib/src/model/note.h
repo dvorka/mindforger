@@ -1,7 +1,7 @@
 /*
  note.h     MindForger thinking notebook
 
- Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -162,9 +162,9 @@ public:
     const std::vector<Link*>& getLinks() const { return links; }
     Link* getLinkByName(const std::string& name) const;
     size_t getLinksCount() const { return links.size(); }
-    void clearLinks() { 
+    void clearLinks() {
         for(auto l:links) { delete l; }
-        links.clear(); 
+        links.clear();
     }
 
     void promote();

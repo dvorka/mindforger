@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -136,9 +136,9 @@ then
     exit 1
 fi
 
-if [ ${OPTION_RUN_VALGRIND} ] 
+if [ ${OPTION_RUN_VALGRIND} ]
 then
-    if [ ${OPTION_RUN_GDB} ] 
+    if [ ${OPTION_RUN_GDB} ]
     then
 	export M8R_VALGRIND="valgrind --vgdb=yes --vgdb-error=0 --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
     else
@@ -146,8 +146,8 @@ then
 	export M8R_VALGRIND="valgrind -v --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
     fi
 else
-    export M8R_VALGRIND=    
-    if [ ${OPTION_RUN_GDB} ] 
+    export M8R_VALGRIND=
+    if [ ${OPTION_RUN_GDB} ]
     then
 	export M8R_GDB="gdb --args"
     fi

@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ def replace_version(
 
         if data and old_version and new_version:
             print(f"Replacing {old_version} -> {new_version} in {file_path}")
-            
+
             updated_data = data.replace(old_version, new_version)
 
             with open(file_path, 'w') as file:
@@ -75,7 +75,7 @@ def replace_version(
 def replace_files(
         file_paths: list,
         old_version: str,
-        new_version: str        
+        new_version: str
 ):
     for file_path in file_paths:
         replace_version(
@@ -96,14 +96,14 @@ if __name__ == "__main__":
     replace_files(
         file_paths=SEMANTIC_VERSION_FILES,
         old_version=f"{old_major_version}.{old_minor_version}.0",
-        new_version=f"{new_major_version}.{new_minor_version}.0",        
+        new_version=f"{new_major_version}.{new_minor_version}.0",
     )
 
     # special files replacement
     replace_version(
         file_path=MINOR_VERSION_FILES[0],
         old_version=f"{old_major_version},{old_minor_version},0",
-        new_version=f"{new_major_version},{new_minor_version},0",        
+        new_version=f"{new_major_version},{new_minor_version},0",
     )
 
     # special files replacement

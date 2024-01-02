@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 #export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this line to disable)
 #export OPTION_RUN_ALL_TESTS=yes # comment this line to disable
 export OPTION_TESTS="open-exit.sikuli"
-export OPTION_TEST=open-exit.sikuli 
+export OPTION_TEST=open-exit.sikuli
 
 export M8R_TEST_APP_DIR="`pwd`/../../app/test/qt"
 export M8R_TEST_REPOSITORY="${HOME}/tmp/small-repository"
@@ -55,7 +55,7 @@ then
     echo "Set M8R_SIKULIX_SCRIPTS_DIR env var to specify directory w/ MindForger's SikuliX scripts"
     exit 1
 fi
-if [ ${OPTION_RUN_VALGRIND} ] 
+if [ ${OPTION_RUN_VALGRIND} ]
 then
     export M8R_VALGRIND="valgrind --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
     #export M8R_VALGRIND="valgrind -v --track-origins=yes --tool=memcheck --leak-check=full --show-leak-kinds=all"
@@ -71,7 +71,7 @@ then
     exit 0
 fi
 
-   
+
 # Compile source w/ debug code enabled and various test libs linked to get test-ready binary
 #  - use -g GCC option to get line information
 # Valgrind

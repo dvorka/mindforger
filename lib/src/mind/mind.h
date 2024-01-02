@@ -1,7 +1,7 @@
 /*
  mind.h     MindForger thinking notebook
 
- Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -163,7 +163,7 @@ private:
     /**
      * Outline map is an Outline used to organize Outlines into the tree.
      * Notes in the Outline map:
-     * 
+     *
      * - has exactly one link which points to the Outline they represent
      * - Outline link is *relative* on the filesystem and absolute (resolved) in runtime
      */
@@ -396,7 +396,7 @@ public:
     //   >> temporary note of Outline type (never saved), cannot be created by user
     void getOutlineNames(std::vector<std::string>& names) const;
     void getOutlineKeys(std::vector<std::string>& keys) const;
-    
+
     /*
      * SCOPING
      */

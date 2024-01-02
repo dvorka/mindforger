@@ -1,7 +1,7 @@
 @echo off
 rem MindForger thinking notebook
 
-rem Copyright (C) 2016-2023
+rem Copyright (C) 2016-2024
 
 rem This program is free software; you can redistribute it and/or
 rem modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ echo ====================================
 cmake --build . --config Debug -- /m
 if "%ERRORLEVEL%" neq "0" goto :err
 echo ====================================
-echo cmark-gfm has been built  successfully 
+echo cmark-gfm has been built  successfully
 echo ====================================
 goto :end
 :err
