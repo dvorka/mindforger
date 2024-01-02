@@ -103,7 +103,7 @@ function releaseForParticularUbuntuVersion() {
     export MFSRC=/home/dvorka/p/mindforger/git/mindforger
     export NOW=`date +%Y-%m-%d--%H-%M-%S`
     export MFBUILD=mindforger-${NOW}
-    
+
     # 1) clean up
     echo -e "\n# Cleanup ####################################################"
     rm -rvf *.*~ ./debian
@@ -122,7 +122,7 @@ function releaseForParticularUbuntuVersion() {
     echo "4.1) build MF dependencies"
     rm -rvf deps/cmark-gfm/build
     cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . && cd ../../..
-        
+
     echo "4.2) Qt: generate makefile using qmake"
     echo -e "\n# qmake ######################################################"
     cd ..
@@ -133,7 +133,7 @@ function releaseForParticularUbuntuVersion() {
     # like this qt5-default. Instead debian/rules file exports env var w/ Qt choice
     # .pro file is also extended to have 'make install' target
     qmake -r mindforger.pro CONFIG+=mfoldhunspell
-    
+
     # 5) add new version to LOCAL Bazaar
     echo -e "\n# bazaar add & commit  #######################################"
     bzr add .
@@ -149,8 +149,8 @@ function releaseForParticularUbuntuVersion() {
 	echo "OK: GPG agent running."
     else
 	gpg-agent --daemon
-    fi    
-    
+    fi
+
     # 6) build debs
     echo -e "\n# source & binary debs  ######################################"
     # OPTIONAL: build .deb package (us uc tells that no GPG signing is needed)
@@ -160,7 +160,7 @@ function releaseForParticularUbuntuVersion() {
 
     # 7) build binary from source deb on CLEAN system - no deps installed
     echo -e "\n# clean build ~ pbuilder  ####################################"
-    cd ../build-area    
+    cd ../build-area
     # IMPORTANT pbuilder's caches in /var and /home MUST be on same physical drive
     # BEGIN
     export PBUILDFOLDER=/tmp/mindforger-tmp
@@ -175,10 +175,10 @@ function releaseForParticularUbuntuVersion() {
 	echo -e "\n${UBUNTUVERSION} DRY RUN finished - exiting WITHOUT upload to Launchpad\n"
 	exit 0
     fi
-    
+
     # 8) upload to Launchpad: push Bazaar and put changes
     echo -e "\n# bzr push .deb to Launchpad #################################"
-    
+
     # from buildarea/ to ./dist
     cd ../${MF}
     echo "Before bzr push: " `pwd`
@@ -203,8 +203,8 @@ then
     exit 1
 fi
 
-export ARG_MAJOR_VERSION=1.55.
-export ARG_MINOR_VERSION=1 # minor version is incremented for every Ubuntu version
+export ARG_MAJOR_VERSION=2.0.
+export ARG_MINOR_VERSION=0 # minor version is incremented for every Ubuntu version
 export ARG_BAZAAR_MSG="MindForger ${ARG_MAJOR_VERSION}${ARG_MINOR_VERSION} release."
 
 # export DRY_RUN="true"

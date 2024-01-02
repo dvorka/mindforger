@@ -171,7 +171,7 @@ l10n: ## update and release localization strings: MF_LANG=en
 
 .PHONY: ver-find
 ver-find: ## pre-version update finder
-	cd .. && git grep "1\.55"
+	cd .. && git grep -n "1\.55"
 
 
 test-lib: clean ## compile and run lib/ unit tests
