@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-version: 1.55.{build}
+version: 2.0.{build}
 
 skip_commits:
   files:
@@ -36,9 +36,9 @@ platform: x64
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Release
 
-cache: 
+cache:
  - c:\cache
- - C:\Program Files\googletest-distribution 
+ - C:\Program Files\googletest-distribution
 
 # check https://www.appveyor.com/docs/windows-images-software for updates
 install:
@@ -47,9 +47,9 @@ install:
  - set PATH=%PATH%;%QT_DIR%\bin
  - set M8R_HOME=%APPVEYOR_BUILD_FOLDER%
  - if not exist c:\cache mkdir c:\cache
-# on the image vcredist is in C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012 
+# on the image vcredist is in C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012
  - if not exist c:\cache\vcredist_x64.exe  curl -LfSs -o c:\cache\vcredist_x64.exe https://aka.ms/vs/15/release/vc_redist.x64.exe
- - if not exist "C:\Program Files\googletest-distribution" pushd %TEMP% && curl -LfSs -o gtest.zip https://github.com/google/googletest/archive/release-1.8.1.zip && 7z x gtest.zip && cd googletest-release-1.8.1 && mkdir build && cd build && cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -Dgtest_build_samples=OFF -Dgtest_build_tests=OFF -Dgmock_build_tests=OFF -Dgtest_force_shared_crt=ON .. && cmake --build . --config Debug -- /m &&  cmake -DBUILD_TYPE=Debug -P cmake_install.cmake && popd 
+ - if not exist "C:\Program Files\googletest-distribution" pushd %TEMP% && curl -LfSs -o gtest.zip https://github.com/google/googletest/archive/release-1.8.1.zip && 7z x gtest.zip && cd googletest-release-1.8.1 && mkdir build && cd build && cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -Dgtest_build_samples=OFF -Dgtest_build_tests=OFF -Dgmock_build_tests=OFF -Dgtest_force_shared_crt=ON .. && cmake --build . --config Debug -- /m &&  cmake -DBUILD_TYPE=Debug -P cmake_install.cmake && popd
 
 before_build:
  - cd "%M8R_HOME%"
@@ -80,7 +80,7 @@ test_script:
      Write-Output "Test exit code: $TestExitCode"
      if ($TestExitCode -ne 0) {
        Push-AppveyorArtifact mindforger-unit-tests.log -Type zip
-       throw "Exec: tests failed" 
+       throw "Exec: tests failed"
      }
 
 on_finish:
