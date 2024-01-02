@@ -197,14 +197,6 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         this, SLOT(doActionStackOverflowToolbar())
     );
     QObject::connect(
-        new QShortcut(QKeySequence("Alt+4"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionH2oGptToolbar())
-    );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarH2oGpt, SIGNAL(triggered()),
-        this, SLOT(doActionH2oGptToolbar())
-    );
-    QObject::connect(
         new QShortcut(QKeySequence("Alt+5"), view.getOrloj()), SIGNAL(activated()),
         this, SLOT(doActionDuckDuckGoToolbar())
     );
@@ -227,18 +219,6 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(
         view.getLeftToolBar()->actionLeftToolbarBard, SIGNAL(triggered()),
         this, SLOT(doActionBardToolbar())
-    );
-    QObject::connect(
-        new QShortcut(QKeySequence("Alt+8"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionPythonToolbar())
-    );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarPython, SIGNAL(triggered()),
-        this, SLOT(doActionPythonToolbar())
-    );
-    QObject::connect(
-        new QShortcut(QKeySequence("Alt+9"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionCppToolbar())
     );
     */
     // wire TOP toolbar signals
@@ -935,7 +915,7 @@ void MainWindowPresenter::slotMainToolbarVisibilityChanged(bool visibility)
     mdConfigRepresentation->save(config);
 }
 
-void MainWindowPresenter::doActionFindOutlineByName()
+void MainWindowPresenter::doActionFindOutlineByName(const std::string& phrase)
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> os{mind->getOutlines()};
@@ -943,6 +923,9 @@ void MainWindowPresenter::doActionFindOutlineByName()
     vector<Thing*> es{os.begin(),os.end()};
 
     findOutlineByNameDialog->show(es);
+    if(phrase.size()) {
+        findOutlineByNameDialog->setSearchedString(QString::fromStdString(phrase));
+    }
 }
 
 void MainWindowPresenter::handleFindOutlineByName()
@@ -971,14 +954,14 @@ void MainWindowPresenter::handleFindThingByName()
     }
 }
 
-void MainWindowPresenter::doActionFindOutlineByTag()
+void MainWindowPresenter::doActionFindOutlineByTag(const string& tag)
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> os{mind->getOutlines()};
     Outline::sortByName(os);
     vector<Thing*> outlines{os.begin(),os.end()};
 
-    findOutlineByTagDialog->show(outlines);
+    findOutlineByTagDialog->show(outlines, nullptr, nullptr, tag);
 }
 
 void MainWindowPresenter::handleFindOutlineByTag()
@@ -2015,12 +1998,6 @@ void MainWindowPresenter::handleRunTool()
     );
 
     // RUN tool
-    if(selectedTool == TOOL_H2O_GPT_API) {
-        // TODO: sniff HTTP traffic and use HTTP client/JSon to talk to the service
-        MF_DEBUG("H2O GPT API not implemented yet");
-        return;
-    }
-
     QDesktopServices::openUrl(QUrl{command});
 }
 
@@ -2154,11 +2131,6 @@ void MainWindowPresenter::doActionStackOverflowToolbar()
     handleLeftToolbarAction(TOOL_STACK_OVERFLOW);
 }
 
-void MainWindowPresenter::doActionH2oGptToolbar()
-{
-    handleLeftToolbarAction(TOOL_H2O_GPT_WEB);
-}
-
 void MainWindowPresenter::doActionDuckDuckGoToolbar()
 {
     handleLeftToolbarAction(TOOL_DUCKDUCKGO);
@@ -2172,16 +2144,6 @@ void MainWindowPresenter::doActionGitHubToolbar()
 void MainWindowPresenter::doActionBardToolbar()
 {
     handleLeftToolbarAction(TOOL_GOOGLE_BARD);
-}
-
-void MainWindowPresenter::doActionPythonToolbar()
-{
-    handleLeftToolbarAction(TOOL_DOC_PYTHON);
-}
-
-void MainWindowPresenter::doActionCppToolbar()
-{
-    handleLeftToolbarAction(TOOL_DOC_CPP);
 }
 
 void MainWindowPresenter::handleLeftToolbarAction(string selectedTool)
@@ -2245,12 +2207,6 @@ void MainWindowPresenter::handleLeftToolbarAction(string selectedTool)
     // phrase replace @ template > get command, if invalid, then fallback
     QString command = templateText.replace(QString{TOOL_PHRASE}, phrase);
     MF_DEBUG("Run tool: command '" << command.toStdString() << "'" << endl);
-    if(selectedTool == TOOL_H2O_GPT_API) {
-        // TODO: sniff HTTP traffic and use HTTP client/JSon to talk to the service
-        MF_DEBUG("H2O GPT API not implemented yet");
-        return;
-    }
-
     QDesktopServices::openUrl(QUrl{command});
 }
 

@@ -1,16 +1,28 @@
 2024-01-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v2.0.0 - Limbo added to the application menu View/Limbo,
-      polished Preferences (Appearance refactored to Controls; restart requirement
-      highlighted), missing OOTB Eisenhower Matrix is automatically added back
-      to the list of Organizers, up/down button in O/N preview mode to move around
-      O's Ns while presenting a N.
-      Libraries - ability to index external PDF files and generate Notebooks
-      which represent them in MindForger (update and removal of the library
-      supported as well. New left side toolbar which runs various tools
+    * Released v2.0.0 - major release which removes features which are not used
+      in practices and brings several new features.
+    * Feature: Notebook Tree view brings ability to organize Notebooks to
+      and outline.
+    * Feature: Libraries bring ability to index external PDF files and generate
+      Notebooks which represent them in MindForger (update and removal of the
+      library supported as well.
+    * Feature: New left side toolbar which runs various tools
       (like Wikipedia, arXiv, StackOverflow, ...) on phrase which is the current
       context (Notebook or Note name, selected text or text under the cursor, ...)
       in order to get more information about the phrase.
+    * Enhancement: CLI to Wingman rewrite: help, search, knowledge recherche and
+      commands.
+    * Enhancement: Limbo added to the application menu View/Limbo.
+    * Enhancement: Polished Preferences - Appearance refactored to Controls,
+      restart requirement highlighted.
+    * Enhancement: Added up and down button in O/N preview mode to move around
+      O's Ns while presenting a N.
+    * Enhancement: MindForger icon changed to GenAI style.
+    * Enhancement: CLI rewrite towards Wingman with help, search, knowledge recherche and commands.
+    * Fix: Missing OOTB Eisenhower Matrix is automatically added back to
+      the list of Organizers.
+    * Fix: Conflicting menu keyboard shortcuts resolved.
 
 2023-01-15  Martin Dvorak  <martin.dvorak@mindforger.com>
 

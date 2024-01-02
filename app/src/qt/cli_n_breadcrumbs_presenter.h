@@ -50,11 +50,13 @@ public:
 
     void executeListOutlines();
     void executeListNotes();
-    void executeFts(QString& command);
 
 private slots:
-    void executeCommand();
+    /**
+     * @brief key pressed handler of the CLI edit line
+     */
     void handleCliTextChanged(const QString& text);
+    void executeCommand();
 };
 
 }

@@ -123,11 +123,11 @@ class KnowledgeGraph
 
 public:
     explicit KnowledgeGraph(
-            Mind* mind,
-            long unsigned mindColor=0x008C00,
-            long unsigned coreColor=0x000000,
-            long unsigned outlinesColor=0x220000,
-            long unsigned notesColor=0x000022);
+        Mind* mind,
+        long unsigned mindColor=0x008C00,
+        long unsigned coreColor=0x000000,
+        long unsigned outlinesColor=0x220000,
+        long unsigned notesColor=0x000022);
     KnowledgeGraph(const KnowledgeGraph&) = delete;
     KnowledgeGraph(const KnowledgeGraph&&) = delete;
     KnowledgeGraph &operator=(const KnowledgeGraph&) = delete;

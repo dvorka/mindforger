@@ -977,8 +977,8 @@ string Mind::outlineMapKey2Relative(const string& outlineKey) const
 string Mind::outlineMapKey2Absolute(const string& outlineKey) const
 {
     string resolvedKey{
-        config.getMemoryPath() 
-        + FILE_PATH_SEPARATOR 
+        config.getMemoryPath()
+        + FILE_PATH_SEPARATOR
         + outlineKey
     };
     MF_DEBUG("  " << resolvedKey << endl);
@@ -1051,7 +1051,7 @@ void Mind::outlinesMapSynchronize(Outline* outlinesMap)
     MF_DEBUG("DONE O links validity check" << endl);
 
     if(osToRemove.size()) {
-        MF_DEBUG("Removing Ns with INVALID O key:" << endl);    
+        MF_DEBUG("Removing Ns with INVALID O key:" << endl);
         for(auto oToRemove:osToRemove) {
             MF_DEBUG("  " << oToRemove->getName() << endl);
             delete oToRemove;
@@ -1143,7 +1143,7 @@ Outline* Mind::outlinesMapLearn(string outlineKey)
     }
 
     if(osToRemove.size()) {
-        MF_DEBUG("Removing Ns with MISSING relative O key:" << endl);    
+        MF_DEBUG("Removing Ns with MISSING relative O key:" << endl);
         for(auto oToRemove:osToRemove) {
             MF_DEBUG("  " << oToRemove->getName() << endl);
             delete oToRemove;
@@ -1187,6 +1187,8 @@ Outline* Mind::outlinesMapRemember()
     if(this->outlinesMap) {
         remind().getPersistence().save(this->outlinesMap);
     }
+
+    return this->outlinesMap;
 }
 
 Note* Mind::noteNew(

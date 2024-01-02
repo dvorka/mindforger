@@ -23,6 +23,9 @@
 
 namespace m8r {
 
+/**
+ * Wingman is a class that provides a set of LLM-based use cases.
+*/
 class Wingman
 {
 public:
@@ -48,7 +51,7 @@ public:
     void fix_grammar(std::string grammar);
     void fix_spelling(std::string spelling);
     void fix_style(std::string style);
-    
+
     void translate(std::string text);
 
     void summarize(std::string text);

@@ -34,8 +34,6 @@ RunToolDialog::RunToolDialog(QWidget* parent)
         QString{TOOL_GOOGLE_SEARCH},
         QString{TOOL_GH_REPOS},
         QString{TOOL_GH_TOPICS},
-        QString{TOOL_H2O_GPT_WEB},
-        QString{TOOL_H2O_GPT_API},
         QString{TOOL_WIKIPEDIA}
     };
 
@@ -113,14 +111,6 @@ QString RunToolDialog::getTemplateTextForToolName(string selectedTool) const
         return templateText;
     } else if(selectedTool == TOOL_DEEPL) {
         return QString{"https://www.deepl.com/en/translator"};
-    } else if(selectedTool == TOOL_DOC_PYTHON) {
-        QString templateText{"https://docs.python.org/3.10/search.html?q="};
-        templateText.append(TOOL_PHRASE);
-        return templateText;
-    } else if(selectedTool == TOOL_DOC_CPP) {
-        QString templateText{"https://duckduckgo.com/?sites=cppreference.com&ia=web&q="};
-        templateText.append(TOOL_PHRASE);
-        return templateText;
     } else if(selectedTool == TOOL_STACK_OVERFLOW) {
         QString templateText{"https://stackoverflow.com/search?q="};
         templateText.append(TOOL_PHRASE);
@@ -147,11 +137,6 @@ QString RunToolDialog::getTemplateTextForToolName(string selectedTool) const
         QString temlateText{"https://www.google.com/search?q="};
         temlateText.append(TOOL_PHRASE);
         return temlateText;
-    } else if(selectedTool == TOOL_H2O_GPT_API) {
-        // TODO: sniff HTTP traffic and use HTTP client/JSon to talk to the service
-        MF_DEBUG("H2O GPT API not implemented yet");
-    } else if(selectedTool == TOOL_H2O_GPT_WEB) {
-        return QString{"https://gpt.h2o.ai/"};
     } else if(selectedTool == TOOL_WIKIPEDIA) {
         // TODO: URL
         QString temlateText{"https://en.wikipedia.org/w/index.php?search="};

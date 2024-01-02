@@ -37,12 +37,9 @@ public:
     QAction* actionLeftToolbarArxiv;
     QAction* actionLeftToolbarWikipedia;
     QAction* actionLeftToolbarStackOverflow;
-    QAction* actionLeftToolbarH2oGpt;
     QAction* actionLeftToolbarDuckDuckGo;
     QAction* actionLeftToolbarGitHub;
     QAction* actionLeftToolbarBard;
-    QAction* actionLeftToolbarPython;
-    QAction* actionLeftToolbarCpp;
 
     // IMPORTANT: hide event hidden as it was causing undesired configuration
     // changes and toolbar hiding on Qt's spontaneous hide/show events. Citation

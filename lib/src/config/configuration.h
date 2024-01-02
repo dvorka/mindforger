@@ -111,12 +111,8 @@ constexpr const auto TOOL_GH_REPOS = "GitHub repositories";
 constexpr const auto TOOL_GH_TOPICS = "GitHub topics";
 constexpr const auto TOOL_GOOGLE_BARD = "Google Bard";
 constexpr const auto TOOL_GOOGLE_SEARCH = "Google Search";
-constexpr const auto TOOL_H2O_GPT_WEB = "h2oGPT web";
-constexpr const auto TOOL_H2O_GPT_API = "h2oGPT API";
 constexpr const auto TOOL_CHAT_GPT_WEB = "OpenAI chatGPT web";
 constexpr const auto TOOL_WIKIPEDIA = "Wikipedia";
-constexpr const auto TOOL_DOC_PYTHON = "Python documentation";
-constexpr const auto TOOL_DOC_CPP = "C++ documentation";
 
 // improve platform/language specific
 constexpr const auto DEFAULT_NEW_OUTLINE = "# New Markdown File\n\nThis is a new Markdown file created by MindForger.\n\n#Section 1\nThe first section.\n\n";
@@ -243,7 +239,7 @@ private:
     // configured Mind state where user wants Mind to be
     MindState desiredMindState;
     // current Mind state on the way to desired state
-    MindState mindState;    
+    MindState mindState;
     // if count(N) > asyncMindTreshold then long-running mind computations should be run in async
     unsigned int asyncMindThreshold;
 
@@ -477,7 +473,7 @@ public:
     void setUiEditorLiveSpellCheck(bool enable) { uiEditorLiveSpellCheck= enable; }
     std::string getUiEditorSpellCheckDefaultLanguage() const {
         return uiEditorSpellCheckLanguage;
-    }    
+    }
     void setUiEditorSpellCheckDefaultLanguage(std::string lang) {
         uiEditorSpellCheckLanguage = lang;
     }

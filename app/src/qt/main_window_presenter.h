@@ -218,12 +218,12 @@ public slots:
     // recall
     void doActionFts();
     void doFts(const QString& pattern, bool doSearch=false);
-    void doActionFindOutlineByName();
+    void doActionFindOutlineByName(const std::string& phrase="");
     void handleFindOutlineByName();
     void handleFindThingByName();
     void doActionFindNoteByName();
     void handleFindNoteByName();
-    void doActionFindOutlineByTag();
+    void doActionFindOutlineByTag(const std::string& tag="");
     void handleFindOutlineByTag();
     void doActionFindNoteByTag();
     void doTriggerFindNoteByTag(const m8r::Tag* tag);
@@ -311,7 +311,7 @@ public slots:
     void doActionFormatTocWithoutTags();
     void doActionFormatTimestamp();
     void doActionFormatCodeBlock();
-    void doActionFormatMathBlock();    
+    void doActionFormatMathBlock();
     void doActionFormatDiagramBlock();
     void doActionFormatDiagramPie();
     void doActionFormatDiagramFlow();
@@ -376,12 +376,9 @@ public slots:
     void doActionArxivToolbar();
     void doActionWikipediaToolbar();
     void doActionStackOverflowToolbar();
-    void doActionH2oGptToolbar();
     void doActionDuckDuckGoToolbar();
     void doActionGitHubToolbar();
     void doActionBardToolbar();
-    void doActionPythonToolbar();
-    void doActionCppToolbar();
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();

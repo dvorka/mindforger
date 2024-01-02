@@ -74,7 +74,9 @@ public:
     void show(
         std::vector<Thing*>& outlines,
         std::vector<const Tag*>* tags=nullptr,
-        std::vector<std::string>* customizedNames=nullptr);
+        std::vector<std::string>* customizedNames=nullptr,
+        const std::string& searchPhrase=""
+    );
 
 signals:
     void searchFinished();

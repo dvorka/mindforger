@@ -149,8 +149,8 @@ class MyClass
 
     int field; // brief field description in the lower case
     /**
-	 * @brief Another field.
-	 *
+     * @brief Another field.
+     *
      * Field with a long description must be documented using
      * this style of the comment. The text of description to be
      * formed by sentences. Apart to that you can use any formatting

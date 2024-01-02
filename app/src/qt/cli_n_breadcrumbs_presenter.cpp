@@ -31,7 +31,7 @@ CliAndBreadcrumbsPresenter::CliAndBreadcrumbsPresenter(
     // widgets
     view->setVisible(Configuration::getInstance().isUiShowBreadcrump());
 
-    // wire signals
+    // wire signals (view events to presenter handlers)
     QObject::connect(
         view->cli, SIGNAL(returnPressed()),
         this, SLOT(executeCommand()));
@@ -40,21 +40,62 @@ CliAndBreadcrumbsPresenter::CliAndBreadcrumbsPresenter(
         this, SLOT(handleCliTextChanged(QString)));
 }
 
+
 void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
 {
     // IMPROVE remove parameter text if it's not needed
     UNUSED_ARG(text);
 
+    // TODO use status bar
+
     QString command = view->getCommand();
+    MF_DEBUG("CLI text changed to: '" << command.toStdString() << "'" << endl);
     if(command.size()) {
-        if(command.startsWith(CliAndBreadcrumbsView::CMD_TOOL)) {
+        MF_DEBUG("  handling:" << endl);
+        if(command.startsWith(CliAndBreadcrumbsView::CHAR_HELP)) {
+            MF_DEBUG("    HELP" << endl);
+            QMessageBox::information(
+                &mainPresenter->getView(),
+                tr("Wingman help"),
+                tr(
+                    // IMPROVE consider <html> prefix, <br/> separator and colors/bold
+                    "Use the following commands to use Wingman:\n"
+                    "\n"
+                    "? ... help\n"
+                    "/ ... search\n"
+                    "@ ... knowledge recherche\n"
+                    "> ... run a command\n"
+                    ": ... chat with workspace, Notebook or Note\n"
+                    "\n"
+                    "or type full-text search phrase\n"
+                )
+            );
+            view->setCommand("");
+            mainPresenter->getStatusBar()->showInfo(
+                tr("Wingman: ? for help, / search, @ knowledge, > command, : chat, or type FTS phrase"));
+            return;
+        } else if(command.startsWith(CliAndBreadcrumbsView::CHAR_FIND)) {
+            MF_DEBUG("    / HELP find" << endl);
+            view->updateCompleterModel(CliAndBreadcrumbsView::HELP_FIND_CMDS);
+            return;
+        } else if(command.startsWith(CliAndBreadcrumbsView::CHAR_KNOW)) {
+            MF_DEBUG("    @ HELP knowledge" << endl);
+            view->updateCompleterModel(CliAndBreadcrumbsView::HELP_KNOW_CMDS);
+            return;
+        } else if(command.startsWith(CliAndBreadcrumbsView::CHAR_CMD)) {
+            MF_DEBUG("    > HELP command" << endl);
+            view->updateCompleterModel(CliAndBreadcrumbsView::HELP_CMD_CMDS);
+            return;
+        } else if(command.startsWith(CliAndBreadcrumbsView::CHAR_KNOW)) {
+            MF_DEBUG("    @ EXEC" << endl);
             QString prefix(
                 QString::fromStdString(
                     command.toStdString().substr(
-                        CliAndBreadcrumbsView::CMD_TOOL.size()-1)));
+                        CliAndBreadcrumbsView::CHAR_KNOW.size()-1)));
             QString phrase{"PHRASE"};
             mainPresenter->doActionOpenRunToolDialog(phrase);
             view->setCommand("");
+            return;
         } else if(command.startsWith(CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME)) {
             QString prefix(
                 QString::fromStdString(
@@ -77,75 +118,67 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                             outlineNamesCompletion << qs;
                         }
                     }
-                    view->updateCompleterModel(&outlineNamesCompletion);
+                    view->updateCompleterModel(
+                        CliAndBreadcrumbsView::DEFAULT_CMDS,
+                        &outlineNamesCompletion);
                 } else {
+                    // TODO NOT handled
                 }
             } else {
-                view->updateCompleterModel();
+                MF_DEBUG("    FALLBACK (default CMDs)" << endl);
+                view->updateCompleterModel(
+                    CliAndBreadcrumbsView::DEFAULT_CMDS);
             }
             return;
         }
+        MF_DEBUG("    NO HANDLING (FTS phrase OR lost focus)" << endl);
+        return;
+    } else { // empty command
+        MF_DEBUG("    EMPTY command > NO handling" << endl);
+        return;
     }
-
-    // fallback
-    view->forceFtsHistoryCompletion();
 }
 
 // TODO i18n
 void CliAndBreadcrumbsPresenter::executeCommand()
 {
     QString command = view->getCommand();
+    MF_DEBUG("CLI command EXEC: '" << command.toStdString() << "'" << endl);
     if(command.size()) {
         view->addCompleterItem(command);
 
-        if(command.startsWith(CliAndBreadcrumbsView::CMD_FTS)) {
-            executeFts(command);
-            view->showBreadcrumb();
-            return;
-        }
         if(command.startsWith(CliAndBreadcrumbsView::CMD_LIST_OUTLINES)) {
+            MF_DEBUG("  executing: list outlines" << endl);
             executeListOutlines();
             view->showBreadcrumb();
             return;
-        }
-        if(command.startsWith(CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME)) {
+        } else if(command.startsWith(CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_TAG)) {
+            string name = command.toStdString().substr(
+                CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_TAG.size());
+            MF_DEBUG("  executing: find O by tag '" << name << "'" << endl);
+            if(name.size()) {
+                mainPresenter->doActionFindOutlineByTag(name);
+            }
+            mainPresenter->getStatusBar()->showInfo(tr("Notebook not found - please specify tag search phrase (is empty)"));
+            return;
+        } else if(command.startsWith(CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME)) {
             string name = command.toStdString().substr(
                 CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME.size());
-            unique_ptr<vector<Outline*>> outlines = mind->findOutlineByNameFts(name);
-            if(!outlines || !outlines->size()) {
-                // IMPROVE memory leak if outlines && !outlines->size()
-                QString firstCompletion = view->getFirstCompletion();
-                if(firstCompletion.size()) {
-                    name = view->getFirstCompletion().toStdString().substr(
-                        CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME.size()
-                    );
-                    outlines = mind->findOutlineByNameFts(name);
-                }
+            MF_DEBUG("  executing: find O by name '" << name << "'" << endl);
+            if(name.size()) {
+                mainPresenter->doActionFindOutlineByName(name);
             }
-            if(outlines && outlines->size()) {
-                mainPresenter->getOrloj()->showFacetOutline(outlines->front());
-                // TODO efficient
-                mainPresenter->getStatusBar()->showInfo(tr("Notebook ")+QString::fromStdString(outlines->front()->getName()));
-            } else {
-                mainPresenter->getStatusBar()->showInfo(tr("Notebook not found: ") += QString(name.c_str()));
-            }
-            view->showBreadcrumb();
+            mainPresenter->getStatusBar()->showInfo(tr("Notebook not found - please specify name search phrase (is empty)"));
+            // status handling examples:
+            // mainPresenter->getStatusBar()->showInfo(tr("Notebook ")+QString::fromStdString(outlines->front()->getName()));
+            // mainPresenter->getStatusBar()->showInfo(tr("Notebook not found: ") += QString(name.c_str()));
             return;
+        } else {
+            // do FTS as fallback
+            mainPresenter->doFts(view->getCommand(), true);
         }
-
-        // do FTS as fallback
-        mainPresenter->doFts(view->getCommand(), true);
     } else {
         mainPresenter->getStatusBar()->showError(tr("No command!"));
-    }
-}
-
-void CliAndBreadcrumbsPresenter::executeFts(QString& command)
-{
-    string searchedString = command.toStdString().substr(
-         CliAndBreadcrumbsView::CMD_FTS.size());
-    if(!searchedString.empty()) {
-        mainPresenter->doFts(QString::fromStdString(searchedString), true);
     }
 }
 

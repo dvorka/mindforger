@@ -74,6 +74,9 @@ public:
     ~EditTagsPanel();
 
     QLineEdit* getLineEdit() const { return lineEdit; }
+    void setTagToFind(const std::string& tagAsText) {
+        lineEdit->setText(QString::fromStdString(tagAsText));
+    }
     void clearTagList();
     void refreshOntologyTags();
     void refresh(const std::vector<const Tag*>* noteTags);
