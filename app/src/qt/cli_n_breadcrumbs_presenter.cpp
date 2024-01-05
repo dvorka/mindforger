@@ -59,15 +59,23 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                 tr("Wingman help"),
                 tr(
                     // IMPROVE consider <html> prefix, <br/> separator and colors/bold
-                    "Use the following commands to use Wingman:\n"
-                    "\n"
-                    "? ... help\n"
-                    "/ ... search\n"
-                    "@ ... knowledge recherche\n"
-                    "> ... run a command\n"
-                    ": ... chat with workspace, Notebook or Note\n"
-                    "\n"
-                    "or type full-text search phrase\n"
+                    "<html>"
+                    "Use the following commands:"
+                    "<br>"
+                    "<br>? ... help"
+                    "<br>/ ... search"
+                    "<br>@ ... knowledge recherche"
+                    "<br>> ... run a command"
+                    "<br>: ... chat with workspace, Notebook or Note"
+                    "<br>&nbsp;&nbsp;... or type full-text search phrase"
+                    "<br>"
+                    "<br>Examples:"
+                    "<br>"
+                    "<br>/ find notebook by name My Name"
+                    "<br>@ arxiv Knowledge management"
+                    "<br>> emoji"
+                    "<br>: explain in simple terms SELECTED"
+                    "<br>"
                 )
             );
             view->setCommand("");
@@ -76,25 +84,21 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
             return;
         } else if(command.startsWith(CliAndBreadcrumbsView::CHAR_FIND)) {
             MF_DEBUG("    / HELP find" << endl);
-            view->updateCompleterModel(CliAndBreadcrumbsView::HELP_FIND_CMDS);
+            if(command.size()<=2) {
+                view->updateCompleterModel(CliAndBreadcrumbsView::HELP_FIND_CMDS);
+            }
             return;
         } else if(command.startsWith(CliAndBreadcrumbsView::CHAR_KNOW)) {
             MF_DEBUG("    @ HELP knowledge" << endl);
-            view->updateCompleterModel(CliAndBreadcrumbsView::HELP_KNOW_CMDS);
+            if(command.size()<=2) {
+                view->updateCompleterModel(CliAndBreadcrumbsView::HELP_KNOW_CMDS);
+            }
             return;
         } else if(command.startsWith(CliAndBreadcrumbsView::CHAR_CMD)) {
             MF_DEBUG("    > HELP command" << endl);
-            view->updateCompleterModel(CliAndBreadcrumbsView::HELP_CMD_CMDS);
-            return;
-        } else if(command.startsWith(CliAndBreadcrumbsView::CHAR_KNOW)) {
-            MF_DEBUG("    @ EXEC" << endl);
-            QString prefix(
-                QString::fromStdString(
-                    command.toStdString().substr(
-                        CliAndBreadcrumbsView::CHAR_KNOW.size()-1)));
-            QString phrase{"PHRASE"};
-            mainPresenter->doActionOpenRunToolDialog(phrase);
-            view->setCommand("");
+            if(command.size()<=2) {
+                view->updateCompleterModel(CliAndBreadcrumbsView::HELP_CMD_CMDS);
+            }
             return;
         } else if(command.startsWith(CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME)) {
             QString prefix(
@@ -152,14 +156,19 @@ void CliAndBreadcrumbsPresenter::executeCommand()
             executeListOutlines();
             view->showBreadcrumb();
             return;
+        } else if(command.startsWith(CliAndBreadcrumbsView::CMD_EMOJIS)) {
+            MF_DEBUG("  executing: emojis" << endl);
+            mainPresenter->doActionEmojisDialog();
+            return;
         } else if(command.startsWith(CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_TAG)) {
             string name = command.toStdString().substr(
                 CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_TAG.size());
             MF_DEBUG("  executing: find O by tag '" << name << "'" << endl);
             if(name.size()) {
                 mainPresenter->doActionFindOutlineByTag(name);
+            } else {
+                mainPresenter->getStatusBar()->showInfo(tr("Notebook not found - please specify tag search phrase (is empty)"));
             }
-            mainPresenter->getStatusBar()->showInfo(tr("Notebook not found - please specify tag search phrase (is empty)"));
             return;
         } else if(command.startsWith(CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME)) {
             string name = command.toStdString().substr(
@@ -167,11 +176,24 @@ void CliAndBreadcrumbsPresenter::executeCommand()
             MF_DEBUG("  executing: find O by name '" << name << "'" << endl);
             if(name.size()) {
                 mainPresenter->doActionFindOutlineByName(name);
+            } else {
+                mainPresenter->getStatusBar()->showInfo(tr("Notebook not found - please specify name search phrase (is empty)"));
             }
-            mainPresenter->getStatusBar()->showInfo(tr("Notebook not found - please specify name search phrase (is empty)"));
             // status handling examples:
             // mainPresenter->getStatusBar()->showInfo(tr("Notebook ")+QString::fromStdString(outlines->front()->getName()));
             // mainPresenter->getStatusBar()->showInfo(tr("Notebook not found: ") += QString(name.c_str()));
+            return;
+        } else if(command.startsWith(CliAndBreadcrumbsView::CMD_KNOW_WIKIPEDIA)) {
+            string name = command.toStdString().substr(
+                CliAndBreadcrumbsView::CMD_KNOW_WIKIPEDIA.size());
+            MF_DEBUG("  executing: knowledge recherche of '" << name << "' @ wikipedia" << endl);
+            if(name.size()) {
+                QString phrase=QString::fromStdString(name);
+                // TODO choose tool
+                mainPresenter->doActionOpenRunToolDialog(phrase);
+            } else {
+                mainPresenter->getStatusBar()->showInfo(tr("Please specify a search phrase - it cannot be empty"));
+            }
             return;
         } else {
             // do FTS as fallback

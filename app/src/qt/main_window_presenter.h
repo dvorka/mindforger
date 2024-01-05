@@ -388,6 +388,7 @@ public slots:
     void doActionHelpDiagrams();
     void doActionHelpReportBug();
     void doActionHelpCheckForUpdates();
+    void doActionEmojisDialog();
     void doActionHelpAboutMindForger();
 
     void slotHandleFts();

@@ -3829,6 +3829,51 @@ void MainWindowPresenter::doActionHelpCheckForUpdates()
     );
 }
 
+void MainWindowPresenter::doActionEmojisDialog()
+{
+    // IMPROVE load emojis from the main MF configuration file
+    QMessageBox::information(
+        &view,
+        QString{tr("Emojis")},
+        QString{
+            "<html>"
+            "Copy character from below and paste it to the text:"
+            "<br>"
+            "<br>Emoji:"
+            "<br>🐞 ⛑ ❗ ❌"
+            "<br>🔴 🔵 🚫 🎯"
+            "<br>🙂 🥶 🥰 🐻 🤖 💩 👻 ☠️"
+            "<br>🦑 🐙 👾"
+            "<br>💪 👍 🤞 🤙 👌 🙏 🤦"
+            "<br>🛠 🔧"
+            "<br>📡 🌊 🚀 🎖"
+            "<br>📣 📢 🏁 🚧 🚩 💣 💯 🖼️"
+            "<br>"
+            "<br>Greek alphabet:"
+            "<br>Α α, Β β, Γ γ, Δ δ, Ε ε,"
+            "<br>Ζ ζ, Η η, Θ θ, Ι ι, Κ κ,"
+            "<br>Λ λ, Μ μ, Ν ν, Ξ ξ, Ο ο,"
+            "<br>Π π, Ρ ρ, Σ σ/ς, Τ τ, Υ υ,"
+            "<br>Φ φ, Χ χ, Ψ ψ, Ω ω"
+            "<br>"
+            "<br>Special:"
+            "<br>✔ ♥ ⦀"
+            "<br>"
+            "<br>Math and statistics:"
+            "<br>x̄"
+            "<br>"
+            "<br>Physics:"
+            "<br>°"
+            "<br>"
+            "<br>More special unicode characters:"
+            "<ul>"
+            "<li><a href='https://unicode-table.com/en/'>Unicode Table</a></li>"
+            "<li><a href='https://emojipedia.org/'>Emojipedia</a></li>"
+            "</ul>"
+        });
+}
+
+
 void MainWindowPresenter::doActionHelpAboutMindForger()
 {
     // IMPROVE move this to view: remove this method and route signal to MainWindowView

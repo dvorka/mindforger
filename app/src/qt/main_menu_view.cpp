@@ -275,7 +275,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewDwell->setStatusTip(tr("Open memory dwell..."));
     actionViewDwell->setEnabled(false);
 
-    actionViewCli = new QAction(QIcon(":/menu-icons/cli.svg"), tr("&CLI"), mainWindow);
+    actionViewCli = new QAction(QIcon(":/menu-icons/cli.svg"), tr("&Wingman"), mainWindow);
     actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
     actionViewCli->setStatusTip(tr("Activate command line interface..."));
 
@@ -284,6 +284,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     );
     actionViewTerminal->setStatusTip(
         tr("Run simple command line from current MindForger workspace...")
+    );
+
+    actionViewEmojis = new QAction(
+        QIcon(":/menu-icons/bug.svg"), tr("Emo&jis"), mainWindow
+    );
+    actionViewEmojis->setStatusTip(
+        tr("Open dialog with emoji characters to be copy/pasted to names, descriptions and text...")
     );
 
     actionViewRecentNotes = new QAction(
@@ -343,6 +350,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewTags);
     menuView->addAction(actionViewNavigator);
     menuView->addAction(actionViewCli);
+    menuView->addAction(actionViewEmojis);
     menuView->addAction(actionViewTerminal);
 #ifdef MF_WIP
     menuView->addAction(actionViewStencils);
@@ -1023,7 +1031,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionHelpCheckForUpdates = new QAction(QIcon(":/menu-icons/download.svg"), tr("&Check for Updates"), mainWindow);
     actionHelpCheckForUpdates->setStatusTip(tr("Check for MindForger updates"));
 
-    actionHelpAboutQt = new QAction(QIcon(":/menu-icons/about_qt.svg"), tr("&About Qt"), mainWindow);
+    actionHelpAboutQt = new QAction(QIcon(":/menu-icons/about_qt.svg"), tr("About &Qt"), mainWindow);
     actionHelpAboutQt->setStatusTip(tr("About Qt..."));
 
     actionHelpAbout = new QAction(QIcon(":/menu-icons/write.svg"), tr("&About MindForger"), mainWindow);

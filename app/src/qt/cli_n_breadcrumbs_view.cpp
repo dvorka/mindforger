@@ -147,15 +147,17 @@ const QString CliAndBreadcrumbsView::CMD_KNOW_BARD
     = "@bard";
 
 const QStringList CliAndBreadcrumbsView::HELP_KNOW_CMDS = QStringList()
-//        << CMD_KNOW_WIKIPEDIA
-//        << CMD_KNOW_ARXIV
-        ;
+//    << CMD_KNOW_WIKIPEDIA
+//    << CMD_KNOW_ARXIV
+    ;
 
 const QString CliAndBreadcrumbsView::CHAR_CMD
     = ">";
 
 const QString CliAndBreadcrumbsView::CMD_HOME
     = "> home"; // go to home O
+const QString CliAndBreadcrumbsView::CMD_EMOJIS
+    = "> emojis";
 const QString CliAndBreadcrumbsView::CMD_TERMINAL
     = "> terminal";
 const QString CliAndBreadcrumbsView::CMD_LIST_OUTLINES
@@ -164,6 +166,7 @@ const QString CliAndBreadcrumbsView::CMD_LIST_OUTLINES
 const QStringList CliAndBreadcrumbsView::HELP_CMD_CMDS = QStringList()
 //        << CMD_HOME
 //        << CMD_TERMINAL
+        << CMD_EMOJIS
         << CMD_LIST_OUTLINES
         ;
 

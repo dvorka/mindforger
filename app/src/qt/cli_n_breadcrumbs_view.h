@@ -116,6 +116,7 @@ public:
     static const QString CHAR_CMD;
 
     static const QString CMD_HOME;
+    static const QString CMD_EMOJIS;
     static const QString CMD_TERMINAL;
     static const QString CMD_LIST_OUTLINES;
 

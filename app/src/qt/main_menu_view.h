@@ -120,6 +120,7 @@ public:
     QAction* actionViewDwell;
     QAction* actionViewStencils;
     QAction* actionViewCli;
+    QAction* actionViewEmojis;
     QAction* actionViewTerminal;
     QAction* actionViewRecentNotes;
     QAction* actionViewLimbo;
