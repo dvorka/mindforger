@@ -269,7 +269,8 @@ void injectThingsLinks(cmark_node* srcNode, Mind& mind)
  * Preprocessor.
  */
 
-const string CmarkAhoCorasickBlockAutolinkingPreprocessor::TRAILING_CHARS = string{" \t,:;.!?<>{}&()-+/*\\_=%~#$^[]'\""};
+const string CmarkAhoCorasickBlockAutolinkingPreprocessor::TRAILING_CHARS
+    = string{" \t,:;.!?<>{}&()-+/*\\_=%~#$^[]'\""};
 
 CmarkAhoCorasickBlockAutolinkingPreprocessor::CmarkAhoCorasickBlockAutolinkingPreprocessor(Mind& mind)
     : AutolinkingPreprocessor{mind}

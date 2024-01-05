@@ -76,6 +76,15 @@ void AutolinkingMind::updateTrieIndex()
         addThingToTrie(n);
     }
 
+    // remove functional blacklist
+    vector<string> blacklist = {
+        "http",
+        "https",
+    };
+    for_each(blacklist.begin(), blacklist.end(), [this](const string& s) {
+        trie->removeWord(s);
+    });
+
     // IMPROVE: add also tags
 
 #ifdef DO_MF_DEBUG
