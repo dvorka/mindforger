@@ -45,6 +45,7 @@ private:
         UnorderedList,
         TaskDoneItem,
         TaskWipItem,
+        TaskTodoItem,
         OrderedList,
 
         HtmlTag,
@@ -79,6 +80,7 @@ private:
     QTextCharFormat listFormat;
     QTextCharFormat taskDoneFormat;
     QTextCharFormat taskWipFormat;
+    QTextCharFormat taskTodoFormat;
     QTextCharFormat codeBlockFormat;
     QTextCharFormat mathBlockFormat;
 

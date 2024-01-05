@@ -65,7 +65,8 @@ NoteEditHighlighter::NoteEditHighlighter(QPlainTextEdit* noteEditorView)
     addRegex(UnorderedList, "^(:?    )*[\\*\\+\\-] ");
     addRegex(OrderedList, "^(:?    )*\\d\\d?\\. ");
     addRegex(TaskDoneItem, "^(:?    )*[\\*\\+\\-] \\[x\\]");
-    addRegex(TaskWipItem, "^(:?    )*[\\*\\+\\-] \\[ \\]");
+    addRegex(TaskWipItem, "^(:?    )*[\\*\\+\\-] \\[w\\]");
+    addRegex(TaskTodoItem, "^(:?    )*[\\*\\+\\-] \\[ \\]");
 
     // formats
     boldFormat.setForeground(lookAndFeels.getEditorBold());
@@ -80,6 +81,7 @@ NoteEditHighlighter::NoteEditHighlighter(QPlainTextEdit* noteEditorView)
     listFormat.setForeground(lookAndFeels.getEditorList());
     taskDoneFormat.setForeground(lookAndFeels.getEditorTaskDone());
     taskWipFormat.setForeground(lookAndFeels.getEditorTaskWip());
+    taskTodoFormat.setForeground(lookAndFeels.getEditorTaskTodo());
     codeBlockFormat.setForeground(lookAndFeels.getEditorCodeblock());
     mathBlockFormat.setForeground(lookAndFeels.getEditorCodeblock());
 
@@ -204,6 +206,9 @@ void NoteEditHighlighter::highlightPatterns(const QString& text)
                 break;
             case TaskDoneItem:
                 setFormat(index, length, taskDoneFormat);
+                break;
+            case TaskTodoItem:
+                setFormat(index, length, taskTodoFormat);
                 break;
             case TaskWipItem:
                 setFormat(index, length, taskWipFormat);
