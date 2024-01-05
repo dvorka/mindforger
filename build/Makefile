@@ -87,7 +87,7 @@ gen-ui-class: ## generate UI C++ class skeleton: CLASS_NAME=My_Class
 
 ../app/mindforger:
 	@echo "Building PRODUCTION MindForger executable..."
-	cd .. && qmake -r mindforger.pro && make -j 7 ; cd ..
+	cd .. && qmake -r mindforger.pro && make -j ; cd ..
 	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
@@ -99,7 +99,7 @@ build: clean-app ../app/mindforger ## build production MindForger application bi
 .PHONY: build-dev
 build-dev: clean-app ## build development MindForger application binary
 	@echo "Building DEV MindForger executable..."
-	cd .. && qmake -r mindforger.pro DEFINES+=DO_MF_DEBUG && make -j 7 ; cd ..
+	cd .. && qmake -r mindforger.pro DEFINES+=DO_MF_DEBUG && make -j ; cd ..
 	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
@@ -110,7 +110,7 @@ build-dev: clean-app ## build development MindForger application binary
 .PHONY: build-rc
 build-rc: clean-app ## build RC MindForger application binary
 	@echo "MindForger RC build..."
-	cd .. && qmake CONFIG+=mfrc -r mindforger.pro && make -j 7
+	cd .. && qmake CONFIG+=mfrc -r mindforger.pro && make -j
 	@echo "If RC build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
@@ -118,7 +118,7 @@ build-rc: clean-app ## build RC MindForger application binary
 .PHONY: build-ci
 build-ci: clean-app ## build CI MindForger application binary
 	@echo "MindForger CI build..."
-	cd .. && qmake CONFIG+=mfci -r mindforger.pro && make -j 7
+	cd .. && qmake CONFIG+=mfci -r mindforger.pro && make -j
 	@echo "If CI build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
