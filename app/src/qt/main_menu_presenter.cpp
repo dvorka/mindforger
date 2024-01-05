@@ -75,7 +75,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         mwp, SLOT(doActionMindPreferences())
     );
     QObject::connect(
-        view->actionViewEmojis, SIGNAL(triggered()),
+        view->actionFormatEmojis, SIGNAL(triggered()),
         mwp, SLOT(doActionEmojisDialog())
     );
     QObject::connect(

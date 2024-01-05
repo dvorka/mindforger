@@ -286,13 +286,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
         tr("Run simple command line from current MindForger workspace...")
     );
 
-    actionViewEmojis = new QAction(
-        QIcon(":/menu-icons/bug.svg"), tr("Emo&jis"), mainWindow
-    );
-    actionViewEmojis->setStatusTip(
-        tr("Open dialog with emoji characters to be copy/pasted to names, descriptions and text...")
-    );
-
     actionViewRecentNotes = new QAction(
         QIcon(":/menu-icons/open-recent.svg"),
         tr("&Recent Notes"),
@@ -350,7 +343,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewTags);
     menuView->addAction(actionViewNavigator);
     menuView->addAction(actionViewCli);
-    menuView->addAction(actionViewEmojis);
     menuView->addAction(actionViewTerminal);
 #ifdef MF_WIP
     menuView->addAction(actionViewStencils);
@@ -982,6 +974,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFormatHr = new QAction(tr("&Horizontal ruler"), mainWindow);
     actionFormatHr->setStatusTip(tr("Horizontal ruler"));
 
+    actionFormatEmojis = new QAction(tr("Emo&jis"), mainWindow);
+    actionFormatEmojis->setStatusTip(
+        tr("Open dialog with emoji characters to be copy/pasted to names, descriptions and text...")
+    );
+
     menuFormat->addAction(actionFormatBold);
     menuFormat->addAction(actionFormatItalic);
     menuFormat->addAction(actionFormatCode);
@@ -998,6 +995,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFormat->addMenu(submenuFormatMathJax);
     menuFormat->addAction(actionFormatTimestamp);
     menuFormat->addAction(actionFormatHr);
+    menuFormat->addAction(actionFormatEmojis);
     menuFormat->addSeparator();
     menuFormat->addAction(actionFormatLink);
     menuFormat->addAction(actionFormatImage);

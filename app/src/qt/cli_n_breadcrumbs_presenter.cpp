@@ -67,7 +67,7 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                     "<br>@ ... knowledge recherche"
                     "<br>> ... run a command"
                     "<br>: ... chat with workspace, Notebook or Note"
-                    "<br>&nbsp;&nbsp;... or type full-text search phrase"
+                    "<br>&nbsp;&nbsp;... or full-text search phrase"
                     "<br>"
                     "<br>Examples:"
                     "<br>"

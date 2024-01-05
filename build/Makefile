@@ -34,7 +34,8 @@ CLASS_NAME := "New_Class"
 MF_LANG := "en"
 # Ubuntu distro: trusty xenial bionic focal jammy kinetic
 DISTRO := "bionic"
-
+# CPU cores thant can be used to build the project
+CPU_CORES := 7
 
 #
 # targets
@@ -87,7 +88,7 @@ gen-ui-class: ## generate UI C++ class skeleton: CLASS_NAME=My_Class
 
 ../app/mindforger:
 	@echo "Building PRODUCTION MindForger executable..."
-	cd .. && qmake -r mindforger.pro && make -j ; cd ..
+	cd .. && qmake -r mindforger.pro && make -j $(CPU_CORES) ; cd ..
 	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
@@ -99,7 +100,7 @@ build: clean-app ../app/mindforger ## build production MindForger application bi
 .PHONY: build-dev
 build-dev: clean-app ## build development MindForger application binary
 	@echo "Building DEV MindForger executable..."
-	cd .. && qmake -r mindforger.pro DEFINES+=DO_MF_DEBUG && make -j ; cd ..
+	cd .. && qmake -r mindforger.pro DEFINES+=DO_MF_DEBUG && make -j $(CPU_CORES) ; cd ..
 	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
@@ -110,7 +111,7 @@ build-dev: clean-app ## build development MindForger application binary
 .PHONY: build-rc
 build-rc: clean-app ## build RC MindForger application binary
 	@echo "MindForger RC build..."
-	cd .. && qmake CONFIG+=mfrc -r mindforger.pro && make -j
+	cd .. && qmake CONFIG+=mfrc -r mindforger.pro && make -j $(CPU_CORES)
 	@echo "If RC build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
@@ -118,7 +119,7 @@ build-rc: clean-app ## build RC MindForger application binary
 .PHONY: build-ci
 build-ci: clean-app ## build CI MindForger application binary
 	@echo "MindForger CI build..."
-	cd .. && qmake CONFIG+=mfci -r mindforger.pro && make -j
+	cd .. && qmake CONFIG+=mfci -r mindforger.pro && make -j $(CPU_CORES)
 	@echo "If CI build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
@@ -164,8 +165,8 @@ install-dev-local: clean build-rc ## install MindForger RC build to ~/bin as 'mi
 #
 
 
-.PHONY: l10n
-l10n: ## update and release localization strings: MF_LANG=en
+.PHONY: localization
+localization: ## update and release localization strings: MF_LANG=en
 	cd make && ./l10n-update-strings.sh && ./l10n-edit-and-release.sh $(MF_LANG)
 
 
@@ -266,7 +267,7 @@ doc-to-wiki: ## mindforger-documentation to mindforger.wiki
 	cd doc && ./mf-doc-to-wiki.py
 
 
-.PHONY: api-reference
+.PHONY: doc-api-reference
 api-reference: ## generate Doxygen source code documentation
 	cd doxygen && doxygen ./mindforger.cfg
 

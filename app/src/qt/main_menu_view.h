@@ -120,7 +120,6 @@ public:
     QAction* actionViewDwell;
     QAction* actionViewStencils;
     QAction* actionViewCli;
-    QAction* actionViewEmojis;
     QAction* actionViewTerminal;
     QAction* actionViewRecentNotes;
     QAction* actionViewLimbo;
@@ -260,6 +259,7 @@ public:
     QAction* actionFormatImage;
     QAction* actionFormatTable;
     QAction* actionFormatHr;
+    QAction* actionFormatEmojis;
     QAction* actionFormatTimestamp;
 
     // menu: Help
