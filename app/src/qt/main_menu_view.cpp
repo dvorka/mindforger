@@ -757,7 +757,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditWordWrap = new QAction(QIcon(":/menu-icons/word-wrap.svg"), tr("&Word Wrap"), mainWindow);
     actionEditWordWrap->setStatusTip(tr("Toggle word wrap mode"));
 
-    actionEditNameDescFocusSwap = new QAction(QIcon(":/menu-icons/up.svg"), tr("&Swap Name/Description Focus"), mainWindow);
+    actionEditNameDescFocusSwap = new QAction(QIcon(":/menu-icons/up.svg"), tr("Swap Nam&e/Description Focus"), mainWindow);
     actionEditNameDescFocusSwap->setStatusTip(tr("Swap focus of N title and description editors"));
 
     actionEditExtract = new QAction(QIcon(":/menu-icons/cut.svg"), tr("E&xtract"), mainWindow);
@@ -769,7 +769,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditComplete = new QAction(QIcon(":/menu-icons/link.svg"), tr("Complete Link\tCtrl+L"), mainWindow);
     actionEditComplete->setStatusTip(tr("Complete word being written by finding link to Notebook or Note"));
 
-    actionEditSpellCheck = new QAction(QIcon(":/menu-icons/paste.svg"), tr("Sp&ell Check"), mainWindow);
+    actionEditSpellCheck = new QAction(QIcon(":/menu-icons/paste.svg"), tr("&Spell Check"), mainWindow);
     actionEditSpellCheck->setStatusTip(tr("Spell check Notebook or Note description"));
 
     menuEdit = qMenuBar->addMenu(tr("&Edit"));
