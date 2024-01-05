@@ -66,7 +66,17 @@ clean-app:
 
 .PHONY: git-subs-update
 git-subs-update: ## update Git submodules
+	@echo "Initializing sub-modules with cmark-gfm and other dependencies..."
 	cd .. && git submodule update --init --recursive
+
+
+../deps/cmark-gfm/build: git-subs-update
+	@echo "Building cmark-gfm and other dependencies..."
+	cd ../deps/cmark-gfm \
+	&& mkdir -p build && cd build \
+	&& cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. \
+	&& cmake --build . \
+	; cd ../../../build
 
 
 .PHONY: gen-lib-class
@@ -86,9 +96,14 @@ gen-ui-class: ## generate UI C++ class skeleton: CLASS_NAME=My_Class
 #
 
 
-../app/mindforger:
+../Makefile:
+	@echo "Generating Makefile..."
+	cd .. && qmake -r mindforger.pro ; cd build
+
+
+../app/mindforger: ../Makefile
 	@echo "Building PRODUCTION MindForger executable..."
-	cd .. && qmake -r mindforger.pro && make -j $(CPU_CORES) ; cd ..
+	cd .. && make -j $(CPU_CORES) ; cd build
 	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
@@ -154,7 +169,7 @@ run-dev: build-dev ## run MindForger development build
 # install
 #
 
-install-dev-local: clean build-rc ## install MindForger RC build to ~/bin as 'mind' executable
+install-dev-local: ../deps/cmark-gfm/build ../Makefile ../lib/tests/Makefile clean build-rc ## install MindForger RC build to ~/bin as 'mind' executable
 	cp -vf ../app/mindforger ~/bin
 	mv -vf ~/bin/mindforger ~/bin/mind
 	~/bin/mind --version
@@ -173,6 +188,11 @@ localization: ## update and release localization strings: MF_LANG=en
 .PHONY: ver-find
 ver-find: ## pre-version update finder
 	cd .. && git grep -n "1\.55"
+
+
+../lib/tests/Makefile:
+	@echo "Generating lib test Makefile..."
+	cd ../lib/test && qmake -r mindforger-lib-unit-tests.pro ; cd ../../build
 
 
 test-lib: clean ## compile and run lib/ unit tests
