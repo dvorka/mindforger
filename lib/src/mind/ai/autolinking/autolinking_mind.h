@@ -42,6 +42,7 @@ private:
 
     Trie* trie;
 
+    static const std::vector<std::string> excludedWords;
 public:
     explicit AutolinkingMind(Mind& mind);
     AutolinkingMind(const AutolinkingMind&) = delete;

@@ -31,10 +31,10 @@ InsertLinkDialog::InsertLinkDialog(QWidget* parent)
     pathLabel = new QLabel{tr("Notebook, Note, file path or web address:")};
     pathEdit = new QLineEdit{};
 
-    findOutlineButton = new QPushButton{tr("Notebook")};
-    findNoteButton = new QPushButton{tr("Note")};
-    findFileButton = new QPushButton{tr("File")};
-    findDirectoryButton = new QPushButton{tr("Directory")};
+    findOutlineButton = new QPushButton{tr("Note&book")};
+    findNoteButton = new QPushButton{tr("&Note")};
+    findFileButton = new QPushButton{tr("&File")};
+    findDirectoryButton = new QPushButton{tr("&Directory")};
 
     copyToRepoCheckBox = new QCheckBox{tr("copy link target to workspace")};
     copyToRepoCheckBox->setChecked(true);

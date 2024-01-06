@@ -26,6 +26,8 @@ namespace m8r {
 
 using namespace std;
 
+const vector<string> AutolinkingMind::excludedWords({"http", "https"});
+
 AutolinkingMind::AutolinkingMind(Mind& mind)
     : mind{mind},
       trie{nullptr}
@@ -76,20 +78,19 @@ void AutolinkingMind::updateTrieIndex()
         addThingToTrie(n);
     }
 
-    // remove functional blacklist
-    vector<string> blacklist = {
-        "http",
-        "https",
-    };
-    for_each(blacklist.begin(), blacklist.end(), [this](const string& s) {
+    // remove excluded words whose autolinking breaks
+    // Markdown structure (like e.g. http:// in links)
+    for(const string& s:this->excludedWords) {
         trie->removeWord(s);
-    });
+    }
 
     // IMPROVE: add also tags
 
 #ifdef DO_MF_DEBUG
     auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("[Autolinking] trie w/ " << size << " things updated in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
+    MF_DEBUG(
+        "[Autolinking] trie w/ " << size << " things updated in: "
+        << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
 #endif
 }
 
