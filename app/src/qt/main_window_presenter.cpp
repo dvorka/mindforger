@@ -930,7 +930,14 @@ void MainWindowPresenter::doActionFindOutlineByName(const std::string& phrase)
 void MainWindowPresenter::handleFindOutlineByName()
 {
     if(findOutlineByNameDialog->getChoice()) {
-        orloj->showFacetOutline((Outline*)findOutlineByNameDialog->getChoice());
+        Outline* o = (Outline*)findOutlineByNameDialog->getChoice();
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+            orloj->getOutlinesMap()->selectRowByOutlineKey(o->getKey());
+            return;
+        } else {
+            orloj->showFacetOutline(o);
+        }
+
         // IMPROVE make this more efficient
         statusBar->showInfo(QString(tr("Notebook "))+QString::fromStdString(findOutlineByNameDialog->getChoice()->getName()));
     } else {

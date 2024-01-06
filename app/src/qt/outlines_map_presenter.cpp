@@ -167,10 +167,10 @@ void OutlinesMapPresenter::clearSelection()
     view->clearSelection();
 }
 
-void OutlinesMapPresenter::selectRowByNote(const Note* note)
+void OutlinesMapPresenter::selectRowByOutlineKey(const string& outlineKey)
 {
-    if(note) {
-        int row = model->getRowByNote(note);
+    if(outlineKey.size()) {
+        int row = model->getRowByOutlineKey(outlineKey);
         if(row >= 0) {
             view->selectRow(row);
             view->scrollTo(model->index(row, 0));

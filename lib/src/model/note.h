@@ -34,6 +34,12 @@ namespace m8r {
 
 class Outline;
 
+// Outline key - resolved O path which may change if the repository is moved
+constexpr const auto LINK_NAME_OUTLINE_KEY = "Outline key";
+// Outline path - relative O path which can be used to create valid absolute O path on map load
+constexpr const auto LINK_NAME_OUTLINE_PATH = "Outline path";
+// ^ const in constexpr ensures const value
+
 /**
  * @brief Note - a thought.
  *

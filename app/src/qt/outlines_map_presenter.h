@@ -99,7 +99,7 @@ public:
 
     void clearSelection();
     void focus() { view->setFocus(); }
-    void selectRowByNote(const Note* note);
+    void selectRowByOutlineKey(const std::string &outlineKey);
 
     int getCurrentRow() const;
     Note* getCurrentNote() const;

@@ -110,9 +110,24 @@ int OutlinesMapModel::insertNote(Note* note)
 
 int OutlinesMapModel::getRowByNote(const Note* note)
 {
-    for(int row = 0; row<rowCount(); row++) {
+     for(int row = 0; row<rowCount(); row++) {
         if(item(row)->data().value<Note*>() == note) {
-            return row;
+             return row;
+         }
+     }
+    return NO_INDEX;
+}
+
+int OutlinesMapModel::getRowByOutlineKey(const string& outlineKey)
+{
+    for(int row = 0; row<rowCount(); row++) {
+        Note* n = item(row)->data().value<Note*>();
+        Link* oLink = n->getLinkByName(LINK_NAME_OUTLINE_KEY);
+        if(oLink) {
+            string oKey{oLink->getUrl()};
+            if(oKey == outlineKey) {
+                return row;
+            }
         }
     }
     return NO_INDEX;
