@@ -1032,12 +1032,19 @@ void Mind::outlinesMapSynchronize(Outline* outlinesMap)
         Link* oLink = n->getLinkByName(LINK_NAME_OUTLINE_KEY);
         if(oLink) {
             string oKey{oLink->getUrl()};
-            if(findOutlineByKey(oKey)) {
+            Outline* o = findOutlineByKey(oKey);
+            if(o) {
                 // valid O in MF & map
                 MF_DEBUG(
                     "  VALID  : " << n->getName() << endl <<
                     "           " << oKey << endl
                 );
+                // refresh N representing O (name, timestamps, ... may be changed by other views)
+                n->setName(o->getName());
+                n->setModified(o->getModified());
+                n->setModifiedPretty();
+                n->setRead(o->getRead());
+                n->setReadPretty();
                 mapOsKeys.push_back(oKey);
             } else {
                 MF_DEBUG("  INVALID (no O for link): " << n->getName() << endl);
@@ -1433,18 +1440,18 @@ unique_ptr<vector<Outline*>> Mind::findOutlineByNameFts(const string& pattern) c
     return result;
 }
 
-bool Mind::findOutlineByKey(const string& key) const
+Outline* Mind::findOutlineByKey(const string& key) const
 {
     if(key.size()) {
         vector<Outline*> outlines = memory.getOutlines();
         for(Outline* outline:outlines) {
             if(key.compare(outline->getKey()) == 0) {
-                return true;
+                return outline;
             }
         }
     }
 
-    return false;
+    return nullptr;
 }
 
 } /* namespace */

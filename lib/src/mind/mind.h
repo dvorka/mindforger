@@ -381,7 +381,7 @@ public:
      */
     std::unique_ptr<std::vector<Outline*>> findOutlineByNameFts(const std::string& pattern) const;
     //std::vector<Note*>* findNoteByNameFts(const std::string& pattern) const;
-    bool findOutlineByKey(const std::string& key) const;
+    Outline* findOutlineByKey(const std::string& key) const;
     std::vector<Note*>* findNoteFts(
             const std::string& pattern,
             const FtsSearch mode = FtsSearch::EXACT,
