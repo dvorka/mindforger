@@ -39,7 +39,8 @@ private:
     CliAndBreadcrumbsView* cliAndBreadcrumps;
 
 protected:
-    void focusOutEvent(QFocusEvent*) override;
+    virtual void focusInEvent(QFocusEvent*) override;
+    virtual void focusOutEvent(QFocusEvent*) override;
 
 public:
     QPalette PALETTE_DISABLED_TEXT;

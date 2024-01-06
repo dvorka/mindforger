@@ -243,7 +243,6 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(view.getToolBar()->actionViewNavigator, SIGNAL(triggered()), this, SLOT(doActionViewKnowledgeGraphNavigator()));
     QObject::connect(view.getToolBar()->actionViewTags, SIGNAL(triggered()), this, SLOT(doActionViewTagCloud()));
     QObject::connect(view.getToolBar()->actionViewRecentNotes, SIGNAL(triggered()), this, SLOT(doActionViewRecentNotes()));
-    QObject::connect(view.getToolBar()->actionFindFts, SIGNAL(triggered()), this, SLOT(doActionFts()));
     QObject::connect(view.getToolBar()->actionHomeOutline, SIGNAL(triggered()), this, SLOT(doActionViewHome()));
     QObject::connect(view.getToolBar()->actionThink, SIGNAL(triggered()), this, SLOT(doActionMindToggleThink()));
     QObject::connect(view.getToolBar()->actionScope, SIGNAL(triggered()), this, SLOT(doActionMindTimeTagScope()));

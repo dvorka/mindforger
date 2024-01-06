@@ -66,6 +66,17 @@ void CliView::keyPressEvent(QKeyEvent* event)
     QLineEdit::keyPressEvent(event);
 }
 
+void CliView::focusInEvent(QFocusEvent* event)
+{
+    MF_DEBUG("CLI: on focus acquired" << std::endl);
+
+    if(text() == CLI_HELP_SHADOW_TEXT) {
+        clear();
+    }
+
+    QLineEdit::focusInEvent(event);
+}
+
 void CliView::focusOutEvent(QFocusEvent* event)
 {
     MF_DEBUG("CLI: on focus lost" << std::endl);

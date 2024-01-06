@@ -53,7 +53,6 @@ public:
     QAction* actionViewNavigator;
     QAction* actionViewTags;
     QAction* actionViewRecentNotes;
-    QAction* actionFindFts;
     QAction* actionHomeOutline;
     QAction* actionThink;
     QAction* actionScope;

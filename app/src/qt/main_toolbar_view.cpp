@@ -25,9 +25,10 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
 {
     // TOOLBAR: L&F driven toolbar icons - dark vs. light
 
-    actionFindFts = addAction(
-        QIcon(":/icons/find-fts.svg"),
-        "Full-text search");
+    // REMOVED: button preceding the CLI
+    //actionFindFts = addAction(
+    //    QIcon(":/icons/find-fts.svg"),
+    //    "Full-text search");
 
     cli = new CliAndBreadcrumbsView{this};
     addWidget(cli);
