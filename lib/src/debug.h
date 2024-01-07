@@ -40,6 +40,7 @@
 
     // show WIP features
     #define MF_WIP
+    #define MF_WIP_WINGMAN
 
     // future timestamps check
     #define MF_ASSERT_WHERE " (" << __FILE__ << ":" << __LINE__ << ")"

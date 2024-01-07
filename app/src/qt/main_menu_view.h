@@ -48,9 +48,6 @@ public:
     QMenu* menuMind;
     QMenu* menuFind;
     QMenu* menuView;
-#ifdef MF_WIP_KNOW
-    QMenu* menuKnowledge;
-#endif
     QMenu* menuNavigator;
     QMenu* menuLibrary;
 #ifdef MF_WIP
@@ -81,6 +78,7 @@ public:
     QAction* actionMindRemember;
     QAction* actionMindThink;
     QAction* actionMindAutolink;
+    QAction* actionMindWingman;
     QAction* actionMindScope;
     QAction* actionMindForget;
     QAction* actionMindSnapshot;

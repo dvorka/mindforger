@@ -12,6 +12,7 @@ Big thanks to 3rd party FOSS content authors:
 * Qt Company ([Qt](https://www.qt.io/) - lib and code)
 * GitHub ([CMark GFM](https://github.com/github/cmark-gfm) - Markdown rendering - lib)
 * Kevin Hendricks, Bjoern Jacke, Lázsló Németh ([Hunspell](https://github.com/hunspell/hunspell) - spellcheck - lib)
+* Daniel Stenberg ([cURL](https://curl.se) - libcurl with GnuTLS flavor)
 * NetBSD Foundation (strptime - Windows port - lib)
 * Toni Ronkko (dirent - Windows port - lib)
 * Microsoft (getopt - Windows port - lib)

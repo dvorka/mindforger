@@ -25,6 +25,8 @@ using namespace std;
 TerminalDialog::TerminalDialog(QWidget* parent)
     : QDialog(parent)
 {
+    setWindowTitle(tr("Terminal"));
+
     cmdEdit = new MyLineEdit(this, this);
 
     cmdCompleter = new QCompleter(new QStandardItemModel(cmdEdit), this);

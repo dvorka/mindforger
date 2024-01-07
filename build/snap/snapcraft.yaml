@@ -21,6 +21,7 @@ parts:
       - libx11-xcb1  # fixes could not find or load the Qt platform plugin "xcb" in ""
       - zlib1g-dev
       - ccache
+      - libcurl4-gnutls-dev
       - libhunspell-dev
       - build-essential
       - qtbase5-dev

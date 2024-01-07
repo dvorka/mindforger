@@ -41,6 +41,7 @@
 #include "dialogs/sync_library_dialog.h"
 #include "dialogs/rm_library_dialog.h"
 #include "dialogs/run_tool_dialog.h"
+#include "dialogs/wingman_dialog.h"
 #include "dialogs/organizer_new_dialog.h"
 #include "dialogs/outline_new_dialog.h"
 #include "dialogs/note_new_dialog.h"
@@ -126,6 +127,7 @@ private:
     SyncLibraryDialog* syncLibraryDialog;
     RemoveLibraryDialog* rmLibraryDialog;
     RunToolDialog* runToolDialog;
+    WingmanDialog* wingmanDialog;
     ScopeDialog* scopeDialog;
     OrganizerNewDialog* newOrganizerDialog;
     OutlineNewDialog* newOutlineDialog;
@@ -373,6 +375,8 @@ public slots:
     void doActionSpellCheck();
     // tools toolbar
     void handleLeftToolbarAction(std::string selectedTool);
+    void doActionWingman();
+    void handlActionWingman();
     void doActionArxivToolbar();
     void doActionWikipediaToolbar();
     void doActionStackOverflowToolbar();

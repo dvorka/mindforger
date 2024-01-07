@@ -57,6 +57,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     syncLibraryDialog = new SyncLibraryDialog{&view};
     rmLibraryDialog = new RemoveLibraryDialog(&view);
     runToolDialog = new RunToolDialog{&view};
+    wingmanDialog = new WingmanDialog{&view};
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
     newOutlineDialog = new OutlineNewDialog{
@@ -2214,6 +2215,18 @@ void MainWindowPresenter::handleLeftToolbarAction(string selectedTool)
     QString command = templateText.replace(QString{TOOL_PHRASE}, phrase);
     MF_DEBUG("Run tool: command '" << command.toStdString() << "'" << endl);
     QDesktopServices::openUrl(QUrl{command});
+}
+
+void MainWindowPresenter::doActionWingman()
+{
+    MF_DEBUG("SIGNAL handled: WINGMAN dialog...");
+    this->wingmanDialog->initForMode(WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE);
+    this->wingmanDialog->show();
+}
+
+void MainWindowPresenter::handlActionWingman()
+{
+
 }
 
 void MainWindowPresenter::doActionOutlineOrNoteNew()

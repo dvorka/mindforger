@@ -103,6 +103,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindAutolink->setVisible(false);
 #endif
 
+    actionMindWingman = new QAction(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman"), mainWindow);
+    actionMindWingman->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Slash));
+    actionMindWingman->setStatusTip(tr("Activate wingman..."));
+
     // scope ... don't show any N/O older than 1Y/3M/...
     actionMindScope = new QAction(QIcon(":/menu-icons/filter.svg"), tr("S&cope"), mainWindow);
     actionMindScope->setStatusTip(tr("Don't show Notebooks and Notes older than..."));
@@ -144,18 +148,19 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addMenu(submenuMindNew);
     menuMind->addMenu(submenuMindLearn);
     menuMind->addMenu(submenuMindRelearn);
-    menuMind->addAction(actionMindScope);
-    menuMind->addAction(actionMindThink);
-    menuMind->addAction(actionMindAutolink);
     menuMind->addAction(actionMindRemember);
 #ifdef MF_WIP
     menuMind->addAction(actionMindSnapshot);
-#endif
-    menuMind->addAction(actionMindPreferences);
-#ifdef MF_WIP
     menuMind->addAction(actionMindForget);
-    menuMind->addSeparator();
 #endif
+    menuMind->addSeparator();
+    menuMind->addAction(actionMindThink);
+    menuMind->addAction(actionMindAutolink);
+    menuMind->addAction(actionMindWingman);
+    menuMind->addAction(actionMindScope);
+    menuMind->addSeparator();
+    menuMind->addAction(actionMindPreferences);
+    menuMind->addSeparator();
     menuMind->addMenu(submenuMindExport);
     menuMind->addSeparator();
     menuMind->addAction(actionExit);
@@ -275,7 +280,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewDwell->setStatusTip(tr("Open memory dwell..."));
     actionViewDwell->setEnabled(false);
 
-    actionViewCli = new QAction(QIcon(":/menu-icons/cli.svg"), tr("&Wingman"), mainWindow);
+    actionViewCli = new QAction(QIcon(":/menu-icons/cli.svg"), tr("&CLI"), mainWindow);
     actionViewCli->setShortcut(QKeySequence(Qt::ALT+Qt::Key_X));
     actionViewCli->setStatusTip(tr("Activate command line interface..."));
 
@@ -308,7 +313,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewLimbo->setEnabled(true);
 
     actionViewHoist = new QAction(
-        QIcon(":/menu-icons/hoisting.svg"), tr("Ho&isting"), mainWindow);
+        QIcon(":/menu-icons/hoisting.svg"), tr("Ho&ist"), mainWindow);
     actionViewHoist->setCheckable(true);
     actionViewHoist->setChecked(false);
     actionViewHoist->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_I));

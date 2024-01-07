@@ -2,7 +2,7 @@ Source: mindforger
 Section: utils
 Priority: optional
 Maintainer: Martin Dvorak <martin.dvorak@mindforger.com>
-Build-Depends: debhelper (>= 8.0.0), build-essential, ccache, qt5-qmake, zlib1g-dev, libhunspell-dev (>=1.6), qtbase5-dev, libqt5webkit5-dev
+Build-Depends: debhelper (>= 8.0.0), build-essential, ccache, qt5-qmake, zlib1g-dev, libcurl4-gnutls-dev, libhunspell-dev (>=1.6), qtbase5-dev, libqt5webkit5-dev
 Standards-Version: 3.9.5
 Homepage: https://github.com/dvorka/mindforger
 Vcs-Git: https://github.com/dvorka/mindforger.git

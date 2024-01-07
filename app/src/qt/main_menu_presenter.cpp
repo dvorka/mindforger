@@ -29,75 +29,52 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     // menu: mind
     QObject::connect(
         view->actionMindNewRepository, SIGNAL(triggered()),
-        mwp, SLOT(doActionMindNewRepository())
-    );
+        mwp, SLOT(doActionMindNewRepository()));
     QObject::connect(
         view->actionMindNewFile, SIGNAL(triggered()),
-        mwp, SLOT(doActionMindNewFile())
-    );
+        mwp, SLOT(doActionMindNewFile()));
+    QObject::connect(
+        view->actionMindWingman, SIGNAL(triggered()),
+        mwp, SLOT(doActionWingman()));
     QObject::connect(
         view->actionMindThink, SIGNAL(triggered()),
-        mwp, SLOT(doActionMindToggleThink())
-    );
+        mwp, SLOT(doActionMindToggleThink()));
     QObject::connect(
         view->actionMindAutolink, SIGNAL(triggered()),
-        mwp, SLOT(doActionMindToggleAutolink())
-    );
+        mwp, SLOT(doActionMindToggleAutolink()));
     QObject::connect(
         view->actionMindLearnDirectory, SIGNAL(triggered()),
-        mwp, SLOT(doActionMindLearnRepository())
-    );
+        mwp, SLOT(doActionMindLearnRepository()));
     QObject::connect(
         view->actionMindLearnRepository, SIGNAL(triggered()),
-        mwp, SLOT(doActionMindLearnRepository())
-    );
+        mwp, SLOT(doActionMindLearnRepository()));
     QObject::connect(
         view->actionMindLearnFile, SIGNAL(triggered()),
-        mwp, SLOT(doActionMindLearnFile())
-    );
+        mwp, SLOT(doActionMindLearnFile()));
     for(auto& r:config.getRepositories()) {
         view->submenuMindRelearn->addFile(QString::fromStdString(r.first));
     }
     QObject::connect(
         view->submenuMindRelearn, SIGNAL(recentFileTriggered(QString)),
-        mwp, SLOT(doActionMindRelearn(QString))
-    );
+        mwp, SLOT(doActionMindRelearn(QString)));
     QObject::connect(
         view->actionMindScope, SIGNAL(triggered()),
-        mwp, SLOT(doActionMindTimeTagScope())
-    );
+        mwp, SLOT(doActionMindTimeTagScope()));
     QObject::connect(
         view->actionMindRemember, SIGNAL(triggered()),
-        mwp, SLOT(doActionMindRemember())
-    );
+        mwp, SLOT(doActionMindRemember()));
     QObject::connect(
         view->actionMindPreferences, SIGNAL(triggered()),
-        mwp, SLOT(doActionMindPreferences())
-    );
-    QObject::connect(
-        view->actionFormatEmojis, SIGNAL(triggered()),
-        mwp, SLOT(doActionEmojisDialog())
-    );
-    QObject::connect(
-        view->actionViewTerminal, SIGNAL(triggered()),
-        mwp, SLOT(doActionViewTerminal())
-    );
-    QObject::connect(
-        view->actionViewLimbo, SIGNAL(triggered()),
-        mwp, SLOT(doActionViewLimbo())
-    );
+        mwp, SLOT(doActionMindPreferences()));
     QObject::connect(
         view->actionMindSnapshot, SIGNAL(triggered()),
-        mwp, SLOT(doActionMindSnapshot())
-    );
+        mwp, SLOT(doActionMindSnapshot()));
     QObject::connect(
         view->actionMindExportCsv, SIGNAL(triggered()),
-        mwp, SLOT(doActionMindCsvExport())
-    );
+        mwp, SLOT(doActionMindCsvExport()));
     QObject::connect(
         view->actionExit, SIGNAL(triggered()),
-        mwp, SLOT(doActionExit())
-    );
+        mwp, SLOT(doActionExit()));
 #ifdef DO_MF_DEBUG
     QObject::connect(view->actionMindHack, SIGNAL(triggered()), mwp, SLOT(doActionMindHack()));
 #endif
@@ -116,6 +93,12 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 #endif
 
     // menu: view
+    QObject::connect(
+        view->actionViewTerminal, SIGNAL(triggered()),
+        mwp, SLOT(doActionViewTerminal()));
+    QObject::connect(
+        view->actionViewLimbo, SIGNAL(triggered()),
+        mwp, SLOT(doActionViewLimbo()));
     QObject::connect(view->actionViewDashboard, SIGNAL(triggered()), mwp, SLOT(doActionViewDashboard()));
     QObject::connect(view->actionViewHome, SIGNAL(triggered()), mwp, SLOT(doActionViewHome()));
     QObject::connect(view->actionViewOrganizers, SIGNAL(triggered()), mwp, SLOT(doActionViewOrganizers()));
@@ -265,6 +248,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         mwp, SLOT(doActionSpellCheck()));
 
     // menu: format
+    QObject::connect(
+        view->actionFormatEmojis, SIGNAL(triggered()),
+        mwp, SLOT(doActionEmojisDialog()));
     QObject::connect(view->actionFormatBold, SIGNAL(triggered()), mwp, SLOT(doActionFormatBold()));
     QObject::connect(view->actionFormatItalic, SIGNAL(triggered()), mwp, SLOT(doActionFormatItalic()));
     QObject::connect(view->actionFormatCode, SIGNAL(triggered()), mwp, SLOT(doActionFormatCode()));
