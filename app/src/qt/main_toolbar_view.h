@@ -41,15 +41,8 @@ public:
     QAction* actionNewOutlineOrNote;
     QAction* actionOpenRepository;
     QAction* actionOpenFile;
-#ifdef MF_DEPRECATED
-    QAction* actionViewDashboard;
-#endif
     QAction* actionViewOutlines;
-#ifdef OLD_EISENHOWER
-    QAction* actionViewEisenhower;
-#else
     QAction* actionViewOrganizers;
-#endif
     QAction* actionViewNavigator;
     QAction* actionViewTags;
     QAction* actionViewRecentNotes;

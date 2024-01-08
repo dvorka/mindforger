@@ -119,9 +119,6 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
 
     startupLabel = new QLabel(tr("Show the following view on application start")+":", this);
     startupCombo = new QComboBox{this};
-#ifdef MF_DEPRECATED
-    startupCombo->addItem(QString{START_TO_DASHBOARD});
-#endif
     startupCombo->addItem(QString{START_TO_OUTLINES});
     startupCombo->addItem(QString{START_TO_OUTLINES_TREE});
     startupCombo->addItem(QString{START_TO_TAGS});

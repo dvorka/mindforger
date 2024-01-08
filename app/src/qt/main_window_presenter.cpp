@@ -155,10 +155,6 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(
         exportMemoryToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
     QObject::connect(
-        orloj->getDashboard()->getView()->getNavigatorDashboardlet(), SIGNAL(clickToSwitchFacet()),
-        this, SLOT(doActionViewKnowledgeGraphNavigator())
-    );
-    QObject::connect(
         orloj->getNoteEdit()->getView()->getNoteEditor(), SIGNAL(signalDnDropUrl(QString)),
         this, SLOT(doActionFormatLinkOrImage(QString))
     );
@@ -235,14 +231,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         this, SLOT(doActionMindLearnRepository())
     );
     QObject::connect(view.getToolBar()->actionOpenFile, SIGNAL(triggered()), this, SLOT(doActionMindLearnFile()));
-#ifdef MF_DEPRECATED
-    QObject::connect(view.getToolBar()->actionViewDashboard, SIGNAL(triggered()), this, SLOT(doActionViewDashboard()));
-#endif
-#ifdef ONE_ORGANIZER
-    QObject::connect(view.getToolBar()->actionViewEisenhower, SIGNAL(triggered()), this, SLOT(doActionViewOrganizer()));
-#else
     QObject::connect(view.getToolBar()->actionViewOrganizers, SIGNAL(triggered()), this, SLOT(doActionViewOrganizers()));
-#endif
     QObject::connect(view.getToolBar()->actionViewOutlines, SIGNAL(triggered()), this, SLOT(doActionViewOutlines()));
     QObject::connect(view.getToolBar()->actionViewNavigator, SIGNAL(triggered()), this, SLOT(doActionViewKnowledgeGraphNavigator()));
     QObject::connect(view.getToolBar()->actionViewTags, SIGNAL(triggered()), this, SLOT(doActionViewTagCloud()));
@@ -334,9 +323,7 @@ void MainWindowPresenter::showInitialView()
                     orloj->showFacetOutlineList(mind->getOutlines());
                 }
             } else if(config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER) {
-                if(!string{START_TO_DASHBOARD}.compare(config.getStartupView())) {
-                    orloj->showFacetDashboard();
-                } else if(!string{START_TO_OUTLINES}.compare(config.getStartupView())) {
+                if(!string{START_TO_OUTLINES}.compare(config.getStartupView())) {
                     orloj->showFacetOutlineList(mind->getOutlines());
                 } else if(!string{START_TO_OUTLINES_TREE}.compare(config.getStartupView())) {
                     orloj->showFacetOutlinesMap(mind->outlinesMapGet());
@@ -1285,13 +1272,6 @@ void MainWindowPresenter::doActionViewRecentNotes()
     vector<Note*> notes{};
     mind->getAllNotes(notes, true, config.isRecentIncludeOs());
     orloj->showFacetRecentNotes(notes);
-}
-
-void MainWindowPresenter::doActionViewDashboard()
-{
-    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-        orloj->showFacetDashboard();
-    }
 }
 
 void MainWindowPresenter::sortAndSaveOrganizersConfig()

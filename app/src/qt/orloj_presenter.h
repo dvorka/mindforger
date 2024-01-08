@@ -27,7 +27,6 @@
 #include <QtWidgets>
 
 #include "orloj_view.h"
-#include "dashboard_presenter.h"
 #include "organizers_table_presenter.h"
 #include "organizer_presenter.h"
 #include "kanban_presenter.h"
@@ -46,7 +45,6 @@
 
 namespace m8r {
 
-class DashboardPresenter;
 class OrganizersTablePresenter;
 class OrganizerPresenter;
 class KanbanPresenter;
@@ -73,10 +71,9 @@ enum OrlojPresenterFacets {
     FACET_TAG_CLOUD,              // 9
     FACET_RECENT_NOTES,           // 10
     FACET_NAVIGATOR,              // 11
-    FACET_DASHBOARD,              // 12
-    FACET_LIST_ORGANIZERS,        // 13
-    FACET_KANBAN,                 // 14
-    FACET_MAP_OUTLINES            // 15
+    FACET_LIST_ORGANIZERS,        // 12
+    FACET_KANBAN,                 // 13
+    FACET_MAP_OUTLINES            // 14
 };
 
 // aspect modifies facet
@@ -110,7 +107,6 @@ private:
     Configuration& config;
     Mind* mind;
 
-    DashboardPresenter* dashboardPresenter;
     OrganizersTablePresenter* organizersTablePresenter;
     OrganizerPresenter* organizerPresenter;
     KanbanPresenter* kanbanPresenter;
@@ -136,7 +132,6 @@ public:
     Mind* getMind() { return mind; }
 
     OrlojView* getView() const { return view; }
-    DashboardPresenter* getDashboard() const { return dashboardPresenter; }
     OrganizerPresenter* getOrganizer() const { return organizerPresenter; }
     KanbanPresenter* getKanban() const { return kanbanPresenter; }
     NavigatorPresenter* getNavigator() const { return navigatorPresenter; }
@@ -189,7 +184,6 @@ public:
      */
     void onFacetChange(const OrlojPresenterFacets targetFacet) const;
 
-    void showFacetDashboard();
     void showFacetOrganizerList(const std::vector<Organizer*>& organizers);
     void showFacetEisenhowerMatrix(
             Organizer* organizer,

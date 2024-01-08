@@ -1,12 +1,12 @@
-2024-01-??  Martin Dvorak  <martin.dvorak@mindforger.com>
+2024-02-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.0.0 - major release which removes features which are not used
       in practices and brings several new features.
     * Feature: Notebook Tree view brings ability to organize Notebooks to
       and outline.
     * Feature: Libraries bring ability to index external PDF files and generate
-      Notebooks which represent them in MindForger (update and removal of the
-      library supported as well.
+      Notebooks which represent them in MindForger. Synchronization and removal
+      of the library supported as well.
     * Feature: New left side toolbar which runs various tools
       (like Wikipedia, arXiv, StackOverflow, ...) on phrase which is the current
       context (Notebook or Note name, selected text or text under the cursor, ...)
@@ -23,6 +23,7 @@
     * Fix: Missing OOTB Eisenhower Matrix is automatically added back to
       the list of Organizers.
     * Fix: Conflicting menu keyboard shortcuts resolved.
+    * Deprecation: dashboard view removed.
 
 2023-01-15  Martin Dvorak  <martin.dvorak@mindforger.com>
 

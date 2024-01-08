@@ -326,8 +326,6 @@ HEADERS += \
     src/qt/navigator_presenter.h \
     src/qt/main_toolbar_view.h \
     src/qt/dialogs/export_file_dialog.h \
-    src/qt/dashboard_view.h \
-    src/qt/dashboard_presenter.h \
     src/qt/widgets/edit_buttons_panel.h \
     src/qt/widgets/edit_name_panel.h \
     src/qt/widgets/view_to_edit_buttons_panel.h \
@@ -454,8 +452,6 @@ SOURCES += \
     src/qt/navigator_presenter.cpp \
     src/qt/main_toolbar_view.cpp \
     src/qt/dialogs/export_file_dialog.cpp \
-    src/qt/dashboard_view.cpp \
-    src/qt/dashboard_presenter.cpp \
     src/qt/widgets/edit_buttons_panel.cpp \
     src/qt/widgets/edit_name_panel.cpp \
     src/qt/widgets/view_to_edit_buttons_panel.cpp \

@@ -177,7 +177,7 @@ public:
     // function
     Mind* getMind() const { return mind; }
 
-    // dashboard(s)
+    // hey hello!
     void showInitialView();
 
     // N view
@@ -242,7 +242,6 @@ public slots:
     void handleFtsNerEntity();
 #endif
     // view
-    void doActionViewDashboard();
     void sortAndSaveOrganizersConfig();
     void doActionViewOrganizers();
     void doActionViewOrganizer();

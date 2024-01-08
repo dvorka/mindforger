@@ -21,7 +21,6 @@
 
 #include <QtWidgets>
 
-#include "dashboard_view.h"
 #include "organizers_table_view.h"
 #include "organizer_view.h"
 #include "kanban_view.h"
@@ -62,7 +61,6 @@ class OrlojView : public QSplitter
     Q_OBJECT
 
 private:
-    DashboardView* dashboard;
     OrganizersTableView* organizersTable;
     OrganizerView* organizer;
     KanbanView* kanban;
@@ -87,7 +85,6 @@ public:
     OrlojView &operator=(const OrlojView&&) = delete;
     virtual ~OrlojView() {};
 
-    DashboardView* getDashboard() const { return dashboard; }
     OrganizerView* getOrganizer() const { return organizer; }
     OrganizersTableView* getOrganizersTable() const { return organizersTable; }
     KanbanView* getKanban() const { return kanban; }
@@ -104,11 +101,6 @@ public:
     NavigatorView* getNavigator() const { return navigator; }
 
     void setMainMenu(MainMenuView* menuView) { this->menuView=menuView; }
-
-    /**
-     * @brief Dashboard
-     */
-    void showFacetDashboard();
 
     /**
      * @brief List of Organizers

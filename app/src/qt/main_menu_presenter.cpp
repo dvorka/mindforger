@@ -99,7 +99,6 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(
         view->actionViewLimbo, SIGNAL(triggered()),
         mwp, SLOT(doActionViewLimbo()));
-    QObject::connect(view->actionViewDashboard, SIGNAL(triggered()), mwp, SLOT(doActionViewDashboard()));
     QObject::connect(view->actionViewHome, SIGNAL(triggered()), mwp, SLOT(doActionViewHome()));
     QObject::connect(view->actionViewOrganizers, SIGNAL(triggered()), mwp, SLOT(doActionViewOrganizers()));
     QObject::connect(view->actionViewOutlines, SIGNAL(triggered()), mwp, SLOT(doActionViewOutlines()));
@@ -329,14 +328,6 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
 MainMenuPresenter::~MainMenuPresenter()
 {
     // TODO deletes: actions
-}
-
-void MainMenuPresenter::showFacetDashboard()
-{
-    view->showFacetOutlineList(
-        config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY,
-        config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
-    );
 }
 
 void MainMenuPresenter::showFacetOrganizerList()

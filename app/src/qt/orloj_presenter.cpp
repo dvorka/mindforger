@@ -36,7 +36,6 @@ OrlojPresenter::OrlojPresenter(
     this->view = view;
     this->mind = mind;
 
-    this->dashboardPresenter = new DashboardPresenter(view->getDashboard(), this);
     this->organizersTablePresenter = new OrganizersTablePresenter(view->getOrganizersTable(), mainPresenter->getHtmlRepresentation());
     this->organizerPresenter = new OrganizerPresenter(view->getOrganizer(), this);
     this->kanbanPresenter = new KanbanPresenter(view->getKanban(), this);
@@ -70,11 +69,6 @@ OrlojPresenter::OrlojPresenter(
         this,
         SLOT(slotShowSelectedOutline()));
     QObject::connect(
-        view->getDashboard()->getOutlinesDashboardlet(),
-        SIGNAL(signalShowSelectedOutline()),
-        this,
-        SLOT(slotShowSelectedOutline()));
-    QObject::connect(
         view->getOutlinesMapTable(),
         SIGNAL(signalMapShowSelectedOutline()),
         this,
@@ -96,19 +90,9 @@ OrlojPresenter::OrlojPresenter(
         SIGNAL(signalShowSelectedRecentNote()),
         this,
         SLOT(slotShowSelectedRecentNote()));
-    QObject::connect(
-        view->getDashboard()->getRecentDashboardlet(),
-        SIGNAL(signalShowSelectedRecentNote()),
-        this,
-        SLOT(slotShowSelectedRecentNote()));
     // hit ENTER in Tags to view Recall by Tag detail
     QObject::connect(
         view->getTagCloud(),
-        SIGNAL(signalShowDialogForTag()),
-        this,
-        SLOT(slotShowSelectedTagRecallDialog()));
-    QObject::connect(
-        view->getDashboard()->getTagsDashboardlet(),
         SIGNAL(signalShowDialogForTag()),
         this,
         SLOT(slotShowSelectedTagRecallDialog()));
@@ -284,26 +268,6 @@ void OrlojPresenter::showFacetRecentNotes(const vector<Note*>& notes)
     setFacet(OrlojPresenterFacets::FACET_RECENT_NOTES);
     recentNotesTablePresenter->refresh(notes);
     view->showFacetRecentNotes();
-    mainPresenter->getStatusBar()->showMindStatistics();
-}
-
-void OrlojPresenter::showFacetDashboard() {
-    setFacet(OrlojPresenterFacets::FACET_DASHBOARD);
-
-    vector<Note*> allNotes{};
-    mind->getAllNotes(allNotes, true, true);
-    map<const Tag*,int> allTags{};
-    mind->getTagsCardinality(allTags);
-
-    dashboardPresenter->refresh(
-        mind->getOutlines(),
-        allNotes,
-        allTags,
-        mind->remind().getOutlineMarkdownsSize(),
-        mind->getStatistics()
-    );
-    view->showFacetDashboard();
-    mainPresenter->getMainMenu()->showFacetDashboard();
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
@@ -565,19 +529,9 @@ void OrlojPresenter::slotShowSelectedOutline()
        activeFacet!=OrlojPresenterFacets::FACET_RECENT_NOTES
       )
     {
-        int row;
-        if(activeFacet==OrlojPresenterFacets::FACET_DASHBOARD) {
-            row = dashboardPresenter->getOutlinesPresenter()->getCurrentRow();
-        } else {
-            row = outlinesTablePresenter->getCurrentRow();
-        }
+        int row = outlinesTablePresenter->getCurrentRow();
         if(row != OutlinesTablePresenter::NO_ROW) {
-            QStandardItem* item;
-            if(activeFacet==OrlojPresenterFacets::FACET_DASHBOARD) {
-                item = dashboardPresenter->getOutlinesPresenter()->getModel()->item(row);
-            } else {
-                item = outlinesTablePresenter->getModel()->item(row);
-            }
+            QStandardItem* item = outlinesTablePresenter->getModel()->item(row);
             // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
             if(item) {
                 Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
@@ -632,25 +586,13 @@ void OrlojPresenter::showFacetTagCloud()
 
 void OrlojPresenter::slotShowSelectedTagRecallDialog()
 {
-    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD
-         ||
-       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
-      )
-    {
-        int row;
-        if(activeFacet==OrlojPresenterFacets::FACET_DASHBOARD) {
-            row = dashboardPresenter->getTagsPresenter()->getCurrentRow();
-        } else {
-            row = tagCloudPresenter->getCurrentRow();
-        }
+    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD) {
+        int row = tagCloudPresenter->getCurrentRow();
         if(row != OutlinesTablePresenter::NO_ROW) {
             QStandardItem* item;
             switch(activeFacet) {
             case OrlojPresenterFacets::FACET_TAG_CLOUD:
                 item = tagCloudPresenter->getModel()->item(row);
-                break;
-            case OrlojPresenterFacets::FACET_DASHBOARD:
-                item = dashboardPresenter->getTagsPresenter()->getModel()->item(row);
                 break;
             default:
                 item = nullptr;
@@ -672,21 +614,11 @@ void OrlojPresenter::slotShowTagRecallDialog(const QItemSelection& selected, con
 {
     Q_UNUSED(deselected);
 
-    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD
-         ||
-       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
-      )
-    {
+    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD) {
         QModelIndexList indices = selected.indexes();
         if(indices.size()) {
             const QModelIndex& index = indices.at(0);
-            QStandardItem* item;
-            // TODO if 2 switch
-            if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD) {
-                item = tagCloudPresenter->getModel()->itemFromIndex(index);
-            } else {
-                item = dashboardPresenter->getTagsPresenter()->getModel()->itemFromIndex(index);
-            }
+            QStandardItem* item = tagCloudPresenter->getModel()->itemFromIndex(index);
             // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
             const Tag* tag = item->data(Qt::UserRole + 1).value<const Tag*>();
             mainPresenter->doTriggerFindNoteByTag(tag);
@@ -1004,25 +936,13 @@ void OrlojPresenter::slotGetLinksForPattern(const QString& pattern)
 
 void OrlojPresenter::slotShowSelectedRecentNote()
 {
-    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES
-         ||
-       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
-      )
-    {
-        int row;
-        if(activeFacet==OrlojPresenterFacets::FACET_DASHBOARD) {
-            row = dashboardPresenter->getRecentNotesPresenter()->getCurrentRow();
-        } else {
-            row = recentNotesTablePresenter->getCurrentRow();
-        }
+    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES) {
+        int row = recentNotesTablePresenter->getCurrentRow();
         if(row != RecentNotesTablePresenter::NO_ROW) {
             QStandardItem* item;
             switch(activeFacet) {
             case OrlojPresenterFacets::FACET_RECENT_NOTES:
                 item = recentNotesTablePresenter->getModel()->item(row);
-                break;
-            case OrlojPresenterFacets::FACET_DASHBOARD:
-                item = dashboardPresenter->getRecentNotesPresenter()->getModel()->item(row);
                 break;
             default:
                 item = nullptr;
@@ -1051,20 +971,11 @@ void OrlojPresenter::slotShowRecentNote(const QItemSelection& selected, const QI
 {
     Q_UNUSED(deselected);
 
-    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES
-         ||
-       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
-      )
-    {
+    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES) {
         QModelIndexList indices = selected.indexes();
         if(indices.size()) {
             const QModelIndex& index = indices.at(0);
-            QStandardItem* item;
-            if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES) {
-                item = recentNotesTablePresenter->getModel()->itemFromIndex(index);
-            } else {
-                item = dashboardPresenter->getRecentNotesPresenter()->getModel()->itemFromIndex(index);
-            }
+            QStandardItem* item = recentNotesTablePresenter->getModel()->itemFromIndex(index);
             // TODO make my role constant
             const Note* note = item->data(Qt::UserRole + 1).value<const Note*>();
 

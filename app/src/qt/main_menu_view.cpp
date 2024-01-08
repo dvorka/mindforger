@@ -239,9 +239,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 
     // menu: view
 
-    actionViewDashboard = new QAction(QIcon(":/menu-icons/dashboard.svg"), tr("Dashboard"), mainWindow);
-    actionViewDashboard->setStatusTip(tr("Open Dashboard..."));
-
     actionViewHome = new QAction(QIcon(":/menu-icons/home.svg"), tr("&Home Notebook"), mainWindow);
     actionViewHome->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
     actionViewHome->setStatusTip(tr("Open Home Notebook..."));
@@ -332,9 +329,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewFullscreen->setStatusTip(tr("Toggle fullscreen"));
 
     menuView = qMenuBar->addMenu(tr("&View"));
-#ifdef MF_WIP
-    menuView->addAction(actionViewDashboard);
-#endif
     menuView->addAction(actionViewHome);
 #ifdef MF_WIP
     menuView->addAction(actionViewDecks);
@@ -1087,7 +1081,6 @@ void MainMenuView::showAllMenuItems()
 #endif
 
     menuView->setEnabled(true);
-    actionViewDashboard->setEnabled(true);
     actionViewHome->setEnabled(true);
     actionViewOrganizers->setEnabled(true);
     actionViewOutlinesMap->setEnabled(true);
@@ -1192,7 +1185,6 @@ void MainMenuView::showModeAwareFacet(bool repositoryMode, bool mfMode)
         actionViewTags->setEnabled(false);
         actionViewLimbo->setEnabled(false);
 #ifdef MF_WIP
-        actionViewDashboard->setEnabled(false);
         actionViewDecks->setEnabled(false);
 #endif
 
@@ -1338,7 +1330,6 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode, bool mfMode)
     actionFindNoteByTag->setEnabled(false);
 
     menuView->setEnabled(false);
-    actionViewDashboard->setEnabled(false);
     actionViewHome->setEnabled(false);
     actionViewOrganizers->setEnabled(false);
     actionViewOutlines->setEnabled(false);
