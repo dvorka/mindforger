@@ -72,7 +72,10 @@ WingmanDialog::WingmanDialog(QWidget* parent)
     setWindowTitle(tr("Wingman"));
 
     preludeLabel = new QLabel{
-        tr("Ask Wingman a predefined prompt or type your own phrase."),
+        tr(
+            "Wingman can run a predefined or custom prompt."
+            "<br>"
+        ),
         parent
     };
 
@@ -145,6 +148,7 @@ WingmanDialog::WingmanDialog(QWidget* parent)
     buttonLayout->addWidget(runButton);
     buttonLayout->addStretch();
 
+    mainLayout->addWidget(preludeLabel);
     mainLayout->addWidget(promptsGroup);
     mainLayout->addWidget(contentGroup);
     mainLayout->addLayout(buttonLayout);

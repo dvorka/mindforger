@@ -2304,7 +2304,7 @@ void MainWindowPresenter::handleActionWingman()
         wingmanAnswer
     );
 
-    TODO continue here
+    // TODO TODO TODO continue here
 }
 
 void MainWindowPresenter::doActionOutlineOrNoteNew()
