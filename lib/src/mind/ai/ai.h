@@ -29,9 +29,6 @@
 #include "./aa_model.h"
 #include "./ai_aa_weighted_fts.h"
 #include "./ai_aa_bow.h"
-#ifdef MF_NER
-    #include "./nlp/named_entity_recognition.h"
-#endif
 
 namespace m8r {
 
@@ -76,14 +73,6 @@ private:
     // Associations assessment implemenations: AA @ weighted FTS, AA @ BoW
     AiAssociationsAssessment* aa;
 
-#ifdef MF_NER
-    /*
-     * Named-entity recognition (NER)
-     */
-
-    NamedEntityRecognition ner;
-#endif
-
     /*
      * Neural network models
      */
@@ -127,17 +116,6 @@ public:
         return aa->getAssociatedNotes(words, associations, self);
     }
 
-#ifdef MF_NER
-    bool isNerInitialized() const { return ner.isInitialized(); }
-
-    /**
-     * @brief Recognize person names in O.
-     */
-    void recognizePersons(const Outline* outline, int entityFilter, std::vector<NerNamedEntity>& result) {
-        ner.recognizePersons(outline, entityFilter, result);
-    }
-#endif
-
     /**
      * @brief Clear, but don't deallocate.
      *
@@ -162,17 +140,6 @@ private:
      * @brief Train associations assessment neural network once memory is learned.
      */
     void trainAaNn();
-
-public:
-#ifdef DO_MF_DEBUG
-    static void print(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard) {
-        std::cout << "Note '" << n->getName() << "' AA leaderboard("<< leaderboard.size() <<"):" << std::endl;
-        int i=1;
-        for(auto& nn:leaderboard) {
-            std::cout << "  #" << i++ << " '" << nn.first->getName() << "' ~ " << nn.second << std::endl;
-        }
-    }
-#endif
 };
 
 }

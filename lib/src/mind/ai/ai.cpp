@@ -23,9 +23,6 @@ namespace m8r {
 using namespace std;
 
 Ai::Ai(Memory& memory, Mind& mind)
-#ifdef MF_NER
-    : ner{}
-#endif
 {
     switch(Configuration::getInstance().getAaAlgorithm()) {
     case Configuration::AssociationAssessmentAlgorithm::BOW:
@@ -37,12 +34,6 @@ Ai::Ai(Memory& memory, Mind& mind)
     default:
         aa = nullptr;
     }
-
-#ifdef MF_NER
-    // TODO get MODEL location from configuration
-    static std::string nerModelPath{"/home/dvorka/p/mindforger/lab/ner/MITIE/MITIE-models/english/ner_model.dat"};
-    ner.setNerModel(nerModelPath);
-#endif
 }
 
 Ai::~Ai()

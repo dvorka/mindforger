@@ -206,20 +206,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionFindDocByName->setStatusTip(tr("Find Document by name"));
 #endif
 
-#ifdef MF_NER
-    actionFindNerPersons = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall &Persons"), mainWindow);
-    actionFindNerPersons->setStatusTip(tr("Find persons using Named-entity recognition (NER)"));
-
-    actionFindNerLocations = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall &Locations"), mainWindow);
-    actionFindNerLocations->setStatusTip(tr("Find locations using Named-entity recognition (NER)"));
-
-    actionFindNerOrganizations = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Organizations"), mainWindow);
-    actionFindNerOrganizations->setStatusTip(tr("Find organizations using Named-entity recognition (NER)"));
-
-    actionFindNerMisc = new QAction(QIcon(":/menu-icons/find.svg"), tr("Recall Other Entities"), mainWindow);
-    actionFindNerMisc->setStatusTip(tr("Find miscellaneous entities using Named-entity recognition (NER)"));
-#endif
-
     menuFind = qMenuBar->addMenu(tr("&Recall"));
     menuFind->addAction(actionFindFts);
     menuFind->addAction(actionFindOutlineByName);
@@ -228,13 +214,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuFind->addAction(actionFindNoteByTag);
 #ifdef MF_WIP
     menuFind->addAction(actionFindDocByName);
-#endif
-#ifdef MF_NER
-    menuFind->addSeparator();
-    menuFind->addAction(actionFindNerPersons);
-    menuFind->addAction(actionFindNerLocations);
-    menuFind->addAction(actionFindNerOrganizations);
-    menuFind->addAction(actionFindNerMisc);
 #endif
 
     // menu: view

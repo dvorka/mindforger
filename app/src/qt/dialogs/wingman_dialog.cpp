@@ -44,6 +44,7 @@ const vector<QString> WingmanDialog::notePrompts(
         QString{"Rewrite to be funny."},
         QString{"Chat with the content."},
         // other UCs:
+        // - NER UCs
         // - simplify
         // - beautify
         // - translate

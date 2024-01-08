@@ -41,13 +41,6 @@ win32 {
  DEPENDPATH += $$PWD/../deps/zlib-win/include
 }
 
-# DEPRECATED: Mitie (NER library)
-mfner {
-    DEFINES += MF_NER
-    INCLUDEPATH += $$PWD/../deps/mitie/mitielib/include
-    DEPENDPATH += $$PWD/../deps/mitie/mitielib/include
-}
-
 # debug
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
@@ -160,13 +153,6 @@ SOURCES += \
 !mfnomd2html {
     SOURCES += \
     src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.cpp
-}
-
-# DEPRECATED: Mitie (NER library)
-mfner {
-    SOURCES += \
-    src/mind/ai/nlp/named_entity_recognition.cpp \
-    src/mind/ai/nlp/ner_named_entity.cpp
 }
 
 HEADERS += \
@@ -301,13 +287,6 @@ HEADERS += \
 !mfnomd2html {
     SOURCES += \
     src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h
-}
-
-# DEPRECATED: Mitie (NER library)
-mfner {
-    HEADERS += \
-    src/mind/ai/nlp/named_entity_recognition.h \
-    src/mind/ai/nlp/ner_named_entity.h
 }
 
 win32 {

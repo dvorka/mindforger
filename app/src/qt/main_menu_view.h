@@ -96,12 +96,6 @@ public:
 #ifdef MF_WIP
     QAction* actionFindDocByName;
 #endif
-#ifdef MF_NER
-    QAction* actionFindNerPersons;
-    QAction* actionFindNerLocations;
-    QAction* actionFindNerOrganizations;
-    QAction* actionFindNerMisc;
-#endif
 
     // menu: View
     QAction* actionViewHome;

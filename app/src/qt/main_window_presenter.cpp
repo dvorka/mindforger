@@ -93,10 +93,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
              QString::fromStdString(File::EXTENSION_CSV),
              &view
     );
-#ifdef MF_NER
-    nerChooseTagsDialog = new NerChooseTagTypesDialog(&view);
-    nerResultDialog = new NerResultDialog(&view);
-#endif
+
     // show/hide widgets based on configuration
     handleMindPreferences();
 
@@ -249,21 +246,11 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         this, SLOT(slotMainToolbarVisibilityChanged(bool))
     );
 
-
-#ifdef MF_NER
-    QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleFindNerEntities()));
-    QObject::connect(nerResultDialog, SIGNAL(choiceFinished()), this, SLOT(handleFtsNerEntity()));
-#endif
-
     // async task 2 GUI events distributor
     distributor = new AsyncTaskNotificationsDistributor(this);
     // setup callback for cleanup when it finishes
     QObject::connect(distributor, SIGNAL(finished()), distributor, SLOT(deleteLater()));
     distributor->start();
-#ifdef MF_NER
-    // NER worker
-    nerWorker = nullptr;
-#endif
 
     // send signal to components to be updated on a configuration change
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
@@ -1111,161 +1098,6 @@ void MainWindowPresenter::handleFindNoteByName()
         statusBar->showInfo(QString(tr("Note not found")+": ") += findNoteByNameDialog->getSearchedString());
     }
 }
-
-#ifdef MF_NER
-
-void MainWindowPresenter::doActionFindNerPersons()
-{
-    if(orloj->isFacetActiveOutlineManagement()) {
-        nerChooseTagsDialog->clearCheckboxes();
-        nerChooseTagsDialog->getPersonsCheckbox()->setChecked(true);
-        nerChooseTagsDialog->show();
-    } else {
-        statusBar->showInfo(tr("Initializing NER and predicting..."));
-        QMessageBox::critical(&view, tr("NER"), tr("Memory NER not implemented yet."));
-    }
-}
-void MainWindowPresenter::doActionFindNerLocations()
-{
-    if(orloj->isFacetActiveOutlineManagement()) {
-        nerChooseTagsDialog->clearCheckboxes();
-        nerChooseTagsDialog->getLocationsCheckbox()->setChecked(true);
-        nerChooseTagsDialog->show();
-    } else {
-        statusBar->showInfo(tr("Initializing NER and predicting..."));
-        QMessageBox::critical(&view, tr("NER"), tr("Memory NER not implemented yet."));
-    }
-}
-void MainWindowPresenter::doActionFindNerOrganizations()
-{
-    if(orloj->isFacetActiveOutlineManagement()) {
-        nerChooseTagsDialog->clearCheckboxes();
-        nerChooseTagsDialog->getOrganizationsCheckbox()->setChecked(true);
-        nerChooseTagsDialog->show();
-    } else {
-        statusBar->showInfo(tr("Initializing NER and predicting..."));
-        QMessageBox::critical(&view, tr("NER"), tr("Memory NER not implemented yet."));
-    }
-}
-void MainWindowPresenter::doActionFindNerMisc()
-{
-    if(orloj->isFacetActiveOutlineManagement()) {
-        nerChooseTagsDialog->clearCheckboxes();
-        nerChooseTagsDialog->getMiscCheckbox()->setChecked(true);
-        nerChooseTagsDialog->show();
-    } else {
-        statusBar->showInfo(tr("Initializing NER and predicting..."));
-        QMessageBox::critical(&view, tr("NER"), tr("Memory NER not implemented yet."));
-    }
-}
-
-NerMainWindowWorkerThread* MainWindowPresenter::startNerWorkerThread(
-        Mind* m,
-        OrlojPresenter* o,
-        int f,
-        std::vector<NerNamedEntity>* r,
-        QDialog* d)
-{
-    QThread* thread = new QThread;
-    NerMainWindowWorkerThread* worker
-        = new NerMainWindowWorkerThread(thread, m, o, f, r, d);
-
-    // signals
-    worker->moveToThread(thread);
-    // TODO implement dialog w/ error handling - QObject::connect(worker, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
-    QObject::connect(thread, SIGNAL(started()), worker, SLOT(process()));
-    // open dialog to choose from result(s)
-    QObject::connect(worker, SIGNAL(finished()), this, SLOT(handleChooseNerEntityResult()));
-    // worker's finished signal quits thread ~ thread CANNOT be reused
-    QObject::connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
-    // schedule thread for automatic deletion by Qt - I delete worker myself
-    //QObject::connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
-    QObject::connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-
-    thread->start();
-
-    return worker;
-}
-
-// handleFindNerPerson() -> handleChooseNerEntityResult() -> handleFtsNerEntity()
-void MainWindowPresenter::handleFindNerEntities()
-{
-    nerChooseTagsDialog->hide();
-
-    int entityFilter{};
-    entityFilter =
-          (nerChooseTagsDialog->getPersonsCheckbox()->isChecked()?NerNamedEntityType::PERSON:0) |
-          (nerChooseTagsDialog->getLocationsCheckbox()->isChecked()?NerNamedEntityType::LOCATION:0) |
-          (nerChooseTagsDialog->getOrganizationsCheckbox()->isChecked()?NerNamedEntityType::ORGANIZATION:0) |
-          (nerChooseTagsDialog->getMiscCheckbox()->isChecked()?NerNamedEntityType::MISC:0);
-
-    MF_DEBUG("Named-entity type filter: " << entityFilter << endl);
-
-    vector<NerNamedEntity>* result
-        = new vector<NerNamedEntity>{};
-    if(mind->isNerInitilized()) {
-        statusBar->showInfo(tr("Recognizing named entities..."));
-
-        mind->recognizePersons(orloj->getOutlineView()->getCurrentOutline(), entityFilter, *result);
-
-        chooseNerEntityResult(result);
-    } else {
-        statusBar->showInfo(tr("Initializing NER and recognizing named entities..."));
-
-        // launch async worker
-        QDialog* progressDialog
-            = new QDialog{&view};
-        nerWorker
-            = startNerWorkerThread(mind, orloj, entityFilter, result, progressDialog);
-
-        // show PROGRESS dialog - will be closed by worker
-        QVBoxLayout* mainLayout = new QVBoxLayout{};
-        QLabel* l = new QLabel{tr(" Initializing (the first run only) NER and predicting... ")};
-        mainLayout->addWidget(l);
-        progressDialog->setLayout(mainLayout);
-        progressDialog->setWindowTitle(tr("Named-entity Recognition"));
-        //progressDialog->resize(fontMetrics().averageCharWidth()*35, height());
-        //progressDialog->setModal(true);
-        progressDialog->update();
-        progressDialog->activateWindow();
-        progressDialog->show();
-        // dialog is deleted by worker thread
-    }
-}
-
-void MainWindowPresenter::chooseNerEntityResult(vector<NerNamedEntity>* nerEntities)
-{
-    MF_DEBUG("Showing NER results to choose one entity for FTS..." << endl);
-    statusBar->showInfo(tr("NER predicition finished"));
-
-    if(nerEntities && nerEntities->size()) {
-        nerResultDialog->show(*nerEntities);
-    } else {
-        QMessageBox::information(&view, tr("Named-entity Recognition"), tr("No named entities recognized."));
-    }
-}
-
-void MainWindowPresenter::handleChooseNerEntityResult()
-{
-    vector<NerNamedEntity>* nerEntities = nerWorker->getResult();
-    chooseNerEntityResult(nerEntities);
-
-    // cleanup: thread is deleted by Qt (deleteLater() signal)
-    delete nerEntities;
-    delete nerWorker;
-}
-
-void MainWindowPresenter::handleFtsNerEntity()
-{
-    if(nerResultDialog->getChoice().size()) {
-        executeFts(
-            nerResultDialog->getChoice(),
-            false,
-            orloj->getOutlineView()->getCurrentOutline());
-    }
-}
-
-#endif
 
 void MainWindowPresenter::doActionViewRecentNotes()
 {

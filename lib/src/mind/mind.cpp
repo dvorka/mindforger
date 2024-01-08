@@ -1408,23 +1408,6 @@ MindStatistics* Mind::getStatistics()
     return stats;
 }
 
-/*
- * NER
- */
-
-#ifdef MF_NER
-
-bool Mind::isNerInitilized() const
-{
-    return ai->isNerInitialized();
-}
-
-void Mind::recognizePersons(const Outline* outline, int entityFilter, std::vector<NerNamedEntity>& result) {
-    ai->recognizePersons(outline, entityFilter, result);
-}
-
-#endif
-
 // unique_ptr template BREAKS Qt Developer indentation > stored at EOF
 unique_ptr<vector<Outline*>> Mind::findOutlineByNameFts(const string& pattern) const
 {

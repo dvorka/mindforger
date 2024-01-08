@@ -36,9 +36,6 @@
 #include "../config/configuration.h"
 #include "../representations/representation_interceptor.h"
 #include "../representations/markdown/markdown_configuration_representation.h"
-#ifdef MF_NER
-    #include "ai/nlp/named_entity_recognition.h"
-#endif
 
 namespace m8r {
 
@@ -329,17 +326,6 @@ public:
     KnowledgeGraph* getKnowledgeGraph() const { return knowledgeGraph; }
 
     size_t getTriplesCount() const { return triples.size(); }
-
-#ifdef MF_NER
-
-    /*
-     * NRE
-     */
-
-    bool isNerInitilized() const;
-    void recognizePersons(const Outline* outline, int entityFilter, std::vector<NerNamedEntity>& result);
-
-#endif
 
     /*
      * REMEMBERING

@@ -58,15 +58,6 @@ mfoldhunspell | equals(OS_DISTRO_VERSION, "Windows") | equals(OS_DISTRO_VERSION,
   message("Hunspell: configuring use of NEW API on OS: $$OS_DISTRO_VERSION")
 }
 
-mfllamacpp {
-    DEFINES += MF_LLAMA_CPP
-}
-
-# Named Entity Recognition
-mfner {
-  DEFINES += MF_NER
-}
-
 # webkit is supposed to be OBSOLETED by webengine, but webengine is disabled
 # on Linux since Qt 5.9 due to its tragic performance -> conditional compilation
 # seems to be the only way:
@@ -125,12 +116,6 @@ win32 {
     LIBS += -L$$PWD/../deps/cmark-gfm/build/extensions -lcmark-gfm-extensions
     LIBS += -L$$PWD/../deps/cmark-gfm/build/src -lcmark-gfm
   }
-}
-
-# NER library
-mfner {
-  # MF links MITIE for AI/NLP/DL
-  LIBS += -L$$OUT_PWD/../deps/mitie/mitielib -lmitie
 }
 
 # Zlib
@@ -337,14 +322,6 @@ HEADERS += \
 win32|macx|mfwebengine {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
 }
-mfner {
-    HEADERS += \
-    src/qt/dialogs/ner_choose_tag_types_dialog.h \
-    src/qt/dialogs/ner_result_dialog.h \
-    src/qt/ner_leaderboard_model.h \
-    src/qt/ner_leaderboard_view.h \
-    src/qt/ner_main_window_worker_thread.h
-}
 
 SOURCES += \
     ./src/qt/mindforger.cpp \
@@ -461,15 +438,6 @@ SOURCES += \
 
 win32|macx|mfwebengine {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp
-}
-
-mfner {
-    SOURCES += \
-    src/qt/dialogs/ner_choose_tag_types_dialog.cpp \
-    src/qt/dialogs/ner_result_dialog.cpp \
-    src/qt/ner_leaderboard_model.cpp \
-    src/qt/ner_leaderboard_view.cpp \
-    src/qt/ner_main_window_worker_thread.cpp
 }
 
 win32 {

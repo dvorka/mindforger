@@ -30,9 +30,6 @@
 #include "main_menu_presenter.h"
 
 #include "gear/async_task_notifications_distributor.h"
-#ifdef MF_NER
-    #include "ner_main_window_worker_thread.h"
-#endif
 #include "cli_n_breadcrumbs_presenter.h"
 #include "orloj_presenter.h"
 #include "status_bar_presenter.h"
@@ -61,8 +58,6 @@
 #include "dialogs/terminal_dialog.h"
 #include "dialogs/export_csv_file_dialog.h"
 #include "dialogs/export_file_dialog.h"
-#include "dialogs/ner_choose_tag_types_dialog.h"
-#include "dialogs/ner_result_dialog.h"
 
 #include <QtWidgets>
 #include <QtConcurrent/QtConcurrent>
@@ -108,9 +103,6 @@ private:
     Mind* mind;
 
     AsyncTaskNotificationsDistributor* distributor;
-#ifdef MF_NER
-    NerMainWindowWorkerThread* nerWorker;
-#endif
 
     MarkdownOutlineRepresentation* mdRepresentation;
     HtmlOutlineRepresentation* htmlRepresentation;
@@ -149,8 +141,6 @@ private:
     NewFileDialog* newFileDialog;
     ExportFileDialog* exportOutlineToHtmlDialog;
     ExportCsvFileDialog* exportMemoryToCsvDialog;
-    NerChooseTagTypesDialog *nerChooseTagsDialog;
-    NerResultDialog* nerResultDialog;
 
 public:
     explicit MainWindowPresenter(MainWindowView& view);
@@ -182,15 +172,6 @@ public:
 
     // N view
     void handleNoteViewLinkClicked(const QUrl& url);
-
-    // NER
-    NerMainWindowWorkerThread* startNerWorkerThread(
-        Mind* m,
-        OrlojPresenter* o,
-        int f,
-        std::vector<NerNamedEntity>* r,
-        QDialog* d
-    );
 
 public slots:
     // mind
@@ -231,16 +212,6 @@ public slots:
     void doTriggerFindNoteByTag(const m8r::Tag* tag);
     void doSwitchFindByTagDialog(bool toFindNotesByTag);
     void handleFindNoteByTag();
-#ifdef MF_NER
-    void doActionFindNerPersons();
-    void doActionFindNerLocations();
-    void doActionFindNerOrganizations();
-    void doActionFindNerMisc();
-    void handleFindNerEntities();
-    void chooseNerEntityResult(vector<NerNamedEntity>*);
-    void handleChooseNerEntityResult();
-    void handleFtsNerEntity();
-#endif
     // view
     void sortAndSaveOrganizersConfig();
     void doActionViewOrganizers();
