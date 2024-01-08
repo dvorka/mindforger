@@ -169,6 +169,12 @@ run-dev: build-dev ## run MindForger development build
 # install
 #
 
+
+.PHONY: devenv-debian
+devenv-debian:
+	sudo apt-get install build-essential zlib1g-dev libcurl4-gnutls-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools ccache cmake debhelper
+
+
 install-dev-local: ../deps/cmark-gfm/build ../Makefile ../lib/tests/Makefile clean build-rc ## install MindForger RC build to ~/bin as 'mind' executable
 	cp -vf ../app/mindforger ~/bin
 	mv -vf ~/bin/mindforger ~/bin/mind
@@ -241,9 +247,59 @@ dist-dmg: ## build macOS Disk iMaGe .dmg package
 	cd macos && ./mindforger-build.sh && ./dmg-package-build.sh
 
 
+#
+# Debian
+#
+# MindForger PPA: https://www.mindforger.com/debian is managed by aptly
+#
+# - information about MindForger's Debian PPAs can be found in
+#   https://www.mindforger.com/debian/index.html
+#
+# - aptly CANNOT be used to build one PPA for all Debian releases
+#   therefore every release has it's own PPA
+#
+# - the structure looks like this (from deprecated debian/ to new debian-ppa/):
+#
+#   https://www.mindforger.com/debian-ppa/
+#     stretch/
+#       dists/      ... export from ~/.aptly/public
+#       pool/
+#       index.html  ... created by me w/ how to set it up
+#     ...
+#     trixie/
+#       dists/      ... export from ~/.aptly/public
+#       pool/
+#       index.html  ... created by me w/ how to set it up
+#
+# - source Debian packages for every version (which are used by aptly)
+#   are stored in
+#
+#   ~/p/mindforger/debian/aptly/
+#     hstr/
+#       9-stretch/
+#       ...
+#       13-trixie/
+#     mindforger/
+#       9-stretch/
+#         mindforger-*.*.*.deb
+#       ...
+#       13-trixie/
+#         mindforger-*.*.*.deb
+#
+# - Makefile targets below are used to manage Debian PPAs and generate them
+#
+
+# future repos  : trixie-main
+# CURRENT repos : bookworm-main, bullseye-main, buster-main, stretch-main
+# obsolete repos: jessie-main
+
 .PHONY: dist-debian-ppa
-dist-debian-ppa: ## add .deb to aptly PPA
-	cd debian && ./debian-aptly-add-deb.sh
+dist-debian-aptly-create-ppa:  ## create Debian PPA for current Debian release: DISTRO=bullseye
+	cd ./build/debian && ./debian-ppa-aptly-build.sh
+
+#
+# ^ Debian
+#
 
 
 .PHONY: dist-ubuntu-deb

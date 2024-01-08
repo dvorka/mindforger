@@ -10,10 +10,10 @@
 <a href="https://twitter.com/intent/follow?screen_name=mindforger"><img src="https://img.shields.io/twitter/follow/mindforger.svg?style=social&logo=twitter" alt="follow on Twitter"></a>
 <!-- [![Documentation](https://img.shields.io/badge/project-documentation-blue.svg)](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md) -->
 
-Are you **drowning** in **information**, but **starving** for **knowledge**? Where do you keep your **private remarks** 
-like ideas, personal plans, gift tips, how-tos, dreams, business vision, finance strategy, auto 
-coaching notes? Loads of documents, sketches and remarks spread around the file system, cloud, 
-web and Post-it notes? Are you afraid of your knowledge **privacy**? Are you able to **find** them once you create them? 
+Are you **drowning** in **information**, but **starving** for **knowledge**? Where do you keep your **private remarks**
+like ideas, personal plans, gift tips, how-tos, dreams, business vision, finance strategy, auto
+coaching notes? Loads of documents, sketches and remarks spread around the file system, cloud,
+web and Post-it notes? Are you afraid of your knowledge **privacy**? Are you able to **find** them once you create them?
 Do you know how are they mutually **related** when you read or write them? No?
 
 https://www.mindforger.com
@@ -21,7 +21,7 @@ https://www.mindforger.com
 ## Markdown Editor
 ![MindForger](http://www.mindforger.com/github/github-markdown-ide.png?)
 
-MindForger is open, free, well performing Markdown editor which respects your privacy and enables security. 
+MindForger is open, free, well performing Markdown editor which respects your privacy and enables security.
 
 ## Thinking Notebook
 ![MindForger](http://www.mindforger.com/github/github-thinking-notebook.png)
@@ -34,7 +34,7 @@ Install:
 * [macOS](https://github.com/dvorka/mindforger/wiki/Installation#macos)
 * [Windows](https://github.com/dvorka/mindforger/wiki/Installation#windows)
 * [Ubuntu](https://github.com/dvorka/mindforger/wiki/Installation#ubuntu)
-* [Debian](https://github.com/dvorka/mindforger/wiki/Installation#windows)
+* [Debian](https://github.com/dvorka/mindforger/wiki/Installation#debian)
 * [Fedora](https://github.com/dvorka/mindforger/wiki/Installation#fedora)
 * [FreeBSD](https://github.com/dvorka/mindforger/wiki/Installation#freebsd)
 * [Arch Linux](https://github.com/dvorka/mindforger/wiki/Installation#arch-linux)
