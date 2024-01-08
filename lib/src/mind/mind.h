@@ -28,6 +28,8 @@
 #include "memory.h"
 #include "knowledge_graph.h"
 #include "ai/ai.h"
+#include "ai/llm/wingman.h"
+#include "ai/llm/mock_wingman.h"
 #include "associated_notes.h"
 #include "ontology/thing_class_rel_triple.h"
 #include "aspect/mind_scope_aspect.h"
@@ -194,6 +196,11 @@ private:
      * Where the mind thinks.
      */
     Ai* ai;
+
+    /**
+     * Wingman
+     */
+    Wingman* wingman;
 
     /**
      * @brief Knowledge graph mind representation.
@@ -678,6 +685,11 @@ public:
      * @brief Actions to perform on N rename.
      */
     void noteOnRename(const std::string& oldName, const std::string& newName);
+
+    /*
+     * WINGMAN
+     */
+    void wingmanSummarize(const std::string& text, std::string& summary);
 
     /*
      * DIAGNOSTICS

@@ -1,5 +1,5 @@
 /*
- mock_wingman.h     MindForger thinking notebook
+ llamacpp_wingman.h     MindForger thinking notebook
 
  Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,28 +16,34 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_MOCK_WINGMAN_H
-#define M8R_MOCK_WINGMAN_H
-
-#include "wingman.h"
+#ifndef M8R_LLAMACPP_WINGMAN_H
+#define M8R_LLAMACPP_WINGMAN_H
 
 namespace m8r {
 
 /**
- * Mock Wingman implementation.
+ * llama.cpp Wingman implementation.
+ *
+ * LLM models to use:
+ *
+ * - llama 7B
+ *   - llama-2-7b.Q4_0.gguf
+ * - Zephir 7B
+ *   - ?.gguf
+ * - Mistral 7B
+ *   - ?.gguf
+ *
  */
-class MockWingman: Wingman
+class LlamaCppWingman
 {
 public:
-    explicit MockWingman();
-    MockWingman(const MockWingman&) = delete;
-    MockWingman(const MockWingman&&) = delete;
-    MockWingman& operator =(const MockWingman&) = delete;
-    MockWingman& operator =(const MockWingman&&) = delete;
-    ~MockWingman();
-
-    virtual void summarize(const std::string& text, std::string& summary) override;
+    explicit LlamaCppWingman();
+    LlamaCppWingman(const LlamaCppWingman&) = delete;
+    LlamaCppWingman(const LlamaCppWingman&&) = delete;
+    LlamaCppWingman& operator =(const LlamaCppWingman&) = delete;
+    LlamaCppWingman& operator =(const LlamaCppWingman&&) = delete;
+    ~LlamaCppWingman();
 };
 
 }
-#endif // M8R_MOCK_WINGMAN_H
+#endif // M8R_LLAMACPP_WINGMAN_H

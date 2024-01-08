@@ -24,8 +24,44 @@ using namespace std;
 
 const vector<QString> WingmanDialog::outlinePrompts(
     {
-        QString{"http"},
-        QString{"https"}
+        QString{"Summarize."},
+        QString{"Generate tags from the text."},
+        QString{"Find persons."},
+        QString{"Find locations."},
+        QString{"Find organizations."},
+        QString{"Chat with the content."},
+    }
+);
+const vector<QString> WingmanDialog::notePrompts(
+    {
+        QString{"Summarize."},
+        QString{"Shorten."},
+        QString{"Explain #NAME like I'm 5."},
+        QString{"Generate tags."},
+        QString{"Fix grammar."},
+        QString{"Rewrite formally."},
+        QString{"Rewrite informally."},
+        QString{"Rewrite to be funny."},
+        QString{"Chat with the content."},
+        // other UCs:
+        // - simplify
+        // - beautify
+        // - translate
+        // - fix spelling
+        // - fix style
+        // - create plan ...
+    }
+);
+const vector<QString> WingmanDialog::textPrompts(
+    {
+        QString{"Complete the text."},
+        QString{"Complete the last text line."},
+        QString{"Explain like I'm 5."},
+        QString{"Fix grammar."},
+        QString{"Generate tags."},
+        QString{"Rewrite formally."},
+        QString{"Rewrite informally."},
+        QString{"Rewrite to Kafka style."},
     }
 );
 
@@ -35,23 +71,63 @@ WingmanDialog::WingmanDialog(QWidget* parent)
     // UI
     setWindowTitle(tr("Wingman"));
 
-    phraseLabel = new QLabel{tr("Entity:"), parent};
-    phraseEdit = new QLineEdit{parent};
-    // TODO O, N, text ~ get prefix in
+    preludeLabel = new QLabel{
+        tr("Ask Wingman a predefined prompt or type your own phrase."),
+        parent
+    };
 
-    toolLabel = new QLabel{tr("Predefined prompts:"), parent};
-    toolCombo = new QComboBox{this};
+    // GROUP: prompts
+    QGroupBox* promptsGroup = new QGroupBox{tr("Prompt"), this};
+    QVBoxLayout* promptsLayout = new QVBoxLayout{this};
+
+    predefinedPromptsLabel = new QLabel{tr("Predefined:"), parent};
+    predefinedPromptsCombo = new QComboBox{this};
     for(QString toolName:outlinePrompts) {
-        toolCombo->addItem(toolName);
+        predefinedPromptsCombo->addItem(toolName);
     }
 
-    // TODO change of the tool changes the template
+    promptLabel = new QLabel{tr("Your:"), parent};
+    promptEdit = new QLineEdit{parent};
+    promptEdit->setToolTip(
+        tr("Type in your prompt like: 'Translate the following text to Spanish: #CONTENT."));
 
-    templateLabel = new QLabel{tr("Template:"), parent};
-    templateEdit = new QLineEdit{parent};
+    promptsLayout->addWidget(predefinedPromptsLabel);
+    promptsLayout->addWidget(predefinedPromptsCombo);
+    promptsLayout->addWidget(promptLabel);
+    promptsLayout->addWidget(promptEdit);
+    promptsGroup->setLayout(promptsLayout);
+
+    // GROUP: content
+    QGroupBox* contentGroup = new QGroupBox{tr("Context"), this};
+    QVBoxLayout* contentLayout = new QVBoxLayout{this};
+
+    contextTypeLabel = new QLabel{tr("Type:"), parent};
+    contextTypeEdit = new QLineEdit{parent};
+    contextTypeEdit->setReadOnly(true);
+
+    contextNameLabel = new QLabel{tr("Name (#NAME):"), parent};
+    contextNameEdit = new QLineEdit{parent};
+    contextNameEdit->setReadOnly(true);
+
+    contextLabel = new QLabel{tr("Text (#TEXT):"), parent};
+    contextEdit = new QLineEdit{parent};
+    contextEdit->setReadOnly(true);
+
+    postmortemLabel = new QLabel{
+        tr("Use #NAME or #TEXT to include it to your prompt."),
+        parent};
+
+    contentLayout->addWidget(contextTypeLabel);
+    contentLayout->addWidget(contextTypeEdit);
+    contentLayout->addWidget(contextNameLabel);
+    contentLayout->addWidget(contextNameEdit);
+    contentLayout->addWidget(contextLabel);
+    contentLayout->addWidget(contextEdit);
+    contentLayout->addWidget(postmortemLabel);
+    contentGroup->setLayout(contentLayout);
 
     // IMPROVE disable/enable find button if text/path is valid: freedom vs validation
-    runButton = new QPushButton{tr("&Get")};
+    runButton = new QPushButton{tr("&Ask Wingman")};
     runButton->setDefault(true);
     closeButton = new QPushButton{tr("&Cancel")};
 
@@ -62,12 +138,6 @@ WingmanDialog::WingmanDialog(QWidget* parent)
 
     // assembly
     QVBoxLayout* mainLayout = new QVBoxLayout{};
-    mainLayout->addWidget(phraseLabel);
-    mainLayout->addWidget(phraseEdit);
-    mainLayout->addWidget(toolLabel);
-    mainLayout->addWidget(toolCombo);
-    mainLayout->addWidget(templateLabel);
-    mainLayout->addWidget(templateEdit);
 
     QHBoxLayout* buttonLayout = new QHBoxLayout{};
     buttonLayout->addStretch(1);
@@ -75,14 +145,10 @@ WingmanDialog::WingmanDialog(QWidget* parent)
     buttonLayout->addWidget(runButton);
     buttonLayout->addStretch();
 
+    mainLayout->addWidget(promptsGroup);
+    mainLayout->addWidget(contentGroup);
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
-
-    // signals
-    QObject::connect(
-        toolCombo, SIGNAL(currentIndexChanged(QString)),
-        this, SLOT(handleChangeToolCombo(QString))
-    );
 
     // dialog
     resize(fontMetrics().averageCharWidth()*55, height());
@@ -91,6 +157,24 @@ WingmanDialog::WingmanDialog(QWidget* parent)
 
 WingmanDialog::~WingmanDialog()
 {
+    delete preludeLabel;
+
+    delete predefinedPromptsLabel;
+    delete predefinedPromptsCombo;
+    delete promptLabel;
+    delete promptEdit;
+
+    delete contextTypeLabel;
+    delete contextTypeEdit;
+    delete contextNameLabel;
+    delete contextNameEdit;
+    delete contextLabel;
+    delete contextEdit;
+
+    delete postmortemLabel;
+
+    delete runButton;
+    delete closeButton;
 }
 
 void WingmanDialog::initForMode(WingmanDialogModes mode)
@@ -99,13 +183,15 @@ void WingmanDialog::initForMode(WingmanDialogModes mode)
 
     switch(mode) {
         case WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE:
-            phraseLabel->setText(tr("Outline:"));
+            contextTypeEdit->setText(tr("outline"));
+            contextEdit->setText(tr("<Notebook document>"));
             break;
         case WingmanDialogModes::WINGMAN_DIALOG_MODE_NOTE:
-            phraseLabel->setText(tr("Note:"));
+            contextTypeEdit->setText(tr("note"));
+            contextEdit->setText(tr("<Note description>"));
             break;
         case WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT:
-            phraseLabel->setText(tr("Text:"));
+            contextEdit->setText(tr("<selected / current text>"));
             break;
     }
 }
@@ -113,65 +199,6 @@ void WingmanDialog::initForMode(WingmanDialogModes mode)
 void WingmanDialog::show()
 {
     QDialog::show();
-}
-
-QString WingmanDialog::getTemplateTextForToolName(string selectedTool) const
-{
-    if(selectedTool == TOOL_ARXIV) {
-        QString templateText{"https://arxiv.org/search/?query="};
-        templateText.append(TOOL_PHRASE);
-        return templateText;
-    } else if(selectedTool == TOOL_DEEPL) {
-        return QString{"https://www.deepl.com/en/translator"};
-    } else if(selectedTool == TOOL_STACK_OVERFLOW) {
-        QString templateText{"https://stackoverflow.com/search?q="};
-        templateText.append(TOOL_PHRASE);
-        return templateText;
-    } else if(selectedTool == TOOL_DUCKDUCKGO) {
-        QString templateText{"https://www.duckduckgo.com/?q="};
-        templateText.append(TOOL_PHRASE);
-        return templateText;
-    } else if(selectedTool == TOOL_GH_TOPICS) {
-        // TODO fix search URL
-        QString templateText{"https://www.github.com/search?q="};
-        templateText.append(TOOL_PHRASE);
-        return templateText;
-    } else if(selectedTool == TOOL_GH_REPOS) {
-        // TODO fix search URL
-        QString templateText{"https://www.github.com/search?q="};
-        templateText.append(TOOL_PHRASE);
-        return templateText;
-    } else if(selectedTool == TOOL_CHAT_GPT_WEB) {
-        return QString{"https://chat.openai.com/"};
-    } else if(selectedTool == TOOL_GOOGLE_BARD) {
-        return QString{"https://bard.google.com/chat"};
-    } else if(selectedTool == TOOL_GOOGLE_SEARCH) {
-        QString temlateText{"https://www.google.com/search?q="};
-        temlateText.append(TOOL_PHRASE);
-        return temlateText;
-    } else if(selectedTool == TOOL_WIKIPEDIA) {
-        // TODO: URL
-        QString temlateText{"https://en.wikipedia.org/w/index.php?search="};
-        temlateText.append(TOOL_PHRASE);
-        return temlateText;
-    }
-
-    string msg{
-        "Tool '" + selectedTool + "' to search/explain/process "
-        "the phrase is not supported."};
-    QMessageBox msgBox{
-        QMessageBox::Critical,
-        QObject::tr("Unsupported Knowledge Tool"),
-        QObject::tr(msg.c_str()),
-    };
-
-    return QString{};
-}
-
-void WingmanDialog::handleChangeToolCombo(const QString& text) {
-    MF_DEBUG("Tool changed: " << text.toStdString() << endl);
-
-    this->templateEdit->setText(getTemplateTextForToolName(text.toStdString()));
 }
 
 } // m8r namespace

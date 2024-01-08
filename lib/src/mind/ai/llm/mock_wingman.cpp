@@ -20,12 +20,24 @@
 
 namespace m8r {
 
+using namespace std;
+
 MockWingman::MockWingman()
+    : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_MOCK)
 {
 }
 
 MockWingman::~MockWingman()
 {
+}
+
+void MockWingman::summarize(const string& text, string& summary)
+{
+    MF_DEBUG("MockWingman::summarize() text:" << text << endl);
+
+    summary = "This is a MOCK summary of the text: '"+text+"'.";
+
+    MF_DEBUG("MockWingman::summarize() summary:" << summary << endl);
 }
 
 } // m8r namespace

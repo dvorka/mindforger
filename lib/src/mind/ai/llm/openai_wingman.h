@@ -1,5 +1,5 @@
 /*
- mock_wingman.h     MindForger thinking notebook
+ openai_wingman.h     MindForger thinking notebook
 
  Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,28 +16,35 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef M8R_MOCK_WINGMAN_H
-#define M8R_MOCK_WINGMAN_H
+#ifndef M8R_OPENAI_WINGMAN_H
+#define M8R_OPENAI_WINGMAN_H
+
+#include <string>
+
+#include "curl/curl.h"
 
 #include "wingman.h"
 
 namespace m8r {
 
 /**
- * Mock Wingman implementation.
+ * OpenAI Wingman implementation.
  */
-class MockWingman: Wingman
+class OpenAiWingman: Wingman
 {
+private:
+    void curlGet(std::string& url, std::string& readBuffer);
+
 public:
-    explicit MockWingman();
-    MockWingman(const MockWingman&) = delete;
-    MockWingman(const MockWingman&&) = delete;
-    MockWingman& operator =(const MockWingman&) = delete;
-    MockWingman& operator =(const MockWingman&&) = delete;
-    ~MockWingman();
+    explicit OpenAiWingman();
+    OpenAiWingman(const OpenAiWingman&) = delete;
+    OpenAiWingman(const OpenAiWingman&&) = delete;
+    OpenAiWingman& operator =(const OpenAiWingman&) = delete;
+    OpenAiWingman& operator =(const OpenAiWingman&&) = delete;
+    ~OpenAiWingman();
 
     virtual void summarize(const std::string& text, std::string& summary) override;
 };
 
 }
-#endif // M8R_MOCK_WINGMAN_H
+#endif // M8R_OPENAI_WINGMAN_H

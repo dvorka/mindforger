@@ -102,6 +102,9 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // wire signals
     QObject::connect(
+        wingmanDialog->getRunButton(), SIGNAL(clicked()),
+        this, SLOT(handleActionWingman()));
+    QObject::connect(
         runToolDialog->getRunButton(), SIGNAL(clicked()),
         this, SLOT(handleRunTool()));
     QObject::connect(
@@ -2153,6 +2156,7 @@ void MainWindowPresenter::doActionBardToolbar()
     handleLeftToolbarAction(TOOL_GOOGLE_BARD);
 }
 
+// TODO remove when code reused by Wingman and @ CLI
 void MainWindowPresenter::handleLeftToolbarAction(string selectedTool)
 {
     // get PHRASE from the active context:
@@ -2220,13 +2224,87 @@ void MainWindowPresenter::handleLeftToolbarAction(string selectedTool)
 void MainWindowPresenter::doActionWingman()
 {
     MF_DEBUG("SIGNAL handled: WINGMAN dialog...");
+    // get PHRASE from the active context:
+    // - N editor: get word under cursor OR selected text
+    // - N tree: get N name
+    // - O tree: get O name
+    // - ...
+    QString phrase;
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        phrase = orloj->getNoteEdit()->getView()->getNoteEditor()->getToolPhrase();
+    } else if(
+        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+        || orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+    ) {
+        Outline* o = orloj->getOutlineView()->getCurrentOutline();
+        if(o) {
+              phrase = QString::fromStdString(o->getName());
+        }
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
+        Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+        if(note) {
+            phrase = QString::fromStdString(note->getName());
+        }
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        phrase = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getToolPhrase();
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_LIST_OUTLINES)) {
+        int row = orloj->getOutlinesTable()->getCurrentRow();
+        if(row != OutlinesTablePresenter::NO_ROW) {
+            QStandardItem* item
+                = orloj->getOutlinesTable()->getModel()->item(row);
+            if(item) {
+                Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
+                phrase = QString::fromStdString(outline->getName());
+            }
+        }
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        int row = orloj->getOutlinesMap()->getCurrentRow();
+        if(row != OutlinesTablePresenter::NO_ROW) {
+            QStandardItem* item
+                = orloj->getOutlinesMap()->getModel()->item(row);
+            if(item) {
+                Note* note = item->data(Qt::UserRole + 1).value<Note*>();
+                phrase = QString::fromStdString(note->getName());
+            }
+        }
+    }
+
+    if(phrase.length() == 0) {
+        QMessageBox msgBox{
+            QMessageBox::Critical,
+            QObject::tr("Empty Phrase"),
+            QObject::tr("Phrase to search/explain/process is empty.")
+        };
+        msgBox.exec();
+        return;
+    }
+
+    // TODO set type determined ^
     this->wingmanDialog->initForMode(WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE);
+    // TODO set context name e.g. N name
+    // TODO set context (actual text to be used in prompt) e.g. N description
+
+
+    // TODO rename content to context
+    this->wingmanDialog->setContextNameText(phrase);
     this->wingmanDialog->show();
 }
 
-void MainWindowPresenter::handlActionWingman()
+void MainWindowPresenter::handleActionWingman()
 {
+    MF_DEBUG("SIGNAL handled: WINGMAN dialog..." << endl);
 
+    string wingmanAnswer{};
+
+    // TODO get and resolve prompt
+
+    // TODO this->wingmanDialog->getPrompt();
+    mind->wingmanSummarize(
+        "FOO text",
+        wingmanAnswer
+    );
+
+    TODO continue here
 }
 
 void MainWindowPresenter::doActionOutlineOrNoteNew()

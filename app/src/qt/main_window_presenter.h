@@ -376,7 +376,7 @@ public slots:
     // tools toolbar
     void handleLeftToolbarAction(std::string selectedTool);
     void doActionWingman();
-    void handlActionWingman();
+    void handleActionWingman();
     void doActionArxivToolbar();
     void doActionWikipediaToolbar();
     void doActionStackOverflowToolbar();

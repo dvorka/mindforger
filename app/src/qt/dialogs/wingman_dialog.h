@@ -38,21 +38,27 @@ class WingmanDialog : public QDialog
 private:
 
     static const std::vector<QString> outlinePrompts;
+    static const std::vector<QString> notePrompts;
+    static const std::vector<QString> textPrompts;
 
     WingmanDialogModes mode;
 
-    std::vector<QString> promptsOutline;
-    std::vector<QString> promptsNote;
-    std::vector<QString> promptsText;
+    QLabel* preludeLabel;
 
-    QLabel* phraseLabel;
-    QLineEdit* phraseEdit;
+    QLabel* predefinedPromptsLabel;
+    QComboBox* predefinedPromptsCombo;
 
-    QLabel* toolLabel;
-    QComboBox* toolCombo;
+    QLabel* promptLabel;
+    QLineEdit* promptEdit;
 
-    QLabel* templateLabel;
-    QLineEdit* templateEdit;
+    QLabel* contextTypeLabel;
+    QLineEdit* contextTypeEdit;
+    QLabel* contextNameLabel;
+    QLineEdit* contextNameEdit;
+    QLabel* contextLabel;
+    QLineEdit* contextEdit;
+
+    QLabel* postmortemLabel;
 
     QPushButton* runButton;
     QPushButton* closeButton;
@@ -65,31 +71,25 @@ public:
     WingmanDialog& operator =(const WingmanDialog&&) = delete;
     ~WingmanDialog();
 
+    void clear() {
+        this->promptEdit->clear();
+        this->contextNameEdit->clear();
+        this->contextEdit->clear();
+    }
     void initForMode(WingmanDialogModes mode);
+    void setPromptText(QString phrase) {
+        this->promptEdit->setText(phrase);
+    }
+    void setContextNameText(QString contentName) {
+        this->contextNameEdit->setText(contentName);
+    }
+    void setContextText(QString content) {
+        this->contextEdit->setText(content);
+    }
 
     void show();
 
-    QString getTemplateTextForToolName(std::string selectedTool) const;
-
     QPushButton* getRunButton() const { return runButton; }
-    QString getSelectedTool() const {
-        return this->toolCombo->itemText(
-            this->toolCombo->currentIndex()
-        );
-    }
-    QString getTemplateText() const {
-        return this->templateEdit->text();
-    }
-    QString getPhraseText() const { return phraseEdit->text(); }
-    void setPhraseText(QString phrase) {
-        this->phraseEdit->setText(phrase);
-    }
-    void setTemplateText(QString templateText) {
-        this->templateEdit->setText(templateText);
-    }
-
-private slots:
-    void handleChangeToolCombo(const QString& text);
 };
 
 }

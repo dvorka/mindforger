@@ -20,8 +20,15 @@
 
 namespace m8r {
 
-Wingman::Wingman()
+using namespace std;
+
+/*
+ * Wingman class implementation.
+ */
+
+Wingman::Wingman(WingmanLlmProviders llmProvider)
 {
+    this->llmProvider = llmProvider;
 }
 
 Wingman::~Wingman()

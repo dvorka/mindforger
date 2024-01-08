@@ -51,7 +51,8 @@ Mind::Mind(Configuration &configuration)
       tagsScopeAspect{ontology},
       scopeAspect{timeScopeAspect, tagsScopeAspect}
 {
-    ai = new Ai{memory,*this};
+    ai = new Ai{memory, *this};
+    wingman = (Wingman*)new MockWingman{};
     deleteWatermark = 0;
     activeProcesses = 0;
     associationsSemaphore = 0;
@@ -73,6 +74,7 @@ Mind::Mind(Configuration &configuration)
 Mind::~Mind()
 {
     delete ai;
+    delete wingman;
     delete knowledgeGraph;
     delete mdConfigRepresentation;
     delete autoInterceptor;
@@ -1452,6 +1454,12 @@ Outline* Mind::findOutlineByKey(const string& key) const
     }
 
     return nullptr;
+}
+
+void Mind::wingmanSummarize(const string& text, string& summary)
+{
+    MF_DEBUG("MIND: Wingman summarizing: '" << text << "'" << endl);
+    wingman->summarize(text, summary);
 }
 
 } /* namespace */
