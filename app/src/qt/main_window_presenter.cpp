@@ -58,6 +58,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     rmLibraryDialog = new RemoveLibraryDialog(&view);
     runToolDialog = new RunToolDialog{&view};
     wingmanDialog = new WingmanDialog{&view};
+    chatDialog = new ChatDialog{&view};
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
     newOutlineDialog = new OutlineNewDialog{
@@ -2105,6 +2106,7 @@ void MainWindowPresenter::doActionWingman()
 void MainWindowPresenter::handleActionWingman()
 {
     MF_DEBUG("SIGNAL handled: WINGMAN dialog..." << endl);
+    this->wingmanDialog->hide();
 
     string wingmanAnswer{};
 
@@ -2115,6 +2117,11 @@ void MainWindowPresenter::handleActionWingman()
         "FOO text",
         wingmanAnswer
     );
+
+    // show result
+    this->chatDialog->insertPrompt("Summarize.");
+    this->chatDialog->insertOutput(wingmanAnswer);
+    this->chatDialog->show();
 
     // TODO TODO TODO continue here
 }

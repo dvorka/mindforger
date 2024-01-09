@@ -164,7 +164,7 @@ void TerminalDialog::runCommand()
             // TODO _popen WINDOWS
     #ifdef _WIN32
             FILE* pipe = _popen(cmd.c_str(), "r");
-    # else
+    #else
             FILE* pipe = popen(cmd.c_str(), "r");
     #endif
             if(!pipe) {

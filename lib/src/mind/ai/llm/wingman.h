@@ -46,6 +46,7 @@ public:
     Wingman& operator =(const Wingman&&) = delete;
     virtual ~Wingman();
 
+    // dialog || menu Notebook/Wingman/Summarize || menu Note/Wingman/Summarize
     virtual void summarize(const std::string& text, std::string& summary) = 0;
 };
 

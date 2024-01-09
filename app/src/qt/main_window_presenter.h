@@ -39,6 +39,7 @@
 #include "dialogs/rm_library_dialog.h"
 #include "dialogs/run_tool_dialog.h"
 #include "dialogs/wingman_dialog.h"
+#include "dialogs/chat_dialog.h"
 #include "dialogs/organizer_new_dialog.h"
 #include "dialogs/outline_new_dialog.h"
 #include "dialogs/note_new_dialog.h"
@@ -120,6 +121,7 @@ private:
     RemoveLibraryDialog* rmLibraryDialog;
     RunToolDialog* runToolDialog;
     WingmanDialog* wingmanDialog;
+    ChatDialog* chatDialog;
     ScopeDialog* scopeDialog;
     OrganizerNewDialog* newOrganizerDialog;
     OutlineNewDialog* newOutlineDialog;
