@@ -22,6 +22,9 @@ namespace m8r {
 
 using namespace std;
 
+const string COLOR_PROMPT_GREEN{"#00bb00"};
+const string COLOR_PROMPT_BLUE{"#00aaaa"};
+
 ChatDialog::ChatDialog(QWidget* parent)
     : QDialog(parent)
 {
@@ -54,7 +57,7 @@ ChatDialog::ChatDialog(QWidget* parent)
     chatWindow = new QTextEdit(this);
     chatWindow->setReadOnly(true);
     chatWindow->clear();
-    chatWindow->insertHtml(QString::fromStdString(getPrompt()));
+    chatWindow->insertHtml(QString::fromStdString(getTerminalPrompt()));
 
     QVBoxLayout* layout = new QVBoxLayout{this};
     layout->addWidget(chatWindow);
@@ -70,15 +73,20 @@ ChatDialog::~ChatDialog()
 
 void ChatDialog::show()
 {
-    // > Summarize.                         [green]
-    // 🤖 Lorem ipsum dolor sit amet,       [gray]
+    // Notebook/<name> OpenAI chatGPT3.5    [blue, yellow]
+    // $ Summarize.                         [green]
+    //
+    // Lorem ipsum dolor sit amet,          [gray]
     // consectetur adipiscing elit.
     //
-    // Explain like I'm 5: NLP.
-    // 🤖 Lorem ipsum dolor sit amet,
+    // ~/notebook/<name> OpenAI chatGPT3.5
+    // $ Explain 'NLP' like I'm 5.
     //
-    // >
-    //   ^ cursor
+    // Lorem ipsum dolor sit amet,
+    //
+    // ~/notebook/<name> OpenAI chatGPT3.5
+    // $
+    //  ^ cursor
 
     cmdEdit->clear();
     cmdEdit->setFocus();
@@ -87,14 +95,27 @@ void ChatDialog::show()
     QDialog::show();
 }
 
-string ChatDialog::getPrompt(bool error)
+string ChatDialog::getTerminalPrompt(bool error)
 {
-    string prompt{"<font color='#0000ff'>" + getCwd() + "</font>"};
-    prompt.append("<br/><font color='");
+    // TODO
+    string thing{"notebook"};
+    string thingName{"My notebook"};
+    string wingmanModel{"OpenAI gpt-3"};
+
+    string prompt{
+        "<hr/>"
+        "<font color='" + COLOR_PROMPT_BLUE + "'>@" + thing + "</font> " +
+        "<font color='" + COLOR_PROMPT_GREEN + "'><b>" + thingName + "</b></font>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+        "<font color='" + COLOR_PROMPT_BLUE + "'>" + wingmanModel + "</font>"
+        "<br/>"
+    };
+
+    prompt.append("<font color='");
     if(error) {
         prompt.append("#ff0000");
     } else {
-        prompt.append("#00ff00");
+        prompt.append(COLOR_PROMPT_GREEN);
     }
     prompt.append("'>&gt;</font> ");
     return prompt;
@@ -104,17 +125,26 @@ void ChatDialog::insertPrompt(const std::string& prompt)
 {
     chatWindow->insertHtml(
         QString::fromStdString(
-            "<font color='#00bb00'>"
-            "&gt; " + prompt +
+            "<font color='"+COLOR_PROMPT_GREEN+"'>" +
+            prompt +
             "</font>"
+            "<br/><br/>"
         ));
-    chatWindow->insertHtml(QString::fromStdString("<br/><br/>"));
+    chatWindow->moveCursor(QTextCursor::End);
+    chatWindow->ensureCursorVisible();
 }
 
-void ChatDialog::insertOutput(const std::string& output)
+void ChatDialog::insertOutput(const std::string& output, bool error)
 {
-    chatWindow->insertHtml(QString::fromStdString("🤖 " + output));
-    chatWindow->insertHtml(QString::fromStdString("<br/><br/>"));
+    chatWindow->insertHtml(
+        QString::fromStdString(
+            "<br/>" +
+            output +
+            "<br/>" +
+            getTerminalPrompt(error)
+        ));
+    chatWindow->moveCursor(QTextCursor::End);
+    chatWindow->ensureCursorVisible();
 }
 
 void ChatDialog::runCommand()
@@ -125,7 +155,7 @@ void ChatDialog::runCommand()
            || cmdEdit->text() == QString::fromStdString("cls")
         ) {
             chatWindow->clear();
-            chatWindow->insertHtml(QString::fromStdString(getPrompt()));
+            chatWindow->insertHtml(QString::fromStdString(getTerminalPrompt()));
         } else if(cmdEdit->text() == QString::fromStdString("exit")
           || cmdEdit->text() == QString::fromStdString("quit")
           || cmdEdit->text() == QString::fromStdString("bye")
@@ -151,36 +181,17 @@ void ChatDialog::runCommand()
             // run prompt
             MF_DEBUG("Running prompt: '" << cmd << "'" << endl);
             int statusCode{0};
-            string cmdStdOut{};
+            string cmdStdOut{"Foo result Lorem ipsum dolor sit amet, consectetur adipiscing elit."};
 
             // TODO run prompt
             // TODO run prompt
             // TODO run prompt
 
             MF_DEBUG("Chat command finished with status: " << statusCode << endl);
-            chatWindow->insertHtml(QString::fromStdString("<br/>"));
-
             if(cmdStdOut.size()) {
-                replaceAll("\n", "<br/>", cmdStdOut);
-                chatWindow->insertHtml(
-                    QString::fromStdString("🤖 " + cmdStdOut + "<br/>")
-                );
+                // replaceAll("\n", "<br/>", cmdStdOut);
+                this->insertOutput(cmdStdOut, statusCode!=0?true:false);
             }
-
-            if(statusCode) {
-                cerr << "Chat command failed with status: " << statusCode << endl;
-                chatWindow->insertHtml(
-                    QString::fromStdString(getPrompt(true))
-                );
-            } else {
-                chatWindow->insertHtml(
-                    QString::fromStdString(getPrompt())
-                );
-            }
-
-            // scroll down by moving cursor to the end AND ensuring it's visible
-            chatWindow->moveCursor(QTextCursor::End);
-            chatWindow->ensureCursorVisible();
         }
     }
 

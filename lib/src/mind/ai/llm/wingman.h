@@ -20,14 +20,52 @@
 #define M8R_WINGMAN_H
 
 #include <string>
+#include <vector>
 
 #include "../../../debug.h"
 
 namespace m8r {
 
+/*
+ * Predefined LLM prompts.
+ */
+
+constexpr const auto CTX_INCLUDE_NAME = "#NAME";
+constexpr const auto CTX_INCLUDE_TEXT = "#TEXT";
+
+constexpr const auto PROMPT_SUMMARIZE = "Summarize: #NAME. #TEXT";
+constexpr const auto PROMPT_GENERATE_TAGS = "Generate tags for: #NAME. #TEXT";
+constexpr const auto PROMPT_FIND_PERSONS = "Find persons names in: #NAME. #TEXT";
+constexpr const auto PROMPT_FIND_LOCATIONS = "Find locations in: #NAME. #TEXT";
+constexpr const auto PROMPT_FIND_ORGS = "Find organizations in: #NAME. #TEXT";
+constexpr const auto PROMPT_CHAT = "Chat with the context.";
+
+constexpr const auto PROMPT_SHORTEN = "Shorten #TEXT";
+constexpr const auto PROMPT_EXPLAIN_LIKE_5 = "Explain #NAME like I'm 5.";
+constexpr const auto PROMPT_FIX_GRAMMAR = "Fix grammar in: #TEXT";
+constexpr const auto PROMPT_REWRITE_FORMALLY = "Rewrite formally: #TEXT";
+constexpr const auto PROMPT_REWRITE_INFORMALLY = "Rewrite informally: #TEXT";
+constexpr const auto PROMPT_REWRITE_KAFKA = "Rewrite in Kafka style: #TEXT";
+
+constexpr const auto PROMPT_COMPLETE_TEXT = "Complete the text: #TEXT";
+
+// other UCs:
+// - NER UCs
+// - simplify
+// - beautify
+// - translate
+// - fix spelling
+// - fix style
+// - create plan ...
+
+/*
+ * Wingman providers.
+ */
+
 enum WingmanLlmProviders {
     WINGMAN_PROVIDER_MOCK,
     WINGMAN_PROVIDER_OPENAI,
+    WINGMAN_PROVIDER_GOOGLE,
 };
 
 /**
@@ -38,6 +76,37 @@ class Wingman
 private:
     WingmanLlmProviders llmProvider;
 
+    std::vector<std::string> outlinePrompts = {
+        PROMPT_SUMMARIZE,
+        PROMPT_GENERATE_TAGS,
+        PROMPT_FIND_PERSONS,
+        PROMPT_FIND_LOCATIONS,
+        PROMPT_FIND_ORGS,
+        // PROMPT_CHAT,
+    };
+
+    std::vector<std::string> notePrompts = {
+        PROMPT_SUMMARIZE,
+        PROMPT_SHORTEN,
+        PROMPT_EXPLAIN_LIKE_5,
+        PROMPT_GENERATE_TAGS,
+        PROMPT_FIX_GRAMMAR,
+        PROMPT_REWRITE_FORMALLY,
+        PROMPT_REWRITE_INFORMALLY,
+        PROMPT_REWRITE_KAFKA,
+        // PROMPT_CHAT,
+    };
+
+    std::vector<std::string> textPrompts = {
+        PROMPT_COMPLETE_TEXT,
+        PROMPT_EXPLAIN_LIKE_5,
+        PROMPT_FIX_GRAMMAR,
+        PROMPT_GENERATE_TAGS,
+        PROMPT_REWRITE_FORMALLY,
+        PROMPT_REWRITE_INFORMALLY,
+        PROMPT_REWRITE_KAFKA,
+    };
+
 public:
     explicit Wingman(WingmanLlmProviders llmProvider);
     Wingman(const Wingman&) = delete;
@@ -45,6 +114,16 @@ public:
     Wingman& operator =(const Wingman&) = delete;
     Wingman& operator =(const Wingman&&) = delete;
     virtual ~Wingman();
+
+    virtual const std::vector<std::string>& getPredefinedOPrompts() {
+        return outlinePrompts;
+    }
+    virtual const std::vector<std::string>& getPredefinedNPrompts() {
+        return notePrompts;
+    }
+    virtual const std::vector<std::string>& getPredefinedTPrompts() {
+        return textPrompts;
+    }
 
     // dialog || menu Notebook/Wingman/Summarize || menu Note/Wingman/Summarize
     virtual void summarize(const std::string& text, std::string& summary) = 0;

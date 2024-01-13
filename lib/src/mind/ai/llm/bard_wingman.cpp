@@ -1,5 +1,5 @@
 /*
- mock_wingman.cpp     MindForger thinking notebook
+ bard_wingman.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,28 +16,16 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "mock_wingman.h"
+#include "bard_wingman.h"
 
 namespace m8r {
 
-using namespace std;
-
-MockWingman::MockWingman()
-    : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_MOCK)
+BardWingman::BardWingman()
 {
 }
 
-MockWingman::~MockWingman()
+BardWingman::~BardWingman()
 {
-}
-
-void MockWingman::summarize(const string& text, string& summary)
-{
-    MF_DEBUG("MockWingman::summarize() text:" << text << endl);
-
-    summary = "SUMMARY(MOCK, '"+text+"')";
-
-    MF_DEBUG("MockWingman::summarize() summary:" << summary << endl);
 }
 
 } // m8r namespace

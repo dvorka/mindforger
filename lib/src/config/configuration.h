@@ -70,7 +70,7 @@ constexpr const auto START_TO_OUTLINES_TREE = "outlines tree";
 constexpr const auto START_TO_OUTLINES = "outlines";
 constexpr const auto START_TO_TAGS = "tags";
 constexpr const auto START_TO_RECENT = "recent";
-constexpr const auto START_TO_EISENHOWER_MATRIX = "Eisehower";
+constexpr const auto START_TO_EISENHOWER_MATRIX = "Eisenhower";
 constexpr const auto START_TO_HOME_OUTLINE = "home";
 constexpr const auto DEFAULT_STARTUP_VIEW = START_TO_OUTLINES;
 

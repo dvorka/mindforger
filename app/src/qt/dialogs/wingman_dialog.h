@@ -19,6 +19,9 @@
 #ifndef M8RUI_WINGMAN_DIALOG_H
 #define M8RUI_WINGMAN_DIALOG_H
 
+#include <vector>
+#include <string>
+
 #include <QtWidgets>
 
 #include "../../lib/src/config/configuration.h"
@@ -36,12 +39,13 @@ class WingmanDialog : public QDialog
     Q_OBJECT
 
 private:
-
-    static const std::vector<QString> outlinePrompts;
-    static const std::vector<QString> notePrompts;
-    static const std::vector<QString> textPrompts;
+    std::vector<QString> outlinePrompts;
+    std::vector<QString> notePrompts;
+    std::vector<QString> textPrompts;
 
     WingmanDialogModes mode;
+
+    QString context;
 
     QLabel* preludeLabel;
 
@@ -49,7 +53,7 @@ private:
     QComboBox* predefinedPromptsCombo;
 
     QLabel* promptLabel;
-    QLineEdit* promptEdit;
+    QTextEdit* promptEdit;
 
     QLabel* contextTypeLabel;
     QLineEdit* contextTypeEdit;
@@ -58,34 +62,49 @@ private:
     QLabel* contextLabel;
     QLineEdit* contextEdit;
 
-    QLabel* postmortemLabel;
-
     QPushButton* runButton;
     QPushButton* closeButton;
 
 public:
-    explicit WingmanDialog(QWidget* parent);
+    explicit WingmanDialog(
+        const std::vector<std::string>& predefinedOPrompts,
+        const std::vector<std::string>& predefinedNPrompts,
+        const std::vector<std::string>& predefinedTPrompts,
+        QWidget* parent);
     WingmanDialog(const WingmanDialog&) = delete;
     WingmanDialog(const WingmanDialog&&) = delete;
     WingmanDialog& operator =(const WingmanDialog&) = delete;
     WingmanDialog& operator =(const WingmanDialog&&) = delete;
     ~WingmanDialog();
 
-    void clear() {
-        this->promptEdit->clear();
-        this->contextNameEdit->clear();
-        this->contextEdit->clear();
-    }
+    void clear();
     void initForMode(WingmanDialogModes mode);
+    WingmanDialogModes getMode() const { return mode; }
+
     void setPromptText(QString phrase) {
         this->promptEdit->setText(phrase);
+    }
+    QString getPromptText() const {
+        if(this->promptEdit->toPlainText().isEmpty()) {
+            return predefinedPromptsCombo->currentText();
+        }
+        return this->promptEdit->toPlainText();
+    }
+
+    void setContextType(WingmanDialogModes contextType) {
+        this->mode = contextType;
+    }
+    WingmanDialogModes getContextType() const {
+        return this->mode;
     }
     void setContextNameText(QString contentName) {
         this->contextNameEdit->setText(contentName);
     }
-    void setContextText(QString content) {
-        this->contextEdit->setText(content);
+    QString getContextNameText() const {
+        return this->contextNameEdit->text();
     }
+    void setContextText(QString context);
+    QString getContextText() const;
 
     void show();
 

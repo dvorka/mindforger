@@ -71,7 +71,7 @@ void OpenAiWingman::summarize(const string& text, string& summary)
 {
     MF_DEBUG("OpenAiWingman::summarize() text:" << text << endl);
 
-    summary = "This is a OPENAI summary of the text: '"+text+"'.";
+    summary = "SUMMARY(OpenAI, '"+text+"')";
 
     MF_DEBUG("OpenAiWingman::summarize() summary:" << summary << endl);
 }

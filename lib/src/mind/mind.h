@@ -675,6 +675,7 @@ public:
     /*
      * WINGMAN
      */
+    Wingman* getWingman() const { return wingman; }
     void wingmanSummarize(const std::string& text, std::string& summary);
 
     /*

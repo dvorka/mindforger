@@ -741,8 +741,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditExtract = new QAction(QIcon(":/menu-icons/cut.svg"), tr("E&xtract"), mainWindow);
     actionEditExtract->setStatusTip(tr("Create new Note from the text selected in the current Note..."));
 
-    actionEditRunTool = new QAction(QIcon(":/menu-icons/on.svg"), tr("Find Knowledge\tCtrl+/"), mainWindow);
-    actionEditRunTool->setStatusTip(tr("Run an external tool to find, explain, process text under the cursor"));
+    actionEditWingman = new QAction(QIcon(":/menu-icons/on.svg"), tr("&Wingman"), mainWindow); // \tCtrl+/
+    actionEditWingman->setStatusTip(tr("Run an external tool to find, explain, process text under the cursor"));
 
     actionEditComplete = new QAction(QIcon(":/menu-icons/link.svg"), tr("Complete Link\tCtrl+L"), mainWindow);
     actionEditComplete->setStatusTip(tr("Complete word being written by finding link to Notebook or Note"));
@@ -765,7 +765,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuEdit->addAction(actionEditWordWrap);
     menuEdit->addAction(actionEditNameDescFocusSwap);
     menuEdit->addSeparator();
-    menuEdit->addAction(actionEditRunTool);
+    menuEdit->addAction(actionEditWingman);
     menuEdit->addAction(actionEditComplete);
     menuEdit->addAction(actionEditExtract);
     menuEdit->addSeparator();

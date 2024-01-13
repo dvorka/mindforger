@@ -74,13 +74,13 @@ public:
     ~ChatDialog();
 
     void insertPrompt(const std::string& prompt);
-    void insertOutput(const std::string& output);
+    void insertOutput(const std::string& output, bool error=false);
 
     void show();
 
 private:
     void runCommand();
-    std::string getPrompt(bool error=false);
+    std::string getTerminalPrompt(bool error=false);
 };
 
 }

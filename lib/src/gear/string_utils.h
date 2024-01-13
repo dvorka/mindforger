@@ -59,7 +59,7 @@ std::vector<std::string> stringSplit(const std::string s, const std::string rege
 std::string normalizeToNcName(std::string name, char quoteChar);
 
 /**
- * @brief Check wheter strings are identical while ignoring case.
+ * @brief Check whether the strings are identical while ignoring case.
  */
 static inline bool stringistring(const std::string& a, const std::string& b)
 {
@@ -88,7 +88,7 @@ static inline void stringToLower(const std::string& s, std::string& lowerS)
  *
  * New trimmed string is created and returned - caller is responsible for freeing it.
  */
-static inline char *stringTrim(const char *s) {
+static inline char* stringTrim(const char* s) {
     if(s) {
         while(isspace(static_cast<unsigned char>(*s))) {
             s++;

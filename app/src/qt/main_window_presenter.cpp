@@ -57,7 +57,11 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     syncLibraryDialog = new SyncLibraryDialog{&view};
     rmLibraryDialog = new RemoveLibraryDialog(&view);
     runToolDialog = new RunToolDialog{&view};
-    wingmanDialog = new WingmanDialog{&view};
+    wingmanDialog = new WingmanDialog{
+        mind->getWingman()->getPredefinedOPrompts(),
+        mind->getWingman()->getPredefinedNPrompts(),
+        mind->getWingman()->getPredefinedTPrompts(),
+        &view};
     chatDialog = new ChatDialog{&view};
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
@@ -2042,24 +2046,37 @@ void MainWindowPresenter::doActionWingman()
     // - N tree: get N name
     // - O tree: get O name
     // - ...
-    QString phrase;
+    QString contextTextName{};
+    QString contextText{};
+    WingmanDialogModes contextType{WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT};
+
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-        phrase = orloj->getNoteEdit()->getView()->getNoteEditor()->getToolPhrase();
+        contextText = orloj->getNoteEdit()->getView()->getNoteEditor()->getToolPhrase();
+        contextType = WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT;
     } else if(
         orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
         || orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
     ) {
         Outline* o = orloj->getOutlineView()->getCurrentOutline();
         if(o) {
-              phrase = QString::fromStdString(o->getName());
+            contextTextName = QString::fromStdString(o->getName());
+            string contextTextStr{};
+            mdRepresentation->to(o, &contextTextStr);
+            contextText = QString::fromStdString(contextTextStr);
+            contextType = WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE;
         }
     } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
         Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
         if(note) {
-            phrase = QString::fromStdString(note->getName());
+            contextTextName = QString::fromStdString(note->getName());
+            string contextTextStr{};
+            mdRepresentation->to(note, &contextTextStr);
+            contextText = QString::fromStdString(contextTextStr);
+            contextType = WingmanDialogModes::WINGMAN_DIALOG_MODE_NOTE;
         }
     } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-        phrase = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getToolPhrase();
+        contextText = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getToolPhrase();
+        contextType = WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT;
     } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_LIST_OUTLINES)) {
         int row = orloj->getOutlinesTable()->getCurrentRow();
         if(row != OutlinesTablePresenter::NO_ROW) {
@@ -2067,7 +2084,13 @@ void MainWindowPresenter::doActionWingman()
                 = orloj->getOutlinesTable()->getModel()->item(row);
             if(item) {
                 Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
-                phrase = QString::fromStdString(outline->getName());
+                if(outline) {
+                    contextTextName = QString::fromStdString(outline->getName());
+                    string contextTextStr{};
+                    mdRepresentation->to(outline, &contextTextStr);
+                    contextText = QString::fromStdString(contextTextStr);
+                    contextType = WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE;
+                }
             }
         }
     } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
@@ -2077,29 +2100,37 @@ void MainWindowPresenter::doActionWingman()
                 = orloj->getOutlinesMap()->getModel()->item(row);
             if(item) {
                 Note* note = item->data(Qt::UserRole + 1).value<Note*>();
-                phrase = QString::fromStdString(note->getName());
+                if(note) {
+                    contextTextName = QString::fromStdString(note->getName());
+                    string contextTextStr{};
+                    mdRepresentation->to(note, &contextTextStr);
+                    contextText = QString::fromStdString(contextTextStr);
+                    contextType = WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE;
+                }
             }
         }
     }
 
-    if(phrase.length() == 0) {
+    if(contextTextName.length() == 0) {
         QMessageBox msgBox{
             QMessageBox::Critical,
-            QObject::tr("Empty Phrase"),
-            QObject::tr("Phrase to search/explain/process is empty.")
+            QObject::tr("Empty Prompt"),
+            QObject::tr("Prompt to run/explain/process is empty.")
         };
         msgBox.exec();
         return;
     }
 
-    // TODO set type determined ^
-    this->wingmanDialog->initForMode(WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE);
-    // TODO set context name e.g. N name
-    // TODO set context (actual text to be used in prompt) e.g. N description
+    // context
+    this->wingmanDialog->initForMode(contextType);
+    if(contextType == WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT) {
+        this->wingmanDialog->setContextNameText("");
+        this->wingmanDialog->setContextText(contextTextName);
+    } else {
+        this->wingmanDialog->setContextNameText(contextTextName);
+        this->wingmanDialog->setContextText(contextText);
+    }
 
-
-    // TODO rename content to context
-    this->wingmanDialog->setContextNameText(phrase);
     this->wingmanDialog->show();
 }
 
@@ -2110,20 +2141,27 @@ void MainWindowPresenter::handleActionWingman()
 
     string wingmanAnswer{};
 
-    // TODO get and resolve prompt
+    // system prompt: prompt + context
 
-    // TODO this->wingmanDialog->getPrompt();
-    mind->wingmanSummarize(
-        "FOO text",
-        wingmanAnswer
-    );
+    // resolve prompt to system prompt
+    string systemPrompt{this->wingmanDialog->getPromptText().toStdString()};
+    replaceAll(
+        CTX_INCLUDE_NAME,
+        this->wingmanDialog->getContextNameText().toStdString(),
+        systemPrompt);
+    replaceAll(
+        CTX_INCLUDE_TEXT,
+        this->wingmanDialog->getContextText().toStdString(),
+        systemPrompt);
+
+    // RUN wingman
+    // TODO route action to wingman handler
+    mind->wingmanSummarize(systemPrompt, wingmanAnswer);
 
     // show result
-    this->chatDialog->insertPrompt("Summarize.");
+    this->chatDialog->insertPrompt(systemPrompt); // TODO trom huge prompts + suffix ...
     this->chatDialog->insertOutput(wingmanAnswer);
     this->chatDialog->show();
-
-    // TODO TODO TODO continue here
 }
 
 void MainWindowPresenter::doActionOutlineOrNoteNew()

@@ -22,59 +22,33 @@ namespace m8r {
 
 using namespace std;
 
-const vector<QString> WingmanDialog::outlinePrompts(
-    {
-        QString{"Summarize."},
-        QString{"Generate tags from the text."},
-        QString{"Find persons."},
-        QString{"Find locations."},
-        QString{"Find organizations."},
-        QString{"Chat with the content."},
-    }
-);
-const vector<QString> WingmanDialog::notePrompts(
-    {
-        QString{"Summarize."},
-        QString{"Shorten."},
-        QString{"Explain #NAME like I'm 5."},
-        QString{"Generate tags."},
-        QString{"Fix grammar."},
-        QString{"Rewrite formally."},
-        QString{"Rewrite informally."},
-        QString{"Rewrite to be funny."},
-        QString{"Chat with the content."},
-        // other UCs:
-        // - NER UCs
-        // - simplify
-        // - beautify
-        // - translate
-        // - fix spelling
-        // - fix style
-        // - create plan ...
-    }
-);
-const vector<QString> WingmanDialog::textPrompts(
-    {
-        QString{"Complete the text."},
-        QString{"Complete the last text line."},
-        QString{"Explain like I'm 5."},
-        QString{"Fix grammar."},
-        QString{"Generate tags."},
-        QString{"Rewrite formally."},
-        QString{"Rewrite informally."},
-        QString{"Rewrite to Kafka style."},
-    }
-);
-
-WingmanDialog::WingmanDialog(QWidget* parent)
-    : QDialog(parent)
+WingmanDialog::WingmanDialog(
+    const vector<string>& predefinedOPrompts,
+    const vector<string>& predefinedNPrompts,
+    const vector<string>& predefinedTPrompts,
+    QWidget* parent
+):
+    context{},
+    QDialog(parent)
 {
+    for(string prompt:predefinedOPrompts) {
+        outlinePrompts.push_back(QString::fromStdString(prompt));
+    }
+    for(string prompt:predefinedNPrompts) {
+        notePrompts.push_back(QString::fromStdString(prompt));
+    }
+    for(string prompt:predefinedTPrompts) {
+        textPrompts.push_back(QString::fromStdString(prompt));
+    }
+
     // UI
     setWindowTitle(tr("Wingman"));
 
     preludeLabel = new QLabel{
         tr(
-            "Wingman can run a predefined or custom prompt."
+            "Wingman can run a predefined or custom prompt"
+            " "
+            "with the selected context."
             "<br>"
         ),
         parent
@@ -90,8 +64,10 @@ WingmanDialog::WingmanDialog(QWidget* parent)
         predefinedPromptsCombo->addItem(toolName);
     }
 
-    promptLabel = new QLabel{tr("Your:"), parent};
-    promptEdit = new QLineEdit{parent};
+    promptLabel = new QLabel{
+        tr("Your (overrides Predefined, use #NAME or #TEXT to include context):"),
+        parent};
+    promptEdit = new QTextEdit{parent};
     promptEdit->setToolTip(
         tr("Type in your prompt like: 'Translate the following text to Spanish: #CONTENT."));
 
@@ -117,17 +93,12 @@ WingmanDialog::WingmanDialog(QWidget* parent)
     contextEdit = new QLineEdit{parent};
     contextEdit->setReadOnly(true);
 
-    postmortemLabel = new QLabel{
-        tr("Use #NAME or #TEXT to include it to your prompt."),
-        parent};
-
-    contentLayout->addWidget(contextTypeLabel);
-    contentLayout->addWidget(contextTypeEdit);
     contentLayout->addWidget(contextNameLabel);
     contentLayout->addWidget(contextNameEdit);
     contentLayout->addWidget(contextLabel);
     contentLayout->addWidget(contextEdit);
-    contentLayout->addWidget(postmortemLabel);
+    contentLayout->addWidget(contextTypeLabel);
+    contentLayout->addWidget(contextTypeEdit);
     contentGroup->setLayout(contentLayout);
 
     // IMPROVE disable/enable find button if text/path is valid: freedom vs validation
@@ -176,10 +147,17 @@ WingmanDialog::~WingmanDialog()
     delete contextLabel;
     delete contextEdit;
 
-    delete postmortemLabel;
-
     delete runButton;
     delete closeButton;
+}
+
+void WingmanDialog::clear()
+{
+    this->context.clear();
+
+    this->promptEdit->clear();
+    this->contextNameEdit->clear();
+    this->contextEdit->clear();
 }
 
 void WingmanDialog::initForMode(WingmanDialogModes mode)
@@ -189,16 +167,26 @@ void WingmanDialog::initForMode(WingmanDialogModes mode)
     switch(mode) {
         case WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE:
             contextTypeEdit->setText(tr("outline"));
-            contextEdit->setText(tr("<Notebook document>"));
+            contextEdit->setText(tr("<Notebook text>"));
             break;
         case WingmanDialogModes::WINGMAN_DIALOG_MODE_NOTE:
             contextTypeEdit->setText(tr("note"));
-            contextEdit->setText(tr("<Note description>"));
+            contextEdit->setText(tr("<Note text>"));
             break;
         case WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT:
-            contextEdit->setText(tr("<selected / current text>"));
+            contextNameEdit->clear();
+            contextEdit->clear();
             break;
     }
+}
+
+void WingmanDialog::setContextText(QString context) {
+    this->context=context;
+    this->contextEdit->setText(context.mid(0, 50).append("..."));
+}
+
+QString WingmanDialog::getContextText() const {
+    return context;
 }
 
 void WingmanDialog::show()

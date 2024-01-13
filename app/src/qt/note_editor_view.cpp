@@ -101,10 +101,12 @@ NoteEditorView::NoteEditorView(QWidget* parent)
         this, SLOT(insertCompletion(QString))
     );
     // shortcut signals
+    /*
     new QShortcut(
         QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_Slash)),
         this, SLOT(slotStartRunTool())
     );
+    */
     new QShortcut(
         QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_L)),
         this, SLOT(slotStartLinkCompletion())
