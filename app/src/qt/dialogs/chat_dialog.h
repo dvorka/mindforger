@@ -74,7 +74,10 @@ public:
     ~ChatDialog();
 
     void insertPrompt(const std::string& prompt);
-    void insertOutput(const std::string& output, bool error=false);
+    void insertOutput(
+        const std::string& output,
+        const std::string& outputDescriptor,
+        bool error=false);
 
     void show();
 

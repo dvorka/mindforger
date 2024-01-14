@@ -24,6 +24,7 @@ using namespace std;
 
 const string COLOR_PROMPT_GREEN{"#00bb00"};
 const string COLOR_PROMPT_BLUE{"#00aaaa"};
+const string COLOR_PROMPT_GRAY{"#777777"};
 
 ChatDialog::ChatDialog(QWidget* parent)
     : QDialog(parent)
@@ -105,8 +106,6 @@ string ChatDialog::getTerminalPrompt(bool error)
         "<hr/>"
         "<font color='" + COLOR_PROMPT_BLUE + "'>@" + thing + "</font> " +
         "<font color='" + COLOR_PROMPT_GREEN + "'><b>" + thingName + "</b></font>"
-        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-        "<font color='" + COLOR_PROMPT_BLUE + "'>[" + wingmanModel + "]</font>"
         "<br/>"
     };
 
@@ -133,10 +132,17 @@ void ChatDialog::insertPrompt(const std::string& prompt)
     chatWindow->ensureCursorVisible();
 }
 
-void ChatDialog::insertOutput(const std::string& output, bool error)
+void ChatDialog::insertOutput(
+    const string& output, const string& outputDescriptor, bool error)
 {
     chatWindow->insertHtml(
         QString::fromStdString(
+            "<br/>"
+            "<b>Answer:</b>"
+            " <font color='" + COLOR_PROMPT_GRAY + "'>" +
+            outputDescriptor +
+            "</font>" +
+            "<br/>" +
             "<br/>" +
             output +
             "<br/>" +
@@ -179,17 +185,22 @@ void ChatDialog::runCommand()
 
             // run prompt
             MF_DEBUG("Running prompt: '" << cmd << "'" << endl);
+            // TODO status bar
+            string answerHtml{"Foo result Lorem ipsum dolor sit amet, consectetur adipiscing elit."};
+            string answerDescriptor{"[foo model]"};
             int statusCode{0};
-            string cmdStdOut{"Foo result Lorem ipsum dolor sit amet, consectetur adipiscing elit."};
 
             // TODO run prompt
             // TODO run prompt
             // TODO run prompt
 
             MF_DEBUG("Chat command finished with status: " << statusCode << endl);
-            if(cmdStdOut.size()) {
+            if(answerHtml.size()) {
                 // replaceAll("\n", "<br/>", cmdStdOut);
-                this->insertOutput(cmdStdOut, statusCode!=0?true:false);
+                this->insertOutput(
+                    answerHtml,
+                    answerDescriptor,
+                    statusCode==0?false:true);
             }
         }
     }

@@ -47,6 +47,11 @@ Configuration::Configuration()
       autolinking{DEFAULT_AUTOLINKING},
       autolinkingColonSplit{},
       autolinkingCaseInsensitive{},
+      wingman{true},
+      wingmanProvider{},
+      wingmanShellEnvApiKey{true},
+      wingmanApiKey{},
+      wingmanLlmModel{"gpt-3.5-turbo"},
       md2HtmlOptions{},
       distributorSleepInterval{DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL},
       markdownQuoteSections{},
@@ -377,5 +382,35 @@ const char* Configuration::getEditorFromEnv()
     char* editor = getenv(ENV_VAR_M8R_EDITOR);  // this is not leak (static reusable array)
     return editor;
 }
+
+bool Configuration::isWingman() {
+    MF_DEBUG("Configuration::isWingman(" << wingman << "):" << endl);
+    if(wingman) {
+        MF_DEBUG(
+            "  Wingman key @ env: " << wingmanShellEnvApiKey << endl <<
+            "  Wingman key name : " << ENV_VAR_OPENAI_API_KEY << endl <<
+            "  Wingman key      : " << wingmanApiKey << endl
+        );
+        if(wingmanShellEnvApiKey && wingmanApiKey.empty()) {
+            // OpenAI wingman provider initialization
+            // user may have multiple OpenAI accounts and keys - get the key generated for MF
+            const char* apiKeyEnv
+                = std::getenv(ENV_VAR_OPENAI_API_KEY);
+            MF_DEBUG("  Wingman key loaded from env: " << apiKeyEnv << endl);
+            if(apiKeyEnv) {
+                wingmanApiKey = apiKeyEnv;
+                return true;
+            } else {
+                std::cerr << "OpenAI API key not found in the environment variable MINDFORGER_OPENAI_API_KEY." << std::endl;
+                wingman = false;
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 } // m8r namespace

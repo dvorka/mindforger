@@ -71,10 +71,10 @@ WingmanDialog::WingmanDialog(
     promptEdit->setToolTip(
         tr("Type in your prompt like: 'Translate the following text to Spanish: #CONTENT."));
 
-    promptsLayout->addWidget(predefinedPromptsLabel);
-    promptsLayout->addWidget(predefinedPromptsCombo);
     promptsLayout->addWidget(promptLabel);
     promptsLayout->addWidget(promptEdit);
+    promptsLayout->addWidget(predefinedPromptsLabel);
+    promptsLayout->addWidget(predefinedPromptsCombo);
     promptsGroup->setLayout(promptsLayout);
 
     // GROUP: content

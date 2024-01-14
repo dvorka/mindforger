@@ -31,14 +31,28 @@ MockWingman::~MockWingman()
 {
 }
 
+void MockWingman::chat(
+    const string& prompt,
+    const string& llmModel,
+    string& httpResponse,
+    WingmanStatusCode& status,
+    string& errorMessage,
+    string& answerLlmModel,
+    int& promptTokens,
+    int& answerTokens,
+    string& answerHtml
+) {
+    MF_DEBUG("MockWingman::chat() prompt:" << prompt << endl);
 
-void MockWingman::chat(const std::string& prompt, std::string& answer)
-{
-    MF_DEBUG("MockWingman::summarize() text:" << prompt << endl);
+    httpResponse.clear();
+    status=WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
+    errorMessage.clear();
+    answerLlmModel.assign(llmModel);
+    promptTokens=42;
+    answerTokens=42198;
+    answerHtml.assign("chat(MOCK, '"+prompt+"')");
 
-    answer.assign("chat(MOCK, '"+prompt+"')");
-
-    MF_DEBUG("MockWingman::summarize() summary:" << answer << endl);
+    MF_DEBUG("MockWingman::chat() answer:" << answerHtml << endl);
 }
 
 } // m8r namespace

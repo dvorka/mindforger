@@ -30,6 +30,7 @@
 #include "ai/ai.h"
 #include "ai/llm/wingman.h"
 #include "ai/llm/openai_wingman.h"
+#include "ai/llm/mock_wingman.h"
 #include "associated_notes.h"
 #include "ontology/thing_class_rel_triple.h"
 #include "aspect/mind_scope_aspect.h"
@@ -676,7 +677,17 @@ public:
      * WINGMAN
      */
     Wingman* getWingman() const { return wingman; }
-    void wingmanSummarize(const std::string& text, std::string& summary);
+    void wingmanChat(
+        const std::string& prompt,
+        const std::string& llmModel,
+        std::string& httpResponse,
+        WingmanStatusCode& status,
+        std::string& errorMessage,
+        std::string& answerLlmModel,
+        int& promptTokens,
+        int& answerTokens,
+        std::string& answerHtml
+    );
 
     /*
      * DIAGNOSTICS

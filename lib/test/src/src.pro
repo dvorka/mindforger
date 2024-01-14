@@ -105,10 +105,23 @@ win32{
 }
 
 SOURCES += \
+    ./test_utils.cpp \
+    ./indexer/repository_indexer_test.cpp \
+    ./config/configuration_test.cpp \
+    ./markdown/markdown_test.cpp \
+    ./html/html_test.cpp \
+    ./json/json_test.cpp \
+    ../benchmark/markdown_benchmark.cpp \
+    ../benchmark/html_benchmark.cpp \
+    ../benchmark/trie_benchmark.cpp \
+    ../benchmark/ai_benchmark.cpp \
+    ./ai/nlp_test.cpp \
+    ./ai/autolinking_test.cpp \
+    ./ai/autolinking_cmark_test.cpp \
     ./gear/datetime_test.cpp \
     ./gear/string_utils_test.cpp \
-    ./indexer/repository_indexer_test.cpp \
-    ./markdown/markdown_test.cpp \
+    ./gear/file_utils_test.cpp \
+    ./gear/trie_test.cpp \
     ./mind/fts_test.cpp \
     ./mind/memory_test.cpp \
     ./mind/mind_test.cpp \
@@ -116,18 +129,6 @@ SOURCES += \
     ./mindforger_lib_unit_tests.cpp \
     ./mind/organizer_test.cpp \
     ./mind/outline_test.cpp \
-    ./test_utils.cpp \
-    ./config/configuration_test.cpp \
-    ../benchmark/markdown_benchmark.cpp \
-    ../benchmark/html_benchmark.cpp \
-    ./html/html_test.cpp \
-    ./ai/nlp_test.cpp \
-    ../benchmark/trie_benchmark.cpp \
-    ../benchmark/ai_benchmark.cpp \
-    ./gear/file_utils_test.cpp \
-    ./gear/trie_test.cpp \
-    ./ai/autolinking_test.cpp \
-    ./ai/autolinking_cmark_test.cpp \
     ./mind/filesystem_information_test.cpp
 
 HEADERS += \

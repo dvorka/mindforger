@@ -121,6 +121,7 @@ private:
     RemoveLibraryDialog* rmLibraryDialog;
     RunToolDialog* runToolDialog;
     WingmanDialog* wingmanDialog;
+    QProgressDialog* wingmanProgressDialog;
     ChatDialog* chatDialog;
     ScopeDialog* scopeDialog;
     OrganizerNewDialog* newOrganizerDialog;

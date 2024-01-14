@@ -113,6 +113,9 @@ constexpr const auto TOOL_GOOGLE_SEARCH = "Google Search";
 constexpr const auto TOOL_CHAT_GPT_WEB = "OpenAI chatGPT web";
 constexpr const auto TOOL_WIKIPEDIA = "Wikipedia";
 
+constexpr const auto ENV_VAR_OPENAI_API_KEY = "MINDFORGER_OPENAI_API_KEY";
+
+
 // improve platform/language specific
 constexpr const auto DEFAULT_NEW_OUTLINE = "# New Markdown File\n\nThis is a new Markdown file created by MindForger.\n\n#Section 1\nThe first section.\n\n";
 
@@ -265,6 +268,11 @@ private:
     bool autolinking; // enable MD autolinking
     bool autolinkingColonSplit;
     bool autolinkingCaseInsensitive;
+    bool wingman; // is Wingman enabled
+    std::string wingmanProvider; // "OpenAI", "Google", "Mock"
+    bool wingmanShellEnvApiKey; // use API key from shell environment on MF load
+    std::string wingmanApiKey;
+    std::string wingmanLlmModel;
     TimeScope timeScope;
     std::string timeScopeAsString;
     std::vector<std::string> tagsScope;
@@ -418,6 +426,9 @@ public:
     void setAutolinkingColonSplit(bool autolinkingColonSplit) { this->autolinkingColonSplit=autolinkingColonSplit; }
     bool isAutolinkingCaseInsensitive() const { return autolinkingCaseInsensitive; }
     void setAutolinkingCaseInsensitive(bool autolinkingCaseInsensitive) { this->autolinkingCaseInsensitive=autolinkingCaseInsensitive; }
+    bool isWingman();
+    std::string getWingmanApiKey() const { return wingmanApiKey; }
+    std::string getWingmanLlmModel() const { return wingmanLlmModel; }
     unsigned int getMd2HtmlOptions() const { return md2HtmlOptions; }
     AssociationAssessmentAlgorithm getAaAlgorithm() const { return aaAlgorithm; }
     void setAaAlgorithm(AssociationAssessmentAlgorithm aaa) { aaAlgorithm = aaa; }

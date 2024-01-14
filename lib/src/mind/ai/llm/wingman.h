@@ -68,6 +68,12 @@ enum WingmanLlmProviders {
     WINGMAN_PROVIDER_GOOGLE,
 };
 
+// Wingman provider service status codes
+enum WingmanStatusCode {
+    WINGMAN_STATUS_CODE_OK,
+    WINGMAN_STATUS_CODE_ERROR
+};
+
 /**
  * Wingman is a class that provides a set of LLM-based use cases.
  */
@@ -125,7 +131,17 @@ public:
         return textPrompts;
     }
 
-    virtual void chat(const std::string& prompt, std::string& answer) = 0;
+    virtual void chat(
+        const std::string& prompt,
+        const std::string& llmModel,
+        std::string& httpResponse,
+        WingmanStatusCode& status,
+        std::string& errorMessage,
+        std::string& answerLlmModel,
+        int& promptTokens,
+        int& answerTokens,
+        std::string& answerHtml
+    ) = 0;
 };
 
 }

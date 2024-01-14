@@ -62,6 +62,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         mind->getWingman()->getPredefinedNPrompts(),
         mind->getWingman()->getPredefinedTPrompts(),
         &view};
+    wingmanProgressDialog = nullptr;
     chatDialog = new ChatDialog{&view};
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
@@ -283,6 +284,9 @@ MainWindowPresenter::~MainWindowPresenter()
     //if(findNoteByNameDialog) delete findNoteByNameDialog;
     if(insertImageDialog) delete insertImageDialog;
     if(newLibraryDialog) delete newLibraryDialog;
+    if(wingmanDialog) delete wingmanDialog;
+    if(wingmanProgressDialog) delete wingmanProgressDialog;
+    if(chatDialog) delete chatDialog;
 
     // TODO deletes
     delete this->mdConfigRepresentation;
@@ -2040,7 +2044,19 @@ void MainWindowPresenter::handleLeftToolbarAction(string selectedTool)
 
 void MainWindowPresenter::doActionWingman()
 {
-    MF_DEBUG("SIGNAL handled: WINGMAN dialog...");
+    MF_DEBUG("SIGNAL handled: WINGMAN dialog..." << endl);
+    if(!config.isWingman()) {
+        QMessageBox msgBox{
+            QMessageBox::Critical,
+            QObject::tr("Wingman Not Available"),
+            QObject::tr(
+                "Wingman provider is either not configured or "
+                "it cannot be initialized.")
+        };
+        msgBox.exec();
+        return;
+    }
+
     // get PHRASE from the active context:
     // - N editor: get word under cursor OR selected text
     // - N tree: get N name
@@ -2139,28 +2155,81 @@ void MainWindowPresenter::handleActionWingman()
     MF_DEBUG("SIGNAL handled: WINGMAN dialog..." << endl);
     this->wingmanDialog->hide();
 
-    string wingmanAnswer{};
+    // show progress bar
+    /*
+    if(wingmanProgressDialog == nullptr) {
+        wingmanProgressDialog = new QProgressDialog(
+            tr("Wingman is talking to GPT provider..."),
+            tr("Cancel"),
+            0,
+            100,
+            &view);
+    } else {
+        wingmanProgressDialog->reset();
+    }
+	wingmanProgressDialog->setWindowModality(Qt::WindowModal);
+    wingmanProgressDialog->show();
+	wingmanProgressDialog->setValue(5);
+    */
+    statusBar->showInfo(QString(tr("Wingman is talking to GPT provider...")));
 
-    // system prompt: prompt + context
-
-    // resolve prompt to system prompt
-    string systemPrompt{this->wingmanDialog->getPromptText().toStdString()};
+    // prompt: resolve prompt w/ the context(s)
+    string prompt{this->wingmanDialog->getPromptText().toStdString()};
     replaceAll(
         CTX_INCLUDE_NAME,
         this->wingmanDialog->getContextNameText().toStdString(),
-        systemPrompt);
+        prompt);
     replaceAll(
         CTX_INCLUDE_TEXT,
         this->wingmanDialog->getContextText().toStdString(),
-        systemPrompt);
+        prompt);
+	// TODO wingmanProgressDialog->setValue(10);
 
-    // RUN wingman
-    // TODO route action to wingman handler
-    mind->wingmanSummarize(systemPrompt, wingmanAnswer);
+    // RUN Wingman
+    string httpResponse{};
+    WingmanStatusCode status{
+        WingmanStatusCode::WINGMAN_STATUS_CODE_OK
+    };
+    string errorMessage{};
+    string answerLlmModel{};
+    int promptTokens{};
+    int answerTokens{};
+    string answerHtml{};
+    // chat
+    mind->wingmanChat(
+        prompt,
+        config.getWingmanLlmModel(),
+        httpResponse,
+        status,
+        errorMessage,
+        answerLlmModel,
+        promptTokens,
+        answerTokens,
+        answerHtml
+    );
+    string answerDescriptor{
+        "[model: " + answerLlmModel +
+        ", tokens (prompt/answer): " +
+        std::to_string(promptTokens) + "/" + std::to_string(answerTokens) +
+        ", status: " +
+        (status==WingmanStatusCode::WINGMAN_STATUS_CODE_OK?"OK":"ERROR") +
+        "]"
+    };
 
-    // show result
-    this->chatDialog->insertPrompt(systemPrompt); // TODO trom huge prompts + suffix ...
-    this->chatDialog->insertOutput(wingmanAnswer);
+    // HIDE progress dialog
+	// TODO wingmanProgressDialog->setValue(100);
+    // TODO wingmanProgressDialog->hide();
+
+    // SHOW result
+    // TODO from huge prompts + suffix ...
+    this->chatDialog->insertPrompt(prompt);
+    this->chatDialog->insertOutput(
+        answerHtml,
+        answerDescriptor,
+        status==WingmanStatusCode::WINGMAN_STATUS_CODE_OK?false:true
+    );
+
+    statusBar->showInfo(QString(tr("Wingman got answer from the GPT provider")));
     this->chatDialog->show();
 }
 

@@ -74,7 +74,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="MarkdownParserTestCase.Bug622Loop64kLinesOverflow"
 #export OPTION_TEST="MarkdownParserTestCase.Deadline"
 #export OPTION_TEST="MarkdownParserTestCase.Links"
-export OPTION_TEST="MarkdownParserTestCase.LinksWithParenthesis"
+#export OPTION_TEST="MarkdownParserTestCase.LinksWithParenthesis"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerLinks"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSections"
 #export OPTION_TEST="MarkdownParserTestCase.MarkdownLexerSectionsNoMetadata"
@@ -120,6 +120,8 @@ export OPTION_TEST="MarkdownParserTestCase.LinksWithParenthesis"
 #export OPTION_TEST="StringGearTestCase.StringToNcName"
 #export OPTION_TEST="TrieTestCase.*"
 #export OPTION_TEST="TrieTestCase.AddAndRemove"
+#export OPTION_TEST="JSonTestCase.SerializeOpenAiRequest"
+export OPTION_TEST="JSonTestCase.ParseOpenAiResponse"
 
 # environment - to be specified in .bashrc or elsewhere:
 #   export M8R_CPU_CORES=7

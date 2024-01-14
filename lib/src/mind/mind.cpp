@@ -53,14 +53,23 @@ Mind::Mind(Configuration &configuration)
 {
     ai = new Ai{memory, *this};
 
-    // wingman: MOCK
-    // wingman = (Wingman*)new MockWingman{};
-    // wingman: OpenAI
-    wingman = (Wingman*)new OpenAiWingman{};
+    MF_DEBUG(
+        "Mind() Wingman init: "
+        << config.isWingman() << "/"
+        << std::to_string(config.getWingmanApiKey().size()) << " "
+        << endl
+    );
+    if(config.isWingman() && config.getWingmanApiKey().size()) {
+        // wingman: OpenAI
+        wingman = (Wingman*)new OpenAiWingman{
+            config.getWingmanApiKey()
+        };
+    } else {
+        // wingman: MOCK
+        wingman = (Wingman*)new MockWingman{};
+    }
     // wingman: Google Bard
     // wingman = (Wingman*)new BardWingman{};
-
-
 
     deleteWatermark = 0;
     activeProcesses = 0;
@@ -1448,10 +1457,30 @@ Outline* Mind::findOutlineByKey(const string& key) const
     return nullptr;
 }
 
-void Mind::wingmanSummarize(const string& text, string& summary)
-{
-    MF_DEBUG("MIND: Wingman summarizing: '" << text << "'" << endl);
-    wingman->chat(text, summary);
+void Mind::wingmanChat(
+    const string& prompt,
+    const string& llmModel,
+    string& httpResponse,
+    WingmanStatusCode& status,
+    string& errorMessage,
+    string& answerLlmModel,
+    int& promptTokens,
+    int& answerTokens,
+    string& answerHtml
+) {
+    MF_DEBUG("MIND: Wingman chat..." << endl);
+    wingman->chat(
+        prompt,
+        llmModel,
+        httpResponse,
+        status,
+        errorMessage,
+        answerLlmModel,
+        promptTokens,
+        answerTokens,
+        answerHtml
+    );
+    MF_DEBUG("MIND: DONE Wingman chat" << endl);
 }
 
 } /* namespace */
