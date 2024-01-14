@@ -1091,6 +1091,7 @@ void MainMenuView::showAllMenuItems()
     actionOrganizerMovePrevious->setEnabled(true);
     actionOrganizerMoveNext->setEnabled(true);
 
+    menuNavigator->show();
     menuNavigator->setEnabled(true);
     actionViewOrganizers->setEnabled(true);
     actionOutlineEdit->setEnabled(true);
@@ -1180,7 +1181,6 @@ void MainMenuView::showModeAwareFacet(bool repositoryMode, bool mfMode)
     }
 }
 
-
 void MainMenuView::showFacetOrganizerList(bool repositoryMode, bool mfMode)
 {
     showAllMenuItems();
@@ -1193,7 +1193,7 @@ void MainMenuView::showFacetOrganizerList(bool repositoryMode, bool mfMode)
     actionOrganizerMovePrevious->setEnabled(false);
     actionOrganizerMoveNext->setEnabled(false);
 
-    menuNavigator->setEnabled(false);
+    menuNavigator->setEnabled(false); menuNavigator->setVisible(false);
     menuLibrary->setEnabled(false);
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
@@ -1208,10 +1208,8 @@ void MainMenuView::showFacetOrganizerView(bool repositoryMode, bool mfMode)
 {
     showAllMenuItems();
 
-    menuNavigator->setEnabled(false);
-#ifdef MF_WIP
+    menuNavigator->setEnabled(false); menuNavigator->hide();
     menuLibrary->setEnabled(false);
-#endif
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
     menuEdit->setEnabled(false);
@@ -1225,7 +1223,7 @@ void MainMenuView::showFacetOutlineList(bool repositoryMode, bool mfMode)
 {
     showAllMenuItems();
 
-    menuNavigator->setEnabled(false);
+    menuNavigator->setEnabled(false); menuNavigator->hide();
     menuOrganizer->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
@@ -1250,7 +1248,7 @@ void MainMenuView::showFacetOutlinesMap(bool repositoryMode, bool mfMode)
 {
     showAllMenuItems();
 
-    menuNavigator->setEnabled(false);
+    menuNavigator->setEnabled(false); menuNavigator->hide();
     menuOrganizer->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
@@ -1264,10 +1262,8 @@ void MainMenuView::showFacetOutlineView(bool repositoryMode, bool mfMode)
 {
     showAllMenuItems();
 
-    menuNavigator->setEnabled(false);
-#ifdef MF_WIP
+    menuNavigator->setEnabled(false); menuNavigator->hide();
     menuLibrary->setEnabled(false);
-#endif
     menuOrganizer->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
@@ -1289,9 +1285,7 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode, bool mfMode)
     menuMind->setEnabled(false);
     actionExit->setEnabled(false);
 
-#ifdef MF_WIP
     menuLibrary->setEnabled(false);
-#endif
     menuOrganizer->setEnabled(false);
     actionOrganizerNew->setEnabled(false);
     actionOrganizerEdit->setEnabled(false);
@@ -1317,7 +1311,7 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode, bool mfMode)
     actionViewLimbo->setEnabled(false);
     actionViewRecentNotes->setEnabled(false);
 
-    menuNavigator->setEnabled(false);
+    menuNavigator->setEnabled(false); menuNavigator->hide();
     actionViewOrganizers->setEnabled(false);
     actionOutlineEdit->setEnabled(false);
     actionOutlineClone->setEnabled(false);

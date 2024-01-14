@@ -36,7 +36,7 @@ public:
     MockWingman& operator =(const MockWingman&&) = delete;
     ~MockWingman();
 
-    virtual void summarize(const std::string& text, std::string& summary) override;
+    virtual void chat(const std::string& prompt, std::string& answer) override;
 };
 
 }

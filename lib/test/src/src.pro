@@ -33,7 +33,7 @@ win32 {
     CONFIG(release, debug|release): LIBS += -L$$PWD/../../release -lmindforger
     else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../debug -lmindforger
 } else {
-    LIBS += -L$$OUT_PWD/../../../lib -lmindforger
+    LIBS += -L$$OUT_PWD/../../../lib -lmindforger -lcurl
 }
 
 !mfnomd2html {

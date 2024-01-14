@@ -97,17 +97,16 @@ void ChatDialog::show()
 
 string ChatDialog::getTerminalPrompt(bool error)
 {
-    // TODO
-    string thing{"notebook"};
-    string thingName{"My notebook"};
-    string wingmanModel{"OpenAI gpt-3"};
+    string thing{"notebook"}; // TODO notebook / note
+    string thingName{"My notebook"}; // TODO name based on ctx
+    string wingmanModel{"OpenAI gpt-3"}; // TODO get provider from mind (virtual method @ base class)
 
     string prompt{
         "<hr/>"
         "<font color='" + COLOR_PROMPT_BLUE + "'>@" + thing + "</font> " +
         "<font color='" + COLOR_PROMPT_GREEN + "'><b>" + thingName + "</b></font>"
         "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-        "<font color='" + COLOR_PROMPT_BLUE + "'>" + wingmanModel + "</font>"
+        "<font color='" + COLOR_PROMPT_BLUE + "'>[" + wingmanModel + "]</font>"
         "<br/>"
     };
 

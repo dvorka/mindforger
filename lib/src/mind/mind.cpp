@@ -52,7 +52,16 @@ Mind::Mind(Configuration &configuration)
       scopeAspect{timeScopeAspect, tagsScopeAspect}
 {
     ai = new Ai{memory, *this};
-    wingman = (Wingman*)new MockWingman{};
+
+    // wingman: MOCK
+    // wingman = (Wingman*)new MockWingman{};
+    // wingman: OpenAI
+    wingman = (Wingman*)new OpenAiWingman{};
+    // wingman: Google Bard
+    // wingman = (Wingman*)new BardWingman{};
+
+
+
     deleteWatermark = 0;
     activeProcesses = 0;
     associationsSemaphore = 0;
@@ -1442,7 +1451,7 @@ Outline* Mind::findOutlineByKey(const string& key) const
 void Mind::wingmanSummarize(const string& text, string& summary)
 {
     MF_DEBUG("MIND: Wingman summarizing: '" << text << "'" << endl);
-    wingman->summarize(text, summary);
+    wingman->chat(text, summary);
 }
 
 } /* namespace */

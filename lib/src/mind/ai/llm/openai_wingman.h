@@ -33,7 +33,11 @@ namespace m8r {
 class OpenAiWingman: Wingman
 {
 private:
-    void curlGet(std::string& url, std::string& readBuffer);
+    std::string apiKey;
+
+    void curlGet(
+        const std::string& prompt,
+        std::string& response);
 
 public:
     explicit OpenAiWingman();
@@ -43,7 +47,7 @@ public:
     OpenAiWingman& operator =(const OpenAiWingman&&) = delete;
     ~OpenAiWingman();
 
-    virtual void summarize(const std::string& text, std::string& summary) override;
+    virtual void chat(const std::string& prompt, std::string& answer) override;
 };
 
 }

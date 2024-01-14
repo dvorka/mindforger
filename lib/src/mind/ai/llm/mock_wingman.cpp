@@ -31,13 +31,14 @@ MockWingman::~MockWingman()
 {
 }
 
-void MockWingman::summarize(const string& text, string& summary)
+
+void MockWingman::chat(const std::string& prompt, std::string& answer)
 {
-    MF_DEBUG("MockWingman::summarize() text:" << text << endl);
+    MF_DEBUG("MockWingman::summarize() text:" << prompt << endl);
 
-    summary = "SUMMARY(MOCK, '"+text+"')";
+    answer.assign("chat(MOCK, '"+prompt+"')");
 
-    MF_DEBUG("MockWingman::summarize() summary:" << summary << endl);
+    MF_DEBUG("MockWingman::summarize() summary:" << answer << endl);
 }
 
 } // m8r namespace

@@ -88,7 +88,7 @@ win32 {
     else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/debug -lmindforger
 } else {
     # Linux and macOS
-    LIBS += -L$$OUT_PWD/../lib -lmindforger
+    LIBS += -L$$OUT_PWD/../lib -lmindforger -lcurl
 }
 
 # Markdown to HTML: cmark-gfm (or nothing)

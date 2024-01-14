@@ -18,6 +18,10 @@
 */
 #include "openai_wingman.h"
 
+#include "../../../representations/json/nlohmann/json.hpp"
+
+#include "../../../gear/string_utils.h"
+
 namespace m8r {
 
 using namespace std;
@@ -26,12 +30,10 @@ using namespace std;
  * cURL callback for writing data to string.
  */
 
-static size_t WriteCallback(
-    void* contents, size_t size, size_t nmemb, void* userp
-) {
-    ((std::string*)userp)->append((char*)contents, size * nmemb);
-
-    return size * nmemb;
+size_t openaiCurlWriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
+    size_t totalSize = size * nmemb;
+    output->append((char*)contents, totalSize);
+    return totalSize;
 }
 
 /*
@@ -39,41 +41,126 @@ static size_t WriteCallback(
  */
 
 OpenAiWingman::OpenAiWingman()
-    : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI)
+    : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI),
+    apiKey{}
 {
+    const char* apiKeyEnv = std::getenv("OPENAI_API_KEY");
+    if (!apiKeyEnv) {
+        std::cerr << "OpenAI API key not found in the environment variable OPENAI_API_KEY." << std::endl;
+        // TODO open FE dialog and ask for entering the key
+        throw std::runtime_error(
+            "OpenAI API key not found in the environment variable OPENAI_API_KEY.");
+    }
+    this->apiKey = string(apiKeyEnv);
 }
 
 OpenAiWingman::~OpenAiWingman()
 {
 }
 
-void OpenAiWingman::curlGet(string& url, string& readBuffer)
-{
-    CURL* curl;
-    CURLcode res;
+/**
+ * OpenAI cURL GET request.
+ *
+ * @see https://platform.openai.com/docs/guides/text-generation/chat-completions-api?lang=curl
+ */
+void OpenAiWingman::curlGet(
+    const string& prompt,
+    string& response
+) {
+    CURL* curl = curl_easy_init();
+    if (curl) {
+        // TODO get GPT model from the configuration
+        string gptModel{"gpt-3.5-turbo"};
 
-    curl = curl_easy_init();
-    if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, url);
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        string escapedPrompt{prompt};
+        replaceAll("\n", " ", escapedPrompt);
+        replaceAll("\"", "\\\"", escapedPrompt);
 
-        // https://curl.se/libcurl/c/curl_easy_perform.html
-        res = curl_easy_perform(curl);
+        string promptJSon{
+            "{"
+            "  \"model\": \"" + gptModel + "\","
+            "  \"messages\": ["
+            "    {"
+            "      \"role\": \"system\","
+            "      \"content\": \"You are a helpful assistant.\""
+            "    },"
+            // TODO conversation history as additional context
+            //"    {"
+            //"      \"role\": \"user\","
+            //"      \"content\": \"Who won the world series in 2020?\""
+            //"    },"
+            //"    {"
+            //"      \"role\": \"assistant\","
+            //"      \"content\": \"The Los Angeles Dodgers won the World Series in 2020.\""
+            //"    },"
+            "    {"
+            "      \"role\": \"user\","
+            "      \"content\": \"" + escapedPrompt + "\""
+            "    }"
+            "  ]"
+            "}"
+        };
+        MF_DEBUG(
+            "OpenAiWingman::curlGet() promptJSon:" << endl
+            << ">>>"
+            << promptJSon
+            << "<<<"
+            << endl);
+        // TODO remove
+        // TODO response = promptJSon;
 
+        // set up cURL options
+        curl_easy_setopt(
+            curl, CURLOPT_URL,
+            "https://api.openai.com/v1/chat/completions");
+        curl_easy_setopt(
+            curl, CURLOPT_POSTFIELDS,
+            promptJSon.c_str());
+        curl_easy_setopt(
+            curl, CURLOPT_WRITEFUNCTION,
+            openaiCurlWriteCallback);
+        curl_easy_setopt(
+            curl, CURLOPT_WRITEDATA,
+            &response);
+
+        struct curl_slist* headers = NULL;
+        headers = curl_slist_append(headers, ("Authorization: Bearer " + apiKey).c_str());
+        headers = curl_slist_append(headers, "Content-Type: application/json");
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+        // perform the request
+        CURLcode res = curl_easy_perform(curl);
+
+        // clean up
         curl_easy_cleanup(curl);
-        MF_DEBUG("Wingman::curlGet() result:" << res << endl);
-        MF_DEBUG("Wingman::curlGet() response:" << readBuffer << endl);
+        curl_slist_free_all(headers);
+
+        if (res != CURLE_OK) {
+            std::cerr << "cURL request failed: " << curl_easy_strerror(res) << std::endl;
+            response.clear();
+        }
+        // TODO report error code to show RED in chat
+
+        // parse JSon
+        // TODO import to json namespace
+        // TODO auto responseJSon = nlohmann::json::parse(R"({"happy": true, "pi": 3.141})");
+        auto responseJSon = nlohmann::json::parse(response);
+        MF_DEBUG(
+            "OpenAiWingman::curlGet() responseJSon:" << endl
+            << ">>>"
+            << responseJSon.dump(4)
+            << "<<<"
+            << endl);
     }
 }
 
-void OpenAiWingman::summarize(const string& text, string& summary)
+void OpenAiWingman::chat(const std::string& prompt, std::string& answer)
 {
-    MF_DEBUG("OpenAiWingman::summarize() text:" << text << endl);
+    MF_DEBUG("OpenAiWingman::summarize() prompt:" << endl << prompt << endl);
 
-    summary = "SUMMARY(OpenAI, '"+text+"')";
+    curlGet(prompt, answer);
 
-    MF_DEBUG("OpenAiWingman::summarize() summary:" << summary << endl);
+    MF_DEBUG("OpenAiWingman::summarize() summary:" << endl << answer << endl);
 }
 
 } // m8r namespace

@@ -125,8 +125,7 @@ public:
         return textPrompts;
     }
 
-    // dialog || menu Notebook/Wingman/Summarize || menu Note/Wingman/Summarize
-    virtual void summarize(const std::string& text, std::string& summary) = 0;
+    virtual void chat(const std::string& prompt, std::string& answer) = 0;
 };
 
 }

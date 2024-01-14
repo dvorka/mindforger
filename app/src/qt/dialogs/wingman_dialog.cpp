@@ -28,8 +28,8 @@ WingmanDialog::WingmanDialog(
     const vector<string>& predefinedTPrompts,
     QWidget* parent
 ):
-    context{},
-    QDialog(parent)
+    QDialog(parent),
+    context{}
 {
     for(string prompt:predefinedOPrompts) {
         outlinePrompts.push_back(QString::fromStdString(prompt));

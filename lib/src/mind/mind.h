@@ -29,7 +29,7 @@
 #include "knowledge_graph.h"
 #include "ai/ai.h"
 #include "ai/llm/wingman.h"
-#include "ai/llm/mock_wingman.h"
+#include "ai/llm/openai_wingman.h"
 #include "associated_notes.h"
 #include "ontology/thing_class_rel_triple.h"
 #include "aspect/mind_scope_aspect.h"
