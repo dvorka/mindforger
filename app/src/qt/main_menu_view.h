@@ -49,7 +49,6 @@ public:
     QMenu* menuFind;
     QMenu* menuView;
     QMenu* menuNavigator;
-    QMenu* menuLibrary;
 #ifdef MF_WIP
     QMenu* menuFlashcards;
 #endif
@@ -82,6 +81,10 @@ public:
     QAction* actionMindScope;
     QAction* actionMindForget;
     QAction* actionMindSnapshot;
+    QMenu* submenuMindLibrary;
+    QAction* actionLibraryAdd;
+    QAction* actionLibrarySync;
+    QAction* actionLibraryDeprecate;
     QAction* actionMindPreferences;
     QMenu* submenuMindExport;
     QAction* actionMindExportCsv;
@@ -120,11 +123,6 @@ public:
     // menu: Knowledge
     QAction* actionKnowledgeWikipedia;
     QAction* actionKnowledgeArxiv;
-
-    // menu: Library
-    QAction* actionLibraryAdd;
-    QAction* actionLibrarySync;
-    QAction* actionLibraryDeprecate;
 
     // menu: Organizer
     QAction* actionOrganizerNew;

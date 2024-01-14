@@ -82,6 +82,12 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindRemember = new QAction(QIcon(":/menu-icons/save.svg"), tr("Re&member"), mainWindow);
     actionMindRemember->setStatusTip(tr("Persist all Things in Memory"));
 
+    // TODO remove this menu item > make it Configuration option in Mind menu (Limbo or erase)
+    // forget ... move to Limbo or erase
+    actionMindForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Forget"), mainWindow);
+    actionMindForget->setStatusTip(tr("Limbo vs erase memory..."));
+    actionMindForget->setEnabled(false);
+
     // recall ... smart *combined* (semantic) mind search using FTS/associations/... to find O or N
     //actionMindRecall = new QAction(tr("&Recall"), mainWindow);
     // IMPROVE show memory dwell as a base for reminding a note
@@ -111,11 +117,34 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindScope = new QAction(QIcon(":/menu-icons/filter.svg"), tr("S&cope"), mainWindow);
     actionMindScope->setStatusTip(tr("Don't show Notebooks and Notes older than..."));
 
-    // TODO remove this menu item > make it Configuration option in Mind menu (Limbo or erase)
-    // forget ... move to Limbo or erase
-    actionMindForget = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Forget"), mainWindow);
-    actionMindForget->setStatusTip(tr("Limbo vs erase memory..."));
-    actionMindForget->setEnabled(false);
+    // SUBMENU: library
+    submenuMindLibrary = menuMind->addMenu(QIcon(":/menu-icons/copy.svg"), tr("Li&brary"));
+    // library: add
+    actionLibraryAdd = new QAction(
+        QIcon(":/menu-icons/new.svg"), tr("&New library"), mainWindow);
+    actionLibraryAdd->setStatusTip(
+        tr("Add path to the directory with documents (PDF, txt, HTML)..."));
+    // choose library > determine library src directory > re-index src directory
+    // show side-by-side comparison: ONLY in src / ACTION <.del> / ONLY in MF
+    // - includes synchronization in one on another direction
+    // - decisions executed AFTER user clicks DO IT button (not while editing dialog)
+    actionLibrarySync= new QAction(
+        QIcon(":/menu-icons/edit.svg"),
+        tr("&Update library"),
+        mainWindow);
+    actionLibrarySync->setStatusTip(
+        tr(
+            "Synchronize library source directory with MindForger notebook(s) which represent"
+            "library resources..."));
+    // library: deprecate
+    actionLibraryDeprecate = new QAction(
+        QIcon(":/menu-icons/delete.svg"), tr("&Delete library"), mainWindow);
+    actionLibraryDeprecate->setStatusTip(tr(
+        "Delete all Notebooks representing the library resources..."));
+    // assemble Library sub-menu
+    submenuMindLibrary->addAction(actionLibraryAdd);
+    submenuMindLibrary->addAction(actionLibrarySync);
+    submenuMindLibrary->addAction(actionLibraryDeprecate);
 
     // dream ... sanity, integrity, detox, inference, assoc discovery, ...
     //actionMindDream = new QAction(tr("&Dream"), mainWindow);
@@ -158,6 +187,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addAction(actionMindAutolink);
     menuMind->addAction(actionMindWingman);
     menuMind->addAction(actionMindScope);
+    menuMind->addSeparator();
+    menuMind->addMenu(submenuMindLibrary);
     menuMind->addSeparator();
     menuMind->addAction(actionMindPreferences);
     menuMind->addSeparator();
@@ -369,36 +400,6 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNavigator->addSeparator();
     menuNavigator->addAction(actionNavigatorShuffle);
     menuNavigator->setEnabled(false);
-
-    // menu: library
-    menuLibrary = qMenuBar->addMenu(tr("Lib&rary"));
-
-    actionLibraryAdd = new QAction(
-        QIcon(":/menu-icons/new.svg"), tr("&New library"), mainWindow);
-    actionLibraryAdd->setStatusTip(
-        tr("Add path to the directory with documents (PDF, txt, HTML)..."));
-
-    // choose library > determine library src directory > re-index src directory
-    // show side-by-side comparison: ONLY in src / ACTION <.del> / ONLY in MF
-    // - includes synchronization in one on another direction
-    // - decisions executed AFTER user clicks DO IT button (not while editing dialog)
-    actionLibrarySync= new QAction(
-        QIcon(":/menu-icons/edit.svg"),
-        tr("&Update library"),
-        mainWindow);
-    actionLibrarySync->setStatusTip(
-        tr(
-            "Synchronize library source directory with MindForger notebook(s) which represent"
-            "library resources..."));
-
-    actionLibraryDeprecate = new QAction(
-        QIcon(":/menu-icons/delete.svg"), tr("&Delete library"), mainWindow);
-    actionLibraryDeprecate->setStatusTip(tr(
-        "Delete all Notebooks representing the library resources..."));
-
-    menuLibrary->addAction(actionLibraryAdd);
-    menuLibrary->addAction(actionLibrarySync);
-    menuLibrary->addAction(actionLibraryDeprecate);
 
     // menu: flashcards
 #ifdef MF_WIP
@@ -1047,6 +1048,7 @@ void MainMenuView::showAllMenuItems()
     menuMind->setEnabled(true);
     // autolink: leave as is - it's not that simple as it's status, not just action
     actionMindScope->setEnabled(true);
+    submenuMindLibrary->setEnabled(true);
     actionExit->setEnabled(true);
 
     menuFind->setEnabled(true);
@@ -1073,7 +1075,6 @@ void MainMenuView::showAllMenuItems()
     actionViewLimbo->setEnabled(true);
     actionViewRecentNotes->setEnabled(true);
 
-    menuLibrary->setEnabled(true);
     actionLibraryAdd->setEnabled(true);
     actionLibraryDeprecate->setEnabled(true);
 
@@ -1137,8 +1138,8 @@ void MainMenuView::showAllMenuItems()
 void MainMenuView::showModeAwareFacet(bool repositoryMode, bool mfMode)
 {
    if(!repositoryMode) {
+        submenuMindLibrary->setEnabled(false);
         menuView->setEnabled(false);
-        menuLibrary->setEnabled(false);
         menuOutline->setEnabled(false);
         menuEdit->setEnabled(false);
         menuFormat->setEnabled(false);
@@ -1149,7 +1150,7 @@ void MainMenuView::showModeAwareFacet(bool repositoryMode, bool mfMode)
         actionFindOutlineByTag->setEnabled(false);
     }
     if(!mfMode) {
-        menuLibrary->setEnabled(false);
+        submenuMindLibrary->setEnabled(false);
 #ifdef MF_WIP
         menuFlashcards->setEnabled(false);
 #endif
@@ -1193,8 +1194,8 @@ void MainMenuView::showFacetOrganizerList(bool repositoryMode, bool mfMode)
     actionOrganizerMovePrevious->setEnabled(false);
     actionOrganizerMoveNext->setEnabled(false);
 
+    submenuMindLibrary->setEnabled(false);
     menuNavigator->setEnabled(false); menuNavigator->setVisible(false);
-    menuLibrary->setEnabled(false);
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
     menuEdit->setEnabled(false);
@@ -1208,8 +1209,8 @@ void MainMenuView::showFacetOrganizerView(bool repositoryMode, bool mfMode)
 {
     showAllMenuItems();
 
+    submenuMindLibrary->setEnabled(false);
     menuNavigator->setEnabled(false); menuNavigator->hide();
-    menuLibrary->setEnabled(false);
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
     menuEdit->setEnabled(false);
@@ -1262,8 +1263,8 @@ void MainMenuView::showFacetOutlineView(bool repositoryMode, bool mfMode)
 {
     showAllMenuItems();
 
+    submenuMindLibrary->setEnabled(false);
     menuNavigator->setEnabled(false); menuNavigator->hide();
-    menuLibrary->setEnabled(false);
     menuOrganizer->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
@@ -1283,9 +1284,9 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode, bool mfMode)
     showAllMenuItems();
 
     menuMind->setEnabled(false);
+    submenuMindLibrary->setEnabled(false);
     actionExit->setEnabled(false);
 
-    menuLibrary->setEnabled(false);
     menuOrganizer->setEnabled(false);
     actionOrganizerNew->setEnabled(false);
     actionOrganizerEdit->setEnabled(false);

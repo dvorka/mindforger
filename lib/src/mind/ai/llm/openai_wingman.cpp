@@ -44,7 +44,8 @@ OpenAiWingman::OpenAiWingman()
     : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI),
     apiKey{}
 {
-    const char* apiKeyEnv = std::getenv("OPENAI_API_KEY");
+    // user may have multiple OpenAI accounts and keys - get the key generated for MF
+    const char* apiKeyEnv = std::getenv("MINDFORGER_OPENAI_API_KEY");
     if (!apiKeyEnv) {
         std::cerr << "OpenAI API key not found in the environment variable OPENAI_API_KEY." << std::endl;
         // TODO open FE dialog and ask for entering the key
