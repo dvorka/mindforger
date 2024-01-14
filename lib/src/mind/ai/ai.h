@@ -70,7 +70,7 @@ private:
      * Associations
      */
 
-    // Associations assessment implemenations: AA @ weighted FTS, AA @ BoW
+    // Associations assessment implementations: AA @ weighted FTS, AA @ BoW
     AiAssociationsAssessment* aa;
 
     /*
@@ -140,6 +140,18 @@ private:
      * @brief Train associations assessment neural network once memory is learned.
      */
     void trainAaNn();
+
+#ifdef DO_MF_DEBUG
+public:
+    static void print(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard) {
+        std::cout << "Note '" << n->getName() << "' AA leaderboard("<< leaderboard.size() <<"):" << std::endl;
+        int i=1;
+        for(auto& nn:leaderboard) {
+            std::cout << "  #" << i++ << " '" << nn.first->getName() << "' ~ " << nn.second << std::endl;
+        }
+    }
+#endif
+
 };
 
 }
