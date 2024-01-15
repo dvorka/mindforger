@@ -152,6 +152,7 @@ void ChatDialog::insertOutput(
     chatWindow->ensureCursorVisible();
 }
 
+// TODO this code should be in a presenter, not in the view class
 void ChatDialog::runCommand()
 {
     if(cmdEdit->text().size()) {

@@ -2127,11 +2127,11 @@ void MainWindowPresenter::doActionWingman()
         }
     }
 
-    if(contextTextName.length() == 0) {
+    if(contextTextName.length() == 0 and contextText.length() == 0) {
         QMessageBox msgBox{
             QMessageBox::Critical,
-            QObject::tr("Empty Prompt"),
-            QObject::tr("Prompt to run/explain/process is empty.")
+            QObject::tr("Empty Context"),
+            QObject::tr("Context which is used to create the prompt is empty.")
         };
         msgBox.exec();
         return;
@@ -2139,14 +2139,8 @@ void MainWindowPresenter::doActionWingman()
 
     // context
     this->wingmanDialog->initForMode(contextType);
-    if(contextType == WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT) {
-        this->wingmanDialog->setContextNameText("");
-        this->wingmanDialog->setContextText(contextTextName);
-    } else {
-        this->wingmanDialog->setContextNameText(contextTextName);
-        this->wingmanDialog->setContextText(contextText);
-    }
-
+    this->wingmanDialog->setContextNameText(contextTextName);
+    this->wingmanDialog->setContextText(contextText);
     this->wingmanDialog->show();
 }
 
@@ -2156,6 +2150,8 @@ void MainWindowPresenter::handleActionWingman()
     this->wingmanDialog->hide();
 
     // show progress bar
+    // TODO QtConcurrent must be used to run long running operation in a separate thread
+    // https://doc.qt.io/qt-5/qtconcurrentrun.html
     /*
     if(wingmanProgressDialog == nullptr) {
         wingmanProgressDialog = new QProgressDialog(
@@ -2196,6 +2192,8 @@ void MainWindowPresenter::handleActionWingman()
     int answerTokens{};
     string answerHtml{};
     // chat
+    // TODO let AsyncTaskNotificationsDistributor to run it:
+    // - create a queue of tasks, store the task for distributor there, let it run :)
     mind->wingmanChat(
         prompt,
         config.getWingmanLlmModel(),

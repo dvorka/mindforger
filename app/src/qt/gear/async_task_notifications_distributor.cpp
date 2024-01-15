@@ -57,7 +57,7 @@ AsyncTaskNotificationsDistributor::~AsyncTaskNotificationsDistributor()
 // TODO refactor this function to multiple methods to make it more structured
 void AsyncTaskNotificationsDistributor::run()
 {
-    // avoid re-calculation of TayW word learderboards if it's not needed
+    // avoid re-calculation of TayW word leaderboards if it's not needed
     QString lastTayWords{};
     Outline* lastTayWOutline{};
     Note* lastTayWNote{};

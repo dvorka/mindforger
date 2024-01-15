@@ -182,7 +182,12 @@ void WingmanDialog::initForMode(WingmanDialogModes mode)
 
 void WingmanDialog::setContextText(QString context) {
     this->context=context;
-    this->contextEdit->setText(context.mid(0, 50).append("..."));
+
+    int limit{50};
+    if(context.length()>limit) {
+        context=context.mid(0, limit).append("...");
+    }
+    this->contextEdit->setText(context);
 }
 
 QString WingmanDialog::getContextText() const {
