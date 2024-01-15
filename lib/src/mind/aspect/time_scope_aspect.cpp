@@ -32,14 +32,15 @@ TimeScopeAspect::~TimeScopeAspect()
 {
 }
 
-string TimeScopeAspect::getTimeScopeAsString()
+string TimeScopeAspect::getTimeScopeAsString() const
 {
     string result{};
+
     timeScope.toString(result);
 #ifdef __APPLE__
     return result;
 #else
-    return std::move(result);
+    return result;
 #endif
 }
 

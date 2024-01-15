@@ -69,7 +69,7 @@ public:
         timePoint = now-timeScope.relativeSecs;
     }
     TimeScope& getTimeScope() { return timeScope; }
-    std::string getTimeScopeAsString();
+    std::string getTimeScopeAsString() const;
     void resetTimeScope() { timeScope.reset(); }
 
     void setTimePoint(time_t timePoint);
