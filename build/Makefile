@@ -52,7 +52,7 @@ help: ## make targets help
 
 .PHONY: clean
 clean: ## clean build artifacts
-	rm -vf ../app/mindforger
+	rm -vf ../app/mindforger ../app/*.o
 	rm -vf ../lib/libmindforger.a
 	rm -vf ../lib/test/src/mindforger-lib-unit-tests
 	cd .. && make clean
