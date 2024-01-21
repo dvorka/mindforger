@@ -20,7 +20,6 @@ Big thanks to 3rd party FOSS content authors:
 * Jordan Russell ([jrsoftware.org](http://jrsoftware.org) - Windows installer framework)
 * Graeme Gott and Wereturtle ([Ghostwriter](https://github.com/wereturle/ghostwriter) - inspiration and code)
 * Christian Loose ([CuteMarkEd](https://cloose.github.io/CuteMarkEd/) - inspiration and code)
-* Davis E. King ([MITIE](https://github.com/mit-nlp/MITIE) - AI/NLP library and tools for information extraction - library)
 * Jean-loup Gailly, Mark Adler ([Zlib](https://sourceforge.net/projects/gnuwin32/) - library)
 * David Parsons ([Discount](http://www.pell.portland.or.us/~orc/Code/discount/) - Markdown rendering - library used in the past)
 * Google ([Google C++ unit testing framework](https://github.com/google/googletest))

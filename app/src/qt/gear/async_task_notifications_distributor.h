@@ -44,8 +44,8 @@ class MainWindowPresenter;
  * accessible.
  *
  * Summary: distributor gets or pulls tasks, executes them (in its own thread i.e. it
- * doesn't block Qt main thread) and notifies result using signals to Qt frontend (which
- * ensures asynchronous dispatch).
+ * doesn't block Qt main thread) and notifies about result availability using signals
+ * to Qt frontend (which ensures asynchronous dispatch).
  */
 class AsyncTaskNotificationsDistributor : public QThread
 {
@@ -121,7 +121,6 @@ signals:
     void signalRefreshCurrentNotePreview();
 
 public slots:
-
     void slotConfigurationUpdated();
 };
 

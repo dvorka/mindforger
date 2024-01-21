@@ -352,8 +352,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuView->addAction(actionViewTags);
     menuView->addAction(actionViewNavigator);
     menuView->addAction(actionViewCli);
-    menuView->addAction(actionViewTerminal);
 #ifdef MF_WIP
+    menuView->addAction(actionViewTerminal);
     menuView->addAction(actionViewStencils);
     menuView->addAction(actionViewDwell);
 #endif

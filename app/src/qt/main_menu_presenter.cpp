@@ -35,7 +35,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         mwp, SLOT(doActionMindNewFile()));
     QObject::connect(
         view->actionMindWingman, SIGNAL(triggered()),
-        mwp, SLOT(doActionWingman()));
+        mwp, SLOT(handleActionWingman()));
     QObject::connect(
         view->actionMindThink, SIGNAL(triggered()),
         mwp, SLOT(doActionMindToggleThink()));

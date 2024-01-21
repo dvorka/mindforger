@@ -54,22 +54,31 @@ Mind::Mind(Configuration &configuration)
     ai = new Ai{memory, *this};
 
     MF_DEBUG(
-        "Mind() Wingman init: "
-        << config.isWingman() << "/"
+        "MIND Wingman init: "
+        << boolalpha << config.isWingman() << "/"
         << std::to_string(config.getWingmanApiKey().size()) << " "
         << endl
     );
-    if(config.isWingman() && config.getWingmanApiKey().size()) {
-        // wingman: OpenAI
-        wingman = (Wingman*)new OpenAiWingman{
-            config.getWingmanApiKey()
-        };
-    } else {
-        // wingman: MOCK
-        wingman = (Wingman*)new MockWingman{};
+    if(config.isWingman()) {
+        MF_DEBUG("MIND Wingman INIT: instantiation..." << endl);
+        if(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI && config.getWingmanApiKey().size()) {
+            // wingman: OpenAI
+            MF_DEBUG("  MIND Wingman ~ OpenAI" << endl);
+            wingman = (Wingman*)new OpenAiWingman{
+                config.getWingmanApiKey(),
+                config.getWingmanLlmModel()
+            };
+        // } else if(BARD)
+        //   wingman: Google Bard
+        //   wingman = (Wingman*)new BardWingman{};
+        } else {
+            // wingman: MOCK
+            MF_DEBUG("  MIND Wingman ~ MOCK" << endl);
+            wingman = (Wingman*)new MockWingman{
+                "mock-llm-model"
+            };
+        }
     }
-    // wingman: Google Bard
-    // wingman = (Wingman*)new BardWingman{};
 
     deleteWatermark = 0;
     activeProcesses = 0;
@@ -1459,7 +1468,6 @@ Outline* Mind::findOutlineByKey(const string& key) const
 
 void Mind::wingmanChat(
     const string& prompt,
-    const string& llmModel,
     string& httpResponse,
     WingmanStatusCode& status,
     string& errorMessage,
@@ -1471,7 +1479,6 @@ void Mind::wingmanChat(
     MF_DEBUG("MIND: Wingman chat..." << endl);
     wingman->chat(
         prompt,
-        llmModel,
         httpResponse,
         status,
         errorMessage,

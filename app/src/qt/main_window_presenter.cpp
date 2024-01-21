@@ -57,13 +57,21 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     syncLibraryDialog = new SyncLibraryDialog{&view};
     rmLibraryDialog = new RemoveLibraryDialog(&view);
     runToolDialog = new RunToolDialog{&view};
-    wingmanDialog = new WingmanDialog{
-        mind->getWingman()->getPredefinedOPrompts(),
-        mind->getWingman()->getPredefinedNPrompts(),
-        mind->getWingman()->getPredefinedTPrompts(),
-        &view};
     wingmanProgressDialog = nullptr;
-    chatDialog = new ChatDialog{&view};
+    if(config.isWingman()) {
+        wingmanDialog = new WingmanDialog{
+            mind->getWingman()->getPredefinedOPrompts(),
+            mind->getWingman()->getPredefinedNPrompts(),
+            mind->getWingman()->getPredefinedTPrompts(),
+            &view
+        };
+    } else {
+        vector<string> empty{};
+        wingmanDialog = new WingmanDialog{
+            empty, empty, empty,
+            &view
+        };
+    }
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
     newOutlineDialog = new OutlineNewDialog{
@@ -105,9 +113,10 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // wire signals
     QObject::connect(
-        wingmanDialog->getRunButton(), SIGNAL(clicked()),
-        this, SLOT(handleActionWingman()));
+        wingmanDialog, SIGNAL(signalRunWingman()),
+        this, SLOT(slotRunWingmanFromDialog()));
     QObject::connect(
+        // TODO remove / comment
         runToolDialog->getRunButton(), SIGNAL(clicked()),
         this, SLOT(handleRunTool()));
     QObject::connect(
@@ -284,11 +293,9 @@ MainWindowPresenter::~MainWindowPresenter()
     //if(findNoteByNameDialog) delete findNoteByNameDialog;
     if(insertImageDialog) delete insertImageDialog;
     if(newLibraryDialog) delete newLibraryDialog;
-    if(wingmanDialog) delete wingmanDialog;
     if(wingmanProgressDialog) delete wingmanProgressDialog;
-    if(chatDialog) delete chatDialog;
+    if(wingmanDialog) delete wingmanDialog;
 
-    // TODO deletes
     delete this->mdConfigRepresentation;
     delete this->mdRepositoryConfigRepresentation;
     delete this->mdDocumentRepresentation;
@@ -394,7 +401,9 @@ void MainWindowPresenter::showInitialView()
             statusBar->showMindStatistics();
             // ask notifications distributor to repaint status bar later
             AsyncTaskNotificationsDistributor::Task* task
-                = new AsyncTaskNotificationsDistributor::Task{f,AsyncTaskNotificationsDistributor::TaskType::DREAM_TO_THINK};
+                = new AsyncTaskNotificationsDistributor::Task{
+                    f,
+                    AsyncTaskNotificationsDistributor::TaskType::DREAM_TO_THINK};
             distributor->add(task);
         }
     }
@@ -660,7 +669,9 @@ void MainWindowPresenter::doActionMindThink()
         statusBar->showMindStatistics();
         // ask notifications distributor to repaint status bar later
         AsyncTaskNotificationsDistributor::Task* task
-            = new AsyncTaskNotificationsDistributor::Task{f,AsyncTaskNotificationsDistributor::TaskType::DREAM_TO_THINK};
+            = new AsyncTaskNotificationsDistributor::Task{
+                f,
+                AsyncTaskNotificationsDistributor::TaskType::DREAM_TO_THINK};
         distributor->add(task);
     }
 }
@@ -2042,9 +2053,10 @@ void MainWindowPresenter::handleLeftToolbarAction(string selectedTool)
     QDesktopServices::openUrl(QUrl{command});
 }
 
-void MainWindowPresenter::doActionWingman()
+void MainWindowPresenter::handleActionWingman()
 {
-    MF_DEBUG("SIGNAL handled: WINGMAN dialog..." << endl);
+    MF_DEBUG("SIGNAL handled: WINGMAN CHAT dialog requests PROMPT run..." << endl);
+
     if(!config.isWingman()) {
         QMessageBox msgBox{
             QMessageBox::Critical,
@@ -2127,32 +2139,41 @@ void MainWindowPresenter::doActionWingman()
         }
     }
 
-    if(contextTextName.length() == 0 and contextText.length() == 0) {
-        QMessageBox msgBox{
-            QMessageBox::Critical,
-            QObject::tr("Empty Context"),
-            QObject::tr("Context which is used to create the prompt is empty.")
-        };
-        msgBox.exec();
-        return;
-    }
-
-    // context
-    this->wingmanDialog->initForMode(contextType);
-    this->wingmanDialog->setContextNameText(contextTextName);
-    this->wingmanDialog->setContextText(contextText);
-    this->wingmanDialog->show();
+    this->wingmanDialog->show(
+        contextType,
+        contextTextName,
+        contextText
+    );
 }
 
-void MainWindowPresenter::handleActionWingman()
+void MainWindowPresenter::slotRunWingmanFromDialog()
 {
-    MF_DEBUG("SIGNAL handled: WINGMAN dialog..." << endl);
-    this->wingmanDialog->hide();
+    // pull prompt from the dialog & prepare prompt from the dialog
+    string prompt = this->wingmanDialog->getPrompt();
 
-    // show progress bar
-    // TODO QtConcurrent must be used to run long running operation in a separate thread
-    // https://doc.qt.io/qt-5/qtconcurrentrun.html
-    /*
+    replaceAll(
+        CTX_INCLUDE_NAME,
+        this->wingmanDialog->getContextNameText().toStdString(),
+        prompt);
+    replaceAll(
+        CTX_INCLUDE_TEXT,
+        this->wingmanDialog->getContextText().toStdString(),
+        prompt);
+
+    // RUN Wingman
+    statusBar->showInfo(QString(tr("Wingman is talking to GPT provider...")));
+
+    string httpResponse{};
+    WingmanStatusCode status{
+        WingmanStatusCode::WINGMAN_STATUS_CODE_OK
+    };
+    string errorMessage{};
+    string answerLlmModel{};
+    int promptTokens{};
+    int answerTokens{};
+    string answerHtml{};
+    // chat
+    // - create a queue of tasks, store the task for distributor there, let it run :)
     if(wingmanProgressDialog == nullptr) {
         wingmanProgressDialog = new QProgressDialog(
             tr("Wingman is talking to GPT provider..."),
@@ -2166,37 +2187,14 @@ void MainWindowPresenter::handleActionWingman()
 	wingmanProgressDialog->setWindowModality(Qt::WindowModal);
     wingmanProgressDialog->show();
 	wingmanProgressDialog->setValue(5);
-    */
-    statusBar->showInfo(QString(tr("Wingman is talking to GPT provider...")));
-
-    // prompt: resolve prompt w/ the context(s)
-    string prompt{this->wingmanDialog->getPromptText().toStdString()};
-    replaceAll(
-        CTX_INCLUDE_NAME,
-        this->wingmanDialog->getContextNameText().toStdString(),
-        prompt);
-    replaceAll(
-        CTX_INCLUDE_TEXT,
-        this->wingmanDialog->getContextText().toStdString(),
-        prompt);
-	// TODO wingmanProgressDialog->setValue(10);
-
-    // RUN Wingman
-    string httpResponse{};
-    WingmanStatusCode status{
-        WingmanStatusCode::WINGMAN_STATUS_CODE_OK
-    };
-    string errorMessage{};
-    string answerLlmModel{};
-    int promptTokens{};
-    int answerTokens{};
-    string answerHtml{};
-    // chat
-    // TODO let AsyncTaskNotificationsDistributor to run it:
-    // - create a queue of tasks, store the task for distributor there, let it run :)
+    // force processing of all events and refresh
+    QCoreApplication::processEvents();
+    // measure time
+    auto start = std::chrono::high_resolution_clock::now();
+    // run
+    // TODO let AsyncTaskNotificationsDistributor to run it so that progress gets events
     mind->wingmanChat(
         prompt,
-        config.getWingmanLlmModel(),
         httpResponse,
         status,
         errorMessage,
@@ -2205,30 +2203,31 @@ void MainWindowPresenter::handleActionWingman()
         answerTokens,
         answerHtml
     );
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+    // wingmanProgressDialog->hide();
     string answerDescriptor{
         "[model: " + answerLlmModel +
         ", tokens (prompt/answer): " +
         std::to_string(promptTokens) + "/" + std::to_string(answerTokens) +
-        ", status: " +
+        ", time: " +
+        std::to_string(duration.count()) +
+        "s, status: " +
         (status==WingmanStatusCode::WINGMAN_STATUS_CODE_OK?"OK":"ERROR") +
         "]"
     };
 
     // HIDE progress dialog
-	// TODO wingmanProgressDialog->setValue(100);
-    // TODO wingmanProgressDialog->hide();
+	wingmanProgressDialog->setValue(100);
+    wingmanProgressDialog->hide();
 
-    // SHOW result
-    // TODO from huge prompts + suffix ...
-    this->chatDialog->insertPrompt(prompt);
-    this->chatDialog->insertOutput(
+    // PUSH answer to the chat dialog
+    this->wingmanDialog->appendAnswerToChat(
         answerHtml,
         answerDescriptor,
-        status==WingmanStatusCode::WINGMAN_STATUS_CODE_OK?false:true
+        this->wingmanDialog->getContextType()
     );
-
     statusBar->showInfo(QString(tr("Wingman got answer from the GPT provider")));
-    this->chatDialog->show();
 }
 
 void MainWindowPresenter::doActionOutlineOrNoteNew()

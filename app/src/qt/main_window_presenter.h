@@ -19,6 +19,8 @@
 #ifndef M8RUI_MAIN_WINDOW_PRESENTER_H
 #define M8RUI_MAIN_WINDOW_PRESENTER_H
 
+#include <chrono>
+
 #include "../../lib/src/mind/mind.h"
 #include "../../lib/src/mind/ai/autolinking_preprocessor.h"
 #include "../../lib/src/mind/dikw/filesystem_information.h"
@@ -39,7 +41,6 @@
 #include "dialogs/rm_library_dialog.h"
 #include "dialogs/run_tool_dialog.h"
 #include "dialogs/wingman_dialog.h"
-#include "dialogs/chat_dialog.h"
 #include "dialogs/organizer_new_dialog.h"
 #include "dialogs/outline_new_dialog.h"
 #include "dialogs/note_new_dialog.h"
@@ -88,6 +89,7 @@ class FtsDialogPresenter;
  * and code conventions.
  *
  */
+// TODO rename to AppWindowPresenter
 class MainWindowPresenter : public QObject
 {
     Q_OBJECT
@@ -120,9 +122,8 @@ private:
     SyncLibraryDialog* syncLibraryDialog;
     RemoveLibraryDialog* rmLibraryDialog;
     RunToolDialog* runToolDialog;
-    WingmanDialog* wingmanDialog;
     QProgressDialog* wingmanProgressDialog;
-    ChatDialog* chatDialog;
+    WingmanDialog* wingmanDialog;
     ScopeDialog* scopeDialog;
     OrganizerNewDialog* newOrganizerDialog;
     OutlineNewDialog* newOutlineDialog;
@@ -346,10 +347,11 @@ public slots:
     void doActionToggleLiveNotePreview();
     void doActionNameDescFocusSwap();
     void doActionSpellCheck();
-    // tools toolbar
-    void handleLeftToolbarAction(std::string selectedTool);
-    void doActionWingman();
+    // wingman
     void handleActionWingman();
+    void slotRunWingmanFromDialog();
+    // TODO remake to CLI or REMOVE tools toolbar
+    void handleLeftToolbarAction(std::string selectedTool);
     void doActionArxivToolbar();
     void doActionWikipediaToolbar();
     void doActionStackOverflowToolbar();

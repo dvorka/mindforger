@@ -23,6 +23,7 @@
 #include <vector>
 
 #include "../../../debug.h"
+#include "../../../config/configuration.h"
 
 namespace m8r {
 
@@ -57,16 +58,6 @@ constexpr const auto PROMPT_COMPLETE_TEXT = "Complete the text: #TEXT";
 // - fix spelling
 // - fix style
 // - create plan ...
-
-/*
- * Wingman providers.
- */
-
-enum WingmanLlmProviders {
-    WINGMAN_PROVIDER_MOCK,
-    WINGMAN_PROVIDER_OPENAI,
-    WINGMAN_PROVIDER_GOOGLE,
-};
 
 // Wingman provider service status codes
 enum WingmanStatusCode {
@@ -133,7 +124,6 @@ public:
 
     virtual void chat(
         const std::string& prompt,
-        const std::string& llmModel,
         std::string& httpResponse,
         WingmanStatusCode& status,
         std::string& errorMessage,

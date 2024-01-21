@@ -22,8 +22,9 @@ namespace m8r {
 
 using namespace std;
 
-MockWingman::MockWingman()
-    : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_MOCK)
+MockWingman::MockWingman(const string& llmModel)
+    : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_MOCK),
+      llmModel{llmModel}
 {
 }
 
@@ -33,7 +34,6 @@ MockWingman::~MockWingman()
 
 void MockWingman::chat(
     const string& prompt,
-    const string& llmModel,
     string& httpResponse,
     WingmanStatusCode& status,
     string& errorMessage,
@@ -47,7 +47,7 @@ void MockWingman::chat(
     httpResponse.clear();
     status=WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
     errorMessage.clear();
-    answerLlmModel.assign(llmModel);
+    answerLlmModel.assign(this->llmModel);
     promptTokens=42;
     answerTokens=42198;
     answerHtml.assign("chat(MOCK, '"+prompt+"')");

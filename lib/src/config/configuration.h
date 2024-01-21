@@ -39,6 +39,13 @@
 
 namespace m8r {
 
+enum WingmanLlmProviders {
+    WINGMAN_PROVIDER_NONE,
+    WINGMAN_PROVIDER_MOCK,
+    WINGMAN_PROVIDER_OPENAI
+    // TODO WINGMAN_PROVIDER_GOOGLE,
+};
+
 // const in constexpr makes value const
 constexpr const auto ENV_VAR_HOME = "HOME";
 constexpr const auto ENV_VAR_DISPLAY = "DISPLAY";
@@ -269,7 +276,7 @@ private:
     bool autolinkingColonSplit;
     bool autolinkingCaseInsensitive;
     bool wingman; // is Wingman enabled
-    std::string wingmanProvider; // "OpenAI", "Google", "Mock"
+    WingmanLlmProviders wingmanProvider; // "OpenAI", "Google", "Mock"
     bool wingmanShellEnvApiKey; // use API key from shell environment on MF load
     std::string wingmanApiKey;
     std::string wingmanLlmModel;

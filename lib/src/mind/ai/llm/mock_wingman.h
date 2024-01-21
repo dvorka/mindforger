@@ -28,17 +28,20 @@ namespace m8r {
  */
 class MockWingman: Wingman
 {
+    std::string llmModel;
+
 public:
-    explicit MockWingman();
+    explicit MockWingman(const std::string& llmModel);
     MockWingman(const MockWingman&) = delete;
     MockWingman(const MockWingman&&) = delete;
     MockWingman& operator =(const MockWingman&) = delete;
     MockWingman& operator =(const MockWingman&&) = delete;
     ~MockWingman();
 
+    std::string getWingmanLlmModel() const { return llmModel; }
+
     virtual void chat(
         const std::string& prompt,
-        const std::string& llmModel,
         std::string& httpResponse,
         WingmanStatusCode& status,
         std::string& errorMessage,

@@ -276,7 +276,6 @@ HEADERS += \
     src/qt/dialogs/rm_library_dialog.h \
     src/qt/dialogs/run_tool_dialog.h \
     src/qt/dialogs/wingman_dialog.h \
-    src/qt/dialogs/chat_dialog.h \
     src/qt/dialogs/sync_library_dialog.h \
     src/qt/dialogs/terminal_dialog.h \
     src/qt/kanban_column_model.h \
@@ -399,7 +398,6 @@ SOURCES += \
     src/qt/dialogs/rm_library_dialog.cpp \
     src/qt/dialogs/run_tool_dialog.cpp \
     src/qt/dialogs/wingman_dialog.cpp \
-    src/qt/dialogs/chat_dialog.cpp \
     src/qt/dialogs/sync_library_dialog.cpp \
     src/qt/dialogs/terminal_dialog.cpp \
     src/qt/kanban_column_model.cpp \

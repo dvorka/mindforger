@@ -40,9 +40,13 @@ size_t openaiCurlWriteCallback(void* contents, size_t size, size_t nmemb, std::s
  * OpenAi Wingman class implementation.
  */
 
-OpenAiWingman::OpenAiWingman(const string& apiKey)
+OpenAiWingman::OpenAiWingman(
+    const string& apiKey,
+    const std::string& llmModel
+)
     : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI),
-    apiKey{apiKey}
+      apiKey{apiKey},
+      llmModel{llmModel}
 {
 }
 
@@ -239,7 +243,6 @@ void OpenAiWingman::curlGet(
 
 void OpenAiWingman::chat(
     const string& prompt,
-    const string& llmModel,
     string& httpResponse,
     WingmanStatusCode& status,
     string& errorMessage,
@@ -252,7 +255,7 @@ void OpenAiWingman::chat(
 
     curlGet(
         prompt,
-        llmModel,
+        this->llmModel,
         httpResponse,
         status,
         errorMessage,

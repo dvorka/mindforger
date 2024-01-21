@@ -22,14 +22,19 @@ namespace m8r {
 
 using namespace std;
 
+const string COLOR_PROMPT_GREEN{"#00bb00"};
+const string COLOR_PROMPT_BLUE{"#00aaaa"};
+const string COLOR_PROMPT_GRAY{"#777777"};
+
 WingmanDialog::WingmanDialog(
     const vector<string>& predefinedOPrompts,
     const vector<string>& predefinedNPrompts,
     const vector<string>& predefinedTPrompts,
     QWidget* parent
-):
-    QDialog(parent),
-    context{}
+): QDialog(parent),
+   firstRun{true},
+   mode{WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT},
+   context{}
 {
     for(string prompt:predefinedOPrompts) {
         outlinePrompts.push_back(QString::fromStdString(prompt));
@@ -41,45 +46,52 @@ WingmanDialog::WingmanDialog(
         textPrompts.push_back(QString::fromStdString(prompt));
     }
 
-    // UI
-    setWindowTitle(tr("Wingman"));
+    setWindowTitle(tr("Wingman Chat"));
 
-    preludeLabel = new QLabel{
-        tr(
-            "Wingman can run a predefined or custom prompt"
-            " "
-            "with the selected context."
-            "<br>"
-        ),
-        parent
-    };
+    promptsLabel = new QLabel{tr("Prompt:"), parent};
 
-    // GROUP: prompts
-    QGroupBox* promptsGroup = new QGroupBox{tr("Prompt"), this};
-    QVBoxLayout* promptsLayout = new QVBoxLayout{this};
-
-    predefinedPromptsLabel = new QLabel{tr("Predefined:"), parent};
     predefinedPromptsCombo = new QComboBox{this};
-    for(QString toolName:outlinePrompts) {
-        predefinedPromptsCombo->addItem(toolName);
+    predefinedPromptsCombo->hide();
+
+    cmdEdit = new MyLineEdit(this, this);
+    cmdEdit->setToolTip(
+        tr(
+            "Use 'clear' or 'cls' to clear the chat window."
+            " Use 'exit', 'quit' or 'bye' to close the dialog."));
+    QPalette p = cmdEdit->palette();
+    p.setColor(QPalette::Text, QColor(COLOR_PROMPT_GREEN.c_str()));
+    cmdEdit->setPalette(p);
+
+    cmdCompleter = new QCompleter(new QStandardItemModel(cmdEdit), this);
+    cmdCompleter->setCompletionMode(QCompleter::CompletionMode::InlineCompletion);
+    cmdCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    QStandardItemModel* cmdCompleterModel =
+        dynamic_cast<QStandardItemModel*>(cmdCompleter->model());
+    if(cmdCompleterModel) {
+        completerCommands.clear();
+        // prompts based on the context
+
+        completerCommands << QString::fromStdString("exit");
+        completerCommands << QString::fromStdString("quit");
+        completerCommands << QString::fromStdString("bye");
+
+        for(auto c:completerCommands) {
+            cmdCompleterModel->appendRow(new QStandardItem(c));
+        }
     }
 
-    promptLabel = new QLabel{
-        tr("Your (overrides Predefined, use #NAME or #TEXT to include context):"),
-        parent};
-    promptEdit = new QTextEdit{parent};
-    promptEdit->setToolTip(
-        tr("Type in your prompt like: 'Translate the following text to Spanish: #CONTENT."));
+    cmdEdit->setCompleter(cmdCompleter);
 
-    promptsLayout->addWidget(promptLabel);
-    promptsLayout->addWidget(promptEdit);
-    promptsLayout->addWidget(predefinedPromptsLabel);
-    promptsLayout->addWidget(predefinedPromptsCombo);
-    promptsGroup->setLayout(promptsLayout);
+    chatWindow = new QTextEdit(this);
+    chatWindow->setReadOnly(true);
 
-    // GROUP: content
-    QGroupBox* contentGroup = new QGroupBox{tr("Context"), this};
-    QVBoxLayout* contentLayout = new QVBoxLayout{this};
+    askButton = new QPushButton(tr("&Run Prompt"), this);
+    togglePromptSourceButton = new QPushButton(tr("Show Predefined &Prompts"), this);
+    toggleContextButton = new QPushButton(tr("Show &Context"), this);
+    closeButton = new QPushButton(tr("Close"), this);
+
+    // GROUP: context
+    contextGroup = new QGroupBox{tr("Context"), this};
 
     contextTypeLabel = new QLabel{tr("Type:"), parent};
     contextTypeEdit = new QLineEdit{parent};
@@ -93,97 +105,107 @@ WingmanDialog::WingmanDialog(
     contextEdit = new QLineEdit{parent};
     contextEdit->setReadOnly(true);
 
-    contentLayout->addWidget(contextNameLabel);
-    contentLayout->addWidget(contextNameEdit);
-    contentLayout->addWidget(contextLabel);
-    contentLayout->addWidget(contextEdit);
-    contentLayout->addWidget(contextTypeLabel);
-    contentLayout->addWidget(contextTypeEdit);
-    contentGroup->setLayout(contentLayout);
+    QHBoxLayout* contentLayout = new QHBoxLayout{this};
+    QVBoxLayout* contentLayout1 = new QVBoxLayout{this};
+    contentLayout1->addWidget(contextNameLabel);
+    contentLayout1->addWidget(contextNameEdit);
+    contentLayout->addLayout(contentLayout1);
+    QVBoxLayout* contentLayout2 = new QVBoxLayout{this};
+    contentLayout2->addWidget(contextLabel);
+    contentLayout2->addWidget(contextEdit);
+    contentLayout->addLayout(contentLayout2);
+    QVBoxLayout* contentLayout3 = new QVBoxLayout{this};
+    contentLayout3->addWidget(contextTypeLabel);
+    contentLayout3->addWidget(contextTypeEdit);
+    contentLayout->addLayout(contentLayout3);
+    contextGroup->setLayout(contentLayout);
+    contextGroup->hide();
 
-    // IMPROVE disable/enable find button if text/path is valid: freedom vs validation
-    runButton = new QPushButton{tr("&Ask Wingman")};
-    runButton->setDefault(true);
-    closeButton = new QPushButton{tr("&Cancel")};
+    // assembly
+    QHBoxLayout* buttonLayout = new QHBoxLayout{};
+    buttonLayout->addStretch(1);
+    buttonLayout->addWidget(closeButton);
+    buttonLayout->addWidget(toggleContextButton);
+    buttonLayout->addWidget(togglePromptSourceButton);
+    buttonLayout->addWidget(askButton);
+    buttonLayout->addStretch();
+
+    QVBoxLayout* layout = new QVBoxLayout{this};
+    layout->addWidget(chatWindow);
+    layout->addWidget(promptsLabel);
+    layout->addWidget(predefinedPromptsCombo);
+    layout->addWidget(cmdEdit);
+    layout->addLayout(buttonLayout);
+    layout->addWidget(contextGroup);
+    setLayout(layout);
+
+    resize(fontMetrics().averageCharWidth()*100, fontMetrics().height()*35);
+
+    this->initForMode(mode);
+    chatWindow->clear();
 
     // signals
     QObject::connect(
         closeButton, SIGNAL(clicked()),
         this, SLOT(close()));
-
-    // assembly
-    QVBoxLayout* mainLayout = new QVBoxLayout{};
-
-    QHBoxLayout* buttonLayout = new QHBoxLayout{};
-    buttonLayout->addStretch(1);
-    buttonLayout->addWidget(closeButton);
-    buttonLayout->addWidget(runButton);
-    buttonLayout->addStretch();
-
-    mainLayout->addWidget(preludeLabel);
-    mainLayout->addWidget(promptsGroup);
-    mainLayout->addWidget(contentGroup);
-    mainLayout->addLayout(buttonLayout);
-    setLayout(mainLayout);
-
-    // dialog
-    resize(fontMetrics().averageCharWidth()*55, height());
-    setModal(true);
+    QObject::connect(
+        togglePromptSourceButton, SIGNAL(clicked()),
+        this, SLOT(handleTogglePromptSource()));
+    QObject::connect(
+        toggleContextButton, SIGNAL(clicked()),
+        this, SLOT(handleToggleContextGroup()));
+    QObject::connect(
+        askButton, SIGNAL(clicked()),
+        this, SLOT(handleRunPrompt()));
 }
 
 WingmanDialog::~WingmanDialog()
 {
-    delete preludeLabel;
-
-    delete predefinedPromptsLabel;
+    delete promptsLabel;
     delete predefinedPromptsCombo;
-    delete promptLabel;
-    delete promptEdit;
-
-    delete contextTypeLabel;
-    delete contextTypeEdit;
-    delete contextNameLabel;
-    delete contextNameEdit;
-    delete contextLabel;
-    delete contextEdit;
-
-    delete runButton;
+    delete cmdEdit;
+    delete chatWindow;
+    delete askButton;
+    delete togglePromptSourceButton;
+    delete toggleContextButton;
     delete closeButton;
-}
-
-void WingmanDialog::clear()
-{
-    this->context.clear();
-
-    this->promptEdit->clear();
-    this->contextNameEdit->clear();
-    this->contextEdit->clear();
+    delete contextGroup; // deletes children automatically
 }
 
 void WingmanDialog::initForMode(WingmanDialogModes mode)
 {
     this->mode=mode;
 
+    predefinedPromptsCombo->clear();
+    vector<QString>* prompts{};
+
     switch(mode) {
         case WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE:
-            contextTypeEdit->setText(tr("outline"));
+            prompts = &outlinePrompts;
+            contextTypeEdit->setText(tr("notebook"));
             contextEdit->setText(tr("<Notebook text>"));
             break;
         case WingmanDialogModes::WINGMAN_DIALOG_MODE_NOTE:
+            prompts = &notePrompts;
             contextTypeEdit->setText(tr("note"));
             contextEdit->setText(tr("<Note text>"));
             break;
         case WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT:
+            prompts = &textPrompts;
             contextNameEdit->clear();
             contextEdit->clear();
             break;
+    }
+
+    for(QString prompt:*prompts) {
+        predefinedPromptsCombo->addItem(prompt);
     }
 }
 
 void WingmanDialog::setContextText(QString context) {
     this->context=context;
 
-    int limit{50};
+    int limit{25};
     if(context.length()>limit) {
         context=context.mid(0, limit).append("...");
     }
@@ -194,9 +216,200 @@ QString WingmanDialog::getContextText() const {
     return context;
 }
 
-void WingmanDialog::show()
-{
+void WingmanDialog::show(
+    WingmanDialogModes contextType,
+    QString& contextName,
+    QString& context
+) {
+    this->initForMode(contextType);
+
+    setContextText(context);
+    setContextNameText(contextName);
+
+    cmdEdit->clear();
+    cmdEdit->setFocus();
+
+    setModal(true);
     QDialog::show();
+}
+
+std::string WingmanDialog::getPrompt()
+{
+    if(predefinedPromptsCombo->isVisible()) {
+        return predefinedPromptsCombo->currentText().toStdString();
+    } else {
+        return cmdEdit->text().toStdString();
+    }
+}
+
+string WingmanDialog::getChatPromptPrefix(bool error)
+{
+    string prompt{};
+
+    if(!firstRun) {
+        prompt.append("<hr/>");
+    } else {
+        firstRun=false;
+    }
+
+    if(contextTypeEdit->text().size()>0) {
+        string promptDescriptor{
+            "[context type: " + contextTypeEdit->text().toStdString() +
+            ", context name: " + contextNameEdit->text().toStdString() +
+            "]"
+        };
+
+        prompt.append(
+            "<font color='" + COLOR_PROMPT_GRAY + "'>" +
+            promptDescriptor +
+            "</font>" +
+            "<br/>"
+        );
+    }
+
+    prompt.append("<font color='");
+    if(error) {
+        prompt.append("#ff0000");
+    } else {
+        prompt.append(COLOR_PROMPT_GREEN);
+    }
+    prompt.append("'>&gt;</font> ");
+
+    return prompt;
+}
+
+void WingmanDialog::appendPromptToChat(const std::string& prompt)
+{
+    chatWindow->insertHtml(
+        QString::fromStdString(
+            getChatPromptPrefix(
+                false)) +
+        QString::fromStdString(
+            "<font color='"+COLOR_PROMPT_GREEN+"'>" +
+            prompt +
+            "</font>"
+            "<br/><br/>"
+        ));
+
+    chatWindow->moveCursor(QTextCursor::End);
+    chatWindow->ensureCursorVisible();
+}
+
+void WingmanDialog::appendAnswerToChat(
+    const string& answer,
+    const string& answerDescriptor,
+    const WingmanDialogModes& contextType
+) {
+    string contextTypeString;
+    switch(contextType) {
+        case WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE:
+            contextTypeString = "outline";
+            break;
+        case WingmanDialogModes::WINGMAN_DIALOG_MODE_NOTE:
+            contextTypeString = "note";
+            break;
+        default:
+            contextTypeString = "text";
+            break;
+    }
+
+    chatWindow->insertHtml(
+        QString::fromStdString(
+            "<br/>"
+            "<b>"
+            "<font color='" + COLOR_PROMPT_BLUE + "'>"
+            "wingman@" + contextTypeString +
+            "</font>" +
+            "</b>:"
+            "<br/>"
+            "<br/>" +
+            answer +
+            "<br/>" +
+            "<br/>" +
+            "<font color='" + COLOR_PROMPT_GRAY + "'>" +
+            answerDescriptor +
+            "</font>" +
+            "<br/>"
+        ));
+
+    chatWindow->moveCursor(QTextCursor::End);
+    chatWindow->ensureCursorVisible();
+}
+
+void WingmanDialog::runPrompt()
+{
+    // TODO help
+    if(cmdEdit->text() == QString::fromStdString("clear")
+        || cmdEdit->text() == QString::fromStdString("cls")
+    ) {
+        chatWindow->clear();
+    } else if(cmdEdit->text() == QString::fromStdString("exit")
+        || cmdEdit->text() == QString::fromStdString("quit")
+        || cmdEdit->text() == QString::fromStdString("bye")
+    ) {
+        QDialog::close();
+    } else {
+        string prompt = getPrompt();
+
+        appendPromptToChat(prompt);
+
+        // add command to completer
+        QStandardItemModel* completerModel
+            = dynamic_cast<QStandardItemModel*>(cmdCompleter->model());
+        if(!completerModel) {
+            completerModel = new QStandardItemModel();
+        }
+        completerModel->insertRow(
+            0, new QStandardItem(cmdEdit->text())
+        );
+
+        // run prompt by sending SIGNAL to main window presenter
+        MF_DEBUG("RUNNING prompt from the CHAT dialog: '" << prompt << "'" << endl);
+        emit signalRunWingman();
+        MF_DEBUG("SIGNAL to RUN prompt sent" << endl);
+    }
+
+    cmdEdit->clear();
+    MF_DEBUG("Chat prompt dispatched" << endl);
+}
+
+void WingmanDialog::handleRunPrompt()
+{
+    MF_DEBUG("SLOT handle: run" << endl);
+
+    runPrompt();
+}
+
+void WingmanDialog::handleTogglePromptSource()
+{
+    MF_DEBUG("SLOT handle: toggle" << endl);
+
+    if(predefinedPromptsCombo->isVisible()) {
+        predefinedPromptsCombo->hide();
+        promptsLabel->setText(tr("Prompt:"));
+        cmdEdit->show();
+        cmdEdit->setFocus();
+        togglePromptSourceButton->setText(tr("Show &Predefined Prompts"));
+    } else {
+        cmdEdit->hide();
+        promptsLabel->setText(tr("Predefined prompts:"));
+        predefinedPromptsCombo->show();
+        predefinedPromptsCombo->setFocus();
+        togglePromptSourceButton->setText(tr("Write Your &Prompt"));
+    }
+}
+
+void WingmanDialog::handleToggleContextGroup()
+{
+    MF_DEBUG("SLOT handle: toggle context" << endl);
+
+    if(contextGroup->isVisible()) {
+        contextGroup->hide();
+        toggleContextButton->setText(tr("Show &Context"));
+    } else {
+        contextGroup->show();
+        toggleContextButton->setText(tr("Hide &Context"));
+    }
 }
 
 } // m8r namespace

@@ -1,5 +1,5 @@
 /*
- wingman_dialog.h     MindForger thinking notebook
+ chat_dialog.h     MindForger thinking notebook
 
  Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -19,12 +19,17 @@
 #ifndef M8RUI_WINGMAN_DIALOG_H
 #define M8RUI_WINGMAN_DIALOG_H
 
-#include <vector>
+
+#include <iostream>
+#include <stdexcept>
+#include <stdio.h>
 #include <string>
 
-#include <QtWidgets>
+#include "../../lib/src/debug.h"
+#include "../../lib/src/gear/file_utils.h"
+#include "../../lib/src/gear/string_utils.h"
 
-#include "../../lib/src/config/configuration.h"
+#include <QtWidgets>
 
 namespace m8r {
 
@@ -34,36 +39,63 @@ enum WingmanDialogModes {
     WINGMAN_DIALOG_MODE_TEXT
 };
 
-class WingmanDialog : public QDialog
+class WingmanDialog : public QDialog // TODO rename to WingmanDialog
 {
     Q_OBJECT
+
+    class MyLineEdit : public QLineEdit
+    {
+    private:
+        WingmanDialog* chatDialog;
+    public:
+        explicit MyLineEdit(WingmanDialog* chatDialog, QWidget* parent)
+            : QLineEdit(parent),
+              chatDialog(chatDialog)
+        {}
+        virtual void keyPressEvent(QKeyEvent* event) override {
+            switch(event->key()) {
+                case Qt::Key_Return: // Qt::Key_Enter is keypad Enter
+                    chatDialog->runPrompt();
+                    setFocus();
+                    return;
+            }
+
+            // continue event dispatch (completer needs to get the event)
+            QLineEdit::keyPressEvent(event);
+        }
+    };
 
 private:
     std::vector<QString> outlinePrompts;
     std::vector<QString> notePrompts;
     std::vector<QString> textPrompts;
 
+    bool firstRun;
     WingmanDialogModes mode;
-
     QString context;
 
-    QLabel* preludeLabel;
+    QTextEdit* chatWindow;
 
-    QLabel* predefinedPromptsLabel;
+    QLabel* promptsLabel;
+
+    MyLineEdit* cmdEdit;
+    QCompleter* cmdCompleter;
+    QStringList completerCommands;
+
     QComboBox* predefinedPromptsCombo;
 
-    QLabel* promptLabel;
-    QTextEdit* promptEdit;
+    QPushButton* askButton;
+    QPushButton* togglePromptSourceButton;
+    QPushButton* toggleContextButton;
+    QPushButton* closeButton;
 
+    QGroupBox* contextGroup;
     QLabel* contextTypeLabel;
     QLineEdit* contextTypeEdit;
     QLabel* contextNameLabel;
     QLineEdit* contextNameEdit;
     QLabel* contextLabel;
     QLineEdit* contextEdit;
-
-    QPushButton* runButton;
-    QPushButton* closeButton;
 
 public:
     explicit WingmanDialog(
@@ -77,28 +109,23 @@ public:
     WingmanDialog& operator =(const WingmanDialog&&) = delete;
     ~WingmanDialog();
 
-    void clear();
     void initForMode(WingmanDialogModes mode);
     WingmanDialogModes getMode() const { return mode; }
+    void setMode(WingmanDialogModes mode) { this->mode=mode; }
 
-    void setPromptText(QString phrase) {
-        this->promptEdit->setText(phrase);
-    }
-    QString getPromptText() const {
-        if(this->promptEdit->toPlainText().isEmpty()) {
-            return predefinedPromptsCombo->currentText();
-        }
-        return this->promptEdit->toPlainText();
-    }
+    void appendPromptToChat(const std::string& prompt);
+    void appendAnswerToChat(
+        const std::string& answer,
+        const std::string& answerDescriptor,
+        const WingmanDialogModes& contextType);
 
-    void setContextType(WingmanDialogModes contextType) {
-        this->mode = contextType;
-    }
+    std::string getPrompt();
+
     WingmanDialogModes getContextType() const {
         return this->mode;
     }
-    void setContextNameText(QString contentName) {
-        this->contextNameEdit->setText(contentName);
+    void setContextNameText(QString contextName) {
+        this->contextNameEdit->setText(contextName);
     }
     QString getContextNameText() const {
         return this->contextNameEdit->text();
@@ -106,9 +133,23 @@ public:
     void setContextText(QString context);
     QString getContextText() const;
 
-    void show();
+    void show(
+        WingmanDialogModes contextType,
+        QString& contextName,
+        QString& context);
 
-    QPushButton* getRunButton() const { return runButton; }
+private:
+    void runPrompt();
+    std::string getChatPromptPrefix(bool error=false);
+
+signals:
+    void signalRunWingman();
+
+private slots:
+    void handleRunPrompt();
+    void handleTogglePromptSource();
+    void handleToggleContextGroup();
+
 };
 
 }

@@ -679,7 +679,6 @@ public:
     Wingman* getWingman() const { return wingman; }
     void wingmanChat(
         const std::string& prompt,
-        const std::string& llmModel,
         std::string& httpResponse,
         WingmanStatusCode& status,
         std::string& errorMessage,

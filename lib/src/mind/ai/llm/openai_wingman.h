@@ -34,6 +34,7 @@ class OpenAiWingman: Wingman
 {
 private:
     std::string apiKey;
+    std::string llmModel;
 
     void curlGet(
         const std::string& prompt,
@@ -48,7 +49,7 @@ private:
     );
 
 public:
-    explicit OpenAiWingman(const std::string& apiKey);
+    explicit OpenAiWingman(const std::string& apiKey, const std::string& llmModel);
     OpenAiWingman(const OpenAiWingman&) = delete;
     OpenAiWingman(const OpenAiWingman&&) = delete;
     OpenAiWingman& operator =(const OpenAiWingman&) = delete;
@@ -57,7 +58,6 @@ public:
 
     virtual void chat(
         const std::string& prompt,
-        const std::string& llmModel,
         std::string& httpResponse,
         WingmanStatusCode& status,
         std::string& errorMessage,

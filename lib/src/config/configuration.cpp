@@ -48,7 +48,7 @@ Configuration::Configuration()
       autolinkingColonSplit{},
       autolinkingCaseInsensitive{},
       wingman{true},
-      wingmanProvider{},
+      wingmanProvider{WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI},
       wingmanShellEnvApiKey{true},
       wingmanApiKey{},
       wingmanLlmModel{"gpt-3.5-turbo"},
@@ -384,30 +384,42 @@ const char* Configuration::getEditorFromEnv()
 }
 
 bool Configuration::isWingman() {
-    MF_DEBUG("Configuration::isWingman(" << wingman << "):" << endl);
+    MF_DEBUG("Configuration::isWingman(" << boolalpha << wingman << "):" << endl);
     if(wingman) {
         MF_DEBUG(
             "  Wingman key @ env: " << wingmanShellEnvApiKey << endl <<
             "  Wingman key name : " << ENV_VAR_OPENAI_API_KEY << endl <<
             "  Wingman key      : " << wingmanApiKey << endl
         );
-        if(wingmanShellEnvApiKey && wingmanApiKey.empty()) {
-            // OpenAI wingman provider initialization
-            // user may have multiple OpenAI accounts and keys - get the key generated for MF
-            const char* apiKeyEnv
-                = std::getenv(ENV_VAR_OPENAI_API_KEY);
-            MF_DEBUG("  Wingman key loaded from env: " << apiKeyEnv << endl);
-            if(apiKeyEnv) {
-                wingmanApiKey = apiKeyEnv;
-                return true;
+        if(WingmanLlmProviders::WINGMAN_PROVIDER_NONE == wingmanProvider) {
+            MF_DEBUG("  NONE Wingman CONFIGURED" << endl);
+            return false;
+        } else if(WingmanLlmProviders::WINGMAN_PROVIDER_MOCK == wingmanProvider) {
+            MF_DEBUG("  CONFIGURING Wingman provider: MOCK" << endl);
+            return true;
+        } else if(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI == wingmanProvider) {
+            MF_DEBUG("  CONFIGURING Wingman provider: OPENAI" << endl);
+            if(wingmanShellEnvApiKey && wingmanApiKey.empty()) {
+                // OpenAI wingman provider initialization
+                // user may have multiple OpenAI accounts and keys - get the key generated for MF
+                const char* apiKeyEnv
+                    = std::getenv(ENV_VAR_OPENAI_API_KEY);
+                MF_DEBUG("  Wingman key loaded from env: " << apiKeyEnv << endl);
+                if(apiKeyEnv) {
+                    wingmanApiKey = apiKeyEnv;
+                    return true;
+                } else {
+                    std::cerr << "OpenAI API key not found in the environment variable MINDFORGER_OPENAI_API_KEY." << std::endl;
+                    wingman = false;
+                    return false;
+                }
             } else {
-                std::cerr << "OpenAI API key not found in the environment variable MINDFORGER_OPENAI_API_KEY." << std::endl;
-                wingman = false;
-                return false;
+                return true;
             }
         } else {
-            return true;
+            MF_DEBUG("  ERROR: unable to CONFIGURE UNKNOWN Wingman provider: " << wingmanProvider << endl);
         }
+
     }
     return false;
 }
