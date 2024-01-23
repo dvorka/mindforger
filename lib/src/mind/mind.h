@@ -677,16 +677,7 @@ public:
      * WINGMAN
      */
     Wingman* getWingman() const { return wingman; }
-    void wingmanChat(
-        const std::string& prompt,
-        std::string& httpResponse,
-        WingmanStatusCode& status,
-        std::string& errorMessage,
-        std::string& answerLlmModel,
-        int& promptTokens,
-        int& answerTokens,
-        std::string& answerHtml
-    );
+    CommandWingmanChat wingmanChat(CommandWingmanChat& command);
 
     /*
      * DIAGNOSTICS

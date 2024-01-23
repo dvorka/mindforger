@@ -36,17 +36,7 @@ private:
     std::string apiKey;
     std::string llmModel;
 
-    void curlGet(
-        const std::string& prompt,
-        const std::string& llmModel,
-        std::string& httpResponse,
-        WingmanStatusCode& status,
-        std::string& errorMessage,
-        std::string& answerLlmModel,
-        int& promptTokens,
-        int& answerTokens,
-        std::string& answerHtml
-    );
+    void curlGet(CommandWingmanChat& command);
 
 public:
     explicit OpenAiWingman(const std::string& apiKey, const std::string& llmModel);
@@ -56,16 +46,7 @@ public:
     OpenAiWingman& operator =(const OpenAiWingman&&) = delete;
     ~OpenAiWingman();
 
-    virtual void chat(
-        const std::string& prompt,
-        std::string& httpResponse,
-        WingmanStatusCode& status,
-        std::string& errorMessage,
-        std::string& answerLlmModel,
-        int& promptTokens,
-        int& answerTokens,
-        std::string& answerHtml
-    ) override;
+    virtual void chat(CommandWingmanChat& command) override;
 };
 
 }

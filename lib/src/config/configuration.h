@@ -434,6 +434,7 @@ public:
     bool isAutolinkingCaseInsensitive() const { return autolinkingCaseInsensitive; }
     void setAutolinkingCaseInsensitive(bool autolinkingCaseInsensitive) { this->autolinkingCaseInsensitive=autolinkingCaseInsensitive; }
     bool isWingman();
+    WingmanLlmProviders getWingmanLlmProvider() const { return wingmanProvider; }
     std::string getWingmanApiKey() const { return wingmanApiKey; }
     std::string getWingmanLlmModel() const { return wingmanLlmModel; }
     unsigned int getMd2HtmlOptions() const { return md2HtmlOptions; }

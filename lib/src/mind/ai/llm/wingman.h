@@ -66,6 +66,22 @@ enum WingmanStatusCode {
 };
 
 /**
+ * Wingman chat request command pattern must be used as asynchronous requests
+ * cannot handle that many parameters.
+ */
+struct CommandWingmanChat {
+    std::string prompt;
+    std::string httpResponse;
+    WingmanStatusCode status;
+    std::string errorMessage;
+    std::string answerLlmModel;
+    int promptTokens;
+    int answerTokens;
+    std::string answerHtml;
+};
+
+
+/**
  * Wingman is a class that provides a set of LLM-based use cases.
  */
 class Wingman
@@ -122,16 +138,7 @@ public:
         return textPrompts;
     }
 
-    virtual void chat(
-        const std::string& prompt,
-        std::string& httpResponse,
-        WingmanStatusCode& status,
-        std::string& errorMessage,
-        std::string& answerLlmModel,
-        int& promptTokens,
-        int& answerTokens,
-        std::string& answerHtml
-    ) = 0;
+    virtual void chat(CommandWingmanChat& command) = 0;
 };
 
 }

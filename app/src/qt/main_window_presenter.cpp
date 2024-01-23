@@ -2148,6 +2148,8 @@ void MainWindowPresenter::handleActionWingman()
 
 void MainWindowPresenter::slotRunWingmanFromDialog()
 {
+    bool runAsynchronously = true;
+
     // pull prompt from the dialog & prepare prompt from the dialog
     string prompt = this->wingmanDialog->getPrompt();
 
@@ -2163,67 +2165,91 @@ void MainWindowPresenter::slotRunWingmanFromDialog()
     // RUN Wingman
     statusBar->showInfo(QString(tr("Wingman is talking to GPT provider...")));
 
-    string httpResponse{};
-    WingmanStatusCode status{
-        WingmanStatusCode::WINGMAN_STATUS_CODE_OK
+    // run
+    CommandWingmanChat commandWingmanChat{
+        prompt,
+        "",
+        WingmanStatusCode::WINGMAN_STATUS_CODE_OK,
+        "",
+        "",
+        0,
+        0,
+        ""
     };
-    string errorMessage{};
-    string answerLlmModel{};
-    int promptTokens{};
-    int answerTokens{};
-    string answerHtml{};
-    // chat
-    // - create a queue of tasks, store the task for distributor there, let it run :)
-    if(wingmanProgressDialog == nullptr) {
-        wingmanProgressDialog = new QProgressDialog(
-            tr("Wingman is talking to GPT provider..."),
-            tr("Cancel"),
-            0,
-            100,
-            &view);
-    } else {
-        wingmanProgressDialog->reset();
-    }
-	wingmanProgressDialog->setWindowModality(Qt::WindowModal);
-    wingmanProgressDialog->show();
-	wingmanProgressDialog->setValue(5);
-    // force processing of all events and refresh
-    QCoreApplication::processEvents();
     // measure time
     auto start = std::chrono::high_resolution_clock::now();
-    // run
-    // TODO let AsyncTaskNotificationsDistributor to run it so that progress gets events
-    mind->wingmanChat(
-        prompt,
-        httpResponse,
-        status,
-        errorMessage,
-        answerLlmModel,
-        promptTokens,
-        answerTokens,
-        answerHtml
-    );
+    if(runAsynchronously) {
+        if(wingmanProgressDialog == nullptr) {
+            wingmanProgressDialog = new QProgressDialog(
+                tr("Wingman is talking to GPT provider..."),
+                tr("Cancel"),
+                0,
+                100,
+                &view);
+        } else {
+            wingmanProgressDialog->reset();
+        }
+        wingmanProgressDialog->setWindowModality(Qt::WindowModal);
+
+        int limit = 100*10*15; // 15s
+
+        wingmanProgressDialog->setMinimum(0);
+        wingmanProgressDialog->setMaximum(limit);
+        wingmanProgressDialog->show();
+        wingmanProgressDialog->setValue(5);
+
+        QFuture<CommandWingmanChat> future = QtConcurrent::run(
+            this->mind,
+            &Mind::wingmanChat,
+            commandWingmanChat);
+
+        // wait for the future to finish
+        QFutureWatcher<void> futureWatcher{};
+        futureWatcher.setFuture(future);
+        // blocking wait: futureWatcher.waitForFinished();
+
+        // event non-blocking wait
+        while(!futureWatcher.isFinished() && limit > 0) {
+            MF_DEBUG("Wingman is talking to GPT provider..." << endl);
+            QApplication::processEvents();
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            limit-=100;
+            wingmanProgressDialog->setValue(limit);
+        }
+        // TODO if limit < 0, then raise error & show critical dialog
+
+        commandWingmanChat = future.result();
+
+        // HIDE progress dialog
+        wingmanProgressDialog->hide();
+
+        // check the result
+        if (future.isFinished()) {
+            statusBar->showInfo(QString(tr("Wingman got an answer from the GPT provider")));
+        } else {
+            // TODO show critical dialog
+            statusBar->showError(QString(tr("Wingman call to GPT provider failed")));
+        }
+    } else {
+        mind->wingmanChat(commandWingmanChat);
+    }
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
     // wingmanProgressDialog->hide();
     string answerDescriptor{
-        "[model: " + answerLlmModel +
+        "[model: " + commandWingmanChat.answerLlmModel +
         ", tokens (prompt/answer): " +
-        std::to_string(promptTokens) + "/" + std::to_string(answerTokens) +
+        std::to_string(commandWingmanChat.promptTokens) + "/" + std::to_string(commandWingmanChat.answerTokens) +
         ", time: " +
         std::to_string(duration.count()) +
         "s, status: " +
-        (status==WingmanStatusCode::WINGMAN_STATUS_CODE_OK?"OK":"ERROR") +
+        (commandWingmanChat.status==WingmanStatusCode::WINGMAN_STATUS_CODE_OK?"OK":"ERROR") +
         "]"
     };
 
-    // HIDE progress dialog
-	wingmanProgressDialog->setValue(100);
-    wingmanProgressDialog->hide();
-
     // PUSH answer to the chat dialog
     this->wingmanDialog->appendAnswerToChat(
-        answerHtml,
+        commandWingmanChat.answerHtml,
         answerDescriptor,
         this->wingmanDialog->getContextType()
     );

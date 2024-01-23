@@ -61,7 +61,8 @@ Mind::Mind(Configuration &configuration)
     );
     if(config.isWingman()) {
         MF_DEBUG("MIND Wingman INIT: instantiation..." << endl);
-        if(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI && config.getWingmanApiKey().size()) {
+        if(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI == config.getWingmanLlmProvider()
+           && config.getWingmanApiKey().size()) {
             // wingman: OpenAI
             MF_DEBUG("  MIND Wingman ~ OpenAI" << endl);
             wingman = (Wingman*)new OpenAiWingman{
@@ -1466,28 +1467,14 @@ Outline* Mind::findOutlineByKey(const string& key) const
     return nullptr;
 }
 
-void Mind::wingmanChat(
-    const string& prompt,
-    string& httpResponse,
-    WingmanStatusCode& status,
-    string& errorMessage,
-    string& answerLlmModel,
-    int& promptTokens,
-    int& answerTokens,
-    string& answerHtml
-) {
+CommandWingmanChat Mind::wingmanChat(CommandWingmanChat& command) {
     MF_DEBUG("MIND: Wingman chat..." << endl);
-    wingman->chat(
-        prompt,
-        httpResponse,
-        status,
-        errorMessage,
-        answerLlmModel,
-        promptTokens,
-        answerTokens,
-        answerHtml
-    );
+
+    wingman->chat(command);
+
     MF_DEBUG("MIND: DONE Wingman chat" << endl);
+
+    return command;
 }
 
 } /* namespace */

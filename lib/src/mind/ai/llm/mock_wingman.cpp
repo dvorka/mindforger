@@ -32,27 +32,18 @@ MockWingman::~MockWingman()
 {
 }
 
-void MockWingman::chat(
-    const string& prompt,
-    string& httpResponse,
-    WingmanStatusCode& status,
-    string& errorMessage,
-    string& answerLlmModel,
-    int& promptTokens,
-    int& answerTokens,
-    string& answerHtml
-) {
-    MF_DEBUG("MockWingman::chat() prompt:" << prompt << endl);
+void MockWingman::chat(CommandWingmanChat& command) {
+    MF_DEBUG("MockWingman::chat() prompt:" << command.prompt << endl);
 
-    httpResponse.clear();
-    status=WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
-    errorMessage.clear();
-    answerLlmModel.assign(this->llmModel);
-    promptTokens=42;
-    answerTokens=42198;
-    answerHtml.assign("chat(MOCK, '"+prompt+"')");
+    command.httpResponse.clear();
+    command.status=WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
+    command.errorMessage.clear();
+    command.answerLlmModel.assign(this->llmModel);
+    command.promptTokens=42;
+    command.answerTokens=42198;
+    command.answerHtml.assign("chat(MOCK, '"+command.prompt+"')");
 
-    MF_DEBUG("MockWingman::chat() answer:" << answerHtml << endl);
+    MF_DEBUG("MockWingman::chat() answer:" << command.answerHtml << endl);
 }
 
 } // m8r namespace

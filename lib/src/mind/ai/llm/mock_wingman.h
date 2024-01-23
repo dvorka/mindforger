@@ -40,16 +40,7 @@ public:
 
     std::string getWingmanLlmModel() const { return llmModel; }
 
-    virtual void chat(
-        const std::string& prompt,
-        std::string& httpResponse,
-        WingmanStatusCode& status,
-        std::string& errorMessage,
-        std::string& answerLlmModel,
-        int& promptTokens,
-        int& answerTokens,
-        std::string& answerHtml
-    ) override;
+    virtual void chat(CommandWingmanChat& command) override;
 };
 
 }
