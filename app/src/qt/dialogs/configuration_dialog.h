@@ -38,6 +38,7 @@ class ConfigurationDialog : public QDialog
     class MarkdownTab;
     class NavigatorTab;
     class MindTab;
+    class WingmanTab;
 
 private:
     QTabWidget* tabWidget;
@@ -47,6 +48,7 @@ private:
     MarkdownTab* markdownTab;
     NavigatorTab* navigatorTab;
     MindTab* mindTab;
+    WingmanTab* wingmanTab;
 
     QDialogButtonBox *buttonBox;
 
@@ -66,6 +68,30 @@ private slots:
     void saveSlot();
 signals:
     void saveConfigSignal();
+};
+
+/**
+ * @brief Wingman tab.
+ */
+class ConfigurationDialog::WingmanTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    Configuration& config;
+
+    QLabel* llmProvidersLabel;
+    QComboBox* llmProvidersCombo;
+
+    QLabel* llmHelpLabel;
+
+public:
+    explicit WingmanTab(QWidget* parent);
+    ~WingmanTab();
+
+    // there and back is handled by Dialog's access to this class & Config singleton
+    void refresh();
+    void save();
 };
 
 /**

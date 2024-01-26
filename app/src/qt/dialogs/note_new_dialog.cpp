@@ -34,6 +34,8 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     nameLabel = new QLabel(tr("Name")+":", this),
     nameEdit = new QLineEdit(tr("Note"), this);
 
+    emojisButton = new QPushButton(tr("&Emojis"), this);
+
     // moving edit tags to this position changes TAB ORDER ~ it's selected as 2nd field
     editTagsGroup = new EditTagsPanel{MfWidgetMode::CREATE_MODE, ontology, this};
     editTagsGroup->refreshOntologyTags();
@@ -58,7 +60,12 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     // assembly
     QVBoxLayout* basicLayout = new QVBoxLayout{this};
     basicLayout->addWidget(nameLabel);
-    basicLayout->addWidget(nameEdit);
+
+    QHBoxLayout* nameLayout = new QHBoxLayout{this};
+    nameLayout->addWidget(nameEdit);
+    nameLayout->addWidget(emojisButton);
+    basicLayout->addLayout(nameLayout);
+
     basicLayout->addWidget(positionLabel);
     basicLayout->addWidget(positionCombo);
     basicLayout->addWidget(viewEditLabel);
@@ -229,6 +236,11 @@ const std::vector<const Tag*>& NoteNewDialog::getTags() const
 int NoteNewDialog::getProgress() const
 {
     return generalTab->getProgressSpin()->value();
+}
+
+QPushButton* NoteNewDialog::getEmojisButton() const
+{
+    return generalTab->getEmojisButton();
 }
 
 void NoteNewDialog::show(

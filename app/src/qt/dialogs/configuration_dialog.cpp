@@ -33,6 +33,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     markdownTab = new MarkdownTab{this};
     navigatorTab = new NavigatorTab{this};
     mindTab = new MindTab{this};
+    wingmanTab = new WingmanTab{this};
 
     tabWidget->addTab(appTab, tr("Application"));
     tabWidget->addTab(viewerTab, tr("Viewer"));
@@ -40,6 +41,7 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     tabWidget->addTab(markdownTab, tr("Markdown"));
     tabWidget->addTab(navigatorTab, tr("Navigator"));
     tabWidget->addTab(mindTab, tr("Mind"));
+    tabWidget->addTab(wingmanTab, tr("Wingman"));
 
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
@@ -75,6 +77,7 @@ void ConfigurationDialog::show()
     markdownTab->refresh();
     navigatorTab->refresh();
     mindTab->refresh();
+    wingmanTab->refresh();
 
     QDialog::show();
 }
@@ -87,6 +90,7 @@ void ConfigurationDialog::saveSlot()
     markdownTab->save();
     navigatorTab->save();
     mindTab->save();
+    wingmanTab->save();
 
     emit saveConfigSignal();
 }
@@ -654,6 +658,65 @@ void ConfigurationDialog::MindTab::save()
 {
     config.setSaveReadsMetadata(saveReadsMetadataCheck->isChecked());
     config.setDistributorSleepInterval(distributorSleepIntervalSpin->value());
+}
+
+/*
+ * Wingman tab
+ */
+
+ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
+    : QWidget(parent), config(Configuration::getInstance())
+{
+    llmProvidersLabel = new QLabel(tr("LLM provider:"), this);
+
+    llmProvidersCombo = new QComboBox{this};
+    llmProvidersCombo->addItem(""); // disable Wingman
+    // TODO enable OpenAI ONLY if ENV_VAR_OPENAI_API_KEY is set
+    llmProvidersCombo->addItem(
+        QString{"OpenAI"}, WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI);
+
+    // set the last selected provider
+    llmProvidersCombo->setCurrentIndex(
+        llmProvidersCombo->findData(config.getWingmanLlmProvider()));
+
+    llmHelpLabel = new QLabel(
+        tr(
+            "To configure <a href='https://openai.com'>OpenAI</a> LLM provider, "
+            "<a href='https://platform.openai.com/api-keys'>generate OpenAI API key</a> "
+            "and set"
+            "<br/>"
+            "%1 shell environment variable with the key."
+        ).arg(ENV_VAR_OPENAI_API_KEY));
+
+    // assembly
+    QVBoxLayout* nLayout = new QVBoxLayout{this};
+    nLayout->addWidget(llmProvidersLabel);
+    nLayout->addWidget(llmProvidersCombo);
+    nLayout->addWidget(llmHelpLabel);
+    QGroupBox* nGroup = new QGroupBox{tr("Large language model (LLM) providers"), this};
+    nGroup->setLayout(nLayout);
+
+    QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(nGroup);
+    boxesLayout->addStretch();
+    setLayout(boxesLayout);
+}
+
+ConfigurationDialog::WingmanTab::~WingmanTab()
+{
+    delete llmProvidersLabel;
+    delete llmProvidersCombo;
+    delete llmHelpLabel;
+}
+
+void ConfigurationDialog::WingmanTab::refresh()
+{
+    // TODO to be implemented - use App
+}
+
+void ConfigurationDialog::WingmanTab::save()
+{
+    // TODO to be implemented - use App
 }
 
 /*

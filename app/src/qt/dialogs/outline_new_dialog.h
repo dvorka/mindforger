@@ -73,6 +73,7 @@ public:
     int8_t getImportance() const;
     int8_t getUrgency() const;
     int getProgress() const;
+    QPushButton* getEmojisButton() const;
     const std::vector<const Tag*>& getTags() const;
 
     void show(
@@ -96,6 +97,7 @@ private:
 
     QLabel* nameLabel;
     QLineEdit* nameEdit;
+    QPushButton* emojisButton;
     QLabel* typeLabel;
     QComboBox* typeCombo;
     QLabel* importanceLabel;
@@ -119,6 +121,7 @@ public:
     UrgencyComboBox* getUrgencyCombo() const { return urgencyCombo; }
     QComboBox* getStencilCombo() const { return stencilCombo; }
     QSpinBox* getProgressSpin() const { return progressSpin; }
+    QPushButton* getEmojisButton() const { return emojisButton; }
     const std::vector<const Tag*>& getTags() { return editTagsGroup->getTags(); }
 
     void showFacet(Repository::RepositoryType repositoryType);

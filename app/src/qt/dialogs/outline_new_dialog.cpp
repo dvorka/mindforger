@@ -35,6 +35,8 @@ OutlineNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     nameLabel = new QLabel(tr("Name")+":", this);
     nameEdit = new QLineEdit(tr("Notebook"), this);
 
+    emojisButton = new QPushButton(tr("&Emojis"), this);
+
     typeLabel = new QLabel(tr("Type")+":", this);
     typeCombo = new QComboBox{this};
 
@@ -58,7 +60,12 @@ OutlineNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     // assembly
     QVBoxLayout* basicLayout = new QVBoxLayout{this};
     basicLayout->addWidget(nameLabel);
-    basicLayout->addWidget(nameEdit);
+
+    QHBoxLayout* nameLayout = new QHBoxLayout{this};
+    nameLayout->addWidget(nameEdit);
+    nameLayout->addWidget(emojisButton);
+    basicLayout->addLayout(nameLayout);
+
     basicLayout->addWidget(typeLabel);
     basicLayout->addWidget(typeCombo);
     QWidget* wiu = new QWidget{this};
@@ -300,6 +307,11 @@ int8_t OutlineNewDialog::getUrgency() const
 int OutlineNewDialog::getProgress() const
 {
     return generalTab->getProgressSpin()->value();
+}
+
+QPushButton* OutlineNewDialog::getEmojisButton() const
+{
+    return generalTab->getEmojisButton();
 }
 
 const std::vector<const Tag*>& OutlineNewDialog::getTags() const

@@ -132,7 +132,14 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(
         newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
     QObject::connect(
-        newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
+        newNoteDialog, SIGNAL(accepted()),
+        this, SLOT(handleNoteNew()));
+    QObject::connect(
+        newNoteDialog->getEmojisButton(), SIGNAL(clicked()),
+        this, SLOT(doActionEmojisDialog()));
+    QObject::connect(
+        newOutlineDialog->getEmojisButton(), SIGNAL(clicked()),
+        this, SLOT(doActionEmojisDialog()));
     QObject::connect(
         findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
     QObject::connect(
@@ -3882,7 +3889,7 @@ void MainWindowPresenter::doActionEmojisDialog()
         QString{tr("Emojis")},
         QString{
             "<html>"
-            "Copy character from below and paste it to the text:"
+            "Copy character from below to paste it:"
             "<br>"
             "<br>Emoji:"
             "<br>🐞 🚀 🌟 🔧 🧪 📚 🔗 ⛑ 🚧 ❗ ❌ ✔"
