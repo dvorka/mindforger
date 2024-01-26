@@ -57,7 +57,6 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     syncLibraryDialog = new SyncLibraryDialog{&view};
     rmLibraryDialog = new RemoveLibraryDialog(&view);
     runToolDialog = new RunToolDialog{&view};
-    wingmanProgressDialog = nullptr;
     if(config.isWingman()) {
         wingmanDialog = new WingmanDialog{
             mind->getWingman()->getPredefinedOPrompts(),
@@ -293,7 +292,6 @@ MainWindowPresenter::~MainWindowPresenter()
     //if(findNoteByNameDialog) delete findNoteByNameDialog;
     if(insertImageDialog) delete insertImageDialog;
     if(newLibraryDialog) delete newLibraryDialog;
-    if(wingmanProgressDialog) delete wingmanProgressDialog;
     if(wingmanDialog) delete wingmanDialog;
 
     delete this->mdConfigRepresentation;
@@ -2179,24 +2177,13 @@ void MainWindowPresenter::slotRunWingmanFromDialog()
     // measure time
     auto start = std::chrono::high_resolution_clock::now();
     if(runAsynchronously) {
-        if(wingmanProgressDialog == nullptr) {
-            wingmanProgressDialog = new QProgressDialog(
-                tr("Wingman is talking to GPT provider..."),
-                tr("Cancel"),
-                0,
-                100,
-                &view);
-        } else {
-            wingmanProgressDialog->reset();
-        }
-        wingmanProgressDialog->setWindowModality(Qt::WindowModal);
+        const int progressStep = 100; // 100ms
+        const int progressLimit = progressStep*10*30; // 30s
+        int progress = 0;
 
-        int limit = 100*10*15; // 15s
-
-        wingmanProgressDialog->setMinimum(0);
-        wingmanProgressDialog->setMaximum(limit);
-        wingmanProgressDialog->show();
-        wingmanProgressDialog->setValue(5);
+        // hint maximum: progressLimit to show progress steps, 0 to show animated
+        this->wingmanDialog->resetProgress(0);
+        this->wingmanDialog->setProgressVisible(true);
 
         QFuture<CommandWingmanChat> future = QtConcurrent::run(
             this->mind,
@@ -2208,27 +2195,40 @@ void MainWindowPresenter::slotRunWingmanFromDialog()
         futureWatcher.setFuture(future);
         // blocking wait: futureWatcher.waitForFinished();
 
-        // event non-blocking wait
-        while(!futureWatcher.isFinished() && limit > 0) {
-            MF_DEBUG("Wingman is talking to GPT provider..." << endl);
+        // hint: the purpose of progress is not to cancel the run in case of time out,
+        // but just to visualize a progress...
+        while(!futureWatcher.isFinished() && progress < progressLimit) {
+            MF_DEBUG(
+                progress << "/" << progressLimit <<
+                " Wingman is talking to GPT provider..." << endl
+            );
             QApplication::processEvents();
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            limit-=100;
-            wingmanProgressDialog->setValue(limit);
+            std::this_thread::sleep_for(std::chrono::milliseconds(progressStep));
+            progress += progressStep;
+            this->wingmanDialog->setProgressValue(progress);
         }
-        // TODO if limit < 0, then raise error & show critical dialog
+        this->wingmanDialog->setProgressValue(progressLimit);
 
         commandWingmanChat = future.result();
 
         // HIDE progress dialog
-        wingmanProgressDialog->hide();
+        this->wingmanDialog->setProgressVisible(false);
 
         // check the result
         if (future.isFinished()) {
             statusBar->showInfo(QString(tr("Wingman got an answer from the GPT provider")));
         } else {
-            // TODO show critical dialog
-            statusBar->showError(QString(tr("Wingman call to GPT provider failed")));
+            statusBar->showError(QString(tr("Wingman failed to get answer from the GPT provider")));
+
+            // PUSH answer to the chat dialog
+            this->wingmanDialog->appendAnswerToChat(
+                "Wingman failed to get answer from the GPT provider.<br/><br/>"+commandWingmanChat.answerHtml,
+                "",
+                this->wingmanDialog->getContextType(),
+                true
+            );
+
+            return;
         }
     } else {
         mind->wingmanChat(commandWingmanChat);
@@ -2253,7 +2253,6 @@ void MainWindowPresenter::slotRunWingmanFromDialog()
         answerDescriptor,
         this->wingmanDialog->getContextType()
     );
-    statusBar->showInfo(QString(tr("Wingman got answer from the GPT provider")));
 }
 
 void MainWindowPresenter::doActionOutlineOrNoteNew()
@@ -3886,7 +3885,8 @@ void MainWindowPresenter::doActionEmojisDialog()
             "Copy character from below and paste it to the text:"
             "<br>"
             "<br>Emoji:"
-            "<br>🐞 🌟 🧪 🔗 ⛑ 🚧 ❗ ❌ ✔ 📚 📈 🖼️"
+            "<br>🐞 🚀 🌟 🔧 🧪 📚 🔗 ⛑ 🚧 ❗ ❌ ✔"
+            "<br>📌 ✂️ 📎 📋 📝 📅 📈 🖼️"
             "<br>🔴 🔵 🟣 🟢 🔮 ♥ 💙 💛 💚 🚫 🎯 ⚽ ⚙️"
             "<br>🙂 😃 🥶 🥰 🐻 🐸 🤖 💩 👻 🎉 💣 ☠️"
             "<br>🦑 🐙 👾 🐉"

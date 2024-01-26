@@ -122,7 +122,6 @@ private:
     SyncLibraryDialog* syncLibraryDialog;
     RemoveLibraryDialog* rmLibraryDialog;
     RunToolDialog* runToolDialog;
-    QProgressDialog* wingmanProgressDialog;
     WingmanDialog* wingmanDialog;
     ScopeDialog* scopeDialog;
     OrganizerNewDialog* newOrganizerDialog;

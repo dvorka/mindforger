@@ -73,6 +73,7 @@ private:
     bool firstRun;
     WingmanDialogModes mode;
     QString context;
+    std::string lastAnswer;
 
     QTextEdit* chatWindow;
 
@@ -85,6 +86,8 @@ private:
     QComboBox* predefinedPromptsCombo;
 
     QPushButton* askButton;
+    QPushButton* copyButton;
+
     QPushButton* togglePromptSourceButton;
     QPushButton* toggleContextButton;
     QPushButton* closeButton;
@@ -96,6 +99,10 @@ private:
     QLineEdit* contextNameEdit;
     QLabel* contextLabel;
     QLineEdit* contextEdit;
+
+    QProgressBar* progressBar;
+    bool cmdEditVisibilityCache;
+    bool predefPromptsVisibilityCache;
 
 public:
     explicit WingmanDialog(
@@ -117,7 +124,8 @@ public:
     void appendAnswerToChat(
         const std::string& answer,
         const std::string& answerDescriptor,
-        const WingmanDialogModes& contextType);
+        const WingmanDialogModes& contextType,
+        bool error=false);
 
     std::string getPrompt();
 
@@ -138,6 +146,29 @@ public:
         QString& contextName,
         QString& context);
 
+    void resetProgress(int maximum) {
+        progressBar->setValue(0);
+        progressBar->setMinimum(0);
+        progressBar->setMaximum(maximum);
+        progressBar->setValue(0);
+    }
+    void setProgressValue(int progress) {
+        progressBar->setValue(progress);
+    }
+    void setProgressVisible(bool visible) {
+        if(visible) {
+            predefPromptsVisibilityCache = predefinedPromptsCombo->isVisible();
+            cmdEditVisibilityCache = cmdEdit->isVisible();
+            predefinedPromptsCombo->setVisible(false);
+            cmdEdit->setVisible(false);
+        } else {
+            predefinedPromptsCombo->setVisible(predefPromptsVisibilityCache);
+            cmdEdit->setVisible(cmdEditVisibilityCache);
+        }
+
+        progressBar->setVisible(visible);
+    }
+
 private:
     void runPrompt();
     std::string getChatPromptPrefix(bool error=false);
@@ -147,6 +178,7 @@ signals:
 
 private slots:
     void handleRunPrompt();
+    void handleCopyLastAnswer();
     void handleTogglePromptSource();
     void handleToggleContextGroup();
 

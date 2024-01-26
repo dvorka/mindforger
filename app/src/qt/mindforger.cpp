@@ -522,6 +522,13 @@ int main(int argc, char* argv[])
     }
     // mdConfigRepresentation->save(config);
 
+    // set application font family and size
+    // TODO QFont font("Arial", 25);
+    //mindforgerApplication.setFont(font);
+    MF_DEBUG("Application font family: " << mindforgerApplication.font().family().toStdString() << endl);
+    MF_DEBUG("Application font pixel size: " << mindforgerApplication.font().pixelSize() << endl);
+    MF_DEBUG("Application font point size: " << mindforgerApplication.font().pointSize() << endl);
+
     // initialize and start UI
     m8r::MainWindowView mainWindowView(lookAndFeels);
     m8r::MainWindowPresenter mainWindowPresenter(mainWindowView);

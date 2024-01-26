@@ -1334,6 +1334,11 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode, bool mfMode)
     mainWindow->getToolBar()->setEnabled(false);
 
     showModeAwareFacet(repositoryMode, mfMode);
+
+    if(!repositoryMode) {
+        menuEdit->setEnabled(true);
+        menuFormat->setEnabled(true);
+    }
 }
 
 void MainMenuView::showFacetMindThink()

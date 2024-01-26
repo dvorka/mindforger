@@ -37,6 +37,7 @@
     //#define MF_DEBUG_QRC
     //#define MF_DEBUG_L10N
     //#define MF_DEBUG_AUTOLINKING
+    //#define MF_DEBUG_LIBRARY
 
     // show WIP features
     #define MF_WIP

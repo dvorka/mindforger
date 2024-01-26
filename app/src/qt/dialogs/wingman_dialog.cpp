@@ -34,7 +34,8 @@ WingmanDialog::WingmanDialog(
 ): QDialog(parent),
    firstRun{true},
    mode{WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT},
-   context{}
+   context{},
+   lastAnswer{}
 {
     for(string prompt:predefinedOPrompts) {
         outlinePrompts.push_back(QString::fromStdString(prompt));
@@ -86,6 +87,8 @@ WingmanDialog::WingmanDialog(
     chatWindow->setReadOnly(true);
 
     askButton = new QPushButton(tr("&Run Prompt"), this);
+    copyButton = new QPushButton(tr("C&opy"), this);
+    copyButton->setToolTip(tr("Copy last answer to the clipboard"));
     togglePromptSourceButton = new QPushButton(tr("Show Predefined &Prompts"), this);
     toggleContextButton = new QPushButton(tr("Show &Context"), this);
     closeButton = new QPushButton(tr("Close"), this);
@@ -104,6 +107,12 @@ WingmanDialog::WingmanDialog(
     contextLabel = new QLabel{tr("Text (#TEXT):"), parent};
     contextEdit = new QLineEdit{parent};
     contextEdit->setReadOnly(true);
+
+    progressBar = new QProgressBar(this);
+    progressBar->setTextVisible(true);
+    progressBar->setMinimum(0);
+    progressBar->setMaximum(100);
+    progressBar->hide();
 
     QHBoxLayout* contentLayout = new QHBoxLayout{this};
     QVBoxLayout* contentLayout1 = new QVBoxLayout{this};
@@ -127,6 +136,7 @@ WingmanDialog::WingmanDialog(
     buttonLayout->addWidget(closeButton);
     buttonLayout->addWidget(toggleContextButton);
     buttonLayout->addWidget(togglePromptSourceButton);
+    buttonLayout->addWidget(copyButton);
     buttonLayout->addWidget(askButton);
     buttonLayout->addStretch();
 
@@ -135,6 +145,7 @@ WingmanDialog::WingmanDialog(
     layout->addWidget(promptsLabel);
     layout->addWidget(predefinedPromptsCombo);
     layout->addWidget(cmdEdit);
+    layout->addWidget(progressBar);
     layout->addLayout(buttonLayout);
     layout->addWidget(contextGroup);
     setLayout(layout);
@@ -157,6 +168,9 @@ WingmanDialog::WingmanDialog(
     QObject::connect(
         askButton, SIGNAL(clicked()),
         this, SLOT(handleRunPrompt()));
+    QObject::connect(
+        copyButton, SIGNAL(clicked()),
+        this, SLOT(handleCopyLastAnswer()));
 }
 
 WingmanDialog::~WingmanDialog()
@@ -298,8 +312,11 @@ void WingmanDialog::appendPromptToChat(const std::string& prompt)
 void WingmanDialog::appendAnswerToChat(
     const string& answer,
     const string& answerDescriptor,
-    const WingmanDialogModes& contextType
+    const WingmanDialogModes& contextType,
+    bool error
 ) {
+    this->lastAnswer=answer;
+
     string contextTypeString;
     switch(contextType) {
         case WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE:
@@ -313,6 +330,9 @@ void WingmanDialog::appendAnswerToChat(
             break;
     }
 
+    const string errorPrefix{"<font color='#ff0000'>ERROR: "};
+    const string errorSuffix{"</font>"};
+
     chatWindow->insertHtml(
         QString::fromStdString(
             "<br/>"
@@ -323,7 +343,9 @@ void WingmanDialog::appendAnswerToChat(
             "</b>:"
             "<br/>"
             "<br/>" +
+            (error?errorPrefix:"") +
             answer +
+            (error?errorSuffix:"") +
             "<br/>" +
             "<br/>" +
             "<font color='" + COLOR_PROMPT_GRAY + "'>" +
@@ -378,6 +400,15 @@ void WingmanDialog::handleRunPrompt()
     MF_DEBUG("SLOT handle: run" << endl);
 
     runPrompt();
+}
+
+void WingmanDialog::handleCopyLastAnswer()
+{
+    MF_DEBUG("SLOT handle: copy" << endl);
+
+    // get a pointer to the clipboard
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(QString::fromStdString(this->lastAnswer));
 }
 
 void WingmanDialog::handleTogglePromptSource()

@@ -1065,10 +1065,12 @@ void Mind::outlinesMapSynchronize(Outline* outlinesMap)
             Outline* o = findOutlineByKey(oKey);
             if(o) {
                 // valid O in MF & map
+                #ifdef MF_DEBUG_LIBRARY
                 MF_DEBUG(
                     "  VALID  : " << n->getName() << endl <<
                     "           " << oKey << endl
                 );
+                #endif
                 // refresh N representing O (name, timestamps, ... may be changed by other views)
                 n->setName(o->getName());
                 n->setModified(o->getModified());
@@ -1141,19 +1143,25 @@ void Mind::outlinesMapSynchronize(Outline* outlinesMap)
 
 Outline* Mind::outlinesMapLearn(string outlineKey)
 {
+    #ifdef MF_DEBUG_LIBRARY
     MF_DEBUG("Learning Os map from " << outlineKey << endl);
+    #endif
     Outline* outlinesMap = memory.learnOutlinesMap(outlineKey);
 
     vector<Note*> osToRemove{};
 
     // normalization: set Ns types to O + resolve O links to absolute
+    #ifdef MF_DEBUG_LIBRARY
     MF_DEBUG("Setting map's Ns type O" << endl);
+    #endif
     for(auto n:outlinesMap->getNotes()) {
+        #ifdef MF_DEBUG_LIBRARY
         MF_DEBUG(
             "  Setting '" << n->getName()
             << "' with " << n->getLinks().size() << " link(s)"
             << " to O" << endl
         );
+        #endif
         n->setType(&Outline::NOTE_4_OUTLINE_TYPE);
 
         Link* oMemPathLink = n->getLinkByName(LINK_NAME_OUTLINE_PATH);
