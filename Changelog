@@ -5,12 +5,12 @@
     * Feature: Wingman brings OpenAI chat GPT integration allowing to
       compose, rewrite, summarize, do NER, fix, or chat with remarks.
     * Feature: Notebook Tree view brings ability to organize Notebooks to
-      and outline.
+      a tree (an outline).
     * Feature: Libraries bring ability to index external PDF files and generate
       Notebooks which represent them in MindForger. Synchronization and removal
-      of the library supported as well.
+      of the library (directory with files) is supported as well.
     * Feature: Emojis dialog allowing to use Unicode-based emojis
-      in Notebook names, Note names or text.
+      in Notebooks and Notes names or text.
     * Hidden feature: New left side toolbar which runs various tools
       (like Wikipedia, arXiv, StackOverflow, ...) on phrase which is the current
       context (Notebook or Note name, selected text or text under the cursor, ...)
@@ -29,8 +29,9 @@
     * Fix: Missing OOTB Eisenhower Matrix is automatically added back to
       the list of Organizers.
     * Fix: Conflicting menu keyboard shortcuts resolution (e.g. Organizers view).
+    * Fix: Edit and Format menus re-enabled on single Markdown file configuration.
     * Deprecation: dashboard view removed.
-    * Deprecation: experimental Nitie code removed.
+    * Deprecation: experimental Mitie (NER) code removed (replaced by LLM integration).
 
 2023-01-15  Martin Dvorak  <martin.dvorak@mindforger.com>
 

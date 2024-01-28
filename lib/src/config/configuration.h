@@ -16,6 +16,12 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+// TODO this class to be rewritten using templates and dynamic configuration
+//   so that adding of new configuration is easier and more robust,
+//   ideally there should be a configuration runtime configured by
+//   a data structure ~ list of configuration items
+
 #ifndef M8R_CONFIGURATION_H_
 #define M8R_CONFIGURATION_H_
 
@@ -275,17 +281,55 @@ private:
     bool autolinking; // enable MD autolinking
     bool autolinkingColonSplit;
     bool autolinkingCaseInsensitive;
-    bool wingman; // is Wingman enabled
+
+    /*
+    Wingman configuration, initialization and use:
+
+    - CONFIGURATION:
+        - configuration initialization:
+            - configuration constructor():
+                - configuration.llmProvider set to NONE
+            - configuration load():
+                - configuration.llmProvider is load first - is one of:
+                    - NONE
+                    - MOCK
+                    - OPEN_AI
+        - configuration detection whether particular Wingman provider is available:
+            - bool can<provider>()
+        - Wingman initialization from the configuration perspective
+          (all fields, like API key, are set ...)
+            - bool init<provider>()
+        - Wingman CONFIGURATION AVAILABILITY to the runtime:
+            - bool isWingman()
+            - Wingman is available from the configuration perspective
+    - MIND:
+        - constructor:
+          if Wingman configuration is available,
+          then instantiate a Wingman @ configured provider
+            - if configuration.isWingman()
+              then mind.wingman = <provider>Wingman()
+        - Wingman AVAILABILITY to the runtime:
+            - Wingman* mind.getWingman()
+                - nullptr || Wingman instance
+        - configuration CHANGE detection:
+            - mind.llmProvider used to detect configuration change
+            - on change: switch Wingman instance
+    - APP WINDOW / WINGMAN DIALOG:
+        - configuration CHANGE detection:
+            - appWindow.llmProvider used to detect configuration change
+            - on change: re-init Wingman DIALOG (refresh pre-defined prompts)
+    */
     WingmanLlmProviders wingmanProvider; // "OpenAI", "Google", "Mock"
-    bool wingmanShellEnvApiKey; // use API key from shell environment on MF load
-    std::string wingmanApiKey;
-    std::string wingmanLlmModel;
+    std::string wingmanApiKey; // OpenAI/Bard/... API key loaded from the shell environment
+    std::string wingmanLlmModel; // gpt-3.5-turbo
+
     TimeScope timeScope;
     std::string timeScopeAsString;
     std::vector<std::string> tagsScope;
     unsigned int md2HtmlOptions;
     AssociationAssessmentAlgorithm aaAlgorithm;
     int distributorSleepInterval;
+
     bool markdownQuoteSections;
     /**
      * @brief Do include Outlines in the recent view or not.
@@ -433,10 +477,6 @@ public:
     void setAutolinkingColonSplit(bool autolinkingColonSplit) { this->autolinkingColonSplit=autolinkingColonSplit; }
     bool isAutolinkingCaseInsensitive() const { return autolinkingCaseInsensitive; }
     void setAutolinkingCaseInsensitive(bool autolinkingCaseInsensitive) { this->autolinkingCaseInsensitive=autolinkingCaseInsensitive; }
-    bool isWingman();
-    WingmanLlmProviders getWingmanLlmProvider() const { return wingmanProvider; }
-    std::string getWingmanApiKey() const { return wingmanApiKey; }
-    std::string getWingmanLlmModel() const { return wingmanLlmModel; }
     unsigned int getMd2HtmlOptions() const { return md2HtmlOptions; }
     AssociationAssessmentAlgorithm getAaAlgorithm() const { return aaAlgorithm; }
     void setAaAlgorithm(AssociationAssessmentAlgorithm aaa) { aaAlgorithm = aaa; }
@@ -446,6 +486,36 @@ public:
     void setMarkdownQuoteSections(bool markdownQuoteSections) { this->markdownQuoteSections = markdownQuoteSections; }
     bool isRecentIncludeOs() const { return recentIncludeOs; }
     void setRecentIncludeOs(bool recentIncludeOs) { this->recentIncludeOs = recentIncludeOs; }
+
+    /*
+     * Wingman
+     */
+    void setWingmanLlmProvider(WingmanLlmProviders provider);
+    WingmanLlmProviders getWingmanLlmProvider() const { return wingmanProvider; }
+#ifdef MF_WIP
+    bool canWingmanMock() { return true; }
+#else
+    bool canWingmanMock() { return false; }
+#endif
+    bool canWingmanOpenAi();
+private:
+    bool initWingmanMock();
+    bool initWingmanOpenAi();
+    /**
+     * @brief Initialize Wingman's LLM provider.
+     */
+    bool initWingman();
+public:
+    std::string getWingmanApiKey() const { return wingmanApiKey; }
+    /**
+     * @brief Get preferred Wingman's LLM provider model name.
+     */
+    std::string getWingmanLlmModel() const { return wingmanLlmModel; }
+    /**
+     * @brief Check whether Wingman's LLM provider is ready from
+     * the configuration perspective.
+     */
+    bool isWingman();
 
     /*
      * GUI

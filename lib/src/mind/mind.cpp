@@ -53,33 +53,7 @@ Mind::Mind(Configuration &configuration)
 {
     ai = new Ai{memory, *this};
 
-    MF_DEBUG(
-        "MIND Wingman init: "
-        << boolalpha << config.isWingman() << "/"
-        << std::to_string(config.getWingmanApiKey().size()) << " "
-        << endl
-    );
-    if(config.isWingman()) {
-        MF_DEBUG("MIND Wingman INIT: instantiation..." << endl);
-        if(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI == config.getWingmanLlmProvider()
-           && config.getWingmanApiKey().size()) {
-            // wingman: OpenAI
-            MF_DEBUG("  MIND Wingman ~ OpenAI" << endl);
-            wingman = (Wingman*)new OpenAiWingman{
-                config.getWingmanApiKey(),
-                config.getWingmanLlmModel()
-            };
-        // } else if(BARD)
-        //   wingman: Google Bard
-        //   wingman = (Wingman*)new BardWingman{};
-        } else {
-            // wingman: MOCK
-            MF_DEBUG("  MIND Wingman ~ MOCK" << endl);
-            wingman = (Wingman*)new MockWingman{
-                "mock-llm-model"
-            };
-        }
-    }
+    initWingman();
 
     deleteWatermark = 0;
     activeProcesses = 0;
@@ -102,7 +76,7 @@ Mind::Mind(Configuration &configuration)
 Mind::~Mind()
 {
     delete ai;
-    delete wingman;
+    if(wingman) delete wingman;
     delete knowledgeGraph;
     delete mdConfigRepresentation;
     delete autoInterceptor;
@@ -1475,12 +1449,64 @@ Outline* Mind::findOutlineByKey(const string& key) const
     return nullptr;
 }
 
-CommandWingmanChat Mind::wingmanChat(CommandWingmanChat& command) {
+void Mind::initWingman()
+{
+    MF_DEBUG(
+        "MIND Wingman init: " << boolalpha << config.isWingman() << endl
+    );
+    if(config.isWingman()) {
+        MF_DEBUG("MIND Wingman INIT: instantiation..." << endl);
+        switch(config.getWingmanLlmProvider()) {
+        case WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI:
+            MF_DEBUG("  MIND Wingman init: OpenAI" << endl);
+            wingman = (Wingman*)new OpenAiWingman{
+                config.getWingmanApiKey(),
+                config.getWingmanLlmModel()
+            };
+            wingmanLlmProvider = config.getWingmanLlmProvider();
+            return;
+        // case BARD:
+        //   wingman = (Wingman*)new BardWingman{};
+        //  return;
+        case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
+            MF_DEBUG("  MIND Wingman init: MOCK" << endl);
+            wingman = (Wingman*)new MockWingman{
+                "mock-llm-model"
+            };
+            wingmanLlmProvider = config.getWingmanLlmProvider();
+            return;
+        default:
+            MF_DEBUG("  MIND Wingman init: UNKNOWN" << endl);
+            break;
+        }
+    }
+
+    MF_DEBUG("MIND Wingman init: DISABLED" << endl);
+    wingman = nullptr;
+    wingmanLlmProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
+}
+
+Wingman* Mind::getWingman()
+{
+    if(this->wingmanLlmProvider != config.getWingmanLlmProvider()) {
+        initWingman();
+    }
+
+    return this->wingman;
+}
+
+CommandWingmanChat Mind::wingmanChat(CommandWingmanChat& command)
+{
     MF_DEBUG("MIND: Wingman chat..." << endl);
 
-    wingman->chat(command);
-
-    MF_DEBUG("MIND: DONE Wingman chat" << endl);
+    if(getWingman()) {
+        getWingman()->chat(command);
+        MF_DEBUG("MIND: DONE Wingman chat" << endl);
+    } else {
+        MF_DEBUG("ERROR: MIND Wingman chat - Wingman NOT configured and/or initialized" << endl);
+        command.errorMessage = "ERROR: Wingman NOT configured and/or initialized";
+        command.status = WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
+    }
 
     return command;
 }

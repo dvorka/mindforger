@@ -668,16 +668,7 @@ ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
     llmProvidersLabel = new QLabel(tr("LLM provider:"), this);
-
     llmProvidersCombo = new QComboBox{this};
-    llmProvidersCombo->addItem(""); // disable Wingman
-    // TODO enable OpenAI ONLY if ENV_VAR_OPENAI_API_KEY is set
-    llmProvidersCombo->addItem(
-        QString{"OpenAI"}, WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI);
-
-    // set the last selected provider
-    llmProvidersCombo->setCurrentIndex(
-        llmProvidersCombo->findData(config.getWingmanLlmProvider()));
 
     llmHelpLabel = new QLabel(
         tr(
@@ -711,12 +702,33 @@ ConfigurationDialog::WingmanTab::~WingmanTab()
 
 void ConfigurationDialog::WingmanTab::refresh()
 {
-    // TODO to be implemented - use App
+    // TODO to be implemented - use App as inspiration
+
+    // refresh LLM providers combo
+    llmProvidersCombo->clear();
+    llmProvidersCombo->addItem(""); // disable Wingman
+    if(config.canWingmanMock()) {
+        llmProvidersCombo->addItem(
+            QString{"Mock"}, WingmanLlmProviders::WINGMAN_PROVIDER_MOCK);
+    }
+    if(config.canWingmanOpenAi()) {
+        llmProvidersCombo->addItem(
+            QString{"OpenAI"}, WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI);
+    }
+    // set the last selected provider
+    llmProvidersCombo->setCurrentIndex(
+        llmProvidersCombo->findData(config.getWingmanLlmProvider()));
 }
+
 
 void ConfigurationDialog::WingmanTab::save()
 {
-    // TODO to be implemented - use App
+    // TODO to be implemented - use App as inspiration
+
+    // get LLM provider enum value from llmProvidersCombo
+    WingmanLlmProviders llmProvider = static_cast<WingmanLlmProviders>(
+        llmProvidersCombo->itemData(llmProvidersCombo->currentIndex()).toInt());
+    config.setWingmanLlmProvider(llmProvider);
 }
 
 /*

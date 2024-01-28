@@ -1,6 +1,6 @@
 # Contribute to MindForger
 
-MindForger is free and open source software. Feel free to **contribute** - any help 
+MindForger is free and open source software. Feel free to **contribute** - any help
 with MindForger development will be **highly appreciated**!
 
 * **Bugs and Suggestions**
@@ -13,16 +13,24 @@ with MindForger development will be **highly appreciated**!
     * Submit pull request/patch with implementation of a feature you missed.
 * **Integration**
     * How-to or code enabling integration with your (favorite) project.
-* **Enhancements** 
+* **Enhancements**
     * Submit performance, efficiency and/or productivity enhancements suggestions (code, bug or docs)
-* **Documentation** 
+* **Documentation**
     * Write a document, block post; create YouTube video, ...
 
 Don't hesitate to contact [me](mailto:martin.dvorak@mindforger.com).
 
+**Table of contents**:
+
+* [Code of Conduct](#code-of-conduct)
+* [Styleguide: Git Commit Messages](#styleguide--git-commit-messages)
+* [Styleguide: C++](#styleguide--c)
+* [Styleguide: C++ Comments](#styleguide--c---comments)
+* [Styleguide: Qt](#styleguide--qt)
+
 
 # Code of Conduct
-This project and everyone participating in it is governed by the 
+This project and everyone participating in it is governed by the
 [MindForger Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold this
 code.
 
@@ -36,7 +44,7 @@ code.
 
 # Styleguide: C++
 Code style:
-  
+
 * Use `.h` extension for header files.
 * Use `.cpp` extension for class files.
 * Use `lower_case_with_underscores` source code file names.
@@ -63,8 +71,8 @@ public:
 ...
 
     void myFunction(int myParam) { ... }
-    
-    int myMultiLineFunction() const { 
+
+    int myMultiLineFunction() const {
         ...
     }
 
@@ -118,7 +126,7 @@ void MainWindowPresenter::doActionOrganizerMoveNoteToNextVisibleQuadrant(Note* n
 ```
 
 
-# Styleguide: C++ comments
+# Styleguide: C++ Comments
 Comments should be used to explain tricky and/or
 important code only. Don't use comments to explain
 obvious things as comments might diverge from the
@@ -190,3 +198,5 @@ public:
 
 * MindForger uses MVP pattern (see `main_window_presenter.h/.cpp`)
 * See `/src/qt` source code for a code style reference.
+
+

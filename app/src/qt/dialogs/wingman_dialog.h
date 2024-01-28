@@ -105,11 +105,7 @@ private:
     bool predefPromptsVisibilityCache;
 
 public:
-    explicit WingmanDialog(
-        const std::vector<std::string>& predefinedOPrompts,
-        const std::vector<std::string>& predefinedNPrompts,
-        const std::vector<std::string>& predefinedTPrompts,
-        QWidget* parent);
+    explicit WingmanDialog(QWidget* parent);
     WingmanDialog(const WingmanDialog&) = delete;
     WingmanDialog(const WingmanDialog&&) = delete;
     WingmanDialog& operator =(const WingmanDialog&) = delete;
@@ -144,7 +140,10 @@ public:
     void show(
         WingmanDialogModes contextType,
         QString& contextName,
-        QString& context);
+        QString& context,
+        const std::vector<std::string>& predefinedOPrompts,
+        const std::vector<std::string>& predefinedNPrompts,
+        const std::vector<std::string>& predefinedTPrompts);
 
     void resetProgress(int maximum) {
         progressBar->setValue(0);

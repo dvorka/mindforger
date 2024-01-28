@@ -26,27 +26,13 @@ const string COLOR_PROMPT_GREEN{"#00bb00"};
 const string COLOR_PROMPT_BLUE{"#00aaaa"};
 const string COLOR_PROMPT_GRAY{"#777777"};
 
-WingmanDialog::WingmanDialog(
-    const vector<string>& predefinedOPrompts,
-    const vector<string>& predefinedNPrompts,
-    const vector<string>& predefinedTPrompts,
-    QWidget* parent
-): QDialog(parent),
-   firstRun{true},
-   mode{WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT},
-   context{},
-   lastAnswer{}
+WingmanDialog::WingmanDialog(QWidget* parent)
+: QDialog(parent),
+  firstRun{true},
+  mode{WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT},
+  context{},
+  lastAnswer{}
 {
-    for(string prompt:predefinedOPrompts) {
-        outlinePrompts.push_back(QString::fromStdString(prompt));
-    }
-    for(string prompt:predefinedNPrompts) {
-        notePrompts.push_back(QString::fromStdString(prompt));
-    }
-    for(string prompt:predefinedTPrompts) {
-        textPrompts.push_back(QString::fromStdString(prompt));
-    }
-
     setWindowTitle(tr("Wingman Chat"));
 
     promptsLabel = new QLabel{tr("Prompt:"), parent};
@@ -233,8 +219,24 @@ QString WingmanDialog::getContextText() const {
 void WingmanDialog::show(
     WingmanDialogModes contextType,
     QString& contextName,
-    QString& context
+    QString& context,
+    const vector<string>& predefinedOPrompts,
+    const vector<string>& predefinedNPrompts,
+    const vector<string>& predefinedTPrompts
 ) {
+    outlinePrompts.clear();
+    for(string prompt:predefinedOPrompts) {
+        outlinePrompts.push_back(QString::fromStdString(prompt));
+    }
+    notePrompts.clear();
+    for(string prompt:predefinedNPrompts) {
+        notePrompts.push_back(QString::fromStdString(prompt));
+    }
+    textPrompts.clear();
+    for(string prompt:predefinedTPrompts) {
+        textPrompts.push_back(QString::fromStdString(prompt));
+    }
+
     this->initForMode(contextType);
 
     setContextText(context);

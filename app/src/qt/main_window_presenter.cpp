@@ -57,20 +57,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     syncLibraryDialog = new SyncLibraryDialog{&view};
     rmLibraryDialog = new RemoveLibraryDialog(&view);
     runToolDialog = new RunToolDialog{&view};
-    if(config.isWingman()) {
-        wingmanDialog = new WingmanDialog{
-            mind->getWingman()->getPredefinedOPrompts(),
-            mind->getWingman()->getPredefinedNPrompts(),
-            mind->getWingman()->getPredefinedTPrompts(),
-            &view
-        };
-    } else {
-        vector<string> empty{};
-        wingmanDialog = new WingmanDialog{
-            empty, empty, empty,
-            &view
-        };
-    }
+    wingmanDialog = new WingmanDialog{&view};
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
     newOutlineDialog = new OutlineNewDialog{
@@ -2068,7 +2055,7 @@ void MainWindowPresenter::handleActionWingman()
             QObject::tr("Wingman Not Available"),
             QObject::tr(
                 "Wingman provider is either not configured or "
-                "it cannot be initialized.")
+                "initialized - see MindForger Preferences (Wingman tab).")
         };
         msgBox.exec();
         return;
@@ -2147,7 +2134,10 @@ void MainWindowPresenter::handleActionWingman()
     this->wingmanDialog->show(
         contextType,
         contextTextName,
-        contextText
+        contextText,
+        mind->getWingman()->getPredefinedOPrompts(),
+        mind->getWingman()->getPredefinedNPrompts(),
+        mind->getWingman()->getPredefinedTPrompts()
     );
 }
 

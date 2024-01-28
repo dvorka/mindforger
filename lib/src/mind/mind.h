@@ -196,6 +196,15 @@ private:
     Ai* ai;
 
     /**
+     * Configuration driven Wingman initialization.
+     */
+    void initWingman();
+    /**
+     * Wingman LLM provider currently used by Mind.
+     * (user to detect configuration changes)
+     */
+    WingmanLlmProviders wingmanLlmProvider;
+    /**
      * Wingman
      */
     Wingman* wingman;
@@ -676,7 +685,7 @@ public:
     /*
      * WINGMAN
      */
-    Wingman* getWingman() const { return wingman; }
+    Wingman* getWingman();
     CommandWingmanChat wingmanChat(CommandWingmanChat& command);
 
     /*
