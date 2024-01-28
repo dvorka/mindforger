@@ -107,8 +107,6 @@ const QString CliAndBreadcrumbsView::CMD_HELP_KNOWLEDGE
     = "?     @ for knowledge recherche";
 const QString CliAndBreadcrumbsView::CMD_HELP_CMD
     = "?     > to run a command";
-const QString CliAndBreadcrumbsView::CMD_HELP_CHAT
-    = "?     : to chat with workspace, Notebook or Note";
 const QString CliAndBreadcrumbsView::CMD_HELP_FTS
     = "?     full-text search phrase";
 
@@ -180,9 +178,6 @@ const QStringList CliAndBreadcrumbsView::HELP_CMD_CMDS = QStringList()
         << CMD_EMOJIS
         << CMD_LIST_OUTLINES
         ;
-
-const QString CliAndBreadcrumbsView::CHAR_CHAT
-    = ":";
 
 // TODO migrate all commands to constants
 const QStringList CliAndBreadcrumbsView::DEFAULT_CMDS = QStringList()

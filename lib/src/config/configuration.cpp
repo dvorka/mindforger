@@ -47,7 +47,7 @@ Configuration::Configuration()
       autolinking{DEFAULT_AUTOLINKING},
       autolinkingColonSplit{},
       autolinkingCaseInsensitive{},
-      wingmanProvider{WingmanLlmProviders::WINGMAN_PROVIDER_NONE},
+      wingmanProvider{DEFAULT_WINGMAN_LLM_PROVIDER},
       wingmanApiKey{},
       wingmanLlmModel{"gpt-3.5-turbo"},
       md2HtmlOptions{},
@@ -145,6 +145,9 @@ void Configuration::clear()
     autolinking = DEFAULT_AUTOLINKING;
     autolinkingColonSplit = DEFAULT_AUTOLINKING_COLON_SPLIT;
     autolinkingCaseInsensitive = DEFAULT_AUTOLINKING_CASE_INSENSITIVE;
+    wingmanProvider = DEFAULT_WINGMAN_LLM_PROVIDER;
+    wingmanApiKey.clear();
+    wingmanLlmModel.clear();
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
     tagsScope.clear();
     markdownQuoteSections = DEFAULT_MD_QUOTE_SECTIONS;
@@ -198,6 +201,7 @@ void Configuration::clear()
     navigatorMaxNodes = DEFAULT_NAVIGATOR_MAX_GRAPH_NODES;
     uiShowToolbar = DEFAULT_UI_SHOW_TOOLBAR;
     uiExpertMode = DEFAULT_UI_EXPERT_MODE;
+    uiAppFontSize = DEFAULT_UI_APP_FONT_SIZE;
     uiDistractionFreeMode = false;
     uiHoistedMode = false;
     uiLiveNotePreview = DEFAULT_UI_LIVE_NOTE_PREVIEW;

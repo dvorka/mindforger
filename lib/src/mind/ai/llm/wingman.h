@@ -100,6 +100,8 @@ private:
         PROMPT_FIND_PERSONS,
         PROMPT_FIND_LOCATIONS,
         PROMPT_FIND_ORGS,
+        // PROMPT_FIND_PERSONS,  // NER
+        // PROMPT_FIND_PLACES,  // NER
         // PROMPT_CHAT,
     };
 

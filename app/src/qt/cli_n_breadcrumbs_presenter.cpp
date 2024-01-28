@@ -66,21 +66,21 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                     "<br>/ ... search"
                     "<br>@ ... knowledge recherche"
                     "<br>> ... run a command"
-                    "<br>: ... chat with workspace, Notebook or Note"
+                    //"<br>: ... chat with workspace, Notebook or Note"
                     "<br>&nbsp;&nbsp;... or full-text search phrase"
                     "<br>"
                     "<br>Examples:"
                     "<br>"
-                    "<br>/ find notebook by name My Name"
-                    "<br>@ arxiv Knowledge management"
-                    "<br>> emoji"
-                    "<br>: explain in simple terms SELECTED"
+                    "<br>/ find notebook by tag TODO"
+                    "<br>@ arxiv LLM"
+                    "<br>> emojis"
+                    //"<br>: explain in simple terms SELECTED"
                     "<br>"
                 )
             );
             view->setCommand("");
             mainPresenter->getStatusBar()->showInfo(
-                tr("Wingman: ? for help, / search, @ knowledge, > command, : chat, or type FTS phrase"));
+                tr("Wingman: ? for help, / search, @ knowledge, > command, or type FTS phrase"));
             return;
         } else if(command.startsWith(CliAndBreadcrumbsView::CHAR_FIND)) {
             MF_DEBUG("    / HELP find" << endl);

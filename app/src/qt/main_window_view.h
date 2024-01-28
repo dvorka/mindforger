@@ -26,7 +26,6 @@
 
 #include "main_window_presenter.h"
 #include "main_toolbar_view.h"
-#include "left_toolbar_view.h"
 #include "main_menu_presenter.h"
 #include "cli_n_breadcrumbs_view.h"
 #include "orloj_view.h"
@@ -37,7 +36,6 @@ namespace m8r {
 class OrlojView;
 class MainWindowPresenter;
 class MainToolbarView;
-class LeftToolbarView;
 class CliAndBreadcrumbsView;
 
 /**
@@ -61,7 +59,6 @@ private:
 
     OrlojView* orlojView;
     MainToolbarView* toolBarView;
-    LeftToolbarView* leftToolBarView;
     StatusBarView* statusBarView;
 
 public:
@@ -74,7 +71,6 @@ public:
 
     QMenuBar* getMenuBar() const { return menuBar(); }
     MainToolbarView* getToolBar() const { return toolBarView; }
-    LeftToolbarView* getLeftToolBar() const { return leftToolBarView; }
     CliAndBreadcrumbsView* getCli() const;
     OrlojView* getOrloj() const { return orlojView; }
     StatusBarView* getStatusBar() const { return statusBarView; }

@@ -213,6 +213,7 @@ public:
     static constexpr const bool DEFAULT_AUTOLINKING = false;
     static constexpr const bool DEFAULT_AUTOLINKING_COLON_SPLIT = true;
     static constexpr const bool DEFAULT_AUTOLINKING_CASE_INSENSITIVE = true;
+    static constexpr const WingmanLlmProviders DEFAULT_WINGMAN_LLM_PROVIDER = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
 
     static constexpr const bool UI_DEFAULT_NERD_TARGET_AUDIENCE = true;
@@ -494,10 +495,14 @@ public:
      */
     void setWingmanLlmProvider(WingmanLlmProviders provider);
     WingmanLlmProviders getWingmanLlmProvider() const { return wingmanProvider; }
-    std::string getWingmanLlmProviderAsString(WingmanLlmProviders provider) const {
-        if(provider==WINGMAN_PROVIDER_MOCK) return "mock";
-        else if(provider==WINGMAN_PROVIDER_OPENAI) return "openai";
-        else return "none";
+    static std::string getWingmanLlmProviderAsString(WingmanLlmProviders provider) {
+        if(provider == WingmanLlmProviders::WINGMAN_PROVIDER_MOCK) {
+            return "mock";
+        } else if(provider == WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI) {
+            return "openai";
+        }
+
+        return "none";
     }
 #ifdef MF_WIP
     bool canWingmanMock() { return true; }

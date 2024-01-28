@@ -40,9 +40,6 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
     // IMPROVE toolbar position to be configurable
     addToolBar(Qt::TopToolBarArea, toolBarView);
 
-    leftToolBarView = new LeftToolbarView{this};
-    // addToolBar(Qt::LeftToolBarArea, leftToolBarView);
-
     centralWidget = new QWidget(this);
 
     centralLayout = new QVBoxLayout{centralWidget};

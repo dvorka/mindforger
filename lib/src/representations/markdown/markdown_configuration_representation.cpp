@@ -501,7 +501,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: 500, 1000, 3000, 5000" << endl <<
          CONFIG_SETTING_MIND_AUTOLINKING << (c?(c->isAutolinking()?"yes":"no"):(Configuration::DEFAULT_AUTOLINKING?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
-         CONFIG_SETTING_MIND_WINGMAN_PROVIDER << c->getWingmanLlmProviderAsString(c->getWingmanLlmProvider()) << endl <<
+         CONFIG_SETTING_MIND_WINGMAN_PROVIDER << Configuration::getWingmanLlmProviderAsString(c?c->getWingmanLlmProvider():Configuration::DEFAULT_WINGMAN_LLM_PROVIDER) << endl <<
          "    * Examples: none, openai" << endl <<
          endl <<
 
@@ -512,7 +512,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: outlines, tags, recent, home" << endl <<
          CONFIG_SETTING_UI_THEME_LABEL << (c?c->getUiThemeName():Configuration::DEFAULT_UI_THEME_NAME) << endl <<
          "    * Examples: dark, light, native" << endl <<
-         CONFIG_SETTING_UI_APP_FONT_SIZE << c->getUiAppFontSize() << endl <<
+         CONFIG_SETTING_UI_APP_FONT_SIZE << (c?c->getUiAppFontSize():Configuration::DEFAULT_UI_APP_FONT_SIZE) << endl <<
          "    * Examples: 0 (default - auto), 10, 42" << endl <<
          CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL << (c?c->getUiHtmlCssPath():Configuration::DEFAULT_UI_HTML_CSS_THEME) << endl <<
          "    * Normal themes (dark, light) style HTML generated from Markdown," << endl <<
