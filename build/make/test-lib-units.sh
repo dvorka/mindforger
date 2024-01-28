@@ -54,7 +54,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="ConfigurationTestCase.FromEnvironment"
 #export OPTION_TEST="ConfigurationTestCase.Save*"
 #export OPTION_TEST="ConfigurationTestCase.SaveAndLoad"
-#export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
+export OPTION_TEST="ConfigurationTestCase.SaveDefaultConfig"
 #export OPTION_TEST="DateTimeGearTestCase.*"
 #export OPTION_TEST="DateTimeGearTestCase.Immutability"
 #export OPTION_TEST="FileGearTestCase.DeepCopy"
@@ -121,7 +121,7 @@ export OPTION_RECOMPILE=yes # recompile before running test(s) (comment this lin
 #export OPTION_TEST="TrieTestCase.*"
 #export OPTION_TEST="TrieTestCase.AddAndRemove"
 #export OPTION_TEST="JSonTestCase.SerializeOpenAiRequest"
-export OPTION_TEST="JSonTestCase.ParseOpenAiResponse"
+#export OPTION_TEST="JSonTestCase.ParseOpenAiResponse"
 
 # environment - to be specified in .bashrc or elsewhere:
 #   export M8R_CPU_CORES=7
