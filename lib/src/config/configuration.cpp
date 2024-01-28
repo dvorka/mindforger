@@ -75,6 +75,7 @@ Configuration::Configuration()
       uiFullOPreview{DEFAULT_FULL_O_PREVIEW},
       uiShowToolbar{DEFAULT_UI_SHOW_TOOLBAR},
       uiExpertMode{DEFAULT_UI_EXPERT_MODE},
+      uiAppFontSize{DEFAULT_UI_APP_FONT_SIZE},
       uiDistractionFreeMode{},
       uiHoistedMode{},
       uiLiveNotePreview{DEFAULT_UI_LIVE_NOTE_PREVIEW},

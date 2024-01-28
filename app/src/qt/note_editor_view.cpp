@@ -207,6 +207,20 @@ void NoteEditorView::dragMoveEvent(QDragMoveEvent* event)
     event->acceptProposedAction();
 }
 
+void NoteEditorView::replaceSelectedText(const std::string& text)
+{
+    QTextCursor cursor = textCursor();
+    cursor.removeSelectedText();
+    cursor.insertText(QString::fromStdString(text));
+    setTextCursor(cursor);
+}
+
+void NoteEditorView::appendAfterSelectedText(const std::string& phrase) {
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::EndOfBlock);
+    cursor.insertText(" " + QString::fromStdString(phrase));
+}
+
 /*
  * Formatting
  */
@@ -575,22 +589,17 @@ QString NoteEditorView::getToolPhrase()
 {
     QString phrase{};
 
-    // get PHRASE: selection > the word under the cursor
-    QString selection{textCursor().selectedText()};
-    if(selection.size()) {
-        phrase = selection;
-    } else {
-        MF_DEBUG(
-            "Run tool: getting the phrase under the cursor..." << endl);
-        phrase = getCompletionPrefix();
-        MF_DEBUG(
-            "Run tool: phrase under the cursor '" << phrase.toStdString()
-            << "'" << endl);
+    // if there is no selection, attempt to select the word under the cursor
+    if(textCursor().selectedText().size() == 0) {
+        // select the word under cursor
+        QTextCursor cursor = textCursor();
+        cursor.select(QTextCursor::WordUnderCursor);
+        setTextCursor(cursor);
     }
 
-    return phrase;
+    // get PHRASE from selection
+    return QString{textCursor().selectedText()};
 }
-
 
 void NoteEditorView::slotStartRunTool()
 {

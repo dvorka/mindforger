@@ -87,6 +87,8 @@ private:
 
     QPushButton* askButton;
     QPushButton* copyButton;
+    QPushButton* appendButton;
+    QPushButton* replaceButton;
 
     QPushButton* togglePromptSourceButton;
     QPushButton* toggleContextButton;
@@ -124,6 +126,10 @@ public:
         bool error=false);
 
     std::string getPrompt();
+    std::string getLastAnswer() { return this->lastAnswer; }
+
+    QPushButton* getAppendButton() const { return appendButton; }
+    QPushButton* getReplaceButton() const { return replaceButton; }
 
     WingmanDialogModes getContextType() const {
         return this->mode;

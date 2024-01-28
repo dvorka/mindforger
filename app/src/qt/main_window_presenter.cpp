@@ -102,6 +102,12 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         wingmanDialog, SIGNAL(signalRunWingman()),
         this, SLOT(slotRunWingmanFromDialog()));
     QObject::connect(
+        wingmanDialog->getAppendButton(), SIGNAL(clicked()),
+        this, SLOT(slotWingmanAppendFromDialog()));
+    QObject::connect(
+        wingmanDialog->getReplaceButton(), SIGNAL(clicked()),
+        this, SLOT(slotWingmanReplaceFromDialog()));
+    QObject::connect(
         // TODO remove / comment
         runToolDialog->getRunButton(), SIGNAL(clicked()),
         this, SLOT(handleRunTool()));
@@ -2259,6 +2265,88 @@ void MainWindowPresenter::slotRunWingmanFromDialog()
             this->wingmanDialog->getContextType()
         );
     }
+}
+
+void MainWindowPresenter::slotWingmanAppendFromDialog()
+{
+    if(this->wingmanDialog->getLastAnswer().length()) {
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            if(orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getSelectedText().size()) {
+                orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->appendAfterSelectedText(
+                    this->wingmanDialog->getLastAnswer());
+                statusBar->showInfo(QString(tr("Wingman's answer appended after selected text in Notebook header.")));
+                this->wingmanDialog->hide();
+            } else{
+                QMessageBox::critical(
+                    &view,
+                    tr("Wingman Action Error"),
+                    tr("Unable to append text in Notebook header editor - no text selected.")
+                );
+            }
+            return;
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            if(orloj->getNoteEdit()->getView()->getNoteEditor()->getSelectedText().size()) {
+                orloj->getNoteEdit()->getView()->getNoteEditor()->appendAfterSelectedText(
+                    this->wingmanDialog->getLastAnswer());
+                statusBar->showInfo(QString(tr("Wingman's answer appended after selected text in the Note editor.")));
+                this->wingmanDialog->hide();
+            } else{
+                QMessageBox::critical(
+                    &view,
+                    tr("Wingman Action Error"),
+                    tr("Unable to append text in Note editor - no text selected.")
+                );
+            }
+            return;
+        } else {
+            statusBar->showInfo(
+                QString(
+                    tr("Unable to append after selected text with Wingman's answer in non-edit perspective.")));
+            return;
+        }
+    }
+    statusBar->showInfo(QString(tr("No answer from Wingman to append after selected text - run a prompt.")));
+}
+
+void MainWindowPresenter::slotWingmanReplaceFromDialog()
+{
+    if(this->wingmanDialog->getLastAnswer().length()) {
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            if(orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getSelectedText().size()) {
+                orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->replaceSelectedText(
+                    this->wingmanDialog->getLastAnswer());
+                statusBar->showInfo(QString(tr("Wingman's answer replaced selected text in Notebook header.")));
+                this->wingmanDialog->hide();
+            } else{
+                QMessageBox::critical(
+                    &view,
+                    tr("Wingman Action Error"),
+                    tr("Unable to replace Notebook header text - no text selected.")
+                );
+            }
+            return;
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            if(orloj->getNoteEdit()->getView()->getNoteEditor()->getSelectedText().size()) {
+                orloj->getNoteEdit()->getView()->getNoteEditor()->replaceSelectedText(
+                    this->wingmanDialog->getLastAnswer());
+                statusBar->showInfo(QString(tr("Wingman's answer replaced selected text in Note text.")));
+                this->wingmanDialog->hide();
+            } else{
+                QMessageBox::critical(
+                    &view,
+                    tr("Wingman Action Error"),
+                    tr("Unable to replace Note text - no text selected.")
+                );
+            }
+            return;
+        } else {
+            statusBar->showInfo(
+                QString(
+                    tr("Unable to replace selected text with Wingman's answer in non-edit perspective.")));
+            return;
+        }
+    }
+    statusBar->showInfo(QString(tr("No answer from Wingman to replace selected text - run a prompt.")));
 }
 
 void MainWindowPresenter::doActionOutlineOrNoteNew()

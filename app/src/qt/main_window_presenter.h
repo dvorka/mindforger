@@ -349,6 +349,8 @@ public slots:
     // wingman
     void handleActionWingman();
     void slotRunWingmanFromDialog();
+    void slotWingmanAppendFromDialog();
+    void slotWingmanReplaceFromDialog();
     // TODO remake to CLI or REMOVE tools toolbar
     void handleLeftToolbarAction(std::string selectedTool);
     void doActionArxivToolbar();

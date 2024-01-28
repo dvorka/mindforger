@@ -75,6 +75,10 @@ WingmanDialog::WingmanDialog(QWidget* parent)
     askButton = new QPushButton(tr("&Run Prompt"), this);
     copyButton = new QPushButton(tr("C&opy"), this);
     copyButton->setToolTip(tr("Copy last answer to the clipboard"));
+    appendButton = new QPushButton(tr("&Append"), this);
+    appendButton->setToolTip(tr("Append the last Wingman answer to the Note text after the cursor"));
+    replaceButton = new QPushButton(tr("&Replace"), this);
+    replaceButton->setToolTip(tr("Replace (selected) Note text with the last Wingman answer"));
     togglePromptSourceButton = new QPushButton(tr("Show Predefined &Prompts"), this);
     toggleContextButton = new QPushButton(tr("Show &Context"), this);
     closeButton = new QPushButton(tr("Close"), this);
@@ -124,6 +128,8 @@ WingmanDialog::WingmanDialog(QWidget* parent)
     buttonLayout->addWidget(togglePromptSourceButton);
     buttonLayout->addStretch(1);
     buttonLayout->addWidget(copyButton);
+    buttonLayout->addWidget(appendButton);
+    buttonLayout->addWidget(replaceButton);
     buttonLayout->addWidget(askButton);
     buttonLayout->addStretch();
 
@@ -185,16 +191,22 @@ void WingmanDialog::initForMode(WingmanDialogModes mode)
             prompts = &outlinePrompts;
             contextTypeEdit->setText(tr("notebook"));
             contextEdit->setText(tr("<Notebook text>"));
+            appendButton->hide();
+            replaceButton->hide();
             break;
         case WingmanDialogModes::WINGMAN_DIALOG_MODE_NOTE:
             prompts = &notePrompts;
             contextTypeEdit->setText(tr("note"));
             contextEdit->setText(tr("<Note text>"));
+            appendButton->hide();
+            replaceButton->hide();
             break;
         case WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT:
             prompts = &textPrompts;
             contextNameEdit->clear();
             contextEdit->clear();
+            appendButton->show();
+            replaceButton->show();
             break;
     }
 

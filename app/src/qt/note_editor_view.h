@@ -100,6 +100,8 @@ public:
 
     // formatting
     QString getSelectedText() const { return textCursor().selectedText(); }
+    void replaceSelectedText(const std::string &text);
+    void appendAfterSelectedText(const std::string& phrase);
     void wrapSelectedText(const QString &tag) { wrapSelectedText(tag,""); }
     void wrapSelectedText(const QString &tag, const QString &endTag);
     void removeSelectedText() { textCursor().removeSelectedText(); }
