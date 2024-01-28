@@ -220,6 +220,7 @@ public:
     static const std::string DEFAULT_UI_THEME_NAME;
     static constexpr const bool DEFAULT_UI_SHOW_TOOLBAR = true;
     static constexpr const bool DEFAULT_UI_EXPERT_MODE = false;
+    static constexpr const int DEFAULT_UI_APP_FONT_SIZE = 0;
     static constexpr const bool DEFAULT_UI_LIVE_NOTE_PREVIEW = true;
     static constexpr const bool DEFAULT_UI_NERD_MENU = false;
     static const std::string DEFAULT_UI_HTML_CSS_THEME;
@@ -369,6 +370,7 @@ private:
     bool uiFullOPreview;
     bool uiShowToolbar;
     bool uiExpertMode;
+    int uiAppFontSize;
     bool uiDistractionFreeMode; // fullscreen, no split, hidden toolbar + menu
     bool uiHoistedMode; // no split
     bool uiLiveNotePreview;
@@ -492,6 +494,11 @@ public:
      */
     void setWingmanLlmProvider(WingmanLlmProviders provider);
     WingmanLlmProviders getWingmanLlmProvider() const { return wingmanProvider; }
+    std::string getWingmanLlmProviderAsString(WingmanLlmProviders provider) const {
+        if(provider==WINGMAN_PROVIDER_MOCK) return "mock";
+        else if(provider==WINGMAN_PROVIDER_OPENAI) return "openai";
+        else return "none";
+    }
 #ifdef MF_WIP
     bool canWingmanMock() { return true; }
 #else
@@ -658,7 +665,12 @@ public:
     bool isUiShowToolbar() const { return uiShowToolbar; }
     void setUiShowToolbar(bool showToolbar){ this->uiShowToolbar = showToolbar; }
     bool isUiExpertMode() const { return uiExpertMode; }
-    void setUiExpertMode(bool uiExpertMode){ this->uiExpertMode= uiExpertMode; }
+    void setUiExpertMode(bool uiExpertMode){ this->uiExpertMode = uiExpertMode; }
+    int getUiAppFontSize() const { return uiAppFontSize; }
+    void setUiAppFontSize(int appFontSize){
+        MF_DEBUG("Configuration::setUiAppFontSize: " << appFontSize << std::endl);
+        this->uiAppFontSize = appFontSize;
+    }
     bool isUiDistractionFreeMode() const { return uiDistractionFreeMode; }
     void setUiDistractionFreeMode(bool distractionFreeMode){ this->uiDistractionFreeMode = distractionFreeMode; }
     bool isUiHoistedMode() const { return uiHoistedMode; }
@@ -671,7 +683,6 @@ public:
     void setUiOsTableSortOrder(const bool ascending) { this->uiOsTableSortOrder = ascending; }
     bool isUiDoubleClickNoteViewToEdit() const { return this->uiDoubleClickNoteViewToEdit; }
     void setUiDoubleClickNoteViewToEdit(bool enable) { this->uiDoubleClickNoteViewToEdit = enable; }
-
 };
 
 } // namespace

@@ -118,10 +118,11 @@ WingmanDialog::WingmanDialog(QWidget* parent)
 
     // assembly
     QHBoxLayout* buttonLayout = new QHBoxLayout{};
-    buttonLayout->addStretch(1);
+    //buttonLayout->addStretch(1);
     buttonLayout->addWidget(closeButton);
     buttonLayout->addWidget(toggleContextButton);
     buttonLayout->addWidget(togglePromptSourceButton);
+    buttonLayout->addStretch(1);
     buttonLayout->addWidget(copyButton);
     buttonLayout->addWidget(askButton);
     buttonLayout->addStretch();

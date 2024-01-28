@@ -2245,11 +2245,20 @@ void MainWindowPresenter::slotRunWingmanFromDialog()
     };
 
     // PUSH answer to the chat dialog
-    this->wingmanDialog->appendAnswerToChat(
-        commandWingmanChat.answerHtml,
-        answerDescriptor,
-        this->wingmanDialog->getContextType()
-    );
+    if(WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR == commandWingmanChat.status) {
+        this->wingmanDialog->appendAnswerToChat(
+            commandWingmanChat.errorMessage,
+            answerDescriptor,
+            this->wingmanDialog->getContextType(),
+            true
+        );
+    } else {
+        this->wingmanDialog->appendAnswerToChat(
+            commandWingmanChat.answerHtml,
+            answerDescriptor,
+            this->wingmanDialog->getContextType()
+        );
+    }
 }
 
 void MainWindowPresenter::doActionOutlineOrNoteNew()

@@ -523,11 +523,27 @@ int main(int argc, char* argv[])
     // mdConfigRepresentation->save(config);
 
     // set application font family and size
-    // TODO QFont font("Arial", 25);
-    //mindforgerApplication.setFont(font);
-    MF_DEBUG("Application font family: " << mindforgerApplication.font().family().toStdString() << endl);
-    MF_DEBUG("Application font pixel size: " << mindforgerApplication.font().pixelSize() << endl);
-    MF_DEBUG("Application font point size: " << mindforgerApplication.font().pointSize() << endl);
+    // QFont font("Arial", 25);
+    // mindforgerApplication.setFont(font);
+    MF_DEBUG(
+        "Qt boot MindForger application font:" << endl <<
+        "  family: " << mindforgerApplication.font().family().toStdString() << endl <<
+        "  pixel size: " << mindforgerApplication.font().pixelSize() << endl <<
+        "  point size: " << mindforgerApplication.font().pointSize() << endl);
+    if(config.getUiAppFontSize()) {
+        MF_DEBUG("Setting application font size to: " << config.getUiAppFontSize() << endl);
+        QFont font(
+            mindforgerApplication.font().family(),
+            config.getUiAppFontSize()
+        );
+        mindforgerApplication.setFont(font);
+
+        MF_DEBUG(
+            "AFTER MindForger application font reconfiguration:" << endl <<
+            "  family: " << mindforgerApplication.font().family().toStdString() << endl <<
+            "  pixel size: " << mindforgerApplication.font().pixelSize() << endl <<
+            "  point size: " << mindforgerApplication.font().pointSize() << endl);
+    }
 
     // initialize and start UI
     m8r::MainWindowView mainWindowView(lookAndFeels);

@@ -47,7 +47,7 @@ Configuration::Configuration()
       autolinking{DEFAULT_AUTOLINKING},
       autolinkingColonSplit{},
       autolinkingCaseInsensitive{},
-      wingmanProvider{WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI},
+      wingmanProvider{WingmanLlmProviders::WINGMAN_PROVIDER_NONE},
       wingmanApiKey{},
       wingmanLlmModel{"gpt-3.5-turbo"},
       md2HtmlOptions{},
@@ -440,7 +440,7 @@ bool Configuration::initWingmanOpenAi() {
 bool Configuration::initWingman()
 {
     MF_DEBUG(
-        "  Configuration::initWingman():" << endl <<
+        "  BEFORE Configuration::initWingman():" << endl <<
         "    LLM provider: " << wingmanProvider << endl <<
         "    OpenAI API key env var name: " << ENV_VAR_OPENAI_API_KEY << endl <<
         "    Wingman provider API key   : " << wingmanApiKey << endl
@@ -474,6 +474,13 @@ bool Configuration::initWingman()
         wingmanApiKey.clear();
         wingmanLlmModel.clear();
     }
+
+    MF_DEBUG(
+        "  BEFORE Configuration::initWingman():" << endl <<
+        "    LLM provider: " << wingmanProvider << endl <<
+        "    OpenAI API key env var name: " << ENV_VAR_OPENAI_API_KEY << endl <<
+        "    Wingman provider API key   : " << wingmanApiKey << endl
+    );
 
     return initialized;
 }

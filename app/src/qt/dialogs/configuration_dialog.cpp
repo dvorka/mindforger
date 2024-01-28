@@ -133,6 +133,12 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
 #endif
     startupCombo->addItem(QString{START_TO_HOME_OUTLINE});
 
+    appFontSizeLabel = new QLabel(
+        tr("Application font size - 0 is system (<font color='#ff0000'>requires restart</font>)")+":", this);
+    appFontSizeSpin = new QSpinBox(this);
+    appFontSizeSpin->setMinimum(0);
+    appFontSizeSpin->setMaximum(68);
+
     showToolbarCheck = new QCheckBox(tr("show toolbar"), this);
     showToolbarCheck->setChecked(true);
     uiExpertModeCheck = new QCheckBox(
@@ -149,6 +155,8 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     QVBoxLayout* appearanceLayout = new QVBoxLayout{this};
     appearanceLayout->addWidget(themeLabel);
     appearanceLayout->addWidget(themeCombo);
+    appearanceLayout->addWidget(appFontSizeLabel);
+    appearanceLayout->addWidget(appFontSizeSpin);
     appearanceLayout->addWidget(menuLabel);
     appearanceLayout->addWidget(nerdMenuCheck);
     QGroupBox* appearanceGroup = new QGroupBox{tr("Appearance"), this};
@@ -172,6 +180,8 @@ ConfigurationDialog::AppTab::~AppTab()
 {
     delete themeLabel;
     delete themeCombo;
+    delete appFontSizeLabel;
+    delete appFontSizeSpin;
     delete startupLabel;
     delete startupCombo;
     delete showToolbarCheck;
@@ -188,6 +198,7 @@ void ConfigurationDialog::AppTab::refresh()
         themeCombo->setCurrentIndex(i);
     }
     showToolbarCheck->setChecked(config.isUiShowToolbar());
+    appFontSizeSpin->setValue(config.getUiAppFontSize());
     uiExpertModeCheck->setChecked(config.isUiExpertMode());
     nerdMenuCheck->setChecked(config.isUiNerdTargetAudience());
 }
@@ -197,6 +208,7 @@ void ConfigurationDialog::AppTab::save()
     config.setStartupView(startupCombo->itemText(startupCombo->currentIndex()).toStdString());
     config.setUiThemeName(themeCombo->itemText(themeCombo->currentIndex()).toStdString());
     config.setUiShowToolbar(showToolbarCheck->isChecked());
+    config.setUiAppFontSize(appFontSizeSpin->value());
     config.setUiExpertMode(uiExpertModeCheck->isChecked());
     config.setUiNerdTargetAudience(nerdMenuCheck->isChecked());
 }
@@ -702,8 +714,6 @@ ConfigurationDialog::WingmanTab::~WingmanTab()
 
 void ConfigurationDialog::WingmanTab::refresh()
 {
-    // TODO to be implemented - use App as inspiration
-
     // refresh LLM providers combo
     llmProvidersCombo->clear();
     llmProvidersCombo->addItem(""); // disable Wingman
@@ -723,8 +733,6 @@ void ConfigurationDialog::WingmanTab::refresh()
 
 void ConfigurationDialog::WingmanTab::save()
 {
-    // TODO to be implemented - use App as inspiration
-
     // get LLM provider enum value from llmProvidersCombo
     WingmanLlmProviders llmProvider = static_cast<WingmanLlmProviders>(
         llmProvidersCombo->itemData(llmProvidersCombo->currentIndex()).toInt());

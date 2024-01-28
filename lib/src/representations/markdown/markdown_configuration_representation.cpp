@@ -34,10 +34,12 @@ constexpr const auto CONFIG_SETTING_MIND_TIME_SCOPE_LABEL = "* Time scope: ";
 constexpr const auto CONFIG_SETTING_MIND_TAGS_SCOPE_LABEL = "* Tags scope: ";
 constexpr const auto CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL = "* Async refresh interval (ms): ";
 constexpr const auto CONFIG_SETTING_MIND_AUTOLINKING = "* Autolinking: ";
+constexpr const auto CONFIG_SETTING_MIND_WINGMAN_PROVIDER = "* Wingman LLM provider: ";
 
 // application
 constexpr const auto CONFIG_SETTING_STARTUP_VIEW_LABEL = "* Startup view: ";
 constexpr const auto CONFIG_SETTING_UI_THEME_LABEL = "* Theme: ";
+constexpr const auto CONFIG_SETTING_UI_APP_FONT_SIZE = "* Application font size: ";
 constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* Markdown CSS theme: ";
 constexpr const auto CONFIG_SETTING_UI_HTML_ZOOM_LABEL = "* Markdown HTML zoom: ";
 constexpr const auto CONFIG_SETTING_UI_SHOW_TOOLBAR_LABEL =  "* Show toolbar: ";
@@ -156,6 +158,20 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         if(t.size()) {
                             c.setUiThemeName(t);
                         }
+                    } else if(line->find(CONFIG_SETTING_UI_APP_FONT_SIZE) != std::string::npos) {
+                        string t = line->substr(strlen(CONFIG_SETTING_UI_APP_FONT_SIZE));
+                        std::string::size_type st;
+                        int i;
+                        try {
+                          i = std::stoi (t,&st);
+                        }
+                        catch(...) {
+                          i = Configuration::DEFAULT_UI_APP_FONT_SIZE;
+                        }
+                        if(i<0) {
+                            i=Configuration::DEFAULT_UI_APP_FONT_SIZE;
+                        }
+                        c.setUiAppFontSize(i);
                     } else if(line->find(CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL) != std::string::npos) {
                         string t = line->substr(strlen(CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL));
                         if(t.size()) {
@@ -385,6 +401,15 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         } else {
                             c.setAutolinking(false);
                         }
+                    } else if(line->find(CONFIG_SETTING_MIND_WINGMAN_PROVIDER) != std::string::npos) {
+                        if(line->find(
+                            c.getWingmanLlmProviderAsString(
+                                WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI)) != std::string::npos
+                        ) {
+                            c.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI);
+                        } else {
+                            c.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_NONE);
+                        }
                     }
                 }
             }
@@ -470,12 +495,14 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_MIND_TIME_SCOPE_LABEL << timeScopeAsString << endl <<
          "    * Examples: 2y0m0d0h0m (recent 2 years), 0y3m15d0h0m (recent 3 months and 15 days)" << endl <<
          CONFIG_SETTING_MIND_TAGS_SCOPE_LABEL << tagsScopeAsString << endl <<
-         "    * Examples: important (shown Notebooks must be tagged with 'important;); if no tag is specified, then tags scope is disabled" << endl <<
+         "    * Examples: important (shown Notebooks must be tagged with 'important'); if no tag is specified, then tags scope is disabled" << endl <<
          CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL << (c?c->getDistributorSleepInterval():Configuration::DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL+1) << endl <<
          "    * Sleep interval (miliseconds) between asynchronous mind-related evaluations (associations, ...)" << endl <<
          "    * Examples: 500, 1000, 3000, 5000" << endl <<
          CONFIG_SETTING_MIND_AUTOLINKING << (c?(c->isAutolinking()?"yes":"no"):(Configuration::DEFAULT_AUTOLINKING?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_MIND_WINGMAN_PROVIDER << c->getWingmanLlmProviderAsString(c->getWingmanLlmProvider()) << endl <<
+         "    * Examples: none, openai" << endl <<
          endl <<
 
          "# " << CONFIG_SECTION_APP << endl <<
@@ -485,6 +512,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: outlines, tags, recent, home" << endl <<
          CONFIG_SETTING_UI_THEME_LABEL << (c?c->getUiThemeName():Configuration::DEFAULT_UI_THEME_NAME) << endl <<
          "    * Examples: dark, light, native" << endl <<
+         CONFIG_SETTING_UI_APP_FONT_SIZE << c->getUiAppFontSize() << endl <<
+         "    * Examples: 0 (default - auto), 10, 42" << endl <<
          CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL << (c?c->getUiHtmlCssPath():Configuration::DEFAULT_UI_HTML_CSS_THEME) << endl <<
          "    * Normal themes (dark, light) style HTML generated from Markdown," << endl <<
          "      while raw theme shows syntax-highlighted Markdown only. You can" << endl <<

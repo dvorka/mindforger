@@ -48,6 +48,7 @@ OpenAiWingman::OpenAiWingman(
       apiKey{apiKey},
       llmModel{llmModel}
 {
+    MF_DEBUG("OpenAiWingman::OpenAiWingman() apiKey: " << apiKey << endl);
 }
 
 OpenAiWingman::~OpenAiWingman()
@@ -221,8 +222,15 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             }
         } else {
             command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
-            command.errorMessage.assign(
-                "No choices in the OpenAI API HTTP response");
+            if(
+                httpResponseJSon.contains("error")
+                && httpResponseJSon["error"].contains("message")
+            ) {
+                httpResponseJSon["error"]["message"].get_to(command.errorMessage);
+            } else {
+                command.errorMessage.assign(
+                    "No choices in the OpenAI API HTTP response");
+            }
         }
     } else {
         command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;

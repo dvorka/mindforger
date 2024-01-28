@@ -53,6 +53,9 @@ Mind::Mind(Configuration &configuration)
 {
     ai = new Ai{memory, *this};
 
+    // TODO BEGIN: code before Wingman config persisted
+    config.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI);
+    // TODO END: code before Wingman config persisted
     initWingman();
 
     deleteWatermark = 0;

@@ -132,6 +132,9 @@ private:
     QLabel* menuLabel;
     QComboBox* themeCombo;
 
+    QLabel* appFontSizeLabel;
+    QSpinBox* appFontSizeSpin;
+
     QLabel* startupLabel;
     QComboBox* startupCombo;
 

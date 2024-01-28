@@ -41,14 +41,17 @@ constexpr const auto PROMPT_FIND_LOCATIONS = "Find locations in: #NAME. #TEXT";
 constexpr const auto PROMPT_FIND_ORGS = "Find organizations in: #NAME. #TEXT";
 constexpr const auto PROMPT_CHAT = "Chat with the context.";
 
-constexpr const auto PROMPT_SHORTEN = "Shorten #TEXT";
-constexpr const auto PROMPT_EXPLAIN_LIKE_5 = "Explain #NAME like I'm 5.";
+constexpr const auto PROMPT_SHORTEN = "Shorten: #TEXT";
+constexpr const auto PROMPT_EXPLAIN_LIKE_5 = "Explain like I'm 5: #TEXT";
 constexpr const auto PROMPT_FIX_GRAMMAR = "Fix grammar in: #TEXT";
+constexpr const auto PROMPT_FIND_GRAMMAR = "Find grammar errors in: #TEXT";
+constexpr const auto PROMPT_TRANSLATE_EN = "Translate to English: #TEXT";
 constexpr const auto PROMPT_REWRITE_FORMALLY = "Rewrite formally: #TEXT";
-constexpr const auto PROMPT_REWRITE_INFORMALLY = "Rewrite informally: #TEXT";
-constexpr const auto PROMPT_REWRITE_KAFKA = "Rewrite in Kafka style: #TEXT";
-
-constexpr const auto PROMPT_COMPLETE_TEXT = "Complete the text: #TEXT";
+constexpr const auto PROMPT_REWRITE_ACADEMIA = "Rewrite in academic style: #TEXT";
+constexpr const auto PROMPT_REWRITE_SLANG = "Rewrite in a slang style: #TEXT";
+constexpr const auto PROMPT_SYNONYM = "Give synonym to: #TEXT";
+constexpr const auto PROMPT_ANTONYM = "Give antonym to: #TEXT";
+constexpr const auto PROMPT_COMPLETE_TEXT = "Complete work-in-progress text: #TEXT";
 
 // other UCs:
 // - NER UCs
@@ -91,6 +94,8 @@ private:
 
     std::vector<std::string> outlinePrompts = {
         PROMPT_SUMMARIZE,
+        PROMPT_TRANSLATE_EN,
+        PROMPT_FIND_GRAMMAR,
         PROMPT_GENERATE_TAGS,
         PROMPT_FIND_PERSONS,
         PROMPT_FIND_LOCATIONS,
@@ -101,12 +106,13 @@ private:
     std::vector<std::string> notePrompts = {
         PROMPT_SUMMARIZE,
         PROMPT_SHORTEN,
+        PROMPT_FIND_GRAMMAR,
         PROMPT_EXPLAIN_LIKE_5,
+        PROMPT_TRANSLATE_EN,
         PROMPT_GENERATE_TAGS,
         PROMPT_FIX_GRAMMAR,
         PROMPT_REWRITE_FORMALLY,
-        PROMPT_REWRITE_INFORMALLY,
-        PROMPT_REWRITE_KAFKA,
+        PROMPT_REWRITE_SLANG,
         // PROMPT_CHAT,
     };
 
@@ -114,10 +120,14 @@ private:
         PROMPT_COMPLETE_TEXT,
         PROMPT_EXPLAIN_LIKE_5,
         PROMPT_FIX_GRAMMAR,
+        PROMPT_FIND_GRAMMAR,
+        PROMPT_TRANSLATE_EN,
         PROMPT_GENERATE_TAGS,
         PROMPT_REWRITE_FORMALLY,
-        PROMPT_REWRITE_INFORMALLY,
-        PROMPT_REWRITE_KAFKA,
+        PROMPT_REWRITE_ACADEMIA,
+        PROMPT_REWRITE_SLANG,
+        PROMPT_SYNONYM,
+        PROMPT_ANTONYM,
     };
 
 public:
