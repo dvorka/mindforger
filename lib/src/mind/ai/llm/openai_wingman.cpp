@@ -100,6 +100,45 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             << "<<<"
             << endl);
 
+#ifdef MF_OPENAI_QT_NETWORK
+// Set up Qt networking options
+        QNetworkRequest request;
+        request.setUrl(QUrl("https://api.openai.com/v1/chat/completions"));
+
+        QByteArray requestBody(requestJSonStr.toUtf8());
+        request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
+        request.setRawHeader("Authorization", "Bearer " + apiKey.toUtf8());
+
+        // Create a network access manager
+        QNetworkAccessManager manager;
+
+        // Send the request
+        QNetworkReply *reply = manager.post(request, requestBody);
+
+        // Connect to the finished signal to handle the response
+        connect(reply, &QNetworkReply::finished, [&]() {
+            if (reply->error() == QNetworkReply::NoError) {
+                command.httpResponse = reply->readAll().toUtf8();
+                command.answerHtml = parseHtmlFromJson(command.httpResponse);
+                command.answerTokens = countTokens(command.answerHtml);
+                command.answerLlmModel = llmModel;
+                command.status = WingmanStatusCode::WINGMAN_STATUS_CODE_SUCCESS;
+            } else {
+                command.status = WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
+                command.errorMessage = reply->errorString();
+                std::cerr << "Error: Wingman OpenAI Qt networking request failed: " << command.errorMessage << std::endl;
+
+                command.httpResponse.clear();
+                command.answerHtml.clear();
+                command.answerTokens = 0;
+                command.answerLlmModel = llmModel;
+                return;
+            }
+        });
+
+        // Delete the network reply when it's finished
+        connect(reply, &QNetworkReply::finished, reply, &QNetworkReply::deleteLater);
+#else
         // set up cURL options
         command.httpResponse.clear();
         curl_easy_setopt(
@@ -139,6 +178,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
 
             return;
         }
+#endif
 
         // parse JSon
         /*

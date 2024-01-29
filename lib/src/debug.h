@@ -23,6 +23,9 @@
 //   - configuration: DEFINES = DO_MF_DEBUG
 //   - command line: CONFIG+=mfunits
 
+// use Qt Network instead of CURL for the communication with OpenAI
+// #define MF_OPENAI_QT_NETWORK
+
 #ifdef DO_MF_DEBUG
     #include <chrono>
     #include <iostream>

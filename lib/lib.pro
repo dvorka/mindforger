@@ -20,6 +20,12 @@ TEMPLATE = lib
 CONFIG += staticlib
 CONFIG -= qt
 
+# Qt Network as CURL replacement on Windows
+win32 {
+  CONFIG += qt
+  QT += network
+}
+
 # Dependencies:
 # - INCLUDEPATH is used during compilation to find included header files.
 # - DEPENDPATH is used to resolve dependencies between header and source files,

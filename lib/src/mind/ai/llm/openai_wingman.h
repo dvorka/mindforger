@@ -25,6 +25,10 @@
 
 #include "wingman.h"
 
+#ifdef MF_OPENAI_QT_NETWORK
+#include <QtNetwork>
+#endif
+
 namespace m8r {
 
 /**
