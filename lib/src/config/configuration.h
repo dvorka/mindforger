@@ -209,6 +209,7 @@ public:
 
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
     static const std::string DEFAULT_TIME_SCOPE;
+    static const std::string DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
 
     static constexpr const bool DEFAULT_AUTOLINKING = false;
     static constexpr const bool DEFAULT_AUTOLINKING_COLON_SPLIT = true;

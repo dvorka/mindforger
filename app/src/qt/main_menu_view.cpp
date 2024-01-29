@@ -465,7 +465,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
        mainWindow
    );
-    actionOrganizerFocusPrevious->setStatusTip(tr("Move focus to previous column or quandrant..."));
+    actionOrganizerFocusPrevious->setStatusTip(tr("Move focus to previous column or quadrant..."));
 
     actionOrganizerFocusNext = new QAction(
         QIcon(":/menu-icons/right.svg"),
@@ -477,7 +477,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
         mainWindow
     );
-    actionOrganizerFocusNext->setStatusTip(tr("Move focus to next column or quandrant..."));
+    actionOrganizerFocusNext->setStatusTip(tr("Move focus to next column or quadrant..."));
 
     menuOrganizer->addAction(actionOrganizerNew);
     menuOrganizer->addAction(actionOrganizerEdit);
@@ -1092,7 +1092,6 @@ void MainMenuView::showAllMenuItems()
     actionOrganizerMovePrevious->setEnabled(true);
     actionOrganizerMoveNext->setEnabled(true);
 
-    menuNavigator->show();
     menuNavigator->setEnabled(true);
     actionViewOrganizers->setEnabled(true);
     actionOutlineEdit->setEnabled(true);
@@ -1195,7 +1194,7 @@ void MainMenuView::showFacetOrganizerList(bool repositoryMode, bool mfMode)
     actionOrganizerMoveNext->setEnabled(false);
 
     submenuMindLibrary->setEnabled(false);
-    menuNavigator->setEnabled(false); menuNavigator->setVisible(false);
+    menuNavigator->setEnabled(false);
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
     menuEdit->setEnabled(false);
@@ -1210,7 +1209,7 @@ void MainMenuView::showFacetOrganizerView(bool repositoryMode, bool mfMode)
     showAllMenuItems();
 
     submenuMindLibrary->setEnabled(false);
-    menuNavigator->setEnabled(false); menuNavigator->hide();
+    menuNavigator->setEnabled(false);
     menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
     menuEdit->setEnabled(false);
@@ -1224,7 +1223,7 @@ void MainMenuView::showFacetOutlineList(bool repositoryMode, bool mfMode)
 {
     showAllMenuItems();
 
-    menuNavigator->setEnabled(false); menuNavigator->hide();
+    menuNavigator->setEnabled(false);
     menuOrganizer->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
@@ -1249,7 +1248,7 @@ void MainMenuView::showFacetOutlinesMap(bool repositoryMode, bool mfMode)
 {
     showAllMenuItems();
 
-    menuNavigator->setEnabled(false); menuNavigator->hide();
+    menuNavigator->setEnabled(false);
     menuOrganizer->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
@@ -1264,7 +1263,7 @@ void MainMenuView::showFacetOutlineView(bool repositoryMode, bool mfMode)
     showAllMenuItems();
 
     submenuMindLibrary->setEnabled(false);
-    menuNavigator->setEnabled(false); menuNavigator->hide();
+    menuNavigator->setEnabled(false);
     menuOrganizer->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);
@@ -1312,7 +1311,7 @@ void MainMenuView::showFacetNoteEdit(bool repositoryMode, bool mfMode)
     actionViewLimbo->setEnabled(false);
     actionViewRecentNotes->setEnabled(false);
 
-    menuNavigator->setEnabled(false); menuNavigator->hide();
+    menuNavigator->setEnabled(false);
     actionViewOrganizers->setEnabled(false);
     actionOutlineEdit->setEnabled(false);
     actionOutlineClone->setEnabled(false);
@@ -1365,6 +1364,12 @@ void MainMenuView::showFacetNavigator()
 {
     showAllMenuItems();
 
+#ifdef MF_WIP
+    menuFlashcards->setEnabled(false);
+#endif
+
+    menuOrganizer->setEnabled(false);
+    menuOutline->setEnabled(false);
     menuNote->setEnabled(false);
     menuEdit->setEnabled(false);
     menuFormat->setEnabled(false);

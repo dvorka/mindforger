@@ -36,6 +36,7 @@ const string Configuration::DEFAULT_UI_THEME_NAME = string{UI_DEFAULT_THEME};
 const string Configuration::DEFAULT_UI_HTML_CSS_THEME = string{UI_DEFAULT_HTML_CSS_THEME};
 const string Configuration::DEFAULT_EDITOR_FONT= string{UI_DEFAULT_EDITOR_FONT};
 const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
+const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OPENAI = string{"gpt-3.5-turbo"};
 
 Configuration::Configuration()
     : asyncMindThreshold{},
@@ -49,7 +50,7 @@ Configuration::Configuration()
       autolinkingCaseInsensitive{},
       wingmanProvider{DEFAULT_WINGMAN_LLM_PROVIDER},
       wingmanApiKey{},
-      wingmanLlmModel{"gpt-3.5-turbo"},
+      wingmanLlmModel{DEFAULT_WINGMAN_LLM_MODEL_OPENAI},
       md2HtmlOptions{},
       distributorSleepInterval{DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL},
       markdownQuoteSections{},
@@ -430,6 +431,7 @@ bool Configuration::initWingmanOpenAi() {
         const char* apiKeyEnv = std::getenv(ENV_VAR_OPENAI_API_KEY);
         MF_DEBUG("    Wingman API key loaded from the env: " << apiKeyEnv << endl);
         wingmanApiKey = apiKeyEnv;
+        wingmanLlmModel = DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
         wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI;
         return true;
     }
@@ -438,6 +440,7 @@ bool Configuration::initWingmanOpenAi() {
         "    Wingman OpenAI API key NOT found in the environment variable "
         "MINDFORGER_OPENAI_API_KEY" << endl);
     wingmanApiKey.clear();
+    wingmanLlmModel.clear();
     wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
     return false;
 }
