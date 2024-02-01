@@ -2206,7 +2206,7 @@ void MainWindowPresenter::slotRunWingmanFromDialog()
                 " Wingman is talking to GPT provider..." << endl
             );
             QApplication::processEvents();
-            std::this_thread::sleep_for(std::chrono::milliseconds(progressStep));
+            QThread::msleep(progressStep); // portable sleep
             progress += progressStep;
             this->wingmanDialog->setProgressValue(progress);
         }
