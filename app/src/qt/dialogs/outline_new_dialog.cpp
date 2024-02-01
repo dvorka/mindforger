@@ -61,10 +61,11 @@ OutlineNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     QVBoxLayout* basicLayout = new QVBoxLayout{this};
     basicLayout->addWidget(nameLabel);
 
-    QHBoxLayout* nameLayout = new QHBoxLayout{this};
+    QWidget* eji = new QWidget{this};
+    QHBoxLayout* nameLayout = new QHBoxLayout{eji};
     nameLayout->addWidget(nameEdit);
     nameLayout->addWidget(emojisButton);
-    basicLayout->addLayout(nameLayout);
+    basicLayout->addWidget(eji);
 
     basicLayout->addWidget(typeLabel);
     basicLayout->addWidget(typeCombo);

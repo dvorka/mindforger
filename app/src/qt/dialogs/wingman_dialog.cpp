@@ -105,18 +105,21 @@ WingmanDialog::WingmanDialog(QWidget* parent)
     progressBar->hide();
 
     QHBoxLayout* contentLayout = new QHBoxLayout{this};
-    QVBoxLayout* contentLayout1 = new QVBoxLayout{this};
+    QWidget* cw1 = new QWidget{this};
+    QVBoxLayout* contentLayout1 = new QVBoxLayout{cw1};
     contentLayout1->addWidget(contextNameLabel);
     contentLayout1->addWidget(contextNameEdit);
-    contentLayout->addLayout(contentLayout1);
-    QVBoxLayout* contentLayout2 = new QVBoxLayout{this};
+    contentLayout->addWidget(cw1);
+    QWidget* cw2 = new QWidget{this};
+    QVBoxLayout* contentLayout2 = new QVBoxLayout{cw2};
     contentLayout2->addWidget(contextLabel);
     contentLayout2->addWidget(contextEdit);
-    contentLayout->addLayout(contentLayout2);
-    QVBoxLayout* contentLayout3 = new QVBoxLayout{this};
+    contentLayout->addWidget(cw2);
+    QWidget* cw3 = new QWidget{this};
+    QVBoxLayout* contentLayout3 = new QVBoxLayout{cw3};
     contentLayout3->addWidget(contextTypeLabel);
     contentLayout3->addWidget(contextTypeEdit);
-    contentLayout->addLayout(contentLayout3);
+    contentLayout->addWidget(cw3);
     contextGroup->setLayout(contentLayout);
     contextGroup->hide();
 
