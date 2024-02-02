@@ -21,13 +21,14 @@
 
 #include <string>
 
-#include "curl/curl.h"
+// HTTP client: CURL on Linux, Qt Network on macOS and Win
+#ifdef _WIN32
+  #include <QtNetwork>
+#else
+  #include "curl/curl.h"
+#endif
 
 #include "wingman.h"
-
-#ifdef MF_OPENAI_QT_NETWORK
-#include <QtNetwork>
-#endif
 
 namespace m8r {
 
@@ -48,7 +49,7 @@ public:
     OpenAiWingman(const OpenAiWingman&&) = delete;
     OpenAiWingman& operator =(const OpenAiWingman&) = delete;
     OpenAiWingman& operator =(const OpenAiWingman&&) = delete;
-    ~OpenAiWingman();
+    ~OpenAiWingman() override;
 
     virtual void chat(CommandWingmanChat& command) override;
 };

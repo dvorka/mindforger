@@ -20,7 +20,7 @@ TEMPLATE = lib
 CONFIG += staticlib
 CONFIG -= qt
 
-# Qt Network as CURL replacement on Windows
+# Qt Network as CURL replacement on Win - add Qt to libmindforger!
 win32 {
   CONFIG += qt
   QT += network
