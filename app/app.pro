@@ -189,6 +189,7 @@ INCLUDEPATH += ./src/qt/spelling
 #
 win32{
     QMAKE_CXXFLAGS += /MP
+    QMAKE_CXX = ccache $$QMAKE_CXX
 } else {
     # linux and macos
     mfnoccache {
