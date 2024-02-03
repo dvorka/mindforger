@@ -1,4 +1,4 @@
-/*
+ /*
  main_menu_view.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
@@ -109,9 +109,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindAutolink->setVisible(false);
 #endif
 
-    actionMindWingman = new QAction(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman"), mainWindow);
+    actionMindWingman = new QAction(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman GPT"), mainWindow);
     actionMindWingman->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Slash));
-    actionMindWingman->setStatusTip(tr("Activate wingman..."));
+    actionMindWingman->setStatusTip(tr("Open Wingman dialog..."));
 
     // scope ... don't show any N/O older than 1Y/3M/...
     actionMindScope = new QAction(QIcon(":/menu-icons/filter.svg"), tr("S&cope"), mainWindow);
@@ -541,7 +541,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineUp->setStatusTip(tr("Move the Notebook up"));
 
     actionOutlineDown = new QAction(
-        QIcon(":/menu-icons/down.svg"), tr("Move Do&wn"), mainWindow);
+        QIcon(":/menu-icons/down.svg"), tr("Move D&own"), mainWindow);
     actionOutlineDown->setStatusTip(tr("Move the Notebook down"));
 
     actionOutlineLast = new QAction(
@@ -560,6 +560,20 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineTWikiImport->setStatusTip(tr("Import Notebook from an external TWiki file and restart MindForger"));
     submenuOutlineImport->addAction(actionOutlineTWikiImport);
 
+    submenuOutlineWingman = menuOutline->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman GPT"));
+    actionOutlineWingmanSummarize = new QAction(tr("&Summarize"), mainWindow);
+    actionOutlineWingmanSummarize->setStatusTip(tr("Ask Wingman to summarize text of the Notebook..."));
+    submenuOutlineWingman->addAction(actionOutlineWingmanSummarize);
+    actionOutlineWingmanExplain = new QAction(tr("&Explain"), mainWindow);
+    actionOutlineWingmanExplain->setStatusTip(tr("Ask Wingman to explain the name of the Notebook..."));
+    submenuOutlineWingman->addAction(actionOutlineWingmanExplain);
+    actionOutlineWingmanFind = new QAction(tr("&Find Tasks"), mainWindow);
+    actionOutlineWingmanFind->setStatusTip(tr("Ask Wingman to find tasks in the Notebook text..."));
+    submenuOutlineWingman->addAction(actionOutlineWingmanFind);
+    actionOutlineWingmanMore = new QAction(tr("&More prompts..."), mainWindow);
+    actionOutlineWingmanMore->setStatusTip(tr("Open Wingman chat..."));
+    submenuOutlineWingman->addAction(actionOutlineWingmanMore);
+
     menuOutline->addAction(actionOutlineNew);
     menuOutline->addAction(actionOutlineEdit);
     menuOutline->addAction(actionOutlineForget);
@@ -576,6 +590,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #ifdef MF_WIP
     menuOutline->addAction(actionOutlineStencil);
 #endif
+    menuOutline->addMenu(submenuOutlineWingman);
     menuOutline->addAction(actionOutlineClone);
     menuOutline->addSeparator();
 #ifdef MF_WIP
@@ -586,6 +601,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuOutline->addMenu(submenuOutlineExport);
 
     // menu: Note
+    menuNote = qMenuBar->addMenu(tr("&Note"));
+
 #ifdef __APPLE__
     actionNoteNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
     actionNoteNew->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
@@ -638,7 +655,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteUp->setStatusTip(tr("Move the Note up"));
 
     actionNoteDown = new QAction(
-        QIcon(":/menu-icons/down.svg"), tr("Move Do&wn\tCtrl+Down"), mainWindow);
+        QIcon(":/menu-icons/down.svg"), tr("Move Dow&n\tCtrl+Down"), mainWindow);
     actionNoteDown->setStatusTip(tr("Move the Note down"));
 
     actionNoteLast = new QAction(
@@ -677,7 +694,20 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteImport->setStatusTip(tr("Import Note from an external file in a supported format"));
     actionNoteImport->setEnabled(false);
 
-    menuNote = qMenuBar->addMenu(tr("&Note"));
+    submenuNoteWingman = menuNote->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman GPT"));
+    actionNoteWingmanSummarize = new QAction(tr("&Summarize"), mainWindow);
+    actionNoteWingmanSummarize->setStatusTip(tr("Ask Wingman to summarize text of the Note..."));
+    submenuNoteWingman->addAction(actionNoteWingmanSummarize);
+    actionNoteWingmanFixGrammar = new QAction(tr("&Find Grammar Errors"), mainWindow);
+    actionNoteWingmanFixGrammar->setStatusTip(tr("Ask Wingman to find grammar errors in the Note text..."));
+    submenuNoteWingman->addAction(actionNoteWingmanFixGrammar);
+    actionNoteWingmanRewrite = new QAction(tr("&Translate to English"), mainWindow);
+    actionNoteWingmanRewrite->setStatusTip(tr("Ask Wingman to translate the Note text to English..."));
+    submenuNoteWingman->addAction(actionNoteWingmanRewrite);
+    actionNoteWingmanMore = new QAction(tr("&More prompts..."), mainWindow);
+    actionNoteWingmanMore->setStatusTip(tr("Open Wingman chat..."));
+    submenuNoteWingman->addAction(actionNoteWingmanMore);
+
     menuNote->addAction(actionNoteNew);
     menuNote->addAction(actionNoteEdit);
     menuNote->addAction(actionNoteExternalEdit);
@@ -693,6 +723,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNote->addAction(actionNoteDown);
     menuNote->addAction(actionNoteLast);
     menuNote->addSeparator();
+    menuNote->addMenu(submenuNoteWingman);
     menuNote->addAction(actionNoteClone);
     menuNote->addAction(actionNoteRefactor);
 #ifdef MF_WIP
@@ -706,6 +737,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuNote->setEnabled(false);
 
     // menu: edit
+    menuEdit = qMenuBar->addMenu(tr("&Edit"));
 
     actionEditFind = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Find\tCtrl+Shift+F"), mainWindow);
     actionEditFind->setStatusTip(tr("Search Note text"));
@@ -733,7 +765,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditLiveNotePreview->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_P));
     actionEditLiveNotePreview->setStatusTip(tr("Toggle live HTML preview"));
 
-    actionEditWordWrap = new QAction(QIcon(":/menu-icons/word-wrap.svg"), tr("&Word Wrap"), mainWindow);
+    actionEditWordWrap = new QAction(QIcon(":/menu-icons/word-wrap.svg"), tr("W&ord Wrap"), mainWindow);
     actionEditWordWrap->setStatusTip(tr("Toggle word wrap mode"));
 
     actionEditNameDescFocusSwap = new QAction(QIcon(":/menu-icons/up.svg"), tr("Swap Nam&e/Description Focus"), mainWindow);
@@ -751,7 +783,23 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditSpellCheck = new QAction(QIcon(":/menu-icons/paste.svg"), tr("&Spell Check"), mainWindow);
     actionEditSpellCheck->setStatusTip(tr("Spell check Notebook or Note description"));
 
-    menuEdit = qMenuBar->addMenu(tr("&Edit"));
+    submenuEditWingman = menuEdit->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman GPT"));
+    actionEditWingmanFixGrammar = new QAction(tr("&Fix Grammar"), mainWindow);
+    actionEditWingmanFixGrammar->setStatusTip(tr("Ask Wingman to fix grammar errors in the selected text / word under the cursor..."));
+    submenuEditWingman->addAction(actionEditWingmanFixGrammar);
+    actionEditWingmanExplain = new QAction(tr("&Explain"), mainWindow);
+    actionEditWingmanExplain->setStatusTip(tr("Ask Wingman to explain the word under the cursor / selected text..."));
+    submenuEditWingman->addAction(actionEditWingmanExplain);
+    actionEditWingmanFinishText = new QAction(tr("Finish &Text"), mainWindow);
+    actionEditWingmanFinishText->setStatusTip(tr("Ask Wingman to finish the text following the selected text / word under the cursor..."));
+    submenuEditWingman->addAction(actionEditWingmanFinishText);
+    actionEditWingmanRewriteText = new QAction(tr("&Rewrite Text"), mainWindow);
+    actionEditWingmanRewriteText->setStatusTip(tr("Ask Wingman to rewrite the text following the selected text / word under the cursor..."));
+    submenuEditWingman->addAction(actionEditWingmanRewriteText);
+    actionEditWingmanMore = new QAction(tr("&More prompts..."), mainWindow);
+    actionEditWingmanMore->setStatusTip(tr("Open Wingman chat..."));
+    submenuEditWingman->addAction(actionEditWingmanMore);
+
     menuEdit->addAction(actionEditFind);
     menuEdit->addAction(actionEditFindNext);
     menuEdit->addSeparator();
@@ -766,7 +814,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuEdit->addAction(actionEditWordWrap);
     menuEdit->addAction(actionEditNameDescFocusSwap);
     menuEdit->addSeparator();
-    menuEdit->addAction(actionEditWingman);
+    menuEdit->addMenu(submenuEditWingman);
     menuEdit->addAction(actionEditComplete);
     menuEdit->addAction(actionEditExtract);
     menuEdit->addSeparator();
@@ -1098,6 +1146,7 @@ void MainMenuView::showAllMenuItems()
     actionOutlineClone->setEnabled(true);
     actionOutlineHome->setEnabled(true);
     actionOutlineForget->setEnabled(true);
+    submenuOutlineWingman->setEnabled(true);
 
     menuOutline->setEnabled(true);
     actionOutlineEdit->setEnabled(true);
@@ -1274,6 +1323,8 @@ void MainMenuView::showFacetOutlineView(bool repositoryMode, bool mfMode)
     actionOutlineLast->setEnabled(false);
     actionOutlinePromote->setEnabled(false);
     actionOutlineDemote->setEnabled(false);
+
+    submenuOutlineWingman->setEnabled(false);
 
     showModeAwareFacet(repositoryMode, mfMode);
 }

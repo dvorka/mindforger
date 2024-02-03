@@ -36,12 +36,12 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     wingmanTab = new WingmanTab{this};
 
     tabWidget->addTab(appTab, tr("Application"));
+    tabWidget->addTab(wingmanTab, tr("Wingman"));
     tabWidget->addTab(viewerTab, tr("Viewer"));
     tabWidget->addTab(editorTab, tr("Editor"));
     tabWidget->addTab(markdownTab, tr("Markdown"));
-    tabWidget->addTab(navigatorTab, tr("Navigator"));
     tabWidget->addTab(mindTab, tr("Mind"));
-    tabWidget->addTab(wingmanTab, tr("Wingman"));
+    tabWidget->addTab(navigatorTab, tr("Navigator"));
 
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
@@ -217,7 +217,7 @@ void ConfigurationDialog::AppTab::save()
  * Viewer tab
  */
 
-ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
+ConfigurationDialog::ViewerTab::ViewerTab(QWidget* parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
     zoomLabel = new QLabel(tr("HTML zoom (100 is 100%, Ctrl + mouse wheel)")+":", this);
@@ -677,14 +677,20 @@ void ConfigurationDialog::MindTab::save()
  */
 
 ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
-    : QWidget(parent), config(Configuration::getInstance())
+    : QWidget(parent),
+      openAiComboLabel{"OpenAI"},
+      config(Configuration::getInstance())
 {
     llmProvidersLabel = new QLabel(tr("LLM provider:"), this);
     llmProvidersCombo = new QComboBox{this};
+    QObject::connect(
+        llmProvidersCombo, SIGNAL(currentIndexChanged(int)),
+        this, SLOT(handleComboBoxChanged(int))
+    );
 
     llmHelpLabel = new QLabel(
         tr(
-            "To configure <a href='https://openai.com'>OpenAI</a> LLM provider, "
+            "<html>To configure <a href='https://openai.com'>OpenAI</a> LLM provider, "
             "<a href='https://platform.openai.com/api-keys'>generate OpenAI API key</a> "
             "and set"
             "<br/>"
@@ -705,6 +711,20 @@ ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
     setLayout(boxesLayout);
 }
 
+void ConfigurationDialog::WingmanTab::handleComboBoxChanged(int index) {
+    string comboItemLabel{llmProvidersCombo->itemText(index).toStdString()};
+    MF_DEBUG("WingmanTab::handleComboBoxChange: '" << comboItemLabel << "'" << endl);
+    if(this->isVisible() && comboItemLabel == openAiComboLabel) {
+        QMessageBox::warning(
+            this,
+            tr("Data Privacy Warning"),
+            tr(
+                "You have chosen OpenAI as your Wingman LLM provider. "
+                "Therefore, your data will be sent to OpenAI servers "
+                "for GPT processing when you use Wingman."));
+    }
+}
+
 ConfigurationDialog::WingmanTab::~WingmanTab()
 {
     delete llmProvidersLabel;
@@ -717,13 +737,15 @@ void ConfigurationDialog::WingmanTab::refresh()
     // refresh LLM providers combo
     llmProvidersCombo->clear();
     llmProvidersCombo->addItem(""); // disable Wingman
+#ifdef MF_WIP
     if(config.canWingmanMock()) {
         llmProvidersCombo->addItem(
             QString{"Mock"}, WingmanLlmProviders::WINGMAN_PROVIDER_MOCK);
     }
+#endif
     if(config.canWingmanOpenAi()) {
         llmProvidersCombo->addItem(
-            QString{"OpenAI"}, WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI);
+            QString::fromStdString(openAiComboLabel), WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI);
     }
     // set the last selected provider
     llmProvidersCombo->setCurrentIndex(

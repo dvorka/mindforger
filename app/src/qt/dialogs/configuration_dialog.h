@@ -66,6 +66,7 @@ public:
 
 private slots:
     void saveSlot();
+
 signals:
     void saveConfigSignal();
 };
@@ -78,6 +79,8 @@ class ConfigurationDialog::WingmanTab : public QWidget
     Q_OBJECT
 
 private:
+    const std::string openAiComboLabel;
+
     Configuration& config;
 
     QLabel* llmProvidersLabel;
@@ -92,6 +95,9 @@ public:
     // there and back is handled by Dialog's access to this class & Config singleton
     void refresh();
     void save();
+
+private slots:
+    void handleComboBoxChanged(int index);
 };
 
 /**

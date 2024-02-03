@@ -232,7 +232,7 @@ QString WingmanDialog::getContextText() const {
     return context;
 }
 
-void WingmanDialog::show(
+void WingmanDialog::setup(
     WingmanDialogModes contextType,
     QString& contextName,
     QString& context,
@@ -259,19 +259,43 @@ void WingmanDialog::show(
     setContextNameText(contextName);
 
     cmdEdit->clear();
+}
+
+void WingmanDialog::show(
+    WingmanDialogModes contextType,
+    QString& contextName,
+    QString& context,
+    const vector<string>& predefinedOPrompts,
+    const vector<string>& predefinedNPrompts,
+    const vector<string>& predefinedTPrompts
+) {
+    this->setup(
+        contextType,
+        contextName,
+        context,
+        predefinedOPrompts,
+        predefinedNPrompts,
+        predefinedTPrompts
+    );
+
     cmdEdit->setFocus();
 
     setModal(true);
     QDialog::show();
 }
 
-std::string WingmanDialog::getPrompt()
+string WingmanDialog::getPrompt()
 {
     if(predefinedPromptsCombo->isVisible()) {
         return predefinedPromptsCombo->currentText().toStdString();
     } else {
         return cmdEdit->text().toStdString();
     }
+}
+
+void WingmanDialog::setPrompt(const std::string& prompt)
+{
+    cmdEdit->setText(QString::fromStdString(prompt));
 }
 
 string WingmanDialog::getChatPromptPrefix(bool error)

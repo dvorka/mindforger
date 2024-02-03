@@ -73,6 +73,7 @@ private:
     bool firstRun;
     WingmanDialogModes mode;
     QString context;
+    QString lastPromptLabel;
     std::string lastAnswer;
 
     QTextEdit* chatWindow;
@@ -125,7 +126,22 @@ public:
         const WingmanDialogModes& contextType,
         bool error=false);
 
+    void setPromptsLabel(const QString& label) {
+        lastPromptLabel = promptsLabel->text();
+        promptsLabel->setText(label);
+    }
+    void setLastPromptLabel() {
+        promptsLabel->setText(lastPromptLabel);
+    }
+
     std::string getPrompt();
+    void setPrompt(const std::string& prompt);
+    void selectPrompt() {
+        if(cmdEdit->isVisible() && !cmdEdit->text().isEmpty()) {
+            cmdEdit->setFocus();
+            cmdEdit->selectAll();
+        }
+    }
     std::string getLastAnswer() { return this->lastAnswer; }
 
     QPushButton* getAppendButton() const { return appendButton; }
@@ -143,6 +159,13 @@ public:
     void setContextText(QString context);
     QString getContextText() const;
 
+    void setup(
+        WingmanDialogModes contextType,
+        QString& contextName,
+        QString& context,
+        const std::vector<std::string>& predefinedOPrompts,
+        const std::vector<std::string>& predefinedNPrompts,
+        const std::vector<std::string>& predefinedTPrompts);
     void show(
         WingmanDialogModes contextType,
         QString& contextName,
@@ -150,6 +173,10 @@ public:
         const std::vector<std::string>& predefinedOPrompts,
         const std::vector<std::string>& predefinedNPrompts,
         const std::vector<std::string>& predefinedTPrompts);
+    void show() {
+        setModal(true);
+        QDialog::show();
+    }
 
     void resetProgress(int maximum) {
         progressBar->setValue(0);

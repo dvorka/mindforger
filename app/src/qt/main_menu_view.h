@@ -159,6 +159,11 @@ public:
     QAction* actionOutlineHtmlExport;
     QMenu* submenuOutlineImport;
     QAction* actionOutlineTWikiImport;
+    QMenu* submenuOutlineWingman;
+    QAction* actionOutlineWingmanSummarize;
+    QAction* actionOutlineWingmanExplain;
+    QAction* actionOutlineWingmanFind;
+    QAction* actionOutlineWingmanMore;
 
     // menu: Note
     QAction* actionNoteNew;
@@ -179,6 +184,11 @@ public:
     QAction* actionNoteClone;
     QAction* actionNoteExport;
     QAction* actionNoteImport;
+    QMenu* submenuNoteWingman;
+    QAction* actionNoteWingmanSummarize;
+    QAction* actionNoteWingmanFixGrammar;
+    QAction* actionNoteWingmanRewrite;
+    QAction* actionNoteWingmanMore;
 
     // menu: Edit
     QAction* actionEditFind;
@@ -195,6 +205,12 @@ public:
     QAction* actionEditWingman;
     QAction* actionEditComplete;
     QAction* actionEditSpellCheck;
+    QMenu* submenuEditWingman;
+    QAction* actionEditWingmanFixGrammar;
+    QAction* actionEditWingmanExplain;
+    QAction* actionEditWingmanFinishText;
+    QAction* actionEditWingmanRewriteText;
+    QAction* actionEditWingmanMore;
 
     // menu: Format
     QAction* actionFormatBold;

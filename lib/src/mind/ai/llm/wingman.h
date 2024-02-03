@@ -36,13 +36,15 @@ constexpr const auto CTX_INCLUDE_TEXT = "#TEXT";
 
 constexpr const auto PROMPT_SUMMARIZE = "Summarize: #NAME. #TEXT";
 constexpr const auto PROMPT_GENERATE_TAGS = "Generate tags for: #NAME. #TEXT";
+constexpr const auto PROMPT_FIND_TASKS = "Find tasks in: #NAME. #TEXT";
 constexpr const auto PROMPT_FIND_PERSONS = "Find persons names in: #NAME. #TEXT";
 constexpr const auto PROMPT_FIND_LOCATIONS = "Find locations in: #NAME. #TEXT";
 constexpr const auto PROMPT_FIND_ORGS = "Find organizations in: #NAME. #TEXT";
 constexpr const auto PROMPT_CHAT = "Chat with the context.";
 
 constexpr const auto PROMPT_SHORTEN = "Shorten: #TEXT";
-constexpr const auto PROMPT_EXPLAIN_LIKE_5 = "Explain like I'm 5: #TEXT";
+constexpr const auto PROMPT_EXPLAIN_LIKE_5 = "Explain like I'm 5: #NAME";
+constexpr const auto PROMPT_EXPLAIN_LIKE_5_TXT = "Explain like I'm 5: #TEXT";
 constexpr const auto PROMPT_FIX_GRAMMAR = "Fix grammar in: #TEXT";
 constexpr const auto PROMPT_FIND_GRAMMAR = "Find grammar errors in: #TEXT";
 constexpr const auto PROMPT_TRANSLATE_EN = "Translate to English: #TEXT";
@@ -97,11 +99,10 @@ private:
         PROMPT_TRANSLATE_EN,
         PROMPT_FIND_GRAMMAR,
         PROMPT_GENERATE_TAGS,
+        PROMPT_FIND_TASKS,
         PROMPT_FIND_PERSONS,
         PROMPT_FIND_LOCATIONS,
         PROMPT_FIND_ORGS,
-        // PROMPT_FIND_PERSONS,  // NER
-        // PROMPT_FIND_PLACES,  // NER
         // PROMPT_CHAT,
     };
 
@@ -111,6 +112,7 @@ private:
         PROMPT_FIND_GRAMMAR,
         PROMPT_EXPLAIN_LIKE_5,
         PROMPT_TRANSLATE_EN,
+        PROMPT_FIND_TASKS,
         PROMPT_GENERATE_TAGS,
         PROMPT_FIX_GRAMMAR,
         PROMPT_REWRITE_FORMALLY,
@@ -120,7 +122,7 @@ private:
 
     std::vector<std::string> textPrompts = {
         PROMPT_COMPLETE_TEXT,
-        PROMPT_EXPLAIN_LIKE_5,
+        PROMPT_EXPLAIN_LIKE_5_TXT,
         PROMPT_FIX_GRAMMAR,
         PROMPT_FIND_GRAMMAR,
         PROMPT_TRANSLATE_EN,

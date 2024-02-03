@@ -2051,10 +2051,8 @@ void MainWindowPresenter::handleLeftToolbarAction(string selectedTool)
     QDesktopServices::openUrl(QUrl{command});
 }
 
-void MainWindowPresenter::handleActionWingman()
+bool MainWindowPresenter::checkWingmanAvailability()
 {
-    MF_DEBUG("SIGNAL handled: WINGMAN CHAT dialog requests PROMPT run..." << endl);
-
     if(!config.isWingman()) {
         QMessageBox msgBox{
             QMessageBox::Critical,
@@ -2064,6 +2062,29 @@ void MainWindowPresenter::handleActionWingman()
                 "initialized - see MindForger Preferences (Wingman tab).")
         };
         msgBox.exec();
+        return false;
+    }
+
+    return true;
+}
+
+void MainWindowPresenter::handleWingmanMenuAction(const std::string& prompt)
+{
+    if(!checkWingmanAvailability()) {
+        return;
+    }
+
+    handleActionWingman(false);
+    this->wingmanDialog->setPrompt(prompt);
+    this->wingmanDialog->appendPromptToChat(prompt);
+    slotRunWingmanFromDialog(true);
+}
+
+void MainWindowPresenter::handleActionWingman(bool showDialog)
+{
+    MF_DEBUG("SIGNAL handled: WINGMAN CHAT dialog requests PROMPT run..." << endl);
+
+    if(!checkWingmanAvailability()) {
         return;
     }
 
@@ -2087,7 +2108,10 @@ void MainWindowPresenter::handleActionWingman()
         if(o) {
             contextTextName = QString::fromStdString(o->getName());
             string contextTextStr{};
+            auto oFormat = o->getFormat();
+            o->setFormat(MarkdownDocument::Format::MARKDOWN);
             mdRepresentation->to(o, &contextTextStr);
+            o->setFormat(oFormat);
             contextText = QString::fromStdString(contextTextStr);
             contextType = WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE;
         }
@@ -2109,11 +2133,14 @@ void MainWindowPresenter::handleActionWingman()
             QStandardItem* item
                 = orloj->getOutlinesTable()->getModel()->item(row);
             if(item) {
-                Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
-                if(outline) {
-                    contextTextName = QString::fromStdString(outline->getName());
+                Outline* o = item->data(Qt::UserRole + 1).value<Outline*>();
+                if(o) {
+                    contextTextName = QString::fromStdString(o->getName());
                     string contextTextStr{};
-                    mdRepresentation->to(outline, &contextTextStr);
+                    auto oFormat = o->getFormat();
+                    o->setFormat(MarkdownDocument::Format::MARKDOWN);
+                    mdRepresentation->to(o, &contextTextStr);
+                    o->setFormat(oFormat);
                     contextText = QString::fromStdString(contextTextStr);
                     contextType = WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE;
                 }
@@ -2137,17 +2164,28 @@ void MainWindowPresenter::handleActionWingman()
         }
     }
 
-    this->wingmanDialog->show(
-        contextType,
-        contextTextName,
-        contextText,
-        mind->getWingman()->getPredefinedOPrompts(),
-        mind->getWingman()->getPredefinedNPrompts(),
-        mind->getWingman()->getPredefinedTPrompts()
-    );
+    if(showDialog) {
+        this->wingmanDialog->show(
+            contextType,
+            contextTextName,
+            contextText,
+            mind->getWingman()->getPredefinedOPrompts(),
+            mind->getWingman()->getPredefinedNPrompts(),
+            mind->getWingman()->getPredefinedTPrompts()
+        );
+    } else {
+        this->wingmanDialog->setup(
+            contextType,
+            contextTextName,
+            contextText,
+            mind->getWingman()->getPredefinedOPrompts(),
+            mind->getWingman()->getPredefinedNPrompts(),
+            mind->getWingman()->getPredefinedTPrompts()
+        );
+    }
 }
 
-void MainWindowPresenter::slotRunWingmanFromDialog()
+void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
 {
     bool runAsynchronously = true;
 
@@ -2163,8 +2201,14 @@ void MainWindowPresenter::slotRunWingmanFromDialog()
         this->wingmanDialog->getContextText().toStdString(),
         prompt);
 
+    if(showDialog) {
+        this->wingmanDialog->show();
+    }
+
     // RUN Wingman
-    statusBar->showInfo(QString(tr("Wingman is talking to GPT provider...")));
+    QString promptLabel{QString(tr("Wingman is talking to the GPT provider..."))};
+    this->wingmanDialog->setPromptsLabel(promptLabel);
+    statusBar->showInfo(promptLabel);
 
     // run
     CommandWingmanChat commandWingmanChat{
@@ -2203,7 +2247,7 @@ void MainWindowPresenter::slotRunWingmanFromDialog()
         while(!futureWatcher.isFinished() && progress < progressLimit) {
             MF_DEBUG(
                 progress << "/" << progressLimit <<
-                " Wingman is talking to GPT provider..." << endl
+                " Wingman is talking to the GPT provider..." << endl
             );
             QApplication::processEvents();
             QThread::msleep(progressStep); // portable sleep
@@ -2219,9 +2263,9 @@ void MainWindowPresenter::slotRunWingmanFromDialog()
 
         // check the result
         if (future.isFinished()) {
-            statusBar->showInfo(QString(tr("Wingman got an answer from the GPT provider")));
+            statusBar->showInfo(QString(tr("Wingman received an answer from the GPT provider")));
         } else {
-            statusBar->showError(QString(tr("Wingman failed to get answer from the GPT provider")));
+            statusBar->showError(QString(tr("Wingman failed to receive an answer from the GPT provider")));
 
             // PUSH answer to the chat dialog
             this->wingmanDialog->appendAnswerToChat(
@@ -2265,6 +2309,9 @@ void MainWindowPresenter::slotRunWingmanFromDialog()
             this->wingmanDialog->getContextType()
         );
     }
+
+    this->wingmanDialog->setLastPromptLabel();
+    this->wingmanDialog->selectPrompt();
 }
 
 void MainWindowPresenter::slotWingmanAppendFromDialog()

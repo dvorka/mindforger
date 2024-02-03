@@ -181,6 +181,12 @@ public slots:
 #ifdef DO_MF_DEBUG
     void doActionMindHack();
 #endif
+    // wingman: dialog
+    void handleActionWingman(bool showDialog=true);
+    void slotRunWingmanFromDialog(bool showDialog=false);
+    void slotWingmanAppendFromDialog();
+    void slotWingmanReplaceFromDialog();
+    // workspace
     void doActionMindNewRepository();
     void handleMindNewRepository();
     void doActionMindNewFile();
@@ -314,6 +320,21 @@ public slots:
     void doActionOutlineHtmlExport();
     void handleOutlineHtmlExport();
     void doActionOutlineTWikiImport();
+    bool checkWingmanAvailability();
+    void handleWingmanMenuAction(const std::string& prompt);
+    void doActionWingmanOSummarize() { handleWingmanMenuAction(PROMPT_SUMMARIZE); }
+    void doActionWingmanOExplain() { handleWingmanMenuAction(PROMPT_EXPLAIN_LIKE_5); }
+    void doActionWingmanOFind() { handleWingmanMenuAction(PROMPT_FIND_TASKS); }
+
+    void doActionWingmanNSummarize() { handleWingmanMenuAction(PROMPT_SUMMARIZE); }
+    void doActionWingmanNFixGrammar() { handleWingmanMenuAction(PROMPT_FIND_GRAMMAR); }
+    void doActionWingmanNRewrite() { handleWingmanMenuAction(PROMPT_TRANSLATE_EN); }
+
+    void doActionWingmanEFixGrammar() { handleWingmanMenuAction(PROMPT_FIX_GRAMMAR); }
+    void doActionWingmanEExplain() { handleWingmanMenuAction(PROMPT_EXPLAIN_LIKE_5_TXT); }
+    void doActionWingmanEFinishText() { handleWingmanMenuAction(PROMPT_COMPLETE_TEXT); }
+    void doActionWingmanERewriteText() { handleWingmanMenuAction(PROMPT_REWRITE_FORMALLY); }
+
     // Note
     void doActionNoteNew();
     bool withWriteableOutline(const std::string& outlineKey);
@@ -346,11 +367,7 @@ public slots:
     void doActionToggleLiveNotePreview();
     void doActionNameDescFocusSwap();
     void doActionSpellCheck();
-    // wingman
-    void handleActionWingman();
-    void slotRunWingmanFromDialog();
-    void slotWingmanAppendFromDialog();
-    void slotWingmanReplaceFromDialog();
+    // actions
     // TODO remake to CLI or REMOVE tools toolbar
     void handleLeftToolbarAction(std::string selectedTool);
     void doActionArxivToolbar();

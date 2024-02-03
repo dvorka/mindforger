@@ -174,6 +174,48 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(
         view->actionOutlineTWikiImport, SIGNAL(triggered()),
         mwp, SLOT(doActionOutlineTWikiImport()));
+    // wingman: Outline
+    QObject::connect(
+        view->actionOutlineWingmanSummarize, SIGNAL(triggered()),
+        mwp, SLOT(doActionWingmanOSummarize()));
+    QObject::connect(
+        view->actionOutlineWingmanExplain, SIGNAL(triggered()),
+        mwp, SLOT(doActionWingmanOExplain()));
+    QObject::connect(
+        view->actionOutlineWingmanFind, SIGNAL(triggered()),
+        mwp, SLOT(doActionWingmanOFind()));
+    QObject::connect(
+        view->actionOutlineWingmanMore, SIGNAL(triggered()),
+        mwp, SLOT(handleActionWingman()));
+    // wingman: Note
+    QObject::connect(
+        view->actionNoteWingmanSummarize, SIGNAL(triggered()),
+        mwp, SLOT(doActionWingmanNSummarize()));
+    QObject::connect(
+        view->actionNoteWingmanFixGrammar, SIGNAL(triggered()),
+        mwp, SLOT(doActionWingmanNFixGrammar()));
+    QObject::connect(
+        view->actionNoteWingmanRewrite, SIGNAL(triggered()),
+        mwp, SLOT(doActionWingmanNRewrite()));
+    QObject::connect(
+        view->actionNoteWingmanMore, SIGNAL(triggered()),
+        mwp, SLOT(handleActionWingman()));
+    // wingman: Text (Edit)
+    QObject::connect(
+        view->actionEditWingmanFixGrammar, SIGNAL(triggered()),
+        mwp, SLOT(doActionWingmanEFixGrammar()));
+    QObject::connect(
+        view->actionEditWingmanExplain, SIGNAL(triggered()),
+        mwp, SLOT(doActionWingmanEExplain()));
+    QObject::connect(
+        view->actionEditWingmanFinishText, SIGNAL(triggered()),
+        mwp, SLOT(doActionWingmanEFinishText()));
+    QObject::connect(
+        view->actionEditWingmanRewriteText, SIGNAL(triggered()),
+        mwp, SLOT(doActionWingmanERewriteText()));
+    QObject::connect(
+        view->actionEditWingmanMore, SIGNAL(triggered()),
+        mwp, SLOT(handleActionWingman()));
 
     // menu: Note
     QObject::connect(
