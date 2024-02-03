@@ -22,6 +22,7 @@ message("= MindForger QMake configuration ==========================")
 message("Qt version: $$QT_VERSION")
 
 QT += widgets
+QT += network
 
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
@@ -88,6 +89,7 @@ win32 {
     else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/debug -lmindforger
 } else {
     # Linux and macOS
+    # TODO split macOS
     LIBS += -L$$OUT_PWD/../lib -lmindforger -lcurl
 }
 

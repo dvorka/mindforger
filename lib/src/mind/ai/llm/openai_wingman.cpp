@@ -102,12 +102,64 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             << "<<<"
             << endl);
 
-#ifdef WIN32
+#if defined(_WIN32) || defined(__APPLE__)
         /* Qt Networking examples:
          *
+         * - https://community.openai.com/t/qt-interface-w-chatgpt-api/354900
          * - https://gist.github.com/FONQRI/d8fb13150c1e6760f1b1617730559418
          */
 
+        QNetworkAccessManager networkManager;
+        string prompt{"Write a simple 'Hello World' program in Python."};
+        int maxTokens = 300;
+
+        QString qApiKey = QString::fromStdString(apiKey);
+
+        //QUrl apiEndpoint("https://api.openai.com/v1/chat/completions");
+        QUrl apiEndpoint("https://api.openai.com/v1/engines/davinci/completions");
+        QNetworkRequest request(apiEndpoint);
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        request.setRawHeader("Authorization", "Bearer " + qApiKey.toUtf8());
+
+        QJsonObject jsonPayload;
+        jsonPayload.insert("prompt", QJsonValue(QString::fromStdString(prompt)));
+        jsonPayload.insert("max_tokens", maxTokens);
+
+        // Send API request
+        QNetworkReply* reply = networkManager.post(request, QJsonDocument(jsonPayload).toJson());
+        /*
+        QObject::connect(
+            reply, &QNetworkReply::finished,
+            [reply]()
+        {
+            if (reply->error() != QNetworkReply::NoError) {
+                MF_DEBUG("Error: " << reply->errorString().toStdString() << endl);
+            } else {
+                QJsonObject jsonResponse = QJsonDocument::fromJson(reply->readAll()).object();
+                QString code = jsonResponse.value("choices").toArray().first().toObject().value("text").toString().trimmed();
+                MF_DEBUG("Received code:" << endl);
+                MF_DEBUG(code.toStdString());
+            }
+            reply->deleteLater();
+        });
+        */
+        for(int i=0; i<120; i++) {
+            MF_DEBUG("Step " << i << endl);
+                if(reply->isRunning()) {
+                    MF_DEBUG("  IS RUNNING " << i << endl);
+                } else {
+                    if(reply->error() == QNetworkReply::NoError) {
+                        MF_DEBUG("  NO error! " << i << endl);
+                    } else {
+                        MF_DEBUG("  An ERROR! " << reply->error() << endl);
+                    }
+                }
+            QThread::msleep(1000);
+        }
+
+
+
+#ifdef DISABLED_DEBUG_BLAH
         // request
         QNetworkRequest request{};
 
@@ -116,41 +168,69 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             QUrl("https://api.openai.com/v1/chat/completions"));
         request.setHeader(
             QNetworkRequest::ContentTypeHeader,
-            QVariant("application/json"));
-        string apiKeyUtf8{stringToUtf8(apiKey)};
+            "application/json");
+        // TODO removed string apiKeyUtf8{stringToUtf8(apiKey)};
         request.setRawHeader(
             "Authorization",
-            ("Bearer " + apiKeyUtf8).c_str());
+            ("Bearer " + apiKey).c_str());
 
         // request body
-        string requestJSonStrUtf8{stringToUtf8(requestJSonStr)};
-        QByteArray requestBody(
-            requestJSonStrUtf8.c_str());
+        MF_DEBUG("Building OpenAI request body..." << endl);
+        // TODO remove string requestJSonStrUtf8{stringToUtf8(requestJSonStr)};
+        QByteArray requestBody(requestJSonStr.c_str());
+        MF_DEBUG("  OpenAI request body bytearray DONE" << endl);
 
         // create a network access manager
-        QNetworkAccessManager manager;
+        QNetworkAccessManager manager{};
 
-        // request: POST
+        MF_DEBUG("POSTing  OpenAI request..." << endl);
         QNetworkReply* reply = manager.post(request, requestBody);
+        MF_DEBUG("  OpenAI reply handle: " << reply << endl);
 
         // connect to the finished signal to handle the response
+        /*
         QObject::connect(
             reply, &QNetworkReply::finished,
-            [&]()
+            [=]()
         {
             if (reply->error() == QNetworkReply::NoError) {
-                command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
-                command.httpResponse = QString(reply->readAll()).toStdString();
+                auto commandhttpResponse = QString::fromUtf8(reply->readAll()).toStdString();
+                MF_DEBUG("Request to OpenAI successful: '" << commandhttpResponse << endl);
+                //command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
+                //command.httpResponse = QString::fromUtf8(reply->readAll()).toStdString();
+                MF_DEBUG("  Response from OpenAI: '" << commandhttpResponse << endl);
             } else {
-                command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
-                command.errorMessage = QString(reply->readAll()).toStdString();
+                auto commanderrorMessage = reply->errorString().toStdString();
+                MF_DEBUG("Request to OpenAI FAILED: '" << commanderrorMessage << endl);
+                //command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
+                //command.errorMessage = reply->errorString().toStdString();
+                //command.httpResponse.clear();
+                //MF_DEBUG("  ERROR response from OpenAI: '" << command.httpResponse << endl);
             }
+            reply->deleteLater();
         });
+        */
+
+        for(int i=0; i<30; i++) {
+            MF_DEBUG("Step " << i << endl);
+                if(reply->isRunning()) {
+                    MF_DEBUG("  IS RUNNING " << i << endl);
+                } else {
+                    if(reply->error() == QNetworkReply::NoError) {
+                        MF_DEBUG("  NO error! " << i << endl);
+                    } else {
+                        MF_DEBUG("  An ERROR! " << reply->error() << endl);
+                    }
+                }
+            QThread::msleep(1000);
+        }
 
         // delete the network reply when it's finished
-        QObject::connect(
-            reply, &QNetworkReply::finished,
-            reply, &QNetworkReply::deleteLater);
+        //QObject::connect(
+        //    reply, &QNetworkReply::finished,
+        //    reply, &QNetworkReply::deleteLater);
+#endif // disabled blah
+
 #else        
         // set up cURL options
         command.httpResponse.clear();
@@ -189,7 +269,11 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
 
         // finish error handling (shared by QNetwork/CURL)
         if(command.status == WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR) {
-            std::cerr << "Error: Wingman OpenAI cURL request failed: " << command.errorMessage << endl;
+        // if(true) {
+            std::cerr <<
+            "Error: Wingman OpenAI cURL/QtNetwork request failed (error message/HTTP response):" << endl <<
+             "  '" << command.errorMessage << "'" << endl <<
+             "  '" << command.httpResponse << "'" << endl;
 
             command.httpResponse.clear();
             command.answerHtml.clear();
@@ -226,7 +310,26 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             "system_fingerprint": null
         }
         */
-        auto httpResponseJSon = nlohmann::json::parse(command.httpResponse);
+
+        // parse response string to JSon object
+        nlohmann::json httpResponseJSon;
+        try {
+            auto httpResponseJSon = nlohmann::json::parse(command.httpResponse);
+        } catch (...) {
+            // catch ALL exceptions
+            MF_DEBUG(
+                "Error: unable to parse OpenAI JSon response:" << endl <<
+                "'" << command.httpResponse << "'" << endl
+            );
+
+            command.status = WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
+            command.errorMessage = "Error: unable to parse OpenAI JSon response: '" + command.httpResponse + "'";
+            command.answerHtml.clear();
+            command.answerTokens = 0;
+            command.answerLlmModel = llmModel;
+
+            return;
+        }
 
         MF_DEBUG(
             "OpenAiWingman::curlGet() parsed response:" << endl

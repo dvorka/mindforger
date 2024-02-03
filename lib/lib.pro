@@ -18,13 +18,14 @@
 TARGET = mindforger
 TEMPLATE = lib
 CONFIG += staticlib
-CONFIG -= qt
 
-# Qt Network as CURL replacement on Win - add Qt to libmindforger!
-win32 {
-  CONFIG += qt
-  QT += network
-}
+#win32|macx {
+    # Qt Network as CURL replacement on Win - add Qt to libmindforger!
+    CONFIG += qt
+    QT += network
+#} else {
+#    CONFIG -= qt
+#}
 
 # Dependencies:
 # - INCLUDEPATH is used during compilation to find included header files.
