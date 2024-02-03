@@ -189,7 +189,9 @@ INCLUDEPATH += ./src/qt/spelling
 #
 win32{
     QMAKE_CXXFLAGS += /MP
-    QMAKE_CXX = ccache $$QMAKE_CXX
+    !mfnoccache {
+        QMAKE_CXX = ccache $$QMAKE_CXX
+    }
 } else {
     # linux and macos
     mfnoccache {
@@ -504,5 +506,6 @@ win32 {
 message(DEFINES of app.pro build: $$DEFINES)
 message(QMAKE_EXTRA_TARGETS of app.pro build: $$QMAKE_EXTRA_TARGETS)
 message(QT of app.pro build: $$QT)
+message(PATH is: $$(PATH))
 
 # eof

@@ -56,7 +56,9 @@ mfdebug|mfunits {
 # compiler options (qmake CONFIG+=mfnoccache ...)
 win32{
     QMAKE_CXXFLAGS += /MP
-    QMAKE_CXX = ccache $$QMAKE_CXX
+    !mfnoccache {
+        QMAKE_CXX = ccache $$QMAKE_CXX
+    }
 } else {
     # linux and macos
     mfnoccache {

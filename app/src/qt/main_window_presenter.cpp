@@ -2187,7 +2187,7 @@ void MainWindowPresenter::handleActionWingman(bool showDialog)
 
 void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
 {
-    bool runAsynchronously = false;
+    bool runAsynchronously = true;
 
     // pull prompt from the dialog & prepare prompt from the dialog
     string prompt = this->wingmanDialog->getPrompt();

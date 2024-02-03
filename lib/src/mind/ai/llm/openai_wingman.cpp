@@ -117,208 +117,64 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
 #if defined(_WIN32) || defined(__APPLE__)
         /* Qt Networking examples:
          *
-         * - https://community.openai.com/t/qt-interface-w-chatgpt-api/354900
          * - https://forum.qt.io/topic/116601/qnetworkaccessmanager-reply-is-always-empty/7
+         * - https://community.openai.com/t/qt-interface-w-chatgpt-api/354900
          * - https://gist.github.com/FONQRI/d8fb13150c1e6760f1b1617730559418
          */
-#ifdef THIS_WORKS_GET
-        QNetworkAccessManager nam;
-
-        QNetworkRequest request(QUrl("https://www.walkman-pictures.com/"));
-        auto reply = nam.get(request);
-
-        QEventLoop loop;
-        QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-        loop.exec();
-
-        reply->deleteLater();
-        auto error = reply->error();
-        if(error != QNetworkReply::NoError) {
-            qDebug() << "network error:" << error << reply->errorString();
-            return;
-        }
-        QByteArray read = reply->readAll();
-        if(read.isEmpty()) {
-            qDebug() << "response is empty";
-            return;
-        }
-
-        QString fileName(QDir::currentPath() + "/" + "qnetwork-get-test.html");
-        QFile file(fileName);
-        //[CHANGED]Remove QIODevice::Text to prevent line terminator mis-translating
-        if(!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            qDebug() << "file open error:" << file.error() << file.errorString();
-            return;
-        }
-        //NOTE: Don't use QTextStream to write QByteArray to file, that's not the right way even if the result is correct!!!
-        file.write(read);
-        file.close();
-#endif
-
 
         QNetworkAccessManager networkManager;
-        string prompt{"Write a simple 'Hello World' program in Python."};
-        int maxTokens = 300;
 
-        QString qApiKey = QString::fromStdString(apiKey);
-
-        QUrl apiEndpoint("https://api.openai.com/v1/chat/completions");
-        //QUrl apiEndpoint("https://api.openai.com/v1/engines/davinci/completions");
-        QNetworkRequest request(apiEndpoint);
-        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-        request.setRawHeader("Authorization", "Bearer " + qApiKey.toUtf8());
-
-        /*
-        QJsonObject jsonPayload;
-        jsonPayload.insert("prompt", QJsonValue(QString::fromStdString(prompt)));
-        jsonPayload.insert("max_tokens", maxTokens);
-        */
-
-        // Send API request
-        QNetworkReply* reply = networkManager.post(
-            request,
-            requestJSonStr.c_str()
-            //QJsonDocument(jsonPayload).toJson()
-        );
-
-        QEventLoop loop;
-        QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-        loop.exec();
-
-        reply->deleteLater();
-        auto error = reply->error();
-        if(error != QNetworkReply::NoError) {
-            qDebug() << "network error:" << error << reply->errorString();
-            return;
-        }
-        QByteArray read = reply->readAll();
-        if(read.isEmpty()) {
-            qDebug() << "response is empty";
-            return;
-        }
-
-        QString qCommandResponse = QString{read};
-        qDebug() << "Response is: '" << qCommandResponse << "'";
-        command.httpResponse = qCommandResponse.toStdString();
-
-        /*
-        QString fileName(QDir::currentPath() + "/" + "qnetwork-get-test.html");
-        QFile file(fileName);
-        //[CHANGED]Remove QIODevice::Text to prevent line terminator mis-translating
-        if(!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            qDebug() << "file open error:" << file.error() << file.errorString();
-            return;
-        }
-        //NOTE: Don't use QTextStream to write QByteArray to file, that's not the right way even if the result is correct!!!
-        file.write(read);
-        file.close();
-        */
-
-        /*
-        QObject::connect(
-            reply, &QNetworkReply::finished,
-            [reply]()
-        {
-            if (reply->error() != QNetworkReply::NoError) {
-                MF_DEBUG("Error: " << reply->errorString().toStdString() << endl);
-            } else {
-                QJsonObject jsonResponse = QJsonDocument::fromJson(reply->readAll()).object();
-                QString code = jsonResponse.value("choices").toArray().first().toObject().value("text").toString().trimmed();
-                MF_DEBUG("Received code:" << endl);
-                MF_DEBUG(code.toStdString());
-            }
-            reply->deleteLater();
-        });
-
-        for(int i=0; i<120; i++) {
-            MF_DEBUG("Step " << i << endl);
-                if(reply->isRunning()) {
-                    MF_DEBUG("  IS RUNNING " << i << endl);
-                } else {
-                    if(reply->error() == QNetworkReply::NoError) {
-                        MF_DEBUG("  NO error! " << i << endl);
-                    } else {
-                        MF_DEBUG("  An ERROR! " << reply->error() << endl);
-                    }
-                }
-            QThread::msleep(1000);
-        }
-        */
-
-
-#ifdef DISABLED_DEBUG_BLAH
-        // request
-        QNetworkRequest request{};
-
-        // request: headers
-        request.setUrl(
-            QUrl("https://api.openai.com/v1/chat/completions"));
+        QNetworkRequest request(QUrl("https://api.openai.com/v1/chat/completions"));
         request.setHeader(
             QNetworkRequest::ContentTypeHeader,
             "application/json");
-        // TODO removed string apiKeyUtf8{stringToUtf8(apiKey)};
         request.setRawHeader(
             "Authorization",
-            ("Bearer " + apiKey).c_str());
+            "Bearer " + QString::fromStdString(apiKey).toUtf8());
 
-        // request body
-        MF_DEBUG("Building OpenAI request body..." << endl);
-        // TODO remove string requestJSonStrUtf8{stringToUtf8(requestJSonStr)};
-        QByteArray requestBody(requestJSonStr.c_str());
-        MF_DEBUG("  OpenAI request body bytearray DONE" << endl);
+        QNetworkReply* reply = networkManager.post(
+            request,
+            requestJSonStr.c_str()
+        );
+        QEventLoop loop;
+        QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        loop.exec();
+        reply->deleteLater();
 
-        // create a network access manager
-        QNetworkAccessManager manager{};
+        command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
 
-        MF_DEBUG("POSTing  OpenAI request..." << endl);
-        QNetworkReply* reply = manager.post(request, requestBody);
-        MF_DEBUG("  OpenAI reply handle: " << reply << endl);
+        // response: error handling
+        auto error = reply->error();
+        if(error != QNetworkReply::NoError) {
+            command.errorMessage =
+                "Error: request to OpenAI Wingman provider failed due a network error - " +
+                reply->errorString().toStdString();
+            MF_DEBUG(command.errorMessage << endl);
+            command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
+        }
+        QByteArray read;
+        if(command.status == m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK) {
+            read = reply->readAll();
 
-        // connect to the finished signal to handle the response
-        /*
-        QObject::connect(
-            reply, &QNetworkReply::finished,
-            [=]()
-        {
-            if (reply->error() == QNetworkReply::NoError) {
-                auto commandhttpResponse = QString::fromUtf8(reply->readAll()).toStdString();
-                MF_DEBUG("Request to OpenAI successful: '" << commandhttpResponse << endl);
-                //command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
-                //command.httpResponse = QString::fromUtf8(reply->readAll()).toStdString();
-                MF_DEBUG("  Response from OpenAI: '" << commandhttpResponse << endl);
-            } else {
-                auto commanderrorMessage = reply->errorString().toStdString();
-                MF_DEBUG("Request to OpenAI FAILED: '" << commanderrorMessage << endl);
-                //command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
-                //command.errorMessage = reply->errorString().toStdString();
-                //command.httpResponse.clear();
-                //MF_DEBUG("  ERROR response from OpenAI: '" << command.httpResponse << endl);
+            if(read.isEmpty()) {
+                command.errorMessage =
+                    "Error: Request to OpenAI Wingman provider failed - response is empty'";
+                MF_DEBUG(command.errorMessage << endl);
+                command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
             }
-            reply->deleteLater();
-        });
-        */
-
-        for(int i=0; i<30; i++) {
-            MF_DEBUG("Step " << i << endl);
-                if(reply->isRunning()) {
-                    MF_DEBUG("  IS RUNNING " << i << endl);
-                } else {
-                    if(reply->error() == QNetworkReply::NoError) {
-                        MF_DEBUG("  NO error! " << i << endl);
-                    } else {
-                        MF_DEBUG("  An ERROR! " << reply->error() << endl);
-                    }
-                }
-            QThread::msleep(1000);
         }
 
-        // delete the network reply when it's finished
-        //QObject::connect(
-        //    reply, &QNetworkReply::finished,
-        //    reply, &QNetworkReply::deleteLater);
-#endif // disabled blah
-
-#else        
+        // response: successful response processing
+        if(command.status == m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK) {
+            QString qCommandResponse = QString{read};
+            command.httpResponse = qCommandResponse.toStdString();
+            command.errorMessage.clear();
+            command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
+            MF_DEBUG(
+                "Successful OpenAI Wingman provider response:" << endl <<
+                "  '" << command.httpResponse << "'" << endl);
+        }
+#else
         // set up cURL options
         command.httpResponse.clear();
         curl_easy_setopt(
@@ -356,7 +212,6 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
 
         // finish error handling (shared by QNetwork/CURL)
         if(command.status == WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR) {
-        // if(true) {
             std::cerr <<
             "Error: Wingman OpenAI cURL/QtNetwork request failed (error message/HTTP response):" << endl <<
              "  '" << command.errorMessage << "'" << endl <<
@@ -466,11 +321,17 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
                     command.errorMessage.assign(
                         "OpenAI API HTTP required failed with finish_reason: "
                         + statusStr);
+                    command.answerHtml.clear();
+                    command.answerTokens = 0;
+                    command.answerLlmModel = llmModel;
                 }
                 MF_DEBUG("  status: " << command.status << endl);
             }
         } else {
             command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
+            command.answerHtml.clear();
+            command.answerTokens = 0;
+            command.answerLlmModel = llmModel;
             if(
                 httpResponseJSon.contains("error")
                 && httpResponseJSon["error"].contains("message")
