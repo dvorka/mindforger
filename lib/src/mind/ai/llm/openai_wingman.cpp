@@ -63,8 +63,10 @@ OpenAiWingman::~OpenAiWingman()
  * @see https://json.nlohmann.me/
  */
 void OpenAiWingman::curlGet(CommandWingmanChat& command) {
+#if !defined(__APPLE__) && !defined(_WIN32)
     CURL* curl = curl_easy_init();
     if (curl) {
+#endif
         string escapedPrompt{command.prompt};
         replaceAll("\n", " ", escapedPrompt);
         replaceAll("\"", "\\\"", escapedPrompt);
@@ -100,45 +102,56 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             << "<<<"
             << endl);
 
-#ifdef MF_OPENAI_QT_NETWORK
-// Set up Qt networking options
-        QNetworkRequest request;
-        request.setUrl(QUrl("https://api.openai.com/v1/chat/completions"));
+#ifdef WIN32
+        /* Qt Networking examples:
+         *
+         * - https://gist.github.com/FONQRI/d8fb13150c1e6760f1b1617730559418
+         */
 
-        QByteArray requestBody(requestJSonStr.toUtf8());
-        request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
-        request.setRawHeader("Authorization", "Bearer " + apiKey.toUtf8());
+        // request
+        QNetworkRequest request{};
 
-        // Create a network access manager
+        // request: headers
+        request.setUrl(
+            QUrl("https://api.openai.com/v1/chat/completions"));
+        request.setHeader(
+            QNetworkRequest::ContentTypeHeader,
+            QVariant("application/json"));
+        string apiKeyUtf8{stringToUtf8(apiKey)};
+        request.setRawHeader(
+            "Authorization",
+            ("Bearer " + apiKeyUtf8).c_str());
+
+        // request body
+        string requestJSonStrUtf8{stringToUtf8(requestJSonStr)};
+        QByteArray requestBody(
+            requestJSonStrUtf8.c_str());
+
+        // create a network access manager
         QNetworkAccessManager manager;
 
-        // Send the request
-        QNetworkReply *reply = manager.post(request, requestBody);
+        // request: POST
+        QNetworkReply* reply = manager.post(request, requestBody);
 
-        // Connect to the finished signal to handle the response
-        connect(reply, &QNetworkReply::finished, [&]() {
+        // connect to the finished signal to handle the response
+        QObject::connect(
+            reply, &QNetworkReply::finished,
+            [&]()
+        {
             if (reply->error() == QNetworkReply::NoError) {
-                command.httpResponse = reply->readAll().toUtf8();
-                command.answerHtml = parseHtmlFromJson(command.httpResponse);
-                command.answerTokens = countTokens(command.answerHtml);
-                command.answerLlmModel = llmModel;
-                command.status = WingmanStatusCode::WINGMAN_STATUS_CODE_SUCCESS;
+                command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
+                command.httpResponse = QString(reply->readAll()).toStdString();
             } else {
-                command.status = WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
-                command.errorMessage = reply->errorString();
-                std::cerr << "Error: Wingman OpenAI Qt networking request failed: " << command.errorMessage << std::endl;
-
-                command.httpResponse.clear();
-                command.answerHtml.clear();
-                command.answerTokens = 0;
-                command.answerLlmModel = llmModel;
-                return;
+                command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
+                command.errorMessage = QString(reply->readAll()).toStdString();
             }
         });
 
-        // Delete the network reply when it's finished
-        connect(reply, &QNetworkReply::finished, reply, &QNetworkReply::deleteLater);
-#else
+        // delete the network reply when it's finished
+        QObject::connect(
+            reply, &QNetworkReply::finished,
+            reply, &QNetworkReply::deleteLater);
+#else        
         // set up cURL options
         command.httpResponse.clear();
         curl_easy_setopt(
@@ -169,7 +182,14 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
         if (res != CURLE_OK) {
             command.status = WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
             command.errorMessage = curl_easy_strerror(res);
-            std::cerr << "Error: Wingman OpenAI cURL request failed: " << command.errorMessage << std::endl;
+        } else {
+            command.status = WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
+        }
+#endif
+
+        // finish error handling (shared by QNetwork/CURL)
+        if(command.status == WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR) {
+            std::cerr << "Error: Wingman OpenAI cURL request failed: " << command.errorMessage << endl;
 
             command.httpResponse.clear();
             command.answerHtml.clear();
@@ -178,7 +198,6 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
 
             return;
         }
-#endif
 
         // parse JSon
         /*
@@ -272,11 +291,14 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
                     "No choices in the OpenAI API HTTP response");
             }
         }
-    } else {
+#if !defined(__APPLE__) && !defined(_WIN32)
+    }
+    else {
         command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
         command.errorMessage.assign(
             "OpenAI API HTTP request failed: unable to initialize cURL");
     }
+#endif
 }
 
 void OpenAiWingman::chat(CommandWingmanChat& command) {

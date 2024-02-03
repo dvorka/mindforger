@@ -36,7 +36,7 @@ public:
     MockWingman(const MockWingman&&) = delete;
     MockWingman& operator =(const MockWingman&) = delete;
     MockWingman& operator =(const MockWingman&&) = delete;
-    ~MockWingman();
+    ~MockWingman() override;
 
     std::string getWingmanLlmModel() const { return llmModel; }
 
