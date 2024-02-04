@@ -29,8 +29,7 @@ MindForger is human mind inspired personal knowledge management tool.
 MindForger is open, free, well performing Markdown editor / IDE which respects your privacy.
 
 ## Features
-
-[Features overview](https://www.mindforger.com/#features): open, free, OpenAI GPT integrated, knowledge manager, Markdown editor (math, diagrams, images, TOC generator), outliner, spell-check, Markdown IDE (multi-document, section refactoring, cloning, stencils, scopes), organizer (Eisenhower matrix, Kanban), knowledge graph navigator, knowledge autolinking, think as you browse, think as you write, find by name/tag/text/regexp, find similar sections (associations), tagging, emojis, recent sections, external section editor, themes, internationalization, export (CSV with OHE for machine learning, HTML) and import (TWiki).
+MindForger [features overview](https://www.mindforger.com/#features): open, free, OpenAI GPT integrated, knowledge manager, Markdown editor (math, diagrams, images, table of contents generator), outliner, spell-check, Markdown IDE (multi-document workspace, section refactoring, cloning, scopes and stencils), organizer (Eisenhower matrix, Kanban), knowledge graph navigator, knowledge autolinking, think as you browse, think as you write, find by name/tag/text/regexp, find similar sections (associations), tagging, emojis, recent sections, external section editor, themes, internationalization, export (CSV with OHE for machine learning, HTML) and import (TWiki).
 
 ## Installation
 Install:
