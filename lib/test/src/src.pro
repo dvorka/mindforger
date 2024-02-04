@@ -1,4 +1,4 @@
-# mindforger-lib-unit-tests.pro     MindForger thinking notebook
+# src.pro     MindForger thinking notebook
 #
 # Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
@@ -22,7 +22,18 @@ DEFINES = DO_MF_DEBUG
 
 CONFIG += console
 CONFIG -= app_bundle
-CONFIG -= qt
+
+win32|macx {
+    # Qt Network as CURL replacement on Win - add Qt to libmindforger
+    CONFIG += qt
+    QT += network
+} else {
+    CONFIG -= qt
+}
+
+message("= MindForger library test QMake configuration ==========================")
+message("Qt version: $$QT_VERSION")
+
 
 INCLUDEPATH += $$PWD/../../../lib/src
 DEPENDPATH += $$PWD/../../../lib/src
@@ -138,5 +149,14 @@ SOURCES += \
 
 HEADERS += \
     ./test_gear.h
+
+# ########################################
+# Diagnostics
+# ########################################
+
+message(DEFINES of app.pro build: $$DEFINES)
+message(QMAKE_EXTRA_TARGETS of app.pro build: $$QMAKE_EXTRA_TARGETS)
+message(QT of app.pro build: $$QT)
+message(PATH is: $$(PATH))
 
 # eof

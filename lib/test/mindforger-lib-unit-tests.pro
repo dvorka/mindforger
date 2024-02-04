@@ -17,17 +17,6 @@
 
 TEMPLATE = subdirs
 
-win32|macx {
-    # Qt Network as CURL replacement on Win - add Qt to libmindforger
-    CONFIG += qt
-    QT += network
-} else {
-    CONFIG -= qt
-}
-
-message("= MindForger library test QMake configuration ==========================")
-message("Qt version: $$QT_VERSION")
-
 SUBDIRS = lib src
 
 # where to find the sub projects - give the folders
@@ -36,14 +25,5 @@ src.subdir  = ./src
 
 # build dependencies
 src.depends = lib
-
-# ########################################
-# Diagnostics
-# ########################################
-
-message(DEFINES of app.pro build: $$DEFINES)
-message(QMAKE_EXTRA_TARGETS of app.pro build: $$QMAKE_EXTRA_TARGETS)
-message(QT of app.pro build: $$QT)
-message(PATH is: $$(PATH))
 
 # eof
