@@ -24,7 +24,7 @@ skip_commits:
 environment:
    APPVEYOR_SAVE_CACHE_ON_ERROR: true
 
-image: Visual Studio 2019
+image: Visual Studio 2017
 
 #---------------------------------#
 #       build configuration       #
@@ -42,16 +42,16 @@ cache:
 
 # check https://www.appveyor.com/docs/windows-images-software for updates
 install:
-# QT used by: MF 2.0.0+ (5.15.2 requires VS 2019 - change ABOVE if switching Qt)
+# QT used by: MF 2.0.0+ (5.15.2 requires MSVC 2019)
  - set QT_DIR=C:\Qt\5.15.2\msvc2019_64
-# QT used by: MF 1.55.*- (5.9.9 requires VS 2017 - change ABOVE if switching Qt)
+# QT used by: MF 1.55.*- (5.9.9 requires MSVC 2017)
 # - set QT_DIR=C:\Qt\5.9.9\msvc2017_64
  - set PATH=%PATH%;%QT_DIR%\bin
  - set M8R_HOME=%APPVEYOR_BUILD_FOLDER%
  - if not exist c:\cache mkdir c:\cache
-# on the image vcredist is in C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.16.27012
+# on the image vcredist is in C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012
  - if not exist c:\cache\vcredist_x64.exe  curl -LfSs -o c:\cache\vcredist_x64.exe https://aka.ms/vs/15/release/vc_redist.x64.exe
- - if not exist "C:\Program Files\googletest-distribution" pushd %TEMP% && curl -LfSs -o gtest.zip https://github.com/google/googletest/archive/release-1.8.1.zip && 7z x gtest.zip && cd googletest-release-1.8.1 && mkdir build && cd build && cmake -G "Visual Studio 15 2019 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -Dgtest_build_samples=OFF -Dgtest_build_tests=OFF -Dgmock_build_tests=OFF -Dgtest_force_shared_crt=ON .. && cmake --build . --config Debug -- /m &&  cmake -DBUILD_TYPE=Debug -P cmake_install.cmake && popd
+ - if not exist "C:\Program Files\googletest-distribution" pushd %TEMP% && curl -LfSs -o gtest.zip https://github.com/google/googletest/archive/release-1.8.1.zip && 7z x gtest.zip && cd googletest-release-1.8.1 && mkdir build && cd build && cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -Dgtest_build_samples=OFF -Dgtest_build_tests=OFF -Dgmock_build_tests=OFF -Dgtest_force_shared_crt=ON .. && cmake --build . --config Debug -- /m &&  cmake -DBUILD_TYPE=Debug -P cmake_install.cmake && popd
 
 before_build:
  - cd "%M8R_HOME%"
@@ -59,8 +59,8 @@ before_build:
  - git submodule update
 
 build_script:
- - pushd "%M8R_HOME%\deps\cmark-gfm" && mkdir build && cd build && cmake -G "Visual Studio 15 2019 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . --config Release -- /m && cmake --build . --config Debug -- /m && popd
- - call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
+ - pushd "%M8R_HOME%\deps\cmark-gfm" && mkdir build && cd build && cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_CONFIGURATION_TYPES=Debug;Release -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . --config Release -- /m && cmake --build . --config Debug -- /m && popd
+ - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
  - cd "%M8R_HOME%" && qmake -r mindforger.pro "CONFIG+=mfnoccache" && nmake
  - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime && "C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Q /DVcRedistPath=c:\cache\vcredist_x64.exe build\windows\installer\mindforger-setup.iss
 # - if "%APPVEYOR_REPO_BRANCH%" equ "master" appveyor PushArtifact app\release\installer\mindforger-setup.exe
