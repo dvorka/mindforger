@@ -133,7 +133,7 @@ gen-ui-class: ## generate UI C++ class skeleton: CLASS_NAME=My_Class
 
 ../app/mindforger: ../Makefile
 	@echo "Building PRODUCTION MindForger executable..."
-	cd .. && make -j $(VENDOR) ; cd build
+	cd .. && make -j $(CPU_CORES) ; cd build
 	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
