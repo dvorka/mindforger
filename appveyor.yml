@@ -68,8 +68,19 @@ build_script:
  # - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
  - cd "%M8R_HOME%" && qmake -r mindforger.pro "CONFIG+=mfnoccache" && nmake
  - windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime && "C:\Program Files (x86)\Inno Setup 5\iscc.exe" /Q /DVcRedistPath=c:\cache\vcredist_x64.exe build\windows\installer\mindforger-setup.iss
-# - if "%APPVEYOR_REPO_BRANCH%" equ "master" appveyor PushArtifact app\release\installer\mindforger-setup.exe
- - appveyor PushArtifact app\release\installer\mindforger-setup.exe
+ - echo "Installer build DONE" 
+ # - if "%APPVEYOR_REPO_BRANCH%" equ "master" appveyor PushArtifact app\release\installer\mindforger-setup.exe
+ # TODO disabled as artifact not found
+ # - appveyor PushArtifact app\release\installer\mindforger-setup.exe
+ - cd
+ - dir *.exe
+ - dir app
+ - dir app\*.exe
+ - dir app\release
+ - dir app\release\*.exe
+ - dir app\release\installer
+ - dir app\release\installer\*.exe
+ # end temporary search
 
 before_test:
  - pushd "%M8R_HOME%\lib\test" && qmake -r mindforger-lib-unit-tests.pro "CONFIG+=debug" "CONFIG+=mfdebug" "CONFIG+=mfunit" "CONFIG+=mfnoccache" && nmake && popd

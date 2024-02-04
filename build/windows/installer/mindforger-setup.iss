@@ -47,5 +47,5 @@ Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MINDFORGER_APP_N
 [Run]
 Filename: "{tmp}\vcredist_x64.exe"; \
     Parameters: "/install /quiet /norestart"; \
-    StatusMsg: "Installing VC++ 2017 Redistributables..."
+    StatusMsg: "Installing VC++ 2019 Redistributables..."
 Filename: "{app}\bin\{#MINDFORGER_APP_EXE}"; WorkingDir: "{app}\bin\"; Flags: shellexec  nowait postinstall skipifsilent runascurrentuser; Description: "{cm:LaunchProgram,{#StringChange(MINDFORGER_APP_NAME, '&', '&&')}}"
