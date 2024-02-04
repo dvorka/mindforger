@@ -96,7 +96,11 @@ public:
     void setZoomFactor(qreal factor) {
         headerViewer->setZoomFactor(factor);
     }
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0) && (defined(__APPLE__) || defined(_WIN32))
+    void setHtml(const QString& html, const QUrl& baseUrl = QUrl("file://")) {
+#else
     void setHtml(const QString& html, const QUrl& baseUrl = QUrl()) {
+#endif
         headerViewer->setHtml(html, baseUrl);
     }
     void giveViewerFocus() {

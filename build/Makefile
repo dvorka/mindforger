@@ -36,10 +36,40 @@ MF_LANG := "en"
 DISTRO := "bionic"
 # CPU cores thant can be used to build the project
 CPU_CORES := 7
+# Qt version to be used by MindForger
+# MF_QT_VERSION := 5.9.9
+MF_QT_VERSION := 5.15.2
+
+#
+# OS detection
+#
+
+# uname returns the operating system name: Darwin, Linux, etc.
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin)
+  # this sets QTDIR and PATH shell (!) and make environment variables on macOS
+  QTDIR := /Users/dvorka/Qt/$(MF_QT_VERSION)/clang_64
+  PATH := /Users/dvorka/Qt/$(MF_QT_VERSION)/clang_64/bin:/Library/Developer/CommandLineTools/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:$(PATH)
+endif
+
 
 #
 # targets
 #
+
+
+.PHONY: diagnostics
+diagnostics:
+	@echo "MindForger diagnostics:"
+	@echo "  MINDFORGER_VERSION: $(MINDFORGER_VERSION)"
+	@echo "  MINDFORGER_RELEASE_DIR: $(MINDFORGER_RELEASE_DIR)"
+	@echo "  MF_MAKER_WORKING_DIR: $(MF_MAKER_WORKING_DIR)"
+	@echo "  CLASS_NAME: $(CLASS_NAME)"
+	@echo "  MF_LANG: $(MF_LANG)"
+	@echo "  DISTRO: $(DISTRO)"
+	@echo "  CPU_CORES: $(CPU_CORES)"
+	@echo "  PATH: ${PATH}"
+	@echo "  QTDIR: ${QTDIR}"
 
 
 .PHONY: help
@@ -116,11 +146,13 @@ build: clean-app ../app/mindforger ## build production MindForger application bi
 build-dev: clean-app ## build development MindForger application binary
 	@echo "Building DEV MindForger executable..."
 	cd .. && qmake -r mindforger.pro DEFINES+=DO_MF_DEBUG && make -j $(CPU_CORES) ; cd ..
-	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
+ifeq ($(UNAME), Darwin)
+	@echo "\nIf build succeeded, then MindForger executable can be found in:\n  app/mindforger.app/Contents/MacOS/mindforger"
+	ls -al ../app/mindforger.app/Contents/MacOS/mindforger
+else
+	@echo "\nIf build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
-
-
-# TODO: build-dev-clang
+endif
 
 
 .PHONY: build-rc
@@ -160,10 +192,13 @@ run-ci: build-ci ## run MindForger CI build
 
 
 run-dev: build-dev ## run MindForger development build
+ifeq ($(UNAME), Darwin)
+	cd ../app/mindforger.app/Contents/MacOS && ./mindforger /Users/dvorka/mf-devel/mf-copy
+else
 	cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/library-trainer
 	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/computer-hw.md
 	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/bug-copy-image
-
+endif
 
 #
 # install
