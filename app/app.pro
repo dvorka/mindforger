@@ -22,6 +22,7 @@ message("= MindForger QMake configuration ==========================")
 message("Qt version: $$QT_VERSION")
 
 QT += widgets
+QT += network
 
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
@@ -88,6 +89,7 @@ win32 {
     else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/debug -lmindforger
 } else {
     # Linux and macOS
+    # TODO split macOS
     LIBS += -L$$OUT_PWD/../lib -lmindforger -lcurl
 }
 
@@ -187,6 +189,9 @@ INCLUDEPATH += ./src/qt/spelling
 #
 win32{
     QMAKE_CXXFLAGS += /MP
+    !mfnoccache {
+        QMAKE_CXX = ccache $$QMAKE_CXX
+    }
 } else {
     # linux and macos
     mfnoccache {
@@ -501,5 +506,6 @@ win32 {
 message(DEFINES of app.pro build: $$DEFINES)
 message(QMAKE_EXTRA_TARGETS of app.pro build: $$QMAKE_EXTRA_TARGETS)
 message(QT of app.pro build: $$QT)
+message(PATH is: $$(PATH))
 
 # eof

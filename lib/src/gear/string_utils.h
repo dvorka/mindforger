@@ -49,7 +49,7 @@ char** stringSplit(const char* s, const char delimiter);
 char** stringSplit(const char* s, const char delimiter, u_int16_t resultBaseSize, u_int16_t resultIncSize);
 std::vector<std::string> stringSplit(const std::string s, const std::string regexDelimiter);
 
-#if defined(__APPLE__) || defined(_WIN32)
+#if defined(_WIN32)
 static inline std::string stringToUtf8(std::string& codepage_str)
 {
     int size = MultiByteToWideChar(
@@ -88,6 +88,11 @@ static inline std::string stringToUtf8(std::string& codepage_str)
                 nullptr);
 
     return utf8_str;
+}
+#elif defined(__APPLE__)
+static inline std::string stringToUtf8(std::string& codepage_str)
+{
+    return codepage_str;
 }
 #endif
 

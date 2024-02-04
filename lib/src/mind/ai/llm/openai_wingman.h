@@ -22,7 +22,7 @@
 #include <string>
 
 // HTTP client: CURL on Linux, Qt Network on macOS and Win
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__APPLE__)
   #include <QtNetwork>
 #else
   #include "curl/curl.h"

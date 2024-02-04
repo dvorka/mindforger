@@ -18,13 +18,14 @@
 TARGET = mindforger
 TEMPLATE = lib
 CONFIG += staticlib
-CONFIG -= qt
 
-# Qt Network as CURL replacement on Win - add Qt to libmindforger!
-win32 {
-  CONFIG += qt
-  QT += network
-}
+#win32|macx {
+    # Qt Network as CURL replacement on Win - add Qt to libmindforger!
+    CONFIG += qt
+    QT += network
+#} else {
+#    CONFIG -= qt
+#}
 
 # Dependencies:
 # - INCLUDEPATH is used during compilation to find included header files.
@@ -55,6 +56,9 @@ mfdebug|mfunits {
 # compiler options (qmake CONFIG+=mfnoccache ...)
 win32{
     QMAKE_CXXFLAGS += /MP
+    !mfnoccache {
+        QMAKE_CXX = ccache $$QMAKE_CXX
+    }
 } else {
     # linux and macos
     mfnoccache {
