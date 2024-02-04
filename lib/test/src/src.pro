@@ -90,6 +90,11 @@ win32 {
 # compiler options
 win32{
     QMAKE_CXXFLAGS += /MP
+
+    # DISABLED ccache as it causes compilation error:
+    #   "C1090: PDB API call failed, error code '23'" when used 
+    # when used w/ MS VS compiler:
+    # !mfnoccache { QMAKE_CXX = ccache $$QMAKE_CXX }
 } else {
     # linux and macos
     mfnoccache {

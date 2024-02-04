@@ -42,7 +42,10 @@ cache:
 
 # check https://www.appveyor.com/docs/windows-images-software for updates
 install:
+# QT used by: MF 1.55.*- (VS 2017 - change ABOVE if switching Qt)
  - set QT_DIR=C:\Qt\5.9.9\msvc2017_64
+# - set C:\Qt\5.12.6\msvc2017_64
+# - set QT_DIR=C:\Qt\5.15.2\msvc2019_64
 # - set QT_DIR=C:\Qt\5.9.7\msvc2017_64
  - set PATH=%PATH%;%QT_DIR%\bin
  - set M8R_HOME=%APPVEYOR_BUILD_FOLDER%

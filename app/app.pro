@@ -22,7 +22,10 @@ message("= MindForger QMake configuration ==========================")
 message("Qt version: $$QT_VERSION")
 
 QT += widgets
-QT += network
+
+win32 {
+  QT += network
+}
 
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
@@ -189,9 +192,11 @@ INCLUDEPATH += ./src/qt/spelling
 #
 win32{
     QMAKE_CXXFLAGS += /MP
-    !mfnoccache {
-        QMAKE_CXX = ccache $$QMAKE_CXX
-    }
+    
+    # DISABLED ccache as it causes compilation error:
+    #   "C1090: PDB API call failed, error code '23'" when used 
+    # when used w/ MS VS compiler:
+    # !mfnoccache { QMAKE_CXX = ccache $$QMAKE_CXX }
 } else {
     # linux and macos
     mfnoccache {

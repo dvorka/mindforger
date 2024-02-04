@@ -19,13 +19,13 @@ TARGET = mindforger
 TEMPLATE = lib
 CONFIG += staticlib
 
-#win32|macx {
-    # Qt Network as CURL replacement on Win - add Qt to libmindforger!
+win32|macx {
+    # Qt Network as CURL replacement on Win - add Qt to libmindforger
     CONFIG += qt
     QT += network
-#} else {
-#    CONFIG -= qt
-#}
+} else {
+    CONFIG -= qt
+}
 
 # Dependencies:
 # - INCLUDEPATH is used during compilation to find included header files.
@@ -56,9 +56,11 @@ mfdebug|mfunits {
 # compiler options (qmake CONFIG+=mfnoccache ...)
 win32{
     QMAKE_CXXFLAGS += /MP
-    !mfnoccache {
-        QMAKE_CXX = ccache $$QMAKE_CXX
-    }
+
+    # DISABLED ccache as it causes compilation error:
+    #   "C1090: PDB API call failed, error code '23'" when used 
+    # when used w/ MS VS compiler:
+    # !mfnoccache { QMAKE_CXX = ccache $$QMAKE_CXX }
 } else {
     # linux and macos
     mfnoccache {
