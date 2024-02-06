@@ -48,7 +48,7 @@ EditButtonsPanel::EditButtonsPanel(MfWidgetMode mode, QWidget* parent)
 
     rememberAndLeaveButton = new QPushButton{tr("Remember and Leave"), this};
 #ifdef __APPLE__
-    rememberAndLeaveButton->setToolTip("⌘L");
+    rememberAndLeaveButton->setToolTip("⌘D");  // like DONE (⌘L used for link completion in N editor)
 #else
     rememberAndLeaveButton->setToolTip("Alt+Left");
 #endif

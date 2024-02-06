@@ -42,7 +42,7 @@ NoteEditView::NoteEditView(QWidget* parent)
     // signals
 #ifdef __APPLE__
     new QShortcut(
-        QKeySequence(Qt::CTRL+Qt::Key_L),
+        QKeySequence(Qt::CTRL+Qt::Key_D),
         this, SLOT(slotSaveAndCloseEditor()));
 #else
     // TODO leak?
