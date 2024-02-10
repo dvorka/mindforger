@@ -61,21 +61,21 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                     // IMPROVE consider <html> prefix, <br/> separator and colors/bold
                     "<html>"
                     "Use the following commands:"
-                    "<br>"
+                    "<pre>"
                     "<br>? ... help"
-                    "<br>/ ... search"
+                    "<br>/ ... find"
                     "<br>@ ... knowledge recherche"
                     "<br>> ... run a command"
                     //"<br>: ... chat with workspace, Notebook or Note"
                     "<br>&nbsp;&nbsp;... or full-text search phrase"
-                    "<br>"
+                    "</pre>"
                     "<br>Examples:"
-                    "<br>"
-                    "<br>/ find notebook by tag TODO"
-                    "<br>@ arxiv LLM"
-                    "<br>> emojis"
+                    "<pre>"
+                    "<br>/notebook by tag TODO"
+                    "<br>@arxiv LLM"
+                    "<br>>emojis"
                     //"<br>: explain in simple terms SELECTED"
-                    "<br>"
+                    "</pre>"
                 )
             );
             view->setCommand("");
@@ -183,20 +183,35 @@ void CliAndBreadcrumbsPresenter::executeCommand()
             // mainPresenter->getStatusBar()->showInfo(tr("Notebook ")+QString::fromStdString(outlines->front()->getName()));
             // mainPresenter->getStatusBar()->showInfo(tr("Notebook not found: ") += QString(name.c_str()));
             return;
-        } else if(command.startsWith(CliAndBreadcrumbsView::CMD_KNOW_WIKIPEDIA)) {
-            string name = command.toStdString().substr(
-                CliAndBreadcrumbsView::CMD_KNOW_WIKIPEDIA.size());
-            MF_DEBUG("  executing: knowledge recherche of '" << name << "' @ wikipedia" << endl);
-            if(name.size()) {
-                QString phrase=QString::fromStdString(name);
-                // TODO choose tool
-                mainPresenter->doActionOpenRunToolDialog(phrase);
-            } else {
-                mainPresenter->getStatusBar()->showInfo(tr("Please specify a search phrase - it cannot be empty"));
+        } else 
+        // knowledge lookup in the CLI:
+        // - @wikipedia     ... opens tool dialog with Wikipedi SELECTED in the dropdown
+        // - @wikipedia llm ... opens directly https://wikipedia.org
+        if(command.startsWith(CliAndBreadcrumbsView::CHAR_KNOW)) {
+            for(auto c:CliAndBreadcrumbsView::HELP_KNOW_CMDS) {
+                QString toolName = command.mid(1, c.size()-1);
+                if(command.startsWith(c)) {
+                    QString phrase = command.mid(1, c.size());
+                    MF_DEBUG(
+                        "  executing: knowledge recherche of '" 
+                        << phrase.toStdString() 
+                        << "' using command '"
+                        << c.toStdString() << "' and tool '"
+                        << toolName.toStdString() << "'" << endl);
+                    if(phrase.size() > 1 && phrase.startsWith(" ")) {
+                        phrase = phrase.mid(1);
+                        mainPresenter->doActionOpenRunToolDialog(phrase, toolName, false);
+                        mainPresenter->handleRunTool();
+                    } else {
+                        // search phrase is empty
+                        mainPresenter->doActionOpenRunToolDialog(phrase, toolName);
+                    }
+                    return;
+                }
             }
-            return;
+            // ELSE: unknown @unknown knowledge recherche tool do FTS as fallback
+            mainPresenter->getStatusBar()->showInfo(tr("Unknown knowledge recherche source - use valid source like @wikipedia"));
         } else {
-            // do FTS as fallback
             mainPresenter->doFts(view->getCommand(), true);
         }
     } else {

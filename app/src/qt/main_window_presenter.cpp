@@ -1796,10 +1796,14 @@ void MainWindowPresenter::doActionEditPasteImageData(QImage image)
     injectImageLinkToEditor(path, QString{"image"});
 }
 
-void MainWindowPresenter::doActionOpenRunToolDialog(QString& phrase)
-{
+void MainWindowPresenter::doActionOpenRunToolDialog(
+    QString& phrase,
+    QString& toolName,
+    bool openDialog
+) {
     MF_DEBUG("SIGNAL handled: open run tool dialog...");
     this->runToolDialog->setPhraseText(phrase);
+    this->runToolDialog->setSelectedTool(toolName);
     QString templateText = this->runToolDialog->getTemplateTextForToolName(
         this->runToolDialog->getSelectedTool().toStdString());
     if(templateText.length() == 0) {
@@ -1807,7 +1811,9 @@ void MainWindowPresenter::doActionOpenRunToolDialog(QString& phrase)
     }
     this->runToolDialog->setTemplateText(templateText);
 
-    this->runToolDialog->show();
+    if(openDialog) {
+        this->runToolDialog->show();
+    }
 }
 
 void MainWindowPresenter::handleRunTool()
@@ -3101,7 +3107,6 @@ void MainWindowPresenter::selectNoteInOutlineTree(Note* note, Outline::Patch& pa
 {
     QModelIndex idx;
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
-        QModelIndex idx;
         if(onUp) {
             idx = orloj->getOutlinesMap()->getModel()->index(patch.start, 0);
         } else {
@@ -3110,7 +3115,6 @@ void MainWindowPresenter::selectNoteInOutlineTree(Note* note, Outline::Patch& pa
 
         orloj->getOutlinesMap()->getView()->setCurrentIndex(idx);
     } else {
-        QModelIndex idx;
         if(onUp) {
             idx = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(patch.start, 0);
         } else {

@@ -159,7 +159,9 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     appearanceLayout->addWidget(appFontSizeSpin);
     appearanceLayout->addWidget(menuLabel);
     appearanceLayout->addWidget(nerdMenuCheck);
-    QGroupBox* appearanceGroup = new QGroupBox{tr("Appearance"), this};
+    QGroupBox* appearanceGroup = new QGroupBox{
+        tr("Appearance (<font color='#ff0000'>requires restart</font>)"),
+        this};
     appearanceGroup->setLayout(appearanceLayout);
 
     QVBoxLayout* controlsLayout = new QVBoxLayout{this};

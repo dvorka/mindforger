@@ -152,12 +152,13 @@ const QString CliAndBreadcrumbsView::CMD_KNOW_DUCK
     = "@duckduckgo";
 const QString CliAndBreadcrumbsView::CMD_KNOW_GITHUB
     = "@github";
-const QString CliAndBreadcrumbsView::CMD_KNOW_BARD
-    = "@bard";
 
 const QStringList CliAndBreadcrumbsView::HELP_KNOW_CMDS = QStringList()
-//    << CMD_KNOW_WIKIPEDIA
-//    << CMD_KNOW_ARXIV
+    << CMD_KNOW_WIKIPEDIA
+    << CMD_KNOW_ARXIV
+    << CMD_KNOW_STACK_OVERFLOW
+    << CMD_KNOW_DUCK
+    << CMD_KNOW_GITHUB
     ;
 
 const QString CliAndBreadcrumbsView::CHAR_CMD

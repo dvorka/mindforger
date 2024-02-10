@@ -1,7 +1,7 @@
 2024-02-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.0.0 - a major release that removes unused features
-      and brings several new features like Wingman
+      and brings several new features like Wingman.
     * Feature: Wingman brings OpenAI chat GPT integration allowing to
       compose, rewrite, summarize, do NER, fix, or chat with remarks.
     * Feature: Notebook Tree view brings ability to organize Notebooks to
@@ -30,6 +30,8 @@
       the list of Organizers.
     * Fix: Conflicting menu keyboard shortcuts resolution (e.g. Organizers view).
     * Fix: Edit and Format menus re-enabled on single Markdown file configuration.
+    * Upgrade: new version(s) of Qt with enhanced security support
+      added - Qt 5.15.2 LTS is supported on macOS and Windows.
     * Deprecation: dashboard view removed.
     * Deprecation: experimental Mitie (NER) code removed (replaced by LLM integration).
 

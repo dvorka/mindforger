@@ -61,6 +61,12 @@ public:
             this->toolCombo->currentIndex()
         );
     }
+    void setSelectedTool(QString toolName) {
+        int index = this->toolCombo->findText(toolName);
+        if(index != -1) {
+            this->toolCombo->setCurrentIndex(index);
+        }
+    }
     QString getTemplateText() const {
         return this->templateEdit->text();
     }

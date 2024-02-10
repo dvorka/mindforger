@@ -89,7 +89,7 @@ RunToolDialog::RunToolDialog(QWidget* parent)
     );
 
     // dialog
-    setWindowTitle(tr("Get Knowledge"));
+    setWindowTitle(tr("Retrieve Knowledge"));
     resize(fontMetrics().averageCharWidth()*55, height());
     setModal(true);
 }
