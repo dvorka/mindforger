@@ -29,6 +29,8 @@ using namespace m8r::filesystem;
 
 namespace m8r {
 
+const string KnowledgeTool::TOOL_PHRASE = string{"<<PHRASE>>"};
+
 // non-primitive constants initializations
 const string Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH = string{FILE_PATH_M8R_REPOSITORY};
 const string Configuration::DEFAULT_STARTUP_VIEW_NAME = string{DEFAULT_STARTUP_VIEW};

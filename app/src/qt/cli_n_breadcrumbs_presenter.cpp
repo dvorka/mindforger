@@ -71,9 +71,9 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
                     "</pre>"
                     "<br>Examples:"
                     "<pre>"
-                    "<br>/notebook by tag TODO"
+                    "<br>/ find notebook by tag TODO"
                     "<br>@arxiv LLM"
-                    "<br>>emojis"
+                    "<br>> emojis"
                     //"<br>: explain in simple terms SELECTED"
                     "</pre>"
                 )
@@ -91,7 +91,7 @@ void CliAndBreadcrumbsPresenter::handleCliTextChanged(const QString& text)
         } else if(command.startsWith(CliAndBreadcrumbsView::CHAR_KNOW)) {
             MF_DEBUG("    @ HELP knowledge" << endl);
             if(command.size()<=2) {
-                view->updateCompleterModel(CliAndBreadcrumbsView::HELP_KNOW_CMDS);
+                view->updateCompleterModel(view->HELP_KNOW_CMDS);
             }
             return;
         } else if(command.startsWith(CliAndBreadcrumbsView::CHAR_CMD)) {
@@ -183,28 +183,27 @@ void CliAndBreadcrumbsPresenter::executeCommand()
             // mainPresenter->getStatusBar()->showInfo(tr("Notebook ")+QString::fromStdString(outlines->front()->getName()));
             // mainPresenter->getStatusBar()->showInfo(tr("Notebook not found: ") += QString(name.c_str()));
             return;
-        } else 
+        } else
         // knowledge lookup in the CLI:
         // - @wikipedia     ... opens tool dialog with Wikipedi SELECTED in the dropdown
         // - @wikipedia llm ... opens directly https://wikipedia.org
         if(command.startsWith(CliAndBreadcrumbsView::CHAR_KNOW)) {
-            for(auto c:CliAndBreadcrumbsView::HELP_KNOW_CMDS) {
-                QString toolName = command.mid(1, c.size()-1);
+            for(auto c:view->HELP_KNOW_CMDS) {
+                QString toolId = command.mid(1, c.size()-1);
                 if(command.startsWith(c)) {
-                    QString phrase = command.mid(1, c.size());
+                    QString phrase = command.mid(1 + c.size());
                     MF_DEBUG(
-                        "  executing: knowledge recherche of '" 
-                        << phrase.toStdString() 
+                        "  executing: knowledge recherche of phrase '"
+                        << phrase.toStdString()
                         << "' using command '"
                         << c.toStdString() << "' and tool '"
-                        << toolName.toStdString() << "'" << endl);
-                    if(phrase.size() > 1 && phrase.startsWith(" ")) {
-                        phrase = phrase.mid(1);
-                        mainPresenter->doActionOpenRunToolDialog(phrase, toolName, false);
+                        << toolId.toStdString() << "'" << endl);
+                    if(phrase.size() > 1) {
+                        mainPresenter->doActionOpenRunToolDialog(phrase, toolId, false);
                         mainPresenter->handleRunTool();
                     } else {
                         // search phrase is empty
-                        mainPresenter->doActionOpenRunToolDialog(phrase, toolName);
+                        mainPresenter->doActionOpenRunToolDialog(phrase, toolId);
                     }
                     return;
                 }

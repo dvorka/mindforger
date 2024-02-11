@@ -141,26 +141,6 @@ const QStringList CliAndBreadcrumbsView::HELP_FIND_CMDS = QStringList()
 const QString CliAndBreadcrumbsView::CHAR_KNOW
     = "@";
 
-// knowledge recherche uses current context / selected entity to lookup the knowledge
-const QString CliAndBreadcrumbsView::CMD_KNOW_WIKIPEDIA
-    = "@wikipedia";
-const QString CliAndBreadcrumbsView::CMD_KNOW_ARXIV
-    = "@arxiv";
-const QString CliAndBreadcrumbsView::CMD_KNOW_STACK_OVERFLOW
-    = "@stackoverflow";
-const QString CliAndBreadcrumbsView::CMD_KNOW_DUCK
-    = "@duckduckgo";
-const QString CliAndBreadcrumbsView::CMD_KNOW_GITHUB
-    = "@github";
-
-const QStringList CliAndBreadcrumbsView::HELP_KNOW_CMDS = QStringList()
-    << CMD_KNOW_WIKIPEDIA
-    << CMD_KNOW_ARXIV
-    << CMD_KNOW_STACK_OVERFLOW
-    << CMD_KNOW_DUCK
-    << CMD_KNOW_GITHUB
-    ;
-
 const QString CliAndBreadcrumbsView::CHAR_CMD
     = ">";
 
@@ -220,6 +200,11 @@ CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent, bool zenMode)
     : QWidget(parent),
       zenMode{zenMode}
 {
+    HELP_KNOW_CMDS = QStringList();
+    for(const auto& toolName:KnowledgeTool::getToolIds()) {
+        HELP_KNOW_CMDS << (CHAR_KNOW + QString::fromStdString(toolName));
+    }
+
     setFixedHeight(this->fontMetrics().height()*1.5);
 
     QHBoxLayout* layout = new QHBoxLayout(this);

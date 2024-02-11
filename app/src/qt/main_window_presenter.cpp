@@ -1798,15 +1798,27 @@ void MainWindowPresenter::doActionEditPasteImageData(QImage image)
 
 void MainWindowPresenter::doActionOpenRunToolDialog(
     QString& phrase,
-    QString& toolName,
+    QString& toolId,
     bool openDialog
 ) {
-    MF_DEBUG("SIGNAL handled: open run tool dialog...");
+    MF_DEBUG("SIGNAL handled: open run tool dialog..." << endl);
     this->runToolDialog->setPhraseText(phrase);
-    this->runToolDialog->setSelectedTool(toolName);
-    QString templateText = this->runToolDialog->getTemplateTextForToolName(
-        this->runToolDialog->getSelectedTool().toStdString());
+    if(!this->runToolDialog->selectToolById(toolId.toStdString())) {
+        QMessageBox::critical(
+            &view,
+            tr("Run Knowledge Tool Error"),
+            tr("Unknown tool to run '%1'.").arg(toolId));
+        return;
+    }
+    QString templateText =
+        QString::fromStdString(
+            KnowledgeTool::getUrlTemplateForToolId(
+                this->runToolDialog->getSelectedToolId()));
     if(templateText.length() == 0) {
+        QMessageBox::critical(
+            &view,
+            tr("Open Knowledge Tool Dialog Error"),
+            tr("Unable to construct URL to open for unknown tool '%1'.").arg(toolId));
         return;
     }
     this->runToolDialog->setTemplateText(templateText);
@@ -1840,7 +1852,7 @@ void MainWindowPresenter::handleRunTool()
 
     // phrase replace @ template > get command, if invalid, then fallback
     QString command = templateText.replace(
-        QString{TOOL_PHRASE}, phrase
+        QString::fromStdString(KnowledgeTool::TOOL_PHRASE), phrase
     );
 
     // RUN tool
@@ -1962,38 +1974,7 @@ void MainWindowPresenter::doActionOutlineNew()
     );
 }
 
-void MainWindowPresenter::doActionArxivToolbar()
-{
-    handleLeftToolbarAction(TOOL_ARXIV);
-}
-
-void MainWindowPresenter::doActionWikipediaToolbar()
-{
-    handleLeftToolbarAction(TOOL_WIKIPEDIA);
-}
-
-void MainWindowPresenter::doActionStackOverflowToolbar()
-{
-    handleLeftToolbarAction(TOOL_STACK_OVERFLOW);
-}
-
-void MainWindowPresenter::doActionDuckDuckGoToolbar()
-{
-    handleLeftToolbarAction(TOOL_DUCKDUCKGO);
-}
-
-void MainWindowPresenter::doActionGitHubToolbar()
-{
-    handleLeftToolbarAction(TOOL_GH_REPOS);
-}
-
-void MainWindowPresenter::doActionBardToolbar()
-{
-    handleLeftToolbarAction(TOOL_GOOGLE_BARD);
-}
-
-// TODO remove when code reused by Wingman and @ CLI
-void MainWindowPresenter::handleLeftToolbarAction(string selectedTool)
+void MainWindowPresenter::handleKnowledgeToolAction(string selectedTool)
 {
     // get PHRASE from the active context:
     // - N editor: get word under cursor OR selected text
@@ -2042,17 +2023,29 @@ void MainWindowPresenter::handleLeftToolbarAction(string selectedTool)
     }
 
     // use phrase to RUN the tool
-    QString templateText
-        = this->runToolDialog->getTemplateTextForToolName(selectedTool);
+    string templateText
+        = KnowledgeTool::getUrlTemplateForToolId(selectedTool);
     MF_DEBUG(
         "Run tool: "
-        << phrase.toStdString() << " -> "
-        << templateText.toStdString() << " -> "
-        << selectedTool << endl
+        << selectedTool << " + "
+        << phrase.toStdString() << " + "
+        << templateText << endl
     );
 
+    if(templateText.empty()) {
+        QMessageBox::critical(
+            &view,
+            tr("Run Knowledge Tool Error"),
+            tr("Unable to construct URL to open for unknown tool '%1'.").arg(
+                QString::fromStdString(selectedTool))
+        );
+        return;
+    }
+
     // phrase replace @ template > get command, if invalid, then fallback
-    QString command = templateText.replace(QString{TOOL_PHRASE}, phrase);
+    QString command = QString::fromStdString(templateText).replace(
+        QString::fromStdString(KnowledgeTool::TOOL_PHRASE),
+        phrase);
     MF_DEBUG("Run tool: command '" << command.toStdString() << "'" << endl);
     QDesktopServices::openUrl(QUrl{command});
 }
@@ -2846,7 +2839,7 @@ void MainWindowPresenter::doActionNoteExternalEdit()
                     "Error: unable to run external editor as C++ command processor "
                     "is not available"
                 };
-                MF_DEBUG(errorMessage);
+                MF_DEBUG(errorMessage << endl);
                 statusBar->showError(errorMessage);
                 QMessageBox::critical(
                     &view,
@@ -3000,7 +2993,7 @@ void MainWindowPresenter::doActionNoteForget()
 
 void MainWindowPresenter::doActionNoteExtract()
 {
-    // TODO distinquish HEADER and NOTE - different places from where to get text
+    // TODO distinguish HEADER and NOTE - different places from where to get text
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)
          ||
        orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
@@ -3640,11 +3633,11 @@ void MainWindowPresenter::handleCreateOrganizer()
 
     Organizer* o{nullptr};
     if(newOrganizerDialog->getOrganizerToEdit()) {
-        MF_DEBUG("Updating organizer...");
+        MF_DEBUG("Updating organizer..." << endl);
         o = newOrganizerDialog->getOrganizerToEdit();
         o->setName(newOrganizerDialog->getOrganizerName().toStdString());
     } else {
-        MF_DEBUG("Creating organizer...");
+        MF_DEBUG("Creating organizer..." << endl);
         if(Organizer::OrganizerType::EISENHOWER_MATRIX == newOrganizerDialog->getOrganizerType()) {
             o = new EisenhowerMatrix(
                 newOrganizerDialog->getOrganizerName().toStdString()

@@ -23,6 +23,7 @@
 
 #include "look_n_feel.h"
 #include "cli_n_breadcrumbs_presenter.h"
+#include "../../lib/src/config/configuration.h"
 
 namespace m8r {
 
@@ -103,14 +104,7 @@ public:
 
     static const QString CHAR_KNOW;
 
-    static const QString CMD_KNOW_WIKIPEDIA;
-    static const QString CMD_KNOW_ARXIV;
-    static const QString CMD_KNOW_STACK_OVERFLOW;
-    static const QString CMD_KNOW_DUCK;
-    static const QString CMD_KNOW_GITHUB;
-    static const QString CMD_KNOW_BARD;
-
-    static const QStringList HELP_KNOW_CMDS;
+    QStringList HELP_KNOW_CMDS;
 
     // command
 
