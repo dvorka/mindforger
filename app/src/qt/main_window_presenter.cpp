@@ -182,11 +182,6 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         this, SLOT(doActionEditPasteImageData(QImage))
     );
     QObject::connect(
-        new QShortcut(QKeySequence("Alt+1"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionRunToolDialogAnywhere())
-    );
-    // wire TOP toolbar signals
-    QObject::connect(
         view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()),
         this, SLOT(doActionOutlineOrNoteNew())
     );

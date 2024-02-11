@@ -37,6 +37,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         view->actionMindWingman, SIGNAL(triggered()),
         mwp, SLOT(handleActionWingman()));
     QObject::connect(
+        view->actionMindTool, SIGNAL(triggered()),
+        mwp, SLOT(doActionRunToolDialogAnywhere()));
+    QObject::connect(
         view->actionMindThink, SIGNAL(triggered()),
         mwp, SLOT(doActionMindToggleThink()));
     QObject::connect(

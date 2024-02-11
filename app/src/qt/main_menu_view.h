@@ -78,6 +78,7 @@ public:
     QAction* actionMindThink;
     QAction* actionMindAutolink;
     QAction* actionMindWingman;
+    QAction* actionMindTool;
     QAction* actionMindScope;
     QAction* actionMindForget;
     QAction* actionMindSnapshot;
