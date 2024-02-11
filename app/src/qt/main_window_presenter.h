@@ -362,13 +362,12 @@ public slots:
     void doActionEditFindAgain();
     void doActionEditWordWrapToggle();
     void doActionEditPasteImageData(QImage image);
+    void doActionRunToolDialogAnywhere();
     void doActionOpenRunToolDialog(QString& phrase, QString& toolId, bool showDialog=true);
     void handleRunTool();
     void doActionToggleLiveNotePreview();
     void doActionNameDescFocusSwap();
     void doActionSpellCheck();
-    // actions
-    void handleKnowledgeToolAction(std::string selectedTool);
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();

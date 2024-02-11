@@ -11,9 +11,9 @@
       of the library (directory with files) is supported as well.
     * Feature: Emojis dialog allowing to use Unicode-based emojis
       in Notebooks and Notes names or text.
-    * Hidden feature: New left side toolbar which runs various tools
-      (like Wikipedia, arXiv, StackOverflow, ...) on phrase which is the current
-      context (Notebook or Note name, selected text or text under the cursor, ...)
+    * Feature: CLI can newly search knowledge on the internet sites - like
+      Wikipedia, arXiv, or StackOverflow - on phrase which is the current
+      context (Notebook or Note name; selected text or text under the cursor)
       in order to get more information about the phrase.
     * Enhancement: CLI to Wingman rewrite: help, search, knowledge recherche and
       commands.

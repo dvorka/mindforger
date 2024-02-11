@@ -41,7 +41,7 @@ RunToolDialog::RunToolDialog(QWidget* parent)
     templateEdit = new QLineEdit{parent};
 
     // IMPROVE disable/enable find button if text/path is valid: freedom vs validation
-    runButton = new QPushButton{tr("&Get")};
+    runButton = new QPushButton{tr("&Lookup")};
     runButton->setDefault(true);
     closeButton = new QPushButton{tr("&Cancel")};
 
@@ -75,7 +75,7 @@ RunToolDialog::RunToolDialog(QWidget* parent)
     );
 
     // dialog
-    setWindowTitle(tr("Retrieve Knowledge"));
+    setWindowTitle(tr("Lookup Knowledge"));
     resize(fontMetrics().averageCharWidth()*55, height());
     setModal(true);
 }

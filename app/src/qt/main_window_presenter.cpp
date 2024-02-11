@@ -181,57 +181,10 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SIGNAL(signalPasteImageData(QImage)),
         this, SLOT(doActionEditPasteImageData(QImage))
     );
-    // wire LEFT toolbar signals
-    /*
     QObject::connect(
         new QShortcut(QKeySequence("Alt+1"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionArxivToolbar())
+        this, SLOT(doActionRunToolDialogAnywhere())
     );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarArxiv, SIGNAL(triggered()),
-        this, SLOT(doActionArxivToolbar())
-    );
-    QObject::connect(
-        new QShortcut(QKeySequence("Alt+2"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionWikipediaToolbar())
-    );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarWikipedia, SIGNAL(triggered()),
-        this, SLOT(doActionWikipediaToolbar())
-    );
-    QObject::connect(
-        new QShortcut(QKeySequence("Alt+3"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionStackOverflowToolbar())
-    );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarStackOverflow, SIGNAL(triggered()),
-        this, SLOT(doActionStackOverflowToolbar())
-    );
-    QObject::connect(
-        new QShortcut(QKeySequence("Alt+5"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionDuckDuckGoToolbar())
-    );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarDuckDuckGo, SIGNAL(triggered()),
-        this, SLOT(doActionDuckDuckGoToolbar())
-    );
-    QObject::connect(
-        new QShortcut(QKeySequence("Alt+6"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionGitHubToolbar())
-    );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarGitHub, SIGNAL(triggered()),
-        this, SLOT(doActionGitHubToolbar())
-    );
-    QObject::connect(
-        new QShortcut(QKeySequence("Alt+7"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionBardToolbar())
-    );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarBard, SIGNAL(triggered()),
-        this, SLOT(doActionBardToolbar())
-    );
-    */
     // wire TOP toolbar signals
     QObject::connect(
         view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()),
@@ -1796,13 +1749,55 @@ void MainWindowPresenter::doActionEditPasteImageData(QImage image)
     injectImageLinkToEditor(path, QString{"image"});
 }
 
+void MainWindowPresenter::doActionRunToolDialogAnywhere()
+{
+    QString phrase{};
+    QString toolId{KnowledgeTool::WIKIPEDIA};
+
+    doActionOpenRunToolDialog(phrase, toolId, true);
+}
+
 void MainWindowPresenter::doActionOpenRunToolDialog(
     QString& phrase,
     QString& toolId,
     bool openDialog
 ) {
     MF_DEBUG("SIGNAL handled: open run tool dialog..." << endl);
+
+    // if phrase is empty, then use active context
+    if(phrase.isEmpty()) {
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            phrase = orloj->getNoteEdit()->getView()->getNoteEditor()->getToolPhrase();
+        } else if(
+            orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+            || orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+        ) {
+            Outline* o = orloj->getOutlineView()->getCurrentOutline();
+            if(o) {
+                phrase = QString::fromStdString(o->getName());
+            }
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
+            Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+            if(note) {
+                phrase = QString::fromStdString(note->getName());
+            }
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            phrase = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getToolPhrase();
+        }
+        else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_LIST_OUTLINES)) {
+            int row = orloj->getOutlinesTable()->getCurrentRow();
+            if(row != OutlinesTablePresenter::NO_ROW) {
+                QStandardItem* item
+                    = orloj->getOutlinesTable()->getModel()->item(row);
+                if(item) {
+                    Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
+                    phrase = QString::fromStdString(outline->getName());
+                }
+            }
+        }
+    }
     this->runToolDialog->setPhraseText(phrase);
+
     if(!this->runToolDialog->selectToolById(toolId.toStdString())) {
         QMessageBox::critical(
             &view,
@@ -1972,82 +1967,6 @@ void MainWindowPresenter::doActionOutlineNew()
         mind->remind().getStencils(ResourceType::OUTLINE),
         Configuration::getInstance().getActiveRepository()->getType()
     );
-}
-
-void MainWindowPresenter::handleKnowledgeToolAction(string selectedTool)
-{
-    // get PHRASE from the active context:
-    // - N editor: get word under cursor OR selected text
-    // - N tree: get N name
-    // - O tree: get O name
-    // - ...
-    QString phrase;
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-        phrase = orloj->getNoteEdit()->getView()->getNoteEditor()->getToolPhrase();
-    } else if(
-        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
-        || orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
-    ) {
-        Outline* o = orloj->getOutlineView()->getCurrentOutline();
-        if(o) {
-              phrase = QString::fromStdString(o->getName());
-        }
-    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
-        Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
-        if(note) {
-            phrase = QString::fromStdString(note->getName());
-        }
-    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-        phrase = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getToolPhrase();
-    }
-    else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_LIST_OUTLINES)) {
-        int row = orloj->getOutlinesTable()->getCurrentRow();
-        if(row != OutlinesTablePresenter::NO_ROW) {
-            QStandardItem* item
-                = orloj->getOutlinesTable()->getModel()->item(row);
-            if(item) {
-                Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
-                phrase = QString::fromStdString(outline->getName());
-            }
-        }
-    }
-
-    if(phrase.length() == 0) {
-        QMessageBox msgBox{
-            QMessageBox::Critical,
-            QObject::tr("Empty Phrase"),
-            QObject::tr("Phrase to search/explain/process is empty.")
-        };
-        msgBox.exec();
-        return;
-    }
-
-    // use phrase to RUN the tool
-    string templateText
-        = KnowledgeTool::getUrlTemplateForToolId(selectedTool);
-    MF_DEBUG(
-        "Run tool: "
-        << selectedTool << " + "
-        << phrase.toStdString() << " + "
-        << templateText << endl
-    );
-
-    if(templateText.empty()) {
-        QMessageBox::critical(
-            &view,
-            tr("Run Knowledge Tool Error"),
-            tr("Unable to construct URL to open for unknown tool '%1'.").arg(
-                QString::fromStdString(selectedTool))
-        );
-        return;
-    }
-
-    // phrase replace @ template > get command, if invalid, then fallback
-    QString command = QString::fromStdString(templateText).replace(
-        QString::fromStdString(KnowledgeTool::TOOL_PHRASE),
-        phrase);
-    MF_DEBUG("Run tool: command '" << command.toStdString() << "'" << endl);
-    QDesktopServices::openUrl(QUrl{command});
 }
 
 bool MainWindowPresenter::checkWingmanAvailability()
