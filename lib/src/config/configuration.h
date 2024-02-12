@@ -371,9 +371,10 @@ private:
             - appWindow.llmProvider used to detect configuration change
             - on change: re-init Wingman DIALOG (refresh pre-defined prompts)
     */
-    WingmanLlmProviders wingmanProvider; // "OpenAI", "Google", "Mock"
-    std::string wingmanApiKey; // OpenAI/Bard/... API key loaded from the shell environment
-    std::string wingmanLlmModel; // gpt-3.5-turbo
+    WingmanLlmProviders wingmanProvider; // "none", "Mock", "OpenAI", ...
+    std::string wingmanApiKey; // API key of the currently configured Wingman LLM provider
+    std::string wingmanOpenAiApiKey; // OpenAI API specified by user in the config, env or UI
+    std::string wingmanLlmModel; // preferred LLM model the currently configured provider, like "gpt-3.5-turbo"
 
     TimeScope timeScope;
     std::string timeScopeAsString;
@@ -568,13 +569,18 @@ private:
      */
     bool initWingman();
 public:
+    std::string getWingmanOpenAiApiKey() const { return wingmanOpenAiApiKey; }
+    void setWingmanOpenAiApiKey(std::string apiKey) { wingmanOpenAiApiKey = apiKey; }
+    /**
+     * @brief Get API key of the currently configured Wingman LLM provider.
+     */
     std::string getWingmanApiKey() const { return wingmanApiKey; }
     /**
-     * @brief Get preferred Wingman's LLM provider model name.
+     * @brief Get preferred Wingman LLM provider model name.
      */
     std::string getWingmanLlmModel() const { return wingmanLlmModel; }
     /**
-     * @brief Check whether Wingman's LLM provider is ready from
+     * @brief Check whether a Wingman LLM provider is ready from
      * the configuration perspective.
      */
     bool isWingman();

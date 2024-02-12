@@ -52,6 +52,7 @@ Configuration::Configuration()
       autolinkingCaseInsensitive{},
       wingmanProvider{DEFAULT_WINGMAN_LLM_PROVIDER},
       wingmanApiKey{},
+      wingmanOpenAiApiKey{},
       wingmanLlmModel{DEFAULT_WINGMAN_LLM_MODEL_OPENAI},
       md2HtmlOptions{},
       distributorSleepInterval{DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL},
@@ -150,6 +151,7 @@ void Configuration::clear()
     autolinkingCaseInsensitive = DEFAULT_AUTOLINKING_CASE_INSENSITIVE;
     wingmanProvider = DEFAULT_WINGMAN_LLM_PROVIDER;
     wingmanApiKey.clear();
+    wingmanOpenAiApiKey.clear();
     wingmanLlmModel.clear();
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
     tagsScope.clear();
@@ -391,7 +393,14 @@ const char* Configuration::getEditorFromEnv()
 
 bool Configuration::canWingmanOpenAi()
 {
-    return std::getenv(ENV_VAR_OPENAI_API_KEY) != nullptr?true:false;
+    if (
+        this->wingmanOpenAiApiKey.size() > 0
+        || std::getenv(ENV_VAR_OPENAI_API_KEY) != nullptr
+    ) {
+        return true;
+    }
+
+    return false;
 }
 
 void Configuration::setWingmanLlmProvider(WingmanLlmProviders provider)
@@ -429,18 +438,22 @@ bool Configuration::initWingmanOpenAi() {
     if(canWingmanOpenAi()) {
         MF_DEBUG(
             "    Wingman OpenAI API key found in the shell environment variable "
-            "MINDFORGER_OPENAI_API_KEY" << endl);
-        const char* apiKeyEnv = std::getenv(ENV_VAR_OPENAI_API_KEY);
-        MF_DEBUG("    Wingman API key loaded from the env: " << apiKeyEnv << endl);
-        wingmanApiKey = apiKeyEnv;
+            "MINDFORGER_OPENAI_API_KEY or set in MF config" << endl);
+        if(wingmanOpenAiApiKey.size() > 0) {
+            wingmanApiKey = wingmanOpenAiApiKey;
+        } else {
+            const char* apiKeyEnv = std::getenv(ENV_VAR_OPENAI_API_KEY);
+            MF_DEBUG("    Wingman API key loaded from the env: " << apiKeyEnv << endl);
+            wingmanApiKey = apiKeyEnv;
+        }
         wingmanLlmModel = DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
         wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI;
         return true;
     }
 
     MF_DEBUG(
-        "    Wingman OpenAI API key NOT found in the environment variable "
-        "MINDFORGER_OPENAI_API_KEY" << endl);
+        "    Wingman OpenAI API key NEITHER found in the environment variable "
+        "MINDFORGER_OPENAI_API_KEY, NOR set in MF configuration" << endl);
     wingmanApiKey.clear();
     wingmanLlmModel.clear();
     wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;

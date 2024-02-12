@@ -87,6 +87,8 @@ private:
     QComboBox* llmProvidersCombo;
 
     QLabel* llmHelpLabel;
+    QLineEdit* openAiApiKeyEdit;
+    QPushButton* clearOpenAiApiKeyButton;
 
 public:
     explicit WingmanTab(QWidget* parent);
@@ -98,6 +100,7 @@ public:
 
 private slots:
     void handleComboBoxChanged(int index);
+    void clearOpenAiApiKeySlot();
 };
 
 /**
