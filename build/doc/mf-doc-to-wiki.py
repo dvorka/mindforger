@@ -76,6 +76,7 @@ def md_to_wiki_file(md_file_path: str, wiki_file_path: str):
         wiki_out.writelines(data[1:] if not is_blacklisted else data)
     print("    CONVERT" if not is_blacklisted else "    COPY")
 
+FILE_PATCH_FOOTER = "_Footer.md"
 
 def doc_to_wiki(doc_mf_repo_path: str, wiki_repo_path: str):
     if not os.path.isdir(doc_mf_repo_path):
@@ -95,13 +96,33 @@ def doc_to_wiki(doc_mf_repo_path: str, wiki_repo_path: str):
     ) = gather_documentation_file_paths(doc_mf_repo_path)
 
     paths_to_copy: list = image_paths.copy()
+    paths_to_patch: list = []
 
     print(f"Converting {len(md_paths_to_convert)} files:")
     for md_path in md_paths_to_convert:
+        wiki_file_path = md_path.replace(doc_mf_repo_memory_path, wiki_repo_path)
+
+        # files to patch
+        if FILE_PATCH_FOOTER in wiki_file_path:
+            paths_to_patch.append(wiki_file_path)
+
         md_to_wiki_file(
             md_file_path=md_path,
-            wiki_file_path=md_path.replace(doc_mf_repo_memory_path, wiki_repo_path),
+            wiki_file_path=wiki_file_path,
         )
+
+    print(f"Patching {len(paths_to_patch)} files:")
+    for p in paths_to_patch:
+        print(f"  {p}")
+        if FILE_PATCH_FOOTER in p:
+            with open(p, "r") as file:
+                filedata = file.read()
+                filedata = filedata.replace(
+                    "master/CREDITS",
+                    "master/CREDITS.md",
+                )
+            with open(p, "w") as file:
+                file.write(filedata)
 
     print(f"Copying {len(paths_to_copy)} files:")
     for p in paths_to_copy:
