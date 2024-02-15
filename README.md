@@ -29,7 +29,7 @@ MindForger is human mind inspired personal knowledge management tool.
 MindForger is open, free, well performing Markdown editor / IDE which respects your privacy.
 
 ## Features
-MindForger [features overview](https://www.mindforger.com/#features): open, free, OpenAI GPT integrated, knowledge manager, Markdown editor (math, diagrams, images, table of contents generator), outliner, spell-check, Markdown IDE (multi-document workspace, section refactoring, cloning, scopes and stencils), organizer (Eisenhower matrix, Kanban), knowledge graph navigator, knowledge autolinking, think as you browse, think as you write, find by name/tag/text/regexp, find similar sections (associations), tagging, emojis, recent sections, external section editor, themes, internationalization, export (CSV with OHE for machine learning, HTML) and import (TWiki).
+MindForger **features overview**: [open](https://github.com/dvorka/mindforger?tab=GPL-2.0-1-ov-file#readme), [free](https://www.mindforger.com/#floss), [OpenAI GPT integrated](https://www.mindforger.com/#llm), knowledge manager, Markdown editor (math, diagrams, images, table of contents generator), [outliner](https://www.youtube.com/watch?v=LUqavHfKhnc&list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&index=4), spell-check, [Markdown IDE](https://www.mindforger.com/#features) (multi-document workspace, section refactoring, cloning, scopes and stencils), [organizer](https://www.youtube.com/watch?v=Tje2mso7jNY&list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&index=11) (Eisenhower matrix, Kanban), [knowledge graph navigator](https://www.youtube.com/watch?v=ZbQmZ1fKpxI&list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&index=14), knowledge autolinking, think as you browse, think as you write, find by name/tag/text/regexp, find similar sections (associations), tagging, emojis, checklists, recent sections, [external section editor](https://www.youtube.com/watch?v=SLuvfDRyUrM&list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&index=12), themes, internationalization, export (CSV with OHE for machine learning, HTML) and import (TWiki).
 
 ## Installation
 Install:
@@ -75,17 +75,24 @@ Check also [packages](https://pkgs.org/search/?q=mindforger) for Linux and Unix.
 ## Documentation
 Read:
 
-* [Why MindForger?](https://github.com/dvorka/mindforger/wiki/Getting-started#why-mindforger)
+* [Getting started](https://github.com/dvorka/mindforger/wiki/Getting-started)
 * [Installation](https://github.com/dvorka/mindforger/wiki/Installation)
 * [User documentation](https://github.com/dvorka/mindforger/wiki/User-documentation)
 * [Developer documentation](https://github.com/dvorka/mindforger/wiki/Developer-documentation)
 * [Project history](https://github.com/dvorka/mindforger/wiki/History)
 * [FAQs](https://github.com/dvorka/mindforger/wiki/FAQs)
 
-Check `man mindforger`
+Watch:
+
+* [YouTube tutorials](https://www.youtube.com/playlist?list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS)
+
+Check:
+
+* `man mindforger`
+
 
 ## In the News
-Read about MindForger on [FOSSMint](https://www.fossmint.com/mindforger-notebook-and-markdown-ide/), [Fedora Magazine](https://fedoramagazine.org/4-try-copr-december-2018/), [UbuntuPIT](https://www.ubuntupit.com/mindforger-a-privacy-focused-thinking-notebook-and-markdown-ide-for-linux/), [AppImageHub](https://www.appimagehub.com/p/1257573/), [AwesomeOpenSource](https://awesomeopensource.com/project/dvorka/mindforger), [root.cz](https://www.root.cz/clanky/softwarova-sklizen-19-9-2018/) and [MOONGIFT.jp](https://www.moongift.jp/2018/12/mindforger-markdown%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9/).
+Read about MindForger on [FOSSMint](https://www.fossmint.com/mindforger-notebook-and-markdown-ide/), [Fedora Magazine](https://fedoramagazine.org/4-try-copr-december-2018/), [UbuntuPIT](https://www.ubuntupit.com/mindforger-a-privacy-focused-thinking-notebook-and-markdown-ide-for-linux/), [AppImageHub](https://www.appimagehub.com/p/1257573/), [AwesomeOpenSource](https://awesomeopensource.com/project/dvorka/mindforger), [root.cz](https://www.root.cz/clanky/softwarova-sklizen-19-9-2018/) [(2024)](https://www.root.cz/clanky/softwarova-sklizen-7-2-2024-vytvarejte-commitovaci-zpravy-s-umelou-inteligenci/) and [MOONGIFT.jp](https://www.moongift.jp/2018/12/mindforger-markdown%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9/).
 
 ## Bugs and Feature Requests
 https://github.com/dvorka/mindforger/issues
