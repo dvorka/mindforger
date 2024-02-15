@@ -74,7 +74,7 @@ TEST(JSonTestCase, ParseOpenAiResponse)
     string answerGptModel{};
     int promptTokens{};
     int answerTokens{};
-    string answerHtml{};
+    string answerMarkdown{};
 
     MF_DEBUG(
         "OpenAiWingman::curlGet() parsed response:" << endl
@@ -106,13 +106,13 @@ TEST(JSonTestCase, ParseOpenAiResponse)
         if(choice.contains("message")
             && choice["message"].contains("content")
         ) {
-            choice["message"]["content"].get_to(answerHtml);
+            choice["message"]["content"].get_to(answerMarkdown);
             // TODO ask GPT for HTML formatted response
             m8r::replaceAll(
                 "\n",
                 "<br/>",
-                answerHtml);
-            MF_DEBUG("  answer (HTML): " << answerHtml << endl);
+                answerMarkdown);
+            MF_DEBUG("  answer (HTML): " << answerMarkdown << endl);
         }
         if(choice.contains("finish_reason")) {
             string statusStr{};
@@ -142,7 +142,7 @@ TEST(JSonTestCase, ParseOpenAiResponse)
         answerGptModel);
     EXPECT_EQ(
         "LLM answer:<br/>42",
-        answerHtml);
+        answerMarkdown);
     EXPECT_EQ(
         m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK,
         status);

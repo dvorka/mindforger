@@ -71,8 +71,8 @@ enum WingmanStatusCode {
 };
 
 /**
- * Wingman chat request command pattern must be used as asynchronous requests
- * cannot handle that many parameters.
+ * Wingman chat request command pattern must be used as asynchronous requests.
+ * As it annot handle that many parameters this structure is used.
  */
 struct CommandWingmanChat {
     std::string prompt;
@@ -82,7 +82,7 @@ struct CommandWingmanChat {
     std::string answerLlmModel;
     int promptTokens;
     int answerTokens;
-    std::string answerHtml;
+    std::string answerMarkdown;
 };
 
 

@@ -91,7 +91,10 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
         */
         nlohmann::json messageSystemJSon{};
         messageSystemJSon["role"] = "system"; // system (instruct GPT who it is), user (user prompts), assistant (GPT answers)
-        messageSystemJSon["content"] = "You are a helpful assistant.";
+        messageSystemJSon["content"] =
+            // "You are a helpful assistant that returns HTML-formatted answers to the user's prompts."
+            "You are a helpful assistant."
+            ;
         // ... more messages like above (with chat history) can be created to provide context
         nlohmann::json messageUserJSon{};
         messageUserJSon["role"] = "user";
@@ -218,7 +221,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
              "  '" << command.httpResponse << "'" << endl;
 
             command.httpResponse.clear();
-            command.answerHtml.clear();
+            command.answerMarkdown.clear();
             command.answerTokens = 0;
             command.answerLlmModel = llmModel;
 
@@ -266,7 +269,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
 
             command.status = WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
             command.errorMessage = "Error: unable to parse OpenAI JSon response: '" + command.httpResponse + "'";
-            command.answerHtml.clear();
+            command.answerMarkdown.clear();
             command.answerTokens = 0;
             command.answerLlmModel = llmModel;
 
@@ -303,13 +306,13 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             if(choice.contains("message")
                 && choice["message"].contains("content")
             ) {
-                choice["message"]["content"].get_to(command.answerHtml);
+                choice["message"]["content"].get_to(command.answerMarkdown);
                 // TODO ask GPT for HTML formatted response
                 m8r::replaceAll(
                     "\n",
                     "<br/>",
-                    command.answerHtml);
-                MF_DEBUG("  answer (HTML): " << command.answerHtml << endl);
+                    command.answerMarkdown);
+                MF_DEBUG("  answer (HTML): " << command.answerMarkdown << endl);
             }
             if(choice.contains("finish_reason")) {
                 string statusStr{};
@@ -321,7 +324,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
                     command.errorMessage.assign(
                         "OpenAI API HTTP required failed with finish_reason: "
                         + statusStr);
-                    command.answerHtml.clear();
+                    command.answerMarkdown.clear();
                     command.answerTokens = 0;
                     command.answerLlmModel = llmModel;
                 }
@@ -329,7 +332,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             }
         } else {
             command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
-            command.answerHtml.clear();
+            command.answerMarkdown.clear();
             command.answerTokens = 0;
             command.answerLlmModel = llmModel;
             if(
@@ -357,7 +360,7 @@ void OpenAiWingman::chat(CommandWingmanChat& command) {
 
     curlGet(command);
 
-    MF_DEBUG("OpenAiWingman::chat() answer:" << endl << command.answerHtml << endl);
+    MF_DEBUG("OpenAiWingman::chat() answer:" << endl << command.answerMarkdown << endl);
 }
 
 } // m8r namespace

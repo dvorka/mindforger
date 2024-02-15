@@ -209,13 +209,15 @@ void NoteEditorView::replaceSelectedText(const std::string& text)
     setTextCursor(cursor);
 }
 
-void NoteEditorView::appendAfterSelectedText(const std::string& phrase) {
+void NoteEditorView::appendAfterSelectedText(const std::string& phrase)
+{
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::EndOfBlock);
     cursor.insertText(" " + QString::fromStdString(phrase));
 }
 
-void NoteEditorView::appendAfterCursor(const std::string& phrase) {
+void NoteEditorView::appendAfterCursor(const std::string& phrase)
+{
     textCursor().insertText(QString::fromStdString(phrase));
 }
 

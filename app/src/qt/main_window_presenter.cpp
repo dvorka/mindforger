@@ -2182,7 +2182,7 @@ void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
 
             // PUSH answer to the chat dialog
             this->wingmanDialog->appendAnswerToChat(
-                "Wingman failed to get answer from the GPT provider.<br/><br/>"+commandWingmanChat.answerHtml,
+                "Wingman failed to get answer from the GPT provider.<br/><br/>"+commandWingmanChat.answerMarkdown,
                 "",
                 this->wingmanDialog->getContextType(),
                 true
@@ -2217,7 +2217,7 @@ void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
         );
     } else {
         this->wingmanDialog->appendAnswerToChat(
-            commandWingmanChat.answerHtml,
+            commandWingmanChat.answerMarkdown,
             answerDescriptor,
             this->wingmanDialog->getContextType()
         );
