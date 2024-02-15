@@ -2234,29 +2234,25 @@ void MainWindowPresenter::slotWingmanAppendFromDialog()
             if(orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getSelectedText().size()) {
                 orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->appendAfterSelectedText(
                     this->wingmanDialog->getLastAnswer());
-                statusBar->showInfo(QString(tr("Wingman's answer appended after selected text in Notebook header.")));
-                this->wingmanDialog->hide();
+                statusBar->showInfo(QString(tr("Wingman's answer appended after selected text in the Notebook header.")));
             } else{
-                QMessageBox::critical(
-                    &view,
-                    tr("Wingman Action Error"),
-                    tr("Unable to append text in Notebook header editor - no text selected.")
-                );
+                orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->appendAfterCursor(
+                    this->wingmanDialog->getLastAnswer());
+                statusBar->showInfo(QString(tr("Wingman's answer appended after the cursor in the Notebook header.")));
             }
+            this->wingmanDialog->hide();
             return;
         } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
             if(orloj->getNoteEdit()->getView()->getNoteEditor()->getSelectedText().size()) {
                 orloj->getNoteEdit()->getView()->getNoteEditor()->appendAfterSelectedText(
                     this->wingmanDialog->getLastAnswer());
                 statusBar->showInfo(QString(tr("Wingman's answer appended after selected text in the Note editor.")));
-                this->wingmanDialog->hide();
             } else{
-                QMessageBox::critical(
-                    &view,
-                    tr("Wingman Action Error"),
-                    tr("Unable to append text in Note editor - no text selected.")
-                );
+                orloj->getNoteEdit()->getView()->getNoteEditor()->appendAfterCursor(
+                    this->wingmanDialog->getLastAnswer());
+                statusBar->showInfo(QString(tr("Wingman's answer appended after the cursor in the Note editor.")));
             }
+            this->wingmanDialog->hide();
             return;
         } else {
             statusBar->showInfo(

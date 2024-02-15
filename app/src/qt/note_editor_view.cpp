@@ -215,6 +215,10 @@ void NoteEditorView::appendAfterSelectedText(const std::string& phrase) {
     cursor.insertText(" " + QString::fromStdString(phrase));
 }
 
+void NoteEditorView::appendAfterCursor(const std::string& phrase) {
+    textCursor().insertText(QString::fromStdString(phrase));
+}
+
 /*
  * Formatting
  */
