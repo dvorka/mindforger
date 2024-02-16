@@ -18,9 +18,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # https://wiki.ubuntu.com/Releases
-# old: precise quantal saucy precise utopic vivid wily trusty (old GCC) yakkety artful cosmic
-# current: trusty xenial bionic disco eoan jammy kinetic
-for DISTRO in jammy kinetic
+# old: precise quantal saucy precise utopic vivid wily trusty (old GCC) yakkety artful cosmic disco eoan kinetic
+# current: trusty xenial bionic focal jammy mantic
+for DISTRO in bionic
 do
     sudo pbuilder --create ${DISTRO}
     rm -vf ~/pbuilder/${DISTRO}-base.tgz

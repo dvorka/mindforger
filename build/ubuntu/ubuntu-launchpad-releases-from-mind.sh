@@ -85,22 +85,27 @@
 # Ubuntu version:
 # - https://wiki.ubuntu.com/Releases
 # - obsolete:
-#     precise quantal saucy precise utopic vivid wily yakkety artful cosmic
+#     precise quantal saucy precise utopic vivid wily yakkety artful cosmic kinetic
 # - current :
-#     (trusty) xenial bionic (cosmic disco eoan) focal (groovy) (hirsute) (impish) jammy kinetic
+#     (trusty) xenial bionic (cosmic disco eoan) focal (groovy) (hirsute) (impish) jammy (kinetic) mantic
 # - command (Bash tuple of distro names):
-#     trusty xenial bionic focal jammy kinetic
+#     trusty xenial bionic focal jammy mantic
+# - done (use ./ubuntu-launchpad-releases-from-mind.sh <DISTRO>):
+#     focal jammy kinetic
+# - TODO - required hunspell version not available on older Ubuntu versions:
+#     ERROR: pbuilder-satisfydepends-dummy : Depends: libhunspell-dev (>= 1.6) but it is not going to be installed.
+#     trusty xenial bionic mantic
 
 if [[ ${#} == 1 ]]
 then
     export UBUNTU_VERSIONS=(${1})
 else
-    export UBUNTU_VERSIONS=(focal)
+    export UBUNTU_VERSIONS=(kinetic)
 fi
 
 # environment variables
-export MAJOR_VERSION=1
-export MINOR_VERSION=55
+export MAJOR_VERSION=2
+export MINOR_VERSION=0
 export PATCH_VERSION=5 # patch version is incremented for every Ubuntu build @ Launchpad
 export MF_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" # semantic version
 export RM_CMD="rm -vrf "

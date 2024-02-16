@@ -285,13 +285,13 @@ dist-dmg: ## build macOS Disk iMaGe .dmg package
 #
 # Debian
 #
-# MindForger PPA: https://www.mindforger.com/debian is managed by aptly
+# OBSOLETE: MindForger PPA: https://www.mindforger.com/debian is managed by aptly
 #
-# - information about MindForger's Debian PPAs can be found in
+# - OBSOLETE: information about MindForger's Debian PPAs can be found in
 #   https://www.mindforger.com/debian/index.html
 #
 # - aptly CANNOT be used to build one PPA for all Debian releases
-#   therefore every release has it's own PPA
+#   therefore every release has its own PPA
 #
 # - the structure looks like this (from deprecated debian/ to new debian-ppa/):
 #
@@ -305,6 +305,8 @@ dist-dmg: ## build macOS Disk iMaGe .dmg package
 #       dists/      ... export from ~/.aptly/public
 #       pool/
 #       index.html  ... created by me w/ how to set it up
+#
+# - Debian distributions are built in VirtualBox VMs on "mind" machine
 #
 # - source Debian packages for every version (which are used by aptly)
 #   are stored in
