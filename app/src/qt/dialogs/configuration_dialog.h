@@ -1,7 +1,7 @@
 /*
  configuration_dialog.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@ class ConfigurationDialog : public QDialog
     class MarkdownTab;
     class NavigatorTab;
     class MindTab;
+    class WingmanTab;
 
 private:
     QTabWidget* tabWidget;
@@ -47,6 +48,7 @@ private:
     MarkdownTab* markdownTab;
     NavigatorTab* navigatorTab;
     MindTab* mindTab;
+    WingmanTab* wingmanTab;
 
     QDialogButtonBox *buttonBox;
 
@@ -64,8 +66,41 @@ public:
 
 private slots:
     void saveSlot();
+
 signals:
     void saveConfigSignal();
+};
+
+/**
+ * @brief Wingman tab.
+ */
+class ConfigurationDialog::WingmanTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    const std::string openAiComboLabel;
+
+    Configuration& config;
+
+    QLabel* llmProvidersLabel;
+    QComboBox* llmProvidersCombo;
+
+    QLabel* llmHelpLabel;
+    QLineEdit* openAiApiKeyEdit;
+    QPushButton* clearOpenAiApiKeyButton;
+
+public:
+    explicit WingmanTab(QWidget* parent);
+    ~WingmanTab();
+
+    // there and back is handled by Dialog's access to this class & Config singleton
+    void refresh();
+    void save();
+
+private slots:
+    void handleComboBoxChanged(int index);
+    void clearOpenAiApiKeySlot();
 };
 
 /**
@@ -103,7 +138,11 @@ private:
     Configuration& config;
 
     QLabel* themeLabel;
+    QLabel* menuLabel;
     QComboBox* themeCombo;
+
+    QLabel* appFontSizeLabel;
+    QSpinBox* appFontSizeSpin;
 
     QLabel* startupLabel;
     QComboBox* startupCombo;

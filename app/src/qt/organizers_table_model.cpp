@@ -1,7 +1,7 @@
 /*
  organizers_table_model.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,7 +23,9 @@ namespace m8r {
 
 using namespace std;
 
-OrganizersTableModel::OrganizersTableModel(QObject* parent, HtmlOutlineRepresentation* htmlRepresentation)
+OrganizersTableModel::OrganizersTableModel(
+    QObject* parent, HtmlOutlineRepresentation* htmlRepresentation
+)
     : QStandardItemModel(parent), htmlRepresentation(htmlRepresentation)
 {
     setColumnCount(1);

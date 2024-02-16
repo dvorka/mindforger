@@ -1,7 +1,7 @@
 /*
  terminal_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@ using namespace std;
 TerminalDialog::TerminalDialog(QWidget* parent)
     : QDialog(parent)
 {
+    setWindowTitle(tr("Terminal"));
+
     cmdEdit = new MyLineEdit(this, this);
 
     cmdCompleter = new QCompleter(new QStandardItemModel(cmdEdit), this);
@@ -162,7 +164,7 @@ void TerminalDialog::runCommand()
             // TODO _popen WINDOWS
     #ifdef _WIN32
             FILE* pipe = _popen(cmd.c_str(), "r");
-    # else
+    #else
             FILE* pipe = popen(cmd.c_str(), "r");
     #endif
             if(!pipe) {

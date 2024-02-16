@@ -1,7 +1,7 @@
 /*
  note.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -33,6 +33,12 @@
 namespace m8r {
 
 class Outline;
+
+// Outline key - resolved O path which may change if the repository is moved
+constexpr const auto LINK_NAME_OUTLINE_KEY = "Outline key";
+// Outline path - relative O path which can be used to create valid absolute O path on map load
+constexpr const auto LINK_NAME_OUTLINE_PATH = "Outline path";
+// ^ const in constexpr ensures const value
 
 /**
  * @brief Note - a thought.
@@ -160,7 +166,12 @@ public:
 
     void addLink(Link* link);
     const std::vector<Link*>& getLinks() const { return links; }
+    Link* getLinkByName(const std::string& name) const;
     size_t getLinksCount() const { return links.size(); }
+    void clearLinks() {
+        for(auto l:links) { delete l; }
+        links.clear();
+    }
 
     void promote();
     void demote();

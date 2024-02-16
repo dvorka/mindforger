@@ -1,7 +1,7 @@
 /*
  markdown_benchmark.cpp     MindForger markdown test
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ extern char* getMindforgerGitHomePath();
 
 // 2018/03/02 100x = 2.460ms (120MiB)
 TEST(MarkdownParserBenchmark, DISABLED_ParserMeta)
-{    
+{
     unique_ptr<string> fileName
             = unique_ptr<string>(new string{"/lib/test/resources/benchmark-repository/memory/meta.md"});
     fileName.get()->insert(0, getMindforgerGitHomePath());

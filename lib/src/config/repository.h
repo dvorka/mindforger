@@ -1,7 +1,7 @@
 /*
  repository.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -35,9 +35,9 @@ public:
     /**
      * @brief Repository type.
      *
-     * MindForger repository is a directory with sub-directories enabling advanced
-     * knowledge organization and memory/ directory with Outlines written in Markdown-based
-     * DSL (metadata enriched) format.
+     * MindForger repository is a directory with sub-directories enabling
+     * knowledge organization and memory/ directory with Outlines written
+     * in Markdown-based DSL (metadata enriched) format.
      *
      * Markdown repository is any directory structure containing Markdown files.
      */

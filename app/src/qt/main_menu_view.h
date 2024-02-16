@@ -1,7 +1,7 @@
 /*
  main_menu.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -48,12 +48,8 @@ public:
     QMenu* menuMind;
     QMenu* menuFind;
     QMenu* menuView;
-#ifdef MF_WIP_KNOW
-    QMenu* menuKnowledge;
-#endif
     QMenu* menuNavigator;
 #ifdef MF_WIP
-    QMenu* menuLibrary;
     QMenu* menuFlashcards;
 #endif
     QMenu* menuOrganizer;
@@ -61,6 +57,9 @@ public:
     QMenu* menuNote;
     QMenu* menuEdit;
     QMenu* menuFormat;
+#ifdef MF_WIP
+    QMenu* menuTools;
+#endif
     QMenu* menuHelp;
 
 #ifdef DO_MF_DEBUG
@@ -71,15 +70,22 @@ public:
     QAction* actionMindNewRepository;
     QAction* actionMindNewFile;
     QMenu* submenuMindLearn;
+    QAction* actionMindLearnDirectory;
     QAction* actionMindLearnRepository;
     QAction* actionMindLearnFile;
     RecentFilesMenu* submenuMindRelearn;
     QAction* actionMindRemember;
     QAction* actionMindThink;
     QAction* actionMindAutolink;
+    QAction* actionMindWingman;
+    QAction* actionMindTool;
     QAction* actionMindScope;
     QAction* actionMindForget;
     QAction* actionMindSnapshot;
+    QMenu* submenuMindLibrary;
+    QAction* actionLibraryAdd;
+    QAction* actionLibrarySync;
+    QAction* actionLibraryDeprecate;
     QAction* actionMindPreferences;
     QMenu* submenuMindExport;
     QAction* actionMindExportCsv;
@@ -94,20 +100,16 @@ public:
 #ifdef MF_WIP
     QAction* actionFindDocByName;
 #endif
-#ifdef MF_NER
-    QAction* actionFindNerPersons;
-    QAction* actionFindNerLocations;
-    QAction* actionFindNerOrganizations;
-    QAction* actionFindNerMisc;
-#endif
 
     // menu: View
-    QAction* actionViewDashboard;
     QAction* actionViewHome;
     QAction* actionViewDecks;
     QAction* actionViewOrganizers;
     QAction* actionViewOutlines;
+    QAction* actionViewOutlinesMap;
+#ifdef MF_WIP
     QAction* actionViewLibraryDocs;
+#endif
     QAction* actionViewTags;
     QAction* actionViewNavigator;
     QAction* actionViewDwell;
@@ -122,10 +124,6 @@ public:
     // menu: Knowledge
     QAction* actionKnowledgeWikipedia;
     QAction* actionKnowledgeArxiv;
-
-    // menu: Library
-    QAction* actionLibraryAdd;
-    QAction* actionLibraryDeprecate;
 
     // menu: Organizer
     QAction* actionOrganizerNew;
@@ -152,10 +150,21 @@ public:
     QAction* actionOutlineClone;
     QAction* actionOutlineArtExamine;
     QAction* actionOutlineForget;
+    QAction* actionOutlinePromote;
+    QAction* actionOutlineDemote;
+    QAction* actionOutlineFirst;
+    QAction* actionOutlineUp;
+    QAction* actionOutlineDown;
+    QAction* actionOutlineLast;
     QMenu* submenuOutlineExport;
     QAction* actionOutlineHtmlExport;
     QMenu* submenuOutlineImport;
     QAction* actionOutlineTWikiImport;
+    QMenu* submenuOutlineWingman;
+    QAction* actionOutlineWingmanSummarize;
+    QAction* actionOutlineWingmanExplain;
+    QAction* actionOutlineWingmanFind;
+    QAction* actionOutlineWingmanMore;
 
     // menu: Note
     QAction* actionNoteNew;
@@ -176,6 +185,11 @@ public:
     QAction* actionNoteClone;
     QAction* actionNoteExport;
     QAction* actionNoteImport;
+    QMenu* submenuNoteWingman;
+    QAction* actionNoteWingmanSummarize;
+    QAction* actionNoteWingmanFixGrammar;
+    QAction* actionNoteWingmanRewrite;
+    QAction* actionNoteWingmanMore;
 
     // menu: Edit
     QAction* actionEditFind;
@@ -189,8 +203,15 @@ public:
     QAction* actionEditWordWrap;
     QAction* actionEditNameDescFocusSwap;
     QAction* actionEditExtract;
+    QAction* actionEditWingman;
     QAction* actionEditComplete;
     QAction* actionEditSpellCheck;
+    QMenu* submenuEditWingman;
+    QAction* actionEditWingmanFixGrammar;
+    QAction* actionEditWingmanExplain;
+    QAction* actionEditWingmanFinishText;
+    QAction* actionEditWingmanRewriteText;
+    QAction* actionEditWingmanMore;
 
     // menu: Format
     QAction* actionFormatBold;
@@ -202,6 +223,9 @@ public:
     QAction* actionFormatCode;
     QAction* actionFormatCodeBlock;
     QMenu* submenuFormatMathJax;
+    QMenu* submenuFormatToc;
+    QAction* actionFormatTocWithoutTags;
+    QAction* actionFormatTocWithTags;
     QMenu* submenuFormatLists;
     QMenu* submenuFormatBlocks;
     QMenu* submenuFormatDiagrams;
@@ -241,7 +265,7 @@ public:
     QAction* actionFormatImage;
     QAction* actionFormatTable;
     QAction* actionFormatHr;
-    QAction* actionFormatToc;
+    QAction* actionFormatEmojis;
     QAction* actionFormatTimestamp;
 
     // menu: Help
@@ -258,6 +282,8 @@ public:
     QAction* actionHelpAboutQt;
     QAction* actionHelpAbout;
 
+    void showModeAwareFacet(bool repositoryMode, bool mfMode);
+
 public:
     MainMenuView(MainWindowView& mainWindow);
     MainMenuView(const MainMenuView&) = delete;
@@ -266,11 +292,12 @@ public:
     MainMenuView &operator=(const MainMenuView&&) = delete;
     virtual ~MainMenuView();
 
-    void showFacetOrganizerList(bool repositoryMode=true);
-    void showFacetOrganizerView(bool repositoryMode=true);
-    void showFacetOutlineList(bool repositoryMode=true);
-    void showFacetOutlineView(bool repositoryMode=true);
-    void showFacetNoteEdit(bool repositoryMode=true);
+    void showFacetOrganizerList(bool repositoryMode=true, bool mfMode=true);
+    void showFacetOrganizerView(bool repositoryMode=true, bool mfMode=true);
+    void showFacetOutlinesMap(bool repositoryMode=true, bool mfMode=true);
+    void showFacetOutlineList(bool repositoryMode=true, bool mfMode=true);
+    void showFacetOutlineView(bool repositoryMode=true, bool mfMode=true);
+    void showFacetNoteEdit(bool repositoryMode=true, bool mfMode=true);
 
     void showFacetMindThink();
     void showFacetMindSleep();

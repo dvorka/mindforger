@@ -1,7 +1,7 @@
 /*
 add_library_dialog.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -44,8 +44,6 @@ private:
     std::vector<Note*> notes;
 
     QLabel* findLibrarySourceLabel;
-    QLabel* libraryNameLabel;
-    QLineEdit* libraryNameEdit;
     QLabel* uriLabel;
     QLineEdit* uriEdit;
 
@@ -68,7 +66,6 @@ public:
     void show();
 
     QPushButton* getCreateButton() const { return createButton; }
-    QString getLibraryNameText() const { return libraryNameEdit->text(); }
     QString getLibraryUriText() const { return uriEdit->text(); }
     bool isIndexPdf() const { return pdfCheckBox->isChecked(); }
 

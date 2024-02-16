@@ -1,7 +1,7 @@
 /*
  outline_header_edit_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
     // signals
 #ifdef __APPLE__
     new QShortcut(
-        QKeySequence(Qt::CTRL+Qt::Key_L),
+        QKeySequence(Qt::CTRL+Qt::Key_D),
         this, SLOT(slotSaveAndCloseEditor()));
 #else
     new QShortcut(
@@ -59,7 +59,7 @@ OutlineHeaderEditView::OutlineHeaderEditView(QWidget* parent)
         this, SLOT(slotOpenOutlineHeaderPropertiesEditor()));
     new QShortcut(
         QKeySequence(Qt::CTRL+Qt::Key_S),
-        this, SLOT(slotSaveOutlineHeader()));    
+        this, SLOT(slotSaveOutlineHeader()));
     QObject::connect(
         bottomButtonsPanel->getRememberButton(), SIGNAL(clicked()),
         this, SLOT(slotSaveOutlineHeader()));

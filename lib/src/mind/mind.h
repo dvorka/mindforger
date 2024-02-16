@@ -1,7 +1,7 @@
 /*
  mind.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,19 +23,20 @@
 #include <memory>
 #include <mutex>
 #include <regex>
+#include <vector>
 
 #include "memory.h"
 #include "knowledge_graph.h"
 #include "ai/ai.h"
+#include "ai/llm/wingman.h"
+#include "ai/llm/openai_wingman.h"
+#include "ai/llm/mock_wingman.h"
 #include "associated_notes.h"
 #include "ontology/thing_class_rel_triple.h"
 #include "aspect/mind_scope_aspect.h"
 #include "../config/configuration.h"
 #include "../representations/representation_interceptor.h"
 #include "../representations/markdown/markdown_configuration_representation.h"
-#ifdef MF_NER
-    #include "ai/nlp/named_entity_recognition.h"
-#endif
 
 namespace m8r {
 
@@ -154,6 +155,19 @@ private:
     MindStatistics* stats;
 
     /**
+     * Outline map is an Outline used to organize Outlines into the tree.
+     * Notes in the Outline map:
+     *
+     * - has exactly one link which points to the Outline they represent
+     * - Outline link is *relative* on the filesystem and absolute (resolved) in runtime
+     */
+    Outline* outlinesMap;
+
+    std::string outlineMapKey2Relative(const std::string& outlineKey) const;
+    std::string outlineMapKey2Absolute(const std::string& outlineKey) const;
+    void outlinesMapSynchronize(Outline* outlinesMap);
+
+    /**
      * Atomic mind state changes and asynchronous computations synchronization
      * through Mind components and processes.
      */
@@ -180,6 +194,20 @@ private:
      * Where the mind thinks.
      */
     Ai* ai;
+
+    /**
+     * Configuration driven Wingman initialization.
+     */
+    void initWingman();
+    /**
+     * Wingman LLM provider currently used by Mind.
+     * (user to detect configuration changes)
+     */
+    WingmanLlmProviders wingmanLlmProvider;
+    /**
+     * Wingman
+     */
+    Wingman* wingman;
 
     /**
      * @brief Knowledge graph mind representation.
@@ -309,17 +337,6 @@ public:
 
     size_t getTriplesCount() const { return triples.size(); }
 
-#ifdef MF_NER
-
-    /*
-     * NRE
-     */
-
-    bool isNerInitilized() const;
-    void recognizePersons(const Outline* outline, int entityFilter, std::vector<NerNamedEntity>& result);
-
-#endif
-
     /*
      * REMEMBERING
      */
@@ -367,6 +384,7 @@ public:
      */
     std::unique_ptr<std::vector<Outline*>> findOutlineByNameFts(const std::string& pattern) const;
     //std::vector<Note*>* findNoteByNameFts(const std::string& pattern) const;
+    Outline* findOutlineByKey(const std::string& key) const;
     std::vector<Note*>* findNoteFts(
             const std::string& pattern,
             const FtsSearch mode = FtsSearch::EXACT,
@@ -374,6 +392,7 @@ public:
     // TODO findFts() - search also outline name and description
     //   >> temporary note of Outline type (never saved), cannot be created by user
     void getOutlineNames(std::vector<std::string>& names) const;
+    void getOutlineKeys(std::vector<std::string>& keys) const;
 
     /*
      * SCOPING
@@ -542,6 +561,27 @@ public:
     bool outlineForget(std::string outlineKey);
 
     /*
+     * OUTLINE MAP (TREE)
+     */
+
+    /**
+     * @brief Create new O map (tree).
+     */
+    Outline* outlinesMapNew(std::string outlineKey);
+    /**
+     * @brief Load Os map (tree).
+     */
+    Outline* outlinesMapLearn(std::string outlineKey);
+    /**
+     * @brief Load or create Os map (tree).
+     */
+    Outline* outlinesMapGet();
+    /**
+     * @brief Save Os map (tree).
+     */
+    Outline* outlinesMapRemember();
+
+    /*
      * NOTE MGMT
      */
 
@@ -641,6 +681,12 @@ public:
      * @brief Actions to perform on N rename.
      */
     void noteOnRename(const std::string& oldName, const std::string& newName);
+
+    /*
+     * WINGMAN
+     */
+    Wingman* getWingman();
+    CommandWingmanChat wingmanChat(CommandWingmanChat& command);
 
     /*
      * DIAGNOSTICS

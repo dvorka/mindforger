@@ -1,7 +1,7 @@
 /*
  main_toolbar_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -41,19 +41,11 @@ public:
     QAction* actionNewOutlineOrNote;
     QAction* actionOpenRepository;
     QAction* actionOpenFile;
-#ifdef MF_DEPRECATED
-    QAction* actionViewDashboard;
-#endif
     QAction* actionViewOutlines;
-#ifdef OLD_EISENHOWER
-    QAction* actionViewEisenhower;
-#else
     QAction* actionViewOrganizers;
-#endif
     QAction* actionViewNavigator;
     QAction* actionViewTags;
     QAction* actionViewRecentNotes;
-    QAction* actionFindFts;
     QAction* actionHomeOutline;
     QAction* actionThink;
     QAction* actionScope;

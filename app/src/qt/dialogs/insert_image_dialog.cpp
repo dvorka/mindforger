@@ -1,7 +1,7 @@
 /*
  insert_image_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ InsertImageDialog::InsertImageDialog(QWidget* parent)
     pathEdit = new QLineEdit{};
 
     findFileButton = new QPushButton{tr("File")};
-    copyToRepoCheckBox = new QCheckBox{tr("copy image to repository")};
+    copyToRepoCheckBox = new QCheckBox{tr("copy image to workspace")};
     copyToRepoCheckBox->setChecked(true);
     copyToRepoCheckBox->setEnabled(true);
 
@@ -45,14 +45,14 @@ InsertImageDialog::InsertImageDialog(QWidget* parent)
 
     // assembly
     QVBoxLayout* mainLayout = new QVBoxLayout{};
-    mainLayout->addWidget(alternateTextLabel);
-    mainLayout->addWidget(alternateTextEdit);
-    mainLayout->addWidget(pathLabel);
-    mainLayout->addWidget(pathEdit);
     QHBoxLayout* srcButtonLayout = new QHBoxLayout{};
     srcButtonLayout->addWidget(findFileButton);
     srcButtonLayout->addStretch();
     mainLayout->addLayout(srcButtonLayout);
+    mainLayout->addWidget(alternateTextLabel);
+    mainLayout->addWidget(alternateTextEdit);
+    mainLayout->addWidget(pathLabel);
+    mainLayout->addWidget(pathEdit);
     mainLayout->addWidget(copyToRepoCheckBox);
 
     QHBoxLayout* buttonLayout = new QHBoxLayout{};
@@ -77,8 +77,7 @@ InsertImageDialog::~InsertImageDialog()
 void InsertImageDialog::show()
 {
     alternateTextEdit->setText(tr("Image"));
-    alternateTextEdit->selectAll();
-    alternateTextEdit->setFocus();
+    findFileButton->setFocus();
     pathEdit->clear();
 
     QDialog::show();

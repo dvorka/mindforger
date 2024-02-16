@@ -1,7 +1,7 @@
 /*
  persistence.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ public:
             const std::string& extension) = 0;
     virtual void load(Stencil* stencil) = 0;
     virtual bool isWriteable(const std::string& outlineKey) = 0;
-    virtual void save(Outline* outline) = 0;    
+    virtual void save(Outline* outline) = 0;
     virtual void saveAsHtml(Outline* outline, const std::string& fileName) = 0;
 };
 

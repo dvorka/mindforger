@@ -1,7 +1,7 @@
 /*
  mind.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -45,12 +45,19 @@ Mind::Mind(Configuration &configuration)
 #else
       autolinking{nullptr},
 #endif
+      outlinesMap{},
       exclusiveMind{},
       timeScopeAspect{},
       tagsScopeAspect{ontology},
       scopeAspect{timeScopeAspect, tagsScopeAspect}
 {
-    ai = new Ai{memory,*this};
+    ai = new Ai{memory, *this};
+
+    // TODO BEGIN: code before Wingman config persisted
+    config.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI);
+    // TODO END: code before Wingman config persisted
+    initWingman();
+
     deleteWatermark = 0;
     activeProcesses = 0;
     associationsSemaphore = 0;
@@ -72,11 +79,16 @@ Mind::Mind(Configuration &configuration)
 Mind::~Mind()
 {
     delete ai;
+    if(wingman) delete wingman;
     delete knowledgeGraph;
     delete mdConfigRepresentation;
     delete autoInterceptor;
     delete autolinking;
     delete stats;
+
+    if(this->outlinesMap) {
+        delete this->outlinesMap;
+    }
 
     // - Memory destruct outlines
     // - allNotesCache Notes is just container referencing Memory's Outlines
@@ -354,6 +366,15 @@ void Mind::getOutlineNames(vector<string>& names) const
     vector<Outline*> outlines = memory.getOutlines();
     for(Outline* outline:outlines) {
         names.push_back(outline->getName());
+    }
+}
+
+void Mind::getOutlineKeys(vector<string>& keys) const
+{
+    // IMPROVE PERF cache vector (stack member) until and evict on memory modification
+    vector<Outline*> outlines = memory.getOutlines();
+    for(Outline* outline:outlines) {
+        keys.push_back(outline->getKey());
     }
 }
 
@@ -950,16 +971,258 @@ bool Mind::outlineForget(string outlineKey)
     return false;
 }
 
+string Mind::outlineMapKey2Relative(const string& outlineKey) const
+{
+    string relativeKey{
+        outlineKey.substr(config.getMemoryPath().size() +1)
+    };
+    MF_DEBUG("  " << relativeKey << endl);
+
+    return relativeKey;
+}
+
+string Mind::outlineMapKey2Absolute(const string& outlineKey) const
+{
+    string resolvedKey{
+        config.getMemoryPath()
+        + FILE_PATH_SEPARATOR
+        + outlineKey
+    };
+    MF_DEBUG("  " << resolvedKey << endl);
+
+    return resolvedKey;
+}
+
+Outline* Mind::outlinesMapNew(string outlineKey)
+{
+    MF_DEBUG("Creating Os map:" << endl);
+    Outline* newOutlinesMap = new Outline{
+        memory.getOntology().getDefaultOutlineType()};
+
+    for(Outline* o:getOutlines()) {
+        Note* n = o->getOutlineDescriptorAsNote();
+        newOutlinesMap->addNote(n);
+
+        n->addLink(
+            new Link{
+                LINK_NAME_OUTLINE_KEY,
+                o->getKey()
+            }
+        );
+        n->addLink(
+            new Link{
+                LINK_NAME_OUTLINE_PATH,
+                Mind::outlineMapKey2Relative(o->getKey())
+            }
+        );
+    }
+
+    newOutlinesMap->setName("Notebooks Map");
+    newOutlinesMap->setKey(outlineKey);
+    newOutlinesMap->sortNotesByRead();
+
+    newOutlinesMap->completeProperties(datetimeNow());
+
+    return newOutlinesMap;
+}
+
+void Mind::outlinesMapSynchronize(Outline* outlinesMap)
+{
+    vector<Note*> osToRemove{};
+
+    // ensure that map contains only valid Os
+    //   - remove from map: map O NOT in runtime O
+    //   - add at the top of map: runtime Os NOT in mapOs
+    MF_DEBUG("Map O links validity check:");
+    vector<string> mapOsKeys{};
+    for(Note* n:outlinesMap->getNotes()) {
+        Link* oLink = n->getLinkByName(LINK_NAME_OUTLINE_KEY);
+        if(oLink) {
+            string oKey{oLink->getUrl()};
+            Outline* o = findOutlineByKey(oKey);
+            if(o) {
+                // valid O in MF & map
+                #ifdef MF_DEBUG_LIBRARY
+                MF_DEBUG(
+                    "  VALID  : " << n->getName() << endl <<
+                    "           " << oKey << endl
+                );
+                #endif
+                // refresh N representing O (name, timestamps, ... may be changed by other views)
+                n->setName(o->getName());
+                n->setModified(o->getModified());
+                n->setModifiedPretty();
+                n->setRead(o->getRead());
+                n->setReadPretty();
+                mapOsKeys.push_back(oKey);
+            } else {
+                MF_DEBUG("  INVALID (no O for link): " << n->getName() << endl);
+                osToRemove.push_back(n);
+            }
+        } else {
+            MF_DEBUG("  INVALID (missing link): " << n->getName() << endl);
+            osToRemove.push_back(n);
+        }
+    }
+    MF_DEBUG("DONE O links validity check" << endl);
+
+    if(osToRemove.size()) {
+        MF_DEBUG("Removing Ns with INVALID O key:" << endl);
+        for(auto oToRemove:osToRemove) {
+            MF_DEBUG("  " << oToRemove->getName() << endl);
+            delete oToRemove;
+            outlinesMap->removeNote(oToRemove);
+        }
+        osToRemove.clear();
+    }
+
+    // find mind keys which are NOT in map > prepend them to map
+    vector<Outline*> osToAdd{};
+    MF_DEBUG("Finding mind keys to be ADDED to map:" << endl);
+    for(auto mindO: getOutlines()) {
+        if(find(mapOsKeys.begin(), mapOsKeys.end(), mindO->getKey()) == mapOsKeys.end()) {
+            MF_DEBUG("  " << mindO->getKey() << endl);
+
+            // TODO skip keys w/ "," ~ https://github.com/dvorka/mindforger/issues/1518 workaround
+            // TODO remove this code once #1518 is fixed
+            if(find(mindO->getKey().begin(), mindO->getKey().end(), ',') == mindO->getKey().end()) {
+                osToAdd.push_back(mindO);
+            } else {
+                MF_DEBUG("    SKIPPING key w/ ','" << endl);
+                continue;
+            }
+
+        }
+    }
+    MF_DEBUG("ADDING mind keys to map:" << endl);
+    for(auto o:osToAdd) {
+        MF_DEBUG("  " << o->getKey() << endl);
+        // clone O's descriptor to get N which might be deleted later
+        Note* n = new Note(*o->getOutlineDescriptorAsNote());
+
+        n->clearLinks();
+        n->addLink(
+            new Link{
+                LINK_NAME_OUTLINE_KEY,
+                o->getKey()
+            }
+        );
+        n->addLink(
+            new Link{
+                LINK_NAME_OUTLINE_PATH,
+                Mind::outlineMapKey2Relative(o->getKey())
+            }
+        );
+
+        outlinesMap->addNote(n , 0);
+    }
+}
+
+Outline* Mind::outlinesMapLearn(string outlineKey)
+{
+    #ifdef MF_DEBUG_LIBRARY
+    MF_DEBUG("Learning Os map from " << outlineKey << endl);
+    #endif
+    Outline* outlinesMap = memory.learnOutlinesMap(outlineKey);
+
+    vector<Note*> osToRemove{};
+
+    // normalization: set Ns types to O + resolve O links to absolute
+    #ifdef MF_DEBUG_LIBRARY
+    MF_DEBUG("Setting map's Ns type O" << endl);
+    #endif
+    for(auto n:outlinesMap->getNotes()) {
+        #ifdef MF_DEBUG_LIBRARY
+        MF_DEBUG(
+            "  Setting '" << n->getName()
+            << "' with " << n->getLinks().size() << " link(s)"
+            << " to O" << endl
+        );
+        #endif
+        n->setType(&Outline::NOTE_4_OUTLINE_TYPE);
+
+        Link* oMemPathLink = n->getLinkByName(LINK_NAME_OUTLINE_PATH);
+        if(oMemPathLink && oMemPathLink->getUrl().size() > 0) {
+            string oMemPath{oMemPathLink->getUrl()};
+
+            n->clearLinks();
+            n->addLink(
+                new Link{
+                    LINK_NAME_OUTLINE_KEY,
+                    Mind::outlineMapKey2Absolute(oMemPath)
+                }
+            );
+            n->addLink(
+                new Link{
+                    LINK_NAME_OUTLINE_PATH,
+                    oMemPath
+                }
+            );
+        } else {
+            MF_DEBUG("  SKIPPING N w/o link: " << n->getName() << endl);
+            osToRemove.push_back(n);
+        }
+    }
+
+    if(osToRemove.size()) {
+        MF_DEBUG("Removing Ns with MISSING relative O key:" << endl);
+        for(auto oToRemove:osToRemove) {
+            MF_DEBUG("  " << oToRemove->getName() << endl);
+            delete oToRemove;
+            outlinesMap->removeNote(oToRemove);
+        }
+        osToRemove.clear();
+    }
+
+    // synchronize map's Os with mind's Os
+    outlinesMapSynchronize(outlinesMap);
+
+    return outlinesMap;
+}
+
+Outline* Mind::outlinesMapGet()
+{
+    if(this->outlinesMap) {
+        // ensure consistency between mind's and map's Os
+        outlinesMapSynchronize(this->outlinesMap);
+
+        return this->outlinesMap;
+    }
+
+    string outlinesMapPath{config.getOutlinesMapPath()};
+
+    if(isFile(outlinesMapPath.c_str())) {
+        // load existing Os map
+        this->outlinesMap = outlinesMapLearn(outlinesMapPath);
+    } else {
+        // create new Os map
+        this->outlinesMap = outlinesMapNew(outlinesMapPath);
+
+        outlinesMapRemember();
+    }
+
+    return this->outlinesMap;
+}
+
+Outline* Mind::outlinesMapRemember()
+{
+    if(this->outlinesMap) {
+        remind().getPersistence().save(this->outlinesMap);
+    }
+
+    return this->outlinesMap;
+}
+
 Note* Mind::noteNew(
-        const std::string& outlineKey,
-        const uint16_t offset,
-        // IMPROVE pass name by reference
-        const std::string* name,
-        const NoteType* noteType,
-        u_int16_t depth,
-        const std::vector<const Tag*>* tags,
-        const int8_t progress,
-        Stencil* noteStencil)
+    const std::string& outlineKey,
+    const uint16_t offset,
+    // IMPROVE pass name by reference
+    const std::string* name,
+    const NoteType* noteType,
+    u_int16_t depth,
+    const std::vector<const Tag*>* tags,
+    const int8_t progress,
+    Stencil* noteStencil)
 {
     Outline* o = memory.getOutline(outlineKey);
     if(o) {
@@ -1158,23 +1421,6 @@ MindStatistics* Mind::getStatistics()
     return stats;
 }
 
-/*
- * NER
- */
-
-#ifdef MF_NER
-
-bool Mind::isNerInitilized() const
-{
-    return ai->isNerInitialized();
-}
-
-void Mind::recognizePersons(const Outline* outline, int entityFilter, std::vector<NerNamedEntity>& result) {
-    ai->recognizePersons(outline, entityFilter, result);
-}
-
-#endif
-
 // unique_ptr template BREAKS Qt Developer indentation > stored at EOF
 unique_ptr<vector<Outline*>> Mind::findOutlineByNameFts(const string& pattern) const
 {
@@ -1190,6 +1436,82 @@ unique_ptr<vector<Outline*>> Mind::findOutlineByNameFts(const string& pattern) c
         }
     }
     return result;
+}
+
+Outline* Mind::findOutlineByKey(const string& key) const
+{
+    if(key.size()) {
+        vector<Outline*> outlines = memory.getOutlines();
+        for(Outline* outline:outlines) {
+            if(key.compare(outline->getKey()) == 0) {
+                return outline;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+void Mind::initWingman()
+{
+    MF_DEBUG(
+        "MIND Wingman init: " << boolalpha << config.isWingman() << endl
+    );
+    if(config.isWingman()) {
+        MF_DEBUG("MIND Wingman INIT: instantiation..." << endl);
+        switch(config.getWingmanLlmProvider()) {
+        case WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI:
+            MF_DEBUG("  MIND Wingman init: OpenAI" << endl);
+            wingman = (Wingman*)new OpenAiWingman{
+                config.getWingmanApiKey(),
+                config.getWingmanLlmModel()
+            };
+            wingmanLlmProvider = config.getWingmanLlmProvider();
+            return;
+        // case BARD:
+        //   wingman = (Wingman*)new BardWingman{};
+        //  return;
+        case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
+            MF_DEBUG("  MIND Wingman init: MOCK" << endl);
+            wingman = (Wingman*)new MockWingman{
+                "mock-llm-model"
+            };
+            wingmanLlmProvider = config.getWingmanLlmProvider();
+            return;
+        default:
+            MF_DEBUG("  MIND Wingman init: UNKNOWN" << endl);
+            break;
+        }
+    }
+
+    MF_DEBUG("MIND Wingman init: DISABLED" << endl);
+    wingman = nullptr;
+    wingmanLlmProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
+}
+
+Wingman* Mind::getWingman()
+{
+    if(this->wingmanLlmProvider != config.getWingmanLlmProvider()) {
+        initWingman();
+    }
+
+    return this->wingman;
+}
+
+CommandWingmanChat Mind::wingmanChat(CommandWingmanChat& command)
+{
+    MF_DEBUG("MIND: Wingman chat..." << endl);
+
+    if(getWingman()) {
+        getWingman()->chat(command);
+        MF_DEBUG("MIND: DONE Wingman chat" << endl);
+    } else {
+        MF_DEBUG("ERROR: MIND Wingman chat - Wingman NOT configured and/or initialized" << endl);
+        command.errorMessage = "ERROR: Wingman NOT configured and/or initialized";
+        command.status = WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
+    }
+
+    return command;
 }
 
 } /* namespace */

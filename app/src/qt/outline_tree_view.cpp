@@ -1,7 +1,7 @@
 /*
  outline_tree_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -104,19 +104,19 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
                 emit signalSelectNextRow();
                 break;
             case Qt::Key_Home:
-                MF_DEBUG("  OutlineTreeView::keyPressEvent HOME" << endl);
+                MF_DEBUG("  OutlineTreeView::keyPressEvent HOME" << std::endl);
                 if(this->model()->rowCount() > 0) {
                     this->selectRow(0);
                 }
                 return;
             case Qt::Key_End:
-                MF_DEBUG("  OutlineTreeView::keyPressEvent END" << endl);
+                MF_DEBUG("  OutlineTreeView::keyPressEvent END" << std::endl);
                 if(this->model()->rowCount() > 0) {
                     this->selectRow(this->model()->rowCount()-1);
                 }
                 return;
             case Qt::Key_PageUp: {
-                MF_DEBUG("  OutlineTreeView::keyPressEvent PAGE_UP" << endl);
+                MF_DEBUG("  OutlineTreeView::keyPressEvent PAGE_UP" << std::endl);
                 // get currently selected row
                 QModelIndexList indices = selectionModel()->selection().indexes();
                 // no indexes > no row > no selection
@@ -134,7 +134,7 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
                 return;
             }
             case Qt::Key_PageDown: {
-                MF_DEBUG("  OutlineTreeView::keyPressEvent PAGE_DOWN" << endl);
+                MF_DEBUG("  OutlineTreeView::keyPressEvent PAGE_DOWN" << std::endl);
                 // get currently selected row
                 QModelIndexList indices = selectionModel()->selection().indexes();
                 // no indexes > no row > no selection

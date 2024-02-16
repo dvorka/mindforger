@@ -2,7 +2,7 @@
 #
 # MindForger knowledge management tool
 #
-# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ echo "==============================================================="
 
 if [[ -z "${1}" ]]
 then
-    export MFVERSION="1.54.0"
+    export MFVERSION="2.0.0"
 else
     export MFVERSION="${1}"
 fi
@@ -68,7 +68,7 @@ cd ${MFPRJNAME}
 export MFRPMROOT=`pwd`
 
 # bin build
-# --target=x86_64 
+# --target=x86_64
 # --target=i386
 rpmbuild --target=x86_64 --buildroot ${MFRPMROOT}/ -bb ${MFPRJNAME}-2.spec
 # noarch would be for SOURCE deb

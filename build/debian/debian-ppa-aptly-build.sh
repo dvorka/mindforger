@@ -46,18 +46,18 @@ export MF_IN_DEB_PACKAGES_DIR="/home/dvorka/p/mindforger/debian/aptly"
 # ^ must have the following structure:
 #.
 #├── hstr
-#│   └── 09-stretch
-#│       ├── hstr_1.27.0-1_amd64.deb
-#│       ├── hstr_2.0.0-1_amd64.deb
-#│       └── hstr_2.4.0-1_amd64.deb
+#│   └── 09-stretch
+#│       ├── hstr_1.27.0-1_amd64.deb
+#│       ├── hstr_2.0.0-1_amd64.deb
+#│       └── hstr_2.4.0-1_amd64.deb
 #└── mindforger
 #    ├── 09-stretch
-#    │   ├── mindforger_1.42.0-1_amd64.deb
-#    │   ├── ...
-#    │   └── mindforger_1.53.0-1_amd64.deb
+#    │   ├── mindforger_1.42.0-1_amd64.deb
+#    │   ├── ...
+#    │   └── mindforger_1.53.0-1_amd64.deb
 #    ├── ...
 #    └── 13-trixie
-#        └── mindforger_1.54.0-1_amd64.deb
+#        └── mindforger_1.54.0-1_amd64.deb
 #
 export MF_OUT_PPA_ALL_DEBIAN_RELEASES_DIR="/home/dvorka/p/mindforger/debian/debian-ppa.mindforger.com"
 # ^ PPAs for all releases side-by-side

@@ -24,6 +24,7 @@
         <file alias="mindforger_en_US.qm">resources/qt/translations/mindforger_en.qm</file>
         <file alias="mindforger_nerd_cs_CZ.qm">resources/qt/translations/mindforger_nerd_cs.qm</file>
         <file alias="mindforger_nerd_en_US.qm">resources/qt/translations/mindforger_nerd_en.qm</file>
+        <file alias="mindforger_zh_CN">resources/qt/translations/mindforger_zh_cn.ts</file>
     </qresource>
     <qresource prefix="/html-css">
         <file alias="dark.css">resources/qt/css/dark.css</file>
@@ -47,6 +48,8 @@
         <file alias="home.svg">resources/menu-icons/light_go-home.svg</file>
         <file alias="tag.svg">resources/menu-icons/light_tag.svg</file>
         <file alias="bug.svg">resources/menu-icons/light_tools-report-bug.svg</file>
+        <file alias="wingman-green.svg">resources/menu-icons/light_wingman-green.svg</file>
+        <file alias="wingman-gray.svg">resources/menu-icons/light_wingman-gray.svg</file>
         <file alias="fullscreen.svg">resources/menu-icons/light_view-fullscreen.svg</file>
         <file alias="preview.svg">resources/menu-icons/light_view-preview.svg</file>
         <file alias="refresh.svg">resources/menu-icons/light_view-refresh.svg</file>

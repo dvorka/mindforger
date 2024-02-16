@@ -2,7 +2,7 @@
 #
 # MindForger knowledge management tool
 #
-# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
 # See 'MindForger Release Guide#Debian and my PPA' notebook for detailed steps description...
 
 # .deb package to be added
-export NEW_VERSION_NAME="1.53.0"
+export NEW_VERSION_NAME="2.0.0"
 export NEW_RELEASE_NAME="mindforger_${NEW_VERSION_NAME}"
 export NEW_DEB_NAME="${NEW_RELEASE_NAME}-1_amd64.deb"
 # Debian release ~ aptly publish

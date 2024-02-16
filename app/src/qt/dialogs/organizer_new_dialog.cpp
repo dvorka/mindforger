@@ -1,7 +1,7 @@
 /*
  new_organizer_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -142,7 +142,7 @@ OrganizerNewDialog::OrganizerNewDialog(Ontology& ontology, QWidget* parent)
         this, SLOT(handleChangeTypeCombo(QString))
     );
 
-    // dialog    
+    // dialog
     setWindowTitle(tr("New Organizer"));
     // make dialog big enough (FTS dialog based size)
     resize(fontMetrics().averageCharWidth()*90, fontMetrics().height()*35);

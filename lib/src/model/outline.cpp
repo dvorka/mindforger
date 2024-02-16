@@ -1,7 +1,7 @@
 /*
  outline.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -393,6 +393,11 @@ void Outline::setNotes(const vector<Note*>& notes)
     this->notes = notes;
 }
 
+void Outline::sortNotesByRead()
+{
+    Outline::sortByRead(this->notes);
+}
+
 int8_t Outline::getProgress() const
 {
     return progress;
@@ -504,7 +509,7 @@ Note* Outline::cloneNote(const Note* clonedNote, const bool deep)
 {
     int offset = getNoteOffset(clonedNote);
     if(offset != -1) {
-        Note* newNote;
+        Note* newNote{};
 
         vector<Note*> children{};
         getAllNoteChildren(clonedNote, &children);

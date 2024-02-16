@@ -1,7 +1,7 @@
 /*
  markdown_benchmark.cpp     MindForger markdown test
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ using namespace std;
 extern char* getMindforgerGitHomePath();
 
 TEST(HtmlTestCase, Outline)
-{    
+{
     string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
     fileName.insert(0, getMindforgerGitHomePath());
 

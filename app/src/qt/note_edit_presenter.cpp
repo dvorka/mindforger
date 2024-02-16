@@ -1,7 +1,7 @@
 /*
  note_edit_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -63,7 +63,7 @@ void NoteEditPresenter::setNote(Note* note)
     string mdDescription{};
     mwp->getMarkdownRepresentation()->toDescription(note, &mdDescription);
 
-    view->setNote(note, mdDescription);    
+    view->setNote(note, mdDescription);
 }
 
 void NoteEditPresenter::slotKeyPressed()

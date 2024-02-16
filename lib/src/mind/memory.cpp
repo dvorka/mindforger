@@ -1,7 +1,7 @@
 /*
  memory.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -208,6 +208,11 @@ Outline* Memory::createOutline(Stencil* stencil)
 bool Memory::learnOutlineTWiki(const string& twikiFileName, const string& outlineFileName)
 {
     return twikiRepresentation.outline(File{twikiFileName}, File{outlineFileName});
+}
+
+Outline* Memory::learnOutlinesMap(const string& filePath)
+{
+    return mdRepresentation.outline(File{filePath});
 }
 
 Note* Memory::createNote(Stencil* stencil)

@@ -1,7 +1,7 @@
 /*
  information.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ class InformationSource
 {
 public:
     static const std::string DIR_MEMORY_M1ndF0rg3rL1br8ry;
+    static const std::string FILE_META_M1ndF0rg3rL1br8ryM3t8;
 
     enum SourceType {
         FILESYSTEM,

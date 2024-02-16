@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2009, 2010, 2011, 2012, 2013 Graeme Gott <graeme@gottcode.org>
  * Copyright (C) 2014-2020 wereturtle
- * Copyright (C) 2021-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ * Copyright (C) 2021-2024 Martin Dvorak <martin.dvorak@mindforger.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

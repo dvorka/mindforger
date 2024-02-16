@@ -1,6 +1,5 @@
-mindforger (1.54.1-0ubuntu1) trusty; urgency=low
+mindforger (2.0.0-0ubuntu1) bionic; urgency=low
 
-  * Experimental packaging.
+  * New version.
 
- -- Martin Dvorak (Dvorka) <martin.dvorak@mindforger.com>  Sat, 1 Jan 2022 14:11:33 +0100
-
+ -- Martin Dvorak (Dvorka) <martin.dvorak@mindforger.com>  Sat, 1 Jan 2024 14:11:33 +0100

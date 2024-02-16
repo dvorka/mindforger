@@ -1,7 +1,7 @@
 /*
  cli_n_breadcrumbs_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -20,18 +20,37 @@
 
 namespace m8r {
 
+// "Enter a prompt - \"? .\" for help, \"> .\" to chat (Alt-x), \"/ .\" run command (Ctrl-/), or type a phrase to find."
+constexpr const auto CLI_HELP_SHADOW_TEXT
+    = "Enter a prompt, command or phrase - type ? for help.";
+
+
 CliView::CliView(CliAndBreadcrumbsView* cliAndBreadcrumps, QWidget* parent)
-    : QLineEdit(parent)
+    : QLineEdit(parent),
+      PALETTE_DISABLED_TEXT(this->palette()),
+      PALETTE_ENABLED_TEXT(this->palette()),
+      PALETTE_ERROR_TEXT(this->palette())
 {
     this->cliAndBreadcrumps = cliAndBreadcrumps;
+
+    PALETTE_DISABLED_TEXT.setColor(
+        QPalette::Text,
+        QColor(125, 125, 125));
+
+    PALETTE_ENABLED_TEXT.setColor(
+        QPalette::Text,
+        LookAndFeels::getInstance().getCliTextColor());
+
+    PALETTE_ERROR_TEXT.setColor(
+        QPalette::Text,
+        QColor(125, 0, 0));
+
 #if !defined(__APPLE__)
     // changing pallette @ macOS w/ dark model @ Qt 5.15.x+ causes edit line to be unreadable
-
-    QPalette* palette = new QPalette();
-    palette->setColor(QPalette::Text, LookAndFeels::getInstance().getCliTextColor());
-    setPalette(*palette);
+    setPalette(PALETTE_ENABLED_TEXT);
 #endif
-    setToolTip("Run command: type . for available commands, type search string for FTS, Alt-x to activate.");
+
+    setToolTip(CLI_HELP_SHADOW_TEXT);
 }
 
 void CliView::keyPressEvent(QKeyEvent* event)
@@ -47,18 +66,103 @@ void CliView::keyPressEvent(QKeyEvent* event)
     QLineEdit::keyPressEvent(event);
 }
 
+void CliView::focusInEvent(QFocusEvent* event)
+{
+    MF_DEBUG("CLI: on focus acquired" << std::endl);
+
+    if(text() == CLI_HELP_SHADOW_TEXT) {
+        clear();
+    }
+
+    QLineEdit::focusInEvent(event);
+}
+
+void CliView::focusOutEvent(QFocusEvent* event)
+{
+    MF_DEBUG("CLI: on focus lost" << std::endl);
+
+    if(text().size() == 0) {
+        setText(CLI_HELP_SHADOW_TEXT);
+    }
+
+    QLineEdit::focusOutEvent(event);
+}
+
 /*
- * CliAndBreadcrumbsView
+ * CLI and breadcrumbs view.
  */
 
-const QString CliAndBreadcrumbsView::CMD_FTS = ".fts ";
-const QString CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME = ".find outline by name ";
-const QString CliAndBreadcrumbsView::CMD_LIST_OUTLINES = ".list outlines";
+const QStringList CliAndBreadcrumbsView::EMPTY_CMDS = QStringList();
+
+// help
+
+const QString CliAndBreadcrumbsView::CHAR_HELP
+    = "?";
+
+const QString CliAndBreadcrumbsView::CMD_HELP_HELP
+    = "? ... ? for help";
+const QString CliAndBreadcrumbsView::CMD_HELP_SEARCH
+    = "?     / to search";
+const QString CliAndBreadcrumbsView::CMD_HELP_KNOWLEDGE
+    = "?     @ for knowledge recherche";
+const QString CliAndBreadcrumbsView::CMD_HELP_CMD
+    = "?     > to run a command";
+const QString CliAndBreadcrumbsView::CMD_HELP_FTS
+    = "?     full-text search phrase";
+
+const QStringList CliAndBreadcrumbsView::HELP_CMDS = QStringList()
+        << CMD_HELP_HELP
+        << CMD_HELP_SEARCH
+ //       << CMD_HELP_KNOWLEDGE
+        << CMD_HELP_CMD
+ //       << CMD_HELP_CHAT
+ //       << CMD_HELP_FTS
+        ;
+
+const QString CliAndBreadcrumbsView::CHAR_FIND
+    = "/";
+
+const QString CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_NAME
+    = "/ find notebook by name ";
+const QString CliAndBreadcrumbsView::CMD_FIND_NOTE_BY_NAME
+    = "/ find note by name ";
+const QString CliAndBreadcrumbsView::CMD_FIND_OUTLINE_BY_TAG
+    = "/ find notebook by tag ";
+const QString CliAndBreadcrumbsView::CMD_FIND_NOTE_BY_TAG
+    = "/ find note by tag ";
+
+const QStringList CliAndBreadcrumbsView::HELP_FIND_CMDS = QStringList()
+        << CMD_FIND_OUTLINE_BY_NAME
+        << CMD_FIND_OUTLINE_BY_TAG
+//        << CMD_FIND_NOTE_BY_NAME
+//        << CMD_FIND_NOTE_BY_TAG
+        ;
+
+const QString CliAndBreadcrumbsView::CHAR_KNOW
+    = "@";
+
+const QString CliAndBreadcrumbsView::CHAR_CMD
+    = ">";
+
+const QString CliAndBreadcrumbsView::CMD_HOME
+    = "> home"; // go to home O
+const QString CliAndBreadcrumbsView::CMD_EMOJIS
+    = "> emojis";
+const QString CliAndBreadcrumbsView::CMD_TERMINAL
+    = "> terminal";
+const QString CliAndBreadcrumbsView::CMD_LIST_OUTLINES
+    = "> list notebooks";
+
+const QStringList CliAndBreadcrumbsView::HELP_CMD_CMDS = QStringList()
+//        << CMD_HOME
+//        << CMD_TERMINAL
+        << CMD_EMOJIS
+        << CMD_LIST_OUTLINES
+        ;
 
 // TODO migrate all commands to constants
 const QStringList CliAndBreadcrumbsView::DEFAULT_CMDS = QStringList()
         /*
-        << CMD_HELP
         << CMD_EXIT
         // home tools
         //<< "home"
@@ -87,7 +191,6 @@ const QStringList CliAndBreadcrumbsView::DEFAULT_CMDS = QStringList()
         // TODO new outline
         // TODO new note
         */
-        << CMD_FTS
         << CMD_LIST_OUTLINES
         << CMD_FIND_OUTLINE_BY_NAME
         ;
@@ -97,6 +200,11 @@ CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent, bool zenMode)
     : QWidget(parent),
       zenMode{zenMode}
 {
+    HELP_KNOW_CMDS = QStringList();
+    for(const auto& toolName:KnowledgeTool::getToolIds()) {
+        HELP_KNOW_CMDS << (CHAR_KNOW + QString::fromStdString(toolName));
+    }
+
     setFixedHeight(this->fontMetrics().height()*1.5);
 
     QHBoxLayout* layout = new QHBoxLayout(this);
@@ -111,30 +219,56 @@ CliAndBreadcrumbsView::CliAndBreadcrumbsView(QWidget* parent, bool zenMode)
     }
     layout->addWidget(breadcrumbsLabel);
 
-    cli = new CliView(this, parent);
-    cliCompleter = new QCompleter(new QStandardItemModel{}, parent);
-    cliCompleter->setCaseSensitivity(Qt::CaseSensitivity::CaseInsensitive);
-    cliCompleter->setCompletionMode(QCompleter::PopupCompletion);
-    cli->setCompleter(cliCompleter);
+    this->cli = new CliView(this, parent);
+    this->cliCompleter = new QCompleter(new QStandardItemModel{}, parent);
+    this->cliCompleter->setCaseSensitivity(Qt::CaseSensitivity::CaseInsensitive);
+    this->cliCompleter->setCompletionMode(QCompleter::PopupCompletion);
+    this->cli->setCompleter(cliCompleter);
+    this->cli->setText(CLI_HELP_SHADOW_TEXT);
     layout->addWidget(cli);
 
     showBreadcrumb();
 }
 
+void CliAndBreadcrumbsView::showCli(bool selectAll)
+{
+    MF_DEBUG("CLI view: SHOW (select ALL = " << std::boolalpha << selectAll << ")" << std::endl);
+
+    // if help presents, then clear it AND change color
+    if(cli->text().startsWith(CLI_HELP_SHADOW_TEXT)) {
+        cli->clear();
+    }
+#if !defined(__APPLE__)
+    setPalette(this->cli->PALETTE_ENABLED_TEXT);
+#endif
+
+    // show
+    show();
+    cli->setFocus();
+    if(selectAll) {
+        cli->selectAll();
+    }
+}
+
 void appendToStandardModel(const QStringList& list, QStandardItemModel* completerModel) {
     for(const auto& i:list) {
         QStandardItem* item = new QStandardItem(i);
+
+        // TODO icons are not shown on certain platforms (Linux/x86)
+        /*
         if(i.startsWith(".")) {
             item->setIcon(QIcon(":/menu-icons/cli.svg"));
         } else {
             item->setIcon(QIcon(":/menu-icons/find.svg"));
         }
-        // IMPROVE item->setToolTip("tool tip");
+        */
+
+        // TODO IMPROVE item->setToolTip("tool tip");
         completerModel->appendRow(item);
     }
 }
 
-void CliAndBreadcrumbsView::updateCompleterModel(const QStringList* list)
+void CliAndBreadcrumbsView::updateCompleterModel(const QStringList& helpList, const QStringList* list)
 {
     QStandardItemModel* completerModel=(QStandardItemModel*)cliCompleter->model();
     if(completerModel==nullptr) {
@@ -154,12 +288,12 @@ void CliAndBreadcrumbsView::updateCompleterModel(const QStringList* list)
     if(list!=nullptr) {
         appendToStandardModel(*list, completerModel);
     }
-    appendToStandardModel(DEFAULT_CMDS, completerModel);
+    appendToStandardModel(helpList, completerModel);
 }
 
 void CliAndBreadcrumbsView::forceFtsHistoryCompletion()
 {
-    updateCompleterModel();
+    updateCompleterModel(DEFAULT_CMDS);
 
     // ensure completion is shown despite there is NO filtering character
     cliCompleter->complete();
@@ -216,17 +350,6 @@ void CliAndBreadcrumbsView::showBreadcrumb()
         breadcrumbsLabel->show();
         cli->hide();
     }
-}
-
-void CliAndBreadcrumbsView::showCli(bool selectAll)
-{
-    show();
-    cli->setFocus();
-    if(selectAll) {
-        cli->selectAll();
-    }
-    updateCompleterModel();
-    cliCompleter->complete();
 }
 
 } // m8r namespace

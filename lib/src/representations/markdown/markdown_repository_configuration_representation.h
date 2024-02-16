@@ -1,7 +1,7 @@
 /*
  markdown_configuration_representation.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -58,16 +58,21 @@ class MarkdownRepositoryConfigurationRepresentation : public RepositoryConfigura
 
 public:
     explicit MarkdownRepositoryConfigurationRepresentation();
-    MarkdownRepositoryConfigurationRepresentation(const MarkdownRepositoryConfigurationRepresentation&) = delete;
-    MarkdownRepositoryConfigurationRepresentation(const MarkdownRepositoryConfigurationRepresentation&&) = delete;
-    MarkdownRepositoryConfigurationRepresentation& operator =(const MarkdownRepositoryConfigurationRepresentation&) = delete;
-    MarkdownRepositoryConfigurationRepresentation& operator =(const MarkdownRepositoryConfigurationRepresentation&&) = delete;
+    MarkdownRepositoryConfigurationRepresentation(
+        const MarkdownRepositoryConfigurationRepresentation&) = delete;
+    MarkdownRepositoryConfigurationRepresentation(
+        const MarkdownRepositoryConfigurationRepresentation&&) = delete;
+    MarkdownRepositoryConfigurationRepresentation& operator =(
+        const MarkdownRepositoryConfigurationRepresentation&) = delete;
+    MarkdownRepositoryConfigurationRepresentation& operator =(
+        const MarkdownRepositoryConfigurationRepresentation&&) = delete;
     virtual ~MarkdownRepositoryConfigurationRepresentation();
 
     std::string* to(Configuration& c);
 
     /**
-     * @brief Load repository configuration from file and return true on success (file exists), otherwise return false.
+     * @brief Load repository configuration from file and return true on success
+     *        (file exists), otherwise return false.
      */
     virtual bool load(Configuration& c);
     /**
@@ -80,10 +85,14 @@ public:
     void save(const filesystem::File& file) { save(&file, nullptr); }
 
 private:
-    void repositoryConfiguration(std::vector<MarkdownAstNodeSection*>* ast, Configuration& c);
-    void repositoryConfigurationSection(std::string* title, std::vector<std::string*>* body, Configuration& c);
-    void repositoryConfigurationSectionOrganizers(std::vector<std::string*>* body, Configuration& c);
-    Organizer* repositoryConfigurationSectionOrganizerAdd(Organizer* o, std::set<std::string>& keys, Configuration& c);
+    void repositoryConfiguration(
+        std::vector<MarkdownAstNodeSection*>* ast, Configuration& c);
+    void repositoryConfigurationSection(
+        std::string* title, std::vector<std::string*>* body, Configuration& c);
+    void repositoryConfigurationSectionOrganizers(
+        std::vector<std::string*>* body, Configuration& c);
+    Organizer* repositoryConfigurationSectionOrganizerAdd(
+        Organizer* o, std::set<std::string>& keys, Configuration& c);
     std::string& to(Configuration* c, std::string& md);
     void save(const filesystem::File* file, Configuration* c);
 };

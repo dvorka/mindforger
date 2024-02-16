@@ -41,13 +41,15 @@ using namespace m8r::filesystem;
  *
  * ```
  * $ mindforger
- *   ... lookup repository as follows
- *     1. configured in ~/.mindforger,
+ *   ... looks up repository as follows
+ *     1. repository configured in ~/.mindforger,
  *     2. specified by environment variable MINDFORGER_REPOSITORY,
- *     3. check existence of MindForger repository in default location i.e. ~/mindforger-repository
- *     4. create new MindForger repository in default location i.e. ~/mindforger-repository
+ *     3. checks existence of MindForger repository in default location
+ *        i.e. ~/mindforger-repository
+ *     4. creates new MindForger repository in default location
+ *        i.e. ~/mindforger-repository
  * $ mindforger ~/my-mf-repository
- *   ... MindForger repository
+ *   ... start MindForger with given repository
  * $ mindforger ~/books/marathon-training
  *   ... directory structure w/ Markdowns
  * $ mindforger ~/my-mf-repository/memory/plans.md
@@ -78,7 +80,8 @@ using namespace m8r::filesystem;
  *   -h
  * ```
  *
- * Terminal CLI commands proposal:
+ * Terminal CLI commands proposal
+ * (Docker inspiration > switch entity and action):
  *
  * ```
  * $ mindforger --command LIST outlines
@@ -127,42 +130,53 @@ int main(int argc, char* argv[])
     // default terminal macOS environment: TERM=xterm-256color DISPLAY=
 #endif
 
-    // Stupid & ugly: QWebEngine @ macOS requires extra parameter(s) to
+    //
+    // SECURITY: WebKit vs WebEngine in Qt
+    //
+    // Stupid & ugly: QWebEngine @ macOS/Win requires extra parameter(s) to
     // allow access to local files (like images) to QApplication (security).
-    // Parameter differ Qt version to Qt version as diffent versions
-    // bundle different Chromium versions.
+    // MindForger generates HTML from Markdown and uses QWebEngine to render it,
+    // so it needs to allow access to files (like images) references from the HTML.
+    // Qt parameters to QWebEngine differ Qt version to Qt version as different
+    // versions bundle different Chromium versions. (Qt uses QWebKit on Linux)
     //
     // Qt 5.9.9
-    //  --disable-web-security           ... same origin
+    // * --disable-web-security           ... same origin
     //
-    // Qt 5.15.2 ~ Chrome 83 ~ I did NOT find params to enable filesystem access
-    //  --user-data-dir=<HOME>           ... user data dir
-    //  --disable-web-security           ... same origin
-    //  --disable-site-isolation-trials
+    // Qt 5.15.2
+    // * --disable-web-security           ... can go AWAY
+    // * base URL: file://
     //
-    // QApplication args assembly:
-    //  - order in ^ examples matters
-    //
-    // Additional hints:
-    // - HTML is rendered by QWebEngine on macOS
-    // - QWebEngine is Chromium wrapper
-    //   https://doc.qt.io/qt-5/qtwebengine-overview.html
-    //   https://doc.qt.io/qt-5/qtwebengine-features.html
-    //
-    // Debugging:
-    //
-    // - DEBUG_WEBENGINE_SECURITY_QT_5_15
-//#define DEBUG_WEBENGINE_SECURITY_QT_5_15
+    // If DESPERATE in the future, then get SHA which edited this line from Git history.
+    // (it removed code which can debug WebEngine security parameters on macOS/Win)
     //
     // Resources:
-    // - https://doc.qt.io/qt-5/qtwebengine-index.html
-    // - https://doc.qt.io/qt-5/qtwebengine-debugging.html#using-command-line-arguments
-    // - https://wiki.qt.io/QtWebEngine/ChromiumVersions
-    // - https://stackoverflow.com/questions/35432749/disable-web-security-in-chrome-48
-    //   ^ changes in required parameters with disable-web-security
+    // * https://github.com/dvorka/mindforger/issues/1506
+    //   explanation of the problem and solution
+    // * https://github.com/dvorka/mindforger/compare/dev/1.55.1...shlemiel:mindforger_poc0:dev/1.55.1
+    //   POC of the solution (what to change for Qt 5.15.0+):
+    //   - note_view.h (baseURL) and outline_header_view.h (baseURL) QUrl from "" to "file://"
     //
-#if defined(__APPLE__) || defined(_WIN32)
-  #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+    // Additional resources:
+    // - QWebEngine as Chromium wrapper:
+    //   - https://doc.qt.io/qt-5/qtwebengine-index.html
+    //   - https://doc.qt.io/qt-5/qtwebengine-overview.html
+    //   - https://doc.qt.io/qt-5/qtwebengine-features.html
+    // - QWebEngine debugging:
+    //   - https://doc.qt.io/qt-5/qtwebengine-debugging.html#using-command-line-arguments
+    //   - https://wiki.qt.io/QtWebEngine/ChromiumVersions
+    // - Chromium command line:
+    //   - switches:
+    //     - --disable-web-security
+    //     - --allow-file-access-from-files
+    //     - --no-sandbox
+    //     - --user-data-dir
+    //     - --single-process
+    //     - --disable-site-isolation-trials
+    //   - https://stackoverflow.com/questions/35432749/disable-web-security-in-chrome-48
+    //     ^ changes in required parameters with disable-web-security
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0) && (defined(__APPLE__) || defined(_WIN32))
     char ARG_DISABLE_WEB_SECURITY[] = "--disable-web-security";
     int newArgc = argc + 1 + 1;
     char** newArgv = new char*[static_cast<size_t>(newArgc)];
@@ -172,79 +186,27 @@ int main(int argc, char* argv[])
         newArgv[i] = argv[i-1];
     }
     newArgv[newArgc-1] = nullptr;
-  #else
-    // IMPROVE: new Chromium @ QWebEngine requires more parameters, but
-    //   I didn't find working configuration which would allow loading
-    //   of images on macOS BigSur
-    char ARG_DISABLE_WEB_SECURITY[] = "--disable-web-security";
-    char ARG_USER_DATA_DIR[] = "--user-data-dir=/Users/dvorka/tmp";
-    char ARG_SINGLE_PROCESS[] = "--single-process";
-    char ARG_NO_SANDBOX[] = "--no-sandbox";
-    char ARG_DISABLE_ISOLATION_TRIALS[] = "--disable-site-isolation-trials";
-    char ARG_ALLOW_FILE_ACCESS_FROM_FILES[] = "--allow-file-access-from-files";
 
-    #ifdef DEBUG_WEBENGINE_SECURITY_QT_5_15
-        int newArgc = 6;
-        char** newArgv = new char*[static_cast<size_t>(newArgc)];
-        newArgv[0] = argv[0];
-        newArgv[1] = "--args";
-        newArgv[2] = ARG_USER_DATA_DIR;
-        newArgv[3] = ARG_DISABLE_WEB_SECURITY;
-        newArgv[4] = "/Users/dvorka/mf-devel/mf-copy";
-        newArgv[5] = NULL;
-
-    #else // DEBUG_WEBENGINE_SECURITY_QT_5_15
-        char* injectWebEngineArgv[] = {
-            ARG_USER_DATA_DIR,
-            ARG_DISABLE_WEB_SECURITY,
-            ARG_DISABLE_ISOLATION_TRIALS,
-            ARG_SINGLE_PROCESS,
-            ARG_NO_SANDBOX,
-            ARG_ALLOW_FILE_ACCESS_FROM_FILES
-        };
-        int injectWebEngineArgc = 6;
-
-        int newArgc = argc + injectWebEngineArgc + 1;
-        char** newArgv = new char*[static_cast<size_t>(newArgc)];
-        newArgv[0] = argv[0];
-        int i=1;
-        for (int v=0; v<injectWebEngineArgc; i++, v++) {
-            newArgv[i] = injectWebEngineArgv[v];
-        }
-        for(int v=1; v<argc; v++, i++) {
-            newArgv[i] = argv[v];
-        }
-        newArgv[newArgc-1] = nullptr;
-    #endif // DEBUG_WEBENGINE_SECURITY_QT_5_15
-  #endif // Qt version
-
-  #ifdef DO_MF_DEBUG
-    MF_DEBUG("argv: " << newArgc << endl);
-    for(int i=0; i<newArgc; i++) {
-        if(newArgv[i] == nullptr) {
-            MF_DEBUG("  " << i << " NULL" << endl);
-            break;
-        }
-        MF_DEBUG("  " << i << " " << newArgv[i] << endl);
-    }
-  #endif
+    #ifdef DO_MF_DEBUG
+      MF_DEBUG("argv: " << newArgc << endl);
+      for(int i=0; i<newArgc; i++) {
+          if(newArgv[i] == nullptr) {
+              MF_DEBUG("  " << i << " NULL" << endl);
+              break;
+          }
+          MF_DEBUG("  " << i << " " << newArgv[i] << endl);
+      }
+    #endif
 
     QApplication mindforgerApplication(newArgc, newArgv);
 #else
     QApplication mindforgerApplication(argc, argv);
 #endif
 
-#ifdef MF_DEBUG_QRC
-    QDirIterator it(":", QDirIterator::Subdirectories);
-    while (it.hasNext()) {
-        MF_DEBUG(it.next() << endl);
-    }
-#endif
     QApplication::setApplicationName("MindForger");
     QApplication::setApplicationVersion(MINDFORGER_VERSION);
     mindforgerApplication.setWindowIcon(QIcon(":/icons/mindforger-icon.png"));
 
-#ifndef DEBUG_WEBENGINE_SECURITY_QT_5_15
     std::string useRepository{};
     QString themeOptionValue{};
     QString configurationFilePath{};
@@ -256,7 +218,7 @@ int main(int argc, char* argv[])
             "[<directory>|<file>]",
             QCoreApplication::translate(
                  "main",
-                 "MindForger repository or directory/file with Markdown(s) to open"
+                 "MindForger workspace or directory/file with Markdown(s) to open"
             )
         );
         QCommandLineOption themeOption(QStringList() << "t" << "theme",
@@ -274,8 +236,8 @@ int main(int argc, char* argv[])
         );
         parser.addOption(configPathOption);
 
-#if defined(__APPLE__) || defined(_WIN32)
-        // command line options passed to WebEngine to disable security
+     #if defined(__APPLE__) || defined(_WIN32)
+        // command line options which might be passed to WebEngine to control the security
         QCommandLineOption macosDisableSecurityOption(QStringList() << "S" << "disable-web-security",
             QCoreApplication::translate("main", "Disable WebEngine security to allow loading of images on macOS.")
         );
@@ -304,8 +266,9 @@ int main(int argc, char* argv[])
             QCoreApplication::translate("main", "Disable WebEngine security via acess file from file on macOS.")
         );
         parser.addOption(macosAcessFileFromFile);
-      #endif
-#endif
+      #endif // >= 5.15.0
+    #endif // APPLE or WIN
+
         QCommandLineOption versionOption=parser.addVersionOption();
         QCommandLineOption helpOption=parser.addHelpOption();
         // process the actual command line arguments given by the user
@@ -338,11 +301,6 @@ int main(int argc, char* argv[])
         }
     }
     // else there are no parameters and options > simply load GUI
-# else // DEBUG_WEBENGINE_SECURITY_QT_5_15
-    QString configurationFilePath{"/Users/dvorka/.mindforger.md"};
-    QString themeOptionValue{};
-    std::string useRepository{};
-#endif // DEBUG_WEBENGINE_SECURITY_QT_5_15
 
     // load configuration
     m8r::MarkdownConfigurationRepresentation mdConfigRepresentation{};
@@ -366,7 +324,9 @@ int main(int argc, char* argv[])
 
     m8r::MarkdownRepositoryConfigurationRepresentation mdRepositoryCfgRepresentation{};
     if(!useRepository.empty()) {
-        m8r::Repository* r = m8r::RepositoryIndexer::getRepositoryForPath(useRepository);
+        m8r::Repository* r = m8r::RepositoryIndexer::getRepositoryForPath(
+            useRepository
+        );
         if(r) {
             config.setActiveRepository(
                 config.addRepository(r), mdRepositoryCfgRepresentation
@@ -374,11 +334,13 @@ int main(int argc, char* argv[])
         } else {
             if(config.createEmptyMarkdownFile(useRepository)) {
                 r = m8r::RepositoryIndexer::getRepositoryForPath(useRepository);
-                config.setActiveRepository(config.addRepository(r), mdRepositoryCfgRepresentation);
+                config.setActiveRepository(
+                    config.addRepository(r), mdRepositoryCfgRepresentation
+                );
             } else {
                 cerr << QCoreApplication::translate(
                             "main",
-                            "Error: Unable to find given repository/file "
+                            "Error: Unable to find given workspace/file "
                             "to open - open MindForger without parameters "
                             "and create it from menu Mind/New: '"
                         ).toUtf8().constData()
@@ -514,6 +476,29 @@ int main(int argc, char* argv[])
         }
     }
     // mdConfigRepresentation->save(config);
+
+    // set application font family and size
+    // QFont font("Arial", 25);
+    // mindforgerApplication.setFont(font);
+    MF_DEBUG(
+        "Qt boot MindForger application font:" << endl <<
+        "  family: " << mindforgerApplication.font().family().toStdString() << endl <<
+        "  pixel size: " << mindforgerApplication.font().pixelSize() << endl <<
+        "  point size: " << mindforgerApplication.font().pointSize() << endl);
+    if(config.getUiAppFontSize()) {
+        MF_DEBUG("Setting application font size to: " << config.getUiAppFontSize() << endl);
+        QFont font(
+            mindforgerApplication.font().family(),
+            config.getUiAppFontSize()
+        );
+        mindforgerApplication.setFont(font);
+
+        MF_DEBUG(
+            "AFTER MindForger application font reconfiguration:" << endl <<
+            "  family: " << mindforgerApplication.font().family().toStdString() << endl <<
+            "  pixel size: " << mindforgerApplication.font().pixelSize() << endl <<
+            "  point size: " << mindforgerApplication.font().pointSize() << endl);
+    }
 
     // initialize and start UI
     m8r::MainWindowView mainWindowView(lookAndFeels);

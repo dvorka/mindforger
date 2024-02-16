@@ -1,7 +1,7 @@
 /*
  view_to_edit_buttons_panel.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -36,6 +36,8 @@ private:
     QPushButton* showOutlineHeaderButton;
     QPushButton* editButton;
     QPushButton* toggleFullOPreviewButton;
+    QPushButton* nextNoteButton;
+    QPushButton* lastNoteButton;
 
     // expert mode (no buttons) setting @ frontend
     bool expertMode;
@@ -55,6 +57,8 @@ public:
     QPushButton* getShowOutlineHeaderButton() const { return showOutlineHeaderButton; }
     QPushButton* getEditButton() const { return editButton; }
     QPushButton* getFullOPreviewButton() const { return toggleFullOPreviewButton; }
+    QPushButton* getNextNoteButton() const { return nextNoteButton; }
+    QPushButton* getLastNoteButton() const { return lastNoteButton; }
 };
 
 }

@@ -1,7 +1,7 @@
 /*
  outline_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -24,23 +24,24 @@ using namespace std;
 
 namespace m8r {
 
-OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
-                               OrlojView* view,
-                               Mind* mind)
-    : activeFacet{OrlojPresenterFacets::FACET_NONE},
-      config{Configuration::getInstance()},
-      skipEditNoteCheck{false}
+OrlojPresenter::OrlojPresenter(
+    MainWindowPresenter* mainPresenter,
+    OrlojView* view,
+    Mind* mind
+) : activeFacet{OrlojPresenterFacets::FACET_NONE},
+    config{Configuration::getInstance()},
+    skipEditNoteCheck{false}
 {
     this->mainPresenter = mainPresenter;
     this->view = view;
     this->mind = mind;
 
-    this->dashboardPresenter = new DashboardPresenter(view->getDashboard(), this);
     this->organizersTablePresenter = new OrganizersTablePresenter(view->getOrganizersTable(), mainPresenter->getHtmlRepresentation());
     this->organizerPresenter = new OrganizerPresenter(view->getOrganizer(), this);
     this->kanbanPresenter = new KanbanPresenter(view->getKanban(), this);
     this->tagCloudPresenter = new TagsTablePresenter(view->getTagCloud(), mainPresenter->getHtmlRepresentation());
     this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
+    this->outlinesMapPresenter = new OutlinesMapPresenter(view->getOutlinesMap(), mainPresenter, this);
     this->recentNotesTablePresenter = new RecentNotesTablePresenter(view->getRecentNotesTable(), mainPresenter->getHtmlRepresentation());
     this->outlineViewPresenter = new OutlineViewPresenter(view->getOutlineView(), this);
     this->outlineHeaderViewPresenter = new OutlineHeaderViewPresenter(view->getOutlineHeaderView(), this);
@@ -68,10 +69,10 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         this,
         SLOT(slotShowSelectedOutline()));
     QObject::connect(
-        view->getDashboard()->getOutlinesDashboardlet(),
-        SIGNAL(signalShowSelectedOutline()),
+        view->getOutlinesMapTable(),
+        SIGNAL(signalMapShowSelectedOutline()),
         this,
-        SLOT(slotShowSelectedOutline()));
+        SLOT(slotMapShowSelectedOutline()));
     QObject::connect(
         view->getOutlinesTable(),
         SIGNAL(signalFindOutlineByName()),
@@ -89,19 +90,9 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
         SIGNAL(signalShowSelectedRecentNote()),
         this,
         SLOT(slotShowSelectedRecentNote()));
-    QObject::connect(
-        view->getDashboard()->getRecentDashboardlet(),
-        SIGNAL(signalShowSelectedRecentNote()),
-        this,
-        SLOT(slotShowSelectedRecentNote()));
     // hit ENTER in Tags to view Recall by Tag detail
     QObject::connect(
         view->getTagCloud(),
-        SIGNAL(signalShowDialogForTag()),
-        this,
-        SLOT(slotShowSelectedTagRecallDialog()));
-    QObject::connect(
-        view->getDashboard()->getTagsDashboardlet(),
         SIGNAL(signalShowDialogForTag()),
         this,
         SLOT(slotShowSelectedTagRecallDialog()));
@@ -123,44 +114,85 @@ OrlojPresenter::OrlojPresenter(MainWindowPresenter* mainPresenter,
 #endif
     // editor getting data from the backend
     QObject::connect(
-        view->getNoteEdit()->getNoteEditor(), SIGNAL(signalGetLinksForPattern(QString)),
-        this, SLOT(slotGetLinksForPattern(QString)));
+        view->getNoteEdit()->getNoteEditor(),
+            SIGNAL(signalGetLinksForPattern(QString)),
+        this,
+            SLOT(slotGetLinksForPattern(QString)));
     QObject::connect(
-        this, SIGNAL(signalLinksForPattern(QString, std::vector<std::string>*)),
-        view->getNoteEdit()->getNoteEditor(), SLOT(slotPerformLinkCompletion(QString, std::vector<std::string>*)));
+        this,
+            SIGNAL(signalLinksForPattern(QString, std::vector<std::string>*)),
+        view->getNoteEdit()->getNoteEditor(),
+            SLOT(slotPerformLinkCompletion(QString, std::vector<std::string>*)));
     QObject::connect(
-        view->getOutlineHeaderEdit()->getHeaderEditor(), SIGNAL(signalGetLinksForPattern(QString)),
-        this, SLOT(slotGetLinksForPattern(QString)));
+        view->getOutlineHeaderEdit()->getHeaderEditor(),
+            SIGNAL(signalGetLinksForPattern(QString)),
+        this,
+            SLOT(slotGetLinksForPattern(QString)));
     QObject::connect(
-        this, SIGNAL(signalLinksForHeaderPattern(QString, std::vector<std::string>*)),
-        view->getOutlineHeaderEdit()->getHeaderEditor(), SLOT(slotPerformLinkCompletion(QString, std::vector<std::string>*)));
+        this,
+            SIGNAL(signalLinksForHeaderPattern(QString, std::vector<std::string>*)),
+        view->getOutlineHeaderEdit()->getHeaderEditor(),
+            SLOT(slotPerformLinkCompletion(QString, std::vector<std::string>*)));
     QObject::connect(
-        outlineHeaderEditPresenter->getView()->getButtonsPanel(), SIGNAL(signalShowLivePreview()),
-        mainPresenter, SLOT(doActionToggleLiveNotePreview()));
+        outlineHeaderEditPresenter->getView()->getButtonsPanel(),
+            SIGNAL(signalShowLivePreview()),
+        mainPresenter,
+            SLOT(doActionToggleLiveNotePreview()));
     QObject::connect(
-        noteEditPresenter->getView()->getButtonsPanel(), SIGNAL(signalShowLivePreview()),
-        mainPresenter, SLOT(doActionToggleLiveNotePreview()));
+        noteEditPresenter->getView()->getButtonsPanel(),
+            SIGNAL(signalShowLivePreview()),
+        mainPresenter,
+            SLOT(doActionToggleLiveNotePreview()));
     // intercept Os table column sorting
     QObject::connect(
-        view->getOutlinesTable()->horizontalHeader(), SIGNAL(sectionClicked(int)),
-        this, SLOT(slotOutlinesTableSorted(int)));
+        view->getOutlinesTable()->horizontalHeader(),
+            SIGNAL(sectionClicked(int)),
+        this,
+            SLOT(slotOutlinesTableSorted(int)));
     // toggle full O HTML preview
     QObject::connect(
-        view->getOutlineHeaderView()->getEditPanel()->getFullOPreviewButton(), SIGNAL(clicked()),
-        this, SLOT(slotToggleFullOutlinePreview()));
+        view->getOutlineHeaderView()->getEditPanel()->getFullOPreviewButton(),
+            SIGNAL(clicked()),
+        this,
+            SLOT(slotToggleFullOutlinePreview()));
+    // ^ and v @ O header/N view panel
+    QObject::connect(
+        view->getOutlineHeaderView()->getEditPanel()->getNextNoteButton(),
+            SIGNAL(clicked()),
+        outlineViewPresenter->getOutlineTree(),
+            SLOT(slotSelectPreviousRow()));
+    QObject::connect(
+        view->getOutlineHeaderView()->getEditPanel()->getLastNoteButton(),
+            SIGNAL(clicked()),
+        outlineViewPresenter->getOutlineTree(),
+            SLOT(slotSelectNextRow()));
+    QObject::connect(
+        view->getNoteView()->getButtonsPanel()->getNextNoteButton(),
+            SIGNAL(clicked()),
+        outlineViewPresenter->getOutlineTree(),
+            SLOT(slotSelectPreviousRow()));
+    QObject::connect(
+        view->getNoteView()->getButtonsPanel()->getLastNoteButton(),
+            SIGNAL(clicked()),
+        outlineViewPresenter->getOutlineTree(),
+            SLOT(slotSelectNextRow()));
     // show O header @ N
     QObject::connect(
-        view->getNoteView()->getButtonsPanel()->getShowOutlineHeaderButton(), SIGNAL(clicked()),
-        this, SLOT(slotShowOutlineHeader()));
+        view->getNoteView()->getButtonsPanel()->getShowOutlineHeaderButton(),
+            SIGNAL(clicked()),
+        this,
+            SLOT(slotShowOutlineHeader()));
 }
 
-int dialogSaveOrCancel()
+int dialogSaveOrCancel(QWidget* view)
 {
     // l10n by moving this dialog either to Qt class OR view class
     QMessageBox msgBox{
         QMessageBox::Question,
         QObject::tr("Save Note"),
-        QObject::tr("Do you want to save changes?")
+        QObject::tr("Do you want to save changes?"),
+        {},
+        view
     };
 
     QPushButton* discard = msgBox.addButton(
@@ -228,26 +260,6 @@ void OrlojPresenter::showFacetRecentNotes(const vector<Note*>& notes)
     setFacet(OrlojPresenterFacets::FACET_RECENT_NOTES);
     recentNotesTablePresenter->refresh(notes);
     view->showFacetRecentNotes();
-    mainPresenter->getStatusBar()->showMindStatistics();
-}
-
-void OrlojPresenter::showFacetDashboard() {
-    setFacet(OrlojPresenterFacets::FACET_DASHBOARD);
-
-    vector<Note*> allNotes{};
-    mind->getAllNotes(allNotes, true, true);
-    map<const Tag*,int> allTags{};
-    mind->getTagsCardinality(allTags);
-
-    dashboardPresenter->refresh(
-        mind->getOutlines(),
-        allNotes,
-        allTags,
-        mind->remind().getOutlineMarkdownsSize(),
-        mind->getStatistics()
-    );
-    view->showFacetDashboard();
-    mainPresenter->getMainMenu()->showFacetDashboard();
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
@@ -348,6 +360,25 @@ void OrlojPresenter::showFacetOutlineList(const vector<Outline*>& outlines)
     mainPresenter->getStatusBar()->showMindStatistics();
 }
 
+void OrlojPresenter::showFacetOutlinesMap(Outline* outlinesMap)
+{
+    setFacet(OrlojPresenterFacets::FACET_MAP_OUTLINES);
+    outlinesMapPresenter->refresh(outlinesMap);
+    view->showFacetOutlinesMap();
+    mainPresenter->getMainMenu()->showFacetOutlinesMap();
+    mainPresenter->getStatusBar()->showMindStatistics();
+
+    // give focus to the component
+    auto componentView = view->getOutlinesMapTable();
+    componentView->setFocus();
+    // give focus to the first row in the view
+    if(componentView->model()->rowCount() > 0) {
+        componentView->setCurrentIndex(
+            componentView->model()->index(0, 0)
+        );
+    }
+}
+
 void OrlojPresenter::slotShowOutlines()
 {
     showFacetOutlineList(mind->getOutlines());
@@ -445,6 +476,40 @@ void OrlojPresenter::showFacetOutline(Outline* outline)
     mainPresenter->getStatusBar()->showInfo(QString("Notebook '%1'   %2").arg(outline->getName().c_str()).arg(outline->getKey().c_str()));
 }
 
+void OrlojPresenter::slotMapShowSelectedOutline()
+{
+    MF_DEBUG("  -> signal HANDLER @ OrlojPresenter: show O " << activeFacet << std::endl);
+    if(activeFacet == OrlojPresenterFacets::FACET_MAP_OUTLINES){
+        int row = outlinesMapPresenter->getCurrentRow();
+        MF_DEBUG("  current row: " << row << std::endl);
+        if(row != OutlinesTablePresenter::NO_ROW) {
+            QStandardItem* item = outlinesMapPresenter->getModel()->item(row);
+            MF_DEBUG("    Item: " << item << std::endl);
+            if(item) {
+                Note* noteForOutline = item->data(Qt::UserRole + 1).value<Note*>();
+                MF_DEBUG("    N for O: " << noteForOutline << endl);
+                if(noteForOutline
+                   && noteForOutline->getLinks().size() > 0
+                   && noteForOutline->getLinks().at(0)->getUrl().size() > 0
+                ) {
+                    MF_DEBUG("    Getting O: " << noteForOutline->getLinks().at(0)->getUrl() << endl);
+                    Outline* outline = mind->remind().getOutline(noteForOutline->getLinks().at(0)->getUrl());
+                    if(outline) {
+                        showFacetOutline(outline);
+                        return;
+                    } else {
+                        mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Notebook not found!")));
+                    }
+                }
+                return;
+            } else {
+                mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Notebook not found!")));
+            }
+        }
+        mainPresenter->getStatusBar()->showInfo(QString(tr("No Notebook selected!")));
+    }
+}
+
 void OrlojPresenter::slotShowSelectedOutline()
 {
     if(activeFacet!=OrlojPresenterFacets::FACET_ORGANIZER
@@ -456,19 +521,9 @@ void OrlojPresenter::slotShowSelectedOutline()
        activeFacet!=OrlojPresenterFacets::FACET_RECENT_NOTES
       )
     {
-        int row;
-        if(activeFacet==OrlojPresenterFacets::FACET_DASHBOARD) {
-            row = dashboardPresenter->getOutlinesPresenter()->getCurrentRow();
-        } else {
-            row = outlinesTablePresenter->getCurrentRow();
-        }
+        int row = outlinesTablePresenter->getCurrentRow();
         if(row != OutlinesTablePresenter::NO_ROW) {
-            QStandardItem* item;
-            if(activeFacet==OrlojPresenterFacets::FACET_DASHBOARD) {
-                item = dashboardPresenter->getOutlinesPresenter()->getModel()->item(row);
-            } else {
-                item = outlinesTablePresenter->getModel()->item(row);
-            }
+            QStandardItem* item = outlinesTablePresenter->getModel()->item(row);
             // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
             if(item) {
                 Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
@@ -523,25 +578,13 @@ void OrlojPresenter::showFacetTagCloud()
 
 void OrlojPresenter::slotShowSelectedTagRecallDialog()
 {
-    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD
-         ||
-       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
-      )
-    {
-        int row;
-        if(activeFacet==OrlojPresenterFacets::FACET_DASHBOARD) {
-            row = dashboardPresenter->getTagsPresenter()->getCurrentRow();
-        } else {
-            row = tagCloudPresenter->getCurrentRow();
-        }
+    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD) {
+        int row = tagCloudPresenter->getCurrentRow();
         if(row != OutlinesTablePresenter::NO_ROW) {
             QStandardItem* item;
             switch(activeFacet) {
             case OrlojPresenterFacets::FACET_TAG_CLOUD:
                 item = tagCloudPresenter->getModel()->item(row);
-                break;
-            case OrlojPresenterFacets::FACET_DASHBOARD:
-                item = dashboardPresenter->getTagsPresenter()->getModel()->item(row);
                 break;
             default:
                 item = nullptr;
@@ -563,21 +606,11 @@ void OrlojPresenter::slotShowTagRecallDialog(const QItemSelection& selected, con
 {
     Q_UNUSED(deselected);
 
-    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD
-         ||
-       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
-      )
-    {
+    if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD) {
         QModelIndexList indices = selected.indexes();
         if(indices.size()) {
             const QModelIndex& index = indices.at(0);
-            QStandardItem* item;
-            // TODO if 2 switch
-            if(activeFacet == OrlojPresenterFacets::FACET_TAG_CLOUD) {
-                item = tagCloudPresenter->getModel()->itemFromIndex(index);
-            } else {
-                item = dashboardPresenter->getTagsPresenter()->getModel()->itemFromIndex(index);
-            }
+            QStandardItem* item = tagCloudPresenter->getModel()->itemFromIndex(index);
             // TODO introduce name my user role - replace constant with my enum name > do it for whole file e.g. MfDataRole
             const Tag* tag = item->data(Qt::UserRole + 1).value<const Tag*>();
             mainPresenter->doTriggerFindNoteByTag(tag);
@@ -750,7 +783,7 @@ bool OrlojPresenter::avoidDataLossOnNoteEdit()
             if(Configuration::getInstance().isUiEditorAutosave()) {
                 decision = OrlojButtonRoles::SAVE_ROLE;
             } else {
-                decision = dialogSaveOrCancel();
+                decision = dialogSaveOrCancel(view);
             }
 
             switch(decision) {
@@ -774,7 +807,7 @@ bool OrlojPresenter::avoidDataLossOnNoteEdit()
                 return true;
             }
         } else if(activeFacet == OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER) {
-            int decision = dialogSaveOrCancel();
+            int decision = dialogSaveOrCancel(view);
             switch(decision) {
             case OrlojButtonRoles::DISCARD_ROLE:
                 // do nothing
@@ -895,25 +928,13 @@ void OrlojPresenter::slotGetLinksForPattern(const QString& pattern)
 
 void OrlojPresenter::slotShowSelectedRecentNote()
 {
-    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES
-         ||
-       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
-      )
-    {
-        int row;
-        if(activeFacet==OrlojPresenterFacets::FACET_DASHBOARD) {
-            row = dashboardPresenter->getRecentNotesPresenter()->getCurrentRow();
-        } else {
-            row = recentNotesTablePresenter->getCurrentRow();
-        }
+    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES) {
+        int row = recentNotesTablePresenter->getCurrentRow();
         if(row != RecentNotesTablePresenter::NO_ROW) {
             QStandardItem* item;
             switch(activeFacet) {
             case OrlojPresenterFacets::FACET_RECENT_NOTES:
                 item = recentNotesTablePresenter->getModel()->item(row);
-                break;
-            case OrlojPresenterFacets::FACET_DASHBOARD:
-                item = dashboardPresenter->getRecentNotesPresenter()->getModel()->item(row);
                 break;
             default:
                 item = nullptr;
@@ -942,20 +963,11 @@ void OrlojPresenter::slotShowRecentNote(const QItemSelection& selected, const QI
 {
     Q_UNUSED(deselected);
 
-    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES
-         ||
-       activeFacet == OrlojPresenterFacets::FACET_DASHBOARD
-      )
-    {
+    if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES) {
         QModelIndexList indices = selected.indexes();
         if(indices.size()) {
             const QModelIndex& index = indices.at(0);
-            QStandardItem* item;
-            if(activeFacet == OrlojPresenterFacets::FACET_RECENT_NOTES) {
-                item = recentNotesTablePresenter->getModel()->itemFromIndex(index);
-            } else {
-                item = dashboardPresenter->getRecentNotesPresenter()->getModel()->itemFromIndex(index);
-            }
+            QStandardItem* item = recentNotesTablePresenter->getModel()->itemFromIndex(index);
             // TODO make my role constant
             const Note* note = item->data(Qt::UserRole + 1).value<const Note*>();
 

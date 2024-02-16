@@ -1,7 +1,7 @@
 /*
  configuration_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -33,20 +33,25 @@ ConfigurationDialog::ConfigurationDialog(QWidget* parent)
     markdownTab = new MarkdownTab{this};
     navigatorTab = new NavigatorTab{this};
     mindTab = new MindTab{this};
+    wingmanTab = new WingmanTab{this};
 
     tabWidget->addTab(appTab, tr("Application"));
+    tabWidget->addTab(wingmanTab, tr("Wingman"));
     tabWidget->addTab(viewerTab, tr("Viewer"));
     tabWidget->addTab(editorTab, tr("Editor"));
     tabWidget->addTab(markdownTab, tr("Markdown"));
-    tabWidget->addTab(navigatorTab, tr("Navigator"));
     tabWidget->addTab(mindTab, tr("Mind"));
+    tabWidget->addTab(navigatorTab, tr("Navigator"));
 
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
     // signals
-    QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    QObject::connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &ConfigurationDialog::saveSlot);
+    QObject::connect(
+        buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    QObject::connect(
+        buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    QObject::connect(
+        buttonBox, &QDialogButtonBox::accepted, this, &ConfigurationDialog::saveSlot);
 
     QVBoxLayout* mainLayout = new QVBoxLayout{this};
     mainLayout->addWidget(tabWidget);
@@ -72,6 +77,7 @@ void ConfigurationDialog::show()
     markdownTab->refresh();
     navigatorTab->refresh();
     mindTab->refresh();
+    wingmanTab->refresh();
 
     QDialog::show();
 }
@@ -84,6 +90,7 @@ void ConfigurationDialog::saveSlot()
     markdownTab->save();
     navigatorTab->save();
     mindTab->save();
+    wingmanTab->save();
 
     emit saveConfigSignal();
 }
@@ -95,7 +102,10 @@ void ConfigurationDialog::saveSlot()
 ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
-    themeLabel = new QLabel(tr("UI theme (<font color='#ff0000'>requires restart</font>)")+":", this);
+    themeLabel = new QLabel(
+        tr("UI theme (<font color='#ff0000'>requires restart</font>)")+":", this);
+    menuLabel = new QLabel(
+        tr("Menu (<font color='#ff0000'>requires restart</font>)")+":", this);
     themeCombo = new QComboBox{this};
     themeCombo->addItem(QString{UI_THEME_LIGHT});
 #ifndef __APPLE__
@@ -113,10 +123,8 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
 
     startupLabel = new QLabel(tr("Show the following view on application start")+":", this);
     startupCombo = new QComboBox{this};
-#ifdef MF_DEPRECATED
-    startupCombo->addItem(QString{START_TO_DASHBOARD});
-#endif
     startupCombo->addItem(QString{START_TO_OUTLINES});
+    startupCombo->addItem(QString{START_TO_OUTLINES_TREE});
     startupCombo->addItem(QString{START_TO_TAGS});
     startupCombo->addItem(QString{START_TO_RECENT});
 #ifdef MF_BUG
@@ -125,10 +133,17 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
 #endif
     startupCombo->addItem(QString{START_TO_HOME_OUTLINE});
 
+    appFontSizeLabel = new QLabel(
+        tr("Application font size - 0 is system (<font color='#ff0000'>requires restart</font>)")+":", this);
+    appFontSizeSpin = new QSpinBox(this);
+    appFontSizeSpin->setMinimum(0);
+    appFontSizeSpin->setMaximum(68);
+
     showToolbarCheck = new QCheckBox(tr("show toolbar"), this);
     showToolbarCheck->setChecked(true);
-    uiExpertModeCheck = new QCheckBox(tr("I don't need buttons - I know all keyboard shortcuts!"), this);
-    nerdMenuCheck = new QCheckBox(tr("nerd menu (requires restart)"), this);
+    uiExpertModeCheck = new QCheckBox(
+        tr("I don't need buttons - I know all keyboard shortcuts!"), this);
+    nerdMenuCheck = new QCheckBox(tr("nerd terminology"), this);
 
     // assembly
     QVBoxLayout* startupLayout = new QVBoxLayout{this};
@@ -140,15 +155,25 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     QVBoxLayout* appearanceLayout = new QVBoxLayout{this};
     appearanceLayout->addWidget(themeLabel);
     appearanceLayout->addWidget(themeCombo);
-    appearanceLayout->addWidget(showToolbarCheck);
-    appearanceLayout->addWidget(uiExpertModeCheck);
+    appearanceLayout->addWidget(appFontSizeLabel);
+    appearanceLayout->addWidget(appFontSizeSpin);
+    appearanceLayout->addWidget(menuLabel);
     appearanceLayout->addWidget(nerdMenuCheck);
-    QGroupBox* appearanceGroup = new QGroupBox{tr("Appearance"), this};
+    QGroupBox* appearanceGroup = new QGroupBox{
+        tr("Appearance (<font color='#ff0000'>requires restart</font>)"),
+        this};
     appearanceGroup->setLayout(appearanceLayout);
+
+    QVBoxLayout* controlsLayout = new QVBoxLayout{this};
+    controlsLayout->addWidget(showToolbarCheck);
+    controlsLayout->addWidget(uiExpertModeCheck);
+    QGroupBox* controlsGroup = new QGroupBox{tr("Controls"), this};
+    controlsGroup->setLayout(controlsLayout);
 
     QVBoxLayout* boxesLayout = new QVBoxLayout{this};
     boxesLayout->addWidget(startupGroup);
     boxesLayout->addWidget(appearanceGroup);
+    boxesLayout->addWidget(controlsGroup);
     boxesLayout->addStretch();
     setLayout(boxesLayout);
 }
@@ -157,6 +182,8 @@ ConfigurationDialog::AppTab::~AppTab()
 {
     delete themeLabel;
     delete themeCombo;
+    delete appFontSizeLabel;
+    delete appFontSizeSpin;
     delete startupLabel;
     delete startupCombo;
     delete showToolbarCheck;
@@ -173,6 +200,7 @@ void ConfigurationDialog::AppTab::refresh()
         themeCombo->setCurrentIndex(i);
     }
     showToolbarCheck->setChecked(config.isUiShowToolbar());
+    appFontSizeSpin->setValue(config.getUiAppFontSize());
     uiExpertModeCheck->setChecked(config.isUiExpertMode());
     nerdMenuCheck->setChecked(config.isUiNerdTargetAudience());
 }
@@ -182,6 +210,7 @@ void ConfigurationDialog::AppTab::save()
     config.setStartupView(startupCombo->itemText(startupCombo->currentIndex()).toStdString());
     config.setUiThemeName(themeCombo->itemText(themeCombo->currentIndex()).toStdString());
     config.setUiShowToolbar(showToolbarCheck->isChecked());
+    config.setUiAppFontSize(appFontSizeSpin->value());
     config.setUiExpertMode(uiExpertModeCheck->isChecked());
     config.setUiNerdTargetAudience(nerdMenuCheck->isChecked());
 }
@@ -190,7 +219,7 @@ void ConfigurationDialog::AppTab::save()
  * Viewer tab
  */
 
-ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
+ConfigurationDialog::ViewerTab::ViewerTab(QWidget* parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
     zoomLabel = new QLabel(tr("HTML zoom (100 is 100%, Ctrl + mouse wheel)")+":", this);
@@ -198,11 +227,13 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget *parent)
     zoomSpin->setMinimum(25);
     zoomSpin->setMaximum(500);
 
-    srcCodeHighlightSupportCheck = new QCheckBox{tr("source code syntax highlighting support"), this};
+    srcCodeHighlightSupportCheck = new QCheckBox{
+        tr("source code syntax highlighting support"), this};
 
     mathSupportCheck = new QCheckBox{tr("math support"), this};
     fullOPreviewCheck = new QCheckBox{tr("whole notebook preview"), this};
-    doubleClickViewerToEditCheck = new QCheckBox{tr("double click HTML preview to edit"), this};
+    doubleClickViewerToEditCheck = new QCheckBox{
+        tr("double click HTML preview to edit"), this};
 
     diagramSupportLabel = new QLabel(tr("Diagram support")+":", this);
     diagramSupportCombo = new QComboBox{this};
@@ -367,7 +398,7 @@ ConfigurationDialog::EditorTab::EditorTab(QWidget *parent)
 
     editorSpellCheckHelp = new QLabel(
         tr("Spell check dictionaries <a href='"
-           "https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/installation.md#spell-check-"
+           "https://github.com/dvorka/mindforger/wiki/Installation#spell-check"
            "'>configuration documentation</a>"
         ),
         this
@@ -641,6 +672,129 @@ void ConfigurationDialog::MindTab::save()
 {
     config.setSaveReadsMetadata(saveReadsMetadataCheck->isChecked());
     config.setDistributorSleepInterval(distributorSleepIntervalSpin->value());
+}
+
+/*
+ * Wingman tab
+ */
+
+ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
+    : QWidget(parent),
+      openAiComboLabel{"OpenAI"},
+      config(Configuration::getInstance())
+{
+    llmProvidersLabel = new QLabel(tr("LLM provider:"), this);
+    llmProvidersCombo = new QComboBox{this};
+    QObject::connect(
+        llmProvidersCombo, SIGNAL(currentIndexChanged(int)),
+        this, SLOT(handleComboBoxChanged(int))
+    );
+
+    llmHelpLabel = new QLabel(
+        tr(
+            "<html>Configure <a href='https://openai.com'>OpenAI</a> LLM provider:\n"
+            "<ul>"
+            "<li><a href='https://platform.openai.com/api-keys'>Generate</a> an OpenAI API key.</li>"
+            "<li>Set the API key:"
+            "<br>a) either set the <b>%1</b> environment variable<br/>"
+                "with the API key<br/>"
+                "b) or paste the API key below to save it <font color='#ff0000'>unencrypted</font> to<br/>"
+                "<b>.mindforger.md</b> file in your home dir.</li>"
+            "<li><font color='#ff0000'>Restart</font> MindForger to apply the change.</li>"
+            "</ul>"
+        ).arg(ENV_VAR_OPENAI_API_KEY));
+    llmHelpLabel->setVisible(!config.canWingmanOpenAi());
+    openAiApiKeyEdit = new QLineEdit(this);
+    openAiApiKeyEdit->setVisible(!config.canWingmanOpenAi());
+    clearOpenAiApiKeyButton = new QPushButton(tr("Clear OpenAI API Key"), this);
+    if(config.getWingmanOpenAiApiKey().size() == 0) {
+        clearOpenAiApiKeyButton->setVisible(false);
+    }
+
+    // assembly
+    QVBoxLayout* nLayout = new QVBoxLayout{this};
+    nLayout->addWidget(llmProvidersLabel);
+    nLayout->addWidget(llmProvidersCombo);
+    nLayout->addWidget(llmHelpLabel);
+    nLayout->addWidget(openAiApiKeyEdit);
+    nLayout->addWidget(clearOpenAiApiKeyButton);
+    QGroupBox* nGroup = new QGroupBox{tr("Large language model (LLM) providers"), this};
+    nGroup->setLayout(nLayout);
+
+    QVBoxLayout* boxesLayout = new QVBoxLayout{this};
+    boxesLayout->addWidget(nGroup);
+    boxesLayout->addStretch();
+    setLayout(boxesLayout);
+
+    QObject::connect(
+        clearOpenAiApiKeyButton, SIGNAL(clicked()),
+        this, SLOT(clearOpenAiApiKeySlot()));
+
+}
+
+void ConfigurationDialog::WingmanTab::clearOpenAiApiKeySlot()
+{
+    openAiApiKeyEdit->clear();
+    QMessageBox::information(
+        this,
+        tr("OpenAI API Key Cleared"),
+        tr(
+            "API key has been cleared from the configuration. "
+            "Please close the configuration dialog with the OK button "
+            "and restart MindForger to apply this change.")
+    );
+}
+
+void ConfigurationDialog::WingmanTab::handleComboBoxChanged(int index) {
+    string comboItemLabel{llmProvidersCombo->itemText(index).toStdString()};
+    MF_DEBUG("WingmanTab::handleComboBoxChange: '" << comboItemLabel << "'" << endl);
+    if(this->isVisible() && comboItemLabel == openAiComboLabel) {
+        QMessageBox::warning(
+            this,
+            tr("Data Privacy Warning"),
+            tr(
+                "You have chosen OpenAI as your Wingman LLM provider. "
+                "Therefore, your data will be sent to OpenAI servers "
+                "for GPT processing when you use Wingman."));
+    }
+}
+
+ConfigurationDialog::WingmanTab::~WingmanTab()
+{
+    delete llmProvidersLabel;
+    delete llmProvidersCombo;
+    delete llmHelpLabel;
+}
+
+void ConfigurationDialog::WingmanTab::refresh()
+{
+    // refresh LLM providers combo
+    llmProvidersCombo->clear();
+    llmProvidersCombo->addItem(""); // disable Wingman
+#ifdef MF_WIP
+    if(config.canWingmanMock()) {
+        llmProvidersCombo->addItem(
+            QString{"Mock"}, WingmanLlmProviders::WINGMAN_PROVIDER_MOCK);
+    }
+#endif
+    if(config.canWingmanOpenAi()) {
+        llmProvidersCombo->addItem(
+            QString::fromStdString(openAiComboLabel), WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI);
+    }
+    openAiApiKeyEdit->setText(QString::fromStdString(config.getWingmanOpenAiApiKey()));
+    // set the last selected provider
+    llmProvidersCombo->setCurrentIndex(
+        llmProvidersCombo->findData(config.getWingmanLlmProvider()));
+}
+
+
+void ConfigurationDialog::WingmanTab::save()
+{
+    // get LLM provider enum value from llmProvidersCombo
+    WingmanLlmProviders llmProvider = static_cast<WingmanLlmProviders>(
+        llmProvidersCombo->itemData(llmProvidersCombo->currentIndex()).toInt());
+    config.setWingmanLlmProvider(llmProvider);
+    config.setWingmanOpenAiApiKey(openAiApiKeyEdit->text().toStdString());
 }
 
 /*

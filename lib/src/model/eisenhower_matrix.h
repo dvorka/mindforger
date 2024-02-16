@@ -1,7 +1,7 @@
 /*
  eisenhower_matrix.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -37,11 +37,12 @@ public:
     static constexpr const auto CONFIG_VALUE_SORT_BY_I = "importance";
     static constexpr const auto CONFIG_VALUE_SORT_BY_U = "urgency";
 
-    static constexpr const auto KEY_EISENHOWER_MATRIX = "/m1ndf0rg3r/organizers/eisenhower-matrix";
+    static constexpr const auto KEY_EISENHOWER_MATRIX =
+        "/m1ndf0rg3r/organizers/eisenhower-matrix";
 
     static std::string createEisenhowerMatrixKey();
 
-    static EisenhowerMatrix* createEisenhowMatrixOrganizer();
+    static EisenhowerMatrix* createEisenhowerMatrixOrganizer();
     static bool isEisenhowMatrixOrganizer(Organizer* o);
 
 public:

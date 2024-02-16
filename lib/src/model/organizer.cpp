@@ -1,7 +1,7 @@
 /*
  organizer.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ using namespace std;
 namespace m8r {
 
 const string Organizer::TYPE_STR_KANBAN = string{"Kanban"};
-const string Organizer::TYPE_STR_EISENHOWER_MATRIX= string{"Eisenhower Matrix"};
+const string Organizer::TYPE_STR_EISENHOWER_MATRIX = string{"Eisenhower Matrix"};
 
 std::string Organizer::createOrganizerKey(
     const set<string>& keys,
@@ -58,7 +58,7 @@ Organizer::Organizer(const Organizer& o)
       organizerType{o.organizerType},
       filterBy{o.getFilterBy()},
       modified{o.modified}
-{    
+{
     this->tagsUrQuadrant = o.tagsUrQuadrant;
     this->tagsUlQuadrant = o.tagsUlQuadrant;
     this->tagsLrQuadrant = o.tagsLlQuadrant;

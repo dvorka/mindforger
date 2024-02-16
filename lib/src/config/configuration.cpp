@@ -1,7 +1,7 @@
 /*
  configuration.cpp     M8r configuration management
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -29,6 +29,8 @@ using namespace m8r::filesystem;
 
 namespace m8r {
 
+const string KnowledgeTool::TOOL_PHRASE = string{"<<PHRASE>>"};
+
 // non-primitive constants initializations
 const string Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH = string{FILE_PATH_M8R_REPOSITORY};
 const string Configuration::DEFAULT_STARTUP_VIEW_NAME = string{DEFAULT_STARTUP_VIEW};
@@ -36,6 +38,7 @@ const string Configuration::DEFAULT_UI_THEME_NAME = string{UI_DEFAULT_THEME};
 const string Configuration::DEFAULT_UI_HTML_CSS_THEME = string{UI_DEFAULT_HTML_CSS_THEME};
 const string Configuration::DEFAULT_EDITOR_FONT= string{UI_DEFAULT_EDITOR_FONT};
 const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
+const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OPENAI = string{"gpt-3.5-turbo"};
 
 Configuration::Configuration()
     : asyncMindThreshold{},
@@ -47,9 +50,14 @@ Configuration::Configuration()
       autolinking{DEFAULT_AUTOLINKING},
       autolinkingColonSplit{},
       autolinkingCaseInsensitive{},
+      wingmanProvider{DEFAULT_WINGMAN_LLM_PROVIDER},
+      wingmanApiKey{},
+      wingmanOpenAiApiKey{},
+      wingmanLlmModel{DEFAULT_WINGMAN_LLM_MODEL_OPENAI},
       md2HtmlOptions{},
       distributorSleepInterval{DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL},
       markdownQuoteSections{},
+      recentIncludeOs{DEFAULT_RECENT_INCLUDE_OS},
       uiNerdTargetAudience{DEFAULT_UI_NERD_MENU},
       uiHtmlZoom{},
       externalEditorCmd{},
@@ -71,6 +79,7 @@ Configuration::Configuration()
       uiFullOPreview{DEFAULT_FULL_O_PREVIEW},
       uiShowToolbar{DEFAULT_UI_SHOW_TOOLBAR},
       uiExpertMode{DEFAULT_UI_EXPERT_MODE},
+      uiAppFontSize{DEFAULT_UI_APP_FONT_SIZE},
       uiDistractionFreeMode{},
       uiHoistedMode{},
       uiLiveNotePreview{DEFAULT_UI_LIVE_NOTE_PREVIEW},
@@ -140,9 +149,14 @@ void Configuration::clear()
     autolinking = DEFAULT_AUTOLINKING;
     autolinkingColonSplit = DEFAULT_AUTOLINKING_COLON_SPLIT;
     autolinkingCaseInsensitive = DEFAULT_AUTOLINKING_CASE_INSENSITIVE;
+    wingmanProvider = DEFAULT_WINGMAN_LLM_PROVIDER;
+    wingmanApiKey.clear();
+    wingmanOpenAiApiKey.clear();
+    wingmanLlmModel.clear();
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
     tagsScope.clear();
     markdownQuoteSections = DEFAULT_MD_QUOTE_SECTIONS;
+    recentIncludeOs = DEFAULT_RECENT_INCLUDE_OS;
 
     // Markdown 2 HTML options
     md2HtmlOptions = 0
@@ -192,6 +206,7 @@ void Configuration::clear()
     navigatorMaxNodes = DEFAULT_NAVIGATOR_MAX_GRAPH_NODES;
     uiShowToolbar = DEFAULT_UI_SHOW_TOOLBAR;
     uiExpertMode = DEFAULT_UI_EXPERT_MODE;
+    uiAppFontSize = DEFAULT_UI_APP_FONT_SIZE;
     uiDistractionFreeMode = false;
     uiHoistedMode = false;
     uiLiveNotePreview = DEFAULT_UI_LIVE_NOTE_PREVIEW;
@@ -268,7 +283,11 @@ void Configuration::setActiveRepository(
             memoryPath.clear();
             memoryPath += activeRepository->getDir();
 
-            // TODO limbo class
+            mindPath.clear();
+            mindPath += activeRepository->getDir();
+
+            outlinesMapPath.clear();
+
             limboPath.clear();
             limboPath += activeRepository->getDir();
 
@@ -279,12 +298,18 @@ void Configuration::setActiveRepository(
                 memoryPath+=FILE_PATH_SEPARATOR;
                 memoryPath+=DIRNAME_MEMORY;
 
-                // TODO limbo class
+                mindPath+=FILE_PATH_SEPARATOR;
+                mindPath+=DIRNAME_MIND;
+
+                outlinesMapPath+=mindPath;
+                outlinesMapPath+=FILE_PATH_SEPARATOR;
+                outlinesMapPath+=FILENAME_OUTLINES_MAP;
+
                 limboPath+=FILE_PATH_SEPARATOR;
                 limboPath+=DIRNAME_LIMBO;
 
                 // setting ACTIVE repository means that repository SPECIFIC configuration must be loaded
-                this->initRepositoryConfiguration(EisenhowerMatrix::createEisenhowMatrixOrganizer());
+                this->initRepositoryConfiguration(EisenhowerMatrix::createEisenhowerMatrixOrganizer());
                 persistence.load(*this);
             } else {
                 this->clearRepositoryConfiguration();
@@ -364,6 +389,131 @@ const char* Configuration::getEditorFromEnv()
 {
     char* editor = getenv(ENV_VAR_M8R_EDITOR);  // this is not leak (static reusable array)
     return editor;
+}
+
+bool Configuration::canWingmanOpenAi()
+{
+    if (
+        this->wingmanOpenAiApiKey.size() > 0
+        || std::getenv(ENV_VAR_OPENAI_API_KEY) != nullptr
+    ) {
+        return true;
+    }
+
+    return false;
+}
+
+void Configuration::setWingmanLlmProvider(WingmanLlmProviders provider)
+{
+    MF_DEBUG(
+        "Configuration::setWingmanLlmProvider(): "
+        << std::to_string(provider) << endl);
+
+    wingmanProvider = provider;
+
+    // try to initialize Wingman @ given LLM provider,
+    // if it fails, then set it to false ~ disabled Wingman
+    initWingman();
+}
+
+bool Configuration::initWingmanMock()
+{
+    if(canWingmanMock()) {
+        wingmanApiKey.clear();
+        wingmanLlmModel.clear();
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * @brief Check whether OpenAI Wingman requirements are satisfied.
+ *
+ * In case that the requirements are satisfied (OpenAI API key provided),
+ * then Wingman @ OpenAI can be choosen @ Mindforger configuration.
+*/
+bool Configuration::initWingmanOpenAi() {
+    MF_DEBUG("  Configuration::initWingmanOpenAi()" << endl);
+    if(canWingmanOpenAi()) {
+        MF_DEBUG(
+            "    Wingman OpenAI API key found in the shell environment variable "
+            "MINDFORGER_OPENAI_API_KEY or set in MF config" << endl);
+        if(wingmanOpenAiApiKey.size() > 0) {
+            wingmanApiKey = wingmanOpenAiApiKey;
+        } else {
+            const char* apiKeyEnv = std::getenv(ENV_VAR_OPENAI_API_KEY);
+            MF_DEBUG("    Wingman API key loaded from the env: " << apiKeyEnv << endl);
+            wingmanApiKey = apiKeyEnv;
+        }
+        wingmanLlmModel = DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
+        wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI;
+        return true;
+    }
+
+    MF_DEBUG(
+        "    Wingman OpenAI API key NEITHER found in the environment variable "
+        "MINDFORGER_OPENAI_API_KEY, NOR set in MF configuration" << endl);
+    wingmanApiKey.clear();
+    wingmanLlmModel.clear();
+    wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
+    return false;
+}
+
+bool Configuration::initWingman()
+{
+    MF_DEBUG(
+        "  BEFORE Configuration::initWingman():" << endl <<
+        "    LLM provider: " << wingmanProvider << endl <<
+        "    OpenAI API key env var name: " << ENV_VAR_OPENAI_API_KEY << endl <<
+        "    Wingman provider API key   : " << wingmanApiKey << endl
+    );
+
+    bool initialized = false;
+
+    switch (wingmanProvider) {
+    case WingmanLlmProviders::WINGMAN_PROVIDER_NONE:
+        MF_DEBUG("  NONE Wingman CONFIGURED" << endl);
+        return true;
+#ifdef MF_WIP
+    case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
+        MF_DEBUG("  MOCK Wingman provider CONFIGURED" << endl);
+        initialized = initWingmanMock();
+        break;
+#endif
+    case WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI:
+        MF_DEBUG("  OpenAI Wingman provider CONFIGURED" << endl);
+        initialized = initWingmanOpenAi();
+        break;
+    default:
+        MF_DEBUG(
+            "  ERROR: unable to CONFIGURE UNKNOWN Wingman provider: "
+            << wingmanProvider << endl);
+        initialized = false;
+    }
+
+    if(!initialized) {
+        wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
+        wingmanApiKey.clear();
+        wingmanLlmModel.clear();
+    }
+
+    MF_DEBUG(
+        "  BEFORE Configuration::initWingman():" << endl <<
+        "    LLM provider: " << wingmanProvider << endl <<
+        "    OpenAI API key env var name: " << ENV_VAR_OPENAI_API_KEY << endl <<
+        "    Wingman provider API key   : " << wingmanApiKey << endl
+    );
+
+    return initialized;
+}
+
+/**
+ * @brief Re-initialize Wingman using configured LLM provider and return
+ * whether it is ready to be used.
+ */
+bool Configuration::isWingman() {
+    return WingmanLlmProviders::WINGMAN_PROVIDER_NONE==wingmanProvider?false:true;
 }
 
 } // m8r namespace

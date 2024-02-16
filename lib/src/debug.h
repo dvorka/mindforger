@@ -1,7 +1,7 @@
 /*
  debug.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -34,12 +34,13 @@
     // enable/disable verbose debug of particular components
     //#define MF_DEBUG_HTML
     //#define MF_DEBUG_ASYNC_TASKS
-    //#define MF_DEBUG_QRC
     //#define MF_DEBUG_L10N
     //#define MF_DEBUG_AUTOLINKING
+    //#define MF_DEBUG_LIBRARY
 
     // show WIP features
     #define MF_WIP
+    #define MF_WIP_WINGMAN
 
     // future timestamps check
     #define MF_ASSERT_WHERE " (" << __FILE__ << ":" << __LINE__ << ")"

@@ -1,7 +1,7 @@
 /*
  cli_n_breadcrumbs_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -50,11 +50,13 @@ public:
 
     void executeListOutlines();
     void executeListNotes();
-    void executeFts(QString& command);
 
 private slots:
-    void executeCommand();
+    /**
+     * @brief key pressed handler of the CLI edit line
+     */
     void handleCliTextChanged(const QString& text);
+    void executeCommand();
 };
 
 }

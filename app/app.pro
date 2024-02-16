@@ -1,6 +1,6 @@
 # app.pro     Qt project file for MindForger Qt-based frontend
 #
-# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,12 +23,20 @@ message("Qt version: $$QT_VERSION")
 
 QT += widgets
 
+win32 {
+  QT += network
+}
+
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
 }
 
 mfci {
   DEFINES += DO_MF_CI
+}
+
+mfrc {
+  DEFINES += DO_MF_RC
 }
 
 # Hunspell spell check:
@@ -54,13 +62,8 @@ mfoldhunspell | equals(OS_DISTRO_VERSION, "Windows") | equals(OS_DISTRO_VERSION,
   message("Hunspell: configuring use of NEW API on OS: $$OS_DISTRO_VERSION")
 }
 
-# Named Entity Recognition
-mfner {
-  DEFINES += MF_NER
-}
-
 # webkit is supposed to be OBSOLETED by webengine, but webengine is disabled
-# on Linux since Qt 5.9 due to its tragic performance > conditional compilation
+# on Linux since Qt 5.9 due to its tragic performance -> conditional compilation
 # seems to be the only way:
 # - webkit on Linux
 # - webengine on Windows and macOS
@@ -68,7 +71,6 @@ win32|macx|mfwebengine {
     DEFINES += MF_QT_WEB_ENGINE
     QT += webengine
     QT += webenginewidgets
-
 } else {
     QT += webkit
     QT += webkitwidgets
@@ -90,7 +92,8 @@ win32 {
     else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/debug -lmindforger
 } else {
     # Linux and macOS
-    LIBS += -L$$OUT_PWD/../lib -lmindforger
+    # TODO split macOS
+    LIBS += -L$$OUT_PWD/../lib -lmindforger -lcurl
 }
 
 # Markdown to HTML: cmark-gfm (or nothing)
@@ -120,17 +123,11 @@ win32 {
   }
 }
 
-# NER library
-mfner {
-  # MF links MITIE for AI/NLP/DL
-  LIBS += -L$$OUT_PWD/../deps/mitie/mitielib -lmitie
-}
-
 # Zlib
 win32 {
     INCLUDEPATH += $$PWD/../deps/zlib-win/include
     DEPENDPATH += $$PWD/../deps/zlib-win/include
-    
+
     CONFIG(release, debug|release): LIBS += -L$$PWD/../deps/zlib-win/lib/ -lzlibwapi
     else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../deps/zlib-win/lib/ -lzlibwapi
 } else {
@@ -187,9 +184,19 @@ INCLUDEPATH += ./src/qt/spelling
 #
 # - GCC: -std=c++0x ~ -std=c++11
 #
-# compiler options (qmake CONFIG+=mfnoccache ...)
+# compiler and compiler options:
+#   - https://doc.qt.io/qt-6/qmake-variable-reference.html#qmake-cxx
+#   - QMAKE_CXX       ... compiler
+#   - QMAKE_CXXFLAGS  ... compiler options
+#   - compilation options ~ DEFINEs (qmake CONFIG+=mfnoccache ...)
+#
 win32{
     QMAKE_CXXFLAGS += /MP
+    
+    # DISABLED ccache as it causes compilation error:
+    #   "C1090: PDB API call failed, error code '23'" when used 
+    # when used w/ MS VS compiler:
+    # !mfnoccache { QMAKE_CXX = ccache $$QMAKE_CXX }
 } else {
     # linux and macos
     mfnoccache {
@@ -231,7 +238,6 @@ HEADERS += \
     ./src/qt/note_view_model.h \
     ./src/qt/note_view_presenter.h \
     ./src/qt/note_view.h \
-    ./src/qt/note_edit_model.h \
     ./src/qt/note_edit_presenter.h \
     ./src/qt/look_n_feel.h \
     ./src/qt/html_delegate.h \
@@ -277,6 +283,10 @@ HEADERS += \
     src/qt/dialogs/add_library_dialog.h \
     src/qt/dialogs/export_csv_file_dialog.h \
     src/qt/dialogs/organizer_new_dialog.h \
+    src/qt/dialogs/rm_library_dialog.h \
+    src/qt/dialogs/run_tool_dialog.h \
+    src/qt/dialogs/wingman_dialog.h \
+    src/qt/dialogs/sync_library_dialog.h \
     src/qt/dialogs/terminal_dialog.h \
     src/qt/kanban_column_model.h \
     src/qt/kanban_column_presenter.h \
@@ -292,6 +302,9 @@ HEADERS += \
     src/qt/organizers_table_model.h \
     src/qt/organizers_table_presenter.h \
     src/qt/organizers_table_view.h \
+    src/qt/outlines_map_model.h \
+    src/qt/outlines_map_presenter.h \
+    src/qt/outlines_map_view.h \
     src/qt/qt_commons.h \
     src/qt/spelling/abstract_dictionary.h \
     src/qt/spelling/abstract_dictionary_provider.h \
@@ -307,8 +320,6 @@ HEADERS += \
     src/qt/navigator_presenter.h \
     src/qt/main_toolbar_view.h \
     src/qt/dialogs/export_file_dialog.h \
-    src/qt/dashboard_view.h \
-    src/qt/dashboard_presenter.h \
     src/qt/widgets/edit_buttons_panel.h \
     src/qt/widgets/edit_name_panel.h \
     src/qt/widgets/view_to_edit_buttons_panel.h \
@@ -319,14 +330,6 @@ HEADERS += \
 
 win32|macx|mfwebengine {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
-}
-mfner {
-    HEADERS += \
-    src/qt/dialogs/ner_choose_tag_types_dialog.h \
-    src/qt/dialogs/ner_result_dialog.h \
-    src/qt/ner_leaderboard_model.h \
-    src/qt/ner_leaderboard_view.h \
-    src/qt/ner_main_window_worker_thread.h
 }
 
 SOURCES += \
@@ -356,7 +359,6 @@ SOURCES += \
     ./src/qt/note_view_model.cpp \
     ./src/qt/note_view_presenter.cpp \
     ./src/qt/note_view.cpp \
-    ./src/qt/note_edit_model.cpp \
     ./src/qt/note_edit_presenter.cpp \
     ./src/qt/look_n_feel.cpp \
     ./src/qt/html_delegate.cpp \
@@ -402,6 +404,10 @@ SOURCES += \
     src/qt/dialogs/add_library_dialog.cpp \
     src/qt/dialogs/export_csv_file_dialog.cpp \
     src/qt/dialogs/organizer_new_dialog.cpp \
+    src/qt/dialogs/rm_library_dialog.cpp \
+    src/qt/dialogs/run_tool_dialog.cpp \
+    src/qt/dialogs/wingman_dialog.cpp \
+    src/qt/dialogs/sync_library_dialog.cpp \
     src/qt/dialogs/terminal_dialog.cpp \
     src/qt/kanban_column_model.cpp \
     src/qt/kanban_column_presenter.cpp \
@@ -417,6 +423,9 @@ SOURCES += \
     src/qt/organizers_table_model.cpp \
     src/qt/organizers_table_presenter.cpp \
     src/qt/organizers_table_view.cpp \
+    src/qt/outlines_map_model.cpp \
+    src/qt/outlines_map_presenter.cpp \
+    src/qt/outlines_map_view.cpp \
     src/qt/spelling/dictionary_manager.cpp \
     src/qt/spelling/spell_checker.cpp \
     src/qt/tags_table_model.cpp \
@@ -428,8 +437,6 @@ SOURCES += \
     src/qt/navigator_presenter.cpp \
     src/qt/main_toolbar_view.cpp \
     src/qt/dialogs/export_file_dialog.cpp \
-    src/qt/dashboard_view.cpp \
-    src/qt/dashboard_presenter.cpp \
     src/qt/widgets/edit_buttons_panel.cpp \
     src/qt/widgets/edit_name_panel.cpp \
     src/qt/widgets/view_to_edit_buttons_panel.cpp \
@@ -439,15 +446,6 @@ SOURCES += \
 
 win32|macx|mfwebengine {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp
-}
-
-mfner {
-    SOURCES += \
-    src/qt/dialogs/ner_choose_tag_types_dialog.cpp \
-    src/qt/dialogs/ner_result_dialog.cpp \
-    src/qt/ner_leaderboard_model.cpp \
-    src/qt/ner_leaderboard_view.cpp \
-    src/qt/ner_main_window_worker_thread.cpp
 }
 
 win32 {
@@ -466,7 +464,8 @@ TRANSLATIONS = \
     ./resources/qt/translations/mindforger_nerd_en.ts \
     ./resources/qt/translations/mindforger_nerd_cs.ts \
     ./resources/qt/translations/mindforger_en.ts \
-    ./resources/qt/translations/mindforger_cs.ts
+    ./resources/qt/translations/mindforger_cs.ts \
+    ./resources/qt/translations/mindforger_zh_cn.ts
 
 RESOURCES += \
     ./mf-resources.qrc
@@ -512,5 +511,6 @@ win32 {
 message(DEFINES of app.pro build: $$DEFINES)
 message(QMAKE_EXTRA_TARGETS of app.pro build: $$QMAKE_EXTRA_TARGETS)
 message(QT of app.pro build: $$QT)
+message(PATH is: $$(PATH))
 
 # eof

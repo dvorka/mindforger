@@ -1,7 +1,7 @@
 /*
  string_utils_test.cpp     MindForger application test
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -27,15 +27,29 @@ using namespace m8r;
 
 TEST(StringGearTestCase, StringToNcName)
 {
+    // GIVEN
     string s("123 text 456");
+    // WHEN
     string r = normalizeToNcName(s, '-');
+    // THEN
     cout << s << " => " << r << endl;
     ASSERT_EQ("123-text-456", r);
 
+    // GIVEN
     s.assign("čeština už je tu!");
+    // WHEN
     r = normalizeToNcName(s, '-');
+    // THEN
     cout << s << " => " << r << endl;
     ASSERT_EQ("---e--tina-u---je-tu-", r);
+
+    // GIVEN
+    s.assign("Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf");
+    // WHEN
+    r = normalizeToNcName(s, '-');
+    // THEN
+    cout << s << " => " << r << endl;
+    ASSERT_EQ("Compensation-Letter-05012021---Doe--John--Clifton--Tony--pdf", r);
 }
 
 TEST(StringGearTestCase, Split)

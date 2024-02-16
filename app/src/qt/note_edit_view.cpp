@@ -1,7 +1,7 @@
 /*
  note_edit_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -42,16 +42,19 @@ NoteEditView::NoteEditView(QWidget* parent)
     // signals
 #ifdef __APPLE__
     new QShortcut(
-        QKeySequence(Qt::CTRL+Qt::Key_L),
+        QKeySequence(Qt::CTRL+Qt::Key_D),
         this, SLOT(slotSaveAndCloseEditor()));
 #else
+    // TODO leak?
     new QShortcut(
         QKeySequence(Qt::ALT+Qt::Key_Left),
         this, SLOT(slotSaveAndCloseEditor()));
 #endif
+    // TODO leak?
     new QShortcut(
         QKeySequence(Qt::CTRL+Qt::Key_G),
         this, SLOT(slotCloseEditor()));
+    // TODO leak?
     new QShortcut(
 #if __APPLE__
         QKeySequence(Qt::CTRL+Qt::Key_Return),
@@ -59,6 +62,7 @@ NoteEditView::NoteEditView(QWidget* parent)
         QKeySequence(Qt::ALT+Qt::Key_Return),
 #endif
         this, SLOT(slotOpenNotePropertiesEditor()));
+    // TODO leak?
     new QShortcut(
         QKeySequence(Qt::CTRL+Qt::Key_S),
         this, SLOT(slotSaveNote()));

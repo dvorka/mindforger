@@ -1,7 +1,7 @@
 /*
  look_n_feel.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -102,7 +102,8 @@ void LookAndFeels::setDarkTheme()
     editorLink.setRgb(0x00,0xFF,0xFF);
     editorList.setRgb(0x00,0x99,0x00);
     editorTaskDone.setRgb(0x00,0x99,0x00);
-    editorTaskWip.setRgb(0x99,0x00,0x00);
+    editorTaskWip.setRgb(0xFF,0xA5,0x00);
+    editorTaskTodo.setRgb(0x99,0x00,0x00);
     editorCodeblock.setRgb(0x99,0x99,0x99);
     editorHtmlTag.setRgb(0xAA,0x00,0xAA);
     editorHtmlEntity.setRgb(0xAA,0x00,0xAA);

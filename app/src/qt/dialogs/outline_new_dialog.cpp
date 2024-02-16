@@ -1,7 +1,7 @@
 /*
  outline_new_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -35,6 +35,8 @@ OutlineNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     nameLabel = new QLabel(tr("Name")+":", this);
     nameEdit = new QLineEdit(tr("Notebook"), this);
 
+    emojisButton = new QPushButton(tr("&Emojis"), this);
+
     typeLabel = new QLabel(tr("Type")+":", this);
     typeCombo = new QComboBox{this};
 
@@ -58,7 +60,13 @@ OutlineNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     // assembly
     QVBoxLayout* basicLayout = new QVBoxLayout{this};
     basicLayout->addWidget(nameLabel);
-    basicLayout->addWidget(nameEdit);
+
+    QWidget* eji = new QWidget{this};
+    QHBoxLayout* nameLayout = new QHBoxLayout{eji};
+    nameLayout->addWidget(nameEdit);
+    nameLayout->addWidget(emojisButton);
+    basicLayout->addWidget(eji);
+
     basicLayout->addWidget(typeLabel);
     basicLayout->addWidget(typeCombo);
     QWidget* wiu = new QWidget{this};
@@ -300,6 +308,11 @@ int8_t OutlineNewDialog::getUrgency() const
 int OutlineNewDialog::getProgress() const
 {
     return generalTab->getProgressSpin()->value();
+}
+
+QPushButton* OutlineNewDialog::getEmojisButton() const
+{
+    return generalTab->getEmojisButton();
 }
 
 const std::vector<const Tag*>& OutlineNewDialog::getTags() const

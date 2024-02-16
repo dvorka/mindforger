@@ -1,7 +1,7 @@
 /*
  note_new_dialog.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ private:
     GeneralTab* generalTab;
     AdvancedTab* advancedTab;
 
-    QDialogButtonBox *buttonBox;
+    QDialogButtonBox* buttonBox;
 
 public:
     explicit NoteNewDialog(Ontology& ontology, QWidget* parent);
@@ -65,6 +65,7 @@ public:
     const NoteType* getNoteType() const;
     const std::vector<const Tag*>& getTags() const;
     int getProgress() const;
+    QPushButton* getEmojisButton() const;
     bool isPositionBelow() const;
     bool isPositionAbove() const { return !isPositionBelow(); }
     bool isOpenInEditor() const;
@@ -88,6 +89,7 @@ private:
 
     QLabel* nameLabel;
     QLineEdit* nameEdit;
+    QPushButton* emojisButton;
     QLabel* typeLabel;
     QComboBox* typeCombo;
     QLabel* progressLabel;
@@ -109,6 +111,7 @@ public:
     QComboBox* getTypeCombo() const { return typeCombo; }
     const std::vector<const Tag*>& getTags() { return editTagsGroup->getTags(); }
     QSpinBox* getProgressSpin() const { return progressSpin; }
+    QPushButton* getEmojisButton() const { return emojisButton; }
     QComboBox* getStencilCombo() const { return stencilCombo; }
     QComboBox* getPositionCombo() const { return positionCombo; }
     QComboBox* getViewEditCombo() const { return viewEditCombo; }

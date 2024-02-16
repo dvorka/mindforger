@@ -1,7 +1,7 @@
 /*
  memory.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ private:
      */
     bool aware;
 
-    /**      
+    /**
      * @brief Cache outlines in memory.
      *
      * If FALSE, then outlines are always loaded from
@@ -116,6 +116,11 @@ public:
      * @brief Create Outline from stencil, but don't learn it yet.
      */
     Outline* createOutline(Stencil* stencil);
+
+    /**
+     * @brief Learn Outlines map (tree).
+     */
+    Outline* learnOutlinesMap(const std::string& fileNamePath);
 
     /**
      * @brief Convert TWiki file to MD file (O not instantiated).

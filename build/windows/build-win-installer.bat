@@ -1,7 +1,7 @@
 @echo off
 rem MindForger thinking notebook
 
-rem Copyright (C) 2016-2022
+rem Copyright (C) 2016-2024
 
 rem This program is free software; you can redistribute it and/or
 rem modify it under the terms of the GNU General Public License
@@ -28,3 +28,5 @@ C:\Qt\5.12.1\msvc2017_64\bin\windeployqt app\release\mindforger.exe  --dir app\r
 
 rem Build installer
 "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /Qp /DVcRedistPath="c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\vcredist_x64.exe" build\windows\installer\mindforger-setup.iss
+
+echo "Find installer in mindforger/app/release/installer/*.exe"

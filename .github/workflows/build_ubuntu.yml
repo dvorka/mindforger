@@ -11,7 +11,7 @@ jobs:
           submodules: recursive
 
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get install -y build-essential zlib1g-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache
+        run: sudo apt-get update && sudo apt-get install -y build-essential zlib1g-dev libcurl4-gnutls-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache
 
       - name: Build dependency - cmark-gfm
         run: cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
@@ -23,7 +23,7 @@ jobs:
         run: export M8R_GIT_PATH=`pwd` && cd build/make && M8R_CPU_CORES=4 ./test-lib-units.sh
 
       - name: Run QMake to build application
-        run: pwd ; qmake -r "CONFIG+=mfci" mindforger.pro 
+        run: pwd ; qmake -r "CONFIG+=mfci" mindforger.pro
 
       - name: Run Make to build application
         run: make -j 4

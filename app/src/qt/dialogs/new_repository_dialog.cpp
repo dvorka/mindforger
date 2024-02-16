@@ -1,7 +1,7 @@
 /*
  new_repository_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -23,14 +23,16 @@ namespace m8r {
 NewRepositoryDialog::NewRepositoryDialog(QWidget* parent)
     : QDialog(parent)
 {
-    homeDirectory = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+    homeDirectory = QStandardPaths::locate(
+        QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory
+    );
 
     // widgets
-    repositoryNameLabel = new QLabel{tr("Repository name:")};
+    repositoryNameLabel = new QLabel{tr("Workspace name:")};
     repositoryNameEdit = new QLineEdit{};
-    dirLabel = new QLabel{tr("Repository directory:")};
+    dirLabel = new QLabel{tr("Workspace directory:")};
     dirEdit = new QLineEdit{};
-    pathLabel = new QLabel{tr("Repository to be created in:")};
+    pathLabel = new QLabel{tr("Workspace to be created in:")};
     pathEdit = new QLineEdit{};
     pathEdit->setEnabled(false);
 
@@ -45,11 +47,26 @@ NewRepositoryDialog::NewRepositoryDialog(QWidget* parent)
     closeButton = new QPushButton{tr("&Cancel")};
 
     // signals
-    QObject::connect(repositoryNameEdit, SIGNAL(textChanged(const QString&)), this, SLOT(refreshPath()));
-    QObject::connect(dirEdit, SIGNAL(textChanged(const QString&)), this, SLOT(refreshPath()));
-    QObject::connect(findDirectoryButton, SIGNAL(clicked()), this, SLOT(handleFindDirectory()));
-    QObject::connect(newButton, SIGNAL(clicked()), this, SLOT(close()));
-    QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    QObject::connect(
+        repositoryNameEdit, SIGNAL(textChanged(const QString&)),
+        this, SLOT(refreshPath())
+    );
+    QObject::connect(
+        dirEdit, SIGNAL(textChanged(const QString&)),
+        this, SLOT(refreshPath())
+    );
+    QObject::connect(
+        findDirectoryButton, SIGNAL(clicked()),
+        this, SLOT(handleFindDirectory())
+    );
+    QObject::connect(
+        newButton, SIGNAL(clicked()),
+        this, SLOT(close())
+    );
+    QObject::connect(
+        closeButton, SIGNAL(clicked()),
+        this, SLOT(close())
+    );
 
     // assembly
     QVBoxLayout* mainLayout = new QVBoxLayout{};
@@ -76,7 +93,7 @@ NewRepositoryDialog::NewRepositoryDialog(QWidget* parent)
     setLayout(mainLayout);
 
     // dialog
-    setWindowTitle(tr("Create New Repository"));
+    setWindowTitle(tr("Create New Workspace"));
     resize(fontMetrics().averageCharWidth()*60, height());
     setModal(true);
 }
@@ -87,7 +104,7 @@ NewRepositoryDialog::~NewRepositoryDialog()
 
 void NewRepositoryDialog::show()
 {
-    repositoryNameEdit->setText(tr("mindforger-repository"));
+    repositoryNameEdit->setText(tr("mindforger-workspace"));
     repositoryNameEdit->selectAll();
     repositoryNameEdit->setFocus();
     dirEdit->setText(homeDirectory);
@@ -105,7 +122,9 @@ void NewRepositoryDialog::refreshPath()
     // dir
     QString directory{dirEdit->text()};
     if(directory.isEmpty()) {
-        directory = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+        directory = QStandardPaths::locate(
+            QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory
+        );
     }
     if(!directory.endsWith(FILE_PATH_SEPARATOR)) {
         directory.append(FILE_PATH_SEPARATOR);
@@ -113,7 +132,7 @@ void NewRepositoryDialog::refreshPath()
     // name
     QString name{repositoryNameEdit->text()};
     if(name.isEmpty()) {
-        name = tr("mindforger-repository");
+        name = tr("mindforger-workspace");
     } else {
         name = QString::fromStdString(normalizeToNcName(name.toStdString(),'-'));
     }
@@ -126,7 +145,9 @@ void NewRepositoryDialog::refreshPath()
 void NewRepositoryDialog::handleFindDirectory()
 {
     QString homeDirectory
-        = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+        = QStandardPaths::locate(
+            QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory
+        );
 
     QFileDialog fileDialog{this};
     fileDialog.setWindowTitle(tr("Choose Directory"));

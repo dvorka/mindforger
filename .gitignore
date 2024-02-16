@@ -6,6 +6,7 @@ Release/
 Debug/
 .vs/
 .idea/
+.vscode/
 .venv/
 *.o
 *.a
@@ -20,3 +21,8 @@ TEST_LOG*.*
 compile_commands.json
 .qmake.stash
 .DS_Store
+deps/cmark-gfm
+deps/mitie
+deps/cmark-gfm
+snapcraft.yaml
+*.snap

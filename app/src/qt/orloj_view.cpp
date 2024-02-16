@@ -1,7 +1,7 @@
 /*
  orloj_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -25,9 +25,6 @@ using namespace std;
 OrlojView::OrlojView(QWidget* parent)
     : QSplitter(Qt::Horizontal, parent)
 {
-    dashboard = new DashboardView(this);
-    addWidget(dashboard);
-
     organizersTable = new OrganizersTableView(this);
     addWidget(organizersTable);
 
@@ -42,6 +39,9 @@ OrlojView::OrlojView(QWidget* parent)
 
     outlinesTable = new OutlinesTableView(this);
     addWidget(outlinesTable);
+
+    outlinesMap = new OutlinesMapView(this);
+    addWidget(outlinesMap);
 
     recentNotesTable = new RecentNotesTableView(this);
     addWidget(recentNotesTable);
@@ -97,12 +97,6 @@ void OrlojView::fiftyFifty()
     setSizes(sizes);
 }
 
-void OrlojView::showFacetDashboard()
-{
-    QSet<QWidget*> v; v << dashboard;
-    hideChildren(v);
-}
-
 void OrlojView::showFacetOrganizers()
 {
     QSet<QWidget*> v; v << organizersTable;
@@ -130,6 +124,12 @@ void OrlojView::showFacetTagCloud()
 void OrlojView::showFacetOutlines()
 {
     QSet<QWidget*> v; v << outlinesTable;
+    hideChildren(v);
+}
+
+void OrlojView::showFacetOutlinesMap()
+{
+    QSet<QWidget*> v; v << outlinesMap;
     hideChildren(v);
 }
 

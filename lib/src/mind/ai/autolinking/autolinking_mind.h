@@ -1,7 +1,7 @@
 /*
  autolinking_mind.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@ private:
 
     Trie* trie;
 
+    static const std::vector<std::string> excludedWords;
 public:
     explicit AutolinkingMind(Mind& mind);
     AutolinkingMind(const AutolinkingMind&) = delete;

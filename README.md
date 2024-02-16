@@ -10,23 +10,26 @@
 <a href="https://twitter.com/intent/follow?screen_name=mindforger"><img src="https://img.shields.io/twitter/follow/mindforger.svg?style=social&logo=twitter" alt="follow on Twitter"></a>
 <!-- [![Documentation](https://img.shields.io/badge/project-documentation-blue.svg)](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md) -->
 
-Are you **drowning** in **information**, but **starving** for **knowledge**? Where do you keep your **private remarks** 
-like ideas, personal plans, gift tips, how-tos, dreams, business vision, finance strategy, auto 
-coaching notes? Loads of documents, sketches and remarks spread around the file system, cloud, 
-web and Post-it notes? Are you afraid of your knowledge **privacy**? Are you able to **find** them once you create them? 
+Are you **drowning** in **information**, but **starving** for **knowledge**? Where do you keep your **private remarks**
+like ideas, personal plans, gift tips, how-tos, dreams, business vision, finance strategy, auto
+coaching notes? Loads of documents, sketches and remarks spread around the file system, cloud,
+web and Post-it notes? Are you afraid of your knowledge **privacy**? Are you able to **find** them once you create them?
 Do you know how are they mutually **related** when you read or write them? No?
 
 https://www.mindforger.com
 
-## Markdown Editor
-![MindForger](http://www.mindforger.com/github/github-markdown-ide.png?)
-
-MindForger is open, free, well performing Markdown editor which respects your privacy and enables security. 
-
 ## Thinking Notebook
 ![MindForger](http://www.mindforger.com/github/github-thinking-notebook.png)
 
-MindForger is actually more than an editor or IDE - it's human mind inspired personal knowledge management tool.
+MindForger is human mind inspired personal knowledge management tool.
+
+## Markdown Editor
+![MindForger](http://www.mindforger.com/github/github-markdown-ide.png?)
+
+MindForger is open, free, well performing Markdown editor / IDE which respects your privacy.
+
+## Features
+MindForger **features overview**: [open](https://github.com/dvorka/mindforger?tab=GPL-2.0-1-ov-file#readme), [free](https://www.mindforger.com/#floss), [OpenAI GPT integrated](https://www.mindforger.com/#llm), knowledge manager, Markdown editor (math, diagrams, images, table of contents generator), [outliner](https://www.youtube.com/watch?v=LUqavHfKhnc&list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&index=4), spell-check, [Markdown IDE](https://www.mindforger.com/#features) (multi-document workspace, section refactoring, cloning, scopes and stencils), [organizer](https://www.youtube.com/watch?v=Tje2mso7jNY&list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&index=11) (Eisenhower matrix, Kanban), [knowledge graph navigator](https://www.youtube.com/watch?v=ZbQmZ1fKpxI&list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&index=14), knowledge autolinking, think as you browse, think as you write, find by name/tag/text/regexp, find similar sections (associations), tagging, emojis, checklists, recent sections, [external section editor](https://www.youtube.com/watch?v=SLuvfDRyUrM&list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&index=12), themes, internationalization, export (CSV with OHE for machine learning, HTML) and import (TWiki).
 
 ## Installation
 Install:
@@ -72,17 +75,24 @@ Check also [packages](https://pkgs.org/search/?q=mindforger) for Linux and Unix.
 ## Documentation
 Read:
 
-* [Why MindForger?](https://github.com/dvorka/mindforger/wiki/Getting-started#why-mindforger)
+* [Getting started](https://github.com/dvorka/mindforger/wiki/Getting-started)
 * [Installation](https://github.com/dvorka/mindforger/wiki/Installation)
 * [User documentation](https://github.com/dvorka/mindforger/wiki/User-documentation)
 * [Developer documentation](https://github.com/dvorka/mindforger/wiki/Developer-documentation)
 * [Project history](https://github.com/dvorka/mindforger/wiki/History)
 * [FAQs](https://github.com/dvorka/mindforger/wiki/FAQs)
 
-Check `man mindforger`
+Watch:
+
+* [YouTube tutorials](https://www.youtube.com/playlist?list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS)
+
+Check:
+
+* `man mindforger`
+
 
 ## In the News
-Read about MindForger on [FOSSMint](https://www.fossmint.com/mindforger-notebook-and-markdown-ide/), [Fedora Magazine](https://fedoramagazine.org/4-try-copr-december-2018/), [UbuntuPIT](https://www.ubuntupit.com/mindforger-a-privacy-focused-thinking-notebook-and-markdown-ide-for-linux/), [AppImageHub](https://www.appimagehub.com/p/1257573/), [AwesomeOpenSource](https://awesomeopensource.com/project/dvorka/mindforger), [root.cz](https://www.root.cz/clanky/softwarova-sklizen-19-9-2018/) and [MOONGIFT.jp](https://www.moongift.jp/2018/12/mindforger-markdown%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9/).
+Read about MindForger on [FOSSMint](https://www.fossmint.com/mindforger-notebook-and-markdown-ide/), [Fedora Magazine](https://fedoramagazine.org/4-try-copr-december-2018/), [UbuntuPIT](https://www.ubuntupit.com/mindforger-a-privacy-focused-thinking-notebook-and-markdown-ide-for-linux/), [AppImageHub](https://www.appimagehub.com/p/1257573/), [AwesomeOpenSource](https://awesomeopensource.com/project/dvorka/mindforger), [root.cz](https://www.root.cz/clanky/softwarova-sklizen-19-9-2018/) [(2024)](https://www.root.cz/clanky/softwarova-sklizen-7-2-2024-vytvarejte-commitovaci-zpravy-s-umelou-inteligenci/) and [MOONGIFT.jp](https://www.moongift.jp/2018/12/mindforger-markdown%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%9F%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9/).
 
 ## Bugs and Feature Requests
 https://github.com/dvorka/mindforger/issues

@@ -1,7 +1,7 @@
 /*
  note_new_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -34,6 +34,8 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     nameLabel = new QLabel(tr("Name")+":", this),
     nameEdit = new QLineEdit(tr("Note"), this);
 
+    emojisButton = new QPushButton(tr("&Emojis"), this);
+
     // moving edit tags to this position changes TAB ORDER ~ it's selected as 2nd field
     editTagsGroup = new EditTagsPanel{MfWidgetMode::CREATE_MODE, ontology, this};
     editTagsGroup->refreshOntologyTags();
@@ -58,7 +60,13 @@ NoteNewDialog::GeneralTab::GeneralTab(Ontology& ontology, QWidget *parent)
     // assembly
     QVBoxLayout* basicLayout = new QVBoxLayout{this};
     basicLayout->addWidget(nameLabel);
-    basicLayout->addWidget(nameEdit);
+
+    QWidget* eji = new QWidget{this};
+    QHBoxLayout* nameLayout = new QHBoxLayout{eji};
+    nameLayout->addWidget(nameEdit);
+    nameLayout->addWidget(emojisButton);
+    basicLayout->addWidget(eji);
+
     basicLayout->addWidget(positionLabel);
     basicLayout->addWidget(positionCombo);
     basicLayout->addWidget(viewEditLabel);
@@ -229,6 +237,11 @@ const std::vector<const Tag*>& NoteNewDialog::getTags() const
 int NoteNewDialog::getProgress() const
 {
     return generalTab->getProgressSpin()->value();
+}
+
+QPushButton* NoteNewDialog::getEmojisButton() const
+{
+    return generalTab->getEmojisButton();
 }
 
 void NoteNewDialog::show(

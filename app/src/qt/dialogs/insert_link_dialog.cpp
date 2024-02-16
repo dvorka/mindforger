@@ -1,7 +1,7 @@
 /*
  insert_link_dialog.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -31,12 +31,12 @@ InsertLinkDialog::InsertLinkDialog(QWidget* parent)
     pathLabel = new QLabel{tr("Notebook, Note, file path or web address:")};
     pathEdit = new QLineEdit{};
 
-    findOutlineButton = new QPushButton{tr("Notebook")};
-    findNoteButton = new QPushButton{tr("Note")};
-    findFileButton = new QPushButton{tr("File")};
-    findDirectoryButton = new QPushButton{tr("Directory")};
+    findOutlineButton = new QPushButton{tr("Note&book")};
+    findNoteButton = new QPushButton{tr("&Note")};
+    findFileButton = new QPushButton{tr("&File")};
+    findDirectoryButton = new QPushButton{tr("&Directory")};
 
-    copyToRepoCheckBox = new QCheckBox{tr("copy link target to repository")};
+    copyToRepoCheckBox = new QCheckBox{tr("copy link target to workspace")};
     copyToRepoCheckBox->setChecked(true);
     copyToRepoCheckBox->setEnabled(true);
 

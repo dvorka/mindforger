@@ -1,7 +1,7 @@
 /*
  outline_tree_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -22,8 +22,9 @@ namespace m8r {
 
 using namespace std;
 
-OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, MainWindowPresenter* mwp, QObject* parent)
-    : QObject(parent)
+OutlineTreePresenter::OutlineTreePresenter(
+    OutlineTreeView* view, MainWindowPresenter* mwp, QObject* parent
+) : QObject(parent)
 {
     this->view = view;
     this->model = new OutlineTreeModel{view, mwp->getHtmlRepresentation()};
@@ -35,17 +36,35 @@ OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, MainWindowPres
     this->view->setItemDelegate(delegate);
 
     // signals
-    QObject::connect(view, SIGNAL(signalSelectNextRow()), this, SLOT(slotSelectNextRow()));
-    QObject::connect(view, SIGNAL(signalSelectPreviousRow()), this, SLOT(slotSelectPreviousRow()));
+    QObject::connect(
+        view, SIGNAL(signalSelectNextRow()),
+        this, SLOT(slotSelectNextRow()));
+    QObject::connect(
+        view, SIGNAL(signalSelectPreviousRow()),
+        this, SLOT(slotSelectPreviousRow()));
 
-    QObject::connect(view, SIGNAL(signalOutlineShow()), mwp, SLOT(doActionOutlineShow()));
+    QObject::connect(
+        view, SIGNAL(signalOutlineShow()),
+        mwp, SLOT(doActionOutlineShow()));
 
-    QObject::connect(view, SIGNAL(signalChangePromote()), mwp, SLOT(doActionNotePromote()));
-    QObject::connect(view, SIGNAL(signalChangeDemote()), mwp, SLOT(doActionNoteDemote()));
-    QObject::connect(view, SIGNAL(signalChangeFirst()), mwp, SLOT(doActionNoteFirst()));
-    QObject::connect(view, SIGNAL(signalChangeUp()), mwp, SLOT(doActionNoteUp()));
-    QObject::connect(view, SIGNAL(signalChangeDown()), mwp, SLOT(doActionNoteDown()));
-    QObject::connect(view, SIGNAL(signalChangeLast()), mwp, SLOT(doActionNoteLast()));
+    QObject::connect(
+        view, SIGNAL(signalChangePromote()),
+        mwp, SLOT(doActionNotePromote()));
+    QObject::connect(
+        view, SIGNAL(signalChangeDemote()),
+        mwp, SLOT(doActionNoteDemote()));
+    QObject::connect(
+        view, SIGNAL(signalChangeFirst()),
+        mwp, SLOT(doActionNoteFirst()));
+    QObject::connect(
+        view, SIGNAL(signalChangeUp()),
+        mwp, SLOT(doActionNoteUp()));
+    QObject::connect(
+        view, SIGNAL(signalChangeDown()),
+        mwp, SLOT(doActionNoteDown()));
+    QObject::connect(
+        view, SIGNAL(signalChangeLast()),
+        mwp, SLOT(doActionNoteLast()));
 
     QObject::connect(
         view, SIGNAL(signalOutlineOrNoteEdit()),
@@ -53,8 +72,12 @@ OutlineTreePresenter::OutlineTreePresenter(OutlineTreeView* view, MainWindowPres
     QObject::connect(
         view, SIGNAL(signalOutlineOrNoteExternalEdit()),
         mwp, SLOT(doActionNoteExternalEdit()));
-    QObject::connect(view, SIGNAL(signalEdit()), mwp, SLOT(doActionNoteEdit()));
-    QObject::connect(view, SIGNAL(signalForget()), mwp, SLOT(doActionNoteForget()));
+    QObject::connect(
+        view, SIGNAL(signalEdit()),
+        mwp, SLOT(doActionNoteEdit()));
+    QObject::connect(
+        view, SIGNAL(signalForget()),
+        mwp, SLOT(doActionNoteForget()));
 }
 
 OutlineTreePresenter::~OutlineTreePresenter()
@@ -126,11 +149,15 @@ void OutlineTreePresenter::refresh(Note* note)
     }
 }
 
-void OutlineTreePresenter::insertAndSelect(Note* note)
+void OutlineTreePresenter::selectRow(int row)
 {
-    int row = model->insertNote(note);
     view->scrollTo(model->index(row, 0));
     view->selectRow(row);
+}
+
+void OutlineTreePresenter::insertAndSelect(Note* note)
+{
+    this->selectRow(model->insertNote(note));
 }
 
 void OutlineTreePresenter::clearSelection()
@@ -166,8 +193,40 @@ Note* OutlineTreePresenter::getCurrentNote() const
     // IMPROVE constant w/ a name
     if(row != -1) {
         return model->item(row)->data().value<Note*>();
-    } else {
-        return nullptr;
+    }
+
+    return nullptr;
+}
+
+/**
+ * @brief Get adjacent N - adjacent above or below N.
+ *
+ * @return adjacent note or NULL if no such N.
+ */
+Note* OutlineTreePresenter::getAdjacentNote() const
+{
+    int row = getCurrentRow();
+    if(row != NO_ROW) {
+        if(row > 0) {
+            return model->item(row-1)->data().value<Note*>();
+        }
+        // ELSE row == 0 and child row cannot be selected
+        // as its not clear upfront whether/how many
+        // children will be deleted
+        // therefore it is expected that this function
+        // returns nullptr, so that row 0 can be selected
+        // AFTER N is deleted (if any row is remaining in O)
+    }
+
+    return nullptr;
+}
+
+void OutlineTreePresenter::slotSelectPreviousRow()
+{
+    int row = getCurrentRow();
+    if(row) {
+        QModelIndex previousIndex = model->index(row-1, 0);
+        view->setCurrentIndex(previousIndex);
     }
 }
 
@@ -177,15 +236,6 @@ void OutlineTreePresenter::slotSelectNextRow()
     if(row < model->rowCount()-1) {
         QModelIndex nextIndex = model->index(row+1, 0);
         view->setCurrentIndex(nextIndex);
-    }
-}
-
-void OutlineTreePresenter::slotSelectPreviousRow()
-{
-    int row = getCurrentRow();
-    if(row) {
-        QModelIndex previousIndex = model->index(row-1, 0);
-        view->setCurrentIndex(previousIndex);
     }
 }
 

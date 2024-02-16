@@ -1,7 +1,7 @@
 /*
  orloj_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -21,12 +21,12 @@
 
 #include <QtWidgets>
 
-#include "dashboard_view.h"
 #include "organizers_table_view.h"
 #include "organizer_view.h"
 #include "kanban_view.h"
 #include "tags_table_view.h"
 #include "outlines_table_view.h"
+#include "outlines_map_view.h"
 #include "notes_table_view.h"
 #include "recent_notes_table_view.h"
 #include "outline_view_splitter.h"
@@ -61,12 +61,12 @@ class OrlojView : public QSplitter
     Q_OBJECT
 
 private:
-    DashboardView* dashboard;
     OrganizersTableView* organizersTable;
     OrganizerView* organizer;
     KanbanView* kanban;
     TagsTableView* tagCloud;
     OutlinesTableView* outlinesTable;
+    OutlinesMapView* outlinesMap;
     RecentNotesTableView* recentNotesTable;
     OutlineViewSplitter* outlineView;
     OutlineHeaderView* outlineHeaderView;
@@ -85,12 +85,13 @@ public:
     OrlojView &operator=(const OrlojView&&) = delete;
     virtual ~OrlojView() {};
 
-    DashboardView* getDashboard() const { return dashboard; }
     OrganizerView* getOrganizer() const { return organizer; }
     OrganizersTableView* getOrganizersTable() const { return organizersTable; }
     KanbanView* getKanban() const { return kanban; }
     TagsTableView* getTagCloud() const { return tagCloud; }
     OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
+    OutlinesMapView* getOutlinesMapTable() const { return outlinesMap; }
+    OutlinesMapView* getOutlinesMap() const { return outlinesMap; }
     RecentNotesTableView* getRecentNotesTable() const { return recentNotesTable; }
     OutlineViewSplitter* getOutlineView() const { return outlineView; }
     OutlineHeaderView* getOutlineHeaderView() const { return outlineHeaderView; }
@@ -100,11 +101,6 @@ public:
     NavigatorView* getNavigator() const { return navigator; }
 
     void setMainMenu(MainMenuView* menuView) { this->menuView=menuView; }
-
-    /**
-     * @brief Dashboard
-     */
-    void showFacetDashboard();
 
     /**
      * @brief List of Organizers
@@ -130,6 +126,11 @@ public:
      * @brief List of Outlines
      */
     void showFacetOutlines();
+
+    /**
+     * @brief Tree of Outlines
+     */
+    void showFacetOutlinesMap();
 
     /**
      * @brief Outline detail: name and tree of Notes

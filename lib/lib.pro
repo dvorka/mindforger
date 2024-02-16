@@ -1,6 +1,6 @@
 # mindforger-lib.pro     MindForger thinking notebook
 #
-# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software ; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,7 +18,14 @@
 TARGET = mindforger
 TEMPLATE = lib
 CONFIG += staticlib
-CONFIG -= qt
+
+win32|macx {
+    # Qt Network as CURL replacement on Win - add Qt to libmindforger
+    CONFIG += qt
+    QT += network
+} else {
+    CONFIG -= qt
+}
 
 # Dependencies:
 # - INCLUDEPATH is used during compilation to find included header files.
@@ -41,13 +48,6 @@ win32 {
  DEPENDPATH += $$PWD/../deps/zlib-win/include
 }
 
-# NER library
-mfner {
-    DEFINES += MF_NER
-    INCLUDEPATH += $$PWD/../deps/mitie/mitielib/include
-    DEPENDPATH += $$PWD/../deps/mitie/mitielib/include
-}
-
 # debug
 mfdebug|mfunits {
   DEFINES += DO_MF_DEBUG
@@ -56,6 +56,11 @@ mfdebug|mfunits {
 # compiler options (qmake CONFIG+=mfnoccache ...)
 win32{
     QMAKE_CXXFLAGS += /MP
+
+    # DISABLED ccache as it causes compilation error:
+    #   "C1090: PDB API call failed, error code '23'" when used 
+    # when used w/ MS VS compiler:
+    # !mfnoccache { QMAKE_CXX = ccache $$QMAKE_CXX }
 } else {
     # linux and macos
     mfnoccache {
@@ -68,6 +73,8 @@ win32{
       # debug info
       QMAKE_CXXFLAGS += -g
     }
+
+    # -O3 ... can be specified by this variable (overrides -O1 -O2)
     QMAKE_CXXFLAGS += -pedantic -std=c++11
 }
 
@@ -111,6 +118,9 @@ SOURCES += \
     src/config/repository_configuration.cpp \
     src/gear/async_utils.cpp \
     src/gear/math_utils.cpp \
+    src/mind/ai/llm/wingman.cpp \
+    src/mind/ai/llm/mock_wingman.cpp \
+    src/mind/ai/llm/openai_wingman.cpp \
     src/mind/dikw/dikw_pyramid.cpp \
     src/mind/dikw/filesystem_information.cpp \
     src/mind/dikw/information.cpp \
@@ -155,12 +165,6 @@ SOURCES += \
 !mfnomd2html {
     SOURCES += \
     src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.cpp
-}
-
-mfner {
-    SOURCES += \
-    src/mind/ai/nlp/named_entity_recognition.cpp \
-    src/mind/ai/nlp/ner_named_entity.cpp
 }
 
 HEADERS += \
@@ -225,6 +229,9 @@ HEADERS += \
     ./src/gear/math_utils.h \
     ./src/mind/dikw/dikw_pyramid.h \
     ./src/mind/dikw/filesystem_information.h \
+    src/mind/ai/llm/wingman.h \
+    src/mind/ai/llm/mock_wingman.h \
+    src/mind/ai/llm/openai_wingman.h \
     src/mind/dikw/information.h \
     src/model/eisenhower_matrix.h \
     src/model/kanban.h \
@@ -293,12 +300,6 @@ HEADERS += \
     SOURCES += \
     src/mind/ai/autolinking/cmark_aho_corasick_block_autolinking_preprocessor.h
 }
-
-mfner {
-    HEADERS += \
-    src/mind/ai/nlp/named_entity_recognition.h \
-    src/mind/ai/nlp/ner_named_entity.h
-}    
 
 win32 {
     HEADERS += \

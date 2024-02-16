@@ -1,6 +1,6 @@
-# mindforger-lib-unit-tests.pro     MindForger thinking notebook
+# src.pro     MindForger thinking notebook
 #
-# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software ; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,7 +22,18 @@ DEFINES = DO_MF_DEBUG
 
 CONFIG += console
 CONFIG -= app_bundle
-CONFIG -= qt
+
+win32|macx {
+    # Qt Network as CURL replacement on Win - add Qt to libmindforger
+    CONFIG += qt
+    QT += network
+} else {
+    CONFIG -= qt
+}
+
+message("= MindForger library test QMake configuration ==========================")
+message("Qt version: $$QT_VERSION")
+
 
 INCLUDEPATH += $$PWD/../../../lib/src
 DEPENDPATH += $$PWD/../../../lib/src
@@ -33,7 +44,7 @@ win32 {
     CONFIG(release, debug|release): LIBS += -L$$PWD/../../release -lmindforger
     else:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../debug -lmindforger
 } else {
-    LIBS += -L$$OUT_PWD/../../../lib -lmindforger
+    LIBS += -L$$OUT_PWD/../../../lib -lmindforger -lcurl
 }
 
 !mfnomd2html {
@@ -90,6 +101,11 @@ win32 {
 # compiler options
 win32{
     QMAKE_CXXFLAGS += /MP
+
+    # DISABLED ccache as it causes compilation error:
+    #   "C1090: PDB API call failed, error code '23'" when used 
+    # when used w/ MS VS compiler:
+    # !mfnoccache { QMAKE_CXX = ccache $$QMAKE_CXX }
 } else {
     # linux and macos
     mfnoccache {
@@ -105,10 +121,23 @@ win32{
 }
 
 SOURCES += \
+    ./test_utils.cpp \
+    ./indexer/repository_indexer_test.cpp \
+    ./config/configuration_test.cpp \
+    ./markdown/markdown_test.cpp \
+    ./html/html_test.cpp \
+    ./json/json_test.cpp \
+    ../benchmark/markdown_benchmark.cpp \
+    ../benchmark/html_benchmark.cpp \
+    ../benchmark/trie_benchmark.cpp \
+    ../benchmark/ai_benchmark.cpp \
+    ./ai/nlp_test.cpp \
+    ./ai/autolinking_test.cpp \
+    ./ai/autolinking_cmark_test.cpp \
     ./gear/datetime_test.cpp \
     ./gear/string_utils_test.cpp \
-    ./indexer/repository_indexer_test.cpp \
-    ./markdown/markdown_test.cpp \
+    ./gear/file_utils_test.cpp \
+    ./gear/trie_test.cpp \
     ./mind/fts_test.cpp \
     ./mind/memory_test.cpp \
     ./mind/mind_test.cpp \
@@ -116,21 +145,18 @@ SOURCES += \
     ./mindforger_lib_unit_tests.cpp \
     ./mind/organizer_test.cpp \
     ./mind/outline_test.cpp \
-    ./test_utils.cpp \
-    ./config/configuration_test.cpp \
-    ../benchmark/markdown_benchmark.cpp \
-    ../benchmark/html_benchmark.cpp \
-    ./html/html_test.cpp \
-    ./ai/nlp_test.cpp \
-    ../benchmark/trie_benchmark.cpp \
-    ../benchmark/ai_benchmark.cpp \
-    ./gear/file_utils_test.cpp \
-    ./gear/trie_test.cpp \
-    ./ai/autolinking_test.cpp \
-    ./ai/autolinking_cmark_test.cpp \
     ./mind/filesystem_information_test.cpp
 
 HEADERS += \
     ./test_gear.h
+
+# ########################################
+# Diagnostics
+# ########################################
+
+message(DEFINES of app.pro build: $$DEFINES)
+message(QMAKE_EXTRA_TARGETS of app.pro build: $$QMAKE_EXTRA_TARGETS)
+message(QT of app.pro build: $$QT)
+message(PATH is: $$(PATH))
 
 # eof

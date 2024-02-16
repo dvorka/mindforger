@@ -1,7 +1,7 @@
 @echo off
 rem MindForger thinking notebook
 
-rem Copyright (C) 2016-2022
+rem Copyright (C) 2016-2024
 
 rem This program is free software; you can redistribute it and/or
 rem modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ nmake
 if "%ERRORLEVEL%" neq "0" goto :err
 
 echo ===================================================
-echo MindForger application has been built successfully 
+echo MindForger application has been built successfully
 echo ==================================================
 goto :end
 :err

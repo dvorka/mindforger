@@ -1,7 +1,7 @@
 /*
  forget_aspect.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -32,14 +32,15 @@ TimeScopeAspect::~TimeScopeAspect()
 {
 }
 
-string TimeScopeAspect::getTimeScopeAsString()
+string TimeScopeAspect::getTimeScopeAsString() const
 {
     string result{};
+
     timeScope.toString(result);
 #ifdef __APPLE__
     return result;
 #else
-    return std::move(result);
+    return result;
 #endif
 }
 

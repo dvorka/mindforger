@@ -1,7 +1,7 @@
 /*
  note_editor_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -102,7 +102,7 @@ NoteEditorView::NoteEditorView(QWidget* parent)
     );
     // shortcut signals
     new QShortcut(
-        QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_Slash)),
+        QKeySequence(QKeySequence(Qt::CTRL+Qt::Key_L)),
         this, SLOT(slotStartLinkCompletion())
     );
 
@@ -199,6 +199,26 @@ void NoteEditorView::dragMoveEvent(QDragMoveEvent* event)
 {
     // needed to protect text cursor functionality after drop
     event->acceptProposedAction();
+}
+
+void NoteEditorView::replaceSelectedText(const std::string& text)
+{
+    QTextCursor cursor = textCursor();
+    cursor.removeSelectedText();
+    cursor.insertText(QString::fromStdString(text));
+    setTextCursor(cursor);
+}
+
+void NoteEditorView::appendAfterSelectedText(const std::string& phrase)
+{
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::EndOfBlock);
+    cursor.insertText(" " + QString::fromStdString(phrase));
+}
+
+void NoteEditorView::appendAfterCursor(const std::string& phrase)
+{
+    textCursor().insertText(QString::fromStdString(phrase));
 }
 
 /*
@@ -405,13 +425,15 @@ void NoteEditorView::keyPressEvent(QKeyEvent* event)
                 break;
         }
     } else {
-        switch(event->key()) {        
+        switch(event->key()) {
             case Qt::Key_Escape: {
                 // completer menu not visible - exit editor ~ Cancel
                 QMessageBox msgBox{
                     QMessageBox::Question,
                     tr("Exit Editor"),
-                    tr("Do you really want to exit editor without saving?")
+                    tr("Do you really want to exit editor without saving?"),
+                    {},
+                    parent
                 };
                 QPushButton* yes = msgBox.addButton("&Yes", QMessageBox::YesRole);
 #ifdef __APPLE__
@@ -556,6 +578,29 @@ void NoteEditorView::performTextCompletion(const QString& completionPrefix)
         completer->popup()->verticalScrollBar()->sizeHint().width()
     );
     completer->complete(rect);
+}
+
+/**
+ * @brief Get phrase to be used by a tool (arXiv, GPT, Wikipedia, ...)
+ *
+ * Either return selected text or word under the cursor.
+ *
+ * @return phrase text
+ */
+QString NoteEditorView::getToolPhrase()
+{
+    QString phrase{};
+
+    // if there is no selection, attempt to select the word under the cursor
+    if(textCursor().selectedText().size() == 0) {
+        // select the word under cursor
+        QTextCursor cursor = textCursor();
+        cursor.select(QTextCursor::WordUnderCursor);
+        setTextCursor(cursor);
+    }
+
+    // get PHRASE from selection
+    return QString{textCursor().selectedText()};
 }
 
 void NoteEditorView::slotStartLinkCompletion()

@@ -1,7 +1,7 @@
 /*
  find_outline_by_tag.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -74,7 +74,9 @@ public:
     void show(
         std::vector<Thing*>& outlines,
         std::vector<const Tag*>* tags=nullptr,
-        std::vector<std::string>* customizedNames=nullptr);
+        std::vector<std::string>* customizedNames=nullptr,
+        const std::string& searchPhrase=""
+    );
 
 signals:
     void searchFinished();

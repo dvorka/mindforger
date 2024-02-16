@@ -1,7 +1,7 @@
 /*
  main_window_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -19,6 +19,8 @@
 #ifndef M8RUI_MAIN_WINDOW_PRESENTER_H
 #define M8RUI_MAIN_WINDOW_PRESENTER_H
 
+#include <chrono>
+
 #include "../../lib/src/mind/mind.h"
 #include "../../lib/src/mind/ai/autolinking_preprocessor.h"
 #include "../../lib/src/mind/dikw/filesystem_information.h"
@@ -30,14 +32,15 @@
 #include "main_menu_presenter.h"
 
 #include "gear/async_task_notifications_distributor.h"
-#ifdef MF_NER
-    #include "ner_main_window_worker_thread.h"
-#endif
 #include "cli_n_breadcrumbs_presenter.h"
 #include "orloj_presenter.h"
 #include "status_bar_presenter.h"
 
 #include "dialogs/add_library_dialog.h"
+#include "dialogs/sync_library_dialog.h"
+#include "dialogs/rm_library_dialog.h"
+#include "dialogs/run_tool_dialog.h"
+#include "dialogs/wingman_dialog.h"
 #include "dialogs/organizer_new_dialog.h"
 #include "dialogs/outline_new_dialog.h"
 #include "dialogs/note_new_dialog.h"
@@ -57,8 +60,6 @@
 #include "dialogs/terminal_dialog.h"
 #include "dialogs/export_csv_file_dialog.h"
 #include "dialogs/export_file_dialog.h"
-#include "dialogs/ner_choose_tag_types_dialog.h"
-#include "dialogs/ner_result_dialog.h"
 
 #include <QtWidgets>
 #include <QtConcurrent/QtConcurrent>
@@ -88,6 +89,7 @@ class FtsDialogPresenter;
  * and code conventions.
  *
  */
+// TODO rename to AppWindowPresenter
 class MainWindowPresenter : public QObject
 {
     Q_OBJECT
@@ -104,9 +106,6 @@ private:
     Mind* mind;
 
     AsyncTaskNotificationsDistributor* distributor;
-#ifdef MF_NER
-    NerMainWindowWorkerThread* nerWorker;
-#endif
 
     MarkdownOutlineRepresentation* mdRepresentation;
     HtmlOutlineRepresentation* htmlRepresentation;
@@ -120,6 +119,10 @@ private:
     StatusBarPresenter* statusBar;
 
     AddLibraryDialog* newLibraryDialog;
+    SyncLibraryDialog* syncLibraryDialog;
+    RemoveLibraryDialog* rmLibraryDialog;
+    RunToolDialog* runToolDialog;
+    WingmanDialog* wingmanDialog;
     ScopeDialog* scopeDialog;
     OrganizerNewDialog* newOrganizerDialog;
     OutlineNewDialog* newOutlineDialog;
@@ -141,8 +144,6 @@ private:
     NewFileDialog* newFileDialog;
     ExportFileDialog* exportOutlineToHtmlDialog;
     ExportCsvFileDialog* exportMemoryToCsvDialog;
-    NerChooseTagTypesDialog *nerChooseTagsDialog;
-    NerResultDialog* nerResultDialog;
 
 public:
     explicit MainWindowPresenter(MainWindowView& view);
@@ -169,26 +170,23 @@ public:
     // function
     Mind* getMind() const { return mind; }
 
-    // dashboard(s)
+    // hey hello!
     void showInitialView();
 
     // N view
     void handleNoteViewLinkClicked(const QUrl& url);
-
-    // NER
-    NerMainWindowWorkerThread* startNerWorkerThread(
-        Mind* m,
-        OrlojPresenter* o,
-        int f,
-        std::vector<NerNamedEntity>* r,
-        QDialog* d
-    );
 
 public slots:
     // mind
 #ifdef DO_MF_DEBUG
     void doActionMindHack();
 #endif
+    // wingman: dialog
+    void handleActionWingman(bool showDialog=true);
+    void slotRunWingmanFromDialog(bool showDialog=false);
+    void slotWingmanAppendFromDialog();
+    void slotWingmanReplaceFromDialog();
+    // workspace
     void doActionMindNewRepository();
     void handleMindNewRepository();
     void doActionMindNewFile();
@@ -212,47 +210,39 @@ public slots:
     // recall
     void doActionFts();
     void doFts(const QString& pattern, bool doSearch=false);
-    void doActionFindOutlineByName();
+    void doActionFindOutlineByName(const std::string& phrase="");
     void handleFindOutlineByName();
     void handleFindThingByName();
     void doActionFindNoteByName();
     void handleFindNoteByName();
-    void doActionFindOutlineByTag();
+    void doActionFindOutlineByTag(const std::string& tag="");
     void handleFindOutlineByTag();
     void doActionFindNoteByTag();
     void doTriggerFindNoteByTag(const m8r::Tag* tag);
     void doSwitchFindByTagDialog(bool toFindNotesByTag);
     void handleFindNoteByTag();
-#ifdef MF_NER
-    void doActionFindNerPersons();
-    void doActionFindNerLocations();
-    void doActionFindNerOrganizations();
-    void doActionFindNerMisc();
-    void handleFindNerEntities();
-    void chooseNerEntityResult(vector<NerNamedEntity>*);
-    void handleChooseNerEntityResult();
-    void handleFtsNerEntity();
-#endif
     // view
-    void doActionViewDashboard();
     void sortAndSaveOrganizersConfig();
     void doActionViewOrganizers();
     void doActionViewOrganizer();
     void doActionViewTagCloud();
     bool doActionViewHome();
     void doActionViewOutlines();
+    void doActionViewOutlinesMap();
     void doActionViewRecentNotes();
     void doActionViewKnowledgeGraphNavigator();
     void doActionCli();
     void doActionViewTerminal();
+    void doActionViewLimbo();
     void doActionViewDistractionFree();
     void doActionViewFullscreen();
-    // knowledge
-    void doActionKnowledgeArxiv();
-    void doActionKnowledgeWikipedia();
     // library
     void doActionLibraryNew();
     void handleNewLibrary();
+    void doActionLibrarySync();
+    void handleSyncLibrary();
+    void doActionLibraryRm();
+    void handleRmLibrary();
     // organizer
     void doActionOrganizerNew();
     void handleCreateOrganizer();
@@ -297,10 +287,12 @@ public slots:
     void doActionFormatListNumber();
     void doActionFormatListTask();
     void doActionFormatListTaskItem();
-    void doActionFormatToc();
+    void doActionFormatToc(bool withTags);
+    void doActionFormatTocWithTags();
+    void doActionFormatTocWithoutTags();
     void doActionFormatTimestamp();
     void doActionFormatCodeBlock();
-    void doActionFormatMathBlock();    
+    void doActionFormatMathBlock();
     void doActionFormatDiagramBlock();
     void doActionFormatDiagramPie();
     void doActionFormatDiagramFlow();
@@ -328,6 +320,21 @@ public slots:
     void doActionOutlineHtmlExport();
     void handleOutlineHtmlExport();
     void doActionOutlineTWikiImport();
+    bool checkWingmanAvailability();
+    void handleWingmanMenuAction(const std::string& prompt);
+    void doActionWingmanOSummarize() { handleWingmanMenuAction(PROMPT_SUMMARIZE); }
+    void doActionWingmanOExplain() { handleWingmanMenuAction(PROMPT_EXPLAIN_LIKE_5); }
+    void doActionWingmanOFind() { handleWingmanMenuAction(PROMPT_FIND_TASKS); }
+
+    void doActionWingmanNSummarize() { handleWingmanMenuAction(PROMPT_SUMMARIZE); }
+    void doActionWingmanNFixGrammar() { handleWingmanMenuAction(PROMPT_FIND_GRAMMAR); }
+    void doActionWingmanNRewrite() { handleWingmanMenuAction(PROMPT_TRANSLATE_EN); }
+
+    void doActionWingmanEFixGrammar() { handleWingmanMenuAction(PROMPT_FIX_GRAMMAR); }
+    void doActionWingmanEExplain() { handleWingmanMenuAction(PROMPT_EXPLAIN_LIKE_5_TXT); }
+    void doActionWingmanEFinishText() { handleWingmanMenuAction(PROMPT_COMPLETE_TEXT); }
+    void doActionWingmanERewriteText() { handleWingmanMenuAction(PROMPT_REWRITE_FORMALLY); }
+
     // Note
     void doActionNoteNew();
     bool withWriteableOutline(const std::string& outlineKey);
@@ -337,6 +344,7 @@ public slots:
     void doActionOutlineShow();
     void doActionNoteEdit();
     void doActionNoteExternalEdit();
+    void selectNoteInOutlineTree(Note* note, Outline::Patch& patch, bool onUp);
     void doActionNoteFirst();
     void doActionNoteUp();
     void doActionNotePromote();
@@ -354,6 +362,9 @@ public slots:
     void doActionEditFindAgain();
     void doActionEditWordWrapToggle();
     void doActionEditPasteImageData(QImage image);
+    void doActionRunToolDialogAnywhere();
+    void doActionOpenRunToolDialog(QString& phrase, QString& toolId, bool showDialog=true);
+    void handleRunTool();
     void doActionToggleLiveNotePreview();
     void doActionNameDescFocusSwap();
     void doActionSpellCheck();
@@ -366,6 +377,7 @@ public slots:
     void doActionHelpDiagrams();
     void doActionHelpReportBug();
     void doActionHelpCheckForUpdates();
+    void doActionEmojisDialog();
     void doActionHelpAboutMindForger();
 
     void slotHandleFts();

@@ -1,7 +1,7 @@
 /*
  html_outline_representation.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -144,6 +144,7 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
         html.assign(
             "<!DOCTYPE html>\n"
             "<html>"
+            "<head><meta charset=\"UTF-8\"></head>"
             "<body style='");
         fgBgTextColorStyle(html);
         html += "'><pre>";
@@ -152,7 +153,9 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
         html.assign(
             "<!DOCTYPE html>\n"
             "<html>"
-            "<head>");
+            "<head>"
+            "<meta charset=\"UTF-8\">"
+        );
 #ifdef DO_MF_DEBUG
         html += "\n";
 #endif

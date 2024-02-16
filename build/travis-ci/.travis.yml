@@ -1,6 +1,6 @@
 # .travis.yml     Travis CI configuration file for MindForger
 #
-# Copyright (C) 2014-2022  Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2014-2024  Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,12 +17,12 @@
 
 os:
   - linux
-  
+
 # Missing codecvt: upgrade from g++ 4.8 to 5 > MATRIX_EVAL sets CXX to g++-5 > qmake CONFIG and QMAKE_CXX sets it to build process
 matrix:
   include:
     - os: linux
-      addons: 
+      addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
@@ -40,7 +40,7 @@ dist: trusty # Travis CI provides Precise and Trusty only
 before_install:
   - sudo apt-get update -qq
   - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"  
+  - "sh -e /etc/init.d/xvfb start"
   - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
   - sudo apt-get update -qq
   - eval "${MATRIX_EVAL}"
@@ -48,6 +48,7 @@ before_install:
 install:
   - sudo apt-get install -qq qtbase5-dev libqt5webkit5-dev
   - sudo apt-get install -qq qt5-default qttools5-dev-tools
+  - sudo apt-get install -qq libcurl4-gnutls-dev
   - sudo apt-get install -qq libhunspell-dev
   - sudo apt-get install -qq ccache
   - sudo apt-get install -qq libgtest-dev
@@ -62,7 +63,7 @@ script: # make lib unit tests > run lib unit tests > make MF > install MF
   - cd "${M8RHOME}"
   - eval "${MATRIX_EVAL}"
   - cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . && cd ../../..
-  - "echo \"M8RDEBUG: g++ compiler is set to: ${CXX}\""  
+  - "echo \"M8RDEBUG: g++ compiler is set to: ${CXX}\""
   - cd lib/test # UNIT tests
   - qmake -r CONFIG+=mfnocxx CONFIG+=mfunits QMAKE_CXX=${CXX} mindforger-lib-unit-tests.pro
   - make

@@ -1,7 +1,7 @@
 /*
  time_scope_aspect.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -69,7 +69,7 @@ public:
         timePoint = now-timeScope.relativeSecs;
     }
     TimeScope& getTimeScope() { return timeScope; }
-    std::string getTimeScopeAsString();
+    std::string getTimeScopeAsString() const;
     void resetTimeScope() { timeScope.reset(); }
 
     void setTimePoint(time_t timePoint);

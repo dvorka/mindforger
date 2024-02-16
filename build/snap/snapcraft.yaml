@@ -1,0 +1,84 @@
+name: mindforger
+base: core18 # the base snap is the execution environment for this snap: core18 (18.04), core20 (20.04)
+version: '2.0.0' # just for humans, typically '1.2+git' or '1.3.2'
+summary: Thinking notebook and Markdown editor
+description: |
+   Search, browse, view and edit your Markdown files. Get as much
+   as possible from the knowledge in your remarks with associations,
+   auto linking and powerful search options.
+
+grade: devel # must be 'stable' to release into candidate/stable channels: devel, stable
+confinement: devmode # use 'strict' once you have the right plugs and slots: strict, devmode, classic
+architectures:
+  - build-on: amd64
+
+parts:
+  mindforger:
+    plugin: qmake
+    source: .  # . or git@github.com:dvorka/mindforger.git
+    qt-version: qt5
+    build-packages:
+      - libx11-xcb1  # fixes could not find or load the Qt platform plugin "xcb" in ""
+      - zlib1g-dev
+      - ccache
+      - libcurl4-gnutls-dev
+      - libhunspell-dev
+      - build-essential
+      - qtbase5-dev
+      - qt5-qmake
+      - libqt5webkit5-dev  # WebKit is used @ Linux, WebEngine @ macOS/Win
+      - ttf-ubuntu-font-family  # w/o fonts there are no menus/text in UI
+      - libvoikko-dev  # reported as missing in the start-up log
+    stage-packages:  # suggested by snapcraft build
+      - libbrotli1
+      - libdouble-conversion1
+      - libfreetype6
+      - libgl1
+      - libglvnd0
+      - libglx0
+      - libgraphite2-3
+      - libgstreamer-plugins-base1.0-0
+      - libgstreamer1.0-0
+      - libharfbuzz0b
+      - libhunspell-1.6-0
+      - libhyphen0
+      - libicu60
+      - libjpeg-turbo8
+      - liborc-0.4-0
+      - libpng16-16
+      - libqt5core5a
+      - libqt5gui5
+      - libqt5network5
+      - libqt5positioning5
+      - libqt5printsupport5
+      - libqt5qml5
+      - libqt5quick5
+      - libqt5sensors5
+      - libqt5webchannel5
+      - libqt5webkit5
+      - libqt5widgets5
+      - libwebp6
+      - libwoff1
+      - libx11-6
+      - libxau6
+      - libxcb1
+      - libxdmcp6
+      - libxml2
+      - libxslt1.1
+    options:
+      - -r
+      - "CONFIG+=mfdebug"
+
+apps:
+  mindforger:
+    command: bin/mindforger
+    environment:
+      QT_DEBUG_PLUGINS: 1
+      # # Qt's xcb plugin (X11 vs. Wayland) configuration
+      LD_LIBRARY_PATH: /usr/lib/x86_64-linux-gnu:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins/platforms  # add path to dir w/ libqxcb.so
+      QT_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins
+      QT_QPA_PLATFORM_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins
+      # font configuration
+      FONTCONFIG_PATH: ${SNAP}/etc/fonts/conf.d
+      FONTCONFIG_FILE: ${SNAP}/etc/fonts/fonts.conf
+    plugs: [home, network]

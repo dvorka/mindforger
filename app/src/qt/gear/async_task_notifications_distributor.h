@@ -1,7 +1,7 @@
 /*
  async_task_notifications_distributor.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -44,8 +44,8 @@ class MainWindowPresenter;
  * accessible.
  *
  * Summary: distributor gets or pulls tasks, executes them (in its own thread i.e. it
- * doesn't block Qt main thread) and notifies result using signals to Qt frontend (which
- * ensures asynchronous dispatch).
+ * doesn't block Qt main thread) and notifies about result availability using signals
+ * to Qt frontend (which ensures asynchronous dispatch).
  */
 class AsyncTaskNotificationsDistributor : public QThread
 {
@@ -121,7 +121,6 @@ signals:
     void signalRefreshCurrentNotePreview();
 
 public slots:
-
     void slotConfigurationUpdated();
 };
 

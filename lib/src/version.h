@@ -1,7 +1,7 @@
 /*
  version.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -28,6 +28,8 @@ namespace m8r {
 
 #ifdef DO_MF_DEBUG
   #define MINDFORGER_NIGHTLY " (" __DATE__ " " __TIME__ ")"
+#elif DO_MF_RC
+  #define MINDFORGER_NIGHTLY " (RC " __DATE__ " " __TIME__ ")"
 #elif DO_MF_CI
   #define MINDFORGER_NIGHTLY " (CI " __DATE__ " " __TIME__ ")"
 #else

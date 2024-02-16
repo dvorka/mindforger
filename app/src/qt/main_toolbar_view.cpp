@@ -1,7 +1,7 @@
 /*
  main_toolbar_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -25,9 +25,10 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
 {
     // TOOLBAR: L&F driven toolbar icons - dark vs. light
 
-    actionFindFts = addAction(
-        QIcon(":/icons/find-fts.svg"),
-        "Full-text search");
+    // REMOVED: button preceding the CLI
+    //actionFindFts = addAction(
+    //    QIcon(":/icons/find-fts.svg"),
+    //    "Full-text search");
 
     cli = new CliAndBreadcrumbsView{this};
     addWidget(cli);
@@ -43,7 +44,7 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
 
     actionOpenRepository = addAction(
         QIcon(":/icons/open-repository.svg"),
-        tr("Open a directory with Markdowns or MindForger repository"));
+        tr("Open directory with Markdowns or Workspace"));
     actionOpenFile = addAction(
         QIcon(":/icons/open-file.svg"),
         tr("Open Markdown file"));
@@ -56,20 +57,9 @@ MainToolbarView::MainToolbarView(MainWindowView* mainWindowView)
 
     addSeparator();
 
-#ifdef MF_DEPRECATED
-    actionViewDashboard = addAction(
-        QIcon(":/icons/dashboard.svg"),
-        tr("View Dashboard"));
-#endif
-#ifdef ONE_ORGANIZER
-    actionViewEisenhower = addAction(
-        QIcon(":/icons/view-eisenhower.svg"),
-        tr("View Eisenhower Matrix"));
-#else
     actionViewOrganizers = addAction(
         QIcon(":/icons/view-eisenhower.svg"),
         tr("View Eisenhower Matrices"));
-#endif
     actionViewOutlines = addAction(
         QIcon(":/icons/view-outlines.svg"),
         tr("View Notebooks"));

@@ -1,7 +1,7 @@
 /*
  configuration.h     M8r configuration management
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -16,6 +16,12 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+// TODO this class to be rewritten using templates and dynamic configuration
+//   so that adding of new configuration is easier and more robust,
+//   ideally there should be a configuration runtime configured by
+//   a data structure ~ list of configuration items
+
 #ifndef M8R_CONFIGURATION_H_
 #define M8R_CONFIGURATION_H_
 
@@ -23,7 +29,6 @@
 #include <string>
 #include <cstdlib>
 #include <cstdio>
-#include <vector>
 
 #include "repository.h"
 #include "time_scope.h"
@@ -40,6 +45,13 @@
 
 namespace m8r {
 
+enum WingmanLlmProviders {
+    WINGMAN_PROVIDER_NONE,
+    WINGMAN_PROVIDER_MOCK,
+    WINGMAN_PROVIDER_OPENAI
+    // TODO WINGMAN_PROVIDER_GOOGLE,
+};
+
 // const in constexpr makes value const
 constexpr const auto ENV_VAR_HOME = "HOME";
 constexpr const auto ENV_VAR_DISPLAY = "DISPLAY";
@@ -51,6 +63,7 @@ constexpr const auto DIRNAME_M8R_REPOSITORY = "mindforger-repository";
 constexpr const auto FILE_PATH_M8R_REPOSITORY = "~/mindforger-repository";
 
 constexpr const auto FILENAME_M8R_CONFIGURATION = ".mindforger.md";
+constexpr const auto FILENAME_OUTLINES_MAP = "outlines-map.md";
 constexpr const auto DIRNAME_MEMORY = "memory";
 constexpr const auto DIRNAME_MIND = "mind";
 constexpr const auto DIRNAME_LIMBO = "limbo";
@@ -66,11 +79,11 @@ constexpr const auto UI_THEME_BLACK_WITH_FIXED_FONT = "black with fixed font";
 constexpr const auto UI_THEME_NATIVE = "native";
 constexpr const auto UI_THEME_NATIVE_WITH_FIXED_FONT = "native with fixed font";
 
-constexpr const auto START_TO_DASHBOARD = "dashboard";
+constexpr const auto START_TO_OUTLINES_TREE = "outlines tree";
 constexpr const auto START_TO_OUTLINES = "outlines";
 constexpr const auto START_TO_TAGS = "tags";
 constexpr const auto START_TO_RECENT = "recent";
-constexpr const auto START_TO_EISENHOWER_MATRIX = "Eisehower";
+constexpr const auto START_TO_EISENHOWER_MATRIX = "Eisenhower";
 constexpr const auto START_TO_HOME_OUTLINE = "home";
 constexpr const auto DEFAULT_STARTUP_VIEW = START_TO_OUTLINES;
 
@@ -100,6 +113,71 @@ constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_FONT = "Monospace,10";
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
+struct KnowledgeTool
+{
+    static const std::string TOOL_PHRASE;
+
+    // knowledge tools IDs
+    static constexpr const auto ARXIV = "arxiv";
+    static constexpr const auto WIKIPEDIA = "wikipedia";
+    static constexpr const auto GH_REPOS = "github-repositories";
+    static constexpr const auto GH_CODE = "github-code";
+    static constexpr const auto STACK_OVERFLOW = "stackoverflow";
+    static constexpr const auto DUCKDUCKGO = "duckduckgo";
+    static constexpr const auto GOOGLE = "google";
+    static constexpr const auto CPP = "cpp";
+    static constexpr const auto PYTHON = "python";
+
+    std::string id;
+    std::string name;
+    std::string urlTemplate;
+
+    KnowledgeTool(
+        const std::string& id, const std::string& name, const std::string& urlTemplate)
+        : id(id), name(name), urlTemplate(urlTemplate) {}
+
+    static std::vector<std::string> getToolIds() {
+        return {
+            ARXIV,
+            WIKIPEDIA,
+            GH_REPOS,
+            GH_CODE,
+            STACK_OVERFLOW,
+            DUCKDUCKGO,
+            GOOGLE,
+            CPP,
+            PYTHON
+        };
+    }
+
+    static std::string getUrlTemplateForToolId(const std::string& toolId) {
+        if (toolId == ARXIV) {
+            return "https://arxiv.org/search/?query=" + TOOL_PHRASE;
+        } else if (toolId == WIKIPEDIA) {
+            return "https://en.wikipedia.org/w/index.php?search=" + TOOL_PHRASE;
+        } else if (toolId == GH_REPOS) {
+            return "https://www.github.com/search?type=repositories&q=" + TOOL_PHRASE;
+        } else if (toolId == GH_CODE) {
+            return "https://www.github.com/search?type=code&q=" + TOOL_PHRASE;
+        } else if (toolId == DUCKDUCKGO) {
+            return "https://www.duckduckgo.com/?q=" + TOOL_PHRASE;
+        } else if (toolId == GOOGLE) {
+            return "https://www.google.com/search?q=" + TOOL_PHRASE;
+        } else if (toolId == STACK_OVERFLOW) {
+            return "https://stackoverflow.com/search?q=" + TOOL_PHRASE;
+        } else if (toolId == CPP) {
+            return "https://duckduckgo.com/?sites=cppreference.com&ia=web&q=" + TOOL_PHRASE;
+        } else if (toolId == PYTHON) {
+            return "https://docs.python.org/3.11/search.html?q=" + TOOL_PHRASE;
+        }
+
+        return "";
+    }
+};
+
+// Wingman LLM models API keys
+constexpr const auto ENV_VAR_OPENAI_API_KEY = "MINDFORGER_OPENAI_API_KEY";
+
 // improve platform/language specific
 constexpr const auto DEFAULT_NEW_OUTLINE = "# New Markdown File\n\nThis is a new Markdown file created by MindForger.\n\n#Section 1\nThe first section.\n\n";
 
@@ -110,8 +188,8 @@ class RepositoryConfigurationPersistence;
  * @brief MindForger configuration.
  *
  * Configuration file (Markdown-based DSL) maintained by this class contains
- * location of repositories, active repository and user preferences (for GUI
- * and library).
+ * location of repositories, active repository and user preferences
+ * (for GUIand library).
  *
  * MindForger configuration file is stored in ~/.mindforger.md by default.
  *
@@ -180,10 +258,12 @@ public:
 
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
     static const std::string DEFAULT_TIME_SCOPE;
+    static const std::string DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
 
     static constexpr const bool DEFAULT_AUTOLINKING = false;
     static constexpr const bool DEFAULT_AUTOLINKING_COLON_SPLIT = true;
     static constexpr const bool DEFAULT_AUTOLINKING_CASE_INSENSITIVE = true;
+    static constexpr const WingmanLlmProviders DEFAULT_WINGMAN_LLM_PROVIDER = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
 
     static constexpr const bool UI_DEFAULT_NERD_TARGET_AUDIENCE = true;
@@ -191,6 +271,7 @@ public:
     static const std::string DEFAULT_UI_THEME_NAME;
     static constexpr const bool DEFAULT_UI_SHOW_TOOLBAR = true;
     static constexpr const bool DEFAULT_UI_EXPERT_MODE = false;
+    static constexpr const int DEFAULT_UI_APP_FONT_SIZE = 0;
     static constexpr const bool DEFAULT_UI_LIVE_NOTE_PREVIEW = true;
     static constexpr const bool DEFAULT_UI_NERD_MENU = false;
     static const std::string DEFAULT_UI_HTML_CSS_THEME;
@@ -206,6 +287,7 @@ public:
     static constexpr const bool DEFAULT_EDITOR_AUTOSAVE = false;
     static constexpr const bool DEFAULT_FULL_O_PREVIEW = false;
     static constexpr const bool DEFAULT_MD_QUOTE_SECTIONS = true;
+    static constexpr const bool DEFAULT_RECENT_INCLUDE_OS= false;
     static constexpr const bool DEFAULT_SPELLCHECK_LIVE = true;
     static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
     static constexpr const bool DEFAULT_MD_MATH = false;
@@ -224,7 +306,7 @@ private:
     // configured Mind state where user wants Mind to be
     MindState desiredMindState;
     // current Mind state on the way to desired state
-    MindState mindState;    
+    MindState mindState;
     // if count(N) > asyncMindTreshold then long-running mind computations should be run in async
     unsigned int asyncMindThreshold;
 
@@ -238,6 +320,8 @@ private:
 
     // active repository memory, limbo, ... paths (efficiency)
     std::string memoryPath;
+    std::string mindPath;
+    std::string outlinesMapPath;
     std::string limboPath;
 
     // repository configuration (when in repository mode)
@@ -249,13 +333,65 @@ private:
     bool autolinking; // enable MD autolinking
     bool autolinkingColonSplit;
     bool autolinkingCaseInsensitive;
+
+    /*
+    Wingman configuration, initialization and use:
+
+    - CONFIGURATION:
+        - configuration initialization:
+            - configuration constructor():
+                - configuration.llmProvider set to NONE
+            - configuration load():
+                - configuration.llmProvider is load first - is one of:
+                    - NONE
+                    - MOCK
+                    - OPEN_AI
+        - configuration detection whether particular Wingman provider is available:
+            - bool can<provider>()
+        - Wingman initialization from the configuration perspective
+          (all fields, like API key, are set ...)
+            - bool init<provider>()
+        - Wingman CONFIGURATION AVAILABILITY to the runtime:
+            - bool isWingman()
+            - Wingman is available from the configuration perspective
+    - MIND:
+        - constructor:
+          if Wingman configuration is available,
+          then instantiate a Wingman @ configured provider
+            - if configuration.isWingman()
+              then mind.wingman = <provider>Wingman()
+        - Wingman AVAILABILITY to the runtime:
+            - Wingman* mind.getWingman()
+                - nullptr || Wingman instance
+        - configuration CHANGE detection:
+            - mind.llmProvider used to detect configuration change
+            - on change: switch Wingman instance
+    - APP WINDOW / WINGMAN DIALOG:
+        - configuration CHANGE detection:
+            - appWindow.llmProvider used to detect configuration change
+            - on change: re-init Wingman DIALOG (refresh pre-defined prompts)
+    */
+    WingmanLlmProviders wingmanProvider; // "none", "Mock", "OpenAI", ...
+    std::string wingmanApiKey; // API key of the currently configured Wingman LLM provider
+    std::string wingmanOpenAiApiKey; // OpenAI API specified by user in the config, env or UI
+    std::string wingmanLlmModel; // preferred LLM model the currently configured provider, like "gpt-3.5-turbo"
+
     TimeScope timeScope;
     std::string timeScopeAsString;
     std::vector<std::string> tagsScope;
     unsigned int md2HtmlOptions;
     AssociationAssessmentAlgorithm aaAlgorithm;
     int distributorSleepInterval;
+
     bool markdownQuoteSections;
+    /**
+     * @brief Do include Outlines in the recent view or not.
+     *
+     * Subjectively it's better to show visited/editor Ns only as user
+     * can always easily get to O description + automatically added
+     * Os are increasing entropy of the recent view too much.
+     */
+    bool recentIncludeOs;
 
     // GUI configuration
     bool uiNerdTargetAudience;
@@ -286,6 +422,7 @@ private:
     bool uiFullOPreview;
     bool uiShowToolbar;
     bool uiExpertMode;
+    int uiAppFontSize;
     bool uiDistractionFreeMode; // fullscreen, no split, hidden toolbar + menu
     bool uiHoistedMode; // no split
     bool uiLiveNotePreview;
@@ -321,6 +458,8 @@ public:
     }
 
     const std::string& getMemoryPath() const { return memoryPath; }
+    const std::string& getMindPath() const { return mindPath; }
+    const std::string& getOutlinesMapPath() const { return outlinesMapPath; }
     const std::string& getLimboPath() const { return limboPath; }
     const char* getRepositoryPathFromEnv();
     /**
@@ -399,6 +538,52 @@ public:
     void setDistributorSleepInterval(int sleepInterval) { distributorSleepInterval = sleepInterval; }
     bool isMarkdownQuoteSections() const { return markdownQuoteSections; }
     void setMarkdownQuoteSections(bool markdownQuoteSections) { this->markdownQuoteSections = markdownQuoteSections; }
+    bool isRecentIncludeOs() const { return recentIncludeOs; }
+    void setRecentIncludeOs(bool recentIncludeOs) { this->recentIncludeOs = recentIncludeOs; }
+
+    /*
+     * Wingman
+     */
+    void setWingmanLlmProvider(WingmanLlmProviders provider);
+    WingmanLlmProviders getWingmanLlmProvider() const { return wingmanProvider; }
+    static std::string getWingmanLlmProviderAsString(WingmanLlmProviders provider) {
+        if(provider == WingmanLlmProviders::WINGMAN_PROVIDER_MOCK) {
+            return "mock";
+        } else if(provider == WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI) {
+            return "openai";
+        }
+
+        return "none";
+    }
+#ifdef MF_WIP
+    bool canWingmanMock() { return true; }
+#else
+    bool canWingmanMock() { return false; }
+#endif
+    bool canWingmanOpenAi();
+private:
+    bool initWingmanMock();
+    bool initWingmanOpenAi();
+    /**
+     * @brief Initialize Wingman's LLM provider.
+     */
+    bool initWingman();
+public:
+    std::string getWingmanOpenAiApiKey() const { return wingmanOpenAiApiKey; }
+    void setWingmanOpenAiApiKey(std::string apiKey) { wingmanOpenAiApiKey = apiKey; }
+    /**
+     * @brief Get API key of the currently configured Wingman LLM provider.
+     */
+    std::string getWingmanApiKey() const { return wingmanApiKey; }
+    /**
+     * @brief Get preferred Wingman LLM provider model name.
+     */
+    std::string getWingmanLlmModel() const { return wingmanLlmModel; }
+    /**
+     * @brief Check whether a Wingman LLM provider is ready from
+     * the configuration perspective.
+     */
+    bool isWingman();
 
     /*
      * GUI
@@ -444,7 +629,7 @@ public:
     void setUiEditorLiveSpellCheck(bool enable) { uiEditorLiveSpellCheck= enable; }
     std::string getUiEditorSpellCheckDefaultLanguage() const {
         return uiEditorSpellCheckLanguage;
-    }    
+    }
     void setUiEditorSpellCheckDefaultLanguage(std::string lang) {
         uiEditorSpellCheckLanguage = lang;
     }
@@ -541,7 +726,12 @@ public:
     bool isUiShowToolbar() const { return uiShowToolbar; }
     void setUiShowToolbar(bool showToolbar){ this->uiShowToolbar = showToolbar; }
     bool isUiExpertMode() const { return uiExpertMode; }
-    void setUiExpertMode(bool uiExpertMode){ this->uiExpertMode= uiExpertMode; }
+    void setUiExpertMode(bool uiExpertMode){ this->uiExpertMode = uiExpertMode; }
+    int getUiAppFontSize() const { return uiAppFontSize; }
+    void setUiAppFontSize(int appFontSize){
+        MF_DEBUG("Configuration::setUiAppFontSize: " << appFontSize << std::endl);
+        this->uiAppFontSize = appFontSize;
+    }
     bool isUiDistractionFreeMode() const { return uiDistractionFreeMode; }
     void setUiDistractionFreeMode(bool distractionFreeMode){ this->uiDistractionFreeMode = distractionFreeMode; }
     bool isUiHoistedMode() const { return uiHoistedMode; }
@@ -554,7 +744,6 @@ public:
     void setUiOsTableSortOrder(const bool ascending) { this->uiOsTableSortOrder = ascending; }
     bool isUiDoubleClickNoteViewToEdit() const { return this->uiDoubleClickNoteViewToEdit; }
     void setUiDoubleClickNoteViewToEdit(bool enable) { this->uiDoubleClickNoteViewToEdit = enable; }
-
 };
 
 } // namespace

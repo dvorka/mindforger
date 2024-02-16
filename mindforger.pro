@@ -1,6 +1,6 @@
 # mindforger.pro     Qt project file for MindForger
 #
-# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,6 +17,10 @@
 
 #########################################################################
 #
+# QMake example:
+#
+#   qmake -project project.pro CONFIG+=mysetting1 CONFIG+=mysetting2
+#
 # QMake build options:
 #
 #   qmake CONFIG+=mfwebengine       ... build project w/ Qt WebEngine instead of Qt WebKit
@@ -26,8 +30,8 @@
 #   qmake CONFIG+=mfnoccache        ... do NOT use ccache to build the project
 #   qmake CONFIG+=mfdebug           ... show debug messages + include WIP code
 #   qmake CONFIG+=mfci              ... CI build (AppVeyor, ...) w/ build info @ window title
+#   qmake CONFIG+=mfrc              ... RC build w/ build info @ window title
 #   qmake CONFIG+=mfunits           ... option to run unit tests
-#   qmake CONFIG+=mfner             ... DEPRECATED: build project w/ NER and link dlib/MITIE
 #
 # Warning: DEPRECATED build options will be removed in the next major release.
 #

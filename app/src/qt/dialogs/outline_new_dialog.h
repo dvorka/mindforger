@@ -1,7 +1,7 @@
 /*
  outline_new_dialog.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -73,6 +73,7 @@ public:
     int8_t getImportance() const;
     int8_t getUrgency() const;
     int getProgress() const;
+    QPushButton* getEmojisButton() const;
     const std::vector<const Tag*>& getTags() const;
 
     void show(
@@ -96,6 +97,7 @@ private:
 
     QLabel* nameLabel;
     QLineEdit* nameEdit;
+    QPushButton* emojisButton;
     QLabel* typeLabel;
     QComboBox* typeCombo;
     QLabel* importanceLabel;
@@ -119,6 +121,7 @@ public:
     UrgencyComboBox* getUrgencyCombo() const { return urgencyCombo; }
     QComboBox* getStencilCombo() const { return stencilCombo; }
     QSpinBox* getProgressSpin() const { return progressSpin; }
+    QPushButton* getEmojisButton() const { return emojisButton; }
     const std::vector<const Tag*>& getTags() { return editTagsGroup->getTags(); }
 
     void showFacet(Repository::RepositoryType repositoryType);

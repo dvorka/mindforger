@@ -1,7 +1,7 @@
 /*
  markdown_configuration_representation.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -40,11 +40,13 @@ constexpr const auto CONFIG_SETTING_ORG_SCOPE = "* Outline scope: ";
 
 using namespace std;
 
-MarkdownRepositoryConfigurationRepresentation::MarkdownRepositoryConfigurationRepresentation()
-{    
+MarkdownRepositoryConfigurationRepresentation
+    ::MarkdownRepositoryConfigurationRepresentation()
+{
 }
 
-MarkdownRepositoryConfigurationRepresentation::~MarkdownRepositoryConfigurationRepresentation()
+MarkdownRepositoryConfigurationRepresentation
+    ::~MarkdownRepositoryConfigurationRepresentation()
 {
 }
 
@@ -53,8 +55,9 @@ MarkdownRepositoryConfigurationRepresentation::~MarkdownRepositoryConfigurationR
  * as ROBUST as possible ~ handle eventual user typos and incorrect
  * formatting.
  */
-void MarkdownRepositoryConfigurationRepresentation::repositoryConfiguration(vector<MarkdownAstNodeSection*>* ast, Configuration& c)
-{
+void MarkdownRepositoryConfigurationRepresentation::repositoryConfiguration(
+    vector<MarkdownAstNodeSection*>* ast, Configuration& c
+) {
     c.getRepositoryConfiguration().clear();
 
     if(ast) {
@@ -71,7 +74,8 @@ void MarkdownRepositoryConfigurationRepresentation::repositoryConfiguration(vect
                 }
             }
 
-            // 1st section contains just description (post declared/trailing hashes are ignored as they are not needed on save)
+            // 1st section contains just description (post declared/trailing hashes
+            // are ignored as they are not needed on save)
         }
 
         // parse remaining sections as configuration
@@ -143,8 +147,9 @@ void MarkdownRepositoryConfigurationRepresentation::repositoryConfigurationSecti
  *
  * MD section is split using organizer name row(s).
  */
-void MarkdownRepositoryConfigurationRepresentation::repositoryConfigurationSectionOrganizers(
-    vector<string*>* body, Configuration& c
+void MarkdownRepositoryConfigurationRepresentation
+    ::repositoryConfigurationSectionOrganizers(
+        vector<string*>* body, Configuration& c
 ) {
     set<string> keys{};
     if(body) {
@@ -164,7 +169,9 @@ void MarkdownRepositoryConfigurationRepresentation::repositoryConfigurationSecti
 
                     key.clear();
                 } else if(o && line->find(CONFIG_SETTING_ORG_TYPE) != std::string::npos) {
-                    if(Organizer::TYPE_STR_KANBAN == line->substr(strlen(CONFIG_SETTING_ORG_TYPE))) {
+                    if(Organizer::TYPE_STR_KANBAN
+                       == line->substr(strlen(CONFIG_SETTING_ORG_TYPE))
+                    ) {
                         delete o;
                         o = new Kanban(name);
                     }
@@ -220,10 +227,11 @@ void MarkdownRepositoryConfigurationRepresentation::repositoryConfigurationSecti
     }
 }
 
-Organizer* MarkdownRepositoryConfigurationRepresentation::repositoryConfigurationSectionOrganizerAdd(
-    Organizer* o,
-    set<string>& keys,
-    Configuration& c
+Organizer* MarkdownRepositoryConfigurationRepresentation
+    ::repositoryConfigurationSectionOrganizerAdd(
+        Organizer* o,
+        set<string>& keys,
+        Configuration& c
 ) {
     if(o) {
         // validate organizer integrity
@@ -239,7 +247,8 @@ Organizer* MarkdownRepositoryConfigurationRepresentation::repositoryConfiguratio
         }
         set<string>::iterator it = keys.find(o->getKey());
         if(it != keys.end()) {
-            cerr << "Error: skipping '" << o->getName() << "' organizer as another organizer "
+            cerr << "Error: skipping '" << o->getName()
+                 << "' organizer as another organizer "
                  << "with key '" << o->getKey() << "' is already defined" << endl;
             delete o;
             return nullptr;
@@ -319,32 +328,62 @@ string& MarkdownRepositoryConfigurationRepresentation::to(Configuration* c, stri
 
 bool MarkdownRepositoryConfigurationRepresentation::load(Configuration& c)
 {
-    MF_DEBUG("Loading repository configuration from: '" << c.getRepositoryConfigFilePath() << "'" << endl);
+    MF_DEBUG(
+        "Loading repository configuration from: '"
+        << c.getRepositoryConfigFilePath() << "'"
+        << endl);
     string file{c.getRepositoryConfigFilePath().c_str()};
     if(isFile(file.c_str())) {
         MarkdownDocument md{&file};
         md.from();
         vector<MarkdownAstNodeSection*>* ast = md.moveAst();
         repositoryConfiguration(ast, c);
-        MF_DEBUG("  Loaded " << c.getRepositoryConfiguration().getOrganizers().size() << " Organizer(s)" << endl);
+        MF_DEBUG(
+            "  Loaded " << c.getRepositoryConfiguration().getOrganizers().size()
+            << " Organizer(s)"
+            << endl);
+        // validation: add built-in Eisenhower if it is missing
+        bool isOotbEm = false;
+        for(auto o:c.getRepositoryConfiguration().getOrganizers()) {
+            MF_DEBUG(
+                "    " << o->getName() <<
+                " (" << o->getOrganizerTypeAsStr() << ")" << endl
+            );
+            if(EisenhowerMatrix::isEisenhowMatrixOrganizer(o)) {
+                isOotbEm = true;
+            }
+        }
+        if(!isOotbEm) {
+            MF_DEBUG(
+                "Organizers: ADDING missing "
+                << Organizer::TYPE_STR_EISENHOWER_MATRIX << endl);
+            c.getRepositoryConfiguration().addOrganizer(
+                EisenhowerMatrix::createEisenhowerMatrixOrganizer());
+            this->save(c);
+        }
+
         return true;
     } else {
         return false;
     }
 }
 
-void MarkdownRepositoryConfigurationRepresentation::save(const File* file, Configuration* c)
-{
+void MarkdownRepositoryConfigurationRepresentation::save(
+    const File* file, Configuration* c
+) {
     string md{};
     to(c,md);
 
     if(c) {
-        MF_DEBUG("Saving repository configuration to file " << c->getRepositoryConfigFilePath() << endl);
+        MF_DEBUG(
+            "Saving repository configuration to file "
+            << c->getRepositoryConfigFilePath() << endl);
         std::ofstream out(c->getRepositoryConfigFilePath());
         out << md;
         out.close();
     } else {
-        MF_DEBUG("Saving repository configuration to File " << file->getName() << endl);
+        MF_DEBUG(
+            "Saving repository configuration to File " << file->getName() << endl);
         std::ofstream out(file->getName());
         out << md;
         out.close();

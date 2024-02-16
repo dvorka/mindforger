@@ -1,7 +1,7 @@
 /*
  autolinking_mind.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@
 namespace m8r {
 
 using namespace std;
+
+const vector<string> AutolinkingMind::excludedWords({"http", "https"});
 
 AutolinkingMind::AutolinkingMind(Mind& mind)
     : mind{mind},
@@ -76,11 +78,19 @@ void AutolinkingMind::updateTrieIndex()
         addThingToTrie(n);
     }
 
+    // remove excluded words whose autolinking breaks
+    // Markdown structure (like e.g. http:// in links)
+    for(const string& s:this->excludedWords) {
+        trie->removeWord(s);
+    }
+
     // IMPROVE: add also tags
 
 #ifdef DO_MF_DEBUG
     auto end = chrono::high_resolution_clock::now();
-    MF_DEBUG("[Autolinking] trie w/ " << size << " things updated in: " << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
+    MF_DEBUG(
+        "[Autolinking] trie w/ " << size << " things updated in: "
+        << chrono::duration_cast<chrono::microseconds>(end-begin).count()/1000000.0 << "ms" << endl);
 #endif
 }
 

@@ -1,7 +1,7 @@
 /*
  outline_tree_model.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ void OutlineTreeModel::removeAllRows()
 
     QStringList tableHeader;
     tableHeader
-            << tr("Outline") // tree of Notes is in fact Notebook's outline
+            << tr("Notebook Outline") // tree of Notes is in fact Notebook's outline
             << tr("Done")
             << tr("Rs")
             << tr("Ws")

@@ -1,7 +1,7 @@
 /*
  organizers_table_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -41,7 +41,9 @@ public:
     static const int NO_ROW = -1;
 
 public:
-    explicit OrganizersTablePresenter(OrganizersTableView* view, HtmlOutlineRepresentation* htmlRepresentation);
+    explicit OrganizersTablePresenter(
+        OrganizersTableView* view, HtmlOutlineRepresentation* htmlRepresentation
+    );
     OrganizersTablePresenter(const OrganizersTablePresenter&) = delete;
     OrganizersTablePresenter(const OrganizersTablePresenter&&) = delete;
     OrganizersTablePresenter &operator=(const OrganizersTablePresenter&) = delete;

@@ -1,7 +1,7 @@
 /*
  outline.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -259,7 +259,8 @@ public:
     const std::vector<Note*>& getNotes() const;
     size_t getNotesCount() const;
     void setNotes(const std::vector<Note*>& notes);
-    void addNote(Note*);    
+    void sortNotesByRead();
+    void addNote(Note*);
     /**
      * @brief Clone Note including its children.
      *

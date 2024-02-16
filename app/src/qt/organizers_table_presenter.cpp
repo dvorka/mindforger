@@ -1,7 +1,7 @@
 /*
  organizers_table_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -22,8 +22,9 @@ namespace m8r {
 
 using namespace std;
 
-OrganizersTablePresenter::OrganizersTablePresenter(OrganizersTableView* view, HtmlOutlineRepresentation* htmlRepresentation)
-{
+OrganizersTablePresenter::OrganizersTablePresenter(
+    OrganizersTableView* view, HtmlOutlineRepresentation* htmlRepresentation
+) {
     this->view = view;
     this->model = new OrganizersTableModel(this, htmlRepresentation);
     this->view->setModel(this->model);

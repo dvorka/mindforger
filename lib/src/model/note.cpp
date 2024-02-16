@@ -1,7 +1,7 @@
 /*
  note.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -65,6 +65,12 @@ Note::Note(const Note& n)
 
     if(n.tags.size()) {
         tags.insert(tags.end(), n.tags.begin(), n.tags.end());
+    }
+
+    if(n.links.size()) {
+        for(Link* l:n.links) {
+            links.push_back(new Link(l->getName(), l->getUrl()));
+        }
     }
 
     flags = n.flags;
@@ -290,7 +296,7 @@ const vector<string*>& Note::getDescription() const
 }
 
 string Note::getDescriptionAsString(const std::string& separator) const
-{    
+{
     // IMPROVE cache narrowed description for performance & return it by reference
     string result{};
     if(description.size()) {
@@ -454,6 +460,17 @@ void Note::addLink(Link* link)
     if(link) {
         links.push_back(link);
     }
+}
+
+Link* Note::getLinkByName(const string& name) const
+{
+    for(Link* l:this->links) {
+        if(l->getName() == name) {
+            return l;
+        }
+    }
+
+    return nullptr;
 }
 
 void Note::demote()

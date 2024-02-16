@@ -1,7 +1,7 @@
 /*
  async_task_notifications_distributor.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ AsyncTaskNotificationsDistributor::~AsyncTaskNotificationsDistributor()
 // TODO refactor this function to multiple methods to make it more structured
 void AsyncTaskNotificationsDistributor::run()
 {
-    // avoid re-calculation of TayW word learderboards if it's not needed
+    // avoid re-calculation of TayW word leaderboards if it's not needed
     QString lastTayWords{};
     Outline* lastTayWOutline{};
     Note* lastTayWNote{};
@@ -67,6 +67,35 @@ void AsyncTaskNotificationsDistributor::run()
     while(true) {
         msleep(static_cast<unsigned long>(sleepInterval));
 
+
+
+        /*
+
+        // Wingman: send queued chat request to configured LLM provider
+        // TODO Task* task = new Task{TaskType::CHAT, chatRequest};
+        if(false) {
+            // TODO check wingman not null
+            auto chatRequestsQueue = mwp->getMind()->getWingman()->taskQueue();
+            MF_DEBUG("AsyncTaskDistributor: AWAKE w/ " << chatRequestsQueue.size() << " chat requests" << endl);
+
+            while(chatRequestsQueue.size()) {
+                auto llmChatTask = chatRequestsQueue.pop();
+                MF_DEBUG("AsyncTaskDistributor: chat request '" << chatRequest << "'" << endl);
+                mwp->getMind()->getWingman()->chat(
+                    llmChatTask
+                );
+
+                // TODO send signal to main window presenter to show chat result
+                emit showStatusBarInfo(
+                    // TODO "Associated Notes for Notebook '"+QString::fromStdString(mwp->getOrloj()->getOutlineView()->getCurrentOutline()->getName())+"'...");
+                emit handleAppendLlmResponseToChatDialog(llmChatTask);
+            }
+        }
+
+        */
+
+
+
         // live preview refresh
         if((++livePreviewMultiplier)%3==0
              &&
@@ -74,7 +103,7 @@ void AsyncTaskNotificationsDistributor::run()
              &&
            mwp->getOrloj()->isAspectActive(OrlojPresenterFacetAspect::ASPECT_LIVE_PREVIEW))
         {
-            MF_DEBUG("Task distributor: refresh O or N preview");
+            MF_DEBUG("AsyncTaskDistributor: refresh O or N preview");
             emit signalRefreshCurrentNotePreview();
 
             // hit counter can be cleared, because associations are not visible if live preview is active
@@ -83,7 +112,7 @@ void AsyncTaskNotificationsDistributor::run()
         }
 
 #ifdef MF_DEBUG_ASYNC_TASKS
-        MF_DEBUG("AsyncDistributor[" << datetimeNow() << "]: wake up w/ associations need " << (int)mwp->getMind()->needForAssociations() << endl);
+        MF_DEBUG("AsyncTaskDistributor[" << datetimeNow() << "]: wake up w/ associations need " << (int)mwp->getMind()->needForAssociations() << endl);
 #endif
         if(mwp->getMind()->needForAssociations()
              ||
@@ -94,7 +123,7 @@ void AsyncTaskNotificationsDistributor::run()
              mwp->getOrloj()->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER))))
         {
 #ifdef MF_DEBUG_ASYNC_TASKS
-            MF_DEBUG("AsyncDistributor: calculating associations..." << Configuration::getInstance().isUiLiveNotePreview() << endl);
+            MF_DEBUG("AsyncTaskDistributor: calculating associations..." << Configuration::getInstance().isUiLiveNotePreview() << endl);
 #endif
             mwp->getMind()->meditateAssociations();
 

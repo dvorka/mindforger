@@ -1,7 +1,7 @@
 /*
  ai.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -29,9 +29,6 @@
 #include "./aa_model.h"
 #include "./ai_aa_weighted_fts.h"
 #include "./ai_aa_bow.h"
-#ifdef MF_NER
-    #include "./nlp/named_entity_recognition.h"
-#endif
 
 namespace m8r {
 
@@ -73,16 +70,8 @@ private:
      * Associations
      */
 
-    // Associations assessment implemenations: AA @ weighted FTS, AA @ BoW
+    // Associations assessment implementations: AA @ weighted FTS, AA @ BoW
     AiAssociationsAssessment* aa;
-
-#ifdef MF_NER
-    /*
-     * Named-entity recognition (NER)
-     */
-
-    NamedEntityRecognition ner;
-#endif
 
     /*
      * Neural network models
@@ -127,17 +116,6 @@ public:
         return aa->getAssociatedNotes(words, associations, self);
     }
 
-#ifdef MF_NER
-    bool isNerInitialized() const { return ner.isInitialized(); }
-
-    /**
-     * @brief Recognize person names in O.
-     */
-    void recognizePersons(const Outline* outline, int entityFilter, std::vector<NerNamedEntity>& result) {
-        ner.recognizePersons(outline, entityFilter, result);
-    }
-#endif
-
     /**
      * @brief Clear, but don't deallocate.
      *
@@ -163,8 +141,8 @@ private:
      */
     void trainAaNn();
 
-public:
 #ifdef DO_MF_DEBUG
+public:
     static void print(const Note* n, std::vector<std::pair<Note*,float>>& leaderboard) {
         std::cout << "Note '" << n->getName() << "' AA leaderboard("<< leaderboard.size() <<"):" << std::endl;
         int i=1;
@@ -173,6 +151,7 @@ public:
         }
     }
 #endif
+
 };
 
 }

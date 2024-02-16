@@ -1,7 +1,7 @@
 /*
  note_editor_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -100,6 +100,9 @@ public:
 
     // formatting
     QString getSelectedText() const { return textCursor().selectedText(); }
+    void replaceSelectedText(const std::string &text);
+    void appendAfterSelectedText(const std::string& phrase);
+    void appendAfterCursor(const std::string& phrase);
     void wrapSelectedText(const QString &tag) { wrapSelectedText(tag,""); }
     void wrapSelectedText(const QString &tag, const QString &endTag);
     void removeSelectedText() { textCursor().removeSelectedText(); }
@@ -121,6 +124,9 @@ public:
     QString getRelevantWords() const;
     void clearHitCounter() { hitCounter=0; }
     int getHitCounter() const { return hitCounter; }
+
+    // tools
+    QString getToolPhrase();
 
     // autocomplete
 protected:

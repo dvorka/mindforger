@@ -1,7 +1,7 @@
 /*
  markdown_test.cpp     MindForger markdown test
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -947,6 +947,64 @@ TEST(MarkdownParserTestCase, Links)
     EXPECT_NE(std::string::npos, serialized->find("[same as](./o1.md)"));
     EXPECT_NE(std::string::npos, serialized->find("[opposite of](./x.md)"));
     EXPECT_NE(std::string::npos, serialized->find("[is a](./y.md#a-z)"));
+
+    delete serialized;
+    delete o;
+}
+
+// Repro for BUG: https://github.com/dvorka/mindforger/issues/1518
+// - metadata link with "," is not parsed
+TEST(MarkdownParserTestCase, DISABLED_LinksWithParenthesis)
+{
+    string repositoryPath{"/tmp"};
+    string fileName{"md-parser-links-parenthesis.md"};
+    string content;
+    string filePath{repositoryPath+"/"+fileName};
+
+    content.assign(
+        "# Outline Name <!-- Metadata: links: [root link](./a,b.pdf); -->\n"
+        "O text.\n"
+        "\n"
+        "## First Section <!-- Metadata: links: [first link](./a/b/c/Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf),[second link](./x/y/z/Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf); -->\n"
+        "N1 text.\n"
+        "\n"
+        "## Second Section\n"
+        "N2 text.\n"
+        "\n");
+    m8r::stringToFile(filePath, content);
+
+    m8r::Repository* repository = m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath);
+    repository->setMode(m8r::Repository::RepositoryMode::FILE);
+    repository->setFile(fileName);
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-mptc-l.md");
+    config.setActiveRepository(config.addRepository(repository), repositoryConfigRepresentation);
+    m8r::Ontology ontology{};
+
+    // parse
+    m8r::MarkdownOutlineRepresentation mdr{ontology, nullptr};
+    m8r::filesystem::File file{filePath};
+    m8r::Outline* o = mdr.outline(file);
+
+    // asserts
+    EXPECT_NE(nullptr, o);
+    EXPECT_EQ(2, o->getNotesCount());
+
+    cout << endl << "O links: " << o->getLinksCount();
+    EXPECT_EQ(1, o->getLinksCount());
+
+    cout << endl << "N links: " << o->getNotes()[0]->getLinksCount();
+    EXPECT_EQ(2, o->getNotes()[0]->getLinksCount());
+
+    // serialize
+    string* serialized = mdr.to(o);
+    cout << endl << "- SERIALIZED ---";
+    cout << endl << *serialized;
+    EXPECT_NE(std::string::npos, serialized->find("[root link](./Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf)"));
+    EXPECT_NE(std::string::npos, serialized->find("[first link](./Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf)"));
+    EXPECT_NE(std::string::npos, serialized->find("[second link](./Compensation Letter 05012021 - Doe, John (Clifton, Tony).pdf)"));
 
     delete serialized;
     delete o;

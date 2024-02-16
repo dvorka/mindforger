@@ -1,3 +1,47 @@
+2024-02-16  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v2.0.0 - a major release that removes unused features
+      and brings several new features like Wingman.
+    * Feature: Wingman brings OpenAI LLM integration allowing to
+      compose, rewrite, summarize, NER or fix grammar of notes.
+    * Feature: Notebook Tree view brings ability to organize Notebooks to
+      a tree (outline).
+    * Feature: Libraries bring ability to index external PDF files and generate
+      Notebooks which represent them in MindForger. Synchronization and removal
+      of the library (directory with files) is supported as well.
+    * Feature: Emojis dialog allowing to use Unicode-based emojis
+      in Notebooks and Notes names or text.
+    * Feature: CLI can newly search knowledge on the internet sites - like
+      Wikipedia, arXiv, or StackOverflow - on phrase which is the current
+      context (Notebook or Note name; selected text or text under the cursor)
+      in order to get more information about the phrase.
+    * Enhancement: CLI rewrite - help, search, knowledge search
+      (Wikipedia, arXiv, search engines) and commands.
+    * Enhancement: Limbo added to the application menu View/Limbo.
+    * Enhancement: Polished Preferences - Appearance refactored to Controls,
+      restart requirement highlighted.
+    * Enhancement: Added up and down button in O/N preview mode to move around
+      O's Ns while presenting a N.
+    * Enhancement: MindForger icon changed to GenAI style.
+    * Enhancement: menu refactoring impacting Scope, and Navigate and various
+      menu items.
+    * Fix: Missing OOTB Eisenhower Matrix is automatically added back to
+      the list of Organizers.
+    * Fix: Conflicting menu keyboard shortcuts resolution (e.g. Organizers view).
+    * Fix: Edit and Format menus re-enabled on single Markdown file configuration.
+    * Upgrade: new version(s) of Qt with enhanced security support
+      added - Qt 5.15.2 LTS is supported on macOS and Windows.
+    * Deprecation: dashboard view removed.
+    * Deprecation: experimental Mitie (NER) code removed (replaced by LLM integration).
+
+2023-01-15  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v1.55.0 - a minor release which fixes delete of a Note in
+      the Notebook view that now keeps selected an adjacent Note, improves
+      page up/page down navigation in table widgets, adds charset to
+      the exported HTML head, adds new Note templates, and renames Repository
+      to Workspace in the UI (source code kept intact).
+
 2022-03-07  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v1.54.0 - macOS fix release: Qt downgraded from 5.9.9 (security)

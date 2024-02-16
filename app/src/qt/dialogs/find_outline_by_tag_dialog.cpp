@@ -1,7 +1,7 @@
 /*
  find_outline_by_tag.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ FindOutlineByTagDialog::FindOutlineByTagDialog(Ontology& ontology, QWidget *pare
     // signals
     QObject::connect(editTagsGroup, SIGNAL(signalTagSelectionChanged()), this, SLOT(handleTagsChanged()));
 
-    // dialog    
+    // dialog
     setWindowTitle(tr("Find Notebook by Tags"));
     // height is set to make sure listview gets enough lines
     resize(fontMetrics().averageCharWidth()*55, fontMetrics().height()*30);
@@ -88,7 +88,9 @@ FindOutlineByTagDialog::~FindOutlineByTagDialog()
     delete closeButton;
 }
 
-void FindOutlineByTagDialog::show(vector<Thing*>& outlines, vector<const Tag*>* tags, vector<string>* customizedNames)
+void FindOutlineByTagDialog::show(
+    vector<Thing*>& outlines, vector<const Tag*>* tags, vector<string>* customizedNames, const string& searchPhrase
+)
 {
     choice = nullptr;
     // tags are changed > need to be refreshed
@@ -122,7 +124,12 @@ void FindOutlineByTagDialog::show(vector<Thing*>& outlines, vector<const Tag*>* 
             editTagsGroup->slotAddTag();
         }
     }
-    editTagsGroup->getLineEdit()->clear();
+
+    if(searchPhrase.size()) {
+        editTagsGroup->getLineEdit()->setText(QString::fromStdString(searchPhrase));
+    } else {
+        editTagsGroup->getLineEdit()->clear();
+    }
     editTagsGroup->getLineEdit()->setFocus();
     QDialog::show();
 }

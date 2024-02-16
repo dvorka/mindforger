@@ -1,7 +1,7 @@
 /*
  ai_aa_weighted_fts.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -112,7 +112,7 @@ void AiAaWeightedFts::tokenizeAndStripString(string s, const bool ignoreCase, ve
 }
 
 vector<pair<Note*,float>>* AiAaWeightedFts::assessNotesWithFallback(const string& regexp, Outline* scope, const Note* self)
-{                         
+{
     vector<pair<Note*,float>>* result = new vector<pair<Note*,float>>();
     if(regexp.empty()) return result;
 

@@ -2,7 +2,7 @@
 #
 # MindForger knowledge management tool
 #
-# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -90,7 +90,7 @@ function buildGitHubTarball {
     #echo "This script must NOT be run if debug code is enabled - disable DO_MF_DEBUG first"
     #exit 1
     #fi
-    
+
     #
     # 1) create tarball
     #
@@ -100,7 +100,7 @@ function buildGitHubTarball {
     cd ${MFBUILD}/${MF}
     # copy  project files to current directory
     cp -rvf ${MFSRC}/* ${MFSRC}/*.*  .
-    
+
     # 1.2) prune MindForger project source: tests, *.o/... build files, ...
     echo -e "\n# MF project cleanup ########################################"
     rm -vrf ./.git ./app/mindforger ./build ./app/test ./lib/test
@@ -119,7 +119,7 @@ function buildGitHubTarball {
 # # Main #
 # ############################################################################
 
-export ARG_VERSION="1.54.0"
+export ARG_VERSION="2.0.0"
 export ARG_BAZAAR_MSG="MindForger ${ARG_VERSION} release."
 
 buildGitHubTarball "${ARG_VERSION}" "${ARG_BAZAAR_MSG}" ${1}

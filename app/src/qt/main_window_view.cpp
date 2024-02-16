@@ -1,7 +1,7 @@
 /*
  main_window_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -24,7 +24,16 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
     : QMainWindow(nullptr), // main window has no parent - it is destroyed by main MF class
       lookAndFeel(lookAndFeel)
 {
-    windowTitleSkeleton = "MindForger - "+tr("Thinking Notebook")+" - "+MINDFORGER_VERSION;
+#ifdef MF_LLAMA_CPP
+  #define MINDFORGER_GPT " GPT"
+#else
+  #define MINDFORGER_GPT ""
+#endif
+    windowTitleSkeleton
+        = "MindForger" MINDFORGER_GPT " - "
+          +tr("Thinking Notebook")+" - "
+          +MINDFORGER_VERSION;
+
     setWindowTitle(windowTitleSkeleton);
 
     toolBarView = new MainToolbarView{this};

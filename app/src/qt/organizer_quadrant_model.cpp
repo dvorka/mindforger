@@ -1,7 +1,7 @@
 /*
  organizer_quadrant_model.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -93,7 +93,8 @@ void OrganizerQuadrantModel::addRow(
         // item
         item = new QStandardItem(html);
         item->setToolTip(html);
-        // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
+        // TODO under which ROLE this is > I should declare CUSTOM role
+        //   (user+1 as constant)
         item->setData(QVariant::fromValue(note));
         items += item;
     } else {
@@ -104,7 +105,8 @@ void OrganizerQuadrantModel::addRow(
         // item
         item = new QStandardItem(html);
         item->setToolTip(html);
-        // TODO under which ROLE this is > I should declare CUSTOM role (user+1 as constant)
+        // TODO under which ROLE this is > I should declare CUSTOM role
+        //   (user+1 as constant)
         item->setData(QVariant::fromValue(note));
         items += item;
     }

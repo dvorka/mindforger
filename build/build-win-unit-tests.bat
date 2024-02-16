@@ -1,7 +1,7 @@
 @echo off
 rem MindForger thinking notebook
 
-rem Copyright (C) 2016-2022
+rem Copyright (C) 2016-2024
 
 rem This program is free software; you can redistribute it and/or
 rem modify it under the terms of the GNU General Public License
@@ -32,17 +32,17 @@ echo ====================================
 echo Generating MindForger unit test build files
 echo ====================================
 cd "%MF_BASE%\lib\test"
-qmake -r mindforger-lib-unit-tests.pro "CONFIG+=debug" "CONFIG+=mfdebug" 
+qmake -r mindforger-lib-unit-tests.pro "CONFIG+=debug" "CONFIG+=mfdebug"
 if "%ERRORLEVEL%" neq "0" goto :err
 
 echo ====================================
-echo Building MindForger unit tests 
+echo Building MindForger unit tests
 echo ====================================
 nmake
 if "%ERRORLEVEL%" neq "0" goto :err
 
 echo ====================================
-echo MindForger unit tests has been built successfully 
+echo MindForger unit tests has been built successfully
 echo ====================================
 goto :end
 :err

@@ -2,7 +2,7 @@
 #
 # MindForger knowledge management tool
 #
-# Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ fi
 # ############################################################################
 
 function createChangelog() {
-  # Debian tooling changelog hints: 
+  # Debian tooling changelog hints:
   # - signature line MUST have one whitespace prefix
   # - signature line MUST have double space between email and timestamp
   # - traling lines must have exactly one space
@@ -93,7 +93,7 @@ function buildDebPackage() {
     #	echo "This script must NOT be run if debug code is enabled - disable DO_M8R_DEBUG first"
     #	exit 1
     #fi
-    
+
     #
     # 1) create upstream tarball
     #
@@ -103,7 +103,7 @@ function buildDebPackage() {
     cd ${MFBUILD}/${MF}
     # copy  project files to current directory
     cp -rvf ${MFSRC}/* ${MFSRC}/*.*  .
-    
+
     # 1.2) prune MindForger project source: tests, *.o/... build files, ...
     echo -e "\n# MF project cleanup ########################################"
     rm -vrf ./.git ./app/mindforger ./build ./app/test ./lib/test
@@ -112,13 +112,13 @@ function buildDebPackage() {
 
     # 1.3) generate makefiles (will be used later to build binary)
     qmake -r mindforger.pro
-        
+
     # 1.4) create tar archive
     createTarball
 
     #
     # 2) create source deb
-    #    
+    #
     # 2.1) add Debian control files
     cp -rvf ${MFSRC}/build/debian/debian  .
     createChangelog ./debian/changelog
@@ -129,7 +129,7 @@ function buildDebPackage() {
 	echo "OK: GPG agent running."
     else
 	gpg-agent --daemon
-    fi    
+    fi
 
     DEBEMAIL="martin.dvorak@mindforger.com"
     DEBFULLNAME="Martin Dvorak"
@@ -142,7 +142,7 @@ function buildDebPackage() {
 
     #
     # 3) create source deb
-    #    
+    #
     # 3.1) build deb
     # build source deb package
     dpkg-buildpackage -S
@@ -153,7 +153,7 @@ function buildDebPackage() {
 # # Main #
 # ############################################################################
 
-export ARG_VERSION="1.54.0"
+export ARG_VERSION="2.0.0"
 export ARG_BAZAAR_MSG="MindForger ${ARG_VERSION} release."
 
 # Debian releases: https://www.debian.org/releases/

@@ -1,7 +1,7 @@
 /*
  main_window_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2022 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -17,6 +17,8 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "main_window_presenter.h"
+
+#include <QShortcut>
 
 #include "kanban_column_presenter.h"
 
@@ -45,22 +47,29 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
 
     // assemble presenters w/ UI
     statusBar = new StatusBarPresenter{view.getStatusBar(), mind};
-    mainMenu = new MainMenuPresenter{this}; view.getOrloj()->setMainMenu(mainMenu->getView());
+    mainMenu = new MainMenuPresenter{
+        this}; view.getOrloj()->setMainMenu(mainMenu->getView());
     cli = new CliAndBreadcrumbsPresenter{this, view.getCli(), mind};
     orloj = new OrlojPresenter{this, view.getOrloj(), mind};
 
     // initialize components
     newLibraryDialog = new AddLibraryDialog{&view};
+    syncLibraryDialog = new SyncLibraryDialog{&view};
+    rmLibraryDialog = new RemoveLibraryDialog(&view);
+    runToolDialog = new RunToolDialog{&view};
+    wingmanDialog = new WingmanDialog{&view};
     scopeDialog = new ScopeDialog{mind->getOntology(), &view};
     newOrganizerDialog = new OrganizerNewDialog{mind->getOntology(), &view};
-    newOutlineDialog = new OutlineNewDialog{QString::fromStdString(config.getMemoryPath()), mind->getOntology(), &view};
+    newOutlineDialog = new OutlineNewDialog{
+        QString::fromStdString(config.getMemoryPath()), mind->getOntology(), &view};
     newNoteDialog = new NoteNewDialog{mind->remind().getOntology(), &view};
     ftsDialog = new FtsDialog{&view};
     ftsDialogPresenter = new FtsDialogPresenter(ftsDialog, mind, orloj);
     findOutlineByNameDialog = new FindOutlineByNameDialog{&view};
     findThingByNameDialog = new FindOutlineByNameDialog{&view};
     findNoteByNameDialog = new FindNoteByNameDialog{&view};
-    findOutlineByTagDialog = new FindOutlineByTagDialog{mind->remind().getOntology(), &view};
+    findOutlineByTagDialog = new FindOutlineByTagDialog{
+        mind->remind().getOntology(), &view};
     findNoteByTagDialog = new FindNoteByTagDialog{mind->remind().getOntology(), &view};
     refactorNoteToOutlineDialog = new RefactorNoteToOutlineDialog{&view};
     configDialog = new ConfigurationDialog{&view};
@@ -84,38 +93,78 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
              QString::fromStdString(File::EXTENSION_CSV),
              &view
     );
-#ifdef MF_NER
-    nerChooseTagsDialog = new NerChooseTagTypesDialog(&view);
-    nerResultDialog = new NerResultDialog(&view);
-#endif
+
     // show/hide widgets based on configuration
     handleMindPreferences();
 
     // wire signals
-    QObject::connect(newLibraryDialog->getCreateButton(), SIGNAL(clicked()), this, SLOT(handleNewLibrary()));
-    QObject::connect(scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
-    QObject::connect(newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
-    QObject::connect(newNoteDialog, SIGNAL(accepted()), this, SLOT(handleNoteNew()));
-    QObject::connect(findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
-    QObject::connect(findThingByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindThingByName()));
-    QObject::connect(findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByName()));
-    QObject::connect(findOutlineByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByTag()));
-    QObject::connect(findOutlineByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
-    QObject::connect(findNoteByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByTag()));
-    QObject::connect(findNoteByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
-    QObject::connect(newOrganizerDialog, SIGNAL(createFinished()), this, SLOT(handleCreateOrganizer()));
-    QObject::connect(refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
-    QObject::connect(insertImageDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatImage()));
-    QObject::connect(insertLinkDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatLink()));
-    QObject::connect(rowsAndDepthDialog->getGenerateButton(), SIGNAL(clicked()), this, SLOT(handleRowsAndDepth()));
-    QObject::connect(newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
-    QObject::connect(newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
-    QObject::connect(exportOutlineToHtmlDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineHtmlExport()));
-    QObject::connect(exportMemoryToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
     QObject::connect(
-        orloj->getDashboard()->getView()->getNavigatorDashboardlet(), SIGNAL(clickToSwitchFacet()),
-        this, SLOT(doActionViewKnowledgeGraphNavigator())
-    );
+        wingmanDialog, SIGNAL(signalRunWingman()),
+        this, SLOT(slotRunWingmanFromDialog()));
+    QObject::connect(
+        wingmanDialog->getAppendButton(), SIGNAL(clicked()),
+        this, SLOT(slotWingmanAppendFromDialog()));
+    QObject::connect(
+        wingmanDialog->getReplaceButton(), SIGNAL(clicked()),
+        this, SLOT(slotWingmanReplaceFromDialog()));
+    QObject::connect(
+        // TODO remove / comment
+        runToolDialog->getRunButton(), SIGNAL(clicked()),
+        this, SLOT(handleRunTool()));
+    QObject::connect(
+        newLibraryDialog->getCreateButton(), SIGNAL(clicked()),
+        this, SLOT(handleNewLibrary()));
+    QObject::connect(
+        syncLibraryDialog->getSyncButton(), SIGNAL(clicked()),
+        this, SLOT(handleSyncLibrary()));
+    QObject::connect(
+        rmLibraryDialog->getRemoveButton(), SIGNAL(clicked()),
+        this, SLOT(handleRmLibrary()));
+    QObject::connect(
+        scopeDialog->getSetButton(), SIGNAL(clicked()), this, SLOT(handleMindScope()));
+    QObject::connect(
+        newOutlineDialog, SIGNAL(accepted()), this, SLOT(handleOutlineNew()));
+    QObject::connect(
+        newNoteDialog, SIGNAL(accepted()),
+        this, SLOT(handleNoteNew()));
+    QObject::connect(
+        newNoteDialog->getEmojisButton(), SIGNAL(clicked()),
+        this, SLOT(doActionEmojisDialog()));
+    QObject::connect(
+        newOutlineDialog->getEmojisButton(), SIGNAL(clicked()),
+        this, SLOT(doActionEmojisDialog()));
+    QObject::connect(
+        findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
+    QObject::connect(
+        findThingByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindThingByName()));
+    QObject::connect(
+        findNoteByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByName()));
+    QObject::connect(
+        findOutlineByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByTag()));
+    QObject::connect(
+        findOutlineByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
+    QObject::connect(
+        findNoteByTagDialog, SIGNAL(searchFinished()), this, SLOT(handleFindNoteByTag()));
+    QObject::connect(
+        findNoteByTagDialog, SIGNAL(switchDialogs(bool)), this, SLOT(doSwitchFindByTagDialog(bool)));
+    QObject::connect(
+        newOrganizerDialog, SIGNAL(createFinished()), this, SLOT(handleCreateOrganizer()));
+    QObject::connect(
+        refactorNoteToOutlineDialog, SIGNAL(searchFinished()), this, SLOT(handleRefactorNoteToOutline()));
+    QObject::connect(
+        insertImageDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatImage()));
+    QObject::connect(
+        insertLinkDialog->getInsertButton(), SIGNAL(clicked()), this, SLOT(handleFormatLink()));
+    QObject::connect(
+        rowsAndDepthDialog->getGenerateButton(), SIGNAL(clicked()), this, SLOT(handleRowsAndDepth()));
+    QObject::connect(
+        newRepositoryDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewRepository()));
+    QObject::connect(
+        newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
+    QObject::connect(
+        exportOutlineToHtmlDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineHtmlExport()));
+    QObject::connect(
+        exportMemoryToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
     QObject::connect(
         orloj->getNoteEdit()->getView()->getNoteEditor(), SIGNAL(signalDnDropUrl(QString)),
         this, SLOT(doActionFormatLinkOrImage(QString))
@@ -132,23 +181,20 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SIGNAL(signalPasteImageData(QImage)),
         this, SLOT(doActionEditPasteImageData(QImage))
     );
-    // wire toolbar signals
-    QObject::connect(view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()), this, SLOT(doActionOutlineOrNoteNew()));
-    QObject::connect(view.getToolBar()->actionOpenRepository, SIGNAL(triggered()), this, SLOT(doActionMindLearnRepository()));
+    QObject::connect(
+        view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()),
+        this, SLOT(doActionOutlineOrNoteNew())
+    );
+    QObject::connect(
+        view.getToolBar()->actionOpenRepository, SIGNAL(triggered()),
+        this, SLOT(doActionMindLearnRepository())
+    );
     QObject::connect(view.getToolBar()->actionOpenFile, SIGNAL(triggered()), this, SLOT(doActionMindLearnFile()));
-#ifdef MF_DEPRECATED
-    QObject::connect(view.getToolBar()->actionViewDashboard, SIGNAL(triggered()), this, SLOT(doActionViewDashboard()));
-#endif
-#ifdef ONE_ORGANIZER
-    QObject::connect(view.getToolBar()->actionViewEisenhower, SIGNAL(triggered()), this, SLOT(doActionViewOrganizer()));
-#else
     QObject::connect(view.getToolBar()->actionViewOrganizers, SIGNAL(triggered()), this, SLOT(doActionViewOrganizers()));
-#endif
     QObject::connect(view.getToolBar()->actionViewOutlines, SIGNAL(triggered()), this, SLOT(doActionViewOutlines()));
     QObject::connect(view.getToolBar()->actionViewNavigator, SIGNAL(triggered()), this, SLOT(doActionViewKnowledgeGraphNavigator()));
     QObject::connect(view.getToolBar()->actionViewTags, SIGNAL(triggered()), this, SLOT(doActionViewTagCloud()));
     QObject::connect(view.getToolBar()->actionViewRecentNotes, SIGNAL(triggered()), this, SLOT(doActionViewRecentNotes()));
-    QObject::connect(view.getToolBar()->actionFindFts, SIGNAL(triggered()), this, SLOT(doActionFts()));
     QObject::connect(view.getToolBar()->actionHomeOutline, SIGNAL(triggered()), this, SLOT(doActionViewHome()));
     QObject::connect(view.getToolBar()->actionThink, SIGNAL(triggered()), this, SLOT(doActionMindToggleThink()));
     QObject::connect(view.getToolBar()->actionScope, SIGNAL(triggered()), this, SLOT(doActionMindTimeTagScope()));
@@ -162,21 +208,11 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         this, SLOT(slotMainToolbarVisibilityChanged(bool))
     );
 
-
-#ifdef MF_NER
-    QObject::connect(nerChooseTagsDialog->getChooseButton(), SIGNAL(clicked()), this, SLOT(handleFindNerEntities()));
-    QObject::connect(nerResultDialog, SIGNAL(choiceFinished()), this, SLOT(handleFtsNerEntity()));
-#endif
-
     // async task 2 GUI events distributor
     distributor = new AsyncTaskNotificationsDistributor(this);
     // setup callback for cleanup when it finishes
     QObject::connect(distributor, SIGNAL(finished()), distributor, SLOT(deleteLater()));
     distributor->start();
-#ifdef MF_NER
-    // NER worker
-    nerWorker = nullptr;
-#endif
 
     // send signal to components to be updated on a configuration change
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
@@ -204,8 +240,8 @@ MainWindowPresenter::~MainWindowPresenter()
     //if(findNoteByNameDialog) delete findNoteByNameDialog;
     if(insertImageDialog) delete insertImageDialog;
     if(newLibraryDialog) delete newLibraryDialog;
+    if(wingmanDialog) delete wingmanDialog;
 
-    // TODO deletes
     delete this->mdConfigRepresentation;
     delete this->mdRepositoryConfigRepresentation;
     delete this->mdDocumentRepresentation;
@@ -236,10 +272,10 @@ void MainWindowPresenter::showInitialView()
                     orloj->showFacetOutlineList(mind->getOutlines());
                 }
             } else if(config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER) {
-                if(!string{START_TO_DASHBOARD}.compare(config.getStartupView())) {
-                    orloj->showFacetDashboard();
-                } else if(!string{START_TO_OUTLINES}.compare(config.getStartupView())) {
+                if(!string{START_TO_OUTLINES}.compare(config.getStartupView())) {
                     orloj->showFacetOutlineList(mind->getOutlines());
+                } else if(!string{START_TO_OUTLINES_TREE}.compare(config.getStartupView())) {
+                    orloj->showFacetOutlinesMap(mind->outlinesMapGet());
                 } else if(!string{START_TO_TAGS}.compare(config.getStartupView())) {
                     orloj->showFacetTagCloud();
                 } else if(!string{START_TO_RECENT}.compare(config.getStartupView())) {
@@ -279,12 +315,18 @@ void MainWindowPresenter::showInitialView()
         orloj->showFacetOutlineList(mind->getOutlines());
     }
 
-    view.setFileOrDirectory(QString::fromStdString(config.getActiveRepository()->getPath()));
+    view.setFileOrDirectory(
+        QString::fromStdString(config.getActiveRepository()->getPath())
+    );
 
     // config > menu
     mainMenu->showFacetMindAutolink(config.isAutolinking());
     mainMenu->showFacetLiveNotePreview(config.isUiLiveNotePreview());
-    orloj->setAspect(config.isUiLiveNotePreview()?OrlojPresenterFacetAspect::ASPECT_LIVE_PREVIEW:OrlojPresenterFacetAspect::ASPECT_NONE);
+    orloj->setAspect(
+        config.isUiLiveNotePreview()
+        ?OrlojPresenterFacetAspect::ASPECT_LIVE_PREVIEW
+        :OrlojPresenterFacetAspect::ASPECT_NONE
+    );
 
     // move Mind to configured state
     if(config.getDesiredMindState()==Configuration::MindState::THINKING) {
@@ -293,14 +335,21 @@ void MainWindowPresenter::showInitialView()
         if(f.wait_for(chrono::microseconds(0)) == future_status::ready) {
             if(!f.get()) {
                 mainMenu->showFacetMindSleep();
-                statusBar->showError(tr("Cannot think - either Mind already dreaming or repository too big"));
+                statusBar->showError(
+                    tr(
+                        "Cannot think - either Mind already dreaming or "
+                        "workspace too big"
+                    )
+                );
             }
             statusBar->showMindStatistics();
         } else {
             statusBar->showMindStatistics();
             // ask notifications distributor to repaint status bar later
             AsyncTaskNotificationsDistributor::Task* task
-                = new AsyncTaskNotificationsDistributor::Task{f,AsyncTaskNotificationsDistributor::TaskType::DREAM_TO_THINK};
+                = new AsyncTaskNotificationsDistributor::Task{
+                    f,
+                    AsyncTaskNotificationsDistributor::TaskType::DREAM_TO_THINK};
             distributor->add(task);
         }
     }
@@ -467,7 +516,7 @@ void MainWindowPresenter::handleNoteViewLinkClicked(const QUrl& url)
 #ifdef DO_MF_DEBUG
 void MainWindowPresenter::doActionMindHack()
 {
-    MF_DEBUG("[MindHack] Current facet: " << orloj->getFacet() << endl);
+    MF_DEBUG("MindHack" << endl);
 }
 #endif
 
@@ -479,14 +528,26 @@ void MainWindowPresenter::doActionMindNewRepository()
 void MainWindowPresenter::handleMindNewRepository()
 {
     // if directory exists, then fail
-    if(isDirectoryOrFileExists(newRepositoryDialog->getRepositoryPath().toStdString().c_str())) {
-        QMessageBox::critical(&view, tr("New Repository Error"), tr("Specified repository path already exists!"));
+    if(isDirectoryOrFileExists(
+        newRepositoryDialog->getRepositoryPath().toStdString().c_str())
+    ) {
+        QMessageBox::critical(
+            &view,
+            tr("New Workspace Error"),
+            tr("Specified workspace path already exists!")
+        );
         return;
     }
 
     // create repository
-    if(!config.getInstaller()->createEmptyMindForgerRepository(newRepositoryDialog->getRepositoryPath().toStdString())) {
-        QMessageBox::critical(&view, tr("New Repository Error"), tr("Failed to create empty repository!"));
+    if(!config.getInstaller()->createEmptyMindForgerRepository(
+        newRepositoryDialog->getRepositoryPath().toStdString())
+    ) {
+        QMessageBox::critical(
+            &view,
+            tr("New Workspace Error"),
+            tr("Failed to create empty workspace!")
+        );
         return;
     }
 
@@ -496,7 +557,12 @@ void MainWindowPresenter::handleMindNewRepository()
         newRepositoryDialog->isCopyStencils(),
         newRepositoryDialog->getRepositoryPath().toStdString().c_str()
     )) {
-        statusBar->showError(tr("ERROR: repository created, but attempt to copy documentation and/or stencils failed"));
+        statusBar->showError(
+            tr(
+                "ERROR: workspace created, but attempt to copy documentation "
+                "and/or stencils failed"
+            )
+        );
     }
 
     // open new repository
@@ -549,7 +615,9 @@ void MainWindowPresenter::doActionMindThink()
         statusBar->showMindStatistics();
         // ask notifications distributor to repaint status bar later
         AsyncTaskNotificationsDistributor::Task* task
-            = new AsyncTaskNotificationsDistributor::Task{f,AsyncTaskNotificationsDistributor::TaskType::DREAM_TO_THINK};
+            = new AsyncTaskNotificationsDistributor::Task{
+                f,
+                AsyncTaskNotificationsDistributor::TaskType::DREAM_TO_THINK};
         distributor->add(task);
     }
 }
@@ -648,13 +716,18 @@ void MainWindowPresenter::doActionToggleLiveNotePreview()
 void MainWindowPresenter::doActionMindLearnRepository()
 {
     QString homeDirectory
-        = QStandardPaths::locate(QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory);
+        = QStandardPaths::locate(
+            QStandardPaths::HomeLocation, QString(), QStandardPaths::LocateDirectory
+        );
 
     QFileDialog learnDialog{&view};
-    learnDialog.setWindowTitle(tr("Learn Directory or MindForger Repository"));
-    // learnDialog.setFileMode(QFileDialog::Directory|QFileDialog::ExistingFiles); not supported, therefore
+    learnDialog.setWindowTitle(tr("Learn Directory or MindForger Workspace"));
+    // learnDialog.setFileMode(QFileDialog::Directory|QFileDialog::ExistingFiles);
+    //   not supported, therefore
     // >
-    // ASK user: directory/repository or file (choice) > open dialog configured as required
+    // ASK user: directory/repository or file (choice)
+    // >
+    // open dialog configured as required
     learnDialog.setFileMode(QFileDialog::Directory);
     learnDialog.setDirectory(homeDirectory);
     learnDialog.setViewMode(QFileDialog::Detail);
@@ -706,7 +779,7 @@ void MainWindowPresenter::doActionMindRelearn(QString path)
         QMessageBox::critical(
             &view,
             tr("Learn"),
-            tr("This is neither valid MindForger/Markdown repository nor file."));
+            tr("This is neither valid MindForger/Markdown workspace nor file."));
     }
 }
 
@@ -785,7 +858,7 @@ void MainWindowPresenter::slotMainToolbarVisibilityChanged(bool visibility)
     mdConfigRepresentation->save(config);
 }
 
-void MainWindowPresenter::doActionFindOutlineByName()
+void MainWindowPresenter::doActionFindOutlineByName(const std::string& phrase)
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> os{mind->getOutlines()};
@@ -793,12 +866,22 @@ void MainWindowPresenter::doActionFindOutlineByName()
     vector<Thing*> es{os.begin(),os.end()};
 
     findOutlineByNameDialog->show(es);
+    if(phrase.size()) {
+        findOutlineByNameDialog->setSearchedString(QString::fromStdString(phrase));
+    }
 }
 
 void MainWindowPresenter::handleFindOutlineByName()
 {
     if(findOutlineByNameDialog->getChoice()) {
-        orloj->showFacetOutline((Outline*)findOutlineByNameDialog->getChoice());
+        Outline* o = (Outline*)findOutlineByNameDialog->getChoice();
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+            orloj->getOutlinesMap()->selectRowByOutlineKey(o->getKey());
+            return;
+        } else {
+            orloj->showFacetOutline(o);
+        }
+
         // IMPROVE make this more efficient
         statusBar->showInfo(QString(tr("Notebook "))+QString::fromStdString(findOutlineByNameDialog->getChoice()->getName()));
     } else {
@@ -821,14 +904,14 @@ void MainWindowPresenter::handleFindThingByName()
     }
 }
 
-void MainWindowPresenter::doActionFindOutlineByTag()
+void MainWindowPresenter::doActionFindOutlineByTag(const string& tag)
 {
     // IMPROVE rebuild model ONLY if dirty i.e. an outline name was changed on save
     vector<Outline*> os{mind->getOutlines()};
     Outline::sortByName(os);
     vector<Thing*> outlines{os.begin(),os.end()};
 
-    findOutlineByTagDialog->show(outlines);
+    findOutlineByTagDialog->show(outlines, nullptr, nullptr, tag);
 }
 
 void MainWindowPresenter::handleFindOutlineByTag()
@@ -862,7 +945,7 @@ void MainWindowPresenter::doActionFindNoteByTag()
 void MainWindowPresenter::doTriggerFindNoteByTag(const Tag* tag)
 {
     findNoteByTagDialog->setWindowTitle(tr("Find Note by Tags"));
-    findNoteByTagDialog->clearScope();    
+    findNoteByTagDialog->clearScope();
     vector<Note*> allNotes{};
     mind->getAllNotes(allNotes);
     vector<const Tag*> tags{};
@@ -982,173 +1065,11 @@ void MainWindowPresenter::handleFindNoteByName()
     }
 }
 
-#ifdef MF_NER
-
-void MainWindowPresenter::doActionFindNerPersons()
-{
-    if(orloj->isFacetActiveOutlineManagement()) {
-        nerChooseTagsDialog->clearCheckboxes();
-        nerChooseTagsDialog->getPersonsCheckbox()->setChecked(true);
-        nerChooseTagsDialog->show();
-    } else {
-        statusBar->showInfo(tr("Initializing NER and predicting..."));
-        QMessageBox::critical(&view, tr("NER"), tr("Memory NER not implemented yet."));
-    }
-}
-void MainWindowPresenter::doActionFindNerLocations()
-{
-    if(orloj->isFacetActiveOutlineManagement()) {
-        nerChooseTagsDialog->clearCheckboxes();
-        nerChooseTagsDialog->getLocationsCheckbox()->setChecked(true);
-        nerChooseTagsDialog->show();
-    } else {
-        statusBar->showInfo(tr("Initializing NER and predicting..."));
-        QMessageBox::critical(&view, tr("NER"), tr("Memory NER not implemented yet."));
-    }
-}
-void MainWindowPresenter::doActionFindNerOrganizations()
-{
-    if(orloj->isFacetActiveOutlineManagement()) {
-        nerChooseTagsDialog->clearCheckboxes();
-        nerChooseTagsDialog->getOrganizationsCheckbox()->setChecked(true);
-        nerChooseTagsDialog->show();
-    } else {
-        statusBar->showInfo(tr("Initializing NER and predicting..."));
-        QMessageBox::critical(&view, tr("NER"), tr("Memory NER not implemented yet."));
-    }
-}
-void MainWindowPresenter::doActionFindNerMisc()
-{
-    if(orloj->isFacetActiveOutlineManagement()) {
-        nerChooseTagsDialog->clearCheckboxes();
-        nerChooseTagsDialog->getMiscCheckbox()->setChecked(true);
-        nerChooseTagsDialog->show();
-    } else {
-        statusBar->showInfo(tr("Initializing NER and predicting..."));
-        QMessageBox::critical(&view, tr("NER"), tr("Memory NER not implemented yet."));
-    }
-}
-
-NerMainWindowWorkerThread* MainWindowPresenter::startNerWorkerThread(
-        Mind* m,
-        OrlojPresenter* o,
-        int f,
-        std::vector<NerNamedEntity>* r,
-        QDialog* d)
-{
-    QThread* thread = new QThread;
-    NerMainWindowWorkerThread* worker
-        = new NerMainWindowWorkerThread(thread, m, o, f, r, d);
-
-    // signals
-    worker->moveToThread(thread);
-    // TODO implement dialog w/ error handling - QObject::connect(worker, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
-    QObject::connect(thread, SIGNAL(started()), worker, SLOT(process()));
-    // open dialog to choose from result(s)
-    QObject::connect(worker, SIGNAL(finished()), this, SLOT(handleChooseNerEntityResult()));
-    // worker's finished signal quits thread ~ thread CANNOT be reused
-    QObject::connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
-    // schedule thread for automatic deletion by Qt - I delete worker myself
-    //QObject::connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
-    QObject::connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-
-    thread->start();
-
-    return worker;
-}
-
-// handleFindNerPerson() -> handleChooseNerEntityResult() -> handleFtsNerEntity()
-void MainWindowPresenter::handleFindNerEntities()
-{
-    nerChooseTagsDialog->hide();
-
-    int entityFilter{};
-    entityFilter =
-          (nerChooseTagsDialog->getPersonsCheckbox()->isChecked()?NerNamedEntityType::PERSON:0) |
-          (nerChooseTagsDialog->getLocationsCheckbox()->isChecked()?NerNamedEntityType::LOCATION:0) |
-          (nerChooseTagsDialog->getOrganizationsCheckbox()->isChecked()?NerNamedEntityType::ORGANIZATION:0) |
-          (nerChooseTagsDialog->getMiscCheckbox()->isChecked()?NerNamedEntityType::MISC:0);
-
-    MF_DEBUG("Named-entity type filter: " << entityFilter << endl);
-
-    vector<NerNamedEntity>* result
-        = new vector<NerNamedEntity>{};
-    if(mind->isNerInitilized()) {
-        statusBar->showInfo(tr("Recognizing named entities..."));
-
-        mind->recognizePersons(orloj->getOutlineView()->getCurrentOutline(), entityFilter, *result);
-
-        chooseNerEntityResult(result);
-    } else {
-        statusBar->showInfo(tr("Initializing NER and recognizing named entities..."));
-
-        // launch async worker
-        QDialog* progressDialog
-            = new QDialog{&view};
-        nerWorker
-            = startNerWorkerThread(mind, orloj, entityFilter, result, progressDialog);
-
-        // show PROGRESS dialog - will be closed by worker
-        QVBoxLayout* mainLayout = new QVBoxLayout{};
-        QLabel* l = new QLabel{tr(" Initializing (the first run only) NER and predicting... ")};
-        mainLayout->addWidget(l);
-        progressDialog->setLayout(mainLayout);
-        progressDialog->setWindowTitle(tr("Named-entity Recognition"));
-        //progressDialog->resize(fontMetrics().averageCharWidth()*35, height());
-        //progressDialog->setModal(true);
-        progressDialog->update();
-        progressDialog->activateWindow();
-        progressDialog->show();
-        // dialog is deleted by worker thread
-    }
-}
-
-void MainWindowPresenter::chooseNerEntityResult(vector<NerNamedEntity>* nerEntities)
-{
-    MF_DEBUG("Showing NER results to choose one entity for FTS..." << endl);
-    statusBar->showInfo(tr("NER predicition finished"));
-
-    if(nerEntities && nerEntities->size()) {
-        nerResultDialog->show(*nerEntities);
-    } else {
-        QMessageBox::information(&view, tr("Named-entity Recognition"), tr("No named entities recognized."));
-    }
-}
-
-void MainWindowPresenter::handleChooseNerEntityResult()
-{
-    vector<NerNamedEntity>* nerEntities = nerWorker->getResult();
-    chooseNerEntityResult(nerEntities);
-
-    // cleanup: thread is deleted by Qt (deleteLater() signal)
-    delete nerEntities;
-    delete nerWorker;
-}
-
-void MainWindowPresenter::handleFtsNerEntity()
-{
-    if(nerResultDialog->getChoice().size()) {
-        executeFts(
-            nerResultDialog->getChoice(),
-            false,
-            orloj->getOutlineView()->getCurrentOutline());
-    }
-}
-
-#endif
-
 void MainWindowPresenter::doActionViewRecentNotes()
 {
     vector<Note*> notes{};
-    mind->getAllNotes(notes, true, true);
+    mind->getAllNotes(notes, true, config.isRecentIncludeOs());
     orloj->showFacetRecentNotes(notes);
-}
-
-void MainWindowPresenter::doActionViewDashboard()
-{
-    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-        orloj->showFacetDashboard();
-    }
 }
 
 void MainWindowPresenter::sortAndSaveOrganizersConfig()
@@ -1161,8 +1082,12 @@ void MainWindowPresenter::sortAndSaveOrganizersConfig()
 
 void MainWindowPresenter::doActionViewOrganizers()
 {
-    if(config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY) {
-        orloj->showFacetOrganizerList(config.getRepositoryConfiguration().getOrganizers());
+    if(config.getActiveRepository()->getMode()
+       == Repository::RepositoryMode::REPOSITORY
+    ) {
+        orloj->showFacetOrganizerList(
+            config.getRepositoryConfiguration().getOrganizers()
+        );
     }
 }
 
@@ -1188,7 +1113,9 @@ bool MainWindowPresenter::doActionViewHome()
         orloj->showFacetOutline(homeOutline.at(0));
         return true;
     } else {
-        statusBar->showInfo(tr("Home Notebook is not defined!"));
+        statusBar->showInfo(
+            tr("Home Notebook not set - use menu 'Notebooks/Make Home'")
+        );
         return false;
     }
 }
@@ -1199,6 +1126,16 @@ void MainWindowPresenter::doActionViewOutlines()
         view.getCli()->setBreadcrumbPath("/notebooks");
         cli->executeListOutlines();
         view.getOrloj()->getOutlinesTable()->setFocus();
+    }
+}
+
+void MainWindowPresenter::doActionViewOutlinesMap()
+{
+    if(config.getActiveRepository()->getType()==Repository::RepositoryType::MINDFORGER
+         &&
+       config.getActiveRepository()->getMode()==Repository::RepositoryMode::REPOSITORY)
+    {
+        orloj->showFacetOutlinesMap(mind->outlinesMapGet());
     }
 }
 
@@ -1470,12 +1407,12 @@ void MainWindowPresenter::doActionFormatListTaskItem()
     }
 }
 
-void MainWindowPresenter::doActionFormatToc()
+void MainWindowPresenter::doActionFormatToc(bool withTags)
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
             || orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER))
     {
-        string* text = mdRepresentation->toc(orloj->getOutlineView()->getCurrentOutline());
+        string* text = mdRepresentation->toc(orloj->getOutlineView()->getCurrentOutline(), withTags);
 
         if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
             orloj->getNoteEdit()->getView()->getNoteEditor()->insertMarkdownText(QString::fromStdString(*text));
@@ -1485,6 +1422,16 @@ void MainWindowPresenter::doActionFormatToc()
 
         delete text;
     }
+}
+
+void MainWindowPresenter::doActionFormatTocWithTags()
+{
+    this->doActionFormatToc(true);
+}
+
+void MainWindowPresenter::doActionFormatTocWithoutTags()
+{
+    this->doActionFormatToc(false);
 }
 
 // IMPROVE: consolidate methods which just insert a (semi)static string
@@ -1755,7 +1702,9 @@ void MainWindowPresenter::copyLinkOrImageToRepository(const string& srcPath, QSt
         pathToDirectoryAndFile(path.toStdString(), d, f);
         path = QString::fromStdString(f);
 
-        statusBar->showInfo(tr("File copied to repository path '%1'").arg(path.toStdString().c_str()));
+        statusBar->showInfo(
+            tr("File copied to workspace path '%1'").arg(path.toStdString().c_str())
+        );
     } else {
         // fallback: create link, but don't copy
         path = insertLinkDialog->getPathText();
@@ -1795,9 +1744,118 @@ void MainWindowPresenter::doActionEditPasteImageData(QImage image)
     injectImageLinkToEditor(path, QString{"image"});
 }
 
+void MainWindowPresenter::doActionRunToolDialogAnywhere()
+{
+    QString phrase{};
+    QString toolId{KnowledgeTool::WIKIPEDIA};
+
+    doActionOpenRunToolDialog(phrase, toolId, true);
+}
+
+void MainWindowPresenter::doActionOpenRunToolDialog(
+    QString& phrase,
+    QString& toolId,
+    bool openDialog
+) {
+    MF_DEBUG("SIGNAL handled: open run tool dialog..." << endl);
+
+    // if phrase is empty, then use active context
+    if(phrase.isEmpty()) {
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            phrase = orloj->getNoteEdit()->getView()->getNoteEditor()->getToolPhrase();
+        } else if(
+            orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+            || orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+        ) {
+            Outline* o = orloj->getOutlineView()->getCurrentOutline();
+            if(o) {
+                phrase = QString::fromStdString(o->getName());
+            }
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
+            Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+            if(note) {
+                phrase = QString::fromStdString(note->getName());
+            }
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            phrase = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getToolPhrase();
+        }
+        else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_LIST_OUTLINES)) {
+            int row = orloj->getOutlinesTable()->getCurrentRow();
+            if(row != OutlinesTablePresenter::NO_ROW) {
+                QStandardItem* item
+                    = orloj->getOutlinesTable()->getModel()->item(row);
+                if(item) {
+                    Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
+                    phrase = QString::fromStdString(outline->getName());
+                }
+            }
+        }
+    }
+    this->runToolDialog->setPhraseText(phrase);
+
+    if(!this->runToolDialog->selectToolById(toolId.toStdString())) {
+        QMessageBox::critical(
+            &view,
+            tr("Run Knowledge Tool Error"),
+            tr("Unknown tool to run '%1'.").arg(toolId));
+        return;
+    }
+    QString templateText =
+        QString::fromStdString(
+            KnowledgeTool::getUrlTemplateForToolId(
+                this->runToolDialog->getSelectedToolId()));
+    if(templateText.length() == 0) {
+        QMessageBox::critical(
+            &view,
+            tr("Open Knowledge Tool Dialog Error"),
+            tr("Unable to construct URL to open for unknown tool '%1'.").arg(toolId));
+        return;
+    }
+    this->runToolDialog->setTemplateText(templateText);
+
+    if(openDialog) {
+        this->runToolDialog->show();
+    }
+}
+
+void MainWindowPresenter::handleRunTool()
+{
+    this->runToolDialog->hide();
+
+    string selectedTool{
+        this->runToolDialog->getSelectedTool().toStdString()
+    };
+
+    QString phrase=this->runToolDialog->getPhraseText();
+    if(phrase.length() == 0) {
+        QMessageBox msgBox{
+            QMessageBox::Critical,
+            QObject::tr("Empty Phrase"),
+            QObject::tr("Phrase to search/explain/process is empty.")
+        };
+        msgBox.exec();
+        return;
+    }
+
+    // get & check template text validity
+    QString templateText = this->runToolDialog->getTemplateText();
+
+    // phrase replace @ template > get command, if invalid, then fallback
+    QString command = templateText.replace(
+        QString::fromStdString(KnowledgeTool::TOOL_PHRASE), phrase
+    );
+
+    // RUN tool
+    QDesktopServices::openUrl(QUrl{command});
+}
+
 void MainWindowPresenter::statusInfoPreviewFlickering()
 {
-    statusBar->showInfo(QString(tr("HTML Note preview flickering can be eliminated by disabling math and diagrams in Preferences menu")));
+    statusBar->showInfo(
+        QString(
+            tr(
+                "HTML Note preview flickering can be eliminated by disabling math "
+                "and diagrams in Preferences menu")));
 }
 
 /*
@@ -1906,6 +1964,347 @@ void MainWindowPresenter::doActionOutlineNew()
     );
 }
 
+bool MainWindowPresenter::checkWingmanAvailability()
+{
+    if(!config.isWingman()) {
+        QMessageBox msgBox{
+            QMessageBox::Critical,
+            QObject::tr("Wingman Not Available"),
+            QObject::tr(
+                "Wingman provider is either not configured or "
+                "initialized - see MindForger Preferences (Wingman tab).")
+        };
+        msgBox.exec();
+        return false;
+    }
+
+    return true;
+}
+
+void MainWindowPresenter::handleWingmanMenuAction(const std::string& prompt)
+{
+    if(!checkWingmanAvailability()) {
+        return;
+    }
+
+    handleActionWingman(false);
+    this->wingmanDialog->setPrompt(prompt);
+    this->wingmanDialog->appendPromptToChat(prompt);
+    slotRunWingmanFromDialog(true);
+}
+
+void MainWindowPresenter::handleActionWingman(bool showDialog)
+{
+    MF_DEBUG("SIGNAL handled: WINGMAN CHAT dialog requests PROMPT run..." << endl);
+
+    if(!checkWingmanAvailability()) {
+        return;
+    }
+
+    // get PHRASE from the active context:
+    // - N editor: get word under cursor OR selected text
+    // - N tree: get N name
+    // - O tree: get O name
+    // - ...
+    QString contextTextName{};
+    QString contextText{};
+    WingmanDialogModes contextType{WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        contextText = orloj->getNoteEdit()->getView()->getNoteEditor()->getToolPhrase();
+        contextType = WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT;
+    } else if(
+        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+        || orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+    ) {
+        Outline* o = orloj->getOutlineView()->getCurrentOutline();
+        if(o) {
+            contextTextName = QString::fromStdString(o->getName());
+            string contextTextStr{};
+            auto oFormat = o->getFormat();
+            o->setFormat(MarkdownDocument::Format::MARKDOWN);
+            mdRepresentation->to(o, &contextTextStr);
+            o->setFormat(oFormat);
+            contextText = QString::fromStdString(contextTextStr);
+            contextType = WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE;
+        }
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
+        Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+        if(note) {
+            contextTextName = QString::fromStdString(note->getName());
+            string contextTextStr{};
+            mdRepresentation->to(note, &contextTextStr);
+            contextText = QString::fromStdString(contextTextStr);
+            contextType = WingmanDialogModes::WINGMAN_DIALOG_MODE_NOTE;
+        }
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        contextText = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getToolPhrase();
+        contextType = WingmanDialogModes::WINGMAN_DIALOG_MODE_TEXT;
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_LIST_OUTLINES)) {
+        int row = orloj->getOutlinesTable()->getCurrentRow();
+        if(row != OutlinesTablePresenter::NO_ROW) {
+            QStandardItem* item
+                = orloj->getOutlinesTable()->getModel()->item(row);
+            if(item) {
+                Outline* o = item->data(Qt::UserRole + 1).value<Outline*>();
+                if(o) {
+                    contextTextName = QString::fromStdString(o->getName());
+                    string contextTextStr{};
+                    auto oFormat = o->getFormat();
+                    o->setFormat(MarkdownDocument::Format::MARKDOWN);
+                    mdRepresentation->to(o, &contextTextStr);
+                    o->setFormat(oFormat);
+                    contextText = QString::fromStdString(contextTextStr);
+                    contextType = WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE;
+                }
+            }
+        }
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        int row = orloj->getOutlinesMap()->getCurrentRow();
+        if(row != OutlinesTablePresenter::NO_ROW) {
+            QStandardItem* item
+                = orloj->getOutlinesMap()->getModel()->item(row);
+            if(item) {
+                Note* note = item->data(Qt::UserRole + 1).value<Note*>();
+                if(note) {
+                    contextTextName = QString::fromStdString(note->getName());
+                    string contextTextStr{};
+                    mdRepresentation->to(note, &contextTextStr);
+                    contextText = QString::fromStdString(contextTextStr);
+                    contextType = WingmanDialogModes::WINGMAN_DIALOG_MODE_OUTLINE;
+                }
+            }
+        }
+    }
+
+    if(showDialog) {
+        this->wingmanDialog->show(
+            contextType,
+            contextTextName,
+            contextText,
+            mind->getWingman()->getPredefinedOPrompts(),
+            mind->getWingman()->getPredefinedNPrompts(),
+            mind->getWingman()->getPredefinedTPrompts()
+        );
+    } else {
+        this->wingmanDialog->setup(
+            contextType,
+            contextTextName,
+            contextText,
+            mind->getWingman()->getPredefinedOPrompts(),
+            mind->getWingman()->getPredefinedNPrompts(),
+            mind->getWingman()->getPredefinedTPrompts()
+        );
+    }
+}
+
+void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
+{
+    bool runAsynchronously = true;
+
+    // pull prompt from the dialog & prepare prompt from the dialog
+    string prompt = this->wingmanDialog->getPrompt();
+
+    replaceAll(
+        CTX_INCLUDE_NAME,
+        this->wingmanDialog->getContextNameText().toStdString(),
+        prompt);
+    replaceAll(
+        CTX_INCLUDE_TEXT,
+        this->wingmanDialog->getContextText().toStdString(),
+        prompt);
+
+    if(showDialog) {
+        this->wingmanDialog->show();
+    }
+
+    // RUN Wingman
+    QString promptLabel{QString(tr("Wingman is talking to the GPT provider..."))};
+    this->wingmanDialog->setPromptsLabel(promptLabel);
+    statusBar->showInfo(promptLabel);
+
+    // run
+    CommandWingmanChat commandWingmanChat{
+        prompt,
+        "",
+        WingmanStatusCode::WINGMAN_STATUS_CODE_OK,
+        "",
+        "",
+        0,
+        0,
+        ""
+    };
+    // measure time
+    auto start = std::chrono::high_resolution_clock::now();
+    if(runAsynchronously) {
+        const int progressStep = 100; // 100ms
+        const int progressLimit = progressStep*10*30; // 30s
+        int progress = 0;
+
+        // hint maximum: progressLimit to show progress steps, 0 to show animated
+        this->wingmanDialog->resetProgress(0);
+        this->wingmanDialog->setProgressVisible(true);
+
+        QFuture<CommandWingmanChat> future = QtConcurrent::run(
+            this->mind,
+            &Mind::wingmanChat,
+            commandWingmanChat);
+
+        // wait for the future to finish
+        QFutureWatcher<void> futureWatcher{};
+        futureWatcher.setFuture(future);
+        // blocking wait: futureWatcher.waitForFinished();
+
+        // hint: the purpose of progress is not to cancel the run in case of time out,
+        // but just to visualize a progress...
+        while(!futureWatcher.isFinished() && progress < progressLimit) {
+            MF_DEBUG(
+                progress << "/" << progressLimit <<
+                " Wingman is talking to the GPT provider..." << endl
+            );
+            QApplication::processEvents();
+            QThread::msleep(progressStep); // portable sleep
+            progress += progressStep;
+            this->wingmanDialog->setProgressValue(progress);
+        }
+        this->wingmanDialog->setProgressValue(progressLimit);
+
+        commandWingmanChat = future.result();
+
+        // HIDE progress dialog
+        this->wingmanDialog->setProgressVisible(false);
+
+        // check the result
+        if (future.isFinished()) {
+            statusBar->showInfo(QString(tr("Wingman received an answer from the GPT provider")));
+        } else {
+            statusBar->showError(QString(tr("Wingman failed to receive an answer from the GPT provider")));
+
+            // PUSH answer to the chat dialog
+            this->wingmanDialog->appendAnswerToChat(
+                "Wingman failed to get answer from the GPT provider.<br/><br/>"+commandWingmanChat.answerMarkdown,
+                "",
+                this->wingmanDialog->getContextType(),
+                true
+            );
+
+            return;
+        }
+    } else {
+        mind->wingmanChat(commandWingmanChat);
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+    // wingmanProgressDialog->hide();
+    string answerDescriptor{
+        "[model: " + commandWingmanChat.answerLlmModel +
+        ", tokens (prompt/answer): " +
+        std::to_string(commandWingmanChat.promptTokens) + "/" + std::to_string(commandWingmanChat.answerTokens) +
+        ", time: " +
+        std::to_string(duration.count()) +
+        "s, status: " +
+        (commandWingmanChat.status==WingmanStatusCode::WINGMAN_STATUS_CODE_OK?"OK":"ERROR") +
+        "]"
+    };
+
+    // PUSH answer to the chat dialog
+    if(WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR == commandWingmanChat.status) {
+        this->wingmanDialog->appendAnswerToChat(
+            commandWingmanChat.errorMessage,
+            answerDescriptor,
+            this->wingmanDialog->getContextType(),
+            true
+        );
+    } else {
+        this->wingmanDialog->appendAnswerToChat(
+            commandWingmanChat.answerMarkdown,
+            answerDescriptor,
+            this->wingmanDialog->getContextType()
+        );
+    }
+
+    this->wingmanDialog->setLastPromptLabel();
+    this->wingmanDialog->selectPrompt();
+}
+
+void MainWindowPresenter::slotWingmanAppendFromDialog()
+{
+    if(this->wingmanDialog->getLastAnswer().length()) {
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            if(orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getSelectedText().size()) {
+                orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->appendAfterSelectedText(
+                    this->wingmanDialog->getLastAnswer());
+                statusBar->showInfo(QString(tr("Wingman's answer appended after selected text in the Notebook header.")));
+            } else{
+                orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->appendAfterCursor(
+                    this->wingmanDialog->getLastAnswer());
+                statusBar->showInfo(QString(tr("Wingman's answer appended after the cursor in the Notebook header.")));
+            }
+            this->wingmanDialog->hide();
+            return;
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            if(orloj->getNoteEdit()->getView()->getNoteEditor()->getSelectedText().size()) {
+                orloj->getNoteEdit()->getView()->getNoteEditor()->appendAfterSelectedText(
+                    this->wingmanDialog->getLastAnswer());
+                statusBar->showInfo(QString(tr("Wingman's answer appended after selected text in the Note editor.")));
+            } else{
+                orloj->getNoteEdit()->getView()->getNoteEditor()->appendAfterCursor(
+                    this->wingmanDialog->getLastAnswer());
+                statusBar->showInfo(QString(tr("Wingman's answer appended after the cursor in the Note editor.")));
+            }
+            this->wingmanDialog->hide();
+            return;
+        } else {
+            statusBar->showInfo(
+                QString(
+                    tr("Unable to append after selected text with Wingman's answer in non-edit perspective.")));
+            return;
+        }
+    }
+    statusBar->showInfo(QString(tr("No answer from Wingman to append after selected text - run a prompt.")));
+}
+
+void MainWindowPresenter::slotWingmanReplaceFromDialog()
+{
+    if(this->wingmanDialog->getLastAnswer().length()) {
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            if(orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getSelectedText().size()) {
+                orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->replaceSelectedText(
+                    this->wingmanDialog->getLastAnswer());
+                statusBar->showInfo(QString(tr("Wingman's answer replaced selected text in Notebook header.")));
+                this->wingmanDialog->hide();
+            } else{
+                QMessageBox::critical(
+                    &view,
+                    tr("Wingman Action Error"),
+                    tr("Unable to replace Notebook header text - no text selected.")
+                );
+            }
+            return;
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            if(orloj->getNoteEdit()->getView()->getNoteEditor()->getSelectedText().size()) {
+                orloj->getNoteEdit()->getView()->getNoteEditor()->replaceSelectedText(
+                    this->wingmanDialog->getLastAnswer());
+                statusBar->showInfo(QString(tr("Wingman's answer replaced selected text in Note text.")));
+                this->wingmanDialog->hide();
+            } else{
+                QMessageBox::critical(
+                    &view,
+                    tr("Wingman Action Error"),
+                    tr("Unable to replace Note text - no text selected.")
+                );
+            }
+            return;
+        } else {
+            statusBar->showInfo(
+                QString(
+                    tr("Unable to replace selected text with Wingman's answer in non-edit perspective.")));
+            return;
+        }
+    }
+    statusBar->showInfo(QString(tr("No answer from Wingman to replace selected text - run a prompt.")));
+}
+
 void MainWindowPresenter::doActionOutlineOrNoteNew()
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
@@ -1913,7 +2312,7 @@ void MainWindowPresenter::doActionOutlineOrNoteNew()
        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
          ||
        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE))
-    {        
+    {
         doActionNoteNew();
     } else {
         doActionOutlineNew();
@@ -1997,7 +2396,7 @@ bool MainWindowPresenter::withWriteableOutline(const std::string& outlineKey)
 }
 
 void MainWindowPresenter::handleNoteNew()
-{    
+{
     int offset
         = orloj->getOutlineView()->getOutlineTree()->getCurrentRow();
     if(offset == OutlineTreePresenter::NO_ROW) {
@@ -2350,7 +2749,7 @@ void MainWindowPresenter::doActionNoteExternalEdit()
                     "Error: unable to run external editor as C++ command processor "
                     "is not available"
                 };
-                MF_DEBUG(errorMessage);
+                MF_DEBUG(errorMessage << endl);
                 statusBar->showError(errorMessage);
                 QMessageBox::critical(
                     &view,
@@ -2467,9 +2866,34 @@ void MainWindowPresenter::doActionNoteForget()
 
             QAbstractButton* choosen = msgBox.clickedButton();
             if(yes == choosen) {
+                // delete selected row & SELECT and adjacent row:
+                //   - row is always deleted INCLUDING children
+                //   - adjacent row must be identified BEFORE deleting the row
+                // consider the following scenarios:
+                //   - N is the first row in O
+                //     > row 0 w/ chidlren will be deleted and new row 0
+                //       will be selected AFTER the delete (if any N remains in O)
+                //   - there are Ns above row to be deleted
+                //     > simplest scenario - N above N to be deleted will be selected
+                //   - N is the last N in O, it has children and it is deleted including children
+                //     > no row is selected in this case
+
+                Note* adjacentNote = nullptr;
+                if(orloj->getOutlineView()->getOutlineTree()->getModel()->rowCount() > 1) {
+                    adjacentNote = orloj->getOutlineView()->getOutlineTree()->getAdjacentNote();
+                }
+
                 Outline* outline = mind->noteForget(note);
                 mind->remember(outline);
                 orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+
+                if(orloj->getOutlineView()->getOutlineTree()->getModel()->rowCount()) {
+                    if(adjacentNote) {
+                        orloj->getOutlineView()->selectRowByNote(adjacentNote);
+                    } else {
+                        orloj->getOutlineView()->getOutlineTree()->selectRow(0);
+                    }
+                }
             }
             return;
         }
@@ -2479,7 +2903,7 @@ void MainWindowPresenter::doActionNoteForget()
 
 void MainWindowPresenter::doActionNoteExtract()
 {
-    // TODO distinquish HEADER and NOTE - different places from where to get text
+    // TODO distinguish HEADER and NOTE - different places from where to get text
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)
          ||
        orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
@@ -2577,20 +3001,61 @@ void MainWindowPresenter::doActionNoteClone()
     }
 }
 
+void MainWindowPresenter::doActionOutlineShow()
+{
+    orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
+}
+
+void MainWindowPresenter::selectNoteInOutlineTree(Note* note, Outline::Patch& patch, bool onUp)
+{
+    QModelIndex idx;
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        if(onUp) {
+            idx = orloj->getOutlinesMap()->getModel()->index(patch.start, 0);
+        } else {
+            idx = orloj->getOutlinesMap()->getModel()->index(note->getOutline()->getNoteOffset(note), 0);
+        }
+
+        orloj->getOutlinesMap()->getView()->setCurrentIndex(idx);
+    } else {
+        if(onUp) {
+            idx = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(patch.start, 0);
+        } else {
+            idx = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(note->getOutline()->getNoteOffset(note), 0);
+        }
+        orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
+    }
+}
+
 void MainWindowPresenter::doActionNoteFirst()
 {
-    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    Note* note{};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        note = orloj->getOutlinesMap()->getCurrentNote();
+    } else {
+        note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    }
+
     if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteFirst(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
-            mind->remind().remember(note->getOutline());
-            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                mind->outlinesMapRemember();
+            } else {
+                mind->remind().remember(note->getOutline());
+            }
+
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                orloj->getOutlinesMap()->refresh(note->getOutline(), &patch);
+            } else {
+                orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            }
+
             // select Note in the tree
-            QModelIndex idx
-                = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(patch.start, 0);
-            orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
+            this->selectNoteInOutlineTree(note, patch, true);
             statusBar->showInfo(QString(tr("Moved Note '%1' to be the first child")).arg(note->getName().c_str()));
         }
     } else {
@@ -2600,18 +3065,33 @@ void MainWindowPresenter::doActionNoteFirst()
 
 void MainWindowPresenter::doActionNoteUp()
 {
-    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    Note* note{};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        note = orloj->getOutlinesMap()->getCurrentNote();
+    } else {
+        note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    }
+
     if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteUp(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
-            mind->remind().remember(note->getOutline());
-            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                mind->outlinesMapRemember();
+            } else {
+                mind->remind().remember(note->getOutline());
+            }
+
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                orloj->getOutlinesMap()->refresh(note->getOutline(), &patch);
+            } else {
+                orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            }
+
             // select Note in the tree
-            QModelIndex idx
-                = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(patch.start, 0);
-            orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
+            this->selectNoteInOutlineTree(note, patch, true);
             statusBar->showInfo(QString(tr("Moved up Note '%1'")).arg(note->getName().c_str()));
         }
     } else {
@@ -2621,18 +3101,33 @@ void MainWindowPresenter::doActionNoteUp()
 
 void MainWindowPresenter::doActionNoteDown()
 {
-    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    Note* note{};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        note = orloj->getOutlinesMap()->getCurrentNote();
+    } else {
+        note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    }
+
     if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteDown(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
-            mind->remind().remember(note->getOutline());
-            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                mind->outlinesMapRemember();
+            } else {
+                mind->remind().remember(note->getOutline());
+            }
+
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                orloj->getOutlinesMap()->refresh(note->getOutline(), &patch);
+            } else {
+                orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            }
+
             // select Note in the tree
-            QModelIndex idx
-                = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(note->getOutline()->getNoteOffset(note), 0);
-            orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
+            this->selectNoteInOutlineTree(note, patch, false);
             statusBar->showInfo(QString(tr("Moved down Note '%1'").arg(note->getName().c_str())));
         }
     } else {
@@ -2642,18 +3137,33 @@ void MainWindowPresenter::doActionNoteDown()
 
 void MainWindowPresenter::doActionNoteLast()
 {
-    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    Note* note{};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        note = orloj->getOutlinesMap()->getCurrentNote();
+    } else {
+        note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    }
+
     if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteLast(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
-            mind->remind().remember(note->getOutline());
-            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                mind->outlinesMapRemember();
+            } else {
+                mind->remind().remember(note->getOutline());
+            }
+
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                orloj->getOutlinesMap()->refresh(note->getOutline(), &patch);
+            } else {
+                orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            }
+
             // select Note in the tree
-            QModelIndex idx
-                = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(note->getOutline()->getNoteOffset(note), 0);
-            orloj->getOutlineView()->getOutlineTree()->getView()->setCurrentIndex(idx);
+            this->selectNoteInOutlineTree(note, patch, false);
             statusBar->showInfo(QString(tr("Moved Note '%1' to be the last child")).arg(note->getName().c_str()));
         }
     } else {
@@ -2661,21 +3171,33 @@ void MainWindowPresenter::doActionNoteLast()
     }
 }
 
-void MainWindowPresenter::doActionOutlineShow()
-{
-    orloj->showFacetOutline(orloj->getOutlineView()->getCurrentOutline());
-}
-
 void MainWindowPresenter::doActionNotePromote()
 {
-    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    Note* note{};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        note = orloj->getOutlinesMap()->getCurrentNote();
+    } else {
+        note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    }
+
     if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->notePromote(note, &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
-            mind->remind().remember(note->getOutline());
-            orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                mind->outlinesMapRemember();
+            } else {
+                mind->remind().remember(note->getOutline());
+            }
+
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                orloj->getOutlinesMap()->refresh(note->getOutline(), &patch);
+            } else {
+                orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            }
+
             statusBar->showInfo(QString(tr("Promoted Note '%1'")).arg(note->getName().c_str()));
         }
     } else {
@@ -2685,14 +3207,31 @@ void MainWindowPresenter::doActionNotePromote()
 
 void MainWindowPresenter::doActionNoteDemote()
 {
-    Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    Note* note{};
+
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+        note = orloj->getOutlinesMap()->getCurrentNote();
+    } else {
+        note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+    }
+
     if(note && withWriteableOutline(note->getOutline()->getKey())) {
         // IMPROVE consider patch once in class (cross functions)
         Outline::Patch patch{Outline::Patch::Diff::NO,0,0}; // explicit initialization required by older GCC versions
         mind->noteDemote(note, &patch);
-        mind->remind().remember(note->getOutline());
-        orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
         if(patch.diff != Outline::Patch::Diff::NO) {
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                mind->outlinesMapRemember();
+            } else {
+                mind->remind().remember(note->getOutline());
+            }
+
+            if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
+                orloj->getOutlinesMap()->refresh(note->getOutline(), &patch);
+            } else {
+                orloj->getOutlineView()->getOutlineTree()->refresh(note->getOutline(), &patch);
+            }
+
             statusBar->showInfo(QString(tr("Demoted Note '%1'")).arg(note->getName().c_str()));
         }
     } else {
@@ -2818,16 +3357,6 @@ void MainWindowPresenter::doActionViewTerminal()
     terminalDialog->show();
 }
 
-void MainWindowPresenter::doActionKnowledgeWikipedia()
-{
-    QDesktopServices::openUrl(QUrl{"https://en.wikipedia.org/"});
-}
-
-void MainWindowPresenter::doActionKnowledgeArxiv()
-{
-    QDesktopServices::openUrl(QUrl{"https://arxiv.org/search/cs"});
-}
-
 void MainWindowPresenter::doActionLibraryNew()
 {
     newLibraryDialog->show();
@@ -2846,13 +3375,9 @@ void MainWindowPresenter::handleNewLibrary()
         return;
     }
 
-    // TODO check that it's new path (SAFE library update is different operation)
-
     newLibraryDialog->hide();
 
-    // TODO add library to repository configuration
-
-    // TODO index library documents
+    // index library documents
     FilesystemInformationSource informationSource{
         uri,
         *orloj->getMind(),
@@ -2866,7 +3391,7 @@ void MainWindowPresenter::handleNewLibrary()
         QMessageBox::critical(
             &view,
             tr("Add Library Error"),
-            tr("Library already indexed - use update action to reindex documents.")
+            tr("Library already indexed - use 'Update library' action to synchronize documents.")
         );
         return;
     }
@@ -2875,7 +3400,7 @@ void MainWindowPresenter::handleNewLibrary()
             &view,
             tr("Add Library Error"),
             tr("Unable to index documents on library path - either memory directory "
-               "doesn't exist or not in MindForger repository mode."
+               "doesn't exist or not in MindForger workspace mode."
             )
         );
         return;
@@ -2887,6 +3412,121 @@ void MainWindowPresenter::handleNewLibrary()
 
     // show Os view
     orloj->showFacetOutlineList(mind->getOutlines());
+}
+
+void MainWindowPresenter::doActionLibrarySync()
+{
+    syncLibraryDialog->reset();
+
+    // determine existing library dirs
+    vector<FilesystemInformationSource*> srcs
+        = FilesystemInformationSource::findInformationSources(
+            config,
+            *orloj->getMind(),
+            *mdDocumentRepresentation);
+
+    if(srcs.size()) {
+        for(FilesystemInformationSource* src:srcs) {
+            syncLibraryDialog->addLibraryToSync(src->getPath());
+
+            delete src;
+        }
+
+        syncLibraryDialog->show();
+    } else {
+        QMessageBox::information(
+            &view,
+            tr("Library synchronization"),
+            tr("There are no libraries - nothing to synchronize.")
+        );
+    }
+}
+
+void MainWindowPresenter::handleSyncLibrary()
+{
+    syncLibraryDialog->hide();
+
+    string librarySrcDir
+        = syncLibraryDialog->getLibraryPathsCombo()->currentText().toStdString();
+
+    FilesystemInformationSource informationSource{
+        librarySrcDir,
+        *orloj->getMind(),
+        *mdDocumentRepresentation,
+    };
+
+    informationSource.indexToMemory(*config.getActiveRepository(), true);
+
+    rmLibraryDialog->reset();
+}
+
+
+void MainWindowPresenter::doActionLibraryRm()
+{
+    rmLibraryDialog->reset();
+
+    // determine existing library dirs
+    vector<FilesystemInformationSource*> srcs
+        = FilesystemInformationSource::findInformationSources(
+            config,
+            *orloj->getMind(),
+            *mdDocumentRepresentation);
+
+    if(srcs.size()) {
+        for(FilesystemInformationSource* src:srcs) {
+            rmLibraryDialog->addLibraryToRemove(src);
+        }
+
+        rmLibraryDialog->show();
+    } else {
+        QMessageBox::information(
+            &view,
+            tr("Library deletion"),
+            tr("There are no libraries - nothing to delete.")
+        );
+    }
+}
+
+void MainWindowPresenter::handleRmLibrary()
+{
+    rmLibraryDialog->hide();
+
+    string librarySrcDir
+        = rmLibraryDialog->getLibraryPathsCombo()->currentText().toStdString();
+
+    // confirm removal of MF directory
+    QMessageBox msgBox{
+        QMessageBox::Question,
+        tr("Delete Library"),
+        tr("Do you really want to delete Notebooks which represent the library documents?")
+    };
+    QPushButton* yes = msgBox.addButton("&Yes", QMessageBox::YesRole);
+#ifdef __APPLE__
+    yes->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
+    yes->setToolTip("⌘Y");
+
+    QPushButton* no =
+#endif
+    msgBox.addButton("&No", QMessageBox::NoRole);
+#ifdef __APPLE__
+    no->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+    no->setToolTip("⌘N");
+#endif
+    msgBox.exec();
+
+    QAbstractButton* choosen = msgBox.clickedButton();
+    if(yes == choosen) {
+        // purge library directory
+        string mfLibraryPath{rmLibraryDialog->getLibraryMfPathForLocator(librarySrcDir)};
+        removeDirectoryRecursively(mfLibraryPath.c_str());
+
+        // reload the whole workspace
+        doActionMindRelearn(
+            QString::fromStdString(config.getActiveRepository()->getPath())
+        );
+    }
+
+    rmLibraryDialog->reset();
 }
 
 void MainWindowPresenter::doActionOrganizerNew()
@@ -2903,11 +3543,11 @@ void MainWindowPresenter::handleCreateOrganizer()
 
     Organizer* o{nullptr};
     if(newOrganizerDialog->getOrganizerToEdit()) {
-        MF_DEBUG("Updating organizer...");
+        MF_DEBUG("Updating organizer..." << endl);
         o = newOrganizerDialog->getOrganizerToEdit();
         o->setName(newOrganizerDialog->getOrganizerName().toStdString());
     } else {
-        MF_DEBUG("Creating organizer...");
+        MF_DEBUG("Creating organizer..." << endl);
         if(Organizer::OrganizerType::EISENHOWER_MATRIX == newOrganizerDialog->getOrganizerType()) {
             o = new EisenhowerMatrix(
                 newOrganizerDialog->getOrganizerName().toStdString()
@@ -2956,7 +3596,7 @@ void MainWindowPresenter::handleCreateOrganizer()
 
     // add organizer & save configuration
     if(!newOrganizerDialog->getOrganizerToEdit()) {
-        config.getRepositoryConfiguration().addOrganizer(o);        
+        config.getRepositoryConfiguration().addOrganizer(o);
     }
     sortAndSaveOrganizersConfig();
 
@@ -3183,27 +3823,52 @@ void MainWindowPresenter::doActionOrganizerForget()
         choice = QMessageBox::question(
             &view,
             tr("Forget Organizer"),
-            tr("Do you really want to forget '") + QString::fromStdString(o->getName()) + tr("' Organizer?")
+            tr("Do you really want to forget '")
+                + QString::fromStdString(o->getName()) + tr("' Organizer?")
         );
         if (choice == QMessageBox::Yes) {
             config.getRepositoryConfiguration().removeOrganizer(o);
             getConfigRepresentation()->save(config);
-            orloj->showFacetOrganizerList(config.getRepositoryConfiguration().getOrganizers());
+            orloj->showFacetOrganizerList(
+                config.getRepositoryConfiguration().getOrganizers());
         } // else do nothing
     } else {
         QMessageBox::critical(
             &view,
             tr("Delete Organizer"),
-            tr("Eisenhower Matrix is built-in and cannot be deleted - only custom organizers can.")
+            tr(
+                "Eisenhower Matrix is built-in and cannot be deleted - only custom "
+                "organizers can.")
+        );
+    }
+}
+
+
+void MainWindowPresenter::doActionViewLimbo()
+{
+    if(config.getActiveRepository()->getMode()
+           ==Repository::RepositoryMode::REPOSITORY
+       && config.getActiveRepository()->getType()
+           ==Repository::RepositoryType::MINDFORGER
+    ) {
+        QString path{"file://"};
+        path.append(config.getLimboPath().c_str());
+        QDesktopServices::openUrl(QUrl{path});
+    } else {
+        QMessageBox::information(
+            &view,
+            tr("View Limbo"),
+            tr(
+                "Limbo directory with deleted Notebooks is available in "
+                "the MindForger workspace, not if a Markdown is edited or a directory "
+                "with markdowns is opened.")
         );
     }
 }
 
 void MainWindowPresenter::doActionHelpDocumentation()
 {
-    QDesktopServices::openUrl(
-        QUrl{"https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md"}
-    );
+    QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger/wiki"});
 }
 
 void MainWindowPresenter::doActionHelpWeb()
@@ -3237,7 +3902,9 @@ void MainWindowPresenter::doActionHelpMathLivePreview()
 void MainWindowPresenter::doActionHelpMathQuickReference()
 {
     QDesktopServices::openUrl(
-        QUrl{"https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference"}
+        QUrl{
+            "https://math.meta.stackexchange.com/questions/5020"
+            "/mathjax-basic-tutorial-and-quick-reference"}
     );
 }
 
@@ -3254,6 +3921,49 @@ void MainWindowPresenter::doActionHelpCheckForUpdates()
         QUrl{"https://github.com/dvorka/mindforger/releases"}
     );
 }
+
+void MainWindowPresenter::doActionEmojisDialog()
+{
+    // IMPROVE load emojis from the main MF configuration file
+    QMessageBox::information(
+        &view,
+        QString{tr("Emojis")},
+        QString{
+            "<html>"
+            "Copy character from below to paste it:"
+            "<br>"
+            "<br>Emoji:"
+            "<br>🐞 🚀 🌟 🔧 🧪 📚 🔗 ⛑ 🚧 ❗ ❌ ✔"
+            "<br>📌 ✂️ 📎 📋 📝 📅 📈 🖼️"
+            "<br>🔴 🔵 🟣 🟢 🔮 ♥ 💙 💛 💚 🚫 🎯 ⚽ ⚙️"
+            "<br>🙂 😃 🥶 🥰 🐻 🐸 🤖 💩 👻 🎉 💣 ☠️"
+            "<br>🦑 🐙 👾 🐉"
+            "<br>💪 👍 🤞 🤙 👌 🙏 🤦"
+            "<br>🛠 🔧 🔨 💎 🛡 💥 🔥 🧬 🧙‍ 🧠 🔋 ⦀"
+            "<br>🚀 🛸 📡 🌊 🎖 🍔 🥋 💍 🥔 🎨 🌻 🌲"
+            "<br>📣 📢 🧲 🏁 🚩  💯"
+            "<br>"
+            "<br>Greek alphabet:"
+            "<br>Α α, Β β, Γ γ, Δ δ, Ε ε,"
+            "<br>Ζ ζ, Η η, Θ θ, Ι ι, Κ κ,"
+            "<br>Λ λ, Μ μ, Ν ν, Ξ ξ, Ο ο,"
+            "<br>Π π, Ρ ρ, Σ σ/ς, Τ τ, Υ υ,"
+            "<br>Φ φ, Χ χ, Ψ ψ, Ω ω"
+            "<br>"
+            "<br>Math and statistics:"
+            "<br>x̄"
+            "<br>"
+            "<br>Physics:"
+            "<br>°"
+            "<br>"
+            "<br>More special unicode characters:"
+            "<ul>"
+            "<li><a href='https://unicode-table.com/en/'>Unicode Table</a></li>"
+            "<li><a href='https://emojipedia.org/'>Emojipedia</a></li>"
+            "</ul>"
+        });
+}
+
 
 void MainWindowPresenter::doActionHelpAboutMindForger()
 {
@@ -3280,7 +3990,7 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
             "<br>Contact me at <a href='mailto:martin.dvorak@mindforger.com'>&lt;martin.dvorak@mindforger.com&gt;</a>"
             " or see <a href='https://www.mindforger.com'>www.mindforger.com</a> for more information."
             "<br>"
-            "<br>Copyright (C) 2016-2022 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/blob/master/CREDITS.md'>contributors</a>."
+            "<br>Copyright (C) 2016-2024 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/blob/master/CREDITS.md'>contributors</a>."
         });
 }
 
