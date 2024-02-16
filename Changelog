@@ -1,11 +1,11 @@
-2024-02-??  Martin Dvorak  <martin.dvorak@mindforger.com>
+2024-02-16  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.0.0 - a major release that removes unused features
       and brings several new features like Wingman.
-    * Feature: Wingman brings OpenAI chat GPT integration allowing to
-      compose, rewrite, summarize, do NER, fix, or chat with remarks.
+    * Feature: Wingman brings OpenAI LLM integration allowing to
+      compose, rewrite, summarize, NER or fix grammar of notes.
     * Feature: Notebook Tree view brings ability to organize Notebooks to
-      a tree (an outline).
+      a tree (outline).
     * Feature: Libraries bring ability to index external PDF files and generate
       Notebooks which represent them in MindForger. Synchronization and removal
       of the library (directory with files) is supported as well.
@@ -15,15 +15,14 @@
       Wikipedia, arXiv, or StackOverflow - on phrase which is the current
       context (Notebook or Note name; selected text or text under the cursor)
       in order to get more information about the phrase.
-    * Enhancement: CLI to Wingman rewrite: help, search, knowledge recherche and
-      commands.
+    * Enhancement: CLI rewrite - help, search, knowledge search
+      (Wikipedia, arXiv, search engines) and commands.
     * Enhancement: Limbo added to the application menu View/Limbo.
     * Enhancement: Polished Preferences - Appearance refactored to Controls,
       restart requirement highlighted.
     * Enhancement: Added up and down button in O/N preview mode to move around
       O's Ns while presenting a N.
     * Enhancement: MindForger icon changed to GenAI style.
-    * Enhancement: CLI rewrite towards Wingman with help, search, knowledge recherche and commands.
     * Enhancement: menu refactoring impacting Scope, and Navigate and various
       menu items.
     * Fix: Missing OOTB Eisenhower Matrix is automatically added back to
