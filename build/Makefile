@@ -120,9 +120,6 @@ gen-ui-class: ## generate UI C++ class skeleton: CLASS_NAME=My_Class
 	@echo "Generating UI C++ class for name: $(CLASS_NAME)"
 	./make/gen-cpp-ui-class.py $(CLASS_NAME)
 
-.PHONY: devenv-debian
-devenv-debian:
-	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools ccache cmake debhelper
 
 #
 # build
