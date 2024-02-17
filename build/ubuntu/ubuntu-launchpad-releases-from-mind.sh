@@ -79,6 +79,18 @@
 #
 
 # ########################################################################
+# # Troubleshooting
+# ########################################################################
+
+# PROBLEM: build successfull, but .deb is NOT uploaded to Launchpad
+#   - check that .dsc file is signed using GPG
+#   - manually upload .dsc file from ~/p/mindforger/launchpad/* to Launchpad
+#     using dput:
+#
+#     dput ppa:ultradvorka/productivity mindforger_2.0.6-0ubuntu1_source.changes
+#
+
+# ########################################################################
 # # Configuration
 # ########################################################################
 
@@ -86,12 +98,16 @@
 # - https://wiki.ubuntu.com/Releases
 # - obsolete:
 #     precise quantal saucy precise utopic vivid wily yakkety artful cosmic kinetic
-# - current :
-#     (trusty) xenial bionic (cosmic disco eoan) focal (groovy) (hirsute) (impish) jammy (kinetic) mantic
-# - command (Bash tuple of distro names):
+# - history (* LTS):
+#     trusty* xenial* bionic* (cosmic disco eoan) focal* (groovy hirsute impish)
+#     jammy* (kinetic lunar) mantic
+# - current ~ Bash tuple below || ./ubuntu-launchpad-releases-from-mind.sh <DISTRO> + manual upload:
 #     trusty xenial bionic focal jammy mantic
-# - done (use ./ubuntu-launchpad-releases-from-mind.sh <DISTRO>):
-#     focal jammy kinetic
+# - NOT RELEASED (non-satisfying hunspell version - can be fixed by downgrade to libhunspell-dev (>= 1.6) in build/ubuntu/debian/control:
+#     trusty xenial
+#
+#
+#
 # - TODO - required hunspell version not available on older Ubuntu versions:
 #     ERROR: pbuilder-satisfydepends-dummy : Depends: libhunspell-dev (>= 1.6) but it is not going to be installed.
 #     trusty xenial bionic mantic
@@ -106,7 +122,7 @@ fi
 # environment variables
 export MAJOR_VERSION=2
 export MINOR_VERSION=0
-export PATCH_VERSION=5 # patch version is incremented for every Ubuntu build @ Launchpad
+export PATCH_VERSION=1 # patch version is incremented for every Ubuntu build @ Launchpad
 export MF_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" # semantic version
 export RM_CMD="rm -vrf "
 export CP_CMD="cp -vrf "
@@ -114,8 +130,8 @@ export CP_CMD="cp -vrf "
 export OPT_VERBOSE="v"
 if [[ ${#} == 1 ]]
 then
-    export OPT_DO_PUSH="false" # "true" to upload src to bazaar
-    export OPT_DO_RELEASE="false" # "true" to dpush binary .deb to Launchpad and TRIGGER release
+    export OPT_DO_PUSH="true" # "true" to upload src to bazaar
+    export OPT_DO_RELEASE="true" # "true" to dpush binary .deb to Launchpad and TRIGGER release
 else
     #export OPT_DO_PUSH="false" # "true" to upload src to bazaar
     #export OPT_DO_RELEASE="false" # "true" to dpush binary .deb to Launchpad and TRIGGER release

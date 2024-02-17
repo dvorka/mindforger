@@ -331,8 +331,8 @@ dist-dmg: ## build macOS Disk iMaGe .dmg package
 # obsolete repos: jessie-main
 
 .PHONY: dist-debian-ppa
-dist-debian-aptly-create-ppa:  ## create Debian PPA for current Debian release: DISTRO=bullseye
-	cd ./build/debian && ./debian-ppa-aptly-build.sh
+dist-debian-aptly-create-ppa:  ## create Debian PPA for all releases
+	cd ./debian && ./debian-ppa-aptly-build.sh
 
 #
 # ^ Debian
