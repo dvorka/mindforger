@@ -120,9 +120,6 @@ gen-ui-class: ## generate UI C++ class skeleton: CLASS_NAME=My_Class
 	@echo "Generating UI C++ class for name: $(CLASS_NAME)"
 	./make/gen-cpp-ui-class.py $(CLASS_NAME)
 
-.PHONY: devenv-debian
-devenv-debian:
-	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools ccache cmake debhelper
 
 #
 # build
@@ -288,13 +285,13 @@ dist-dmg: ## build macOS Disk iMaGe .dmg package
 #
 # Debian
 #
-# MindForger PPA: https://www.mindforger.com/debian is managed by aptly
+# OBSOLETE: MindForger PPA: https://www.mindforger.com/debian is managed by aptly
 #
-# - information about MindForger's Debian PPAs can be found in
+# - OBSOLETE: information about MindForger's Debian PPAs can be found in
 #   https://www.mindforger.com/debian/index.html
 #
 # - aptly CANNOT be used to build one PPA for all Debian releases
-#   therefore every release has it's own PPA
+#   therefore every release has its own PPA
 #
 # - the structure looks like this (from deprecated debian/ to new debian-ppa/):
 #
@@ -308,6 +305,8 @@ dist-dmg: ## build macOS Disk iMaGe .dmg package
 #       dists/      ... export from ~/.aptly/public
 #       pool/
 #       index.html  ... created by me w/ how to set it up
+#
+# - Debian distributions are built in VirtualBox VMs on "mind" machine
 #
 # - source Debian packages for every version (which are used by aptly)
 #   are stored in
@@ -332,8 +331,8 @@ dist-dmg: ## build macOS Disk iMaGe .dmg package
 # obsolete repos: jessie-main
 
 .PHONY: dist-debian-ppa
-dist-debian-aptly-create-ppa:  ## create Debian PPA for current Debian release: DISTRO=bullseye
-	cd ./build/debian && ./debian-ppa-aptly-build.sh
+dist-debian-aptly-create-ppa:  ## create Debian PPA for all releases
+	cd ./debian && ./debian-ppa-aptly-build.sh
 
 #
 # ^ Debian
