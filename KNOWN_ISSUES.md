@@ -5,6 +5,7 @@ for the complete list of bugs.
 
 # 2.0.0
 
+* Autolinking can crash the application on notebook or note delete (undefined link target).
 * Autolinking can break MathJax code blocks/text integrity in Markdown text.
 * Windows Server R2 2012: empty MF documentation repository in wrong location when MF is launched
   at the end of installation.

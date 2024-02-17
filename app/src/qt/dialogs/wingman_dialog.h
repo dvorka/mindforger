@@ -142,7 +142,22 @@ public:
             cmdEdit->selectAll();
         }
     }
-    std::string getLastAnswer() { return this->lastAnswer; }
+    /**
+     * @brief Get the last answer as a Markdown string.
+     *
+     * The answer is typically pasted or appended to the Note editor,
+     * which uses Markdown format (not HTML), so the answer is converted
+     * to Markdown format.
+     */
+    std::string getLastAnswer() {
+        if(this->lastAnswer.find("<br/>") != std::string::npos) {
+            std::string decodedAnswer{this->lastAnswer};
+            replaceAll("<br/>", "\n", decodedAnswer);
+            return decodedAnswer;
+        }
+
+        return this->lastAnswer;
+    }
 
     QPushButton* getAppendButton() const { return appendButton; }
     QPushButton* getReplaceButton() const { return replaceButton; }

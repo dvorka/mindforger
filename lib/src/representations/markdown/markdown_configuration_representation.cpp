@@ -35,6 +35,7 @@ constexpr const auto CONFIG_SETTING_MIND_TAGS_SCOPE_LABEL = "* Tags scope: ";
 constexpr const auto CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL = "* Async refresh interval (ms): ";
 constexpr const auto CONFIG_SETTING_MIND_AUTOLINKING = "* Autolinking: ";
 constexpr const auto CONFIG_SETTING_MIND_WINGMAN_PROVIDER = "* Wingman LLM provider: ";
+constexpr const auto CONFIG_SETTING_MIND_OPENAI_KEY = "* Wingman's OpenAI API key: ";
 
 // application
 constexpr const auto CONFIG_SETTING_STARTUP_VIEW_LABEL = "* Startup view: ";
@@ -410,6 +411,9 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         } else {
                             c.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_NONE);
                         }
+                    } else if(line->find(CONFIG_SETTING_MIND_OPENAI_KEY) != std::string::npos) {
+                        string k = line->substr(strlen(CONFIG_SETTING_MIND_OPENAI_KEY));
+                        c.setWingmanOpenAiApiKey(k);
                     }
                 }
             }
@@ -503,6 +507,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_MIND_WINGMAN_PROVIDER << Configuration::getWingmanLlmProviderAsString(c?c->getWingmanLlmProvider():Configuration::DEFAULT_WINGMAN_LLM_PROVIDER) << endl <<
          "    * Examples: none, openai" << endl <<
+         CONFIG_SETTING_MIND_OPENAI_KEY << (c?c->getWingmanOpenAiApiKey():"") << endl <<
+         "    * OpenAI API key generated at https://platform.openai.com/api-keys to be used by Wingman as LLM provider" << endl <<
          endl <<
 
          "# " << CONFIG_SECTION_APP << endl <<

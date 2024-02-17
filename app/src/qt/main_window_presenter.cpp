@@ -181,58 +181,6 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SIGNAL(signalPasteImageData(QImage)),
         this, SLOT(doActionEditPasteImageData(QImage))
     );
-    // wire LEFT toolbar signals
-    /*
-    QObject::connect(
-        new QShortcut(QKeySequence("Alt+1"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionArxivToolbar())
-    );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarArxiv, SIGNAL(triggered()),
-        this, SLOT(doActionArxivToolbar())
-    );
-    QObject::connect(
-        new QShortcut(QKeySequence("Alt+2"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionWikipediaToolbar())
-    );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarWikipedia, SIGNAL(triggered()),
-        this, SLOT(doActionWikipediaToolbar())
-    );
-    QObject::connect(
-        new QShortcut(QKeySequence("Alt+3"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionStackOverflowToolbar())
-    );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarStackOverflow, SIGNAL(triggered()),
-        this, SLOT(doActionStackOverflowToolbar())
-    );
-    QObject::connect(
-        new QShortcut(QKeySequence("Alt+5"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionDuckDuckGoToolbar())
-    );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarDuckDuckGo, SIGNAL(triggered()),
-        this, SLOT(doActionDuckDuckGoToolbar())
-    );
-    QObject::connect(
-        new QShortcut(QKeySequence("Alt+6"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionGitHubToolbar())
-    );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarGitHub, SIGNAL(triggered()),
-        this, SLOT(doActionGitHubToolbar())
-    );
-    QObject::connect(
-        new QShortcut(QKeySequence("Alt+7"), view.getOrloj()), SIGNAL(activated()),
-        this, SLOT(doActionBardToolbar())
-    );
-    QObject::connect(
-        view.getLeftToolBar()->actionLeftToolbarBard, SIGNAL(triggered()),
-        this, SLOT(doActionBardToolbar())
-    );
-    */
-    // wire TOP toolbar signals
     QObject::connect(
         view.getToolBar()->actionNewOutlineOrNote, SIGNAL(triggered()),
         this, SLOT(doActionOutlineOrNoteNew())
@@ -1796,18 +1744,78 @@ void MainWindowPresenter::doActionEditPasteImageData(QImage image)
     injectImageLinkToEditor(path, QString{"image"});
 }
 
-void MainWindowPresenter::doActionOpenRunToolDialog(QString& phrase)
+void MainWindowPresenter::doActionRunToolDialogAnywhere()
 {
-    MF_DEBUG("SIGNAL handled: open run tool dialog...");
+    QString phrase{};
+    QString toolId{KnowledgeTool::WIKIPEDIA};
+
+    doActionOpenRunToolDialog(phrase, toolId, true);
+}
+
+void MainWindowPresenter::doActionOpenRunToolDialog(
+    QString& phrase,
+    QString& toolId,
+    bool openDialog
+) {
+    MF_DEBUG("SIGNAL handled: open run tool dialog..." << endl);
+
+    // if phrase is empty, then use active context
+    if(phrase.isEmpty()) {
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+            phrase = orloj->getNoteEdit()->getView()->getNoteEditor()->getToolPhrase();
+        } else if(
+            orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+            || orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+        ) {
+            Outline* o = orloj->getOutlineView()->getCurrentOutline();
+            if(o) {
+                phrase = QString::fromStdString(o->getName());
+            }
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
+            Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
+            if(note) {
+                phrase = QString::fromStdString(note->getName());
+            }
+        } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+            phrase = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getToolPhrase();
+        }
+        else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_LIST_OUTLINES)) {
+            int row = orloj->getOutlinesTable()->getCurrentRow();
+            if(row != OutlinesTablePresenter::NO_ROW) {
+                QStandardItem* item
+                    = orloj->getOutlinesTable()->getModel()->item(row);
+                if(item) {
+                    Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
+                    phrase = QString::fromStdString(outline->getName());
+                }
+            }
+        }
+    }
     this->runToolDialog->setPhraseText(phrase);
-    QString templateText = this->runToolDialog->getTemplateTextForToolName(
-        this->runToolDialog->getSelectedTool().toStdString());
+
+    if(!this->runToolDialog->selectToolById(toolId.toStdString())) {
+        QMessageBox::critical(
+            &view,
+            tr("Run Knowledge Tool Error"),
+            tr("Unknown tool to run '%1'.").arg(toolId));
+        return;
+    }
+    QString templateText =
+        QString::fromStdString(
+            KnowledgeTool::getUrlTemplateForToolId(
+                this->runToolDialog->getSelectedToolId()));
     if(templateText.length() == 0) {
+        QMessageBox::critical(
+            &view,
+            tr("Open Knowledge Tool Dialog Error"),
+            tr("Unable to construct URL to open for unknown tool '%1'.").arg(toolId));
         return;
     }
     this->runToolDialog->setTemplateText(templateText);
 
-    this->runToolDialog->show();
+    if(openDialog) {
+        this->runToolDialog->show();
+    }
 }
 
 void MainWindowPresenter::handleRunTool()
@@ -1834,7 +1842,7 @@ void MainWindowPresenter::handleRunTool()
 
     // phrase replace @ template > get command, if invalid, then fallback
     QString command = templateText.replace(
-        QString{TOOL_PHRASE}, phrase
+        QString::fromStdString(KnowledgeTool::TOOL_PHRASE), phrase
     );
 
     // RUN tool
@@ -1954,101 +1962,6 @@ void MainWindowPresenter::doActionOutlineNew()
         mind->remind().getStencils(ResourceType::OUTLINE),
         Configuration::getInstance().getActiveRepository()->getType()
     );
-}
-
-void MainWindowPresenter::doActionArxivToolbar()
-{
-    handleLeftToolbarAction(TOOL_ARXIV);
-}
-
-void MainWindowPresenter::doActionWikipediaToolbar()
-{
-    handleLeftToolbarAction(TOOL_WIKIPEDIA);
-}
-
-void MainWindowPresenter::doActionStackOverflowToolbar()
-{
-    handleLeftToolbarAction(TOOL_STACK_OVERFLOW);
-}
-
-void MainWindowPresenter::doActionDuckDuckGoToolbar()
-{
-    handleLeftToolbarAction(TOOL_DUCKDUCKGO);
-}
-
-void MainWindowPresenter::doActionGitHubToolbar()
-{
-    handleLeftToolbarAction(TOOL_GH_REPOS);
-}
-
-void MainWindowPresenter::doActionBardToolbar()
-{
-    handleLeftToolbarAction(TOOL_GOOGLE_BARD);
-}
-
-// TODO remove when code reused by Wingman and @ CLI
-void MainWindowPresenter::handleLeftToolbarAction(string selectedTool)
-{
-    // get PHRASE from the active context:
-    // - N editor: get word under cursor OR selected text
-    // - N tree: get N name
-    // - O tree: get O name
-    // - ...
-    QString phrase;
-    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
-        phrase = orloj->getNoteEdit()->getView()->getNoteEditor()->getToolPhrase();
-    } else if(
-        orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
-        || orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
-    ) {
-        Outline* o = orloj->getOutlineView()->getCurrentOutline();
-        if(o) {
-              phrase = QString::fromStdString(o->getName());
-        }
-    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)) {
-        Note* note = orloj->getOutlineView()->getOutlineTree()->getCurrentNote();
-        if(note) {
-            phrase = QString::fromStdString(note->getName());
-        }
-    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
-        phrase = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getToolPhrase();
-    }
-    else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_LIST_OUTLINES)) {
-        int row = orloj->getOutlinesTable()->getCurrentRow();
-        if(row != OutlinesTablePresenter::NO_ROW) {
-            QStandardItem* item
-                = orloj->getOutlinesTable()->getModel()->item(row);
-            if(item) {
-                Outline* outline = item->data(Qt::UserRole + 1).value<Outline*>();
-                phrase = QString::fromStdString(outline->getName());
-            }
-        }
-    }
-
-    if(phrase.length() == 0) {
-        QMessageBox msgBox{
-            QMessageBox::Critical,
-            QObject::tr("Empty Phrase"),
-            QObject::tr("Phrase to search/explain/process is empty.")
-        };
-        msgBox.exec();
-        return;
-    }
-
-    // use phrase to RUN the tool
-    QString templateText
-        = this->runToolDialog->getTemplateTextForToolName(selectedTool);
-    MF_DEBUG(
-        "Run tool: "
-        << phrase.toStdString() << " -> "
-        << templateText.toStdString() << " -> "
-        << selectedTool << endl
-    );
-
-    // phrase replace @ template > get command, if invalid, then fallback
-    QString command = templateText.replace(QString{TOOL_PHRASE}, phrase);
-    MF_DEBUG("Run tool: command '" << command.toStdString() << "'" << endl);
-    QDesktopServices::openUrl(QUrl{command});
 }
 
 bool MainWindowPresenter::checkWingmanAvailability()
@@ -2269,7 +2182,7 @@ void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
 
             // PUSH answer to the chat dialog
             this->wingmanDialog->appendAnswerToChat(
-                "Wingman failed to get answer from the GPT provider.<br/><br/>"+commandWingmanChat.answerHtml,
+                "Wingman failed to get answer from the GPT provider.<br/><br/>"+commandWingmanChat.answerMarkdown,
                 "",
                 this->wingmanDialog->getContextType(),
                 true
@@ -2304,7 +2217,7 @@ void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
         );
     } else {
         this->wingmanDialog->appendAnswerToChat(
-            commandWingmanChat.answerHtml,
+            commandWingmanChat.answerMarkdown,
             answerDescriptor,
             this->wingmanDialog->getContextType()
         );
@@ -2321,29 +2234,25 @@ void MainWindowPresenter::slotWingmanAppendFromDialog()
             if(orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->getSelectedText().size()) {
                 orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->appendAfterSelectedText(
                     this->wingmanDialog->getLastAnswer());
-                statusBar->showInfo(QString(tr("Wingman's answer appended after selected text in Notebook header.")));
-                this->wingmanDialog->hide();
+                statusBar->showInfo(QString(tr("Wingman's answer appended after selected text in the Notebook header.")));
             } else{
-                QMessageBox::critical(
-                    &view,
-                    tr("Wingman Action Error"),
-                    tr("Unable to append text in Notebook header editor - no text selected.")
-                );
+                orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->appendAfterCursor(
+                    this->wingmanDialog->getLastAnswer());
+                statusBar->showInfo(QString(tr("Wingman's answer appended after the cursor in the Notebook header.")));
             }
+            this->wingmanDialog->hide();
             return;
         } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
             if(orloj->getNoteEdit()->getView()->getNoteEditor()->getSelectedText().size()) {
                 orloj->getNoteEdit()->getView()->getNoteEditor()->appendAfterSelectedText(
                     this->wingmanDialog->getLastAnswer());
                 statusBar->showInfo(QString(tr("Wingman's answer appended after selected text in the Note editor.")));
-                this->wingmanDialog->hide();
             } else{
-                QMessageBox::critical(
-                    &view,
-                    tr("Wingman Action Error"),
-                    tr("Unable to append text in Note editor - no text selected.")
-                );
+                orloj->getNoteEdit()->getView()->getNoteEditor()->appendAfterCursor(
+                    this->wingmanDialog->getLastAnswer());
+                statusBar->showInfo(QString(tr("Wingman's answer appended after the cursor in the Note editor.")));
             }
+            this->wingmanDialog->hide();
             return;
         } else {
             statusBar->showInfo(
@@ -2840,7 +2749,7 @@ void MainWindowPresenter::doActionNoteExternalEdit()
                     "Error: unable to run external editor as C++ command processor "
                     "is not available"
                 };
-                MF_DEBUG(errorMessage);
+                MF_DEBUG(errorMessage << endl);
                 statusBar->showError(errorMessage);
                 QMessageBox::critical(
                     &view,
@@ -2994,7 +2903,7 @@ void MainWindowPresenter::doActionNoteForget()
 
 void MainWindowPresenter::doActionNoteExtract()
 {
-    // TODO distinquish HEADER and NOTE - different places from where to get text
+    // TODO distinguish HEADER and NOTE - different places from where to get text
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)
          ||
        orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
@@ -3101,7 +3010,6 @@ void MainWindowPresenter::selectNoteInOutlineTree(Note* note, Outline::Patch& pa
 {
     QModelIndex idx;
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_MAP_OUTLINES)) {
-        QModelIndex idx;
         if(onUp) {
             idx = orloj->getOutlinesMap()->getModel()->index(patch.start, 0);
         } else {
@@ -3110,7 +3018,6 @@ void MainWindowPresenter::selectNoteInOutlineTree(Note* note, Outline::Patch& pa
 
         orloj->getOutlinesMap()->getView()->setCurrentIndex(idx);
     } else {
-        QModelIndex idx;
         if(onUp) {
             idx = orloj->getOutlineView()->getOutlineTree()->getView()->model()->index(patch.start, 0);
         } else {
@@ -3636,11 +3543,11 @@ void MainWindowPresenter::handleCreateOrganizer()
 
     Organizer* o{nullptr};
     if(newOrganizerDialog->getOrganizerToEdit()) {
-        MF_DEBUG("Updating organizer...");
+        MF_DEBUG("Updating organizer..." << endl);
         o = newOrganizerDialog->getOrganizerToEdit();
         o->setName(newOrganizerDialog->getOrganizerName().toStdString());
     } else {
-        MF_DEBUG("Creating organizer...");
+        MF_DEBUG("Creating organizer..." << endl);
         if(Organizer::OrganizerType::EISENHOWER_MATRIX == newOrganizerDialog->getOrganizerType()) {
             o = new EisenhowerMatrix(
                 newOrganizerDialog->getOrganizerName().toStdString()

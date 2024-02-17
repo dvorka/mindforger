@@ -25,37 +25,23 @@ using namespace std;
 RunToolDialog::RunToolDialog(QWidget* parent)
     : QDialog(parent)
 {
-    vector<QString> toolNames  = {
-        QString{TOOL_ARXIV},
-        QString{TOOL_CHAT_GPT_WEB},
-        QString{TOOL_DEEPL},
-        QString{TOOL_DUCKDUCKGO},
-        QString{TOOL_GOOGLE_BARD},
-        QString{TOOL_GOOGLE_SEARCH},
-        QString{TOOL_GH_REPOS},
-        QString{TOOL_GH_TOPICS},
-        QString{TOOL_WIKIPEDIA}
-    };
-
-
     // UI
-
     phraseLabel = new QLabel{tr("Phrase:"), parent};
     phraseEdit = new QLineEdit{parent};
 
     toolLabel = new QLabel{tr("Knowledge source:"), parent};
     toolCombo = new QComboBox{this};
-    for(QString toolName:toolNames) {
-        toolCombo->addItem(toolName);
+    for(string toolId: KnowledgeTool::getToolIds()) {
+        toolCombo->addItem(
+            getToolNameForToolId(toolId),
+            QString::fromStdString(toolId));
     }
-
-    // TODO change of the tool changes the template
 
     templateLabel = new QLabel{tr("Template:"), parent};
     templateEdit = new QLineEdit{parent};
 
     // IMPROVE disable/enable find button if text/path is valid: freedom vs validation
-    runButton = new QPushButton{tr("&Get")};
+    runButton = new QPushButton{tr("&Lookup")};
     runButton->setDefault(true);
     closeButton = new QPushButton{tr("&Cancel")};
 
@@ -89,7 +75,7 @@ RunToolDialog::RunToolDialog(QWidget* parent)
     );
 
     // dialog
-    setWindowTitle(tr("Get Knowledge"));
+    setWindowTitle(tr("Lookup Knowledge"));
     resize(fontMetrics().averageCharWidth()*55, height());
     setModal(true);
 }
@@ -98,68 +84,63 @@ RunToolDialog::~RunToolDialog()
 {
 }
 
+QString RunToolDialog::getToolNameForToolId(std::string toolId) const
+{
+    if(KnowledgeTool::ARXIV == toolId) {
+        return tr("arXiv");
+    } else if(KnowledgeTool::WIKIPEDIA == toolId) {
+        return tr("Wikipedia");
+    } else if(KnowledgeTool::GH_REPOS == toolId) {
+        return tr("GitHub Repositories");
+    } else if(KnowledgeTool::GH_CODE == toolId) {
+        return tr("GitHub Code");
+    } else if(KnowledgeTool::DUCKDUCKGO == toolId) {
+        return tr("DuckDuckGo");
+    } else if(KnowledgeTool::GOOGLE == toolId) {
+        return tr("Google");
+    } else if(KnowledgeTool::STACK_OVERFLOW == toolId) {
+        return tr("StackOverflow");
+    } else if(KnowledgeTool::CPP == toolId) {
+        return tr("CPP reference");
+    } else if(KnowledgeTool::PYTHON == toolId) {
+        return tr("Python documentation");
+    }
+
+    // no suitable name available
+    return QString::fromStdString(toolId);
+}
+
+bool RunToolDialog::selectToolById(std::string toolId) {
+    MF_DEBUG(
+        "RunToolDialog::selectToolById(" << toolId << ") in variantData: " << std::endl);
+
+    QVariant desiredValue = QVariant::fromValue<QString>(
+        QString::fromStdString(toolId));
+    int index = this->toolCombo->findData(desiredValue, Qt::UserRole);
+    if(index != -1) {
+        this->toolCombo->setCurrentIndex(index);
+        return true;
+    }
+
+    MF_DEBUG(
+        "ERROR: RunToolDialog::setSelectedToolId() - toolId '"
+        << toolId << "' not found!" << std::endl);
+    return false;
+}
+
 void RunToolDialog::show()
 {
     QDialog::show();
 }
 
-QString RunToolDialog::getTemplateTextForToolName(string selectedTool) const
+void RunToolDialog::handleChangeToolCombo(const QString& text)
 {
-    if(selectedTool == TOOL_ARXIV) {
-        QString templateText{"https://arxiv.org/search/?query="};
-        templateText.append(TOOL_PHRASE);
-        return templateText;
-    } else if(selectedTool == TOOL_DEEPL) {
-        return QString{"https://www.deepl.com/en/translator"};
-    } else if(selectedTool == TOOL_STACK_OVERFLOW) {
-        QString templateText{"https://stackoverflow.com/search?q="};
-        templateText.append(TOOL_PHRASE);
-        return templateText;
-    } else if(selectedTool == TOOL_DUCKDUCKGO) {
-        QString templateText{"https://www.duckduckgo.com/?q="};
-        templateText.append(TOOL_PHRASE);
-        return templateText;
-    } else if(selectedTool == TOOL_GH_TOPICS) {
-        // TODO fix search URL
-        QString templateText{"https://www.github.com/search?q="};
-        templateText.append(TOOL_PHRASE);
-        return templateText;
-    } else if(selectedTool == TOOL_GH_REPOS) {
-        // TODO fix search URL
-        QString templateText{"https://www.github.com/search?q="};
-        templateText.append(TOOL_PHRASE);
-        return templateText;
-    } else if(selectedTool == TOOL_CHAT_GPT_WEB) {
-        return QString{"https://chat.openai.com/"};
-    } else if(selectedTool == TOOL_GOOGLE_BARD) {
-        return QString{"https://bard.google.com/chat"};
-    } else if(selectedTool == TOOL_GOOGLE_SEARCH) {
-        QString temlateText{"https://www.google.com/search?q="};
-        temlateText.append(TOOL_PHRASE);
-        return temlateText;
-    } else if(selectedTool == TOOL_WIKIPEDIA) {
-        // TODO: URL
-        QString temlateText{"https://en.wikipedia.org/w/index.php?search="};
-        temlateText.append(TOOL_PHRASE);
-        return temlateText;
-    }
-
-    string msg{
-        "Tool '" + selectedTool + "' to search/explain/process "
-        "the phrase is not supported."};
-    QMessageBox msgBox{
-        QMessageBox::Critical,
-        QObject::tr("Unsupported Knowledge Tool"),
-        QObject::tr(msg.c_str()),
-    };
-
-    return QString{};
-}
-
-void RunToolDialog::handleChangeToolCombo(const QString& text) {
     MF_DEBUG("Tool changed: " << text.toStdString() << endl);
 
-    this->templateEdit->setText(getTemplateTextForToolName(text.toStdString()));
+    this->templateEdit->setText(
+        QString::fromStdString(
+            KnowledgeTool::getUrlTemplateForToolId(
+                text.toStdString())));
 }
 
 } // m8r namespace

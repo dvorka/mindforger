@@ -113,6 +113,10 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindWingman->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Slash));
     actionMindWingman->setStatusTip(tr("Open Wingman dialog..."));
 
+    actionMindTool = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Find on Web"), mainWindow);
+    actionMindTool->setShortcut(QKeySequence(Qt::ALT+Qt::Key_1));
+    actionMindTool->setStatusTip(tr("Find Notebook or Note name; selected text or text under cursor on the web..."));
+
     // scope ... don't show any N/O older than 1Y/3M/...
     actionMindScope = new QAction(QIcon(":/menu-icons/filter.svg"), tr("S&cope"), mainWindow);
     actionMindScope->setStatusTip(tr("Don't show Notebooks and Notes older than..."));
@@ -186,6 +190,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addAction(actionMindThink);
     menuMind->addAction(actionMindAutolink);
     menuMind->addAction(actionMindWingman);
+    menuMind->addAction(actionMindTool);
     menuMind->addAction(actionMindScope);
     menuMind->addSeparator();
     menuMind->addMenu(submenuMindLibrary);

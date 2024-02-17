@@ -362,20 +362,12 @@ public slots:
     void doActionEditFindAgain();
     void doActionEditWordWrapToggle();
     void doActionEditPasteImageData(QImage image);
-    void doActionOpenRunToolDialog(QString& phrase);
+    void doActionRunToolDialogAnywhere();
+    void doActionOpenRunToolDialog(QString& phrase, QString& toolId, bool showDialog=true);
     void handleRunTool();
     void doActionToggleLiveNotePreview();
     void doActionNameDescFocusSwap();
     void doActionSpellCheck();
-    // actions
-    // TODO remake to CLI or REMOVE tools toolbar
-    void handleLeftToolbarAction(std::string selectedTool);
-    void doActionArxivToolbar();
-    void doActionWikipediaToolbar();
-    void doActionStackOverflowToolbar();
-    void doActionDuckDuckGoToolbar();
-    void doActionGitHubToolbar();
-    void doActionBardToolbar();
     // help
     void doActionHelpDocumentation();
     void doActionHelpWeb();

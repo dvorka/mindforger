@@ -23,6 +23,8 @@
 
 #include "../../lib/src/config/configuration.h"
 
+#include "../model_meta_definitions.h"
+
 namespace m8r {
 
 class RunToolDialog : public QDialog
@@ -51,9 +53,9 @@ public:
     RunToolDialog& operator =(const RunToolDialog&&) = delete;
     ~RunToolDialog();
 
-    void show();
+    QString getToolNameForToolId(std::string toolId) const;
 
-    QString getTemplateTextForToolName(std::string selectedTool) const;
+    void show();
 
     QPushButton* getRunButton() const { return runButton; }
     QString getSelectedTool() const {
@@ -61,6 +63,12 @@ public:
             this->toolCombo->currentIndex()
         );
     }
+    std::string getSelectedToolId() const {
+        int currentIndex = this->toolCombo->currentIndex();
+        QVariant variantData = this->toolCombo->itemData(currentIndex, Qt::UserRole);
+        return variantData.toString().toStdString();
+    }
+    bool selectToolById(std::string toolId);
     QString getTemplateText() const {
         return this->templateEdit->text();
     }

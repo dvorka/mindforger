@@ -113,21 +113,70 @@ constexpr const auto UI_DEFAULT_HTML_CSS_THEME = UI_HTML_THEME_CSS_LIGHT;
 constexpr const auto UI_DEFAULT_EDITOR_FONT = "Monospace,10";
 constexpr const auto UI_DEFAULT_FONT_POINT_SIZE = 10;
 
-constexpr const auto TOOL_PHRASE = "<<PHRASE>>";
+struct KnowledgeTool
+{
+    static const std::string TOOL_PHRASE;
 
-constexpr const auto TOOL_ARXIV = "arXiv";
-constexpr const auto TOOL_DUCKDUCKGO = "DuckDuckGo";
-constexpr const auto TOOL_DEEPL = "DeepL web";
-constexpr const auto TOOL_STACK_OVERFLOW = "StackOverflow";
-constexpr const auto TOOL_GH_REPOS = "GitHub repositories";
-constexpr const auto TOOL_GH_TOPICS = "GitHub topics";
-constexpr const auto TOOL_GOOGLE_BARD = "Google Bard";
-constexpr const auto TOOL_GOOGLE_SEARCH = "Google Search";
-constexpr const auto TOOL_CHAT_GPT_WEB = "OpenAI chatGPT web";
-constexpr const auto TOOL_WIKIPEDIA = "Wikipedia";
+    // knowledge tools IDs
+    static constexpr const auto ARXIV = "arxiv";
+    static constexpr const auto WIKIPEDIA = "wikipedia";
+    static constexpr const auto GH_REPOS = "github-repositories";
+    static constexpr const auto GH_CODE = "github-code";
+    static constexpr const auto STACK_OVERFLOW = "stackoverflow";
+    static constexpr const auto DUCKDUCKGO = "duckduckgo";
+    static constexpr const auto GOOGLE = "google";
+    static constexpr const auto CPP = "cpp";
+    static constexpr const auto PYTHON = "python";
 
+    std::string id;
+    std::string name;
+    std::string urlTemplate;
+
+    KnowledgeTool(
+        const std::string& id, const std::string& name, const std::string& urlTemplate)
+        : id(id), name(name), urlTemplate(urlTemplate) {}
+
+    static std::vector<std::string> getToolIds() {
+        return {
+            ARXIV,
+            WIKIPEDIA,
+            GH_REPOS,
+            GH_CODE,
+            STACK_OVERFLOW,
+            DUCKDUCKGO,
+            GOOGLE,
+            CPP,
+            PYTHON
+        };
+    }
+
+    static std::string getUrlTemplateForToolId(const std::string& toolId) {
+        if (toolId == ARXIV) {
+            return "https://arxiv.org/search/?query=" + TOOL_PHRASE;
+        } else if (toolId == WIKIPEDIA) {
+            return "https://en.wikipedia.org/w/index.php?search=" + TOOL_PHRASE;
+        } else if (toolId == GH_REPOS) {
+            return "https://www.github.com/search?type=repositories&q=" + TOOL_PHRASE;
+        } else if (toolId == GH_CODE) {
+            return "https://www.github.com/search?type=code&q=" + TOOL_PHRASE;
+        } else if (toolId == DUCKDUCKGO) {
+            return "https://www.duckduckgo.com/?q=" + TOOL_PHRASE;
+        } else if (toolId == GOOGLE) {
+            return "https://www.google.com/search?q=" + TOOL_PHRASE;
+        } else if (toolId == STACK_OVERFLOW) {
+            return "https://stackoverflow.com/search?q=" + TOOL_PHRASE;
+        } else if (toolId == CPP) {
+            return "https://duckduckgo.com/?sites=cppreference.com&ia=web&q=" + TOOL_PHRASE;
+        } else if (toolId == PYTHON) {
+            return "https://docs.python.org/3.11/search.html?q=" + TOOL_PHRASE;
+        }
+
+        return "";
+    }
+};
+
+// Wingman LLM models API keys
 constexpr const auto ENV_VAR_OPENAI_API_KEY = "MINDFORGER_OPENAI_API_KEY";
-
 
 // improve platform/language specific
 constexpr const auto DEFAULT_NEW_OUTLINE = "# New Markdown File\n\nThis is a new Markdown file created by MindForger.\n\n#Section 1\nThe first section.\n\n";
@@ -322,9 +371,10 @@ private:
             - appWindow.llmProvider used to detect configuration change
             - on change: re-init Wingman DIALOG (refresh pre-defined prompts)
     */
-    WingmanLlmProviders wingmanProvider; // "OpenAI", "Google", "Mock"
-    std::string wingmanApiKey; // OpenAI/Bard/... API key loaded from the shell environment
-    std::string wingmanLlmModel; // gpt-3.5-turbo
+    WingmanLlmProviders wingmanProvider; // "none", "Mock", "OpenAI", ...
+    std::string wingmanApiKey; // API key of the currently configured Wingman LLM provider
+    std::string wingmanOpenAiApiKey; // OpenAI API specified by user in the config, env or UI
+    std::string wingmanLlmModel; // preferred LLM model the currently configured provider, like "gpt-3.5-turbo"
 
     TimeScope timeScope;
     std::string timeScopeAsString;
@@ -519,13 +569,18 @@ private:
      */
     bool initWingman();
 public:
+    std::string getWingmanOpenAiApiKey() const { return wingmanOpenAiApiKey; }
+    void setWingmanOpenAiApiKey(std::string apiKey) { wingmanOpenAiApiKey = apiKey; }
+    /**
+     * @brief Get API key of the currently configured Wingman LLM provider.
+     */
     std::string getWingmanApiKey() const { return wingmanApiKey; }
     /**
-     * @brief Get preferred Wingman's LLM provider model name.
+     * @brief Get preferred Wingman LLM provider model name.
      */
     std::string getWingmanLlmModel() const { return wingmanLlmModel; }
     /**
-     * @brief Check whether Wingman's LLM provider is ready from
+     * @brief Check whether a Wingman LLM provider is ready from
      * the configuration perspective.
      */
     bool isWingman();

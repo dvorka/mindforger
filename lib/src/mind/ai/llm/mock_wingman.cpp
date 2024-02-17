@@ -41,9 +41,9 @@ void MockWingman::chat(CommandWingmanChat& command) {
     command.answerLlmModel.assign(this->llmModel);
     command.promptTokens=42;
     command.answerTokens=42198;
-    command.answerHtml.assign("chat(MOCK, '"+command.prompt+"')");
+    command.answerMarkdown.assign("chat(MOCK, '"+command.prompt+"')");
 
-    MF_DEBUG("MockWingman::chat() answer:" << command.answerHtml << endl);
+    MF_DEBUG("MockWingman::chat() answer:" << command.answerMarkdown << endl);
 }
 
 } // m8r namespace

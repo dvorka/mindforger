@@ -102,6 +102,7 @@ public:
     QString getSelectedText() const { return textCursor().selectedText(); }
     void replaceSelectedText(const std::string &text);
     void appendAfterSelectedText(const std::string& phrase);
+    void appendAfterCursor(const std::string& phrase);
     void wrapSelectedText(const QString &tag) { wrapSelectedText(tag,""); }
     void wrapSelectedText(const QString &tag, const QString &endTag);
     void removeSelectedText() { textCursor().removeSelectedText(); }
@@ -146,7 +147,6 @@ private slots:
     void insertTab() { smartEditor.insertTab(); }
     void insertCompletion(const QString& completion, bool singleWord=false);
 public slots:
-    void slotStartRunTool();
     void slotStartLinkCompletion();
     void slotPerformLinkCompletion(const QString& completionPrefix, std::vector<std::string>* links);
 
@@ -174,7 +174,6 @@ signals:
 
     void signalDnDropUrl(QString url);
     void signalPasteImageData(QImage image);
-    void signalOpenRunToolDialog(QString& phrase);
     void signalGetLinksForPattern(const QString& pattern);
 };
 
