@@ -103,14 +103,14 @@
 #     jammy* (kinetic lunar) mantic
 # - current ~ Bash tuple below || ./ubuntu-launchpad-releases-from-mind.sh <DISTRO> + manual upload:
 #     trusty xenial bionic focal jammy mantic
-# - NOT RELEASED (non-satisfying hunspell version - can be fixed by downgrade to libhunspell-dev (>= 1.6) in build/ubuntu/debian/control:
+# - NOT RELEASED:
 #     trusty xenial
+#     ^ are oldest Ubuntu LTS releases, it can be released as follows:
+#       - use beast machine
+#       - change Hunspell dependency in build/ubuntu/debian/control as follows (downgrade from 1.6 to 1.3):
+#         libhunspell-dev (>= 1.3)
+#       - build distro: `ubuntu-launchpad-...-from-beast.sh trusty` @ beast machine
 #
-#
-#
-# - TODO - required hunspell version not available on older Ubuntu versions:
-#     ERROR: pbuilder-satisfydepends-dummy : Depends: libhunspell-dev (>= 1.6) but it is not going to be installed.
-#     trusty xenial bionic mantic
 
 if [[ ${#} == 1 ]]
 then
