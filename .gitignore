@@ -18,6 +18,7 @@ TEST_LOG*.*
 *.vcx*
 *.sln
 *.bak
+*.TMP
 compile_commands.json
 .qmake.stash
 .DS_Store
