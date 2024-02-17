@@ -23,12 +23,15 @@ rem to demo repository used for creation of screenshots and videos.
 :: auxiliary var
 set "MF_BASE=%~dp0%.."
 :: call MSVC 2017 Development Environment Setup
-call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+:: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.29.30133\vcredist_x64.exe"
 :: call Qt Development Environment Setup
 :: call "C:\software\Qt\5.12.0\msvc2017_64\bin\qtenv2.bat"
-call "C:\Qt\5.12.1\msvc2017_64\bin\qtenv2.bat"
+:: call "C:\Qt\5.12.1\msvc2017_64\bin\qtenv2.bat"
+call "C:\Qt2024\5.15.2\msvc2019_64\bin\qtenv2.bat"
 :: set PATH to cmake and zlib
 set "PATH=%PATH%;c:\Program Files\CMake\bin;%MF_BASE%\deps\zlib-win\lib"
 :: set path to Inno Setup 5 script compiler
 set "MF_ICSS=c:\Program Files (x86)\Inno Setup 5\ISCC.exe"
-set "VC_REDIST_PATH=c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.14.26405\vcredist_x64.exe"
+:: set "VC_REDIST_PATH=c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.14.26405\vcredist_x64.exe"
+set "VC_REDIST_PATH=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.29.30133\vcredist_x64.exe"

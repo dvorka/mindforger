@@ -24,9 +24,14 @@ cls
 cd ..\..
 
 rem Gather libraries...
-C:\Qt\5.12.1\msvc2017_64\bin\windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
+rem 5.12.1 @ CI: 
+rem C:\Qt\5.12.1\msvc2017_64\bin\windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
+rem 5.15.2 @ VM:
+C:\Qt2024\5.15.2\msvc2019_64\bin\windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
+rem 5.15.2 @ CI:
+rem C:\Qt\5.15.2\msvc2019_64\bin\windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
 
 rem Build installer
-"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /Qp /DVcRedistPath="c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.16.27012\vcredist_x64.exe" build\windows\installer\mindforger-setup.iss
+"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /Qp /DVcRedistPath="c:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.29.30133\vcredist_x64.exe" build\windows\installer\mindforger-setup.iss
 
 echo "Find installer in mindforger/app/release/installer/*.exe"
