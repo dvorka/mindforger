@@ -21,17 +21,17 @@
 
 #
 # This script builds MindForger/HSTR Debian PPA for a particular Debian release.
-#   - it adds all .deb pacakges in given directory to aptly repository.
+#   - it adds all .deb packages in given directory to aptly repository.
 #
 # Usage:
 #
-#   MF_DEBIAN_DISTRO_DIR=... MF_DEBIAN_RELEASE=... ./debian-aptly-add-deb.sh 
+#   MF_DEBIAN_DISTRO_DIR=... MF_DEBIAN_RELEASE=... ./debian-ppa-aptly-build.sh
 #
 # Example:
 #
 #   MF_DEBIAN_DEB_DIR=~/p/mindforger/debian/aptly/mindforger/12-bookworm \ 
 #   MF_DEBIAN_RELEASE=bookworm \
-#   ./debian-release-aptly-build.sh
+#   ./debian-ppa-aptly-build.sh
 #
 # aptly abstractions hierarchy:
 #

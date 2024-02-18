@@ -18,9 +18,16 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # https://wiki.ubuntu.com/Releases
-# old: precise quantal saucy precise utopic vivid wily trusty (old GCC) yakkety artful cosmic disco eoan kinetic
-# current: trusty xenial bionic focal jammy mantic
-for DISTRO in bionic
+# - obsolete:
+#   precise quantal saucy precise utopic vivid wily trusty (old GCC)
+#   yakkety artful cosmic disco eoan kinetic
+# - current:
+#   trusty xenial bionic focal jammy mantic
+#
+# Distro is stored to:
+# ~/pbuilder
+#
+for DISTRO in mantic
 do
     sudo pbuilder --create ${DISTRO}
     rm -vf ~/pbuilder/${DISTRO}-base.tgz
