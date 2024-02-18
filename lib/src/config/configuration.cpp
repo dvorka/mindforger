@@ -446,7 +446,15 @@ bool Configuration::initWingmanOpenAi() {
             MF_DEBUG("    Wingman API key loaded from the env: " << apiKeyEnv << endl);
             wingmanApiKey = apiKeyEnv;
         }
-        wingmanLlmModel = DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
+
+        const char* llmModelEnv = std::getenv(ENV_VAR_OPENAI_LLM_MODEL);
+        if(llmModelEnv) {
+            MF_DEBUG("    Wingman LLM model loaded from the env: " << llmModelEnv << endl);
+            wingmanLlmModel = llmModelEnv;
+        } else {
+            MF_DEBUG("    Wingman LLM model set to default: " << DEFAULT_WINGMAN_LLM_MODEL_OPENAI << endl);
+            wingmanLlmModel = DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
+        }
         wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI;
         return true;
     }

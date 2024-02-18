@@ -160,7 +160,7 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     appearanceLayout->addWidget(menuLabel);
     appearanceLayout->addWidget(nerdMenuCheck);
     QGroupBox* appearanceGroup = new QGroupBox{
-        tr("Appearance (<font color='#ff0000'>requires restart</font>)"),
+        tr("Appearance"),
         this};
     appearanceGroup->setLayout(appearanceLayout);
 

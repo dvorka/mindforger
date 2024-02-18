@@ -177,6 +177,7 @@ struct KnowledgeTool
 
 // Wingman LLM models API keys
 constexpr const auto ENV_VAR_OPENAI_API_KEY = "MINDFORGER_OPENAI_API_KEY";
+constexpr const auto ENV_VAR_OPENAI_LLM_MODEL = "MINDFORGER_OPENAI_LLM_MODEL";
 
 // improve platform/language specific
 constexpr const auto DEFAULT_NEW_OUTLINE = "# New Markdown File\n\nThis is a new Markdown file created by MindForger.\n\n#Section 1\nThe first section.\n\n";
