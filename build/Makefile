@@ -205,6 +205,15 @@ endif
 #
 
 
+.PHONY: devenv-ubuntu
+devenv-ubuntu:
+	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libcurl4-gnutls-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache cmake
+
+
+devenv-ubuntu-2204:
+	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libcurl4-gnutls-dev libqt5webkit5-dev qttools5-dev-tools qtbase5-dev qt5-qmake ccache cmake
+
+
 .PHONY: devenv-debian
 devenv-debian:
 	sudo apt-get install build-essential zlib1g-dev libcurl4-gnutls-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools ccache cmake debhelper
