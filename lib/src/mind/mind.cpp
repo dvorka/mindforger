@@ -49,13 +49,11 @@ Mind::Mind(Configuration &configuration)
       exclusiveMind{},
       timeScopeAspect{},
       tagsScopeAspect{ontology},
-      scopeAspect{timeScopeAspect, tagsScopeAspect}
+      scopeAspect{timeScopeAspect, tagsScopeAspect},
+      wingman{nullptr}
 {
     ai = new Ai{memory, *this};
 
-    // TODO BEGIN: code before Wingman config persisted
-    config.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI);
-    // TODO END: code before Wingman config persisted
     initWingman();
 
     deleteWatermark = 0;
@@ -1458,19 +1456,32 @@ void Mind::initWingman()
         "MIND Wingman init: " << boolalpha << config.isWingman() << endl
     );
     if(config.isWingman()) {
-        MF_DEBUG("MIND Wingman INIT: instantiation..." << endl);
+        MF_DEBUG("MIND Wingman initialization..." << endl);
         switch(config.getWingmanLlmProvider()) {
         case WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI:
             MF_DEBUG("  MIND Wingman init: OpenAI" << endl);
+            if(wingman) {
+                delete wingman;
+                wingman = nullptr;
+            }
             wingman = (Wingman*)new OpenAiWingman{
-                config.getWingmanApiKey(),
-                config.getWingmanLlmModel()
+                config.getWingmanOpenAiApiKey(),
+                config.getWingmanOpenAiLlm()
             };
             wingmanLlmProvider = config.getWingmanLlmProvider();
             return;
-        // case BARD:
-        //   wingman = (Wingman*)new BardWingman{};
-        //  return;
+        case WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA:
+            MF_DEBUG("  MIND Wingman init: ollama" << endl);
+            if(wingman) {
+                delete wingman;
+                wingman = nullptr;
+            }
+            wingman = (Wingman*)new OllamaWingman{
+                config.getWingmanOllamaUrl(),
+                config.getWingmanOllamaLlm()
+            };
+            wingmanLlmProvider = config.getWingmanLlmProvider();
+            return;
         case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
             MF_DEBUG("  MIND Wingman init: MOCK" << endl);
             wingman = (Wingman*)new MockWingman{
@@ -1485,6 +1496,9 @@ void Mind::initWingman()
     }
 
     MF_DEBUG("MIND Wingman init: DISABLED" << endl);
+    if(wingman) {
+        delete wingman;
+    }
     wingman = nullptr;
     wingmanLlmProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
 }

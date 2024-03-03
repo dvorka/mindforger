@@ -55,6 +55,7 @@ OpenAiWingman::~OpenAiWingman()
 {
 }
 
+// TODO refactor to parent class so that all wingmans can use it
 /**
  * OpenAI cURL GET request.
  *

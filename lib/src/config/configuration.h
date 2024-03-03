@@ -50,7 +50,6 @@ enum WingmanLlmProviders {
     WINGMAN_PROVIDER_MOCK,
     WINGMAN_PROVIDER_OPENAI,
     WINGMAN_PROVIDER_OLLAMA
-    // TODO WINGMAN_PROVIDER_GOOGLE,
 };
 
 // const in constexpr makes value const
@@ -260,12 +259,14 @@ public:
 
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
     static const std::string DEFAULT_TIME_SCOPE;
+
     static const std::string DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
+    static const std::string DEFAULT_WINGMAN_LLM_MODEL_OLLAMA;
+    static constexpr const WingmanLlmProviders DEFAULT_WINGMAN_LLM_PROVIDER = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
 
     static constexpr const bool DEFAULT_AUTOLINKING = false;
     static constexpr const bool DEFAULT_AUTOLINKING_COLON_SPLIT = true;
     static constexpr const bool DEFAULT_AUTOLINKING_CASE_INSENSITIVE = true;
-    static constexpr const WingmanLlmProviders DEFAULT_WINGMAN_LLM_PROVIDER = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
 
     static constexpr const bool UI_DEFAULT_NERD_TARGET_AUDIENCE = true;
@@ -374,10 +375,11 @@ private:
             - on change: re-init Wingman DIALOG (refresh pre-defined prompts)
     */
     WingmanLlmProviders wingmanProvider; // "none", "Mock", "OpenAI", ...
-    std::string wingmanApiKey; // API key of the currently configured Wingman LLM provider
     std::string wingmanOpenAiApiKey; // OpenAI API specified by user in the config, env or UI
-    std::string wingmanLlmModel; // preferred LLM model the currently configured provider, like "gpt-3.5-turbo"
-
+    std::string wingmanOpenAiLlm;
+    std::string wingmanOllamaUrl; // base URL like http://localhost:11434
+    std::string wingmanOllamaLlm;
+    
     TimeScope timeScope;
     std::string timeScopeAsString;
     std::vector<std::string> tagsScope;
@@ -553,6 +555,8 @@ public:
             return "mock";
         } else if(provider == WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI) {
             return "openai";
+        } else if(provider == WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA) {
+            return "ollama";
         }
 
         return "none";
@@ -563,9 +567,11 @@ public:
     bool canWingmanMock() { return false; }
 #endif
     bool canWingmanOpenAi();
+    bool canWingmanOllama();
 private:
     bool initWingmanMock();
     bool initWingmanOpenAi();
+    bool initWingmanOllama();
     /**
      * @brief Initialize Wingman's LLM provider.
      */
@@ -573,14 +579,13 @@ private:
 public:
     std::string getWingmanOpenAiApiKey() const { return wingmanOpenAiApiKey; }
     void setWingmanOpenAiApiKey(std::string apiKey) { wingmanOpenAiApiKey = apiKey; }
-    /**
-     * @brief Get API key of the currently configured Wingman LLM provider.
-     */
-    std::string getWingmanApiKey() const { return wingmanApiKey; }
-    /**
-     * @brief Get preferred Wingman LLM provider model name.
-     */
-    std::string getWingmanLlmModel() const { return wingmanLlmModel; }
+    std::string getWingmanOpenAiLlm() const { return wingmanOpenAiLlm; }
+    void setWingmanOpenAiLlm(std::string llm) { wingmanOpenAiLlm = llm; }
+    std::string getWingmanOllamaUrl() const { return wingmanOllamaUrl; }
+    void setWingmanOllamaUrl(std::string url) { wingmanOllamaUrl = url; }
+    std::string getWingmanOllamaLlm() const { return wingmanOllamaLlm; }
+    void setWingmanOllamaLlm(std::string llm) { wingmanOllamaLlm = llm; }
+
     /**
      * @brief Check whether a Wingman LLM provider is ready from
      * the configuration perspective.

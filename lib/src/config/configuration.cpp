@@ -38,7 +38,8 @@ const string Configuration::DEFAULT_UI_THEME_NAME = string{UI_DEFAULT_THEME};
 const string Configuration::DEFAULT_UI_HTML_CSS_THEME = string{UI_DEFAULT_HTML_CSS_THEME};
 const string Configuration::DEFAULT_EDITOR_FONT= string{UI_DEFAULT_EDITOR_FONT};
 const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
-const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OPENAI = string{"gpt-3.5-turbo"};
+const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OPENAI = string{"gpt-3.5-turbo"}; // "gpt-3.5-turbo" and "gpt-4" are symbolic names
+const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OLLAMA = string{"llama2"};
 
 Configuration::Configuration()
     : asyncMindThreshold{},
@@ -51,9 +52,10 @@ Configuration::Configuration()
       autolinkingColonSplit{},
       autolinkingCaseInsensitive{},
       wingmanProvider{DEFAULT_WINGMAN_LLM_PROVIDER},
-      wingmanApiKey{},
       wingmanOpenAiApiKey{},
-      wingmanLlmModel{DEFAULT_WINGMAN_LLM_MODEL_OPENAI},
+      wingmanOpenAiLlm{DEFAULT_WINGMAN_LLM_MODEL_OPENAI},
+      wingmanOllamaUrl{},
+      wingmanOllamaLlm{DEFAULT_WINGMAN_LLM_MODEL_OLLAMA},
       md2HtmlOptions{},
       distributorSleepInterval{DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL},
       markdownQuoteSections{},
@@ -150,9 +152,10 @@ void Configuration::clear()
     autolinkingColonSplit = DEFAULT_AUTOLINKING_COLON_SPLIT;
     autolinkingCaseInsensitive = DEFAULT_AUTOLINKING_CASE_INSENSITIVE;
     wingmanProvider = DEFAULT_WINGMAN_LLM_PROVIDER;
-    wingmanApiKey.clear();
     wingmanOpenAiApiKey.clear();
-    wingmanLlmModel.clear();
+    wingmanOpenAiLlm = DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
+    wingmanOllamaUrl.clear();
+    wingmanOllamaLlm = DEFAULT_WINGMAN_LLM_MODEL_OLLAMA;
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
     tagsScope.clear();
     markdownQuoteSections = DEFAULT_MD_QUOTE_SECTIONS;
@@ -403,6 +406,15 @@ bool Configuration::canWingmanOpenAi()
     return false;
 }
 
+bool Configuration::canWingmanOllama()
+{
+    if(wingmanOllamaUrl.size() > 0) {
+        return true;
+    }
+
+    return false;
+}
+
 void Configuration::setWingmanLlmProvider(WingmanLlmProviders provider)
 {
     MF_DEBUG(
@@ -410,17 +422,11 @@ void Configuration::setWingmanLlmProvider(WingmanLlmProviders provider)
         << std::to_string(provider) << endl);
 
     wingmanProvider = provider;
-
-    // try to initialize Wingman @ given LLM provider,
-    // if it fails, then set it to false ~ disabled Wingman
-    initWingman();
 }
 
 bool Configuration::initWingmanMock()
 {
     if(canWingmanMock()) {
-        wingmanApiKey.clear();
-        wingmanLlmModel.clear();
         return true;
     }
 
@@ -436,35 +442,57 @@ bool Configuration::initWingmanMock()
 bool Configuration::initWingmanOpenAi() {
     MF_DEBUG("  Configuration::initWingmanOpenAi()" << endl);
     if(canWingmanOpenAi()) {
+        // API key
         MF_DEBUG(
             "    Wingman OpenAI API key found in the shell environment variable "
             "MINDFORGER_OPENAI_API_KEY or set in MF config" << endl);
-        if(wingmanOpenAiApiKey.size() > 0) {
-            wingmanApiKey = wingmanOpenAiApiKey;
-        } else {
+        if(wingmanOpenAiApiKey.size() <= 0) {
             const char* apiKeyEnv = std::getenv(ENV_VAR_OPENAI_API_KEY);
             MF_DEBUG("    Wingman API key loaded from the env: " << apiKeyEnv << endl);
-            wingmanApiKey = apiKeyEnv;
+            wingmanOpenAiApiKey = apiKeyEnv;
         }
 
+        // LLM model
         const char* llmModelEnv = std::getenv(ENV_VAR_OPENAI_LLM_MODEL);
         if(llmModelEnv) {
             MF_DEBUG("    Wingman LLM model loaded from the env: " << llmModelEnv << endl);
-            wingmanLlmModel = llmModelEnv;
+            wingmanOpenAiLlm = llmModelEnv;
         } else {
             MF_DEBUG("    Wingman LLM model set to default: " << DEFAULT_WINGMAN_LLM_MODEL_OPENAI << endl);
-            wingmanLlmModel = DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
+            wingmanOpenAiLlm = DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
         }
-        wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI;
         return true;
     }
 
     MF_DEBUG(
         "    Wingman OpenAI API key NEITHER found in the environment variable "
         "MINDFORGER_OPENAI_API_KEY, NOR set in MF configuration" << endl);
-    wingmanApiKey.clear();
-    wingmanLlmModel.clear();
-    wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
+    if(wingmanProvider == WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI) {
+        wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
+    }
+    return false;
+}
+
+/**
+ * @brief Check whether ollama Wingman requirements are satisfied.
+ */
+bool Configuration::initWingmanOllama() {
+    MF_DEBUG("  Configuration::initWingmanOllama()" << endl);
+    if(canWingmanOllama()) {
+        // OPTIONAL: LLM model 
+        if(wingmanOllamaLlm.size() <= 0) {
+            MF_DEBUG("    Wingman LLM model for ollama set to default: " << DEFAULT_WINGMAN_LLM_MODEL_OLLAMA << endl);
+            wingmanOpenAiLlm = DEFAULT_WINGMAN_LLM_MODEL_OLLAMA;
+        }
+        wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA;
+        return true;
+    }
+
+    MF_DEBUG(
+        "    Wingman ollama URL not set in the configuration" << endl);
+    if(wingmanProvider == WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA) {
+        wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
+    }
     return false;
 }
 
@@ -474,7 +502,11 @@ bool Configuration::initWingman()
         "  BEFORE Configuration::initWingman():" << endl <<
         "    LLM provider: " << wingmanProvider << endl <<
         "    OpenAI API key env var name: " << ENV_VAR_OPENAI_API_KEY << endl <<
-        "    Wingman provider API key   : " << wingmanApiKey << endl
+        "    OpenAI API key             : " << wingmanOpenAiApiKey << endl <<
+        "    OpenAI LLM env var name    : " << ENV_VAR_OPENAI_LLM_MODEL << endl <<
+        "    OpenAI LLM                 : " << wingmanOpenAiLlm << endl <<
+        "    ollama URL                 : " << wingmanOllamaUrl << endl <<
+        "    ollama LLM                 : " << wingmanOllamaLlm << endl
     );
 
     bool initialized = false;
@@ -493,6 +525,10 @@ bool Configuration::initWingman()
         MF_DEBUG("  OpenAI Wingman provider CONFIGURED" << endl);
         initialized = initWingmanOpenAi();
         break;
+    case WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA:
+        MF_DEBUG("  ollama Wingman provider CONFIGURED" << endl);
+        initialized = initWingmanOllama();
+        break;
     default:
         MF_DEBUG(
             "  ERROR: unable to CONFIGURE UNKNOWN Wingman provider: "
@@ -502,15 +538,17 @@ bool Configuration::initWingman()
 
     if(!initialized) {
         wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
-        wingmanApiKey.clear();
-        wingmanLlmModel.clear();
     }
 
     MF_DEBUG(
-        "  BEFORE Configuration::initWingman():" << endl <<
+        "  AFTER Configuration::initWingman():" << endl <<
         "    LLM provider: " << wingmanProvider << endl <<
         "    OpenAI API key env var name: " << ENV_VAR_OPENAI_API_KEY << endl <<
-        "    Wingman provider API key   : " << wingmanApiKey << endl
+        "    OpenAI API key             : " << wingmanOpenAiApiKey << endl <<
+        "    OpenAI LLM env var name    : " << ENV_VAR_OPENAI_LLM_MODEL << endl <<
+        "    OpenAI LLM                 : " << wingmanOpenAiLlm << endl <<
+        "    ollama URL                 : " << wingmanOllamaUrl << endl <<
+        "    ollama LLM                 : " << wingmanOllamaLlm << endl
     );
 
     return initialized;

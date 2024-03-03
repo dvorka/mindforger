@@ -42,13 +42,13 @@ namespace m8r {
 class OllamaWingman: Wingman
 {
 private:
-    std::string apiKey;
+    std::string url;
     std::string llmModel;
 
     void curlGet(CommandWingmanChat& command);
 
 public:
-    explicit OllamaWingman(const std::string& apiKey, const std::string& llmModel);
+    explicit OllamaWingman(const std::string& url, const std::string& llmModel);
     OllamaWingman(const OllamaWingman&) = delete;
     OllamaWingman(const OllamaWingman&&) = delete;
     OllamaWingman& operator =(const OllamaWingman&) = delete;

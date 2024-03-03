@@ -35,7 +35,11 @@ MF_LANG := "en"
 # Ubuntu distro: trusty xenial bionic focal jammy kinetic
 DISTRO := "bionic"
 # CPU cores thant can be used to build the project
-CPU_CORES := 7
+ifeq ($(shell hostname), skunkworks)
+  CPU_CORES := 10
+else
+  CPU_CORES := 7
+endif
 # Qt version to be used by MindForger
 # MF_QT_VERSION := 5.9.9
 MF_QT_VERSION := 5.15.2
