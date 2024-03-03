@@ -117,6 +117,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             << "<<<"
             << endl);
 
+        // TODO this must be refactored to parent class so that all wingmans can use it
 #if defined(_WIN32) || defined(__APPLE__)
         /* Qt Networking examples:
          *
