@@ -57,6 +57,8 @@ OllamaWingman::~OllamaWingman()
 /**
  * OpenAI cURL GET request.
  *
+ * @see https://github.com/ollama/ollama/blob/main/docs/api.md#generate-a-completion
+ * @see https://github.com/ollama/ollama/blob/main/docs/api.md#list-local-models
  * @see https://ollama.com/library/llama2
  * @see https://json.nlohmann.me/
  */
@@ -70,11 +72,12 @@ void OllamaWingman::curlGet(CommandWingmanChat& command) {
         replaceAll("\"", "\\\"", escapedPrompt);
 
         /*
-        ollama API JSon request example (see unit test):
+        ollama API JSon request example - chat vs. generate answer:
 
         curl -X POST http://localhost:11434/api/generate -d '{
             "model": "llama2",
-            "prompt":"Why is the sky blue?"
+            "prompt":"Why is the sky blue?",
+            "stream": false
         }'
 
         */
@@ -212,30 +215,22 @@ void OllamaWingman::curlGet(CommandWingmanChat& command) {
 
         // parse JSon
         /*
-        OpenAI API JSon response example:
+        ollama API JSon response example:
+
         {
-            "id": "chatcmpl-8gspbsufrxF42A6JfaiwuxoitQ1fT",
-            "object": "chat.completion",
-            "created": 1705231239,
-            "model": "gpt-3.5-turbo-0613",
-            "choices": [
-                {
-                "index": 0,
-                "message": {
-                    "role": "assistant",
-                    "content": "...LLM answer...",
-                },
-                "logprobs": null,
-                "finish_reason": "stop"
-                }
-            ],
-            "usage": {
-                "prompt_tokens": 26,
-                "completion_tokens": 491,
-                "total_tokens": 517
-            },
-            "system_fingerprint": null
+            "model": "llama2",
+            "created_at": "2023-08-04T19:22:45.499127Z",
+            "response": "The sky is blue because it is the color of the sky.",
+            "done": true,
+            "context": [1, 2, 3],
+            "total_duration": 5043500667,
+            "load_duration": 5025959,
+            "prompt_eval_count": 26,
+            "prompt_eval_duration": 325953000,
+            "eval_count": 290,
+            "eval_duration": 4709213000
         }
+
         */
 
         // parse response string to JSon object
