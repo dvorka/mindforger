@@ -58,7 +58,7 @@ win32{
     QMAKE_CXXFLAGS += /MP
 
     # DISABLED ccache as it causes compilation error:
-    #   "C1090: PDB API call failed, error code '23'" when used 
+    #   "C1090: PDB API call failed, error code '23'" when used
     # when used w/ MS VS compiler:
     # !mfnoccache { QMAKE_CXX = ccache $$QMAKE_CXX }
 } else {
@@ -121,6 +121,7 @@ SOURCES += \
     src/mind/ai/llm/wingman.cpp \
     src/mind/ai/llm/mock_wingman.cpp \
     src/mind/ai/llm/openai_wingman.cpp \
+    src/mind/ai/llm/ollama_wingman.cpp \
     src/mind/dikw/dikw_pyramid.cpp \
     src/mind/dikw/filesystem_information.cpp \
     src/mind/dikw/information.cpp \
@@ -232,6 +233,7 @@ HEADERS += \
     src/mind/ai/llm/wingman.h \
     src/mind/ai/llm/mock_wingman.h \
     src/mind/ai/llm/openai_wingman.h \
+    src/mind/ai/llm/ollama_wingman.h \
     src/mind/dikw/information.h \
     src/model/eisenhower_matrix.h \
     src/model/kanban.h \

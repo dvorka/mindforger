@@ -2119,7 +2119,7 @@ void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
     }
 
     // RUN Wingman
-    QString promptLabel{QString(tr("Wingman is talking to the GPT provider..."))};
+    QString promptLabel{QString(tr("Wingman is runnning inferences..."))};
     this->wingmanDialog->setPromptsLabel(promptLabel);
     statusBar->showInfo(promptLabel);
 
@@ -2160,7 +2160,7 @@ void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
         while(!futureWatcher.isFinished() && progress < progressLimit) {
             MF_DEBUG(
                 progress << "/" << progressLimit <<
-                " Wingman is talking to the GPT provider..." << endl
+                " Wingman is running inferences..." << endl
             );
             QApplication::processEvents();
             QThread::msleep(progressStep); // portable sleep

@@ -120,7 +120,7 @@ static inline std::string &stringLeftTrim(std::string& s) {
         s.begin(),
         std::find_if(s.begin(),
         s.end(),
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(__FreeBSD__)
         [](int c) {return !std::isspace(c);})
 #else
         std::not1(std::ptr_fun<int, int>(isspace)))
