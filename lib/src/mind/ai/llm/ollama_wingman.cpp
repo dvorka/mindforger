@@ -98,7 +98,7 @@ void OllamaWingman::curlGet(CommandWingmanChat& command) {
 #if defined(_WIN32) || defined(__APPLE__)
         QNetworkAccessManager networkManager;
 
-        QNetworkRequest request(QUrl(this->url.c_str());
+        QNetworkRequest request(QUrl(QString::fromStdString(this->url)));
         request.setHeader(
             QNetworkRequest::ContentTypeHeader,
             "application/json");
