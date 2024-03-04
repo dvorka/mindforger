@@ -134,7 +134,7 @@ static inline std::string &stringRightTrim(std::string& s) {
         std::find_if(
             s.rbegin(),
             s.rend(),
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(__FreeBSD__)
             [](int c) {return !std::isspace(c);}
         ).base(),
 #else
