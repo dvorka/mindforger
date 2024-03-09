@@ -39,6 +39,8 @@ class ConfigurationDialog : public QDialog
     class NavigatorTab;
     class MindTab;
     class WingmanTab;
+    class WingmanOpenAiTab;
+    class WingmanOllamaTab;
 
 private:
     QTabWidget* tabWidget;
@@ -72,6 +74,56 @@ signals:
 };
 
 /**
+ * @brief Wingman tab's OpenAI tab.
+ */
+class ConfigurationDialog::WingmanOpenAiTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    Configuration& config;
+
+    QLabel* helpLabel;
+    QLineEdit* apiKeyEdit;
+    QPushButton* clearApiKeyButton;
+
+public:
+    explicit WingmanOpenAiTab(QWidget* parent);
+    ~WingmanOpenAiTab();
+
+    void refresh();
+    void save();
+
+private slots:
+    void clearApiKeySlot();
+};
+
+/**
+ * @brief Wingman tab's ollama tab.
+ */
+class ConfigurationDialog::WingmanOllamaTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    Configuration& config;
+
+    QLabel* helpLabel;
+    QLineEdit* urlEdit;
+    QPushButton* clearUrlButton;
+
+public:
+    explicit WingmanOllamaTab(QWidget* parent);
+    ~WingmanOllamaTab();
+
+    void refresh();
+    void save();
+
+private slots:
+    void clearUrlSlot();
+};
+
+/**
  * @brief Wingman tab.
  */
 class ConfigurationDialog::WingmanTab : public QWidget
@@ -86,9 +138,9 @@ private:
     QLabel* llmProvidersLabel;
     QComboBox* llmProvidersCombo;
 
-    QLabel* llmHelpLabel;
-    QLineEdit* openAiApiKeyEdit;
-    QPushButton* clearOpenAiApiKeyButton;
+    QTabWidget* wingmanTabWidget;
+    WingmanOpenAiTab* wingmanOpenAiTab;
+    WingmanOllamaTab* wingmanOllamaTab;
 
 public:
     explicit WingmanTab(QWidget* parent);
@@ -100,7 +152,6 @@ public:
 
 private slots:
     void handleComboBoxChanged(int index);
-    void clearOpenAiApiKeySlot();
 };
 
 /**

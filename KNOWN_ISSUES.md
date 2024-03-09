@@ -3,6 +3,16 @@
 MindForger known issues - see [GitHub issues](https://github.com/dvorka/mindforger/issues?q=is%3Aopen+is%3Aissue+label%3A%22bug+%3Alady_beetle%3A%22)
 for the complete list of bugs.
 
+# 2.1.0
+
+* Autolinking can crash the application on notebook or note delete (undefined link target).
+* Autolinking can break MathJax code blocks/text integrity in Markdown text.
+* Windows Server R2 2012: empty MF documentation repository in wrong location when MF is launched
+  at the end of installation.
+* Notebook HTML export doesn't export local images: links to filesystem are kept intact, images
+  are not copied.
+* Frontend memleaks.
+
 # 2.0.0
 
 * Autolinking can crash the application on notebook or note delete (undefined link target).

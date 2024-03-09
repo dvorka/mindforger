@@ -675,6 +675,164 @@ void ConfigurationDialog::MindTab::save()
 }
 
 /*
+ * Wingman Open AI tab
+ */
+
+ConfigurationDialog::WingmanOpenAiTab::WingmanOpenAiTab(QWidget* parent)
+    : QWidget(parent),
+      config(Configuration::getInstance())
+{
+    helpLabel = new QLabel(
+        tr(
+            "<html><a href='https://openai.com'>OpenAI</a> LLM provider configuration:\n"
+            "<ul>"
+            "<li><a href='https://platform.openai.com/api-keys'>Generate</a> an OpenAI API key.</li>"
+            "<li>Set the API key:"
+            "<br>a) either set the <b>%1</b> environment variable<br/>"
+                "with the API key<br/>"
+                "b) or paste the API key below to save it <font color='#ff0000'>unencrypted</font> to<br/>"
+                "<b>.mindforger.md</b> file in your home directory.</li>"
+            "<li><font color='#ff0000'>Restart</font> MindForger to apply the change.</li>"
+            "</ul>"
+        ).arg(ENV_VAR_OPENAI_API_KEY));
+    helpLabel->setVisible(!config.canWingmanOpenAi());
+    apiKeyEdit = new QLineEdit(this);
+    apiKeyEdit->setVisible(!config.canWingmanOpenAi());
+    clearApiKeyButton = new QPushButton(tr("Clear OpenAI API Key"), this);
+
+    QVBoxLayout* llmProvidersLayout = new QVBoxLayout();
+    llmProvidersLayout->addWidget(helpLabel);
+    llmProvidersLayout->addWidget(apiKeyEdit);
+    llmProvidersLayout->addWidget(clearApiKeyButton);
+    llmProvidersLayout->addStretch();
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addLayout(llmProvidersLayout);
+    layout->addStretch();
+    setLayout(layout);
+
+    QObject::connect(
+        clearApiKeyButton, SIGNAL(clicked()),
+        this, SLOT(clearApiKeySlot()));
+}
+
+ConfigurationDialog::WingmanOpenAiTab::~WingmanOpenAiTab()
+{
+    delete helpLabel;
+    delete apiKeyEdit;
+    delete clearApiKeyButton;
+}
+
+void ConfigurationDialog::WingmanOpenAiTab::clearApiKeySlot()
+{
+    apiKeyEdit->clear();
+    QMessageBox::information(
+        this,
+        tr("OpenAI API Key Cleared"),
+        tr(
+            "API key has been cleared from the configuration. "
+            "Please close the configuration dialog with the OK button "
+            "and restart MindForger to apply this change.")
+    );
+}
+
+void ConfigurationDialog::WingmanOpenAiTab::refresh()
+{
+    apiKeyEdit->setText(QString::fromStdString(config.getWingmanOpenAiApiKey()));
+
+    if(apiKeyEdit->text().size() == 0) {
+        clearApiKeyButton->setVisible(false);
+    } else {
+        clearApiKeyButton->setVisible(true);
+    }
+}
+
+void ConfigurationDialog::WingmanOpenAiTab::save()
+{
+    config.setWingmanOpenAiApiKey(apiKeyEdit->text().toStdString());
+}
+
+
+/*
+ * Wingman ollama
+ */
+
+ConfigurationDialog::WingmanOllamaTab::WingmanOllamaTab(QWidget* parent)
+    : QWidget(parent),
+      config(Configuration::getInstance())
+{
+    helpLabel = new QLabel(
+        tr(
+            "<html><a href='https://openai.com'>OpenAI</a> LLM provider configuration:\n"
+            "<ul>"
+            "<li><a href='https://platform.openai.com/api-keys'>Generate</a> an OpenAI API key.</li>"
+            "<li>Set the API key:"
+            "<br>a) either set the <b>%1</b> environment variable<br/>"
+                "with the API key<br/>"
+                "b) or paste the API key below to save it <font color='#ff0000'>unencrypted</font> to<br/>"
+                "<b>.mindforger.md</b> file in your home directory.</li>"
+            "<li><font color='#ff0000'>Restart</font> MindForger to apply the change.</li>"
+            "</ul>"
+        ).arg(ENV_VAR_OPENAI_API_KEY));
+    helpLabel->setVisible(!config.canWingmanOllama());
+    urlEdit = new QLineEdit(this);
+    urlEdit->setVisible(!config.canWingmanOllama());
+    clearUrlButton = new QPushButton(tr("Clear ollama URL"), this);
+
+    QVBoxLayout* llmProvidersLayout = new QVBoxLayout();
+    llmProvidersLayout->addWidget(helpLabel);
+    llmProvidersLayout->addWidget(urlEdit);
+    llmProvidersLayout->addWidget(clearUrlButton);
+    llmProvidersLayout->addStretch();
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addLayout(llmProvidersLayout);
+    layout->addStretch();
+    setLayout(layout);
+
+    QObject::connect(
+        clearUrlButton, SIGNAL(clicked()),
+        this, SLOT(clearUrlSlot()));
+}
+
+ConfigurationDialog::WingmanOllamaTab::~WingmanOllamaTab()
+{
+    delete helpLabel;
+    delete urlEdit;
+    delete clearUrlButton;
+}
+
+void ConfigurationDialog::WingmanOllamaTab::clearUrlSlot()
+{
+    urlEdit->clear();
+    QMessageBox::information(
+        this,
+        tr("URL Cleared"),
+        xxx
+        tr(
+            "API key has been cleared from the configuration. "
+            "Please close the configuration dialog with the OK button "
+            "and restart MindForger to apply this change.")
+    );
+}
+
+void ConfigurationDialog::WingmanOpenAiTab::refresh()
+{
+    openAiApiKeyEdit->setText(QString::fromStdString(config.getWingmanOpenAiApiKey()));
+
+    if(openAiApiKeyEdit->text().size() == 0) {
+        clearOpenAiApiKeyButton->setVisible(false);
+    } else {
+        clearOpenAiApiKeyButton->setVisible(true);
+    }
+}
+
+void ConfigurationDialog::WingmanOpenAiTab::save()
+{
+    config.setWingmanOpenAiApiKey(openAiApiKeyEdit->text().toStdString());
+}
+
+/*
  * Wingman tab
  */
 
@@ -690,34 +848,19 @@ ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
         this, SLOT(handleComboBoxChanged(int))
     );
 
-    llmHelpLabel = new QLabel(
-        tr(
-            "<html>Configure <a href='https://openai.com'>OpenAI</a> LLM provider:\n"
-            "<ul>"
-            "<li><a href='https://platform.openai.com/api-keys'>Generate</a> an OpenAI API key.</li>"
-            "<li>Set the API key:"
-            "<br>a) either set the <b>%1</b> environment variable<br/>"
-                "with the API key<br/>"
-                "b) or paste the API key below to save it <font color='#ff0000'>unencrypted</font> to<br/>"
-                "<b>.mindforger.md</b> file in your home dir.</li>"
-            "<li><font color='#ff0000'>Restart</font> MindForger to apply the change.</li>"
-            "</ul>"
-        ).arg(ENV_VAR_OPENAI_API_KEY));
-    llmHelpLabel->setVisible(!config.canWingmanOpenAi());
-    openAiApiKeyEdit = new QLineEdit(this);
-    openAiApiKeyEdit->setVisible(!config.canWingmanOpenAi());
-    clearOpenAiApiKeyButton = new QPushButton(tr("Clear OpenAI API Key"), this);
-    if(config.getWingmanOpenAiApiKey().size() == 0) {
-        clearOpenAiApiKeyButton->setVisible(false);
-    }
+    wingmanTabWidget = new QTabWidget;
+    wingmanOpenAiTab = new WingmanOpenAiTab{this};
+    wingmanOllamaTab = new WingmanOllamaTab{this};
+    wingmanTabWidget->addTab(wingmanOpenAiTab, tr("OpenAI"));
+    wingmanTabWidget->addTab(wingmanOllamaTab, tr("ollama"));
 
     // assembly
     QVBoxLayout* nLayout = new QVBoxLayout{this};
     nLayout->addWidget(llmProvidersLabel);
     nLayout->addWidget(llmProvidersCombo);
-    nLayout->addWidget(llmHelpLabel);
-    nLayout->addWidget(openAiApiKeyEdit);
-    nLayout->addWidget(clearOpenAiApiKeyButton);
+
+    nLayout->addWidget(wingmanTabWidget);
+
     QGroupBox* nGroup = new QGroupBox{tr("Large language model (LLM) providers"), this};
     nGroup->setLayout(nLayout);
 
@@ -725,25 +868,8 @@ ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
     boxesLayout->addWidget(nGroup);
     boxesLayout->addStretch();
     setLayout(boxesLayout);
-
-    QObject::connect(
-        clearOpenAiApiKeyButton, SIGNAL(clicked()),
-        this, SLOT(clearOpenAiApiKeySlot()));
-
 }
 
-void ConfigurationDialog::WingmanTab::clearOpenAiApiKeySlot()
-{
-    openAiApiKeyEdit->clear();
-    QMessageBox::information(
-        this,
-        tr("OpenAI API Key Cleared"),
-        tr(
-            "API key has been cleared from the configuration. "
-            "Please close the configuration dialog with the OK button "
-            "and restart MindForger to apply this change.")
-    );
-}
 
 void ConfigurationDialog::WingmanTab::handleComboBoxChanged(int index) {
     string comboItemLabel{llmProvidersCombo->itemText(index).toStdString()};
@@ -763,7 +889,6 @@ ConfigurationDialog::WingmanTab::~WingmanTab()
 {
     delete llmProvidersLabel;
     delete llmProvidersCombo;
-    delete llmHelpLabel;
 }
 
 void ConfigurationDialog::WingmanTab::refresh()
@@ -781,7 +906,7 @@ void ConfigurationDialog::WingmanTab::refresh()
         llmProvidersCombo->addItem(
             QString::fromStdString(openAiComboLabel), WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI);
     }
-    openAiApiKeyEdit->setText(QString::fromStdString(config.getWingmanOpenAiApiKey()));
+    wingmanOpenAiTab->refresh();
     // set the last selected provider
     llmProvidersCombo->setCurrentIndex(
         llmProvidersCombo->findData(config.getWingmanLlmProvider()));
@@ -794,7 +919,11 @@ void ConfigurationDialog::WingmanTab::save()
     WingmanLlmProviders llmProvider = static_cast<WingmanLlmProviders>(
         llmProvidersCombo->itemData(llmProvidersCombo->currentIndex()).toInt());
     config.setWingmanLlmProvider(llmProvider);
-    config.setWingmanOpenAiApiKey(openAiApiKeyEdit->text().toStdString());
+
+    // OpenAI tab
+    wingmanOpenAiTab->save();
+    // ollama tab
+    // TODO ... xxx ...
 }
 
 /*
