@@ -84,6 +84,7 @@ private:
     Configuration& config;
 
     QLabel* helpLabel;
+    QLabel* configuredLabel;
     QLineEdit* apiKeyEdit;
     QPushButton* clearApiKeyButton;
 
@@ -132,6 +133,7 @@ class ConfigurationDialog::WingmanTab : public QWidget
 
 private:
     const std::string openAiComboLabel;
+    const std::string ollamaComboLabel;
 
     Configuration& config;
 
