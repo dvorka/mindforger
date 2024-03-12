@@ -40,18 +40,32 @@ size_t ollamaCurlWriteCallback(void* contents, size_t size, size_t nmemb, std::s
  * Ollama Wingman class implementation.
  */
 
-OllamaWingman::OllamaWingman(
-    const string& url,
-    const std::string& llmModel
-)
+OllamaWingman::OllamaWingman(const string& url)
     : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA),
       url{url + "/api/generate"},
-      llmModel{llmModel}
+      llmModels{}
 {
 }
 
 OllamaWingman::~OllamaWingman()
 {
+}
+
+void OllamaWingman::curlListModels() {
+    if(!this->llmModels.empty()) {
+        this->llmModels.clear();
+    }
+    
+    // call to ollama API to list available models
+    throw std::runtime_error("OllamaWingman::curlListModels() not implemented");
+}
+
+std::vector<std::string>& OllamaWingman::listModels() 
+{
+    if(this->llmModels.empty()) {
+        this->curlListModels();
+    }
+    return this->llmModels;
 }
 
 /**

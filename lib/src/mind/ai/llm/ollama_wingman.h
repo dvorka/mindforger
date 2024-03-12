@@ -43,18 +43,20 @@ class OllamaWingman: Wingman
 {
 private:
     std::string url;
-    std::string llmModel;
+    std::vector<std::string> llmModels;
 
+    void curlListModels();
     void curlGet(CommandWingmanChat& command);
 
 public:
-    explicit OllamaWingman(const std::string& url, const std::string& llmModel);
+    explicit OllamaWingman(const std::string& url);
     OllamaWingman(const OllamaWingman&) = delete;
     OllamaWingman(const OllamaWingman&&) = delete;
     OllamaWingman& operator =(const OllamaWingman&) = delete;
     OllamaWingman& operator =(const OllamaWingman&&) = delete;
     ~OllamaWingman() override;
 
+    virtual std::vector<std::string>& listModels() override;
     virtual void chat(CommandWingmanChat& command) override;
 };
 

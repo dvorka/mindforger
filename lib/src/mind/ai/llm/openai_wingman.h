@@ -37,20 +37,26 @@ namespace m8r {
  */
 class OpenAiWingman: Wingman
 {
+public:
+    static const std::string LLM_MODEL_OPENAI_GPT35;
+    static const std::string LLM_MODEL_OPENAI_GPT4;
+
 private:
     std::string apiKey;
-    std::string llmModel;
+    std::vector<std::string> llmModels;
+    std::string defaultLlmModel;
 
     void curlGet(CommandWingmanChat& command);
 
 public:
-    explicit OpenAiWingman(const std::string& apiKey, const std::string& llmModel);
+    explicit OpenAiWingman(const std::string& apiKey);
     OpenAiWingman(const OpenAiWingman&) = delete;
     OpenAiWingman(const OpenAiWingman&&) = delete;
     OpenAiWingman& operator =(const OpenAiWingman&) = delete;
     OpenAiWingman& operator =(const OpenAiWingman&&) = delete;
     ~OpenAiWingman() override;
 
+    virtual std::vector<std::string>& listModels() override;
     virtual void chat(CommandWingmanChat& command) override;
 };
 

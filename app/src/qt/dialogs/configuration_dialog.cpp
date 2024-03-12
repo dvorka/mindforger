@@ -779,7 +779,7 @@ ConfigurationDialog::WingmanOllamaTab::WingmanOllamaTab(QWidget* parent)
         ).arg(ENV_VAR_OPENAI_API_KEY));
     helpLabel->setVisible(!config.canWingmanOllama());
     urlEdit = new QLineEdit(this);
-    clearUrlButton = new QPushButton(tr("Clear ollama URL"), this);
+    clearUrlButton = new QPushButton(tr("Clear URL"), this);
 
     QVBoxLayout* llmProvidersLayout = new QVBoxLayout();
     llmProvidersLayout->addWidget(helpLabel);

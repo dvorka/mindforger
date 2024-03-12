@@ -26,6 +26,11 @@ namespace m8r {
 
 using namespace std;
 
+
+// OpenAI models: "gpt-3.5-turbo" and "gpt-4" are aliases for the latest models
+const std::string LLM_GPT_35_TURBO=string{"gpt-3.5-turbo"};
+const std::string LLM_GPT_4=string{"gpt-4"};
+
 /*
  * cURL callback for writing data to string.
  */
@@ -40,19 +45,26 @@ size_t openaiCurlWriteCallback(void* contents, size_t size, size_t nmemb, std::s
  * OpenAi Wingman class implementation.
  */
 
-OpenAiWingman::OpenAiWingman(
-    const string& apiKey,
-    const std::string& llmModel
-)
+OpenAiWingman::OpenAiWingman(const string& apiKey)
     : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI),
       apiKey{apiKey},
-      llmModel{llmModel}
+      llmModels{},
+      defaultLlmModel{LLM_GPT_35_TURBO}
 {
     MF_DEBUG("OpenAiWingman::OpenAiWingman() apiKey: " << apiKey << endl);
+
+    // IMPROVE list models using OpenAI API - will many models be confusing for user?
+    llmModels.push_back(LLM_GPT_35_TURBO);
+    llmModels.push_back(LLM_GPT_4);
 }
 
 OpenAiWingman::~OpenAiWingman()
 {
+}
+
+std::vector<std::string>& OpenAiWingman::listModels() 
+{
+    return this->llmModels;
 }
 
 // TODO refactor to parent class so that all wingmans can use it
@@ -225,7 +237,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             command.httpResponse.clear();
             command.answerMarkdown.clear();
             command.answerTokens = 0;
-            command.answerLlmModel = llmModel;
+            command.answerLlmModel = llmModel.size()>0? llmModel: defaultLlmModel;
 
             return;
         }

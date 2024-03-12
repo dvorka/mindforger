@@ -38,7 +38,7 @@ const string Configuration::DEFAULT_UI_THEME_NAME = string{UI_DEFAULT_THEME};
 const string Configuration::DEFAULT_UI_HTML_CSS_THEME = string{UI_DEFAULT_HTML_CSS_THEME};
 const string Configuration::DEFAULT_EDITOR_FONT= string{UI_DEFAULT_EDITOR_FONT};
 const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
-const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OPENAI = string{"gpt-3.5-turbo"}; // "gpt-3.5-turbo" and "gpt-4" are symbolic names
+const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OPENAI = LLM_MODEL_OPENAI_GPT35TURBO; 
 const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OLLAMA = string{"llama2"};
 
 Configuration::Configuration()

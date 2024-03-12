@@ -27,6 +27,7 @@ using namespace std;
  */
 
 Wingman::Wingman(WingmanLlmProviders llmProvider)
+    : llmModel{}
 {
     this->llmProvider = llmProvider;
 }

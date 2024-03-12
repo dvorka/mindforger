@@ -134,6 +134,9 @@ private:
         PROMPT_ANTONYM,
     };
 
+protected:
+    std::string llmModel;
+
 public:
     explicit Wingman(WingmanLlmProviders llmProvider);
     Wingman(const Wingman&) = delete;
@@ -152,6 +155,22 @@ public:
         return textPrompts;
     }
 
+    virtual void setLlmModel(const std::string& llmModel) {
+        this->llmModel = llmModel;
+    }
+
+    virtual const std::string& getLlmModel() {
+        return llmModel;
+    }
+
+    /**
+     * List available LLM models.
+     */
+    virtual std::vector<std::string>& listModels() = 0;
+
+    /**
+     * Chat with given LLM model.
+     */
     virtual void chat(CommandWingmanChat& command) = 0;
 };
 
