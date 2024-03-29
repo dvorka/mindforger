@@ -29,6 +29,10 @@ using namespace m8r::filesystem;
 
 namespace m8r {
 
+const string LLM_MODEL_GPT35 = string{"gpt-3.5"};
+// TODO ollama does NOT have to host llama2 > it should NOT be offered as default model
+const string LLM_MODEL_LLAMA2 = string{"llama2"};
+
 const string KnowledgeTool::TOOL_PHRASE = string{"<<PHRASE>>"};
 
 // non-primitive constants initializations
@@ -38,8 +42,8 @@ const string Configuration::DEFAULT_UI_THEME_NAME = string{UI_DEFAULT_THEME};
 const string Configuration::DEFAULT_UI_HTML_CSS_THEME = string{UI_DEFAULT_HTML_CSS_THEME};
 const string Configuration::DEFAULT_EDITOR_FONT= string{UI_DEFAULT_EDITOR_FONT};
 const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
-const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OPENAI = LLM_MODEL_OPENAI_GPT35TURBO; 
-const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OLLAMA = string{"llama2"};
+const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OPENAI = LLM_MODEL_GPT35;
+const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OLLAMA = LLM_MODEL_LLAMA2;
 
 Configuration::Configuration()
     : asyncMindThreshold{},
@@ -479,7 +483,7 @@ bool Configuration::initWingmanOpenAi() {
 bool Configuration::initWingmanOllama() {
     MF_DEBUG("  Configuration::initWingmanOllama()" << endl);
     if(canWingmanOllama()) {
-        // OPTIONAL: LLM model 
+        // OPTIONAL: LLM model
         if(wingmanOllamaLlm.size() <= 0) {
             MF_DEBUG("    Wingman LLM model for ollama set to default: " << DEFAULT_WINGMAN_LLM_MODEL_OLLAMA << endl);
             wingmanOpenAiLlm = DEFAULT_WINGMAN_LLM_MODEL_OLLAMA;

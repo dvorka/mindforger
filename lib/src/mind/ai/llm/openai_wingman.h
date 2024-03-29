@@ -42,8 +42,11 @@ public:
     static const std::string LLM_MODEL_OPENAI_GPT4;
 
 private:
+    // API key needed to access OpenAI API endpoint
     std::string apiKey;
+    // Names of LLM models provided by the OpenAI API endpoint
     std::vector<std::string> llmModels;
+    // Name of the LLM model which is used by Wingman - must be one of llmModels ^
     std::string defaultLlmModel;
 
     void curlGet(CommandWingmanChat& command);
@@ -56,7 +59,14 @@ public:
     OpenAiWingman& operator =(const OpenAiWingman&&) = delete;
     ~OpenAiWingman() override;
 
+    /**
+     * @brief List (and cache) LLM model names
+     */
     virtual std::vector<std::string>& listModels() override;
+
+    /**
+     * @brief Chat with configured LLM model.
+     */
     virtual void chat(CommandWingmanChat& command) override;
 };
 

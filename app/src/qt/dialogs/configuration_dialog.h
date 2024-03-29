@@ -85,6 +85,7 @@ private:
 
     QLabel* helpLabel;
     QLabel* configuredLabel;
+    QLabel* apiKeyLabel;
     QLineEdit* apiKeyEdit;
     QPushButton* clearApiKeyButton;
 
@@ -110,6 +111,7 @@ private:
     Configuration& config;
 
     QLabel* helpLabel;
+    QLabel* urlLabel;
     QLineEdit* urlEdit;
     QPushButton* clearUrlButton;
 

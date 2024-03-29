@@ -349,7 +349,9 @@ private:
                     - NONE
                     - MOCK
                     - OPEN_AI
-        - configuration detection whether particular Wingman provider is available:
+                    - OLLAMA
+                    - OPENA_AI_API
+        - configuration detection whether any of Wingman providers is configured (available):
             - bool can<provider>()
         - Wingman initialization from the configuration perspective
           (all fields, like API key, are set ...)
@@ -359,8 +361,9 @@ private:
             - Wingman is available from the configuration perspective
     - MIND:
         - constructor:
-          if Wingman configuration is available,
-          then instantiate a Wingman @ configured provider
+          if any Wingman configuration is available,
+          then instantiate the Wingman using configured provider
+          else no Wingman
             - if configuration.isWingman()
               then mind.wingman = <provider>Wingman()
         - Wingman AVAILABILITY to the runtime:
@@ -369,8 +372,8 @@ private:
         - configuration CHANGE detection:
             - mind.llmProvider used to detect configuration change
             - on change: switch Wingman instance
-    - APP WINDOW / WINGMAN DIALOG:
-        - configuration CHANGE detection:
+    - APP WINDOW / WINGMAN CHAT WINDOW:
+        - configuration CHANGE detection - WINDOWS registered using a callback to be notified:
             - appWindow.llmProvider used to detect configuration change
             - on change: re-init Wingman DIALOG (refresh pre-defined prompts)
     */
@@ -379,7 +382,7 @@ private:
     std::string wingmanOpenAiLlm;
     std::string wingmanOllamaUrl; // base URL like http://localhost:11434
     std::string wingmanOllamaLlm;
-    
+
     TimeScope timeScope;
     std::string timeScopeAsString;
     std::vector<std::string> tagsScope;

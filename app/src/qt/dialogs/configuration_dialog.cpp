@@ -92,6 +92,8 @@ void ConfigurationDialog::saveSlot()
     mindTab->save();
     wingmanTab->save();
 
+    // callback: notify components on config change using signals defined in
+    // the main window presenter
     emit saveConfigSignal();
 }
 
@@ -686,26 +688,30 @@ ConfigurationDialog::WingmanOpenAiTab::WingmanOpenAiTab(QWidget* parent)
         tr(
             "<html><a href='https://openai.com'>OpenAI</a> LLM provider configuration:\n"
             "<ul>"
-            "<li><a href='https://platform.openai.com/api-keys'>Generate</a> an OpenAI API key.</li>"
+            "<li>Generate new OpenAI API key at <a href='https://platform.openai.com/api-keys'>openai.com</a>.</li>"
             "<li>Set the API key:"
             "<br>a) either set the <b>%1</b> environment variable<br/>"
                 "with the API key<br/>"
                 "b) or paste the API key below to save it <font color='#ff0000'>unencrypted</font> to<br/>"
                 "<b>.mindforger.md</b> file in your home directory.</li>"
-            "<li><font color='#ff0000'>Restart</font> MindForger to apply the change.</li>"
             "</ul>"
         ).arg(ENV_VAR_OPENAI_API_KEY));
     helpLabel->setVisible(!config.canWingmanOpenAi());
+    apiKeyLabel = new QLabel(tr("<br>API key:"));
+    apiKeyLabel->setVisible(helpLabel->isVisible());
     apiKeyEdit = new QLineEdit(this);
     apiKeyEdit->setVisible(helpLabel->isVisible());
-    clearApiKeyButton = new QPushButton(tr("Clear OpenAI API Key"), this);
+    setOllamaButton = new QPushButton(tr("Set ollama"), this); // enabled on valid config > add ollama to drop down > choose it in drop down
+    clearApiKeyButton = new QPushButton(tr("Clear API Key"), this);
     clearApiKeyButton->setVisible(helpLabel->isVisible());
+
     configuredLabel = new QLabel(
         tr("The OpenAI API key is configured using the environment variable."), this);
     configuredLabel->setVisible(!helpLabel->isVisible());
 
     QVBoxLayout* llmProvidersLayout = new QVBoxLayout();
     llmProvidersLayout->addWidget(helpLabel);
+    llmProvidersLayout->addWidget(apiKeyLabel);
     llmProvidersLayout->addWidget(apiKeyEdit);
     llmProvidersLayout->addWidget(clearApiKeyButton);
     llmProvidersLayout->addWidget(configuredLabel);
@@ -725,6 +731,7 @@ ConfigurationDialog::WingmanOpenAiTab::~WingmanOpenAiTab()
 {
     delete helpLabel;
     delete configuredLabel;
+    delete apiKeyLabel;
     delete apiKeyEdit;
     delete clearApiKeyButton;
 }
@@ -737,22 +744,14 @@ void ConfigurationDialog::WingmanOpenAiTab::clearApiKeySlot()
         tr("OpenAI API Key Cleared"),
         tr(
             "API key has been cleared from the configuration. "
-            "Please close the configuration dialog with the OK button "
-            "and restart MindForger to apply this change.")
+            "Please close the configuration dialog with the OK button to finish "
+            "the reconfiguration")
     );
 }
 
 void ConfigurationDialog::WingmanOpenAiTab::refresh()
 {
     apiKeyEdit->setText(QString::fromStdString(config.getWingmanOpenAiApiKey()));
-
-    if(apiKeyEdit->text().size() == 0) {
-        clearApiKeyButton->setVisible(false);
-    } else {
-        if(helpLabel->isVisible()) {
-            clearApiKeyButton->setVisible(true);
-        }
-    }
 }
 
 void ConfigurationDialog::WingmanOpenAiTab::save()
@@ -771,18 +770,19 @@ ConfigurationDialog::WingmanOllamaTab::WingmanOllamaTab(QWidget* parent)
 {
     helpLabel = new QLabel(
         tr(
-            "<html>ollama LLM provider configuration:\n"
+            "<html><a href='https://ollama.com'>ollama</a> LLM provider configuration:\n"
             "<ul>"
-            "<li>Set ollama server URL - default is <a href='http://localhost:11434'>http://localhost:11434</a></li>"
-            "<li><font color='#ff0000'>Restart</font> MindForger to apply the change.</li>"
+            "<li>Set your ollama server URL - default is <a href='http://localhost:11434'>http://localhost:11434</a></li>"
             "</ul>"
         ).arg(ENV_VAR_OPENAI_API_KEY));
     helpLabel->setVisible(!config.canWingmanOllama());
+    urlLabel = new QLabel(tr("<br>ollama server URL:"));
     urlEdit = new QLineEdit(this);
     clearUrlButton = new QPushButton(tr("Clear URL"), this);
 
     QVBoxLayout* llmProvidersLayout = new QVBoxLayout();
     llmProvidersLayout->addWidget(helpLabel);
+    llmProvidersLayout->addWidget(urlLabel);
     llmProvidersLayout->addWidget(urlEdit);
     llmProvidersLayout->addWidget(clearUrlButton);
     llmProvidersLayout->addStretch();
@@ -800,6 +800,7 @@ ConfigurationDialog::WingmanOllamaTab::WingmanOllamaTab(QWidget* parent)
 ConfigurationDialog::WingmanOllamaTab::~WingmanOllamaTab()
 {
     delete helpLabel;
+    delete urlLabel;
     delete urlEdit;
     delete clearUrlButton;
 }
@@ -813,25 +814,23 @@ void ConfigurationDialog::WingmanOllamaTab::clearUrlSlot()
         tr(
             "ollama URL has been cleared from the configuration. "
             "Please close the configuration dialog with the OK button "
-            "and restart MindForger to apply this change.")
+            "to finish the reconfiguration.")
     );
 }
 
 void ConfigurationDialog::WingmanOllamaTab::refresh()
 {
     urlEdit->setText(QString::fromStdString(config.getWingmanOllamaUrl()));
-
-    if(urlEdit->text().size() == 0) {
-        clearUrlButton->setVisible(false);
-    } else {
-        clearUrlButton->setVisible(true);
-    }
 }
 
 void ConfigurationDialog::WingmanOllamaTab::save()
 {
     config.setWingmanOllamaUrl(urlEdit->text().toStdString());
 }
+
+/*
+ * TODO: Wingman Open AI API tab
+ */
 
 /*
  * Wingman tab

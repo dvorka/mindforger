@@ -53,18 +53,22 @@ OpenAiWingman::OpenAiWingman(const string& apiKey)
 {
     MF_DEBUG("OpenAiWingman::OpenAiWingman() apiKey: " << apiKey << endl);
 
-    // IMPROVE list models using OpenAI API - will many models be confusing for user?
-    llmModels.push_back(LLM_GPT_35_TURBO);
-    llmModels.push_back(LLM_GPT_4);
+    listModels();
 }
 
 OpenAiWingman::~OpenAiWingman()
 {
 }
 
-std::vector<std::string>& OpenAiWingman::listModels() 
+std::vector<std::string>& OpenAiWingman::listModels()
 {
-    return this->llmModels;
+    llmModels.clear();
+
+    // TODO list models using OpenAI API - will many models be confusing for user?
+    llmModels.push_back(LLM_GPT_35_TURBO);
+    llmModels.push_back(LLM_GPT_4);
+
+    return llmModels;
 }
 
 // TODO refactor to parent class so that all wingmans can use it

@@ -28,6 +28,11 @@ namespace m8r {
  */
 class MockWingman: Wingman
 {
+public:
+    static constexpr const auto LLM_MODEL_MOCK = "mock-llm-model";
+
+private:
+    std::vector<std::string> llmModels;
     std::string llmModel;
 
 public:
@@ -38,9 +43,14 @@ public:
     MockWingman& operator =(const MockWingman&&) = delete;
     ~MockWingman() override;
 
+    virtual std::vector<std::string>& listModels() {
+        return this->llmModels;
+    }
+
     std::string getWingmanLlmModel() const { return llmModel; }
 
     virtual void chat(CommandWingmanChat& command) override;
+
 };
 
 }

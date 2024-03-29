@@ -24,8 +24,10 @@ using namespace std;
 
 MockWingman::MockWingman(const string& llmModel)
     : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_MOCK),
+      llmModels{},
       llmModel{llmModel}
 {
+    this->llmModels.push_back(this->llmModel);
 }
 
 MockWingman::~MockWingman()

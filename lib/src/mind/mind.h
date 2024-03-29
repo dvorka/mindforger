@@ -196,13 +196,15 @@ private:
      */
     Ai* ai;
 
+public:
     /**
      * Configuration driven Wingman initialization.
      */
     void initWingman();
+
+private:
     /**
      * Wingman LLM provider currently used by Mind.
-     * (user to detect configuration changes)
      */
     WingmanLlmProviders wingmanLlmProvider;
     /**

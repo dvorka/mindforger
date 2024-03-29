@@ -164,12 +164,12 @@ public:
     }
 
     /**
-     * List available LLM models.
+     * @brief List available LLM model names.
      */
     virtual std::vector<std::string>& listModels() = 0;
 
     /**
-     * Chat with given LLM model.
+     * @brief Chat with LLM model specified by the 'command'.
      */
     virtual void chat(CommandWingmanChat& command) = 0;
 };

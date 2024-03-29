@@ -47,10 +47,10 @@ Mind::Mind(Configuration &configuration)
 #endif
       outlinesMap{},
       exclusiveMind{},
+      wingman{nullptr},
       timeScopeAspect{},
       tagsScopeAspect{ontology},
-      scopeAspect{timeScopeAspect, tagsScopeAspect},
-      wingman{nullptr}
+      scopeAspect{timeScopeAspect, tagsScopeAspect}
 {
     ai = new Ai{memory, *this};
 
@@ -1465,8 +1465,8 @@ void Mind::initWingman()
                 wingman = nullptr;
             }
             wingman = (Wingman*)new OpenAiWingman{
-                config.getWingmanOpenAiApiKey(),
-                config.getWingmanOpenAiLlm()
+                config.getWingmanOpenAiApiKey()
+                // TODO config.getWingmanOpenAiLlm()
             };
             wingmanLlmProvider = config.getWingmanLlmProvider();
             return;
@@ -1478,19 +1478,21 @@ void Mind::initWingman()
             }
             wingman = (Wingman*)new OllamaWingman{
                 config.getWingmanOllamaUrl(),
-                config.getWingmanOllamaLlm()
+                // TODO config.getWingmanOllamaLlm()
             };
             wingmanLlmProvider = config.getWingmanLlmProvider();
             return;
         case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
             MF_DEBUG("  MIND Wingman init: MOCK" << endl);
             wingman = (Wingman*)new MockWingman{
-                "mock-llm-model"
+                MockWingman::LLM_MODEL_MOCK
             };
             wingmanLlmProvider = config.getWingmanLlmProvider();
             return;
+        case WingmanLlmProviders::WINGMAN_PROVIDER_NONE:
+            MF_DEBUG("  MIND Wingman init: set to NONE > deinitialize > NO Wingman" << endl);
         default:
-            MF_DEBUG("  MIND Wingman init: UNKNOWN" << endl);
+            MF_DEBUG("  MIND Wingman init: UNKNOWN > NO Wingman" << endl);
             break;
         }
     }

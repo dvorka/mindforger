@@ -214,7 +214,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(distributor, SIGNAL(finished()), distributor, SLOT(deleteLater()));
     distributor->start();
 
-    // send signal to components to be updated on a configuration change
+    // send signal to components to be updated on a config change (callback)
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SLOT(slotConfigurationUpdated()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getNoteEdit()->getView()->getNoteEditor(), SLOT(slotConfigurationUpdated()));
@@ -3337,6 +3337,9 @@ void MainWindowPresenter::handleMindPreferences()
 {
     mdConfigRepresentation->save(config);
 
+    // re-initialize Wingman
+    mind->initWingman();
+
     view.getToolBar()->setVisible(config.isUiShowToolbar());
     view.getOrloj()->getNoteView()->setZoomFactor(config.getUiHtmlZoomFactor());
     view.getOrloj()->getOutlineHeaderView()->setZoomFactor(config.getUiHtmlZoomFactor());
@@ -3349,8 +3352,8 @@ void MainWindowPresenter::handleMindPreferences()
     view.getOrloj()->getNoteEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
     view.getOrloj()->getOutlineHeaderEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
 
-    // IMPROVE: highlighter should NOT reference lib configuration to honor MVP, spell check
-    // setting to be pushed to highlighter from here
+    // IMPROVE: highlighter should NOT reference lib configuration to honor MVP,
+    // spell check setting to be pushed to highlighter from here
 }
 
 void MainWindowPresenter::doActionViewTerminal()
