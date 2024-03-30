@@ -73,6 +73,11 @@ signals:
     void saveConfigSignal();
 };
 
+constexpr const auto WINGMAN_NONE_COMBO_LABEL = "";
+constexpr const auto WINGMAN_OPENAI_COMBO_LABEL = "OpenAI";
+constexpr const auto WINGMAN_OLLAMA_COMBO_LABEL = "ollama";
+constexpr const auto WINGMAN_MOCK_COMBO_LABEL = "mock";
+
 /**
  * @brief Wingman tab's OpenAI tab.
  */
@@ -81,22 +86,27 @@ class ConfigurationDialog::WingmanOpenAiTab : public QWidget
     Q_OBJECT
 
 private:
+    QComboBox* parentLlmProvidersCombo;
     Configuration& config;
 
     QLabel* helpLabel;
     QLabel* configuredLabel;
     QLabel* apiKeyLabel;
     QLineEdit* apiKeyEdit;
+    QPushButton* setOpenAiButton;
     QPushButton* clearApiKeyButton;
+    QLabel* llmModelsLabel;
+    QComboBox* llmModelsCombo;
 
 public:
-    explicit WingmanOpenAiTab(QWidget* parent);
+    explicit WingmanOpenAiTab(QWidget* parent, QComboBox* parentLlmProvidersCombo);
     ~WingmanOpenAiTab();
 
     void refresh();
     void save();
 
 private slots:
+    void setOpenAiSlot();
     void clearApiKeySlot();
 };
 
@@ -108,21 +118,27 @@ class ConfigurationDialog::WingmanOllamaTab : public QWidget
     Q_OBJECT
 
 private:
+    QComboBox* parentLlmProvidersCombo;
+
     Configuration& config;
 
     QLabel* helpLabel;
     QLabel* urlLabel;
     QLineEdit* urlEdit;
+    QPushButton* setOllamaButton;
     QPushButton* clearUrlButton;
+    QLabel* llmModelsLabel;
+    QComboBox* llmModelsCombo;
 
 public:
-    explicit WingmanOllamaTab(QWidget* parent);
+    explicit WingmanOllamaTab(QWidget* parent, QComboBox* parentLlmProvidersCombo);
     ~WingmanOllamaTab();
 
     void refresh();
     void save();
 
 private slots:
+    void setOllamaSlot();
     void clearUrlSlot();
 };
 
@@ -134,9 +150,6 @@ class ConfigurationDialog::WingmanTab : public QWidget
     Q_OBJECT
 
 private:
-    const std::string openAiComboLabel;
-    const std::string ollamaComboLabel;
-
     Configuration& config;
 
     QLabel* llmProvidersLabel;

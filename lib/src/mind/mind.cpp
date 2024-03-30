@@ -1464,10 +1464,8 @@ void Mind::initWingman()
                 delete wingman;
                 wingman = nullptr;
             }
-            wingman = (Wingman*)new OpenAiWingman{
-                config.getWingmanOpenAiApiKey()
-                // TODO config.getWingmanOpenAiLlm()
-            };
+            wingman = (Wingman*)new OpenAiWingman{config.getWingmanOpenAiApiKey()};
+            wingman->setLlmModel(config.getWingmanOpenAiLlm());
             wingmanLlmProvider = config.getWingmanLlmProvider();
             return;
         case WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA:
@@ -1476,10 +1474,8 @@ void Mind::initWingman()
                 delete wingman;
                 wingman = nullptr;
             }
-            wingman = (Wingman*)new OllamaWingman{
-                config.getWingmanOllamaUrl(),
-                // TODO config.getWingmanOllamaLlm()
-            };
+            wingman = (Wingman*)new OllamaWingman{config.getWingmanOllamaUrl()};
+            wingman->setLlmModel(config.getWingmanOllamaLlm());
             wingmanLlmProvider = config.getWingmanLlmProvider();
             return;
         case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
@@ -1491,6 +1487,7 @@ void Mind::initWingman()
             return;
         case WingmanLlmProviders::WINGMAN_PROVIDER_NONE:
             MF_DEBUG("  MIND Wingman init: set to NONE > deinitialize > NO Wingman" << endl);
+            break;
         default:
             MF_DEBUG("  MIND Wingman init: UNKNOWN > NO Wingman" << endl);
             break;

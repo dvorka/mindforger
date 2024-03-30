@@ -52,6 +52,12 @@ enum WingmanLlmProviders {
     WINGMAN_PROVIDER_OLLAMA
 };
 
+constexpr const auto LLM_MODEL_NONE = "";
+constexpr const auto LLM_MODEL_GPT35_TURBO = "gpt-3.5-turbo";
+constexpr const auto LLM_MODEL_GPT4 = "gpt-4";
+// TODO ollama does NOT have to host llama2 > it should NOT be offered as default model
+constexpr const auto LLM_MODEL_LLAMA2 = "llama2";
+
 // const in constexpr makes value const
 constexpr const auto ENV_VAR_HOME = "HOME";
 constexpr const auto ENV_VAR_DISPLAY = "DISPLAY";
@@ -569,6 +575,7 @@ public:
 #else
     bool canWingmanMock() { return false; }
 #endif
+    bool canWingmanOpenAiFromEnv();
     bool canWingmanOpenAi();
     bool canWingmanOllama();
 private:

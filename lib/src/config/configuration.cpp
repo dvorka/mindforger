@@ -29,10 +29,6 @@ using namespace m8r::filesystem;
 
 namespace m8r {
 
-const string LLM_MODEL_GPT35 = string{"gpt-3.5"};
-// TODO ollama does NOT have to host llama2 > it should NOT be offered as default model
-const string LLM_MODEL_LLAMA2 = string{"llama2"};
-
 const string KnowledgeTool::TOOL_PHRASE = string{"<<PHRASE>>"};
 
 // non-primitive constants initializations
@@ -42,8 +38,8 @@ const string Configuration::DEFAULT_UI_THEME_NAME = string{UI_DEFAULT_THEME};
 const string Configuration::DEFAULT_UI_HTML_CSS_THEME = string{UI_DEFAULT_HTML_CSS_THEME};
 const string Configuration::DEFAULT_EDITOR_FONT= string{UI_DEFAULT_EDITOR_FONT};
 const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
-const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OPENAI = LLM_MODEL_GPT35;
-const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OLLAMA = LLM_MODEL_LLAMA2;
+const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OPENAI = string{LLM_MODEL_GPT35_TURBO};
+const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OLLAMA = string{LLM_MODEL_LLAMA2};
 
 Configuration::Configuration()
     : asyncMindThreshold{},
@@ -398,12 +394,18 @@ const char* Configuration::getEditorFromEnv()
     return editor;
 }
 
+bool Configuration::canWingmanOpenAiFromEnv()
+{
+    if(std::getenv(ENV_VAR_OPENAI_API_KEY) != nullptr) {
+        return true;
+    }
+
+    return false;
+}
+
 bool Configuration::canWingmanOpenAi()
 {
-    if (
-        this->wingmanOpenAiApiKey.size() > 0
-        || std::getenv(ENV_VAR_OPENAI_API_KEY) != nullptr
-    ) {
+    if(this->wingmanOpenAiApiKey.size() > 0 || canWingmanOpenAiFromEnv()) {
         return true;
     }
 
