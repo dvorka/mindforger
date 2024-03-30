@@ -874,10 +874,13 @@ ConfigurationDialog::WingmanOllamaTab::WingmanOllamaTab(QWidget* parent, QComboB
     llmProvidersLayout->addWidget(helpLabel);
     llmProvidersLayout->addWidget(urlLabel);
     llmProvidersLayout->addWidget(urlEdit);
-    llmProvidersLayout->addWidget(setOllamaButton);
-    llmProvidersLayout->addWidget(clearUrlButton);
     llmProvidersLayout->addWidget(llmModelsLabel);
     llmProvidersLayout->addWidget(llmModelsCombo);
+    QHBoxLayout* buttonsLayout = new QHBoxLayout{};
+    buttonsLayout->addWidget(setOllamaButton);
+    buttonsLayout->addWidget(clearUrlButton);
+    llmProvidersLayout->addLayout(buttonsLayout);
+
     llmProvidersLayout->addStretch();
 
     QVBoxLayout* layout = new QVBoxLayout();
