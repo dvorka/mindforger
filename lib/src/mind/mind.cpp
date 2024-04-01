@@ -1502,6 +1502,53 @@ void Mind::initWingman()
     wingmanLlmProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
 }
 
+void Mind::findLibraryOrphanOs()
+{
+    vector<Outline*> orphanOutlines{};
+    const vector<Outline*>& outlines = memory.getOutlines();
+    const Tag* t = memory.getOntology().findOrCreateTag(
+        MarkdownDocumentRepresentation::TAG_LIB_DOC);
+    MF_DEBUG("Searching ORPHAN library outlines..." << endl);
+    for(Outline* outline:outlines) {
+        if(!outline->hasTag(t)) {
+            continue;
+        }
+
+        const vector<string*>& d = outline->getDescription();
+        if(d.size()>0) {
+            if(d[0]->size() > 0) {
+                // MF_DEBUG("  Orphan: 1st line '" << *d[0] << "'" << endl);
+                if(stringStartsWith(*d[0], MarkdownDocumentRepresentation::PREFIX_1ST_LINE)) {
+                    // extract Markdown link
+                    size_t i{strlen(MarkdownDocumentRepresentation::PREFIX_1ST_LINE)};
+                    string s{
+                        d[0]->substr(
+                            i,
+                            d[0]->size()-i)};
+                    // MF_DEBUG("    '" << s << "'" << endl);
+
+                    // parse Markdown link
+                    string documentPath{};
+                    if(s.size()>4 && s[0]=='[' && s[s.size()-1]==')') {
+                        size_t i;
+                        if((i=s.find("](")) != std::string::npos) {
+                            documentPath = s.substr(i+2,s.size()-3-i);
+                        }
+                    }
+                    if(documentPath.size()) {
+                        MF_DEBUG("    '" << documentPath << "'" << endl);
+                        if(!isFile(documentPath.c_str())) {
+                            MF_DEBUG("      ORPHAN" << endl);
+                            // TODO
+                            detect whether the file exists
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 Wingman* Mind::getWingman()
 {
     if(this->wingmanLlmProvider != config.getWingmanLlmProvider()) {

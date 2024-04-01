@@ -24,13 +24,8 @@ MainWindowView::MainWindowView(LookAndFeels& lookAndFeel)
     : QMainWindow(nullptr), // main window has no parent - it is destroyed by main MF class
       lookAndFeel(lookAndFeel)
 {
-#ifdef MF_LLAMA_CPP
-  #define MINDFORGER_GPT " GPT"
-#else
-  #define MINDFORGER_GPT ""
-#endif
     windowTitleSkeleton
-        = "MindForger" MINDFORGER_GPT " - "
+        = "MindForger - "
           +tr("Thinking Notebook")+" - "
           +MINDFORGER_VERSION;
 

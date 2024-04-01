@@ -107,7 +107,7 @@ TEST(JSonTestCase, ParseOpenAiResponse)
             && choice["message"].contains("content")
         ) {
             choice["message"]["content"].get_to(answerMarkdown);
-            // TODO ask GPT for HTML formatted response
+            // TODO ask LLM for HTML formatted response
             m8r::replaceAll(
                 "\n",
                 "<br/>",

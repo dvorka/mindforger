@@ -709,6 +709,7 @@ ConfigurationDialog::WingmanOpenAiTab::WingmanOpenAiTab(QWidget* parent, QComboB
     setOpenAiButton->setVisible(helpLabel->isVisible());
     clearApiKeyButton = new QPushButton(tr("Clear API Key"), this);
     clearApiKeyButton->setVisible(helpLabel->isVisible());
+    // LLM model can be choose at any time when a valid configuration is available
     llmModelsLabel = new QLabel(tr("LLM model:"));
     llmModelsCombo = new QComboBox();
     llmModelsCombo->addItem(LLM_MODEL_NONE);
@@ -1006,7 +1007,7 @@ void ConfigurationDialog::WingmanTab::handleComboBoxChanged(int index) {
             tr(
                 "You have chosen OpenAI as your Wingman LLM provider. "
                 "Therefore, your data will be sent to OpenAI servers "
-                "for GPT processing when you use Wingman."));
+                "when you use Wingman."));
     }
 }
 

@@ -55,12 +55,12 @@ void OllamaWingman::curlListModels() {
     if(!this->llmModels.empty()) {
         this->llmModels.clear();
     }
-    
+
     // call to ollama API to list available models
     throw std::runtime_error("OllamaWingman::curlListModels() not implemented");
 }
 
-std::vector<std::string>& OllamaWingman::listModels() 
+std::vector<std::string>& OllamaWingman::listModels()
 {
     if(this->llmModels.empty()) {
         this->curlListModels();
@@ -258,7 +258,7 @@ void OllamaWingman::curlGet(CommandWingmanChat& command) {
         }
         if(httpResponseJSon.contains("response")) {
             httpResponseJSon["response"].get_to(command.answerMarkdown);
-            // TODO ask GPT for HTML formatted response
+            // TODO ask LLM for HTML formatted response
             m8r::replaceAll(
                 "\n",
                 "<br/>",

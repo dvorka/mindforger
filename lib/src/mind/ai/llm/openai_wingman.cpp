@@ -107,7 +107,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
 
         */
         nlohmann::json messageSystemJSon{};
-        messageSystemJSon["role"] = "system"; // system (instruct GPT who it is), user (user prompts), assistant (GPT answers)
+        messageSystemJSon["role"] = "system"; // system (instruct LLM who it is), user (user prompts), assistant (LLM answers)
         messageSystemJSon["content"] =
             // "You are a helpful assistant that returns HTML-formatted answers to the user's prompts."
             "You are a helpful assistant."
@@ -196,6 +196,8 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
                 "  '" << command.httpResponse << "'" << endl);
         }
 #else
+        // TODO refactor this section to a generic CURL call which gets: URL, body as C string and returns httpResponse
+
         // set up cURL options
         command.httpResponse.clear();
         curl_easy_setopt(

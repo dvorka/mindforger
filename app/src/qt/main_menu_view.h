@@ -85,6 +85,7 @@ public:
     QMenu* submenuMindLibrary;
     QAction* actionLibraryAdd;
     QAction* actionLibrarySync;
+    QAction* actionLibraryOrphans;
     QAction* actionLibraryDeprecate;
     QAction* actionMindPreferences;
     QMenu* submenuMindExport;

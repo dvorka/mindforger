@@ -240,6 +240,7 @@ public slots:
     void doActionLibraryNew();
     void handleNewLibrary();
     void doActionLibrarySync();
+    void doActionLibraryOrphans();
     void handleSyncLibrary();
     void doActionLibraryRm();
     void handleRmLibrary();

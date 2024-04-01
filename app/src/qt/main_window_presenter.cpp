@@ -2176,13 +2176,13 @@ void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
 
         // check the result
         if (future.isFinished()) {
-            statusBar->showInfo(QString(tr("Wingman received an answer from the GPT provider")));
+            statusBar->showInfo(QString(tr("Wingman received an answer from the LLM provider")));
         } else {
-            statusBar->showError(QString(tr("Wingman failed to receive an answer from the GPT provider")));
+            statusBar->showError(QString(tr("Wingman failed to receive an answer from the LLM provider")));
 
             // PUSH answer to the chat dialog
             this->wingmanDialog->appendAnswerToChat(
-                "Wingman failed to get answer from the GPT provider.<br/><br/>"+commandWingmanChat.answerMarkdown,
+                "Wingman failed to get answer from the LLM provider.<br/><br/>"+commandWingmanChat.answerMarkdown,
                 "",
                 this->wingmanDialog->getContextType(),
                 true
@@ -3464,6 +3464,10 @@ void MainWindowPresenter::handleSyncLibrary()
     rmLibraryDialog->reset();
 }
 
+void MainWindowPresenter::doActionLibraryOrphans()
+{
+    mind->findLibraryOrphanOs();
+}
 
 void MainWindowPresenter::doActionLibraryRm()
 {

@@ -109,7 +109,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindAutolink->setVisible(false);
 #endif
 
-    actionMindWingman = new QAction(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman GPT"), mainWindow);
+    actionMindWingman = new QAction(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman LLM"), mainWindow);
     actionMindWingman->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Slash));
     actionMindWingman->setStatusTip(tr("Open Wingman dialog..."));
 
@@ -140,6 +140,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
         tr(
             "Synchronize library source directory with MindForger notebook(s) which represent"
             "library resources..."));
+    // library: find orphans
+    actionLibraryOrphans = new QAction(
+        QIcon(":/menu-icons/find.svg"),
+        tr("&Find orphans"),
+        mainWindow);
+    actionLibrarySync->setStatusTip(
+        tr("Find library Notebooks which reference non-existent documents..."));
     // library: deprecate
     actionLibraryDeprecate = new QAction(
         QIcon(":/menu-icons/delete.svg"), tr("&Delete library"), mainWindow);
@@ -148,6 +155,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // assemble Library sub-menu
     submenuMindLibrary->addAction(actionLibraryAdd);
     submenuMindLibrary->addAction(actionLibrarySync);
+    submenuMindLibrary->addAction(actionLibraryOrphans);
     submenuMindLibrary->addAction(actionLibraryDeprecate);
 
     // dream ... sanity, integrity, detox, inference, assoc discovery, ...
@@ -565,7 +573,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineTWikiImport->setStatusTip(tr("Import Notebook from an external TWiki file and restart MindForger"));
     submenuOutlineImport->addAction(actionOutlineTWikiImport);
 
-    submenuOutlineWingman = menuOutline->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman GPT"));
+    submenuOutlineWingman = menuOutline->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman LLM"));
     actionOutlineWingmanSummarize = new QAction(tr("&Summarize"), mainWindow);
     actionOutlineWingmanSummarize->setStatusTip(tr("Ask Wingman to summarize text of the Notebook..."));
     submenuOutlineWingman->addAction(actionOutlineWingmanSummarize);
@@ -699,7 +707,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteImport->setStatusTip(tr("Import Note from an external file in a supported format"));
     actionNoteImport->setEnabled(false);
 
-    submenuNoteWingman = menuNote->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman GPT"));
+    submenuNoteWingman = menuNote->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman LLM"));
     actionNoteWingmanSummarize = new QAction(tr("&Summarize"), mainWindow);
     actionNoteWingmanSummarize->setStatusTip(tr("Ask Wingman to summarize text of the Note..."));
     submenuNoteWingman->addAction(actionNoteWingmanSummarize);
@@ -788,7 +796,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditSpellCheck = new QAction(QIcon(":/menu-icons/paste.svg"), tr("&Spell Check"), mainWindow);
     actionEditSpellCheck->setStatusTip(tr("Spell check Notebook or Note description"));
 
-    submenuEditWingman = menuEdit->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman GPT"));
+    submenuEditWingman = menuEdit->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman LLM"));
     actionEditWingmanFixGrammar = new QAction(tr("&Fix Grammar"), mainWindow);
     actionEditWingmanFixGrammar->setStatusTip(tr("Ask Wingman to fix grammar errors in the selected text / word under the cursor..."));
     submenuEditWingman->addAction(actionEditWingmanFixGrammar);

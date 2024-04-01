@@ -29,6 +29,12 @@ namespace m8r {
 
 class MarkdownDocumentRepresentation
 {
+public:
+
+    static constexpr const auto TAG_LIB_DOC = "library-document";
+
+    static constexpr const auto PREFIX_1ST_LINE = "This is a notebook for the document: ";
+
 private:
     Ontology& ontology;
 

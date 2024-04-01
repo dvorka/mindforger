@@ -38,6 +38,7 @@
 #include "../config/configuration.h"
 #include "../representations/representation_interceptor.h"
 #include "../representations/markdown/markdown_configuration_representation.h"
+#include "../representations/markdown/markdown_document_representation.h"
 
 namespace m8r {
 
@@ -684,6 +685,15 @@ public:
      * @brief Actions to perform on N rename.
      */
     void noteOnRename(const std::string& oldName, const std::string& newName);
+
+    /*
+     * LIBRARY (information source)
+     */
+
+    /**
+     * @brief Find Os which reference non-existent documents.
+     */
+    void findLibraryOrphanOs();
 
     /*
      * WINGMAN
