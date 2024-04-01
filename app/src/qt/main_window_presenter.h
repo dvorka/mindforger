@@ -241,6 +241,7 @@ public slots:
     void handleNewLibrary();
     void doActionLibrarySync();
     void doActionLibraryOrphans();
+    void doActionLibraryDeprecateOrphanOs();
     void handleSyncLibrary();
     void doActionLibraryRm();
     void handleRmLibrary();

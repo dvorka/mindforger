@@ -3466,7 +3466,56 @@ void MainWindowPresenter::handleSyncLibrary()
 
 void MainWindowPresenter::doActionLibraryOrphans()
 {
-    mind->findLibraryOrphanOs();
+    int orphans = mind->findLibraryOrphanOs();
+    if(orphans) {
+        doActionViewOutlines();
+
+        QMessageBox::information(
+            &view,
+            tr("Library Orphans"),
+            tr(
+                "Found %1 library Notebooks with orphaned documents. "
+                "Notebooks were tagged with 'library-orphan-document' tag. "
+                "Use scopes to filter them out."
+            ).arg(orphans)
+        );
+    } else {
+        QMessageBox::information(
+            &view,
+            tr("Library Orphans"),
+            tr("No Notebooks with orphaned documents found.")
+        );
+    }
+}
+
+void MainWindowPresenter::doActionLibraryDeprecateOrphanOs()
+{
+    vector<const Tag*> tags{};
+    tags.push_back(
+        mind->getOntology().findOrCreateTag(
+            MarkdownDocumentRepresentation::TAG_LIB_DOC_ORPHAN));
+    vector<Outline*> os{};
+    mind->findOutlinesByTags(tags, os);
+
+    if(os.size()) {
+        for(Outline* o:os) {
+            mind->outlineForget(o->getKey());
+        }
+
+        QMessageBox::information(
+            &view,
+            tr("Library Orphans"),
+            tr("%1 Notebooks tagged as library orphans were deprecated.").arg(os.size())
+        );
+
+        doActionViewOutlines();
+    } else {
+        QMessageBox::information(
+            &view,
+            tr("Library Orphans"),
+            tr("No Notebooks with library orphan tag found.")
+        );
+    }
 }
 
 void MainWindowPresenter::doActionLibraryRm()

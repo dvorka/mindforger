@@ -86,6 +86,7 @@ public:
     QAction* actionLibraryAdd;
     QAction* actionLibrarySync;
     QAction* actionLibraryOrphans;
+    QAction* actionLibraryDeprecateOrphanOs;
     QAction* actionLibraryDeprecate;
     QAction* actionMindPreferences;
     QMenu* submenuMindExport;

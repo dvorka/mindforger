@@ -147,7 +147,14 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
         mainWindow);
     actionLibrarySync->setStatusTip(
         tr("Find library Notebooks which reference non-existent documents..."));
-    // library: deprecate
+    // library: deprecate orphan Os
+    actionLibraryDeprecateOrphanOs = new QAction(
+        QIcon(":/menu-icons/delete.svg"),
+        tr("Deprecate &orphans"),
+        mainWindow);
+    actionLibraryDeprecateOrphanOs->setStatusTip(
+        tr("Deprecate library Notebooks that has tag which indicates reference of non-existent document..."));
+    // library: delete
     actionLibraryDeprecate = new QAction(
         QIcon(":/menu-icons/delete.svg"), tr("&Delete library"), mainWindow);
     actionLibraryDeprecate->setStatusTip(tr(
@@ -156,6 +163,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     submenuMindLibrary->addAction(actionLibraryAdd);
     submenuMindLibrary->addAction(actionLibrarySync);
     submenuMindLibrary->addAction(actionLibraryOrphans);
+    submenuMindLibrary->addAction(actionLibraryDeprecateOrphanOs);
     submenuMindLibrary->addAction(actionLibraryDeprecate);
 
     // dream ... sanity, integrity, detox, inference, assoc discovery, ...

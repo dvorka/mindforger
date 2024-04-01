@@ -702,7 +702,7 @@ vector<Note*>* Mind::getNotesOfType(const NoteType& type, const Outline& outline
     return nullptr;
 }
 
-void Mind::findOutlinesByTags(const std::vector<const Tag*>& tags, std::vector<Outline*>& result) const
+void Mind::findOutlinesByTags(const vector<const Tag*>& tags, vector<Outline*>& result) const
 {
     for(Outline* o:memory.getOutlines()) {
         bool allMatched = true;
@@ -1502,7 +1502,7 @@ void Mind::initWingman()
     wingmanLlmProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
 }
 
-void Mind::findLibraryOrphanOs()
+int Mind::findLibraryOrphanOs()
 {
     vector<Outline*> orphanOutlines{};
     const vector<Outline*>& outlines = memory.getOutlines();
@@ -1539,14 +1539,32 @@ void Mind::findLibraryOrphanOs()
                         MF_DEBUG("    '" << documentPath << "'" << endl);
                         if(!isFile(documentPath.c_str())) {
                             MF_DEBUG("      ORPHAN" << endl);
-                            // TODO
-                            detect whether the file exists
+                            orphanOutlines.push_back(outline);
+
+                            // tag O as orphan
+                            const Tag* orphanTag = memory.getOntology().findOrCreateTag(
+                                MarkdownDocumentRepresentation::TAG_LIB_DOC_ORPHAN);
+                            if(!outline->hasTag(orphanTag)) {
+                                outline->addTag(orphanTag);
+                                memory.remember(outline);
+                            }
                         }
                     }
                 }
             }
         }
     }
+
+    if(orphanOutlines.size()) {
+        MF_DEBUG("ORPHAN library outlines found:" << endl);
+        for(Outline* o:orphanOutlines) {
+            MF_DEBUG("  " << o->getName() << endl);
+        }
+    } else {
+        MF_DEBUG("NO ORPHAN library outlines found." << endl);
+    }
+
+    return orphanOutlines.size();
 }
 
 Wingman* Mind::getWingman()

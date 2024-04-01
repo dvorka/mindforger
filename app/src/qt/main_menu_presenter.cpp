@@ -116,6 +116,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(view->actionLibraryAdd, SIGNAL(triggered()), mwp, SLOT(doActionLibraryNew()));
     QObject::connect(view->actionLibrarySync, SIGNAL(triggered()), mwp, SLOT(doActionLibrarySync()));
     QObject::connect(view->actionLibraryOrphans, SIGNAL(triggered()), mwp, SLOT(doActionLibraryOrphans()));
+    QObject::connect(view->actionLibraryDeprecateOrphanOs, SIGNAL(triggered()), mwp, SLOT(doActionLibraryDeprecateOrphanOs()));
     QObject::connect(view->actionLibraryDeprecate, SIGNAL(triggered()), mwp, SLOT(doActionLibraryRm()));
 
     // menu: Organizer

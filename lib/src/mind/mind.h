@@ -693,7 +693,7 @@ public:
     /**
      * @brief Find Os which reference non-existent documents.
      */
-    void findLibraryOrphanOs();
+    int findLibraryOrphanOs();
 
     /*
      * WINGMAN
