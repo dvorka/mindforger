@@ -1,6 +1,13 @@
-2024-03-??  Martin Dvorak  <martin.dvorak@mindforger.com>
+2024-04-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v2.1.0 - ...
+    * Released v2.1.0 - Local LLMs support, Notes semantic search
+      and orphan library documents management.
+    * WIP: Feature: ollama integration brings privacy safe Wingman 
+      via ollama hosted LLMs.
+    * WIP: Feature: embeddings calculation by ollama hosted LLM models
+    * WIP: Enhancement: improved LLM providers configuration: OpenAI and ollama
+      (environment vs. configuration; LLM model selection; provider choice)
+    * WIP: Enhancement: library orphans
 
 2024-02-16  Martin Dvorak  <martin.dvorak@mindforger.com>
 

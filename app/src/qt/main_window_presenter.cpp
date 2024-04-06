@@ -666,6 +666,38 @@ void MainWindowPresenter::doActionMindToggleAutolink()
     }
 }
 
+void MainWindowPresenter::doActionMindToggleSemanticSearch()
+{
+    // TODO: to be implemented in analogous way as autolinking
+    if(config.isSemanticSearch()) {
+        config.setSemanticSearch(false);
+        statusBar->showInfo(tr("Semantic search disabled"));
+    } else {
+        // check whether possible
+        if(config.canWingmanOllama()) {
+            config.setSemanticSearch(true);
+            statusBar->showInfo(tr("Semantic search activated"));
+        } else {
+            config.setSemanticSearch(false);
+            statusBar->showError(tr("Semantic search cannot be activated - missing dependencies"));
+            QMessageBox::critical(
+                &view,
+                tr("Semantic Search"),
+                tr("Semantic search cannot be activated - ollama Wingman must be configured.")
+            );
+            return;
+        }
+    }
+    mdConfigRepresentation->save(config);
+
+    // activate semantic search
+    if(config.isSemanticSearch()) {
+        statusBar->showInfo(tr("Refresh semantic search index ~ text embeddings of all (modified) Notes..."));
+        mind->refreshEmbeddings();
+    }
+}
+
+
 void MainWindowPresenter::doActionNameDescFocusSwap()
 {
     if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {

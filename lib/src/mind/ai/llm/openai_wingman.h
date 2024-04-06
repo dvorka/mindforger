@@ -70,6 +70,14 @@ public:
      * @brief Chat with configured LLM model.
      */
     virtual void chat(CommandWingmanChat& command) override;
+
+    /**
+     * @brief Get embeddings from configured LLM model.
+     */
+    virtual void embeddings(CommandWingmanEmbeddings& command) override {
+        UNUSED_ARG(command);
+        throw std::runtime_error("OpenAI Wingman does not support embeddings");
+    }
 };
 
 }

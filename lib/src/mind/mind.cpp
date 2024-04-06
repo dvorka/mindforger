@@ -1476,6 +1476,7 @@ void Mind::initWingman()
                 wingman = nullptr;
             }
             wingman = (Wingman*)new OllamaWingman{config.getWingmanOllamaUrl()};
+            wingman->listModels();
             wingman->setLlmModel(config.getWingmanOllamaLlm());
             wingmanLlmProvider = config.getWingmanLlmProvider();
             return;
@@ -1591,6 +1592,72 @@ CommandWingmanChat Mind::wingmanChat(CommandWingmanChat& command)
     }
 
     return command;
+}
+
+void Mind::refreshEmbeddings()
+{
+    MF_DEBUG("MIND: Refreshing embeddings..." << endl);
+    if(getWingman()) {
+        vector<Note*> allNotes{};
+        memory.getAllNotes(allNotes);
+#ifdef MF_DEBUG        
+        int embeddingsSizeB=0;
+        int counter=0;
+        MF_DEBUG("  Embedding for " << allNotes.size() << " Notes:" << endl);
+#endif
+        auto beginTs = chrono::high_resolution_clock::now();
+        for(Note* n:allNotes) {
+            MF_DEBUG(
+                "    " <<
+                ++counter << "/" << allNotes.size() <<
+                " getting embeddings for '" << n->getName() << "'" << endl);
+
+            CommandWingmanEmbeddings command{};
+            command.prompt = n->getDescriptionAsString();
+            // TODO: truncate text
+
+            // TODO: calculate embeddings ONLY if not in cache (timestamp not changed)
+
+            getWingman()->embeddings(command);
+#ifdef MF_DEBUG
+            if(command.answerEmbeddings.size()) {
+                embeddingsSizeB += command.answerEmbeddings.size()*sizeof(command.answerEmbeddings[0]);
+            }
+#endif
+            // TODO: store embeddings to embeddings cache: note key -> modified/embeddings vector
+        }
+#ifdef MF_DEBUG
+        auto endTs = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::milliseconds>(endTs - beginTs);        
+        auto nDuration = to_string(float(duration.count()) / float(allNotes.size()));
+        auto nps = to_string(1000.0 / (float(duration.count()) / float(allNotes.size())));
+        MF_DEBUG(
+            "Embeddings of " <<
+            allNotes.size() <<
+            " Notes via LLM in " <<
+            to_string(duration.count()) << "ms" <<
+            " (" << nDuration << "ms/N) " << 
+            " (" << nps << "N/s)" << 
+            endl);
+        MF_DEBUG(
+            "Embeddings size of " << allNotes.size() << " Notes: " <<
+            stringIntFormat(std::to_string(embeddingsSizeB)) << " bytes " <<
+            "(" << stringIntFormat(
+                std::to_string(
+                    int(
+                        float(embeddingsSizeB) / float(allNotes.size())))) << " bytes/N)" <<
+            endl
+        );
+        
+        // BENCHMARK:
+        // - production repository: 15.000 Notes
+        // - ~7 Notes / second
+        // - 38' for 15.000 Notes
+        // - 250MB embedding vectors cache for 15.000 Notes > 16kB/Note
+#endif
+    }
+
+    MF_DEBUG("MIND: DONE refreshing embeddings" << endl);
 }
 
 } /* namespace */

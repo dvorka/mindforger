@@ -57,6 +57,7 @@ constexpr const auto LLM_MODEL_GPT35_TURBO = "gpt-3.5-turbo";
 constexpr const auto LLM_MODEL_GPT4 = "gpt-4";
 // TODO ollama does NOT have to host llama2 > it should NOT be offered as default model
 constexpr const auto LLM_MODEL_LLAMA2 = "llama2";
+constexpr const auto LLM_MODEL_PHI = "phi";
 
 // const in constexpr makes value const
 constexpr const auto ENV_VAR_HOME = "HOME";
@@ -275,6 +276,8 @@ public:
     static constexpr const bool DEFAULT_AUTOLINKING_CASE_INSENSITIVE = true;
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
 
+    static constexpr const bool DEFAULT_SEMANTIC_SEARCH = false;
+
     static constexpr const bool UI_DEFAULT_NERD_TARGET_AUDIENCE = true;
     static const std::string DEFAULT_STARTUP_VIEW_NAME;
     static const std::string DEFAULT_UI_THEME_NAME;
@@ -342,6 +345,8 @@ private:
     bool autolinking; // enable MD autolinking
     bool autolinkingColonSplit;
     bool autolinkingCaseInsensitive;
+
+    bool semanticSearch;
 
     /*
     Wingman configuration, initialization and use:
@@ -544,6 +549,8 @@ public:
     void setAutolinkingColonSplit(bool autolinkingColonSplit) { this->autolinkingColonSplit=autolinkingColonSplit; }
     bool isAutolinkingCaseInsensitive() const { return autolinkingCaseInsensitive; }
     void setAutolinkingCaseInsensitive(bool autolinkingCaseInsensitive) { this->autolinkingCaseInsensitive=autolinkingCaseInsensitive; }
+    bool isSemanticSearch() const { return semanticSearch; }
+    void setSemanticSearch(bool semanticSearch) { this->semanticSearch=semanticSearch; }
     unsigned int getMd2HtmlOptions() const { return md2HtmlOptions; }
     AssociationAssessmentAlgorithm getAaAlgorithm() const { return aaAlgorithm; }
     void setAaAlgorithm(AssociationAssessmentAlgorithm aaa) { aaAlgorithm = aaa; }

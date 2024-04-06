@@ -195,6 +195,7 @@ public slots:
     void doActionMindSleep();
     void doActionMindToggleThink();
     void doActionMindToggleAutolink();
+    void doActionMindToggleSemanticSearch();
     void doActionMindLearnRepository();
     void doActionMindLearnFile();
     void doActionMindRelearn(QString path);

@@ -147,9 +147,9 @@ build: clean-app ../app/mindforger ## build production MindForger application bi
 
 
 .PHONY: build-dev
-build-dev: clean-app ## build development MindForger application binary
+build-dev: clean-app ## build development MindForger application binary w/ debug info
 	@echo "Building DEV MindForger executable..."
-	cd .. && qmake -r mindforger.pro DEFINES+=DO_MF_DEBUG && make -j $(CPU_CORES) ; cd ..
+	cd .. && qmake -r mindforger.pro CONFIG+=debug DEFINES+=DO_MF_DEBUG && make -j $(CPU_CORES) ; cd ..
 ifeq ($(UNAME), Darwin)
 	@echo "\nIf build succeeded, then MindForger executable can be found in:\n  app/mindforger.app/Contents/MacOS/mindforger"
 	ls -al ../app/mindforger.app/Contents/MacOS/mindforger
@@ -202,6 +202,13 @@ else
 	cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/library-trainer
 	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/computer-hw.md
 	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/bug-copy-image
+endif
+
+run-gdb: build-dev ## run MindForger using gdb
+ifeq ($(UNAME), Darwin)
+	cd ../app/mindforger.app/Contents/MacOS && ./mindforger /Users/dvorka/mf-devel/mf-copy
+else
+	cd ../app && pwd && gdb --args ./mindforger /home/dvorka/mf-devel/library-trainer
 endif
 
 #

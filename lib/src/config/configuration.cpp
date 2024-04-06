@@ -39,7 +39,7 @@ const string Configuration::DEFAULT_UI_HTML_CSS_THEME = string{UI_DEFAULT_HTML_C
 const string Configuration::DEFAULT_EDITOR_FONT= string{UI_DEFAULT_EDITOR_FONT};
 const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
 const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OPENAI = string{LLM_MODEL_GPT35_TURBO};
-const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OLLAMA = string{LLM_MODEL_LLAMA2};
+const string Configuration::DEFAULT_WINGMAN_LLM_MODEL_OLLAMA = string{LLM_MODEL_PHI};
 
 Configuration::Configuration()
     : asyncMindThreshold{},
@@ -51,6 +51,7 @@ Configuration::Configuration()
       autolinking{DEFAULT_AUTOLINKING},
       autolinkingColonSplit{},
       autolinkingCaseInsensitive{},
+      semanticSearch{DEFAULT_SEMANTIC_SEARCH},
       wingmanProvider{DEFAULT_WINGMAN_LLM_PROVIDER},
       wingmanOpenAiApiKey{},
       wingmanOpenAiLlm{DEFAULT_WINGMAN_LLM_MODEL_OPENAI},
@@ -151,6 +152,7 @@ void Configuration::clear()
     autolinking = DEFAULT_AUTOLINKING;
     autolinkingColonSplit = DEFAULT_AUTOLINKING_COLON_SPLIT;
     autolinkingCaseInsensitive = DEFAULT_AUTOLINKING_CASE_INSENSITIVE;
+    semanticSearch = DEFAULT_SEMANTIC_SEARCH;
     wingmanProvider = DEFAULT_WINGMAN_LLM_PROVIDER;
     wingmanOpenAiApiKey.clear();
     wingmanOpenAiLlm = DEFAULT_WINGMAN_LLM_MODEL_OPENAI;

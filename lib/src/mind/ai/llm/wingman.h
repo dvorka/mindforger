@@ -72,7 +72,7 @@ enum WingmanStatusCode {
 
 /**
  * Wingman chat request command pattern must be used as asynchronous requests.
- * As it annot handle that many parameters this structure is used.
+ * As it cannot handle that many parameters this structure is used.
  */
 struct CommandWingmanChat {
     std::string prompt;
@@ -83,6 +83,19 @@ struct CommandWingmanChat {
     int promptTokens;
     int answerTokens;
     std::string answerMarkdown;
+};
+
+/**
+ * Wingman embeddings request command pattern must be used as asynchronous requests.
+ * As it vannot handle that many parameters this structure is used.
+ */
+struct CommandWingmanEmbeddings {
+    std::string prompt;
+    std::string httpResponse;
+    WingmanStatusCode status;
+    std::string errorMessage;
+    std::string answerLlmModel;
+    std::vector<float> answerEmbeddings;
 };
 
 
@@ -172,6 +185,11 @@ public:
      * @brief Chat with LLM model specified by the 'command'.
      */
     virtual void chat(CommandWingmanChat& command) = 0;
+
+    /**
+     * @brief Get document embeddings for given prompt.
+     */
+    virtual void embeddings(CommandWingmanEmbeddings& command) = 0;
 };
 
 }

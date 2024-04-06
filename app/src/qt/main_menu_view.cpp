@@ -109,6 +109,12 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindAutolink->setVisible(false);
 #endif
 
+    // if Wingman is not configured and/or capable, then dialog with error message is shown (unable to detect it here)
+    actionMindSemanticSearch = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Semantic Search"), mainWindow);
+    actionMindSemanticSearch->setCheckable(true);
+    actionMindSemanticSearch->setStatusTip(tr("Use Wingman LLM to search for similar Notes (associations) using text embeddings..."));
+    actionMindSemanticSearch->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_S));    
+
     actionMindWingman = new QAction(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman LLM"), mainWindow);
     actionMindWingman->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Slash));
     actionMindWingman->setStatusTip(tr("Open Wingman dialog..."));
@@ -205,6 +211,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addSeparator();
     menuMind->addAction(actionMindThink);
     menuMind->addAction(actionMindAutolink);
+    menuMind->addAction(actionMindSemanticSearch);
     menuMind->addAction(actionMindWingman);
     menuMind->addAction(actionMindTool);
     menuMind->addAction(actionMindScope);

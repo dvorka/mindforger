@@ -45,8 +45,9 @@ private:
     std::string url;
     std::vector<std::string> llmModels;
 
-    void curlListModels();
-    void curlGet(CommandWingmanChat& command);
+    void listModelsHttpGet();
+    void chatHttpPost(CommandWingmanChat& command);
+    void embeddingsHttpPost(CommandWingmanEmbeddings& command);
 
 public:
     explicit OllamaWingman(const std::string& url);
@@ -58,6 +59,7 @@ public:
 
     virtual std::vector<std::string>& listModels() override;
     virtual void chat(CommandWingmanChat& command) override;
+    virtual void embeddings(CommandWingmanEmbeddings& command) override;
 };
 
 }

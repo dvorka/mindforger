@@ -77,6 +77,9 @@ public:
     QAction* actionMindRemember;
     QAction* actionMindThink;
     QAction* actionMindAutolink;
+#ifdef DO_MF_DEBUG
+    QAction* actionMindSemanticSearch;
+#endif
     QAction* actionMindWingman;
     QAction* actionMindTool;
     QAction* actionMindScope;

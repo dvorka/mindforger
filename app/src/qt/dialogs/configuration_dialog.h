@@ -90,9 +90,9 @@ private:
     Configuration& config;
 
     QLabel* helpLabel;
-    QLabel* configuredLabel;
     QLabel* apiKeyLabel;
     QLineEdit* apiKeyEdit;
+    QPushButton* refreshLlmModelsButton;
     QPushButton* setOpenAiButton;
     QPushButton* clearApiKeyButton;
     QLabel* llmModelsLabel;
@@ -104,6 +104,10 @@ public:
 
     void refresh();
     void save();
+
+private:
+
+QString getHelpLabelText() const;
 
 private slots:
     void setOpenAiSlot();
@@ -125,6 +129,7 @@ private:
     QLabel* helpLabel;
     QLabel* urlLabel;
     QLineEdit* urlEdit;
+    QPushButton* refreshLlmModelsButton;
     QPushButton* setOllamaButton;
     QPushButton* clearUrlButton;
     QLabel* llmModelsLabel;
@@ -138,6 +143,7 @@ public:
     void save();
 
 private slots:
+    void refreshLlmModelsSlot();
     void setOllamaSlot();
     void clearUrlSlot();
 };

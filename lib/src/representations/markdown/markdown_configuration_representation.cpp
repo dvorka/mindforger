@@ -34,6 +34,7 @@ constexpr const auto CONFIG_SETTING_MIND_TIME_SCOPE_LABEL = "* Time scope: ";
 constexpr const auto CONFIG_SETTING_MIND_TAGS_SCOPE_LABEL = "* Tags scope: ";
 constexpr const auto CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL = "* Async refresh interval (ms): ";
 constexpr const auto CONFIG_SETTING_MIND_AUTOLINKING = "* Autolinking: ";
+constexpr const auto CONFIG_SETTING_MIND_SEMANTIC_SEARCH = "* Semantic search: ";
 constexpr const auto CONFIG_SETTING_MIND_WINGMAN_PROVIDER = "* Wingman LLM provider: ";
 constexpr const auto CONFIG_SETTING_MIND_OPENAI_KEY = "* Wingman's OpenAI API key: ";
 constexpr const auto CONFIG_SETTING_MIND_OPENAI_LLM = "* Wingman's OpenAI LLM model: ";
@@ -405,6 +406,12 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         } else {
                             c.setAutolinking(false);
                         }
+                    } else if(line->find(CONFIG_SETTING_MIND_SEMANTIC_SEARCH) != std::string::npos) {
+                        if(line->find("yes") != std::string::npos) {
+                            c.setSemanticSearch(true);
+                        } else {
+                            c.setSemanticSearch(false);
+                        }
                     } else if(line->find(CONFIG_SETTING_MIND_WINGMAN_PROVIDER) != std::string::npos) {
                         if(line->find(
                             c.getWingmanLlmProviderAsString(
@@ -521,6 +528,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Sleep interval (miliseconds) between asynchronous mind-related evaluations (associations, ...)" << endl <<
          "    * Examples: 500, 1000, 3000, 5000" << endl <<
          CONFIG_SETTING_MIND_AUTOLINKING << (c?(c->isAutolinking()?"yes":"no"):(Configuration::DEFAULT_AUTOLINKING?"yes":"no")) << endl <<
+         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_MIND_SEMANTIC_SEARCH << (c?(c->isSemanticSearch()?"yes":"no"):(Configuration::DEFAULT_SEMANTIC_SEARCH?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_MIND_WINGMAN_PROVIDER << Configuration::getWingmanLlmProviderAsString(c?c->getWingmanLlmProvider():Configuration::DEFAULT_WINGMAN_LLM_PROVIDER) << endl <<
          "    * Examples: none, openai, ollama" << endl <<

@@ -48,8 +48,10 @@ public:
     }
 
     std::string getWingmanLlmModel() const { return llmModel; }
-
     virtual void chat(CommandWingmanChat& command) override;
+    virtual void embeddings(CommandWingmanEmbeddings& command) override {
+        UNUSED_ARG(command);
+    }
 
 };
 

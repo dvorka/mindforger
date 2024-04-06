@@ -685,32 +685,16 @@ ConfigurationDialog::WingmanOpenAiTab::WingmanOpenAiTab(QWidget* parent, QComboB
       parentLlmProvidersCombo{parentLlmProvidersCombo},
       config(Configuration::getInstance())
 {
-    helpLabel = new QLabel(
-        tr(
-            "<html><a href='https://openai.com'>OpenAI</a> LLM provider configuration:\n"
-            "<ul>"
-            "<li>Generate new OpenAI API key at <a href='https://platform.openai.com/api-keys'>openai.com</a>.</li>"
-            "<li>a) either set the <b>%1</b> environment variable<br/>"
-                "with the API key<br/>"
-                "b) or paste the API key below to save it <font color='#ff0000'>unencrypted</font> to<br/>"
-                "<b>.mindforger.md</b> file in your home directory.</li>"
-            "</ul>"
-        ).arg(ENV_VAR_OPENAI_API_KEY));
-    BUG: if key in config > it overrides the env var > must be visible
-    hidden ONLY if env key is set & config key is empty
-    helpLabel->setVisible(!config.canWingmanOpenAiFromEnv());
     apiKeyLabel = new QLabel(tr("<br>API key:"));
-    apiKeyLabel->setVisible(helpLabel->isVisible());
     apiKeyEdit = new QLineEdit(this);
-    apiKeyEdit->setVisible(helpLabel->isVisible());
+    refreshLlmModelsButton = new QPushButton(tr("Refresh LLM models"), this);
+    refreshLlmModelsButton->setVisible(false);
     // enabled on valid config > add ollama to drop down > choose it in drop down
     setOpenAiButton = new QPushButton(tr("Set OpenAI as LLM Provider"), this);
     setOpenAiButton->setToolTip(
         tr("Add OpenAI to the dropdown with LLM providers (if not there) and set it for use with Wingman")
     );
-    setOpenAiButton->setVisible(helpLabel->isVisible());
     clearApiKeyButton = new QPushButton(tr("Clear API Key"), this);
-    clearApiKeyButton->setVisible(helpLabel->isVisible());
     // LLM model can be choose at any time when a valid configuration is available
     llmModelsLabel = new QLabel(tr("LLM model:"));
     llmModelsCombo = new QComboBox();
@@ -718,15 +702,13 @@ ConfigurationDialog::WingmanOpenAiTab::WingmanOpenAiTab(QWidget* parent, QComboB
     llmModelsCombo->addItem(LLM_MODEL_GPT35_TURBO);
     llmModelsCombo->addItem(LLM_MODEL_GPT4);
 
-    configuredLabel = new QLabel(
-        tr("The OpenAI API key is configured using the environment variable."), this);
-    configuredLabel->setVisible(!helpLabel->isVisible());
+    // help text is created using initialized dialog fields
+    helpLabel = new QLabel(getHelpLabelText(), this);
 
     QVBoxLayout* llmProvidersLayout = new QVBoxLayout();
     llmProvidersLayout->addWidget(helpLabel);
     llmProvidersLayout->addWidget(apiKeyLabel);
     llmProvidersLayout->addWidget(apiKeyEdit);
-    llmProvidersLayout->addWidget(configuredLabel);
     llmProvidersLayout->addWidget(llmModelsLabel);
     llmProvidersLayout->addWidget(llmModelsCombo);
     QHBoxLayout* buttonsLayout = new QHBoxLayout{};
@@ -751,12 +733,54 @@ ConfigurationDialog::WingmanOpenAiTab::WingmanOpenAiTab(QWidget* parent, QComboB
 ConfigurationDialog::WingmanOpenAiTab::~WingmanOpenAiTab()
 {
     delete helpLabel;
-    delete configuredLabel;
     delete apiKeyLabel;
     delete apiKeyEdit;
+    delete refreshLlmModelsButton;
     delete clearApiKeyButton;
     delete llmModelsLabel;
     delete llmModelsCombo;
+}
+
+QString ConfigurationDialog::WingmanOpenAiTab::getHelpLabelText() const
+{
+    if(apiKeyEdit->text().size()==0) { 
+        if(config.canWingmanOpenAiFromEnv()) {
+            // key: NOT in config & IN env > ENV used
+            return tr(
+                "The OpenAI API key is configured using the environment<br/>"
+                "variable <b>%1</b>.<br/>"
+                "If you want to override it, then set the key below.<br/>"
+                "It will be saved <font color='#ff0000'>unencrypted</font> to "
+                "<b>.mindforger.md</b> configuration file in your home directory."
+            ).arg(ENV_VAR_OPENAI_API_KEY);
+        } else {
+            // key: NOT in config & NOT in env > NO key
+            return tr(
+                "<html><a href='https://openai.com'>OpenAI</a> LLM provider configuration:\n"
+                "<ul>"
+                "<li>Generate new OpenAI API key at <a href='https://platform.openai.com/api-keys'>openai.com</a>.</li>"
+                "<li>a) either set the <b>%1</b> environment variable<br/>"
+                    "with the API key<br/>"
+                    "b) or paste the API key below to save it <font color='#ff0000'>unencrypted</font> to<br/>"
+                    "<b>.mindforger.md</b> file in your home directory.</li>"
+                "</ul>"
+            ).arg(ENV_VAR_OPENAI_API_KEY);
+        }
+    } else {
+        if(config.canWingmanOpenAiFromEnv()) {
+            // key: IN config & IN env > CONFIG used
+            return tr(
+                "The OpenAI API key is configured both using the environment<br/>"
+                "variable <b>%1</b> and configuration.<br/>"
+                "Configuration overrides environment - key from below is used."
+            ).arg(ENV_VAR_OPENAI_API_KEY);
+        } else {
+            // key: IN config & NOT env > CONFIG used
+            return tr(
+                "The OpenAI API key is configured using the key below."
+            ).arg(ENV_VAR_OPENAI_API_KEY);
+        }
+    }
 }
 
 void refreshWingmanLlmProvidersComboBox(
@@ -834,6 +858,8 @@ void ConfigurationDialog::WingmanOpenAiTab::refresh()
     apiKeyEdit->setText(QString::fromStdString(config.getWingmanOpenAiApiKey()));
     llmModelsCombo->setCurrentText(
             QString::fromStdString(config.getWingmanOpenAiLlm()));
+
+    helpLabel->setText(getHelpLabelText());
 }
 
 void ConfigurationDialog::WingmanOpenAiTab::save()
@@ -868,6 +894,7 @@ ConfigurationDialog::WingmanOllamaTab::WingmanOllamaTab(QWidget* parent, QComboB
     setOllamaButton->setToolTip(
         tr("Add ollama to the dropdown with LLM providers (if not there) and set it for use with Wingman")
     );
+    refreshLlmModelsButton = new QPushButton(tr("Refresh LLM models"), this);
     clearUrlButton = new QPushButton(tr("Clear URL"), this);
     llmModelsLabel = new QLabel(tr("LLM model:"));
     llmModelsCombo = new QComboBox();
@@ -880,6 +907,7 @@ ConfigurationDialog::WingmanOllamaTab::WingmanOllamaTab(QWidget* parent, QComboB
     llmProvidersLayout->addWidget(llmModelsLabel);
     llmProvidersLayout->addWidget(llmModelsCombo);
     QHBoxLayout* buttonsLayout = new QHBoxLayout{};
+    buttonsLayout->addWidget(refreshLlmModelsButton);
     buttonsLayout->addWidget(setOllamaButton);
     buttonsLayout->addWidget(clearUrlButton);
     llmProvidersLayout->addLayout(buttonsLayout);
@@ -891,6 +919,9 @@ ConfigurationDialog::WingmanOllamaTab::WingmanOllamaTab(QWidget* parent, QComboB
     layout->addStretch();
     setLayout(layout);
 
+    QObject::connect(
+        refreshLlmModelsButton, SIGNAL(clicked()),
+        this, SLOT(refreshLlmModelsSlot()));
     QObject::connect(
         setOllamaButton, SIGNAL(clicked()),
         this, SLOT(setOllamaSlot()));
@@ -904,9 +935,17 @@ ConfigurationDialog::WingmanOllamaTab::~WingmanOllamaTab()
     delete helpLabel;
     delete urlLabel;
     delete urlEdit;
+    delete refreshLlmModelsButton;
     delete clearUrlButton;
     delete llmModelsLabel;
     delete llmModelsCombo;
+}
+
+void ConfigurationDialog::WingmanOllamaTab::refreshLlmModelsSlot()
+{
+    MF_DEBUG("Signal SLOT: refresh LLM models" << endl);
+
+    // TODO: refresh LLM models - how to call mind cleanly?
 }
 
 void ConfigurationDialog::WingmanOllamaTab::setOllamaSlot()

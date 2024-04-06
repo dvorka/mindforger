@@ -700,6 +700,10 @@ public:
      */
     Wingman* getWingman();
     CommandWingmanChat wingmanChat(CommandWingmanChat& command);
+    /**
+     * @brief Use ollama Wingman to refresh text embeddings for all Notes.
+     */
+    void refreshEmbeddings();
 
     /*
      * DIAGNOSTICS
