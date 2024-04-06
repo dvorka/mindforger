@@ -696,6 +696,8 @@ ConfigurationDialog::WingmanOpenAiTab::WingmanOpenAiTab(QWidget* parent, QComboB
                 "<b>.mindforger.md</b> file in your home directory.</li>"
             "</ul>"
         ).arg(ENV_VAR_OPENAI_API_KEY));
+    BUG: if key in config > it overrides the env var > must be visible
+    hidden ONLY if env key is set & config key is empty
     helpLabel->setVisible(!config.canWingmanOpenAiFromEnv());
     apiKeyLabel = new QLabel(tr("<br>API key:"));
     apiKeyLabel->setVisible(helpLabel->isVisible());

@@ -582,11 +582,12 @@ private:
     bool initWingmanMock();
     bool initWingmanOpenAi();
     bool initWingmanOllama();
+public:
     /**
      * @brief Initialize Wingman's LLM provider.
      */
     bool initWingman();
-public:
+
     std::string getWingmanOpenAiApiKey() const { return wingmanOpenAiApiKey; }
     void setWingmanOpenAiApiKey(std::string apiKey) { wingmanOpenAiApiKey = apiKey; }
     std::string getWingmanOpenAiLlm() const { return wingmanOpenAiLlm; }

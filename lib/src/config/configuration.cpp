@@ -457,7 +457,11 @@ bool Configuration::initWingmanOpenAi() {
             MF_DEBUG("    Wingman API key loaded from the env: " << apiKeyEnv << endl);
             wingmanOpenAiApiKey = apiKeyEnv;
         }
-
+        #ifdef DO_MF_DEBUG
+        else {
+            MF_DEBUG("    Wingman API key from config will be used: " << wingmanOpenAiApiKey << endl);
+        }
+        #endif
         // LLM model
         const char* llmModelEnv = std::getenv(ENV_VAR_OPENAI_LLM_MODEL);
         if(llmModelEnv) {

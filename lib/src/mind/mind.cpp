@@ -1455,6 +1455,7 @@ void Mind::initWingman()
     MF_DEBUG(
         "MIND Wingman init: " << boolalpha << config.isWingman() << endl
     );
+    config.initWingman();
     if(config.isWingman()) {
         MF_DEBUG("MIND Wingman initialization..." << endl);
         switch(config.getWingmanLlmProvider()) {
@@ -1464,7 +1465,7 @@ void Mind::initWingman()
                 delete wingman;
                 wingman = nullptr;
             }
-            wingman = (Wingman*)new OpenAiWingman{config.getWingmanOpenAiApiKey()};
+            wingman = (Wingman*)new OpenAiWingman{};
             wingman->setLlmModel(config.getWingmanOpenAiLlm());
             wingmanLlmProvider = config.getWingmanLlmProvider();
             return;

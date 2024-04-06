@@ -28,6 +28,8 @@
   #include "curl/curl.h"
 #endif
 
+#include "../../../config/configuration.h"
+
 #include "wingman.h"
 
 namespace m8r {
@@ -42,8 +44,8 @@ public:
     static const std::string LLM_MODEL_OPENAI_GPT4;
 
 private:
-    // API key needed to access OpenAI API endpoint
-    std::string apiKey;
+    // API key needed to access OpenAI API endpoint - read from config
+    Configuration& config;
     // Names of LLM models provided by the OpenAI API endpoint
     std::vector<std::string> llmModels;
     // Name of the LLM model which is used by Wingman - must be one of llmModels ^
@@ -52,7 +54,7 @@ private:
     void curlGet(CommandWingmanChat& command);
 
 public:
-    explicit OpenAiWingman(const std::string& apiKey);
+    explicit OpenAiWingman();
     OpenAiWingman(const OpenAiWingman&) = delete;
     OpenAiWingman(const OpenAiWingman&&) = delete;
     OpenAiWingman& operator =(const OpenAiWingman&) = delete;

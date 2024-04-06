@@ -45,13 +45,17 @@ size_t openaiCurlWriteCallback(void* contents, size_t size, size_t nmemb, std::s
  * OpenAi Wingman class implementation.
  */
 
-OpenAiWingman::OpenAiWingman(const string& apiKey)
+OpenAiWingman::OpenAiWingman()
     : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI),
-      apiKey{apiKey},
+      config(Configuration::getInstance()),
       llmModels{},
       defaultLlmModel{LLM_GPT_35_TURBO}
 {
-    MF_DEBUG("OpenAiWingman::OpenAiWingman() apiKey: " << apiKey << endl);
+    // API key to be always read from config as it might be reconfigured
+    // during MindForger run
+    MF_DEBUG(
+        "OpenAiWingman::OpenAiWingman() apiKey: '"
+        << config.getWingmanOpenAiApiKey() << "'" << endl);
 
     listModels();
 }
@@ -214,8 +218,11 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             &command.httpResponse);
 
         struct curl_slist* headers = NULL;
-        headers = curl_slist_append(headers, ("Authorization: Bearer " + apiKey).c_str());
-        headers = curl_slist_append(headers, "Content-Type: application/json");
+        headers = curl_slist_append(
+            headers,
+            ("Authorization: Bearer " + config.getWingmanOpenAiApiKey()).c_str());
+        headers = curl_slist_append(
+            headers, "Content-Type: application/json");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
         // perform the request
