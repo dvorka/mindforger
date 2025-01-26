@@ -94,6 +94,10 @@ public:
         static const Color color(0xFF,0xCD,0x8D);
         return color;
     }
+    static const Color& MF_ORANGE() {
+        static const Color color(0xED,0x70,0x14);
+        return color;
+    }
     static const Color& MF_PURPLE() {
         static const Color color(0xC7,0x9E,0xC9);
         return color;

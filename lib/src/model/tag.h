@@ -69,6 +69,10 @@ public:
         static const std::string KEY_TODO = std::string{"todo"};
         return KEY_TODO;
     }
+    static const std::string& KeyWip() {
+        static const std::string KEY_WIP= std::string{"wip"};
+        return KEY_WIP;
+    }
     static const std::string& KeyDone() {
         static const std::string KEY_DONE = std::string{"done"};
         return KEY_DONE;
