@@ -5,7 +5,7 @@
 
 /*
  * MindForger thinking notebook
- * Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
+ * Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
  *
  * This header file has been modified for MindForger as follows:
 

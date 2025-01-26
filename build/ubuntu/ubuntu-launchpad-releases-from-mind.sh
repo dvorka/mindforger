@@ -2,7 +2,7 @@
 #
 # MindForger knowledge management tool
 #
-# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -102,12 +102,9 @@
 #     trusty* xenial* bionic* (cosmic disco eoan) focal* (groovy hirsute impish)
 #     jammy* (kinetic lunar) mantic
 # - current ~ Bash tuple below || ./ubuntu-launchpad-releases-from-mind.sh <DISTRO> + manual upload:
-#     trusty xenial bionic focal jammy mantic
+#     trusty xenial bionic focal jammy noble
 # - NOT RELEASED (non-satisfying hunspell version - can be fixed by downgrade to libhunspell-dev (>= 1.6) in build/ubuntu/debian/control:
 #     trusty xenial
-#
-#
-#
 # - TODO - required hunspell version not available on older Ubuntu versions:
 #     ERROR: pbuilder-satisfydepends-dummy : Depends: libhunspell-dev (>= 1.6) but it is not going to be installed.
 #     trusty xenial bionic mantic
@@ -116,13 +113,13 @@ if [[ ${#} == 1 ]]
 then
     export UBUNTU_VERSIONS=(${1})
 else
-    export UBUNTU_VERSIONS=(kinetic)
+    export UBUNTU_VERSIONS=(noble)
 fi
 
 # environment variables
 export MAJOR_VERSION=2
 export MINOR_VERSION=0
-export PATCH_VERSION=1 # patch version is incremented for every Ubuntu build @ Launchpad
+export PATCH_VERSION=7 # patch version is incremented for every Ubuntu build @ Launchpad
 export MF_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" # semantic version
 export RM_CMD="rm -vrf "
 export CP_CMD="cp -vrf "

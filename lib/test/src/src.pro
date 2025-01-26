@@ -1,6 +1,6 @@
 # src.pro     MindForger thinking notebook
 #
-# Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software ; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -103,7 +103,7 @@ win32{
     QMAKE_CXXFLAGS += /MP
 
     # DISABLED ccache as it causes compilation error:
-    #   "C1090: PDB API call failed, error code '23'" when used 
+    #   "C1090: PDB API call failed, error code '23'" when used
     # when used w/ MS VS compiler:
     # !mfnoccache { QMAKE_CXX = ccache $$QMAKE_CXX }
 } else {
