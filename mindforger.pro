@@ -68,4 +68,9 @@ shortcutfiles.files += app/resources/gnome-shell/mindforger.desktop
 shortcutfiles.path = $$PREFIX/share/applications/
 INSTALLS += shortcutfiles
 
+# Appstream Metainfo for linux software centers
+appstreammetainfofiles.files += app/resources/linux/com.mindforger.mindforger.metainfo.xml
+appstreammetainfofiles.path = $$PREFIX/share/metainfo/
+INSTALLS += appstreammetainfofiles
+
 # eof

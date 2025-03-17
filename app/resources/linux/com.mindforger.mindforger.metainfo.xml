@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.mindforger.mindforger</id>
+
+  <name>Mindforger</name>
+  <summary>Thinking notebook and Markdown editor. </summary>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0-or-later</project_license>
+
+  <recommends>
+    <display_length compare="ge">768</display_length>
+  </recommends>
+
+  <description>
+    <p>
+      Are you drowning in information, but starving for knowledge?
+    </p>
+    <p>
+      Where do you keep your private remarks like ideas, personal plans, exam preparation notes, gift tips, how-tos, dreams, business visions, finance strategies, meeting minutes and auto coaching notes? Loads of documents, sketches and remarks spread around the file system, cloud, web and Post-it notes? Are you afraid of your knowledge privacy? Are you able to find particular remarks once you create them? Do you know how are the remarks mutually related when you browse, read or write them? No?
+    </p>
+  </description>
+
+  <launchable type="desktop-id">mindforger.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://www.mindforger.com/images/screenshots/tayr.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://www.mindforger.com/images/screenshots/knowledge-graph-navigator-light.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://www.mindforger.com/images/screenshots/tayw.png</image>
+    </screenshot>
+  </screenshots>
+</component>
