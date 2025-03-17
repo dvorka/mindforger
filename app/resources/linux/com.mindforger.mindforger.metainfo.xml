@@ -3,10 +3,19 @@
   <id>com.mindforger.mindforger</id>
 
   <name>Mindforger</name>
-  <summary>Thinking notebook and Markdown editor. </summary>
+  <summary>Thinking notebook and Markdown editor</summary>
 
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0-or-later</project_license>
+  <developer id="com.mindforger">
+    <name>Martin Dvorak</name>
+  </developer>
+
+  <url type="homepage">https://www.mindforger.com/</url>
+  <url type="bugtracker">https://github.com/dvorka/mindforger/issues</url>
+  <url type="faq">https://github.com/dvorka/mindforger/wiki/FAQs</url>
+  <url type="help">https://github.com/dvorka/mindforger/wiki</url>
+  <url type="vcs-browser">https://github.com/dvorka/mindforger</url>
 
   <recommends>
     <display_length compare="ge">768</display_length>
@@ -21,6 +30,8 @@
     </p>
   </description>
 
+  <content_rating type="oars-1.0"/>
+
   <launchable type="desktop-id">mindforger.desktop</launchable>
   <screenshots>
     <screenshot type="default">
@@ -31,6 +42,15 @@
     </screenshot>
     <screenshot>
       <image>https://www.mindforger.com/images/screenshots/tayw.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://www.mindforger.com/images/screenshots/markdown-images.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://www.mindforger.com/images/screenshots/hoisting.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://www.mindforger.com/images/screenshots/i18n.png</image>
     </screenshot>
   </screenshots>
 </component>
