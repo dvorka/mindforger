@@ -63,6 +63,16 @@ iconfiles.files += app/resources/icons/*
 iconfiles.path = $$PREFIX/share/icons/mindforger/
 INSTALLS += iconfiles
 
+# Standard location for svg icon
+linuxsvg.files += app/resources/icons/mindforger.svg
+linuxsvg.path = $$PREFIX/share/icons/hicolor/scalable/apps/
+INSTALLS += linuxsvg
+
+# Standard location for png icon
+linuxpng.files += app/resources/icons/mindforger128x128.png
+linuxpng.path = $$PREFIX/share/icons/hicolor/128x128/apps/
+INSTALLS += linuxpng
+
 linuxdesktopfiles.files += app/resources/linux/mindforger.desktop
 linuxdesktopfiles.path = $$PREFIX/share/applications/
 INSTALLS += linuxdesktopfiles
