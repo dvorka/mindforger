@@ -63,10 +63,9 @@ iconfiles.files += app/resources/icons/*
 iconfiles.path = $$PREFIX/share/icons/mindforger/
 INSTALLS += iconfiles
 
-# experiment w/ file
-shortcutfiles.files += app/resources/gnome-shell/mindforger.desktop
-shortcutfiles.path = $$PREFIX/share/applications/
-INSTALLS += shortcutfiles
+linuxdesktopfiles.files += app/resources/linux/mindforger.desktop
+linuxdesktopfiles.path = $$PREFIX/share/applications/
+INSTALLS += linuxdesktopfiles
 
 # Appstream Metainfo for linux software centers
 appstreammetainfofiles.files += app/resources/linux/com.mindforger.mindforger.metainfo.xml
