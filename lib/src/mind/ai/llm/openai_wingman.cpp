@@ -68,11 +68,117 @@ std::vector<std::string>& OpenAiWingman::listModels()
 {
     llmModels.clear();
 
-    // TODO list models using OpenAI API - will many models be confusing for user?
-    llmModels.push_back(LLM_GPT_35_TURBO);
-    llmModels.push_back(LLM_GPT_4);
+    // try to fetch models from OpenAI API
+    try {
+        listModelsHttpGet();
+    } catch (...) {
+        MF_DEBUG("OpenAiWingman::listModels() failed to fetch from API, using defaults" << endl);
+    }
+    
+    // if API call failed or returned no models, use defaults
+    if (llmModels.empty()) {
+        llmModels.push_back(LLM_GPT_35_TURBO);
+        llmModels.push_back(LLM_GPT_4);
+    }
 
     return llmModels;
+}
+
+void OpenAiWingman::listModelsHttpGet()
+{
+    string url = "https://api.openai.com/v1/models";
+    
+    MF_DEBUG("OpenAiWingman::listModelsHttpGet() url: " << url << endl);
+    
+#if !defined(__APPLE__) && !defined(_WIN32)
+    CURL* curl = curl_easy_init();
+    if (!curl) {
+        return;
+    }
+#endif
+
+    string responseString;
+    
+#if defined(_WIN32) || defined(__APPLE__)
+    QNetworkAccessManager networkManager;
+    
+    QNetworkRequest request(QUrl(QString::fromStdString(url)));
+    request.setHeader(
+        QNetworkRequest::ContentTypeHeader,
+        "application/json");
+    request.setRawHeader(
+        "Authorization",
+        "Bearer " + QString::fromStdString(config.getWingmanOpenAiApiKey()).toUtf8());
+    
+    QNetworkReply* reply = networkManager.get(request);
+    QEventLoop loop;
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+    
+    auto error = reply->error();
+    if (error != QNetworkReply::NoError) {
+        MF_DEBUG("OpenAiWingman::listModelsHttpGet() error: " << reply->errorString().toStdString() << endl);
+        reply->deleteLater();
+        return;
+    }
+    
+    QByteArray read = reply->readAll();
+    responseString = QString{read}.toStdString();
+    reply->deleteLater();
+#else
+    // CURL implementation
+    curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, openaiCurlWriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseString);
+    
+    struct curl_slist* headers = NULL;
+    headers = curl_slist_append(
+        headers,
+        ("Authorization: Bearer " + config.getWingmanOpenAiApiKey()).c_str());
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    
+    CURLcode res = curl_easy_perform(curl);
+    curl_easy_cleanup(curl);
+    curl_slist_free_all(headers);
+    
+    if (res != CURLE_OK) {
+        MF_DEBUG("OpenAiWingman::listModelsHttpGet() error: " << curl_easy_strerror(res) << endl);
+        return;
+    }
+#endif
+
+    // parse JSON response
+    nlohmann::json httpResponseJson;
+    try {
+        httpResponseJson = nlohmann::json::parse(responseString);
+    } catch (...) {
+        MF_DEBUG(
+            "Error: unable to parse OpenAI models JSON response:" << endl <<
+            "'" << responseString << "'" << endl
+        );
+        return;
+    }
+    
+    MF_DEBUG(
+        "OpenAiWingman::listModelsHttpGet() parsed response:" << endl
+        << ">>>"
+        << httpResponseJson.dump(4)
+        << "<<<"
+        << endl);
+    
+    if (httpResponseJson.contains("data")) {
+        for (const auto& item : httpResponseJson["data"].items()) {
+            if (item.value().contains("id")) {
+                string modelId = item.value()["id"];
+                // filter to only include GPT models (optional)
+                if (modelId.find("gpt") != string::npos) {
+                    llmModels.push_back(modelId);
+                    MF_DEBUG("  Added model: " << modelId << endl);
+                }
+            }
+        }
+    }
 }
 
 // TODO refactor to parent class so that all wingmans can use it

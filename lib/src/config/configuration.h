@@ -59,6 +59,10 @@ constexpr const auto LLM_MODEL_GPT4 = "gpt-4";
 constexpr const auto LLM_MODEL_LLAMA2 = "llama2";
 constexpr const auto LLM_MODEL_PHI = "phi";
 
+// Default URLs for LLM providers
+constexpr const auto DEFAULT_OLLAMA_URL = "http://localhost:11434";
+constexpr const auto DEFAULT_OPENAI_API_URL = "https://api.openai.com/v1";
+
 // const in constexpr makes value const
 constexpr const auto ENV_VAR_HOME = "HOME";
 constexpr const auto ENV_VAR_DISPLAY = "DISPLAY";
@@ -185,6 +189,26 @@ struct KnowledgeTool
 // Wingman LLM models API keys
 constexpr const auto ENV_VAR_OPENAI_API_KEY = "MINDFORGER_OPENAI_API_KEY";
 constexpr const auto ENV_VAR_OPENAI_LLM_MODEL = "MINDFORGER_OPENAI_LLM_MODEL";
+
+/**
+ * @brief LLM Provider Configuration
+ * 
+ * Represents configuration for a single Large Language Model provider.
+ * Supports OpenAI and ollama providers with provider-specific fields.
+ */
+struct LlmProviderConfig {
+    std::string id;                    // unique identifier (e.g., "openai-1", "ollama-local")
+    std::string displayName;           // user-friendly name (e.g., "OpenAI GPT-4", "Local Ollama")
+    WingmanLlmProviders providerType;  // WINGMAN_PROVIDER_OPENAI, WINGMAN_PROVIDER_OLLAMA
+    std::string url;                   // for ollama: base URL, for OpenAI: empty
+    std::string apiKey;                // for OpenAI: API key, for ollama: empty
+    std::string llmModel;              // model name (e.g., "gpt-4", "llama2")
+    bool isValid;                      // whether configuration was validated/probed
+    
+    LlmProviderConfig() 
+        : providerType(WINGMAN_PROVIDER_NONE), 
+          isValid(false) {}
+};
 
 // improve platform/language specific
 constexpr const auto DEFAULT_NEW_OUTLINE = "# New Markdown File\n\nThis is a new Markdown file created by MindForger.\n\n#Section 1\nThe first section.\n\n";
@@ -393,6 +417,10 @@ private:
     std::string wingmanOpenAiLlm;
     std::string wingmanOllamaUrl; // base URL like http://localhost:11434
     std::string wingmanOllamaLlm;
+
+    // Wingman2: collection of configured LLM providers
+    std::vector<LlmProviderConfig> llmProviders;
+    std::string activeLlmProviderId;
 
     TimeScope timeScope;
     std::string timeScopeAsString;
@@ -603,6 +631,67 @@ public:
     void setWingmanOllamaUrl(std::string url) { wingmanOllamaUrl = url; }
     std::string getWingmanOllamaLlm() const { return wingmanOllamaLlm; }
     void setWingmanOllamaLlm(std::string llm) { wingmanOllamaLlm = llm; }
+
+    /*
+     * Wingman2 LLM Provider Management
+     */
+    
+    /**
+     * @brief Get all configured LLM providers
+     */
+    std::vector<LlmProviderConfig>& getLlmProviders() { return llmProviders; }
+    
+    /**
+     * @brief Get LLM provider by ID
+     * @return Pointer to provider or nullptr if not found
+     */
+    LlmProviderConfig* getLlmProviderById(const std::string& id);
+    
+    /**
+     * @brief Get the active LLM provider
+     * @return Pointer to active provider or nullptr if none set
+     */
+    LlmProviderConfig* getActiveLlmProvider();
+    
+    /**
+     * @brief Add a new LLM provider configuration
+     * @param provider The provider configuration to add
+     */
+    void addLlmProvider(const LlmProviderConfig& provider);
+    
+    /**
+     * @brief Update an existing LLM provider
+     * @param id Provider ID to update
+     * @param provider Updated configuration
+     */
+    void updateLlmProvider(const std::string& id, const LlmProviderConfig& provider);
+    
+    /**
+     * @brief Remove an LLM provider
+     * @param id Provider ID to remove
+     */
+    void removeLlmProvider(const std::string& id);
+    
+    /**
+     * @brief Set the active LLM provider
+     * @param id Provider ID to activate
+     */
+    void setActiveLlmProvider(const std::string& id);
+    
+    /**
+     * @brief Probe/validate OpenAI provider configuration
+     */
+    bool probeOpenAiProvider(const std::string& apiKey, const std::string& model, std::string& errorMessage);
+    
+    /**
+     * @brief Probe/validate ollama provider configuration
+     */
+    bool probeOllamaProvider(const std::string& url, const std::string& model, std::string& errorMessage);
+    
+    /**
+     * @brief Migrate from legacy Wingman configuration to Wingman2
+     */
+    void migrateFromLegacyWingmanConfig();
 
     /**
      * @brief Check whether a Wingman LLM provider is ready from

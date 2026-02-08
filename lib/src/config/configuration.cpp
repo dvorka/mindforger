@@ -574,4 +574,146 @@ bool Configuration::isWingman() {
     return WingmanLlmProviders::WINGMAN_PROVIDER_NONE==wingmanProvider?false:true;
 }
 
+/*
+ * Wingman2 LLM Provider Management
+ */
+
+LlmProviderConfig* Configuration::getLlmProviderById(const string& id) {
+    for (auto& provider : llmProviders) {
+        if (provider.id == id) {
+            return &provider;
+        }
+    }
+    return nullptr;
+}
+
+LlmProviderConfig* Configuration::getActiveLlmProvider() {
+    if (activeLlmProviderId.empty()) {
+        return nullptr;
+    }
+    return getLlmProviderById(activeLlmProviderId);
+}
+
+void Configuration::addLlmProvider(const LlmProviderConfig& provider) {
+    llmProviders.push_back(provider);
+    MF_DEBUG("Configuration::addLlmProvider() added: " << provider.id << endl);
+}
+
+void Configuration::updateLlmProvider(const string& id, const LlmProviderConfig& provider) {
+    for (auto& p : llmProviders) {
+        if (p.id == id) {
+            p = provider;
+            MF_DEBUG("Configuration::updateLlmProvider() updated: " << id << endl);
+            return;
+        }
+    }
+}
+
+void Configuration::removeLlmProvider(const string& id) {
+    llmProviders.erase(
+        std::remove_if(
+            llmProviders.begin(), 
+            llmProviders.end(),
+            [&id](const LlmProviderConfig& p) { return p.id == id; }),
+        llmProviders.end());
+    
+    // if active provider was removed, clear active provider
+    if (activeLlmProviderId == id) {
+        activeLlmProviderId.clear();
+    }
+    
+    MF_DEBUG("Configuration::removeLlmProvider() removed: " << id << endl);
+}
+
+void Configuration::setActiveLlmProvider(const string& id) {
+    activeLlmProviderId = id;
+    MF_DEBUG("Configuration::setActiveLlmProvider() set to: " << id << endl);
+}
+
+bool Configuration::probeOpenAiProvider(
+    const string& apiKey, 
+    const string& model, 
+    string& errorMessage) 
+{
+    // basic validation
+    if (apiKey.empty() && !canWingmanOpenAiFromEnv()) {
+        errorMessage = "API key is required for OpenAI provider";
+        return false;
+    }
+    
+    if (model.empty()) {
+        errorMessage = "Model name is required";
+        return false;
+    }
+    
+    // TODO: actually test the connection by calling OpenAI API
+    // For now, just validate the inputs
+    MF_DEBUG("Configuration::probeOpenAiProvider() validated: " << model << endl);
+    return true;
+}
+
+bool Configuration::probeOllamaProvider(
+    const string& url, 
+    const string& model, 
+    string& errorMessage) 
+{
+    // basic validation
+    if (url.empty()) {
+        errorMessage = "URL is required for ollama provider";
+        return false;
+    }
+    
+    if (model.empty()) {
+        errorMessage = "Model name is required";
+        return false;
+    }
+    
+    // TODO: actually test the connection by calling ollama API
+    // For now, just validate the inputs
+    MF_DEBUG("Configuration::probeOllamaProvider() validated: " << url << ", " << model << endl);
+    return true;
+}
+
+void Configuration::migrateFromLegacyWingmanConfig() {
+    // check if already migrated or no legacy config
+    if (!llmProviders.empty()) {
+        return;
+    }
+    
+    if (wingmanProvider == WINGMAN_PROVIDER_NONE) {
+        return;
+    }
+    
+    MF_DEBUG("Configuration::migrateFromLegacyWingmanConfig() migrating..." << endl);
+    
+    // migrate based on provider type
+    if (wingmanProvider == WINGMAN_PROVIDER_OPENAI && canWingmanOpenAi()) {
+        LlmProviderConfig provider;
+        provider.id = "legacy-openai";
+        provider.displayName = "OpenAI (migrated)";
+        provider.providerType = WINGMAN_PROVIDER_OPENAI;
+        provider.apiKey = wingmanOpenAiApiKey;
+        provider.llmModel = wingmanOpenAiLlm;
+        provider.isValid = true;
+        
+        addLlmProvider(provider);
+        setActiveLlmProvider(provider.id);
+        
+        MF_DEBUG("Configuration::migrateFromLegacyWingmanConfig() migrated OpenAI" << endl);
+    } else if (wingmanProvider == WINGMAN_PROVIDER_OLLAMA && canWingmanOllama()) {
+        LlmProviderConfig provider;
+        provider.id = "legacy-ollama";
+        provider.displayName = "ollama (migrated)";
+        provider.providerType = WINGMAN_PROVIDER_OLLAMA;
+        provider.url = wingmanOllamaUrl;
+        provider.llmModel = wingmanOllamaLlm;
+        provider.isValid = true;
+        
+        addLlmProvider(provider);
+        setActiveLlmProvider(provider.id);
+        
+        MF_DEBUG("Configuration::migrateFromLegacyWingmanConfig() migrated ollama" << endl);
+    }
+}
+
 } // m8r namespace

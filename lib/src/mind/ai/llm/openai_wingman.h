@@ -52,6 +52,7 @@ private:
     std::string defaultLlmModel;
 
     void curlGet(CommandWingmanChat& command);
+    void listModelsHttpGet();
 
 public:
     explicit OpenAiWingman();

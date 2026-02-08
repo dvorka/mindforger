@@ -150,7 +150,7 @@ void OllamaWingman::listModelsHttpGet() {
                     MF_DEBUG("    name: " << item.value()["name"] << endl);
                     string llmModelName{item.value()["name"]};
                     // add model to list
-                    this->llmModels.push_back(llmModel);
+                    this->llmModels.push_back(llmModelName);
                 }
             }
         }

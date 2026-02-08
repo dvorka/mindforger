@@ -41,6 +41,7 @@ class ConfigurationDialog : public QDialog
     class WingmanTab;
     class WingmanOpenAiTab;
     class WingmanOllamaTab;
+    class Wingman2Tab;
 
 private:
     QTabWidget* tabWidget;
@@ -51,6 +52,7 @@ private:
     NavigatorTab* navigatorTab;
     MindTab* mindTab;
     WingmanTab* wingmanTab;
+    Wingman2Tab* wingman2Tab;
 
     QDialogButtonBox *buttonBox;
 
@@ -355,6 +357,46 @@ public:
     // there and back is handled by Dialog's access to this class & Config singleton
     void refresh();
     void save();
+};
+
+/**
+ * @brief Wingman2 tab for managing LLM providers.
+ */
+class ConfigurationDialog::Wingman2Tab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    Configuration& config;
+
+    QLabel* helpLabel;
+    QComboBox* llmProvidersCombo;
+    QPushButton* addProviderButton;
+    
+    QGroupBox* providerDetailsGroup;
+    QLabel* providerTypeLabel;
+    QLabel* providerTypeValue;
+    QLabel* modelLabel;
+    QLabel* modelValue;
+    QLabel* statusLabel;
+    QLabel* statusValue;
+    QPushButton* editButton;
+    QPushButton* removeButton;
+    QPushButton* testButton;
+
+public:
+    explicit Wingman2Tab(QWidget* parent);
+    ~Wingman2Tab();
+
+    void refresh();
+    void save();
+
+private slots:
+    void handleAddProvider();
+    void handleEditProvider();
+    void handleRemoveProvider();
+    void handleTestConnection();
+    void handleProviderSelectionChanged(int index);
 };
 
 }
