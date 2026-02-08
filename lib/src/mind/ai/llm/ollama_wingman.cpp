@@ -1,7 +1,7 @@
 /*
  ollama_wingman.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -52,9 +52,9 @@ OllamaWingman::~OllamaWingman()
 }
 
 void OllamaWingman::listModelsHttpGet() {
-    string url = 
+    string url =
         this->url +
-        (stringEndsWith(this->url, "/")?"":"/") + 
+        (stringEndsWith(this->url, "/")?"":"/") +
         "api/tags";
 
     MF_DEBUG("    ollama: curlGet() url: " << url << endl);
@@ -155,7 +155,7 @@ void OllamaWingman::listModelsHttpGet() {
             }
         }
     }
-    MF_DEBUG("    DONE ollama: curlGet() url: " << url << endl); 
+    MF_DEBUG("    DONE ollama: curlGet() url: " << url << endl);
 }
 
 /**
@@ -192,9 +192,9 @@ void OllamaWingman::chatHttpPost(CommandWingmanChat& command) {
 
         string requestJSonStr = requestJSon.dump(4);
 
-        string url = 
+        string url =
             this->url +
-            (stringEndsWith(this->url, "/")?"":"/") + 
+            (stringEndsWith(this->url, "/")?"":"/") +
             "api/generate";
 
         MF_DEBUG(
@@ -421,9 +421,9 @@ void OllamaWingman::embeddingsHttpPost(CommandWingmanEmbeddings& command) {
 
         string requestJSonStr = requestJSon.dump(4);
 
-        string url = 
+        string url =
             this->url +
-            (stringEndsWith(this->url, "/")?"":"/") + 
+            (stringEndsWith(this->url, "/")?"":"/") +
             "api/embeddings";
 
         MF_DEBUG(

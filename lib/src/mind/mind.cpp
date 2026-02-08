@@ -1,7 +1,7 @@
 /*
  mind.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -1600,7 +1600,7 @@ void Mind::refreshEmbeddings()
     if(getWingman()) {
         vector<Note*> allNotes{};
         memory.getAllNotes(allNotes);
-#ifdef MF_DEBUG        
+#ifdef MF_DEBUG
         int embeddingsSizeB=0;
         int counter=0;
         MF_DEBUG("  Embedding for " << allNotes.size() << " Notes:" << endl);
@@ -1628,7 +1628,7 @@ void Mind::refreshEmbeddings()
         }
 #ifdef MF_DEBUG
         auto endTs = chrono::high_resolution_clock::now();
-        auto duration = chrono::duration_cast<chrono::milliseconds>(endTs - beginTs);        
+        auto duration = chrono::duration_cast<chrono::milliseconds>(endTs - beginTs);
         auto nDuration = to_string(float(duration.count()) / float(allNotes.size()));
         auto nps = to_string(1000.0 / (float(duration.count()) / float(allNotes.size())));
         MF_DEBUG(
@@ -1636,8 +1636,8 @@ void Mind::refreshEmbeddings()
             allNotes.size() <<
             " Notes via LLM in " <<
             to_string(duration.count()) << "ms" <<
-            " (" << nDuration << "ms/N) " << 
-            " (" << nps << "N/s)" << 
+            " (" << nDuration << "ms/N) " <<
+            " (" << nps << "N/s)" <<
             endl);
         MF_DEBUG(
             "Embeddings size of " << allNotes.size() << " Notes: " <<
@@ -1648,7 +1648,7 @@ void Mind::refreshEmbeddings()
                         float(embeddingsSizeB) / float(allNotes.size())))) << " bytes/N)" <<
             endl
         );
-        
+
         // BENCHMARK:
         // - production repository: 15.000 Notes
         // - ~7 Notes / second

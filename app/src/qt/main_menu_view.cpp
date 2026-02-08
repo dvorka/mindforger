@@ -1,7 +1,7 @@
  /*
  main_menu_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2024 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -113,7 +113,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindSemanticSearch = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Semantic Search"), mainWindow);
     actionMindSemanticSearch->setCheckable(true);
     actionMindSemanticSearch->setStatusTip(tr("Use Wingman LLM to search for similar Notes (associations) using text embeddings..."));
-    actionMindSemanticSearch->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_S));    
+    actionMindSemanticSearch->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
 
     actionMindWingman = new QAction(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman LLM"), mainWindow);
     actionMindWingman->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Slash));
