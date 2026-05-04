@@ -27,3 +27,4 @@ deps/mitie
 deps/cmark-gfm
 snapcraft.yaml
 *.snap
+.qtc_clangd/
