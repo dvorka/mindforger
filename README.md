@@ -31,6 +31,14 @@ MindForger is open, free, well performing Markdown editor / IDE which respects y
 ## Features
 MindForger **features overview**: [open](https://github.com/dvorka/mindforger?tab=GPL-2.0-1-ov-file#readme), [free](https://www.mindforger.com/#floss), <!-- [OpenAI GPT integrated](https://www.mindforger.com/#llm), --> knowledge manager, Markdown editor (math, diagrams, images, table of contents generator), [outliner](https://www.youtube.com/watch?v=LUqavHfKhnc&list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&index=4), spell-check, [Markdown IDE](https://www.mindforger.com/#features) (multi-document workspace, section refactoring, cloning, scopes and stencils), [organizer](https://www.youtube.com/watch?v=Tje2mso7jNY&list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&index=11) (Eisenhower matrix, Kanban), [knowledge graph navigator](https://www.youtube.com/watch?v=ZbQmZ1fKpxI&list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&index=14), knowledge autolinking, think as you browse, think as you write, find by name/tag/text/regexp, find similar sections (associations), tagging, emojis, checklists, recent sections, [external section editor](https://www.youtube.com/watch?v=SLuvfDRyUrM&list=PLkTlgXXVRbUDdvysdslnAt_mU15oNPWNS&index=12), themes, internationalization, export (CSV with OHE for machine learning, HTML) and import (TWiki).
 
+## Packages
+
+<table><tr><td>
+  <a href="https://repology.org/project/mindforger/versions">
+    <img src="https://repology.org/badge/vertical-allrepos/mindforger.svg?columns=1" alt="Packaging status" align="left">
+  </a>
+</td></tr></table>
+
 ## Installation
 Install:
 
