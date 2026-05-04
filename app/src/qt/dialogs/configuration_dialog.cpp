@@ -1025,8 +1025,8 @@ ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
     wingmanTabWidget = new QTabWidget;
     wingmanOpenAiTab = new WingmanOpenAiTab{this, llmProvidersCombo};
     wingmanOllamaTab = new WingmanOllamaTab{this, llmProvidersCombo};
-    wingmanTabWidget->addTab(wingmanOpenAiTab, tr("OpenAI"));
     wingmanTabWidget->addTab(wingmanOllamaTab, tr("ollama"));
+    wingmanTabWidget->addTab(wingmanOpenAiTab, tr("OpenAI"));
 
     // assembly
     QVBoxLayout* nLayout = new QVBoxLayout{this};
@@ -1137,34 +1137,36 @@ ConfigurationDialog::Wingman2Tab::Wingman2Tab(QWidget* parent)
       config(Configuration::getInstance())
 {
     helpLabel = new QLabel(
-        tr("Configure Large Language Model (LLM) to be used by Wingman"), this);
-    
-    QLabel* providerLabel = new QLabel(tr("LLM Provider:"), this);
+        tr("Wingman LLMs"), this);
+
+    QLabel* providerLabel = new QLabel(tr("Use LLM:"), this);
     llmProvidersCombo = new QComboBox(this);
-    
-    addProviderButton = new QPushButton(tr("Add Provider"), this);
-    
-    QHBoxLayout* providerLayout = new QHBoxLayout();
-    providerLayout->addWidget(providerLabel);
-    providerLayout->addWidget(llmProvidersCombo, 1);
-    providerLayout->addWidget(addProviderButton);
-    
+
+    addProviderButton = new QPushButton(tr(" Add LLM "), this);
+
+    QHBoxLayout* llmRow1Layout = new QHBoxLayout();
+    llmRow1Layout->addWidget(providerLabel);
+    llmRow1Layout->addWidget(llmProvidersCombo, 1);
+
+    QHBoxLayout* llmRow2Layout = new QHBoxLayout();
+    llmRow2Layout->addStretch();
+    llmRow2Layout->addWidget(addProviderButton);
+
     // provider details group
-    providerDetailsGroup = new QGroupBox(tr("Selected Provider Details"), this);
-    
-    QLabel* typeLabel = new QLabel(tr("Provider Type:"), this);
+    providerDetailsGroup = new QGroupBox(tr("Selected LLM details"), this);
+
+    QLabel* typeLabel = new QLabel(tr("Provider type:"), this);
     providerTypeValue = new QLabel("", this);
-    
+
     QLabel* mLabel = new QLabel(tr("Model:"), this);
     modelValue = new QLabel("", this);
-    
+
     QLabel* sLabel = new QLabel(tr("Status:"), this);
     statusValue = new QLabel("", this);
-    
-    editButton = new QPushButton(tr("Edit"), this);
-    removeButton = new QPushButton(tr("Remove"), this);
+
     testButton = new QPushButton(tr("Test Connection"), this);
-    
+    removeButton = new QPushButton(tr("Remove"), this);
+
     QGridLayout* detailsLayout = new QGridLayout();
     detailsLayout->addWidget(typeLabel, 0, 0);
     detailsLayout->addWidget(providerTypeValue, 0, 1);
@@ -1172,33 +1174,33 @@ ConfigurationDialog::Wingman2Tab::Wingman2Tab(QWidget* parent)
     detailsLayout->addWidget(modelValue, 1, 1);
     detailsLayout->addWidget(sLabel, 2, 0);
     detailsLayout->addWidget(statusValue, 2, 1);
-    
+
     QHBoxLayout* buttonLayout = new QHBoxLayout();
-    buttonLayout->addWidget(editButton);
-    buttonLayout->addWidget(removeButton);
     buttonLayout->addWidget(testButton);
+    buttonLayout->addWidget(removeButton);
     buttonLayout->addStretch();
-    
+
     QVBoxLayout* groupLayout = new QVBoxLayout();
     groupLayout->addLayout(detailsLayout);
     groupLayout->addLayout(buttonLayout);
-    
+
     providerDetailsGroup->setLayout(groupLayout);
     providerDetailsGroup->setVisible(false);
-    
+
     // main layout
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(helpLabel);
     mainLayout->addSpacing(10);
-    mainLayout->addLayout(providerLayout);
+    mainLayout->addLayout(llmRow1Layout);
+    mainLayout->addLayout(llmRow2Layout);
     mainLayout->addWidget(providerDetailsGroup);
     mainLayout->addStretch();
-    
+
     setLayout(mainLayout);
-    
+
     // signals
     QObject::connect(
-        addProviderButton, &QPushButton::clicked, 
+        addProviderButton, &QPushButton::clicked,
         this, &Wingman2Tab::handleAddProvider);
     QObject::connect(
         editButton, &QPushButton::clicked,
@@ -1222,19 +1224,19 @@ void ConfigurationDialog::Wingman2Tab::refresh()
 {
     // populate providers combo
     llmProvidersCombo->clear();
-    
+
     vector<LlmProviderConfig>& providers = config.getLlmProviders();
     if (providers.empty()) {
         providerDetailsGroup->setVisible(false);
         return;
     }
-    
+
     for (const auto& provider : providers) {
         llmProvidersCombo->addItem(
             QString::fromStdString(provider.displayName),
             QString::fromStdString(provider.id));
     }
-    
+
     // select active provider
     LlmProviderConfig* activeProvider = config.getActiveLlmProvider();
     if (activeProvider) {
@@ -1244,7 +1246,7 @@ void ConfigurationDialog::Wingman2Tab::refresh()
             llmProvidersCombo->setCurrentIndex(index);
         }
     }
-    
+
     handleProviderSelectionChanged(llmProvidersCombo->currentIndex());
 }
 
@@ -1263,7 +1265,7 @@ void ConfigurationDialog::Wingman2Tab::handleAddProvider()
     AddLlmProviderDialog addDialog(this);
     if (addDialog.exec() == QDialog::Accepted) {
         WingmanLlmProviders providerType = addDialog.getSelectedProviderType();
-        
+
         if (providerType == WINGMAN_PROVIDER_OPENAI) {
             OpenAiConfigDialog configDialog(this);
             if (configDialog.exec() == QDialog::Accepted) {
@@ -1285,15 +1287,15 @@ void ConfigurationDialog::Wingman2Tab::handleEditProvider()
     if (llmProvidersCombo->count() == 0) {
         return;
     }
-    
+
     QString providerId = llmProvidersCombo->itemData(
         llmProvidersCombo->currentIndex()).toString();
     LlmProviderConfig* provider = config.getLlmProviderById(providerId.toStdString());
-    
+
     if (!provider) {
         return;
     }
-    
+
     // TODO: implement edit functionality
     QMessageBox::information(
         this,
@@ -1306,16 +1308,16 @@ void ConfigurationDialog::Wingman2Tab::handleRemoveProvider()
     if (llmProvidersCombo->count() == 0) {
         return;
     }
-    
+
     QString providerId = llmProvidersCombo->itemData(
         llmProvidersCombo->currentIndex()).toString();
-    
+
     QMessageBox::StandardButton reply = QMessageBox::question(
         this,
         tr("Remove Provider"),
         tr("Are you sure you want to remove this LLM provider configuration?"),
         QMessageBox::Yes | QMessageBox::No);
-    
+
     if (reply == QMessageBox::Yes) {
         config.removeLlmProvider(providerId.toStdString());
         refresh();
@@ -1327,18 +1329,18 @@ void ConfigurationDialog::Wingman2Tab::handleTestConnection()
     if (llmProvidersCombo->count() == 0) {
         return;
     }
-    
+
     QString providerId = llmProvidersCombo->itemData(
         llmProvidersCombo->currentIndex()).toString();
     LlmProviderConfig* provider = config.getLlmProviderById(providerId.toStdString());
-    
+
     if (!provider) {
         return;
     }
-    
+
     string errorMessage;
     bool success = false;
-    
+
     if (provider->providerType == WINGMAN_PROVIDER_OPENAI) {
         success = config.probeOpenAiProvider(
             provider->apiKey, provider->llmModel, errorMessage);
@@ -1346,7 +1348,7 @@ void ConfigurationDialog::Wingman2Tab::handleTestConnection()
         success = config.probeOllamaProvider(
             provider->url, provider->llmModel, errorMessage);
     }
-    
+
     if (success) {
         QMessageBox::information(
             this,
@@ -1367,15 +1369,15 @@ void ConfigurationDialog::Wingman2Tab::handleProviderSelectionChanged(int index)
         providerDetailsGroup->setVisible(false);
         return;
     }
-    
+
     QString providerId = llmProvidersCombo->itemData(index).toString();
     LlmProviderConfig* provider = config.getLlmProviderById(providerId.toStdString());
-    
+
     if (!provider) {
         providerDetailsGroup->setVisible(false);
         return;
     }
-    
+
     // update details
     if (provider->providerType == WINGMAN_PROVIDER_OPENAI) {
         providerTypeValue->setText("OpenAI");
@@ -1384,9 +1386,9 @@ void ConfigurationDialog::Wingman2Tab::handleProviderSelectionChanged(int index)
     } else {
         providerTypeValue->setText("Unknown");
     }
-    
+
     modelValue->setText(QString::fromStdString(provider->llmModel));
-    
+
     if (provider->isValid) {
         statusValue->setText(tr("Configured ✓"));
         statusValue->setStyleSheet("QLabel { color: green; }");
@@ -1394,7 +1396,7 @@ void ConfigurationDialog::Wingman2Tab::handleProviderSelectionChanged(int index)
         statusValue->setText(tr("Not validated"));
         statusValue->setStyleSheet("QLabel { color: orange; }");
     }
-    
+
     providerDetailsGroup->setVisible(true);
 }
 

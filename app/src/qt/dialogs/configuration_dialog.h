@@ -372,7 +372,7 @@ private:
     QLabel* helpLabel;
     QComboBox* llmProvidersCombo;
     QPushButton* addProviderButton;
-    
+
     QGroupBox* providerDetailsGroup;
     QLabel* providerTypeLabel;
     QLabel* providerTypeValue;
@@ -380,7 +380,6 @@ private:
     QLabel* modelValue;
     QLabel* statusLabel;
     QLabel* statusValue;
-    QPushButton* editButton;
     QPushButton* removeButton;
     QPushButton* testButton;
 
