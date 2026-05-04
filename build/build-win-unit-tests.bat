@@ -1,7 +1,7 @@
 @echo off
 rem MindForger thinking notebook
 
-rem Copyright (C) 2016-2024
+rem Copyright (C) 2016-2025
 
 rem This program is free software; you can redistribute it and/or
 rem modify it under the terms of the GNU General Public License
