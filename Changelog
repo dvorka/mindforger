@@ -18,6 +18,9 @@
       API. OpenRouter API key and model can be set in Preferences > Wingman.
     * Fix: Ctrl+/ now uses the model configured in Preferences instead of
       a stale cached model when only the model name (not provider type) changes.
+    * Fix: macOS CI updated to use macos-13 (Intel) runner with
+      jurplel/install-qt-action@v4 to get Qt 5.15.2 with WebEngine - Homebrew's
+      qt@5 on Apple Silicon (macos-latest) no longer ships qtwebengine.
 
 2024-02-16  Martin Dvorak  <martin.dvorak@mindforger.com>
 
