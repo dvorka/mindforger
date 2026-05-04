@@ -78,7 +78,13 @@ diagnostics:
 
 .PHONY: help
 help: ## make targets help
-	@echo "MindForger Swiss knife help:"
+	@echo " __  __ _           _ _____                         "
+	@echo "|  \\/  (_)_ __   __| |  ___|__  _ __ __ _  ___ _ __ "
+	@echo "| |\\/| | | '_ \\ / _\` | |_ / _ \\| '__/ _\` |/ _ \\ '__|"
+	@echo "| |  | | | | | | (_| |  _| (_) | | | (_| |  __/ |   "
+	@echo "|_|  |_|_|_| |_|\\__,_|_|  \\___/|_|  \\__, |\\___|_|   $(MINDFORGER_VERSION)"
+	@echo "                                     |___/            "
+	@echo "MindForger Swiss knife:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
 	| sort \
 	| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
