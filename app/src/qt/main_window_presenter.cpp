@@ -518,6 +518,10 @@ void MainWindowPresenter::doActionMindHack()
 {
     MF_DEBUG("MindHack" << endl);
 }
+#else
+void MainWindowPresenter::doActionMindHack()
+{
+}
 #endif
 
 void MainWindowPresenter::doActionMindNewRepository()
