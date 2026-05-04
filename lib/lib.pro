@@ -122,6 +122,7 @@ SOURCES += \
     src/mind/ai/llm/mock_wingman.cpp \
     src/mind/ai/llm/openai_wingman.cpp \
     src/mind/ai/llm/ollama_wingman.cpp \
+    src/mind/ai/llm/openrouter_wingman.cpp \
     src/mind/dikw/dikw_pyramid.cpp \
     src/mind/dikw/filesystem_information.cpp \
     src/mind/dikw/information.cpp \
@@ -234,6 +235,7 @@ HEADERS += \
     src/mind/ai/llm/mock_wingman.h \
     src/mind/ai/llm/openai_wingman.h \
     src/mind/ai/llm/ollama_wingman.h \
+    src/mind/ai/llm/openrouter_wingman.h \
     src/mind/dikw/information.h \
     src/model/eisenhower_matrix.h \
     src/model/kanban.h \

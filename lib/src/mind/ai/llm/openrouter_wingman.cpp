@@ -1,5 +1,5 @@
 /*
- openai_wingman.cpp     MindForger thinking notebook
+ openrouter_wingman.cpp     MindForger thinking notebook
 
  Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
@@ -16,7 +16,7 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "openai_wingman.h"
+#include "openrouter_wingman.h"
 
 #include "../../../representations/json/nlohmann/json.hpp"
 
@@ -26,68 +26,65 @@ namespace m8r {
 
 using namespace std;
 
-
-// OpenAI models: "gpt-3.5-turbo" and "gpt-4" are aliases for the latest models
-const std::string LLM_GPT_35_TURBO=string{"gpt-3.5-turbo"};
-const std::string LLM_GPT_4=string{"gpt-4"};
-
 /*
  * cURL callback for writing data to string.
  */
 
-size_t openaiCurlWriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
+size_t openrouterCurlWriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
     size_t totalSize = size * nmemb;
     output->append((char*)contents, totalSize);
     return totalSize;
 }
 
 /*
- * OpenAi Wingman class implementation.
+ * OpenRouter Wingman class implementation.
  */
 
-OpenAiWingman::OpenAiWingman(const std::string& apiKey)
-    : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI),
+OpenRouterWingman::OpenRouterWingman(const std::string& apiKey)
+    : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_OPENROUTER),
       apiKey{apiKey},
       llmModels{},
-      defaultLlmModel{LLM_GPT_35_TURBO}
+      defaultLlmModel{"openai/gpt-3.5-turbo"}
 {
     MF_DEBUG(
-        "OpenAiWingman::OpenAiWingman() apiKey: '"
+        "OpenRouterWingman::OpenRouterWingman() apiKey: '"
         << this->apiKey << "'" << endl);
 
     listModels();
 }
 
-OpenAiWingman::~OpenAiWingman()
+OpenRouterWingman::~OpenRouterWingman()
 {
 }
 
-std::vector<std::string>& OpenAiWingman::listModels()
+std::vector<std::string>& OpenRouterWingman::listModels()
 {
     llmModels.clear();
 
-    // try to fetch models from OpenAI API
+    // try to fetch models from OpenRouter API
     try {
         listModelsHttpGet();
     } catch (...) {
-        MF_DEBUG("OpenAiWingman::listModels() failed to fetch from API, using defaults" << endl);
+        MF_DEBUG("OpenRouterWingman::listModels() failed to fetch from API, using defaults" << endl);
     }
-    
+
     // if API call failed or returned no models, use defaults
     if (llmModels.empty()) {
-        llmModels.push_back(LLM_GPT_35_TURBO);
-        llmModels.push_back(LLM_GPT_4);
+        llmModels.push_back("openai/gpt-3.5-turbo");
+        llmModels.push_back("openai/gpt-4");
+        llmModels.push_back("anthropic/claude-3-haiku");
+        llmModels.push_back("anthropic/claude-3-sonnet");
     }
 
     return llmModels;
 }
 
-void OpenAiWingman::listModelsHttpGet()
+void OpenRouterWingman::listModelsHttpGet()
 {
-    string url = "https://api.openai.com/v1/models";
-    
-    MF_DEBUG("OpenAiWingman::listModelsHttpGet() url: " << url << endl);
-    
+    string url = string{DEFAULT_OPENROUTER_API_URL} + "/models";
+
+    MF_DEBUG("OpenRouterWingman::listModelsHttpGet() url: " << url << endl);
+
 #if !defined(__APPLE__) && !defined(_WIN32)
     CURL* curl = curl_easy_init();
     if (!curl) {
@@ -96,10 +93,10 @@ void OpenAiWingman::listModelsHttpGet()
 #endif
 
     string responseString;
-    
+
 #if defined(_WIN32) || defined(__APPLE__)
     QNetworkAccessManager networkManager;
-    
+
     QNetworkRequest request(QUrl(QString::fromStdString(url)));
     request.setHeader(
         QNetworkRequest::ContentTypeHeader,
@@ -107,19 +104,19 @@ void OpenAiWingman::listModelsHttpGet()
     request.setRawHeader(
         "Authorization",
         "Bearer " + QString::fromStdString(this->apiKey).toUtf8());
-    
+
     QNetworkReply* reply = networkManager.get(request);
     QEventLoop loop;
     QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
     loop.exec();
-    
+
     auto error = reply->error();
     if (error != QNetworkReply::NoError) {
-        MF_DEBUG("OpenAiWingman::listModelsHttpGet() error: " << reply->errorString().toStdString() << endl);
+        MF_DEBUG("OpenRouterWingman::listModelsHttpGet() error: " << reply->errorString().toStdString() << endl);
         reply->deleteLater();
         return;
     }
-    
+
     QByteArray read = reply->readAll();
     responseString = QString{read}.toStdString();
     reply->deleteLater();
@@ -127,21 +124,21 @@ void OpenAiWingman::listModelsHttpGet()
     // CURL implementation
     curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, openaiCurlWriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, openrouterCurlWriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseString);
-    
+
     struct curl_slist* headers = NULL;
     headers = curl_slist_append(
         headers,
         ("Authorization: Bearer " + this->apiKey).c_str());
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-    
+
     CURLcode res = curl_easy_perform(curl);
     curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
-    
+
     if (res != CURLE_OK) {
-        MF_DEBUG("OpenAiWingman::listModelsHttpGet() error: " << curl_easy_strerror(res) << endl);
+        MF_DEBUG("OpenRouterWingman::listModelsHttpGet() error: " << curl_easy_strerror(res) << endl);
         return;
     }
 #endif
@@ -152,42 +149,36 @@ void OpenAiWingman::listModelsHttpGet()
         httpResponseJson = nlohmann::json::parse(responseString);
     } catch (...) {
         MF_DEBUG(
-            "Error: unable to parse OpenAI models JSON response:" << endl <<
+            "Error: unable to parse OpenRouter models JSON response:" << endl <<
             "'" << responseString << "'" << endl
         );
         return;
     }
-    
+
     MF_DEBUG(
-        "OpenAiWingman::listModelsHttpGet() parsed response:" << endl
+        "OpenRouterWingman::listModelsHttpGet() parsed response:" << endl
         << ">>>"
         << httpResponseJson.dump(4)
         << "<<<"
         << endl);
-    
+
     if (httpResponseJson.contains("data")) {
         for (const auto& item : httpResponseJson["data"].items()) {
             if (item.value().contains("id")) {
                 string modelId = item.value()["id"];
-                // filter to only include GPT models (optional)
-                if (modelId.find("gpt") != string::npos) {
-                    llmModels.push_back(modelId);
-                    MF_DEBUG("  Added model: " << modelId << endl);
-                }
+                llmModels.push_back(modelId);
+                MF_DEBUG("  Added model: " << modelId << endl);
             }
         }
     }
 }
 
-// TODO refactor to parent class so that all wingmans can use it
 /**
- * OpenAI cURL GET request.
+ * OpenRouter cURL GET request - uses OpenAI-compatible chat completions API.
  *
- * @see https://platform.openai.com/docs/guides/text-generation/chat-completions-api?lang=curl
- * @see https://github.com/nlohmann/json?tab=readme-ov-file
- * @see https://json.nlohmann.me/
+ * @see https://openrouter.ai/docs#requests
  */
-void OpenAiWingman::curlGet(CommandWingmanChat& command) {
+void OpenRouterWingman::curlGet(CommandWingmanChat& command) {
 #if !defined(__APPLE__) && !defined(_WIN32)
     CURL* curl = curl_easy_init();
     if (curl) {
@@ -196,31 +187,10 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
         replaceAll("\n", " ", escapedPrompt);
         replaceAll("\"", "\\\"", escapedPrompt);
 
-        /*
-        OpenAI API JSon request example (see unit test):
-
-        {
-            "messages": [
-                {
-                    "content": "You are a helpful assistant.",
-                    "role": "system"
-                },
-                {
-                    "content": "Hey hello! I'm MindForger user - how can you help me?",
-                    "role": "user"
-                }
-            ],
-            "model": "gpt-3.5-turbo"
-        }
-
-        */
         nlohmann::json messageSystemJSon{};
-        messageSystemJSon["role"] = "system"; // system (instruct LLM who it is), user (user prompts), assistant (LLM answers)
-        messageSystemJSon["content"] =
-            // "You are a helpful assistant that returns HTML-formatted answers to the user's prompts."
-            "You are a helpful assistant."
-            ;
-        // ... more messages like above (with chat history) can be created to provide context
+        messageSystemJSon["role"] = "system";
+        messageSystemJSon["content"] = "You are a helpful assistant.";
+
         nlohmann::json messageUserJSon{};
         messageUserJSon["role"] = "user";
         messageUserJSon["content"] = escapedPrompt;
@@ -236,30 +206,24 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
         string requestJSonStr = requestJSon.dump(4);
 
         MF_DEBUG(
-            "OpenAiWingman::curlGet() promptJSon:" << endl
+            "OpenRouterWingman::curlGet() promptJSon:" << endl
             << ">>>"
             << requestJSonStr
             << "<<<"
             << endl);
 
-        // TODO this must be refactored to parent class so that all Wingmans can use it
-#if defined(_WIN32) || defined(__APPLE__)
-        /* Qt Networking examples:
-         *
-         * - https://forum.qt.io/topic/116601/qnetworkaccessmanager-reply-is-always-empty/7
-         * - https://community.openai.com/t/qt-interface-w-chatgpt-api/354900
-         * - https://gist.github.com/FONQRI/d8fb13150c1e6760f1b1617730559418
-         */
+        string chatUrl = string{DEFAULT_OPENROUTER_API_URL} + "/chat/completions";
 
+#if defined(_WIN32) || defined(__APPLE__)
         QNetworkAccessManager networkManager;
 
-        QNetworkRequest request(QUrl("https://api.openai.com/v1/chat/completions"));
+        QNetworkRequest request(QUrl(QString::fromStdString(chatUrl)));
         request.setHeader(
             QNetworkRequest::ContentTypeHeader,
             "application/json");
         request.setRawHeader(
             "Authorization",
-            "Bearer " + QString::fromStdString(apiKey).toUtf8());
+            "Bearer " + QString::fromStdString(this->apiKey).toUtf8());
 
         QNetworkReply* reply = networkManager.post(
             request,
@@ -272,11 +236,10 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
 
         command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
 
-        // response: error handling
         auto error = reply->error();
         if(error != QNetworkReply::NoError) {
             command.errorMessage =
-                "Error: request to OpenAI Wingman provider failed due a network error - " +
+                "Error: request to OpenRouter Wingman provider failed due a network error - " +
                 reply->errorString().toStdString();
             MF_DEBUG(command.errorMessage << endl);
             command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
@@ -287,36 +250,32 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
 
             if(read.isEmpty()) {
                 command.errorMessage =
-                    "Error: Request to OpenAI Wingman provider failed - response is empty'";
+                    "Error: Request to OpenRouter Wingman provider failed - response is empty";
                 MF_DEBUG(command.errorMessage << endl);
                 command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
             }
         }
 
-        // response: successful response processing
         if(command.status == m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK) {
             QString qCommandResponse = QString{read};
             command.httpResponse = qCommandResponse.toStdString();
             command.errorMessage.clear();
             command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
             MF_DEBUG(
-                "Successful OpenAI Wingman provider response:" << endl <<
+                "Successful OpenRouter Wingman provider response:" << endl <<
                 "  '" << command.httpResponse << "'" << endl);
         }
 #else
-        // TODO refactor this section to a generic CURL call which gets: URL, body as C string and returns httpResponse
-
-        // set up cURL options
         command.httpResponse.clear();
         curl_easy_setopt(
             curl, CURLOPT_URL,
-            "https://api.openai.com/v1/chat/completions");
+            chatUrl.c_str());
         curl_easy_setopt(
             curl, CURLOPT_POSTFIELDS,
             requestJSonStr.c_str());
         curl_easy_setopt(
             curl, CURLOPT_WRITEFUNCTION,
-            openaiCurlWriteCallback);
+            openrouterCurlWriteCallback);
         curl_easy_setopt(
             curl, CURLOPT_WRITEDATA,
             &command.httpResponse);
@@ -329,10 +288,8 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             headers, "Content-Type: application/json");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
-        // perform the request
         CURLcode res = curl_easy_perform(curl);
 
-        // clean up
         curl_easy_cleanup(curl);
         curl_slist_free_all(headers);
 
@@ -347,7 +304,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
         // finish error handling (shared by QNetwork/CURL)
         if(command.status == WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR) {
             std::cerr <<
-            "Error: Wingman OpenAI cURL/QtNetwork request failed (error message/HTTP response):" << endl <<
+            "Error: Wingman OpenRouter cURL/QtNetwork request failed (error message/HTTP response):" << endl <<
              "  '" << command.errorMessage << "'" << endl <<
              "  '" << command.httpResponse << "'" << endl;
 
@@ -359,47 +316,18 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             return;
         }
 
-        // parse JSon
-        /*
-        OpenAI API JSon response example:
-        {
-            "id": "chatcmpl-8gspbsufrxF42A6JfaiwuxoitQ1fT",
-            "object": "chat.completion",
-            "created": 1705231239,
-            "model": "gpt-3.5-turbo-0613",
-            "choices": [
-                {
-                "index": 0,
-                "message": {
-                    "role": "assistant",
-                    "content": "...LLM answer...",
-                },
-                "logprobs": null,
-                "finish_reason": "stop"
-                }
-            ],
-            "usage": {
-                "prompt_tokens": 26,
-                "completion_tokens": 491,
-                "total_tokens": 517
-            },
-            "system_fingerprint": null
-        }
-        */
-
-        // parse response string to JSon object
+        // parse JSon response (OpenAI-compatible format)
         nlohmann::json httpResponseJSon;
         try {
             httpResponseJSon = nlohmann::json::parse(command.httpResponse);
         } catch (...) {
-            // catch ALL exceptions
             MF_DEBUG(
-                "Error: unable to parse OpenAI JSon response:" << endl <<
+                "Error: unable to parse OpenRouter JSon response:" << endl <<
                 "'" << command.httpResponse << "'" << endl
             );
 
             command.status = WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
-            command.errorMessage = "Error: unable to parse OpenAI JSon response: '" + command.httpResponse + "'";
+            command.errorMessage = "Error: unable to parse OpenRouter JSon response: '" + command.httpResponse + "'";
             command.answerMarkdown.clear();
             command.answerTokens = 0;
             command.answerLlmModel = llmModel;
@@ -408,13 +336,13 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
         }
 
         MF_DEBUG(
-            "OpenAiWingman::curlGet() parsed response:" << endl
+            "OpenRouterWingman::curlGet() parsed response:" << endl
             << ">>>"
             << httpResponseJSon.dump(4)
             << "<<<"
             << endl);
 
-        MF_DEBUG("OpenAiWingman::curlGet() fields:" << endl);
+        MF_DEBUG("OpenRouterWingman::curlGet() fields:" << endl);
         if(httpResponseJSon.contains("model")) {
             httpResponseJSon["model"].get_to(command.answerLlmModel);
             MF_DEBUG("  model: " << command.answerLlmModel << endl);
@@ -432,13 +360,11 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
         if(httpResponseJSon.contains("choices")
             && httpResponseJSon["choices"].size() > 0
         ) {
-            // TODO get the last choice rather than the first one
             auto choice = httpResponseJSon["choices"][0];
             if(choice.contains("message")
                 && choice["message"].contains("content")
             ) {
                 choice["message"]["content"].get_to(command.answerMarkdown);
-                // TODO ask GPT for HTML formatted response
                 m8r::replaceAll(
                     "\n",
                     "<br/>",
@@ -453,7 +379,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
                 } else {
                     command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
                     command.errorMessage.assign(
-                        "OpenAI API HTTP required failed with finish_reason: "
+                        "OpenRouter API HTTP request failed with finish_reason: "
                         + statusStr);
                     command.answerMarkdown.clear();
                     command.answerTokens = 0;
@@ -473,7 +399,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
                 httpResponseJSon["error"]["message"].get_to(command.errorMessage);
             } else {
                 command.errorMessage.assign(
-                    "No choices in the OpenAI API HTTP response");
+                    "No choices in the OpenRouter API HTTP response");
             }
         }
 #if !defined(__APPLE__) && !defined(_WIN32)
@@ -481,17 +407,17 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
     else {
         command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
         command.errorMessage.assign(
-            "OpenAI API HTTP request failed: unable to initialize cURL");
+            "OpenRouter API HTTP request failed: unable to initialize cURL");
     }
 #endif
 }
 
-void OpenAiWingman::chat(CommandWingmanChat& command) {
-    MF_DEBUG("OpenAiWingman::chat() prompt:" << endl << command.prompt << endl);
+void OpenRouterWingman::chat(CommandWingmanChat& command) {
+    MF_DEBUG("OpenRouterWingman::chat() prompt:" << endl << command.prompt << endl);
 
     curlGet(command);
 
-    MF_DEBUG("OpenAiWingman::chat() answer:" << endl << command.answerMarkdown << endl);
+    MF_DEBUG("OpenRouterWingman::chat() answer:" << endl << command.answerMarkdown << endl);
 }
 
 } // m8r namespace

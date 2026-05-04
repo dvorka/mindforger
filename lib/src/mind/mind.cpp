@@ -1452,56 +1452,64 @@ Outline* Mind::findOutlineByKey(const string& key) const
 
 void Mind::initWingman()
 {
-    MF_DEBUG(
-        "MIND Wingman init: " << boolalpha << config.isWingman() << endl
-    );
-    config.initWingman();
-    if(config.isWingman()) {
-        MF_DEBUG("MIND Wingman initialization..." << endl);
-        switch(config.getWingmanLlmProvider()) {
-        case WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI:
-            MF_DEBUG("  MIND Wingman init: OpenAI" << endl);
-            if(wingman) {
-                delete wingman;
-                wingman = nullptr;
-            }
-            wingman = (Wingman*)new OpenAiWingman{};
-            wingman->setLlmModel(config.getWingmanOpenAiLlm());
-            wingmanLlmProvider = config.getWingmanLlmProvider();
-            return;
-        case WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA:
-            MF_DEBUG("  MIND Wingman init: ollama" << endl);
-            if(wingman) {
-                delete wingman;
-                wingman = nullptr;
-            }
-            wingman = (Wingman*)new OllamaWingman{config.getWingmanOllamaUrl()};
-            wingman->listModels();
-            wingman->setLlmModel(config.getWingmanOllamaLlm());
-            wingmanLlmProvider = config.getWingmanLlmProvider();
-            return;
-        case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
-            MF_DEBUG("  MIND Wingman init: MOCK" << endl);
-            wingman = (Wingman*)new MockWingman{
-                MockWingman::LLM_MODEL_MOCK
-            };
-            wingmanLlmProvider = config.getWingmanLlmProvider();
-            return;
-        case WingmanLlmProviders::WINGMAN_PROVIDER_NONE:
-            MF_DEBUG("  MIND Wingman init: set to NONE > deinitialize > NO Wingman" << endl);
-            break;
-        default:
-            MF_DEBUG("  MIND Wingman init: UNKNOWN > NO Wingman" << endl);
-            break;
+    MF_DEBUG("MIND Wingman init: " << boolalpha << config.isWingman() << endl);
+
+    if(!config.isWingman()) {
+        MF_DEBUG("MIND Wingman init: DISABLED" << endl);
+        if(wingman) {
+            delete wingman;
+            wingman = nullptr;
         }
+        wingmanActiveLlmProviderId.clear();
+        return;
     }
 
-    MF_DEBUG("MIND Wingman init: DISABLED" << endl);
+    LlmProviderConfig* provider = config.getActiveLlmProvider();
+    if(!provider) {
+        MF_DEBUG("MIND Wingman init: no active LLM provider configured" << endl);
+        if(wingman) {
+            delete wingman;
+            wingman = nullptr;
+        }
+        wingmanActiveLlmProviderId.clear();
+        return;
+    }
+
+    MF_DEBUG("MIND Wingman initialization for provider: " << provider->id << endl);
+
     if(wingman) {
         delete wingman;
+        wingman = nullptr;
     }
-    wingman = nullptr;
-    wingmanLlmProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
+
+    switch(provider->providerType) {
+    case WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI:
+        MF_DEBUG("  MIND Wingman init: OpenAI" << endl);
+        wingman = (Wingman*)new OpenAiWingman{provider->apiKey};
+        wingman->setLlmModel(provider->llmModel);
+        break;
+    case WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA:
+        MF_DEBUG("  MIND Wingman init: ollama" << endl);
+        wingman = (Wingman*)new OllamaWingman{provider->url};
+        wingman->listModels();
+        wingman->setLlmModel(provider->llmModel);
+        break;
+    case WingmanLlmProviders::WINGMAN_PROVIDER_OPENROUTER:
+        MF_DEBUG("  MIND Wingman init: OpenRouter" << endl);
+        wingman = (Wingman*)new OpenRouterWingman{provider->apiKey};
+        wingman->setLlmModel(provider->llmModel);
+        break;
+    case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
+        MF_DEBUG("  MIND Wingman init: MOCK" << endl);
+        wingman = (Wingman*)new MockWingman{MockWingman::LLM_MODEL_MOCK};
+        break;
+    default:
+        MF_DEBUG("  MIND Wingman init: UNKNOWN > NO Wingman" << endl);
+        wingmanActiveLlmProviderId.clear();
+        return;
+    }
+
+    wingmanActiveLlmProviderId = provider->id;
 }
 
 int Mind::findLibraryOrphanOs()
@@ -1571,8 +1579,15 @@ int Mind::findLibraryOrphanOs()
 
 Wingman* Mind::getWingman()
 {
-    if(this->wingmanLlmProvider != config.getWingmanLlmProvider()) {
+    string currentId = config.getActiveLlmProviderId();
+    if(currentId != wingmanActiveLlmProviderId) {
         initWingman();
+    } else if(wingman) {
+        // sync model name in case it changed without changing the active provider
+        LlmProviderConfig* provider = config.getActiveLlmProvider();
+        if(provider) {
+            wingman->setLlmModel(provider->llmModel);
+        }
     }
 
     return this->wingman;

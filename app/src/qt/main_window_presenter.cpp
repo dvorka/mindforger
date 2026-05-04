@@ -674,7 +674,7 @@ void MainWindowPresenter::doActionMindToggleSemanticSearch()
         statusBar->showInfo(tr("Semantic search disabled"));
     } else {
         // check whether possible
-        if(config.canWingmanOllama()) {
+        if(!config.getLlmProviders().empty()) {
             config.setSemanticSearch(true);
             statusBar->showInfo(tr("Semantic search activated"));
         } else {
@@ -2229,7 +2229,7 @@ void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
     auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
     // wingmanProgressDialog->hide();
     string answerDescriptor{
-        "[provider: " + config.getWingmanLlmProviderAsString(config.getWingmanLlmProvider()) +
+        "[provider: " + config.getActiveLlmProviderId() +
         ", model: " + commandWingmanChat.answerLlmModel +
         ", tokens (prompt/answer): " +
         std::to_string(commandWingmanChat.promptTokens) + "/" + std::to_string(commandWingmanChat.answerTokens) +

@@ -49,7 +49,8 @@ enum WingmanLlmProviders {
     WINGMAN_PROVIDER_NONE,
     WINGMAN_PROVIDER_MOCK,
     WINGMAN_PROVIDER_OPENAI,
-    WINGMAN_PROVIDER_OLLAMA
+    WINGMAN_PROVIDER_OLLAMA,
+    WINGMAN_PROVIDER_OPENROUTER
 };
 
 constexpr const auto LLM_MODEL_NONE = "";
@@ -62,6 +63,7 @@ constexpr const auto LLM_MODEL_PHI = "phi";
 // Default URLs for LLM providers
 constexpr const auto DEFAULT_OLLAMA_URL = "http://localhost:11434";
 constexpr const auto DEFAULT_OPENAI_API_URL = "https://api.openai.com/v1";
+constexpr const auto DEFAULT_OPENROUTER_API_URL = "https://openrouter.ai/api/v1";
 
 // const in constexpr makes value const
 constexpr const auto ENV_VAR_HOME = "HOME";
@@ -189,6 +191,8 @@ struct KnowledgeTool
 // Wingman LLM models API keys
 constexpr const auto ENV_VAR_OPENAI_API_KEY = "MINDFORGER_OPENAI_API_KEY";
 constexpr const auto ENV_VAR_OPENAI_LLM_MODEL = "MINDFORGER_OPENAI_LLM_MODEL";
+constexpr const auto ENV_VAR_OPENROUTER_API_KEY = "MINDFORGER_OPENROUTER_API_KEY";
+constexpr const auto ENV_VAR_OPENROUTER_LLM_MODEL = "MINDFORGER_OPENROUTER_LLM_MODEL";
 
 /**
  * @brief LLM Provider Configuration
@@ -372,53 +376,7 @@ private:
 
     bool semanticSearch;
 
-    /*
-    Wingman configuration, initialization and use:
-
-    - CONFIGURATION:
-        - configuration initialization:
-            - configuration constructor():
-                - configuration.llmProvider set to NONE
-            - configuration load():
-                - configuration.llmProvider is load first - is one of:
-                    - NONE
-                    - MOCK
-                    - OPEN_AI
-                    - OLLAMA
-                    - OPENA_AI_API
-        - configuration detection whether any of Wingman providers is configured (available):
-            - bool can<provider>()
-        - Wingman initialization from the configuration perspective
-          (all fields, like API key, are set ...)
-            - bool init<provider>()
-        - Wingman CONFIGURATION AVAILABILITY to the runtime:
-            - bool isWingman()
-            - Wingman is available from the configuration perspective
-    - MIND:
-        - constructor:
-          if any Wingman configuration is available,
-          then instantiate the Wingman using configured provider
-          else no Wingman
-            - if configuration.isWingman()
-              then mind.wingman = <provider>Wingman()
-        - Wingman AVAILABILITY to the runtime:
-            - Wingman* mind.getWingman()
-                - nullptr || Wingman instance
-        - configuration CHANGE detection:
-            - mind.llmProvider used to detect configuration change
-            - on change: switch Wingman instance
-    - APP WINDOW / WINGMAN CHAT WINDOW:
-        - configuration CHANGE detection - WINDOWS registered using a callback to be notified:
-            - appWindow.llmProvider used to detect configuration change
-            - on change: re-init Wingman DIALOG (refresh pre-defined prompts)
-    */
-    WingmanLlmProviders wingmanProvider; // "none", "Mock", "OpenAI", ...
-    std::string wingmanOpenAiApiKey; // OpenAI API specified by user in the config, env or UI
-    std::string wingmanOpenAiLlm;
-    std::string wingmanOllamaUrl; // base URL like http://localhost:11434
-    std::string wingmanOllamaLlm;
-
-    // Wingman2: collection of configured LLM providers
+    // Wingman: collection of configured LLM providers
     std::vector<LlmProviderConfig> llmProviders;
     std::string activeLlmProviderId;
 
@@ -592,8 +550,6 @@ public:
     /*
      * Wingman
      */
-    void setWingmanLlmProvider(WingmanLlmProviders provider);
-    WingmanLlmProviders getWingmanLlmProvider() const { return wingmanProvider; }
     static std::string getWingmanLlmProviderAsString(WingmanLlmProviders provider) {
         if(provider == WingmanLlmProviders::WINGMAN_PROVIDER_MOCK) {
             return "mock";
@@ -601,97 +557,28 @@ public:
             return "openai";
         } else if(provider == WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA) {
             return "ollama";
+        } else if(provider == WingmanLlmProviders::WINGMAN_PROVIDER_OPENROUTER) {
+            return "openrouter";
         }
 
         return "none";
     }
-#ifdef MF_WIP
-    bool canWingmanMock() { return true; }
-#else
-    bool canWingmanMock() { return false; }
-#endif
-    bool canWingmanOpenAiFromEnv();
-    bool canWingmanOpenAi();
-    bool canWingmanOllama();
-private:
-    bool initWingmanMock();
-    bool initWingmanOpenAi();
-    bool initWingmanOllama();
-public:
-    /**
-     * @brief Initialize Wingman's LLM provider.
-     */
-    bool initWingman();
-
-    std::string getWingmanOpenAiApiKey() const { return wingmanOpenAiApiKey; }
-    void setWingmanOpenAiApiKey(std::string apiKey) { wingmanOpenAiApiKey = apiKey; }
-    std::string getWingmanOpenAiLlm() const { return wingmanOpenAiLlm; }
-    void setWingmanOpenAiLlm(std::string llm) { wingmanOpenAiLlm = llm; }
-    std::string getWingmanOllamaUrl() const { return wingmanOllamaUrl; }
-    void setWingmanOllamaUrl(std::string url) { wingmanOllamaUrl = url; }
-    std::string getWingmanOllamaLlm() const { return wingmanOllamaLlm; }
-    void setWingmanOllamaLlm(std::string llm) { wingmanOllamaLlm = llm; }
 
     /*
-     * Wingman2 LLM Provider Management
+     * Wingman LLM Provider Management
      */
     
-    /**
-     * @brief Get all configured LLM providers
-     */
     std::vector<LlmProviderConfig>& getLlmProviders() { return llmProviders; }
-    
-    /**
-     * @brief Get LLM provider by ID
-     * @return Pointer to provider or nullptr if not found
-     */
     LlmProviderConfig* getLlmProviderById(const std::string& id);
-    
-    /**
-     * @brief Get the active LLM provider
-     * @return Pointer to active provider or nullptr if none set
-     */
     LlmProviderConfig* getActiveLlmProvider();
-    
-    /**
-     * @brief Add a new LLM provider configuration
-     * @param provider The provider configuration to add
-     */
     void addLlmProvider(const LlmProviderConfig& provider);
-    
-    /**
-     * @brief Update an existing LLM provider
-     * @param id Provider ID to update
-     * @param provider Updated configuration
-     */
     void updateLlmProvider(const std::string& id, const LlmProviderConfig& provider);
-    
-    /**
-     * @brief Remove an LLM provider
-     * @param id Provider ID to remove
-     */
     void removeLlmProvider(const std::string& id);
-    
-    /**
-     * @brief Set the active LLM provider
-     * @param id Provider ID to activate
-     */
     void setActiveLlmProvider(const std::string& id);
-    
-    /**
-     * @brief Probe/validate OpenAI provider configuration
-     */
+    std::string getActiveLlmProviderId() const { return activeLlmProviderId; }
     bool probeOpenAiProvider(const std::string& apiKey, const std::string& model, std::string& errorMessage);
-    
-    /**
-     * @brief Probe/validate ollama provider configuration
-     */
     bool probeOllamaProvider(const std::string& url, const std::string& model, std::string& errorMessage);
-    
-    /**
-     * @brief Migrate from legacy Wingman configuration to Wingman2
-     */
-    void migrateFromLegacyWingmanConfig();
+    bool probeOpenRouterProvider(const std::string& apiKey, const std::string& model, std::string& errorMessage);
 
     /**
      * @brief Check whether a Wingman LLM provider is ready from

@@ -5,9 +5,19 @@
     * WIP: Feature: ollama integration brings privacy safe Wingman 
       via ollama hosted LLMs.
     * WIP: Feature: embeddings calculation by ollama hosted LLM models
+    * Refactor: migrated Wingman LLM configuration from legacy per-provider
+      config fields to multi-provider LlmProviderConfig vector (Wingman2
+      architecture); config dialog consolidated to a single Wingman tab;
+      OpenAI/OpenRouter wingmen now take explicit API key in constructor;
+      config file serializer/parser updated with backward-compatible migration.
     * WIP: Enhancement: improved LLM providers configuration: OpenAI and ollama
       (environment vs. configuration; LLM model selection; provider choice)
     * WIP: Enhancement: library orphans
+    * Feature: OpenRouter LLM provider support - OpenRouter (openrouter.ai)
+      can now be configured as Wingman's LLM provider using OpenAI-compatible
+      API. OpenRouter API key and model can be set in Preferences > Wingman.
+    * Fix: Ctrl+/ now uses the model configured in Preferences instead of
+      a stale cached model when only the model name (not provider type) changes.
 
 2024-02-16  Martin Dvorak  <martin.dvorak@mindforger.com>
 

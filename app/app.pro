@@ -289,6 +289,7 @@ HEADERS += \
     src/qt/dialogs/add_llm_provider_dialog.h \
     src/qt/dialogs/openai_config_dialog.h \
     src/qt/dialogs/ollama_config_dialog.h \
+    src/qt/dialogs/openrouter_config_dialog.h \
     src/qt/dialogs/sync_library_dialog.h \
     src/qt/dialogs/terminal_dialog.h \
     src/qt/kanban_column_model.h \
@@ -413,6 +414,7 @@ SOURCES += \
     src/qt/dialogs/add_llm_provider_dialog.cpp \
     src/qt/dialogs/openai_config_dialog.cpp \
     src/qt/dialogs/ollama_config_dialog.cpp \
+    src/qt/dialogs/openrouter_config_dialog.cpp \
     src/qt/dialogs/sync_library_dialog.cpp \
     src/qt/dialogs/terminal_dialog.cpp \
     src/qt/kanban_column_model.cpp \

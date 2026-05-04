@@ -52,11 +52,6 @@ Configuration::Configuration()
       autolinkingColonSplit{},
       autolinkingCaseInsensitive{},
       semanticSearch{DEFAULT_SEMANTIC_SEARCH},
-      wingmanProvider{DEFAULT_WINGMAN_LLM_PROVIDER},
-      wingmanOpenAiApiKey{},
-      wingmanOpenAiLlm{DEFAULT_WINGMAN_LLM_MODEL_OPENAI},
-      wingmanOllamaUrl{},
-      wingmanOllamaLlm{DEFAULT_WINGMAN_LLM_MODEL_OLLAMA},
       md2HtmlOptions{},
       distributorSleepInterval{DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL},
       markdownQuoteSections{},
@@ -153,11 +148,8 @@ void Configuration::clear()
     autolinkingColonSplit = DEFAULT_AUTOLINKING_COLON_SPLIT;
     autolinkingCaseInsensitive = DEFAULT_AUTOLINKING_CASE_INSENSITIVE;
     semanticSearch = DEFAULT_SEMANTIC_SEARCH;
-    wingmanProvider = DEFAULT_WINGMAN_LLM_PROVIDER;
-    wingmanOpenAiApiKey.clear();
-    wingmanOpenAiLlm = DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
-    wingmanOllamaUrl.clear();
-    wingmanOllamaLlm = DEFAULT_WINGMAN_LLM_MODEL_OLLAMA;
+    llmProviders.clear();
+    activeLlmProviderId.clear();
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
     tagsScope.clear();
     markdownQuoteSections = DEFAULT_MD_QUOTE_SECTIONS;
@@ -396,182 +388,8 @@ const char* Configuration::getEditorFromEnv()
     return editor;
 }
 
-bool Configuration::canWingmanOpenAiFromEnv()
-{
-    if(std::getenv(ENV_VAR_OPENAI_API_KEY) != nullptr) {
-        return true;
-    }
-
-    return false;
-}
-
-bool Configuration::canWingmanOpenAi()
-{
-    if(this->wingmanOpenAiApiKey.size() > 0 || canWingmanOpenAiFromEnv()) {
-        return true;
-    }
-
-    return false;
-}
-
-bool Configuration::canWingmanOllama()
-{
-    if(wingmanOllamaUrl.size() > 0) {
-        return true;
-    }
-
-    return false;
-}
-
-void Configuration::setWingmanLlmProvider(WingmanLlmProviders provider)
-{
-    MF_DEBUG(
-        "Configuration::setWingmanLlmProvider(): "
-        << std::to_string(provider) << endl);
-
-    wingmanProvider = provider;
-}
-
-bool Configuration::initWingmanMock()
-{
-    if(canWingmanMock()) {
-        return true;
-    }
-
-    return false;
-}
-
-/**
- * @brief Check whether OpenAI Wingman requirements are satisfied.
- *
- * In case that the requirements are satisfied (OpenAI API key provided),
- * then Wingman @ OpenAI can be choosen @ Mindforger configuration.
-*/
-bool Configuration::initWingmanOpenAi() {
-    MF_DEBUG("  Configuration::initWingmanOpenAi()" << endl);
-    if(canWingmanOpenAi()) {
-        // API key
-        MF_DEBUG(
-            "    Wingman OpenAI API key found in the shell environment variable "
-            "MINDFORGER_OPENAI_API_KEY or set in MF config" << endl);
-        if(wingmanOpenAiApiKey.size() <= 0) {
-            const char* apiKeyEnv = std::getenv(ENV_VAR_OPENAI_API_KEY);
-            MF_DEBUG("    Wingman API key loaded from the env: " << apiKeyEnv << endl);
-            wingmanOpenAiApiKey = apiKeyEnv;
-        }
-        #ifdef DO_MF_DEBUG
-        else {
-            MF_DEBUG("    Wingman API key from config will be used: " << wingmanOpenAiApiKey << endl);
-        }
-        #endif
-        // LLM model
-        const char* llmModelEnv = std::getenv(ENV_VAR_OPENAI_LLM_MODEL);
-        if(llmModelEnv) {
-            MF_DEBUG("    Wingman LLM model loaded from the env: " << llmModelEnv << endl);
-            wingmanOpenAiLlm = llmModelEnv;
-        } else {
-            MF_DEBUG("    Wingman LLM model set to default: " << DEFAULT_WINGMAN_LLM_MODEL_OPENAI << endl);
-            wingmanOpenAiLlm = DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
-        }
-        return true;
-    }
-
-    MF_DEBUG(
-        "    Wingman OpenAI API key NEITHER found in the environment variable "
-        "MINDFORGER_OPENAI_API_KEY, NOR set in MF configuration" << endl);
-    if(wingmanProvider == WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI) {
-        wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
-    }
-    return false;
-}
-
-/**
- * @brief Check whether ollama Wingman requirements are satisfied.
- */
-bool Configuration::initWingmanOllama() {
-    MF_DEBUG("  Configuration::initWingmanOllama()" << endl);
-    if(canWingmanOllama()) {
-        // OPTIONAL: LLM model
-        if(wingmanOllamaLlm.size() <= 0) {
-            MF_DEBUG("    Wingman LLM model for ollama set to default: " << DEFAULT_WINGMAN_LLM_MODEL_OLLAMA << endl);
-            wingmanOpenAiLlm = DEFAULT_WINGMAN_LLM_MODEL_OLLAMA;
-        }
-        wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA;
-        return true;
-    }
-
-    MF_DEBUG(
-        "    Wingman ollama URL not set in the configuration" << endl);
-    if(wingmanProvider == WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA) {
-        wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
-    }
-    return false;
-}
-
-bool Configuration::initWingman()
-{
-    MF_DEBUG(
-        "  BEFORE Configuration::initWingman():" << endl <<
-        "    LLM provider: " << wingmanProvider << endl <<
-        "    OpenAI API key env var name: " << ENV_VAR_OPENAI_API_KEY << endl <<
-        "    OpenAI API key             : " << wingmanOpenAiApiKey << endl <<
-        "    OpenAI LLM env var name    : " << ENV_VAR_OPENAI_LLM_MODEL << endl <<
-        "    OpenAI LLM                 : " << wingmanOpenAiLlm << endl <<
-        "    ollama URL                 : " << wingmanOllamaUrl << endl <<
-        "    ollama LLM                 : " << wingmanOllamaLlm << endl
-    );
-
-    bool initialized = false;
-
-    switch (wingmanProvider) {
-    case WingmanLlmProviders::WINGMAN_PROVIDER_NONE:
-        MF_DEBUG("  NONE Wingman CONFIGURED" << endl);
-        return true;
-#ifdef MF_WIP
-    case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
-        MF_DEBUG("  MOCK Wingman provider CONFIGURED" << endl);
-        initialized = initWingmanMock();
-        break;
-#endif
-    case WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI:
-        MF_DEBUG("  OpenAI Wingman provider CONFIGURED" << endl);
-        initialized = initWingmanOpenAi();
-        break;
-    case WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA:
-        MF_DEBUG("  ollama Wingman provider CONFIGURED" << endl);
-        initialized = initWingmanOllama();
-        break;
-    default:
-        MF_DEBUG(
-            "  ERROR: unable to CONFIGURE UNKNOWN Wingman provider: "
-            << wingmanProvider << endl);
-        initialized = false;
-    }
-
-    if(!initialized) {
-        wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
-    }
-
-    MF_DEBUG(
-        "  AFTER Configuration::initWingman():" << endl <<
-        "    LLM provider: " << wingmanProvider << endl <<
-        "    OpenAI API key env var name: " << ENV_VAR_OPENAI_API_KEY << endl <<
-        "    OpenAI API key             : " << wingmanOpenAiApiKey << endl <<
-        "    OpenAI LLM env var name    : " << ENV_VAR_OPENAI_LLM_MODEL << endl <<
-        "    OpenAI LLM                 : " << wingmanOpenAiLlm << endl <<
-        "    ollama URL                 : " << wingmanOllamaUrl << endl <<
-        "    ollama LLM                 : " << wingmanOllamaLlm << endl
-    );
-
-    return initialized;
-}
-
-/**
- * @brief Re-initialize Wingman using configured LLM provider and return
- * whether it is ready to be used.
- */
 bool Configuration::isWingman() {
-    return WingmanLlmProviders::WINGMAN_PROVIDER_NONE==wingmanProvider?false:true;
+    return !llmProviders.empty() && !activeLlmProviderId.empty();
 }
 
 /*
@@ -636,9 +454,12 @@ bool Configuration::probeOpenAiProvider(
     string& errorMessage) 
 {
     // basic validation
-    if (apiKey.empty() && !canWingmanOpenAiFromEnv()) {
-        errorMessage = "API key is required for OpenAI provider";
-        return false;
+    if (apiKey.empty()) {
+        const char* envKey = std::getenv(ENV_VAR_OPENAI_API_KEY);
+        if(envKey == nullptr) {
+            errorMessage = "API key is required for OpenAI provider";
+            return false;
+        }
     }
     
     if (model.empty()) {
@@ -674,46 +495,27 @@ bool Configuration::probeOllamaProvider(
     return true;
 }
 
-void Configuration::migrateFromLegacyWingmanConfig() {
-    // check if already migrated or no legacy config
-    if (!llmProviders.empty()) {
-        return;
+bool Configuration::probeOpenRouterProvider(
+    const string& apiKey,
+    const string& model,
+    string& errorMessage)
+{
+    // basic validation
+    if (apiKey.empty()) {
+        const char* envKey = std::getenv(ENV_VAR_OPENROUTER_API_KEY);
+        if(envKey == nullptr) {
+            errorMessage = "API key is required for OpenRouter provider";
+            return false;
+        }
     }
-    
-    if (wingmanProvider == WINGMAN_PROVIDER_NONE) {
-        return;
+
+    if (model.empty()) {
+        errorMessage = "Model name is required";
+        return false;
     }
-    
-    MF_DEBUG("Configuration::migrateFromLegacyWingmanConfig() migrating..." << endl);
-    
-    // migrate based on provider type
-    if (wingmanProvider == WINGMAN_PROVIDER_OPENAI && canWingmanOpenAi()) {
-        LlmProviderConfig provider;
-        provider.id = "legacy-openai";
-        provider.displayName = "OpenAI (migrated)";
-        provider.providerType = WINGMAN_PROVIDER_OPENAI;
-        provider.apiKey = wingmanOpenAiApiKey;
-        provider.llmModel = wingmanOpenAiLlm;
-        provider.isValid = true;
-        
-        addLlmProvider(provider);
-        setActiveLlmProvider(provider.id);
-        
-        MF_DEBUG("Configuration::migrateFromLegacyWingmanConfig() migrated OpenAI" << endl);
-    } else if (wingmanProvider == WINGMAN_PROVIDER_OLLAMA && canWingmanOllama()) {
-        LlmProviderConfig provider;
-        provider.id = "legacy-ollama";
-        provider.displayName = "ollama (migrated)";
-        provider.providerType = WINGMAN_PROVIDER_OLLAMA;
-        provider.url = wingmanOllamaUrl;
-        provider.llmModel = wingmanOllamaLlm;
-        provider.isValid = true;
-        
-        addLlmProvider(provider);
-        setActiveLlmProvider(provider.id);
-        
-        MF_DEBUG("Configuration::migrateFromLegacyWingmanConfig() migrated ollama" << endl);
-    }
+
+    MF_DEBUG("Configuration::probeOpenRouterProvider() validated: " << model << endl);
+    return true;
 }
 
 } // m8r namespace

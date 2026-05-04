@@ -18,6 +18,7 @@
 */
 
 #include "markdown_configuration_representation.h"
+#include <sstream>
 
 using namespace std;
 using namespace m8r::filesystem;
@@ -35,11 +36,8 @@ constexpr const auto CONFIG_SETTING_MIND_TAGS_SCOPE_LABEL = "* Tags scope: ";
 constexpr const auto CONFIG_SETTING_MIND_DISTRIBUTOR_INTERVAL = "* Async refresh interval (ms): ";
 constexpr const auto CONFIG_SETTING_MIND_AUTOLINKING = "* Autolinking: ";
 constexpr const auto CONFIG_SETTING_MIND_SEMANTIC_SEARCH = "* Semantic search: ";
-constexpr const auto CONFIG_SETTING_MIND_WINGMAN_PROVIDER = "* Wingman LLM provider: ";
-constexpr const auto CONFIG_SETTING_MIND_OPENAI_KEY = "* Wingman's OpenAI API key: ";
-constexpr const auto CONFIG_SETTING_MIND_OPENAI_LLM = "* Wingman's OpenAI LLM model: ";
-constexpr const auto CONFIG_SETTING_MIND_OLLAMA_URL = "* Wingman's ollama URL: ";
-constexpr const auto CONFIG_SETTING_MIND_OLLAMA_LLM = "* Wingman's ollama LLM model: ";
+constexpr const auto CONFIG_SETTING_MIND_ACTIVE_WINGMAN_PROVIDER = "* Active Wingman LLM provider ID: ";
+constexpr const auto CONFIG_SETTING_MIND_WINGMAN_PROVIDER_ITEM = "* Wingman LLM provider: ";
 
 // application
 constexpr const auto CONFIG_SETTING_STARTUP_VIEW_LABEL = "* Startup view: ";
@@ -412,32 +410,111 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         } else {
                             c.setSemanticSearch(false);
                         }
-                    } else if(line->find(CONFIG_SETTING_MIND_WINGMAN_PROVIDER) != std::string::npos) {
-                        if(line->find(
-                            c.getWingmanLlmProviderAsString(
-                                WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI)) != std::string::npos
-                        ) {
-                            c.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI);
-                        } else if(line->find(
-                            c.getWingmanLlmProviderAsString(
-                                WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA)) != std::string::npos
-                        ) {
-                            c.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA);
-                        } else {
-                            c.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_NONE);
+                    } else if(line->find(CONFIG_SETTING_MIND_ACTIVE_WINGMAN_PROVIDER) != std::string::npos) {
+                        string id = line->substr(strlen(CONFIG_SETTING_MIND_ACTIVE_WINGMAN_PROVIDER));
+                        c.setActiveLlmProvider(id);
+                    } else if(line->find(CONFIG_SETTING_MIND_WINGMAN_PROVIDER_ITEM) != std::string::npos) {
+                        string v = line->substr(strlen(CONFIG_SETTING_MIND_WINGMAN_PROVIDER_ITEM));
+                        // format: id|displayName|typeStr|url|apiKey|llmModel|isValid
+                        std::vector<std::string> parts;
+                        std::stringstream ss(v);
+                        std::string part;
+                        while(std::getline(ss, part, '|')) {
+                            parts.push_back(part);
                         }
-                    } else if(line->find(CONFIG_SETTING_MIND_OPENAI_KEY) != std::string::npos) {
-                        string k = line->substr(strlen(CONFIG_SETTING_MIND_OPENAI_KEY));
-                        c.setWingmanOpenAiApiKey(k);
-                    } else if(line->find(CONFIG_SETTING_MIND_OPENAI_LLM) != std::string::npos) {
-                        string k = line->substr(strlen(CONFIG_SETTING_MIND_OPENAI_LLM));
-                        c.setWingmanOpenAiLlm(k);
-                    } else if(line->find(CONFIG_SETTING_MIND_OLLAMA_URL) != std::string::npos) {
-                        string k = line->substr(strlen(CONFIG_SETTING_MIND_OLLAMA_URL));
-                        c.setWingmanOllamaUrl(k);
-                    } else if(line->find(CONFIG_SETTING_MIND_OLLAMA_LLM) != std::string::npos) {
-                        string k = line->substr(strlen(CONFIG_SETTING_MIND_OLLAMA_LLM));
-                        c.setWingmanOllamaLlm(k);
+                        if(parts.size() == 7) {
+                            LlmProviderConfig p;
+                            p.id = parts[0];
+                            p.displayName = parts[1];
+                            p.url = parts[3];
+                            p.apiKey = parts[4];
+                            p.llmModel = parts[5];
+                            p.isValid = (parts[6] == "1");
+                            string typeStr = parts[2];
+                            if(typeStr == Configuration::getWingmanLlmProviderAsString(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI)) {
+                                p.providerType = WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI;
+                            } else if(typeStr == Configuration::getWingmanLlmProviderAsString(WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA)) {
+                                p.providerType = WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA;
+                            } else if(typeStr == Configuration::getWingmanLlmProviderAsString(WingmanLlmProviders::WINGMAN_PROVIDER_OPENROUTER)) {
+                                p.providerType = WingmanLlmProviders::WINGMAN_PROVIDER_OPENROUTER;
+                            } else {
+                                p.providerType = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
+                            }
+                            c.addLlmProvider(p);
+                        }
+                    }
+                }
+            }
+            // legacy config migration: if new providers list is empty but legacy fields were parsed above,
+            // migrate them into LlmProviderConfig entries
+            {
+                // legacy constants used only for migration
+                constexpr const auto LEGACY_WINGMAN_PROVIDER = "* Wingman LLM provider: ";
+                constexpr const auto LEGACY_OPENAI_KEY = "* Wingman's OpenAI API key: ";
+                constexpr const auto LEGACY_OPENAI_LLM = "* Wingman's OpenAI LLM model: ";
+                constexpr const auto LEGACY_OLLAMA_URL = "* Wingman's ollama URL: ";
+                constexpr const auto LEGACY_OLLAMA_LLM = "* Wingman's ollama LLM model: ";
+                constexpr const auto LEGACY_OPENROUTER_KEY = "* Wingman's OpenRouter API key: ";
+                constexpr const auto LEGACY_OPENROUTER_LLM = "* Wingman's OpenRouter LLM model: ";
+
+                if(c.getLlmProviders().empty()) {
+                    std::string legacyProvider, openAiKey, openAiLlm, ollamaUrl, ollamaLlm, openRouterKey, openRouterLlm;
+                    for(string* line: *body) {
+                        if(!line || !line->size() || line->at(0) != '*') continue;
+                        if(line->find(LEGACY_WINGMAN_PROVIDER) != std::string::npos) {
+                            legacyProvider = line->substr(strlen(LEGACY_WINGMAN_PROVIDER));
+                        } else if(line->find(LEGACY_OPENAI_KEY) != std::string::npos) {
+                            openAiKey = line->substr(strlen(LEGACY_OPENAI_KEY));
+                        } else if(line->find(LEGACY_OPENAI_LLM) != std::string::npos) {
+                            openAiLlm = line->substr(strlen(LEGACY_OPENAI_LLM));
+                        } else if(line->find(LEGACY_OLLAMA_URL) != std::string::npos) {
+                            ollamaUrl = line->substr(strlen(LEGACY_OLLAMA_URL));
+                        } else if(line->find(LEGACY_OLLAMA_LLM) != std::string::npos) {
+                            ollamaLlm = line->substr(strlen(LEGACY_OLLAMA_LLM));
+                        } else if(line->find(LEGACY_OPENROUTER_KEY) != std::string::npos) {
+                            openRouterKey = line->substr(strlen(LEGACY_OPENROUTER_KEY));
+                        } else if(line->find(LEGACY_OPENROUTER_LLM) != std::string::npos) {
+                            openRouterLlm = line->substr(strlen(LEGACY_OPENROUTER_LLM));
+                        }
+                    }
+                    if(!openAiKey.empty() || !openAiLlm.empty()) {
+                        LlmProviderConfig p;
+                        p.id = "openai-migrated";
+                        p.displayName = "OpenAI (migrated)";
+                        p.providerType = WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI;
+                        p.apiKey = openAiKey;
+                        p.llmModel = openAiLlm;
+                        p.isValid = !openAiKey.empty();
+                        c.addLlmProvider(p);
+                        if(legacyProvider == Configuration::getWingmanLlmProviderAsString(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI)) {
+                            c.setActiveLlmProvider(p.id);
+                        }
+                    }
+                    if(!ollamaUrl.empty() || !ollamaLlm.empty()) {
+                        LlmProviderConfig p;
+                        p.id = "ollama-migrated";
+                        p.displayName = "Ollama (migrated)";
+                        p.providerType = WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA;
+                        p.url = ollamaUrl;
+                        p.llmModel = ollamaLlm;
+                        p.isValid = !ollamaUrl.empty();
+                        c.addLlmProvider(p);
+                        if(legacyProvider == Configuration::getWingmanLlmProviderAsString(WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA)) {
+                            c.setActiveLlmProvider(p.id);
+                        }
+                    }
+                    if(!openRouterKey.empty() || !openRouterLlm.empty()) {
+                        LlmProviderConfig p;
+                        p.id = "openrouter-migrated";
+                        p.displayName = "OpenRouter (migrated)";
+                        p.providerType = WingmanLlmProviders::WINGMAN_PROVIDER_OPENROUTER;
+                        p.apiKey = openRouterKey;
+                        p.llmModel = openRouterLlm;
+                        p.isValid = !openRouterKey.empty();
+                        c.addLlmProvider(p);
+                        if(legacyProvider == Configuration::getWingmanLlmProviderAsString(WingmanLlmProviders::WINGMAN_PROVIDER_OPENROUTER)) {
+                            c.setActiveLlmProvider(p.id);
+                        }
                     }
                 }
             }
@@ -531,17 +608,21 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: yes, no" << endl <<
          CONFIG_SETTING_MIND_SEMANTIC_SEARCH << (c?(c->isSemanticSearch()?"yes":"no"):(Configuration::DEFAULT_SEMANTIC_SEARCH?"yes":"no")) << endl <<
          "    * Examples: yes, no" << endl <<
-         CONFIG_SETTING_MIND_WINGMAN_PROVIDER << Configuration::getWingmanLlmProviderAsString(c?c->getWingmanLlmProvider():Configuration::DEFAULT_WINGMAN_LLM_PROVIDER) << endl <<
-         "    * Examples: none, openai, ollama" << endl <<
-         CONFIG_SETTING_MIND_OPENAI_KEY << (c?c->getWingmanOpenAiApiKey():"") << endl <<
-         "    * OpenAI API key generated at https://platform.openai.com/api-keys to be used by Wingman as LLM provider" << endl <<
-         CONFIG_SETTING_MIND_OPENAI_LLM << (c?c->getWingmanOpenAiLlm():"") << endl <<
-         "    * Preferred Open AI LLM model: gpt-4, gpt-3.5-turbo, ... " << endl <<
-         CONFIG_SETTING_MIND_OLLAMA_URL << (c?c->getWingmanOllamaUrl():"") << endl <<
-         "    * Base URL of the ollama service like http://localhost:11434" << endl <<
-         CONFIG_SETTING_MIND_OLLAMA_LLM << (c?c->getWingmanOllamaLlm():"") << endl <<
-         "    * Preferred ollama LLM model: llama2, mistral, phi, ... " << endl <<
-         endl <<
+         CONFIG_SETTING_MIND_ACTIVE_WINGMAN_PROVIDER << (c?c->getActiveLlmProviderId():"") << endl <<
+         "    * ID of the active Wingman LLM provider" << endl;
+    if(c) {
+        for(const LlmProviderConfig& p: c->getLlmProviders()) {
+            s << CONFIG_SETTING_MIND_WINGMAN_PROVIDER_ITEM
+              << p.id << "|"
+              << p.displayName << "|"
+              << Configuration::getWingmanLlmProviderAsString(p.providerType) << "|"
+              << p.url << "|"
+              << p.apiKey << "|"
+              << p.llmModel << "|"
+              << (p.isValid ? "1" : "0") << endl;
+        }
+    }
+    s << endl <<
 
          "# " << CONFIG_SECTION_APP << endl <<
          "Application settings:" << endl <<

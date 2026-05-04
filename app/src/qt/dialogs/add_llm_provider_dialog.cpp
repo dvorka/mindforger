@@ -31,6 +31,7 @@ AddLlmProviderDialog::AddLlmProviderDialog(QWidget* parent)
     providerTypeCombo = new QComboBox(this);
     providerTypeCombo->addItem(tr("OpenAI"), WINGMAN_PROVIDER_OPENAI);
     providerTypeCombo->addItem(tr("ollama"), WINGMAN_PROVIDER_OLLAMA);
+    providerTypeCombo->addItem(tr("OpenRouter"), WINGMAN_PROVIDER_OPENROUTER);
     
     nextButton = new QPushButton(tr("Next >"), this);
     nextButton->setDefault(true);

@@ -31,6 +31,7 @@
 #include "ai/llm/wingman.h"
 #include "ai/llm/openai_wingman.h"
 #include "ai/llm/ollama_wingman.h"
+#include "ai/llm/openrouter_wingman.h"
 #include "ai/llm/mock_wingman.h"
 #include "associated_notes.h"
 #include "ontology/thing_class_rel_triple.h"
@@ -205,9 +206,9 @@ public:
 
 private:
     /**
-     * Wingman LLM provider currently used by Mind.
+     * ID of the active LLM provider currently used by Mind.
      */
-    WingmanLlmProviders wingmanLlmProvider;
+    std::string wingmanActiveLlmProviderId;
     /**
      * Wingman
      */

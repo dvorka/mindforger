@@ -97,13 +97,7 @@ OllamaConfigDialog::~OllamaConfigDialog()
 
 void OllamaConfigDialog::show()
 {
-    // load current config if any
-    string ollamaUrl = config.getWingmanOllamaUrl();
-    if (ollamaUrl.empty()) {
-        urlEdit->setText(DEFAULT_OLLAMA_URL);
-    } else {
-        urlEdit->setText(QString::fromStdString(ollamaUrl));
-    }
+    urlEdit->setText(DEFAULT_OLLAMA_URL);
     
     llmModelCombo->clear();
     configValid = false;
