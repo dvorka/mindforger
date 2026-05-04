@@ -27,34 +27,34 @@ AddLlmProviderDialog::AddLlmProviderDialog(QWidget* parent)
       selectedProviderType(WINGMAN_PROVIDER_NONE)
 {
     questionLabel = new QLabel(tr("Which provider do you want to configure?"), this);
-    
+
     providerTypeCombo = new QComboBox(this);
-    providerTypeCombo->addItem(tr("OpenAI"), WINGMAN_PROVIDER_OPENAI);
     providerTypeCombo->addItem(tr("ollama"), WINGMAN_PROVIDER_OLLAMA);
     providerTypeCombo->addItem(tr("OpenRouter"), WINGMAN_PROVIDER_OPENROUTER);
-    
+    providerTypeCombo->addItem(tr("OpenAI"), WINGMAN_PROVIDER_OPENAI);
+
     nextButton = new QPushButton(tr("Next >"), this);
     nextButton->setDefault(true);
-    
+
     cancelButton = new QPushButton(tr("Cancel"), this);
-    
+
     // layout
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(questionLabel);
     mainLayout->addWidget(providerTypeCombo);
-    
+
     QHBoxLayout* buttonLayout = new QHBoxLayout();
     buttonLayout->addStretch();
     buttonLayout->addWidget(cancelButton);
     buttonLayout->addWidget(nextButton);
-    
+
     mainLayout->addLayout(buttonLayout);
     setLayout(mainLayout);
-    
+
     // signals
     QObject::connect(nextButton, &QPushButton::clicked, this, &AddLlmProviderDialog::handleNext);
     QObject::connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);
-    
+
     // dialog
     setWindowTitle(tr("New LLM Provider"));
     resize(fontMetrics().averageCharWidth()*55, height());
@@ -69,7 +69,7 @@ void AddLlmProviderDialog::show()
 {
     providerTypeCombo->setCurrentIndex(0);
     selectedProviderType = WINGMAN_PROVIDER_NONE;
-    
+
     QDialog::show();
 }
 
@@ -77,7 +77,7 @@ void AddLlmProviderDialog::handleNext()
 {
     selectedProviderType = static_cast<WingmanLlmProviders>(
         providerTypeCombo->itemData(providerTypeCombo->currentIndex()).toInt());
-    
+
     accept();
 }
 
