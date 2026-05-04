@@ -178,7 +178,9 @@ public:
 
 public slots:
     // mind
+#ifdef DO_MF_DEBUG
     void doActionMindHack();
+#endif
     // wingman: dialog
     void handleActionWingman(bool showDialog=true);
     void slotRunWingmanFromDialog(bool showDialog=false);
