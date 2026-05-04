@@ -14,7 +14,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y build-essential zlib1g-dev libcurl4-gnutls-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache
 
       - name: Build dependency - cmark-gfm
-        run: cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build .
+        run: cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && cmake --build .
 
       - name: Build test dependency - Google Test Framework
         run: sudo apt-get install -y libgtest-dev && cd /usr/src/gtest && sudo cmake . && sudo make && sudo mv -v lib/libg* /usr/lib
