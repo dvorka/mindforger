@@ -127,7 +127,12 @@ shared_future<bool> Mind::think()
             return mindDream();
         } else {
             // IMPROVE design ASYNC AI/AA to handle also huge repositories
-            MF_DEBUG("Think: CANNOT think because number of Notes in Mind is too big" << endl);
+            MF_DEBUG(
+                "Think: CANNOT think because number of Notes in Mind is too big"
+                <<
+                memory.getNotesCount() << "/" << config.getAsyncMindThreshold()
+                << endl
+                );
             persistMindState(Configuration::MindState::SLEEPING);
             promise<bool> p;
             p.set_value(false);

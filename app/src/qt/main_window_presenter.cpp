@@ -609,7 +609,12 @@ void MainWindowPresenter::doActionMindThink()
             statusBar->showMindStatistics();
         } else {
             mainMenu->showFacetMindSleep();
-            statusBar->showError(tr("Cannot think - either Mind already dreaming or repository too big"));
+            statusBar->showError(
+                tr(
+                    "Cannot think - either Mind already dreaming or "
+                    "repository has too many notes: %1 > %2")
+                    .arg(mind->remind().getNotesCount()).arg(config.getAsyncMindThreshold())
+            );
         }
     } else {
         statusBar->showMindStatistics();
