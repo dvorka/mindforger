@@ -57,7 +57,8 @@ public:
     const LlmProviderConfig& getProviderConfig() const { return providerConfig; }
     bool isConfigValid() const { return configValid; }
 
-    void show();
+protected:
+    void showEvent(QShowEvent* event) override;
 
 private slots:
     void handleEnvVarCheckbox(int state);

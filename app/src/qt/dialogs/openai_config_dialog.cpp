@@ -42,7 +42,7 @@ OpenAiConfigDialog::OpenAiConfigDialog(QWidget* parent)
     useEnvVarCheckbox = new QCheckBox(
         tr("Use environment variable %1").arg(ENV_VAR_OPENAI_API_KEY), this);
     envVarInfoLabel = new QLabel(
-        tr("Environment variable: %1")
+        tr("You can set env var: %1")
         .arg(ENV_VAR_OPENAI_API_KEY), this);
     envVarInfoLabel->setStyleSheet("QLabel { color: gray; font-size: small; }");
     
@@ -60,7 +60,7 @@ OpenAiConfigDialog::OpenAiConfigDialog(QWidget* parent)
     modelLayout->addWidget(refreshModelsButton);
     
     QLabel* modelHelpLabel = new QLabel(
-        tr("(You can type model name or select from list)"), this);
+        tr("You can type model name or select from list"), this);
     modelHelpLabel->setStyleSheet("QLabel { color: gray; font-size: small; }");
     
     // buttons
@@ -108,7 +108,7 @@ OpenAiConfigDialog::~OpenAiConfigDialog()
 {
 }
 
-void OpenAiConfigDialog::show()
+void OpenAiConfigDialog::showEvent(QShowEvent* event)
 {
     apiKeyEdit->clear();
     llmModelCombo->setCurrentText(LLM_MODEL_GPT35_TURBO);
@@ -128,7 +128,7 @@ void OpenAiConfigDialog::show()
     // keep apiKeyEdit state consistent with checkbox
     apiKeyEdit->setEnabled(!useEnvVarCheckbox->isChecked());
 
-    QDialog::show();
+    QDialog::showEvent(event);
 }
 
 void OpenAiConfigDialog::handleEnvVarCheckbox(int state)

@@ -949,6 +949,9 @@ void ConfigurationDialog::WingmanTab::handleTestConnection()
     }
 
     if (success) {
+        provider->isValid = true;
+        statusValue->setText(tr("Configured ✓"));
+        statusValue->setStyleSheet("QLabel { color: green; }");
         QMessageBox::information(
             this,
             tr("Connection Test"),

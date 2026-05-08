@@ -95,14 +95,13 @@ OllamaConfigDialog::~OllamaConfigDialog()
 {
 }
 
-void OllamaConfigDialog::show()
+void OllamaConfigDialog::showEvent(QShowEvent* event)
 {
     urlEdit->setText(DEFAULT_OLLAMA_URL);
-    
     llmModelCombo->clear();
     configValid = false;
-    
-    QDialog::show();
+
+    QDialog::showEvent(event);
 }
 
 void OllamaConfigDialog::handleReset()
