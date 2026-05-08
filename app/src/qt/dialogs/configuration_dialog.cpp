@@ -757,6 +757,9 @@ ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
     QLabel* sLabel = new QLabel(tr("Status:"), this);
     statusValue = new QLabel("", this);
 
+    QLabel* pLabel = new QLabel(tr("Your data privacy:"), this);
+    privacyValue = new QLabel("", this);
+
     testButton = new QPushButton(tr("Test Connection"), this);
     removeButton = new QPushButton(tr("Remove"), this);
 
@@ -767,6 +770,8 @@ ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
     detailsLayout->addWidget(modelValue, 1, 1);
     detailsLayout->addWidget(sLabel, 2, 0);
     detailsLayout->addWidget(statusValue, 2, 1);
+    detailsLayout->addWidget(pLabel, 3, 0);
+    detailsLayout->addWidget(privacyValue, 3, 1);
 
     QHBoxLayout* buttonLayout = new QHBoxLayout();
     buttonLayout->addWidget(testButton);
@@ -950,7 +955,7 @@ void ConfigurationDialog::WingmanTab::handleTestConnection()
 
     if (success) {
         provider->isValid = true;
-        statusValue->setText(tr("Configured ✓"));
+        statusValue->setText(tr("configured"));
         statusValue->setStyleSheet("QLabel { color: green; }");
         QMessageBox::information(
             this,
@@ -983,10 +988,16 @@ void ConfigurationDialog::WingmanTab::handleProviderSelectionChanged(int index)
     // update details
     if (provider->providerType == WINGMAN_PROVIDER_OPENAI) {
         providerTypeValue->setText("OpenAI");
+        privacyValue->setText("will be shared w/ 3rd party");
+        privacyValue->setStyleSheet("QLabel { color: red; }");
     } else if (provider->providerType == WINGMAN_PROVIDER_OLLAMA) {
         providerTypeValue->setText("ollama");
+        privacyValue->setText("will not be shared w/ 3rd party");
+        privacyValue->setStyleSheet("QLabel { color: green; }");
     } else if (provider->providerType == WINGMAN_PROVIDER_OPENROUTER) {
         providerTypeValue->setText("OpenRouter");
+        privacyValue->setText("will be shared w/ 3rd party");
+        privacyValue->setStyleSheet("QLabel { color: red; }");
     } else {
         providerTypeValue->setText("Unknown");
     }
@@ -994,7 +1005,7 @@ void ConfigurationDialog::WingmanTab::handleProviderSelectionChanged(int index)
     modelValue->setText(QString::fromStdString(provider->llmModel));
 
     if (provider->isValid) {
-        statusValue->setText(tr("Configured ✓"));
+        statusValue->setText(tr("configured"));
         statusValue->setStyleSheet("QLabel { color: green; }");
     } else {
         statusValue->setText(tr("Not validated"));

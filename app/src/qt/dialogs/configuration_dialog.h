@@ -272,6 +272,8 @@ private:
     QLabel* modelValue;
     QLabel* statusLabel;
     QLabel* statusValue;
+    QLabel* privacyLabel;
+    QLabel* privacyValue;
     QPushButton* removeButton;
     QPushButton* testButton;
 
