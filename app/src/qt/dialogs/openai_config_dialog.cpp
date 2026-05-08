@@ -159,7 +159,7 @@ void OpenAiConfigDialog::handleRefresh()
             apiKey = string(envKey);
         }
     } else {
-        apiKey = apiKeyEdit->text().toStdString();
+        apiKey = apiKeyEdit->text().trimmed().toStdString();
     }
 
     if(apiKey.empty()) {
@@ -198,7 +198,7 @@ void OpenAiConfigDialog::handleProbe()
     // when checkbox is set, pass empty key - probeOpenAiProvider will check env var itself
     string apiKey = useEnvVarCheckbox->isChecked()
         ? string{}
-        : apiKeyEdit->text().toStdString();
+        : apiKeyEdit->text().trimmed().toStdString();
     string model = llmModelCombo->currentText().toStdString();
     string errorMessage;
     
@@ -221,7 +221,7 @@ void OpenAiConfigDialog::handleProbe()
 void OpenAiConfigDialog::handleAdd()
 {
     bool useEnv = useEnvVarCheckbox->isChecked();
-    string apiKey = useEnv ? string{} : apiKeyEdit->text().toStdString();
+    string apiKey = useEnv ? string{} : apiKeyEdit->text().trimmed().toStdString();
     string model = llmModelCombo->currentText().toStdString();
 
     // validate: key must come from either the edit line or the env var

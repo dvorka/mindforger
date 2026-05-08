@@ -158,7 +158,7 @@ void OpenRouterConfigDialog::handleProbe()
     // when checkbox is set, pass empty key - probeOpenRouterProvider will check env var itself
     string apiKey = useEnvVarCheckbox->isChecked()
         ? string{}
-        : apiKeyEdit->text().toStdString();
+        : apiKeyEdit->text().trimmed().toStdString();
     string model = llmModelCombo->currentText().toStdString();
     string errorMessage;
 
@@ -181,7 +181,7 @@ void OpenRouterConfigDialog::handleProbe()
 void OpenRouterConfigDialog::handleAdd()
 {
     bool useEnv = useEnvVarCheckbox->isChecked();
-    string apiKey = useEnv ? string{} : apiKeyEdit->text().toStdString();
+    string apiKey = useEnv ? string{} : apiKeyEdit->text().trimmed().toStdString();
     string model = llmModelCombo->currentText().toStdString();
 
     // validate: key must come from either the edit line or the env var
