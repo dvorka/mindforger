@@ -382,6 +382,7 @@ public slots:
     void doActionHelpCheckForUpdates();
     void doActionEmojisDialog();
     void doActionHelpAboutMindForger();
+    void doActionHelpSponsor();
 
     void slotHandleFts();
     void slotMainToolbarVisibilityChanged(bool visibility);

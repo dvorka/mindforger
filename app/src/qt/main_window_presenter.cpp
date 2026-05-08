@@ -3965,6 +3965,11 @@ void MainWindowPresenter::doActionHelpDocumentation()
     QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger/wiki"});
 }
 
+void MainWindowPresenter::doActionHelpSponsor()
+{
+    QDesktopServices::openUrl(QUrl{"https://opencollective.com/dvorka-floss-lab/projects/mindforger"});
+}
+
 void MainWindowPresenter::doActionHelpWeb()
 {
     QDesktopServices::openUrl(

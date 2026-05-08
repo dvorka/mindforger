@@ -91,5 +91,6 @@
         <file alias="about_qt.svg">resources/menu-icons/light_about_qt.svg</file>
         <file alias="cli.svg">resources/menu-icons/light_cli.svg</file>
         <file alias="edit_external.svg">resources/menu-icons/light_edit_external.svg</file>
+        <file alias="heart.svg">resources/menu-icons/light_heart.svg</file>
     </qresource>
 </RCC>

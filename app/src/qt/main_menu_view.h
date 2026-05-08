@@ -285,6 +285,8 @@ public:
     QAction* actionHelpAboutQt;
     QAction* actionHelpAbout;
 
+    QAction* actionHelpSponsor;
+
     void showModeAwareFacet(bool repositoryMode, bool mfMode);
 
 public:
