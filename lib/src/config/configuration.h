@@ -205,13 +205,15 @@ struct LlmProviderConfig {
     std::string displayName;           // user-friendly name (e.g., "OpenAI GPT-4", "Local Ollama")
     WingmanLlmProviders providerType;  // WINGMAN_PROVIDER_OPENAI, WINGMAN_PROVIDER_OLLAMA
     std::string url;                   // for ollama: base URL, for OpenAI: empty
-    std::string apiKey;                // for OpenAI: API key, for ollama: empty
+    std::string apiKey;                // for OpenAI/OpenRouter: stored API key (empty when useEnvVar is true)
     std::string llmModel;              // model name (e.g., "gpt-4", "llama2")
     bool isValid;                      // whether configuration was validated/probed
-    
-    LlmProviderConfig() 
-        : providerType(WINGMAN_PROVIDER_NONE), 
-          isValid(false) {}
+    bool useEnvVar;                    // if true, resolve API key from environment variable at runtime
+
+    LlmProviderConfig()
+        : providerType(WINGMAN_PROVIDER_NONE),
+          isValid(false),
+          useEnvVar(false) {}
 };
 
 // improve platform/language specific

@@ -50,7 +50,7 @@ OllamaConfigDialog::OllamaConfigDialog(QWidget* parent)
     modelLayout->addWidget(refreshModelsButton);
     
     QLabel* modelHelpLabel = new QLabel(
-        tr("(You can type model name or select from list)"), this);
+        tr("You can type model name or select from list"), this);
     modelHelpLabel->setStyleSheet("QLabel { color: gray; font-size: small; }");
     
     // buttons

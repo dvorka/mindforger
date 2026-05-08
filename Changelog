@@ -13,6 +13,12 @@
       architecture); config dialog consolidated to a single Wingman tab;
       OpenAI/OpenRouter wingmen now take explicit API key in constructor;
       config file serializer/parser updated with backward-compatible migration.
+    * Enhancement: OpenAI and OpenRouter provider config dialogs now support
+      env var based API key via checkbox "Use environment variable
+      MINDFORGER_OPENAI_API_KEY / MINDFORGER_OPENROUTER_API_KEY";
+      checkbox is enabled only when the env var is set; when checked the edit
+      line is disabled and the key is resolved from the env var at runtime;
+      useEnvVar flag is persisted in ~/.mindforger.md.
     * WIP: Enhancement: improved LLM providers configuration: OpenAI and ollama
       (environment vs. configuration; LLM model selection; provider choice)
     * WIP: Enhancement: library orphans

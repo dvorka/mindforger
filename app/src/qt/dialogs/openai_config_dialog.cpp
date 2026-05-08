@@ -31,17 +31,20 @@ OpenAiConfigDialog::OpenAiConfigDialog(QWidget* parent)
     QLabel* apiKeyLabel = new QLabel(tr("API Key:"), this);
     apiKeyEdit = new QLineEdit(this);
     apiKeyEdit->setEchoMode(QLineEdit::Password);
-    
+
     resetButton = new QPushButton(tr("Reset"), this);
-    
+
     QHBoxLayout* apiKeyLayout = new QHBoxLayout();
     apiKeyLayout->addWidget(apiKeyEdit);
     apiKeyLayout->addWidget(resetButton);
-    
-    // environment variable info
+
+    // environment variable checkbox and info label
+    useEnvVarCheckbox = new QCheckBox(
+        tr("Use environment variable %1").arg(ENV_VAR_OPENAI_API_KEY), this);
     envVarInfoLabel = new QLabel(
-        tr("Environment variable: %1<br>(if set, overrides the value above)")
+        tr("Environment variable: %1")
         .arg(ENV_VAR_OPENAI_API_KEY), this);
+    envVarInfoLabel->setStyleSheet("QLabel { color: gray; font-size: small; }");
     
     // LLM model combo (editable)
     QLabel* modelLabel = new QLabel(tr("LLM Model:"), this);
@@ -76,6 +79,7 @@ OpenAiConfigDialog::OpenAiConfigDialog(QWidget* parent)
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(apiKeyLabel);
     mainLayout->addLayout(apiKeyLayout);
+    mainLayout->addWidget(useEnvVarCheckbox);
     mainLayout->addWidget(envVarInfoLabel);
     mainLayout->addSpacing(10);
     mainLayout->addWidget(modelLabel);
@@ -87,6 +91,7 @@ OpenAiConfigDialog::OpenAiConfigDialog(QWidget* parent)
     setLayout(mainLayout);
     
     // signals
+    QObject::connect(useEnvVarCheckbox, &QCheckBox::stateChanged, this, &OpenAiConfigDialog::handleEnvVarCheckbox);
     QObject::connect(resetButton, &QPushButton::clicked, this, &OpenAiConfigDialog::handleReset);
     QObject::connect(refreshModelsButton, &QPushButton::clicked, this, &OpenAiConfigDialog::handleRefresh);
     QObject::connect(probeButton, &QPushButton::clicked, this, &OpenAiConfigDialog::handleProbe);
@@ -108,22 +113,56 @@ void OpenAiConfigDialog::show()
     apiKeyEdit->clear();
     llmModelCombo->setCurrentText(LLM_MODEL_GPT35_TURBO);
     configValid = false;
-    
+
+    // detect whether the environment variable exists and configure the checkbox
+    bool envVarExists = (std::getenv(ENV_VAR_OPENAI_API_KEY) != nullptr);
+    useEnvVarCheckbox->setEnabled(envVarExists);
+    if(!envVarExists) {
+        useEnvVarCheckbox->setChecked(false);
+        useEnvVarCheckbox->setToolTip(
+            tr("Set %1 environment variable to enable this option.")
+            .arg(ENV_VAR_OPENAI_API_KEY));
+    } else {
+        useEnvVarCheckbox->setToolTip(QString{});
+    }
+    // keep apiKeyEdit state consistent with checkbox
+    apiKeyEdit->setEnabled(!useEnvVarCheckbox->isChecked());
+
     QDialog::show();
+}
+
+void OpenAiConfigDialog::handleEnvVarCheckbox(int state)
+{
+    bool useEnv = (state == Qt::Checked);
+    // when env var is used, the edit line is irrelevant - disable it
+    apiKeyEdit->setEnabled(!useEnv);
+    if(useEnv) {
+        apiKeyEdit->clear();
+    }
 }
 
 void OpenAiConfigDialog::handleReset()
 {
+    useEnvVarCheckbox->setChecked(false);
     apiKeyEdit->clear();
+    apiKeyEdit->setEnabled(true);
     llmModelCombo->setCurrentText(LLM_MODEL_GPT35_TURBO);
 }
 
 void OpenAiConfigDialog::handleRefresh()
 {
-    // validate API key is set
-    string apiKey = apiKeyEdit->text().toStdString();
-    const char* envKey = std::getenv(ENV_VAR_OPENAI_API_KEY);
-    if (apiKey.empty() && envKey == nullptr) {
+    // resolve effective API key: checkbox has priority over env var fallback
+    string apiKey{};
+    if(useEnvVarCheckbox->isChecked()) {
+        const char* envKey = std::getenv(ENV_VAR_OPENAI_API_KEY);
+        if(envKey) {
+            apiKey = string(envKey);
+        }
+    } else {
+        apiKey = apiKeyEdit->text().toStdString();
+    }
+
+    if(apiKey.empty()) {
         QMessageBox::warning(
             this,
             tr("API Key Required"),
@@ -131,10 +170,8 @@ void OpenAiConfigDialog::handleRefresh()
             .arg(ENV_VAR_OPENAI_API_KEY));
         return;
     }
-    
-    string effectiveKey = apiKey.empty() ? std::string(envKey) : apiKey;
     try {
-        OpenAiWingman wingman{effectiveKey};
+        OpenAiWingman wingman{apiKey};
         vector<string>& models = wingman.listModels();
         
         llmModelCombo->clear();
@@ -158,7 +195,10 @@ void OpenAiConfigDialog::handleRefresh()
 
 void OpenAiConfigDialog::handleProbe()
 {
-    string apiKey = apiKeyEdit->text().toStdString();
+    // when checkbox is set, pass empty key - probeOpenAiProvider will check env var itself
+    string apiKey = useEnvVarCheckbox->isChecked()
+        ? string{}
+        : apiKeyEdit->text().toStdString();
     string model = llmModelCombo->currentText().toStdString();
     string errorMessage;
     
@@ -180,38 +220,38 @@ void OpenAiConfigDialog::handleProbe()
 
 void OpenAiConfigDialog::handleAdd()
 {
-    string apiKey = apiKeyEdit->text().toStdString();
+    bool useEnv = useEnvVarCheckbox->isChecked();
+    string apiKey = useEnv ? string{} : apiKeyEdit->text().toStdString();
     string model = llmModelCombo->currentText().toStdString();
-    
-    // validate inputs
-    const char* envKey = std::getenv(ENV_VAR_OPENAI_API_KEY);
-    if (apiKey.empty() && envKey == nullptr) {
+
+    // validate: key must come from either the edit line or the env var
+    if(!useEnv && apiKey.empty()) {
         QMessageBox::warning(
             this,
             tr("API Key Required"),
-            tr("Please enter an API key or set the %1 environment variable.")
-            .arg(ENV_VAR_OPENAI_API_KEY));
+            tr("Please enter an API key or check the environment variable option."));
         return;
     }
-    
-    if (model.empty()) {
+
+    if(model.empty()) {
         QMessageBox::warning(
             this,
             tr("Model Required"),
             tr("Please select or enter a model name."));
         return;
     }
-    
+
     // generate unique ID using timestamp
     auto now = chrono::system_clock::now();
     auto timestamp = chrono::duration_cast<chrono::seconds>(now.time_since_epoch()).count();
     providerConfig.id = "openai-" + to_string(timestamp);
     providerConfig.displayName = "OpenAI " + model;
     providerConfig.providerType = WINGMAN_PROVIDER_OPENAI;
-    providerConfig.apiKey = apiKey;
+    providerConfig.apiKey = apiKey;  // empty when useEnvVar is true
     providerConfig.llmModel = model;
     providerConfig.isValid = configValid;
-    
+    providerConfig.useEnvVar = useEnv;
+
     accept();
 }
 

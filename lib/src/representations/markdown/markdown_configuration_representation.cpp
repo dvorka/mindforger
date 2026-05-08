@@ -422,7 +422,7 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         while(std::getline(ss, part, '|')) {
                             parts.push_back(part);
                         }
-                        if(parts.size() == 7) {
+                        if(parts.size() >= 7) {
                             LlmProviderConfig p;
                             p.id = parts[0];
                             p.displayName = parts[1];
@@ -430,6 +430,7 @@ void MarkdownConfigurationRepresentation::configurationSection(
                             p.apiKey = parts[4];
                             p.llmModel = parts[5];
                             p.isValid = (parts[6] == "1");
+                            p.useEnvVar = (parts.size() >= 8 && parts[7] == "1");
                             string typeStr = parts[2];
                             if(typeStr == Configuration::getWingmanLlmProviderAsString(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI)) {
                                 p.providerType = WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI;
@@ -619,7 +620,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
               << p.url << "|"
               << p.apiKey << "|"
               << p.llmModel << "|"
-              << (p.isValid ? "1" : "0") << endl;
+              << (p.isValid ? "1" : "0") << "|"
+              << (p.useEnvVar ? "1" : "0") << endl;
         }
     }
     s << endl <<

@@ -735,7 +735,7 @@ ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
     QLabel* providerLabel = new QLabel(tr("Use LLM:"), this);
     llmProvidersCombo = new QComboBox(this);
 
-    addProviderButton = new QPushButton(tr(" Add LLM "), this);
+    addProviderButton = new QPushButton(tr("&Add LLM "), this);
 
     QHBoxLayout* llmRow1Layout = new QHBoxLayout();
     llmRow1Layout->addWidget(providerLabel);

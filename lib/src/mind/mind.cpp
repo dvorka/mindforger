@@ -1488,22 +1488,40 @@ void Mind::initWingman()
     }
 
     switch(provider->providerType) {
-    case WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI:
+    case WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI: {
         MF_DEBUG("  MIND Wingman init: OpenAI" << endl);
-        wingman = (Wingman*)new OpenAiWingman{provider->apiKey};
+        string effectiveKey = provider->apiKey;
+        if(provider->useEnvVar) {
+            const char* envKey = std::getenv(ENV_VAR_OPENAI_API_KEY);
+            if(envKey) {
+                effectiveKey = string(envKey);
+                MF_DEBUG("  MIND Wingman OpenAI: using env var key" << endl);
+            }
+        }
+        wingman = (Wingman*)new OpenAiWingman{effectiveKey};
         wingman->setLlmModel(provider->llmModel);
         break;
+    }
     case WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA:
         MF_DEBUG("  MIND Wingman init: ollama" << endl);
         wingman = (Wingman*)new OllamaWingman{provider->url};
         wingman->listModels();
         wingman->setLlmModel(provider->llmModel);
         break;
-    case WingmanLlmProviders::WINGMAN_PROVIDER_OPENROUTER:
+    case WingmanLlmProviders::WINGMAN_PROVIDER_OPENROUTER: {
         MF_DEBUG("  MIND Wingman init: OpenRouter" << endl);
-        wingman = (Wingman*)new OpenRouterWingman{provider->apiKey};
+        string effectiveKey = provider->apiKey;
+        if(provider->useEnvVar) {
+            const char* envKey = std::getenv(ENV_VAR_OPENROUTER_API_KEY);
+            if(envKey) {
+                effectiveKey = string(envKey);
+                MF_DEBUG("  MIND Wingman OpenRouter: using env var key" << endl);
+            }
+        }
+        wingman = (Wingman*)new OpenRouterWingman{effectiveKey};
         wingman->setLlmModel(provider->llmModel);
         break;
+    }
     case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
         MF_DEBUG("  MIND Wingman init: MOCK" << endl);
         wingman = (Wingman*)new MockWingman{MockWingman::LLM_MODEL_MOCK};

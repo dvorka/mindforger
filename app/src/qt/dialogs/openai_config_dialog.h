@@ -35,6 +35,7 @@ private:
     Configuration& config;
     
     QLineEdit* apiKeyEdit;
+    QCheckBox* useEnvVarCheckbox;
     QPushButton* resetButton;
     QLabel* envVarInfoLabel;
     QComboBox* llmModelCombo;
@@ -60,6 +61,7 @@ public:
     void show();
 
 private slots:
+    void handleEnvVarCheckbox(int state);
     void handleReset();
     void handleRefresh();
     void handleProbe();

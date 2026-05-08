@@ -39,24 +39,30 @@ OpenRouterConfigDialog::OpenRouterConfigDialog(QWidget* parent)
     apiKeyLayout->addWidget(apiKeyEdit);
     apiKeyLayout->addWidget(resetButton);
 
-    // environment variable info
+    // environment variable checkbox and info label
+    useEnvVarCheckbox = new QCheckBox(
+        tr("Use environment variable %1").arg(ENV_VAR_OPENROUTER_API_KEY), this);
     envVarInfoLabel = new QLabel(
-        tr("Environment variable: %1<br>(if set, overrides the value above)")
+        tr("Environment variable: %1")
         .arg(ENV_VAR_OPENROUTER_API_KEY), this);
+    envVarInfoLabel->setStyleSheet("QLabel { color: gray; font-size: small; }");
 
     // LLM model combo (editable for any model on OpenRouter)
     QLabel* modelLabel = new QLabel(tr("LLM Model:"), this);
     llmModelCombo = new QComboBox(this);
     llmModelCombo->setEditable(true);
-    llmModelCombo->addItem("openai/gpt-3.5-turbo");
+
+    llmModelCombo->addItem("openrouter/free");
+    llmModelCombo->addItem("meta-llama/llama-3.3-70b-instruct:free");
+    llmModelCombo->addItem("openai/gpt-oss-120b:free");
+    llmModelCombo->addItem("nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free");
     llmModelCombo->addItem("openai/gpt-4");
     llmModelCombo->addItem("anthropic/claude-3-haiku");
     llmModelCombo->addItem("anthropic/claude-3-sonnet");
     llmModelCombo->addItem("google/gemini-pro");
-    llmModelCombo->addItem("meta-llama/llama-3-8b-instruct");
 
     QLabel* modelHelpLabel = new QLabel(
-        tr("(Enter any model ID from <a href='https://openrouter.ai/models'>openrouter.ai/models</a>)"), this);
+        tr("Enter any model ID from <a href='https://openrouter.ai/models'>openrouter.ai/models</a>"), this);
     modelHelpLabel->setOpenExternalLinks(true);
     modelHelpLabel->setStyleSheet("QLabel { color: gray; font-size: small; }");
 
@@ -76,6 +82,7 @@ OpenRouterConfigDialog::OpenRouterConfigDialog(QWidget* parent)
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(apiKeyLabel);
     mainLayout->addLayout(apiKeyLayout);
+    mainLayout->addWidget(useEnvVarCheckbox);
     mainLayout->addWidget(envVarInfoLabel);
     mainLayout->addSpacing(10);
     mainLayout->addWidget(modelLabel);
@@ -87,6 +94,7 @@ OpenRouterConfigDialog::OpenRouterConfigDialog(QWidget* parent)
     setLayout(mainLayout);
 
     // signals
+    QObject::connect(useEnvVarCheckbox, &QCheckBox::stateChanged, this, &OpenRouterConfigDialog::handleEnvVarCheckbox);
     QObject::connect(resetButton, &QPushButton::clicked, this, &OpenRouterConfigDialog::handleReset);
     QObject::connect(probeButton, &QPushButton::clicked, this, &OpenRouterConfigDialog::handleProbe);
     QObject::connect(addButton, &QPushButton::clicked, this, &OpenRouterConfigDialog::handleAdd);
@@ -107,18 +115,48 @@ void OpenRouterConfigDialog::show()
     apiKeyEdit->clear();
     configValid = false;
 
+    // detect whether the environment variable exists and configure the checkbox
+    bool envVarExists = (std::getenv(ENV_VAR_OPENROUTER_API_KEY) != nullptr);
+    useEnvVarCheckbox->setEnabled(envVarExists);
+    if(!envVarExists) {
+        useEnvVarCheckbox->setChecked(false);
+        useEnvVarCheckbox->setToolTip(
+            tr("Set %1 environment variable to enable this option.")
+            .arg(ENV_VAR_OPENROUTER_API_KEY));
+    } else {
+        useEnvVarCheckbox->setChecked(false);
+        useEnvVarCheckbox->setEnabled(false);
+    }
+    // keep apiKeyEdit state consistent with checkbox
+    apiKeyEdit->setEnabled(!useEnvVarCheckbox->isChecked());
+
     QDialog::show();
+}
+
+void OpenRouterConfigDialog::handleEnvVarCheckbox(int state)
+{
+    bool useEnv = (state == Qt::Checked);
+    // when env var is used, the edit line is irrelevant - disable it
+    apiKeyEdit->setEnabled(!useEnv);
+    if(useEnv) {
+        apiKeyEdit->clear();
+    }
 }
 
 void OpenRouterConfigDialog::handleReset()
 {
+    useEnvVarCheckbox->setChecked(false);
     apiKeyEdit->clear();
+    apiKeyEdit->setEnabled(true);
     llmModelCombo->setCurrentIndex(0);
 }
 
 void OpenRouterConfigDialog::handleProbe()
 {
-    string apiKey = apiKeyEdit->text().toStdString();
+    // when checkbox is set, pass empty key - probeOpenRouterProvider will check env var itself
+    string apiKey = useEnvVarCheckbox->isChecked()
+        ? string{}
+        : apiKeyEdit->text().toStdString();
     string model = llmModelCombo->currentText().toStdString();
     string errorMessage;
 
@@ -140,21 +178,20 @@ void OpenRouterConfigDialog::handleProbe()
 
 void OpenRouterConfigDialog::handleAdd()
 {
-    string apiKey = apiKeyEdit->text().toStdString();
+    bool useEnv = useEnvVarCheckbox->isChecked();
+    string apiKey = useEnv ? string{} : apiKeyEdit->text().toStdString();
     string model = llmModelCombo->currentText().toStdString();
 
-    // validate inputs
-    const char* envKey = std::getenv(ENV_VAR_OPENROUTER_API_KEY);
-    if (apiKey.empty() && envKey == nullptr) {
+    // validate: key must come from either the edit line or the env var
+    if(!useEnv && apiKey.empty()) {
         QMessageBox::warning(
             this,
             tr("API Key Required"),
-            tr("Please enter an API key or set the %1 environment variable.")
-            .arg(ENV_VAR_OPENROUTER_API_KEY));
+            tr("Please enter an API key or check the environment variable option."));
         return;
     }
 
-    if (model.empty()) {
+    if(model.empty()) {
         QMessageBox::warning(
             this,
             tr("Model Required"),
@@ -168,9 +205,10 @@ void OpenRouterConfigDialog::handleAdd()
     providerConfig.id = "openrouter-" + to_string(timestamp);
     providerConfig.displayName = "OpenRouter " + model;
     providerConfig.providerType = WINGMAN_PROVIDER_OPENROUTER;
-    providerConfig.apiKey = apiKey;
+    providerConfig.apiKey = apiKey;  // empty when useEnvVar is true
     providerConfig.llmModel = model;
     providerConfig.isValid = configValid;
+    providerConfig.useEnvVar = useEnv;
 
     accept();
 }
