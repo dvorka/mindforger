@@ -36,7 +36,7 @@ This document provides instructions to the copilot AI assistants for dvorka/mind
 - Library dependencies are stored in `deps/` - each have its own build style.
 - Library code lives under `lib/`.
 - Qt application code lives under `app/`.
-- Tests code lives under `lib/tests/`.
+- Tests code lives under `lib/test/`.
 - Licenses are stored in `licenses/`.
 
 ## Test instructions
