@@ -68,6 +68,9 @@ Ontology::Ontology()
     tagTaxonomy.add(Tag::KeyTodo(), new Tag{Tag::KeyTodo(), &tagTaxonomy, Color::MF_YELLOW()});
     tagTaxonomy.add(Tag::KeyWip(), new Tag{Tag::KeyWip(), &tagTaxonomy, Color::MF_ORANGE()});
     tagTaxonomy.add(Tag::KeyDone(), new Tag{Tag::KeyDone(), &tagTaxonomy, Color::MF_GREEN()});
+    tagTaxonomy.add(Tag::KeyP2(), new Tag{Tag::KeyP2(), &tagTaxonomy, Color::PINK()});
+    tagTaxonomy.add(Tag::KeyP1(), new Tag{Tag::KeyP1(), &tagTaxonomy, Color::MF_RED()});
+    tagTaxonomy.add(Tag::KeyP0(), new Tag{Tag::KeyP0(), &tagTaxonomy, Color::RED()});
     // knowledge type
     tagTaxonomy.add(Tag::KeyWhat(), new Tag{Tag::KeyWhat(), &tagTaxonomy, Color::MF_TURQUOISE()});
     tagTaxonomy.add(Tag::KeyHow(), new Tag{Tag::KeyHow(), &tagTaxonomy, Color::MF_TURQUOISE()});

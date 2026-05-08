@@ -2,8 +2,9 @@
 
     * Released v2.1.0 - Local LLMs support, Notes semantic search
       and orphan library documents management.
-    * Autolinking renders autolinked links and manually made links in
-      different colors.
+    * Autolinking renders manual links and auto links in different colors - blue vs.
+      green.
+    * Improved tag rendering for TODO/WIP/DONE and priorities P0/P1/P2.
     * WIP: Feature: ollama integration brings privacy safe Wingman
       via ollama hosted LLMs.
     * WIP: Feature: embeddings calculation by ollama hosted LLM models
