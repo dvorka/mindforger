@@ -319,7 +319,11 @@ void ConfigurationDialog::ViewerTab::refresh()
     }
 
     zoomSpin->setValue(config.getUiHtmlZoom());
-    srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
+    // BUG: there is a bug @ Ubuntu 24.04 and newer that crashes MF if src highlight is on >
+    //   before it is fixed, this settting must be reset & disabled
+    srcCodeHighlightSupportCheck->setChecked(false);
+    srcCodeHighlightSupportCheck->setVisible(false);
+    //srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
     mathSupportCheck->setChecked(config.isUiEnableMathInMd());
     fullOPreviewCheck->setChecked(config.isUiFullOPreview());
     diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());

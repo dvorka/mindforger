@@ -293,7 +293,10 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         }
                     } else if(line->find(CONFIG_SETTING_MD_HIGHLIGHT_LABEL) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
-                            c.setUiEnableSrcHighlightInMd(true);
+                            // BUG: there is a bug @ Ubuntu 24.04 and newer that crashes MF if src highlight is on >
+                            //   before it is fixed, this settting must be reset & disabled
+                            c.setUiEnableSrcHighlightInMd(false);
+                            //c.setUiEnableSrcHighlightInMd(true);
                         } else {
                             c.setUiEnableSrcHighlightInMd(false);
                         }
