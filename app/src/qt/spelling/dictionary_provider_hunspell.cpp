@@ -330,7 +330,11 @@ DictionaryProviderHunspell::DictionaryProviderHunspell()
 {
 	QStringList dictdirs = QDir::searchPaths("dict");
 #if !defined(Q_OS_MAC) && defined(Q_OS_UNIX)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+	QStringList xdg = QString(qgetenv("XDG_DATA_DIRS")).split(QChar(':'), Qt::SkipEmptyParts);
+#else
 	QStringList xdg = QString(qgetenv("XDG_DATA_DIRS")).split(QChar(':'), QString::SkipEmptyParts);
+#endif
 	if (xdg.isEmpty()) {
 		xdg.append("/usr/local/share");
 		xdg.append("/usr/share");
