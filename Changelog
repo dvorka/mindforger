@@ -1,7 +1,7 @@
 2026-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v2.1.0 - Local LLMs support, Notes semantic search
-      and orphan library documents management.
+    * Released v2.1.0 - Local LLMs support, Notes semantic search and orphan
+      library documents management.
     * Autolinking renders manual links and auto links in different colors - blue vs.
       green.
     * Improved tag rendering for TODO/WIP/DONE and priorities P0/P1/P2.
@@ -30,6 +30,8 @@
     * Fix: macOS CI updated to use macos-13 (Intel) runner with
       jurplel/install-qt-action@v4 to get Qt 5.15.2 with WebEngine - Homebrew's
       qt@5 on Apple Silicon (macos-latest) no longer ships qtwebengine.
+    * Fix: source code fixed to be compilable w/o warning on systems w/ GCC 13+
+      (deprecated language and QT constructions updated & conditionally compiled)
 
 2024-02-16  Martin Dvorak  <martin.dvorak@mindforger.com>
 

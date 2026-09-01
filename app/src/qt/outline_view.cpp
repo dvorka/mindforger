@@ -66,6 +66,8 @@ void OutlineView::refreshHeader(const std::string& name)
                QString::fromStdString(name),
                Qt::ElideRight,
                width()-20);
+        // escape '&' in the outline name to avoid Qt interpreting it as a shortcut
+        elidedText.replace(QLatin1Char('&'), QLatin1String("&&"));
         nameLabel->setText(elidedText);
     } else {
         nameLabel->setText("");
