@@ -113,7 +113,8 @@ win32{
     } else:!mfnocxx {
       QMAKE_CXX = ccache g++
     }
-    QMAKE_CXXFLAGS += -pedantic -std=c++11
+    CONFIG += c++14
+    QMAKE_CXXFLAGS += -pedantic
     # ensure valgrind line numbers
     mfunits {
       QMAKE_CXX += -g

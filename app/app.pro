@@ -182,7 +182,8 @@ INCLUDEPATH += ./src/qt/spelling
 # - S7    64b: GCC 4.8.5, Qt 5.2.1
 # - Win10 64b: MSVC 2017, Qt 5.12.0
 #
-# - GCC: -std=c++0x ~ -std=c++11
+# - GCC: -std=c++0x is the pre-standardization name for -std=c++11 (same thing)
+# - project targets C++14
 #
 # compiler and compiler options:
 #   - https://doc.qt.io/qt-6/qmake-variable-reference.html#qmake-cxx
@@ -204,7 +205,8 @@ win32{
     } else:!mfnocxx {
       QMAKE_CXX = ccache g++
     }
-    QMAKE_CXXFLAGS += -pedantic -std=c++11
+    CONFIG += c++14
+    QMAKE_CXXFLAGS += -pedantic
 }
 
 # profiling: instrument code for gprof

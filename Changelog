@@ -2,6 +2,9 @@
 
     * Released v2.1.0 - Local LLMs support, Notes semantic search and orphan
       library documents management.
+    * Project upgraded from C++11 to C++14 - this is the conservative change which
+      enables MindForger to be built on GitHub Actions/Appveyor/CI nodes again and
+      catches up a bit on new distros.
     * Autolinking renders manual links and auto links in different colors - blue vs.
       green.
     * Improved tag rendering for TODO/WIP/DONE and priorities P0/P1/P2.

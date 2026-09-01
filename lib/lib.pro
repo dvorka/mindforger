@@ -75,7 +75,8 @@ win32{
     }
 
     # -O3 ... can be specified by this variable (overrides -O1 -O2)
-    QMAKE_CXXFLAGS += -pedantic -std=c++11
+    CONFIG += c++14
+    QMAKE_CXXFLAGS += -pedantic
 }
 
 SOURCES += \

@@ -231,11 +231,13 @@ SOURCES += \
 # - S7    64b:   GCC 4.8.5, Qt 5.2.1
 # - Win10 64b: MinGW 4.9.2, Qt 5.10.0
 #
-# - GCC: -std=c++0x ~ -std=c++11
+# - GCC: -std=c++0x is the pre-standardization name for -std=c++11 (same thing)
+# - project targets C++14
 
 # Enable MindForger test/profiling code
 QMAKE_CXX = ccache g++
-QMAKE_CXXFLAGS += -pedantic -std=c++11 -DDO_MF_DEBUG
+CONFIG += c++14
+QMAKE_CXXFLAGS += -pedantic -DDO_MF_DEBUG
 
 TRANSLATIONS = src/qt/translations/mindforger_en.ts \
     ../../src/qt/translations/mindforger_de.ts \
