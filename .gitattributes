@@ -1,0 +1,6 @@
+# vendored stemmer library keeps its original Windows-style line endings;
+# pin them so tools don't silently convert only some lines and produce a
+# mixed-EOL file (see lib/src/mind/ai/nlp/stemmer/{utilities,stemming,indexing})
+lib/src/mind/ai/nlp/stemmer/utilities/* text eol=crlf
+lib/src/mind/ai/nlp/stemmer/stemming/* text eol=crlf
+lib/src/mind/ai/nlp/stemmer/indexing/* text eol=crlf

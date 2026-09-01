@@ -18,6 +18,7 @@
 .vibe/
 .vs/
 .vscode/
+CLAUDE.md
 Debug/
 Makefile
 Makefile.*

@@ -120,11 +120,7 @@ static inline std::string &stringLeftTrim(std::string& s) {
         s.begin(),
         std::find_if(s.begin(),
         s.end(),
-#if defined(__APPLE__) || defined(__FreeBSD__)
         [](int c) {return !std::isspace(c);})
-#else
-        std::not1(std::ptr_fun<int, int>(isspace)))
-#endif
     );
     return s;
 }
@@ -134,13 +130,8 @@ static inline std::string &stringRightTrim(std::string& s) {
         std::find_if(
             s.rbegin(),
             s.rend(),
-#if defined(__APPLE__) || defined(__FreeBSD__)
             [](int c) {return !std::isspace(c);}
         ).base(),
-#else
-            std::not1(std::ptr_fun<int, int>(isspace))
-        ).base(),
-#endif
         s.end()
     );
     return s;
