@@ -63,9 +63,23 @@ iconfiles.files += app/resources/icons/*
 iconfiles.path = $$PREFIX/share/icons/mindforger/
 INSTALLS += iconfiles
 
-# experiment w/ file
-shortcutfiles.files += app/resources/gnome-shell/mindforger.desktop
-shortcutfiles.path = $$PREFIX/share/applications/
-INSTALLS += shortcutfiles
+# Standard location for svg icon
+linuxsvg.files += app/resources/icons/mindforger.svg
+linuxsvg.path = $$PREFIX/share/icons/hicolor/scalable/apps/
+INSTALLS += linuxsvg
+
+# Standard location for png icon
+linuxpng.files += app/resources/icons/mindforger128x128.png
+linuxpng.path = $$PREFIX/share/icons/hicolor/128x128/apps/
+INSTALLS += linuxpng
+
+linuxdesktopfiles.files += app/resources/linux/mindforger.desktop
+linuxdesktopfiles.path = $$PREFIX/share/applications/
+INSTALLS += linuxdesktopfiles
+
+# Appstream Metainfo for linux software centers
+appstreammetainfofiles.files += app/resources/linux/com.mindforger.mindforger.metainfo.xml
+appstreammetainfofiles.path = $$PREFIX/share/metainfo/
+INSTALLS += appstreammetainfofiles
 
 # eof
