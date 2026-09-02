@@ -45,6 +45,7 @@ private:
 
     LlmProviderConfig providerConfig;
     bool configValid;
+    bool editMode;
 
 public:
     explicit OpenRouterConfigDialog(QWidget* parent);
@@ -53,6 +54,8 @@ public:
     OpenRouterConfigDialog& operator=(const OpenRouterConfigDialog&) = delete;
     OpenRouterConfigDialog& operator=(const OpenRouterConfigDialog&&) = delete;
     ~OpenRouterConfigDialog();
+
+    void setEditProvider(const LlmProviderConfig& provider);
 
     const LlmProviderConfig& getProviderConfig() const { return providerConfig; }
     bool isConfigValid() const { return configValid; }

@@ -33,7 +33,7 @@ class OpenAiConfigDialog : public QDialog
 
 private:
     Configuration& config;
-    
+
     QLineEdit* apiKeyEdit;
     QCheckBox* useEnvVarCheckbox;
     QPushButton* resetButton;
@@ -43,9 +43,10 @@ private:
     QPushButton* probeButton;
     QPushButton* addButton;
     QPushButton* cancelButton;
-    
+
     LlmProviderConfig providerConfig;
     bool configValid;
+    bool editMode;
 
 public:
     explicit OpenAiConfigDialog(QWidget* parent);
@@ -54,6 +55,8 @@ public:
     OpenAiConfigDialog& operator=(const OpenAiConfigDialog&) = delete;
     OpenAiConfigDialog& operator=(const OpenAiConfigDialog&&) = delete;
     ~OpenAiConfigDialog();
+
+    void setEditProvider(const LlmProviderConfig& provider);
 
     const LlmProviderConfig& getProviderConfig() const { return providerConfig; }
     bool isConfigValid() const { return configValid; }

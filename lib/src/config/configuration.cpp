@@ -389,7 +389,7 @@ const char* Configuration::getEditorFromEnv()
 }
 
 bool Configuration::isWingman() {
-    return !llmProviders.empty() && !activeLlmProviderId.empty();
+    return getActiveLlmProvider() != nullptr;
 }
 
 /*
@@ -430,16 +430,16 @@ void Configuration::updateLlmProvider(const string& id, const LlmProviderConfig&
 void Configuration::removeLlmProvider(const string& id) {
     llmProviders.erase(
         std::remove_if(
-            llmProviders.begin(), 
+            llmProviders.begin(),
             llmProviders.end(),
             [&id](const LlmProviderConfig& p) { return p.id == id; }),
         llmProviders.end());
-    
+
     // if active provider was removed, clear active provider
     if (activeLlmProviderId == id) {
         activeLlmProviderId.clear();
     }
-    
+
     MF_DEBUG("Configuration::removeLlmProvider() removed: " << id << endl);
 }
 
@@ -448,12 +448,12 @@ void Configuration::setActiveLlmProvider(const string& id) {
     MF_DEBUG("Configuration::setActiveLlmProvider() set to: " << id << endl);
 }
 
-bool Configuration::probeOpenAiProvider(
-    const string& apiKey, 
-    const string& model, 
-    string& errorMessage) 
+bool Configuration::validateOpenAiProviderInput(
+    const string& apiKey,
+    const string& model,
+    string& errorMessage)
 {
-    // basic validation
+    // input-only validation - does NOT contact the OpenAI API
     if (apiKey.empty()) {
         const char* envKey = std::getenv(ENV_VAR_OPENAI_API_KEY);
         if(envKey == nullptr) {
@@ -461,46 +461,42 @@ bool Configuration::probeOpenAiProvider(
             return false;
         }
     }
-    
+
     if (model.empty()) {
         errorMessage = "Model name is required";
         return false;
     }
-    
-    // TODO: actually test the connection by calling OpenAI API
-    // For now, just validate the inputs
-    MF_DEBUG("Configuration::probeOpenAiProvider() validated: " << model << endl);
+
+    MF_DEBUG("Configuration::validateOpenAiProviderInput() validated: " << model << endl);
     return true;
 }
 
-bool Configuration::probeOllamaProvider(
-    const string& url, 
-    const string& model, 
-    string& errorMessage) 
+bool Configuration::validateOllamaProviderInput(
+    const string& url,
+    const string& model,
+    string& errorMessage)
 {
-    // basic validation
+    // input-only validation - does NOT contact the ollama server
     if (url.empty()) {
         errorMessage = "URL is required for ollama provider";
         return false;
     }
-    
+
     if (model.empty()) {
         errorMessage = "Model name is required";
         return false;
     }
-    
-    // TODO: actually test the connection by calling ollama API
-    // For now, just validate the inputs
-    MF_DEBUG("Configuration::probeOllamaProvider() validated: " << url << ", " << model << endl);
+
+    MF_DEBUG("Configuration::validateOllamaProviderInput() validated: " << url << ", " << model << endl);
     return true;
 }
 
-bool Configuration::probeOpenRouterProvider(
+bool Configuration::validateOpenRouterProviderInput(
     const string& apiKey,
     const string& model,
     string& errorMessage)
 {
-    // basic validation
+    // input-only validation - does NOT contact the OpenRouter API
     if (apiKey.empty()) {
         const char* envKey = std::getenv(ENV_VAR_OPENROUTER_API_KEY);
         if(envKey == nullptr) {
@@ -514,7 +510,7 @@ bool Configuration::probeOpenRouterProvider(
         return false;
     }
 
-    MF_DEBUG("Configuration::probeOpenRouterProvider() validated: " << model << endl);
+    MF_DEBUG("Configuration::validateOpenRouterProviderInput() validated: " << model << endl);
     return true;
 }
 

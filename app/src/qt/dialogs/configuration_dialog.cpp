@@ -764,6 +764,7 @@ ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
     QLabel* pLabel = new QLabel(tr("Your data privacy:"), this);
     privacyValue = new QLabel("", this);
 
+    editButton = new QPushButton(tr("Edit"), this);
     testButton = new QPushButton(tr("Test Connection"), this);
     removeButton = new QPushButton(tr("Remove"), this);
 
@@ -778,6 +779,7 @@ ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
     detailsLayout->addWidget(privacyValue, 3, 1);
 
     QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(editButton);
     buttonLayout->addWidget(testButton);
     buttonLayout->addWidget(removeButton);
     buttonLayout->addStretch();
@@ -805,6 +807,9 @@ ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
         addProviderButton, &QPushButton::clicked,
         this, &WingmanTab::handleAddProvider);
     QObject::connect(
+        editButton, &QPushButton::clicked,
+        this, &WingmanTab::handleEditProvider);
+    QObject::connect(
         removeButton, &QPushButton::clicked,
         this, &WingmanTab::handleRemoveProvider);
     QObject::connect(
@@ -821,29 +826,43 @@ ConfigurationDialog::WingmanTab::~WingmanTab()
 
 void ConfigurationDialog::WingmanTab::refresh()
 {
-    // populate providers combo
+    // (re)stage from config - the dialog was just (re)opened
+    stagedProviders = config.getLlmProviders();
+    stagedActiveProviderId = config.getActiveLlmProviderId();
+
+    refreshProvidersUi();
+}
+
+LlmProviderConfig* ConfigurationDialog::WingmanTab::findStagedProviderById(const string& id)
+{
+    for (auto& provider : stagedProviders) {
+        if (provider.id == id) {
+            return &provider;
+        }
+    }
+    return nullptr;
+}
+
+void ConfigurationDialog::WingmanTab::refreshProvidersUi()
+{
+    // populate providers combo from the staged copy
     llmProvidersCombo->clear();
 
-    vector<LlmProviderConfig>& providers = config.getLlmProviders();
-    if (providers.empty()) {
+    if (stagedProviders.empty()) {
         providerDetailsGroup->setVisible(false);
         return;
     }
 
-    for (const auto& provider : providers) {
+    for (const auto& provider : stagedProviders) {
         llmProvidersCombo->addItem(
             QString::fromStdString(provider.displayName),
             QString::fromStdString(provider.id));
     }
 
-    // select active provider
-    LlmProviderConfig* activeProvider = config.getActiveLlmProvider();
-    if (activeProvider) {
-        int index = llmProvidersCombo->findData(
-            QString::fromStdString(activeProvider->id));
-        if (index >= 0) {
-            llmProvidersCombo->setCurrentIndex(index);
-        }
+    // select staged active provider
+    int index = llmProvidersCombo->findData(QString::fromStdString(stagedActiveProviderId));
+    if (index >= 0) {
+        llmProvidersCombo->setCurrentIndex(index);
     }
 
     handleProviderSelectionChanged(llmProvidersCombo->currentIndex());
@@ -851,11 +870,16 @@ void ConfigurationDialog::WingmanTab::refresh()
 
 void ConfigurationDialog::WingmanTab::save()
 {
+    // set the copy to cfg - the only place Add/Edit/Rm/Test Connection takes effect
+    config.getLlmProviders() = stagedProviders;
+
     // save active provider selection
     if (llmProvidersCombo->count() > 0) {
         QString providerId = llmProvidersCombo->itemData(
             llmProvidersCombo->currentIndex()).toString();
         config.setActiveLlmProvider(providerId.toStdString());
+    } else {
+        config.setActiveLlmProvider("");
     }
 }
 
@@ -868,20 +892,20 @@ void ConfigurationDialog::WingmanTab::handleAddProvider()
         if (providerType == WINGMAN_PROVIDER_OPENAI) {
             OpenAiConfigDialog configDialog(this);
             if (configDialog.exec() == QDialog::Accepted) {
-                config.addLlmProvider(configDialog.getProviderConfig());
-                refresh();
+                stagedProviders.push_back(configDialog.getProviderConfig());
+                refreshProvidersUi();
             }
         } else if (providerType == WINGMAN_PROVIDER_OLLAMA) {
             OllamaConfigDialog configDialog(this);
             if (configDialog.exec() == QDialog::Accepted) {
-                config.addLlmProvider(configDialog.getProviderConfig());
-                refresh();
+                stagedProviders.push_back(configDialog.getProviderConfig());
+                refreshProvidersUi();
             }
         } else if (providerType == WINGMAN_PROVIDER_OPENROUTER) {
             OpenRouterConfigDialog configDialog(this);
             if (configDialog.exec() == QDialog::Accepted) {
-                config.addLlmProvider(configDialog.getProviderConfig());
-                refresh();
+                stagedProviders.push_back(configDialog.getProviderConfig());
+                refreshProvidersUi();
             }
         }
     }
@@ -895,17 +919,36 @@ void ConfigurationDialog::WingmanTab::handleEditProvider()
 
     QString providerId = llmProvidersCombo->itemData(
         llmProvidersCombo->currentIndex()).toString();
-    LlmProviderConfig* provider = config.getLlmProviderById(providerId.toStdString());
+    LlmProviderConfig* provider = findStagedProviderById(providerId.toStdString());
 
     if (!provider) {
         return;
     }
+    // copy: provider is a pointer into staged providers vector - dereference
+    LlmProviderConfig editedProvider = *provider;
 
-    // TODO: implement edit functionality
-    QMessageBox::information(
-        this,
-        tr("Edit Provider"),
-        tr("Edit functionality is not yet implemented."));
+    if (editedProvider.providerType == WINGMAN_PROVIDER_OPENAI) {
+        OpenAiConfigDialog configDialog(this);
+        configDialog.setEditProvider(editedProvider);
+        if (configDialog.exec() == QDialog::Accepted) {
+            *findStagedProviderById(editedProvider.id) = configDialog.getProviderConfig();
+            refreshProvidersUi();
+        }
+    } else if (editedProvider.providerType == WINGMAN_PROVIDER_OLLAMA) {
+        OllamaConfigDialog configDialog(this);
+        configDialog.setEditProvider(editedProvider);
+        if (configDialog.exec() == QDialog::Accepted) {
+            *findStagedProviderById(editedProvider.id) = configDialog.getProviderConfig();
+            refreshProvidersUi();
+        }
+    } else if (editedProvider.providerType == WINGMAN_PROVIDER_OPENROUTER) {
+        OpenRouterConfigDialog configDialog(this);
+        configDialog.setEditProvider(editedProvider);
+        if (configDialog.exec() == QDialog::Accepted) {
+            *findStagedProviderById(editedProvider.id) = configDialog.getProviderConfig();
+            refreshProvidersUi();
+        }
+    }
 }
 
 void ConfigurationDialog::WingmanTab::handleRemoveProvider()
@@ -924,8 +967,17 @@ void ConfigurationDialog::WingmanTab::handleRemoveProvider()
         QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::Yes) {
-        config.removeLlmProvider(providerId.toStdString());
-        refresh();
+        string id = providerId.toStdString();
+        stagedProviders.erase(
+            std::remove_if(
+                stagedProviders.begin(),
+                stagedProviders.end(),
+                [&id](const LlmProviderConfig& p) { return p.id == id; }),
+            stagedProviders.end());
+        if (stagedActiveProviderId == id) {
+            stagedActiveProviderId.clear();
+        }
+        refreshProvidersUi();
     }
 }
 
@@ -937,7 +989,7 @@ void ConfigurationDialog::WingmanTab::handleTestConnection()
 
     QString providerId = llmProvidersCombo->itemData(
         llmProvidersCombo->currentIndex()).toString();
-    LlmProviderConfig* provider = config.getLlmProviderById(providerId.toStdString());
+    LlmProviderConfig* provider = findStagedProviderById(providerId.toStdString());
 
     if (!provider) {
         return;
@@ -947,14 +999,44 @@ void ConfigurationDialog::WingmanTab::handleTestConnection()
     bool success = false;
 
     if (provider->providerType == WINGMAN_PROVIDER_OPENAI) {
-        success = config.probeOpenAiProvider(
-            provider->apiKey, provider->llmModel, errorMessage);
+        string effectiveApiKey = provider->apiKey;
+        if (provider->useEnvVar) {
+            const char* envKey = std::getenv(ENV_VAR_OPENAI_API_KEY);
+            if (envKey) {
+                effectiveApiKey = string(envKey);
+            }
+        }
+        if (config.validateOpenAiProviderInput(effectiveApiKey, provider->llmModel, errorMessage)) {
+            OpenAiWingman wingman{effectiveApiKey};
+            success = wingman.didLastListModelsSucceed();
+            if (!success) {
+                errorMessage = "Could not connect to the OpenAI API with the given API key";
+            }
+        }
     } else if (provider->providerType == WINGMAN_PROVIDER_OLLAMA) {
-        success = config.probeOllamaProvider(
-            provider->url, provider->llmModel, errorMessage);
+        if (config.validateOllamaProviderInput(provider->url, provider->llmModel, errorMessage)) {
+            OllamaWingman wingman{provider->url};
+            wingman.listModels();
+            success = wingman.didLastListModelsSucceed();
+            if (!success) {
+                errorMessage = "Could not connect to the ollama server at " + provider->url;
+            }
+        }
     } else if (provider->providerType == WINGMAN_PROVIDER_OPENROUTER) {
-        success = config.probeOpenRouterProvider(
-            provider->apiKey, provider->llmModel, errorMessage);
+        string effectiveApiKey = provider->apiKey;
+        if (provider->useEnvVar) {
+            const char* envKey = std::getenv(ENV_VAR_OPENROUTER_API_KEY);
+            if (envKey) {
+                effectiveApiKey = string(envKey);
+            }
+        }
+        if (config.validateOpenRouterProviderInput(effectiveApiKey, provider->llmModel, errorMessage)) {
+            OpenRouterWingman wingman{effectiveApiKey};
+            success = wingman.didLastListModelsSucceed();
+            if (!success) {
+                errorMessage = "Could not connect to the OpenRouter API with the given API key";
+            }
+        }
     }
 
     if (success) {
@@ -982,7 +1064,7 @@ void ConfigurationDialog::WingmanTab::handleProviderSelectionChanged(int index)
     }
 
     QString providerId = llmProvidersCombo->itemData(index).toString();
-    LlmProviderConfig* provider = config.getLlmProviderById(providerId.toStdString());
+    LlmProviderConfig* provider = findStagedProviderById(providerId.toStdString());
 
     if (!provider) {
         providerDetailsGroup->setVisible(false);

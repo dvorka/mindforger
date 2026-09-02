@@ -43,7 +43,8 @@ size_t ollamaCurlWriteCallback(void* contents, size_t size, size_t nmemb, std::s
 OllamaWingman::OllamaWingman(const string& url)
     : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA),
       url{url},
-      llmModels{}
+      llmModels{},
+      lastListModelsSucceeded{false}
 {
 }
 
@@ -52,6 +53,8 @@ OllamaWingman::~OllamaWingman()
 }
 
 void OllamaWingman::listModelsHttpGet() {
+    lastListModelsSucceeded = false;
+
     string url =
         this->url +
         (stringEndsWith(this->url, "/")?"":"/") +
@@ -140,7 +143,10 @@ void OllamaWingman::listModelsHttpGet() {
         "OllamaWingman::listModelsHttpGet() parsed response:" << endl
         << ">>>" << httpResponseJSon.dump(4) << "<<<" << endl);
 
+    // a "models" array (even if empty) means the server responded correctly -
+    // a server with no models installed is still a successful connection
     if(httpResponseJSon.contains("models")) {
+        lastListModelsSucceeded = true;
         for(const auto& item : httpResponseJSon["models"].items()) {
             if(item.value().contains("name")) {
                 string llmModelName{item.value()["name"]};
@@ -214,7 +220,6 @@ void OllamaWingman::chatHttpPost(CommandWingmanChat& command) {
         QEventLoop loop;
         QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
         loop.exec();
-        reply->deleteLater();
 
         command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
 
@@ -249,6 +254,7 @@ void OllamaWingman::chatHttpPost(CommandWingmanChat& command) {
                 "Successful ollama Wingman provider response:" << endl <<
                 "  '" << command.httpResponse << "'" << endl);
         }
+        reply->deleteLater();
 #else
         // set up cURL options: POST
         command.httpResponse.clear();
@@ -443,7 +449,6 @@ void OllamaWingman::embeddingsHttpPost(CommandWingmanEmbeddings& command) {
         QEventLoop loop;
         QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
         loop.exec();
-        reply->deleteLater();
 
         command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
 
@@ -478,6 +483,7 @@ void OllamaWingman::embeddingsHttpPost(CommandWingmanEmbeddings& command) {
                 "Successful ollama Wingman provider response:" << endl <<
                 "  '" << command.httpResponse << "'" << endl);
         }
+        reply->deleteLater();
 #else
         // set up cURL options: POST
         command.httpResponse.clear();

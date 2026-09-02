@@ -197,8 +197,7 @@ constexpr const auto ENV_VAR_OPENROUTER_LLM_MODEL = "MINDFORGER_OPENROUTER_LLM_M
 /**
  * @brief LLM Provider Configuration
  *
- * Represents configuration for a single Large Language Model provider.
- * Supports ollama, OpenRouter and OpenAI providers with provider-specific fields.
+ * Represents configuration for a single LLM provider.
  */
 struct LlmProviderConfig {
     std::string id;                    // unique identifier (e.g., "ollama-local")
@@ -578,9 +577,9 @@ public:
     void removeLlmProvider(const std::string& id);
     void setActiveLlmProvider(const std::string& id);
     std::string getActiveLlmProviderId() const { return activeLlmProviderId; }
-    bool probeOpenAiProvider(const std::string& apiKey, const std::string& model, std::string& errorMessage);
-    bool probeOllamaProvider(const std::string& url, const std::string& model, std::string& errorMessage);
-    bool probeOpenRouterProvider(const std::string& apiKey, const std::string& model, std::string& errorMessage);
+    bool validateOpenAiProviderInput(const std::string& apiKey, const std::string& model, std::string& errorMessage);
+    bool validateOllamaProviderInput(const std::string& url, const std::string& model, std::string& errorMessage);
+    bool validateOpenRouterProviderInput(const std::string& apiKey, const std::string& model, std::string& errorMessage);
 
     /**
      * @brief Check whether a Wingman LLM provider is ready from

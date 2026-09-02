@@ -33,7 +33,7 @@ class OllamaConfigDialog : public QDialog
 
 private:
     Configuration& config;
-    
+
     QLineEdit* urlEdit;
     QPushButton* resetButton;
     QComboBox* llmModelCombo;
@@ -41,9 +41,10 @@ private:
     QPushButton* probeButton;
     QPushButton* addButton;
     QPushButton* cancelButton;
-    
+
     LlmProviderConfig providerConfig;
     bool configValid;
+    bool editMode;
 
 public:
     explicit OllamaConfigDialog(QWidget* parent);
@@ -52,6 +53,8 @@ public:
     OllamaConfigDialog& operator=(const OllamaConfigDialog&) = delete;
     OllamaConfigDialog& operator=(const OllamaConfigDialog&&) = delete;
     ~OllamaConfigDialog();
+
+    void setEditProvider(const LlmProviderConfig& provider);
 
     const LlmProviderConfig& getProviderConfig() const { return providerConfig; }
     bool isConfigValid() const { return configValid; }

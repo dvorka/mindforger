@@ -25,9 +25,9 @@ using namespace std;
 OpenRouterConfigDialog::OpenRouterConfigDialog(QWidget* parent)
     : QDialog(parent),
       config(Configuration::getInstance()),
-      configValid(false)
+      configValid(false),
+      editMode(false)
 {
-    // API key field
     QLabel* apiKeyLabel = new QLabel(tr("API Key:"), this);
     apiKeyEdit = new QLineEdit(this);
     apiKeyEdit->setEchoMode(QLineEdit::Password);
@@ -39,7 +39,6 @@ OpenRouterConfigDialog::OpenRouterConfigDialog(QWidget* parent)
     apiKeyLayout->addWidget(apiKeyEdit);
     apiKeyLayout->addWidget(resetButton);
 
-    // environment variable checkbox and info label
     useEnvVarCheckbox = new QCheckBox(
         tr("Use environment variable %1").arg(ENV_VAR_OPENROUTER_API_KEY), this);
     envVarInfoLabel = new QLabel(
@@ -47,7 +46,6 @@ OpenRouterConfigDialog::OpenRouterConfigDialog(QWidget* parent)
         .arg(ENV_VAR_OPENROUTER_API_KEY), this);
     envVarInfoLabel->setStyleSheet("QLabel { color: gray; font-size: small; }");
 
-    // LLM model combo (editable for any model on OpenRouter)
     QLabel* modelLabel = new QLabel(tr("LLM Model:"), this);
     llmModelCombo = new QComboBox(this);
     llmModelCombo->setEditable(true);
@@ -110,15 +108,23 @@ OpenRouterConfigDialog::~OpenRouterConfigDialog()
 {
 }
 
+void OpenRouterConfigDialog::setEditProvider(const LlmProviderConfig& provider)
+{
+    editMode = true;
+    providerConfig = provider;
+    configValid = provider.isValid;
+
+    setWindowTitle(tr("Edit OpenRouter Provider"));
+    addButton->setText(tr("Save"));
+}
+
 void OpenRouterConfigDialog::showEvent(QShowEvent* event)
 {
-    apiKeyEdit->clear();
-    configValid = false;
-
-    // detect whether the environment variable exists and configure the checkbox
     bool envVarExists = (std::getenv(ENV_VAR_OPENROUTER_API_KEY) != nullptr);
-    useEnvVarCheckbox->setEnabled(envVarExists);
-    if(!envVarExists) {
+    bool showEnvVarOption = envVarExists || (editMode && providerConfig.useEnvVar);
+    useEnvVarCheckbox->setEnabled(showEnvVarOption);
+    useEnvVarCheckbox->setVisible(showEnvVarOption);
+    if(!showEnvVarOption) {
         useEnvVarCheckbox->setChecked(false);
         useEnvVarCheckbox->setToolTip(
             tr("Set %1 environment variable to enable this option.")
@@ -126,11 +132,19 @@ void OpenRouterConfigDialog::showEvent(QShowEvent* event)
     } else {
         useEnvVarCheckbox->setToolTip(QString{});
     }
-    // keep apiKeyEdit state consistent with checkbox
+
+    if(editMode) {
+        useEnvVarCheckbox->setChecked(providerConfig.useEnvVar);
+        apiKeyEdit->setText(
+            providerConfig.useEnvVar
+            ? QString{}
+            : QString::fromStdString(providerConfig.apiKey));
+        llmModelCombo->setCurrentText(QString::fromStdString(providerConfig.llmModel));
+    } else {
+        apiKeyEdit->clear();
+        configValid = false;
+    }
     apiKeyEdit->setEnabled(!useEnvVarCheckbox->isChecked());
-    // checkbox
-    useEnvVarCheckbox->setEnabled(envVarExists);
-    useEnvVarCheckbox->setVisible(envVarExists);
 
     QDialog::showEvent(event);
 }
@@ -138,7 +152,6 @@ void OpenRouterConfigDialog::showEvent(QShowEvent* event)
 void OpenRouterConfigDialog::handleEnvVarCheckbox(int state)
 {
     bool useEnv = (state == Qt::Checked);
-    // when env var is used, the edit line is irrelevant - disable it
     apiKeyEdit->setEnabled(!useEnv);
     if(useEnv) {
         apiKeyEdit->clear();
@@ -155,25 +168,42 @@ void OpenRouterConfigDialog::handleReset()
 
 void OpenRouterConfigDialog::handleProbe()
 {
-    // when checkbox is set, pass empty key - probeOpenRouterProvider will check env var itself
     string apiKey = useEnvVarCheckbox->isChecked()
         ? string{}
         : apiKeyEdit->text().trimmed().toStdString();
     string model = llmModelCombo->currentText().toStdString();
     string errorMessage;
 
-    if (config.probeOpenRouterProvider(apiKey, model, errorMessage)) {
-        QMessageBox::information(
-            this,
-            tr("Configuration Valid"),
-            tr("OpenRouter provider configuration is valid."));
-        configValid = true;
-    } else {
+    if (!config.validateOpenRouterProviderInput(apiKey, model, errorMessage)) {
         QMessageBox::critical(
             this,
             tr("Configuration Invalid"),
             tr("OpenRouter provider configuration is invalid: %1")
             .arg(QString::fromStdString(errorMessage)));
+        configValid = false;
+        return;
+    }
+
+    string effectiveApiKey = apiKey;
+    if (useEnvVarCheckbox->isChecked()) {
+        const char* envKey = std::getenv(ENV_VAR_OPENROUTER_API_KEY);
+        if (envKey) {
+            effectiveApiKey = string(envKey);
+        }
+    }
+
+    OpenRouterWingman wingman{effectiveApiKey};
+    if (wingman.didLastListModelsSucceed()) {
+        QMessageBox::information(
+            this,
+            tr("Configuration Valid"),
+            tr("OpenRouter provider configuration is valid - successfully connected to the OpenRouter API."));
+        configValid = true;
+    } else {
+        QMessageBox::critical(
+            this,
+            tr("Configuration Invalid"),
+            tr("Could not connect to the OpenRouter API with the given API key. Please check the key and try again."));
         configValid = false;
     }
 }
@@ -184,7 +214,6 @@ void OpenRouterConfigDialog::handleAdd()
     string apiKey = useEnv ? string{} : apiKeyEdit->text().trimmed().toStdString();
     string model = llmModelCombo->currentText().toStdString();
 
-    // validate: key must come from either the edit line or the env var
     if(!useEnv && apiKey.empty()) {
         QMessageBox::warning(
             this,
@@ -201,10 +230,11 @@ void OpenRouterConfigDialog::handleAdd()
         return;
     }
 
-    // generate unique ID using timestamp
-    auto now = chrono::system_clock::now();
-    auto timestamp = chrono::duration_cast<chrono::seconds>(now.time_since_epoch()).count();
-    providerConfig.id = "openrouter-" + to_string(timestamp);
+    if(!editMode) {
+        auto now = chrono::system_clock::now();
+        auto timestamp = chrono::duration_cast<chrono::seconds>(now.time_since_epoch()).count();
+        providerConfig.id = "openrouter-" + to_string(timestamp);
+    }
     providerConfig.displayName = "OpenRouter " + model;
     providerConfig.providerType = WINGMAN_PROVIDER_OPENROUTER;
     providerConfig.apiKey = apiKey;  // empty when useEnvVar is true

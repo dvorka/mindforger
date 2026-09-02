@@ -49,6 +49,8 @@ private:
     std::vector<std::string> llmModels;
     // Name of the LLM model which is used by Wingman - must be one of llmModels ^
     std::string defaultLlmModel;
+    // Whether the last listModelsHttpGet() call reached and parsed the response
+    bool lastListModelsSucceeded;
 
     void curlGet(CommandWingmanChat& command);
     void listModelsHttpGet();
@@ -65,6 +67,18 @@ public:
      * @brief List (and cache) LLM model names
      */
     virtual std::vector<std::string>& listModels() override;
+
+    /**
+     * @brief Get the already-cached LLM model names without triggering
+     * another live listModels() fetch (the constructor already fetches once).
+     */
+    const std::vector<std::string>& getModels() const { return llmModels; }
+
+    /**
+     * @brief Whether the last listModels() call actually contacted the OpenAI
+     * API successfully, as opposed to silently falling back to default models.
+     */
+    bool didLastListModelsSucceed() const { return lastListModelsSucceeded; }
 
     /**
      * @brief Chat with configured LLM model.

@@ -48,6 +48,8 @@ private:
     std::vector<std::string> llmModels;
     // name of the default LLM model
     std::string defaultLlmModel;
+    // whether the last listModelsHttpGet() call reached and parsed the API response
+    bool lastListModelsSucceeded;
 
     void curlGet(CommandWingmanChat& command);
     void listModelsHttpGet();
@@ -64,6 +66,13 @@ public:
      * @brief List (and cache) LLM model names.
      */
     virtual std::vector<std::string>& listModels() override;
+
+    /**
+     * @brief Whether the last listModels() call actually contacted the
+     * OpenRouter API successfully, as opposed to silently falling back to
+     * default models.
+     */
+    bool didLastListModelsSucceed() const { return lastListModelsSucceeded; }
 
     /**
      * @brief Chat with configured LLM model.

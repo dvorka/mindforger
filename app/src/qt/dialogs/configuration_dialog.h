@@ -261,6 +261,10 @@ class ConfigurationDialog::WingmanTab : public QWidget
 private:
     Configuration& config;
 
+    // staged copy of providers and active provider ID to allow safe Cancel
+    std::vector<LlmProviderConfig> stagedProviders;
+    std::string stagedActiveProviderId;
+
     QLabel* helpLabel;
     QComboBox* llmProvidersCombo;
     QPushButton* addProviderButton;
@@ -270,8 +274,12 @@ private:
     QLabel* modelValue;
     QLabel* statusValue;
     QLabel* privacyValue;
+    QPushButton* editButton;
     QPushButton* removeButton;
     QPushButton* testButton;
+
+    LlmProviderConfig* findStagedProviderById(const std::string& id);
+    void refreshProvidersUi();
 
 public:
     explicit WingmanTab(QWidget* parent);

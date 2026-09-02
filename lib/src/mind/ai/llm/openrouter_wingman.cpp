@@ -44,11 +44,13 @@ OpenRouterWingman::OpenRouterWingman(const std::string& apiKey)
     : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_OPENROUTER),
       apiKey{apiKey},
       llmModels{},
-      defaultLlmModel{"openai/gpt-3.5-turbo"}
+      defaultLlmModel{"openai/gpt-3.5-turbo"},
+      lastListModelsSucceeded{false}
 {
+    // never log the raw API key - debug logs get shared for troubleshooting
     MF_DEBUG(
-        "OpenRouterWingman::OpenRouterWingman() apiKey: '"
-        << this->apiKey << "'" << endl);
+        "OpenRouterWingman::OpenRouterWingman() apiKey configured: "
+        << boolalpha << !this->apiKey.empty() << endl);
 
     listModels();
 }
@@ -81,6 +83,8 @@ std::vector<std::string>& OpenRouterWingman::listModels()
 
 void OpenRouterWingman::listModelsHttpGet()
 {
+    lastListModelsSucceeded = false;
+
     string url = string{DEFAULT_OPENROUTER_API_URL} + "/models";
 
     MF_DEBUG("OpenRouterWingman::listModelsHttpGet() url: " << url << endl);
@@ -162,7 +166,10 @@ void OpenRouterWingman::listModelsHttpGet()
         << "<<<"
         << endl);
 
+    // OpenRouter returns HTTP 200 with a JSON error body (e.g. bad API key), so
+    // a successful parse alone doesn't mean success - a "data" array does
     if (httpResponseJson.contains("data")) {
+        lastListModelsSucceeded = true;
         for (const auto& item : httpResponseJson["data"].items()) {
             if (item.value().contains("id")) {
                 string modelId = item.value()["id"];
@@ -232,7 +239,6 @@ void OpenRouterWingman::curlGet(CommandWingmanChat& command) {
         QEventLoop loop;
         QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
         loop.exec();
-        reply->deleteLater();
 
         command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
 
@@ -265,6 +271,7 @@ void OpenRouterWingman::curlGet(CommandWingmanChat& command) {
                 "Successful OpenRouter Wingman provider response:" << endl <<
                 "  '" << command.httpResponse << "'" << endl);
         }
+        reply->deleteLater();
 #else
         command.httpResponse.clear();
         curl_easy_setopt(

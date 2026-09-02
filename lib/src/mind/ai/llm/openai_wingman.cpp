@@ -49,11 +49,13 @@ OpenAiWingman::OpenAiWingman(const std::string& apiKey)
     : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI),
       apiKey{apiKey},
       llmModels{},
-      defaultLlmModel{LLM_GPT_35_TURBO}
+      defaultLlmModel{LLM_GPT_35_TURBO},
+      lastListModelsSucceeded{false}
 {
+    // never log the raw API key - debug logs get shared for troubleshooting
     MF_DEBUG(
-        "OpenAiWingman::OpenAiWingman() apiKey: '"
-        << this->apiKey << "'" << endl);
+        "OpenAiWingman::OpenAiWingman() apiKey configured: "
+        << boolalpha << !this->apiKey.empty() << endl);
 
     listModels();
 }
@@ -84,8 +86,10 @@ std::vector<std::string>& OpenAiWingman::listModels()
 
 void OpenAiWingman::listModelsHttpGet()
 {
+    lastListModelsSucceeded = false;
+
     string url = "https://api.openai.com/v1/models";
-    
+
     MF_DEBUG("OpenAiWingman::listModelsHttpGet() url: " << url << endl);
     
 #if !defined(__APPLE__) && !defined(_WIN32)
@@ -164,8 +168,11 @@ void OpenAiWingman::listModelsHttpGet()
         << httpResponseJson.dump(4)
         << "<<<"
         << endl);
-    
+
+    // OpenAI returns HTTP 200 with a JSON error body (e.g. bad API key), so a
+    // successful parse alone doesn't mean success - a "data" array does
     if (httpResponseJson.contains("data")) {
+        lastListModelsSucceeded = true;
         for (const auto& item : httpResponseJson["data"].items()) {
             if (item.value().contains("id")) {
                 string modelId = item.value()["id"];
@@ -268,7 +275,6 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
         QEventLoop loop;
         QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
         loop.exec();
-        reply->deleteLater();
 
         command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
 
@@ -303,6 +309,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
                 "Successful OpenAI Wingman provider response:" << endl <<
                 "  '" << command.httpResponse << "'" << endl);
         }
+        reply->deleteLater();
 #else
         // TODO refactor this section to a generic CURL call which gets: URL, body as C string and returns httpResponse
 

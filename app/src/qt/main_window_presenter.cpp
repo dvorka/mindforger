@@ -678,8 +678,10 @@ void MainWindowPresenter::doActionMindToggleSemanticSearch()
         config.setSemanticSearch(false);
         statusBar->showInfo(tr("Semantic search disabled"));
     } else {
-        // check whether possible
-        if(!config.getLlmProviders().empty()) {
+        // check whether possible - only ollama's Wingman implements embeddings()
+        // (OpenAI/OpenRouter throw), so semantic search requires it to be active
+        LlmProviderConfig* activeLlmProvider = config.getActiveLlmProvider();
+        if(activeLlmProvider && activeLlmProvider->providerType == WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA) {
             config.setSemanticSearch(true);
             statusBar->showInfo(tr("Semantic search activated"));
         } else {
