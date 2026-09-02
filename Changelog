@@ -26,6 +26,9 @@
     * Fix: source code fixed to be compilable w/o warning on systems w/ GCC 13+
       (deprecated language and QT constructions updated & conditionally compiled).
     * Fix: removed call incorrect cURL option CURL_HTTPOST for legacy POSTs.
+    * Fix: Linux desktop integration reworked - .desktop file and icons moved
+      to standard hicolor theme paths, AppStream metainfo added for Linux
+      software centers.
     * Test fix: stabilized MindTestCase.LearnAmnesiaLearn expected
       stale ontology tags count (14/17) - updated to match the P0/P1/P2 priority
       tags added by the tag colorization feature.
