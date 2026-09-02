@@ -4,10 +4,10 @@ on: [push]
 
 jobs:
   build:
-    # macos-13 is an Intel (x86_64) runner; required because Qt5 official builds
-    # with WebEngine only exist for x86_64 macOS - Apple Silicon runners have
-    # Homebrew Qt5 without webengine support.
-    runs-on: macos-13
+    # macos-15-intel is an Intel (x86_64) runner; required because Qt5 official
+    # builds with WebEngine only exist for x86_64 macOS - Apple Silicon runners
+    # have Homebrew Qt5 without webengine support.
+    runs-on: macos-15-intel
     steps:
       - uses: actions/checkout@v4
         with:
