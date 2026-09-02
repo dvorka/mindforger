@@ -396,24 +396,26 @@ dist-ubuntu-deb: ## locally build .deb for any Ubuntu version: DISTRO=bionic
 .PHONY: dist-snap
 dist-snap: ## build strict Snap package for the Snap Store (LXD required)
 	@echo "Building Snap $(MINDFORGER_VERSION) ..."
-	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" snap/snapcraft.yaml
 	cd .. && make clean && cd build
-	cp -vf snap/snapcraft.yaml .. && cd .. && snapcraft clean && snapcraft pack
+	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
+	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" ../snapcraft.yaml
+	cd .. && snapcraft clean && snapcraft pack
 
 
 .PHONY: dist-snap-wip
 dist-snap-wip: ## debug Snap build w/o clean up, but w/ incremental build
 	@echo "Building Snap $(MINDFORGER_VERSION) ..."
-	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" snap/snapcraft.yaml
-	cp -vf snap/snapcraft.yaml .. && cd .. && snapcraft pack --debug
+	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
+	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" ../snapcraft.yaml
+	cd .. && snapcraft pack --debug
 
 
 .PHONY: dist-snap-classic
 dist-snap-classic: ## build classic Snap package for downloadable GitHub Release (LXD required)
 	@echo "Building classic Snap $(MINDFORGER_VERSION) ..."
-	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" snap/snapcraft.yaml
 	cd .. && make clean && cd build
 	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
+	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" ../snapcraft.yaml
 	./snap/apply-classic.sh ../snapcraft.yaml
 	cd .. && snapcraft clean && snapcraft pack
 

@@ -49,7 +49,7 @@ RELEASE_STATUS = {
 }
 
 # PAD Program_Change_Info should stay concise; cap the generated summary
-MAX_CHANGE_INFO_CHARS = 2000
+MAX_CHANGE_INFO_CHARS = 500
 
 
 def read_version() -> str:
@@ -152,7 +152,15 @@ def release_status(version: str, previous_version: str) -> str:
 
 
 def change_info(version: str, bullets: list) -> str:
-    summary = "; ".join(bullets) or f"MindForger {version} release."
+    """Return the human-curated one-line summary from the 'Released vX.Y.Z - ...'
+    bullet, rather than concatenating every bullet into a wall of text."""
+    prefix = f"Released v{version}"
+    summary = f"MindForger {version} release."
+    for bullet in bullets:
+        if bullet.startswith(prefix):
+            _, _, text = bullet.partition("-")
+            summary = text.strip() or summary
+            break
     if len(summary) > MAX_CHANGE_INFO_CHARS:
         summary = summary[: MAX_CHANGE_INFO_CHARS - 1].rstrip() + "..."
     return summary
