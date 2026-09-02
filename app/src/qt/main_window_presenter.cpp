@@ -2233,8 +2233,9 @@ void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
     // wingmanProgressDialog->hide();
+    LlmProviderConfig* activeLlmProvider = config.getLlmProviderById(config.getActiveLlmProviderId());
     string answerDescriptor{
-        "[provider: " + config.getLlmProviderById(config.getActiveLlmProviderId())->displayName +
+        "[provider: " + (activeLlmProvider ? activeLlmProvider->displayName : "N/A") +
         ", model: " + commandWingmanChat.answerLlmModel +
         ", tokens (prompt/answer): " +
         std::to_string(commandWingmanChat.promptTokens) + "/" + std::to_string(commandWingmanChat.answerTokens) +

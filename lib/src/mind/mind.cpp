@@ -1496,6 +1496,10 @@ void Mind::initWingman()
             if(envKey) {
                 effectiveKey = string(envKey);
                 MF_DEBUG("  MIND Wingman OpenAI: using env var key" << endl);
+            } else {
+                MF_DEBUG("  MIND Wingman OpenAI: env var " << ENV_VAR_OPENAI_API_KEY << " not set > NO Wingman" << endl);
+                wingmanActiveLlmProviderId.clear();
+                return;
             }
         }
         wingman = (Wingman*)new OpenAiWingman{effectiveKey};
@@ -1516,6 +1520,10 @@ void Mind::initWingman()
             if(envKey) {
                 effectiveKey = string(envKey);
                 MF_DEBUG("  MIND Wingman OpenRouter: using env var key" << endl);
+            } else {
+                MF_DEBUG("  MIND Wingman OpenRouter: env var " << ENV_VAR_OPENROUTER_API_KEY << " not set > NO Wingman" << endl);
+                wingmanActiveLlmProviderId.clear();
+                return;
             }
         }
         wingman = (Wingman*)new OpenRouterWingman{effectiveKey};
