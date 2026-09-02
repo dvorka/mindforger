@@ -356,6 +356,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         LookAndFeels::getInstance().getQApplication(), SLOT(aboutQt())
     );
     QObject::connect(view->actionHelpAbout, SIGNAL(triggered()), mwp, SLOT(doActionHelpAboutMindForger()));
+    QObject::connect(view->actionHelpSponsor, SIGNAL(triggered()), mwp, SLOT(doActionHelpSponsor()));
 
     switch(config.getDesiredMindState()) {
     case Configuration::MindState::THINKING:

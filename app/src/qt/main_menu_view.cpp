@@ -1090,6 +1090,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionHelpAbout = new QAction(QIcon(":/menu-icons/write.svg"), tr("&About MindForger"), mainWindow);
     actionHelpAbout->setStatusTip(tr("About MindForger..."));
 
+    actionHelpSponsor = new QAction(QIcon(":/menu-icons/heart.svg"), tr("&Sponsor"), mainWindow);
+    actionHelpSponsor->setStatusTip(tr("Sponsor MindForger..."));
+
     menuHelp = qMenuBar->addMenu(tr("&Help"));
     menuHelp->addAction(actionHelpDocumentation);
     menuHelp->addAction(actionHelpWeb);
@@ -1106,6 +1109,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
     menuHelp->addAction(actionHelpAboutQt);
     menuHelp->addAction(actionHelpAbout);
+    menuHelp->addSeparator();
+    menuHelp->addAction(actionHelpSponsor);
 }
 
 MainMenuView::~MainMenuView()

@@ -77,9 +77,7 @@ public:
     QAction* actionMindRemember;
     QAction* actionMindThink;
     QAction* actionMindAutolink;
-#ifdef DO_MF_DEBUG
     QAction* actionMindSemanticSearch;
-#endif
     QAction* actionMindWingman;
     QAction* actionMindTool;
     QAction* actionMindScope;
@@ -286,6 +284,8 @@ public:
     QAction* actionHelpCheckForUpdates;
     QAction* actionHelpAboutQt;
     QAction* actionHelpAbout;
+
+    QAction* actionHelpSponsor;
 
     void showModeAwareFacet(bool repositoryMode, bool mfMode);
 

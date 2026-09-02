@@ -217,7 +217,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
 
     EXPECT_EQ(3, memory.getOntology().getOutlineTypes().size());
     EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
-    EXPECT_EQ(14, memory.getOntology().getTags().size());
+    EXPECT_EQ(18, memory.getOntology().getTags().size());
 
     mind.learn();
     mind.think().get();
@@ -231,7 +231,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(8, memory.getNotesCount());
     EXPECT_EQ(3, memory.getOntology().getOutlineTypes().size());
     EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
-    EXPECT_EQ(17, memory.getOntology().getTags().size());
+    EXPECT_EQ(21, memory.getOntology().getTags().size());
 
     // 2/3 amnesia - assert mind and memory cleaned (+Valgrind memory check)
     mind.amnesia();
@@ -244,7 +244,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(3, memory.getOntology().getOutlineTypes().size());
     EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
     // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
-    EXPECT_EQ(17, memory.getOntology().getTags().size());
+    EXPECT_EQ(21, memory.getOntology().getTags().size());
 
     // 3/3 learn - MARKDOWN repository (not MINDFORGER repository as above)
     repositoryPath.assign("/tmp/mf-unit-amnesia");
@@ -303,7 +303,7 @@ TEST(MindTestCase, LearnAmnesiaLearn) {
     EXPECT_EQ(3, memory.getOntology().getOutlineTypes().size());
     EXPECT_EQ(16, memory.getOntology().getNoteTypes().size());
     // tags are kept as it's not a problem - they are used as suggestion on new/edit of Os and Ns
-    EXPECT_EQ(17, memory.getOntology().getTags().size());
+    EXPECT_EQ(21, memory.getOntology().getTags().size());
 }
 
 TEST(MindTestCase, CommonWordsBlacklist) {

@@ -127,7 +127,12 @@ shared_future<bool> Mind::think()
             return mindDream();
         } else {
             // IMPROVE design ASYNC AI/AA to handle also huge repositories
-            MF_DEBUG("Think: CANNOT think because number of Notes in Mind is too big" << endl);
+            MF_DEBUG(
+                "Think: CANNOT think because number of Notes in Mind is too big"
+                <<
+                memory.getNotesCount() << "/" << config.getAsyncMindThreshold()
+                << endl
+                );
             persistMindState(Configuration::MindState::SLEEPING);
             promise<bool> p;
             p.set_value(false);
@@ -1452,56 +1457,90 @@ Outline* Mind::findOutlineByKey(const string& key) const
 
 void Mind::initWingman()
 {
-    MF_DEBUG(
-        "MIND Wingman init: " << boolalpha << config.isWingman() << endl
-    );
-    config.initWingman();
-    if(config.isWingman()) {
-        MF_DEBUG("MIND Wingman initialization..." << endl);
-        switch(config.getWingmanLlmProvider()) {
-        case WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI:
-            MF_DEBUG("  MIND Wingman init: OpenAI" << endl);
-            if(wingman) {
-                delete wingman;
-                wingman = nullptr;
-            }
-            wingman = (Wingman*)new OpenAiWingman{};
-            wingman->setLlmModel(config.getWingmanOpenAiLlm());
-            wingmanLlmProvider = config.getWingmanLlmProvider();
-            return;
-        case WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA:
-            MF_DEBUG("  MIND Wingman init: ollama" << endl);
-            if(wingman) {
-                delete wingman;
-                wingman = nullptr;
-            }
-            wingman = (Wingman*)new OllamaWingman{config.getWingmanOllamaUrl()};
-            wingman->listModels();
-            wingman->setLlmModel(config.getWingmanOllamaLlm());
-            wingmanLlmProvider = config.getWingmanLlmProvider();
-            return;
-        case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
-            MF_DEBUG("  MIND Wingman init: MOCK" << endl);
-            wingman = (Wingman*)new MockWingman{
-                MockWingman::LLM_MODEL_MOCK
-            };
-            wingmanLlmProvider = config.getWingmanLlmProvider();
-            return;
-        case WingmanLlmProviders::WINGMAN_PROVIDER_NONE:
-            MF_DEBUG("  MIND Wingman init: set to NONE > deinitialize > NO Wingman" << endl);
-            break;
-        default:
-            MF_DEBUG("  MIND Wingman init: UNKNOWN > NO Wingman" << endl);
-            break;
+    MF_DEBUG("MIND Wingman init: " << boolalpha << config.isWingman() << endl);
+
+    if(!config.isWingman()) {
+        MF_DEBUG("MIND Wingman init: DISABLED" << endl);
+        if(wingman) {
+            delete wingman;
+            wingman = nullptr;
         }
+        wingmanActiveLlmProviderId.clear();
+        return;
     }
 
-    MF_DEBUG("MIND Wingman init: DISABLED" << endl);
+    LlmProviderConfig* provider = config.getActiveLlmProvider();
+    if(!provider) {
+        MF_DEBUG("MIND Wingman init: no active LLM provider configured" << endl);
+        if(wingman) {
+            delete wingman;
+            wingman = nullptr;
+        }
+        wingmanActiveLlmProviderId.clear();
+        return;
+    }
+
+    MF_DEBUG("MIND Wingman initialization for provider: " << provider->id << endl);
+
     if(wingman) {
         delete wingman;
+        wingman = nullptr;
     }
-    wingman = nullptr;
-    wingmanLlmProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
+
+    switch(provider->providerType) {
+    case WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI: {
+        MF_DEBUG("  MIND Wingman init: OpenAI" << endl);
+        string effectiveKey = provider->apiKey;
+        if(provider->useEnvVar) {
+            const char* envKey = std::getenv(ENV_VAR_OPENAI_API_KEY);
+            if(envKey) {
+                effectiveKey = string(envKey);
+                MF_DEBUG("  MIND Wingman OpenAI: using env var key" << endl);
+            } else {
+                MF_DEBUG("  MIND Wingman OpenAI: env var " << ENV_VAR_OPENAI_API_KEY << " not set > NO Wingman" << endl);
+                wingmanActiveLlmProviderId.clear();
+                return;
+            }
+        }
+        wingman = (Wingman*)new OpenAiWingman{effectiveKey};
+        wingman->setLlmModel(provider->llmModel);
+        break;
+    }
+    case WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA:
+        MF_DEBUG("  MIND Wingman init: ollama" << endl);
+        wingman = (Wingman*)new OllamaWingman{provider->url};
+        wingman->listModels();
+        wingman->setLlmModel(provider->llmModel);
+        break;
+    case WingmanLlmProviders::WINGMAN_PROVIDER_OPENROUTER: {
+        MF_DEBUG("  MIND Wingman init: OpenRouter" << endl);
+        string effectiveKey = provider->apiKey;
+        if(provider->useEnvVar) {
+            const char* envKey = std::getenv(ENV_VAR_OPENROUTER_API_KEY);
+            if(envKey) {
+                effectiveKey = string(envKey);
+                MF_DEBUG("  MIND Wingman OpenRouter: using env var key" << endl);
+            } else {
+                MF_DEBUG("  MIND Wingman OpenRouter: env var " << ENV_VAR_OPENROUTER_API_KEY << " not set > NO Wingman" << endl);
+                wingmanActiveLlmProviderId.clear();
+                return;
+            }
+        }
+        wingman = (Wingman*)new OpenRouterWingman{effectiveKey};
+        wingman->setLlmModel(provider->llmModel);
+        break;
+    }
+    case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
+        MF_DEBUG("  MIND Wingman init: MOCK" << endl);
+        wingman = (Wingman*)new MockWingman{MockWingman::LLM_MODEL_MOCK};
+        break;
+    default:
+        MF_DEBUG("  MIND Wingman init: UNKNOWN > NO Wingman" << endl);
+        wingmanActiveLlmProviderId.clear();
+        return;
+    }
+
+    wingmanActiveLlmProviderId = provider->id;
 }
 
 int Mind::findLibraryOrphanOs()
@@ -1557,6 +1596,7 @@ int Mind::findLibraryOrphanOs()
         }
     }
 
+#ifdef DO_MF_DEBUG
     if(orphanOutlines.size()) {
         MF_DEBUG("ORPHAN library outlines found:" << endl);
         for(Outline* o:orphanOutlines) {
@@ -1565,14 +1605,22 @@ int Mind::findLibraryOrphanOs()
     } else {
         MF_DEBUG("NO ORPHAN library outlines found." << endl);
     }
+#endif
 
     return orphanOutlines.size();
 }
 
 Wingman* Mind::getWingman()
 {
-    if(this->wingmanLlmProvider != config.getWingmanLlmProvider()) {
+    string currentId = config.getActiveLlmProviderId();
+    if(currentId != wingmanActiveLlmProviderId) {
         initWingman();
+    } else if(wingman) {
+        // sync model name in case it changed without changing the active provider
+        LlmProviderConfig* provider = config.getActiveLlmProvider();
+        if(provider) {
+            wingman->setLlmModel(provider->llmModel);
+        }
     }
 
     return this->wingman;
@@ -1600,12 +1648,12 @@ void Mind::refreshEmbeddings()
     if(getWingman()) {
         vector<Note*> allNotes{};
         memory.getAllNotes(allNotes);
-#ifdef MF_DEBUG
+#ifdef DO_MF_DEBUG
         int embeddingsSizeB=0;
         int counter=0;
         MF_DEBUG("  Embedding for " << allNotes.size() << " Notes:" << endl);
-#endif
         auto beginTs = chrono::high_resolution_clock::now();
+#endif
         for(Note* n:allNotes) {
             MF_DEBUG(
                 "    " <<
@@ -1619,14 +1667,14 @@ void Mind::refreshEmbeddings()
             // TODO: calculate embeddings ONLY if not in cache (timestamp not changed)
 
             getWingman()->embeddings(command);
-#ifdef MF_DEBUG
+#ifdef DO_MF_DEBUG
             if(command.answerEmbeddings.size()) {
                 embeddingsSizeB += command.answerEmbeddings.size()*sizeof(command.answerEmbeddings[0]);
             }
 #endif
             // TODO: store embeddings to embeddings cache: note key -> modified/embeddings vector
         }
-#ifdef MF_DEBUG
+#ifdef DO_MF_DEBUG
         auto endTs = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::milliseconds>(endTs - beginTs);
         auto nDuration = to_string(float(duration.count()) / float(allNotes.size()));

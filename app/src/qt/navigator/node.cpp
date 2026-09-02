@@ -253,7 +253,11 @@ void NavigatorNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
     QFontMetrics fm = painter->fontMetrics();
     qreal PADDING_WIDTH = 10;
     qreal PADDING_HEIGHT = 6;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    int textWidth = fm.horizontalAdvance(nodeName);
+#else
     int textWidth = fm.width(nodeName);
+#endif
     int textHeight = fm.height();
     defaultNodeWidth = textWidth + PADDING_WIDTH;
     defaultNodeHeight = textHeight + PADDING_HEIGHT;
@@ -266,7 +270,7 @@ void NavigatorNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
     if(showType) {
         painter->drawRect(rectF);
     } else {
-        painter->drawRoundRect(rectF);
+        painter->drawRoundedRect(rectF, 25, 25, Qt::RelativeSize);
     }
     // text
     //   IMPORTANT: check boundingRect() to ensure text is NOT clipped

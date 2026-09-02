@@ -19,6 +19,8 @@
 
 #include "configuration.h"
 
+#include <algorithm>
+
 #ifdef _WIN32
   #include <ShlObj.h>
   #include <KnownFolders.h>
@@ -52,11 +54,6 @@ Configuration::Configuration()
       autolinkingColonSplit{},
       autolinkingCaseInsensitive{},
       semanticSearch{DEFAULT_SEMANTIC_SEARCH},
-      wingmanProvider{DEFAULT_WINGMAN_LLM_PROVIDER},
-      wingmanOpenAiApiKey{},
-      wingmanOpenAiLlm{DEFAULT_WINGMAN_LLM_MODEL_OPENAI},
-      wingmanOllamaUrl{},
-      wingmanOllamaLlm{DEFAULT_WINGMAN_LLM_MODEL_OLLAMA},
       md2HtmlOptions{},
       distributorSleepInterval{DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL},
       markdownQuoteSections{},
@@ -153,11 +150,8 @@ void Configuration::clear()
     autolinkingColonSplit = DEFAULT_AUTOLINKING_COLON_SPLIT;
     autolinkingCaseInsensitive = DEFAULT_AUTOLINKING_CASE_INSENSITIVE;
     semanticSearch = DEFAULT_SEMANTIC_SEARCH;
-    wingmanProvider = DEFAULT_WINGMAN_LLM_PROVIDER;
-    wingmanOpenAiApiKey.clear();
-    wingmanOpenAiLlm = DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
-    wingmanOllamaUrl.clear();
-    wingmanOllamaLlm = DEFAULT_WINGMAN_LLM_MODEL_OLLAMA;
+    llmProviders.clear();
+    activeLlmProviderId.clear();
     timeScopeAsString.assign(DEFAULT_TIME_SCOPE);
     tagsScope.clear();
     markdownQuoteSections = DEFAULT_MD_QUOTE_SECTIONS;
@@ -396,182 +390,135 @@ const char* Configuration::getEditorFromEnv()
     return editor;
 }
 
-bool Configuration::canWingmanOpenAiFromEnv()
-{
-    if(std::getenv(ENV_VAR_OPENAI_API_KEY) != nullptr) {
-        return true;
-    }
-
-    return false;
-}
-
-bool Configuration::canWingmanOpenAi()
-{
-    if(this->wingmanOpenAiApiKey.size() > 0 || canWingmanOpenAiFromEnv()) {
-        return true;
-    }
-
-    return false;
-}
-
-bool Configuration::canWingmanOllama()
-{
-    if(wingmanOllamaUrl.size() > 0) {
-        return true;
-    }
-
-    return false;
-}
-
-void Configuration::setWingmanLlmProvider(WingmanLlmProviders provider)
-{
-    MF_DEBUG(
-        "Configuration::setWingmanLlmProvider(): "
-        << std::to_string(provider) << endl);
-
-    wingmanProvider = provider;
-}
-
-bool Configuration::initWingmanMock()
-{
-    if(canWingmanMock()) {
-        return true;
-    }
-
-    return false;
-}
-
-/**
- * @brief Check whether OpenAI Wingman requirements are satisfied.
- *
- * In case that the requirements are satisfied (OpenAI API key provided),
- * then Wingman @ OpenAI can be choosen @ Mindforger configuration.
-*/
-bool Configuration::initWingmanOpenAi() {
-    MF_DEBUG("  Configuration::initWingmanOpenAi()" << endl);
-    if(canWingmanOpenAi()) {
-        // API key
-        MF_DEBUG(
-            "    Wingman OpenAI API key found in the shell environment variable "
-            "MINDFORGER_OPENAI_API_KEY or set in MF config" << endl);
-        if(wingmanOpenAiApiKey.size() <= 0) {
-            const char* apiKeyEnv = std::getenv(ENV_VAR_OPENAI_API_KEY);
-            MF_DEBUG("    Wingman API key loaded from the env: " << apiKeyEnv << endl);
-            wingmanOpenAiApiKey = apiKeyEnv;
-        }
-        #ifdef DO_MF_DEBUG
-        else {
-            MF_DEBUG("    Wingman API key from config will be used: " << wingmanOpenAiApiKey << endl);
-        }
-        #endif
-        // LLM model
-        const char* llmModelEnv = std::getenv(ENV_VAR_OPENAI_LLM_MODEL);
-        if(llmModelEnv) {
-            MF_DEBUG("    Wingman LLM model loaded from the env: " << llmModelEnv << endl);
-            wingmanOpenAiLlm = llmModelEnv;
-        } else {
-            MF_DEBUG("    Wingman LLM model set to default: " << DEFAULT_WINGMAN_LLM_MODEL_OPENAI << endl);
-            wingmanOpenAiLlm = DEFAULT_WINGMAN_LLM_MODEL_OPENAI;
-        }
-        return true;
-    }
-
-    MF_DEBUG(
-        "    Wingman OpenAI API key NEITHER found in the environment variable "
-        "MINDFORGER_OPENAI_API_KEY, NOR set in MF configuration" << endl);
-    if(wingmanProvider == WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI) {
-        wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
-    }
-    return false;
-}
-
-/**
- * @brief Check whether ollama Wingman requirements are satisfied.
- */
-bool Configuration::initWingmanOllama() {
-    MF_DEBUG("  Configuration::initWingmanOllama()" << endl);
-    if(canWingmanOllama()) {
-        // OPTIONAL: LLM model
-        if(wingmanOllamaLlm.size() <= 0) {
-            MF_DEBUG("    Wingman LLM model for ollama set to default: " << DEFAULT_WINGMAN_LLM_MODEL_OLLAMA << endl);
-            wingmanOpenAiLlm = DEFAULT_WINGMAN_LLM_MODEL_OLLAMA;
-        }
-        wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA;
-        return true;
-    }
-
-    MF_DEBUG(
-        "    Wingman ollama URL not set in the configuration" << endl);
-    if(wingmanProvider == WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA) {
-        wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
-    }
-    return false;
-}
-
-bool Configuration::initWingman()
-{
-    MF_DEBUG(
-        "  BEFORE Configuration::initWingman():" << endl <<
-        "    LLM provider: " << wingmanProvider << endl <<
-        "    OpenAI API key env var name: " << ENV_VAR_OPENAI_API_KEY << endl <<
-        "    OpenAI API key             : " << wingmanOpenAiApiKey << endl <<
-        "    OpenAI LLM env var name    : " << ENV_VAR_OPENAI_LLM_MODEL << endl <<
-        "    OpenAI LLM                 : " << wingmanOpenAiLlm << endl <<
-        "    ollama URL                 : " << wingmanOllamaUrl << endl <<
-        "    ollama LLM                 : " << wingmanOllamaLlm << endl
-    );
-
-    bool initialized = false;
-
-    switch (wingmanProvider) {
-    case WingmanLlmProviders::WINGMAN_PROVIDER_NONE:
-        MF_DEBUG("  NONE Wingman CONFIGURED" << endl);
-        return true;
-#ifdef MF_WIP
-    case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
-        MF_DEBUG("  MOCK Wingman provider CONFIGURED" << endl);
-        initialized = initWingmanMock();
-        break;
-#endif
-    case WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI:
-        MF_DEBUG("  OpenAI Wingman provider CONFIGURED" << endl);
-        initialized = initWingmanOpenAi();
-        break;
-    case WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA:
-        MF_DEBUG("  ollama Wingman provider CONFIGURED" << endl);
-        initialized = initWingmanOllama();
-        break;
-    default:
-        MF_DEBUG(
-            "  ERROR: unable to CONFIGURE UNKNOWN Wingman provider: "
-            << wingmanProvider << endl);
-        initialized = false;
-    }
-
-    if(!initialized) {
-        wingmanProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
-    }
-
-    MF_DEBUG(
-        "  AFTER Configuration::initWingman():" << endl <<
-        "    LLM provider: " << wingmanProvider << endl <<
-        "    OpenAI API key env var name: " << ENV_VAR_OPENAI_API_KEY << endl <<
-        "    OpenAI API key             : " << wingmanOpenAiApiKey << endl <<
-        "    OpenAI LLM env var name    : " << ENV_VAR_OPENAI_LLM_MODEL << endl <<
-        "    OpenAI LLM                 : " << wingmanOpenAiLlm << endl <<
-        "    ollama URL                 : " << wingmanOllamaUrl << endl <<
-        "    ollama LLM                 : " << wingmanOllamaLlm << endl
-    );
-
-    return initialized;
-}
-
-/**
- * @brief Re-initialize Wingman using configured LLM provider and return
- * whether it is ready to be used.
- */
 bool Configuration::isWingman() {
-    return WingmanLlmProviders::WINGMAN_PROVIDER_NONE==wingmanProvider?false:true;
+    return getActiveLlmProvider() != nullptr;
+}
+
+/*
+ * Wingman2 LLM Provider Management
+ */
+
+LlmProviderConfig* Configuration::getLlmProviderById(const string& id) {
+    for (auto& provider : llmProviders) {
+        if (provider.id == id) {
+            return &provider;
+        }
+    }
+    return nullptr;
+}
+
+LlmProviderConfig* Configuration::getActiveLlmProvider() {
+    if (activeLlmProviderId.empty()) {
+        return nullptr;
+    }
+    return getLlmProviderById(activeLlmProviderId);
+}
+
+void Configuration::addLlmProvider(const LlmProviderConfig& provider) {
+    // enforce unique provider IDs
+    if (!provider.id.empty() && getLlmProviderById(provider.id) != nullptr) {
+        MF_DEBUG("Configuration::addLlmProvider() duplicate ID, not added: " << provider.id << endl);
+        return;
+    }
+    llmProviders.push_back(provider);
+    MF_DEBUG("Configuration::addLlmProvider() added: " << provider.id << endl);
+}
+
+void Configuration::updateLlmProvider(const string& id, const LlmProviderConfig& provider) {
+    for (auto& p : llmProviders) {
+        if (p.id == id) {
+            p = provider;
+            MF_DEBUG("Configuration::updateLlmProvider() updated: " << id << endl);
+            return;
+        }
+    }
+}
+
+void Configuration::removeLlmProvider(const string& id) {
+    llmProviders.erase(
+        std::remove_if(
+            llmProviders.begin(),
+            llmProviders.end(),
+            [&id](const LlmProviderConfig& p) { return p.id == id; }),
+        llmProviders.end());
+
+    // if active provider was removed, clear active provider
+    if (activeLlmProviderId == id) {
+        activeLlmProviderId.clear();
+    }
+
+    MF_DEBUG("Configuration::removeLlmProvider() removed: " << id << endl);
+}
+
+void Configuration::setActiveLlmProvider(const string& id) {
+    activeLlmProviderId = id;
+    MF_DEBUG("Configuration::setActiveLlmProvider() set to: " << id << endl);
+}
+
+bool Configuration::validateOpenAiProviderInput(
+    const string& apiKey,
+    const string& model,
+    string& errorMessage)
+{
+    // input-only validation - does NOT contact the OpenAI API
+    if (apiKey.empty()) {
+        const char* envKey = std::getenv(ENV_VAR_OPENAI_API_KEY);
+        if(envKey == nullptr) {
+            errorMessage = "API key is required for OpenAI provider";
+            return false;
+        }
+    }
+
+    if (model.empty()) {
+        errorMessage = "Model name is required";
+        return false;
+    }
+
+    MF_DEBUG("Configuration::validateOpenAiProviderInput() validated: " << model << endl);
+    return true;
+}
+
+bool Configuration::validateOllamaProviderInput(
+    const string& url,
+    const string& model,
+    string& errorMessage)
+{
+    // input-only validation - does NOT contact the ollama server
+    if (url.empty()) {
+        errorMessage = "URL is required for ollama provider";
+        return false;
+    }
+
+    if (model.empty()) {
+        errorMessage = "Model name is required";
+        return false;
+    }
+
+    MF_DEBUG("Configuration::validateOllamaProviderInput() validated: " << url << ", " << model << endl);
+    return true;
+}
+
+bool Configuration::validateOpenRouterProviderInput(
+    const string& apiKey,
+    const string& model,
+    string& errorMessage)
+{
+    // input-only validation - does NOT contact the OpenRouter API
+    if (apiKey.empty()) {
+        const char* envKey = std::getenv(ENV_VAR_OPENROUTER_API_KEY);
+        if(envKey == nullptr) {
+            errorMessage = "API key is required for OpenRouter provider";
+            return false;
+        }
+    }
+
+    if (model.empty()) {
+        errorMessage = "Model name is required";
+        return false;
+    }
+
+    MF_DEBUG("Configuration::validateOpenRouterProviderInput() validated: " << model << endl);
+    return true;
 }
 
 } // m8r namespace

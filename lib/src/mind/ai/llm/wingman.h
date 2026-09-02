@@ -48,6 +48,7 @@ constexpr const auto PROMPT_EXPLAIN_LIKE_5_TXT = "Explain like I'm 5: #TEXT";
 constexpr const auto PROMPT_FIX_GRAMMAR = "Fix grammar in: #TEXT";
 constexpr const auto PROMPT_FIND_GRAMMAR = "Find grammar errors in: #TEXT";
 constexpr const auto PROMPT_TRANSLATE_EN = "Translate to English: #TEXT";
+constexpr const auto PROMPT_FACT_CHECK = "Fact check: #TEXT";
 constexpr const auto PROMPT_REWRITE_FORMALLY = "Rewrite formally: #TEXT";
 constexpr const auto PROMPT_REWRITE_ACADEMIA = "Rewrite in academic style: #TEXT";
 constexpr const auto PROMPT_REWRITE_SLANG = "Rewrite in a slang style: #TEXT";
@@ -129,6 +130,7 @@ private:
         PROMPT_GENERATE_TAGS,
         PROMPT_FIX_GRAMMAR,
         PROMPT_REWRITE_FORMALLY,
+        PROMPT_FACT_CHECK,
         PROMPT_REWRITE_SLANG,
         // PROMPT_CHAT,
     };
@@ -138,6 +140,7 @@ private:
         PROMPT_EXPLAIN_LIKE_5_TXT,
         PROMPT_FIX_GRAMMAR,
         PROMPT_FIND_GRAMMAR,
+        PROMPT_FACT_CHECK,
         PROMPT_TRANSLATE_EN,
         PROMPT_GENERATE_TAGS,
         PROMPT_REWRITE_FORMALLY,

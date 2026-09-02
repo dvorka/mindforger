@@ -17,6 +17,10 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "configuration_dialog.h"
+#include "add_llm_provider_dialog.h"
+#include "openai_config_dialog.h"
+#include "ollama_config_dialog.h"
+#include "openrouter_config_dialog.h"
 
 namespace m8r {
 
@@ -315,7 +319,11 @@ void ConfigurationDialog::ViewerTab::refresh()
     }
 
     zoomSpin->setValue(config.getUiHtmlZoom());
-    srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
+    // BUG: there is a bug @ Ubuntu 24.04 and newer that crashes MF if src highlight is on >
+    //   before it is fixed, this settting must be reset & disabled
+    srcCodeHighlightSupportCheck->setChecked(false);
+    srcCodeHighlightSupportCheck->setVisible(false);
+    //srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
     mathSupportCheck->setChecked(config.isUiEnableMathInMd());
     fullOPreviewCheck->setChecked(config.isUiFullOPreview());
     diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
@@ -677,410 +685,6 @@ void ConfigurationDialog::MindTab::save()
 }
 
 /*
- * Wingman Open AI tab
- */
-
-ConfigurationDialog::WingmanOpenAiTab::WingmanOpenAiTab(QWidget* parent, QComboBox* parentLlmProvidersCombo)
-    : QWidget(parent),
-      parentLlmProvidersCombo{parentLlmProvidersCombo},
-      config(Configuration::getInstance())
-{
-    apiKeyLabel = new QLabel(tr("<br>API key:"));
-    apiKeyEdit = new QLineEdit(this);
-    refreshLlmModelsButton = new QPushButton(tr("Refresh LLM models"), this);
-    refreshLlmModelsButton->setVisible(false);
-    // enabled on valid config > add ollama to drop down > choose it in drop down
-    setOpenAiButton = new QPushButton(tr("Set OpenAI as LLM Provider"), this);
-    setOpenAiButton->setToolTip(
-        tr("Add OpenAI to the dropdown with LLM providers (if not there) and set it for use with Wingman")
-    );
-    clearApiKeyButton = new QPushButton(tr("Clear API Key"), this);
-    // LLM model can be choose at any time when a valid configuration is available
-    llmModelsLabel = new QLabel(tr("LLM model:"));
-    llmModelsCombo = new QComboBox();
-    llmModelsCombo->addItem(LLM_MODEL_NONE);
-    llmModelsCombo->addItem(LLM_MODEL_GPT35_TURBO);
-    llmModelsCombo->addItem(LLM_MODEL_GPT4);
-
-    // help text is created using initialized dialog fields
-    helpLabel = new QLabel(getHelpLabelText(), this);
-
-    QVBoxLayout* llmProvidersLayout = new QVBoxLayout();
-    llmProvidersLayout->addWidget(helpLabel);
-    llmProvidersLayout->addWidget(apiKeyLabel);
-    llmProvidersLayout->addWidget(apiKeyEdit);
-    llmProvidersLayout->addWidget(llmModelsLabel);
-    llmProvidersLayout->addWidget(llmModelsCombo);
-    QHBoxLayout* buttonsLayout = new QHBoxLayout{};
-    buttonsLayout->addWidget(setOpenAiButton);
-    buttonsLayout->addWidget(clearApiKeyButton);
-    llmProvidersLayout->addLayout(buttonsLayout);
-    llmProvidersLayout->addStretch();
-
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->addLayout(llmProvidersLayout);
-    layout->addStretch();
-    setLayout(layout);
-
-    QObject::connect(
-        setOpenAiButton, SIGNAL(clicked()),
-        this, SLOT(setOpenAiSlot()));
-    QObject::connect(
-        clearApiKeyButton, SIGNAL(clicked()),
-        this, SLOT(clearApiKeySlot()));
-}
-
-ConfigurationDialog::WingmanOpenAiTab::~WingmanOpenAiTab()
-{
-    delete helpLabel;
-    delete apiKeyLabel;
-    delete apiKeyEdit;
-    delete refreshLlmModelsButton;
-    delete clearApiKeyButton;
-    delete llmModelsLabel;
-    delete llmModelsCombo;
-}
-
-QString ConfigurationDialog::WingmanOpenAiTab::getHelpLabelText() const
-{
-    if(apiKeyEdit->text().size()==0) {
-        if(config.canWingmanOpenAiFromEnv()) {
-            // key: NOT in config & IN env > ENV used
-            return tr(
-                "The OpenAI API key is configured using the environment<br/>"
-                "variable <b>%1</b>.<br/>"
-                "If you want to override it, then set the key below.<br/>"
-                "It will be saved <font color='#ff0000'>unencrypted</font> to "
-                "<b>.mindforger.md</b> configuration file in your home directory."
-            ).arg(ENV_VAR_OPENAI_API_KEY);
-        } else {
-            // key: NOT in config & NOT in env > NO key
-            return tr(
-                "<html><a href='https://openai.com'>OpenAI</a> LLM provider configuration:\n"
-                "<ul>"
-                "<li>Generate new OpenAI API key at <a href='https://platform.openai.com/api-keys'>openai.com</a>.</li>"
-                "<li>a) either set the <b>%1</b> environment variable<br/>"
-                    "with the API key<br/>"
-                    "b) or paste the API key below to save it <font color='#ff0000'>unencrypted</font> to<br/>"
-                    "<b>.mindforger.md</b> file in your home directory.</li>"
-                "</ul>"
-            ).arg(ENV_VAR_OPENAI_API_KEY);
-        }
-    } else {
-        if(config.canWingmanOpenAiFromEnv()) {
-            // key: IN config & IN env > CONFIG used
-            return tr(
-                "The OpenAI API key is configured both using the environment<br/>"
-                "variable <b>%1</b> and configuration.<br/>"
-                "Configuration overrides environment - key from below is used."
-            ).arg(ENV_VAR_OPENAI_API_KEY);
-        } else {
-            // key: IN config & NOT env > CONFIG used
-            return tr(
-                "The OpenAI API key is configured using the key below."
-            ).arg(ENV_VAR_OPENAI_API_KEY);
-        }
-    }
-}
-
-void refreshWingmanLlmProvidersComboBox(
-    QComboBox* parentLlmProvidersCombo,
-    Configuration& config
-)
-{
-    parentLlmProvidersCombo->clear();
-    parentLlmProvidersCombo->addItem(WINGMAN_NONE_COMBO_LABEL); // NO LLM provider - NO Wingman
-#ifdef MF_WIP
-    if(config.canWingmanMock()) {
-        parentLlmProvidersCombo->addItem(
-            QString::fromStdString(WINGMAN_MOCK_COMBO_LABEL),
-            WingmanLlmProviders::WINGMAN_PROVIDER_MOCK);
-    }
-#endif
-    if(config.canWingmanOpenAi()) {
-        parentLlmProvidersCombo->addItem(
-            QString::fromStdString(WINGMAN_OPENAI_COMBO_LABEL),
-            WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI);
-    }
-    if(config.canWingmanOllama()) {
-        parentLlmProvidersCombo->addItem(
-            QString::fromStdString(WINGMAN_OLLAMA_COMBO_LABEL),
-            WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA);
-    }
-
-    // select configure provider in the combo box
-    parentLlmProvidersCombo->setCurrentIndex(
-        parentLlmProvidersCombo->findData(config.getWingmanLlmProvider()));
-
-}
-
-void ConfigurationDialog::WingmanOpenAiTab::setOpenAiSlot()
-{
-    MF_DEBUG("Signal SLOT: set OpenAI" << endl);
-
-    if(apiKeyEdit->text().size()==0 && !config.canWingmanOpenAiFromEnv()) {
-        QMessageBox::critical(
-            this,
-            tr("LLM Provider Config Error"),
-            tr(
-                "Unable to set OpenAI as LLM provider as neither API key is set in the configuration, "
-                "nor it is defined and environment variable")
-        );
-        config.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_NONE);
-        refreshWingmanLlmProvidersComboBox(parentLlmProvidersCombo, config);
-    }
-
-    save();
-    config.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI);
-    refreshWingmanLlmProvidersComboBox(parentLlmProvidersCombo, config);
-}
-
-void ConfigurationDialog::WingmanOpenAiTab::clearApiKeySlot()
-{
-    apiKeyEdit->clear();
-
-    save();
-    if(config.getWingmanLlmProvider() == WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI) {
-        config.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_NONE);
-    }
-    refreshWingmanLlmProvidersComboBox(parentLlmProvidersCombo, config);
-    QMessageBox::information(
-        this,
-        tr("OpenAI API Key Cleared"),
-        tr(
-            "API key has been cleared from the configuration and "
-            "OpenAI is no longer the LLM provider.")
-    );
-}
-
-void ConfigurationDialog::WingmanOpenAiTab::refresh()
-{
-    apiKeyEdit->setText(QString::fromStdString(config.getWingmanOpenAiApiKey()));
-    llmModelsCombo->setCurrentText(
-            QString::fromStdString(config.getWingmanOpenAiLlm()));
-
-    helpLabel->setText(getHelpLabelText());
-}
-
-void ConfigurationDialog::WingmanOpenAiTab::save()
-{
-    config.setWingmanOpenAiApiKey(apiKeyEdit->text().toStdString());
-    config.setWingmanOpenAiLlm(
-        llmModelsCombo->itemText(llmModelsCombo->currentIndex()).toStdString());
-}
-
-
-/*
- * Wingman ollama
- */
-
-ConfigurationDialog::WingmanOllamaTab::WingmanOllamaTab(QWidget* parent, QComboBox* parentLlmProvidersCombo)
-    : QWidget(parent),
-      parentLlmProvidersCombo{parentLlmProvidersCombo},
-      config(Configuration::getInstance())
-{
-    helpLabel = new QLabel(
-        tr(
-            "<html><a href='https://ollama.com'>ollama</a> LLM provider configuration:\n"
-            "<ul>"
-            "<li>Set your ollama server URL - default is <a href='http://localhost:11434'>http://localhost:11434</a></li>"
-            "</ul>"
-        ).arg(ENV_VAR_OPENAI_API_KEY));
-    helpLabel->setVisible(!config.canWingmanOllama());
-    urlLabel = new QLabel(tr("<br>ollama server URL:"));
-    urlEdit = new QLineEdit(this);
-    // enabled on valid config > add ollama to drop down > choose it in drop down
-    setOllamaButton = new QPushButton(tr("Set ollama as LLM Provider"), this);
-    setOllamaButton->setToolTip(
-        tr("Add ollama to the dropdown with LLM providers (if not there) and set it for use with Wingman")
-    );
-    refreshLlmModelsButton = new QPushButton(tr("Refresh LLM models"), this);
-    clearUrlButton = new QPushButton(tr("Clear URL"), this);
-    llmModelsLabel = new QLabel(tr("LLM model:"));
-    llmModelsCombo = new QComboBox();
-    llmModelsCombo->addItem(LLM_MODEL_NONE);
-
-    QVBoxLayout* llmProvidersLayout = new QVBoxLayout();
-    llmProvidersLayout->addWidget(helpLabel);
-    llmProvidersLayout->addWidget(urlLabel);
-    llmProvidersLayout->addWidget(urlEdit);
-    llmProvidersLayout->addWidget(llmModelsLabel);
-    llmProvidersLayout->addWidget(llmModelsCombo);
-    QHBoxLayout* buttonsLayout = new QHBoxLayout{};
-    buttonsLayout->addWidget(refreshLlmModelsButton);
-    buttonsLayout->addWidget(setOllamaButton);
-    buttonsLayout->addWidget(clearUrlButton);
-    llmProvidersLayout->addLayout(buttonsLayout);
-
-    llmProvidersLayout->addStretch();
-
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->addLayout(llmProvidersLayout);
-    layout->addStretch();
-    setLayout(layout);
-
-    QObject::connect(
-        refreshLlmModelsButton, SIGNAL(clicked()),
-        this, SLOT(refreshLlmModelsSlot()));
-    QObject::connect(
-        setOllamaButton, SIGNAL(clicked()),
-        this, SLOT(setOllamaSlot()));
-    QObject::connect(
-        clearUrlButton, SIGNAL(clicked()),
-        this, SLOT(clearUrlSlot()));
-}
-
-ConfigurationDialog::WingmanOllamaTab::~WingmanOllamaTab()
-{
-    delete helpLabel;
-    delete urlLabel;
-    delete urlEdit;
-    delete refreshLlmModelsButton;
-    delete clearUrlButton;
-    delete llmModelsLabel;
-    delete llmModelsCombo;
-}
-
-void ConfigurationDialog::WingmanOllamaTab::refreshLlmModelsSlot()
-{
-    MF_DEBUG("Signal SLOT: refresh LLM models" << endl);
-
-    // TODO: refresh LLM models - how to call mind cleanly?
-}
-
-void ConfigurationDialog::WingmanOllamaTab::setOllamaSlot()
-{
-    MF_DEBUG("Signal SLOT: set ollama" << endl);
-
-    if(urlEdit->text().size()==0) {
-        QMessageBox::critical(
-            this,
-            tr("LLM Provider Config Error"),
-            tr(
-                "Unable to set ollama as LLM provider as neither API key is set in the configuration, "
-                "nor it is defined and environment variable")
-        );
-        config.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_NONE);
-        refreshWingmanLlmProvidersComboBox(parentLlmProvidersCombo, config);
-    }
-
-    save();
-    config.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA);
-    refreshWingmanLlmProvidersComboBox(parentLlmProvidersCombo, config);
-}
-
-void ConfigurationDialog::WingmanOllamaTab::clearUrlSlot()
-{
-    urlEdit->clear();
-
-    save();
-    if(config.getWingmanLlmProvider() == WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA) {
-        config.setWingmanLlmProvider(WingmanLlmProviders::WINGMAN_PROVIDER_NONE);
-    }
-    refreshWingmanLlmProvidersComboBox(parentLlmProvidersCombo, config);
-    QMessageBox::information(
-        this,
-        tr("ollama Server URL Cleared"),
-        tr(
-            "ollama server URL has been cleared from the configuration and "
-            "ollama is no longer the LLM provider."));
-}
-
-void ConfigurationDialog::WingmanOllamaTab::refresh()
-{
-    urlEdit->setText(QString::fromStdString(config.getWingmanOllamaUrl()));
-}
-
-void ConfigurationDialog::WingmanOllamaTab::save()
-{
-    config.setWingmanOllamaUrl(urlEdit->text().toStdString());
-}
-
-/*
- * TODO: Wingman Open AI API tab
- */
-
-/*
- * Wingman tab
- */
-
-ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
-    : QWidget(parent),
-      config(Configuration::getInstance())
-{
-    llmProvidersLabel = new QLabel(tr("LLM provider:"), this);
-    llmProvidersCombo = new QComboBox{this};
-    QObject::connect(
-        llmProvidersCombo, SIGNAL(currentIndexChanged(int)),
-        this, SLOT(handleComboBoxChanged(int))
-    );
-
-    wingmanTabWidget = new QTabWidget;
-    wingmanOpenAiTab = new WingmanOpenAiTab{this, llmProvidersCombo};
-    wingmanOllamaTab = new WingmanOllamaTab{this, llmProvidersCombo};
-    wingmanTabWidget->addTab(wingmanOpenAiTab, tr("OpenAI"));
-    wingmanTabWidget->addTab(wingmanOllamaTab, tr("ollama"));
-
-    // assembly
-    QVBoxLayout* nLayout = new QVBoxLayout{this};
-    nLayout->addWidget(llmProvidersLabel);
-    nLayout->addWidget(llmProvidersCombo);
-
-    nLayout->addWidget(wingmanTabWidget);
-
-    QGroupBox* nGroup = new QGroupBox{tr("Large language model (LLM) providers"), this};
-    nGroup->setLayout(nLayout);
-
-    QVBoxLayout* boxesLayout = new QVBoxLayout{this};
-    boxesLayout->addWidget(nGroup);
-    boxesLayout->addStretch();
-    setLayout(boxesLayout);
-}
-
-
-void ConfigurationDialog::WingmanTab::handleComboBoxChanged(int index) {
-    string comboItemLabel{llmProvidersCombo->itemText(index).toStdString()};
-    MF_DEBUG("WingmanTab::handleComboBoxChange: '" << comboItemLabel << "'" << endl);
-    if(this->isVisible() && comboItemLabel == WINGMAN_OPENAI_COMBO_LABEL) {
-        QMessageBox::warning(
-            this,
-            tr("Data Privacy Warning"),
-            tr(
-                "You have chosen OpenAI as your Wingman LLM provider. "
-                "Therefore, your data will be sent to OpenAI servers "
-                "when you use Wingman."));
-    }
-}
-
-ConfigurationDialog::WingmanTab::~WingmanTab()
-{
-    delete llmProvidersLabel;
-    delete llmProvidersCombo;
-}
-
-void ConfigurationDialog::WingmanTab::refresh()
-{
-    // refresh LLM providers combo
-    refreshWingmanLlmProvidersComboBox(llmProvidersCombo, config);
-
-    wingmanOpenAiTab->refresh();
-    wingmanOllamaTab->refresh();
-}
-
-void ConfigurationDialog::WingmanTab::save()
-{
-    // get LLM provider enum value from llmProvidersCombo
-    WingmanLlmProviders llmProvider = static_cast<WingmanLlmProviders>(
-        llmProvidersCombo->itemData(llmProvidersCombo->currentIndex()).toInt());
-    config.setWingmanLlmProvider(llmProvider);
-
-    // OpenAI tab
-    wingmanOpenAiTab->save();
-    // ollama tab
-    wingmanOllamaTab->save();
-}
-
-/*
  * Navigator tab
  */
 
@@ -1119,6 +723,385 @@ void ConfigurationDialog::NavigatorTab::refresh()
 void ConfigurationDialog::NavigatorTab::save()
 {
     config.setNavigatorMaxNodes(maxNodesSpin->value());
+}
+
+/*
+ * Wingman tab
+ */
+
+ConfigurationDialog::WingmanTab::WingmanTab(QWidget* parent)
+    : QWidget(parent),
+      config(Configuration::getInstance())
+{
+    helpLabel = new QLabel(
+        tr("Wingman LLMs"), this);
+
+    QLabel* providerLabel = new QLabel(tr("Use LLM:"), this);
+    llmProvidersCombo = new QComboBox(this);
+
+    addProviderButton = new QPushButton(tr("&Add LLM "), this);
+
+    QHBoxLayout* llmRow1Layout = new QHBoxLayout();
+    llmRow1Layout->addWidget(providerLabel);
+    llmRow1Layout->addWidget(llmProvidersCombo, 1);
+
+    QHBoxLayout* llmRow2Layout = new QHBoxLayout();
+    llmRow2Layout->addStretch();
+    llmRow2Layout->addWidget(addProviderButton);
+
+    // provider details group
+    providerDetailsGroup = new QGroupBox(tr("Selected LLM details"), this);
+
+    QLabel* typeLabel = new QLabel(tr("Provider type:"), this);
+    providerTypeValue = new QLabel("", this);
+
+    QLabel* mLabel = new QLabel(tr("Model:"), this);
+    modelValue = new QLabel("", this);
+
+    QLabel* sLabel = new QLabel(tr("Status:"), this);
+    statusValue = new QLabel("", this);
+
+    QLabel* pLabel = new QLabel(tr("Your data privacy:"), this);
+    privacyValue = new QLabel("", this);
+
+    editButton = new QPushButton(tr("Edit"), this);
+    testButton = new QPushButton(tr("Test Connection"), this);
+    removeButton = new QPushButton(tr("Remove"), this);
+
+    QGridLayout* detailsLayout = new QGridLayout();
+    detailsLayout->addWidget(typeLabel, 0, 0);
+    detailsLayout->addWidget(providerTypeValue, 0, 1);
+    detailsLayout->addWidget(mLabel, 1, 0);
+    detailsLayout->addWidget(modelValue, 1, 1);
+    detailsLayout->addWidget(sLabel, 2, 0);
+    detailsLayout->addWidget(statusValue, 2, 1);
+    detailsLayout->addWidget(pLabel, 3, 0);
+    detailsLayout->addWidget(privacyValue, 3, 1);
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(editButton);
+    buttonLayout->addWidget(testButton);
+    buttonLayout->addWidget(removeButton);
+    buttonLayout->addStretch();
+
+    QVBoxLayout* groupLayout = new QVBoxLayout();
+    groupLayout->addLayout(detailsLayout);
+    groupLayout->addLayout(buttonLayout);
+
+    providerDetailsGroup->setLayout(groupLayout);
+    providerDetailsGroup->setVisible(false);
+
+    // main layout
+    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    mainLayout->addWidget(helpLabel);
+    mainLayout->addSpacing(10);
+    mainLayout->addLayout(llmRow1Layout);
+    mainLayout->addLayout(llmRow2Layout);
+    mainLayout->addWidget(providerDetailsGroup);
+    mainLayout->addStretch();
+
+    setLayout(mainLayout);
+
+    // signals
+    QObject::connect(
+        addProviderButton, &QPushButton::clicked,
+        this, &WingmanTab::handleAddProvider);
+    QObject::connect(
+        editButton, &QPushButton::clicked,
+        this, &WingmanTab::handleEditProvider);
+    QObject::connect(
+        removeButton, &QPushButton::clicked,
+        this, &WingmanTab::handleRemoveProvider);
+    QObject::connect(
+        testButton, &QPushButton::clicked,
+        this, &WingmanTab::handleTestConnection);
+    QObject::connect(
+        llmProvidersCombo, SIGNAL(currentIndexChanged(int)),
+        this, SLOT(handleProviderSelectionChanged(int)));
+}
+
+ConfigurationDialog::WingmanTab::~WingmanTab()
+{
+}
+
+void ConfigurationDialog::WingmanTab::refresh()
+{
+    // (re)stage from config - the dialog was just (re)opened
+    stagedProviders = config.getLlmProviders();
+    stagedActiveProviderId = config.getActiveLlmProviderId();
+
+    refreshProvidersUi();
+}
+
+LlmProviderConfig* ConfigurationDialog::WingmanTab::findStagedProviderById(const string& id)
+{
+    for (auto& provider : stagedProviders) {
+        if (provider.id == id) {
+            return &provider;
+        }
+    }
+    return nullptr;
+}
+
+void ConfigurationDialog::WingmanTab::refreshProvidersUi()
+{
+    // populate providers combo from the staged copy
+    llmProvidersCombo->clear();
+
+    if (stagedProviders.empty()) {
+        providerDetailsGroup->setVisible(false);
+        return;
+    }
+
+    for (const auto& provider : stagedProviders) {
+        llmProvidersCombo->addItem(
+            QString::fromStdString(provider.displayName),
+            QString::fromStdString(provider.id));
+    }
+
+    // select staged active provider
+    int index = llmProvidersCombo->findData(QString::fromStdString(stagedActiveProviderId));
+    if (index >= 0) {
+        llmProvidersCombo->setCurrentIndex(index);
+    }
+
+    handleProviderSelectionChanged(llmProvidersCombo->currentIndex());
+}
+
+void ConfigurationDialog::WingmanTab::save()
+{
+    // set the copy to cfg - the only place Add/Edit/Rm/Test Connection takes effect
+    config.setLlmProviders(stagedProviders);
+
+    // save active provider selection
+    if (llmProvidersCombo->count() > 0) {
+        QString providerId = llmProvidersCombo->itemData(
+            llmProvidersCombo->currentIndex()).toString();
+        config.setActiveLlmProvider(providerId.toStdString());
+    } else {
+        config.setActiveLlmProvider("");
+    }
+}
+
+void ConfigurationDialog::WingmanTab::handleAddProvider()
+{
+    AddLlmProviderDialog addDialog(this);
+    if (addDialog.exec() == QDialog::Accepted) {
+        WingmanLlmProviders providerType = addDialog.getSelectedProviderType();
+
+        if (providerType == WINGMAN_PROVIDER_OPENAI) {
+            OpenAiConfigDialog configDialog(this);
+            if (configDialog.exec() == QDialog::Accepted) {
+                stagedProviders.push_back(configDialog.getProviderConfig());
+                refreshProvidersUi();
+            }
+        } else if (providerType == WINGMAN_PROVIDER_OLLAMA) {
+            OllamaConfigDialog configDialog(this);
+            if (configDialog.exec() == QDialog::Accepted) {
+                stagedProviders.push_back(configDialog.getProviderConfig());
+                refreshProvidersUi();
+            }
+        } else if (providerType == WINGMAN_PROVIDER_OPENROUTER) {
+            OpenRouterConfigDialog configDialog(this);
+            if (configDialog.exec() == QDialog::Accepted) {
+                stagedProviders.push_back(configDialog.getProviderConfig());
+                refreshProvidersUi();
+            }
+        }
+    }
+}
+
+void ConfigurationDialog::WingmanTab::handleEditProvider()
+{
+    if (llmProvidersCombo->count() == 0) {
+        return;
+    }
+
+    QString providerId = llmProvidersCombo->itemData(
+        llmProvidersCombo->currentIndex()).toString();
+    LlmProviderConfig* provider = findStagedProviderById(providerId.toStdString());
+
+    if (!provider) {
+        return;
+    }
+    // copy: provider is a pointer into staged providers vector - dereference
+    LlmProviderConfig editedProvider = *provider;
+
+    if (editedProvider.providerType == WINGMAN_PROVIDER_OPENAI) {
+        OpenAiConfigDialog configDialog(this);
+        configDialog.setEditProvider(editedProvider);
+        if (configDialog.exec() == QDialog::Accepted) {
+            *findStagedProviderById(editedProvider.id) = configDialog.getProviderConfig();
+            refreshProvidersUi();
+        }
+    } else if (editedProvider.providerType == WINGMAN_PROVIDER_OLLAMA) {
+        OllamaConfigDialog configDialog(this);
+        configDialog.setEditProvider(editedProvider);
+        if (configDialog.exec() == QDialog::Accepted) {
+            *findStagedProviderById(editedProvider.id) = configDialog.getProviderConfig();
+            refreshProvidersUi();
+        }
+    } else if (editedProvider.providerType == WINGMAN_PROVIDER_OPENROUTER) {
+        OpenRouterConfigDialog configDialog(this);
+        configDialog.setEditProvider(editedProvider);
+        if (configDialog.exec() == QDialog::Accepted) {
+            *findStagedProviderById(editedProvider.id) = configDialog.getProviderConfig();
+            refreshProvidersUi();
+        }
+    }
+}
+
+void ConfigurationDialog::WingmanTab::handleRemoveProvider()
+{
+    if (llmProvidersCombo->count() == 0) {
+        return;
+    }
+
+    QString providerId = llmProvidersCombo->itemData(
+        llmProvidersCombo->currentIndex()).toString();
+
+    QMessageBox::StandardButton reply = QMessageBox::question(
+        this,
+        tr("Remove Provider"),
+        tr("Are you sure you want to remove this LLM provider configuration?"),
+        QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes) {
+        string id = providerId.toStdString();
+        stagedProviders.erase(
+            std::remove_if(
+                stagedProviders.begin(),
+                stagedProviders.end(),
+                [&id](const LlmProviderConfig& p) { return p.id == id; }),
+            stagedProviders.end());
+        if (stagedActiveProviderId == id) {
+            stagedActiveProviderId.clear();
+        }
+        refreshProvidersUi();
+    }
+}
+
+void ConfigurationDialog::WingmanTab::handleTestConnection()
+{
+    if (llmProvidersCombo->count() == 0) {
+        return;
+    }
+
+    QString providerId = llmProvidersCombo->itemData(
+        llmProvidersCombo->currentIndex()).toString();
+    LlmProviderConfig* provider = findStagedProviderById(providerId.toStdString());
+
+    if (!provider) {
+        return;
+    }
+
+    string errorMessage;
+    bool success = false;
+
+    if (provider->providerType == WINGMAN_PROVIDER_OPENAI) {
+        string effectiveApiKey = provider->apiKey;
+        if (provider->useEnvVar) {
+            const char* envKey = std::getenv(ENV_VAR_OPENAI_API_KEY);
+            if (envKey) {
+                effectiveApiKey = string(envKey);
+            }
+        }
+        if (config.validateOpenAiProviderInput(effectiveApiKey, provider->llmModel, errorMessage)) {
+            OpenAiWingman wingman{effectiveApiKey};
+            success = wingman.didLastListModelsSucceed();
+            if (!success) {
+                errorMessage = "Could not connect to the OpenAI API with the given API key";
+            }
+        }
+    } else if (provider->providerType == WINGMAN_PROVIDER_OLLAMA) {
+        if (config.validateOllamaProviderInput(provider->url, provider->llmModel, errorMessage)) {
+            OllamaWingman wingman{provider->url};
+            wingman.listModels();
+            success = wingman.didLastListModelsSucceed();
+            if (!success) {
+                errorMessage = "Could not connect to the ollama server at " + provider->url;
+            }
+        }
+    } else if (provider->providerType == WINGMAN_PROVIDER_OPENROUTER) {
+        string effectiveApiKey = provider->apiKey;
+        if (provider->useEnvVar) {
+            const char* envKey = std::getenv(ENV_VAR_OPENROUTER_API_KEY);
+            if (envKey) {
+                effectiveApiKey = string(envKey);
+            }
+        }
+        if (config.validateOpenRouterProviderInput(effectiveApiKey, provider->llmModel, errorMessage)) {
+            OpenRouterWingman wingman{effectiveApiKey};
+            success = wingman.didLastListModelsSucceed();
+            if (!success) {
+                errorMessage = "Could not connect to the OpenRouter API with the given API key";
+            }
+        }
+    }
+
+    if (success) {
+        provider->isValid = true;
+        statusValue->setText(tr("configured"));
+        statusValue->setStyleSheet("QLabel { color: green; }");
+        QMessageBox::information(
+            this,
+            tr("Connection Test"),
+            tr("Provider configuration is valid."));
+    } else {
+        provider->isValid = false;
+        statusValue->setText(tr("Not validated"));
+        statusValue->setStyleSheet("QLabel { color: orange; }");
+        QMessageBox::critical(
+            this,
+            tr("Connection Test"),
+            tr("Provider configuration test failed: %1")
+            .arg(QString::fromStdString(errorMessage)));
+    }
+}
+
+void ConfigurationDialog::WingmanTab::handleProviderSelectionChanged(int index)
+{
+    if (index < 0 || llmProvidersCombo->count() == 0) {
+        providerDetailsGroup->setVisible(false);
+        return;
+    }
+
+    QString providerId = llmProvidersCombo->itemData(index).toString();
+    LlmProviderConfig* provider = findStagedProviderById(providerId.toStdString());
+
+    if (!provider) {
+        providerDetailsGroup->setVisible(false);
+        return;
+    }
+
+    // update details
+    if (provider->providerType == WINGMAN_PROVIDER_OPENAI) {
+        providerTypeValue->setText(tr("OpenAI"));
+        privacyValue->setText(tr("will be shared w/ 3rd party"));
+        privacyValue->setStyleSheet("QLabel { color: red; }");
+    } else if (provider->providerType == WINGMAN_PROVIDER_OLLAMA) {
+        providerTypeValue->setText(tr("ollama"));
+        privacyValue->setText(tr("will not be shared w/ 3rd party"));
+        privacyValue->setStyleSheet("QLabel { color: green; }");
+    } else if (provider->providerType == WINGMAN_PROVIDER_OPENROUTER) {
+        providerTypeValue->setText(tr("OpenRouter"));
+        privacyValue->setText(tr("will be shared w/ 3rd party"));
+        privacyValue->setStyleSheet("QLabel { color: red; }");
+    } else {
+        providerTypeValue->setText(tr("Unknown"));
+    }
+
+    modelValue->setText(QString::fromStdString(provider->llmModel));
+
+    if (provider->isValid) {
+        statusValue->setText(tr("configured"));
+        statusValue->setStyleSheet("QLabel { color: green; }");
+    } else {
+        statusValue->setText(tr("Not validated"));
+        statusValue->setStyleSheet("QLabel { color: orange; }");
+    }
+
+    providerDetailsGroup->setVisible(true);
 }
 
 } // m8r namespace

@@ -44,6 +44,7 @@ class OllamaWingman: Wingman
 private:
     std::string url;
     std::vector<std::string> llmModels;
+    bool lastListModelsSucceeded;
 
     void listModelsHttpGet();
     void chatHttpPost(CommandWingmanChat& command);
@@ -58,6 +59,9 @@ public:
     ~OllamaWingman() override;
 
     virtual std::vector<std::string>& listModels() override;
+
+    bool didLastListModelsSucceed() const { return lastListModelsSucceeded; }
+
     virtual void chat(CommandWingmanChat& command) override;
     virtual void embeddings(CommandWingmanEmbeddings& command) override;
 };

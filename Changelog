@@ -1,13 +1,35 @@
-2024-04-??  Martin Dvorak  <martin.dvorak@mindforger.com>
+2026-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v2.1.0 - Local LLMs support, Notes semantic search
-      and orphan library documents management.
-    * WIP: Feature: ollama integration brings privacy safe Wingman 
-      via ollama hosted LLMs.
-    * WIP: Feature: embeddings calculation by ollama hosted LLM models
-    * WIP: Enhancement: improved LLM providers configuration: OpenAI and ollama
-      (environment vs. configuration; LLM model selection; provider choice)
-    * WIP: Enhancement: library orphans
+    * Released v2.1.0 - Local LLMs support, Notes semantic search and orphan
+      library documents management.
+    * Project upgraded from C++11 to C++14 - this is the conservative change which
+      enables MindForger to be built on GitHub Actions/Appveyor/CI nodes again and
+      catches up a bit on new distros.
+    * Enhancement: autolinking renders manual links and auto links in different
+      colors - blue vs. green.
+    * Enhancement: improved tag rendering for TODO/WIP/DONE and priorities P0/P1/P2.
+    * Feature: ollama integration brings privacy safe Wingman via local ollama
+      hosted LLMs.
+    * Feature: OpenRouter LLM provider support - OpenRouter (openrouter.ai)
+      can now be configured as Wingman's LLM provider using OpenAI-compatible API.
+    * Enhancement: improved LLM providers configuration - ollama, OpenAI and OpenRouter
+      support environment vs. configuration, LLM model fetch and selection, indicate
+      whether the data are shared w/ 3rd party or not.
+    * Enhancement: library orphans detection.
+    * Fix: the first O name rendering after MF start no longer shows ellipsis.
+    * Fix: added escaping of ampersands in O name Qt view.
+    * Fix: Ctrl+/ now uses the model configured in Preferences instead of
+      a stale cached model when only the model name (not provider type) changes.
+    * Fix: macOS CI updated to use macos-13 (Intel) runner with
+      jurplel/install-qt-action@v4 to get Qt 5.15.2 with WebEngine - Homebrew's
+      qt@5 on Apple Silicon (macos-latest) no longer ships qtwebengine.
+    * Fix: source code fixed to be compilable w/o warning on systems w/ GCC 13+
+      (deprecated language and QT constructions updated & conditionally compiled).
+    * Fix: removed call incorrect cURL option CURL_HTTPOST for legacy POSTs.
+    * Test fix: stabilized MindTestCase.LearnAmnesiaLearn expected
+      stale ontology tags count (14/17) - updated to match the P0/P1/P2 priority
+      tags added by the tag colorization feature.
+    * Experimental WIP Feature: embeddings calculation by ollama hosted LLM models.
 
 2024-02-16  Martin Dvorak  <martin.dvorak@mindforger.com>
 

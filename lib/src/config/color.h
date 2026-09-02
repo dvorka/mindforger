@@ -76,6 +76,10 @@ public:
         static const Color color(0x33,0x33,0x33);
         return color;
     }
+    static const Color& PINK() {
+        static const Color color(0xFF,0xA4,0xA4);
+        return color;
+    }
 
     // MindForger colors
     static const Color& MF_RED() {

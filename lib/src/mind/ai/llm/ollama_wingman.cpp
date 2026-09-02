@@ -43,7 +43,8 @@ size_t ollamaCurlWriteCallback(void* contents, size_t size, size_t nmemb, std::s
 OllamaWingman::OllamaWingman(const string& url)
     : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA),
       url{url},
-      llmModels{}
+      llmModels{},
+      lastListModelsSucceeded{false}
 {
 }
 
@@ -52,110 +53,110 @@ OllamaWingman::~OllamaWingman()
 }
 
 void OllamaWingman::listModelsHttpGet() {
+    lastListModelsSucceeded = false;
+
     string url =
         this->url +
         (stringEndsWith(this->url, "/")?"":"/") +
         "api/tags";
 
-    MF_DEBUG("    ollama: curlGet() url: " << url << endl);
-    CURL* curl = curl_easy_init();
-    if (curl) {
-        curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
-        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L);
-        curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 50L);
-        curl_easy_setopt(curl, CURLOPT_TCP_KEEPALIVE, 1L);
+    MF_DEBUG("    ollama: listModelsHttpGet() url: " << url << endl);
 
-        std::string responseString;
-        std::string headerString;
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, ollamaCurlWriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseString);
-        curl_easy_setopt(curl, CURLOPT_HEADERDATA, &headerString);
+    string responseString;
 
-        // perform GET request
-        CURLcode res = curl_easy_perform(curl);
-        MF_DEBUG("    ollama: curlGet() response: '" << responseString << "'" << endl);
+#if defined(_WIN32) || defined(__APPLE__)
+    QNetworkAccessManager networkManager;
 
-        // clean up
-        curl_easy_cleanup(curl);
+    QNetworkRequest request(QUrl(QString::fromStdString(url)));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-        if (res != CURLE_OK) {
-            MF_DEBUG("    ollama: curlGet() error: " << curl_easy_strerror(res) << endl);
-            //command.status = WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
-            //command.errorMessage = curl_easy_strerror(res);
-        } else {
-            MF_DEBUG("    ollama: curlGet() OK" << endl);
-            //command.status = WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
-        }
+    QNetworkReply* reply = networkManager.get(request);
+    QEventLoop loop;
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
 
-        // curl_global_cleanup();
-        curl = NULL;
-
-        // parse JSon
-        /*
-        {
-            "models": [
-                {
-                    "name": "llama2:latest",
-                    "model": "llama2:latest",
-                    "modified_at": "2024-03-02T09:59:31.011931063+01:00",
-                    "size": 3826793677,
-                    "digest": "78e26419b4469263f75331927a00a0284ef6544c1975b826b15abdaef17bb962",
-                    "details": {
-                        "parent_model": "",
-                        "format": "gguf",
-                        "family": "llama",
-                        "families": [
-                        "llama"
-                        ],
-                        "parameter_size": "7B",
-                        "quantization_level": "Q4_0"
-                    }
-                },
-            ...
-        }
-        */
-       // parse json
-       nlohmann::json httpResponseJSon;
-       try {
-           httpResponseJSon = nlohmann::json::parse(responseString);
-       } catch (...) {
-           // catch ALL exceptions
-           MF_DEBUG(
-               "Error: unable to parse ollama JSon response:" << endl <<
-                "'" << responseString << "'" << endl
-           );
-           // TODO: create command so that I can transfer all the fields
-           //command.status = WingmanStatusCode::WINGMAN_STATUS_CODE_ERROR;
-           //command.errorMessage = "Error: unable to parse ollama JSon response: '" + command.httpResponse + "'";
-           //command.answerMarkdown.clear();
-           //command.answerTokens = 0;
-           //command.answerLlmModel = llmModel;
-
-           return;
-        }
-
+    auto error = reply->error();
+    if(error != QNetworkReply::NoError) {
         MF_DEBUG(
-            "OllamaWingman::curlGet() parsed response:" << endl
-            << ">>>"
-            << httpResponseJSon.dump(4)
-            << "<<<"
-            << endl);
+            "    ollama: listModelsHttpGet() error: "
+            << reply->errorString().toStdString() << endl);
+        reply->deleteLater();
+        return;
+    }
+    QByteArray read = reply->readAll();
+    responseString = QString{read}.toStdString();
+    reply->deleteLater();
+#else
+    CURL* curl = curl_easy_init();
+    if(!curl) {
+        MF_DEBUG("    ollama: listModelsHttpGet() failed to init CURL" << endl);
+        return;
+    }
 
-        MF_DEBUG("OllamaWingman::curlGet() fields:" << endl);
-        if(httpResponseJSon.contains("models")) {
-            for(const auto& item : httpResponseJSon["models"].items()) {
-                MF_DEBUG("  item: " << item.key() << endl);
-                if(item.value().contains("name")) {
-                    MF_DEBUG("    name: " << item.value()["name"] << endl);
-                    string llmModelName{item.value()["name"]};
-                    // add model to list
-                    this->llmModels.push_back(llmModel);
-                }
+    std::string headerString;
+    curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L);
+    curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 50L);
+    curl_easy_setopt(curl, CURLOPT_TCP_KEEPALIVE, 1L);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, ollamaCurlWriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseString);
+    curl_easy_setopt(curl, CURLOPT_HEADERDATA, &headerString);
+
+    CURLcode res = curl_easy_perform(curl);
+    curl_easy_cleanup(curl);
+
+    if(res != CURLE_OK) {
+        MF_DEBUG(
+            "    ollama: listModelsHttpGet() error: "
+            << curl_easy_strerror(res) << endl);
+        return;
+    }
+#endif
+
+    MF_DEBUG("    ollama: listModelsHttpGet() response: '" << responseString << "'" << endl);
+
+    // parse JSON response
+    /*
+    {
+        "models": [
+            {
+                "name": "llama2:latest",
+                "model": "llama2:latest",
+                ...
+            },
+        ...
+    }
+    */
+    nlohmann::json httpResponseJSon;
+    try {
+        httpResponseJSon = nlohmann::json::parse(responseString);
+    } catch (...) {
+        MF_DEBUG(
+            "Error: unable to parse ollama models JSon response:" << endl <<
+            "'" << responseString << "'" << endl
+        );
+        return;
+    }
+
+    MF_DEBUG(
+        "OllamaWingman::listModelsHttpGet() parsed response:" << endl
+        << ">>>" << httpResponseJSon.dump(4) << "<<<" << endl);
+
+    // a "models" array (even if empty) means the server responded correctly -
+    // a server with no models installed is still a successful connection
+    if(httpResponseJSon.contains("models")) {
+        lastListModelsSucceeded = true;
+        for(const auto& item : httpResponseJSon["models"].items()) {
+            if(item.value().contains("name")) {
+                string llmModelName{item.value()["name"]};
+                MF_DEBUG("    name: " << llmModelName << endl);
+                this->llmModels.push_back(llmModelName);
             }
         }
     }
-    MF_DEBUG("    DONE ollama: curlGet() url: " << url << endl);
+
+    MF_DEBUG("    DONE ollama: listModelsHttpGet() url: " << url << endl);
 }
 
 /**
@@ -219,7 +220,6 @@ void OllamaWingman::chatHttpPost(CommandWingmanChat& command) {
         QEventLoop loop;
         QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
         loop.exec();
-        reply->deleteLater();
 
         command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
 
@@ -254,6 +254,7 @@ void OllamaWingman::chatHttpPost(CommandWingmanChat& command) {
                 "Successful ollama Wingman provider response:" << endl <<
                 "  '" << command.httpResponse << "'" << endl);
         }
+        reply->deleteLater();
 #else
         // set up cURL options: POST
         command.httpResponse.clear();
@@ -448,7 +449,6 @@ void OllamaWingman::embeddingsHttpPost(CommandWingmanEmbeddings& command) {
         QEventLoop loop;
         QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
         loop.exec();
-        reply->deleteLater();
 
         command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
 
@@ -483,10 +483,10 @@ void OllamaWingman::embeddingsHttpPost(CommandWingmanEmbeddings& command) {
                 "Successful ollama Wingman provider response:" << endl <<
                 "  '" << command.httpResponse << "'" << endl);
         }
+        reply->deleteLater();
 #else
         // set up cURL options: POST
         command.httpResponse.clear();
-        curl_easy_setopt(curl, CURLOPT_HTTPPOST, 1);
         curl_easy_setopt(
             curl, CURLOPT_URL,
             url.c_str());

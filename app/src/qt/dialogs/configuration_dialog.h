@@ -39,8 +39,6 @@ class ConfigurationDialog : public QDialog
     class NavigatorTab;
     class MindTab;
     class WingmanTab;
-    class WingmanOpenAiTab;
-    class WingmanOllamaTab;
 
 private:
     QTabWidget* tabWidget;
@@ -71,110 +69,6 @@ private slots:
 
 signals:
     void saveConfigSignal();
-};
-
-constexpr const auto WINGMAN_NONE_COMBO_LABEL = "";
-constexpr const auto WINGMAN_OPENAI_COMBO_LABEL = "OpenAI";
-constexpr const auto WINGMAN_OLLAMA_COMBO_LABEL = "ollama";
-constexpr const auto WINGMAN_MOCK_COMBO_LABEL = "mock";
-
-/**
- * @brief Wingman tab's OpenAI tab.
- */
-class ConfigurationDialog::WingmanOpenAiTab : public QWidget
-{
-    Q_OBJECT
-
-private:
-    QComboBox* parentLlmProvidersCombo;
-    Configuration& config;
-
-    QLabel* helpLabel;
-    QLabel* apiKeyLabel;
-    QLineEdit* apiKeyEdit;
-    QPushButton* refreshLlmModelsButton;
-    QPushButton* setOpenAiButton;
-    QPushButton* clearApiKeyButton;
-    QLabel* llmModelsLabel;
-    QComboBox* llmModelsCombo;
-
-public:
-    explicit WingmanOpenAiTab(QWidget* parent, QComboBox* parentLlmProvidersCombo);
-    ~WingmanOpenAiTab();
-
-    void refresh();
-    void save();
-
-private:
-
-QString getHelpLabelText() const;
-
-private slots:
-    void setOpenAiSlot();
-    void clearApiKeySlot();
-};
-
-/**
- * @brief Wingman tab's ollama tab.
- */
-class ConfigurationDialog::WingmanOllamaTab : public QWidget
-{
-    Q_OBJECT
-
-private:
-    QComboBox* parentLlmProvidersCombo;
-
-    Configuration& config;
-
-    QLabel* helpLabel;
-    QLabel* urlLabel;
-    QLineEdit* urlEdit;
-    QPushButton* refreshLlmModelsButton;
-    QPushButton* setOllamaButton;
-    QPushButton* clearUrlButton;
-    QLabel* llmModelsLabel;
-    QComboBox* llmModelsCombo;
-
-public:
-    explicit WingmanOllamaTab(QWidget* parent, QComboBox* parentLlmProvidersCombo);
-    ~WingmanOllamaTab();
-
-    void refresh();
-    void save();
-
-private slots:
-    void refreshLlmModelsSlot();
-    void setOllamaSlot();
-    void clearUrlSlot();
-};
-
-/**
- * @brief Wingman tab.
- */
-class ConfigurationDialog::WingmanTab : public QWidget
-{
-    Q_OBJECT
-
-private:
-    Configuration& config;
-
-    QLabel* llmProvidersLabel;
-    QComboBox* llmProvidersCombo;
-
-    QTabWidget* wingmanTabWidget;
-    WingmanOpenAiTab* wingmanOpenAiTab;
-    WingmanOllamaTab* wingmanOllamaTab;
-
-public:
-    explicit WingmanTab(QWidget* parent);
-    ~WingmanTab();
-
-    // there and back is handled by Dialog's access to this class & Config singleton
-    void refresh();
-    void save();
-
-private slots:
-    void handleComboBoxChanged(int index);
 };
 
 /**
@@ -355,6 +249,51 @@ public:
     // there and back is handled by Dialog's access to this class & Config singleton
     void refresh();
     void save();
+};
+
+/**
+ * @brief Wingman tab for managing LLM providers.
+ */
+class ConfigurationDialog::WingmanTab : public QWidget
+{
+    Q_OBJECT
+
+private:
+    Configuration& config;
+
+    // staged copy of providers and active provider ID to allow safe Cancel
+    std::vector<LlmProviderConfig> stagedProviders;
+    std::string stagedActiveProviderId;
+
+    QLabel* helpLabel;
+    QComboBox* llmProvidersCombo;
+    QPushButton* addProviderButton;
+
+    QGroupBox* providerDetailsGroup;
+    QLabel* providerTypeValue;
+    QLabel* modelValue;
+    QLabel* statusValue;
+    QLabel* privacyValue;
+    QPushButton* editButton;
+    QPushButton* removeButton;
+    QPushButton* testButton;
+
+    LlmProviderConfig* findStagedProviderById(const std::string& id);
+    void refreshProvidersUi();
+
+public:
+    explicit WingmanTab(QWidget* parent);
+    ~WingmanTab();
+
+    void refresh();
+    void save();
+
+private slots:
+    void handleAddProvider();
+    void handleEditProvider();
+    void handleRemoveProvider();
+    void handleTestConnection();
+    void handleProviderSelectionChanged(int index);
 };
 
 }

@@ -81,7 +81,7 @@ static double TWO_PI = 2.0*PI;
 NavigatorEdge::NavigatorEdge(NavigatorNode* source, NavigatorNode* destination)
 	: arrowSize(10)
 {
-	setAcceptedMouseButtons(0);
+	setAcceptedMouseButtons(Qt::MouseButtons());
     srcNode = source;
     dstNode = destination;
     srcNode->addEdge(this);

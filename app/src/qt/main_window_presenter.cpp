@@ -609,7 +609,12 @@ void MainWindowPresenter::doActionMindThink()
             statusBar->showMindStatistics();
         } else {
             mainMenu->showFacetMindSleep();
-            statusBar->showError(tr("Cannot think - either Mind already dreaming or repository too big"));
+            statusBar->showError(
+                tr(
+                    "Cannot think - either Mind already dreaming or "
+                    "repository has too many notes: %1 > %2")
+                    .arg(mind->remind().getNotesCount()).arg(config.getAsyncMindThreshold())
+            );
         }
     } else {
         statusBar->showMindStatistics();
@@ -673,8 +678,10 @@ void MainWindowPresenter::doActionMindToggleSemanticSearch()
         config.setSemanticSearch(false);
         statusBar->showInfo(tr("Semantic search disabled"));
     } else {
-        // check whether possible
-        if(config.canWingmanOllama()) {
+        // check whether possible - only ollama's Wingman implements embeddings()
+        // (OpenAI/OpenRouter throw), so semantic search requires it to be active
+        LlmProviderConfig* activeLlmProvider = config.getActiveLlmProvider();
+        if(activeLlmProvider && activeLlmProvider->providerType == WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA) {
             config.setSemanticSearch(true);
             statusBar->showInfo(tr("Semantic search activated"));
         } else {
@@ -2228,8 +2235,9 @@ void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
     // wingmanProgressDialog->hide();
+    LlmProviderConfig* activeLlmProvider = config.getLlmProviderById(config.getActiveLlmProviderId());
     string answerDescriptor{
-        "[provider: " + config.getWingmanLlmProviderAsString(config.getWingmanLlmProvider()) +
+        "[provider: " + (activeLlmProvider ? activeLlmProvider->displayName : "N/A") +
         ", model: " + commandWingmanChat.answerLlmModel +
         ", tokens (prompt/answer): " +
         std::to_string(commandWingmanChat.promptTokens) + "/" + std::to_string(commandWingmanChat.answerTokens) +
@@ -3958,6 +3966,11 @@ void MainWindowPresenter::doActionViewLimbo()
 void MainWindowPresenter::doActionHelpDocumentation()
 {
     QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger/wiki"});
+}
+
+void MainWindowPresenter::doActionHelpSponsor()
+{
+    QDesktopServices::openUrl(QUrl{"https://opencollective.com/dvorka-floss-lab/projects/mindforger"});
 }
 
 void MainWindowPresenter::doActionHelpWeb()

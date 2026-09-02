@@ -6,6 +6,15 @@
 it under the terms of the BSD License.
 */
 
+/* local modification (Martin Dvorak, 2026-09-01):
+ * dropped the "public std::binary_function<...>" base class from every string
+ * comparator functor below (equal_string_i_compare, less_string_compare, etc.).
+ * std::binary_function is deprecated since C++11 and removed in C++17, and its
+ * first_argument_type/second_argument_type/result_type typedefs are not referenced
+ * anywhere in this codebase - these functors are only ever used directly as plain
+ * comparators (e.g. with std::sort/std::map), so the inheritance was dead
+ * boilerplate kept just to silence -Wdeprecated-declarations under GCC 13. */
+
 #ifndef __STRING_UTIL_H__
 #define __STRING_UTIL_H__
 
@@ -832,7 +841,6 @@ namespace string_util
     //equal functors
     template<typename T>
     class equal_string_i_compare
-        : public std::binary_function<const T*, const T*, bool>
         {
     public:
         inline bool operator()(const T* a_, const T* b_) const
@@ -843,7 +851,6 @@ namespace string_util
 
     template<typename T>
     class equal_basic_string_i_compare
-        : public std::binary_function<T, T, bool>
         {
     public:
         inline bool operator()(const T& a_, const T& b_) const
@@ -854,7 +861,6 @@ namespace string_util
 
     template<typename T>
     class equal_string_compare
-        : public std::binary_function<const T*, const T*, bool>
         {
     public:
         inline bool operator()(const T* a_, const T* b_) const
@@ -866,7 +872,6 @@ namespace string_util
     //less functors
     template<typename T>
     class less_string_n_compare
-        : public std::binary_function<const T*, const T*, bool>
         {
     public:
         less_string_n_compare(size_t comparison_size) : m_comparison_size(comparison_size) {}
@@ -880,7 +885,6 @@ namespace string_util
 
     template<typename T>
     class less_string_ni_compare
-        : public std::binary_function<const T*, const T*, bool>
         {
     public:
         less_string_ni_compare(size_t comparison_size) : m_comparison_size(comparison_size) {}
@@ -894,7 +898,6 @@ namespace string_util
 
     template<typename T>
     class less_string_i_compare
-        : public std::binary_function<const T*, const T*, bool>
         {
     public:
         inline bool operator()(const T* a_, const T* b_) const
@@ -905,7 +908,6 @@ namespace string_util
 
     template<typename T>
     class less_string_compare
-        : public std::binary_function<const T*, const T*, bool>
         {
     public:
         inline bool operator()(const T* a_, const T* b_) const
@@ -916,7 +918,6 @@ namespace string_util
 
     template<typename T>
     class less_basic_string_compare
-        : public std::binary_function<T, T, bool>
         {
     public:
         inline bool operator()(const T& a_, const T& b_) const
@@ -927,7 +928,6 @@ namespace string_util
 
     template<typename T>
     class less_string_natural_order_i_compare
-        : public std::binary_function<const T*, const T*, bool>
         {
     public:
         inline bool operator()(const T* a_, const T* b_) const
