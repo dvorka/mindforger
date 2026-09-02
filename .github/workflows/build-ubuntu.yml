@@ -1,5 +1,6 @@
-name: Ubuntu unit tests
+name: Ubuntu build & test
 
+# build Ubuntu tarball and run unit tests for pull requests
 on: [push]
 
 jobs:

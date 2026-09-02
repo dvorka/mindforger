@@ -1,6 +1,11 @@
 name: macOS build
 
-on: [push]
+# build the macOS .dmg only for release pull requests:
+#   - source (head) branch must be rel/<major.minor.patch>
+#   - target (base) branch must be main
+on:
+  pull_request:
+    branches: [main]
 
 jobs:
   build:
