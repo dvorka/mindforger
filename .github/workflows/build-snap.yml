@@ -2,14 +2,14 @@ name: Snap build
 
 # build the classic-confinement Snap package only for release pull requests:
 #   - source (head) branch must be rel/<major.minor.patch>
-#   - target (base) branch must be main
+#   - target (base) branch must be master
 on:
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   build:
-    # cheap gate: only run for rel/* head branches targeting main
+    # cheap gate: only run for rel/* head branches targeting master
     if: startsWith(github.head_ref, 'rel/')
     runs-on: ubuntu-24.04
 

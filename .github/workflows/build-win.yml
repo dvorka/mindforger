@@ -2,10 +2,10 @@ name: Windows build
 
 # build the Windows installer and ZIP archive only for release pull requests:
 #   - source (head) branch must be rel/<major.minor.patch>
-#   - target (base) branch must be main
+#   - target (base) branch must be master
 on:
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   build:
