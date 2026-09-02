@@ -1,7 +1,7 @@
 /*
  outline_view.h     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -55,6 +55,13 @@ private:
 
     QVBoxLayout headerVerticalLayout;
 
+    // raw (non-elided) name of the currently shown Outline - cached so that
+    // the elided nameLabel text can be recomputed once this widget's width
+    // is actually known (see resizeEvent())
+    std::string currentName{};
+
+    void updateNameLabelText();
+
 public:
     explicit OutlineView(QWidget* parent);
     OutlineView(const OutlineView&) = delete;
@@ -66,6 +73,14 @@ public:
     void refreshHeader(const std::string& name);
     const QPushButton* getNameLabel() const { return nameLabel; }
     OutlineTreeView* getOutlineTree() const { return outlineTreeView; }
+
+protected:
+    // recompute the elided nameLabel text on every resize: on the very first
+    // Outline shown after MindForger start, refreshHeader() may run before
+    // this widget has received its first real layout pass, so width() is
+    // still stale/incorrect at that point - the subsequent resize event(s)
+    // fired once the surrounding QSplitter finishes laying out fix it up
+    void resizeEvent(QResizeEvent* event) override;
 };
 
 }

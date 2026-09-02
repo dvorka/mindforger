@@ -1,7 +1,7 @@
 /*
  mind.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -47,10 +47,10 @@ Mind::Mind(Configuration &configuration)
 #endif
       outlinesMap{},
       exclusiveMind{},
+      wingman{nullptr},
       timeScopeAspect{},
       tagsScopeAspect{ontology},
-      scopeAspect{timeScopeAspect, tagsScopeAspect},
-      wingman{nullptr}
+      scopeAspect{timeScopeAspect, tagsScopeAspect}
 {
     ai = new Ai{memory, *this};
 
@@ -127,7 +127,12 @@ shared_future<bool> Mind::think()
             return mindDream();
         } else {
             // IMPROVE design ASYNC AI/AA to handle also huge repositories
-            MF_DEBUG("Think: CANNOT think because number of Notes in Mind is too big" << endl);
+            MF_DEBUG(
+                "Think: CANNOT think because number of Notes in Mind is too big"
+                <<
+                memory.getNotesCount() << "/" << config.getAsyncMindThreshold()
+                << endl
+                );
             persistMindState(Configuration::MindState::SLEEPING);
             promise<bool> p;
             p.set_value(false);
@@ -702,7 +707,7 @@ vector<Note*>* Mind::getNotesOfType(const NoteType& type, const Outline& outline
     return nullptr;
 }
 
-void Mind::findOutlinesByTags(const std::vector<const Tag*>& tags, std::vector<Outline*>& result) const
+void Mind::findOutlinesByTags(const vector<const Tag*>& tags, vector<Outline*>& result) const
 {
     for(Outline* o:memory.getOutlines()) {
         bool allMatched = true;
@@ -1452,61 +1457,170 @@ Outline* Mind::findOutlineByKey(const string& key) const
 
 void Mind::initWingman()
 {
-    MF_DEBUG(
-        "MIND Wingman init: " << boolalpha << config.isWingman() << endl
-    );
-    if(config.isWingman()) {
-        MF_DEBUG("MIND Wingman initialization..." << endl);
-        switch(config.getWingmanLlmProvider()) {
-        case WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI:
-            MF_DEBUG("  MIND Wingman init: OpenAI" << endl);
-            if(wingman) {
-                delete wingman;
-                wingman = nullptr;
+    MF_DEBUG("MIND Wingman init: " << boolalpha << config.isWingman() << endl);
+
+    if(!config.isWingman()) {
+        MF_DEBUG("MIND Wingman init: DISABLED" << endl);
+        if(wingman) {
+            delete wingman;
+            wingman = nullptr;
+        }
+        wingmanActiveLlmProviderId.clear();
+        return;
+    }
+
+    LlmProviderConfig* provider = config.getActiveLlmProvider();
+    if(!provider) {
+        MF_DEBUG("MIND Wingman init: no active LLM provider configured" << endl);
+        if(wingman) {
+            delete wingman;
+            wingman = nullptr;
+        }
+        wingmanActiveLlmProviderId.clear();
+        return;
+    }
+
+    MF_DEBUG("MIND Wingman initialization for provider: " << provider->id << endl);
+
+    if(wingman) {
+        delete wingman;
+        wingman = nullptr;
+    }
+
+    switch(provider->providerType) {
+    case WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI: {
+        MF_DEBUG("  MIND Wingman init: OpenAI" << endl);
+        string effectiveKey = provider->apiKey;
+        if(provider->useEnvVar) {
+            const char* envKey = std::getenv(ENV_VAR_OPENAI_API_KEY);
+            if(envKey) {
+                effectiveKey = string(envKey);
+                MF_DEBUG("  MIND Wingman OpenAI: using env var key" << endl);
+            } else {
+                MF_DEBUG("  MIND Wingman OpenAI: env var " << ENV_VAR_OPENAI_API_KEY << " not set > NO Wingman" << endl);
+                wingmanActiveLlmProviderId.clear();
+                return;
             }
-            wingman = (Wingman*)new OpenAiWingman{
-                config.getWingmanOpenAiApiKey(),
-                config.getWingmanOpenAiLlm()
-            };
-            wingmanLlmProvider = config.getWingmanLlmProvider();
-            return;
-        case WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA:
-            MF_DEBUG("  MIND Wingman init: ollama" << endl);
-            if(wingman) {
-                delete wingman;
-                wingman = nullptr;
+        }
+        wingman = (Wingman*)new OpenAiWingman{effectiveKey};
+        wingman->setLlmModel(provider->llmModel);
+        break;
+    }
+    case WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA:
+        MF_DEBUG("  MIND Wingman init: ollama" << endl);
+        wingman = (Wingman*)new OllamaWingman{provider->url};
+        wingman->listModels();
+        wingman->setLlmModel(provider->llmModel);
+        break;
+    case WingmanLlmProviders::WINGMAN_PROVIDER_OPENROUTER: {
+        MF_DEBUG("  MIND Wingman init: OpenRouter" << endl);
+        string effectiveKey = provider->apiKey;
+        if(provider->useEnvVar) {
+            const char* envKey = std::getenv(ENV_VAR_OPENROUTER_API_KEY);
+            if(envKey) {
+                effectiveKey = string(envKey);
+                MF_DEBUG("  MIND Wingman OpenRouter: using env var key" << endl);
+            } else {
+                MF_DEBUG("  MIND Wingman OpenRouter: env var " << ENV_VAR_OPENROUTER_API_KEY << " not set > NO Wingman" << endl);
+                wingmanActiveLlmProviderId.clear();
+                return;
             }
-            wingman = (Wingman*)new OllamaWingman{
-                config.getWingmanOllamaUrl(),
-                config.getWingmanOllamaLlm()
-            };
-            wingmanLlmProvider = config.getWingmanLlmProvider();
-            return;
-        case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
-            MF_DEBUG("  MIND Wingman init: MOCK" << endl);
-            wingman = (Wingman*)new MockWingman{
-                "mock-llm-model"
-            };
-            wingmanLlmProvider = config.getWingmanLlmProvider();
-            return;
-        default:
-            MF_DEBUG("  MIND Wingman init: UNKNOWN" << endl);
-            break;
+        }
+        wingman = (Wingman*)new OpenRouterWingman{effectiveKey};
+        wingman->setLlmModel(provider->llmModel);
+        break;
+    }
+    case WingmanLlmProviders::WINGMAN_PROVIDER_MOCK:
+        MF_DEBUG("  MIND Wingman init: MOCK" << endl);
+        wingman = (Wingman*)new MockWingman{MockWingman::LLM_MODEL_MOCK};
+        break;
+    default:
+        MF_DEBUG("  MIND Wingman init: UNKNOWN > NO Wingman" << endl);
+        wingmanActiveLlmProviderId.clear();
+        return;
+    }
+
+    wingmanActiveLlmProviderId = provider->id;
+}
+
+int Mind::findLibraryOrphanOs()
+{
+    vector<Outline*> orphanOutlines{};
+    const vector<Outline*>& outlines = memory.getOutlines();
+    const Tag* t = memory.getOntology().findOrCreateTag(
+        MarkdownDocumentRepresentation::TAG_LIB_DOC);
+    MF_DEBUG("Searching ORPHAN library outlines..." << endl);
+    for(Outline* outline:outlines) {
+        if(!outline->hasTag(t)) {
+            continue;
+        }
+
+        const vector<string*>& d = outline->getDescription();
+        if(d.size()>0) {
+            if(d[0]->size() > 0) {
+                // MF_DEBUG("  Orphan: 1st line '" << *d[0] << "'" << endl);
+                if(stringStartsWith(*d[0], MarkdownDocumentRepresentation::PREFIX_1ST_LINE)) {
+                    // extract Markdown link
+                    size_t i{strlen(MarkdownDocumentRepresentation::PREFIX_1ST_LINE)};
+                    string s{
+                        d[0]->substr(
+                            i,
+                            d[0]->size()-i)};
+                    // MF_DEBUG("    '" << s << "'" << endl);
+
+                    // parse Markdown link
+                    string documentPath{};
+                    if(s.size()>4 && s[0]=='[' && s[s.size()-1]==')') {
+                        size_t i;
+                        if((i=s.find("](")) != std::string::npos) {
+                            documentPath = s.substr(i+2,s.size()-3-i);
+                        }
+                    }
+                    if(documentPath.size()) {
+                        MF_DEBUG("    '" << documentPath << "'" << endl);
+                        if(!isFile(documentPath.c_str())) {
+                            MF_DEBUG("      ORPHAN" << endl);
+                            orphanOutlines.push_back(outline);
+
+                            // tag O as orphan
+                            const Tag* orphanTag = memory.getOntology().findOrCreateTag(
+                                MarkdownDocumentRepresentation::TAG_LIB_DOC_ORPHAN);
+                            if(!outline->hasTag(orphanTag)) {
+                                outline->addTag(orphanTag);
+                                memory.remember(outline);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
-    MF_DEBUG("MIND Wingman init: DISABLED" << endl);
-    if(wingman) {
-        delete wingman;
+#ifdef DO_MF_DEBUG
+    if(orphanOutlines.size()) {
+        MF_DEBUG("ORPHAN library outlines found:" << endl);
+        for(Outline* o:orphanOutlines) {
+            MF_DEBUG("  " << o->getName() << endl);
+        }
+    } else {
+        MF_DEBUG("NO ORPHAN library outlines found." << endl);
     }
-    wingman = nullptr;
-    wingmanLlmProvider = WingmanLlmProviders::WINGMAN_PROVIDER_NONE;
+#endif
+
+    return orphanOutlines.size();
 }
 
 Wingman* Mind::getWingman()
 {
-    if(this->wingmanLlmProvider != config.getWingmanLlmProvider()) {
+    string currentId = config.getActiveLlmProviderId();
+    if(currentId != wingmanActiveLlmProviderId) {
         initWingman();
+    } else if(wingman) {
+        // sync model name in case it changed without changing the active provider
+        LlmProviderConfig* provider = config.getActiveLlmProvider();
+        if(provider) {
+            wingman->setLlmModel(provider->llmModel);
+        }
     }
 
     return this->wingman;
@@ -1526,6 +1640,72 @@ CommandWingmanChat Mind::wingmanChat(CommandWingmanChat& command)
     }
 
     return command;
+}
+
+void Mind::refreshEmbeddings()
+{
+    MF_DEBUG("MIND: Refreshing embeddings..." << endl);
+    if(getWingman()) {
+        vector<Note*> allNotes{};
+        memory.getAllNotes(allNotes);
+#ifdef DO_MF_DEBUG
+        int embeddingsSizeB=0;
+        int counter=0;
+        MF_DEBUG("  Embedding for " << allNotes.size() << " Notes:" << endl);
+        auto beginTs = chrono::high_resolution_clock::now();
+#endif
+        for(Note* n:allNotes) {
+            MF_DEBUG(
+                "    " <<
+                ++counter << "/" << allNotes.size() <<
+                " getting embeddings for '" << n->getName() << "'" << endl);
+
+            CommandWingmanEmbeddings command{};
+            command.prompt = n->getDescriptionAsString();
+            // TODO: truncate text
+
+            // TODO: calculate embeddings ONLY if not in cache (timestamp not changed)
+
+            getWingman()->embeddings(command);
+#ifdef DO_MF_DEBUG
+            if(command.answerEmbeddings.size()) {
+                embeddingsSizeB += command.answerEmbeddings.size()*sizeof(command.answerEmbeddings[0]);
+            }
+#endif
+            // TODO: store embeddings to embeddings cache: note key -> modified/embeddings vector
+        }
+#ifdef DO_MF_DEBUG
+        auto endTs = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::milliseconds>(endTs - beginTs);
+        auto nDuration = to_string(float(duration.count()) / float(allNotes.size()));
+        auto nps = to_string(1000.0 / (float(duration.count()) / float(allNotes.size())));
+        MF_DEBUG(
+            "Embeddings of " <<
+            allNotes.size() <<
+            " Notes via LLM in " <<
+            to_string(duration.count()) << "ms" <<
+            " (" << nDuration << "ms/N) " <<
+            " (" << nps << "N/s)" <<
+            endl);
+        MF_DEBUG(
+            "Embeddings size of " << allNotes.size() << " Notes: " <<
+            stringIntFormat(std::to_string(embeddingsSizeB)) << " bytes " <<
+            "(" << stringIntFormat(
+                std::to_string(
+                    int(
+                        float(embeddingsSizeB) / float(allNotes.size())))) << " bytes/N)" <<
+            endl
+        );
+
+        // BENCHMARK:
+        // - production repository: 15.000 Notes
+        // - ~7 Notes / second
+        // - 38' for 15.000 Notes
+        // - 250MB embedding vectors cache for 15.000 Notes > 16kB/Note
+#endif
+    }
+
+    MF_DEBUG("MIND: DONE refreshing embeddings" << endl);
 }
 
 } /* namespace */

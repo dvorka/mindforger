@@ -13,6 +13,8 @@ body > *:last-child {
   margin-bottom: 0 !important; }
 
 a {
+  color: #228b22; }
+a.mf-url {
   color: #4183C4; }
 a.absent {
   color: #cc0000; }

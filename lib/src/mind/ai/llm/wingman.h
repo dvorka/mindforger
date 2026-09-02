@@ -1,7 +1,7 @@
 /*
  wingman.h     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -48,6 +48,7 @@ constexpr const auto PROMPT_EXPLAIN_LIKE_5_TXT = "Explain like I'm 5: #TEXT";
 constexpr const auto PROMPT_FIX_GRAMMAR = "Fix grammar in: #TEXT";
 constexpr const auto PROMPT_FIND_GRAMMAR = "Find grammar errors in: #TEXT";
 constexpr const auto PROMPT_TRANSLATE_EN = "Translate to English: #TEXT";
+constexpr const auto PROMPT_FACT_CHECK = "Fact check: #TEXT";
 constexpr const auto PROMPT_REWRITE_FORMALLY = "Rewrite formally: #TEXT";
 constexpr const auto PROMPT_REWRITE_ACADEMIA = "Rewrite in academic style: #TEXT";
 constexpr const auto PROMPT_REWRITE_SLANG = "Rewrite in a slang style: #TEXT";
@@ -72,7 +73,7 @@ enum WingmanStatusCode {
 
 /**
  * Wingman chat request command pattern must be used as asynchronous requests.
- * As it annot handle that many parameters this structure is used.
+ * As it cannot handle that many parameters this structure is used.
  */
 struct CommandWingmanChat {
     std::string prompt;
@@ -83,6 +84,19 @@ struct CommandWingmanChat {
     int promptTokens;
     int answerTokens;
     std::string answerMarkdown;
+};
+
+/**
+ * Wingman embeddings request command pattern must be used as asynchronous requests.
+ * As it vannot handle that many parameters this structure is used.
+ */
+struct CommandWingmanEmbeddings {
+    std::string prompt;
+    std::string httpResponse;
+    WingmanStatusCode status;
+    std::string errorMessage;
+    std::string answerLlmModel;
+    std::vector<float> answerEmbeddings;
 };
 
 
@@ -116,6 +130,7 @@ private:
         PROMPT_GENERATE_TAGS,
         PROMPT_FIX_GRAMMAR,
         PROMPT_REWRITE_FORMALLY,
+        PROMPT_FACT_CHECK,
         PROMPT_REWRITE_SLANG,
         // PROMPT_CHAT,
     };
@@ -125,6 +140,7 @@ private:
         PROMPT_EXPLAIN_LIKE_5_TXT,
         PROMPT_FIX_GRAMMAR,
         PROMPT_FIND_GRAMMAR,
+        PROMPT_FACT_CHECK,
         PROMPT_TRANSLATE_EN,
         PROMPT_GENERATE_TAGS,
         PROMPT_REWRITE_FORMALLY,
@@ -133,6 +149,9 @@ private:
         PROMPT_SYNONYM,
         PROMPT_ANTONYM,
     };
+
+protected:
+    std::string llmModel;
 
 public:
     explicit Wingman(WingmanLlmProviders llmProvider);
@@ -152,7 +171,28 @@ public:
         return textPrompts;
     }
 
+    virtual void setLlmModel(const std::string& llmModel) {
+        this->llmModel = llmModel;
+    }
+
+    virtual const std::string& getLlmModel() {
+        return llmModel;
+    }
+
+    /**
+     * @brief List available LLM model names.
+     */
+    virtual std::vector<std::string>& listModels() = 0;
+
+    /**
+     * @brief Chat with LLM model specified by the 'command'.
+     */
     virtual void chat(CommandWingmanChat& command) = 0;
+
+    /**
+     * @brief Get document embeddings for given prompt.
+     */
+    virtual void embeddings(CommandWingmanEmbeddings& command) = 0;
 };
 
 }

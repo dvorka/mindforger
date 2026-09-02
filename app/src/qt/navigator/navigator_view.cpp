@@ -1,7 +1,7 @@
 /*
  mind-navigator.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -363,7 +363,11 @@ void NavigatorView::timerEvent(QTimerEvent *event)
 void NavigatorView::wheelEvent(QWheelEvent *event)
 {
     // edge stretching
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    initialEdgeLenght += event->angleDelta().y()>0?initialEdgeLenght/3:initialEdgeLenght/-3;
+#else
     initialEdgeLenght += event->delta()>0?initialEdgeLenght/3:initialEdgeLenght/-3;
+#endif
     checkAndFixInitialEdgeLength(initialEdgeLenght);
     refreshOnNextTimerTick();
 

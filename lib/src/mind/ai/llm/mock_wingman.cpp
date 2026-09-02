@@ -1,7 +1,7 @@
 /*
  mock_wingman.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -24,8 +24,10 @@ using namespace std;
 
 MockWingman::MockWingman(const string& llmModel)
     : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_MOCK),
+      llmModels{},
       llmModel{llmModel}
 {
+    this->llmModels.push_back(this->llmModel);
 }
 
 MockWingman::~MockWingman()

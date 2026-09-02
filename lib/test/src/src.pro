@@ -1,6 +1,6 @@
 # src.pro     MindForger thinking notebook
 #
-# Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software ; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -113,7 +113,8 @@ win32{
     } else:!mfnocxx {
       QMAKE_CXX = ccache g++
     }
-    QMAKE_CXXFLAGS += -pedantic -std=c++11
+    CONFIG += c++14
+    QMAKE_CXXFLAGS += -pedantic
     # ensure valgrind line numbers
     mfunits {
       QMAKE_CXX += -g

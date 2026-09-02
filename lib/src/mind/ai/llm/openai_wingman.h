@@ -1,7 +1,7 @@
 /*
  openai_wingman.h     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -20,6 +20,7 @@
 #define M8R_OPENAI_WINGMAN_H
 
 #include <string>
+#include <stdexcept>
 
 // HTTP client: CURL on Linux, Qt Network on macOS and Win
 #if defined(_WIN32) || defined(__APPLE__)
@@ -37,21 +38,60 @@ namespace m8r {
  */
 class OpenAiWingman: Wingman
 {
+public:
+    static const std::string LLM_MODEL_OPENAI_GPT35;
+    static const std::string LLM_MODEL_OPENAI_GPT4;
+
 private:
+    // API key needed to access OpenAI API endpoint
     std::string apiKey;
-    std::string llmModel;
+    // Names of LLM models provided by the OpenAI API endpoint
+    std::vector<std::string> llmModels;
+    // Name of the LLM model which is used by Wingman - must be one of llmModels ^
+    std::string defaultLlmModel;
+    // Whether the last listModelsHttpGet() call reached and parsed the response
+    bool lastListModelsSucceeded;
 
     void curlGet(CommandWingmanChat& command);
+    void listModelsHttpGet();
 
 public:
-    explicit OpenAiWingman(const std::string& apiKey, const std::string& llmModel);
+    explicit OpenAiWingman(const std::string& apiKey);
     OpenAiWingman(const OpenAiWingman&) = delete;
     OpenAiWingman(const OpenAiWingman&&) = delete;
     OpenAiWingman& operator =(const OpenAiWingman&) = delete;
     OpenAiWingman& operator =(const OpenAiWingman&&) = delete;
     ~OpenAiWingman() override;
 
+    /**
+     * @brief List (and cache) LLM model names
+     */
+    virtual std::vector<std::string>& listModels() override;
+
+    /**
+     * @brief Get the already-cached LLM model names without triggering
+     * another live listModels() fetch (the constructor already fetches once).
+     */
+    const std::vector<std::string>& getModels() const { return llmModels; }
+
+    /**
+     * @brief Whether the last listModels() call actually contacted the OpenAI
+     * API successfully, as opposed to silently falling back to default models.
+     */
+    bool didLastListModelsSucceed() const { return lastListModelsSucceeded; }
+
+    /**
+     * @brief Chat with configured LLM model.
+     */
     virtual void chat(CommandWingmanChat& command) override;
+
+    /**
+     * @brief Get embeddings from configured LLM model.
+     */
+    virtual void embeddings(CommandWingmanEmbeddings& command) override {
+        UNUSED_ARG(command);
+        throw std::runtime_error("OpenAI Wingman does not support embeddings");
+    }
 };
 
 }

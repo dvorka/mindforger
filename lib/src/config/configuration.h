@@ -1,7 +1,7 @@
 /*
  configuration.h     M8r configuration management
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -49,8 +49,21 @@ enum WingmanLlmProviders {
     WINGMAN_PROVIDER_NONE,
     WINGMAN_PROVIDER_MOCK,
     WINGMAN_PROVIDER_OPENAI,
-    WINGMAN_PROVIDER_OLLAMA
+    WINGMAN_PROVIDER_OLLAMA,
+    WINGMAN_PROVIDER_OPENROUTER
 };
+
+constexpr const auto LLM_MODEL_NONE = "";
+constexpr const auto LLM_MODEL_GPT35_TURBO = "gpt-3.5-turbo";
+constexpr const auto LLM_MODEL_GPT4 = "gpt-4";
+// TODO ollama does NOT have to host llama2 > it should NOT be offered as default model
+constexpr const auto LLM_MODEL_LLAMA2 = "llama2";
+constexpr const auto LLM_MODEL_PHI = "phi";
+
+// Default URLs for LLM providers
+constexpr const auto DEFAULT_OLLAMA_URL = "http://localhost:11434";
+constexpr const auto DEFAULT_OPENAI_API_URL = "https://api.openai.com/v1";
+constexpr const auto DEFAULT_OPENROUTER_API_URL = "https://openrouter.ai/api/v1";
 
 // const in constexpr makes value const
 constexpr const auto ENV_VAR_HOME = "HOME";
@@ -178,6 +191,29 @@ struct KnowledgeTool
 // Wingman LLM models API keys
 constexpr const auto ENV_VAR_OPENAI_API_KEY = "MINDFORGER_OPENAI_API_KEY";
 constexpr const auto ENV_VAR_OPENAI_LLM_MODEL = "MINDFORGER_OPENAI_LLM_MODEL";
+constexpr const auto ENV_VAR_OPENROUTER_API_KEY = "MINDFORGER_OPENROUTER_API_KEY";
+constexpr const auto ENV_VAR_OPENROUTER_LLM_MODEL = "MINDFORGER_OPENROUTER_LLM_MODEL";
+
+/**
+ * @brief LLM Provider Configuration
+ *
+ * Represents configuration for a single LLM provider.
+ */
+struct LlmProviderConfig {
+    std::string id;                    // unique identifier (e.g., "ollama-local")
+    std::string displayName;           // user-friendly name (e.g., "OpenAI GPT-4", "Local Ollama")
+    WingmanLlmProviders providerType;  // WINGMAN_PROVIDER_OLLAMA, WINGMAN_PROVIDER_OPENAI, WINGMAN_PROVIDER_OPENROUTER
+    std::string url;                   // for ollama: base URL, for OpenAI: empty
+    std::string apiKey;                // for OpenAI/OpenRouter: stored API key (empty when useEnvVar is true)
+    std::string llmModel;              // model name (e.g., "gpt-4", "llama2")
+    bool isValid;                      // whether configuration was validated/probed
+    bool useEnvVar;                    // if true, resolve API key from environment variable at runtime
+
+    LlmProviderConfig()
+        : providerType(WINGMAN_PROVIDER_NONE),
+          isValid(false),
+          useEnvVar(false) {}
+};
 
 // improve platform/language specific
 constexpr const auto DEFAULT_NEW_OUTLINE = "# New Markdown File\n\nThis is a new Markdown file created by MindForger.\n\n#Section 1\nThe first section.\n\n";
@@ -254,7 +290,7 @@ public:
     };
 
     static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_BOW = 200;
-    static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_WEIGHTED_FTS = 20000;
+    static constexpr const int DEFAULT_ASYNC_MIND_THRESHOLD_WEIGHTED_FTS = 25000;
     static constexpr const int DEFAULT_DISTRIBUTOR_SLEEP_INTERVAL = 500;
 
     static const std::string DEFAULT_ACTIVE_REPOSITORY_PATH;
@@ -268,6 +304,8 @@ public:
     static constexpr const bool DEFAULT_AUTOLINKING_COLON_SPLIT = true;
     static constexpr const bool DEFAULT_AUTOLINKING_CASE_INSENSITIVE = true;
     static constexpr const bool DEFAULT_SAVE_READS_METADATA = true;
+
+    static constexpr const bool DEFAULT_SEMANTIC_SEARCH = false;
 
     static constexpr const bool UI_DEFAULT_NERD_TARGET_AUDIENCE = true;
     static const std::string DEFAULT_STARTUP_VIEW_NAME;
@@ -337,49 +375,12 @@ private:
     bool autolinkingColonSplit;
     bool autolinkingCaseInsensitive;
 
-    /*
-    Wingman configuration, initialization and use:
+    bool semanticSearch;
 
-    - CONFIGURATION:
-        - configuration initialization:
-            - configuration constructor():
-                - configuration.llmProvider set to NONE
-            - configuration load():
-                - configuration.llmProvider is load first - is one of:
-                    - NONE
-                    - MOCK
-                    - OPEN_AI
-        - configuration detection whether particular Wingman provider is available:
-            - bool can<provider>()
-        - Wingman initialization from the configuration perspective
-          (all fields, like API key, are set ...)
-            - bool init<provider>()
-        - Wingman CONFIGURATION AVAILABILITY to the runtime:
-            - bool isWingman()
-            - Wingman is available from the configuration perspective
-    - MIND:
-        - constructor:
-          if Wingman configuration is available,
-          then instantiate a Wingman @ configured provider
-            - if configuration.isWingman()
-              then mind.wingman = <provider>Wingman()
-        - Wingman AVAILABILITY to the runtime:
-            - Wingman* mind.getWingman()
-                - nullptr || Wingman instance
-        - configuration CHANGE detection:
-            - mind.llmProvider used to detect configuration change
-            - on change: switch Wingman instance
-    - APP WINDOW / WINGMAN DIALOG:
-        - configuration CHANGE detection:
-            - appWindow.llmProvider used to detect configuration change
-            - on change: re-init Wingman DIALOG (refresh pre-defined prompts)
-    */
-    WingmanLlmProviders wingmanProvider; // "none", "Mock", "OpenAI", ...
-    std::string wingmanOpenAiApiKey; // OpenAI API specified by user in the config, env or UI
-    std::string wingmanOpenAiLlm;
-    std::string wingmanOllamaUrl; // base URL like http://localhost:11434
-    std::string wingmanOllamaLlm;
-    
+    // Wingman: collection of configured LLM providers
+    std::vector<LlmProviderConfig> llmProviders;
+    std::string activeLlmProviderId;
+
     TimeScope timeScope;
     std::string timeScopeAsString;
     std::vector<std::string> tagsScope;
@@ -535,6 +536,8 @@ public:
     void setAutolinkingColonSplit(bool autolinkingColonSplit) { this->autolinkingColonSplit=autolinkingColonSplit; }
     bool isAutolinkingCaseInsensitive() const { return autolinkingCaseInsensitive; }
     void setAutolinkingCaseInsensitive(bool autolinkingCaseInsensitive) { this->autolinkingCaseInsensitive=autolinkingCaseInsensitive; }
+    bool isSemanticSearch() const { return semanticSearch; }
+    void setSemanticSearch(bool semanticSearch) { this->semanticSearch=semanticSearch; }
     unsigned int getMd2HtmlOptions() const { return md2HtmlOptions; }
     AssociationAssessmentAlgorithm getAaAlgorithm() const { return aaAlgorithm; }
     void setAaAlgorithm(AssociationAssessmentAlgorithm aaa) { aaAlgorithm = aaa; }
@@ -548,8 +551,6 @@ public:
     /*
      * Wingman
      */
-    void setWingmanLlmProvider(WingmanLlmProviders provider);
-    WingmanLlmProviders getWingmanLlmProvider() const { return wingmanProvider; }
     static std::string getWingmanLlmProviderAsString(WingmanLlmProviders provider) {
         if(provider == WingmanLlmProviders::WINGMAN_PROVIDER_MOCK) {
             return "mock";
@@ -557,34 +558,29 @@ public:
             return "openai";
         } else if(provider == WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA) {
             return "ollama";
+        } else if(provider == WingmanLlmProviders::WINGMAN_PROVIDER_OPENROUTER) {
+            return "openrouter";
         }
 
         return "none";
     }
-#ifdef MF_WIP
-    bool canWingmanMock() { return true; }
-#else
-    bool canWingmanMock() { return false; }
-#endif
-    bool canWingmanOpenAi();
-    bool canWingmanOllama();
-private:
-    bool initWingmanMock();
-    bool initWingmanOpenAi();
-    bool initWingmanOllama();
-    /**
-     * @brief Initialize Wingman's LLM provider.
+
+    /*
+     * Wingman LLM Provider Management
      */
-    bool initWingman();
-public:
-    std::string getWingmanOpenAiApiKey() const { return wingmanOpenAiApiKey; }
-    void setWingmanOpenAiApiKey(std::string apiKey) { wingmanOpenAiApiKey = apiKey; }
-    std::string getWingmanOpenAiLlm() const { return wingmanOpenAiLlm; }
-    void setWingmanOpenAiLlm(std::string llm) { wingmanOpenAiLlm = llm; }
-    std::string getWingmanOllamaUrl() const { return wingmanOllamaUrl; }
-    void setWingmanOllamaUrl(std::string url) { wingmanOllamaUrl = url; }
-    std::string getWingmanOllamaLlm() const { return wingmanOllamaLlm; }
-    void setWingmanOllamaLlm(std::string llm) { wingmanOllamaLlm = llm; }
+
+    const std::vector<LlmProviderConfig>& getLlmProviders() const { return llmProviders; }
+    void setLlmProviders(const std::vector<LlmProviderConfig>& providers) { llmProviders = providers; }
+    LlmProviderConfig* getLlmProviderById(const std::string& id);
+    LlmProviderConfig* getActiveLlmProvider();
+    void addLlmProvider(const LlmProviderConfig& provider);
+    void updateLlmProvider(const std::string& id, const LlmProviderConfig& provider);
+    void removeLlmProvider(const std::string& id);
+    void setActiveLlmProvider(const std::string& id);
+    std::string getActiveLlmProviderId() const { return activeLlmProviderId; }
+    bool validateOpenAiProviderInput(const std::string& apiKey, const std::string& model, std::string& errorMessage);
+    bool validateOllamaProviderInput(const std::string& url, const std::string& model, std::string& errorMessage);
+    bool validateOpenRouterProviderInput(const std::string& apiKey, const std::string& model, std::string& errorMessage);
 
     /**
      * @brief Check whether a Wingman LLM provider is ready from

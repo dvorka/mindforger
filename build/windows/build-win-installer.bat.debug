@@ -1,7 +1,7 @@
 @echo off
 rem MindForger thinking notebook
 
-rem Copyright (C) 2016-2025
+rem Copyright (C) 2016-2026
 
 rem This program is free software; you can redistribute it and/or
 rem modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ cls
 cd ..\..
 
 rem Gather libraries...
-rem 5.12.1 @ CI: 
+rem 5.12.1 @ CI:
 rem C:\Qt\5.12.1\msvc2017_64\bin\windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime
 rem 5.15.2 @ VM:
 C:\Qt2024\5.15.2\msvc2019_64\bin\windeployqt app\release\mindforger.exe  --dir app\release\bin --no-compiler-runtime

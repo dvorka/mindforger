@@ -1,6 +1,6 @@
 # app.pro     Qt project file for MindForger Qt-based frontend
 #
-# Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -182,7 +182,8 @@ INCLUDEPATH += ./src/qt/spelling
 # - S7    64b: GCC 4.8.5, Qt 5.2.1
 # - Win10 64b: MSVC 2017, Qt 5.12.0
 #
-# - GCC: -std=c++0x ~ -std=c++11
+# - GCC: -std=c++0x is the pre-standardization name for -std=c++11 (same thing)
+# - project targets C++14
 #
 # compiler and compiler options:
 #   - https://doc.qt.io/qt-6/qmake-variable-reference.html#qmake-cxx
@@ -204,7 +205,8 @@ win32{
     } else:!mfnocxx {
       QMAKE_CXX = ccache g++
     }
-    QMAKE_CXXFLAGS += -pedantic -std=c++11
+    CONFIG += c++14
+    QMAKE_CXXFLAGS += -pedantic
 }
 
 # profiling: instrument code for gprof
@@ -286,6 +288,10 @@ HEADERS += \
     src/qt/dialogs/rm_library_dialog.h \
     src/qt/dialogs/run_tool_dialog.h \
     src/qt/dialogs/wingman_dialog.h \
+    src/qt/dialogs/add_llm_provider_dialog.h \
+    src/qt/dialogs/openai_config_dialog.h \
+    src/qt/dialogs/ollama_config_dialog.h \
+    src/qt/dialogs/openrouter_config_dialog.h \
     src/qt/dialogs/sync_library_dialog.h \
     src/qt/dialogs/terminal_dialog.h \
     src/qt/kanban_column_model.h \
@@ -407,6 +413,10 @@ SOURCES += \
     src/qt/dialogs/rm_library_dialog.cpp \
     src/qt/dialogs/run_tool_dialog.cpp \
     src/qt/dialogs/wingman_dialog.cpp \
+    src/qt/dialogs/add_llm_provider_dialog.cpp \
+    src/qt/dialogs/openai_config_dialog.cpp \
+    src/qt/dialogs/ollama_config_dialog.cpp \
+    src/qt/dialogs/openrouter_config_dialog.cpp \
     src/qt/dialogs/sync_library_dialog.cpp \
     src/qt/dialogs/terminal_dialog.cpp \
     src/qt/kanban_column_model.cpp \

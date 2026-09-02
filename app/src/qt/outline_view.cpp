@@ -1,7 +1,7 @@
 /*
  outline_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -58,18 +58,31 @@ OutlineView::~OutlineView()
 
 void OutlineView::refreshHeader(const std::string& name)
 {
-    if(!name.empty()) {
+    currentName = name;
+    updateNameLabelText();
+}
+
+void OutlineView::updateNameLabelText()
+{
+    if(!currentName.empty()) {
         QFontMetrics metrics(nameLabel->font());
-        // IMPROVE nameLabel has incorrect size before rendered for the first time - find a better solution than fixed width
         QString elidedText
             = metrics.elidedText(
-               QString::fromStdString(name),
+               QString::fromStdString(currentName),
                Qt::ElideRight,
                width()-20);
+        // escape '&' in the outline name to avoid Qt interpreting it as a shortcut
+        elidedText.replace(QLatin1Char('&'), QLatin1String("&&"));
         nameLabel->setText(elidedText);
     } else {
         nameLabel->setText("");
     }
+}
+
+void OutlineView::resizeEvent(QResizeEvent* event)
+{
+    QWidget::resizeEvent(event);
+    updateNameLabelText();
 }
 
 } // m8r namespace

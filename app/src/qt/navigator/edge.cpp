@@ -1,7 +1,7 @@
 /*
  edge.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@ static double TWO_PI = 2.0*PI;
 NavigatorEdge::NavigatorEdge(NavigatorNode* source, NavigatorNode* destination)
 	: arrowSize(10)
 {
-	setAcceptedMouseButtons(0);
+	setAcceptedMouseButtons(Qt::MouseButtons());
     srcNode = source;
     dstNode = destination;
     srcNode->addEdge(this);

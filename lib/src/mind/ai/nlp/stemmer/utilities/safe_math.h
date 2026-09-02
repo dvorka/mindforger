@@ -7,6 +7,14 @@
     it under the terms of the BSD License.
 * @{*/
 
+/* local modification (Martin Dvorak, 2026-09-01):
+ * dropped the "public std::binary_function<double, double, bool>" base class from
+ * double_less below. std::binary_function is deprecated since C++11 and removed
+ * in C++17, and its argument/result typedefs are not referenced anywhere in this
+ * codebase - double_less is only ever used as a plain comparator functor, so the
+ * inheritance was dead boilerplate kept just to silence -Wdeprecated-declarations
+ * under GCC 13. */
+
 #ifndef __SAFE_MATH_H__
 #define __SAFE_MATH_H__
 
@@ -94,7 +102,7 @@ inline bool compare_doubles_greater(const double left, const double right, const
     }
 
 ///@brief "less" interface for double values.
-class double_less : public std::binary_function<double, double, bool>
+class double_less
     {
 public:
     inline bool operator()(const double& left, const double& right) const

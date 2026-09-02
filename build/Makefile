@@ -1,4 +1,4 @@
-# Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # MindForger thinking notebook
 #
@@ -78,7 +78,13 @@ diagnostics:
 
 .PHONY: help
 help: ## make targets help
-	@echo "MindForger Swiss knife help:"
+	@echo " __  __ _           _ _____                         "
+	@echo "|  \\/  (_)_ __   __| |  ___|__  _ __ __ _  ___ _ __ "
+	@echo "| |\\/| | | '_ \\ / _\` | |_ / _ \\| '__/ _\` |/ _ \\ '__|"
+	@echo "| |  | | | | | | (_| |  _| (_) | | | (_| |  __/ |   "
+	@echo "|_|  |_|_|_| |_|\\__,_|_|  \\___/|_|  \\__, |\\___|_|   $(MINDFORGER_VERSION)"
+	@echo "                                     |___/            "
+	@echo "MindForger Swiss knife:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
 	| sort \
 	| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -147,9 +153,9 @@ build: clean-app ../app/mindforger ## build production MindForger application bi
 
 
 .PHONY: build-dev
-build-dev: clean-app ## build development MindForger application binary
+build-dev: clean-app ## build development MindForger application binary w/ debug info
 	@echo "Building DEV MindForger executable..."
-	cd .. && qmake -r mindforger.pro DEFINES+=DO_MF_DEBUG && make -j $(CPU_CORES) ; cd ..
+	cd .. && qmake -r mindforger.pro CONFIG+=debug DEFINES+=DO_MF_DEBUG && make -j $(CPU_CORES) ; cd ..
 ifeq ($(UNAME), Darwin)
 	@echo "\nIf build succeeded, then MindForger executable can be found in:\n  app/mindforger.app/Contents/MacOS/mindforger"
 	ls -al ../app/mindforger.app/Contents/MacOS/mindforger
@@ -202,6 +208,13 @@ else
 	cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/library-trainer
 	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/computer-hw.md
 	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/bug-copy-image
+endif
+
+run-gdb: build-dev ## run MindForger using gdb
+ifeq ($(UNAME), Darwin)
+	cd ../app/mindforger.app/Contents/MacOS && ./mindforger /Users/dvorka/mf-devel/mf-copy
+else
+	cd ../app && pwd && gdb --args ./mindforger /home/dvorka/mf-devel/library-trainer
 endif
 
 #

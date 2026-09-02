@@ -1,7 +1,7 @@
 /*
  main_window_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -214,7 +214,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(distributor, SIGNAL(finished()), distributor, SLOT(deleteLater()));
     distributor->start();
 
-    // send signal to components to be updated on a configuration change
+    // send signal to components to be updated on a config change (callback)
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SLOT(slotConfigurationUpdated()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getNoteEdit()->getView()->getNoteEditor(), SLOT(slotConfigurationUpdated()));
@@ -609,7 +609,12 @@ void MainWindowPresenter::doActionMindThink()
             statusBar->showMindStatistics();
         } else {
             mainMenu->showFacetMindSleep();
-            statusBar->showError(tr("Cannot think - either Mind already dreaming or repository too big"));
+            statusBar->showError(
+                tr(
+                    "Cannot think - either Mind already dreaming or "
+                    "repository has too many notes: %1 > %2")
+                    .arg(mind->remind().getNotesCount()).arg(config.getAsyncMindThreshold())
+            );
         }
     } else {
         statusBar->showMindStatistics();
@@ -665,6 +670,40 @@ void MainWindowPresenter::doActionMindToggleAutolink()
         orloj->showFacetNoteView(orloj->getOutlineView()->getOutlineTree()->getCurrentNote());
     }
 }
+
+void MainWindowPresenter::doActionMindToggleSemanticSearch()
+{
+    // TODO: to be implemented in analogous way as autolinking
+    if(config.isSemanticSearch()) {
+        config.setSemanticSearch(false);
+        statusBar->showInfo(tr("Semantic search disabled"));
+    } else {
+        // check whether possible - only ollama's Wingman implements embeddings()
+        // (OpenAI/OpenRouter throw), so semantic search requires it to be active
+        LlmProviderConfig* activeLlmProvider = config.getActiveLlmProvider();
+        if(activeLlmProvider && activeLlmProvider->providerType == WingmanLlmProviders::WINGMAN_PROVIDER_OLLAMA) {
+            config.setSemanticSearch(true);
+            statusBar->showInfo(tr("Semantic search activated"));
+        } else {
+            config.setSemanticSearch(false);
+            statusBar->showError(tr("Semantic search cannot be activated - missing dependencies"));
+            QMessageBox::critical(
+                &view,
+                tr("Semantic Search"),
+                tr("Semantic search cannot be activated - ollama Wingman must be configured.")
+            );
+            return;
+        }
+    }
+    mdConfigRepresentation->save(config);
+
+    // activate semantic search
+    if(config.isSemanticSearch()) {
+        statusBar->showInfo(tr("Refresh semantic search index ~ text embeddings of all (modified) Notes..."));
+        mind->refreshEmbeddings();
+    }
+}
+
 
 void MainWindowPresenter::doActionNameDescFocusSwap()
 {
@@ -2176,13 +2215,13 @@ void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
 
         // check the result
         if (future.isFinished()) {
-            statusBar->showInfo(QString(tr("Wingman received an answer from the GPT provider")));
+            statusBar->showInfo(QString(tr("Wingman received an answer from the LLM provider")));
         } else {
-            statusBar->showError(QString(tr("Wingman failed to receive an answer from the GPT provider")));
+            statusBar->showError(QString(tr("Wingman failed to receive an answer from the LLM provider")));
 
             // PUSH answer to the chat dialog
             this->wingmanDialog->appendAnswerToChat(
-                "Wingman failed to get answer from the GPT provider.<br/><br/>"+commandWingmanChat.answerMarkdown,
+                "Wingman failed to get answer from the LLM provider.<br/><br/>"+commandWingmanChat.answerMarkdown,
                 "",
                 this->wingmanDialog->getContextType(),
                 true
@@ -2196,8 +2235,9 @@ void MainWindowPresenter::slotRunWingmanFromDialog(bool showDialog)
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
     // wingmanProgressDialog->hide();
+    LlmProviderConfig* activeLlmProvider = config.getLlmProviderById(config.getActiveLlmProviderId());
     string answerDescriptor{
-        "[provider: " + config.getWingmanLlmProviderAsString(config.getWingmanLlmProvider()) +
+        "[provider: " + (activeLlmProvider ? activeLlmProvider->displayName : "N/A") +
         ", model: " + commandWingmanChat.answerLlmModel +
         ", tokens (prompt/answer): " +
         std::to_string(commandWingmanChat.promptTokens) + "/" + std::to_string(commandWingmanChat.answerTokens) +
@@ -3337,6 +3377,9 @@ void MainWindowPresenter::handleMindPreferences()
 {
     mdConfigRepresentation->save(config);
 
+    // re-initialize Wingman
+    mind->initWingman();
+
     view.getToolBar()->setVisible(config.isUiShowToolbar());
     view.getOrloj()->getNoteView()->setZoomFactor(config.getUiHtmlZoomFactor());
     view.getOrloj()->getOutlineHeaderView()->setZoomFactor(config.getUiHtmlZoomFactor());
@@ -3349,8 +3392,8 @@ void MainWindowPresenter::handleMindPreferences()
     view.getOrloj()->getNoteEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
     view.getOrloj()->getOutlineHeaderEdit()->getButtonsPanel()->setVisible(!config.isUiExpertMode());
 
-    // IMPROVE: highlighter should NOT reference lib configuration to honor MVP, spell check
-    // setting to be pushed to highlighter from here
+    // IMPROVE: highlighter should NOT reference lib configuration to honor MVP,
+    // spell check setting to be pushed to highlighter from here
 }
 
 void MainWindowPresenter::doActionViewTerminal()
@@ -3461,6 +3504,59 @@ void MainWindowPresenter::handleSyncLibrary()
     rmLibraryDialog->reset();
 }
 
+void MainWindowPresenter::doActionLibraryOrphans()
+{
+    int orphans = mind->findLibraryOrphanOs();
+    if(orphans) {
+        doActionViewOutlines();
+
+        QMessageBox::information(
+            &view,
+            tr("Library Orphans"),
+            tr(
+                "Found %1 library Notebooks with orphaned documents. "
+                "Notebooks were tagged with 'library-orphan-document' tag. "
+                "Use scopes to filter them out."
+            ).arg(orphans)
+        );
+    } else {
+        QMessageBox::information(
+            &view,
+            tr("Library Orphans"),
+            tr("No Notebooks with orphaned documents found.")
+        );
+    }
+}
+
+void MainWindowPresenter::doActionLibraryDeprecateOrphanOs()
+{
+    vector<const Tag*> tags{};
+    tags.push_back(
+        mind->getOntology().findOrCreateTag(
+            MarkdownDocumentRepresentation::TAG_LIB_DOC_ORPHAN));
+    vector<Outline*> os{};
+    mind->findOutlinesByTags(tags, os);
+
+    if(os.size()) {
+        for(Outline* o:os) {
+            mind->outlineForget(o->getKey());
+        }
+
+        QMessageBox::information(
+            &view,
+            tr("Library Orphans"),
+            tr("%1 Notebooks tagged as library orphans were deprecated.").arg(os.size())
+        );
+
+        doActionViewOutlines();
+    } else {
+        QMessageBox::information(
+            &view,
+            tr("Library Orphans"),
+            tr("No Notebooks with library orphan tag found.")
+        );
+    }
+}
 
 void MainWindowPresenter::doActionLibraryRm()
 {
@@ -3872,6 +3968,11 @@ void MainWindowPresenter::doActionHelpDocumentation()
     QDesktopServices::openUrl(QUrl{"https://github.com/dvorka/mindforger/wiki"});
 }
 
+void MainWindowPresenter::doActionHelpSponsor()
+{
+    QDesktopServices::openUrl(QUrl{"https://opencollective.com/dvorka-floss-lab/projects/mindforger"});
+}
+
 void MainWindowPresenter::doActionHelpWeb()
 {
     QDesktopServices::openUrl(
@@ -3991,7 +4092,7 @@ void MainWindowPresenter::doActionHelpAboutMindForger()
             "<br>Contact me at <a href='mailto:martin.dvorak@mindforger.com'>&lt;martin.dvorak@mindforger.com&gt;</a>"
             " or see <a href='https://www.mindforger.com'>www.mindforger.com</a> for more information."
             "<br>"
-            "<br>Copyright (C) 2016-2025 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/blob/master/CREDITS.md'>contributors</a>."
+            "<br>Copyright (C) 2016-2026 <a href='http://me.mindforger.com'>Martin Dvorak</a> and <a href='https://github.com/dvorka/mindforger/blob/master/CREDITS.md'>contributors</a>."
         });
 }
 

@@ -1,7 +1,7 @@
 /*
  markdown_document_representation.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -51,12 +51,11 @@ Outline* MarkdownDocumentRepresentation::to(
     }
 
     o->addTag(ontology.findOrCreateTag("pdf"));
-    o->addTag(ontology.findOrCreateTag("library-document"));
+    o->addTag(ontology.findOrCreateTag(TAG_LIB_DOC));
 
     o->addDescriptionLine(
         new string{
-            "This is a notebook for the document: "
-            "[" + documentPath + "](" + documentPath + ")"});
+            string{PREFIX_1ST_LINE} + "[" + documentPath + "](" + documentPath + ")"});
     o->addDescriptionLine(new string{""});
     o->addDescriptionLine(new string{"---"});
     o->addDescriptionLine(new string{""});
