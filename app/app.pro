@@ -485,7 +485,19 @@ RESOURCES += \
 # ########################################
 # See http://doc.qt.io/qt-5/qmake-advanced-usage.html
 
-binfile.files += mindforger
+# binfile installs the compiled TARGET, a build OUTPUT rather than a source-tree
+# asset. A bare relative INSTALLS.files name (the previous 'mindforger') always
+# resolves against the SOURCE dir, which is wrong for an out-of-source/shadow build
+# (e.g. snapcraft's qmake plugin, where the binary is actually linked into a separate
+# build dir) - it silently installed whatever stale file happened to already be
+# sitting in the source tree instead of the freshly built one. A path-containing
+# INSTALLS.files entry doesn't fix this either: qmake silently DROPS the whole
+# 'binfile' target if that path doesn't exist yet at configure time, which it never
+# does on a from-scratch build (chicken-and-egg). '.extra' bypasses qmake's
+# file/dir auto-detection so the rule is always generated, and $$OUT_PWD is the
+# actual build directory - equal to $$PWD for the in-source builds .deb/tarball/CI/
+# build-rc all use, so this is a no-op change for them.
+binfile.extra = $(INSTALL_PROGRAM) $$OUT_PWD/$$TARGET $(INSTALL_ROOT)$$PREFIX/bin/$$TARGET
 binfile.path = $$PREFIX/bin/
 INSTALLS += binfile
 
