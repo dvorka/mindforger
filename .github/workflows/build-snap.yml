@@ -9,8 +9,6 @@ on:
 
 jobs:
   build:
-    # cheap gate: only run for rel/* head branches targeting master
-    if: startsWith(github.head_ref, 'rel/')
     runs-on: ubuntu-24.04
 
     steps:
