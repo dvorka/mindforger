@@ -39,6 +39,8 @@ SEMANTIC_VERSION_FILES = [
     # ^ export MINDFORGER_VERSION="1.54.0"
     "../../build/tarball/tarball-build.sh",
     # ^ export ARG_VERSION="1.54.0"
+    "../../build/snap/snapcraft.yaml",
+    # ^ version: '1.54.0'
     "../../lib/src/app_info.h",
     # ^ #define MINDFORGER_VERSION_STRING "1.54.0",
 ]

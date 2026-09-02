@@ -2,11 +2,13 @@
 
 [![Support on Open Collective](https://img.shields.io/badge/Sponsor-Open%20Collective-blue?style=for-the-badge&logo=open-collective)](https://opencollective.com/dvorka-floss-lab)
 [![Appveyor CI for Win](https://ci.appveyor.com/api/projects/status/iemop280po84od66?svg=true)](https://ci.appveyor.com/project/dvorka/mindforger)
-[![GitHub Actions CI for macOS](https://github.com/dvorka/mindforger/actions/workflows/build_macos.yml/badge.svg)](https://github.com/dvorka/mindforger/actions)
-[![GitHub Actions CI for Ubuntu](https://github.com/dvorka/mindforger/actions/workflows/build_ubuntu.yml/badge.svg)](https://github.com/dvorka/mindforger/actions)
+[![GitHub Actions CI for macOS](https://github.com/dvorka/mindforger/actions/workflows/build-macos.yml/badge.svg)](https://github.com/dvorka/mindforger/actions)
+[![GitHub Actions CI for Ubuntu](https://github.com/dvorka/mindforger/actions/workflows/build-ubuntu.yml/badge.svg)](https://github.com/dvorka/mindforger/actions)
+[![GitHub Actions CI for Win](https://github.com/dvorka/mindforger/actions/workflows/build-win.yml/badge.svg)](https://github.com/dvorka/mindforger/actions)
 [![Current release](https://img.shields.io/github/release/dvorka/mindforger.svg)](https://github.com/dvorka/mindforger/releases)
 [![GitHub issues](https://img.shields.io/github/issues/dvorka/mindforger.svg?maxAge=360)](https://github.com/dvorka/mindforger/issues)
 [![All releases downloads](https://img.shields.io/github/downloads/dvorka/mindforger/total.svg)](https://github.com/dvorka/mindforger/releases)
+[![Get it from the Snap Store](https://snapcraft.io/mindforger/badge.svg)](https://snapcraft.io/mindforger)
 [![License](https://img.shields.io/github/license/dvorka/mindforger?color=%23ff0000)](https://github.com/dvorka/mindforger/blob/master/LICENSE)
 
 <!-- a href="https://twitter.com/intent/follow?screen_name=mindforger"><img src="https://img.shields.io/twitter/follow/mindforger.svg?style=social&logo=twitter" alt="follow on Twitter"></a -->

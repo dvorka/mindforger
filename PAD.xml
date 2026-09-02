@@ -35,18 +35,18 @@
 	<Program_Info>
 		<Program_Name>MindForger</Program_Name>
 		<Program_Version>2.1.0</Program_Version>
-		<Program_Release_Month>03</Program_Release_Month>
-		<Program_Release_Day>16</Program_Release_Day>
-		<Program_Release_Year>2024</Program_Release_Year>
+		<Program_Release_Month>09</Program_Release_Month>
+		<Program_Release_Day>02</Program_Release_Day>
+		<Program_Release_Year>2026</Program_Release_Year>
 		<Program_Cost_Dollars>0</Program_Cost_Dollars>
 		<Program_Cost_Other_Code>0</Program_Cost_Other_Code>
 		<Program_Cost_Other>0</Program_Cost_Other>
 		<Program_Type>Freeware</Program_Type>
-		<Program_Release_Status>Major Update</Program_Release_Status>
+		<Program_Release_Status>Minor Update</Program_Release_Status>
 		<Program_Install_Support>Install and Uninstall</Program_Install_Support>
 		<Program_OS_Support>Linux,Mac OS X,Win7 x64,WinOther</Program_OS_Support>
 		<Program_Language>English</Program_Language>
-		<Program_Change_Info />
+		<Program_Change_Info>Local LLMs support, Notes semantic search and orphan library documents management.</Program_Change_Info>
 		<Program_Specific_Category>Education</Program_Specific_Category>
 		<Program_Category_Class>Business::Office Suites &amp; Tools</Program_Category_Class>
 		<Program_Categories />

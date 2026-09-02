@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+# MindForger thinking notebook
+#
+# Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+# On a regular Linux install, MindForger's own Installer class seeds a fresh
+# ~/mindforger-repository with default memory/stencils content copied from
+# /usr/share/doc/mindforger (see lib/src/install/installer.cpp,
+# FILE_PATH_DEFAULT_LINUX_SYSTEM_REPOSITORY). That is a hardcoded absolute host
+# path, checked with a plain file-existence test - it is unreachable under snap
+# confinement: for strict, /usr inside the mount namespace is the BASE snap's
+# /usr, not this snap's own bundled content, and snapcraft cannot bind-mount into
+# it; for classic, it is the real host path, populated only if the .deb happens
+# to also be installed there. Since neither confinement mode can make that literal
+# path resolve to our content, seed the SAME default content ourselves here,
+# before the real binary ever runs, mirroring exactly what Installer::
+# initMindForgerRepository(copyDoc=true, copyStencils=true, ...) does.
+
+set -e
+
+REPO="$HOME/mindforger-repository"
+SEED="$SNAP/share/doc/mindforger"
+
+if [ ! -e "$REPO" ] && [ -d "$SEED" ]; then
+    mkdir -p "$REPO"
+    [ -d "$SEED/memory" ] && cp -r "$SEED/memory" "$REPO/"
+    [ -d "$SEED/stencils" ] && cp -r "$SEED/stencils" "$REPO/"
+fi
+
+exec "$SNAP/bin/mindforger" "$@"
