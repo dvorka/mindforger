@@ -20,6 +20,7 @@
 #define M8R_OPENROUTER_WINGMAN_H
 
 #include <string>
+#include <stdexcept>
 
 // HTTP client: CURL on Linux, Qt Network on macOS and Win
 #if defined(_WIN32) || defined(__APPLE__)
