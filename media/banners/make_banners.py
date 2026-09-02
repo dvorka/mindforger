@@ -5,6 +5,7 @@ import os
 import random
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from pathlib import Path
 
 W, H = 2160, 720
 # Ubuntu system fonts, not repo content - same as mytral's make/make_seo_assets.py
