@@ -871,7 +871,7 @@ void ConfigurationDialog::WingmanTab::refreshProvidersUi()
 void ConfigurationDialog::WingmanTab::save()
 {
     // set the copy to cfg - the only place Add/Edit/Rm/Test Connection takes effect
-    config.getLlmProviders() = stagedProviders;
+    config.setLlmProviders(stagedProviders);
 
     // save active provider selection
     if (llmProvidersCombo->count() > 0) {
@@ -1048,6 +1048,9 @@ void ConfigurationDialog::WingmanTab::handleTestConnection()
             tr("Connection Test"),
             tr("Provider configuration is valid."));
     } else {
+        provider->isValid = false;
+        statusValue->setText(tr("Not validated"));
+        statusValue->setStyleSheet("QLabel { color: orange; }");
         QMessageBox::critical(
             this,
             tr("Connection Test"),
@@ -1073,19 +1076,19 @@ void ConfigurationDialog::WingmanTab::handleProviderSelectionChanged(int index)
 
     // update details
     if (provider->providerType == WINGMAN_PROVIDER_OPENAI) {
-        providerTypeValue->setText("OpenAI");
-        privacyValue->setText("will be shared w/ 3rd party");
+        providerTypeValue->setText(tr("OpenAI"));
+        privacyValue->setText(tr("will be shared w/ 3rd party"));
         privacyValue->setStyleSheet("QLabel { color: red; }");
     } else if (provider->providerType == WINGMAN_PROVIDER_OLLAMA) {
-        providerTypeValue->setText("ollama");
-        privacyValue->setText("will not be shared w/ 3rd party");
+        providerTypeValue->setText(tr("ollama"));
+        privacyValue->setText(tr("will not be shared w/ 3rd party"));
         privacyValue->setStyleSheet("QLabel { color: green; }");
     } else if (provider->providerType == WINGMAN_PROVIDER_OPENROUTER) {
-        providerTypeValue->setText("OpenRouter");
-        privacyValue->setText("will be shared w/ 3rd party");
+        providerTypeValue->setText(tr("OpenRouter"));
+        privacyValue->setText(tr("will be shared w/ 3rd party"));
         privacyValue->setStyleSheet("QLabel { color: red; }");
     } else {
-        providerTypeValue->setText("Unknown");
+        providerTypeValue->setText(tr("Unknown"));
     }
 
     modelValue->setText(QString::fromStdString(provider->llmModel));

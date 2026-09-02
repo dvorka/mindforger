@@ -19,6 +19,8 @@
 
 #include "configuration.h"
 
+#include <algorithm>
+
 #ifdef _WIN32
   #include <ShlObj.h>
   #include <KnownFolders.h>
@@ -413,6 +415,11 @@ LlmProviderConfig* Configuration::getActiveLlmProvider() {
 }
 
 void Configuration::addLlmProvider(const LlmProviderConfig& provider) {
+    // enforce unique provider IDs
+    if (!provider.id.empty() && getLlmProviderById(provider.id) != nullptr) {
+        MF_DEBUG("Configuration::addLlmProvider() duplicate ID, not added: " << provider.id << endl);
+        return;
+    }
     llmProviders.push_back(provider);
     MF_DEBUG("Configuration::addLlmProvider() added: " << provider.id << endl);
 }

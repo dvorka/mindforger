@@ -569,7 +569,8 @@ public:
      * Wingman LLM Provider Management
      */
 
-    std::vector<LlmProviderConfig>& getLlmProviders() { return llmProviders; }
+    const std::vector<LlmProviderConfig>& getLlmProviders() const { return llmProviders; }
+    void setLlmProviders(const std::vector<LlmProviderConfig>& providers) { llmProviders = providers; }
     LlmProviderConfig* getLlmProviderById(const std::string& id);
     LlmProviderConfig* getActiveLlmProvider();
     void addLlmProvider(const LlmProviderConfig& provider);

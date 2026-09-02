@@ -1652,8 +1652,8 @@ void Mind::refreshEmbeddings()
         int embeddingsSizeB=0;
         int counter=0;
         MF_DEBUG("  Embedding for " << allNotes.size() << " Notes:" << endl);
-#endif
         auto beginTs = chrono::high_resolution_clock::now();
+#endif
         for(Note* n:allNotes) {
             MF_DEBUG(
                 "    " <<
