@@ -257,6 +257,11 @@ ver-find: ## pre-version update finder
 	cd .. && git grep -n "1\.55"
 
 
+.PHONY: dist-pad-refresh
+dist-pad-refresh: ## refresh PAD.xml release fields (version, date, changelog, installer size)
+	./make/distro-pad-refresh.py
+
+
 ../lib/tests/Makefile:
 	@echo "Generating lib test Makefile..."
 	cd ../lib/test && qmake -r mindforger-lib-unit-tests.pro ; cd ../../build
@@ -374,17 +379,89 @@ dist-ubuntu-deb: ## locally build .deb for any Ubuntu version: DISTRO=bionic
 	false
 
 
+#
+# DISTRIBUTION: Snap package (local builds only)
+#
+# Prerequisites:
+#   sudo snap install snapcraft --classic
+#   sudo snap install lxd
+#   sudo lxd init --auto
+#   sudo usermod -aG lxd $USER
+#
+# build/snap/snapcraft.yaml is the STRICT manifest (Snap Store). dist-snap-classic
+# derives the classic manifest (downloadable/sideloaded release) from it via
+# build/snap/apply-classic.sh - never hand-edit a classic variant directly.
+#
+
 .PHONY: dist-snap
-dist-snap: ## build snap distro for snapcraft.io
-	@echo "Building Snap ..."
+dist-snap: ## build strict Snap package for the Snap Store (LXD required)
+	@echo "Building Snap $(MINDFORGER_VERSION) ..."
 	cd .. && make clean && cd build
-	cp -vf snap/snapcraft.yaml .. && cd .. && snapcraft clean && snapcraft --debug
+	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
+	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" ../snapcraft.yaml
+	cd .. && snapcraft clean && snapcraft pack
 
 
-.PHONY: dist-wip
-dist-snap-wip:  # debug Snap build w/o clean up, but w/ incremental build
-	@echo "Building Snap ..."
-	cp -vf snap/snapcraft.yaml .. && cd .. && snapcraft --debug
+.PHONY: dist-snap-wip
+dist-snap-wip: ## debug Snap build w/o clean up, but w/ incremental build
+	@echo "Building Snap $(MINDFORGER_VERSION) ..."
+	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
+	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" ../snapcraft.yaml
+	cd .. && snapcraft pack --debug
+
+
+.PHONY: dist-snap-classic
+dist-snap-classic: ## build classic Snap package for downloadable GitHub Release (LXD required)
+	@echo "Building classic Snap $(MINDFORGER_VERSION) ..."
+	cd .. && make clean && cd build
+	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
+	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" ../snapcraft.yaml
+	./snap/apply-classic.sh ../snapcraft.yaml
+	cd .. && snapcraft clean && snapcraft pack
+
+
+.PHONY: dist-snap-remove
+dist-snap-remove: ## remove locally installed Snap (requires sudo)
+	@echo "Removing Snap package..."
+	sudo snap remove mindforger || true
+	@echo "DONE Snap removed"
+
+
+.PHONY: dist-snap-install
+dist-snap-install: dist-snap-remove dist-snap ## build and install the STRICT Snap locally (for testing, requires sudo)
+	@echo "Installing strict Snap package locally..."
+	@SNAP_FILE=$$(ls ../mindforger_*.snap 2>/dev/null | head -1); \
+	if [ -z "$$SNAP_FILE" ]; then \
+		echo "Error: Snap package not found. Run 'make dist-snap' first."; \
+		exit 1; \
+	fi; \
+	echo "Note: this command requires sudo privileges for snap install"; \
+	sudo snap install --dangerous "$$SNAP_FILE"; \
+	echo "DONE Snap installed. Run with: mindforger"
+
+
+.PHONY: dist-snap-install-classic
+dist-snap-install-classic: dist-snap-remove dist-snap-classic ## build and install the CLASSIC Snap locally (for testing, requires sudo)
+	@echo "Installing classic Snap package locally..."
+	@SNAP_FILE=$$(ls ../mindforger_*.snap 2>/dev/null | head -1); \
+	if [ -z "$$SNAP_FILE" ]; then \
+		echo "Error: Snap package not found. Run 'make dist-snap-classic' first."; \
+		exit 1; \
+	fi; \
+	echo "Note: this command requires sudo privileges for snap install"; \
+	sudo snap install --dangerous --classic "$$SNAP_FILE"; \
+	echo "DONE Snap installed. Run with: mindforger"
+
+
+.PHONY: dist-snap-path
+dist-snap-path: ## show path to the last built Snap package
+	@ls -1 ../mindforger_*.snap 2>/dev/null || echo "No Snap package built yet"
+
+
+.PHONY: dist-snap-upload
+dist-snap-upload: dist-snap ## upload strict Snap package to the Snap Store (amd64)
+	@echo "Uploading Snap package to the Snap Store..."
+	snapcraft upload --release=stable ../mindforger_$(MINDFORGER_VERSION)_amd64.snap
 
 
 .PHONY: dist-all-clean

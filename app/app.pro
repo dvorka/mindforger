@@ -485,7 +485,7 @@ RESOURCES += \
 # ########################################
 # See http://doc.qt.io/qt-5/qmake-advanced-usage.html
 
-binfile.files += mindforger
+binfile.extra = $(INSTALL_PROGRAM) \"$$OUT_PWD/$$TARGET\" \"$(INSTALL_ROOT)$$PREFIX/bin/$$TARGET\"
 binfile.path = $$PREFIX/bin/
 INSTALLS += binfile
 

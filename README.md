@@ -8,6 +8,7 @@
 [![Current release](https://img.shields.io/github/release/dvorka/mindforger.svg)](https://github.com/dvorka/mindforger/releases)
 [![GitHub issues](https://img.shields.io/github/issues/dvorka/mindforger.svg?maxAge=360)](https://github.com/dvorka/mindforger/issues)
 [![All releases downloads](https://img.shields.io/github/downloads/dvorka/mindforger/total.svg)](https://github.com/dvorka/mindforger/releases)
+[![Get it from the Snap Store](https://snapcraft.io/mindforger/badge.svg)](https://snapcraft.io/mindforger)
 [![License](https://img.shields.io/github/license/dvorka/mindforger?color=%23ff0000)](https://github.com/dvorka/mindforger/blob/master/LICENSE)
 
 <!-- a href="https://twitter.com/intent/follow?screen_name=mindforger"><img src="https://img.shields.io/twitter/follow/mindforger.svg?style=social&logo=twitter" alt="follow on Twitter"></a -->
