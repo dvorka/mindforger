@@ -75,6 +75,42 @@ constexpr const auto CONFIG_SETTING_SAVE_READS_METADATA_LABEL = "* Save reads me
 constexpr const auto CONFIG_SETTING_ACTIVE_REPOSITORY_LABEL = "* Active repository: ";
 constexpr const auto CONFIG_SETTING_REPOSITORY_LABEL = "* Repository: ";
 
+// wingman LLM provider delimiter escaping
+constexpr const char WINGMAN_PROVIDER_ITEM_DELIMITER = '|';
+constexpr const char WINGMAN_PROVIDER_ITEM_ESCAPE = '\\';
+
+string escapeWingmanProviderItemField(const string& field)
+{
+    string result{};
+    result.reserve(field.size());
+    for(char c: field) {
+        if(c == WINGMAN_PROVIDER_ITEM_DELIMITER || c == WINGMAN_PROVIDER_ITEM_ESCAPE) {
+            result += WINGMAN_PROVIDER_ITEM_ESCAPE;
+        }
+        result += c;
+    }
+    return result;
+}
+
+vector<string> splitWingmanProviderItemFields(const string& line)
+{
+    vector<string> fields{};
+    string field{};
+    for(size_t i = 0; i < line.size(); i++) {
+        char c = line[i];
+        if(c == WINGMAN_PROVIDER_ITEM_ESCAPE && i + 1 < line.size()) {
+            field += line[++i];
+        } else if(c == WINGMAN_PROVIDER_ITEM_DELIMITER) {
+            fields.push_back(field);
+            field.clear();
+        } else {
+            field += c;
+        }
+    }
+    fields.push_back(field);
+    return fields;
+}
+
 MarkdownConfigurationRepresentation::MarkdownConfigurationRepresentation()
     : mdRepositoryCfgRepresentation{}
 {
@@ -418,13 +454,9 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         c.setActiveLlmProvider(id);
                     } else if(line->find(CONFIG_SETTING_MIND_WINGMAN_PROVIDER_ITEM) != std::string::npos) {
                         string v = line->substr(strlen(CONFIG_SETTING_MIND_WINGMAN_PROVIDER_ITEM));
-                        // format: id|displayName|typeStr|url|apiKey|llmModel|isValid
-                        std::vector<std::string> parts;
-                        std::stringstream ss(v);
-                        std::string part;
-                        while(std::getline(ss, part, '|')) {
-                            parts.push_back(part);
-                        }
+                        // format: id|displayName|typeStr|url|apiKey|llmModel|isValid|useEnvVar
+                        // ('|' and '\' within a field are backslash-escaped - see splitWingmanProviderItemFields())
+                        std::vector<std::string> parts = splitWingmanProviderItemFields(v);
                         if(parts.size() >= 7) {
                             LlmProviderConfig p;
                             p.id = parts[0];
@@ -617,12 +649,12 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
     if(c) {
         for(const LlmProviderConfig& p: c->getLlmProviders()) {
             s << CONFIG_SETTING_MIND_WINGMAN_PROVIDER_ITEM
-              << p.id << "|"
-              << p.displayName << "|"
+              << escapeWingmanProviderItemField(p.id) << "|"
+              << escapeWingmanProviderItemField(p.displayName) << "|"
               << Configuration::getWingmanLlmProviderAsString(p.providerType) << "|"
-              << p.url << "|"
-              << p.apiKey << "|"
-              << p.llmModel << "|"
+              << escapeWingmanProviderItemField(p.url) << "|"
+              << escapeWingmanProviderItemField(p.apiKey) << "|"
+              << escapeWingmanProviderItemField(p.llmModel) << "|"
               << (p.isValid ? "1" : "0") << "|"
               << (p.useEnvVar ? "1" : "0") << endl;
         }
