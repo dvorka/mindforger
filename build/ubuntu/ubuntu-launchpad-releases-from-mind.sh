@@ -87,7 +87,7 @@
 #   - manually upload .dsc file from ~/p/mindforger/launchpad/* to Launchpad
 #     using dput:
 #
-#     dput ppa:ultradvorka/productivity mindforger_2.0.6-0ubuntu1_source.changes
+#     dput ppa:ultradvorka/productivity mindforger_1.42.0-0ubuntu1_source.changes
 #
 
 # ########################################################################
@@ -121,8 +121,8 @@ fi
 
 # environment variables
 export MAJOR_VERSION=2
-export MINOR_VERSION=0
-export PATCH_VERSION=1 # patch version is incremented for every Ubuntu build @ Launchpad
+export MINOR_VERSION=1
+export PATCH_VERSION=0 # patch version is incremented for every Ubuntu build @ Launchpad
 export MF_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" # semantic version
 export RM_CMD="rm -vrf "
 export CP_CMD="cp -vrf "
