@@ -17,6 +17,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+# Prerequisites:
+# - install Google Test Framework (https://github.com/google/googletest)
+#   1. clone googletest Git repository and change to googletest dir
+#   2. mkdir build && cd build
+#   3. cmake -DCMAKE_BUILD_TYPE=Release ..
+#   4. make
+#   5. sudo make install
+# - install Valgrind (https://valgrind.org/)
+
 # Usage:
 # - to run all tests: uncomment OPTION_RUN_ALL_TESTS
 # - to run single test: comment OPTION_RUN_ALL_TESTS and uncomment OPTION_TEST with test ID
