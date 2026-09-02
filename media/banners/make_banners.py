@@ -3,16 +3,18 @@
 import math
 import os
 import random
+from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 W, H = 2160, 720
+# Ubuntu system fonts, not repo content - same as mytral's make/make_seo_assets.py
 FONT_BOLD = "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf"
 FONT_REG = "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf"
-ROOT = "/home/dvorka/p/mindforger/git/mindforger/"
-LOGO = ROOT + "media/logo/mind-forger-512x512.png"
-SCREENSHOT = ROOT + "media/screenshots/tayr.png"
-OUT = ROOT + "media/banners/"
+ROOT = Path(__file__).resolve().parent.parent.parent
+LOGO = str(ROOT / "media" / "logo" / "mind-forger-512x512.png")
+SCREENSHOT = str(ROOT / "media" / "screenshots" / "tayr.png")
+OUT = str(ROOT / "media" / "banners") + os.sep
 
 MAX_BYTES = 2 * 1024 * 1024
 
