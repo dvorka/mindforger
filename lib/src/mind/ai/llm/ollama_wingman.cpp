@@ -481,7 +481,6 @@ void OllamaWingman::embeddingsHttpPost(CommandWingmanEmbeddings& command) {
 #else
         // set up cURL options: POST
         command.httpResponse.clear();
-        curl_easy_setopt(curl, CURLOPT_HTTPPOST, 1);
         curl_easy_setopt(
             curl, CURLOPT_URL,
             url.c_str());

@@ -1588,6 +1588,7 @@ int Mind::findLibraryOrphanOs()
         }
     }
 
+#ifdef DO_MF_DEBUG
     if(orphanOutlines.size()) {
         MF_DEBUG("ORPHAN library outlines found:" << endl);
         for(Outline* o:orphanOutlines) {
@@ -1596,6 +1597,7 @@ int Mind::findLibraryOrphanOs()
     } else {
         MF_DEBUG("NO ORPHAN library outlines found." << endl);
     }
+#endif
 
     return orphanOutlines.size();
 }
@@ -1638,7 +1640,7 @@ void Mind::refreshEmbeddings()
     if(getWingman()) {
         vector<Note*> allNotes{};
         memory.getAllNotes(allNotes);
-#ifdef MF_DEBUG
+#ifdef DO_MF_DEBUG
         int embeddingsSizeB=0;
         int counter=0;
         MF_DEBUG("  Embedding for " << allNotes.size() << " Notes:" << endl);
@@ -1657,14 +1659,14 @@ void Mind::refreshEmbeddings()
             // TODO: calculate embeddings ONLY if not in cache (timestamp not changed)
 
             getWingman()->embeddings(command);
-#ifdef MF_DEBUG
+#ifdef DO_MF_DEBUG
             if(command.answerEmbeddings.size()) {
                 embeddingsSizeB += command.answerEmbeddings.size()*sizeof(command.answerEmbeddings[0]);
             }
 #endif
             // TODO: store embeddings to embeddings cache: note key -> modified/embeddings vector
         }
-#ifdef MF_DEBUG
+#ifdef DO_MF_DEBUG
         auto endTs = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::milliseconds>(endTs - beginTs);
         auto nDuration = to_string(float(duration.count()) / float(allNotes.size()));
