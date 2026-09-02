@@ -196,14 +196,14 @@ constexpr const auto ENV_VAR_OPENROUTER_LLM_MODEL = "MINDFORGER_OPENROUTER_LLM_M
 
 /**
  * @brief LLM Provider Configuration
- * 
+ *
  * Represents configuration for a single Large Language Model provider.
- * Supports OpenAI and ollama providers with provider-specific fields.
+ * Supports ollama, OpenRouter and OpenAI providers with provider-specific fields.
  */
 struct LlmProviderConfig {
-    std::string id;                    // unique identifier (e.g., "openai-1", "ollama-local")
+    std::string id;                    // unique identifier (e.g., "ollama-local")
     std::string displayName;           // user-friendly name (e.g., "OpenAI GPT-4", "Local Ollama")
-    WingmanLlmProviders providerType;  // WINGMAN_PROVIDER_OPENAI, WINGMAN_PROVIDER_OLLAMA
+    WingmanLlmProviders providerType;  // WINGMAN_PROVIDER_OLLAMA, WINGMAN_PROVIDER_OPENAI, WINGMAN_PROVIDER_OPENROUTER
     std::string url;                   // for ollama: base URL, for OpenAI: empty
     std::string apiKey;                // for OpenAI/OpenRouter: stored API key (empty when useEnvVar is true)
     std::string llmModel;              // model name (e.g., "gpt-4", "llama2")
@@ -569,7 +569,7 @@ public:
     /*
      * Wingman LLM Provider Management
      */
-    
+
     std::vector<LlmProviderConfig>& getLlmProviders() { return llmProviders; }
     LlmProviderConfig* getLlmProviderById(const std::string& id);
     LlmProviderConfig* getActiveLlmProvider();
