@@ -12,14 +12,6 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - name: Validate release branch name
-        run: |
-          if [[ ! "${{ github.head_ref }}" =~ ^rel/[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Branch '${{ github.head_ref }}' is not a rel/<major.minor.patch> release branch."
-            exit 1
-          fi
-          echo "Release branch '${{ github.head_ref }}' validated."
-
       - uses: actions/checkout@v4
         with:
           submodules: recursive
