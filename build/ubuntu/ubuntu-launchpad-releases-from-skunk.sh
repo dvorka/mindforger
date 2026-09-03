@@ -100,11 +100,11 @@
 #     precise quantal saucy precise utopic vivid wily yakkety artful cosmic kinetic
 # - history (* LTS):
 #     trusty* xenial* bionic* (cosmic disco eoan) focal* (groovy hirsute impish)
-#     jammy* (kinetic lunar) mantic
+#     jammy* (kinetic lunar) mantic trusty xenial bionic focal jammy mantic
 # - current ~ Bash tuple below || ./ubuntu-launchpad-releases-from-mind.sh <DISTRO> + manual upload:
-#     trusty xenial bionic focal jammy mantic
+#     jammy noble resolute
 # - NOT RELEASED:
-#     trusty xenial
+#     trusty xenial focal
 #     ^ are oldest Ubuntu LTS releases, it can be released as follows:
 #       - use beast machine
 #       - change Hunspell dependency in build/ubuntu/debian/control as follows (downgrade from 1.6 to 1.3):
@@ -112,20 +112,34 @@
 #       - build distro: `ubuntu-launchpad-...-from-beast.sh trusty` @ beast machine
 #
 
+# EDIT for every release:
+# - UBUNTU_VERSIONS
+# - PATCH_VERSION
+
 if [[ ${#} == 1 ]]
 then
     export UBUNTU_VERSIONS=(${1})
 else
-    export UBUNTU_VERSIONS=(kinetic)
+    # export UBUNTU_VERSIONS=(jammy noble resolute)
+    # export UBUNTU_VERSIONS=(jammy)
+    # export UBUNTU_VERSIONS=(noble)
+    export UBUNTU_VERSIONS=(resolute)
 fi
 
 # environment variables
 export MAJOR_VERSION=2
 export MINOR_VERSION=1
-export PATCH_VERSION=0 # patch version is incremented for every Ubuntu build @ Launchpad
+export PATCH_VERSION=3 # patch version is incremented for every Ubuntu build @ Launchpad
 export MF_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" # semantic version
 export RM_CMD="rm -vrf "
 export CP_CMD="cp -vrf "
+
+# use ~50% of host CPU cores to compile the project
+export BUILD_JOBS=$(( $(nproc) / 2 ))
+if [[ ${BUILD_JOBS} -lt 1 ]]
+then
+    export BUILD_JOBS=1
+fi
 
 export OPT_VERBOSE="v"
 if [[ ${#} == 1 ]]
@@ -138,6 +152,30 @@ else
     export OPT_DO_PUSH="true" # "true" to upload src to bazaar
     export OPT_DO_RELEASE="true" # "true" to dpush binary .deb to Launchpad and TRIGGER release
 fi
+
+# Ubuntu removed legacy WebKit (libqt5webkit5-dev) starting w/ 26.04 LTS (resolute):
+# - older Ubuntu versions (jammy, noble) to use WebKit which MF used for years
+# - newer Ubuntu versions (resolute, ...) to use WebEngine which is used by Win and macOS versions of MF
+export WEBENGINE_DISTROS=(resolute)
+
+function usesWebengine {
+    local distro=${1}
+    local d
+    for d in "${WEBENGINE_DISTROS[@]}"
+    do
+	if [[ "${d}" == "${distro}" ]]
+	then
+	    return 0
+	fi
+    done
+    return 1
+}
+
+function patchDebianForWebengine {
+    echo "Patching debian/control + debian/rules: ${UBUNTUVERSION} needs Qt WebEngine (libqt5webkit5-dev unavailable there)"
+    sed -i 's/libqt5webkit5-dev/qtwebengine5-dev/' ./debian/control
+    printf '\noverride_dh_auto_configure:\n\tdh_auto_configure -- CONFIG+=mfwebengine\n' >> ./debian/rules
+}
 
 # shell variables
 # ...
@@ -289,13 +327,24 @@ function releaseForParticularUbuntuVersion {
     echoStep "Create Debian control files"
     cd mindforger && cp -rvf ${MFSRC}/build/ubuntu/debian .
     createChangelog ./debian/changelog
+    if usesWebengine "${UBUNTUVERSION}"
+    then
+        echo -e "\n# HTML rendering: modern WebEngine ############################"
+	    patchDebianForWebengine
+    else:
+        echo -e "\n# HTML rendering: legacy WebKit ############################"
+    fi
     echo "Changelog:"
     cat ./debian/changelog
+    echo "Control:"
+    cat ./debian/control
+    echo "Rules:"
+    cat ./debian/rules
 
     # 4) build MF dependencies
     echoStep "Build MindForger library dependencies: cmark-gfm"
     rm -rf${OPT_VERBOSE} deps/cmark-gfm/build
-    cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . && cd ../../..
+    cd deps/cmark-gfm && mkdir -v build && cd build && cmake -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF .. && cmake --build . --parallel ${BUILD_JOBS} && cd ../../..
     echoStepDone "cmark-gfm build"
     # cmark-gfm static library:
     ls -l deps/cmark-gfm/build/src/libcmark-gfm.a
@@ -311,7 +360,12 @@ function releaseForParticularUbuntuVersion {
     # like this qt5-default.
     # Instead debian/rules file exports env var w/ Qt choice
     # .pro file is also extended to have 'make install' target
-    qmake -r mindforger.pro
+    if usesWebengine "${UBUNTUVERSION}"
+    then
+	qmake -r mindforger.pro CONFIG+=mfwebengine
+    else
+	qmake -r mindforger.pro
+    fi
 
     # 6) optionally PATCH source files e.g. different Ubuntu distro specific paths
     echoStep "Patch Makefiles - fix Qt paths for Ubuntu versions"
@@ -372,7 +426,7 @@ function releaseForParticularUbuntuVersion {
     #   http://manpages.ubuntu.com/manpages/xenial/en/man1/debuild.1.html
     #   man debuild
     # build SIGNED source .deb package:
-    bzr builddeb --verbose --source
+    bzr builddeb --verbose --source -- -j${BUILD_JOBS}
     # verify build result and EXIT on failure
     build_status=$?
     echo -e "DONE: SOURCE .deb package build on HOST system (buildarea/mindforger_<major>.<minor>.<patch>.orig.tar.gz):"
@@ -406,7 +460,7 @@ function releaseForParticularUbuntuVersion {
     echo "    - mindfoger_<major>.<minor>.<patch>-0ubuntu1.dsc ... control descriptor according to which is build made"
     echo "    - mindfoger_<major>.<minor>.<patch>.orig.tar.gz  ... TARBALL w/ Debian control files used to build .deb"
     # pbuild-dist help: https://wiki.ubuntu.com/PbuilderHowto
-    pbuilder-dist ${UBUNTUVERSION} build ${MFRELEASE}.dsc
+    pbuilder-dist ${UBUNTUVERSION} build --debbuildopts="-j${BUILD_JOBS}" ${MFRELEASE}.dsc
     # VERIFY pbuilder-dist build result
     build_status=$?
     echo -e "DONE: BINARY .deb package build on FAKEROOT system, result stored to ${PBUILDFOLDER}/${UBUNTUVERSION}_result:"
@@ -446,7 +500,7 @@ fi
 
 export BAZAAR_MSG="MindForger ${MF_VERSION} release."
 
-for UBUNTU_VERSION in ${UBUNTU_VERSIONS}
+for UBUNTU_VERSION in ${UBUNTU_VERSIONS[@]}
 do
     echo -e "\n###################################################"
     echo "# Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
