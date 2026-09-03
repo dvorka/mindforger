@@ -164,6 +164,14 @@ else
 	ls -al ../app/mindforger
 endif
 
+.PHONY: build-webengine
+build-webengine: clean-app ## build MindForger application binary w/ Qt WebEngine (macOS|Win) insted of default Qt WebKit (Linux)
+	@echo "Building MindForger executable with Qt WebEngine support..."
+	@echo "Prerequisite: Qt WebEngine must be installed: sudo apt-get install -y qtwebengine5-dev qtwebengine5-dev-tools"
+	cd .. && qmake -r mindforger.pro CONFIG+=mfwebengine DEFINES+=DO_MF_WEBENGINE && make -j $(CPU_CORES) ; cd ..
+	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
+	ls -al ../app/mindforger
+
 
 .PHONY: build-rc
 build-rc: clean-app ## build RC MindForger application binary

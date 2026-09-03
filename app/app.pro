@@ -68,10 +68,12 @@ mfoldhunspell | equals(OS_DISTRO_VERSION, "Windows") | equals(OS_DISTRO_VERSION,
 # - webkit on Linux
 # - webengine on Windows and macOS
 win32|macx|mfwebengine {
+    message("HTML rendering: Qt WebEngine (modern Chromium)")
     DEFINES += MF_QT_WEB_ENGINE
     QT += webengine
     QT += webenginewidgets
 } else {
+    message("HTML rendering: Qt WebKit (legacy Apple WebKit)")
     QT += webkit
     QT += webkitwidgets
 }

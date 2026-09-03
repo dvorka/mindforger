@@ -74,9 +74,9 @@ void OutlineHeaderViewPresenter::refreshLivePreview()
     auxOutline.setDescription(d);
 
     double yScrollPct{0};
-    QScrollBar* scrollbar = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->verticalScrollBar();
 #if defined(_WIN32) || defined(__APPLE__)
     // WebEngine: scroll to same pct view
+    QScrollBar* scrollbar = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->verticalScrollBar();
     if(scrollbar) {
         if(scrollbar->maximum()) {
             // scroll: QWebEngine API for scrolling is not available - JavaScript must be used instead (via signal)
