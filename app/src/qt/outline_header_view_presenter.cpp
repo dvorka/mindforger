@@ -74,7 +74,7 @@ void OutlineHeaderViewPresenter::refreshLivePreview()
     auxOutline.setDescription(d);
 
     double yScrollPct{0};
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(MF_QT_WEB_ENGINE)
     // WebEngine: scroll to same pct view
     QScrollBar* scrollbar = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->verticalScrollBar();
     if(scrollbar) {
@@ -101,7 +101,7 @@ void OutlineHeaderViewPresenter::refreshLivePreview()
     view->setHtml(QString::fromStdString(html));
 
     // IMPROVE share code between O header and N
-#if !defined(__APPLE__) && !defined(_WIN32) && !defined(MF_QT_WEB_ENGINE)
+#if !defined(MF_QT_WEB_ENGINE)
     // WebView: scroll to same pct view
     if(scrollbar) {
         if(scrollbar->maximum()) {
