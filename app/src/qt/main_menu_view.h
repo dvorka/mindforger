@@ -1,7 +1,7 @@
 /*
  main_menu.h     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -77,6 +77,7 @@ public:
     QAction* actionMindRemember;
     QAction* actionMindThink;
     QAction* actionMindAutolink;
+    QAction* actionMindSemanticSearch;
     QAction* actionMindWingman;
     QAction* actionMindTool;
     QAction* actionMindScope;
@@ -85,6 +86,8 @@ public:
     QMenu* submenuMindLibrary;
     QAction* actionLibraryAdd;
     QAction* actionLibrarySync;
+    QAction* actionLibraryOrphans;
+    QAction* actionLibraryDeprecateOrphanOs;
     QAction* actionLibraryDeprecate;
     QAction* actionMindPreferences;
     QMenu* submenuMindExport;
@@ -281,6 +284,8 @@ public:
     QAction* actionHelpCheckForUpdates;
     QAction* actionHelpAboutQt;
     QAction* actionHelpAbout;
+
+    QAction* actionHelpSponsor;
 
     void showModeAwareFacet(bool repositoryMode, bool mfMode);
 

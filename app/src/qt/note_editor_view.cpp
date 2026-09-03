@@ -1,7 +1,7 @@
 /*
  note_editor_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -735,7 +735,11 @@ int NoteEditorView::lineNumberPanelWidth()
             max /= 10;
             ++digits;
         }
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+        int space = 3 + fontMetrics().horizontalAdvance(QLatin1Char{'9'}) * digits;
+#else
         int space = 3 + fontMetrics().width(QLatin1Char{'9'}) * digits;
+#endif
         return space;
     } else {
         return 0;

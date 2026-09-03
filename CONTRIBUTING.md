@@ -6,11 +6,11 @@ with MindForger development will be **highly appreciated**!
 * **Bugs and Suggestions**
     * Submit bugs, issues, ideas and enhancements.
 * **Translations**
-    * Translate MindForger to your language.
+    * Translate MindForger into your language.
 * **Platform support**
     * Port MindForger to your favorite OS or distribution.
 * **Code**
-    * Submit pull request/patch with implementation of a feature you missed.
+    * Submit pull request/patch with implementation of a feature you feel is missing.
 * **Integration**
     * How-to or code enabling integration with your (favorite) project.
 * **Enhancements**

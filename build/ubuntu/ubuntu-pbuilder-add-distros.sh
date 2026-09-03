@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,14 +20,14 @@
 # https://wiki.ubuntu.com/Releases
 # - obsolete:
 #   precise quantal saucy precise utopic vivid wily trusty (old GCC)
-#   yakkety artful cosmic disco eoan kinetic mantic
+#   yakkety artful cosmic disco eoan kinetic
 # - current:
-#   trusty xenial bionic focal jammy noble
+#   trusty xenial bionic focal jammy mantic
 #
 # Distro is stored to:
 # ~/pbuilder
 #
-for DISTRO in noble
+for DISTRO in mantic
 do
     sudo pbuilder --create ${DISTRO}
     rm -vf ~/pbuilder/${DISTRO}-base.tgz

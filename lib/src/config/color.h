@@ -1,7 +1,7 @@
 /*
  color.h     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -76,6 +76,10 @@ public:
         static const Color color(0x33,0x33,0x33);
         return color;
     }
+    static const Color& PINK() {
+        static const Color color(0xFF,0xA4,0xA4);
+        return color;
+    }
 
     // MindForger colors
     static const Color& MF_RED() {
@@ -92,6 +96,10 @@ public:
     }
     static const Color& MF_YELLOW() {
         static const Color color(0xFF,0xCD,0x8D);
+        return color;
+    }
+    static const Color& MF_ORANGE() {
+        static const Color color(0xED,0x70,0x14);
         return color;
     }
     static const Color& MF_PURPLE() {

@@ -2,7 +2,7 @@
 #
 # MindForger knowledge management tool
 #
-# Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -153,7 +153,7 @@ function buildDebPackage() {
 # # Main #
 # ############################################################################
 
-export ARG_VERSION="2.0.0"
+export ARG_VERSION="2.1.0"
 export ARG_BAZAAR_MSG="MindForger ${ARG_VERSION} release."
 
 # Debian releases: https://www.debian.org/releases/

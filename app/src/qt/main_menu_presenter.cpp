@@ -1,7 +1,7 @@
 /*
  main_menu_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -45,6 +45,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(
         view->actionMindAutolink, SIGNAL(triggered()),
         mwp, SLOT(doActionMindToggleAutolink()));
+    QObject::connect(
+        view->actionMindSemanticSearch, SIGNAL(triggered()),
+        mwp, SLOT(doActionMindToggleSemanticSearch()));
     QObject::connect(
         view->actionMindLearnDirectory, SIGNAL(triggered()),
         mwp, SLOT(doActionMindLearnRepository()));
@@ -115,6 +118,8 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     // menu: Library
     QObject::connect(view->actionLibraryAdd, SIGNAL(triggered()), mwp, SLOT(doActionLibraryNew()));
     QObject::connect(view->actionLibrarySync, SIGNAL(triggered()), mwp, SLOT(doActionLibrarySync()));
+    QObject::connect(view->actionLibraryOrphans, SIGNAL(triggered()), mwp, SLOT(doActionLibraryOrphans()));
+    QObject::connect(view->actionLibraryDeprecateOrphanOs, SIGNAL(triggered()), mwp, SLOT(doActionLibraryDeprecateOrphanOs()));
     QObject::connect(view->actionLibraryDeprecate, SIGNAL(triggered()), mwp, SLOT(doActionLibraryRm()));
 
     // menu: Organizer
@@ -351,6 +356,7 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         LookAndFeels::getInstance().getQApplication(), SLOT(aboutQt())
     );
     QObject::connect(view->actionHelpAbout, SIGNAL(triggered()), mwp, SLOT(doActionHelpAboutMindForger()));
+    QObject::connect(view->actionHelpSponsor, SIGNAL(triggered()), mwp, SLOT(doActionHelpSponsor()));
 
     switch(config.getDesiredMindState()) {
     case Configuration::MindState::THINKING:

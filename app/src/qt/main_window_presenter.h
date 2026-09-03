@@ -1,7 +1,7 @@
 /*
  main_window_presenter.h     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -195,6 +195,7 @@ public slots:
     void doActionMindSleep();
     void doActionMindToggleThink();
     void doActionMindToggleAutolink();
+    void doActionMindToggleSemanticSearch();
     void doActionMindLearnRepository();
     void doActionMindLearnFile();
     void doActionMindRelearn(QString path);
@@ -240,6 +241,8 @@ public slots:
     void doActionLibraryNew();
     void handleNewLibrary();
     void doActionLibrarySync();
+    void doActionLibraryOrphans();
+    void doActionLibraryDeprecateOrphanOs();
     void handleSyncLibrary();
     void doActionLibraryRm();
     void handleRmLibrary();
@@ -379,6 +382,7 @@ public slots:
     void doActionHelpCheckForUpdates();
     void doActionEmojisDialog();
     void doActionHelpAboutMindForger();
+    void doActionHelpSponsor();
 
     void slotHandleFts();
     void slotMainToolbarVisibilityChanged(bool visibility);

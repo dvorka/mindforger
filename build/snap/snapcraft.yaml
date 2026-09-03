@@ -1,84 +1,191 @@
-name: mindforger
-base: core18 # the base snap is the execution environment for this snap: core18 (18.04), core20 (20.04)
-version: '2.0.0' # just for humans, typically '1.2+git' or '1.3.2'
-summary: Thinking notebook and Markdown editor
-description: |
-   Search, browse, view and edit your Markdown files. Get as much
-   as possible from the knowledge in your remarks with associations,
-   auto linking and powerful search options.
+# MindForger Snap Package Configuration
+#
+# This is the STRICT manifest, published to the Snap Store.
+#
+# Build (strict):  cd build && make dist-snap
+# Install (strict): sudo snap install --dangerous mindforger_*.snap
+# Run: mindforger
+#
+# A CLASSIC variant (full host access, for the downloadable GitHub Release build - no
+# 'home' interface restrictions on hidden files or paths outside $HOME) is derived from
+# this file by build/snap/apply-classic.sh - never edit a classic manifest by hand.
+# Build (classic): cd build && make dist-snap-classic
 
-grade: devel # must be 'stable' to release into candidate/stable channels: devel, stable
-confinement: devmode # use 'strict' once you have the right plugs and slots: strict, devmode, classic
-architectures:
-  - build-on: amd64
+name: mindforger
+title: MindForger
+base: core24
+version: '2.1.0'
+summary: Thinking notebook and Markdown IDE
+description: |
+  MindForger is a human-mind-inspired personal knowledge management tool and
+  Markdown IDE. Search, browse, view and edit your Markdown files and get
+  the most out of the knowledge in your notes with associations, auto
+  linking and powerful full-text and Wingman (LLM-assisted) search - all
+  running locally, with your privacy respected.
+
+grade: stable
+confinement: strict
+license: GPL-2.0
+contact: martin.dvorak@mindforger.com
+issues: https://github.com/dvorka/mindforger/issues
+source-code: https://github.com/dvorka/mindforger
+website: https://www.mindforger.com
+
+platforms:
+  amd64:
+
+apps:
+  mindforger:
+    # bin/mindforger-launcher seeds a fresh ~/mindforger-repository with the default
+    # memory/stencils content before exec'ing the real bin/mindforger - see
+    # build/snap/mindforger-launcher for why this can't be done by the app itself
+    # under snap confinement.
+    command: bin/mindforger-launcher
+    desktop: meta/gui/mindforger.desktop
+    environment:
+      # Qt's xcb plugin (X11 vs. Wayland) configuration. ${SNAPCRAFT_ARCH_TRIPLET} is a
+      # snapcraft BUILD-time variable, not one snapd exports into the app's runtime
+      # environment - meta/snap.yaml ships that string unexpanded, so at 'snap run'
+      # time it silently becomes empty, producing a broken "usr/lib//qt5/plugins" path
+      # and "Could not find the Qt platform plugin xcb" (confirmed against a real Snap
+      # Store install, not just an unsquashed/manually-run smoke test). Hardcode the
+      # multiarch dir instead - safe since 'platforms:' above is amd64-only; revisit if
+      # another architecture is ever added.
+      QT_PLUGIN_PATH: ${SNAP}/usr/lib/x86_64-linux-gnu/qt5/plugins
+      QT_QPA_PLATFORM_PLUGIN_PATH: ${SNAP}/usr/lib/x86_64-linux-gnu/qt5/plugins
+      # font configuration - w/o this there are no menus/text in UI
+      FONTCONFIG_PATH: ${SNAP}/etc/fonts
+      FONTCONFIG_FILE: ${SNAP}/etc/fonts/fonts.conf
+      # strict-only wiring (removed by build/snap/apply-classic.sh for the classic build):
+      # ~/.mindforger.md is a HIDDEN file directly in $HOME, and hidden files/dirs
+      # right under $HOME are unreachable through the 'home' interface under strict
+      # confinement - move it (and the default ~/mindforger-repository suggestion)
+      # under the snap's own always-writable per-user area instead
+      HOME: ${SNAP_USER_COMMON}
+    plugs:
+      - desktop
+      - desktop-legacy
+      - wayland
+      - x11
+      - opengl
+      - home            # open existing Markdown repositories anywhere under $HOME
+      - removable-media # open Markdown repositories on external/mounted media
+      - network         # Wingman: ollama / OpenAI / OpenRouter LLM providers
 
 parts:
   mindforger:
     plugin: qmake
-    source: .  # . or git@github.com:dvorka/mindforger.git
-    qt-version: qt5
+    source: .
+    # 'source: .' copies the WHOLE working tree, including any gitignored, locally
+    # built artifacts (a stale app/mindforger binary, lib/libmindforger.a, qmake-
+    # generated Makefiles, ...) left over from unrelated local builds (e.g. 'make
+    # build-rc'). If make's timestamp check considers those already up to date, the
+    # snap ships that stale artifact untouched instead of a fresh production build -
+    # this has actually happened. 'source: .' also copies .git/, so strip anything
+    # not tracked by git from the build's OWN copy (never touches the real checkout)
+    # right after pull, guaranteeing the build only ever sees committed/staged source.
+    override-pull: |
+      craftctl default
+      git clean -xdf
+    # cmark-gfm (deps/cmark-gfm, a git submodule) is a separate CMake project that
+    # app.pro statically links against via a plain relative path - it is NOT built by
+    # qmake and must exist before qmake runs (see the GitHub Actions Ubuntu workflow's
+    # dedicated "Build dependency - cmark-gfm" step, which this mirrors). Building it
+    # here makes the snap self-contained instead of depending on a pre-built
+    # deps/cmark-gfm/build/ left on the host by some other local build.
+    override-build: |
+      # deps/cmark-gfm is a git submodule: 'git clean -xdf' above does not (and should
+      # not) recurse into it, so a CMakeCache.txt left over from a HOST build - which
+      # bakes in the host's absolute path - can still be sitting in its build/ dir.
+      # Reconfiguring in place against that cache fails ("source ... does not match
+      # the source used to generate cache"), so always start it from scratch.
+      rm -rf "$CRAFT_PART_SRC/deps/cmark-gfm/build"
+      cmake -S "$CRAFT_PART_SRC/deps/cmark-gfm" -B "$CRAFT_PART_SRC/deps/cmark-gfm/build" \
+        -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+      cmake --build "$CRAFT_PART_SRC/deps/cmark-gfm/build" -j"$(nproc)"
+      craftctl default
+    qmake-parameters:
+      - "-r"
     build-packages:
-      - libx11-xcb1  # fixes could not find or load the Qt platform plugin "xcb" in ""
-      - zlib1g-dev
+      - build-essential
+      - git    # needed by override-pull's git clean -xdf, not by the build itself
+      - cmake  # needed to build the cmark-gfm dependency, see override-build above
       - ccache
+      - zlib1g-dev
       - libcurl4-gnutls-dev
       - libhunspell-dev
-      - build-essential
-      - qtbase5-dev
-      - qt5-qmake
+      - libvoikko-dev
       - libqt5webkit5-dev  # WebKit is used @ Linux, WebEngine @ macOS/Win
-      - ttf-ubuntu-font-family  # w/o fonts there are no menus/text in UI
-      - libvoikko-dev  # reported as missing in the start-up log
-    stage-packages:  # suggested by snapcraft build
-      - libbrotli1
-      - libdouble-conversion1
-      - libfreetype6
-      - libgl1
-      - libglvnd0
-      - libglx0
-      - libgraphite2-3
-      - libgstreamer-plugins-base1.0-0
-      - libgstreamer1.0-0
-      - libharfbuzz0b
-      - libhunspell-1.6-0
-      - libhyphen0
-      - libicu60
-      - libjpeg-turbo8
-      - liborc-0.4-0
-      - libpng16-16
-      - libqt5core5a
-      - libqt5gui5
-      - libqt5network5
-      - libqt5positioning5
-      - libqt5printsupport5
+      - qtbase5-dev
+      - qtbase5-dev-tools
+      - qttools5-dev-tools
+      - qt5-qmake
+      - qtchooser
+    stage-packages:
+      - libqt5core5t64
+      - libqt5gui5t64
+      - libqt5network5t64
+      - libqt5widgets5t64
+      - libqt5printsupport5t64
       - libqt5qml5
       - libqt5quick5
+      - libqt5positioning5
       - libqt5sensors5
       - libqt5webchannel5
       - libqt5webkit5
-      - libqt5widgets5
-      - libwebp6
-      - libwoff1
-      - libx11-6
-      - libxau6
-      - libxcb1
-      - libxdmcp6
-      - libxml2
-      - libxslt1.1
-    options:
-      - -r
-      - "CONFIG+=mfdebug"
+      - libhunspell-1.7-0
+      - libvoikko1
+      - libcurl3t64-gnutls
+      - fontconfig-config
+      - fonts-ubuntu
+      # Qt xcb platform plugin runtime deps (not pulled by Depends: alone)
+      - libxcb-icccm4
+      - libxcb-image0
+      - libxcb-keysyms1
+      - libxcb-randr0
+      - libxcb-render-util0
+      - libxcb-shape0
+      - libxcb-sync1
+      - libxcb-xfixes0
+      - libxcb-xinerama0
+      - libxcb-xkb1
+      - libxkbcommon-x11-0
 
-apps:
-  mindforger:
-    command: bin/mindforger
-    environment:
-      QT_DEBUG_PLUGINS: 1
-      # # Qt's xcb plugin (X11 vs. Wayland) configuration
-      LD_LIBRARY_PATH: /usr/lib/x86_64-linux-gnu:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins/platforms  # add path to dir w/ libqxcb.so
-      QT_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins
-      QT_QPA_PLATFORM_PLUGIN_PATH: ${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/qt5/plugins
-      # font configuration
-      FONTCONFIG_PATH: ${SNAP}/etc/fonts/conf.d
-      FONTCONFIG_FILE: ${SNAP}/etc/fonts/fonts.conf
-    plugs: [home, network]
+  launcher:
+    # stages the first-run default-content seeding wrapper as bin/mindforger-launcher,
+    # alongside the real bin/mindforger built by the mindforger part above - see
+    # build/snap/mindforger-launcher for what it does and why it is needed
+    plugin: dump
+    source: build/snap
+    organize:
+      mindforger-launcher: bin/mindforger-launcher
+    stage:
+      - bin/mindforger-launcher
+    prime:
+      - bin/mindforger-launcher
+
+  desktop-assets:
+    # a dedicated desktop file is required here (rather than reusing
+    # app/resources/linux/mindforger.desktop, which is correct for a regular
+    # Linux install): snapcraft's desktop-file postprocessing resolves Icon=
+    # as a literal path inside the prime dir, not a themed icon name, so it
+    # must point at meta/gui/mindforger.png instead of the icon theme name
+    # "mindforger" used by the .deb/tarball installs
+    plugin: dump
+    source: build/snap/gui
+    organize:
+      mindforger.desktop: meta/gui/mindforger.desktop
+    stage:
+      - meta/gui/mindforger.desktop
+    prime:
+      - meta/gui/mindforger.desktop
+
+  desktop-icon:
+    plugin: dump
+    source: app/resources/icons
+    organize:
+      mindforger128x128.png: meta/gui/mindforger.png
+    stage:
+      - meta/gui/mindforger.png
+    prime:
+      - meta/gui/mindforger.png

@@ -1,7 +1,7 @@
 /*
  markdown_document_representation.h     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -29,6 +29,13 @@ namespace m8r {
 
 class MarkdownDocumentRepresentation
 {
+public:
+
+    static constexpr const auto TAG_LIB_DOC = "library-document";
+    static constexpr const auto TAG_LIB_DOC_ORPHAN = "library-orphan-document";
+
+    static constexpr const auto PREFIX_1ST_LINE = "This is a notebook for the document: ";
+
 private:
     Ontology& ontology;
 

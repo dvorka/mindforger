@@ -1,6 +1,6 @@
 # mindforger-lib.pro     MindForger thinking notebook
 #
-# Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software ; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -75,7 +75,8 @@ win32{
     }
 
     # -O3 ... can be specified by this variable (overrides -O1 -O2)
-    QMAKE_CXXFLAGS += -pedantic -std=c++11
+    CONFIG += c++14
+    QMAKE_CXXFLAGS += -pedantic
 }
 
 SOURCES += \
@@ -121,6 +122,8 @@ SOURCES += \
     src/mind/ai/llm/wingman.cpp \
     src/mind/ai/llm/mock_wingman.cpp \
     src/mind/ai/llm/openai_wingman.cpp \
+    src/mind/ai/llm/ollama_wingman.cpp \
+    src/mind/ai/llm/openrouter_wingman.cpp \
     src/mind/dikw/dikw_pyramid.cpp \
     src/mind/dikw/filesystem_information.cpp \
     src/mind/dikw/information.cpp \
@@ -232,6 +235,8 @@ HEADERS += \
     src/mind/ai/llm/wingman.h \
     src/mind/ai/llm/mock_wingman.h \
     src/mind/ai/llm/openai_wingman.h \
+    src/mind/ai/llm/ollama_wingman.h \
+    src/mind/ai/llm/openrouter_wingman.h \
     src/mind/dikw/information.h \
     src/model/eisenhower_matrix.h \
     src/model/kanban.h \

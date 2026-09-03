@@ -1,4 +1,4 @@
-# Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # MindForger thinking notebook
 #
@@ -22,7 +22,7 @@
 # variables
 #
 
-MINDFORGER_VERSION := 2.0.0
+MINDFORGER_VERSION := 2.1.0
 MINDFORGER_RELEASE_BASE_DIR := /home/dvorka/p/mindforger/release
 MINDFORGER_RELEASE_DIR := $(MINDFORGER_RELEASE_BASE_DIR)/$(MINDFORGER_VERSION)-maker
 
@@ -35,7 +35,11 @@ MF_LANG := "en"
 # Ubuntu distro: trusty xenial bionic focal jammy kinetic
 DISTRO := "bionic"
 # CPU cores thant can be used to build the project
-CPU_CORES := 7
+ifeq ($(shell hostname), skunkworks)
+  CPU_CORES := 10
+else
+  CPU_CORES := 7
+endif
 # Qt version to be used by MindForger
 # MF_QT_VERSION := 5.9.9
 MF_QT_VERSION := 5.15.2
@@ -74,7 +78,13 @@ diagnostics:
 
 .PHONY: help
 help: ## make targets help
-	@echo "MindForger Swiss knife help:"
+	@echo " __  __ _           _ _____                         "
+	@echo "|  \\/  (_)_ __   __| |  ___|__  _ __ __ _  ___ _ __ "
+	@echo "| |\\/| | | '_ \\ / _\` | |_ / _ \\| '__/ _\` |/ _ \\ '__|"
+	@echo "| |  | | | | | | (_| |  _| (_) | | | (_| |  __/ |   "
+	@echo "|_|  |_|_|_| |_|\\__,_|_|  \\___/|_|  \\__, |\\___|_|   $(MINDFORGER_VERSION)"
+	@echo "                                     |___/            "
+	@echo "MindForger Swiss knife:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
 	| sort \
 	| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -143,9 +153,9 @@ build: clean-app ../app/mindforger ## build production MindForger application bi
 
 
 .PHONY: build-dev
-build-dev: clean-app ## build development MindForger application binary
+build-dev: clean-app ## build development MindForger application binary w/ debug info
 	@echo "Building DEV MindForger executable..."
-	cd .. && qmake -r mindforger.pro DEFINES+=DO_MF_DEBUG && make -j $(CPU_CORES) ; cd ..
+	cd .. && qmake -r mindforger.pro CONFIG+=debug DEFINES+=DO_MF_DEBUG && make -j $(CPU_CORES) ; cd ..
 ifeq ($(UNAME), Darwin)
 	@echo "\nIf build succeeded, then MindForger executable can be found in:\n  app/mindforger.app/Contents/MacOS/mindforger"
 	ls -al ../app/mindforger.app/Contents/MacOS/mindforger
@@ -153,6 +163,14 @@ else
 	@echo "\nIf build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 endif
+
+.PHONY: build-webengine
+build-webengine: clean-app ## build MindForger application binary w/ Qt WebEngine (macOS|Win) insted of default Qt WebKit (Linux)
+	@echo "Building MindForger executable with Qt WebEngine support..."
+	@echo "Prerequisite: Qt WebEngine must be installed: sudo apt-get install -y qtwebengine5-dev qtwebengine5-dev-tools"
+	cd .. && qmake -r mindforger.pro CONFIG+=mfwebengine DEFINES+=DO_MF_WEBENGINE && make -j $(CPU_CORES) ; cd ..
+	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
+	ls -al ../app/mindforger
 
 
 .PHONY: build-rc
@@ -200,9 +218,25 @@ else
 	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/bug-copy-image
 endif
 
+run-gdb: build-dev ## run MindForger using gdb
+ifeq ($(UNAME), Darwin)
+	cd ../app/mindforger.app/Contents/MacOS && ./mindforger /Users/dvorka/mf-devel/mf-copy
+else
+	cd ../app && pwd && gdb --args ./mindforger /home/dvorka/mf-devel/library-trainer
+endif
+
 #
 # install
 #
+
+
+.PHONY: devenv-ubuntu
+devenv-ubuntu:
+	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libcurl4-gnutls-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache cmake
+
+
+devenv-ubuntu-2204:
+	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libcurl4-gnutls-dev libqt5webkit5-dev qttools5-dev-tools qtbase5-dev qt5-qmake ccache cmake
 
 
 .PHONY: devenv-debian
@@ -229,6 +263,11 @@ localization: ## update and release localization strings: MF_LANG=en
 .PHONY: ver-find
 ver-find: ## pre-version update finder
 	cd .. && git grep -n "1\.55"
+
+
+.PHONY: dist-pad-refresh
+dist-pad-refresh: ## refresh PAD.xml release fields (version, date, changelog, installer size)
+	./make/distro-pad-refresh.py
 
 
 ../lib/tests/Makefile:
@@ -348,17 +387,89 @@ dist-ubuntu-deb: ## locally build .deb for any Ubuntu version: DISTRO=bionic
 	false
 
 
+#
+# DISTRIBUTION: Snap package (local builds only)
+#
+# Prerequisites:
+#   sudo snap install snapcraft --classic
+#   sudo snap install lxd
+#   sudo lxd init --auto
+#   sudo usermod -aG lxd $USER
+#
+# build/snap/snapcraft.yaml is the STRICT manifest (Snap Store). dist-snap-classic
+# derives the classic manifest (downloadable/sideloaded release) from it via
+# build/snap/apply-classic.sh - never hand-edit a classic variant directly.
+#
+
 .PHONY: dist-snap
-dist-snap: ## build snap distro for snapcraft.io
-	@echo "Building Snap ..."
+dist-snap: ## build strict Snap package for the Snap Store (LXD required)
+	@echo "Building Snap $(MINDFORGER_VERSION) ..."
 	cd .. && make clean && cd build
-	cp -vf snap/snapcraft.yaml .. && cd .. && snapcraft clean && snapcraft --debug
+	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
+	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" ../snapcraft.yaml
+	cd .. && snapcraft clean && snapcraft pack
 
 
-.PHONY: dist-wip
-dist-snap-wip:  # debug Snap build w/o clean up, but w/ incremental build
-	@echo "Building Snap ..."
-	cp -vf snap/snapcraft.yaml .. && cd .. && snapcraft --debug
+.PHONY: dist-snap-wip
+dist-snap-wip: ## debug Snap build w/o clean up, but w/ incremental build
+	@echo "Building Snap $(MINDFORGER_VERSION) ..."
+	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
+	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" ../snapcraft.yaml
+	cd .. && snapcraft pack --debug
+
+
+.PHONY: dist-snap-classic
+dist-snap-classic: ## build classic Snap package for downloadable GitHub Release (LXD required)
+	@echo "Building classic Snap $(MINDFORGER_VERSION) ..."
+	cd .. && make clean && cd build
+	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
+	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" ../snapcraft.yaml
+	./snap/apply-classic.sh ../snapcraft.yaml
+	cd .. && snapcraft clean && snapcraft pack
+
+
+.PHONY: dist-snap-remove
+dist-snap-remove: ## remove locally installed Snap (requires sudo)
+	@echo "Removing Snap package..."
+	sudo snap remove mindforger || true
+	@echo "DONE Snap removed"
+
+
+.PHONY: dist-snap-install
+dist-snap-install: dist-snap-remove dist-snap ## build and install the STRICT Snap locally (for testing, requires sudo)
+	@echo "Installing strict Snap package locally..."
+	@SNAP_FILE=$$(ls ../mindforger_*.snap 2>/dev/null | head -1); \
+	if [ -z "$$SNAP_FILE" ]; then \
+		echo "Error: Snap package not found. Run 'make dist-snap' first."; \
+		exit 1; \
+	fi; \
+	echo "Note: this command requires sudo privileges for snap install"; \
+	sudo snap install --dangerous "$$SNAP_FILE"; \
+	echo "DONE Snap installed. Run with: mindforger"
+
+
+.PHONY: dist-snap-install-classic
+dist-snap-install-classic: dist-snap-remove dist-snap-classic ## build and install the CLASSIC Snap locally (for testing, requires sudo)
+	@echo "Installing classic Snap package locally..."
+	@SNAP_FILE=$$(ls ../mindforger_*.snap 2>/dev/null | head -1); \
+	if [ -z "$$SNAP_FILE" ]; then \
+		echo "Error: Snap package not found. Run 'make dist-snap-classic' first."; \
+		exit 1; \
+	fi; \
+	echo "Note: this command requires sudo privileges for snap install"; \
+	sudo snap install --dangerous --classic "$$SNAP_FILE"; \
+	echo "DONE Snap installed. Run with: mindforger"
+
+
+.PHONY: dist-snap-path
+dist-snap-path: ## show path to the last built Snap package
+	@ls -1 ../mindforger_*.snap 2>/dev/null || echo "No Snap package built yet"
+
+
+.PHONY: dist-snap-upload
+dist-snap-upload: dist-snap ## upload strict Snap package to the Snap Store (amd64)
+	@echo "Uploading Snap package to the Snap Store..."
+	snapcraft upload --release=stable ../mindforger_$(MINDFORGER_VERSION)_amd64.snap
 
 
 .PHONY: dist-all-clean

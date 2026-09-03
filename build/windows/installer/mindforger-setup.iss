@@ -38,6 +38,12 @@ Source: "{#VcRedistPath}"; DestDir: "{tmp}"; Flags: deleteafterinstall
 Source: "..\..\..\app\release\bin\*"; DestDir: "{app}\bin"; Flags: recursesubdirs
 Source: "..\..\..\doc\*"; DestDir: "{app}\Resources\mindforger-repository"; Flags: recursesubdirs
 Source: "..\..\..\deps\zlib-win\lib\zlibwapi.dll"; DestDir: "{app}\bin"
+Source: "..\..\..\deps\openssl-win\ms-vs-2017\libeay32.dll"; DestDir: "{app}\bin"
+Source: "..\..\..\deps\openssl-win\ms-vs-2017\ssleay32.dll"; DestDir: "{app}\bin"
+Source: "..\..\..\deps\openssl-win\openssl-1.1.1\capi.dll"; DestDir: "{app}\bin"
+Source: "..\..\..\deps\openssl-win\openssl-1.1.1\dasync.dll"; DestDir: "{app}\bin"
+Source: "..\..\..\deps\openssl-win\openssl-1.1.1\libcrypto-1_1-x64.dll"; DestDir: "{app}\bin"
+Source: "..\..\..\deps\openssl-win\openssl-1.1.1\libssl-1_1-x64.dll"; DestDir: "{app}\bin"
 
 [Icons]
 Name: "{group}\{#MINDFORGER_APP_NAME}"; Filename: "{app}\bin\{#MINDFORGER_APP_EXE}"

@@ -1,0 +1,54 @@
+name: Windows build
+
+# build the Windows installer and ZIP archive only for release pull requests:
+#   - source (head) branch must be rel/<major.minor.patch>
+#   - target (base) branch must be master
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: cmd
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Qt 5.15 with WebEngine
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2019_64'
+          modules: 'qtwebengine'
+
+      - name: Set up MSVC x64 build tools
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Build dependency - cmark-gfm
+        run: cd deps\cmark-gfm && mkdir build && cd build && cmake -G "Visual Studio 17 2022" -A x64 -DCMARK_TESTS=OFF -DCMARK_SHARED=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .. && cmake --build . --config Release
+
+      - name: Run QMake
+        run: qmake -r "CONFIG+=mfci" mindforger.pro
+
+      - name: Run NMake
+        run: nmake
+
+      - name: Download VC++ Redistributable
+        run: curl -LfSs -o "%RUNNER_TEMP%\vcredist_x64.exe" https://aka.ms/vs/17/release/vc_redist.x64.exe
+
+      - name: Build Windows installer
+        run: windeployqt app\release\mindforger.exe --dir app\release\bin --no-compiler-runtime && "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" /Q /DVcRedistPath="%RUNNER_TEMP%\vcredist_x64.exe" build\windows\installer\mindforger-setup.iss
+
+      - name: Archive push build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-ci-build
+          path: app/release/installer/mindforger-setup.exe

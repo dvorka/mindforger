@@ -1,3 +1,54 @@
+2026-09-02  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v2.1.0 - Local LLMs support, Notes semantic search and orphan
+      library documents management.
+    * Project upgraded from C++11 to C++14 - this is the conservative change which
+      enables MindForger to be built on GitHub Actions/Appveyor/CI nodes again and
+      catches up a bit on new distros.
+    * Enhancement: autolinking renders manual links and auto links in different
+      colors - blue vs. green.
+    * Enhancement: improved tag rendering for TODO/WIP/DONE and priorities P0/P1/P2.
+    * Feature: ollama integration brings privacy safe Wingman via local ollama
+      hosted LLMs.
+    * Feature: OpenRouter LLM provider support - OpenRouter (openrouter.ai)
+      can now be configured as Wingman's LLM provider using OpenAI-compatible API.
+    * Enhancement: improved LLM providers configuration - ollama, OpenAI and OpenRouter
+      support environment vs. configuration, LLM model fetch and selection, indicate
+      whether the data are shared w/ 3rd party or not.
+    * Enhancement: library orphans detection.
+    * Build: reworked Snap packaging - bumped base core18 -> core24, switched to
+      strict confinement, replaced the classic qmake plugin options with the
+      craft-parts qmake plugin, refreshed build/stage packages for Ubuntu 24.04
+      and wired the Snap version to app_info.h like the other release artifacts.
+    * Build: added a classic-confinement Snap variant (build/snap/apply-classic.sh,
+      dist-snap-classic make target) for a downloadable GitHub Release build with
+      full host filesystem access, alongside the strict Snap Store build.
+    * Fix: the Snap build could silently package a stale, previously locally-built
+      binary (potentially an RC/debug build) instead of a fresh compile - fixed by
+      making the build self-contained (builds its own cmark-gfm dependency, strips
+      untracked host artifacts via 'git clean -xdf' on its own source copy) and by
+      fixing a latent app.pro bug where 'make install' resolved the compiled binary
+      against the source directory instead of the actual build directory, which only
+      ever mattered for an out-of-source/shadow build (like the Snap's).
+    * Fix: the first O name rendering after MF start no longer shows ellipsis.
+    * Fix: added escaping of ampersands in O name Qt view.
+    * Fix: Ctrl+/ now uses the model configured in Preferences instead of
+      a stale cached model when only the model name (not provider type) changes.
+    * Fix: macOS CI updated to use macos-13 (Intel) runner with
+      jurplel/install-qt-action@v4 to get Qt 5.15.2 with WebEngine - Homebrew's
+      qt@5 on Apple Silicon (macos-latest) no longer ships qtwebengine.
+    * Fix: source code fixed to be compilable w/o warning on systems w/ GCC 13+
+      (deprecated language and QT constructions updated & conditionally compiled).
+    * Fix: removed call incorrect cURL option CURL_HTTPOST for legacy POSTs.
+    * Fix: Linux desktop integration reworked - .desktop file and icons moved
+      to standard hicolor theme paths, AppStream metainfo added for Linux
+      software centers.
+    * Test fix: stabilized MindTestCase.LearnAmnesiaLearn expected
+      stale ontology tags count (14/17) - updated to match the P0/P1/P2 priority
+      tags added by the tag colorization feature.
+    * Doc: added media directory w/ banner(s), screenshots and favicon.
+    * Experimental WIP Feature: embeddings calculation by ollama hosted LLM models.
+
 2024-02-16  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.0.0 - a major release that removes unused features

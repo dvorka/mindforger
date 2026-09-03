@@ -1,7 +1,7 @@
 /*
  cmark_gfm_markdown_transcoder.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
   #include <cmark-gfm-core-extensions.h>
   #include <registry.h>
   #include <parser.h>
+  #include <regex>
 #endif // MF_MD_2_HTML_CMARK
 
 namespace m8r {
@@ -81,7 +82,13 @@ string* CmarkGfmMarkdownTranscoder::to(RepresentationType format, const string* 
         if(doc) {
             char *rendered_html = cmark_render_html_with_mem(doc, CMARK_OPT_DEFAULT | CMARK_OPT_UNSAFE, parser->syntax_extensions, mem);
             if (rendered_html) {
-                html->append(rendered_html);
+                // regex for autolinked URLs (text == href)
+                //   <a href="http://example.com">http://example.com</a>
+                // replace with:
+                //   <a class="mf-url" href="http://example.com">http://example.com</a>
+                string rendered(rendered_html);
+                regex url_regex("<a href=\"([^\"]+)\">\\1</a>");
+                html->append(regex_replace(rendered, url_regex, "<a class=\"mf-url\" href=\"$1\">$1</a>"));
                 free(rendered_html);
             }
             cmark_node_free(doc);

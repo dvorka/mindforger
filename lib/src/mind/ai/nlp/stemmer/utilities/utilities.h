@@ -7,6 +7,13 @@
 it under the terms of the BSD License.
 * @{*/
 
+/* local modification (Martin Dvorak, 2026-09-01):
+ * dropped the "public std::unary_function<T, bool>" base class from within<T> below.
+ * std::unary_function is deprecated since C++11 and removed in C++17, and its
+ * argument_type/result_type typedefs are not referenced anywhere in this codebase -
+ * within<T> is only ever used as a plain functor, so the inheritance was dead
+ * boilerplate kept just to silence -Wdeprecated-declarations under GCC 13. */
+
 #ifndef __UTILITIES_H__
 #define __UTILITIES_H__
 
@@ -44,7 +51,7 @@ inline bool is_within(const T value, const T first, const T second)
 
 ///Determines if a value is within a given range.
 template<typename T>
-class within : public std::unary_function<T, bool>
+class within
     {
 public:
     /**Constructor.

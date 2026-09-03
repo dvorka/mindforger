@@ -1,7 +1,7 @@
 /*
  tag.h     MindForger application entry point
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -65,13 +65,31 @@ public:
         static const std::string KEY_COOL = std::string{"cool"};
         return KEY_COOL;
     }
+    // TODO > WIP > DONE
     static const std::string& KeyTodo() {
         static const std::string KEY_TODO = std::string{"todo"};
         return KEY_TODO;
     }
+    static const std::string& KeyWip() {
+        static const std::string KEY_WIP= std::string{"wip"};
+        return KEY_WIP;
+    }
     static const std::string& KeyDone() {
         static const std::string KEY_DONE = std::string{"done"};
         return KEY_DONE;
+    }
+    // priority: p2 > p1 > p0
+    static const std::string& KeyP2() {
+        static const std::string KEY_P2 = std::string{"p2"};
+        return KEY_P2;
+    }
+    static const std::string& KeyP1() {
+        static const std::string KEY_P1= std::string{"p1"};
+        return KEY_P1;
+    }
+    static const std::string& KeyP0() {
+        static const std::string KEY_P0= std::string{"p0"};
+        return KEY_P0;
     }
     static const std::string& KeyPersonal() {
         static const std::string KEY_PERSONAL = std::string{"personal"};

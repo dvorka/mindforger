@@ -1,7 +1,7 @@
 /*
  mind.h     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -30,6 +30,8 @@
 #include "ai/ai.h"
 #include "ai/llm/wingman.h"
 #include "ai/llm/openai_wingman.h"
+#include "ai/llm/ollama_wingman.h"
+#include "ai/llm/openrouter_wingman.h"
 #include "ai/llm/mock_wingman.h"
 #include "associated_notes.h"
 #include "ontology/thing_class_rel_triple.h"
@@ -37,6 +39,7 @@
 #include "../config/configuration.h"
 #include "../representations/representation_interceptor.h"
 #include "../representations/markdown/markdown_configuration_representation.h"
+#include "../representations/markdown/markdown_document_representation.h"
 
 namespace m8r {
 
@@ -195,15 +198,17 @@ private:
      */
     Ai* ai;
 
+public:
     /**
      * Configuration driven Wingman initialization.
      */
     void initWingman();
+
+private:
     /**
-     * Wingman LLM provider currently used by Mind.
-     * (user to detect configuration changes)
+     * ID of the active LLM provider currently used by Mind.
      */
-    WingmanLlmProviders wingmanLlmProvider;
+    std::string wingmanActiveLlmProviderId;
     /**
      * Wingman
      */
@@ -683,10 +688,23 @@ public:
     void noteOnRename(const std::string& oldName, const std::string& newName);
 
     /*
+     * LIBRARY (information source)
+     */
+
+    /**
+     * @brief Find Os which reference non-existent documents.
+     */
+    int findLibraryOrphanOs();
+
+    /*
      * WINGMAN
      */
     Wingman* getWingman();
     CommandWingmanChat wingmanChat(CommandWingmanChat& command);
+    /**
+     * @brief Use ollama Wingman to refresh text embeddings for all Notes.
+     */
+    void refreshEmbeddings();
 
     /*
      * DIAGNOSTICS

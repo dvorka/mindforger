@@ -2,7 +2,7 @@
 #
 # MindForger thinking notebook
 #
-# Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-export MINDFORGER_VERSION="2.0.0"
+export MINDFORGER_VERSION="2.1.0"
 
 # aligned with Ubuntu 18.4
 # export QT_VERSION="5.9.9"

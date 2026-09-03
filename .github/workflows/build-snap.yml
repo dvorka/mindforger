@@ -1,0 +1,36 @@
+name: Snap build
+
+# build the classic-confinement Snap package only for release pull requests:
+#   - source (head) branch must be rel/<major.minor.patch>
+#   - target (base) branch must be master
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Prepare classic-confinement snapcraft.yaml
+        # build/snap/snapcraft.yaml is the STRICT (Snap Store) manifest; the
+        # downloadable GitHub Release build is the CLASSIC variant derived from it -
+        # mirrors what 'make dist-snap-classic' does for a local build
+        run: |
+          cp -vf build/snap/snapcraft.yaml snapcraft.yaml
+          build/snap/apply-classic.sh snapcraft.yaml
+
+      - name: Build Snap package
+        id: snapcraft
+        uses: snapcore/action-build@v1
+
+      - name: Archive push build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mindforger-snap-classic
+          path: ${{ steps.snapcraft.outputs.snap }}
+          if-no-files-found: error

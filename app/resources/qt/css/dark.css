@@ -18,6 +18,8 @@ body > *:last-child {
 }
 
 a {
+  color: #4ecb71; }
+a.mf-url {
   color: #4183C4; }
 a.absent {
   color: #cc0000; }

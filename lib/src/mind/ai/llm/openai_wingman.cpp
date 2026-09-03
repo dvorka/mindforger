@@ -1,7 +1,7 @@
 /*
  openai_wingman.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -26,6 +26,11 @@ namespace m8r {
 
 using namespace std;
 
+
+// OpenAI models: "gpt-3.5-turbo" and "gpt-4" are aliases for the latest models
+const std::string LLM_GPT_35_TURBO=string{"gpt-3.5-turbo"};
+const std::string LLM_GPT_4=string{"gpt-4"};
+
 /*
  * cURL callback for writing data to string.
  */
@@ -40,21 +45,148 @@ size_t openaiCurlWriteCallback(void* contents, size_t size, size_t nmemb, std::s
  * OpenAi Wingman class implementation.
  */
 
-OpenAiWingman::OpenAiWingman(
-    const string& apiKey,
-    const std::string& llmModel
-)
+OpenAiWingman::OpenAiWingman(const std::string& apiKey)
     : Wingman(WingmanLlmProviders::WINGMAN_PROVIDER_OPENAI),
       apiKey{apiKey},
-      llmModel{llmModel}
+      llmModels{},
+      defaultLlmModel{LLM_GPT_35_TURBO},
+      lastListModelsSucceeded{false}
 {
-    MF_DEBUG("OpenAiWingman::OpenAiWingman() apiKey: " << apiKey << endl);
+    // never log the raw API key - debug logs get shared for troubleshooting
+    MF_DEBUG(
+        "OpenAiWingman::OpenAiWingman() apiKey configured: "
+        << boolalpha << !this->apiKey.empty() << endl);
+
+    listModels();
 }
 
 OpenAiWingman::~OpenAiWingman()
 {
 }
 
+std::vector<std::string>& OpenAiWingman::listModels()
+{
+    llmModels.clear();
+
+    // try to fetch models from OpenAI API
+    try {
+        listModelsHttpGet();
+    } catch (...) {
+        MF_DEBUG("OpenAiWingman::listModels() failed to fetch from API, using defaults" << endl);
+    }
+    
+    // if API call failed or returned no models, use defaults
+    if (llmModels.empty()) {
+        llmModels.push_back(LLM_GPT_35_TURBO);
+        llmModels.push_back(LLM_GPT_4);
+    }
+
+    return llmModels;
+}
+
+void OpenAiWingman::listModelsHttpGet()
+{
+    lastListModelsSucceeded = false;
+
+    string url = "https://api.openai.com/v1/models";
+
+    MF_DEBUG("OpenAiWingman::listModelsHttpGet() url: " << url << endl);
+    
+#if !defined(__APPLE__) && !defined(_WIN32)
+    CURL* curl = curl_easy_init();
+    if (!curl) {
+        return;
+    }
+#endif
+
+    string responseString;
+    
+#if defined(_WIN32) || defined(__APPLE__)
+    QNetworkAccessManager networkManager;
+    
+    QNetworkRequest request(QUrl(QString::fromStdString(url)));
+    request.setHeader(
+        QNetworkRequest::ContentTypeHeader,
+        "application/json");
+    request.setRawHeader(
+        "Authorization",
+        "Bearer " + QString::fromStdString(this->apiKey).toUtf8());
+    
+    QNetworkReply* reply = networkManager.get(request);
+    QEventLoop loop;
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+    
+    auto error = reply->error();
+    if (error != QNetworkReply::NoError) {
+        MF_DEBUG("OpenAiWingman::listModelsHttpGet() error: " << reply->errorString().toStdString() << endl);
+        reply->deleteLater();
+        return;
+    }
+    
+    QByteArray read = reply->readAll();
+    responseString = QString{read}.toStdString();
+    reply->deleteLater();
+#else
+    // CURL implementation
+    curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, openaiCurlWriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseString);
+    
+    struct curl_slist* headers = NULL;
+    headers = curl_slist_append(
+        headers,
+        ("Authorization: Bearer " + this->apiKey).c_str());
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    
+    CURLcode res = curl_easy_perform(curl);
+    curl_easy_cleanup(curl);
+    curl_slist_free_all(headers);
+    
+    if (res != CURLE_OK) {
+        MF_DEBUG("OpenAiWingman::listModelsHttpGet() error: " << curl_easy_strerror(res) << endl);
+        return;
+    }
+#endif
+
+    // parse JSON response
+    nlohmann::json httpResponseJson;
+    try {
+        httpResponseJson = nlohmann::json::parse(responseString);
+    } catch (...) {
+        MF_DEBUG(
+            "Error: unable to parse OpenAI models JSON response:" << endl <<
+            "'" << responseString << "'" << endl
+        );
+        return;
+    }
+    
+    MF_DEBUG(
+        "OpenAiWingman::listModelsHttpGet() parsed response:" << endl
+        << ">>>"
+        << httpResponseJson.dump(4)
+        << "<<<"
+        << endl);
+
+    // OpenAI returns HTTP 200 with a JSON error body (e.g. bad API key), so a
+    // successful parse alone doesn't mean success - a "data" array does
+    if (httpResponseJson.contains("data")) {
+        lastListModelsSucceeded = true;
+        for (const auto& item : httpResponseJson["data"].items()) {
+            if (item.value().contains("id")) {
+                string modelId = item.value()["id"];
+                // filter to only include GPT models (optional)
+                if (modelId.find("gpt") != string::npos) {
+                    llmModels.push_back(modelId);
+                    MF_DEBUG("  Added model: " << modelId << endl);
+                }
+            }
+        }
+    }
+}
+
+// TODO refactor to parent class so that all wingmans can use it
 /**
  * OpenAI cURL GET request.
  *
@@ -90,7 +222,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
 
         */
         nlohmann::json messageSystemJSon{};
-        messageSystemJSon["role"] = "system"; // system (instruct GPT who it is), user (user prompts), assistant (GPT answers)
+        messageSystemJSon["role"] = "system"; // system (instruct LLM who it is), user (user prompts), assistant (LLM answers)
         messageSystemJSon["content"] =
             // "You are a helpful assistant that returns HTML-formatted answers to the user's prompts."
             "You are a helpful assistant."
@@ -117,6 +249,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             << "<<<"
             << endl);
 
+        // TODO this must be refactored to parent class so that all Wingmans can use it
 #if defined(_WIN32) || defined(__APPLE__)
         /* Qt Networking examples:
          *
@@ -142,7 +275,6 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
         QEventLoop loop;
         QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
         loop.exec();
-        reply->deleteLater();
 
         command.status = m8r::WingmanStatusCode::WINGMAN_STATUS_CODE_OK;
 
@@ -177,7 +309,10 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
                 "Successful OpenAI Wingman provider response:" << endl <<
                 "  '" << command.httpResponse << "'" << endl);
         }
+        reply->deleteLater();
 #else
+        // TODO refactor this section to a generic CURL call which gets: URL, body as C string and returns httpResponse
+
         // set up cURL options
         command.httpResponse.clear();
         curl_easy_setopt(
@@ -194,8 +329,11 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             &command.httpResponse);
 
         struct curl_slist* headers = NULL;
-        headers = curl_slist_append(headers, ("Authorization: Bearer " + apiKey).c_str());
-        headers = curl_slist_append(headers, "Content-Type: application/json");
+        headers = curl_slist_append(
+            headers,
+            ("Authorization: Bearer " + this->apiKey).c_str());
+        headers = curl_slist_append(
+            headers, "Content-Type: application/json");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
         // perform the request
@@ -223,7 +361,7 @@ void OpenAiWingman::curlGet(CommandWingmanChat& command) {
             command.httpResponse.clear();
             command.answerMarkdown.clear();
             command.answerTokens = 0;
-            command.answerLlmModel = llmModel;
+            command.answerLlmModel = llmModel.size()>0? llmModel: defaultLlmModel;
 
             return;
         }

@@ -1,7 +1,7 @@
 /*
  string-utils.h     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -120,11 +120,7 @@ static inline std::string &stringLeftTrim(std::string& s) {
         s.begin(),
         std::find_if(s.begin(),
         s.end(),
-#ifdef __APPLE__
         [](int c) {return !std::isspace(c);})
-#else
-        std::not1(std::ptr_fun<int, int>(isspace)))
-#endif
     );
     return s;
 }
@@ -134,13 +130,8 @@ static inline std::string &stringRightTrim(std::string& s) {
         std::find_if(
             s.rbegin(),
             s.rend(),
-#ifdef __APPLE__
             [](int c) {return !std::isspace(c);}
         ).base(),
-#else
-            std::not1(std::ptr_fun<int, int>(isspace))
-        ).base(),
-#endif
         s.end()
     );
     return s;

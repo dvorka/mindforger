@@ -1,7 +1,7 @@
 /*
  outline_header_view_presenter.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -74,8 +74,9 @@ void OutlineHeaderViewPresenter::refreshLivePreview()
     auxOutline.setDescription(d);
 
     double yScrollPct{0};
+
     QScrollBar* scrollbar = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor()->verticalScrollBar();
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(MF_QT_WEB_ENGINE)
     // WebEngine: scroll to same pct view
     if(scrollbar) {
         if(scrollbar->maximum()) {
@@ -101,7 +102,7 @@ void OutlineHeaderViewPresenter::refreshLivePreview()
     view->setHtml(QString::fromStdString(html));
 
     // IMPROVE share code between O header and N
-#if !defined(__APPLE__) && !defined(_WIN32) && !defined(MF_QT_WEB_ENGINE)
+#if !defined(MF_QT_WEB_ENGINE)
     // WebView: scroll to same pct view
     if(scrollbar) {
         if(scrollbar->maximum()) {

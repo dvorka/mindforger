@@ -1,7 +1,7 @@
  /*
  main_menu_view.cpp     MindForger thinking notebook
 
- Copyright (C) 2016-2025 Martin Dvorak <martin.dvorak@mindforger.com>
+ Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License
@@ -109,7 +109,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindAutolink->setVisible(false);
 #endif
 
-    actionMindWingman = new QAction(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman GPT"), mainWindow);
+    // if Wingman is not configured and/or capable, then dialog with error message is shown (unable to detect it here)
+    actionMindSemanticSearch = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Semantic Search"), mainWindow);
+    actionMindSemanticSearch->setCheckable(true);
+    actionMindSemanticSearch->setStatusTip(tr("Use Wingman LLM to search for similar Notes (associations) using text embeddings..."));
+    actionMindSemanticSearch->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
+
+    actionMindWingman = new QAction(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman LLM"), mainWindow);
     actionMindWingman->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Slash));
     actionMindWingman->setStatusTip(tr("Open Wingman dialog..."));
 
@@ -140,7 +146,21 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
         tr(
             "Synchronize library source directory with MindForger notebook(s) which represent"
             "library resources..."));
-    // library: deprecate
+    // library: find orphans
+    actionLibraryOrphans = new QAction(
+        QIcon(":/menu-icons/find.svg"),
+        tr("&Find orphans"),
+        mainWindow);
+    actionLibrarySync->setStatusTip(
+        tr("Find library Notebooks which reference non-existent documents..."));
+    // library: deprecate orphan Os
+    actionLibraryDeprecateOrphanOs = new QAction(
+        QIcon(":/menu-icons/delete.svg"),
+        tr("Deprecate &orphans"),
+        mainWindow);
+    actionLibraryDeprecateOrphanOs->setStatusTip(
+        tr("Deprecate library Notebooks that has tag which indicates reference of non-existent document..."));
+    // library: delete
     actionLibraryDeprecate = new QAction(
         QIcon(":/menu-icons/delete.svg"), tr("&Delete library"), mainWindow);
     actionLibraryDeprecate->setStatusTip(tr(
@@ -148,6 +168,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     // assemble Library sub-menu
     submenuMindLibrary->addAction(actionLibraryAdd);
     submenuMindLibrary->addAction(actionLibrarySync);
+    submenuMindLibrary->addAction(actionLibraryOrphans);
+    submenuMindLibrary->addAction(actionLibraryDeprecateOrphanOs);
     submenuMindLibrary->addAction(actionLibraryDeprecate);
 
     // dream ... sanity, integrity, detox, inference, assoc discovery, ...
@@ -189,6 +211,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addSeparator();
     menuMind->addAction(actionMindThink);
     menuMind->addAction(actionMindAutolink);
+    menuMind->addAction(actionMindSemanticSearch);
     menuMind->addAction(actionMindWingman);
     menuMind->addAction(actionMindTool);
     menuMind->addAction(actionMindScope);
@@ -565,7 +588,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionOutlineTWikiImport->setStatusTip(tr("Import Notebook from an external TWiki file and restart MindForger"));
     submenuOutlineImport->addAction(actionOutlineTWikiImport);
 
-    submenuOutlineWingman = menuOutline->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman GPT"));
+    submenuOutlineWingman = menuOutline->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman LLM"));
     actionOutlineWingmanSummarize = new QAction(tr("&Summarize"), mainWindow);
     actionOutlineWingmanSummarize->setStatusTip(tr("Ask Wingman to summarize text of the Notebook..."));
     submenuOutlineWingman->addAction(actionOutlineWingmanSummarize);
@@ -699,7 +722,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNoteImport->setStatusTip(tr("Import Note from an external file in a supported format"));
     actionNoteImport->setEnabled(false);
 
-    submenuNoteWingman = menuNote->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman GPT"));
+    submenuNoteWingman = menuNote->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman LLM"));
     actionNoteWingmanSummarize = new QAction(tr("&Summarize"), mainWindow);
     actionNoteWingmanSummarize->setStatusTip(tr("Ask Wingman to summarize text of the Note..."));
     submenuNoteWingman->addAction(actionNoteWingmanSummarize);
@@ -788,7 +811,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditSpellCheck = new QAction(QIcon(":/menu-icons/paste.svg"), tr("&Spell Check"), mainWindow);
     actionEditSpellCheck->setStatusTip(tr("Spell check Notebook or Note description"));
 
-    submenuEditWingman = menuEdit->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman GPT"));
+    submenuEditWingman = menuEdit->addMenu(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman LLM"));
     actionEditWingmanFixGrammar = new QAction(tr("&Fix Grammar"), mainWindow);
     actionEditWingmanFixGrammar->setStatusTip(tr("Ask Wingman to fix grammar errors in the selected text / word under the cursor..."));
     submenuEditWingman->addAction(actionEditWingmanFixGrammar);
@@ -1067,6 +1090,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionHelpAbout = new QAction(QIcon(":/menu-icons/write.svg"), tr("&About MindForger"), mainWindow);
     actionHelpAbout->setStatusTip(tr("About MindForger..."));
 
+    actionHelpSponsor = new QAction(QIcon(":/menu-icons/heart.svg"), tr("&Sponsor"), mainWindow);
+    actionHelpSponsor->setStatusTip(tr("Sponsor MindForger..."));
+
     menuHelp = qMenuBar->addMenu(tr("&Help"));
     menuHelp->addAction(actionHelpDocumentation);
     menuHelp->addAction(actionHelpWeb);
@@ -1083,6 +1109,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
 #endif
     menuHelp->addAction(actionHelpAboutQt);
     menuHelp->addAction(actionHelpAbout);
+    menuHelp->addSeparator();
+    menuHelp->addAction(actionHelpSponsor);
 }
 
 MainMenuView::~MainMenuView()

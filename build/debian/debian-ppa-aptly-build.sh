@@ -2,7 +2,7 @@
 #
 # MindForger knowledge management tool
 #
-# Copyright (C) 2016-2023 Martin Dvorak <martin.dvorak@mindforger.com>
+# Copyright (C) 2016-2026 Martin Dvorak <martin.dvorak@mindforger.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@
 #
 # Example:
 #
-#   MF_DEBIAN_DEB_DIR=~/p/mindforger/debian/aptly/mindforger/12-bookworm \ 
+#   MF_DEBIAN_DEB_DIR=~/p/mindforger/debian/aptly/mindforger/12-bookworm \
 #   MF_DEBIAN_RELEASE=bookworm \
 #   ./debian-ppa-aptly-build.sh
 #
@@ -65,10 +65,10 @@ export MF_OUT_PPA_ALL_DEBIAN_RELEASES_DIR="/home/dvorka/p/mindforger/debian/debi
 
 
 # Add ONE .deb package to aptly repository:
-#   
+#
 # Parameters:
 #   $1 - MF version     e.g. 1.55.0
-#   $2 - Debian release e.g. stretch 
+#   $2 - Debian release e.g. stretch
 #
 function add_deb {
     NEW_MF_VERSION=${1}
@@ -166,10 +166,10 @@ function add_debian_release {
         export MF_DEB_FILE_NAME=$(basename ${P})
 
         echo ${MF_DEB_FILE_NAME} | tr "_" " " | while read A B C
-        do 
+        do
         echo $B | tr "-" " " | while read X Y
         do
-            echo $X 
+            echo $X
         done
         done | while read MF_RELEASE_VERSION
         do
@@ -191,7 +191,7 @@ function add_debian_release {
     done
 }
 
-# 
+#
 # MAIN
 #
 

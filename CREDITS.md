@@ -56,6 +56,14 @@ Acknowledgements to reviewers, testers and supporters:
 * Tomas 'Floex' Dvorak (review, testing)
 * Honza Odstrcil (feedback)
 
+<!--
+MindForger project is supported by:
+
+* [Augment Code](https://www.augmentcode.com/) - FLOSS support - high quality PR reviews.
+* [GitHub](https://github.com) - GitHub Copilot CLI - FLOSS tier - AI assisted coding.
+* [Google](https://www.google.com) - Gemini CLI - free tier - AI assisted coding.
+-->
+
 Special thanks to:
 
 * Bjarne Stroustrup (C++ - for inspiring visions and being the authority behind C++ language)
