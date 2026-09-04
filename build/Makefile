@@ -22,7 +22,9 @@
 # variables
 #
 
-MINDFORGER_VERSION := 2.1.0
+# lib/src/app_info.h (MINDFORGER_VERSION_STRING) is the authoritative version source
+MINDFORGER_VERSION := $(shell sed -n 's/.*MINDFORGER_VERSION_STRING "\(.*\)"/\1/p' ../lib/src/app_info.h)
+MINDFORGER_VERSION_MAJOR_MINOR := $(word 1,$(subst ., ,$(MINDFORGER_VERSION))).$(word 2,$(subst ., ,$(MINDFORGER_VERSION)))
 MINDFORGER_RELEASE_BASE_DIR := /home/dvorka/p/mindforger/release
 MINDFORGER_RELEASE_DIR := $(MINDFORGER_RELEASE_BASE_DIR)/$(MINDFORGER_VERSION)-maker
 
@@ -261,9 +263,24 @@ localization: ## update and release localization strings: MF_LANG=en
 	cd make && ./l10n-update-strings.sh && ./l10n-edit-and-release.sh $(MF_LANG)
 
 
-.PHONY: ver-find
-ver-find: ## pre-version update finder
-	cd .. && git grep -n "1\.55"
+.PHONY: releng-rel-version
+releng-rel-version: ## pre-version update finder
+	cd .. && git grep -n "2\.1\."
+
+
+.PHONY: releng-ver-set
+releng-ver-set: ## propagate lib/src/app_info.h version to all release/packaging files
+	@echo "Setting version $(MINDFORGER_VERSION) ($(MINDFORGER_VERSION_MAJOR_MINOR)) in release/packaging files..."
+	sed -i "s/^version: .*/version: $(MINDFORGER_VERSION_MAJOR_MINOR).{build}/" ../appveyor.yml
+	sed -i "s/^export NEW_VERSION_NAME=.*/export NEW_VERSION_NAME=\"$(MINDFORGER_VERSION)\"/" debian/debian-aptly-add-deb.sh
+	sed -i "s/^export ARG_VERSION=.*/export ARG_VERSION=\"$(MINDFORGER_VERSION)\"/" debian/debian-make-deb.sh
+	sed -i -E "s/^mindforger \([0-9]+\.[0-9]+\.[0-9]+(-[^)]*)\)/mindforger ($(MINDFORGER_VERSION)\1)/" debian/debian/changelog
+	sed -i "s/export MFVERSION=\"[0-9.]*\"/export MFVERSION=\"$(MINDFORGER_VERSION)\"/" fedora/fedora-rpm-from-deb.sh
+	sed -i "s/^export MINDFORGER_VERSION=.*/export MINDFORGER_VERSION=\"$(MINDFORGER_VERSION)\"/" macos/env.sh
+	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" snap/snapcraft.yaml
+	sed -i "s/^export ARG_VERSION=.*/export ARG_VERSION=\"$(MINDFORGER_VERSION)\"/" tarball/tarball-build.sh
+	sed -i -E "s/^mindforger \([0-9]+\.[0-9]+\.[0-9]+(-[^)]*)\)/mindforger ($(MINDFORGER_VERSION)\1)/" ubuntu/debian/changelog
+	@echo "Done. Review changes with: git diff"
 
 
 .PHONY: dist-pad-refresh

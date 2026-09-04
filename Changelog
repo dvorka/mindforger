@@ -1,3 +1,12 @@
+2026-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v2.2.0 - ...
+    * Build: simplified version handling - lib/src/app_info.h is now the one and
+      only authoritative source of MindForger's version; build/Makefile's
+      MINDFORGER_VERSION is parsed from it, and the new `make releng-ver-set`
+      target propagates it to appveyor.yml and all Debian/Fedora/macOS/Snap/
+      tarball release/packaging scripts.
+
 2026-09-02  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.1.0 - Local LLMs support, Notes semantic search and orphan

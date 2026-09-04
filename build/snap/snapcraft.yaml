@@ -14,7 +14,7 @@
 name: mindforger
 title: MindForger
 base: core24
-version: '2.1.0'
+version: '2.2.0'
 summary: Thinking notebook and Markdown IDE
 description: |
   MindForger is a human-mind-inspired personal knowledge management tool and
