@@ -17,6 +17,10 @@
 
 version: 2.2.{build}
 
+branches:
+  only:
+    - master
+
 skip_commits:
   files:
     - '**/*.md'
