@@ -225,6 +225,7 @@ else
 	cd ../app && pwd && gdb --args ./mindforger /home/dvorka/mf-devel/library-trainer
 endif
 
+
 #
 # install
 #
