@@ -60,41 +60,41 @@ If you have any ideas, suggestions, news to share, or constructive criticism to 
 ## Installation
 Install:
 
-* [macOS](https://github.com/dvorka-oss/mindforger/wiki/Installation#macos)
-* [Windows](https://github.com/dvorka-oss/mindforger/wiki/Installation#windows)
-* [Ubuntu](https://github.com/dvorka-oss/mindforger/wiki/Installation#ubuntu)
-* [Debian](https://github.com/dvorka-oss/mindforger/wiki/Installation#debian)
-* [Fedora](https://github.com/dvorka-oss/mindforger/wiki/Installation#fedora)
-* [FreeBSD](https://github.com/dvorka-oss/mindforger/wiki/Installation#freebsd)
-* [Arch Linux](https://github.com/dvorka-oss/mindforger/wiki/Installation#arch-linux)
-* [NixOS](https://github.com/dvorka-oss/mindforger/wiki/Installation#nixos)
-* [openSUSE](https://github.com/dvorka-oss/mindforger/wiki/Installation#opensuse)
-* [WSL](https://github.com/dvorka-oss/mindforger/wiki/Installation#wsl)
+* [macOS](https://github.com/dvorka/mindforger/wiki/Installation#macos)
+* [Windows](https://github.com/dvorka/mindforger/wiki/Installation#windows)
+* [Ubuntu](https://github.com/dvorka/mindforger/wiki/Installation#ubuntu)
+* [Debian](https://github.com/dvorka/mindforger/wiki/Installation#debian)
+* [Fedora](https://github.com/dvorka/mindforger/wiki/Installation#fedora)
+* [FreeBSD](https://github.com/dvorka/mindforger/wiki/Installation#freebsd)
+* [Arch Linux](https://github.com/dvorka/mindforger/wiki/Installation#arch-linux)
+* [NixOS](https://github.com/dvorka/mindforger/wiki/Installation#nixos)
+* [openSUSE](https://github.com/dvorka/mindforger/wiki/Installation#opensuse)
+* [WSL](https://github.com/dvorka/mindforger/wiki/Installation#wsl)
 
 Build:
 
-* [build on macOS](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-macos)
-* [build on Windows](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-windows)
-* [build on Ubuntu](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-ubuntu)
-* [build on Debian](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-debian)
-* [build on Fedora](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-fedora)
-* [build on Gentoo](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-gentoo)
-* [build on NixOS](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-nixos)
-* [build on WSL](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-wsl)
+* [build on macOS](https://github.com/dvorka/mindforger/wiki/Installation#build-on-macos)
+* [build on Windows](https://github.com/dvorka/mindforger/wiki/Installation#build-on-windows)
+* [build on Ubuntu](https://github.com/dvorka/mindforger/wiki/Installation#build-on-ubuntu)
+* [build on Debian](https://github.com/dvorka/mindforger/wiki/Installation#build-on-debian)
+* [build on Fedora](https://github.com/dvorka/mindforger/wiki/Installation#build-on-fedora)
+* [build on Gentoo](https://github.com/dvorka/mindforger/wiki/Installation#build-on-gentoo)
+* [build on NixOS](https://github.com/dvorka/mindforger/wiki/Installation#build-on-nixos)
+* [build on WSL](https://github.com/dvorka/mindforger/wiki/Installation#build-on-wsl)
 
 Docker:
 
-* [build and run container](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-and-run-in-container)
+* [build and run container](https://github.com/dvorka/mindforger/wiki/Installation#build-and-run-in-container)
 
 Tarball:
 
-* [download tarball](https://github.com/dvorka-oss/mindforger/releases)
+* [download tarball](https://github.com/dvorka/mindforger/releases)
 
 Nightly builds:
 
-* [macOS .dmg nightly](https://github.com/dvorka-oss/mindforger/actions)
+* [macOS .dmg nightly](https://github.com/dvorka/mindforger/actions)
 * [Windows installer nightly](https://ci.appveyor.com/project/dvorka/mindforger/build/artifacts)
-* [tarball nightly](https://github.com/dvorka-oss/mindforger/actions/workflows/build_ubuntu.yml)
+* [tarball nightly](https://github.com/dvorka/mindforger/actions/workflows/build_ubuntu.yml)
 
 Check also [packages](https://pkgs.org/search/?q=mindforger) for Linux and Unix.
 
@@ -103,12 +103,12 @@ Check also [packages](https://pkgs.org/search/?q=mindforger) for Linux and Unix.
 ## Documentation
 Read:
 
-* [Getting started](https://github.com/dvorka-oss/mindforger/wiki/Getting-started)
-* [Installation](https://github.com/dvorka-oss/mindforger/wiki/Installation)
-* [User documentation](https://github.com/dvorka-oss/mindforger/wiki/User-documentation)
-* [Developer documentation](https://github.com/dvorka-oss/mindforger/wiki/Developer-documentation)
-* [Project history](https://github.com/dvorka-oss/mindforger/wiki/History)
-* [FAQs](https://github.com/dvorka-oss/mindforger/wiki/FAQs)
+* [Getting started](https://github.com/dvorka/mindforger/wiki/Getting-started)
+* [Installation](https://github.com/dvorka/mindforger/wiki/Installation)
+* [User documentation](https://github.com/dvorka/mindforger/wiki/User-documentation)
+* [Developer documentation](https://github.com/dvorka/mindforger/wiki/Developer-documentation)
+* [Project history](https://github.com/dvorka/mindforger/wiki/History)
+* [FAQs](https://github.com/dvorka/mindforger/wiki/FAQs)
 
 Watch:
 
@@ -121,4 +121,4 @@ Check:
 
 
 ## Bugs and Feature Requests
-https://github.com/dvorka-oss/mindforger/issues
+https://github.com/dvorka/mindforger/issues
