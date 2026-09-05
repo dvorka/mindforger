@@ -218,7 +218,7 @@ else
 	# cd ../app && pwd && ./mindforger /home/dvorka/mf-devel/bug-copy-image
 endif
 
-run-gdb: build-dev ## run MindForger using gdb
+run-gdb: clean build-dev ## run MindForger using gdb
 ifeq ($(UNAME), Darwin)
 	cd ../app/mindforger.app/Contents/MacOS && ./mindforger /Users/dvorka/mf-devel/mf-copy
 else
