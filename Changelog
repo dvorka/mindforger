@@ -13,6 +13,7 @@
       which corrupted the result - fixed by verbatim using CommonMark's <...>.
     * Fix: "arrow down" in the dialog to find Note/Outline by name finally gives
       always focus to the first entry in the list instead of scrolling down.
+    * Cleanup: stripped malformed iCCP profile from (un)used logos.
 
 2026-09-02  Martin Dvorak  <martin.dvorak@mindforger.com>
 
