@@ -154,8 +154,8 @@ else
 fi
 
 # Ubuntu removed legacy WebKit (libqt5webkit5-dev) starting w/ 26.04 LTS (resolute):
-# - older Ubuntu versions (jammy, noble) to use WebKit which MF used for years
-# - newer Ubuntu versions (resolute, ...) to use WebEngine which is used by Win and macOS versions of MF
+# - older Ubuntu versions (jammy, noble) still get legacy WebKit, which MF used for years
+# - newer Ubuntu versions (resolute, ...) use WebEngine, MF's default everywhere else
 export WEBENGINE_DISTROS=(resolute)
 
 function usesWebengine {
@@ -172,9 +172,14 @@ function usesWebengine {
 }
 
 function patchDebianForWebengine {
-    echo "Patching debian/control + debian/rules: ${UBUNTUVERSION} needs Qt WebEngine (libqt5webkit5-dev unavailable there)"
+    echo "Patching debian/control: ${UBUNTUVERSION} needs Qt WebEngine (libqt5webkit5-dev unavailable there)"
     sed -i 's/libqt5webkit5-dev/qtwebengine5-dev/' ./debian/control
-    printf '\noverride_dh_auto_configure:\n\tdh_auto_configure -- CONFIG+=mfwebengine\n' >> ./debian/rules
+    # no debian/rules override needed: Qt WebEngine is qmake's own default now
+}
+
+function patchDebianForWebkit {
+    echo "Patching debian/rules: ${UBUNTUVERSION} still builds against legacy Qt WebKit (libqt5webkit5-dev, per debian/control)"
+    printf '\noverride_dh_auto_configure:\n\tdh_auto_configure -- CONFIG+=mfwebkit\n' >> ./debian/rules
 }
 
 # shell variables
@@ -331,8 +336,9 @@ function releaseForParticularUbuntuVersion {
     then
         echo -e "\n# HTML rendering: modern WebEngine ############################"
 	    patchDebianForWebengine
-    else:
+    else
         echo -e "\n# HTML rendering: legacy WebKit ############################"
+        patchDebianForWebkit
     fi
     echo "Changelog:"
     cat ./debian/changelog
@@ -360,11 +366,14 @@ function releaseForParticularUbuntuVersion {
     # like this qt5-default.
     # Instead debian/rules file exports env var w/ Qt choice
     # .pro file is also extended to have 'make install' target
+    # Qt WebEngine is now the project default (CONFIG+=mfwebengine is accepted but
+    # redundant), so distros still on legacy WebKit (libqt5webkit5-dev, patched into
+    # debian/control below) need CONFIG+=mfwebkit to opt out of the new default
     if usesWebengine "${UBUNTUVERSION}"
     then
-	qmake -r mindforger.pro CONFIG+=mfwebengine
-    else
 	qmake -r mindforger.pro
+    else
+	qmake -r mindforger.pro CONFIG+=mfwebkit
     fi
 
     # 6) optionally PATCH source files e.g. different Ubuntu distro specific paths

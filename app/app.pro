@@ -62,20 +62,20 @@ mfoldhunspell | equals(OS_DISTRO_VERSION, "Windows") | equals(OS_DISTRO_VERSION,
   message("Hunspell: configuring use of NEW API on OS: $$OS_DISTRO_VERSION")
 }
 
-# webkit is supposed to be OBSOLETED by webengine, but webengine is disabled
-# on Linux since Qt 5.9 due to its tragic performance -> conditional compilation
-# seems to be the only way:
-# - webkit on Linux
-# - webengine on Windows and macOS
-win32|macx|mfwebengine {
+# Qt WebEngine (Chromium-based) is the default HTML rendering backend on all
+# platforms - Linux included since Qt WebKit is EOL and no longer packaged by
+# recent distros. Qt WebKit remains available on Linux for anyone who needs it
+# (e.g. older distros without WebEngine packages) via CONFIG+=mfwebkit:
+#   qmake CONFIG+=mfwebkit mindforger.pro
+mfwebkit {
+    message("HTML rendering: Qt WebKit (legacy Apple WebKit)")
+    QT += webkit
+    QT += webkitwidgets
+} else {
     message("HTML rendering: Qt WebEngine (modern Chromium)")
     DEFINES += MF_QT_WEB_ENGINE
     QT += webengine
     QT += webenginewidgets
-} else {
-    message("HTML rendering: Qt WebKit (legacy Apple WebKit)")
-    QT += webkit
-    QT += webkitwidgets
 }
 
 # Dependencies:
@@ -337,7 +337,7 @@ HEADERS += \
     src/qt/dialogs/fts_dialog_presenter.h \
     src/qt/gear/apple_utils.h
 
-win32|macx|mfwebengine {
+!mfwebkit {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
 }
 
@@ -458,7 +458,7 @@ SOURCES += \
     src/qt/outline_header_view_model.cpp \
     src/qt/dialogs/fts_dialog_presenter.cpp
 
-win32|macx|mfwebengine {
+!mfwebkit {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp
 }
 

@@ -166,11 +166,11 @@ else
 	ls -al ../app/mindforger
 endif
 
-.PHONY: build-webengine
-build-webengine: clean-app ## build MindForger application binary w/ Qt WebEngine (macOS|Win) insted of default Qt WebKit (Linux)
-	@echo "Building MindForger executable with Qt WebEngine support..."
-	@echo "Prerequisite: Qt WebEngine must be installed: sudo apt-get install -y qtwebengine5-dev qtwebengine5-dev-tools"
-	cd .. && qmake -r mindforger.pro CONFIG+=mfwebengine DEFINES+=DO_MF_WEBENGINE && make -j $(CPU_CORES) ; cd ..
+.PHONY: build-webkit
+build-webkit: clean-app ## build MindForger application binary w/ legacy Qt WebKit instead of default Qt WebEngine (Linux only)
+	@echo "Building MindForger executable with legacy Qt WebKit support..."
+	@echo "Prerequisite: Qt WebKit must be installed: sudo apt-get install -y libqt5webkit5-dev"
+	cd .. && qmake -r mindforger.pro CONFIG+=mfwebkit && make -j $(CPU_CORES) ; cd ..
 	@echo "If build succeeded, then MindForger executable can be found in:\n  app/mindforger"
 	ls -al ../app/mindforger
 
@@ -233,18 +233,21 @@ endif
 #
 
 
+# Qt WebEngine is the default HTML rendering backend (see build-webkit target above
+# for the legacy Qt WebKit alternative, which needs libqt5webkit5-dev instead)
+
 .PHONY: devenv-ubuntu
 devenv-ubuntu:
-	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libcurl4-gnutls-dev libqt5webkit5-dev qttools5-dev-tools qt5-default ccache cmake
+	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libcurl4-gnutls-dev qtwebengine5-dev qttools5-dev-tools qt5-default ccache cmake
 
 
 devenv-ubuntu-2204:
-	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libcurl4-gnutls-dev libqt5webkit5-dev qttools5-dev-tools qtbase5-dev qt5-qmake ccache cmake
+	sudo apt-get install build-essential zlib1g-dev libhunspell-dev libcurl4-gnutls-dev qtwebengine5-dev qttools5-dev-tools qtbase5-dev qt5-qmake ccache cmake
 
 
 .PHONY: devenv-debian
 devenv-debian:
-	sudo apt-get install build-essential zlib1g-dev libcurl4-gnutls-dev libhunspell-dev libqt5webkit5-dev qttools5-dev-tools ccache cmake debhelper
+	sudo apt-get install build-essential zlib1g-dev libcurl4-gnutls-dev libhunspell-dev qtwebengine5-dev qttools5-dev-tools ccache cmake debhelper
 
 
 install-dev-local: ../deps/cmark-gfm/build ../Makefile ../lib/tests/Makefile clean build-rc ## install MindForger RC build to ~/bin as 'mind' executable

@@ -23,7 +23,9 @@
 #
 # QMake build options:
 #
-#   qmake CONFIG+=mfwebengine       ... build project w/ Qt WebEngine instead of Qt WebKit
+#   qmake CONFIG+=mfwebkit          ... build project w/ legacy Qt WebKit instead of the
+#                                       default Qt WebEngine (Linux only - WebEngine is
+#                                       always used on Windows and macOS)
 #   qmake CONFIG+=mfoldhunspell     ... force use of DEPRECATED Hunspell API
 #   qmake CONFIG+=mfnomd2html       ... build project w/o Markdown 2 HTML library (cmark-gfm)
 #   qmake CONFIG+=mfnocxx           ... do NOT define CXX i.e. g++

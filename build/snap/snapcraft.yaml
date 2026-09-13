@@ -56,6 +56,20 @@ apps:
       # font configuration - w/o this there are no menus/text in UI
       FONTCONFIG_PATH: ${SNAP}/etc/fonts
       FONTCONFIG_FILE: ${SNAP}/etc/fonts/fonts.conf
+      # Qt WebEngine bakes the /usr install prefix in at compile time, so - same
+      # reasoning as QT_PLUGIN_PATH above - the helper process and its resource/
+      # translation data must be pointed at their location under $SNAP explicitly,
+      # otherwise the note view fails to render with "Could not find
+      # QtWebEngineProcess"/"Could not find the WebEngine resources" errors.
+      QTWEBENGINEPROCESS_PATH: ${SNAP}/usr/lib/x86_64-linux-gnu/qt5/libexec/QtWebEngineProcess
+      QTWEBENGINE_RESOURCES_PATH: ${SNAP}/usr/share/qt5/resources
+      QTWEBENGINE_LOCALES_PATH: ${SNAP}/usr/share/qt5/translations/qtwebengine_locales
+      # Chromium's own process sandbox (user namespaces + seccomp-bpf) nests badly
+      # inside snapd's own strict confinement sandbox - disabling it here and relying
+      # on snapd's outer confinement instead is the standard workaround used by other
+      # snaps that bundle QtWebEngine/CEF (unverified against a real Snap Store
+      # install yet - revisit if sandboxing issues turn up in testing).
+      QTWEBENGINE_DISABLE_SANDBOX: "1"
       # strict-only wiring (removed by build/snap/apply-classic.sh for the classic build):
       # ~/.mindforger.md is a HIDDEN file directly in $HOME, and hidden files/dirs
       # right under $HOME are unreachable through the 'home' interface under strict
@@ -115,7 +129,7 @@ parts:
       - libcurl4-gnutls-dev
       - libhunspell-dev
       - libvoikko-dev
-      - libqt5webkit5-dev  # WebKit is used @ Linux, WebEngine @ macOS/Win
+      - qtwebengine5-dev  # Qt WebEngine is the default HTML rendering backend everywhere
       - qtbase5-dev
       - qtbase5-dev-tools
       - qttools5-dev-tools
@@ -132,7 +146,11 @@ parts:
       - libqt5positioning5
       - libqt5sensors5
       - libqt5webchannel5
-      - libqt5webkit5
+      - libqt5quickwidgets5
+      - libqt5webenginecore5
+      - libqt5webenginewidgets5
+      - libqt5webengine5
+      - libqt5webengine-data
       # QtSvg's iconengines/libqsvgicon.so + imageformats/libqsvg.so - all of the
       # app's menu/toolbar icons are .svg resources (see app/mf-resources.qrc), so
       # without this they silently render blank instead of showing an error

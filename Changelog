@@ -1,6 +1,11 @@
 2026-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.2.0 - Snap distro and autolinking colors stabilization.
+    * Build: Qt WebEngine is now the default HTML rendering backend on Linux (as it
+      already was on Windows and macOS) - qmake no longer needs CONFIG+=mfwebengine.
+      Legacy Qt WebKit remains available on Linux via CONFIG+=mfwebkit for distros
+      without WebEngine packages. The Snap package (strict and classic) switched from
+      WebKit to WebEngine accordingly.
     * Build: simplified version handling - lib/src/app_info.h as authoritative source.
     * Feature: Edit/Rewrap Paragraph - fills/rewraps the paragraph under the cursor
       to 80 columns.
