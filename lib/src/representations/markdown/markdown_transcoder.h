@@ -35,6 +35,11 @@ constexpr const auto JS_LIB_MERMAILD_URL = "https://cdnjs.cloudflare.com/ajax/li
 // CSS cannot be downloaded from raw.githubusercontent.com (probably wrong content type) where it would be auto updated > www.mindforger.com hosting
 constexpr const auto EXPORT_DEFAULT_CSS_URL = "http://www.mindforger.com/support/export/css/light.css";
 
+// KaTeX math rendering for standalone HTML export (offline qrc:/ resources are used for in-app rendering instead)
+constexpr const auto JS_LIB_KATEX_CSS_URL = "https://cdn.jsdelivr.net/npm/katex@0.18.7/dist/katex.min.css";
+constexpr const auto JS_LIB_KATEX_JS_URL = "https://cdn.jsdelivr.net/npm/katex@0.18.7/dist/katex.min.js";
+constexpr const auto JS_LIB_KATEX_AUTORENDER_URL = "https://cdn.jsdelivr.net/npm/katex@0.18.7/dist/contrib/auto-render.min.js";
+
 /**
  * @brief Markdown to HTML options.
  *

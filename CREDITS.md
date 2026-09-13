@@ -25,6 +25,7 @@ Big thanks to 3rd party FOSS content authors:
 * Google ([Google C++ unit testing framework](https://github.com/google/googletest))
 * Knut Sveidqvist ([Mermaid.js](https://mermaidjs.github.io/) - diagrams and flowcharts rendering in HTML)
 * AMS and SIAM ([MathJax.js](https://www.mathjax.org/) - math rendering in HTML)
+* Emily Eisenberg ([Katex](https://katex.org/) - fast math rendering in HTML)
 * Ivan Sagalaev ([Highlight.js](https://highlightjs.org/) - source code syntax highlighting)
 * Danny Allen (primary [icon theme](https://store.kde.org/content/show.php?content=18317) store.kde.com - icons)
 * Krita (https://github.com/KDE/krita - menu icons - remixed)

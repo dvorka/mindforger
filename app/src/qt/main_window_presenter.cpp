@@ -1900,8 +1900,8 @@ void MainWindowPresenter::statusInfoPreviewFlickering()
     statusBar->showInfo(
         QString(
             tr(
-                "HTML Note preview flickering can be eliminated by disabling math "
-                "and diagrams in Preferences menu")));
+                "HTML Note preview flickering can be eliminated by setting Math "
+                "support and Diagram support to disable in Preferences menu")));
 }
 
 /*

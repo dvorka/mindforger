@@ -1,4 +1,6 @@
-MindForger uses MathJax (https://www.mathjax.org/) for math rendering in HTML.
+MindForger uses MathJax (https://www.mathjax.org/) v4, self-hosted/offline
+(tex-svg component, bundled as app/resources/qt/js/mathjax-tex-svg.js), as the
+"MathJax (legacy)" math rendering option in HTML.
 
                                  Apache License
                            Version 2.0, January 2004

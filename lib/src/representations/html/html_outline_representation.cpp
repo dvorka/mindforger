@@ -205,19 +205,65 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
             }
         }
 
-        // MATH: MathJax.js
-        // - doc: http://docs.mathjax.org/en/latest/start.html
-        // - CDN: https://cdnjs.com/libraries/mathjax
-        // - check newMathJax variable in the script above e.g. https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-        if(standalone || config.isUiEnableMathInMd()) {
-            html += "<script type=\"text/x-mathjax-config\">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}});</script>";
+        // MATH: KaTeX (fast, offline) or MathJax (legacy, offline)
+        // - KaTeX doc: https://katex.org/docs/browser.html
+        // - MathJax doc: https://docs.mathjax.org/en/latest/start.html
+        static const char* MATH_DELIMITERS_KATEX =
+            "document.addEventListener('DOMContentLoaded',function(){"
+            "renderMathInElement(document.body,{delimiters:["
+            "{left:'$$',right:'$$',display:true},"
+            "{left:'$',right:'$',display:false},"
+            "{left:'\\\\(',right:'\\\\)',display:false}"
+            "]});});";
+        if(standalone) {
+            // standalone HTML export: qrc:/ resources are not available outside the app
+            html += "<link rel=\"stylesheet\" href=\"";
+            html += JS_LIB_KATEX_CSS_URL;
+            html += "\">";
+            html += "<script src=\"";
+            html += JS_LIB_KATEX_JS_URL;
+            html += "\"></script>";
+            html += "<script src=\"";
+            html += JS_LIB_KATEX_AUTORENDER_URL;
+            html += "\"></script>";
+            html += "<script>";
+            html += MATH_DELIMITERS_KATEX;
+            html += "</script>";
+        } else {
+            switch(config.getUiEnableMathInMd()) {
+            case Configuration::MathJsLibSupport::MATH_KATEX:
+                html += "<link rel=\"stylesheet\" href=\"qrc:/html-css/katex.min.css\">";
 #ifdef DO_MF_DEBUG
-            html += "\n";
+                html += "\n";
 #endif
-            html += "<script type=\"text/javascript\" src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML\"></script>";
+                html += "<script type=\"text/javascript\" src=\"qrc:/js/katex.min.js\"></script>";
 #ifdef DO_MF_DEBUG
-            html += "\n";
+                html += "\n";
 #endif
+                html += "<script type=\"text/javascript\" src=\"qrc:/js/katex-auto-render.min.js\"></script>";
+#ifdef DO_MF_DEBUG
+                html += "\n";
+#endif
+                html += "<script type=\"text/javascript\">";
+                html += MATH_DELIMITERS_KATEX;
+                html += "</script>";
+#ifdef DO_MF_DEBUG
+                html += "\n";
+#endif
+                break;
+            case Configuration::MathJsLibSupport::MATH_MATHJAX:
+                html += "<script type=\"text/javascript\">window.MathJax = {tex: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}};</script>";
+#ifdef DO_MF_DEBUG
+                html += "\n";
+#endif
+                html += "<script type=\"text/javascript\" src=\"qrc:/js/mathjax-tex-svg.js\"></script>";
+#ifdef DO_MF_DEBUG
+                html += "\n";
+#endif
+                break;
+            default:
+                break;
+            }
         }
 
         // SYNTAX HIGHLIGHTING: offline Highlight.js (CME)

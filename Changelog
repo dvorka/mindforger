@@ -16,6 +16,12 @@
     * Cleanup: stripped malformed iCCP profile from (un)used logos.
     * Fix: "arrow up" in the Notebook/Note tree no longer loses tree focus and
       switches to the Notebook description when pressed with no row selected.
+    * Enhancement: Math support now offers KaTeX (fast, fully offline ~ QT resources
+      which is now part of MindForger binary) and MathJax (legacy, upgraded to v4,
+      now offline) instead of a single online-only CDN dependency.
+    * Fix: offline Mermaid diagram rendering was broken - mermaid.js was never
+      registered as a Qt resource, so "offline JavaScript lib" config option silently
+      failed.
 
 2026-09-02  Martin Dvorak  <martin.dvorak@mindforger.com>
 
