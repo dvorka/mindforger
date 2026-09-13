@@ -246,8 +246,8 @@ devenv-ubuntu-2204:
 
 
 .PHONY: devenv-debian
-devenv-debian:
-	sudo apt-get install build-essential zlib1g-dev libcurl4-gnutls-dev libhunspell-dev qtwebengine5-dev qttools5-dev-tools ccache cmake debhelper
+devenv-debian: ## dev env for build/debian/debian-make-deb.sh, which is pinned to CONFIG+=mfwebkit (see build/debian/debian/control)
+	sudo apt-get install build-essential zlib1g-dev libcurl4-gnutls-dev libhunspell-dev qtwebengine5-dev libqt5webkit5-dev qttools5-dev-tools ccache cmake debhelper
 
 
 install-dev-local: ../deps/cmark-gfm/build ../Makefile ../lib/tests/Makefile clean build-rc ## install MindForger RC build to ~/bin as 'mind' executable
