@@ -41,14 +41,19 @@ class FindOutlineByNameDialog : public QDialog
         {}
         void keyPressEvent(QKeyEvent* event) override {
             if(event->key() == Qt::Key_Down) {
-                // find the first visible row
+                // find 1st visible row and give it focus - consume the event so that it
+                // is NOT also handled by QLineEdit which would scroll the list view instead
                 for(int row = 0; row<target->model()->rowCount(); row++) {
                     if(!target->isRowHidden(row)) {
-                        target->setCurrentIndex(target->model()->index(row,0));
+                        QModelIndex index = target->model()->index(row,0);
+                        target->setCurrentIndex(index);
+                        target->scrollTo(index, QAbstractItemView::PositionAtTop);
                         break;
                     }
                 }
                 target->setFocus();
+                event->accept();
+                return;
             }
             QLineEdit::keyPressEvent(event);
         }

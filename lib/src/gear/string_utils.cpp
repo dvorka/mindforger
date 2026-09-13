@@ -19,6 +19,8 @@
 #include "string_utils.h"
 
 #include <cassert>
+#include <regex>
+#include <sstream>
 
 using namespace std;
 
@@ -190,6 +192,135 @@ void replaceAll(const std::string& old_s, const std::string& new_s, std::string&
              s.replace(from, old_s.length(), new_s);
              from += new_s.length();
     }
+}
+
+bool isMarkdownParagraphBoundaryLine(const string& line)
+{
+    // indented code block: 4+ leading spaces or a leading TAB - checked on the RAW,
+    // untrimmed line as trimming would hide the indentation which makes it code
+    if(stringStartsWith(line, "\t")) {
+        return true;
+    }
+    size_t leadingSpaces{0};
+    while(leadingSpaces<line.size() && line[leadingSpaces]==' ') {
+        leadingSpaces++;
+    }
+    if(leadingSpaces>=4) {
+        return true;
+    }
+
+    string trimmed{line};
+    stringTrim(trimmed);
+
+    if(trimmed.empty()) {
+        return true;
+    }
+
+    static const regex heading{R"(^#{1,6}(\s|$))"};
+    static const regex blockquote{R"(^>)"};
+    static const regex codeFence{R"(^(```|~~~))"};
+    static const regex bulletList{R"(^[-*]\s+\S)"};
+    static const regex numberedList{R"(^\d+\.\s+\S)"};
+    static const regex horizontalRule{R"(^(-{3,}|\*{3,}|_{3,})\s*$)"};
+
+    if(regex_search(trimmed, heading)
+       || regex_search(trimmed, blockquote)
+       || regex_search(trimmed, codeFence)
+       || regex_search(trimmed, bulletList)
+       || regex_search(trimmed, numberedList)
+       || regex_search(trimmed, horizontalRule)
+    ) {
+        return true;
+    }
+
+    // table row - heuristic: any pipe character on the line
+    if(trimmed.find('|')!=string::npos) {
+        return true;
+    }
+
+    return false;
+}
+
+static size_t utf8Length(const string& s)
+{
+    // count Unicode codepoints in a UTF-8 encoded string by skipping continuation
+    // bytes (10xxxxxx) - counts UTF-8 bytes, so accented Latin, Cyrillic or non-ASCII
+
+    size_t length{0};
+    for(unsigned char c: s) {
+        if((c&0xC0)!=0x80) {
+            length++;
+        }
+    }
+    return length;
+}
+
+vector<string> rewrapParagraphLines(const vector<string>& lines, unsigned width)
+{
+    // hard break (two trailing spaces or backslash) aware word ensuring
+    // it will not be lost during rewrapping
+    struct Word {
+        string text;
+        bool hardBreak;
+        string hardBreakSuffix;
+    };
+
+    vector<Word> words{};
+    for(const string& line: lines) {
+        size_t contentEnd{line.size()};
+        while(contentEnd>0 && line[contentEnd-1]==' ') {
+            contentEnd--;
+        }
+        bool hardBreak{false};
+        string hardBreakSuffix{};
+        if(line.size()-contentEnd>=2) {
+            hardBreak = true;
+            hardBreakSuffix = "  ";
+        } else if(contentEnd>0 && line[contentEnd-1]=='\\') {
+            hardBreak = true;
+        }
+
+        istringstream iss{line};
+        string word{};
+        size_t wordsBefore{words.size()};
+        while(iss >> word) {
+            words.push_back(Word{word, false, {}});
+        }
+        if(hardBreak && words.size()>wordsBefore) {
+            words.back().hardBreak = true;
+            words.back().hardBreakSuffix = hardBreakSuffix;
+        }
+    }
+
+    vector<string> result{};
+    string currentLine{};
+    size_t currentLineLength{0};
+    for(const Word& word: words) {
+        size_t wordLength = utf8Length(word.text);
+        if(currentLine.empty()) {
+            currentLine = word.text;
+            currentLineLength = wordLength;
+        } else if(currentLineLength+1+wordLength<=width) {
+            currentLine += ' ';
+            currentLine += word.text;
+            currentLineLength += 1+wordLength;
+        } else {
+            result.push_back(currentLine);
+            currentLine = word.text;
+            currentLineLength = wordLength;
+        }
+        if(word.hardBreak) {
+            currentLine += word.hardBreakSuffix;
+            result.push_back(currentLine);
+            currentLine.clear();
+            currentLineLength = 0;
+        }
+    }
+    if(!currentLine.empty()) {
+        result.push_back(currentLine);
+    }
+
+    return result;
 }
 
 } /* namespace */

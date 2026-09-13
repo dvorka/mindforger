@@ -224,7 +224,9 @@ Note* OutlineTreePresenter::getAdjacentNote() const
 void OutlineTreePresenter::slotSelectPreviousRow()
 {
     int row = getCurrentRow();
-    if(row) {
+    // NO_ROW(-1) must NOT pass this check as it would compute an invalid
+    // row and clear the tree selection, kicking focus to another view
+    if(row > 0) {
         QModelIndex previousIndex = model->index(row-1, 0);
         view->setCurrentIndex(previousIndex);
     }

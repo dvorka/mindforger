@@ -278,6 +278,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         view->actionEditWordWrap, SIGNAL(triggered()),
         mwp, SLOT(doActionEditWordWrapToggle()));
     QObject::connect(
+        view->actionEditRewrapParagraph, SIGNAL(triggered()),
+        mwp, SLOT(doActionEditRewrapParagraph()));
+    QObject::connect(
         view->actionEditNameDescFocusSwap, SIGNAL(triggered()),
         mwp, SLOT(doActionNameDescFocusSwap()));
     QObject::connect(

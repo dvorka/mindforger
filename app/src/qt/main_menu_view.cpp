@@ -796,6 +796,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionEditWordWrap = new QAction(QIcon(":/menu-icons/word-wrap.svg"), tr("W&ord Wrap"), mainWindow);
     actionEditWordWrap->setStatusTip(tr("Toggle word wrap mode"));
 
+    actionEditRewrapParagraph = new QAction(QIcon(":/menu-icons/rewrap-paragraph.svg"), tr("Rewr&ap Paragraph"), mainWindow);
+    actionEditRewrapParagraph->setStatusTip(tr("Rewrap/fill the paragraph under the cursor to a fixed line width"));
+
     actionEditNameDescFocusSwap = new QAction(QIcon(":/menu-icons/up.svg"), tr("Swap Nam&e/Description Focus"), mainWindow);
     actionEditNameDescFocusSwap->setStatusTip(tr("Swap focus of N title and description editors"));
 
@@ -840,6 +843,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuEdit->addSeparator();
     menuEdit->addAction(actionEditLiveNotePreview);
     menuEdit->addAction(actionEditWordWrap);
+    menuEdit->addAction(actionEditRewrapParagraph);
     menuEdit->addAction(actionEditNameDescFocusSwap);
     menuEdit->addSeparator();
     menuEdit->addMenu(submenuEditWingman);

@@ -168,7 +168,8 @@ private:
 
     QLabel* zoomLabel;
     QSpinBox* zoomSpin;
-    QCheckBox* mathSupportCheck;
+    QLabel* mathSupportLabel;
+    QComboBox* mathSupportCombo;
     QCheckBox* fullOPreviewCheck;
     QCheckBox* doubleClickViewerToEditCheck;
     QLabel* diagramSupportLabel;

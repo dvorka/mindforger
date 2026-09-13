@@ -25,7 +25,7 @@
 #
 # Known risk (unverified here - no older-host test rig available): classic confinement
 # runs the binary against the HOST's own ld.so/glibc, not core24's. If a user's host
-# glibc is older than core24's build glibc, loading the bundled Qt5/WebKit .so files
+# glibc is older than core24's build glibc, loading the bundled Qt5/WebEngine .so files
 # via LD_LIBRARY_PATH below can hit a glibc/ld.so ABI mismatch (symbol lookup errors
 # such as "undefined symbol: __tunable_is_initialized, GLIBC_PRIVATE"). If that turns
 # up in the wild, the fix is the same one MyTraL uses for its classic variant: a launcher
@@ -52,7 +52,7 @@ sed -i 's|^confinement: strict$|confinement: classic|' "$YAML"
 sed -i '/# strict-only wiring/,/HOME: \${SNAP_USER_COMMON}/d' "$YAML"
 
 # 3. classic does not get snapd's automatic per-snap library search path injection -
-#    point the dynamic linker at the bundled Qt5/WebKit libs explicitly, otherwise the
+#    point the dynamic linker at the bundled Qt5/WebEngine libs explicitly, otherwise the
 #    app falls back to whatever (if anything) the host distro happens to have installed.
 #    Hardcode the multiarch dir - ${SNAPCRAFT_ARCH_TRIPLET} is a snapcraft BUILD-time
 #    variable, not one snapd exports at runtime (confirmed against a real Snap Store

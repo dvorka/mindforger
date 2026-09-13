@@ -314,14 +314,21 @@ void MarkdownConfigurationRepresentation::configurationSection(
                             c.setEditorFont(t);
                         }
                     } else if(line->find(CONFIG_SETTING_MD_MATH_LABEL) != std::string::npos) {
-                        if(line->find("yes") != std::string::npos) {
-                            c.setUiEnableMathInMd(true);
+                        if(line->find(UI_MATH_LIB_KATEX) != std::string::npos) {
+                            c.setUiEnableMathInMd(Configuration::MathJsLibSupport::MATH_KATEX);
+                        } else if(line->find(UI_MATH_LIB_MATHJAX) != std::string::npos) {
+                            c.setUiEnableMathInMd(Configuration::MathJsLibSupport::MATH_MATHJAX);
+                        } else if(line->find("yes") != std::string::npos) {
+                            // backward compatibility: old boolean "yes" -> new default good engine
+                            c.setUiEnableMathInMd(Configuration::MathJsLibSupport::MATH_KATEX);
                         } else {
-                            c.setUiEnableMathInMd(false);
+                            c.setUiEnableMathInMd(Configuration::MathJsLibSupport::MATH_NO);
                         }
                     } else if(line->find(CONFIG_SETTING_MD_DIAGRAM_LABEL) != std::string::npos) {
                         if(line->find(UI_JS_LIB_ONLINE) != std::string::npos) {
-                            c.setUiEnableDiagramsInMd(Configuration::JavaScriptLibSupport::ONLINE);
+                            // backward compatibility: "online" is no longer offered in the
+                            // UI (no CDN dependency for diagrams) - migrate to offline
+                            c.setUiEnableDiagramsInMd(Configuration::JavaScriptLibSupport::OFFLINE);
                         } else if(line->find(UI_JS_LIB_OFFLINE) != std::string::npos) {
                             c.setUiEnableDiagramsInMd(Configuration::JavaScriptLibSupport::OFFLINE);
                         } else {
@@ -734,12 +741,12 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          CONFIG_SETTING_MD_HIGHLIGHT_LABEL << (c?(c->isUiEnableSrcHighlightInMd()?"yes":"no"):(Configuration::DEFAULT_MD_HIGHLIGHT?"yes":"no")) << endl <<
          "    * Enable offline Highlight JavaScript library to show source code with syntax highlighting in HTML generated from Markdown." << endl <<
          "    * Examples: yes, no" << endl <<
-         CONFIG_SETTING_MD_MATH_LABEL << (c?(c->isUiEnableMathInMd()?"yes":"no"):(Configuration::DEFAULT_MD_MATH?"yes":"no")) << endl <<
-         "    * Enable online MathJax JavaScript library to show math expressions in HTML generated from Markdown." << endl <<
-         "    * Examples: yes, no" << endl <<
+         CONFIG_SETTING_MD_MATH_LABEL << (c?c->getMathLibSupportAsString(c->getUiEnableMathInMd()):UI_MATH_LIB_NO) << endl <<
+         "    * Enable offline KaTeX or MathJax (legacy) JavaScript library to show math expressions in HTML generated from Markdown." << endl <<
+         "    * Examples: katex, mathjax, no" << endl <<
          CONFIG_SETTING_MD_DIAGRAM_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableDiagramsInMd()):UI_JS_LIB_NO) << endl <<
-         "    * Enable online Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
-         "    * Examples: online, no" << endl <<
+         "    * Enable online or offline Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
+         "    * Examples: offline, no" << endl <<
          CONFIG_SETTING_NAVIGATOR_MAX_GRAPH_NODES_LABEL << (c?c->getNavigatorMaxNodes():Configuration::DEFAULT_NAVIGATOR_MAX_GRAPH_NODES) << endl <<
          "    * Maximum number of knowledge graph navigator nodes (performance vs. readability trade-off)." << endl <<
          "    * Examples: 150" << endl <<

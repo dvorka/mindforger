@@ -99,10 +99,10 @@ void OutlineTreeView::keyPressEvent(QKeyEvent* event)
                 break;
             case Qt::Key_Up:
                 emit signalSelectPreviousRow();
-                break;
+                return;
             case Qt::Key_Down:
                 emit signalSelectNextRow();
-                break;
+                return;
             case Qt::Key_Home:
                 MF_DEBUG("  OutlineTreeView::keyPressEvent HOME" << std::endl);
                 if(this->model()->rowCount() > 0) {
