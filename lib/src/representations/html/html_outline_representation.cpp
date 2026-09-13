@@ -208,12 +208,14 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
         // MATH: KaTeX (fast, offline) or MathJax (legacy, offline)
         // - KaTeX doc: https://katex.org/docs/browser.html
         // - MathJax doc: https://docs.mathjax.org/en/latest/start.html
+        // NOTE:
+        // - only $...$/$$...$$ delimiters are supported
+        //   (other delimiters would NOT survive CommonMark rendering)
         static const char* MATH_DELIMITERS_KATEX =
             "document.addEventListener('DOMContentLoaded',function(){"
             "renderMathInElement(document.body,{delimiters:["
             "{left:'$$',right:'$$',display:true},"
-            "{left:'$',right:'$',display:false},"
-            "{left:'\\\\(',right:'\\\\)',display:false}"
+            "{left:'$',right:'$',display:false}"
             "]});});";
         if(standalone) {
             // standalone HTML export: qrc:/ resources are not available outside the app
@@ -252,7 +254,8 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
 #endif
                 break;
             case Configuration::MathJsLibSupport::MATH_MATHJAX:
-                html += "<script type=\"text/javascript\">window.MathJax = {tex: {inlineMath: [['$','$'], ['\\\\(','\\\\)']]}};</script>";
+                // same $...$/$$...$$-only rationale as MATH_DELIMITERS_KATEX above
+                html += "<script type=\"text/javascript\">window.MathJax = {tex: {inlineMath: [['$','$']]}};</script>";
 #ifdef DO_MF_DEBUG
                 html += "\n";
 #endif

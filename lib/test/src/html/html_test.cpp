@@ -224,6 +224,7 @@ TEST(HtmlTestCase, MathSupportKaTeXIsOfflineOnly)
     EXPECT_EQ(std::string::npos, html.find("mathjax"));
     EXPECT_EQ(std::string::npos, html.find("http://"));
     EXPECT_EQ(std::string::npos, html.find("https://"));
+    EXPECT_EQ(std::string::npos, html.find("\\\\("));
 }
 
 TEST(HtmlTestCase, MathSupportMathJaxLegacyIsOfflineOnly)
@@ -256,6 +257,7 @@ TEST(HtmlTestCase, MathSupportMathJaxLegacyIsOfflineOnly)
     EXPECT_EQ(std::string::npos, html.find("katex"));
     EXPECT_EQ(std::string::npos, html.find("http://"));
     EXPECT_EQ(std::string::npos, html.find("https://"));
+    EXPECT_EQ(std::string::npos, html.find("\\\\("));
 }
 
 TEST(HtmlTestCase, DiagramSupportOfflineMermaidIsFixed)

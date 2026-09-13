@@ -225,6 +225,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SLOT(slotConfigurationUpdated()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getNoteEdit()->getView()->getNoteEditor(), SLOT(slotConfigurationUpdated()));
+    QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getNoteView(), SLOT(slotConfigurationUpdated()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), distributor, SLOT(slotConfigurationUpdated()));
 
     // let Mind to learn active repository & preserve desired state
