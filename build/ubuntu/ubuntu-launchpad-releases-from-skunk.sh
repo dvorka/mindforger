@@ -120,8 +120,9 @@
 # Legacy Qt WebKit remains available on Linux via CONFIG+=mfwebkit (see mindforger.pro)
 
 # ########################################################################
-
-# EDIT for every release:
+# MANUAL preparation
+# ########################################################################
+# For every release edit:
 # - UBUNTU_VERSIONS
 # - PATCH_VERSION
 
@@ -130,15 +131,16 @@ then
     export UBUNTU_VERSIONS=(${1})
 else
     # export UBUNTU_VERSIONS=(jammy noble resolute)
+    export UBUNTU_VERSIONS=(noble resolute)
     # export UBUNTU_VERSIONS=(jammy)
     # export UBUNTU_VERSIONS=(noble)
-    export UBUNTU_VERSIONS=(resolute)
+    # export UBUNTU_VERSIONS=(resolute)
 fi
 
 # environment variables
 export MAJOR_VERSION=2
-export MINOR_VERSION=1
-export PATCH_VERSION=3 # patch version is incremented for every Ubuntu build @ Launchpad
+export MINOR_VERSION=2
+export PATCH_VERSION=1 # patch version is incremented for every Ubuntu build @ Launchpad
 export MF_VERSION="${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" # semantic version
 export RM_CMD="rm -vrf "
 export CP_CMD="cp -vrf "
@@ -430,7 +432,7 @@ function releaseForParticularUbuntuVersion {
     echo "    - mindfoger_<major>.<minor>.<patch>-0ubuntu1.dsc ... control descriptor according to which is build made"
     echo "    - mindfoger_<major>.<minor>.<patch>.orig.tar.gz  ... TARBALL w/ Debian control files used to build .deb"
     # pbuild-dist help: https://wiki.ubuntu.com/PbuilderHowto
-    pbuilder-dist ${UBUNTUVERSION} build --debbuildopts="-j${BUILD_JOBS}" ${MFRELEASE}.dsc
+    pbuilder-dist ${UBUNTUVERSION} build --debbuildopts "-j${BUILD_JOBS}" ${MFRELEASE}.dsc
     # VERIFY pbuilder-dist build result
     build_status=$?
     echo -e "DONE: BINARY .deb package build on FAKEROOT system, result stored to ${PBUILDFOLDER}/${UBUNTUVERSION}_result:"
@@ -476,7 +478,7 @@ do
     echo "# Releasing MF for Ubuntu version: ${UBUNTU_VERSION}"
     echo "###################################################"
     releaseForParticularUbuntuVersion ${UBUNTU_VERSION} "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}" "${BAZAAR_MSG}"
-    MINOR_VERSION=`expr $MINOR_VERSION + 1`
+    PATCH_VERSION=`expr $PATCH_VERSION + 1`
 done
 
 # eof
