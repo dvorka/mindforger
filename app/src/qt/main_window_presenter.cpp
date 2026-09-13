@@ -93,6 +93,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
              QString::fromStdString(File::EXTENSION_CSV),
              &view
     );
+    emojisDialog = new EmojisDialog{&view};
 
     // show/hide widgets based on configuration
     handleMindPreferences();
@@ -133,6 +134,12 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(
         newOutlineDialog->getEmojisButton(), SIGNAL(clicked()),
         this, SLOT(doActionEmojisDialog()));
+    QObject::connect(
+        emojisDialog, SIGNAL(emojiSelected(QString)),
+        this, SLOT(slotInsertEmoji(QString)));
+    QObject::connect(
+        qApp, SIGNAL(focusChanged(QWidget*,QWidget*)),
+        this, SLOT(slotApplicationFocusChanged(QWidget*,QWidget*)));
     QObject::connect(
         findOutlineByNameDialog, SIGNAL(searchFinished()), this, SLOT(handleFindOutlineByName()));
     QObject::connect(
@@ -218,6 +225,7 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), this, SLOT(handleMindPreferences()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor(), SLOT(slotConfigurationUpdated()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getNoteEdit()->getView()->getNoteEditor(), SLOT(slotConfigurationUpdated()));
+    QObject::connect(configDialog, SIGNAL(saveConfigSignal()), orloj->getNoteView(), SLOT(slotConfigurationUpdated()));
     QObject::connect(configDialog, SIGNAL(saveConfigSignal()), distributor, SLOT(slotConfigurationUpdated()));
 
     // let Mind to learn active repository & preserve desired state
@@ -1893,8 +1901,8 @@ void MainWindowPresenter::statusInfoPreviewFlickering()
     statusBar->showInfo(
         QString(
             tr(
-                "HTML Note preview flickering can be eliminated by disabling math "
-                "and diagrams in Preferences menu")));
+                "HTML Note preview flickering can be eliminated by setting Math "
+                "support and Diagram support to disable in Preferences menu")));
 }
 
 /*
@@ -3312,6 +3320,20 @@ void MainWindowPresenter::doActionEditWordWrapToggle()
     }
 }
 
+void MainWindowPresenter::doActionEditRewrapParagraph()
+{
+    NoteEditorView* editor{};
+    if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
+        editor = orloj->getNoteEdit()->getView()->getNoteEditor();
+    } else if(orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
+        editor = orloj->getOutlineHeaderEdit()->getView()->getHeaderEditor();
+    } else {
+        return;
+    }
+
+    editor->rewrapParagraph();
+}
+
 void MainWindowPresenter::doActionMindRemember()
 {
     mdConfigRepresentation->save(config);
@@ -4026,44 +4048,44 @@ void MainWindowPresenter::doActionHelpCheckForUpdates()
 
 void MainWindowPresenter::doActionEmojisDialog()
 {
-    // IMPROVE load emojis from the main MF configuration file
-    QMessageBox::information(
-        &view,
-        QString{tr("Emojis")},
-        QString{
-            "<html>"
-            "Copy character from below to paste it:"
-            "<br>"
-            "<br>Emoji:"
-            "<br>🐞 🚀 🌟 🔧 🧪 📚 🔗 ⛑ 🚧 ❗ ❌ ✔"
-            "<br>📌 ✂️ 📎 📋 📝 📅 📈 🖼️"
-            "<br>🔴 🔵 🟣 🟢 🔮 ♥ 💙 💛 💚 🚫 🎯 ⚽ ⚙️"
-            "<br>🙂 😃 🥶 🥰 🐻 🐸 🤖 💩 👻 🎉 💣 ☠️"
-            "<br>🦑 🐙 👾 🐉"
-            "<br>💪 👍 🤞 🤙 👌 🙏 🤦"
-            "<br>🛠 🔧 🔨 💎 🛡 💥 🔥 🧬 🧙‍ 🧠 🔋 ⦀"
-            "<br>🚀 🛸 📡 🌊 🎖 🍔 🥋 💍 🥔 🎨 🌻 🌲"
-            "<br>📣 📢 🧲 🏁 🚩  💯"
-            "<br>"
-            "<br>Greek alphabet:"
-            "<br>Α α, Β β, Γ γ, Δ δ, Ε ε,"
-            "<br>Ζ ζ, Η η, Θ θ, Ι ι, Κ κ,"
-            "<br>Λ λ, Μ μ, Ν ν, Ξ ξ, Ο ο,"
-            "<br>Π π, Ρ ρ, Σ σ/ς, Τ τ, Υ υ,"
-            "<br>Φ φ, Χ χ, Ψ ψ, Ω ω"
-            "<br>"
-            "<br>Math and statistics:"
-            "<br>x̄"
-            "<br>"
-            "<br>Physics:"
-            "<br>°"
-            "<br>"
-            "<br>More special unicode characters:"
-            "<ul>"
-            "<li><a href='https://unicode-table.com/en/'>Unicode Table</a></li>"
-            "<li><a href='https://emojipedia.org/'>Emojipedia</a></li>"
-            "</ul>"
-        });
+    emojisDialog->exec();
+
+    // exec() steals focus - give it back to the name/description field
+    // characters were inserted to
+    if(!lastFocusedTextInput.isNull()) {
+        lastFocusedTextInput->setFocus();
+    }
+}
+
+void MainWindowPresenter::slotApplicationFocusChanged(QWidget* old, QWidget* now)
+{
+    Q_UNUSED(old);
+
+    // remember the last name/description input widget which had focus so
+    // that emojisDialog's emojiSelected() knows where to insert a character -
+    // clicks within emojisDialog itself do not overwrite this, as none of
+    // its widgets are QLineEdit/QTextEdit/QPlainTextEdit
+    if(qobject_cast<QLineEdit*>(now)
+       || qobject_cast<QTextEdit*>(now)
+       || qobject_cast<QPlainTextEdit*>(now))
+    {
+        lastFocusedTextInput = now;
+    }
+}
+
+void MainWindowPresenter::slotInsertEmoji(const QString& c)
+{
+    if(lastFocusedTextInput.isNull()) {
+        return;
+    }
+
+    if(QLineEdit* lineEdit = qobject_cast<QLineEdit*>(lastFocusedTextInput.data())) {
+        lineEdit->insert(c);
+    } else if(QTextEdit* textEdit = qobject_cast<QTextEdit*>(lastFocusedTextInput.data())) {
+        textEdit->insertPlainText(c);
+    } else if(QPlainTextEdit* plainTextEdit = qobject_cast<QPlainTextEdit*>(lastFocusedTextInput.data())) {
+        plainTextEdit->insertPlainText(c);
+    }
 }
 
 

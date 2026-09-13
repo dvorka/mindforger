@@ -62,20 +62,20 @@ mfoldhunspell | equals(OS_DISTRO_VERSION, "Windows") | equals(OS_DISTRO_VERSION,
   message("Hunspell: configuring use of NEW API on OS: $$OS_DISTRO_VERSION")
 }
 
-# webkit is supposed to be OBSOLETED by webengine, but webengine is disabled
-# on Linux since Qt 5.9 due to its tragic performance -> conditional compilation
-# seems to be the only way:
-# - webkit on Linux
-# - webengine on Windows and macOS
-win32|macx|mfwebengine {
+# Qt WebEngine (Chromium) is the default MF's HTML rendering backend on all
+# platforms:
+# - Qt WebKit is EOL (since 2018) community fork which is no longer packaged by new distros
+# - Qt WebKit MF build remains available on Linux via CONFIG+=mfwebkit:
+#   qmake CONFIG+=mfwebkit mindforger.pro
+mfwebkit {
+    message("HTML rendering: Qt WebKit (legacy Apple WebKit)")
+    QT += webkit
+    QT += webkitwidgets
+} else {
     message("HTML rendering: Qt WebEngine (modern Chromium)")
     DEFINES += MF_QT_WEB_ENGINE
     QT += webengine
     QT += webenginewidgets
-} else {
-    message("HTML rendering: Qt WebKit (legacy Apple WebKit)")
-    QT += webkit
-    QT += webkitwidgets
 }
 
 # Dependencies:
@@ -262,6 +262,7 @@ HEADERS += \
     ./src/qt/dialogs/find_outline_by_name_dialog.h \
     ./src/qt/dialogs/find_note_by_name_dialog.h \
     ./src/qt/dialogs/note_edit_dialog.h \
+    ./src/qt/dialogs/emojis_dialog.h \
     ./src/qt/dialogs/configuration_dialog.h \
     ./src/qt/widgets/edit_tags_panel.h \
     ./src/qt/widgets/labeled_edit_line_panel.h \
@@ -336,7 +337,7 @@ HEADERS += \
     src/qt/dialogs/fts_dialog_presenter.h \
     src/qt/gear/apple_utils.h
 
-win32|macx|mfwebengine {
+!mfwebkit {
     HEADERS += ./src/qt/web_engine_page_link_navigation_policy.h
 }
 
@@ -387,6 +388,7 @@ SOURCES += \
     ./src/qt/dialogs/find_outline_by_name_dialog.cpp \
     ./src/qt/dialogs/find_note_by_name_dialog.cpp \
     ./src/qt/dialogs/note_edit_dialog.cpp \
+    ./src/qt/dialogs/emojis_dialog.cpp \
     ./src/qt/dialogs/configuration_dialog.cpp \
     ./src/qt/widgets/edit_tags_panel.cpp \
     ./src/qt/widgets/labeled_edit_line_panel.cpp \
@@ -456,7 +458,7 @@ SOURCES += \
     src/qt/outline_header_view_model.cpp \
     src/qt/dialogs/fts_dialog_presenter.cpp
 
-win32|macx|mfwebengine {
+!mfwebkit {
     SOURCES += ./src/qt/web_engine_page_link_navigation_policy.cpp
 }
 

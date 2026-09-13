@@ -31,9 +31,14 @@
         <file alias="light.css">resources/qt/css/light.css</file>
         <file alias="highlight.css">resources/qt/css/highlight-js-default.css</file>
         <file alias="light-compact.css">resources/qt/css/light-compact.css</file>
+        <file alias="katex.min.css">resources/qt/css/katex.min.css</file>
     </qresource>
     <qresource prefix="/js">
         <file alias="highlight.js">resources/qt/js/highlight.js</file>
+        <file alias="mermaid.js">resources/qt/js/mermaid.js</file>
+        <file alias="katex.min.js">resources/qt/js/katex.min.js</file>
+        <file alias="katex-auto-render.min.js">resources/qt/js/katex-auto-render.min.js</file>
+        <file alias="mathjax-tex-svg.js">resources/qt/js/mathjax-tex-svg.js</file>
     </qresource>
     <qresource prefix="/menu-icons">
         <file alias="redo.svg">resources/menu-icons/light_edit-redo.svg</file>
@@ -87,6 +92,7 @@
         <file alias="document.svg">resources/menu-icons/light_folder-documents.svg</file>
         <file alias="folder.svg">resources/menu-icons/light_folder.svg</file>
         <file alias="word-wrap.svg">resources/menu-icons/light_word_wrap.svg</file>
+        <file alias="rewrap-paragraph.svg">resources/menu-icons/light_format_align_justify.svg</file>
         <file alias="terminal.svg">resources/menu-icons/light_terminal.svg</file>
         <file alias="about_qt.svg">resources/menu-icons/light_about_qt.svg</file>
         <file alias="cli.svg">resources/menu-icons/light_cli.svg</file>

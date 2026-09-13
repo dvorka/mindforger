@@ -236,7 +236,11 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget* parent)
     srcCodeHighlightSupportCheck = new QCheckBox{
         tr("source code syntax highlighting support"), this};
 
-    mathSupportCheck = new QCheckBox{tr("math support"), this};
+    mathSupportLabel = new QLabel(tr("Math support")+":", this);
+    mathSupportCombo = new QComboBox{this};
+    mathSupportCombo->addItem(QString{"disable"});
+    mathSupportCombo->addItem(QString{"KaTeX"});
+    mathSupportCombo->addItem(QString{"MathJax (legacy)"});
     fullOPreviewCheck = new QCheckBox{tr("whole notebook preview"), this};
     doubleClickViewerToEditCheck = new QCheckBox{
         tr("double click HTML preview to edit"), this};
@@ -244,8 +248,7 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget* parent)
     diagramSupportLabel = new QLabel(tr("Diagram support")+":", this);
     diagramSupportCombo = new QComboBox{this};
     diagramSupportCombo->addItem(QString{"disable"});
-    // TODO: to be stabilized diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
-    diagramSupportCombo->addItem(QString{"online JavaScript lib"});
+    diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
 
     htmlCssThemeLabel = new QLabel(tr("Viewer theme CSS")+":", this);
     htmlCssThemeCombo = new QComboBox{this};
@@ -271,7 +274,8 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget* parent)
     viewerLayout->addWidget(doubleClickViewerToEditCheck);
     viewerLayout->addWidget(fullOPreviewCheck);
     viewerLayout->addWidget(srcCodeHighlightSupportCheck);
-    viewerLayout->addWidget(mathSupportCheck);
+    viewerLayout->addWidget(mathSupportLabel);
+    viewerLayout->addWidget(mathSupportCombo);
     viewerLayout->addWidget(diagramSupportLabel);
     viewerLayout->addWidget(diagramSupportCombo);
     viewerLayout->addWidget(zoomLabel);
@@ -300,7 +304,8 @@ ConfigurationDialog::ViewerTab::~ViewerTab()
     delete zoomLabel;
     delete zoomSpin;
     delete srcCodeHighlightSupportCheck;
-    delete mathSupportCheck;
+    delete mathSupportLabel;
+    delete mathSupportCombo;
     delete fullOPreviewCheck;
     delete diagramSupportLabel;
     delete diagramSupportCombo;
@@ -324,9 +329,14 @@ void ConfigurationDialog::ViewerTab::refresh()
     srcCodeHighlightSupportCheck->setChecked(false);
     srcCodeHighlightSupportCheck->setVisible(false);
     //srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
-    mathSupportCheck->setChecked(config.isUiEnableMathInMd());
+    mathSupportCombo->setCurrentIndex(config.getUiEnableMathInMd());
     fullOPreviewCheck->setChecked(config.isUiFullOPreview());
-    diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
+    // no "online" option in the combo (index 0 = disable, index 1 = offline) - any
+    // legacy ONLINE setting is migrated to OFFLINE on config load, but map it
+    // defensively here too in case it is ever set in-memory without a reload
+    diagramSupportCombo->setCurrentIndex(
+        config.getUiEnableDiagramsInMd() == Configuration::JavaScriptLibSupport::NO ? 0 : 1
+    );
     doubleClickViewerToEditCheck->setChecked(config.isUiDoubleClickNoteViewToEdit());
 }
 
@@ -346,10 +356,15 @@ void ConfigurationDialog::ViewerTab::save()
 
     config.setUiHtmlZoom(zoomSpin->value());
     config.setUiEnableSrcHighlightInMd(srcCodeHighlightSupportCheck->isChecked());
-    config.setUiEnableMathInMd(mathSupportCheck->isChecked());
+    config.setUiEnableMathInMd(
+        static_cast<Configuration::MathJsLibSupport>(mathSupportCombo->currentIndex())
+    );
     config.setUiFullOPreview(fullOPreviewCheck->isChecked());
+    // combo index 0 = disable, index 1 = offline (no "online" option)
     config.setUiEnableDiagramsInMd(
-        static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex())
+        diagramSupportCombo->currentIndex() == 0
+            ? Configuration::JavaScriptLibSupport::NO
+            : Configuration::JavaScriptLibSupport::OFFLINE
     );
     config.setUiDoubleClickNoteViewToEdit(doubleClickViewerToEditCheck->isChecked());
 }

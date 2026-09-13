@@ -255,6 +255,63 @@ void NoteEditorView::wrapSelectedText(const QString& tag, const QString& endTag)
     setFocus();
 }
 
+void NoteEditorView::rewrapParagraph()
+{
+    static const unsigned REWRAP_PARAGRAPH_WIDTH = 80;
+
+    QTextBlock cursorBlock = textCursor().block();
+    if(isMarkdownParagraphBoundaryLine(cursorBlock.text().toStdString())) {
+        return;
+    }
+
+    QTextBlock startBlock = cursorBlock;
+    while(startBlock.previous().isValid()
+          && !isMarkdownParagraphBoundaryLine(startBlock.previous().text().toStdString())
+    ) {
+        startBlock = startBlock.previous();
+    }
+    QTextBlock endBlock = cursorBlock;
+    while(endBlock.next().isValid()
+          && !isMarkdownParagraphBoundaryLine(endBlock.next().text().toStdString())
+    ) {
+        endBlock = endBlock.next();
+    }
+
+    std::vector<std::string> paragraphLines{};
+    for(QTextBlock b = startBlock; ; b = b.next()) {
+        paragraphLines.push_back(b.text().toStdString());
+        if(b == endBlock) {
+            break;
+        }
+    }
+
+    std::vector<std::string> wrapped = rewrapParagraphLines(paragraphLines, REWRAP_PARAGRAPH_WIDTH);
+    if(wrapped.empty()) {
+        return;
+    }
+
+    QString replacement{};
+    for(size_t i = 0; i < wrapped.size(); i++) {
+        if(i) {
+            replacement += QChar::LineFeed;
+        }
+        replacement += QString::fromStdString(wrapped[i]);
+    }
+
+    QTextCursor editCursor{startBlock};
+    editCursor.movePosition(QTextCursor::StartOfBlock);
+    QTextCursor endCursor{endBlock};
+    endCursor.movePosition(QTextCursor::EndOfBlock);
+    editCursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
+
+    editCursor.beginEditBlock();
+    editCursor.insertText(replacement);
+    editCursor.endEditBlock();
+
+    setTextCursor(editCursor);
+    setFocus();
+}
+
 void NoteEditorView::insertMarkdownText(const QString& text, bool newLine, int offset)
 {
     QTextCursor cursor = textCursor();

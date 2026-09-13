@@ -102,6 +102,76 @@ cmark_node* injectAstLinkNode(
     return linkNode;
 }
 
+bool looksLikeUrl(const string& word)
+{
+    // bare URL word must be injected as its own autolink AST node rather than
+    // appended as plain text: the autolinking preprocessor re-serializes the whole
+    // document back to plain Markdown via cmark_render_commonmark() (see process()
+    // below), and that writer backslash-escapes Markdown-special characters (e.g.
+    // '_') wherever they occur in plain TEXT node content - including inside bare
+    // URLs, which it has no notion of. Once re-parsed by the real HTML renderer,
+    // GFM's bare URL autolink extension does not strip that escape cleanly,
+    // corrupting the link's href (and breaking text==href based autolink coloring).
+    // a CMARK_NODE_LINK node whose sole child's literal text equals its url is
+    // recognized by cmark-gfm's commonmark writer as an autolink (is_autolink() in
+    // cmark-gfm's commonmark.c) and emitted verbatim as <url>, unescaped
+    return word.compare(0, 7, "http://") == 0 || word.compare(0, 8, "https://") == 0;
+}
+
+string stripUrlTrailingPunctuation(const string& url, string& trailingPunctuation)
+{
+    // a bare URL word is chopped from surrounding prose at whitespace only,
+    // BUT (see e.g. "See https://example.com). More text." would reach here as
+    // "https://example.com)." > strip trailing punctuation that CommonMark does
+    // not part of the URL
+    static const string URL_TRAILING_PUNCTUATION{"?!.,:*_~'\""};
+
+    size_t end{url.size()};
+    while(end>0) {
+        char c{url[end-1]};
+        if(c==')') {
+            int balance{0};
+            for(size_t i=0; i<end; i++) {
+                if(url[i]=='(') {
+                    balance++;
+                } else if(url[i]==')') {
+                    balance--;
+                }
+            }
+            if(balance>=0) {
+                break;
+            }
+            end--;
+        } else if(URL_TRAILING_PUNCTUATION.find(c)!=string::npos) {
+            end--;
+        } else {
+            break;
+        }
+    }
+
+    trailingPunctuation = url.substr(end);
+    return url.substr(0, end);
+}
+
+cmark_node* injectAstAutolinkNode(
+    cmark_node* srcNode,
+    cmark_node* node,
+    const string& url
+) {
+    cmark_node* linkNode{cmark_node_new(CMARK_NODE_LINK)};
+    cmark_node* txtNode{cmark_node_new(CMARK_NODE_TEXT)};
+
+    cmark_node_set_url(linkNode, url.c_str());
+    cmark_node_set_literal(txtNode, url.c_str());
+    cmark_node_append_child(linkNode, txtNode);
+    if(node) {
+        cmark_node_insert_after(node, linkNode);
+    } else {
+        cmark_node_insert_before(srcNode, linkNode);
+    }
+    return linkNode;
+}
+
 cmark_node* injectAstTxtNode(
     cmark_node* srcNode,
     cmark_node* node,
@@ -121,6 +191,31 @@ cmark_node* injectAstTxtNode(
 
     MF_DEBUG("         TXT node: >>>" << txtNode << "<<<" << endl);
     return txtNode;
+}
+
+cmark_node* appendUnmatchedWord(
+    cmark_node* srcNode,
+    cmark_node* node,
+    string& at,
+    const string& word
+) {
+    // appends an unmatched word to the pending plain-text buffer, unless it looks
+    // like a bare URL - bare URLs are instead flushed as a dedicated autolink AST
+    // node - see injectAstAutolinkNode()
+    if(looksLikeUrl(word)) {
+        string trailingPunctuation{};
+        string url{stripUrlTrailingPunctuation(word, trailingPunctuation)};
+
+        if(at.size()) {
+            node = injectAstTxtNode(srcNode, node, at);
+        }
+        node = injectAstAutolinkNode(srcNode, node, url);
+        // keep whatever was peeled off the URL as plain text after the link
+        at.append(trailingPunctuation);
+    } else {
+        at.append(word);
+    }
+    return node;
 }
 
 void injectThingsLinks(cmark_node* srcNode, Mind& mind)
@@ -212,7 +307,7 @@ void injectThingsLinks(cmark_node* srcNode, Mind& mind)
                 if(begin != string::npos) {
                     chop = txt.substr(0, begin);
                     txt = txt.substr(begin+1);
-                    at.append(chop);
+                    node = appendUnmatchedWord(srcNode, node, at, chop);
                     // TODO IMPORTANT append what was found - space or tab! simply index there
                     at.append(" ");
 
@@ -221,7 +316,7 @@ void injectThingsLinks(cmark_node* srcNode, Mind& mind)
                     MF_DEBUG("     at : '" << at  << "'" << endl);
                 } else {
                     // no more words (prefix already checked) > DONE
-                    at.append(txt);
+                    node = appendUnmatchedWord(srcNode, node, at, txt);
 
                     MF_DEBUG("  DONE no-more words: '" << chop << "'" << endl);
                     MF_DEBUG("     txt: '" << txt << "'" << endl);
@@ -239,7 +334,7 @@ void injectThingsLinks(cmark_node* srcNode, Mind& mind)
             if(begin != string::npos) {
                 chop = txt.substr(0, begin);
                 txt = txt.substr(begin+1);
-                at.append(chop);
+                node = appendUnmatchedWord(srcNode, node, at, chop);
                 // TODO IMPORTANT append what was found - space or tab! simply index there
                 at.append(" ");
 
@@ -248,7 +343,7 @@ void injectThingsLinks(cmark_node* srcNode, Mind& mind)
                 MF_DEBUG("     at : '" << at  << "'" << endl);
             } else {
                 // no more words (prefix already checked) > DONE
-                at.append(txt);
+                node = appendUnmatchedWord(srcNode, node, at, txt);
 
                 MF_DEBUG("  DONE no-more words: '" << chop << "'" << endl);
                 MF_DEBUG("     txt: '" << txt << "'" << endl);

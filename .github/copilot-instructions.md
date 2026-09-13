@@ -48,6 +48,7 @@ This document provides instructions to the copilot AI assistants for dvorka/mind
 - Always use text to indicate success/failure/progress like DONE, ERROR or WIP - never use (unicode) characters like ✓ or ✗.
 - Always print or log intermediate values only when they aid debugging.
 - Always make sure that tests which test new feature or fix are in green.
+- After a feature is implemented, do not run the application to manually test frontend/UI changes - compiling the code and running library tests (`gtest`) is sufficient.
 
 ## Build instructions
 

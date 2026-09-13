@@ -1,3 +1,29 @@
+2026-09-13  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v2.2.0 - Rewrap, Snap distro, WebEngine (Linux), KaTeX and autolinking.
+    * Feature: Edit/Rewrap Paragraph - fills/rewraps the paragraph under the cursor
+      to 80 columns.
+    * Enhancement: Qt WebEngine is newly the default HTML rendering backend on Linux as it
+      already was on Windows and macOS.
+    * Enhancement: Math support now offers KaTeX (really fast, offline @ QT resources
+      included MF binary) and MathJax (legacy, upgraded, offline) instead of online
+      CDN dependency.
+    * Enhancement: add emojis by clicking associated button when adding new
+      Notebook/Note or editing Notebook/Note name or description.
+    * Fix: strict Snap shipped with no menu/toolbar icons.
+    * Fix: colors of autolinking generated Note/Outline interlinks are in blue.
+    * Fix: bare http(s):// URLs containing Markdown-special characters (e.g. '_')
+      got backslash-escaped by the autolinking preprocessor's Markdown round-trip
+      which corrupted the result - fixed by verbatim using CommonMark's <...>.
+    * Fix: "arrow down" in the dialog to find Note/Outline by name finally gives
+      always focus to the first entry in the list instead of scrolling down.
+    * Fix: "arrow up" in the Notebook/Note tree no longer loses tree focus and
+      switches to the Notebook description when pressed with no row selected.
+    * Fix: offline Mermaid diagram rendering works again - mermaid.js was not
+      registered as a Qt resource, so it always silently failed. Online option removed.
+    * Cleanup: stripped malformed iCCP profile from (un)used logos.
+    * Build: simplified version handling - lib/src/app_info.h as authoritative source.
+
 2026-09-02  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.1.0 - Local LLMs support, Notes semantic search and orphan

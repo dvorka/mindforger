@@ -60,9 +60,11 @@
 #include "dialogs/terminal_dialog.h"
 #include "dialogs/export_csv_file_dialog.h"
 #include "dialogs/export_file_dialog.h"
+#include "dialogs/emojis_dialog.h"
 
 #include <QtWidgets>
 #include <QtConcurrent/QtConcurrent>
+#include <QPointer>
 
 namespace m8r {
 
@@ -144,6 +146,11 @@ private:
     NewFileDialog* newFileDialog;
     ExportFileDialog* exportOutlineToHtmlDialog;
     ExportCsvFileDialog* exportMemoryToCsvDialog;
+    EmojisDialog* emojisDialog;
+
+    // last name/description input (QLineEdit/QTextEdit/QPlainTextEdit) which
+    // had focus - used as the target for emojisDialog's emojiSelected()
+    QPointer<QWidget> lastFocusedTextInput;
 
 public:
     explicit MainWindowPresenter(MainWindowView& view);
@@ -364,6 +371,7 @@ public slots:
     void doActionEditFind();
     void doActionEditFindAgain();
     void doActionEditWordWrapToggle();
+    void doActionEditRewrapParagraph();
     void doActionEditPasteImageData(QImage image);
     void doActionRunToolDialogAnywhere();
     void doActionOpenRunToolDialog(QString& phrase, QString& toolId, bool showDialog=true);
@@ -386,6 +394,8 @@ public slots:
 
     void slotHandleFts();
     void slotMainToolbarVisibilityChanged(bool visibility);
+    void slotApplicationFocusChanged(QWidget* old, QWidget* now);
+    void slotInsertEmoji(const QString& c);
 
 private:
     void injectMarkdownText(const QString& text, bool newline=false, int offset=0);

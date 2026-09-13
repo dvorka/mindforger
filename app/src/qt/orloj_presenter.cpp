@@ -1008,12 +1008,13 @@ void OrlojPresenter::slotRefreshCurrentNotePreview()
     if(!config.isUiHoistedMode()) {
         if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)) {
             noteViewPresenter->refreshLivePreview();
-#if defined(__APPLE__) || defined(_WIN32)
+#if defined(MF_QT_WEB_ENGINE)
+            // WebEngine steals focus on setHtml() reload - give it back to the editor
             getNoteEdit()->getView()->getNoteEditor()->setFocus();
 #endif
         } else if(isFacetActive(OrlojPresenterFacets::FACET_EDIT_OUTLINE_HEADER)) {
             outlineHeaderViewPresenter->refreshLivePreview();
-#if defined(__APPLE__) || defined(_WIN32)
+#if defined(MF_QT_WEB_ENGINE)
             getOutlineHeaderEdit()->getView()->getHeaderEditor()->setFocus();
 #endif
         }

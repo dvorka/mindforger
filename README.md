@@ -9,7 +9,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/dvorka/mindforger.svg?maxAge=360)](https://github.com/dvorka/mindforger/issues)
 [![All releases downloads](https://img.shields.io/github/downloads/dvorka/mindforger/total.svg)](https://github.com/dvorka/mindforger/releases)
 [![Get it from the Snap Store](https://snapcraft.io/mindforger/badge.svg)](https://snapcraft.io/mindforger)
-[![License](https://img.shields.io/github/license/dvorka/mindforger?color=%23ff0000)](https://github.com/dvorka/mindforger/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/dvorka/mindforger?color=%24ff0000)](https://github.com/dvorka/mindforger/blob/master/LICENSE)
 
 <!-- a href="https://twitter.com/intent/follow?screen_name=mindforger"><img src="https://img.shields.io/twitter/follow/mindforger.svg?style=social&logo=twitter" alt="follow on Twitter"></a -->
 <!-- [![Documentation](https://img.shields.io/badge/project-documentation-blue.svg)](https://github.com/dvorka/mindforger-repository/blob/master/memory/mindforger/index.md) -->
@@ -41,7 +41,7 @@ MindForger is open, free, well performing Markdown editor / IDE which respects y
 ## Perfect Software
 [Perfect software](https://outofdesk.netlify.app/perfect-software) is not necessarily the best software - it is perfect simply because it does exactly what you want, how do you want it and when you want it. The [YAGNI](https://martinfowler.com/bliki/Yagni.html) - You Aren't Gonna Need It - mantra protects software from wasting time and resources on implementing anything and everything.
 
-The **MindForger** project **is perfect to me**. Even if project's `main` branch does not receive updates, be sure that I use it every day - it is the first application I start when I boot up my computer and the last one I close. I add a small feature here or there, fix a bug or update a dependency as needed. In other words, the project is **not** and will **not** be dead.
+The **MindForger** project **is perfect to me**. Even if project's main development branch does not receive updates, be sure that I use it every day - it is the first application I start when I boot up my computer and the last one I close. I add a small feature here or there, fix a bug or update a dependency as needed. In other words, the project is **not** and will **not** be dead.
 
 If you have any ideas, suggestions, news to share, or constructive criticism to share, **do not hesitate to contact me**! Please do not be offended if your GitHub issue or bug report is not implemeted - IAGNI.
 
@@ -60,41 +60,41 @@ If you have any ideas, suggestions, news to share, or constructive criticism to 
 ## Installation
 Install:
 
-* [macOS](https://github.com/dvorka-oss/mindforger/wiki/Installation#macos)
-* [Windows](https://github.com/dvorka-oss/mindforger/wiki/Installation#windows)
-* [Ubuntu](https://github.com/dvorka-oss/mindforger/wiki/Installation#ubuntu)
-* [Debian](https://github.com/dvorka-oss/mindforger/wiki/Installation#debian)
-* [Fedora](https://github.com/dvorka-oss/mindforger/wiki/Installation#fedora)
-* [FreeBSD](https://github.com/dvorka-oss/mindforger/wiki/Installation#freebsd)
-* [Arch Linux](https://github.com/dvorka-oss/mindforger/wiki/Installation#arch-linux)
-* [NixOS](https://github.com/dvorka-oss/mindforger/wiki/Installation#nixos)
-* [openSUSE](https://github.com/dvorka-oss/mindforger/wiki/Installation#opensuse)
-* [WSL](https://github.com/dvorka-oss/mindforger/wiki/Installation#wsl)
+* [macOS](https://github.com/dvorka/mindforger/wiki/Installation#macos)
+* [Windows](https://github.com/dvorka/mindforger/wiki/Installation#windows)
+* [Ubuntu](https://github.com/dvorka/mindforger/wiki/Installation#ubuntu)
+* [Debian](https://github.com/dvorka/mindforger/wiki/Installation#debian)
+* [Fedora](https://github.com/dvorka/mindforger/wiki/Installation#fedora)
+* [FreeBSD](https://github.com/dvorka/mindforger/wiki/Installation#freebsd)
+* [Arch Linux](https://github.com/dvorka/mindforger/wiki/Installation#arch-linux)
+* [NixOS](https://github.com/dvorka/mindforger/wiki/Installation#nixos)
+* [openSUSE](https://github.com/dvorka/mindforger/wiki/Installation#opensuse)
+* [WSL](https://github.com/dvorka/mindforger/wiki/Installation#wsl)
 
 Build:
 
-* [build on macOS](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-macos)
-* [build on Windows](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-windows)
-* [build on Ubuntu](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-ubuntu)
-* [build on Debian](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-debian)
-* [build on Fedora](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-fedora)
-* [build on Gentoo](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-gentoo)
-* [build on NixOS](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-nixos)
-* [build on WSL](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-on-wsl)
+* [build on macOS](https://github.com/dvorka/mindforger/wiki/Installation#build-on-macos)
+* [build on Windows](https://github.com/dvorka/mindforger/wiki/Installation#build-on-windows)
+* [build on Ubuntu](https://github.com/dvorka/mindforger/wiki/Installation#build-on-ubuntu)
+* [build on Debian](https://github.com/dvorka/mindforger/wiki/Installation#build-on-debian)
+* [build on Fedora](https://github.com/dvorka/mindforger/wiki/Installation#build-on-fedora)
+* [build on Gentoo](https://github.com/dvorka/mindforger/wiki/Installation#build-on-gentoo)
+* [build on NixOS](https://github.com/dvorka/mindforger/wiki/Installation#build-on-nixos)
+* [build on WSL](https://github.com/dvorka/mindforger/wiki/Installation#build-on-wsl)
 
 Docker:
 
-* [build and run container](https://github.com/dvorka-oss/mindforger/wiki/Installation#build-and-run-in-container)
+* [build and run container](https://github.com/dvorka/mindforger/wiki/Installation#build-and-run-in-container)
 
 Tarball:
 
-* [download tarball](https://github.com/dvorka-oss/mindforger/releases)
+* [download tarball](https://github.com/dvorka/mindforger/releases)
 
 Nightly builds:
 
-* [macOS .dmg nightly](https://github.com/dvorka-oss/mindforger/actions)
+* [macOS .dmg nightly](https://github.com/dvorka/mindforger/actions)
 * [Windows installer nightly](https://ci.appveyor.com/project/dvorka/mindforger/build/artifacts)
-* [tarball nightly](https://github.com/dvorka-oss/mindforger/actions/workflows/build_ubuntu.yml)
+* [tarball nightly](https://github.com/dvorka/mindforger/actions/workflows/build_ubuntu.yml)
 
 Check also [packages](https://pkgs.org/search/?q=mindforger) for Linux and Unix.
 
@@ -103,12 +103,12 @@ Check also [packages](https://pkgs.org/search/?q=mindforger) for Linux and Unix.
 ## Documentation
 Read:
 
-* [Getting started](https://github.com/dvorka-oss/mindforger/wiki/Getting-started)
-* [Installation](https://github.com/dvorka-oss/mindforger/wiki/Installation)
-* [User documentation](https://github.com/dvorka-oss/mindforger/wiki/User-documentation)
-* [Developer documentation](https://github.com/dvorka-oss/mindforger/wiki/Developer-documentation)
-* [Project history](https://github.com/dvorka-oss/mindforger/wiki/History)
-* [FAQs](https://github.com/dvorka-oss/mindforger/wiki/FAQs)
+* [Getting started](https://github.com/dvorka/mindforger/wiki/Getting-started)
+* [Installation](https://github.com/dvorka/mindforger/wiki/Installation)
+* [User documentation](https://github.com/dvorka/mindforger/wiki/User-documentation)
+* [Developer documentation](https://github.com/dvorka/mindforger/wiki/Developer-documentation)
+* [Project history](https://github.com/dvorka/mindforger/wiki/History)
+* [FAQs](https://github.com/dvorka/mindforger/wiki/FAQs)
 
 Watch:
 
@@ -121,4 +121,4 @@ Check:
 
 
 ## Bugs and Feature Requests
-https://github.com/dvorka-oss/mindforger/issues
+https://github.com/dvorka/mindforger/issues
