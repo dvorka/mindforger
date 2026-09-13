@@ -41,7 +41,7 @@ MindForger is open, free, well performing Markdown editor / IDE which respects y
 ## Perfect Software
 [Perfect software](https://outofdesk.netlify.app/perfect-software) is not necessarily the best software - it is perfect simply because it does exactly what you want, how do you want it and when you want it. The [YAGNI](https://martinfowler.com/bliki/Yagni.html) - You Aren't Gonna Need It - mantra protects software from wasting time and resources on implementing anything and everything.
 
-The **MindForger** project **is perfect to me**. Even if project's `main` branch does not receive updates, be sure that I use it every day - it is the first application I start when I boot up my computer and the last one I close. I add a small feature here or there, fix a bug or update a dependency as needed. In other words, the project is **not** and will **not** be dead.
+The **MindForger** project **is perfect to me**. Even if project's main development branch does not receive updates, be sure that I use it every day - it is the first application I start when I boot up my computer and the last one I close. I add a small feature here or there, fix a bug or update a dependency as needed. In other words, the project is **not** and will **not** be dead.
 
 If you have any ideas, suggestions, news to share, or constructive criticism to share, **do not hesitate to contact me**! Please do not be offended if your GitHub issue or bug report is not implemeted - IAGNI.
 
