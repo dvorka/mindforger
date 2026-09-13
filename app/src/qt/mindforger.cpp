@@ -176,7 +176,7 @@ int main(int argc, char* argv[])
     //   - https://stackoverflow.com/questions/35432749/disable-web-security-in-chrome-48
     //     ^ changes in required parameters with disable-web-security
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0) && (defined(__APPLE__) || defined(_WIN32))
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0) && defined(MF_QT_WEB_ENGINE)
     char ARG_DISABLE_WEB_SECURITY[] = "--disable-web-security";
     int newArgc = argc + 1 + 1;
     char** newArgv = new char*[static_cast<size_t>(newArgc)];
@@ -236,7 +236,7 @@ int main(int argc, char* argv[])
         );
         parser.addOption(configPathOption);
 
-     #if defined(__APPLE__) || defined(_WIN32)
+     #if defined(MF_QT_WEB_ENGINE)
         // command line options which might be passed to WebEngine to control the security
         QCommandLineOption macosDisableSecurityOption(QStringList() << "S" << "disable-web-security",
             QCoreApplication::translate("main", "Disable WebEngine security to allow loading of images on macOS.")
@@ -267,7 +267,7 @@ int main(int argc, char* argv[])
         );
         parser.addOption(macosAcessFileFromFile);
       #endif // >= 5.15.0
-    #endif // APPLE or WIN
+    #endif // MF_QT_WEB_ENGINE
 
         QCommandLineOption versionOption=parser.addVersionOption();
         QCommandLineOption helpOption=parser.addHelpOption();

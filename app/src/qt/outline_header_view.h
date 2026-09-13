@@ -96,7 +96,7 @@ public:
     void setZoomFactor(qreal factor) {
         headerViewer->setZoomFactor(factor);
     }
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0) && (defined(__APPLE__) || defined(_WIN32))
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0) && defined(MF_QT_WEB_ENGINE)
     void setHtml(const QString& html, const QUrl& baseUrl = QUrl("file://")) {
 #else
     void setHtml(const QString& html, const QUrl& baseUrl = QUrl()) {
