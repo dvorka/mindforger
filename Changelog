@@ -1,14 +1,10 @@
 2026-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v2.2.0 - Snap distro and autolinking colors stabilization.
-    * Build: Qt WebEngine is now the default HTML rendering backend on Linux (as it
-      already was on Windows and macOS) - qmake no longer needs CONFIG+=mfwebengine.
-      Legacy Qt WebKit remains available on Linux via CONFIG+=mfwebkit for distros
-      without WebEngine packages. The Snap package (strict and classic) switched from
-      WebKit to WebEngine accordingly.
-    * Build: simplified version handling - lib/src/app_info.h as authoritative source.
+    * Released v2.2.0 - Snap distro, WebEngine and autolinking colors stabilization.
     * Feature: Edit/Rewrap Paragraph - fills/rewraps the paragraph under the cursor
       to 80 columns.
+    * Enhancement: Qt WebEngine is newly the default HTML rendering backend on Linux as it
+      already was on Windows and macOS.
     * Enhancement: add emojis by clicking associated button when adding new
       Notebook/Note or editing Notebook/Note name or description.
     * Fix: strict Snap shipped with no menu/toolbar icons.
@@ -18,9 +14,10 @@
       which corrupted the result - fixed by verbatim using CommonMark's <...>.
     * Fix: "arrow down" in the dialog to find Note/Outline by name finally gives
       always focus to the first entry in the list instead of scrolling down.
-    * Cleanup: stripped malformed iCCP profile from (un)used logos.
     * Fix: "arrow up" in the Notebook/Note tree no longer loses tree focus and
       switches to the Notebook description when pressed with no row selected.
+    * Cleanup: stripped malformed iCCP profile from (un)used logos.
+    * Build: simplified version handling - lib/src/app_info.h as authoritative source.
 
 2026-09-02  Martin Dvorak  <martin.dvorak@mindforger.com>
 

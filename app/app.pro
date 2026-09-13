@@ -62,10 +62,10 @@ mfoldhunspell | equals(OS_DISTRO_VERSION, "Windows") | equals(OS_DISTRO_VERSION,
   message("Hunspell: configuring use of NEW API on OS: $$OS_DISTRO_VERSION")
 }
 
-# Qt WebEngine (Chromium-based) is the default HTML rendering backend on all
-# platforms - Linux included since Qt WebKit is EOL and no longer packaged by
-# recent distros. Qt WebKit remains available on Linux for anyone who needs it
-# (e.g. older distros without WebEngine packages) via CONFIG+=mfwebkit:
+# Qt WebEngine (Chromium) is the default MF's HTML rendering backend on all
+# platforms:
+# - Qt WebKit is EOL (since 2018) community fork which is no longer packaged by new distros
+# - Qt WebKit MF build remains available on Linux via CONFIG+=mfwebkit:
 #   qmake CONFIG+=mfwebkit mindforger.pro
 mfwebkit {
     message("HTML rendering: Qt WebKit (legacy Apple WebKit)")

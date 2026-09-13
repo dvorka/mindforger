@@ -112,6 +112,15 @@
 #       - build distro: `ubuntu-launchpad-...-from-beast.sh trusty` @ beast machine
 #
 
+# ########################################################################
+# # Hints
+# ########################################################################
+
+# Qt WebEngine is MF's default MD 2 HTML rendering backend on all supported Ubuntu versions
+# Legacy Qt WebKit remains available on Linux via CONFIG+=mfwebkit (see mindforger.pro)
+
+# ########################################################################
+
 # EDIT for every release:
 # - UBUNTU_VERSIONS
 # - PATCH_VERSION
@@ -152,16 +161,6 @@ else
     export OPT_DO_PUSH="true" # "true" to upload src to bazaar
     export OPT_DO_RELEASE="true" # "true" to dpush binary .deb to Launchpad and TRIGGER release
 fi
-
-# Qt WebEngine (qtwebengine5-dev) is MF's default HTML rendering backend on every
-# supported Ubuntu version - build/ubuntu/debian/control declares it as the base
-# build-dep and qmake's own default already builds it, so no per-distro branching is
-# needed here any more. Legacy Qt WebKit remains available on Linux via
-# CONFIG+=mfwebkit (see mindforger.pro) for anyone hand-building it, but this release
-# pipeline no longer publishes WebKit .debs for any distro.
-
-# shell variables
-# ...
 
 # ########################################################################
 # # Helpers
