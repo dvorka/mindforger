@@ -96,7 +96,7 @@ public:
         noteViewer->setZoomFactor(factor);
     }
     // IMPORTANT: file:// base URL is IMPORTANT for QtWebEngine to load local images on Qt >=5.12.0
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0) && (defined(__APPLE__) || defined(_WIN32))
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0) && defined(MF_QT_WEB_ENGINE)
     void setHtml(const QString& html, const QUrl& baseUrl = QUrl("file://")) {
 #else
     void setHtml(const QString& html, const QUrl& baseUrl = QUrl()) {

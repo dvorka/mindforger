@@ -87,7 +87,7 @@ void NoteViewPresenter::refreshLivePreview()
 
     double yScrollPct{0};
     QScrollBar* scrollbar = orloj->getNoteEdit()->getView()->getNoteEditor()->verticalScrollBar();
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(MF_QT_WEB_ENGINE)
     // WebEngine: scroll to same pct view
     if(scrollbar) {
         if(scrollbar->maximum()) {

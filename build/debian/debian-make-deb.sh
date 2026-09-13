@@ -111,7 +111,10 @@ function buildDebPackage() {
     find . -type f \( -name "*moc_*.cpp" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
 
     # 1.3) generate makefiles (will be used later to build binary)
-    qmake -r mindforger.pro
+    # - CONFIG+=mfwebkit matches debian/control's libqt5webkit5-dev build-dep
+    # - Qt WebEngine is MF default, but Debian packaging is pinned to the legacy Qt WebKit
+    #   (older Debian releases / backward compatibility)
+    qmake -r mindforger.pro CONFIG+=mfwebkit
 
     # 1.4) create tar archive
     createTarball
