@@ -423,8 +423,15 @@ dist-ubuntu-deb: ## locally build .deb for any Ubuntu version: DISTRO=bionic
 # build/snap/apply-classic.sh - never hand-edit a classic variant directly.
 #
 
+.PHONY: dist-snap-clean
+dist-snap-clean: ## remove locally built Snap relics (packed .snap + build-copy snapcraft.yaml) so a stale one is never picked up by mistake
+	@echo "Removing locally built Snap artifacts..."
+	rm -vf ../mindforger_*.snap
+	rm -vf ../snapcraft.yaml
+
+
 .PHONY: dist-snap
-dist-snap: ## build strict Snap package for the Snap Store (LXD required)
+dist-snap: dist-snap-clean ## build strict Snap package for the Snap Store (LXD required)
 	@echo "Building Snap $(MINDFORGER_VERSION) ..."
 	cd .. && make clean && cd build
 	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
@@ -441,7 +448,7 @@ dist-snap-wip: ## debug Snap build w/o clean up, but w/ incremental build
 
 
 .PHONY: dist-snap-classic
-dist-snap-classic: ## build classic Snap package for downloadable GitHub Release (LXD required)
+dist-snap-classic: dist-snap-clean ## build classic Snap package for downloadable GitHub Release (LXD required)
 	@echo "Building classic Snap $(MINDFORGER_VERSION) ..."
 	cd .. && make clean && cd build
 	cp -vf snap/snapcraft.yaml ../snapcraft.yaml

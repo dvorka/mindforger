@@ -57,19 +57,27 @@ apps:
       FONTCONFIG_PATH: ${SNAP}/etc/fonts
       FONTCONFIG_FILE: ${SNAP}/etc/fonts/fonts.conf
       # Qt WebEngine bakes the /usr install prefix in at compile time, so - same
-      # reasoning as QT_PLUGIN_PATH above - the helper process and its resource/
-      # translation data must be pointed at their location under $SNAP explicitly,
-      # otherwise the note view fails to render with "Could not find
-      # QtWebEngineProcess"/"Could not find the WebEngine resources" errors.
+      # reasoning as QT_PLUGIN_PATH above - the helper process must be pointed at
+      # its location under $SNAP explicitly, otherwise the note view fails to
+      # render with "Could not find QtWebEngineProcess". There is no equivalent
+      # env var for WebEngine's resources/locales data (verified against the
+      # actual linked libQt5WebEngineCore.so.5 - only the vars below exist) -
+      # bin/qt.conf (see the launcher part and build/snap/qt.conf) relocates those
+      # instead.
       QTWEBENGINEPROCESS_PATH: ${SNAP}/usr/lib/x86_64-linux-gnu/qt5/libexec/QtWebEngineProcess
-      QTWEBENGINE_RESOURCES_PATH: ${SNAP}/usr/share/qt5/resources
-      QTWEBENGINE_LOCALES_PATH: ${SNAP}/usr/share/qt5/translations/qtwebengine_locales
       # Chromium's own process sandbox (user namespaces + seccomp-bpf) nests badly
       # inside snapd's own strict confinement sandbox - disabling it here and relying
       # on snapd's outer confinement instead is the standard workaround used by other
       # snaps that bundle QtWebEngine/CEF (unverified against a real Snap Store
       # install yet - revisit if sandboxing issues turn up in testing).
       QTWEBENGINE_DISABLE_SANDBOX: "1"
+      # observed in testing: "Creating shared memory in /dev/shm/.org.chromium.*
+      # failed: Permission denied" followed by a segfault - Chromium's default
+      # /dev/shm-based shared memory doesn't play well with snapd's own confined
+      # /dev/shm; --disable-dev-shm-usage (the standard fix for this exact failure
+      # in other sandboxed/containerized Chromium deployments, e.g. Docker) makes
+      # it fall back to a different backing store instead.
+      QTWEBENGINE_CHROMIUM_FLAGS: --disable-dev-shm-usage
       # strict-only wiring (removed by build/snap/apply-classic.sh for the classic build):
       # ~/.mindforger.md is a HIDDEN file directly in $HOME, and hidden files/dirs
       # right under $HOME are unreachable through the 'home' interface under strict
@@ -181,15 +189,35 @@ parts:
   launcher:
     # stages the first-run default-content seeding wrapper as bin/mindforger-launcher,
     # alongside the real bin/mindforger built by the mindforger part above - see
-    # build/snap/mindforger-launcher for what it does and why it is needed
+    # build/snap/mindforger-launcher for what it does and why it is needed.
+    # Also stages qt.conf next to bin/mindforger - see build/snap/qt.conf for why
+    # this (rather than an env var) is how Qt WebEngine's resources/locales paths
+    # get relocated under $SNAP.
     plugin: dump
     source: build/snap
     organize:
       mindforger-launcher: bin/mindforger-launcher
+      qt.conf: bin/qt.conf
     stage:
       - bin/mindforger-launcher
+      - bin/qt.conf
     prime:
       - bin/mindforger-launcher
+      - bin/qt.conf
+
+  webengine-qtconf:
+    # QtWebEngineProcess (staged by the mindforger part's stage-packages under
+    # usr/lib/x86_64-linux-gnu/qt5/libexec/) is a separate executable that looks for
+    # its own qt.conf right next to itself, independently of bin/qt.conf above - see
+    # build/snap/qt.conf for why the identical file needs to exist at both locations
+    plugin: dump
+    source: build/snap
+    organize:
+      qt.conf: usr/lib/x86_64-linux-gnu/qt5/libexec/qt.conf
+    stage:
+      - usr/lib/x86_64-linux-gnu/qt5/libexec/qt.conf
+    prime:
+      - usr/lib/x86_64-linux-gnu/qt5/libexec/qt.conf
 
   desktop-assets:
     # a dedicated desktop file is required here (rather than reusing
