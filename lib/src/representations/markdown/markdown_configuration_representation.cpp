@@ -326,7 +326,9 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         }
                     } else if(line->find(CONFIG_SETTING_MD_DIAGRAM_LABEL) != std::string::npos) {
                         if(line->find(UI_JS_LIB_ONLINE) != std::string::npos) {
-                            c.setUiEnableDiagramsInMd(Configuration::JavaScriptLibSupport::ONLINE);
+                            // backward compatibility: "online" is no longer offered in the
+                            // UI (no CDN dependency for diagrams) - migrate to offline
+                            c.setUiEnableDiagramsInMd(Configuration::JavaScriptLibSupport::OFFLINE);
                         } else if(line->find(UI_JS_LIB_OFFLINE) != std::string::npos) {
                             c.setUiEnableDiagramsInMd(Configuration::JavaScriptLibSupport::OFFLINE);
                         } else {

@@ -248,7 +248,6 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget* parent)
     diagramSupportLabel = new QLabel(tr("Diagram support")+":", this);
     diagramSupportCombo = new QComboBox{this};
     diagramSupportCombo->addItem(QString{"disable"});
-    diagramSupportCombo->addItem(QString{"online JavaScript lib"});
     diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
 
     htmlCssThemeLabel = new QLabel(tr("Viewer theme CSS")+":", this);
@@ -332,7 +331,12 @@ void ConfigurationDialog::ViewerTab::refresh()
     //srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
     mathSupportCombo->setCurrentIndex(config.getUiEnableMathInMd());
     fullOPreviewCheck->setChecked(config.isUiFullOPreview());
-    diagramSupportCombo->setCurrentIndex(config.getUiEnableDiagramsInMd());
+    // no "online" option in the combo (index 0 = disable, index 1 = offline) - any
+    // legacy ONLINE setting is migrated to OFFLINE on config load, but map it
+    // defensively here too in case it is ever set in-memory without a reload
+    diagramSupportCombo->setCurrentIndex(
+        config.getUiEnableDiagramsInMd() == Configuration::JavaScriptLibSupport::NO ? 0 : 1
+    );
     doubleClickViewerToEditCheck->setChecked(config.isUiDoubleClickNoteViewToEdit());
 }
 
@@ -356,8 +360,11 @@ void ConfigurationDialog::ViewerTab::save()
         static_cast<Configuration::MathJsLibSupport>(mathSupportCombo->currentIndex())
     );
     config.setUiFullOPreview(fullOPreviewCheck->isChecked());
+    // combo index 0 = disable, index 1 = offline (no "online" option)
     config.setUiEnableDiagramsInMd(
-        static_cast<Configuration::JavaScriptLibSupport>(diagramSupportCombo->currentIndex())
+        diagramSupportCombo->currentIndex() == 0
+            ? Configuration::JavaScriptLibSupport::NO
+            : Configuration::JavaScriptLibSupport::OFFLINE
     );
     config.setUiDoubleClickNoteViewToEdit(doubleClickViewerToEditCheck->isChecked());
 }

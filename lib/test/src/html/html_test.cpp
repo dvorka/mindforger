@@ -290,3 +290,36 @@ TEST(HtmlTestCase, DiagramSupportOfflineMermaidIsFixed)
     EXPECT_NE(std::string::npos, html.find("qrc:/js/mermaid.js"));
     EXPECT_EQ(std::string::npos, html.find("https://cdnjs.cloudflare.com"));
 }
+
+TEST(HtmlTestCase, DiagramSupportOnlineIsNoLongerOffered)
+{
+    // GIVEN: ONLINE explicitly set (no longer reachable from the Preferences UI,
+    // which now offers only "disable"/"offline" - kept in the enum only for
+    // backward-compat config-file migration to OFFLINE)
+    string fileName{"/lib/test/resources/benchmark-repository/memory/meta.md"};
+    fileName.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-htc-diagram-online.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(fileName)),
+        repositoryConfigRepresentation
+    );
+    config.setUiEnableDiagramsInMd(m8r::Configuration::JavaScriptLibSupport::ONLINE);
+    m8r::Mind mind(config);
+    m8r::HtmlColorsMock dummyColors{};
+    m8r::HtmlOutlineRepresentation htmlRepresentation{mind.remind().getOntology(), dummyColors, nullptr};
+    mind.learn();
+    mind.think().get();
+    string markdown{"# Test\n\n```mermaid\ngraph TD; A-->B;\n```\n"};
+
+    // WHEN
+    string html{};
+    htmlRepresentation.to(&markdown, &html);
+
+    // THEN: no diagram JS is injected at all for interactive (non-standalone) rendering
+    EXPECT_EQ(std::string::npos, html.find("mermaid.js"));
+    EXPECT_EQ(std::string::npos, html.find("http://"));
+    EXPECT_EQ(std::string::npos, html.find("https://"));
+}

@@ -177,23 +177,16 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
 #endif
 
         // DIAGRAMS: mermaid.js
-        // - CDN: https://cdnjs.com/libraries/mermaid
         // - download from: https://unpkg.com/mermaid@7.1.0/dist/
         // - live demo: https://mermaidjs.github.io/mermaid-live-editor
+        // NOTE: interactive rendering is offline-only (no CDN option) - standalone HTML
+        // export still uses the CDN since qrc:/ resources are not available outside the app
         if(standalone) {
             html += "<script type=\"text/javascript\" src=\"";
             html += JS_LIB_MERMAILD_URL;
             html += "\"></script>";
         } else {
             switch(config.getUiEnableDiagramsInMd()) {
-            case Configuration::JavaScriptLibSupport::ONLINE:
-                html += "<script type=\"text/javascript\" src=\"";
-                html += JS_LIB_MERMAILD_URL;
-                html += "\"></script>";
-#ifdef DO_MF_DEBUG
-                html += "\n";
-#endif
-                break;
             case Configuration::JavaScriptLibSupport::OFFLINE:
                 html += "<script type=\"text/javascript\" src=\"qrc:/js/mermaid.js\"></script>";
 #ifdef DO_MF_DEBUG

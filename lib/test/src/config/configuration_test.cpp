@@ -305,3 +305,36 @@ TEST(ConfigurationTestCase, MathSupportBackwardCompatibleYes)
     c.setConfigFilePath(backupConfigPath);
     c.setUiEnableMathInMd(backupMath);
 }
+
+TEST(ConfigurationTestCase, DiagramSupportOnlineMigratesToOffline)
+{
+    // GIVEN: a config file with the deprecated "online" diagram JS lib setting
+    // (the Preferences UI no longer offers "online" - no CDN dependency for diagrams)
+    string configPath{"/tmp/cfg-diagram-backward-compat.md"};
+    m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    m8r::Configuration& c = m8r::Configuration::getInstance();
+    string backupConfigPath = c.getConfigFilePath();
+    m8r::Configuration::JavaScriptLibSupport backupDiagram = c.getUiEnableDiagramsInMd();
+
+    c.setConfigFilePath(configPath);
+    c.setUiEnableDiagramsInMd(m8r::Configuration::JavaScriptLibSupport::OFFLINE);
+    configRepresentation.save(c);
+    std::unique_ptr<string> asString{m8r::fileToString(configPath)};
+    string oldStyleContent{*asString};
+    string needle{"Enable diagram support in Markdown: offline"};
+    string replacement{"Enable diagram support in Markdown: online"};
+    size_t pos = oldStyleContent.find(needle);
+    ASSERT_NE(std::string::npos, pos);
+    oldStyleContent.replace(pos, needle.size(), replacement);
+    m8r::stringToFile(configPath, oldStyleContent);
+
+    // WHEN: the old "online" config is loaded
+    ASSERT_TRUE(configRepresentation.load(c));
+
+    // THEN: it migrates to offline - the only JS lib option left in the UI
+    EXPECT_EQ(m8r::Configuration::JavaScriptLibSupport::OFFLINE, c.getUiEnableDiagramsInMd());
+
+    // cleanup
+    c.setConfigFilePath(backupConfigPath);
+    c.setUiEnableDiagramsInMd(backupDiagram);
+}
