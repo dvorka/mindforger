@@ -245,10 +245,8 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget* parent)
     doubleClickViewerToEditCheck = new QCheckBox{
         tr("double click HTML preview to edit"), this};
 
-    diagramSupportLabel = new QLabel(tr("Diagram support")+":", this);
-    diagramSupportCombo = new QComboBox{this};
-    diagramSupportCombo->addItem(QString{"disable"});
-    diagramSupportCombo->addItem(QString{"offline JavaScript lib"});
+    diagramSupportCheck = new QCheckBox{
+        tr("diagram support"), this};
 
     htmlCssThemeLabel = new QLabel(tr("Viewer theme CSS")+":", this);
     htmlCssThemeCombo = new QComboBox{this};
@@ -274,10 +272,9 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget* parent)
     viewerLayout->addWidget(doubleClickViewerToEditCheck);
     viewerLayout->addWidget(fullOPreviewCheck);
     viewerLayout->addWidget(srcCodeHighlightSupportCheck);
+    viewerLayout->addWidget(diagramSupportCheck);
     viewerLayout->addWidget(mathSupportLabel);
     viewerLayout->addWidget(mathSupportCombo);
-    viewerLayout->addWidget(diagramSupportLabel);
-    viewerLayout->addWidget(diagramSupportCombo);
     viewerLayout->addWidget(zoomLabel);
     viewerLayout->addWidget(zoomSpin);
     viewerGroup->setLayout(viewerLayout);
@@ -307,8 +304,7 @@ ConfigurationDialog::ViewerTab::~ViewerTab()
     delete mathSupportLabel;
     delete mathSupportCombo;
     delete fullOPreviewCheck;
-    delete diagramSupportLabel;
-    delete diagramSupportCombo;
+    delete diagramSupportCheck;
     delete doubleClickViewerToEditCheck;
 }
 
@@ -324,18 +320,14 @@ void ConfigurationDialog::ViewerTab::refresh()
     }
 
     zoomSpin->setValue(config.getUiHtmlZoom());
-    // BUG: there is a bug @ Ubuntu 24.04 and newer that crashes MF if src highlight is on >
-    //   before it is fixed, this settting must be reset & disabled
-    srcCodeHighlightSupportCheck->setChecked(false);
-    srcCodeHighlightSupportCheck->setVisible(false);
-    //srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
+    srcCodeHighlightSupportCheck->setChecked(config.isUiEnableSrcHighlightInMd());
     mathSupportCombo->setCurrentIndex(config.getUiEnableMathInMd());
     fullOPreviewCheck->setChecked(config.isUiFullOPreview());
-    // no "online" option in the combo (index 0 = disable, index 1 = offline) - any
-    // legacy ONLINE setting is migrated to OFFLINE on config load, but map it
-    // defensively here too in case it is ever set in-memory without a reload
-    diagramSupportCombo->setCurrentIndex(
-        config.getUiEnableDiagramsInMd() == Configuration::JavaScriptLibSupport::NO ? 0 : 1
+    // no "online" option (checked = offline Mermaid support) - any legacy ONLINE
+    // setting is migrated to OFFLINE on config load, but map it defensively here
+    // too in case it is ever set in-memory without a reload
+    diagramSupportCheck->setChecked(
+        config.getUiEnableDiagramsInMd() != Configuration::JavaScriptLibSupport::NO
     );
     doubleClickViewerToEditCheck->setChecked(config.isUiDoubleClickNoteViewToEdit());
 }
@@ -360,11 +352,11 @@ void ConfigurationDialog::ViewerTab::save()
         static_cast<Configuration::MathJsLibSupport>(mathSupportCombo->currentIndex())
     );
     config.setUiFullOPreview(fullOPreviewCheck->isChecked());
-    // combo index 0 = disable, index 1 = offline (no "online" option)
+    // unchecked = disable, checked = offline (no "online" option)
     config.setUiEnableDiagramsInMd(
-        diagramSupportCombo->currentIndex() == 0
-            ? Configuration::JavaScriptLibSupport::NO
-            : Configuration::JavaScriptLibSupport::OFFLINE
+        diagramSupportCheck->isChecked()
+            ? Configuration::JavaScriptLibSupport::OFFLINE
+            : Configuration::JavaScriptLibSupport::NO
     );
     config.setUiDoubleClickNoteViewToEdit(doubleClickViewerToEditCheck->isChecked());
 }

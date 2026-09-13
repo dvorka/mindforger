@@ -262,11 +262,16 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
             }
         }
 
-        // SYNTAX HIGHLIGHTING: offline Highlight.js (CME)
+        // SYNTAX HIGHLIGHTING: highlight.js 11.x - offline qrc:/ bundle in-app,
+        // standalone HTML export uses a CDN (qrc:/ resources are not available outside the app)
         if(standalone) {
-            html += "<link rel=\"stylesheet\" href=\"http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/default.min.css\">";
-            html += "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js\"></script>";
-            html += "<script>hljs.initHighlightingOnLoad();</script>";
+            html += "<link rel=\"stylesheet\" href=\"";
+            html += JS_LIB_HLJS_CSS_URL;
+            html += "\">";
+            html += "<script src=\"";
+            html += JS_LIB_HLJS_JS_URL;
+            html += "\"></script>";
+            html += "<script>hljs.highlightAll();</script>";
         } else if(config.isUiEnableSrcHighlightInMd()) {
             html += "<link rel=\"stylesheet\" href=\"qrc:/html-css/highlight.css\"/>";
 #ifdef DO_MF_DEBUG
@@ -276,7 +281,7 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
 #ifdef DO_MF_DEBUG
             html += "\n";
 #endif
-            html += "<script type=\"text/javascript\">hljs.initHighlightingOnLoad();</script>";
+            html += "<script type=\"text/javascript\">hljs.highlightAll();</script>";
 #ifdef DO_MF_DEBUG
             html += "\n";
 #endif
