@@ -1,4 +1,4 @@
-2026-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
+2026-09-13  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.2.0 - Rewrap, Snap distro, WebEngine (Linux), KaTeX and autolinking.
     * Feature: Edit/Rewrap Paragraph - fills/rewraps the paragraph under the cursor
