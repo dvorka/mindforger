@@ -746,7 +746,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: katex, mathjax, no" << endl <<
          CONFIG_SETTING_MD_DIAGRAM_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableDiagramsInMd()):UI_JS_LIB_NO) << endl <<
          "    * Enable online or offline Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
-         "    * Examples: online, offline, no" << endl <<
+         "    * Examples: offline, no" << endl <<
          CONFIG_SETTING_NAVIGATOR_MAX_GRAPH_NODES_LABEL << (c?c->getNavigatorMaxNodes():Configuration::DEFAULT_NAVIGATOR_MAX_GRAPH_NODES) << endl <<
          "    * Maximum number of knowledge graph navigator nodes (performance vs. readability trade-off)." << endl <<
          "    * Examples: 150" << endl <<

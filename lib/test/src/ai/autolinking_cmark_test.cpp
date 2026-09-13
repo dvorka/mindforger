@@ -400,6 +400,39 @@ TEST(AutolinkingCmarkTestCase, NanoRepo)
     ASSERT_STREQ("Text of [AAA](mindforger://links.mindforger.com/AAA).", autolinkedMd.c_str());
 }
 
+TEST(AutolinkingCmarkTestCase, BareUrlTrailingPunctuationNotIncludedInLink)
+{
+    // GIVEN a minimal repository just to obtain a working Mind - this test is
+    // about bare URL detection, not about O/N/T matching, so the repository's
+    // own content is irrelevant and hand-crafted Markdown is autolinked instead
+    string repositoryPath{"/lib/test/resources/autolinking-nano-repository"};
+    repositoryPath.insert(0, getMindforgerGitHomePath());
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-act-url-punct.md");
+    config.setActiveRepository(config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryPath)), repositoryConfigRepresentation);
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think().get();
+    m8r::CmarkAhoCorasickBlockAutolinkingPreprocessor autolinker{mind};
+
+    // WHEN a bare URL is immediately followed by sentence punctuation with no
+    // space in between - a whitespace-only word split would otherwise pull
+    // the closing paren and period into the injected autolink's URL and text
+    string line{"See https://www.mindforger.com/a/b). More text."};
+    vector<string*> md{};
+    md.push_back(&line);
+    string autolinkedMd{};
+    autolinker.process(md, autolinkedMd);
+
+    // THEN the closing paren and period are kept out of the link
+    cout << "= BEGIN AUTO MD =" << endl << autolinkedMd << endl << "= END AUTO MD =" << endl;
+    ASSERT_STREQ(
+        "See <https://www.mindforger.com/a/b>). More text.",
+        autolinkedMd.c_str());
+}
+
 TEST(AutolinkingCmarkTestCase, MicroRepo)
 {
     // GIVEN

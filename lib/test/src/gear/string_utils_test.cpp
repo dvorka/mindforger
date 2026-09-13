@@ -229,3 +229,100 @@ TEST(StringGearTestCase, RewrapParagraphLinesEmpty)
     // THEN
     ASSERT_TRUE(rewrapped.empty());
 }
+
+TEST(StringGearTestCase, RewrapParagraphLinesUsesCodepointWidthNotByteWidth)
+{
+    // GIVEN a Czech word whose UTF-8 byte length (9) is longer than its
+    // Unicode codepoint length (7) - byte-based width counting would wrap
+    // this line too early
+    vector<string> lines{"čeština dnes"};
+
+    // WHEN wrapped to a width that fits both words by codepoint count
+    // (7 + 1 + 4 = 12) but not by UTF-8 byte count (9 + 1 + 4 = 14)
+    vector<string> rewrapped = rewrapParagraphLines(lines, 12);
+
+    // THEN both words stay on the same output line
+    for(const string& line: rewrapped) {
+        cout << "rewrapped[" << line.size() << "] '" << line << "'" << endl;
+    }
+    ASSERT_EQ(1u, rewrapped.size());
+    ASSERT_EQ("čeština dnes", rewrapped[0]);
+}
+
+TEST(StringGearTestCase, RewrapParagraphLinesPreservesHardBreakWithTrailingSpaces)
+{
+    // GIVEN a paragraph where the 1st line ends with a markdown hard line
+    // break (two trailing spaces) - short enough that a naive rewrap would
+    // merge it with the 2nd line into a single wrapped line
+    vector<string> lines{
+        "Line one.  ",
+        "Line two.",
+    };
+
+    // WHEN
+    vector<string> rewrapped = rewrapParagraphLines(lines, 80);
+
+    // THEN the hard break still splits the output into 2 lines and the
+    // 2-space marker is preserved so the rendered document is not affected
+    for(const string& line: rewrapped) {
+        cout << "rewrapped[" << line.size() << "] '" << line << "'" << endl;
+    }
+    ASSERT_EQ(2u, rewrapped.size());
+    ASSERT_EQ("Line one.  ", rewrapped[0]);
+    ASSERT_EQ("Line two.", rewrapped[1]);
+}
+
+TEST(StringGearTestCase, RewrapParagraphLinesPreservesHardBreakWithTrailingBackslash)
+{
+    // GIVEN a paragraph where the 1st line ends with a markdown hard line
+    // break expressed as a trailing backslash
+    vector<string> lines{
+        "Line one.\\",
+        "Line two.",
+    };
+
+    // WHEN
+    vector<string> rewrapped = rewrapParagraphLines(lines, 80);
+
+    // THEN the hard break still splits the output into 2 lines and the
+    // backslash marker is preserved
+    for(const string& line: rewrapped) {
+        cout << "rewrapped[" << line.size() << "] '" << line << "'" << endl;
+    }
+    ASSERT_EQ(2u, rewrapped.size());
+    ASSERT_EQ("Line one.\\", rewrapped[0]);
+    ASSERT_EQ("Line two.", rewrapped[1]);
+}
+
+TEST(StringGearTestCase, RewrapParagraphLinesHardBreakInLongParagraphStillWraps)
+{
+    // GIVEN a long line without a hard break, followed by a short line
+    // with a hard break, followed by more text - words before the hard
+    // break must still be wrapped to width, and the hard break must force
+    // a new output line regardless of the remaining width budget
+    vector<string> lines{
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+        "tempor.  ",
+        "Ut enim ad minim veniam.",
+    };
+
+    // WHEN
+    vector<string> rewrapped = rewrapParagraphLines(lines, 20);
+
+    // THEN
+    for(const string& line: rewrapped) {
+        cout << "rewrapped[" << line.size() << "] '" << line << "'" << endl;
+    }
+    ASSERT_FALSE(rewrapped.empty());
+    // the hard break marker must survive and terminate its own output line
+    bool foundHardBreakLine{false};
+    for(const string& line: rewrapped) {
+        if(line.size()>=2 && line.substr(line.size()-2)=="  ") {
+            foundHardBreakLine = true;
+            break;
+        }
+    }
+    ASSERT_TRUE(foundHardBreakLine);
+    // and the words after it must not appear on the same output line
+    ASSERT_EQ(string::npos, rewrapped.back().find("tempor"));
+}

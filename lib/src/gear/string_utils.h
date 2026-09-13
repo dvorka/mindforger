@@ -200,8 +200,10 @@ bool isMarkdownParagraphBoundaryLine(const std::string& line);
  *
  * @param lines a single plain prose paragraph i.e. lines with none of them matching
  *              isMarkdownParagraphBoundaryLine()
- * @param width target column width - a single word longer than width is kept whole
- *              on its own line rather than being broken
+ * @param width target column width, measured in Unicode codepoints rather than
+ *              display columns (East-Asian wide glyphs and emoji are not measured
+ *              exactly) - a single word longer than width is kept whole on its
+ *              own line rather than being broken
  */
 std::vector<std::string> rewrapParagraphLines(const std::vector<std::string>& lines, unsigned width = 80);
 

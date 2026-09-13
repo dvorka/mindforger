@@ -118,6 +118,41 @@ bool looksLikeUrl(const string& word)
     return word.compare(0, 7, "http://") == 0 || word.compare(0, 8, "https://") == 0;
 }
 
+string stripUrlTrailingPunctuation(const string& url, string& trailingPunctuation)
+{
+    // a bare URL word is chopped from surrounding prose at whitespace only,
+    // BUT (see e.g. "See https://example.com). More text." would reach here as
+    // "https://example.com)." > strip trailing punctuation that CommonMark does
+    // not part of the URL
+    static const string URL_TRAILING_PUNCTUATION{"?!.,:*_~'\""};
+
+    size_t end{url.size()};
+    while(end>0) {
+        char c{url[end-1]};
+        if(c==')') {
+            int balance{0};
+            for(size_t i=0; i<end; i++) {
+                if(url[i]=='(') {
+                    balance++;
+                } else if(url[i]==')') {
+                    balance--;
+                }
+            }
+            if(balance>=0) {
+                break;
+            }
+            end--;
+        } else if(URL_TRAILING_PUNCTUATION.find(c)!=string::npos) {
+            end--;
+        } else {
+            break;
+        }
+    }
+
+    trailingPunctuation = url.substr(end);
+    return url.substr(0, end);
+}
+
 cmark_node* injectAstAutolinkNode(
     cmark_node* srcNode,
     cmark_node* node,
@@ -168,10 +203,15 @@ cmark_node* appendUnmatchedWord(
     // like a bare URL - bare URLs are instead flushed as a dedicated autolink AST
     // node - see injectAstAutolinkNode()
     if(looksLikeUrl(word)) {
+        string trailingPunctuation{};
+        string url{stripUrlTrailingPunctuation(word, trailingPunctuation)};
+
         if(at.size()) {
             node = injectAstTxtNode(srcNode, node, at);
         }
-        node = injectAstAutolinkNode(srcNode, node, word);
+        node = injectAstAutolinkNode(srcNode, node, url);
+        // keep whatever was peeled off the URL as plain text after the link
+        at.append(trailingPunctuation);
     } else {
         at.append(word);
     }
