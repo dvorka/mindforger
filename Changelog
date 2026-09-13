@@ -1,6 +1,6 @@
 2026-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v2.2.0 - Snap distro, WebEngine and autolinking colors stabilization.
+    * Released v2.2.0 - Rewrap, Snap distro, WebEngine (Linux), KaTeX and autolinking.
     * Feature: Edit/Rewrap Paragraph - fills/rewraps the paragraph under the cursor
       to 80 columns.
     * Enhancement: Qt WebEngine is newly the default HTML rendering backend on Linux as it
@@ -20,7 +20,7 @@
     * Fix: "arrow up" in the Notebook/Note tree no longer loses tree focus and
       switches to the Notebook description when pressed with no row selected.
     * Fix: offline Mermaid diagram rendering works again - mermaid.js was not
-      registered as a Qt resource, so it always silently failed.
+      registered as a Qt resource, so it always silently failed. Online option removed.
     * Cleanup: stripped malformed iCCP profile from (un)used logos.
     * Build: simplified version handling - lib/src/app_info.h as authoritative source.
 
