@@ -114,6 +114,10 @@ constexpr const auto UI_JS_LIB_ONLINE = "online";
 constexpr const auto UI_JS_LIB_OFFLINE = "offline";
 constexpr const auto UI_JS_LIB_NO = "no";
 
+constexpr const auto UI_MATH_LIB_NO = "no";
+constexpr const auto UI_MATH_LIB_KATEX = "katex";
+constexpr const auto UI_MATH_LIB_MATHJAX = "mathjax";
+
 constexpr const auto UI_OS_TABLE_SORT_ORDER_ASC = "ascending";
 constexpr const auto UI_OS_TABLE_SORT_ORDER_DESC = "descending";
 
@@ -269,8 +273,15 @@ public:
 
     enum JavaScriptLibSupport {
         NO,         // 0
-        ONLINE,     // 2
-        OFFLINE     // 1
+        ONLINE,     // 1
+        OFFLINE     // 2
+    };
+
+    // math rendering engine: KaTeX (fast, offline) or MathJax (legacy, offline)
+    enum MathJsLibSupport {
+        MATH_NO,        // 0
+        MATH_KATEX,     // 1
+        MATH_MATHJAX    // 2
     };
 
     enum EditorKeyBindingMode {
@@ -331,7 +342,7 @@ public:
     static constexpr const bool DEFAULT_RECENT_INCLUDE_OS= false;
     static constexpr const bool DEFAULT_SPELLCHECK_LIVE = true;
     static constexpr const bool DEFAULT_MD_HIGHLIGHT = true;
-    static constexpr const bool DEFAULT_MD_MATH = false;
+    static constexpr const MathJsLibSupport DEFAULT_MD_MATH = MathJsLibSupport::MATH_NO;
     static constexpr const bool DEFAULT_ALLOW_ONLINE_JS_LIBS = false;
     static constexpr const bool DEFAULT_NAVIGATOR_SHOW_LEGEND = false;
     static constexpr const int DEFAULT_OS_TABLE_SORT_COLUMN = 7;
@@ -421,6 +432,7 @@ private:
     bool uiEditorSmartEditor; // toggle smart editor: lists, blocks and {[(`_
     bool uiEditorSpaceSectionEscaping; // escape # in section with spaces (enabled), or HTML (disabled)
     JavaScriptLibSupport uiEnableDiagramsInMd; // MD: diagrams
+    MathJsLibSupport uiEnableMathInMd; // MD: math (KaTeX/MathJax)
     int navigatorMaxNodes;
     bool uiEditorTabsAsSpaces;
     bool uiEditorAutosave;
@@ -694,6 +706,11 @@ public:
             if(s==JavaScriptLibSupport::OFFLINE) return UI_JS_LIB_OFFLINE; else return UI_JS_LIB_NO;
     }
 
+    const char* getMathLibSupportAsString(MathJsLibSupport s) const {
+        if(s==MathJsLibSupport::MATH_KATEX) return UI_MATH_LIB_KATEX; else
+            if(s==MathJsLibSupport::MATH_MATHJAX) return UI_MATH_LIB_MATHJAX; else return UI_MATH_LIB_NO;
+    }
+
     bool isUiEnableSrcHighlightInMd() {
         return (md2HtmlOptions&MdToHtmlOption::CodeHighlighting)>0?true:false;
     }
@@ -704,16 +721,8 @@ public:
             md2HtmlOptions &= ~MdToHtmlOption::CodeHighlighting;
         }
     }
-    bool isUiEnableMathInMd() {
-        return (md2HtmlOptions&MdToHtmlOption::MathSupport)>0?true:false;
-    }
-    void setUiEnableMathInMd(bool enable) {
-        if(enable) {
-            md2HtmlOptions |= MdToHtmlOption::MathSupport;
-        } else {
-            md2HtmlOptions &= ~MdToHtmlOption::MathSupport;
-        }
-    }
+    MathJsLibSupport getUiEnableMathInMd() { return uiEnableMathInMd; }
+    void setUiEnableMathInMd(MathJsLibSupport mode) { uiEnableMathInMd = mode; }
 
     JavaScriptLibSupport getUiEnableDiagramsInMd() { return uiEnableDiagramsInMd; }
     void setUiEnableDiagramsInMd(JavaScriptLibSupport mode) { uiEnableDiagramsInMd = mode; }

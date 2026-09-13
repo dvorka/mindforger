@@ -152,6 +152,15 @@ void NoteViewPresenter::slotEditNote()
     orloj->showFacetNoteEdit(this->currentNote);
 }
 
+void NoteViewPresenter::slotConfigurationUpdated()
+{
+    // re-render the currently viewed N (if any) so that a changed setting
+    // (e.g. math rendering engine) is reflected without switching Ns
+    if(currentNote) {
+        refresh(currentNote);
+    }
+}
+
 void NoteViewPresenter::slotEditNoteDoubleClick()
 {
     if(orloj->getMainPresenter()->getConfiguration().isUiDoubleClickNoteViewToEdit()) {

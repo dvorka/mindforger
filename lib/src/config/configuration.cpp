@@ -161,9 +161,9 @@ void Configuration::clear()
     md2HtmlOptions = 0
         // DISABLED highlighting and extensions support is consequence of HTML preview flickering when =-v is enabled
         //| MdToHtmlOption::CodeHighlighting // source code highlighting via offline highlight.js - disabled by default
-        //| MdToHtmlOption::MathSupport // math expressions support via mathjax.js - disabled by default
         //| MdToHtmlOption::DiagramSupport; // diagram support via mermaid.js - disabled by default
         ;
+    uiEnableMathInMd = DEFAULT_MD_MATH; // math support via KaTeX/MathJax - disabled by default
 
     aaAlgorithm = AssociationAssessmentAlgorithm::WEIGHTED_FTS;
     switch(aaAlgorithm) {
