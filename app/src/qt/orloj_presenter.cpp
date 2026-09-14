@@ -32,6 +32,7 @@ OrlojPresenter::OrlojPresenter(
     config{Configuration::getInstance()},
     skipEditNoteCheck{false}
 {
+    this->currentNotebookTree = nullptr;
     this->mainPresenter = mainPresenter;
     this->view = view;
     this->mind = mind;
@@ -42,6 +43,7 @@ OrlojPresenter::OrlojPresenter(
     this->tagCloudPresenter = new TagsTablePresenter(view->getTagCloud(), mainPresenter->getHtmlRepresentation());
     this->outlinesTablePresenter = new OutlinesTablePresenter(view->getOutlinesTable(), mainPresenter->getHtmlRepresentation());
     this->outlinesMapPresenter = new OutlinesMapPresenter(view->getOutlinesMap(), mainPresenter, this);
+    this->notebookTreesTablePresenter = new NotebookTreesTablePresenter(view->getNotebookTreesTable(), mainPresenter->getHtmlRepresentation());
     this->recentNotesTablePresenter = new RecentNotesTablePresenter(view->getRecentNotesTable(), mainPresenter->getHtmlRepresentation());
     this->outlineViewPresenter = new OutlineViewPresenter(view->getOutlineView(), this);
     this->outlineHeaderViewPresenter = new OutlineHeaderViewPresenter(view->getOutlineHeaderView(), this);
@@ -73,6 +75,12 @@ OrlojPresenter::OrlojPresenter(
         SIGNAL(signalMapShowSelectedOutline()),
         this,
         SLOT(slotMapShowSelectedOutline()));
+    // hit enter in Notebook trees to open the selected tree
+    QObject::connect(
+        view->getNotebookTreesTable(),
+        SIGNAL(signalShowSelectedNotebookTree()),
+        this,
+        SLOT(slotShowSelectedNotebookTree()));
     QObject::connect(
         view->getOutlinesTable(),
         SIGNAL(signalFindOutlineByName()),
@@ -376,6 +384,43 @@ void OrlojPresenter::showFacetOutlinesMap(Outline* outlinesMap)
         componentView->setCurrentIndex(
             componentView->model()->index(0, 0)
         );
+    }
+}
+
+void OrlojPresenter::showFacetNotebookTreeList(const vector<NotebookTree*>& notebookTrees)
+{
+    setFacet(OrlojPresenterFacets::FACET_LIST_NOTEBOOK_TREES);
+    currentNotebookTree = nullptr;
+    // IMPROVE reload ONLY if dirty, otherwise just show
+    notebookTreesTablePresenter->refresh(notebookTrees);
+    view->showFacetNotebookTrees();
+    mainPresenter->getMainMenu()->showFacetNotebookTreeList();
+    mainPresenter->getStatusBar()->showMindStatistics();
+}
+
+void OrlojPresenter::slotShowSelectedNotebookTree()
+{
+    if(activeFacet == OrlojPresenterFacets::FACET_LIST_NOTEBOOK_TREES) {
+        int row = notebookTreesTablePresenter->getCurrentRow();
+        if(row != NotebookTreesTablePresenter::NO_ROW) {
+            QStandardItem* item = notebookTreesTablePresenter->getModel()->item(row);
+            if(item) {
+                NotebookTree* notebookTree = item->data(Qt::UserRole + 1).value<NotebookTree*>();
+                MF_DEBUG("Notebook tree selected by Orloj: data(user)=" << notebookTree << endl);
+
+                currentNotebookTree = notebookTree;
+                Outline* tree = mind->notebookTreeGet(notebookTree->getKey());
+                showFacetOutlinesMap(tree);
+
+                mainPresenter->getStatusBar()->showInfo(
+                    QString(tr("Notebook Tree: '%1'")).arg(notebookTree->getName().c_str())
+                );
+                return;
+            } else {
+                mainPresenter->getStatusBar()->showInfo(QString(tr("Selected Notebook Tree not found!")));
+            }
+        }
+        mainPresenter->getStatusBar()->showInfo(QString(tr("No Notebook Tree selected!")));
     }
 }
 

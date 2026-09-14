@@ -288,6 +288,7 @@ HEADERS += \
     src/qt/dialogs/add_library_dialog.h \
     src/qt/dialogs/export_csv_file_dialog.h \
     src/qt/dialogs/organizer_new_dialog.h \
+    src/qt/dialogs/notebook_tree_new_dialog.h \
     src/qt/dialogs/rm_library_dialog.h \
     src/qt/dialogs/run_tool_dialog.h \
     src/qt/dialogs/wingman_dialog.h \
@@ -314,6 +315,9 @@ HEADERS += \
     src/qt/outlines_map_model.h \
     src/qt/outlines_map_presenter.h \
     src/qt/outlines_map_view.h \
+    src/qt/notebook_trees_table_model.h \
+    src/qt/notebook_trees_table_presenter.h \
+    src/qt/notebook_trees_table_view.h \
     src/qt/qt_commons.h \
     src/qt/spelling/abstract_dictionary.h \
     src/qt/spelling/abstract_dictionary_provider.h \
@@ -414,6 +418,7 @@ SOURCES += \
     src/qt/dialogs/add_library_dialog.cpp \
     src/qt/dialogs/export_csv_file_dialog.cpp \
     src/qt/dialogs/organizer_new_dialog.cpp \
+    src/qt/dialogs/notebook_tree_new_dialog.cpp \
     src/qt/dialogs/rm_library_dialog.cpp \
     src/qt/dialogs/run_tool_dialog.cpp \
     src/qt/dialogs/wingman_dialog.cpp \
@@ -440,6 +445,9 @@ SOURCES += \
     src/qt/outlines_map_model.cpp \
     src/qt/outlines_map_presenter.cpp \
     src/qt/outlines_map_view.cpp \
+    src/qt/notebook_trees_table_model.cpp \
+    src/qt/notebook_trees_table_presenter.cpp \
+    src/qt/notebook_trees_table_view.cpp \
     src/qt/spelling/dictionary_manager.cpp \
     src/qt/spelling/spell_checker.cpp \
     src/qt/tags_table_model.cpp \

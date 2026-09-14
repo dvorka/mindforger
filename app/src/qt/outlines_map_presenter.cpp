@@ -62,6 +62,10 @@ OutlinesMapPresenter::OutlinesMapPresenter(
         view, SIGNAL(signalChangeLast()),
         mwp, SLOT(doActionNoteLast()));
 
+    QObject::connect(
+        view, SIGNAL(signalForget()),
+        mwp, SLOT(doActionNotebookTreeRemoveEntry()));
+
     // TODO signals to be re-written and re-wired
     /*
     QObject::connect(
@@ -76,9 +80,6 @@ OutlinesMapPresenter::OutlinesMapPresenter(
     QObject::connect(
         view, SIGNAL(signalEdit()),
         mwp, SLOT(doActionNoteEdit()));
-    QObject::connect(
-        view, SIGNAL(signalForget()),
-        mwp, SLOT(doActionNoteForget()));
     */
 }
 

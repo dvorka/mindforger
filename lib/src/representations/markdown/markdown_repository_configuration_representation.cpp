@@ -38,6 +38,16 @@ constexpr const auto CONFIG_SETTING_ORG_FILTER_BY = "* Filter by: ";
 constexpr const auto CONFIG_SETTING_ORG_SORT_BY = "* Sort by: ";
 constexpr const auto CONFIG_SETTING_ORG_SCOPE = "* Outline scope: ";
 
+constexpr const auto CONFIG_SECTION_NOTEBOOK_TREES = "Notebook Trees";
+
+// notebook trees
+constexpr const auto CONFIG_SETTING_NBT_NAME = "Notebook tree name: ";
+constexpr const auto CONFIG_SETTING_NBT_KEY = "* Key: ";
+
+// default name given to the legacy, single Notebooks Map migrated
+// to the first Notebook Tree for backward compatibility
+constexpr const auto LEGACY_NOTEBOOKS_MAP_NAME = "Notebooks Map";
+
 using namespace std;
 
 MarkdownRepositoryConfigurationRepresentation
@@ -115,6 +125,9 @@ void MarkdownRepositoryConfigurationRepresentation::repositoryConfigurationSecti
         if(!title->compare(CONFIG_SECTION_ORGANIZERS)) {
             MF_DEBUG("PARSING configuration section: Organizers" << endl);
             repositoryConfigurationSectionOrganizers(body, c);
+        } else if(!title->compare(CONFIG_SECTION_NOTEBOOK_TREES)) {
+            MF_DEBUG("PARSING configuration section: Notebook Trees" << endl);
+            repositoryConfigurationSectionNotebookTrees(body, c);
         }
     }
 }
@@ -264,6 +277,82 @@ Organizer* MarkdownRepositoryConfigurationRepresentation
     return o;
 }
 
+/**
+ * @brief Parse notebook tree(s) from MD section.
+ *
+ * @example
+ * # Notebook Trees
+ * Notebook tree name: My Work Tree
+ * * Key: /home/dvorka/mf/mind/notebook-tree-1700000000.md
+ * ...
+ * Notebook tree name: My Personal Tree
+ * * Key: /home/dvorka/mf/mind/notebook-tree-1700000001.md
+ *
+ * MD section is split using notebook tree name row(s).
+ */
+void MarkdownRepositoryConfigurationRepresentation
+    ::repositoryConfigurationSectionNotebookTrees(
+        vector<string*>* body, Configuration& c
+) {
+    set<string> keys{};
+    if(body) {
+        NotebookTree* t = nullptr;
+        string name{};
+        for(string* line:*body) {
+            if(line) {
+                if(line->find(CONFIG_SETTING_NBT_NAME) != std::string::npos) {
+                    // add PREVIOUS NotebookTree (if available) so that it's not rewritten
+                    repositoryConfigurationSectionNotebookTreeAdd(t, keys, c);
+
+                    name = line->substr(strlen(CONFIG_SETTING_NBT_NAME));
+                    t = new NotebookTree(name, "");
+                } else if(t && line->find(CONFIG_SETTING_NBT_KEY) != std::string::npos) {
+                    t->setKey(line->substr(strlen(CONFIG_SETTING_NBT_KEY)));
+                }
+            }
+        }
+
+        // add (valid) notebook tree
+        t = repositoryConfigurationSectionNotebookTreeAdd(t, keys, c);
+    }
+}
+
+NotebookTree* MarkdownRepositoryConfigurationRepresentation
+    ::repositoryConfigurationSectionNotebookTreeAdd(
+        NotebookTree* t,
+        set<string>& keys,
+        Configuration& c
+) {
+    if(t) {
+        // validate notebook tree integrity
+        if(t->getKey().empty()) {
+            t->setKey(
+                NotebookTree::createNotebookTreeKey(
+                    keys,
+                    c.getMindPath(),
+                    FILE_PATH_SEPARATOR
+                )
+            );
+        }
+        set<string>::iterator it = keys.find(t->getKey());
+        if(it != keys.end()) {
+            cerr << "Error: skipping '" << t->getName()
+                 << "' notebook tree as another notebook tree "
+                 << "with key '" << t->getKey() << "' is already defined" << endl;
+            delete t;
+            return nullptr;
+        } // else OK - key not defined yet
+
+        // persist
+        if(t && c.hasRepositoryConfiguration()) {
+            c.getRepositoryConfiguration().addNotebookTree(t);
+            keys.insert(t->getKey());
+        }
+    }
+
+    return t;
+}
+
 string* MarkdownRepositoryConfigurationRepresentation::to(Configuration& c)
 {
     string* md = new string{};
@@ -275,6 +364,7 @@ string& MarkdownRepositoryConfigurationRepresentation::to(Configuration* c, stri
 {
     stringstream s{};
     string os{};
+    string ts{};
     string timeScopeAsString{}, tagsScopeAsString{}, mindStateAsString{"sleep"};
     if(c) {
         // organizers
@@ -304,6 +394,20 @@ string& MarkdownRepositoryConfigurationRepresentation::to(Configuration* c, stri
             oss << endl;
         }
         os=oss.str();
+
+        // notebook trees
+        stringstream tss{};
+        if(c->hasRepositoryConfiguration() && c->getRepositoryConfiguration().getNotebookTrees().size()) {
+            for(NotebookTree* t:c->getRepositoryConfiguration().getNotebookTrees()) {
+                tss
+                << CONFIG_SETTING_NBT_NAME << t->getName() << endl
+                << CONFIG_SETTING_NBT_KEY << t->getKey() << endl
+                << endl;
+            }
+        } else {
+            tss << endl;
+        }
+        ts=tss.str();
     }
 
     // IMPROVE build more in compile time and less in runtime
@@ -315,7 +419,10 @@ string& MarkdownRepositoryConfigurationRepresentation::to(Configuration* c, stri
          endl <<
 
          "# " << CONFIG_SECTION_ORGANIZERS << endl <<
-         os
+         os <<
+
+         "# " << CONFIG_SECTION_NOTEBOOK_TREES << endl <<
+         ts
 
          ;
 
@@ -359,6 +466,19 @@ bool MarkdownRepositoryConfigurationRepresentation::load(Configuration& c)
                 << Organizer::TYPE_STR_EISENHOWER_MATRIX << endl);
             c.getRepositoryConfiguration().addOrganizer(
                 EisenhowerMatrix::createEisenhowerMatrixOrganizer());
+            this->save(c);
+        }
+
+        // backward compatibility: migrate legacy, single Notebooks Map
+        // (mind/outlines-map.md) to be the first registered Notebook Tree
+        if(c.getRepositoryConfiguration().getNotebookTrees().empty()
+           && isFile(c.getOutlinesMapPath().c_str())
+        ) {
+            MF_DEBUG(
+                "Notebook Trees: MIGRATING legacy Notebooks Map from "
+                << c.getOutlinesMapPath() << endl);
+            c.getRepositoryConfiguration().addNotebookTree(
+                new NotebookTree(LEGACY_NOTEBOOKS_MAP_NAME, c.getOutlinesMapPath()));
             this->save(c);
         }
 

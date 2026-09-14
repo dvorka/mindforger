@@ -210,7 +210,7 @@ bool Memory::learnOutlineTWiki(const string& twikiFileName, const string& outlin
     return twikiRepresentation.outline(File{twikiFileName}, File{outlineFileName});
 }
 
-Outline* Memory::learnOutlinesMap(const string& filePath)
+Outline* Memory::learnNotebookTree(const string& filePath)
 {
     return mdRepresentation.outline(File{filePath});
 }
