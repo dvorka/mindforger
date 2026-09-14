@@ -6,6 +6,7 @@
     * Fix: source code syntax highlighting no longer crashes MindForger thanks to
       the migration to Qt WebEngine + upgraded the offline highlight.js library
       to new version.
+    * Cleanup: hid not-yet-ready Workspace/Semantic Search menu item from production builds.
 
 2026-09-13  Martin Dvorak  <martin.dvorak@mindforger.com>
 
