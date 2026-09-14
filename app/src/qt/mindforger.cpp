@@ -305,6 +305,11 @@ int main(int argc, char* argv[])
     // load configuration
     m8r::MarkdownConfigurationRepresentation mdConfigRepresentation{};
     m8r::Configuration& config = m8r::Configuration::getInstance();
+#ifdef MF_QT_WEB_ENGINE
+    config.setHtmlRenderingWebEngineBackend(true);
+#else
+    config.setHtmlRenderingWebEngineBackend(false);
+#endif
     if(configurationFilePath.size()) {
         config.setConfigFilePath(configurationFilePath.toStdString());
     }

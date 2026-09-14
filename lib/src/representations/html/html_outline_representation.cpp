@@ -272,7 +272,7 @@ void HtmlOutlineRepresentation::header(string& html, string* basePath, bool stan
             html += JS_LIB_HLJS_JS_URL;
             html += "\"></script>";
             html += "<script>hljs.highlightAll();</script>";
-        } else if(config.isUiEnableSrcHighlightInMd()) {
+        } else if(config.isUiEnableSrcHighlightInMd() && config.isHtmlRenderingWebEngineBackend()) {
             html += "<link rel=\"stylesheet\" href=\"qrc:/html-css/highlight.css\"/>";
 #ifdef DO_MF_DEBUG
             html += "\n";

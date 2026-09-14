@@ -235,6 +235,11 @@ ConfigurationDialog::ViewerTab::ViewerTab(QWidget* parent)
 
     srcCodeHighlightSupportCheck = new QCheckBox{
         tr("source code syntax highlighting support"), this};
+#ifndef MF_QT_WEB_ENGINE
+    // legacy Qt WebKit's JS engine cannot safely run the ES2015+ highlight.js bundle
+    // -> keep the option hidden
+    srcCodeHighlightSupportCheck->setVisible(false);
+#endif
 
     mathSupportLabel = new QLabel(tr("Math support")+":", this);
     mathSupportCombo = new QComboBox{this};
