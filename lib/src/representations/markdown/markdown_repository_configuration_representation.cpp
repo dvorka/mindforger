@@ -38,10 +38,10 @@ constexpr const auto CONFIG_SETTING_ORG_FILTER_BY = "* Filter by: ";
 constexpr const auto CONFIG_SETTING_ORG_SORT_BY = "* Sort by: ";
 constexpr const auto CONFIG_SETTING_ORG_SCOPE = "* Outline scope: ";
 
-constexpr const auto CONFIG_SECTION_NOTEBOOK_TREES = "Notebook Trees";
+constexpr const auto CONFIG_SECTION_NOTEBOOK_TREES = "Notebook Shelves";
 
 // notebook trees
-constexpr const auto CONFIG_SETTING_NBT_NAME = "Notebook tree name: ";
+constexpr const auto CONFIG_SETTING_NBT_NAME = "Notebook shelf name: ";
 constexpr const auto CONFIG_SETTING_NBT_KEY = "* Key: ";
 
 // default name given to the legacy, single Notebooks Map migrated
@@ -126,7 +126,7 @@ void MarkdownRepositoryConfigurationRepresentation::repositoryConfigurationSecti
             MF_DEBUG("PARSING configuration section: Organizers" << endl);
             repositoryConfigurationSectionOrganizers(body, c);
         } else if(!title->compare(CONFIG_SECTION_NOTEBOOK_TREES)) {
-            MF_DEBUG("PARSING configuration section: Notebook Trees" << endl);
+            MF_DEBUG("PARSING configuration section: Notebook Shelves" << endl);
             repositoryConfigurationSectionNotebookTrees(body, c);
         }
     }
@@ -281,14 +281,14 @@ Organizer* MarkdownRepositoryConfigurationRepresentation
  * @brief Parse notebook tree(s) from MD section.
  *
  * @example
- * # Notebook Trees
- * Notebook tree name: My Work Tree
+ * # Notebook Shelves
+ * Notebook shelf name: My Work Shelf
  * * Key: /home/dvorka/mf/mind/notebook-tree-1700000000.md
  * ...
- * Notebook tree name: My Personal Tree
+ * Notebook shelf name: My Personal Shelf
  * * Key: /home/dvorka/mf/mind/notebook-tree-1700000001.md
  *
- * MD section is split using notebook tree name row(s).
+ * MD section is split using notebook shelf name row(s).
  */
 void MarkdownRepositoryConfigurationRepresentation
     ::repositoryConfigurationSectionNotebookTrees(

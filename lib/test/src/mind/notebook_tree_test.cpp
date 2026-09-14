@@ -93,18 +93,18 @@ TEST(NotebookTreeTestCase, ParseSaveAndLoad)
     c.setActiveRepository(c.addRepository(r), repositoryConfigRepresentation);
 
     c.getRepositoryConfiguration().addNotebookTree(
-        new m8r::NotebookTree("My Work Tree", c.getMindPath()+FILE_PATH_SEPARATOR+"notebook-tree-1.md"));
+        new m8r::NotebookTree("My Work Shelf", c.getMindPath()+FILE_PATH_SEPARATOR+"notebook-tree-1.md"));
     c.getRepositoryConfiguration().addNotebookTree(
-        new m8r::NotebookTree("My Personal Tree", c.getMindPath()+FILE_PATH_SEPARATOR+"notebook-tree-2.md"));
+        new m8r::NotebookTree("My Personal Shelf", c.getMindPath()+FILE_PATH_SEPARATOR+"notebook-tree-2.md"));
 
     configRepresentation.save(c);
 
     // THEN: assert serialized configuration
     ASSERT_TRUE(c.getRepositoryConfigFilePath().size());
     string* asString = m8r::fileToString(c.getRepositoryConfigFilePath());
-    EXPECT_NE(std::string::npos, asString->find("Notebook Trees"));
-    EXPECT_NE(std::string::npos, asString->find("Notebook tree name: My Work Tree"));
-    EXPECT_NE(std::string::npos, asString->find("Notebook tree name: My Personal Tree"));
+    EXPECT_NE(std::string::npos, asString->find("Notebook Shelves"));
+    EXPECT_NE(std::string::npos, asString->find("Notebook shelf name: My Work Shelf"));
+    EXPECT_NE(std::string::npos, asString->find("Notebook shelf name: My Personal Shelf"));
     delete asString;
 
     // GIVEN load previously saved configuration
@@ -120,8 +120,8 @@ TEST(NotebookTreeTestCase, ParseSaveAndLoad)
     for(auto t:c.getRepositoryConfiguration().getNotebookTrees()) {
         names.push_back(t->getName());
     }
-    EXPECT_NE(names.end(), std::find(names.begin(), names.end(), "My Work Tree"));
-    EXPECT_NE(names.end(), std::find(names.begin(), names.end(), "My Personal Tree"));
+    EXPECT_NE(names.end(), std::find(names.begin(), names.end(), "My Work Shelf"));
+    EXPECT_NE(names.end(), std::find(names.begin(), names.end(), "My Personal Shelf"));
 }
 
 TEST(NotebookTreeTestCase, MigrateLegacyNotebooksMap)

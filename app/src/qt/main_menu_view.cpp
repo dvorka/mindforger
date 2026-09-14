@@ -297,7 +297,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
     actionViewOutlines->setStatusTip(tr("Show list of Notebooks..."));
 
-    actionViewNotebookTrees = new QAction(QIcon(":/menu-icons/dashboard.svg"), tr("Notebook &Trees"), mainWindow);
+    actionViewNotebookTrees = new QAction(QIcon(":/menu-icons/dashboard.svg"), tr("Notebook &Shelves"), mainWindow);
     actionViewNotebookTrees->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
     actionViewNotebookTrees->setStatusTip(tr("Show list of Notebook trees..."));
 
@@ -523,7 +523,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuOrganizer->addAction(actionOrganizerMoveNext);
 
     // menu: notebook tree
-    menuNotebookTree = qMenuBar->addMenu(tr("Notebook &Tree"));
+    menuNotebookTree = qMenuBar->addMenu(tr("&Shelf"));
 
     actionNotebookTreeNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
     actionNotebookTreeNew->setStatusTip(tr("Create a new Notebook tree to organize your Notebooks"));
@@ -537,7 +537,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNotebookTreeAddOutline = new QAction(QIcon(":/menu-icons/list-text.svg"), tr("&Add Notebook..."), mainWindow);
     actionNotebookTreeAddOutline->setStatusTip(tr("Add a Notebook to the current Notebook tree"));
 
-    actionNotebookTreeRemoveOutline = new QAction(QIcon(":/menu-icons/delete.svg"), tr("Remove fro&m Tree"), mainWindow);
+    actionNotebookTreeRemoveOutline = new QAction(QIcon(":/menu-icons/delete.svg"), tr("Remove fro&m Shelf"), mainWindow);
     actionNotebookTreeRemoveOutline->setStatusTip(tr("Remove selected entry from the current Notebook tree (Notebook itself is NOT deleted)"));
 
     menuNotebookTree->addAction(actionNotebookTreeNew);

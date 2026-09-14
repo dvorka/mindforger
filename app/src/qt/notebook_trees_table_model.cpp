@@ -41,7 +41,7 @@ void NotebookTreesTableModel::removeAllRows()
 
     QStringList tableHeader;
     tableHeader
-        << tr("Notebook Trees");
+        << tr("Notebook Shelves");
     setHorizontalHeaderLabels(tableHeader);
 }
 
