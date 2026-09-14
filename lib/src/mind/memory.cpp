@@ -265,6 +265,11 @@ void Memory::exportToHtml(Outline* outline, const string& fileName)
     persistence->saveAsHtml(outline, fileName);
 }
 
+void Memory::exportToMarkdown(Outline* outline, const string& fileName)
+{
+    persistence->saveAsMarkdown(outline, fileName);
+}
+
 void Memory::exportToCsv(
         const string& fileName,
         map<const Tag*,int>& tagsCardinality,

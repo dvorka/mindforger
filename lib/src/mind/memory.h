@@ -153,6 +153,11 @@ public:
     void exportToHtml(Outline* outline, const std::string& fileName);
 
     /**
+     * @brief Export Outline to Markdown.
+     */
+    void exportToMarkdown(Outline* outline, const std::string& fileName);
+
+    /**
      * @brief Export memory to CSV.
      */
     void exportToCsv(

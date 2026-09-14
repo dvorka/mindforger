@@ -180,6 +180,9 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
         view->actionOutlineHtmlExport, SIGNAL(triggered()),
         mwp, SLOT(doActionOutlineHtmlExport()));
     QObject::connect(
+        view->actionOutlineMarkdownExport, SIGNAL(triggered()),
+        mwp, SLOT(doActionOutlineMarkdownExport()));
+    QObject::connect(
         view->actionOutlineTWikiImport, SIGNAL(triggered()),
         mwp, SLOT(doActionOutlineTWikiImport()));
     // wingman: Outline

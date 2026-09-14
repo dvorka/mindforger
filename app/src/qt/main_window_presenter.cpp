@@ -86,6 +86,13 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
              QString::fromStdString(File::EXTENSION_HTML),
              &view
     );
+    exportOutlineToMarkdownDialog
+       = new ExportFileDialog(
+             tr("Export Notebook to Markdown"),
+             tr("Export"),
+             QString::fromStdString(File::EXTENSION_MD_MD),
+             &view
+    );
     exportMemoryToCsvDialog
        = new ExportCsvFileDialog(
              tr("Export Memory to CSV"),
@@ -170,6 +177,8 @@ MainWindowPresenter::MainWindowPresenter(MainWindowView& view)
         newFileDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindNewFile()));
     QObject::connect(
         exportOutlineToHtmlDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineHtmlExport()));
+    QObject::connect(
+        exportOutlineToMarkdownDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleOutlineMarkdownExport()));
     QObject::connect(
         exportMemoryToCsvDialog->getNewButton(), SIGNAL(clicked()), this, SLOT(handleMindCsvExport()));
     QObject::connect(
@@ -2595,6 +2604,35 @@ void MainWindowPresenter::handleOutlineHtmlExport()
             Outline* o = orloj->getOutlineView()->getCurrentOutline();
             if(o) {
                 mind->remind().exportToHtml(o, exportOutlineToHtmlDialog->getFilePath().toStdString());
+                return;
+            }
+        }
+
+        QMessageBox::critical(&view, tr("Export Error"), tr("Unable to find Notebook to export!"));
+    }
+}
+
+void MainWindowPresenter::doActionOutlineMarkdownExport()
+{
+    exportOutlineToMarkdownDialog->show();
+}
+
+void MainWindowPresenter::handleOutlineMarkdownExport()
+{
+    if(isDirectoryOrFileExists(exportOutlineToMarkdownDialog->getFilePath().toStdString().c_str())) {
+        QMessageBox::critical(&view, tr("Export Error"), tr("Specified file path already exists!"));
+    } else {
+        if(orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE)
+             ||
+           orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_OUTLINE_HEADER)
+             ||
+           orloj->isFacetActive(OrlojPresenterFacets::FACET_VIEW_NOTE)
+             ||
+           orloj->isFacetActive(OrlojPresenterFacets::FACET_EDIT_NOTE)
+        ) {
+            Outline* o = orloj->getOutlineView()->getCurrentOutline();
+            if(o) {
+                mind->remind().exportToMarkdown(o, exportOutlineToMarkdownDialog->getFilePath().toStdString());
                 return;
             }
         }

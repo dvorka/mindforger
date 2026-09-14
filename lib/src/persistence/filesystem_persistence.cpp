@@ -130,4 +130,15 @@ void FilesystemPersistence::saveAsHtml(Outline* outline, const string& fileName)
     delete text;
 }
 
+void FilesystemPersistence::saveAsMarkdown(Outline* outline, const string& fileName)
+{
+    string* text = mdRepresentation.to(outline);
+    if(text!=nullptr) {
+        ofstream out(fileName);
+        out << *text;
+        out.close();
+        delete text;
+    }
+}
+
 } // m8r namespace

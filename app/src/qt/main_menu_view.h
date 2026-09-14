@@ -161,6 +161,7 @@ public:
     QAction* actionOutlineLast;
     QMenu* submenuOutlineExport;
     QAction* actionOutlineHtmlExport;
+    QAction* actionOutlineMarkdownExport;
     QMenu* submenuOutlineImport;
     QAction* actionOutlineTWikiImport;
     QMenu* submenuOutlineWingman;

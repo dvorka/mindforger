@@ -579,9 +579,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     submenuOutlineExport = menuOutline->addMenu(QIcon(":/menu-icons/export.svg"), "E&xport");
     actionOutlineHtmlExport = new QAction(tr("&HTML"), mainWindow);
     actionOutlineHtmlExport->setStatusTip(tr("Export Notebook to a file in HTML format"));
-    // TODO Markdown
+    actionOutlineMarkdownExport = new QAction(tr("&Markdown"), mainWindow);
+    actionOutlineMarkdownExport->setStatusTip(tr("Export Notebook to a file in Markdown format"));
     // TODO Markdown with meta (status: Markdown with MindForger metadata
     submenuOutlineExport->addAction(actionOutlineHtmlExport);
+    submenuOutlineExport->addAction(actionOutlineMarkdownExport);
 
     submenuOutlineImport = menuOutline->addMenu(QIcon(":/menu-icons/import.svg"), tr("&Import"));
     actionOutlineTWikiImport= new QAction(tr("&TWiki"), mainWindow);
