@@ -45,9 +45,11 @@ MainMenuPresenter::MainMenuPresenter(MainWindowPresenter* mwp)
     QObject::connect(
         view->actionMindAutolink, SIGNAL(triggered()),
         mwp, SLOT(doActionMindToggleAutolink()));
+#ifdef MF_WIP
     QObject::connect(
         view->actionMindSemanticSearch, SIGNAL(triggered()),
         mwp, SLOT(doActionMindToggleSemanticSearch()));
+#endif
     QObject::connect(
         view->actionMindLearnDirectory, SIGNAL(triggered()),
         mwp, SLOT(doActionMindLearnRepository()));
