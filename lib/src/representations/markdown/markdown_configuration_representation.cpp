@@ -42,6 +42,7 @@ constexpr const auto CONFIG_SETTING_MIND_WINGMAN_PROVIDER_ITEM = "* Wingman LLM 
 // application
 constexpr const auto CONFIG_SETTING_STARTUP_VIEW_LABEL = "* Startup view: ";
 constexpr const auto CONFIG_SETTING_UI_THEME_LABEL = "* Theme: ";
+constexpr const auto CONFIG_SETTING_UI_LOCALE_LABEL = "* Locale: ";
 constexpr const auto CONFIG_SETTING_UI_APP_FONT_SIZE = "* Application font size: ";
 constexpr const auto CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL = "* Markdown CSS theme: ";
 constexpr const auto CONFIG_SETTING_UI_HTML_ZOOM_LABEL = "* Markdown HTML zoom: ";
@@ -196,6 +197,12 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         // NOTE: theme name is NOT validated
                         if(t.size()) {
                             c.setUiThemeName(t);
+                        }
+                    } else if(line->find(CONFIG_SETTING_UI_LOCALE_LABEL) != std::string::npos) {
+                        string t = line->substr(strlen(CONFIG_SETTING_UI_LOCALE_LABEL));
+                        // NOTE: locale is NOT validated
+                        if(t.size()) {
+                            c.setUiLocale(t);
                         }
                     } else if(line->find(CONFIG_SETTING_UI_APP_FONT_SIZE) != std::string::npos) {
                         string t = line->substr(strlen(CONFIG_SETTING_UI_APP_FONT_SIZE));
@@ -675,6 +682,8 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Examples: outlines, tags, recent, home" << endl <<
          CONFIG_SETTING_UI_THEME_LABEL << (c?c->getUiThemeName():Configuration::DEFAULT_UI_THEME_NAME) << endl <<
          "    * Examples: dark, light, native" << endl <<
+         CONFIG_SETTING_UI_LOCALE_LABEL << (c?c->getUiLocale():Configuration::DEFAULT_UI_LOCALE_NAME) << endl <<
+         "    * Examples: system, en_US, cs_CZ" << endl <<
          CONFIG_SETTING_UI_APP_FONT_SIZE << (c?c->getUiAppFontSize():Configuration::DEFAULT_UI_APP_FONT_SIZE) << endl <<
          "    * Examples: 0 (default - auto), 10, 42" << endl <<
          CONFIG_SETTING_UI_HTML_CSS_THEME_LABEL << (c?c->getUiHtmlCssPath():Configuration::DEFAULT_UI_HTML_CSS_THEME) << endl <<

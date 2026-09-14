@@ -1,3 +1,14 @@
+2026-09-14  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Feature: Czech localization - MindForger's UI is now fully translated to
+      Czech (mindforger_cs.ts/.qm and mindforger_nerd_cs.ts/.qm), covering all
+      ~1080 UI strings (menus, dialogs, tooltips and messages).
+    * Feature: Preferences now let you pick the UI language (System default,
+      English, Czech) instead of only following the OS locale - see
+      Preferences/Application/Appearance (requires restart).
+    * Fix: Qt resource bundle referenced mindforger_zh_cn.ts instead of the
+      compiled mindforger_zh_cn.qm, so the Chinese translation could never load.
+
 2026-09-13  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.2.0 - Rewrap, Snap distro, WebEngine (Linux), KaTeX and autolinking.

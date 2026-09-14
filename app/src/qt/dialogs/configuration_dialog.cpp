@@ -127,6 +127,13 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     themeCombo->addItem(QString{UI_THEME_NATIVE_WITH_FIXED_FONT});
 #endif
 
+    localeLabel = new QLabel(
+        tr("Language (<font color='#ff0000'>requires restart</font>)")+":", this);
+    localeCombo = new QComboBox{this};
+    localeCombo->addItem(tr("System default"), QString{UI_LOCALE_SYSTEM});
+    localeCombo->addItem(QStringLiteral("English"), QString{UI_LOCALE_EN_US});
+    localeCombo->addItem(QStringLiteral("Čeština"), QString{UI_LOCALE_CS_CZ});
+
     startupLabel = new QLabel(tr("Show the following view on application start")+":", this);
     startupCombo = new QComboBox{this};
     startupCombo->addItem(QString{START_TO_OUTLINES});
@@ -161,6 +168,8 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     QVBoxLayout* appearanceLayout = new QVBoxLayout{this};
     appearanceLayout->addWidget(themeLabel);
     appearanceLayout->addWidget(themeCombo);
+    appearanceLayout->addWidget(localeLabel);
+    appearanceLayout->addWidget(localeCombo);
     appearanceLayout->addWidget(appFontSizeLabel);
     appearanceLayout->addWidget(appFontSizeSpin);
     appearanceLayout->addWidget(menuLabel);
@@ -188,6 +197,8 @@ ConfigurationDialog::AppTab::~AppTab()
 {
     delete themeLabel;
     delete themeCombo;
+    delete localeLabel;
+    delete localeCombo;
     delete appFontSizeLabel;
     delete appFontSizeSpin;
     delete startupLabel;
@@ -205,6 +216,10 @@ void ConfigurationDialog::AppTab::refresh()
     if(i>=0) {
         themeCombo->setCurrentIndex(i);
     }
+    i = localeCombo->findData(QString::fromStdString(config.getUiLocale()));
+    if(i>=0) {
+        localeCombo->setCurrentIndex(i);
+    }
     showToolbarCheck->setChecked(config.isUiShowToolbar());
     appFontSizeSpin->setValue(config.getUiAppFontSize());
     uiExpertModeCheck->setChecked(config.isUiExpertMode());
@@ -215,6 +230,7 @@ void ConfigurationDialog::AppTab::save()
 {
     config.setStartupView(startupCombo->itemText(startupCombo->currentIndex()).toStdString());
     config.setUiThemeName(themeCombo->itemText(themeCombo->currentIndex()).toStdString());
+    config.setUiLocale(localeCombo->currentData().toString().toStdString());
     config.setUiShowToolbar(showToolbarCheck->isChecked());
     config.setUiAppFontSize(appFontSizeSpin->value());
     config.setUiExpertMode(uiExpertModeCheck->isChecked());

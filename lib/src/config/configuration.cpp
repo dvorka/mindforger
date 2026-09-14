@@ -37,6 +37,7 @@ const string KnowledgeTool::TOOL_PHRASE = string{"<<PHRASE>>"};
 const string Configuration::DEFAULT_ACTIVE_REPOSITORY_PATH = string{FILE_PATH_M8R_REPOSITORY};
 const string Configuration::DEFAULT_STARTUP_VIEW_NAME = string{DEFAULT_STARTUP_VIEW};
 const string Configuration::DEFAULT_UI_THEME_NAME = string{UI_DEFAULT_THEME};
+const string Configuration::DEFAULT_UI_LOCALE_NAME = string{UI_LOCALE_SYSTEM};
 const string Configuration::DEFAULT_UI_HTML_CSS_THEME = string{UI_DEFAULT_HTML_CSS_THEME};
 const string Configuration::DEFAULT_EDITOR_FONT= string{UI_DEFAULT_EDITOR_FONT};
 const string Configuration::DEFAULT_TIME_SCOPE = string{"0y0m0d0h0m"};
@@ -196,6 +197,7 @@ void Configuration::clear()
 #endif
     startupView.assign(DEFAULT_STARTUP_VIEW);
     uiThemeName.assign(UI_DEFAULT_THEME);
+    uiLocale.assign(UI_LOCALE_SYSTEM);
     uiHtmlCssPath.assign(UI_DEFAULT_HTML_CSS_THEME);
     uiHtmlZoom = DEFAULT_UI_HTML_ZOOM;
     externalEditorCmd = "";
