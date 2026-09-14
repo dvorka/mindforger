@@ -1,3 +1,11 @@
+2026-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
+
+    * Released v2.3.0 - Source code syntax highlighting.
+    * Enhancement: changed in-app diagram support from dropdown to checkbox.
+    * Fix: source code syntax highlighting no longer crashes MindForger thanks to
+      the migration to Qt WebEngine + upgraded the offline highlight.js library
+      to new version.
+
 2026-09-13  Martin Dvorak  <martin.dvorak@mindforger.com>
 
     * Released v2.2.0 - Rewrap, Snap distro, WebEngine (Linux), KaTeX and autolinking.
@@ -47,7 +55,7 @@
       craft-parts qmake plugin, refreshed build/stage packages for Ubuntu 24.04
       and wired the Snap version to app_info.h like the other release artifacts.
     * Build: added a classic-confinement Snap variant (build/snap/apply-classic.sh,
-      dist-snap-classic make target) for a downloadable GitHub Release build with
+      distro-snap-classic make target) for a downloadable GitHub Release build with
       full host filesystem access, alongside the strict Snap Store build.
     * Fix: the Snap build could silently package a stale, previously locally-built
       binary (potentially an RC/debug build) instead of a fresh compile - fixed by

@@ -287,8 +287,8 @@ releng-ver-set: ## propagate lib/src/app_info.h version to all release/packaging
 	@echo "Done. Review changes with: git diff"
 
 
-.PHONY: dist-pad-refresh
-dist-pad-refresh: ## refresh PAD.xml release fields (version, date, changelog, installer size)
+.PHONY: distro-pad-refresh
+distro-pad-refresh: ## refresh PAD.xml release fields (version, date, changelog, installer size)
 	./make/distro-pad-refresh.py
 
 
@@ -301,8 +301,8 @@ test-lib: clean ## compile and run lib/ unit tests
 	cd make && ./test-lib-units.sh
 
 
-.PHONY: dist-work-clean
-dist-work-clean:
+.PHONY: distro-work-clean
+distro-work-clean:
 	rm -rvf $(MF_MAKER_WORKING_DIR)
 
 
@@ -314,22 +314,22 @@ $(MINDFORGER_RELEASE_DIR):
 	mkdir -v $(MINDFORGER_RELEASE_DIR) || echo "$(MINDFORGER_RELEASE_DIR) already exists"
 
 
-dist-tarball: dist-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR) ## build tarball distribution
+distro-tarball: distro-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR) ## build tarball distribution
 	@echo "Building TARBALL distribution..."
 	mkdir -vp $(MF_MAKER_WORKING_DIR)
 	cp -vf ./tarball/tarball-build.sh $(MF_MAKER_WORKING_DIR) && cd $(MF_MAKER_WORKING_DIR) && ./tarball-build.sh
 	cp -vf $(MF_MAKER_WORKING_DIR)/`cd $(MF_MAKER_WORKING_DIR) && ls -d mindforger*`/mindforger_$(MINDFORGER_VERSION)_tarball.tgz $(MINDFORGER_RELEASE_DIR)
 
 
-dist-deb: dist-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR) ## build Debian distribution
+distro-deb: distro-work-clean $(MF_MAKER_WORKING_DIR) $(MINDFORGER_RELEASE_DIR) ## build Debian distribution
 	@echo "Building DEB distribution..."
 	mkdir -vp $(MF_MAKER_WORKING_DIR)
 	cp -vf ./debian/debian-make-deb.sh $(MF_MAKER_WORKING_DIR) && cd $(MF_MAKER_WORKING_DIR) && ./debian-make-deb.sh
 	cp -vf $(MF_MAKER_WORKING_DIR)/`cd $(MF_MAKER_WORKING_DIR) && ls -d mindforger*`/mindforger_$(MINDFORGER_VERSION)-1_amd64.deb $(MINDFORGER_RELEASE_DIR)
 
 
-.PHONY: dist-rpm
-dist-rpm: ## build .rpm package on Fedora
+.PHONY: distro-rpm
+distro-rpm: ## build .rpm package on Fedora
 	@echo "IMPORTANT: this target MUST be run on Fedora!"
 	cd fedora && ./fedora-distro-setup.sh
 	@echo "Building .rpm package..."
@@ -337,8 +337,8 @@ dist-rpm: ## build .rpm package on Fedora
 	@echo "Find .rpm in ~/alien directory"
 
 
-.PHONY: dist-dmg
-dist-dmg: ## build macOS Disk iMaGe .dmg package
+.PHONY: distro-dmg
+distro-dmg: ## build macOS Disk iMaGe .dmg package
 	@echo "Building .dmg package..."
 	cd macos && ./mindforger-build.sh && ./dmg-package-build.sh
 
@@ -391,8 +391,8 @@ dist-dmg: ## build macOS Disk iMaGe .dmg package
 # CURRENT repos : bookworm-main, bullseye-main, buster-main, stretch-main
 # obsolete repos: jessie-main
 
-.PHONY: dist-debian-ppa
-dist-debian-aptly-create-ppa:  ## create Debian PPA for all releases
+.PHONY: distro-debian-ppa
+distro-debian-aptly-create-ppa:  ## create Debian PPA for all releases
 	cd ./debian && ./debian-ppa-aptly-build.sh
 
 #
@@ -400,8 +400,8 @@ dist-debian-aptly-create-ppa:  ## create Debian PPA for all releases
 #
 
 
-.PHONY: dist-ubuntu-deb
-dist-ubuntu-deb: ## locally build .deb for any Ubuntu version: DISTRO=bionic
+.PHONY: distro-ubuntu-deb
+distro-ubuntu-deb: ## locally build .deb for any Ubuntu version: DISTRO=bionic
 	@echo "Building Ubuntu $(DISTRO) .deb ..."
 	@echo "Copying latest version of .sh script to launchpad/ ..."
 	@echo "Running .sh script ..."
@@ -418,20 +418,20 @@ dist-ubuntu-deb: ## locally build .deb for any Ubuntu version: DISTRO=bionic
 #   sudo lxd init --auto
 #   sudo usermod -aG lxd $USER
 #
-# build/snap/snapcraft.yaml is the STRICT manifest (Snap Store). dist-snap-classic
+# build/snap/snapcraft.yaml is the STRICT manifest (Snap Store). distro-snap-classic
 # derives the classic manifest (downloadable/sideloaded release) from it via
 # build/snap/apply-classic.sh - never hand-edit a classic variant directly.
 #
 
-.PHONY: dist-snap-clean
-dist-snap-clean: ## remove locally built Snap relics (packed .snap + build-copy snapcraft.yaml) so a stale one is never picked up by mistake
+.PHONY: distro-snap-clean
+distro-snap-clean: ## remove locally built Snap relics (packed .snap + build-copy snapcraft.yaml) so a stale one is never picked up by mistake
 	@echo "Removing locally built Snap artifacts..."
 	rm -vf ../mindforger_*.snap
 	rm -vf ../snapcraft.yaml
 
 
-.PHONY: dist-snap
-dist-snap: dist-snap-clean ## build strict Snap package for the Snap Store (LXD required)
+.PHONY: distro-snap
+distro-snap: distro-snap-clean ## build strict Snap package for the Snap Store (LXD required)
 	@echo "Building Snap $(MINDFORGER_VERSION) ..."
 	cd .. && make clean && cd build
 	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
@@ -439,16 +439,16 @@ dist-snap: dist-snap-clean ## build strict Snap package for the Snap Store (LXD 
 	cd .. && snapcraft clean && snapcraft pack
 
 
-.PHONY: dist-snap-wip
-dist-snap-wip: ## debug Snap build w/o clean up, but w/ incremental build
+.PHONY: distro-snap-wip
+distro-snap-wip: ## debug Snap build w/o clean up, but w/ incremental build
 	@echo "Building Snap $(MINDFORGER_VERSION) ..."
 	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
 	sed -i "s/^version: .*/version: '$(MINDFORGER_VERSION)'/" ../snapcraft.yaml
 	cd .. && snapcraft pack --debug
 
 
-.PHONY: dist-snap-classic
-dist-snap-classic: dist-snap-clean ## build classic Snap package for downloadable GitHub Release (LXD required)
+.PHONY: distro-snap-classic
+distro-snap-classic: distro-snap-clean ## build classic Snap package for downloadable GitHub Release (LXD required)
 	@echo "Building classic Snap $(MINDFORGER_VERSION) ..."
 	cd .. && make clean && cd build
 	cp -vf snap/snapcraft.yaml ../snapcraft.yaml
@@ -457,19 +457,19 @@ dist-snap-classic: dist-snap-clean ## build classic Snap package for downloadabl
 	cd .. && snapcraft clean && snapcraft pack
 
 
-.PHONY: dist-snap-remove
-dist-snap-remove: ## remove locally installed Snap (requires sudo)
+.PHONY: distro-snap-remove
+distro-snap-remove: ## remove locally installed Snap (requires sudo)
 	@echo "Removing Snap package..."
 	sudo snap remove mindforger || true
 	@echo "DONE Snap removed"
 
 
-.PHONY: dist-snap-install
-dist-snap-install: dist-snap-remove dist-snap ## build and install the STRICT Snap locally (for testing, requires sudo)
+.PHONY: distro-snap-install
+distro-snap-install: distro-snap-remove distro-snap ## build and install the STRICT Snap locally (for testing, requires sudo)
 	@echo "Installing strict Snap package locally..."
 	@SNAP_FILE=$$(ls ../mindforger_*.snap 2>/dev/null | head -1); \
 	if [ -z "$$SNAP_FILE" ]; then \
-		echo "Error: Snap package not found. Run 'make dist-snap' first."; \
+		echo "Error: Snap package not found. Run 'make distro-snap' first."; \
 		exit 1; \
 	fi; \
 	echo "Note: this command requires sudo privileges for snap install"; \
@@ -477,12 +477,12 @@ dist-snap-install: dist-snap-remove dist-snap ## build and install the STRICT Sn
 	echo "DONE Snap installed. Run with: mindforger"
 
 
-.PHONY: dist-snap-install-classic
-dist-snap-install-classic: dist-snap-remove dist-snap-classic ## build and install the CLASSIC Snap locally (for testing, requires sudo)
+.PHONY: distro-snap-install-classic
+distro-snap-install-classic: distro-snap-remove distro-snap-classic ## build and install the CLASSIC Snap locally (for testing, requires sudo)
 	@echo "Installing classic Snap package locally..."
 	@SNAP_FILE=$$(ls ../mindforger_*.snap 2>/dev/null | head -1); \
 	if [ -z "$$SNAP_FILE" ]; then \
-		echo "Error: Snap package not found. Run 'make dist-snap-classic' first."; \
+		echo "Error: Snap package not found. Run 'make distro-snap-classic' first."; \
 		exit 1; \
 	fi; \
 	echo "Note: this command requires sudo privileges for snap install"; \
@@ -490,23 +490,23 @@ dist-snap-install-classic: dist-snap-remove dist-snap-classic ## build and insta
 	echo "DONE Snap installed. Run with: mindforger"
 
 
-.PHONY: dist-snap-path
-dist-snap-path: ## show path to the last built Snap package
+.PHONY: distro-snap-path
+distro-snap-path: ## show path to the last built Snap package
 	@ls -1 ../mindforger_*.snap 2>/dev/null || echo "No Snap package built yet"
 
 
-.PHONY: dist-snap-upload
-dist-snap-upload: dist-snap ## upload strict Snap package to the Snap Store (amd64)
+.PHONY: distro-snap-upload
+distro-snap-upload: distro-snap ## upload strict Snap package to the Snap Store (amd64)
 	@echo "Uploading Snap package to the Snap Store..."
 	snapcraft upload --release=stable ../mindforger_$(MINDFORGER_VERSION)_amd64.snap
 
 
-.PHONY: dist-all-clean
-dist-all-clean:
+.PHONY: distro-all-clean
+distro-all-clean:
 	rm -rvf $(MINDFORGER_RELEASE_DIR)
 
 
-dist-all: dist-all-clean $(MINDFORGER_RELEASE_DIR) dist-tarball dist-deb ## build all distributions
+distro-all: distro-all-clean $(MINDFORGER_RELEASE_DIR) distro-tarball distro-deb ## build all distributions
 	@echo "Building all $(MINDFORGER_VERSION) distributions"
 
 

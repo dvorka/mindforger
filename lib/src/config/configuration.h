@@ -396,6 +396,7 @@ private:
     std::string timeScopeAsString;
     std::vector<std::string> tagsScope;
     unsigned int md2HtmlOptions;
+    bool htmlRenderingWebEngineBackend;
     AssociationAssessmentAlgorithm aaAlgorithm;
     int distributorSleepInterval;
 
@@ -721,6 +722,19 @@ public:
             md2HtmlOptions &= ~MdToHtmlOption::CodeHighlighting;
         }
     }
+
+    /**
+     * @brief Check if HTML rendering uses the WebEngine backend.
+     *
+     * Legacy Qt WebKit's JS engine cannot safely run the ES2015+ -> JS libs which are
+     * used by Markdown viewer,like highlight.js/mermaid/MathJax, may crash - this
+     * function is used to control the rendering.
+     *
+     * @return true if WebEngine backend is used, false otherwise.
+     */
+    bool isHtmlRenderingWebEngineBackend() const { return htmlRenderingWebEngineBackend; }
+    void setHtmlRenderingWebEngineBackend(bool enable) { htmlRenderingWebEngineBackend = enable; }
+
     MathJsLibSupport getUiEnableMathInMd() { return uiEnableMathInMd; }
     void setUiEnableMathInMd(MathJsLibSupport mode) { uiEnableMathInMd = mode; }
 
