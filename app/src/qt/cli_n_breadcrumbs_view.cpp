@@ -20,7 +20,7 @@
 
 namespace m8r {
 
-// "Enter a prompt - \"? .\" for help, \"> .\" to chat (Alt-x), \"/ .\" run command (Ctrl-/), or type a phrase to find."
+// "Enter a prompt - \"? .\" for help, \"! .\" to chat (Alt-x), \"/ .\" run command (Ctrl-/), or type a phrase to find."
 constexpr const auto CLI_HELP_SHADOW_TEXT
     = "Enter a prompt, command or phrase - type ? for help.";
 
@@ -106,7 +106,7 @@ const QString CliAndBreadcrumbsView::CMD_HELP_SEARCH
 const QString CliAndBreadcrumbsView::CMD_HELP_KNOWLEDGE
     = "?     @ for knowledge recherche";
 const QString CliAndBreadcrumbsView::CMD_HELP_CMD
-    = "?     > to run a command";
+    = "?     ! to run a command";
 const QString CliAndBreadcrumbsView::CMD_HELP_FTS
     = "?     full-text search phrase";
 
@@ -142,16 +142,16 @@ const QString CliAndBreadcrumbsView::CHAR_KNOW
     = "@";
 
 const QString CliAndBreadcrumbsView::CHAR_CMD
-    = ">";
+    = "!";
 
 const QString CliAndBreadcrumbsView::CMD_HOME
-    = "> home"; // go to home O
+    = "! home"; // go to home O
 const QString CliAndBreadcrumbsView::CMD_EMOJIS
-    = "> emojis";
+    = "! emojis";
 const QString CliAndBreadcrumbsView::CMD_TERMINAL
-    = "> terminal";
+    = "! terminal";
 const QString CliAndBreadcrumbsView::CMD_LIST_OUTLINES
-    = "> list notebooks";
+    = "! list notebooks";
 
 const QStringList CliAndBreadcrumbsView::HELP_CMD_CMDS = QStringList()
 //        << CMD_HOME
