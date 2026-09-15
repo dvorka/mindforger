@@ -523,7 +523,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuOrganizer->addAction(actionOrganizerMoveNext);
 
     // menu: notebook tree
-    menuNotebookTree = qMenuBar->addMenu(tr("&Shelf"));
+    menuNotebookTree = qMenuBar->addMenu(tr("She&lf"));
 
     actionNotebookTreeNew = new QAction(QIcon(":/menu-icons/new.svg"), tr("&New"), mainWindow);
     actionNotebookTreeNew->setStatusTip(tr("Create a new Notebook tree to organize your Notebooks"));
