@@ -397,3 +397,133 @@ TEST(NotebookTreeTestCase, RememberSelfHealsMissingMindDirectory)
     EXPECT_TRUE(m8r::isDirectoryOrFileExists(mindDir.c_str()));
     EXPECT_TRUE(m8r::isFile(treeKey.c_str()));
 }
+
+TEST(NotebookTreeTestCase, ForgetMovesBackingFileToLimboAndEvictsCache)
+{
+    // GIVEN a MindForger repository with a Notebook tree/shelf
+    string repositoryPath{"/tmp/mf-unit-notebook-tree-forget"};
+    m8r::removeDirectoryRecursively(repositoryPath.c_str());
+    map<string,string> pathToContent{};
+    m8r::createEmptyRepository(repositoryPath, pathToContent);
+
+    m8r::Repository* repository = new m8r::Repository(
+        repositoryPath,
+        m8r::Repository::RepositoryType::MINDFORGER,
+        m8r::Repository::RepositoryMode::REPOSITORY,
+        "",
+        false);
+
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/mf-unit-notebook-tree-forget-cfg.md");
+    config.setActiveRepository(
+        config.addRepository(repository), repositoryConfigRepresentation
+    );
+
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think().get();
+
+    set<string> existingKeys{};
+    string treeKey = m8r::NotebookTree::createNotebookTreeKey(
+        existingKeys, config.getMindPath(), FILE_PATH_SEPARATOR);
+    m8r::Outline* tree = mind.notebookTreeNew(treeKey, "ForgottenTree");
+    mind.notebookTreeRemember(tree);
+    ASSERT_TRUE(m8r::isFile(treeKey.c_str()));
+
+    string expectedLimboKey{
+        config.getLimboPath() + FILE_PATH_SEPARATOR + "ForgottenTree.md"};
+    ASSERT_FALSE(m8r::isFile(expectedLimboKey.c_str()));
+
+    // WHEN: the Notebook tree is forgotten/deleted, exactly as done by
+    // the "Delete Notebook Tree" UI action
+    bool forgotten = mind.notebookTreeForget(treeKey);
+
+    // THEN: its backing file is MOVED to Limbo - never left orphaned in
+    // mind/, unlike a plain registry-only removal
+    ASSERT_TRUE(forgotten);
+    EXPECT_FALSE(m8r::isFile(treeKey.c_str()));
+    EXPECT_TRUE(m8r::isFile(expectedLimboKey.c_str()));
+
+    // AND: the cache no longer holds the forgotten tree - fetching the
+    // SAME key again self-heals with a brand-new EMPTY tree rather than
+    // returning stale, cached content (which would prove a leftover
+    // cache entry, and risk a later create silently reusing this exact
+    // key while it still resolved to the old, forgotten instance)
+    m8r::Outline* reGotten = mind.notebookTreeGet(treeKey);
+    EXPECT_EQ("Notebook Tree", reGotten->getName());
+    EXPECT_EQ(0, reGotten->getNotes().size());
+    EXPECT_TRUE(m8r::isFile(treeKey.c_str()));
+}
+
+TEST(NotebookTreeTestCase, StaleEntriesCleanupSurvivesStaleParentAndChild)
+{
+    // GIVEN a MindForger repository and a Notebook tree with 2 NESTED
+    // entries - a parent (depth 0) and its child (depth 1) - BOTH
+    // stale, i.e. linking to Notebooks that no longer exist
+    string repositoryPath{"/tmp/mf-unit-notebook-tree-nested-stale"};
+    m8r::removeDirectoryRecursively(repositoryPath.c_str());
+    map<string,string> pathToContent{};
+    m8r::createEmptyRepository(repositoryPath, pathToContent);
+
+    m8r::Repository* repository = new m8r::Repository(
+        repositoryPath,
+        m8r::Repository::RepositoryType::MINDFORGER,
+        m8r::Repository::RepositoryMode::REPOSITORY,
+        "",
+        false);
+
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/mf-unit-notebook-tree-nested-stale-cfg.md");
+    config.setActiveRepository(
+        config.addRepository(repository), repositoryConfigRepresentation
+    );
+
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think().get();
+
+    // 2 Notebooks, immediately forgotten so their keys resolve to nothing -
+    // NOT registered in any tree via notebookTreeAddOutline(), so forgetting
+    // them does not itself touch the tree crafted below
+    string parentOutlineName{"Parent Notebook"};
+    string parentOutlineKey = mind.outlineNew(&parentOutlineName);
+    string childOutlineName{"Child Notebook"};
+    string childOutlineKey = mind.outlineNew(&childOutlineName);
+    ASSERT_TRUE(mind.outlineForget(parentOutlineKey));
+    ASSERT_TRUE(mind.outlineForget(childOutlineKey));
+
+    set<string> existingKeys{};
+    string treeKey = m8r::NotebookTree::createNotebookTreeKey(
+        existingKeys, config.getMindPath(), FILE_PATH_SEPARATOR);
+    m8r::Outline* tree = mind.notebookTreeNew(treeKey, "Nested Stale Tree");
+
+    m8r::Note* parentNote = new m8r::Note(*tree->getOutlineDescriptorAsNote());
+    parentNote->setName("Stale Parent");
+    parentNote->clearLinks();
+    parentNote->addLink(new m8r::Link{m8r::LINK_NAME_OUTLINE_KEY, parentOutlineKey});
+    parentNote->setDepth(0);
+    tree->addNote(parentNote);
+
+    m8r::Note* childNote = new m8r::Note(*tree->getOutlineDescriptorAsNote());
+    childNote->setName("Stale Child");
+    childNote->clearLinks();
+    childNote->addLink(new m8r::Link{m8r::LINK_NAME_OUTLINE_KEY, childOutlineKey});
+    childNote->setDepth(1);
+    tree->addNote(childNote);
+
+    ASSERT_EQ(2, tree->getNotes().size());
+
+    // WHEN: the tree is fetched - notebookTreeRemoveStaleEntries() runs
+    // and (in document order) tries to forgetNote() the stale PARENT
+    // first, which deallocates its whole subtree, INCLUDING the stale
+    // child also queued for removal
+    m8r::Outline* reGotten = mind.notebookTreeGet(treeKey);
+
+    // THEN: no crash / no use-after-free, and BOTH stale entries are gone
+    ASSERT_EQ(tree, reGotten);
+    EXPECT_EQ(0, reGotten->getNotes().size());
+}

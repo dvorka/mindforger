@@ -4089,6 +4089,11 @@ void MainWindowPresenter::doActionNotebookTreeDelete()
                 + tr("' Notebook tree? Notebooks organized in it will NOT be deleted.")
         );
         if(choice == QMessageBox::Yes) {
+            // move the tree's own backing file to Limbo (like outlineForget())
+            // BEFORE the registry entry (which owns t) is deleted below -
+            // otherwise its file would be left orphaned in mind/
+            mind->notebookTreeForget(t->getKey());
+
             config.getRepositoryConfiguration().removeNotebookTree(t);
             getConfigRepresentation()->save(config);
 

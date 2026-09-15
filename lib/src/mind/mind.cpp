@@ -1061,11 +1061,20 @@ void Mind::notebookTreeRemoveStaleEntries(Outline* notebookTree)
     if(osToRemove.size()) {
         MF_DEBUG("Removing Ns with INVALID O key:" << endl);
         for(auto oToRemove:osToRemove) {
+            // forgetNote() removes AND deallocates a Note's WHOLE
+            // subtree (every descendant of greater depth) - if
+            // oToRemove was itself a descendant of an earlier,
+            // also-stale entry in this list, it was already freed as
+            // a side effect of that removal, so skip it here, else
+            // this dereferences/double-frees already-freed memory
+            const auto& currentNotes = notebookTree->getNotes();
+            if(std::find(currentNotes.begin(), currentNotes.end(), oToRemove)
+                == currentNotes.end()
+            ) {
+                continue;
+            }
+
             MF_DEBUG("  " << oToRemove->getName() << endl);
-            // NOTE: forgetNote() removes AND deallocates - deallocating
-            // BEFORE removing from the Outline's Notes vector would be
-            // a use-after-free (removeNote() dereferences the Note to
-            // read its depth)
             notebookTree->forgetNote(oToRemove);
         }
     }
@@ -1120,6 +1129,15 @@ Outline* Mind::notebookTreeLearn(const string& treeKey)
     if(osToRemove.size()) {
         MF_DEBUG("Removing Ns with MISSING relative O key:" << endl);
         for(auto oToRemove:osToRemove) {
+            // see the matching guard in notebookTreeRemoveStaleEntries()
+            // for why this membership check is needed
+            const auto& currentNotes = notebookTree->getNotes();
+            if(std::find(currentNotes.begin(), currentNotes.end(), oToRemove)
+                == currentNotes.end()
+            ) {
+                continue;
+            }
+
             MF_DEBUG("  " << oToRemove->getName() << endl);
             notebookTree->forgetNote(oToRemove);
         }
@@ -1227,6 +1245,24 @@ void Mind::notebookTreeRemoveOutlineFromAll(const string& outlineKey)
             notebookTreeRemember(notebookTree);
         }
     }
+}
+
+bool Mind::notebookTreeForget(const string& treeKey)
+{
+    // ensure it's loaded (self-heals if its file is already missing) so
+    // its name is available to derive the Limbo file name from
+    Outline* notebookTree = notebookTreeGet(treeKey);
+    if(!notebookTree) {
+        return false;
+    }
+
+    auto k = memory.createLimboKey(&notebookTree->getName());
+    moveFile(treeKey, k);
+
+    notebookTreeCache.erase(treeKey);
+    delete notebookTree;
+
+    return true;
 }
 
 Note* Mind::noteNew(

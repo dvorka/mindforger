@@ -67,7 +67,12 @@ public:
     /*
      * organizers
      */
-    void clearOrganizers() { this->organizers.clear(); }
+    void clearOrganizers() {
+        for(auto& o:this->organizers) {
+            delete o;
+        }
+        this->organizers.clear();
+    }
     void addOrganizer(Organizer* organizer);
     void removeOrganizer(Organizer* organizer);
     std::vector<Organizer*> getOrganizers() const { return this->organizers; }
@@ -76,7 +81,12 @@ public:
     /*
      * notebook trees
      */
-    void clearNotebookTrees() { this->notebookTrees.clear(); }
+    void clearNotebookTrees() {
+        for(auto& t:this->notebookTrees) {
+            delete t;
+        }
+        this->notebookTrees.clear();
+    }
     void addNotebookTree(NotebookTree* notebookTree);
     void removeNotebookTree(NotebookTree* notebookTree);
     std::vector<NotebookTree*> getNotebookTrees() const { return this->notebookTrees; }

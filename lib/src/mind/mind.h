@@ -601,6 +601,15 @@ public:
      * Notebook tree keeps a dangling reference to it.
      */
     void notebookTreeRemoveOutlineFromAll(const std::string& outlineKey);
+    /**
+     * @brief Move a Notebook tree's backing file to limbo and drop it
+     * from the cache.
+     *
+     * Mirrors outlineForget() - the tree's own file is never left
+     * orphaned in mind/ (nor its stale Outline instance kept cached)
+     * when the tree is deleted; the Notebooks it organized are untouched.
+     */
+    bool notebookTreeForget(const std::string& treeKey);
 
     /*
      * NOTE MGMT
