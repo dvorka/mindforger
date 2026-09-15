@@ -39,23 +39,20 @@ NotebookTreesTablePresenter::~NotebookTreesTablePresenter()
 
 void NotebookTreesTablePresenter::refresh(const vector<NotebookTree*>& notebookTrees)
 {
-    vector<NotebookTree*> sortedNotebookTrees{notebookTrees};
-    std::sort(
-        sortedNotebookTrees.begin(),
-        sortedNotebookTrees.end(),
-        [](NotebookTree* a, NotebookTree* b){ return a->getModified() > b->getModified(); }
-    );
+    // notebookTrees is already in the right order (most recently
+    // created/renamed/opened first) - see RepositoryConfiguration::
+    // touchNotebookTree() - nothing to sort here
 
 #ifdef DO_MF_DEBUG
     MF_DEBUG("Refreshing notebook trees table:");
-    for(NotebookTree* t:sortedNotebookTrees) {
-        MF_DEBUG("  [" << t->getModified() << "]  " << t->getName() << endl);
+    for(NotebookTree* t:notebookTrees) {
+        MF_DEBUG("  " << t->getName() << endl);
     }
 #endif
 
     model->removeAllRows();
-    if(sortedNotebookTrees.size()) {
-        for(auto& t:sortedNotebookTrees) {
+    if(notebookTrees.size()) {
+        for(auto& t:notebookTrees) {
             model->addRow(t);
         }
     }

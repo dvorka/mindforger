@@ -82,26 +82,19 @@ std::string NotebookTree::resolveNotebookTreeKey(
 }
 
 NotebookTree::NotebookTree(const std::string& name, const std::string& key)
-    : Thing{name},
-      modified{datetimeNow()}
+    : Thing{name}
 {
     this->key = key;
 }
 
 NotebookTree::NotebookTree(const NotebookTree& t)
-    : Thing{t.getName()},
-      modified{t.modified}
+    : Thing{t.getName()}
 {
     this->key = t.key;
 }
 
 NotebookTree::~NotebookTree()
 {
-}
-
-void NotebookTree::makeModified()
-{
-    this->modified = datetimeNow();
 }
 
 } // m8r namespace

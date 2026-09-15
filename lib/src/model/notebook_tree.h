@@ -74,14 +74,6 @@ public:
         const std::string& separator
     );
 
-private:
-    /*
-     * transient fields
-     */
-
-    time_t modified;
-
-public:
     explicit NotebookTree(const std::string& name, const std::string& key);
     explicit NotebookTree(const NotebookTree& t);
     NotebookTree(const NotebookTree&&) = delete;
@@ -90,17 +82,6 @@ public:
     ~NotebookTree();
 
     void setKey(const std::string& key) { this->key = key; }
-
-    bool operator<(const NotebookTree& other) const {
-        return modified < other.modified;
-    }
-
-    bool operator<(NotebookTree* other) const {
-        return modified < other->modified;
-    }
-
-    time_t getModified() const { return this->modified; }
-    void makeModified();
 };
 
 }

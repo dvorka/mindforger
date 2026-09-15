@@ -4027,7 +4027,6 @@ void MainWindowPresenter::handleCreateOrRenameNotebookTree()
     if(t) {
         // rename
         t->setName(newNotebookTreeDialog->getNotebookTreeName().toStdString());
-        t->makeModified();
 
         // keep the underlying tree Outline's own name in sync too
         Outline* tree = mind->notebookTreeGet(t->getKey());
@@ -4050,7 +4049,8 @@ void MainWindowPresenter::handleCreateOrRenameNotebookTree()
         mind->notebookTreeRemember(tree);
     }
 
-    config.getRepositoryConfiguration().sortNotebookTrees();
+    // move created/renamed tree to the top of the Notebook Trees
+    config.getRepositoryConfiguration().touchNotebookTree(t);
     getConfigRepresentation()->save(config);
 
     newNotebookTreeDialog->hide();

@@ -95,13 +95,18 @@ void RepositoryConfiguration::removeNotebookTree(NotebookTree* notebookTree)
     delete notebookTree;
 }
 
-void RepositoryConfiguration::sortNotebookTrees()
+void RepositoryConfiguration::touchNotebookTree(NotebookTree* notebookTree)
 {
-    std::sort(
-        notebookTrees.begin(),
-        notebookTrees.end(),
-        [](NotebookTree* a, NotebookTree* b){ return a->getModified() > b->getModified(); }
+    this->notebookTrees.erase(
+        std::remove(
+            this->notebookTrees.begin(),
+            this->notebookTrees.end(),
+            notebookTree
+        ),
+        this->notebookTrees.end()
     );
+
+    this->notebookTrees.insert(this->notebookTrees.begin(), notebookTree);
 }
 
 } // m8r namespace

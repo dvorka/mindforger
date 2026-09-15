@@ -409,6 +409,11 @@ void OrlojPresenter::slotShowSelectedNotebookTree()
                 MF_DEBUG("Notebook tree selected by Orloj: data(user)=" << notebookTree << endl);
 
                 currentNotebookTree = notebookTree;
+
+                // move it to the top of the Notebook Trees list & save the order to config
+                config.getRepositoryConfiguration().touchNotebookTree(notebookTree);
+                mainPresenter->getConfigRepresentation()->save(config);
+
                 Outline* tree = mind->notebookTreeGet(notebookTree->getKey());
                 showFacetOutlinesMap(tree);
 

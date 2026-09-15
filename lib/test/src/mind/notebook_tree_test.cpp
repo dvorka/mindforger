@@ -116,8 +116,6 @@ TEST(NotebookTreeTestCase, RepositoryConfigurationAddRemoveGet)
 
     // THEN
     ASSERT_EQ(2, rc.getNotebookTrees().size());
-    rc.sortNotebookTrees();
-    ASSERT_EQ(2, rc.getNotebookTrees().size());
 
     // WHEN: remove one
     rc.removeNotebookTree(t1);
@@ -125,6 +123,36 @@ TEST(NotebookTreeTestCase, RepositoryConfigurationAddRemoveGet)
     // THEN
     ASSERT_EQ(1, rc.getNotebookTrees().size());
     EXPECT_EQ("Tree 2", rc.getNotebookTrees()[0]->getName());
+}
+
+TEST(NotebookTreeTestCase, TouchMovesTreeToFrontOfTheList)
+{
+    // GIVEN 3 Notebook trees, added in order 1, 2, 3
+    m8r::RepositoryConfiguration rc{};
+    m8r::NotebookTree* t1 = new m8r::NotebookTree("Tree 1", "/tmp/mf-unit/mind/notebook-tree-1.md");
+    m8r::NotebookTree* t2 = new m8r::NotebookTree("Tree 2", "/tmp/mf-unit/mind/notebook-tree-2.md");
+    m8r::NotebookTree* t3 = new m8r::NotebookTree("Tree 3", "/tmp/mf-unit/mind/notebook-tree-3.md");
+    rc.addNotebookTree(t1);
+    rc.addNotebookTree(t2);
+    rc.addNotebookTree(t3);
+    ASSERT_EQ(3, rc.getNotebookTrees().size());
+
+    // WHEN: the FIRST (oldest) one is touched - e.g. it was just opened
+    rc.touchNotebookTree(t1);
+
+    // THEN: it moves to the FRONT, the other 2 keep their relative order
+    ASSERT_EQ(3, rc.getNotebookTrees().size());
+    EXPECT_EQ("Tree 1", rc.getNotebookTrees()[0]->getName());
+    EXPECT_EQ("Tree 2", rc.getNotebookTrees()[1]->getName());
+    EXPECT_EQ("Tree 3", rc.getNotebookTrees()[2]->getName());
+
+    // WHEN: the (now) LAST one is touched too
+    rc.touchNotebookTree(t3);
+
+    // THEN: it becomes first, the previously-touched Tree 1 comes 2nd
+    EXPECT_EQ("Tree 3", rc.getNotebookTrees()[0]->getName());
+    EXPECT_EQ("Tree 1", rc.getNotebookTrees()[1]->getName());
+    EXPECT_EQ("Tree 2", rc.getNotebookTrees()[2]->getName());
 }
 
 TEST(NotebookTreeTestCase, ParseSaveAndLoad)
@@ -194,6 +222,53 @@ TEST(NotebookTreeTestCase, ParseSaveAndLoad)
     EXPECT_EQ(
         c.getMindPath()+FILE_PATH_SEPARATOR+"notebook-tree-2.md",
         nameToKey["My Personal Shelf"]);
+}
+
+TEST(NotebookTreeTestCase, OrderPersistsAcrossSaveAndLoad)
+{
+    // GIVEN 2 Notebook trees, w/ "My Work Shelf" touched (e.g. opened)
+    // AFTER "My Personal Shelf" was added, so it's the front one
+    m8r::TestSandbox box{"", true};
+    string mdFilename{"custom-repository-notebook-tree-order.md"};
+    box.addMdFile(mdFilename);
+
+    m8r::MarkdownConfigurationRepresentation configRepresentation{};
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& c = m8r::Configuration::getInstance();
+    c.clear();
+
+    c.setConfigFilePath(box.configPath);
+    m8r::Repository* r = new m8r::Repository{
+        box.repositoryPath,
+        m8r::Repository::RepositoryType::MINDFORGER,
+        m8r::Repository::RepositoryMode::REPOSITORY,
+        mdFilename
+    };
+    c.setActiveRepository(c.addRepository(r), repositoryConfigRepresentation);
+
+    m8r::NotebookTree* personal = new m8r::NotebookTree(
+        "My Personal Shelf", c.getMindPath()+FILE_PATH_SEPARATOR+"notebook-tree-1.md");
+    c.getRepositoryConfiguration().addNotebookTree(personal);
+
+    m8r::NotebookTree* work = new m8r::NotebookTree(
+        "My Work Shelf", c.getMindPath()+FILE_PATH_SEPARATOR+"notebook-tree-2.md");
+    c.getRepositoryConfiguration().addNotebookTree(work);
+
+    c.getRepositoryConfiguration().touchNotebookTree(work);
+    ASSERT_EQ("My Work Shelf", c.getRepositoryConfiguration().getNotebookTrees()[0]->getName());
+
+    // WHEN: saved and (freshly) reloaded, exactly as happens across an
+    // application restart
+    configRepresentation.save(c);
+    c.setConfigFilePath(box.configPath);
+    bool loaded = configRepresentation.load(c);
+
+    // THEN: the order (NOT any timestamp) round-tripped exactly, w/o
+    // any separate sort/field needed
+    ASSERT_TRUE(loaded);
+    ASSERT_EQ(2, c.getRepositoryConfiguration().getNotebookTrees().size());
+    EXPECT_EQ("My Work Shelf", c.getRepositoryConfiguration().getNotebookTrees()[0]->getName());
+    EXPECT_EQ("My Personal Shelf", c.getRepositoryConfiguration().getNotebookTrees()[1]->getName());
 }
 
 TEST(NotebookTreeTestCase, MigrateLegacyNotebooksMap)

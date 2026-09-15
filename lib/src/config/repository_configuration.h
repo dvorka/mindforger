@@ -67,6 +67,7 @@ public:
     /*
      * organizers
      */
+
     void clearOrganizers() {
         for(auto& o:this->organizers) {
             delete o;
@@ -81,6 +82,7 @@ public:
     /*
      * notebook trees
      */
+
     void clearNotebookTrees() {
         for(auto& t:this->notebookTrees) {
             delete t;
@@ -90,7 +92,14 @@ public:
     void addNotebookTree(NotebookTree* notebookTree);
     void removeNotebookTree(NotebookTree* notebookTree);
     std::vector<NotebookTree*> getNotebookTrees() const { return this->notebookTrees; }
-    void sortNotebookTrees();
+
+    /**
+     * @brief Move an ALREADY REGISTERED Notebook tree to the front of
+     * the list.
+     *
+     * Notebook Trees are simply listed in this registry's order.
+     */
+    void touchNotebookTree(NotebookTree* notebookTree);
 };
 
 } // namespace
