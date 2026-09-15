@@ -1,11 +1,13 @@
 2026-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v2.3.0 - Source code syntax highlighting.
+    * Released v2.3.0 - winget.
     * Feature: Notebook/Export/Markdown - export a Notebook to a file in Markdown format.
     * Enhancement: changed in-app diagram support from dropdown to checkbox.
     * Fix: source code syntax highlighting no longer crashes MindForger thanks to
       the migration to Qt WebEngine + upgraded the offline highlight.js library
       to new version.
+    * Build: added winget distribution tooling to generate and submit
+      MindForger.MindForger manifests to microsoft/winget-pkgs.
     * Cleanup: hid not-yet-ready Workspace/Semantic Search menu item from production builds.
 
 2026-09-13  Martin Dvorak  <martin.dvorak@mindforger.com>

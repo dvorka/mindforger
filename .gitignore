@@ -28,5 +28,6 @@ compile_commands.json
 deps/cmark-gfm
 deps/cmark-gfm
 deps/mitie
+distro/winget/
 moc_*.cpp
 snapcraft.yaml

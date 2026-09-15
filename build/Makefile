@@ -505,6 +505,39 @@ distro-snap-upload: distro-snap ## upload strict Snap package to the Snap Store 
 	snapcraft upload --release=stable ../mindforger_$(MINDFORGER_VERSION)_amd64.snap
 
 
+#
+# winget (Windows Package Manager)
+#
+# Prerequisites and full walkthrough: see build/winget/README.md
+#
+# Per-release sequence - run AFTER the GitHub release (with the Windows installer
+# asset) is live:
+#   make distro-winget-from-release VERSION=x.y.z
+#   make distro-winget-validate     VERSION=x.y.z
+#   make distro-winget-submit-pr    VERSION=x.y.z WINGET_PKGS_DIR=C:\path\to\winget-pkgs
+#
+
+.PHONY: distro-winget-from-release
+distro-winget-from-release: ## look up the Windows installer on a GitHub release, hash it, and generate winget manifests (VERSION required)
+	powershell.exe -NoProfile -ExecutionPolicy Bypass -File build/winget/generate-from-release.ps1 -Version $(VERSION)
+
+.PHONY: distro-winget-validate
+distro-winget-validate: ## validate generated winget manifests locally (VERSION required)
+	winget validate --manifest distro/winget/manifests/m/MindForger/MindForger/$(VERSION)
+
+.PHONY: distro-winget-submit-pr
+distro-winget-submit-pr: ## copy manifests to winget-pkgs fork, commit signed, push, open PR (VERSION and WINGET_PKGS_DIR required)
+	powershell.exe -NoProfile -ExecutionPolicy Bypass -File build/winget/submit-pr.ps1 -Version $(VERSION) -WingetPkgsDir "$(WINGET_PKGS_DIR)"
+
+.PHONY: distro-winget-hash-url
+distro-winget-hash-url: ## print SHA256 of the published Windows installer without generating manifests (VERSION required)
+	powershell.exe -NoProfile -ExecutionPolicy Bypass -File build/winget/sha256-from-url.ps1 -Version $(VERSION)
+
+#
+# ^ winget
+#
+
+
 .PHONY: distro-all-clean
 distro-all-clean:
 	rm -rvf $(MINDFORGER_RELEASE_DIR)
