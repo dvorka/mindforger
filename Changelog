@@ -1,12 +1,9 @@
 2026-??-??  Martin Dvorak  <martin.dvorak@mindforger.com>
 
-    * Released v2.3.0 - Source code syntax highlighting.
-    * Feature: View/Notebook Trees - Notebook Tree is no longer a single, automatically
-      populated tree: create as many named Notebook trees as needed, add Notebooks to
-      them explicitly (a Notebook may belong to several trees), and rename/delete trees
-      via the new View/Notebook Trees menu. Existing users' current Notebook Tree is
-      automatically preserved as their first Notebook tree. Deleting a Notebook removes
-      it from every Notebook tree that referenced it.
+    * Released v2.3.0 - Notebook shelves, Markdown export.
+    * Feature: Notebook shelves - single notebook tree was rewritten to custom notebook
+      shelves - create as many named notebook shelves for notebooks you want to group
+      as needed and add Notebooks to them explicitly.
     * Feature: Notebook/Export/Markdown - export a Notebook to a file in Markdown format.
     * Enhancement: changed in-app diagram support from dropdown to checkbox.
     * Fix: source code syntax highlighting no longer crashes MindForger thanks to
