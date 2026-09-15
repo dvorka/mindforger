@@ -25,6 +25,7 @@
 # lib/src/app_info.h (MINDFORGER_VERSION_STRING) is the authoritative version source
 MINDFORGER_VERSION := $(shell sed -n 's/.*MINDFORGER_VERSION_STRING "\(.*\)"/\1/p' ../lib/src/app_info.h)
 MINDFORGER_VERSION_MAJOR_MINOR := $(word 1,$(subst ., ,$(MINDFORGER_VERSION))).$(word 2,$(subst ., ,$(MINDFORGER_VERSION)))
+MINDFORGER_PREVIOUS_MINOR_VERSION := $(shell echo $(MINDFORGER_VERSION) | awk -F. '{minor=$$2-1; if (minor<0) minor=0; print $$1"."minor".0"}')
 MINDFORGER_RELEASE_BASE_DIR := /home/dvorka/p/mindforger/release
 MINDFORGER_RELEASE_DIR := $(MINDFORGER_RELEASE_BASE_DIR)/$(MINDFORGER_VERSION)-maker
 
@@ -286,6 +287,9 @@ releng-ver-set: ## propagate lib/src/app_info.h version to all release/packaging
 	sed -i -E "s/^mindforger \([0-9]+\.[0-9]+\.[0-9]+(-[^)]*)\)/mindforger ($(MINDFORGER_VERSION)\1)/" ubuntu/debian/changelog
 	@echo "Done. Review changes with: git diff"
 
+.PHONY: releng-gh-downloads
+releng-gh-downloads: ## show GitHub downloads count w/ optional VERSION=x.y.z release var
+	./make/gh-release-downloads.sh dvorka/mindforger $(if $(VERSION),$(VERSION),$(MINDFORGER_PREVIOUS_MINOR_VERSION))
 
 .PHONY: dist-pad-refresh
 dist-pad-refresh: ## refresh PAD.xml release fields (version, date, changelog, installer size)
