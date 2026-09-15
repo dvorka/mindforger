@@ -27,6 +27,7 @@
 #include "tags_table_view.h"
 #include "outlines_table_view.h"
 #include "outlines_map_view.h"
+#include "notebook_trees_table_view.h"
 #include "notes_table_view.h"
 #include "recent_notes_table_view.h"
 #include "outline_view_splitter.h"
@@ -67,6 +68,7 @@ private:
     TagsTableView* tagCloud;
     OutlinesTableView* outlinesTable;
     OutlinesMapView* outlinesMap;
+    NotebookTreesTableView* notebookTreesTable;
     RecentNotesTableView* recentNotesTable;
     OutlineViewSplitter* outlineView;
     OutlineHeaderView* outlineHeaderView;
@@ -92,6 +94,7 @@ public:
     OutlinesTableView* getOutlinesTable() const { return outlinesTable; }
     OutlinesMapView* getOutlinesMapTable() const { return outlinesMap; }
     OutlinesMapView* getOutlinesMap() const { return outlinesMap; }
+    NotebookTreesTableView* getNotebookTreesTable() const { return notebookTreesTable; }
     RecentNotesTableView* getRecentNotesTable() const { return recentNotesTable; }
     OutlineViewSplitter* getOutlineView() const { return outlineView; }
     OutlineHeaderView* getOutlineHeaderView() const { return outlineHeaderView; }
@@ -128,9 +131,14 @@ public:
     void showFacetOutlines();
 
     /**
-     * @brief Tree of Outlines
+     * @brief Tree of Outlines (a single, opened Notebook tree)
      */
     void showFacetOutlinesMap();
+
+    /**
+     * @brief List of Notebook trees
+     */
+    void showFacetNotebookTrees();
 
     /**
      * @brief Outline detail: name and tree of Notes
