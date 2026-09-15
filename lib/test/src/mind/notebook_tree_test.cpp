@@ -17,6 +17,7 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -44,6 +45,62 @@ TEST(NotebookTreeTestCase, KeyGenerationIsUnique)
     ASSERT_NE(key1, key2);
     EXPECT_NE(std::string::npos, key1.find(mindPath));
     EXPECT_NE(std::string::npos, key1.find(".md"));
+}
+
+TEST(NotebookTreeTestCase, KeyRelativePathRoundTrip)
+{
+    // GIVEN an absolute key living under the repository root
+    string repositoryDir{"/home/dvorka/mf-devel/library-trainer"};
+    string absoluteKey{
+        repositoryDir + FILE_PATH_SEPARATOR
+        + "mind" + FILE_PATH_SEPARATOR
+        + "notebook-tree-1789452772.md"};
+
+    // WHEN converted to a portable, repository-root-relative path
+    string relativeKey = m8r::NotebookTree::notebookTreeKeyToRelativePath(
+        absoluteKey, repositoryDir, FILE_PATH_SEPARATOR);
+
+    // THEN it neither contains the repository root nor starts w/ a separator
+    EXPECT_EQ(
+        string{"mind"} + FILE_PATH_SEPARATOR + "notebook-tree-1789452772.md",
+        relativeKey);
+    EXPECT_EQ(std::string::npos, relativeKey.find(repositoryDir));
+
+    // WHEN resolved back to the absolute key used at runtime
+    string resolvedKey = m8r::NotebookTree::resolveNotebookTreeKey(
+        relativeKey, repositoryDir, FILE_PATH_SEPARATOR);
+
+    // THEN it round-trips to the exact original absolute key
+    EXPECT_EQ(absoluteKey, resolvedKey);
+}
+
+TEST(NotebookTreeTestCase, ResolveKeyBackwardCompatibleWithAbsolutePaths)
+{
+    // GIVEN a key persisted by an older MindForger version as an
+    // absolute path (as found e.g. in a pre-existing repository)
+    string legacyAbsoluteKey{
+        "/home/dvorka/mf-devel/library-trainer/mind/notebook-tree-1789452772.md"};
+
+    // WHEN resolved against (any) repository root
+    string resolvedKey = m8r::NotebookTree::resolveNotebookTreeKey(
+        legacyAbsoluteKey, "/home/dvorka/mf-devel/library-trainer", FILE_PATH_SEPARATOR);
+
+    // THEN the absolute value is detected and returned UNCHANGED
+    EXPECT_EQ(legacyAbsoluteKey, resolvedKey);
+}
+
+TEST(NotebookTreeTestCase, RelativePathFallsBackWhenKeyNotUnderRepository)
+{
+    // GIVEN a key which (unexpectedly) does NOT live under the repository root
+    string key{"/some/other/place/notebook-tree-1.md"};
+    string repositoryDir{"/home/dvorka/mf/my-repo"};
+
+    // WHEN converted to a repository-relative path
+    string relativeKey = m8r::NotebookTree::notebookTreeKeyToRelativePath(
+        key, repositoryDir, FILE_PATH_SEPARATOR);
+
+    // THEN it's returned UNCHANGED rather than producing an unresolvable path
+    EXPECT_EQ(key, relativeKey);
 }
 
 TEST(NotebookTreeTestCase, RepositoryConfigurationAddRemoveGet)
@@ -105,6 +162,12 @@ TEST(NotebookTreeTestCase, ParseSaveAndLoad)
     EXPECT_NE(std::string::npos, asString->find("Notebook Shelves"));
     EXPECT_NE(std::string::npos, asString->find("Notebook shelf name: My Work Shelf"));
     EXPECT_NE(std::string::npos, asString->find("Notebook shelf name: My Personal Shelf"));
+    // AND: Key is persisted as a PORTABLE, repository-root-relative path -
+    // the repository's absolute location must NOT leak into the file
+    EXPECT_NE(
+        std::string::npos,
+        asString->find(string{"* Key: mind"} + FILE_PATH_SEPARATOR + "notebook-tree-1.md"));
+    EXPECT_EQ(std::string::npos, asString->find(box.repositoryPath));
     delete asString;
 
     // GIVEN load previously saved configuration
@@ -117,11 +180,20 @@ TEST(NotebookTreeTestCase, ParseSaveAndLoad)
     ASSERT_TRUE(loaded);
     ASSERT_EQ(2, c.getRepositoryConfiguration().getNotebookTrees().size());
     vector<string> names{};
+    map<string,string> nameToKey{};
     for(auto t:c.getRepositoryConfiguration().getNotebookTrees()) {
         names.push_back(t->getName());
+        nameToKey[t->getName()] = t->getKey();
     }
     EXPECT_NE(names.end(), std::find(names.begin(), names.end(), "My Work Shelf"));
     EXPECT_NE(names.end(), std::find(names.begin(), names.end(), "My Personal Shelf"));
+    // AND: relative Key resolved back to the EXACT original absolute key
+    EXPECT_EQ(
+        c.getMindPath()+FILE_PATH_SEPARATOR+"notebook-tree-1.md",
+        nameToKey["My Work Shelf"]);
+    EXPECT_EQ(
+        c.getMindPath()+FILE_PATH_SEPARATOR+"notebook-tree-2.md",
+        nameToKey["My Personal Shelf"]);
 }
 
 TEST(NotebookTreeTestCase, MigrateLegacyNotebooksMap)
@@ -274,4 +346,54 @@ TEST(NotebookTreeTestCase, AddOutlineAndForgetCascade)
     m8r::Outline* reloadedTreeB = mind.notebookTreeGet(treeKeyB);
     EXPECT_EQ(0, reloadedTreeA->getNotes().size());
     EXPECT_EQ(0, reloadedTreeB->getNotes().size());
+}
+
+TEST(NotebookTreeTestCase, RememberSelfHealsMissingMindDirectory)
+{
+    // GIVEN a MindForger repository whose mind/ directory is MISSING -
+    // this reproduces a pre-existing repository created before Notebook
+    // Trees/Shelves existed (mind/ is otherwise only created when a NEW
+    // repository is created, see Installer::createEmptyMindForgerRepository)
+    string repositoryPath{"/tmp/mf-unit-notebook-tree-no-mind-dir"};
+    m8r::removeDirectoryRecursively(repositoryPath.c_str());
+    map<string,string> pathToContent{};
+    m8r::createEmptyRepository(repositoryPath, pathToContent);
+
+    string mindDir{repositoryPath + FILE_PATH_SEPARATOR + "mind"};
+    ASSERT_TRUE(m8r::isDirectoryOrFileExists(mindDir.c_str()));
+    m8r::removeDirectoryRecursively(mindDir.c_str());
+    ASSERT_FALSE(m8r::isDirectoryOrFileExists(mindDir.c_str()));
+
+    m8r::Repository* repository = new m8r::Repository(
+        repositoryPath,
+        m8r::Repository::RepositoryType::MINDFORGER,
+        m8r::Repository::RepositoryMode::REPOSITORY,
+        "",
+        false);
+
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/mf-unit-notebook-tree-no-mind-dir-cfg.md");
+    config.setActiveRepository(
+        config.addRepository(repository), repositoryConfigRepresentation
+    );
+
+    m8r::Mind mind(config);
+    mind.learn();
+    mind.think().get();
+
+    // WHEN: a new Notebook tree/shelf is created and persisted, exactly
+    // as done by the "Add Notebook Tree" UI action
+    set<string> existingKeys{};
+    string treeKey = m8r::NotebookTree::createNotebookTreeKey(
+        existingKeys, config.getMindPath(), FILE_PATH_SEPARATOR);
+    m8r::Outline* tree = mind.notebookTreeNew(treeKey, "Self-Healed Tree");
+    mind.notebookTreeRemember(tree);
+
+    // THEN: the missing mind/ directory is (re)created and the tree is
+    // ACTUALLY persisted to disk - w/o the fix this silently no-ops,
+    // leaving repository-configuration.md referencing a non-existent file
+    EXPECT_TRUE(m8r::isDirectoryOrFileExists(mindDir.c_str()));
+    EXPECT_TRUE(m8r::isFile(treeKey.c_str()));
 }

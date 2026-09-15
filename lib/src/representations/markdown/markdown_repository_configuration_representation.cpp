@@ -283,10 +283,10 @@ Organizer* MarkdownRepositoryConfigurationRepresentation
  * @example
  * # Notebook Shelves
  * Notebook shelf name: My Work Shelf
- * * Key: /home/dvorka/mf/mind/notebook-tree-1700000000.md
+ * * Key: mind/notebook-tree-1700000000.md
  * ...
  * Notebook shelf name: My Personal Shelf
- * * Key: /home/dvorka/mf/mind/notebook-tree-1700000001.md
+ * * Key: mind/notebook-tree-1700000001.md
  *
  * MD section is split using notebook shelf name row(s).
  */
@@ -307,7 +307,13 @@ void MarkdownRepositoryConfigurationRepresentation
                     name = line->substr(strlen(CONFIG_SETTING_NBT_NAME));
                     t = new NotebookTree(name, "");
                 } else if(t && line->find(CONFIG_SETTING_NBT_KEY) != std::string::npos) {
-                    t->setKey(line->substr(strlen(CONFIG_SETTING_NBT_KEY)));
+                    t->setKey(
+                        NotebookTree::resolveNotebookTreeKey(
+                            line->substr(strlen(CONFIG_SETTING_NBT_KEY)),
+                            c.getActiveRepository()->getDir(),
+                            FILE_PATH_SEPARATOR
+                        )
+                    );
                 }
             }
         }
@@ -401,7 +407,12 @@ string& MarkdownRepositoryConfigurationRepresentation::to(Configuration* c, stri
             for(NotebookTree* t:c->getRepositoryConfiguration().getNotebookTrees()) {
                 tss
                 << CONFIG_SETTING_NBT_NAME << t->getName() << endl
-                << CONFIG_SETTING_NBT_KEY << t->getKey() << endl
+                << CONFIG_SETTING_NBT_KEY
+                << NotebookTree::notebookTreeKeyToRelativePath(
+                       t->getKey(),
+                       c->getActiveRepository()->getDir(),
+                       FILE_PATH_SEPARATOR)
+                << endl
                 << endl;
             }
         } else {

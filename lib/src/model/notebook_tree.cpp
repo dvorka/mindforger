@@ -22,6 +22,24 @@ using namespace std;
 
 namespace m8r {
 
+namespace {
+
+bool isAbsolutePath(const string& path)
+{
+    if(path.empty()) {
+        return false;
+    }
+    if(path[0] == '/' || path[0] == '\\') {
+        return true;
+    }
+    if(path.size() >= 2 && path[1] == ':') {
+        return true;
+    }
+    return false;
+}
+
+} // anonymous namespace
+
 std::string NotebookTree::createNotebookTreeKey(
     const set<string>& keys,
     const string& mindDirectoryPath,
@@ -35,6 +53,32 @@ std::string NotebookTree::createNotebookTreeKey(
         key.insert(key.size()-3, "_");
     }
     return key;
+}
+
+std::string NotebookTree::notebookTreeKeyToRelativePath(
+    const string& key,
+    const string& repositoryDir,
+    const string& separator
+) {
+    string prefix{repositoryDir + separator};
+    if(key.compare(0, prefix.size(), prefix) == 0) {
+        return key.substr(prefix.size());
+    }
+    // defensive fallback: key unexpectedly not under the repository
+    // root - keep it as is rather than produce a path that cannot be
+    // resolved back on load
+    return key;
+}
+
+std::string NotebookTree::resolveNotebookTreeKey(
+    const string& storedKey,
+    const string& repositoryDir,
+    const string& separator
+) {
+    if(isAbsolutePath(storedKey)) {
+        return storedKey;
+    }
+    return repositoryDir + separator + storedKey;
 }
 
 NotebookTree::NotebookTree(const std::string& name, const std::string& key)

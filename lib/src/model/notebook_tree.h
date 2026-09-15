@@ -45,6 +45,35 @@ public:
         const std::string& separator
     );
 
+    /**
+     * @brief Convert an absolute NotebookTree key to a path relative
+     * to the repository root, for portable persistence in
+     * repository-configuration.md.
+     *
+     * If key is not located under repositoryDir (unexpected), it is
+     * returned unchanged rather than risking an unresolvable path.
+     */
+    static std::string notebookTreeKeyToRelativePath(
+        const std::string& key,
+        const std::string& repositoryDir,
+        const std::string& separator
+    );
+
+    /**
+     * @brief Resolve a NotebookTree key as read from
+     * repository-configuration.md to the absolute path used at runtime.
+     *
+     * Accepts both the portable, repository-root-relative form written
+     * by current MindForger versions and the absolute form written by
+     * older versions (backward compatibility) - a value already
+     * absolute is detected and returned unchanged.
+     */
+    static std::string resolveNotebookTreeKey(
+        const std::string& storedKey,
+        const std::string& repositoryDir,
+        const std::string& separator
+    );
+
 private:
     /*
      * transient fields

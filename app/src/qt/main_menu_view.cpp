@@ -114,7 +114,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindSemanticSearch = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Semantic Search"), mainWindow);
     actionMindSemanticSearch->setCheckable(true);
     actionMindSemanticSearch->setStatusTip(tr("Use Wingman LLM to search for similar Notes (associations) using text embeddings..."));
-    actionMindSemanticSearch->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
+    actionMindSemanticSearch->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_M));
 #endif
 
     actionMindWingman = new QAction(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman LLM"), mainWindow);
@@ -297,8 +297,8 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionViewOutlines->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_O));
     actionViewOutlines->setStatusTip(tr("Show list of Notebooks..."));
 
-    actionViewNotebookTrees = new QAction(QIcon(":/menu-icons/dashboard.svg"), tr("Notebook &Shelves"), mainWindow);
-    actionViewNotebookTrees->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
+    actionViewNotebookTrees = new QAction(QIcon(":/menu-icons/bookshelf.svg"), tr("Notebook &Shelves"), mainWindow);
+    actionViewNotebookTrees->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
     actionViewNotebookTrees->setStatusTip(tr("Show list of Notebook trees..."));
 
 #ifdef MF_WIP
@@ -534,7 +534,7 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionNotebookTreeDelete = new QAction(QIcon(":/menu-icons/delete.svg"), tr("&Delete"), mainWindow);
     actionNotebookTreeDelete->setStatusTip(tr("Delete Notebook tree without undo"));
 
-    actionNotebookTreeAddOutline = new QAction(QIcon(":/menu-icons/list-text.svg"), tr("&Add Notebook..."), mainWindow);
+    actionNotebookTreeAddOutline = new QAction(QIcon(":/menu-icons/notebook-add.svg"), tr("&Add Notebook..."), mainWindow);
     actionNotebookTreeAddOutline->setStatusTip(tr("Add a Notebook to the current Notebook tree"));
 
     actionNotebookTreeRemoveOutline = new QAction(QIcon(":/menu-icons/delete.svg"), tr("Remove fro&m Shelf"), mainWindow);
