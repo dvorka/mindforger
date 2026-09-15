@@ -336,10 +336,7 @@ void MarkdownConfigurationRepresentation::configurationSection(
                         }
                     } else if(line->find(CONFIG_SETTING_MD_HIGHLIGHT_LABEL) != std::string::npos) {
                         if(line->find("yes") != std::string::npos) {
-                            // BUG: there is a bug @ Ubuntu 24.04 and newer that crashes MF if src highlight is on >
-                            //   before it is fixed, this settting must be reset & disabled
-                            c.setUiEnableSrcHighlightInMd(false);
-                            //c.setUiEnableSrcHighlightInMd(true);
+                            c.setUiEnableSrcHighlightInMd(true);
                         } else {
                             c.setUiEnableSrcHighlightInMd(false);
                         }
@@ -745,7 +742,7 @@ string& MarkdownConfigurationRepresentation::to(Configuration* c, string& md)
          "    * Enable offline KaTeX or MathJax (legacy) JavaScript library to show math expressions in HTML generated from Markdown." << endl <<
          "    * Examples: katex, mathjax, no" << endl <<
          CONFIG_SETTING_MD_DIAGRAM_LABEL << (c?c->getJsLibSupportAsString(c->getUiEnableDiagramsInMd()):UI_JS_LIB_NO) << endl <<
-         "    * Enable online or offline Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
+         "    * Enable offline Mermaid JavaScript library to show diagrams in HTML generated from Markdown." << endl <<
          "    * Examples: offline, no" << endl <<
          CONFIG_SETTING_NAVIGATOR_MAX_GRAPH_NODES_LABEL << (c?c->getNavigatorMaxNodes():Configuration::DEFAULT_NAVIGATOR_MAX_GRAPH_NODES) << endl <<
          "    * Maximum number of knowledge graph navigator nodes (performance vs. readability trade-off)." << endl <<

@@ -77,7 +77,9 @@ public:
     QAction* actionMindRemember;
     QAction* actionMindThink;
     QAction* actionMindAutolink;
+#ifdef MF_WIP
     QAction* actionMindSemanticSearch;
+#endif
     QAction* actionMindWingman;
     QAction* actionMindTool;
     QAction* actionMindScope;
@@ -161,6 +163,7 @@ public:
     QAction* actionOutlineLast;
     QMenu* submenuOutlineExport;
     QAction* actionOutlineHtmlExport;
+    QAction* actionOutlineMarkdownExport;
     QMenu* submenuOutlineImport;
     QAction* actionOutlineTWikiImport;
     QMenu* submenuOutlineWingman;

@@ -145,6 +145,7 @@ private:
     NewRepositoryDialog* newRepositoryDialog;
     NewFileDialog* newFileDialog;
     ExportFileDialog* exportOutlineToHtmlDialog;
+    ExportFileDialog* exportOutlineToMarkdownDialog;
     ExportCsvFileDialog* exportMemoryToCsvDialog;
     EmojisDialog* emojisDialog;
 
@@ -329,6 +330,8 @@ public slots:
     void doActionOutlineForget();
     void doActionOutlineHtmlExport();
     void handleOutlineHtmlExport();
+    void doActionOutlineMarkdownExport();
+    void handleOutlineMarkdownExport();
     void doActionOutlineTWikiImport();
     bool checkWingmanAvailability();
     void handleWingmanMenuAction(const std::string& prompt);

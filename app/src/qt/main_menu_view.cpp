@@ -109,11 +109,13 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     actionMindAutolink->setVisible(false);
 #endif
 
+#ifdef MF_WIP
     // if Wingman is not configured and/or capable, then dialog with error message is shown (unable to detect it here)
     actionMindSemanticSearch = new QAction(QIcon(":/menu-icons/find.svg"), tr("&Semantic Search"), mainWindow);
     actionMindSemanticSearch->setCheckable(true);
     actionMindSemanticSearch->setStatusTip(tr("Use Wingman LLM to search for similar Notes (associations) using text embeddings..."));
     actionMindSemanticSearch->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
+#endif
 
     actionMindWingman = new QAction(QIcon(":/menu-icons/wingman-green.svg"), tr("&Wingman LLM"), mainWindow);
     actionMindWingman->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Slash));
@@ -211,7 +213,9 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     menuMind->addSeparator();
     menuMind->addAction(actionMindThink);
     menuMind->addAction(actionMindAutolink);
+#ifdef MF_WIP
     menuMind->addAction(actionMindSemanticSearch);
+#endif
     menuMind->addAction(actionMindWingman);
     menuMind->addAction(actionMindTool);
     menuMind->addAction(actionMindScope);
@@ -579,9 +583,11 @@ MainMenuView::MainMenuView(MainWindowView& mainWindowView)
     submenuOutlineExport = menuOutline->addMenu(QIcon(":/menu-icons/export.svg"), "E&xport");
     actionOutlineHtmlExport = new QAction(tr("&HTML"), mainWindow);
     actionOutlineHtmlExport->setStatusTip(tr("Export Notebook to a file in HTML format"));
-    // TODO Markdown
+    actionOutlineMarkdownExport = new QAction(tr("&Markdown"), mainWindow);
+    actionOutlineMarkdownExport->setStatusTip(tr("Export Notebook to a file in Markdown format"));
     // TODO Markdown with meta (status: Markdown with MindForger metadata
     submenuOutlineExport->addAction(actionOutlineHtmlExport);
+    submenuOutlineExport->addAction(actionOutlineMarkdownExport);
 
     submenuOutlineImport = menuOutline->addMenu(QIcon(":/menu-icons/import.svg"), tr("&Import"));
     actionOutlineTWikiImport= new QAction(tr("&TWiki"), mainWindow);

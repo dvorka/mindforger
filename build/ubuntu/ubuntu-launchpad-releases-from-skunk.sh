@@ -212,8 +212,11 @@ function checkoutMindforger {
     rm -rf${OPT_VERBOSE} ./lib/.qmake.stash ./lib/lib.pro.user ./lib/src/mindforger-lib-unit-tests
     rm -rf${OPT_VERBOSE} ./deps/cmark-gfm/.github
     rm -rf${OPT_VERBOSE} ./deps/mitie
+    # remove stray packaging artifacts (e.g. locally built .snap) that may be
+    # sitting in MFSRC working directory - cp above does NOT respect .gitignore
+    rm -rf${OPT_VERBOSE} ./*.snap
     # IMPROVE: static libraries lib*.a are NOT deleted to keep cmark-gfm dependency libs
-    find . -type f \( -name "*moc_*.cpp" -or -name "*.o" -or -name "*.*~" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
+    find . -type f \( -name "*moc_*.cpp" -or -name "*.o" -or -name "*.*~" -or -name "*.snap" -or -name ".gitignore" -or -name ".git" \) | while read F; do rm -vf $F; done
 
     cd ..
 }
