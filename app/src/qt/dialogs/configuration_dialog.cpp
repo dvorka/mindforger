@@ -105,6 +105,23 @@ void ConfigurationDialog::saveSlot()
  * App tab
  */
 
+/**
+ * @brief Build language combo item label prefixed with the UTF-8 flag emoji.
+ *
+ * Non-ASCII characters are passed as escaped u8 literals to keep sources
+ * portable across compilers (MSVC does not assume UTF-8 sources).
+ */
+static QString localeComboLabel(const char* flag, const QString& name)
+{
+#ifdef _WIN32
+    // Windows emoji font does not render flags - they would be shown as letters
+    Q_UNUSED(flag);
+    return name;
+#else
+    return QString::fromUtf8(flag) + QStringLiteral(" ") + name;
+#endif
+}
+
 ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     : QWidget(parent), config(Configuration::getInstance())
 {
@@ -130,9 +147,16 @@ ConfigurationDialog::AppTab::AppTab(QWidget *parent)
     localeLabel = new QLabel(
         tr("Language (<font color='#ff0000'>requires restart</font>)")+":", this);
     localeCombo = new QComboBox{this};
-    localeCombo->addItem(tr("System default"), QString{UI_LOCALE_SYSTEM});
-    localeCombo->addItem(QStringLiteral("English"), QString{UI_LOCALE_EN_US});
-    localeCombo->addItem(QStringLiteral("Čeština"), QString{UI_LOCALE_CS_CZ});
+    // flags: globe, US and CZ regional indicators; name: Cestina with diacritics
+    localeCombo->addItem(
+        localeComboLabel(u8"\U0001F310", tr("System default")),
+        QString{UI_LOCALE_SYSTEM});
+    localeCombo->addItem(
+        localeComboLabel(u8"\U0001F1FA\U0001F1F8", QStringLiteral("English")),
+        QString{UI_LOCALE_EN_US});
+    localeCombo->addItem(
+        localeComboLabel(u8"\U0001F1E8\U0001F1FF", QString::fromUtf8(u8"\u010Ce\u0161tina")),
+        QString{UI_LOCALE_CS_CZ});
 
     startupLabel = new QLabel(tr("Show the following view on application start")+":", this);
     startupCombo = new QComboBox{this};

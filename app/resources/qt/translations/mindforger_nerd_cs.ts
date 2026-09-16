@@ -67,12 +67,12 @@
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2019"/>
         <source>Wingman Not Available</source>
-        <translation>Wingman není dostupný</translation>
+        <translation>AI parťák není dostupný</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2020"/>
         <source>Wingman provider is either not configured or initialized - see MindForger Preferences (Wingman tab).</source>
-        <translation>Poskytovatel Wingman není nakonfigurován nebo inicializován – viz Předvolby MindForger (záložka Wingman).</translation>
+        <translation>Poskytovatel AI parťáka není nakonfigurován nebo inicializován – viz Předvolby MindForger (záložka AI parťák).</translation>
     </message>
 </context>
 <context>
@@ -272,7 +272,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/cli_n_breadcrumbs_presenter.cpp" line="59"/>
         <source>Wingman help</source>
-        <translation>Nápověda Wingman</translation>
+        <translation>Nápověda AI parťáka</translation>
     </message>
     <message>
         <location filename="../../../src/qt/cli_n_breadcrumbs_presenter.cpp" line="60"/>
@@ -282,7 +282,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/cli_n_breadcrumbs_presenter.cpp" line="83"/>
         <source>Wingman: ? for help, / search, @ knowledge, &gt; command, or type FTS phrase</source>
-        <translation>Wingman: ? nápověda, / hledání, @ znalosti, &gt; příkaz, nebo napište fulltextový výraz</translation>
+        <translation>AI parťák: ? nápověda, / hledání, @ znalosti, &gt; příkaz, nebo napište fulltextový výraz</translation>
     </message>
     <message>
         <location filename="../../../src/qt/cli_n_breadcrumbs_presenter.cpp" line="170"/>
@@ -348,7 +348,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="43"/>
         <source>Wingman</source>
-        <translation>Wingman</translation>
+        <translation>AI parťák</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="66"/>
@@ -359,52 +359,62 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::ConfigurationDialog::AppTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="112"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="129"/>
         <source>UI theme (&lt;font color=&apos;#ff0000&apos;&gt;requires restart&lt;/font&gt;)</source>
         <translation>Motiv uživatelského rozhraní (&lt;font color=&apos;#ff0000&apos;&gt;vyžaduje restart&lt;/font&gt;)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="114"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="131"/>
         <source>Menu (&lt;font color=&apos;#ff0000&apos;&gt;requires restart&lt;/font&gt;)</source>
         <translation>Nabídka (&lt;font color=&apos;#ff0000&apos;&gt;vyžaduje restart&lt;/font&gt;)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="130"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="148"/>
+        <source>Language (&lt;font color=&apos;#ff0000&apos;&gt;requires restart&lt;/font&gt;)</source>
+        <translation>Jazyk (&lt;font color=&apos;#ff0000&apos;&gt;vyžaduje restart&lt;/font&gt;)</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="152"/>
+        <source>System default</source>
+        <translation>Podle systému</translation>
+    </message>
+    <message>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="161"/>
         <source>Show the following view on application start</source>
         <translation>Zobrazit při spuštění aplikace následující pohled</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="143"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="174"/>
         <source>Application font size - 0 is system (&lt;font color=&apos;#ff0000&apos;&gt;requires restart&lt;/font&gt;)</source>
         <translation>Velikost písma aplikace – 0 znamená systémovou (&lt;font color=&apos;#ff0000&apos;&gt;vyžaduje restart&lt;/font&gt;)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="148"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="179"/>
         <source>show toolbar</source>
         <translation>zobrazit panel nástrojů</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="151"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="182"/>
         <source>I don&apos;t need buttons - I know all keyboard shortcuts!</source>
         <translation>Nepotřebuji tlačítka – znám všechny klávesové zkratky!</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="152"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="183"/>
         <source>nerd terminology</source>
-        <translation>technická terminologie</translation>
+        <translation>nerd terminologie</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="169"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="202"/>
         <source>Appearance</source>
         <translation>Vzhled</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="176"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="209"/>
         <source>Controls</source>
         <translation>Ovládání</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="158"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="189"/>
         <source>Startup</source>
         <translation>Spuštění</translation>
     </message>
@@ -412,47 +422,47 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::ConfigurationDialog::EditorTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="415"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="455"/>
         <source>Editor key binding</source>
         <translation>Klávesové ovládání editoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="420"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="460"/>
         <source>Editor font</source>
         <translation>Písmo editoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="425"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="465"/>
         <source>Spell check dictionaries &lt;a href=&apos;https://github.com/dvorka/mindforger/wiki/Installation#spell-check&apos;&gt;configuration documentation&lt;/a&gt;</source>
         <translation>Slovníky kontroly pravopisu – &lt;a href=&apos;https://github.com/dvorka/mindforger/wiki/Installation#spell-check&apos;&gt;dokumentace konfigurace&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="434"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="474"/>
         <source>live spell check</source>
         <translation>průběžná kontrola pravopisu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="450"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="490"/>
         <source>TABs as SPACEs</source>
         <translation>TABy jako MEZERY</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="451"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="491"/>
         <source>autosave Note on editor close</source>
         <translation>automaticky uložit poznámku při zavření editoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="453"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="493"/>
         <source>TAB width</source>
         <translation>šířka TABu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="458"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="498"/>
         <source>External editor command</source>
         <translation>Příkaz externího editoru</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="477"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="517"/>
         <source>Editor</source>
         <translation>Editor</translation>
     </message>
@@ -460,37 +470,37 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::ConfigurationDialog::MarkdownTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="583"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="623"/>
         <source>syntax highlighting</source>
         <translation>zvýrazňování syntaxe</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="587"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="627"/>
         <source>autocomplete text</source>
         <translation>automatické doplňování textu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="591"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="631"/>
         <source>autocomplete lists, blocks and {([`_ characters</source>
         <translation>automaticky doplňovat seznamy, bloky a znaky {([`_</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="596"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="636"/>
         <source>SPACE-based # in section escaping (HTML otherwise)</source>
         <translation>Escapování # v sekcích pomocí MEZERY (jinak HTML)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="604"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="644"/>
         <source>Rendering</source>
         <translation>Vykreslování</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="610"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="650"/>
         <source>Autocompletion</source>
         <translation>Automatické doplňování</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="615"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="655"/>
         <source>Escaping</source>
         <translation>Escapování</translation>
     </message>
@@ -498,22 +508,22 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::ConfigurationDialog::MindTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="657"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="697"/>
         <source>save reads metadata</source>
         <translation>ukládat metadata čtení</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="659"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="699"/>
         <source>Async refresh interval (1 - 10.000ms)</source>
         <translation>Interval asynchronní obnovy (1 – 10 000 ms)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="667"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="707"/>
         <source>Persistence</source>
         <translation>Perzistence</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="673"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="713"/>
         <source>Notifications</source>
         <translation>Oznámení</translation>
     </message>
@@ -521,12 +531,12 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::ConfigurationDialog::NavigatorTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="709"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="749"/>
         <source>Max graph nodes (150 by default)</source>
         <translation>Max. počet uzlů grafu (výchozí 150)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="718"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="758"/>
         <source>Knowledge Graph Navigator</source>
         <translation>Navigátor grafu znalostí</translation>
     </message>
@@ -534,57 +544,57 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::ConfigurationDialog::ViewerTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="272"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="312"/>
         <source>HTML Viewer</source>
         <translation>HTML prohlížeč</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="253"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="293"/>
         <source>Viewer theme CSS</source>
         <translation>CSS motiv prohlížeče</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="231"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="271"/>
         <source>HTML zoom (100 is 100%, Ctrl + mouse wheel)</source>
         <translation>Přiblížení HTML (100 = 100 %, Ctrl + kolečko myši)</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="237"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="277"/>
         <source>source code syntax highlighting support</source>
         <translation>podpora zvýrazňování syntaxe zdrojového kódu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="239"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="279"/>
         <source>Math support</source>
         <translation>Podpora matematiky</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="244"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="284"/>
         <source>whole notebook preview</source>
         <translation>náhled celého zápisníku</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="246"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="286"/>
         <source>double click HTML preview to edit</source>
         <translation>dvojklik na HTML náhled pro úpravu</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="248"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="288"/>
         <source>Diagram support</source>
         <translation>Podpora diagramů</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="261"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="301"/>
         <source>Find Custom CSS File</source>
         <translation>Najít vlastní soubor CSS</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="285"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="325"/>
         <source>HTML Viewer CSS</source>
         <translation>CSS HTML prohlížeče</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="379"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="419"/>
         <source>Choose CSS File</source>
         <translation>Vybrat soubor CSS</translation>
     </message>
@@ -592,126 +602,126 @@ Vyberte nový zdroj knihovny:</translation>
 <context>
     <name>m8r::ConfigurationDialog::WingmanTab</name>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="752"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="792"/>
         <source>Wingman LLMs</source>
-        <translation>LLM modely Wingman</translation>
+        <translation>LLM modely AI parťáka</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="754"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="794"/>
         <source>Use LLM:</source>
         <translation>Použít LLM:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="757"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="797"/>
         <source>&amp;Add LLM </source>
         <translation>&amp;Přidat LLM </translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="768"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="808"/>
         <source>Selected LLM details</source>
         <translation>Podrobnosti vybraného LLM</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="770"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="810"/>
         <source>Provider type:</source>
         <translation>Typ poskytovatele:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="773"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="813"/>
         <source>Model:</source>
         <translation>Model:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="776"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="816"/>
         <source>Status:</source>
         <translation>Stav:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="779"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="819"/>
         <source>Your data privacy:</source>
         <translation>Soukromí vašich dat:</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="782"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="822"/>
         <source>Edit</source>
         <translation>Upravit</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="783"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="823"/>
         <source>Test Connection</source>
         <translation>Otestovat připojení</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="784"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="824"/>
         <source>Remove</source>
         <translation>Odebrat</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="980"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1020"/>
         <source>Remove Provider</source>
         <translation>Odebrat poskytovatele</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="981"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1021"/>
         <source>Are you sure you want to remove this LLM provider configuration?</source>
         <translation>Opravdu chcete odebrat tuto konfiguraci poskytovatele LLM?</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1059"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1112"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1099"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1152"/>
         <source>configured</source>
         <translation>nakonfigurováno</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1063"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1071"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1103"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1111"/>
         <source>Connection Test</source>
         <translation>Test připojení</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1064"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1104"/>
         <source>Provider configuration is valid.</source>
         <translation>Konfigurace poskytovatele je platná.</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1067"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1115"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1107"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1155"/>
         <source>Not validated</source>
         <translation>Neověřeno</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1072"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1112"/>
         <source>Provider configuration test failed: %1</source>
         <translation>Test konfigurace poskytovatele selhal: %1</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1094"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1134"/>
         <source>OpenAI</source>
         <translation>OpenAI</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1095"/>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1103"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1135"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1143"/>
         <source>will be shared w/ 3rd party</source>
         <translation>bude sdíleno s třetí stranou</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1098"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1138"/>
         <source>ollama</source>
         <translation>ollama</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1099"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1139"/>
         <source>will not be shared w/ 3rd party</source>
         <translation>nebude sdíleno s třetí stranou</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1102"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1142"/>
         <source>OpenRouter</source>
         <translation>OpenRouter</translation>
     </message>
     <message>
-        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1106"/>
+        <location filename="../../../src/qt/dialogs/configuration_dialog.cpp" line="1146"/>
         <source>Unknown</source>
         <translation>Neznámé</translation>
     </message>
@@ -1124,7 +1134,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/dialogs/insert_image_dialog.cpp" line="33"/>
         <source>copy image to workspace</source>
-        <translation>kopírovat obrázek do pracovního prostoru</translation>
+        <translation>kopírovat obrázek do prostoru</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/insert_image_dialog.cpp" line="38"/>
@@ -1187,7 +1197,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/dialogs/insert_link_dialog.cpp" line="39"/>
         <source>copy link target to workspace</source>
-        <translation>kopírovat cíl odkazu do pracovního prostoru</translation>
+        <translation>kopírovat cíl odkazu do prostoru</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/insert_link_dialog.cpp" line="44"/>
@@ -1378,12 +1388,12 @@ Vyberte nový zdroj knihovny:</translation>
         <location filename="../../../src/qt/main_menu_view.cpp" line="725"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="817"/>
         <source>&amp;Wingman LLM</source>
-        <translation>&amp;Wingman LLM</translation>
+        <translation>AI pa&amp;rťák</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="181"/>
         <source>Create backup archive of the current workspace and store it in home directory</source>
-        <translation>Vytvořit záložní archiv aktuálního pracovního prostoru a uložit jej do domovského adresáře</translation>
+        <translation>Vytvořit záložní archiv aktuálního prostoru a uložit jej do domovského adresáře</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="244"/>
@@ -2299,17 +2309,17 @@ Vyberte nový zdroj knihovny:</translation>
         <location filename="../../../src/qt/main_menu_view.cpp" line="41"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="53"/>
         <source>&amp;Workspace</source>
-        <translation>Pracovní &amp;prostor</translation>
+        <translation>&amp;Prostor</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="43"/>
         <source>Create a brand new MindForger workspace...</source>
-        <translation>Vytvořit zbrusu nový pracovní prostor MindForger...</translation>
+        <translation>Vytvořit zbrusu nový prostor MindForger...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="56"/>
         <source>Learn knowledge by loading a MindForger workspace...</source>
-        <translation>Naučit se znalosti načtením pracovního prostoru MindForger...</translation>
+        <translation>Naučit se znalosti načtením prostoru MindForger...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="60"/>
@@ -2329,12 +2339,12 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="75"/>
         <source>Re-learn recently opened MindForger workspaces, Markdown directories or files</source>
-        <translation>Znovu se naučit nedávno otevřené pracovní prostory MindForger, adresáře Markdown nebo soubory</translation>
+        <translation>Znovu se naučit nedávno otevřené prostory MindForger, adresáře Markdown nebo soubory</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="808"/>
         <source>&amp;Wingman</source>
-        <translation>&amp;Wingman</translation>
+        <translation>AI pa&amp;rťák</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="323"/>
@@ -2344,7 +2354,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="326"/>
         <source>Run simple command line from current MindForger workspace...</source>
-        <translation>Spustit jednoduchý příkazový řádek z aktuálního pracovního prostoru MindForger...</translation>
+        <translation>Spustit jednoduchý příkazový řádek z aktuálního prostoru MindForger...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="1036"/>
@@ -2469,12 +2479,12 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="115"/>
         <source>Use Wingman LLM to search for similar Notes (associations) using text embeddings...</source>
-        <translation>Použít Wingman LLM k vyhledání podobných poznámek (asociací) pomocí textových embeddingů...</translation>
+        <translation>Použít AI parťáka k vyhledání podobných poznámek (asociací) pomocí textových embeddingů...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="120"/>
         <source>Open Wingman dialog...</source>
-        <translation>Otevřít dialog Wingman...</translation>
+        <translation>Otevřít dialog AI parťáka...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="122"/>
@@ -2530,7 +2540,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="593"/>
         <source>Ask Wingman to summarize text of the Notebook...</source>
-        <translation>Požádat Wingman o shrnutí textu zápisníku...</translation>
+        <translation>Požádat AI parťáka o shrnutí textu zápisníku...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="595"/>
@@ -2541,7 +2551,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="596"/>
         <source>Ask Wingman to explain the name of the Notebook...</source>
-        <translation>Požádat Wingman o vysvětlení názvu zápisníku...</translation>
+        <translation>Požádat AI parťáka o vysvětlení názvu zápisníku...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="598"/>
@@ -2551,7 +2561,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="599"/>
         <source>Ask Wingman to find tasks in the Notebook text...</source>
-        <translation>Požádat Wingman o nalezení úkolů v textu zápisníku...</translation>
+        <translation>Požádat AI parťáka o nalezení úkolů v textu zápisníku...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="601"/>
@@ -2565,7 +2575,7 @@ Vyberte nový zdroj knihovny:</translation>
         <location filename="../../../src/qt/main_menu_view.cpp" line="736"/>
         <location filename="../../../src/qt/main_menu_view.cpp" line="831"/>
         <source>Open Wingman chat...</source>
-        <translation>Otevřít chat Wingman...</translation>
+        <translation>Otevřít chat s AI parťákem...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="686"/>
@@ -2575,7 +2585,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="727"/>
         <source>Ask Wingman to summarize text of the Note...</source>
-        <translation>Požádat Wingman o shrnutí textu poznámky...</translation>
+        <translation>Požádat AI parťáka o shrnutí textu poznámky...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="729"/>
@@ -2585,7 +2595,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="730"/>
         <source>Ask Wingman to find grammar errors in the Note text...</source>
-        <translation>Požádat Wingman o nalezení gramatických chyb v textu poznámky...</translation>
+        <translation>Požádat AI parťáka o nalezení gramatických chyb v textu poznámky...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="732"/>
@@ -2595,7 +2605,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="733"/>
         <source>Ask Wingman to translate the Note text to English...</source>
-        <translation>Požádat Wingman o překlad textu poznámky do angličtiny...</translation>
+        <translation>Požádat AI parťáka o překlad textu poznámky do angličtiny...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="771"/>
@@ -2655,12 +2665,12 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="819"/>
         <source>Ask Wingman to fix grammar errors in the selected text / word under the cursor...</source>
-        <translation>Požádat Wingman o opravu gramatických chyb ve vybraném textu / slově pod kurzorem...</translation>
+        <translation>Požádat AI parťáka o opravu gramatických chyb ve vybraném textu / slově pod kurzorem...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="822"/>
         <source>Ask Wingman to explain the word under the cursor / selected text...</source>
-        <translation>Požádat Wingman o vysvětlení slova pod kurzorem / vybraného textu...</translation>
+        <translation>Požádat AI parťáka o vysvětlení slova pod kurzorem / vybraného textu...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="824"/>
@@ -2670,7 +2680,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="825"/>
         <source>Ask Wingman to finish the text following the selected text / word under the cursor...</source>
-        <translation>Požádat Wingman o dokončení textu navazujícího na vybraný text / slovo pod kurzorem...</translation>
+        <translation>Požádat AI parťáka o dokončení textu navazujícího na vybraný text / slovo pod kurzorem...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="827"/>
@@ -2680,7 +2690,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="828"/>
         <source>Ask Wingman to rewrite the text following the selected text / word under the cursor...</source>
-        <translation>Požádat Wingman o přepsání textu navazujícího na vybraný text / slovo pod kurzorem...</translation>
+        <translation>Požádat AI parťáka o přepsání textu navazujícího na vybraný text / slovo pod kurzorem...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_menu_view.cpp" line="877"/>
@@ -3048,7 +3058,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_toolbar_view.cpp" line="47"/>
         <source>Open directory with Markdowns or Workspace</source>
-        <translation>Otevřít adresář se soubory Markdown nebo pracovní prostor</translation>
+        <translation>Otevřít adresář se soubory Markdown nebo prostor</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_toolbar_view.cpp" line="50"/>
@@ -3221,18 +3231,18 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="1753"/>
         <source>File copied to workspace path &apos;%1&apos;</source>
-        <translation>Soubor zkopírován do pracovního prostoru &apos;%1&apos;</translation>
+        <translation>Soubor zkopírován do prostoru &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2328"/>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2342"/>
         <source>Wingman Action Error</source>
-        <translation>Chyba akce Wingman</translation>
+        <translation>Chyba akce AI parťáka</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2298"/>
         <source>Wingman&apos;s answer appended after selected text in the Note editor.</source>
-        <translation>Odpověď Wingman byla připojena za vybraný text v editoru poznámky.</translation>
+        <translation>Odpověď AI parťáka byla připojena za vybraný text v editoru poznámky.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="1903"/>
@@ -3242,17 +3252,17 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2309"/>
         <source>Unable to append after selected text with Wingman&apos;s answer in non-edit perspective.</source>
-        <translation>Nelze připojit odpověď Wingman za vybraný text mimo režim úprav.</translation>
+        <translation>Nelze připojit odpověď AI parťáka za vybraný text mimo režim úprav.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2313"/>
         <source>No answer from Wingman to append after selected text - run a prompt.</source>
-        <translation>Žádná odpověď Wingman k připojení za vybraný text – spusťte dotaz.</translation>
+        <translation>Žádná odpověď AI parťáka k připojení za vybraný text – spusťte dotaz.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2323"/>
         <source>Wingman&apos;s answer replaced selected text in Notebook header.</source>
-        <translation>Odpověď Wingman nahradila vybraný text v záhlaví zápisníku.</translation>
+        <translation>Odpověď AI parťáka nahradila vybraný text v záhlaví zápisníku.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2329"/>
@@ -3262,7 +3272,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2337"/>
         <source>Wingman&apos;s answer replaced selected text in Note text.</source>
-        <translation>Odpověď Wingman nahradila vybraný text v textu poznámky.</translation>
+        <translation>Odpověď AI parťáka nahradila vybraný text v textu poznámky.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2343"/>
@@ -3272,12 +3282,12 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2350"/>
         <source>Unable to replace selected text with Wingman&apos;s answer in non-edit perspective.</source>
-        <translation>Nelze nahradit vybraný text odpovědí Wingman mimo režim úprav.</translation>
+        <translation>Nelze nahradit vybraný text odpovědí AI parťáka mimo režim úprav.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2354"/>
         <source>No answer from Wingman to replace selected text - run a prompt.</source>
-        <translation>Žádná odpověď Wingman k nahrazení vybraného textu – spusťte dotaz.</translation>
+        <translation>Žádná odpověď AI parťáka k nahrazení vybraného textu – spusťte dotaz.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2426"/>
@@ -3328,7 +3338,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="3468"/>
         <source>Unable to index documents on library path - either memory directory doesn&apos;t exist or not in MindForger workspace mode.</source>
-        <translation>Nelze indexovat dokumenty na cestě knihovny – buď adresář paměti neexistuje, nebo nejste v režimu pracovního prostoru MindForger.</translation>
+        <translation>Nelze indexovat dokumenty na cestě knihovny – buď adresář paměti neexistuje, nebo nejste v režimu prostoru MindForger.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="3505"/>
@@ -3410,28 +3420,28 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="347"/>
         <source>Cannot think - either Mind already dreaming or workspace too big</source>
-        <translation>Nelze přemýšlet – mysl již sní, nebo je pracovní prostor příliš velký</translation>
+        <translation>Nelze přemýšlet – mysl již sní, nebo je prostor příliš velký</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="544"/>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="556"/>
         <source>New Workspace Error</source>
-        <translation>Chyba nového pracovního prostoru</translation>
+        <translation>Chyba nového prostoru</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="545"/>
         <source>Specified workspace path already exists!</source>
-        <translation>Zadaná cesta pracovního prostoru již existuje!</translation>
+        <translation>Zadaná cesta prostoru již existuje!</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="557"/>
         <source>Failed to create empty workspace!</source>
-        <translation>Vytvoření prázdného pracovního prostoru selhalo!</translation>
+        <translation>Vytvoření prázdného prostoru selhalo!</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="569"/>
         <source>ERROR: workspace created, but attempt to copy documentation and/or stencils failed</source>
-        <translation>CHYBA: pracovní prostor byl vytvořen, ale pokus o zkopírování dokumentace a/nebo šablon selhal</translation>
+        <translation>CHYBA: prostor byl vytvořen, ale pokus o zkopírování dokumentace a/nebo šablon selhal</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="621"/>
@@ -3461,7 +3471,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="701"/>
         <source>Semantic search cannot be activated - ollama Wingman must be configured.</source>
-        <translation>Sémantické vyhledávání nelze aktivovat – musí být nakonfigurován Wingman ollama.</translation>
+        <translation>Sémantické vyhledávání nelze aktivovat – musí být nakonfigurován AI parťák s ollama.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="710"/>
@@ -3471,12 +3481,12 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="771"/>
         <source>Learn Directory or MindForger Workspace</source>
-        <translation>Naučit se adresář nebo pracovní prostor MindForger</translation>
+        <translation>Naučit se adresář nebo prostor MindForger</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="829"/>
         <source>This is neither valid MindForger/Markdown workspace nor file.</source>
-        <translation>Toto není platný pracovní prostor ani soubor MindForger/Markdown.</translation>
+        <translation>Toto není platný prostor ani soubor MindForger/Markdown.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="950"/>
@@ -3527,32 +3537,32 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2169"/>
         <source>Wingman is runnning inferences...</source>
-        <translation>Wingman provádí inferenci...</translation>
+        <translation>AI parťák provádí inferenci...</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2226"/>
         <source>Wingman received an answer from the LLM provider</source>
-        <translation>Wingman obdržel odpověď od poskytovatele LLM</translation>
+        <translation>AI parťák obdržel odpověď od poskytovatele LLM</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2228"/>
         <source>Wingman failed to receive an answer from the LLM provider</source>
-        <translation>Wingmanovi se nepodařilo obdržet odpověď od poskytovatele LLM</translation>
+        <translation>AI parťákovi se nepodařilo obdržet odpověď od poskytovatele LLM</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2286"/>
         <source>Wingman&apos;s answer appended after selected text in the Notebook header.</source>
-        <translation>Odpověď Wingman byla připojena za vybraný text v záhlaví zápisníku.</translation>
+        <translation>Odpověď AI parťáka byla připojena za vybraný text v záhlaví zápisníku.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2290"/>
         <source>Wingman&apos;s answer appended after the cursor in the Notebook header.</source>
-        <translation>Odpověď Wingman byla připojena za kurzor v záhlaví zápisníku.</translation>
+        <translation>Odpověď AI parťáka byla připojena za kurzor v záhlaví zápisníku.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2302"/>
         <source>Wingman&apos;s answer appended after the cursor in the Note editor.</source>
-        <translation>Odpověď Wingman byla připojena za kurzor v editoru poznámky.</translation>
+        <translation>Odpověď AI parťáka byla připojena za kurzor v editoru poznámky.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="2439"/>
@@ -3854,7 +3864,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="3980"/>
         <source>Limbo directory with deleted Notebooks is available in the MindForger workspace, not if a Markdown is edited or a directory with markdowns is opened.</source>
-        <translation>Adresář Limbo se smazanými zápisníky je dostupný v pracovním prostoru MindForger, nikoli při úpravě souboru Markdown nebo otevření adresáře se soubory Markdown.</translation>
+        <translation>Adresář Limbo se smazanými zápisníky je dostupný v prostoru MindForger, nikoli při úpravě souboru Markdown nebo otevření adresáře se soubory Markdown.</translation>
     </message>
     <message>
         <location filename="../../../src/qt/main_window_presenter.cpp" line="4097"/>
@@ -3924,17 +3934,17 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/dialogs/new_repository_dialog.cpp" line="31"/>
         <source>Workspace name:</source>
-        <translation>Název pracovního prostoru:</translation>
+        <translation>Název prostoru:</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/new_repository_dialog.cpp" line="33"/>
         <source>Workspace directory:</source>
-        <translation>Adresář pracovního prostoru:</translation>
+        <translation>Adresář prostoru:</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/new_repository_dialog.cpp" line="35"/>
         <source>Workspace to be created in:</source>
-        <translation>Pracovní prostor bude vytvořen v:</translation>
+        <translation>Prostor bude vytvořen v:</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/new_repository_dialog.cpp" line="39"/>
@@ -3964,7 +3974,7 @@ Vyberte nový zdroj knihovny:</translation>
     <message>
         <location filename="../../../src/qt/dialogs/new_repository_dialog.cpp" line="96"/>
         <source>Create New Workspace</source>
-        <translation>Vytvořit nový pracovní prostor</translation>
+        <translation>Vytvořit nový prostor</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/new_repository_dialog.cpp" line="107"/>
@@ -5566,7 +5576,7 @@ s dokumentem. Takové zápisníky můžete deaktivovat sami.
     <message>
         <location filename="../../../src/qt/dialogs/wingman_dialog.cpp" line="36"/>
         <source>Wingman Chat</source>
-        <translation>Chat Wingman</translation>
+        <translation>Chat s AI parťákem</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/wingman_dialog.cpp" line="38"/>
@@ -5602,7 +5612,7 @@ s dokumentem. Takové zápisníky můžete deaktivovat sami.
     <message>
         <location filename="../../../src/qt/dialogs/wingman_dialog.cpp" line="79"/>
         <source>Append the last Wingman answer to the Note text after the cursor</source>
-        <translation>Připojit poslední odpověď Wingman za kurzor v textu poznámky</translation>
+        <translation>Připojit poslední odpověď AI parťáka za kurzor v textu poznámky</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/wingman_dialog.cpp" line="80"/>
@@ -5612,7 +5622,7 @@ s dokumentem. Takové zápisníky můžete deaktivovat sami.
     <message>
         <location filename="../../../src/qt/dialogs/wingman_dialog.cpp" line="81"/>
         <source>Replace (selected) Note text with the last Wingman answer</source>
-        <translation>Nahradit (vybraný) text poznámky poslední odpovědí Wingman</translation>
+        <translation>Nahradit (vybraný) text poznámky poslední odpovědí AI parťáka</translation>
     </message>
     <message>
         <location filename="../../../src/qt/dialogs/wingman_dialog.cpp" line="82"/>
@@ -5701,7 +5711,7 @@ s dokumentem. Takové zápisníky můžete deaktivovat sami.
     <message>
         <location filename="../../../src/qt/mindforger.cpp" line="219"/>
         <source>MindForger workspace or directory/file with Markdown(s) to open</source>
-        <translation>Pracovní prostor MindForger nebo adresář/soubor se soubory Markdown k otevření</translation>
+        <translation>Prostor MindForger nebo adresář/soubor se soubory Markdown k otevření</translation>
     </message>
     <message>
         <location filename="../../../src/qt/mindforger.cpp" line="225"/>
@@ -5757,7 +5767,7 @@ s dokumentem. Takové zápisníky můžete deaktivovat sami.
     <message>
         <location filename="../../../src/qt/mindforger.cpp" line="341"/>
         <source>Error: Unable to find given workspace/file to open - open MindForger without parameters and create it from menu Mind/New: &apos;</source>
-        <translation>Chyba: Nelze najít zadaný pracovní prostor/soubor k otevření – spusťte MindForger bez parametrů a vytvořte jej z nabídky Mysl/Nový: &apos;</translation>
+        <translation>Chyba: Nelze najít zadaný prostor/soubor k otevření – spusťte MindForger bez parametrů a vytvořte jej z nabídky Mysl/Nový: &apos;</translation>
     </message>
     <message>
         <location filename="../../../src/qt/mindforger.cpp" line="365"/>
