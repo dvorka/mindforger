@@ -864,6 +864,77 @@ TEST(NoteTestCase, MangleNoteName) {
     EXPECT_EQ("", o->getNotes()[5]->getMangledName());
 }
 
+// non-ASCII coverage for https://github.com/dvorka/mindforger/issues/1501 :
+// non-ASCII letters (Korean, Chinese, Czech diacritics) must survive mangling
+// instead of being collapsed to '-' and stripped to an empty/ASCII-only anchor
+TEST(NoteTestCase, MangleNoteNameNonAscii) {
+    // GIVEN a repository with an Outline containing Notes whose names are
+    // ASCII-only, mixed ASCII/non-ASCII and non-ASCII only
+    string repositoryDir{"/tmp/mf-unit-repository-m-non-ascii"};
+    m8r::removeDirectoryRecursively(repositoryDir.c_str());
+    m8r::Installer installer{};
+    installer.createEmptyMindForgerRepository(repositoryDir);
+    string oFile{repositoryDir+"/memory/o.md"};
+    string oContent{
+        "# Non-ASCII Links Mangling"
+        "\n"
+        "\nThis document elaborates mangling of non-ASCII section names to links."
+        "\n"
+        "\n# 기타"
+        "\npure Korean name"
+        "\n"
+        "\n# 普通话"
+        "\npure Chinese name"
+        "\n"
+        "\n# ARIA 벤치마크 결과"
+        "\nmixed ASCII and Korean name"
+        "\n"
+        "\n# český příklad"
+        "\nCzech name with diacritics"
+        "\n"};
+    m8r::stringToFile(oFile,oContent);
+
+    m8r::MarkdownRepositoryConfigurationRepresentation repositoryConfigRepresentation{};
+    m8r::Configuration& config = m8r::Configuration::getInstance();
+    config.clear();
+    config.setConfigFilePath("/tmp/cfg-ntc-mnna.md");
+    config.setActiveRepository(
+        config.addRepository(m8r::RepositoryIndexer::getRepositoryForPath(repositoryDir)),
+        repositoryConfigRepresentation
+    );
+    m8r::Mind mind{config};
+    m8r::Memory& memory = mind.remind();
+    mind.learn();
+    mind.think().get(); // ensure that ASYNC learning finishes
+
+    // WHEN the Notes' mangled names are computed
+    vector<m8r::Outline*> outlines = memory.getOutlines();
+    m8r::Outline* o = outlines.at(0);
+    EXPECT_EQ(4, o->getNotesCount());
+
+    string koreanOnly = o->getNotes()[0]->getMangledName();
+    string chineseOnly = o->getNotes()[1]->getMangledName();
+    string mixed = o->getNotes()[2]->getMangledName();
+    string diacritics = o->getNotes()[3]->getMangledName();
+
+    // THEN non-ASCII letters are preserved rather than collapsed to '-'
+    EXPECT_EQ(string{"기타"}, koreanOnly);
+    EXPECT_EQ(string{"普通话"}, chineseOnly);
+    EXPECT_EQ(string{"aria-벤치마크-결과"}, mixed);
+    EXPECT_EQ(string{"český-příklad"}, diacritics);
+
+    // AND none of the non-ASCII-only names collapse to an empty anchor
+    EXPECT_FALSE(koreanOnly.empty());
+    EXPECT_FALSE(chineseOnly.empty());
+
+    // AND clicking on a link to any of the Notes resolves back to that exact
+    // Note (the write side and the read side of navigation must agree)
+    EXPECT_EQ(o->getNotes()[0], o->getNoteByMangledName(koreanOnly));
+    EXPECT_EQ(o->getNotes()[1], o->getNoteByMangledName(chineseOnly));
+    EXPECT_EQ(o->getNotes()[2], o->getNoteByMangledName(mixed));
+    EXPECT_EQ(o->getNotes()[3], o->getNoteByMangledName(diacritics));
+}
+
 TEST(NoteTestCase, DirectNoteChildren) {
     // prepare M8R repository and let the mind think...
     string repositoryDir{"/tmp/mf-unit-repository-n-child-n"};

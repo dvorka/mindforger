@@ -163,11 +163,16 @@ vector<string> stringSplit(const string s, const string regexDelimiter)
 string normalizeToNcName(string name, char quoteChar) {
     string result = name;
     if(!result.empty()) {
-        if(!isalnum(result[0], locale())) {
+        // a non-ASCII (UTF-8, >=0x80) leading byte is part of a Unicode letter/digit,
+        // which the XML NCName spec permits as NameStartChar - only an ASCII char
+        // that is not alpha numerical needs the safe '_' prefix
+        unsigned char first = static_cast<unsigned char>(result[0]);
+        if(first < 0x80 && !isalnum(result[0], locale())) {
             result.insert(0, 1, '_');
         }
         for(size_t i=0; i<result.size(); i++) {
-            if(!isalnum(result[i],locale())) {
+            unsigned char c = static_cast<unsigned char>(result[i]);
+            if(c < 0x80 && !isalnum(result[i],locale())) {
                 result[i] = quoteChar;
             }
         }
